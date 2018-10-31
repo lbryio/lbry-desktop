@@ -1,19 +1,19 @@
 import { connect } from 'react-redux';
-import { selectPendingPublishes, selectClaimsWithPendingPublishes } from 'redux/selectors/publish';
-import { selectIsFetchingClaimListMine } from 'lbry-redux';
+import { selectPendingPublishes } from 'redux/selectors/publish';
+import { selectIsFetchingClaimListMine, selectFileListPublishedSort, selectMyClaimsWithoutChannels } from 'lbry-redux';
 import { doNavigate } from 'redux/actions/navigation';
 import { doCheckPendingPublishes } from 'redux/actions/publish';
 import FileListPublished from './view';
 
 const select = state => ({
-  claims: selectClaimsWithPendingPublishes(state),
+  claims: selectMyClaimsWithoutChannels(state),
   fetching: selectIsFetchingClaimListMine(state),
-  pendingPublishes: selectPendingPublishes(state),
+  sortBy: selectFileListPublishedSort(state),
 });
 
 const perform = dispatch => ({
   navigate: path => dispatch(doNavigate(path)),
-  checkIfPublishesConfirmed: publishes => dispatch(doCheckPendingPublishes(publishes)),
+  checkPendingPublishes: () => dispatch(doCheckPendingPublishes()),
 });
 
 export default connect(

@@ -1,3 +1,4 @@
+// @flow
 import React from 'react';
 import { MODALS } from 'lbry-redux';
 import ModalError from 'modal/modalError';
@@ -27,13 +28,15 @@ import ModalConfirmThumbnailUpload from 'modal/modalConfirmThumbnailUpload';
 import ModalWalletEncrypt from 'modal/modalWalletEncrypt';
 import ModalWalletDecrypt from 'modal/modalWalletDecrypt';
 import ModalWalletUnlock from 'modal/modalWalletUnlock';
+import ModalRewardCode from 'modal/modalRewardCode';
 
 type Props = {
-  modal: string,
+  notification: { id: string },
+  notificationProps: {},
 };
 
 class ModalRouter extends React.PureComponent<Props> {
-  constructor(props) {
+  constructor(props: Props) {
     super(props);
 
     this.state = {
@@ -51,7 +54,7 @@ class ModalRouter extends React.PureComponent<Props> {
   }
 
   showTransitionModals(props) {
-    const { modal, modalProps, openModal, page } = props;
+    const { modal, openModal, page } = props;
 
     if (modal) {
       return;
@@ -80,6 +83,8 @@ class ModalRouter extends React.PureComponent<Props> {
     if (!isWelcomeAcknowledged && user && !user.is_reward_approved && !user.is_identity_verified) {
       return MODALS.WELCOME;
     }
+
+    return undefined;
   }
 
   checkShowEmail(props) {
@@ -92,6 +97,8 @@ class ModalRouter extends React.PureComponent<Props> {
     ) {
       return MODALS.EMAIL_COLLECTION;
     }
+
+    return undefined;
   }
 
   checkShowCreditIntro(props) {
@@ -104,6 +111,8 @@ class ModalRouter extends React.PureComponent<Props> {
     ) {
       return MODALS.INSUFFICIENT_CREDITS;
     }
+
+    return undefined;
   }
 
   isPaidShowPage(props) {
@@ -177,6 +186,8 @@ class ModalRouter extends React.PureComponent<Props> {
         return <ModalWalletDecrypt {...notificationProps} />;
       case MODALS.WALLET_UNLOCK:
         return <ModalWalletUnlock {...notificationProps} />;
+      case MODALS.REWARD_GENERATED_CODE:
+        return <ModalRewardCode {...notificationProps} />;
       default:
         return null;
     }

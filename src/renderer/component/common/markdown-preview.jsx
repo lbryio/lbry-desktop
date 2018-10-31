@@ -6,25 +6,34 @@ import remarkEmoji from 'remark-emoji';
 import ExternalLink from 'component/externalLink';
 import defaultSchema from 'hast-util-sanitize/lib/github.json';
 
+type MarkdownProps = {
+  content: ?string,
+  promptLinks?: boolean,
+};
+
+type SimpleLinkProps = {
+  href?: string,
+  title?: string,
+  children?: React.Node,
+};
+
+const SimpleLink = (props: SimpleLinkProps) => {
+  const { href, title, children } = props;
+  return (
+    <a href={href} title={title}>
+      {children}
+    </a>
+  );
+};
+
 // Use github sanitation schema
 const schema = { ...defaultSchema };
 
 // Extend sanitation schema to support lbry protocol
 schema.protocols.href[3] = 'lbry';
 
-type MarkdownProps = {
-  content: string,
-  promptLinks?: boolean,
-};
-
-const SimpleLink = ({ href, title, children }) => (
-  <a href={href} title={title}>
-    {children}
-  </a>
-);
-
 const MarkdownPreview = (props: MarkdownProps) => {
-  const { content, externalLinks, promptLinks } = props;
+  const { content, promptLinks } = props;
   const remarkOptions = {
     sanitize: schema,
     remarkReactComponents: {

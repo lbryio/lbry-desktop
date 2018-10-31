@@ -4,13 +4,8 @@ import { makeSelectClientSetting } from 'redux/selectors/settings';
 
 import FileRender from './view';
 
-const select = (state, props) => ({
+const select = state => ({
   currentTheme: makeSelectClientSetting(THEME)(state),
 });
 
-const perform = dispatch => ({});
-
-export default connect(
-  select,
-  perform
-)(FileRender);
+export default connect(select)(FileRender);

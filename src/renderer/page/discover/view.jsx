@@ -31,6 +31,20 @@ class DiscoverPage extends React.PureComponent<Props> {
     this.clearContinuousFetch();
   }
 
+  getCategoryLinkPartByCategory(category: string) {
+    const channelName = category.substr(category.indexOf('@'));
+    if (!channelName.includes('#')) {
+      return null;
+    }
+    return channelName;
+  }
+
+  trimClaimIdFromCategory(category: string) {
+    return category.split('#')[0];
+  }
+
+  continousFetch: ?IntervalID;
+
   clearContinuousFetch() {
     if (this.continousFetch) {
       clearInterval(this.continousFetch);
@@ -38,24 +52,26 @@ class DiscoverPage extends React.PureComponent<Props> {
     }
   }
 
-  continousFetch: ?number;
-
   render() {
     const { featuredUris, fetchingFeaturedUris } = this.props;
     const hasContent = typeof featuredUris === 'object' && Object.keys(featuredUris).length;
     const failedToLoad = !fetchingFeaturedUris && !hasContent;
-
     return (
       <Page noPadding isLoading={!hasContent && fetchingFeaturedUris}>
         {hasContent &&
           Object.keys(featuredUris).map(
             category =>
               featuredUris[category].length ? (
-                <CategoryList key={category} category={category} names={featuredUris[category]} />
+                <CategoryList
+                  key={category}
+                  category={this.trimClaimIdFromCategory(category)}
+                  names={featuredUris[category]}
+                  categoryLink={this.getCategoryLinkPartByCategory(category)}
+                />
               ) : (
                 <CategoryList
                   key={category}
-                  category={category.split('#')[0]}
+                  category={this.trimClaimIdFromCategory(category)}
                   categoryLink={category}
                 />
               )

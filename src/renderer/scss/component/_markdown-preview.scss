@@ -1,14 +1,14 @@
 .markdown-preview {
   margin: 0;
 
-  /* Headers */
+  // Headers
   h1,
   h2,
   h3,
   h4,
   h5,
   h6 {
-    font-family: 'metropolis-semibold';
+    font-weight: 600;
     margin: 16px 0;
   }
 
@@ -33,68 +33,74 @@
   }
 
   h6 {
+    color: $lbry-gray-5;
     font-size: 0.84em;
-    color: var(--color-help);
   }
 
-  /* Paragraphs */
+  // Paragraphs
   p {
-    margin: $spacing-vertical * 2/3 0;
     white-space: pre-line;
   }
 
-  /* Strikethrough text */
+  // Strikethrough text
   del {
-    color: var(--color-help);
+    color: $lbry-gray-5;
   }
 
-  /* Tables */
+  // Tables
   table {
-    padding: 8px;
     margin: 16px 0;
-    background-color: var(--card-bg);
+    padding: 8px;
+    background-color: $lbry-white;
 
-    tr td,
-    tr th,
-    tr td:first-of-type,
-    tr th:first-of-type,
-    tr td:last-of-type,
-    tr th:last-of-type {
-      padding: 8px;
+    tr {
+      td,
+      th,
+      td:first-of-type,
+      th:first-of-type,
+      td:last-of-type,
+      th:last-of-type {
+        padding: 8px;
+      }
     }
   }
 
-  /* Image */
+  // Image
   img {
     margin: 16px 0;
   }
 
-  /* Horizontal Rule */
+  // Horizontal Rule
   hr {
-    border: 1px solid var(--color-divider);
+    border: 1px solid $lbry-gray-2;
   }
 
-  /* Code */
+  // Code
   code {
-    display: block;
-    padding: 8px;
     margin: 16px 0;
-    background-color: var(--color-bg-alt);
-    color: var(--color-help);
-    font-size: 1em;
+    padding: 8px;
+
+    background-color: $lbry-gray-1;
+    color: $lbry-gray-5;
+    display: block;
     font-family: Consolas, 'Lucida Console', 'Source Sans', monospace;
+    font-size: 1em;
   }
 
   a {
-    font-size: 1em;
-    color: var(--btn-external-color);
+    color: $lbry-blue-1;
     display: inline-block;
+    font-size: 1em;
   }
 
-  /* Lists */
+  // Lists
   ul,
   ol {
     margin-bottom: 2em;
+
+    > li {
+      list-style-position: outside;
+    }
   }
 
   ul {
@@ -103,21 +109,18 @@
 
   li {
     margin-left: 2em;
+
     p {
       display: inline-block;
     }
   }
-
-  ol > li,
-  ul > li {
-    list-style-position: outside;
-  }
 }
 
 blockquote {
-  padding: 8px;
   margin: 16px 0;
-  color: var(--color-help);
-  border-left: 2px solid var(--color-help);
-  background-color: var(--color-bg-alt);
+  padding: 8px;
+
+  background-color: $lbry-gray-1;
+  color: $lbry-gray-5;
+  border-left: 2px solid $lbry-gray-5;
 }

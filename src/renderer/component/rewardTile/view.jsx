@@ -7,6 +7,7 @@ import { rewards } from 'lbryinc';
 import * as icons from 'constants/icons';
 
 type Props = {
+  openRewardCodeModal: () => void,
   reward: {
     id: string,
     reward_title: string,
@@ -19,7 +20,7 @@ type Props = {
 };
 
 const RewardTile = (props: Props) => {
-  const { reward } = props;
+  const { reward, openRewardCodeModal } = props;
   const claimed = !!reward.transaction_id;
 
   return (
@@ -27,6 +28,9 @@ const RewardTile = (props: Props) => {
       <div className="card__title">{reward.reward_title}</div>
       <div className="card__subtitle">{reward.reward_description}</div>
       <div className="card__actions">
+        {reward.reward_type === rewards.TYPE_GENERATED_CODE && (
+          <Button button="primary" onClick={openRewardCodeModal} label={__('Enter Code')} />
+        )}
         {reward.reward_type === rewards.TYPE_REFERRAL && (
           <Button button="primary" navigate="/invite" label={__('Go To Invites')} />
         )}

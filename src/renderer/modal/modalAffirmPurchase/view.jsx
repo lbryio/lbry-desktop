@@ -1,8 +1,18 @@
+// @flow
 import React from 'react';
 import FilePrice from 'component/filePrice';
 import { Modal } from 'modal/modal';
+import type { Metadata } from 'types/claim';
 
-class ModalAffirmPurchase extends React.PureComponent {
+type Props = {
+  closeModal: () => void,
+  loadVideo: string => void,
+  uri: string,
+  cancelPurchase: () => void,
+  metadata: Metadata,
+};
+
+class ModalAffirmPurchase extends React.PureComponent<Props> {
   constructor() {
     super();
 
@@ -25,15 +35,18 @@ class ModalAffirmPurchase extends React.PureComponent {
       <Modal
         type="confirm"
         isOpen
+        title={__('Confirm Purchase')}
         contentLabel={__('Confirm Purchase')}
         onConfirmed={this.onAffirmPurchase}
         onAborted={cancelPurchase}
       >
-        {__('This will purchase')} <strong>{title}</strong> {__('for')}{' '}
-        <strong>
-          <FilePrice uri={uri} showFullPrice inheritStyle showLBC={false} />
-        </strong>{' '}
-        {__('credits')}.
+        <section className="card__content">
+          {__('This will purchase')} <strong>{`"${title}"`}</strong> {__('for')}{' '}
+          <strong>
+            <FilePrice uri={uri} showFullPrice inheritStyle showLBC={false} />
+          </strong>{' '}
+          {__('credits')}.
+        </section>
       </Modal>
     );
   }

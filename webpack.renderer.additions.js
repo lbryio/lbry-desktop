@@ -31,7 +31,7 @@ module.exports = {
   },
   plugins: isDev ? [
     new FilewatcherPlugin({
-      watchFileRegex: [require.resolve('lbry-redux')],
+      watchFileRegex: [require.resolve('lbry-redux'), require.resolve('lbryinc')],
     }),
   ] : [],
 };

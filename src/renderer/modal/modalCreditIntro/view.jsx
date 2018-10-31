@@ -17,9 +17,8 @@ const ModalCreditIntro = (props: Props) => {
   const totalRewardRounded = Math.floor(totalRewardValue / 10) * 10;
 
   return (
-    <Modal type="custom" isOpen contentLabel="Welcome to LBRY">
-      <section>
-        <h3 className="modal__header">{__('Computer Wizard Needs Tokens Badly')}</h3>
+    <Modal type="custom" isOpen contentLabel="Welcome to LBRY" title={__('LBRY Credits Needed')}>
+      <section className="card__content">
         <p>
           Some actions require LBRY credits (<em>
             <CurrencySymbol />

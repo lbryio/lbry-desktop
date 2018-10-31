@@ -1,14 +1,10 @@
 // @flow
-import * as NOTIFICATION_TYPES from 'constants/notification_types';
+import * as NOTIFICATION_TYPES from 'constants/subscriptions';
 import { ipcRenderer } from 'electron';
 import { doAlertError } from 'redux/actions/app';
 import { doNavigate } from 'redux/actions/navigation';
-import {
-  setSubscriptionLatest,
-  setSubscriptionNotification,
-  setSubscriptionNotifications,
-} from 'redux/actions/subscriptions';
-import { selectNotifications } from 'redux/selectors/subscriptions';
+import { setSubscriptionLatest, doUpdateUnreadSubscriptions } from 'redux/actions/subscriptions';
+import { makeSelectUnreadByChannel } from 'redux/selectors/subscriptions';
 import { selectBadgeNumber } from 'redux/selectors/app';
 import {
   ACTIONS,
@@ -16,100 +12,43 @@ import {
   Lbry,
   Lbryapi,
   buildURI,
-  batchActions,
-  doResolveUris,
   doFetchClaimListMine,
   makeSelectCostInfoForUri,
   makeSelectFileInfoForUri,
+  selectFileInfosByOutpoint,
   selectDownloadingByOutpoint,
   selectTotalDownloadProgress,
   selectBalance,
   MODALS,
   doNotify,
+  makeSelectChannelForClaimUri,
+  parseURI,
 } from 'lbry-redux';
 import { makeSelectClientSetting, selectosNotificationsEnabled } from 'redux/selectors/settings';
 import setBadge from 'util/setBadge';
 import setProgressBar from 'util/setProgressBar';
 import analytics from 'analytics';
-import { Lbryio } from 'lbryinc';
 
 const DOWNLOAD_POLL_INTERVAL = 250;
 
-export function doFetchFeaturedUris() {
-  return dispatch => {
-    dispatch({
-      type: ACTIONS.FETCH_FEATURED_CONTENT_STARTED,
-    });
-
-    const success = ({ Uris }) => {
-      const urisToResolve = Object.keys(Uris).reduce(
-        (resolve, category) => [...resolve, ...Uris[category]],
-        []
-      );
-
-      const actions = [
-        doResolveUris(urisToResolve),
-        {
-          type: ACTIONS.FETCH_FEATURED_CONTENT_COMPLETED,
-          data: {
-            uris: Uris,
-            success: true,
-          },
-        },
-      ];
-      dispatch(batchActions(...actions));
-    };
-
-    const failure = () => {
-      dispatch({
-        type: ACTIONS.FETCH_FEATURED_CONTENT_COMPLETED,
-        data: {
-          uris: {},
-        },
-      });
-    };
-
-    Lbryio.call('file', 'list_homepage').then(success, failure);
-  };
-}
-
-export function doFetchRewardedContent() {
-  return dispatch => {
-    const success = nameToClaimId => {
-      dispatch({
-        type: ACTIONS.FETCH_REWARD_CONTENT_COMPLETED,
-        data: {
-          claimIds: Object.values(nameToClaimId),
-          success: true,
-        },
-      });
-    };
-
-    const failure = () => {
-      dispatch({
-        type: ACTIONS.FETCH_REWARD_CONTENT_COMPLETED,
-        data: {
-          claimIds: [],
-          success: false,
-        },
-      });
-    };
-
-    Lbryio.call('reward', 'list_featured').then(success, failure);
-  };
-}
-
-export function doUpdateLoadStatus(uri, outpoint) {
+export function doUpdateLoadStatus(uri: string, outpoint: string) {
   return (dispatch, getState) => {
+    const setNextStatusUpdate = () =>
+      setTimeout(() => {
+        // We need to check if outpoint still exists first because user are able to delete file (outpoint) while downloading.
+        // If a file is already deleted, no point to still try update load status
+        const byOutpoint = selectFileInfosByOutpoint(getState());
+        if (byOutpoint[outpoint]) {
+          dispatch(doUpdateLoadStatus(uri, outpoint));
+        }
+      }, DOWNLOAD_POLL_INTERVAL);
     Lbry.file_list({
       outpoint,
       full_status: true,
     }).then(([fileInfo]) => {
       if (!fileInfo || fileInfo.written_bytes === 0) {
         // download hasn't started yet
-        setTimeout(() => {
-          dispatch(doUpdateLoadStatus(uri, outpoint));
-        }, DOWNLOAD_POLL_INTERVAL);
+        setNextStatusUpdate();
       } else if (fileInfo.completed) {
         const state = getState();
         // TODO this isn't going to get called if they reload the client before
@@ -129,19 +68,15 @@ export function doUpdateLoadStatus(uri, outpoint) {
         const totalProgress = selectTotalDownloadProgress(state);
         setProgressBar(totalProgress);
 
-        const notifications = selectNotifications(state);
-        if (notifications[uri] && notifications[uri].type === NOTIFICATION_TYPES.DOWNLOADING) {
-          const count = Object.keys(notifications).reduce(
-            (acc, cur) =>
-              notifications[cur].subscription.channelName ===
-              notifications[uri].subscription.channelName
-                ? acc + 1
-                : acc,
-            0
-          );
+        const channelUri = makeSelectChannelForClaimUri(uri, true)(state);
+        const { claimName: channelName } = parseURI(channelUri);
+
+        const unreadForChannel = makeSelectUnreadByChannel(channelUri)(state);
+        if (unreadForChannel.type === NOTIFICATION_TYPES.DOWNLOADING) {
+          const count = unreadForChannel.uris.length;
 
           if (selectosNotificationsEnabled(state)) {
-            const notif = new window.Notification(notifications[uri].subscription.channelName, {
+            const notif = new window.Notification(channelName, {
               body: `Posted ${fileInfo.metadata.title}${
                 count > 1 && count < 10 ? ` and ${count - 1} other new items` : ''
               }${count > 9 ? ' and 9+ other new items' : ''}`,
@@ -155,18 +90,12 @@ export function doUpdateLoadStatus(uri, outpoint) {
               );
             };
           }
-          if (state.navigation.currentPath !== '/subscriptions') {
-            dispatch(
-              setSubscriptionNotification(
-                notifications[uri].subscription,
-                uri,
-                NOTIFICATION_TYPES.DOWNLOADED
-              )
-            );
-          }
+
+          dispatch(doUpdateUnreadSubscriptions(channelUri, null, NOTIFICATION_TYPES.DOWNLOADED));
         } else {
           // If notifications are disabled(false) just return
           if (!selectosNotificationsEnabled(getState())) return;
+
           const notif = new window.Notification('LBRY Download Complete', {
             body: fileInfo.metadata.title,
             silent: false,
@@ -192,10 +121,7 @@ export function doUpdateLoadStatus(uri, outpoint) {
 
         const totalProgress = selectTotalDownloadProgress(getState());
         setProgressBar(totalProgress);
-
-        setTimeout(() => {
-          dispatch(doUpdateLoadStatus(uri, outpoint));
-        }, DOWNLOAD_POLL_INTERVAL);
+        setNextStatusUpdate();
       }
     });
   };
@@ -359,14 +285,14 @@ export function doPurchaseUri(uri, specificCostInfo, shouldRecordViewEvent) {
   };
 }
 
-export function doFetchClaimsByChannel(uri, page) {
-  return (dispatch, getState) => {
+export function doFetchClaimsByChannel(uri, page, pageSize) {
+  return dispatch => {
     dispatch({
       type: ACTIONS.FETCH_CHANNEL_CLAIMS_STARTED,
       data: { uri, page },
     });
 
-    Lbry.claim_list_by_channel({ uri, page: page || 1 }).then(result => {
+    Lbry.claim_list_by_channel({ uri, page: page || 1, page_size: pageSize || 20 }).then(result => {
       const claimResult = result[uri] || {};
       const { claims_in_channel: claimsInChannel, returned_page: returnedPage } = claimResult;
 
@@ -387,18 +313,6 @@ export function doFetchClaimsByChannel(uri, page) {
             buildURI({ contentName: latest.name, claimId: latest.claim_id }, false)
           )
         );
-        // commented out as a note for @sean, notification will be clared individually
-        // const notifications = selectNotifications(getState());
-        // const newNotifications = {};
-        // Object.keys(notifications).forEach(cur => {
-        //   if (
-        //     notifications[cur].subscription.channelName !== latest.channel_name ||
-        //     notifications[cur].type === NOTIFICATION_TYPES.DOWNLOADING
-        //   ) {
-        //     newNotifications[cur] = { ...notifications[cur] };
-        //   }
-        // });
-        // dispatch(setSubscriptionNotifications(newNotifications));
       }
 
       dispatch({

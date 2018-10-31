@@ -14,7 +14,7 @@ type Props = {
   showLBC?: boolean,
   fee?: boolean,
   inheritStyle?: boolean,
-  filePage?: boolean,
+  badge?: boolean,
 };
 
 class CreditAmount extends React.PureComponent<Props> {
@@ -38,7 +38,7 @@ class CreditAmount extends React.PureComponent<Props> {
       fee,
       showLBC,
       inheritStyle,
-      filePage,
+      badge,
     } = this.props;
 
     const minimumRenderableAmount = 10 ** (-1 * precision);
@@ -78,11 +78,13 @@ class CreditAmount extends React.PureComponent<Props> {
       <span
         title={fullPrice}
         className={classnames('credit-amount', {
-          'credit-amount--free': !large && isFree,
-          'credit-amount--cost': !large && !isFree,
           'credit-amount--large': large,
+          // TODO: remove inheritStyle prop
+          // It just complicates things
           'credit-amount--inherit': inheritStyle,
-          'credit-amount--file-page': filePage,
+          badge: badge,
+          'badge--cost': badge && !isFree,
+          'badge--free': badge && isFree,
         })}
       >
         {amountText}

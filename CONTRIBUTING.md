@@ -10,10 +10,11 @@ However, for those individuals who want a bit more guidance on the best way to c
 
 * [Here](https://github.com/lbryio/lbry-desktop/issues?q=is%3Aopen+is%3Aissue+label%3A%22help+wanted%22+no%3Aassignee)
   is a list of help wanted issues.
-* Comment on an issue to let us know if you are going to work on it, don't take an issue that
-  someone reserved less than 3 days ago
-* Submit a pull request and get paid in LBC
-* Don't hesitate to contact us with any questions or comments
+* Comment on an issue to let us know if you are going to work on it, don't take an issue that someone reserved less than 3 days ago.
+* Submit a pull request and get paid in LBC.
+* Don't hesitate to contact us with any questions or comments.
+* [Check out this video for a quickstart guide to running and developing the desktop app](https://spee.ch/7da73fc508ffc4ff8b2711e3c3950110430b0c5f/LBRYAppDesign.mp4).
+
 
 ## Choose an Issue
 
@@ -23,7 +24,7 @@ you see here are the latest source code changes and issues.
 Since LBRY is based on a decentralized community, we believe that the app will be stronger if it
 receives contributions from individuals outside the core team -- such as yourself!
 
-To make contributing as easy and rewarding of possible, we have instituted the following system:
+To make contributing as easy and rewarding as possible, we have instituted the following system:
 
 * Anyone can view all issues in the system by clicking on the
   [Issues](https://github.com/lbryio/lbry-desktop/issues) button at the top of the page. Feel free to
@@ -39,15 +40,15 @@ To make contributing as easy and rewarding of possible, we have instituted the f
 
 | Level                                                                                                                                            | Description                                                                                        |
 | ------------------------------------------------------------------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------------------- |
-| [**level 0**](https://github.com/lbryio/lbry-desktop/issues?q=is%3Aopen+is%3Aissue+label%3A%22help+wanted%22+label%3A%22level%3A+0%22+no%3Aassignee) | Typos and text edits -- a tech-savvy non-programmer can fix these                                  |
-| [**level 1**](https://github.com/lbryio/lbry-desktop/issues?q=is%3Aopen+is%3Aissue+label%3A%22help+wanted%22+label%3A%22level%3A+1%22+no%3Aassignee) | Programming issues that require little knowledge of how the LBRY app works                         |
-| [**level 2**](https://github.com/lbryio/lbry-desktop/issues?q=is%3Aopen+is%3Aissue+label%3A%22help+wanted%22+label%3A%22level%3A+2%22+no%3Aassignee) | Issues of average difficulty that require the developer to dig into how the app works a little bit |
-| [**level 3**](https://github.com/lbryio/lbry-desktop/issues?q=is%3Aopen+is%3Aissue+label%3A%22help+wanted%22+label%3A%22level%3A+3%22+no%3Aassignee) | Issues that are likely too tricky to be level 2 or require more thinking outside of the box        |
-| [**level 4**](https://github.com/lbryio/lbry-desktop/issues?q=is%3Aopen+is%3Aissue+label%3A%22help+wanted%22+label%3A%22level%3A+4%22+no%3Aassignee) | Big features or really hard issues                                                                 |
+| [**level 0**](https://github.com/lbryio/lbry-desktop/issues?q=is%3Aopen+is%3Aissue+label%3A%22help+wanted%22+label%3A%22level%3A+0%22+no%3Aassignee) | Typos and text edits -- a tech-savvy non-programmer can fix these.                                  |
+| [**level 1**](https://github.com/lbryio/lbry-desktop/issues?q=is%3Aopen+is%3Aissue+label%3A%22help+wanted%22+label%3A%22level%3A+1%22+no%3Aassignee) | Programming issues that require little knowledge of how the LBRY app works.                         |
+| [**level 2**](https://github.com/lbryio/lbry-desktop/issues?q=is%3Aopen+is%3Aissue+label%3A%22help+wanted%22+label%3A%22level%3A+2%22+no%3Aassignee) | Issues of average difficulty that require the developer to dig into how the app works a little bit. |
+| [**level 3**](https://github.com/lbryio/lbry-desktop/issues?q=is%3Aopen+is%3Aissue+label%3A%22help+wanted%22+label%3A%22level%3A+3%22+no%3Aassignee) | Issues that are likely too tricky to be level 2 or require more thinking outside of the box.        |
+| [**level 4**](https://github.com/lbryio/lbry-desktop/issues?q=is%3Aopen+is%3Aissue+label%3A%22help+wanted%22+label%3A%22level%3A+4%22+no%3Aassignee) | Big features or really hard issues.                                                                 |
 
 The process of ranking issues is highly subjective. The purpose of sorting issues like this is to
-give contributors a general idea about the type of issues they are looking at. It could very well be
-the case that a level 1 issue is more difficult than a level 2, for instance. This system is meant
+give contributors a general idea about the type of issues they are looking at. For instance, it could very well be
+the case that a level 1 issue is more difficult than a level 2 issue. This system is meant
 to help you find relevant issues, not to prevent you from working on issues that you otherwise
 would. If these rankings don't work for you, feel free to ignore them.
 
@@ -55,14 +56,14 @@ Although all contributions should have good UX, the [UX label, when applied in c
 
 ## Code Overview
 
-The entry point for this application is `src/renderer/index.js`
+The entry point for this application is `src/renderer/index.js`.
 
 This application is primarily written in JavaScript and is built on [Electron](https://electronjs.org)
 while utilizing [React](https://reactjs.org) and [Redux](https://redux.js.org) for UI and
 application state.
 
 The project comes with diverse tools for simplifying the development process and for providing
-better code quality. It's recommended to make use of them thoroughly during ongoing development. We follow the well-known [Airbnb JavaScript Style Guide](http://airbnb.io/javascript/) for defining
+better code quality. It's recommended to make use of them thoroughly during ongoing development. We follow the well-known [Airbnb JavaScript Style Guide](https://airbnb.io/javascript/) for defining
 our styling rules and code best practices.
 
 ### lbry-redux
@@ -119,7 +120,7 @@ You can also use the following command:
 `$ yarn format`
 
 for applying formatting rules to all project's code sources. For formatting a specific file or
-directory use:
+directory, use:
 
 `$ yarn prettier 'glob/pattern'`
 

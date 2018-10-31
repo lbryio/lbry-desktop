@@ -1,45 +1,35 @@
 .card {
-  margin-left: auto;
-  margin-right: auto;
   border-radius: var(--card-radius);
-  user-select: text;
   display: flex;
-  position: relative;
   flex-direction: column;
+  margin-right: auto;
+  margin-left: auto;
   max-width: var(--card-max-width);
-}
-
-.card > h1 {
-  word-wrap: break-word;
-}
-
-.card--section {
-  background-color: var(--card-bg);
-  padding: $spacing-vertical;
-  margin-top: $spacing-vertical * 2/3;
-  box-shadow: var(--box-shadow-layer);
-}
-
-.card--small {
+  user-select: text;
   white-space: normal;
+
+  // .card-media__internal__links should always be inside a card
+  .card-media__internal-links {
+    top: $spacing-vertical * 2/3;
+    right: $spacing-vertical * 2/3;
+    position: absolute;
+  }
 
   .card__media {
     padding-top: var(--video-aspect-ratio);
   }
 
+  // Text that is shown if a piece of content has no thumbnail
+  // We need to do this because the thumbnail uses padding-top: var(--video-aspect-ratio); for dynamic height
+  // this lets the text sit in the middle instead of the bottom
   .card__media-text {
-    // for the weird padding required for dynamic height
-    // this lets the text sit in the middle instead of the bottom
     margin-top: calc(var(--video-aspect-ratio) * -1);
   }
+}
 
-  .channel-name {
-    font-size: 12px;
-
-    @media only screen and (min-width: $medium-breakpoint) {
-      font-size: 14px;
-    }
-  }
+.card--disabled {
+  opacity: 0.3;
+  pointer-events: none;
 }
 
 .card--link {
@@ -50,213 +40,54 @@
   opacity: 0.5;
 }
 
+.card--section {
+  margin-top: $spacing-vertical * 2/3;
+  padding: $spacing-vertical;
+  background-color: $lbry-white;
+}
+
+.card--small {
+  font-size: 13px;
+}
+
+.card--space-between {
+  display: flex;
+  justify-content: space-between;
+}
+
 .card--wallet-balance {
   background: url('../../../static/img/stripe-background.png') no-repeat;
   background-size: cover;
-  color: var(--card-wallet-color);
+  color: $lbry-white;
   justify-content: space-between;
 
-  .card__title,
-  .card__subtitle {
-    color: var(--card-wallet-color);
+  .card__subtitle,
+  .card__title {
+    color: $lbry-white;
   }
 }
 
-.card--disabled {
-  opacity: 0.3;
-  pointer-events: none;
-}
-
 .card__media {
-  background-size: cover;
-  background-repeat: no-repeat;
+  background-color: $lbry-gray-3;
   background-position: 50% 50%;
-  background-color: var(--color-placeholder);
+  background-repeat: no-repeat;
+  background-size: cover;
 }
 
 .card__media--no-img {
+  align-items: center;
   display: flex;
   justify-content: center;
-  align-items: center;
   position: relative;
 }
 
 .card__media--nsfw {
-  background-color: var(--color-error);
-}
-
-.card__title-identity {
-  color: var(--text-color);
-}
-
-.card__title-identity--file {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-
-  .icon {
-    margin: 0 $spacing-vertical * 1/3;
-  }
-}
-
-.card__title-identity-icons {
-  display: flex;
-  align-items: center;
-  align-self: flex-start;
-}
-
-.card__title {
-  font-size: 18px;
-  color: var(--text-color);
-}
-
-.card__title--small {
-  font-size: 12px;
-  line-height: 12px;
-
-  @media only screen and (min-width: $medium-breakpoint) {
-    font-size: 14px;
-    line-height: 14px;
-  }
-}
-
-.card__title--x-small {
-  font-size: 12px;
-  line-height: 12px;
-}
-
-.card__title--large {
-  font-size: 22px;
-}
-
-.card__title--file {
-  font-family: 'metropolis-bold';
-  font-size: 28px;
-  margin-bottom: 0;
-  padding-top: 0;
-  padding-bottom: 5px;
-  font-size: 18px;
-}
-
-.card__title--file-card {
-  padding-top: $spacing-vertical * 1/3;
-  // height is the same height that two lines of title fill
-  // doing this so content below the title is inline accross the row
-  height: 30px;
-
-  @media only screen and (min-width: $medium-breakpoint) {
-    height: 36px;
-  }
-}
-
-.card__subtitle {
-  margin: 0;
-  font-size: 14px;
-  font-family: 'metropolis-medium';
-  color: var(--card-text-color);
-}
-
-.card__subtitle--x-small {
-  font-size: 12px;
-}
-
-.card__subtitle--large {
-  font-size: 18px;
-  padding-bottom: $spacing-vertical * 1/3;
-}
-
-.card__subtitle-price {
-  padding-top: $spacing-vertical * 1/3;
-}
-
-.card__title--small + .card__subtitle,
-.card__title--x-small + .card__subtitle {
-  padding-top: $spacing-vertical * 1/3;
-}
-
-.card__meta {
-  color: var(--color-help);
-  font-size: 14px;
-  font-family: 'metropolis-medium';
-  padding-top: $spacing-vertical * 2/3;
-}
-
-.card__file-properties {
-  display: flex;
-  align-items: center;
-  padding-top: $spacing-vertical * 1/3;
-  color: var(--card-text-color);
-
-  .icon + .icon,
-  .credit-amount + .icon {
-    margin-left: $spacing-vertical * 1/3;
-  }
-}
-
-// .card-media__internal__links should always be inside a card
-.card {
-  .card-media__internal-links {
-    position: absolute;
-    top: $spacing-vertical * 2/3;
-    right: $spacing-vertical * 2/3;
-  }
-}
-
-.card--small {
-  .card-media__internal-links {
-    top: $spacing-vertical * 1/3;
-    right: $spacing-vertical * 1/3;
-  }
-}
-
-// Channel info with buttons on the right side
-.card__channel-info {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: $spacing-width 0 0;
-}
-
-.card__channel-info--large {
-  padding-top: 0;
-  padding-bottom: $spacing-vertical * 2/3;
-}
-
-.card__content {
-  margin-top: $spacing-vertical * 2/3;
-}
-
-.card__content--extra-padding {
-  margin-top: $spacing-vertical * 3/2;
-}
-
-.card__subtext-title {
-  color: var(--text-color);
-  font-size: calc(var(--font-size-subtext-multiple) * 1.2em);
-
-  &:not(:first-of-type) {
-    margin-top: $spacing-vertical * 3/2;
-  }
-}
-
-.card__subtext {
-  font-size: calc(var(--font-size-subtext-multiple) * 1em);
-  padding-top: $spacing-vertical * 1/3;
-  word-break: break-word;
-  font-family: 'metropolis-medium';
-}
-
-.card__subtext--small {
-  font-size: calc(var(--font-size-subtext-multiple) * 0.8em);
-}
-
-.card__subtext--large {
-  font-size: calc(var(--font-size-subtext-multiple) * 0.9em);
+  background-color: $lbry-red-5;
 }
 
 .card__actions {
-  margin-top: $spacing-vertical * 2/3;
   display: flex;
+  margin-top: $spacing-vertical * 2/3;
 
   &:not(.card__actions--vertical) {
     .btn:nth-child(n + 2),
@@ -267,18 +98,20 @@
   }
 }
 
-.card__actions--no-margin {
-  margin-top: 0;
+.card__actions-bottom-corner {
+  bottom: $spacing-vertical;
+  right: $spacing-vertical;
+  position: absolute;
 }
 
-.card__actions--vertical {
-  flex-direction: column;
-  margin-top: 0;
-  align-items: flex-end;
+.card__actions-top-corner {
+  display: flex;
+  justify-content: flex-end;
+}
 
-  .btn:not(:first-child) {
-    margin-top: $spacing-vertical * 1/3;
-  }
+.card__actions--between {
+  justify-content: space-between;
+  flex-wrap: wrap;
 }
 
 .card__actions--center {
@@ -290,118 +123,54 @@
   }
 }
 
-.card__actions-top-corner {
-  position: absolute;
-  top: $spacing-vertical;
-  right: $spacing-vertical;
-}
-
-.card__actions-bottom-corner {
-  position: absolute;
-  bottom: $spacing-vertical;
-  right: $spacing-vertical;
-}
-
 .card__actions--end {
   justify-content: flex-end;
 }
 
-.card__actions--between {
-  justify-content: space-between;
-  flex-wrap: wrap;
+.card__actions--no-margin {
+  margin-top: 0;
 }
 
-/*
- .card-row is used on the discover page
- It is a list of cards that extend past the right edge of the screen
- There are left/right arrows to scroll the cards and view hidden content
-*/
-.card-row {
-  white-space: nowrap;
-  width: 100%;
-  padding-top: $spacing-vertical;
+.card__actions--vertical {
+  align-items: flex-end;
+  flex-direction: column;
+  margin-top: 0;
 
-  &:last-of-type {
-    padding-bottom: $spacing-vertical * 2/3;
+  .btn:not(:first-child) {
+    margin-top: $spacing-vertical * 1/3;
   }
 }
 
-.card-row__header {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  // specific padding-left styling is needed here
-  // this needs to be used on a page with noPadding
-  // doing so allows the content to scroll to the edge of the screen
-  padding-left: $spacing-width;
+.card__content {
+  margin-top: $spacing-vertical * 2/3;
 }
 
-.card-row__title {
-  display: flex;
+.card__error-msg {
+  margin: $spacing-vertical * 1/3 0;
+  padding: $spacing-vertical * 1/3;
+
+  background-color: rgba($lbry-red-1, 0.3);
+  border-left: 2px solid $lbry-red-5;
+  color: $lbry-red-5;
+}
+
+.card__file-properties {
   align-items: center;
-  font-size: 18px;
-  line-height: 24px;
-
-  @media only screen and (min-width: $medium-breakpoint) {
-    font-size: 20px;
-  }
-}
-
-.card-row__scroll-btns {
+  color: $lbry-gray-5;
   display: flex;
-  padding-right: $spacing-width * 1/3;
 
-  @media (min-width: $medium-breakpoint) {
-    padding-right: $spacing-width;
+  .icon + .icon {
+    margin-left: $spacing-vertical * 1/3;
   }
 }
 
-.card-row__scrollhouse {
-  padding-top: $spacing-vertical * 2/3;
-  overflow: hidden;
+// How cards are displayed in lists
 
-  .card {
-    display: inline-block;
-    vertical-align: top;
-    overflow-y: visible;
-    // 31 px to handle to padding between cards
-    width: calc((100% / 4) - 34px);
-
-    @media only screen and (min-width: $medium-breakpoint) {
-      width: calc((100% / 6) - 29px);
-    }
-
-    @media only screen and (min-width: $large-breakpoint) {
-      width: calc((100% / 8) - 27px);
-    }
-  }
-
-  .card:not(:first-of-type) {
-    margin-left: 20px;
-  }
-
-  .card:first-of-type {
-    margin-left: $spacing-width;
-  }
-
-  .card:last-of-type {
-    margin-right: $spacing-width;
-  }
-}
-
-.card-row__message {
-  padding: 0 $spacing-width;
-  white-space: normal;
-}
-
-/*
-  How cards are displayed in lists
-*/
 .card__list {
   .card {
     display: inline-block;
-    vertical-align: top;
     margin-bottom: $spacing-vertical * 3/2;
+    vertical-align: top;
 
     @media only screen and (max-width: $medium-breakpoint) {
       width: calc((100% / 4) - (60px / 4)); // 60px === 20px margin-right * three cards
@@ -429,19 +198,6 @@
   }
 }
 
-.card__list--rewards {
-  .card {
-    display: inline-block;
-    width: calc(50% - 10px);
-    margin-bottom: 20px;
-    vertical-align: top;
-
-    &:not(:nth-child(2n + 1)) {
-      margin-left: 20px;
-    }
-  }
-}
-
 .card__list--recommended {
   flex: 0 0 var(--recommended-content-width);
   padding-left: $spacing-width;
@@ -451,50 +207,161 @@
   }
 }
 
+.card__list--rewards {
+  column-count: 2;
+  column-gap: $spacing-vertical * 1/3;
+
+  .card {
+    display: inline-block;
+    margin: 0 0 $spacing-vertical * 1/3;
+    width: 100%;
+  }
+}
+
+.card__meta {
+  color: $lbry-gray-5;
+  font-size: 14px;
+  font-weight: 500;
+  padding-top: $spacing-vertical * 2/3;
+}
+
+.card__subtitle {
+  color: $lbry-gray-5;
+  font-size: 0.9em;
+  padding-top: $spacing-vertical * 1/3;
+
+  @media (min-width: $large-breakpoint) {
+    font-size: 1em;
+  }
+}
+
+.card__subtext {
+  font-size: 0.85em;
+  padding-top: $spacing-vertical * 1/3;
+}
+
+.card__subtext-title {
+  font-size: 1.1em;
+
+  &:not(:first-of-type) {
+    padding-top: $spacing-vertical * 3/2;
+  }
+}
+
 .card__success-msg {
-  border-left: 2px solid var(--success-msg-border);
-  color: var(--success-msg-color);
-  background-color: var(--success-msg-bg);
-  padding: $spacing-vertical * 1/3;
   margin: $spacing-vertical * 1/3 0;
+  padding: $spacing-vertical * 1/3;
+
+  background-color: rgba($lbry-green-1, 0.1);
+  border-left: 5px solid $lbry-green-5;
+  color: $lbry-green-5;
 }
 
-.card__media--autothumb {
-  color: red !important;
+.card__title {
+  color: $lbry-black;
+  font-size: 1.5em;
+  padding-top: $spacing-vertical * 1/3;
+
+  @media (min-width: $large-breakpoint) {
+    font-size: 1.7em;
+  }
 }
 
-.card__media {
-  &.card__media--autothumb.purple {
-    background-color: #9c27b0;
+.card__title-identity-icons {
+  align-items: center;
+  align-self: flex-start;
+  display: flex;
+}
+
+.card__title--file-card {
+  // FileCard is slightly different where the title is only slightly bigger than the subtitle
+  // Slightly bigger than 2 lines for consistent channel placement
+  font-size: 1em;
+  height: 3.3em;
+
+  @media only screen and (min-width: $large-breakpoint) {
+    font-size: 1.1em;
   }
-  &.card__media--autothumb.red {
-    background-color: #e53935;
+}
+
+// .card-row is used on the discover page
+// It is a list of cards that extend past the right edge of the screen
+// There are left/right arrows to scroll the cards and view hidden content
+
+.card-row {
+  padding-top: $spacing-vertical;
+  white-space: nowrap;
+  width: 100%;
+
+  &:last-of-type {
+    padding-bottom: $spacing-vertical * 2/3;
   }
-  &.card__media--autothumb.pink {
-    background-color: #e91e63;
+}
+
+.card-row__header {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  // specific padding-left styling is needed here
+  // this needs to be used on a page with noPadding
+  // doing so allows the content to scroll to the edge of the screen
+  padding-left: $spacing-width;
+}
+
+.card-row__message {
+  padding: 0 $spacing-width;
+  white-space: normal;
+}
+
+.card-row__scroll-btns {
+  display: flex;
+  padding-right: $spacing-width * 1/3;
+
+  @media (min-width: $medium-breakpoint) {
+    padding-right: $spacing-width;
   }
-  &.card__media--autothumb.indigo {
-    background-color: #3f51b5;
+}
+
+.card-row__scrollhouse {
+  padding-top: $spacing-vertical * 2/3;
+  overflow: hidden;
+
+  .card {
+    display: inline-block;
+    overflow-y: visible;
+    vertical-align: top;
+    width: calc((100% / 4) - 34px); // 31 px to handle to padding between cards
+
+    &:not(:first-of-type) {
+      margin-left: 20px;
+    }
+
+    &:first-of-type {
+      margin-left: $spacing-width;
+    }
+
+    &:last-of-type {
+      margin-right: $spacing-width;
+    }
+
+    @media only screen and (min-width: $medium-breakpoint) {
+      width: calc((100% / 6) - 29px);
+    }
+
+    @media only screen and (min-width: $large-breakpoint) {
+      width: calc((100% / 8) - 27px);
+    }
   }
-  &.card__media--autothumb.blue {
-    background-color: #2196f3;
-  }
-  &.card__media--autothumb.light-blue {
-    background-color: #039be5;
-  }
-  &.card__media--autothumb.cyan {
-    background-color: #00acc1;
-  }
-  &.card__media--autothumb.teal {
-    background-color: #009688;
-  }
-  &.card__media--autothumb.green {
-    background-color: #43a047;
-  }
-  &.card__media--autothumb.yellow {
-    background-color: #ffeb3b;
-  }
-  &.card__media--autothumb.orange {
-    background-color: #ffa726;
+}
+
+.card-row__title {
+  align-items: center;
+  display: flex;
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 24px;
+
+  @media only screen and (min-width: $medium-breakpoint) {
+    font-size: 20px;
   }
 }

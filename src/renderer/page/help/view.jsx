@@ -26,7 +26,6 @@ type VersionInfo = {
   os_release: string,
   platform: string,
   lbrynet_version: string,
-  lbryum_version: string,
 };
 
 type State = {
@@ -199,7 +198,7 @@ class HelpPage extends React.PureComponent<Props, State> {
           )}
 
           {this.state.uiVersion && ver ? (
-            <table className="table table--stretch table--help">
+            <table className="card__content table table--stretch table--help">
               <tbody>
                 <tr>
                   <td>{__('App')}</td>
@@ -210,10 +209,6 @@ class HelpPage extends React.PureComponent<Props, State> {
                   <td>{ver.lbrynet_version}</td>
                 </tr>
                 <tr>
-                  <td>{__('Wallet (lbryum)')}</td>
-                  <td>{ver.lbryum_version}</td>
-                </tr>
-                <tr>
                   <td>{__('Connected Email')}</td>
                   <td>
                     {user && user.primary_email ? (
@@ -221,7 +216,7 @@ class HelpPage extends React.PureComponent<Props, State> {
                         {user.primary_email}{' '}
                         <Button
                           button="link"
-                          href={`http://lbry.io/list/edit/${accessToken}`}
+                          href={`https://lbry.io/list/edit/${accessToken}`}
                           label={__('Update mailing preferences')}
                         />
                       </React.Fragment>

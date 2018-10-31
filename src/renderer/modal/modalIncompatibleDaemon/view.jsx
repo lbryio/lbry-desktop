@@ -15,6 +15,7 @@ class ModalIncompatibleDaemon extends React.PureComponent<Props> {
     return (
       <Modal
         isOpen
+        title={__('Incompatible Daemon')}
         contentLabel={__('Incompatible daemon running')}
         type="confirm"
         confirmButtonLabel={__('Close LBRY and daemon')}
@@ -22,9 +23,11 @@ class ModalIncompatibleDaemon extends React.PureComponent<Props> {
         onConfirmed={quitAnyDaemon}
         onAborted={quit}
       >
-        {__(
-          'This browser is running with an incompatible version of the LBRY protocol, please close the LBRY app and rerun the installation package to repair it. '
-        )}
+        <p>
+          {__(
+            'This browser is running with an incompatible version of the LBRY protocol, please close the LBRY app and rerun the installation package to repair it. '
+          )}
+        </p>
         <Button
           button="link"
           label={__('Learn more')}

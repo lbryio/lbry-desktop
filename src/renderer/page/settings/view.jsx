@@ -16,6 +16,7 @@ type DaemonSettings = {
   download_directory: string,
   disable_max_key_fee: boolean,
   share_usage_data: boolean,
+  max_key_fee?: Price,
 };
 
 type Props = {
@@ -34,6 +35,7 @@ type Props = {
   autoDownload: boolean,
   encryptWallet: () => void,
   decryptWallet: () => void,
+  updateWalletStatus: () => void,
   walletEncrypted: boolean,
   osNotificationsEnabled: boolean,
 };
@@ -65,10 +67,8 @@ class SettingsPage extends React.PureComponent<Props, State> {
   }
 
   componentDidMount() {
-    const { props } = this;
-
-    props.getThemes();
-    props.updateWalletStatus();
+    this.props.getThemes();
+    this.props.updateWalletStatus();
   }
 
   onRunOnStartChange(event: SyntheticInputEvent<*>) {
@@ -126,16 +126,20 @@ class SettingsPage extends React.PureComponent<Props, State> {
   }
 
   onChangeEncryptWallet() {
-    const { props } = this;
-    props.walletEncrypted ? props.decryptWallet() : props.encryptWallet();
-  }
-
-  setDaemonSetting(name: string, value: boolean | string | Price) {
-    this.props.setDaemonSetting(name, value);
+    const { decryptWallet, walletEncrypted, encryptWallet } = this.props;
+    if (walletEncrypted) {
+      decryptWallet();
+    } else {
+      encryptWallet();
+    }
   }
 
   onDesktopNotificationsChange(event: SyntheticInputEvent<*>) {
     this.props.setClientSetting(settings.OS_NOTIFICATIONS_ENABLED, event.target.checked);
+  }
+
+  setDaemonSetting(name: string, value: boolean | string | Price) {
+    this.props.setDaemonSetting(name, value);
   }
 
   clearCache() {
@@ -180,11 +184,13 @@ class SettingsPage extends React.PureComponent<Props, State> {
             <section className="card card--section">
               <div className="card__title">{__('Download Directory')}</div>
               <span className="card__subtitle">{__('LBRY downloads will be saved here.')}</span>
-              <FileSelector
-                type="openDirectory"
-                currentPath={daemonSettings.download_directory}
-                onFileChosen={this.onDownloadDirChange}
-              />
+              <div className="card__content">
+                <FileSelector
+                  type="openDirectory"
+                  currentPath={daemonSettings.download_directory}
+                  onFileChosen={this.onDownloadDirChange}
+                />
+              </div>
             </section>
             <section className="card card--section">
               <div className="card__title">{__('Max Purchase Price')}</div>
@@ -346,7 +352,7 @@ class SettingsPage extends React.PureComponent<Props, State> {
               <FormField
                 type="checkbox"
                 name="encrypt_wallet"
-                onChange={e => this.onChangeEncryptWallet(e)}
+                onChange={() => this.onChangeEncryptWallet()}
                 checked={walletEncrypted}
                 postfix={__('Encrypt my wallet with a custom password.')}
                 helper={

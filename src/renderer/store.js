@@ -97,18 +97,25 @@ const store = createStore(
 );
 
 const compressor = createCompressor();
-const saveClaimsFilter = createFilter('claims', ['byId', 'claimsByUri']);
-const subscriptionsFilter = createFilter('subscriptions', ['subscriptions']);
+// Removing claims from redux-persist to see if it solves https://github.com/lbryio/lbry-desktop/issues/1983
+// We were caching so much data the app was locking up
+// We can't add this back until we can perform this in a non-blocking way
+// const saveClaimsFilter = createFilter('claims', ['byId', 'claimsByUri']);
+const subscriptionsFilter = createFilter('subscriptions', ['subscriptions', 'unread', 'viewMode']);
 const contentFilter = createFilter('content', ['positions', 'history']);
-
+const fileInfoFilter = createFilter('fileInfo', [
+  'fileListPublishedSort',
+  'fileListDownloadedSort',
+  'fileListSubscriptionSort',
+]);
 // We only need to persist the receiveAddress for the wallet
 const walletFilter = createFilter('wallet', ['receiveAddress']);
 
 const persistOptions = {
-  whitelist: ['claims', 'subscriptions', 'publish', 'wallet', 'content'],
+  whitelist: ['subscriptions', 'publish', 'wallet', 'content', 'fileInfo'],
   // Order is important. Needs to be compressed last or other transforms can't
   // read the data
-  transforms: [saveClaimsFilter, subscriptionsFilter, walletFilter, contentFilter, compressor],
+  transforms: [subscriptionsFilter, walletFilter, contentFilter, fileInfoFilter, compressor],
   debounce: 10000,
   storage: localForage,
 };

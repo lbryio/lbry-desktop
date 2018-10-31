@@ -36,27 +36,24 @@ class UserHistoryItem extends React.PureComponent<Props> {
     }
 
     return (
-      <tr
+      <div
+        role="button"
         onClick={onSelect}
-        className={classnames({
-          history__selected: selected,
+        className={classnames('item-list__item', {
+          'item-list__item--selected': selected,
         })}
       >
-        <td>
-          <input checked={selected} type="checkbox" onClick={onSelect} />
-        </td>
-        <td>{moment(lastViewed).from(moment())}</td>
-        <td>{title}</td>
-        <td>
-          <Button
-            tourniquet
-            button="link"
-            label={name ? `lbry://${name}` : `lbry://...`}
-            navigate="/show"
-            navigateParams={{ uri }}
-          />
-        </td>
-      </tr>
+        <input checked={selected} type="checkbox" onClick={onSelect} />
+        <span className="time time--ago">{moment(lastViewed).from(moment())}</span>
+        <span className="item-list__item--cutoff">{title}</span>
+        <Button
+          tourniquet
+          button="link"
+          label={name ? `lbry://${name}` : `lbry://...`}
+          navigate="/show"
+          navigateParams={{ uri }}
+        />
+      </div>
     );
   }
 }

@@ -1,14 +1,22 @@
+// @flow
 import React from 'react';
 import { Modal } from 'modal/modal';
 
-class ModalTransactionFailed extends React.PureComponent {
+type Props = {
+  closeModal: () => void,
+};
+
+class ModalTransactionFailed extends React.PureComponent<Props> {
   render() {
     const { closeModal } = this.props;
 
     return (
-      <Modal isOpen contentLabel={__('Transaction failed')} onConfirmed={closeModal}>
-        {__('Transaction failed.')}:
-      </Modal>
+      <Modal
+        isOpen
+        contentLabel={__('Transaction failed')}
+        title={__('Transaction Failed')}
+        onConfirmed={closeModal}
+      />
     );
   }
 }

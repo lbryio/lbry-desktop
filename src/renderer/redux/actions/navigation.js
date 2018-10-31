@@ -8,6 +8,14 @@ export function doNavigate(path, params = {}, options = {}) {
       return;
     }
 
+    // ensure uri always has "lbry://" prefix
+    const navigationParams = params;
+    if (path === '/show') {
+      if (navigationParams.uri && !navigationParams.uri.startsWith('lbry://')) {
+        navigationParams.uri = `lbry://${navigationParams.uri}`;
+      }
+    }
+
     let url = path;
     if (params && Object.values(params).length) {
       url += `?${toQueryString(params)}`;

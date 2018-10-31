@@ -1,3 +1,7 @@
+* {
+  box-sizing: border-box;
+}
+
 body,
 div,
 dl,
@@ -28,22 +32,26 @@ iframe {
   margin: 0;
   padding: 0;
 }
+
 :focus {
   outline: 0;
 }
+
 input::-webkit-search-cancel-button {
-  /* Remove default */
-  -webkit-appearance: none;
+  -webkit-appearance: none; // Remove default
 }
+
 table {
   border-collapse: collapse;
   border-spacing: 0;
 }
+
 fieldset,
-img,
-iframe {
-  border: 0;
+iframe,
+img {
+  border: none;
 }
+
 h1,
 h2,
 h3,
@@ -52,28 +60,38 @@ h5,
 h6 {
   font-weight: normal;
 }
+
 ol,
 ul {
   list-style-position: inside;
+
   > li {
     list-style-position: inside;
   }
 }
+
 input,
-textarea,
-select {
+select,
+textarea {
+  border: none;
   font-family: inherit;
   font-size: inherit;
   font-weight: inherit;
-  border: 0 none;
 }
+
 img {
   width: auto;
   height: auto;
+  max-width: 100%;
+  max-height: 100%;
   vertical-align: middle;
-  -ms-interpolation-mode: bicubic;
 }
+
 a {
   color: inherit;
   text-decoration: none;
+}
+
+button:disabled {
+  cursor: default;
 }

@@ -2,7 +2,6 @@
 import React from 'react';
 import Button from 'component/button';
 import { buildURI } from 'lbry-redux';
-import classnames from 'classnames';
 import type { Claim } from 'types/claim';
 
 type Props = {
@@ -39,18 +38,12 @@ class UriIndicator extends React.PureComponent<Props> {
     if (!claim) {
       return <span className="empty">{isResolvingUri ? 'Validating...' : 'Unused'}</span>;
     }
-
-    const {
-      channel_name: channelName,
-      has_signature: hasSignature,
-      signature_is_valid: signatureIsValid,
-      value,
-    } = claim;
+    const { channel_name: channelName, signature_is_valid: signatureIsValid, value } = claim;
 
     const channelClaimId =
       value && value.publisherSignature && value.publisherSignature.certificateId;
 
-    if (!hasSignature || !channelName) {
+    if (!channelName) {
       return <span className="channel-name">Anonymous</span>;
     }
 
@@ -59,17 +52,7 @@ class UriIndicator extends React.PureComponent<Props> {
       channelLink = link ? buildURI({ channelName, claimId: channelClaimId }) : false;
     }
 
-    const inner = (
-      <span>
-        <span
-          className={classnames('channel-name', {
-            'button-text no-underline': link,
-          })}
-        >
-          {channelName}
-        </span>{' '}
-      </span>
-    );
+    const inner = <span className="channel-name">{channelName}</span>;
 
     if (!channelLink) {
       return inner;

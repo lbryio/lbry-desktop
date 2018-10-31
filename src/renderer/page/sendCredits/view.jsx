@@ -3,7 +3,7 @@ import WalletSend from 'component/walletSend';
 import WalletAddress from 'component/walletAddress';
 import Page from 'component/page';
 
-const SendReceivePage = props => (
+const SendReceivePage = () => (
   <Page>
     <WalletSend />
     <WalletAddress />

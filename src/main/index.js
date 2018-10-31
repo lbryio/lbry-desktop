@@ -68,8 +68,9 @@ if (isDev) {
 protocol.registerStandardSchemes(['content']);
 
 app.on('ready', async () => {
-  const processList = await findProcess('name', 'lbrynet-daemon');
+  const processList = await findProcess('name', 'lbrynet');
   const isDaemonRunning = processList.length > 0;
+
   if (!isDaemonRunning) {
     daemon = new Daemon();
     daemon.on('exit', () => {

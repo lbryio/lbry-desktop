@@ -5,18 +5,20 @@ import { FormRow } from 'component/common/form';
 import * as statuses from 'constants/shape_shift';
 import Address from 'component/address';
 import Button from 'component/button';
-import type { Dispatch } from 'redux/actions/shape_shift';
+import type { Dispatch, ThunkAction } from 'types/redux';
+import type { Action } from 'redux/actions/shape_shift';
+
 import ShiftMarketInfo from './market_info';
 
 type Props = {
   shiftState: ?string,
   shiftCoinType: ?string,
-  shiftDepositAddress: ?string,
+  shiftDepositAddress: string,
   shiftReturnAddress: ?string,
   shiftOrderId: ?string,
   originCoinDepositMax: ?number,
-  clearShapeShift: Dispatch,
-  getActiveShift: Dispatch,
+  clearShapeShift: () => (Dispatch<Action>) => ThunkAction<Action>,
+  getActiveShift: string => (Dispatch<Action>) => ThunkAction<Action>,
   shapeShiftRate: ?number,
   originCoinDepositMax: ?number,
   originCoinDepositFee: ?number,
@@ -101,7 +103,7 @@ class ActiveShapeShift extends React.PureComponent<Props> {
         )}
 
         {shiftState === statuses.RECEIVED && (
-          <div className="card__content--extra-vertical-space">
+          <div>
             <p>
               {__('ShapeShift has received your payment! Sending the funds to your LBRY wallet.')}
             </p>
@@ -110,7 +112,7 @@ class ActiveShapeShift extends React.PureComponent<Props> {
         )}
 
         {shiftState === statuses.COMPLETE && (
-          <div className="card__content--extra-vertical-space">
+          <div>
             <p>{__('Transaction complete! You should see the new LBC in your wallet.')}</p>
           </div>
         )}

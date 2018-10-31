@@ -3,12 +3,13 @@ import React from 'react';
 import type { Claim } from 'types/claim';
 import Button from 'component/button';
 import * as icons from 'constants/icons';
-import Tooltip from 'component/common/tooltip';
-import Address from 'component/address';
+import CopyableText from 'component/copyableText';
+import ToolTip from 'component/common/tooltip';
 
 type Props = {
   claim: Claim,
   onDone: () => void,
+  speechShareable: boolean,
 };
 
 class SocialShare extends React.PureComponent<Props> {
@@ -27,57 +28,84 @@ class SocialShare extends React.PureComponent<Props> {
       channel_name: channelName,
       value,
     } = this.props.claim;
+    const { speechShareable, onDone } = this.props;
     const channelClaimId =
       value && value.publisherSignature && value.publisherSignature.certificateId;
-    const { onDone } = this.props;
-    const speechPrefix = 'http://spee.ch/';
+    const speechPrefix = 'https://spee.ch/';
+    const lbryPrefix = 'https://open.lbry.io/';
+
     const speechURL =
       channelName && channelClaimId
         ? `${speechPrefix}${channelName}:${channelClaimId}/${claimName}`
         : `${speechPrefix}${claimName}#${claimId}`;
 
-    return (
-      <div>
-        <div className="card__title">
-          <h2>{__('Share This Content')}</h2>
+    const lbryURL = `${lbryPrefix}${claimName}#${claimId}`;
 
+    return (
+      <section className="card__content">
+        {speechShareable && (
           <div className="card__content">
-            <Address address={speechURL} noSnackbar />
+            <label className="card__subtitle">{__('Web link')}</label>
+            <CopyableText copyable={speechURL} noSnackbar />
+            <div className="card__actions card__actions--center">
+              <ToolTip onComponent body={__('Facebook')}>
+                <Button
+                  iconColor="blue"
+                  icon={icons.FACEBOOK}
+                  button="alt"
+                  label={__('')}
+                  href={`https://facebook.com/sharer/sharer.php?u=${speechURL}`}
+                />
+              </ToolTip>
+              <ToolTip onComponent body={__('Twitter')}>
+                <Button
+                  iconColor="blue"
+                  icon={icons.TWITTER}
+                  button="alt"
+                  label={__('')}
+                  href={`https://twitter.com/home?status=${speechURL}`}
+                />
+              </ToolTip>
+              <ToolTip onComponent body={__('View on Spee.ch')}>
+                <Button
+                  icon={icons.GLOBE}
+                  iconColor="blue"
+                  button="alt"
+                  label={__('')}
+                  href={`${speechURL}`}
+                />
+              </ToolTip>
+            </div>
           </div>
+        )}
+        <div className="card__content">
+          <label className="card__subtitle">{__('LBRY App link')}</label>
+          <CopyableText copyable={lbryURL} noSnackbar />
           <div className="card__actions card__actions--center">
-            <Tooltip onComponent body={__('Facebook')}>
+            <ToolTip onComponent body={__('Facebook')}>
               <Button
                 iconColor="blue"
                 icon={icons.FACEBOOK}
                 button="alt"
                 label={__('')}
-                href={`https://facebook.com/sharer/sharer.php?u=${speechURL}`}
+                href={`https://facebook.com/sharer/sharer.php?u=${lbryURL}`}
               />
-            </Tooltip>
-            <Tooltip onComponent body={__('Twitter')}>
+            </ToolTip>
+            <ToolTip onComponent body={__('Twitter')}>
               <Button
                 iconColor="blue"
                 icon={icons.TWITTER}
                 button="alt"
                 label={__('')}
-                href={`https://twitter.com/home?status=${speechURL}`}
+                href={`https://twitter.com/home?status=${lbryURL}`}
               />
-            </Tooltip>
-            <Tooltip onComponent body={__('View on Spee.ch')}>
-              <Button
-                icon={icons.GLOBE}
-                iconColor="blue"
-                button="alt"
-                label={__('')}
-                href={`${speechURL}`}
-              />
-            </Tooltip>
-          </div>
-          <div className="card__actions">
-            <Button button="link" label={__('Done')} onClick={onDone} />
+            </ToolTip>
           </div>
         </div>
-      </div>
+        <div className="card__actions">
+          <Button button="link" label={__('Done')} onClick={onDone} />
+        </div>
+      </section>
     );
   }
 }

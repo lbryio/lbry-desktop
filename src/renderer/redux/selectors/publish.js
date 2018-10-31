@@ -1,48 +1,19 @@
 import { createSelector } from 'reselect';
-import { parseURI, selectClaimsById, selectMyClaimsWithoutChannels } from 'lbry-redux';
+import {
+  parseURI,
+  selectClaimsById,
+  selectMyClaimsWithoutChannels,
+  selectResolvingUris,
+  buildURI,
+  selectClaimsByUri,
+} from 'lbry-redux';
 
 const selectState = state => state.publish || {};
-
-export const selectPendingPublishes = createSelector(
-  selectState,
-  state => state.pendingPublishes.map(pendingClaim => ({ ...pendingClaim, pending: true })) || []
-);
-
-export const selectClaimsWithPendingPublishes = createSelector(
-  selectMyClaimsWithoutChannels,
-  selectPendingPublishes,
-  (claims, pendingPublishes) => {
-    // ensure there are no duplicates, they are being checked for in a setInterval
-    // no need to wait for it to complete though
-    // loop through myclaims
-    // if a claim has the same name as one in pendingPublish, remove it from pending
-    const claimMap = {};
-    claims.forEach(claim => {
-      claimMap[claim.name] = true;
-    });
-
-    const filteredPendingPublishes = pendingPublishes.filter(claim => !claimMap[claim.name]);
-    return [...filteredPendingPublishes, ...claims];
-  }
-);
 
 export const selectPublishFormValues = createSelector(selectState, state => {
   const { pendingPublish, ...formValues } = state;
   return formValues;
 });
-
-export const selectPendingPublish = uri =>
-  createSelector(selectPendingPublishes, pendingPublishes => {
-    const { claimName, contentName } = parseURI(uri);
-
-    if (!pendingPublishes.length) {
-      return null;
-    }
-
-    return pendingPublishes.filter(
-      publish => publish.name === claimName || publish.name === contentName
-    )[0];
-  });
 
 // Is the current uri the same as the uri they clicked "edit" on
 export const selectIsStillEditing = createSelector(selectPublishFormValues, publishState => {
@@ -91,5 +62,50 @@ export const selectMyClaimForUri = createSelector(
               ? claim.name === claimName
               : claim.name === contentName || claim.name === claimName
         );
+  }
+);
+
+export const selectIsResolvingPublishUris = createSelector(
+  selectState,
+  selectResolvingUris,
+  ({ uri, name }, resolvingUris) => {
+    if (uri) {
+      const isResolvingUri = resolvingUris.includes(uri);
+      const { isChannel } = parseURI(uri);
+
+      let isResolvingShortUri;
+      if (isChannel) {
+        const shortUri = buildURI({ contentName: name });
+        isResolvingShortUri = resolvingUris.includes(shortUri);
+      }
+
+      return isResolvingUri || isResolvingShortUri;
+    }
+
+    return false;
+  }
+);
+
+export const selectTakeOverAmount = createSelector(
+  selectState,
+  selectMyClaimForUri,
+  selectClaimsByUri,
+  ({ name }, myClaimForUri, claimsByUri) => {
+    // We only care about the winning claim for the short uri
+    const shortUri = buildURI({ contentName: name });
+    const claimForShortUri = claimsByUri[shortUri];
+
+    if (!myClaimForUri && claimForShortUri) {
+      return claimForShortUri.effective_amount;
+    } else if (myClaimForUri && claimForShortUri) {
+      // https://github.com/lbryio/lbry/issues/1476
+      // We should check the current effective_amount on my claim to see how much additional lbc
+      // is needed to win the claim. Currently this is not possible during a takeover.
+      // With this, we could say something like, "You have x lbc in support, if you bid y additional LBC you will control the claim"
+      // For now just ignore supports. We will just show the winning claim's bid amount
+      return claimForShortUri.effective_amount || claimForShortUri.amount;
+    }
+
+    return null;
   }
 );

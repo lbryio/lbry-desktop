@@ -12,6 +12,13 @@ import ThreeScene from './internal/scene';
 import ThreeLoader from './internal/loader';
 import ThreeRenderer from './internal/renderer';
 
+type viewerTheme = {
+  gridColor: string,
+  groundColor: string,
+  backgroundColor: string,
+  centerLineColor: string,
+};
+
 type Props = {
   theme: string,
   source: {
@@ -27,12 +34,13 @@ type State = {
 };
 
 class ThreeViewer extends React.PureComponent<Props, State> {
-  static testWebgl = new Promise((resolve, reject) => {
-    if (detectWebGL()) resolve();
-    else reject();
-  });
+  static testWebgl = (): Promise<void> =>
+    new Promise((resolve, reject) => {
+      if (detectWebGL()) resolve();
+      else reject();
+    });
 
-  static createOrbitControls(camera, canvas) {
+  static createOrbitControls(camera: any, canvas: any) {
     const controls = new THREE.OrbitControls(camera, canvas);
     // Controls configuration
     controls.enableDamping = true;
@@ -46,7 +54,7 @@ class ThreeViewer extends React.PureComponent<Props, State> {
     return controls;
   }
 
-  static fitMeshToCamera(group) {
+  static fitMeshToCamera(group: any) {
     const max = { x: 0, y: 0, z: 0 };
     const min = { x: 0, y: 0, z: 0 };
 
@@ -82,23 +90,9 @@ class ThreeViewer extends React.PureComponent<Props, State> {
     See: https://github.com/mrdoob/three.js/blob/dev/docs/scenes/js/material.js#L195
   */
 
-  static updateMaterial(material, geometry) {
-    material.vertexColors = +material.vertexColors; // Ensure number
-    material.side = +material.side; // Ensure number
-    material.needsUpdate = true;
-    // If Geometry needs update
-    if (geometry) {
-      geometry.verticesNeedUpdate = true;
-      geometry.normalsNeedUpdate = true;
-      geometry.colorsNeedUpdate = true;
-    }
-  }
-
   constructor(props: Props) {
     super(props);
     const { theme } = this.props;
-    this.viewer = React.createRef();
-    this.guiContainer = React.createRef();
     // Object defualt color
     this.materialColor = '#44b098';
     // Viewer themes
@@ -124,10 +118,21 @@ class ThreeViewer extends React.PureComponent<Props, State> {
       isReady: false,
       isLoading: false,
     };
+    // Internal objects
+    this.gui = null;
+    this.grid = null;
+    this.mesh = null;
+    this.camera = null;
+    this.frameID = null;
+    this.renderer = null;
+    this.material = null;
+    this.geometry = null;
+    this.targetCenter = null;
+    this.bufferGeometry = null;
   }
 
   componentDidMount() {
-    ThreeViewer.testWebgl
+    ThreeViewer.testWebgl()
       .then(() => {
         this.renderScene();
         // Update render on resize window
@@ -187,7 +192,39 @@ class ThreeViewer extends React.PureComponent<Props, State> {
     }
   }
 
-  transformGroup(group) {
+  // Define component types
+  theme: viewerTheme;
+  themes: { dark: viewerTheme, light: viewerTheme };
+  materialColor: string;
+  // Refs
+  viewer: ?HTMLElement;
+  guiContainer: ?HTMLElement;
+  // Too complex to add a custom type
+  gui: any;
+  grid: any;
+  mesh: any;
+  scene: any;
+  camera: any;
+  frameID: any;
+  controls: any;
+  material: any;
+  geometry: any;
+  targetCenter: any;
+  bufferGeometry: any;
+
+  updateMaterial(material: any, geometry: any) {
+    this.material.vertexColors = +material.vertexColors; // Ensure number
+    this.material.side = +material.side; // Ensure number
+    this.material.needsUpdate = true;
+    // If Geometry needs update
+    if (geometry) {
+      this.geometry.verticesNeedUpdate = true;
+      this.geometry.normalsNeedUpdate = true;
+      this.geometry.colorsNeedUpdate = true;
+    }
+  }
+
+  transformGroup(group: any) {
     ThreeViewer.fitMeshToCamera(group);
 
     if (!this.targetCenter) {
@@ -203,20 +240,19 @@ class ThreeViewer extends React.PureComponent<Props, State> {
 
       const config = {
         color: this.materialColor,
-      };
-
-      config.reset = () => {
-        // Reset material color
-        config.color = this.materialColor;
-        // Reset material
-        this.material.color.set(config.color);
-        this.material.flatShading = true;
-        this.material.shininess = 30;
-        this.material.wireframe = false;
-        // Reset autoRotate
-        this.controls.autoRotate = false;
-        // Reset camera
-        this.restoreCamera();
+        reset: () => {
+          // Reset material color
+          config.color = this.materialColor;
+          // Reset material
+          this.material.color.set(config.color);
+          this.material.flatShading = true;
+          this.material.shininess = 30;
+          this.material.wireframe = false;
+          // Reset autoRotate
+          this.controls.autoRotate = false;
+          // Reset camera
+          this.restoreCamera();
+        },
       };
 
       const materialFolder = this.gui.addFolder('Material');
@@ -240,7 +276,7 @@ class ThreeViewer extends React.PureComponent<Props, State> {
         .add(this.material, 'flatShading')
         .name('FlatShading')
         .onChange(() => {
-          ThreeViewer.updateMaterial(this.material);
+          this.updateMaterial(this.material);
         })
         .listen();
 
@@ -258,11 +294,13 @@ class ThreeViewer extends React.PureComponent<Props, State> {
 
       sceneFolder.add(config, 'reset').name('Reset');
 
-      this.guiContainer.current.appendChild(this.gui.domElement);
+      if (this.guiContainer) {
+        this.guiContainer.appendChild(this.gui.domElement);
+      }
     }
   }
 
-  createGeometry(data) {
+  createGeometry(data: any) {
     this.bufferGeometry = data;
     this.bufferGeometry.computeBoundingBox();
     this.bufferGeometry.center();
@@ -301,14 +339,14 @@ class ThreeViewer extends React.PureComponent<Props, State> {
   };
 
   handleResize = () => {
-    const { offsetWidth: width, offsetHeight: height } = this.viewer.current;
+    const { offsetWidth: width, offsetHeight: height } = this.viewer || {};
     this.camera.aspect = width / height;
     this.camera.updateProjectionMatrix();
     this.controls.update();
     this.renderer.setSize(width, height);
   };
 
-  updateControlsTarget(point) {
+  updateControlsTarget(point: { x: number, y: number, z: number }) {
     this.controls.target.fromArray([point.x, point.y, point.z]);
     this.controls.update();
   }
@@ -319,7 +357,10 @@ class ThreeViewer extends React.PureComponent<Props, State> {
     this.updateControlsTarget(this.targetCenter);
   }
 
-  renderStl(data) {
+  // Flow requested to add it here
+  renderer: any;
+
+  renderStl(data: any) {
     this.createGeometry(data);
     this.mesh = new THREE.Mesh(this.geometry, this.material);
     this.mesh.name = 'model';
@@ -327,7 +368,7 @@ class ThreeViewer extends React.PureComponent<Props, State> {
     this.transformGroup(this.mesh);
   }
 
-  renderObj(event) {
+  renderObj(event: any) {
     const mesh = event.detail.loaderRootNode;
     this.mesh = new THREE.Group();
     this.mesh.name = 'model';
@@ -352,7 +393,7 @@ class ThreeViewer extends React.PureComponent<Props, State> {
     this.transformGroup(this.mesh);
   }
 
-  renderModel(fileType, parsedData) {
+  renderModel(fileType: string, parsedData: any) {
     const renderTypes = {
       stl: data => this.renderStl(data),
       obj: data => this.renderObj(data),
@@ -377,9 +418,8 @@ class ThreeViewer extends React.PureComponent<Props, State> {
       ...this.theme,
     });
 
-    const viewer = this.viewer.current;
     const canvas = this.renderer.domElement;
-    const { offsetWidth: width, offsetHeight: height } = viewer;
+    const { offsetWidth: width, offsetHeight: height } = this.viewer || {};
 
     // Grid
     this.grid = ThreeGrid({ size: 100, gridColor, centerLineColor });
@@ -408,7 +448,9 @@ class ThreeViewer extends React.PureComponent<Props, State> {
     this.startLoader();
 
     // Append canvas
-    viewer.appendChild(canvas);
+    if (this.viewer) {
+      this.viewer.appendChild(canvas);
+    }
 
     const updateScene = () => {
       this.frameID = requestAnimationFrame(updateScene);
@@ -433,11 +475,11 @@ class ThreeViewer extends React.PureComponent<Props, State> {
       <React.Fragment>
         {error && <LoadingScreen status={error} spinner={false} />}
         {showLoading && <LoadingScreen status={loadingMessage} spinner />}
-        <div ref={this.guiContainer} className={containerClass} />
+        <div ref={element => (this.guiContainer = element)} className={containerClass} />
         <div
           style={{ opacity: showViewer ? 1 : 0 }}
           className="three-viewer file-render__viewer"
-          ref={this.viewer}
+          ref={viewer => (this.viewer = viewer)}
         />
       </React.Fragment>
     );

@@ -21,21 +21,20 @@ class ModalConfirmTransaction extends React.PureComponent<Props> {
     return (
       <Modal
         isOpen
+        title={__('Send LBC')}
         contentLabel={__('Confirm Transaction')}
         type="confirm"
-        confirmButtonLabel={__('Continue')}
+        confirmButtonLabel={__('Send')}
         onConfirmed={() => this.onConfirmed()}
         onAborted={closeModal}
       >
-        <p>{__('Are you sure you want to ')}</p>
-        <h1>
-          {__('send ')} {amount} LBC
-        </h1>
-        <p>{__('Sending: ')}</p>
-        <blockquote>{amount} LBC</blockquote>
-        <p>{__('To address: ')}</p>
-        <blockquote>{address}</blockquote>
-        <p>{__('Once the transaction is sent, it cannot be reversed.')}</p>
+        <section className="card__content">
+          <p>{__('Sending: ')}</p>
+          <blockquote>{amount} LBC</blockquote>
+          <p>{__('To address: ')}</p>
+          <blockquote>{address}</blockquote>
+          <p>{__('Once the transaction is sent, it cannot be reversed.')}</p>
+        </section>
       </Modal>
     );
   }

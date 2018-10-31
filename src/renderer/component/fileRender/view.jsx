@@ -11,11 +11,11 @@ import AudioVideoViewer from 'component/viewers/audioVideoViewer';
 type Props = {
   mediaType: string,
   source: {
+    stream: string => void,
     fileName: string,
     fileType: string,
+    contentType: string,
     downloadPath: string,
-    stream: opts => void,
-    blob: callback => void,
   },
   currentTheme: string,
 };
@@ -25,7 +25,7 @@ class FileRender extends React.PureComponent<Props> {
     const { source, mediaType, currentTheme, poster } = this.props;
 
     // Extract relevant data to render file
-    const { blob, stream, fileName, fileType, contentType, downloadPath } = source;
+    const { stream, fileType, contentType, downloadPath } = source;
 
     // Human-readable files (scripts and plain-text files)
     const readableFiles = ['text', 'document', 'script'];

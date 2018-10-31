@@ -1,6 +1,6 @@
 // @flow
 
-import React from 'react';
+import * as React from 'react';
 import CodeMirror from 'codemirror/lib/codemirror';
 import { openSnippetMenu, stopContextMenu } from 'util/contextMenu';
 
@@ -22,21 +22,20 @@ import 'codemirror/mode/javascript/javascript';
 
 type Props = {
   theme: string,
-  value: string,
+  value: ?string,
   contentType: string,
 };
 
 class CodeViewer extends React.PureComponent<Props> {
-  constructor(props) {
+  constructor(props: Props) {
     super(props);
     this.codeMirror = null;
-    this.textarea = React.createRef();
   }
 
   componentDidMount() {
     const { theme, contentType } = this.props;
     // Init CodeMirror
-    this.codeMirror = CodeMirror.fromTextArea(this.textarea.current, {
+    this.codeMirror = CodeMirror.fromTextArea(this.textarea, {
       // Auto detect syntax with file contentType
       mode: contentType,
       // Adaptive theme
@@ -54,11 +53,14 @@ class CodeViewer extends React.PureComponent<Props> {
     this.codeMirror.on('contextmenu', openSnippetMenu);
   }
 
+  textarea: ?HTMLTextAreaElement;
+  codeMirror: any;
+
   render() {
     const { value } = this.props;
     return (
       <div className="code-viewer" onContextMenu={stopContextMenu}>
-        <textarea ref={this.textarea} disabled value={value} />
+        <textarea ref={textarea => (this.textarea = textarea)} disabled value={value} />
       </div>
     );
   }

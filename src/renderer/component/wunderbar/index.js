@@ -7,6 +7,7 @@ import {
   doFocusSearchInput,
   doBlurSearchInput,
   doSearch,
+  doNotify,
 } from 'lbry-redux';
 import { makeSelectClientSetting } from 'redux/selectors/settings';
 import * as settings from 'constants/settings';
@@ -38,6 +39,7 @@ const perform = dispatch => ({
   updateSearchQuery: query => dispatch(doUpdateSearchQuery(query)),
   doFocus: () => dispatch(doFocusSearchInput()),
   doBlur: () => dispatch(doBlurSearchInput()),
+  doShowSnackBar: (modal, props) => dispatch(doNotify(modal, props)),
 });
 
 export default connect(

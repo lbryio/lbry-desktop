@@ -1,91 +1,96 @@
 .CodeMirror {
-  border: 0px;
-  border-radius: 0px;
-  background: var(--card-bg);
-  color: var(--text-color);
-}
-
-.editor-toolbar {
-  opacity: 1;
-  border: 0;
-  background: var(--color-bg-alt);
+  border-top: none;
+  border-right: 1px solid $lbry-gray-1;
+  border-bottom: 1px solid $lbry-gray-1;
+  border-left: 1px solid $lbry-gray-1;
   border-radius: 0;
-  box-shadow: var(--box-shadow-layer);
+  background: $lbry-white;
+  color: $lbry-black;
+
+  .CodeMirror-cursor {
+    border-color: $lbry-teal-3;
+  }
+
+  .CodeMirror-placeholder {
+    opacity: 0.5;
+  }
+
+  .CodeMirror-selected {
+    background-color: transparent;
+  }
+
+  .CodeMirror-selectedtext {
+    background-color: $lbry-teal-5;
+    color: $lbry-white;
+  }
+
+  .cm-spell-error:not(.cm-url):not(.cm-comment):not(.cm-tag):not(.cm-word) {
+    background: none;
+    text-decoration: underline;
+    text-decoration-color: $lbry-red-3;
+    text-decoration-style: dotted;
+  }
 }
 
-.editor-toolbar:hover {
-  opacity: 1;
-}
-
-.editor-toolbar i.separator {
-  border: 0;
-}
-
-.editor-toolbar.fullscreen {
-  background: var(--color-bg-alt);
-}
-
-.editor-toolbar.fullscreen::before,
-.editor-toolbar.fullscreen::after {
-  display: none;
-}
-
-.editor-toolbar a {
-  opacity: 0.6;
-  color: var(--text-color) !important;
-  transition: opacity 0.3s ease;
-}
-
-.editor-toolbar a.active,
-.editor-toolbar a:hover {
-  opacity: 1;
-  background: var(--button-bg);
-  border-color: transparent;
-}
-
-.editor-toolbar.disabled-for-preview a:not(.no-disable) {
-  background: var(--color-bg-alt);
-  border-color: transparent;
-  opacity: 0.3;
-}
-
-.editor-statusbar {
-  color: var(--form-label-color);
-}
-
-.editor-preview {
-  font-size: calc(var(--font-size-subtext-multiple) * 1em);
-  background: var(--color-bg);
-  border: 0;
-}
-
-.CodeMirror .CodeMirror-cursor {
-  border-color: var(--color-primary);
-}
-
-.CodeMirror .CodeMirror-placeholder {
-  opacity: 0.5;
-}
-
-/* Fix selection */
+// Fix selection
 .CodeMirror-line::selection,
 .CodeMirror-line > span::selection,
 .CodeMirror-line > span > span::selection {
-  background: var(--text-selection-bg);
+  background-color: $lbry-teal-1;
 }
 
-.CodeMirror .CodeMirror-selected {
-  background: transparent;
+.editor-toolbar {
+  background-color: $lbry-gray-1;
+  border: none;
+  border-radius: 0;
+  opacity: 1; // ?
+
+  &:hover {
+    opacity: 1; // ?
+  }
+
+  &.disabled-for-preview a:not(.no-disable) {
+    background-color: $lbry-gray-1;
+    border-color: transparent;
+    opacity: 0.3;
+  }
+
+  &.fullscreen {
+    background-color: $lbry-gray-1;
+
+    &::before,
+    &::after {
+      display: none;
+    }
+  }
+
+  a {
+    color: $lbry-black !important;
+    transition: opacity 0.3s ease;
+
+    &:not(.active),
+    &:not(:hover) {
+      opacity: 0.6;
+    }
+
+    &.active,
+    &:hover {
+      border-color: transparent;
+      opacity: 1;
+    }
+  }
+
+  i.separator {
+    border: none;
+  }
 }
 
-.CodeMirror .CodeMirror-selectedtext {
-  background: var(--editor-text-selection-bg) !important;
-  color: var(--text-selection-color) !important;
+.editor-preview {
+  background-color: rgba($lbry-gray-1, 0.5);
+  border: none;
+  font-size: calc(var(--font-size-subtext-multiple) * 1em);
 }
 
-.CodeMirror .cm-spell-error:not(.cm-url):not(.cm-comment):not(.cm-tag):not(.cm-word) {
-  background: none;
-  text-decoration: underline;
-  text-decoration-color: #f00;
-  text-decoration-style: dotted;
+.editor-statusbar {
+  color: rgba($lbry-black, 0.5);
 }

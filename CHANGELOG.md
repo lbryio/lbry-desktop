@@ -1,18 +1,38 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
-The format is based on [Keep a Changelog](http://keepachangelog.com/).
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 
 ### Added
-* Allow typing of encryption password without clicking entry box ([#1977](https://github.com/lbryio/lbry-desktop/pull/1977))
+ * Allow typing of encryption password without clicking entry box ([#1977](https://github.com/lbryio/lbry-desktop/pull/1977))
+ * Focus on search bar with {cmd,ctrl} + "l" ([#2003](https://github.com/lbryio/lbry-desktop/pull/2003))
+ * Add support for clickable channel names on explore page headings ([#2023](https://github.com/lbryio/lbry-desktop/pull/2023))
+ * Content loading placeholder styles on FileCard/FileTile ([#2022](https://github.com/lbryio/lbry-desktop/pull/2022))
+ * Persistence to Transaction List Filter Selection ([#2048](https://github.com/lbryio/lbry-desktop/pull/2048))
+ * Subscription improvements ([#2031](https://github.com/lbryio/lbry-desktop/pull/2031))
+ * Adds Persistence to File List Filter Selections ([#2050](https://github.com/lbryio/lbry-desktop/pull/2050))
 
 ### Changed
-* Make tooltip smarter ([#1979](https://github.com/lbryio/lbry-desktop/pull/1979))
+ * Upgraded to lbrynet v0.30.0 ([#1998](https://github.com/lbryio/lbry-desktop/pull/1998))
+ * Make tooltip smarter ([#1979](https://github.com/lbryio/lbry-desktop/pull/1979))
+ * Change channel pages to have 48 items instead of 10 ([#2002](https://github.com/lbryio/lbry-desktop/pull/2002))
+ * Update to https ([#2016](https://github.com/lbryio/lbry-desktop/pull/2016))
+ * Simplify FileCard and FileTile component styling ([#2011](https://github.com/lbryio/lbry-desktop/pull/2011))
+ * Credit card verification messaging ([#2025](https://github.com/lbryio/lbry-desktop/pull/2025))
+ * Reverse Order & Use System/Location Time/Date ([#2036]https://github.com/lbryio/lbry-desktop/pull/2036)
+ * Limit file type can be uploaded as thumbnail for publishing ([#2034](https://github.com/lbryio/lbry-desktop/pull/2034))
+ * Change snackbar notification position to bottom-left ([#2040](https://github.com/lbryio/lbry-desktop/pull/2040))
+ * Use shared colors from lbryio/color project ([#2045](https://github.com/lbryio/lbry-desktop/pull/2045))
 
 ### Fixed
-
+ * Fixed transactions filter menu collides with transaction table ([#2005](https://github.com/lbryio/lbry-desktop/pull/2005))
+ * Invite table cutoff with large number of invites ([#1985](https://github.com/lbryio/lbry-desktop/pull/1985))
+ * History styling on large screens and link issue with claims ([#1999](https://github.com/lbryio/lbry-desktop/pull/1999))
+ * Satisfy console warnings in publishForm and validation messaging ([#2010](https://github.com/lbryio/lbry-desktop/pull/2010))
+ * App crashing if invalid characters entered in LBRY URL ([#2026])(https://github.com/lbryio/lbry-desktop/pull/2026))
+ * Fix issue file_list call continues indefinitely if a file is removed while downloading ([#2042])(https://github.com/lbryio/lbry-desktop/pull/2042))
 
 ## [0.25.1] - 2018-09-18
 
@@ -29,7 +49,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
 ### Added
  * Wallet encryption/decryption user flows in settings ([#1785](https://github.com/lbryio/lbry-desktop/pull/1785))
  * Suggestions for recommended content on file page ([#1845](https://github.com/lbryio/lbry-desktop/pull/1845))
- * Auto download setting for subscriptions ([#1898](https://github.com/lbryio/lbry-desktop/pull/1898))
+ * Auto-download setting for subscriptions ([#1898](https://github.com/lbryio/lbry-desktop/pull/1898))
  * Ability to disable desktop notifications ([#1834](https://github.com/lbryio/lbry-desktop/pull/1834))
  * Better preview for content ([#620](https://github.com/lbryio/lbry-desktop/pull/620))
  * New markdown and docx viewer ([#1826](https://github.com/lbryio/lbry-desktop/pull/1826))
@@ -41,7 +61,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
  * FAQ to wallet security area ([#1917](https://github.com/lbryio/lbry-desktop/pull/1917))
 
 ### Changed
- * Upgraded LBRY Protocol to [version 0.21.2](https://github.com/lbryio/lbry/releases/tag/v0.21.2) fixing a download bug.
+ * Upgraded LBRY Protocol to [version 0.21.2](https://github.com/lbryio/lbry/releases/tag/v0.21.2) fixing a download bug
  * Searching now shows results by default, including direct lbry:// URL tile ([#1875](https://github.com/lbryio/lbry-desktop/pull/))
  * Replaced checkboxes with toggles throughout app ([#1834](https://github.com/lbryio/lbry-desktop/pull/1834))
  * Removed price tile when content is Free ([#1845](https://github.com/lbryio/lbry-desktop/pull/1845))
@@ -73,10 +93,14 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
 ## [0.23.0] - 2018-07-25
 
 ### Fixed
- * **Wallet -> Get Credits** page now shows correct ShapeShift status when it's avialable ([#1836](https://github.com/lbryio/lbry-desktop/issues/1836))
+ * **Wallet -> Get Credits** page now shows correct ShapeShift status when it's available ([#1836](https://github.com/lbryio/lbry-desktop/issues/1836))
  * Fix middle click link error ([#1843](https://github.com/lbryio/lbry-desktop/issues/1843)}
  * Problem with search auto-complete menu when scrolling over file viewer ([#1847](https://github.com/lbryio/lbry-desktop/issues/1847))
  * Show label when publish button is disabled while uploading thumbnail to spee.ch ([#1867](https://github.com/lbryio/lbry-desktop/pull/1867))
+ * Edit option missing from certain published claims ([#1756](https://github.com/lbryio/lbry-desktop/issues/1756))
+  * Navigation issue with channels that have more than one page ([#1797](https://github.com/lbryio/lbry-desktop/pull/1797))
+  * Navigation issue with channels that have more than one page ([#1797](https://github.com/lbryio/lbry-desktop/pull/1797))
+  * Upgrade modals would stack on-top of each other if the app was kept open for a long time ([#1857](https://github.com/lbryio/lbry-desktop/pull/1857))
 
 ### Added
  * 3D file viewer for OBJ & STL file types ([#1558](https://github.com/lbryio/lbry-desktop/pull/1558))
@@ -87,21 +111,13 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
 ### Changed
   * Upgraded LBRY Protocol to [version 0.20.4](https://github.com/lbryio/lbry/releases/tag/v0.20.4) to assist with download availability and lower CPU usage on idle.
-  * Upgraded Electron-Builder and Updater to support signing the daemon and improving the auto update process ([#1784](https://github.com/lbryio/lbry-desktop/pull/1784))
+  * Upgraded Electron-Builder and Updater to support signing the daemon and improving the auto-update process ([#1784](https://github.com/lbryio/lbry-desktop/pull/1784))
   * Channel page now uses caching, faster switching between channels/claims ([#1750](https://github.com/lbryio/lbry-desktop/pull/1750))
   * Only show video error modal if you are on the video page & don't retry to play failed videos ([#1768](https://github.com/lbryio/lbry-desktop/pull/1768))
   * Actually hide NSFW files if a user chooses to hide NSFW content via the settings page ([#1748](https://github.com/lbryio/lbry-desktop/pull/1748))
   * Hide the "Community top bids" section if user chooses to hide NSFW content ([#1760](https://github.com/lbryio/lbry-desktop/pull/1760))
   * More descriptive error message when Shapeshift is unavailable ([#1771](https://github.com/lbryio/lbry-desktop/pull/1771))
   * Rename the Github repo to lbry-desktop ([#1765](https://github.com/lbryio/lbry-desktop/pull/1765))
-
-
-### Fixed
-  * Edit option missing from certain published claims ([#1756](https://github.com/lbryio/lbry-desktop/issues/1756))
-  * Navigation issue with channels that have more than one page ([#1797](https://github.com/lbryio/lbry-desktop/pull/1797))
-  * Navigation issue with channels that have more than one page ([#1797](https://github.com/lbryio/lbry-desktop/pull/1797))
-  * Upgrade modals would stack on-top of each other if the app was kept open for a long time ([#1857](https://github.com/lbryio/lbry-desktop/pull/1857))
-
 
 ## [0.22.2] - 2018-07-09
 
@@ -158,7 +174,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
    * New publishes now show as pending on Publishes screen ([#1040](https://github.com/lbryio/lbry-desktop/pull/1040))
    * Enhanced flair to snackbar ([#1313](https://github.com/lbryio/lbry-desktop/pull/1313))
    * Made font in price badge larger ([#1420](https://github.com/lbryio/lbry-desktop/pull/1420))
-   * Move rewards logic to interal api ([#1509](https://github.com/lbryio/lbry-desktop/pull/1509))
+   * Move rewards logic to internal API ([#1509](https://github.com/lbryio/lbry-desktop/pull/1509))
    * Narrative about Feature Request on Help Page and Report Page ([#1551](https://github.com/lbryio/lbry-desktop/pull/1551))
 
 
@@ -178,11 +194,11 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
    * Spacing in search suggestions ([#1422](https://github.com/lbryio/lbry-desktop/pull/1422))
    * Text/HTML files don't display correctly in-app anymore ([#1379](https://github.com/lbryio/lbry-desktop/issues/1379))
    * Notification modals when reward is claimed ([#1436](https://github.com/lbryio/lbry-desktop/issues/1436)) and ([#1407](https://github.com/lbryio/lbry-desktop/issues/1407))
-   * Disabled cards(grayed out) ([#1466](https://github.com/lbryio/lbry-desktop/issues/1466))
+   * Disabled cards (grayed out) ([#1466](https://github.com/lbryio/lbry-desktop/issues/1466))
    * New lines not showing correctly after markdown changes ([#1504](https://github.com/lbryio/lbry-desktop/issues/1504))
    * Claim ID being null when reporting a claim that was not previously downloaded ([PR#1530](https://github.com/lbryio/lbry-desktop/pull/1530))
    * URI and outpoint not being passed properly to API ([#1494](https://github.com/lbryio/lbry-desktop/issues/1494))
-   * Incorrect markdown preview on url with parentheses ([#1570](https://github.com/lbryio/lbry-desktop/issues/1570))
+   * Incorrect markdown preview on URL with parentheses ([#1570](https://github.com/lbryio/lbry-desktop/issues/1570))
    * Fix Linux upgrade path and add manual installation note ([#1606](https://github.com/lbryio/lbry-desktop/issues/1606))
    * Fix can type in unfocused fields while publishing without selecting file ([#1456](https://github.com/lbryio/lbry-desktop/issues/1456))
    * Fix navigation button resulting incorrect page designation ([#1502](https://github.com/lbryio/lbry-desktop/issues/1502))
@@ -216,7 +232,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
 ## [0.21.4] - 2018-05-10
 
 ### Changed
-  * Update LBRY Protocol to 0.19.3 - faster blockchain header download for new and existing users (See fulll change log for [0.19.2](https://github.com/lbryio/lbry/releases/tag/v0.19.2) and [0.19.3](https://github.com/lbryio/lbry/releases/tag/v0.19.3))
+  * Update LBRY Protocol to 0.19.3 - faster blockchain header download for new and existing users (See full change log for [0.19.2](https://github.com/lbryio/lbry/releases/tag/v0.19.2) and [0.19.3](https://github.com/lbryio/lbry/releases/tag/v0.19.3))
 
 ### Fixed
  * Ability to submit bug reports
@@ -275,7 +291,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
 ### Added
  * Added Automatic Dark Mode ([#950](https://github.com/lbryio/lbry-desktop/pull/950))
  * Re-introduce build dir / dist dir option for isolated build environments ([#933](https://github.com/lbryio/lbry-desktop/pull/933))
- * Added sms as a method for reward identity verification ([#946](https://github.com/lbryio/lbry-desktop/pull/946))
+ * Added SMS as a method for reward identity verification ([#946](https://github.com/lbryio/lbry-desktop/pull/946))
  * Added auto-update ([#808](https://github.com/lbryio/lbry-desktop/pull/808))
 
 
@@ -295,7 +311,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
 ## [0.19.4] - 2018-01-08
 
 ### Added
- * Video state tracking in redux - developer only ([#890](https://github.com/lbryio/lbry-desktop/pull/890))
+ * Video state tracking in Redux - developer only ([#890](https://github.com/lbryio/lbry-desktop/pull/890))
 
 
 ### Changed
@@ -365,14 +381,14 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
 ### Added
  * [Subscriptions](https://github.com/lbryio/lbry-desktop/issues/715). File and channel pages now show a subscribe button. A new "Subscriptions" tab appears on the homepage shows the most recent content from subscribed channels.
- * [LBC acquisition widget](https://github.com/lbryio/lbry-desktop/issues/609). Convert other popular cryptos into LBC via a ShapeShift integration.
+ * [LBC acquisition widget](https://github.com/lbryio/lbry-desktop/issues/609). Convert other popular Cryptocurrencies into LBC via a ShapeShift integration.
  * [Flow](https://flow.org/) static type checking. This is a dev-only feature, but will make development faster, less error prone, and better for newcomers.
 
 
 ### Changed
  * The first run process for new users has changed substantially. New users can now easily receive one credit.
  * The wallet area has been re-organized. Send and Receive are now on the same page. A new page, "Get Credits", explains how users can add LBRY credits to the app.
- * Significant structural changes to code organization, packaging, and building. The app now follows a typical electron folder structure. All 3 `package.json` files have been reduced to a single file. Redux related code was moved into it's own subfolder.
+ * Significant structural changes to code organization, packaging, and building. The app now follows a typical electron folder structure. All 3 `package.json` files have been reduced to a single file. Redux-related code was moved into it's own subfolder.
  * The macOS docking icon has been improved.
  * The prompt for an insufficient balance is much more user-friendly.
  * The credit balance displayed in the main app navigation displays two decimal places instead of one.
@@ -414,7 +430,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
 
 ### Changed
- * Daemon updated to [v0.18.0](https://github.com/lbryio/lbry/releases/tag/v0.18.0). The largest changes here are several more network improvements and fixes as well as functionality and improvements related to concurrent heavier usage (bugs and issues largely discoverd by spee.ch).
+ * Daemon updated to [v0.18.0](https://github.com/lbryio/lbry/releases/tag/v0.18.0). The largest changes here are several more network improvements and fixes as well as functionality and improvements related to concurrent heavier usage (bugs and issues largely discovered by spee.ch).
  * Improved build and first-run process for new developers.
  * Replaced all instances of `XMLHttpRequest` with native `Fetch` API (#676).
 
@@ -437,7 +453,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
 ### Fixed
  * Fixed handling of empty search results.
- * Fixed minimum channel length name(#689).
+ * Fixed minimum channel length name (#689).
 
 
 
@@ -454,11 +470,11 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
 ### Changed
  * LBRY protocol upgraded from v0.16.1 to [v0.17](https://github.com/lbryio/lbry/releases/tag/v0.17.0). Significant improvements to download performance anticipated.
  * Improved Discover page load time by batching all URIs into one API call.
- * Changed the File page to make it clearer how to to open the folder for a file.
+ * Changed the File page to make it clearer how to open the folder for a file.
  * Display search bar on discover page instead of title and remove duplicated icon.
  * Minor update for themes.
  * There is no longer a minimum channel length (#645)
- * Changed the File page to make it clearer how to to open the folder for a file
+ * Changed the File page to make it clearer how to open the folder for a file
  * The upgrade message is now friendlier and includes a link to the release notes.
  * Local settings refactored and no longer intermixed with LBRY API library.
 
@@ -471,7 +487,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
  * Be consistent with the step property on credit inputs (#604)
  * Fixed unresponsive header (#613)
  * Fixed dark theme issues with text content.
- * Minor css fixes.
+ * Minor CSS fixes.
  * Fixed issue when file fails to download (#642)
  * Fixed issue after accessing a video without enough credits (#605)
  * Fixed channel fetching without claims (#634)
@@ -497,7 +513,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
 
 ### Fixed
- * URLs on cards no longer wrap and show an ellipsis if longer than one line
+ * URLs on cards no longer wrap and show an ellipsis if longer than one line.
 
 
 
@@ -753,7 +769,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
 ### Fixed
  * Eliminated instance of costs being double fetched
  * Fixed issue preventing file re-download
- * Fixed race condition that could prevent file playbac
+ * Fixed race condition that could prevent file playback
  * Fixed issue with batch actions and thunk
 
 
@@ -785,7 +801,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
 ### Added
  * Entire app re-written to use Redux as state store. Far saner and faster. Will also increase productivity moving forward.
  * Channel page shows content published in channel.
- * URI handling. Clicking lbry:// links should open the app and appropriate URI on all OSes.
+ * URI handling. Clicking lbry:// links should open the app and appropriate URI on all Operating Systems.
  * File cards have an icon indicating you posses that file.
  * Download directory setting now uses a proper dialog.
  * Movie player automatically shows if the file has already been downloaded.
@@ -811,55 +827,55 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
  * Fixed file info subscribes not being unsubscribed in unmount.
  * Fixed drawer not highlighting selected page.
  * You can now make API calls directly on the lbry module, e.g. lbry.peer_list()
- * New-style API calls return promises instead of using callbacks
- * Wherever possible, use outpoints for unique IDs instead of names or SD hashes
+ * New-style API calls return promises instead of using callbacks.
+ * Wherever possible, use outpoints for unique IDs instead of names or SD hashes.
  * New publishes now display immediately in My Files, even before they hit the lbrynet file manager.
- * New welcome flow for new users
- * Redesigned UI for Discover
- * Handle more of price calculations at the daemon layer to improve page load time
- * Add special support for building channel claims in lbryuri module
- * Enable windows code signing of binary
- * Support for opening LBRY URIs from links in other apps
+ * New welcome flow for new users.
+ * Redesigned UI for Discover.
+ * Handle more of price calculations at the daemon layer to improve page load time.
+ * Add special support for building channel claims in lbryuri module.
+ * Enable windows code signing of binary.
+ * Support for opening LBRY URIs from links in other apps.
 
 
 ### Changed
- * Update process now easier and more reliable
- * Updated search to be compatible with new Lighthouse servers
- * Cleaned up shutdown logic
- * Support lbry v0.10 API signatures
+ * Update process now easier and more reliable.
+ * Updated search to be compatible with new Lighthouse servers.
+ * Cleaned up shutdown logic.
+ * Support lbry v0.10 API signatures.
 
 
 ### Fixed
- * Fix Watch page and progress bars for new API changes
- * On Windows, prevent opening multiple LBRY instances (launching LBRY again just focuses the current instance)
+ * Fix Watch page and progress bars for new API changes.
+ * On Windows, prevent opening multiple LBRY instances (launching LBRY again just focuses the current instance).
 
 
 
 ## [0.9.0rc15] - 2017-03-09
 ### Added
- * A way to access the Developer Settings panel in Electron (Ctrl-Shift and click logo)
- * Option in Developer Settings to toggle developer menu
+ * A way to access the Developer Settings panel in Electron (Ctrl-Shift and click logo).
+ * Option in Developer Settings to toggle developer menu.
 ### Changed
- * Open and reveal files using Electron instead of daemon
+ * Open and reveal files using Electron instead of daemon.
 
 ## [0.9.0rc12] - 2017-03-06
 ### Changed
- * Improved ability to style FormFields and form field labels
- * Refactored Publish page to use form field changes
+ * Improved ability to style FormFields and form field labels.
+ * Refactored Publish page to use form field changes.
 
 ## [0.9.0rc11] - 2017-02-27
 ### Added
- * "Back to LBRY" button on Watch page
+ * "Back to LBRY" button on Watch page.
 ### Changed
- * In error modal, hide details in expandable section
+ * In error modal, hide details in expandable section.
 ### Fixed
- * On load screen, always show Cancel link if a previous page is available
- * When user hits "Watch," don't check balance if download already started
- * Restore UI version on Help page
- * Fix sorting on My Files page
+ * On load screen, always show Cancel link if a previous page is available.
+ * When user hits "Watch," don't check balance if download already started.
+ * Restore UI version on Help page.
+ * Fix sorting on My Files page.
 
 ## [0.9.0rc9] - 2017-02-22
 ### Changed
  * Use local file for publishing
  * Use local file and html5 for video playback
- * Misc changes needed to make UI compatible with electron
+ * Misc changes needed to make UI compatible with electron.

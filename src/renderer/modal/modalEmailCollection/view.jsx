@@ -16,7 +16,6 @@ class ModalEmailCollection extends React.PureComponent<Props> {
     const { closeModal, email, user } = this.props;
 
     const cancelButton = <Button button="link" onClick={closeModal} label={__('Not Now')} />;
-
     if (user && !user.has_verified_email && !email) {
       return <UserEmailNew cancelButton={cancelButton} />;
     } else if (user && !user.has_verified_email) {
@@ -35,16 +34,8 @@ class ModalEmailCollection extends React.PureComponent<Props> {
     }
 
     return (
-      <Modal type="custom" isOpen contentLabel="Email">
-        <section>
-          <h3 className="modal__header">Can We Stay In Touch?</h3>
-          <div className="card__content">{this.renderInner()}</div>
-          <div className="card__content">
-            <div className="help">
-              {`${__('Your email may be used to sync usage data across devices.')} `}
-            </div>
-          </div>
-        </section>
+      <Modal type="custom" isOpen contentLabel="Email" title={__('Can We Stay In Touch?')}>
+        <section className="card__content">{this.renderInner()}</section>
       </Modal>
     );
   }

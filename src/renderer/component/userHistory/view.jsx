@@ -99,7 +99,8 @@ class UserHistoryPage extends React.PureComponent<Props, State> {
 
     const allSelected = Object.keys(itemsSelected).length === history.length;
     const selectHandler = allSelected ? this.unselectAll : this.selectAll;
-    return (
+
+    return history.length ? (
       <React.Fragment>
         <div className="card__actions card__actions--between">
           {Object.keys(itemsSelected).length ? (
@@ -109,7 +110,6 @@ class UserHistoryPage extends React.PureComponent<Props, State> {
               {/* Using an empty span so spacing stays the same if the button isn't rendered */}
             </span>
           )}
-
           <Button
             button="link"
             label={allSelected ? __('Cancel') : __('Select All')}
@@ -117,21 +117,19 @@ class UserHistoryPage extends React.PureComponent<Props, State> {
           />
         </div>
         {!!history.length && (
-          <table className="card--section table table--stretch table--history">
-            <tbody>
-              {history.map(item => (
-                <UserHistoryItem
-                  key={item.uri}
-                  uri={item.uri}
-                  lastViewed={item.lastViewed}
-                  selected={!!itemsSelected[item.uri]}
-                  onSelect={() => {
-                    this.onSelect(item.uri);
-                  }}
-                />
-              ))}
-            </tbody>
-          </table>
+          <section className="item-list">
+            {history.map(item => (
+              <UserHistoryItem
+                key={item.uri}
+                uri={item.uri}
+                lastViewed={item.lastViewed}
+                selected={!!itemsSelected[item.uri]}
+                onSelect={() => {
+                  this.onSelect(item.uri);
+                }}
+              />
+            ))}
+          </section>
         )}
         {pageCount > 1 && (
           <FormRow padded verticallyCentered centered>
@@ -161,6 +159,15 @@ class UserHistoryPage extends React.PureComponent<Props, State> {
           </FormRow>
         )}
       </React.Fragment>
+    ) : (
+      <div className="page__empty">
+        <h3 className="card__title">
+          {__("You don't have anything saved in history yet, go check out some content on LBRY!")}
+        </h3>
+        <div className="card__actions card__actions--center">
+          <Button button="primary" navigate="/discover" label={__('Explore new content')} />
+        </div>
+      </div>
     );
   }
 }

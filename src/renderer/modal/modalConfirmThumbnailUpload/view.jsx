@@ -25,21 +25,24 @@ class ModalConfirmThumbnailUpload extends React.PureComponent<Props> {
     return (
       <Modal
         isOpen
+        title={__('Upload Thumbnail')}
         contentLabel={__('Confirm Thumbnail Upload')}
         type="confirm"
         confirmButtonLabel={__('Upload')}
         onConfirmed={() => this.upload()}
         onAborted={closeModal}
       >
-        <p>{__('Are you sure you want to upload this thumbnail to spee.ch')}?</p>
-        <blockquote>{path}</blockquote>
-        <FormField
-          type="checkbox"
-          name="content_is_mature"
-          postfix={__('Mature audiences only')}
-          checked={nsfw}
-          onChange={event => updatePublishForm({ nsfw: event.target.checked })}
-        />
+        <section className="card__content">
+          <p>{__('Are you sure you want to upload this thumbnail to spee.ch')}?</p>
+          <blockquote>{path}</blockquote>
+          <FormField
+            type="checkbox"
+            name="content_is_mature"
+            postfix={__('Mature audiences only')}
+            checked={nsfw}
+            onChange={event => updatePublishForm({ nsfw: event.target.checked })}
+          />
+        </section>
       </Modal>
     );
   }

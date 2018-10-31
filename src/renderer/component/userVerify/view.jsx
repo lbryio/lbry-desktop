@@ -2,7 +2,7 @@
 import * as React from 'react';
 import Button from 'component/button';
 import CardVerify from 'component/cardVerify';
-import Lbryio from 'lbryinc';
+import { Lbryio } from 'lbryinc';
 import * as icons from 'constants/icons';
 
 type Props = {
@@ -43,7 +43,7 @@ class UserVerify extends React.PureComponent<Props> {
           <p className="card__content">
             {`${__(
               'If you have a valid credit or debit card, you can use it to instantly prove your humanity.'
-            )} ${__('There is no charge at all for this, now or in the future.')} `}
+            )} ${__('LBRY does not store your credit card information. There is no charge at all for this, now or in the future.')} `}
           </p>
           <div className="card__actions">
             {errorMessage && <p className="form-field__error">{errorMessage}</p>}

@@ -10,11 +10,17 @@ type Props = {
   source: string,
 };
 
-class DocxViewer extends React.PureComponent<Props> {
-  constructor(props) {
+type State = {
+  error: boolean,
+  loading: boolean,
+  content: ?string,
+};
+
+class DocxViewer extends React.PureComponent<Props, State> {
+  constructor(props: Props) {
     super(props);
     this.state = {
-      error: null,
+      error: false,
       content: null,
       loading: true,
     };
@@ -46,7 +52,7 @@ class DocxViewer extends React.PureComponent<Props> {
         const markdown = breakdance.render(result.value);
         this.setState({ content: markdown, loading: false });
       })
-      .catch(error => {
+      .catch(() => {
         this.setState({ error: true, loading: false });
       })
       .done();

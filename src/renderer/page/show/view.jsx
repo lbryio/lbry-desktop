@@ -42,8 +42,8 @@ class ShowPage extends React.PureComponent<Props> {
     if ((isResolvingUri && !claim) || !claim) {
       const { claimName } = parseURI(uri);
       innerContent = (
-        <Page>
-          <section className="card">
+        <Page notContained>
+          <section>
             <h1>{claimName}</h1>
             <div className="card__content">
               {isResolvingUri && <BusyIndicator message={__('Loading decentralized data...')} />}

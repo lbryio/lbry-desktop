@@ -23,17 +23,16 @@
     "extract-langs": "node build/extractLocals.js",
     "compile": "electron-webpack && yarn extract-langs",
     "build": "yarn compile && electron-builder build",
-    "build:dir": "yarn build -- --dir -c.compression=store -c.mac.identity=null",
     "dev": "electron-webpack dev",
     "lint": "eslint 'src/**/*.{js,jsx}' --fix && flow",
     "format": "prettier 'src/**/*.{js,jsx,scss,json}' --write",
     "flow-defs": "flow-typed install",
-    "release": "yarn compile && electron-builder build",
     "precommit": "lint-staged",
-    "preinstall": "yarn cache clean lbry-redux",
+    "preinstall": "yarn cache clean lbry-redux && yarn cache clean lbryinc",
     "postinstall": "electron-builder install-app-deps && node build/downloadDaemon.js"
   },
   "dependencies": {
+    "@types/three": "^0.93.1",
     "bluebird": "^3.5.1",
     "breakdance": "^3.0.1",
     "classnames": "^2.2.5",
@@ -50,8 +49,8 @@
     "formik": "^0.10.4",
     "hast-util-sanitize": "^1.1.2",
     "keytar": "^4.2.1",
-    "lbry-redux": "lbryio/lbry-redux#fa141b9175500b874bb77da0258e18d902e069b9",
-    "lbryinc": "lbryio/lbryinc#c09aa2645ecccb33c83e9a9545ff119232910f6f",
+    "lbry-redux": "lbryio/lbry-redux#f193d38c61ea061679ebc7b4ca139a0e9c95ef8a",
+    "lbryinc": "lbryio/lbryinc#7a458ea13ceceffa0191e73139f94e5c953f22b1",
     "localforage": "^1.7.1",
     "mammoth": "^1.4.6",
     "mime": "^2.3.1",
@@ -89,10 +88,11 @@
     "y18n": "^4.0.0"
   },
   "devDependencies": {
+    "@lbry/color": "^1.0.2",
     "axios": "^0.18.0",
     "babel-eslint": "^8.2.2",
     "babel-plugin-module-resolver": "^3.1.1",
-    "babel-polyfill": "^6.20.0",
+    "babel-polyfill": "^6.26.0",
     "babel-preset-env": "^1.6.1",
     "babel-preset-react": "^6.24.1",
     "babel-preset-stage-2": "^6.18.0",
@@ -135,9 +135,9 @@
     "yarn": "^1.3"
   },
   "lbrySettings": {
-    "lbrynetDaemonVersion": "0.21.2",
-    "lbrynetDaemonUrlTemplate": "https://github.com/lbryio/lbry/releases/download/vDAEMONVER/lbrynet-daemon-vDAEMONVER-OSNAME.zip",
+    "lbrynetDaemonVersion": "0.30.0",
+    "lbrynetDaemonUrlTemplate": "https://github.com/lbryio/lbry/releases/download/vDAEMONVER/lbrynet-OSNAME.zip",
     "lbrynetDaemonDir": "static/daemon",
-    "lbrynetDaemonFileName": "lbrynet-daemon"
+    "lbrynetDaemonFileName": "lbrynet"
   }
 }

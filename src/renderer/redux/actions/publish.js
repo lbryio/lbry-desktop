@@ -1,4 +1,11 @@
 // @flow
+import type { Dispatch, GetState } from 'types/redux';
+import type { Source, Metadata } from 'types/claim';
+import type {
+  UpdatePublishFormData,
+  UpdatePublishFormAction,
+  PublishParams,
+} from 'redux/reducers/publish';
 import {
   ACTIONS,
   Lbry,
@@ -7,37 +14,18 @@ import {
   selectMyChannelClaims,
   THUMBNAIL_STATUSES,
   batchActions,
+  creditsToString,
+  selectPendingById,
 } from 'lbry-redux';
-import { selectPendingPublishes } from 'redux/selectors/publish';
-import type {
-  UpdatePublishFormData,
-  UpdatePublishFormAction,
-  PublishParams,
-} from 'redux/reducers/publish';
 import { selectosNotificationsEnabled } from 'redux/selectors/settings';
 import { doNavigate } from 'redux/actions/navigation';
 import fs from 'fs';
 import path from 'path';
+import { CC_LICENSES, COPYRIGHT, OTHER } from 'constants/licenses';
 
 type Action = UpdatePublishFormAction | { type: ACTIONS.CLEAR_PUBLISH };
-type PromiseAction = Promise<Action>;
-type Dispatch = (action: Action | PromiseAction | Array<Action>) => any;
-type GetState = () => {};
 
-export const doClearPublish = () => (dispatch: Dispatch): PromiseAction => {
-  dispatch({ type: ACTIONS.CLEAR_PUBLISH });
-  return dispatch(doResetThumbnailStatus());
-};
-
-export const doUpdatePublishForm = (publishFormValue: UpdatePublishFormData) => (
-  dispatch: Dispatch
-): UpdatePublishFormAction =>
-  dispatch({
-    type: ACTIONS.UPDATE_PUBLISH_FORM,
-    data: { ...publishFormValue },
-  });
-
-export const doResetThumbnailStatus = () => (dispatch: Dispatch): PromiseAction => {
+export const doResetThumbnailStatus = () => (dispatch: Dispatch<Action>): Promise<Action> => {
   dispatch({
     type: ACTIONS.UPDATE_PUBLISH_FORM,
     data: {
@@ -73,7 +61,24 @@ export const doResetThumbnailStatus = () => (dispatch: Dispatch): PromiseAction 
     );
 };
 
-export const doUploadThumbnail = (filePath: string, nsfw: boolean) => (dispatch: Dispatch) => {
+export const doClearPublish = () => (dispatch: Dispatch<Action>): Promise<Action> => {
+  dispatch({ type: ACTIONS.CLEAR_PUBLISH });
+  return dispatch(doResetThumbnailStatus());
+};
+
+export const doUpdatePublishForm = (publishFormValue: UpdatePublishFormData) => (
+  dispatch: Dispatch<Action>
+): UpdatePublishFormAction =>
+  dispatch(
+    ({
+      type: ACTIONS.UPDATE_PUBLISH_FORM,
+      data: { ...publishFormValue },
+    }: UpdatePublishFormAction)
+  );
+
+export const doUploadThumbnail = (filePath: string, nsfw: boolean) => (
+  dispatch: Dispatch<Action>
+) => {
   const thumbnail = fs.readFileSync(filePath);
   const fileExt = path.extname(filePath);
   const fileName = path.basename(filePath);
@@ -127,7 +132,7 @@ export const doUploadThumbnail = (filePath: string, nsfw: boolean) => (dispatch:
     .catch(err => uploadError(err.message));
 };
 
-export const doPrepareEdit = (claim: any, uri: string) => (dispatch: Dispatch) => {
+export const doPrepareEdit = (claim: any, uri: string) => (dispatch: Dispatch<Action>) => {
   const {
     name,
     amount,
@@ -154,7 +159,7 @@ export const doPrepareEdit = (claim: any, uri: string) => (dispatch: Dispatch) =
     title,
   } = metadata;
 
-  const publishData = {
+  const publishData: UpdatePublishFormData = {
     name,
     channel: channelName,
     bid: amount,
@@ -164,19 +169,34 @@ export const doPrepareEdit = (claim: any, uri: string) => (dispatch: Dispatch) =
     description,
     fee,
     language,
-    licenseType: license,
-    licenseUrl,
     nsfw,
     thumbnail,
     title,
     uri,
     uploadThumbnailStatus: thumbnail ? THUMBNAIL_STATUSES.MANUAL : undefined,
+    licenseUrl,
   };
+
+  // Make sure custom liscence's are mapped properly
+  if (!CC_LICENSES.some(({ value }) => value === license)) {
+    if (!licenseUrl) {
+      publishData.licenseType = COPYRIGHT;
+    } else {
+      publishData.licenseType = OTHER;
+    }
+
+    publishData.otherLicenseDescription = license;
+  } else {
+    publishData.licenseType = license;
+  }
 
   dispatch({ type: ACTIONS.DO_PREPARE_EDIT, data: publishData });
 };
 
-export const doPublish = (params: PublishParams) => (dispatch: Dispatch, getState: () => {}) => {
+export const doPublish = (params: PublishParams) => (
+  dispatch: Dispatch<Action>,
+  getState: () => {}
+) => {
   const state = getState();
   const myChannels = selectMyChannelClaims(state);
 
@@ -210,22 +230,29 @@ export const doPublish = (params: PublishParams) => (dispatch: Dispatch, getStat
     licenseUrl,
     language,
     thumbnail,
+    description: description || undefined,
+  };
+
+  const publishPayload: {
+    name: ?string,
+    channel_id: string,
+    bid: ?number,
+    metadata: ?Metadata,
+    file_path?: string,
+    sources?: Source,
+  } = {
+    name,
+    channel_id: channelId,
+    bid: creditsToString(bid),
+    metadata,
   };
 
   if (fee) {
-    metadata.fee = fee;
+    metadata.fee = {
+      currency: fee.currency,
+      amount: creditsToString(fee.amount),
+    };
   }
-
-  if (description) {
-    metadata.description = description;
-  }
-
-  const publishPayload = {
-    name,
-    channel_id: channelId,
-    bid,
-    metadata,
-  };
 
   if (filePath) {
     publishPayload.file_path = filePath;
@@ -238,7 +265,6 @@ export const doPublish = (params: PublishParams) => (dispatch: Dispatch, getStat
   const success = () => {
     dispatch({
       type: ACTIONS.PUBLISH_SUCCESS,
-      data: { pendingPublish: { ...publishPayload } },
     });
     dispatch(doNotify({ id: MODALS.PUBLISH }, { uri }));
   };
@@ -252,30 +278,23 @@ export const doPublish = (params: PublishParams) => (dispatch: Dispatch, getStat
 };
 
 // Calls claim_list_mine until any pending publishes are confirmed
-export const doCheckPendingPublishes = () => (dispatch: Dispatch, getState: GetState) => {
+export const doCheckPendingPublishes = () => (dispatch: Dispatch<Action>, getState: GetState) => {
   const state = getState();
-  const pendingPublishes = selectPendingPublishes(state);
+  const pendingById = selectPendingById(state);
+  if (!Object.keys(pendingById)) {
+    return;
+  }
 
   let publishCheckInterval;
 
   const checkFileList = () => {
     Lbry.claim_list_mine().then(claims => {
-      const pendingPublishMap = {};
-      pendingPublishes.forEach(({ name }) => {
-        pendingPublishMap[name] = name;
-      });
-
-      const actions = [];
       claims.forEach(claim => {
-        if (pendingPublishMap[claim.name]) {
-          actions.push({
-            type: ACTIONS.REMOVE_PENDING_PUBLISH,
-            data: {
-              name: claim.name,
-            },
-          });
+        // If it's confirmed, check that it wasn't pending previously
+        if (claim.confirmations > 0 && pendingById[claim.claim_id]) {
+          delete pendingById[claim.claim_id];
 
-          delete pendingPublishMap[claim.name];
+          // If it's confirmed, check if we should notify the user
           if (selectosNotificationsEnabled(getState())) {
             const notif = new window.Notification('LBRY Publish Complete', {
               body: `${claim.value.stream.metadata.title} has been published to lbry://${
@@ -294,25 +313,21 @@ export const doCheckPendingPublishes = () => (dispatch: Dispatch, getState: GetS
         }
       });
 
-      actions.push({
+      dispatch({
         type: ACTIONS.FETCH_CLAIM_LIST_MINE_COMPLETED,
         data: {
           claims,
         },
       });
 
-      dispatch(batchActions(...actions));
-
-      if (!Object.keys(pendingPublishMap).length) {
+      if (!Object.keys(pendingById).length) {
         clearInterval(publishCheckInterval);
       }
     });
   };
 
-  if (pendingPublishes.length) {
+  checkFileList();
+  publishCheckInterval = setInterval(() => {
     checkFileList();
-    publishCheckInterval = setInterval(() => {
-      checkFileList();
-    }, 30000);
-  }
+  }, 30000);
 };

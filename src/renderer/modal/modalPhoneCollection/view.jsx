@@ -1,10 +1,19 @@
+// @flow
 import React from 'react';
 import { Modal } from 'modal/modal';
 import Button from 'component/button';
 import UserPhoneNew from 'component/userPhoneNew';
 import UserPhoneVerify from 'component/userPhoneVerify';
 
-class ModalPhoneCollection extends React.PureComponent {
+type Props = {
+  phone: ?number,
+  user: {
+    phone_number: ?number,
+  },
+  closeModal: () => void,
+};
+
+class ModalPhoneCollection extends React.PureComponent<Props> {
   renderInner() {
     const { closeModal, phone, user } = this.props;
 
@@ -15,7 +24,7 @@ class ModalPhoneCollection extends React.PureComponent {
     } else if (!user.phone_number) {
       return <UserPhoneVerify cancelButton={cancelButton} />;
     }
-    closeModal();
+    return closeModal();
   }
 
   render() {
@@ -27,11 +36,8 @@ class ModalPhoneCollection extends React.PureComponent {
     }
 
     return (
-      <Modal type="custom" isOpen contentLabel="Phone">
-        <section>
-          <h3 className="modal__header">Verify Your Phone</h3>
-          {this.renderInner()}
-        </section>
+      <Modal type="custom" isOpen contentLabel="Phone" title={__('Verify Your Phone')}>
+        <section className="card__content">{this.renderInner()}</section>
       </Modal>
     );
   }

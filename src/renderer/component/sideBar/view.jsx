@@ -2,7 +2,6 @@
 import * as React from 'react';
 import Button from 'component/button';
 import classnames from 'classnames';
-import * as NOTIFICATION_TYPES from 'constants/notification_types';
 
 type SideBarLink = {
   label: string,
@@ -17,15 +16,11 @@ type Props = {
     primary: Array<SideBarLink>,
     secondary: Array<SideBarLink>,
   },
-  notifications: {
-    type: string,
-  },
+  unreadSubscriptionTotal: number,
 };
 
 const SideBar = (props: Props) => {
-  const { navLinks, notifications } = props;
-
-  const badges = Object.keys(notifications).length;
+  const { navLinks, unreadSubscriptionTotal } = props;
 
   return (
     <nav className="nav">
@@ -40,7 +35,11 @@ const SideBar = (props: Props) => {
             >
               <Button
                 navigate={path}
-                label={path === '/subscriptions' && badges ? `${label} (${badges})` : label}
+                label={
+                  path === '/subscriptions' && unreadSubscriptionTotal
+                    ? `${label} (${unreadSubscriptionTotal})`
+                    : label
+                }
                 icon={icon}
               />
             </li>

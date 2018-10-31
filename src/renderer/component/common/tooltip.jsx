@@ -11,7 +11,11 @@ type Props = {
   onComponent?: boolean, // extra padding to account for button/form field size
 };
 
-class ToolTip extends React.PureComponent<Props> {
+type State = {
+  direction: string,
+};
+
+class ToolTip extends React.PureComponent<Props, State> {
   static defaultProps = {
     direction: 'bottom',
   };
@@ -34,6 +38,9 @@ class ToolTip extends React.PureComponent<Props> {
 
     // Get parent-container
     const viewport = document.getElementById('content');
+    if (!viewport) {
+      throw Error('Document must contain parent div with #content');
+    }
 
     const visibility = {
       top: rect.top >= 0,

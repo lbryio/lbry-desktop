@@ -52,7 +52,12 @@ const analytics: Analytics = {
     onSuccessCb: ?() => void
   ): void => {
     if (analyticsEnabled) {
-      const params = {
+      const params: {
+        uri: string,
+        outpoint: string,
+        claim_id: string,
+        time_to_start?: number,
+      } = {
         uri,
         outpoint,
         claim_id: claimId,

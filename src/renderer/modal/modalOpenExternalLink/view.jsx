@@ -23,20 +23,22 @@ class ModalOpenExternalLink extends React.PureComponent<Props> {
     return (
       <Modal
         isOpen
+        title={__('Warning!')}
         contentLabel={__('Confirm External Link')}
         type="confirm"
         confirmButtonLabel={__('Continue')}
         onConfirmed={() => this.openExternalLink()}
         onAborted={closeModal}
       >
-        <h1>Warning!</h1>
-        <p>{__('This link leads to an external website.')}</p>
-        <blockquote>{uri}</blockquote>
-        <p>
-          {__(
-            'LBRY Inc is not responsible for its content, click continue to proceed at your own risk.'
-          )}
-        </p>
+        <section className="card__content">
+          <p>{__('This link leads to an external website.')}</p>
+          <blockquote>{uri}</blockquote>
+          <p>
+            {__(
+              'LBRY Inc is not responsible for its content, click continue to proceed at your own risk.'
+            )}
+          </p>
+        </section>
       </Modal>
     );
   }

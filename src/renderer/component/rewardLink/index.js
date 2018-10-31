@@ -24,7 +24,7 @@ const makeSelect = () => {
 };
 
 const perform = dispatch => ({
-  claimReward: reward => dispatch(doClaimRewardType(reward.reward_type, true)),
+  claimReward: reward => dispatch(doClaimRewardType(reward.reward_type)),
   clearError: reward => dispatch(doClaimRewardClearError(reward)),
   navigate: path => dispatch(doNavigate(path)),
 });

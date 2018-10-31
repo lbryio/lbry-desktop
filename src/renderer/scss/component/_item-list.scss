@@ -1,0 +1,27 @@
+.item-list {
+  background-color: $lbry-white;
+  margin-top: $spacing-vertical;
+  padding: $spacing-vertical;
+}
+
+.item-list__item {
+  align-items: center;
+  display: flex;
+  padding: $spacing-vertical * 1/3;
+
+  input,
+  .item-list__item--cutoff {
+    margin-right: $spacing-vertical;
+  }
+}
+
+.item-list__item--cutoff {
+  max-width: 350px;
+  overflow-x: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.item-list__item--selected {
+  background-color: $lbry-gray-1;
+}
