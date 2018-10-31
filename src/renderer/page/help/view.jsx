@@ -165,7 +165,7 @@ class HelpPage extends React.PureComponent<Props, State> {
               button="primary"
               label={__('Open Log Folder')}
               icon={icons.REPORT}
-              onClick={() => shell.showItemInFolder(dataDirectory)}
+              onClick={() => shell.openItem(dataDirectory)}
             />
           </div>
         </section>
