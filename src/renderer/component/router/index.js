@@ -7,4 +7,7 @@ const select = state => ({
   currentPage: selectCurrentPage(state),
 });
 
-export default connect(select, { doNotify })(Router);
+export default connect(
+  select,
+  { doNotify }
+)(Router);
