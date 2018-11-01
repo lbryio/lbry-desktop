@@ -74,8 +74,7 @@
     }
   }
 
-  &.btn--disabled:disabled {
-    // wtf?
+  &:disabled {
     cursor: default;
 
     &.btn--primary {
