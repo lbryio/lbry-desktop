@@ -119,7 +119,7 @@ You can also use the following command:
 
 `$ yarn format`
 
-for applying formatting rules to all projects' code sources. For formatting a specific file or
+for applying formatting rules to the entire project's code. For formatting a specific file or
 directory, use:
 
 `$ yarn prettier 'glob/pattern'`
