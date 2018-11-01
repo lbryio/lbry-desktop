@@ -48,6 +48,11 @@ class TransactionList extends React.PureComponent<Props> {
   }
 
   filterTransaction(transaction: Transaction) {
+    // The shorter "recent transactions" list shouldn't be filtered
+    if (this.props.slim) {
+      return transaction;
+    }
+
     return (
       this.props.filterSetting === TRANSACTIONS.ALL || this.props.filterSetting === transaction.type
     );
