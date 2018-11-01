@@ -41,13 +41,18 @@ export default handleActions(
       action: DoChannelUnsubscribe
     ): SubscriptionState => {
       const subscriptionToRemove: Subscription = action.data;
-
       const newSubscriptions = state.subscriptions
         .slice()
         .filter(subscription => subscription.channelName !== subscriptionToRemove.channelName);
 
+      // Check if we need to remove it from the 'unread' state
+      const { unread } = state.unread;
+      if (unread[subscriptionToRemove.uri]) {
+        delete unread[subscriptionToRemove.uri];
+      }
       return {
         ...state,
+        ...unread,
         subscriptions: newSubscriptions,
       };
     },
