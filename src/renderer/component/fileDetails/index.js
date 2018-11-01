@@ -19,4 +19,7 @@ const perform = dispatch => ({
   openFolder: path => dispatch(doOpenFileInFolder(path)),
 });
 
-export default connect(select, perform)(FileDetails);
+export default connect(
+  select,
+  perform
+)(FileDetails);

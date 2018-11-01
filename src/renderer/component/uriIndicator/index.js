@@ -17,4 +17,7 @@ const perform = dispatch => ({
   resolveUri: uri => dispatch(doResolveUri(uri)),
 });
 
-export default connect(select, perform)(UriIndicator);
+export default connect(
+  select,
+  perform
+)(UriIndicator);
