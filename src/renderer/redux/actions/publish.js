@@ -276,9 +276,11 @@ export const doPublish = (params: PublishParams) => (
     // We have to fake a temp claim until the new pending one is returned by claim_list_mine
     // We can't rely on claim_list_mine because there might be some delay before the new claims are returned
     // Doing this allows us to show the pending claim immediately, it will get overwritten by the real one
-    const myNewClaims = myClaims.map(
-      claim => (claim.claim_id === pendingClaim.claim_id ? pendingClaim.output : claim)
-    );
+    const isMatch = claim => claim.claim_id === pendingClaim.claim_id;
+    const isEdit = myClaims.some(isMatch);
+    const myNewClaims = isEdit
+      ? myClaims.map(claim => (isMatch(claim) ? pendingClaim.output : claim))
+      : myClaims.concat(pendingClaim.output);
 
     actions.push({
       type: ACTIONS.FETCH_CLAIM_LIST_MINE_COMPLETED,
@@ -311,6 +313,7 @@ export const doCheckPendingPublishes = () => (dispatch: Dispatch<Action>, getSta
 
   const checkFileList = () => {
     Lbry.claim_list_mine().then(claims => {
+      console.log('check');
       claims.forEach(claim => {
         // If it's confirmed, check if it was pending previously
         if (claim.confirmations > 0 && pendingById[claim.claim_id]) {
