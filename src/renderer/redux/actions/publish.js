@@ -313,7 +313,6 @@ export const doCheckPendingPublishes = () => (dispatch: Dispatch<Action>, getSta
 
   const checkFileList = () => {
     Lbry.claim_list_mine().then(claims => {
-      console.log('check');
       claims.forEach(claim => {
         // If it's confirmed, check if it was pending previously
         if (claim.confirmations > 0 && pendingById[claim.claim_id]) {
