@@ -48,11 +48,6 @@ class TransactionList extends React.PureComponent<Props> {
   }
 
   filterTransaction(transaction: Transaction) {
-    // The shorter "recent transactions" list shouldn't be filtered
-    if (this.props.slim) {
-      return transaction;
-    }
-
     return (
       this.props.filterSetting === TRANSACTIONS.ALL || this.props.filterSetting === transaction.type
     );
@@ -71,7 +66,10 @@ class TransactionList extends React.PureComponent<Props> {
 
   render() {
     const { emptyMessage, rewards, transactions, slim, filterSetting } = this.props;
-    const transactionList = transactions.filter(this.filterTransaction);
+
+    // The shorter "recent transactions" list shouldn't be filtered
+    const transactionList = slim ? transactions : transactions.filter(this.filterTransaction);
+
     // Flow offers little support for Object.values() typing.
     // https://github.com/facebook/flow/issues/2221
     // $FlowFixMe
