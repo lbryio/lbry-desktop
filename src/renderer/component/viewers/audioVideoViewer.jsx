@@ -26,7 +26,7 @@ class AudioVideoViewer extends React.PureComponent<Props> {
 
     // We only want to encode the fileName so forward slashes "/" are handled properly by the file system
     // TODO: Determine changes needed for windows
-    const path = `file://${basePath}${encodedFileName}`;
+    const path = `${basePath}${encodedFileName}`;
 
     // Another alternative, maybe we don't need to do anything in the main electron process?
     // get blob url, then set as source and call videojs()

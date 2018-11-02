@@ -25,7 +25,7 @@ class FileRender extends React.PureComponent<Props> {
     const { source, mediaType, currentTheme, poster } = this.props;
 
     // Extract relevant data to render file
-    const { stream, fileType, contentType, downloadPath } = source;
+    const { stream, fileType, contentType, downloadPath, fileName } = source;
 
     // Human-readable files (scripts and plain-text files)
     const readableFiles = ['text', 'document', 'script'];
