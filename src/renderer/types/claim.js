@@ -14,6 +14,18 @@ export type Metadata = {
   title: string,
   thumbnail: ?string,
   description: ?string,
+  fee?:
+    | {
+        amount: number, // should be a string https://github.com/lbryio/lbry/issues/1576
+        currency: string,
+        address: string,
+        version: string,
+      }
+    | {
+        // We don't include a version or address in the metadata field when publishing
+        amount: number,
+        currency: string,
+      },
 };
 
 // Actual claim type has more values than this

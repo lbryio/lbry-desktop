@@ -82,9 +82,18 @@ html[data-theme='dark'] {
     background-color: rgba($lbry-red-1, 0.1);
   }
 
-  .btn.btn--alt:not(:disabled) {
-    background-color: rgba($lbry-white, 0.1);
-    color: $lbry-gray-1;
+  //
+  // BUTTON
+  //
+  .btn {
+    &.btn--alt:not(:disabled) {
+      background-color: rgba($lbry-white, 0.1);
+      color: $lbry-gray-1;
+    }
+
+    &.btn--primary:disabled {
+      background-color: rgba($lbry-teal-5, 0.15);
+    }
   }
 
   .search__top {
@@ -119,10 +128,6 @@ html[data-theme='dark'] {
   .modal-overlay,
   .error-modal-overlay {
     background-color: rgba($lbry-black, 0.7);
-  }
-
-  .btn {
-    color: $lbry-gray-3;
   }
 
   .modal {

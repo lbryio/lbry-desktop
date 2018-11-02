@@ -22,7 +22,6 @@ class FileListPublished extends React.PureComponent<Props> {
 
   render() {
     const { fetching, claims, navigate, sortBy } = this.props;
-
     return (
       <Page notContained loading={fetching}>
         {claims && claims.length ? (

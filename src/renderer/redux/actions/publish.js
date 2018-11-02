@@ -16,6 +16,7 @@ import {
   batchActions,
   creditsToString,
   selectPendingById,
+  selectMyClaimsWithoutChannels,
 } from 'lbry-redux';
 import { selectosNotificationsEnabled } from 'redux/selectors/settings';
 import { doNavigate } from 'redux/actions/navigation';
@@ -199,6 +200,7 @@ export const doPublish = (params: PublishParams) => (
 ) => {
   const state = getState();
   const myChannels = selectMyChannelClaims(state);
+  const myClaims = selectMyClaimsWithoutChannels(state);
 
   const {
     name,
@@ -223,7 +225,7 @@ export const doPublish = (params: PublishParams) => (
   const channelId = namedChannelClaim ? namedChannelClaim.claim_id : '';
   const fee = contentIsFree || !price.amount ? undefined : { ...price };
 
-  const metadata = {
+  const metadata: Metadata = {
     title,
     nsfw,
     license,
@@ -262,11 +264,32 @@ export const doPublish = (params: PublishParams) => (
 
   dispatch({ type: ACTIONS.PUBLISH_START });
 
-  const success = () => {
-    dispatch({
+  const success = pendingClaim => {
+    const actions = [];
+
+    actions.push({
       type: ACTIONS.PUBLISH_SUCCESS,
     });
-    dispatch(doNotify({ id: MODALS.PUBLISH }, { uri }));
+
+    actions.push(doNotify({ id: MODALS.PUBLISH }, { uri }));
+
+    // We have to fake a temp claim until the new pending one is returned by claim_list_mine
+    // We can't rely on claim_list_mine because there might be some delay before the new claims are returned
+    // Doing this allows us to show the pending claim immediately, it will get overwritten by the real one
+    const isMatch = claim => claim.claim_id === pendingClaim.claim_id;
+    const isEdit = myClaims.some(isMatch);
+    const myNewClaims = isEdit
+      ? myClaims.map(claim => (isMatch(claim) ? pendingClaim.output : claim))
+      : myClaims.concat(pendingClaim.output);
+
+    actions.push({
+      type: ACTIONS.FETCH_CLAIM_LIST_MINE_COMPLETED,
+      data: {
+        claims: myNewClaims,
+      },
+    });
+
+    dispatch(batchActions(...actions));
   };
 
   const failure = error => {
@@ -281,7 +304,8 @@ export const doPublish = (params: PublishParams) => (
 export const doCheckPendingPublishes = () => (dispatch: Dispatch<Action>, getState: GetState) => {
   const state = getState();
   const pendingById = selectPendingById(state);
-  if (!Object.keys(pendingById)) {
+
+  if (!Object.keys(pendingById).length) {
     return;
   }
 
@@ -289,8 +313,9 @@ export const doCheckPendingPublishes = () => (dispatch: Dispatch<Action>, getSta
 
   const checkFileList = () => {
     Lbry.claim_list_mine().then(claims => {
+      console.log('check');
       claims.forEach(claim => {
-        // If it's confirmed, check that it wasn't pending previously
+        // If it's confirmed, check if it was pending previously
         if (claim.confirmations > 0 && pendingById[claim.claim_id]) {
           delete pendingById[claim.claim_id];
 
@@ -326,7 +351,6 @@ export const doCheckPendingPublishes = () => (dispatch: Dispatch<Action>, getSta
     });
   };
 
-  checkFileList();
   publishCheckInterval = setInterval(() => {
     checkFileList();
   }, 30000);

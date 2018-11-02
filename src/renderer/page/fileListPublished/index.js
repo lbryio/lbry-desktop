@@ -1,6 +1,9 @@
 import { connect } from 'react-redux';
-import { selectPendingPublishes } from 'redux/selectors/publish';
-import { selectIsFetchingClaimListMine, selectFileListPublishedSort, selectMyClaimsWithoutChannels } from 'lbry-redux';
+import {
+  selectIsFetchingClaimListMine,
+  selectFileListPublishedSort,
+  selectMyClaimsWithoutChannels,
+} from 'lbry-redux';
 import { doNavigate } from 'redux/actions/navigation';
 import { doCheckPendingPublishes } from 'redux/actions/publish';
 import FileListPublished from './view';
