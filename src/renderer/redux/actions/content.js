@@ -1,5 +1,6 @@
 // @flow
 import * as NOTIFICATION_TYPES from 'constants/subscriptions';
+import { PAGE_SIZE } from 'constants/claim';
 import { ipcRenderer } from 'electron';
 import { doAlertError } from 'redux/actions/app';
 import { doNavigate } from 'redux/actions/navigation';
@@ -293,38 +294,40 @@ export function doFetchClaimsByChannel(uri, page, pageSize) {
       data: { uri, page },
     });
 
-    Lbry.claim_list_by_channel({ uri, page: page || 1, page_size: pageSize || 20 }).then(result => {
-      const claimResult = result[uri] || {};
-      const { claims_in_channel: claimsInChannel, returned_page: returnedPage } = claimResult;
+    Lbry.claim_list_by_channel({ uri, page: page || 1, page_size: pageSize || PAGE_SIZE }).then(
+      result => {
+        const claimResult = result[uri] || {};
+        const { claims_in_channel: claimsInChannel, returned_page: returnedPage } = claimResult;
 
-      if (claimsInChannel && claimsInChannel.length) {
-        const latest = claimsInChannel[0];
-        dispatch(
-          setSubscriptionLatest(
-            {
-              channelName: latest.channel_name,
-              uri: buildURI(
-                {
-                  contentName: latest.channel_name,
-                  claimId: latest.value.publisherSignature.certificateId,
-                },
-                false
-              ),
-            },
-            buildURI({ contentName: latest.name, claimId: latest.claim_id }, false)
-          )
-        );
+        if (claimsInChannel && claimsInChannel.length) {
+          const latest = claimsInChannel[0];
+          dispatch(
+            setSubscriptionLatest(
+              {
+                channelName: latest.channel_name,
+                uri: buildURI(
+                  {
+                    contentName: latest.channel_name,
+                    claimId: latest.value.publisherSignature.certificateId,
+                  },
+                  false
+                ),
+              },
+              buildURI({ contentName: latest.name, claimId: latest.claim_id }, false)
+            )
+          );
+        }
+
+        dispatch({
+          type: ACTIONS.FETCH_CHANNEL_CLAIMS_COMPLETED,
+          data: {
+            uri,
+            claims: claimsInChannel || [],
+            page: returnedPage || undefined,
+          },
+        });
       }
-
-      dispatch({
-        type: ACTIONS.FETCH_CHANNEL_CLAIMS_COMPLETED,
-        data: {
-          uri,
-          claims: claimsInChannel || [],
-          page: returnedPage || undefined,
-        },
-      });
-    });
+    );
   };
 }
 

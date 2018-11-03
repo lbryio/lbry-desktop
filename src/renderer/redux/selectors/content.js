@@ -14,12 +14,6 @@ export const selectChannelClaimCounts = createSelector(
 export const makeSelectTotalItemsForChannel = uri =>
   createSelector(selectChannelClaimCounts, byUri => byUri && byUri[uri]);
 
-export const makeSelectTotalPagesForChannel = uri =>
-  createSelector(
-    selectChannelClaimCounts,
-    byUri => byUri && byUri[uri] && Math.ceil(byUri[uri] / 10)
-  );
-
 export const selectRewardContentClaimIds = createSelector(
   selectState,
   state => state.rewardedContentClaimIds
@@ -52,9 +46,8 @@ export const makeSelectHistoryForPage = page =>
 
       if (claimAtUri) {
         return { lastViewed, uri, ...claimAtUri };
-      } else {
-        return historyItem;
       }
+      return historyItem;
     });
   });
 
