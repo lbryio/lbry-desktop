@@ -9,6 +9,7 @@ import {
   makeSelectClaimIsMine,
   makeSelectTotalPagesForChannel,
   selectCurrentParams,
+  doNotify,
 } from 'lbry-redux';
 import { doNavigate } from 'redux/actions/navigation';
 import ChannelPage from './view';
@@ -27,6 +28,7 @@ const perform = dispatch => ({
   fetchClaims: (uri, page) => dispatch(doFetchClaimsByChannel(uri, page)),
   fetchClaimCount: uri => dispatch(doFetchClaimCountByChannel(uri)),
   navigate: (path, params) => dispatch(doNavigate(path, params)),
+  openModal: (modal, props) => dispatch(doNotify(modal, props)),
 });
 
 export default connect(

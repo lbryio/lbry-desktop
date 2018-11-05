@@ -13,6 +13,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
  * Persistence to Transaction List Filter Selection ([#2048](https://github.com/lbryio/lbry-desktop/pull/2048))
  * Subscription improvements ([#2031](https://github.com/lbryio/lbry-desktop/pull/2031))
  * Adds Persistence to File List Filter Selections ([#2050](https://github.com/lbryio/lbry-desktop/pull/2050))
+ * Add more share options for channel page ([#2088](https://github.com/lbryio/lbry-desktop/pull/2088))
 
 ### Changed
  * Upgraded to lbrynet v0.30.0 ([#1998](https://github.com/lbryio/lbry-desktop/pull/1998))

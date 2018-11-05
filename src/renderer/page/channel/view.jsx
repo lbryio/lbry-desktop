@@ -4,11 +4,13 @@ import BusyIndicator from 'component/common/busy-indicator';
 import { FormField, FormRow } from 'component/common/form';
 import ReactPaginate from 'react-paginate';
 import SubscribeButton from 'component/subscribeButton';
-import ViewOnWebButton from 'component/viewOnWebButton';
 import Page from 'component/page';
 import FileList from 'component/fileList';
 import HiddenNsfwClaims from 'component/hiddenNsfwClaims';
 import type { Claim } from 'types/claim';
+import Button from 'component/button';
+import { MODALS } from 'lbry-redux';
+import * as icons from 'constants/icons';
 
 type Props = {
   uri: string,
@@ -22,6 +24,7 @@ type Props = {
   fetchClaims: (string, number) => void,
   fetchClaimCount: string => void,
   navigate: (string, {}) => void,
+  openModal: ({ id: string }, { uri: string }) => void,
 };
 
 class ChannelPage extends React.PureComponent<Props> {
@@ -67,10 +70,18 @@ class ChannelPage extends React.PureComponent<Props> {
   }
 
   render() {
-    const { uri, fetching, claimsInChannel, claim, page, totalPages, channelIsMine } = this.props;
-    const { name, permanent_url: permanentUrl, claim_id: claimId } = claim;
+    const {
+      uri,
+      fetching,
+      claimsInChannel,
+      claim,
+      page,
+      totalPages,
+      channelIsMine,
+      openModal,
+    } = this.props;
+    const { name, permanent_url: permanentUrl } = claim;
     const currentPage = parseInt((page || 1) - 1, 10);
-
     const contentList =
       claimsInChannel && claimsInChannel.length ? (
         <FileList sortByHeight hideFilter fileInfos={claimsInChannel} />
@@ -88,7 +99,12 @@ class ChannelPage extends React.PureComponent<Props> {
         </section>
         <div className="card__actions">
           <SubscribeButton uri={`lbry://${permanentUrl}`} channelName={name} />
-          <ViewOnWebButton claimId={claimId} claimName={name} />
+          <Button
+            button="alt"
+            icon={icons.GLOBE}
+            label={__('Share Channel')}
+            onClick={() => openModal({ id: MODALS.SOCIAL_SHARE }, { uri, speechShareable: true })}
+          />
         </div>
         <section className="card__content">{contentList}</section>
         {(!fetching || (claimsInChannel && claimsInChannel.length)) &&
