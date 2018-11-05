@@ -64,7 +64,7 @@ if (isDev) {
 }
 
 app.on('ready', async () => {
-  const processList = await findProcess('name', 'lbrynet');
+  const processList = await findProcess('name', 'lbrynet start');
   const isDaemonRunning = processList.length > 0;
 
   if (!isDaemonRunning) {
