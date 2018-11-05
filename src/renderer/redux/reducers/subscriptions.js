@@ -46,7 +46,7 @@ export default handleActions(
         .filter(subscription => subscription.channelName !== subscriptionToRemove.channelName);
 
       // Check if we need to remove it from the 'unread' state
-      const { unread } = state.unread;
+      const { unread } = state;
       if (unread[subscriptionToRemove.uri]) {
         delete unread[subscriptionToRemove.uri];
       }
