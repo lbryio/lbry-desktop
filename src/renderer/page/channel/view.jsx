@@ -103,7 +103,7 @@ class ChannelPage extends React.PureComponent<Props> {
             button="alt"
             icon={icons.GLOBE}
             label={__('Share Channel')}
-            onClick={() => openModal({ id: MODALS.SOCIAL_SHARE }, { uri, speechShareable:'true' })}
+            onClick={() => openModal({ id: MODALS.SOCIAL_SHARE }, { uri, speechShareable: true })}
           />
         </div>
         <section className="card__content">{contentList}</section>
