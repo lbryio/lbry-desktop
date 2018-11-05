@@ -26,6 +26,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
  * Limit file type can be uploaded as thumbnail for publishing ([#2034](https://github.com/lbryio/lbry-desktop/pull/2034))
  * Change snackbar notification position to bottom-left ([#2040](https://github.com/lbryio/lbry-desktop/pull/2040))
  * Use shared colors from lbryio/color project ([#2045](https://github.com/lbryio/lbry-desktop/pull/2045))
+ * Remove ToS checkbox ([#2087](https://github.com/lbryio/lbry-desktop/pull/2087))
 
 ### Fixed
  * Fixed transactions filter menu collides with transaction table ([#2005](https://github.com/lbryio/lbry-desktop/pull/2005))
