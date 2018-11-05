@@ -23,7 +23,7 @@ const select = (state, props) => ({
 });
 
 const perform = dispatch => ({
-  fetchClaims: (uri, page) => dispatch(doFetchClaimsByChannel(uri, page)),
+  fetchClaims: (uri, page) => dispatch(doFetchClaimsByChannel(uri, page, true)),
   fetchClaimCount: uri => dispatch(doFetchClaimCountByChannel(uri)),
   navigate: (path, params) => dispatch(doNavigate(path, params)),
 });

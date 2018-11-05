@@ -26,6 +26,7 @@ import {
   creditsToString,
 } from 'lbry-redux';
 import { makeSelectClientSetting, selectosNotificationsEnabled } from 'redux/selectors/settings';
+import { makeSelectTotalPagesForChannel } from 'redux/selectors/content';
 import setBadge from 'util/setBadge';
 import setProgressBar from 'util/setProgressBar';
 import analytics from 'analytics';
@@ -286,8 +287,8 @@ export function doPurchaseUri(uri, specificCostInfo, shouldRecordViewEvent) {
   };
 }
 
-export function doFetchClaimsByChannel(uri, page, pageSize) {
-  return dispatch => {
+export function doFetchClaimsByChannel(uri, page, cacheNextPage) {
+  return (dispatch, getState) => {
     dispatch({
       type: ACTIONS.FETCH_CHANNEL_CLAIMS_STARTED,
       data: { uri, page },
@@ -324,6 +325,12 @@ export function doFetchClaimsByChannel(uri, page, pageSize) {
           page: returnedPage || undefined,
         },
       });
+
+      const totalPages = makeSelectTotalPagesForChannel(uri)(getState());
+      const pageInt = parseInt(page || 1, 10);
+      if (cacheNextPage && pageInt + 1 < totalPages) {
+        dispatch(doFetchClaimsByChannel(uri, pageInt + 1, false));
+      }
     });
   };
 }
