@@ -37,9 +37,12 @@ class SocialShare extends React.PureComponent<Props> {
     const speechURL =
       channelName && channelClaimId
         ? `${speechPrefix}${channelName}:${channelClaimId}/${claimName}`
-        : `${speechPrefix}${claimName}#${claimId}`;
+        : `${speechPrefix}${claimId}/${claimName}`;
 
-    const lbryURL = `${lbryPrefix}${claimName}#${claimId}`;
+    const lbryURL =
+      channelName && channelClaimId
+        ? `${lbryPrefix}${channelName}#${channelClaimId}/${claimName}`
+        : `${lbryPrefix}${claimName}#${claimId}`;
 
     return (
       <section className="card__content">
