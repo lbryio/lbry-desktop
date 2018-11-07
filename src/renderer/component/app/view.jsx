@@ -8,6 +8,8 @@ import SideBar from 'component/sideBar';
 import Header from 'component/header';
 import { openContextMenu } from '../../util/contextMenu';
 
+const TWO_POINT_FIVE_MINUTES = 1000 * 60 * 2.5;
+
 type Props = {
   alertError: (string | {}) => void,
   recordScroll: number => void,
@@ -15,6 +17,7 @@ type Props = {
   currentPageAttributes: { path: string, scrollY: number },
   pageTitle: ?string,
   theme: string,
+  updateBlockHeight: () => void,
 };
 
 class App extends React.PureComponent<Props> {
@@ -38,6 +41,8 @@ class App extends React.PureComponent<Props> {
   }
 
   componentDidMount() {
+    const { updateBlockHeight } = this.props;
+
     const mainContent = document.getElementById('content');
     this.mainContent = mainContent;
 
@@ -46,6 +51,11 @@ class App extends React.PureComponent<Props> {
     }
 
     ReactModal.setAppElement('#window'); // fuck this
+
+    updateBlockHeight();
+    setInterval(() => {
+      updateBlockHeight();
+    }, TWO_POINT_FIVE_MINUTES);
   }
 
   componentWillReceiveProps(props: Props) {
