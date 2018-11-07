@@ -1,5 +1,5 @@
 // @flow
-import React from 'react';
+import React, { Fragment } from 'react';
 import BusyIndicator from 'component/common/busy-indicator';
 import Button from 'component/button';
 import TransactionList from 'component/transactionList';
@@ -11,44 +11,58 @@ type Props = {
   fetchingTransactions: boolean,
   hasTransactions: boolean,
   transactions: Array<Transaction>,
+  fetchMyClaims: () => void,
 };
 
 class TransactionListRecent extends React.PureComponent<Props> {
   componentDidMount() {
-    this.props.fetchTransactions();
+    const { fetchMyClaims, fetchTransactions } = this.props;
+
+    fetchMyClaims();
+    fetchTransactions();
   }
 
   render() {
-    const { fetchingTransactions, hasTransactions, transactions } = this.props;
-
+    const { fetchingTransactions, hasTransactions, transactions, fetchTransactions } = this.props;
     return (
       <section className="card card--section">
-        <div className="card__title">{__('Recent Transactions')}</div>
+        <div className="card__title card--space-between">
+          {__('Recent Transactions')}
+          <div className="card__actions-top-corner">
+            <Button
+              button="inverse"
+              label={__('Refresh')}
+              onClick={fetchTransactions}
+              disabled={fetchingTransactions}
+            />
+          </div>
+        </div>
         <div className="card__subtitle">
           {__('To view all of your transactions, navigate to the')}{' '}
           <Button button="link" navigate="/history" label={__('transactions page')} />.
         </div>
-        {fetchingTransactions && (
-          <div className="card__content">
-            <BusyIndicator message={__('Loading transactions')} />
-          </div>
-        )}
-        {!fetchingTransactions && (
-          <TransactionList
-            slim
-            transactions={transactions}
-            emptyMessage={__("Looks like you don't have any recent transactions.")}
-          />
-        )}
+        {fetchingTransactions &&
+          !hasTransactions && (
+            <div className="card__content">
+              <BusyIndicator message={__('Loading transactions')} />
+            </div>
+          )}
         {hasTransactions && (
-          <div className="card__actions">
-            <Button
-              button="primary"
-              navigate="/history"
-              label={__('Full History')}
-              icon={icons.CLOCK}
+          <Fragment>
+            <TransactionList
+              slim
+              transactions={transactions}
+              emptyMessage={__("Looks like you don't have any recent transactions.")}
             />
-          </div>
+            <div className="card__actions">
+              <Button
+                button="primary"
+                navigate="/history"
+                label={__('Full History')}
+                icon={icons.CLOCK}
+              />
+            </div>
+          </Fragment>
         )}
       </section>
     );

@@ -82,7 +82,7 @@ class TransactionList extends React.PureComponent<Props> {
         )}
         {!slim &&
           !!transactionList.length && (
-            <div className="card__actions">
+            <div className="card__actions card__actions--between">
               <FileExporter
                 data={transactionList}
                 label={__('Export')}
@@ -90,33 +90,31 @@ class TransactionList extends React.PureComponent<Props> {
                 filters={['nout']}
                 defaultPath={__('lbry-transactions-history')}
               />
+              {!slim && (
+                <FormField
+                  type="select"
+                  value={filterSetting || TRANSACTIONS.ALL}
+                  onChange={this.handleFilterChanged}
+                  affixClass="form-field--align-center"
+                  prefix={__('Show')}
+                  postfix={
+                    <Button
+                      button="link"
+                      icon={icons.HELP}
+                      href="https://lbry.io/faq/transaction-types"
+                      title={__('Help')}
+                    />
+                  }
+                >
+                  {transactionTypes.map(tt => (
+                    <option key={tt} value={tt}>
+                      {__(`${this.capitalize(tt)}`)}
+                    </option>
+                  ))}
+                </FormField>
+              )}
             </div>
           )}
-        {!slim && (
-          <div className="card__actions-top-corner">
-            <FormField
-              type="select"
-              value={filterSetting || TRANSACTIONS.ALL}
-              onChange={this.handleFilterChanged}
-              affixClass="form-field--align-center"
-              prefix={__('Show')}
-              postfix={
-                <Button
-                  button="link"
-                  icon={icons.HELP}
-                  href="https://lbry.io/faq/transaction-types"
-                  title={__('Help')}
-                />
-              }
-            >
-              {transactionTypes.map(tt => (
-                <option key={tt} value={tt}>
-                  {__(`${this.capitalize(tt)}`)}
-                </option>
-              ))}
-            </FormField>
-          </div>
-        )}
         {!!transactionList.length && (
           <table className="card__content table table--transactions table--stretch">
             <thead>
