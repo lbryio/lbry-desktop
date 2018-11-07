@@ -108,6 +108,7 @@ const fileInfoFilter = createFilter('fileInfo', [
   'fileListDownloadedSort',
   'fileListSubscriptionSort',
 ]);
+const appFilter = createFilter('app', ['hasClickedComment']);
 // We only need to persist the receiveAddress for the wallet
 const walletFilter = createFilter('wallet', ['receiveAddress']);
 
@@ -115,7 +116,14 @@ const persistOptions = {
   whitelist: ['subscriptions', 'publish', 'wallet', 'content', 'fileInfo'],
   // Order is important. Needs to be compressed last or other transforms can't
   // read the data
-  transforms: [subscriptionsFilter, walletFilter, contentFilter, fileInfoFilter, compressor],
+  transforms: [
+    subscriptionsFilter,
+    walletFilter,
+    contentFilter,
+    fileInfoFilter,
+    appFilter,
+    compressor,
+  ],
   debounce: 10000,
   storage: localForage,
 };

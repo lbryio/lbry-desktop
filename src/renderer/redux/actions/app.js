@@ -2,8 +2,8 @@ import { execSync } from 'child_process';
 import isDev from 'electron-is-dev';
 import path from 'path';
 import { ipcRenderer, remote } from 'electron';
+import * as ACTIONS from 'constants/action_types';
 import {
-  ACTIONS,
   Lbry,
   doBalanceSubscribe,
   doFetchFileInfosAndPublishedClaims,
@@ -384,6 +384,12 @@ export function doChangeVolume(volume) {
         volume,
       },
     });
+  };
+}
+
+export function doClickCommentButton() {
+  return {
+    type: ACTIONS.ADD_COMMENT,
   };
 }
 

@@ -19,6 +19,11 @@ export const selectUpdateUrl = createSelector(selectPlatform, platform => {
   }
 });
 
+export const selectHasClickedComment = createSelector(
+  selectState,
+  state => state.hasClickedComment
+);
+
 export const selectRemoteVersion = createSelector(selectState, state => state.remoteVersion);
 
 export const selectIsUpgradeAvailable = createSelector(
