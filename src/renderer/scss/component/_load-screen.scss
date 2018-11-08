@@ -8,11 +8,11 @@
   color: $lbry-white;
   display: flex;
   flex-direction: column;
-  justify-content: center;
 }
 
 .load-screen__header {
   display: flex;
+  margin-top: 35vh;
 }
 
 .load-screen__title {
@@ -40,4 +40,9 @@
   line-height: 1;
   max-width: 400px;
   padding-top: $spacing-vertical * 2/3;
+}
+
+.load-screen--help {
+  font-size: 14px;
+  padding-top: $spacing-vertical;
 }

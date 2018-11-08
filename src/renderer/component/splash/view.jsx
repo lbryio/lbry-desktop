@@ -1,4 +1,5 @@
 // @flow
+import type { Status } from 'types/status';
 import * as React from 'react';
 import { Lbry, MODALS } from 'lbry-redux';
 import ModalWalletUnlock from 'modal/modalWalletUnlock';
@@ -6,6 +7,8 @@ import ModalIncompatibleDaemon from 'modal/modalIncompatibleDaemon';
 import ModalUpgrade from 'modal/modalUpgrade';
 import ModalDownloading from 'modal/modalDownloading';
 import LoadScreen from './internal/load-screen';
+
+const ONE_MINUTE = 60 * 1000;
 
 type Props = {
   checkDaemonVersion: () => Promise<any>,
@@ -23,6 +26,7 @@ type State = {
   message: string,
   isRunning: boolean,
   launchedModal: boolean,
+  error: boolean,
 };
 
 export class SplashScreen extends React.PureComponent<Props, State> {
@@ -34,14 +38,17 @@ export class SplashScreen extends React.PureComponent<Props, State> {
       message: __('Connecting'),
       isRunning: false,
       launchedModal: false,
+      error: false,
     };
 
     this.hasRecordedUser = false;
+    this.timeout = undefined;
   }
 
   componentDidMount() {
     const { checkDaemonVersion } = this.props;
 
+    this.adjustErrorTimeout();
     Lbry.connect()
       .then(checkDaemonVersion)
       .then(() => {
@@ -57,22 +64,54 @@ export class SplashScreen extends React.PureComponent<Props, State> {
       });
   }
 
+  componentDidUpdate() {
+    this.adjustErrorTimeout();
+  }
+
+  componentWillUnmount() {
+    if (this.timeout) {
+      clearTimeout(this.timeout);
+    }
+  }
+
+  adjustErrorTimeout() {
+    if (this.timeout) {
+      clearTimeout(this.timeout);
+    }
+
+    // Every time we make it to a new step in the daemon startup process, reset the timer
+    // If nothing changes after 1 minute, show the error message.
+    this.timeout = setTimeout(() => {
+      this.setState({ error: true });
+    }, ONE_MINUTE);
+  }
+
   updateStatus() {
     Lbry.status().then(status => {
       this.updateStatusCallback(status);
     });
   }
 
-  updateStatusCallback(status) {
+  updateStatusCallback(status: Status) {
     const { notifyUnlockWallet, authenticate } = this.props;
     const { launchedModal } = this.state;
+
+    if (status.error) {
+      this.setState({
+        error: true,
+      });
+      return;
+    }
 
     if (!this.hasRecordedUser && status) {
       authenticate();
       this.hasRecordedUser = true;
     }
 
-    if (status.wallet && status.wallet.is_locked) {
+    const { wallet, blockchain_headers: blockchainHeaders } = status;
+
+    // If the wallet is locked, stop doing anything and make the user input their password
+    if (wallet && wallet.is_locked) {
       this.setState({
         isRunning: true,
       });
@@ -97,43 +136,49 @@ export class SplashScreen extends React.PureComponent<Props, State> {
           this.props.onReadyToLaunch();
         }
       });
+
       return;
-    } else if (status.blockchain_headers && status.blockchain_headers.download_progress < 100) {
+    } else if (blockchainHeaders) {
+      const blockChainHeaders = blockchainHeaders;
+      if (blockChainHeaders.download_progress < 100) {
+        this.setState({
+          message: __('Blockchain Sync'),
+          details: `${__('Catching up with the blockchain')} (${
+            blockchainHeaders.download_progress
+          }%)`,
+        });
+      }
+    } else if (wallet && wallet.blocks_behind > 0) {
+      const format = wallet.blocks_behind === 1 ? '%s block behind' : '%s blocks behind';
       this.setState({
         message: __('Blockchain Sync'),
-        details: `${__('Catching up with the blockchain')} (${
-          status.blockchain_headers.download_progress
-        }%)`,
+        details: __(format, wallet.blocks_behind),
       });
-    } else if (status.wallet && status.wallet.blocks_behind > 0) {
-      const format = status.wallet.blocks_behind === 1 ? '%s block behind' : '%s blocks behind';
-      this.setState({
-        message: __('Blockchain Sync'),
-        details: __(format, status.wallet.blocks_behind),
-      });
-    } else if (status.wallet && status.wallet.blocks_behind === 0) {
+    } else if (wallet && wallet.blocks_behind === 0) {
       this.setState({
         message: 'Network Loading',
         details: 'Initializing LBRY service...',
       });
     }
+
     setTimeout(() => {
       this.updateStatus();
     }, 500);
   }
 
   hasRecordedUser: boolean;
+  timeout: ?TimeoutID;
 
   render() {
     const { notification } = this.props;
-    const { message, details, isRunning } = this.state;
+    const { message, details, isRunning, error } = this.state;
 
     const notificationId = notification && notification.id;
 
     // {notificationId === MODALS.WALLET_UNLOCK && <ModalWalletUnlock />}
     return (
       <React.Fragment>
-        <LoadScreen message={message} details={details} />
+        <LoadScreen message={message} details={details} error={error} />
         {/* Temp hack: don't show any modals on splash screen daemon is running;
             daemon doesn't let you quit during startup, so the "Quit" buttons
             in the modals won't work. */}

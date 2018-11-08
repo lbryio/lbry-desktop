@@ -183,6 +183,16 @@
     text-transform: uppercase;
   }
 
+  &.btn--load-screen {
+    display: inline-block;
+    border-bottom: 1px solid $lbry-white;
+
+    &:hover {
+      color: $lbry-blue-1;
+      border-bottom: 1px solid $lbry-blue-1;
+    }
+  }
+
   .icon + .btn__label {
     padding-left: 5px;
   }
