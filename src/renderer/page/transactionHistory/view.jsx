@@ -3,7 +3,7 @@ import React from 'react';
 import BusyIndicator from 'component/common/busy-indicator';
 import TransactionList from 'component/transactionList';
 import Page from 'component/page';
-import Button from 'component/button';
+import RefreshTransactionButton from 'component/transactionRefreshButton';
 
 type Props = {
   fetchMyClaims: () => void,
@@ -21,21 +21,14 @@ class TransactionHistoryPage extends React.PureComponent<Props> {
   }
 
   render() {
-    const { fetchingTransactions, transactions, fetchTransactions } = this.props;
+    const { fetchingTransactions, transactions } = this.props;
 
     return (
       <Page>
         <section className="card card--section">
           <div className="card__title card--space-between">
             {__('Transaction History')}
-            <div className="card__actions-top-corner">
-              <Button
-                button="inverse"
-                label={__('Refresh')}
-                onClick={fetchTransactions}
-                disabled={fetchingTransactions}
-              />
-            </div>
+            <RefreshTransactionButton />
           </div>
           {fetchingTransactions && !transactions.length ? (
             <div className="card__content">

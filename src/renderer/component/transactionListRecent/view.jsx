@@ -1,10 +1,11 @@
 // @flow
+import type { Transaction } from 'component/transactionList/view';
 import React, { Fragment } from 'react';
 import BusyIndicator from 'component/common/busy-indicator';
 import Button from 'component/button';
 import TransactionList from 'component/transactionList';
 import * as icons from 'constants/icons';
-import type { Transaction } from 'component/transactionList/view';
+import RefreshTransactionButton from 'component/transactionRefreshButton';
 
 type Props = {
   fetchTransactions: () => void,
@@ -23,19 +24,12 @@ class TransactionListRecent extends React.PureComponent<Props> {
   }
 
   render() {
-    const { fetchingTransactions, hasTransactions, transactions, fetchTransactions } = this.props;
+    const { fetchingTransactions, hasTransactions, transactions } = this.props;
     return (
       <section className="card card--section">
         <div className="card__title card--space-between">
           {__('Recent Transactions')}
-          <div className="card__actions-top-corner">
-            <Button
-              button="inverse"
-              label={__('Refresh')}
-              onClick={fetchTransactions}
-              disabled={fetchingTransactions}
-            />
-          </div>
+          <RefreshTransactionButton />
         </div>
         <div className="card__subtitle">
           {__('To view all of your transactions, navigate to the')}{' '}
