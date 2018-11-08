@@ -96,10 +96,16 @@ html[data-theme='dark'] {
     }
   }
 
+  //
+  // SEARCH
+  //
   .search__top {
     background-color: rgba($lbry-white, 0.15);
   }
 
+  //
+  // TABLE
+  //
   table.table,
   .markdown-preview table {
     thead {
@@ -117,8 +123,16 @@ html[data-theme='dark'] {
     }
   }
 
+  //
+  // ITEM LIST
+  //
   .item-list {
     background-color: rgba($lbry-white, 0.1);
+  }
+
+  .item-list__item--selected {
+    background-color: $lbry-black;
+    color: $lbry-white;
   }
 
   .item-list__item:not(:last-of-type) {

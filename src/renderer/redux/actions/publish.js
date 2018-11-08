@@ -22,7 +22,7 @@ import { selectosNotificationsEnabled } from 'redux/selectors/settings';
 import { doNavigate } from 'redux/actions/navigation';
 import fs from 'fs';
 import path from 'path';
-import { CC_LICENSES, COPYRIGHT, OTHER } from 'constants/licenses';
+import { CC_LICENSES, COPYRIGHT, OTHER, NONE, PUBLIC_DOMAIN } from 'constants/licenses';
 
 type Action = UpdatePublishFormAction | { type: ACTIONS.CLEAR_PUBLISH };
 
@@ -179,8 +179,11 @@ export const doPrepareEdit = (claim: any, uri: string) => (dispatch: Dispatch<Ac
   };
 
   // Make sure custom liscence's are mapped properly
+  // If the license isn't one of the standard licenses, map the custom license and description/url
   if (!CC_LICENSES.some(({ value }) => value === license)) {
-    if (!licenseUrl) {
+    if (!license || license === NONE || license === PUBLIC_DOMAIN) {
+      publishData.licenseType = license;
+    } else if (license && !licenseUrl && license !== NONE) {
       publishData.licenseType = COPYRIGHT;
     } else {
       publishData.licenseType = OTHER;
@@ -313,7 +316,6 @@ export const doCheckPendingPublishes = () => (dispatch: Dispatch<Action>, getSta
 
   const checkFileList = () => {
     Lbry.claim_list_mine().then(claims => {
-      console.log('check');
       claims.forEach(claim => {
         // If it's confirmed, check if it was pending previously
         if (claim.confirmations > 0 && pendingById[claim.claim_id]) {

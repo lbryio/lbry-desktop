@@ -23,26 +23,27 @@ class DateTime extends React.PureComponent<Props> {
   };
 
   componentWillMount() {
-    this.refreshDate(this.props);
+    // this.refreshDate(this.props);
   }
 
-  componentWillReceiveProps(props) {
-    this.refreshDate(props);
+  componentWillReceiveProps() {
+    // this.refreshDate(props);
   }
 
-  refreshDate(props) {
-    const { block, date, fetchBlock } = props;
-    if (block && date === undefined) {
-      fetchBlock(block);
-    }
-  }
+  // Removing this for performance reasons. Can be un-commented once block_show is better with large numbers of calls
+  // Or the date is included in the claim
+  //
+  // refreshDate(props: Props) {
+  //   const { block, date, fetchBlock } = props;
+  //   if (block && date === undefined) {
+  //     fetchBlock(block);
+  //   }
+  // }
 
   render() {
     const { date, formatOptions, timeAgo } = this.props;
     const show = this.props.show || DateTime.SHOW_BOTH;
     const locale = app.i18n.getLocale();
-
-    // If !date, it's currently being fetched
 
     if (timeAgo) {
       return date ? <span>{moment(date).from(moment())}</span> : <span />;

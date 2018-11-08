@@ -1,13 +1,18 @@
 import React from 'react';
 import Button from 'component/button';
 import RewardSummary from 'component/rewardSummary';
-import ShapeShift from 'component/shapeShift';
+// import ShapeShift from 'component/shapeShift';
 import Page from 'component/page';
 
 const GetCreditsPage = () => (
   <Page>
     <RewardSummary />
-    <ShapeShift />
+    {/*
+      Removing Shapeshift after they switched to user accounts
+      Ideally most of the redux logic should be able to be re-used if we switch to another company
+      Or find a way to use ShapShift with an account?
+      <ShapeShift />
+    */}
     <section className="card card--section">
       <div className="card__title">{__('More ways to get LBRY Credits')}</div>
       <div className="card__content">
