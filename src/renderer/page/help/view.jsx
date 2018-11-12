@@ -173,7 +173,8 @@ class HelpPage extends React.PureComponent<Props, State> {
         <section className="card card--section">
           <div className="card__title">{__('Report a Bug or Suggest a New Feature')}</div>
           <p className="card__subtitle">
-            {__('Did you find something wrong? Think LBRY could add something useful and cool?')}
+            {__('Did you find something wrong? Think LBRY could add something useful and cool?')}{' '}
+            <Button button="link" label={__('Learn more')} href="https://lbry.io/faq/support" />
           </p>
           <div className="card__actions">
             <Button

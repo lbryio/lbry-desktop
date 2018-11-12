@@ -15,6 +15,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
  * Adds Persistence to File List Filter Selections ([#2050](https://github.com/lbryio/lbry-desktop/pull/2050))
  * Add more share options for channel page ([#2088](https://github.com/lbryio/lbry-desktop/pull/2088))
  * Better error handling on app startup ([#2098](https://github.com/lbryio/lbry-desktop/pull/2098))
+ * Add FAQ and Some Link in Report pages ([#2103](https://github.com/lbryio/lbry-desktop/pull/2103))
 
 ### Changed
  * Upgraded to lbrynet v0.30.0 ([#1998](https://github.com/lbryio/lbry-desktop/pull/1998))
