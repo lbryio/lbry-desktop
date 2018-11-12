@@ -5676,6 +5676,7 @@ lbry-redux@lbryio/lbry-redux#bf83ec3dd8f0417439b2ee4b6bf7b2549c012096:
   dependencies:
     proxy-polyfill "0.1.6"
     reselect "^3.0.0"
+    uuid "^3.3.2"
 
 lbryinc@lbryio/lbryinc#82308ece97188747adbf6d71d55b6e7a6fa0bd95:
   version "0.0.1"
@@ -9919,7 +9920,7 @@ uuid@3.1.0:
   version "3.1.0"
   resolved "https://registry.yarnpkg.com/uuid/-/uuid-3.1.0.tgz#3dd3d3e790abc24d7b0d3a034ffababe28ebbc04"
 
-uuid@^3.0.0, uuid@^3.0.1, uuid@^3.1.0:
+uuid@^3.0.0, uuid@^3.0.1, uuid@^3.1.0, uuid@^3.3.2:
   version "3.3.2"
   resolved "https://registry.yarnpkg.com/uuid/-/uuid-3.3.2.tgz#1b4af4955eb3077c501c23872fc6513811587131"
 

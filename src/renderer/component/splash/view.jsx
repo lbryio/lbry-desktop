@@ -42,6 +42,7 @@ export class SplashScreen extends React.PureComponent<Props, State> {
       error: false,
     };
 
+    (this: any).renderModals = this.renderModals.bind(this);
     this.hasRecordedUser = false;
     this.timeout = undefined;
   }
@@ -170,11 +171,30 @@ export class SplashScreen extends React.PureComponent<Props, State> {
   hasRecordedUser: boolean;
   timeout: ?TimeoutID;
 
-  render() {
+  renderModals() {
     const { modal } = this.props;
-    const { message, details, isRunning, error } = this.state;
-
     const modalId = modal && modal.id;
+
+    if (!modalId) {
+      return null;
+    }
+
+    switch (modalId) {
+      case MODALS.INCOMPATIBLE_DAEMON:
+        return <ModalIncompatibleDaemon />;
+      case MODALS.WALLET_UNLOCK:
+        return <ModalWalletUnlock />;
+      case MODALS.UPGRADE:
+        return <ModalUpgrade />;
+      case MODALS.DOWNLOADING:
+        return <ModalDownloading />;
+      default:
+        return null;
+    }
+  }
+
+  render() {
+    const { message, details, isRunning, error } = this.state;
 
     return (
       <React.Fragment>
@@ -182,14 +202,7 @@ export class SplashScreen extends React.PureComponent<Props, State> {
         {/* Temp hack: don't show any modals on splash screen daemon is running;
             daemon doesn't let you quit during startup, so the "Quit" buttons
             in the modals won't work. */}
-        {isRunning && (
-          <React.Fragment>
-            {modalId === MODALS.WALLET_UNLOCK && <ModalWalletUnlock />}
-            {modalId === MODALS.INCOMPATIBLE_DAEMON && <ModalIncompatibleDaemon />}
-            {modalId === MODALS.UPGRADE && <ModalUpgrade />}
-            {modalId === MODALS.DOWNLOADING && <ModalDownloading />}
-          </React.Fragment>
-        )}
+        {isRunning && this.renderModals()}
       </React.Fragment>
     );
   }
