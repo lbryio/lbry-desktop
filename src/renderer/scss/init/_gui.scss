@@ -1,0 +1,208 @@
+// Generic html styles used accross the App
+// component specific styling should go in the component scss file
+
+html {
+  @include font-sans;
+  background-color: $lbry-white;
+  font-size: 12px;
+  height: 100%;
+  overflow-x: hidden;
+}
+
+body {
+  color: $lbry-black;
+  cursor: default;
+  font-size: 1rem;
+  font-weight: 400;
+  height: 100%;
+  line-height: 1.5;
+  overflow: hidden;
+
+  html[data-theme='dark'] & {
+    color: mix($lbry-white, $lbry-gray-3, 50%);
+  }
+}
+
+*::selection {
+  background-color: $lbry-teal-3;
+  color: $lbry-white;
+}
+
+code {
+  @include font-mono;
+  background-color: $lbry-gray-1;
+  font-size: 1.5rem;
+}
+
+input {
+  &.input-copyable {
+    background-color: rgba($lbry-gray-1, 0.3);
+    border: 1px dashed $lbry-gray-1;
+    color: $lbry-gray-5;
+    flex: 1;
+    padding: 0.8rem 1rem;
+    text-overflow: ellipsis;
+    user-select: text;
+
+    html[data-theme='dark'] & {
+      background-color: rgba($lbry-gray-1, 0.1);
+      border-color: $lbry-gray-5;
+      color: inherit;
+    }
+  }
+
+  &:not(.input-copyable):not(.wunderbar__input) {
+    border-bottom: var(--input-border-size) solid $lbry-gray-5;
+  }
+
+  &:not(.input-copyable):not(.wunderbar__input):not(:placeholder-shown):not(:disabled) {
+    &:hover {
+      border-color: rgba($lbry-black, 0.8);
+    }
+  }
+}
+
+textarea {
+  // font-size: 0.8rem;
+}
+
+
+
+.columns {
+  display: flex;
+  justify-content: space-between;
+
+  > * {
+    flex-basis: 0;
+    flex-grow: 1;
+
+    &:not(:last-of-type) {
+      margin-right: 1.5rem;
+    }
+
+    &:not(:first-of-type):not(:last-of-type) {
+      // margin: 0 $spacing-vertical / 3;
+    }
+
+    &:first-of-type {
+      // margin-right: $spacing-vertical / 3;
+    }
+
+    &:last-of-type {
+      // margin-left: $spacing-vertical / 3;
+    }
+  }
+}
+
+.divider__horizontal {
+  border-top: $lbry-gray-2;
+  margin: 16px 0;
+}
+
+.hidden {
+  display: none;
+}
+
+.disabled {
+  opacity: 0.3;
+  pointer-events: none;
+}
+
+.column {
+  display: flex;
+
+  .column__item:not(:first-child) {
+    padding-left: $spacing-width * 2/3;
+  }
+}
+
+.truncated-text {
+  @include truncate;
+}
+
+.busy-indicator__loader {
+  min-width: 16px;
+  min-height: 8px;
+  margin: -1rem 0;
+  padding: 0 30px;
+
+  background: url('../../../static/img/busy.gif') no-repeat center center;
+  display: inline-block;
+  vertical-align: middle;
+
+  &:first-child {
+    padding-left: 2px;
+  }
+
+  &:last-child {
+    padding-right: 2px;
+  }
+}
+
+
+.alert-text {
+  color: $lbry-red-3;
+  font-weight: 600;
+
+  html[data-theme='dark'] & {
+    color: $lbry-red-1;
+  }
+}
+
+.help {
+  background-color: rgba($lbry-blue-1, 0.1);
+  border-radius: 0.5rem;
+  color: $lbry-gray-5;
+  display: block;
+  margin-bottom: 1rem;
+  padding: 1rem;
+  position: relative;
+  top: 1rem;
+
+  html[data-theme='dark'] & {
+    color: inherit;
+  }
+}
+
+.meta {
+  color: $lbry-gray-1;
+  font-size: 0.8rem;
+}
+
+
+
+.empty {
+  color: $lbry-gray-5;
+  font-style: italic;
+
+  html[data-theme='dark'] & {
+    color: inherit;
+  }
+}
+
+.qr-code {
+  width: 134px;
+  height: 134px;
+  border: 3px solid $lbry-white;
+
+  &.qr-code--right-padding {
+    margin-right: $spacing-vertical * 2/3;
+  }
+
+  &.qr-code--top-padding {
+    margin-top: $spacing-vertical * 2/3;
+  }
+}
+
+.error-text {
+  color: $lbry-red-5;
+}
+
+.thumbnail-preview {
+  width: var(--thumbnail-preview-width);
+  height: var(--thumbnail-preview-height);
+
+  background-position: 50% 50%;
+  background-repeat: no-repeat;
+  background-size: cover;
+}

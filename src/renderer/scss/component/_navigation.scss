@@ -1,0 +1,146 @@
+.navigation {
+  background-color: $lbry-white;
+  border-right: 1px solid rgba($lbry-gray-1, 0.9);
+  font-size: 1.25rem;
+  padding-top: 2rem;
+  position: relative;
+
+  html[data-theme='dark'] & {
+    background-color: $lbry-black;
+    border-right: 1px solid $lbry-black;
+  }
+
+  @media (min-width: 601px) {
+    width: 171px; // 1px is for the border
+  }
+
+  @media (max-width: 600px) {
+    display: none;
+  }
+
+  &::before {
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+
+    // make this gradient "to bottom" on mobile view
+    background-image: linear-gradient(
+      to right,
+      transparent,
+      rgba(mix($lbry-blue-3, $lbry-gray-4, 15%), 0.2) 100%
+    );
+    content: '';
+    position: absolute;
+    z-index: 0;
+
+    html[data-theme='dark'] & {
+      background-image: linear-gradient(
+        to bottom right,
+        transparent,
+        rgba(mix($lbry-blue-3, $lbry-gray-4, 15%), 0.2) 100%
+      );
+    }
+  }
+}
+
+.navigation__links {
+  position: relative;
+}
+
+.navigation__link {
+  display: block;
+  line-height: 1.75;
+  padding-left: 2rem;
+  position: relative;
+  text-align: left;
+  transition: color 0.2s;
+  white-space: nowrap;
+  width: 100%;
+
+  &::before {
+    top: 0;
+    left: 0;
+
+    background-color: $lbry-teal-3;
+    content: '';
+    height: 100%;
+    position: absolute;
+    transition: width 0.2s;
+  }
+
+  &:not(.active):not(&--title) {
+    color: $lbry-gray-5;
+
+    &::before {
+      width: 0;
+    }
+  }
+
+  &:not(&--title) {
+    &:hover,
+    &.active {
+      color: $lbry-black;
+
+      html[data-theme='dark'] & {
+        color: $lbry-gray-1;
+      }
+
+      &::before {
+        width: 0.5rem;
+      }
+    }
+  }
+
+  &--title {
+    margin-bottom: 0.25rem;
+    padding-top: 2rem;
+
+    color: $lbry-gray-5;
+    cursor: default;
+    font-size: 1.1rem;
+    font-weight: 700;
+    letter-spacing: 0.1rem;
+    text-transform: uppercase;
+  }
+}
+
+.navigation__link__items {
+  font-size: 1.15rem;
+  padding-left: 1.5rem;
+}
+
+.navigation__link__item {
+  position: relative;
+
+  &::before {
+    width: 0.25rem;
+    height: 0.25rem;
+    top: 44%;
+    left: -1rem;
+
+    border-radius: 50%;
+    content: "";
+    position: absolute;
+    transition: background-color 0.2s;
+  }
+
+  &:not(.active) {
+    color: $lbry-gray-5;
+
+    &::before {
+      background-color: transparent;
+    }
+  }
+
+  &:hover,
+  &.active {
+    &::before {
+      background-color: $lbry-black;
+
+      html[data-theme='dark'] & {
+        color: $lbry-gray-1;
+      }
+    }
+  }
+}

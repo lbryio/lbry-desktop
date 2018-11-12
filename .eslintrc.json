@@ -1,0 +1,47 @@
+{
+  "plugins": ["flowtype"],
+  "extends": [
+    "airbnb",
+    "plugin:import/electron",
+    "plugin:flowtype/recommended",
+    "plugin:prettier/recommended"
+  ],
+  "settings": {
+    "import/resolver": {
+      "webpack": {
+        "config": "webpack.renderer.additions.js"
+      }
+    }
+  },
+  "parser": "babel-eslint",
+  "env": {
+    "browser": true,
+    "node": true
+  },
+  "globals": {
+    "__static": true,
+    "staticResourcesPath": true,
+    "__": true,
+    "__n": true,
+    "app": true
+  },
+  "rules": {
+    "import/no-commonjs": "warn",
+    "import/no-amd": "warn",
+    "prettier/prettier": ["error", {
+      "trailingComma": "es5",
+      "printWidth": 100,
+      "singleQuote": true
+    }],
+    "func-names": ["warn", "as-needed"],
+    "jsx-a11y/label-has-for": 0,
+    "import/prefer-default-export": 0,
+    "no-return-assign": 0,
+    "react/require-default-props": 0,
+    "react/jsx-closing-tag-location": 0,
+    "jsx-a11y/no-noninteractive-element-to-interactive-role": 0,
+    "class-methods-use-this": 0,
+    "jsx-a11y/interactive-supports-focus": 0,
+    "jsx-a11y/click-events-have-key-events": 0
+  }
+}

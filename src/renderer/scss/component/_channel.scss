@@ -1,0 +1,26 @@
+.channel-info {
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
+
+  h1 {
+    user-select: text;
+  }
+}
+
+.channel-info__actions {
+  display: flex;
+}
+
+.channel-info__actions__group {
+  @extend .media__actions__group;
+  @extend .media__actions__group--file-page;
+}
+
+.channel-name {
+  // display: block;
+  overflow: hidden;
+  text-align: left;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}

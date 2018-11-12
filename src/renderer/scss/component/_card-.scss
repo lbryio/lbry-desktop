@@ -1,0 +1,345 @@
+//  C A R D S
+
+.cards {
+  &.list {
+  }
+
+  // `.card.row` is used on the discover page
+  // It is a list of cards that extend past the right edge of the screen
+  // There are arrows to horizontally scroll the cards and view hidden content
+
+  &.row {
+
+  }
+}
+
+
+
+//  C A R D S
+//  H E A D E R
+
+.cards__header {
+}
+
+.cards__header__title {
+}
+
+.cards__header__navigation {
+}
+
+
+
+//  C A R D S
+//  M E S S A G E
+
+.cards__message {
+}
+
+
+
+//  C A R D S
+//  S C R O L L H O U S E
+
+.cards__scrollhouse {
+}
+
+
+
+//  C A R D
+
+.card {
+  > h1 {
+    word-wrap: break-word;
+  }
+
+  &.link {
+    cursor: pointer;
+  }
+
+  &.pending {
+    opacity: 0.5;
+  }
+
+  // .card-media__internal__links should always be inside a card
+  .card-media__internal-links {
+    top: $spacing-vertical * 2/3;
+    right: $spacing-vertical * 2/3;
+    position: absolute;
+  }
+}
+
+//
+
+.card--link {
+}
+
+.card--disabled {
+}
+
+.card--section {
+  .card__title {
+  }
+}
+
+.card--wallet-balance {
+}
+
+//
+
+
+
+//  C A R D
+//  A C T I O N S
+
+.card__actions {
+}
+
+.card__actions-bottom-corner {
+  bottom: $spacing-vertical;
+  right: $spacing-vertical;
+  position: absolute;
+}
+
+.card__actions-top-corner {
+  top: $spacing-vertical;
+  right: $spacing-vertical;
+  position: absolute;
+}
+
+.card__actions--between {
+}
+
+.card__actions--center {
+  align-items: center;
+  justify-content: center;
+
+  .btn {
+    // margin: 0 $spacing-vertical / 3;
+  }
+}
+
+.card__actions--end {
+  justify-content: flex-end;
+}
+
+/*
+.card__actions--no-margin {
+  margin-top: 0;
+}
+*/
+
+.card__actions--vertical {
+  align-items: flex-end;
+  flex-direction: column;
+  // margin-top: 0;
+
+  .btn:not(:first-child) {
+    // margin-top: $spacing-vertical * 1/3;
+  }
+}
+
+.card__actions__group {
+}
+
+.card__actions__group--file-page {
+}
+
+
+
+//  C A R D
+//  C H A N N E L
+
+.card__channel-info {
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
+  padding: $spacing-width 0 0;
+}
+
+
+
+//  C A R D
+//  C O N T E N T
+
+.card__content {
+}
+
+.card__content--extra-padding {
+}
+
+.card__content--file-page {
+}
+
+
+
+//  C A R D
+//  I D E N T I T Y
+
+.card__identity--file-page {
+}
+
+.card__identity__amount,
+.card__identity__nsfw {
+}
+
+.card__identity__amount:not(.card__identity__amount--large),
+.card__identity__nsfw {
+}
+
+.card__identity__amount--cost {
+}
+
+.card__identity__amount--free {
+}
+
+.card__identity__amount--large {
+}
+
+.card__identity__nsfw {
+}
+
+
+
+//  C A R D
+//  I N F O
+
+.card__info {
+}
+
+.card__info__text {
+}
+
+.card__info__title {
+}
+
+
+
+//  C A R D
+//  L I S T
+
+.card__list {
+}
+
+.card__list--recommended {
+}
+
+.card__list--rewards {
+}
+
+
+
+//  C A R D
+//  M E D I A
+
+.card__media {
+}
+
+.card__media--no-img {
+}
+
+.card__media--nsfw {
+}
+
+.card__media-text {
+}
+
+
+
+//  C A R D
+//  M E T A
+
+.card__meta {
+  &.file {
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 0;
+    padding-top: 0;
+    padding-bottom: 5px;
+  }
+
+  &.identity--file {
+    align-items: center;
+    display: flex;
+    justify-content: space-between;
+
+    .icon {
+      margin: 0 $spacing-vertical * 1/3;
+    }
+  }
+
+  &.identity-icons {
+    align-items: center;
+    align-self: flex-start;
+    display: flex;
+  }
+}
+
+.card__meta__properties {
+  align-items: center;
+  color: var(--card-text-color);
+  display: flex;
+}
+
+.card__meta__subtitle {
+  color: var(--card-text-color);
+}
+
+
+
+//  C A R D
+//  P L A C E H O L D E R
+
+.card__placeholder {
+  &.channel {
+  }
+
+  &.date {
+  }
+
+  &.media {
+  }
+
+  &.title {
+  }
+}
+
+
+
+//  C A R D
+//  P R O P E R T I E S
+
+.card__properties {
+}
+
+
+
+//  C A R D
+//  T I T L E
+
+.card__title {
+}
+
+.card__title--file-page {
+}
+
+.card__date,
+.card__subtitle {
+  opacity: 0.7;
+}
+
+.card__subtitle {
+}
+
+.card__subtitle--file-page {
+}
+
+.card__subtitle__channel {
+}
+
+.card__subtitle__date {
+}
+
+.card__title--small + .card__subtitle,
+.card__title--x-small + .card__subtitle {
+  padding-top: $spacing-vertical * 1/3;
+}

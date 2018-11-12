@@ -1,0 +1,10 @@
+.main {
+  margin: auto;
+  overflow: hidden;
+  position: relative;
+  z-index: 1;
+
+  &:not(&--no-padding) {
+    padding: 2rem;
+  }
+}

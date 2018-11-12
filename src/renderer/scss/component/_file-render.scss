@@ -1,0 +1,87 @@
+.file-render {
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+
+  margin: auto;
+  overflow: hidden;
+  position: absolute;
+  z-index: 1;
+}
+
+.file-render__viewer {
+  width: 100%;
+  height: 100%;
+
+  background-color: $lbry-white;
+  margin: 0;
+
+  iframe,
+  webview {
+    width: 100%;
+    height: 100%;
+  }
+}
+
+.document-viewer {
+  background-color: $lbry-white;
+  font-size: calc(var(--font-size-subtext-multiple) * 1em);
+  overflow: auto;
+
+  .markdown-preview {
+    height: 100%;
+    overflow: auto;
+    padding: $spacing-vertical $spacing-width;
+  }
+}
+
+.code-viewer,
+.document-viewer__content {
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+}
+
+// Code-viewer
+.code-viewer .CodeMirror {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  min-height: 100px;
+
+  .cm-invalidchar {
+    display: none;
+  }
+
+  .CodeMirror .CodeMirror-lines {
+    // is there really a .CodeMirror inside a .CodeMirror?
+    padding: 4px 0;
+  }
+
+  .CodeMirror-code {
+    font-family: Menlo, Consolas, 'DejaVu Sans Mono', inconsolata, monospace;
+    font-size: 1em;
+    font-weight: 350;
+    letter-spacing: 0.3px;
+    line-height: 1.5em;
+    word-spacing: 1px;
+  }
+
+  .CodeMirror-gutters {
+    background-color: $lbry-gray-1;
+    border-right: 1px solid $lbry-gray-2;
+    padding-right: 8px;
+  }
+
+  .CodeMirror-line {
+    padding-left: 16px;
+  }
+
+  .CodeMirror-linenumber {
+    color: $lbry-gray-5;
+  }
+}

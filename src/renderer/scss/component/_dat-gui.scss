@@ -1,0 +1,103 @@
+// dat.gui component
+
+.gui-container {
+  top: 0;
+  right: 0;
+
+  position: absolute;
+  z-index: 2;
+
+  .dg.main {
+    margin: 0;
+    padding: 0;
+    overflow: inherit;
+  }
+
+  // Light theme:
+  // https://github.com/liabru/dat-gui-light-theme
+
+  &.light {
+    .dg.main.taller-than-window .close-button {
+      border-top: 1px solid #ddd;
+    }
+
+    .dg.main .close-button {
+      &:not(:hover) {
+        background-color: #e8e8e8;
+      }
+
+      &:hover {
+        background-color: #ddd;
+      }
+    }
+
+    .dg {
+      color: #555;
+      text-shadow: none !important;
+
+      &.main {
+        &::-webkit-scrollbar {
+          background-color: #fafafa;
+        }
+
+        &::-webkit-scrollbar-thumb {
+          background-color: #bbb;
+        }
+      }
+
+      li {
+        &:not(.folder) {
+          background-color: #fafafa;
+          border-bottom: 1px solid #ddd;
+        }
+
+        &.save-row .button {
+          text-shadow: none !important;
+        }
+
+        &.title {
+          background: #e8e8e8
+            url('data:image/gif;base64,R0lGODlhBQAFAJEAAP////Pz8////////yH5BAEAAAIALAAAAAAFAAUAAAIIlI+hKgFxoCgAOw==')
+            6px 10px no-repeat;
+        }
+      }
+
+      .cr {
+        &.function:hover,
+        &.boolean:hover {
+          background-color: $lbry-white;
+        }
+      }
+
+      .c {
+        input {
+          &[type='text'] {
+            &:not(:focus),
+            &:not(:hover) {
+              background-color: #e9e9e9;
+            }
+
+            &:focus,
+            &:hover {
+              background-color: #eee;
+            }
+
+            &:focus {
+              color: #555;
+            }
+          }
+        }
+
+        .slider {
+          &:not(:hover) {
+            background-color: #e9e9e9;
+          }
+
+          &:hover {
+            background-color: #eee;
+          }
+        }
+      }
+    }
+  }
+}

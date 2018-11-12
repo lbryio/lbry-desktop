@@ -1,0 +1,130 @@
+@font-face {
+  font-family: 'Inter UI';
+  font-style: normal;
+  font-weight: 400;
+  src: url('../../../static/font/inter/variable.woff2') format('woff2-variations'),
+    url('../../../static/font/inter/400.woff2') format('woff2'),
+    url('../../../static/font/inter/400.woff') format('woff');
+}
+
+@font-face {
+  font-family: 'Inter UI';
+  font-style: italic;
+  font-weight: 400;
+  src: url('../../../static/font/inter/variable.woff2') format('woff2-variations'),
+    url('../../../static/font/inter/400i.woff2') format('woff2'),
+    url('../../../static/font/inter/400i.woff') format('woff');
+}
+
+@font-face {
+  font-family: 'Inter UI';
+  font-style: normal;
+  font-weight: 500;
+  src: url('../../../static/font/inter/variable.woff2') format('woff2-variations'),
+    url('../../../static/font/inter/500.woff2') format('woff2'),
+    url('../../../static/font/inter/500.woff') format('woff');
+}
+
+@font-face {
+  font-family: 'Inter UI';
+  font-style: italic;
+  font-weight: 500;
+  src: url('../../../static/font/inter/variable.woff2') format('woff2-variations'),
+    url('../../../static/font/inter/500i.woff2') format('woff2'),
+    url('../../../static/font/inter/500i.woff') format('woff');
+}
+
+@font-face {
+  font-family: 'Inter UI';
+  font-style: normal;
+  font-weight: 600;
+  src: url('../../../static/font/inter/variable.woff2') format('woff2-variations'),
+    url('../../../static/font/inter/600.woff2') format('woff2'),
+    url('../../../static/font/inter/600.woff') format('woff');
+}
+
+@font-face {
+  font-family: 'Inter UI';
+  font-style: italic;
+  font-weight: 600;
+  src: url('../../../static/font/inter/variable.woff2') format('woff2-variations'),
+    url('../../../static/font/inter/600i.woff2') format('woff2'),
+    url('../../../static/font/inter/600i.woff') format('woff');
+}
+
+@font-face {
+  font-family: 'Inter UI';
+  font-style: normal;
+  font-weight: 700;
+  src: url('../../../static/font/inter/variable.woff2') format('woff2-variations'),
+    url('../../../static/font/inter/700.woff2') format('woff2'),
+    url('../../../static/font/inter/700.woff') format('woff');
+}
+
+@font-face {
+  font-family: 'Inter UI';
+  font-style: italic;
+  font-weight: 700;
+  src: url('../../../static/font/inter/variable.woff2') format('woff2-variations'),
+    url('../../../static/font/inter/700i.woff2') format('woff2'),
+    url('../../../static/font/inter/700i.woff') format('woff');
+}
+
+@font-face {
+  font-family: 'Inter UI';
+  font-style: normal;
+  font-weight: 800;
+  src: url('../../../static/font/inter/variable.woff2') format('woff2-variations'),
+    url('../../../static/font/inter/800.woff2') format('woff2'),
+    url('../../../static/font/inter/800.woff') format('woff');
+}
+
+@font-face {
+  font-family: 'Inter UI';
+  font-style: italic;
+  font-weight: 800;
+  src: url('../../../static/font/inter/variable.woff2') format('woff2-variations'),
+    url('../../../static/font/inter/800i.woff2') format('woff2'),
+    url('../../../static/font/inter/800i.woff') format('woff');
+}
+
+@font-face {
+  font-family: 'Inter UI';
+  font-style: normal;
+  font-weight: 900;
+  src: url('../../../static/font/inter/variable.woff2') format('woff2-variations'),
+    url('../../../static/font/inter/900.woff2') format('woff2'),
+    url('../../../static/font/inter/900.woff') format('woff');
+}
+
+@font-face {
+  font-family: 'Inter UI';
+  font-style: italic;
+  font-weight: 900;
+  src: url('../../../static/font/inter/variable.woff2') format('woff2-variations'),
+    url('../../../static/font/inter/900i.woff2') format('woff2'),
+    url('../../../static/font/inter/900i.woff') format('woff');
+}
+
+/*
+Single variable font.
+Note that you may want to do something like this to make sure you are serving
+constant fonts to older browsers:
+
+html {
+  font-family: "Inter UI", sans-serif;
+}
+
+@supports (font-variation-settings: normal) {
+  html {
+    font-family: "Inter UI var", sans-serif;
+  }
+}
+*/
+
+@font-face {
+  font-family: 'Inter UI Variable';
+  font-weight: 400 900; // safe weight range
+  src: url('../../../static/font/inter/variable.woff2') format('woff2-variations'),
+    url('../../../static/font/inter/variable.woff2') format('woff2');
+}

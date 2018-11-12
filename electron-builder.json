@@ -1,0 +1,77 @@
+{
+  "appId": "io.lbry.LBRY",
+  "productName": "LBRY",
+  "publish": [
+    {
+      "provider": "s3",
+      "bucket": "build.lbry.io",
+      "path": "app/release",
+      "region": "us-east-1"
+    },
+    "github"
+  ],
+  "mac": {
+    "category": "public.app-category.entertainment"
+  },
+  "dmg": {
+    "iconSize": 128,
+    "contents": [
+      {
+        "x": 115,
+        "y": 164
+      },
+      {
+        "x": 387,
+        "y": 164,
+        "type": "link",
+        "path": "/Applications"
+      }
+    ],
+    "window": {
+      "x": 200,
+      "y": 200,
+      "width": 500,
+      "height": 300
+    },
+    "background": "./build/background.png"
+  },
+  "protocols": [
+    {
+      "name": "LBRY URI",
+      "schemes": ["lbry"],
+      "role": "Viewer"
+    }
+  ],
+  "linux": {
+    "target": "deb",
+    "category": "AudioVideo;Video",
+    "desktop": {
+      "MimeType": "x-scheme-handler/lbry",
+      "Exec": "/opt/LBRY/lbry %U"
+    }
+  },
+  "deb": {
+    "depends": [
+      "gconf2",
+      "gconf-service",
+      "libnotify4",
+      "libappindicator1",
+      "libxtst6",
+      "libnss3",
+      "libsecret-1-0"
+    ]
+  },
+  "nsis": {
+    "perMachine": true,
+    "createDesktopShortcut": "always"
+  },
+  "win": {
+    "target": [
+      {
+        "target": "nsis",
+        "arch": ["x64", "ia32"]
+      }
+    ]
+  },
+  "artifactName": "${productName}_${version}.${ext}"
+}

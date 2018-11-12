@@ -1,0 +1,31 @@
+.item-list {
+  background-color: $lbry-white;
+  margin-top: $spacing-vertical;
+  padding: $spacing-vertical;
+
+  html[data-theme='dark'] & {
+    background-color: rgba($lbry-white, 0.1);
+  }
+}
+
+.item-list__item {
+  align-items: center;
+  display: flex;
+  padding: $spacing-vertical * 1/3;
+
+  input,
+  &--cutoff {
+    margin-right: $spacing-vertical;
+  }
+
+  &--cutoff {
+    max-width: 350px;
+    overflow-x: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  &--selected {
+    background-color: $lbry-gray-1;
+  }
+}

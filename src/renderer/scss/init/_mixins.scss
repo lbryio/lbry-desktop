@@ -1,0 +1,34 @@
+@mixin constrict {
+  max-width: 20vw;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+@mixin ellipsis {
+  // to take over for truncate on LBRY Web
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+@mixin font-mono {
+  font-family: Inconsolata, 'Fira Mono', 'Droid Sans Mono', 'Source Code Pro', Consolas,
+    'Lucida Console', 'Courier New', Courier, monospace;
+}
+
+@mixin font-sans {
+  font-family: 'Inter UI', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial,
+    sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
+}
+
+@mixin font-serif {
+  font-family: 'Apple Garamond', Baskerville, Georgia, 'Times New Roman', 'Droid Serif', Times,
+    'Source Serif Pro', serif;
+}
+
+@mixin truncate {
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+}

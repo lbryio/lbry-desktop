@@ -1,0 +1,113 @@
+.search-results {
+}
+
+.search-results-wrapper {
+  padding: 2rem;
+}
+
+.search-results__content__row {
+  padding-bottom: 1rem;
+
+  &:not(:first-of-type) {
+    padding-top: 1rem;
+  }
+}
+
+.search-results__header {
+  background-image: linear-gradient(to bottom right, $lbry-black, $lbry-cyan-5 80%);
+  color: $lbry-white;
+  padding: 2rem;
+
+  html[data-theme='dark'] & {
+    background-image: linear-gradient(
+      to bottom right,
+      transparent,
+      rgba(mix($lbry-blue-3, $lbry-gray-4, 15%), 0.2) 100%
+    );
+  }
+}
+
+.search-results__header__title {
+  align-items: center;
+  cursor: default;
+  display: flex;
+  font-weight: 700;
+  line-height: 1.33;
+  margin-bottom: 2rem;
+
+  > * {
+    margin-left: 0.5rem;
+  }
+
+  @media (min-width: 601px) {
+    font-size: 2rem;
+  }
+
+  @media (max-width: 600px) {
+    font-size: 1.75rem;
+  }
+}
+
+
+
+// .search__content {
+//   padding: $spacing-width;
+// }
+
+// .search__results {
+//   margin-top: -$spacing-width;
+//   padding-bottom: $spacing-vertical;
+//   flex-flow: wrap column;
+
+//   .search-result__row {
+//     padding: $spacing-vertical 0;
+
+//     &:first-of-type {
+//       padding-top: 0;
+//     }
+//   }
+// }
+
+.search__results {
+  @extend .media-group--list;
+}
+
+.search__results__row {
+  @extend .card__list;
+  position: relative;
+
+  &:not(:last-of-type) {
+    margin-bottom: 2rem;
+  }
+
+  .file-list__header {
+    @extend .media-group__header__title;
+    top: -1.5rem; left: 0;
+    position: absolute;
+  }
+}
+
+.search__top {
+  // background-color: rgba($lbry-gray-1, 0.3);
+  // padding: 0 $spacing-width $spacing-width;
+  // color: $lbry-white;
+  // @extend .media-group--row;
+
+  background-image: linear-gradient(to bottom right, $lbry-black, $lbry-cyan-5 80%);
+
+  html[data-theme='dark'] & {
+    background-image: linear-gradient(
+      to bottom right,
+      transparent,
+      rgba(mix($lbry-blue-3, $lbry-gray-4, 15%), 0.2) 100%
+    );
+  }
+
+  @media (min-width: 601px) {
+    padding-bottom: $spacing-vertical;
+  }
+
+  @media (max-width: 600px) {
+    padding-bottom: 1rem;
+  }
+}

@@ -1,0 +1,138 @@
+.card {
+  background-color: $lbry-white;
+  border: 1px solid $lbry-gray-1;
+  border-radius: 0.5rem;
+  margin-bottom: 1.5rem;
+  position: relative;
+
+  html[data-theme='dark'] & {
+    background-color: rgba($lbry-white, 0.1);
+    border-color: rgba($lbry-white, 0.1);
+  }
+
+  &--disabled {
+    opacity: 0.3;
+    pointer-events: none;
+  }
+
+  &--link {
+    cursor: pointer;
+  }
+
+  &--section {
+    padding: 2rem;
+
+    .card__content:not(:last-child) {
+      margin-bottom: 1.5rem;
+    }
+  }
+
+  &--wallet-balance {
+    background-image: url('../../../static/img/stripe-background.png');
+    background-repeat: no-repeat;
+    background-size: cover;
+    color: $lbry-white;
+    justify-content: space-between;
+  }
+}
+
+
+
+.card__actions {
+  > *:not(:last-child) {
+    margin-right: 1.5rem;
+  }
+
+  &--bottom-corner {
+    right: 2rem; bottom: 2rem;
+    position: absolute;
+  }
+
+  &--center {
+    align-items: center;
+    justify-content: center;
+  }
+
+  &--top-corner {
+    top: 2rem; right: 2rem;
+
+    padding-top: 1rem;
+    position: absolute;
+  }
+}
+
+.card__content {
+  font-size: 1.15rem;
+
+  p:not(:last-of-type) {
+    margin-bottom: 1rem;
+  }
+}
+
+.card__header {
+  margin-bottom: 3rem;
+}
+
+.card-media__internal-links {
+  top: 2rem;
+  right: 2rem;
+  position: absolute;
+}
+
+.card__meta {
+  color: $lbry-gray-5;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+}
+
+.card__message {
+  border-left: 0.5rem solid;
+  padding: 1rem 1rem 1rem 1.5rem;
+
+  &:not(&--error):not(&--failure):not(&--success) {
+    background-color: rgba($lbry-teal-1, 0.1);
+    border-color: $lbry-teal-3;
+  }
+
+  &--error {
+    background-color: rgba($lbry-orange-1, 0.1);
+    border-color: $lbry-orange-3;
+  }
+
+  &--failure {
+    background-color: rgba($lbry-red-1, 0.1);
+    border-color: $lbry-red-3;
+  }
+
+  &--success {
+    background-color: rgba($lbry-green-1, 0.1);
+    border-color: $lbry-green-3;
+  }
+}
+
+
+
+.card__subtitle {
+  font-size: 1.25rem;
+  margin-bottom: 0.5rem;
+
+  .media__property {
+    bottom: -0.12rem;
+    position: relative;
+  }
+}
+
+.card__title {
+  font-size: 2rem;
+  font-weight: 600;
+}
+
+
+
+.card__list {
+  display: grid;
+  grid-gap: 1rem;
+
+  &--rewards {
+  }
+}

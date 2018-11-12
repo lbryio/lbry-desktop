@@ -1,0 +1,68 @@
+.spinner {
+  width: 50px;
+  height: 40px;
+
+  font-size: 10px;
+  margin: $spacing-vertical * 1/3;
+  text-align: center;
+
+  .rect {
+    width: 6px;
+    height: 100%;
+
+    animation: sk-stretchdelay 1.2s infinite ease-in-out;
+    display: inline-block;
+    margin: 0 2px;
+
+    &.rect2 {
+      animation-delay: -1.1s;
+    }
+
+    &.rect3 {
+      animation-delay: -1s;
+    }
+
+    &.rect4 {
+      animation-delay: -0.9s;
+    }
+
+    &.rect5 {
+      animation-delay: -0.8s;
+    }
+  }
+
+  &--dark {
+    .rect {
+      background-color: $lbry-black;
+    }
+  }
+
+  &--light {
+    .rect {
+      background-color: $lbry-white;
+    }
+  }
+
+  &--small {
+    width: 40px;
+    height: 32px;
+
+    font-size: 10px;
+    margin: $spacing-vertical * 1/3 0;
+    text-align: center;
+
+    .rect {
+      width: 3px;
+      height: 100%;
+      margin: 0 2px;
+    }
+  }
+
+  &--splash {
+    margin-top: $spacing-vertical;
+
+    .rect {
+      background-color: $lbry-white;
+    }
+  }
+}

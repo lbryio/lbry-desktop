@@ -1,0 +1,119 @@
+.markdown-preview {
+  // Headers
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-size: inherit;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    padding-top: 1rem;
+  }
+
+  // Paragraphs
+  p {
+    font-size: 1.15rem;
+    margin-bottom: 1rem;
+    white-space: pre-line;
+
+    svg {
+      width: 1rem; height: 1rem;
+
+      margin-left: 0.2rem;
+      position: relative;
+      top: 1px;
+    }
+  }
+
+  // Strikethrough text
+  del {
+    // color: $lbry-gray-5;
+  }
+
+  // Tables
+  table {
+    margin-bottom: 1.2rem;
+    padding: 1.2rem 0.8rem 0.8rem 0.8rem;
+    background-color: $lbry-white;
+
+    tr {
+      td,
+      th,
+      td:first-of-type,
+      th:first-of-type,
+      td:last-of-type,
+      th:last-of-type {
+        padding: 0.8rem;
+      }
+    }
+  }
+
+  // Image
+  img {
+    margin-bottom: 1rem;
+    padding-top: 1rem;
+  }
+
+  // Horizontal Rule
+  hr {
+    width: 100%; height: 1px;
+
+    background-color: $lbry-gray-1;
+    margin-bottom: 2rem;
+    position: relative;
+    top: 1rem;
+
+    html[data-theme='dark'] & {
+      background-color: rgba($lbry-gray-5, 0.2);
+    }
+  }
+
+  // Code
+  code {
+    margin-bottom: 1rem;
+    padding: 0.8rem;
+
+    background-color: $lbry-gray-1;
+    color: $lbry-gray-5;
+    display: block;
+    font-family: Consolas, 'Lucida Console', 'Source Sans', monospace;
+  }
+
+  a {
+    color: $lbry-blue-1;
+    display: inline-block;
+  }
+
+  // Lists
+  ul,
+  ol {
+    margin-bottom: 1rem;
+
+    > li {
+      list-style-position: outside;
+    }
+  }
+
+  ul {
+    list-style: initial;
+  }
+
+  li {
+    margin-left: 2rem;
+
+    p {
+      display: inline-block;
+    }
+  }
+}
+
+blockquote {
+  margin-bottom: 1rem;
+  padding: 0.8rem;
+
+  background-color: rgba($lbry-cyan-1, 0.1);
+  // color: $lbry-gray-5;
+  border-left: 0.5rem solid $lbry-cyan-5;
+}

@@ -1,0 +1,49 @@
+.credit-amount {
+  font-size: 0.8rem;
+  white-space: nowrap;
+
+  &--cost {
+    &:not(.credit-amount--file-page) {
+      // color: $lbry-gray-5;
+    }
+
+    &.credit-amount--file-page {
+      background-color: $lbry-yellow-2;
+      // color: $lbry-black;
+    }
+  }
+
+  &--file-page {
+    border-radius: 0.2rem;
+    font-weight: 600;
+    letter-spacing: 0.05rem;
+    line-height: 2;
+    padding-right: 0.5rem;
+    padding-left: 0.5rem;
+    vertical-align: top;
+  }
+
+  &--free {
+    &:not(.credit-amount--file-page) {
+      // color: $lbry-blue-5;
+    }
+
+    &.credit-amount--file-page {
+      background-color: $lbry-blue-2;
+      // color: $lbry-blue-5;
+    }
+  }
+
+  &--inherit {
+    background-color: inherit;
+    color: inherit;
+    font-size: inherit;
+    font-weight: inherit;
+    padding: 0;
+  }
+
+  &--large {
+    font-size: 36px;
+    font-weight: 600;
+  }
+}

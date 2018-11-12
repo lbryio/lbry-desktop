@@ -1,0 +1,187 @@
+.form-row {
+  display: flex;
+  flex-direction: row;
+
+  &:not(&--vertically-centered) {
+    align-items: flex-end;
+  }
+
+  &--centered {
+    justify-content: center;
+  }
+
+  &--padded {
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+  }
+
+  &--right {
+    justify-content: flex-end;
+  }
+
+  &--stretch {
+    flex: 1;
+  }
+
+  &--vertically-centered {
+    align-items: center;
+  }
+
+
+
+  .form-field {
+    &:not(:first-of-type) {
+      padding-left: 1rem;
+    }
+
+    &.form-field--stretch {
+      width: 100%;
+
+      input {
+        max-width: 400px;
+        width: 100%;
+      }
+    }
+  }
+
+
+  button + input,
+  input + button {
+    margin-left: 1rem;
+  }
+}
+
+.form-field.form-field--disabled {
+  opacity: 0.4;
+  pointer-events: none;
+}
+
+.form-field--SimpleMDE {
+  display: block;
+  width: 100%;
+}
+
+.form-field__input {
+  display: flex;
+  font-size: 1.25rem;
+  margin-bottom: 0.25rem;
+
+  &.form-field--auto-height {
+    height: auto;
+  }
+
+  &.form-field--first-item {
+    padding: 0;
+  }
+
+  &--level {
+    line-height: 2;
+  }
+
+  input {
+    &[type='checkbox'] {
+      margin-top: 4px;
+    }
+
+    &[type='radio'] {
+      margin-top: 2px;
+    }
+
+    &.paginate-channel {
+      width: 35px;
+    }
+
+    &.input--thumbnail {
+      width: 400px;
+    }
+  }
+}
+
+.form-field__help,
+.form-field__label,
+.form-field__error {
+  font-weight: 500;
+}
+
+.form-field__error {
+  color: $lbry-red-5;
+
+  html[data-theme='dark'] & {
+    color: $lbry-red-2;
+  }
+}
+
+.form-field__help {
+  color: $lbry-gray-5;
+  padding-top: $spacing-vertical * 1/3;
+}
+
+.form-field__label {
+  color: inherit;
+  font-size: 1.25rem;
+  opacity: 0.7;
+}
+
+.form-field__prefix,
+.form-field__postfix {
+  font-weight: 500;
+  // line-height: 2;
+
+  &.form-field--align-center {
+    align-self: center;
+  }
+
+  &.form-field--fix-no-height {
+    line-height: 1;
+  }
+}
+
+.form-field__prefix {
+  padding-right: 0.5rem;
+}
+
+.form-field__postfix {
+  padding-left: 0.5rem;
+}
+
+.form-field__select-wrapper {
+  position: relative;
+  width: 20rem; height: 2.5rem;
+
+  &::after {
+    width: 100%; height: 100%;
+    top: 0; left: 0;
+
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E %3Cpath d='M3 4 L21 4 12 20 3 4 Z' stroke='black' stroke-width='2' fill='black' fill-rule='evenodd' stroke-linejoin='round'/%3E %3C/svg%3E"), linear-gradient(to right, transparent 80%, $lbry-gray-1 85%);
+    background-position: 95% center, right top;
+    background-repeat: no-repeat;
+    background-size: 0.8rem, 100%;
+    content: "";
+    pointer-events: none;
+    position: absolute;
+  }
+}
+
+.form-field__select {
+  width: 100%; height: 100%;
+
+  background-color: $lbry-gray-1;
+  border-radius: 0;
+  padding: 0.5rem;
+
+  -webkit-appearance: none;
+
+  &:disabled {
+    opacity: 0.5;
+  }
+}
+
+// Not sure if I like these
+// Maybe this should be in gui.scss?
+.input--price-amount {
+  width: 80px;
+}
+
+.input--address {
+  width: 370px;
+}

@@ -1,0 +1,47 @@
+.pagination {
+  + .form-field {
+    margin-left: 1rem;
+  }
+}
+
+.pagination__item {
+  width: 3rem; height: 3rem;
+
+  border-radius: 50%;
+  display: inline-block;
+  text-align: center;
+
+  &:not(&--selected):not(&--break):not(.disabled):hover {
+    background-color: $lbry-gray-1;
+  }
+
+  &:not(&--previous):not(&--next) {
+    font-weight: 600;
+    line-height: 3rem;
+  }
+
+  &:not(&--break):not(.disabled) {
+    cursor: pointer;
+  }
+
+  &--break {
+    opacity: 0.3;
+  }
+
+  &--previous,
+  &--next {
+    bottom: -0.4rem;
+    font-size: 2.5rem;
+    line-height: 1;
+    position: relative;
+  }
+
+  &--selected {
+    background-color: $lbry-teal-5;
+    color: $lbry-white;
+  }
+
+  > a {
+    display: block;
+  }
+}
