@@ -87,8 +87,32 @@ class ReportPage extends React.Component {
             {__('You can also')}{' '}
             <Button
               button="link"
-              href="https://github.com/lbryio/lbry/issues"
+              href="https://github.com/lbryio/lbry-desktop/issues"
               label={__('submit an issue on GitHub')}
+            />.
+          </p>
+          <p>
+            {__('Explore our')}{' '}
+            <Button
+              button="link"
+              href="https://lbry.tech"
+              label={__('LBRY Technical Resources')}
+            />.
+          </p>
+          <p>
+            {__('Join our')}{' '}
+            <Button
+              button="link"
+              href="https://discourse.lbry.io/"
+              label={__('LBRY Tech Forum')}
+            />.
+          </p>
+          <p>
+            {__('Read our')}{' '}
+            <Button
+              button="link"
+              href="https://lbry.tech/contribute"
+              label={__('Contributors Guide')}
             />.
           </p>
         </section>
