@@ -31,7 +31,7 @@ class FileDetails extends PureComponent<Props> {
 
     clickCommentButton();
     Lbryio.call('user_tag', 'edit', { add: 'comments-waitlist' });
-    showSnackBar(__('Thanks! This feature is so beta, all we had time for was this button.'));
+    showSnackBar(__('Thanks! Comments are coming soon(ish).'));
   }
 
   render() {
@@ -106,7 +106,7 @@ class FileDetails extends PureComponent<Props> {
               data-id="add-comment"
               disabled={hasClickedComment}
               button="primary"
-              label="Comment"
+              label={__('Want to comment?')}
               onClick={this.handleCommentClick}
             />
           </div>
