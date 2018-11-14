@@ -83,7 +83,7 @@ html[data-theme='dark'] {
   }
 
   //
-  // BUTTON
+  // Button
   //
   .btn {
     &.btn--alt:not(:disabled) {
@@ -191,5 +191,16 @@ html[data-theme='dark'] {
         color: $lbry-black;
       }
     }
+  }
+
+  //
+  // Expandable
+  //
+  .expandable {
+    border-bottom: var(--input-border-size) solid $lbry-gray-5;
+  }
+
+  .expandable--closed::after {
+    background-image: linear-gradient(to bottom, transparent 0%, $lbry-black 90%);
   }
 }

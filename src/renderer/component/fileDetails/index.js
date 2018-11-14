@@ -4,8 +4,12 @@ import {
   makeSelectContentTypeForUri,
   makeSelectMetadataForUri,
   makeSelectFileInfoForUri,
+  doNotify,
 } from 'lbry-redux';
+import { selectUser } from 'lbryinc';
 import { doOpenFileInFolder } from 'redux/actions/file';
+import { selectHasClickedComment } from 'redux/selectors/app';
+import { doClickCommentButton } from 'redux/actions/app';
 import FileDetails from './view';
 
 const select = (state, props) => ({
@@ -13,10 +17,14 @@ const select = (state, props) => ({
   contentType: makeSelectContentTypeForUri(props.uri)(state),
   fileInfo: makeSelectFileInfoForUri(props.uri)(state),
   metadata: makeSelectMetadataForUri(props.uri)(state),
+  hasClickedComment: selectHasClickedComment(state),
+  user: selectUser(state),
 });
 
 const perform = dispatch => ({
   openFolder: path => dispatch(doOpenFileInFolder(path)),
+  showSnackBar: message => dispatch(doNotify({ message, displayType: ['snackbar'] })),
+  clickCommentButton: () => dispatch(doClickCommentButton()),
 });
 
 export default connect(
