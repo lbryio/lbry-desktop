@@ -33,7 +33,7 @@ export type AppState = {
   checkUpgradeTimer: ?number,
   isUpgradeAvailable: ?boolean,
   isUpgradeSkipped: ?boolean,
-  snackBar: ?SnackBar,
+  hasClickedComment: boolean,
 };
 
 const defaultState: AppState = {
@@ -50,14 +50,13 @@ const defaultState: AppState = {
   autoUpdateDownloaded: false,
   autoUpdateDeclined: false,
   modalsAllowed: true,
-
+  hasClickedComment: false,
   downloadProgress: undefined,
   upgradeDownloading: undefined,
   upgradeDownloadComplete: undefined,
   checkUpgradeTimer: undefined,
   isUpgradeAvailable: undefined,
   isUpgradeSkipped: undefined,
-  snackBar: undefined,
 };
 
 reducers[ACTIONS.DAEMON_READY] = state =>
@@ -187,6 +186,11 @@ reducers[ACTIONS.HISTORY_NAVIGATE] = state =>
 reducers[ACTIONS.CLEAR_UPGRADE_TIMER] = state =>
   Object.assign({}, state, {
     checkUpgradeTimer: undefined,
+  });
+
+reducers[ACTIONS.ADD_COMMENT] = state =>
+  Object.assign({}, state, {
+    hasClickedComment: true,
   });
 
 export default function reducer(state: AppState = defaultState, action: any) {

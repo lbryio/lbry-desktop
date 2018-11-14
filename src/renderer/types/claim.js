@@ -14,6 +14,8 @@ export type Metadata = {
   title: string,
   thumbnail: ?string,
   description: ?string,
+  license: ?string,
+  language: string,
   fee?:
     | {
         amount: number, // should be a string https://github.com/lbryio/lbry/issues/1576

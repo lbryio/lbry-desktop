@@ -130,7 +130,7 @@ p:not(:first-of-type) {
   bottom: 0;
   right: 0;
 
-  background-color: rgba($lbry-gray-1, 0.3);
+  background-color: mix($lbry-white, $lbry-gray-1, 70%);
   display: flex;
   position: absolute;
   z-index: 0;
@@ -243,11 +243,6 @@ p:not(:first-of-type) {
   font-size: inherit;
   font-weight: inherit;
   padding: 0;
-}
-
-.divider__horizontal {
-  border-top: $lbry-gray-2;
-  margin: 16px 0;
 }
 
 .hidden {
