@@ -63,7 +63,7 @@ export default () => {
         {
           label: 'Developer API Guide',
           click: () => {
-            shell.openExternal('https://lbry.io/quickstart');
+            shell.openExternal('https://lbry.tech/playground');
           },
         },
       ],
