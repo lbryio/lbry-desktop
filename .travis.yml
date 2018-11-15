@@ -30,6 +30,7 @@ before_install:
   fi
 before_script:
 - git lfs pull
+- if [ "$TRAVIS_PULL_REQUEST" != "false" ]; then unset WIN_CSC_LINK; unset CSC_LINK; fi
 script:
 - |
   if [ "$TARGET" == "windows" ]; then
