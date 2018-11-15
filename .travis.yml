@@ -30,12 +30,13 @@ before_install:
   fi
 before_script:
 - git lfs pull
+- if [ "$TRAVIS_PULL_REQUEST" != "false" ]; then unset WIN_CSC_LINK; fi
 script:
 - |
   if [ "$TARGET" == "windows" ]; then
     # Remove any special characters before adding to our list of ENVs
     # https://github.com/electron-userland/electron-builder/issues/2450#issuecomment-421788155
-    ENVS=`env | grep -iE '(DEBUG|NODE_|ELECTRON_|YARN_|NPM_|CI|CIRCLE|TRAVIS|APPVEYOR_|CSC_|_TOKEN|_KEY|AWS_|STRIP|BUILD_|TARGET)([A-Z]|_)*=' | sed -n '/^[^\t]/s/=.*//p' | sed '/^$/d' | sed 's/^/-e /g' | tr '\n' ' '`
+    ENVS=`env | grep -iE '(DEBUG|NODE_|ELECTRON_|YARN_|NPM_|CI|CIRCLE|TRAVIS|APPVEYOR_|CSC_|_TOKEN|_KEY|AWS_|STRIP|BUILD_|TARGET|PUBLISH_FOR_PULL_REQUEST)([A-Z]|_)*=' | sed -n '/^[^\t]/s/=.*//p' | sed '/^$/d' | sed 's/^/-e /g' | tr '\n' ' '`
     docker run $ENVS --rm \
       -v ${PWD}:/project \
       electronuserland/builder:wine \
