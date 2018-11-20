@@ -123,7 +123,6 @@ class WunderBar extends React.PureComponent<Props> {
       } else {
         this.props.doShowSnackBar({
           message: __('Invalid LBRY URL entered. Only A-Z, a-z, and - allowed.'),
-          displayType: ['snackbar'],
         });
       }
     } catch (e) {

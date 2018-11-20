@@ -33,9 +33,7 @@ class ReportPage extends React.Component {
 
         // Display global notice
         const action = doToast({
-          displayType: ['snackbar'],
           message: __('Message received! Thanks for helping.'),
-          isError: false,
         });
         window.app.store.dispatch(action);
       });
@@ -90,7 +88,8 @@ class ReportPage extends React.Component {
                 button="link"
                 href="https://github.com/lbryio/lbry-desktop/issues"
                 label={__('submit an issue on GitHub')}
-              />.
+              />
+              .
             </p>
             <p>
               {__('Explore our')}{' '}
