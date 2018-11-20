@@ -122,28 +122,28 @@ class SelectThumbnail extends React.PureComponent<Props, State> {
                 onFileChosen={path => openModal(MODALS.CONFIRM_THUMBNAIL_UPLOAD, { path })}
               />
             )}
-            {status === THUMBNAIL_STATUSES.COMPLETE && (
-              <div className="column column--space-between">
-                <img
-                  className="column__item thumbnail-preview"
-                  src={thumbnail}
-                  alt={__('Thumbnail Preview')}
-                />
-                <div className="column__item">
-                  <p>
-                    Upload complete.{' '}
-                    <Button button="link" href={thumbnail} label={__('View it on spee.ch')} />.
-                  </p>
-                  <div className="card__actions">
-                    <Button
-                      button="link"
-                      label={__('New thumbnail')}
-                      onClick={resetThumbnailStatus}
-                    />
+            {status === THUMBNAIL_STATUSES.COMPLETE &&
+              thumbnail && (
+                <div className="column column--space-between">
+                  <div
+                    className="column__item thumbnail-preview"
+                    style={{ backgroundImage: `url(${thumbnail})` }}
+                  />
+                  <div className="column__item">
+                    <p>
+                      Upload complete.{' '}
+                      <Button button="link" href={thumbnail} label={__('View it on spee.ch')} />.
+                    </p>
+                    <div className="card__actions">
+                      <Button
+                        button="link"
+                        label={__('New thumbnail')}
+                        onClick={resetThumbnailStatus}
+                      />
+                    </div>
                   </div>
                 </div>
-              </div>
-            )}
+              )}
           </React.Fragment>
         )}
         {status === THUMBNAIL_STATUSES.READY && (
