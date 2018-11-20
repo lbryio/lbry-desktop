@@ -1,6 +1,7 @@
 // @flow
 import type { Claim, Metadata } from 'types/claim';
 import type { FileInfo } from 'types/file_info';
+import type { Node } from 'react';
 import React, { Fragment, PureComponent } from 'react';
 import { Lbryio } from 'lbryinc';
 import MarkdownPreview from 'component/common/markdown-preview';
@@ -15,7 +16,7 @@ type Props = {
   openFolder: string => void,
   contentType: string,
   clickCommentButton: () => void,
-  showSnackBar: string => void,
+  showSnackBar: Node => void,
   hasClickedComment: boolean,
   user: ?any,
 };
@@ -31,7 +32,12 @@ class FileDetails extends PureComponent<Props> {
 
     clickCommentButton();
     Lbryio.call('user_tag', 'edit', { add: 'comments-waitlist' });
-    showSnackBar(__('Thanks! Comments are coming soon(ish).'));
+    showSnackBar(
+      <span>
+        {__('Thanks! Comments are coming soon')}
+        <sup>TM</sup>
+      </span>
+    );
   }
 
   render() {
