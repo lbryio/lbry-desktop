@@ -1,7 +1,8 @@
 // @flow
 import type { Status } from 'types/status';
 import * as React from 'react';
-import { Lbry, MODALS } from 'lbry-redux';
+import * as MODALS from 'constants/modal_types';
+import { Lbry } from 'lbry-redux';
 import ModalWalletUnlock from 'modal/modalWalletUnlock';
 import ModalIncompatibleDaemon from 'modal/modalIncompatibleDaemon';
 import ModalUpgrade from 'modal/modalUpgrade';
@@ -16,7 +17,7 @@ type Props = {
   daemonVersionMatched: boolean,
   onReadyToLaunch: () => void,
   authenticate: () => void,
-  notification: ?{
+  modal: ?{
     id: string,
   },
 };
@@ -41,6 +42,7 @@ export class SplashScreen extends React.PureComponent<Props, State> {
       error: false,
     };
 
+    (this: any).renderModals = this.renderModals.bind(this);
     this.hasRecordedUser = false;
     this.timeout = undefined;
   }
@@ -169,27 +171,38 @@ export class SplashScreen extends React.PureComponent<Props, State> {
   hasRecordedUser: boolean;
   timeout: ?TimeoutID;
 
+  renderModals() {
+    const { modal } = this.props;
+    const modalId = modal && modal.id;
+
+    if (!modalId) {
+      return null;
+    }
+
+    switch (modalId) {
+      case MODALS.INCOMPATIBLE_DAEMON:
+        return <ModalIncompatibleDaemon />;
+      case MODALS.WALLET_UNLOCK:
+        return <ModalWalletUnlock />;
+      case MODALS.UPGRADE:
+        return <ModalUpgrade />;
+      case MODALS.DOWNLOADING:
+        return <ModalDownloading />;
+      default:
+        return null;
+    }
+  }
+
   render() {
-    const { notification } = this.props;
     const { message, details, isRunning, error } = this.state;
 
-    const notificationId = notification && notification.id;
-
-    // {notificationId === MODALS.WALLET_UNLOCK && <ModalWalletUnlock />}
     return (
       <React.Fragment>
         <LoadScreen message={message} details={details} error={error} />
         {/* Temp hack: don't show any modals on splash screen daemon is running;
             daemon doesn't let you quit during startup, so the "Quit" buttons
             in the modals won't work. */}
-        {isRunning && (
-          <React.Fragment>
-            {notificationId === MODALS.WALLET_UNLOCK && <ModalWalletUnlock />}
-            {notificationId === MODALS.INCOMPATIBLE_DAEMON && <ModalIncompatibleDaemon />}
-            {notificationId === MODALS.UPGRADE && <ModalUpgrade />}
-            {notificationId === MODALS.DOWNLOADING && <ModalDownloading />}
-          </React.Fragment>
-        )}
+        {isRunning && this.renderModals()}
       </React.Fragment>
     );
   }

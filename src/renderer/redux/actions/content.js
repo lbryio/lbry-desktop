@@ -1,8 +1,9 @@
 // @flow
 import * as NOTIFICATION_TYPES from 'constants/subscriptions';
 import { PAGE_SIZE } from 'constants/claim';
+import * as MODALS from 'constants/modal_types';
 import { ipcRenderer } from 'electron';
-import { doAlertError } from 'redux/actions/app';
+import { doOpenModal } from 'redux/actions/app';
 import { doNavigate } from 'redux/actions/navigation';
 import { setSubscriptionLatest, doUpdateUnreadSubscriptions } from 'redux/actions/subscriptions';
 import { makeSelectUnreadByChannel } from 'redux/selectors/subscriptions';
@@ -20,11 +21,10 @@ import {
   selectDownloadingByOutpoint,
   selectTotalDownloadProgress,
   selectBalance,
-  MODALS,
-  doNotify,
   makeSelectChannelForClaimUri,
   parseURI,
   creditsToString,
+  doError
 } from 'lbry-redux';
 import { makeSelectClientSetting, selectosNotificationsEnabled } from 'redux/selectors/settings';
 import setBadge from 'util/setBadge';
@@ -182,10 +182,10 @@ function handleLoadVideoError(uri, errorType = '') {
       });
       dispatch(doSetPlayingUri(null));
       if (errorType === 'timeout') {
-        doNotify({ id: MODALS.FILE_TIMEOUT }, { uri });
+        doOpenModal(MODALS.FILE_TIMEOUT, { uri });
       } else {
         dispatch(
-          doAlertError(
+          doError(
             `Failed to download ${uri}, please try again. If this problem persists, visit https://lbry.io/faq/support for support.`
           )
         );
@@ -238,7 +238,7 @@ export function doPurchaseUri(uri, specificCostInfo, shouldRecordViewEvent) {
 
     function attemptPlay(cost, instantPurchaseMax = null) {
       if (cost > 0 && (!instantPurchaseMax || cost > instantPurchaseMax)) {
-        dispatch(doNotify({ id: MODALS.AFFIRM_PURCHASE }, { uri }));
+        dispatch(doOpenModal(MODALS.AFFIRM_PURCHASE, { uri }));
       } else {
         dispatch(doLoadVideo(uri, shouldRecordViewEvent));
       }
@@ -266,7 +266,7 @@ export function doPurchaseUri(uri, specificCostInfo, shouldRecordViewEvent) {
 
     if (cost > balance) {
       dispatch(doSetPlayingUri(null));
-      dispatch(doNotify({ id: MODALS.INSUFFICIENT_CREDITS }));
+      dispatch(doOpenModal(MODALS.INSUFFICIENT_CREDITS));
       Promise.resolve();
       return;
     }

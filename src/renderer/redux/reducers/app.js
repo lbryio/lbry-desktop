@@ -193,6 +193,18 @@ reducers[ACTIONS.ADD_COMMENT] = state =>
     hasClickedComment: true,
   });
 
+reducers[ACTIONS.SHOW_MODAL] = (state, action) =>
+  Object.assign({}, state, {
+    modal: action.data.id,
+    modalProps: action.data.modalProps
+  })
+
+reducers[ACTIONS.HIDE_MODAL] = (state, action) =>
+  Object.assign({}, state, {
+    modal: null,
+    modalProps: null,
+  })
+
 export default function reducer(state: AppState = defaultState, action: any) {
   const handler = reducers[action.type];
   if (handler) return handler(state, action);

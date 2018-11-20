@@ -1,10 +1,11 @@
 // @flow
+import * as ICONS from 'constants/icons';
+import * as MODALS from 'constants/modal_types';
 import * as React from 'react';
 import { FormField } from 'component/common/form';
 import Button from 'component/button';
 import FileExporter from 'component/common/file-exporter';
-import * as icons from 'constants/icons';
-import { MODALS, TRANSACTIONS } from 'lbry-redux';
+import { TRANSACTIONS } from 'lbry-redux';
 import TransactionListItem from './internal/transaction-list-item';
 
 export type Transaction = {
@@ -61,7 +62,7 @@ class TransactionList extends React.PureComponent<Props> {
   }
 
   revokeClaim(txid: string, nout: number) {
-    this.props.openModal({ id: MODALS.CONFIRM_CLAIM_REVOKE }, { txid, nout });
+    this.props.openModal(MODALS.CONFIRM_CLAIM_REVOKE, { txid, nout });
   }
 
   render() {

@@ -3,7 +3,7 @@ import {
   makeSelectCostInfoForUri,
   makeSelectFileInfoForUri,
   makeSelectClaimIsMine,
-  doNotify,
+  doOpenModal,
 } from 'lbry-redux';
 import FileActions from './view';
 
@@ -15,7 +15,7 @@ const select = (state, props) => ({
 });
 
 const perform = dispatch => ({
-  openModal: (modal, props) => dispatch(doNotify(modal, props)),
+  openModal: (modal, props) => dispatch(doOpenModal(modal, props)),
 });
 
 export default connect(
