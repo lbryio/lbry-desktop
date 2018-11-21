@@ -394,3 +394,33 @@ export const doCheckSubscriptionsInit = () => (dispatch: ReduxDispatch) => {
     data: { checkSubscriptionsTimer },
   });
 };
+
+export const doFetchRecommendedSubscriptions = () => (dispatch: ReduxDispatch) => {
+  dispatch({
+    type: ACTIONS.GET_SUGGESTED_SUBSCRIPTIONS_START,
+  });
+
+  return Lbryio.call('subscription', 'suggest')
+    .then(suggested =>
+      dispatch({
+        type: ACTIONS.GET_SUGGESTED_SUBSCRIPTIONS_SUCCESS,
+        data: suggested,
+      })
+    )
+    .catch(error =>
+      dispatch({
+        type: ACTIONS.GET_SUGGESTED_SUBSCRIPTIONS_FAIL,
+        error,
+      })
+    );
+};
+
+export const doCompleteFirstRun = () => (dispatch: ReduxDispatch) =>
+  dispatch({
+    type: ACTIONS.SUBSCRIPTION_FIRST_RUN_COMPLETED,
+  });
+
+export const doShowSuggestedSubs = () => (dispatch: ReduxDispatch) =>
+  dispatch({
+    type: ACTIONS.VIEW_SUGGESTED_SUBSCRIPTIONS,
+  });

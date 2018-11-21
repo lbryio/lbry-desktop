@@ -2,7 +2,7 @@
 
 import * as React from 'react';
 import CodeMirror from 'codemirror/lib/codemirror';
-import { openSnippetMenu, stopContextMenu } from 'util/contextMenu';
+import { openSnippetMenu, stopContextMenu } from 'util/context-menu';
 
 // Addons
 import 'codemirror/addon/selection/mark-selection';

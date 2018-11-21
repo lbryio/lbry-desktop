@@ -19,7 +19,7 @@ import SubscribeButton from 'component/subscribeButton';
 import Page from 'component/page';
 import FileDownloadLink from 'component/fileDownloadLink';
 import classnames from 'classnames';
-import getMediaType from 'util/getMediaType';
+import getMediaType from 'util/get-media-type';
 import RecommendedContent from 'component/recommendedContent';
 import { FormField, FormRow } from 'component/common/form';
 import ToolTip from 'component/common/tooltip';
@@ -208,7 +208,7 @@ class FilePage extends React.Component<Props> {
                     }}
                   />
                 ) : (
-                  <SubscribeButton uri={channelUri} channelName={channelName} />
+                  <SubscribeButton uri={channelUri} />
                 )}
                 {!claimIsMine && (
                   <Button

@@ -6,7 +6,7 @@ import ReactModal from 'react-modal';
 import throttle from 'util/throttle';
 import SideBar from 'component/sideBar';
 import Header from 'component/header';
-import { openContextMenu } from '../../util/contextMenu';
+import { openContextMenu } from '../../util/context-menu';
 
 const TWO_POINT_FIVE_MINUTES = 1000 * 60 * 2.5;
 

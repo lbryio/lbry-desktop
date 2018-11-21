@@ -24,11 +24,11 @@ import {
   makeSelectChannelForClaimUri,
   parseURI,
   creditsToString,
-  doError
+  doError,
 } from 'lbry-redux';
 import { makeSelectClientSetting, selectosNotificationsEnabled } from 'redux/selectors/settings';
-import setBadge from 'util/setBadge';
-import setProgressBar from 'util/setProgressBar';
+import setBadge from 'util/set-badge';
+import setProgressBar from 'util/set-progress-bar';
 import analytics from 'analytics';
 
 const DOWNLOAD_POLL_INTERVAL = 250;

@@ -76,7 +76,7 @@ class ChannelTile extends React.PureComponent<Props> {
           )}
           {subscriptionUri && (
             <div className="card__actions">
-              <SubscribeButton uri={subscriptionUri} channelName={channelName} />
+              <SubscribeButton uri={subscriptionUri} />
             </div>
           )}
         </div>

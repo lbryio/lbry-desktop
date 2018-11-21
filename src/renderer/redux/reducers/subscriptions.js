@@ -12,13 +12,18 @@ import type {
   DoRemoveSubscriptionUnreads,
   FetchedSubscriptionsSucess,
   SetViewMode,
+  GetSuggestedSubscriptionsSuccess,
 } from 'types/subscription';
 
 const defaultState: SubscriptionState = {
   subscriptions: [],
   unread: {},
+  suggested: {},
   loading: false,
   viewMode: VIEW_ALL,
+  loadingSuggested: false,
+  firstRunCompleted: false,
+  showSuggestedSubs: false,
 };
 
 export default handleActions(
@@ -52,7 +57,7 @@ export default handleActions(
       }
       return {
         ...state,
-        ...unread,
+        unread: { ...unread },
         subscriptions: newSubscriptions,
       };
     },
@@ -127,6 +132,30 @@ export default handleActions(
     ): SubscriptionState => ({
       ...state,
       viewMode: action.data,
+    }),
+    [ACTIONS.GET_SUGGESTED_SUBSCRIPTIONS_START]: (state: SubscriptionState): SubscriptionState => ({
+      ...state,
+      loadingSuggested: true,
+    }),
+    [ACTIONS.GET_SUGGESTED_SUBSCRIPTIONS_SUCCESS]: (
+      state: SubscriptionState,
+      action: GetSuggestedSubscriptionsSuccess
+    ): SubscriptionState => ({
+      ...state,
+      suggested: action.data,
+      loadingSuggested: false,
+    }),
+    [ACTIONS.GET_SUGGESTED_SUBSCRIPTIONS_FAIL]: (state: SubscriptionState): SubscriptionState => ({
+      ...state,
+      loadingSuggested: false,
+    }),
+    [ACTIONS.SUBSCRIPTION_FIRST_RUN_COMPLETED]: (state: SubscriptionState): SubscriptionState => ({
+      ...state,
+      firstRunCompleted: true,
+    }),
+    [ACTIONS.VIEW_SUGGESTED_SUBSCRIPTIONS]: (state: SubscriptionState): SubscriptionState => ({
+      ...state,
+      showSuggestedSubs: true,
     }),
   },
   defaultState

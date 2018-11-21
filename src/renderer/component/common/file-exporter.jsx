@@ -3,7 +3,7 @@ import fs from 'fs';
 import path from 'path';
 import React from 'react';
 import Button from 'component/button';
-import parseData from 'util/parseData';
+import parseData from 'util/parse-data';
 import * as icons from 'constants/icons';
 import { remote } from 'electron';
 
@@ -33,7 +33,10 @@ class FileExporter extends React.PureComponent<Props> {
     fs.writeFile(filename, data, err => {
       if (err) throw err;
       // Do something after creation
-      onFileCreated && onFileCreated(filename);
+
+      if (onFileCreated) {
+        onFileCreated(filename);
+      }
     });
   }
 
@@ -55,24 +58,22 @@ class FileExporter extends React.PureComponent<Props> {
       ],
     };
 
-    remote.dialog.showSaveDialog(
-      remote.getCurrentWindow(),
-      options,
-      filename => {
-        // User hit cancel so do nothing:
-        if (!filename) return;
-        // Get extension and remove initial dot
-        const format = path.extname(filename).replace(/\./g, '');
-        // Parse data to string with the chosen format
-        const parsed = parseData(data, format, filters);
-        // Write file
-        parsed && this.handleFileCreation(filename, parsed);
+    remote.dialog.showSaveDialog(remote.getCurrentWindow(), options, filename => {
+      // User hit cancel so do nothing:
+      if (!filename) return;
+      // Get extension and remove initial dot
+      const format = path.extname(filename).replace(/\./g, '');
+      // Parse data to string with the chosen format
+      const parsed = parseData(data, format, filters);
+      // Write file
+      if (parsed) {
+        this.handleFileCreation(filename, parsed);
       }
-    );
+    });
   }
 
   render() {
-    const { title, label } = this.props;
+    const { label } = this.props;
     return (
       <Button
         button="primary"

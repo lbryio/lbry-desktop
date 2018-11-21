@@ -7,6 +7,9 @@ import {
   NOTIFY_ONLY,
   VIEW_ALL,
   VIEW_LATEST_FIRST,
+  SUGGESTED_TOP_BID,
+  SUGGESTED_TOP_SUBSCRIBED,
+  SUGGESTED_FEATURED,
 } from 'constants/subscriptions';
 
 export type Subscription = {
@@ -31,11 +34,21 @@ export type UnreadSubscriptions = {
 
 export type ViewMode = VIEW_LATEST_FIRST | VIEW_ALL;
 
+export type SuggestedType = SUGGESTED_TOP_BID | SUGGESTED_TOP_SUBSCRIBED | SUGGESTED_FEATURED;
+
+export type SuggestedSubscriptions = {
+  [SuggestedType]: string,
+};
+
 export type SubscriptionState = {
   subscriptions: Array<Subscription>,
   unread: UnreadSubscriptions,
   loading: boolean,
   viewMode: ViewMode,
+  suggested: SuggestedSubscriptions,
+  loadingSuggested: boolean,
+  firstRunCompleted: boolean,
+  showSuggestedSubs: boolean,
 };
 
 //
@@ -92,6 +105,11 @@ export type FetchedSubscriptionsSucess = {
 export type SetViewMode = {
   type: ACTIONS.SET_VIEW_MODE,
   data: ViewMode,
+};
+
+export type GetSuggestedSubscriptionsSuccess = {
+  type: ACTIONS.GET_SUGGESTED_SUBSCRIPTIONS_START,
+  data: SuggestedSubscriptions,
 };
 
 export type Action =
