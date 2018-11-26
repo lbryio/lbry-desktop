@@ -1,10 +1,10 @@
 // @flow
+import * as ICONS from 'constants/icons';
 import fs from 'fs';
 import path from 'path';
 import React from 'react';
 import Button from 'component/button';
 import parseData from 'util/parse-data';
-import * as icons from 'constants/icons';
 import { remote } from 'electron';
 
 type Props = {
@@ -77,7 +77,7 @@ class FileExporter extends React.PureComponent<Props> {
     return (
       <Button
         button="primary"
-        icon={icons.DOWNLOAD}
+        icon={ICONS.DOWNLOAD}
         label={label || __('Export')}
         onClick={this.handleButtonClick}
       />

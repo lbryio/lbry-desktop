@@ -1,9 +1,9 @@
 // @flow
+import * as ICONS from 'constants/icons';
 import React from 'react';
 import Button from 'component/button';
 import Address from 'component/address';
 import QRCode from 'component/common/qr-code';
-import * as icons from 'constants/icons';
 
 type Props = {
   checkAddressIsMine: string => void,
@@ -63,7 +63,7 @@ class WalletAddress extends React.PureComponent<Props, State> {
           <Button
             button="primary"
             label={__('Get New Address')}
-            icon={icons.REFRESH}
+            icon={ICONS.REFRESH}
             onClick={getNewAddress}
             disabled={gettingNewAddress}
           />

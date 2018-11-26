@@ -1,10 +1,10 @@
 // @flow
 import type { Transaction } from 'component/transactionList/view';
+import * as ICONS from 'constants/icons';
 import React, { Fragment } from 'react';
 import BusyIndicator from 'component/common/busy-indicator';
 import Button from 'component/button';
 import TransactionList from 'component/transactionList';
-import * as icons from 'constants/icons';
 import RefreshTransactionButton from 'component/transactionRefreshButton';
 
 type Props = {
@@ -53,7 +53,7 @@ class TransactionListRecent extends React.PureComponent<Props> {
                 button="primary"
                 navigate="/history"
                 label={__('Full History')}
-                icon={icons.CLOCK}
+                icon={ICONS.CLOCK}
               />
             </div>
           </Fragment>

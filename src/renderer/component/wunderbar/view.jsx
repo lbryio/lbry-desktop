@@ -1,10 +1,10 @@
 // @flow
+import * as ICONS from 'constants/icons';
 import React from 'react';
 import classnames from 'classnames';
 import { normalizeURI, SEARCH_TYPES, isURIValid } from 'lbry-redux';
 import Icon from 'component/common/icon';
 import { parseQueryParams } from 'util/query-params';
-import * as icons from 'constants/icons';
 import Autocomplete from './internal/autocomplete';
 
 const L_KEY_CODE = 76;
@@ -43,11 +43,11 @@ class WunderBar extends React.PureComponent<Props> {
   getSuggestionIcon = (type: string) => {
     switch (type) {
       case 'file':
-        return icons.LOCAL;
+        return ICONS.LOCAL;
       case 'channel':
-        return icons.AT_SIGN;
+        return ICONS.AT_SIGN;
       default:
-        return icons.SEARCH;
+        return ICONS.SEARCH;
     }
   };
 
@@ -138,7 +138,7 @@ class WunderBar extends React.PureComponent<Props> {
 
     return (
       <div className="wunderbar">
-        <Icon icon={icons.SEARCH} />
+        <Icon icon={ICONS.SEARCH} />
         <Autocomplete
           autoHighlight
           wrapperStyle={{ flex: 1, position: 'relative' }}
