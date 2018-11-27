@@ -27,12 +27,14 @@ export default class MarkAsRead extends PureComponent<Props> {
   }
 
   render() {
+    const { channel } = this.props;
+    const label = channel ? __('Mark as read') : __('Mark all as read');
     return (
       <Button
         noPadding
         button="inverse"
         icon={ICONS.CHECK_SIMPLE}
-        label={__('Mark as read')}
+        label={label}
         onClick={this.handleClick}
       />
     );
