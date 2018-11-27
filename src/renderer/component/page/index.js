@@ -8,7 +8,7 @@ import {
 import { doNavigate, doHistoryBack, doHistoryForward } from 'redux/actions/navigation';
 import { doDownloadUpgrade } from 'redux/actions/app';
 import { selectIsUpgradeAvailable, selectNavLinks } from 'redux/selectors/app';
-import { formatCredits } from 'util/formatCredits';
+import { formatCredits } from 'util/format-credits';
 import Page from './view';
 
 const select = state => ({

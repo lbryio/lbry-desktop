@@ -5,11 +5,10 @@ import Button from 'component/button';
 
 type Props = {
   closeModal: () => void,
-  navigate: string => void,
 };
 
 const ModalFirstSubscription = (props: Props) => {
-  const { closeModal, navigate } = props;
+  const { closeModal } = props;
 
   return (
     <Modal type="custom" isOpen contentLabel="Subscriptions 101" title={__('Subscriptions 101')}>
@@ -17,25 +16,13 @@ const ModalFirstSubscription = (props: Props) => {
         <p>{__('You just subscribed to your first channel. Awesome!')}</p>
         <p>{__('A few quick things to know:')}</p>
         <p className="card__content">
-          {__('1) You can use the')}{' '}
-          <Button
-            button="link"
-            label={__('Subscriptions Page')}
-            onClick={() => {
-              navigate('/subscriptions');
-              closeModal();
-            }}
-          />{' '}
-          {__('to view content across all of your subscribed channels.')}
-        </p>
-        <p className="card__content">
           {__(
-            '2) This app will automatically download new free content from channels you are subscribed to.'
+            '1) This app will automatically download new free content from channels you are subscribed to.'
           )}
         </p>
         <p className="card__content">
           {__(
-            '3) If we have your email address, we may send you notifications and rewards related to new content.'
+            '2) If we have your email address, we may send you notifications and rewards related to new content.'
           )}
         </p>
         <div className="modal__buttons">

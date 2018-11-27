@@ -3,7 +3,7 @@ import React from 'react';
 import classnames from 'classnames';
 import { normalizeURI, SEARCH_TYPES, isURIValid } from 'lbry-redux';
 import Icon from 'component/common/icon';
-import { parseQueryParams } from 'util/query_params';
+import { parseQueryParams } from 'util/query-params';
 import * as icons from 'constants/icons';
 import Autocomplete from './internal/autocomplete';
 
@@ -20,6 +20,7 @@ type Props = {
   doBlur: () => void,
   resultCount: number,
   focused: boolean,
+  doShowSnackBar: ({}) => void,
 };
 
 class WunderBar extends React.PureComponent<Props> {

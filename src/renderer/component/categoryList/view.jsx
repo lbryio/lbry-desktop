@@ -1,18 +1,19 @@
 // @flow
-import * as React from 'react';
+import type { Claim } from 'types/claim';
+import React, { PureComponent } from 'react';
 import { normalizeURI } from 'lbry-redux';
 import ToolTip from 'component/common/tooltip';
 import FileCard from 'component/fileCard';
 import Button from 'component/button';
 import * as icons from 'constants/icons';
-import type { Claim } from 'types/claim';
+import SubscribeButton from 'component/subscribeButton';
 
 type Props = {
   category: string,
-  names: Array<string>,
+  names: ?Array<string>,
   categoryLink: ?string,
   fetching: boolean,
-  channelClaims: Array<Claim>,
+  channelClaims: ?Array<Claim>,
   fetchChannel: string => void,
   obscureNsfw: boolean,
 };
@@ -22,9 +23,8 @@ type State = {
   canScrollPrevious: boolean,
 };
 
-class CategoryList extends React.PureComponent<Props, State> {
+class CategoryList extends PureComponent<Props, State> {
   static defaultProps = {
-    names: [],
     categoryLink: '',
   };
 
@@ -209,7 +209,6 @@ class CategoryList extends React.PureComponent<Props, State> {
   render() {
     const { category, categoryLink, names, channelClaims, obscureNsfw } = this.props;
     const { canScrollNext, canScrollPrevious } = this.state;
-
     const isCommunityTopBids = category.match(/^community/i);
     const showScrollButtons = isCommunityTopBids ? !obscureNsfw : true;
 
@@ -218,7 +217,10 @@ class CategoryList extends React.PureComponent<Props, State> {
         <div className="card-row__header">
           <div className="card-row__title">
             {categoryLink ? (
-              <Button label={category} navigate="/show" navigateParams={{ uri: categoryLink }} />
+              <div className="card__actions card__actions--no-margin">
+                <Button label={category} navigate="/show" navigateParams={{ uri: categoryLink }} />
+                <SubscribeButton uri={`lbry://${categoryLink}`} showSnackBarOnSubscribe />
+              </div>
             ) : (
               category
             )}
@@ -263,19 +265,33 @@ class CategoryList extends React.PureComponent<Props, State> {
             }}
           >
             {names &&
+              names.length &&
               names.map(name => (
                 <FileCard showSubscribedLogo key={name} uri={normalizeURI(name)} />
               ))}
 
             {channelClaims &&
               channelClaims.length &&
-              channelClaims.map(claim => (
-                <FileCard
-                  showSubcribedLogo
-                  key={claim.claim_id}
-                  uri={`lbry://${claim.name}#${claim.claim_id}`}
-                />
-              ))}
+              channelClaims
+                // Only show the first 10 claims, regardless of the amount we have on a channel page
+                .slice(0, 10)
+                .map(claim => (
+                  <FileCard
+                    showSubcribedLogo
+                    key={claim.claim_id}
+                    uri={`lbry://${claim.name}#${claim.claim_id}`}
+                  />
+                ))}
+            {/*
+                If there aren't any uris passed in, create an empty array and render placeholder cards
+                channelClaims or names are being fetched
+              */}
+            {!channelClaims &&
+              !names &&
+              /* eslint-disable react/no-array-index-key */
+              new Array(10).fill(1).map((x, i) => <FileCard key={i} />)
+            /* eslint-enable react/no-array-index-key */
+            }
           </div>
         )}
       </div>

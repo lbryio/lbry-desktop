@@ -98,7 +98,7 @@ class ChannelPage extends React.PureComponent<Props> {
           </h1>
         </section>
         <div className="card__actions">
-          <SubscribeButton uri={`lbry://${permanentUrl}`} channelName={name} />
+          <SubscribeButton uri={`lbry://${permanentUrl}`} />
           <Button
             button="alt"
             icon={icons.GLOBE}

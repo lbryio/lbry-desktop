@@ -2,6 +2,7 @@
 import * as MODALS from 'constants/modal_types';
 import * as ICONS from 'constants/icons';
 import React from 'react';
+import { parseURI } from 'lbry-redux';
 import Button from 'component/button';
 
 type SubscribtionArgs = {
@@ -10,30 +11,36 @@ type SubscribtionArgs = {
 };
 
 type Props = {
-  channelName: ?string,
-  uri: ?string,
+  uri: string,
   isSubscribed: boolean,
   subscriptions: Array<string>,
   doChannelSubscribe: ({ channelName: string, uri: string }) => void,
   doChannelUnsubscribe: SubscribtionArgs => void,
   doOpenModal: ({ id: string }) => void,
+  firstRunCompleted: boolean,
+  showSnackBarOnSubscribe: boolean,
+  doToast: ({ message: string }) => void,
 };
 
 export default (props: Props) => {
   const {
-    channelName,
     uri,
     doChannelSubscribe,
     doChannelUnsubscribe,
     doOpenModal,
     subscriptions,
     isSubscribed,
+    firstRunCompleted,
+    showSnackBarOnSubscribe,
+    doToast,
   } = props;
 
   const subscriptionHandler = isSubscribed ? doChannelUnsubscribe : doChannelSubscribe;
   const subscriptionLabel = isSubscribed ? __('Unsubscribe') : __('Subscribe');
 
-  return channelName && uri ? (
+  const { claimName } = parseURI(uri);
+
+  return (
     <Button
       iconColor="red"
       icon={isSubscribed ? undefined : ICONS.HEART}
@@ -42,14 +49,19 @@ export default (props: Props) => {
       onClick={e => {
         e.stopPropagation();
 
-        if (!subscriptions.length) {
+        if (!subscriptions.length && !firstRunCompleted) {
           doOpenModal(MODALS.FIRST_SUBSCRIPTION);
         }
+
         subscriptionHandler({
-          channelName,
+          channelName: claimName,
           uri,
         });
+
+        if (showSnackBarOnSubscribe) {
+          doToast({ message: `${__('Successfully subscribed to')} ${claimName}!` });
+        }
       }}
     />
-  ) : null;
+  );
 };

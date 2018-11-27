@@ -192,7 +192,18 @@ p:not(:first-of-type) {
   display: flex;
   flex-direction: column;
   margin-top: 200px;
+  margin-bottom: 100px;
   text-align: center;
+}
+
+// Empty pages that display columns of content
+.page__empty--horizontal {
+  max-width: 60vw;
+  margin: auto;
+  display: flex;
+  flex-direction: row;
+  text-align: left;
+  justify-content: center;
 }
 
 .columns {

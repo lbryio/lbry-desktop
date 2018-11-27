@@ -1,3 +1,4 @@
+import { SUGGESTED_FEATURED, SUGGESTED_TOP_SUBSCRIBED } from 'constants/subscriptions';
 import { createSelector } from 'reselect';
 import {
   selectAllClaimsByChannel,
@@ -7,6 +8,7 @@ import {
   selectClaimsByUri,
   parseURI,
 } from 'lbry-redux';
+import { swapKeyAndValue } from 'util/swap-json';
 
 // Returns the entire subscriptions state
 const selectState = state => state.subscriptions || {};
@@ -19,6 +21,72 @@ export const selectIsFetchingSubscriptions = createSelector(selectState, state =
 
 // The current view mode on the subscriptions page
 export const selectViewMode = createSelector(selectState, state => state.viewMode);
+
+// Suggested subscriptions from internal apis
+export const selectSuggested = createSelector(selectState, state => state.suggested);
+export const selectLoadingSuggested = createSelector(selectState, state => state.loadingSuggested);
+export const selectSuggestedChannels = createSelector(
+  selectSubscriptions,
+  selectSuggested,
+  (userSubscriptions, suggested) => {
+    if (!suggested) {
+      return null;
+    }
+
+    // Swap the key/value because we will use the uri for everything, this just makes it easier
+    // suggested is returned from the api with the form:
+    // {
+    //   featured: { "Channel label": uri, ... },
+    //   top_subscribed: { "@channel": uri, ... }
+    //   top_bid: { "@channel": uri, ... }
+    // }
+    // To properly compare the suggested subscriptions from our current subscribed channels
+    // We only care about the uri, not the label
+
+    // We also only care about top_subscribed and featured
+    // top_bid could just be porn or a channel with no content
+    const topSubscribedSuggestions = swapKeyAndValue(suggested[SUGGESTED_TOP_SUBSCRIBED]);
+    const featuredSuggestions = swapKeyAndValue(suggested[SUGGESTED_FEATURED]);
+
+    // Make sure there are no duplicates
+    // If a uri isn't already in the suggested object, add it
+    const suggestedChannels = { ...topSubscribedSuggestions };
+
+    Object.keys(featuredSuggestions).forEach(uri => {
+      if (!suggestedChannels[uri]) {
+        const channelLabel = featuredSuggestions[uri];
+        suggestedChannels[uri] = channelLabel;
+      }
+    });
+
+    userSubscriptions.forEach(({ uri }) => {
+      // Note to passer bys:
+      // Maybe we should just remove the `lbry://` prefix from subscription uris
+      // Most places don't store them like that
+      const subscribedUri = uri.slice('lbry://'.length);
+
+      if (suggestedChannels[subscribedUri]) {
+        delete suggestedChannels[subscribedUri];
+      }
+    });
+
+    return Object.keys(suggestedChannels)
+      .map(uri => ({
+        uri,
+        label: suggestedChannels[uri],
+      }))
+      .slice(0, 5);
+  }
+);
+
+export const selectFirstRunCompleted = createSelector(
+  selectState,
+  state => state.firstRunCompleted
+);
+export const selectshowSuggestedSubs = createSelector(
+  selectState,
+  state => state.showSuggestedSubs
+);
 
 // Fetching any claims that are a part of a users subscriptions
 export const selectSubscriptionsBeingFetched = createSelector(

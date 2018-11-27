@@ -9,7 +9,7 @@ import UriIndicator from 'component/uriIndicator';
 import * as icons from 'constants/icons';
 import classnames from 'classnames';
 import FilePrice from 'component/filePrice';
-import { openCopyLinkMenu } from 'util/contextMenu';
+import { openCopyLinkMenu } from 'util/context-menu';
 import DateTime from 'component/dateTime';
 
 type Props = {

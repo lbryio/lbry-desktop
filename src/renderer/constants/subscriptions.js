@@ -5,3 +5,8 @@ export const VIEW_LATEST_FIRST = 'view_latest_first';
 export const DOWNLOADING = 'DOWNLOADING';
 export const DOWNLOADED = 'DOWNLOADED';
 export const NOTIFY_ONLY = 'NOTIFY_ONLY;';
+
+// Suggested types
+export const SUGGESTED_TOP_BID = 'top_bid';
+export const SUGGESTED_TOP_SUBSCRIBED = 'top_subscribed';
+export const SUGGESTED_FEATURED = 'featured';

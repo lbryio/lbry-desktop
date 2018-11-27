@@ -7,11 +7,15 @@ import {
   selectIsFetchingSubscriptions,
   selectUnreadSubscriptions,
   selectViewMode,
+  selectFirstRunCompleted,
+  selectshowSuggestedSubs,
 } from 'redux/selectors/subscriptions';
 import {
-  doUpdateUnreadSubscriptions,
   doFetchMySubscriptions,
   doSetViewMode,
+  doFetchRecommendedSubscriptions,
+  doCompleteFirstRun,
+  doShowSuggestedSubs,
 } from 'redux/actions/subscriptions';
 import { doSetClientSetting } from 'redux/actions/settings';
 import { makeSelectClientSetting } from 'redux/selectors/settings';
@@ -26,14 +30,18 @@ const select = state => ({
   allSubscriptions: selectSubscriptionClaims(state),
   unreadSubscriptions: selectUnreadSubscriptions(state),
   viewMode: selectViewMode(state),
+  firstRunCompleted: selectFirstRunCompleted(state),
+  showSuggestedSubs: selectshowSuggestedSubs(state),
 });
 
 export default connect(
   select,
   {
-    doUpdateUnreadSubscriptions,
     doFetchMySubscriptions,
     doSetClientSetting,
     doSetViewMode,
+    doFetchRecommendedSubscriptions,
+    doCompleteFirstRun,
+    doShowSuggestedSubs,
   }
 )(SubscriptionsPage);
