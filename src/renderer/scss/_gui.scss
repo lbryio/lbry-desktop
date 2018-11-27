@@ -203,6 +203,7 @@ p:not(:first-of-type) {
   display: flex;
   flex-direction: row;
   text-align: left;
+  justify-content: center;
 }
 
 .columns {
