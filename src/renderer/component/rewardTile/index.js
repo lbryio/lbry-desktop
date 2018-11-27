@@ -1,6 +1,6 @@
 import * as MODALS from 'constants/modal_types';
 import { connect } from 'react-redux';
-import { doOpenModal } from 'lbry-redux';
+import { doOpenModal } from 'redux/actions/app';
 import RewardTile from './view';
 
 const perform = dispatch => ({
