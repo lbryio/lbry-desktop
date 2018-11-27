@@ -1,5 +1,6 @@
 // @TODO: Customize advice based on OS
 // @flow
+import * as ICONS from 'constants/icons';
 import * as React from 'react';
 import { shell } from 'electron';
 import { Lbry } from 'lbry-redux';
@@ -7,7 +8,6 @@ import Native from 'native';
 import Button from 'component/button';
 import BusyIndicator from 'component/common/busy-indicator';
 import Page from 'component/page';
-import * as icons from 'constants/icons';
 
 type DeamonSettings = {
   data_dir: string | any,
@@ -126,7 +126,7 @@ class HelpPage extends React.PureComponent<Props, State> {
             <Button
               href="https://lbry.io/faq"
               label={__('Read the FAQ')}
-              icon={icons.HELP}
+              icon={ICONS.HELP}
               button="primary"
             />
           </div>
@@ -142,7 +142,7 @@ class HelpPage extends React.PureComponent<Props, State> {
             <Button
               button="primary"
               label={__('Join Our Chat')}
-              icon={icons.MESSAGE}
+              icon={ICONS.MESSAGE}
               href="https://chat.lbry.io"
             />
           </div>
@@ -158,13 +158,13 @@ class HelpPage extends React.PureComponent<Props, State> {
             <Button
               button="primary"
               label={__('Open Log')}
-              icon={icons.REPORT}
+              icon={ICONS.REPORT}
               onClick={() => this.openLogFile(dataDirectory)}
             />
             <Button
               button="primary"
               label={__('Open Log Folder')}
-              icon={icons.REPORT}
+              icon={ICONS.REPORT}
               onClick={() => shell.openItem(dataDirectory)}
             />
           </div>
@@ -180,7 +180,7 @@ class HelpPage extends React.PureComponent<Props, State> {
             <Button
               navigate="/report"
               label={__('Submit a Bug Report/Feature Request')}
-              icon={icons.REPORT}
+              icon={ICONS.REPORT}
               button="primary"
             />
           </div>

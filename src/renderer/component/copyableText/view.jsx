@@ -1,9 +1,9 @@
 // @flow
+import * as ICONS from 'constants/icons';
 import * as React from 'react';
 import { clipboard } from 'electron';
 import { FormRow } from 'component/common/form';
 import Button from 'component/button';
-import * as icons from 'constants/icons';
 
 type Props = {
   copyable: string,
@@ -41,7 +41,7 @@ export default class CopyableText extends React.PureComponent<Props> {
         <Button
           noPadding
           button="secondary"
-          icon={icons.CLIPBOARD}
+          icon={ICONS.CLIPBOARD}
           onClick={() => {
             clipboard.writeText(copyable);
             doToast({

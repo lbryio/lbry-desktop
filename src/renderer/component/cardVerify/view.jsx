@@ -1,7 +1,7 @@
 // @flow
+import * as ICONS from 'constants/icons';
 import React from 'react';
 import Button from 'component/button';
-import * as icons from 'constants/icons';
 
 let scriptLoading = false;
 let scriptLoaded = false;
@@ -159,7 +159,7 @@ class CardVerify extends React.Component {
       <Button
         button="primary"
         label={this.props.label}
-        icon={icons.LOCK}
+        icon={ICONS.LOCK}
         disabled={this.props.disabled || this.state.open || this.hasPendingClick}
         onClick={this.onClick.bind(this)}
       />

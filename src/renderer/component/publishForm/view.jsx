@@ -1,17 +1,17 @@
 // @flow
+import type { Claim } from 'types/claim';
+import type { PublishParams, UpdatePublishFormData } from 'redux/reducers/publish';
+import { COPYRIGHT, OTHER } from 'constants/licenses';
+import { CHANNEL_NEW, CHANNEL_ANONYMOUS, MINIMUM_PUBLISH_BID } from 'constants/claim';
+import * as ICONS from 'constants/icons';
 import * as React from 'react';
 import { isNameValid, buildURI, regexInvalidURI, THUMBNAIL_STATUSES } from 'lbry-redux';
 import { Form, FormField, FormRow, FormFieldPrice, Submit } from 'component/common/form';
 import Button from 'component/button';
 import ChannelSection from 'component/selectChannel';
 import classnames from 'classnames';
-import type { PublishParams, UpdatePublishFormData } from 'redux/reducers/publish';
 import FileSelector from 'component/common/file-selector';
 import SelectThumbnail from 'component/selectThumbnail';
-import { COPYRIGHT, OTHER } from 'constants/licenses';
-import { CHANNEL_NEW, CHANNEL_ANONYMOUS, MINIMUM_PUBLISH_BID } from 'constants/claim';
-import * as icons from 'constants/icons';
-import type { Claim } from 'types/claim';
 import BidHelpText from './internal/bid-help-text';
 import NameHelpText from './internal/name-help-text';
 import LicenseType from './internal/license-type';
@@ -354,7 +354,7 @@ class PublishForm extends React.PureComponent<Props> {
               <div className="card__actions-top-corner">
                 <Button
                   button="inverse"
-                  icon={icons.CLOSE}
+                  icon={ICONS.CLOSE}
                   label={__('Clear')}
                   onClick={clearPublish}
                 />

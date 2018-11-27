@@ -1,4 +1,7 @@
 // @flow
+import type { Claim } from 'types/claim';
+import * as ICONS from 'constants/icons';
+import * as MODALS from 'constants/modal_types';
 import React from 'react';
 import BusyIndicator from 'component/common/busy-indicator';
 import { FormField, FormRow } from 'component/common/form';
@@ -7,10 +10,7 @@ import SubscribeButton from 'component/subscribeButton';
 import Page from 'component/page';
 import FileList from 'component/fileList';
 import HiddenNsfwClaims from 'component/hiddenNsfwClaims';
-import type { Claim } from 'types/claim';
 import Button from 'component/button';
-import { MODALS } from 'lbry-redux';
-import * as icons from 'constants/icons';
 
 type Props = {
   uri: string,
@@ -101,7 +101,7 @@ class ChannelPage extends React.PureComponent<Props> {
           <SubscribeButton uri={`lbry://${permanentUrl}`} />
           <Button
             button="alt"
-            icon={icons.GLOBE}
+            icon={ICONS.GLOBE}
             label={__('Share Channel')}
             onClick={() =>
               openModal(

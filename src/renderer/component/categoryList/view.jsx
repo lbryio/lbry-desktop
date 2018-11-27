@@ -1,11 +1,11 @@
 // @flow
 import type { Claim } from 'types/claim';
-import React, { PureComponent } from 'react';
+import * as ICONS from 'constants/icons';
+import * as React from 'react';
 import { normalizeURI } from 'lbry-redux';
 import ToolTip from 'component/common/tooltip';
 import FileCard from 'component/fileCard';
 import Button from 'component/button';
-import * as icons from 'constants/icons';
 import SubscribeButton from 'component/subscribeButton';
 
 type Props = {
@@ -239,13 +239,13 @@ class CategoryList extends PureComponent<Props, State> {
                 className="btn--arrow"
                 disabled={!canScrollPrevious}
                 onClick={this.handleScrollPrevious}
-                icon={icons.ARROW_LEFT}
+                icon={ICONS.ARROW_LEFT}
               />
               <Button
                 className="btn--arrow"
                 disabled={!canScrollNext}
                 onClick={this.handleScrollNext}
-                icon={icons.ARROW_RIGHT}
+                icon={ICONS.ARROW_RIGHT}
               />
             </div>
           )}

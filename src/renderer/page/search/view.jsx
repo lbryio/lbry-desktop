@@ -1,6 +1,7 @@
 // @flow
+import * as ICONS from 'constants/icons';
+import * as SETTINGS from 'constants/settings';
 import * as React from 'react';
-import * as settings from 'constants/settings';
 import { isURIValid, normalizeURI, parseURI } from 'lbry-redux';
 import { FormField, FormRow } from 'component/common/form';
 import FileTile from 'component/fileTile';
@@ -9,7 +10,6 @@ import FileListSearch from 'component/fileListSearch';
 import Page from 'component/page';
 import ToolTip from 'component/common/tooltip';
 import Icon from 'component/common/icon';
-import * as icons from 'constants/icons';
 
 type Props = {
   query: ?string,
@@ -27,11 +27,11 @@ class SearchPage extends React.PureComponent<Props> {
 
   onSearchResultCountChange(event: SyntheticInputEvent<*>) {
     const count = Number(event.target.value);
-    this.props.setClientSetting(settings.RESULT_COUNT, count);
+    this.props.setClientSetting(SETTINGS.RESULT_COUNT, count);
   }
 
   onShowUnavailableChange(event: SyntheticInputEvent<*>) {
-    this.props.setClientSetting(settings.SHOW_UNAVAILABLE, event.target.checked);
+    this.props.setClientSetting(SETTINGS.SHOW_UNAVAILABLE, event.target.checked);
   }
 
   render() {
@@ -57,7 +57,7 @@ class SearchPage extends React.PureComponent<Props> {
                   icon
                   body={__('This is the resolution of a LBRY URL and not controlled by LBRY Inc.')}
                 >
-                  <Icon icon={icons.HELP} />
+                  <Icon icon={ICONS.HELP} />
                 </ToolTip>
               </div>
               {isChannel ? (

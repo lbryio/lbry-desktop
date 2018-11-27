@@ -1,10 +1,10 @@
 // @flow
+import type { Claim } from 'types/claim';
+import * as ICONS from 'constants/icons';
 import React from 'react';
 import Button from 'component/button';
-import * as icons from 'constants/icons';
 import ToolTip from 'component/common/tooltip';
 import analytics from 'analytics';
-import type { Claim } from 'types/claim';
 
 type Props = {
   claim: Claim,
@@ -80,7 +80,7 @@ class FileDownloadLink extends React.PureComponent<Props> {
         <ToolTip onComponent body={__('Download')}>
           <Button
             button="alt"
-            icon={icons.DOWNLOAD}
+            icon={ICONS.DOWNLOAD}
             iconColor="green"
             onClick={() => {
               purchaseUri(uri);
@@ -97,7 +97,7 @@ class FileDownloadLink extends React.PureComponent<Props> {
     } else if (fileInfo && fileInfo.download_path) {
       return (
         <ToolTip onComponent body={__('Open file')}>
-          <Button button="alt" iconColor="green" icon={icons.LOCAL} onClick={() => openFile()} />
+          <Button button="alt" iconColor="green" icon={ICONS.LOCAL} onClick={() => openFile()} />
         </ToolTip>
       );
     }

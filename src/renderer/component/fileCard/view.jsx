@@ -1,12 +1,12 @@
 // @flow
+import type { Claim, Metadata } from 'types/claim';
+import * as ICONS from 'constants/icons';
 import * as React from 'react';
 import { normalizeURI, convertToShareLink } from 'lbry-redux';
-import type { Claim, Metadata } from 'types/claim';
 import CardMedia from 'component/cardMedia';
 import TruncatedText from 'component/common/truncated-text';
 import Icon from 'component/common/icon';
 import UriIndicator from 'component/uriIndicator';
-import * as icons from 'constants/icons';
 import classnames from 'classnames';
 import FilePrice from 'component/filePrice';
 import { openCopyLinkMenu } from 'util/context-menu';
@@ -119,9 +119,9 @@ class FileCard extends React.PureComponent<Props> {
 
           <div className="card__file-properties">
             <FilePrice hideFree uri={uri} />
-            {isRewardContent && <Icon iconColor="red" icon={icons.FEATURED} />}
-            {showSubscribedLogo && isSubscribed && <Icon icon={icons.HEART} />}
-            {fileInfo && <Icon icon={icons.LOCAL} />}
+            {isRewardContent && <Icon iconColor="red" icon={ICONS.FEATURED} />}
+            {showSubscribedLogo && isSubscribed && <Icon icon={ICONS.HEART} />}
+            {fileInfo && <Icon icon={ICONS.LOCAL} />}
           </div>
         </div>
         {isNew && (

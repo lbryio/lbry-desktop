@@ -1,7 +1,7 @@
 // @flow
-import * as React from 'react';
-import * as icons from 'constants/icons';
 import type { Claim, Metadata } from 'types/claim';
+import * as ICONS from 'constants/icons';
+import * as React from 'react';
 import { normalizeURI, parseURI } from 'lbry-redux';
 import CardMedia from 'component/cardMedia';
 import TruncatedText from 'component/common/truncated-text';
@@ -55,9 +55,9 @@ class FileTile extends React.PureComponent<Props> {
     return (
       <div className={classnames('card__file-properties', { card__subtitle: size === 'large' })}>
         <FilePrice hideFree uri={uri} />
-        {isSubscribed && <Icon icon={icons.HEART} />}
-        {isRewardContent && <Icon iconColor="red" icon={icons.FEATURED} />}
-        {isDownloaded && <Icon icon={icons.LOCAL} />}
+        {isSubscribed && <Icon icon={ICONS.HEART} />}
+        {isRewardContent && <Icon iconColor="red" icon={ICONS.FEATURED} />}
+        {isDownloaded && <Icon icon={ICONS.LOCAL} />}
       </div>
     );
   }

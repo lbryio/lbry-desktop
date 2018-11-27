@@ -1,9 +1,10 @@
 // @flow
 import type { Claim, Metadata } from 'types/claim';
 import type { FileInfo } from 'types/file_info';
+import * as MODALS from 'constants/modal_types';
+import * as ICONS from 'constants/icons';
 import * as React from 'react';
 import * as settings from 'constants/settings';
-import * as MODALS from 'constants/modal_types';
 import { buildURI, normalizeURI } from 'lbry-redux';
 import FileViewer from 'component/fileViewer';
 import Thumbnail from 'component/common/thumbnail';
@@ -13,7 +14,6 @@ import FileActions from 'component/fileActions';
 import UriIndicator from 'component/uriIndicator';
 import Icon from 'component/common/icon';
 import DateTime from 'component/dateTime';
-import * as icons from 'constants/icons';
 import Button from 'component/button';
 import SubscribeButton from 'component/subscribeButton';
 import Page from 'component/page';
@@ -183,9 +183,9 @@ class FilePage extends React.Component<Props> {
           <div className="card__content">
             <div className="card--space-between">
               <h1>{title}</h1>
-              <div className="card__title-identity-icons">
+              <div className="card__title-identity-ICONS">
                 {isRewardContent && (
-                  <Icon size={20} iconColor="red" tooltip="bottom" icon={icons.FEATURED} />
+                  <Icon size={20} iconColor="red" tooltip="bottom" icon={ICONS.FEATURED} />
                 )}
                 <FilePrice badge uri={normalizeURI(uri)} />
               </div>
@@ -200,7 +200,7 @@ class FilePage extends React.Component<Props> {
                 {claimIsMine ? (
                   <Button
                     button="primary"
-                    icon={icons.EDIT}
+                    icon={ICONS.EDIT}
                     label={__('Edit')}
                     onClick={() => {
                       prepareEdit(claim, editUri);
@@ -213,14 +213,14 @@ class FilePage extends React.Component<Props> {
                 {!claimIsMine && (
                   <Button
                     button="alt"
-                    icon={icons.GIFT}
+                    icon={ICONS.GIFT}
                     label={__('Send a tip')}
                     onClick={() => openModal(MODALS.SEND_TIP, { uri })}
                   />
                 )}
                 <Button
                   button="alt"
-                  icon={icons.GLOBE}
+                  icon={ICONS.GLOBE}
                   label={__('Share')}
                   onClick={() => openModal(MODALS.SOCIAL_SHARE, { uri, speechShareable })}
                 />
