@@ -167,28 +167,44 @@ export const doUpdateUnreadSubscriptions = (
 };
 
 // Remove multiple files (or all) from a channels unread subscriptions
-export const doRemoveUnreadSubscriptions = (channelUri: string, readUris: Array<string>) => (
+export const doRemoveUnreadSubscriptions = (channelUri: ?string, readUris: ?Array<string>) => (
   dispatch: ReduxDispatch,
   getState: GetState
 ) => {
   const state = getState();
   const unreadByChannel = selectUnreadByChannel(state);
+
+  // If no channel is passed in, remove all unread subscriptions from all channels
+  if (!channelUri) {
+    return dispatch({
+      type: ACTIONS.REMOVE_SUBSCRIPTION_UNREADS,
+      data: { channel: null },
+    });
+  }
+
   const currentChannelUnread = unreadByChannel[channelUri];
   if (!currentChannelUnread || !currentChannelUnread.uris) {
+    // Channel passed in doesn't have any unreads
     return;
   }
 
   // For each uri passed in, remove it from the list of unread uris
-  const urisToRemoveMap = readUris.reduce(
-    (acc, val) => ({
-      ...acc,
-      [val]: true,
-    }),
-    {}
-  );
+  // If no uris are passed in, remove them all
+  let newUris;
+  if (readUris) {
+    const urisToRemoveMap = readUris.reduce(
+      (acc, val) => ({
+        ...acc,
+        [val]: true,
+      }),
+      {}
+    );
 
-  const filteredUris = currentChannelUnread.uris.filter(uri => !urisToRemoveMap[uri]);
-  const newUris = filteredUris.length ? filteredUris : null;
+    const filteredUris = currentChannelUnread.uris.filter(uri => !urisToRemoveMap[uri]);
+    newUris = filteredUris.length ? filteredUris : null;
+  } else {
+    newUris = null;
+  }
 
   dispatch({
     type: ACTIONS.REMOVE_SUBSCRIPTION_UNREADS,

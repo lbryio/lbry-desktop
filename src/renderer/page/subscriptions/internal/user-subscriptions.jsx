@@ -11,6 +11,7 @@ import FileCard from 'component/fileCard';
 import { parseURI } from 'lbry-redux';
 import Native from 'native';
 import SuggestedSubscriptions from 'component/subscribeSuggested';
+import MarkAsRead from 'component/subscribeMarkAsRead';
 
 type Props = {
   viewMode: ViewMode,
@@ -90,7 +91,10 @@ export default (props: Props) => {
         <div className="card__content">
           {viewMode === VIEW_ALL && (
             <Fragment>
-              <div className="card__title">{__('Your subscriptions')}</div>
+              <div className="card__title card__actions card__actions--no-margin">
+                {__('Your subscriptions')}
+                {unreadSubscriptions.length > 0 && <MarkAsRead />}
+              </div>
               <FileList hideFilter sortByHeight fileInfos={subscriptions} />
             </Fragment>
           )}
@@ -102,13 +106,14 @@ export default (props: Props) => {
                   const { claimName } = parseURI(channel);
                   return (
                     <section key={channel}>
-                      <div className="card__title">
+                      <div className="card__title card__actions card__actions--no-margin">
                         <Button
                           button="link"
                           navigate="/show"
                           navigateParams={{ uri: channel }}
                           label={claimName}
                         />
+                        <MarkAsRead channel={channel} />
                       </div>
                       <div className="card__list card__content">
                         {uris.map(uri => <FileCard key={uri} uri={uri} />)}

@@ -66,10 +66,11 @@ export default handleActions(
       action: SetSubscriptionLatest
     ): SubscriptionState => ({
       ...state,
-      subscriptions: state.subscriptions.map(subscription =>
-        subscription.channelName === action.data.subscription.channelName
-          ? { ...subscription, latest: action.data.uri }
-          : subscription
+      subscriptions: state.subscriptions.map(
+        subscription =>
+          subscription.channelName === action.data.subscription.channelName
+            ? { ...subscription, latest: action.data.uri }
+            : subscription
       ),
     }),
     [ACTIONS.UPDATE_SUBSCRIPTION_UNREADS]: (
@@ -94,12 +95,19 @@ export default handleActions(
       action: DoRemoveSubscriptionUnreads
     ): SubscriptionState => {
       const { channel, uris } = action.data;
-      const newUnread = { ...state.unread };
 
-      if (!uris) {
-        delete newUnread[channel];
+      // If no channel is passed in, remove all unreads
+      let newUnread;
+      if (channel) {
+        newUnread = { ...state.unread };
+
+        if (!uris) {
+          delete newUnread[channel];
+        } else {
+          newUnread[channel].uris = uris;
+        }
       } else {
-        newUnread[channel].uris = uris;
+        newUnread = {};
       }
 
       return {
