@@ -125,7 +125,7 @@ export default (props: Props) => {
                 <Fragment>
                   <div className="page__empty">
                     <h3 className="card__title">{__('All caught up!')}</h3>
-                    <p className="card__subtitle">{__('You might like these channels.')}</p>
+                    <p className="card__subtitle">{__('You might like these channels below.')}</p>
                   </div>
                   <SuggestedSubscriptions />
                 </Fragment>
