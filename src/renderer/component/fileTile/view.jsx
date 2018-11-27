@@ -65,9 +65,9 @@ class FileTile extends React.PureComponent<Props> {
       <div className={classnames('card__file-properties', { card__subtitle: size === 'large' })}>
         <FilePrice hideFree uri={uri} />
         {isNew && <span className="badge badge--alert icon">{__('NEW')}</span>}
-        {isSubscribed && <Icon icon={icons.HEART} />}
-        {isRewardContent && <Icon iconColor="red" icon={icons.FEATURED} />}
-        {isDownloaded && <Icon icon={icons.LOCAL} />}
+        {isSubscribed && <Icon icon={ICONS.HEART} />}
+        {isRewardContent && <Icon iconColor="red" icon={ICONS.FEATURED} />}
+        {isDownloaded && <Icon icon={ICONS.LOCAL} />}
       </div>
     );
   }
