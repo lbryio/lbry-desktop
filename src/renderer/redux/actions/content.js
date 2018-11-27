@@ -14,7 +14,6 @@ import {
   Lbry,
   Lbryapi,
   buildURI,
-  doFetchClaimListMine,
   makeSelectCostInfoForUri,
   makeSelectFileInfoForUri,
   selectFileInfosByOutpoint,
@@ -331,28 +330,6 @@ export function doFetchClaimsByChannel(uri, page, pageSize) {
   };
 }
 
-export function doFetchClaimCountByChannel(uri) {
-  return dispatch => {
-    dispatch({
-      type: ACTIONS.FETCH_CHANNEL_CLAIM_COUNT_STARTED,
-      data: { uri },
-    });
-
-    Lbry.claim_list_by_channel({ uri }).then(result => {
-      const claimResult = result[uri];
-      const totalClaims = claimResult ? claimResult.claims_in_channel : 0;
-
-      dispatch({
-        type: ACTIONS.FETCH_CHANNEL_CLAIM_COUNT_COMPLETED,
-        data: {
-          uri,
-          totalClaims,
-        },
-      });
-    });
-  };
-}
-
 export function doPlayUri(uri) {
   return dispatch => {
     dispatch(doSetPlayingUri(uri));
@@ -403,24 +380,6 @@ export function doCreateChannel(name: string, amount: number) {
       );
     });
   };
-}
-
-export function doPublish(params) {
-  return dispatch =>
-    new Promise((resolve, reject) => {
-      const success = claim => {
-        resolve(claim);
-
-        if (claim === true) dispatch(doFetchClaimListMine());
-        else
-          setTimeout(() => dispatch(doFetchClaimListMine()), 20000, {
-            once: true,
-          });
-      };
-      const failure = err => reject(err);
-
-      Lbry.publishDeprecated(params, null, success, failure);
-    });
 }
 
 export function savePosition(claimId: string, outpoint: string, position: number) {

@@ -22,27 +22,21 @@ type Props = {
   claimsInChannel: Array<Claim>,
   channelIsMine: boolean,
   fetchClaims: (string, number) => void,
-  fetchClaimCount: string => void,
   navigate: (string, {}) => void,
   openModal: ({ id: string }, { uri: string }) => void,
 };
 
 class ChannelPage extends React.PureComponent<Props> {
   componentDidMount() {
-    const { uri, page, fetchClaims, fetchClaimCount } = this.props;
-
+    const { uri, page, fetchClaims } = this.props;
     fetchClaims(uri, page || 1);
-    fetchClaimCount(uri);
   }
 
   componentWillReceiveProps(nextProps: Props) {
-    const { page, uri, fetchClaims, fetchClaimCount } = this.props;
+    const { page, fetchClaims } = this.props;
 
     if (nextProps.page && page !== nextProps.page) {
       fetchClaims(nextProps.uri, nextProps.page);
-    }
-    if (nextProps.uri !== uri) {
-      fetchClaimCount(uri);
     }
   }
 
