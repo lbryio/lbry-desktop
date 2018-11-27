@@ -111,7 +111,7 @@ export default (props: Props) => {
                         />
                       </div>
                       <div className="card__list card__content">
-                        {uris.map(uri => <FileCard isNew key={uri} uri={uri} />)}
+                        {uris.map(uri => <FileCard key={uri} uri={uri} />)}
                       </div>
                     </section>
                   );

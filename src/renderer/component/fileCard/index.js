@@ -14,7 +14,7 @@ import {
   makeSelectContentPositionForUri,
 } from 'redux/selectors/content';
 import { selectShowNsfw } from 'redux/selectors/settings';
-import { makeSelectIsSubscribed } from 'redux/selectors/subscriptions';
+import { makeSelectIsSubscribed, makeSelectIsNew } from 'redux/selectors/subscriptions';
 import { doClearContentHistoryUri } from 'redux/actions/content';
 import FileCard from './view';
 
@@ -29,6 +29,7 @@ const select = (state, props) => ({
   isResolvingUri: makeSelectIsUriResolving(props.uri)(state),
   position: makeSelectContentPositionForUri(props.uri)(state),
   isSubscribed: makeSelectIsSubscribed(props.uri)(state),
+  isNew: makeSelectIsNew(props.uri)(state),
 });
 
 const perform = dispatch => ({

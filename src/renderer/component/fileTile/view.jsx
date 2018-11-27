@@ -30,6 +30,7 @@ type Props = {
   displayDescription?: boolean,
   size: string,
   isSubscribed: boolean,
+  isNew: boolean,
 };
 
 class FileTile extends React.PureComponent<Props> {
@@ -49,15 +50,24 @@ class FileTile extends React.PureComponent<Props> {
   }
 
   renderFileProperties() {
-    const { isSubscribed, isDownloaded, claim, uri, rewardedContentClaimIds, size } = this.props;
+    const {
+      isSubscribed,
+      isDownloaded,
+      claim,
+      uri,
+      rewardedContentClaimIds,
+      size,
+      isNew,
+    } = this.props;
     const isRewardContent = claim && rewardedContentClaimIds.includes(claim.claim_id);
 
     return (
       <div className={classnames('card__file-properties', { card__subtitle: size === 'large' })}>
         <FilePrice hideFree uri={uri} />
-        {isSubscribed && <Icon icon={ICONS.HEART} />}
-        {isRewardContent && <Icon iconColor="red" icon={ICONS.FEATURED} />}
-        {isDownloaded && <Icon icon={ICONS.LOCAL} />}
+        {isNew && <span className="badge badge--alert icon">{__('NEW')}</span>}
+        {isSubscribed && <Icon icon={icons.HEART} />}
+        {isRewardContent && <Icon iconColor="red" icon={icons.FEATURED} />}
+        {isDownloaded && <Icon icon={icons.LOCAL} />}
       </div>
     );
   }
