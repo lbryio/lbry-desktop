@@ -5,15 +5,21 @@ import SnackBar from 'component/snackBar';
 import SplashScreen from 'component/splash';
 import moment from 'moment';
 import * as ACTIONS from 'constants/action_types';
+import * as MODALS from 'constants/modal_types';
 import { ipcRenderer, remote, shell } from 'electron';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
-import { doConditionalAuthNavigate, doDaemonReady, doAutoUpdate } from 'redux/actions/app';
+import {
+  doConditionalAuthNavigate,
+  doDaemonReady,
+  doAutoUpdate,
+  doOpenModal,
+} from 'redux/actions/app';
 import { doToast, doBlackListedOutpointsSubscribe, isURIValid } from 'lbry-redux';
 import { doNavigate } from 'redux/actions/navigation';
 import { doDownloadLanguages, doUpdateIsNightAsync } from 'redux/actions/settings';
-import { doUserEmailVerify, doAuthenticate, Lbryio } from 'lbryinc';
+import { doUserEmailVerify, doAuthenticate, Lbryio, rewards } from 'lbryinc';
 import 'scss/all.scss';
 import store from 'store';
 import pjson from 'package.json';
@@ -59,6 +65,14 @@ Lbryio.setOverride(
       ipcRenderer.send('get-auth-token');
     })
 );
+
+rewards.setCallback('claimFirstRewardSuccess', () => {
+  app.store.dispatch(doOpenModal(MODALS.FIRST_REWARD));
+});
+
+rewards.setCallback('rewardApprovalRequired', () => {
+  app.store.dispatch(doOpenModal(MODALS.REWARD_APPROVAL_REQUIRED));
+});
 
 ipcRenderer.on('open-uri-requested', (event, uri, newSession) => {
   if (uri && uri.startsWith('lbry://')) {
