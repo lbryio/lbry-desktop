@@ -5,12 +5,12 @@ import {
   selectBalance,
   selectCurrentPage,
   selectError,
-  doToast
+  doToast,
 } from 'lbry-redux';
 import { makeSelectClientSetting } from 'redux/selectors/settings';
 import { selectUser, selectUserIsVerificationCandidate } from 'lbryinc';
 import { selectModal } from 'redux/selectors/app';
-
+import { doOpenModal } from 'redux/actions/app';
 import ModalRouter from './view';
 
 const select = state => ({
@@ -30,6 +30,7 @@ const select = state => ({
 
 const perform = dispatch => ({
   showToast: props => dispatch(doToast(props)),
+  openModal: props => dispatch(doOpenModal(props)),
 });
 
 export default connect(

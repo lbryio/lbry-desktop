@@ -364,9 +364,9 @@ export function doClickCommentButton() {
 export function doConditionalAuthNavigate(newSession) {
   return (dispatch, getState) => {
     const state = getState();
-    const notification = selectModal(state);
+    const modal = selectModal(state);
 
-    if (newSession || (notification && notification.id !== 'email_collection')) {
+    if (newSession || (modal && modal.id !== MODALS.EMAIL_COLLECTION)) {
       dispatch(doAuthNavigate());
     }
   };
