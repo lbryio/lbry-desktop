@@ -15,7 +15,7 @@ import * as NOTIFICATION_TYPES from 'constants/subscriptions';
 import { Lbryio, rewards, doClaimRewardType } from 'lbryinc';
 import { selectSubscriptions, selectUnreadByChannel } from 'redux/selectors/subscriptions';
 import { makeSelectClientSetting } from 'redux/selectors/settings';
-import { Lbry, buildURI, parseURI } from 'lbry-redux';
+import { Lbry, buildURI, parseURI, doResolveUris } from 'lbry-redux';
 import { doPurchaseUri, doFetchClaimsByChannel } from 'redux/actions/content';
 import Promise from 'bluebird';
 
@@ -101,6 +101,7 @@ export const doFetchMySubscriptions = () => (dispatch: ReduxDispatch, getState: 
         data: subscriptions,
       });
 
+      dispatch(doResolveUris(subscriptions.map(({ uri }) => uri)));
       subscriptions.forEach(({ uri }) => dispatch(doFetchClaimsByChannel(uri, 1)));
     })
     .catch(() => {
