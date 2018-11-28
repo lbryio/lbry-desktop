@@ -263,8 +263,7 @@ export const makeSelectIsNew = uri =>
       if (!isSubscribed) {
         return false;
       }
-      // console.log("uri", uri)
-      // console.log("channel", channel)
+
       const unreadForChannel = unreadByChannel[`lbry://${channel}`];
       if (unreadForChannel) {
         return unreadForChannel.uris.includes(uri);
