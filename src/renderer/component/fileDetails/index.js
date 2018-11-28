@@ -4,7 +4,7 @@ import {
   makeSelectContentTypeForUri,
   makeSelectMetadataForUri,
   makeSelectFileInfoForUri,
-  doNotify,
+  doToast,
 } from 'lbry-redux';
 import { selectUser } from 'lbryinc';
 import { doOpenFileInFolder } from 'redux/actions/file';
@@ -23,7 +23,7 @@ const select = (state, props) => ({
 
 const perform = dispatch => ({
   openFolder: path => dispatch(doOpenFileInFolder(path)),
-  showSnackBar: message => dispatch(doNotify({ message, displayType: ['snackbar'] })),
+  showSnackBar: message => dispatch(doToast({ message })),
   clickCommentButton: () => dispatch(doClickCommentButton()),
 });
 

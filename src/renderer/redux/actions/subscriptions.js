@@ -15,7 +15,7 @@ import * as NOTIFICATION_TYPES from 'constants/subscriptions';
 import { Lbryio, rewards, doClaimRewardType } from 'lbryinc';
 import { selectSubscriptions, selectUnreadByChannel } from 'redux/selectors/subscriptions';
 import { makeSelectClientSetting } from 'redux/selectors/settings';
-import { Lbry, buildURI, parseURI } from 'lbry-redux';
+import { Lbry, buildURI, parseURI, doResolveUris } from 'lbry-redux';
 import { doPurchaseUri, doFetchClaimsByChannel } from 'redux/actions/content';
 import Promise from 'bluebird';
 
@@ -101,6 +101,7 @@ export const doFetchMySubscriptions = () => (dispatch: ReduxDispatch, getState: 
         data: subscriptions,
       });
 
+      dispatch(doResolveUris(subscriptions.map(({ uri }) => uri)));
       subscriptions.forEach(({ uri }) => dispatch(doFetchClaimsByChannel(uri, 1)));
     })
     .catch(() => {
@@ -167,28 +168,44 @@ export const doUpdateUnreadSubscriptions = (
 };
 
 // Remove multiple files (or all) from a channels unread subscriptions
-export const doRemoveUnreadSubscriptions = (channelUri: string, readUris: Array<string>) => (
+export const doRemoveUnreadSubscriptions = (channelUri: ?string, readUris: ?Array<string>) => (
   dispatch: ReduxDispatch,
   getState: GetState
 ) => {
   const state = getState();
   const unreadByChannel = selectUnreadByChannel(state);
+
+  // If no channel is passed in, remove all unread subscriptions from all channels
+  if (!channelUri) {
+    return dispatch({
+      type: ACTIONS.REMOVE_SUBSCRIPTION_UNREADS,
+      data: { channel: null },
+    });
+  }
+
   const currentChannelUnread = unreadByChannel[channelUri];
   if (!currentChannelUnread || !currentChannelUnread.uris) {
+    // Channel passed in doesn't have any unreads
     return;
   }
 
   // For each uri passed in, remove it from the list of unread uris
-  const urisToRemoveMap = readUris.reduce(
-    (acc, val) => ({
-      ...acc,
-      [val]: true,
-    }),
-    {}
-  );
+  // If no uris are passed in, remove them all
+  let newUris;
+  if (readUris) {
+    const urisToRemoveMap = readUris.reduce(
+      (acc, val) => ({
+        ...acc,
+        [val]: true,
+      }),
+      {}
+    );
 
-  const filteredUris = currentChannelUnread.uris.filter(uri => !urisToRemoveMap[uri]);
-  const newUris = filteredUris.length ? filteredUris : null;
+    const filteredUris = currentChannelUnread.uris.filter(uri => !urisToRemoveMap[uri]);
+    newUris = filteredUris.length ? filteredUris : null;
+  } else {
+    newUris = null;
+  }
 
   dispatch({
     type: ACTIONS.REMOVE_SUBSCRIPTION_UNREADS,
@@ -394,3 +411,33 @@ export const doCheckSubscriptionsInit = () => (dispatch: ReduxDispatch) => {
     data: { checkSubscriptionsTimer },
   });
 };
+
+export const doFetchRecommendedSubscriptions = () => (dispatch: ReduxDispatch) => {
+  dispatch({
+    type: ACTIONS.GET_SUGGESTED_SUBSCRIPTIONS_START,
+  });
+
+  return Lbryio.call('subscription', 'suggest')
+    .then(suggested =>
+      dispatch({
+        type: ACTIONS.GET_SUGGESTED_SUBSCRIPTIONS_SUCCESS,
+        data: suggested,
+      })
+    )
+    .catch(error =>
+      dispatch({
+        type: ACTIONS.GET_SUGGESTED_SUBSCRIPTIONS_FAIL,
+        error,
+      })
+    );
+};
+
+export const doCompleteFirstRun = () => (dispatch: ReduxDispatch) =>
+  dispatch({
+    type: ACTIONS.SUBSCRIPTION_FIRST_RUN_COMPLETED,
+  });
+
+export const doShowSuggestedSubs = () => (dispatch: ReduxDispatch) =>
+  dispatch({
+    type: ACTIONS.VIEW_SUGGESTED_SUBSCRIPTIONS,
+  });

@@ -3,15 +3,8 @@ import isDev from 'electron-is-dev';
 import path from 'path';
 import { ipcRenderer, remote } from 'electron';
 import * as ACTIONS from 'constants/action_types';
-import {
-  Lbry,
-  doBalanceSubscribe,
-  doFetchFileInfosAndPublishedClaims,
-  doNotify,
-  selectNotification,
-  MODALS,
-  doHideNotification,
-} from 'lbry-redux';
+import * as MODALS from 'constants/modal_types';
+import { Lbry, doBalanceSubscribe, doFetchFileInfosAndPublishedClaims, doError } from 'lbry-redux';
 import Native from 'native';
 import { doFetchDaemonSettings } from 'redux/actions/settings';
 import { doAuthNavigate } from 'redux/actions/navigation';
@@ -25,8 +18,9 @@ import {
   selectAutoUpdateDeclined,
   selectRemoteVersion,
   selectUpgradeTimer,
+  selectModal,
 } from 'redux/selectors/app';
-import { doAuthenticate, doFetchRewardedContent } from 'lbryinc';
+import { doAuthenticate } from 'lbryinc';
 import { lbrySettings as config, version as appVersion } from 'package.json';
 
 const { autoUpdater } = remote.require('electron-updater');
@@ -34,6 +28,22 @@ const { download } = remote.require('electron-dl');
 const Fs = remote.require('fs');
 
 const CHECK_UPGRADE_INTERVAL = 10 * 60 * 1000;
+
+export function doOpenModal(id, modalProps = {}) {
+  return {
+    type: ACTIONS.SHOW_MODAL,
+    data: {
+      id,
+      modalProps,
+    },
+  };
+}
+
+export function doHideModal() {
+  return {
+    type: ACTIONS.HIDE_MODAL,
+  };
+}
 
 export function doUpdateDownloadProgress(percent) {
   return {
@@ -89,12 +99,8 @@ export function doDownloadUpgrade() {
     dispatch({
       type: ACTIONS.UPGRADE_DOWNLOAD_STARTED,
     });
-    dispatch(doHideNotification());
-    dispatch(
-      doNotify({
-        id: MODALS.DOWNLOADING,
-      })
-    );
+    dispatch(doHideModal());
+    dispatch(doOpenModal(MODALS.DOWNLOADING));
   };
 }
 
@@ -113,19 +119,11 @@ export function doDownloadUpgradeRequested() {
       // electron-updater behavior
       if (autoUpdateDeclined) {
         // The user declined an update before, so show the "confirm" dialog
-        dispatch(
-          doNotify({
-            id: MODALS.AUTO_UPDATE_CONFIRM,
-          })
-        );
+        dispatch(doOpenModal(MODALS.AUTO_UPDATE_CONFIRM));
       } else {
         // The user was never shown the original update dialog (e.g. because they were
         // watching a video). So show the inital "update downloaded" dialog.
-        dispatch(
-          doNotify({
-            id: MODALS.AUTO_UPDATE_DOWNLOADED,
-          })
-        );
+        dispatch(doOpenModal(MODALS.AUTO_UPDATE_DOWNLOADED));
       }
     } else {
       // Old behavior for Linux
@@ -153,11 +151,7 @@ export function doAutoUpdate() {
       type: ACTIONS.AUTO_UPDATE_DOWNLOADED,
     });
 
-    dispatch(
-      doNotify({
-        id: MODALS.AUTO_UPDATE_DOWNLOADED,
-      })
-    );
+    dispatch(doOpenModal(MODALS.AUTO_UPDATE_DOWNLOADED));
 
     dispatch(doClearUpgradeTimer());
   };
@@ -226,14 +220,10 @@ export function doCheckUpgradeAvailable() {
 
       if (
         upgradeAvailable &&
-        !selectNotification(state) &&
+        !selectModal(state) &&
         (!selectIsUpgradeSkipped(state) || remoteVersion !== selectRemoteVersion(state))
       ) {
-        dispatch(
-          doNotify({
-            id: MODALS.UPGRADE,
-          })
-        );
+        dispatch(doOpenModal(MODALS.UPGRADE));
       }
     };
 
@@ -278,53 +268,32 @@ export function doCheckDaemonVersion() {
         type: ACTIONS.DAEMON_VERSION_MISMATCH,
       });
 
-      return dispatch(
-        doNotify({
-          id: MODALS.INCOMPATIBLE_DAEMON,
-        })
-      );
+      return dispatch(doOpenModal(MODALS.INCOMPATIBLE_DAEMON));
     });
   };
 }
 
 export function doNotifyEncryptWallet() {
   return dispatch => {
-    dispatch(
-      doNotify({
-        id: MODALS.WALLET_ENCRYPT,
-      })
-    );
+    dispatch(doOpenModal(MODALS.WALLET_ENCRYPT));
   };
 }
 
 export function doNotifyDecryptWallet() {
   return dispatch => {
-    dispatch(
-      doNotify({
-        id: MODALS.WALLET_DECRYPT,
-      })
-    );
+    dispatch(doOpenModal(MODALS.WALLET_DECRYPT));
   };
 }
 
 export function doNotifyUnlockWallet() {
   return dispatch => {
-    dispatch(
-      doNotify({
-        id: MODALS.WALLET_UNLOCK,
-      })
-    );
+    dispatch(doOpenModal(MODALS.WALLET_UNLOCK));
   };
 }
 
 export function doAlertError(errorList) {
   return dispatch => {
-    dispatch(
-      doNotify({
-        id: MODALS.ERROR,
-        error: errorList,
-      })
-    );
+    dispatch(doError(errorList));
   };
 }
 
@@ -337,7 +306,6 @@ export function doDaemonReady() {
     dispatch(doFetchDaemonSettings());
     dispatch(doBalanceSubscribe());
     dispatch(doFetchFileInfosAndPublishedClaims());
-    dispatch(doFetchRewardedContent());
     if (!selectIsUpgradeSkipped(state)) {
       dispatch(doCheckUpgradeAvailable());
     }
@@ -396,9 +364,9 @@ export function doClickCommentButton() {
 export function doConditionalAuthNavigate(newSession) {
   return (dispatch, getState) => {
     const state = getState();
-    const notification = selectNotification(state);
+    const modal = selectModal(state);
 
-    if (newSession || (notification && notification.id !== 'email_collection')) {
+    if (newSession || (modal && modal.id !== MODALS.EMAIL_COLLECTION)) {
       dispatch(doAuthNavigate());
     }
   };

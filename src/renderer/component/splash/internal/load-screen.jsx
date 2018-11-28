@@ -1,7 +1,7 @@
 // @flow
+import * as ICONS from 'constants/icons';
 import React, { Fragment } from 'react';
 import Icon from 'component/common/icon';
-import * as icons from 'constants/icons';
 import Spinner from 'component/spinner';
 import Button from 'component/button';
 
@@ -52,7 +52,7 @@ class LoadScreen extends React.PureComponent<Props> {
           <Fragment>
             {isWarning ? (
               <span className="load-screen__message">
-                <Icon size={20} icon={icons.ALERT} />
+                <Icon size={20} icon={ICONS.ALERT} />
                 {` ${message}`}
               </span>
             ) : (

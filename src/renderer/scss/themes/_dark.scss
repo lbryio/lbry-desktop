@@ -1,4 +1,11 @@
 html[data-theme='dark'] {
+  //
+  // HTML Elements
+  //
+  blockquote {
+    background-color: rgba($lbry-black, 0.9);
+  }
+
   .header {
     background-color: rgba($lbry-black, 0.9);
   }
@@ -202,5 +209,12 @@ html[data-theme='dark'] {
 
   .expandable--closed::after {
     background-image: linear-gradient(to bottom, transparent 0%, $lbry-black 90%);
+  }
+
+  //
+  // File Viewer
+  //
+  .document-viewer {
+    background-color: transparent;
   }
 }

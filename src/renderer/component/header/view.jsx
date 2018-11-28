@@ -1,8 +1,8 @@
 // @flow
+import * as ICONS from 'constants/icons';
 import * as React from 'react';
 import Button from 'component/button';
 import WunderBar from 'component/wunderbar';
-import * as icons from 'constants/icons';
 
 type Props = {
   autoUpdateDownloaded: boolean,
@@ -40,7 +40,7 @@ const Header = (props: Props) => {
         <Button
           noPadding
           button="alt"
-          icon={icons.HOME}
+          icon={ICONS.HOME}
           className="btn--home-nav"
           description={__('Home')}
           onClick={() => navigate('/discover')}
@@ -48,14 +48,14 @@ const Header = (props: Props) => {
         <div className="header__history">
           <Button
             className="btn--arrow"
-            icon={icons.ARROW_LEFT}
+            icon={ICONS.ARROW_LEFT}
             description={__('Navigate back')}
             onClick={back}
             disabled={isBackDisabled}
           />
           <Button
             className="btn--arrow"
-            icon={icons.ARROW_RIGHT}
+            icon={ICONS.ARROW_RIGHT}
             description={__('Navigate forward')}
             onClick={forward}
             disabled={isForwardDisabled}
@@ -89,7 +89,7 @@ const Header = (props: Props) => {
           button="primary"
           className="btn--header-publish"
           onClick={() => navigate('/publish')}
-          icon={icons.UPLOAD}
+          icon={ICONS.UPLOAD}
           label={isUpgradeAvailable ? '' : __('Publish')}
           description={__('Publish content')}
         />
@@ -98,7 +98,7 @@ const Header = (props: Props) => {
           <Button
             button="primary"
             onClick={downloadUpgradeRequested}
-            icon={icons.DOWNLOAD}
+            icon={ICONS.DOWNLOAD}
             label={__('Upgrade App')}
           />
         )}

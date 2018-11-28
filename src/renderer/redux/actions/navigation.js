@@ -1,5 +1,5 @@
 import { ACTIONS, selectHistoryIndex, selectHistoryStack } from 'lbry-redux';
-import { toQueryString } from 'util/query_params';
+import { toQueryString } from 'util/query-params';
 import analytics from 'analytics';
 
 export function doNavigate(path, params = {}, options = {}) {

@@ -32,6 +32,14 @@
     }
   }
 
+  &.btn--no-padding {
+    .btn__content {
+      padding: 0;
+      display: flex;
+      align-items: center;
+    }
+  }
+
   &.btn--alt {
     &:not(:disabled) {
       background-color: $lbry-white;

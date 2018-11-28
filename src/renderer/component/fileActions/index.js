@@ -3,8 +3,8 @@ import {
   makeSelectCostInfoForUri,
   makeSelectFileInfoForUri,
   makeSelectClaimIsMine,
-  doNotify,
 } from 'lbry-redux';
+import { doOpenModal } from 'redux/actions/app';
 import FileActions from './view';
 
 const select = (state, props) => ({
@@ -15,7 +15,7 @@ const select = (state, props) => ({
 });
 
 const perform = dispatch => ({
-  openModal: (modal, props) => dispatch(doNotify(modal, props)),
+  openModal: (modal, props) => dispatch(doOpenModal(modal, props)),
 });
 
 export default connect(

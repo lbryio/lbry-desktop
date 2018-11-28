@@ -1,7 +1,7 @@
 // @flow
 import React from 'react';
 import classnames from 'classnames';
-import { formatCredits, formatFullPrice } from 'util/formatCredits';
+import { formatCredits, formatFullPrice } from 'util/format-credits';
 
 type Props = {
   amount: number,

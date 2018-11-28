@@ -1,7 +1,7 @@
 import React from 'react';
 import Button from 'component/button';
 import { FormRow, FormField } from 'component/common/form';
-import { Lbry, doNotify } from 'lbry-redux';
+import { Lbry, doToast } from 'lbry-redux';
 import Page from 'component/page';
 
 class ReportPage extends React.Component {
@@ -32,10 +32,8 @@ class ReportPage extends React.Component {
         });
 
         // Display global notice
-        const action = doNotify({
-          displayType: ['snackbar'],
+        const action = doToast({
           message: __('Message received! Thanks for helping.'),
-          isError: false,
         });
         window.app.store.dispatch(action);
       });
@@ -90,7 +88,8 @@ class ReportPage extends React.Component {
                 button="link"
                 href="https://github.com/lbryio/lbry-desktop/issues"
                 label={__('submit an issue on GitHub')}
-              />.
+              />
+              .
             </p>
             <p>
               {__('Explore our')}{' '}

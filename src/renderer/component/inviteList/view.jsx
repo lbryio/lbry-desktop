@@ -1,9 +1,9 @@
 // @flow
+import * as ICONS from 'constants/icons';
 import React from 'react';
 import Icon from 'component/common/icon';
 import RewardLink from 'component/rewardLink';
 import { rewards } from 'lbryinc';
-import * as icons from 'constants/icons';
 
 type Props = {
   invitees: ?Array<{
@@ -46,14 +46,14 @@ class InviteList extends React.PureComponent<Props> {
                     <td>{invitee.email}</td>
                     <td className="text-center">
                       {invitee.invite_accepted ? (
-                        <Icon icon={icons.CHECK} />
+                        <Icon icon={ICONS.CHECK} />
                       ) : (
                         <span className="empty">{__('unused')}</span>
                       )}
                     </td>
                     <td className="text-center">
                       {invitee.invite_reward_claimed ? (
-                        <Icon icon={icons.CHECK} />
+                        <Icon icon={ICONS.CHECK} />
                       ) : invitee.invite_reward_claimable ? (
                         <RewardLink label={__('claim')} reward_type={rewards.TYPE_REFERRAL} />
                       ) : (

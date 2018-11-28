@@ -23,9 +23,8 @@ import UserHistoryPage from 'page/userHistory';
 const route = (props, page, routesMap) => {
   const component = routesMap[page];
   if (!component) {
-    props.doNotify({
+    props.doToast({
       message: __('Invalid page requested'),
-      displayType: ['snackbar'],
     });
   }
   return component || routesMap.discover;

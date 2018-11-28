@@ -1,6 +1,6 @@
 // @flow
 import * as React from 'react';
-import { stopContextMenu } from 'util/contextMenu';
+import { stopContextMenu } from 'util/context-menu';
 
 type Props = {
   source: string,

@@ -1,8 +1,9 @@
 // @flow
 import * as NOTIFICATION_TYPES from 'constants/subscriptions';
 import { PAGE_SIZE } from 'constants/claim';
+import * as MODALS from 'constants/modal_types';
 import { ipcRenderer } from 'electron';
-import { doAlertError } from 'redux/actions/app';
+import { doOpenModal } from 'redux/actions/app';
 import { doNavigate } from 'redux/actions/navigation';
 import { setSubscriptionLatest, doUpdateUnreadSubscriptions } from 'redux/actions/subscriptions';
 import { makeSelectUnreadByChannel } from 'redux/selectors/subscriptions';
@@ -13,22 +14,20 @@ import {
   Lbry,
   Lbryapi,
   buildURI,
-  doFetchClaimListMine,
   makeSelectCostInfoForUri,
   makeSelectFileInfoForUri,
   selectFileInfosByOutpoint,
   selectDownloadingByOutpoint,
   selectTotalDownloadProgress,
   selectBalance,
-  MODALS,
-  doNotify,
   makeSelectChannelForClaimUri,
   parseURI,
   creditsToString,
+  doError,
 } from 'lbry-redux';
 import { makeSelectClientSetting, selectosNotificationsEnabled } from 'redux/selectors/settings';
-import setBadge from 'util/setBadge';
-import setProgressBar from 'util/setProgressBar';
+import setBadge from 'util/set-badge';
+import setProgressBar from 'util/set-progress-bar';
 import analytics from 'analytics';
 
 const DOWNLOAD_POLL_INTERVAL = 250;
@@ -182,10 +181,10 @@ function handleLoadVideoError(uri, errorType = '') {
       });
       dispatch(doSetPlayingUri(null));
       if (errorType === 'timeout') {
-        doNotify({ id: MODALS.FILE_TIMEOUT }, { uri });
+        doOpenModal(MODALS.FILE_TIMEOUT, { uri });
       } else {
         dispatch(
-          doAlertError(
+          doError(
             `Failed to download ${uri}, please try again. If this problem persists, visit https://lbry.io/faq/support for support.`
           )
         );
@@ -238,7 +237,7 @@ export function doPurchaseUri(uri, specificCostInfo, shouldRecordViewEvent) {
 
     function attemptPlay(cost, instantPurchaseMax = null) {
       if (cost > 0 && (!instantPurchaseMax || cost > instantPurchaseMax)) {
-        dispatch(doNotify({ id: MODALS.AFFIRM_PURCHASE }, { uri }));
+        dispatch(doOpenModal(MODALS.AFFIRM_PURCHASE, { uri }));
       } else {
         dispatch(doLoadVideo(uri, shouldRecordViewEvent));
       }
@@ -266,7 +265,7 @@ export function doPurchaseUri(uri, specificCostInfo, shouldRecordViewEvent) {
 
     if (cost > balance) {
       dispatch(doSetPlayingUri(null));
-      dispatch(doNotify({ id: MODALS.INSUFFICIENT_CREDITS }));
+      dispatch(doOpenModal(MODALS.INSUFFICIENT_CREDITS));
       Promise.resolve();
       return;
     }
@@ -331,28 +330,6 @@ export function doFetchClaimsByChannel(uri, page, pageSize) {
   };
 }
 
-export function doFetchClaimCountByChannel(uri) {
-  return dispatch => {
-    dispatch({
-      type: ACTIONS.FETCH_CHANNEL_CLAIM_COUNT_STARTED,
-      data: { uri },
-    });
-
-    Lbry.claim_list_by_channel({ uri }).then(result => {
-      const claimResult = result[uri];
-      const totalClaims = claimResult ? claimResult.claims_in_channel : 0;
-
-      dispatch({
-        type: ACTIONS.FETCH_CHANNEL_CLAIM_COUNT_COMPLETED,
-        data: {
-          uri,
-          totalClaims,
-        },
-      });
-    });
-  };
-}
-
 export function doPlayUri(uri) {
   return dispatch => {
     dispatch(doSetPlayingUri(uri));
@@ -403,24 +380,6 @@ export function doCreateChannel(name: string, amount: number) {
       );
     });
   };
-}
-
-export function doPublish(params) {
-  return dispatch =>
-    new Promise((resolve, reject) => {
-      const success = claim => {
-        resolve(claim);
-
-        if (claim === true) dispatch(doFetchClaimListMine());
-        else
-          setTimeout(() => dispatch(doFetchClaimListMine()), 20000, {
-            once: true,
-          });
-      };
-      const failure = err => reject(err);
-
-      Lbry.publishDeprecated(params, null, success, failure);
-    });
 }
 
 export function savePosition(claimId: string, outpoint: string, position: number) {

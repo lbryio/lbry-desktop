@@ -101,7 +101,6 @@ const compressor = createCompressor();
 // We were caching so much data the app was locking up
 // We can't add this back until we can perform this in a non-blocking way
 // const saveClaimsFilter = createFilter('claims', ['byId', 'claimsByUri']);
-const subscriptionsFilter = createFilter('subscriptions', ['subscriptions', 'unread', 'viewMode']);
 const contentFilter = createFilter('content', ['positions', 'history']);
 const fileInfoFilter = createFilter('fileInfo', [
   'fileListPublishedSort',
@@ -116,14 +115,7 @@ const persistOptions = {
   whitelist: ['subscriptions', 'publish', 'wallet', 'content', 'fileInfo', 'app'],
   // Order is important. Needs to be compressed last or other transforms can't
   // read the data
-  transforms: [
-    subscriptionsFilter,
-    walletFilter,
-    contentFilter,
-    fileInfoFilter,
-    appFilter,
-    compressor,
-  ],
+  transforms: [walletFilter, contentFilter, fileInfoFilter, appFilter, compressor],
   debounce: 10000,
   storage: localForage,
 };
