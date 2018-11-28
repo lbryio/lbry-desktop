@@ -253,3 +253,23 @@ export const makeSelectIsSubscribed = uri =>
       return false;
     }
   );
+
+export const makeSelectIsNew = uri =>
+  createSelector(
+    makeSelectIsSubscribed(uri),
+    makeSelectChannelForClaimUri(uri),
+    selectUnreadByChannel,
+    (isSubscribed, channel, unreadByChannel) => {
+      if (!isSubscribed) {
+        return false;
+      }
+
+      const unreadForChannel = unreadByChannel[`lbry://${channel}`];
+      if (unreadForChannel) {
+        return unreadForChannel.uris.includes(uri);
+      }
+
+      return false;
+      // If they are subscribed, check to see if this uri is in the list of unreads
+    }
+  );

@@ -3,8 +3,8 @@ import {
   makeSelectCostInfoForUri,
   makeSelectFileInfoForUri,
   makeSelectClaimIsMine,
-  doOpenModal,
 } from 'lbry-redux';
+import { doOpenModal } from 'redux/actions/app';
 import FileActions from './view';
 
 const select = (state, props) => ({

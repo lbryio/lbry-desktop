@@ -23,7 +23,7 @@ const select = (state, props) => ({
 
 const perform = dispatch => ({
   openFolder: path => dispatch(doOpenFileInFolder(path)),
-  showSnackBar: message => dispatch(doToast(message)),
+  showSnackBar: message => dispatch(doToast({ message })),
   clickCommentButton: () => dispatch(doClickCommentButton()),
 });
 
