@@ -98,10 +98,7 @@ class ChannelPage extends React.PureComponent<Props> {
             icon={ICONS.GLOBE}
             label={__('Share Channel')}
             onClick={() =>
-              openModal(
-                { id: MODALS.SOCIAL_SHARE },
-                { uri, speechShareable: true, isChannel: true }
-              )
+              openModal(MODALS.SOCIAL_SHARE, { uri, speechShareable: true, isChannel: true })
             }
           />
         </div>
