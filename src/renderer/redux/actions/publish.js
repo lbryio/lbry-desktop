@@ -16,7 +16,7 @@ import {
   creditsToString,
   selectPendingById,
   selectMyClaimsWithoutChannels,
-  doError
+  doError,
 } from 'lbry-redux';
 import { doOpenModal } from 'redux/actions/app';
 import { selectosNotificationsEnabled } from 'redux/selectors/settings';
@@ -99,7 +99,7 @@ export const doUploadThumbnail = (filePath: string, nsfw: boolean) => (
           type: ACTIONS.UPDATE_PUBLISH_FORM,
           data: { uploadThumbnailStatus: THUMBNAIL_STATUSES.API_DOWN },
         },
-        dispatch(doOpenModal({ id: MODALS.ERROR, error }))
+        dispatch(doOpenModal(MODALS.ERROR, { error }))
       )
     );
 
@@ -298,7 +298,7 @@ export const doPublish = (params: PublishParams) => (
 
   const failure = error => {
     dispatch({ type: ACTIONS.PUBLISH_FAIL });
-    dispatch(doError(error.message))
+    dispatch(doError(error.message));
   };
 
   return Lbry.publish(publishPayload).then(success, failure);
