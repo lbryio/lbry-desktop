@@ -34,6 +34,7 @@ autoUpdater.logger = remote.require('electron-log');
 
 // We need to override Lbryio for getting/setting the authToken
 // We interect with ipcRenderer to get the auth key from a users keyring
+let authToken;
 Lbryio.setOverride('setAuthToken', status => {
   Lbryio.call(
     'user',
@@ -49,7 +50,9 @@ Lbryio.setOverride('setAuthToken', status => {
       throw new Error(__('auth_token is missing from response'));
     }
 
-    ipcRenderer.send('set-auth-token', response.auth_token);
+    const newAuthToken = response.auth_token;
+    authToken = newAuthToken;
+    ipcRenderer.send('set-auth-token', authToken);
   });
 });
 
@@ -57,12 +60,16 @@ Lbryio.setOverride(
   'getAuthToken',
   () =>
     new Promise(resolve => {
-      ipcRenderer.once('auth-token-response', (event, token) => {
-        Lbryio.authToken = token;
-        resolve(token);
-      });
+      if (authToken) {
+        resolve(authToken);
+      } else {
+        ipcRenderer.once('auth-token-response', (event, token) => {
+          Lbryio.authToken = token;
+          resolve(token);
+        });
 
-      ipcRenderer.send('get-auth-token');
+        ipcRenderer.send('get-auth-token');
+      }
     })
 );
 
