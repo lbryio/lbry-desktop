@@ -102,7 +102,7 @@ export const doFetchMySubscriptions = () => (dispatch: ReduxDispatch, getState: 
       });
 
       dispatch(doResolveUris(subscriptions.map(({ uri }) => uri)));
-      subscriptions.forEach(({ uri }) => dispatch(doFetchClaimsByChannel(uri, 1)));
+      dispatch(doCheckSubscriptions());
     })
     .catch(() => {
       dispatch({
@@ -401,7 +401,6 @@ export const doCheckSubscriptionsInit = () => (dispatch: ReduxDispatch) => {
   // setTimeout below is a hack to ensure redux is hydrated when subscriptions are checked
   // this will be replaced with <PersistGate> which reqiures a package upgrade
   setTimeout(() => dispatch(doFetchMySubscriptions()), 5000);
-  setTimeout(() => dispatch(doCheckSubscriptions()), 10000);
   const checkSubscriptionsTimer = setInterval(
     () => dispatch(doCheckSubscriptions()),
     CHECK_SUBSCRIPTIONS_INTERVAL
