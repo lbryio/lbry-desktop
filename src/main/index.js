@@ -64,7 +64,7 @@ if (isDev) {
 }
 
 app.on('ready', async () => {
-  const processListArgs = process.platform === 'win32' ? 'lbrynet' : 'lbrynet start';
+  const processListArgs = process.platform === 'win32' ? 'lbrynet.exe' : 'lbrynet start';
   const processList = await findProcess('name', processListArgs);
 
   const isDaemonRunning = processList.length > 0;
