@@ -34,35 +34,49 @@ autoUpdater.logger = remote.require('electron-log');
 
 // We need to override Lbryio for getting/setting the authToken
 // We interect with ipcRenderer to get the auth key from a users keyring
-Lbryio.setOverride('setAuthToken', status => {
-  Lbryio.call(
-    'user',
-    'new',
-    {
-      auth_token: '',
-      language: 'en',
-      app_id: status.installation_id,
-    },
-    'post'
-  ).then(response => {
-    if (!response.auth_token) {
-      throw new Error(__('auth_token is missing from response'));
-    }
+// We keep a local variable for authToken beacuse `ipcRenderer.send` does not
+// contain a response, so there is no way to know when it's been set
+let authToken;
+Lbryio.setOverride(
+  'setAuthToken',
+  status =>
+    new Promise(resolve => {
+      Lbryio.call(
+        'user',
+        'new',
+        {
+          auth_token: '',
+          language: 'en',
+          app_id: status.installation_id,
+        },
+        'post'
+      ).then(response => {
+        if (!response.auth_token) {
+          throw new Error(__('auth_token is missing from response'));
+        }
 
-    ipcRenderer.send('set-auth-token', response.auth_token);
-  });
-});
+        const newAuthToken = response.auth_token;
+        authToken = newAuthToken;
+        ipcRenderer.send('set-auth-token', authToken);
+        resolve();
+      });
+    })
+);
 
 Lbryio.setOverride(
   'getAuthToken',
   () =>
     new Promise(resolve => {
-      ipcRenderer.once('auth-token-response', (event, token) => {
-        Lbryio.authToken = token;
-        resolve(token);
-      });
+      if (authToken) {
+        resolve(authToken);
+      } else {
+        ipcRenderer.once('auth-token-response', (event, token) => {
+          Lbryio.authToken = token;
+          resolve(token);
+        });
 
-      ipcRenderer.send('get-auth-token');
+        ipcRenderer.send('get-auth-token');
+      }
     })
 );
 
