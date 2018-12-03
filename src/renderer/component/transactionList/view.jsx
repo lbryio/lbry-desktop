@@ -82,7 +82,7 @@ class TransactionList extends React.PureComponent<Props> {
           <p className="card__content">{emptyMessage || __('No transactions to list.')}</p>
         )}
         {!slim &&
-          !!transactionList.length && (
+          !!transactions.length && (
             <div className="card__actions card__actions--between">
               <FileExporter
                 data={transactionList}
