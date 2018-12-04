@@ -114,6 +114,11 @@ export class SplashScreen extends React.PureComponent<Props, State> {
 
     // If the wallet is locked, stop doing anything and make the user input their password
     if (wallet && wallet.is_locked) {
+      // Clear the error timeout, it might sit on this step for a while until someone enters their password
+      if (this.timeout) {
+        clearTimeout(this.timeout);
+      }
+
       this.setState({
         isRunning: true,
       });
@@ -122,6 +127,10 @@ export class SplashScreen extends React.PureComponent<Props, State> {
         this.setState({ launchedModal: true }, () => notifyUnlockWallet());
       }
     } else if (status.is_running) {
+      // If we cleared the error timout due to a wallet being locked, make sure to start it back up
+      if (!this.timeout) {
+        this.adjustErrorTimeout();
+      }
       // Wait until we are able to resolve a name before declaring
       // that we are done.
       // TODO: This is a hack, and the logic should live in the daemon
