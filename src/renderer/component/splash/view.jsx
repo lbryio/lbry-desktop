@@ -52,7 +52,12 @@ export class SplashScreen extends React.PureComponent<Props, State> {
 
     this.adjustErrorTimeout();
     Lbry.connect()
-      .then(checkDaemonVersion)
+      .then(() => {
+        this.setState({
+          isRunning: true,
+        });
+        checkDaemonVersion();
+      })
       .then(() => {
         this.updateStatus();
       })
@@ -89,9 +94,12 @@ export class SplashScreen extends React.PureComponent<Props, State> {
   }
 
   updateStatus() {
-    Lbry.status().then(status => {
-      this.updateStatusCallback(status);
-    });
+    const { daemonVersionMatched } = this.props;
+    if (daemonVersionMatched) {
+      Lbry.status().then(status => {
+        this.updateStatusCallback(status);
+      });
+    }
   }
 
   updateStatusCallback(status: Status) {
@@ -118,10 +126,6 @@ export class SplashScreen extends React.PureComponent<Props, State> {
       if (this.timeout) {
         clearTimeout(this.timeout);
       }
-
-      this.setState({
-        isRunning: true,
-      });
 
       if (launchedModal === false) {
         this.setState({ launchedModal: true }, () => notifyUnlockWallet());
