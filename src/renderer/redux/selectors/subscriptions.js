@@ -24,7 +24,10 @@ export const selectViewMode = createSelector(selectState, state => state.viewMod
 
 // Suggested subscriptions from internal apis
 export const selectSuggested = createSelector(selectState, state => state.suggested);
-export const selectLoadingSuggested = createSelector(selectState, state => state.loadingSuggested);
+export const selectIsFetchingSuggested = createSelector(
+  selectState,
+  state => state.loadingSuggested
+);
 export const selectSuggestedChannels = createSelector(
   selectSubscriptions,
   selectSuggested,

@@ -1,14 +1,24 @@
 // @flow
 import React, { PureComponent } from 'react';
 import CategoryList from 'component/categoryList';
+import Spinner from 'component/spinner';
 
 type Props = {
   suggested: Array<{ label: string, uri: string }>,
+  loading: boolean,
 };
 
 class SuggestedSubscriptions extends PureComponent<Props> {
   render() {
-    const { suggested } = this.props;
+    const { suggested, loading } = this.props;
+
+    if (loading) {
+      return (
+        <div className="page__empty">
+          <Spinner delayed />
+        </div>
+      );
+    }
 
     return suggested ? (
       <div className="card__content subscriptions__suggested">
