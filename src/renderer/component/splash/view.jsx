@@ -25,7 +25,6 @@ type Props = {
 type State = {
   details: string,
   message: string,
-  isRunning: boolean,
   launchedModal: boolean,
   error: boolean,
 };
@@ -37,7 +36,6 @@ export class SplashScreen extends React.PureComponent<Props, State> {
     this.state = {
       details: __('Starting up'),
       message: __('Connecting'),
-      isRunning: false,
       launchedModal: false,
       error: false,
     };
@@ -52,12 +50,7 @@ export class SplashScreen extends React.PureComponent<Props, State> {
 
     this.adjustErrorTimeout();
     Lbry.connect()
-      .then(() => {
-        this.setState({
-          isRunning: true,
-        });
-        checkDaemonVersion();
-      })
+      .then(checkDaemonVersion)
       .then(() => {
         this.updateStatus();
       })
@@ -94,16 +87,13 @@ export class SplashScreen extends React.PureComponent<Props, State> {
   }
 
   updateStatus() {
-    const { daemonVersionMatched } = this.props;
-    if (daemonVersionMatched) {
-      Lbry.status().then(status => {
-        this.updateStatusCallback(status);
-      });
-    }
+    Lbry.status().then(status => {
+      this.updateStatusCallback(status);
+    });
   }
 
   updateStatusCallback(status: Status) {
-    const { notifyUnlockWallet, authenticate } = this.props;
+    const { notifyUnlockWallet, authenticate, modal } = this.props;
     const { launchedModal } = this.state;
 
     if (status.error) {
@@ -127,7 +117,8 @@ export class SplashScreen extends React.PureComponent<Props, State> {
         clearTimeout(this.timeout);
       }
 
-      if (launchedModal === false) {
+      // Make sure there isn't another active modal (like INCOMPATIBLE_DAEMON)
+      if (launchedModal === false && !modal) {
         this.setState({ launchedModal: true }, () => notifyUnlockWallet());
       }
     } else if (status.is_running) {
@@ -135,13 +126,6 @@ export class SplashScreen extends React.PureComponent<Props, State> {
       if (!this.timeout) {
         this.adjustErrorTimeout();
       }
-      // Wait until we are able to resolve a name before declaring
-      // that we are done.
-      // TODO: This is a hack, and the logic should live in the daemon
-      // to give us a better sense of when we are actually started
-      this.setState({
-        isRunning: true,
-      });
 
       Lbry.resolve({ uri: 'lbry://one' }).then(() => {
         // Only leave the load screen if the daemon version matched;
@@ -207,7 +191,7 @@ export class SplashScreen extends React.PureComponent<Props, State> {
   }
 
   render() {
-    const { message, details, isRunning, error } = this.state;
+    const { message, details, error } = this.state;
 
     return (
       <React.Fragment>
@@ -215,7 +199,7 @@ export class SplashScreen extends React.PureComponent<Props, State> {
         {/* Temp hack: don't show any modals on splash screen daemon is running;
             daemon doesn't let you quit during startup, so the "Quit" buttons
             in the modals won't work. */}
-        {isRunning && this.renderModals()}
+        {this.renderModals()}
       </React.Fragment>
     );
   }
