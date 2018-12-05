@@ -52,7 +52,12 @@ export class SplashScreen extends React.PureComponent<Props, State> {
 
     this.adjustErrorTimeout();
     Lbry.connect()
-      .then(checkDaemonVersion)
+      .then(() => {
+        this.setState({
+          isRunning: true,
+        });
+        checkDaemonVersion();
+      })
       .then(() => {
         this.updateStatus();
       })
@@ -89,9 +94,12 @@ export class SplashScreen extends React.PureComponent<Props, State> {
   }
 
   updateStatus() {
-    Lbry.status().then(status => {
-      this.updateStatusCallback(status);
-    });
+    const { daemonVersionMatched } = this.props;
+    if (daemonVersionMatched) {
+      Lbry.status().then(status => {
+        this.updateStatusCallback(status);
+      });
+    }
   }
 
   updateStatusCallback(status: Status) {
@@ -114,14 +122,19 @@ export class SplashScreen extends React.PureComponent<Props, State> {
 
     // If the wallet is locked, stop doing anything and make the user input their password
     if (wallet && wallet.is_locked) {
-      this.setState({
-        isRunning: true,
-      });
+      // Clear the error timeout, it might sit on this step for a while until someone enters their password
+      if (this.timeout) {
+        clearTimeout(this.timeout);
+      }
 
       if (launchedModal === false) {
         this.setState({ launchedModal: true }, () => notifyUnlockWallet());
       }
     } else if (status.is_running) {
+      // If we cleared the error timout due to a wallet being locked, make sure to start it back up
+      if (!this.timeout) {
+        this.adjustErrorTimeout();
+      }
       // Wait until we are able to resolve a name before declaring
       // that we are done.
       // TODO: This is a hack, and the logic should live in the daemon
