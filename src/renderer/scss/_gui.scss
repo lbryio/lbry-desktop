@@ -28,6 +28,12 @@ button {
   font-weight: inherit;
 }
 
+h1 {
+  // Paul - Remove this in your changes
+  // This should be added to the media-title (or whatever that is called)
+  word-break: break-word;
+}
+
 ul {
   list-style-type: none;
   padding: 0;
