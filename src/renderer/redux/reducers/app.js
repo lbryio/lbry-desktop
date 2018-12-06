@@ -1,7 +1,7 @@
 // @flow
 
 import * as ACTIONS from 'constants/action_types';
-
+import * as MODALS from 'constants/modal_types';
 import { remote } from 'electron';
 
 const win = remote.BrowserWindow.getFocusedWindow();
@@ -33,7 +33,7 @@ export type AppState = {
   checkUpgradeTimer: ?number,
   isUpgradeAvailable: ?boolean,
   isUpgradeSkipped: ?boolean,
-  snackBar: ?SnackBar,
+  hasClickedComment: boolean,
 };
 
 const defaultState: AppState = {
@@ -50,14 +50,13 @@ const defaultState: AppState = {
   autoUpdateDownloaded: false,
   autoUpdateDeclined: false,
   modalsAllowed: true,
-
+  hasClickedComment: false,
   downloadProgress: undefined,
   upgradeDownloading: undefined,
   upgradeDownloadComplete: undefined,
   checkUpgradeTimer: undefined,
   isUpgradeAvailable: undefined,
   isUpgradeSkipped: undefined,
-  snackBar: undefined,
 };
 
 reducers[ACTIONS.DAEMON_READY] = state =>
@@ -187,6 +186,31 @@ reducers[ACTIONS.HISTORY_NAVIGATE] = state =>
 reducers[ACTIONS.CLEAR_UPGRADE_TIMER] = state =>
   Object.assign({}, state, {
     checkUpgradeTimer: undefined,
+  });
+
+reducers[ACTIONS.ADD_COMMENT] = state =>
+  Object.assign({}, state, {
+    hasClickedComment: true,
+  });
+
+reducers[ACTIONS.SHOW_MODAL] = (state, action) =>
+  Object.assign({}, state, {
+    modal: action.data.id,
+    modalProps: action.data.modalProps,
+  });
+
+reducers[ACTIONS.HIDE_MODAL] = state =>
+  Object.assign({}, state, {
+    modal: null,
+    modalProps: null,
+  });
+
+// This is fired from the lbryinc module
+// Instead of adding callbacks in that module, we can just listen for this event
+// There will be no other modals at this time as this is a blocking action
+reducers[ACTIONS.AUTHENTICATION_FAILURE] = state =>
+  Object.assign({}, state, {
+    modal: MODALS.AUTHENTICATION_FAILURE,
   });
 
 export default function reducer(state: AppState = defaultState, action: any) {

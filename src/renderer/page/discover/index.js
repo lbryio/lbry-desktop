@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import { selectFeaturedUris, selectFetchingFeaturedUris, doFetchFeaturedUris } from 'lbry-redux';
-import { doFetchRewardedContent } from 'lbryinc';
+import { doFetchRewardedContent, doRewardList } from 'lbryinc';
 import DiscoverPage from './view';
 
 const select = state => ({
@@ -11,6 +11,7 @@ const select = state => ({
 const perform = dispatch => ({
   fetchFeaturedUris: () => dispatch(doFetchFeaturedUris()),
   fetchRewardedContent: () => dispatch(doFetchRewardedContent()),
+  fetchRewards: () => dispatch(doRewardList()),
 });
 
 export default connect(

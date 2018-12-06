@@ -1,7 +1,7 @@
 import React from 'react';
 import Button from 'component/button';
 import { FormRow, FormField } from 'component/common/form';
-import { Lbry, doNotify } from 'lbry-redux';
+import { Lbry, doToast } from 'lbry-redux';
 import Page from 'component/page';
 
 class ReportPage extends React.Component {
@@ -32,10 +32,8 @@ class ReportPage extends React.Component {
         });
 
         // Display global notice
-        const action = doNotify({
-          displayType: ['snackbar'],
+        const action = doToast({
           message: __('Message received! Thanks for helping.'),
-          isError: false,
         });
         window.app.store.dispatch(action);
       });
@@ -48,13 +46,13 @@ class ReportPage extends React.Component {
     return (
       <Page>
         <section className="card card--section">
+          <div className="card__title">{__('Report an Issue/Request a Feature')}</div>
+          <p className="card__subtitle">
+            {__(
+              'Please describe the problem you experienced or the feature you want to see and any information you think might be useful to us. Links to screenshots are great!'
+            )}
+          </p>
           <div className="card__content">
-            <div className="card__title">{__('Report an Issue/Request a Feature')}</div>
-            <p>
-              {__(
-                'Please describe the problem you experienced or the feature you want to see and any information you think might be useful to us. Links to screenshots are great!'
-              )}
-            </p>
             <FormRow>
               <FormField
                 type="textarea"
@@ -83,14 +81,25 @@ class ReportPage extends React.Component {
         </section>
         <section className="card card--section">
           <div className="card__title">{__('Developer?')}</div>
-          <p>
-            {__('You can also')}{' '}
-            <Button
-              button="link"
-              href="https://github.com/lbryio/lbry/issues"
-              label={__('submit an issue on GitHub')}
-            />.
-          </p>
+          <div className="card__content">
+            <p>
+              {__('You can also')}{' '}
+              <Button
+                button="link"
+                href="https://github.com/lbryio/lbry-desktop/issues"
+                label={__('submit an issue on GitHub')}
+              />
+              .
+            </p>
+            <p>
+              {__('Explore our')}{' '}
+              <Button button="link" href="https://lbry.tech" label={__('technical resources')} />.
+            </p>
+            <p>
+              {__('Join our')}{' '}
+              <Button button="link" href="https://discourse.lbry.io/" label={__('tech forum')} />.
+            </p>
+          </div>
         </section>
       </Page>
     );

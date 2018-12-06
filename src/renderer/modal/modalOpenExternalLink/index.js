@@ -1,9 +1,12 @@
 import { connect } from 'react-redux';
-import { doHideNotification } from 'lbry-redux';
+import { doHideModal } from 'redux/actions/app';
 import ModalOpenExternalLink from './view';
 
 const perform = dispatch => ({
-  closeModal: () => dispatch(doHideNotification()),
+  closeModal: () => dispatch(doHideModal()),
 });
 
-export default connect(null, perform)(ModalOpenExternalLink);
+export default connect(
+  null,
+  perform
+)(ModalOpenExternalLink);

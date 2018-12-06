@@ -1,0 +1,23 @@
+// The gerbil is tied to subscriptions currently, but this style should move to it's own file once
+// the gerbil is added in more places with different layouts
+.subscriptions__gerbil {
+  height: 250px;
+  width: 210px;
+}
+
+.subscriptions__suggested {
+  animation: expand 0.2s;
+  width: 100%;
+  margin-top: $spacing-vertical;
+}
+
+@-webkit-keyframes expand {
+  0% {
+    margin-top: 200px;
+    opacity: 0;
+  }
+  100% {
+    margin-top: $spacing-vertical;
+    opacity: 1;
+  }
+}

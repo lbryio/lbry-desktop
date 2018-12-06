@@ -12,13 +12,18 @@ import type {
   DoRemoveSubscriptionUnreads,
   FetchedSubscriptionsSucess,
   SetViewMode,
+  GetSuggestedSubscriptionsSuccess,
 } from 'types/subscription';
 
 const defaultState: SubscriptionState = {
   subscriptions: [],
   unread: {},
+  suggested: {},
   loading: false,
   viewMode: VIEW_ALL,
+  loadingSuggested: false,
+  firstRunCompleted: false,
+  showSuggestedSubs: false,
 };
 
 export default handleActions(
@@ -41,13 +46,18 @@ export default handleActions(
       action: DoChannelUnsubscribe
     ): SubscriptionState => {
       const subscriptionToRemove: Subscription = action.data;
-
       const newSubscriptions = state.subscriptions
         .slice()
         .filter(subscription => subscription.channelName !== subscriptionToRemove.channelName);
 
+      // Check if we need to remove it from the 'unread' state
+      const { unread } = state;
+      if (unread[subscriptionToRemove.uri]) {
+        delete unread[subscriptionToRemove.uri];
+      }
       return {
         ...state,
+        unread: { ...unread },
         subscriptions: newSubscriptions,
       };
     },
@@ -85,12 +95,19 @@ export default handleActions(
       action: DoRemoveSubscriptionUnreads
     ): SubscriptionState => {
       const { channel, uris } = action.data;
-      const newUnread = { ...state.unread };
 
-      if (!uris) {
-        delete newUnread[channel];
+      // If no channel is passed in, remove all unreads
+      let newUnread;
+      if (channel) {
+        newUnread = { ...state.unread };
+
+        if (!uris) {
+          delete newUnread[channel];
+        } else {
+          newUnread[channel].uris = uris;
+        }
       } else {
-        newUnread[channel].uris = uris;
+        newUnread = {};
       }
 
       return {
@@ -122,6 +139,30 @@ export default handleActions(
     ): SubscriptionState => ({
       ...state,
       viewMode: action.data,
+    }),
+    [ACTIONS.GET_SUGGESTED_SUBSCRIPTIONS_START]: (state: SubscriptionState): SubscriptionState => ({
+      ...state,
+      loadingSuggested: true,
+    }),
+    [ACTIONS.GET_SUGGESTED_SUBSCRIPTIONS_SUCCESS]: (
+      state: SubscriptionState,
+      action: GetSuggestedSubscriptionsSuccess
+    ): SubscriptionState => ({
+      ...state,
+      suggested: action.data,
+      loadingSuggested: false,
+    }),
+    [ACTIONS.GET_SUGGESTED_SUBSCRIPTIONS_FAIL]: (state: SubscriptionState): SubscriptionState => ({
+      ...state,
+      loadingSuggested: false,
+    }),
+    [ACTIONS.SUBSCRIPTION_FIRST_RUN_COMPLETED]: (state: SubscriptionState): SubscriptionState => ({
+      ...state,
+      firstRunCompleted: true,
+    }),
+    [ACTIONS.VIEW_SUGGESTED_SUBSCRIPTIONS]: (state: SubscriptionState): SubscriptionState => ({
+      ...state,
+      showSuggestedSubs: true,
     }),
   },
   defaultState

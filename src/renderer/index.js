@@ -5,15 +5,21 @@ import SnackBar from 'component/snackBar';
 import SplashScreen from 'component/splash';
 import moment from 'moment';
 import * as ACTIONS from 'constants/action_types';
+import * as MODALS from 'constants/modal_types';
 import { ipcRenderer, remote, shell } from 'electron';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
-import { doConditionalAuthNavigate, doDaemonReady, doAutoUpdate } from 'redux/actions/app';
-import { doNotify, doBlackListedOutpointsSubscribe, isURIValid } from 'lbry-redux';
+import {
+  doConditionalAuthNavigate,
+  doDaemonReady,
+  doAutoUpdate,
+  doOpenModal,
+} from 'redux/actions/app';
+import { doToast, doBlackListedOutpointsSubscribe, isURIValid } from 'lbry-redux';
 import { doNavigate } from 'redux/actions/navigation';
 import { doDownloadLanguages, doUpdateIsNightAsync } from 'redux/actions/settings';
-import { doUserEmailVerify, doAuthenticate, Lbryio } from 'lbryinc';
+import { doUserEmailVerify, doAuthenticate, Lbryio, rewards } from 'lbryinc';
 import 'scss/all.scss';
 import store from 'store';
 import pjson from 'package.json';
@@ -28,37 +34,59 @@ autoUpdater.logger = remote.require('electron-log');
 
 // We need to override Lbryio for getting/setting the authToken
 // We interect with ipcRenderer to get the auth key from a users keyring
-Lbryio.setOverride('setAuthToken', status => {
-  Lbryio.call(
-    'user',
-    'new',
-    {
-      auth_token: '',
-      language: 'en',
-      app_id: status.installation_id,
-    },
-    'post'
-  ).then(response => {
-    if (!response.auth_token) {
-      throw new Error(__('auth_token is missing from response'));
-    }
+// We keep a local variable for authToken beacuse `ipcRenderer.send` does not
+// contain a response, so there is no way to know when it's been set
+let authToken;
+Lbryio.setOverride(
+  'setAuthToken',
+  status =>
+    new Promise(resolve => {
+      Lbryio.call(
+        'user',
+        'new',
+        {
+          auth_token: '',
+          language: 'en',
+          app_id: status.installation_id,
+        },
+        'post'
+      ).then(response => {
+        if (!response.auth_token) {
+          throw new Error(__('auth_token is missing from response'));
+        }
 
-    ipcRenderer.send('set-auth-token', response.auth_token);
-  });
-});
+        const newAuthToken = response.auth_token;
+        authToken = newAuthToken;
+        ipcRenderer.send('set-auth-token', authToken);
+        resolve();
+      });
+    })
+);
 
 Lbryio.setOverride(
   'getAuthToken',
   () =>
     new Promise(resolve => {
-      ipcRenderer.once('auth-token-response', (event, token) => {
-        Lbryio.authToken = token;
-        resolve(token);
-      });
+      if (authToken) {
+        resolve(authToken);
+      } else {
+        ipcRenderer.once('auth-token-response', (event, token) => {
+          Lbryio.authToken = token;
+          resolve(token);
+        });
 
-      ipcRenderer.send('get-auth-token');
+        ipcRenderer.send('get-auth-token');
+      }
     })
 );
+
+rewards.setCallback('claimFirstRewardSuccess', () => {
+  app.store.dispatch(doOpenModal(MODALS.FIRST_REWARD));
+});
+
+rewards.setCallback('rewardApprovalRequired', () => {
+  app.store.dispatch(doOpenModal(MODALS.REWARD_APPROVAL_REQUIRED));
+});
 
 ipcRenderer.on('open-uri-requested', (event, uri, newSession) => {
   if (uri && uri.startsWith('lbry://')) {
@@ -74,9 +102,8 @@ ipcRenderer.on('open-uri-requested', (event, uri, newSession) => {
         app.store.dispatch(doUserEmailVerify(verification.token, verification.recaptcha));
       } else {
         app.store.dispatch(
-          doNotify({
+          doToast({
             message: 'Invalid Verification URI',
-            displayType: ['snackbar'],
           })
         );
       }
@@ -87,9 +114,8 @@ ipcRenderer.on('open-uri-requested', (event, uri, newSession) => {
       app.store.dispatch(doNavigate('/show', { uri }));
     } else {
       app.store.dispatch(
-        doNotify({
+        doToast({
           message: __('Invalid LBRY URL requested'),
-          displayType: ['snackbar'],
         })
       );
     }
@@ -123,11 +149,16 @@ document.addEventListener('drop', event => {
 });
 document.addEventListener('click', event => {
   let { target } = event;
+
   while (target && target !== document) {
     if (target.matches('a') || target.matches('button')) {
       // TODO: Look into using accessiblity labels (this would also make the app more accessible)
       const hrefParts = window.location.href.split('#');
-      const element = target.title || (target.textContent && target.textContent.trim());
+
+      // Buttons that we want to track should use `data-id`
+      // This prevents multiple buttons being grouped together if they have the same text
+      const element =
+        target.dataset.id || target.title || (target.textContent && target.textContent.trim());
       if (element) {
         analytics.track('CLICK', {
           target: element,

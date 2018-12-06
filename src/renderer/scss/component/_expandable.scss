@@ -1,0 +1,28 @@
+.expandable {
+  border-bottom: var(--input-border-size) solid $lbry-gray-3;
+  padding-bottom: $spacing-vertical * 1/3;
+}
+
+.expandable--open {
+  max-height: 100%;
+}
+
+.expandable--closed {
+  max-height: 10em;
+  position: relative;
+  overflow: hidden;
+}
+
+.expandable--closed::after {
+  content: '';
+  width: 100%;
+  height: 20%;
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  background-image: linear-gradient(
+    to bottom,
+    transparent 0%,
+    mix($lbry-white, $lbry-gray-1, 70%) 90%
+  );
+}

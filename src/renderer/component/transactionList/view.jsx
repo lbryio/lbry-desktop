@@ -1,10 +1,11 @@
 // @flow
+import * as ICONS from 'constants/icons';
+import * as MODALS from 'constants/modal_types';
 import * as React from 'react';
 import { FormField } from 'component/common/form';
 import Button from 'component/button';
 import FileExporter from 'component/common/file-exporter';
-import * as icons from 'constants/icons';
-import { MODALS, TRANSACTIONS } from 'lbry-redux';
+import { TRANSACTIONS } from 'lbry-redux';
 import TransactionListItem from './internal/transaction-list-item';
 
 export type Transaction = {
@@ -61,12 +62,15 @@ class TransactionList extends React.PureComponent<Props> {
   }
 
   revokeClaim(txid: string, nout: number) {
-    this.props.openModal({ id: MODALS.CONFIRM_CLAIM_REVOKE }, { txid, nout });
+    this.props.openModal(MODALS.CONFIRM_CLAIM_REVOKE, { txid, nout });
   }
 
   render() {
     const { emptyMessage, rewards, transactions, slim, filterSetting } = this.props;
-    const transactionList = transactions.filter(this.filterTransaction);
+
+    // The shorter "recent transactions" list shouldn't be filtered
+    const transactionList = slim ? transactions : transactions.filter(this.filterTransaction);
+
     // Flow offers little support for Object.values() typing.
     // https://github.com/facebook/flow/issues/2221
     // $FlowFixMe
@@ -78,8 +82,8 @@ class TransactionList extends React.PureComponent<Props> {
           <p className="card__content">{emptyMessage || __('No transactions to list.')}</p>
         )}
         {!slim &&
-          !!transactionList.length && (
-            <div className="card__actions">
+          !!transactions.length && (
+            <div className="card__actions card__actions--between">
               <FileExporter
                 data={transactionList}
                 label={__('Export')}
@@ -87,33 +91,31 @@ class TransactionList extends React.PureComponent<Props> {
                 filters={['nout']}
                 defaultPath={__('lbry-transactions-history')}
               />
+              {!slim && (
+                <FormField
+                  type="select"
+                  value={filterSetting || TRANSACTIONS.ALL}
+                  onChange={this.handleFilterChanged}
+                  affixClass="form-field--align-center"
+                  prefix={__('Show')}
+                  postfix={
+                    <Button
+                      button="link"
+                      icon={ICONS.HELP}
+                      href="https://lbry.io/faq/transaction-types"
+                      title={__('Help')}
+                    />
+                  }
+                >
+                  {transactionTypes.map(tt => (
+                    <option key={tt} value={tt}>
+                      {__(`${this.capitalize(tt)}`)}
+                    </option>
+                  ))}
+                </FormField>
+              )}
             </div>
           )}
-        {!slim && (
-          <div className="card__actions-top-corner">
-            <FormField
-              type="select"
-              value={filterSetting || TRANSACTIONS.ALL}
-              onChange={this.handleFilterChanged}
-              affixClass="form-field--align-center"
-              prefix={__('Show')}
-              postfix={
-                <Button
-                  button="link"
-                  icon={icons.HELP}
-                  href="https://lbry.io/faq/transaction-types"
-                  title={__('Help')}
-                />
-              }
-            >
-              {transactionTypes.map(tt => (
-                <option key={tt} value={tt}>
-                  {__(`${this.capitalize(tt)}`)}
-                </option>
-              ))}
-            </FormField>
-          </div>
-        )}
         {!!transactionList.length && (
           <table className="card__content table table--transactions table--stretch">
             <thead>

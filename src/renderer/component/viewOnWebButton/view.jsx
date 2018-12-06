@@ -1,6 +1,6 @@
 // @flow
+import * as ICONS from 'constants/icons';
 import React from 'react';
-import * as icons from 'constants/icons';
 import Button from 'component/button';
 
 type Props = {
@@ -16,7 +16,7 @@ export default (props: Props) => {
 
   return claimId && claimName ? (
     <Button
-      icon={icons.GLOBE}
+      icon={ICONS.GLOBE}
       button="alt"
       label={__('Share')}
       href={`https://spee.ch/${speechURL}`}

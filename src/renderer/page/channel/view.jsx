@@ -1,14 +1,16 @@
 // @flow
+import type { Claim } from 'types/claim';
+import * as ICONS from 'constants/icons';
+import * as MODALS from 'constants/modal_types';
 import React from 'react';
 import BusyIndicator from 'component/common/busy-indicator';
 import { FormField, FormRow } from 'component/common/form';
 import ReactPaginate from 'react-paginate';
 import SubscribeButton from 'component/subscribeButton';
-import ViewOnWebButton from 'component/viewOnWebButton';
 import Page from 'component/page';
 import FileList from 'component/fileList';
 import HiddenNsfwClaims from 'component/hiddenNsfwClaims';
-import type { Claim } from 'types/claim';
+import Button from 'component/button';
 
 type Props = {
   uri: string,
@@ -20,26 +22,21 @@ type Props = {
   claimsInChannel: Array<Claim>,
   channelIsMine: boolean,
   fetchClaims: (string, number) => void,
-  fetchClaimCount: string => void,
   navigate: (string, {}) => void,
+  openModal: ({ id: string }, { uri: string }) => void,
 };
 
 class ChannelPage extends React.PureComponent<Props> {
   componentDidMount() {
-    const { uri, page, fetchClaims, fetchClaimCount } = this.props;
-
+    const { uri, page, fetchClaims } = this.props;
     fetchClaims(uri, page || 1);
-    fetchClaimCount(uri);
   }
 
   componentWillReceiveProps(nextProps: Props) {
-    const { page, uri, fetchClaims, fetchClaimCount } = this.props;
+    const { page, fetchClaims } = this.props;
 
     if (nextProps.page && page !== nextProps.page) {
       fetchClaims(nextProps.uri, nextProps.page);
-    }
-    if (nextProps.uri !== uri) {
-      fetchClaimCount(uri);
     }
   }
 
@@ -67,10 +64,18 @@ class ChannelPage extends React.PureComponent<Props> {
   }
 
   render() {
-    const { uri, fetching, claimsInChannel, claim, page, totalPages, channelIsMine } = this.props;
-    const { name, permanent_url: permanentUrl, claim_id: claimId } = claim;
+    const {
+      uri,
+      fetching,
+      claimsInChannel,
+      claim,
+      page,
+      totalPages,
+      channelIsMine,
+      openModal,
+    } = this.props;
+    const { name, permanent_url: permanentUrl } = claim;
     const currentPage = parseInt((page || 1) - 1, 10);
-
     const contentList =
       claimsInChannel && claimsInChannel.length ? (
         <FileList sortByHeight hideFilter fileInfos={claimsInChannel} />
@@ -87,8 +92,15 @@ class ChannelPage extends React.PureComponent<Props> {
           </h1>
         </section>
         <div className="card__actions">
-          <SubscribeButton uri={permanentUrl} channelName={name} />
-          <ViewOnWebButton claimId={claimId} claimName={name} />
+          <SubscribeButton uri={`lbry://${permanentUrl}`} />
+          <Button
+            button="alt"
+            icon={ICONS.GLOBE}
+            label={__('Share Channel')}
+            onClick={() =>
+              openModal(MODALS.SOCIAL_SHARE, { uri, speechShareable: true, isChannel: true })
+            }
+          />
         </div>
         <section className="card__content">{contentList}</section>
         {(!fetching || (claimsInChannel && claimsInChannel.length)) &&

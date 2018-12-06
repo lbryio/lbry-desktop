@@ -1,8 +1,8 @@
 // @flow
+import * as ICONS from 'constants/icons';
+import * as SETTINGS from 'constants/settings';
 import * as React from 'react';
 import { FormField, FormFieldPrice } from 'component/common/form';
-import * as settings from 'constants/settings';
-import * as icons from 'constants/icons';
 import Button from 'component/button';
 import Page from 'component/page';
 import FileSelector from 'component/common/file-selector';
@@ -98,31 +98,31 @@ class SettingsPage extends React.PureComponent<Props, State> {
       this.onAutomaticDarkModeChange(false);
     }
 
-    this.props.setClientSetting(settings.THEME, value);
+    this.props.setClientSetting(SETTINGS.THEME, value);
   }
 
   onAutomaticDarkModeChange(value: boolean) {
-    this.props.setClientSetting(settings.AUTOMATIC_DARK_MODE_ENABLED, value);
+    this.props.setClientSetting(SETTINGS.AUTOMATIC_DARK_MODE_ENABLED, value);
   }
 
   onAutoplayChange(event: SyntheticInputEvent<*>) {
-    this.props.setClientSetting(settings.AUTOPLAY, event.target.checked);
+    this.props.setClientSetting(SETTINGS.AUTOPLAY, event.target.checked);
   }
 
   onInstantPurchaseEnabledChange(enabled: boolean) {
-    this.props.setClientSetting(settings.INSTANT_PURCHASE_ENABLED, enabled);
+    this.props.setClientSetting(SETTINGS.INSTANT_PURCHASE_ENABLED, enabled);
   }
 
   onInstantPurchaseMaxChange(newValue: Price) {
-    this.props.setClientSetting(settings.INSTANT_PURCHASE_MAX, newValue);
+    this.props.setClientSetting(SETTINGS.INSTANT_PURCHASE_MAX, newValue);
   }
 
   onShowNsfwChange(event: SyntheticInputEvent<*>) {
-    this.props.setClientSetting(settings.SHOW_NSFW, event.target.checked);
+    this.props.setClientSetting(SETTINGS.SHOW_NSFW, event.target.checked);
   }
 
   onAutoDownloadChange(event: SyntheticInputEvent<*>) {
-    this.props.setClientSetting(settings.AUTO_DOWNLOAD, event.target.checked);
+    this.props.setClientSetting(SETTINGS.AUTO_DOWNLOAD, event.target.checked);
   }
 
   onChangeEncryptWallet() {
@@ -135,7 +135,7 @@ class SettingsPage extends React.PureComponent<Props, State> {
   }
 
   onDesktopNotificationsChange(event: SyntheticInputEvent<*>) {
-    this.props.setClientSetting(settings.OS_NOTIFICATIONS_ENABLED, event.target.checked);
+    this.props.setClientSetting(SETTINGS.OS_NOTIFICATIONS_ENABLED, event.target.checked);
   }
 
   setDaemonSetting(name: string, value: boolean | string | Price) {
@@ -378,7 +378,7 @@ class SettingsPage extends React.PureComponent<Props, State> {
                 <Button
                   button="primary"
                   label={this.state.clearingCache ? __('Clearing') : __('Clear the cache')}
-                  icon={icons.ALERT}
+                  icon={ICONS.ALERT}
                   onClick={this.clearCache}
                   disabled={this.state.clearingCache}
                 />

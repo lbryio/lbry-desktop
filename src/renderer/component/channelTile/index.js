@@ -15,4 +15,7 @@ const perform = dispatch => ({
   resolveUri: uri => dispatch(doResolveUri(uri)),
 });
 
-export default connect(select, perform)(ChannelTile);
+export default connect(
+  select,
+  perform
+)(ChannelTile);

@@ -1,11 +1,12 @@
 import { connect } from 'react-redux';
-import { doHideNotification } from 'lbry-redux';
-import { doNavigate } from 'redux/actions/navigation';
+import { doHideModal } from 'redux/actions/app';
 import ModalFirstSubscription from './view';
 
 const perform = dispatch => () => ({
-  closeModal: () => dispatch(doHideNotification()),
-  navigate: path => dispatch(doNavigate(path)),
+  closeModal: () => dispatch(doHideModal()),
 });
 
-export default connect(null, perform)(ModalFirstSubscription);
+export default connect(
+  null,
+  perform
+)(ModalFirstSubscription);

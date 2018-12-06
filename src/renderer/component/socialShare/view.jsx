@@ -1,8 +1,8 @@
 // @flow
-import React from 'react';
 import type { Claim } from 'types/claim';
+import * as ICONS from 'constants/icons';
+import React from 'react';
 import Button from 'component/button';
-import * as icons from 'constants/icons';
 import CopyableText from 'component/copyableText';
 import ToolTip from 'component/common/tooltip';
 
@@ -10,9 +10,14 @@ type Props = {
   claim: Claim,
   onDone: () => void,
   speechShareable: boolean,
+  isChannel: boolean,
 };
 
 class SocialShare extends React.PureComponent<Props> {
+  static defaultProps = {
+    isChannel: false,
+  };
+
   constructor(props: Props) {
     super(props);
 
@@ -22,36 +27,45 @@ class SocialShare extends React.PureComponent<Props> {
   input: ?HTMLInputElement;
 
   render() {
-    const {
-      claim_id: claimId,
-      name: claimName,
-      channel_name: channelName,
-      value,
-    } = this.props.claim;
+    const { claim, isChannel } = this.props;
+    const { claim_id: claimId, name: claimName, channel_name: channelName, value } = claim;
+
     const { speechShareable, onDone } = this.props;
     const channelClaimId =
       value && value.publisherSignature && value.publisherSignature.certificateId;
     const speechPrefix = 'https://spee.ch/';
     const lbryPrefix = 'https://open.lbry.io/';
 
-    const speechURL =
-      channelName && channelClaimId
-        ? `${speechPrefix}${channelName}:${channelClaimId}/${claimName}`
-        : `${speechPrefix}${claimName}#${claimId}`;
+    let speechURL;
+    let lbryURL;
+    if (isChannel) {
+      // For channel claims, the channel name (@something) is in `claim.name`
+      speechURL = `${speechPrefix}${claimName}:${claimId}`;
+      lbryURL = `${lbryPrefix}${claimName}#${claimId}`;
+    } else {
+      // If it's for a regular claim, check if it has an associated channel
+      speechURL =
+        channelName && channelClaimId
+          ? `${speechPrefix}${channelName}:${channelClaimId}/${claimName}`
+          : `${speechPrefix}${claimId}/${claimName}`;
 
-    const lbryURL = `${lbryPrefix}${claimName}#${claimId}`;
+      lbryURL =
+        channelName && channelClaimId
+          ? `${lbryPrefix}${channelName}#${channelClaimId}/${claimName}`
+          : `${lbryPrefix}${claimName}#${claimId}`;
+    }
 
     return (
       <section className="card__content">
         {speechShareable && (
           <div className="card__content">
             <label className="card__subtitle">{__('Web link')}</label>
-            <CopyableText copyable={speechURL} noSnackbar />
+            <CopyableText copyable={speechURL} />
             <div className="card__actions card__actions--center">
               <ToolTip onComponent body={__('Facebook')}>
                 <Button
                   iconColor="blue"
-                  icon={icons.FACEBOOK}
+                  icon={ICONS.FACEBOOK}
                   button="alt"
                   label={__('')}
                   href={`https://facebook.com/sharer/sharer.php?u=${speechURL}`}
@@ -60,7 +74,7 @@ class SocialShare extends React.PureComponent<Props> {
               <ToolTip onComponent body={__('Twitter')}>
                 <Button
                   iconColor="blue"
-                  icon={icons.TWITTER}
+                  icon={ICONS.TWITTER}
                   button="alt"
                   label={__('')}
                   href={`https://twitter.com/home?status=${speechURL}`}
@@ -68,7 +82,7 @@ class SocialShare extends React.PureComponent<Props> {
               </ToolTip>
               <ToolTip onComponent body={__('View on Spee.ch')}>
                 <Button
-                  icon={icons.GLOBE}
+                  icon={ICONS.GLOBE}
                   iconColor="blue"
                   button="alt"
                   label={__('')}
@@ -85,7 +99,7 @@ class SocialShare extends React.PureComponent<Props> {
             <ToolTip onComponent body={__('Facebook')}>
               <Button
                 iconColor="blue"
-                icon={icons.FACEBOOK}
+                icon={ICONS.FACEBOOK}
                 button="alt"
                 label={__('')}
                 href={`https://facebook.com/sharer/sharer.php?u=${lbryURL}`}
@@ -94,7 +108,7 @@ class SocialShare extends React.PureComponent<Props> {
             <ToolTip onComponent body={__('Twitter')}>
               <Button
                 iconColor="blue"
-                icon={icons.TWITTER}
+                icon={ICONS.TWITTER}
                 button="alt"
                 label={__('')}
                 href={`https://twitter.com/home?status=${lbryURL}`}

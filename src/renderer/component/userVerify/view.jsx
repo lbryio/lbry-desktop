@@ -1,9 +1,9 @@
 // @flow
+import * as ICONS from 'constants/icons';
 import * as React from 'react';
 import Button from 'component/button';
 import CardVerify from 'component/cardVerify';
 import { Lbryio } from 'lbryinc';
-import * as icons from 'constants/icons';
 
 type Props = {
   errorMessage: ?string,
@@ -43,7 +43,9 @@ class UserVerify extends React.PureComponent<Props> {
           <p className="card__content">
             {`${__(
               'If you have a valid credit or debit card, you can use it to instantly prove your humanity.'
-            )} ${__('LBRY does not store your credit card information. There is no charge at all for this, now or in the future.')} `}
+            )} ${__(
+              'LBRY does not store your credit card information. There is no charge at all for this, now or in the future.'
+            )} `}
           </p>
           <div className="card__actions">
             {errorMessage && <p className="form-field__error">{errorMessage}</p>}
@@ -78,7 +80,7 @@ class UserVerify extends React.PureComponent<Props> {
                 verifyPhone();
               }}
               button="primary"
-              icon={icons.PHONE}
+              icon={ICONS.PHONE}
               label={__('Submit Phone Number')}
             />
           </div>
@@ -107,7 +109,7 @@ class UserVerify extends React.PureComponent<Props> {
             <Button
               href="https://chat.lbry.io"
               button="primary"
-              icon={icons.MESSAGE}
+              icon={ICONS.MESSAGE}
               label={__('Join LBRY Chat')}
             />
           </div>

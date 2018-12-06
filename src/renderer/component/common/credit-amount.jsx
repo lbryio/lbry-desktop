@@ -1,7 +1,7 @@
 // @flow
 import React from 'react';
 import classnames from 'classnames';
-import { formatCredits, formatFullPrice } from 'util/formatCredits';
+import { formatCredits, formatFullPrice } from 'util/format-credits';
 
 type Props = {
   amount: number,
@@ -82,7 +82,7 @@ class CreditAmount extends React.PureComponent<Props> {
           // TODO: remove inheritStyle prop
           // It just complicates things
           'credit-amount--inherit': inheritStyle,
-          badge: badge,
+          badge,
           'badge--cost': badge && !isFree,
           'badge--free': badge && isFree,
         })}

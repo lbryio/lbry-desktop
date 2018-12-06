@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import { selectBalance, selectIsBackDisabled, selectIsForwardDisabled } from 'lbry-redux';
-import { formatCredits } from 'util/formatCredits';
+import { formatCredits } from 'util/format-credits';
 import { doNavigate, doHistoryBack, doHistoryForward } from 'redux/actions/navigation';
 import { selectIsUpgradeAvailable, selectAutoUpdateDownloaded } from 'redux/selectors/app';
 import { doDownloadUpgradeRequested } from 'redux/actions/app';

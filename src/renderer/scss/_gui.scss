@@ -2,7 +2,7 @@
 // component specific styling should go in the component scss file
 
 html {
-  background-color: $lbry-white;
+  background-color: $lbry-teal-5;
   font-family: 'Inter UI', sans-serif;
   height: 100%;
 }
@@ -130,7 +130,7 @@ p:not(:first-of-type) {
   bottom: 0;
   right: 0;
 
-  background-color: rgba($lbry-gray-1, 0.3);
+  background-color: mix($lbry-white, $lbry-gray-1, 70%);
   display: flex;
   position: absolute;
   z-index: 0;
@@ -192,7 +192,18 @@ p:not(:first-of-type) {
   display: flex;
   flex-direction: column;
   margin-top: 200px;
+  margin-bottom: 100px;
   text-align: center;
+}
+
+// Empty pages that display columns of content
+.page__empty--horizontal {
+  max-width: 60vw;
+  margin: auto;
+  display: flex;
+  flex-direction: row;
+  text-align: left;
+  justify-content: center;
 }
 
 .columns {
@@ -243,11 +254,6 @@ p:not(:first-of-type) {
   font-size: inherit;
   font-weight: inherit;
   padding: 0;
-}
-
-.divider__horizontal {
-  border-top: $lbry-gray-2;
-  margin: 16px 0;
 }
 
 .hidden {
@@ -302,7 +308,7 @@ p:not(:first-of-type) {
 }
 
 .meta {
-  color: $lbry-gray-1;
+  color: $lbry-gray-5;
   font-size: 0.8em;
 }
 

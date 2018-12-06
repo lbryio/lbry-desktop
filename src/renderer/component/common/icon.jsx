@@ -1,7 +1,7 @@
 // @flow
+import * as ICONS from 'constants/icons';
 import React from 'react';
 import * as FeatherIcons from 'react-feather';
-import * as icons from 'constants/icons';
 import Tooltip from 'component/common/tooltip';
 
 // It would be nice to standardize this somehow
@@ -20,9 +20,9 @@ type Props = {
 class IconComponent extends React.PureComponent<Props> {
   getTooltip = (icon: string) => {
     switch (icon) {
-      case icons.FEATURED:
+      case ICONS.FEATURED:
         return __('Featured content. Earn rewards for watching.');
-      case icons.LOCAL:
+      case ICONS.LOCAL:
         return __('This file is downloaded.');
       default:
         return null;
@@ -56,8 +56,8 @@ class IconComponent extends React.PureComponent<Props> {
     }
 
     let iconSize = size || 14;
-    // Arrow icons are quite a bit smaller than the other icons we use
-    if (icon === icons.ARROW_LEFT || icon === icons.ARROW_RIGHT) {
+    // Arrow ICONS are quite a bit smaller than the other ICONS we use
+    if (icon === ICONS.ARROW_LEFT || icon === ICONS.ARROW_RIGHT) {
       iconSize = 20;
     }
 

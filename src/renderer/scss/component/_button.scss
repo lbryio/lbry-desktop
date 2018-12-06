@@ -32,6 +32,14 @@
     }
   }
 
+  &.btn--no-padding {
+    .btn__content {
+      padding: 0;
+      display: flex;
+      align-items: center;
+    }
+  }
+
   &.btn--alt {
     &:not(:disabled) {
       background-color: $lbry-white;
@@ -74,8 +82,7 @@
     }
   }
 
-  &.btn--disabled:disabled {
-    // wtf?
+  &:disabled {
     cursor: default;
 
     &.btn--primary {
@@ -154,6 +161,7 @@
     font-size: 1em;
     min-width: 0;
     text-align: left;
+    transition: none;
   }
 
   &.btn--no-style {
@@ -182,6 +190,16 @@
 
   &.btn--uppercase {
     text-transform: uppercase;
+  }
+
+  &.btn--load-screen {
+    display: inline-block;
+    border-bottom: 1px solid $lbry-white;
+
+    &:hover {
+      color: $lbry-blue-1;
+      border-bottom: 1px solid $lbry-blue-1;
+    }
   }
 
   .icon + .btn__label {

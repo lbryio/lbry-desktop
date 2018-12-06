@@ -12,11 +12,11 @@
 
   @media (min-width: $medium-breakpoint) {
     padding-left: $spacing-width;
-    width: calc(var(--side-nav-width) * 1.4);
+    min-width: calc(var(--side-nav-width) * 1.4);
   }
 
   @media (min-width: $large-breakpoint) {
-    width: calc(var(--side-nav-width) * 1.6);
+    min-width: calc(var(--side-nav-width) * 1.6);
   }
 }
 

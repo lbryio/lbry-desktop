@@ -6,22 +6,24 @@ import type {
   UpdatePublishFormAction,
   PublishParams,
 } from 'redux/reducers/publish';
+import * as MODALS from 'constants/modal_types';
 import {
   ACTIONS,
   Lbry,
-  doNotify,
-  MODALS,
   selectMyChannelClaims,
   THUMBNAIL_STATUSES,
   batchActions,
   creditsToString,
   selectPendingById,
+  selectMyClaimsWithoutChannels,
+  doError,
 } from 'lbry-redux';
+import { doOpenModal } from 'redux/actions/app';
 import { selectosNotificationsEnabled } from 'redux/selectors/settings';
 import { doNavigate } from 'redux/actions/navigation';
 import fs from 'fs';
 import path from 'path';
-import { CC_LICENSES, COPYRIGHT, OTHER } from 'constants/licenses';
+import { CC_LICENSES, COPYRIGHT, OTHER, NONE, PUBLIC_DOMAIN } from 'constants/licenses';
 
 type Action = UpdatePublishFormAction | { type: ACTIONS.CLEAR_PUBLISH };
 
@@ -97,7 +99,7 @@ export const doUploadThumbnail = (filePath: string, nsfw: boolean) => (
           type: ACTIONS.UPDATE_PUBLISH_FORM,
           data: { uploadThumbnailStatus: THUMBNAIL_STATUSES.API_DOWN },
         },
-        dispatch(doNotify({ id: MODALS.ERROR, error }))
+        dispatch(doOpenModal(MODALS.ERROR, { error }))
       )
     );
 
@@ -178,8 +180,11 @@ export const doPrepareEdit = (claim: any, uri: string) => (dispatch: Dispatch<Ac
   };
 
   // Make sure custom liscence's are mapped properly
+  // If the license isn't one of the standard licenses, map the custom license and description/url
   if (!CC_LICENSES.some(({ value }) => value === license)) {
-    if (!licenseUrl) {
+    if (!license || license === NONE || license === PUBLIC_DOMAIN) {
+      publishData.licenseType = license;
+    } else if (license && !licenseUrl && license !== NONE) {
       publishData.licenseType = COPYRIGHT;
     } else {
       publishData.licenseType = OTHER;
@@ -199,6 +204,7 @@ export const doPublish = (params: PublishParams) => (
 ) => {
   const state = getState();
   const myChannels = selectMyChannelClaims(state);
+  const myClaims = selectMyClaimsWithoutChannels(state);
 
   const {
     name,
@@ -223,7 +229,7 @@ export const doPublish = (params: PublishParams) => (
   const channelId = namedChannelClaim ? namedChannelClaim.claim_id : '';
   const fee = contentIsFree || !price.amount ? undefined : { ...price };
 
-  const metadata = {
+  const metadata: Metadata = {
     title,
     nsfw,
     license,
@@ -262,16 +268,37 @@ export const doPublish = (params: PublishParams) => (
 
   dispatch({ type: ACTIONS.PUBLISH_START });
 
-  const success = () => {
-    dispatch({
+  const success = pendingClaim => {
+    const actions = [];
+
+    actions.push({
       type: ACTIONS.PUBLISH_SUCCESS,
     });
-    dispatch(doNotify({ id: MODALS.PUBLISH }, { uri }));
+
+    actions.push(doOpenModal(MODALS.PUBLISH, { uri }));
+
+    // We have to fake a temp claim until the new pending one is returned by claim_list_mine
+    // We can't rely on claim_list_mine because there might be some delay before the new claims are returned
+    // Doing this allows us to show the pending claim immediately, it will get overwritten by the real one
+    const isMatch = claim => claim.claim_id === pendingClaim.claim_id;
+    const isEdit = myClaims.some(isMatch);
+    const myNewClaims = isEdit
+      ? myClaims.map(claim => (isMatch(claim) ? pendingClaim.output : claim))
+      : myClaims.concat(pendingClaim.output);
+
+    actions.push({
+      type: ACTIONS.FETCH_CLAIM_LIST_MINE_COMPLETED,
+      data: {
+        claims: myNewClaims,
+      },
+    });
+
+    dispatch(batchActions(...actions));
   };
 
   const failure = error => {
     dispatch({ type: ACTIONS.PUBLISH_FAIL });
-    dispatch(doNotify({ id: MODALS.ERROR, error: error.message }));
+    dispatch(doError(error.message));
   };
 
   return Lbry.publish(publishPayload).then(success, failure);
@@ -281,7 +308,8 @@ export const doPublish = (params: PublishParams) => (
 export const doCheckPendingPublishes = () => (dispatch: Dispatch<Action>, getState: GetState) => {
   const state = getState();
   const pendingById = selectPendingById(state);
-  if (!Object.keys(pendingById)) {
+
+  if (!Object.keys(pendingById).length) {
     return;
   }
 
@@ -290,7 +318,7 @@ export const doCheckPendingPublishes = () => (dispatch: Dispatch<Action>, getSta
   const checkFileList = () => {
     Lbry.claim_list_mine().then(claims => {
       claims.forEach(claim => {
-        // If it's confirmed, check that it wasn't pending previously
+        // If it's confirmed, check if it was pending previously
         if (claim.confirmations > 0 && pendingById[claim.claim_id]) {
           delete pendingById[claim.claim_id];
 
@@ -326,7 +354,6 @@ export const doCheckPendingPublishes = () => (dispatch: Dispatch<Action>, getSta
     });
   };
 
-  checkFileList();
   publishCheckInterval = setInterval(() => {
     checkFileList();
   }, 30000);

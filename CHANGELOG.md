@@ -6,33 +6,44 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ## [Unreleased]
 
 ### Added
+ * Redemption of custom reward codes via Rewards page ([#1935](https://github.com/lbryio/lbry-desktop/pull/1935))
+ * Ability to manage email preferences from Help page ([#1929](https://github.com/lbryio/lbry-desktop/pull/1929))
+ * History tracking to My LBRY menu ([#1846](https://github.com/lbryio/lbry-desktop/pull/1846))
+ * Gather data for comments support via claim page ([#2095](https://github.com/lbryio/lbry-desktop/pull/2095))
  * Allow typing of encryption password without clicking entry box ([#1977](https://github.com/lbryio/lbry-desktop/pull/1977))
  * Focus on search bar with {cmd,ctrl} + "l" ([#2003](https://github.com/lbryio/lbry-desktop/pull/2003))
- * Add support for clickable channel names on explore page headings ([#2023](https://github.com/lbryio/lbry-desktop/pull/2023))
- * Content loading placeholder styles on FileCard/FileTile ([#2022](https://github.com/lbryio/lbry-desktop/pull/2022))
+ * Support for clickable channel names on explore page headings ([#2023](https://github.com/lbryio/lbry-desktop/pull/2023))
+ * Relative time and loading placeholder styles on FileCard/FileTile ([#2022](https://github.com/lbryio/lbry-desktop/pull/2022))
  * Persistence to Transaction List Filter Selection ([#2048](https://github.com/lbryio/lbry-desktop/pull/2048))
  * Subscription improvements ([#2031](https://github.com/lbryio/lbry-desktop/pull/2031))
- * Adds Persistence to File List Filter Selections ([#2050](https://github.com/lbryio/lbry-desktop/pull/2050))
+ * Persistence to File List Filter Selections ([#2050](https://github.com/lbryio/lbry-desktop/pull/2050))
+ * More share options for claim and channel pages ([#2088](https://github.com/lbryio/lbry-desktop/pull/2088) / [#1943](https://github.com/lbryio/lbry-desktop/pull/1943))
+ * Better error handling on app startup ([#2098](https://github.com/lbryio/lbry-desktop/pull/2098))
+ * FAQ and links in Report page ([#2103](https://github.com/lbryio/lbry-desktop/pull/2103))
 
 ### Changed
  * Upgraded to lbrynet v0.30.0 ([#1998](https://github.com/lbryio/lbry-desktop/pull/1998))
- * Make tooltip smarter ([#1979](https://github.com/lbryio/lbry-desktop/pull/1979))
- * Change channel pages to have 48 items instead of 10 ([#2002](https://github.com/lbryio/lbry-desktop/pull/2002))
- * Update to https ([#2016](https://github.com/lbryio/lbry-desktop/pull/2016))
+ * Make tooltip smarter, show full title on hover ([#1979](https://github.com/lbryio/lbry-desktop/pull/1979))
+ * Channel pages to have 20 items instead of 10 ([#2002](https://github.com/lbryio/lbry-desktop/pull/2002))
+ * External links to https ([#2016](https://github.com/lbryio/lbry-desktop/pull/2016))
  * Simplify FileCard and FileTile component styling ([#2011](https://github.com/lbryio/lbry-desktop/pull/2011))
  * Credit card verification messaging ([#2025](https://github.com/lbryio/lbry-desktop/pull/2025))
- * Reverse Order & Use System/Location Time/Date ([#2036]https://github.com/lbryio/lbry-desktop/pull/2036)
+ * Reverse Order & Use System/Location Time/Date ([#2036]https://github.com/lbryio/lbry-desktop/pull/2036))
  * Limit file type can be uploaded as thumbnail for publishing ([#2034](https://github.com/lbryio/lbry-desktop/pull/2034))
  * Change snackbar notification position to bottom-left ([#2040](https://github.com/lbryio/lbry-desktop/pull/2040))
  * Use shared colors from lbryio/color project ([#2045](https://github.com/lbryio/lbry-desktop/pull/2045))
+ * Remove ToS checkbox ([#2087](https://github.com/lbryio/lbry-desktop/pull/2087))
 
 ### Fixed
- * Fixed transactions filter menu collides with transaction table ([#2005](https://github.com/lbryio/lbry-desktop/pull/2005))
+ * Show pending transactions on Overview page, with refresh button ([#2085](https://github.com/lbryio/lbry-desktop/pull/2085))
+ * Copyright license not being displayed correctly during edits ([#1997](https://github.com/lbryio/lbry-desktop/pull/1997))
+ * Transactions filter menu collides with transaction table ([#2005](https://github.com/lbryio/lbry-desktop/pull/2005))
  * Invite table cutoff with large number of invites ([#1985](https://github.com/lbryio/lbry-desktop/pull/1985))
  * History styling on large screens and link issue with claims ([#1999](https://github.com/lbryio/lbry-desktop/pull/1999))
  * Satisfy console warnings in publishForm and validation messaging ([#2010](https://github.com/lbryio/lbry-desktop/pull/2010))
  * App crashing if invalid characters entered in LBRY URL ([#2026])(https://github.com/lbryio/lbry-desktop/pull/2026))
- * Fix issue file_list call continues indefinitely if a file is removed while downloading ([#2042])(https://github.com/lbryio/lbry-desktop/pull/2042))
+ * File_list call continues indefinitely if a file is removed while downloading ([#2042](https://github.com/lbryio/lbry-desktop/pull/2042))
+ * Open folder containing log file when Open Log File button is clicked ([#2078](https://github.com/lbryio/lbry-desktop/pull/2078))
 
 ## [0.25.1] - 2018-09-18
 

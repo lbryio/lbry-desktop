@@ -1,5 +1,6 @@
 .markdown-preview {
   margin: 0;
+  word-break: break-all;
 
   // Headers
   h1,
@@ -76,6 +77,10 @@
   }
 
   // Code
+  pre {
+    white-space: normal;
+  }
+
   code {
     margin: 16px 0;
     padding: 8px;

@@ -24,6 +24,7 @@ class DiscoverPage extends React.PureComponent<Props> {
     this.continousFetch = setInterval(() => {
       fetchFeaturedUris();
       fetchRewardedContent();
+      fetchRewards();
     }, 1000 * 60 * 60);
   }
 

@@ -19,6 +19,11 @@ export const selectUpdateUrl = createSelector(selectPlatform, platform => {
   }
 });
 
+export const selectHasClickedComment = createSelector(
+  selectState,
+  state => state.hasClickedComment
+);
+
 export const selectRemoteVersion = createSelector(selectState, state => state.remoteVersion);
 
 export const selectIsUpgradeAvailable = createSelector(
@@ -247,3 +252,14 @@ export const selectNavLinks = createSelector(
     return navLinks;
   }
 );
+
+export const selectModal = createSelector(selectState, state => {
+  if (!state.modal) {
+    return null;
+  }
+
+  return {
+    id: state.modal,
+    modalProps: state.modalProps,
+  };
+});

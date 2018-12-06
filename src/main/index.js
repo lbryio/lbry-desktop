@@ -68,7 +68,10 @@ if (isDev) {
 protocol.registerStandardSchemes(['content']);
 
 app.on('ready', async () => {
-  const processList = await findProcess('name', 'lbrynet');
+  // Windows WMIC returns lbrynet start with 2 spaces. https://github.com/yibn2008/find-process/issues/18
+  const processListArgs = process.platform === 'win32' ? 'lbrynet  start' : 'lbrynet start';
+  const processList = await findProcess('name', processListArgs);
+
   const isDaemonRunning = processList.length > 0;
 
   if (!isDaemonRunning) {

@@ -1,9 +1,9 @@
 import { connect } from 'react-redux';
-import { doHideNotification } from 'lbry-redux';
+import { doHideModal } from 'redux/actions/app';
 import ModalSocialShare from './view';
 
 const perform = dispatch => ({
-  closeModal: () => dispatch(doHideNotification()),
+  closeModal: () => dispatch(doHideModal()),
 });
 
 export default connect(
