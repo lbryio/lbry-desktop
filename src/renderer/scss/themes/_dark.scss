@@ -165,6 +165,10 @@ html[data-theme='dark'] {
       a {
         color: $lbry-white !important; // We need to use !important to override the CodeMirror styles
 
+        &.active {
+          background-color: rgba($lbry-black, 0.4);
+        }
+
         &:hover {
           color: $lbry-black !important;
         }

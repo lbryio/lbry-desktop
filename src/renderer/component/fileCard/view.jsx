@@ -65,7 +65,13 @@ class FileCard extends React.PureComponent<Props> {
       isSubscribed,
       isNew,
       showSubscribedLogo,
+      isResolvingUri,
     } = this.props;
+
+    if (!isResolvingUri && !claim && !pending) {
+      // abandoned
+      return null;
+    }
 
     if (!claim && !pending) {
       return (
