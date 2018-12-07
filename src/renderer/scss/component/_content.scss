@@ -54,6 +54,10 @@
   padding-top: var(--video-aspect-ratio);
   width: 100%;
 
+  .card__media-text {
+    margin-top: calc(-1 * var(--video-aspect-ratio));
+  }
+
   &.content__empty--nsfw {
     background-color: $lbry-grape-3;
   }
