@@ -48,6 +48,7 @@ export default class Expandable extends PureComponent<Props, State> {
         </div>
         <Button
           button="link"
+          className="expandable__button"
           label={expanded ? __('Less') : __('More')}
           onClick={this.handleClick}
         />

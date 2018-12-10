@@ -213,13 +213,23 @@ class CategoryList extends PureComponent<Props, State> {
     const showScrollButtons = isCommunityTopBids ? !obscureNsfw : true;
 
     return (
-      <div className="card-row">
-        <div className="card-row__header">
-          <div className="card-row__title">
+      <section className="media-group--row">
+        <header className="media-group__header">
+          <div className="media-group__header-title">
             {categoryLink ? (
-              <div className="card__actions card__actions--no-margin">
-                <Button label={category} navigate="/show" navigateParams={{ uri: categoryLink }} />
-                <SubscribeButton uri={`lbry://${categoryLink}`} showSnackBarOnSubscribe />
+              <div className="channel-info__actions">
+                <div className="channel-info__actions__group">
+                  <Button
+                    label={category}
+                    navigate="/show"
+                    navigateParams={{ uri: categoryLink }}
+                  />
+                  <SubscribeButton
+                    button="alt"
+                    showSnackBarOnSubscribe
+                    uri={`lbry://${categoryLink}`}
+                  />
+                </div>
               </div>
             ) : (
               category
@@ -234,32 +244,30 @@ class CategoryList extends PureComponent<Props, State> {
             )}
           </div>
           {showScrollButtons && (
-            <div className="card-row__scroll-btns">
+            <nav className="media-group__header-navigation">
               <Button
-                className="btn--arrow"
                 disabled={!canScrollPrevious}
                 onClick={this.handleScrollPrevious}
                 icon={ICONS.ARROW_LEFT}
               />
               <Button
-                className="btn--arrow"
                 disabled={!canScrollNext}
                 onClick={this.handleScrollNext}
                 icon={ICONS.ARROW_RIGHT}
               />
-            </div>
+            </nav>
           )}
-        </div>
+        </header>
         {obscureNsfw && isCommunityTopBids ? (
-          <div className="card-row__message help">
+          <p className="media__message media__message--help">
             {__(
               'The community top bids section is only visible if you allow mature content in the app. You can change your content viewing preferences'
             )}{' '}
             <Button button="link" navigate="/settings" label={__('here')} />.
-          </div>
+          </p>
         ) : (
-          <div
-            className="card-row__scrollhouse"
+          <ul
+            className="media-scrollhouse"
             ref={ref => {
               this.rowItems = ref;
             }}
@@ -292,9 +300,9 @@ class CategoryList extends PureComponent<Props, State> {
               new Array(10).fill(1).map((x, i) => <FileCard key={i} />)
             /* eslint-enable react/no-array-index-key */
             }
-          </div>
+          </ul>
         )}
-      </div>
+      </section>
     );
   }
 }

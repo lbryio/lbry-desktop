@@ -16,6 +16,7 @@ type Props = {
   obscureNsfw: boolean,
   claimIsMine: boolean,
   isDownloaded: boolean,
+  isSearchResult: boolean,
   uri: string,
   isResolvingUri: boolean,
   rewardedContentClaimIds: Array<string>,
@@ -62,7 +63,7 @@ class FileTile extends React.PureComponent<Props> {
     const isRewardContent = claim && rewardedContentClaimIds.includes(claim.claim_id);
 
     return (
-      <div className={classnames('card__file-properties', { card__subtitle: size === 'large' })}>
+      <div className={classnames('media__properties', { card__subtitle: size === 'large' })}>
         <FilePrice hideFree uri={uri} />
         {isNew && <span className="badge badge--alert icon">{__('NEW')}</span>}
         {isSubscribed && <Icon icon={ICONS.HEART} />}
@@ -77,6 +78,7 @@ class FileTile extends React.PureComponent<Props> {
       claim,
       metadata,
       isResolvingUri,
+      isSearchResult,
       navigate,
       obscureNsfw,
       claimIsMine,
@@ -91,16 +93,15 @@ class FileTile extends React.PureComponent<Props> {
     if (!claim && isResolvingUri) {
       return (
         <div
-          className={classnames('file-tile', {
-            'file-tile--small': size === 'small',
-            'file-tile--large': size === 'large',
+          className={classnames('media-tile', {
+            large: size === 'large',
           })}
         >
-          <div className="card--placeholder card__media" />
+          <div className="card__placeholder card__media" />
           <div className="file-tile__info">
-            <div className="card--placeholder placeholder__title--tile" />
-            <div className="card--placeholder placeholder__channel" />
-            <div className="card--placeholder placeholder__date" />
+            <div className="card__placeholder title" />
+            <div className="card__placeholder channel" />
+            <div className="card__placeholder date" />
           </div>
         </div>
       );
@@ -133,9 +134,10 @@ class FileTile extends React.PureComponent<Props> {
 
     return !name && hideNoResult ? null : (
       <section
-        className={classnames('file-tile card--link', {
-          'file-tile--small': size === 'small',
-          'file-tile--large': size === 'large',
+        className={classnames('media-tile card--link', {
+          'media--search-result': isSearchResult,
+          'media--small': size === 'small',
+          'media--large': size === 'large',
         })}
         onClick={onClick}
         onKeyUp={onClick}
@@ -143,21 +145,23 @@ class FileTile extends React.PureComponent<Props> {
         tabIndex="0"
       >
         <CardMedia title={title || name} thumbnail={thumbnail} />
-        <div className="file-tile__info">
-          <div className="file-tile__title">
+        <div className="media__info">
+          <div className="media__title">
             {(title || name) && (
               <TruncatedText text={title || name} lines={size === 'small' ? 2 : 3} />
             )}
           </div>
-          <div className="card__subtitle">
+          <div className="media__subtitle">
             <UriIndicator uri={uri} link />
           </div>
-          <div className="card__subtitle card--space-between">
-            <DateTime timeAgo block={height} />
+          <div className="media__subtitle card--space-between">
+            <div className="media__date">
+              <DateTime timeAgo block={height} />
+            </div>
             {size !== 'large' && this.renderFileProperties()}
           </div>
           {displayDescription && (
-            <div className="card__subtext">
+            <div className="media__subtext">
               <TruncatedText text={description} lines={size === 'large' ? 4 : 3} />
             </div>
           )}

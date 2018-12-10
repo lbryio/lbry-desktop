@@ -37,7 +37,10 @@ class WalletSend extends React.PureComponent<Props> {
 
     return (
       <section className="card card--section">
-        <div className="card__title">{__('Send Credits')}</div>
+        <header className="card__header">
+          <h2 className="card__title">{__('Send Credits')}</h2>
+        </header>
+
         <div className="card__content">
           <Formik
             initialValues={{

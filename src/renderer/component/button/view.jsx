@@ -23,7 +23,7 @@ type Props = {
   noPadding: ?boolean, // to remove padding and allow circular buttons
   uppercase: ?boolean,
   iconColor?: string,
-  tourniquet: ?boolean, // to shorten the button and ellipsis, only use for links
+  constrict: ?boolean, // to shorten the button and ellipsis, only use for links
 };
 
 class Button extends React.PureComponent<Props> {
@@ -51,7 +51,7 @@ class Button extends React.PureComponent<Props> {
       noPadding,
       uppercase,
       iconColor,
-      tourniquet,
+      constrict,
       ...otherProps
     } = this.props;
 
@@ -71,7 +71,7 @@ class Button extends React.PureComponent<Props> {
             'btn--link': button === 'link',
             'btn--external-link': button === 'link' && href,
             'btn--uppercase': uppercase,
-            'btn--tourniquet': tourniquet,
+            'btn--constrict': constrict,
           }
         : 'btn--no-style',
       className

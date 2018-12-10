@@ -72,7 +72,7 @@ export default (props: Props) => {
 
       {!hasSubscriptions && (
         <Fragment>
-          <div className="page__empty--horizontal">
+          <div className="yrbl-wrap">
             <img
               alt="Sad gerbil"
               className="subscriptions__gerbil"
@@ -116,7 +116,9 @@ export default (props: Props) => {
                         <MarkAsRead channel={channel} />
                       </div>
                       <div className="card__list card__content">
-                        {uris.map(uri => <FileCard key={uri} uri={uri} />)}
+                        {uris.map(uri => (
+                          <FileCard key={uri} uri={uri} />
+                        ))}
                       </div>
                     </section>
                   );
@@ -125,7 +127,7 @@ export default (props: Props) => {
                 <Fragment>
                   <div className="page__empty">
                     <h3 className="card__title">{__('All caught up!')}</h3>
-                    <p className="card__subtitle">{__('You might like these channels below.')}</p>
+                    <p className="card__subtitle">{__('You might like the channels below.')}</p>
                   </div>
                   <SuggestedSubscriptions />
                 </Fragment>

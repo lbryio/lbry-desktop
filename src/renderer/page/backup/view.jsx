@@ -20,15 +20,21 @@ class BackupPage extends React.PureComponent<Props> {
       <Page>
         <section className="card card--section">
           {noDaemonSettings ? (
-            <div className="card__title">{__('Failed to load settings.')}</div>
+            <header className="card__header">
+              <h2 className="card__title">{__('Failed to load settings.')}</h2>
+            </header>
           ) : (
             <React.Fragment>
-              <div className="card__title">{__('Backup Your LBRY Credits')}</div>
-              <p className="card__subtitle">
-                {__(
-                  'Your LBRY credits are controllable by you and only you, via wallet file(s) stored locally on your computer.'
-                )}
-              </p>
+              <header className="card__header">
+                <h2 className="card__title">{__('Backup Your LBRY Credits')}</h2>
+
+                <p className="card__subtitle">
+                  {__(
+                    'Your LBRY credits are controllable by you and only you, via wallet file(s) stored locally on your computer.'
+                  )}
+                </p>
+              </header>
+
               <div className="card__content">
                 <p>
                   {__(
@@ -40,7 +46,7 @@ class BackupPage extends React.PureComponent<Props> {
                     'However, it is fairly easy to back up manually. To backup your wallet, make a copy of the folder listed below:'
                   )}
                 </p>
-                <p className="card__success-msg">{lbryumWalletDir}</p>
+                <p className="card__message">{lbryumWalletDir}</p>
                 <p>
                   {__(
                     'Access to these files are equivalent to having access to your credits. Keep any copies you make of your wallet in a secure place.'
@@ -52,7 +58,8 @@ class BackupPage extends React.PureComponent<Props> {
                     button="link"
                     href="https://lbry.io/faq/how-to-backup-wallet"
                     label={__('see this article')}
-                  />.
+                  />
+                  .
                 </p>
               </div>
             </React.Fragment>

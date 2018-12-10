@@ -92,20 +92,28 @@ class WalletSendTip extends React.PureComponent<Props, State> {
           placeholder="1.23"
           onChange={event => this.handleSupportPriceChange(event)}
           helper={
-            <span>
+            <p>
               {__(`This will appear as a tip for "${title}".`)}{' '}
               <Button label={__('Learn more')} button="link" href="https://lbry.io/faq/tipping" />
-            </span>
+            </p>
           }
         />
-        <div className="card__actions">
-          <Button
-            button="primary"
-            label={__('Send')}
-            disabled={isPending || tipError}
-            onClick={this.handleSendButtonClicked}
-          />
-          <Button button="link" label={__('Cancel')} onClick={onCancel} navigateParams={{ uri }} />
+
+        <div className="card__content">
+          <div className="card__actions">
+            <Button
+              button="primary"
+              label={__('Send')}
+              disabled={isPending || tipError}
+              onClick={this.handleSendButtonClicked}
+            />
+            <Button
+              button="link"
+              label={__('Cancel')}
+              onClick={onCancel}
+              navigateParams={{ uri }}
+            />
+          </div>
         </div>
       </section>
     );

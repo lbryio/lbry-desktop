@@ -38,17 +38,18 @@ class SnackBar extends React.PureComponent<Props> {
     }
 
     return (
-      <div className={classnames("snack-bar", {
-        "snack-bar--error": isError
-      })}>
+      <div
+        className={classnames('snack-bar', {
+          'snack-bar--error': isError,
+        })}
+      >
         <div className="snack-bar__message">
           <div>&#9432;</div>
           <div>{message}</div>
         </div>
-        {linkText &&
-          linkTarget && (
-            <Button navigate={linkTarget} className="snack-bar__action" label={linkText} />
-          )}
+        {linkText && linkTarget && (
+          <Button navigate={linkTarget} className="snack-bar__action" label={linkText} />
+        )}
       </div>
     );
   }

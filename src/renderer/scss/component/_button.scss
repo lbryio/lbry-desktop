@@ -1,232 +1,160 @@
 .btn {
-  min-width: var(--btn-height);
-  height: var(--btn-height);
-
-  align-items: center;
-  background-color: $lbry-teal-5;
-  border: none;
-  border-radius: var(--btn-radius);
-  color: $lbry-white;
-  cursor: pointer;
-  display: flex;
-  fill: currentColor; // for proper icon color
-  font-size: 12px;
-  justify-content: center;
-  padding: 10px;
+  fill: currentColor;
   position: relative;
-  text-decoration: none;
-  transition: all var(--animation-duration) var(--animation-style);
+}
 
-  &:not(:disabled) {
+.btn--alt {
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+.btn--constrict {
+  @include constrict;
+}
+
+.btn--disabled {
+  opacity: 0.3;
+}
+
+.btn--external-link,
+.btn--link {
+  transition: color 0.2s;
+
+  &:not(.btn--disabled):not(:hover) {
+    color: $lbry-teal-5;
+
+    html[data-theme='dark'] & {
+      color: $lbry-teal-3;
+    }
+  }
+
+  &:not(.btn--disabled):hover {
+    color: $lbry-teal-3;
+
+    html[data-theme='dark'] & {
+      color: $lbry-teal-4;
+    }
+  }
+}
+
+.btn--external-link {
+  font-weight: 500;
+  text-align: left;
+}
+
+.btn--icon {
+  width: 5rem;
+  height: 5rem;
+
+  background-repeat: no-repeat;
+  background-size: 50%;
+  border-radius: 50%;
+  color: $lbry-white;
+  transition: background-color 0.2s;
+
+  &:not(:hover) {
+    background-color: rgba($lbry-black, 0.7);
   }
 
   &:hover {
-    background-color: $lbry-teal-4;
+    background-color: $lbry-green-3;
   }
 
-  &:not(.btn--no-padding):not(.btn--link):not(.btn--no-style) {
-    .btn__content {
-      align-items: center;
-      display: flex;
-      padding: 0 8px;
+  &.btn--play {
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E %3Cg stroke='white' stroke-width='2' fill='white' fill-rule='evenodd' stroke-linejoin='round'%3E %3Cpolygon points='5 21 5 3 21 12'/%3E %3C/g%3E %3C/svg%3E");
+    background-position: calc(50% + 0.1rem) center;
+  }
+
+  &.btn--view {
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E %3Cg stroke='white' stroke-width='2' fill='none' fill-rule='evenodd'%3E %3Cpath d='M2, 12 C2, 12 5, 5 12, 5 C19, 5 22, 12 22, 12 C22, 12 19, 19 12, 19 C5, 19 2, 12 2, 12 Z' stroke-linejoin='round'/%3E %3Ccircle cx='12' cy='12' r='3'/%3E %3Cpath d='M12, 5 L12, 3' stroke-linecap='round'/%3E %3Cpath d='M18, 6.5 L19, 5' stroke-linecap='round'/%3E %3Cpath d='M21, 10 L22.5, 9' stroke-linecap='round'/%3E %3Cpath d='M1.5, 10 L3, 9' stroke-linecap='round' transform='translate(2.250000, 9.500000) scale(1, -1) translate(-2.250000, -9.500000)'/%3E %3Cpath d='M5, 6.5 L6, 5' stroke-linecap='round' transform='translate(5.500000, 5.750000) scale(-1, 1) translate(-5.500000, -5.750000)'/%3E %3C/g%3E %3C/svg%3E");
+    background-position: center calc(50% + 0.1rem);
+  }
+
+  .btn__label {
+    display: none;
+  }
+}
+
+.btn--inverse {
+  border: 1px solid $lbry-gray-1;
+  border-radius: 1rem;
+  color: inherit;
+  padding: var(--spacing-vertical-small) var(--spacing-vertical-medium); // 0.5rem 1rem;
+  transition: background-color 0.2s;
+
+  html[data-theme='dark'] & {
+    border-color: rgba($lbry-white, 0.1);
+  }
+
+  &:not(:hover) {
+    background-color: transparent;
+  }
+
+  &:hover {
+    background-color: $lbry-gray-1;
+
+    html[data-theme='dark'] & {
+      background-color: rgba($lbry-white, 0.1);
     }
   }
 
-  &.btn--no-padding {
-    .btn__content {
-      padding: 0;
-      display: flex;
-      align-items: center;
+  .btn__content {
+    display: flex;
+
+    svg {
+      width: 1rem;
+      height: 1rem;
+
+      color: $lbry-gray-4;
+      margin-right: var(--spacing-vertical-small); // 0.25rem;
+    }
+
+    .btn__label {
+      line-height: 1rem;
     }
   }
+}
 
-  &.btn--alt {
-    &:not(:disabled) {
-      background-color: $lbry-white;
-      color: $lbry-black;
-    }
+.btn--load-screen {
+  border-bottom: 1px solid $lbry-white;
+  display: inline-block;
 
-    &:disabled {
-      background-color: transparent;
-      color: $lbry-gray-5;
-    }
-  }
-
-  &.btn--arrow {
-    color: $lbry-black;
-    width: var(--btn-arrow-width);
-
-    &:disabled {
-      opacity: 0.3;
-    }
-  }
-
-  &.btn--danger {
-    background-color: $lbry-red-3;
-  }
-
-  &.btn--link {
-    padding: 0;
-    margin: 0;
-    background-color: inherit;
-    color: $lbry-teal-4;
-    font-size: 1em;
-    border-radius: 0;
-    display: inline;
-    min-width: 0;
-    box-shadow: none;
-    text-align: left;
-
-    &:disabled {
-      color: $lbry-gray-5;
-    }
-  }
-
-  &:disabled {
-    cursor: default;
-
-    &.btn--primary {
-      background-color: rgba($lbry-black, 0.5);
-    }
-
-    &:hover {
-      box-shadow: none;
-    }
-  }
-
-  &.btn--external-link {
+  &:hover {
+    border-bottom: 1px solid $lbry-blue-1;
     color: $lbry-blue-1;
   }
+}
 
-  &.btn--file-actions {
-    width: var(--btn-height);
-    height: var(--btn-height);
+.btn--primary {
+  align-self: center; // fixes buttons next to tall elements inside one with `display: flex`
+  border-radius: 1rem;
+  color: $lbry-white;
+  padding: var(--spacing-vertical-miniscule) var(--spacing-vertical-medium); // 0.5rem 1rem;
+  transition: background-color 0.2s;
 
-    background-color: $lbry-black;
-    border-radius: var(--btn-radius);
-    color: $lbry-white;
-    opacity: 0.8;
-    padding: 10px;
-  }
-
-  &.btn--header-balance {
-    color: $lbry-teal-5;
-    font-size: 14px;
-
-    @media only screen and (min-width: $large-breakpoint) {
-      font-size: 18px;
-    }
-
-    .btn__label--balance {
-      color: $lbry-gray-5;
-    }
-
-    &:hover {
-      background-color: transparent;
-
-      .btn__label--balance {
-        color: $lbry-teal-5;
-      }
-    }
-  }
-
-  &.btn--header-publish {
+  &:not(:hover) {
     background-color: $lbry-teal-5;
   }
-
-  &.btn--home-nav {
-    background-color: $lbry-white;
-    box-shadow: none;
-
-    .btn__content {
-      padding: 0;
-    }
-  }
-
-  &.btn--inverse {
-    background-color: transparent;
-    box-shadow: none;
-    color: $lbry-teal-5;
-  }
-
-  &.btn--link {
-    margin: 0;
-    padding: 0;
-
-    background-color: inherit;
-    border-radius: 0;
-    box-shadow: none;
-    color: $lbry-teal-5;
-    display: inline;
-    font-size: 1em;
-    min-width: 0;
-    text-align: left;
-    transition: none;
-  }
-
-  &.btn--no-style {
-    margin: 0;
-    padding: 0;
-
-    background-color: inherit;
-    border-radius: 0;
-    box-shadow: none;
-    color: inherit;
-    font-size: inherit;
-    font-weight: inherit;
-    min-width: 0;
-  }
-
-  &.btn--secondary {
-    background-color: $lbry-teal-5;
-  }
-
-  &.btn--tourniquet {
-    max-width: 20vw;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
-
-  &.btn--uppercase {
-    text-transform: uppercase;
-  }
-
-  &.btn--load-screen {
-    display: inline-block;
-    border-bottom: 1px solid $lbry-white;
-
-    &:hover {
-      color: $lbry-blue-1;
-      border-bottom: 1px solid $lbry-blue-1;
-    }
-  }
-
-  .icon + .btn__label {
-    padding-left: 5px;
-  }
-}
-
-.btn--link,
-.btn--no-style {
-  height: auto;
-
-  .btn__label,
-  .btn__content {
-    padding: 0;
-  }
-}
-
-.icon + .btn__label,
-.btn__label + .icon {
-  margin-left: 5px;
-}
-
-.btn--uri-indicator {
-  display: inline-block;
-  transition: color var(--animation-duration) var(--animation-style);
 
   &:hover {
-    color: $lbry-teal-4;
+    background-color: $lbry-teal-3;
+
+    html[data-theme='dark'] & {
+      background-color: $lbry-teal-4;
+    }
   }
+
+  svg {
+    width: 1rem;
+    height: 1rem;
+
+    margin-right: var(--spacing-vertical-small); // 0.5rem;
+    position: relative;
+    top: 0.1rem;
+  }
+}
+
+.btn--uppercase {
+  text-transform: uppercase;
 }

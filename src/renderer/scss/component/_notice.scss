@@ -1,10 +1,14 @@
 .notice {
-  background-color: $lbry-green-1;
-  border: 1px solid $lbry-green-2;
+  border: 1px solid;
   border-radius: 5px;
-  color: $lbry-green-3;
-  padding: 10px 20px;
+  padding: var(--spacing-vertical-medium) var(--spacing-vertical-large); // 10px 20px;
   text-shadow: 0 1px 0 rgba($lbry-white, 0.5);
+
+  &:not(.notice--error) {
+    background-color: $lbry-green-1;
+    border-color: $lbry-green-2;
+    color: $lbry-green-3;
+  }
 }
 
 .notice--error {

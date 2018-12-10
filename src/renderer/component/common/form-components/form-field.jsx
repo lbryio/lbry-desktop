@@ -68,9 +68,11 @@ export class FormField extends React.PureComponent<Props> {
     if (type) {
       if (type === 'select') {
         input = (
-          <select className="form-field__select" id={name} {...inputProps}>
-            {children}
-          </select>
+          <div className="form-field__select-wrapper">
+            <select className="form-field__select" id={name} {...inputProps}>
+              {children}
+            </select>
+          </div>
         );
       } else if (type === 'markdown') {
         const handleEvents = {

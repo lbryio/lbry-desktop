@@ -1,5 +1,5 @@
 // @flow
-import * as ICONS from 'constants/icons';
+import classnames from 'classnames';
 import React from 'react';
 import Button from 'component/button';
 
@@ -15,10 +15,19 @@ class VideoPlayButton extends React.PureComponent<Props> {
     const { fileInfo, mediaType, isLoading, play } = this.props;
     const disabled = isLoading || fileInfo === undefined;
     const doesPlayback = ['audio', 'video'].indexOf(mediaType) !== -1;
-    const icon = doesPlayback ? ICONS.PLAY : ICONS.EYE;
     const label = doesPlayback ? __('Play') : __('View');
 
-    return <Button button="primary" disabled={disabled} label={label} icon={icon} onClick={play} />;
+    return (
+      <Button
+        disabled={disabled}
+        label={label}
+        className={classnames('btn--icon', {
+          'btn--play': doesPlayback,
+          'btn--view': !doesPlayback,
+        })}
+        onClick={play}
+      />
+    );
   }
 }
 

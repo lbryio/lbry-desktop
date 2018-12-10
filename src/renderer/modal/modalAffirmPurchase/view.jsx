@@ -40,13 +40,13 @@ class ModalAffirmPurchase extends React.PureComponent<Props> {
         onConfirmed={this.onAffirmPurchase}
         onAborted={cancelPurchase}
       >
-        <section className="card__content">
+        <p>
           {__('This will purchase')} <strong>{`"${title}"`}</strong> {__('for')}{' '}
           <strong>
             <FilePrice uri={uri} showFullPrice inheritStyle showLBC={false} />
           </strong>{' '}
           {__('credits')}.
-        </section>
+        </p>
       </Modal>
     );
   }

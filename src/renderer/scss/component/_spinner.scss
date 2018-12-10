@@ -3,7 +3,7 @@
   height: 40px;
 
   font-size: 10px;
-  margin: $spacing-vertical * 1/3;
+  margin: var(--spacing-vertical-small); // $spacing-vertical * 1/3;
   text-align: center;
 
   .rect {
@@ -32,21 +32,13 @@
   }
 }
 
-.spinner--light {
-  .rect {
-    background-color: $lbry-white;
-  }
-}
-
 .spinner--dark {
   .rect {
     background-color: $lbry-black;
   }
 }
 
-.spinner--splash {
-  margin-top: $spacing-vertical;
-
+.spinner--light {
   .rect {
     background-color: $lbry-white;
   }
@@ -57,7 +49,7 @@
   height: 32px;
 
   font-size: 10px;
-  margin: $spacing-vertical * 1/3 0;
+  margin: var(--spacing-vertical-small) 0; // $spacing-vertical * 1/3 0;
   text-align: center;
 
   .rect {
@@ -67,14 +59,10 @@
   }
 }
 
-@keyframes sk-stretchdelay {
-  0%,
-  40%,
-  100% {
-    transform: scaleY(0.4);
-  }
+.spinner--splash {
+  margin-top: var(--spacing-vertical-large); // $spacing-vertical;
 
-  20% {
-    transform: scaleY(1);
+  .rect {
+    background-color: $lbry-white;
   }
 }

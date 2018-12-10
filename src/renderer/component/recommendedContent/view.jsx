@@ -50,7 +50,7 @@ export default class RecommendedContent extends React.PureComponent<Props> {
     const { recommendedContent, isSearching } = this.props;
 
     return (
-      <section className="card__list--recommended">
+      <section className="media-group--list-recommended">
         <span>Related</span>
         {recommendedContent &&
           recommendedContent.map(recommendedUri => (
@@ -62,9 +62,9 @@ export default class RecommendedContent extends React.PureComponent<Props> {
               uri={recommendedUri}
             />
           ))}
-        {recommendedContent &&
-          !recommendedContent.length &&
-          !isSearching && <div className="card__subtitle">No related content found</div>}
+        {recommendedContent && !recommendedContent.length && !isSearching && (
+          <div className="media__subtitle">No related content found</div>
+        )}
       </section>
     );
   }

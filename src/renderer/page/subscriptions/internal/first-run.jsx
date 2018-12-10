@@ -23,7 +23,7 @@ export default (props: Props) => {
 
   return (
     <Fragment>
-      <div className="page__empty--horizontal">
+      <div className="yrbl-wrap">
         <img
           alt="Friendly gerbil"
           className="subscriptions__gerbil"
@@ -43,18 +43,17 @@ export default (props: Props) => {
               <Button button="primary" label={__('Explore')} onClick={doShowSuggestedSubs} />
             </div>
           )}
-          {showSuggested &&
-            numberOfSubscriptions > 0 && (
-              <div className="card__actions">
-                <Button
-                  button="primary"
-                  onClick={onFinish}
-                  label={`${__('View your')} ${numberOfSubscriptions} ${
-                    numberOfSubscriptions > 1 ? __('subcriptions') : __('subscription')
-                  }`}
-                />
-              </div>
-            )}
+          {showSuggested && numberOfSubscriptions > 0 && (
+            <div className="card__actions">
+              <Button
+                button="primary"
+                onClick={onFinish}
+                label={`${__('View your')} ${numberOfSubscriptions} ${
+                  numberOfSubscriptions > 1 ? __('subcriptions') : __('subscription')
+                }`}
+              />
+            </div>
+          )}
         </div>
       </div>
       {showSuggested && !loadingSuggested && <SuggestedSubscriptions />}

@@ -46,12 +46,15 @@ class ReportPage extends React.Component {
     return (
       <Page>
         <section className="card card--section">
-          <div className="card__title">{__('Report an Issue/Request a Feature')}</div>
-          <p className="card__subtitle">
-            {__(
-              'Please describe the problem you experienced or the feature you want to see and any information you think might be useful to us. Links to screenshots are great!'
-            )}
-          </p>
+          <header className="card__header">
+            <h2 className="card__title">{__('Report an Issue/Request a Feature')}</h2>
+            <p className="card__subtitle">
+              {__(
+                'Please describe the problem you experienced or the feature you want to see and any information you think might be useful to us. Links to screenshots are great!'
+              )}
+            </p>
+          </header>
+
           <div className="card__content">
             <FormRow>
               <FormField
@@ -79,8 +82,12 @@ class ReportPage extends React.Component {
             </div>
           </div>
         </section>
+
         <section className="card card--section">
-          <div className="card__title">{__('Developer?')}</div>
+          <header className="card__header">
+            <h2 className="card__title">{__('Developer?')}</h2>
+          </header>
+
           <div className="card__content">
             <p>
               {__('You can also')}{' '}

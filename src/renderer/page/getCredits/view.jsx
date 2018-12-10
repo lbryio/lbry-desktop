@@ -14,7 +14,10 @@ const GetCreditsPage = () => (
       <ShapeShift />
     */}
     <section className="card card--section">
-      <div className="card__title">{__('More ways to get LBRY Credits')}</div>
+      <header className="card__header">
+        <h2 className="card__title">{__('More ways to get LBRY Credits')}</h2>
+      </header>
+
       <div className="card__content">
         <p>
           {
@@ -22,8 +25,15 @@ const GetCreditsPage = () => (
           }
         </p>
       </div>
-      <div className="card__actions">
-        <Button button="primary" href="https://lbry.io/faq/earn-credits" label={__('Read More')} />
+
+      <div className="card__content">
+        <div className="card__actions">
+          <Button
+            button="primary"
+            href="https://lbry.io/faq/earn-credits"
+            label={__('Read More')}
+          />
+        </div>
       </div>
     </section>
   </Page>

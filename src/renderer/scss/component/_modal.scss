@@ -11,6 +11,10 @@
   justify-content: center;
   position: fixed;
   z-index: 9999;
+
+  html[data-theme='dark'] & {
+    background-color: rgba($lbry-black, 0.7);
+  }
 }
 
 .modal-overlay--clear {
@@ -24,13 +28,31 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
+  line-height: 1.55;
   max-width: var(--modal-width);
   overflow: auto;
-  padding: $spacing-vertical;
+  padding: var(--spacing-vertical-large); // $spacing-vertical;
   word-break: break-word;
+
+  @media (min-width: 501px) {
+    min-width: 500px;
+  }
+
+  html[data-theme='dark'] & {
+    background-color: $lbry-black;
+    border-color: $lbry-gray-5;
+  }
+
+  .card__content:not(:last-child) {
+    margin-bottom: var(--spacing-vertical-large); // 1.5rem;
+  }
 
   .btn.btn--alt {
     background-color: $lbry-white; // Set modal buttons bg color
+
+    html[data-theme='dark'] & {
+      background-color: transparent;
+    }
   }
 }
 
@@ -41,7 +63,7 @@
   right: 0;
 
   background-color: rgba($lbry-gray-1, 0.5);
-  padding: $spacing-vertical;
+  padding: var(--spacing-vertical-large); // $spacing-vertical;
   overflow-y: scroll;
   position: absolute;
 
@@ -59,16 +81,16 @@
     height: 0;
     transition: height var(--animation-duration) var(--animation-style);
   }
+}
 
-  &--after-open {
-    .modal--fullscreen {
-      height: 100vh;
-    }
+.ReactModal__Overlay--after-open {
+  .modal--fullscreen {
+    height: 100vh;
   }
+}
 
-  &--before-close {
-    height: 0;
-  }
+.ReactModal__Overlay--before-close {
+  height: 0;
 }
 
 .modal__header {
@@ -79,15 +101,15 @@
   display: flex;
   flex-direction: row;
   justify-content: center;
-  margin-top: $spacing-vertical * 2/3;
+  margin-top: var(--spacing-vertical-medium); // $spacing-vertical * 2/3;
 }
 
 .modal__button {
-  margin: 0 $spacing-vertical * 1/3;
+  margin: 0 var(--spacing-vertical-small); // 0 $spacing-vertical * 1/3;
 
   &.btn--link {
     // So the text is not bigger than the text inside the button
-    font-size: 0.8em;
+    font-size: 0.8rem;
   }
 }
 
@@ -97,7 +119,8 @@
 
 .error-modal__content {
   display: flex;
-  padding: 0 8px 10px 10px;
+  padding: 0 var(--spacing-vertical-medium) var(--spacing-vertical-medium)
+    var(--spacing-vertical-medium); // 0 8px 10px 10px;
 }
 
 .error-modal__warning-symbol {
@@ -117,8 +140,8 @@
 .error-modal__error-list {
   max-width: var(--modal-width);
   max-height: 400px;
-  margin-top: $spacing-vertical * 1/3;
-  padding: $spacing-vertical * 1/3;
+  margin-top: var(--spacing-vertical-small); // $spacing-vertical * 1/3;
+  padding: var(--spacing-vertical-small); // $spacing-vertical * 1/3;
 
   background-color: $lbry-red-1;
   border-left: 2px solid $lbry-red-5;

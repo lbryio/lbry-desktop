@@ -1,6 +1,6 @@
 // @flow
 import type { Claim, Metadata } from 'types/claim';
-import * as ICONS from 'constants/icons';
+import * as icons from 'constants/icons';
 import * as React from 'react';
 import { normalizeURI, convertToShareLink } from 'lbry-redux';
 import CardMedia from 'component/cardMedia';
@@ -27,15 +27,10 @@ type Props = {
   isResolvingUri: boolean,
   /* eslint-enable react/no-unused-prop-types */
   isSubscribed: boolean,
-  showSubscribedLogo: boolean,
   isNew: boolean,
 };
 
 class FileCard extends React.PureComponent<Props> {
-  static defaultProps = {
-    showSubscribedLogo: false,
-  };
-
   componentWillMount() {
     this.resolve(this.props);
   }
@@ -64,7 +59,6 @@ class FileCard extends React.PureComponent<Props> {
       pending,
       isSubscribed,
       isNew,
-      showSubscribedLogo,
       isResolvingUri,
     } = this.props;
 
@@ -75,12 +69,12 @@ class FileCard extends React.PureComponent<Props> {
 
     if (!claim && !pending) {
       return (
-        <div className="card card--small">
-          <div className="card--placeholder card__media" />
-          <div className="card--placeholder placeholder__title" />
-          <div className="card--placeholder placeholder__channel" />
-          <div className="card--placeholder placeholder__date" />
-        </div>
+        <section className="media-card media--placeholder small">
+          <div className="media__thumb media__thumb--placeholder" />
+          <div className="media__title media__title--placeholder" />
+          <div className="media__channel media__channel--placeholder" />
+          <div className="media__date media__date--placeholder" />
+        </section>
       );
     }
 
@@ -107,34 +101,29 @@ class FileCard extends React.PureComponent<Props> {
         tabIndex="0"
         role="button"
         onClick={!pending ? () => navigate('/show', { uri }) : () => {}}
-        className={classnames('card card--small', {
-          'card--link': !pending,
-          'card--pending': pending,
+        className={classnames('media-card', {
+          'media--link': !pending,
+          'media--pending': pending,
         })}
         onContextMenu={handleContextMenu}
       >
         <CardMedia thumbnail={thumbnail} />
-        <div className="card__title card__title--file-card">
+        <div className="media__title">
           <TruncatedText text={title} lines={2} />
         </div>
-        <div className="card__subtitle">
+        <div className="media__subtitle">
           {pending ? <div>Pending...</div> : <UriIndicator uri={uri} link />}
         </div>
-        <div className="card__subtitle card--space-between">
+        <div className="media__date">
           <DateTime timeAgo block={height} />
-
-          <div className="card__file-properties">
-            <FilePrice hideFree uri={uri} />
-            {isRewardContent && <Icon iconColor="red" icon={ICONS.FEATURED} />}
-            {showSubscribedLogo && isSubscribed && <Icon icon={ICONS.HEART} />}
-            {fileInfo && <Icon icon={ICONS.LOCAL} />}
-          </div>
         </div>
-        {isNew && (
-          <div className="card__subtitle">
-            <span className="badge badge--alert">{__('NEW')}</span>
-          </div>
-        )}
+        <div className="media__properties">
+          <FilePrice hideFree uri={uri} />
+          {isRewardContent && <Icon iconColor="red" icon={icons.FEATURED} />}
+          {isSubscribed && <Icon icon={icons.HEART} />}
+          {fileInfo && <Icon icon={icons.LOCAL} />}
+          {isNew && <span className="badge badge--alert">{__('NEW')}</span>}
+        </div>
       </section>
     );
     /* eslint-enable jsx-a11y/click-events-have-key-events */

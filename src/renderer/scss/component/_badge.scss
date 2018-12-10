@@ -1,21 +1,47 @@
 .badge {
-  border-radius: 5px;
-  padding: 5px;
-  font-weight: 800;
-  font-size: 0.8em;
+  font-weight: 600;
+  vertical-align: top;
+  white-space: nowrap;
+
+  &:not(.badge--large) {
+    border-radius: 0.2rem;
+    display: inline-block;
+    font-size: 0.8rem;
+    letter-spacing: 0.05rem;
+    line-height: 2;
+    padding-right: var(--spacing-vertical-small); // 0.5rem;
+    padding-left: var(--spacing-vertical-small); // 0.55rem;
+  }
 }
 
-.badge--alert {
-  background-color: $lbry-red-3;
-  color: $lbry-white;
+.badge--cost:not(.badge--large) {
+  background-color: $lbry-yellow-2;
+
+  html[data-theme='dark'] & {
+    background-color: $lbry-yellow-3;
+    color: $lbry-black;
+  }
 }
 
 .badge--free {
   background-color: $lbry-blue-2;
-  color: $lbry-blue-5;
+
+  html[data-theme='dark'] & {
+    background-color: $lbry-blue-3;
+    color: $lbry-black;
+  }
 }
 
-.badge--cost {
-  background-color: $lbry-yellow-3;
-  color: $lbry-black;
+.badge--large {
+  font-size: 5rem;
+  line-height: 1;
+}
+
+.badge--nsfw {
+  background-color: $lbry-grape-2;
+
+  html[data-theme='dark'] & {
+    background-color: $lbry-grape-3;
+    color: $lbry-black;
+  }
 }

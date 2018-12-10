@@ -348,35 +348,35 @@ class PublishForm extends React.PureComponent<Props> {
     return (
       <Form onSubmit={this.handlePublish}>
         <section className={classnames('card card--section', { 'card--disabled': publishing })}>
-          <div className="card__title card--space-between">
-            {__('Content')}
-            {(filePath || !!editingURI) && (
-              <div className="card__actions-top-corner">
-                <Button
-                  button="inverse"
-                  icon={ICONS.CLOSE}
-                  label={__('Clear')}
-                  onClick={clearPublish}
-                />
-              </div>
-            )}
-          </div>
-          <div className="card__subtitle">
-            {isStillEditing ? __('Editing a claim') : __('What are you publishing?')}{' '}
-            {__('Read our')}{' '}
-            <Button button="link" label={__('FAQ')} href="https://lbry.io/faq/how-to-publish" />{' '}
-            {__('to learn more.')}
-          </div>
+          <header className="card__header">
+            <h2 className="card__title">{__('Content')}</h2>
+            <p className="card__subtitle">
+              {isStillEditing ? __('Editing a claim') : __('What are you publishing?')}{' '}
+              {__('Read our')}{' '}
+              <Button button="link" label={__('FAQ')} href="https://lbry.io/faq/how-to-publish" />{' '}
+              {__('to learn more.')}
+            </p>
+          </header>
+
+          {(filePath || !!editingURI) && (
+            <div className="card__internal-links">
+              <Button
+                button="inverse"
+                icon={icons.CLOSE}
+                label={__('Clear')}
+                onClick={clearPublish}
+              />
+            </div>
+          )}
           <div className="card__content">
             <FileSelector currentPath={filePath} onFileChosen={this.handleFileChange} />
-            {!!isStillEditing &&
-              name && (
-                <p className="card__content card__subtitle">
-                  {__("If you don't choose a file, the file from your existing claim")}
-                  {` "${name}" `}
-                  {__('will be used.')}
-                </p>
-              )}
+            {!!isStillEditing && name && (
+              <p className="card__content card__subtitle">
+                {__("If you don't choose a file, the file from your existing claim")}
+                {` "${name}" `}
+                {__('will be used.')}
+              </p>
+            )}
           </div>
         </section>
         <div className={classnames({ 'card--disabled': formDisabled })}>
@@ -408,18 +408,21 @@ class PublishForm extends React.PureComponent<Props> {
           </section>
 
           <section className="card card--section">
-            <div className="card__title">{__('Thumbnail')}</div>
-            <div className="card__subtitle">
-              {uploadThumbnailStatus === THUMBNAIL_STATUSES.API_DOWN ? (
-                __('Enter a URL for your thumbnail.')
-              ) : (
-                <React.Fragment>
-                  {__('Upload your thumbnail (.png/.jpg/.jpeg/.gif) to')}{' '}
-                  <Button button="link" label={__('spee.ch')} href="https://spee.ch/about" />.{' '}
-                  {__('Recommended size: 800x450 (16:9)')}
-                </React.Fragment>
-              )}
-            </div>
+            <header className="card__header">
+              <h2 className="card__title">{__('Thumbnail')}</h2>
+              <p className="card__subtitle">
+                {uploadThumbnailStatus === THUMBNAIL_STATUSES.API_DOWN ? (
+                  __('Enter a URL for your thumbnail.')
+                ) : (
+                  <React.Fragment>
+                    {__('Upload your thumbnail (.png/.jpg/.jpeg/.gif) to')}{' '}
+                    <Button button="link" label={__('spee.ch')} href="https://spee.ch/about" />.{' '}
+                    {__('Recommended size: 800x450 (16:9)')}
+                  </React.Fragment>
+                )}
+              </p>
+            </header>
+
             <SelectThumbnail
               thumbnailPath={thumbnailPath}
               thumbnail={thumbnail}
@@ -431,8 +434,11 @@ class PublishForm extends React.PureComponent<Props> {
           </section>
 
           <section className="card card--section">
-            <div className="card__title">{__('Price')}</div>
-            <div className="card__subtitle">{__('How much will this content cost?')}</div>
+            <header className="card__header">
+              <h2 className="card__title">{__('Price')}</h2>
+              <p className="card__subtitle">{__('How much will this content cost?')}</p>
+            </header>
+
             <div className="card__content">
               <FormField
                 type="radio"
@@ -469,22 +475,30 @@ class PublishForm extends React.PureComponent<Props> {
           </section>
 
           <section className="card card--section">
-            <div className="card__title">{__('Anonymous or under a channel?')}</div>
-            <p className="card__subtitle">
-              {__('This is a username or handle that your content can be found under.')}{' '}
-              {__('Ex. @Marvel, @TheBeatles, @BooksByJoe')}
-            </p>
-            <ChannelSection channel={channel} onChannelChange={this.handleChannelChange} />
+            <header className="card__header">
+              <h2 className="card__title">{__('Anonymous or under a channel?')}</h2>
+              <p className="card__subtitle">
+                {__('This is a username or handle that your content can be found under.')}{' '}
+                {__('Ex. @Marvel, @TheBeatles, @BooksByJoe')}
+              </p>
+            </header>
+
+            <div className="card__content">
+              <ChannelSection channel={channel} onChannelChange={this.handleChannelChange} />
+            </div>
           </section>
 
           <section className="card card--section">
-            <div className="card__title">{__('Where can people find this content?')}</div>
-            <p className="card__subtitle">
-              {__(
-                'The LBRY URL is the exact address where people find your content (ex. lbry://myvideo).'
-              )}{' '}
-              <Button button="link" label={__('Learn more')} href="https://lbry.io/faq/naming" />
-            </p>
+            <header className="card__header">
+              <h2 className="card__title">{__('Where can people find this content?')}</h2>
+              <p className="card__subtitle">
+                {__(
+                  'The LBRY URL is the exact address where people find your content (ex. lbry://myvideo).'
+                )}{' '}
+                <Button button="link" label={__('Learn more')} href="https://lbry.io/faq/naming" />
+              </p>
+            </header>
+
             <div className="card__content">
               <FormRow>
                 <FormField
@@ -512,6 +526,7 @@ class PublishForm extends React.PureComponent<Props> {
                 />
               </FormRow>
             </div>
+
             <div className={classnames('card__content', { 'card--disabled': !name })}>
               <FormField
                 className="input--price-amount"
@@ -538,74 +553,85 @@ class PublishForm extends React.PureComponent<Props> {
           </section>
 
           <section className="card card--section">
-            <FormRow>
-              <FormField
-                type="checkbox"
-                name="content_is_mature"
-                postfix={__('Mature audiences only')}
-                checked={nsfw}
-                onChange={event => updatePublishForm({ nsfw: event.target.checked })}
+            <div className="card__content">
+              <FormRow>
+                <FormField
+                  type="checkbox"
+                  name="content_is_mature"
+                  postfix={__('Mature audiences only')}
+                  checked={nsfw}
+                  onChange={event => updatePublishForm({ nsfw: event.target.checked })}
+                />
+              </FormRow>
+
+              <FormRow padded>
+                <FormField
+                  label={__('Language')}
+                  type="select"
+                  name="content_language"
+                  value={language}
+                  onChange={event => updatePublishForm({ language: event.target.value })}
+                >
+                  <option value="en">{__('English')}</option>
+                  <option value="zh">{__('Chinese')}</option>
+                  <option value="fr">{__('French')}</option>
+                  <option value="de">{__('German')}</option>
+                  <option value="jp">{__('Japanese')}</option>
+                  <option value="ru">{__('Russian')}</option>
+                  <option value="es">{__('Spanish')}</option>
+                </FormField>
+              </FormRow>
+
+              <LicenseType
+                licenseType={licenseType}
+                otherLicenseDescription={otherLicenseDescription}
+                licenseUrl={licenseUrl}
+                handleLicenseChange={(newLicenseType, newLicenseUrl) =>
+                  updatePublishForm({
+                    licenseType: newLicenseType,
+                    licenseUrl: newLicenseUrl,
+                  })
+                }
+                handleLicenseDescriptionChange={event =>
+                  updatePublishForm({
+                    otherLicenseDescription: event.target.value,
+                  })
+                }
+                handleLicenseUrlChange={event =>
+                  updatePublishForm({ licenseUrl: event.target.value })
+                }
               />
-            </FormRow>
-
-            <FormRow padded>
-              <FormField
-                label={__('Language')}
-                type="select"
-                name="content_language"
-                value={language}
-                onChange={event => updatePublishForm({ language: event.target.value })}
-              >
-                <option value="en">{__('English')}</option>
-                <option value="zh">{__('Chinese')}</option>
-                <option value="fr">{__('French')}</option>
-                <option value="de">{__('German')}</option>
-                <option value="jp">{__('Japanese')}</option>
-                <option value="ru">{__('Russian')}</option>
-                <option value="es">{__('Spanish')}</option>
-              </FormField>
-            </FormRow>
-
-            <LicenseType
-              licenseType={licenseType}
-              otherLicenseDescription={otherLicenseDescription}
-              licenseUrl={licenseUrl}
-              handleLicenseChange={(newLicenseType, newLicenseUrl) =>
-                updatePublishForm({
-                  licenseType: newLicenseType,
-                  licenseUrl: newLicenseUrl,
-                })
-              }
-              handleLicenseDescriptionChange={event =>
-                updatePublishForm({
-                  otherLicenseDescription: event.target.value,
-                })
-              }
-              handleLicenseUrlChange={event =>
-                updatePublishForm({ licenseUrl: event.target.value })
-              }
-            />
+            </div>
           </section>
 
-          <div className="card__actions">
-            <Submit
-              label={submitLabel}
-              disabled={
-                formDisabled ||
-                !formValid ||
-                uploadThumbnailStatus === THUMBNAIL_STATUSES.IN_PROGRESS
-              }
-            />
-            <Button button="alt" onClick={this.handleCancelPublish} label={__('Cancel')} />
-          </div>
-          <div className="card__subtitle">
-            {__('By continuing, you accept the')}{' '}
-            <Button
-              button="link"
-              href="https://www.lbry.io/termsofservice"
-              label={__('LBRY terms of service')}
-            />.
-          </div>
+          <section className="card card--section">
+            <div className="card__content">
+              {__('By continuing, you accept the')}{' '}
+              <Button
+                button="link"
+                href="https://www.lbry.io/termsofservice"
+                label={__('LBRY Terms of Service')}
+              />
+              .
+            </div>
+          </section>
+
+          <section className="card card--section">
+            <div className="card__content">
+              <div className="card__actions">
+                <Submit
+                  label={submitLabel}
+                  disabled={
+                    formDisabled ||
+                    !formValid ||
+                    uploadThumbnailStatus === THUMBNAIL_STATUSES.IN_PROGRESS
+                  }
+                />
+                <Button button="alt" onClick={this.handleCancelPublish} label={__('Cancel')} />
+              </div>
+            </div>
+          </section>
+
           {!formDisabled && !formValid && this.renderFormErrors()}
         </div>
       </Form>

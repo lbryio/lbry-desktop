@@ -23,38 +23,34 @@ const SideBar = (props: Props) => {
   const { navLinks, unreadSubscriptionTotal } = props;
 
   return (
-    <nav className="nav">
-      <div className="nav__links">
-        <ul className="nav__primary">
-          {navLinks.primary.map(({ label, path, active, icon }) => (
-            <li
-              key={path}
-              className={classnames('nav__link', {
-                'nav__link--active': active,
-              })}
-            >
-              <Button
-                navigate={path}
-                label={
-                  path === '/subscriptions' && unreadSubscriptionTotal
-                    ? `${label} (${unreadSubscriptionTotal})`
-                    : label
-                }
-                icon={icon}
-              />
-            </li>
-          ))}
-        </ul>
-        <hr />
+    <nav className="navigation">
+      <div className="navigation__links">
+        {navLinks.primary.map(({ label, path, active }) => (
+          <Button
+            className={classnames('navigation__link', {
+              'navigation__link--active': active,
+            })}
+            key={path}
+            label={
+              path === '/subscriptions' && unreadSubscriptionTotal
+                ? `${label} (${unreadSubscriptionTotal})`
+                : label
+            }
+            navigate={path}
+          />
+        ))}
+
         <ul>
-          {navLinks.secondary.map(({ label, path, active, icon, subLinks = [] }) => (
+          <li className="navigation__link navigation__link--title">Account</li>
+
+          {navLinks.secondary.map(({ label, path, active, subLinks = [] }) => (
             <li
-              key={label}
-              className={classnames('nav__link', {
-                'nav__link--active': active,
+              className={classnames('navigation__link', {
+                'navigation__link--active': active,
               })}
+              key={label}
             >
-              <Button navigate={path} label={label} icon={icon} />
+              <Button label={label} navigate={path} />
 
               {
                 // The sublinks should be animated on open close
@@ -62,25 +58,24 @@ const SideBar = (props: Props) => {
                 // was really slow and looked pretty bad. Possible fix is upgrading to v2
                 // Not sure if that has better performance
               }
-              {!!subLinks.length &&
-                active && (
-                  <ul key="0" className="nav__sub-links">
-                    {subLinks.map(({ label: subLabel, path: subPath, active: subLinkActive }) => (
-                      <li
-                        key={subPath}
-                        className={classnames('nav__link nav__link--sub', {
-                          'nav__link--active': subLinkActive,
-                        })}
-                      >
-                        {subPath ? (
-                          <Button navigate={subPath} label={subLabel} />
-                        ) : (
-                          <span>{subLabel}</span>
-                        )}
-                      </li>
-                    ))}
-                  </ul>
-                )}
+              {!!subLinks.length && active && (
+                <ul key="0" className="navigation__link-items">
+                  {subLinks.map(({ active: subLinkActive, label: subLabel, path: subPath }) => (
+                    <li
+                      className={classnames('navigation__link-item', {
+                        'navigation__link-item--active': subLinkActive,
+                      })}
+                      key={subPath}
+                    >
+                      {subPath ? (
+                        <Button label={subLabel} navigate={subPath} />
+                      ) : (
+                        <span>{subLabel}</span>
+                      )}
+                    </li>
+                  ))}
+                </ul>
+              )}
             </li>
           ))}
         </ul>

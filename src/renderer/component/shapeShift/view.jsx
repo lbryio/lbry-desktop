@@ -73,13 +73,17 @@ class ShapeShift extends React.PureComponent<Props> {
 
     return (
       <section className="card card--section">
-        <div className="card__title">{__('Convert Crypto to LBC')}</div>
-        <p className="card__subtitle">
-          {__('Powered by ShapeShift. Read our FAQ')}{' '}
-          <Button button="link" label={__('here')} href="https://lbry.io/faq/shapeshift" />.
-          {hasActiveShift &&
-            shiftState !== 'complete' && <span>{__('This will update automatically.')}</span>}
-        </p>
+        <header className="card__header">
+          <h2 className="card__title">{__('Convert Crypto to LBC')}</h2>
+
+          <p className="card__subtitle">
+            {__('Powered by ShapeShift. Read our FAQ')}{' '}
+            <Button button="link" label={__('here')} href="https://lbry.io/faq/shapeshift" />.
+            {hasActiveShift && shiftState !== 'complete' && (
+              <span>{__('This will update automatically.')}</span>
+            )}
+          </p>
+        </header>
 
         <div className="card__content">
           {error && <div className="form-field__error">{error}</div>}

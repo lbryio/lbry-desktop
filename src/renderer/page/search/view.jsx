@@ -48,10 +48,10 @@ class SearchPage extends React.PureComponent<Props> {
 
     return (
       <Page noPadding>
-        {query &&
-          isValid && (
-            <div className="search__top">
-              <div className="file-list__header">
+        <section className="search">
+          {query && isValid && (
+            <header className="search__header">
+              <h1 className="search__title">
                 {`lbry://${query}`}
                 <ToolTip
                   icon
@@ -59,41 +59,43 @@ class SearchPage extends React.PureComponent<Props> {
                 >
                   <Icon icon={ICONS.HELP} />
                 </ToolTip>
-              </div>
+              </h1>
               {isChannel ? (
                 <ChannelTile size="large" uri={uri} />
               ) : (
                 <FileTile size="large" displayHiddenMessage uri={uri} />
               )}
-            </div>
+            </header>
           )}
-        <div className="search__content">
-          <FormRow alignRight>
-            <FormField
-              type="number"
-              name="result_count"
-              min={10}
-              max={1000}
-              value={resultCount}
-              onChange={this.onSearchResultCountChange}
-              postfix={__('returned results')}
-            />
-            {
-              // Removing this for now, it currently doesn't do anything but ideally it would
-              // display content that we don't think is currently available to download
-              // It is like a "display all" setting
-              // <FormField
-              //   type="checkbox"
-              //   name="show_unavailable"
-              //   onChange={this.onShowUnavailableChange}
-              //   checked={showUnavailable}
-              //   postfix={__('Include unavailable content')}
-              // />
-            }
-          </FormRow>
-          <FileListSearch query={query} />
-          <div className="help">{__('These search results are provided by LBRY, Inc.')}</div>
-        </div>
+
+          <div className="search__results-wrapper">
+            <FormRow alignRight>
+              <FormField
+                type="number"
+                name="result_count"
+                min={10}
+                max={1000}
+                value={resultCount}
+                onChange={this.onSearchResultCountChange}
+                postfix={__('returned results')}
+              />
+              {
+                // Removing this for now, it currently doesn't do anything but ideally it would
+                // display content that we don't think is currently available to download
+                // It is like a "display all" setting
+                // <FormField
+                //   type="checkbox"
+                //   name="show_unavailable"
+                //   onChange={this.onShowUnavailableChange}
+                //   checked={showUnavailable}
+                //   postfix={__('Include unavailable content')}
+                // />
+              }
+            </FormRow>
+            <FileListSearch query={query} />
+            <div className="help">{__('These search results are provided by LBRY, Inc.')}</div>
+          </div>
+        </section>
       </Page>
     );
   }

@@ -43,14 +43,16 @@ class ShowPage extends React.PureComponent<Props> {
       const { claimName } = parseURI(uri);
       innerContent = (
         <Page notContained>
-          <section>
-            <h1>{claimName}</h1>
+          <section className="card card--section">
+            <header className="card__header">
+              <h1 className="card__title">{claimName}</h1>
+            </header>
+
             <div className="card__content">
               {isResolvingUri && <BusyIndicator message={__('Loading decentralized data...')} />}
-              {claim === null &&
-                !isResolvingUri && (
-                  <span className="empty">{__("There's nothing at this location.")}</span>
-                )}
+              {claim === null && !isResolvingUri && (
+                <span className="empty">{__("There's nothing at this location.")}</span>
+              )}
             </div>
           </section>
         </Page>

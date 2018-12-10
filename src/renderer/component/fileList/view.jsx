@@ -174,7 +174,10 @@ class FileList extends React.PureComponent<Props> {
             </FormField>
           </div>
         )}
-        <div className="card__list card__content">{content}</div>
+
+        <section className="media-group--list">
+          <div className="card__list">{content}</div>
+        </section>
       </section>
     );
   }

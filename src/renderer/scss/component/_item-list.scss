@@ -1,17 +1,21 @@
 .item-list {
   background-color: $lbry-white;
-  margin-top: $spacing-vertical;
-  padding: $spacing-vertical;
+  margin-top: var(--spacing-vertical-large); // $spacing-vertical;
+  padding: var(--spacing-vertical-large); // $spacing-vertical;
+
+  html[data-theme='dark'] & {
+    background-color: rgba($lbry-white, 0.1);
+  }
 }
 
 .item-list__item {
   align-items: center;
   display: flex;
-  padding: $spacing-vertical * 1/3;
+  padding: var(--spacing-vertical-small); // $spacing-vertical * 1/3;
 
   input,
-  .item-list__item--cutoff {
-    margin-right: $spacing-vertical;
+  &--cutoff {
+    margin-right: var(--spacing-vertical-large); // $spacing-vertical;
   }
 }
 

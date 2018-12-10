@@ -8,6 +8,10 @@
 
 ::-webkit-scrollbar-thumb {
   background-color: $lbry-gray-3;
+
+  html[data-theme='dark'] & {
+    background-color: $lbry-gray-5;
+  }
 }
 
 ::-webkit-scrollbar-thumb:active {
