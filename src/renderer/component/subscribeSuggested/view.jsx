@@ -23,7 +23,7 @@ class SuggestedSubscriptions extends PureComponent<Props> {
     return suggested ? (
       <div className="card__content subscriptions__suggested">
         {suggested.map(({ uri, label }) => (
-          <CategoryList key={uri} category={label} categoryLink={uri} />
+          <CategoryList isSubComponent key={uri} category={label} categoryLink={uri} />
         ))}
       </div>
     ) : null;

@@ -7,6 +7,7 @@ import ToolTip from 'component/common/tooltip';
 import FileCard from 'component/fileCard';
 import Button from 'component/button';
 import SubscribeButton from 'component/subscribeButton';
+import classnames from 'classnames';
 
 type Props = {
   category: string,
@@ -16,6 +17,7 @@ type Props = {
   channelClaims: ?Array<Claim>,
   fetchChannel: string => void,
   obscureNsfw: boolean,
+  isSubComponent: boolean,
 };
 
 type State = {
@@ -26,6 +28,7 @@ type State = {
 class CategoryList extends PureComponent<Props, State> {
   static defaultProps = {
     categoryLink: '',
+    isSubComponent: false,
   };
 
   constructor() {
@@ -207,14 +210,27 @@ class CategoryList extends PureComponent<Props, State> {
   }
 
   render() {
-    const { category, categoryLink, names, channelClaims, obscureNsfw } = this.props;
+    const {
+      category,
+      categoryLink,
+      names,
+      channelClaims,
+      obscureNsfw,
+      isSubComponent,
+    } = this.props;
     const { canScrollNext, canScrollPrevious } = this.state;
     const isCommunityTopBids = category.match(/^community/i);
     const showScrollButtons = isCommunityTopBids ? !obscureNsfw : true;
 
+    // isSubComponent is a hack, this component should be able to handle this with proper overflow styling
+
     return (
       <div className="card-row">
-        <div className="card-row__header">
+        <div
+          className={classnames('card-row__header', {
+            'card-row__header--sub-component': isSubComponent,
+          })}
+        >
           <div className="card-row__title">
             {categoryLink ? (
               <div className="card__actions card__actions--no-margin">
@@ -234,7 +250,11 @@ class CategoryList extends PureComponent<Props, State> {
             )}
           </div>
           {showScrollButtons && (
-            <div className="card-row__scroll-btns">
+            <div
+              className={classnames('card-row__scroll-btns', {
+                'card-row__scroll-btns--sub-component': isSubComponent,
+              })}
+            >
               <Button
                 className="btn--arrow"
                 disabled={!canScrollPrevious}
@@ -259,7 +279,9 @@ class CategoryList extends PureComponent<Props, State> {
           </div>
         ) : (
           <div
-            className="card-row__scrollhouse"
+            className={classnames('card-row__scrollhouse', {
+              'card-row__scrollhouse--sub-component': isSubComponent,
+            })}
             ref={ref => {
               this.rowItems = ref;
             }}
@@ -289,7 +311,7 @@ class CategoryList extends PureComponent<Props, State> {
             {!channelClaims &&
               !names &&
               /* eslint-disable react/no-array-index-key */
-              new Array(10).fill(1).map((x, i) => <FileCard key={i} />)
+              new Array(10).fill(1).map((x, i) => <FileCard placeholder key={i} />)
             /* eslint-enable react/no-array-index-key */
             }
           </div>
