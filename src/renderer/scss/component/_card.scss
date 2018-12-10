@@ -92,7 +92,7 @@
   position: relative;
 
   + .card__content {
-    padding-top: var(--spacing-vertical-large); // 2rem;
+    padding-top: var(--spacing-vertical-medium); // 2rem;
   }
 
   &:not(.card__header--flat) {
