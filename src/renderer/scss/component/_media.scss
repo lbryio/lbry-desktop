@@ -277,13 +277,13 @@
     display: inline-block;
   }
 
-  &:not(&--large):not(:empty) {
-    padding-top: var(--spacing-vertical-small); // 0.3rem;
+  &:not(.media__properties--large):not(:empty) {
+    padding-top: 0.3rem;
   }
 
-  &:not(&--large) {
+  &:not(.media__properties--large) {
     svg {
-      padding-top: var(--spacing-vertical-small); // 0.2rem;
+      padding-top: 0.2rem;
     }
   }
 
@@ -421,7 +421,7 @@
     }
   }
 
-  .media {
+  .media-card {
     cursor: pointer;
     display: inline-block;
     margin-bottom: var(--spacing-vertical-large); // 2rem;

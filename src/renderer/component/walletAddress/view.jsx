@@ -77,6 +77,12 @@ class WalletAddress extends React.PureComponent<Props, State> {
               onClick={this.toggleQR}
             />
           </div>
+
+          <p className="help">
+            {__(
+              'You can generate a new address at any time, and any previous addresses will continue to work. Using multiple addresses can be helpful for keeping track of incoming payments from multiple sources.'
+            )}
+          </p>
         </div>
 
         {showQR && (
@@ -84,16 +90,6 @@ class WalletAddress extends React.PureComponent<Props, State> {
             <QRCode value={receiveAddress} paddingTop />
           </div>
         )}
-
-        <div className="card__content">
-          <div className="help">
-            <p>
-              {__(
-                'You can generate a new address at any time, and any previous addresses will continue to work. Using multiple addresses can be helpful for keeping track of incoming payments from multiple sources.'
-              )}
-            </p>
-          </div>
-        </div>
       </section>
     );
   }
