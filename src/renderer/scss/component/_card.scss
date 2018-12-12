@@ -306,6 +306,10 @@
   // this needs to be used on a page with noPadding
   // doing so allows the content to scroll to the edge of the screen
   padding-left: $spacing-width;
+
+  &.card-row__header--sub-component {
+    padding-left: 0;
+  }
 }
 
 .card-row__message {
@@ -319,6 +323,12 @@
 
   @media (min-width: $medium-breakpoint) {
     padding-right: $spacing-width;
+  }
+
+  &.card-row__scroll-btns--sub-component {
+    @media (min-width: $medium-breakpoint) {
+      padding-right: 0;
+    }
   }
 }
 
@@ -351,6 +361,12 @@
 
     @media only screen and (min-width: $large-breakpoint) {
       width: calc((100% / 8) - 27px);
+    }
+  }
+
+  &.card-row__scrollhouse--sub-component {
+    .card:first-of-type {
+      margin-left: 0;
     }
   }
 }

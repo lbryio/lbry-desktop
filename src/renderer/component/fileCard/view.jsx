@@ -29,11 +29,13 @@ type Props = {
   isSubscribed: boolean,
   showSubscribedLogo: boolean,
   isNew: boolean,
+  placeholder: boolean,
 };
 
 class FileCard extends React.PureComponent<Props> {
   static defaultProps = {
     showSubscribedLogo: false,
+    placeholder: false,
   };
 
   componentWillMount() {
@@ -66,14 +68,16 @@ class FileCard extends React.PureComponent<Props> {
       isNew,
       showSubscribedLogo,
       isResolvingUri,
+      placeholder,
     } = this.props;
 
-    if (!isResolvingUri && !claim && !pending) {
-      // abandoned
+    const abandoned = !isResolvingUri && !claim && !pending && !placeholder;
+
+    if (abandoned) {
       return null;
     }
 
-    if (!claim && !pending) {
+    if ((!claim && !pending) || placeholder) {
       return (
         <div className="card card--small">
           <div className="card--placeholder card__media" />
