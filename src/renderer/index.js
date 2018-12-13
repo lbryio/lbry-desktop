@@ -15,6 +15,7 @@ import {
   doDaemonReady,
   doAutoUpdate,
   doOpenModal,
+  doHideModal,
 } from 'redux/actions/app';
 import { doToast, doBlackListedOutpointsSubscribe, isURIValid } from 'lbry-redux';
 import { doNavigate } from 'redux/actions/navigation';
@@ -86,6 +87,10 @@ rewards.setCallback('claimFirstRewardSuccess', () => {
 
 rewards.setCallback('rewardApprovalRequired', () => {
   app.store.dispatch(doOpenModal(MODALS.REWARD_APPROVAL_REQUIRED));
+});
+
+rewards.setCallback('claimRewardSuccess', () => {
+  app.store.dispatch(doHideModal(MODALS.REWARD_APPROVAL_REQUIRED));
 });
 
 ipcRenderer.on('open-uri-requested', (event, uri, newSession) => {
