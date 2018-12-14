@@ -20,6 +20,7 @@
   }
 
   .CodeMirror-selectedtext {
+    background-color: $lbry-teal-5 !important;
     color: $lbry-white;
   }
 
@@ -85,4 +86,10 @@
 
 .editor-statusbar {
   color: rgba($lbry-black, 0.5);
+  font-size: 1rem;
+  padding: var(--spacing-vertical-medium) 0; // overriding styles from elsewhere
+
+  html[data-theme='dark'] & {
+    color: inherit;
+  }
 }

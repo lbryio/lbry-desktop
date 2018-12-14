@@ -39,7 +39,7 @@ const perform = dispatch => ({
   updateSearchQuery: query => dispatch(doUpdateSearchQuery(query)),
   doFocus: () => dispatch(doFocusSearchInput()),
   doBlur: () => dispatch(doBlurSearchInput()),
-  doShowSnackBar: (props) => dispatch(doToast(props)),
+  doShowSnackBar: props => dispatch(doToast(props)),
 });
 
 export default connect(

@@ -2,6 +2,7 @@
 import * as ICONS from 'constants/icons';
 import * as React from 'react';
 import Button from 'component/button';
+import LbcSymbol from 'component/common/lbc-symbol';
 import WunderBar from 'component/wunderbar';
 
 type Props = {
@@ -38,68 +39,68 @@ const Header = (props: Props) => {
     <header className="header">
       <div className="header__navigation">
         <Button
-          noPadding
-          button="alt"
-          icon={ICONS.HOME}
-          className="btn--home-nav"
-          description={__('Home')}
-          onClick={() => navigate('/discover')}
-        />
-        <div className="header__history">
-          <Button
-            className="btn--arrow"
-            icon={ICONS.ARROW_LEFT}
-            description={__('Navigate back')}
-            onClick={back}
-            disabled={isBackDisabled}
-          />
-          <Button
-            className="btn--arrow"
-            icon={ICONS.ARROW_RIGHT}
-            description={__('Navigate forward')}
-            onClick={forward}
-            disabled={isForwardDisabled}
-          />
-        </div>
-      </div>
-      <WunderBar />
-      <div className="header__actions-right">
-        <Button
-          button="inverse"
-          className="btn--header-balance"
-          onClick={() => navigate('/wallet')}
+          className="header__navigation-item header__navigation-item--wallet"
+          description={__('Your wallet')}
+          iconRight="LBC"
           label={
             isUpgradeAvailable ? (
               `${balance}`
             ) : (
               <React.Fragment>
-                <span className="btn__label--balance" title={`${balance} LBC`}>
-                  You have
-                </span>{' '}
-                <span title={`${balance} LBC`}>{roundedBalance} LBC</span>
+                <span title={`${balance} LBC`}>{roundedBalance}</span>
+                <LbcSymbol />
               </React.Fragment>
             )
           }
-          iconRight="LBC"
-          description={__('Your wallet')}
+          onClick={() => navigate('/wallet')}
         />
 
         <Button
-          uppercase
-          button="primary"
-          className="btn--header-publish"
-          onClick={() => navigate('/publish')}
-          icon={ICONS.UPLOAD}
-          label={isUpgradeAvailable ? '' : __('Publish')}
+          className="header__navigation-item header__navigation-item--back"
+          description={__('Navigate back')}
+          disabled={isBackDisabled}
+          onClick={back}
+        />
+
+        <Button
+          className="header__navigation-item header__navigation-item--forward"
+          description={__('Navigate forward')}
+          disabled={isForwardDisabled}
+          onClick={forward}
+        />
+
+        <Button
+          className="header__navigation-item header__navigation-item--home"
+          description={__('Home')}
+          onClick={() => navigate('/discover')}
+        />
+      </div>
+
+      <WunderBar />
+
+      {
+        // TODO: Make `Menu` add `.active` class to `.navigation` when clicked
+      }
+
+      <div className="header__navigation">
+        <Button
+          className="header__navigation-item header__navigation-item--menu"
+          description={__('Menu')}
+        />
+
+        <Button
+          className="header__navigation-item header__navigation-item--publish"
           description={__('Publish content')}
+          label={isUpgradeAvailable ? '' : __('Publish')}
+          onClick={() => navigate('/publish')}
         />
 
         {showUpgradeButton && (
           <Button
             button="primary"
-            onClick={downloadUpgradeRequested}
             icon={ICONS.DOWNLOAD}
             label={__('Upgrade App')}
+            onClick={downloadUpgradeRequested}
           />
         )}
       </div>

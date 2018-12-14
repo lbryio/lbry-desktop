@@ -1,15 +1,10 @@
 .menu-container {
   display: inline-block;
-}
 
-.menu {
-  padding-top: ($spacing-vertical / 5) 0;
-  position: absolute;
-  white-space: nowrap;
-  z-index: 1;
-}
-
-.menu__menu-item {
-  display: block;
-  padding: ($spacing-vertical / 4) ($spacing-vertical / 2);
+  .menu {
+    padding-top: var(--spacing-vertical-medium);
+    position: absolute;
+    white-space: nowrap;
+    z-index: 1;
+  }
 }

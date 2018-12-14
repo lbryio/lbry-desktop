@@ -41,11 +41,17 @@ class UserEmailNew extends React.PureComponent<Props, State> {
     const { cancelButton, errorMessage, isPending } = this.props;
 
     return (
-      <div>
+      <span>
         <p>
           {__("We'll let you know about LBRY updates, security issues, and great new content.")}
         </p>
-        <p>{__("We'll never sell your email, and you can unsubscribe at any time.")}</p>
+
+        <p>
+          {__(
+            'In addition, your email address will never be sold and you can unsubscribe at any time.'
+          )}
+        </p>
+
         <Form onSubmit={this.handleSubmit}>
           <FormRow padded>
             <FormField
@@ -59,15 +65,18 @@ class UserEmailNew extends React.PureComponent<Props, State> {
               onChange={this.handleEmailChanged}
             />
           </FormRow>
+
           <div className="card__actions">
             <Submit label="Submit" disabled={isPending} />
             {cancelButton}
+            <br /><br />
           </div>
-          <div className="card__content help">
+
+          <p className="card__content help">
             {`${__('Your email may be used to sync usage data across devices.')} `}
-          </div>
+          </p>
         </Form>
-      </div>
+      </span>
     );
   }
 }

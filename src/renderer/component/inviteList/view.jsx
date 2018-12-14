@@ -24,9 +24,10 @@ class InviteList extends React.PureComponent<Props> {
 
     return (
       <section className="card card--section">
-        <div className="card__title">
-          <h3>{__('Invite History')}</h3>
-        </div>
+        <header className="card__header">
+          <h2 className="card__title">{__('Invite History')}</h2>
+        </header>
+
         <div className="card__content">
           {invitees.length === 0 && (
             <span className="empty">{__("You haven't invited anyone.")} </span>
@@ -66,6 +67,7 @@ class InviteList extends React.PureComponent<Props> {
             </table>
           )}
         </div>
+
         <div className="card__content">
           <div className="help">
             {__(

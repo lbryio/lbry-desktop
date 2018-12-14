@@ -1,9 +1,5 @@
 import { connect } from 'react-redux';
-import {
-  doWalletUnlock,
-  selectWalletUnlockPending,
-  selectWalletUnlockSucceeded,
-} from 'lbry-redux';
+import { doWalletUnlock, selectWalletUnlockPending, selectWalletUnlockSucceeded } from 'lbry-redux';
 import { doQuit, doHideModal } from 'redux/actions/app';
 import ModalWalletUnlock from './view';
 

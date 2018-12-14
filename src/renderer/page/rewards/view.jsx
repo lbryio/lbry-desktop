@@ -34,13 +34,14 @@ class RewardsPage extends PureComponent<Props> {
       if (!user.primary_email || !user.has_verified_email || !user.is_identity_verified) {
         return (
           <section className="card card--section">
-            <div className="card__title">{__('Humans Only')}</div>
-            <div className="card__subtitle">
-              <p>
+            <header className="card__header">
+              <h2 className="card__title">{__('Humans Only')}</h2>
+              <p className="card__subtitle">
                 {__('Rewards are for human beings only.')}{' '}
                 {__("You'll have to prove you're one of us before you can claim any rewards.")}
               </p>
-            </div>
+            </header>
+
             <div className="card__content">
               <Button onClick={doAuth} button="primary" label="Prove Humanity" />
             </div>
@@ -96,16 +97,21 @@ class RewardsPage extends PureComponent<Props> {
 
     if (daemonSettings && !daemonSettings.share_usage_data) {
       return (
-        <div className="card card--section">
-          <div className="card__title">{__('Disabled')}</div>
-          <p>
-            {__(
-              'Rewards are currently disabled for your account. Turn on diagnostic data sharing, in'
-            )}{' '}
-            <Button button="link" onClick={() => navigate('/settings')} label="Settings" />
-            {__(', in order to re-enable them.')}
-          </p>
-        </div>
+        <section className="card card--section">
+          <header className="card__header">
+            <h2 className="card__title">{__('Disabled')}</h2>
+          </header>
+
+          <div className="card__content">
+            <p>
+              {__(
+                'Rewards are currently disabled for your account. Turn on diagnostic data sharing, in'
+              )}{' '}
+              <Button button="link" onClick={() => navigate('/settings')} label="Settings" />
+              {__(', in order to re-enable them.')}
+            </p>
+          </div>
+        </section>
       );
     } else if (fetching) {
       return (
@@ -142,6 +148,7 @@ class RewardsPage extends PureComponent<Props> {
 
     const isNotEligible =
       !user || !user.primary_email || !user.has_verified_email || !user.is_reward_approved;
+
     return (
       <div
         className={classnames('card__list--rewards', {

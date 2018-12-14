@@ -35,33 +35,35 @@ class FileListSearch extends React.PureComponent<Props> {
       query && (
         <React.Fragment>
           <div className="search__results">
-            <div className="search-result__row">
-              <div className="file-list__header">{__('Search Results')}</div>
+            <section className="search__results-section">
+              <div className="search__results-title">{__('Search Results')}</div>
               <HiddenNsfwClaims uris={uris} />
               {!isSearching && fileResults.length ? (
-                fileResults.map(uri => <FileTile key={uri} uri={uri} />)
+                fileResults.map(uri => <FileTile isSearchResult key={uri} uri={uri} />)
               ) : (
                 <NoResults />
               )}
-            </div>
+            </section>
 
-            <div className="search-result__row">
-              <div className="file-list__header">{__('Channels')}</div>
+            <section className="search__results-section">
+              <div className="search__results-title">{__('Channels')}</div>
               {!isSearching && channelResults.length ? (
-                channelResults.map(uri => <ChannelTile key={uri} uri={uri} />)
+                channelResults.map(uri => <ChannelTile isSearchResult key={uri} uri={uri} />)
               ) : (
                 <NoResults />
               )}
-            </div>
+            </section>
 
-            <div className="search-result__row">
-              <div className="file-list__header">{__('Your downloads')}</div>
+            <section className="search__results-section">
+              <div className="search__results-title">{__('Your downloads')}</div>
               {downloadUris && downloadUris.length ? (
-                downloadUris.map(uri => <FileTile hideNoResult key={uri} uri={uri} />)
+                downloadUris.map(uri => (
+                  <FileTile hideNoResult isSearchResult key={uri} uri={uri} />
+                ))
               ) : (
                 <NoResults />
               )}
-            </div>
+            </section>
           </div>
         </React.Fragment>
       )

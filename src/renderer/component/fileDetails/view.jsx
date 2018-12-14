@@ -69,14 +69,14 @@ class FileDetails extends PureComponent<Props> {
         <Expandable>
           {description && (
             <Fragment>
-              <div className="card__subtext-title">About</div>
-              <div className="card__subtext">
+              <div className="media__info-title">About</div>
+              <div className="media__info-text">
                 <MarkdownPreview content={description} promptLinks />
               </div>
             </Fragment>
           )}
-          <div className="card__subtext-title">Info</div>
-          <div className="card__subtext">
+          <div className="media__info-title">Info</div>
+          <div className="media__info-text">
             <div>
               {__('Content-Type')}
               {': '}
@@ -105,27 +105,26 @@ class FileDetails extends PureComponent<Props> {
             )}
           </div>
         </Expandable>
-        <div className="card__content">
-          <div className="card__subtext-title">Comments</div>
-          <div className="card__actions card__actions--center">
-            <Button
-              data-id="add-comment"
-              disabled={hasClickedComment}
-              button="primary"
-              label={__('Want to comment?')}
-              onClick={this.handleCommentClick}
-            />
-          </div>
-          {hasClickedComment && (
-            <p className="main--for-content">
-              {user
-                ? __(
-                    'Your support has been added. You will be notified when comments are available.'
-                  )
-                : __('Your support has been added. Comments are coming soon.')}
-            </p>
-          )}
+
+        <div className="media__info-title">Comments</div>
+
+        <div className="card__actions">
+          <Button
+            data-id="add-comment"
+            disabled={hasClickedComment}
+            button="primary"
+            label={__('Want to comment?')}
+            onClick={this.handleCommentClick}
+          />
         </div>
+        <br />
+        {hasClickedComment && (
+          <p className="main--for-content">
+            {user
+              ? __('Your support has been added. You will be notified when comments are available.')
+              : __('Your support has been added. Comments are coming soon.')}
+          </p>
+        )}
       </Fragment>
     );
   }

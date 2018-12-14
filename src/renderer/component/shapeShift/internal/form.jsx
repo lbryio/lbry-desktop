@@ -83,13 +83,14 @@ export default (props: Props) => {
           value={values.returnAddress}
         />
       </FormRow>
+
       <span className="help">
-        <span>
-          ({__('optional but recommended')})<br />
-          {__('We will return your')} {originCoin}{' '}
-          {__("to this address if the transaction doesn't go through.")}
-        </span>
+        ({__('optional but recommended')})<br />
+        {__('We will return your')} {originCoin}{' '}
+        {__("to this address if the transaction doesn't go through.")}
       </span>
+      <br />
+
       <div className="card__actions">
         <Submit
           button="primary"

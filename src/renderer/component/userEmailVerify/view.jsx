@@ -54,48 +54,51 @@ class UserEmailVerify extends React.PureComponent<Props, State> {
     const { cancelButton, errorMessage, email, isPending, onModal } = this.props;
 
     return (
-      <Form onSubmit={this.handleSubmit}>
+      <span>
         <p>Please enter the verification code emailed to {email}.</p>
-        <FormRow padded>
-          <FormField
-            stretch
-            name="code"
-            type="text"
-            placeholder="eyJyZWNhcHRjaGEiOiIw..."
-            label={__('Verification Code')}
-            error={errorMessage}
-            value={this.state.code}
-            onChange={event => this.handleCodeChanged(event)}
-          />
-        </FormRow>
-        <div className="help">
-          <p>
+
+        <Form onSubmit={this.handleSubmit}>
+          <FormRow padded>
+            <FormField
+              stretch
+              name="code"
+              type="text"
+              placeholder="eyJyZWNhcHRjaGEiOiIw..."
+              label={__('Verification Code')}
+              error={errorMessage}
+              value={this.state.code}
+              onChange={event => this.handleCodeChanged(event)}
+            />
+          </FormRow>
+
+          <div className="card__actions">
+            <Submit label={__('Verify')} disabled={isPending} />
+            {cancelButton}
+            {!onModal && (
+              <Button
+                button="link"
+                label={__('Resend verification email')}
+                onClick={this.handleResendVerificationEmail}
+              />
+            )}
+          </div>
+
+          <p className="help">
             {__('Email')} <Button button="link" href="mailto:help@lbry.io" label="help@lbry.io" />{' '}
             or join our <Button button="link" href="https://chat.lbry.io" label="chat" />{' '}
             {__('if you encounter any trouble with your code.')}
           </p>
-        </div>
-        <div className="card__actions">
-          <Submit label={__('Verify')} disabled={isPending} />
-          {cancelButton}
-          {!onModal && (
-            <Button
-              button="link"
-              label={__('Resend verification email')}
-              onClick={this.handleResendVerificationEmail}
-            />
+          {onModal && (
+            <div className="card__actions help">
+              <Button
+                button="link"
+                label={__('Resend verification email')}
+                onClick={this.handleResendVerificationEmail}
+              />
+            </div>
           )}
-        </div>
-        {onModal && (
-          <div className="card__actions help">
-            <Button
-              button="link"
-              label={__('Resend verification email')}
-              onClick={this.handleResendVerificationEmail}
-            />
-          </div>
-        )}
-      </Form>
+        </Form>
+      </span>
     );
   }
 }

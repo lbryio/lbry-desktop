@@ -34,16 +34,23 @@ class FileListPublished extends React.PureComponent<Props> {
           />
         ) : (
           <div className="page__empty">
-            <h3 className="card__title">
-              {__("It looks like you haven't published anything to LBRY yet.")}
-            </h3>
-            <div className="card__actions card__actions--center">
-              <Button
-                button="primary"
-                onClick={() => navigate('/publish')}
-                label={__('Publish something new')}
-              />
-            </div>
+            <section className="card card--section">
+              <header className="card__header">
+                <h2 className="card__title">
+                  {__("It looks like you haven't published anything to LBRY yet.")}
+                </h2>
+              </header>
+
+              <div className="card__content">
+                <div className="card__actions card__actions--center">
+                  <Button
+                    button="primary"
+                    onClick={() => navigate('/publish')}
+                    label={__('Publish something new')}
+                  />
+                </div>
+              </div>
+            </section>
           </div>
         )}
       </Page>

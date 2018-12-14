@@ -67,26 +67,29 @@ export class Modal extends React.PureComponent<ModalProps> {
           ![null, undefined, ''].includes(overlayClassName) ? overlayClassName : 'modal-overlay'
         }
       >
-        <h1 className="modal__header">{title}</h1>
-        <div>{children}</div>
-        {type === 'custom' ? null : ( // custom modals define their own buttons
-          <div className="card__actions card__actions--center">
-            <Button
-              button="primary"
-              label={confirmButtonLabel}
-              disabled={confirmButtonDisabled}
-              onClick={onConfirmed}
-            />
-            {type === 'confirm' ? (
+        <h1 className="card__title">{title}</h1>
+        <div className="card__content">{children}</div>
+
+        <div className="card__content">
+          {type === 'custom' ? null : ( // custom modals define their own buttons
+            <div className="card__actions">
               <Button
-                button="link"
-                label={abortButtonLabel}
-                disabled={abortButtonDisabled}
-                onClick={onAborted}
+                button="primary"
+                label={confirmButtonLabel}
+                disabled={confirmButtonDisabled}
+                onClick={onConfirmed}
               />
-            ) : null}
-          </div>
-        )}
+              {type === 'confirm' ? (
+                <Button
+                  button="link"
+                  label={abortButtonLabel}
+                  disabled={abortButtonDisabled}
+                  onClick={onAborted}
+                />
+              ) : null}
+            </div>
+          )}
+        </div>
       </ReactModal>
     );
   }

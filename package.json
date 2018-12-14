@@ -46,6 +46,7 @@
     "electron-log": "^2.2.12",
     "electron-updater": "^2.23.3",
     "electron-window-state": "^4.1.1",
+    "filewatcher-webpack-plugin": "^1.2.0",
     "find-process": "^1.1.0",
     "formik": "^0.10.4",
     "hast-util-sanitize": "^1.1.2",
@@ -89,6 +90,7 @@
   },
   "devDependencies": {
     "@lbry/color": "^1.0.2",
+    "@lbry/components": "^1.5.1",
     "axios": "^0.18.0",
     "babel-eslint": "^8.2.2",
     "babel-plugin-module-resolver": "^3.1.1",
@@ -113,7 +115,6 @@
     "eslint-plugin-jsx-a11y": "^6.0.3",
     "eslint-plugin-prettier": "^2.6.0",
     "eslint-plugin-react": "^7.7.0",
-    "filewatcher-webpack-plugin": "^1.2.0",
     "flow-bin": "^0.69.0",
     "flow-typed": "^2.3.0",
     "husky": "^0.14.3",

@@ -50,17 +50,16 @@ class UserPhoneVerify extends React.PureComponent {
           error={phoneErrorMessage}
         />
         {/* render help separately so it always shows */}
-        <div className="meta">
-          <p>
-            {__('Email')} <Button button="link" href="mailto:help@lbry.io" label="help@lbry.io" />{' '}
-            or join our <Button button="link" href="https://chat.lbry.io" label="chat" />{' '}
-            {__('if you encounter any trouble with your code.')}
-          </p>
-        </div>
         <div className="card__actions card__actions--center">
           <Submit label={__('Verify')} />
           {cancelButton}
         </div>
+
+        <p className="help">
+          {__('Email')} <Button button="link" href="mailto:help@lbry.io" label="help@lbry.io" />{' '}
+          or join our <Button button="link" href="https://chat.lbry.io" label="chat" />{' '}
+          {__('if you encounter any trouble with your code.')}
+        </p>
       </Form>
     );
   }
