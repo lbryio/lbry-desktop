@@ -99,7 +99,7 @@
     "decompress": "^4.2.0",
     "del": "^3.0.0",
     "devtron": "^1.4.0",
-    "electron": "^2.0.6",
+    "electron": "^2.0.14",
     "electron-builder": "^20.22.0",
     "electron-devtools-installer": "^2.2.3",
     "electron-publisher-s3": "^20.8.1",
