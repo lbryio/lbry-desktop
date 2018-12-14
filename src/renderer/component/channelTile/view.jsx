@@ -15,6 +15,7 @@ type Props = {
   claim: ?Claim,
   resolveUri: string => void,
   navigate: (string, ?{}) => void,
+  buttonStyle: string,
 };
 
 class ChannelTile extends React.PureComponent<Props> {
@@ -37,7 +38,16 @@ class ChannelTile extends React.PureComponent<Props> {
   }
 
   render() {
-    const { claim, navigate, isResolvingUri, isSearchResult, totalItems, uri, size } = this.props;
+    const {
+      claim,
+      navigate,
+      isResolvingUri,
+      isSearchResult,
+      totalItems,
+      uri,
+      size,
+      buttonStyle,
+    } = this.props;
 
     let channelName;
     let subscriptionUri;
@@ -78,7 +88,7 @@ class ChannelTile extends React.PureComponent<Props> {
           )}
           {subscriptionUri && (
             <div className="media__actions">
-              <SubscribeButton uri={subscriptionUri} />
+              <SubscribeButton buttonStyle="inverse" uri={subscriptionUri} />
             </div>
           )}
         </div>

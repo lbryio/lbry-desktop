@@ -20,6 +20,7 @@ type Props = {
   firstRunCompleted: boolean,
   showSnackBarOnSubscribe: boolean,
   doToast: ({ message: string }) => void,
+  buttonStyle: string,
 };
 
 export default (props: Props) => {
@@ -33,6 +34,7 @@ export default (props: Props) => {
     firstRunCompleted,
     showSnackBarOnSubscribe,
     doToast,
+    buttonStyle,
   } = props;
 
   const subscriptionHandler = isSubscribed ? doChannelUnsubscribe : doChannelSubscribe;
@@ -44,7 +46,7 @@ export default (props: Props) => {
     <Button
       iconColor="red"
       icon={isSubscribed ? undefined : ICONS.HEART}
-      button="alt"
+      button={buttonStyle ? buttonStyle : 'alt'}
       label={subscriptionLabel}
       onClick={e => {
         e.stopPropagation();
