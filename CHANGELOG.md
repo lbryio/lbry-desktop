@@ -13,6 +13,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
  * Channel subscribe button on search page ([#2146](https://github.com/lbryio/lbry-desktop/pull/2146))
  * Close modal after redeeming reward code ([#2146](https://github.com/lbryio/lbry-desktop/pull/2146))
  * Update Electron to prevent segfault on Ubuntu@18.10 ([#2146](https://github.com/lbryio/lbry-desktop/pull/2146))
+ * Show reward code modal when all rewards are claimed ([#2146](https://github.com/lbryio/lbry-desktop/pull/2146))
 
 
 ## [0.26.0] - 2018-12-12
