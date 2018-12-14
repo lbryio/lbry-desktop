@@ -1,5 +1,5 @@
 // @flow
-import React from 'react';
+import React, { PureComponent, Fragment } from 'react';
 import BusyIndicator from 'component/common/busy-indicator';
 import RewardListClaimed from 'component/rewardListClaimed';
 import RewardTile from 'component/rewardTile';
@@ -26,7 +26,7 @@ type Props = {
   },
 };
 
-class RewardsPage extends React.PureComponent<Props> {
+class RewardsPage extends PureComponent<Props> {
   renderPageHeader() {
     const { doAuth, navigate, user, daemonSettings } = this.props;
 
@@ -76,6 +76,21 @@ class RewardsPage extends React.PureComponent<Props> {
     return null;
   }
 
+  renderCustomRewardCode() {
+    return (
+      <RewardTile
+        key={REWARD_TYPES.TYPE_GENERATED_CODE}
+        reward={{
+          reward_type: REWARD_TYPES.TYPE_GENERATED_CODE,
+          reward_title: __('Custom Code'),
+          reward_description: __(
+            'Are you a supermodel or rockstar that received a custom reward code? Claim it here.'
+          ),
+        }}
+      />
+    );
+  }
+
   renderUnclaimedRewards() {
     const { fetching, rewards, user, daemonSettings, navigate, claimed } = this.props;
 
@@ -108,13 +123,20 @@ class RewardsPage extends React.PureComponent<Props> {
       );
     } else if (!rewards || rewards.length <= 0) {
       return (
-        <div className="card__content">
-          {claimed && claimed.length
-            ? __(
-                "You have claimed all available rewards! We're regularly adding more so be sure to check back later."
-              )
-            : __('There are no rewards available at this time, please check back later.')}
-        </div>
+        <Fragment>
+          <div className="card--section">
+            <h2 className="card__title">{__('No Rewards Available')}</h2>
+            <p>
+              {claimed && claimed.length
+                ? __(
+                    "You have claimed all available rewards! We're regularly adding more so be sure to check back later."
+                  )
+                : __('There are no rewards available at this time, please check back later.')}
+            </p>
+          </div>
+
+          <div className="card__content card__list--rewards">{this.renderCustomRewardCode()}</div>
+        </Fragment>
       );
     }
 
@@ -126,17 +148,10 @@ class RewardsPage extends React.PureComponent<Props> {
           'card--disabled': isNotEligible,
         })}
       >
-        {rewards.map(reward => <RewardTile key={reward.reward_type} reward={reward} />)}
-        <RewardTile
-          key={REWARD_TYPES.TYPE_GENERATED_CODE}
-          reward={{
-            reward_type: REWARD_TYPES.TYPE_GENERATED_CODE,
-            reward_title: __('Custom Code'),
-            reward_description: __(
-              'Are you a supermodel or rockstar that received a custom reward code? Claim it here.'
-            ),
-          }}
-        />
+        {rewards.map(reward => (
+          <RewardTile key={reward.reward_type} reward={reward} />
+        ))}
+        {this.renderCustomRewardCode()}
       </div>
     );
   }
