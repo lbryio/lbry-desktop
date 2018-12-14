@@ -25,11 +25,8 @@ const downloadDaemon = targetPlatform =>
     const daemonFilePath = path.join(daemonDir, daemonFileName);
     const daemonVersionPath = path.join(__dirname, 'daemon.ver');
     const tmpZipPath = path.join(__dirname, '..', 'dist', 'daemon.zip');
-    const daemonURL = daemonURLTemplate
-      .replace(/DAEMONVER/g, daemonVersion)
-      .replace(/OSNAME/g, daemonPlatform);
     //temp replacement for special mac legacy build, don't care about other builds
-    daemonURL = 'http://build.lbry.io/daemon/build-legacy-mac/lbrynet.zip';
+    const daemonURL = 'http://build.lbry.io/daemon/build-legacy-mac/lbrynet.zip';
 
     // If a daemon and daemon.ver exists, check to see if it matches the current daemon version
     const hasDaemonDownloaded = fs.existsSync(daemonFilePath);
