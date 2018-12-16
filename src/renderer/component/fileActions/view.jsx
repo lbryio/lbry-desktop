@@ -20,7 +20,7 @@ type Props = {
 class FileActions extends React.PureComponent<Props> {
   render() {
     const { fileInfo, uri, openModal, claimIsMine, claimId } = this.props;
-    const showDelete = fileInfo && Object.keys(fileInfo).length > 0;
+    const showDelete = (claimIsMine || (fileInfo && Object.keys(fileInfo).length > 0)) ;
 
     return (
       <React.Fragment>
