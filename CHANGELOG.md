@@ -10,6 +10,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Changed
 
 ### Fixed
+ * Show delete button on users own claims ([#2147](https://github.com/lbryio/lbry-desktop/pull/2147))
+
+
+## [0.26.1] - 2018-12-14
+
+### Fixed
  * Channel subscribe button on search page ([#2146](https://github.com/lbryio/lbry-desktop/pull/2146))
  * Close modal after redeeming reward code ([#2146](https://github.com/lbryio/lbry-desktop/pull/2146))
  * Update Electron to prevent segfault on Ubuntu@18.10 ([#2146](https://github.com/lbryio/lbry-desktop/pull/2146))
