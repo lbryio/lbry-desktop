@@ -17,7 +17,7 @@ class DiscoverPage extends React.PureComponent<Props> {
   }
 
   componentWillMount() {
-    const { fetchFeaturedUris, fetchRewardedContent } = this.props;
+    const { fetchFeaturedUris, fetchRewardedContent, fetchRewards } = this.props;
     fetchFeaturedUris();
     fetchRewardedContent();
 
