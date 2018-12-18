@@ -294,6 +294,11 @@
   &:not(.media__properties--large) {
     height: 2rem;
 
+    .badge {
+      position: relative;
+      top: 0.2rem;
+    }
+
     svg {
       padding-top: 0.2rem;
     }

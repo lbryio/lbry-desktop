@@ -181,10 +181,20 @@
   font-size: 2rem;
   font-weight: 600;
 
+  &:not(.card__title--flex) {
+    .btn {
+      bottom: -0.5rem;
+      float: right;
+      font-size: 1rem;
+    }
+  }
+
   .btn {
-    bottom: -0.5rem;
-    float: right;
-    font-size: 1rem;
     position: relative;
   }
+}
+
+.card__title--flex {
+  @include between;
+  display: flex;
 }

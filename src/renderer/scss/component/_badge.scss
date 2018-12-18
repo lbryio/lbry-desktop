@@ -14,6 +14,11 @@
   }
 }
 
+.badge--alert {
+  background-color: $lbry-red-2;
+  color: $lbry-white;
+}
+
 .badge--cost:not(.badge--large) {
   background-color: $lbry-yellow-2;
 

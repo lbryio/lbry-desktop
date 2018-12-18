@@ -105,8 +105,8 @@ export default (props: Props) => {
                 unreadSubscriptions.map(({ channel, uris }) => {
                   const { claimName } = parseURI(channel);
                   return (
-                    <section key={channel}>
-                      <div className="card__title card__actions card__actions--no-margin">
+                    <span>
+                      <h2 className="card__title card__title--flex">
                         <Button
                           button="link"
                           navigate="/show"
@@ -114,13 +114,16 @@ export default (props: Props) => {
                           label={claimName}
                         />
                         <MarkAsRead channel={channel} />
-                      </div>
-                      <div className="card__list card__content">
-                        {uris.map(uri => (
-                          <FileCard key={uri} uri={uri} />
-                        ))}
-                      </div>
-                    </section>
+                      </h2>
+
+                      <section className="media-group--list" key={channel}>
+                        <ul className="card__list">
+                          {uris.map(uri => (
+                            <FileCard key={uri} uri={uri} />
+                          ))}
+                        </ul>
+                      </section>
+                    </span>
                   );
                 })
               ) : (
