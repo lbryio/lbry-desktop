@@ -56,11 +56,7 @@ class IconComponent extends React.PureComponent<Props> {
       color = this.getIconColor(iconColor);
     }
 
-    let iconSize = size || 14;
-    // Arrow ICONS are quite a bit smaller than the other ICONS we use
-    if (icon === ICONS.ARROW_LEFT || icon === ICONS.ARROW_RIGHT) {
-      iconSize = 20;
-    }
+    const iconSize = size || 14;
 
     let tooltipText;
     if (tooltip) {

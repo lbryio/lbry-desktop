@@ -3,25 +3,22 @@ import * as ICONS from 'constants/icons';
 import React from 'react';
 
 // Returns a react component
-const buildIcon = iconStrokes => {
-  return ({ size = 24, color = 'currentColor', ...otherProps }) => (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      viewBox="0 0 24 24"
-      width={size}
-      height={size}
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke={color}
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      {...otherProps}
-    >
-      {iconStrokes}
-    </svg>
-  );
-};
+const buildIcon = iconStrokes => ({ size = 24, color = 'currentColor', ...otherProps }) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 0 24 24"
+    width={size}
+    height={size}
+    fill="none"
+    stroke={color}
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    {...otherProps}
+  >
+    {iconStrokes}
+  </svg>
+);
 
 export const customIcons = {
   [ICONS.ARROW_LEFT]: buildIcon(

@@ -89,10 +89,10 @@ class Button extends React.PureComponent<Props> {
 
     const content = (
       <span className="btn__content">
-        {icon && <Icon icon={icon} iconColor={iconColor} iconSize={iconSize} />}
+        {icon && <Icon icon={icon} iconColor={iconColor} size={iconSize} />}
         {label && <span className="btn__label">{label}</span>}
         {children && children}
-        {iconRight && <Icon icon={iconRight} iconColor={iconColor} iconSize={iconSize} />}
+        {iconRight && <Icon icon={iconRight} iconColor={iconColor} size={iconSize} />}
       </span>
     );
 

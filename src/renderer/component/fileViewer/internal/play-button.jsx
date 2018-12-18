@@ -23,6 +23,7 @@ class VideoPlayButton extends React.PureComponent<Props> {
         disabled={disabled}
         label={label}
         icon={icon}
+        iconSize={30}
         className={classnames('btn--icon', {
           'btn--play': doesPlayback,
           'btn--view': !doesPlayback,
