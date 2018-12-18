@@ -67,12 +67,14 @@ const Header = (props: Props) => {
           className="header__navigation-item header__navigation-item--forward"
           description={__('Navigate forward')}
           disabled={isForwardDisabled}
+          icon={ICONS.FORWARD_ARROW}
           onClick={forward}
         />
 
         <Button
           className="header__navigation-item header__navigation-item--home"
           description={__('Home')}
+          icon={ICONS.HOME}
           onClick={() => navigate('/discover')}
         />
       </div>
@@ -87,11 +89,13 @@ const Header = (props: Props) => {
         <Button
           className="header__navigation-item header__navigation-item--menu"
           description={__('Menu')}
+          icon={ICONS.MENU}
         />
 
         <Button
           className="header__navigation-item header__navigation-item--publish"
           description={__('Publish content')}
+          icon={ICONS.UPLOAD_CLOUD}
           label={isUpgradeAvailable ? '' : __('Publish')}
           onClick={() => navigate('/publish')}
         />

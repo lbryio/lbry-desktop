@@ -11,7 +11,7 @@ const GREEN_COLOR = '#44b098';
 const BLUE_COLOR = '#49b2e2';
 
 const customIcons = {
-  BACK_ARROW: (
+  [ICONS.BACK_ARROW]: () => (
     <svg viewBox="0 0 24 24">
       <g stroke="black" strokeWidth="2" fill="none" fillRule="evenodd" strokeLinecap="round">
         <path d="M4, 12 L21, 12" />
@@ -23,7 +23,7 @@ const customIcons = {
       </g>
     </svg>
   ),
-  BACK_ARROW_WHITE: (
+  [ICONS.BACK_ARROW_WHITE]: () => (
     <svg viewBox="0 0 24 24">
       <g stroke="white" strokeWidth="2" fill="none" fillRule="evenodd" strokeLinecap="round">
         <path d="M4, 12 L21, 12" />
@@ -35,7 +35,7 @@ const customIcons = {
       </g>
     </svg>
   ),
-  EYE: (
+  [ICONS.EYE]: () => (
     <svg viewBox="0 0 24 24">
       <g stroke="black" strokeWidth="2" fill="none" fillRule="evenodd">
         <path
@@ -59,7 +59,7 @@ const customIcons = {
       </g>
     </svg>
   ),
-  EYE_WHITE: (
+  [ICONS.EYE_WHITE]: () => (
     <svg viewBox="0 0 24 24">
       <g stroke="white" strokeWidth="2" fill="none" fillRule="evenodd">
         <path
@@ -83,7 +83,7 @@ const customIcons = {
       </g>
     </svg>
   ),
-  FORWARD_ARROW: (
+  [ICONS.FORWARD_ARROW]: () => (
     <svg viewBox="0 0 24 24">
       <g stroke="black" strokeWidth="2" fill="none" fillRule="evenodd" strokeLinecap="round">
         <path d="M3, 12 L20, 12" />
@@ -91,7 +91,7 @@ const customIcons = {
       </g>
     </svg>
   ),
-  FORWARD_ARROW_WHITE: (
+  [ICONS.FORWARD_ARROW_WHITE]: () => (
     <svg viewBox="0 0 24 24">
       <g stroke="white" strokeWidth="2" fill="none" fillRule="evenodd" strokeLinecap="round">
         <path d="M3, 12 L20, 12" />
@@ -99,7 +99,7 @@ const customIcons = {
       </g>
     </svg>
   ),
-  HOME: (
+  [ICONS.HOME]: () => (
     <svg viewBox="0 0 24 24">
       <g
         stroke="black"
@@ -114,7 +114,7 @@ const customIcons = {
       </g>
     </svg>
   ),
-  HOME_WHITE: (
+  [ICONS.HOME_WHITE]: () => (
     <svg viewBox="0 0 24 24">
       <g
         stroke="white"
@@ -129,7 +129,7 @@ const customIcons = {
       </g>
     </svg>
   ),
-  MENU: (
+  [ICONS.MENU]: () => (
     <svg viewBox="0 0 24 24">
       <path
         d="M3.5, 7 C3.5, 7.27910535 3.72002141, 7.5 3.99339768, 7.5 L20.0066023, 7.5 C20.2782464, 7.5 20.5, 7.27680164 20.5, 7 C20.5, 6.72089465 20.2799786, 6.5 20.0066023, 6.5 L3.99339768, 6.5 C3.72175357, 6.5 3.5, 6.72319836 3.5, 7 Z M3.5, 12 C3.5, 12.2791054 3.72002141, 12.5 3.99339768, 12.5 L20.0066023, 12.5 C20.2782464, 12.5 20.5, 12.2768016 20.5, 12 C20.5, 11.7208946 20.2799786, 11.5 20.0066023, 11.5 L3.99339768, 11.5 C3.72175357, 11.5 3.5, 11.7231984 3.5, 12 Z M3.5, 17 C3.5, 17.2791054 3.72002141, 17.5 3.99339768, 17.5 L20.0066023, 17.5 C20.2782464, 17.5 20.5, 17.2768016 20.5, 17 C20.5, 16.7208946 20.2799786, 16.5 20.0066023, 16.5 L3.99339768, 16.5 C3.72175357, 16.5 3.5, 16.7231984 3.5, 17 Z"
@@ -140,7 +140,7 @@ const customIcons = {
       />
     </svg>
   ),
-  MENU_WHITE: (
+  [ICONS.MENU_WHITE]: () => (
     <svg viewBox="0 0 24 24">
       <path
         d="M3.5, 7 C3.5, 7.27910535 3.72002141, 7.5 3.99339768, 7.5 L20.0066023, 7.5 C20.2782464, 7.5 20.5, 7.27680164 20.5, 7 C20.5, 6.72089465 20.2799786, 6.5 20.0066023, 6.5 L3.99339768, 6.5 C3.72175357, 6.5 3.5, 6.72319836 3.5, 7 Z M3.5, 12 C3.5, 12.2791054 3.72002141, 12.5 3.99339768, 12.5 L20.0066023, 12.5 C20.2782464, 12.5 20.5, 12.2768016 20.5, 12 C20.5, 11.7208946 20.2799786, 11.5 20.0066023, 11.5 L3.99339768, 11.5 C3.72175357, 11.5 3.5, 11.7231984 3.5, 12 Z M3.5, 17 C3.5, 17.2791054 3.72002141, 17.5 3.99339768, 17.5 L20.0066023, 17.5 C20.2782464, 17.5 20.5, 17.2768016 20.5, 17 C20.5, 16.7208946 20.2799786, 16.5 20.0066023, 16.5 L3.99339768, 16.5 C3.72175357, 16.5 3.5, 16.7231984 3.5, 17 Z"
@@ -151,21 +151,21 @@ const customIcons = {
       />
     </svg>
   ),
-  PLAY: (
+  [ICONS.PLAY]: () => (
     <svg viewBox="0 0 24 24">
       <g stroke="black" strokeWidth="2" fill="white" fillRule="evenodd" strokeLinejoin="round">
         <polygon points="5 21 5 3 21 12" />
       </g>
     </svg>
   ),
-  PLAY_WHITE: (
+  [ICONS.PLAY_WHITE]: () => (
     <svg viewBox="0 0 24 24">
       <g stroke="white" strokeWidth="2" fill="white" fillRule="evenodd" strokeLinejoin="round">
         <polygon points="5 21 5 3 21 12" />
       </g>
     </svg>
   ),
-  TRIANGLE_DOWN: (
+  [ICONS.TRIANGLE_DOWN]: () => (
     <svg viewBox="0 0 24 24">
       <path
         d="M3 4 L21 4 12 20 3 4 Z"
@@ -177,7 +177,7 @@ const customIcons = {
       />
     </svg>
   ),
-  TRIANGLE_DOWN_WHITE: (
+  [ICONS.TRIANGLE_DOWN_WHITE]: () => (
     <svg viewBox="0 0 24 24">
       <path
         d="M3 4 L21 4 12 20 3 4 Z"
@@ -189,7 +189,7 @@ const customIcons = {
       />
     </svg>
   ),
-  UPLOAD_CLOUD: (
+  [ICONS.UPLOAD_CLOUD]: () => (
     <svg viewBox="0 0 24 24">
       <g stroke="black" strokeWidth="2" fill="none" fillRule="evenodd" strokeLinecap="round">
         <path
@@ -205,7 +205,7 @@ const customIcons = {
       </g>
     </svg>
   ),
-  UPLOAD_CLOUD_WHITE: (
+  [ICONS.UPLOAD_CLOUD_WHITE]: () => (
     <svg viewBox="0 0 24 24">
       <g stroke="white" strokeWidth="2" fill="none" fillRule="evenodd" strokeLinecap="round">
         <path
@@ -257,7 +257,6 @@ class IconComponent extends React.PureComponent<Props> {
 
   render() {
     const { icon, tooltip, iconColor, size } = this.props;
-    // const Icon = FeatherIcons[icon];
     const Icon = customIcons[this.props.icon] || FeatherIcons[this.props.icon];
 
     if (!Icon) {
