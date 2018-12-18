@@ -257,7 +257,8 @@ class IconComponent extends React.PureComponent<Props> {
 
   render() {
     const { icon, tooltip, iconColor, size } = this.props;
-    const Icon = FeatherIcons[icon];
+    // const Icon = FeatherIcons[icon];
+    const Icon = customIcons[this.props.icon] || FeatherIcons[this.props.icon];
 
     if (!Icon) {
       return null;

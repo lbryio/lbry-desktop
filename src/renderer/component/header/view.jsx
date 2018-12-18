@@ -59,6 +59,7 @@ const Header = (props: Props) => {
           className="header__navigation-item header__navigation-item--back"
           description={__('Navigate back')}
           disabled={isBackDisabled}
+          icon={ICONS.BACK_ARROW}
           onClick={back}
         />
 
