@@ -59,7 +59,7 @@ const Header = (props: Props) => {
           className="header__navigation-item header__navigation-item--back"
           description={__('Navigate back')}
           disabled={isBackDisabled}
-          icon={ICONS.BACK_ARROW}
+          icon={ICONS.ARROW_LEFT}
           onClick={back}
         />
 
@@ -67,7 +67,8 @@ const Header = (props: Props) => {
           className="header__navigation-item header__navigation-item--forward"
           description={__('Navigate forward')}
           disabled={isForwardDisabled}
-          icon={ICONS.FORWARD_ARROW}
+          icon={ICONS.ARROW_RIGHT}
+          iconSize={20}
           onClick={forward}
         />
 
@@ -75,6 +76,7 @@ const Header = (props: Props) => {
           className="header__navigation-item header__navigation-item--home"
           description={__('Home')}
           icon={ICONS.HOME}
+          iconSize={20}
           onClick={() => navigate('/discover')}
         />
       </div>
@@ -95,7 +97,7 @@ const Header = (props: Props) => {
         <Button
           className="header__navigation-item header__navigation-item--publish"
           description={__('Publish content')}
-          icon={ICONS.UPLOAD_CLOUD}
+          icon={ICONS.UPLOAD}
           label={isUpgradeAvailable ? '' : __('Publish')}
           onClick={() => navigate('/publish')}
         />
