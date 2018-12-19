@@ -8,6 +8,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Added
 
 ### Changed
+ * App redesign with shared colors component ([#2144](https://github.com/lbryio/lbry-desktop/pull/2144))
 
 ### Fixed
  * Show delete button on users own claims ([#2147](https://github.com/lbryio/lbry-desktop/pull/2147))
