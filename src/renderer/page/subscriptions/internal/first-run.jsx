@@ -23,7 +23,7 @@ export default (props: Props) => {
 
   return (
     <Fragment>
-      <div className="page__empty--horizontal">
+      <div className="yrbl-wrap">
         <img
           alt="Friendly gerbil"
           className="subscriptions__gerbil"

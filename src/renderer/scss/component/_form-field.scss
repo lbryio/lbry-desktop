@@ -1,51 +1,12 @@
-.form-row {
-  align-items: flex-end;
-  display: flex;
-  flex-direction: row;
-
-  &.form-row--centered {
-    justify-content: center;
+.form-field {
+  &:not(:last-of-type) {
+    margin-bottom: var(--spacing-vertical-small);
   }
 
-  &.form-row--padded {
-    padding-top: $spacing-vertical * 1/3;
+  &.form-field--disabled {
+    opacity: 0.4;
+    pointer-events: none;
   }
-
-  &.form-row--right {
-    justify-content: flex-end;
-  }
-
-  &.form-row--stretch {
-    flex: 1;
-  }
-
-  &.form-row--vertically-centered {
-    align-items: center;
-  }
-
-  .form-field {
-    &:not(:first-of-type) {
-      padding-left: $spacing-vertical;
-    }
-
-    &.form-field--stretch {
-      width: 100%;
-
-      input {
-        max-width: 400px;
-        width: 100%;
-      }
-    }
-  }
-
-  input + .btn {
-    margin-left: $spacing-vertical * 1/3;
-  }
-}
-
-.form-field.form-field--disabled {
-  opacity: 0.4;
-  pointer-events: none;
 }
 
 .form-field--SimpleMDE {
@@ -54,8 +15,10 @@
 }
 
 .form-field__input {
+  align-items: center;
   display: flex;
-  padding-top: $spacing-vertical / 3;
+  font-size: 1.25rem;
+  margin-bottom: var(--spacing-vertical-small);
 
   &.form-field--auto-height {
     height: auto;
@@ -66,14 +29,6 @@
   }
 
   input {
-    &[type='checkbox'] {
-      margin-top: 4px;
-    }
-
-    &[type='radio'] {
-      margin-top: 2px;
-    }
-
     &.paginate-channel {
       width: 35px;
     }
@@ -84,30 +39,41 @@
   }
 }
 
+.form-field__input--level {
+  line-height: 2;
+}
+
 .form-field__help,
 .form-field__label,
 .form-field__error {
-  font-size: 12px;
   font-weight: 500;
 }
 
+// TODO: Refactor to remove need for `!important`
+
 .form-field__error {
-  color: $lbry-red-3 !important;
+  color: $lbry-red-5 !important;
+
+  html[data-theme='dark'] & {
+    color: $lbry-red-2 !important;
+  }
 }
 
 .form-field__help {
   color: $lbry-gray-5;
-  padding-top: $spacing-vertical * 1/3;
+  padding-top: var(--spacing-vertical-small);
 }
 
 .form-field__label {
   color: inherit;
+  font-size: 1.25rem;
   opacity: 0.7;
 }
 
 .form-field__prefix,
 .form-field__postfix {
   font-weight: 500;
+  // line-height: 2;
 
   &.form-field--align-center {
     align-self: center;
@@ -119,34 +85,47 @@
 }
 
 .form-field__prefix {
-  padding-right: $spacing-vertical * 1/3;
+  padding-right: var(--spacing-vertical-small);
 }
 
 .form-field__postfix {
-  padding-left: $spacing-vertical * 1/3;
+  padding-left: var(--spacing-vertical-small);
+}
+
+.form-field__select-wrapper {
+  position: relative;
+  width: 20rem;
+  height: 3rem;
+
+  &::after {
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+
+    // TRIANGLE_DOWN
+    // background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E %3Cpath d='M3 4 L21 4 12 20 3 4 Z' stroke='black' stroke-width='2' fill='black' fill-rule='evenodd' stroke-linejoin='round'/%3E %3C/svg%3E"),
+      // linear-gradient(to right, transparent 80%, $lbry-gray-1 85%);
+    background-position: 95% center, right top;
+    background-repeat: no-repeat;
+    background-size: 0.8rem, 100%;
+    content: '';
+    pointer-events: none;
+    position: absolute;
+  }
 }
 
 .form-field__select {
-  background-color: $lbry-gray-3;
-  border-radius: 8px;
-  color: $lbry-black;
-  font-size: 12px;
-  font-weight: 500;
-  height: 30px;
-  line-height: 30px;
-  min-width: 60px;
+  width: 100%;
+  height: 100%;
+
+  background-color: $lbry-gray-1;
+  border-radius: 0;
+  padding: var(--spacing-vertical-small);
+
+  -webkit-appearance: none;
 
   &:disabled {
     opacity: 0.5;
   }
-}
-
-// Not sure if I like these
-// Maybe this should be in gui.scss?
-.input--price-amount {
-  width: 80px;
-}
-
-.input--address {
-  width: 370px;
 }

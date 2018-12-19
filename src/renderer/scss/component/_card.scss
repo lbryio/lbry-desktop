@@ -1,29 +1,13 @@
 .card {
-  border-radius: var(--card-radius);
-  display: flex;
-  flex-direction: column;
-  margin-right: auto;
-  margin-left: auto;
-  max-width: var(--card-max-width);
-  user-select: text;
-  white-space: normal;
+  background-color: $lbry-white;
+  border: 1px solid $lbry-gray-1;
+  border-radius: 0.5rem;
+  margin-bottom: var(--spacing-vertical-large);
+  position: relative;
 
-  // .card-media__internal__links should always be inside a card
-  .card-media__internal-links {
-    top: $spacing-vertical * 2/3;
-    right: $spacing-vertical * 2/3;
-    position: absolute;
-  }
-
-  .card__media {
-    padding-top: var(--video-aspect-ratio);
-  }
-
-  // Text that is shown if a piece of content has no thumbnail
-  // We need to do this because the thumbnail uses padding-top: var(--video-aspect-ratio); for dynamic height
-  // this lets the text sit in the middle instead of the bottom
-  .card__media-text {
-    margin-top: calc(var(--video-aspect-ratio) * -1);
+  html[data-theme='dark'] & {
+    background-color: rgba($lbry-white, 0.1);
+    border-color: rgba($lbry-white, 0.1);
   }
 }
 
@@ -36,332 +20,151 @@
   cursor: pointer;
 }
 
-.card--pending {
-  opacity: 0.5;
-}
-
 .card--section {
-  margin-top: $spacing-vertical * 2/3;
-  padding: $spacing-vertical;
-  background-color: $lbry-white;
-}
+  padding: var(--spacing-vertical-large);
 
-.card--small {
-  font-size: 13px;
+  .card__content:not(:last-of-type) {
+    margin-bottom: var(--spacing-vertical-large);
+  }
 }
 
 .card--space-between {
-  display: flex;
-  justify-content: space-between;
+  @include between;
 }
 
 .card--wallet-balance {
-  background: url('../../../static/img/stripe-background.png') no-repeat;
+  background-image: url('../../../static/img/stripe-background.png');
+  background-repeat: no-repeat;
   background-size: cover;
   color: $lbry-white;
   justify-content: space-between;
-
-  .card__subtitle,
-  .card__title {
-    color: $lbry-white;
-  }
 }
 
-.card__media {
-  background-color: $lbry-gray-3;
-  background-position: 50% 50%;
-  background-repeat: no-repeat;
-  background-size: cover;
-}
-
-.card__media--no-img {
-  align-items: center;
-  display: flex;
-  justify-content: center;
-  position: relative;
-}
-
-.card__media--nsfw {
-  background-color: $lbry-red-5;
-}
+//  C A R D
+//  A C T I O N S
 
 .card__actions {
-  display: flex;
-  margin-top: $spacing-vertical * 2/3;
-
-  &:not(.card__actions--vertical) {
-    .btn:nth-child(n + 2),
-    // For buttons wrapped in a tooltip
-    .tooltip:nth-child(n + 2) {
-      margin-left: $spacing-vertical / 3;
-    }
+  > *:not(:last-child) {
+    margin-right: var(--spacing-vertical-large);
   }
-}
-
-.card__actions-bottom-corner {
-  bottom: $spacing-vertical;
-  right: $spacing-vertical;
-  position: absolute;
-}
-
-.card__actions-top-corner {
-  display: flex;
-  justify-content: flex-end;
 }
 
 .card__actions--between {
-  justify-content: space-between;
-  flex-wrap: wrap;
+  @include between;
+}
+
+.card__actions--bottom-corner {
+  right: 2rem;
+  bottom: 2rem;
+  position: absolute;
 }
 
 .card__actions--center {
   align-items: center;
   justify-content: center;
-
-  .btn {
-    margin: 0 $spacing-vertical / 3;
-  }
 }
 
-.card__actions--end {
-  justify-content: flex-end;
+.card__actions--top-corner {
+  top: 0;
+  right: 0;
+  position: absolute;
 }
 
-.card__actions--no-margin {
-  margin-top: 0;
+.card__actions--top-space {
+  padding-top: var(--spacing-vertical-small);
 }
 
-.card__actions--vertical {
-  align-items: flex-end;
-  flex-direction: column;
-  margin-top: 0;
-
-  .btn:not(:first-child) {
-    margin-top: $spacing-vertical * 1/3;
-  }
-}
+//  C A R D
+//  C O N T E N T
 
 .card__content {
-  margin-top: $spacing-vertical * 2/3;
-}
+  font-size: 1.15rem;
 
-.card__error-msg {
-  margin: $spacing-vertical * 1/3 0;
-  padding: $spacing-vertical * 1/3;
-
-  background-color: rgba($lbry-red-1, 0.3);
-  border-left: 2px solid $lbry-red-5;
-  color: $lbry-red-5;
-}
-
-.card__file-properties {
-  align-items: center;
-  color: $lbry-gray-5;
-  display: flex;
-
-  .icon + .icon {
-    margin-left: $spacing-vertical * 1/3;
+  p:not(:last-of-type) {
+    margin-bottom: var(--spacing-vertical-medium);
   }
 }
 
-// How cards are displayed in lists
+//  C A R D
+//  H E A D E R
+
+.card__header {
+  position: relative;
+
+  + .card__content {
+    padding-top: var(--spacing-vertical-medium);
+  }
+
+  &:not(.card__header--flat) {
+    margin-bottom: var(--spacing-vertical-small);
+  }
+}
+
+//  C A R D
+//  I N T E R N A L
+
+.card__internal-links {
+  top: 2rem;
+  right: 2rem;
+  position: absolute;
+}
+
+//  C A R D
+//  L I S T
 
 .card__list {
-  .card {
-    display: inline-block;
-    margin-bottom: $spacing-vertical * 3/2;
-    vertical-align: top;
-
-    @media only screen and (max-width: $medium-breakpoint) {
-      width: calc((100% / 4) - (60px / 4)); // 60px === 20px margin-right * three cards
-
-      &:not(:nth-child(4n + 1)) {
-        margin-left: 20px;
-      }
-    }
-
-    @media only screen and (min-width: $medium-breakpoint) and (max-width: $large-breakpoint) {
-      width: calc((100% / 6) - (100px / 6));
-
-      &:not(:nth-child(6n + 1)) {
-        margin-left: 20px;
-      }
-    }
-
-    @media only screen and (min-width: $large-breakpoint) {
-      width: calc((100% / 8) - (140px / 8));
-
-      &:not(:nth-child(8n + 1)) {
-        margin-left: 20px;
-      }
-    }
-  }
+  display: grid;
+  grid-gap: var(--spacing-vertical-medium);
 }
 
-.card__list--recommended {
-  flex: 0 0 var(--recommended-content-width);
-  padding-left: $spacing-width;
-
-  @media (min-width: $medium-breakpoint) {
-    flex: 0 0 var(--recommended-content-width-medium);
-  }
-}
-
-.card__list--rewards {
-  column-count: 2;
-  column-gap: $spacing-vertical * 1/3;
-
-  .card {
-    display: inline-block;
-    margin: 0 0 $spacing-vertical * 1/3;
-    width: 100%;
-  }
-}
+//  C A R D
+//  M E T A
 
 .card__meta {
   color: $lbry-gray-5;
-  font-size: 14px;
-  font-weight: 500;
-  padding-top: $spacing-vertical * 2/3;
+  padding-top: var(--spacing-vertical-medium);
+  padding-bottom: var(--spacing-vertical-medium);
 }
+
+//  C A R D
+//  M E S S A G E
+
+.card__message {
+  border-left: 0.5rem solid;
+  padding: var(--spacing-vertical-medium) var(--spacing-vertical-medium)
+    var(--spacing-vertical-medium) var(--spacing-vertical-large);
+
+  &:not(&--error):not(&--failure):not(&--success) {
+    background-color: rgba($lbry-teal-1, 0.1);
+    border-color: $lbry-teal-3;
+  }
+}
+
+.card__message--error {
+  background-color: rgba($lbry-orange-1, 0.1);
+  border-color: $lbry-orange-3;
+}
+
+.card__message--failure {
+  background-color: rgba($lbry-red-1, 0.1);
+  border-color: $lbry-red-3;
+}
+
+.card__message--success {
+  background-color: rgba($lbry-green-1, 0.1);
+  border-color: $lbry-green-3;
+}
+
+//  C A R D
+//  S U B T I T L E
 
 .card__subtitle {
-  color: $lbry-gray-5;
-  font-size: 0.9em;
-  padding-top: $spacing-vertical * 1/3;
+  font-size: 1.25rem;
+  margin-bottom: var(--spacing-vertical-small);
 
-  @media (min-width: $large-breakpoint) {
-    font-size: 1em;
-  }
-}
-
-.card__subtext {
-  font-size: 0.85em;
-  padding-top: $spacing-vertical * 1/3;
-}
-
-.card__subtext-title {
-  font-size: 1.1em;
-
-  &:not(:first-of-type) {
-    padding-top: $spacing-vertical * 3/2;
-  }
-}
-
-.card__success-msg {
-  margin: $spacing-vertical * 1/3 0;
-  padding: $spacing-vertical * 1/3;
-
-  background-color: rgba($lbry-green-1, 0.1);
-  border-left: 5px solid $lbry-green-5;
-  color: $lbry-green-5;
-}
-
-.card__title {
-  color: $lbry-black;
-  font-size: 1.5em;
-  padding-top: $spacing-vertical * 1/3;
-
-  @media (min-width: $large-breakpoint) {
-    font-size: 1.7em;
-  }
-}
-
-.card__title-identity-icons {
-  align-items: center;
-  align-self: flex-start;
-  display: flex;
-}
-
-.card__title--file-card {
-  // FileCard is slightly different where the title is only slightly bigger than the subtitle
-  // Slightly bigger than 2 lines for consistent channel placement
-  font-size: 1em;
-  height: 3.3em;
-
-  @media only screen and (min-width: $large-breakpoint) {
-    font-size: 1.1em;
-  }
-}
-
-// .card-row is used on the discover page
-// It is a list of cards that extend past the right edge of the screen
-// There are left/right arrows to scroll the cards and view hidden content
-
-.card-row {
-  padding-top: $spacing-vertical;
-  white-space: nowrap;
-  width: 100%;
-
-  &:last-of-type {
-    padding-bottom: $spacing-vertical * 2/3;
-  }
-}
-
-.card-row__header {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  // specific padding-left styling is needed here
-  // this needs to be used on a page with noPadding
-  // doing so allows the content to scroll to the edge of the screen
-  padding-left: $spacing-width;
-
-  &.card-row__header--sub-component {
-    padding-left: 0;
-  }
-}
-
-.card-row__message {
-  padding: 0 $spacing-width;
-  white-space: normal;
-}
-
-.card-row__scroll-btns {
-  display: flex;
-  padding-right: $spacing-width * 1/3;
-
-  @media (min-width: $medium-breakpoint) {
-    padding-right: $spacing-width;
-  }
-
-  &.card-row__scroll-btns--sub-component {
-    @media (min-width: $medium-breakpoint) {
-      padding-right: 0;
-    }
-  }
-}
-
-.card-row__scrollhouse {
-  padding-top: $spacing-vertical * 2/3;
-  padding-bottom: $spacing-vertical * 1/6;
-  overflow: hidden;
-
-  .card {
-    display: inline-block;
-    overflow-y: visible;
-    vertical-align: top;
-    width: calc((100% / 4) - 34px); // 31 px to handle to padding between cards
-
-    &:not(:first-of-type) {
-      margin-left: 20px;
-    }
-
-    &:first-of-type {
-      margin-left: $spacing-width;
-    }
-
-    &:last-of-type {
-      margin-right: $spacing-width;
-    }
-
-    @media only screen and (min-width: $medium-breakpoint) {
-      width: calc((100% / 6) - 29px);
-    }
-
-    @media only screen and (min-width: $large-breakpoint) {
-      width: calc((100% / 8) - 27px);
-    }
+  .badge {
+    bottom: -0.12rem;
+    position: relative;
   }
 
   &.card-row__scrollhouse--sub-component {
@@ -371,14 +174,27 @@
   }
 }
 
-.card-row__title {
-  align-items: center;
-  display: flex;
-  font-size: 18px;
-  font-weight: 600;
-  line-height: 24px;
+//  C A R D
+//  T I T L E
 
-  @media only screen and (min-width: $medium-breakpoint) {
-    font-size: 20px;
+.card__title {
+  font-size: 2rem;
+  font-weight: 600;
+
+  &:not(.card__title--flex) {
+    .btn {
+      bottom: -0.5rem;
+      float: right;
+      font-size: 1rem;
+    }
   }
+
+  .btn {
+    position: relative;
+  }
+}
+
+.card__title--flex {
+  @include between;
+  display: flex;
 }

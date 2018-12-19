@@ -47,8 +47,11 @@ class FormInviteNew extends React.PureComponent {
             }}
           />
         </FormRow>
-        <div className="card__actions">
-          <Submit label="Invite" disabled={isPending} />
+
+        <div className="card__content">
+          <div className="card__actions">
+            <Submit label="Invite" disabled={isPending} />
+          </div>
         </div>
       </Form>
     );
@@ -68,11 +71,14 @@ class InviteNew extends React.PureComponent {
 
     return (
       <section className="card card--section">
-        <div className="card__title">{__('Invite a Friend')}</div>
+        <header className="card__header">
+          <h2 className="card__title">{__('Invite a Friend')}</h2>
 
-        <div className="card__subtitle">
-          {__("Or an enemy. Or your cousin Jerry, who you're kind of unsure about.")}
-        </div>
+          <p className="card__subtitle">
+            {__("Or an enemy. Or your cousin Jerry, who you're kind of unsure about.")}
+          </p>
+        </header>
+
         {/*
         <div className="card__content">
           {invitesRemaining > 0 &&
@@ -80,6 +86,7 @@ class InviteNew extends React.PureComponent {
           {invitesRemaining <= 0 &&
             <p className="empty">{__("You have no invites.")}</p>}
         </div> */}
+
         <div className="card__content">
           <FormInviteNew
             errorMessage={errorMessage}
@@ -88,11 +95,14 @@ class InviteNew extends React.PureComponent {
             rewardAmount={rewardAmount}
           />
         </div>
-        <p className="help help--padded">
-          {__('Read our')}{' '}
-          <Button button="link" label={__('FAQ')} href="https://lbry.io/faq/referrals" />{' '}
-          {__('to learn more about referrals')}.
-        </p>
+
+        <div className="card__content">
+          <p className="help">
+            {__('Read our')}{' '}
+            <Button button="link" label={__('FAQ')} href="https://lbry.io/faq/referrals" />{' '}
+            {__('to learn more about referrals')}.
+          </p>
+        </div>
       </section>
     );
   }

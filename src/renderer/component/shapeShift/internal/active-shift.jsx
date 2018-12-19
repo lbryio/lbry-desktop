@@ -80,9 +80,9 @@ class ActiveShapeShift extends React.PureComponent<Props> {
           <div>
             <p>
               Send up to{' '}
-              <span className="credit-amount--bold">
+              <strong>
                 {originCoinDepositMax} {shiftCoinType}
-              </span>{' '}
+              </strong>{' '}
               to the address below.
             </p>
             <ShiftMarketInfo
@@ -134,13 +134,12 @@ class ActiveShapeShift extends React.PureComponent<Props> {
             />
           )}
         </div>
-        {shiftState === statuses.NO_DEPOSITS &&
-          shiftReturnAddress && (
-            <div className="help">
-              {__("If the transaction doesn't go through, ShapeShift will return your")}{' '}
-              {shiftCoinType} {__('back to')} {shiftReturnAddress}
-            </div>
-          )}
+        {shiftState === statuses.NO_DEPOSITS && shiftReturnAddress && (
+          <div className="help">
+            {__("If the transaction doesn't go through, ShapeShift will return your")}{' '}
+            {shiftCoinType} {__('back to')} {shiftReturnAddress}
+          </div>
+        )}
       </div>
     );
   }

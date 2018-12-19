@@ -1,0 +1,170 @@
+// Mozilla prefixes are unnecessary for app, necessary for LBRY Web
+
+html {
+  box-sizing: border-box;
+  text-rendering: optimizeLegibility;
+
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
+}
+
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+
+  border: none;
+  box-sizing: inherit;
+  outline: 0 !important;
+  user-select: none;
+}
+
+a,
+area,
+button,
+[role='button'],
+input,
+label,
+select,
+summary,
+textarea {
+  // Remove touch delay on supported devices
+  touch-action: manipulation;
+}
+
+button,
+input,
+select,
+textarea {
+  font-family: inherit;
+  font-size: inherit;
+  font-weight: inherit;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-weight: normal;
+}
+
+ol,
+ul {
+  list-style-position: inside;
+
+  > li {
+    list-style-position: inside;
+  }
+}
+
+ul {
+  list-style-type: none;
+}
+
+label[for] {
+  cursor: pointer;
+}
+
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+dl {
+  overflow-x: scroll;
+  overflow-y: hidden;
+  width: 100%;
+}
+
+dt {
+  float: left;
+  width: 20%;
+}
+
+dd {
+  float: left;
+  width: 80%;
+}
+
+textarea {
+  border: 1px solid $lbry-gray-2;
+  padding: $spacing-vertical * 1/3;
+  width: 100%;
+}
+
+img {
+  width: auto;
+  height: auto;
+  max-width: 100%;
+  max-height: 100%;
+  vertical-align: middle;
+}
+
+input {
+  background-color: transparent;
+  line-height: 1;
+
+  &::placeholder {
+    color: inherit;
+    opacity: 0.3;
+  }
+
+  &:not(:disabled) {
+    color: inherit;
+  }
+
+  &:not([type='checkbox']),
+  &:not([type='file']),
+  &:not([type='radio']),
+  &:not([type='select']) {
+    cursor: text;
+  }
+
+  &:not([type='file']):not(:disabled):not(.wunderbar__input):not(.input-copyable) {
+    border-bottom: var(--input-border-size) dotted $lbry-gray-5;
+  }
+
+  &[type='checkbox']:not(:disabled),
+  &[type='file']:not(:disabled),
+  &[type='radio']:not(:disabled),
+  &[type='select']:not(:disabled) {
+    cursor: pointer;
+  }
+
+  &[type='file'] {
+    border-bottom: none;
+  }
+
+  &:disabled {
+    border-bottom: var(--input-border-size) solid $lbry-gray-3;
+    color: $lbry-gray-3;
+    cursor: default;
+  }
+
+  &::-webkit-search-cancel-button {
+    -webkit-appearance: none;
+  }
+}
+
+button {
+  background-color: transparent;
+  color: inherit;
+
+  &:not(:disabled) {
+    cursor: pointer;
+  }
+
+  &:disabled {
+    cursor: default;
+    opacity: 0.3;
+    pointer-events: none;
+  }
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}

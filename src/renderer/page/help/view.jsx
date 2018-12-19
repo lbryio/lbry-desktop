@@ -1,6 +1,6 @@
 // @TODO: Customize advice based on OS
 // @flow
-import * as ICONS from 'constants/icons';
+import * as icons from 'constants/icons';
 import * as React from 'react';
 import { shell } from 'electron';
 import { Lbry } from 'lbry-redux';
@@ -119,150 +119,177 @@ class HelpPage extends React.PureComponent<Props, State> {
     return (
       <Page>
         <section className="card card--section">
-          <div className="card__title">{__('Read the FAQ')}</div>
-          <p className="card__subtitle">{__('Our FAQ answers many common questions.')}</p>
+          <header className="card__header">
+            <h2 className="card__title">{__('Read the FAQ')}</h2>
+            <p className="card__subtitle">{__('Our FAQ answers many common questions.')}</p>
+          </header>
 
-          <div className="card__actions">
-            <Button
-              href="https://lbry.io/faq"
-              label={__('Read the FAQ')}
-              icon={ICONS.HELP}
-              button="primary"
-            />
-          </div>
-        </section>
-
-        <section className="card card--section">
-          <div className="card__title">{__('Get Live Help')}</div>
-          <p className="card__subtitle">
-            {__('Live help is available most hours in the')} <strong>#help</strong>{' '}
-            {__('channel of our Discord chat room.')}
-          </p>
-          <div className="card__actions">
-            <Button
-              button="primary"
-              label={__('Join Our Chat')}
-              icon={ICONS.MESSAGE}
-              href="https://chat.lbry.io"
-            />
-          </div>
-        </section>
-
-        <section className="card card--section">
-          <div className="card__title">{__('View your Log')}</div>
-          <p className="card__subtitle">
-            {__('Did something go wrong? Have a look in your log file, or send it to')}{' '}
-            <Button button="link" label={__('support')} href="https://lbry.io/faq/support" />.
-          </p>
-          <div className="card__actions">
-            <Button
-              button="primary"
-              label={__('Open Log')}
-              icon={ICONS.REPORT}
-              onClick={() => this.openLogFile(dataDirectory)}
-            />
-            <Button
-              button="primary"
-              label={__('Open Log Folder')}
-              icon={ICONS.REPORT}
-              onClick={() => shell.openItem(dataDirectory)}
-            />
-          </div>
-        </section>
-
-        <section className="card card--section">
-          <div className="card__title">{__('Report a Bug or Suggest a New Feature')}</div>
-          <p className="card__subtitle">
-            {__('Did you find something wrong? Think LBRY could add something useful and cool?')}{' '}
-            <Button button="link" label={__('Learn more')} href="https://lbry.io/faq/support" />
-          </p>
-          <div className="card__actions">
-            <Button
-              navigate="/report"
-              label={__('Submit a Bug Report/Feature Request')}
-              icon={ICONS.REPORT}
-              button="primary"
-            />
-          </div>
-          <div className="card__meta">{__('Thanks! LBRY is made by its users.')}</div>
-        </section>
-
-        <section className="card card--section">
-          <div className="card__title">{__('About')}</div>
-          {this.state.upgradeAvailable !== null && this.state.upgradeAvailable ? (
-            <div className="card__subtitle">
-              {__('A newer version of LBRY is available.')}{' '}
-              <Button button="link" href={newVerLink} label={__('Download now!')} />
+          <div className="card__content">
+            <div className="card__actions">
+              <Button
+                href="https://lbry.io/faq"
+                label={__('Read the FAQ')}
+                icon={icons.HELP}
+                button="primary"
+              />
             </div>
-          ) : (
-            <div className="card__subtitle">{__('Your LBRY app is up to date.')}</div>
-          )}
+          </div>
+        </section>
 
-          {this.state.uiVersion && ver ? (
-            <table className="card__content table table--stretch table--help">
-              <tbody>
-                <tr>
-                  <td>{__('App')}</td>
-                  <td>{this.state.uiVersion}</td>
-                </tr>
-                <tr>
-                  <td>{__('Daemon (lbrynet)')}</td>
-                  <td>{ver.lbrynet_version}</td>
-                </tr>
-                <tr>
-                  <td>{__('Connected Email')}</td>
-                  <td>
-                    {user && user.primary_email ? (
-                      <React.Fragment>
-                        {user.primary_email}{' '}
-                        <Button
-                          button="link"
-                          href={`https://lbry.io/list/edit/${accessToken}`}
-                          label={__('Update mailing preferences')}
-                        />
-                      </React.Fragment>
-                    ) : (
-                      <React.Fragment>
-                        <span className="empty">{__('none')} </span>
-                        <Button button="link" onClick={() => doAuth()} label={__('set email')} />
-                      </React.Fragment>
-                    )}
-                  </td>
-                </tr>
-                <tr>
-                  <td>{__('Reward Eligible')}</td>
-                  <td>{user && user.is_reward_approved ? __('Yes') : __('No')}</td>
-                </tr>
-                <tr>
-                  <td>{__('Platform')}</td>
-                  <td>{platform}</td>
-                </tr>
-                <tr>
-                  <td>{__('Installation ID')}</td>
-                  <td>{this.state.lbryId}</td>
-                </tr>
-                <tr>
-                  <td>{__('Access Token')}</td>
-                  <td>
-                    {this.state.accessTokenHidden && (
-                      <Button button="link" label={__('View')} onClick={this.showAccessToken} />
-                    )}
-                    {!this.state.accessTokenHidden &&
-                      accessToken && (
+        <section className="card card--section">
+          <header className="card__header">
+            <h2 className="card__title">{__('Get Live Help')}</h2>
+
+            <p className="card__subtitle">
+              {__('Live help is available most hours in the')} <strong>#help</strong>{' '}
+              {__('channel of our Discord chat room.')}
+            </p>
+          </header>
+
+          <div className="card__content">
+            <div className="card__actions">
+              <Button
+                button="primary"
+                label={__('Join Our Chat')}
+                icon={icons.MESSAGE}
+                href="https://chat.lbry.io"
+              />
+            </div>
+          </div>
+        </section>
+
+        <section className="card card--section">
+          <header className="card__header">
+            <h2 className="card__title">{__('View your Log')}</h2>
+
+            <p className="card__subtitle">
+              {__('Did something go wrong? Have a look in your log file, or send it to')}{' '}
+              <Button button="link" label={__('support')} href="https://lbry.io/faq/support" />.
+            </p>
+          </header>
+
+          <div className="card__content">
+            <div className="card__actions">
+              <Button
+                button="primary"
+                label={__('Open Log')}
+                icon={icons.REPORT}
+                onClick={() => this.openLogFile(dataDirectory)}
+              />
+              <Button
+                button="primary"
+                label={__('Open Log Folder')}
+                icon={icons.REPORT}
+                onClick={() => shell.openItem(dataDirectory)}
+              />
+            </div>
+          </div>
+        </section>
+
+        <section className="card card--section">
+          <header className="card__header">
+            <h2 className="card__title">{__('Report a Bug or Suggest a New Feature')}</h2>
+
+            <p className="card__subtitle">
+              {__('Did you find something wrong? Think LBRY could add something useful and cool?')}
+              <Button button="link" label={__('Learn more')} href="https://lbry.io/faq/support" />
+            </p>
+          </header>
+
+          <div className="card__content">
+            <div className="card__actions">
+              <Button
+                navigate="/report"
+                label={__('Submit a Bug Report/Feature Request')}
+                icon={icons.REPORT}
+                button="primary"
+              />
+            </div>
+
+            <div className="card__meta">{__('Thanks! LBRY is made by its users.')}</div>
+          </div>
+        </section>
+
+        <section className="card card--section">
+          <header className="card__header">
+            <h2 className="card__title">{__('About')}</h2>
+
+            {this.state.upgradeAvailable !== null && this.state.upgradeAvailable ? (
+              <p className="card__subtitle">
+                {__('A newer version of LBRY is available.')}{' '}
+                <Button button="link" href={newVerLink} label={__('Download now!')} />
+              </p>
+            ) : (
+              <p className="card__subtitle">{__('Your LBRY app is up to date.')}</p>
+            )}
+          </header>
+
+          <div className="card__content">
+            {this.state.uiVersion && ver ? (
+              <table className="table table--stretch table--help">
+                <tbody>
+                  <tr>
+                    <td>{__('App')}</td>
+                    <td>{this.state.uiVersion}</td>
+                  </tr>
+                  <tr>
+                    <td>{__('Daemon (lbrynet)')}</td>
+                    <td>{ver.lbrynet_version}</td>
+                  </tr>
+                  <tr>
+                    <td>{__('Connected Email')}</td>
+                    <td>
+                      {user && user.primary_email ? (
+                        <React.Fragment>
+                          {user.primary_email}{' '}
+                          <Button
+                            button="link"
+                            href={`https://lbry.io/list/edit/${accessToken}`}
+                            label={__('Update mailing preferences')}
+                          />
+                        </React.Fragment>
+                      ) : (
+                        <React.Fragment>
+                          <span className="empty">{__('none')} </span>
+                          <Button button="link" onClick={() => doAuth()} label={__('set email')} />
+                        </React.Fragment>
+                      )}
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>{__('Reward Eligible')}</td>
+                    <td>{user && user.is_reward_approved ? __('Yes') : __('No')}</td>
+                  </tr>
+                  <tr>
+                    <td>{__('Platform')}</td>
+                    <td>{platform}</td>
+                  </tr>
+                  <tr>
+                    <td>{__('Installation ID')}</td>
+                    <td>{this.state.lbryId}</td>
+                  </tr>
+                  <tr>
+                    <td>{__('Access Token')}</td>
+                    <td>
+                      {this.state.accessTokenHidden && (
+                        <Button button="link" label={__('View')} onClick={this.showAccessToken} />
+                      )}
+                      {!this.state.accessTokenHidden && accessToken && (
                         <div>
                           <p>{accessToken}</p>
-                          <div className="help">
+                          <div className="alert-text">
                             {__('This is equivalent to a password. Do not post or share this.')}
                           </div>
                         </div>
                       )}
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          ) : (
-            <BusyIndicator message={__('Looking up version info')} />
-          )}
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            ) : (
+              <BusyIndicator message={__('Looking up version info')} />
+            )}
+          </div>
         </section>
       </Page>
     );

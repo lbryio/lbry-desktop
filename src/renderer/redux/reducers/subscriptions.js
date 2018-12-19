@@ -66,11 +66,10 @@ export default handleActions(
       action: SetSubscriptionLatest
     ): SubscriptionState => ({
       ...state,
-      subscriptions: state.subscriptions.map(
-        subscription =>
-          subscription.channelName === action.data.subscription.channelName
-            ? { ...subscription, latest: action.data.uri }
-            : subscription
+      subscriptions: state.subscriptions.map(subscription =>
+        subscription.channelName === action.data.subscription.channelName
+          ? { ...subscription, latest: action.data.uri }
+          : subscription
       ),
     }),
     [ACTIONS.UPDATE_SUBSCRIPTION_UNREADS]: (

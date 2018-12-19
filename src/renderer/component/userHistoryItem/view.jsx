@@ -47,7 +47,7 @@ class UserHistoryItem extends React.PureComponent<Props> {
         <span className="time time--ago">{moment(lastViewed).from(moment())}</span>
         <span className="item-list__item--cutoff">{title}</span>
         <Button
-          tourniquet
+          constrict
           button="link"
           label={name ? `lbry://${name}` : `lbry://...`}
           navigate="/show"

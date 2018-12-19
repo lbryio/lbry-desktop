@@ -20,9 +20,11 @@ const ModalCreditIntro = (props: Props) => {
     <Modal type="custom" isOpen contentLabel="Welcome to LBRY" title={__('LBRY Credits Needed')}>
       <section className="card__content">
         <p>
-          Some actions require LBRY credits (<em>
+          Some actions require LBRY credits (
+          <em>
             <CurrencySymbol />
-          </em>), the blockchain token that powers the LBRY network.
+          </em>
+          ), the blockchain token that powers the LBRY network.
         </p>
         {currentBalance <= 0 && (
           <p>
@@ -37,6 +39,9 @@ const ModalCreditIntro = (props: Props) => {
             {__('in free rewards for participating in the LBRY beta.')}
           </p>
         )}
+      </section>
+
+      <section className="card__content">
         <div className="card__actions card__actions--center">
           <Button button="primary" onClick={addBalance} label={__('Get Credits')} />
           <Button

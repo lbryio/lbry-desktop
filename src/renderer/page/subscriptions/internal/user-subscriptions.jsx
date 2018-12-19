@@ -72,7 +72,7 @@ export default (props: Props) => {
 
       {!hasSubscriptions && (
         <Fragment>
-          <div className="page__empty--horizontal">
+          <div className="yrbl-wrap">
             <img
               alt="Sad gerbil"
               className="subscriptions__gerbil"
@@ -105,8 +105,8 @@ export default (props: Props) => {
                 unreadSubscriptions.map(({ channel, uris }) => {
                   const { claimName } = parseURI(channel);
                   return (
-                    <section key={channel}>
-                      <div className="card__title card__actions card__actions--no-margin">
+                    <span>
+                      <h2 className="card__title card__title--flex">
                         <Button
                           button="link"
                           navigate="/show"
@@ -114,18 +114,23 @@ export default (props: Props) => {
                           label={claimName}
                         />
                         <MarkAsRead channel={channel} />
-                      </div>
-                      <div className="card__list card__content">
-                        {uris.map(uri => <FileCard key={uri} uri={uri} />)}
-                      </div>
-                    </section>
+                      </h2>
+
+                      <section className="media-group--list" key={channel}>
+                        <ul className="card__list">
+                          {uris.map(uri => (
+                            <FileCard key={uri} uri={uri} />
+                          ))}
+                        </ul>
+                      </section>
+                    </span>
                   );
                 })
               ) : (
                 <Fragment>
                   <div className="page__empty">
                     <h3 className="card__title">{__('All caught up!')}</h3>
-                    <p className="card__subtitle">{__('You might like these channels below.')}</p>
+                    <p className="card__subtitle">{__('You might like the channels below.')}</p>
                   </div>
                   <SuggestedSubscriptions />
                 </Fragment>

@@ -9,11 +9,13 @@ import type { Claim } from 'types/claim';
 type Props = {
   uri: string,
   isResolvingUri: boolean,
+  isSearchResult: boolean,
   totalItems: number,
   size: string,
   claim: ?Claim,
   resolveUri: string => void,
   navigate: (string, ?{}) => void,
+  buttonStyle: string,
 };
 
 class ChannelTile extends React.PureComponent<Props> {
@@ -36,7 +38,16 @@ class ChannelTile extends React.PureComponent<Props> {
   }
 
   render() {
-    const { claim, navigate, isResolvingUri, totalItems, uri, size } = this.props;
+    const {
+      claim,
+      navigate,
+      isResolvingUri,
+      isSearchResult,
+      totalItems,
+      uri,
+      size,
+      buttonStyle,
+    } = this.props;
 
     let channelName;
     let subscriptionUri;
@@ -51,20 +62,21 @@ class ChannelTile extends React.PureComponent<Props> {
       <section
         onClick={onClick}
         role="button"
-        className={classnames('file-tile card--link', {
-          'file-tile--small': size === 'small',
-          'file-tile--large': size === 'large',
+        className={classnames('media-tile card--link', {
+          'media--search-result': isSearchResult,
+          'media--small': size === 'small',
+          'media--large': size === 'large',
         })}
       >
         <CardMedia title={channelName} thumbnail={null} />
-        <div className="file-tile__info">
-          {isResolvingUri && <div className="file-tile__title">{__('Loading...')}</div>}
+        <div className="media__info">
+          {isResolvingUri && <div className="media__title">{__('Loading...')}</div>}
           {!isResolvingUri && (
             <React.Fragment>
-              <div className="file-tile__title">
+              <div className="media__title">
                 <TruncatedText text={channelName || uri} lines={1} />
               </div>
-              <div className="card__subtitle">
+              <div className="media__subtitle">
                 {totalItems > 0 && (
                   <span>
                     {totalItems} {totalItems === 1 ? 'file' : 'files'}
@@ -75,8 +87,8 @@ class ChannelTile extends React.PureComponent<Props> {
             </React.Fragment>
           )}
           {subscriptionUri && (
-            <div className="card__actions">
-              <SubscribeButton uri={subscriptionUri} />
+            <div className="media__actions">
+              <SubscribeButton buttonStyle="inverse" uri={subscriptionUri} />
             </div>
           )}
         </div>

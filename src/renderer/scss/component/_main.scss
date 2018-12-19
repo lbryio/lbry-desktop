@@ -1,0 +1,10 @@
+.main {
+  margin: auto;
+  overflow: hidden;
+  position: relative;
+  z-index: 1;
+
+  &:not(.main--no-padding) {
+    padding: var(--spacing-vertical-large);
+  }
+}

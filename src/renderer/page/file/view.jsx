@@ -2,7 +2,7 @@
 import type { Claim, Metadata } from 'types/claim';
 import type { FileInfo } from 'types/file_info';
 import * as MODALS from 'constants/modal_types';
-import * as ICONS from 'constants/icons';
+import * as icons from 'constants/icons';
 import * as React from 'react';
 import * as settings from 'constants/settings';
 import { buildURI, normalizeURI } from 'lbry-redux';
@@ -21,8 +21,6 @@ import FileDownloadLink from 'component/fileDownloadLink';
 import classnames from 'classnames';
 import getMediaType from 'util/get-media-type';
 import RecommendedContent from 'component/recommendedContent';
-import { FormField, FormRow } from 'component/common/form';
-import ToolTip from 'component/common/tooltip';
 
 type Props = {
   claim: Claim,
@@ -37,7 +35,6 @@ type Props = {
   fetchFileInfo: string => void,
   fetchCostInfo: string => void,
   setViewed: string => void,
-  autoplay: boolean,
   isSubscribed: ?string,
   isSubscribed: boolean,
   channelUri: string,
@@ -126,7 +123,6 @@ class FilePage extends React.Component<Props> {
       navigate,
       costInfo,
       fileInfo,
-      autoplay,
       channelUri,
     } = this.props;
 
@@ -163,90 +159,85 @@ class FilePage extends React.Component<Props> {
 
     return (
       <Page forContent>
-        <section className="content__wrapper">
-          {showFile && <FileViewer className="content__embedded" uri={uri} mediaType={mediaType} />}
-          {!showFile &&
-            (thumbnail ? (
-              <Thumbnail shouldObscure={shouldObscureThumbnail} src={thumbnail} />
-            ) : (
-              <div
-                className={classnames('content__empty', {
-                  'content__empty--nsfw': shouldObscureThumbnail,
-                })}
-              >
-                <div className="card__media-text">
-                  {__("Sorry, looks like we can't preview this file.")}
-                </div>
-              </div>
-            ))}
-
-          <div className="card__content">
-            <div className="card--space-between">
-              <h1>{title}</h1>
-              <div className="card__title-identity-ICONS">
-                {isRewardContent && (
-                  <Icon size={20} iconColor="red" tooltip="bottom" icon={ICONS.FEATURED} />
-                )}
-                <FilePrice badge uri={normalizeURI(uri)} />
+        {showFile && <FileViewer className="content__embedded" uri={uri} mediaType={mediaType} />}
+        {!showFile &&
+          (thumbnail ? (
+            <Thumbnail shouldObscure={shouldObscureThumbnail} src={thumbnail} />
+          ) : (
+            <div
+              className={classnames('content__empty', {
+                'content__empty--nsfw': shouldObscureThumbnail,
+              })}
+            >
+              <div className="card__media-text">
+                {__("Sorry, looks like we can't preview this file.")}
               </div>
             </div>
-            <span className="card__subtitle">
-              <UriIndicator uri={uri} link /> {__('published on')}{' '}
-              <DateTime block={height} show={DateTime.SHOW_DATE} />
-            </span>
-            {metadata.nsfw && <div>NSFW</div>}
-            <div className="card__actions card__actions--no-margin card__actions--between">
-              <div className="card__actions">
-                {claimIsMine ? (
-                  <Button
-                    button="primary"
-                    icon={ICONS.EDIT}
-                    label={__('Edit')}
-                    onClick={() => {
-                      prepareEdit(claim, editUri);
-                      navigate('/publish');
-                    }}
-                  />
-                ) : (
-                  <SubscribeButton uri={channelUri} />
-                )}
-                {!claimIsMine && (
-                  <Button
-                    button="alt"
-                    icon={ICONS.GIFT}
-                    label={__('Send a tip')}
-                    onClick={() => openModal(MODALS.SEND_TIP, { uri })}
-                  />
-                )}
-                <Button
-                  button="alt"
-                  icon={ICONS.GLOBE}
-                  label={__('Share')}
-                  onClick={() => openModal(MODALS.SOCIAL_SHARE, { uri, speechShareable })}
-                />
-              </div>
+          ))}
 
-              <div className="card__actions">
-                <FileDownloadLink uri={uri} />
-                <FileActions uri={uri} claimId={claim.claim_id} />
-              </div>
+        <div className="media__content media__content--large">
+          <h1 className="media__title media__title--large">{title}</h1>
+
+          <div className="media__properties media__properties--large">
+            {isRewardContent && (
+              <Icon size={20} iconColor="red" tooltip="bottom" icon={icons.FEATURED} />
+            )}
+            {metadata.nsfw && <div className="badge badge--nsfw">NSFW</div>}
+            <FilePrice badge uri={normalizeURI(uri)} />
+          </div>
+
+          <div className="media__subtitle media__subtitle--large">
+            <div className="media__subtitle__channel">
+              <UriIndicator uri={uri} link />
             </div>
-            <FormRow>
-              <ToolTip direction="right" body={__('Automatically download and play free content.')}>
-                <FormField
-                  name="autoplay"
-                  type="checkbox"
-                  postfix={__('Autoplay')}
-                  checked={autoplay}
-                  onChange={this.onAutoplayChange}
-                />
-              </ToolTip>
-            </FormRow>
-            <div className="card__content">
-              <FileDetails uri={uri} />
+
+            <div className="media__subtitle__date">
+              {__('Published on')} <DateTime block={height} show={DateTime.SHOW_DATE} />
             </div>
           </div>
-        </section>
+
+          <div className="media__actions media__actions--between">
+            <div className="media__action-group--large">
+              {claimIsMine ? (
+                <Button
+                  button="primary"
+                  icon={icons.EDIT}
+                  label={__('Edit')}
+                  onClick={() => {
+                    prepareEdit(claim, editUri);
+                    navigate('/publish');
+                  }}
+                />
+              ) : (
+                <SubscribeButton uri={channelUri} channelName={channelName} />
+              )}
+              {!claimIsMine && (
+                <Button
+                  button="alt"
+                  icon={icons.GIFT}
+                  label={__('Send a tip')}
+                  onClick={() => openModal({ id: MODALS.SEND_TIP }, { uri })}
+                />
+              )}
+              <Button
+                button="alt"
+                icon={icons.GLOBE}
+                label={__('Share')}
+                onClick={() => openModal({ id: MODALS.SOCIAL_SHARE }, { uri, speechShareable })}
+              />
+            </div>
+
+            <div className="media__action-group--large">
+              <FileDownloadLink uri={uri} />
+              <FileActions uri={uri} claimId={claim.claim_id} />
+            </div>
+          </div>
+
+          <div className="media__info--large">
+            <FileDetails uri={uri} />
+          </div>
+        </div>
+
         <RecommendedContent uri={uri} />
       </Page>
     );

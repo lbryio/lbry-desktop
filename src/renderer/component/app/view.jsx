@@ -89,6 +89,7 @@ class App extends React.PureComponent<Props> {
 
   scrollListener() {
     const { recordScroll } = this.props;
+
     if (this.mainContent) {
       recordScroll(this.mainContent.scrollTop);
     }

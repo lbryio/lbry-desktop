@@ -78,12 +78,14 @@ class AuthPage extends React.PureComponent<Props> {
       <Page>
         {useTemplate ? (
           <section className="card card--section">
-            <div className="card__title">
-              <h1>{this.getTitle()}</h1>
-            </div>
-            <div className="card__content">{innerContent}</div>
+            <header className="card__header card__header--flat">
+              <h2 className="card__title">{this.getTitle()}</h2>
+            </header>
+
             <div className="card__content">
-              <div className="help">
+              {innerContent}
+
+              <p className="help">
                 {`${__(
                   'This information is disclosed only to LBRY, Inc. and not to the LBRY network. It is only required to earn LBRY rewards and may be used to sync usage data across devices.'
                 )} `}
@@ -92,7 +94,7 @@ class AuthPage extends React.PureComponent<Props> {
                   onClick={() => navigate('/discover')}
                   label={__('Return home.')}
                 />
-              </div>
+              </p>
             </div>
           </section>
         ) : (

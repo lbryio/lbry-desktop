@@ -1,3 +1,4 @@
+// React Feather
 export const FEATURED = 'Award';
 export const LOCAL = 'Folder';
 export const ALERT = 'AlertCircle';

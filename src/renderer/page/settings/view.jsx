@@ -182,8 +182,11 @@ class SettingsPage extends React.PureComponent<Props, State> {
         ) : (
           <React.Fragment>
             <section className="card card--section">
-              <div className="card__title">{__('Download Directory')}</div>
-              <span className="card__subtitle">{__('LBRY downloads will be saved here.')}</span>
+              <header className="card__header">
+                <h2 className="card__title">{__('Download Directory')}</h2>
+                <p className="card__subtitle">{__('LBRY downloads will be saved here.')}</p>
+              </header>
+
               <div className="card__content">
                 <FileSelector
                   type="openDirectory"
@@ -192,13 +195,17 @@ class SettingsPage extends React.PureComponent<Props, State> {
                 />
               </div>
             </section>
+
             <section className="card card--section">
-              <div className="card__title">{__('Max Purchase Price')}</div>
-              <span className="card__subtitle">
-                {__(
-                  'This will prevent you from purchasing any content over a certain cost, as a safety measure.'
-                )}
-              </span>
+              <header className="card__header">
+                <h2 className="card__title">{__('Max Purchase Price')}</h2>
+                <p className="card__subtitle">
+                  {__(
+                    'This will prevent you from purchasing any content over a certain cost, as a safety measure.'
+                  )}
+                </p>
+              </header>
+
               <div className="card__content">
                 <FormField
                   type="radio"
@@ -233,13 +240,17 @@ class SettingsPage extends React.PureComponent<Props, State> {
                 )}
               </div>
             </section>
+
             <section className="card card--section">
-              <div className="card__title">{__('Purchase Confirmations')}</div>
-              <div className="card__subtitle">
-                {__(
-                  "When this option is chosen, LBRY won't ask you to confirm downloads below your chosen price."
-                )}
-              </div>
+              <header className="card__header">
+                <h2 className="card__title">{__('Purchase Confirmations')}</h2>
+                <p className="card__subtitle">
+                  {__(
+                    "When this option is chosen, LBRY won't ask you to confirm downloads below your chosen price."
+                  )}
+                </p>
+              </header>
+
               <div className="card__content">
                 <FormField
                   type="radio"
@@ -269,111 +280,146 @@ class SettingsPage extends React.PureComponent<Props, State> {
                 )}
               </div>
             </section>
+
             <section className="card card--section">
-              <div className="card__title">{__('Content Settings')}</div>
-              <FormField
-                type="checkbox"
-                name="autoplay"
-                onChange={this.onAutoplayChange}
-                checked={autoplay}
-                postfix={__('Autoplay media files')}
-              />
-              <FormField
-                type="checkbox"
-                name="auto_download"
-                onChange={this.onAutoDownloadChange}
-                checked={autoDownload}
-                postfix={__('Automatically download new content from your subscriptions')}
-              />
-              <FormField
-                type="checkbox"
-                name="show_nsfw"
-                onChange={this.onShowNsfwChange}
-                checked={showNsfw}
-                postfix={__('Show NSFW content')}
-                helper={__(
-                  'NSFW content may include nudity, intense sexuality, profanity, or other adult content. By displaying NSFW content, you are affirming you are of legal age to view mature content in your country or jurisdiction.  '
-                )}
-              />
+              <header className="card__header">
+                <h2 className="card__title">{__('Content Settings')}</h2>
+              </header>
+
+              <div className="card__content">
+                <FormField
+                  type="checkbox"
+                  name="autoplay"
+                  onChange={this.onAutoplayChange}
+                  checked={autoplay}
+                  postfix={__('Autoplay media files')}
+                />
+
+                <FormField
+                  type="checkbox"
+                  name="auto_download"
+                  onChange={this.onAutoDownloadChange}
+                  checked={autoDownload}
+                  postfix={__('Automatically download new content from your subscriptions')}
+                />
+
+                <FormField
+                  type="checkbox"
+                  name="show_nsfw"
+                  onChange={this.onShowNsfwChange}
+                  checked={showNsfw}
+                  postfix={__('Show NSFW content')}
+                  helper={__(
+                    'NSFW content may include nudity, intense sexuality, profanity, or other adult content. By displaying NSFW content, you are affirming you are of legal age to view mature content in your country or jurisdiction.  '
+                  )}
+                />
+              </div>
             </section>
 
             <section className="card card--section">
-              <div className="card__title">{__('Notifications')}</div>
-              <FormField
-                type="checkbox"
-                name="desktopNotification"
-                onChange={this.onDesktopNotificationsChange}
-                checked={osNotificationsEnabled}
-                postfix={__('Show Desktop Notifications')}
-              />
+              <header className="card__header">
+                <h2 className="card__title">{__('Notifications')}</h2>
+              </header>
+
+              <div className="card__content">
+                <FormField
+                  type="checkbox"
+                  name="desktopNotification"
+                  onChange={this.onDesktopNotificationsChange}
+                  checked={osNotificationsEnabled}
+                  postfix={__('Show Desktop Notifications')}
+                />
+              </div>
             </section>
 
             <section className="card card--section">
-              <div className="card__title">{__('Share Diagnostic Data')}</div>
-              <FormField
-                type="checkbox"
-                name="share_usage_data"
-                onChange={this.onShareDataChange}
-                checked={daemonSettings.share_usage_data}
-                postfix={__(
-                  'Help make LBRY better by contributing analytics and diagnostic data about my usage.'
-                )}
-                helper={__(
-                  'You will be ineligible to earn rewards while diagnostics are not being shared.'
-                )}
-              />
+              <header className="card__header">
+                <h2 className="card__title">{__('Share Diagnostic Data')}</h2>
+              </header>
+
+              <div className="card__content">
+                <FormField
+                  type="checkbox"
+                  name="share_usage_data"
+                  onChange={this.onShareDataChange}
+                  checked={daemonSettings.share_usage_data}
+                  postfix={__(
+                    'Help make LBRY better by contributing analytics and diagnostic data about my usage.'
+                  )}
+                  helper={__(
+                    'You will be ineligible to earn rewards while diagnostics are not being shared.'
+                  )}
+                />
+              </div>
             </section>
+
             <section className="card card--section">
-              <div className="card__title">{__('Theme')}</div>
-              <FormField
-                name="theme_select"
-                type="select"
-                onChange={this.onThemeChange}
-                value={currentTheme}
-                disabled={automaticDarkModeEnabled}
-              >
-                {themes.map(theme => (
-                  <option key={theme} value={theme}>
-                    {theme}
-                  </option>
-                ))}
-              </FormField>
-              <FormField
-                type="checkbox"
-                name="automatic_dark_mode"
-                onChange={e => this.onAutomaticDarkModeChange(e.target.checked)}
-                checked={automaticDarkModeEnabled}
-                disabled={isDarkModeEnabled}
-                postfix={__('Automatic dark mode (9pm to 8am)')}
-              />
+              <header className="card__header">
+                <h2 className="card__title">{__('Theme')}</h2>
+              </header>
+
+              <div className="card__content">
+                <FormField
+                  name="theme_select"
+                  type="select"
+                  onChange={this.onThemeChange}
+                  value={currentTheme}
+                  disabled={automaticDarkModeEnabled}
+                >
+                  {themes.map(theme => (
+                    <option key={theme} value={theme}>
+                      {theme}
+                    </option>
+                  ))}
+                </FormField>
+
+                <FormField
+                  type="checkbox"
+                  name="automatic_dark_mode"
+                  onChange={e => this.onAutomaticDarkModeChange(e.target.checked)}
+                  checked={automaticDarkModeEnabled}
+                  disabled={isDarkModeEnabled}
+                  postfix={__('Automatic dark mode (9pm to 8am)')}
+                />
+              </div>
             </section>
+
             <section className="card card--section">
-              <div className="card__title">{__('Wallet Security')}</div>
-              <FormField
-                type="checkbox"
-                name="encrypt_wallet"
-                onChange={() => this.onChangeEncryptWallet()}
-                checked={walletEncrypted}
-                postfix={__('Encrypt my wallet with a custom password.')}
-                helper={
-                  <React.Fragment>
-                    {__(
-                      'Secure your local wallet data with a custom password. Lost passwords cannot be recovered.'
-                    )}{' '}
-                    <Button
-                      button="link"
-                      label={__('Learn more')}
-                      href="https://lbry.io/faq/wallet-encryption"
-                    />.
-                  </React.Fragment>
-                }
-              />
+              <header className="card__header">
+                <h2 className="card__title">{__('Wallet Security')}</h2>
+              </header>
+
+              <div className="card__content">
+                <FormField
+                  type="checkbox"
+                  name="encrypt_wallet"
+                  onChange={() => this.onChangeEncryptWallet()}
+                  checked={walletEncrypted}
+                  postfix={__('Encrypt my wallet with a custom password.')}
+                  helper={
+                    <React.Fragment>
+                      {__('Secure your local wallet data with a custom password.')}{' '}
+                      <strong>{__('Lost passwords cannot be recovered.')} </strong>
+                      <Button
+                        button="link"
+                        label={__('Learn more')}
+                        href="https://lbry.io/faq/wallet-encryption"
+                      />
+                      .
+                    </React.Fragment>
+                  }
+                />
+              </div>
             </section>
+
             <section className="card card--section">
-              <div className="card__title">{__('Application Cache')}</div>
-              <span className="card__subtitle">
-                {__('This will clear the application cache. Your wallet will not be affected.')}
-              </span>
+              <header className="card__header">
+                <h2 className="card__title">{__('Application Cache')}</h2>
+                <p className="card__subtitle">
+                  {__('This will clear the application cache. Your wallet will not be affected.')}
+                </p>
+              </header>
+
               <div className="card__content">
                 <Button
                   button="primary"

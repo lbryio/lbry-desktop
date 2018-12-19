@@ -1,9 +1,5 @@
 import { connect } from 'react-redux';
-import {
-  doWalletStatus,
-  doWalletDecrypt,
-  selectWalletDecryptSucceeded,
-} from 'lbry-redux';
+import { doWalletStatus, doWalletDecrypt, selectWalletDecryptSucceeded } from 'lbry-redux';
 import { doHideModal } from 'redux/actions/app';
 import ModalWalletDecrypt from './view';
 

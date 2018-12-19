@@ -25,23 +25,28 @@ const RewardTile = (props: Props) => {
 
   return (
     <section className="card card--section">
-      <div className="card__title">{reward.reward_title}</div>
-      <div className="card__subtitle">{reward.reward_description}</div>
-      <div className="card__actions">
-        {reward.reward_type === rewards.TYPE_GENERATED_CODE && (
-          <Button button="primary" onClick={openRewardCodeModal} label={__('Enter Code')} />
-        )}
-        {reward.reward_type === rewards.TYPE_REFERRAL && (
-          <Button button="primary" navigate="/invite" label={__('Go To Invites')} />
-        )}
-        {reward.reward_type !== rewards.TYPE_REFERRAL &&
-          (claimed ? (
-            <span>
-              <Icon icon={ICONS.CHECK} /> {__('Reward claimed.')}
-            </span>
-          ) : (
-            <RewardLink button reward_type={reward.reward_type} />
-          ))}
+      <header className="card__header">
+        <h2 className="card__title">{reward.reward_title}</h2>
+        <p className="card__subtitle">{reward.reward_description}</p>
+      </header>
+
+      <div className="card__content">
+        <div className="card__actions">
+          {reward.reward_type === rewards.TYPE_GENERATED_CODE && (
+            <Button button="primary" onClick={openRewardCodeModal} label={__('Enter Code')} />
+          )}
+          {reward.reward_type === rewards.TYPE_REFERRAL && (
+            <Button button="primary" navigate="/invite" label={__('Go To Invites')} />
+          )}
+          {reward.reward_type !== rewards.TYPE_REFERRAL &&
+            (claimed ? (
+              <span>
+                <Icon icon={ICONS.CHECK} /> {__('Reward claimed.')}
+              </span>
+            ) : (
+              <RewardLink button reward_type={reward.reward_type} />
+            ))}
+        </div>
       </div>
     </section>
   );

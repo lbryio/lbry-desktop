@@ -3,6 +3,7 @@ import * as ICONS from 'constants/icons';
 import React from 'react';
 import * as FeatherIcons from 'react-feather';
 import Tooltip from 'component/common/tooltip';
+import { customIcons } from './icon-custom';
 
 // It would be nice to standardize this somehow
 // These are copied from `scss/vars`, can they both come from the same source?
@@ -44,7 +45,7 @@ class IconComponent extends React.PureComponent<Props> {
 
   render() {
     const { icon, tooltip, iconColor, size } = this.props;
-    const Icon = FeatherIcons[icon];
+    const Icon = customIcons[this.props.icon] || FeatherIcons[this.props.icon];
 
     if (!Icon) {
       return null;
@@ -55,11 +56,7 @@ class IconComponent extends React.PureComponent<Props> {
       color = this.getIconColor(iconColor);
     }
 
-    let iconSize = size || 14;
-    // Arrow ICONS are quite a bit smaller than the other ICONS we use
-    if (icon === ICONS.ARROW_LEFT || icon === ICONS.ARROW_RIGHT) {
-      iconSize = 20;
-    }
+    const iconSize = size || 14;
 
     let tooltipText;
     if (tooltip) {

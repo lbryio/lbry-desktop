@@ -13,7 +13,6 @@ type Props = {
   large?: boolean,
   showLBC?: boolean,
   fee?: boolean,
-  inheritStyle?: boolean,
   badge?: boolean,
 };
 
@@ -37,7 +36,6 @@ class CreditAmount extends React.PureComponent<Props> {
       isEstimate,
       fee,
       showLBC,
-      inheritStyle,
       badge,
     } = this.props;
 
@@ -66,7 +64,11 @@ class CreditAmount extends React.PureComponent<Props> {
       }
 
       if (showLBC) {
-        amountText = `${amountText} ${__('LBC')}`;
+        amountText = (
+          <span>
+            {amountText} {__('LBC')}
+          </span>
+        );
       }
 
       if (fee) {
@@ -77,14 +79,11 @@ class CreditAmount extends React.PureComponent<Props> {
     return (
       <span
         title={fullPrice}
-        className={classnames('credit-amount', {
-          'credit-amount--large': large,
-          // TODO: remove inheritStyle prop
-          // It just complicates things
-          'credit-amount--inherit': inheritStyle,
+        className={classnames('badge', {
           badge,
-          'badge--cost': badge && !isFree,
+          'badge--cost': (badge && !isFree) || amount > 0,
           'badge--free': badge && isFree,
+          'badge--large': large,
         })}
       >
         {amountText}

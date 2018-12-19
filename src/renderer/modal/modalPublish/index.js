@@ -10,4 +10,7 @@ const perform = dispatch => ({
   navigate: (path, params) => dispatch(doNavigate(path, params)),
 });
 
-export default connect(null, perform)(ModalSendTip);
+export default connect(
+  null,
+  perform
+)(ModalSendTip);

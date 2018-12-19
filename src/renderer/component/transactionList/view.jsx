@@ -1,5 +1,5 @@
 // @flow
-import * as ICONS from 'constants/icons';
+import * as icons from 'constants/icons';
 import * as MODALS from 'constants/modal_types';
 import * as React from 'react';
 import { FormField } from 'component/common/form';
@@ -78,12 +78,12 @@ class TransactionList extends React.PureComponent<Props> {
 
     return (
       <React.Fragment>
-        {!transactionList.length && (
-          <p className="card__content">{emptyMessage || __('No transactions to list.')}</p>
-        )}
-        {!slim &&
-          !!transactions.length && (
-            <div className="card__actions card__actions--between">
+        <header className="card__header">
+          {!transactionList.length && (
+            <p className="card__content">{emptyMessage || __('No transactions to list.')}</p>
+          )}
+          {!slim && !!transactionList.length && (
+            <div className="card__actions card__actions--between card__actions--top-space">
               <FileExporter
                 data={transactionList}
                 label={__('Export')}
@@ -91,54 +91,57 @@ class TransactionList extends React.PureComponent<Props> {
                 filters={['nout']}
                 defaultPath={__('lbry-transactions-history')}
               />
-              {!slim && (
-                <FormField
-                  type="select"
-                  value={filterSetting || TRANSACTIONS.ALL}
-                  onChange={this.handleFilterChanged}
-                  affixClass="form-field--align-center"
-                  prefix={__('Show')}
-                  postfix={
-                    <Button
-                      button="link"
-                      icon={ICONS.HELP}
-                      href="https://lbry.io/faq/transaction-types"
-                      title={__('Help')}
-                    />
-                  }
-                >
-                  {transactionTypes.map(tt => (
-                    <option key={tt} value={tt}>
-                      {__(`${this.capitalize(tt)}`)}
-                    </option>
-                  ))}
-                </FormField>
-              )}
+
+              <FormField
+                type="select"
+                value={filterSetting || TRANSACTIONS.ALL}
+                onChange={this.handleFilterChanged}
+                affixClass="form-field--align-center"
+                prefix={__('Show')}
+                postfix={
+                  <Button
+                    button="link"
+                    icon={icons.HELP}
+                    href="https://lbry.io/faq/transaction-types"
+                    title={__('Help')}
+                  />
+                }
+              >
+                {transactionTypes.map(tt => (
+                  <option key={tt} value={tt}>
+                    {__(`${this.capitalize(tt)}`)}
+                  </option>
+                ))}
+              </FormField>
             </div>
           )}
+        </header>
+
         {!!transactionList.length && (
-          <table className="card__content table table--transactions table--stretch">
-            <thead>
-              <tr>
-                <th>{__('Amount')}</th>
-                <th>{__('Type')} </th>
-                <th>{__('Details')} </th>
-                <th>{__('Transaction')}</th>
-                <th>{__('Date')}</th>
-              </tr>
-            </thead>
-            <tbody>
-              {transactionList.map(t => (
-                <TransactionListItem
-                  key={`${t.txid}:${t.nout}`}
-                  transaction={t}
-                  reward={rewards && rewards[t.txid]}
-                  isRevokeable={this.isRevokeable(t.txid, t.nout)}
-                  revokeClaim={this.revokeClaim}
-                />
-              ))}
-            </tbody>
-          </table>
+          <div className="card__content">
+            <table className="table table--transactions table--stretch">
+              <thead>
+                <tr>
+                  <th>{__('Amount')}</th>
+                  <th>{__('Type')} </th>
+                  <th>{__('Details')} </th>
+                  <th>{__('Transaction')}</th>
+                  <th>{__('Date')}</th>
+                </tr>
+              </thead>
+              <tbody>
+                {transactionList.map(t => (
+                  <TransactionListItem
+                    key={`${t.txid}:${t.nout}`}
+                    transaction={t}
+                    reward={rewards && rewards[t.txid]}
+                    isRevokeable={this.isRevokeable(t.txid, t.nout)}
+                    revokeClaim={this.revokeClaim}
+                  />
+                ))}
+              </tbody>
+            </table>
+          </div>
         )}
       </React.Fragment>
     );

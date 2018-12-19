@@ -1,21 +1,46 @@
 // Taken from react-toggle/style.css
-// Edited to add the teal color, nothing else
 .react-toggle {
   background-color: transparent;
-  border: none;
   cursor: pointer;
-  display: inline-block;
-  margin-top: 2px;
-  margin-bottom: auto;
-  padding: 0;
   position: relative;
-  user-select: none;
 
   &:hover {
     &:not(.react-toggle--disabled) {
       .react-toggle-track {
         background-color: $lbry-black;
       }
+    }
+
+    &.react-toggle--disabled {
+      .react-toggle-track {
+        background-color: $lbry-gray-5;
+      }
+    }
+  }
+
+  &:not(.react-toggle--checked) {
+    .react-toggle-track:not(:hover) {
+      background-color: $lbry-gray-5;
+    }
+
+    .react-toggle-track-check {
+      opacity: 0;
+    }
+
+    .react-toggle-thumb {
+      left: 1px;
+    }
+  }
+
+  &:not(.react-toggle--disabled):not(.react-toggle--checked) {
+    .react-toggle-thumb {
+      border-color: $lbry-gray-5;
+    }
+  }
+
+  &.react-toggle--disabled {
+    .react-toggle-thumb {
+      border-color: $lbry-gray-5;
     }
   }
 }
@@ -26,7 +51,21 @@
       .react-toggle-track {
         background-color: $lbry-black;
       }
+
+      .react-toggle-thumb {
+        border-color: $lbry-black;
+      }
     }
+  }
+
+  &:not(:hover) {
+    .react-toggle-thumb {
+      border-color: $lbry-teal-5;
+    }
+  }
+
+  .react-toggle-thumb {
+    left: 22px;
   }
 
   .react-toggle-track {
@@ -35,16 +74,10 @@
 
   .react-toggle-track-check {
     opacity: 1;
-    transition: opacity 0.25s ease;
   }
 
   .react-toggle-track-x {
     opacity: 0;
-  }
-
-  .react-toggle-thumb {
-    border-color: $lbry-teal-5;
-    left: 22px;
   }
 }
 
@@ -57,11 +90,10 @@
 .react-toggle-screenreader-only {
   width: 1px;
   height: 1px;
-  margin: -1px;
-  padding: 0;
 
-  border: none;
+  border: none !important;
   clip: rect(0 0 0 0);
+  margin: -1px !important;
   overflow: hidden;
   position: absolute;
 }
@@ -69,53 +101,50 @@
 .react-toggle-thumb {
   width: 17px;
   height: 17px;
-  top: 1px;
-  left: 1px;
 
   background-color: $lbry-gray-1;
-  border: 1px solid $lbry-gray-5;
+  border: 1px solid;
   border-radius: 50%;
-  box-sizing: border-box;
   position: absolute;
-  transition: all 0.25s ease;
+  top: 1px;
+  transition: all 0.25s;
 }
 
 .react-toggle-track {
   width: 40px;
   height: 19px;
-
-  background-color: $lbry-gray-5;
   border-radius: 30px;
-  padding: 0;
-  transition: all 0.2s ease;
+
+  &:not(.react-toggle--disabled) {
+    transition: all 0.2s;
+  }
+}
+
+.react-toggle-track-check,
+.react-toggle-track-x {
+  align-items: center;
+  display: flex;
+  height: 19px;
+  justify-content: center;
+  line-height: 0;
+  position: absolute;
+  transition: opacity 0.25s;
+
+  @media (min-resolution: 1.1dppx) {
+    top: 1px;
+  }
+
+  @media (max-resolution: 1dppx) {
+    top: 0;
+  }
 }
 
 .react-toggle-track-check {
-  width: 14px;
-  height: 10px;
-  top: 0;
   left: 6px;
-  bottom: 0;
-
-  line-height: 0;
-  margin-top: auto;
-  margin-bottom: auto;
-  opacity: 0;
-  position: absolute;
-  transition: opacity 0.25s ease;
+  width: 14px;
 }
 
 .react-toggle-track-x {
+  right: 8px;
   width: 10px;
-  height: 10px;
-  top: 0;
-  bottom: 0;
-  right: 10px;
-
-  margin-top: auto;
-  margin-bottom: auto;
-  line-height: 0;
-  opacity: 1;
-  position: absolute;
-  transition: opacity 0.25s ease;
 }

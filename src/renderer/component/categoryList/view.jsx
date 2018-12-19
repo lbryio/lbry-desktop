@@ -7,7 +7,6 @@ import ToolTip from 'component/common/tooltip';
 import FileCard from 'component/fileCard';
 import Button from 'component/button';
 import SubscribeButton from 'component/subscribeButton';
-import classnames from 'classnames';
 
 type Props = {
   category: string,
@@ -17,7 +16,6 @@ type Props = {
   channelClaims: ?Array<Claim>,
   fetchChannel: string => void,
   obscureNsfw: boolean,
-  isSubComponent: boolean,
 };
 
 type State = {
@@ -28,7 +26,6 @@ type State = {
 class CategoryList extends PureComponent<Props, State> {
   static defaultProps = {
     categoryLink: '',
-    isSubComponent: false,
   };
 
   constructor() {
@@ -210,32 +207,29 @@ class CategoryList extends PureComponent<Props, State> {
   }
 
   render() {
-    const {
-      category,
-      categoryLink,
-      names,
-      channelClaims,
-      obscureNsfw,
-      isSubComponent,
-    } = this.props;
+    const { category, categoryLink, names, channelClaims, obscureNsfw } = this.props;
     const { canScrollNext, canScrollPrevious } = this.state;
     const isCommunityTopBids = category.match(/^community/i);
     const showScrollButtons = isCommunityTopBids ? !obscureNsfw : true;
 
-    // isSubComponent is a hack, this component should be able to handle this with proper overflow styling
-
     return (
-      <div className="card-row">
-        <div
-          className={classnames('card-row__header', {
-            'card-row__header--sub-component': isSubComponent,
-          })}
-        >
-          <div className="card-row__title">
+      <section className="media-group--row">
+        <header className="media-group__header">
+          <div className="media-group__header-title">
             {categoryLink ? (
-              <div className="card__actions card__actions--no-margin">
-                <Button label={category} navigate="/show" navigateParams={{ uri: categoryLink }} />
-                <SubscribeButton uri={`lbry://${categoryLink}`} showSnackBarOnSubscribe />
+              <div className="channel-info__actions">
+                <div className="channel-info__actions__group">
+                  <Button
+                    label={category}
+                    navigate="/show"
+                    navigateParams={{ uri: categoryLink }}
+                  />
+                  <SubscribeButton
+                    button="alt"
+                    showSnackBarOnSubscribe
+                    uri={`lbry://${categoryLink}`}
+                  />
+                </div>
               </div>
             ) : (
               category
@@ -250,38 +244,30 @@ class CategoryList extends PureComponent<Props, State> {
             )}
           </div>
           {showScrollButtons && (
-            <div
-              className={classnames('card-row__scroll-btns', {
-                'card-row__scroll-btns--sub-component': isSubComponent,
-              })}
-            >
+            <nav className="media-group__header-navigation">
               <Button
-                className="btn--arrow"
                 disabled={!canScrollPrevious}
                 onClick={this.handleScrollPrevious}
                 icon={ICONS.ARROW_LEFT}
               />
               <Button
-                className="btn--arrow"
                 disabled={!canScrollNext}
                 onClick={this.handleScrollNext}
                 icon={ICONS.ARROW_RIGHT}
               />
-            </div>
+            </nav>
           )}
-        </div>
+        </header>
         {obscureNsfw && isCommunityTopBids ? (
-          <div className="card-row__message help">
+          <p className="media__message media__message--help">
             {__(
               'The community top bids section is only visible if you allow mature content in the app. You can change your content viewing preferences'
             )}{' '}
             <Button button="link" navigate="/settings" label={__('here')} />.
-          </div>
+          </p>
         ) : (
-          <div
-            className={classnames('card-row__scrollhouse', {
-              'card-row__scrollhouse--sub-component': isSubComponent,
-            })}
+          <ul
+            className="media-scrollhouse"
             ref={ref => {
               this.rowItems = ref;
             }}
@@ -314,9 +300,9 @@ class CategoryList extends PureComponent<Props, State> {
               new Array(10).fill(1).map((x, i) => <FileCard placeholder key={i} />)
             /* eslint-enable react/no-array-index-key */
             }
-          </div>
+          </ul>
         )}
-      </div>
+      </section>
     );
   }
 }
