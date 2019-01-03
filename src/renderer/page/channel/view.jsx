@@ -23,7 +23,7 @@ type Props = {
   channelIsMine: boolean,
   fetchClaims: (string, number) => void,
   navigate: (string, {}) => void,
-  openModal: ({ id: string }, { uri: string }) => void,
+  openModal: (id: string, { uri: string }) => void,
 };
 
 class ChannelPage extends React.PureComponent<Props> {
@@ -99,10 +99,7 @@ class ChannelPage extends React.PureComponent<Props> {
                 icon={icons.GLOBE}
                 label={__('Share Channel')}
                 onClick={() =>
-                  openModal(
-                    { id: MODALS.SOCIAL_SHARE },
-                    { uri, speechShareable: true, isChannel: true }
-                  )
+                  openModal(MODALS.SOCIAL_SHARE, { uri, speechShareable: true, isChannel: true })
                 }
               />
             </div>
@@ -111,33 +108,34 @@ class ChannelPage extends React.PureComponent<Props> {
 
         <section className="media-group--list">{contentList}</section>
 
-        {(!fetching || (claimsInChannel && claimsInChannel.length)) && totalPages > 1 && (
-          <FormRow verticallyCentered centered>
-            <ReactPaginate
-              pageCount={totalPages}
-              pageRangeDisplayed={2}
-              previousLabel="‹"
-              nextLabel="›"
-              activeClassName="pagination__item--selected"
-              pageClassName="pagination__item"
-              previousClassName="pagination__item pagination__item--previous"
-              nextClassName="pagination__item pagination__item--next"
-              breakClassName="pagination__item pagination__item--break"
-              marginPagesDisplayed={2}
-              onPageChange={e => this.changePage(e.selected + 1)}
-              forcePage={currentPage}
-              initialPage={currentPage}
-              containerClassName="pagination"
-            />
+        {(!fetching || (claimsInChannel && claimsInChannel.length)) &&
+          totalPages > 1 && (
+            <FormRow verticallyCentered centered>
+              <ReactPaginate
+                pageCount={totalPages}
+                pageRangeDisplayed={2}
+                previousLabel="‹"
+                nextLabel="›"
+                activeClassName="pagination__item--selected"
+                pageClassName="pagination__item"
+                previousClassName="pagination__item pagination__item--previous"
+                nextClassName="pagination__item pagination__item--next"
+                breakClassName="pagination__item pagination__item--break"
+                marginPagesDisplayed={2}
+                onPageChange={e => this.changePage(e.selected + 1)}
+                forcePage={currentPage}
+                initialPage={currentPage}
+                containerClassName="pagination"
+              />
 
-            <FormField
-              className="paginate-channel"
-              onKeyUp={e => this.paginate(e, totalPages)}
-              prefix={__('Go to page:')}
-              type="text"
-            />
-          </FormRow>
-        )}
+              <FormField
+                className="paginate-channel"
+                onKeyUp={e => this.paginate(e, totalPages)}
+                prefix={__('Go to page:')}
+                type="text"
+              />
+            </FormRow>
+          )}
 
         {!channelIsMine && <HiddenNsfwClaims className="card__content help" uri={uri} />}
       </Page>

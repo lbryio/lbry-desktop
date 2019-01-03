@@ -12,7 +12,7 @@ type Props = {
   formDisabled: boolean,
   uploadThumbnailStatus: string,
   thumbnailPath: ?string,
-  openModal: ({ id: string }, {}) => void,
+  openModal: (id: string, {}) => void,
   updatePublishForm: ({}) => void,
   resetThumbnailStatus: () => void,
 };
