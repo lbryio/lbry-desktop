@@ -1,5 +1,10 @@
+// @if TARGET='app'
 import { clipboard, remote } from 'electron';
 import isDev from 'electron-is-dev';
+// @endif
+// @if TARGET='web'
+import { remote, isDev } from '../../web/stubs';
+// @endif
 
 function injectDevelopmentTemplate(event, templates) {
   if (!isDev) return templates;

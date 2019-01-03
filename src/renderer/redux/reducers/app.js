@@ -2,7 +2,12 @@
 
 import * as ACTIONS from 'constants/action_types';
 import * as MODALS from 'constants/modal_types';
+// @if TARGET='app'
 import { remote } from 'electron';
+// @endif
+// @if TARGET='web'
+import { remote } from '../../../web/stubs';
+// @endif
 
 const win = remote.BrowserWindow.getFocusedWindow();
 

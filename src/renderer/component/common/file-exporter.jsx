@@ -5,7 +5,12 @@ import path from 'path';
 import React from 'react';
 import Button from 'component/button';
 import parseData from 'util/parse-data';
+// @if TARGET='app'
 import { remote } from 'electron';
+// @endif
+// @if TARGET='web'
+import { remote } from '../../../web/stubs';
+// @endif
 
 type Props = {
   data: Array<any>,

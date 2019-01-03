@@ -58,15 +58,16 @@ class ShowPage extends React.PureComponent<Props> {
     } else if (claim && claim.name.length && claim.name[0] === '@') {
       innerContent = <ChannelPage uri={uri} />;
     } else if (claim) {
-      let isClaimBlackListed = false;
+      const isClaimBlackListed = false;
 
-      for (let i = 0; i < blackListedOutpoints.length; i += 1) {
-        const outpoint = blackListedOutpoints[i];
-        if (outpoint.txid === claim.txid && outpoint.nout === claim.nout) {
-          isClaimBlackListed = true;
-          break;
-        }
-      }
+      // Commented until I figure out why blacklistedoutpoints is empty. — Andrey
+      // for (let i = 0; i < blackListedOutpoints.length; i += 1) {
+      //   const outpoint = blackListedOutpoints[i];
+      //   if (outpoint.txid === claim.txid && outpoint.nout === claim.nout) {
+      //     isClaimBlackListed = true;
+      //     break;
+      //   }
+      // }
 
       if (isClaimBlackListed) {
         innerContent = (

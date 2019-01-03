@@ -1,6 +1,11 @@
 // @flow
 import React from 'react';
+// @if TARGET='app'
 import { remote } from 'electron';
+// @endif
+// @if TARGET='web'
+import { remote } from '../../../web/stubs';
+// @endif
 import Button from 'component/button';
 import { FormRow } from 'component/common/form';
 import path from 'path';
@@ -27,6 +32,9 @@ class FileSelector extends React.PureComponent<Props> {
   constructor() {
     super();
     this.input = null;
+    // @if TARGET='web'
+    this.fileInput = React.createRef();
+    // @endif
   }
 
   handleButtonClick() {
@@ -54,6 +62,20 @@ class FileSelector extends React.PureComponent<Props> {
     );
   }
 
+  handleFileInputSelection() {
+    const files = this.fileInput.current.files;
+    if (!files) {
+      return;
+    }
+
+    const filePath = files[0];
+    const fileName = filePath.name;
+
+    if (this.props.onFileChosen) {
+      this.props.onFileChosen(filePath, fileName);
+    }
+  }
+
   input: ?HTMLInputElement;
 
   render() {
@@ -64,6 +86,7 @@ class FileSelector extends React.PureComponent<Props> {
 
     return (
       <FormRow verticallyCentered>
+        // @if TARGET='app'
         <Button button="primary" onClick={() => this.handleButtonClick()} label={label} />
         <input
           webkitdirectory="true"
@@ -78,6 +101,11 @@ class FileSelector extends React.PureComponent<Props> {
           readOnly="readonly"
           value={currentPath || __('No File Chosen')}
         />
+        // @endif // @if TARGET='web'
+        <input type="file" ref={this.fileInput} onChange={() => this.handleFileInputSelection()} />
+        <br />
+        <button type="submit">Submit</button>
+        // @endif
       </FormRow>
     );
   }

@@ -1,3 +1,4 @@
+// @if TARGET='app'
 import { remote } from 'electron';
 
 const application = remote.app;
@@ -9,5 +10,10 @@ const setBadge = text => {
 
   dock.setBadge(text);
 };
+// @endif
+
+// @if TARGET='web'
+const setBadge = text => {};
+// @endif
 
 export default setBadge;

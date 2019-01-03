@@ -12,15 +12,28 @@ const isDev = PROCESS_ARGV && PROCESS_ARGV.original &&
   (PROCESS_ARGV.original.indexOf('dev') !== -1);
 
 module.exports = {
-  // This rule is temporarily necessary until https://github.com/electron-userland/electron-webpack/issues/60 is fixed.
   module: {
     rules: [
       {
         test: /\.jsx?$/,
-        loader: 'babel-loader',
-        options: {
-          presets: ['env', 'react', 'stage-2'],
-        },
+        use: [
+          // This rule is temporarily necessary until https://github.com/electron-userland/electron-webpack/issues/60 is fixed.
+          {
+            loader: 'babel-loader',
+            options: {
+              presets: ['env', 'react', 'stage-2'],
+            },
+          },
+          {
+            loader: 'preprocess-loader',
+            options: {
+              TARGET: 'app',
+              ppOptions: {
+                type: 'js'
+              }
+            },
+          },
+        ]
       },
     ],
   },

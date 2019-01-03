@@ -1,5 +1,10 @@
 import React from 'react';
+// @if TARGET='app'
 import { remote } from 'electron';
+// @endif
+// @if TARGET='web'
+import { remote } from '../../../../web/stubs';
+// @endif
 import fs from 'fs';
 import path from 'path';
 import player from 'render-media';

@@ -1,6 +1,6 @@
 // @flow
 import React from 'react';
-import { stopContextMenu } from 'util/contextMenu';
+import { stopContextMenu } from 'util/context-menu';
 import videojs from 'video.js';
 import 'video.js/dist/video-js.css';
 import toBlobURL from 'stream-to-blob-url';

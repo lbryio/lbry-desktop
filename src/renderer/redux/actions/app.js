@@ -1,7 +1,9 @@
+// @if TARGET='app'
 import { execSync } from 'child_process';
 import isDev from 'electron-is-dev';
 import path from 'path';
 import { ipcRenderer, remote } from 'electron';
+// @endif
 import * as ACTIONS from 'constants/action_types';
 import * as MODALS from 'constants/modal_types';
 import { Lbry, doBalanceSubscribe, doFetchFileInfosAndPublishedClaims, doError } from 'lbry-redux';
@@ -23,9 +25,11 @@ import {
 import { doAuthenticate } from 'lbryinc';
 import { lbrySettings as config, version as appVersion } from 'package.json';
 
+// @if TARGET='app'
 const { autoUpdater } = remote.require('electron-updater');
 const { download } = remote.require('electron-dl');
 const Fs = remote.require('fs');
+// @endif
 
 const CHECK_UPGRADE_INTERVAL = 10 * 60 * 1000;
 
@@ -71,6 +75,7 @@ export function doStartUpgrade() {
 
 export function doDownloadUpgrade() {
   return (dispatch, getState) => {
+    // @if TARGET='app'
     const state = getState();
     // Make a new directory within temp directory so the filename is guaranteed to be available
     const dir = Fs.mkdtempSync(remote.app.getPath('temp') + path.sep);
@@ -101,6 +106,7 @@ export function doDownloadUpgrade() {
     });
     dispatch(doHideModal());
     dispatch(doOpenModal(MODALS.DOWNLOADING));
+    // @endif
   };
 }
 
@@ -255,6 +261,7 @@ export function doCheckUpgradeSubscribe() {
 
 export function doCheckDaemonVersion() {
   return dispatch => {
+    // @if TARGET='app'
     Lbry.version().then(({ lbrynet_version: lbrynetVersion }) => {
       // Avoid the incompatible daemon modal if running in dev mode
       // Lets you run a different daemon than the one specified in package.json
@@ -270,6 +277,12 @@ export function doCheckDaemonVersion() {
 
       return dispatch(doOpenModal(MODALS.INCOMPATIBLE_DAEMON));
     });
+    // @endif
+    // @if TARGET='web'
+    dispatch({
+      type: ACTIONS.DAEMON_VERSION_MATCH,
+    });
+    // @endif
   };
 }
 
@@ -305,12 +318,14 @@ export function doDaemonReady() {
     dispatch({ type: ACTIONS.DAEMON_READY });
     dispatch(doFetchDaemonSettings());
     dispatch(doBalanceSubscribe());
+    // @if TARGET='app'
     dispatch(doFetchFileInfosAndPublishedClaims());
     if (!selectIsUpgradeSkipped(state)) {
       dispatch(doCheckUpgradeAvailable());
     }
     dispatch(doCheckUpgradeSubscribe());
     dispatch(doCheckSubscriptionsInit());
+    // @endif
   };
 }
 
@@ -324,12 +339,15 @@ export function doClearCache() {
 
 export function doQuit() {
   return () => {
+    // @if TARGET='app'
     remote.app.quit();
+    // @endif
   };
 }
 
 export function doQuitAnyDaemon() {
   return dispatch => {
+    // @if TARGET='app'
     try {
       if (process.platform === 'win32') {
         execSync('taskkill /im lbrynet-daemon.exe /t /f');
@@ -341,6 +359,7 @@ export function doQuitAnyDaemon() {
     } finally {
       dispatch(doQuit());
     }
+    // @endif
   };
 }
 

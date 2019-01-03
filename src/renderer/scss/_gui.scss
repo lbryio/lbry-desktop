@@ -53,7 +53,7 @@ input {
   }
 
   &[type='file'] {
-    border-bottom: none;
+    border-bottom: none !important;
   }
 
   &.input-copyable {
