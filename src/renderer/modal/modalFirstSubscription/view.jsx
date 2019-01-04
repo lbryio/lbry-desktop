@@ -17,12 +17,12 @@ const ModalFirstSubscription = (props: Props) => {
         <p>{__('A few quick things to know:')}</p>
         <p className="card__content">
           {__(
-            '1) This app will automatically download new free content from channels you are subscribed to.'
+            '1) This app will automatically download new free content from channels you are subscribed to. You may configure this in Settings or on the Subscriptions page.'
           )}
         </p>
         <p className="card__content">
           {__(
-            '2) If we have your email address, we may send you notifications and rewards related to new content.'
+            '2) If we have your email address, we will send you notifications related to new content. You may configure subscription emails from the Help page.'
           )}
         </p>
         <div className="modal__buttons">
