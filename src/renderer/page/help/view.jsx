@@ -191,8 +191,8 @@ class HelpPage extends React.PureComponent<Props, State> {
             <h2 className="card__title">{__('Report a Bug or Suggest a New Feature')}</h2>
 
             <p className="card__subtitle">
-              {__('Did you find something wrong? Think LBRY could add something useful and cool?')}
-              <Button button="link" label={__('Learn more')} href="https://lbry.io/faq/support" />
+              {__('Did you find something wrong? Think LBRY could add something useful and cool?')}{' '}
+              <Button button="link" label={__('Learn more')} href="https://lbry.io/faq/support" />.
             </p>
           </header>
 
@@ -274,14 +274,15 @@ class HelpPage extends React.PureComponent<Props, State> {
                       {this.state.accessTokenHidden && (
                         <Button button="link" label={__('View')} onClick={this.showAccessToken} />
                       )}
-                      {!this.state.accessTokenHidden && accessToken && (
-                        <div>
-                          <p>{accessToken}</p>
-                          <div className="alert-text">
-                            {__('This is equivalent to a password. Do not post or share this.')}
+                      {!this.state.accessTokenHidden &&
+                        accessToken && (
+                          <div>
+                            <p>{accessToken}</p>
+                            <div className="alert-text">
+                              {__('This is equivalent to a password. Do not post or share this.')}
+                            </div>
                           </div>
-                        </div>
-                      )}
+                        )}
                     </td>
                   </tr>
                 </tbody>
