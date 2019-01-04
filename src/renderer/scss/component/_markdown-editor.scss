@@ -15,19 +15,27 @@
     opacity: 0.5;
   }
 
-  .CodeMirror-selected {
-    // background-color: transparent;
-  }
-
-  .CodeMirror-selectedtext {
-    background-color: $lbry-teal-5 !important;
-    color: $lbry-white;
-  }
-
   .cm-spell-error:not(.cm-url):not(.cm-comment):not(.cm-tag):not(.cm-word) {
     text-decoration: underline;
     text-decoration-color: $lbry-red-3;
     text-decoration-style: dotted;
+  }
+
+  html[data-theme='dark'] & {
+    border-left: 1px solid rgba($lbry-white, 0.2);
+    border-right: 1px solid rgba($lbry-white, 0.2);
+    border-bottom: 1px solid rgba($lbry-white, 0.2);
+    background-color: rgba($lbry-white, 0.1);
+    color: $lbry-white;
+
+    .CodeMirror-selectedtext {
+      color: $lbry-black;
+    }
+
+    .editor-preview.editor-preview-active {
+      background-color: $lbry-gray-5;
+      color: $lbry-black;
+    }
   }
 }
 
@@ -81,6 +89,33 @@
 
   i.separator {
     border: none;
+  }
+
+  html[data-theme='dark'] & {
+    background-color: rgba($lbry-white, 0.2);
+
+    a {
+      color: $lbry-white !important; // We need to use !important to override the CodeMirror styles
+
+      &.active {
+        background-color: rgba($lbry-black, 0.4);
+      }
+
+      &:hover {
+        color: $lbry-black !important;
+      }
+    }
+
+    &.disabled-for-preview {
+      a:not(.no-disable) {
+        background-color: transparent;
+      }
+
+      // The markdown preview button is highlighted during preview when the other buttons are disabled
+      a.no-disable {
+        background-color: rgba($lbry-white, 0.3);
+      }
+    }
   }
 }
 
