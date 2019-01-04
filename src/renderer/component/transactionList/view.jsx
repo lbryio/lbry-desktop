@@ -79,11 +79,8 @@ class TransactionList extends React.PureComponent<Props> {
     return (
       <React.Fragment>
         <header className="card__header">
-          {!transactionList.length && (
-            <p className="card__content">{emptyMessage || __('No transactions to list.')}</p>
-          )}
           {!slim &&
-            !!transactionList.length && (
+            !!transactions.length && (
               <div className="card__actions card__actions--between card__actions--top-space">
                 <FileExporter
                   data={transactionList}
@@ -117,6 +114,9 @@ class TransactionList extends React.PureComponent<Props> {
               </div>
             )}
         </header>
+        {!transactionList.length && (
+          <p className="card__content">{emptyMessage || __('No transactions to list.')}</p>
+        )}
 
         {!!transactionList.length && (
           <div className="card__content">

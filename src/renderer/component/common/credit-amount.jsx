@@ -64,11 +64,7 @@ class CreditAmount extends React.PureComponent<Props> {
       }
 
       if (showLBC) {
-        amountText = (
-          <span>
-            {amountText} {__('LBC')}
-          </span>
-        );
+        amountText = `${amountText} ${__('LBC')}`;
       }
 
       if (fee) {
