@@ -69,27 +69,24 @@ export class Modal extends React.PureComponent<ModalProps> {
       >
         <h1 className="card__title">{title}</h1>
         <div className="card__content">{children}</div>
-
-        <div className="card__content">
-          {type === 'custom' ? null : ( // custom modals define their own buttons
-            <div className="card__actions">
+        {type === 'custom' ? null : ( // custom modals define their own buttons
+          <div className="card__actions">
+            <Button
+              button="primary"
+              label={confirmButtonLabel}
+              disabled={confirmButtonDisabled}
+              onClick={onConfirmed}
+            />
+            {type === 'confirm' ? (
               <Button
-                button="primary"
-                label={confirmButtonLabel}
-                disabled={confirmButtonDisabled}
-                onClick={onConfirmed}
+                button="link"
+                label={abortButtonLabel}
+                disabled={abortButtonDisabled}
+                onClick={onAborted}
               />
-              {type === 'confirm' ? (
-                <Button
-                  button="link"
-                  label={abortButtonLabel}
-                  disabled={abortButtonDisabled}
-                  onClick={onAborted}
-                />
-              ) : null}
-            </div>
-          )}
-        </div>
+            ) : null}
+          </div>
+        )}
       </ReactModal>
     );
   }
