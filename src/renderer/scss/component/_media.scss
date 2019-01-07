@@ -256,11 +256,16 @@
   &:not(:last-of-type) {
     margin-bottom: var(--spacing-vertical-large);
   }
+
+  &.media__info-text--center {
+    text-align: center;
+  }
 }
 
 .media__info-title {
   font-size: 1.25rem;
   font-weight: 500;
+  margin-bottom: var(--spacing-vertical-small);
 }
 
 //  M E D I A
