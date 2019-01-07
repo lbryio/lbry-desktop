@@ -155,6 +155,7 @@
 
 .media__actions {
   display: flex;
+  flex-wrap: wrap;
   padding-top: var(--spacing-vertical-large);
   padding-bottom: var(--spacing-vertical-large);
 }
