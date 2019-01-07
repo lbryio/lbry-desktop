@@ -664,6 +664,7 @@
       margin-left: var(--spacing-vertical-large);
 
       &:last-of-type {
+        // For some reason margin doesn't work here.
         padding-right: var(--spacing-vertical-large);
       }
     }

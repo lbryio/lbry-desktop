@@ -1,7 +1,7 @@
 // @flow
 import type { Claim } from 'types/claim';
 import * as ICONS from 'constants/icons';
-import * as React from 'react';
+import React, { PureComponent, createRef } from 'react';
 import { normalizeURI } from 'lbry-redux';
 import ToolTip from 'component/common/tooltip';
 import FileCard from 'component/fileCard';
@@ -24,7 +24,7 @@ type State = {
   canScrollPrevious: boolean,
 };
 
-class CategoryList extends React.PureComponent<Props, State> {
+class CategoryList extends PureComponent<Props, State> {
   static defaultProps = {
     categoryLink: '',
   };
@@ -41,7 +41,7 @@ class CategoryList extends React.PureComponent<Props, State> {
     (this: any).handleScrollPrevious = this.handleScrollPrevious.bind(this);
     (this: any).handleArrowButtonsOnScroll = this.handleArrowButtonsOnScroll.bind(this);
 
-    this.scrollWrapper = React.createRef();
+    this.scrollWrapper = createRef();
   }
 
   componentDidMount() {

@@ -25,10 +25,6 @@
 
   &:not(.card__media--nsfw) {
     background-color: #000; // solid black to blend nicely when the video starts (if it doesn't take the full width)
-
-    // html[data-theme='dark'] & {
-    //   background-color: rgba($lbry-white, 0.1);
-    // }
   }
 
   &:hover {
@@ -79,7 +75,6 @@
   height: 100%;
 
   align-items: center;
-  background-color: rgba($lbry-black, 0.5);
   display: flex;
   flex-direction: column;
   justify-content: center;

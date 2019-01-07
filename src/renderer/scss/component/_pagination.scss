@@ -24,7 +24,7 @@
     margin: 0 0.5em;
   }
 
-  &:not(&--break):not(.disabled) {
+  &:not(.pagination__item--break):not(.disabled) {
     cursor: pointer;
   }
 
