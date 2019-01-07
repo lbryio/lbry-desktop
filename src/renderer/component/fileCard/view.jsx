@@ -81,6 +81,7 @@ class FileCard extends React.PureComponent<Props> {
           <div className="media__title media__title--placeholder" />
           <div className="media__channel media__channel--placeholder" />
           <div className="media__date media__date--placeholder" />
+          <div className="media__properties media__properties--placeholder" />
         </li>
       );
     }

@@ -1,12 +1,13 @@
 // @flow
 import type { Claim } from 'types/claim';
 import * as ICONS from 'constants/icons';
-import React, { PureComponent } from 'react';
+import * as React from 'react';
 import { normalizeURI } from 'lbry-redux';
 import ToolTip from 'component/common/tooltip';
 import FileCard from 'component/fileCard';
 import Button from 'component/button';
 import SubscribeButton from 'component/subscribeButton';
+import throttle from 'util/throttle';
 
 type Props = {
   category: string,
@@ -23,7 +24,7 @@ type State = {
   canScrollPrevious: boolean,
 };
 
-class CategoryList extends PureComponent<Props, State> {
+class CategoryList extends React.PureComponent<Props, State> {
   static defaultProps = {
     categoryLink: '',
   };
@@ -33,12 +34,14 @@ class CategoryList extends PureComponent<Props, State> {
 
     this.state = {
       canScrollPrevious: false,
-      canScrollNext: false,
+      canScrollNext: true,
     };
 
     (this: any).handleScrollNext = this.handleScrollNext.bind(this);
     (this: any).handleScrollPrevious = this.handleScrollPrevious.bind(this);
-    this.rowItems = undefined;
+    (this: any).handleArrowButtonsOnScroll = this.handleArrowButtonsOnScroll.bind(this);
+
+    this.scrollWrapper = React.createRef();
   }
 
   componentDidMount() {
@@ -47,54 +50,50 @@ class CategoryList extends PureComponent<Props, State> {
       fetchChannel(categoryLink);
     }
 
-    const cardRow = this.rowItems;
-    if (cardRow) {
-      const cards = cardRow.getElementsByTagName('section');
-      const lastCard = cards[cards.length - 1];
-      const isCompletelyVisible = this.isCardVisible(lastCard);
-
-      if (!isCompletelyVisible) {
-        // not sure how we can avoid doing this
-        /* eslint-disable react/no-did-mount-set-state */
-        this.setState({
-          canScrollNext: true,
-        });
-        /* eslint-enable react/no-did-mount-set-state */
-      }
+    const scrollWrapper = this.scrollWrapper.current;
+    if (scrollWrapper) {
+      scrollWrapper.addEventListener('scroll', throttle(this.handleArrowButtonsOnScroll, 500));
     }
   }
 
-  rowItems: ?HTMLDivElement;
+  scrollWrapper: { current: null | HTMLUListElement };
 
-  handleScroll(cardRow: HTMLDivElement, scrollTarget: number) {
-    const cards = cardRow.getElementsByTagName('section');
-    const animationCallback = () => {
-      const firstCard = cards[0];
-      const lastCard = cards[cards.length - 1];
-      const firstCardVisible = this.isCardVisible(firstCard);
-      const lastCardVisible = this.isCardVisible(lastCard);
+  handleArrowButtonsOnScroll() {
+    // Determine if the arrow buttons should be disabled
+    const scrollWrapper = this.scrollWrapper.current;
+    if (scrollWrapper) {
+      // firstElementChild and lastElementChild will always exist
+      // $FlowFixMe
+      const hasHiddenCardToLeft = !this.isCardVisible(scrollWrapper.firstElementChild);
+      // $FlowFixMe
+      const hasHiddenCardToRight = !this.isCardVisible(scrollWrapper.lastElementChild);
+
       this.setState({
-        canScrollNext: !lastCardVisible,
-        canScrollPrevious: !firstCardVisible,
+        canScrollPrevious: hasHiddenCardToLeft,
+        canScrollNext: hasHiddenCardToRight,
       });
-    };
+    }
+  }
 
-    const currentScrollLeft = cardRow.scrollLeft;
-    const direction = currentScrollLeft > scrollTarget ? 'left' : 'right';
-    this.scrollCardsAnimated(cardRow, scrollTarget, direction, animationCallback);
+  handleScroll(scrollTarget: number) {
+    const scrollWrapper = this.scrollWrapper.current;
+    if (scrollWrapper) {
+      const currentScrollLeft = scrollWrapper.scrollLeft;
+      const direction = currentScrollLeft > scrollTarget ? 'left' : 'right';
+      this.scrollCardsAnimated(scrollWrapper, scrollTarget, direction);
+    }
   }
 
   scrollCardsAnimated = (
-    cardRow: HTMLDivElement,
+    scrollWrapper: HTMLUListElement,
     scrollTarget: number,
-    direction: string,
-    callback: () => any
+    direction: string
   ) => {
     let start;
     const step = timestamp => {
       if (!start) start = timestamp;
 
-      const currentLeftVal = cardRow.scrollLeft;
+      const currentLeftVal = scrollWrapper.scrollLeft;
 
       let newTarget;
       let shouldContinue;
@@ -110,12 +109,10 @@ class CategoryList extends PureComponent<Props, State> {
         shouldContinue = newTarget > scrollTarget;
       }
 
-      cardRow.scrollLeft = newTarget; // eslint-disable-line no-param-reassign
+      scrollWrapper.scrollLeft = newTarget; // eslint-disable-line no-param-reassign
 
       if (shouldContinue) {
         window.requestAnimationFrame(step);
-      } else {
-        callback();
       }
     };
 
@@ -123,85 +120,93 @@ class CategoryList extends PureComponent<Props, State> {
   };
 
   // check if a card is fully visible horizontally
-  isCardVisible = (section: HTMLElement) => {
-    if (!section) {
+  isCardVisible = (card: HTMLLIElement): boolean => {
+    if (!card) {
       return false;
     }
-    const rect = section.getBoundingClientRect();
-    const isVisible = rect.left >= 0 && rect.right <= window.innerWidth;
-    return isVisible;
+    const scrollWrapper = this.scrollWrapper.current;
+    if (scrollWrapper) {
+      const rect = card.getBoundingClientRect();
+      const isVisible =
+        scrollWrapper.scrollLeft < card.offsetLeft &&
+        rect.left >= 0 &&
+        rect.right <= window.innerWidth;
+      return isVisible;
+    }
+
+    return false;
   };
 
   handleScrollNext() {
-    const cardRow = this.rowItems;
-    if (cardRow) {
-      const cards = cardRow.getElementsByTagName('section');
+    const scrollWrapper = this.scrollWrapper.current;
+    if (!scrollWrapper) {
+      return;
+    }
 
-      // loop over items until we find one that is on the screen
-      // continue searching until a card isn't fully visible, this is the new target
-      let firstFullVisibleCard;
-      let firstSemiVisibleCard;
+    const cards = scrollWrapper.getElementsByTagName('li');
 
-      for (let i = 0; i < cards.length; i += 1) {
-        const currentCardVisible = this.isCardVisible(cards[i]);
+    // Loop over items until we find one that is visible
+    // The card before that (starting from the end) is the new "first" card on the screen
 
-        if (firstFullVisibleCard && !currentCardVisible) {
-          firstSemiVisibleCard = cards[i];
-          break;
-        } else if (currentCardVisible) {
-          [firstFullVisibleCard] = cards;
-        }
+    let previousCard: ?HTMLLIElement;
+    for (let i = cards.length - 1; i > 0; i -= 1) {
+      const currentCard: HTMLLIElement = cards[i];
+      const currentCardVisible = this.isCardVisible(currentCard);
+
+      if (currentCardVisible && previousCard) {
+        const scrollTarget = previousCard.offsetLeft;
+        this.handleScroll(scrollTarget);
+        break;
       }
 
-      if (firstFullVisibleCard && firstSemiVisibleCard) {
-        const scrollTarget = firstSemiVisibleCard.offsetLeft - firstFullVisibleCard.offsetLeft;
-        this.handleScroll(cardRow, scrollTarget);
-      }
+      previousCard = currentCard;
     }
   }
 
   handleScrollPrevious() {
-    const cardRow = this.rowItems;
-    if (cardRow) {
-      const cards = cardRow.getElementsByTagName('section');
+    const scrollWrapper = this.scrollWrapper.current;
+    if (!scrollWrapper) {
+      return;
+    }
 
-      let hasFoundCard;
-      let numberOfCardsThatCanFit = 0;
+    const cards = scrollWrapper.getElementsByTagName('li');
 
-      // loop starting at the end until we find a visible card
-      // then count to find how many cards can fit on the screen
-      for (let i = cards.length - 1; i >= 0; i -= 1) {
-        const currentCard = cards[i];
-        const isCurrentCardVisible = this.isCardVisible(currentCard);
+    let hasFoundCard;
+    let numberOfCardsThatCanFit = 0;
 
-        if (isCurrentCardVisible) {
-          if (!hasFoundCard) {
-            hasFoundCard = true;
-          }
+    // loop starting at the end until we find a visible card
+    // then count to find how many cards can fit on the screen
+    for (let i = cards.length - 1; i >= 0; i -= 1) {
+      const currentCard = cards[i];
+      const isCurrentCardVisible = this.isCardVisible(currentCard);
 
-          numberOfCardsThatCanFit += 1;
-        } else if (hasFoundCard) {
-          // this card is off the screen to the left
-          // we know how many cards can fit on a screen
-          // find the new target and scroll
-          const firstCardOffsetLeft = cards[0].offsetLeft;
-          const cardIndexToScrollTo = i + 1 - numberOfCardsThatCanFit;
-          const newFirstCard = cards[cardIndexToScrollTo];
-
-          let scrollTarget;
-          if (newFirstCard) {
-            scrollTarget = newFirstCard.offsetLeft;
-          } else {
-            // more cards can fit on the screen than are currently hidden
-            // just scroll to the first card
-            scrollTarget = cards[0].offsetLeft;
-          }
-
-          scrollTarget -= firstCardOffsetLeft; // to play nice with the margins
-
-          this.handleScroll(cardRow, scrollTarget);
-          break;
+      if (isCurrentCardVisible) {
+        if (!hasFoundCard) {
+          hasFoundCard = true;
         }
+
+        numberOfCardsThatCanFit += 1;
+      } else if (hasFoundCard) {
+        // this card is off the screen to the left
+        // we know how many cards can fit on a screen
+        // find the new target and scroll
+        const firstCardOffsetLeft = cards[0].offsetLeft;
+        const cardIndexToScrollTo = i + 1 - numberOfCardsThatCanFit;
+        const newFirstCard = cards[cardIndexToScrollTo];
+
+        let scrollTarget;
+        if (newFirstCard) {
+          scrollTarget = newFirstCard.offsetLeft;
+        } else {
+          // more cards can fit on the screen than are currently hidden
+          // just scroll to the first card
+          scrollTarget = cards[0].offsetLeft;
+        }
+
+        scrollTarget -= firstCardOffsetLeft; // to play nice with the margins
+
+        this.handleScroll(scrollTarget);
+        break;
       }
     }
   }
@@ -266,12 +271,7 @@ class CategoryList extends PureComponent<Props, State> {
             <Button button="link" navigate="/settings" label={__('here')} />.
           </p>
         ) : (
-          <ul
-            className="media-scrollhouse"
-            ref={ref => {
-              this.rowItems = ref;
-            }}
-          >
+          <ul className="media-scrollhouse" ref={this.scrollWrapper}>
             {names &&
               names.length &&
               names.map(name => (
