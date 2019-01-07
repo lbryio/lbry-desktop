@@ -635,6 +635,7 @@
   // Show the scroll bar on hover
   // `overlay` doesn't take up any vertical space
   overflow-x: hidden;
+  overflow-y: hidden;
   &:hover {
     overflow-x: overlay;
   }

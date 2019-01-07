@@ -19,13 +19,16 @@
   display: flex;
   justify-content: center;
   position: absolute;
+  background-position: 50% 50%;
+  background-repeat: no-repeat;
+  background-size: contain;
 
   &:not(.card__media--nsfw) {
-    background-color: $lbry-black;
+    background-color: #000; // solid black to blend nicely when the video starts (if it doesn't take the full width)
 
-    html[data-theme='dark'] & {
-      background-color: rgba($lbry-white, 0.1);
-    }
+    // html[data-theme='dark'] & {
+    //   background-color: rgba($lbry-white, 0.1);
+    // }
   }
 
   &:hover {
@@ -93,6 +96,7 @@
   top: 0;
   left: 0;
 
+  background-color: #000;
   align-items: center;
   display: flex;
   justify-content: center;
