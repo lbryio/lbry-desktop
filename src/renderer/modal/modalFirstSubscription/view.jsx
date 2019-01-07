@@ -22,7 +22,7 @@ const ModalFirstSubscription = (props: Props) => {
         </p>
         <p className="card__content">
           {__(
-            '2) If we have your email address, we will send you notifications related to new content. You may configure subscription emails from the Help page.'
+            '2) If we have your email address, we will send you notifications related to new content. You may configure these emails from the Help page.'
           )}
         </p>
         <div className="modal__buttons">
