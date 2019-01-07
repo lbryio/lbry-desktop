@@ -99,7 +99,7 @@ class FileCard extends React.PureComponent<Props> {
     const handleContextMenu = event => {
       event.preventDefault();
       event.stopPropagation();
-      openCopyLinkMenu(convertToShareLink(uri), event);
+      openCopyLinkMenu(convertToShareLink(claim.permanent_url), event);
     };
 
     // We should be able to tab through cards
