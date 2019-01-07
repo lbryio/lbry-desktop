@@ -1,6 +1,10 @@
 .btn {
   fill: currentColor;
   position: relative;
+  
+  & svg {
+    stroke-width: 1;
+  }
 }
 
 .btn--alt {
