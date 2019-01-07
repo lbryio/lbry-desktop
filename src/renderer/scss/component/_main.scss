@@ -4,6 +4,10 @@
   position: relative;
   z-index: 1;
 
+  &.main--contained {
+    max-width: 1000px;
+  }
+
   &:not(.main--no-padding) {
     padding: var(--spacing-vertical-large);
   }

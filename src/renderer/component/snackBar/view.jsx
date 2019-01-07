@@ -9,6 +9,7 @@ type Props = {
     linkTarget: ?string,
     linkText: ?string,
     message: string,
+    isError: boolean,
   },
 };
 
@@ -19,6 +20,9 @@ class SnackBar extends React.PureComponent<Props> {
     this.displayTime = 5; // in seconds
     this.hideTimeout = null;
   }
+
+  hideTimeout: ?TimeoutID;
+  displayTime: number;
 
   render() {
     const { snack, removeSnack } = this.props;
@@ -47,9 +51,10 @@ class SnackBar extends React.PureComponent<Props> {
           <div>&#9432;</div>
           <div>{message}</div>
         </div>
-        {linkText && linkTarget && (
-          <Button navigate={linkTarget} className="snack-bar__action" label={linkText} />
-        )}
+        {linkText &&
+          linkTarget && (
+            <Button navigate={linkTarget} className="snack-bar__action" label={linkText} />
+          )}
       </div>
     );
   }

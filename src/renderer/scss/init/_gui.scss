@@ -69,12 +69,6 @@ input {
   &:not(.input-copyable):not(.wunderbar__input) {
     border-bottom: var(--input-border-size) solid $lbry-gray-5;
   }
-
-  &:not(.input-copyable):not(.wunderbar__input):not(:placeholder-shown):not(:disabled) {
-    &:hover {
-      border-color: rgba($lbry-black, 0.8);
-    }
-  }
 }
 
 .input--price-amount {

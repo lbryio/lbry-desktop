@@ -6,13 +6,23 @@ import Button from 'component/button';
 
 type Props = {
   closeModal: () => void,
-  unlockWallet: string => void,
   walletEncryptSucceded: boolean,
-  walletEncryptResult: boolean,
   updateWalletStatus: boolean,
+  encryptWallet: string => void,
+  updateWalletStatus: () => void,
 };
 
-class ModalWalletEncrypt extends React.PureComponent<Props> {
+type State = {
+  newPassword: ?string,
+  newPasswordConfirm: ?string,
+  passwordMismatch: boolean,
+  understandConfirmed: boolean,
+  understandError: boolean,
+  submitted: boolean,
+  failMessage: boolean,
+};
+
+class ModalWalletEncrypt extends React.PureComponent<Props, State> {
   state = {
     newPassword: null,
     newPasswordConfirm: null,
@@ -23,15 +33,30 @@ class ModalWalletEncrypt extends React.PureComponent<Props> {
     failMessage: false,
   };
 
-  onChangeNewPassword(event) {
+  componentDidUpdate() {
+    const { props, state } = this;
+
+    if (state.submitted) {
+      if (props.walletEncryptSucceded === true) {
+        props.closeModal();
+        props.updateWalletStatus();
+      } else if (props.walletEncryptSucceded === false) {
+        // See https://github.com/lbryio/lbry/issues/1307
+        // eslint-disable-next-line react/no-did-update-set-state
+        this.setState({ failMessage: 'Unable to encrypt wallet.' });
+      }
+    }
+  }
+
+  onChangeNewPassword(event: SyntheticInputEvent<>) {
     this.setState({ newPassword: event.target.value });
   }
 
-  onChangeNewPasswordConfirm(event) {
+  onChangeNewPasswordConfirm(event: SyntheticInputEvent<>) {
     this.setState({ newPasswordConfirm: event.target.value });
   }
 
-  onChangeUnderstandConfirm(event) {
+  onChangeUnderstandConfirm(event: SyntheticInputEvent<>) {
     this.setState({
       understandConfirmed: /^.?i understand.?$/i.test(event.target.value),
     });
@@ -58,20 +83,6 @@ class ModalWalletEncrypt extends React.PureComponent<Props> {
 
     this.setState({ submitted: true });
     this.props.encryptWallet(state.newPassword);
-  }
-
-  componentDidUpdate() {
-    const { props, state } = this;
-
-    if (state.submitted) {
-      if (props.walletEncryptSucceded === true) {
-        props.closeModal();
-        props.updateWalletStatus();
-      } else if (props.walletEncryptSucceded === false) {
-        // See https://github.com/lbryio/lbry/issues/1307
-        this.setState({ failMessage: 'Unable to encrypt wallet.' });
-      }
-    }
   }
 
   render() {

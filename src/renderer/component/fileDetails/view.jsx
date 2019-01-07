@@ -108,7 +108,7 @@ class FileDetails extends PureComponent<Props> {
 
         <div className="media__info-title">Comments</div>
 
-        <div className="card__actions">
+        <div className="card__actions--center">
           <Button
             data-id="add-comment"
             disabled={hasClickedComment}
@@ -119,7 +119,7 @@ class FileDetails extends PureComponent<Props> {
         </div>
         <br />
         {hasClickedComment && (
-          <p className="main--for-content">
+          <p className="media__info-text media__info-text--center">
             {user
               ? __('Your support has been added. You will be notified when comments are available.')
               : __('Your support has been added. Comments are coming soon.')}

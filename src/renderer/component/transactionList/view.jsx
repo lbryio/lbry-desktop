@@ -24,7 +24,7 @@ type Props = {
   slim?: boolean,
   transactions: Array<Transaction>,
   rewards: {},
-  openModal: ({ id: string }, { nout: number, txid: string }) => void,
+  openModal: (id: string, { nout: number, txid: string }) => void,
   myClaims: any,
   filterSetting: string,
   setTransactionFilter: string => void,
@@ -79,43 +79,44 @@ class TransactionList extends React.PureComponent<Props> {
     return (
       <React.Fragment>
         <header className="card__header">
-          {!transactionList.length && (
-            <p className="card__content">{emptyMessage || __('No transactions to list.')}</p>
-          )}
-          {!slim && !!transactionList.length && (
-            <div className="card__actions card__actions--between card__actions--top-space">
-              <FileExporter
-                data={transactionList}
-                label={__('Export')}
-                title={__('Export Transactions')}
-                filters={['nout']}
-                defaultPath={__('lbry-transactions-history')}
-              />
+          {!slim &&
+            !!transactions.length && (
+              <div className="card__actions card__actions--between card__actions--top-space">
+                <FileExporter
+                  data={transactionList}
+                  label={__('Export')}
+                  title={__('Export Transactions')}
+                  filters={['nout']}
+                  defaultPath={__('lbry-transactions-history')}
+                />
 
-              <FormField
-                type="select"
-                value={filterSetting || TRANSACTIONS.ALL}
-                onChange={this.handleFilterChanged}
-                affixClass="form-field--align-center"
-                prefix={__('Show')}
-                postfix={
-                  <Button
-                    button="link"
-                    icon={icons.HELP}
-                    href="https://lbry.io/faq/transaction-types"
-                    title={__('Help')}
-                  />
-                }
-              >
-                {transactionTypes.map(tt => (
-                  <option key={tt} value={tt}>
-                    {__(`${this.capitalize(tt)}`)}
-                  </option>
-                ))}
-              </FormField>
-            </div>
-          )}
+                <FormField
+                  type="select"
+                  value={filterSetting || TRANSACTIONS.ALL}
+                  onChange={this.handleFilterChanged}
+                  affixClass="form-field--align-center"
+                  prefix={__('Show')}
+                  postfix={
+                    <Button
+                      button="link"
+                      icon={icons.HELP}
+                      href="https://lbry.io/faq/transaction-types"
+                      title={__('Help')}
+                    />
+                  }
+                >
+                  {transactionTypes.map(tt => (
+                    <option key={tt} value={tt}>
+                      {__(`${this.capitalize(tt)}`)}
+                    </option>
+                  ))}
+                </FormField>
+              </div>
+            )}
         </header>
+        {!transactionList.length && (
+          <p className="card__content">{emptyMessage || __('No transactions to list.')}</p>
+        )}
 
         {!!transactionList.length && (
           <div className="card__content">

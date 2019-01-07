@@ -12,7 +12,7 @@ type DraftTransaction = {
 };
 
 type Props = {
-  openModal: ({ id: string }, { address: string, amount: number }) => void,
+  openModal: (id: string, { address: string, amount: number }) => void,
   balance: number,
 };
 

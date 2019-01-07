@@ -292,9 +292,9 @@ class PublishForm extends React.PureComponent<Props> {
           {uploadThumbnailStatus === THUMBNAIL_STATUSES.IN_PROGRESS && (
             <div>{__('Please wait for thumbnail to finish uploading')}</div>
           )}
-          {!!editingURI && !isStillEditing && !filePath && (
-            <div>{__('You need to reselect a file after changing the LBRY URL')}</div>
-          )}
+          {!!editingURI &&
+            !isStillEditing &&
+            !filePath && <div>{__('You need to reselect a file after changing the LBRY URL')}</div>}
         </div>
       )
     );
@@ -351,7 +351,9 @@ class PublishForm extends React.PureComponent<Props> {
           <header className="card__header">
             <h2 className="card__title">{__('Content')}</h2>
             <p className="card__subtitle">
-              {isStillEditing ? __('Editing a claim') : __('What are you publishing?')}{' '}
+              {isStillEditing
+                ? __('You are currently editing a claim.')
+                : __('What are you publishing?')}{' '}
               {__('Read our')}{' '}
               <Button button="link" label={__('FAQ')} href="https://lbry.io/faq/how-to-publish" />{' '}
               {__('to learn more.')}
@@ -370,13 +372,14 @@ class PublishForm extends React.PureComponent<Props> {
           )}
           <div className="card__content">
             <FileSelector currentPath={filePath} onFileChosen={this.handleFileChange} />
-            {!!isStillEditing && name && (
-              <p className="help">
-                {__("If you don't choose a file, the file from your existing claim")}
-                {` "${name}" `}
-                {__('will be used.')}
-              </p>
-            )}
+            {!!isStillEditing &&
+              name && (
+                <p className="help">
+                  {__("If you don't choose a file, the file from your existing claim")}
+                  {` "${name}" `}
+                  {__('will be used.')}
+                </p>
+              )}
           </div>
         </section>
         <div className={classnames({ 'card--disabled': formDisabled })}>

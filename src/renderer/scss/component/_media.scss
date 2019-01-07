@@ -44,7 +44,8 @@
 .media--placeholder {
   .media__channel,
   .media__date,
-  .media__title {
+  .media__title,
+  .media__properties {
     min-height: 1rem;
   }
 
@@ -154,6 +155,7 @@
 
 .media__actions {
   display: flex;
+  flex-wrap: wrap;
   padding-top: var(--spacing-vertical-large);
   padding-bottom: var(--spacing-vertical-large);
 }
@@ -254,11 +256,16 @@
   &:not(:last-of-type) {
     margin-bottom: var(--spacing-vertical-large);
   }
+
+  &.media__info-text--center {
+    text-align: center;
+  }
 }
 
 .media__info-title {
   font-size: 1.25rem;
   font-weight: 500;
+  margin-bottom: var(--spacing-vertical-small);
 }
 
 //  M E D I A
@@ -298,10 +305,6 @@
       position: relative;
       top: 0.2rem;
     }
-
-    svg {
-      padding-top: 0.2rem;
-    }
   }
 
   svg {
@@ -326,6 +329,10 @@
     padding-top: var(--spacing-vertical-miniscule);
     padding-left: var(--spacing-vertical-small);
   }
+}
+
+.media__properties--placeholder {
+  @include placeholder;
 }
 
 //  M E D I A
@@ -518,18 +525,6 @@
         rgba(mix($lbry-blue-3, $lbry-black, 70%), 0.8) 100%
       );
     }
-
-    // The featured row needs different top spacing
-    // depending on screen width
-
-    @media (min-width: 601px) {
-      padding-bottom: var(--spacing-vertical-large);
-    }
-
-    @media (max-width: 600px) {
-      padding-bottom: var(--spacing-vertical-medium);
-    }
-
     .media-group__header-title {
       background-image: linear-gradient(to right, $lbry-white 80%, transparent 100%);
     }
@@ -548,8 +543,6 @@
   }
 
   &:not(:first-of-type) {
-    padding-bottom: var(--spacing-vertical-large);
-
     .media-group__header-title {
       background-image: linear-gradient(to right, $lbry-black 80%, transparent 100%);
     }
@@ -643,7 +636,15 @@
 
 .media-scrollhouse {
   min-height: 200px;
-  overflow: hidden;
+  padding-bottom: var(--spacing-vertical-large);
+
+  // Show the scroll bar on hover
+  // `overlay` doesn't take up any vertical space
+  overflow-x: hidden;
+  overflow-y: hidden;
+  &:hover {
+    overflow-x: overlay;
+  }
 
   // The media queries in this block ensure that a row of
   // content and its' child elements look good at certain breakpoints
@@ -666,35 +667,30 @@
 
     @media (min-width: 601px) {
       width: calc((100% / 6) - 2.25rem);
-
-      &:not(:first-of-type) {
-        margin-left: var(--spacing-vertical-large);
-      }
-
-      &:first-of-type {
-        margin-left: var(--spacing-vertical-large);
-      }
+      margin-left: var(--spacing-vertical-large);
 
       &:last-of-type {
-        margin-right: var(--spacing-vertical-large);
+        // For some reason margin doesn't work here.
+        padding-right: var(--spacing-vertical-large);
       }
     }
 
-    @media (max-width: 600px) {
-      width: calc((100% / 3) - 3rem);
-
-      &:not(:first-of-type) {
-        margin-left: var(--spacing-vertical-medium);
-      }
-
-      &:first-of-type {
-        margin-left: var(--spacing-vertical-large);
-      }
-
-      &:last-of-type {
-        margin-right: var(--spacing-vertical-large);
-      }
-    }
+    // May be needed for mobile design
+    // @media (max-width: 600px) {
+    //   width: calc((100% / 3) - 3rem);
+    //
+    //   &:not(:first-of-type) {
+    //     margin-left: var(--spacing-vertical-medium);
+    //   }
+    //
+    //   &:first-of-type {
+    //     margin-left: var(--spacing-vertical-large);
+    //   }
+    //
+    //   &:last-of-type {
+    //     margin-right: var(--spacing-vertical-large);
+    //   }
+    // }
   }
 
   .media__title {

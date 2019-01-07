@@ -1,4 +1,7 @@
 .pagination {
+  display: flex;
+  align-items: center;
+
   + .form-field {
     margin-left: var(--spacing-vertical-medium);
   }
@@ -9,19 +12,19 @@
   height: 3rem;
 
   border-radius: 50%;
-  display: inline-block;
   text-align: center;
 
-  &:not(&--selected):not(&--break):not(.disabled):hover {
+  &:not(.pagination__item--selected):not(.pagination__item--break):not(.disabled):hover {
     background-color: $lbry-gray-1;
   }
 
-  &:not(&--previous):not(&--next) {
+  &:not(.pagination__item--previous):not(.pagination__item--next) {
     font-weight: 600;
     line-height: 3rem;
+    margin: 0 0.5em;
   }
 
-  &:not(&--break):not(.disabled) {
+  &:not(.pagination__item--break):not(.disabled) {
     cursor: pointer;
   }
 
@@ -36,7 +39,6 @@
 
 .pagination__item--previous,
 .pagination__item--next {
-  bottom: -0.4rem;
   font-size: 2.5rem;
   line-height: 1;
   position: relative;
