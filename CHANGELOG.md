@@ -16,6 +16,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 - Show delete button on users own claims ([#2147](https://github.com/lbryio/lbry-desktop/pull/2147))
 - Fix "copy" icon being cutoff for some users ([2167](https://github.com/lbryio/lbry-desktop/pull/2167))
+- Use correct url when copying vanity addresses ([#2168](https://github.com/lbryio/lbry-desktop/pull/2168))
 
 ## [0.26.1] - 2018-12-14
 
