@@ -12,6 +12,7 @@ import { parseURI } from 'lbry-redux';
 import Native from 'native';
 import SuggestedSubscriptions from 'component/subscribeSuggested';
 import MarkAsRead from 'component/subscribeMarkAsRead';
+import Tooltip from 'component/common/tooltip';
 
 type Props = {
   viewMode: ViewMode,
@@ -45,29 +46,33 @@ export default (props: Props) => {
       />
 
       {hasSubscriptions && (
-        <div className="card--space-between">
-          <div className="card__actions card__actions--no-margin">
-            <Button
-              disabled={viewMode === VIEW_ALL}
-              button="link"
-              label="All Subscriptions"
-              onClick={() => doSetViewMode(VIEW_ALL)}
-            />
-            <Button
-              button="link"
-              disabled={viewMode === VIEW_LATEST_FIRST}
-              label={__('Latest Only')}
-              onClick={() => doSetViewMode(VIEW_LATEST_FIRST)}
-            />
+        <section className="card card--section">
+          <div className="card__content card--space-between">
+            <div className="card__actions card__actions--no-margin">
+              <Button
+                disabled={viewMode === VIEW_ALL}
+                button="link"
+                label="All Subscriptions"
+                onClick={() => doSetViewMode(VIEW_ALL)}
+              />
+              <Button
+                button="link"
+                disabled={viewMode === VIEW_LATEST_FIRST}
+                label={__('Latest Only')}
+                onClick={() => doSetViewMode(VIEW_LATEST_FIRST)}
+              />
+            </div>
+            <Tooltip onComponent body={__('Automatically download new subscriptions.')}>
+              <FormField
+                type="checkbox"
+                name="auto_download"
+                onChange={onChangeAutoDownload}
+                checked={autoDownload}
+                prefix={__('Auto download')}
+              />
+            </Tooltip>
           </div>
-          <FormField
-            type="checkbox"
-            name="auto_download"
-            onChange={onChangeAutoDownload}
-            checked={autoDownload}
-            prefix={__('Auto download')}
-          />
-        </div>
+        </section>
       )}
 
       {!hasSubscriptions && (
@@ -91,7 +96,7 @@ export default (props: Props) => {
         <div className="card__content">
           {viewMode === VIEW_ALL && (
             <Fragment>
-              <div className="card__title card__actions card__actions--no-margin">
+              <div className="card__title card__title--flex">
                 {__('Your subscriptions')}
                 {unreadSubscriptions.length > 0 && <MarkAsRead />}
               </div>
@@ -118,9 +123,7 @@ export default (props: Props) => {
 
                       <section className="media-group--list" key={channel}>
                         <ul className="card__list">
-                          {uris.map(uri => (
-                            <FileCard key={uri} uri={uri} />
-                          ))}
+                          {uris.map(uri => <FileCard key={uri} uri={uri} />)}
                         </ul>
                       </section>
                     </span>

@@ -181,21 +181,13 @@
 .card__title {
   font-size: 2rem;
   font-weight: 600;
-
-  &:not(.card__title--flex) {
-    .btn {
-      bottom: -0.5rem;
-      float: right;
-      font-size: 1rem;
-    }
-  }
-
-  .btn {
-    position: relative;
-  }
 }
 
 .card__title--flex {
-  @include between;
   display: flex;
+  align-items: center;
+
+  .btn:not(:first-of-type) {
+    margin-left: var(--spacing-vertical-medium);
+  }
 }
