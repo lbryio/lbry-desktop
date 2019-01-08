@@ -191,3 +191,9 @@
     margin-left: var(--spacing-vertical-medium);
   }
 }
+
+.card__title--flex-between {
+  display: flex;
+  @include between;
+  align-items: center;
+}

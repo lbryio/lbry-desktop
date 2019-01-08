@@ -1,5 +1,5 @@
 // @flow
-import type { Transaction } from '../view';
+import type { Transaction } from 'types/transaction';
 import * as ICONS from 'constants/icons';
 import React from 'react';
 import ButtonTransaction from 'component/common/transaction-link';
@@ -53,12 +53,12 @@ class TransactionListItem extends React.PureComponent<Props> {
     return (
       <tr>
         <td>
-          <CreditAmount inheritStyle showPlus amount={amount} precision={8} />
+          <CreditAmount showPlus amount={amount} precision={8} />
           <br />
 
           {fee !== 0 && (
             <span className="table__item-label">
-              <CreditAmount inheritStyle fee amount={fee} precision={8} />
+              <CreditAmount fee amount={fee} precision={8} />
             </span>
           )}
         </td>
@@ -67,16 +67,17 @@ class TransactionListItem extends React.PureComponent<Props> {
         </td>
         <td className="table__item--actionable">
           {reward && <span>{reward.reward_title}</span>}
-          {name && claimId && (
-            <Button
-              constrict
-              button="link"
-              navigate="/show"
-              navigateParams={{ uri: buildURI({ claimName: name, claimId }) }}
-            >
-              {name}
-            </Button>
-          )}
+          {name &&
+            claimId && (
+              <Button
+                constrict
+                button="link"
+                navigate="/show"
+                navigateParams={{ uri: buildURI({ claimName: name, claimId }) }}
+              >
+                {name}
+              </Button>
+            )}
         </td>
 
         <td>

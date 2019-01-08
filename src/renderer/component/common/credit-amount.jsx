@@ -77,7 +77,7 @@ class CreditAmount extends React.PureComponent<Props> {
         title={fullPrice}
         className={classnames('badge', {
           badge,
-          'badge--cost': (badge && !isFree) || amount > 0,
+          'badge--cost': badge && amount > 0,
           'badge--free': badge && isFree,
           'badge--large': large,
         })}
