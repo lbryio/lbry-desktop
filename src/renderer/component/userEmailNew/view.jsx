@@ -41,7 +41,7 @@ class UserEmailNew extends React.PureComponent<Props, State> {
     const { cancelButton, errorMessage, isPending } = this.props;
 
     return (
-      <span>
+      <React.Fragment>
         <p>
           {__("We'll let you know about LBRY updates, security issues, and great new content.")}
         </p>
@@ -71,7 +71,7 @@ class UserEmailNew extends React.PureComponent<Props, State> {
             {cancelButton}
           </div>
         </Form>
-      </span>
+      </React.Fragment>
     );
   }
 }

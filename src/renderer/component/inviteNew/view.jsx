@@ -33,7 +33,7 @@ class FormInviteNew extends React.PureComponent {
 
     return (
       <Form onSubmit={this.handleSubmit}>
-        <FormRow stretch>
+        <FormRow padded>
           <FormField
             stretch
             type="text"
@@ -48,10 +48,8 @@ class FormInviteNew extends React.PureComponent {
           />
         </FormRow>
 
-        <div className="card__content">
-          <div className="card__actions">
-            <Submit label="Invite" disabled={isPending} />
-          </div>
+        <div className="card__actions">
+          <Submit label="Invite" disabled={isPending} />
         </div>
       </Form>
     );
@@ -94,9 +92,7 @@ class InviteNew extends React.PureComponent {
             isPending={isPending}
             rewardAmount={rewardAmount}
           />
-        </div>
 
-        <div className="card__content">
           <p className="help">
             {__('Read our')}{' '}
             <Button button="link" label={__('FAQ')} href="https://lbry.io/faq/referrals" />{' '}

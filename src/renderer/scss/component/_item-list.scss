@@ -28,4 +28,8 @@
 
 .item-list__item--selected {
   background-color: $lbry-gray-1;
+
+  html[data-theme='dark'] & {
+    background-color: rgba($lbry-black, 0.5);
+  }
 }
