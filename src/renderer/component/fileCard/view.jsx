@@ -110,7 +110,7 @@ class FileCard extends React.PureComponent<Props> {
         role="button"
         onClick={!pending ? () => navigate('/show', { uri }) : () => {}}
         className={classnames('media-card', {
-          'media--link': !pending,
+          'card--link': !pending,
           'media--pending': pending,
         })}
         onContextMenu={handleContextMenu}

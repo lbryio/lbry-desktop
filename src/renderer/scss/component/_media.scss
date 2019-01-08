@@ -77,6 +77,17 @@
 }
 
 //  M E D I A
+//  P E N D I N G
+
+.media--pending {
+  opacity: 0.5;
+
+  &:hover {
+    cursor: default;
+  }
+}
+
+//  M E D I A
 //  S E A R C H   R E S U L T
 
 .media--search-result {
@@ -454,7 +465,6 @@
   }
 
   .media-card {
-    cursor: pointer;
     display: inline-block;
     margin-bottom: var(--spacing-vertical-large);
     vertical-align: top;
