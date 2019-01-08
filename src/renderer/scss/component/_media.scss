@@ -374,10 +374,14 @@
   @include thumbnail;
 
   &:not(.media__thumb--nsfw):not(.media__thumb--placeholder) {
-    background-color: $lbry-black;
+    background-color: $lbry-gray-2;
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;
+
+    html[data-theme='dark'] & {
+      background-color: rgba($lbry-white, 0.1);
+    }
   }
 }
 
