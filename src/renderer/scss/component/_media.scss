@@ -161,6 +161,16 @@
   }
 }
 
+.media--search-result,
+.media--small {
+  .media__properties {
+    padding: 0 var(--spacing-vertical-small);
+    border-radius: 5px;
+    background-color: $lbry-white;
+    color: $lbry-black;
+  }
+}
+
 //  M E D I A
 //  A C T I O N S
 

@@ -62,6 +62,10 @@ class FileTile extends React.PureComponent<Props> {
     } = this.props;
     const isRewardContent = claim && rewardedContentClaimIds.includes(claim.claim_id);
 
+    if (!isNew && !isSubscribed && !isRewardContent && !isDownloaded) {
+      return null;
+    }
+
     return (
       <div className={classnames('media__properties', { card__subtitle: size === 'large' })}>
         <FilePrice hideFree uri={uri} />

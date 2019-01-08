@@ -63,7 +63,7 @@ class FileSelector extends React.PureComponent<Props> {
       type === 'file' ? fileLabel || __('Choose File') : directoryLabel || __('Choose Directory');
 
     return (
-      <FormRow verticallyCentered>
+      <FormRow verticallyCentered padded>
         <Button button="primary" onClick={() => this.handleButtonClick()} label={label} />
         <input
           webkitdirectory="true"
