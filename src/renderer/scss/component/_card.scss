@@ -118,6 +118,18 @@
   grid-gap: var(--spacing-vertical-medium);
 }
 
+.card__list--rewards {
+  column-count: 2;
+  column-gap: var(--spacing-vertical-medium);
+  margin-bottom: var(--spacing-vertical-large);
+
+  .card {
+    display: inline-block;
+    margin: 0 0 var(--spacing-vertical-medium);
+    width: 100%;
+  }
+}
+
 //  C A R D
 //  M E T A
 
@@ -166,12 +178,6 @@
   .badge {
     bottom: -0.12rem;
     position: relative;
-  }
-
-  &.card-row__scrollhouse--sub-component {
-    .card:first-of-type {
-      margin-left: 0;
-    }
   }
 }
 
