@@ -67,7 +67,9 @@ export class Modal extends React.PureComponent<ModalProps> {
           ![null, undefined, ''].includes(overlayClassName) ? overlayClassName : 'modal-overlay'
         }
       >
-        <h1 className="card__title">{title}</h1>
+        <header className="card__header">
+          <h2 className="card__title">{title}</h2>
+        </header>
         <div className="card__content">{children}</div>
         {type === 'custom' ? null : ( // custom modals define their own buttons
           <div className="card__actions">

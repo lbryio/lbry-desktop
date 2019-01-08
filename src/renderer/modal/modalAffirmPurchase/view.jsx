@@ -16,7 +16,7 @@ class ModalAffirmPurchase extends React.PureComponent<Props> {
   constructor() {
     super();
 
-    this.onAffirmPurchase = this.onAffirmPurchase.bind(this);
+    (this: any).onAffirmPurchase = this.onAffirmPurchase.bind(this);
   }
 
   onAffirmPurchase() {

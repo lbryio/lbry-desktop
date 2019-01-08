@@ -33,6 +33,10 @@ const APPPAGEURL = 'lbry://?';
 
 autoUpdater.logger = remote.require('electron-log');
 
+if (process.env.LBRY_API_URL) {
+  Lbryio.setLocalApi(process.env.LBRY_API_URL);
+}
+
 // We need to override Lbryio for getting/setting the authToken
 // We interect with ipcRenderer to get the auth key from a users keyring
 // We keep a local variable for authToken beacuse `ipcRenderer.send` does not

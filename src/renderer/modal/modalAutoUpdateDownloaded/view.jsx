@@ -9,8 +9,12 @@ type Props = {
   declineAutoUpdate: () => any,
 };
 
-class ModalAutoUpdateDownloaded extends React.PureComponent<Props> {
-  constructor(props: ModalProps) {
+type State = {
+  disabled: boolean,
+};
+
+class ModalAutoUpdateDownloaded extends React.PureComponent<Props, State> {
+  constructor(props: Props) {
     super(props);
 
     this.state = {

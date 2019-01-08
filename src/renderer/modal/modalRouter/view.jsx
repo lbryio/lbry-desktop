@@ -31,8 +31,8 @@ import ModalWalletUnlock from 'modal/modalWalletUnlock';
 import ModalRewardCode from 'modal/modalRewardCode';
 
 type Props = {
-  notification: { id: string },
-  notificationProps: {},
+  modal: { id: string, modalProps: {} },
+  error: string | { message: string },
 };
 
 class ModalRouter extends React.PureComponent<Props> {
@@ -80,6 +80,7 @@ class ModalRouter extends React.PureComponent<Props> {
 
   checkShowWelcome(props) {
     const { isWelcomeAcknowledged, user } = props;
+
     if (!isWelcomeAcknowledged && user && !user.is_reward_approved && !user.is_identity_verified) {
       return MODALS.WELCOME;
     }

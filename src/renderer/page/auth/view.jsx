@@ -36,7 +36,7 @@ class AuthPage extends React.PureComponent<Props> {
     if (isPending || (user && !user.has_verified_email && !email)) {
       return __('Human Proofing');
     } else if (user && !user.has_verified_email) {
-      return __('Confirm Email');
+      return __('Awaiting Confirmation');
     } else if (user && !user.is_identity_verified && !user.is_reward_approved) {
       return __('Final Verification');
     }
