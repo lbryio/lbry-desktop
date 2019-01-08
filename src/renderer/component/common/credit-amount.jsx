@@ -23,6 +23,7 @@ class CreditAmount extends React.PureComponent<Props> {
     showFullPrice: false,
     showPlus: false,
     showLBC: true,
+    badge: true,
   };
 
   render() {

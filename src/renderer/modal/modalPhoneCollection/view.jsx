@@ -36,8 +36,8 @@ class ModalPhoneCollection extends React.PureComponent<Props> {
     }
 
     return (
-      <Modal type="custom" isOpen contentLabel="Phone" title={__('Verify Your Phone')}>
-        <section className="card__content">{this.renderInner()}</section>
+      <Modal type="custom" isOpen contentLabel="Phone">
+        {this.renderInner()}
       </Modal>
     );
   }

@@ -2,7 +2,7 @@
 /* eslint-disable */
 import React from 'react';
 import Button from 'component/button';
-import { Form, FormField, Submit } from 'component/common/form';
+import { Form, FormField, Submit, FormRow } from 'component/common/form';
 
 class UserPhoneVerify extends React.PureComponent {
   constructor(props) {
@@ -32,35 +32,44 @@ class UserPhoneVerify extends React.PureComponent {
   render() {
     const { cancelButton, phoneErrorMessage, phone, countryCode } = this.props;
     return (
-      <Form onSubmit={this.handleSubmit.bind(this)}>
-        <p>
-          {__(
-            `Please enter the verification code sent to +${countryCode}${phone}. Didn't receive it? `
-          )}
-          <Button button="link" onClick={this.reset.bind(this)} label="Go back." />
-        </p>
-        <FormField
-          type="text"
-          name="code"
-          value={this.state.code}
-          onChange={event => {
-            this.handleCodeChanged(event);
-          }}
-          label={__('Verification Code')}
-          error={phoneErrorMessage}
-        />
-        {/* render help separately so it always shows */}
-        <div className="card__actions card__actions--center">
-          <Submit label={__('Verify')} />
-          {cancelButton}
-        </div>
+      <React.Fragment>
+        <header className="card__header">
+          <h2 className="card__title">{__('Enter The Verification Code')}</h2>
+          <p className="card__subtitle">
+            {' '}
+            {__(
+              `Please enter the verification code sent to +${countryCode}${phone}. Didn't receive it? `
+            )}
+            <Button button="link" onClick={this.reset.bind(this)} label="Go back." />
+          </p>
+        </header>
+        <Form className="card__content" onSubmit={this.handleSubmit.bind(this)}>
+          <FormRow padded>
+            <FormField
+              type="text"
+              name="code"
+              placeholder="1234"
+              value={this.state.code}
+              onChange={event => {
+                this.handleCodeChanged(event);
+              }}
+              label={__('Verification Code')}
+              error={phoneErrorMessage}
+            />
+          </FormRow>
+
+          <div className="card__actions">
+            <Submit label={__('Verify')} />
+            {cancelButton}
+          </div>
+        </Form>
 
         <p className="help">
-          {__('Email')} <Button button="link" href="mailto:help@lbry.io" label="help@lbry.io" />{' '}
-          or join our <Button button="link" href="https://chat.lbry.io" label="chat" />{' '}
+          {__('Email')} <Button button="link" href="mailto:help@lbry.io" label="help@lbry.io" /> or
+          join our <Button button="link" href="https://chat.lbry.io" label="chat" />{' '}
           {__('if you encounter any trouble with your code.')}
         </p>
-      </Form>
+      </React.Fragment>
     );
   }
 }
