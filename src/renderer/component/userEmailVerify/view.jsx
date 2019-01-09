@@ -6,7 +6,7 @@ type Props = {
   cancelButton: React.Node,
   email: string,
   resendVerificationEmail: string => void,
-  doCheckEmailVerified: () => void,
+  checkEmailVerified: () => void,
   user: {
     has_verified_email: boolean,
   },
@@ -40,8 +40,8 @@ class UserEmailVerify extends React.PureComponent<Props> {
   }
 
   checkIfVerified() {
-    const { doCheckEmailVerified } = this.props;
-    doCheckEmailVerified();
+    const { checkEmailVerified } = this.props;
+    checkEmailVerified();
   }
 
   emailVerifyCheckInterval: ?IntervalID;

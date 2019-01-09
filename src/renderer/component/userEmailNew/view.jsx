@@ -69,12 +69,7 @@ class UserEmailNew extends React.PureComponent<Props, State> {
           <div className="card__actions">
             <Submit label="Submit" disabled={isPending} />
             {cancelButton}
-            <br /><br />
           </div>
-
-          <p className="card__content help">
-            {`${__('Your email may be used to sync usage data across devices.')} `}
-          </p>
         </Form>
       </span>
     );
