@@ -95,7 +95,7 @@ class UserPhoneNew extends React.PureComponent<Props, State> {
           </p>
         </header>
         <Form onSubmit={this.handleSubmit}>
-          <FormRow padded verticallyCentered>
+          <FormRow padded>
             <FormField type="select" name="country-codes" onChange={this.handleSelect}>
               {countryCodes.map(country => (
                 <option key={country.countryCallingCode} value={country.countryCallingCode}>

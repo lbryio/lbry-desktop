@@ -73,7 +73,7 @@ class WalletSend extends React.PureComponent<Props> {
                     }
                   />
                 </FormRow>
-                <FormRow padded>
+                <FormRow>
                   <FormField
                     type="text"
                     name="address"

@@ -93,7 +93,7 @@
   position: relative;
 
   + .card__content {
-    padding-top: var(--spacing-vertical-medium);
+    margin-top: var(--spacing-vertical-medium);
   }
 
   &:not(.card__header--flat) {

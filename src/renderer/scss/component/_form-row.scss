@@ -1,9 +1,10 @@
 .form-row {
   display: flex;
   flex-direction: row;
+  align-items: flex-end;
 
-  &:not(&--vertically-centered) {
-    align-items: flex-end;
+  &:not(.form-row--padded):not(:last-of-type) {
+    margin-bottom: var(--spacing-vertical-medium);
   }
 
   .form-field {
@@ -32,8 +33,9 @@
 }
 
 .form-row--padded {
-  padding-top: var(--spacing-vertical-medium);
-  padding-bottom: var(--spacing-vertical-medium);
+  // Ignore the class name, margin allows these to collapse with other items
+  margin-top: var(--spacing-vertical-large);
+  margin-bottom: var(--spacing-vertical-large);
 }
 
 .form-row--right {

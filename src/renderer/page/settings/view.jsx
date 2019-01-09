@@ -2,7 +2,7 @@
 import * as ICONS from 'constants/icons';
 import * as SETTINGS from 'constants/settings';
 import * as React from 'react';
-import { FormField, FormFieldPrice } from 'component/common/form';
+import { FormField, FormFieldPrice, FormRow } from 'component/common/form';
 import Button from 'component/button';
 import Page from 'component/page';
 import FileSelector from 'component/common/file-selector';
@@ -287,32 +287,38 @@ class SettingsPage extends React.PureComponent<Props, State> {
               </header>
 
               <div className="card__content">
-                <FormField
-                  type="checkbox"
-                  name="autoplay"
-                  onChange={this.onAutoplayChange}
-                  checked={autoplay}
-                  postfix={__('Autoplay media files')}
-                />
+                <FormRow>
+                  <FormField
+                    type="checkbox"
+                    name="autoplay"
+                    onChange={this.onAutoplayChange}
+                    checked={autoplay}
+                    postfix={__('Autoplay media files')}
+                  />
+                </FormRow>
 
-                <FormField
-                  type="checkbox"
-                  name="auto_download"
-                  onChange={this.onAutoDownloadChange}
-                  checked={autoDownload}
-                  postfix={__('Automatically download new content from your subscriptions')}
-                />
+                <FormRow>
+                  <FormField
+                    type="checkbox"
+                    name="auto_download"
+                    onChange={this.onAutoDownloadChange}
+                    checked={autoDownload}
+                    postfix={__('Automatically download new content from your subscriptions')}
+                  />
+                </FormRow>
 
-                <FormField
-                  type="checkbox"
-                  name="show_nsfw"
-                  onChange={this.onShowNsfwChange}
-                  checked={showNsfw}
-                  postfix={__('Show NSFW content')}
-                  helper={__(
-                    'NSFW content may include nudity, intense sexuality, profanity, or other adult content. By displaying NSFW content, you are affirming you are of legal age to view mature content in your country or jurisdiction.  '
-                  )}
-                />
+                <FormRow>
+                  <FormField
+                    type="checkbox"
+                    name="show_nsfw"
+                    onChange={this.onShowNsfwChange}
+                    checked={showNsfw}
+                    postfix={__('Show NSFW content')}
+                    helper={__(
+                      'NSFW content may include nudity, intense sexuality, profanity, or other adult content. By displaying NSFW content, you are affirming you are of legal age to view mature content in your country or jurisdiction.  '
+                    )}
+                  />
+                </FormRow>
               </div>
             </section>
 
@@ -359,19 +365,21 @@ class SettingsPage extends React.PureComponent<Props, State> {
               </header>
 
               <div className="card__content">
-                <FormField
-                  name="theme_select"
-                  type="select"
-                  onChange={this.onThemeChange}
-                  value={currentTheme}
-                  disabled={automaticDarkModeEnabled}
-                >
-                  {themes.map(theme => (
-                    <option key={theme} value={theme}>
-                      {theme}
-                    </option>
-                  ))}
-                </FormField>
+                <FormRow>
+                  <FormField
+                    name="theme_select"
+                    type="select"
+                    onChange={this.onThemeChange}
+                    value={currentTheme}
+                    disabled={automaticDarkModeEnabled}
+                  >
+                    {themes.map(theme => (
+                      <option key={theme} value={theme}>
+                        {theme}
+                      </option>
+                    ))}
+                  </FormField>
+                </FormRow>
 
                 <FormField
                   type="checkbox"
