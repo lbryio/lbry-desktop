@@ -158,24 +158,26 @@ class FilePage extends React.Component<Props> {
     }
 
     return (
-      <Page forContent>
-        {showFile && <FileViewer className="content__embedded" uri={uri} mediaType={mediaType} />}
-        {!showFile &&
-          (thumbnail ? (
-            <Thumbnail shouldObscure={shouldObscureThumbnail} src={thumbnail} />
-          ) : (
-            <div
-              className={classnames('content__empty', {
-                'content__empty--nsfw': shouldObscureThumbnail,
-              })}
-            >
-              <div className="card__media-text">
-                {__("Sorry, looks like we can't preview this file.")}
+      <Page notContained className="main--file-page">
+        <div className="grid-area--content">
+          {showFile && <FileViewer className="content__embedded" uri={uri} mediaType={mediaType} />}
+          {!showFile &&
+            (thumbnail ? (
+              <Thumbnail shouldObscure={shouldObscureThumbnail} src={thumbnail} />
+            ) : (
+              <div
+                className={classnames('content__empty', {
+                  'content__empty--nsfw': shouldObscureThumbnail,
+                })}
+              >
+                <div className="card__media-text">
+                  {__("Sorry, looks like we can't preview this file.")}
+                </div>
               </div>
-            </div>
-          ))}
+            ))}
+        </div>
 
-        <div className="media__content media__content--large">
+        <div className="grid-area--info media__content media__content--large">
           <h1 className="media__title media__title--large">{title}</h1>
 
           <div className="media__properties media__properties--large">
@@ -237,8 +239,9 @@ class FilePage extends React.Component<Props> {
             <FileDetails uri={uri} />
           </div>
         </div>
-
-        <RecommendedContent uri={uri} />
+        <div className="grid-area--related">
+          <RecommendedContent uri={uri} />
+        </div>
       </Page>
     );
   }
