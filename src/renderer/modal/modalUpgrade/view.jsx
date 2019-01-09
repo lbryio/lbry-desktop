@@ -28,7 +28,7 @@ class ModalUpgrade extends React.PureComponent<Props> {
             {__('An updated version of LBRY is now available.')}{' '}
             {__('Your version is out of date and may be unreliable or insecure.')}
           </p>
-          <p className="meta">
+          <p className="help">
             {__('Want to know what has changed?')} See the{' '}
             <Button
               button="link"

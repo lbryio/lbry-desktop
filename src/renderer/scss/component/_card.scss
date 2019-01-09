@@ -93,7 +93,7 @@
   position: relative;
 
   + .card__content {
-    padding-top: var(--spacing-vertical-medium);
+    margin-top: var(--spacing-vertical-medium);
   }
 
   &:not(.card__header--flat) {
@@ -116,6 +116,18 @@
 .card__list {
   display: grid;
   grid-gap: var(--spacing-vertical-medium);
+}
+
+.card__list--rewards {
+  column-count: 2;
+  column-gap: var(--spacing-vertical-medium);
+  margin-bottom: var(--spacing-vertical-large);
+
+  .card {
+    display: inline-block;
+    margin: 0 0 var(--spacing-vertical-medium);
+    width: 100%;
+  }
 }
 
 //  C A R D
@@ -167,12 +179,6 @@
     bottom: -0.12rem;
     position: relative;
   }
-
-  &.card-row__scrollhouse--sub-component {
-    .card:first-of-type {
-      margin-left: 0;
-    }
-  }
 }
 
 //  C A R D
@@ -181,21 +187,19 @@
 .card__title {
   font-size: 2rem;
   font-weight: 600;
-
-  &:not(.card__title--flex) {
-    .btn {
-      bottom: -0.5rem;
-      float: right;
-      font-size: 1rem;
-    }
-  }
-
-  .btn {
-    position: relative;
-  }
 }
 
 .card__title--flex {
-  @include between;
   display: flex;
+  align-items: center;
+
+  .btn:not(:first-of-type) {
+    margin-left: var(--spacing-vertical-medium);
+  }
+}
+
+.card__title--flex-between {
+  display: flex;
+  @include between;
+  align-items: center;
 }

@@ -1,5 +1,5 @@
 // @flow
-import type { Transaction } from 'component/transactionList/view';
+import type { Transaction } from 'types/transaction';
 import * as icons from 'constants/icons';
 import React, { Fragment } from 'react';
 import BusyIndicator from 'component/common/busy-indicator';
@@ -28,7 +28,7 @@ class TransactionListRecent extends React.PureComponent<Props> {
     return (
       <section className="card card--section">
         <header className="card__header card__header--flat">
-          <h2 className="card__title">
+          <h2 className="card__title card__title--flex-between">
             {__('Recent Transactions')}
             <RefreshTransactionButton />
           </h2>
@@ -39,11 +39,12 @@ class TransactionListRecent extends React.PureComponent<Props> {
           </p>
         </header>
 
-        {fetchingTransactions && !hasTransactions && (
-          <div className="card__content">
-            <BusyIndicator message={__('Loading transactions')} />
-          </div>
-        )}
+        {fetchingTransactions &&
+          !hasTransactions && (
+            <div className="card__content">
+              <BusyIndicator message={__('Loading transactions')} />
+            </div>
+          )}
 
         {hasTransactions && (
           <Fragment>

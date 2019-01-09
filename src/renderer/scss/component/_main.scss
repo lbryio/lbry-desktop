@@ -12,3 +12,29 @@
     padding: var(--spacing-vertical-large);
   }
 }
+
+.main--file-page {
+  display: grid;
+  grid-template-areas:
+    'content content'
+    'info    related'
+    'info    related';
+
+  @media (min-width: 1470px) {
+    grid-template-areas:
+      'content related'
+      'info    related'
+      'info    related';
+    grid-template-rows: 0fr 1fr;
+  }
+
+  .grid-area--content {
+    grid-area: content;
+  }
+  .grid-area--info {
+    grid-area: info;
+  }
+  .grid-area--related {
+    grid-area: related;
+  }
+}

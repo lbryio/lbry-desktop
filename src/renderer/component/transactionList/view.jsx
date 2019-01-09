@@ -1,4 +1,5 @@
 // @flow
+import type { Transaction } from 'types/transaction';
 import * as icons from 'constants/icons';
 import * as MODALS from 'constants/modal_types';
 import * as React from 'react';
@@ -7,17 +8,6 @@ import Button from 'component/button';
 import FileExporter from 'component/common/file-exporter';
 import { TRANSACTIONS } from 'lbry-redux';
 import TransactionListItem from './internal/transaction-list-item';
-
-export type Transaction = {
-  amount: number,
-  claim_id: string,
-  claim_name: string,
-  fee: number,
-  nout: number,
-  txid: string,
-  type: string,
-  date: Date,
-};
 
 type Props = {
   emptyMessage: ?string,

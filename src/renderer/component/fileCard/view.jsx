@@ -76,7 +76,7 @@ class FileCard extends React.PureComponent<Props> {
 
     if ((!claim && !pending) || placeholder) {
       return (
-        <li className="media-card media--placeholder small">
+        <li className="media-card media--placeholder">
           <div className="media__thumb media__thumb--placeholder" />
           <div className="media__title media__title--placeholder" />
           <div className="media__channel media__channel--placeholder" />
@@ -110,7 +110,7 @@ class FileCard extends React.PureComponent<Props> {
         role="button"
         onClick={!pending ? () => navigate('/show', { uri }) : () => {}}
         className={classnames('media-card', {
-          'media--link': !pending,
+          'card--link': !pending,
           'media--pending': pending,
         })}
         onContextMenu={handleContextMenu}

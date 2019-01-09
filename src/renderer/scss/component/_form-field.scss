@@ -1,8 +1,4 @@
 .form-field {
-  &:not(:last-of-type) {
-    margin-bottom: var(--spacing-vertical-small);
-  }
-
   &.form-field--disabled {
     opacity: 0.4;
     pointer-events: none;
@@ -89,6 +85,12 @@
 
 .form-field__postfix {
   padding-left: var(--spacing-vertical-small);
+}
+
+// Keeps radio buttons aligned with the labels
+// This can probably be done in a better way, but after setting align-items: center on the parent, the label is still off a bit.
+input[type='radio'] + .form-field__postfix {
+  padding-top: 3px;
 }
 
 .form-field__select-wrapper {

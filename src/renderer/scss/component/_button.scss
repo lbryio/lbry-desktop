@@ -1,9 +1,21 @@
 .btn {
   fill: currentColor;
   position: relative;
-  
-  & svg {
-    stroke-width: 1;
+
+  svg {
+    stroke-width: 2;
+    width: 1.2rem;
+    height: 1.2rem;
+    position: relative;
+    top: 0.2rem;
+  }
+
+  .btn__label {
+    margin: 0;
+  }
+
+  svg + .btn__label {
+    margin-left: var(--spacing-vertical-small);
   }
 }
 
@@ -47,6 +59,7 @@
   text-align: left;
 }
 
+// Large icons used for play/view on the file page
 .btn--icon {
   width: 5rem;
   height: 5rem;
@@ -61,19 +74,22 @@
     background-color: rgba($lbry-black, 0.7);
   }
 
-  &:hover {
-    background-color: $lbry-green-3;
-  }
-
-  &.btn--play {
+  // The play icon looks a little weird without this
+  .btn--play {
     padding-left: 0.25rem;
-  }
-
-  &.btn--view {
   }
 
   .btn__label {
     display: none;
+  }
+
+  svg {
+    width: 3rem;
+    height: 3rem;
+
+    margin-right: 0;
+    position: relative;
+    top: 0.1rem;
   }
 }
 
@@ -95,42 +111,18 @@
 
   &:hover {
     background-color: $lbry-gray-1;
+    color: $lbry-black;
 
     html[data-theme='dark'] & {
       background-color: rgba($lbry-white, 0.1);
     }
   }
 
-  // TODO: Refactor to remove need for `!important`
-
-  .btn__label {
-    margin: 0 !important;
+  .btn__content {
+    svg {
+      color: $lbry-gray-4;
+    }
   }
-
-  svg {
-    width: 1rem !important;
-    height: 1rem !important;
-
-    margin-right: var(--spacing-vertical-small);
-    position: relative;
-    top: 0.1rem;
-  }
-
-  // .btn__content {
-  //   display: flex;
-
-  //   svg {
-  //     width: 1rem;
-  //     height: 1rem;
-
-  //     color: $lbry-gray-4;
-  //     margin-right: var(--spacing-vertical-small);
-  //   }
-
-  //   .btn__label {
-  //     line-height: 1rem;
-  //   }
-  // }
 }
 
 .btn--load-screen {
@@ -160,21 +152,6 @@
     html[data-theme='dark'] & {
       background-color: $lbry-teal-4;
     }
-  }
-
-  // TODO: Refactor to remove need for `!important`
-
-  .btn__label {
-    margin: 0 !important;
-  }
-
-  svg {
-    width: 1rem !important;
-    height: 1rem !important;
-
-    margin-right: var(--spacing-vertical-small);
-    position: relative;
-    top: 0.1rem;
   }
 }
 

@@ -49,7 +49,7 @@ class RewardsPage extends PureComponent<Props> {
         );
       }
       return (
-        <div className="card__content">
+        <section className="card card--section">
           <p>
             {__(
               'This account must undergo review before you can participate in the rewards program.'
@@ -70,7 +70,7 @@ class RewardsPage extends PureComponent<Props> {
           <p>
             <Button onClick={() => navigate('/discover')} button="primary" label="Return Home" />
           </p>
-        </div>
+        </section>
       );
     }
 
@@ -100,17 +100,14 @@ class RewardsPage extends PureComponent<Props> {
         <section className="card card--section">
           <header className="card__header">
             <h2 className="card__title">{__('Disabled')}</h2>
-          </header>
-
-          <div className="card__content">
-            <p>
+            <p className="card__subtitle">
               {__(
                 'Rewards are currently disabled for your account. Turn on diagnostic data sharing, in'
               )}{' '}
               <Button button="link" onClick={() => navigate('/settings')} label="Settings" />
               {__(', in order to re-enable them.')}
             </p>
-          </div>
+          </header>
         </section>
       );
     } else if (fetching) {
@@ -121,16 +118,16 @@ class RewardsPage extends PureComponent<Props> {
       );
     } else if (user === null) {
       return (
-        <div className="card__content">
+        <section className="card card--section">
           <p>
             {__('This application is unable to earn rewards due to an authentication failure.')}
           </p>
-        </div>
+        </section>
       );
     } else if (!rewards || rewards.length <= 0) {
       return (
         <Fragment>
-          <div className="card--section">
+          <section className="card card--section">
             <h2 className="card__title">{__('No Rewards Available')}</h2>
             <p>
               {claimed && claimed.length
@@ -139,9 +136,9 @@ class RewardsPage extends PureComponent<Props> {
                   )
                 : __('There are no rewards available at this time, please check back later.')}
             </p>
-          </div>
+          </section>
 
-          <div className="card__content card__list--rewards">{this.renderCustomRewardCode()}</div>
+          <div className="card__list--rewards">{this.renderCustomRewardCode()}</div>
         </Fragment>
       );
     }
@@ -155,9 +152,7 @@ class RewardsPage extends PureComponent<Props> {
           'card--disabled': isNotEligible,
         })}
       >
-        {rewards.map(reward => (
-          <RewardTile key={reward.reward_type} reward={reward} />
-        ))}
+        {rewards.map(reward => <RewardTile key={reward.reward_type} reward={reward} />)}
         {this.renderCustomRewardCode()}
       </div>
     );

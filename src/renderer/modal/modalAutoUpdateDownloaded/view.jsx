@@ -50,7 +50,7 @@ class ModalAutoUpdateDownloaded extends React.PureComponent<Props, State> {
               'A new version of LBRY has been released, downloaded, and is ready for you to use pending a restart.'
             )}
           </p>
-          <p className="meta text-center">
+          <p className="help">
             {__('Want to know what has changed?')} See the{' '}
             <Button
               button="link"

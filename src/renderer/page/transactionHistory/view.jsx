@@ -27,7 +27,7 @@ class TransactionHistoryPage extends React.PureComponent<Props> {
       <Page>
         <section className="card card--section">
           <header className="card__header card__header--flat">
-            <h2 className="card__title">
+            <h2 className="card__title card__title--flex-between ">
               {__('Transaction History')}
               <RefreshTransactionButton />
             </h2>
