@@ -12,16 +12,15 @@
   bottom: 0;
   right: 0;
 
-  align-items: center;
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: cover;
   display: flex;
+  align-items: center;
   justify-content: center;
   position: absolute;
   background-position: 50% 50%;
   background-repeat: no-repeat;
-  background-size: contain;
+  background-size: cover;
+  max-width: calc(var(--file-max-width) * (16 / 9));
+  margin: auto;
 
   &:not(.card__media--nsfw) {
     background-color: #000; // solid black to blend nicely when the video starts (if it doesn't take the full width)
@@ -34,14 +33,14 @@
 
 .content__embedded {
   @include thumbnail;
-  align-items: center;
-  background-color: $lbry-black;
+  background-color: #000;
   display: flex;
   justify-content: center;
+  align-items: center;
   margin-bottom: var(--spacing-vertical-large);
-  max-height: 60vh;
   position: relative;
   width: 100%;
+  max-height: var(--file-max-width);
 
   video {
     width: 100%;
@@ -79,6 +78,7 @@
   flex-direction: column;
   justify-content: center;
   padding: 0 var(--spacing-vertical-large);
+  background-color: rgba($lbry-black, 0.7);
 }
 
 .content__loading-text {
