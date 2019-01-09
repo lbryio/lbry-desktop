@@ -73,15 +73,9 @@
     background-color: rgba($lbry-black, 0.7);
   }
 
-  &:hover {
-    background-color: $lbry-green-3;
-  }
-
-  &.btn--play {
+  // The play icon looks a little weird without this
+  .btn--play {
     padding-left: 0.25rem;
-  }
-
-  &.btn--view {
   }
 
   .btn__label {

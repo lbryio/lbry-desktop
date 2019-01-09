@@ -28,6 +28,11 @@
 
   &:hover {
     cursor: pointer;
+
+    .btn--view,
+    .btn--play {
+      background-color: $lbry-green-3;
+    }
   }
 }
 
