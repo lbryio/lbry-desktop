@@ -301,7 +301,6 @@
   .badge {
     align-items: center;
     position: relative;
-    top: 0.15rem;
 
     > *:not(:last-child) {
       margin-right: var(--spacing-vertical-small);
@@ -311,7 +310,7 @@
   &:not(:empty) {
     height: 2.55rem;
     margin-bottom: var(--spacing-vertical-small);
-    padding-top: var(--spacing-vertical-miniscule);
+    padding-top: var(--spacing-vertical-small);
     padding-left: var(--spacing-vertical-small);
   }
 }
