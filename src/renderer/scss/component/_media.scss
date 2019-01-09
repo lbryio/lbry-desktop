@@ -5,13 +5,6 @@
   display: flex;
   font-size: 1.5rem;
 
-  .media__actions .btn__content {
-    svg {
-      width: 1.5rem;
-      height: 100%;
-    }
-  }
-
   .media__info {
     margin-left: var(--spacing-vertical-large);
     width: calc(100% - 20rem);
@@ -95,14 +88,6 @@
 
   &:not(:last-of-type) {
     margin-bottom: var(--spacing-vertical-large);
-  }
-
-  .media__actions .btn__content {
-    display: inline-flex;
-
-    .btn__label {
-      margin-left: var(--spacing-vertical-small);
-    }
   }
 
   .media__info {
@@ -199,27 +184,6 @@
 
     &:not(:last-child) {
       margin-right: var(--spacing-vertical-large);
-    }
-
-    .btn__content {
-      display: inline-flex;
-    }
-
-    .btn__label {
-      margin-left: var(--spacing-vertical-small);
-    }
-
-    svg {
-      width: 1.5rem;
-      height: 1.5rem;
-    }
-  }
-
-  .btn--alt {
-    padding-top: 2px;
-
-    .btn__label {
-      padding-top: 1px;
     }
   }
 }
