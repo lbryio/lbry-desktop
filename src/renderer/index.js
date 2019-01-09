@@ -20,7 +20,7 @@ import {
 import { doToast, doBlackListedOutpointsSubscribe, isURIValid } from 'lbry-redux';
 import { doNavigate } from 'redux/actions/navigation';
 import { doDownloadLanguages, doUpdateIsNightAsync } from 'redux/actions/settings';
-import { doUserEmailVerify, doAuthenticate, Lbryio, rewards } from 'lbryinc';
+import { doAuthenticate, Lbryio, rewards } from 'lbryinc';
 import 'scss/all.scss';
 import store from 'store';
 import pjson from 'package.json';
@@ -32,6 +32,10 @@ const { autoUpdater } = remote.require('electron-updater');
 const APPPAGEURL = 'lbry://?';
 
 autoUpdater.logger = remote.require('electron-log');
+
+if (process.env.LBRY_API_URL) {
+  Lbryio.setLocalApi(process.env.LBRY_API_URL);
+}
 
 // We need to override Lbryio for getting/setting the authToken
 // We interect with ipcRenderer to get the auth key from a users keyring
@@ -95,23 +99,8 @@ rewards.setCallback('claimRewardSuccess', () => {
 
 ipcRenderer.on('open-uri-requested', (event, uri, newSession) => {
   if (uri && uri.startsWith('lbry://')) {
-    if (uri.startsWith('lbry://?verify=')) {
-      let verification = {};
-      try {
-        verification = JSON.parse(atob(uri.substring(15)));
-      } catch (error) {
-        console.log(error);
-      }
-      if (verification.token && verification.recaptcha) {
-        app.store.dispatch(doConditionalAuthNavigate(newSession));
-        app.store.dispatch(doUserEmailVerify(verification.token, verification.recaptcha));
-      } else {
-        app.store.dispatch(
-          doToast({
-            message: 'Invalid Verification URI',
-          })
-        );
-      }
+    if (uri.startsWith('lbry://?verify')) {
+      app.store.dispatch(doConditionalAuthNavigate(newSession));
     } else if (uri.startsWith(APPPAGEURL)) {
       const navpage = uri.replace(APPPAGEURL, '').toLowerCase();
       app.store.dispatch(doNavigate(`/${navpage}`));

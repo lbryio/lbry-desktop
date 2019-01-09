@@ -12,6 +12,15 @@ type Props = {
 };
 
 class ModalEmailCollection extends React.PureComponent<Props> {
+  getTitle() {
+    const { user } = this.props;
+    if (user && !user.has_verified_email) {
+      return __('Awaiting Confirmation');
+    }
+
+    return __('Can We Stay In Touch?');
+  }
+
   renderInner() {
     const { closeModal, email, user } = this.props;
 
@@ -34,7 +43,7 @@ class ModalEmailCollection extends React.PureComponent<Props> {
     }
 
     return (
-      <Modal type="custom" isOpen contentLabel="Email" title={__('Can We Stay In Touch?')}>
+      <Modal type="custom" isOpen contentLabel="Email" title={this.getTitle()}>
         <section className="card__content">{this.renderInner()}</section>
       </Modal>
     );

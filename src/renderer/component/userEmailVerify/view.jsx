@@ -1,48 +1,37 @@
 // @flow
 import * as React from 'react';
 import Button from 'component/button';
-import { Form, FormField, FormRow, Submit } from 'component/common/form';
 
 type Props = {
   cancelButton: React.Node,
-  errorMessage: ?string,
   email: string,
-  isPending: boolean,
-  onModal?: boolean,
-  verifyUserEmail: (string, string) => void,
-  verifyUserEmailFailure: string => void,
   resendVerificationEmail: string => void,
+  checkEmailVerified: () => void,
+  user: {
+    has_verified_email: boolean,
+  },
 };
 
-type State = {
-  code: string,
-};
-
-class UserEmailVerify extends React.PureComponent<Props, State> {
+class UserEmailVerify extends React.PureComponent<Props> {
   constructor(props: Props) {
     super(props);
-
-    this.state = {
-      code: '',
-    };
-
-    (this: any).handleSubmit = this.handleSubmit.bind(this);
+    this.emailVerifyCheckInterval = null;
     (this: any).handleResendVerificationEmail = this.handleResendVerificationEmail.bind(this);
   }
 
-  handleCodeChanged(event: SyntheticInputEvent<*>) {
-    this.setState({
-      code: String(event.target.value).trim(),
-    });
+  componentDidMount() {
+    this.emailVerifyCheckInterval = setInterval(() => this.checkIfVerified(), 5000);
   }
 
-  handleSubmit() {
-    const { code } = this.state;
-    try {
-      const verification = JSON.parse(atob(code));
-      this.props.verifyUserEmail(verification.token, verification.recaptcha);
-    } catch (error) {
-      this.props.verifyUserEmailFailure('Invalid Verification Token');
+  componentDidUpdate() {
+    if (this.emailVerifyCheckInterval && this.props.user.has_verified_email) {
+      clearInterval(this.emailVerifyCheckInterval);
+    }
+  }
+
+  componentWillUnmount() {
+    if (this.emailVerifyCheckInterval) {
+      clearInterval(this.emailVerifyCheckInterval);
     }
   }
 
@@ -50,55 +39,38 @@ class UserEmailVerify extends React.PureComponent<Props, State> {
     this.props.resendVerificationEmail(this.props.email);
   }
 
+  checkIfVerified() {
+    const { checkEmailVerified } = this.props;
+    checkEmailVerified();
+  }
+
+  emailVerifyCheckInterval: ?IntervalID;
+
   render() {
-    const { cancelButton, errorMessage, email, isPending, onModal } = this.props;
+    const { cancelButton, email } = this.props;
 
     return (
-      <span>
-        <p>Please enter the verification code emailed to {email}.</p>
+      <div>
+        <p>
+          {__('An email was sent to')} {email}.{' '}
+          {__('Follow the link and you will be good to go. This will update automatically.')}
+        </p>
 
-        <Form onSubmit={this.handleSubmit}>
-          <FormRow padded>
-            <FormField
-              stretch
-              name="code"
-              type="text"
-              placeholder="eyJyZWNhcHRjaGEiOiIw..."
-              label={__('Verification Code')}
-              error={errorMessage}
-              value={this.state.code}
-              onChange={event => this.handleCodeChanged(event)}
-            />
-          </FormRow>
+        <div className="card__actions">
+          <Button
+            button="primary"
+            label={__('Resend verification email')}
+            onClick={this.handleResendVerificationEmail}
+          />
+          {cancelButton}
+        </div>
 
-          <div className="card__actions">
-            <Submit label={__('Verify')} disabled={isPending} />
-            {cancelButton}
-            {!onModal && (
-              <Button
-                button="link"
-                label={__('Resend verification email')}
-                onClick={this.handleResendVerificationEmail}
-              />
-            )}
-          </div>
-
-          <p className="help">
-            {__('Email')} <Button button="link" href="mailto:help@lbry.io" label="help@lbry.io" />{' '}
-            or join our <Button button="link" href="https://chat.lbry.io" label="chat" />{' '}
-            {__('if you encounter any trouble with your code.')}
-          </p>
-          {onModal && (
-            <div className="card__actions help">
-              <Button
-                button="link"
-                label={__('Resend verification email')}
-                onClick={this.handleResendVerificationEmail}
-              />
-            </div>
-          )}
-        </Form>
-      </span>
+        <p className="help">
+          {__('Email')} <Button button="link" href="mailto:help@lbry.io" label="help@lbry.io" /> or
+          join our <Button button="link" href="https://chat.lbry.io" label="chat" />{' '}
+          {__('if you encounter any trouble verifying.')}
+        </p>
+      </div>
     );
   }
 }
