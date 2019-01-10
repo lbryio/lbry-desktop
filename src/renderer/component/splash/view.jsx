@@ -17,6 +17,7 @@ type Props = {
   daemonVersionMatched: boolean,
   onReadyToLaunch: () => void,
   authenticate: () => void,
+  hideModal: () => void,
   modal: ?{
     id: string,
   },
@@ -27,9 +28,11 @@ type State = {
   message: string,
   launchedModal: boolean,
   error: boolean,
+  isRunning: boolean,
+  launchWithIncompatibleDaemon: boolean,
 };
 
-export class SplashScreen extends React.PureComponent<Props, State> {
+export default class SplashScreen extends React.PureComponent<Props, State> {
   constructor(props: Props) {
     super(props);
 
@@ -38,9 +41,12 @@ export class SplashScreen extends React.PureComponent<Props, State> {
       message: __('Connecting'),
       launchedModal: false,
       error: false,
+      launchWithIncompatibleDaemon: false,
+      isRunning: false,
     };
 
     (this: any).renderModals = this.renderModals.bind(this);
+    (this: any).runWithIncompatibleDaemon = this.runWithIncompatibleDaemon.bind(this);
     this.hasRecordedUser = false;
     this.timeout = undefined;
   }
@@ -128,12 +134,7 @@ export class SplashScreen extends React.PureComponent<Props, State> {
       }
 
       Lbry.resolve({ uri: 'lbry://one' }).then(() => {
-        // Only leave the load screen if the daemon version matched;
-        // otherwise we'll notify the user at the end of the load screen.
-
-        if (this.props.daemonVersionMatched) {
-          this.props.onReadyToLaunch();
-        }
+        this.setState({ isRunning: true }, () => this.continueAppLaunch());
       });
 
       return;
@@ -165,6 +166,26 @@ export class SplashScreen extends React.PureComponent<Props, State> {
     }, 500);
   }
 
+  runWithIncompatibleDaemon() {
+    const { hideModal } = this.props;
+    hideModal();
+    this.setState({ launchWithIncompatibleDaemon: true }, () => this.continueAppLaunch());
+  }
+
+  continueAppLaunch() {
+    const { daemonVersionMatched, onReadyToLaunch } = this.props;
+    const { isRunning, launchWithIncompatibleDaemon } = this.state;
+
+    if (daemonVersionMatched) {
+      onReadyToLaunch();
+    } else if (launchWithIncompatibleDaemon && isRunning) {
+      // The user may have decided to run the app with mismatched daemons
+      // They could make this decision before the daemon is finished starting up
+      // If it isn't running, this function will be called after the daemon is started
+      onReadyToLaunch();
+    }
+  }
+
   hasRecordedUser: boolean;
   timeout: ?TimeoutID;
 
@@ -178,7 +199,7 @@ export class SplashScreen extends React.PureComponent<Props, State> {
 
     switch (modalId) {
       case MODALS.INCOMPATIBLE_DAEMON:
-        return <ModalIncompatibleDaemon />;
+        return <ModalIncompatibleDaemon onContinueAnyway={this.runWithIncompatibleDaemon} />;
       case MODALS.WALLET_UNLOCK:
         return <ModalWalletUnlock />;
       case MODALS.UPGRADE:
@@ -204,5 +225,3 @@ export class SplashScreen extends React.PureComponent<Props, State> {
     );
   }
 }
-
-export default SplashScreen;
