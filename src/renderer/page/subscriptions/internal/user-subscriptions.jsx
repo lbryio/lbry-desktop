@@ -131,9 +131,16 @@ export default (props: Props) => {
                 })
               ) : (
                 <Fragment>
-                  <div className="page__empty">
-                    <h3 className="card__title">{__('All caught up!')}</h3>
-                    <p className="card__subtitle">{__('You might like the channels below.')}</p>
+                  <div className="yrbl-wrap">
+                    <img
+                      alt="Friendly gerbil"
+                      className="subscriptions__gerbil"
+                      src={Native.imagePath('gerbil-happy.png')}
+                    />
+                    <div className="card__content">
+                      <h2 className="card__title">{__('All caught up!')}</h2>
+                      <p className="card__subtitle">{__('You might like the channels below.')}</p>
+                    </div>
                   </div>
                   <SuggestedSubscriptions />
                 </Fragment>
