@@ -96,8 +96,8 @@ export default (props: Props) => {
         <div className="card__content">
           {viewMode === VIEW_ALL && (
             <Fragment>
-              <div className="card__title card__title--flex">
-                {__('Your subscriptions')}
+              <div className="card__title--flex">
+                <h2 className="card__title">{__('Your subscriptions')}</h2>
                 {unreadSubscriptions.length > 0 && <MarkAsRead />}
               </div>
               <FileList hideFilter sortByHeight fileInfos={subscriptions} />

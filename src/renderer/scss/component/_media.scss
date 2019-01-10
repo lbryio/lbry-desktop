@@ -213,6 +213,40 @@
   @include placeholder;
 }
 
+// M E D I A
+// S U B T E X T
+//
+// Wrapper around low level media information (date, channel)
+//
+.media__subtext {
+  color: rgba($lbry-black, 0.8);
+
+  html[data-theme='dark'] & {
+    color: rgba($lbry-white, 0.7);
+  }
+}
+
+//  M E D I A
+//  S U B T I T L E
+
+.media__subtitle {
+  font-size: 1rem;
+  position: relative;
+}
+
+.media__subtitle--large {
+  display: block;
+
+  > button {
+    display: block;
+  }
+}
+
+.media__subtitle__channel {
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+
 //  M E D I A
 //  I N F O
 
@@ -315,27 +349,6 @@
 
 .media__properties--placeholder {
   @include placeholder;
-}
-
-//  M E D I A
-//  S U B T I T L E
-
-.media__subtitle {
-  font-size: 1rem;
-  position: relative;
-}
-
-.media__subtitle--large {
-  display: block;
-
-  > button {
-    display: block;
-  }
-}
-
-.media__subtitle__channel {
-  font-size: 1.25rem;
-  font-weight: 600;
 }
 
 //  M E D I A
@@ -516,6 +529,10 @@
 
     .channel-info__actions {
       color: $lbry-white;
+    }
+
+    .media__subtext {
+      color: mix($lbry-cyan-5, $lbry-white, 30%);
     }
   }
 

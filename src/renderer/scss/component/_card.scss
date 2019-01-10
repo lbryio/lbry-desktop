@@ -193,6 +193,7 @@
   display: flex;
   align-items: center;
 
+  .card__title + .btn,
   .btn:not(:first-of-type) {
     margin-left: var(--spacing-vertical-medium);
   }
