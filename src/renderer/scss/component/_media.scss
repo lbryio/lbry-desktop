@@ -532,7 +532,7 @@
     }
 
     .media__subtext {
-      color: mix($lbry-cyan-5, $lbry-white, 30%);
+      color: mix($lbry-cyan-5, $lbry-white, 20%);
     }
   }
 
@@ -659,6 +659,16 @@
     padding-top: var(--spacing-vertical-medium);
   }
 
+  // Handles the margin on the right side of the last item
+  // Overflow: hidden makes doesn't care if the margin is off the screen, just the content
+  // Using padding shrinks the last item
+  &::after {
+    content: '';
+    display: inline-block;
+    width: var(--spacing-vertical-large);
+    height: 1px;
+  }
+
   .media-card {
     cursor: pointer;
     display: inline-block;
@@ -670,12 +680,6 @@
     @media (min-width: 601px) {
       width: calc((100% / 6) - 2.25rem);
       margin-left: var(--spacing-vertical-large);
-    }
-
-    &:last-of-type {
-      // We can't use margin or padding because overlfow: hidden ignores those
-      // border-right ensures the last item in the scrollable list has some space to the right
-      border-right: var(--spacing-vertical-large) solid transparent;
     }
 
     // May be needed for mobile design
