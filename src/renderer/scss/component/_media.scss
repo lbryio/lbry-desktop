@@ -502,11 +502,10 @@
 
 .media-group--list-recommended {
   border-left: 1px solid $lbry-gray-1;
-  float: right;
   min-height: 50vh;
   overflow: hidden;
-  padding-left: var(--spacing-vertical-large);
   width: 30rem;
+  padding-left: var(--spacing-vertical-large);
 
   html[data-theme='dark'] & {
     border-color: rgba($lbry-gray-5, 0.2);

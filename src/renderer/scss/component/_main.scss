@@ -17,19 +17,24 @@
   display: grid;
   grid-template-areas:
     'content content'
-    'info    related'
     'info    related';
+
+  grid-gap: var(--spacing-vertical-large);
+
+  max-width: 1787px;
 
   @media (min-width: 1470px) {
     grid-template-areas:
       'content related'
-      'info    related'
       'info    related';
-    grid-template-rows: 0fr 1fr;
+    grid-template-rows: auto 1fr;
+    grid-template-columns: 1fr auto;
   }
 
   .grid-area--content {
     grid-area: content;
+    max-height: var(--file-max-height);
+    max-width: var(--file-max-width);
   }
   .grid-area--info {
     grid-area: info;

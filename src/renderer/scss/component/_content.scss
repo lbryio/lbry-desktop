@@ -19,7 +19,6 @@
   background-position: 50% 50%;
   background-repeat: no-repeat;
   background-size: cover;
-  max-width: calc(var(--file-max-width) * (16 / 9));
   margin: auto;
 
   &:not(.card__media--nsfw) {
@@ -38,14 +37,7 @@
 
 .content__embedded {
   @include thumbnail;
-  background-color: #000;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-bottom: var(--spacing-vertical-large);
   position: relative;
-  width: 100%;
-  max-height: var(--file-max-width);
 
   video {
     width: 100%;
