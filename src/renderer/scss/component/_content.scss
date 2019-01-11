@@ -62,7 +62,8 @@
   width: 100%;
 }
 
-.content__empty--nsfw {
+.content__empty--nsfw,
+.card__media--nsfw {
   background-color: $lbry-grape-3;
 }
 
