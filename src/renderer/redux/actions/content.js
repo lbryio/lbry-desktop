@@ -286,19 +286,23 @@ export function doPurchaseUri(uri, specificCostInfo, shouldRecordViewEvent) {
   };
 }
 
-export function doFetchClaimsByChannel(uri, page, pageSize) {
+export function doFetchClaimsByChannel(
+  uri: string,
+  page: number = 1,
+  pageSize: number = PAGE_SIZE
+) {
   return dispatch => {
     dispatch({
       type: ACTIONS.FETCH_CHANNEL_CLAIMS_STARTED,
       data: { uri, page },
     });
 
-    Lbry.claim_list_by_channel({ uri, page: page || 1, page_size: pageSize || PAGE_SIZE }).then(
-      result => {
-        const claimResult = result[uri] || {};
-        const { claims_in_channel: claimsInChannel, returned_page: returnedPage } = claimResult;
+    Lbry.claim_list_by_channel({ uri, page, page_size: pageSize }).then(result => {
+      const claimResult = result[uri] || {};
+      const { claims_in_channel: claimsInChannel, returned_page: returnedPage } = claimResult;
 
-        if (claimsInChannel && claimsInChannel.length) {
+      if (claimsInChannel && claimsInChannel.length) {
+        if (page === 1) {
           const latest = claimsInChannel[0];
           dispatch(
             setSubscriptionLatest(
@@ -316,17 +320,17 @@ export function doFetchClaimsByChannel(uri, page, pageSize) {
             )
           );
         }
-
-        dispatch({
-          type: ACTIONS.FETCH_CHANNEL_CLAIMS_COMPLETED,
-          data: {
-            uri,
-            claims: claimsInChannel || [],
-            page: returnedPage || undefined,
-          },
-        });
       }
-    );
+
+      dispatch({
+        type: ACTIONS.FETCH_CHANNEL_CLAIMS_COMPLETED,
+        data: {
+          uri,
+          claims: claimsInChannel || [],
+          page: returnedPage || undefined,
+        },
+      });
+    });
   };
 }
 

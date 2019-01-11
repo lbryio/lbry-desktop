@@ -14,22 +14,28 @@
 }
 
 .main--file-page {
+  max-width: 1787px;
   display: grid;
   grid-template-areas:
-    'content content'
-    'info    related'
+    'content related'
     'info    related';
+  grid-gap: var(--spacing-vertical-large);
+  grid-template-rows: auto 1fr;
+  grid-template-columns: 1fr auto;
 
-  @media (min-width: 1470px) {
-    grid-template-areas:
-      'content related'
-      'info    related'
-      'info    related';
-    grid-template-rows: 0fr 1fr;
-  }
+  // TODO: Get responsive grid working, to many issues with different thumbnails messing stuff up on small screens with the file taking up the full width
+  // I will conquer this one day
+  // grid-template-areas:
+  //   'content content'
+  //   'info    related';
+  //
+  // @media (min-width: 1470px) {
+  //
+  // }
 
   .grid-area--content {
     grid-area: content;
+    max-width: var(--file-max-width);
   }
   .grid-area--info {
     grid-area: info;

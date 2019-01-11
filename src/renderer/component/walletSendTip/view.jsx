@@ -1,7 +1,7 @@
 // @flow
 import React from 'react';
 import Button from 'component/button';
-import { FormField } from 'component/common/form';
+import { FormField, FormRow } from 'component/common/form';
 import type { Claim } from 'types/claim';
 
 type Props = {
@@ -74,48 +74,43 @@ class WalletSendTip extends React.PureComponent<Props, State> {
     const { tipAmount, tipError } = this.state;
 
     return (
-      <section className="card__content">
-        <FormField
-          autoFocus
-          label={
-            (tipAmount &&
-              tipAmount !== 0 &&
-              `Tip ${tipAmount.toFixed(8).replace(/\.?0+$/, '')} LBC`) ||
-            __('Amount')
-          }
-          postfix={__('LBC')}
-          className="input--price-amount"
-          error={tipError}
-          min="0"
-          step="any"
-          type="number"
-          placeholder="1.23"
-          onChange={event => this.handleSupportPriceChange(event)}
-          helper={
-            <p>
-              {__(`This will appear as a tip for "${title}".`)}{' '}
-              <Button label={__('Learn more')} button="link" href="https://lbry.io/faq/tipping" />
-            </p>
-          }
-        />
+      <React.Fragment>
+        <FormRow>
+          <FormField
+            autoFocus
+            label={
+              (tipAmount &&
+                tipAmount !== 0 &&
+                `Tip ${tipAmount.toFixed(8).replace(/\.?0+$/, '')} LBC`) ||
+              __('Amount')
+            }
+            postfix={__('LBC')}
+            className="input--price-amount"
+            error={tipError}
+            min="0"
+            step="any"
+            type="number"
+            placeholder="1.23"
+            onChange={event => this.handleSupportPriceChange(event)}
+            helper={
+              <p>
+                {__(`This will appear as a tip for "${title}".`)}{' '}
+                <Button label={__('Learn more')} button="link" href="https://lbry.io/faq/tipping" />
+              </p>
+            }
+          />
+        </FormRow>
 
-        <div className="card__content">
-          <div className="card__actions">
-            <Button
-              button="primary"
-              label={__('Send')}
-              disabled={isPending || tipError}
-              onClick={this.handleSendButtonClicked}
-            />
-            <Button
-              button="link"
-              label={__('Cancel')}
-              onClick={onCancel}
-              navigateParams={{ uri }}
-            />
-          </div>
+        <div className="card__actions">
+          <Button
+            button="primary"
+            label={__('Send')}
+            disabled={isPending || tipError}
+            onClick={this.handleSendButtonClicked}
+          />
+          <Button button="link" label={__('Cancel')} onClick={onCancel} navigateParams={{ uri }} />
         </div>
-      </section>
+      </React.Fragment>
     );
   }
 }

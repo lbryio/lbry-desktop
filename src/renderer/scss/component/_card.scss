@@ -44,6 +44,8 @@
 //  A C T I O N S
 
 .card__actions {
+  font-size: 1.15rem;
+
   > *:not(:last-child) {
     margin-right: var(--spacing-vertical-large);
   }
@@ -193,6 +195,7 @@
   display: flex;
   align-items: center;
 
+  .card__title + .btn,
   .btn:not(:first-of-type) {
     margin-left: var(--spacing-vertical-medium);
   }

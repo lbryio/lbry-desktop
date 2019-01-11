@@ -99,7 +99,9 @@ class FileCard extends React.PureComponent<Props> {
     const handleContextMenu = event => {
       event.preventDefault();
       event.stopPropagation();
-      openCopyLinkMenu(convertToShareLink(claim.permanent_url), event);
+      if (claim) {
+        openCopyLinkMenu(convertToShareLink(claim.permanent_url), event);
+      }
     };
 
     // We should be able to tab through cards
@@ -119,11 +121,13 @@ class FileCard extends React.PureComponent<Props> {
         <div className="media__title">
           <TruncatedText text={title} lines={2} />
         </div>
-        <div className="media__subtitle">
-          {pending ? <div>Pending...</div> : <UriIndicator uri={uri} link />}
-        </div>
-        <div className="media__date">
-          <DateTime timeAgo block={height} />
+        <div className="media__subtext">
+          <div className="media__subtitle">
+            {pending ? <div>Pending...</div> : <UriIndicator uri={uri} link />}
+          </div>
+          <div className="media__date">
+            <DateTime timeAgo block={height} />
+          </div>
         </div>
         <div className="media__properties">
           <FilePrice hideFree uri={uri} />

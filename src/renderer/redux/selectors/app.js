@@ -4,26 +4,20 @@ import * as icons from 'constants/icons';
 
 export const selectState = state => state.app || {};
 
-export const selectPlatform = createSelector(
-  selectState,
-  state => state.platform
-);
+export const selectPlatform = createSelector(selectState, state => state.platform);
 
-export const selectUpdateUrl = createSelector(
-  selectPlatform,
-  platform => {
-    switch (platform) {
-      case 'darwin':
-        return 'https://lbry.io/get/lbry.dmg';
-      case 'linux':
-        return 'https://lbry.io/get/lbry.deb';
-      case 'win32':
-        return 'https://lbry.io/get/lbry.exe';
-      default:
-        throw Error('Unknown platform');
-    }
+export const selectUpdateUrl = createSelector(selectPlatform, platform => {
+  switch (platform) {
+    case 'darwin':
+      return 'https://lbry.io/get/lbry.dmg';
+    case 'linux':
+      return 'https://lbry.io/get/lbry.deb';
+    case 'win32':
+      return 'https://lbry.io/get/lbry.exe';
+    default:
+      throw Error('Unknown platform');
   }
-);
+});
 
 export const selectHasClickedComment = createSelector(
   selectState,
@@ -54,30 +48,18 @@ export const selectUpgradeFilename = createSelector(
   }
 );
 
-export const selectDownloadProgress = createSelector(
-  selectState,
-  state => state.downloadProgress
-);
+export const selectDownloadProgress = createSelector(selectState, state => state.downloadProgress);
 
 export const selectDownloadComplete = createSelector(
   selectState,
   state => state.upgradeDownloadCompleted
 );
 
-export const selectIsUpgradeSkipped = createSelector(
-  selectState,
-  state => state.isUpgradeSkipped
-);
+export const selectIsUpgradeSkipped = createSelector(selectState, state => state.isUpgradeSkipped);
 
-export const selectUpgradeDownloadPath = createSelector(
-  selectState,
-  state => state.downloadPath
-);
+export const selectUpgradeDownloadPath = createSelector(selectState, state => state.downloadPath);
 
-export const selectUpgradeDownloadItem = createSelector(
-  selectState,
-  state => state.downloadItem
-);
+export const selectUpgradeDownloadItem = createSelector(selectState, state => state.downloadItem);
 
 export const selectAutoUpdateDownloaded = createSelector(
   selectState,
@@ -94,35 +76,23 @@ export const selectDaemonVersionMatched = createSelector(
   state => state.daemonVersionMatched
 );
 
-export const selectSnackBar = createSelector(
-  selectState,
-  state => state.snackBar || {}
-);
+export const selectSnackBar = createSelector(selectState, state => state.snackBar || {});
 
 export const selectSnackBarSnacks = createSelector(
   selectSnackBar,
   snackBar => snackBar.snacks || []
 );
 
-export const selectBadgeNumber = createSelector(
-  selectState,
-  state => state.badgeNumber
-);
+export const selectBadgeNumber = createSelector(selectState, state => state.badgeNumber);
 
 export const selectCurrentLanguage = createSelector(
   selectState,
   () => app.i18n.getLocale() || 'en'
 );
 
-export const selectVolume = createSelector(
-  selectState,
-  state => state.volume
-);
+export const selectVolume = createSelector(selectState, state => state.volume);
 
-export const selectUpgradeTimer = createSelector(
-  selectState,
-  state => state.checkUpgradeTimer
-);
+export const selectUpgradeTimer = createSelector(selectState, state => state.checkUpgradeTimer);
 
 export const selectNavLinks = createSelector(
   selectCurrentPage,
@@ -134,7 +104,6 @@ export const selectNavLinks = createSelector(
       page === 'getcredits' ||
       page === 'rewards' ||
       page === 'history' ||
-      page === 'invite' ||
       page === 'backup';
 
     const isMyLbryPage = page =>
@@ -199,11 +168,6 @@ export const selectNavLinks = createSelector(
         active: currentPage === 'rewards',
       },
       {
-        label: 'Invites',
-        path: '/invite',
-        active: currentPage === 'invite',
-      },
-      {
         label: 'Backup',
         path: '/backup',
         active: currentPage === 'backup',
@@ -259,6 +223,12 @@ export const selectNavLinks = createSelector(
           active: isMyLbryPage(currentPage),
         },
         {
+          label: 'Invite',
+          // icon: TBD when we add icons back to the side nav
+          path: '/invite',
+          active: currentPage === 'invite',
+        },
+        {
           label: 'Publish',
           icon: icons.UPLOAD,
           path: '/publish',
@@ -283,15 +253,13 @@ export const selectNavLinks = createSelector(
   }
 );
 
-export const selectModal = createSelector(
-  selectState,
-  state => {
-    if (!state.modal) {
-      return null;
-    }
+export const selectModal = createSelector(selectState, state => {
+  if (!state.modal) {
+    return null;
+  }
 
   return {
     id: state.modal,
     modalProps: state.modalProps,
-  }
-})
+  };
+});

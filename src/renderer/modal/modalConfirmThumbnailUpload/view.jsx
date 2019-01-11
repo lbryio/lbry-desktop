@@ -1,7 +1,7 @@
 // @flow
 import React from 'react';
 import { Modal } from 'modal/modal';
-import { FormField } from 'component/common/form';
+import { FormField, FormRow } from 'component/common/form';
 
 type Props = {
   upload: (string, boolean) => void,
@@ -25,16 +25,21 @@ class ModalConfirmThumbnailUpload extends React.PureComponent<Props> {
     return (
       <Modal
         isOpen
-        title={__('Upload Thumbnail')}
         contentLabel={__('Confirm Thumbnail Upload')}
         type="confirm"
         confirmButtonLabel={__('Upload')}
         onConfirmed={() => this.upload()}
         onAborted={closeModal}
       >
-        <section className="card__content">
-          <p>{__('Are you sure you want to upload this thumbnail to spee.ch')}?</p>
-          <blockquote>{path}</blockquote>
+        <header className="card__header">
+          <h2 className="card__title">{__('More Ways To Get LBRY Credits')}</h2>
+          <p className="card__subtitle">
+            {__('Are you sure you want to upload this thumbnail to spee.ch')}?
+          </p>
+        </header>
+
+        <blockquote>{path}</blockquote>
+        <FormRow>
           <FormField
             type="checkbox"
             name="content_is_mature"
@@ -42,7 +47,7 @@ class ModalConfirmThumbnailUpload extends React.PureComponent<Props> {
             checked={nsfw}
             onChange={event => updatePublishForm({ nsfw: event.target.checked })}
           />
-        </section>
+        </FormRow>
       </Modal>
     );
   }
