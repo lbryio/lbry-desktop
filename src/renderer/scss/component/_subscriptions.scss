@@ -10,15 +10,14 @@
   width: calc(100% + 4rem);
 }
 
-
-
 .yrbl-wrap {
   align-items: center;
   display: flex;
   justify-content: center;
   vertical-align: middle;
+  margin-bottom: var(--spacing-vertical-large);
 
   img {
-    height: 500px;
+    height: 300px;
   }
 }

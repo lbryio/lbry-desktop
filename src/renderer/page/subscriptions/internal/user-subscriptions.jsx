@@ -36,15 +36,6 @@ export default (props: Props) => {
   } = props;
   return (
     <Fragment>
-      <HiddenNsfwClaims
-        uris={subscriptions.reduce((arr, { name, claim_id: claimId }) => {
-          if (name && claimId) {
-            arr.push(`lbry://${name}#${claimId}`);
-          }
-          return arr;
-        }, [])}
-      />
-
       {hasSubscriptions && (
         <section className="card card--section">
           <div className="card__content card--space-between">
@@ -75,6 +66,15 @@ export default (props: Props) => {
         </section>
       )}
 
+      <HiddenNsfwClaims
+        uris={subscriptions.reduce((arr, { name, claim_id: claimId }) => {
+          if (name && claimId) {
+            arr.push(`lbry://${name}#${claimId}`);
+          }
+          return arr;
+        }, [])}
+      />
+
       {!hasSubscriptions && (
         <Fragment>
           <div className="yrbl-wrap">
@@ -96,8 +96,8 @@ export default (props: Props) => {
         <div className="card__content">
           {viewMode === VIEW_ALL && (
             <Fragment>
-              <div className="card__title card__title--flex">
-                {__('Your subscriptions')}
+              <div className="card__title--flex">
+                <h2 className="card__title">{__('Your subscriptions')}</h2>
                 {unreadSubscriptions.length > 0 && <MarkAsRead />}
               </div>
               <FileList hideFilter sortByHeight fileInfos={subscriptions} />
@@ -131,9 +131,16 @@ export default (props: Props) => {
                 })
               ) : (
                 <Fragment>
-                  <div className="page__empty">
-                    <h3 className="card__title">{__('All caught up!')}</h3>
-                    <p className="card__subtitle">{__('You might like the channels below.')}</p>
+                  <div className="yrbl-wrap">
+                    <img
+                      alt="Friendly gerbil"
+                      className="subscriptions__gerbil"
+                      src={Native.imagePath('gerbil-happy.png')}
+                    />
+                    <div className="card__content">
+                      <h2 className="card__title">{__('All caught up!')}</h2>
+                      <p className="card__subtitle">{__('You might like the channels below.')}</p>
+                    </div>
                   </div>
                   <SuggestedSubscriptions />
                 </Fragment>

@@ -213,6 +213,40 @@
   @include placeholder;
 }
 
+// M E D I A
+// S U B T E X T
+//
+// Wrapper around low level media information (date, channel)
+//
+.media__subtext {
+  color: rgba($lbry-black, 0.8);
+
+  html[data-theme='dark'] & {
+    color: rgba($lbry-white, 0.7);
+  }
+}
+
+//  M E D I A
+//  S U B T I T L E
+
+.media__subtitle {
+  font-size: 1rem;
+  position: relative;
+}
+
+.media__subtitle--large {
+  display: block;
+
+  > button {
+    display: block;
+  }
+}
+
+.media__subtitle__channel {
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+
 //  M E D I A
 //  I N F O
 
@@ -255,7 +289,7 @@
 //  M E S S A G E
 
 .media__message {
-  font-size: 0.9rem;
+  font-size: 1.1rem;
   padding: var(--spacing-vertical-medium);
   white-space: normal;
 }
@@ -263,6 +297,31 @@
 .media__message--help {
   background-color: $lbry-yellow-3;
   margin: var(--spacing-vertical-medium) var(--spacing-vertical-large);
+
+  .btn--link {
+    // The normal colors we use for .btn--link are too light for the warning background
+    // This just darkens them a bit and adds an border-bottom so they are easier to see.
+    $altered-color: mix($lbry-teal-5, $lbry-black, 80%);
+    $altered-hover-color: mix($lbry-teal-5, $lbry-black, 60%);
+
+    &:not(.btn--disabled) {
+      color: $altered-color;
+      border-bottom: 1px solid $altered-color;
+
+      &:hover {
+        color: $altered-hover-color;
+      }
+
+      html[data-theme='dark'] & {
+        color: $altered-color;
+        border-bottom: 1px solid $altered-color;
+
+        &:hover {
+          color: $altered-hover-color;
+        }
+      }
+    }
+  }
 
   html[data-theme='dark'] & {
     background-color: $lbry-yellow-4;
@@ -315,27 +374,6 @@
 
 .media__properties--placeholder {
   @include placeholder;
-}
-
-//  M E D I A
-//  S U B T I T L E
-
-.media__subtitle {
-  font-size: 1rem;
-  position: relative;
-}
-
-.media__subtitle--large {
-  display: block;
-
-  > button {
-    display: block;
-  }
-}
-
-.media__subtitle__channel {
-  font-size: 1.25rem;
-  font-weight: 600;
 }
 
 //  M E D I A
@@ -464,11 +502,10 @@
 
 .media-group--list-recommended {
   border-left: 1px solid $lbry-gray-1;
-  float: right;
   min-height: 50vh;
   overflow: hidden;
-  padding-left: var(--spacing-vertical-large);
   width: 30rem;
+  padding-left: var(--spacing-vertical-large);
 
   html[data-theme='dark'] & {
     border-color: rgba($lbry-gray-5, 0.2);
@@ -517,6 +554,10 @@
     .channel-info__actions {
       color: $lbry-white;
     }
+
+    .media__subtext {
+      color: mix($lbry-cyan-5, $lbry-white, 20%);
+    }
   }
 
   &:not(:first-of-type):not(:last-of-type) {
@@ -527,25 +568,16 @@
     }
   }
 
-  &:not(:first-of-type) {
-    .media-group__header-title {
-      background-image: linear-gradient(to right, $lbry-black 80%, transparent 100%);
-    }
-
-    .channel-info__actions {
-      color: initial;
-    }
-  }
-
   .media-group__header {
     flex-direction: row;
     padding-left: var(--spacing-vertical-large);
   }
 
   .media-group__header-title {
-    color: transparent;
+    // color: transparent; // TODO: Add this back for lbryweb, it helps with long titles but was causing issues. A better solution is needed. - Sean
     // !exist unprefixed, needs SVG for LBRY web
     -webkit-background-clip: text;
+    background-image: linear-gradient(to right, $lbry-white 80%, transparent 100%);
 
     html[data-theme='dark'] & {
       background-image: linear-gradient(
@@ -642,6 +674,16 @@
     padding-top: var(--spacing-vertical-medium);
   }
 
+  // Handles the margin on the right side of the last item
+  // Overflow: hidden makes doesn't care if the margin is off the screen, just the content
+  // Using padding shrinks the last item
+  &::after {
+    content: '';
+    display: inline-block;
+    width: var(--spacing-vertical-large);
+    height: 1px;
+  }
+
   .media-card {
     cursor: pointer;
     display: inline-block;
@@ -653,12 +695,6 @@
     @media (min-width: 601px) {
       width: calc((100% / 6) - 2.25rem);
       margin-left: var(--spacing-vertical-large);
-    }
-
-    &:last-of-type {
-      // We can't use margin or padding because overlfow: hidden ignores those
-      // border-right ensures the last item in the scrollable list has some space to the right
-      border-right: var(--spacing-vertical-large) solid transparent;
     }
 
     // May be needed for mobile design

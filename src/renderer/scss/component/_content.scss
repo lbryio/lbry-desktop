@@ -19,7 +19,6 @@
   background-position: 50% 50%;
   background-repeat: no-repeat;
   background-size: cover;
-  max-width: calc(var(--file-max-width) * (16 / 9));
   margin: auto;
 
   &:not(.card__media--nsfw) {
@@ -38,14 +37,7 @@
 
 .content__embedded {
   @include thumbnail;
-  background-color: #000;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-bottom: var(--spacing-vertical-large);
   position: relative;
-  width: 100%;
-  max-height: var(--file-max-width);
 
   video {
     width: 100%;
@@ -70,7 +62,8 @@
   width: 100%;
 }
 
-.content__empty--nsfw {
+.content__empty--nsfw,
+.card__media--nsfw {
   background-color: $lbry-grape-3;
 }
 
@@ -93,14 +86,10 @@
 .content__view {
   width: 100%;
   height: 100%;
-  top: 0;
-  left: 0;
-
   background-color: #000;
   align-items: center;
   display: flex;
   justify-content: center;
-  position: absolute;
 
   iframe {
     width: 100%;

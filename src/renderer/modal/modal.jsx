@@ -72,7 +72,7 @@ export class Modal extends React.PureComponent<ModalProps> {
             <h1 className="card__title">{title}</h1>
           </header>
         )}
-        <div className="card__content">{children}</div>
+        {children}
         {type === 'custom' ? null : ( // custom modals define their own buttons
           <div className="card__actions">
             <Button

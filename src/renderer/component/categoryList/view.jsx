@@ -155,7 +155,7 @@ class CategoryList extends PureComponent<Props, State> {
 
       if (currentCardVisible && previousCard) {
         const scrollTarget = previousCard.offsetLeft;
-        this.handleScroll(scrollTarget);
+        this.handleScroll(scrollTarget - cards[0].offsetLeft);
         break;
       }
 

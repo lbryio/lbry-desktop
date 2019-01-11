@@ -18,7 +18,10 @@ $large-breakpoint: 1921px;
   --spacing-vertical-medium: calc(2rem / 2);
   --spacing-vertical-large: 2rem;
 
-  --file-max-width: 700px;
+  --file-max-width: 1400px;
+  // --file-max-height: calc(var(--file-max-height) * 9 / 16);
+  --file-max-height: 788px;
+
   --video-aspect-ratio: 56.25%; // 9 x 16
 
   // Text
