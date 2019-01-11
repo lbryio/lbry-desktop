@@ -20,7 +20,7 @@
   background-repeat: no-repeat;
   background-size: cover;
   margin: auto;
-
+  // max-height: var(--file-max-height);
   &:not(.card__media--nsfw) {
     background-color: #000; // solid black to blend nicely when the video starts (if it doesn't take the full width)
   }
@@ -85,14 +85,10 @@
 .content__view {
   width: 100%;
   height: 100%;
-  top: 0;
-  left: 0;
-
   background-color: #000;
   align-items: center;
   display: flex;
   justify-content: center;
-  position: absolute;
 
   iframe {
     width: 100%;

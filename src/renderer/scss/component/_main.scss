@@ -14,26 +14,25 @@
 }
 
 .main--file-page {
+  max-width: 1787px;
   display: grid;
   grid-template-areas:
-    'content content'
+    'content related'
     'info    related';
-
   grid-gap: var(--spacing-vertical-large);
+  grid-template-rows: auto 1fr;
+  grid-template-columns: 1fr auto;
 
-  max-width: 1787px;
-
-  @media (min-width: 1470px) {
-    grid-template-areas:
-      'content related'
-      'info    related';
-    grid-template-rows: auto 1fr;
-    grid-template-columns: 1fr auto;
-  }
+  // grid-template-areas:
+  //   'content content'
+  //   'info    related';
+  //
+  // @media (min-width: 1470px) {
+  //
+  // }
 
   .grid-area--content {
     grid-area: content;
-    max-height: var(--file-max-height);
     max-width: var(--file-max-width);
   }
   .grid-area--info {
