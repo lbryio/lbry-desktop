@@ -36,15 +36,6 @@ export default (props: Props) => {
   } = props;
   return (
     <Fragment>
-      <HiddenNsfwClaims
-        uris={subscriptions.reduce((arr, { name, claim_id: claimId }) => {
-          if (name && claimId) {
-            arr.push(`lbry://${name}#${claimId}`);
-          }
-          return arr;
-        }, [])}
-      />
-
       {hasSubscriptions && (
         <section className="card card--section">
           <div className="card__content card--space-between">
@@ -74,6 +65,15 @@ export default (props: Props) => {
           </div>
         </section>
       )}
+
+      <HiddenNsfwClaims
+        uris={subscriptions.reduce((arr, { name, claim_id: claimId }) => {
+          if (name && claimId) {
+            arr.push(`lbry://${name}#${claimId}`);
+          }
+          return arr;
+        }, [])}
+      />
 
       {!hasSubscriptions && (
         <Fragment>

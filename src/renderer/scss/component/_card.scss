@@ -44,6 +44,8 @@
 //  A C T I O N S
 
 .card__actions {
+  font-size: 1.15rem;
+
   > *:not(:last-child) {
     margin-right: var(--spacing-vertical-large);
   }

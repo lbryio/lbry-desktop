@@ -15,16 +15,13 @@ const GetCreditsPage = () => (
     */}
     <section className="card card--section">
       <header className="card__header">
-        <h2 className="card__title">{__('More ways to get LBRY Credits')}</h2>
-      </header>
-
-      <div className="card__content">
-        <p>
+        <h2 className="card__title">{__('More Ways To Get LBRY Credits')}</h2>
+        <p className="card__subtitle">
           {
             'LBRY credits can be purchased on exchanges, earned for contributions, for mining, and more.'
           }
         </p>
-      </div>
+      </header>
 
       <div className="card__content">
         <div className="card__actions">

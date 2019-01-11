@@ -147,14 +147,20 @@ input {
   }
 }
 
+.card {
+  .help {
+    margin-bottom: 0;
+    margin-top: var(--spacing-vertical-large);
+  }
+}
+
 .help {
   background-color: rgba($lbry-blue-1, 0.1);
   border-radius: 0.5rem;
   color: $lbry-gray-5;
   display: block;
-  margin-bottom: 1rem;
   padding: 1rem;
-  position: relative;
+  margin-bottom: var(--spacing-vertical-large);
 
   html[data-theme='dark'] & {
     color: inherit;
