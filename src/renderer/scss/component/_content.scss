@@ -20,7 +20,7 @@
   background-repeat: no-repeat;
   background-size: cover;
   margin: auto;
-  // max-height: var(--file-max-height);
+
   &:not(.card__media--nsfw) {
     background-color: #000; // solid black to blend nicely when the video starts (if it doesn't take the full width)
   }
