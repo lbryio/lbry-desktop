@@ -32,10 +32,28 @@ import ModalRewardCode from 'modal/modalRewardCode';
 
 type Props = {
   modal: { id: string, modalProps: {} },
-  error: string | { message: string },
+  error: { message: string },
+  openModal: string => void,
+  page: string,
+  isWelcomeAcknowledged: boolean,
+  isEmailCollectionAcknowledged: boolean,
+  isVerificationCandidate: boolean,
+  isCreditIntroAcknowledged: boolean,
+  balance: number,
+  showPageCost: number,
+  user: {
+    is_reward_approved: boolean,
+    is_identity_verified: boolean,
+    has_verified_email: boolean,
+  },
 };
 
-class ModalRouter extends React.PureComponent<Props> {
+type State = {
+  lastTransitionModal: ?string,
+  lastTransitionPage: ?string,
+};
+
+class ModalRouter extends React.PureComponent<Props, State> {
   constructor(props: Props) {
     super(props);
 
@@ -49,11 +67,11 @@ class ModalRouter extends React.PureComponent<Props> {
     this.showTransitionModals(this.props);
   }
 
-  componentWillReceiveProps(nextProps) {
+  componentWillReceiveProps(nextProps: Props) {
     this.showTransitionModals(nextProps);
   }
 
-  showTransitionModals(props) {
+  showTransitionModals(props: Props) {
     const { modal, openModal, page } = props;
 
     if (modal) {
@@ -78,7 +96,7 @@ class ModalRouter extends React.PureComponent<Props> {
     }
   }
 
-  checkShowWelcome(props) {
+  checkShowWelcome(props: Props) {
     const { isWelcomeAcknowledged, user } = props;
 
     if (!isWelcomeAcknowledged && user && !user.is_reward_approved && !user.is_identity_verified) {
@@ -88,7 +106,7 @@ class ModalRouter extends React.PureComponent<Props> {
     return undefined;
   }
 
-  checkShowEmail(props) {
+  checkShowEmail(props: Props) {
     const { isEmailCollectionAcknowledged, isVerificationCandidate, user } = props;
     if (
       !isEmailCollectionAcknowledged &&
@@ -102,7 +120,7 @@ class ModalRouter extends React.PureComponent<Props> {
     return undefined;
   }
 
-  checkShowCreditIntro(props) {
+  checkShowCreditIntro(props: Props) {
     const { balance, page, isCreditIntroAcknowledged } = props;
 
     if (
@@ -116,7 +134,7 @@ class ModalRouter extends React.PureComponent<Props> {
     return undefined;
   }
 
-  isPaidShowPage(props) {
+  isPaidShowPage(props: Props) {
     const { page, showPageCost } = props;
     return page === 'show' && showPageCost > 0;
   }

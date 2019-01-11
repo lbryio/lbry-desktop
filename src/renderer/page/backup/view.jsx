@@ -5,14 +5,14 @@ import Page from 'component/page';
 
 type Props = {
   daemonSettings: {
-    lbryum_wallet_dir: ?string,
+    wallet_dir: ?string,
   },
 };
 
 class BackupPage extends React.PureComponent<Props> {
   render() {
     const { daemonSettings } = this.props;
-    const { lbryum_wallet_dir: lbryumWalletDir } = daemonSettings;
+    const { wallet_dir: lbryumWalletDir } = daemonSettings;
 
     const noDaemonSettings = Object.keys(daemonSettings).length === 0;
 

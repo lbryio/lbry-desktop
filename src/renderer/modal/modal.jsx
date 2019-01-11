@@ -23,7 +23,7 @@ type ModalProps = {
   expandButtonLabel?: string,
   hideButtonLabel?: string,
   fullScreen: boolean,
-  title: string,
+  title?: string | React.Node,
 };
 
 export class Modal extends React.PureComponent<ModalProps> {

@@ -4,13 +4,13 @@ import { Modal } from 'modal/modal';
 import Button from 'component/button';
 
 type Props = {
-  quit: () => void,
+  onContinueAnyway: () => void,
   quitAnyDaemon: () => void,
 };
 
 class ModalIncompatibleDaemon extends React.PureComponent<Props> {
   render() {
-    const { quit, quitAnyDaemon } = this.props;
+    const { onContinueAnyway, quitAnyDaemon } = this.props;
 
     return (
       <Modal
@@ -18,21 +18,23 @@ class ModalIncompatibleDaemon extends React.PureComponent<Props> {
         title={__('Incompatible Daemon')}
         contentLabel={__('Incompatible daemon running')}
         type="confirm"
-        confirmButtonLabel={__('Close LBRY and daemon')}
-        abortButtonLabel={__('Do nothing')}
+        confirmButtonLabel={__('Close App and LBRY Processes')}
+        abortButtonLabel={__('Continue Anyway')}
         onConfirmed={quitAnyDaemon}
-        onAborted={quit}
+        onAborted={onContinueAnyway}
       >
-        <p>
-          {__(
-            'This browser is running with an incompatible version of the LBRY protocol, please close the LBRY app and rerun the installation package to repair it. '
-          )}
-        </p>
-        <Button
-          button="link"
-          label={__('Learn more')}
-          href="https://lbry.io/faq/incompatible-protocol-version"
-        />
+        <div className="card__content">
+          <p>
+            {__(
+              'This app is running with an incompatible version of the LBRY protocol. You can still use it, but there may be issues. Re-run the installation package for best results.'
+            )}
+          </p>
+          <Button
+            button="link"
+            label={__('Learn more')}
+            href="https://lbry.io/faq/incompatible-protocol-version"
+          />.
+        </div>
       </Modal>
     );
   }

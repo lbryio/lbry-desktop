@@ -258,7 +258,7 @@ export function doCheckDaemonVersion() {
     Lbry.version().then(({ lbrynet_version: lbrynetVersion }) => {
       // Avoid the incompatible daemon modal if running in dev mode
       // Lets you run a different daemon than the one specified in package.json
-      if (isDev || config.lbrynetDaemonVersion === lbrynetVersion) {
+      if (config.lbrynetDaemonVersion === lbrynetVersion) {
         return dispatch({
           type: ACTIONS.DAEMON_VERSION_MATCH,
         });

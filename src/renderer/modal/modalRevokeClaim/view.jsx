@@ -1,4 +1,5 @@
 // @flow
+import type { Transaction } from 'types/transaction';
 import React from 'react';
 import { Modal } from 'modal/modal';
 import * as txnTypes from 'constants/transaction_types';
@@ -8,6 +9,7 @@ type Props = {
   abandonClaim: (string, number) => void,
   txid: string,
   nout: number,
+  transactionItems: Array<Transaction>,
 };
 
 class ModalRevokeClaim extends React.PureComponent<Props> {
@@ -17,14 +19,14 @@ class ModalRevokeClaim extends React.PureComponent<Props> {
     (this: any).revokeClaim = this.revokeClaim.bind(this);
   }
 
-  getButtonLabel(type) {
+  getButtonLabel(type: string) {
     if (type === txnTypes.TIP) {
       return 'Confirm Tip Unlock';
     }
     return 'Confirm Claim Revoke';
   }
 
-  getMsgBody(type) {
+  getMsgBody(type: string) {
     if (type === txnTypes.TIP) {
       return (
         <React.Fragment>
@@ -58,7 +60,13 @@ class ModalRevokeClaim extends React.PureComponent<Props> {
 
   render() {
     const { transactionItems, txid, nout, closeModal } = this.props;
-    const { type } = transactionItems.find(claim => claim.txid == txid && claim.nout == nout);
+    const { type } =
+      transactionItems.find(claim => claim.txid === txid && claim.nout === nout) || {};
+
+    if (!type) {
+      console.error('Tried to render modalRevokeClaim but no matching tx type found.');
+      return null;
+    }
 
     return (
       <Modal
