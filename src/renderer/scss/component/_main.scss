@@ -23,6 +23,8 @@
   grid-template-rows: auto 1fr;
   grid-template-columns: 1fr auto;
 
+  // TODO: Get responsive grid working, to many issues with different thumbnails messing stuff up on small screens with the file taking up the full width
+  // I will conquer this one day
   // grid-template-areas:
   //   'content content'
   //   'info    related';
