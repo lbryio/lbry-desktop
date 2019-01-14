@@ -155,14 +155,16 @@ class FileTile extends React.PureComponent<Props> {
               <TruncatedText text={title || name} lines={size === 'small' ? 2 : 3} />
             )}
           </div>
-          <div className="media__subtitle">
-            <UriIndicator uri={uri} link />
-          </div>
-          <div className="media__subtitle card--space-between">
-            <div className="media__date">
-              <DateTime timeAgo block={height} />
+          <div className="media__subtext">
+            <div className="media__subtitle">
+              <UriIndicator uri={uri} link />
             </div>
-            {size !== 'large' && this.renderFileProperties()}
+            <div className="media__subtitle card--space-between">
+              <div className="media__date">
+                <DateTime timeAgo block={height} />
+              </div>
+              {size !== 'large' && this.renderFileProperties()}
+            </div>
           </div>
           {displayDescription && (
             <div className="media__subtext">

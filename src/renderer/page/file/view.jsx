@@ -193,7 +193,7 @@ class FilePage extends React.Component<Props> {
               <UriIndicator uri={uri} link />
             </div>
 
-            <div className="media__subtitle__date">
+            <div className="media__subtitle__date media__subtext">
               {__('Published on')} <DateTime block={height} show={DateTime.SHOW_DATE} />
             </div>
           </div>

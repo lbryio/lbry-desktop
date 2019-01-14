@@ -5,7 +5,6 @@ import { Modal } from 'modal/modal';
 import Button from 'component/button';
 
 type Props = {
-  closeModal: () => void,
   quit: () => void,
   unlockWallet: string => void,
   walletUnlockSucceded: boolean,
@@ -29,7 +28,7 @@ class ModalWalletUnlock extends React.PureComponent<Props> {
   }
 
   render() {
-    const { quit, unlockWallet, walletUnlockSucceded, closeModal } = this.props;
+    const { quit, unlockWallet, walletUnlockSucceded } = this.props;
 
     const { password } = this.state;
 
@@ -50,7 +49,12 @@ class ModalWalletUnlock extends React.PureComponent<Props> {
             <p>
               {__(
                 'Your wallet has been encrypted with a local password. Please enter your wallet password to proceed.'
-              )}
+              )}{' '}
+              <Button
+                button="link"
+                label={__('Learn more')}
+                href="https://lbry.io/faq/wallet-encryption"
+              />.
             </p>
             <FormRow padded>
               <FormField
@@ -63,13 +67,6 @@ class ModalWalletUnlock extends React.PureComponent<Props> {
                 onChange={event => this.onChangePassword(event)}
               />
             </FormRow>
-            <div className="card__actions">
-              <Button
-                button="link"
-                label={__('Learn more')}
-                href="https://lbry.io/faq/wallet-encryption"
-              />
-            </div>
           </Form>
         </section>
       </Modal>

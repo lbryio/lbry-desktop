@@ -1,8 +1,13 @@
+// @flow
 import React from 'react';
 import { Modal } from 'modal/modal';
 import Button from 'component/button';
 
-const ModalWelcome = props => {
+type Props = {
+  closeModal: () => void,
+};
+
+const ModalWelcome = (props: Props) => {
   const { closeModal } = props;
 
   return (
@@ -16,10 +21,10 @@ const ModalWelcome = props => {
         <p>
           {__('Below, LBRY is controlled by users -- you -- via blockchain and decentralization.')}
         </p>
-        <div className="modal__buttons">
-          <Button button="primary" onClick={closeModal} label={__("I'm In")} />
-        </div>
       </section>
+      <div className="card__actions">
+        <Button button="primary" onClick={closeModal} label={__("I'm In")} />
+      </div>
     </Modal>
   );
 };

@@ -63,11 +63,6 @@ class ModalRevokeClaim extends React.PureComponent<Props> {
     const { type } =
       transactionItems.find(claim => claim.txid === txid && claim.nout === nout) || {};
 
-    if (!type) {
-      console.error('Tried to render modalRevokeClaim but no matching tx type found.');
-      return null;
-    }
-
     return (
       <Modal
         isOpen

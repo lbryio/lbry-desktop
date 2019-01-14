@@ -49,7 +49,16 @@ class ModalRewardCode extends React.PureComponent<Props, State> {
         confirmButtonDisabled={rewardIsPending}
       >
         <section className="card__content">
-          <FormRow>
+          <p>
+            {__('Redeem a custom reward code for LBC')}
+            {'. '}
+            <Button
+              button="link"
+              href="https://lbry.io/faq/rewards#reward-code"
+              label={__('Learn more')}
+            />.
+          </p>
+          <FormRow padded>
             <FormField
               stretch
               autoFocus
@@ -59,17 +68,6 @@ class ModalRewardCode extends React.PureComponent<Props, State> {
               error={error}
               value={rewardCode}
               onChange={e => this.setState({ rewardCode: e.target.value })}
-              helper={
-                <React.Fragment>
-                  {__('Redeem a custom reward code for LBC')}
-                  {'. '}
-                  <Button
-                    button="link"
-                    href="https://lbry.io/faq/rewards#reward-code"
-                    label={__('Learn more')}
-                  />.
-                </React.Fragment>
-              }
             />
           </FormRow>
         </section>

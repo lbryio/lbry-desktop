@@ -51,7 +51,6 @@ class ModalError extends React.PureComponent<Props> {
           </React.Fragment>
         }
         className="error-modal"
-        overlayClassName="error-modal-overlay"
         onConfirmed={closeModal}
         extraContent={errorInfo}
       >

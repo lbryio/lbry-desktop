@@ -224,7 +224,7 @@ export const selectNavLinks = createSelector(
         },
         {
           label: 'Invite',
-          // icon: TBD when we add icons back to the side nav
+          icon: icons.USERS,
           path: '/invite',
           active: currentPage === 'invite',
         },

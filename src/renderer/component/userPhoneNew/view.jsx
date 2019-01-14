@@ -86,19 +86,20 @@ class UserPhoneNew extends React.PureComponent<Props, State> {
 
     return (
       <React.Fragment>
-        <header className="card__header">
-          <h2 className="card__title">{__('Enter The Verification Code')}</h2>
+        <section className="card__content">
           <p className="card__subtitle">
             {__(
               'Enter your phone number and we will send you a verification code. We will not share your phone number with third parties.'
             )}
           </p>
-        </header>
-        <Form onSubmit={this.handleSubmit}>
+        </section>
+
+        <Form className="card__content" onSubmit={this.handleSubmit}>
           <FormRow padded>
             <FormField type="select" name="country-codes" onChange={this.handleSelect}>
-              {countryCodes.map(country => (
-                <option key={country.countryCallingCode} value={country.countryCallingCode}>
+              {countryCodes.map((country, index) => (
+                // eslint-disable-next-line
+                <option key={index} value={country.countryCallingCode}>
                   {os === 'Darwin' ? country.emoji : `(${country.alpha2})`}{' '}
                   {country.countryCallingCode}
                 </option>
@@ -115,7 +116,7 @@ class UserPhoneNew extends React.PureComponent<Props, State> {
               }}
             />
           </FormRow>
-          <div className="card__actions card__actions--center">
+          <div className="card__actions">
             <Submit label="Submit" disabled={isPending} />
             {cancelButton}
           </div>
