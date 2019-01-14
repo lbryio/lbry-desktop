@@ -53,7 +53,7 @@ class UserEmailNew extends React.PureComponent<Props, State> {
         </p>
 
         <Form onSubmit={this.handleSubmit}>
-          <FormRow padded>
+          <FormRow>
             <FormField
               stretch
               type="email"
