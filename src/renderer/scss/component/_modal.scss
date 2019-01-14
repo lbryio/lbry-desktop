@@ -1,5 +1,4 @@
-.modal-overlay,
-.error-modal-overlay {
+.modal-overlay {
   top: 0;
   left: 0;
   bottom: 0;
@@ -15,10 +14,6 @@
   html[data-theme='dark'] & {
     background-color: rgba($lbry-black, 0.7);
   }
-}
-
-.modal-overlay--clear {
-  background-color: transparent;
 }
 
 .modal {
@@ -92,26 +87,6 @@
 
 .modal__header {
   font-size: 2em;
-}
-
-.modal__buttons {
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  margin-top: var(--spacing-vertical-medium);
-}
-
-.modal__button {
-  margin: 0 var(--spacing-vertical-small);
-
-  &.btn--link {
-    // So the text is not bigger than the text inside the button
-    font-size: 0.8rem;
-  }
-}
-
-.error-modal-overlay {
-  background-color: rgba($lbry-white, 0.7);
 }
 
 .error-modal__content {

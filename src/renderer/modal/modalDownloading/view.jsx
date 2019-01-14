@@ -49,23 +49,14 @@ class ModalDownloading extends React.PureComponent<Props> {
               <p>{__('After the install is complete, please reopen the app.')}</p>
             </React.Fragment>
           ) : null}
-          <div className="modal__buttons">
-            {downloadComplete ? (
-              <Button
-                button="primary"
-                label={__('Begin Upgrade')}
-                className="modal__button"
-                onClick={startUpgrade}
-              />
-            ) : null}
-            <Button
-              button="link"
-              label={__('Cancel')}
-              className="modal__button"
-              onClick={cancelUpgrade}
-            />
-          </div>
         </section>
+
+        <div className="card__actions">
+          {downloadComplete ? (
+            <Button button="primary" label={__('Begin Upgrade')} onClick={startUpgrade} />
+          ) : null}
+          <Button button="link" label={__('Cancel')} onClick={cancelUpgrade} />
+        </div>
       </Modal>
     );
   }

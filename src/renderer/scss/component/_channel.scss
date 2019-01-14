@@ -1,10 +1,11 @@
 .channel-info {
-  align-items: center;
-  display: flex;
-  justify-content: space-between;
-
-  h1 {
+  .media__title {
     user-select: text;
+    margin-bottom: var(--spacing-vertical-medium);
+  }
+
+  .channel-info__actions__group {
+    margin-bottom: var(--spacing-vertical-large);
   }
 }
 

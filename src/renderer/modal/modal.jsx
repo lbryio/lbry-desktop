@@ -17,7 +17,6 @@ type ModalProps = {
   onConfirmed?: any => any,
   onAborted?: any => any,
   className?: string,
-  overlayClassName?: string,
   children?: React.Node,
   extraContent?: React.Node,
   expandButtonLabel?: string,
@@ -51,7 +50,6 @@ export class Modal extends React.PureComponent<ModalProps> {
       onAborted,
       fullScreen,
       className,
-      overlayClassName,
       title,
       ...modalProps
     } = this.props;
@@ -63,9 +61,7 @@ export class Modal extends React.PureComponent<ModalProps> {
           modal: !fullScreen,
           'modal--fullscreen': fullScreen,
         })}
-        overlayClassName={
-          ![null, undefined, ''].includes(overlayClassName) ? overlayClassName : 'modal-overlay'
-        }
+        overlayClassName="modal-overlay"
       >
         {title && (
           <header className="card__header">

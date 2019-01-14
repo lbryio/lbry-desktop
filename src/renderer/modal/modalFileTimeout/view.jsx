@@ -23,9 +23,11 @@ class ModalFileTimeout extends React.PureComponent<Props> {
         onConfirmed={closeModal}
       >
         <section className="card__content">
-          <p className="card__error-msg">
+          <p className="error-modal__error-list">
             {__('LBRY was unable to download the stream')}:
-            <div>{`"${title}"`}</div>
+            <div>
+              <b>{`"${title}"`}</b>
+            </div>
           </p>
         </section>
       </Modal>

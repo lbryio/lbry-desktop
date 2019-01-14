@@ -25,8 +25,9 @@ const SideBar = (props: Props) => {
   return (
     <nav className="navigation">
       <div className="navigation__links">
-        {navLinks.primary.map(({ label, path, active }) => (
+        {navLinks.primary.map(({ label, path, active, icon }) => (
           <Button
+            icon={icon}
             className={classnames('navigation__link', {
               'navigation__link--active': active,
             })}
@@ -43,14 +44,14 @@ const SideBar = (props: Props) => {
         <ul>
           <li className="navigation__link navigation__link--title">Account</li>
 
-          {navLinks.secondary.map(({ label, path, active, subLinks = [] }) => (
+          {navLinks.secondary.map(({ label, path, active, subLinks = [], icon }) => (
             <li
               className={classnames('navigation__link', {
                 'navigation__link--active': active,
               })}
               key={label}
             >
-              <Button label={label} navigate={path} />
+              <Button icon={icon} label={label} navigate={path} />
 
               {
                 // The sublinks should be animated on open close
@@ -58,24 +59,25 @@ const SideBar = (props: Props) => {
                 // was really slow and looked pretty bad. Possible fix is upgrading to v2
                 // Not sure if that has better performance
               }
-              {!!subLinks.length && active && (
-                <ul key="0" className="navigation__link-items">
-                  {subLinks.map(({ active: subLinkActive, label: subLabel, path: subPath }) => (
-                    <li
-                      className={classnames('navigation__link-item', {
-                        'navigation__link-item--active': subLinkActive,
-                      })}
-                      key={subPath}
-                    >
-                      {subPath ? (
-                        <Button label={subLabel} navigate={subPath} />
-                      ) : (
-                        <span>{subLabel}</span>
-                      )}
-                    </li>
-                  ))}
-                </ul>
-              )}
+              {!!subLinks.length &&
+                active && (
+                  <ul key="0" className="navigation__link-items">
+                    {subLinks.map(({ active: subLinkActive, label: subLabel, path: subPath }) => (
+                      <li
+                        className={classnames('navigation__link-item', {
+                          'navigation__link-item--active': subLinkActive,
+                        })}
+                        key={subPath}
+                      >
+                        {subPath ? (
+                          <Button label={subLabel} navigate={subPath} />
+                        ) : (
+                          <span>{subLabel}</span>
+                        )}
+                      </li>
+                    ))}
+                  </ul>
+                )}
             </li>
           ))}
         </ul>

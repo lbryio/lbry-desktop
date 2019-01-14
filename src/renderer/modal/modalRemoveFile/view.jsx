@@ -60,19 +60,19 @@ class ModalRemoveFile extends React.PureComponent<Props, State> {
     return (
       <Modal
         isOpen
+        title="Remove File"
         contentLabel={__('Confirm File Remove')}
         type="confirm"
         confirmButtonLabel={__('Remove')}
         onConfirmed={() => deleteFile(outpoint, deleteChecked, abandonClaimChecked)}
         onAborted={closeModal}
       >
-        <header className="card__header">
-          <h2 className="card__title">{__('Remove File')}</h2>
-          <p className="card__subtitle">
+        <section className="card__content">
+          <p>
             {__("Are you sure you'd like to remove")} <cite>{`"${title}"`}</cite>{' '}
             {__('from the LBRY app?')}
           </p>
-        </header>
+        </section>
         <section className="card__content">
           <FormRow>
             <FormField
@@ -82,7 +82,7 @@ class ModalRemoveFile extends React.PureComponent<Props, State> {
               onChange={this.handleDeleteCheckboxClicked}
             />
           </FormRow>
-          {claimIsMine && (
+          {(true || claimIsMine) && (
             <FormRow>
               <FormField
                 prefix={__('Abandon the claim for this URI')}

@@ -75,7 +75,7 @@ class WalletSendTip extends React.PureComponent<Props, State> {
 
     return (
       <React.Fragment>
-        <FormRow>
+        <FormRow className="card__content">
           <FormField
             autoFocus
             label={

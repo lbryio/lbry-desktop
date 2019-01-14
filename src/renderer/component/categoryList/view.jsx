@@ -227,7 +227,7 @@ class CategoryList extends PureComponent<Props, State> {
                   <Button
                     label={category}
                     navigate="/show"
-                    navigateParams={{ uri: categoryLink }}
+                    navigateParams={{ uri: categoryLink, page: 1 }}
                   />
                   <SubscribeButton
                     button="alt"

@@ -34,23 +34,21 @@ const ModalCreditIntro = (props: Props) => {
         )}
         {Boolean(totalRewardValue) && (
           <p>
-            There are a variety of ways to get credits, including more than{' '}
+            {__(' There are a variety of ways to get credits, including more than')}{' '}
             <CreditAmount inheritStyle amount={totalRewardRounded} />{' '}
             {__('in free rewards for participating in the LBRY beta.')}
           </p>
         )}
       </section>
 
-      <section className="card__content">
-        <div className="card__actions card__actions--center">
-          <Button button="primary" onClick={addBalance} label={__('Get Credits')} />
-          <Button
-            button="link"
-            onClick={closeModal}
-            label={currentBalance <= 0 ? __('Use Without LBC') : __('Meh, Not Now')}
-          />
-        </div>
-      </section>
+      <div className="card__actions">
+        <Button button="primary" onClick={addBalance} label={__('Get Credits')} />
+        <Button
+          button="link"
+          onClick={closeModal}
+          label={currentBalance <= 0 ? __('Use Without LBC') : __('Meh, Not Now')}
+        />
+      </div>
     </Modal>
   );
 };

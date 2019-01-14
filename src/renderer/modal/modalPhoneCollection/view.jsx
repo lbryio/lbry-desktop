@@ -14,6 +14,15 @@ type Props = {
 };
 
 class ModalPhoneCollection extends React.PureComponent<Props> {
+  getTitle() {
+    const { user, phone } = this.props;
+
+    if (!user.phone_number && !phone) {
+      return __('Enter Your Phone Number');
+    }
+    return __('Enter The Verification Code');
+  }
+
   renderInner() {
     const { closeModal, phone, user } = this.props;
 
@@ -36,7 +45,7 @@ class ModalPhoneCollection extends React.PureComponent<Props> {
     }
 
     return (
-      <Modal type="custom" isOpen contentLabel="Phone">
+      <Modal type="custom" isOpen contentLabel="Phone" title={this.getTitle()}>
         {this.renderInner()}
       </Modal>
     );

@@ -91,7 +91,10 @@
 
 .table--transactions {
   td:nth-of-type(1) {
+    // TX amounts
     width: 25%;
+    font-size: 0.8em;
+    font-weight: 600;
   }
 
   td:nth-of-type(2) {

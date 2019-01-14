@@ -86,23 +86,21 @@ class ChannelPage extends React.PureComponent<Props> {
     return (
       <Page notContained>
         <header className="channel-info">
-          <h1>
+          <h1 className="media__title">
             {name}
             {fetching && <BusyIndicator />}
           </h1>
 
-          <div className="channel-info__actions">
-            <div className="channel-info__actions__group">
-              <SubscribeButton uri={`lbry://${permanentUrl}`} channelName={name} />
-              <Button
-                button="alt"
-                icon={icons.GLOBE}
-                label={__('Share Channel')}
-                onClick={() =>
-                  openModal(MODALS.SOCIAL_SHARE, { uri, speechShareable: true, isChannel: true })
-                }
-              />
-            </div>
+          <div className="channel-info__actions__group">
+            <SubscribeButton uri={`lbry://${permanentUrl}`} channelName={name} />
+            <Button
+              button="alt"
+              icon={icons.GLOBE}
+              label={__('Share Channel')}
+              onClick={() =>
+                openModal(MODALS.SOCIAL_SHARE, { uri, speechShareable: true, isChannel: true })
+              }
+            />
           </div>
         </header>
 
