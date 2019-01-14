@@ -101,19 +101,24 @@ class ModalWalletEncrypt extends React.PureComponent<Props, State> {
         onConfirmed={() => this.submitEncryptForm()}
         onAborted={closeModal}
       >
-        <section className="card__content">
-          <Form onSubmit={() => this.submitEncryptForm()}>
+        <Form onSubmit={() => this.submitEncryptForm()}>
+          <section className="card__content">
             <p>
               {__(
                 'Encrypting your wallet will require a password to access your local wallet data when LBRY starts. Please enter a new password for your wallet.'
-              )}
+              )}{' '}
+              <Button
+                button="link"
+                label={__('Learn more')}
+                href="https://lbry.io/faq/wallet-encryption"
+              />.
             </p>
             <FormRow padded>
               <FormField
                 stretch
                 autoFocus
                 error={passwordMismatch === true ? 'Passwords do not match' : false}
-                label={__('New Password')}
+                label={__('Password')}
                 type="password"
                 name="wallet-new-password"
                 onChange={event => this.onChangeNewPassword(event)}
@@ -129,6 +134,8 @@ class ModalWalletEncrypt extends React.PureComponent<Props, State> {
                 onChange={event => this.onChangeNewPasswordConfirm(event)}
               />
             </FormRow>
+          </section>
+          <section className="card__content">
             <p>
               {__(
                 'If your password is lost, it cannot be recovered. You will not be able to access your wallet without a password.'
@@ -144,16 +151,10 @@ class ModalWalletEncrypt extends React.PureComponent<Props, State> {
                 onChange={event => this.onChangeUnderstandConfirm(event)}
               />
             </FormRow>
-            <div className="card__actions">
-              <Button
-                button="link"
-                label={__('Learn more')}
-                href="https://lbry.io/faq/wallet-encryption"
-              />
-            </div>
+            <div className="card__actions" />
             {failMessage && <div className="error-text">{__(failMessage)}</div>}
-          </Form>
-        </section>
+          </section>
+        </Form>
       </Modal>
     );
   }

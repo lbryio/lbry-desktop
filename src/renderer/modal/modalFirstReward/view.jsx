@@ -13,7 +13,6 @@ class ModalFirstReward extends React.PureComponent<Props> {
     return (
       <Modal
         type="alert"
-        overlayClassName="modal-overlay modal-overlay--clear"
         isOpen
         contentLabel={__('Welcome to LBRY')}
         title={__('Your First Reward')}

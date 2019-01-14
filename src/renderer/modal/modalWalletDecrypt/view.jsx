@@ -1,6 +1,5 @@
 // @flow
 import React from 'react';
-import { Form } from 'component/common/form';
 import { Modal } from 'modal/modal';
 import Button from 'component/button';
 
@@ -45,20 +44,16 @@ class ModalWalletDecrypt extends React.PureComponent<Props> {
         onAborted={closeModal}
       >
         <section className="card__content">
-          <Form onSubmit={() => this.submitDecryptForm()}>
-            <p>
-              {__(
-                'Your wallet has been encrypted with a local password, performing this action will remove this password.'
-              )}
-            </p>
-            <div className="card__actions">
-              <Button
-                button="link"
-                label={__('Learn more')}
-                href="https://lbry.io/faq/wallet-encryption"
-              />
-            </div>
-          </Form>
+          <p>
+            {__(
+              'Your wallet has been encrypted with a local password, performing this action will remove this password.'
+            )}{' '}
+            <Button
+              button="link"
+              label={__('Learn more')}
+              href="https://lbry.io/faq/wallet-encryption"
+            />.
+          </p>
         </section>
       </Modal>
     );
