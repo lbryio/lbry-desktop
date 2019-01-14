@@ -96,7 +96,7 @@ const Header = (props: Props) => {
           className="header__navigation-item header__navigation-item--right-action"
           description={__('Publish content')}
           icon={ICONS.UPLOAD}
-          iconSize={20}
+          iconSize={24}
           label={isUpgradeAvailable ? '' : __('Publish')}
           onClick={() => navigate('/publish')}
         />
@@ -105,7 +105,7 @@ const Header = (props: Props) => {
           <Button
             className="header__navigation-item header__navigation-item--right-action"
             icon={ICONS.DOWNLOAD}
-            iconSize={20}
+            iconSize={24}
             label={__('Upgrade App')}
             onClick={downloadUpgradeRequested}
           />

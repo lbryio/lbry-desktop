@@ -3,11 +3,20 @@
   position: relative;
 
   svg {
-    stroke-width: 1.75;
+    stroke-width: 1.9;
     width: 1.2rem;
     height: 1.2rem;
     position: relative;
-    top: 0.1rem;
+    top: 2px;
+    stroke-opacity: 0.7;
+
+    // Buttons that don't have a label
+    &:only-child {
+      stroke-opacity: 1;
+      width: 1.4rem;
+      height: 1.4rem;
+      top: 0;
+    }
   }
 
   .btn__label {
