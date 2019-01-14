@@ -33,7 +33,7 @@ class FormInviteNew extends React.PureComponent {
 
     return (
       <Form onSubmit={this.handleSubmit}>
-        <FormRow padded>
+        <FormRow>
           <FormField
             stretch
             type="text"
@@ -94,7 +94,8 @@ class InviteNew extends React.PureComponent {
           />
 
           <p className="help">
-            {__('Read our')}{' '}
+            {__('Earn')} <Button button="link" navigate="/rewards" label={__('rewards')} />{' '}
+            {__('for inviting your friends.')} {__('Read our')}{' '}
             <Button button="link" label={__('FAQ')} href="https://lbry.io/faq/referrals" />{' '}
             {__('to learn more about referrals')}.
           </p>
