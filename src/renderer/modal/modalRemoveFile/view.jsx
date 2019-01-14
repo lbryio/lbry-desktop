@@ -82,7 +82,7 @@ class ModalRemoveFile extends React.PureComponent<Props, State> {
               onChange={this.handleDeleteCheckboxClicked}
             />
           </FormRow>
-          {(true || claimIsMine) && (
+          {claimIsMine && (
             <FormRow>
               <FormField
                 prefix={__('Abandon the claim for this URI')}
