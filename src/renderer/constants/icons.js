@@ -35,3 +35,4 @@ export const FACEBOOK = 'Facebook';
 export const TWITTER = 'Twitter';
 export const CREDIT_CARD = 'CreditCard';
 export const SETTINGS = 'Settings';
+export const USERS = 'Users';
