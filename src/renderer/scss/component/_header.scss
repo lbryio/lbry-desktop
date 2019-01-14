@@ -34,22 +34,10 @@
       width: calc(var(--header-height) * 3 + 1px);
     }
   }
-
-  &:last-of-type {
-    @media (min-width: 601px) {
-      width: 10rem;
-    }
-
-    @media (max-width: 600px) {
-      width: var(--header-height);
-    }
-  }
 }
 
 .header__navigation-item {
-  width: var(--header-height);
   height: var(--header-height);
-
   background-position: center;
   background-repeat: no-repeat;
   background-size: 50%;
@@ -105,30 +93,41 @@
     display: none;
   }
 }
-
-.header__navigation-item--publish,
-.header__navigation-item--wallet {
-  // Publish and Wallet links are collapsed
-  // into a menu at smaller screen widths
-
-  @media (max-width: 600px) {
-    display: none;
-  }
+.header__navigation-item--back,
+.header__navigation-item--forward,
+.header__navigation-item--home,
+.header__navigation-item--menu {
+  width: var(--header-height);
 }
 
-.header__navigation-item--publish {
+// Currently not used
+// .header__navigation-item--publish,
+// .header__navigation-item--wallet {
+//   // Publish and Wallet links are collapsed
+//   // into a menu at smaller screen widths
+//
+//   @media (max-width: 600px) {
+//     display: none;
+//   }
+// }
+
+.header__navigation-item--right-action {
   display: flex;
   justify-content: center;
   position: relative;
-  width: 100%;
 
   .btn__content {
     display: flex;
+    padding: 0 var(--spacing-vertical-large);
   }
 
   .btn__label {
     line-height: 1.4;
     padding-left: 0.5rem;
+  }
+
+  &:not(:last-child) {
+    border-right: 1px solid $lbry-gray-1;
   }
 
   html[data-theme='dark'] & {
