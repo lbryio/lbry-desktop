@@ -41,16 +41,12 @@ const Header = (props: Props) => {
         <Button
           className="header__navigation-item header__navigation-item--wallet"
           description={__('Your wallet')}
-          iconRight="LBC"
+          title={`Your balance is ${balance} LBRY Credits`}
           label={
-            isUpgradeAvailable ? (
-              `${balance}`
-            ) : (
-              <React.Fragment>
-                <span title={`${balance} LBC`}>{roundedBalance}</span>
-                <LbcSymbol />
-              </React.Fragment>
-            )
+            <React.Fragment>
+              <span>{roundedBalance}</span>
+              <LbcSymbol />
+            </React.Fragment>
           }
           onClick={() => navigate('/wallet')}
         />
