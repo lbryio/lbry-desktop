@@ -34,6 +34,15 @@
     .btn:not(.btn--link) {
       display: inline;
     }
+
+    &.table__item--actionable {
+      span + .btn {
+        margin-left: var(--spacing-vertical-small);
+      }
+      .btn svg {
+        top: 3px;
+      }
+    }
   }
 
   thead {
@@ -93,7 +102,7 @@
   td:nth-of-type(1) {
     // TX amounts
     width: 25%;
-    font-size: 0.8em;
+    font-size: 0.9em;
     font-weight: 600;
   }
 
