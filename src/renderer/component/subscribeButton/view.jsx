@@ -17,7 +17,6 @@ type Props = {
   doChannelSubscribe: ({ channelName: string, uri: string }) => void,
   doChannelUnsubscribe: SubscribtionArgs => void,
   doOpenModal: (id: string) => void,
-  firstRunCompleted: boolean,
   showSnackBarOnSubscribe: boolean,
   doToast: ({ message: string }) => void,
   buttonStyle: string,
@@ -31,7 +30,6 @@ export default (props: Props) => {
     doOpenModal,
     subscriptions,
     isSubscribed,
-    firstRunCompleted,
     showSnackBarOnSubscribe,
     doToast,
     buttonStyle,
@@ -51,7 +49,7 @@ export default (props: Props) => {
       onClick={e => {
         e.stopPropagation();
 
-        if (!subscriptions.length && !firstRunCompleted) {
+        if (!subscriptions.length) {
           doOpenModal(MODALS.FIRST_SUBSCRIPTION);
         }
 
