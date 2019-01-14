@@ -198,7 +198,7 @@ export const selectNavLinks = createSelector(
           label: 'Explore',
           path: '/discover',
           active: currentPage === 'discover',
-          icon: icons.COMPASS,
+          icon: icons.HOME,
         },
         {
           label: 'Subscriptions',
