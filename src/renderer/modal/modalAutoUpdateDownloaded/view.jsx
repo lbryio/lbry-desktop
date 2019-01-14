@@ -47,7 +47,7 @@ class ModalAutoUpdateDownloaded extends React.PureComponent<Props, State> {
         <section className="card__content">
           <p>
             {__(
-              'A new version of LBRY has been released, downloaded, and is ready for you to use pending a restart.'
+              'A new version of LBRY is ready for you to use pending a restart.'
             )}
           </p>
           <p className="help">
