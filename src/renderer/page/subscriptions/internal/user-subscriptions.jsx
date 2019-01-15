@@ -42,6 +42,7 @@ export default (props: Props) => {
             <div className="card__actions card__actions--no-margin">
               <Button
                 disabled={viewMode === VIEW_ALL}
+                selected={viewMode === VIEW_ALL}
                 button="link"
                 label="All Subscriptions"
                 onClick={() => doSetViewMode(VIEW_ALL)}
@@ -49,6 +50,7 @@ export default (props: Props) => {
               <Button
                 button="link"
                 disabled={viewMode === VIEW_LATEST_FIRST}
+                selected={viewMode === VIEW_LATEST_FIRST}
                 label={__('Latest Only')}
                 onClick={() => doSetViewMode(VIEW_LATEST_FIRST)}
               />

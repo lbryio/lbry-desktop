@@ -167,3 +167,16 @@
 .btn--uppercase {
   text-transform: uppercase;
 }
+
+.btn--selected {
+  font-weight: 800;
+  color: $lbry-teal-5;
+
+  &:disabled {
+    opacity: 1;
+  }
+
+  html[data-theme='dark'] & {
+    color: $lbry-teal-3;
+  }
+}

@@ -25,6 +25,7 @@ type Props = {
   iconColor?: string,
   iconSize?: number,
   constrict: ?boolean, // to shorten the button and ellipsis, only use for links
+  selected: ?boolean,
 };
 
 class Button extends React.PureComponent<Props> {
@@ -54,6 +55,7 @@ class Button extends React.PureComponent<Props> {
       iconColor,
       iconSize,
       constrict,
+      selected,
       ...otherProps
     } = this.props;
 
@@ -74,6 +76,7 @@ class Button extends React.PureComponent<Props> {
             'btn--external-link': button === 'link' && href,
             'btn--uppercase': uppercase,
             'btn--constrict': constrict,
+            'btn--selected': selected,
           }
         : 'btn--no-style',
       className
