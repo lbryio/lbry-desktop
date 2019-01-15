@@ -12,6 +12,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ### Changed
 
+### Fixed
+
+## [0.27.0] - 2018-01-15
+
+### Changed
+
 - App redesign with shared colors component ([#2144](https://github.com/lbryio/lbry-desktop/pull/2144))
 - Upgraded [LBRY SDK 0.30.4](https://github.com/lbryio/lbry/releases/tag/v0.30.4) to improve network stability
 
