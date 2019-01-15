@@ -115,7 +115,7 @@ export default (props: Props) => {
                         <Button
                           button="link"
                           navigate="/show"
-                          navigateParams={{ uri: channel }}
+                          navigateParams={{ uri: channel, page: 1 }}
                           label={claimName}
                         />
                         <MarkAsRead channel={channel} />

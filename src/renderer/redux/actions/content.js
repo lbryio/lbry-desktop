@@ -73,7 +73,7 @@ export function doUpdateLoadStatus(uri: string, outpoint: string) {
         const { claimName: channelName } = parseURI(channelUri);
 
         const unreadForChannel = makeSelectUnreadByChannel(channelUri)(state);
-        if (unreadForChannel.type === NOTIFICATION_TYPES.DOWNLOADING) {
+        if (unreadForChannel && unreadForChannel.type === NOTIFICATION_TYPES.DOWNLOADING) {
           const count = unreadForChannel.uris.length;
 
           if (selectosNotificationsEnabled(state)) {

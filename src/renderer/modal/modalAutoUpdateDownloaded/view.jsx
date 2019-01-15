@@ -31,7 +31,7 @@ class ModalAutoUpdateDownloaded extends React.PureComponent<Props, State> {
         type="confirm"
         contentLabel={__('Update Downloaded')}
         title={__('LBRY Leveled Up')}
-        confirmButtonLabel={__('Use it Now')}
+        confirmButtonLabel={__('Use Now')}
         abortButtonLabel={__('Upgrade on Close')}
         confirmButtonDisabled={this.state.disabled}
         onConfirmed={() => {
@@ -47,7 +47,7 @@ class ModalAutoUpdateDownloaded extends React.PureComponent<Props, State> {
         <section className="card__content">
           <p>
             {__(
-              'A new version of LBRY has been released, downloaded, and is ready for you to use pending a restart.'
+              'A new version of LBRY is ready for you.'
             )}
           </p>
           <p className="help">
