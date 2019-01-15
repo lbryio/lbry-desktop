@@ -34,13 +34,15 @@ const RewardLink = (props: Props) => {
         // TODO: This should be moved to redux
         <Modal
           isOpen
+          title={__('Error Claiming Reward')}
           contentLabel="Reward Claim Error"
-          className="error-modal"
           onConfirmed={() => {
             clearError(reward);
           }}
         >
-          {errorMessage}
+          <section className="card__content">
+            <div className="error-modal__error-list">{errorMessage}</div>
+          </section>
         </Modal>
       ) : (
         ''
