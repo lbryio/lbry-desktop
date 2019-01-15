@@ -123,18 +123,18 @@ export class ExpandableModal extends React.PureComponent<ModalProps, State> {
     return (
       <Modal type="custom" {...this.props}>
         {this.props.children}
-        {this.state.expanded ? this.props.extraContent : null}
-        <div className="modal__buttons">
+        {this.state.expanded ? (
+          <div className="card__content">{this.props.extraContent}</div>
+        ) : null}
+        <div className="card__actions">
           <Button
             button="primary"
             label={this.props.confirmButtonLabel}
-            className="modal__button"
             onClick={this.props.onConfirmed}
           />
           <Button
             button="link"
             label={!this.state.expanded ? this.props.expandButtonLabel : this.props.hideButtonLabel}
-            className="modal__button"
             onClick={() => {
               this.toggleExpanded();
             }}
