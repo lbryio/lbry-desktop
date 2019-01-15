@@ -8,6 +8,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ### Added
 
+- Auto email confirmation ([#2169](https://github.com/lbryio/lbry-desktop/pull/2169))
+
 ### Changed
 
 - App redesign with shared colors component ([#2144](https://github.com/lbryio/lbry-desktop/pull/2144))
