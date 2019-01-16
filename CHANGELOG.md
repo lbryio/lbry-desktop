@@ -8,13 +8,18 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ### Added
 
-- Auto email confirmation ([#2169](https://github.com/lbryio/lbry-desktop/pull/2169))
-
 ### Changed
 
 ### Fixed
 
+- Rewards table alignment on small screens ([#2197](https://github.com/lbryio/lbry-desktop/pull/2197))
+- File thumbnail issues when resiszing screen ([#2193](https://github.com/lbryio/lbry-desktop/pull/2197))
+
 ## [0.27.0] - 2018-01-15
+
+### Added
+
+- Auto email confirmation ([#2169](https://github.com/lbryio/lbry-desktop/pull/2169))
 
 ### Changed
 
