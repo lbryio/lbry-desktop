@@ -224,6 +224,7 @@ class FileViewer extends React.PureComponent<Props> {
 
     const poster = metadata && metadata.thumbnail;
     const layoverClass = classnames('content__cover', { 'card__media--nsfw': shouldObscureNsfw });
+
     const layoverStyle =
       !shouldObscureNsfw && poster ? { backgroundImage: `url("${poster}")` } : {};
 

@@ -5,13 +5,14 @@ import SemVer from 'semver';
 import findProcess from 'find-process';
 import url from 'url';
 import https from 'https';
-import { shell, app, ipcMain, dialog, session } from 'electron';
+import { app, dialog, ipcMain, session, shell } from 'electron';
 import { autoUpdater } from 'electron-updater';
 import isDev from 'electron-is-dev';
 import Daemon from './Daemon';
 import createTray from './createTray';
 import createWindow from './createWindow';
 import pjson from '../../package.json';
+import startSandbox from './startSandbox';
 
 autoUpdater.autoDownload = true;
 
@@ -87,6 +88,9 @@ app.on('ready', async () => {
     });
     daemon.launch();
   }
+
+  startSandbox();
+
   if (isDev) {
     await installExtensions();
   }
