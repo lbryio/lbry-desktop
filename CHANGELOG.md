@@ -8,6 +8,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ### Added
 
+- More language options on publish page ([#2201](https://github.com/lbryio/lbry-desktop/pull/2201))
+
 ### Changed
 
 ### Fixed
