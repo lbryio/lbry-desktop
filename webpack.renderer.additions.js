@@ -8,19 +8,25 @@ if (PROCESS_ARGV) {
   PROCESS_ARGV = JSON.parse(PROCESS_ARGV);
 }
 
-const isDev = PROCESS_ARGV && PROCESS_ARGV.original &&
-  (PROCESS_ARGV.original.indexOf('dev') !== -1);
+const isDev = PROCESS_ARGV && PROCESS_ARGV.original && PROCESS_ARGV.original.indexOf('dev') !== -1;
+
+let plugins = [];
+if (isDev) {
+  plugins.push(
+    new FilewatcherPlugin({
+      watchFileRegex: [require.resolve('lbry-redux'), require.resolve('lbryinc')],
+    })
+  );
+}
 
 module.exports = {
-  // This rule is temporarily necessary until https://github.com/electron-userland/electron-webpack/issues/60 is fixed.
+  mode: isDev ? 'development' : 'production',
   module: {
     rules: [
       {
         test: /\.jsx?$/,
+        exclude: /node_modules/,
         loader: 'babel-loader',
-        options: {
-          presets: ['env', 'react', 'stage-2'],
-        },
       },
     ],
   },
@@ -29,9 +35,5 @@ module.exports = {
     modules: [ELECTRON_RENDERER_PROCESS_ROOT, 'node_modules', __dirname],
     extensions: ['.js', '.jsx', '.scss'],
   },
-  plugins: isDev ? [
-    new FilewatcherPlugin({
-      watchFileRegex: [require.resolve('lbry-redux'), require.resolve('lbryinc')],
-    }),
-  ] : [],
+  plugins,
 };

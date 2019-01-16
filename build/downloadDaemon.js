@@ -11,7 +11,7 @@ const downloadDaemon = targetPlatform =>
   new Promise((resolve, reject) => {
     const daemonURLTemplate = packageJSON.lbrySettings.lbrynetDaemonUrlTemplate;
     const daemonVersion = packageJSON.lbrySettings.lbrynetDaemonVersion;
-    const daemonDir = path.join(__dirname,'..',packageJSON.lbrySettings.lbrynetDaemonDir);
+    const daemonDir = path.join(__dirname, '..', packageJSON.lbrySettings.lbrynetDaemonDir);
     let daemonFileName = packageJSON.lbrySettings.lbrynetDaemonFileName;
 
     let currentPlatform = os.platform();
@@ -19,8 +19,8 @@ const downloadDaemon = targetPlatform =>
     var daemonPlatform = process.env.TARGET || targetPlatform || currentPlatform;
     if (daemonPlatform === 'mac' || daemonPlatform === 'darwin') daemonPlatform = 'mac';
     if (daemonPlatform === 'win32' || daemonPlatform === 'windows') {
-     daemonPlatform = 'windows';
-     daemonFileName = daemonFileName + '.exe';
+      daemonPlatform = 'windows';
+      daemonFileName = daemonFileName + '.exe';
     }
     const daemonFilePath = path.join(daemonDir, daemonFileName);
     const daemonVersionPath = path.join(__dirname, 'daemon.ver');
@@ -34,7 +34,7 @@ const downloadDaemon = targetPlatform =>
     const hasDaemonVersion = fs.existsSync(daemonVersionPath);
     let downloadedDaemonVersion;
     if (hasDaemonVersion) {
-      downloadedDaemonVersion = fs.readFileSync(daemonVersionPath, "utf8");
+      downloadedDaemonVersion = fs.readFileSync(daemonVersionPath, 'utf8');
     }
 
     if (hasDaemonDownloaded && hasDaemonVersion && downloadedDaemonVersion === daemonVersion) {
@@ -66,20 +66,21 @@ const downloadDaemon = targetPlatform =>
                 if (error) return newReject(error);
                 return newResolve();
               });
-          })
+            })
         )
         .then(() => del(`${daemonFilePath}*`))
-        .then(() => decompress(tmpZipPath, daemonDir, {
-          filter: file =>
-            path.basename(file.path) === daemonFileName,
-        }))
+        .then(() =>
+          decompress(tmpZipPath, daemonDir, {
+            filter: file => path.basename(file.path) === daemonFileName,
+          })
+        )
         .then(() => {
           console.log('\x1b[32msuccess\x1b[0m Daemon downloaded!');
           if (hasDaemonVersion) {
             del(daemonVersionPath);
           }
 
-          fs.writeFileSync(daemonVersionPath, daemonVersion, "utf8")
+          fs.writeFileSync(daemonVersionPath, daemonVersion, 'utf8');
           resolve('Done');
         })
         .catch(error => {
@@ -87,12 +88,8 @@ const downloadDaemon = targetPlatform =>
             `\x1b[31merror\x1b[0m Daemon download failed due to: \x1b[35m${error}\x1b[0m`
           );
           reject(error);
-        })
-      };
+        });
+    }
   });
 
-module.exports = downloadDaemon;
-
-require('make-runnable/custom')({
-  printOutputFrame: false
-});
+downloadDaemon();

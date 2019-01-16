@@ -103,11 +103,6 @@ reducers[ACTIONS.UPGRADE_DOWNLOAD_STARTED] = state =>
     upgradeDownloading: true,
   });
 
-reducers[ACTIONS.CHANGE_MODALS_ALLOWED] = (state, action) =>
-  Object.assign({}, state, {
-    modalsAllowed: action.data.modalsAllowed,
-  });
-
 reducers[ACTIONS.SKIP_UPGRADE] = state => {
   sessionStorage.setItem('upgradeSkipped', 'true');
 
@@ -115,16 +110,6 @@ reducers[ACTIONS.SKIP_UPGRADE] = state => {
     isUpgradeSkipped: true,
   });
 };
-
-reducers[ACTIONS.MEDIA_PLAY] = state =>
-  Object.assign({}, state, {
-    modalsAllowed: false,
-  });
-
-reducers[ACTIONS.MEDIA_PAUSE] = state =>
-  Object.assign({}, state, {
-    modalsAllowed: true,
-  });
 
 reducers[ACTIONS.SET_PLAYING_URI] = (state, action) => {
   if (action.data.uri === null) {

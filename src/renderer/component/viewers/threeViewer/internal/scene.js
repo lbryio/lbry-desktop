@@ -1,4 +1,4 @@
-import * as THREE from './three';
+import * as THREE from 'three';
 
 const addLights = (scene, color, groundColor) => {
   // Light color
