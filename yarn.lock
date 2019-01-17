@@ -6856,6 +6856,12 @@ node-abi@^2.2.0:
   dependencies:
     semver "^5.4.1"
 
+node-abi@^2.5.1:
+  version "2.5.1"
+  resolved "https://registry.yarnpkg.com/node-abi/-/node-abi-2.5.1.tgz#bb17288fc3b2f68fea0ed9897c66979fd754ed47"
+  dependencies:
+    semver "^5.4.1"
+
 node-async-require-loader@^1.1.14:
   version "1.2.3"
   resolved "https://registry.yarnpkg.com/node-async-require-loader/-/node-async-require-loader-1.2.3.tgz#cb811bcac6bc82bd373ca3bad86d7850e534745a"
