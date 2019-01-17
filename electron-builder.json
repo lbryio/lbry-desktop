@@ -44,6 +44,7 @@
   ],
   "linux": {
     "target": "deb",
+    "executableName": "LBRY",
     "category": "AudioVideo;Video",
     "desktop": {
       "MimeType": "x-scheme-handler/lbry",
