@@ -3870,9 +3870,9 @@ expand-range@^1.8.1:
   dependencies:
     fill-range "^2.1.0"
 
-expand-template@^1.0.2:
-  version "1.1.1"
-  resolved "https://registry.yarnpkg.com/expand-template/-/expand-template-1.1.1.tgz#981f188c0c3a87d2e28f559bc541426ff94f21dd"
+expand-template@^2.0.3:
+  version "2.0.3"
+  resolved "https://registry.yarnpkg.com/expand-template/-/expand-template-2.0.3.tgz#6e14b3fcee0f3a6340ecb57d2e8918692052a47c"
 
 expand-tilde@^2.0.0, expand-tilde@^2.0.2:
   version "2.0.2"
@@ -5874,12 +5874,12 @@ kebab-case@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/kebab-case/-/kebab-case-1.0.0.tgz#3f9e4990adcad0c686c0e701f7645868f75f91eb"
 
-keytar@^4.2.1:
-  version "4.2.1"
-  resolved "https://registry.yarnpkg.com/keytar/-/keytar-4.2.1.tgz#8a06a6577fdf6373e0aa6b112277e63dec77fd12"
+keytar@^4.3.1:
+  version "4.3.0"
+  resolved "https://registry.yarnpkg.com/keytar/-/keytar-4.3.0.tgz#4a3afd64fdeec300716ccf3985fdcf1cfd6e77e9"
   dependencies:
     nan "2.8.0"
-    prebuild-install "^2.4.1"
+    prebuild-install "^5.0.0"
 
 killable@^1.0.0:
   version "1.0.0"
@@ -6811,6 +6811,10 @@ nanomatch@^1.2.9:
     regex-not "^1.0.0"
     snapdragon "^0.8.1"
     to-regex "^3.0.1"
+
+napi-build-utils@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/napi-build-utils/-/napi-build-utils-1.0.1.tgz#1381a0f92c39d66bf19852e7873432fc2123e508"
 
 natural-compare@^1.4.0:
   version "1.4.0"
@@ -7901,21 +7905,22 @@ posthtml@^0.11.2, posthtml@^0.11.3:
     posthtml-parser "^0.3.3"
     posthtml-render "^1.1.0"
 
-prebuild-install@^2.4.1:
-  version "2.5.3"
-  resolved "https://registry.yarnpkg.com/prebuild-install/-/prebuild-install-2.5.3.tgz#9f65f242782d370296353710e9bc843490c19f69"
+prebuild-install@^5.0.0:
+  version "5.2.2"
+  resolved "https://registry.yarnpkg.com/prebuild-install/-/prebuild-install-5.2.2.tgz#237888f21bfda441d0ee5f5612484390bccd4046"
   dependencies:
     detect-libc "^1.0.3"
-    expand-template "^1.0.2"
+    expand-template "^2.0.3"
     github-from-package "0.0.0"
     minimist "^1.2.0"
     mkdirp "^0.5.1"
+    napi-build-utils "^1.0.1"
     node-abi "^2.2.0"
     noop-logger "^0.1.1"
     npmlog "^4.0.1"
     os-homedir "^1.0.1"
     pump "^2.0.1"
-    rc "^1.1.6"
+    rc "^1.2.7"
     simple-get "^2.7.0"
     tar-fs "^1.13.0"
     tunnel-agent "^0.6.0"
