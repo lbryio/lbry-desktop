@@ -3,7 +3,9 @@ import React from 'react';
 import Page from 'component/page';
 import UserHistory from 'component/userHistory';
 
-class UserHistoryPage extends React.PureComponent {
+type Props = {};
+
+class UserHistoryPage extends React.PureComponent<Props> {
   render() {
     return (
       <Page>

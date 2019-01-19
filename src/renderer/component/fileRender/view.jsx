@@ -16,15 +16,16 @@ type Props = {
     fileType: string,
     contentType: string,
     downloadPath: string,
+    url: ?string,
   },
   currentTheme: string,
 };
 
 class FileRender extends React.PureComponent<Props> {
-  constructor(props) {
+  constructor(props: Props) {
     super(props);
 
-    this.escapeListener = this.escapeListener.bind(this);
+    (this: any).escapeListener = this.escapeListener.bind(this);
   }
 
   componentDidMount() {
@@ -35,7 +36,8 @@ class FileRender extends React.PureComponent<Props> {
     window.removeEventListener('keydown', this.escapeListener, true);
   }
 
-  processSandboxRef(element) {
+  // This should use React.createRef()
+  processSandboxRef(element: any) {
     if (!element) {
       return;
     }
@@ -47,7 +49,7 @@ class FileRender extends React.PureComponent<Props> {
       console.log('permissionrequest', e);
     });
 
-    element.addEventListener('console-message', e => {
+    element.addEventListener('console-message', (e: { message: string }) => {
       if (/^\$LBRY_IPC:/.test(e.message)) {
         // Process command
         let message = {};
@@ -71,7 +73,7 @@ class FileRender extends React.PureComponent<Props> {
     });
   }
 
-  escapeListener(e) {
+  escapeListener(e: SyntheticKeyboardEvent<*>) {
     if (e.keyCode === 27) {
       e.preventDefault();
 
@@ -97,7 +99,7 @@ class FileRender extends React.PureComponent<Props> {
     // Supported mediaTypes
     const mediaTypes = {
       '3D-file': <ThreeViewer source={{ fileType, downloadPath }} theme={currentTheme} />,
-      application: (
+      application: !source.url ? null : (
         <webview
           ref={element => this.processSandboxRef(element)}
           title=""

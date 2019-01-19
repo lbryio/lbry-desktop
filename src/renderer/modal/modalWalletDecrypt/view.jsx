@@ -6,11 +6,15 @@ import Button from 'component/button';
 type Props = {
   closeModal: () => void,
   decryptWallet: () => void,
+  updateWalletStatus: () => void,
   walletDecryptSucceded: boolean,
-  updateWalletStatus: boolean,
 };
 
-class ModalWalletDecrypt extends React.PureComponent<Props> {
+type State = {
+  submitted: boolean,
+};
+
+class ModalWalletDecrypt extends React.PureComponent<Props, State> {
   state = {
     submitted: false, // Prior actions could be marked complete
   };
