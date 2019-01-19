@@ -10,21 +10,22 @@ Before reporting any issues, please make sure that you're using the latest versi
 We are also available on live chat at https://chat.lbry.io
 -->
 
-
 ## The Issue
 
 ### Steps to Reproduce
-1.
-2.
-3.
 
-### Expected Behaviour
+1.  2.  3.
+
+### Expected Behavior
+
 Tell us what should happen.
 
-### Actual Behaviour
+### Actual Behavior
+
 Tell us what happens instead.
 
 ### Suggested Solutions
+
 Tell us your suggested solutions if you have any.
 
 ## System Configuration
@@ -41,30 +42,10 @@ Tell us your suggested solutions if you have any.
 - LBRY Installation ID:
 - Operating system:
 
-
 ## Anything Else
+
 <!-- Include anything else that does not fit into the above sections -->
 
-
 ## Screenshots
+
 <!-- If a screenshot would help explain the bug, please include one or two here -->
-
-
-## Internal Use
-
-### Acceptance Criteria
-1.
-2.
-3.
-
-### Definition of Done
-- [ ]  Tested against acceptance criteria
-- [ ] Tested against the assumptions of the user story
-- [ ] The project builds without errors
-- [ ] Unit tests are written and passing
-- [ ] Tests on devices/browsers listed in the issue have passed
-- [ ] QA performed & issues resolved
-- [ ] Refactoring completed
-- [ ] Any configuration or build changes documented
-- [ ] Documentation updated
-- [ ] Peer Code Review performed
