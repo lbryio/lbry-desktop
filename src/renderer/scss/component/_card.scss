@@ -83,7 +83,7 @@
 .card__content {
   font-size: 1.15rem;
 
-  p:not(:last-of-type) {
+  p:not(:last-child) {
     margin-bottom: var(--spacing-vertical-medium);
   }
 }

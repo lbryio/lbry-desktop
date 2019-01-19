@@ -51,7 +51,6 @@ class UserEmailNew extends React.PureComponent<Props, State> {
             'In addition, your email address will never be sold and you can unsubscribe at any time.'
           )}
         </p>
-
         <Form onSubmit={this.handleSubmit}>
           <FormRow>
             <FormField
