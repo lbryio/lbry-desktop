@@ -55,24 +55,22 @@ class WunderBar extends React.PureComponent<Props> {
     const { ctrlKey, metaKey, keyCode } = event;
     const { doFocus, doBlur, focused } = this.props;
 
-    if (!this.input) {
-      return;
-    }
+    if (this.input) {
+      if (focused && keyCode === ESC_KEY_CODE) {
+        this.input.blur();
+        doBlur();
+        return;
+      }
 
-    if (focused && keyCode === ESC_KEY_CODE) {
-      doBlur();
-      this.input.blur();
-      return;
-    }
+      const shouldFocus =
+        process.platform === 'darwin'
+          ? keyCode === L_KEY_CODE && metaKey
+          : keyCode === L_KEY_CODE && ctrlKey;
 
-    const shouldFocus =
-      process.platform === 'darwin'
-        ? keyCode === L_KEY_CODE && metaKey
-        : keyCode === L_KEY_CODE && ctrlKey;
-
-    if (shouldFocus) {
-      doFocus();
-      this.input.focus();
+      if (shouldFocus) {
+        this.input.focus();
+        doFocus();
+      }
     }
   }
 

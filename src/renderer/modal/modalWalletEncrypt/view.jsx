@@ -8,7 +8,7 @@ type Props = {
   closeModal: () => void,
   walletEncryptSucceded: boolean,
   updateWalletStatus: boolean,
-  encryptWallet: string => void,
+  encryptWallet: (?string) => void,
   updateWalletStatus: () => void,
 };
 
@@ -19,7 +19,7 @@ type State = {
   understandConfirmed: boolean,
   understandError: boolean,
   submitted: boolean,
-  failMessage: boolean,
+  failMessage: ?string,
 };
 
 class ModalWalletEncrypt extends React.PureComponent<Props, State> {
@@ -30,7 +30,7 @@ class ModalWalletEncrypt extends React.PureComponent<Props, State> {
     understandConfirmed: false,
     understandError: false,
     submitted: false, // Prior actions could be marked complete
-    failMessage: false,
+    failMessage: undefined,
   };
 
   componentDidUpdate() {

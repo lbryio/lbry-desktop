@@ -42,6 +42,7 @@ type Props = {
   searchBarFocused: boolean,
   mediaType: string,
   claimRewards: () => void,
+  costInfo: ?{ cost: number },
 };
 
 class FileViewer extends React.PureComponent<Props> {
@@ -96,7 +97,7 @@ class FileViewer extends React.PureComponent<Props> {
       this.props.playingUri !== prev.playingUri
     ) {
       // suppress autoplay after download error
-      if (!(this.props.uri in this.props.fileInfoErrors)) {
+      if (!this.props.fileInfoErrors || !(this.props.uri in this.props.fileInfoErrors)) {
         this.handleAutoplay(this.props);
       }
     }
@@ -167,7 +168,7 @@ class FileViewer extends React.PureComponent<Props> {
     }
   }
 
-  fireAnalyticsEvent(claim, startTime, playTime) {
+  fireAnalyticsEvent(claim: Claim, startTime: ?number, playTime: ?number) {
     const { claimRewards } = this.props;
     const { name, claim_id: claimId, txid, nout } = claim;
 
@@ -264,7 +265,7 @@ class FileViewer extends React.PureComponent<Props> {
             style={layoverStyle}
           >
             <PlayButton
-              play={e => {
+              play={(e: SyntheticInputEvent<*>) => {
                 e.stopPropagation();
                 this.playContent();
               }}

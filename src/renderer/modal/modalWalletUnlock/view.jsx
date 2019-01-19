@@ -6,7 +6,8 @@ import Button from 'component/button';
 
 type Props = {
   quit: () => void,
-  unlockWallet: string => void,
+  closeModal: () => void,
+  unlockWallet: (?string) => void,
   walletUnlockSucceded: boolean,
 };
 

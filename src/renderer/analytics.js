@@ -13,13 +13,13 @@ type Analytics = {
   track: (string, ?Object) => void,
   setUser: Object => void,
   toggle: (boolean, ?boolean) => void,
-  apiLogView: (string, string, string) => void,
+  apiLogView: (string, string, string, ?number, ?() => void) => void,
 };
 
 let analyticsEnabled: boolean = false;
 
 const analytics: Analytics = {
-  track: (name: string, payload: ?Object): void => {
+  track: (name, payload) => {
     if (analyticsEnabled) {
       if (payload) {
         mixpanel.track(name, payload);
@@ -28,7 +28,7 @@ const analytics: Analytics = {
       }
     }
   },
-  setUser: (user: Object): void => {
+  setUser: user => {
     if (user.id) {
       mixpanel.identify(user.id);
     }
@@ -44,13 +44,7 @@ const analytics: Analytics = {
     }
     analyticsEnabled = enabled;
   },
-  apiLogView: (
-    uri: string,
-    outpoint: string,
-    claimId: string,
-    timeToStart?: number,
-    onSuccessCb: ?() => void
-  ): void => {
+  apiLogView: (uri, outpoint, claimId, timeToStart, onSuccessCb) => {
     if (analyticsEnabled) {
       const params: {
         uri: string,
