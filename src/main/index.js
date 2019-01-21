@@ -67,6 +67,7 @@ if (isDev) {
 
 protocol.registerStandardSchemes(['content']);
 
+// @if TARGET='app'
 app.on('ready', async () => {
   // Windows WMIC returns lbrynet start with 2 spaces. https://github.com/yibn2008/find-process/issues/18
   const processListArgs = process.platform === 'win32' ? 'lbrynet  start' : 'lbrynet start';
@@ -92,6 +93,7 @@ app.on('ready', async () => {
     });
     daemon.launch();
   }
+  // @endif
 
   // https://electronjs.org/docs/api/protocol#protocolregisterstreamprotocolscheme-handler-completion
   // protocol.registerStreamProtocol(

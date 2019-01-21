@@ -103,8 +103,6 @@ class FileSelector extends React.PureComponent<Props> {
         />
         // @endif // @if TARGET='web'
         <input type="file" ref={this.fileInput} onChange={() => this.handleFileInputSelection()} />
-        <br />
-        <button type="submit">Submit</button>
         // @endif
       </FormRow>
     );

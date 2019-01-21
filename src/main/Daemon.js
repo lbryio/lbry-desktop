@@ -12,25 +12,24 @@ export default class Daemon {
   }
 
   launch() {
-    console.log('Not Launching daemon:', Daemon.path);
-    // this.subprocess = spawn(Daemon.path);
+    this.subprocess = spawn(Daemon.path);
 
-    // this.subprocess.stdout.on('data', data => console.log(`Daemon: ${data}`));
-    // this.subprocess.stderr.on('data', data => console.error(`Daemon: ${data}`));
-    // this.subprocess.on('exit', () => this.fire('exit'));
-    // this.subprocess.on('error', error => console.error(`Daemon: ${error}`));
+    this.subprocess.stdout.on('data', data => console.log(`Daemon: ${data}`));
+    this.subprocess.stderr.on('data', data => console.error(`Daemon: ${data}`));
+    this.subprocess.on('exit', () => this.fire('exit'));
+    this.subprocess.on('error', error => console.error(`Daemon: ${error}`));
   }
 
   quit() {
-    // if (process.platform === 'win32') {
-    //   try {
-    //     execSync(`taskkill /pid ${this.subprocess.pid} /t /f`);
-    //   } catch (error) {
-    //     console.error(error.message);
-    //   }
-    // } else {
-    //   this.subprocess.kill();
-    // }
+    if (process.platform === 'win32') {
+      try {
+        execSync(`taskkill /pid ${this.subprocess.pid} /t /f`);
+      } catch (error) {
+        console.error(error.message);
+      }
+    } else {
+      this.subprocess.kill();
+    }
   }
 
   // Follows the publish/subscribe pattern

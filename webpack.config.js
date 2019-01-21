@@ -4,16 +4,18 @@ const ELECTRON_RENDERER_PROCESS_ROOT = path.resolve(__dirname, 'src/renderer/');
 
 module.exports = env => {
   return {
-    mode: 'development',
+    // commented out because of webpack 3
+    // mode: 'development',
     entry: './src/web/index.js',
     output: {
       path: path.resolve(__dirname, 'dist/web'),
       filename: 'bundle.js',
       publicPath: '/static/main/app/'
     },
-    optimization: {
-      minimize: false
-    },
+    // commented out because of webpack 3
+    // optimization: {
+    //   minimize: false
+    // },
     target: "web",
     node: {
       fs: "empty",

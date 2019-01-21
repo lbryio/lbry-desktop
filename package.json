@@ -29,12 +29,13 @@
     "flow-defs": "flow-typed install",
     "precommit": "lint-staged",
     "preinstall": "yarn cache clean lbry-redux && yarn cache clean lbryinc",
-    "postinstall": "electron-builder install-app-deps && node build/downloadDaemon.js",
-    "build_web_dev": "webpack --mode development",
-    "build_web": "webpack --mode production"
+    "postinstall": "electron-builder install-app-deps && node build/downloadDaemon.js"
   },
   "dependencies": {
+    "@babel/core": "^7.2.2",
     "@types/three": "^0.93.1",
+    "babel": "^6.23.0",
+    "babel-core": "^6.26.3",
     "bluebird": "^3.5.1",
     "breakdance": "^3.0.1",
     "classnames": "^2.2.5",
@@ -132,6 +133,7 @@
     "sass-loader": "^6.0.7",
     "webpack": "^3.10.0",
     "webpack-build-notifier": "^0.1.23",
+    "webpack-cli": "^2.0.0",
     "yarnhook": "^0.2.0"
   },
   "engines": {
