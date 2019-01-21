@@ -10,11 +10,11 @@ module.exports = env => {
     output: {
       path: path.resolve(__dirname, 'dist/web'),
       filename: 'bundle.js',
-      publicPath: '/static/main/app/'
+      publicPath: '/static/app/'
     },
     // commented out because of webpack 3
     // optimization: {
-    //   minimize: false
+      // minimize: false,
     // },
     target: "web",
     node: {
@@ -41,6 +41,7 @@ module.exports = env => {
               loader: 'preprocess-loader',
               options: {
                 TARGET: 'web',
+                LBRYNET_PROXY_URL: '/api_proxy/',
                 ppOptions: {
                   type: 'js'
                 }
