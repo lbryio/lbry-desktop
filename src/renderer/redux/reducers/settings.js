@@ -10,24 +10,34 @@ function getLocalStorageSetting(setting, fallback) {
 const reducers = {};
 const defaultState = {
   clientSettings: {
-    instantPurchaseEnabled: getLocalStorageSetting(SETTINGS.INSTANT_PURCHASE_ENABLED, false),
-    instantPurchaseMax: getLocalStorageSetting(SETTINGS.INSTANT_PURCHASE_MAX, {
+    [SETTINGS.INSTANT_PURCHASE_ENABLED]: getLocalStorageSetting(
+      SETTINGS.INSTANT_PURCHASE_ENABLED,
+      false
+    ),
+    [SETTINGS.INSTANT_PURCHASE_MAX]: getLocalStorageSetting(SETTINGS.INSTANT_PURCHASE_MAX, {
       currency: 'LBC',
       amount: 0.1,
     }),
-    showNsfw: getLocalStorageSetting(SETTINGS.SHOW_NSFW, false),
-    showUnavailable: getLocalStorageSetting(SETTINGS.SHOW_UNAVAILABLE, true),
-    welcome_acknowledged: getLocalStorageSetting(SETTINGS.NEW_USER_ACKNOWLEDGED, false),
-    email_collection_acknowledged: getLocalStorageSetting(SETTINGS.EMAIL_COLLECTION_ACKNOWLEDGED),
-    credit_required_acknowledged: false, // this needs to be re-acknowledged every run
-    language: getLocalStorageSetting(SETTINGS.LANGUAGE, 'en'),
-    theme: getLocalStorageSetting(SETTINGS.THEME, 'light'),
-    themes: getLocalStorageSetting(SETTINGS.THEMES, []),
-    automaticDarkModeEnabled: getLocalStorageSetting(SETTINGS.AUTOMATIC_DARK_MODE_ENABLED, false),
-    autoplay: getLocalStorageSetting(SETTINGS.AUTOPLAY, false),
-    resultCount: Number(getLocalStorageSetting(SETTINGS.RESULT_COUNT, 50)),
-    autoDownload: getLocalStorageSetting(SETTINGS.AUTO_DOWNLOAD, true),
-    osNotificationsEnabled: Boolean(
+    [SETTINGS.SHOW_NSFW]: getLocalStorageSetting(SETTINGS.SHOW_NSFW, false),
+    [SETTINGS.SHOW_UNAVAILABLE]: getLocalStorageSetting(SETTINGS.SHOW_UNAVAILABLE, true),
+    [SETTINGS.NEW_USER_ACKNOWLEDGED]: getLocalStorageSetting(SETTINGS.NEW_USER_ACKNOWLEDGED, false),
+    [SETTINGS.EMAIL_COLLECTION_ACKNOWLEDGED]: getLocalStorageSetting(
+      SETTINGS.EMAIL_COLLECTION_ACKNOWLEDGED,
+      false
+    ),
+    [SETTINGS.FIRST_RUN_COMPLETED]: getLocalStorageSetting(SETTINGS.FIRST_RUN_COMPLETED, false),
+    [SETTINGS.CREDIT_REQUIRED_ACKNOWLEDGED]: false, // this needs to be re-acknowledged every run
+    [SETTINGS.LANGUAGE]: getLocalStorageSetting(SETTINGS.LANGUAGE, 'en'),
+    [SETTINGS.THEME]: getLocalStorageSetting(SETTINGS.THEME, 'dark'),
+    [SETTINGS.THEMES]: getLocalStorageSetting(SETTINGS.THEMES, []),
+    [SETTINGS.AUTOMATIC_DARK_MODE_ENABLED]: getLocalStorageSetting(
+      SETTINGS.AUTOMATIC_DARK_MODE_ENABLED,
+      false
+    ),
+    [SETTINGS.AUTOPLAY]: getLocalStorageSetting(SETTINGS.AUTOPLAY, false),
+    [SETTINGS.RESULT_COUNT]: Number(getLocalStorageSetting(SETTINGS.RESULT_COUNT, 50)),
+    [SETTINGS.AUTO_DOWNLOAD]: getLocalStorageSetting(SETTINGS.AUTO_DOWNLOAD, true),
+    [SETTINGS.OS_NOTIFICATIONS_ENABLED]: Boolean(
       getLocalStorageSetting(SETTINGS.OS_NOTIFICATIONS_ENABLED, true)
     ),
   },

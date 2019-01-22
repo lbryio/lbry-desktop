@@ -30,19 +30,6 @@ class AuthPage extends React.PureComponent<Props> {
     this.navigateIfAuthenticated(nextProps);
   }
 
-  getTitle() {
-    const { email, isPending, user } = this.props;
-
-    if (isPending || (user && !user.has_verified_email && !email)) {
-      return __('Human Proofing');
-    } else if (user && !user.has_verified_email) {
-      return __('Awaiting Confirmation');
-    } else if (user && !user.is_identity_verified && !user.is_reward_approved) {
-      return __('Final Verification');
-    }
-    return __('Welcome to LBRY');
-  }
-
   navigateIfAuthenticated = (props: Props) => {
     const { isPending, user, pathAfterAuth, navigate } = props;
     if (
@@ -78,24 +65,18 @@ class AuthPage extends React.PureComponent<Props> {
       <Page>
         {useTemplate ? (
           <section className="card card--section">
-            <header className="card__header card__header--flat">
-              <h2 className="card__title">{this.getTitle()}</h2>
-            </header>
+            {innerContent}
 
-            <div className="card__content">
-              {innerContent}
-
-              <p className="help">
-                {`${__(
-                  'This information is disclosed only to LBRY, Inc. and not to the LBRY network. It is only required to earn LBRY rewards and may be used to sync usage data across devices.'
-                )} `}
-                <Button
-                  button="link"
-                  onClick={() => navigate('/discover')}
-                  label={__('Return home.')}
-                />
-              </p>
-            </div>
+            <p className="help">
+              {`${__(
+                'This information is disclosed only to LBRY, Inc. and not to the LBRY network. It is only required to earn LBRY rewards and may be used to sync usage data across devices.'
+              )} `}
+              <Button
+                button="link"
+                onClick={() => navigate('/discover')}
+                label={__('Return home.')}
+              />
+            </p>
           </section>
         ) : (
           innerContent

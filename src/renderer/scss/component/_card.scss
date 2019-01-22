@@ -81,7 +81,7 @@
 //  C O N T E N T
 
 .card__content {
-  font-size: 1.15rem;
+  font-size: 1.25rem;
 
   p:not(:last-child) {
     margin-bottom: var(--spacing-vertical-medium);
@@ -174,8 +174,12 @@
 //  S U B T I T L E
 
 .card__subtitle {
-  font-size: 1.25rem;
+  font-size: 1.15rem;
   margin-bottom: var(--spacing-vertical-small);
+
+  p {
+    margin-bottom: var(--spacing-vertical-small);
+  }
 
   .badge {
     bottom: -0.12rem;

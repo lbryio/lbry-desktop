@@ -50,27 +50,33 @@ class UserEmailVerify extends React.PureComponent<Props> {
     const { cancelButton, email } = this.props;
 
     return (
-      <div>
-        <p>
-          {__('An email was sent to')} {email}.{' '}
-          {__('Follow the link and you will be good to go. This will update automatically.')}
-        </p>
+      <React.Fragment>
+        <header className="card__header">
+          <h2 className="card__title">{__('Waiting For Verification')}</h2>
+        </header>
 
-        <div className="card__actions">
-          <Button
-            button="primary"
-            label={__('Resend verification email')}
-            onClick={this.handleResendVerificationEmail}
-          />
-          {cancelButton}
+        <div className="card__content">
+          <p>
+            {__('An email was sent to')} {email}.{' '}
+            {__('Follow the link and you will be good to go. This will update automatically.')}
+          </p>
+
+          <div className="card__actions">
+            <Button
+              button="primary"
+              label={__('Resend verification email')}
+              onClick={this.handleResendVerificationEmail}
+            />
+            {cancelButton}
+          </div>
+
+          <p className="help">
+            {__('Email')} <Button button="link" href="mailto:help@lbry.io" label="help@lbry.io" />{' '}
+            or join our <Button button="link" href="https://chat.lbry.io" label="chat" />{' '}
+            {__('if you encounter any trouble verifying.')}
+          </p>
         </div>
-
-        <p className="help">
-          {__('Email')} <Button button="link" href="mailto:help@lbry.io" label="help@lbry.io" /> or
-          join our <Button button="link" href="https://chat.lbry.io" label="chat" />{' '}
-          {__('if you encounter any trouble verifying.')}
-        </p>
-      </div>
+      </React.Fragment>
     );
   }
 }

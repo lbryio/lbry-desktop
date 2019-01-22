@@ -21,6 +21,7 @@
 
 .badge--cost:not(.badge--large) {
   background-color: $lbry-yellow-2;
+  color: $lbry-black;
 
   html[data-theme='dark'] & {
     background-color: $lbry-yellow-3;

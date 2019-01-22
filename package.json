@@ -67,6 +67,7 @@
     "react-feather": "^1.0.8",
     "react-modal": "^3.1.7",
     "react-paginate": "^5.2.1",
+    "react-pose": "^4.0.5",
     "react-redux": "^5.0.3",
     "react-simplemde-editor": "^3.6.16",
     "react-toggle": "^4.0.2",

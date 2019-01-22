@@ -2,10 +2,12 @@
 import React from 'react';
 import Page from 'component/page';
 import CategoryList from 'component/categoryList';
+import FirstRun from 'component/firstRun';
 
 type Props = {
   fetchFeaturedUris: () => void,
   fetchRewardedContent: () => void,
+  fetchRewards: () => void,
   fetchingFeaturedUris: boolean,
   featuredUris: {},
 };
@@ -59,6 +61,7 @@ class DiscoverPage extends React.PureComponent<Props> {
     const failedToLoad = !fetchingFeaturedUris && !hasContent;
     return (
       <Page noPadding isLoading={!hasContent && fetchingFeaturedUris}>
+        <FirstRun />
         {hasContent &&
           Object.keys(featuredUris).map(
             category =>
