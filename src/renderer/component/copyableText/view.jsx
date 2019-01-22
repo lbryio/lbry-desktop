@@ -7,6 +7,7 @@ import Button from 'component/button';
 
 type Props = {
   copyable: string,
+  snackMessage: ?string,
   doToast: ({ message: string }) => void,
 };
 
@@ -20,7 +21,7 @@ export default class CopyableText extends React.PureComponent<Props> {
   input: ?HTMLInputElement;
 
   render() {
-    const { copyable, doToast } = this.props;
+    const { copyable, doToast, snackMessage } = this.props;
 
     return (
       <FormRow verticallyCentered stretch>
@@ -45,7 +46,7 @@ export default class CopyableText extends React.PureComponent<Props> {
           onClick={() => {
             clipboard.writeText(copyable);
             doToast({
-              message: __('Text copied'),
+              message: snackMessage || __('Text copied'),
             });
           }}
         />

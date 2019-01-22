@@ -216,14 +216,14 @@ class FilePage extends React.Component<Props> {
               {!claimIsMine && (
                 <Button
                   button="alt"
-                  icon={icons.GIFT}
+                  icon={icons.TIP}
                   label={__('Send a tip')}
                   onClick={() => openModal(MODALS.SEND_TIP, { uri })}
                 />
               )}
               <Button
                 button="alt"
-                icon={icons.GLOBE}
+                icon={icons.SHARE}
                 label={__('Share')}
                 onClick={() => openModal(MODALS.SOCIAL_SHARE, { uri, speechShareable })}
               />

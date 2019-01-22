@@ -37,7 +37,7 @@ export const customIcons = {
       <polyline strokeLinejoin="round" points="13 4 21 12 13 20" />
     </g>
   ),
-  [ICONS.EYE]: buildIcon(
+  [ICONS.VIEW]: buildIcon(
     <g fill="none" fillRule="evenodd">
       <path
         d="M2, 12 C2, 12 5, 5 12, 5 C19, 5 22, 12 22, 12 C22, 12 19, 19 12, 19 C5, 19 2, 12 2, 12 Z"

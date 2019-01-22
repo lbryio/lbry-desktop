@@ -20,7 +20,7 @@ type Props = {
 class FileActions extends React.PureComponent<Props> {
   render() {
     const { fileInfo, uri, openModal, claimIsMine, claimId } = this.props;
-    const showDelete = (claimIsMine || (fileInfo && Object.keys(fileInfo).length > 0)) ;
+    const showDelete = claimIsMine || (fileInfo && Object.keys(fileInfo).length > 0);
 
     return (
       <React.Fragment>
@@ -28,7 +28,7 @@ class FileActions extends React.PureComponent<Props> {
           <Tooltip onComponent body={__('Delete this file')}>
             <Button
               button="alt"
-              icon={ICONS.TRASH}
+              icon={ICONS.DELETE}
               description={__('Delete')}
               onClick={() => openModal(MODALS.CONFIRM_FILE_REMOVE, { uri })}
             />

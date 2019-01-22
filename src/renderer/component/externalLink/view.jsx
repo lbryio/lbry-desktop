@@ -34,7 +34,7 @@ class ExternalLink extends React.PureComponent<Props> {
       element = (
         <Button
           button="link"
-          iconRight={ICONS.EXTERNAL_LINK}
+          iconRight={ICONS.EXTERNAL}
           title={title || href}
           label={children}
           className="btn--external-link"

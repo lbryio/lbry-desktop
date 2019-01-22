@@ -17,7 +17,7 @@ class VideoPlayButton extends React.PureComponent<Props> {
     const disabled = isLoading || fileInfo === undefined;
     const doesPlayback = ['audio', 'video'].indexOf(mediaType) !== -1;
     const label = doesPlayback ? __('Play') : __('View');
-    const icon = doesPlayback ? ICONS.PLAY : ICONS.EYE;
+    const icon = doesPlayback ? ICONS.PLAY : ICONS.VIEW;
     return (
       <Button
         disabled={disabled}

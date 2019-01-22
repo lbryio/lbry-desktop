@@ -47,14 +47,14 @@ class InviteList extends React.PureComponent<Props> {
                     <td>{invitee.email}</td>
                     <td className="text-center">
                       {invitee.invite_accepted ? (
-                        <Icon icon={ICONS.CHECK} />
+                        <Icon icon={ICONS.COMPLETED} />
                       ) : (
                         <span className="empty">{__('unused')}</span>
                       )}
                     </td>
                     <td className="text-center">
                       {invitee.invite_reward_claimed ? (
-                        <Icon icon={ICONS.CHECK} />
+                        <Icon icon={ICONS.COMPLETED} />
                       ) : invitee.invite_reward_claimable ? (
                         <RewardLink label={__('claim')} reward_type={rewards.TYPE_REFERRAL} />
                       ) : (

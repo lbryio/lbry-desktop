@@ -82,7 +82,7 @@ class SocialShare extends React.PureComponent<Props> {
               </ToolTip>
               <ToolTip onComponent body={__('View on Spee.ch')}>
                 <Button
-                  icon={ICONS.GLOBE}
+                  icon={ICONS.WEB}
                   iconColor="blue"
                   button="alt"
                   label={__('')}

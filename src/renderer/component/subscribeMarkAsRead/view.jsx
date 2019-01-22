@@ -33,7 +33,7 @@ export default class MarkAsRead extends PureComponent<Props> {
       <Button
         noPadding
         button="inverse"
-        icon={ICONS.CHECK_SIMPLE}
+        icon={ICONS.COMPLETE}
         label={label}
         onClick={this.handleClick}
       />

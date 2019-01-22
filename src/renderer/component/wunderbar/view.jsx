@@ -45,7 +45,7 @@ class WunderBar extends React.PureComponent<Props> {
       case 'file':
         return ICONS.LOCAL;
       case 'channel':
-        return ICONS.AT_SIGN;
+        return ICONS.CHANNEL;
       default:
         return ICONS.SEARCH;
     }

@@ -151,7 +151,7 @@ class HelpPage extends React.PureComponent<Props, State> {
               <Button
                 button="primary"
                 label={__('Join Our Chat')}
-                icon={icons.MESSAGE}
+                icon={icons.CHAT}
                 href="https://chat.lbry.io"
               />
             </div>
