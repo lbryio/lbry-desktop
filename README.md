@@ -1,4 +1,4 @@
-# LBRY App!
+# LBRY App
 
 [![MIT licensed](https://img.shields.io/dub/l/vibe-d.svg?style=flat)](https://github.com/lbryio/lbry-desktop/blob/master/LICENSE)
 [![GitHub release](https://img.shields.io/github/release/lbryio/lbry-desktop.svg)](https://GitHub.com/lbryio/lbry-desktop/releases/)
