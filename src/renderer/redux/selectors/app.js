@@ -106,9 +106,6 @@ export const selectNavLinks = createSelector(
       page === 'history' ||
       page === 'backup';
 
-    const isMyLbryPage = page =>
-      page === 'downloaded' || page === 'published' || page === 'user_history';
-
     const previousStack = historyStack.slice().reverse();
 
     const getPreviousSubLinkPath = checkIfValidPage => {
@@ -130,16 +127,12 @@ export const selectNavLinks = createSelector(
       if (category === 'wallet') {
         const previousPath = getPreviousSubLinkPath(isWalletPage);
         return previousPath || '/wallet';
-      } else if (category === 'myLbry') {
-        const previousPath = getPreviousSubLinkPath(isMyLbryPage);
-        return previousPath || '/downloaded';
       }
 
       return undefined;
     };
 
     const isCurrentlyWalletPage = isWalletPage(currentPage);
-    const isCurrentlyMyLbryPage = isMyLbryPage(currentPage);
 
     const walletSubLinks = [
       {
@@ -174,24 +167,6 @@ export const selectNavLinks = createSelector(
       },
     ];
 
-    const myLbrySubLinks = [
-      {
-        label: 'Downloads',
-        path: '/downloaded',
-        active: currentPage === 'downloaded',
-      },
-      {
-        label: 'Publishes',
-        path: '/published',
-        active: currentPage === 'published',
-      },
-      {
-        label: 'History',
-        path: '/user_history',
-        active: currentPage === 'user_history',
-      },
-    ];
-
     const navLinks = {
       primary: [
         {
@@ -204,35 +179,40 @@ export const selectNavLinks = createSelector(
           label: 'Subscriptions',
           path: '/subscriptions',
           active: currentPage === 'subscriptions',
-          icon: icons.HEART,
+          icon: icons.SUBSCRIPTION,
         },
       ],
       secondary: [
         {
           label: 'Wallet',
-          icon: icons.CREDIT_CARD,
+          icon: icons.WALLET,
           subLinks: walletSubLinks,
           path: isCurrentlyWalletPage ? '/wallet' : getActiveSublink('wallet'),
           active: isWalletPage(currentPage),
         },
         {
-          label: 'My LBRY',
-          icon: icons.LOCAL,
-          subLinks: myLbrySubLinks,
-          path: isCurrentlyMyLbryPage ? '/downloaded' : getActiveSublink('myLbry'),
-          active: isMyLbryPage(currentPage),
-        },
-        {
           label: 'Invite',
-          icon: icons.USERS,
+          icon: icons.INVITE,
           path: '/invite',
           active: currentPage === 'invite',
         },
         {
-          label: 'Publish',
-          icon: icons.UPLOAD,
-          path: '/publish',
-          active: currentPage === 'publish',
+          label: 'Downloads',
+          icon: icons.LOCAL,
+          path: '/downloaded',
+          active: currentPage === 'downloaded',
+        },
+        {
+          label: 'Publishes',
+          icon: icons.PUBLISHED,
+          path: '/published',
+          active: currentPage === 'published',
+        },
+        {
+          label: 'History',
+          icon: icons.HISTORY,
+          path: '/user_history',
+          active: currentPage === 'user_history',
         },
         {
           label: 'Settings',

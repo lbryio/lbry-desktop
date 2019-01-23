@@ -2,23 +2,31 @@
 import * as ICONS from 'constants/icons';
 import React from 'react';
 
+type IconProps = {
+  size: number,
+  color: string,
+};
+
 // Returns a react component
-const buildIcon = iconStrokes => ({ size = 24, color = 'currentColor', ...otherProps }) => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    viewBox="0 0 24 24"
-    width={size}
-    height={size}
-    fill="none"
-    stroke={color}
-    strokeWidth="2"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-    {...otherProps}
-  >
-    {iconStrokes}
-  </svg>
-);
+const buildIcon = iconStrokes => (props: IconProps) => {
+  const { size = 24, color = 'currentColor', ...otherProps } = props;
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 24 24"
+      width={size}
+      height={size}
+      fill="none"
+      stroke={color}
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      {...otherProps}
+    >
+      {iconStrokes}
+    </svg>
+  );
+};
 
 export const customIcons = {
   [ICONS.ARROW_LEFT]: buildIcon(
@@ -90,6 +98,15 @@ export const customIcons = {
         strokeLinejoin="round"
         transform="translate(12.000000, 12.500000) scale(1, -1) translate(-12.000000, -12.500000)"
         points="15 11 12 14 9 11"
+      />
+    </g>
+  ),
+  [ICONS.PUBLISHED]: buildIcon(
+    <g fill="none" fillRule="evenodd" strokeLinecap="round">
+      <path
+        d="M8, 18 L5, 18 L5, 18 C2.790861, 18 1, 16.209139 1, 14 C1, 11.790861 2.790861, 10 5, 10 C5.35840468, 10 5.70579988, 10.0471371 6.03632437, 10.1355501 C6.01233106, 9.92702603 6, 9.71495305 6, 9.5 C6, 6.46243388 8.46243388, 4 11.5, 4 C14.0673313, 4 16.2238156, 5.7590449 16.8299648, 8.1376465 C17.2052921, 8.04765874 17.5970804, 8 18, 8 C20.7614237, 8 23, 10.2385763 23, 13 C23, 15.7614237 20.7614237, 18 18, 18 L16, 18, L8, 18"
+        strokeLinejoin="round"
+        transform="scale(1, 1.2) translate(0, -2)"
       />
     </g>
   ),
