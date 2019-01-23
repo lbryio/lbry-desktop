@@ -39,3 +39,4 @@ export const TWITTER = 'Twitter';
 export const WALLET = 'CreditCard';
 export const SETTINGS = 'Settings';
 export const INVITE = 'Users';
+export const FILE = 'File';
