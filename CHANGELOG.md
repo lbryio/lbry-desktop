@@ -12,9 +12,25 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [0.27.0] - 2018-01-15
 
+- More language options on publish page ([#2201](https://github.com/lbryio/lbry-desktop/pull/2201))
+
+### Changed
+
+### Fixed
+
+- Rewards table alignment on small screens ([#2197](https://github.com/lbryio/lbry-desktop/pull/2197))
+- File thumbnail issues when resiszing screen ([#2193](https://github.com/lbryio/lbry-desktop/pull/2197))
+
+## [0.27.0] - 2018-01-15
+
+### Added
+
+- Auto email confirmation ([#2169](https://github.com/lbryio/lbry-desktop/pull/2169))
+
 ### Changed
 
 - App redesign with shared colors component ([#2144](https://github.com/lbryio/lbry-desktop/pull/2144))
+- Upgraded [LBRY SDK 0.30.4](https://github.com/lbryio/lbry/releases/tag/v0.30.4) to improve network stability
 
 ### Fixed
 

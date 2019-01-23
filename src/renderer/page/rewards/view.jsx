@@ -152,7 +152,7 @@ class RewardsPage extends PureComponent<Props> {
           'card--disabled': isNotEligible,
         })}
       >
-        {rewards.map(reward => <RewardTile key={reward.reward_type} reward={reward} />)}
+        {rewards.map(reward => <RewardTile key={reward.claim_code} reward={reward} />)}
         {this.renderCustomRewardCode()}
       </div>
     );

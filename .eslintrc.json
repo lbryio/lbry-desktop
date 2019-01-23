@@ -49,6 +49,8 @@
     "consistent-return": 0,
     "no-prototype-builtins": 0,
     "flowtype/space-after-type-colon": [2, "always", { "allowLineBreak": true }],
-    "no-restricted-syntax": 0
+    "no-restricted-syntax": 0,
+    "no-empty": 0,
+    "react/prefer-stateless-function": 0
   }
 }

@@ -22,7 +22,7 @@ class ModalFirstReward extends React.PureComponent<Props> {
           <p>{__('You just earned your first reward!')}</p>
           <p>
             {__(
-              "This reward will show in your Wallet in the top right momentarily (if it hasn't already)."
+              "This reward will show in your Wallet in the top left momentarily (if it hasn't already)."
             )}
           </p>
           <p>

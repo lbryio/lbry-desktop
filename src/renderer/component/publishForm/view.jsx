@@ -582,6 +582,12 @@ class PublishForm extends React.PureComponent<Props> {
                   <option value="jp">{__('Japanese')}</option>
                   <option value="ru">{__('Russian')}</option>
                   <option value="es">{__('Spanish')}</option>
+                  <option value="id">{__('Indonesian')}</option>
+                  <option value="it">{__('Italian')}</option>
+                  <option value="nl">{__('Dutch')}</option>
+                  <option value="tr">{__('Turkish')}</option>
+                  <option value="pl">{__('Polish')}</option>
+                  <option value="ms">{__('Malay')}</option>
                 </FormField>
               </FormRow>
 

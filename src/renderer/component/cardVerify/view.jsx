@@ -29,8 +29,12 @@ type Props = {
   token: string,
 };
 
-class CardVerify extends React.Component {
-  constructor(props) {
+type State = {
+  open: boolean,
+};
+
+class CardVerify extends React.Component<Props, State> {
+  constructor(props: Props) {
     super(props);
     this.state = {
       open: false,

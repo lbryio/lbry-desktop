@@ -11,7 +11,10 @@ import LoadingScreen from 'component/common/loading-screen';
 
 class MediaPlayer extends React.PureComponent {
   static MP3_CONTENT_TYPES = ['audio/mpeg3', 'audio/mpeg'];
+  static SANDBOX_TYPES = ['application/x-lbry', 'application/x-ext-lbry'];
   static FILE_MEDIA_TYPES = ['text', 'script', 'e-book', 'comic-book', 'document', '3D-file'];
+  static SANDBOX_SET_BASE_URL = 'http://localhost:5278/set/';
+  static SANDBOX_CONTENT_BASE_URL = 'http://localhost:5278';
 
   constructor(props) {
     super(props);
@@ -193,19 +196,36 @@ class MediaPlayer extends React.PureComponent {
     // Files supported by render-media
     const { contentType, mediaType } = this.props;
 
-    return Object.values(player.mime).indexOf(contentType) !== -1;
+    return (
+      Object.values(player.mime).indexOf(contentType) !== -1 ||
+      MediaPlayer.SANDBOX_TYPES.indexOf(contentType) > -1
+    );
   }
 
   fileType() {
     // This files are supported using a custom viewer
-    const { mediaType } = this.props;
+    const { mediaType, contentType } = this.props;
 
-    return MediaPlayer.FILE_MEDIA_TYPES.indexOf(mediaType) > -1;
+    return (
+      MediaPlayer.FILE_MEDIA_TYPES.indexOf(mediaType) > -1 ||
+      MediaPlayer.SANDBOX_TYPES.indexOf(contentType) > -1
+    );
   }
 
   renderFile() {
     // This is what render-media does with unplayable files
-    const { fileName, downloadPath, contentType, mediaType } = this.props;
+    const { claim, fileName, downloadPath, contentType, mediaType } = this.props;
+
+    if (MediaPlayer.SANDBOX_TYPES.indexOf(contentType) > -1) {
+      const outpoint = `${claim.txid}:${claim.nout}`;
+
+      return fetch(`${MediaPlayer.SANDBOX_SET_BASE_URL}${outpoint}`)
+        .then(res => res.text())
+        .then(url => {
+          const fileSource = { url: `${MediaPlayer.SANDBOX_CONTENT_BASE_URL}${url}` };
+          return this.setState({ fileSource });
+        });
+    }
 
     // File to render
     const fileSource = {
@@ -241,7 +261,7 @@ class MediaPlayer extends React.PureComponent {
   }
 
   showLoadingScreen(isFileType, isPlayableType) {
-    const { mediaType } = this.props;
+    const { mediaType, contentType } = this.props;
     const { hasMetadata, unplayable, unsupported, fileSource } = this.state;
 
     const loader = {
@@ -259,8 +279,9 @@ class MediaPlayer extends React.PureComponent {
 
     // Files
     const isLoadingFile = !fileSource && isFileType;
+    const isLbryPackage = /application\/x(-ext)?-lbry$/.test(contentType);
     const isUnsupported =
-      (mediaType === 'application' || !this.supportedType()) && !isFileType && !isPlayableType;
+      !isLbryPackage && (!this.supportedType() && !isFileType && !isPlayableType);
 
     // Media (audio, video)
     const isUnplayable = isPlayableType && unplayable;
@@ -274,6 +295,8 @@ class MediaPlayer extends React.PureComponent {
       // Show unsupported error message
     } else if (isUnsupported || isUnplayable) {
       loader.loadingStatus = isUnsupported ? unsupportedMessage : unplayableMessage;
+    } else if (isLbryPackage && !isLoadingFile) {
+      loader.loadingStatus = false;
     }
 
     return loader;

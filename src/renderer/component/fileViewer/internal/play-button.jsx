@@ -5,7 +5,7 @@ import Button from 'component/button';
 import * as ICONS from 'constants/icons';
 
 type Props = {
-  play: () => void,
+  play: (SyntheticInputEvent<*>) => void,
   isLoading: boolean,
   mediaType: string,
   fileInfo: ?{},

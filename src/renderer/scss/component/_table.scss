@@ -27,8 +27,8 @@
       color: inherit;
     }
 
-    &:not(:first-of-type) {
-      padding-right: var(--spacing-vertical-medium);
+    &:not(:last-of-type) {
+      padding-right: var(--spacing-vertical-large);
     }
 
     .btn:not(.btn--link) {
@@ -120,5 +120,23 @@
 
   td:nth-of-type(5) {
     width: 15%;
+  }
+}
+
+.table--rewards {
+  td:nth-of-type(1) {
+    width: 40%;
+  }
+
+  td:nth-of-type(2) {
+    width: 17.5%;
+  }
+
+  td:nth-of-type(3) {
+    width: 17.5%;
+  }
+
+  td:nth-of-type(4) {
+    width: 25%;
   }
 }

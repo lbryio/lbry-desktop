@@ -11,4 +11,5 @@ export type Reward = {
   reward_version: ?string,
   transaction_id: ?string,
   updated_at: ?string,
+  claim_code: string,
 };
