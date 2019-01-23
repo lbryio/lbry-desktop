@@ -57,7 +57,7 @@ export class Modal extends React.PureComponent<ModalProps> {
       <ReactModal
         {...modalProps}
         onRequestClose={onAborted || onConfirmed}
-        className={classnames(className, {
+        className={classnames('card', className, {
           modal: !fullScreen,
           'modal--fullscreen': fullScreen,
         })}

@@ -13,10 +13,11 @@ type Props = {
 
 class ModalEmailCollection extends React.PureComponent<Props> {
   getTitle() {
-    const { user } = this.props;
-    if (user && !user.has_verified_email) {
-      return __('Awaiting Confirmation');
-    }
+    // const { user } = this.props;
+    //
+    // if (user && user.email && !user.has_verified_email) {
+    //   return __('Awaiting Confirmation');
+    // }
 
     return __('Can We Stay In Touch?');
   }

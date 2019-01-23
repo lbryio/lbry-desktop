@@ -6,7 +6,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 
-### Added
+### Fixed
+
+- Channel name overlap on homepage when screen size is small
+
+## [0.27.0] - 2018-01-15
 
 - More language options on publish page ([#2201](https://github.com/lbryio/lbry-desktop/pull/2201))
 

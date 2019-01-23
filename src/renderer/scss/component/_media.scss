@@ -232,6 +232,15 @@
 .media__subtitle {
   font-size: 1rem;
   position: relative;
+
+  // Quick fix to fix channel overlapping on the home page. This style shouldn't exist here.
+  .btn--uri-indicator {
+    width: 100%;
+    text-align: left;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
 }
 
 .media__subtitle--large {
