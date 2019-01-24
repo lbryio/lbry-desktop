@@ -272,13 +272,24 @@ class CategoryList extends PureComponent<Props, State> {
           </p>
         ) : (
           <ul className="media-scrollhouse" ref={this.scrollWrapper}>
+            {/*
+              `names` and `channelClaims` should be combined
+              it's set up to take a list of names (uris) to show as cards
+              or a channel link, which it uses for fetch a list of names
+              having both makes it really confusing
+
+              will come back to this once we determine how we will receive channel links
+              from the homepage uris api call
+              - sean
+            */}
             {names &&
-              names.length &&
+              !!names.length &&
               names.map(name => (
                 <FileCard showSubscribedLogo key={name} uri={normalizeURI(name)} />
               ))}
 
-            {channelClaims &&
+            {(!names || !names.length) &&
+              channelClaims &&
               channelClaims.length &&
               channelClaims
                 // Only show the first 10 claims, regardless of the amount we have on a channel page
