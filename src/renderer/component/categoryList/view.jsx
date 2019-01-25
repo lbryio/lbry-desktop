@@ -241,6 +241,7 @@ class CategoryList extends PureComponent<Props, State> {
             )}
             {isCommunityTopBids && (
               <ToolTip
+                direction="top"
                 label={__("What's this?")}
                 body={__(
                   'Community Content is a public space where anyone can share content with the rest of the LBRY community. Bid on the names from "one" to "ten" to put your content here!'

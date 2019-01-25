@@ -1,4 +1,3 @@
-import { createLogger } from 'redux-logger';
 import appReducer from 'redux/reducers/app';
 import availabilityReducer from 'redux/reducers/availability';
 import contentReducer from 'redux/reducers/content';
@@ -74,13 +73,6 @@ const reducers = combineReducers({
 
 const bulkThunk = createBulkThunkMiddleware();
 const middleware = [thunk, bulkThunk];
-
-if (app.env === 'development') {
-  const logger = createLogger({
-    collapsed: true,
-  });
-  middleware.push(logger);
-}
 
 // eslint-disable-next-line no-underscore-dangle
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
