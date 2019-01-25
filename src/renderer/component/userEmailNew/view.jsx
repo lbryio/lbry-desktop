@@ -42,16 +42,14 @@ class UserEmailNew extends React.PureComponent<Props, State> {
 
     return (
       <React.Fragment>
-        <p>
-          {__("We'll let you know about LBRY updates, security issues, and great new content.")}
-        </p>
+        <header className="card__header">
+          <h2 className="card__title">{__("Don't Miss Out")}</h2>
+          <p className="card__subtitle">
+            {__("We'll let you know about LBRY updates, security issues, and great new content.")}
+          </p>
+        </header>
 
-        <p>
-          {__(
-            'In addition, your email address will never be sold and you can unsubscribe at any time.'
-          )}
-        </p>
-        <Form onSubmit={this.handleSubmit}>
+        <Form className="card__content" onSubmit={this.handleSubmit}>
           <FormRow>
             <FormField
               stretch
@@ -66,10 +64,13 @@ class UserEmailNew extends React.PureComponent<Props, State> {
           </FormRow>
 
           <div className="card__actions">
-            <Submit label="Submit" disabled={isPending} />
+            <Submit label="Submit" disabled={isPending || !this.state.email} />
             {cancelButton}
           </div>
         </Form>
+        <p className="help">
+          {__('Your email address will never be sold and you can unsubscribe at any time.')}
+        </p>
       </React.Fragment>
     );
   }

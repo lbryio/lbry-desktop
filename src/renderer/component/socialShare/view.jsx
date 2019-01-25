@@ -61,7 +61,7 @@ class SocialShare extends React.PureComponent<Props> {
           <div className="card__content">
             <label className="card__subtitle">{__('Web link')}</label>
             <CopyableText copyable={speechURL} />
-            <div className="card__actions card__actions--center card__actions--top-space">
+            <div className="card__actions card__actions--center">
               <ToolTip onComponent body={__('Facebook')}>
                 <Button
                   iconColor="blue"
@@ -95,7 +95,7 @@ class SocialShare extends React.PureComponent<Props> {
         <div className="card__content">
           <label className="card__subtitle">{__('LBRY App link')}</label>
           <CopyableText copyable={lbryURL} noSnackbar />
-          <div className="card__actions card__actions--center card__actions--top-space">
+          <div className="card__actions card__actions--center">
             <ToolTip onComponent body={__('Facebook')}>
               <Button
                 iconColor="blue"

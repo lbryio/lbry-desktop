@@ -6,7 +6,9 @@ import ReactModal from 'react-modal';
 import throttle from 'util/throttle';
 import SideBar from 'component/sideBar';
 import Header from 'component/header';
-import { openContextMenu } from '../../util/context-menu';
+import { openContextMenu } from 'util/context-menu';
+import EnhancedLayoutListener from 'util/enhanced-layout';
+import Native from 'native';
 
 const TWO_POINT_FIVE_MINUTES = 1000 * 60 * 2.5;
 
@@ -18,6 +20,8 @@ type Props = {
   pageTitle: ?string,
   theme: string,
   updateBlockHeight: () => void,
+  toggleEnhancedLayout: () => void,
+  enhancedLayout: boolean,
 };
 
 class App extends React.PureComponent<Props> {
@@ -41,16 +45,17 @@ class App extends React.PureComponent<Props> {
   }
 
   componentDidMount() {
-    const { updateBlockHeight } = this.props;
+    const { updateBlockHeight, toggleEnhancedLayout } = this.props;
 
     const mainContent = document.getElementById('content');
     this.mainContent = mainContent;
-
     if (this.mainContent) {
       this.mainContent.addEventListener('scroll', throttle(this.scrollListener, 750));
     }
 
     ReactModal.setAppElement('#window'); // fuck this
+
+    this.enhance = new EnhancedLayoutListener(() => toggleEnhancedLayout());
 
     updateBlockHeight();
     setInterval(() => {
@@ -81,6 +86,8 @@ class App extends React.PureComponent<Props> {
     if (this.mainContent) {
       this.mainContent.removeEventListener('scroll', this.scrollListener);
     }
+
+    this.enhance = null;
   }
 
   setTitleFromProps = (title: ?string) => {
@@ -96,12 +103,22 @@ class App extends React.PureComponent<Props> {
   }
 
   mainContent: ?HTMLElement;
+  enhance: ?any;
 
   render() {
+    const { enhancedLayout } = this.props;
+
     return (
       <div id="window" onContextMenu={e => openContextMenu(e)}>
         <Header />
         <main className="page">
+          {enhancedLayout && (
+            <img
+              alt="Friendly gerbil"
+              className="yrbl--enhanced"
+              src={Native.imagePath('gerbil-happy.png')}
+            />
+          )}
           <SideBar />
           <div className="content" id="content">
             <Router />

@@ -263,3 +263,5 @@ export const selectModal = createSelector(selectState, state => {
     modalProps: state.modalProps,
   };
 });
+
+export const selectEnhancedLayout = createSelector(selectState, state => state.enhancedLayout);

@@ -613,10 +613,10 @@
 
 .media-group__header-navigation {
   display: flex;
-  padding-right: var(--spacing-vertical-medium);
+  padding-right: var(--spacing-vertical-large);
 
   button:not(:last-of-type) {
-    margin-right: var(--spacing-vertical-tiny);
+    margin-right: var(--spacing-vertical-medium);
   }
 
   svg {

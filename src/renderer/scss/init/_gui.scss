@@ -150,7 +150,6 @@ input {
 .card {
   .help {
     margin-bottom: 0;
-    margin-top: var(--spacing-vertical-large);
   }
 }
 
@@ -160,6 +159,7 @@ input {
   color: $lbry-gray-5;
   display: block;
   padding: 1rem;
+  margin-top: var(--spacing-vertical-large);
   margin-bottom: var(--spacing-vertical-large);
 
   html[data-theme='dark'] & {

@@ -34,6 +34,7 @@ export type AppState = {
   isUpgradeAvailable: ?boolean,
   isUpgradeSkipped: ?boolean,
   hasClickedComment: boolean,
+  enhancedLayout: boolean,
 };
 
 const defaultState: AppState = {
@@ -57,6 +58,7 @@ const defaultState: AppState = {
   checkUpgradeTimer: undefined,
   isUpgradeAvailable: undefined,
   isUpgradeSkipped: undefined,
+  enhancedLayout: false,
 };
 
 reducers[ACTIONS.DAEMON_READY] = state =>
@@ -211,6 +213,11 @@ reducers[ACTIONS.HIDE_MODAL] = state =>
 reducers[ACTIONS.AUTHENTICATION_FAILURE] = state =>
   Object.assign({}, state, {
     modal: MODALS.AUTHENTICATION_FAILURE,
+  });
+
+reducers[ACTIONS.ENNNHHHAAANNNCEEE] = state =>
+  Object.assign({}, state, {
+    enhancedLayout: !state.enhancedLayout,
   });
 
 export default function reducer(state: AppState = defaultState, action: any) {
