@@ -9,6 +9,7 @@ type Props = {
   icon?: boolean,
   direction: string,
   onComponent?: boolean, // extra padding to account for button/form field size
+  alwaysVisible?: boolean, // should tooltip stay open, guide callbacks will close it manually
 };
 
 type State = {
@@ -18,6 +19,7 @@ type State = {
 class ToolTip extends React.PureComponent<Props, State> {
   static defaultProps = {
     direction: 'bottom',
+    alwaysVisible: false,
   };
 
   constructor(props: Props) {
@@ -88,7 +90,7 @@ class ToolTip extends React.PureComponent<Props, State> {
 
   render() {
     const { direction } = this.state;
-    const { children, label, body, icon, onComponent } = this.props;
+    const { children, label, body, icon, onComponent, alwaysVisible } = this.props;
 
     const tooltipContent = children || label;
     const bodyLength = body.length;
@@ -106,6 +108,7 @@ class ToolTip extends React.PureComponent<Props, State> {
           'tooltip--bottom': direction === 'bottom',
           'tooltip--left': direction === 'left',
           'tooltip--on-component': onComponent,
+          'tooltip--always-visible': alwaysVisible,
         })}
       >
         {tooltipContent}
@@ -113,7 +116,7 @@ class ToolTip extends React.PureComponent<Props, State> {
           ref={ref => {
             this.tooltip = ref;
           }}
-          className={classnames('tooltip__body', {
+          className={classnames('card tooltip__body', {
             'tooltip__body--short': isShortDescription,
           })}
         >

@@ -1,10 +1,19 @@
+.yrbl-wrap {
+  align-items: center;
+  display: flex;
+  justify-content: center;
+  vertical-align: middle;
+  margin-bottom: var(--spacing-vertical-large);
+}
+
 .yrbl {
   height: 300px;
+  margin-right: var(--spacing-vertical-large);
 }
 
 .yrbl--first-run {
   align-self: center;
-  height: 200px;
+  height: 250px;
   width: auto;
   margin: 0 var(--spacing-vertical-large);
 }

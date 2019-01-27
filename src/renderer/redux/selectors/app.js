@@ -1,6 +1,9 @@
+import * as SETTINGS from 'constants/settings';
+import * as PAGES from 'constants/pages';
+import * as ICONS from 'constants/icons';
 import { createSelector } from 'reselect';
 import { selectCurrentPage, selectHistoryStack } from 'lbry-redux';
-import * as icons from 'constants/icons';
+import { makeSelectClientSetting } from 'redux/selectors/settings';
 
 export const selectState = state => state.app || {};
 
@@ -97,15 +100,29 @@ export const selectUpgradeTimer = createSelector(selectState, state => state.che
 export const selectNavLinks = createSelector(
   selectCurrentPage,
   selectHistoryStack,
-  (currentPage, historyStack) => {
-    const isWalletPage = page =>
-      page === 'wallet' ||
-      page === 'send' ||
-      page === 'getcredits' ||
-      page === 'rewards' ||
-      page === 'history' ||
-      page === 'backup';
+  makeSelectClientSetting(SETTINGS.FIRST_RUN_COMPLETED),
+  makeSelectClientSetting(SETTINGS.INVITE_ACKNOWLEDGED),
+  (currentPage, historyStack, firstRunCompleted, inviteAcknowledged) => {
+    // Determine if any links should show a tooltip for a guided tour
+    // It will only show one at a time, in the order they are set.
+    const guidedTourItem = [
+      {
+        page: PAGES.INVITE,
+        hasBeenCompleted: inviteAcknowledged,
+        guide: 'Check this out!',
+      },
+      // Add more items below for tooltip guides that will happen after a user has completed the invite guide
+    ].filter(({ hasBeenCompleted }) => !hasBeenCompleted)[0];
 
+    const isWalletPage = page =>
+      page === PAGES.WALLET ||
+      page === PAGES.SEND ||
+      page === PAGES.GET_CREDITS ||
+      page === PAGES.REWARDS ||
+      page === PAGES.HISTORY ||
+      page === PAGES.BACKUP;
+
+    const isCurrentlyWalletPage = isWalletPage(currentPage);
     const previousStack = historyStack.slice().reverse();
 
     const getPreviousSubLinkPath = checkIfValidPage => {
@@ -124,107 +141,92 @@ export const selectNavLinks = createSelector(
 
     // Gets the last active sublink in a section
     const getActiveSublink = category => {
-      if (category === 'wallet') {
+      if (category === PAGES.WALLET) {
         const previousPath = getPreviousSubLinkPath(isWalletPage);
-        return previousPath || '/wallet';
+        return previousPath || `/${PAGES.WALLET}`;
       }
 
       return undefined;
     };
 
-    const isCurrentlyWalletPage = isWalletPage(currentPage);
+    // Is this path the first unacknowledged item in the guided tour list
+    const getGuideIfNecessary = page => {
+      if (!firstRunCompleted) {
+        return null;
+      }
+      return guidedTourItem && guidedTourItem.page === page ? guidedTourItem.guide : null;
+    };
+
+    const buildLink = (label, page) => ({
+      label,
+      path: `/${page}`,
+      active: currentPage === page,
+      guide: getGuideIfNecessary(page),
+    });
 
     const walletSubLinks = [
       {
-        label: 'Overview',
-        path: '/wallet',
-        active: currentPage === 'wallet',
+        ...buildLink('Overview', PAGES.WALLET),
       },
       {
-        label: 'Send & Receive',
-        path: '/send',
-        active: currentPage === 'send',
+        ...buildLink('Send & Receive', PAGES.SEND),
       },
       {
-        label: 'Transactions',
-        path: '/history',
-        active: currentPage === 'history',
+        ...buildLink('Transactions', PAGES.HISTORY),
       },
       {
-        label: 'Get Credits',
-        path: '/getcredits',
-        active: currentPage === 'getcredits',
+        ...buildLink('Get Credits', PAGES.GET_CREDITS),
       },
       {
-        label: 'Rewards',
-        path: '/rewards',
-        active: currentPage === 'rewards',
+        ...buildLink('Rewards', PAGES.REWARDS),
       },
       {
-        label: 'Backup',
-        path: '/backup',
-        active: currentPage === 'backup',
+        ...buildLink('Backup', PAGES.BACKUP),
       },
     ];
 
     const navLinks = {
       primary: [
         {
-          label: 'Explore',
-          path: '/discover',
-          active: currentPage === 'discover',
-          icon: icons.HOME,
+          ...buildLink('Explore', PAGES.DISCOVER),
+          icon: ICONS.HOME,
         },
         {
-          label: 'Subscriptions',
-          path: '/subscriptions',
-          active: currentPage === 'subscriptions',
-          icon: icons.SUBSCRIPTION,
+          ...buildLink('Subscriptions', PAGES.SUBSCRIPTIONS),
+          icon: ICONS.SUBSCRIPTION,
         },
       ],
       secondary: [
         {
           label: 'Wallet',
-          icon: icons.WALLET,
+          icon: ICONS.WALLET,
           subLinks: walletSubLinks,
-          path: isCurrentlyWalletPage ? '/wallet' : getActiveSublink('wallet'),
+          path: isCurrentlyWalletPage ? `/${PAGES.WALLET}` : getActiveSublink(PAGES.WALLET),
           active: isWalletPage(currentPage),
         },
         {
-          label: 'Invite',
-          icon: icons.INVITE,
-          path: '/invite',
-          active: currentPage === 'invite',
+          ...buildLink('Invite', PAGES.INVITE),
+          icon: ICONS.INVITE,
         },
         {
-          label: 'Downloads',
-          icon: icons.LOCAL,
-          path: '/downloaded',
-          active: currentPage === 'downloaded',
+          ...buildLink('Downloads', PAGES.DOWNLOADED),
+          icon: ICONS.LOCAL,
         },
         {
-          label: 'Publishes',
-          icon: icons.PUBLISHED,
-          path: '/published',
-          active: currentPage === 'published',
+          ...buildLink('Publishes', PAGES.PUBLISHED),
+          icon: ICONS.PUBLISHED,
         },
         {
-          label: 'History',
-          icon: icons.HISTORY,
-          path: '/user_history',
-          active: currentPage === 'user_history',
+          ...buildLink('History', PAGES.USER_HISTORY),
+          icon: ICONS.HISTORY,
         },
         {
-          label: 'Settings',
-          icon: icons.SETTINGS,
-          path: '/settings',
-          active: currentPage === 'settings',
+          ...buildLink('Settings', PAGES.SETTINGS),
+          icon: ICONS.SETTINGS,
         },
         {
-          label: 'Help',
-          path: '/help',
-          icon: icons.HELP,
-          active: currentPage === 'help',
+          ...buildLink('Help', PAGES.HELP),
+          icon: ICONS.HELP,
         },
       ],
     };

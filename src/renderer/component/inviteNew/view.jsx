@@ -1,12 +1,20 @@
-// I'll come back to this
-/* eslint-disable */
+// @flow
+/* eslint-disable react/no-multi-comp */
 import React from 'react';
-import BusyIndicator from 'component/common/busy-indicator';
-import CreditAmount from 'component/common/credit-amount';
 import Button from 'component/button';
 import { Form, FormRow, FormField, Submit } from 'component/common/form';
 
-class FormInviteNew extends React.PureComponent {
+type FormProps = {
+  inviteNew: string => void,
+  errorMessage: ?string,
+  isPending: boolean,
+};
+
+type FormState = {
+  email: string,
+};
+
+class FormInviteNew extends React.PureComponent<FormProps, FormState> {
   constructor() {
     super();
 
@@ -14,7 +22,7 @@ class FormInviteNew extends React.PureComponent {
       email: '',
     };
 
-    this.handleSubmit = this.handleSubmit.bind(this);
+    (this: any).handleSubmit = this.handleSubmit.bind(this);
   }
 
   handleEmailChanged(event) {
@@ -56,16 +64,16 @@ class FormInviteNew extends React.PureComponent {
   }
 }
 
-class InviteNew extends React.PureComponent {
+type Props = {
+  errorMessage: ?string,
+  inviteNew: string => void,
+  isPending: boolean,
+  rewardAmount: number,
+};
+
+class InviteNew extends React.PureComponent<Props> {
   render() {
-    const {
-      errorMessage,
-      invitesRemaining,
-      inviteNew,
-      inviteStatusIsPending,
-      isPending,
-      rewardAmount,
-    } = this.props;
+    const { errorMessage, inviteNew, isPending, rewardAmount } = this.props;
 
     return (
       <section className="card card--section">
@@ -73,17 +81,9 @@ class InviteNew extends React.PureComponent {
           <h2 className="card__title">{__('Invite a Friend')}</h2>
 
           <p className="card__subtitle">
-            {__("Or an enemy. Or your cousin Jerry, who you're kind of unsure about.")}
+            {__('When your friends start using LBRY, the network gets stronger!')}
           </p>
         </header>
-
-        {/*
-        <div className="card__content">
-          {invitesRemaining > 0 &&
-            <p>{__("You have %s invites remaining.", invitesRemaining)}</p>}
-          {invitesRemaining <= 0 &&
-            <p className="empty">{__("You have no invites.")}</p>}
-        </div> */}
 
         <div className="card__content">
           <FormInviteNew
@@ -106,4 +106,4 @@ class InviteNew extends React.PureComponent {
 }
 
 export default InviteNew;
-/* eslint-enable */
+/* eslint-enable react/no-multi-comp */

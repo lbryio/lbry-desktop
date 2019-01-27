@@ -9,10 +9,10 @@ import FileList from 'component/fileList';
 import { FormField } from 'component/common/form';
 import FileCard from 'component/fileCard';
 import { parseURI } from 'lbry-redux';
-import Native from 'native';
 import SuggestedSubscriptions from 'component/subscribeSuggested';
 import MarkAsRead from 'component/subscribeMarkAsRead';
 import Tooltip from 'component/common/tooltip';
+import Yrbl from 'component/common/yrbl';
 
 type Props = {
   viewMode: ViewMode,
@@ -79,17 +79,11 @@ export default (props: Props) => {
 
       {!hasSubscriptions && (
         <Fragment>
-          <div className="yrbl-wrap">
-            <img
-              alt="Sad gerbil"
-              className="subscriptions__gerbil"
-              src={Native.imagePath('gerbil-sad.png')}
-            />
-            <div className="card__content">
-              <h2 className="card__title">{__('Oh no! What happened to your subscriptions?')}</h2>
-              <p className="card__subtitle">{__('These channels look pretty cool.')}</p>
-            </div>
-          </div>
+          <Yrbl
+            type="sad"
+            title={__('Oh no! What happened to your subscriptions?')}
+            subtitle={__('These channels look pretty cool.')}
+          />
           <SuggestedSubscriptions />
         </Fragment>
       )}
@@ -133,17 +127,10 @@ export default (props: Props) => {
                 })
               ) : (
                 <Fragment>
-                  <div className="yrbl-wrap">
-                    <img
-                      alt="Friendly gerbil"
-                      className="subscriptions__gerbil"
-                      src={Native.imagePath('gerbil-happy.png')}
-                    />
-                    <div className="card__content">
-                      <h2 className="card__title">{__('All caught up!')}</h2>
-                      <p className="card__subtitle">{__('You might like the channels below.')}</p>
-                    </div>
-                  </div>
+                  <Yrbl
+                    title={__('All caught up!')}
+                    subtitle={__('You might like the channels below.')}
+                  />
                   <SuggestedSubscriptions />
                 </Fragment>
               )}
