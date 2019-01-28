@@ -46,14 +46,15 @@ class MediaPlayer extends React.PureComponent {
       volume,
       position,
       claim,
-      startedPlayingCb,
+      onStartCb,
+      onFinishCb,
     } = this.props;
 
     const loadedMetadata = () => {
       this.setState({ hasMetadata: true, startedPlaying: true });
 
-      if (startedPlayingCb) {
-        startedPlayingCb();
+      if (onStartCb) {
+        onStartCb();
       }
       this.media.children[0].play();
     };
@@ -104,6 +105,11 @@ class MediaPlayer extends React.PureComponent {
       mediaElement.addEventListener('click', this.togglePlayListener);
       mediaElement.addEventListener('loadedmetadata', loadedMetadata.bind(this), {
         once: true,
+      });
+      mediaElement.addEventListener('ended', () => {
+        if (onFinishCb) {
+          onFinishCb();
+        }
       });
       mediaElement.addEventListener('webkitfullscreenchange', win32FullScreenChange.bind(this));
       mediaElement.addEventListener('volumechange', () => {

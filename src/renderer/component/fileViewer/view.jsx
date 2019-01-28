@@ -1,4 +1,5 @@
 // @flow
+import * as PAGES from 'constants/pages';
 import React from 'react';
 import classnames from 'classnames';
 import analytics from 'analytics';
@@ -42,7 +43,9 @@ type Props = {
   searchBarFocused: boolean,
   mediaType: string,
   claimRewards: () => void,
-  costInfo: ?{ cost: number },
+  nextFileToPlay: ?string,
+  navigate: (string, {}) => void,
+  costInfo: ?{ cost: number }, // eslint-disable-line react/no-unused-prop-types
 };
 
 class FileViewer extends React.PureComponent<Props> {
@@ -51,7 +54,8 @@ class FileViewer extends React.PureComponent<Props> {
     (this: any).playContent = this.playContent.bind(this);
     (this: any).handleKeyDown = this.handleKeyDown.bind(this);
     (this: any).logTimeToStart = this.logTimeToStart.bind(this);
-    (this: any).startedPlayingCb = undefined;
+    (this: any).onFileFinishCb = this.onFileFinishCb.bind(this);
+    (this: any).onFileStartCb = undefined;
 
     // Don't add these variables to state because we don't need to re-render when their values change
     (this: any).startTime = undefined;
@@ -61,7 +65,7 @@ class FileViewer extends React.PureComponent<Props> {
   componentDidMount() {
     const { fileInfo } = this.props;
     if (!fileInfo) {
-      this.startedPlayingCb = this.logTimeToStart;
+      this.onFileStartCb = this.logTimeToStart;
     }
 
     this.handleAutoplay(this.props);
@@ -83,10 +87,10 @@ class FileViewer extends React.PureComponent<Props> {
       this.playTime = null;
 
       // If this new file is already downloaded, remove the startedPlayingCallback
-      if (fileInfo && this.startedPlayingCb) {
-        this.startedPlayingCb = null;
-      } else if (!fileInfo && !this.startedPlayingCb) {
-        this.startedPlayingCb = this.logTimeToStart;
+      if (fileInfo && this.onFileStartCb) {
+        this.onFileStartCb = null;
+      } else if (!fileInfo && !this.onFileStartCb) {
+        this.onFileStartCb = this.logTimeToStart;
       }
     }
 
@@ -149,10 +153,10 @@ class FileViewer extends React.PureComponent<Props> {
 
     if (fileInfo || isDownloading || isLoading) {
       // User may have pressed download before clicking play
-      this.startedPlayingCb = null;
+      this.onFileStartCb = null;
     }
 
-    if (this.startedPlayingCb) {
+    if (this.onFileStartCb) {
       this.startTime = Date.now();
     }
 
@@ -184,7 +188,15 @@ class FileViewer extends React.PureComponent<Props> {
     analytics.apiLogView(`${name}#${claimId}`, outpoint, claimId, timeToStart, claimRewards);
   }
 
-  startedPlayingCb: ?() => void;
+  onFileFinishCb() {
+    // If a user has `autoplay` enabled, start playing the next file at the top of "related"
+    const { autoplay, nextFileToPlay, navigate } = this.props;
+    if (autoplay && nextFileToPlay) {
+      navigate(PAGES.SHOW, { uri: nextFileToPlay });
+    }
+  }
+
+  onFileStartCb: ?() => void;
   startTime: ?number;
   playTime: ?number;
 
@@ -251,7 +263,8 @@ class FileViewer extends React.PureComponent<Props> {
                 claim={claim}
                 uri={uri}
                 position={position}
-                startedPlayingCb={this.startedPlayingCb}
+                onStartCb={this.onFileStartCb}
+                onFinishCb={this.onFileFinishCb}
                 playingUri={playingUri}
               />
             )}

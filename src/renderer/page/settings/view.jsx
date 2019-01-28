@@ -290,26 +290,6 @@ class SettingsPage extends React.PureComponent<Props, State> {
                 <FormRow>
                   <FormField
                     type="checkbox"
-                    name="autoplay"
-                    onChange={this.onAutoplayChange}
-                    checked={autoplay}
-                    postfix={__('Autoplay media files')}
-                  />
-                </FormRow>
-
-                <FormRow>
-                  <FormField
-                    type="checkbox"
-                    name="auto_download"
-                    onChange={this.onAutoDownloadChange}
-                    checked={autoDownload}
-                    postfix={__('Automatically download new content from your subscriptions')}
-                  />
-                </FormRow>
-
-                <FormRow>
-                  <FormField
-                    type="checkbox"
                     name="show_nsfw"
                     onChange={this.onShowNsfwChange}
                     checked={showNsfw}
@@ -417,6 +397,39 @@ class SettingsPage extends React.PureComponent<Props, State> {
                     </React.Fragment>
                   }
                 />
+              </div>
+            </section>
+
+            <section className="card card--section">
+              <header className="card__header">
+                <h2 className="card__title">{__('Experimental Settings')}</h2>
+              </header>
+
+              <div className="card__content">
+                <FormRow>
+                  <FormField
+                    type="checkbox"
+                    name="auto_download"
+                    onChange={this.onAutoDownloadChange}
+                    checked={autoDownload}
+                    postfix={__('Automatically download new content from my subscriptions')}
+                    helper={__(
+                      "The latest file from each of your subscriptions will be downloaded for quick access as soon as it's published."
+                    )}
+                  />
+                </FormRow>
+                <FormRow>
+                  <FormField
+                    type="checkbox"
+                    name="autoplay"
+                    onChange={this.onAutoplayChange}
+                    checked={autoplay}
+                    postfix={__('Autoplay media files')}
+                    helper={__(
+                      'Autoplay video and audio files when navigating to a file, as well as the next related item when a file finishes playing.'
+                    )}
+                  />
+                </FormRow>
               </div>
             </section>
 

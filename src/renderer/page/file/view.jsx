@@ -4,7 +4,6 @@ import type { FileInfo } from 'types/file_info';
 import * as MODALS from 'constants/modal_types';
 import * as icons from 'constants/icons';
 import * as React from 'react';
-import * as settings from 'constants/settings';
 import { buildURI, normalizeURI } from 'lbry-redux';
 import FileViewer from 'component/fileViewer';
 import Thumbnail from 'component/common/thumbnail';
@@ -41,7 +40,6 @@ type Props = {
   prepareEdit: ({}, string) => void,
   navigate: (string, ?{}) => void,
   openModal: (id: string, { uri: string }) => void,
-  setClientSetting: (string, string | boolean | number) => void,
   markSubscriptionRead: (string, string) => void,
 };
 
@@ -58,12 +56,6 @@ class FilePage extends React.Component<Props> {
     // TODO: Find a better way to detect supported types
     'application',
   ];
-
-  constructor(props: Props) {
-    super(props);
-
-    (this: any).onAutoplayChange = this.onAutoplayChange.bind(this);
-  }
 
   componentDidMount() {
     const { uri, fileInfo, fetchFileInfo, fetchCostInfo, setViewed, isSubscribed } = this.props;
@@ -96,10 +88,6 @@ class FilePage extends React.Component<Props> {
     if (!prevProps.isSubscribed && this.props.isSubscribed) {
       this.removeFromSubscriptionNotifications();
     }
-  }
-
-  onAutoplayChange(event: SyntheticInputEvent<*>) {
-    this.props.setClientSetting(settings.AUTOPLAY, event.target.checked);
   }
 
   removeFromSubscriptionNotifications() {
