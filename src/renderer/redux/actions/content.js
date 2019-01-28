@@ -18,7 +18,6 @@ import {
   makeSelectFileInfoForUri,
   selectFileInfosByOutpoint,
   selectDownloadingByOutpoint,
-  selectTotalDownloadProgress,
   selectBalance,
   makeSelectChannelForClaimUri,
   parseURI,
@@ -27,7 +26,6 @@ import {
 } from 'lbry-redux';
 import { makeSelectClientSetting, selectosNotificationsEnabled } from 'redux/selectors/settings';
 import setBadge from 'util/set-badge';
-import setProgressBar from 'util/set-progress-bar';
 import analytics from 'analytics';
 
 const DOWNLOAD_POLL_INTERVAL = 250;
@@ -66,8 +64,10 @@ export function doUpdateLoadStatus(uri: string, outpoint: string) {
         const badgeNumber = selectBadgeNumber(state);
         setBadge(badgeNumber === 0 ? '' : `${badgeNumber}`);
 
-        const totalProgress = selectTotalDownloadProgress(state);
-        setProgressBar(totalProgress);
+        // Disabling this for now because it's confusing for new users that don't realize files are actually being downloaded
+        // This should move inside of the app
+        // const totalProgress = selectTotalDownloadProgress(state);
+        // setProgressBar(totalProgress);
 
         const channelUri = makeSelectChannelForClaimUri(uri, true)(state);
         const { claimName: channelName } = parseURI(channelUri);
@@ -120,8 +120,8 @@ export function doUpdateLoadStatus(uri: string, outpoint: string) {
           },
         });
 
-        const totalProgress = selectTotalDownloadProgress(getState());
-        setProgressBar(totalProgress);
+        // const totalProgress = selectTotalDownloadProgress(getState());
+        // setProgressBar(totalProgress);
         setNextStatusUpdate();
       }
     });
