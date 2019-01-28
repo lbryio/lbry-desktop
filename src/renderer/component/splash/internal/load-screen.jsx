@@ -32,8 +32,12 @@ class LoadScreen extends React.PureComponent<Props> {
           {error ? (
             <Fragment>
               <h3>{__('Uh oh. Sean must have messed something up. Try refreshing to fix it.')}</h3>
-              <div className="card__actions">
-                <Button label="Refresh" button="alt" onClick={() => window.location.reload()} />
+              <div className="load-screen__actions">
+                <Button
+                  label="Refresh"
+                  className="btn--load-screen"
+                  onClick={() => window.location.reload()}
+                />
               </div>
               <div className="load-screen__help">
                 <p>

@@ -25,6 +25,7 @@ const defaultState = {
       SETTINGS.EMAIL_COLLECTION_ACKNOWLEDGED,
       false
     ),
+    [SETTINGS.INVITE_ACKNOWLEDGED]: getLocalStorageSetting(SETTINGS.INVITE_ACKNOWLEDGED, false),
     [SETTINGS.FIRST_RUN_COMPLETED]: getLocalStorageSetting(SETTINGS.FIRST_RUN_COMPLETED, false),
     [SETTINGS.CREDIT_REQUIRED_ACKNOWLEDGED]: false, // this needs to be re-acknowledged every run
     [SETTINGS.LANGUAGE]: getLocalStorageSetting(SETTINGS.LANGUAGE, 'en'),

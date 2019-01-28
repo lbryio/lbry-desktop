@@ -41,7 +41,7 @@ const RewardTile = (props: Props) => {
           {reward.reward_type !== rewards.TYPE_REFERRAL &&
             (claimed ? (
               <span>
-                <Icon icon={ICONS.CHECK} /> {__('Reward claimed.')}
+                <Icon icon={ICONS.COMPLETED} /> {__('Reward claimed.')}
               </span>
             ) : (
               <RewardLink button reward_type={reward.reward_type} />

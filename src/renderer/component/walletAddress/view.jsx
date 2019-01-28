@@ -2,7 +2,7 @@
 import * as icons from 'constants/icons';
 import React from 'react';
 import Button from 'component/button';
-import Address from 'component/address';
+import CopyableText from 'component/copyableText';
 import QRCode from 'component/common/qr-code';
 
 type Props = {
@@ -58,7 +58,7 @@ class WalletAddress extends React.PureComponent<Props, State> {
         </header>
 
         <div className="card__content">
-          <Address address={receiveAddress} showCopyButton />
+          <CopyableText copyable={receiveAddress} snackMessage={__('Address copied.')} />
         </div>
 
         <div className="card__content">

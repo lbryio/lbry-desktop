@@ -59,7 +59,7 @@ class TransactionListRecent extends React.PureComponent<Props> {
                   button="primary"
                   navigate="/history"
                   label={__('Full History')}
-                  icon={icons.CLOCK}
+                  icon={icons.HISTORY}
                 />
               </div>
             </div>

@@ -3,6 +3,7 @@ import * as ICONS from 'constants/icons';
 import React from 'react';
 import Icon from 'component/common/icon';
 import RewardLink from 'component/rewardLink';
+import Yrbl from 'component/common/yrbl';
 import { rewards } from 'lbryinc';
 
 type Props = {
@@ -22,6 +23,18 @@ class InviteList extends React.PureComponent<Props> {
       return null;
     }
 
+    if (!invitees.length) {
+      return (
+        <Yrbl
+          type="happy"
+          title={__('Power To The People')}
+          subtitle={__(
+            'LBRY is powered by the users. More users, more power… and with great power comes great responsibility.'
+          )}
+        />
+      );
+    }
+
     return (
       <section className="card card--section">
         <header className="card__header">
@@ -29,43 +42,37 @@ class InviteList extends React.PureComponent<Props> {
         </header>
 
         <div className="card__content">
-          {invitees.length === 0 && (
-            <span className="empty">{__("You haven't invited anyone.")} </span>
-          )}
-          {invitees.length > 0 && (
-            <table className="table table--stretch">
-              <thead>
-                <tr>
-                  <th>{__('Invitee Email')}</th>
-                  <th className="text-center">{__('Invite Status')}</th>
-                  <th className="text-center">{__('Reward')}</th>
+          <table className="table table--stretch">
+            <thead>
+              <tr>
+                <th>{__('Invitee Email')}</th>
+                <th className="text-center">{__('Invite Status')}</th>
+                <th className="text-center">{__('Reward')}</th>
+              </tr>
+            </thead>
+            <tbody>
+              {invitees.map(invitee => (
+                <tr key={invitee.email}>
+                  <td>{invitee.email}</td>
+                  <td className="text-center">
+                    {invitee.invite_accepted ? (
+                      <Icon icon={ICONS.COMPLETED} />
+                    ) : (
+                      <span className="empty">{__('unused')}</span>
+                    )}
+                  </td>
+                  <td className="text-center">
+                    {invitee.invite_reward_claimed && <Icon icon={ICONS.COMPLETED} />}
+                    {!invitee.invite_reward_claimed && invitee.invite_reward_claimable ? (
+                      <RewardLink label={__('claim')} reward_type={rewards.TYPE_REFERRAL} />
+                    ) : (
+                      <span className="empty">{__('unclaimable')}</span>
+                    )}
+                  </td>
                 </tr>
-              </thead>
-              <tbody>
-                {invitees.map(invitee => (
-                  <tr key={invitee.email}>
-                    <td>{invitee.email}</td>
-                    <td className="text-center">
-                      {invitee.invite_accepted ? (
-                        <Icon icon={ICONS.CHECK} />
-                      ) : (
-                        <span className="empty">{__('unused')}</span>
-                      )}
-                    </td>
-                    <td className="text-center">
-                      {invitee.invite_reward_claimed ? (
-                        <Icon icon={ICONS.CHECK} />
-                      ) : invitee.invite_reward_claimable ? (
-                        <RewardLink label={__('claim')} reward_type={rewards.TYPE_REFERRAL} />
-                      ) : (
-                        <span className="empty">{__('unclaimable')}</span>
-                      )}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          )}
+              ))}
+            </tbody>
+          </table>
 
           <div className="help">
             {__(

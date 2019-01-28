@@ -3,7 +3,7 @@ import * as React from 'react';
 import QRCode from 'component/common/qr-code';
 import { FormRow } from 'component/common/form';
 import * as statuses from 'constants/shape_shift';
-import Address from 'component/address';
+import CopyableText from 'component/copyableText';
 import Button from 'component/button';
 import type { Dispatch, ThunkAction } from 'types/redux';
 import type { Action } from 'redux/actions/shape_shift';
@@ -96,7 +96,7 @@ class ActiveShapeShift extends React.PureComponent<Props> {
             {shiftDepositAddress && (
               <FormRow verticallyCentered padded>
                 <QRCode value={shiftDepositAddress} paddingRight />
-                <Address address={shiftDepositAddress} showCopyButton padded />
+                <CopyableText copyable={shiftDepositAddress} />
               </FormRow>
             )}
           </div>
@@ -134,12 +134,13 @@ class ActiveShapeShift extends React.PureComponent<Props> {
             />
           )}
         </div>
-        {shiftState === statuses.NO_DEPOSITS && shiftReturnAddress && (
-          <div className="help">
-            {__("If the transaction doesn't go through, ShapeShift will return your")}{' '}
-            {shiftCoinType} {__('back to')} {shiftReturnAddress}
-          </div>
-        )}
+        {shiftState === statuses.NO_DEPOSITS &&
+          shiftReturnAddress && (
+            <div className="help">
+              {__("If the transaction doesn't go through, ShapeShift will return your")}{' '}
+              {shiftCoinType} {__('back to')} {shiftReturnAddress}
+            </div>
+          )}
       </div>
     );
   }

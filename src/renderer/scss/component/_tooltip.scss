@@ -1,11 +1,10 @@
 .tooltip {
   display: inline-block;
   position: relative;
+  z-index: 2;
 
-  &:not(:hover) {
-    .tooltip__body {
-      visibility: hidden;
-    }
+  .tooltip__body {
+    visibility: hidden;
   }
 
   &:hover {
@@ -15,17 +14,20 @@
   }
 
   .tooltip__body {
-    background-color: $lbry-gray-5;
-    border-radius: 8px;
-    color: $lbry-white;
     font-size: 1rem;
-    font-weight: 500;
+    color: $lbry-black;
+    font-weight: 400;
     padding: var(--spacing-vertical-small);
     position: absolute;
     text-align: center;
     white-space: pre-wrap;
     width: 200px;
-    z-index: 1;
+    box-shadow: 5px 5px 5px rgba($lbry-black, 0.15);
+
+    html[data-theme='dark'] & {
+      border: 1px solid #2f2f2f;
+      background-color: $lbry-gray-1;
+    }
 
     &::after {
       width: 0;
@@ -37,9 +39,15 @@
       position: absolute;
     }
 
-    &--short {
+    &.tooltip__body--short {
       width: 130px;
     }
+  }
+}
+
+.tooltip--always-visible {
+  .tooltip__body {
+    visibility: visible;
   }
 }
 

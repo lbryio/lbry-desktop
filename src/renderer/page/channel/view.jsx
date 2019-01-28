@@ -95,7 +95,7 @@ class ChannelPage extends React.PureComponent<Props> {
             <SubscribeButton uri={`lbry://${permanentUrl}`} channelName={name} />
             <Button
               button="alt"
-              icon={icons.GLOBE}
+              icon={icons.SHARE}
               label={__('Share Channel')}
               onClick={() =>
                 openModal(MODALS.SOCIAL_SHARE, { uri, speechShareable: true, isChannel: true })
