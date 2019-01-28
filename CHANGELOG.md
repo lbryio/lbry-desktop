@@ -4,28 +4,36 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
-## [Unreleased]
+## [0.28.0] - Unreleased
+
+### Added
+
+- Support for sandbox applications ([#2178](https://github.com/lbryio/lbry-desktop/pull/2178))
+- CTA to invite page on first run ([#2221](https://github.com/lbryio/lbry-desktop/pull/2221))
+- Responsive related content list ([#2226](https://github.com/lbryio/lbry-desktop/pull/2226))
+- Autoplay content in list of related files ([#2235](https://github.com/lbryio/lbry-desktop/pull/2235))
+
+### Changed
+
+- Less intrusive first run flow ([#2210](https://github.com/lbryio/lbry-desktop/pull/2210))
+
+### Fixed
+
+- Flow errors ([#2213](https://github.com/lbryio/lbry-desktop/pull/2213))
+
+## [0.27.1] - 2018-01-22
 
 ### Fixed
 
 - Channel name overlap on homepage when screen size is small
-
-## [0.27.0] - 2018-01-15
-
-- More language options on publish page ([#2201](https://github.com/lbryio/lbry-desktop/pull/2201))
-
-### Changed
-
-### Fixed
-
-- Rewards table alignment on small screens ([#2197](https://github.com/lbryio/lbry-desktop/pull/2197))
-- File thumbnail issues when resiszing screen ([#2193](https://github.com/lbryio/lbry-desktop/pull/2197))
+- Spacing issue/typo on email collection modal
 
 ## [0.27.0] - 2018-01-15
 
 ### Added
 
 - Auto email confirmation ([#2169](https://github.com/lbryio/lbry-desktop/pull/2169))
+- More language options on publish page ([#2201](https://github.com/lbryio/lbry-desktop/pull/2201))
 
 ### Changed
 
@@ -37,6 +45,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Show delete button on users own claims ([#2147](https://github.com/lbryio/lbry-desktop/pull/2147))
 - Fix "copy" icon being cutoff for some users ([2167](https://github.com/lbryio/lbry-desktop/pull/2167))
 - Use correct url when copying vanity addresses ([#2168](https://github.com/lbryio/lbry-desktop/pull/2168))
+- Rewards table alignment on small screens ([#2197](https://github.com/lbryio/lbry-desktop/pull/2197))
+- File thumbnail issues when resiszing screen ([#2193](https://github.com/lbryio/lbry-desktop/pull/2197))
 
 ## [0.26.1] - 2018-12-14
 
