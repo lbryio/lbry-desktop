@@ -17,7 +17,7 @@ import {
   doOpenModal,
   doHideModal,
 } from 'redux/actions/app';
-import { doToast, doBlackListedOutpointsSubscribe, isURIValid } from 'lbry-redux';
+import { doToast, doBlackListedOutpointsSubscribe, isURIValid, setSearchApi } from 'lbry-redux';
 import { doNavigate } from 'redux/actions/navigation';
 import { doDownloadLanguages, doUpdateIsNightAsync } from 'redux/actions/settings';
 import { doAuthenticate, Lbryio, rewards } from 'lbryinc';
@@ -35,6 +35,10 @@ autoUpdater.logger = remote.require('electron-log');
 
 if (process.env.LBRY_API_URL) {
   Lbryio.setLocalApi(process.env.LBRY_API_URL);
+}
+
+if (process.env.SEARCH_API_URL) {
+  setSearchApi(process.env.SEARCH_API_URL);
 }
 
 // We need to override Lbryio for getting/setting the authToken
