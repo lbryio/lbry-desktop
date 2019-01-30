@@ -18,6 +18,7 @@ type Props = {
     written_bytes: number,
     download_path: string,
     completed: boolean,
+    blobs_completed: number,
   },
   fileInfoErrors: ?{
     [string]: boolean,
@@ -259,7 +260,9 @@ class FileViewer extends React.PureComponent<Props> {
                 downloadCompleted={fileInfo.completed}
                 changeVolume={changeVolume}
                 volume={volume}
-                savePosition={savePosition}
+                savePosition={newPosition =>
+                  savePosition(claim.claim_id, `${claim.txid}:${claim.nout}`, newPosition)
+                }
                 claim={claim}
                 uri={uri}
                 position={position}

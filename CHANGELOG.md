@@ -20,6 +20,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Fixed
 
 - Flow errors ([#2213](https://github.com/lbryio/lbry-desktop/pull/2213))
+- Video position on previously viewed files ([#2240](https://github.com/lbryio/lbry-desktop/pull/2240))
 
 ## [0.27.1] - 2018-01-22
 
