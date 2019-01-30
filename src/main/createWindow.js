@@ -73,6 +73,17 @@ export default appState => {
 
   setupBarMenu();
 
+  window.on('app-command', function(e, cmd) {
+    switch (cmd) {
+      case 'browser-backward':
+        window.webContents.send('navigate-backward', null);
+        return;
+      case 'browser-forward':
+        window.webContents.send('navigate-forward', null);
+        return;
+    }
+  });
+
   window.on('close', event => {
     if (!appState.isQuitting && !appState.autoUpdateAccepted) {
       event.preventDefault();
