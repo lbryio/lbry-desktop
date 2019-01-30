@@ -72,15 +72,28 @@ export default appState => {
   }
 
   setupBarMenu();
-
-  window.on('app-command', function(e, cmd) {
+  // Windows back/forward mouse navigation
+  window.on('app-command', (e, cmd) => {
     switch (cmd) {
       case 'browser-backward':
         window.webContents.send('navigate-backward', null);
-        return;
+        break;
       case 'browser-forward':
         window.webContents.send('navigate-forward', null);
-        return;
+        break;
+      default: // Do nothing
+    }
+  });
+  // Mac back/forward swipe navigation
+  window.on('swipe', (e, dir) => {
+    switch (dir) {
+      case 'left':
+        window.webContents.send('navigate-backward', null);
+        break;
+      case 'right':
+        window.webContents.send('navigate-forward', null);
+        break;
+      default: // Do nothing
     }
   });
 
