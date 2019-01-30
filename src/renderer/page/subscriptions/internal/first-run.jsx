@@ -26,7 +26,7 @@ export default (props: Props) => {
       <div className="yrbl-wrap">
         <img
           alt="Friendly gerbil"
-          className="subscriptions__gerbil"
+          className="subscriptions__gerbil yrbl--first-run"
           src={Native.imagePath('gerbil-happy.png')}
         />
         <div className="card__content">
