@@ -59,6 +59,7 @@ class FileTile extends React.PureComponent<Props> {
       rewardedContentClaimIds,
       size,
       isNew,
+      claimIsMine,
     } = this.props;
     const isRewardContent = claim && rewardedContentClaimIds.includes(claim.claim_id);
 
@@ -67,12 +68,15 @@ class FileTile extends React.PureComponent<Props> {
     }
 
     return (
+      // TODO: turn this into it's own component and share it with FileCard
+      // The only issue is icon placement on the search page
       <div className={classnames('media__properties', { card__subtitle: size === 'large' })}>
         <FilePrice hideFree uri={uri} />
         {isNew && <span className="badge badge--alert icon">{__('NEW')}</span>}
         {isSubscribed && <Icon icon={ICONS.SUBSCRIPTION} />}
         {isRewardContent && <Icon iconColor="red" icon={ICONS.FEATURED} />}
-        {isDownloaded && <Icon icon={ICONS.LOCAL} />}
+        {!claimIsMine && isDownloaded && <Icon icon={ICONS.LOCAL} />}
+        {claimIsMine && <Icon icon={ICONS.PUBLISHED} />}
       </div>
     );
   }

@@ -133,7 +133,8 @@ class FileCard extends React.PureComponent<Props> {
           <FilePrice hideFree uri={uri} />
           {isRewardContent && <Icon iconColor="red" icon={icons.FEATURED} />}
           {isSubscribed && <Icon icon={icons.SUBSCRIPTION} />}
-          {fileInfo && <Icon icon={icons.LOCAL} />}
+          {claimIsMine && <Icon icon={icons.PUBLISHED} />}
+          {!claimIsMine && fileInfo && <Icon icon={icons.LOCAL} />}
           {isNew && <span className="badge badge--alert">{__('NEW')}</span>}
         </div>
       </li>
