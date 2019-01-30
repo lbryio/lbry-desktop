@@ -48,6 +48,7 @@ class MediaPlayer extends React.PureComponent {
       claim,
       onStartCb,
       onFinishCb,
+      savePosition,
     } = this.props;
 
     const loadedMetadata = () => {
@@ -95,13 +96,7 @@ class MediaPlayer extends React.PureComponent {
       if (position) {
         mediaElement.currentTime = position;
       }
-      mediaElement.addEventListener('timeupdate', () =>
-        this.props.savePosition(
-          claim.claim_id,
-          `${claim.txid}:${claim.nout}`,
-          mediaElement.currentTime
-        )
-      );
+      mediaElement.addEventListener('timeupdate', () => savePosition(mediaElement.currentTime));
       mediaElement.addEventListener('click', this.togglePlayListener);
       mediaElement.addEventListener('loadedmetadata', loadedMetadata.bind(this), {
         once: true,
@@ -110,6 +105,7 @@ class MediaPlayer extends React.PureComponent {
         if (onFinishCb) {
           onFinishCb();
         }
+        savePosition(0);
       });
       mediaElement.addEventListener('webkitfullscreenchange', win32FullScreenChange.bind(this));
       mediaElement.addEventListener('volumechange', () => {
