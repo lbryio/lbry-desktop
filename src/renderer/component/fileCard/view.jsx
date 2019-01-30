@@ -29,19 +29,25 @@ type Props = {
   isSubscribed: boolean,
   isNew: boolean,
   placeholder: boolean,
+  preventResolve: boolean,
 };
 
 class FileCard extends React.PureComponent<Props> {
   static defaultProps = {
     placeholder: false,
+    preventResolve: false,
   };
 
-  componentWillMount() {
-    this.resolve(this.props);
+  componentDidMount() {
+    if (!this.props.preventResolve) {
+      this.resolve(this.props);
+    }
   }
 
-  componentWillReceiveProps(nextProps: Props) {
-    this.resolve(nextProps);
+  componentDidUpdate() {
+    if (!this.props.preventResolve) {
+      this.resolve(this.props);
+    }
   }
 
   resolve = (props: Props) => {
@@ -74,7 +80,7 @@ class FileCard extends React.PureComponent<Props> {
       return null;
     }
 
-    if ((!claim && !pending) || placeholder) {
+    if (!claim && (!pending || placeholder)) {
       return (
         <li className="media-card media--placeholder">
           <div className="media__thumb media__thumb--placeholder" />

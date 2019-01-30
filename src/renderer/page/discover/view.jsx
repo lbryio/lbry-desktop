@@ -68,7 +68,7 @@ class DiscoverPage extends React.PureComponent<Props> {
             <CategoryList
               key={category}
               category={this.trimClaimIdFromCategory(category)}
-              names={featuredUris[category]}
+              uris={featuredUris[category]}
               categoryLink={this.getCategoryLinkPartByCategory(category)}
             />
           ))}

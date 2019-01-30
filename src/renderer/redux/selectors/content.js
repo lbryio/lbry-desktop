@@ -1,8 +1,13 @@
+// @flow
 import { createSelector } from 'reselect';
-import { makeSelectClaimForUri, selectClaimsByUri } from 'lbry-redux';
+import {
+  makeSelectClaimForUri,
+  selectClaimsByUri,
+  makeSelectClaimsInChannelForCurrentPage,
+} from 'lbry-redux';
 import { HISTORY_ITEMS_PER_PAGE } from 'constants/content';
 
-export const selectState = state => state.content || {};
+export const selectState = (state: any) => state.content || {};
 
 export const selectPlayingUri = createSelector(selectState, state => state.playingUri);
 
@@ -11,7 +16,7 @@ export const selectChannelClaimCounts = createSelector(
   state => state.channelClaimCounts || {}
 );
 
-export const makeSelectTotalItemsForChannel = uri =>
+export const makeSelectTotalItemsForChannel = (uri: string) =>
   createSelector(selectChannelClaimCounts, byUri => byUri && byUri[uri]);
 
 export const selectRewardContentClaimIds = createSelector(
@@ -19,7 +24,7 @@ export const selectRewardContentClaimIds = createSelector(
   state => state.rewardedContentClaimIds
 );
 
-export const makeSelectContentPositionForUri = uri =>
+export const makeSelectContentPositionForUri = (uri: string) =>
   createSelector(selectState, makeSelectClaimForUri(uri), (state, claim) => {
     if (!claim) {
       return null;
@@ -33,7 +38,7 @@ export const selectHistoryPageCount = createSelector(selectState, state =>
   Math.ceil(state.history.length / HISTORY_ITEMS_PER_PAGE)
 );
 
-export const makeSelectHistoryForPage = page =>
+export const makeSelectHistoryForPage = (page: number) =>
   createSelector(selectState, selectClaimsByUri, (state, claimsByUri) => {
     const left = page * HISTORY_ITEMS_PER_PAGE;
     const historyItems = state.history.slice(left, left + HISTORY_ITEMS_PER_PAGE);
@@ -51,5 +56,19 @@ export const makeSelectHistoryForPage = page =>
     });
   });
 
-export const makeSelectHistoryForUri = uri =>
+export const makeSelectHistoryForUri = (uri: string) =>
   createSelector(selectState, state => state.history.find(i => i.uri === uri));
+
+export const makeSelectCategoryListUris = (uris: Array<string> = [], channel: string) =>
+  createSelector(makeSelectClaimsInChannelForCurrentPage(channel), channelClaims => {
+    if (uris) return uris;
+
+    if (channelClaims) {
+      const CATEGORY_LIST_SIZE = 10;
+      return channelClaims
+        .slice(0, CATEGORY_LIST_SIZE)
+        .map(({ name, claim_id: claimId }) => `${name}#${claimId}`);
+    }
+
+    return null;
+  });
