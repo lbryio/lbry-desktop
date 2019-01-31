@@ -18,7 +18,7 @@ import {
   doHideModal,
 } from 'redux/actions/app';
 import { doToast, doBlackListedOutpointsSubscribe, isURIValid, setSearchApi } from 'lbry-redux';
-import { doNavigate } from 'redux/actions/navigation';
+import { doNavigate, doHistoryBack, doHistoryForward } from 'redux/actions/navigation';
 import { doDownloadLanguages, doUpdateIsNightAsync } from 'redux/actions/settings';
 import { doAuthenticate, Lbryio, rewards } from 'lbryinc';
 import 'scss/all.scss';
@@ -40,6 +40,14 @@ if (process.env.LBRY_API_URL) {
 if (process.env.SEARCH_API_URL) {
   setSearchApi(process.env.SEARCH_API_URL);
 }
+
+ipcRenderer.on('navigate-backward', () => {
+  app.store.dispatch(doHistoryBack());
+});
+
+ipcRenderer.on('navigate-forward', () => {
+  app.store.dispatch(doHistoryForward());
+});
 
 // We need to override Lbryio for getting/setting the authToken
 // We interect with ipcRenderer to get the auth key from a users keyring

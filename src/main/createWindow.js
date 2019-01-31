@@ -73,6 +73,19 @@ export default appState => {
 
   setupBarMenu();
 
+  // Windows back/forward mouse navigation
+  window.on('app-command', (e, cmd) => {
+    switch (cmd) {
+      case 'browser-backward':
+        window.webContents.send('navigate-backward', null);
+        break;
+      case 'browser-forward':
+        window.webContents.send('navigate-forward', null);
+        break;
+      default: // Do nothing
+    }
+  });
+
   window.on('close', event => {
     if (!appState.isQuitting && !appState.autoUpdateAccepted) {
       event.preventDefault();
