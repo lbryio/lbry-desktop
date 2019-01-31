@@ -9,7 +9,7 @@ const select = state => ({
 });
 
 const perform = dispatch => ({
-  fetchFeaturedUris: () => dispatch(doFetchFeaturedUris()),
+  fetchFeaturedUris: () => dispatch(doFetchFeaturedUris(true)),
   fetchRewardedContent: () => dispatch(doFetchRewardedContent()),
   fetchRewards: () => dispatch(doRewardList()),
 });

@@ -29,63 +29,6 @@ class ToolTip extends React.PureComponent<Props, State> {
     };
   }
 
-  componentDidMount() {
-    this.handleVisibility();
-  }
-
-  getVisibility = () => {
-    if (!this.tooltip) {
-      return;
-    }
-
-    const node = this.tooltip;
-    const rect = node.getBoundingClientRect();
-
-    // Get parent-container
-    const viewport = document.getElementById('content');
-    if (!viewport) {
-      throw Error('Document must contain parent div with #content');
-    }
-
-    const visibility = {
-      top: rect.top >= 0,
-      left: rect.left >= 0,
-      right: rect.right <= viewport.offsetWidth,
-      bottom: rect.bottom <= viewport.offsetHeight,
-    };
-
-    return visibility;
-  };
-
-  invertDirection = () => {
-    // Get current direction
-    const { direction } = this.state;
-    // Inverted directions
-    const directions = {
-      top: 'bottom',
-      left: 'right',
-      right: 'left',
-      bottom: 'top',
-    };
-
-    const inverted = directions[direction];
-
-    // Update direction
-    if (inverted) {
-      this.setState({ direction: inverted });
-    }
-  };
-
-  handleVisibility = () => {
-    const { direction } = this.state;
-    const visibility = this.getVisibility();
-
-    // Invert direction if tooltip is outside viewport bounds
-    if (!visibility || !visibility[direction]) {
-      this.invertDirection();
-    }
-  };
-
   tooltip: ?HTMLSpanElement;
 
   render() {
@@ -98,8 +41,6 @@ class ToolTip extends React.PureComponent<Props, State> {
 
     return (
       <span
-        onFocus={this.handleVisibility}
-        onMouseOver={this.handleVisibility}
         className={classnames('tooltip', {
           'tooltip--label': label && !icon,
           'tooltip--icon': icon,
