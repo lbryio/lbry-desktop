@@ -18,7 +18,7 @@ class DiscoverPage extends React.PureComponent<Props> {
     this.continousFetch = undefined;
   }
 
-  componentWillMount() {
+  componentDidMount() {
     const { fetchFeaturedUris, fetchRewardedContent, fetchRewards } = this.props;
     fetchFeaturedUris();
     fetchRewardedContent();
@@ -59,27 +59,19 @@ class DiscoverPage extends React.PureComponent<Props> {
     const { featuredUris, fetchingFeaturedUris } = this.props;
     const hasContent = typeof featuredUris === 'object' && Object.keys(featuredUris).length;
     const failedToLoad = !fetchingFeaturedUris && !hasContent;
+
     return (
       <Page noPadding isLoading={!hasContent && fetchingFeaturedUris}>
         <FirstRun />
         {hasContent &&
-          Object.keys(featuredUris).map(
-            category =>
-              featuredUris[category].length ? (
-                <CategoryList
-                  key={category}
-                  category={this.trimClaimIdFromCategory(category)}
-                  names={featuredUris[category]}
-                  categoryLink={this.getCategoryLinkPartByCategory(category)}
-                />
-              ) : (
-                <CategoryList
-                  key={category}
-                  category={this.trimClaimIdFromCategory(category)}
-                  categoryLink={category}
-                />
-              )
-          )}
+          Object.keys(featuredUris).map(category => (
+            <CategoryList
+              key={category}
+              category={this.trimClaimIdFromCategory(category)}
+              uris={featuredUris[category]}
+              categoryLink={this.getCategoryLinkPartByCategory(category)}
+            />
+          ))}
         {failedToLoad && <div className="empty">{__('Failed to load landing content.')}</div>}
       </Page>
     );

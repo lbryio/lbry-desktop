@@ -24,5 +24,5 @@ export default async function startSandbox() {
   });
 
   // eslint-disable-next-line no-console
-  sandbox.listen(port, () => console.log(`Sandbox listening on port ${port}.`));
+  sandbox.listen(port, 'localhost', () => console.log(`Sandbox listening on port ${port}.`));
 }

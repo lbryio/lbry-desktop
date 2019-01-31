@@ -1,10 +1,10 @@
 // @flow
-import React from 'react';
+import * as React from 'react';
 import Native from 'native';
 
 type Props = {
   title: string,
-  subtitle: string,
+  subtitle: string | React.Node,
   type: string,
 };
 

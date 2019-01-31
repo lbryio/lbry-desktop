@@ -8,18 +8,21 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ### Added
 
-- Support for sandbox applications ([#2178](https://github.com/lbryio/lbry-desktop/pull/2178))
+- Support for sandbox games and applications ([#2178](https://github.com/lbryio/lbry-desktop/pull/2178))
 - CTA to invite page on first run ([#2221](https://github.com/lbryio/lbry-desktop/pull/2221))
 - Responsive related content list ([#2226](https://github.com/lbryio/lbry-desktop/pull/2226))
 - Autoplay content in list of related files ([#2235](https://github.com/lbryio/lbry-desktop/pull/2235))
+- Support for back/forward mouse navigation on Windows ([#2250](https://github.com/lbryio/lbry-desktop/pull/2250))
 
 ### Changed
 
 - Less intrusive first run flow ([#2210](https://github.com/lbryio/lbry-desktop/pull/2210))
+- Add icon for your own publishes on cards/tiles ([#2249](https://github.com/lbryio/lbry-desktop/pull/2249))
 
 ### Fixed
 
 - Flow errors ([#2213](https://github.com/lbryio/lbry-desktop/pull/2213))
+- Video position on previously viewed files ([#2240](https://github.com/lbryio/lbry-desktop/pull/2240))
 
 ## [0.27.1] - 2018-01-22
 
