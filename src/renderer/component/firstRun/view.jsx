@@ -101,7 +101,7 @@ export default class FirstRun extends PureComponent<Props> {
                 <h1 className="card__title">{__('You Are Awesome!')}</h1>
               </header>
               <div className="card__content">
-                <p>{__("Check out some of the neat files below me. I'll see you around!")}</p>
+                <p>{__("Check out some of the neat content below me. I'll see you around!")}</p>
                 <div className="card__actions">
                   <Button button="primary" onClick={completeFirstRun} label={__('See You Later')} />
                 </div>
