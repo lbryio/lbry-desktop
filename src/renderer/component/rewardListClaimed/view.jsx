@@ -26,6 +26,12 @@ const RewardListClaimed = (props: Props) => {
     <section className="card card--section">
       <header className="card__header">
         <h2 className="card__title">Claimed Rewards</h2>
+
+        <p className="card__subtitle">
+          {__(
+            'Reward history is tied to your email. In case of lost or multiple wallets, your balance may differ from the amounts claimed'
+          )}.
+        </p>
       </header>
 
       <table className="table table--rewards table--stretch">
