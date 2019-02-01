@@ -97,9 +97,13 @@ export const doUploadThumbnail = (filePath: string, nsfw: boolean) => (
       batchActions(
         {
           type: ACTIONS.UPDATE_PUBLISH_FORM,
-          data: { uploadThumbnailStatus: THUMBNAIL_STATUSES.API_DOWN },
+          data: {
+            uploadThumbnailStatus: THUMBNAIL_STATUSES.READY,
+            thumbnail: '',
+            nsfw: false,
+          },
         },
-        doError(MODALS.ERROR, { error })
+        doError(error)
       )
     );
 
