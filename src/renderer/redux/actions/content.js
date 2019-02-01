@@ -180,12 +180,13 @@ function handleLoadVideoError(uri, errorType = '') {
         data: { uri },
       });
       dispatch(doSetPlayingUri(null));
+      // this is not working, but should be it's own separate modal in the future (https://github.com/lbryio/lbry-desktop/issues/892)
       if (errorType === 'timeout') {
         doOpenModal(MODALS.FILE_TIMEOUT, { uri });
       } else {
         dispatch(
           doError(
-            `Failed to download ${uri}, please try again. If this problem persists, visit https://lbry.io/faq/support for support.`
+            `Failed to download ${uri}, please try again or see error details:\n\n${errorType}\n\nIf this problem persists, visit https://lbry.io/support for help. `
           )
         );
       }
@@ -204,6 +205,7 @@ export function doLoadVideo(uri, shouldRecordViewEvent) {
 
     Lbry.get({ uri })
       .then(streamInfo => {
+        // need error code from SDK to capture properly
         const timeout =
           streamInfo === null || typeof streamInfo !== 'object' || streamInfo.error === 'Timeout';
 
@@ -221,8 +223,8 @@ export function doLoadVideo(uri, shouldRecordViewEvent) {
           }
         }
       })
-      .catch(() => {
-        dispatch(handleLoadVideoError(uri));
+      .catch(error => {
+        dispatch(handleLoadVideoError(uri, error));
       });
   };
 }
