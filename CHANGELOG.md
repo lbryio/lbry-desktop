@@ -22,6 +22,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ### Fixed
 
+- Error message when thumbupload failed([#2254](https://github.com/lbryio/lbry-desktop/pull/2254))
 - Flow errors ([#2213](https://github.com/lbryio/lbry-desktop/pull/2213))
 - Video position on previously viewed files ([#2240](https://github.com/lbryio/lbry-desktop/pull/2240))
 
