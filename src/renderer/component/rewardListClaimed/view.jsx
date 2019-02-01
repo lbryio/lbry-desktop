@@ -29,7 +29,7 @@ const RewardListClaimed = (props: Props) => {
 
         <p className="card__subtitle">
           {__(
-            'Reward history is tied to your email. In case of lost or multiple wallets, balance may differ from amounts claimed'
+            'Reward history is tied to your email. In case of lost or multiple wallets, your balance may differ from the amounts claimed'
           )}.
         </p>
       </header>
