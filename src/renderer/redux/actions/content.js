@@ -174,6 +174,7 @@ function handleLoadVideoError(uri, errorType = '') {
   return (dispatch, getState) => {
     // suppress error when another media is playing
     const { playingUri } = getState().content;
+    const errorText = typeof errorType === 'object' ? errorType.message : errorType;
     if (playingUri && playingUri === uri) {
       dispatch({
         type: ACTIONS.LOADING_VIDEO_FAILED,
@@ -186,7 +187,7 @@ function handleLoadVideoError(uri, errorType = '') {
       } else {
         dispatch(
           doError(
-            `Failed to download ${uri}, please try again or see error details:\n\n${errorType}\n\nIf this problem persists, visit https://lbry.io/support for help. `
+            `Failed to download ${uri}, please try again or see error details:\n\n${errorText}\n\nIf this problem persists, visit https://lbry.io/support for help. `
           )
         );
       }
