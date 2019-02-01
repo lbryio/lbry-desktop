@@ -107,6 +107,7 @@
 .error-modal {
   max-width: none;
   width: var(--modal-width);
+  white-space: pre-wrap;
 }
 
 .error-modal__error-list {
@@ -120,4 +121,5 @@
   color: $lbry-red-5;
   list-style: none;
   overflow-y: scroll;
+  white-space: pre-wrap;
 }
