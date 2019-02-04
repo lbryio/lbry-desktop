@@ -140,3 +140,10 @@
     width: 25%;
   }
 }
+
+.table--invites {
+  svg {
+    margin-bottom: -2px;
+    margin-left: var(--spacing-vertical-small);
+  }
+}
