@@ -283,8 +283,8 @@ class MediaPlayer extends React.PureComponent {
     const isLoadingFile = !fileSource && isFileType;
     const isLbryPackage = /application\/x(-ext)?-lbry$/.test(contentType);
     const isUnsupported =
-      !isLbryPackage && (!this.supportedType() && !isFileType && !isPlayableType);
-
+      (mediaType === 'application' && !isLbryPackage) ||
+      (!this.supportedType() && !isFileType && !isPlayableType);
     // Media (audio, video)
     const isUnplayable = isPlayableType && unplayable;
     const isLoadingMetadata = isPlayableType && (!hasMetadata && !unplayable);
