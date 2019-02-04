@@ -209,4 +209,9 @@
   display: flex;
   @include between;
   align-items: center;
+
+  .btn {
+    font-size: 1.2rem; // Don't make buttons the size of the title
+    font-weight: 400;
+  }
 }

@@ -16,18 +16,15 @@ type Props = {
 
 const RewardLink = (props: Props) => {
   const { reward, claimReward, label, isPending, button } = props;
-
   return !reward ? null : (
-    <div className="reward-link">
-      <Button
-        button={button ? 'primary' : 'link'}
-        disabled={isPending}
-        label={isPending ? __('Claiming...') : label || `${__('Get')} ${reward.reward_amount} LBC`}
-        onClick={() => {
-          claimReward(reward);
-        }}
-      />
-    </div>
+    <Button
+      button={button ? 'primary' : 'link'}
+      disabled={isPending}
+      label={isPending ? __('Claiming...') : label || `${__('Get')} ${reward.reward_amount} LBC`}
+      onClick={() => {
+        claimReward(reward);
+      }}
+    />
   );
 };
 

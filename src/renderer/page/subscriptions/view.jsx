@@ -43,6 +43,7 @@ export default class extends PureComponent<Props> {
       firstRunCompleted,
       doShowSuggestedSubs,
     } = this.props;
+
     doFetchMySubscriptions();
     doFetchRecommendedSubscriptions();
 

@@ -1,10 +1,11 @@
 // @flow
-import * as ICONS from 'constants/icons';
+import type { Reward } from 'types/reward';
 import React from 'react';
-import Icon from 'component/common/icon';
 import RewardLink from 'component/rewardLink';
 import Yrbl from 'component/common/yrbl';
 import { rewards } from 'lbryinc';
+import Icon from 'component/common/icon';
+import * as ICONS from 'constants/icons';
 
 type Props = {
   invitees: ?Array<{
@@ -13,11 +14,12 @@ type Props = {
     invite_reward_claimed: boolean,
     invite_reward_claimable: boolean,
   }>,
+  referralReward: ?Reward,
 };
 
 class InviteList extends React.PureComponent<Props> {
   render() {
-    const { invitees } = this.props;
+    const { invitees, referralReward } = this.props;
 
     if (!invitees) {
       return null;
@@ -35,50 +37,72 @@ class InviteList extends React.PureComponent<Props> {
       );
     }
 
+    let rewardAmount = 0;
+    let rewardHelp = __(
+      "Woah, you have a lot of friends! You've claimed the maximum amount of referral rewards. Check back soon to see if more are available!."
+    );
+
+    if (referralReward) {
+      rewardAmount = referralReward.reward_amount;
+      rewardHelp = referralReward.reward_description;
+    }
+    const showClaimable = invitees.some(
+      invite => invite.invite_reward_claimable && !invite.invite_reward_claimed
+    );
+
     return (
       <section className="card card--section">
         <header className="card__header">
-          <h2 className="card__title">{__('Invite History')}</h2>
+          <h2 className="card__title card__title--flex-between">
+            {__('Invite History')}
+            {referralReward &&
+              showClaimable && (
+                <RewardLink
+                  button
+                  label={__(`Claim Your ${40 || rewardAmount} LBC Invite Reward`)}
+                  reward_type={rewards.TYPE_REFERRAL}
+                />
+              )}
+          </h2>
         </header>
 
         <div className="card__content">
-          <table className="table table--stretch">
+          <table className="table table--invites table--stretch">
             <thead>
               <tr>
                 <th>{__('Invitee Email')}</th>
-                <th className="text-center">{__('Invite Status')}</th>
-                <th className="text-center">{__('Reward')}</th>
+                <th>{__('Invite Status')}</th>
+                <th>{__('Reward')}</th>
               </tr>
             </thead>
             <tbody>
               {invitees.map(invitee => (
                 <tr key={invitee.email}>
                   <td>{invitee.email}</td>
-                  <td className="text-center">
-                    {invitee.invite_accepted ? (
-                      <Icon icon={ICONS.COMPLETED} />
-                    ) : (
-                      <span className="empty">{__('unused')}</span>
-                    )}
+                  <td>
+                    <span>{invitee.invite_accepted ? __('Accepted') : __('Not Accepted')}</span>
                   </td>
-                  <td className="text-center">
-                    {invitee.invite_reward_claimed && <Icon icon={ICONS.COMPLETED} />}
-                    {!invitee.invite_reward_claimed && invitee.invite_reward_claimable ? (
-                      <RewardLink label={__('claim')} reward_type={rewards.TYPE_REFERRAL} />
-                    ) : (
-                      <span className="empty">{__('unclaimable')}</span>
+                  <td>
+                    {invitee.invite_reward_claimed && (
+                      <React.Fragment>
+                        <span>{__('Claimed')}</span>
+                        <Icon icon={ICONS.COMPLETE} />
+                      </React.Fragment>
                     )}
+
+                    {!invitee.invite_reward_claimed &&
+                      (invitee.invite_reward_claimable ? (
+                        <span>{__('Claimable')}</span>
+                      ) : (
+                        __('Unclaimable')
+                      ))}
                   </td>
                 </tr>
               ))}
             </tbody>
           </table>
 
-          <div className="help">
-            {__(
-              'The maximum number of invite rewards is currently limited. Invite reward can only be claimed if the invitee passes the humanness test.'
-            )}
-          </div>
+          <div className="help">{rewardHelp}</div>
         </div>
       </section>
     );
