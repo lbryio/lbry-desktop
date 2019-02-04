@@ -5666,7 +5666,7 @@ lazy-val@^1.0.3:
 
 "lbry-format@https://github.com/lbryio/lbry-format.git":
   version "0.1.0"
-  resolved "https://github.com/lbryio/lbry-format.git#e2f6d8f68aca5b5322b6afa9f2599bac9c7f216a"
+  resolved "https://github.com/lbryio/lbry-format.git#142684f134b5101a2ae54d5bc7c5bdb3189b2ea2"
   dependencies:
     tar-stream "^1.6.2"
     zstd-codec "^0.1.1"
