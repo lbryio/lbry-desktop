@@ -15,7 +15,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Support for back/forward mouse navigation on Windows ([#2250](https://github.com/lbryio/lbry-desktop/pull/2250))
 
 ### Changed
-
+- Dark theme as default ([#2210](https://github.com/lbryio/lbry-desktop/pull/2210))
 - Less intrusive first run flow ([#2210](https://github.com/lbryio/lbry-desktop/pull/2210))
 - Add icon for your own publishes on cards/tiles ([#2249](https://github.com/lbryio/lbry-desktop/pull/2249))
 - Improved Claimed Reward messaging ([#2253](https://github.com/lbryio/lbry-desktop/pull/2253))
