@@ -17,6 +17,7 @@ type Props = {
   fetchChannel: string => void,
   urisInList: ?Array<string>,
   resolveUris: (Array<string>) => void,
+  lazyLoad: boolean, // only fetch rows if they are on the screen
 };
 
 type State = {
@@ -27,6 +28,7 @@ type State = {
 class CategoryList extends PureComponent<Props, State> {
   static defaultProps = {
     categoryLink: undefined,
+    lazyLoad: false,
   };
 
   scrollWrapper: { current: null | HTMLUListElement };
@@ -48,20 +50,28 @@ class CategoryList extends PureComponent<Props, State> {
   }
 
   componentDidMount() {
-    const { fetching, categoryLink, fetchChannel, resolveUris, urisInList } = this.props;
-    if (!fetching && categoryLink && (!urisInList || urisInList.length)) {
+    const { fetching, categoryLink, fetchChannel, resolveUris, urisInList, lazyLoad } = this.props;
+    if (!fetching && categoryLink && (!urisInList || !urisInList.length)) {
       // Only fetch the channels claims if no urisInList are specifically passed in
       // This allows setting a channel link and and passing in a custom list of urisInList (featured content usually works this way)
       fetchChannel(categoryLink);
     }
 
-    const scrollWrapper = this.scrollWrapper.current;
-    if (scrollWrapper) {
-      scrollWrapper.addEventListener('scroll', throttle(this.handleArrowButtonsOnScroll, 500));
+    if (!urisInList) {
+      return;
+    }
 
-      if (urisInList && window.innerHeight > scrollWrapper.offsetTop) {
-        resolveUris(urisInList);
+    if (lazyLoad) {
+      const scrollWrapper = this.scrollWrapper.current;
+      if (scrollWrapper) {
+        scrollWrapper.addEventListener('scroll', throttle(this.handleArrowButtonsOnScroll, 500));
+
+        if (urisInList && window.innerHeight > scrollWrapper.offsetTop) {
+          resolveUris(urisInList);
+        }
       }
+    } else {
+      resolveUris(urisInList);
     }
   }
 
@@ -246,7 +256,7 @@ class CategoryList extends PureComponent<Props, State> {
   }
 
   render() {
-    const { category, categoryLink, urisInList, obscureNsfw } = this.props;
+    const { category, categoryLink, urisInList, obscureNsfw, lazyLoad } = this.props;
     const { canScrollNext, canScrollPrevious } = this.state;
     const isCommunityTopBids = category.match(/^community/i);
     const showScrollButtons = isCommunityTopBids ? !obscureNsfw : true;
@@ -311,7 +321,7 @@ class CategoryList extends PureComponent<Props, State> {
               urisInList.map(uri => (
                 <FileCard
                   placeholder
-                  preventResolve
+                  preventResolve={lazyLoad}
                   showSubscribedLogo
                   key={uri}
                   uri={normalizeURI(uri)}

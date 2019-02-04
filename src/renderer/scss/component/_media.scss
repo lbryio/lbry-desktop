@@ -405,7 +405,7 @@
   &:not(.media__thumb--nsfw):not(.media__thumb--placeholder) {
     background-color: $lbry-gray-2;
     background-position: center;
-    background-repeat: repeat;
+    background-repeat: no-repeat;
     background-size: cover;
 
     html[data-theme='dark'] & {

@@ -66,6 +66,7 @@ class DiscoverPage extends React.PureComponent<Props> {
         {hasContent &&
           Object.keys(featuredUris).map(category => (
             <CategoryList
+              lazyLoad
               key={category}
               category={this.trimClaimIdFromCategory(category)}
               uris={featuredUris[category]}
