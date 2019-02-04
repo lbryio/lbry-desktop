@@ -118,7 +118,6 @@ export const selectNavLinks = createSelector(
       page === PAGES.WALLET ||
       page === PAGES.SEND ||
       page === PAGES.GET_CREDITS ||
-      page === PAGES.REWARDS ||
       page === PAGES.HISTORY ||
       page === PAGES.BACKUP;
 
@@ -178,9 +177,6 @@ export const selectNavLinks = createSelector(
         ...buildLink('Get Credits', PAGES.GET_CREDITS),
       },
       {
-        ...buildLink('Rewards', PAGES.REWARDS),
-      },
-      {
         ...buildLink('Backup', PAGES.BACKUP),
       },
     ];
@@ -207,6 +203,11 @@ export const selectNavLinks = createSelector(
         {
           ...buildLink('Invite', PAGES.INVITE),
           icon: ICONS.INVITE,
+        },
+        {
+          ...buildLink('Rewards', PAGES.REWARDS),
+          // This probably shouldn't use the "FEATURED" icon, but not sure what else to use
+          icon: ICONS.FEATURED,
         },
         {
           ...buildLink('Downloads', PAGES.DOWNLOADED),
