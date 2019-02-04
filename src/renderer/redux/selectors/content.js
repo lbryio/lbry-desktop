@@ -59,7 +59,7 @@ export const makeSelectHistoryForPage = (page: number) =>
 export const makeSelectHistoryForUri = (uri: string) =>
   createSelector(selectState, state => state.history.find(i => i.uri === uri));
 
-export const makeSelectCategoryListUris = (uris: Array<string> = [], channel: string) =>
+export const makeSelectCategoryListUris = (uris: ?Array<string>, channel: string) =>
   createSelector(makeSelectClaimsInChannelForCurrentPage(channel), channelClaims => {
     if (uris) return uris;
 
