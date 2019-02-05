@@ -19,12 +19,12 @@ import {
   selectMyClaimsWithoutChannels,
   doError,
 } from 'lbry-redux';
-import { Lbryio } from 'lbryinc';
 import { doOpenModal } from 'redux/actions/app';
 import { selectosNotificationsEnabled } from 'redux/selectors/settings';
 import { doNavigate } from 'redux/actions/navigation';
 import fs from 'fs';
 import path from 'path';
+import analytics from 'analytics';
 
 type Action = UpdatePublishFormAction | { type: ACTIONS.CLEAR_PUBLISH };
 
@@ -274,8 +274,7 @@ export const doPublish = (params: PublishParams) => (
   dispatch({ type: ACTIONS.PUBLISH_START });
 
   const success = pendingClaim => {
-    Lbryio.call('event', 'publish');
-
+    analytics.apiLogPublish();
     const actions = [];
 
     actions.push({
