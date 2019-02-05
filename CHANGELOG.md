@@ -8,7 +8,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ### Added
 
-- Support for sandbox games and applications - lbry://@OpenSourceGames ([#2178](https://github.com/lbryio/lbry-desktop/pull/2178))
+- Support for sandbox games and applications - ```lbry://@OpenSourceGames``` ([#2178](https://github.com/lbryio/lbry-desktop/pull/2178))
 - Call to action on invite page during first run ([#2221](https://github.com/lbryio/lbry-desktop/pull/2221))
 - Responsive related content list for smaller screens ([#2226](https://github.com/lbryio/lbry-desktop/pull/2226))
 - Autoplay content in list of related files (experimental feature in settings) ([#2235](https://github.com/lbryio/lbry-desktop/pull/2235))
