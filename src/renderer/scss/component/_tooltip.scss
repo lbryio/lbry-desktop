@@ -22,11 +22,13 @@
     text-align: center;
     white-space: pre-wrap;
     width: 200px;
+    background-color: $lbry-white;
+    border: 1px solid $lbry-gray-1;
     box-shadow: 5px 5px 5px rgba($lbry-black, 0.15);
+    border-radius: 0.5rem;
 
-    html[data-theme='dark'] & {
-      border: 1px solid #2f2f2f;
-      background-color: $lbry-gray-1;
+    &.tooltip__body--short {
+      width: 130px;
     }
 
     &::after {
@@ -38,9 +40,39 @@
       content: ' ';
       position: absolute;
     }
+  }
 
-    &.tooltip__body--short {
-      width: 130px;
+  $tooltip-border: $lbry-gray-5;
+  &.tooltip--bottom .tooltip__body::after {
+    border-color: transparent transparent $tooltip-border transparent;
+  }
+  &.tooltip--left .tooltip__body::after {
+    border-color: transparent transparent transparent $tooltip-border;
+  }
+  &.tooltip--right .tooltip__body::after {
+    border-color: transparent $tooltip-border transparent transparent;
+  }
+  &.tooltip--top .tooltip__body::after {
+    border-color: $tooltip-border transparent transparent transparent;
+  }
+
+  html[data-theme='dark'] & {
+    .tooltip__body {
+      border: none;
+    }
+    $tooltip-border: $lbry-white;
+
+    &.tooltip--bottom .tooltip__body::after {
+      border-color: transparent transparent $tooltip-border transparent;
+    }
+    &.tooltip--left .tooltip__body::after {
+      border-color: transparent transparent transparent $tooltip-border;
+    }
+    &.tooltip--right .tooltip__body::after {
+      border-color: transparent $tooltip-border transparent transparent;
+    }
+    &.tooltip--top .tooltip__body::after {
+      border-color: $tooltip-border transparent transparent transparent;
     }
   }
 }
@@ -48,24 +80,6 @@
 .tooltip--always-visible {
   .tooltip__body {
     visibility: visible;
-  }
-}
-
-.tooltip--bottom .tooltip__body {
-  top: 90%;
-  left: 50%;
-  margin-left: -100px;
-
-  &.tooltip__body--short {
-    margin-left: -65px;
-  }
-
-  &::after {
-    bottom: 100%;
-    left: 50%;
-
-    border-color: transparent transparent $lbry-gray-5 transparent;
-    margin-left: -5px;
   }
 }
 
@@ -79,9 +93,26 @@
   }
 }
 
-.tooltip--on-component {
+.tooltip--on-component,
+.tooltip--icon {
   .tooltip__body {
     margin-top: 10px;
+  }
+}
+
+.tooltip--bottom .tooltip__body {
+  top: 90%;
+  left: 50%;
+  margin-left: -100px;
+
+  &.tooltip__body--short {
+    margin-left: -65px;
+  }
+
+  &::after {
+    bottom: 101%;
+    left: 50%;
+    margin-left: -5px;
   }
 }
 
@@ -92,8 +123,6 @@
   &::after {
     top: 17px;
     left: 100%;
-
-    border-color: transparent transparent transparent $lbry-gray-5;
     margin-top: -5px;
   }
 }
@@ -105,14 +134,12 @@
   &::after {
     top: 17px;
     right: 100%; // To the left of the tooltip
-
-    border-color: transparent $lbry-gray-5 transparent transparent;
     margin-top: -5px;
   }
 }
 
 .tooltip--top .tooltip__body {
-  bottom: 100%;
+  bottom: 120%;
   left: 50%;
   margin-left: -100px;
 
@@ -123,8 +150,6 @@
   &::after {
     top: 100%;
     left: 50%;
-
-    border-color: $lbry-gray-5 transparent transparent transparent;
     margin-left: -5px;
   }
 }
