@@ -1,9 +1,10 @@
 .tooltip {
   display: inline-block;
   position: relative;
-  z-index: 2;
 
   .tooltip__body {
+    z-index: 2;
+
     visibility: hidden;
   }
 
@@ -17,7 +18,7 @@
     font-size: 1rem;
     color: $lbry-black;
     font-weight: 400;
-    padding: var(--spacing-vertical-small);
+    padding: var(--spacing-vertical-miniscule);
     position: absolute;
     text-align: center;
     white-space: pre-wrap;
@@ -28,7 +29,7 @@
     border-radius: 0.5rem;
 
     &.tooltip__body--short {
-      width: 130px;
+      width: 110px;
     }
 
     &::after {
@@ -100,22 +101,6 @@
   }
 }
 
-.tooltip--bottom .tooltip__body {
-  top: 90%;
-  left: 50%;
-  margin-left: -100px;
-
-  &.tooltip__body--short {
-    margin-left: -65px;
-  }
-
-  &::after {
-    bottom: 101%;
-    left: 50%;
-    margin-left: -5px;
-  }
-}
-
 .tooltip--left .tooltip__body {
   top: -5px;
   right: 105%;
@@ -128,13 +113,29 @@
 }
 
 .tooltip--right .tooltip__body {
-  margin-top: -30px;
+  margin-top: -28px;
   margin-left: 110%;
 
   &::after {
-    top: 17px;
+    top: 14px;
     right: 100%; // To the left of the tooltip
     margin-top: -5px;
+  }
+}
+
+.tooltip--bottom .tooltip__body {
+  top: 90%;
+  left: 50%;
+  margin-left: -100px;
+
+  &.tooltip__body--short {
+    margin-left: -56px;
+  }
+
+  &::after {
+    bottom: 100%;
+    left: 50%;
+    margin-left: -5px;
   }
 }
 
@@ -144,7 +145,7 @@
   margin-left: -100px;
 
   &.tooltip__body--short {
-    margin-left: -65px;
+    margin-left: -56px;
   }
 
   &::after {
