@@ -88,7 +88,11 @@
   }
 
   &.navigation__link--guide:not(:hover) {
-    color: rgba($lbry-white, 0.75);
+    color: rgba($lbry-black, 0.75);
+
+    html[data-theme='dark'] {
+      color: rgba($lbry-white, 0.75);
+    }
 
     &::before {
       animation: bounce 1.75s infinite;
