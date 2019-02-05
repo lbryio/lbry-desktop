@@ -170,7 +170,15 @@ class FilePage extends React.Component<Props> {
 
           <div className="media__properties media__properties--large">
             {isRewardContent && (
-              <Icon size={20} iconColor="red" tooltip="bottom" icon={icons.FEATURED} />
+              <Icon
+                size={20}
+                iconColor="red"
+                icon={icons.FEATURED}
+                // Figure out how to get the tooltip to overlap the navbar on the file page and I will love you
+                // https://stackoverflow.com/questions/6421966/css-overflow-x-visible-and-overflow-y-hidden-causing-scrollbar-issue
+                // https://spee.ch/4/overflow-issue
+                // tooltip="bottom"
+              />
             )}
             {metadata.nsfw && <div className="badge badge--nsfw">NSFW</div>}
             <FilePrice badge uri={normalizeURI(uri)} />

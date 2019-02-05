@@ -6,6 +6,7 @@ import type {
   UpdatePublishFormAction,
   PublishParams,
 } from 'redux/reducers/publish';
+import { CC_LICENSES, COPYRIGHT, OTHER, NONE, PUBLIC_DOMAIN } from 'constants/licenses';
 import * as MODALS from 'constants/modal_types';
 import {
   ACTIONS,
@@ -18,12 +19,12 @@ import {
   selectMyClaimsWithoutChannels,
   doError,
 } from 'lbry-redux';
+import { Lbryio } from 'lbryinc';
 import { doOpenModal } from 'redux/actions/app';
 import { selectosNotificationsEnabled } from 'redux/selectors/settings';
 import { doNavigate } from 'redux/actions/navigation';
 import fs from 'fs';
 import path from 'path';
-import { CC_LICENSES, COPYRIGHT, OTHER, NONE, PUBLIC_DOMAIN } from 'constants/licenses';
 
 type Action = UpdatePublishFormAction | { type: ACTIONS.CLEAR_PUBLISH };
 
@@ -273,6 +274,8 @@ export const doPublish = (params: PublishParams) => (
   dispatch({ type: ACTIONS.PUBLISH_START });
 
   const success = pendingClaim => {
+    Lbryio.call('event', 'publish');
+
     const actions = [];
 
     actions.push({

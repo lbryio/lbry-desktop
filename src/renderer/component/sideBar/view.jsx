@@ -29,6 +29,7 @@ class SideBar extends React.PureComponent<Props> {
       <li
         className={classnames('navigation__link', {
           'navigation__link--active': active,
+          'navigation__link--guide': guide,
         })}
         key={label}
       >
