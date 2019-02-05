@@ -57,7 +57,7 @@ class ToolTip extends React.PureComponent<Props, State> {
           ref={ref => {
             this.tooltip = ref;
           }}
-          className={classnames('card tooltip__body', {
+          className={classnames('tooltip__body', {
             'tooltip__body--short': isShortDescription,
           })}
         >

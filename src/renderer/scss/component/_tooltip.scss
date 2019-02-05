@@ -1,9 +1,10 @@
 .tooltip {
   display: inline-block;
   position: relative;
-  z-index: 2;
 
   .tooltip__body {
+    z-index: 2;
+
     visibility: hidden;
   }
 
@@ -17,16 +18,18 @@
     font-size: 1rem;
     color: $lbry-black;
     font-weight: 400;
-    padding: var(--spacing-vertical-small);
+    padding: var(--spacing-vertical-miniscule);
     position: absolute;
     text-align: center;
     white-space: pre-wrap;
     width: 200px;
+    background-color: $lbry-white;
+    border: 1px solid $lbry-gray-1;
     box-shadow: 5px 5px 5px rgba($lbry-black, 0.15);
+    border-radius: 0.5rem;
 
-    html[data-theme='dark'] & {
-      border: 1px solid #2f2f2f;
-      background-color: $lbry-gray-1;
+    &.tooltip__body--short {
+      width: 110px;
     }
 
     &::after {
@@ -38,9 +41,39 @@
       content: ' ';
       position: absolute;
     }
+  }
 
-    &.tooltip__body--short {
-      width: 130px;
+  $tooltip-border: $lbry-gray-5;
+  &.tooltip--bottom .tooltip__body::after {
+    border-color: transparent transparent $tooltip-border transparent;
+  }
+  &.tooltip--left .tooltip__body::after {
+    border-color: transparent transparent transparent $tooltip-border;
+  }
+  &.tooltip--right .tooltip__body::after {
+    border-color: transparent $tooltip-border transparent transparent;
+  }
+  &.tooltip--top .tooltip__body::after {
+    border-color: $tooltip-border transparent transparent transparent;
+  }
+
+  html[data-theme='dark'] & {
+    .tooltip__body {
+      border: none;
+    }
+    $tooltip-border: $lbry-white;
+
+    &.tooltip--bottom .tooltip__body::after {
+      border-color: transparent transparent $tooltip-border transparent;
+    }
+    &.tooltip--left .tooltip__body::after {
+      border-color: transparent transparent transparent $tooltip-border;
+    }
+    &.tooltip--right .tooltip__body::after {
+      border-color: transparent $tooltip-border transparent transparent;
+    }
+    &.tooltip--top .tooltip__body::after {
+      border-color: $tooltip-border transparent transparent transparent;
     }
   }
 }
@@ -48,24 +81,6 @@
 .tooltip--always-visible {
   .tooltip__body {
     visibility: visible;
-  }
-}
-
-.tooltip--bottom .tooltip__body {
-  top: 90%;
-  left: 50%;
-  margin-left: -100px;
-
-  &.tooltip__body--short {
-    margin-left: -65px;
-  }
-
-  &::after {
-    bottom: 100%;
-    left: 50%;
-
-    border-color: transparent transparent $lbry-gray-5 transparent;
-    margin-left: -5px;
   }
 }
 
@@ -79,7 +94,8 @@
   }
 }
 
-.tooltip--on-component {
+.tooltip--on-component,
+.tooltip--icon {
   .tooltip__body {
     margin-top: 10px;
   }
@@ -92,39 +108,49 @@
   &::after {
     top: 17px;
     left: 100%;
-
-    border-color: transparent transparent transparent $lbry-gray-5;
     margin-top: -5px;
   }
 }
 
 .tooltip--right .tooltip__body {
-  margin-top: -30px;
+  margin-top: -28px;
   margin-left: 110%;
 
   &::after {
-    top: 17px;
+    top: 14px;
     right: 100%; // To the left of the tooltip
-
-    border-color: transparent $lbry-gray-5 transparent transparent;
     margin-top: -5px;
   }
 }
 
-.tooltip--top .tooltip__body {
-  bottom: 100%;
+.tooltip--bottom .tooltip__body {
+  top: 90%;
   left: 50%;
   margin-left: -100px;
 
   &.tooltip__body--short {
-    margin-left: -65px;
+    margin-left: -56px;
+  }
+
+  &::after {
+    bottom: 100%;
+    left: 50%;
+    margin-left: -5px;
+  }
+}
+
+.tooltip--top .tooltip__body {
+  bottom: 120%;
+  left: 50%;
+  margin-left: -100px;
+
+  &.tooltip__body--short {
+    margin-left: -56px;
   }
 
   &::after {
     top: 100%;
     left: 50%;
-
-    border-color: $lbry-gray-5 transparent transparent transparent;
     margin-left: -5px;
   }
 }

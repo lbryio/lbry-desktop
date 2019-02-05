@@ -9,6 +9,7 @@ import {
   doSearch,
   doToast,
 } from 'lbry-redux';
+import { Lbryio } from 'lbryinc';
 import { makeSelectClientSetting } from 'redux/selectors/settings';
 import * as settings from 'constants/settings';
 import { doNavigate } from 'redux/actions/navigation';
@@ -34,6 +35,8 @@ const perform = dispatch => ({
   onSearch: (query, size) => {
     dispatch(doSearch(query, size));
     dispatch(doNavigate(`/search`, { query }));
+    // Ideally this would live inside doSearch, but lbry-redux does not have access to lbryinc
+    Lbryio.call('event', 'search');
   },
   onSubmit: (uri, extraParams) => dispatch(doNavigate('/show', { uri, ...extraParams })),
   updateSearchQuery: query => dispatch(doUpdateSearchQuery(query)),
