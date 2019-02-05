@@ -8,7 +8,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ### Added
 
-- Support for sandbox games and applications - lbry://@OpenSourceGames ([#2178](https://github.com/lbryio/lbry-desktop/pull/2178))
+- Support for sandbox games and applications - ```lbry://@OpenSourceGames``` ([#2178](https://github.com/lbryio/lbry-desktop/pull/2178))
 - Call to action on invite page during first run ([#2221](https://github.com/lbryio/lbry-desktop/pull/2221))
 - Responsive related content list for smaller screens ([#2226](https://github.com/lbryio/lbry-desktop/pull/2226))
 - Autoplay content in list of related files (experimental feature in settings) ([#2235](https://github.com/lbryio/lbry-desktop/pull/2235))
@@ -16,6 +16,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ### Changed
 - Dark theme as default ([#2210](https://github.com/lbryio/lbry-desktop/pull/2210))
+- Invite page improvements including increase of reward to 20 LBC / 10 redemptions ([#2256](https://github.com/lbryio/lbry-desktop/pull/2256))
 - Less intrusive first run flow, email collection ([#2210](https://github.com/lbryio/lbry-desktop/pull/2210))
 - Add icon for your own publishes on cards/tiles ([#2249](https://github.com/lbryio/lbry-desktop/pull/2249))
 - Improved Claimed Reward messaging ([#2253](https://github.com/lbryio/lbry-desktop/pull/2253))

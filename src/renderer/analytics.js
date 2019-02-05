@@ -70,6 +70,16 @@ const analytics: Analytics = {
         .catch(() => {});
     }
   },
+  apiLogSearch: () => {
+    if (analyticsEnabled) {
+      Lbryio.call('event', 'search');
+    }
+  },
+  apiLogPublish: () => {
+    if (analyticsEnabled) {
+      Lbryio.call('event', 'publish');
+    }
+  },
 };
 
 export default analytics;
