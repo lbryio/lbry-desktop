@@ -90,7 +90,7 @@
   &.navigation__link--guide:not(:hover) {
     color: rgba($lbry-black, 0.75);
 
-    html[data-theme='dark'] {
+    html[data-theme='dark'] & {
       color: rgba($lbry-white, 0.75);
     }
 
