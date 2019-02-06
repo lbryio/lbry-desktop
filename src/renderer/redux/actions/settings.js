@@ -22,8 +22,10 @@ export function doFetchDaemonSettings() {
 
 export function doSetDaemonSetting(key, value) {
   return dispatch => {
-    const newSettings = {};
-    newSettings[key] = value;
+    const newSettings = {
+      key,
+      value,
+    };
     Lbry.settings_set(newSettings).then(newSettings);
     Lbry.settings_get().then(settings => {
       analytics.toggle(settings.share_usage_data, true);
@@ -71,6 +73,7 @@ export function doUpdateIsNight() {
 export function doUpdateIsNightAsync() {
   return dispatch => {
     dispatch(doUpdateIsNight());
+    // eslint-disable-next-line no-unused-vars
     const updateIsNightInterval = setInterval(
       () => dispatch(doUpdateIsNight()),
       UPDATE_IS_NIGHT_INTERVAL

@@ -13,7 +13,7 @@ export type Price = {
 };
 
 type DaemonSettings = {
-  download_directory: string,
+  download_dir: string,
   disable_max_key_fee: boolean,
   share_usage_data: boolean,
   max_key_fee?: Price,
@@ -80,7 +80,7 @@ class SettingsPage extends React.PureComponent<Props, State> {
   }
 
   onDownloadDirChange(newDirectory: string) {
-    this.setDaemonSetting('download_directory', newDirectory);
+    this.setDaemonSetting('download_dir', newDirectory);
   }
 
   onKeyFeeChange(newValue: Price) {
@@ -190,7 +190,7 @@ class SettingsPage extends React.PureComponent<Props, State> {
               <div className="card__content">
                 <FileSelector
                   type="openDirectory"
-                  currentPath={daemonSettings.download_directory}
+                  currentPath={daemonSettings.download_dir}
                   onFileChosen={this.onDownloadDirChange}
                 />
               </div>

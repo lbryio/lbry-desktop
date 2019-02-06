@@ -1,6 +1,6 @@
 // @flow
 import type { Dispatch, GetState } from 'types/redux';
-import type { Source, Metadata } from 'types/claim';
+import type { Metadata } from 'types/claim';
 import type {
   UpdatePublishFormData,
   UpdatePublishFormAction,
@@ -226,7 +226,6 @@ export const doPublish = (params: PublishParams) => (
     contentIsFree,
     price,
     uri,
-    sources,
   } = params;
 
   // get the claim id from the channel name, we will use that instead
@@ -250,7 +249,6 @@ export const doPublish = (params: PublishParams) => (
     bid: ?number,
     metadata: ?Metadata,
     file_path?: string,
-    sources?: Source,
   } = {
     name,
     channel_id: channelId,
@@ -264,12 +262,8 @@ export const doPublish = (params: PublishParams) => (
       amount: creditsToString(fee.amount),
     };
   }
-
-  if (filePath) {
-    publishPayload.file_path = filePath;
-  } else {
-    publishPayload.sources = sources;
-  }
+  // only pass file on new uploads, not metadata only edits.
+  if (filePath) publishPayload.file_path = filePath;
 
   dispatch({ type: ACTIONS.PUBLISH_START });
 

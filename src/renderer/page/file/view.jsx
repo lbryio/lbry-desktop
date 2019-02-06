@@ -58,15 +58,14 @@ class FilePage extends React.Component<Props> {
   ];
 
   componentDidMount() {
+    // eslint-disable-next-line no-unused-vars
     const { uri, fileInfo, fetchFileInfo, fetchCostInfo, setViewed, isSubscribed } = this.props;
 
     if (isSubscribed) {
       this.removeFromSubscriptionNotifications();
     }
-
-    if (fileInfo === undefined) {
-      fetchFileInfo(uri);
-    }
+    // always refresh file info when entering file page
+    fetchFileInfo(uri);
 
     // See https://github.com/lbryio/lbry-desktop/pull/1563 for discussion
     fetchCostInfo(uri);

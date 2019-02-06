@@ -62,7 +62,11 @@ class FileDetails extends PureComponent<Props> {
     const { description, language, license } = metadata;
 
     const mediaType = contentType || 'unknown';
-    const downloadPath = fileInfo ? path.normalize(fileInfo.download_path) : null;
+    let downloadPath =
+      fileInfo && fileInfo.download_path ? path.normalize(fileInfo.download_path) : null;
+    // We should check if the file exists, and then show a better message, wtih an option to redownload.
+    if (fileInfo && fileInfo.download_path === null)
+      downloadPath = 'File may have been deleted or moved.';
 
     return (
       <Fragment>
