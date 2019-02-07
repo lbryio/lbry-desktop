@@ -27,6 +27,7 @@ export const PHONE = 'Phone';
 export const COMPLETE = 'Check';
 export const COMPLETED = 'CheckCircle';
 export const SUBSCRIPTION = 'Heart';
+export const UNSUBSCRIBE = 'BrokenHeart';
 export const UNLOCK = 'Unlock';
 export const WEB = 'Globe';
 export const SHARE = 'Share2';
