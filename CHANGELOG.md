@@ -4,17 +4,28 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
-## [0.28.0] - Unreleased
+## Unreleased
 
 ### Added
 
-- Support for sandbox games and applications - ```lbry://@OpenSourceGames``` ([#2178](https://github.com/lbryio/lbry-desktop/pull/2178))
+### Changed
+
+### Fixed
+
+- Inverse button readability on hover ([#2271](https://github.com/lbryio/lbry-desktop/pull/2271)
+
+## [0.28.0] - 2019-2-5
+
+### Added
+
+- Support for sandbox games and applications - `lbry://@OpenSourceGames` ([#2178](https://github.com/lbryio/lbry-desktop/pull/2178))
 - Call to action on invite page during first run ([#2221](https://github.com/lbryio/lbry-desktop/pull/2221))
 - Responsive related content list for smaller screens ([#2226](https://github.com/lbryio/lbry-desktop/pull/2226))
 - Autoplay content in list of related files (experimental feature in settings) ([#2235](https://github.com/lbryio/lbry-desktop/pull/2235))
 - Support for back/forward mouse navigation on Windows ([#2250](https://github.com/lbryio/lbry-desktop/pull/2250))
 
 ### Changed
+
 - Dark theme as default ([#2210](https://github.com/lbryio/lbry-desktop/pull/2210))
 - Invite page improvements including increase of reward to 20 LBC / 10 redemptions ([#2256](https://github.com/lbryio/lbry-desktop/pull/2256))
 - Less intrusive first run flow, email collection ([#2210](https://github.com/lbryio/lbry-desktop/pull/2210))
@@ -28,14 +39,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Video position on previously viewed files ([#2240](https://github.com/lbryio/lbry-desktop/pull/2240))
 - Pass download error details on modal ([#2255](https://github.com/lbryio/lbry-desktop/pull/2255))
 
-## [0.27.1] - 2018-01-22
+## [0.27.1] - 2019-01-22
 
 ### Fixed
 
 - Channel name overlap on homepage when screen size is small
 - Spacing issue/typo on email collection modal
 
-## [0.27.0] - 2018-01-15
+## [0.27.0] - 2019-01-15
 
 ### Added
 
