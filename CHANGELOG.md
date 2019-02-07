@@ -8,6 +8,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ### Added
 
+- Broken heart icon for unsubscribe ([#2272](https://github.com/lbryio/lbry-desktop/pull/2272)
+
 ### Changed
 
 ### Fixed
