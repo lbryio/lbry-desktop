@@ -14,7 +14,6 @@ export type Price = {
 
 type DaemonSettings = {
   download_dir: string,
-  disable_max_key_fee: boolean,
   share_usage_data: boolean,
   max_key_fee?: Price,
 };
@@ -38,6 +37,8 @@ type Props = {
   updateWalletStatus: () => void,
   walletEncrypted: boolean,
   osNotificationsEnabled: boolean,
+  disableMaxKeyFee: boolean,
+  localMaxKeyFee: Price,
 };
 
 type State = {
@@ -54,6 +55,7 @@ class SettingsPage extends React.PureComponent<Props, State> {
 
     (this: any).onDownloadDirChange = this.onDownloadDirChange.bind(this);
     (this: any).onKeyFeeChange = this.onKeyFeeChange.bind(this);
+    (this: any).onKeyFeeDisableChange = this.onKeyFeeDisableChange.bind(this);
     (this: any).onInstantPurchaseMaxChange = this.onInstantPurchaseMaxChange.bind(this);
     (this: any).onShowNsfwChange = this.onShowNsfwChange.bind(this);
     (this: any).onShareDataChange = this.onShareDataChange.bind(this);
@@ -84,11 +86,14 @@ class SettingsPage extends React.PureComponent<Props, State> {
   }
 
   onKeyFeeChange(newValue: Price) {
+    this.props.setClientSetting(SETTINGS.LOCAL_MAX_KEY_FEE, newValue);
     this.setDaemonSetting('max_key_fee', newValue);
   }
 
   onKeyFeeDisableChange(isDisabled: boolean) {
-    this.setDaemonSetting('disable_max_key_fee', isDisabled);
+    this.props.setClientSetting(SETTINGS.DISABLE_MAX_KEY_FEE, isDisabled);
+    // null is default value passed to clear key fee
+    if (isDisabled) this.setDaemonSetting('max_key_fee', '');
   }
 
   onThemeChange(event: SyntheticInputEvent<*>) {
@@ -138,7 +143,7 @@ class SettingsPage extends React.PureComponent<Props, State> {
     this.props.setClientSetting(SETTINGS.OS_NOTIFICATIONS_ENABLED, event.target.checked);
   }
 
-  setDaemonSetting(name: string, value: boolean | string | Price) {
+  setDaemonSetting(name: string, value: boolean | string | Price | ''): void {
     this.props.setDaemonSetting(name, value);
   }
 
@@ -168,6 +173,8 @@ class SettingsPage extends React.PureComponent<Props, State> {
       walletEncrypted,
       osNotificationsEnabled,
       autoDownload,
+      disableMaxKeyFee,
+      localMaxKeyFee,
     } = this.props;
 
     const noDaemonSettings = !daemonSettings || Object.keys(daemonSettings).length === 0;
@@ -210,7 +217,7 @@ class SettingsPage extends React.PureComponent<Props, State> {
                 <FormField
                   type="radio"
                   name="no_max_purchase_limit"
-                  checked={daemonSettings.disable_max_key_fee}
+                  checked={disableMaxKeyFee}
                   postfix={__('No Limit')}
                   onChange={() => {
                     this.onKeyFeeDisableChange(true);
@@ -219,23 +226,20 @@ class SettingsPage extends React.PureComponent<Props, State> {
                 <FormField
                   type="radio"
                   name="max_purchase_limit"
+                  checked={!disableMaxKeyFee}
                   onChange={() => {
                     this.onKeyFeeDisableChange(false);
+                    this.onKeyFeeChange(localMaxKeyFee);
                   }}
-                  checked={!daemonSettings.disable_max_key_fee}
                   postfix={__('Choose limit')}
                 />
-                {!daemonSettings.disable_max_key_fee && (
+                {!disableMaxKeyFee && (
                   <FormFieldPrice
                     name="max_key_fee"
                     label="Max purchase price"
                     min={0}
                     onChange={this.onKeyFeeChange}
-                    price={
-                      daemonSettings.max_key_fee
-                        ? daemonSettings.max_key_fee
-                        : { currency: 'USD', amount: 50 }
-                    }
+                    price={daemonSettings.max_key_fee ? daemonSettings.max_key_fee : localMaxKeyFee}
                   />
                 )}
               </div>
