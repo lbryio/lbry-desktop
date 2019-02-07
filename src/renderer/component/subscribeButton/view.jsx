@@ -43,7 +43,7 @@ export default (props: Props) => {
   return (
     <Button
       iconColor="red"
-      icon={isSubscribed ? undefined : ICONS.SUBSCRIPTION}
+      icon={isSubscribed ? ICONS.UNSUBSCRIBE : ICONS.SUBSCRIPTION}
       button={buttonStyle || 'alt'}
       label={subscriptionLabel}
       onClick={e => {
