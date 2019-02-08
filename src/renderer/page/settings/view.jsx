@@ -12,6 +12,8 @@ export type Price = {
   amount: number,
 };
 
+type SetDaemonSettingArg = boolean | string | Price;
+
 type DaemonSettings = {
   download_dir: string,
   share_usage_data: boolean,
@@ -19,8 +21,8 @@ type DaemonSettings = {
 };
 
 type Props = {
-  setDaemonSetting: (string, boolean | string | Price) => void,
-  setClientSetting: (string, boolean | string | number | Price) => void,
+  setDaemonSetting: (string, ?SetDaemonSettingArg) => void,
+  setClientSetting: (string, SetDaemonSettingArg | number) => void,
   clearCache: () => Promise<any>,
   getThemes: () => void,
   daemonSettings: DaemonSettings,
@@ -93,7 +95,7 @@ class SettingsPage extends React.PureComponent<Props, State> {
   onKeyFeeDisableChange(isDisabled: boolean) {
     this.props.setClientSetting(SETTINGS.DISABLE_MAX_KEY_FEE, isDisabled);
     // null is default value passed to clear key fee
-    if (isDisabled) this.setDaemonSetting('max_key_fee', '');
+    if (isDisabled) this.setDaemonSetting('max_key_fee');
   }
 
   onThemeChange(event: SyntheticInputEvent<*>) {
@@ -143,7 +145,7 @@ class SettingsPage extends React.PureComponent<Props, State> {
     this.props.setClientSetting(SETTINGS.OS_NOTIFICATIONS_ENABLED, event.target.checked);
   }
 
-  setDaemonSetting(name: string, value: boolean | string | Price | ''): void {
+  setDaemonSetting(name: string, value: ?SetDaemonSettingArg): void {
     this.props.setDaemonSetting(name, value);
   }
 
