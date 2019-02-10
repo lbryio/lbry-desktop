@@ -1,0 +1,10 @@
+.menu-container {
+  display: inline-block;
+
+  .menu {
+    padding-top: var(--spacing-vertical-medium);
+    position: absolute;
+    white-space: nowrap;
+    z-index: 1;
+  }
+}

@@ -6,13 +6,6 @@
     "plugin:flowtype/recommended",
     "plugin:prettier/recommended"
   ],
-  "settings": {
-    "import/resolver": {
-      "webpack": {
-        "config": "webpack.renderer.additions.js"
-      }
-    }
-  },
   "parser": "babel-eslint",
   "env": {
     "browser": true,
@@ -20,7 +13,7 @@
   },
   "globals": {
     "__static": true,
-    "staticResourcesPath": true,
+    "i18n": true,
     "__": true,
     "__n": true,
     "app": true
@@ -52,6 +45,7 @@
     "no-restricted-syntax": 0,
     "no-empty": 0,
     "react/prefer-stateless-function": 0,
-    "react/sort-comp": 0
+    "react/sort-comp": 0,
+    "no-underscore-dangle": 0
   }
 }
