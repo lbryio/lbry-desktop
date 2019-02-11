@@ -24,7 +24,7 @@ export function doSetDaemonSetting(key, value) {
   return dispatch => {
     const newSettings = {
       key,
-      value: value || null,
+      value: !value && value !== false ? null : value,
     };
     Lbry.settings_set(newSettings).then(newSettings);
     Lbry.settings_get().then(settings => {
