@@ -1,6 +1,7 @@
-import { ipcRenderer } from 'electron';
-
 const Native = {};
+
+// @if TARGET='app'
+import { ipcRenderer } from 'electron';
 
 Native.getAppVersionInfo = () =>
   new Promise(resolve => {
@@ -9,5 +10,11 @@ Native.getAppVersionInfo = () =>
     });
     ipcRenderer.send('version-info-requested');
   });
+
+// @endif
+
+// @if TARGET='web'
+Native.getAppVersionInfo = () => console.error("Don't do this");
+// @endif
 
 export default Native;

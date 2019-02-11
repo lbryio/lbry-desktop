@@ -6,8 +6,8 @@ import React, { Fragment, PureComponent } from 'react';
 import { Lbryio } from 'lbryinc';
 import MarkdownPreview from 'component/common/markdown-preview';
 import Button from 'component/button';
-import path from 'path';
 import Expandable from 'component/expandable';
+import path from 'path';
 
 type Props = {
   claim: Claim,
@@ -62,6 +62,7 @@ class FileDetails extends PureComponent<Props> {
     const { description, language, license } = metadata;
 
     const mediaType = contentType || 'unknown';
+
     const downloadPath = fileInfo ? path.normalize(fileInfo.download_path) : null;
 
     return (

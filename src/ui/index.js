@@ -6,7 +6,6 @@ import SplashScreen from 'component/splash';
 import moment from 'moment';
 import * as ACTIONS from 'constants/action_types';
 import * as MODALS from 'constants/modal_types';
-import { ipcRenderer, remote, shell } from 'electron';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
@@ -27,12 +26,16 @@ import pjson from 'package.json';
 import app from './app';
 import analytics from './analytics';
 import doLogWarningConsoleMessage from './logWarningConsoleMessage';
+// @if TARGET='app'
+import { ipcRenderer, remote, shell } from 'electron';
+// @endif
 
+// @if TARGET='app'
 const { autoUpdater } = remote.require('electron-updater');
-const APPPAGEURL = 'lbry://?';
-
 autoUpdater.logger = remote.require('electron-log');
+// @endif
 
+const APPPAGEURL = 'lbry://?';
 if (process.env.LBRY_API_URL) {
   Lbryio.setLocalApi(process.env.LBRY_API_URL);
 }
@@ -41,6 +44,7 @@ if (process.env.SEARCH_API_URL) {
   setSearchApi(process.env.SEARCH_API_URL);
 }
 
+// @if TARGET='app'
 ipcRenderer.on('navigate-backward', () => {
   app.store.dispatch(doHistoryBack());
 });
@@ -48,6 +52,7 @@ ipcRenderer.on('navigate-backward', () => {
 ipcRenderer.on('navigate-forward', () => {
   app.store.dispatch(doHistoryForward());
 });
+// @endif
 
 // We need to override Lbryio for getting/setting the authToken
 // We interect with ipcRenderer to get the auth key from a users keyring
@@ -74,7 +79,11 @@ Lbryio.setOverride(
 
         const newAuthToken = response.auth_token;
         authToken = newAuthToken;
+        // @if TARGET='app'
+
         ipcRenderer.send('set-auth-token', authToken);
+        // @endif
+
         resolve();
       });
     })
@@ -87,12 +96,15 @@ Lbryio.setOverride(
       if (authToken) {
         resolve(authToken);
       } else {
+        // @if TARGET='app'
+
         ipcRenderer.once('auth-token-response', (event, token) => {
           Lbryio.authToken = token;
           resolve(token);
         });
 
         ipcRenderer.send('get-auth-token');
+        // @endif
       }
     })
 );
@@ -108,6 +120,8 @@ rewards.setCallback('rewardApprovalRequired', () => {
 rewards.setCallback('claimRewardSuccess', () => {
   app.store.dispatch(doHideModal(MODALS.REWARD_APPROVAL_REQUIRED));
 });
+
+// @if TARGET='app'
 
 ipcRenderer.on('open-uri-requested', (event, uri, newSession) => {
   if (uri && uri.startsWith('lbry://')) {
@@ -146,6 +160,7 @@ ipcRenderer.on('devtools-is-opened', () => {
   const logOnDevelopment = false;
   doLogWarningConsoleMessage(logOnDevelopment);
 });
+// @endif
 
 document.addEventListener('dragover', event => {
   event.preventDefault();
@@ -178,15 +193,20 @@ document.addEventListener('click', event => {
       }
     }
     if (target.matches('a[href^="http"]') || target.matches('a[href^="mailto"]')) {
+      // @if TARGET='app'
+
       event.preventDefault();
       shell.openExternal(target.href);
       return;
+      // @endif
     }
     target = target.parentNode;
   }
 });
 
 const init = () => {
+  // @if TARGET='app'
+
   moment.locale(remote.app.getLocale());
 
   autoUpdater.on('error', error => {
@@ -207,8 +227,10 @@ const init = () => {
     });
   }
 
-  app.store.dispatch(doUpdateIsNightAsync());
   app.store.dispatch(doDownloadLanguages());
+  // @endif
+
+  app.store.dispatch(doUpdateIsNightAsync());
   app.store.dispatch(doBlackListedOutpointsSubscribe());
 
   function onDaemonReady() {

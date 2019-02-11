@@ -22,6 +22,20 @@ const electronConfig = {
         test: /\.node$/,
         use: 'node-loader',
       },
+      {
+        test: /\.jsx?$/,
+        use: [
+          {
+            loader: 'preprocess-loader',
+            options: {
+              TARGET: 'app',
+              ppOptions: {
+                type: 'js',
+              },
+            },
+          },
+        ],
+      },
     ],
   },
   plugins: [
@@ -29,10 +43,10 @@ const electronConfig = {
       {
         from: `${STATIC_ROOT}/`,
         to: `${DIST_ROOT}/electron/static/`,
-        ignore: ['font/**/*', 'electron.index.html'],
+        ignore: ['font/**/*', 'index.html'],
       },
       {
-        from: `${STATIC_ROOT}/electron.index.html`,
+        from: `${STATIC_ROOT}/index.html`,
         to: `${DIST_ROOT}/electron/index.html`,
       },
     ]),

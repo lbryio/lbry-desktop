@@ -1,11 +1,18 @@
 // @flow
 import * as ICONS from 'constants/icons';
-import fs from 'fs';
-import path from 'path';
+
 import React from 'react';
 import Button from 'component/button';
 import parseData from 'util/parse-data';
+import fs from 'fs';
+import path from 'path';
+// @if TARGET='app'
+
 import { remote } from 'electron';
+// @endif
+// @if TARGET='web'
+import { remote } from 'web/stubs';
+// @endif
 
 type Props = {
   data: Array<any>,
@@ -30,6 +37,7 @@ class FileExporter extends React.PureComponent<Props> {
 
   handleFileCreation(filename: string, data: any) {
     const { onFileCreated } = this.props;
+    // @if TARGET='app'
     fs.writeFile(filename, data, err => {
       if (err) throw err;
       // Do something after creation
@@ -38,6 +46,7 @@ class FileExporter extends React.PureComponent<Props> {
         onFileCreated(filename);
       }
     });
+    // @endif
   }
 
   handleButtonClick() {
@@ -62,7 +71,9 @@ class FileExporter extends React.PureComponent<Props> {
       // User hit cancel so do nothing:
       if (!filename) return;
       // Get extension and remove initial dot
+      // @if TARGET='app'
       const format = path.extname(filename).replace(/\./g, '');
+      // @endif
       // Parse data to string with the chosen format
       const parsed = parseData(data, format, filters);
       // Write file

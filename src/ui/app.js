@@ -1,7 +1,4 @@
 import store from 'store';
-import { remote } from 'electron';
-import Path from 'path';
-import isDev from 'electron-is-dev';
 
 const env = process.env.NODE_ENV || 'production';
 

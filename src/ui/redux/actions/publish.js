@@ -22,9 +22,9 @@ import {
 import { doOpenModal } from 'redux/actions/app';
 import { selectosNotificationsEnabled } from 'redux/selectors/settings';
 import { doNavigate } from 'redux/actions/navigation';
+import analytics from 'analytics';
 import fs from 'fs';
 import path from 'path';
-import analytics from 'analytics';
 
 type Action = UpdatePublishFormAction | { type: ACTIONS.CLEAR_PUBLISH };
 
