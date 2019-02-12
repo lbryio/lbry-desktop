@@ -12,7 +12,7 @@ export type Price = {
   amount: number,
 };
 
-type SetDaemonSettingArg = boolean | string | Price;
+type SetDaemonSettingArg = boolean | string | number | Price;
 
 type DaemonSettings = {
   download_dir: string,
@@ -22,7 +22,7 @@ type DaemonSettings = {
 
 type Props = {
   setDaemonSetting: (string, ?SetDaemonSettingArg) => void,
-  setClientSetting: (string, SetDaemonSettingArg | number) => void,
+  setClientSetting: (string, SetDaemonSettingArg) => void,
   clearCache: () => Promise<any>,
   getThemes: () => void,
   daemonSettings: DaemonSettings,
