@@ -58,8 +58,7 @@ class FilePage extends React.Component<Props> {
   ];
 
   componentDidMount() {
-    // eslint-disable-next-line no-unused-vars
-    const { uri, fileInfo, fetchFileInfo, fetchCostInfo, setViewed, isSubscribed } = this.props;
+    const { uri, fetchFileInfo, fetchCostInfo, setViewed, isSubscribed } = this.props;
 
     if (isSubscribed) {
       this.removeFromSubscriptionNotifications();

@@ -39,7 +39,6 @@ type Props = {
   updateWalletStatus: () => void,
   walletEncrypted: boolean,
   osNotificationsEnabled: boolean,
-  disableMaxKeyFee: boolean,
   localMaxKeyFee: Price,
 };
 
@@ -175,12 +174,13 @@ class SettingsPage extends React.PureComponent<Props, State> {
       walletEncrypted,
       osNotificationsEnabled,
       autoDownload,
-      disableMaxKeyFee,
       localMaxKeyFee,
     } = this.props;
 
     const noDaemonSettings = !daemonSettings || Object.keys(daemonSettings).length === 0;
     const isDarkModeEnabled = currentTheme === 'dark';
+
+    const disableMaxKeyFee = !(daemonSettings && daemonSettings.max_key_fee);
 
     return (
       <Page>
