@@ -73,8 +73,8 @@ export function doUpdateIsNight() {
 export function doUpdateIsNightAsync() {
   return dispatch => {
     dispatch(doUpdateIsNight());
-    // eslint-disable-next-line no-unused-vars
-    const updateIsNightInterval = setInterval(
+
+    setInterval(
       () => dispatch(doUpdateIsNight()),
       UPDATE_IS_NIGHT_INTERVAL
     );
