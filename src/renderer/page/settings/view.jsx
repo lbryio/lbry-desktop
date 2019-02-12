@@ -92,8 +92,6 @@ class SettingsPage extends React.PureComponent<Props, State> {
   }
 
   onKeyFeeDisableChange(isDisabled: boolean) {
-    this.props.setClientSetting(SETTINGS.DISABLE_MAX_KEY_FEE, isDisabled);
-    // null is default value passed to clear key fee
     if (isDisabled) this.setDaemonSetting('max_key_fee');
   }
 
