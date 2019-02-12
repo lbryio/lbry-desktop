@@ -10,11 +10,6 @@ function getLocalStorageSetting(setting, fallback) {
 const reducers = {};
 const defaultState = {
   clientSettings: {
-    [SETTINGS.DISABLE_MAX_KEY_FEE]: getLocalStorageSetting(SETTINGS.DISABLE_MAX_KEY_FEE, false),
-    [SETTINGS.LOCAL_MAX_KEY_FEE]: getLocalStorageSetting(SETTINGS.LOCAL_MAX_KEY_FEE, {
-      currency: 'USD',
-      amount: 50.0,
-    }),
     [SETTINGS.INSTANT_PURCHASE_ENABLED]: getLocalStorageSetting(
       SETTINGS.INSTANT_PURCHASE_ENABLED,
       false

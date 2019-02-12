@@ -39,7 +39,6 @@ type Props = {
   updateWalletStatus: () => void,
   walletEncrypted: boolean,
   osNotificationsEnabled: boolean,
-  localMaxKeyFee: Price,
 };
 
 type State = {
@@ -87,7 +86,6 @@ class SettingsPage extends React.PureComponent<Props, State> {
   }
 
   onKeyFeeChange(newValue: Price) {
-    this.props.setClientSetting(SETTINGS.LOCAL_MAX_KEY_FEE, newValue);
     this.setDaemonSetting('max_key_fee', newValue);
   }
 
@@ -172,12 +170,12 @@ class SettingsPage extends React.PureComponent<Props, State> {
       walletEncrypted,
       osNotificationsEnabled,
       autoDownload,
-      localMaxKeyFee,
     } = this.props;
 
     const noDaemonSettings = !daemonSettings || Object.keys(daemonSettings).length === 0;
     const isDarkModeEnabled = currentTheme === 'dark';
 
+    const defaultMaxKeyFee = { currency: 'USD', amount: 50 };
     const disableMaxKeyFee = !(daemonSettings && daemonSettings.max_key_fee);
 
     return (
@@ -229,7 +227,7 @@ class SettingsPage extends React.PureComponent<Props, State> {
                   checked={!disableMaxKeyFee}
                   onChange={() => {
                     this.onKeyFeeDisableChange(false);
-                    this.onKeyFeeChange(localMaxKeyFee);
+                    this.onKeyFeeChange(defaultMaxKeyFee);
                   }}
                   postfix={__('Choose limit')}
                 />
@@ -239,7 +237,9 @@ class SettingsPage extends React.PureComponent<Props, State> {
                     label="Max purchase price"
                     min={0}
                     onChange={this.onKeyFeeChange}
-                    price={daemonSettings.max_key_fee ? daemonSettings.max_key_fee : localMaxKeyFee}
+                    price={
+                      daemonSettings.max_key_fee ? daemonSettings.max_key_fee : defaultMaxKeyFee
+                    }
                   />
                 )}
               </div>

@@ -31,7 +31,6 @@ const select = state => ({
   walletEncrypted: selectWalletIsEncrypted(state),
   osNotificationsEnabled: selectosNotificationsEnabled(state),
   autoDownload: makeSelectClientSetting(settings.AUTO_DOWNLOAD)(state),
-  localMaxKeyFee: makeSelectClientSetting(settings.LOCAL_MAX_KEY_FEE)(state),
 });
 
 const perform = dispatch => ({
