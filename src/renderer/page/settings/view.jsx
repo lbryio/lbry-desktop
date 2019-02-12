@@ -12,16 +12,17 @@ export type Price = {
   amount: number,
 };
 
+type SetDaemonSettingArg = boolean | string | number | Price;
+
 type DaemonSettings = {
-  download_directory: string,
-  disable_max_key_fee: boolean,
+  download_dir: string,
   share_usage_data: boolean,
   max_key_fee?: Price,
 };
 
 type Props = {
-  setDaemonSetting: (string, boolean | string | Price) => void,
-  setClientSetting: (string, boolean | string | number | Price) => void,
+  setDaemonSetting: (string, ?SetDaemonSettingArg) => void,
+  setClientSetting: (string, SetDaemonSettingArg) => void,
   clearCache: () => Promise<any>,
   getThemes: () => void,
   daemonSettings: DaemonSettings,
@@ -54,6 +55,7 @@ class SettingsPage extends React.PureComponent<Props, State> {
 
     (this: any).onDownloadDirChange = this.onDownloadDirChange.bind(this);
     (this: any).onKeyFeeChange = this.onKeyFeeChange.bind(this);
+    (this: any).onKeyFeeDisableChange = this.onKeyFeeDisableChange.bind(this);
     (this: any).onInstantPurchaseMaxChange = this.onInstantPurchaseMaxChange.bind(this);
     (this: any).onShowNsfwChange = this.onShowNsfwChange.bind(this);
     (this: any).onShareDataChange = this.onShareDataChange.bind(this);
@@ -80,7 +82,7 @@ class SettingsPage extends React.PureComponent<Props, State> {
   }
 
   onDownloadDirChange(newDirectory: string) {
-    this.setDaemonSetting('download_directory', newDirectory);
+    this.setDaemonSetting('download_dir', newDirectory);
   }
 
   onKeyFeeChange(newValue: Price) {
@@ -88,7 +90,7 @@ class SettingsPage extends React.PureComponent<Props, State> {
   }
 
   onKeyFeeDisableChange(isDisabled: boolean) {
-    this.setDaemonSetting('disable_max_key_fee', isDisabled);
+    if (isDisabled) this.setDaemonSetting('max_key_fee');
   }
 
   onThemeChange(event: SyntheticInputEvent<*>) {
@@ -138,7 +140,7 @@ class SettingsPage extends React.PureComponent<Props, State> {
     this.props.setClientSetting(SETTINGS.OS_NOTIFICATIONS_ENABLED, event.target.checked);
   }
 
-  setDaemonSetting(name: string, value: boolean | string | Price) {
+  setDaemonSetting(name: string, value: ?SetDaemonSettingArg): void {
     this.props.setDaemonSetting(name, value);
   }
 
@@ -173,6 +175,9 @@ class SettingsPage extends React.PureComponent<Props, State> {
     const noDaemonSettings = !daemonSettings || Object.keys(daemonSettings).length === 0;
     const isDarkModeEnabled = currentTheme === 'dark';
 
+    const defaultMaxKeyFee = { currency: 'USD', amount: 50 };
+    const disableMaxKeyFee = !(daemonSettings && daemonSettings.max_key_fee);
+
     return (
       <Page>
         {noDaemonSettings ? (
@@ -190,7 +195,7 @@ class SettingsPage extends React.PureComponent<Props, State> {
               <div className="card__content">
                 <FileSelector
                   type="openDirectory"
-                  currentPath={daemonSettings.download_directory}
+                  currentPath={daemonSettings.download_dir}
                   onFileChosen={this.onDownloadDirChange}
                 />
               </div>
@@ -210,7 +215,7 @@ class SettingsPage extends React.PureComponent<Props, State> {
                 <FormField
                   type="radio"
                   name="no_max_purchase_limit"
-                  checked={daemonSettings.disable_max_key_fee}
+                  checked={disableMaxKeyFee}
                   postfix={__('No Limit')}
                   onChange={() => {
                     this.onKeyFeeDisableChange(true);
@@ -219,22 +224,21 @@ class SettingsPage extends React.PureComponent<Props, State> {
                 <FormField
                   type="radio"
                   name="max_purchase_limit"
+                  checked={!disableMaxKeyFee}
                   onChange={() => {
                     this.onKeyFeeDisableChange(false);
+                    this.onKeyFeeChange(defaultMaxKeyFee);
                   }}
-                  checked={!daemonSettings.disable_max_key_fee}
                   postfix={__('Choose limit')}
                 />
-                {!daemonSettings.disable_max_key_fee && (
+                {!disableMaxKeyFee && (
                   <FormFieldPrice
                     name="max_key_fee"
                     label="Max purchase price"
                     min={0}
                     onChange={this.onKeyFeeChange}
                     price={
-                      daemonSettings.max_key_fee
-                        ? daemonSettings.max_key_fee
-                        : { currency: 'USD', amount: 50 }
+                      daemonSettings.max_key_fee ? daemonSettings.max_key_fee : defaultMaxKeyFee
                     }
                   />
                 )}
