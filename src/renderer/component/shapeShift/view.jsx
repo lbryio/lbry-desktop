@@ -79,14 +79,13 @@ class ShapeShift extends React.PureComponent<Props> {
           <p className="card__subtitle">
             {__('Powered by ShapeShift. Read our FAQ')}{' '}
             <Button button="link" label={__('here')} href="https://lbry.io/faq/shapeshift" />.
-            {hasActiveShift && shiftState !== 'complete' && (
-              <span>{__('This will update automatically.')}</span>
-            )}
+            {hasActiveShift &&
+              shiftState !== 'complete' && <span>{__('This will update automatically.')}</span>}
           </p>
         </header>
 
         <div className="card__content">
-          {error && <div className="form-field__error">{error}</div>}
+          {error && <div className="error-text">{error}</div>}
           {!hasActiveShift && (
             <Formik
               onSubmit={createShapeShift}

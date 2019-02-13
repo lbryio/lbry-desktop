@@ -1,7 +1,7 @@
 // @flow
 import React from 'react';
 import { getExampleAddress } from 'util/shape_shift';
-import { FormField, FormRow, Submit } from 'component/common/form';
+import { FormField, Submit } from 'component/common/form';
 import type { ShapeShiftFormValues, Action } from 'redux/actions/shape_shift';
 import type { Dispatch, ThunkAction } from 'types/redux';
 import ShiftMarketInfo from './market_info';
@@ -70,19 +70,17 @@ export default (props: Props) => {
         originCoinDepositMax={originCoinDepositMax}
       />
 
-      <FormRow padded>
-        <FormField
-          label={__('Return address')}
-          error={touched.returnAddress && !!errors.returnAddress && errors.returnAddress}
-          type="text"
-          name="returnAddress"
-          className="input--address"
-          placeholder={getExampleAddress(originCoin)}
-          onChange={handleChange}
-          onBlur={handleBlur}
-          value={values.returnAddress}
-        />
-      </FormRow>
+      <FormField
+        label={__('Return address')}
+        error={touched.returnAddress && !!errors.returnAddress && errors.returnAddress}
+        type="text"
+        name="returnAddress"
+        className="form-field--address"
+        placeholder={getExampleAddress(originCoin)}
+        onChange={handleChange}
+        onBlur={handleBlur}
+        value={values.returnAddress}
+      />
 
       <span className="help">
         ({__('optional but recommended')})<br />

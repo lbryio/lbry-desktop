@@ -4,7 +4,7 @@ import * as icons from 'constants/icons';
 import * as MODALS from 'constants/modal_types';
 import React from 'react';
 import BusyIndicator from 'component/common/busy-indicator';
-import { FormField, FormRow } from 'component/common/form';
+import { FormField } from 'component/common/form';
 import ReactPaginate from 'react-paginate';
 import SubscribeButton from 'component/subscribeButton';
 import Page from 'component/page';
@@ -108,7 +108,7 @@ class ChannelPage extends React.PureComponent<Props> {
 
         {(!fetching || (claimsInChannel && claimsInChannel.length)) &&
           totalPages > 1 && (
-            <FormRow verticallyCentered centered>
+            <React.Fragment>
               <ReactPaginate
                 pageCount={totalPages}
                 pageRangeDisplayed={2}
@@ -132,7 +132,7 @@ class ChannelPage extends React.PureComponent<Props> {
                 prefix={__('Go to page:')}
                 type="text"
               />
-            </FormRow>
+            </React.Fragment>
           )}
 
         {!channelIsMine && <HiddenNsfwClaims className="card__content help" uri={uri} />}

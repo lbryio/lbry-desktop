@@ -34,7 +34,7 @@ const RewardListClaimed = (props: Props) => {
         </p>
       </header>
 
-      <table className="table table--rewards table--stretch">
+      <table className="card__content table table--rewards">
         <thead>
           <tr>
             <th>{__('Title')}</th>

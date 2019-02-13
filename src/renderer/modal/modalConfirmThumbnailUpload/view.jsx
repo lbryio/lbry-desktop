@@ -1,7 +1,7 @@
 // @flow
 import React from 'react';
 import { Modal } from 'modal/modal';
-import { FormField, FormRow } from 'component/common/form';
+import { FormField } from 'component/common/form';
 
 type Props = {
   upload: (string, boolean) => void,
@@ -36,15 +36,14 @@ class ModalConfirmThumbnailUpload extends React.PureComponent<Props> {
           <p>{__('Are you sure you want to upload this thumbnail to spee.ch')}?</p>
 
           <blockquote>{path}</blockquote>
-          <FormRow>
-            <FormField
-              type="checkbox"
-              name="content_is_mature"
-              postfix={__('For mature audiences only')}
-              checked={nsfw}
-              onChange={event => updatePublishForm({ nsfw: event.target.checked })}
-            />
-          </FormRow>
+
+          <FormField
+            type="checkbox"
+            name="content_is_mature"
+            label={__('For mature audiences only')}
+            checked={nsfw}
+            onChange={event => updatePublishForm({ nsfw: event.target.checked })}
+          />
         </section>
       </Modal>
     );

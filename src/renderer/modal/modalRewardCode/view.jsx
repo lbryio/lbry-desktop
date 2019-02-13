@@ -1,6 +1,6 @@
 // @flow
 import * as React from 'react';
-import { FormRow, FormField } from 'component/common/form';
+import { FormField, Form, Submit } from 'component/common/form';
 import { Modal } from 'modal/modal';
 import Button from 'component/button';
 
@@ -41,14 +41,10 @@ class ModalRewardCode extends React.PureComponent<Props, State> {
         isOpen
         title={__('Enter Reward Code')}
         contentLabel={__('Enter Reward Code')}
-        type="confirm"
-        confirmButtonLabel={__('Redeem')}
-        abortButtonLabel={__('Cancel')}
-        onConfirmed={this.handleSubmit}
+        type="custom"
         onAborted={closeModal}
-        confirmButtonDisabled={rewardIsPending}
       >
-        <section className="card__content">
+        <Form className="card__content" onSubmit={this.handleSubmit}>
           <p>
             {__('Redeem a custom reward code for LBC')}
             {'. '}
@@ -58,19 +54,25 @@ class ModalRewardCode extends React.PureComponent<Props, State> {
               label={__('Learn more')}
             />.
           </p>
-          <FormRow padded>
-            <FormField
-              stretch
-              autoFocus
-              type="text"
-              label={__('Code')}
-              placeholder="0123abc"
-              error={error}
-              value={rewardCode}
-              onChange={e => this.setState({ rewardCode: e.target.value })}
-            />
-          </FormRow>
-        </section>
+          <FormField
+            autoFocus
+            type="text"
+            inputButton={
+              <Submit
+                disabled={!rewardCode || rewardIsPending}
+                label={rewardIsPending ? __('Redeeming') : __('Redeem')}
+              />
+            }
+            label={__('Code')}
+            placeholder="0123abc"
+            error={error}
+            value={rewardCode}
+            onChange={e => this.setState({ rewardCode: e.target.value })}
+          />
+        </Form>
+        <div className="card__actions">
+          <Button button="link" label={__('Cancel')} onClick={closeModal} />
+        </div>
       </Modal>
     );
   }

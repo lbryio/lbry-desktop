@@ -1,11 +1,10 @@
 .card {
   background-color: $lbry-white;
   border: 1px solid $lbry-gray-1;
-  border-radius: 0.5rem;
   margin-bottom: var(--spacing-vertical-large);
   position: relative;
 
-  html[data-theme='dark'] & {
+  html[data-mode='dark'] & {
     background-color: rgba($lbry-white, 0.1);
     border-color: rgba($lbry-white, 0.1);
   }
@@ -199,8 +198,8 @@
   display: flex;
   align-items: center;
 
-  .card__title + .btn,
-  .btn:not(:first-of-type) {
+  .card__title + .button,
+  .button:not(:first-of-type) {
     margin-left: var(--spacing-vertical-medium);
   }
 }
@@ -209,9 +208,4 @@
   display: flex;
   @include between;
   align-items: center;
-
-  .btn {
-    font-size: 1.2rem; // Don't make buttons the size of the title
-    font-weight: 400;
-  }
 }

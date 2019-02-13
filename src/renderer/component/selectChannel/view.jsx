@@ -1,7 +1,7 @@
 // @flow
 import React from 'react';
 import { isNameValid } from 'lbry-redux';
-import { FormRow, FormField } from 'component/common/form';
+import { FormField } from 'component/common/form';
 import BusyIndicator from 'component/common/busy-indicator';
 import Button from 'component/button';
 import { CHANNEL_NEW, CHANNEL_ANONYMOUS } from 'constants/claim';
@@ -152,54 +152,54 @@ class ChannelSection extends React.PureComponent<Props, State> {
 
     return (
       <div className="card__content">
-        {createChannelError && <div className="form-field__error">{createChannelError}</div>}
+        {createChannelError && <div className="error-text">{createChannelError}</div>}
         {fetchingChannels ? (
           <BusyIndicator message="Updating channels" />
         ) : (
-          <FormField
-            key="channel"
-            type="select"
-            onChange={this.handleChannelChange}
-            value={channel}
-          >
-            <option value={CHANNEL_ANONYMOUS}>{__('Anonymous')}</option>
-            {channels.map(({ name }) => (
-              <option key={name} value={name}>
-                {name}
-              </option>
-            ))}
-            <option value={CHANNEL_NEW}>{__('New channel...')}</option>
-          </FormField>
+          <fieldset-section>
+            <FormField
+              key="channel"
+              type="select"
+              onChange={this.handleChannelChange}
+              value={channel}
+            >
+              <option value={CHANNEL_ANONYMOUS}>{__('Anonymous')}</option>
+              {channels.map(({ name }) => (
+                <option key={name} value={name}>
+                  {name}
+                </option>
+              ))}
+              <option value={CHANNEL_NEW}>{__('New channel...')}</option>
+            </FormField>
+          </fieldset-section>
         )}
         {addingChannel && (
           <div className="card__content">
-            <FormRow padded>
-              <FormField
-                label={__('Name')}
-                type="text"
-                prefix="@"
-                placeholder={__('myChannelName')}
-                error={newChannelNameError}
-                value={newChannelName}
-                onChange={this.handleNewChannelNameChange}
-              />
-            </FormRow>
-            <FormRow padded>
-              <FormField
-                className="input--price-amount"
-                label={__('Deposit')}
-                postfix="LBC"
-                step="any"
-                min="0"
-                type="number"
-                helper={__(
-                  'This LBC remains yours. It is a deposit to reserve the name and can be undone at any time.'
-                )}
-                error={newChannelBidError}
-                value={newChannelBid}
-                onChange={event => this.handleNewChannelBidChange(parseFloat(event.target.value))}
-              />
-            </FormRow>
+            <FormField
+              label={__('Name')}
+              type="text"
+              prefix="@"
+              placeholder={__('myChannelName')}
+              error={newChannelNameError}
+              value={newChannelName}
+              onChange={this.handleNewChannelNameChange}
+            />
+
+            <FormField
+              className="form-field--price-amount"
+              label={__('Deposit')}
+              postfix="LBC"
+              step="any"
+              min="0"
+              type="number"
+              helper={__(
+                'This LBC remains yours. It is a deposit to reserve the name and can be undone at any time.'
+              )}
+              error={newChannelBidError}
+              value={newChannelBid}
+              onChange={event => this.handleNewChannelBidChange(parseFloat(event.target.value))}
+            />
+
             <div className="card__actions">
               <Button
                 button="primary"

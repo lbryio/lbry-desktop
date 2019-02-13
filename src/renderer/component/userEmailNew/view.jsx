@@ -1,6 +1,6 @@
 // @flow
 import * as React from 'react';
-import { FormField, Form, FormRow, Submit } from 'component/common/form';
+import { FormField, Form, Submit } from 'component/common/form';
 
 type Props = {
   cancelButton: React.Node,
@@ -50,24 +50,18 @@ class UserEmailNew extends React.PureComponent<Props, State> {
         </header>
 
         <Form className="card__content" onSubmit={this.handleSubmit}>
-          <FormRow>
-            <FormField
-              stretch
-              type="email"
-              label="Email"
-              placeholder="youremail@example.org"
-              name="email"
-              value={this.state.email}
-              error={errorMessage}
-              onChange={this.handleEmailChanged}
-            />
-          </FormRow>
-
-          <div className="card__actions">
-            <Submit label="Submit" disabled={isPending || !this.state.email} />
-            {cancelButton}
-          </div>
+          <FormField
+            type="email"
+            label="Email"
+            placeholder="youremail@example.org"
+            name="email"
+            value={this.state.email}
+            error={errorMessage}
+            onChange={this.handleEmailChanged}
+            inputButton={<Submit label="Submit" disabled={isPending || !this.state.email} />}
+          />
         </Form>
+        <div className="card__actions">{cancelButton}</div>
         <p className="help">
           {__('Your email address will never be sold and you can unsubscribe at any time.')}
         </p>

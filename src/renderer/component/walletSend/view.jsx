@@ -2,7 +2,7 @@
 import React from 'react';
 import * as MODALS from 'constants/modal_types';
 import Button from 'component/button';
-import { Form, FormRow, FormField } from 'component/common/form';
+import { Form, FormField } from 'component/common/form';
 import { Formik } from 'formik';
 import { validateSendTx } from 'util/form-validation';
 
@@ -39,25 +39,26 @@ class WalletSend extends React.PureComponent<Props> {
       <section className="card card--section">
         <header className="card__header">
           <h2 className="card__title">{__('Send Credits')}</h2>
+          <p className="card__subtitle">{__('Send LBC to your friends or favorite creators')}</p>
         </header>
 
-        <div className="card__content">
-          <Formik
-            initialValues={{
-              address: '',
-              amount: '',
-            }}
-            onSubmit={this.handleSubmit}
-            validate={validateSendTx}
-            render={({ values, errors, touched, handleChange, handleBlur, handleSubmit }) => (
-              <Form onSubmit={handleSubmit}>
-                <FormRow>
+        <Formik
+          initialValues={{
+            address: '',
+            amount: '',
+          }}
+          onSubmit={this.handleSubmit}
+          validate={validateSendTx}
+          render={({ values, errors, touched, handleChange, handleBlur, handleSubmit }) => (
+            <Form onSubmit={handleSubmit}>
+              <div className="card__content">
+                <fieldset-group class="fieldset-group--smushed">
                   <FormField
                     type="number"
                     name="amount"
                     label={__('Amount')}
                     postfix={__('LBC')}
-                    className="input--price-amount"
+                    className="form-field--price-amount"
                     affixClass="form-field--fix-no-height"
                     min="0"
                     step="any"
@@ -65,44 +66,45 @@ class WalletSend extends React.PureComponent<Props> {
                     onChange={handleChange}
                     onBlur={handleBlur}
                     value={values.amount}
-                    error={
-                      (!!values.amount && touched.amount && errors.amount) ||
-                      (values.amount === balance &&
-                        __('Decrease amount to account for transaction fee')) ||
-                      (values.amount > balance && __('Not enough credits'))
-                    }
                   />
-                </FormRow>
-                <FormRow>
+
                   <FormField
                     type="text"
                     name="address"
                     placeholder="bbFxRyXXXXXXXXXXXZD8nE7XTLUxYnddTs"
-                    className="input--address"
+                    className="form-field--address"
                     label={__('Recipient address')}
-                    error={!!values.address && touched.address && errors.address}
                     onChange={handleChange}
                     onBlur={handleBlur}
                     value={values.address}
                   />
-                </FormRow>
-                <div className="card__actions">
-                  <Button
-                    button="primary"
-                    type="submit"
-                    label={__('Send')}
-                    disabled={
-                      !values.address ||
-                      !!Object.keys(errors).length ||
-                      !(parseFloat(values.amount) > 0.0) ||
-                      parseFloat(values.amount) === balance
-                    }
-                  />
-                </div>
-              </Form>
-            )}
-          />
-        </div>
+                </fieldset-group>
+              </div>
+              <div className="card__actions">
+                <Button
+                  button="primary"
+                  type="submit"
+                  label={__('Send')}
+                  disabled={
+                    !values.address ||
+                    !!Object.keys(errors).length ||
+                    !(parseFloat(values.amount) > 0.0) ||
+                    parseFloat(values.amount) === balance
+                  }
+                />
+                {!!Object.keys(errors).length && (
+                  <span className="error-text">
+                    {(!!values.address && touched.address && errors.address) ||
+                      (!!values.amount && touched.amount && errors.amount) ||
+                      (values.amount === balance &&
+                        __('Decrease amount to account for transaction fee')) ||
+                      (values.amount > balance && __('Not enough credits'))}
+                  </span>
+                )}
+              </div>
+            </Form>
+          )}
+        />
       </section>
     );
   }

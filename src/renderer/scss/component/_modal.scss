@@ -11,7 +11,7 @@
   position: fixed;
   z-index: 9999;
 
-  html[data-theme='dark'] & {
+  html[data-mode='dark'] & {
     background-color: rgba($lbry-black, 0.7);
   }
 }
@@ -19,7 +19,6 @@
 .modal {
   background-color: $lbry-white;
   border: 1px solid $lbry-gray-3;
-  border-radius: 4px;
   line-height: 1.55;
   max-width: var(--modal-width);
   overflow: auto;
@@ -30,7 +29,7 @@
     min-width: 500px;
   }
 
-  html[data-theme='dark'] & {
+  html[data-mode='dark'] & {
     background-color: $lbry-black;
     border-color: $lbry-gray-5;
   }
@@ -39,10 +38,10 @@
     margin-bottom: var(--spacing-vertical-large);
   }
 
-  .btn.btn--alt {
+  .button.button--alt {
     background-color: $lbry-white; // Set modal buttons bg color
 
-    html[data-theme='dark'] & {
+    html[data-mode='dark'] & {
       background-color: transparent;
     }
   }

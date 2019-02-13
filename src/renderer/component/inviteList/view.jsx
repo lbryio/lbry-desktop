@@ -67,7 +67,7 @@ class InviteList extends React.PureComponent<Props> {
         </header>
 
         <div className="card__content">
-          <table className="table table--invites table--stretch">
+          <table className="table table--invites">
             <thead>
               <tr>
                 <th>{__('Invitee Email')}</th>

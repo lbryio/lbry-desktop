@@ -221,7 +221,7 @@
 .media__subtext {
   color: rgba($lbry-black, 0.8);
 
-  html[data-theme='dark'] & {
+  html[data-mode='dark'] & {
     color: rgba($lbry-white, 0.7);
   }
 }
@@ -234,7 +234,7 @@
   position: relative;
 
   // Quick fix to fix channel overlapping on the home page. This style shouldn't exist here.
-  .btn--uri-indicator {
+  .button--uri-indicator {
     width: 100%;
     text-align: left;
     overflow: hidden;
@@ -262,7 +262,7 @@
 .media__info {
   word-wrap: break-word;
 
-  html[data-theme='dark'] & {
+  html[data-mode='dark'] & {
     border-color: rgba($lbry-gray-5, 0.2);
   }
 }
@@ -271,7 +271,7 @@
   border-top: 1px solid $lbry-gray-1;
   padding-top: var(--spacing-vertical-medium);
 
-  html[data-theme='dark'] & {
+  html[data-mode='dark'] & {
     border-color: rgba($lbry-gray-5, 0.2);
   }
 }
@@ -300,42 +300,8 @@
 .media__message {
   font-size: 1.1rem;
   padding: var(--spacing-vertical-medium);
-  white-space: normal;
-}
-
-.media__message--help {
-  background-color: $lbry-yellow-3;
   margin: var(--spacing-vertical-medium) var(--spacing-vertical-large);
-
-  .btn--link {
-    // The normal colors we use for .btn--link are too light for the warning background
-    // This just darkens them a bit and adds an border-bottom so they are easier to see.
-    $altered-color: mix($lbry-teal-5, $lbry-black, 80%);
-    $altered-hover-color: mix($lbry-teal-5, $lbry-black, 60%);
-
-    &:not(.btn--disabled) {
-      color: $altered-color;
-      border-bottom: 1px solid $altered-color;
-
-      &:hover {
-        color: $altered-hover-color;
-      }
-
-      html[data-theme='dark'] & {
-        color: $altered-color;
-        border-bottom: 1px solid $altered-color;
-
-        &:hover {
-          color: $altered-hover-color;
-        }
-      }
-    }
-  }
-
-  html[data-theme='dark'] & {
-    background-color: $lbry-yellow-4;
-    color: $lbry-black;
-  }
+  white-space: normal;
 }
 
 //  M E D I A
@@ -391,7 +357,7 @@
 .media__text {
   font-size: 2.5rem;
 
-  html[data-theme='dark'] & {
+  html[data-mode='dark'] & {
     color: $lbry-white;
   }
 }
@@ -408,7 +374,7 @@
     background-repeat: no-repeat;
     background-size: cover;
 
-    html[data-theme='dark'] & {
+    html[data-mode='dark'] & {
       background-color: rgba($lbry-white, 0.1);
     }
   }
@@ -516,7 +482,7 @@
   width: 30rem;
   padding-left: var(--spacing-vertical-large);
 
-  html[data-theme='dark'] & {
+  html[data-mode='dark'] & {
     border-color: rgba($lbry-gray-5, 0.2);
   }
 
@@ -530,7 +496,7 @@
     padding-top: var(--spacing-vertical-small);
     padding-bottom: var(--spacing-vertical-medium);
 
-    html[data-theme='dark'] & {
+    html[data-mode='dark'] & {
       border-color: rgba($lbry-gray-5, 0.2);
     }
   }
@@ -541,7 +507,7 @@
   white-space: nowrap;
   width: 100%;
 
-  html[data-theme='dark'] & {
+  html[data-mode='dark'] & {
     color: mix($lbry-white, $lbry-gray-3, 50%);
   }
 
@@ -549,7 +515,7 @@
     background-image: linear-gradient(to bottom right, $lbry-black, $lbry-cyan-5 80%);
     color: $lbry-white;
 
-    html[data-theme='dark'] & {
+    html[data-mode='dark'] & {
       background-image: linear-gradient(
         to bottom right,
         transparent,
@@ -572,7 +538,7 @@
   &:not(:first-of-type):not(:last-of-type) {
     border-bottom: 1px solid rgba($lbry-gray-1, 0.7);
 
-    html[data-theme='dark'] & {
+    html[data-mode='dark'] & {
       border-color: rgba($lbry-gray-5, 0.2);
     }
   }
@@ -588,7 +554,7 @@
     -webkit-background-clip: text;
     background-image: linear-gradient(to right, $lbry-white 80%, transparent 100%);
 
-    html[data-theme='dark'] & {
+    html[data-mode='dark'] & {
       background-image: linear-gradient(
         to right,
         mix($lbry-white, $lbry-gray-3, 50%) 80%,
@@ -646,7 +612,7 @@
     button:first-of-type {
       font-size: 2rem;
 
-      .btn__label {
+      .button__label {
         margin: 0;
       }
     }

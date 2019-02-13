@@ -51,7 +51,7 @@ class UserVerify extends React.PureComponent<Props> {
 
           <div className="card__content">
             <div className="card__actions">
-              {errorMessage && <p className="form-field__error">{errorMessage}</p>}
+              {errorMessage && <p className="error-text">{errorMessage}</p>}
               <CardVerify
                 label={__('Perform Card Verification')}
                 disabled={isPending}

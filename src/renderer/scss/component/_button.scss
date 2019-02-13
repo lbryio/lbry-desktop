@@ -1,6 +1,7 @@
-.btn {
-  fill: currentColor;
-  position: relative;
+@import '~@lbry/components/sass/button/_index.scss';
+
+.button {
+  border-radius: 0;
 
   svg {
     stroke-width: 1.9;
@@ -19,123 +20,60 @@
     }
   }
 
-  .btn__label {
-    margin: 0;
-  }
-
-  svg + .btn__label {
+  svg + .button__label {
     margin-left: var(--spacing-vertical-small);
   }
-}
 
-.btn--alt {
-  &:hover {
-    text-decoration: underline;
+  &.button--icon {
+    border-radius: 50%;
   }
 }
 
-.btn--constrict {
-  @include constrict;
-}
-
-.btn--disabled {
-  opacity: 0.3;
-}
-
-.btn--external-link,
-.btn--link {
-  transition: color 0.2s;
-
-  &:not(.btn--disabled):not(:hover) {
-    color: $lbry-teal-5;
-
-    html[data-theme='dark'] & {
-      color: $lbry-teal-3;
-    }
-  }
-
-  &:not(.btn--disabled):hover {
-    color: $lbry-teal-3;
-
-    html[data-theme='dark'] & {
-      color: $lbry-teal-4;
-    }
-  }
-}
-
-.btn--external-link {
-  font-weight: 500;
-  text-align: left;
-}
-
-// Large icons used for play/view on the file page
-.btn--icon {
-  width: 5rem;
-  height: 5rem;
-
-  background-repeat: no-repeat;
-  background-size: 50%;
-  border-radius: 50%;
-  color: $lbry-white;
-  transition: background-color 0.2s;
-
-  &:not(:hover) {
-    background-color: rgba($lbry-black, 0.7);
-  }
-
-  // The play icon looks a little weird without this
-  .btn--play {
-    padding-left: 0.25rem;
-  }
-
-  .btn__label {
-    display: none;
-  }
-
+.button--primary,
+.button--alt,
+.button--no-style {
   svg {
-    width: 3rem;
-    height: 3rem;
-
-    margin-right: 0;
-    position: relative;
-    top: 0.1rem;
+    width: 1.2rem;
+    height: 1.2rem;
   }
 }
 
-.btn--inverse {
-  border: 1px solid $lbry-gray-1;
-  border-radius: 1rem;
-  color: inherit;
+.button--inverse {
   font-size: 1rem;
-  padding: var(--spacing-vertical-miniscule) var(--spacing-vertical-medium);
   transition: background-color 0.2s;
 
-  html[data-theme='dark'] & {
+  html[data-mode='dark'] & {
     border-color: rgba($lbry-white, 0.1);
+    background-color: rgba($lbry-black, 0.3);
   }
 
   &:not(:hover) {
-    background-color: transparent;
+    background-color: $lbry-white;
   }
 
   &:hover {
     background-color: $lbry-gray-1;
     color: $lbry-black;
 
-    html[data-theme='dark'] & {
+    html[data-mode='dark'] & {
       background-color: rgba($lbry-white, 0.1);
       color: $lbry-white;
     }
   }
 
-  .btn__content {
+  .button__content {
     svg {
       color: $lbry-gray-4;
     }
   }
 }
+.button--link:not(:hover):not(:disabled) {
+  html[data-mode='dark'] & {
+    color: $lbry-teal-4;
+  }
+}
 
-.btn--load-screen {
+.button--load-screen {
   border-bottom: 1px solid $lbry-white;
   display: inline-block;
 
@@ -145,31 +83,7 @@
   }
 }
 
-.btn--primary {
-  align-self: center; // fixes buttons next to tall elements inside one with `display: flex`
-  border-radius: 1rem;
-  color: $lbry-white;
-  padding: var(--spacing-vertical-miniscule) var(--spacing-vertical-medium);
-  transition: background-color 0.2s;
-
-  &:not(:hover) {
-    background-color: $lbry-teal-5;
-  }
-
-  &:hover {
-    background-color: $lbry-teal-3;
-
-    html[data-theme='dark'] & {
-      background-color: $lbry-teal-4;
-    }
-  }
-}
-
-.btn--uppercase {
-  text-transform: uppercase;
-}
-
-.btn--selected {
+.button--selected {
   font-weight: 800;
   color: $lbry-teal-5;
 
@@ -177,7 +91,7 @@
     opacity: 1;
   }
 
-  html[data-theme='dark'] & {
+  html[data-mode='dark'] & {
     color: $lbry-teal-3;
   }
 }

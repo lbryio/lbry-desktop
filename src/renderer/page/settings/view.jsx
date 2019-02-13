@@ -2,7 +2,7 @@
 import * as ICONS from 'constants/icons';
 import * as SETTINGS from 'constants/settings';
 import * as React from 'react';
-import { FormField, FormFieldPrice, FormRow } from 'component/common/form';
+import { FormField, FormFieldPrice, Form } from 'component/common/form';
 import Button from 'component/button';
 import Page from 'component/page';
 import FileSelector from 'component/common/file-selector';
@@ -53,36 +53,17 @@ class SettingsPage extends React.PureComponent<Props, State> {
       clearingCache: false,
     };
 
-    (this: any).onDownloadDirChange = this.onDownloadDirChange.bind(this);
     (this: any).onKeyFeeChange = this.onKeyFeeChange.bind(this);
     (this: any).onKeyFeeDisableChange = this.onKeyFeeDisableChange.bind(this);
     (this: any).onInstantPurchaseMaxChange = this.onInstantPurchaseMaxChange.bind(this);
-    (this: any).onShowNsfwChange = this.onShowNsfwChange.bind(this);
-    (this: any).onShareDataChange = this.onShareDataChange.bind(this);
     (this: any).onThemeChange = this.onThemeChange.bind(this);
     (this: any).onAutomaticDarkModeChange = this.onAutomaticDarkModeChange.bind(this);
-    (this: any).onAutoplayChange = this.onAutoplayChange.bind(this);
     (this: any).clearCache = this.clearCache.bind(this);
-    (this: any).onDesktopNotificationsChange = this.onDesktopNotificationsChange.bind(this);
-    (this: any).onAutoDownloadChange = this.onAutoDownloadChange.bind(this);
-    // (this: any).onLanguageChange = this.onLanguageChange.bind(this)
   }
 
   componentDidMount() {
     this.props.getThemes();
     this.props.updateWalletStatus();
-  }
-
-  onRunOnStartChange(event: SyntheticInputEvent<*>) {
-    this.setDaemonSetting('run_on_startup', event.target.checked);
-  }
-
-  onShareDataChange(event: SyntheticInputEvent<*>) {
-    this.setDaemonSetting('share_usage_data', event.target.checked);
-  }
-
-  onDownloadDirChange(newDirectory: string) {
-    this.setDaemonSetting('download_dir', newDirectory);
   }
 
   onKeyFeeChange(newValue: Price) {
@@ -107,24 +88,12 @@ class SettingsPage extends React.PureComponent<Props, State> {
     this.props.setClientSetting(SETTINGS.AUTOMATIC_DARK_MODE_ENABLED, value);
   }
 
-  onAutoplayChange(event: SyntheticInputEvent<*>) {
-    this.props.setClientSetting(SETTINGS.AUTOPLAY, event.target.checked);
-  }
-
   onInstantPurchaseEnabledChange(enabled: boolean) {
     this.props.setClientSetting(SETTINGS.INSTANT_PURCHASE_ENABLED, enabled);
   }
 
   onInstantPurchaseMaxChange(newValue: Price) {
     this.props.setClientSetting(SETTINGS.INSTANT_PURCHASE_MAX, newValue);
-  }
-
-  onShowNsfwChange(event: SyntheticInputEvent<*>) {
-    this.props.setClientSetting(SETTINGS.SHOW_NSFW, event.target.checked);
-  }
-
-  onAutoDownloadChange(event: SyntheticInputEvent<*>) {
-    this.props.setClientSetting(SETTINGS.AUTO_DOWNLOAD, event.target.checked);
   }
 
   onChangeEncryptWallet() {
@@ -134,10 +103,6 @@ class SettingsPage extends React.PureComponent<Props, State> {
     } else {
       encryptWallet();
     }
-  }
-
-  onDesktopNotificationsChange(event: SyntheticInputEvent<*>) {
-    this.props.setClientSetting(SETTINGS.OS_NOTIFICATIONS_ENABLED, event.target.checked);
   }
 
   setDaemonSetting(name: string, value: ?SetDaemonSettingArg): void {
@@ -170,6 +135,8 @@ class SettingsPage extends React.PureComponent<Props, State> {
       walletEncrypted,
       osNotificationsEnabled,
       autoDownload,
+      setDaemonSetting,
+      setClientSetting,
     } = this.props;
 
     const noDaemonSettings = !daemonSettings || Object.keys(daemonSettings).length === 0;
@@ -193,11 +160,13 @@ class SettingsPage extends React.PureComponent<Props, State> {
               </header>
 
               <div className="card__content">
-                <FileSelector
-                  type="openDirectory"
-                  currentPath={daemonSettings.download_dir}
-                  onFileChosen={this.onDownloadDirChange}
-                />
+                <Form>
+                  <FileSelector
+                    type="openDirectory"
+                    currentPath={daemonSettings.download_dir}
+                    onFileChosen={this.onDownloadDirChange}
+                  />
+                </Form>
               </div>
             </section>
 
@@ -211,30 +180,34 @@ class SettingsPage extends React.PureComponent<Props, State> {
                 </p>
               </header>
 
-              <div className="card__content">
-                <FormField
-                  type="radio"
-                  name="no_max_purchase_limit"
-                  checked={disableMaxKeyFee}
-                  postfix={__('No Limit')}
-                  onChange={() => {
-                    this.onKeyFeeDisableChange(true);
-                  }}
-                />
-                <FormField
-                  type="radio"
-                  name="max_purchase_limit"
-                  checked={!disableMaxKeyFee}
-                  onChange={() => {
-                    this.onKeyFeeDisableChange(false);
-                    this.onKeyFeeChange(defaultMaxKeyFee);
-                  }}
-                  postfix={__('Choose limit')}
-                />
+              <Form className="card__content">
+                <fieldset-section>
+                  <FormField
+                    type="radio"
+                    name="no_max_purchase_no_limit"
+                    checked={disableMaxKeyFee}
+                    label={__('No Limit')}
+                    onChange={() => {
+                      this.onKeyFeeDisableChange(true);
+                    }}
+                  />
+                </fieldset-section>
+                <fieldset-section>
+                  <FormField
+                    type="radio"
+                    name="max_purchase_limit"
+                    checked={!disableMaxKeyFee}
+                    onChange={() => {
+                      this.onKeyFeeDisableChange(false);
+                      this.onKeyFeeChange(defaultMaxKeyFee);
+                    }}
+                    label={__('Choose limit')}
+                  />
+                </fieldset-section>
+
                 {!disableMaxKeyFee && (
                   <FormFieldPrice
                     name="max_key_fee"
-                    label="Max purchase price"
                     min={0}
                     onChange={this.onKeyFeeChange}
                     price={
@@ -242,7 +215,7 @@ class SettingsPage extends React.PureComponent<Props, State> {
                     }
                   />
                 )}
-              </div>
+              </Form>
             </section>
 
             <section className="card card--section">
@@ -255,34 +228,38 @@ class SettingsPage extends React.PureComponent<Props, State> {
                 </p>
               </header>
 
-              <div className="card__content">
-                <FormField
-                  type="radio"
-                  name="confirm_all_purchases"
-                  checked={!instantPurchaseEnabled}
-                  postfix={__('Always confirm before purchasing content')}
-                  onChange={() => {
-                    this.onInstantPurchaseEnabledChange(false);
-                  }}
-                />
-                <FormField
-                  type="radio"
-                  name="instant_purchases"
-                  checked={instantPurchaseEnabled}
-                  postfix={__('Only confirm purchases over a certain price')}
-                  onChange={() => {
-                    this.onInstantPurchaseEnabledChange(true);
-                  }}
-                />
+              <Form className="card__content">
+                <fieldset-section>
+                  <FormField
+                    type="radio"
+                    name="confirm_all_purchases"
+                    checked={!instantPurchaseEnabled}
+                    label={__('Always confirm before purchasing content')}
+                    onChange={() => {
+                      this.onInstantPurchaseEnabledChange(false);
+                    }}
+                  />
+                </fieldset-section>
+                <fieldset-section>
+                  <FormField
+                    type="radio"
+                    name="instant_purchases"
+                    checked={instantPurchaseEnabled}
+                    label={__('Only confirm purchases over a certain price')}
+                    onChange={() => {
+                      this.onInstantPurchaseEnabledChange(true);
+                    }}
+                  />
+                </fieldset-section>
                 {instantPurchaseEnabled && (
                   <FormFieldPrice
-                    label={__('Confirmation price')}
+                    name="confirmation_price"
                     min={0.1}
                     onChange={this.onInstantPurchaseMaxChange}
                     price={instantPurchaseMax}
                   />
                 )}
-              </div>
+              </Form>
             </section>
 
             <section className="card card--section">
@@ -290,36 +267,38 @@ class SettingsPage extends React.PureComponent<Props, State> {
                 <h2 className="card__title">{__('Content Settings')}</h2>
               </header>
 
-              <div className="card__content">
-                <FormRow>
-                  <FormField
-                    type="checkbox"
-                    name="show_nsfw"
-                    onChange={this.onShowNsfwChange}
-                    checked={showNsfw}
-                    postfix={__('Show NSFW content')}
-                    helper={__(
-                      'NSFW content may include nudity, intense sexuality, profanity, or other adult content. By displaying NSFW content, you are affirming you are of legal age to view mature content in your country or jurisdiction.  '
-                    )}
-                  />
-                </FormRow>
-              </div>
+              <Form className="card__content">
+                <FormField
+                  type="setting"
+                  name="show_nsfw"
+                  onChange={() => setClientSetting(SETTINGS.SHOW_NSFW, !showNsfw)}
+                  checked={showNsfw}
+                  label={__('Show NSFW content')}
+                  helper={__(
+                    'NSFW content may include nudity, intense sexuality, profanity, or other adult content. By displaying NSFW content, you are affirming you are of legal age to view mature content in your country or jurisdiction.  '
+                  )}
+                />
+              </Form>
             </section>
 
             <section className="card card--section">
               <header className="card__header">
                 <h2 className="card__title">{__('Notifications')}</h2>
               </header>
-
-              <div className="card__content">
+              <Form className="card__content">
                 <FormField
-                  type="checkbox"
+                  type="setting"
                   name="desktopNotification"
-                  onChange={this.onDesktopNotificationsChange}
+                  onChange={() =>
+                    setClientSetting(SETTINGS.OS_NOTIFICATIONS_ENABLED, !osNotificationsEnabled)
+                  }
                   checked={osNotificationsEnabled}
-                  postfix={__('Show Desktop Notifications')}
+                  label={__('Show Desktop Notifications')}
+                  helper={__(
+                    'Get notified when a publish is confirmed, or when new content is available to watch.'
+                  )}
                 />
-              </div>
+              </Form>
             </section>
 
             <section className="card card--section">
@@ -327,32 +306,35 @@ class SettingsPage extends React.PureComponent<Props, State> {
                 <h2 className="card__title">{__('Share Diagnostic Data')}</h2>
               </header>
 
-              <div className="card__content">
+              <Form className="card__content">
                 <FormField
-                  type="checkbox"
+                  type="setting"
                   name="share_usage_data"
-                  onChange={this.onShareDataChange}
+                  onChange={() =>
+                    setDaemonSetting('share_usage_data', !daemonSettings.share_usage_data)
+                  }
                   checked={daemonSettings.share_usage_data}
-                  postfix={__(
+                  label={__(
                     'Help make LBRY better by contributing analytics and diagnostic data about my usage.'
                   )}
                   helper={__(
                     'You will be ineligible to earn rewards while diagnostics are not being shared.'
                   )}
                 />
-              </div>
+              </Form>
             </section>
 
             <section className="card card--section">
               <header className="card__header">
-                <h2 className="card__title">{__('Theme')}</h2>
+                <h2 className="card__title">{__('Appearance')}</h2>
               </header>
 
-              <div className="card__content">
-                <FormRow>
+              <Form className="card__content">
+                <fieldset-section>
                   <FormField
                     name="theme_select"
                     type="select"
+                    label={__('Theme')}
                     onChange={this.onThemeChange}
                     value={currentTheme}
                     disabled={automaticDarkModeEnabled}
@@ -363,17 +345,18 @@ class SettingsPage extends React.PureComponent<Props, State> {
                       </option>
                     ))}
                   </FormField>
-                </FormRow>
-
-                <FormField
-                  type="checkbox"
-                  name="automatic_dark_mode"
-                  onChange={e => this.onAutomaticDarkModeChange(e.target.checked)}
-                  checked={automaticDarkModeEnabled}
-                  disabled={isDarkModeEnabled}
-                  postfix={__('Automatic dark mode (9pm to 8am)')}
-                />
-              </div>
+                </fieldset-section>
+                <fieldset-section>
+                  <FormField
+                    type="setting"
+                    name="automatic_dark_mode"
+                    onChange={() => this.onAutomaticDarkModeChange(!automaticDarkModeEnabled)}
+                    checked={automaticDarkModeEnabled}
+                    disabled={isDarkModeEnabled}
+                    label={__('Automatic dark mode (9pm to 8am)')}
+                  />
+                </fieldset-section>
+              </Form>
             </section>
 
             <section className="card card--section">
@@ -381,13 +364,13 @@ class SettingsPage extends React.PureComponent<Props, State> {
                 <h2 className="card__title">{__('Wallet Security')}</h2>
               </header>
 
-              <div className="card__content">
+              <Form className="card__content">
                 <FormField
-                  type="checkbox"
+                  type="setting"
                   name="encrypt_wallet"
                   onChange={() => this.onChangeEncryptWallet()}
                   checked={walletEncrypted}
-                  postfix={__('Encrypt my wallet with a custom password.')}
+                  label={__('Encrypt my wallet with a custom password.')}
                   helper={
                     <React.Fragment>
                       {__('Secure your local wallet data with a custom password.')}{' '}
@@ -401,7 +384,7 @@ class SettingsPage extends React.PureComponent<Props, State> {
                     </React.Fragment>
                   }
                 />
-              </div>
+              </Form>
             </section>
 
             <section className="card card--section">
@@ -409,32 +392,29 @@ class SettingsPage extends React.PureComponent<Props, State> {
                 <h2 className="card__title">{__('Experimental Settings')}</h2>
               </header>
 
-              <div className="card__content">
-                <FormRow>
-                  <FormField
-                    type="checkbox"
-                    name="auto_download"
-                    onChange={this.onAutoDownloadChange}
-                    checked={autoDownload}
-                    postfix={__('Automatically download new content from my subscriptions')}
-                    helper={__(
-                      "The latest file from each of your subscriptions will be downloaded for quick access as soon as it's published."
-                    )}
-                  />
-                </FormRow>
-                <FormRow>
-                  <FormField
-                    type="checkbox"
-                    name="autoplay"
-                    onChange={this.onAutoplayChange}
-                    checked={autoplay}
-                    postfix={__('Autoplay media files')}
-                    helper={__(
-                      'Autoplay video and audio files when navigating to a file, as well as the next related item when a file finishes playing.'
-                    )}
-                  />
-                </FormRow>
-              </div>
+              <Form className="card__content">
+                <FormField
+                  type="setting"
+                  name="auto_download"
+                  onChange={() => setClientSetting(SETTINGS.AUTO_DOWNLOAD, !autoDownload)}
+                  checked={autoDownload}
+                  label={__('Automatically download new content from my subscriptions')}
+                  helper={__(
+                    "The latest file from each of your subscriptions will be downloaded for quick access as soon as it's published."
+                  )}
+                />
+
+                <FormField
+                  type="setting"
+                  name="autoplay"
+                  onChange={() => setClientSetting(SETTINGS.AUTOPLAY, !autoplay)}
+                  checked={autoplay}
+                  label={__('Autoplay media files')}
+                  helper={__(
+                    'Autoplay video and audio files when navigating to a file, as well as the next related item when a file finishes playing.'
+                  )}
+                />
+              </Form>
             </section>
 
             <section className="card card--section">
@@ -450,7 +430,7 @@ class SettingsPage extends React.PureComponent<Props, State> {
                   button="primary"
                   label={this.state.clearingCache ? __('Clearing') : __('Clear Cache')}
                   icon={ICONS.ALERT}
-                  onClick={this.clearCache}
+                  // onClick={this.clearCache}
                   disabled={this.state.clearingCache}
                 />
               </div>

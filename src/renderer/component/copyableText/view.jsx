@@ -2,7 +2,7 @@
 import * as ICONS from 'constants/icons';
 import * as React from 'react';
 import { clipboard } from 'electron';
-import { FormRow } from 'component/common/form';
+import { FormField } from 'component/common/form';
 import Button from 'component/button';
 
 type Props = {
@@ -24,33 +24,32 @@ export default class CopyableText extends React.PureComponent<Props> {
     const { copyable, doToast, snackMessage } = this.props;
 
     return (
-      <FormRow verticallyCentered stretch>
-        <input
-          className="input-copyable form-field__input"
-          readOnly
-          value={copyable || ''}
-          ref={input => {
-            this.input = input;
-          }}
-          onFocus={() => {
-            if (this.input) {
-              this.input.select();
-            }
-          }}
-        />
-
-        <Button
-          noPadding
-          button="secondary"
-          icon={ICONS.CLIPBOARD}
-          onClick={() => {
-            clipboard.writeText(copyable);
-            doToast({
-              message: snackMessage || __('Text copied'),
-            });
-          }}
-        />
-      </FormRow>
+      <FormField
+        type="text"
+        className="form-field--copyable"
+        readOnly
+        value={copyable || ''}
+        ref={input => {
+          this.input = input;
+        }}
+        onFocus={() => {
+          if (this.input) {
+            this.input.select();
+          }
+        }}
+        inputButton={
+          <Button
+            button="primary"
+            icon={ICONS.CLIPBOARD}
+            onClick={() => {
+              clipboard.writeText(copyable);
+              doToast({
+                message: snackMessage || __('Text copied'),
+              });
+            }}
+          />
+        }
+      />
     );
   }
 }

@@ -1,7 +1,7 @@
 // @flow
 import * as React from 'react';
 import { buildURI, SORT_OPTIONS } from 'lbry-redux';
-import { FormField } from 'component/common/form';
+import { FormField, Form } from 'component/common/form';
 import FileCard from 'component/fileCard';
 import type { FileInfo } from 'types/file_info';
 
@@ -160,7 +160,7 @@ class FileList extends React.PureComponent<Props> {
     return (
       <section>
         {!hideFilter && (
-          <div className="file-list__sort">
+          <Form>
             <FormField
               prefix={__('Sort by')}
               affixClass="form-field--align-center"
@@ -172,7 +172,7 @@ class FileList extends React.PureComponent<Props> {
               <option value={SORT_OPTIONS.DATE_OLD}>{__('Oldest First')}</option>
               <option value={SORT_OPTIONS.TITLE}>{__('Title')}</option>
             </FormField>
-          </div>
+          </Form>
         )}
 
         <section className="media-group--list">

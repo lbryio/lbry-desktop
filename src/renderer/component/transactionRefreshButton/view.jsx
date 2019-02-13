@@ -12,7 +12,7 @@ type State = {
   disabled: boolean,
 };
 
-class TransactionListRecent extends PureComponent<Props, State> {
+class TransactionRefreshButton extends PureComponent<Props, State> {
   constructor() {
     super();
 
@@ -48,4 +48,4 @@ class TransactionListRecent extends PureComponent<Props, State> {
   }
 }
 
-export default TransactionListRecent;
+export default TransactionRefreshButton;

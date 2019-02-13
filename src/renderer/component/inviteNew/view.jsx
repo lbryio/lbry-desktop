@@ -2,7 +2,7 @@
 /* eslint-disable react/no-multi-comp */
 import React from 'react';
 import Button from 'component/button';
-import { Form, FormRow, FormField, Submit } from 'component/common/form';
+import { Form, FormField, Submit } from 'component/common/form';
 
 type FormProps = {
   inviteNew: string => void,
@@ -41,24 +41,19 @@ class FormInviteNew extends React.PureComponent<FormProps, FormState> {
 
     return (
       <Form onSubmit={this.handleSubmit}>
-        <FormRow>
-          <FormField
-            stretch
-            type="text"
-            label="Email"
-            placeholder="youremail@example.org"
-            name="email"
-            value={this.state.email}
-            error={errorMessage}
-            onChange={event => {
-              this.handleEmailChanged(event);
-            }}
-          />
-        </FormRow>
-
-        <div className="card__actions">
-          <Submit label="Invite" disabled={isPending} />
-        </div>
+        <FormField
+          stretch
+          type="text"
+          label="Email"
+          placeholder="youremail@example.org"
+          name="email"
+          value={this.state.email}
+          error={errorMessage}
+          inputButton={<Submit label="Invite" disabled={isPending} />}
+          onChange={event => {
+            this.handleEmailChanged(event);
+          }}
+        />
       </Form>
     );
   }

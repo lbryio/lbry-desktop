@@ -42,7 +42,16 @@ class NameHelpText extends React.PureComponent<Props> {
       );
     }
 
-    return <React.Fragment>{nameHelpText || __('Create a URL for this content.')}</React.Fragment>;
+    return (
+      <React.Fragment>
+        {nameHelpText || (
+          <span>
+            {__('Create a URL for this content.')}{' '}
+            {uri && `${__('The uri for this name is')} ${uri}`}
+          </span>
+        )}
+      </React.Fragment>
+    );
   }
 }
 

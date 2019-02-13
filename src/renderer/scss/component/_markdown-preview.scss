@@ -67,7 +67,7 @@
     position: relative;
     top: 1rem;
 
-    html[data-theme='dark'] & {
+    html[data-mode='dark'] & {
       background-color: rgba($lbry-gray-5, 0.2);
     }
   }
@@ -85,10 +85,6 @@
     color: $lbry-gray-5;
     display: block;
     font-family: Consolas, 'Lucida Console', 'Source Sans', monospace;
-  }
-
-  table {
-    @extend .table;
   }
 
   a {

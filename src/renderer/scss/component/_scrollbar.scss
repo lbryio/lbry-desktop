@@ -9,7 +9,7 @@
 ::-webkit-scrollbar-thumb {
   background-color: $lbry-gray-3;
 
-  html[data-theme='dark'] & {
+  html[data-mode='dark'] & {
     background-color: $lbry-gray-5;
   }
 }

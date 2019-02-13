@@ -4,7 +4,7 @@
   min-height: 300px;
   padding: var(--spacing-vertical-large);
 
-  html[data-theme='dark'] & {
+  html[data-mode='dark'] & {
     background-color: transparent;
     border-bottom: 1px solid rgba($lbry-white, 0.1);
   }

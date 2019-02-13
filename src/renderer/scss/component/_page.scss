@@ -9,7 +9,7 @@
   position: absolute;
   z-index: 0;
 
-  html[data-theme='dark'] & {
+  html[data-mode='dark'] & {
     background-color: $lbry-black;
   }
 
@@ -24,7 +24,7 @@
     position: absolute;
     z-index: 1;
 
-    html[data-theme='dark'] & {
+    html[data-mode='dark'] & {
       background-color: $lbry-black;
     }
   }

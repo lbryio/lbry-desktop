@@ -1,6 +1,6 @@
 // @flow
 import React from 'react';
-import { Form, FormRow, FormField } from 'component/common/form';
+import { Form, FormField } from 'component/common/form';
 import { Modal } from 'modal/modal';
 import Button from 'component/button';
 
@@ -101,59 +101,53 @@ class ModalWalletEncrypt extends React.PureComponent<Props, State> {
         onConfirmed={() => this.submitEncryptForm()}
         onAborted={closeModal}
       >
-        <Form onSubmit={() => this.submitEncryptForm()}>
-          <section className="card__content">
-            <p>
-              {__(
-                'Encrypting your wallet will require a password to access your local wallet data when LBRY starts. Please enter a new password for your wallet.'
-              )}{' '}
-              <Button
-                button="link"
-                label={__('Learn more')}
-                href="https://lbry.io/faq/wallet-encryption"
-              />.
-            </p>
-            <FormRow padded>
-              <FormField
-                stretch
-                autoFocus
-                error={passwordMismatch === true ? 'Passwords do not match' : false}
-                label={__('Password')}
-                type="password"
-                name="wallet-new-password"
-                onChange={event => this.onChangeNewPassword(event)}
-              />
-            </FormRow>
-            <FormRow padded>
-              <FormField
-                stretch
-                error={passwordMismatch === true ? 'Passwords do not match' : false}
-                label={__('Confirm Password')}
-                type="password"
-                name="wallet-new-password-confirm"
-                onChange={event => this.onChangeNewPasswordConfirm(event)}
-              />
-            </FormRow>
-          </section>
-          <section className="card__content">
-            <p>
-              {__(
-                'If your password is lost, it cannot be recovered. You will not be able to access your wallet without a password.'
-              )}
-            </p>
-            <FormRow padded>
-              <FormField
-                stretch
-                error={understandError === true ? 'You must enter "I understand"' : false}
-                label={__('Enter "I understand"')}
-                type="text"
-                name="wallet-understand"
-                onChange={event => this.onChangeUnderstandConfirm(event)}
-              />
-            </FormRow>
-            <div className="card__actions" />
-            {failMessage && <div className="error-text">{__(failMessage)}</div>}
-          </section>
+        <Form className="card__content" onSubmit={() => this.submitEncryptForm()}>
+          <p>
+            {__(
+              'Encrypting your wallet will require a password to access your local wallet data when LBRY starts. Please enter a new password for your wallet.'
+            )}{' '}
+            <Button
+              button="link"
+              label={__('Learn more')}
+              href="https://lbry.io/faq/wallet-encryption"
+            />.
+          </p>
+          <fieldset-section>
+            <FormField
+              autoFocus
+              error={passwordMismatch === true ? 'Passwords do not match' : false}
+              label={__('Password')}
+              placeholder={__('Shh...')}
+              type="password"
+              name="wallet-new-password"
+              onChange={event => this.onChangeNewPassword(event)}
+            />
+          </fieldset-section>
+          <fieldset-section>
+            <FormField
+              error={passwordMismatch === true ? 'Passwords do not match' : false}
+              label={__('Confirm Password')}
+              placeholder={__('Your eyes only')}
+              type="password"
+              name="wallet-new-password-confirm"
+              onChange={event => this.onChangeNewPasswordConfirm(event)}
+            />
+          </fieldset-section>
+
+          <div className="help help--warning">
+            {__(
+              'If your password is lost, it cannot be recovered. You will not be able to access your wallet without a password.'
+            )}
+          </div>
+          <FormField
+            error={understandError === true ? 'You must enter "I understand"' : false}
+            label={__('Enter "I understand"')}
+            placeholder={__('Dear computer, I understand')}
+            type="text"
+            name="wallet-understand"
+            onChange={event => this.onChangeUnderstandConfirm(event)}
+          />
+          {failMessage && <div className="error-text">{__(failMessage)}</div>}
         </Form>
       </Modal>
     );

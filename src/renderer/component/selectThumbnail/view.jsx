@@ -92,7 +92,6 @@ class SelectThumbnail extends React.PureComponent<Props, State> {
             </div>
             <div className="column__item">
               <FormField
-                className="input--thumbnail"
                 type="text"
                 name="content_thumbnail"
                 label="URL"

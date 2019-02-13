@@ -129,14 +129,7 @@
   line-height: 0;
   position: absolute;
   transition: opacity 0.25s;
-
-  @media (min-resolution: 1.1dppx) {
-    top: 1px;
-  }
-
-  @media (max-resolution: 1dppx) {
-    top: 0;
-  }
+  top: 0;
 }
 
 .react-toggle-track-check {

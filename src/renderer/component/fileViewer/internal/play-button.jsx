@@ -2,7 +2,6 @@
 import classnames from 'classnames';
 import React from 'react';
 import Button from 'component/button';
-import * as ICONS from 'constants/icons';
 
 type Props = {
   play: (SyntheticInputEvent<*>) => void,
@@ -17,16 +16,14 @@ class VideoPlayButton extends React.PureComponent<Props> {
     const disabled = isLoading || fileInfo === undefined;
     const doesPlayback = ['audio', 'video'].indexOf(mediaType) !== -1;
     const label = doesPlayback ? __('Play') : __('View');
-    const icon = doesPlayback ? ICONS.PLAY : ICONS.VIEW;
     return (
       <Button
         disabled={disabled}
-        label={label}
-        icon={icon}
         iconSize={30}
-        className={classnames('btn--icon', {
-          'btn--play': doesPlayback,
-          'btn--view': !doesPlayback,
+        title={label}
+        className={classnames('button--icon', {
+          'button--play': doesPlayback,
+          'button--view': !doesPlayback,
         })}
         onClick={play}
       />

@@ -3,7 +3,7 @@
   margin-bottom: var(--spacing-vertical-medium);
   padding-bottom: var(--spacing-vertical-medium);
 
-  html[data-theme='dark'] & {
+  html[data-mode='dark'] & {
     border-color: rgba($lbry-gray-5, 0.2);
   }
 }
@@ -37,7 +37,7 @@
     content: '';
     position: absolute;
 
-    html[data-theme='dark'] & {
+    html[data-mode='dark'] & {
       background-image: linear-gradient(to bottom, transparent 0%, $lbry-black 90%);
     }
   }

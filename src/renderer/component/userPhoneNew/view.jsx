@@ -1,6 +1,6 @@
 // @flow
 import * as React from 'react';
-import { Form, FormRow, FormField, Submit } from 'component/common/form';
+import { Form, FormField, Submit } from 'component/common/form';
 
 const os = require('os').type();
 const countryCodes = require('country-data')
@@ -95,27 +95,29 @@ class UserPhoneNew extends React.PureComponent<Props, State> {
         </section>
 
         <Form className="card__content" onSubmit={this.handleSubmit}>
-          <FormRow padded>
-            <FormField type="select" name="country-codes" onChange={this.handleSelect}>
-              {countryCodes.map((country, index) => (
-                // eslint-disable-next-line
-                <option key={index} value={country.countryCallingCode}>
-                  {os === 'Darwin' ? country.emoji : `(${country.alpha2})`}{' '}
-                  {country.countryCallingCode}
-                </option>
-              ))}
-            </FormField>
-            <FormField
-              type="text"
-              placeholder={this.state.countryCode === '+1' ? '(555) 555-5555' : '5555555555'}
-              name="phone"
-              value={this.state.phone}
-              error={phoneErrorMessage}
-              onChange={event => {
-                this.handleChanged(event);
-              }}
-            />
-          </FormRow>
+          <fieldset-section>
+            <fieldset-group class="fieldset-group--smushed">
+              <FormField type="select" name="country-codes" onChange={this.handleSelect}>
+                {countryCodes.map((country, index) => (
+                  // eslint-disable-next-line
+                  <option key={index} value={country.countryCallingCode}>
+                    {os === 'Darwin' ? country.emoji : `(${country.alpha2})`}{' '}
+                    {country.countryCallingCode}
+                  </option>
+                ))}
+              </FormField>
+              <FormField
+                type="text"
+                placeholder={this.state.countryCode === '+1' ? '(555) 555-5555' : '5555555555'}
+                name="phone"
+                value={this.state.phone}
+                error={phoneErrorMessage}
+                onChange={event => {
+                  this.handleChanged(event);
+                }}
+              />
+            </fieldset-group>
+          </fieldset-section>
           <div className="card__actions">
             <Submit label="Submit" disabled={isPending} />
             {cancelButton}

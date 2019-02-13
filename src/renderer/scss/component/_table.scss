@@ -1,85 +1,18 @@
+@import '~@lbry/components/sass/table/_index.scss';
+
 .table {
-  max-width: 100%;
-  text-align: left;
-  word-wrap: break-word;
+  [data-mode='dark'] & {
+    background-color: transparent;
 
-  th,
-  td {
-    &:first-of-type {
-      padding-left: var(--spacing-vertical-medium);
+    th {
+      border-bottom: 2px solid $lbry-white;
     }
   }
+}
 
-  th {
-    font-size: 1.25rem;
-    font-weight: 700;
-    padding-top: var(--spacing-vertical-small);
-    padding-bottom: var(--spacing-vertical-small);
-  }
-
-  td {
-    color: $lbry-gray-5;
-    font-weight: 500;
-    padding-top: var(--spacing-vertical-small);
-    padding-bottom: var(--spacing-vertical-small);
-
-    html[data-theme='dark'] & {
-      color: inherit;
-    }
-
-    &:not(:last-of-type) {
-      padding-right: var(--spacing-vertical-large);
-    }
-
-    .btn:not(.btn--link) {
-      display: inline;
-    }
-
-    &.table__item--actionable {
-      span + .btn {
-        margin-left: var(--spacing-vertical-small);
-      }
-      .btn svg {
-        top: 3px;
-      }
-    }
-  }
-
-  thead {
-    border-bottom: 1px solid rgba($lbry-gray-1, 0.7);
-
-    html[data-theme='dark'] & {
-      border-color: rgba($lbry-gray-5, 0.3);
-    }
-  }
-
-  tbody {
-    border: 1px solid $lbry-gray-1;
-
-    html[data-theme='dark'] & {
-      border-color: rgba($lbry-gray-5, 0.3);
-    }
-
-    tr {
-      padding-top: var(--spacing-vertical-small);
-      padding-bottom: var(--spacing-vertical-small);
-
-      &:not(:last-of-type) {
-        border-bottom: 1px solid $lbry-gray-1;
-
-        html[data-theme='dark'] & {
-          border-color: rgba($lbry-gray-5, 0.3);
-        }
-      }
-
-      &:nth-child(even) {
-        background-color: rgba($lbry-gray-1, 0.3);
-
-        html[data-theme='dark'] & {
-          background-color: rgba($lbry-white, 0.1);
-        }
-      }
-    }
+.table__item--actionable {
+  .button svg {
+    top: 3px;
   }
 }
 
@@ -90,12 +23,8 @@
   }
 
   td:nth-of-type(2) {
-    @include constrict;
+    @include constrict(20vw);
   }
-}
-
-.table--stretch {
-  width: 100%;
 }
 
 .table--transactions {

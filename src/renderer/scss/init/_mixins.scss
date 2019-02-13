@@ -3,13 +3,6 @@
   justify-content: space-between;
 }
 
-@mixin constrict {
-  max-width: 20vw;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
 @mixin ellipsis {
   // to take over for truncate on LBRY Web
   overflow: hidden;
@@ -36,7 +29,7 @@
   animation: pulse 2s infinite ease-in-out;
   background-color: $lbry-gray-2;
 
-  html[data-theme='dark'] & {
+  html[data-mode='dark'] & {
     background-color: rgba($lbry-white, 0.1);
   }
 }

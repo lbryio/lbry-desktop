@@ -309,7 +309,7 @@ class CategoryList extends PureComponent<Props, State> {
           )}
         </header>
         {obscureNsfw && isCommunityTopBids ? (
-          <p className="media__message media__message--help">
+          <p className="media__message help--warning">
             {__(
               'The community top bids section is only visible if you allow mature content in the app. You can change your content viewing preferences'
             )}{' '}
