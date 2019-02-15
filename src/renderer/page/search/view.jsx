@@ -3,7 +3,6 @@ import * as SETTINGS from 'constants/settings';
 import * as ICONS from 'constants/icons';
 import * as React from 'react';
 import { isURIValid, normalizeURI, parseURI } from 'lbry-redux';
-import { FormField } from 'component/common/form';
 import FileTile from 'component/fileTile';
 import ChannelTile from 'component/channelTile';
 import FileListSearch from 'component/fileListSearch';
@@ -20,7 +19,6 @@ type Props = {
 class SearchPage extends React.PureComponent<Props> {
   constructor() {
     super();
-
     (this: any).onShowUnavailableChange = this.onShowUnavailableChange.bind(this);
     (this: any).onSearchResultCountChange = this.onSearchResultCountChange.bind(this);
   }
@@ -64,35 +62,21 @@ class SearchPage extends React.PureComponent<Props> {
                   </ToolTip>
                 </h1>
                 {isChannel ? (
-                  <ChannelTile size="large" uri={uri} />
+                  <ChannelTile size="large" isSearchResult uri={uri} />
                 ) : (
-                  <FileTile size="large" displayHiddenMessage uri={uri} />
+                  <FileTile size="large" isSearchResult displayHiddenMessage uri={uri} />
                 )}
               </header>
             )}
 
+          {/*
+            Commented out until I figure out what to do with it in my next PR 
+            <div>
+              <FormField type="text" value={resultCount} label={__("Returned results")} / 
+            </div>
+          */}
+
           <div className="search__results-wrapper">
-            <FormField
-              type="number"
-              name="result_count"
-              min={10}
-              max={1000}
-              value={resultCount}
-              onChange={this.onSearchResultCountChange}
-              postfix={__('returned results')}
-            />
-            {
-              // Removing this for now, it currently doesn't do anything but ideally it would
-              // display content that we don't think is currently available to download
-              // It is like a "display all" setting
-              // <FormField
-              //   type="checkbox"
-              //   name="show_unavailable"
-              //   onChange={this.onShowUnavailableChange}
-              //   checked={showUnavailable}
-              //   postfix={__('Include unavailable content')}
-              // />
-            }
             <FileListSearch query={query} />
             <div className="help">{__('These search results are provided by LBRY, Inc.')}</div>
           </div>

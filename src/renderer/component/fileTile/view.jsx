@@ -1,7 +1,7 @@
 // @flow
 import type { Claim, Metadata } from 'types/claim';
 import * as ICONS from 'constants/icons';
-import * as React from 'react';
+import React, { Fragment } from 'react';
 import { normalizeURI, parseURI } from 'lbry-redux';
 import CardMedia from 'component/cardMedia';
 import TruncatedText from 'component/common/truncated-text';
@@ -11,12 +11,12 @@ import classnames from 'classnames';
 import FilePrice from 'component/filePrice';
 import UriIndicator from 'component/uriIndicator';
 import DateTime from 'component/dateTime';
+import Yrbl from 'component/common/yrbl';
 
 type Props = {
   obscureNsfw: boolean,
   claimIsMine: boolean,
   isDownloaded: boolean,
-  isSearchResult: boolean,
   uri: string,
   isResolvingUri: boolean,
   rewardedContentClaimIds: Array<string>,
@@ -28,7 +28,6 @@ type Props = {
   updatePublishForm: ({}) => void,
   hideNoResult: boolean, // don't show the tile if there is no claim at this uri
   displayHiddenMessage?: boolean,
-  displayDescription?: boolean,
   size: string,
   isSubscribed: boolean,
   isNew: boolean,
@@ -36,7 +35,6 @@ type Props = {
 
 class FileTile extends React.PureComponent<Props> {
   static defaultProps = {
-    displayDescription: true,
     size: 'regular',
   };
 
@@ -57,7 +55,6 @@ class FileTile extends React.PureComponent<Props> {
       claim,
       uri,
       rewardedContentClaimIds,
-      size,
       isNew,
       claimIsMine,
     } = this.props;
@@ -70,7 +67,7 @@ class FileTile extends React.PureComponent<Props> {
     return (
       // TODO: turn this into it's own component and share it with FileCard
       // The only issue is icon placement on the search page
-      <div className={classnames('media__properties', { card__subtitle: size === 'large' })}>
+      <div className="media__properties">
         <FilePrice hideFree uri={uri} />
         {isNew && <span className="badge badge--alert icon">{__('NEW')}</span>}
         {isSubscribed && <Icon icon={ICONS.SUBSCRIPTION} />}
@@ -86,7 +83,6 @@ class FileTile extends React.PureComponent<Props> {
       claim,
       metadata,
       isResolvingUri,
-      isSearchResult,
       navigate,
       obscureNsfw,
       claimIsMine,
@@ -94,22 +90,21 @@ class FileTile extends React.PureComponent<Props> {
       updatePublishForm,
       hideNoResult,
       displayHiddenMessage,
-      displayDescription,
       size,
     } = this.props;
 
     if (!claim && isResolvingUri) {
       return (
         <div
-          className={classnames('media-tile', {
-            large: size === 'large',
+          className={classnames('media-tile media-placeholder', {
+            'media-tile--large': size === 'large',
           })}
         >
-          <div className="card__placeholder card__media" />
-          <div className="file-tile__info">
-            <div className="card__placeholder title" />
-            <div className="card__placeholder channel" />
-            <div className="card__placeholder date" />
+          <div className="media__thumb placeholder" />
+          <div className="media__info">
+            <div className="media__title placeholder" />
+            <div className="media__channel placeholder" />
+            <div className="media__subtitle placeholder" />
           </div>
         </div>
       );
@@ -132,7 +127,6 @@ class FileTile extends React.PureComponent<Props> {
     const title =
       isClaimed && metadata && metadata.title ? metadata.title : parseURI(uri).contentName;
     const thumbnail = metadata && metadata.thumbnail ? metadata.thumbnail : null;
-    const onClick = () => navigate('/show', { uri });
 
     let height;
     let name;
@@ -140,61 +134,84 @@ class FileTile extends React.PureComponent<Props> {
       ({ name, height } = claim);
     }
 
+    const wrapperProps = name
+      ? {
+          onClick: () => navigate('/show', { uri }),
+          role: 'button',
+        }
+      : {};
+
     return !name && hideNoResult ? null : (
       <section
-        className={classnames('media-tile card--link', {
-          'media--search-result': isSearchResult,
-          'media--small': size === 'small',
-          'media--large': size === 'large',
+        className={classnames('media-tile', {
+          'media-tile--small': size === 'small',
+          'media-tile--large': size === 'large',
+          'card--link': name,
         })}
-        onClick={onClick}
-        onKeyUp={onClick}
-        role="button"
-        tabIndex="0"
+        {...wrapperProps}
       >
         <CardMedia title={title || name} thumbnail={thumbnail} />
         <div className="media__info">
-          <div className="media__title">
-            {(title || name) && (
-              <TruncatedText text={title || name} lines={size === 'small' ? 2 : 3} />
-            )}
-          </div>
-          <div className="media__subtext">
-            <div className="media__subtitle">
-              <UriIndicator uri={uri} link />
-            </div>
-            <div className="media__subtitle card--space-between">
-              <div className="media__date">
-                <DateTime timeAgo block={height} />
+          {name && (
+            <Fragment>
+              <div className="media__title">
+                {(title || name) && (
+                  <TruncatedText text={title || name} lines={size === 'small' ? 2 : 3} />
+                )}
               </div>
-              {size !== 'large' && this.renderFileProperties()}
-            </div>
-          </div>
-          {displayDescription && (
-            <div className="media__subtext">
+
+              {size !== 'small' ? (
+                <div className="media__subtext">
+                  {__('Published to')} <UriIndicator uri={uri} link />{' '}
+                  <DateTime timeAgo block={height} />
+                </div>
+              ) : (
+                <Fragment>
+                  <div className="media__subtext">
+                    <UriIndicator uri={uri} link />
+                  </div>
+                  <div className="media__subtext">
+                    <DateTime timeAgo block={height} />
+                  </div>
+                </Fragment>
+              )}
+            </Fragment>
+          )}
+
+          {size !== 'small' && (
+            <div className="media__subtitle">
               <TruncatedText text={description} lines={size === 'large' ? 4 : 3} />
             </div>
           )}
-          {size === 'large' && this.renderFileProperties()}
+
+          {this.renderFileProperties()}
+
           {!name && (
-            <React.Fragment>
-              {__('This location is unused.')}{' '}
-              <Button
-                button="link"
-                label={__('Put something here!')}
-                onClick={e => {
-                  // avoid navigating to /show from clicking on the section
-                  e.stopPropagation();
+            <Yrbl
+              className="yrbl--search"
+              title={__("You get first dibs! There aren't any files here yet.")}
+              subtitle={
+                <Button
+                  button="link"
+                  label={
+                    <Fragment>
+                      {__('Publish something at')} {uri}
+                    </Fragment>
+                  }
+                  onClick={e => {
+                    // avoid navigating to /show from clicking on the section
+                    e.stopPropagation();
 
-                  // strip prefix from the Uri and use that as navigation parameter
-                  const { claimName } = parseURI(uri);
+                    // strip prefix from the Uri and use that as navigation parameter
+                    const { claimName } = parseURI(uri);
 
-                  clearPublish(); // to remove any existing publish data
-                  updatePublishForm({ name: claimName }); // to populate the name
-                  navigate('/publish');
-                }}
-              />
-            </React.Fragment>
+                    clearPublish(); // to remove any existing publish data
+                    updatePublishForm({ name: claimName }); // to populate the name
+                    navigate('/publish');
+                  }}
+                />
+              }
+            />
           )}
         </div>
       </section>

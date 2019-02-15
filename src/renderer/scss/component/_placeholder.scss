@@ -1,28 +1,66 @@
-.card--placeholder {
-  animation: pulse 2s infinite ease-in-out;
-  background-color: $lbry-gray-3;
+.media-placeholder {
+  .placeholder {
+    @include placeholder;
+  }
 }
 
-.placeholder__channel {
-  width: 70%;
-  height: 1rem;
-  margin-top: var(--spacing-vertical-small);
+.media-card.media-placeholder {
+  .media__title {
+    width: 100%;
+  }
+
+  .media__thumb {
+    margin-bottom: var(--spacing-vertical-medium);
+  }
+
+  .media__title {
+    height: 3.5rem;
+  }
+
+  .media__channel {
+    width: 70%;
+    height: 0.6em;
+    margin-bottom: var(--spacing-vertical-small);
+  }
+
+  .media__date {
+    height: 0.6em;
+    width: 30%;
+    margin-bottom: var(--spacing-vertical-medium);
+  }
+
+  .media__properties {
+    height: 1.1em;
+  }
 }
 
-.placeholder__date {
-  width: 50%;
-  height: 1em;
-  margin-top: var(--spacing-vertical-small);
-}
+.media-tile--large.media-placeholder {
+  .media__title,
+  .media__channel,
+  .media__subtitle {
+    // display: block;
+    // padding-left: var(--spacing-vertical-large);
+  }
 
-// Individual items we need a placeholder for
-// FileCard
-.placeholder__title {
-  height: 3rem;
-  margin-top: var(--spacing-vertical-emall);
-}
+  .media__thumb {
+    // margin-right: var(--spacing-vertical-large);
+  }
 
-// FileTile
-.placeholder__title--tile {
-  height: 3rem;
+  .media__title {
+    width: 60%;
+    height: 3rem;
+  }
+
+  .media__channel {
+    width: 35%;
+    height: 1.75rem;
+    margin-top: var(--spacing-vertical-small);
+  }
+
+  .media__subtitle {
+    margin-top: var(--spacing-vertical-large);
+
+    width: 100%;
+    height: 10rem;
+  }
 }

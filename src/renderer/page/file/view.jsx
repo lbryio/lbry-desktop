@@ -182,14 +182,11 @@ class FilePage extends React.Component<Props> {
             <FilePrice badge uri={normalizeURI(uri)} />
           </div>
 
-          <div className="media__subtitle media__subtitle--large">
+          <div className="media__subtext media__subtext--large">
             <div className="media__subtitle__channel">
               <UriIndicator uri={uri} link />
             </div>
-
-            <div className="media__subtitle__date media__subtext">
-              {__('Published on')} <DateTime block={height} show={DateTime.SHOW_DATE} />
-            </div>
+            {__('Published on')} <DateTime block={height} show={DateTime.SHOW_DATE} />
           </div>
 
           <div className="media__actions media__actions--between">

@@ -4,6 +4,14 @@
   min-height: 300px;
   padding: var(--spacing-vertical-large);
 
+  .placeholder {
+    background-color: rgba($lbry-white, 0.1);
+  }
+
+  .media__subtext {
+    color: rgba($lbry-white, 0.6);
+  }
+
   html[data-mode='dark'] & {
     background-color: transparent;
     border-bottom: 1px solid rgba($lbry-white, 0.1);
@@ -11,6 +19,7 @@
 }
 
 .search__title {
+  font-size: 3em;
   align-items: center;
   cursor: default;
   display: flex;
@@ -20,17 +29,6 @@
 
   > * {
     margin-left: var(--spacing-vertical-small);
-  }
-
-  // The search page title size needs tweaking
-  // dependant on screen width
-
-  @media (min-width: 601px) {
-    font-size: 2rem;
-  }
-
-  @media (max-width: 600px) {
-    font-size: 1.75rem;
   }
 }
 

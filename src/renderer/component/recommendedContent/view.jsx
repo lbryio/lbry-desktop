@@ -54,17 +54,11 @@ export default class RecommendedContent extends React.PureComponent<Props> {
         <span>Related</span>
         {recommendedContent &&
           recommendedContent.map(recommendedUri => (
-            <FileTile
-              size="small"
-              hideNoResult
-              displayDescription={false}
-              key={recommendedUri}
-              uri={recommendedUri}
-            />
+            <FileTile hideNoResult size="small" key={recommendedUri} uri={recommendedUri} />
           ))}
-        {recommendedContent && !recommendedContent.length && !isSearching && (
-          <div className="media__subtitle">No related content found</div>
-        )}
+        {recommendedContent &&
+          !recommendedContent.length &&
+          !isSearching && <div className="media__subtitle">No related content found</div>}
       </section>
     );
   }
