@@ -1,7 +1,7 @@
 // @flow
 import React from 'react';
 import { Modal } from 'modal/modal';
-import { FormRow, FormField } from 'component/common/form';
+import { FormField } from 'component/common/form';
 
 type Props = {
   claimIsMine: boolean,
@@ -74,23 +74,20 @@ class ModalRemoveFile extends React.PureComponent<Props, State> {
           </p>
         </section>
         <section className="card__content">
-          <FormRow>
-            <FormField
-              prefix={__('Also delete this file from my computer')}
-              type="checkbox"
-              checked={deleteChecked}
-              onChange={this.handleDeleteCheckboxClicked}
-            />
-          </FormRow>
+          <FormField
+            label={__('Also delete this file from my computer')}
+            type="checkbox"
+            checked={deleteChecked}
+            onChange={this.handleDeleteCheckboxClicked}
+          />
+
           {claimIsMine && (
-            <FormRow>
-              <FormField
-                prefix={__('Abandon the claim for this URI')}
-                type="checkbox"
-                checked={abandonClaimChecked}
-                onChange={this.handleAbandonClaimCheckboxClicked}
-              />
-            </FormRow>
+            <FormField
+              label={__('Abandon the claim for this URI')}
+              type="checkbox"
+              checked={abandonClaimChecked}
+              onChange={this.handleAbandonClaimCheckboxClicked}
+            />
           )}
         </section>
       </Modal>

@@ -4,6 +4,7 @@ import type { Claim } from 'types/claim';
 import moment from 'moment';
 import classnames from 'classnames';
 import Button from 'component/button';
+import { FormField } from 'component/common/form';
 
 type Props = {
   lastViewed: number,
@@ -43,7 +44,7 @@ class UserHistoryItem extends React.PureComponent<Props> {
           'item-list__item--selected': selected,
         })}
       >
-        <input checked={selected} type="checkbox" onClick={onSelect} />
+        <FormField checked={selected} type="checkbox" onClick={onSelect} />
         <span className="time time--ago">{moment(lastViewed).from(moment())}</span>
         <span className="item-list__item--cutoff">{title}</span>
         <Button

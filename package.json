@@ -89,8 +89,7 @@
     "y18n": "^4.0.0"
   },
   "devDependencies": {
-    "@lbry/color": "^1.0.2",
-    "@lbry/components": "^1.5.1",
+    "@lbry/components": "^2.2.0",
     "babel-eslint": "^8.2.2",
     "babel-plugin-module-resolver": "^3.1.1",
     "babel-polyfill": "^6.26.0",

@@ -21,7 +21,6 @@ type Props = {
   type: string,
   button: ?string, // primary, secondary, alt, link
   noPadding: ?boolean, // to remove padding and allow circular buttons
-  uppercase: ?boolean,
   iconColor?: string,
   iconSize?: number,
   constrict: ?boolean, // to shorten the button and ellipsis, only use for links
@@ -51,7 +50,6 @@ class Button extends React.PureComponent<Props> {
       button,
       type,
       noPadding,
-      uppercase,
       iconColor,
       iconSize,
       constrict,
@@ -60,25 +58,23 @@ class Button extends React.PureComponent<Props> {
     } = this.props;
 
     const combinedClassName = classnames(
-      'btn',
+      'button',
       {
-        'btn--no-padding': noPadding,
+        'button--no-padding': noPadding,
       },
       button
         ? {
-            'btn--primary': button === 'primary',
-            'btn--secondary': button === 'secondary',
-            'btn--alt': button === 'alt',
-            'btn--danger': button === 'danger',
-            'btn--inverse': button === 'inverse',
-            'btn--disabled': disabled,
-            'btn--link': button === 'link',
-            'btn--external-link': button === 'link' && href,
-            'btn--uppercase': uppercase,
-            'btn--constrict': constrict,
-            'btn--selected': selected,
+            'button--primary': button === 'primary',
+            'button--secondary': button === 'secondary',
+            'button--alt': button === 'alt',
+            'button--danger': button === 'danger',
+            'button--inverse': button === 'inverse',
+            'button--disabled': disabled,
+            'button--link': button === 'link',
+            'button--constrict': constrict,
+            'button--selected': selected,
           }
-        : 'btn--no-style',
+        : 'button--no-style',
       className
     );
 
@@ -91,9 +87,9 @@ class Button extends React.PureComponent<Props> {
         : onClick;
 
     const content = (
-      <span className="btn__content">
+      <span className="button__content">
         {icon && <Icon icon={icon} iconColor={iconColor} size={iconSize} />}
-        {label && <span className="btn__label">{label}</span>}
+        {label && <span className="button__label">{label}</span>}
         {children && children}
         {iconRight && <Icon icon={iconRight} iconColor={iconColor} size={iconSize} />}
       </span>

@@ -3,7 +3,7 @@
   margin-top: var(--spacing-vertical-large);
   padding: var(--spacing-vertical-large);
 
-  html[data-theme='dark'] & {
+  html[data-mode='dark'] & {
     background-color: rgba($lbry-white, 0.1);
   }
 }
@@ -17,6 +17,10 @@
   .item-list__item--cutoff {
     margin-right: var(--spacing-vertical-large);
   }
+
+  fieldset-section {
+    margin-bottom: 0;
+  }
 }
 
 .item-list__item--cutoff {
@@ -29,7 +33,7 @@
 .item-list__item--selected {
   background-color: $lbry-gray-1;
 
-  html[data-theme='dark'] & {
+  html[data-mode='dark'] & {
     background-color: rgba($lbry-black, 0.5);
   }
 }

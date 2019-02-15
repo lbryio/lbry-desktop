@@ -1,7 +1,7 @@
 // @flow
 import * as React from 'react';
 import Button from 'component/button';
-import { FormField, FormRow } from 'component/common/form';
+import { Form, FormField } from 'component/common/form';
 import ReactPaginate from 'react-paginate';
 import UserHistoryItem from 'component/userHistoryItem';
 
@@ -94,9 +94,9 @@ class UserHistoryPage extends React.PureComponent<Props, State> {
   }
 
   render() {
-    const { history, page, pageCount } = this.props;
+    const { history, page } = this.props;
     const { itemsSelected } = this.state;
-
+    const pageCount = 20;
     const allSelected = Object.keys(itemsSelected).length === history.length;
     const selectHandler = allSelected ? this.unselectAll : this.selectAll;
 
@@ -131,32 +131,35 @@ class UserHistoryPage extends React.PureComponent<Props, State> {
             ))}
           </section>
         )}
-        {pageCount > 1 && (
-          <FormRow padded verticallyCentered centered>
-            <ReactPaginate
-              pageCount={pageCount}
-              pageRangeDisplayed={2}
-              previousLabel="‹"
-              nextLabel="›"
-              activeClassName="pagination__item--selected"
-              pageClassName="pagination__item"
-              previousClassName="pagination__item pagination__item--previous"
-              nextClassName="pagination__item pagination__item--next"
-              breakClassName="pagination__item pagination__item--break"
-              marginPagesDisplayed={2}
-              onPageChange={e => this.changePage(e.selected)}
-              forcePage={page}
-              initialPage={page}
-              containerClassName="pagination"
-            />
-
-            <FormField
-              className="paginate-channel"
-              onKeyUp={e => this.paginate(e)}
-              prefix={__('Go to page:')}
-              type="text"
-            />
-          </FormRow>
+        {pageCount > -1 && (
+          <Form>
+            <fieldset-group class="fieldset-group--smushed fieldgroup--paginate">
+              <fieldset-section>
+                <ReactPaginate
+                  pageCount={pageCount}
+                  pageRangeDisplayed={2}
+                  previousLabel="‹"
+                  nextLabel="›"
+                  activeClassName="pagination__item--selected"
+                  pageClassName="pagination__item"
+                  previousClassName="pagination__item pagination__item--previous"
+                  nextClassName="pagination__item pagination__item--next"
+                  breakClassName="pagination__item pagination__item--break"
+                  marginPagesDisplayed={2}
+                  onPageChange={e => this.changePage(e.selected)}
+                  forcePage={page}
+                  initialPage={page}
+                  containerClassName="pagination"
+                />
+              </fieldset-section>
+              <FormField
+                className="paginate-channel"
+                onKeyUp={e => this.paginate(e)}
+                label={__('Go to page:')}
+                type="text"
+              />
+            </fieldset-group>
+          </Form>
         )}
       </React.Fragment>
     ) : (

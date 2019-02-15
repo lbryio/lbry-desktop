@@ -1,6 +1,6 @@
 // @flow
 import * as React from 'react';
-import { FormRow, FormField } from 'component/common/form';
+import { FormField } from 'component/common/form';
 import { CC_LICENSES, COPYRIGHT, OTHER, PUBLIC_DOMAIN, NONE } from 'constants/licenses';
 
 type Props = {
@@ -41,7 +41,7 @@ class LicenseType extends React.PureComponent<Props> {
     } = this.props;
 
     return (
-      <div className="card__content">
+      <React.Fragment>
         <FormField
           label={__('License (Optional)')}
           type="select"
@@ -61,41 +61,40 @@ class LicenseType extends React.PureComponent<Props> {
         </FormField>
 
         {licenseType === COPYRIGHT && (
-          <FormRow padded>
-            <FormField
-              stretch
-              label={__('Copyright notice')}
-              type="text"
-              name="copyright-notice"
-              value={otherLicenseDescription}
-              onChange={handleLicenseDescriptionChange}
-            />
-          </FormRow>
+          <FormField
+            label={__('Copyright notice')}
+            type="text"
+            name="copyright-notice"
+            value={otherLicenseDescription}
+            onChange={handleLicenseDescriptionChange}
+          />
         )}
 
         {licenseType === OTHER && (
-          <React.Fragment>
-            <FormRow padded>
+          <fieldset>
+            <legend>{__('Provide a description and link to your license')}</legend>
+            <fieldset-group>
               <FormField
                 label={__('License description')}
+                placeholder={__("The 'cool' license - TM")}
                 type="text"
                 name="other-license-description"
                 value={otherLicenseDescription}
                 onChange={handleLicenseDescriptionChange}
               />
-            </FormRow>
-            <FormRow padded>
+
               <FormField
                 label={__('License URL')}
+                placeholder={__('mywebsite.com/license')}
                 type="text"
                 name="other-license-url"
                 value={licenseUrl}
                 onChange={handleLicenseUrlChange}
               />
-            </FormRow>
-          </React.Fragment>
+            </fieldset-group>
+          </fieldset>
         )}
-      </div>
+      </React.Fragment>
     );
   }
 }

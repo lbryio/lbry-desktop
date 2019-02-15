@@ -1,6 +1,6 @@
 // @flow
 import React from 'react';
-import { Form, FormRow, FormField } from 'component/common/form';
+import { Form, FormField } from 'component/common/form';
 import { Modal } from 'modal/modal';
 import Button from 'component/button';
 
@@ -57,17 +57,14 @@ class ModalWalletUnlock extends React.PureComponent<Props> {
                 href="https://lbry.io/faq/wallet-encryption"
               />.
             </p>
-            <FormRow padded>
-              <FormField
-                stretch
-                autoFocus
-                error={walletUnlockSucceded === false ? 'Incorrect Password' : false}
-                label={__('Wallet Password')}
-                type="password"
-                name="wallet-password"
-                onChange={event => this.onChangePassword(event)}
-              />
-            </FormRow>
+            <FormField
+              autoFocus
+              error={walletUnlockSucceded === false ? 'Incorrect Password' : false}
+              label={__('Wallet Password')}
+              type="password"
+              name="wallet-password"
+              onChange={event => this.onChangePassword(event)}
+            />
           </Form>
         </section>
       </Modal>

@@ -2,7 +2,7 @@
 /* eslint-disable */
 import React from 'react';
 import Button from 'component/button';
-import { Form, FormField, Submit, FormRow } from 'component/common/form';
+import { Form, FormField, Submit } from 'component/common/form';
 
 class UserPhoneVerify extends React.PureComponent {
   constructor(props) {
@@ -43,24 +43,20 @@ class UserPhoneVerify extends React.PureComponent {
           </p>
         </section>
         <Form className="card__content" onSubmit={this.handleSubmit.bind(this)}>
-          <FormRow>
-            <FormField
-              type="text"
-              name="code"
-              placeholder="1234"
-              value={this.state.code}
-              onChange={event => {
-                this.handleCodeChanged(event);
-              }}
-              label={__('Verification Code')}
-              error={phoneErrorMessage}
-            />
-          </FormRow>
+          <FormField
+            type="text"
+            name="code"
+            placeholder="1234"
+            value={this.state.code}
+            onChange={event => {
+              this.handleCodeChanged(event);
+            }}
+            label={__('Verification Code')}
+            error={phoneErrorMessage}
+            inputButton={<Submit label={__('Verify')} />}
+          />
 
-          <div className="card__actions">
-            <Submit label={__('Verify')} />
-            {cancelButton}
-          </div>
+          <div className="card__actions">{cancelButton}</div>
         </Form>
 
         <p className="help">

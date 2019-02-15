@@ -6,7 +6,7 @@
   padding-right: var(--spacing-vertical-small);
   position: relative;
 
-  html[data-theme='dark'] & {
+  html[data-mode='dark'] & {
     background-color: $lbry-black;
     border-right: 1px solid $lbry-black;
   }
@@ -38,7 +38,7 @@
     position: absolute;
     z-index: 0;
 
-    html[data-theme='dark'] & {
+    html[data-mode='dark'] & {
       background-image: linear-gradient(
         to bottom right,
         transparent,
@@ -78,7 +78,7 @@
   &.navigation__link--active {
     color: $lbry-black;
 
-    html[data-theme='dark'] & {
+    html[data-mode='dark'] & {
       color: $lbry-gray-1;
     }
 
@@ -90,7 +90,7 @@
   &.navigation__link--guide:not(:hover) {
     color: rgba($lbry-black, 0.75);
 
-    html[data-theme='dark'] & {
+    html[data-mode='dark'] & {
       color: rgba($lbry-white, 0.75);
     }
 
@@ -145,7 +145,7 @@
     &::before {
       background-color: $lbry-black;
 
-      html[data-theme='dark'] & {
+      html[data-mode='dark'] & {
         color: $lbry-gray-1;
       }
     }

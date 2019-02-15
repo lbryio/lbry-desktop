@@ -57,11 +57,12 @@ export default (props: Props) => {
             </div>
             <Tooltip onComponent body={__('Automatically download new subscriptions.')}>
               <FormField
-                type="checkbox"
+                type="setting"
                 name="auto_download"
                 onChange={onChangeAutoDownload}
                 checked={autoDownload}
-                prefix={__('Auto download')}
+                label={__('Auto download')}
+                labelOnLeft
               />
             </Tooltip>
           </div>

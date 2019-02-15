@@ -1,7 +1,6 @@
 // @flow
 import * as React from 'react';
 import ReactDOMServer from 'react-dom/server';
-import classnames from 'classnames';
 import MarkdownPreview from 'component/common/markdown-preview';
 import SimpleMDE from 'react-simplemde-editor';
 import 'simplemde/dist/simplemde.min.css'; // eslint-disable-line import/no-extraneous-dependencies
@@ -25,12 +24,18 @@ type Props = {
   affixClass?: string, // class applied to prefix/postfix label
   firstInList?: boolean, // at the top of a list, no padding top
   autoFocus?: boolean,
+  labelOnLeft: boolean,
   inputProps?: {
     disabled?: boolean,
   },
+  inputButton: ?React.Node,
 };
 
 export class FormField extends React.PureComponent<Props> {
+  static defaultProps = {
+    labelOnLeft: false,
+  };
+
   constructor(props) {
     super(props);
     this.input = React.createRef();
@@ -59,20 +64,51 @@ export class FormField extends React.PureComponent<Props> {
       stretch,
       affixClass,
       autoFocus,
+      inputButton,
+      labelOnLeft,
       ...inputProps
     } = this.props;
-
     const errorMessage = typeof error === 'object' ? error.message : error;
 
     let input;
     if (type) {
-      if (type === 'select') {
+      if (type === 'radio') {
         input = (
-          <div className="form-field__select-wrapper">
-            <select className="form-field__select" id={name} {...inputProps}>
+          <fieldset-section>
+            <radio-element>
+              <input id={name} type="radio" {...inputProps} />
+              <label htmlFor={name}>{label}</label>
+              <radio-toggle onClick={inputProps.onChange} />
+            </radio-element>
+          </fieldset-section>
+        );
+      } else if (type === 'checkbox') {
+        input = (
+          <fieldset-section>
+            <checkbox-element>
+              <input id={name} type="checkbox" {...inputProps} />
+              <label htmlFor={name}>{label}</label>
+              <checkbox-toggle onClick={inputProps.onChange} />
+            </checkbox-element>
+          </fieldset-section>
+        );
+      } else if (type === 'setting') {
+        // 'setting' should only be used for settings. Forms should use "checkbox"
+        input = (
+          <input-submit>
+            {labelOnLeft && <label htmlFor={name}>{label}</label>}
+            <Toggle id={name} {...inputProps} />
+            {!labelOnLeft && <label htmlFor={name}>{label}</label>}
+          </input-submit>
+        );
+      } else if (type === 'select') {
+        input = (
+          <fieldset-section>
+            {label && <label htmlFor={name}>{label}</label>}
+            <select id={name} {...inputProps}>
               {children}
             </select>
-          </div>
+          </fieldset-section>
         );
       } else if (type === 'markdown') {
         const handleEvents = {
@@ -81,64 +117,59 @@ export class FormField extends React.PureComponent<Props> {
 
         input = (
           <div className="form-field--SimpleMDE" onContextMenu={stopContextMenu}>
-            <SimpleMDE
-              {...inputProps}
-              type="textarea"
-              events={handleEvents}
-              options={{
-                hideIcons: ['heading', 'image', 'fullscreen', 'side-by-side'],
-                previewRender(plainText) {
-                  const preview = <MarkdownPreview content={plainText} />;
-                  return ReactDOMServer.renderToString(preview);
-                },
-              }}
-            />
+            <fieldset-section>
+              <label htmlFor={name}>{label}</label>
+              <SimpleMDE
+                {...inputProps}
+                id={name}
+                type="textarea"
+                events={handleEvents}
+                options={{
+                  hideIcons: ['heading', 'image', 'fullscreen', 'side-by-side'],
+                  previewRender(plainText) {
+                    const preview = <MarkdownPreview content={plainText} />;
+                    return ReactDOMServer.renderToString(preview);
+                  },
+                }}
+              />
+            </fieldset-section>
           </div>
         );
       } else if (type === 'textarea') {
-        input = <textarea type={type} id={name} {...inputProps} />;
-      } else if (type === 'checkbox') {
-        input = <Toggle id={name} {...inputProps} />;
+        input = (
+          <fieldset-section>
+            <textarea type={type} id={name} {...inputProps} />
+          </fieldset-section>
+        );
       } else {
-        input = <input type={type} id={name} {...inputProps} ref={this.input} />;
+        const inputElement = <input type={type} id={name} {...inputProps} ref={this.input} />;
+        const inner = inputButton ? (
+          <input-submit>
+            {inputElement}
+            {inputButton}
+          </input-submit>
+        ) : (
+          inputElement
+        );
+
+        input = (
+          <React.Fragment>
+            <fieldset-section>
+              <label htmlFor={name}>{label}</label>
+              {inner}
+            </fieldset-section>
+            {errorMessage && <div className="error-text">{errorMessage}</div>}
+          </React.Fragment>
+        );
       }
     }
 
     return (
-      <div
-        className={classnames('form-field', {
-          'form-field--stretch': stretch || type === 'markdown',
-          'form-field--disabled': inputProps.disabled,
-        })}
-      >
-        {(label || errorMessage) && (
-          <label
-            className={classnames('form-field__label', { 'form-field__error': errorMessage })}
-            htmlFor={name}
-          >
-            {!errorMessage && label}
-            {errorMessage}
-          </label>
-        )}
-        <div
-          className={classnames('form-field__input', {
-            'form-field--auto-height': type === 'markdown',
-          })}
-        >
-          {prefix && (
-            <label htmlFor={name} className={classnames('form-field__prefix', affixClass)}>
-              {prefix}
-            </label>
-          )}
-          {input}
-          {postfix && (
-            <label htmlFor={name} className={classnames('form-field__postfix', affixClass)}>
-              {postfix}
-            </label>
-          )}
-        </div>
+      <React.Fragment>
+        {input}
+
         {helper && <div className="form-field__help">{helper}</div>}
-      </div>
+      </React.Fragment>
     );
   }
 }

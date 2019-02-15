@@ -1,6 +1,6 @@
 import React from 'react';
 import Button from 'component/button';
-import { FormRow, FormField } from 'component/common/form';
+import { FormField } from 'component/common/form';
 import { Lbry, doToast } from 'lbry-redux';
 import Page from 'component/page';
 
@@ -56,19 +56,18 @@ class ReportPage extends React.Component {
           </header>
 
           <div className="card__content">
-            <FormRow>
-              <FormField
-                type="textarea"
-                rows="10"
-                name="message"
-                stretch
-                value={this.state.message}
-                onChange={event => {
-                  this.onMessageChange(event);
-                }}
-                placeholder={__('Description of your issue or feature request')}
-              />
-            </FormRow>
+            <FormField
+              type="textarea"
+              rows="10"
+              name="message"
+              stretch
+              value={this.state.message}
+              onChange={event => {
+                this.onMessageChange(event);
+              }}
+              placeholder={__('Description of your issue or feature request')}
+            />
+
             <div className="card__actions">
               <Button
                 button="primary"

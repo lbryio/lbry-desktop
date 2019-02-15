@@ -6,7 +6,7 @@ import { CHANNEL_NEW, CHANNEL_ANONYMOUS, MINIMUM_PUBLISH_BID } from 'constants/c
 import * as ICONS from 'constants/icons';
 import * as React from 'react';
 import { isNameValid, buildURI, regexInvalidURI, THUMBNAIL_STATUSES } from 'lbry-redux';
-import { Form, FormField, FormRow, FormFieldPrice, Submit } from 'component/common/form';
+import { Form, FormField, FormFieldPrice, Submit } from 'component/common/form';
 import Button from 'component/button';
 import ChannelSection from 'component/selectChannel';
 import classnames from 'classnames';
@@ -283,7 +283,7 @@ class PublishForm extends React.PureComponent<Props> {
     // If there is an error it will be presented as an inline error as well
     return (
       !isFormValid && (
-        <div className="card__content card__subtitle form-field__error">
+        <div className="card__content card__subtitle error-text">
           {!title && <div>{__('A title is required')}</div>}
           {!name && <div>{__('A URL is required')}</div>}
           {name && nameError && <div>{__('The URL you created is not valid')}</div>}
@@ -349,7 +349,17 @@ class PublishForm extends React.PureComponent<Props> {
       <Form onSubmit={this.handlePublish}>
         <section className={classnames('card card--section', { 'card--disabled': publishing })}>
           <header className="card__header">
-            <h2 className="card__title">{__('Content')}</h2>
+            <h2 className="card__title card__title--flex-between">
+              {__('Content')}
+              {(filePath || !!editingURI) && (
+                <Button
+                  button="inverse"
+                  icon={ICONS.CLOSE}
+                  label={__('Clear')}
+                  onClick={clearPublish}
+                />
+              )}
+            </h2>
             <p className="card__subtitle">
               {isStillEditing
                 ? __('You are currently editing a claim.')
@@ -360,16 +370,6 @@ class PublishForm extends React.PureComponent<Props> {
             </p>
           </header>
 
-          {(filePath || !!editingURI) && (
-            <div className="card__internal-links">
-              <Button
-                button="inverse"
-                icon={ICONS.CLOSE}
-                label={__('Clear')}
-                onClick={clearPublish}
-              />
-            </div>
-          )}
           <div className="card__content">
             <FileSelector currentPath={filePath} onFileChosen={this.handleFileChange} />
             {!!isStillEditing &&
@@ -384,9 +384,8 @@ class PublishForm extends React.PureComponent<Props> {
         </section>
         <div className={classnames({ 'card--disabled': formDisabled })}>
           <section className="card card--section">
-            <FormRow>
+            <div className="card__content">
               <FormField
-                stretch
                 type="text"
                 name="content_title"
                 label={__('Title')}
@@ -395,10 +394,8 @@ class PublishForm extends React.PureComponent<Props> {
                 value={title}
                 onChange={e => updatePublishForm({ title: e.target.value })}
               />
-            </FormRow>
-            <FormRow padded>
+
               <FormField
-                stretch
                 type="markdown"
                 name="content_description"
                 label={__('Description')}
@@ -407,7 +404,7 @@ class PublishForm extends React.PureComponent<Props> {
                 disabled={formDisabled}
                 onChange={text => updatePublishForm({ description: text })}
               />
-            </FormRow>
+            </div>
           </section>
 
           <section className="card card--section">
@@ -443,22 +440,26 @@ class PublishForm extends React.PureComponent<Props> {
             </header>
 
             <div className="card__content">
-              <FormField
-                type="radio"
-                name="content_free"
-                postfix={__('Free')}
-                checked={contentIsFree}
-                disabled={formDisabled}
-                onChange={() => updatePublishForm({ contentIsFree: true })}
-              />
-              <FormField
-                type="radio"
-                name="content_cost"
-                postfix={__('Choose price')}
-                checked={!contentIsFree}
-                disabled={formDisabled}
-                onChange={() => updatePublishForm({ contentIsFree: false })}
-              />
+              <fieldset-section>
+                <FormField
+                  type="radio"
+                  name="content_free"
+                  label={__('Free')}
+                  checked={contentIsFree}
+                  disabled={formDisabled}
+                  onChange={() => updatePublishForm({ contentIsFree: true })}
+                />
+              </fieldset-section>
+              <fieldset-section>
+                <FormField
+                  type="radio"
+                  name="content_cost"
+                  label={__('Choose price')}
+                  checked={!contentIsFree}
+                  disabled={formDisabled}
+                  onChange={() => updatePublishForm({ contentIsFree: false })}
+                />
+              </fieldset-section>
               {!contentIsFree && (
                 <FormFieldPrice
                   name="content_cost_amount"
@@ -503,36 +504,33 @@ class PublishForm extends React.PureComponent<Props> {
             </header>
 
             <div className="card__content">
-              <FormRow>
-                <FormField
-                  stretch
-                  label={__('Name')}
-                  prefix={`lbry://${
-                    !channel || channel === CHANNEL_ANONYMOUS || channel === CHANNEL_NEW
-                      ? ''
-                      : `${channel}/`
-                  }`}
-                  type="text"
-                  name="content_name"
-                  placeholder="myname"
-                  value={name}
-                  onChange={event => this.handleNameChange(event.target.value)}
-                  error={nameError}
-                  helper={
-                    <NameHelpText
-                      isStillEditing={isStillEditing}
-                      uri={uri}
-                      myClaimForUri={myClaimForUri}
-                      onEditMyClaim={this.editExistingClaim}
-                    />
-                  }
-                />
-              </FormRow>
+              <FormField
+                label={__('Name')}
+                prefix={`lbry://${
+                  !channel || channel === CHANNEL_ANONYMOUS || channel === CHANNEL_NEW
+                    ? ''
+                    : `${channel}/`
+                }`}
+                type="text"
+                name="content_name"
+                placeholder="myname"
+                value={name}
+                onChange={event => this.handleNameChange(event.target.value)}
+                error={nameError}
+                helper={
+                  <NameHelpText
+                    isStillEditing={isStillEditing}
+                    uri={uri}
+                    myClaimForUri={myClaimForUri}
+                    onEditMyClaim={this.editExistingClaim}
+                  />
+                }
+              />
             </div>
 
             <div className={classnames('card__content', { 'card--disabled': !name })}>
               <FormField
-                className="input--price-amount"
+                className="form-field--price-amount"
                 type="number"
                 name="content_bid"
                 step="any"
@@ -557,39 +555,35 @@ class PublishForm extends React.PureComponent<Props> {
 
           <section className="card card--section">
             <div className="card__content">
-              <FormRow>
-                <FormField
-                  type="checkbox"
-                  name="content_is_mature"
-                  postfix={__('Mature audiences only')}
-                  checked={nsfw}
-                  onChange={event => updatePublishForm({ nsfw: event.target.checked })}
-                />
-              </FormRow>
+              <FormField
+                type="checkbox"
+                name="content_is_mature"
+                label={__('Mature audiences only')}
+                checked={nsfw}
+                onChange={() => updatePublishForm({ nsfw: !nsfw })}
+              />
 
-              <FormRow padded>
-                <FormField
-                  label={__('Language')}
-                  type="select"
-                  name="content_language"
-                  value={language}
-                  onChange={event => updatePublishForm({ language: event.target.value })}
-                >
-                  <option value="en">{__('English')}</option>
-                  <option value="zh">{__('Chinese')}</option>
-                  <option value="fr">{__('French')}</option>
-                  <option value="de">{__('German')}</option>
-                  <option value="jp">{__('Japanese')}</option>
-                  <option value="ru">{__('Russian')}</option>
-                  <option value="es">{__('Spanish')}</option>
-                  <option value="id">{__('Indonesian')}</option>
-                  <option value="it">{__('Italian')}</option>
-                  <option value="nl">{__('Dutch')}</option>
-                  <option value="tr">{__('Turkish')}</option>
-                  <option value="pl">{__('Polish')}</option>
-                  <option value="ms">{__('Malay')}</option>
-                </FormField>
-              </FormRow>
+              <FormField
+                label={__('Language')}
+                type="select"
+                name="content_language"
+                value={language}
+                onChange={event => updatePublishForm({ language: event.target.value })}
+              >
+                <option value="en">{__('English')}</option>
+                <option value="zh">{__('Chinese')}</option>
+                <option value="fr">{__('French')}</option>
+                <option value="de">{__('German')}</option>
+                <option value="jp">{__('Japanese')}</option>
+                <option value="ru">{__('Russian')}</option>
+                <option value="es">{__('Spanish')}</option>
+                <option value="id">{__('Indonesian')}</option>
+                <option value="it">{__('Italian')}</option>
+                <option value="nl">{__('Dutch')}</option>
+                <option value="tr">{__('Turkish')}</option>
+                <option value="pl">{__('Polish')}</option>
+                <option value="ms">{__('Malay')}</option>
+              </FormField>
 
               <LicenseType
                 licenseType={licenseType}
@@ -636,13 +630,13 @@ class PublishForm extends React.PureComponent<Props> {
                     uploadThumbnailStatus === THUMBNAIL_STATUSES.IN_PROGRESS
                   }
                 />
-                <Button button="alt" onClick={this.handleCancelPublish} label={__('Cancel')} />
+                <Button button="link" onClick={this.handleCancelPublish} label={__('Cancel')} />
               </div>
             </div>
           </section>
-
-          {!formDisabled && !formValid && this.renderFormErrors()}
         </div>
+
+        {!formDisabled && !formValid && this.renderFormErrors()}
       </Form>
     );
   }

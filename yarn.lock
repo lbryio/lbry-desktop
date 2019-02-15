@@ -111,13 +111,10 @@
   version "0.7.1"
   resolved "https://registry.yarnpkg.com/@emotion/memoize/-/memoize-0.7.1.tgz#e93c13942592cf5ef01aa8297444dc192beee52f"
 
-"@lbry/color@^1.0.2":
-  version "1.0.3"
-  resolved "https://registry.yarnpkg.com/@lbry/color/-/color-1.0.3.tgz#ec22b2c48b0e358759528fb3bbe7ba468d4e41ca"
-
-"@lbry/components@^1.5.1":
-  version "1.6.3"
-  resolved "https://registry.yarnpkg.com/@lbry/components/-/components-1.6.3.tgz#5187736e8d51d24a4678f972d3c062d880d6d853"
+"@lbry/components@^2.2.0":
+  version "2.2.0"
+  resolved "https://registry.yarnpkg.com/@lbry/components/-/components-2.2.0.tgz#ce9e7667f28be832014d8f29d12796ce514ce039"
+  integrity sha512-AHzc3OZw6gtKESXm0IrGNMFLoJI2JJVDokRzoyHPOdYgLqqADqekC44u8dytGdPHixBo1kZKaoS2FTTXyZpqpw==
 
 "@mapbox/hast-util-table-cell-style@^0.1.3":
   version "0.1.3"

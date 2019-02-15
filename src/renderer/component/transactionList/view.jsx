@@ -3,7 +3,7 @@ import type { Transaction } from 'types/transaction';
 import * as icons from 'constants/icons';
 import * as MODALS from 'constants/modal_types';
 import * as React from 'react';
-import { FormField } from 'component/common/form';
+import { FormField, Form } from 'component/common/form';
 import Button from 'component/button';
 import FileExporter from 'component/common/file-exporter';
 import { TRANSACTIONS } from 'lbry-redux';
@@ -80,27 +80,29 @@ class TransactionList extends React.PureComponent<Props> {
                   defaultPath={__('lbry-transactions-history')}
                 />
 
-                <FormField
-                  type="select"
-                  value={filterSetting || TRANSACTIONS.ALL}
-                  onChange={this.handleFilterChanged}
-                  affixClass="form-field--align-center"
-                  prefix={__('Show')}
-                  postfix={
-                    <Button
-                      button="link"
-                      icon={icons.HELP}
-                      href="https://lbry.io/faq/transaction-types"
-                      title={__('Help')}
-                    />
-                  }
-                >
-                  {transactionTypes.map(tt => (
-                    <option key={tt} value={tt}>
-                      {__(`${this.capitalize(tt)}`)}
-                    </option>
-                  ))}
-                </FormField>
+                <Form>
+                  <FormField
+                    type="select"
+                    value={filterSetting || TRANSACTIONS.ALL}
+                    onChange={this.handleFilterChanged}
+                    affixClass="form-field--align-center"
+                    prefix={__('Show')}
+                    postfix={
+                      <Button
+                        button="link"
+                        icon={icons.HELP}
+                        href="https://lbry.io/faq/transaction-types"
+                        title={__('Help')}
+                      />
+                    }
+                  >
+                    {transactionTypes.map(tt => (
+                      <option key={tt} value={tt}>
+                        {__(`${this.capitalize(tt)}`)}
+                      </option>
+                    ))}
+                  </FormField>
+                </Form>
               </div>
             )}
         </header>
@@ -110,7 +112,7 @@ class TransactionList extends React.PureComponent<Props> {
 
         {!!transactionList.length && (
           <div className="card__content">
-            <table className="table table--transactions table--stretch">
+            <table className="table table--transactions">
               <thead>
                 <tr>
                   <th>{__('Amount')}</th>

@@ -8,7 +8,7 @@
   position: relative;
   z-index: 1;
 
-  html[data-theme='dark'] & {
+  html[data-mode='dark'] & {
     border-color: $lbry-gray-5;
   }
 
@@ -20,7 +20,7 @@
     position: absolute;
     z-index: 1;
 
-    html[data-theme='dark'] & {
+    html[data-mode='dark'] & {
       color: $lbry-gray-5;
     }
   }
@@ -30,7 +30,7 @@
   background-color: $lbry-blue-2;
   color: $lbry-black;
 
-  html[data-theme='dark'] & {
+  html[data-mode='dark'] & {
     background-color: $lbry-blue-4;
     color: inherit;
   }
@@ -43,12 +43,14 @@
   align-items: center;
   border-right: 1px solid $lbry-gray-1;
   border-left: 1px solid $lbry-gray-1;
+  border-bottom: none;
+  border-top: none;
   display: flex;
   justify-content: center;
   padding-left: var(--spacing-vertical-large);
   transition: background-color 0.2s;
 
-  html[data-theme='dark'] & {
+  html[data-mode='dark'] & {
     border-right: 1px solid;
     border-left: 1px solid;
     color: $lbry-white;
@@ -71,7 +73,7 @@
   min-width: 100%;
   overflow: hidden;
 
-  html[data-theme='dark'] & {
+  html[data-mode='dark'] & {
     background-color: $lbry-gray-5;
     color: $lbry-white;
   }

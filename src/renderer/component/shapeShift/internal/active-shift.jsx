@@ -1,7 +1,6 @@
 // @flow
 import * as React from 'react';
 import QRCode from 'component/common/qr-code';
-import { FormRow } from 'component/common/form';
 import * as statuses from 'constants/shape_shift';
 import CopyableText from 'component/copyableText';
 import Button from 'component/button';
@@ -94,10 +93,10 @@ class ActiveShapeShift extends React.PureComponent<Props> {
             />
 
             {shiftDepositAddress && (
-              <FormRow verticallyCentered padded>
+              <React.Fragment>
                 <QRCode value={shiftDepositAddress} paddingRight />
                 <CopyableText copyable={shiftDepositAddress} />
-              </FormRow>
+              </React.Fragment>
             )}
           </div>
         )}

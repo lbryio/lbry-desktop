@@ -41,7 +41,7 @@ class App extends React.PureComponent<Props> {
     });
 
     // $FlowFixMe
-    document.documentElement.setAttribute('data-theme', theme);
+    document.documentElement.setAttribute('data-mode', theme);
   }
 
   componentDidMount() {
@@ -78,7 +78,7 @@ class App extends React.PureComponent<Props> {
 
     if (prevTheme !== theme) {
       // $FlowFixMe
-      document.documentElement.setAttribute('data-theme', theme);
+      document.documentElement.setAttribute('data-mode', theme);
     }
   }
 

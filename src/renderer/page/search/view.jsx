@@ -3,7 +3,7 @@ import * as SETTINGS from 'constants/settings';
 import * as ICONS from 'constants/icons';
 import * as React from 'react';
 import { isURIValid, normalizeURI, parseURI } from 'lbry-redux';
-import { FormField, FormRow } from 'component/common/form';
+import { FormField } from 'component/common/form';
 import FileTile from 'component/fileTile';
 import ChannelTile from 'component/channelTile';
 import FileListSearch from 'component/fileListSearch';
@@ -49,49 +49,50 @@ class SearchPage extends React.PureComponent<Props> {
     return (
       <Page noPadding>
         <section className="search">
-          {query && isValid && (
-            <header className="search__header">
-              <h1 className="search__title">
-                {`lbry://${query}`}
-                <ToolTip
-                  icon
-                  body={__('This is the resolution of a LBRY URL and not controlled by LBRY Inc.')}
-                >
-                  <Icon icon={ICONS.HELP} />
-                </ToolTip>
-              </h1>
-              {isChannel ? (
-                <ChannelTile size="large" uri={uri} />
-              ) : (
-                <FileTile size="large" displayHiddenMessage uri={uri} />
-              )}
-            </header>
-          )}
+          {query &&
+            isValid && (
+              <header className="search__header">
+                <h1 className="search__title">
+                  {`lbry://${query}`}
+                  <ToolTip
+                    icon
+                    body={__(
+                      'This is the resolution of a LBRY URL and not controlled by LBRY Inc.'
+                    )}
+                  >
+                    <Icon icon={ICONS.HELP} />
+                  </ToolTip>
+                </h1>
+                {isChannel ? (
+                  <ChannelTile size="large" uri={uri} />
+                ) : (
+                  <FileTile size="large" displayHiddenMessage uri={uri} />
+                )}
+              </header>
+            )}
 
           <div className="search__results-wrapper">
-            <FormRow alignRight>
-              <FormField
-                type="number"
-                name="result_count"
-                min={10}
-                max={1000}
-                value={resultCount}
-                onChange={this.onSearchResultCountChange}
-                postfix={__('returned results')}
-              />
-              {
-                // Removing this for now, it currently doesn't do anything but ideally it would
-                // display content that we don't think is currently available to download
-                // It is like a "display all" setting
-                // <FormField
-                //   type="checkbox"
-                //   name="show_unavailable"
-                //   onChange={this.onShowUnavailableChange}
-                //   checked={showUnavailable}
-                //   postfix={__('Include unavailable content')}
-                // />
-              }
-            </FormRow>
+            <FormField
+              type="number"
+              name="result_count"
+              min={10}
+              max={1000}
+              value={resultCount}
+              onChange={this.onSearchResultCountChange}
+              postfix={__('returned results')}
+            />
+            {
+              // Removing this for now, it currently doesn't do anything but ideally it would
+              // display content that we don't think is currently available to download
+              // It is like a "display all" setting
+              // <FormField
+              //   type="checkbox"
+              //   name="show_unavailable"
+              //   onChange={this.onShowUnavailableChange}
+              //   checked={showUnavailable}
+              //   postfix={__('Include unavailable content')}
+              // />
+            }
             <FileListSearch query={query} />
             <div className="help">{__('These search results are provided by LBRY, Inc.')}</div>
           </div>

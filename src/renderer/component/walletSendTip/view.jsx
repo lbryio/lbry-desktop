@@ -1,7 +1,7 @@
 // @flow
 import React from 'react';
 import Button from 'component/button';
-import { FormField, FormRow } from 'component/common/form';
+import { FormField, Form } from 'component/common/form';
 import type { Claim } from 'types/claim';
 
 type Props = {
@@ -75,7 +75,7 @@ class WalletSendTip extends React.PureComponent<Props, State> {
 
     return (
       <React.Fragment>
-        <FormRow className="card__content">
+        <Form>
           <FormField
             autoFocus
             label={
@@ -85,13 +85,21 @@ class WalletSendTip extends React.PureComponent<Props, State> {
               __('Amount')
             }
             postfix={__('LBC')}
-            className="input--price-amount"
+            className="form-field--price-amount"
             error={tipError}
             min="0"
             step="any"
             type="number"
             placeholder="1.23"
             onChange={event => this.handleSupportPriceChange(event)}
+            inputButton={
+              <Button
+                button="primary"
+                label={__('Send')}
+                disabled={isPending || tipError}
+                onClick={this.handleSendButtonClicked}
+              />
+            }
             helper={
               <p>
                 {__(`This will appear as a tip for "${title}".`)}{' '}
@@ -99,15 +107,8 @@ class WalletSendTip extends React.PureComponent<Props, State> {
               </p>
             }
           />
-        </FormRow>
-
+        </Form>
         <div className="card__actions">
-          <Button
-            button="primary"
-            label={__('Send')}
-            disabled={isPending || tipError}
-            onClick={this.handleSendButtonClicked}
-          />
           <Button button="link" label={__('Cancel')} onClick={onCancel} navigateParams={{ uri }} />
         </div>
       </React.Fragment>
