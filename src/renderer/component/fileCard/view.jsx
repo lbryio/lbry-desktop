@@ -82,12 +82,12 @@ class FileCard extends React.PureComponent<Props> {
 
     if (!claim && (!pending || placeholder)) {
       return (
-        <li className="media-card media--placeholder">
-          <div className="media__thumb media__thumb--placeholder" />
-          <div className="media__title media__title--placeholder" />
-          <div className="media__channel media__channel--placeholder" />
-          <div className="media__date media__date--placeholder" />
-          <div className="media__properties media__properties--placeholder" />
+        <li className="media-card media-placeholder">
+          <div className="media__thumb placeholder" />
+          <div className="media__title placeholder" />
+          <div className="media__channel placeholder" />
+          <div className="media__date placeholder" />
+          <div className="media__properties" />
         </li>
       );
     }
@@ -127,11 +127,9 @@ class FileCard extends React.PureComponent<Props> {
         <div className="media__title">
           <TruncatedText text={title} lines={2} />
         </div>
-        <div className="media__subtext">
-          <div className="media__subtitle">
-            {pending ? <div>Pending...</div> : <UriIndicator uri={uri} link />}
-          </div>
-          <div className="media__date">
+        <div className="media__subtitle">
+          {pending ? <div>Pending...</div> : <UriIndicator uri={uri} link />}
+          <div>
             <DateTime timeAgo block={height} />
           </div>
         </div>

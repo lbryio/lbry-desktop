@@ -1,6 +1,5 @@
 // @flow
 import React from 'react';
-import { parseURI } from 'lbry-redux';
 import BusyIndicator from 'component/common/busy-indicator';
 import ChannelPage from 'page/channel';
 import FilePage from 'page/file';
@@ -43,14 +42,15 @@ class ShowPage extends React.PureComponent<Props> {
       innerContent = (
         <Page notContained>
           {isResolvingUri && <BusyIndicator message={__('Loading decentralized data...')} />}
-          {claim === null && !isResolvingUri && (
-            <span className="empty">{__("There's nothing at this location.")}</span>
-          )}
+          {claim === null &&
+            !isResolvingUri && (
+              <span className="empty">{__("There's nothing at this location.")}</span>
+            )}
         </Page>
       );
     } else if (claim && claim.name.length && claim.name[0] === '@') {
       innerContent = <ChannelPage uri={uri} />;
-    } else if (claim) {
+    } else if (claim && blackListedOutpoints) {
       let isClaimBlackListed = false;
 
       for (let i = 0; i < blackListedOutpoints.length; i += 1) {

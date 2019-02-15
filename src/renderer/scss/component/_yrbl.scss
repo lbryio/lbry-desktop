@@ -18,6 +18,15 @@
   margin: 0 var(--spacing-vertical-large);
 }
 
+.yrbl--search {
+  justify-content: flex-start;
+  margin: 0;
+
+  .yrbl {
+    height: 18rem;
+  }
+}
+
 // Get weird here
 .yrbl--enhanced {
   position: absolute;

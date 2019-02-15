@@ -9,13 +9,11 @@ import type { Claim } from 'types/claim';
 type Props = {
   uri: string,
   isResolvingUri: boolean,
-  isSearchResult: boolean,
   totalItems: number,
   size: string,
   claim: ?Claim,
   resolveUri: string => void,
   navigate: (string, ?{}) => void,
-  buttonStyle: string,
 };
 
 class ChannelTile extends React.PureComponent<Props> {
@@ -38,16 +36,7 @@ class ChannelTile extends React.PureComponent<Props> {
   }
 
   render() {
-    const {
-      claim,
-      navigate,
-      isResolvingUri,
-      isSearchResult,
-      totalItems,
-      uri,
-      size,
-      buttonStyle,
-    } = this.props;
+    const { claim, navigate, isResolvingUri, totalItems, uri, size } = this.props;
 
     let channelName;
     let subscriptionUri;
@@ -63,9 +52,8 @@ class ChannelTile extends React.PureComponent<Props> {
         onClick={onClick}
         role="button"
         className={classnames('media-tile card--link', {
-          'media--search-result': isSearchResult,
-          'media--small': size === 'small',
-          'media--large': size === 'large',
+          'media-tile--small': size === 'small',
+          'media-tile--large': size === 'large',
         })}
       >
         <CardMedia title={channelName} thumbnail={null} />

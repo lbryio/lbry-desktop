@@ -95,3 +95,12 @@
     color: $lbry-teal-3;
   }
 }
+
+.button--uri-indicator {
+  color: rgba($lbry-white, 0.9);
+  transition: color 0.2s;
+
+  &:hover {
+    color: $lbry-teal-3;
+  }
+}
