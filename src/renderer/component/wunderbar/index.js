@@ -10,8 +10,6 @@ import {
   doToast,
 } from 'lbry-redux';
 import analytics from 'analytics';
-import { makeSelectClientSetting } from 'redux/selectors/settings';
-import * as settings from 'constants/settings';
 import { doNavigate } from 'redux/actions/navigation';
 import Wunderbar from './view';
 
@@ -27,13 +25,12 @@ const select = state => {
     ...searchState,
     wunderbarValue,
     suggestions: selectSearchSuggestions(state),
-    resultCount: makeSelectClientSetting(settings.RESULT_COUNT)(state),
   };
 };
 
 const perform = dispatch => ({
-  onSearch: (query, size) => {
-    dispatch(doSearch(query, size));
+  onSearch: query => {
+    dispatch(doSearch(query));
     dispatch(doNavigate(`/search`, { query }));
     analytics.apiLogSearch();
   },

@@ -86,7 +86,9 @@ code {
 }
 
 .truncated-text {
-  @include truncate;
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
 }
 
 .busy-indicator__loader {

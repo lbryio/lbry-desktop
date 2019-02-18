@@ -34,6 +34,7 @@
     "postinstall": "electron-builder install-app-deps && node build/downloadDaemon.js"
   },
   "dependencies": {
+    "@lbry/components": "^2.2.0",
     "@types/three": "^0.93.1",
     "bluebird": "^3.5.1",
     "breakdance": "^3.0.1",
@@ -52,7 +53,7 @@
     "hast-util-sanitize": "^1.1.2",
     "keytar": "^4.2.1",
     "lbry-format": "https://github.com/lbryio/lbry-format.git",
-    "lbry-redux": "lbryio/lbry-redux#42c185e922a7c6091b0e1580bacbfd8e02f45a91",
+    "lbry-redux": "lbryio/lbry-redux#3ab065b11a52d3e2e6a50a25459f9ff0aac03b13",
     "lbryinc": "lbryio/lbryinc#60d80401891743f991c040bafa8e51da7e939777",
     "localforage": "^1.7.1",
     "mammoth": "^1.4.6",
@@ -62,8 +63,8 @@
     "node-fetch": "^2.3.0",
     "qrcode.react": "^0.8.0",
     "rc-progress": "^2.0.6",
-    "react": "^16.6.0",
-    "react-dom": "^16.6.0",
+    "react": "^16.8.2",
+    "react-dom": "^16.8.2",
     "react-feather": "^1.0.8",
     "react-modal": "^3.1.7",
     "react-paginate": "^5.2.1",
@@ -89,7 +90,6 @@
     "y18n": "^4.0.0"
   },
   "devDependencies": {
-    "@lbry/components": "^2.2.0",
     "babel-eslint": "^8.2.2",
     "babel-plugin-module-resolver": "^3.1.1",
     "babel-polyfill": "^6.26.0",

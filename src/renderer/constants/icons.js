@@ -41,3 +41,6 @@ export const WALLET = 'CreditCard';
 export const SETTINGS = 'Settings';
 export const INVITE = 'Users';
 export const FILE = 'File';
+export const OPTIONS = 'Sliders';
+export const YES = 'ThumbsUp';
+export const NO = 'ThumbsDown';
