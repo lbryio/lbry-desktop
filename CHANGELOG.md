@@ -8,13 +8,17 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ### Added
 
-- Broken heart icon for unsubscribe ([#2272](https://github.com/lbryio/lbry-desktop/pull/2272)
+- Broken heart icon for unsubscribe ([#2272](https://github.com/lbryio/lbry-desktop/pull/2272))
 
 ### Changed
+- Upgrade LBRY SDK to [0.32](https://github.com/lbryio/lbry/releases/tag/v0.32.0) for improved download performance. See [0.31](https://github.com/lbryio/lbry/releases/tag/v0.31.0) for other changes since last app release. 
 
 ### Fixed
 
-- Inverse button readability on hover ([#2271](https://github.com/lbryio/lbry-desktop/pull/2271)
+- Inverse button readability on hover ([#2271](https://github.com/lbryio/lbry-desktop/pull/2271))
+- Shutdown on app close ([#2283](https://github.com/lbryio/lbry-desktop/pull/2283))
+- Startup on GitHub version check failure ([#1744](https://github.com/lbryio/lbry-desktop/issues/1774))
+- SDK detection when running manually ([#2258](https://github.com/lbryio/lbry-desktop/issues/2258))
 
 ## [0.28.0] - 2019-2-5
 
