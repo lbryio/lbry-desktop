@@ -11,26 +11,11 @@ type Props = {
   query: string,
   isSearching: boolean,
   uris: ?Array<string>,
-  downloadUris: ?Array<string>,
 };
 
 class FileListSearch extends React.PureComponent<Props> {
   render() {
-    const { uris, query, downloadUris, isSearching } = this.props;
-
-    const fileResults = [];
-    const channelResults = [];
-    if (uris && uris.length) {
-      uris.forEach(uri => {
-        const isChannel = parseURI(uri).claimName[0] === '@';
-        if (isChannel) {
-          channelResults.push(uri);
-        } else {
-          fileResults.push(uri);
-        }
-      });
-    }
-
+    const { uris, query, isSearching } = this.props;
     return (
       query && (
         <React.Fragment>
@@ -38,26 +23,15 @@ class FileListSearch extends React.PureComponent<Props> {
             <section className="search__results-section">
               <div className="search__results-title">{__('Search Results')}</div>
               <HiddenNsfwClaims uris={uris} />
-              {!isSearching && fileResults.length ? (
-                fileResults.map(uri => <FileTile key={uri} uri={uri} />)
-              ) : (
-                <NoResults />
-              )}
-            </section>
-
-            <section className="search__results-section">
-              <div className="search__results-title">{__('Channels')}</div>
-              {!isSearching && channelResults.length ? (
-                channelResults.map(uri => <ChannelTile key={uri} uri={uri} />)
-              ) : (
-                <NoResults />
-              )}
-            </section>
-
-            <section className="search__results-section">
-              <div className="search__results-title">{__('Your downloads')}</div>
-              {downloadUris && downloadUris.length ? (
-                downloadUris.map(uri => <FileTile hideNoResult key={uri} uri={uri} />)
+              {!isSearching && uris && uris.length ? (
+                uris.map(
+                  uri =>
+                    parseURI(uri).claimName[0] === '@' ? (
+                      <ChannelTile key={uri} uri={uri} />
+                    ) : (
+                      <FileTile key={uri} uri={uri} />
+                    )
+                )
               ) : (
                 <NoResults />
               )}

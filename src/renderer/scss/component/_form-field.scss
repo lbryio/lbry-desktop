@@ -2,11 +2,37 @@
 
 // lbry/components overrides and minor styles
 
+input[type='number'] {
+  padding: var(--spacing-s);
+  width: 8em;
+}
+
+checkbox-element {
+  &[disabled='true'] {
+    opacity: 0.3;
+  }
+}
+
 checkbox-element,
 radio-element,
 fieldset:last-child,
 fieldset-section:last-child {
   margin-bottom: 0;
+}
+
+checkbox-element,
+radio-element {
+  input[type='checkbox']:checked + label {
+    color: $lbry-black;
+
+    [data-mode='dark'] & {
+      color: $lbry-white;
+
+      &:hover {
+        color: $lbry-teal-4;
+      }
+    }
+  }
 }
 
 fieldset-group.fieldset-group--smushed {
@@ -40,6 +66,10 @@ form {
     .button--primary:not(:hover) {
       background-color: $lbry-teal-5;
       border-color: $lbry-teal-5;
+    }
+
+    legend {
+      background-color: $lbry-cyan-5;
     }
   }
 }

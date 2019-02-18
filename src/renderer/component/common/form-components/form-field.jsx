@@ -29,14 +29,16 @@ type Props = {
     disabled?: boolean,
   },
   inputButton: ?React.Node,
+  blockWrap: boolean,
 };
 
 export class FormField extends React.PureComponent<Props> {
   static defaultProps = {
     labelOnLeft: false,
+    blockWrap: true,
   };
 
-  constructor(props) {
+  constructor(props: Props) {
     super(props);
     this.input = React.createRef();
   }
@@ -66,31 +68,39 @@ export class FormField extends React.PureComponent<Props> {
       autoFocus,
       inputButton,
       labelOnLeft,
+      blockWrap,
       ...inputProps
     } = this.props;
     const errorMessage = typeof error === 'object' ? error.message : error;
+
+    const Wrapper = blockWrap
+      ? ({ children: innerChildren }) => <fieldset-section>{innerChildren}</fieldset-section>
+      : ({ children: innerChildren }) => <React.Fragment>{innerChildren}</React.Fragment>;
 
     let input;
     if (type) {
       if (type === 'radio') {
         input = (
-          <fieldset-section>
+          <Wrapper>
             <radio-element>
               <input id={name} type="radio" {...inputProps} />
               <label htmlFor={name}>{label}</label>
               <radio-toggle onClick={inputProps.onChange} />
             </radio-element>
-          </fieldset-section>
+          </Wrapper>
         );
       } else if (type === 'checkbox') {
+        // web components treat props weird
+        // we need to fully remove it for proper component:attribute css styling
+        const elementProps = inputProps.disabled ? { disabled: true } : {};
         input = (
-          <fieldset-section>
-            <checkbox-element>
+          <Wrapper>
+            <checkbox-element {...elementProps}>
               <input id={name} type="checkbox" {...inputProps} />
               <label htmlFor={name}>{label}</label>
               <checkbox-toggle onClick={inputProps.onChange} />
             </checkbox-element>
-          </fieldset-section>
+          </Wrapper>
         );
       } else if (type === 'setting') {
         // 'setting' should only be used for settings. Forms should use "checkbox"

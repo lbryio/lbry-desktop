@@ -12,13 +12,12 @@ const ESC_KEY_CODE = 27;
 
 type Props = {
   updateSearchQuery: string => void,
-  onSearch: (string, ?number) => void,
+  onSearch: string => void,
   onSubmit: (string, {}) => void,
   wunderbarValue: ?string,
   suggestions: Array<string>,
   doFocus: () => void,
   doBlur: () => void,
-  resultCount: number,
   focused: boolean,
   doShowSnackBar: ({}) => void,
 };
@@ -82,7 +81,7 @@ class WunderBar extends React.PureComponent<Props> {
   }
 
   handleSubmit(value: string, suggestion?: { value: string, type: string }) {
-    const { onSubmit, onSearch, resultCount } = this.props;
+    const { onSubmit, onSearch } = this.props;
     const query = value.trim();
     const getParams = () => {
       const parts = query.split('?');
@@ -98,7 +97,7 @@ class WunderBar extends React.PureComponent<Props> {
     // User selected a suggestion
     if (suggestion) {
       if (suggestion.type === 'search') {
-        onSearch(query, resultCount);
+        onSearch(query);
       } else if (isURIValid(query)) {
         const params = getParams();
         const uri = normalizeURI(query);
@@ -125,7 +124,7 @@ class WunderBar extends React.PureComponent<Props> {
         });
       }
     } catch (e) {
-      onSearch(query, resultCount);
+      onSearch(query);
     }
   }
 

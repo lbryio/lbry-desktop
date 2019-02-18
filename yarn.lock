@@ -5660,9 +5660,9 @@ lazy-val@^1.0.3:
     tar-stream "^1.6.2"
     zstd-codec "^0.1.1"
 
-lbry-redux@lbryio/lbry-redux#42c185e922a7c6091b0e1580bacbfd8e02f45a91:
+lbry-redux@lbryio/lbry-redux#2b725cb31729234ba73117e2a74688b8bba26e7c:
   version "0.0.1"
-  resolved "https://codeload.github.com/lbryio/lbry-redux/tar.gz/42c185e922a7c6091b0e1580bacbfd8e02f45a91"
+  resolved "https://codeload.github.com/lbryio/lbry-redux/tar.gz/2b725cb31729234ba73117e2a74688b8bba26e7c"
   dependencies:
     proxy-polyfill "0.1.6"
     reselect "^3.0.0"
@@ -7868,14 +7868,15 @@ rc@^1.0.1, rc@^1.1.2, rc@^1.1.6, rc@^1.2.7:
     minimist "^1.2.0"
     strip-json-comments "~2.0.1"
 
-react-dom@^16.6.0:
-  version "16.7.0"
-  resolved "https://registry.yarnpkg.com/react-dom/-/react-dom-16.7.0.tgz#a17b2a7ca89ee7390bc1ed5eb81783c7461748b8"
+react-dom@^16.8.2:
+  version "16.8.2"
+  resolved "https://registry.yarnpkg.com/react-dom/-/react-dom-16.8.2.tgz#7c8a69545dd554d45d66442230ba04a6a0a3c3d3"
+  integrity sha512-cPGfgFfwi+VCZjk73buu14pYkYBR1b/SRMSYqkLDdhSEHnSwcuYTPu6/Bh6ZphJFIk80XLvbSe2azfcRzNF+Xg==
   dependencies:
     loose-envify "^1.1.0"
     object-assign "^4.1.1"
     prop-types "^15.6.2"
-    scheduler "^0.12.0"
+    scheduler "^0.13.2"
 
 react-feather@^1.0.8:
   version "1.1.1"
@@ -7952,14 +7953,15 @@ react@^0.14.5:
     envify "^3.0.0"
     fbjs "^0.6.1"
 
-react@^16.6.0:
-  version "16.7.0"
-  resolved "https://registry.yarnpkg.com/react/-/react-16.7.0.tgz#b674ec396b0a5715873b350446f7ea0802ab6381"
+react@^16.8.2:
+  version "16.8.2"
+  resolved "https://registry.yarnpkg.com/react/-/react-16.8.2.tgz#83064596feaa98d9c2857c4deae1848b542c9c0c"
+  integrity sha512-aB2ctx9uQ9vo09HVknqv3DGRpI7OIGJhCx3Bt0QqoRluEjHSaObJl+nG12GDdYH6sTgE7YiPJ6ZUyMx9kICdXw==
   dependencies:
     loose-envify "^1.1.0"
     object-assign "^4.1.1"
     prop-types "^15.6.2"
-    scheduler "^0.12.0"
+    scheduler "^0.13.2"
 
 read-config-file@3.1.0, read-config-file@^3.0.0:
   version "3.1.0"
@@ -8532,13 +8534,6 @@ sass-loader@^6.0.7:
     neo-async "^2.5.0"
     pify "^3.0.0"
 
-sass@^1.17.0:
-  version "1.17.0"
-  resolved "https://registry.yarnpkg.com/sass/-/sass-1.17.0.tgz#e370b9302af121c9eadad5639619127772094ae6"
-  integrity sha512-aFi9RQqrCYkHB2DaLKBBbdUhos1N5o3l1ke9N5JqWzgSPmYwZsdmA+ViPVatUy/RPA21uejgYVUXM7GCh8lcdw==
-  dependencies:
-    chokidar "^2.0.0"
-
 sax@1.2.1:
   version "1.2.1"
   resolved "https://registry.yarnpkg.com/sax/-/sax-1.2.1.tgz#7b8e656190b228e81a66aea748480d828cd2d37a"
@@ -8551,9 +8546,10 @@ sax@~1.1.1:
   version "1.1.6"
   resolved "https://registry.yarnpkg.com/sax/-/sax-1.1.6.tgz#5d616be8a5e607d54e114afae55b7eaf2fcc3240"
 
-scheduler@^0.12.0:
-  version "0.12.0"
-  resolved "https://registry.yarnpkg.com/scheduler/-/scheduler-0.12.0.tgz#8ab17699939c0aedc5a196a657743c496538647b"
+scheduler@^0.13.2:
+  version "0.13.2"
+  resolved "https://registry.yarnpkg.com/scheduler/-/scheduler-0.13.2.tgz#969eaee2764a51d2e97b20a60963b2546beff8fa"
+  integrity sha512-qK5P8tHS7vdEMCW5IPyt8v9MJOHqTrOUgPXib7tqm9vh834ibBX5BNhwkplX/0iOzHW5sXyluehYfS9yrkz9+w==
   dependencies:
     loose-envify "^1.1.0"
     object-assign "^4.1.1"

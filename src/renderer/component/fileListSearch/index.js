@@ -1,9 +1,14 @@
 import { connect } from 'react-redux';
-import { makeSelectSearchUris, selectIsSearching, selectSearchDownloadUris } from 'lbry-redux';
+import {
+  makeSelectSearchUris,
+  selectIsSearching,
+  selectSearchDownloadUris,
+  makeSelectQueryWithOptions,
+} from 'lbry-redux';
 import FileListSearch from './view';
 
 const select = (state, props) => ({
-  uris: makeSelectSearchUris(props.query)(state),
+  uris: makeSelectSearchUris(makeSelectQueryWithOptions()(state))(state),
   downloadUris: selectSearchDownloadUris(props.query)(state),
   isSearching: selectIsSearching(state),
 });

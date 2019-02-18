@@ -156,9 +156,11 @@ class FileTile extends React.PureComponent<Props> {
             <Fragment>
               <div className="media__title">
                 {(title || name) && (
-                  <TruncatedText text={title || name} lines={size === 'small' ? 2 : 3} />
+                  <TruncatedText text={title || name} lines={size !== 'small' ? 1 : 2} />
                 )}
               </div>
+
+              {size === 'small' && this.renderFileProperties()}
 
               {size !== 'small' ? (
                 <div className="media__subtext">
@@ -169,9 +171,9 @@ class FileTile extends React.PureComponent<Props> {
                 <Fragment>
                   <div className="media__subtext">
                     <UriIndicator uri={uri} link />
-                  </div>
-                  <div className="media__subtext">
-                    <DateTime timeAgo block={height} />
+                    <div>
+                      <DateTime timeAgo block={height} />
+                    </div>
                   </div>
                 </Fragment>
               )}
@@ -184,7 +186,7 @@ class FileTile extends React.PureComponent<Props> {
             </div>
           )}
 
-          {this.renderFileProperties()}
+          {size !== 'small' && this.renderFileProperties()}
 
           {!name && (
             <Yrbl
