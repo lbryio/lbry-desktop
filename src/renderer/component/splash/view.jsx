@@ -133,7 +133,7 @@ export default class SplashScreen extends React.PureComponent<Props, State> {
         this.adjustErrorTimeout();
       }
 
-      Lbry.resolve({ uri: 'lbry://one' }).then(() => {
+      Lbry.resolve({ urls: 'lbry://one' }).then(() => {
         this.setState({ isRunning: true }, () => this.continueAppLaunch());
       });
 

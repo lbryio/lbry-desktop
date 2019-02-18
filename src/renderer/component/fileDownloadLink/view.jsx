@@ -71,7 +71,7 @@ class FileDownloadLink extends React.PureComponent<Props> {
         : __('Connecting...');
 
       return <span className="file-download">{label}</span>;
-    } else if (fileInfo === null && !downloading) {
+    } else if ((fileInfo === null && !downloading) || (fileInfo && !fileInfo.download_path)) {
       if (!costInfo) {
         return null;
       }

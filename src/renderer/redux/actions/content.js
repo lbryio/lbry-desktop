@@ -239,7 +239,8 @@ export function doPurchaseUri(uri, specificCostInfo, shouldRecordViewEvent) {
     const alreadyDownloading = fileInfo && !!downloadingByOutpoint[fileInfo.outpoint];
 
     function attemptPlay(cost, instantPurchaseMax = null) {
-      if (cost > 0 && (!instantPurchaseMax || cost > instantPurchaseMax)) {
+      // If you have a file entry with correct manifest, you won't pay for the key fee again
+      if (cost > 0 && (!instantPurchaseMax || cost > instantPurchaseMax) && !fileInfo) {
         dispatch(doOpenModal(MODALS.AFFIRM_PURCHASE, { uri }));
       } else {
         dispatch(doLoadVideo(uri, shouldRecordViewEvent));
@@ -248,10 +249,11 @@ export function doPurchaseUri(uri, specificCostInfo, shouldRecordViewEvent) {
 
     // we already fully downloaded the file.
     if (fileInfo && fileInfo.completed) {
-      // If written_bytes is false that means the user has deleted/moved the
+      // If path is null or bytes written is 0 means the user has deleted/moved the
       // file manually on their file system, so we need to dispatch a
       // doLoadVideo action to reconstruct the file from the blobs
-      if (!fileInfo.written_bytes) dispatch(doLoadVideo(uri, shouldRecordViewEvent));
+      if (!fileInfo.download_path || !fileInfo.written_bytes)
+        dispatch(doLoadVideo(uri, shouldRecordViewEvent));
 
       Promise.resolve();
       return;

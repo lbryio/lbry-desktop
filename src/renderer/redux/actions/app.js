@@ -330,17 +330,20 @@ export function doQuit() {
 
 export function doQuitAnyDaemon() {
   return dispatch => {
-    try {
-      if (process.platform === 'win32') {
-        execSync('taskkill /im lbrynet-daemon.exe /t /f');
-      } else {
-        execSync('pkill lbrynet-daemon');
-      }
-    } catch (error) {
-      dispatch(doAlertError(`Quitting daemon failed due to: ${error.message}`));
-    } finally {
-      dispatch(doQuit());
-    }
+    Lbry.stop()
+      .then()
+      .catch(() => {
+        try {
+          if (process.platform === 'win32') {
+            execSync('taskkill /im lbrynet.exe /t /f');
+          } else {
+            execSync('pkill lbrynet');
+          }
+        } catch (error) {
+          dispatch(doAlertError(`Quitting daemon failed due to: ${error.message}`));
+        }
+      });
+    dispatch(doQuit());
   };
 }
 
