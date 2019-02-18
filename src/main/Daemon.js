@@ -1,6 +1,7 @@
 /* eslint-disable no-console */
 import path from 'path';
 import { spawn, execSync } from 'child_process';
+import { Lbry } from 'lbry-redux';
 
 export default class Daemon {
   static path = process.env.LBRY_DAEMON || path.join(__static, 'daemon/lbrynet');
@@ -21,15 +22,19 @@ export default class Daemon {
   }
 
   quit() {
-    if (process.platform === 'win32') {
-      try {
-        execSync(`taskkill /pid ${this.subprocess.pid} /t /f`);
-      } catch (error) {
-        console.error(error.message);
-      }
-    } else {
-      this.subprocess.kill();
-    }
+    Lbry.stop()
+      .then()
+      .catch(() => {
+        if (process.platform === 'win32') {
+          try {
+            execSync(`taskkill /pid ${this.subprocess.pid} /t /f`);
+          } catch (error) {
+            console.error(error.message);
+          }
+        } else {
+          this.subprocess.kill();
+        }
+      });
   }
 
   // Follows the publish/subscribe pattern

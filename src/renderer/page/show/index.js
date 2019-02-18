@@ -1,8 +1,10 @@
 import { connect } from 'react-redux';
+import { PAGE_SIZE } from 'constants/claim';
 import {
   doResolveUri,
   makeSelectClaimForUri,
   makeSelectIsUriResolving,
+  makeSelectTotalPagesForChannel,
   selectBlackListedOutpoints,
 } from 'lbry-redux';
 import ShowPage from './view';
@@ -11,6 +13,7 @@ const select = (state, props) => ({
   claim: makeSelectClaimForUri(props.uri)(state),
   isResolvingUri: makeSelectIsUriResolving(props.uri)(state),
   blackListedOutpoints: selectBlackListedOutpoints(state),
+  totalPages: makeSelectTotalPagesForChannel(props.uri, PAGE_SIZE)(state),
 });
 
 const perform = dispatch => ({

@@ -136,7 +136,7 @@ class FileViewer extends React.PureComponent<Props> {
 
     if (playable && costInfo && costInfo.cost === 0 && !fileInfo && !isDownloading) {
       this.playContent();
-    } else if (playable && fileInfo && fileInfo.blobs_completed > 0) {
+    } else if (playable && fileInfo && fileInfo.download_path && fileInfo.written_bytes > 0) {
       this.playContent();
     }
   };
@@ -221,12 +221,12 @@ class FileViewer extends React.PureComponent<Props> {
     } = this.props;
 
     const isPlaying = playingUri === uri;
-    const isReadyToPlay = fileInfo && fileInfo.written_bytes > 0;
+    const isReadyToPlay = fileInfo && fileInfo.download_path && fileInfo.written_bytes > 0;
     const shouldObscureNsfw = obscureNsfw && metadata && metadata.nsfw;
 
     let loadStatusMessage = '';
 
-    if (fileInfo && fileInfo.completed && !fileInfo.written_bytes) {
+    if (fileInfo && fileInfo.completed && (!fileInfo.download_path || !fileInfo.written_bytes)) {
       loadStatusMessage = __(
         "It looks like you deleted or moved this file. We're rebuilding it now. It will only take a few seconds."
       );
