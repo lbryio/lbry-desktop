@@ -68,7 +68,7 @@ class ChannelTile extends React.PureComponent<Props> {
               <div className="media__subtitle">
                 {totalItems > 0 && (
                   <span>
-                    {totalItems} {totalItems === 1 ? 'file' : 'files'}
+                    {totalItems} {totalItems === 1 ? 'publish' : 'publishes'}
                   </span>
                 )}
                 {!isResolvingUri && !totalItems && <span>This is an empty channel.</span>}
