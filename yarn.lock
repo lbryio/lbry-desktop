@@ -111,10 +111,10 @@
   version "0.7.1"
   resolved "https://registry.yarnpkg.com/@emotion/memoize/-/memoize-0.7.1.tgz#e93c13942592cf5ef01aa8297444dc192beee52f"
 
-"@lbry/components@^2.2.1":
-  version "2.2.1"
-  resolved "https://registry.yarnpkg.com/@lbry/components/-/components-2.2.1.tgz#3fc67e807796e9dc8cd1d5cd86a719849c4710d5"
-  integrity sha512-k8bdSjr0Hq3+ZlvAKRuPea4LTEvXx4zF7+IOb1RmFWfMIk8jBNZi02LmvLoj4VuCa3mKoVfECeaYyXg6vwmY3w==
+"@lbry/components@^2.2.3":
+  version "2.2.3"
+  resolved "https://registry.yarnpkg.com/@lbry/components/-/components-2.2.3.tgz#8823855bb4e011d2fc7497de03e6435e07757d6f"
+  integrity sha512-HONPvhjtvOBEaBTeHTIs0WFD1u3j9tprNTFTKa9zoI7ZLtbHnGqHM+Vi3Oq5xl8OQxEkgJNsHGUDtV4FLhcsHg==
 
 "@mapbox/hast-util-table-cell-style@^0.1.3":
   version "0.1.3"
@@ -5668,19 +5668,20 @@ lbry-redux@lbryio/lbry-redux#3ab065b11a52d3e2e6a50a25459f9ff0aac03b13:
     reselect "^3.0.0"
     uuid "^3.3.2"
 
-lbry-redux@lbryio/lbry-redux#84b7d396934d57a37802aadbef71db91230a9404:
+lbry-redux@lbryio/lbry-redux#76d8bbef9640bf8ea5c4f45550e55b77d3944ee3:
   version "0.0.1"
-  resolved "https://codeload.github.com/lbryio/lbry-redux/tar.gz/84b7d396934d57a37802aadbef71db91230a9404"
+  resolved "https://codeload.github.com/lbryio/lbry-redux/tar.gz/76d8bbef9640bf8ea5c4f45550e55b77d3944ee3"
   dependencies:
     proxy-polyfill "0.1.6"
     reselect "^3.0.0"
     uuid "^3.3.2"
 
-lbryinc@lbryio/lbryinc#60d80401891743f991c040bafa8e51da7e939777:
+lbryinc@lbryio/lbryinc#2334ad53e82c22d6291899785d5292347008f2a9:
   version "0.0.1"
-  resolved "https://codeload.github.com/lbryio/lbryinc/tar.gz/60d80401891743f991c040bafa8e51da7e939777"
+  resolved "https://codeload.github.com/lbryio/lbryinc/tar.gz/2334ad53e82c22d6291899785d5292347008f2a9"
   dependencies:
-    lbry-redux lbryio/lbry-redux#84b7d396934d57a37802aadbef71db91230a9404
+    bluebird "^3.5.1"
+    lbry-redux lbryio/lbry-redux#76d8bbef9640bf8ea5c4f45550e55b77d3944ee3
     reselect "^3.0.0"
 
 lcid@^1.0.0:
