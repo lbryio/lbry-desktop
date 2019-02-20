@@ -3,6 +3,7 @@
 import React from 'react';
 import Button from 'component/button';
 import { Form, FormField, Submit } from 'component/common/form';
+import CopyableText from 'component/copyableText';
 
 type FormProps = {
   inviteNew: string => void,
@@ -63,11 +64,12 @@ type Props = {
   inviteNew: string => void,
   isPending: boolean,
   rewardAmount: number,
+  referralLink: string,
 };
 
 class InviteNew extends React.PureComponent<Props> {
   render() {
-    const { errorMessage, inviteNew, isPending, rewardAmount } = this.props;
+    const { errorMessage, inviteNew, isPending, rewardAmount, referralLink } = this.props;
 
     return (
       <section className="card card--section">
@@ -85,6 +87,12 @@ class InviteNew extends React.PureComponent<Props> {
             inviteNew={inviteNew}
             isPending={isPending}
             rewardAmount={rewardAmount}
+          />
+        </div>
+        <div className="card__content">
+          <CopyableText
+            label={__('Or share this link with your friends')}
+            copyable={referralLink}
           />
 
           <p className="help">
