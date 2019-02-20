@@ -89,6 +89,7 @@ code {
   display: -webkit-box;
   overflow: hidden;
   -webkit-box-orient: vertical;
+  word-break: break-word;
 }
 
 .busy-indicator__loader {
