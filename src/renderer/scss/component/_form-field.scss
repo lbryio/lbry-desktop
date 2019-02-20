@@ -142,14 +142,21 @@ fieldset-group {
 
 // form buttons are black by default
 form {
-  // [data-mode='dark'] & {
-  .button--primary:not(:hover) {
-    background-color: $lbry-teal-5;
-    border-color: $lbry-teal-5;
+  [type='button'] {
+    &.button--primary {
+      &:not(:hover) {
+        background-color: $lbry-teal-5;
+        border-color: $lbry-teal-5;
+      }
 
-    &:hover {
-      background-color: $lbry-teal-3;
-      border-color: $lbry-teal-3;
+      &:hover {
+        background-color: $lbry-teal-3;
+        border-color: $lbry-teal-3;
+      }
+    }
+
+    &.button--inverse {
+      @extend .button--inverse;
     }
   }
 }
