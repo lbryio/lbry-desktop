@@ -182,6 +182,10 @@ fieldset-section {
 
     [data-mode='dark'] & {
       background-color: transparent;
+
+      option {
+        background-color: $lbry-gray-5;
+      }
     }
   }
 
