@@ -43,6 +43,7 @@ class LicenseType extends React.PureComponent<Props> {
     return (
       <React.Fragment>
         <FormField
+          name="license"
           label={__('License (Optional)')}
           type="select"
           value={licenseType}

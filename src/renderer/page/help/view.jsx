@@ -173,13 +173,11 @@ class HelpPage extends React.PureComponent<Props, State> {
               <Button
                 button="primary"
                 label={__('Open Log')}
-                icon={icons.REPORT}
                 onClick={() => this.openLogFile(dataDirectory)}
               />
               <Button
                 button="primary"
                 label={__('Open Log Folder')}
-                icon={icons.REPORT}
                 onClick={() => shell.openItem(dataDirectory)}
               />
             </div>

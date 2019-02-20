@@ -28,7 +28,7 @@ type Props = {
   inputProps?: {
     disabled?: boolean,
   },
-  inputButton: ?React.Node,
+  inputButton?: React.Node,
   blockWrap: boolean,
 };
 
@@ -37,6 +37,8 @@ export class FormField extends React.PureComponent<Props> {
     labelOnLeft: false,
     blockWrap: true,
   };
+
+  input: { current: React.ElementRef<any> };
 
   constructor(props: Props) {
     super(props);
@@ -92,6 +94,7 @@ export class FormField extends React.PureComponent<Props> {
       } else if (type === 'checkbox') {
         // web components treat props weird
         // we need to fully remove it for proper component:attribute css styling
+        // $FlowFixMe
         const elementProps = inputProps.disabled ? { disabled: true } : {};
         input = (
           <Wrapper>
@@ -165,10 +168,18 @@ export class FormField extends React.PureComponent<Props> {
         input = (
           <React.Fragment>
             <fieldset-section>
-              <label htmlFor={name}>{label}</label>
+              {(label || errorMessage) && (
+                <label htmlFor={name}>
+                  {errorMessage ? <span className="error-text">{errorMessage}</span> : label}
+                </label>
+              )}
+              {prefix && (
+                <label className="form-field--inline-prefix" htmlFor={name}>
+                  {prefix}
+                </label>
+              )}
               {inner}
             </fieldset-section>
-            {errorMessage && <div className="error-text">{errorMessage}</div>}
           </React.Fragment>
         );
       }

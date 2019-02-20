@@ -3,8 +3,33 @@
 // lbry/components overrides and minor styles
 
 input[type='number'] {
-  padding: var(--spacing-s);
   width: 8em;
+}
+
+input[type='text'],
+input[type='number'],
+select {
+  padding-bottom: 0.2em;
+
+  [data-mode='dark'] & {
+    &::placeholder {
+      opacity: 0.4;
+    }
+  }
+}
+
+fieldset-section {
+  label {
+    width: auto;
+    text-transform: none;
+  }
+
+  checkbox-element,
+  radio-element {
+    label {
+      font-size: medium;
+    }
+  }
 }
 
 checkbox-element {
@@ -33,48 +58,126 @@ radio-element {
       }
     }
   }
+
+  label {
+    margin-bottom: 0;
+  }
 }
 
-fieldset-group.fieldset-group--smushed {
-  justify-content: flex-start;
+fieldset-group {
+  &.fieldset-group--smushed {
+    justify-content: flex-start;
 
-  fieldset-section {
-    width: auto;
-    margin-bottom: 0;
+    fieldset-section {
+      width: auto;
+      margin-bottom: 0;
 
-    &:first-of-type {
-      input {
-        border-right: none;
+      &:first-of-type {
+        input {
+          border-right: none;
+        }
+      }
+    }
+
+    &.fieldgroup--paginate {
+      margin-top: var(--spacing-vertical-medium);
+      align-items: center;
+      justify-content: center;
+
+      .pagination {
+        margin-bottom: -1em;
       }
     }
   }
 
-  &.fieldgroup--paginate {
-    margin-top: var(--spacing-vertical-medium);
-    align-items: center;
-    justify-content: center;
+  // This is a special case where the prefix appears "inside" the input
+  // It would be way simpler to just use position: absolute and give it a width
+  // but the width can change when we use it for the name prefix
+  // lbry:// {input}, lbry://@short {input}, @lbry://longername {input}
+  // The spacing/alignment isn't very robust and will probably need to be changed
+  // if we use this in more places
+  &.fieldset-group--disabled-prefix {
+    align-items: flex-end;
 
-    .pagination {
-      margin-bottom: -1em;
+    fieldset-section:first-child .form-field__prefix,
+    fieldset-section:last-child input {
+      border-color: $lbry-black;
+
+      [data-mode='dark'] {
+        border-color: $lbry-gray-4;
+      }
+    }
+
+    fieldset-section:first-child {
+      .form-field__prefix {
+        padding: 0.15em var(--spacing-s);
+        padding-right: 0;
+        border: 1px solid;
+        border-right: 0;
+        color: $lbry-gray-4;
+      }
+    }
+
+    fieldset-section:last-child {
+      width: 100%;
+
+      input {
+        border-left: 0;
+        padding-left: var(--spacing-xs);
+
+        &:focus {
+          border-image-slice: 1;
+          border-image-source: linear-gradient(to right, $lbry-black, $lbry-teal-5 5%);
+        }
+
+        [data-mode='dark'] & {
+          &:focus {
+            border-image-source: linear-gradient(to right, $lbry-gray-4, $lbry-teal-5 5%);
+          }
+        }
+      }
     }
   }
 }
 
 // form buttons are black by default
 form {
-  [data-mode='dark'] & {
-    .button--primary:not(:hover) {
-      background-color: $lbry-teal-5;
-      border-color: $lbry-teal-5;
-    }
+  // [data-mode='dark'] & {
+  .button--primary:not(:hover) {
+    background-color: $lbry-teal-5;
+    border-color: $lbry-teal-5;
 
-    legend {
-      background-color: $lbry-cyan-5;
+    &:hover {
+      background-color: $lbry-teal-3;
+      border-color: $lbry-teal-3;
     }
   }
 }
 
 fieldset-section {
+  input-submit {
+    input,
+    select {
+      &:first-child:not(:focus) {
+        border-right-color: transparent;
+      }
+    }
+
+    .button__content {
+      position: relative;
+      top: -0.1em;
+    }
+  }
+
+  select {
+    max-width: 12em;
+    background-color: $lbry-white;
+
+    [data-mode='dark'] & {
+      background-color: transparent;
+    }
+  }
+
   [data-mode='dark'] & {
     input,
     textarea,
@@ -85,25 +188,7 @@ fieldset-section {
     input:not(:focus):not(.form-field--copyable),
     textarea:not(:focus),
     select:not(:focus) {
-      border-color: $lbry-white;
-    }
-
-    input-submit {
-      input,
-      select {
-        &:first-child:not(:focus) {
-          border-right-color: transparent;
-        }
-      }
-    }
-  }
-
-  select {
-    max-width: 12em;
-    background-color: $lbry-white;
-
-    [data-mode='dark'] & {
-      background-color: transparent;
+      border-color: $lbry-gray-4;
     }
   }
 }
@@ -116,6 +201,7 @@ fieldset-section {
   padding: 0.2rem 0.75rem;
   text-overflow: ellipsis;
   user-select: text;
+  cursor: default;
 
   html[data-mode='dark'] & {
     background-color: rgba($lbry-white, 0.3);
@@ -129,9 +215,20 @@ label + .react-toggle,
   margin-left: var(--spacing-vertical-small);
 }
 
+.form-field--inline-prefix {
+  position: absolute;
+  top: 9.5em;
+  left: 2.75em;
+  width: auto;
+
+  & + input {
+    padding-left: 4em;
+  }
+}
+
 .form-field__help {
   @extend .help;
-  margin-top: var(--spacing-vertical-small);
+  margin-top: var(--spacing-vertical-medium);
 }
 
 .form-field--price-amount {
