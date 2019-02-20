@@ -9,34 +9,39 @@ type Props = {
   copyable: string,
   snackMessage: ?string,
   doToast: ({ message: string }) => void,
+  label?: string,
 };
 
 export default class CopyableText extends React.PureComponent<Props> {
   constructor() {
     super();
 
-    this.input = null;
+    this.input = React.createRef();
+    (this: any).onFocus = this.onFocus.bind(this);
   }
 
-  input: ?HTMLInputElement;
+  input: { current: React.ElementRef<any> };
+
+  onFocus() {
+    // We have to go a layer deep since the input is inside the form component
+    const topRef = this.input.current;
+    if (topRef && topRef.input && topRef.input.current) {
+      topRef.input.current.select();
+    }
+  }
 
   render() {
-    const { copyable, doToast, snackMessage } = this.props;
+    const { copyable, doToast, snackMessage, label } = this.props;
 
     return (
       <FormField
         type="text"
         className="form-field--copyable"
         readOnly
+        label={label}
         value={copyable || ''}
-        ref={input => {
-          this.input = input;
-        }}
-        onFocus={() => {
-          if (this.input) {
-            this.input.select();
-          }
-        }}
+        ref={this.input}
+        onFocus={this.onFocus}
         inputButton={
           <Button
             button="primary"

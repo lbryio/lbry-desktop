@@ -3,6 +3,7 @@ import {
   selectUserInvitesRemaining,
   selectUserInviteNewIsPending,
   selectUserInviteNewErrorMessage,
+  selectUserInviteReferralLink,
   doUserInviteNew,
 } from 'lbryinc';
 import InviteNew from './view';
@@ -10,6 +11,7 @@ import InviteNew from './view';
 const select = state => ({
   errorMessage: selectUserInviteNewErrorMessage(state),
   invitesRemaining: selectUserInvitesRemaining(state),
+  referralLink: selectUserInviteReferralLink(state),
   isPending: selectUserInviteNewIsPending(state),
 });
 
