@@ -31,7 +31,7 @@ class ShowPage extends React.PureComponent<Props> {
     if (
       !isResolvingUri &&
       uri &&
-      (claim === undefined || (claim.name[0] === '@' && totalPages === undefined))
+      (claim === undefined || (claim && claim.name[0] === '@' && totalPages === undefined))
     ) {
       resolveUri(uri);
     }
