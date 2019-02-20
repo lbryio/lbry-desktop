@@ -4,7 +4,7 @@ import * as icons from 'constants/icons';
 import * as MODALS from 'constants/modal_types';
 import React from 'react';
 import BusyIndicator from 'component/common/busy-indicator';
-import { FormField } from 'component/common/form';
+import { FormField, Form } from 'component/common/form';
 import ReactPaginate from 'react-paginate';
 import SubscribeButton from 'component/subscribeButton';
 import Page from 'component/page';
@@ -86,7 +86,7 @@ class ChannelPage extends React.PureComponent<Props> {
     return (
       <Page notContained>
         <header className="channel-info">
-          <h1 className="media__title">
+          <h1 className="media__title media__title--large">
             {name}
             {fetching && <BusyIndicator />}
           </h1>
@@ -108,31 +108,36 @@ class ChannelPage extends React.PureComponent<Props> {
 
         {(!fetching || (claimsInChannel && claimsInChannel.length)) &&
           totalPages > 1 && (
-            <React.Fragment>
-              <ReactPaginate
-                pageCount={totalPages}
-                pageRangeDisplayed={2}
-                previousLabel="‹"
-                nextLabel="›"
-                activeClassName="pagination__item--selected"
-                pageClassName="pagination__item"
-                previousClassName="pagination__item pagination__item--previous"
-                nextClassName="pagination__item pagination__item--next"
-                breakClassName="pagination__item pagination__item--break"
-                marginPagesDisplayed={2}
-                onPageChange={e => this.changePage(e.selected + 1)}
-                forcePage={currentPage}
-                initialPage={currentPage}
-                containerClassName="pagination"
-              />
+            <Form>
+              <fieldset-group class="fieldset-group--smushed fieldgroup--paginate">
+                <fieldset-section>
+                  <ReactPaginate
+                    pageCount={totalPages}
+                    pageRangeDisplayed={2}
+                    previousLabel="‹"
+                    nextLabel="›"
+                    activeClassName="pagination__item--selected"
+                    pageClassName="pagination__item"
+                    previousClassName="pagination__item pagination__item--previous"
+                    nextClassName="pagination__item pagination__item--next"
+                    breakClassName="pagination__item pagination__item--break"
+                    marginPagesDisplayed={2}
+                    onPageChange={e => this.changePage(e.selected + 1)}
+                    forcePage={currentPage}
+                    initialPage={currentPage}
+                    containerClassName="pagination"
+                  />
+                </fieldset-section>
 
-              <FormField
-                className="paginate-channel"
-                onKeyUp={e => this.paginate(e, totalPages)}
-                prefix={__('Go to page:')}
-                type="text"
-              />
-            </React.Fragment>
+                <FormField
+                  className="paginate-channel"
+                  onKeyUp={e => this.paginate(e, totalPages)}
+                  label={__('Go to page:')}
+                  type="text"
+                  name="paginate-file"
+                />
+              </fieldset-group>
+            </Form>
           )}
 
         {!channelIsMine && <HiddenNsfwClaims className="card__content help" uri={uri} />}

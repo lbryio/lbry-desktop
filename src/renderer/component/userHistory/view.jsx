@@ -94,9 +94,8 @@ class UserHistoryPage extends React.PureComponent<Props, State> {
   }
 
   render() {
-    const { history, page } = this.props;
+    const { history, page, pageCount } = this.props;
     const { itemsSelected } = this.state;
-    const pageCount = 20;
     const allSelected = Object.keys(itemsSelected).length === history.length;
     const selectHandler = allSelected ? this.unselectAll : this.selectAll;
 
@@ -117,7 +116,7 @@ class UserHistoryPage extends React.PureComponent<Props, State> {
           />
         </div>
         {!!history.length && (
-          <section className="item-list">
+          <section className="card__content item-list">
             {history.map(item => (
               <UserHistoryItem
                 key={item.uri}
@@ -131,7 +130,7 @@ class UserHistoryPage extends React.PureComponent<Props, State> {
             ))}
           </section>
         )}
-        {pageCount > -1 && (
+        {pageCount > 1 && (
           <Form>
             <fieldset-group class="fieldset-group--smushed fieldgroup--paginate">
               <fieldset-section>
@@ -153,10 +152,11 @@ class UserHistoryPage extends React.PureComponent<Props, State> {
                 />
               </fieldset-section>
               <FormField
+                type="text"
+                name="paginate-input"
+                label={__('Go to page:')}
                 className="paginate-channel"
                 onKeyUp={e => this.paginate(e)}
-                label={__('Go to page:')}
-                type="text"
               />
             </fieldset-group>
           </Form>

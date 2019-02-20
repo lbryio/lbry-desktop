@@ -42,7 +42,6 @@ class FormInviteNew extends React.PureComponent<FormProps, FormState> {
     return (
       <Form onSubmit={this.handleSubmit}>
         <FormField
-          stretch
           type="text"
           label="Email"
           placeholder="youremail@example.org"

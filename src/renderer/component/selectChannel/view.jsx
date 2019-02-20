@@ -158,7 +158,7 @@ class ChannelSection extends React.PureComponent<Props, State> {
         ) : (
           <fieldset-section>
             <FormField
-              key="channel"
+              name="channel"
               type="select"
               onChange={this.handleChannelChange}
               value={channel}
@@ -177,8 +177,8 @@ class ChannelSection extends React.PureComponent<Props, State> {
           <div className="card__content">
             <FormField
               label={__('Name')}
+              name="channel-input"
               type="text"
-              prefix="@"
               placeholder={__('myChannelName')}
               error={newChannelNameError}
               value={newChannelName}
@@ -187,8 +187,8 @@ class ChannelSection extends React.PureComponent<Props, State> {
 
             <FormField
               className="form-field--price-amount"
-              label={__('Deposit')}
-              postfix="LBC"
+              name="channel-deposit"
+              label={__('Deposit (LBC)')}
               step="any"
               min="0"
               type="number"

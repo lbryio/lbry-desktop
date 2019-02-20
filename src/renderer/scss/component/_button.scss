@@ -8,11 +8,12 @@
     width: 1.2rem;
     height: 1.2rem;
     position: relative;
-    top: 2px;
-    stroke-opacity: 0.7;
+    top: 1px;
+    color: $lbry-gray-5;
 
     // Buttons that don't have a label
     &:only-child {
+      color: inherit;
       stroke-opacity: 1;
       width: 1.4rem;
       height: 1.4rem;
@@ -35,6 +36,19 @@
   svg {
     width: 1.2rem;
     height: 1.2rem;
+  }
+}
+
+.button--primary {
+  height: var(--spacing-l);
+
+  svg {
+    color: white;
+  }
+
+  svg + .button__label {
+    position: relative;
+    top: -0.05em;
   }
 }
 
@@ -67,9 +81,15 @@
     }
   }
 }
-.button--link:not(:hover):not(:disabled) {
+.button--link:not(:disabled) {
   html[data-mode='dark'] & {
-    color: $lbry-teal-4;
+    &:not(:hover) {
+      color: $lbry-teal-4;
+    }
+
+    &:hover {
+      color: $lbry-teal-3;
+    }
   }
 }
 
@@ -97,11 +117,10 @@
 }
 
 .button--uri-indicator {
-  width: 100%;
+  max-width: 100%;
   overflow: hidden;
   text-align: left;
   text-overflow: ellipsis;
-  white-space: nowrap;
   transition: color 0.2s;
 
   &:hover {

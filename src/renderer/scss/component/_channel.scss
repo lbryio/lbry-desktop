@@ -1,5 +1,6 @@
 .channel-info {
   .media__title {
+    display: block;
     user-select: text;
     margin-bottom: var(--spacing-vertical-medium);
   }

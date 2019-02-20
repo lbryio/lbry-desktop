@@ -75,16 +75,16 @@ class WalletSendTip extends React.PureComponent<Props, State> {
 
     return (
       <React.Fragment>
-        <Form>
+        <Form className="card__content">
           <FormField
             autoFocus
+            name="tip-input"
             label={
               (tipAmount &&
                 tipAmount !== 0 &&
                 `Tip ${tipAmount.toFixed(8).replace(/\.?0+$/, '')} LBC`) ||
               __('Amount')
             }
-            postfix={__('LBC')}
             className="form-field--price-amount"
             error={tipError}
             min="0"

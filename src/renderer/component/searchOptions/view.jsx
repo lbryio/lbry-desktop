@@ -58,6 +58,7 @@ const SearchOptions = (props: Props) => {
               ].map(({ option, label }) => (
                 <FormField
                   key={option}
+                  name={option}
                   type="radio"
                   blockWrap={false}
                   label={label}
@@ -93,6 +94,7 @@ const SearchOptions = (props: Props) => {
               ].map(({ option, label }) => (
                 <FormField
                   key={option}
+                  name={option}
                   type="checkbox"
                   blockWrap={false}
                   disabled={options[SEARCH_OPTIONS.CLAIM_TYPE] === SEARCH_OPTIONS.INCLUDE_CHANNELS}
@@ -107,6 +109,7 @@ const SearchOptions = (props: Props) => {
               <legend className="search__legend--3">{__('Other Options')}</legend>
               <FormField
                 type="number"
+                name="result-count"
                 value={resultCount}
                 onChange={e => setSearchOption(SEARCH_OPTIONS.RESULT_COUNT, e.target.value)}
                 blockWrap={false}

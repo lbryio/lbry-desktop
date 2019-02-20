@@ -57,6 +57,7 @@ class ModalRewardCode extends React.PureComponent<Props, State> {
           <FormField
             autoFocus
             type="text"
+            name="reward-code"
             inputButton={
               <Submit
                 disabled={!rewardCode || rewardIsPending}

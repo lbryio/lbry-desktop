@@ -164,7 +164,9 @@ class SettingsPage extends React.PureComponent<Props, State> {
                   <FileSelector
                     type="openDirectory"
                     currentPath={daemonSettings.download_dir}
-                    onFileChosen={this.onDownloadDirChange}
+                    onFileChosen={(newDirectory: string) => {
+                      setDaemonSetting('download_dir', newDirectory);
+                    }}
                   />
                 </Form>
               </div>
@@ -181,29 +183,25 @@ class SettingsPage extends React.PureComponent<Props, State> {
               </header>
 
               <Form className="card__content">
-                <fieldset-section>
-                  <FormField
-                    type="radio"
-                    name="no_max_purchase_no_limit"
-                    checked={disableMaxKeyFee}
-                    label={__('No Limit')}
-                    onChange={() => {
-                      this.onKeyFeeDisableChange(true);
-                    }}
-                  />
-                </fieldset-section>
-                <fieldset-section>
-                  <FormField
-                    type="radio"
-                    name="max_purchase_limit"
-                    checked={!disableMaxKeyFee}
-                    onChange={() => {
-                      this.onKeyFeeDisableChange(false);
-                      this.onKeyFeeChange(defaultMaxKeyFee);
-                    }}
-                    label={__('Choose limit')}
-                  />
-                </fieldset-section>
+                <FormField
+                  type="radio"
+                  name="no_max_purchase_no_limit"
+                  checked={disableMaxKeyFee}
+                  label={__('No Limit')}
+                  onChange={() => {
+                    this.onKeyFeeDisableChange(true);
+                  }}
+                />
+                <FormField
+                  type="radio"
+                  name="max_purchase_limit"
+                  checked={!disableMaxKeyFee}
+                  onChange={() => {
+                    this.onKeyFeeDisableChange(false);
+                    this.onKeyFeeChange(defaultMaxKeyFee);
+                  }}
+                  label={__('Choose limit')}
+                />
 
                 {!disableMaxKeyFee && (
                   <FormFieldPrice
@@ -229,28 +227,25 @@ class SettingsPage extends React.PureComponent<Props, State> {
               </header>
 
               <Form className="card__content">
-                <fieldset-section>
-                  <FormField
-                    type="radio"
-                    name="confirm_all_purchases"
-                    checked={!instantPurchaseEnabled}
-                    label={__('Always confirm before purchasing content')}
-                    onChange={() => {
-                      this.onInstantPurchaseEnabledChange(false);
-                    }}
-                  />
-                </fieldset-section>
-                <fieldset-section>
-                  <FormField
-                    type="radio"
-                    name="instant_purchases"
-                    checked={instantPurchaseEnabled}
-                    label={__('Only confirm purchases over a certain price')}
-                    onChange={() => {
-                      this.onInstantPurchaseEnabledChange(true);
-                    }}
-                  />
-                </fieldset-section>
+                <FormField
+                  type="radio"
+                  name="confirm_all_purchases"
+                  checked={!instantPurchaseEnabled}
+                  label={__('Always confirm before purchasing content')}
+                  onChange={() => {
+                    this.onInstantPurchaseEnabledChange(false);
+                  }}
+                />
+                <FormField
+                  type="radio"
+                  name="instant_purchases"
+                  checked={instantPurchaseEnabled}
+                  label={__('Only confirm purchases over a certain price')}
+                  onChange={() => {
+                    this.onInstantPurchaseEnabledChange(true);
+                  }}
+                />
+
                 {instantPurchaseEnabled && (
                   <FormFieldPrice
                     name="confirmation_price"
@@ -430,7 +425,7 @@ class SettingsPage extends React.PureComponent<Props, State> {
                   button="primary"
                   label={this.state.clearingCache ? __('Clearing') : __('Clear Cache')}
                   icon={ICONS.ALERT}
-                  // onClick={this.clearCache}
+                  onClick={this.clearCache}
                   disabled={this.state.clearingCache}
                 />
               </div>

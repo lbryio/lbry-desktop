@@ -440,26 +440,23 @@ class PublishForm extends React.PureComponent<Props> {
             </header>
 
             <div className="card__content">
-              <fieldset-section>
-                <FormField
-                  type="radio"
-                  name="content_free"
-                  label={__('Free')}
-                  checked={contentIsFree}
-                  disabled={formDisabled}
-                  onChange={() => updatePublishForm({ contentIsFree: true })}
-                />
-              </fieldset-section>
-              <fieldset-section>
-                <FormField
-                  type="radio"
-                  name="content_cost"
-                  label={__('Choose price')}
-                  checked={!contentIsFree}
-                  disabled={formDisabled}
-                  onChange={() => updatePublishForm({ contentIsFree: false })}
-                />
-              </fieldset-section>
+              <FormField
+                type="radio"
+                name="content_free"
+                label={__('Free')}
+                checked={contentIsFree}
+                disabled={formDisabled}
+                onChange={() => updatePublishForm({ contentIsFree: true })}
+              />
+
+              <FormField
+                type="radio"
+                name="content_cost"
+                label={__('Choose price')}
+                checked={!contentIsFree}
+                disabled={formDisabled}
+                onChange={() => updatePublishForm({ contentIsFree: false })}
+              />
               {!contentIsFree && (
                 <FormFieldPrice
                   name="content_cost_amount"
@@ -504,28 +501,31 @@ class PublishForm extends React.PureComponent<Props> {
             </header>
 
             <div className="card__content">
-              <FormField
-                label={__('Name')}
-                prefix={`lbry://${
-                  !channel || channel === CHANNEL_ANONYMOUS || channel === CHANNEL_NEW
-                    ? ''
-                    : `${channel}/`
-                }`}
-                type="text"
-                name="content_name"
-                placeholder="myname"
-                value={name}
-                onChange={event => this.handleNameChange(event.target.value)}
-                error={nameError}
-                helper={
-                  <NameHelpText
-                    isStillEditing={isStillEditing}
-                    uri={uri}
-                    myClaimForUri={myClaimForUri}
-                    onEditMyClaim={this.editExistingClaim}
-                  />
-                }
-              />
+              <fieldset-group class="fieldset-group--smushed fieldset-group--disabled-prefix">
+                <fieldset-section>
+                  <label>{__('Name')}</label>
+                  <span className="form-field__prefix">{`lbry://${
+                    !channel || channel === CHANNEL_ANONYMOUS || channel === CHANNEL_NEW
+                      ? ''
+                      : `${channel}/`
+                  }`}</span>
+                </fieldset-section>
+                <FormField
+                  type="text"
+                  name="content_name"
+                  value={name}
+                  onChange={event => this.handleNameChange(event.target.value)}
+                  error={nameError}
+                />
+              </fieldset-group>
+              <div className="form-field__help">
+                <NameHelpText
+                  isStillEditing={isStillEditing}
+                  uri={uri}
+                  myClaimForUri={myClaimForUri}
+                  onEditMyClaim={this.editExistingClaim}
+                />
+              </div>
             </div>
 
             <div className={classnames('card__content', { 'card--disabled': !name })}>
@@ -534,7 +534,7 @@ class PublishForm extends React.PureComponent<Props> {
                 type="number"
                 name="content_bid"
                 step="any"
-                label={__('Deposit')}
+                label={__('Deposit (LBC)')}
                 postfix="LBC"
                 value={bid}
                 error={bidError}

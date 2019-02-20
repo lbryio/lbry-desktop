@@ -111,6 +111,7 @@
 //   }
 // }
 
+// Publish button
 .header__navigation-item--right-action {
   display: flex;
   justify-content: center;
@@ -127,7 +128,7 @@
   }
 
   svg {
-    top: 0;
+    top: 0.1em;
   }
 
   &:not(:last-child) {

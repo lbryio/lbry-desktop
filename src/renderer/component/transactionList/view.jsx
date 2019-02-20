@@ -83,10 +83,10 @@ class TransactionList extends React.PureComponent<Props> {
                 <Form>
                   <FormField
                     type="select"
+                    name="file-sort"
                     value={filterSetting || TRANSACTIONS.ALL}
                     onChange={this.handleFilterChanged}
-                    affixClass="form-field--align-center"
-                    prefix={__('Show')}
+                    label={__('Show')}
                     postfix={
                       <Button
                         button="link"

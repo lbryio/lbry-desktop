@@ -75,6 +75,7 @@ class ModalRemoveFile extends React.PureComponent<Props, State> {
         </section>
         <section className="card__content">
           <FormField
+            name="file_delete"
             label={__('Also delete this file from my computer')}
             type="checkbox"
             checked={deleteChecked}
@@ -83,6 +84,7 @@ class ModalRemoveFile extends React.PureComponent<Props, State> {
 
           {claimIsMine && (
             <FormField
+              name="claim_abandon"
               label={__('Abandon the claim for this URI')}
               type="checkbox"
               checked={abandonClaimChecked}
