@@ -248,3 +248,8 @@ export const selectModal = createSelector(selectState, state => {
 });
 
 export const selectEnhancedLayout = createSelector(selectState, state => state.enhancedLayout);
+
+export const selectSearchOptionsExpanded = createSelector(
+  selectState,
+  state => state.searchOptionsExpanded
+);

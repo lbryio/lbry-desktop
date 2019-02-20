@@ -21,7 +21,8 @@
     }
   }
 
-  svg + .button__label {
+  svg + .button__label,
+  .button__label + svg {
     margin-left: var(--spacing-vertical-small);
   }
 
