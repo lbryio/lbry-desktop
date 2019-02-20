@@ -144,8 +144,8 @@
 .media__actions {
   display: flex;
   flex-wrap: wrap;
-  padding-top: var(--spacing-vertical-large);
-  padding-bottom: var(--spacing-vertical-large);
+  margin-top: var(--spacing-vertical-small);
+  margin-bottom: var(--spacing-vertical-small);
 }
 
 .media__actions--between {
@@ -160,6 +160,8 @@
 
 .media__action-group--large {
   display: flex;
+  margin-top: var(--spacing-vertical-small);
+  margin-bottom: var(--spacing-vertical-small);
 
   > * {
     font-size: 1.15rem;
@@ -167,6 +169,10 @@
     &:not(:last-child) {
       margin-right: var(--spacing-vertical-large);
     }
+  }
+
+  &:not(:last-child) {
+    margin-right: var(--spacing-vertical-large);
   }
 }
 
