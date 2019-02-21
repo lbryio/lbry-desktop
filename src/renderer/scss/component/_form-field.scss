@@ -110,6 +110,7 @@ fieldset-group {
 
     fieldset-section:first-child {
       .form-field__prefix {
+        white-space: nowrap;
         padding: 0.15em var(--spacing-s);
         padding-right: 0;
         border: 1px solid;
@@ -225,17 +226,6 @@ fieldset-section {
 label + .react-toggle,
 .react-toggle + label {
   margin-left: var(--spacing-vertical-small);
-}
-
-.form-field--inline-prefix {
-  position: absolute;
-  top: 9.5em;
-  left: 2.75em;
-  width: auto;
-
-  & + input {
-    padding-left: 4em;
-  }
 }
 
 .form-field__help {

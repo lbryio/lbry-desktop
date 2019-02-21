@@ -27,7 +27,7 @@ const SearchOptions = (props: Props) => {
       <div className="card--space-between">
         <Button
           button="alt"
-          label={__('SEARCH OPTIONS')}
+          label={__('ADVANCED SEARCH')}
           iconRight={expanded ? ICONS.UP : ICONS.DOWN}
           onClick={toggleSearchExpanded}
         />
