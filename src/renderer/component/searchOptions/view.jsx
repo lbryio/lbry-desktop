@@ -1,6 +1,6 @@
 // @flow
 import * as ICONS from 'constants/icons';
-import React, { useState } from 'react';
+import React from 'react';
 import { SEARCH_OPTIONS } from 'lbry-redux';
 import { Form, FormField } from 'component/common/form';
 import posed from 'react-pose';
@@ -14,28 +14,50 @@ const ExpandableOptions = posed.div({
 type Props = {
   setSearchOption: (string, boolean | string | number) => void,
   options: {},
+  expanded: boolean,
+  toggleSearchExpanded: () => void,
+  query: string,
+  onFeedbackPositive: string => void,
+  onFeedbackNegative: string => void,
 };
 
 const SearchOptions = (props: Props) => {
-  const { options, setSearchOption } = props;
-  const [expanded, setExpanded] = useState(false);
+  const {
+    options,
+    setSearchOption,
+    expanded,
+    toggleSearchExpanded,
+    query,
+    onFeedbackPositive,
+    onFeedbackNegative,
+  } = props;
   const resultCount = options[SEARCH_OPTIONS.RESULT_COUNT];
 
   return (
     <div className="card card--section search__options-wrapper">
       <div className="card--space-between">
         <Button
-          label={__('SEARCH OPTIONS')}
-          icon={ICONS.OPTIONS}
-          onClick={() => setExpanded(!expanded)}
+          button="alt"
+          label={__('ADVANCED SEARCH')}
+          iconRight={expanded ? ICONS.UP : ICONS.DOWN}
+          onClick={toggleSearchExpanded}
         />
-        {/* 
-          Will be added back when api is ready
-          <div className="media__action-group">
+
+        <div className="media__action-group">
           <span>{__('Find what you were looking for?')}</span>
-          <Button description={__('Yes')} icon={ICONS.YES} />
-          <Button description={__('No')} icon={ICONS.NO} />
-        </div> */}
+          <Button
+            button="alt"
+            description={__('Yes')}
+            onClick={() => onFeedbackPositive(query)}
+            icon={ICONS.YES}
+          />
+          <Button
+            button="alt"
+            description={__('No')}
+            onClick={() => onFeedbackNegative(query)}
+            icon={ICONS.NO}
+          />
+        </div>
       </div>
       <ExpandableOptions pose={expanded ? 'show' : 'hide'}>
         {expanded && (
@@ -77,7 +99,7 @@ const SearchOptions = (props: Props) => {
                 },
                 {
                   option: SEARCH_OPTIONS.MEDIA_AUDIO,
-                  label: __('Sounds'),
+                  label: __('Audio'),
                 },
                 {
                   option: SEARCH_OPTIONS.MEDIA_IMAGE,
@@ -108,13 +130,18 @@ const SearchOptions = (props: Props) => {
             <fieldset>
               <legend className="search__legend--3">{__('Other Options')}</legend>
               <FormField
-                type="number"
+                type="select"
                 name="result-count"
                 value={resultCount}
                 onChange={e => setSearchOption(SEARCH_OPTIONS.RESULT_COUNT, e.target.value)}
                 blockWrap={false}
                 label={__('Returned Results')}
-              />
+              >
+                <option value={10}>10</option>
+                <option value={30}>30</option>
+                <option value={50}>50</option>
+                <option value={100}>100</option>
+              </FormField>
             </fieldset>
           </Form>
         )}

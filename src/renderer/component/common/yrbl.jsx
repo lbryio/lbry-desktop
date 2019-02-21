@@ -7,7 +7,7 @@ type Props = {
   title: string,
   subtitle: string | React.Node,
   type: string,
-  className: ?string,
+  className?: string,
 };
 
 const yrblTypes = {
@@ -30,7 +30,7 @@ export default class extends React.PureComponent<Props> {
         <img alt="Friendly gerbil" className="yrbl" src={Native.imagePath(image)} />
         <div className="card__content">
           <h2 className="card__title">{title}</h2>
-          <p className="card__subtitle">{subtitle}</p>
+          <div className="card__subtitle">{subtitle}</div>
         </div>
       </div>
     );

@@ -16,6 +16,7 @@ type Props = {
     outpoint: number,
     download_path: string,
     completed: boolean,
+    status: string,
   },
   loading: boolean,
   costInfo: ?{},
@@ -26,15 +27,16 @@ type Props = {
 };
 
 class FileDownloadLink extends React.PureComponent<Props> {
-  componentWillUpdate() {
-    const { downloading, fileInfo, uri, restartDownload } = this.props;
+  componentDidMount() {
+    const { fileInfo, uri, restartDownload } = this.props;
     if (
-      !downloading &&
       fileInfo &&
       !fileInfo.completed &&
+      fileInfo.status === 'running' &&
       fileInfo.written_bytes !== false &&
       fileInfo.written_bytes < fileInfo.total_bytes
     ) {
+      // This calls file list to show the percentage
       restartDownload(uri, fileInfo.outpoint);
     }
   }

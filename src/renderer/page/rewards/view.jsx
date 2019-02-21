@@ -129,7 +129,7 @@ class RewardsPage extends PureComponent<Props> {
         <Fragment>
           <section className="card card--section">
             <h2 className="card__title">{__('No Rewards Available')}</h2>
-            <p>
+            <p className="card__content">
               {claimed && claimed.length
                 ? __(
                     "You have claimed all available rewards! We're regularly adding more so be sure to check back later."

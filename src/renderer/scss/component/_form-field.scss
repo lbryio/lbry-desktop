@@ -9,7 +9,7 @@ input[type='number'] {
 input[type='text'],
 input[type='number'],
 select {
-  padding-bottom: 0.2em;
+  padding-bottom: 0.1em;
 
   [data-mode='dark'] & {
     &::placeholder {
@@ -99,6 +99,10 @@ fieldset-group {
   &.fieldset-group--disabled-prefix {
     align-items: flex-end;
 
+    label {
+      min-height: 18px;
+    }
+
     fieldset-section:first-child .form-field__prefix,
     fieldset-section:last-child input {
       border-color: $lbry-black;
@@ -110,6 +114,7 @@ fieldset-group {
 
     fieldset-section:first-child {
       .form-field__prefix {
+        white-space: nowrap;
         padding: 0.15em var(--spacing-s);
         padding-right: 0;
         border: 1px solid;
@@ -142,14 +147,22 @@ fieldset-group {
 
 // form buttons are black by default
 form {
-  // [data-mode='dark'] & {
-  .button--primary:not(:hover) {
-    background-color: $lbry-teal-5;
-    border-color: $lbry-teal-5;
+  [type='button'],
+  [type='submit'] {
+    &.button--primary {
+      &:not(:hover) {
+        background-color: $lbry-teal-5;
+        border-color: $lbry-teal-5;
+      }
 
-    &:hover {
-      background-color: $lbry-teal-3;
-      border-color: $lbry-teal-3;
+      &:hover {
+        background-color: $lbry-teal-3;
+        border-color: $lbry-teal-3;
+      }
+    }
+
+    &.button--inverse {
+      @extend .button--inverse;
     }
   }
 }
@@ -175,6 +188,10 @@ fieldset-section {
 
     [data-mode='dark'] & {
       background-color: transparent;
+
+      option {
+        background-color: $lbry-gray-5;
+      }
     }
   }
 
@@ -213,17 +230,6 @@ fieldset-section {
 label + .react-toggle,
 .react-toggle + label {
   margin-left: var(--spacing-vertical-small);
-}
-
-.form-field--inline-prefix {
-  position: absolute;
-  top: 9.5em;
-  left: 2.75em;
-  width: auto;
-
-  & + input {
-    padding-left: 4em;
-  }
 }
 
 .form-field__help {

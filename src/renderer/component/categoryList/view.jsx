@@ -57,21 +57,21 @@ class CategoryList extends PureComponent<Props, State> {
       fetchChannel(categoryLink);
     }
 
-    if (!urisInList) {
-      return;
-    }
+    const scrollWrapper = this.scrollWrapper.current;
+    if (scrollWrapper) {
+      scrollWrapper.addEventListener('scroll', throttle(this.handleArrowButtonsOnScroll, 500));
 
-    if (lazyLoad) {
-      const scrollWrapper = this.scrollWrapper.current;
-      if (scrollWrapper) {
-        scrollWrapper.addEventListener('scroll', throttle(this.handleArrowButtonsOnScroll, 500));
+      if (!urisInList) {
+        return;
+      }
 
-        if (urisInList && window.innerHeight > scrollWrapper.offsetTop) {
+      if (lazyLoad) {
+        if (window.innerHeight > scrollWrapper.offsetTop) {
           resolveUris(urisInList);
         }
+      } else {
+        resolveUris(urisInList);
       }
-    } else {
-      resolveUris(urisInList);
     }
   }
 

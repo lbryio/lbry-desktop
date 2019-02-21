@@ -17,11 +17,12 @@
       stroke-opacity: 1;
       width: 1.4rem;
       height: 1.4rem;
-      top: 0;
+      top: 0.1em;
     }
   }
 
-  svg + .button__label {
+  svg + .button__label,
+  .button__label + svg {
     margin-left: var(--spacing-vertical-small);
   }
 
@@ -52,26 +53,35 @@
   }
 }
 
-.button--inverse {
+// This is a hack and the extra styles are just so this is more specific than the @lbry/components styling
+// Will make a PR there, but just doing it now for the release - Sean
+[type='button'].button--inverse {
   font-size: 1rem;
   transition: background-color 0.2s;
+  border-radius: 0;
 
   html[data-mode='dark'] & {
-    border-color: rgba($lbry-white, 0.1);
-    background-color: rgba($lbry-black, 0.3);
-  }
+    &:not(:hover) {
+      border-color: rgba($lbry-white, 0.1);
+      background-color: rgba($lbry-black, 0.3);
+    }
 
-  &:not(:hover) {
-    background-color: $lbry-white;
-  }
-
-  &:hover {
-    background-color: $lbry-gray-1;
-    color: $lbry-black;
-
-    html[data-mode='dark'] & {
+    &:hover {
+      border-color: rgba($lbry-white, 0.1);
       background-color: rgba($lbry-white, 0.1);
       color: $lbry-white;
+    }
+  }
+
+  html[data-mode='light'] & {
+    &:not(:hover) {
+      background-color: $lbry-white;
+      color: $lbry-black;
+    }
+
+    &:hover {
+      background-color: $lbry-gray-1;
+      color: $lbry-black;
     }
   }
 
@@ -81,6 +91,7 @@
     }
   }
 }
+
 .button--link:not(:disabled) {
   html[data-mode='dark'] & {
     &:not(:hover) {

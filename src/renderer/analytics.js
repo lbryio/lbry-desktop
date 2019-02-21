@@ -80,6 +80,10 @@ const analytics: Analytics = {
       Lbryio.call('event', 'publish');
     }
   },
+  apiSearchFeedback: (query, vote) => {
+    // We don't need to worry about analytics enabled here because users manually click on the button to provide feedback
+    Lbryio.call('feedback', 'search', { query, vote });
+  },
 };
 
 export default analytics;

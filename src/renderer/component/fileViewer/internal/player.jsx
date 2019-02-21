@@ -38,6 +38,68 @@ class MediaPlayer extends React.PureComponent {
   }
 
   componentDidMount() {
+    this.playMedia();
+
+    // Temp hack to force the video to play if the metadataloaded event was never fired
+    // Will be removed with the new video player
+    setTimeout(() => {
+      const { hasMetadata } = this.state;
+      if (!hasMetadata) {
+        this.refreshMetadata();
+        this.playMedia();
+      }
+    }, 5000);
+  }
+
+  componentWillReceiveProps(next) {
+    const el = this.media.children[0];
+    if (!this.props.paused && next.paused && !el.paused) el.pause();
+  }
+
+  componentDidUpdate() {
+    const { contentType, downloadCompleted } = this.props;
+    const { startedPlaying, fileSource } = this.state;
+
+    if (this.playableType() && !startedPlaying && downloadCompleted) {
+      const container = this.media.children[0];
+
+      if (MediaPlayer.MP3_CONTENT_TYPES.indexOf(contentType) > -1) {
+        this.renderAudio(this.media, true);
+      } else {
+        player.append(
+          this.file(),
+          container,
+          { autoplay: true, controls: true },
+          renderMediaCallback.bind(this)
+        );
+      }
+    } else if (this.fileType() && !fileSource && downloadCompleted) {
+      this.renderFile();
+    }
+  }
+
+  componentWillUnmount() {
+    document.removeEventListener('keydown', this.togglePlayListener);
+    const mediaElement = this.media.children[0];
+    if (mediaElement) {
+      mediaElement.removeEventListener('click', this.togglePlayListener);
+    }
+  }
+
+  toggleFullScreen(event) {
+    const mediaElement = this.media.children[0];
+    if (mediaElement) {
+      if (document.webkitIsFullScreen) {
+        document.webkitExitFullscreen();
+      } else {
+        mediaElement.webkitRequestFullScreen();
+      }
+    }
+  }
+
+  playMedia() {
+    const { hasMetadata } = this.state;
+
     const container = this.media;
     const {
       downloadCompleted,
@@ -50,15 +112,6 @@ class MediaPlayer extends React.PureComponent {
       onFinishCb,
       savePosition,
     } = this.props;
-
-    const loadedMetadata = () => {
-      this.setState({ hasMetadata: true, startedPlaying: true });
-
-      if (onStartCb) {
-        onStartCb();
-      }
-      this.media.children[0].play();
-    };
 
     const renderMediaCallback = error => {
       if (error) this.setState({ unplayable: true });
@@ -91,16 +144,15 @@ class MediaPlayer extends React.PureComponent {
     }
 
     document.addEventListener('keydown', this.togglePlayListener);
-    const mediaElement = this.media.children[0];
+    const mediaElement = container.children[0];
     if (mediaElement) {
       if (position) {
         mediaElement.currentTime = position;
       }
+
+      mediaElement.addEventListener('loadedmetadata', () => this.refreshMetadata());
       mediaElement.addEventListener('timeupdate', () => savePosition(mediaElement.currentTime));
       mediaElement.addEventListener('click', this.togglePlayListener);
-      mediaElement.addEventListener('loadedmetadata', loadedMetadata.bind(this), {
-        once: true,
-      });
       mediaElement.addEventListener('ended', () => {
         if (onFinishCb) {
           onFinishCb();
@@ -116,48 +168,18 @@ class MediaPlayer extends React.PureComponent {
     }
   }
 
-  componentWillReceiveProps(next) {
-    const el = this.media.children[0];
-    if (!this.props.paused && next.paused && !el.paused) el.pause();
+  refreshMetadata() {
+    const { onStartCb } = this.props;
+    this.setState({ hasMetadata: true, startedPlaying: true });
+
+    if (onStartCb) {
+      onStartCb();
+    }
+    this.media.children[0].play();
   }
 
-  componentDidUpdate() {
-    const { contentType, downloadCompleted } = this.props;
-    const { startedPlaying, fileSource } = this.state;
-
-    if (this.playableType() && !startedPlaying && downloadCompleted) {
-      const container = this.media.children[0];
-
-      if (MediaPlayer.MP3_CONTENT_TYPES.indexOf(contentType) > -1) {
-        this.renderAudio(this.media, true);
-      } else {
-        player.render(this.file(), container, {
-          autoplay: true,
-          controls: true,
-        });
-      }
-    } else if (this.fileType() && !fileSource && downloadCompleted) {
-      this.renderFile();
-    }
-  }
-
-  componentWillUnmount() {
-    document.removeEventListener('keydown', this.togglePlayListener);
-    const mediaElement = this.media.children[0];
-    if (mediaElement) {
-      mediaElement.removeEventListener('click', this.togglePlayListener);
-    }
-  }
-
-  toggleFullScreen(event) {
-    const mediaElement = this.media.children[0];
-    if (mediaElement) {
-      if (document.webkitIsFullScreen) {
-        document.webkitExitFullscreen();
-      } else {
-        mediaElement.webkitRequestFullScreen();
-      }
-    }
+  setReady() {
+    this.setState({ ready: true });
   }
 
   togglePlay(event) {

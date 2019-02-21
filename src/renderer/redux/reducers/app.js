@@ -35,6 +35,7 @@ export type AppState = {
   isUpgradeSkipped: ?boolean,
   hasClickedComment: boolean,
   enhancedLayout: boolean,
+  searchOptionsExpanded: boolean,
 };
 
 const defaultState: AppState = {
@@ -59,6 +60,7 @@ const defaultState: AppState = {
   isUpgradeAvailable: undefined,
   isUpgradeSkipped: undefined,
   enhancedLayout: false,
+  searchOptionsExpanded: false,
 };
 
 reducers[ACTIONS.DAEMON_READY] = state =>
@@ -218,6 +220,11 @@ reducers[ACTIONS.AUTHENTICATION_FAILURE] = state =>
 reducers[ACTIONS.ENNNHHHAAANNNCEEE] = state =>
   Object.assign({}, state, {
     enhancedLayout: !state.enhancedLayout,
+  });
+
+reducers[ACTIONS.TOGGLE_SEARCH_EXPANDED] = state =>
+  Object.assign({}, state, {
+    searchOptionsExpanded: !state.searchOptionsExpanded,
   });
 
 export default function reducer(state: AppState = defaultState, action: any) {

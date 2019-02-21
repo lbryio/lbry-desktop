@@ -16,6 +16,7 @@ export const VOLUME_CHANGED = 'VOLUME_CHANGED';
 export const ADD_COMMENT = 'ADD_COMMENT';
 export const SHOW_MODAL = 'SHOW_MODAL';
 export const HIDE_MODAL = 'HIDE_MODAL';
+export const TOGGLE_SEARCH_EXPANDED = 'TOGGLE_SEARCH_EXPANDED';
 export const ENNNHHHAAANNNCEEE = 'ENNNHHHAAANNNCEEE';
 
 // Navigation
