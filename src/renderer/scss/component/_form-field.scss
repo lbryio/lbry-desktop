@@ -99,6 +99,10 @@ fieldset-group {
   &.fieldset-group--disabled-prefix {
     align-items: flex-end;
 
+    label {
+      min-height: 1.3em;
+    }
+
     fieldset-section:first-child .form-field__prefix,
     fieldset-section:last-child input {
       border-color: $lbry-black;
