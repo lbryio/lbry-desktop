@@ -16,10 +16,21 @@ type Props = {
   options: {},
   expanded: boolean,
   toggleSearchExpanded: () => void,
+  query: string,
+  onFeedbackPositive: string => void,
+  onFeedbackNegative: string => void,
 };
 
 const SearchOptions = (props: Props) => {
-  const { options, setSearchOption, expanded, toggleSearchExpanded } = props;
+  const {
+    options,
+    setSearchOption,
+    expanded,
+    toggleSearchExpanded,
+    query,
+    onFeedbackPositive,
+    onFeedbackNegative,
+  } = props;
   const resultCount = options[SEARCH_OPTIONS.RESULT_COUNT];
 
   return (
@@ -31,13 +42,22 @@ const SearchOptions = (props: Props) => {
           iconRight={expanded ? ICONS.UP : ICONS.DOWN}
           onClick={toggleSearchExpanded}
         />
-        {/* 
-          Will be added back when api is ready
-          <div className="media__action-group">
+
+        <div className="media__action-group">
           <span>{__('Find what you were looking for?')}</span>
-          <Button description={__('Yes')} icon={ICONS.YES} />
-          <Button description={__('No')} icon={ICONS.NO} />
-        </div> */}
+          <Button
+            button="alt"
+            description={__('Yes')}
+            onClick={() => onFeedbackPositive(query)}
+            icon={ICONS.YES}
+          />
+          <Button
+            button="alt"
+            description={__('No')}
+            onClick={() => onFeedbackNegative(query)}
+            icon={ICONS.NO}
+          />
+        </div>
       </div>
       <ExpandableOptions pose={expanded ? 'show' : 'hide'}>
         {expanded && (
