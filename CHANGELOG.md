@@ -9,12 +9,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Added
 
 - Added referral link next to email input ([#2287](https://github.com/lbryio/lbry-desktop/pull/2287))
-- Simple search filter options ([#2282](https://github.com/lbryio/lbry-desktop/pull/2282))
+- Simple search filter options and feedback option ([#2282](https://github.com/lbryio/lbry-desktop/pull/2282))
 - Broken heart icon for unsubscribe ([#2272](https://github.com/lbryio/lbry-desktop/pull/2272))
 
 ### Changed
 
-- Upgrade LBRY SDK to [0.32](https://github.com/lbryio/lbry/releases/tag/v0.32.0) for improved download performance. See [0.31](https://github.com/lbryio/lbry/releases/tag/v0.31.0) for other changes since last app release.
+- Upgrade LBRY SDK to [0.32.2](https://github.com/lbryio/lbry/releases/tag/v0.32.0) for improved download performance. See [0.31](https://github.com/lbryio/lbry/releases/tag/v0.31.0) for other changes since last app release.
 - Styling changes to unify components across projects ([#2279](https://github.com/lbryio/lbry-desktop/pull/2279))
 
 ### Fixed
