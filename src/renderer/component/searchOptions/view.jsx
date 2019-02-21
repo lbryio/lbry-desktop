@@ -27,7 +27,7 @@ const SearchOptions = (props: Props) => {
       <div className="card--space-between">
         <Button
           button="alt"
-          label={__('SEARCH OPTIONS')}
+          label={__('ADVANCED SEARCH')}
           iconRight={expanded ? ICONS.UP : ICONS.DOWN}
           onClick={toggleSearchExpanded}
         />
@@ -110,13 +110,18 @@ const SearchOptions = (props: Props) => {
             <fieldset>
               <legend className="search__legend--3">{__('Other Options')}</legend>
               <FormField
-                type="number"
+                type="select"
                 name="result-count"
                 value={resultCount}
                 onChange={e => setSearchOption(SEARCH_OPTIONS.RESULT_COUNT, e.target.value)}
                 blockWrap={false}
                 label={__('Returned Results')}
-              />
+              >
+                <option value={10}>10</option>
+                <option value={30}>30</option>
+                <option value={50}>50</option>
+                <option value={100}>100</option>
+              </FormField>
             </fieldset>
           </Form>
         )}
