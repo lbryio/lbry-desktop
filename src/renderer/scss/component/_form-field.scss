@@ -142,7 +142,8 @@ fieldset-group {
 
 // form buttons are black by default
 form {
-  [type='button'] {
+  [type='button'],
+  [type='submit'] {
     &.button--primary {
       &:not(:hover) {
         background-color: $lbry-teal-5;
