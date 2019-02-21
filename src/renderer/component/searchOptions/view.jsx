@@ -1,6 +1,6 @@
 // @flow
 import * as ICONS from 'constants/icons';
-import React, { useState } from 'react';
+import React from 'react';
 import { SEARCH_OPTIONS } from 'lbry-redux';
 import { Form, FormField } from 'component/common/form';
 import posed from 'react-pose';
@@ -14,20 +14,22 @@ const ExpandableOptions = posed.div({
 type Props = {
   setSearchOption: (string, boolean | string | number) => void,
   options: {},
+  expanded: boolean,
+  toggleSearchExpanded: () => void,
 };
 
 const SearchOptions = (props: Props) => {
-  const { options, setSearchOption } = props;
-  const [expanded, setExpanded] = useState(false);
+  const { options, setSearchOption, expanded, toggleSearchExpanded } = props;
   const resultCount = options[SEARCH_OPTIONS.RESULT_COUNT];
 
   return (
     <div className="card card--section search__options-wrapper">
       <div className="card--space-between">
         <Button
+          button="alt"
           label={__('SEARCH OPTIONS')}
-          icon={ICONS.OPTIONS}
-          onClick={() => setExpanded(!expanded)}
+          iconRight={expanded ? ICONS.UP : ICONS.DOWN}
+          onClick={toggleSearchExpanded}
         />
         {/* 
           Will be added back when api is ready
@@ -77,7 +79,7 @@ const SearchOptions = (props: Props) => {
                 },
                 {
                   option: SEARCH_OPTIONS.MEDIA_AUDIO,
-                  label: __('Sounds'),
+                  label: __('Audio'),
                 },
                 {
                   option: SEARCH_OPTIONS.MEDIA_IMAGE,

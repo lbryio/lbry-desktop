@@ -9,7 +9,7 @@ input[type='number'] {
 input[type='text'],
 input[type='number'],
 select {
-  padding-bottom: 0.2em;
+  padding-bottom: 0.1em;
 
   [data-mode='dark'] & {
     &::placeholder {
@@ -142,14 +142,21 @@ fieldset-group {
 
 // form buttons are black by default
 form {
-  // [data-mode='dark'] & {
-  .button--primary:not(:hover) {
-    background-color: $lbry-teal-5;
-    border-color: $lbry-teal-5;
+  [type='button'] {
+    &.button--primary {
+      &:not(:hover) {
+        background-color: $lbry-teal-5;
+        border-color: $lbry-teal-5;
+      }
 
-    &:hover {
-      background-color: $lbry-teal-3;
-      border-color: $lbry-teal-3;
+      &:hover {
+        background-color: $lbry-teal-3;
+        border-color: $lbry-teal-3;
+      }
+    }
+
+    &.button--inverse {
+      @extend .button--inverse;
     }
   }
 }
@@ -175,6 +182,10 @@ fieldset-section {
 
     [data-mode='dark'] & {
       background-color: transparent;
+
+      option {
+        background-color: $lbry-gray-5;
+      }
     }
   }
 

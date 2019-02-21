@@ -34,7 +34,7 @@
     "postinstall": "electron-builder install-app-deps && node build/downloadDaemon.js"
   },
   "dependencies": {
-    "@lbry/components": "^2.2.3",
+    "@lbry/components": "^2.2.4",
     "@types/three": "^0.93.1",
     "bluebird": "^3.5.1",
     "breakdance": "^3.0.1",
