@@ -5,7 +5,16 @@ import path from 'path';
 import React from 'react';
 import Button from 'component/button';
 import parseData from 'util/parse-data';
+/* eslint-disable no-redeclare */
+// @if TARGET='app'
+// $FlowFixMe
 import { remote } from 'electron';
+// @endif
+// @if TARGET='web'
+// $FlowFixMe
+import { remote } from 'web/stubs';
+// @endif
+/* eslint-enable no-redeclare */
 
 type Props = {
   data: Array<any>,

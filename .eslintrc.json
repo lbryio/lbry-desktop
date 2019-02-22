@@ -37,6 +37,12 @@
       }
     ],
     "func-names": ["warn", "as-needed"],
+    "no-param-reassign": [
+      "error",
+      {
+        "props": false
+      }
+    ],
     "jsx-a11y/label-has-for": 0,
     "import/prefer-default-export": 0,
     "no-return-assign": 0,
@@ -52,6 +58,7 @@
     "no-restricted-syntax": 0,
     "no-empty": 0,
     "react/prefer-stateless-function": 0,
-    "react/sort-comp": 0
+    "react/sort-comp": 0,
+    "jsx-a11y/media-has-caption": 0
   }
 }

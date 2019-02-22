@@ -27,10 +27,17 @@
   height: 100%;
 
   iframe,
-  webview {
+  webview,
+  .video-js {
     width: 100%;
     height: 100%;
   }
+
+  // Removing the play button because we have autoplay turned on
+  // These are classes added by video.js
+  // .video-js .vjs-big-play-button {
+  //   display: none;
+  // }
 }
 
 .document-viewer {

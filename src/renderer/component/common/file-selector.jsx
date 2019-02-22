@@ -1,6 +1,15 @@
 // @flow
-import React from 'react';
+import * as React from 'react';
+/* eslint-disable no-redeclare */
+// @if TARGET='app'
+// $FlowFixMe
 import { remote } from 'electron';
+// @endif
+// @if TARGET='web'
+// $FlowFixMe
+import { remote } from 'web/stubs';
+// @endif
+/* eslint-enable no-redeclare */
 import Button from 'component/button';
 import { FormField } from 'component/common/form';
 import path from 'path';
@@ -24,9 +33,14 @@ class FileSelector extends React.PureComponent<Props> {
     type: 'file',
   };
 
+  fileInput: { current: React.ElementRef<any> };
+
   constructor() {
     super();
     this.input = null;
+    // @if TARGET='web'
+    this.fileInput = React.createRef();
+    // @endif
   }
 
   handleButtonClick() {
@@ -54,6 +68,20 @@ class FileSelector extends React.PureComponent<Props> {
     );
   }
 
+  handleFileInputSelection() {
+    const { files } = this.fileInput.current;
+    if (!files) {
+      return;
+    }
+
+    const filePath = files[0];
+    const fileName = filePath.name;
+
+    if (this.props.onFileChosen) {
+      this.props.onFileChosen(filePath, fileName);
+    }
+  }
+
   input: ?HTMLInputElement;
 
   render() {
@@ -63,22 +91,29 @@ class FileSelector extends React.PureComponent<Props> {
       type === 'file' ? fileLabel || __('Choose File') : directoryLabel || __('Choose Directory');
 
     return (
-      <FormField
-        webkitdirectory="true"
-        className="form-field--copyable"
-        type="text"
-        ref={input => {
-          if (this.input) this.input = input;
-        }}
-        onFocus={() => {
-          if (this.input) this.input.select();
-        }}
-        readOnly="readonly"
-        value={currentPath || __('No File Chosen')}
-        inputButton={
-          <Button button="primary" onClick={() => this.handleButtonClick()} label={label} />
-        }
-      />
+      <React.Fragment>
+        {/* @if TARGET='app' */}
+        <FormField
+          webkitdirectory="true"
+          className="form-field--copyable"
+          type="text"
+          ref={input => {
+            if (this.input) this.input = input;
+          }}
+          onFocus={() => {
+            if (this.input) this.input.select();
+          }}
+          readOnly="readonly"
+          value={currentPath || __('No File Chosen')}
+          inputButton={
+            <Button button="primary" onClick={() => this.handleButtonClick()} label={label} />
+          }
+        />
+        {/* @endif */}
+        {/* @if TARGET='web' */}
+        <input type="file" ref={this.fileInput} onChange={() => this.handleFileInputSelection()} />
+        {/* @endif */}
+      </React.Fragment>
     );
   }
 }

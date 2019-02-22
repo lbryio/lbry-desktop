@@ -7,9 +7,11 @@ import ThreeViewer from 'component/viewers/threeViewer';
 import DocumentViewer from 'component/viewers/documentViewer';
 import DocxViewer from 'component/viewers/docxViewer';
 import HtmlViewer from 'component/viewers/htmlViewer';
+import AudioVideoViewer from 'component/viewers/audioVideoViewer';
 
 type Props = {
   mediaType: string,
+  poster?: string,
   source: {
     stream: string => void,
     fileName: string,
@@ -54,6 +56,7 @@ class FileRender extends React.PureComponent<Props> {
         // Process command
         let message = {};
         try {
+          // $FlowFixMe
           message = JSON.parse(/^\$LBRY_IPC:(.*)/.exec(e.message)[1]);
         } catch (err) {}
         // eslint-disable-next-line no-console
@@ -88,10 +91,10 @@ class FileRender extends React.PureComponent<Props> {
   }
 
   renderViewer() {
-    const { source, mediaType, currentTheme } = this.props;
+    const { source, mediaType, currentTheme, poster } = this.props;
 
     // Extract relevant data to render file
-    const { stream, fileType, contentType, downloadPath } = source;
+    const { stream, fileType, contentType, downloadPath, fileName } = source;
 
     // Human-readable files (scripts and plain-text files)
     const readableFiles = ['text', 'document', 'script'];
@@ -112,6 +115,14 @@ class FileRender extends React.PureComponent<Props> {
           webpreferences="sandbox=true,contextIsolation=true,webviewTag=false,enableRemoteModule=false,devTools=false"
         />
       ),
+      video: (
+        <AudioVideoViewer
+          source={{ downloadPath, fileName }}
+          contentType={contentType}
+          poster={poster}
+        />
+      ),
+      audio: <AudioVideoViewer source={{ downloadPath, fileName }} contentType={contentType} />,
       // Add routes to viewer...
     };
 
