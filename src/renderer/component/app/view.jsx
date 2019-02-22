@@ -119,7 +119,9 @@ class App extends React.PureComponent<Props> {
               src={Native.imagePath('gerbil-happy.png')}
             />
           )}
+          {/* @if TARGET='app' */}
           <SideBar />
+          {/* @endif */}
           <div className="content" id="content">
             <Router />
             <ModalRouter />

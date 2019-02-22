@@ -19,7 +19,13 @@ import {
   doOpenModal,
   doHideModal,
 } from 'redux/actions/app';
-import { doToast, doBlackListedOutpointsSubscribe, isURIValid, setSearchApi } from 'lbry-redux';
+import {
+  Lbry,
+  doToast,
+  doBlackListedOutpointsSubscribe,
+  isURIValid,
+  setSearchApi,
+} from 'lbry-redux';
 import { doNavigate, doHistoryBack, doHistoryForward } from 'redux/actions/navigation';
 import { doDownloadLanguages, doUpdateIsNightAsync } from 'redux/actions/settings';
 import { doAuthenticate, Lbryio, rewards } from 'lbryinc';
@@ -45,6 +51,7 @@ if (process.env.SEARCH_API_URL) {
   setSearchApi(process.env.SEARCH_API_URL);
 }
 
+// @if TARGET='app'
 ipcRenderer.on('navigate-backward', () => {
   app.store.dispatch(doHistoryBack());
 });
@@ -52,6 +59,12 @@ ipcRenderer.on('navigate-backward', () => {
 ipcRenderer.on('navigate-forward', () => {
   app.store.dispatch(doHistoryForward());
 });
+// @endif
+
+// @if TARGET='web'
+Lbry.setDaemonConnectionString('/api/proxy');
+console.log('set string');
+// @endif
 
 // We need to override Lbryio for getting/setting the authToken
 // We interect with ipcRenderer to get the auth key from a users keyring

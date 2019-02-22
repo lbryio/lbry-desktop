@@ -1,6 +1,9 @@
 const path = require('path');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 
-const ELECTRON_RENDERER_PROCESS_ROOT = path.resolve(__dirname, 'src/renderer/');
+const STATIC_ROOT = path.resolve(__dirname, 'static/');
+const DIST_ROOT = path.resolve(__dirname, 'dist/');
+const RENDERER_PROCESS_ROOT = path.resolve(__dirname, 'src/renderer/');
 
 module.exports = env => {
   return {
@@ -12,10 +15,6 @@ module.exports = env => {
       filename: 'bundle.js',
       publicPath: '/static/app/',
     },
-    // commented out because of webpack 3
-    // optimization: {
-    // minimize: false,
-    // },
     target: 'web',
     node: {
       fs: 'empty',
@@ -50,14 +49,6 @@ module.exports = env => {
           ],
           exclude: /node_modules/,
         },
-        // {
-        //   test: /\.jsx?$/,
-        //   loader: 'babel-loader',
-        //   options: {
-        //     presets: ['env', 'react', 'stage-2'],
-        //   },
-        //   exclude: /node_modules/,
-        // },
         {
           test: /\.scss$/,
           use: [
@@ -67,14 +58,26 @@ module.exports = env => {
           ],
         },
         {
-          test: /\.(png|woff|woff2|eot|ttf|svg|gif)$/,
-          // loader: 'url-loader?limit=100000'
+          test: /\.(woff|woff2)$/,
           use: [
             {
               loader: 'file-loader',
               options: {
                 name: '[name].[ext]',
-                // outputPath: 'resources/'
+                outputPath: 'static/font/',
+              },
+            },
+          ],
+        },
+        {
+          // All images should use this, but we need to bring them into components
+          test: /\.(gif|png)$/,
+          use: [
+            {
+              loader: 'file-loader',
+              options: {
+                name: '[name].[ext]',
+                outputPath: 'static/img/',
               },
             },
           ],
@@ -86,9 +89,18 @@ module.exports = env => {
       ],
     },
     resolve: {
-      modules: [ELECTRON_RENDERER_PROCESS_ROOT, 'node_modules', __dirname],
+      modules: [RENDERER_PROCESS_ROOT, 'node_modules', __dirname],
       extensions: ['.js', '.jsx', '.scss', '.json'],
     },
+    plugins: [
+      new CopyWebpackPlugin([
+        {
+          from: `${STATIC_ROOT}/`,
+          to: `${DIST_ROOT}/web/static/`,
+          ignore: ['daemon/**/*', 'font/**/*'],
+        },
+      ]),
+    ],
     externals: [
       (function() {
         var IGNORES = [

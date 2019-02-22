@@ -126,20 +126,19 @@ export default class SplashScreen extends React.PureComponent<Props, State> {
 
     // If the wallet is locked, stop doing anything and make the user input their password
 
-    // @if TARGET='app'
+    // xxxif TARGET='app'
     if (wallet && wallet.is_locked) {
       // Clear the error timeout, it might sit on this step for a while until someone enters their password
       if (this.timeout) {
         clearTimeout(this.timeout);
       }
-      // @endif
-      // @if TARGET='web'
-      console.log('I think web needs this', accountList);
-      // if (account_list && account_list.encrypted) {
+      // xxxendif
+      // xxxif TARGET='web'
+      // if (accountList && accountList.encrypted) {
       //   this.setState({
       //     isRunning: true,
       //   });
-      // @endif
+      // xxxendif
 
       // Make sure there isn't another active modal (like INCOMPATIBLE_DAEMON)
       if (launchedModal === false && !modal) {
@@ -148,7 +147,7 @@ export default class SplashScreen extends React.PureComponent<Props, State> {
     } else if (status.is_running) {
       // If we cleared the error timout due to a wallet being locked, make sure to start it back up
       if (!this.timeout) {
-        this.adjustErrorTimeout();
+        this.adjustErrorTimseout();
       }
 
       Lbry.resolve({ urls: 'lbry://one' }).then(() => {
