@@ -53,7 +53,6 @@ export default class SplashScreen extends React.PureComponent<Props, State> {
 
   componentDidMount() {
     const { checkDaemonVersion } = this.props;
-
     this.adjustErrorTimeout();
     Lbry.connect()
       .then(checkDaemonVersion)
@@ -93,12 +92,21 @@ export default class SplashScreen extends React.PureComponent<Props, State> {
   }
 
   updateStatus() {
+    // @if TARGET='app'
     Lbry.status().then(status => {
       this.updateStatusCallback(status);
     });
+    // @endif
+    // @if TARGET='web'
+    Lbry.status().then(status => {
+      Lbry.account_list().then(accountList => {
+        this.updateStatusCallback(status, accountList);
+      });
+    });
+    // @endif
   }
 
-  updateStatusCallback(status: Status) {
+  updateStatusCallback(status: Status, accountList: any) {
     const { notifyUnlockWallet, authenticate, modal } = this.props;
     const { launchedModal } = this.state;
 
@@ -117,11 +125,20 @@ export default class SplashScreen extends React.PureComponent<Props, State> {
     const { wallet, blockchain_headers: blockchainHeaders } = status;
 
     // If the wallet is locked, stop doing anything and make the user input their password
+
+    // xxxif TARGET='app'
     if (wallet && wallet.is_locked) {
       // Clear the error timeout, it might sit on this step for a while until someone enters their password
       if (this.timeout) {
         clearTimeout(this.timeout);
       }
+      // xxxendif
+      // xxxif TARGET='web'
+      // if (accountList && accountList.encrypted) {
+      //   this.setState({
+      //     isRunning: true,
+      //   });
+      // xxxendif
 
       // Make sure there isn't another active modal (like INCOMPATIBLE_DAEMON)
       if (launchedModal === false && !modal) {
@@ -130,7 +147,7 @@ export default class SplashScreen extends React.PureComponent<Props, State> {
     } else if (status.is_running) {
       // If we cleared the error timout due to a wallet being locked, make sure to start it back up
       if (!this.timeout) {
-        this.adjustErrorTimeout();
+        this.adjustErrorTimseout();
       }
 
       Lbry.resolve({ urls: 'lbry://one' }).then(() => {

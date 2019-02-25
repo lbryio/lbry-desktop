@@ -80,10 +80,7 @@ const Header = (props: Props) => {
 
       <WunderBar />
 
-      {
-        // TODO: Make `Menu` add `.active` class to `.navigation` when clicked
-      }
-
+      {/* @if TARGET='app' */}
       <div className="header__navigation">
         <Button
           className="header__navigation-item header__navigation-item--menu"
@@ -111,6 +108,7 @@ const Header = (props: Props) => {
           />
         )}
       </div>
+      {/* @endif */}
     </header>
   );
 };

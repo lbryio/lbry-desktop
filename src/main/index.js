@@ -1,5 +1,6 @@
 /* eslint-disable no-console */
 // Module imports
+// @if TARGET='app'
 import keytar from 'keytar';
 import SemVer from 'semver';
 import url from 'url';
@@ -99,10 +100,12 @@ app.on('ready', async () => {
   if (isDev) {
     await installExtensions();
   }
+
   rendererWindow = createWindow(appState);
   rendererWindow.webContents.on('devtools-opened', () => {
     rendererWindow.webContents.send('devtools-is-opened');
   });
+
   tray = createTray(rendererWindow);
   // HACK: patch webrequest to fix devtools incompatibility with electron 2.x.
   // See https://github.com/electron/electron/issues/13008#issuecomment-400261941
@@ -324,3 +327,4 @@ const isSecondInstance = app.makeSingleInstance(argv => {
 if (isSecondInstance) {
   app.exit();
 }
+// @endif

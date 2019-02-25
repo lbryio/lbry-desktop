@@ -3,10 +3,12 @@
 import App from 'component/app';
 import SnackBar from 'component/snackBar';
 import SplashScreen from 'component/splash';
+// @if TARGET='app'
 import moment from 'moment';
-import * as ACTIONS from 'constants/action_types';
-import * as MODALS from 'constants/modal_types';
 import { ipcRenderer, remote, shell } from 'electron';
+import * as ACTIONS from 'constants/action_types';
+// @endif
+import * as MODALS from 'constants/modal_types';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
@@ -17,7 +19,13 @@ import {
   doOpenModal,
   doHideModal,
 } from 'redux/actions/app';
-import { doToast, doBlackListedOutpointsSubscribe, isURIValid, setSearchApi } from 'lbry-redux';
+import {
+  Lbry,
+  doToast,
+  doBlackListedOutpointsSubscribe,
+  isURIValid,
+  setSearchApi,
+} from 'lbry-redux';
 import { doNavigate, doHistoryBack, doHistoryForward } from 'redux/actions/navigation';
 import { doDownloadLanguages, doUpdateIsNightAsync } from 'redux/actions/settings';
 import { doAuthenticate, Lbryio, rewards } from 'lbryinc';
@@ -28,10 +36,12 @@ import app from './app';
 import analytics from './analytics';
 import doLogWarningConsoleMessage from './logWarningConsoleMessage';
 
-const { autoUpdater } = remote.require('electron-updater');
 const APPPAGEURL = 'lbry://?';
 
+// @if TARGET='app'
+const { autoUpdater } = remote.require('electron-updater');
 autoUpdater.logger = remote.require('electron-log');
+// @endif
 
 if (process.env.LBRY_API_URL) {
   Lbryio.setLocalApi(process.env.LBRY_API_URL);
@@ -41,6 +51,7 @@ if (process.env.SEARCH_API_URL) {
   setSearchApi(process.env.SEARCH_API_URL);
 }
 
+// @if TARGET='app'
 ipcRenderer.on('navigate-backward', () => {
   app.store.dispatch(doHistoryBack());
 });
@@ -48,6 +59,12 @@ ipcRenderer.on('navigate-backward', () => {
 ipcRenderer.on('navigate-forward', () => {
   app.store.dispatch(doHistoryForward());
 });
+// @endif
+
+// @if TARGET='web'
+Lbry.setDaemonConnectionString('/api/proxy');
+console.log('set string');
+// @endif
 
 // We need to override Lbryio for getting/setting the authToken
 // We interect with ipcRenderer to get the auth key from a users keyring
@@ -74,7 +91,9 @@ Lbryio.setOverride(
 
         const newAuthToken = response.auth_token;
         authToken = newAuthToken;
+        // @if TARGET='app'
         ipcRenderer.send('set-auth-token', authToken);
+        // @endif
         resolve();
       });
     })
@@ -87,12 +106,14 @@ Lbryio.setOverride(
       if (authToken) {
         resolve(authToken);
       } else {
+        // @if TARGET='app'
         ipcRenderer.once('auth-token-response', (event, token) => {
           Lbryio.authToken = token;
           resolve(token);
         });
 
         ipcRenderer.send('get-auth-token');
+        // @endif
       }
     })
 );
@@ -109,6 +130,7 @@ rewards.setCallback('claimRewardSuccess', () => {
   app.store.dispatch(doHideModal(MODALS.REWARD_APPROVAL_REQUIRED));
 });
 
+// @if TARGET='app'
 ipcRenderer.on('open-uri-requested', (event, uri, newSession) => {
   if (uri && uri.startsWith('lbry://')) {
     if (uri.startsWith('lbry://?verify')) {
@@ -146,6 +168,7 @@ ipcRenderer.on('devtools-is-opened', () => {
   const logOnDevelopment = false;
   doLogWarningConsoleMessage(logOnDevelopment);
 });
+// @endif
 
 document.addEventListener('dragover', event => {
   event.preventDefault();
@@ -178,15 +201,18 @@ document.addEventListener('click', event => {
       }
     }
     if (target.matches('a[href^="http"]') || target.matches('a[href^="mailto"]')) {
+      // @if TARGET='app'
       event.preventDefault();
       shell.openExternal(target.href);
       return;
+      // @endif
     }
     target = target.parentNode;
   }
 });
 
 const init = () => {
+  // @if TARGET='app'
   moment.locale(remote.app.getLocale());
 
   autoUpdater.on('error', error => {
@@ -210,6 +236,7 @@ const init = () => {
   app.store.dispatch(doUpdateIsNightAsync());
   app.store.dispatch(doDownloadLanguages());
   app.store.dispatch(doBlackListedOutpointsSubscribe());
+  // @endif
 
   function onDaemonReady() {
     window.sessionStorage.setItem('loaded', 'y'); // once we've made it here once per session, we don't need to show splash again
@@ -224,6 +251,9 @@ const init = () => {
       </Provider>,
       document.getElementById('app')
     );
+    // @if TARGET='web'
+    // window.sessionStorage.removeItem('loaded');
+    // @endif
   }
 
   if (window.sessionStorage.getItem('loaded') === 'y') {

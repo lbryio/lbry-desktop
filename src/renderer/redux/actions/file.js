@@ -6,11 +6,9 @@ import {
   doAbandonClaim,
   selectMyClaimsOutpoints,
   selectFileInfosByOutpoint,
-  selectTotalDownloadProgress,
 } from 'lbry-redux';
 import { doHideModal } from 'redux/actions/app';
 import { doHistoryBack } from 'redux/actions/navigation';
-import setProgressBar from 'util/set-progress-bar';
 
 export function doOpenFileInFolder(path) {
   return () => {
@@ -56,9 +54,6 @@ export function doDeleteFile(outpoint, deleteFromComputer, abandonClaim) {
         outpoint,
       },
     });
-
-    const totalProgress = selectTotalDownloadProgress(getState());
-    setProgressBar(totalProgress);
   };
 }
 

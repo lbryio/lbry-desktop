@@ -2,9 +2,20 @@
 
 import * as ACTIONS from 'constants/action_types';
 import * as MODALS from 'constants/modal_types';
+/* eslint-disable no-redeclare */
+// @if TARGET='app'
+// $FlowFixMe
 import { remote } from 'electron';
+// @endif
+// @if TARGET='web'
+// $FlowFixMe
+import { remote } from 'web/stubs';
+// @endif
+/* eslint-enable no-redeclare */
 
+// @if TARGET='app'
 const win = remote.BrowserWindow.getFocusedWindow();
+// @endif
 
 const reducers = {};
 
@@ -164,7 +175,9 @@ reducers[ACTIONS.DOWNLOADING_COMPLETED] = state => {
   const { badgeNumber } = state;
 
   // Don't update the badge number if the window is focused
+  // @if TARGET='app'
   if (win && win.isFocused()) return Object.assign({}, state);
+  // @endif
 
   return Object.assign({}, state, {
     badgeNumber: badgeNumber + 1,
