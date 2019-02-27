@@ -5764,11 +5764,10 @@ lazy-val@^1.0.3:
     tar-stream "^1.6.2"
     zstd-codec "^0.1.1"
 
-lbry-redux@lbryio/lbry-redux#00755bef2eaef739a44dc0ad66bd5dece50497ac:
+lbry-redux@lbryio/lbry-redux#406e1970b9d5594faf0407100c9bbed45d904cdf:
   version "0.0.1"
-  resolved "https://codeload.github.com/lbryio/lbry-redux/tar.gz/00755bef2eaef739a44dc0ad66bd5dece50497ac"
+  resolved "https://codeload.github.com/lbryio/lbry-redux/tar.gz/406e1970b9d5594faf0407100c9bbed45d904cdf"
   dependencies:
-    preprocess-loader "^0.3.0"
     proxy-polyfill "0.1.6"
     reselect "^3.0.0"
     uuid "^3.3.2"
