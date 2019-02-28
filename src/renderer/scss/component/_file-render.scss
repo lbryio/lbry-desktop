@@ -35,9 +35,9 @@
 
   // Removing the play button because we have autoplay turned on
   // These are classes added by video.js
-  // .video-js .vjs-big-play-button {
-  //   display: none;
-  // }
+  .video-js .vjs-big-play-button {
+    display: none;
+  }
 }
 
 .document-viewer {
