@@ -7,8 +7,6 @@ import path from 'path';
 import player from 'render-media';
 import FileRender from 'component/fileRender';
 import LoadingScreen from 'component/common/loading-screen';
-// Loading this here so we have uniform video style even if we use two different players
-import 'video.js/dist/video-js.css';
 
 type Props = {
   contentType: string,

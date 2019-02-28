@@ -2,6 +2,7 @@
 import React from 'react';
 import { stopContextMenu } from 'util/context-menu';
 import videojs from 'video.js';
+import 'video.js/dist/video-js.css';
 
 type Props = {
   source: {
