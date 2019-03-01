@@ -92,14 +92,17 @@
   }
 }
 
-.button--link:not(:disabled) {
-  html[data-mode='dark'] & {
-    &:not(:hover) {
-      color: $lbry-teal-4;
-    }
+.button--link {
+  word-break: break-all;
+  &:not(:disabled) {
+    html[data-mode='dark'] & {
+      &:not(:hover) {
+        color: $lbry-teal-4;
+      }
 
-    &:hover {
-      color: $lbry-teal-3;
+      &:hover {
+        color: $lbry-teal-3;
+      }
     }
   }
 }
