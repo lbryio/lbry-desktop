@@ -42,17 +42,22 @@ class ShowPage extends React.PureComponent<Props> {
 
     let innerContent = '';
 
-    if ((isResolvingUri && !claim) || !claim) {
+    if (isResolvingUri || !claim || !claim.name) {
+      if (claim && !claim.name) {
+        // While testing the normalization changes, Brannon found that `name` was missing sometimes
+        // This shouldn't happen, so hopefully this helps track it down
+        console.error('No name for associated claim: ', claim.claim_id);
+      }
+
       innerContent = (
         <Page notContained>
           {isResolvingUri && <BusyIndicator message={__('Loading decentralized data...')} />}
-          {claim === null &&
-            !isResolvingUri && (
-              <span className="empty">{__("There's nothing at this location.")}</span>
-            )}
+          {!isResolvingUri && (
+            <span className="empty">{__("There's nothing available at this location.")}</span>
+          )}
         </Page>
       );
-    } else if (claim && claim.name.length && claim.name[0] === '@') {
+    } else if (claim.name.length && claim.name[0] === '@') {
       innerContent = <ChannelPage uri={uri} />;
     } else if (claim && blackListedOutpoints) {
       let isClaimBlackListed = false;
