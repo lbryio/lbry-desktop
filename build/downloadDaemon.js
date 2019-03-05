@@ -89,8 +89,4 @@ const downloadDaemon = targetPlatform =>
     }
   });
 
-module.exports = downloadDaemon;
-
-require('make-runnable/custom')({
-  printOutputFrame: false,
-});
+downloadDaemon();
