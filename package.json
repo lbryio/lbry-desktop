@@ -129,7 +129,6 @@
     "eslint-plugin-jsx-a11y": "^6.0.3",
     "eslint-plugin-prettier": "^2.6.0",
     "eslint-plugin-react": "^7.7.0",
-    "filewatcher-webpack-plugin": "^1.2.0",
     "flow-bin": "^0.89.0",
     "flow-typed": "^2.3.0",
     "husky": "^0.14.3",

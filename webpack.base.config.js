@@ -70,17 +70,3 @@ const baseConfig = {
 };
 
 module.exports = baseConfig;
-
-// const FilewatcherPlugin = require('filewatcher-webpack-plugin');
-// let PROCESS_ARGV = process.env.npm_config_argv;
-// if (PROCESS_ARGV) {
-//   PROCESS_ARGV = JSON.parse(PROCESS_ARGV);
-// }
-// const isDev = PROCESS_ARGV && PROCESS_ARGV.original && PROCESS_ARGV.original.indexOf('dev') !== -1;
-// if (isDev) {
-//   plugins.push(
-//     new FilewatcherPlugin({
-//       watchFileRegex: [require.resolve('lbry-redux'), require.resolve('lbryinc')],
-//     })
-//   );
-// }
