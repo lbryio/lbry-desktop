@@ -67,8 +67,7 @@
     "executableName": "LBRY",
     "category": "AudioVideo;Video",
     "desktop": {
-      "MimeType": "x-scheme-handler/lbry",
-      "Exec": "/opt/LBRY/lbry %U"
+      "MimeType": "x-scheme-handler/lbry"
     }
   },
   "deb": {
