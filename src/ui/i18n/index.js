@@ -11,6 +11,8 @@ const i18n = y18n({
 const i18n = {
   setLocale: () => {},
   getLocale: () => {},
+  __: x => x,
+  __n: x => x,
 };
 // @endif
 

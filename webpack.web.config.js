@@ -12,7 +12,7 @@ const webConfig = {
     ui: './src/ui/index.js',
   },
   output: {
-    filename: 'bundle.js',
+    filename: '[name].js',
     path: __dirname + '/dist/web',
   },
   module: {

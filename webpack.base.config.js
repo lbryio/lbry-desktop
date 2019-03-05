@@ -67,7 +67,6 @@ const baseConfig = {
       __static: `"${path.join(__dirname, 'static').replace(/\\/g, '\\\\')}"`,
     }),
   ],
-  externals: [nodeExternals()],
 };
 
 module.exports = baseConfig;

@@ -6,7 +6,6 @@ const CopyWebpackPlugin = require('copy-webpack-plugin');
 const STATIC_ROOT = path.resolve(__dirname, 'static/');
 const DIST_ROOT = path.resolve(__dirname, 'dist/');
 
-
 const mainConfig = {
   target: 'electron-main',
   entry: {
@@ -41,7 +40,7 @@ const mainConfig = {
   resolve: {
     alias: {
       // 'src/electron': path.resolve(__dirname, 'src/platforms/electron');
-    }
+    },
   },
   plugins: [
     new CopyWebpackPlugin([
@@ -57,7 +56,7 @@ const mainConfig = {
     ]),
   ],
   devServer: {
-    contentBase: path.join(__dirname, 'dist/electron')
+    contentBase: path.join(__dirname, 'dist/electron'),
   },
 };
 
@@ -95,24 +94,25 @@ const renderConfig = {
   resolve: {
     alias: {
       // 'src/electron': path.resolve(__dirname, 'src/platforms/electron');
-    }
+    },
   },
   plugins: [
     new CopyWebpackPlugin([
       {
         from: `${STATIC_ROOT}/`,
         to: `${DIST_ROOT}/electron/static/`,
-        ignore: ['font/**/*', 'index.html'],
+        ignore: ['font/**/*', 'index.html', 'index.dev.html'],
       },
       {
         from: `${STATIC_ROOT}/index.html`,
         to: `${DIST_ROOT}/electron/index.html`,
       },
+      {
+        from: `${STATIC_ROOT}/index.dev.html`,
+        to: `${DIST_ROOT}/electron/index.dev.html`,
+      },
     ]),
   ],
 };
 
-module.exports = [
-  merge(baseConfig, mainConfig),
-  merge(baseConfig, renderConfig),
-];
+module.exports = [merge(baseConfig, mainConfig), merge(baseConfig, renderConfig)];
