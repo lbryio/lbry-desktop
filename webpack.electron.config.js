@@ -13,7 +13,7 @@ const mainConfig = {
     main: './src/platforms/electron/index.js',
   },
   output: {
-    filename: '[name]/bundle.js',
+    filename: '[name].js',
     path: __dirname + '/dist/electron',
   },
   module: {
@@ -67,7 +67,7 @@ const renderConfig = {
     ui: './src/ui/index.js',
   },
   output: {
-    filename: '[name]/bundle.js',
+    filename: '[name].js',
     path: __dirname + '/dist/electron',
   },
   module: {

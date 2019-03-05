@@ -4,6 +4,23 @@
   "directories": {
     "output": "dist/electron"
   },
+  "files": [
+    {
+      "from": "dist/electron",
+      "to": "./",
+      "filter": ["!dist/!electron/**/*"]
+    },
+    {
+      "from": "dist/electron/static",
+      "to": "./",
+      "filter": ["!dist/!electron/static/**/*"]
+    },
+    {
+      "from": "dist/electron/ui",
+      "to": "./",
+      "filter": ["!dist/!electron/ui/**/*"]
+    }
+  ],
   "publish": [
     {
       "provider": "s3",

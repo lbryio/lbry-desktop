@@ -18,7 +18,7 @@
     "name": "LBRY Inc.",
     "email": "hello@lbry.io"
   },
-  "main": "./dist/electron/main/main.js",
+  "main": "./dist/electron/main.js",
   "scripts": {
     "compile:electron": "webpack --progress --config webpack.electron.config.js",
     "compile:web": "webpack --progress --config webpack.web.config.js",
@@ -34,7 +34,9 @@
     "precommit": "lint-staged",
     "preinstall": "yarn cache clean lbry-redux && yarn cache clean lbryinc",
     "postinstall": "electron-builder install-app-deps && node build/downloadDaemon.js",
-    "run:electron": "electron ./dist/electron/main/bundle.js"
+    "run:electron": "electron ./dist/electron/main.js",
+    "pack": "electron-builder --dir",
+    "dist": "electron-builder"
   },
   "dependencies": {
     "@babel/polyfill": "^7.2.5",
