@@ -1,6 +1,9 @@
 {
   "appId": "io.lbry.LBRY",
   "productName": "LBRY",
+  "directories": {
+    "output": "dist/electron"
+  },
   "publish": [
     {
       "provider": "s3",
@@ -44,6 +47,7 @@
   ],
   "linux": {
     "target": "deb",
+    "executableName": "LBRY",
     "category": "AudioVideo;Video",
     "desktop": {
       "MimeType": "x-scheme-handler/lbry",
