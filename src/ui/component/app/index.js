@@ -1,3 +1,4 @@
+import { hot } from 'react-hot-loader/root';
 import { connect } from 'react-redux';
 import {
   selectPageTitle,
@@ -29,7 +30,9 @@ const perform = dispatch => ({
   toggleEnhancedLayout: () => dispatch(doToggleEnhancedLayout()),
 });
 
-export default connect(
-  select,
-  perform
-)(App);
+export default hot(
+  connect(
+    select,
+    perform
+  )(App)
+);
