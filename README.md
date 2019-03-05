@@ -13,7 +13,7 @@ The LBRY app is a graphical browser for the decentralized content marketplace pr
 [lbry daemon](https://github.com/lbryio/lbry) bundled with a UI using
 [Electron](https://electron.atom.io/).
 
-![App GIF](https://spee.ch/7/lbry-redesign-preview.gif)
+![App GIF](https://spee.ch/@lbry:3f/darwin-029.gif)
 
 ## Install
 
@@ -43,6 +43,7 @@ _Note: If coming from a deb install, the directory structure is different and yo
 Double click the installed application to interact with the LBRY network.
 
 ## Running from Source
+*OUR BUILD SETUP IS UNDER ACTIVE DEVELOPMENT AS WE MAKE CHANGES TO SUPPORT ACCESSING THIS APP FROM A WEB BROWSER. CHECK THE package.json FOR STARTUP SCRIPTS. WE WILL BE BACK TO NORMAL SOON. SORRY FOR SHOUTING*
 
 #### Prerequisites
 
@@ -56,7 +57,7 @@ Double click the installed application to interact with the LBRY network.
 1.  Clone (or [fork](https://help.github.com/articles/fork-a-repo/)) this repository: `git clone https://github.com/lbryio/lbry-desktop`
 2.  Change directories into the downloaded folder: `cd lbry-desktop`
 3.  Install the dependencies: `yarn`
-4.  Run the app: `yarn dev`
+4.  Run the app: `yarn dev:electron`
 
 If you want to just build the app you can run `yarn build`. This will give you an executable inside the `/dist` folder. We use [electron-builder](https://github.com/electron-userland/electron-builder) to create
 distributable packages.
