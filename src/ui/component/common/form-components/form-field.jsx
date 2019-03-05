@@ -3,7 +3,7 @@ import * as React from 'react';
 import ReactDOMServer from 'react-dom/server';
 import MarkdownPreview from 'component/common/markdown-preview';
 import SimpleMDE from 'react-simplemde-editor';
-import 'simplemde/dist/simplemde.min.css'; // eslint-disable-line import/no-extraneous-dependencies
+import 'easymde/dist/easymde.min.css'; // eslint-disable-line import/no-extraneous-dependencies
 import Toggle from 'react-toggle';
 import { openEditorMenu, stopContextMenu } from 'util/context-menu';
 
