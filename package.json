@@ -18,7 +18,7 @@
     "name": "LBRY Inc.",
     "email": "hello@lbry.io"
   },
-  "main": "./dist/main/main.js",
+  "main": "./dist/electron/main/main.js",
   "scripts": {
     "compile:electron": "webpack --progress --config webpack.electron.config.js",
     "compile:web": "webpack --progress --config webpack.web.config.js",
