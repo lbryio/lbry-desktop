@@ -5,6 +5,7 @@ const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 const STATIC_ROOT = path.resolve(__dirname, 'static/');
 const DIST_ROOT = path.resolve(__dirname, 'dist/');
+const WEB_PLATFORM_ROOT = path.resolve(__dirname, 'src/platforms/web/');
 
 const webConfig = {
   target: 'web',
@@ -42,13 +43,12 @@ const webConfig = {
   plugins: [
     new CopyWebpackPlugin([
       {
-        from: `${STATIC_ROOT}/`,
-        to: `${DIST_ROOT}/web/static/`,
-        ignore: ['font/**/*', 'index.html', 'daemon/*'],
-      },
-      {
         from: `${STATIC_ROOT}/index.html`,
         to: `${DIST_ROOT}/web/index.html`,
+      },
+      {
+        from: `${WEB_PLATFORM_ROOT}/server.js`,
+        to: `${DIST_ROOT}/web/server.js`,
       },
     ]),
   ],

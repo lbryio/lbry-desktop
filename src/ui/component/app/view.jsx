@@ -113,9 +113,7 @@ class App extends React.PureComponent<Props> {
         <Header />
         <main className="page">
           {enhancedLayout && <Yrbl className="yrbl--enhanced" />}
-          {/* @if TARGET='app' */}
           <SideBar />
-          {/* @endif */}
           <div className="content" id="content">
             <Router />
             <ModalRouter />

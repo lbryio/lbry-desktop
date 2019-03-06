@@ -1,7 +1,6 @@
 const path = require('path');
 const merge = require('webpack-merge');
 const { DefinePlugin, ProvidePlugin } = require('webpack');
-const nodeExternals = require('webpack-node-externals');
 
 const UI_ROOT = path.resolve(__dirname, 'src/ui/');
 const STATIC_ROOT = path.resolve(__dirname, 'static/');
@@ -33,7 +32,7 @@ const baseConfig = {
         use: {
           loader: 'file-loader',
           options: {
-            outputPath: 'ui/imgs',
+            outputPath: 'ui/img',
             name: '[name].[ext]',
           },
         },
