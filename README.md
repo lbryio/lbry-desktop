@@ -43,7 +43,9 @@ _Note: If coming from a deb install, the directory structure is different and yo
 Double click the installed application to interact with the LBRY network.
 
 ## Running from Source
-*OUR BUILD SETUP IS UNDER ACTIVE DEVELOPMENT AS WE MAKE CHANGES TO SUPPORT ACCESSING THIS APP FROM A WEB BROWSER. CHECK THE package.json FOR STARTUP SCRIPTS. WE WILL BE BACK TO NORMAL SOON. SORRY FOR SHOUTING*
+*OUR BUILD SETUP IS UNDER ACTIVE DEVELOPMENT AS WE MAKE CHANGES TO SUPPORT ACCESSING THIS APP FROM A WEB BROWSER. CHECK THE `package.json` FOR STARTUP SCRIPTS. WE WILL BE BACK TO NORMAL SOON. SORRY FOR SHOUTING*
+
+If you continue to have any issues, feel free to email me at sean@lbry.io, or tweet at me https://twitter.com/seanyesmunt. 
 
 #### Prerequisites
 
@@ -57,7 +59,8 @@ Double click the installed application to interact with the LBRY network.
 1.  Clone (or [fork](https://help.github.com/articles/fork-a-repo/)) this repository: `git clone https://github.com/lbryio/lbry-desktop`
 2.  Change directories into the downloaded folder: `cd lbry-desktop`
 3.  Install the dependencies: `yarn`
-4.  Run the app: `yarn dev:electron`
+4.  Compile the app and run it: `yarn compile:electron && yarn run:electron`
+5.  In a different terminal window, start the dev server to reload when you make changes: `yarn dev:electron`
 
 If you want to just build the app you can run `yarn build`. This will give you an executable inside the `/dist` folder. We use [electron-builder](https://github.com/electron-userland/electron-builder) to create
 distributable packages.
