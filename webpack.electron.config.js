@@ -37,11 +37,6 @@ const mainConfig = {
       },
     ],
   },
-  resolve: {
-    alias: {
-      // 'src/electron': path.resolve(__dirname, 'src/platforms/electron');
-    },
-  },
   plugins: [
     new CopyWebpackPlugin([
       {
@@ -90,11 +85,6 @@ const renderConfig = {
         ],
       },
     ],
-  },
-  resolve: {
-    alias: {
-      // 'src/electron': path.resolve(__dirname, 'src/platforms/electron');
-    },
   },
   plugins: [
     new CopyWebpackPlugin([

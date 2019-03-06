@@ -10,7 +10,7 @@ const i18n = y18n({
 // @if TARGET='web'
 const i18n = {
   setLocale: () => {},
-  getLocale: () => {},
+  getLocale: () => null,
   __: x => x,
   __n: x => x,
 };

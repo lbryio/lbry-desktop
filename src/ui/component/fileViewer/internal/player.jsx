@@ -4,8 +4,8 @@ import * as React from 'react';
 // @if TARGET='app'
 import { remote } from 'electron';
 import fs from 'fs';
-import path from 'path';
 // @endif
+import path from 'path';
 import player from 'render-media';
 import FileRender from 'component/fileRender';
 import LoadingScreen from 'component/common/loading-screen';

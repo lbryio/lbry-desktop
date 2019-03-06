@@ -80,7 +80,6 @@ const Header = (props: Props) => {
 
       <WunderBar />
 
-      {/* @if TARGET='app' */}
       <div className="header__navigation">
         <Button
           className="header__navigation-item header__navigation-item--menu"
@@ -98,6 +97,8 @@ const Header = (props: Props) => {
           onClick={() => navigate('/publish')}
         />
 
+        {/* @if TARGET='app' */}
+
         {showUpgradeButton && (
           <Button
             className="header__navigation-item header__navigation-item--right-action"
@@ -107,8 +108,8 @@ const Header = (props: Props) => {
             onClick={downloadUpgradeRequested}
           />
         )}
+        {/* @endif */}
       </div>
-      {/* @endif */}
     </header>
   );
 };

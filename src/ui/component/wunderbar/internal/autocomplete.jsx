@@ -15,9 +15,9 @@ https://github.com/reactjs/react-autocomplete/issues/239
 */
 /* eslint-disable */
 
-const React = require('react');
-const { findDOMNode } = require('react-dom');
-const scrollIntoView = require('dom-scroll-into-view');
+import React from 'react';
+import { findDOMNode } from 'react-dom';
+import scrollIntoView from 'dom-scroll-into-view';
 
 const IMPERATIVE_API = [
   'blur',
