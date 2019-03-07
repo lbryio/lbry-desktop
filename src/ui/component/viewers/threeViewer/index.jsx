@@ -5,14 +5,24 @@ import classNames from 'classnames';
 import LoadingScreen from 'component/common/loading-screen';
 
 // ThreeJS
-import * as THREE from 'three-full';
+import { LoadingManager } from 'three-full/sources/loaders/LoadingManager';
+import { STLLoader } from 'three-full/sources/loaders/STLLoader';
+import { OBJLoader2 } from 'three-full/sources/loaders/OBJLoader2';
+import { OrbitControls } from 'three-full/sources/controls/OrbitControls';
+import { Geometry } from 'three-full/sources/core/Geometry';
+import { Box3 } from 'three-full/sources/math/Box3';
+import { Vector3 } from 'three-full/sources/math/Vector3';
+import { Mesh } from 'three-full/sources/objects/Mesh';
+import { Group } from 'three-full/sources/objects/Group';
+import { PerspectiveCamera } from 'three-full/sources/cameras/PerspectiveCamera';
+import { MeshPhongMaterial } from 'three-full/sources/materials/MeshPhongMaterial';
 import detectWebGL from './internal/detector';
 import ThreeGrid from './internal/grid';
 import ThreeScene from './internal/scene';
 import ThreeRenderer from './internal/renderer';
 
 const Manager = ({ onLoad, onStart, onError }) => {
-  const manager = new THREE.LoadingManager();
+  const manager = new LoadingManager();
   manager.onLoad = onLoad;
   manager.onStart = onStart;
   manager.onError = onError;
@@ -22,8 +32,8 @@ const Manager = ({ onLoad, onStart, onError }) => {
 
 const Loader = (fileType, manager) => {
   const fileTypes = {
-    stl: () => new THREE.STLLoader(manager),
-    obj: () => new THREE.OBJLoader2(manager),
+    stl: () => new STLLoader(manager),
+    obj: () => new OBJLoader2(manager),
   };
   return fileTypes[fileType] ? fileTypes[fileType]() : null;
 };
@@ -70,7 +80,7 @@ class ThreeViewer extends React.PureComponent<Props, State> {
     });
 
   static createOrbitControls(camera: any, canvas: any) {
-    const controls = new THREE.OrbitControls(camera, canvas);
+    const controls = new OrbitControls(camera, canvas);
     // Controls configuration
     controls.enableDamping = true;
     controls.dampingFactor = 0.75;
@@ -88,8 +98,8 @@ class ThreeViewer extends React.PureComponent<Props, State> {
     const min = { x: 0, y: 0, z: 0 };
 
     group.traverse(child => {
-      if (child instanceof THREE.Mesh) {
-        const box = new THREE.Box3().setFromObject(child);
+      if (child instanceof Mesh) {
+        const box = new Box3().setFromObject(child);
         // Max
         max.x = box.max.x > max.x ? box.max.x : max.x;
         max.y = box.max.y > max.y ? box.max.y : max.y;
@@ -108,7 +118,7 @@ class ThreeViewer extends React.PureComponent<Props, State> {
     group.scale.set(scaleFactor, scaleFactor, scaleFactor);
     group.position.setY((meshY / 2) * scaleFactor);
     // Reset object position
-    const box = new THREE.Box3().setFromObject(group);
+    const box = new Box3().setFromObject(group);
     // Update position
     box.getCenter(group.position);
     group.position.multiplyScalar(-1);
@@ -195,7 +205,7 @@ class ThreeViewer extends React.PureComponent<Props, State> {
       }
       // Clean up group items
       this.mesh.traverse(child => {
-        if (child instanceof THREE.Mesh) {
+        if (child instanceof Mesh) {
           if (child.geometry) child.geometry.dispose();
           if (child.material) child.material.dispose();
         }
@@ -257,7 +267,7 @@ class ThreeViewer extends React.PureComponent<Props, State> {
     ThreeViewer.fitMeshToCamera(group);
 
     if (!this.targetCenter) {
-      const box = new THREE.Box3();
+      const box = new Box3();
       this.targetCenter = box.setFromObject(this.mesh).getCenter();
     }
     this.updateControlsTarget(this.targetCenter);
@@ -334,9 +344,9 @@ class ThreeViewer extends React.PureComponent<Props, State> {
     this.bufferGeometry.computeBoundingBox();
     this.bufferGeometry.center();
     this.bufferGeometry.rotateX(-Math.PI / 2);
-    this.bufferGeometry.lookAt(new THREE.Vector3(0, 0, 1));
+    this.bufferGeometry.lookAt(new Vector3(0, 0, 1));
     // Get geometry from bufferGeometry
-    this.geometry = new THREE.Geometry().fromBufferGeometry(this.bufferGeometry);
+    this.geometry = new Geometry().fromBufferGeometry(this.bufferGeometry);
     this.geometry.mergeVertices();
     this.geometry.computeVertexNormals();
   }
@@ -391,7 +401,7 @@ class ThreeViewer extends React.PureComponent<Props, State> {
 
   renderStl(data: any) {
     this.createGeometry(data);
-    this.mesh = new THREE.Mesh(this.geometry, this.material);
+    this.mesh = new Mesh(this.geometry, this.material);
     this.mesh.name = 'model';
     this.scene.add(this.mesh);
     this.transformGroup(this.mesh);
@@ -399,19 +409,19 @@ class ThreeViewer extends React.PureComponent<Props, State> {
 
   renderObj(event: any) {
     const mesh = event.detail.loaderRootNode;
-    this.mesh = new THREE.Group();
+    this.mesh = new Group();
     this.mesh.name = 'model';
 
     // Assign new material
     mesh.traverse(child => {
-      if (child instanceof THREE.Mesh) {
+      if (child instanceof Mesh) {
         // Get geometry from child
-        const geometry = new THREE.Geometry();
+        const geometry = new Geometry();
         geometry.fromBufferGeometry(child.geometry);
         geometry.mergeVertices();
         geometry.computeVertexNormals();
         // Create and regroup inner objects
-        const innerObj = new THREE.Mesh(geometry, this.material);
+        const innerObj = new Mesh(geometry, this.material);
         this.mesh.add(innerObj);
         // Clean up geometry
         geometry.dispose();
@@ -454,7 +464,7 @@ class ThreeViewer extends React.PureComponent<Props, State> {
     this.grid = ThreeGrid({ size: 100, gridColor, centerLineColor });
     this.scene.add(this.grid);
     // Camera
-    this.camera = new THREE.PerspectiveCamera(80, width / height, 0.1, 1000);
+    this.camera = new PerspectiveCamera(80, width / height, 0.1, 1000);
     this.camera.position.set(-9.5, 14, 11);
 
     // Controls
@@ -464,10 +474,10 @@ class ThreeViewer extends React.PureComponent<Props, State> {
     this.renderer.setSize(width, height);
 
     // Create model material
-    this.material = new THREE.MeshPhongMaterial({
+    this.material = new MeshPhongMaterial({
       depthWrite: true,
       flatShading: true,
-      vertexColors: THREE.FaceColors,
+      vertexColors: 1,
     });
 
     // Set material color

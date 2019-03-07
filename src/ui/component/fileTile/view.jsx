@@ -11,7 +11,7 @@ import classnames from 'classnames';
 import FilePrice from 'component/filePrice';
 import UriIndicator from 'component/uriIndicator';
 import DateTime from 'component/dateTime';
-import Yrbl from 'component/common/yrbl';
+import Yrbl from 'component/yrbl';
 
 type Props = {
   obscureNsfw: boolean,

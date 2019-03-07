@@ -16,7 +16,6 @@ const baseConfig = {
     rules: [
       {
         test: /\.jsx?$/,
-        exclude: /node_modules/,
         loader: 'babel-loader',
       },
       {
@@ -46,6 +45,12 @@ const baseConfig = {
           options: {
             outputPath: 'ui/font',
           },
+        },
+      },
+      {
+        test: /\.glsl/,
+        use: {
+          loader: 'file-loader',
         },
       },
     ],
