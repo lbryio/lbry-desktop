@@ -34,7 +34,7 @@ const analytics: Analytics = {
     }
     if (user.primary_email) {
       mixpanel.people.set({
-        $email: user.primary_email,
+        $email: 1,
       });
     }
   },
