@@ -58,7 +58,7 @@ const mainConfig = {
 const renderConfig = {
   target: 'electron-renderer',
   entry: {
-    ui: './src/ui/index.js',
+    ui: './src/ui/index.jsx',
   },
   output: {
     filename: '[name].js',

@@ -10,7 +10,7 @@ const WEB_PLATFORM_ROOT = path.resolve(__dirname, 'src/platforms/web/');
 const webConfig = {
   target: 'web',
   entry: {
-    ui: './src/ui/index.js',
+    ui: './src/ui/index.jsx',
   },
   output: {
     filename: '[name].js',

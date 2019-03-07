@@ -17,6 +17,27 @@
   }
 }
 
+.load-screen__button {
+  color: $lbry-white;
+  // border-bottom: 1px solid $lbry-white;
+
+  &:hover {
+    // border-bottom: 1px solid $lbry-blue-1;
+    color: $lbry-blue-1;
+  }
+}
+.load-screen__button:not(:disabled) {
+  &:not(:hover) {
+    color: $lbry-white;
+    // border-bottom: 1px solid $lbry-white;
+  }
+
+  &:hover {
+    // border-bottom: 1px solid $lbry-blue-1;
+    color: $lbry-blue-1;
+  }
+}
+
 .load-screen__details {
   font-weight: 600;
   line-height: 1;

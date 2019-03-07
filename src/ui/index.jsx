@@ -1,4 +1,5 @@
 /* eslint-disable no-console */
+import ErrorBoundary from 'component/errorBoundary';
 import App from 'component/app';
 import SnackBar from 'component/snackBar';
 import SplashScreen from 'component/splash';
@@ -244,10 +245,10 @@ const init = () => {
 
     ReactDOM.render(
       <Provider store={store}>
-        <React.Fragment>
+        <ErrorBoundary>
           <App />
           <SnackBar />
-        </React.Fragment>
+        </ErrorBoundary>
       </Provider>,
       document.getElementById('app')
     );
@@ -256,14 +257,16 @@ const init = () => {
     // @endif
   }
 
-  if (window.sessionStorage.getItem('loaded') === 'y') {
+  if (false && window.sessionStorage.getItem('loaded') === 'y') {
     onDaemonReady();
   } else {
     ReactDOM.render(
       <Provider store={store}>
         <SplashScreen
           authenticate={() => app.store.dispatch(doAuthenticate(pjson.version))}
-          onReadyToLaunch={onDaemonReady}
+          onReadyToLaunch={() => {
+            // onDaemonReady
+          }}
         />
       </Provider>,
       document.getElementById('app')

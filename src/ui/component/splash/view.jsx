@@ -40,7 +40,7 @@ export default class SplashScreen extends React.PureComponent<Props, State> {
       details: __('Starting up'),
       message: __('Connecting'),
       launchedModal: false,
-      error: false,
+      error: true,
       launchWithIncompatibleDaemon: false,
       isRunning: false,
     };
@@ -97,7 +97,7 @@ export default class SplashScreen extends React.PureComponent<Props, State> {
     });
   }
 
-  updateStatusCallback(status: Status, accountList: any) {
+  updateStatusCallback(status: Status) {
     const { notifyUnlockWallet, authenticate, modal } = this.props;
     const { launchedModal } = this.state;
 
@@ -127,7 +127,7 @@ export default class SplashScreen extends React.PureComponent<Props, State> {
     } else if (status.is_running) {
       // If we cleared the error timout due to a wallet being locked, make sure to start it back up
       if (!this.timeout) {
-        this.adjustErrorTimseout();
+        this.adjustErrorTimeout();
       }
 
       Lbry.resolve({ urls: 'lbry://one' }).then(() => {
@@ -213,7 +213,7 @@ export default class SplashScreen extends React.PureComponent<Props, State> {
 
     return (
       <React.Fragment>
-        <LoadScreen message={message} details={details} error={error} />
+        <LoadScreen message={message} details={details} error={error} />;
         {/* Temp hack: don't show any modals on splash screen daemon is running;
             daemon doesn't let you quit during startup, so the "Quit" buttons
             in the modals won't work. */}

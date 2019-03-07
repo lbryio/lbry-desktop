@@ -34,8 +34,10 @@ class LoadScreen extends React.PureComponent<Props> {
               <h3>{__('Uh oh. Sean must have messed something up. Try refreshing to fix it.')}</h3>
               <div className="load-screen__actions">
                 <Button
+                  disabled
                   label="Refresh"
-                  className="button--load-screen"
+                  button="link"
+                  className="load-screen__button"
                   onClick={() => window.location.reload()}
                 />
               </div>
@@ -48,7 +50,8 @@ class LoadScreen extends React.PureComponent<Props> {
                 <p>
                   {__('Reach out to hello@lbry.io for help, or check out')}{' '}
                   <Button
-                    className="button--load-screen"
+                    button="link"
+                    className="load-screen__button"
                     href="https://lbry.io/faq/startup-troubleshooting"
                     label="this link"
                   />
