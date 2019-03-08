@@ -61,7 +61,8 @@ ipcRenderer.on('navigate-forward', () => {
 // @endif
 
 // @if TARGET='web'
-Lbry.setDaemonConnectionString('https://api.lbry.tv/api/proxy');
+const SDK_API_URL = process.env.SDK_API_URL || 'https://api.lbry.tv/api/proxy';
+Lbry.setDaemonConnectionString(SDK_API_URL);
 // @endif
 
 // We need to override Lbryio for getting/setting the authToken

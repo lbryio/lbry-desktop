@@ -64,6 +64,8 @@ const baseConfig = {
     }),
     new DefinePlugin({
       __static: `"${path.join(__dirname, 'static').replace(/\\/g, '\\\\')}"`,
+      'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV),
+      'process.env.SDK_API_URL': JSON.stringify(process.env.SDK_API_URL),
     }),
   ],
 };
