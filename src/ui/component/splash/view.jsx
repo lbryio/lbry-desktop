@@ -40,7 +40,7 @@ export default class SplashScreen extends React.PureComponent<Props, State> {
       details: __('Starting up'),
       message: __('Connecting'),
       launchedModal: false,
-      error: true,
+      error: false,
       launchWithIncompatibleDaemon: false,
       isRunning: false,
     };
@@ -213,7 +213,7 @@ export default class SplashScreen extends React.PureComponent<Props, State> {
 
     return (
       <React.Fragment>
-        <LoadScreen message={message} details={details} error={error} />;
+        <LoadScreen message={message} details={details} error={error} />
         {/* Temp hack: don't show any modals on splash screen daemon is running;
             daemon doesn't let you quit during startup, so the "Quit" buttons
             in the modals won't work. */}

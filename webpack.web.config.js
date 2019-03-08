@@ -47,6 +47,10 @@ const webConfig = {
         to: `${DIST_ROOT}/web/index.html`,
       },
       {
+        from: `${STATIC_ROOT}/img/favicon.ico`,
+        to: `${DIST_ROOT}/web/favicon.ico`,
+      },
+      {
         from: `${WEB_PLATFORM_ROOT}/server.js`,
         to: `${DIST_ROOT}/web/server.js`,
       },

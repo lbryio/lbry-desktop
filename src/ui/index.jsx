@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import ErrorBoundary from 'component/errorBoundary';
 import App from 'component/app';
 import SnackBar from 'component/snackBar';
@@ -215,8 +214,8 @@ const init = () => {
   // @if TARGET='app'
   moment.locale(remote.app.getLocale());
 
+  /* eslint-disable no-console */
   autoUpdater.on('error', error => {
-    // eslint-disable-next-line no-console
     console.error(error.message);
   });
 
@@ -232,6 +231,7 @@ const init = () => {
       app.store.dispatch(doAutoUpdate());
     });
   }
+  /* eslint-enable no-console */
 
   app.store.dispatch(doUpdateIsNightAsync());
   // @endif
@@ -257,16 +257,14 @@ const init = () => {
     // @endif
   }
 
-  if (false && window.sessionStorage.getItem('loaded') === 'y') {
+  if (window.sessionStorage.getItem('loaded') === 'y') {
     onDaemonReady();
   } else {
     ReactDOM.render(
       <Provider store={store}>
         <SplashScreen
           authenticate={() => app.store.dispatch(doAuthenticate(pjson.version))}
-          onReadyToLaunch={() => {
-            // onDaemonReady
-          }}
+          onReadyToLaunch={onDaemonReady}
         />
       </Provider>,
       document.getElementById('app')
@@ -275,6 +273,3 @@ const init = () => {
 };
 
 init();
-
-/* eslint-enable react/jsx-filename-extension */
-/* eslint-enable no-console */

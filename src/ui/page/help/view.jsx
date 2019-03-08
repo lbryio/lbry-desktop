@@ -234,7 +234,7 @@ class HelpPage extends React.PureComponent<Props, State> {
                 </tr>
                 <tr>
                   <td>{__('Daemon (lbrynet)')}</td>
-                  <td>{ver ? ver.lbrynet_version : __('Loading')}</td>
+                  <td>{ver ? ver.lbrynet_version : __('Loading...')}</td>
                 </tr>
                 <tr>
                   <td>{__('Connected Email')}</td>

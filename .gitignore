@@ -2,6 +2,7 @@
 /node_modules
 /dist
 /static/lbrynet
+/static/daemon
 /static/locales
 yarn-error.log
 package-lock.json

@@ -16,6 +16,7 @@ const baseConfig = {
     rules: [
       {
         test: /\.jsx?$/,
+        exclude: /node_modules/,
         loader: 'babel-loader',
       },
       {
@@ -51,6 +52,9 @@ const baseConfig = {
         test: /\.glsl/,
         use: {
           loader: 'file-loader',
+          options: {
+            outputPath: 'ui/three',
+          },
         },
       },
     ],
