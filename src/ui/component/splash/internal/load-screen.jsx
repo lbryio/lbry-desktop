@@ -34,7 +34,6 @@ class LoadScreen extends React.PureComponent<Props> {
               <h3>{__('Uh oh. Sean must have messed something up. Try refreshing to fix it.')}</h3>
               <div className="load-screen__actions">
                 <Button
-                  disabled
                   label="Refresh"
                   button="link"
                   className="load-screen__button"

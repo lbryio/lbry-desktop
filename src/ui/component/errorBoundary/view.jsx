@@ -38,7 +38,6 @@ export default class ErrorBoundary extends React.Component<Props, State> {
   }
 
   render() {
-    console.log('app.env', app.env);
     if (this.state.hasError) {
       return (
         <div className="load-screen">

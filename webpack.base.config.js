@@ -1,14 +1,17 @@
 const path = require('path');
 const merge = require('webpack-merge');
 const { DefinePlugin, ProvidePlugin } = require('webpack');
+const { getIfUtils, removeEmpty } = require('webpack-config-utils');
+
+const { ifProduction } = getIfUtils(process.env.NODE_ENV);
 
 const UI_ROOT = path.resolve(__dirname, 'src/ui/');
 const STATIC_ROOT = path.resolve(__dirname, 'static/');
 const DIST_ROOT = path.resolve(__dirname, 'dist/');
 
 const baseConfig = {
-  mode: 'development',
-  devtool: 'eval-source-map',
+  mode: ifProduction('production', 'development'),
+  devtool: ifProduction('source-map', 'eval-source-map'),
   node: {
     __dirname: false,
   },
