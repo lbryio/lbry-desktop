@@ -3,11 +3,13 @@ import { remote } from 'electron';
 import React from 'react';
 import LoadingScreen from 'component/common/loading-screen';
 import PdfViewer from 'component/viewers/pdfViewer';
-import ThreeViewer from 'component/viewers/threeViewer';
 import DocumentViewer from 'component/viewers/documentViewer';
 import DocxViewer from 'component/viewers/docxViewer';
 import HtmlViewer from 'component/viewers/htmlViewer';
 import AudioVideoViewer from 'component/viewers/audioVideoViewer';
+// @if TARGET='app'
+import ThreeViewer from 'component/viewers/threeViewer';
+// @endif
 
 type Props = {
   mediaType: string,
@@ -101,7 +103,10 @@ class FileRender extends React.PureComponent<Props> {
 
     // Supported mediaTypes
     const mediaTypes = {
+      // @if TARGET='app'
       '3D-file': <ThreeViewer source={{ fileType, downloadPath }} theme={currentTheme} />,
+      // @endif
+
       application: !source.url ? null : (
         <webview
           ref={element => this.processSandboxRef(element)}

@@ -10,7 +10,7 @@ const WEB_PLATFORM_ROOT = path.resolve(__dirname, 'src/platforms/web/');
 const webConfig = {
   target: 'web',
   entry: {
-    ui: './src/ui/index.js',
+    ui: './src/ui/index.jsx',
   },
   output: {
     filename: '[name].js',
@@ -45,6 +45,10 @@ const webConfig = {
       {
         from: `${STATIC_ROOT}/index.html`,
         to: `${DIST_ROOT}/web/index.html`,
+      },
+      {
+        from: `${STATIC_ROOT}/img/favicon.ico`,
+        to: `${DIST_ROOT}/web/favicon.ico`,
       },
       {
         from: `${WEB_PLATFORM_ROOT}/server.js`,

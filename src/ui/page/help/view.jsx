@@ -8,7 +8,6 @@ import { shell } from 'electron';
 import { Lbry } from 'lbry-redux';
 import Native from 'native';
 import Button from 'component/button';
-import BusyIndicator from 'component/common/busy-indicator';
 import Page from 'component/page';
 
 type DeamonSettings = {
@@ -55,12 +54,16 @@ class HelpPage extends React.PureComponent<Props, State> {
   }
 
   componentDidMount() {
+    // @if TARGET='app'
     Native.getAppVersionInfo().then(({ localVersion, upgradeAvailable }) => {
       this.setState({
         uiVersion: localVersion,
         upgradeAvailable,
       });
     });
+    if (!this.props.accessToken) this.props.fetchAccessToken();
+    // @endif
+
     Lbry.version().then(info => {
       this.setState({
         versionInfo: info,
@@ -71,8 +74,6 @@ class HelpPage extends React.PureComponent<Props, State> {
         lbryId: info.installation_id,
       });
     });
-
-    if (!this.props.accessToken) this.props.fetchAccessToken();
   }
 
   showAccessToken() {
@@ -225,70 +226,66 @@ class HelpPage extends React.PureComponent<Props, State> {
           </header>
 
           <div className="card__content">
-            {this.state.uiVersion && ver ? (
-              <table className="table table--stretch">
-                <tbody>
-                  <tr>
-                    <td>{__('App')}</td>
-                    <td>{this.state.uiVersion}</td>
-                  </tr>
-                  <tr>
-                    <td>{__('Daemon (lbrynet)')}</td>
-                    <td>{ver.lbrynet_version}</td>
-                  </tr>
-                  <tr>
-                    <td>{__('Connected Email')}</td>
-                    <td>
-                      {user && user.primary_email ? (
-                        <React.Fragment>
-                          {user.primary_email}{' '}
-                          <Button
-                            button="link"
-                            href={`https://lbry.io/list/edit/${accessToken}`}
-                            label={__('Update mailing preferences')}
-                          />
-                        </React.Fragment>
-                      ) : (
-                        <React.Fragment>
-                          <span className="empty">{__('none')} </span>
-                          <Button button="link" onClick={() => doAuth()} label={__('set email')} />
-                        </React.Fragment>
-                      )}
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>{__('Reward Eligible')}</td>
-                    <td>{user && user.is_reward_approved ? __('Yes') : __('No')}</td>
-                  </tr>
-                  <tr>
-                    <td>{__('Platform')}</td>
-                    <td>{platform}</td>
-                  </tr>
-                  <tr>
-                    <td>{__('Installation ID')}</td>
-                    <td>{this.state.lbryId}</td>
-                  </tr>
-                  <tr>
-                    <td>{__('Access Token')}</td>
-                    <td>
-                      {this.state.accessTokenHidden && (
-                        <Button button="link" label={__('View')} onClick={this.showAccessToken} />
-                      )}
-                      {!this.state.accessTokenHidden && accessToken && (
-                        <div>
-                          <p>{accessToken}</p>
-                          <div className="alert-text">
-                            {__('This is equivalent to a password. Do not post or share this.')}
-                          </div>
+            <table className="table table--stretch">
+              <tbody>
+                <tr>
+                  <td>{__('App')}</td>
+                  <td>{this.state.uiVersion}</td>
+                </tr>
+                <tr>
+                  <td>{__('Daemon (lbrynet)')}</td>
+                  <td>{ver ? ver.lbrynet_version : __('Loading...')}</td>
+                </tr>
+                <tr>
+                  <td>{__('Connected Email')}</td>
+                  <td>
+                    {user && user.primary_email ? (
+                      <React.Fragment>
+                        {user.primary_email}{' '}
+                        <Button
+                          button="link"
+                          href={`https://lbry.io/list/edit/${accessToken}`}
+                          label={__('Update mailing preferences')}
+                        />
+                      </React.Fragment>
+                    ) : (
+                      <React.Fragment>
+                        <span className="empty">{__('none')} </span>
+                        <Button button="link" onClick={() => doAuth()} label={__('set email')} />
+                      </React.Fragment>
+                    )}
+                  </td>
+                </tr>
+                <tr>
+                  <td>{__('Reward Eligible')}</td>
+                  <td>{user && user.is_reward_approved ? __('Yes') : __('No')}</td>
+                </tr>
+                <tr>
+                  <td>{__('Platform')}</td>
+                  <td>{platform}</td>
+                </tr>
+                <tr>
+                  <td>{__('Installation ID')}</td>
+                  <td>{this.state.lbryId}</td>
+                </tr>
+                <tr>
+                  <td>{__('Access Token')}</td>
+                  <td>
+                    {this.state.accessTokenHidden && (
+                      <Button button="link" label={__('View')} onClick={this.showAccessToken} />
+                    )}
+                    {!this.state.accessTokenHidden && accessToken && (
+                      <div>
+                        <p>{accessToken}</p>
+                        <div className="alert-text">
+                          {__('This is equivalent to a password. Do not post or share this.')}
                         </div>
-                      )}
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            ) : (
-              <BusyIndicator message={__('Looking up version info')} />
-            )}
+                      </div>
+                    )}
+                  </td>
+                </tr>
+              </tbody>
+            </table>
           </div>
         </section>
       </Page>

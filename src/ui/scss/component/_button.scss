@@ -92,31 +92,6 @@
   }
 }
 
-.button--link {
-  word-break: break-all;
-  &:not(:disabled) {
-    html[data-mode='dark'] & {
-      &:not(:hover) {
-        color: $lbry-teal-4;
-      }
-
-      &:hover {
-        color: $lbry-teal-3;
-      }
-    }
-  }
-}
-
-.button--load-screen {
-  border-bottom: 1px solid $lbry-white;
-  display: inline-block;
-
-  &:hover {
-    border-bottom: 1px solid $lbry-blue-1;
-    color: $lbry-blue-1;
-  }
-}
-
 .button--selected {
   font-weight: 800;
   color: $lbry-teal-5;

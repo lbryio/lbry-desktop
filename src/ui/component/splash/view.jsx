@@ -97,7 +97,7 @@ export default class SplashScreen extends React.PureComponent<Props, State> {
     });
   }
 
-  updateStatusCallback(status: Status, accountList: any) {
+  updateStatusCallback(status: Status) {
     const { notifyUnlockWallet, authenticate, modal } = this.props;
     const { launchedModal } = this.state;
 
@@ -127,7 +127,7 @@ export default class SplashScreen extends React.PureComponent<Props, State> {
     } else if (status.is_running) {
       // If we cleared the error timout due to a wallet being locked, make sure to start it back up
       if (!this.timeout) {
-        this.adjustErrorTimseout();
+        this.adjustErrorTimeout();
       }
 
       Lbry.resolve({ urls: 'lbry://one' }).then(() => {

@@ -1,5 +1,12 @@
 {
-  "plugins": ["flowtype"],
+  "plugins": ["flowtype", "import"],
+  "settings": {
+    "import/resolver": {
+      "webpack": {
+        "config": "webpack.base.config.js"
+      }
+    }
+  },
   "extends": [
     "airbnb",
     "plugin:import/electron",
@@ -53,6 +60,8 @@
     "react/prefer-stateless-function": 0,
     "react/sort-comp": 0,
     "jsx-a11y/media-has-caption": 0,
-    "no-underscore-dangle": 0
+    "no-underscore-dangle": 0,
+    "import/extensions": 0,
+    "react/default-props-match-prop-types": 0
   }
 }
