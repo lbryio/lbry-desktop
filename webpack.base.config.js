@@ -3,7 +3,7 @@ const merge = require('webpack-merge');
 const { DefinePlugin, ProvidePlugin } = require('webpack');
 const { getIfUtils, removeEmpty } = require('webpack-config-utils');
 
-const { ifProduction } = getIfUtils(process.env.NODE_ENV);
+const { ifProduction } = getIfUtils(process.env.NODE_ENV || 'development');
 
 const UI_ROOT = path.resolve(__dirname, 'src/ui/');
 const STATIC_ROOT = path.resolve(__dirname, 'static/');
