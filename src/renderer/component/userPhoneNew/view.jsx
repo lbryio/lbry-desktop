@@ -94,12 +94,17 @@ class UserPhoneNew extends React.PureComponent<Props, State> {
           </p>
         </section>
 
-        <Form className="card__content" onSubmit={this.handleSubmit}>
-          <fieldset-section>
+        <Form onSubmit={this.handleSubmit}>
+          <div className="card__content">
             <fieldset-group class="fieldset-group--smushed">
-              <FormField type="select" name="country-codes" onChange={this.handleSelect}>
+              <FormField
+                label={__('Country')}
+                type="select"
+                name="country-codes"
+                onChange={this.handleSelect}
+              >
                 {countryCodes.map((country, index) => (
-                  // eslint-disable-next-line
+                  // eslint-disable-next-line react/no-array-index-key
                   <option key={index} value={country.countryCallingCode}>
                     {os === 'Darwin' ? country.emoji : `(${country.alpha2})`}{' '}
                     {country.countryCallingCode}
@@ -108,6 +113,7 @@ class UserPhoneNew extends React.PureComponent<Props, State> {
               </FormField>
               <FormField
                 type="text"
+                label={__('Number')}
                 placeholder={this.state.countryCode === '+1' ? '(555) 555-5555' : '5555555555'}
                 name="phone"
                 value={this.state.phone}
@@ -117,7 +123,7 @@ class UserPhoneNew extends React.PureComponent<Props, State> {
                 }}
               />
             </fieldset-group>
-          </fieldset-section>
+          </div>
           <div className="card__actions">
             <Submit label="Submit" disabled={isPending} />
             {cancelButton}
