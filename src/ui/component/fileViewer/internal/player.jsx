@@ -1,7 +1,7 @@
+// @flow
 import type { Claim } from 'types/claim';
 import * as React from 'react';
 // @if TARGET='app'
-import 'babel-polyfill';
 import { remote } from 'electron';
 import fs from 'fs';
 // @endif
@@ -14,7 +14,6 @@ type Props = {
   contentType: string,
   mediaType: string,
   downloadCompleted: boolean,
-  playingUri: ?string,
   volume: number,
   position: ?number,
   downloadPath: string,
@@ -77,6 +76,7 @@ class MediaPlayer extends React.PureComponent<Props, State> {
     // Temp hack to force the video to play if the metadataloaded event was never fired
     // Will be removed with the new video player
     // Unoptimized MP4s will fail to render.
+    // @if TARGET='app'
     setTimeout(() => {
       const { hasMetadata } = this.state;
       if (!hasMetadata) {
@@ -84,6 +84,7 @@ class MediaPlayer extends React.PureComponent<Props, State> {
         this.playMedia();
       }
     }, 5000);
+    // @endif
   }
 
   componentWillUnmount() {
@@ -107,9 +108,7 @@ class MediaPlayer extends React.PureComponent<Props, State> {
     }
   }
 
-  async playMedia() {
-    const { hasMetadata } = this.state;
-
+  playMedia() {
     const container = this.mediaContainer.current;
     const {
       downloadCompleted,
@@ -121,6 +120,8 @@ class MediaPlayer extends React.PureComponent<Props, State> {
       downloadPath,
       fileName,
     } = this.props;
+
+    // @if TARGET='app'
 
     const renderMediaCallback = error => {
       if (error) this.setState({ unplayable: true });
@@ -142,16 +143,17 @@ class MediaPlayer extends React.PureComponent<Props, State> {
     // Render default viewer: render-media (video, audio, img, iframe)
     else {
       // Temp hack to help in some metadata loading cases
-      await this.sleep(300);
-      player.append(
-        {
-          name: fileName,
-          createReadStream: opts => fs.createReadStream(downloadPath, opts),
-        },
-        container,
-        { autoplay: true, controls: true },
-        renderMediaCallback.bind(this)
-      );
+      setTimeout(() => {
+        player.append(
+          {
+            name: fileName,
+            createReadStream: opts => fs.createReadStream(downloadPath, opts),
+          },
+          container,
+          { autoplay: true, controls: true },
+          renderMediaCallback.bind(this)
+        );
+      }, 300);
     }
 
     document.addEventListener('keydown', this.togglePlay);
@@ -190,10 +192,7 @@ class MediaPlayer extends React.PureComponent<Props, State> {
     // @endif
   }
 
-  sleep(ms) {
-    return new Promise(resolve => setTimeout(resolve, ms));
-  }
-
+  // @if TARGET='app'
   refreshMetadata() {
     const { onStartCb } = this.props;
     this.setState({ hasMetadata: true });
@@ -206,6 +205,7 @@ class MediaPlayer extends React.PureComponent<Props, State> {
       playerElement.children[0].play();
     }
   }
+  // @endif
 
   togglePlay(event: any) {
     // ignore all events except click and spacebar keydown, or input events in a form control
