@@ -14,7 +14,20 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ### Fixed
 
-## [0.29.1] - 2019-3-1
+## [0.29.4] - 2019-3-12
+
+### Fixed
+
+- Style issue on phone number collection modal
+- White screen when watching videos for some files
+
+## [0.29.3] - 2019-3-7
+
+### Fixed
+
+- Minor style issue with 0 LBC balance on the wallet page
+
+## [0.29.2] - 2019-3-1
 
 ### Fixed
 
