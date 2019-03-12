@@ -1,4 +1,5 @@
 /* eslint-disable */
+import 'babel-polyfill';
 import React from 'react';
 import { remote } from 'electron';
 import fs from 'fs';
@@ -9,12 +10,14 @@ import FileRender from 'component/fileRender';
 import Thumbnail from 'component/common/thumbnail';
 import LoadingScreen from 'component/common/loading-screen';
 
-class MediaPlayer extends React.PureComponent {
+class MediaPlayer extends React.PureComponent<Props, State> {
   static MP3_CONTENT_TYPES = ['audio/mpeg3', 'audio/mpeg'];
   static SANDBOX_TYPES = ['application/x-lbry', 'application/x-ext-lbry'];
   static FILE_MEDIA_TYPES = ['text', 'script', 'e-book', 'comic-book', 'document', '3D-file'];
   static SANDBOX_SET_BASE_URL = 'http://localhost:5278/set/';
   static SANDBOX_CONTENT_BASE_URL = 'http://localhost:5278';
+
+  mediaContainer: { current: React.ElementRef<any> };
 
   constructor(props) {
     super(props);
@@ -25,69 +28,38 @@ class MediaPlayer extends React.PureComponent {
       unplayable: false,
       fileSource: null,
     };
-
+    this.mediaContainer = React.createRef();
     this.togglePlayListener = this.togglePlay.bind(this);
     this.toggleFullScreenVideo = this.toggleFullScreen.bind(this);
   }
 
-  componentDidUpdate(nextProps) {
-    const el = this.refs.media.children[0];
-    if (this.props.playingUri && !nextProps.playingUri && !el.paused) {
+  componentDidUpdate(prevProps: Props) {
+    const { downloadCompleted } = this.props;
+    const { fileSource } = this.state;
+
+    const el = this.mediaContainer.current;
+
+    if (this.props.playingUri && !prevProps.playingUri && !el.paused) {
       el.pause();
+    } else if (this.supportedType() && !fileSource && downloadCompleted) {
+      this.renderFile();
     }
   }
 
   componentDidMount() {
     this.playMedia();
-
-    // Temp hack to force the video to play if the metadataloaded event was never fired
-    // Will be removed with the new video player
-    setTimeout(() => {
-      const { hasMetadata } = this.state;
-      if (!hasMetadata) {
-        this.refreshMetadata();
-        this.playMedia();
-      }
-    }, 5000);
-  }
-
-  componentWillReceiveProps(next) {
-    const el = this.media.children[0];
-    if (!this.props.paused && next.paused && !el.paused) el.pause();
-  }
-
-  componentDidUpdate() {
-    const { contentType, downloadCompleted } = this.props;
-    const { startedPlaying, fileSource } = this.state;
-
-    if (this.playableType() && !startedPlaying && downloadCompleted) {
-      const container = this.media.children[0];
-
-      if (MediaPlayer.MP3_CONTENT_TYPES.indexOf(contentType) > -1) {
-        this.renderAudio(this.media, true);
-      } else {
-        player.append(
-          this.file(),
-          container,
-          { autoplay: true, controls: true },
-          renderMediaCallback.bind(this)
-        );
-      }
-    } else if (this.fileType() && !fileSource && downloadCompleted) {
-      this.renderFile();
-    }
   }
 
   componentWillUnmount() {
     document.removeEventListener('keydown', this.togglePlayListener);
-    const mediaElement = this.media.children[0];
+    const mediaElement = this.mediaContainer.current.children[0];
     if (mediaElement) {
       mediaElement.removeEventListener('click', this.togglePlayListener);
     }
   }
 
   toggleFullScreen(event) {
-    const mediaElement = this.media.children[0];
+    const mediaElement = this.mediaContainer.current;
     if (mediaElement) {
       if (document.webkitIsFullScreen) {
         document.webkitExitFullscreen();
@@ -97,10 +69,10 @@ class MediaPlayer extends React.PureComponent {
     }
   }
 
-  playMedia() {
+  async playMedia() {
     const { hasMetadata } = this.state;
 
-    const container = this.media;
+    const container = this.mediaContainer.current;
     const {
       downloadCompleted,
       contentType,
@@ -135,6 +107,7 @@ class MediaPlayer extends React.PureComponent {
     }
     // Render default viewer: render-media (video, audio, img, iframe)
     else {
+      await this.sleep(250);
       player.append(
         this.file(),
         container,
@@ -150,7 +123,9 @@ class MediaPlayer extends React.PureComponent {
         mediaElement.currentTime = position;
       }
 
-      mediaElement.addEventListener('loadedmetadata', () => this.refreshMetadata());
+      mediaElement.addEventListener('loadedmetadata', () => this.refreshMetadata(), {
+        once: true,
+      });
       mediaElement.addEventListener('timeupdate', () => savePosition(mediaElement.currentTime));
       mediaElement.addEventListener('click', this.togglePlayListener);
       mediaElement.addEventListener('ended', () => {
@@ -168,6 +143,10 @@ class MediaPlayer extends React.PureComponent {
     }
   }
 
+  sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+  }
+
   refreshMetadata() {
     const { onStartCb } = this.props;
     this.setState({ hasMetadata: true, startedPlaying: true });
@@ -175,11 +154,10 @@ class MediaPlayer extends React.PureComponent {
     if (onStartCb) {
       onStartCb();
     }
-    this.media.children[0].play();
-  }
-
-  setReady() {
-    this.setState({ ready: true });
+    const playerElement = this.mediaContainer.current;
+    if (playerElement) {
+      playerElement.children[0].play();
+    }
   }
 
   togglePlay(event) {
@@ -191,7 +169,7 @@ class MediaPlayer extends React.PureComponent {
       return;
     }
     event.preventDefault();
-    const mediaElement = this.media.children[0];
+    const mediaElement = this.mediaContainer.current.children[0];
     if (mediaElement) {
       if (!mediaElement.paused) {
         mediaElement.pause();
@@ -342,9 +320,7 @@ class MediaPlayer extends React.PureComponent {
         <div
           className={'content__view--container'}
           style={{ opacity: isLoading ? 0 : 1 }}
-          ref={container => {
-            this.media = container;
-          }}
+          ref={this.mediaContainer}
         />
       </React.Fragment>
     );
