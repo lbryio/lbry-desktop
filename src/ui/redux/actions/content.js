@@ -16,7 +16,6 @@ import {
   Lbry,
   Lbryapi,
   buildURI,
-  makeSelectCostInfoForUri,
   makeSelectFileInfoForUri,
   selectFileInfosByOutpoint,
   selectDownloadingByOutpoint,
@@ -26,6 +25,8 @@ import {
   creditsToString,
   doError,
 } from 'lbry-redux';
+import { makeSelectCostInfoForUri } from 'lbryinc';
+
 import { makeSelectClientSetting, selectosNotificationsEnabled } from 'redux/selectors/settings';
 import setBadge from 'util/set-badge';
 import analytics from 'analytics';

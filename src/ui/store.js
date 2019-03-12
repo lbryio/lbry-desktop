@@ -3,16 +3,20 @@ import availabilityReducer from 'redux/reducers/availability';
 import contentReducer from 'redux/reducers/content';
 import {
   claimsReducer,
-  costInfoReducer,
   fileInfoReducer,
   searchReducer,
   walletReducer,
   notificationsReducer,
-  blacklistReducer,
 } from 'lbry-redux';
+import {
+  userReducer,
+  rewardsReducer,
+  costInfoReducer,
+  blacklistReducer,
+  homepageReducer,
+} from 'lbryinc';
 import navigationReducer from 'redux/reducers/navigation';
 import settingsReducer from 'redux/reducers/settings';
-import { userReducer, rewardsReducer } from 'lbryinc';
 import shapeShiftReducer from 'redux/reducers/shape_shift';
 import subscriptionsReducer from 'redux/reducers/subscriptions';
 import publishReducer from 'redux/reducers/publish';
@@ -69,6 +73,7 @@ const reducers = combineReducers({
   publish: publishReducer,
   notifications: notificationsReducer,
   blacklist: blacklistReducer,
+  homepage: homepageReducer,
 });
 
 const bulkThunk = createBulkThunkMiddleware();

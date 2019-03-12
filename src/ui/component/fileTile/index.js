@@ -7,10 +7,10 @@ import {
   makeSelectIsUriResolving,
   makeSelectClaimIsMine,
 } from 'lbry-redux';
+import { selectRewardContentClaimIds } from 'lbryinc';
 import { selectShowNsfw } from 'redux/selectors/settings';
 import { doNavigate } from 'redux/actions/navigation';
 import { doClearPublish, doUpdatePublishForm } from 'redux/actions/publish';
-import { selectRewardContentClaimIds } from 'redux/selectors/content';
 import { makeSelectIsSubscribed, makeSelectIsNew } from 'redux/selectors/subscriptions';
 import FileTile from './view';
 

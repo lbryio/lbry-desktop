@@ -1,14 +1,12 @@
 import { connect } from 'react-redux';
 import * as settings from 'constants/settings';
-import {
-  selectCostForCurrentPageUri,
-  selectBalance,
-  selectCurrentPage,
-  selectError,
-  doToast,
-} from 'lbry-redux';
+import { selectBalance, selectCurrentPage, selectError, doToast } from 'lbry-redux';
 import { makeSelectClientSetting } from 'redux/selectors/settings';
-import { selectUser, selectUserIsVerificationCandidate } from 'lbryinc';
+import {
+  selectUser,
+  selectUserIsVerificationCandidate,
+  selectCostForCurrentPageUri,
+} from 'lbryinc';
 import { selectModal } from 'redux/selectors/app';
 import { doOpenModal } from 'redux/actions/app';
 import ModalRouter from './view';

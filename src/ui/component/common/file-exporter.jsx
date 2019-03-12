@@ -4,16 +4,11 @@ import * as ICONS from 'constants/icons';
 import React from 'react';
 import Button from 'component/button';
 import parseData from 'util/parse-data';
-/* eslint-disable no-redeclare */
-// @if TARGET='app'
-// $FlowFixMe
 import { remote } from 'electron';
+import path from 'path';
+// @if TARGET='app'
+import fs from 'fs';
 // @endif
-// @if TARGET='web'
-// $FlowFixMe
-import { remote } from 'web/stubs';
-// @endif
-/* eslint-enable no-redeclare */
 
 type Props = {
   data: Array<any>,
@@ -33,8 +28,6 @@ class FileExporter extends React.PureComponent<Props> {
     super();
     this.handleButtonClick = this.handleButtonClick.bind(this);
   }
-
-  handleButtonClick: () => void;
 
   handleFileCreation(filename: string, data: any) {
     const { onFileCreated } = this.props;

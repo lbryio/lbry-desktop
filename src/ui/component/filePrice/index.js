@@ -1,10 +1,10 @@
 import { connect } from 'react-redux';
+import { makeSelectClaimForUri } from 'lbry-redux';
 import {
-  doFetchCostInfoForUri,
   makeSelectCostInfoForUri,
+  doFetchCostInfoForUri,
   makeSelectFetchingCostInfoForUri,
-  makeSelectClaimForUri,
-} from 'lbry-redux';
+} from 'lbryinc';
 import FilePrice from './view';
 
 const select = (state, props) => ({
