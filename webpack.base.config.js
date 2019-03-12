@@ -3,7 +3,9 @@ const merge = require('webpack-merge');
 const { DefinePlugin, ProvidePlugin } = require('webpack');
 const { getIfUtils, removeEmpty } = require('webpack-config-utils');
 
-const { ifProduction } = getIfUtils(process.env.NODE_ENV || 'development');
+const NODE_ENV = process.env.NODE_ENV || 'development';
+
+const { ifProduction } = getIfUtils(NODE_ENV);
 
 const UI_ROOT = path.resolve(__dirname, 'src/ui/');
 const STATIC_ROOT = path.resolve(__dirname, 'static/');
@@ -76,8 +78,9 @@ const baseConfig = {
     }),
     new DefinePlugin({
       __static: `"${path.join(__dirname, 'static').replace(/\\/g, '\\\\')}"`,
-      'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV),
+      'process.env.NODE_ENV': JSON.stringify(NODE_ENV),
       'process.env.SDK_API_URL': JSON.stringify(process.env.SDK_API_URL),
+      'process.env.LBRY_API_URL': JSON.stringify(process.env.LBRY_API_URL),
     }),
   ],
 };

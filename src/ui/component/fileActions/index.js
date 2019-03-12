@@ -1,9 +1,6 @@
 import { connect } from 'react-redux';
-import {
-  makeSelectCostInfoForUri,
-  makeSelectFileInfoForUri,
-  makeSelectClaimIsMine,
-} from 'lbry-redux';
+import { makeSelectFileInfoForUri, makeSelectClaimIsMine } from 'lbry-redux';
+import { makeSelectCostInfoForUri } from 'lbryinc';
 import { doOpenModal } from 'redux/actions/app';
 import FileActions from './view';
 

@@ -5,8 +5,8 @@ import {
   makeSelectClaimForUri,
   makeSelectIsUriResolving,
   makeSelectTotalPagesForChannel,
-  selectBlackListedOutpoints,
 } from 'lbry-redux';
+import { selectBlackListedOutpoints } from 'lbryinc';
 import ShowPage from './view';
 
 const select = (state, props) => ({

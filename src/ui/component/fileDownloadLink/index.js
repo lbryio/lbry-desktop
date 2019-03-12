@@ -3,9 +3,9 @@ import {
   makeSelectFileInfoForUri,
   makeSelectDownloadingForUri,
   makeSelectLoadingForUri,
-  makeSelectCostInfoForUri,
   makeSelectClaimForUri,
 } from 'lbry-redux';
+import { makeSelectCostInfoForUri } from 'lbryinc';
 import { doOpenFileInShell } from 'redux/actions/file';
 import { doPurchaseUri, doStartDownload, doSetPlayingUri } from 'redux/actions/content';
 import FileDownloadLink from './view';

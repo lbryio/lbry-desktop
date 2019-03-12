@@ -18,16 +18,10 @@ import {
   doOpenModal,
   doHideModal,
 } from 'redux/actions/app';
-import {
-  Lbry,
-  doToast,
-  doBlackListedOutpointsSubscribe,
-  isURIValid,
-  setSearchApi,
-} from 'lbry-redux';
+import { Lbry, doToast, isURIValid, setSearchApi } from 'lbry-redux';
 import { doNavigate, doHistoryBack, doHistoryForward } from 'redux/actions/navigation';
 import { doDownloadLanguages, doUpdateIsNightAsync } from 'redux/actions/settings';
-import { doAuthenticate, Lbryio, rewards } from 'lbryinc';
+import { doAuthenticate, Lbryio, rewards, doBlackListedOutpointsSubscribe } from 'lbryinc';
 import 'scss/all.scss';
 import store from 'store';
 import pjson from 'package.json';

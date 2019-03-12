@@ -8,11 +8,9 @@ import {
   makeSelectClaimIsMine,
   makeSelectClaimIsPending,
 } from 'lbry-redux';
+import { selectRewardContentClaimIds } from 'lbryinc';
 import { doNavigate } from 'redux/actions/navigation';
-import {
-  selectRewardContentClaimIds,
-  makeSelectContentPositionForUri,
-} from 'redux/selectors/content';
+import { makeSelectContentPositionForUri } from 'redux/selectors/content';
 import { selectShowNsfw } from 'redux/selectors/settings';
 import { makeSelectIsSubscribed, makeSelectIsNew } from 'redux/selectors/subscriptions';
 import { doClearContentHistoryUri } from 'redux/actions/content';

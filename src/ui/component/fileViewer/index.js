@@ -4,11 +4,10 @@ import { doChangeVolume } from 'redux/actions/app';
 import { selectVolume } from 'redux/selectors/app';
 import { doPlayUri, doSetPlayingUri, savePosition } from 'redux/actions/content';
 import { doNavigate } from 'redux/actions/navigation';
-import { doClaimEligiblePurchaseRewards } from 'lbryinc';
+import { doClaimEligiblePurchaseRewards, makeSelectCostInfoForUri } from 'lbryinc';
 import {
   makeSelectMetadataForUri,
   makeSelectContentTypeForUri,
-  makeSelectCostInfoForUri,
   makeSelectClaimForUri,
   makeSelectFileInfoForUri,
   makeSelectLoadingForUri,

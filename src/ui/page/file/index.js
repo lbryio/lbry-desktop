@@ -7,15 +7,14 @@ import { doSetClientSetting } from 'redux/actions/settings';
 import { doSetContentHistoryItem } from 'redux/actions/content';
 import {
   doFetchFileInfo,
-  doFetchCostInfoForUri,
   makeSelectClaimIsMine,
-  makeSelectCostInfoForUri,
   makeSelectFileInfoForUri,
   makeSelectClaimForUri,
   makeSelectContentTypeForUri,
   makeSelectMetadataForUri,
   makeSelectChannelForClaimUri,
 } from 'lbry-redux';
+import { makeSelectCostInfoForUri, doFetchCostInfoForUri } from 'lbryinc';
 import { selectShowNsfw, makeSelectClientSetting } from 'redux/selectors/settings';
 import { makeSelectIsSubscribed } from 'redux/selectors/subscriptions';
 import { doPrepareEdit } from 'redux/actions/publish';
