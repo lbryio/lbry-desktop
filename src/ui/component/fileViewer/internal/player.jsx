@@ -74,6 +74,16 @@ class MediaPlayer extends React.PureComponent<Props, State> {
 
   componentDidMount() {
     this.playMedia();
+    // Temp hack to force the video to play if the metadataloaded event was never fired
+    // Will be removed with the new video player
+    // Unoptimized MP4s will fail to render.
+    setTimeout(() => {
+      const { hasMetadata } = this.state;
+      if (!hasMetadata) {
+        this.refreshMetadata();
+        this.playMedia();
+      }
+    }, 5000);
   }
 
   componentWillUnmount() {
@@ -131,7 +141,8 @@ class MediaPlayer extends React.PureComponent<Props, State> {
     }
     // Render default viewer: render-media (video, audio, img, iframe)
     else {
-      await this.sleep(250);
+      // Temp hack to help in some metadata loading cases
+      await this.sleep(300);
       player.append(
         {
           name: fileName,
