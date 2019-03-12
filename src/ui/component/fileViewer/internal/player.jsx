@@ -1,4 +1,4 @@
-/* eslint-disable */
+// @flow
 import type { Claim } from 'types/claim';
 import * as React from 'react';
 // @if TARGET='app'
@@ -14,7 +14,6 @@ type Props = {
   contentType: string,
   mediaType: string,
   downloadCompleted: boolean,
-  playingUri: ?string,
   volume: number,
   position: ?number,
   downloadPath: string,
@@ -74,9 +73,9 @@ class MediaPlayer extends React.PureComponent<Props, State> {
 
   componentDidMount() {
     this.playMedia();
-
     // Temp hack to force the video to play if the metadataloaded event was never fired
     // Will be removed with the new video player
+    // Unoptimized MP4s will fail to render.
     // @if TARGET='app'
     setTimeout(() => {
       const { hasMetadata } = this.state;
@@ -88,23 +87,8 @@ class MediaPlayer extends React.PureComponent<Props, State> {
     // @endif
   }
 
-  // @if TARGET='app'
-  componentDidUpdate(prevProps: Props) {
-    const { downloadCompleted } = this.props;
-    const { fileSource } = this.state;
-
-    const el = this.mediaContainer.current;
-
-    if (this.props.playingUri && !prevProps.playingUri && !el.paused) {
-      el.pause();
-    } else if (this.isSupportedFile() && !fileSource && downloadCompleted) {
-      this.renderFile();
-    }
-  }
-  // @endif
-
   componentWillUnmount() {
-    document.removeEventListener('keydown', this.togglePlay);
+    document.removeEventListener('keydown', this.togglePlayListener);
     const mediaElement = this.mediaContainer.current.children[0];
     if (mediaElement) {
       mediaElement.removeEventListener('click', this.togglePlay);
@@ -125,7 +109,6 @@ class MediaPlayer extends React.PureComponent<Props, State> {
   }
 
   playMedia() {
-    // @if TARGET='app'
     const container = this.mediaContainer.current;
     const {
       downloadCompleted,
@@ -137,6 +120,8 @@ class MediaPlayer extends React.PureComponent<Props, State> {
       downloadPath,
       fileName,
     } = this.props;
+
+    // @if TARGET='app'
 
     const renderMediaCallback = error => {
       if (error) this.setState({ unplayable: true });
@@ -157,15 +142,18 @@ class MediaPlayer extends React.PureComponent<Props, State> {
     }
     // Render default viewer: render-media (video, audio, img, iframe)
     else {
-      player.append(
-        {
-          name: fileName,
-          createReadStream: opts => fs.createReadStream(downloadPath, opts),
-        },
-        container,
-        { autoplay: true, controls: true },
-        renderMediaCallback.bind(this)
-      );
+      // Temp hack to help in some metadata loading cases
+      setTimeout(() => {
+        player.append(
+          {
+            name: fileName,
+            createReadStream: opts => fs.createReadStream(downloadPath, opts),
+          },
+          container,
+          { autoplay: true, controls: true },
+          renderMediaCallback.bind(this)
+        );
+      }, 300);
     }
 
     document.addEventListener('keydown', this.togglePlay);
@@ -175,7 +163,9 @@ class MediaPlayer extends React.PureComponent<Props, State> {
         mediaElement.currentTime = position;
       }
 
-      mediaElement.addEventListener('loadedmetadata', () => this.refreshMetadata());
+      mediaElement.addEventListener('loadedmetadata', () => this.refreshMetadata(), {
+        once: true,
+      });
       mediaElement.addEventListener('timeupdate', () => savePosition(mediaElement.currentTime));
       mediaElement.addEventListener('click', this.togglePlay);
       mediaElement.addEventListener('ended', () => {
@@ -210,7 +200,6 @@ class MediaPlayer extends React.PureComponent<Props, State> {
     if (onStartCb) {
       onStartCb();
     }
-
     const playerElement = this.mediaContainer.current;
     if (playerElement) {
       playerElement.children[0].play();
