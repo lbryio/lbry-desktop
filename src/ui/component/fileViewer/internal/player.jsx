@@ -1,7 +1,7 @@
-/* eslint-disable */
 import type { Claim } from 'types/claim';
 import * as React from 'react';
 // @if TARGET='app'
+import 'babel-polyfill';
 import { remote } from 'electron';
 import fs from 'fs';
 // @endif
@@ -74,37 +74,10 @@ class MediaPlayer extends React.PureComponent<Props, State> {
 
   componentDidMount() {
     this.playMedia();
-
-    // Temp hack to force the video to play if the metadataloaded event was never fired
-    // Will be removed with the new video player
-    // @if TARGET='app'
-    setTimeout(() => {
-      const { hasMetadata } = this.state;
-      if (!hasMetadata) {
-        this.refreshMetadata();
-        this.playMedia();
-      }
-    }, 5000);
-    // @endif
   }
-
-  // @if TARGET='app'
-  componentDidUpdate(prevProps: Props) {
-    const { downloadCompleted } = this.props;
-    const { fileSource } = this.state;
-
-    const el = this.mediaContainer.current;
-
-    if (this.props.playingUri && !prevProps.playingUri && !el.paused) {
-      el.pause();
-    } else if (this.isSupportedFile() && !fileSource && downloadCompleted) {
-      this.renderFile();
-    }
-  }
-  // @endif
 
   componentWillUnmount() {
-    document.removeEventListener('keydown', this.togglePlay);
+    document.removeEventListener('keydown', this.togglePlayListener);
     const mediaElement = this.mediaContainer.current.children[0];
     if (mediaElement) {
       mediaElement.removeEventListener('click', this.togglePlay);
@@ -124,8 +97,9 @@ class MediaPlayer extends React.PureComponent<Props, State> {
     }
   }
 
-  playMedia() {
-    // @if TARGET='app'
+  async playMedia() {
+    const { hasMetadata } = this.state;
+
     const container = this.mediaContainer.current;
     const {
       downloadCompleted,
@@ -157,6 +131,7 @@ class MediaPlayer extends React.PureComponent<Props, State> {
     }
     // Render default viewer: render-media (video, audio, img, iframe)
     else {
+      await this.sleep(250);
       player.append(
         {
           name: fileName,
@@ -175,7 +150,9 @@ class MediaPlayer extends React.PureComponent<Props, State> {
         mediaElement.currentTime = position;
       }
 
-      mediaElement.addEventListener('loadedmetadata', () => this.refreshMetadata());
+      mediaElement.addEventListener('loadedmetadata', () => this.refreshMetadata(), {
+        once: true,
+      });
       mediaElement.addEventListener('timeupdate', () => savePosition(mediaElement.currentTime));
       mediaElement.addEventListener('click', this.togglePlay);
       mediaElement.addEventListener('ended', () => {
@@ -202,7 +179,10 @@ class MediaPlayer extends React.PureComponent<Props, State> {
     // @endif
   }
 
-  // @if TARGET='app'
+  sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+  }
+
   refreshMetadata() {
     const { onStartCb } = this.props;
     this.setState({ hasMetadata: true });
@@ -210,13 +190,11 @@ class MediaPlayer extends React.PureComponent<Props, State> {
     if (onStartCb) {
       onStartCb();
     }
-
     const playerElement = this.mediaContainer.current;
     if (playerElement) {
       playerElement.children[0].play();
     }
   }
-  // @endif
 
   togglePlay(event: any) {
     // ignore all events except click and spacebar keydown, or input events in a form control

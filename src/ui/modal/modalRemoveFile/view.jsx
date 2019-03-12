@@ -8,8 +8,8 @@ type Props = {
   closeModal: () => void,
   deleteFile: (string, boolean, boolean) => void,
   title: string,
-  fileInfo: {
-    outpoint: string,
+  fileInfo?: {
+    outpoint: ?string,
   },
 };
 
@@ -21,7 +21,6 @@ type State = {
 class ModalRemoveFile extends React.PureComponent<Props, State> {
   constructor(props: Props) {
     super(props);
-
     this.state = {
       deleteChecked: false,
       abandonClaimChecked: true,
@@ -48,15 +47,10 @@ class ModalRemoveFile extends React.PureComponent<Props, State> {
   }
 
   render() {
-    const {
-      claimIsMine,
-      closeModal,
-      deleteFile,
-      fileInfo: { outpoint },
-      title,
-    } = this.props;
+    const { claimIsMine, closeModal, deleteFile, fileInfo, title } = this.props;
     const { deleteChecked, abandonClaimChecked } = this.state;
 
+    const outpoint = fileInfo ? fileInfo.outpoint : '';
     return (
       <Modal
         isOpen
@@ -64,7 +58,7 @@ class ModalRemoveFile extends React.PureComponent<Props, State> {
         contentLabel={__('Confirm File Remove')}
         type="confirm"
         confirmButtonLabel={__('Remove')}
-        onConfirmed={() => deleteFile(outpoint, deleteChecked, abandonClaimChecked)}
+        onConfirmed={() => deleteFile(outpoint || '', deleteChecked, abandonClaimChecked)}
         onAborted={closeModal}
       >
         <section className="card__content">
