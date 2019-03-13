@@ -320,7 +320,7 @@ class MediaPlayer extends React.PureComponent<Props, State> {
   }
 
   render() {
-    const { mediaType } = this.props;
+    const { mediaType, claim } = this.props;
     const { fileSource } = this.state;
 
     const isFileType = this.isSupportedFile();
@@ -331,7 +331,7 @@ class MediaPlayer extends React.PureComponent<Props, State> {
     return (
       <React.Fragment>
         {loadingStatus && <LoadingScreen status={loadingStatus} spinner={isLoading} />}
-        {isFileReady && <FileRender source={fileSource} mediaType={mediaType} />}
+        {isFileReady && <FileRender claim={claim} source={fileSource} mediaType={mediaType} />}
         <div
           className="content__view--container"
           style={{ opacity: isLoading ? 0 : 1 }}

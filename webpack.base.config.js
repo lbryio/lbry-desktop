@@ -2,6 +2,7 @@ const path = require('path');
 const merge = require('webpack-merge');
 const { DefinePlugin, ProvidePlugin } = require('webpack');
 const { getIfUtils, removeEmpty } = require('webpack-config-utils');
+var DuplicatePackageCheckerPlugin = require('duplicate-package-checker-webpack-plugin');
 
 const NODE_ENV = process.env.NODE_ENV || 'development';
 
@@ -25,7 +26,7 @@ const baseConfig = {
         loader: 'babel-loader',
       },
       {
-        test: /\.scss$/,
+        test: /\.s?css$/,
         use: [
           'style-loader', // creates style nodes from JS strings
           'css-loader', // translates CSS into CommonJS
@@ -43,9 +44,7 @@ const baseConfig = {
         },
       },
       {
-        // font/inter includes a basic css file applying the fonts
-        // Everywhere else we use .scss
-        test: /\.(css|woff|woff2)$/,
+        test: /\.(woff|woff2)$/,
         use: {
           loader: 'file-loader',
           options: {
@@ -82,6 +81,7 @@ const baseConfig = {
       'process.env.SDK_API_URL': JSON.stringify(process.env.SDK_API_URL),
       'process.env.LBRY_API_URL': JSON.stringify(process.env.LBRY_API_URL),
     }),
+    // new DuplicatePackageCheckerPlugin(),
   ],
 };
 

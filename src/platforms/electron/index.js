@@ -61,6 +61,7 @@ if (isDev) {
 
 app.on('ready', async () => {
   let isDaemonRunning = false;
+  console.log('???');
   await Lbry.status()
     .then(() => {
       isDaemonRunning = true;

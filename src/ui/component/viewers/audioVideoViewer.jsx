@@ -18,7 +18,7 @@ class AudioVideoViewer extends React.PureComponent<Props> {
   player: ?{ dispose: () => void };
 
   componentDidMount() {
-    const { source, contentType, poster } = this.props;
+    const { source, contentType, poster, claim } = this.props;
     const { downloadPath, fileName } = source;
 
     const indexOfFileName = downloadPath.indexOf(fileName);
@@ -27,8 +27,9 @@ class AudioVideoViewer extends React.PureComponent<Props> {
 
     // We only want to encode the fileName so forward slashes "/" are handled properly by the file system
     // TODO: Determine changes needed for windows
-    const path = `${basePath}${encodedFileName}`;
-
+    // const path = `${basePath}${encodedFileName}`;
+    const path = `https://api.lbry.tv/content/claims/${claim.name}/${claim.claim_id}/stream.mp4`;
+    console.log('path', path);
     const sources = [
       {
         src: path,

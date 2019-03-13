@@ -152,6 +152,7 @@ class FileViewer extends React.PureComponent<Props> {
   playContent() {
     const { play, uri, fileInfo, isDownloading, isLoading } = this.props;
 
+    // @if TARGET='app'
     if (fileInfo || isDownloading || isLoading) {
       // User may have pressed download before clicking play
       this.onFileStartCb = null;
@@ -160,6 +161,7 @@ class FileViewer extends React.PureComponent<Props> {
     if (this.onFileStartCb) {
       this.startTime = Date.now();
     }
+    // @endif
 
     play(uri);
   }

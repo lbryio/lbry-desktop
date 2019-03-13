@@ -9,7 +9,6 @@ import { doOpenModal } from 'redux/actions/app';
 import { doNavigate } from 'redux/actions/navigation';
 import { setSubscriptionLatest, doUpdateUnreadSubscriptions } from 'redux/actions/subscriptions';
 import { makeSelectUnreadByChannel } from 'redux/selectors/subscriptions';
-import { selectBadgeNumber } from 'redux/selectors/app';
 import {
   ACTIONS,
   SETTINGS,
@@ -28,12 +27,15 @@ import {
 import { makeSelectCostInfoForUri } from 'lbryinc';
 
 import { makeSelectClientSetting, selectosNotificationsEnabled } from 'redux/selectors/settings';
-import setBadge from 'util/set-badge';
 import analytics from 'analytics';
 
 const DOWNLOAD_POLL_INTERVAL = 250;
 
 export function doUpdateLoadStatus(uri: string, outpoint: string) {
+  // Updates the loading status for a uri as it's downloading
+  // Calls file_list and checks the written_bytes value to see if the number has increased
+  // Not needed on web as users aren't actually downloading the file
+  // @if TARGET='app'
   return (dispatch, getState) => {
     const setNextStatusUpdate = () =>
       setTimeout(() => {
@@ -44,6 +46,7 @@ export function doUpdateLoadStatus(uri: string, outpoint: string) {
           dispatch(doUpdateLoadStatus(uri, outpoint));
         }
       }, DOWNLOAD_POLL_INTERVAL);
+
     Lbry.file_list({
       outpoint,
       full_status: true,
@@ -63,14 +66,6 @@ export function doUpdateLoadStatus(uri: string, outpoint: string) {
             fileInfo,
           },
         });
-
-        const badgeNumber = selectBadgeNumber(state);
-        setBadge(badgeNumber === 0 ? '' : `${badgeNumber}`);
-
-        // Disabling this for now because it's confusing for new users that don't realize files are actually being downloaded
-        // This should move inside of the app
-        // const totalProgress = selectTotalDownloadProgress(state);
-        // setProgressBar(totalProgress);
 
         const channelUri = makeSelectChannelForClaimUri(uri, true)(state);
         const { claimName: channelName } = parseURI(channelUri);
@@ -126,12 +121,11 @@ export function doUpdateLoadStatus(uri: string, outpoint: string) {
           },
         });
 
-        // const totalProgress = selectTotalDownloadProgress(getState());
-        // setProgressBar(totalProgress);
         setNextStatusUpdate();
       }
     });
   };
+  // @endif
 }
 
 export function doStartDownload(uri, outpoint) {

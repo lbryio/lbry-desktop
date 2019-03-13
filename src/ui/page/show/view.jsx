@@ -42,7 +42,7 @@ class ShowPage extends React.PureComponent<Props> {
 
     let innerContent = '';
 
-    if (isResolvingUri || !claim || !claim.name) {
+    if (!claim || (claim && !claim.name)) {
       if (claim && !claim.name) {
         // While testing the normalization changes, Brannon found that `name` was missing sometimes
         // This shouldn't happen, so hopefully this helps track it down

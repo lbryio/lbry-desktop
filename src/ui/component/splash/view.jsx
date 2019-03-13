@@ -92,6 +92,7 @@ export default class SplashScreen extends React.PureComponent<Props, State> {
   }
 
   updateStatus() {
+    console.log('updateStatus??');
     Lbry.status().then(status => {
       this.updateStatusCallback(status);
     });

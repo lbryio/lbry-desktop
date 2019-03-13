@@ -1,7 +1,6 @@
 import ErrorBoundary from 'component/errorBoundary';
 import App from 'component/app';
 import SnackBar from 'component/snackBar';
-import SplashScreen from 'component/splash';
 // @if TARGET='app'
 import moment from 'moment';
 import { ipcRenderer, remote, shell } from 'electron';
@@ -22,6 +21,7 @@ import { Lbry, doToast, isURIValid, setSearchApi } from 'lbry-redux';
 import { doNavigate, doHistoryBack, doHistoryForward } from 'redux/actions/navigation';
 import { doDownloadLanguages, doUpdateIsNightAsync } from 'redux/actions/settings';
 import { doAuthenticate, Lbryio, rewards, doBlackListedOutpointsSubscribe } from 'lbryinc';
+import SplashScreen from 'component/splash';
 import 'scss/all.scss';
 import store from 'store';
 import pjson from 'package.json';
@@ -56,6 +56,7 @@ ipcRenderer.on('navigate-forward', () => {
 
 // @if TARGET='web'
 const SDK_API_URL = process.env.SDK_API_URL || 'https://api.lbry.tv/api/proxy';
+console.log('set it??', SDK_API_URL);
 Lbry.setDaemonConnectionString(SDK_API_URL);
 // @endif
 
@@ -63,6 +64,7 @@ Lbry.setDaemonConnectionString(SDK_API_URL);
 // We interect with ipcRenderer to get the auth key from a users keyring
 // We keep a local variable for authToken beacuse `ipcRenderer.send` does not
 // contain a response, so there is no way to know when it's been set
+// @if TARGET='app'
 let authToken;
 Lbryio.setOverride(
   'setAuthToken',
@@ -110,6 +112,7 @@ Lbryio.setOverride(
       }
     })
 );
+// @endif
 
 rewards.setCallback('claimFirstRewardSuccess', () => {
   app.store.dispatch(doOpenModal(MODALS.FIRST_REWARD));
@@ -247,10 +250,11 @@ const init = () => {
       document.getElementById('app')
     );
     // @if TARGET='web'
-    // window.sessionStorage.removeItem('loaded');
+    window.sessionStorage.removeItem('loaded');
     // @endif
   }
 
+  console.log('???', window.sessionStorage.getItem('loaded'));
   if (window.sessionStorage.getItem('loaded') === 'y') {
     onDaemonReady();
   } else {

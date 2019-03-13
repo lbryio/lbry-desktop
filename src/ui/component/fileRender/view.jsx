@@ -93,7 +93,7 @@ class FileRender extends React.PureComponent<Props> {
   }
 
   renderViewer() {
-    const { source, mediaType, currentTheme, poster } = this.props;
+    const { source, mediaType, currentTheme, poster, claim } = this.props;
 
     // Extract relevant data to render file
     const { stream, fileType, contentType, downloadPath, fileName } = source;
@@ -122,12 +122,19 @@ class FileRender extends React.PureComponent<Props> {
       ),
       video: (
         <AudioVideoViewer
+          claim={claim}
           source={{ downloadPath, fileName }}
           contentType={contentType}
           poster={poster}
         />
       ),
-      audio: <AudioVideoViewer source={{ downloadPath, fileName }} contentType={contentType} />,
+      audio: (
+        <AudioVideoViewer
+          claim={claim}
+          source={{ downloadPath, fileName }}
+          contentType={contentType}
+        />
+      ),
       // Add routes to viewer...
     };
 
