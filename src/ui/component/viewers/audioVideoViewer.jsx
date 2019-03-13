@@ -1,4 +1,5 @@
 // @flow
+import type { Claim } from 'types/claim';
 import React from 'react';
 import { stopContextMenu } from 'util/context-menu';
 import videojs from 'video.js';
@@ -11,6 +12,7 @@ type Props = {
   },
   contentType: string,
   poster?: string,
+  claim: Claim,
 };
 
 class AudioVideoViewer extends React.PureComponent<Props> {
@@ -18,17 +20,9 @@ class AudioVideoViewer extends React.PureComponent<Props> {
   player: ?{ dispose: () => void };
 
   componentDidMount() {
-    const { source, contentType, poster } = this.props;
-    const { downloadPath, fileName } = source;
+    const { contentType, poster, claim } = this.props;
 
-    const indexOfFileName = downloadPath.indexOf(fileName);
-    const basePath = downloadPath.slice(0, indexOfFileName);
-    const encodedFileName = encodeURIComponent(fileName);
-
-    // We only want to encode the fileName so forward slashes "/" are handled properly by the file system
-    // TODO: Determine changes needed for windows
-    const path = `${basePath}${encodedFileName}`;
-
+    const path = `https://api.lbry.tv/content/claims/${claim.name}/${claim.claim_id}/stream.mp4`;
     const sources = [
       {
         src: path,

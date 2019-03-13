@@ -63,6 +63,7 @@ Lbry.setDaemonConnectionString(SDK_API_URL);
 // We interect with ipcRenderer to get the auth key from a users keyring
 // We keep a local variable for authToken beacuse `ipcRenderer.send` does not
 // contain a response, so there is no way to know when it's been set
+// @if TARGET='app'
 let authToken;
 Lbryio.setOverride(
   'setAuthToken',
@@ -110,6 +111,7 @@ Lbryio.setOverride(
       }
     })
 );
+// @endif
 
 rewards.setCallback('claimFirstRewardSuccess', () => {
   app.store.dispatch(doOpenModal(MODALS.FIRST_REWARD));
@@ -247,7 +249,7 @@ const init = () => {
       document.getElementById('app')
     );
     // @if TARGET='web'
-    // window.sessionStorage.removeItem('loaded');
+    window.sessionStorage.removeItem('loaded');
     // @endif
   }
 
