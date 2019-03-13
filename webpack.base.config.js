@@ -2,7 +2,6 @@ const path = require('path');
 const merge = require('webpack-merge');
 const { DefinePlugin, ProvidePlugin } = require('webpack');
 const { getIfUtils, removeEmpty } = require('webpack-config-utils');
-var DuplicatePackageCheckerPlugin = require('duplicate-package-checker-webpack-plugin');
 
 const NODE_ENV = process.env.NODE_ENV || 'development';
 
@@ -81,7 +80,6 @@ const baseConfig = {
       'process.env.SDK_API_URL': JSON.stringify(process.env.SDK_API_URL),
       'process.env.LBRY_API_URL': JSON.stringify(process.env.LBRY_API_URL),
     }),
-    // new DuplicatePackageCheckerPlugin(),
   ],
 };
 
