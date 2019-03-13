@@ -117,10 +117,13 @@ const persistOptions = {
   storage: localForage,
 };
 
+// Dont' persist anything on web (for now)
+// @if TARGET='app'
 window.cacheStore = persistStore(store, persistOptions, err => {
   if (err) {
     console.error('Unable to load saved settings'); // eslint-disable-line no-console
   }
 });
+// @endif
 
 export default store;

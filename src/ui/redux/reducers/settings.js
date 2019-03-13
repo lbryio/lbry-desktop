@@ -59,7 +59,9 @@ reducers[ACTIONS.CLIENT_SETTING_CHANGED] = (state, action) => {
   clientSettings[key] = value;
 
   // this technically probably shouldn't happen here, and should be fixed when we're no longer using localStorage at all for persistent app state
+  // @if TARGET='app'
   localStorage.setItem(`setting_${key}`, JSON.stringify(value));
+  // @endif
 
   return Object.assign({}, state, {
     clientSettings,

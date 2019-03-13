@@ -10,10 +10,10 @@ import Yrbl from 'component/yrbl';
 // The height for items must be static (in banner.scss) so that we can reliably animate into the banner and be vertically centered
 //
 const spring = {
-  type: 'spring',
-  stiffness: 100,
-  damping: 10,
-  mass: 1,
+  transition: {
+    duration: 250,
+    ease: 'easeOut',
+  },
 };
 
 const Welcome = posed.div({
@@ -40,6 +40,36 @@ type Props = {
 };
 
 export default class FirstRun extends PureComponent<Props> {
+  getWelcomeMessage() {
+    /* eslint-disable no-unreachable */
+    // @if TARGET='app'
+    return (
+      <React.Fragment>
+        <p>
+          {__('Using LBRY is like dating a centaur. Totally normal up top, and')}{' '}
+          <em>{__('way different')}</em> {__('underneath.')}
+        </p>
+        <p>{__('Up top, LBRY is similar to popular media sites.')}</p>
+        <p>
+          {__('Below, LBRY is controlled by users -- you -- via blockchain and decentralization.')}
+        </p>
+      </React.Fragment>
+    );
+    // @endif
+    // @if TARGET='web'
+    return (
+      <React.Fragment>
+        <p>{__('Thanks for trying out lbry.tv')}</p>
+        <p>
+          {__(
+            "Some things still don't work they way they are supposed to, but we are working hard to make that better."
+          )}
+        </p>
+      </React.Fragment>
+    );
+    // @endif
+    /* eslint-enable */
+  }
   render() {
     const {
       welcomeAcknowledged,
@@ -69,17 +99,8 @@ export default class FirstRun extends PureComponent<Props> {
                   <h1 className="card__title">{__('Hi There')}</h1>
                 </header>
                 <div className="card__content">
-                  <p>
-                    {__('Using LBRY is like dating a centaur. Totally normal up top, and')}{' '}
-                    <em>{__('way different')}</em> {__('underneath.')}
-                  </p>
-                  <p>{__('Up top, LBRY is similar to popular media sites.')}</p>
-                  <p>
-                    {__(
-                      'Below, LBRY is controlled by users -- you -- via blockchain and decentralization.'
-                    )}
-                  </p>
-                  <div className="card__actions">
+                  {this.getWelcomeMessage()}
+                  <div className="card__actions card__actions--top-space">
                     <Button button="primary" onClick={acknowledgeWelcome} label={__("I'm In")} />
                   </div>
                 </div>

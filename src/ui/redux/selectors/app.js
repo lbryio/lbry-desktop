@@ -139,11 +139,13 @@ export const selectNavLinks = createSelector(
     // Determine if any links should show a tooltip for a guided tour
     // It will only show one at a time, in the order they are set.
     const guidedTourItem = [
+      // @if TARGET='app'
       {
         page: PAGES.INVITE,
         hasBeenCompleted: inviteAcknowledged,
         guide: 'Check this out!',
       },
+      // @endif
       // Add more items below for tooltip guides that will happen after a user has completed the invite guide
     ].filter(({ hasBeenCompleted }) => !hasBeenCompleted)[0];
 
