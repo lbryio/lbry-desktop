@@ -1,4 +1,5 @@
 const path = require('path');
+const webpack = require('webpack');
 const merge = require('webpack-merge');
 const baseConfig = require('./webpack.base.config.js');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
@@ -58,7 +59,7 @@ const mainConfig = {
 const renderConfig = {
   target: 'electron-renderer',
   entry: {
-    ui: './src/ui/index.jsx',
+    ui: ['./src/ui/index.jsx'],
   },
   output: {
     filename: '[name].js',
