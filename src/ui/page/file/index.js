@@ -14,7 +14,12 @@ import {
   makeSelectMetadataForUri,
   makeSelectChannelForClaimUri,
 } from 'lbry-redux';
-import { makeSelectCostInfoForUri, doFetchCostInfoForUri } from 'lbryinc';
+import {
+  makeSelectCostInfoForUri,
+  doFetchCostInfoForUri,
+  doFetchViewCount,
+  makeSelectViewCountForUri,
+} from 'lbryinc';
 import { selectShowNsfw, makeSelectClientSetting } from 'redux/selectors/settings';
 import { makeSelectIsSubscribed } from 'redux/selectors/subscriptions';
 import { doPrepareEdit } from 'redux/actions/publish';
@@ -34,6 +39,7 @@ const select = (state, props) => ({
   autoplay: makeSelectClientSetting(settings.AUTOPLAY)(state),
   isSubscribed: makeSelectIsSubscribed(props.uri)(state),
   channelUri: makeSelectChannelForClaimUri(props.uri, true)(state),
+  viewCount: makeSelectViewCountForUri(props.uri)(state),
 });
 
 const perform = dispatch => ({
@@ -45,6 +51,7 @@ const perform = dispatch => ({
   setClientSetting: (key, value) => dispatch(doSetClientSetting(key, value)),
   setViewed: uri => dispatch(doSetContentHistoryItem(uri)),
   markSubscriptionRead: (channel, uri) => dispatch(doRemoveUnreadSubscription(channel, uri)),
+  fetchViewCount: claimId => dispatch(doFetchViewCount(claimId)),
 });
 
 export default connect(
