@@ -1,6 +1,7 @@
 // @flow
 import * as React from 'react';
 import { FormField, Form, Submit } from 'component/common/form';
+import { Lbryio } from 'lbryinc';
 
 type Props = {
   cancelButton: React.Node,
@@ -35,6 +36,10 @@ class UserEmailNew extends React.PureComponent<Props, State> {
     const { email } = this.state;
     const { addUserEmail } = this.props;
     addUserEmail(email);
+
+    // @if TARGET='web'
+    Lbryio.call('user_tag', 'edit', { add: 'lbrytv' });
+    // @endif
   }
 
   render() {
@@ -45,7 +50,14 @@ class UserEmailNew extends React.PureComponent<Props, State> {
         <header className="card__header">
           <h2 className="card__title">{__("Don't Miss Out")}</h2>
           <p className="card__subtitle">
+            {/* @if TARGET='app' */}
             {__("We'll let you know about LBRY updates, security issues, and great new content.")}
+            {/* @endif */}
+            {/* @if TARGET='web' */}
+            {__(
+              'Stay up to date with lbry.tv and be the first to know about the progress we make.'
+            )}
+            {/* @endif */}
           </p>
         </header>
 

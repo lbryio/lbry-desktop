@@ -26,7 +26,7 @@
     "dev": "yarn dev:electron",
     "dev:electron": "cross-env NODE_ENV=development node ./src/platforms/electron/devServer.js",
     "dev:web": "webpack-dev-server --open --hot --progress --config webpack.web.config.js",
-    "dev:internal-apis": "LBRY_API_URL='http://localhost:8080' yarn dev:electron",
+    "dev:internal-apis": "LBRY_API_URL='http://localhost:9090' yarn dev:electron",
     "run:electron": "electron ./dist/electron/main.js",
     "run:web": "cross-env NODE_ENV=production yarn compile:web && node ./dist/web/server.js",
     "pack": "electron-builder --dir",
