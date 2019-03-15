@@ -256,19 +256,13 @@ class MediaPlayer extends React.PureComponent<Props, State> {
     // This is what render-media does with unplayable files
     const { claim, fileName, downloadPath, contentType } = this.props;
 
-    console.log('render', contentType, MediaPlayer.SANDBOX_TYPES)
-
     if (MediaPlayer.SANDBOX_TYPES.indexOf(contentType) > -1) {
-      console.log('claim', claim)
       const outpoint = `${claim.txid}:${claim.nout}`;
-
-      console.log('fetch', `${MediaPlayer.SANDBOX_SET_BASE_URL}${outpoint}`)
 
       return fetch(`${MediaPlayer.SANDBOX_SET_BASE_URL}${outpoint}`)
         .then(res => res.text())
         .then(url => {
           const fileSource = { url: `${MediaPlayer.SANDBOX_CONTENT_BASE_URL}${url}` };
-          console.log('set source', fileSource)
           return this.setState({ fileSource });
         });
     }
@@ -332,8 +326,6 @@ class MediaPlayer extends React.PureComponent<Props, State> {
     const { fileSource } = this.state;
 
     const isFileType = this.isSupportedFile();
-
-    console.log('isFileType', isFileType);
 
     const isFileReady = fileSource && isFileType;
     const isPlayableType = this.playableType();
