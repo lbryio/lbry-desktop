@@ -144,6 +144,14 @@ class MediaPlayer extends React.PureComponent<Props, State> {
     else {
       // Temp hack to help in some metadata loading cases
       setTimeout(() => {
+
+        const currentMediaContainer = this.mediaContainer.current;
+
+        // Clean any potential rogue instances
+        while (currentMediaContainer.firstChild) {
+          currentMediaContainer.removeChild(currentMediaContainer.firstChild);
+        }
+
         player.append(
           {
             name: fileName,
