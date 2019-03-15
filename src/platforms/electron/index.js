@@ -13,7 +13,7 @@ import Daemon from './Daemon';
 import createTray from './createTray';
 import createWindow from './createWindow';
 import pjson from '../../../package.json';
-// import startSandbox from './startSandbox';
+import startSandbox from './startSandbox';
 
 autoUpdater.autoDownload = true;
 
@@ -36,13 +36,9 @@ let daemon;
 const appState = {};
 
 const installExtensions = async () => {
-  // // eslint-disable-next-line import/no-extraneous-dependencies,global-require
-  // const installer = require('electron-devtools-installer');
-  // // eslint-disable-next-line import/no-extraneous-dependencies,global-require
-  // const devtronExtension = require('devtron');
-  // const extensions = ['REACT_DEVELOPER_TOOLS', 'REDUX_DEVTOOLS'];
-  // await devtronExtension.install();
-  // return Promise.all(extensions.map(name => installer.default(installer[name]))).catch(console.log);
+  // eslint-disable-next-line import/no-extraneous-dependencies,global-require
+  const devtronExtension = require('devtron');
+  return await devtronExtension.install();
 };
 
 app.setAsDefaultProtocolClient('lbry');
@@ -89,7 +85,7 @@ app.on('ready', async () => {
     daemon.launch();
   }
 
-  // startSandbox();
+  startSandbox();
 
   if (isDev) {
     await installExtensions();
