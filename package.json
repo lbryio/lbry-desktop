@@ -59,7 +59,7 @@
     "hast-util-sanitize": "^1.1.2",
     "keytar": "^4.3.0",
     "lbry-format": "https://github.com/lbryio/lbry-format.git",
-    "lbry-redux": "lbryio/lbry-redux#f140db38dd73cead9e87549340fa9434da62ba8a",
+    "lbry-redux": "lbryio/lbry-redux#2a7e05940f892f104428eeb37bd1f178da811a09",
     "lbryinc": "lbryio/lbryinc#351d0a08806b0f770b50066b61a806171f6424d4",
     "localforage": "^1.7.1",
     "mammoth": "^1.4.6",

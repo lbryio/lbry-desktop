@@ -342,7 +342,9 @@ export function doFetchClaimsByChannel(
 export function doPlayUri(uri) {
   return dispatch => {
     dispatch(doSetPlayingUri(uri));
+    // @if TARGET='app'
     dispatch(doPurchaseUri(uri));
+    // @endif
   };
 }
 

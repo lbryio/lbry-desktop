@@ -79,8 +79,10 @@ class FilePage extends React.Component<Props> {
       fetchViewCount(claim.claim_id);
     }
 
-    // always refresh file info when entering file page
+    // always refresh file info when entering file page to see if we have the file
+    // @if TARGET='app'
     fetchFileInfo(uri);
+    // @endif
 
     // See https://github.com/lbryio/lbry-desktop/pull/1563 for discussion
     fetchCostInfo(uri);
@@ -89,9 +91,11 @@ class FilePage extends React.Component<Props> {
 
   componentWillReceiveProps(nextProps: Props) {
     const { fetchFileInfo, uri, setViewed } = this.props;
+    // @if TARGET='app'
     if (nextProps.fileInfo === undefined) {
       fetchFileInfo(uri);
     }
+    // @endif
 
     if (uri !== nextProps.uri) {
       setViewed(nextProps.uri);

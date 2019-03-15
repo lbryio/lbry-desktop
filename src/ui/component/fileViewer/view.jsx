@@ -209,7 +209,7 @@ class FileViewer extends React.PureComponent<Props> {
       isLoading,
       isDownloading,
       playingUri,
-      fileInfo,
+      fileInfo = {},
       contentType,
       changeVolume,
       volume,
@@ -223,9 +223,17 @@ class FileViewer extends React.PureComponent<Props> {
     } = this.props;
 
     const isPlaying = playingUri === uri;
+    /* eslint-disable no-redeclare */
+    // @if TARGET='app'
     const isReadyToPlay = fileInfo && fileInfo.download_path && fileInfo.written_bytes > 0;
-    const shouldObscureNsfw = obscureNsfw && metadata && metadata.nsfw;
+    // @endif
+    // @if TARGET='web'
+    // try to play immediately on web, we don't need to call file_list since we are streaming from reflector
+    const isReadyToPlay = isPlaying;
+    // @endif
+    /* eslint-enable */
 
+    const shouldObscureNsfw = obscureNsfw && metadata && metadata.nsfw;
     let loadStatusMessage = '';
 
     if (fileInfo && fileInfo.completed && (!fileInfo.download_path || !fileInfo.written_bytes)) {
