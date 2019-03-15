@@ -3,6 +3,7 @@ import path from 'path';
 
 export default window => {
   let iconPath;
+
   switch (process.platform) {
     case 'darwin': {
       iconPath = 'static/img/tray/mac/trayTemplate.png';
@@ -17,7 +18,9 @@ export default window => {
     }
   }
 
-  const tray = new Tray(iconPath);
+  const tray = new Tray(
+    process.env.NODE_ENV === 'development' ? iconPath : path.join(process.resourcesPath, iconPath)
+  );
 
   tray.on('double-click', () => {
     window.show();

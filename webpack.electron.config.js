@@ -53,6 +53,7 @@ if (process.env.NODE_ENV === 'production') {
   mainConfig = merge(mainConfig, {
     externals: {
       keytar: 'require("keytar")',
+      electron: 'require("electron")',
     },
   });
 } else {

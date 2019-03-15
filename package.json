@@ -22,7 +22,7 @@
   "scripts": {
     "compile:electron": "webpack --progress --config webpack.electron.config.js",
     "compile:web": "webpack --config webpack.web.config.js",
-    "compile": "yarn compile:electron && yarn compile:web",
+    "compile": "cross-env NODE_ENV=production yarn compile:electron && cross-env NODE_ENV=production yarn compile:web",
     "dev": "yarn dev:electron",
     "dev:electron": "cross-env NODE_ENV=development node ./src/platforms/electron/devServer.js",
     "dev:web": "webpack-dev-server --open --hot --progress --config webpack.web.config.js",
