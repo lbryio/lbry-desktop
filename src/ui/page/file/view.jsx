@@ -99,13 +99,13 @@ class FilePage extends React.Component<Props> {
   }
 
   componentDidUpdate(prevProps: Props) {
-    const { isSubscribed, claim, uri, fetchViewCount } = this.props;
+    const { isSubscribed, claim, uri, fetchViewCount, claimIsMine } = this.props;
 
     if (!prevProps.isSubscribed && isSubscribed) {
       this.removeFromSubscriptionNotifications();
     }
 
-    if (prevProps.uri !== uri) {
+    if (prevProps.uri !== uri && claimIsMine) {
       fetchViewCount(claim.claim_id);
     }
   }
@@ -213,9 +213,11 @@ class FilePage extends React.Component<Props> {
               {__('Published on')} <DateTime block={height} show={DateTime.SHOW_DATE} />
             </div>
 
-            <div className="media__subtext--large">
-              {viewCount} {viewCount !== 1 ? __('Views') : __('View')}
-            </div>
+            {claimIsMine && (
+              <div className="media__subtext--large">
+                {viewCount} {viewCount !== 1 ? __('Views') : __('View')}
+              </div>
+            )}
           </div>
 
           <div className="media__actions media__actions--between">
