@@ -37,10 +37,12 @@ type Props = {
   isSubscribed: ?string,
   isSubscribed: boolean,
   channelUri: string,
+  viewCount: number,
   prepareEdit: ({}, string) => void,
   navigate: (string, ?{}) => void,
   openModal: (id: string, { uri: string }) => void,
   markSubscriptionRead: (string, string) => void,
+  fetchViewCount: string => void,
 };
 
 class FilePage extends React.Component<Props> {
@@ -58,11 +60,25 @@ class FilePage extends React.Component<Props> {
   ];
 
   componentDidMount() {
-    const { uri, fetchFileInfo, fetchCostInfo, setViewed, isSubscribed } = this.props;
+    const {
+      uri,
+      fetchFileInfo,
+      fetchCostInfo,
+      setViewed,
+      isSubscribed,
+      claimIsMine,
+      fetchViewCount,
+      claim,
+    } = this.props;
 
     if (isSubscribed) {
       this.removeFromSubscriptionNotifications();
     }
+
+    if (claimIsMine) {
+      fetchViewCount(claim.claim_id);
+    }
+
     // always refresh file info when entering file page
     fetchFileInfo(uri);
 
@@ -83,8 +99,14 @@ class FilePage extends React.Component<Props> {
   }
 
   componentDidUpdate(prevProps: Props) {
-    if (!prevProps.isSubscribed && this.props.isSubscribed) {
+    const { isSubscribed, claim, uri, fetchViewCount } = this.props;
+
+    if (!prevProps.isSubscribed && isSubscribed) {
       this.removeFromSubscriptionNotifications();
+    }
+
+    if (prevProps.uri !== uri) {
+      fetchViewCount(claim.claim_id);
     }
   }
 
@@ -110,6 +132,7 @@ class FilePage extends React.Component<Props> {
       costInfo,
       fileInfo,
       channelUri,
+      viewCount,
     } = this.props;
 
     // File info
@@ -182,11 +205,17 @@ class FilePage extends React.Component<Props> {
             <FilePrice badge uri={normalizeURI(uri)} />
           </div>
 
-          <div className="media__subtext media__subtext--large">
-            <div className="media__subtitle__channel">
-              <UriIndicator uri={uri} link />
+          <div className="media__actions media__actions--between">
+            <div className="media__subtext media__subtext--large">
+              <div className="media__subtitle__channel">
+                <UriIndicator uri={uri} link />
+              </div>
+              {__('Published on')} <DateTime block={height} show={DateTime.SHOW_DATE} />
             </div>
-            {__('Published on')} <DateTime block={height} show={DateTime.SHOW_DATE} />
+
+            <div className="media__subtext--large">
+              {viewCount} {viewCount !== 1 ? __('Views') : __('View')}
+            </div>
           </div>
 
           <div className="media__actions media__actions--between">

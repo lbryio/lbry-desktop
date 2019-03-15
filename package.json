@@ -60,7 +60,7 @@
     "keytar": "^4.3.0",
     "lbry-format": "https://github.com/lbryio/lbry-format.git",
     "lbry-redux": "lbryio/lbry-redux#f140db38dd73cead9e87549340fa9434da62ba8a",
-    "lbryinc": "lbryio/lbryinc#636f014f421827ab6b74caf334c364a362a1a099",
+    "lbryinc": "lbryio/lbryinc#351d0a08806b0f770b50066b61a806171f6424d4",
     "localforage": "^1.7.1",
     "mammoth": "^1.4.6",
     "mime": "^2.3.1",

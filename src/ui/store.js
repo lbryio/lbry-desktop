@@ -14,6 +14,7 @@ import {
   costInfoReducer,
   blacklistReducer,
   homepageReducer,
+  statsReducer,
 } from 'lbryinc';
 import navigationReducer from 'redux/reducers/navigation';
 import settingsReducer from 'redux/reducers/settings';
@@ -74,6 +75,7 @@ const reducers = combineReducers({
   notifications: notificationsReducer,
   blacklist: blacklistReducer,
   homepage: homepageReducer,
+  stats: statsReducer,
 });
 
 const bulkThunk = createBulkThunkMiddleware();
