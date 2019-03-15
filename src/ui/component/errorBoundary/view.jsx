@@ -1,10 +1,8 @@
 // @flow
+import { Lbryio } from 'lbryinc';
 import * as React from 'react';
 import Yrbl from 'component/yrbl';
 import Button from 'component/button';
-
-const WEB_HOOK_URL =
-  'https://hooks.slack.com/services/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';
 
 type Props = {
   children: React.Node,
@@ -28,12 +26,7 @@ export default class ErrorBoundary extends React.Component<Props, State> {
     declare var app: { env: string };
 
     if (app.env === 'production') {
-      fetch(WEB_HOOK_URL, {
-        method: 'POST',
-        body: JSON.stringify({
-          text: error.stack,
-        }),
-      });
+      Lbryio.call('event', 'desktop_error', { error_message: error.stack });
     }
   }
 
