@@ -81,7 +81,7 @@ class WunderBar extends React.PureComponent<Props> {
   }
 
   handleSubmit(value: string, suggestion?: { value: string, type: string }) {
-    const { onSubmit, onSearch } = this.props;
+    const { onSubmit, onSearch, doShowSnackBar } = this.props;
     const query = value.trim();
     const getParams = () => {
       const parts = query.split('?');
@@ -94,6 +94,12 @@ class WunderBar extends React.PureComponent<Props> {
       return extraParams;
     };
 
+    const showSnackError = () => {
+      doShowSnackBar({
+        message: __('Invalid LBRY URL entered. Only A-Z, a-z, 0-9, and "-" allowed.'),
+      });
+    };
+
     // User selected a suggestion
     if (suggestion) {
       if (suggestion.type === 'search') {
@@ -103,9 +109,7 @@ class WunderBar extends React.PureComponent<Props> {
         const uri = normalizeURI(query);
         onSubmit(uri, params);
       } else {
-        this.props.doShowSnackBar({
-          message: __('Invalid LBRY URL entered. Only A-Z, a-z, and - allowed.'),
-        });
+        showSnackError();
       }
 
       return;
@@ -119,9 +123,7 @@ class WunderBar extends React.PureComponent<Props> {
         const params = getParams();
         onSubmit(uri, params);
       } else {
-        this.props.doShowSnackBar({
-          message: __('Invalid LBRY URL entered. Only A-Z, a-z, and - allowed.'),
-        });
+        showSnackError();
       }
     } catch (e) {
       onSearch(query);
