@@ -7,7 +7,7 @@ const CopyWebpackPlugin = require('copy-webpack-plugin');
 const STATIC_ROOT = path.resolve(__dirname, 'static/');
 const DIST_ROOT = path.resolve(__dirname, 'dist/');
 
-const mainConfig = {
+let mainConfig = {
   target: 'electron-main',
   entry: {
     main: './src/platforms/electron/index.js',
@@ -46,10 +46,22 @@ const mainConfig = {
   devServer: {
     contentBase: path.join(__dirname, 'dist/electron'),
   },
-  externals: {
-    keytar: 'require("keytar")',
-  },
 };
+
+if (process.env.NODE_ENV === 'production') {
+  // Apply prod overrides
+  mainConfig = merge(mainConfig, {
+    externals: {
+      keytar: 'require("keytar")',
+    },
+  });
+} else {
+  const nodeExternals = require('webpack-node-externals');
+  // Apply dev overrides
+  mainConfig = merge(mainConfig, {
+    externals: [nodeExternals()],
+  });
+}
 
 const renderConfig = {
   target: 'electron-renderer',

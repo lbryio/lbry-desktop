@@ -46,6 +46,7 @@ const renderInstance = middleware(renderCompiler, {
 });
 app.use(require('webpack-hot-middleware')(renderCompiler));
 app.use(renderInstance);
+app.use(express.static('dist/electron/static'));
 
 app.listen(8080, () => {
   console.log(chalk.yellow.bold('Renderer listening on port 8080 (still compiling)'));
@@ -64,7 +65,7 @@ mainInstance.waitUntilValid(() => {
   const electron = require('electron');
   const proc = require('child_process');
 
-  const child = proc.spawn(electron, ['./dist/electron/main.js']);
+  const child = proc.spawn(electron, ['./dist/electron/webpack/main.js']);
 
   child.stdout.on('data', (data) => {
     console.log(data.toString());
