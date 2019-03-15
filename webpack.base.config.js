@@ -12,9 +12,9 @@ const UI_ROOT = path.resolve(__dirname, 'src/ui/');
 const STATIC_ROOT = path.resolve(__dirname, 'static/');
 const DIST_ROOT = path.resolve(__dirname, 'dist/');
 
-const baseConfig = {
+let baseConfig = {
   mode: ifProduction('production', 'development'),
-  devtool: ifProduction('source-map', 'eval-source-map'),
+  devtool: ifProduction(false, 'eval-source-map'),
   node: {
     __dirname: false,
   },
