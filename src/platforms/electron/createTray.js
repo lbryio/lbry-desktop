@@ -1,6 +1,8 @@
 import { app, Menu, Tray } from 'electron';
 import path from 'path';
 
+let tray;
+
 export default window => {
   let iconPath;
 
@@ -18,7 +20,7 @@ export default window => {
     }
   }
 
-  const tray = new Tray(
+  tray = new Tray(
     process.env.NODE_ENV === 'development' ? iconPath : path.join(process.resourcesPath, iconPath)
   );
 
