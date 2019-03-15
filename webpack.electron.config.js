@@ -14,14 +14,10 @@ const mainConfig = {
   },
   output: {
     filename: '[name].js',
-    path: __dirname + '/dist/electron',
+    path: __dirname + '/dist/electron/webpack',
   },
   module: {
     rules: [
-      {
-        test: /\.node$/,
-        use: 'node-loader',
-      },
       {
         test: /\.jsx?$/,
         use: [
@@ -43,16 +39,15 @@ const mainConfig = {
       {
         from: `${STATIC_ROOT}/`,
         to: `${DIST_ROOT}/electron/static/`,
-        ignore: ['font/**/*', 'index.html'],
-      },
-      {
-        from: `${STATIC_ROOT}/index.html`,
-        to: `${DIST_ROOT}/electron/index.html`,
+        ignore: ['font/**/*'],
       },
     ]),
   ],
   devServer: {
     contentBase: path.join(__dirname, 'dist/electron'),
+  },
+  externals: {
+    keytar: 'require("keytar")',
   },
 };
 
@@ -63,14 +58,10 @@ const renderConfig = {
   },
   output: {
     filename: '[name].js',
-    path: __dirname + '/dist/electron',
+    path: __dirname + '/dist/electron/webpack',
   },
   module: {
     rules: [
-      {
-        test: /\.node$/,
-        use: 'node-loader',
-      },
       {
         test: /\.jsx?$/,
         use: [
@@ -87,23 +78,6 @@ const renderConfig = {
       },
     ],
   },
-  plugins: [
-    new CopyWebpackPlugin([
-      {
-        from: `${STATIC_ROOT}/`,
-        to: `${DIST_ROOT}/electron/static/`,
-        ignore: ['font/**/*', 'index.html', 'index.dev.html'],
-      },
-      {
-        from: `${STATIC_ROOT}/index.html`,
-        to: `${DIST_ROOT}/electron/index.html`,
-      },
-      {
-        from: `${STATIC_ROOT}/index.dev.html`,
-        to: `${DIST_ROOT}/electron/index.dev.html`,
-      },
-    ]),
-  ],
 };
 
 module.exports = [merge(baseConfig, mainConfig), merge(baseConfig, renderConfig)];

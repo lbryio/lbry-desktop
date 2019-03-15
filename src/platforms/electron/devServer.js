@@ -65,4 +65,8 @@ mainInstance.waitUntilValid(() => {
   const proc = require('child_process');
 
   const child = proc.spawn(electron, ['./dist/electron/main.js']);
+
+  child.stdout.on('data', (data) => {
+    console.log(data.toString());
+  });
 });

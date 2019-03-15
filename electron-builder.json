@@ -6,19 +6,19 @@
   },
   "files": [
     {
-      "from": "dist/electron",
+      "from": "dist/electron/ui",
       "to": "./",
-      "filter": ["!dist/!electron/**/*"]
+      "filter": ["!dist/!electron/ui/**/*"]
+    },
+    {
+      "from": "dist/electron/webpack",
+      "to": "./",
+      "filter": ["!dist/!electron/!webpack/*.js", "!dist/!electron/!webpack/!static/**/*"]
     },
     {
       "from": "dist/electron/static",
       "to": "./",
-      "filter": ["!dist/!electron/static/**/*"]
-    },
-    {
-      "from": "dist/electron/ui",
-      "to": "./",
-      "filter": ["!dist/!electron/ui/**/*"]
+      "filter": ["!dist/!electron/!static/index.html"]
     }
   ],
   "publish": [

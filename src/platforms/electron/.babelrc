@@ -1,0 +1,14 @@
+{
+  "presets": [
+    ["@babel/preset-env", { "useBuiltIns": "entry" }],
+    "@babel/react",
+    "@babel/flow"
+  ],
+  "plugins": [
+    "babel-plugin-transform-imports",
+    ["@babel/plugin-proposal-decorators", { "decoratorsBeforeExport": true }],
+    "@babel/plugin-transform-flow-strip-types",
+    "@babel/plugin-proposal-class-properties",
+    "babel-plugin-add-module-exports"
+  ]
+}

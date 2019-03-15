@@ -202,7 +202,9 @@ class MediaPlayer extends React.PureComponent<Props, State> {
     }
     const playerElement = this.mediaContainer.current;
     if (playerElement) {
-      playerElement.children[0].play();
+      if(playerElement.children && playerElement.children[0]) {
+        playerElement.children[0].play();
+      }
     }
   }
   // @endif
@@ -324,6 +326,7 @@ class MediaPlayer extends React.PureComponent<Props, State> {
     const { fileSource } = this.state;
 
     const isFileType = this.isSupportedFile();
+
     const isFileReady = fileSource && isFileType;
     const isPlayableType = this.playableType();
     const { isLoading, loadingStatus } = this.showLoadingScreen(isFileType, isPlayableType);
