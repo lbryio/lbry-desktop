@@ -45,7 +45,7 @@
     "electron-log": "^2.2.12",
     "electron-updater": "^4.0.6",
     "express": "^4.16.4",
-    "keytar": "4.4.1"
+    "keytar": "^4.4.1"
   },
   "devDependencies": {
     "@babel/core": "^7.0.0",
@@ -100,7 +100,6 @@
     "hast-util-sanitize": "^1.1.2",
     "husky": "^0.14.3",
     "json-loader": "^0.5.4",
-    "keytar": "4.4.1",
     "lbry-format": "https://github.com/lbryio/lbry-format.git",
     "lbry-redux": "lbryio/lbry-redux#2a7e05940f892f104428eeb37bd1f178da811a09",
     "lbryinc": "lbryio/lbryinc#351d0a08806b0f770b50066b61a806171f6424d4",
