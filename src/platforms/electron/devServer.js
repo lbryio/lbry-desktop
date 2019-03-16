@@ -70,4 +70,11 @@ mainInstance.waitUntilValid(() => {
   child.stdout.on('data', (data) => {
     console.log(data.toString());
   });
+
+  process.on('SIGINT', function() {
+    console.log('Killing threads...');
+
+    child.kill('SIGINT');
+    process.exit();
+  });
 });
