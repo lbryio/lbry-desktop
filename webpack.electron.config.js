@@ -60,7 +60,10 @@ if (process.env.NODE_ENV === 'production') {
   const nodeExternals = require('webpack-node-externals');
   // Apply dev overrides
   mainConfig = merge(mainConfig, {
-    externals: [nodeExternals()],
+    externals: {
+      keytar: 'require("keytar")',
+      electron: 'require("electron")',
+    },
   });
 }
 
