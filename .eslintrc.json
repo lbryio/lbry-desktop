@@ -18,7 +18,8 @@
     "i18n": true,
     "__": true,
     "__n": true,
-    "app": true
+    "app": true,
+    "IS_WEB": true
   },
   "rules": {
     "no-multi-spaces": 0,
