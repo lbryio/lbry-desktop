@@ -34,13 +34,11 @@ class Spinner extends PureComponent<Props, State> {
     const { delayed } = this.props;
     if (!delayed) {
       // We can disable this because the default state is to render nothing so there won't be any content thrashing
-      // eslint-disable-next-line react/no-did-mount-set-state
       this.setState({ show: true });
     } else {
       // If the delayed prop is passed in, wait some time before showing the loading indicator
       // We don't want the spinner to just flash for a fraction of a second
       this.delayedTimeout = setTimeout(() => {
-        // eslint-disable-next-line react/no-did-mount-set-state
         this.setState({ show: true });
       }, 750);
     }
@@ -72,11 +70,11 @@ class Spinner extends PureComponent<Props, State> {
           'spinner--small': type === 'small',
         })}
       >
-        <div className="rect rect1" />
-        <div className="rect rect2" />
-        <div className="rect rect3" />
-        <div className="rect rect4" />
-        <div className="rect rect5" />
+        <div className='rect rect1' />
+        <div className='rect rect2' />
+        <div className='rect rect3' />
+        <div className='rect rect4' />
+        <div className='rect rect5' />
       </div>
     );
   }

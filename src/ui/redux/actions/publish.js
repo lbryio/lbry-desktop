@@ -30,7 +30,7 @@ import path from 'path';
 
 type Action = UpdatePublishFormAction | { type: ACTIONS.CLEAR_PUBLISH };
 
-export const doResetThumbnailStatus = () => (dispatch: Dispatch<Action>): Promise<Action> => {
+export const doResetThumbnailStatus = () => (dispatch: Dispatch): Promise<Action> => {
   dispatch({
     type: ACTIONS.UPDATE_PUBLISH_FORM,
     data: {
@@ -66,13 +66,13 @@ export const doResetThumbnailStatus = () => (dispatch: Dispatch<Action>): Promis
     );
 };
 
-export const doClearPublish = () => (dispatch: Dispatch<Action>): Promise<Action> => {
+export const doClearPublish = () => (dispatch: Dispatch): Promise<Action> => {
   dispatch({ type: ACTIONS.CLEAR_PUBLISH });
   return dispatch(doResetThumbnailStatus());
 };
 
 export const doUpdatePublishForm = (publishFormValue: UpdatePublishFormData) => (
-  dispatch: Dispatch<Action>
+  dispatch: Dispatch
 ): UpdatePublishFormAction =>
   dispatch(
     ({
@@ -81,9 +81,7 @@ export const doUpdatePublishForm = (publishFormValue: UpdatePublishFormData) => 
     }: UpdatePublishFormAction)
   );
 
-export const doUploadThumbnail = (filePath: string, nsfw: boolean) => (
-  dispatch: Dispatch<Action>
-) => {
+export const doUploadThumbnail = (filePath: string, nsfw: boolean) => (dispatch: Dispatch) => {
   const thumbnail = fs.readFileSync(filePath);
   const fileExt = path.extname(filePath);
   const fileName = path.basename(filePath);
@@ -129,18 +127,18 @@ export const doUploadThumbnail = (filePath: string, nsfw: boolean) => (
     .then(json =>
       json.success
         ? dispatch({
-            type: ACTIONS.UPDATE_PUBLISH_FORM,
-            data: {
-              uploadThumbnailStatus: THUMBNAIL_STATUSES.COMPLETE,
-              thumbnail: `${json.data.url}${fileExt}`,
-            },
-          })
+          type: ACTIONS.UPDATE_PUBLISH_FORM,
+          data: {
+            uploadThumbnailStatus: THUMBNAIL_STATUSES.COMPLETE,
+            thumbnail: `${json.data.url}${fileExt}`,
+          },
+        })
         : uploadError(json.message)
     )
     .catch(err => uploadError(err.message));
 };
 
-export const doPrepareEdit = (claim: any, uri: string) => (dispatch: Dispatch<Action>) => {
+export const doPrepareEdit = (claim: any, uri: string) => (dispatch: Dispatch) => {
   const {
     name,
     amount,
@@ -204,10 +202,7 @@ export const doPrepareEdit = (claim: any, uri: string) => (dispatch: Dispatch<Ac
   dispatch({ type: ACTIONS.DO_PREPARE_EDIT, data: publishData });
 };
 
-export const doPublish = (params: PublishParams) => (
-  dispatch: Dispatch<Action>,
-  getState: () => {}
-) => {
+export const doPublish = (params: PublishParams) => (dispatch: Dispatch, getState: () => {}) => {
   const state = getState();
   const myChannels = selectMyChannelClaims(state);
   const myClaims = selectMyClaimsWithoutChannels(state);
@@ -306,7 +301,7 @@ export const doPublish = (params: PublishParams) => (
 };
 
 // Calls claim_list_mine until any pending publishes are confirmed
-export const doCheckPendingPublishes = () => (dispatch: Dispatch<Action>, getState: GetState) => {
+export const doCheckPendingPublishes = () => (dispatch: Dispatch, getState: GetState) => {
   const state = getState();
   const pendingById = selectPendingById(state);
 

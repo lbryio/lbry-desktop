@@ -1,5 +1,4 @@
 // @flow
-/* eslint-disable prefer-default-export */
 import { regexAddress } from 'lbry-redux';
 
 type DraftTxValues = {
@@ -19,5 +18,3 @@ export const validateSendTx = (formValues: DraftTxValues) => {
 
   return errors;
 };
-
-/* eslint-enable prefer-default-export */

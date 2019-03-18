@@ -1,4 +1,3 @@
-/* eslint-disable no-redeclare */
 // @if TARGET='app'
 import { clipboard, remote } from 'electron';
 import isDev from 'electron-is-dev';
@@ -6,7 +5,6 @@ import isDev from 'electron-is-dev';
 // @if TARGET='web'
 import { remote, isDev } from 'web/stubs';
 // @endif
-/* eslint-enable no-redeclare */
 
 function injectDevelopmentTemplate(event, templates) {
   if (!isDev) return templates;

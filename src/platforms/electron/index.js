@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 // Module imports
 import '@babel/polyfill';
 import keytar from 'keytar';
@@ -35,8 +34,7 @@ let daemon;
 
 const appState = {};
 
-const installExtensions = async () => {
-  // eslint-disable-next-line import/no-extraneous-dependencies,global-require
+const installExtensions = async() => {
   const devtronExtension = require('devtron');
   return await devtronExtension.install();
 };
@@ -55,7 +53,7 @@ if (isDev) {
   process.env.ELECTRON_DISABLE_SECURITY_WARNINGS = true;
 }
 
-app.on('ready', async () => {
+app.on('ready', async() => {
   let isDaemonRunning = false;
   await Lbry.status()
     .then(() => {
@@ -247,7 +245,7 @@ ipcMain.on('version-info-requested', () => {
   };
 
   const requestLatestRelease = (apiUrl, alreadyRedirected = false) => {
-    const req = https.get(Object.assign(opts, url.parse(apiUrl)), res => {
+    const req = https.get(Object.assign(opts, new url.URL(apiUrl)), res => {
       if (res.statusCode === 301 || res.statusCode === 302) {
         requestLatestRelease(res.headers.location, true);
       } else {

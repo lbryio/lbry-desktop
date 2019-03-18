@@ -1,4 +1,5 @@
 // @flow
+import type { Dispatch, GetState } from 'types/redux';
 import * as NOTIFICATION_TYPES from 'constants/subscriptions';
 import { PAGE_SIZE } from 'constants/claim';
 import * as MODALS from 'constants/modal_types';
@@ -25,7 +26,6 @@ import {
   doError,
 } from 'lbry-redux';
 import { makeSelectCostInfoForUri } from 'lbryinc';
-
 import { makeSelectClientSetting, selectosNotificationsEnabled } from 'redux/selectors/settings';
 import analytics from 'analytics';
 
@@ -36,7 +36,7 @@ export function doUpdateLoadStatus(uri: string, outpoint: string) {
   // Calls file_list and checks the written_bytes value to see if the number has increased
   // Not needed on web as users aren't actually downloading the file
   // @if TARGET='app'
-  return (dispatch, getState) => {
+  return (dispatch: Dispatch, getState: GetState) => {
     const setNextStatusUpdate = () =>
       setTimeout(() => {
         // We need to check if outpoint still exists first because user are able to delete file (outpoint) while downloading.
@@ -128,8 +128,8 @@ export function doUpdateLoadStatus(uri: string, outpoint: string) {
   // @endif
 }
 
-export function doStartDownload(uri, outpoint) {
-  return (dispatch, getState) => {
+export function doStartDownload(uri: string, outpoint: string) {
+  return (dispatch: Dispatch, getState: GetState) => {
     const state = getState();
 
     if (!outpoint) {
@@ -155,14 +155,14 @@ export function doStartDownload(uri, outpoint) {
   };
 }
 
-export function doDownloadFile(uri, streamInfo) {
-  return dispatch => {
+export function doDownloadFile(uri: string, streamInfo: { outpoint: string }) {
+  return (dispatch: Dispatch) => {
     dispatch(doStartDownload(uri, streamInfo.outpoint));
   };
 }
 
-export function doSetPlayingUri(uri) {
-  return dispatch => {
+export function doSetPlayingUri(uri: ?string) {
+  return (dispatch: Dispatch) => {
     dispatch({
       type: ACTIONS.SET_PLAYING_URI,
       data: { uri },
@@ -170,8 +170,8 @@ export function doSetPlayingUri(uri) {
   };
 }
 
-function handleLoadVideoError(uri, errorType = '') {
-  return (dispatch, getState) => {
+function handleLoadVideoError(uri: string, errorType: string = '') {
+  return (dispatch: Dispatch, getState: GetState) => {
     // suppress error when another media is playing
     const { playingUri } = getState().content;
     const errorText = typeof errorType === 'object' ? errorType.message : errorType;
@@ -195,8 +195,8 @@ function handleLoadVideoError(uri, errorType = '') {
   };
 }
 
-export function doLoadVideo(uri, shouldRecordViewEvent) {
-  return dispatch => {
+export function doLoadVideo(uri: string, shouldRecordViewEvent: boolean = false) {
+  return (dispatch: Dispatch) => {
     dispatch({
       type: ACTIONS.LOADING_VIDEO_STARTED,
       data: {
@@ -230,8 +230,12 @@ export function doLoadVideo(uri, shouldRecordViewEvent) {
   };
 }
 
-export function doPurchaseUri(uri, specificCostInfo, shouldRecordViewEvent) {
-  return (dispatch, getState) => {
+export function doPurchaseUri(
+  uri: string,
+  specificCostInfo?: ?{},
+  shouldRecordViewEvent?: boolean = false
+) {
+  return (dispatch: Dispatch, getState: GetState) => {
     const state = getState();
     const balance = selectBalance(state);
     const fileInfo = makeSelectFileInfoForUri(uri)(state);
@@ -252,8 +256,9 @@ export function doPurchaseUri(uri, specificCostInfo, shouldRecordViewEvent) {
       // If path is null or bytes written is 0 means the user has deleted/moved the
       // file manually on their file system, so we need to dispatch a
       // doLoadVideo action to reconstruct the file from the blobs
-      if (!fileInfo.download_path || !fileInfo.written_bytes)
+      if (!fileInfo.download_path || !fileInfo.written_bytes) {
         dispatch(doLoadVideo(uri, shouldRecordViewEvent));
+      }
 
       Promise.resolve();
       return;
@@ -296,7 +301,7 @@ export function doFetchClaimsByChannel(
   page: number = 1,
   pageSize: number = PAGE_SIZE
 ) {
-  return dispatch => {
+  return (dispatch: Dispatch) => {
     dispatch({
       type: ACTIONS.FETCH_CHANNEL_CLAIMS_STARTED,
       data: { uri, page },
@@ -339,8 +344,8 @@ export function doFetchClaimsByChannel(
   };
 }
 
-export function doPlayUri(uri) {
-  return dispatch => {
+export function doPlayUri(uri: string) {
+  return (dispatch: Dispatch) => {
     dispatch(doSetPlayingUri(uri));
     // @if TARGET='app'
     dispatch(doPurchaseUri(uri));
@@ -349,7 +354,7 @@ export function doPlayUri(uri) {
 }
 
 export function doFetchChannelListMine() {
-  return dispatch => {
+  return (dispatch: Dispatch) => {
     dispatch({
       type: ACTIONS.FETCH_CHANNEL_LIST_STARTED,
     });
@@ -366,12 +371,12 @@ export function doFetchChannelListMine() {
 }
 
 export function doCreateChannel(name: string, amount: number) {
-  return dispatch => {
+  return (dispatch: Dispatch) => {
     dispatch({
       type: ACTIONS.CREATE_CHANNEL_STARTED,
     });
 
-    return new Promise((resolve, reject) => {
+    return new Promise<void>((resolve, reject) => {
       Lbry.channel_new({
         channel_name: name,
         amount: creditsToString(amount),
@@ -394,7 +399,7 @@ export function doCreateChannel(name: string, amount: number) {
 }
 
 export function savePosition(claimId: string, outpoint: string, position: number) {
-  return dispatch => {
+  return (dispatch: Dispatch) => {
     dispatch({
       type: ACTIONS.SET_CONTENT_POSITION,
       data: { claimId, outpoint, position },
@@ -403,7 +408,7 @@ export function savePosition(claimId: string, outpoint: string, position: number
 }
 
 export function doSetContentHistoryItem(uri: string) {
-  return dispatch => {
+  return (dispatch: Dispatch) => {
     dispatch({
       type: ACTIONS.SET_CONTENT_LAST_VIEWED,
       data: { uri, lastViewed: Date.now() },
@@ -412,7 +417,7 @@ export function doSetContentHistoryItem(uri: string) {
 }
 
 export function doClearContentHistoryUri(uri: string) {
-  return dispatch => {
+  return (dispatch: Dispatch) => {
     dispatch({
       type: ACTIONS.CLEAR_CONTENT_HISTORY_URI,
       data: { uri },
@@ -421,13 +426,13 @@ export function doClearContentHistoryUri(uri: string) {
 }
 
 export function doClearContentHistoryAll() {
-  return dispatch => {
+  return (dispatch: Dispatch) => {
     dispatch({ type: ACTIONS.CLEAR_CONTENT_HISTORY_ALL });
   };
 }
 
-export function doSetHistoryPage(page) {
-  return dispatch => {
+export function doSetHistoryPage(page: string) {
+  return (dispatch: Dispatch) => {
     dispatch({
       type: ACTIONS.SET_CONTENT_HISTORY_PAGE,
       data: { page },

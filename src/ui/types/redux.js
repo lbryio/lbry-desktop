@@ -1,6 +1,6 @@
 // @flow
-
-// eslint-disable-next-line no-use-before-define
-export type Dispatch<T> = (action: T | Promise<T> | Array<T> | ThunkAction<T>) => any; // Need to refer to ThunkAction
+/* eslint-disable no-use-before-define */
 export type GetState = () => any;
-export type ThunkAction<T> = (dispatch: Dispatch<T>, getState: GetState) => any;
+export type ThunkAction = (dispatch: Dispatch, getState: GetState) => any;
+export type Dispatch = (action: {} | Promise<*> | Array<{}> | ThunkAction) => any; // Need to refer to ThunkAction
+/* eslint-enable */

@@ -1,6 +1,5 @@
 // @flow
 import * as React from 'react';
-/* eslint-disable no-redeclare */
 // @if TARGET='app'
 // $FlowFixMe
 import { remote } from 'electron';
@@ -9,7 +8,6 @@ import { remote } from 'electron';
 // $FlowFixMe
 import { remote } from 'web/stubs';
 // @endif
-/* eslint-enable no-redeclare */
 import Button from 'component/button';
 import { FormField } from 'component/common/form';
 import path from 'path';
@@ -95,24 +93,24 @@ class FileSelector extends React.PureComponent<Props> {
       <React.Fragment>
         {/* @if TARGET='app' */}
         <FormField
-          webkitdirectory="true"
-          className="form-field--copyable"
-          type="text"
+          webkitdirectory='true'
+          className='form-field--copyable'
+          type='text'
           ref={input => {
             if (this.input) this.input = input;
           }}
           onFocus={() => {
             if (this.input) this.input.select();
           }}
-          readOnly="readonly"
+          readOnly='readonly'
           value={currentPath || __('No File Chosen')}
           inputButton={
-            <Button button="primary" onClick={() => this.handleButtonClick()} label={label} />
+            <Button button='primary' onClick={() => this.handleButtonClick()} label={label} />
           }
         />
         {/* @endif */}
         {/* @if TARGET='web' */}
-        <input type="file" ref={this.fileInput} onChange={() => this.handleFileInputSelection()} />
+        <input type='file' ref={this.fileInput} onChange={() => this.handleFileInputSelection()} />
         {/* @endif */}
       </React.Fragment>
     );

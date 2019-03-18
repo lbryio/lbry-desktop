@@ -188,9 +188,7 @@ export function doCancelUpgrade() {
       try {
         upgradeDownloadItem.cancel();
       } catch (err) {
-        // eslint-disable-next-line no-console
         console.error(err);
-        // Do nothing
       }
     }
 

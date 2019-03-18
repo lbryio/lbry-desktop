@@ -111,16 +111,3 @@ export type GetSuggestedSubscriptionsSuccess = {
   type: ACTIONS.GET_SUGGESTED_SUBSCRIPTIONS_START,
   data: SuggestedSubscriptions,
 };
-
-export type Action =
-  | DoChannelSubscribe
-  | DoChannelUnsubscribe
-  | DoUpdateSubscriptionUnreads
-  | DoRemoveSubscriptionUnreads
-  | SetSubscriptionLatest
-  | CheckSubscriptionStarted
-  | CheckSubscriptionCompleted
-  | SetViewMode
-  | Function;
-
-export type Dispatch = ReduxDispatch<Action>;

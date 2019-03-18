@@ -1,7 +1,6 @@
 // @flow
-import type { GetState } from 'types/redux';
+import type { Dispatch, GetState } from 'types/redux';
 import type {
-  Dispatch as ReduxDispatch,
   SubscriptionState,
   Subscription,
   SubscriptionNotificationType,
@@ -22,13 +21,13 @@ import Promise from 'bluebird';
 const CHECK_SUBSCRIPTIONS_INTERVAL = 15 * 60 * 1000;
 const SUBSCRIPTION_DOWNLOAD_LIMIT = 1;
 
-export const doSetViewMode = (viewMode: ViewMode) => (dispatch: ReduxDispatch) =>
+export const doSetViewMode = (viewMode: ViewMode) => (dispatch: Dispatch) =>
   dispatch({
     type: ACTIONS.SET_VIEW_MODE,
     data: viewMode,
   });
 
-export const doFetchMySubscriptions = () => (dispatch: ReduxDispatch, getState: GetState) => {
+export const doFetchMySubscriptions = () => (dispatch: Dispatch, getState: GetState) => {
   const state: { subscriptions: SubscriptionState, settings: any } = getState();
   const { subscriptions: reduxSubscriptions } = state.subscriptions;
   const { share_usage_data: isSharingData } = state.settings.daemonSettings;
@@ -112,7 +111,7 @@ export const doFetchMySubscriptions = () => (dispatch: ReduxDispatch, getState: 
 };
 
 export const setSubscriptionLatest = (subscription: Subscription, uri: string) => (
-  dispatch: ReduxDispatch
+  dispatch: Dispatch
 ) =>
   dispatch({
     type: ACTIONS.SET_SUBSCRIPTION_LATEST,
@@ -127,7 +126,7 @@ export const doUpdateUnreadSubscriptions = (
   channelUri: string,
   uris: ?Array<string>,
   type: ?SubscriptionNotificationType
-) => (dispatch: ReduxDispatch, getState: GetState) => {
+) => (dispatch: Dispatch, getState: GetState) => {
   const state = getState();
   const unreadByChannel = selectUnreadByChannel(state);
   const currentUnreadForChannel: UnreadSubscription = unreadByChannel[channelUri];
@@ -169,7 +168,7 @@ export const doUpdateUnreadSubscriptions = (
 
 // Remove multiple files (or all) from a channels unread subscriptions
 export const doRemoveUnreadSubscriptions = (channelUri: ?string, readUris: ?Array<string>) => (
-  dispatch: ReduxDispatch,
+  dispatch: Dispatch,
   getState: GetState
 ) => {
   const state = getState();
@@ -218,13 +217,13 @@ export const doRemoveUnreadSubscriptions = (channelUri: ?string, readUris: ?Arra
 
 // Remove a single file from a channels unread subscriptions
 export const doRemoveUnreadSubscription = (channelUri: string, readUri: string) => (
-  dispatch: ReduxDispatch
+  dispatch: Dispatch
 ) => {
   dispatch(doRemoveUnreadSubscriptions(channelUri, [readUri]));
 };
 
 export const doCheckSubscription = (subscriptionUri: string, shouldNotify?: boolean) => (
-  dispatch: ReduxDispatch,
+  dispatch: Dispatch,
   getState: GetState
 ) => {
   // no dispatching FETCH_CHANNEL_CLAIMS_STARTED; causes loading issues on <SubscriptionsPage>
@@ -330,7 +329,7 @@ export const doCheckSubscription = (subscriptionUri: string, shouldNotify?: bool
 };
 
 export const doChannelSubscribe = (subscription: Subscription) => (
-  dispatch: ReduxDispatch,
+  dispatch: Dispatch,
   getState: GetState
 ) => {
   const {
@@ -366,7 +365,7 @@ export const doChannelSubscribe = (subscription: Subscription) => (
 };
 
 export const doChannelUnsubscribe = (subscription: Subscription) => (
-  dispatch: ReduxDispatch,
+  dispatch: Dispatch,
   getState: GetState
 ) => {
   const {
@@ -387,7 +386,7 @@ export const doChannelUnsubscribe = (subscription: Subscription) => (
   }
 };
 
-export const doCheckSubscriptions = () => (dispatch: ReduxDispatch, getState: GetState) => {
+export const doCheckSubscriptions = () => (dispatch: Dispatch, getState: GetState) => {
   const state = getState();
   const subscriptions = selectSubscriptions(state);
 
@@ -396,7 +395,7 @@ export const doCheckSubscriptions = () => (dispatch: ReduxDispatch, getState: Ge
   });
 };
 
-export const doCheckSubscriptionsInit = () => (dispatch: ReduxDispatch) => {
+export const doCheckSubscriptionsInit = () => (dispatch: Dispatch) => {
   // doCheckSubscriptionsInit is called by doDaemonReady
   // setTimeout below is a hack to ensure redux is hydrated when subscriptions are checked
   // this will be replaced with <PersistGate> which reqiures a package upgrade
@@ -411,7 +410,7 @@ export const doCheckSubscriptionsInit = () => (dispatch: ReduxDispatch) => {
   });
 };
 
-export const doFetchRecommendedSubscriptions = () => (dispatch: ReduxDispatch) => {
+export const doFetchRecommendedSubscriptions = () => (dispatch: Dispatch) => {
   dispatch({
     type: ACTIONS.GET_SUGGESTED_SUBSCRIPTIONS_START,
   });
@@ -431,12 +430,12 @@ export const doFetchRecommendedSubscriptions = () => (dispatch: ReduxDispatch) =
     );
 };
 
-export const doCompleteFirstRun = () => (dispatch: ReduxDispatch) =>
+export const doCompleteFirstRun = () => (dispatch: Dispatch) =>
   dispatch({
     type: ACTIONS.SUBSCRIPTION_FIRST_RUN_COMPLETED,
   });
 
-export const doShowSuggestedSubs = () => (dispatch: ReduxDispatch) =>
+export const doShowSuggestedSubs = () => (dispatch: Dispatch) =>
   dispatch({
     type: ACTIONS.VIEW_SUGGESTED_SUBSCRIPTIONS,
   });

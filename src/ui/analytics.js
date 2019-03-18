@@ -14,6 +14,7 @@ type Analytics = {
   setUser: Object => void,
   toggle: (boolean, ?boolean) => void,
   apiLogView: (string, string, string, ?number, ?() => void) => void,
+  apiLogPublish: () => void,
 };
 
 let analyticsEnabled: boolean = false;

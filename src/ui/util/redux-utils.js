@@ -2,7 +2,6 @@
 // based off of redux-actions
 // https://redux-actions.js.org/docs/api/handleAction.html#handleactions
 
-// eslint-disable-next-line import/prefer-default-export
 export const handleActions = (actionMap, defaultState) => (state = defaultState, action) => {
   const handler = actionMap[action.type];
 

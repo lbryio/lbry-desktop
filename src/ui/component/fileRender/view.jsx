@@ -49,7 +49,6 @@ class FileRender extends React.PureComponent<Props> {
     window.sandbox = element;
 
     element.addEventListener('permissionrequest', e => {
-      // eslint-disable-next-line no-console
       console.log('permissionrequest', e);
     });
 
@@ -61,10 +60,8 @@ class FileRender extends React.PureComponent<Props> {
           // $FlowFixMe
           message = JSON.parse(/^\$LBRY_IPC:(.*)/.exec(e.message)[1]);
         } catch (err) {}
-        // eslint-disable-next-line no-console
         console.log('IPC', message);
       } else {
-        // eslint-disable-next-line no-console
         console.log('Sandbox:', e.message);
       }
     });
@@ -110,14 +107,14 @@ class FileRender extends React.PureComponent<Props> {
       application: !source.url ? null : (
         <webview
           ref={element => this.processSandboxRef(element)}
-          title=""
-          sandbox="allow-scripts allow-forms allow-pointer-lock"
+          title=''
+          sandbox='allow-scripts allow-forms allow-pointer-lock'
           src={source.url}
-          autosize="on"
+          autosize='on'
           style={{ border: 0, width: '100%', height: '100%' }}
-          useragent="Mozilla/5.0 AppleWebKit/537 Chrome/60 Safari/537"
-          enableremotemodule="false"
-          webpreferences="sandbox=true,contextIsolation=true,webviewTag=false,enableRemoteModule=false,devTools=false"
+          useragent='Mozilla/5.0 AppleWebKit/537 Chrome/60 Safari/537'
+          enableremotemodule='false'
+          webpreferences='sandbox=true,contextIsolation=true,webviewTag=false,enableRemoteModule=false,devTools=false'
         />
       ),
       video: (
@@ -163,7 +160,7 @@ class FileRender extends React.PureComponent<Props> {
   }
 
   render() {
-    return <div className="file-render">{this.renderViewer()}</div>;
+    return <div className='file-render'>{this.renderViewer()}</div>;
   }
 }
 

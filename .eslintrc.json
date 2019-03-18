@@ -1,4 +1,6 @@
 {
+  "parser": "babel-eslint",
+  "extends": ["standard", "standard-jsx", "plugin:flowtype/recommended"],
   "plugins": ["flowtype", "import"],
   "settings": {
     "import/resolver": {
@@ -7,13 +9,6 @@
       }
     }
   },
-  "extends": [
-    "airbnb",
-    "plugin:import/electron",
-    "plugin:flowtype/recommended",
-    "plugin:prettier/recommended"
-  ],
-  "parser": "babel-eslint",
   "env": {
     "browser": true,
     "node": true
@@ -26,42 +21,25 @@
     "app": true
   },
   "rules": {
-    "import/no-commonjs": "warn",
-    "import/no-amd": "warn",
-    "prettier/prettier": [
+    "no-multi-spaces": 0,
+    "new-cap": 0,
+    "prefer-promise-reject-errors": 0,
+    "no-unused-vars": 0,
+    "standard/object-curly-even-spacing": 0,
+    "handle-callback-err": 0,
+    "one-var": 0,
+    "object-curly-spacing": 0,
+    "no-redeclare": 0,
+    "no-return-await": 0,
+    "standard/no-callback-literal": 0,
+    "comma-dangle": ["error", "always-multiline"],
+    "space-before-function-paren": ["error", "never"],
+    "semi": [
       "error",
+      "always",
       {
-        "trailingComma": "es5",
-        "printWidth": 100,
-        "singleQuote": true
+        "omitLastInOneLineBlock": true
       }
-    ],
-    "func-names": ["warn", "as-needed"],
-    "no-param-reassign": [
-      "error",
-      {
-        "props": false
-      }
-    ],
-    "jsx-a11y/label-has-for": 0,
-    "import/prefer-default-export": 0,
-    "no-return-assign": 0,
-    "react/require-default-props": 0,
-    "react/jsx-closing-tag-location": 0,
-    "jsx-a11y/no-noninteractive-element-to-interactive-role": 0,
-    "class-methods-use-this": 0,
-    "jsx-a11y/interactive-supports-focus": 0,
-    "jsx-a11y/click-events-have-key-events": 0,
-    "consistent-return": 0,
-    "no-prototype-builtins": 0,
-    "flowtype/space-after-type-colon": [2, "always", { "allowLineBreak": true }],
-    "no-restricted-syntax": 0,
-    "no-empty": 0,
-    "react/prefer-stateless-function": 0,
-    "react/sort-comp": 0,
-    "jsx-a11y/media-has-caption": 0,
-    "no-underscore-dangle": 0,
-    "import/extensions": 0,
-    "react/default-props-match-prop-types": 0
+    ]
   }
 }
