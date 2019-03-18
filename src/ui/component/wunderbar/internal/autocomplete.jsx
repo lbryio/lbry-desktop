@@ -13,7 +13,6 @@ the search query anywhere, instead of the suggestion starting with it
 
 https://github.com/reactjs/react-autocomplete/issues/239
 */
-/* eslint-disable */
 
 import React from 'react';
 import { findDOMNode } from 'react-dom';
@@ -245,8 +244,9 @@ export default class Autocomplete extends React.Component {
     if (
       (this.state.isOpen && !prevState.isOpen) ||
       ('open' in this.props && this.props.open && !prevProps.open)
-    )
+    ) {
       this.setMenuPositions();
+    }
 
     this.maybeScrollItemIntoView();
     if (prevState.isOpen !== this.state.isOpen) {
@@ -270,9 +270,9 @@ export default class Autocomplete extends React.Component {
   }
 
   handleKeyDown(event) {
-    if (Autocomplete.keyDownHandlers[event.key])
+    if (Autocomplete.keyDownHandlers[event.key]) {
       Autocomplete.keyDownHandlers[event.key].call(this, event);
-    else if (!this.isOpen()) {
+    } else if (!this.isOpen()) {
       this.setState({
         isOpen: true,
       });
@@ -545,9 +545,9 @@ export default class Autocomplete extends React.Component {
   composeEventHandlers(internal, external) {
     return external
       ? e => {
-          internal(e);
-          external(e);
-        }
+        internal(e);
+        external(e);
+      }
       : internal;
   }
 

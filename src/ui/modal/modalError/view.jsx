@@ -1,6 +1,7 @@
 // @flow
+import { Lbryio } from 'lbryinc';
 import React from 'react';
-import { ExpandableModal } from 'modal/modal';
+import { Modal } from 'modal/modal';
 
 type Props = {
   error: string | { message: string },
@@ -8,6 +9,9 @@ type Props = {
 };
 
 class ModalError extends React.PureComponent<Props> {
+  componentDidMount() {
+    Lbryio.call('event', 'desktop_error', { error_message: JSON.stringify(this.props.error) });
+  }
   render() {
     const { closeModal, error } = this.props;
 
@@ -33,25 +37,23 @@ class ModalError extends React.PureComponent<Props> {
       );
     }
 
-    const errorInfo = <ul className="error-modal__error-list">{errorInfoList}</ul>;
-
     return (
-      <ExpandableModal
+      <Modal
         isOpen
         contentLabel={__('Error')}
         title={__('Error')}
-        className="error-modal"
+        className='error-modal'
         onConfirmed={closeModal}
-        extraContent={errorInfo}
       >
-        <section className="card__content">
+        <section className='card__content'>
           <p>
             {__(
               "We're sorry that LBRY has encountered an error. This has been reported and we will investigate the problem."
             )}
           </p>
         </section>
-      </ExpandableModal>
+        <ul className='card__content error-modal__error-list'>{errorInfoList}</ul>
+      </Modal>
     );
   }
 }

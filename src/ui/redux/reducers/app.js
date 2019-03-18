@@ -2,7 +2,6 @@
 
 import * as ACTIONS from 'constants/action_types';
 import * as MODALS from 'constants/modal_types';
-/* eslint-disable no-redeclare */
 // @if TARGET='app'
 // $FlowFixMe
 import { remote } from 'electron';
@@ -11,7 +10,6 @@ import { remote } from 'electron';
 // $FlowFixMe
 import { remote } from 'web/stubs';
 // @endif
-/* eslint-enable no-redeclare */
 
 // @if TARGET='app'
 const win = remote.BrowserWindow.getFocusedWindow();

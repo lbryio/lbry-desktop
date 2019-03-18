@@ -46,7 +46,7 @@ type Props = {
   claimRewards: () => void,
   nextFileToPlay: ?string,
   navigate: (string, {}) => void,
-  costInfo: ?{ cost: number }, // eslint-disable-line react/no-unused-prop-types
+  costInfo: ?{ cost: number },
 };
 
 class FileViewer extends React.PureComponent<Props> {
@@ -223,15 +223,14 @@ class FileViewer extends React.PureComponent<Props> {
     } = this.props;
 
     const isPlaying = playingUri === uri;
-    /* eslint-disable no-redeclare */
     // @if TARGET='app'
     const isReadyToPlay = fileInfo && fileInfo.download_path && fileInfo.written_bytes > 0;
     // @endif
     // @if TARGET='web'
     // try to play immediately on web, we don't need to call file_list since we are streaming from reflector
+    // $FlowFixMe
     const isReadyToPlay = isPlaying;
     // @endif
-    /* eslint-enable */
 
     const shouldObscureNsfw = obscureNsfw && metadata && metadata.nsfw;
     let loadStatusMessage = '';
@@ -255,7 +254,7 @@ class FileViewer extends React.PureComponent<Props> {
     return (
       <div className={classnames('video', {}, className)}>
         {isPlaying && (
-          <div className="content__view">
+          <div className='content__view'>
             {!isReadyToPlay ? (
               <div className={layoverClass} style={layoverStyle}>
                 <LoadingScreen status={loadStatusMessage} />
@@ -285,7 +284,7 @@ class FileViewer extends React.PureComponent<Props> {
         )}
         {!isPlaying && (
           <div
-            role="button"
+            role='button'
             onClick={this.playContent}
             className={layoverClass}
             style={layoverStyle}

@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import path from 'path';
 import { spawn, execSync } from 'child_process';
 import { Lbry } from 'lbry-redux';

@@ -210,7 +210,6 @@ const init = () => {
   // @if TARGET='app'
   moment.locale(remote.app.getLocale());
 
-  /* eslint-disable no-console */
   autoUpdater.on('error', error => {
     console.error(error.message);
   });
@@ -227,7 +226,6 @@ const init = () => {
       app.store.dispatch(doAutoUpdate());
     });
   }
-  /* eslint-enable no-console */
 
   app.store.dispatch(doUpdateIsNightAsync());
   // @endif

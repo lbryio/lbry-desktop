@@ -1,4 +1,3 @@
-// @flow
 import { connect } from 'react-redux';
 import { doHideModal } from 'redux/actions/app';
 import {
@@ -9,7 +8,7 @@ import {
 } from 'lbryinc';
 import ModalRewardCode from './view';
 
-const select = (state): {} => ({
+const select = state => ({
   rewardIsPending: makeSelectIsRewardClaimPending()(state, {
     reward_type: REWARD_TYPES.TYPE_REWARD_CODE,
   }),
@@ -18,7 +17,7 @@ const select = (state): {} => ({
 
 const perform = dispatch => ({
   closeModal: () => dispatch(doHideModal()),
-  submitRewardCode: (code: string) =>
+  submitRewardCode: code =>
     dispatch(doClaimRewardType(REWARD_TYPES.TYPE_REWARD_CODE, { params: { code } })),
 });
 

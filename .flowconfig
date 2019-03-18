@@ -11,17 +11,17 @@ node_modules/
 [options]
 suppress_comment=\\(.\\|\n\\)*\\$FlowFixMe
 suppress_comment=\\(.\\|\n\\)*\\$FlowIssue
-module.name_mapper='^constants\(.*\)$' -> '<PROJECT_ROOT>/src/renderer/constants\1'
-module.name_mapper='^util\(.*\)$' -> '<PROJECT_ROOT>/src/renderer/util\1'
-module.name_mapper='^redux\(.*\)$' -> '<PROJECT_ROOT>/src/renderer/redux\1'
-module.name_mapper='^types\(.*\)$' -> '<PROJECT_ROOT>/src/renderer/types\1'
-module.name_mapper='^component\(.*\)$' -> '<PROJECT_ROOT>/src/renderer/component\1'
-module.name_mapper='^page\(.*\)$' -> '<PROJECT_ROOT>/src/renderer/page\1'
-module.name_mapper='^lbry\(.*\)$' -> '<PROJECT_ROOT>/src/renderer/lbry\1'
-module.name_mapper='^modal\(.*\)$' -> '<PROJECT_ROOT>/src/renderer/modal\1'
-module.name_mapper='^app\(.*\)$' -> '<PROJECT_ROOT>/src/renderer/app\1'
-module.name_mapper='^native\(.*\)$' -> '<PROJECT_ROOT>/src/renderer/native\1'
-module.name_mapper='^analytics\(.*\)$' -> '<PROJECT_ROOT>/src/renderer/analytics\1'
+module.name_mapper='^constants\(.*\)$' -> '<PROJECT_ROOT>/src/ui/constants\1'
+module.name_mapper='^util\(.*\)$' -> '<PROJECT_ROOT>/src/ui/util\1'
+module.name_mapper='^redux\(.*\)$' -> '<PROJECT_ROOT>/src/ui/redux\1'
+module.name_mapper='^types\(.*\)$' -> '<PROJECT_ROOT>/src/ui/types\1'
+module.name_mapper='^component\(.*\)$' -> '<PROJECT_ROOT>/src/ui/component\1'
+module.name_mapper='^page\(.*\)$' -> '<PROJECT_ROOT>/src/ui/page\1'
+module.name_mapper='^lbry\(.*\)$' -> '<PROJECT_ROOT>/src/ui/lbry\1'
+module.name_mapper='^modal\(.*\)$' -> '<PROJECT_ROOT>/src/ui/modal\1'
+module.name_mapper='^app\(.*\)$' -> '<PROJECT_ROOT>/src/ui/app\1'
+module.name_mapper='^native\(.*\)$' -> '<PROJECT_ROOT>/src/ui/native\1'
+module.name_mapper='^analytics\(.*\)$' -> '<PROJECT_ROOT>/src/ui/analytics\1'
 
 
 [strict]

@@ -18,7 +18,6 @@ import {
 } from 'lbryinc';
 import navigationReducer from 'redux/reducers/navigation';
 import settingsReducer from 'redux/reducers/settings';
-import shapeShiftReducer from 'redux/reducers/shape_shift';
 import subscriptionsReducer from 'redux/reducers/subscriptions';
 import publishReducer from 'redux/reducers/publish';
 import { persistStore, autoRehydrate } from 'redux-persist';
@@ -69,7 +68,6 @@ const reducers = combineReducers({
   settings: settingsReducer,
   wallet: walletReducer,
   user: userReducer,
-  shapeShift: shapeShiftReducer,
   subscriptions: subscriptionsReducer,
   publish: publishReducer,
   notifications: notificationsReducer,
@@ -123,7 +121,7 @@ const persistOptions = {
 // @if TARGET='app'
 window.cacheStore = persistStore(store, persistOptions, err => {
   if (err) {
-    console.error('Unable to load saved settings'); // eslint-disable-line no-console
+    console.error('Unable to load saved settings');
   }
 });
 // @endif

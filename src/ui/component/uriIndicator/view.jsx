@@ -10,10 +10,8 @@ type Props = {
   link: ?boolean,
   // Lint thinks we aren't using these, even though we are.
   // Possibly because the resolve function is an arrow function that is passed in props?
-  /* eslint-disable react/no-unused-prop-types */
   resolveUri: string => void,
   uri: string,
-  /* eslint-enable react/no-unused-prop-types */
 };
 
 class UriIndicator extends React.PureComponent<Props> {
@@ -36,7 +34,7 @@ class UriIndicator extends React.PureComponent<Props> {
   render() {
     const { claim, link, isResolvingUri } = this.props;
     if (!claim) {
-      return <span className="empty">{isResolvingUri ? 'Validating...' : 'Unused'}</span>;
+      return <span className='empty'>{isResolvingUri ? 'Validating...' : 'Unused'}</span>;
     }
     const { channel_name: channelName, signature_is_valid: signatureIsValid, value } = claim;
 
@@ -44,7 +42,7 @@ class UriIndicator extends React.PureComponent<Props> {
       value && value.publisherSignature && value.publisherSignature.certificateId;
 
     if (!channelName) {
-      return <span className="channel-name">Anonymous</span>;
+      return <span className='channel-name'>Anonymous</span>;
     }
 
     let channelLink;
@@ -52,7 +50,7 @@ class UriIndicator extends React.PureComponent<Props> {
       channelLink = link ? buildURI({ channelName, claimId: channelClaimId }) : false;
     }
 
-    const inner = <span className="channel-name">{channelName}</span>;
+    const inner = <span className='channel-name'>{channelName}</span>;
 
     if (!channelLink) {
       return inner;
@@ -61,8 +59,8 @@ class UriIndicator extends React.PureComponent<Props> {
     return (
       <Button
         noPadding
-        className="button--uri-indicator"
-        navigate="/show"
+        className='button--uri-indicator'
+        navigate='/show'
         navigateParams={{ uri: channelLink, page: 1 }}
       >
         {inner}

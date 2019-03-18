@@ -46,8 +46,6 @@ export default appState => {
   // and restore the maximized or full screen state.
   windowState.manage(window);
 
-  console.log('url', rendererURL);
-  console.log('window', window);
   window.loadURL(rendererURL);
 
   let deepLinkingURI;
