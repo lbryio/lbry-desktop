@@ -95,6 +95,8 @@ class ModalRouter extends React.PureComponent<Props, State> {
   }
 
   checkShowCreditIntro(props: Props) {
+    // @if TARGET='app'
+    // This doesn't make sense to show until the web has wallet support
     const { balance, page, isCreditIntroAcknowledged } = props;
 
     if (
@@ -104,6 +106,7 @@ class ModalRouter extends React.PureComponent<Props, State> {
     ) {
       return MODALS.INSUFFICIENT_CREDITS;
     }
+    // @endif
 
     return undefined;
   }

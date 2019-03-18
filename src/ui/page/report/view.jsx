@@ -1,7 +1,8 @@
 import React from 'react';
 import Button from 'component/button';
 import { FormField } from 'component/common/form';
-import { Lbry, doToast } from 'lbry-redux';
+import { doToast } from 'lbry-redux';
+import { Lbryio } from 'lbryinc';
 import Page from 'component/page';
 
 class ReportPage extends React.Component {
@@ -26,7 +27,7 @@ class ReportPage extends React.Component {
       this.setState({
         submitting: true,
       });
-      Lbry.report_bug({ message }).then(() => {
+      Lbryio.call('event', 'desktop_error', { error_message }).then(() => {
         this.setState({
           submitting: false,
         });

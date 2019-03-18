@@ -2,10 +2,12 @@
 import * as ICONS from 'constants/icons';
 import * as SETTINGS from 'constants/settings';
 import * as React from 'react';
+import classnames from 'classnames';
 import { FormField, FormFieldPrice, Form } from 'component/common/form';
 import Button from 'component/button';
 import Page from 'component/page';
 import FileSelector from 'component/common/file-selector';
+import UnsupportedOnWeb from 'component/common/unsupported-on-web';
 
 export type Price = {
   currency: string,
@@ -147,12 +149,13 @@ class SettingsPage extends React.PureComponent<Props, State> {
 
     return (
       <Page>
+        {IS_WEB && <UnsupportedOnWeb />}
         {noDaemonSettings ? (
           <section className="card card--section">
             <div className="card__title">{__('Failed to load settings.')}</div>
           </section>
         ) : (
-          <React.Fragment>
+          <div className={classnames({ 'card--disabled': IS_WEB })}>
             <section className="card card--section">
               <header className="card__header">
                 <h2 className="card__title">{__('Download Directory')}</h2>
@@ -430,7 +433,7 @@ class SettingsPage extends React.PureComponent<Props, State> {
                 />
               </div>
             </section>
-          </React.Fragment>
+          </div>
         )}
       </Page>
     );

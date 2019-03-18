@@ -144,7 +144,6 @@ class MediaPlayer extends React.PureComponent<Props, State> {
     else {
       // Temp hack to help in some metadata loading cases
       setTimeout(() => {
-
         const currentMediaContainer = this.mediaContainer.current;
 
         // Clean any potential rogue instances
@@ -210,7 +209,7 @@ class MediaPlayer extends React.PureComponent<Props, State> {
     }
     const playerElement = this.mediaContainer.current;
     if (playerElement) {
-      if(playerElement.children && playerElement.children[0]) {
+      if (playerElement.children && playerElement.children[0]) {
         playerElement.children[0].play();
       }
     }
@@ -290,6 +289,15 @@ class MediaPlayer extends React.PureComponent<Props, State> {
   showLoadingScreen(isFileType: boolean, isPlayableType: boolean) {
     const { mediaType, contentType } = this.props;
     const { unplayable, fileSource, hasMetadata } = this.state;
+
+    if (['audio', 'video'].indexOf(mediaType) === -1) {
+      return {
+        isLoading: false,
+        loadingStatus: __(
+          'This file type is not currently supported on lbry.tv. Try viewing it in the desktop app.'
+        ),
+      };
+    }
 
     const loader: { isLoading: boolean, loadingStatus: ?string } = {
       isLoading: false,
