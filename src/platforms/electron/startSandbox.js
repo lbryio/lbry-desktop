@@ -1,7 +1,5 @@
 import express from 'express';
 import unpackByOutpoint from './unpackByOutpoint';
-import net from 'net';
-import chalk from 'chalk';
 
 // Polyfills and `lbry-redux`
 global.fetch = require('node-fetch');

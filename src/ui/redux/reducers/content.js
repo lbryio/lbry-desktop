@@ -13,17 +13,6 @@ reducers[ACTIONS.SET_PLAYING_URI] = (state, action) =>
     playingUri: action.data.uri,
   });
 
-reducers[ACTIONS.FETCH_CHANNEL_CLAIM_COUNT_COMPLETED] = (state, action) => {
-  const channelClaimCounts = Object.assign({}, state.channelClaimCounts);
-  const { uri, totalClaims } = action.data;
-
-  channelClaimCounts[uri] = totalClaims;
-
-  return Object.assign({}, state, {
-    channelClaimCounts,
-  });
-};
-
 reducers[ACTIONS.SET_CONTENT_POSITION] = (state, action) => {
   const { claimId, outpoint, position } = action.data;
   return {
@@ -57,9 +46,9 @@ reducers[ACTIONS.CLEAR_CONTENT_HISTORY_URI] = (state, action) => {
   return index === -1
     ? state
     : {
-        ...state,
-        history: history.slice(0, index).concat(history.slice(index + 1)),
-      };
+      ...state,
+      history: history.slice(0, index).concat(history.slice(index + 1)),
+    };
 };
 
 reducers[ACTIONS.CLEAR_CONTENT_HISTORY_ALL] = state => ({ ...state, history: [] });

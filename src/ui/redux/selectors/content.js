@@ -14,17 +14,6 @@ export const selectPlayingUri = createSelector(
   state => state.playingUri
 );
 
-export const selectChannelClaimCounts = createSelector(
-  selectState,
-  state => state.channelClaimCounts || {}
-);
-
-export const makeSelectTotalItemsForChannel = (uri: string) =>
-  createSelector(
-    selectChannelClaimCounts,
-    byUri => byUri && byUri[uri]
-  );
-
 export const selectRewardContentClaimIds = createSelector(
   selectState,
   state => state.rewardedContentClaimIds
