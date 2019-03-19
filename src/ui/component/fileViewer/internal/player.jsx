@@ -88,7 +88,6 @@ class MediaPlayer extends React.PureComponent<Props, State> {
   }
 
   componentWillUnmount() {
-    document.removeEventListener('keydown', this.togglePlayListener);
     const mediaElement = this.mediaContainer.current.children[0];
     if (mediaElement) {
       mediaElement.removeEventListener('click', this.togglePlay);
@@ -139,28 +138,24 @@ class MediaPlayer extends React.PureComponent<Props, State> {
     // Render custom viewer: FileRender
     if (this.isSupportedFile() && downloadCompleted) {
       this.renderFile();
-    }
-    // Render default viewer: render-media (video, audio, img, iframe)
-    else {
-      // Temp hack to help in some metadata loading cases
-      setTimeout(() => {
-        const currentMediaContainer = this.mediaContainer.current;
+    } else {
+      // Render default viewer: render-media (video, audio, img, iframe)
+      const currentMediaContainer = this.mediaContainer.current;
 
-        // Clean any potential rogue instances
-        while (currentMediaContainer.firstChild) {
-          currentMediaContainer.removeChild(currentMediaContainer.firstChild);
-        }
+      // Clean any potential rogue instances
+      while (currentMediaContainer.firstChild) {
+        currentMediaContainer.removeChild(currentMediaContainer.firstChild);
+      }
 
-        player.append(
-          {
-            name: fileName,
-            createReadStream: opts => fs.createReadStream(downloadPath, opts),
-          },
-          container,
-          { autoplay: true, controls: true },
-          renderMediaCallback.bind(this)
-        );
-      }, 300);
+      player.append(
+        {
+          name: fileName,
+          createReadStream: opts => fs.createReadStream(downloadPath, opts),
+        },
+        container,
+        { autoplay: true, controls: true },
+        renderMediaCallback.bind(this)
+      );
     }
 
     document.addEventListener('keydown', this.togglePlay);
@@ -225,7 +220,14 @@ class MediaPlayer extends React.PureComponent<Props, State> {
       return;
     }
     event.preventDefault();
-    const mediaElement = this.mediaContainer.current.children[0];
+
+    const mediaRef = this.mediaContainer.current;
+
+    if (!mediaRef) {
+      return;
+    }
+
+    const mediaElement = mediaRef.children && mediaRef.children[0];
     if (mediaElement) {
       if (!mediaElement.paused) {
         mediaElement.pause();
@@ -352,7 +354,7 @@ class MediaPlayer extends React.PureComponent<Props, State> {
         {loadingStatus && <LoadingScreen status={loadingStatus} spinner={isLoading} />}
         {isFileReady && <FileRender claim={claim} source={fileSource} mediaType={mediaType} />}
         <div
-          className="content__view--container"
+          className='content__view--container'
           style={{ opacity: isLoading ? 0 : 1 }}
           ref={this.mediaContainer}
         />
