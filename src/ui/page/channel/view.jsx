@@ -80,21 +80,21 @@ class ChannelPage extends React.PureComponent<Props> {
       claimsInChannel && claimsInChannel.length ? (
         <FileList sortByHeight hideFilter fileInfos={claimsInChannel} />
       ) : (
-        !fetching && <span className='empty'>{__('No content found.')}</span>
+        !fetching && <span className="empty">{__('No content found.')}</span>
       );
 
     return (
       <Page notContained>
-        <header className='channel-info'>
-          <h1 className='media__title media__title--large'>
+        <header className="channel-info">
+          <h1 className="media__title media__title--large">
             {name}
             {fetching && <BusyIndicator />}
           </h1>
 
-          <div className='channel-info__actions__group'>
+          <div className="channel-info__actions__group">
             <SubscribeButton uri={`lbry://${permanentUrl}`} channelName={name} />
             <Button
-              button='alt'
+              button="alt"
               icon={icons.SHARE}
               label={__('Share Channel')}
               onClick={() =>
@@ -104,42 +104,42 @@ class ChannelPage extends React.PureComponent<Props> {
           </div>
         </header>
 
-        <section className='media-group--list'>{contentList}</section>
+        <section className="media-group--list">{contentList}</section>
 
         {(!fetching || (claimsInChannel && claimsInChannel.length)) && totalPages > 1 && (
           <Form>
-            <fieldset-group class='fieldset-group--smushed fieldgroup--paginate'>
+            <fieldset-group class="fieldset-group--smushed fieldgroup--paginate">
               <fieldset-section>
                 <ReactPaginate
                   pageCount={totalPages}
                   pageRangeDisplayed={2}
-                  previousLabel='‹'
-                  nextLabel='›'
-                  activeClassName='pagination__item--selected'
-                  pageClassName='pagination__item'
-                  previousClassName='pagination__item pagination__item--previous'
-                  nextClassName='pagination__item pagination__item--next'
-                  breakClassName='pagination__item pagination__item--break'
+                  previousLabel="‹"
+                  nextLabel="›"
+                  activeClassName="pagination__item--selected"
+                  pageClassName="pagination__item"
+                  previousClassName="pagination__item pagination__item--previous"
+                  nextClassName="pagination__item pagination__item--next"
+                  breakClassName="pagination__item pagination__item--break"
                   marginPagesDisplayed={2}
                   onPageChange={e => this.changePage(e.selected + 1)}
                   forcePage={currentPage}
                   initialPage={currentPage}
-                  containerClassName='pagination'
+                  containerClassName="pagination"
                 />
               </fieldset-section>
 
               <FormField
-                className='paginate-channel'
+                className="paginate-channel"
                 onKeyUp={e => this.paginate(e, totalPages)}
                 label={__('Go to page:')}
-                type='text'
-                name='paginate-file'
+                type="text"
+                name="paginate-file"
               />
             </fieldset-group>
           </Form>
         )}
 
-        {!channelIsMine && <HiddenNsfwClaims className='card__content help' uri={uri} />}
+        {!channelIsMine && <HiddenNsfwClaims className="card__content help" uri={uri} />}
       </Page>
     );
   }
