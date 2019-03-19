@@ -45,26 +45,26 @@ class ChannelTile extends React.PureComponent<Props> {
       subscriptionUri = `lbry://${claim.permanent_url}`;
     }
 
-    const onClick = () => navigate('/show', { uri });
+    const onClick = () => navigate('/show', { uri, page: 1 });
 
     return (
       <section
         onClick={onClick}
-        role="button"
+        role='button'
         className={classnames('media-tile card--link', {
           'media-tile--small': size === 'small',
           'media-tile--large': size === 'large',
         })}
       >
         <CardMedia title={channelName} thumbnail={null} />
-        <div className="media__info">
-          {isResolvingUri && <div className="media__title">{__('Loading...')}</div>}
+        <div className='media__info'>
+          {isResolvingUri && <div className='media__title'>{__('Loading...')}</div>}
           {!isResolvingUri && (
             <React.Fragment>
-              <div className="media__title">
+              <div className='media__title'>
                 <TruncatedText text={channelName || uri} lines={1} />
               </div>
-              <div className="media__subtitle">
+              <div className='media__subtitle'>
                 {totalItems > 0 && (
                   <span>
                     {totalItems} {totalItems === 1 ? 'publish' : 'publishes'}
@@ -75,8 +75,8 @@ class ChannelTile extends React.PureComponent<Props> {
             </React.Fragment>
           )}
           {subscriptionUri && (
-            <div className="media__actions">
-              <SubscribeButton buttonStyle="inverse" uri={subscriptionUri} />
+            <div className='media__actions'>
+              <SubscribeButton buttonStyle='inverse' uri={subscriptionUri} />
             </div>
           )}
         </div>
