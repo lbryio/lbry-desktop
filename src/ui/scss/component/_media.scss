@@ -136,6 +136,7 @@
   display: inline;
   font-size: 2rem;
   line-height: 1.33;
+  margin-right: var(--spacing-vertical-small);
 }
 
 //  M E D I A
@@ -299,11 +300,10 @@
 
   &:not(:empty) {
     height: 2.55rem;
-    margin-top: -1px;
+    margin-top: 0px;
 
     margin-bottom: var(--spacing-vertical-small);
     padding-top: var(--spacing-vertical-small);
-    padding-left: var(--spacing-vertical-small);
   }
 
   .badge {
