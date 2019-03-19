@@ -3378,7 +3378,7 @@ electron-builder@^20.38.4:
     update-notifier "^2.5.0"
     yargs "^12.0.5"
 
-electron-devtools-installer@^2.2.3, electron-devtools-installer@^2.2.4:
+electron-devtools-installer@^2.2.4:
   version "2.2.4"
   resolved "https://registry.yarnpkg.com/electron-devtools-installer/-/electron-devtools-installer-2.2.4.tgz#261a50337e37121d338b966f07922eb4939a8763"
   integrity sha512-b5kcM3hmUqn64+RUcHjjr8ZMpHS2WJ5YO0pnG9+P/RTdx46of/JrEjuciHWux6pE+On6ynWhHJF53j/EDJN0PA==

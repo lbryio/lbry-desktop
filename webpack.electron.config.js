@@ -55,6 +55,8 @@ if (process.env.NODE_ENV === 'production') {
     externals: {
       keytar: 'require("keytar")',
       electron: 'require("electron")',
+      express: 'require("express")',
+      'electron-updater': 'require("electron-updater")',
     },
   });
 } else {
@@ -64,6 +66,8 @@ if (process.env.NODE_ENV === 'production') {
     externals: {
       keytar: 'require("keytar")',
       electron: 'require("electron")',
+      express: 'require("express")',
+      'electron-updater': 'require("electron-updater")',
     },
   });
 }
