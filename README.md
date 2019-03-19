@@ -44,6 +44,8 @@ Double click the installed application to interact with the LBRY network.
 
 ## Running from Source
 
+*Note: We are currently undergoing a lot of internal build changes. Linux doesn't seem to be working at the moment.*
+
 #### Prerequisites
 
 - [Git](https://git-scm.com/downloads)
