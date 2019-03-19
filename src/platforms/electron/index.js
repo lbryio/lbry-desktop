@@ -265,7 +265,7 @@ ipcMain.on('version-info-requested', () => {
     const req = https.get({
       hostname: 'api.github.com',
       path: '/repos/lbryio/lbry-desktop/releases/latest',
-      headers: { 'user-agent': 'LBRY/0.29.4' },
+      headers: { 'user-agent': `LBRY/${localVersion}` },
     }, res => {
       if (res.statusCode === 301 || res.statusCode === 302) {
         requestLatestRelease(res.headers.location, true);
