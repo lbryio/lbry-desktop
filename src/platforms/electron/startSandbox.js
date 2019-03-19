@@ -1,5 +1,7 @@
 import express from 'express';
 import unpackByOutpoint from './unpackByOutpoint';
+import net from 'net';
+import chalk from 'chalk';
 
 // Polyfills and `lbry-redux`
 global.fetch = require('node-fetch');
@@ -13,8 +15,8 @@ const { Lbry } = require('lbry-redux');
 delete global.window;
 
 export default async function startSandbox() {
-  const sandbox = express();
   const port = 5278;
+  const sandbox = express();
 
   sandbox.get('/set/:outpoint', async(req, res) => {
     const { outpoint } = req.params;
@@ -26,5 +28,13 @@ export default async function startSandbox() {
     res.send(`/sandbox/${outpoint}/`);
   });
 
-  sandbox.listen(port, 'localhost', () => console.log(`Sandbox listening on port ${port}.`));
+  sandbox
+    .listen(port, 'localhost', () => console.log(`Sandbox listening on port ${port}.`))
+    .on('error', err => {
+      if (err.code === 'EADDRINUSE') {
+        console.log(
+          'Server already listening at localhost://5278: This is probably another LBRY app running. If not, games in the app will not work.'
+        );
+      }
+    });
 }
