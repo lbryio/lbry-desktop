@@ -80,7 +80,7 @@
     "dom-scroll-into-view": "^1.2.1",
     "electron": "4.1.0",
     "electron-builder": "^20.38.4",
-    "electron-devtools-installer": "^2.2.3",
+    "electron-devtools-installer": "^2.2.4",
     "electron-is-dev": "^0.3.0",
     "electron-publisher-s3": "^20.8.1",
     "electron-webpack": "^2.6.2",

@@ -86,7 +86,24 @@ app.on('ready', async() => {
   startSandbox();
 
   if (isDev) {
-    await installExtensions();
+    //await installExtensions();
+    const {
+      default: installExtension,
+      REACT_DEVELOPER_TOOLS,
+      REDUX_DEVTOOLS, REACT_PERF,
+    } = require('electron-devtools-installer');
+
+    await installExtension(REACT_DEVELOPER_TOOLS)
+      .then((name) => console.log(`Added Extension:  ${name}`))
+      .catch((err) => console.log('An error occurred: ', err));
+
+    await installExtension(REDUX_DEVTOOLS)
+      .then((name) => console.log(`Added Extension:  ${name}`))
+      .catch((err) => console.log('An error occurred: ', err));
+
+    await installExtension(REACT_PERF)
+      .then((name) => console.log(`Added Extension:  ${name}`))
+      .catch((err) => console.log('An error occurred: ', err));
   }
 
   rendererWindow = createWindow(appState);
@@ -208,12 +225,6 @@ ipcMain.on('version-info-requested', () => {
   }
 
   const localVersion = pjson.version;
-  const latestReleaseAPIURL = 'https://api.github.com/repos/lbryio/lbry-desktop/releases/latest';
-  const opts = {
-    headers: {
-      'User-Agent': `LBRY/${localVersion}`,
-    },
-  };
   let result = '';
   const onSuccess = res => {
     res.on('data', data => {
@@ -221,7 +232,13 @@ ipcMain.on('version-info-requested', () => {
     });
 
     res.on('end', () => {
-      const tagName = JSON.parse(result).tag_name;
+      let json;
+      try {
+        json = JSON.parse(result);
+      } catch(e) {
+        return;
+      }
+      const tagName = json.tag_name;
       if (tagName) {
         const [, remoteVersion] = tagName.match(/^v([\d.]+(?:-?rc\d+)?)$/);
         if (!remoteVersion) {
@@ -244,8 +261,12 @@ ipcMain.on('version-info-requested', () => {
     });
   };
 
-  const requestLatestRelease = (apiUrl, alreadyRedirected = false) => {
-    const req = https.get(Object.assign(opts, new url.URL(apiUrl)), res => {
+  const requestLatestRelease = (alreadyRedirected = false) => {
+    const req = https.get({
+      hostname: 'api.github.com',
+      path: '/repos/lbryio/lbry-desktop/releases/latest',
+      headers: { 'user-agent': 'LBRY/0.29.4' },
+    }, res => {
       if (res.statusCode === 301 || res.statusCode === 302) {
         requestLatestRelease(res.headers.location, true);
       } else {
@@ -262,7 +283,7 @@ ipcMain.on('version-info-requested', () => {
     });
   };
 
-  requestLatestRelease(latestReleaseAPIURL);
+  requestLatestRelease();
 });
 
 ipcMain.on('get-auth-token', event => {
@@ -276,6 +297,7 @@ ipcMain.on('set-auth-token', (event, token) => {
 });
 
 process.on('uncaughtException', error => {
+  console.log(error);
   dialog.showErrorBox('Error Encountered', `Caught error: ${error}`);
   appState.isQuitting = true;
   if (daemon) daemon.quit();
