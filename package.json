@@ -171,7 +171,7 @@
   "lbrySettings": {
     "lbrynetDaemonVersion": "0.32.4",
     "lbrynetDaemonUrlTemplate": "https://github.com/lbryio/lbry/releases/download/vDAEMONVER/lbrynet-OSNAME.zip",
-    "lbrynetDaemonDir": "static",
+    "lbrynetDaemonDir": "static/daemon",
     "lbrynetDaemonFileName": "lbrynet"
   }
 }
