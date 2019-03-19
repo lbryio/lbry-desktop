@@ -287,8 +287,17 @@ class MediaPlayer extends React.PureComponent<Props, State> {
   }
 
   showLoadingScreen(isFileType: boolean, isPlayableType: boolean) {
-    const { mediaType, contentType } = this.props;
+    const { claim, mediaType, contentType } = this.props;
     const { unplayable, fileSource, hasMetadata } = this.state;
+    
+    if (claim && claim.value.stream.metadata.fee && claim.value.stream.metadata.fee.amount > 0) {
+      return {
+        isLoading: false,
+        loadingStatus: __(
+          'Currently, only free content is available on lbry.tv. Try viewing it in the desktop app.'
+        ),
+      };
+    }
 
     if (['audio', 'video'].indexOf(mediaType) === -1) {
       return {
