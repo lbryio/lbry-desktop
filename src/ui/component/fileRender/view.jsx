@@ -107,14 +107,14 @@ class FileRender extends React.PureComponent<Props> {
       application: !source.url ? null : (
         <webview
           ref={element => this.processSandboxRef(element)}
-          title=''
-          sandbox='allow-scripts allow-forms allow-pointer-lock'
+          title=""
+          sandbox="allow-scripts allow-forms allow-pointer-lock"
           src={source.url}
-          autosize='on'
+          autosize="on"
           style={{ border: 0, width: '100%', height: '100%' }}
-          useragent='Mozilla/5.0 AppleWebKit/537 Chrome/60 Safari/537'
-          enableremotemodule='false'
-          webpreferences='sandbox=true,contextIsolation=true,webviewTag=false,enableRemoteModule=false,devTools=false'
+          useragent="Mozilla/5.0 AppleWebKit/537 Chrome/60 Safari/537"
+          enableremotemodule="false"
+          webpreferences="sandbox=true,contextIsolation=true,webviewTag=false,enableRemoteModule=false,devTools=false"
         />
       ),
       video: (
@@ -150,7 +150,14 @@ class FileRender extends React.PureComponent<Props> {
     if (!viewer && readableFiles.includes(mediaType)) {
       viewer = <DocumentViewer source={{ stream, fileType, contentType }} theme={currentTheme} />;
     }
-
+    // temp workaround
+    if (claim && claim.value.stream.metadata.fee && claim.value.stream.metadata.fee.amount > 0) {
+      const paidMessage = __(
+        'Currently, only free content is available on lbry.tv. Try viewing it in the desktop app.'
+      );
+      const paid = <LoadingScreen status={paidMessage} spinner={false} />;
+      return paid;
+    }
     // Message Error
     const unsupportedMessage = __("Sorry, looks like we can't preview this file.");
     const unsupported = <LoadingScreen status={unsupportedMessage} spinner={false} />;
@@ -160,7 +167,7 @@ class FileRender extends React.PureComponent<Props> {
   }
 
   render() {
-    return <div className='file-render'>{this.renderViewer()}</div>;
+    return <div className="file-render">{this.renderViewer()}</div>;
   }
 }
 
