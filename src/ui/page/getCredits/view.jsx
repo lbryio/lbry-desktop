@@ -27,7 +27,7 @@ const GetCreditsPage = () => (
         <div className="card__actions">
           <Button
             button="primary"
-            href="https://lbry.io/faq/earn-credits"
+            href="https://lbry.com/faq/earn-credits"
             label={__('Read More')}
           />
         </div>

@@ -98,7 +98,7 @@ export function doDownloadLanguage(langFile) {
         headers: {
           'Content-Type': 'text/html',
         },
-        host: 'i18n.lbry.io',
+        host: 'i18n.lbry.com',
         path: `/langs/${langFile}`,
       },
       response => {
@@ -153,7 +153,7 @@ export function doDownloadLanguages() {
     //   return response.json();
     // }
     //
-    // return fetch("http://i18n.lbry.io")
+    // return fetch("http://i18n.lbry.com")
     //   .then(checkStatus)
     //   .then(parseJSON)
     //   .then(files => {

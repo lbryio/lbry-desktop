@@ -71,7 +71,7 @@ const startDaemon = async() => {
             'Daemon has Exited',
             'The daemon may have encountered an unexpected error, or another daemon instance is already running. \n\n' +
               'For more information please visit: \n' +
-              'https://lbry.io/faq/startup-troubleshooting'
+              'https://lbry.com/faq/startup-troubleshooting'
           );
         }
         app.quit();

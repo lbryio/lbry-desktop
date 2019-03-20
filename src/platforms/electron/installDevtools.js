@@ -1,5 +1,4 @@
 export default async function installDevtools() {
-  console.log('installing');
   const {
     default: installExtension,
     REACT_DEVELOPER_TOOLS,
@@ -18,6 +17,4 @@ export default async function installDevtools() {
   await installExtension(REACT_PERF)
     .then(name => console.log(`Added Extension:  ${name}`))
     .catch(err => console.log('An error occurred: ', err));
-
-  console.log('all done');
 }

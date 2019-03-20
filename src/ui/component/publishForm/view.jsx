@@ -372,7 +372,11 @@ class PublishForm extends React.PureComponent<Props> {
                   ? __('You are currently editing a claim.')
                   : __('What are you publishing?')}{' '}
                 {__('Read our')}{' '}
-                <Button button="link" label={__('FAQ')} href="https://lbry.io/faq/how-to-publish" />{' '}
+                <Button
+                  button="link"
+                  label={__('FAQ')}
+                  href="https://lbry.com/faq/how-to-publish"
+                />{' '}
                 {__('to learn more.')}
               </p>
             </header>
@@ -505,7 +509,7 @@ class PublishForm extends React.PureComponent<Props> {
                   <Button
                     button="link"
                     label={__('Learn more')}
-                    href="https://lbry.io/faq/naming"
+                    href="https://lbry.com/faq/naming"
                   />
                 </p>
               </header>
@@ -622,7 +626,7 @@ class PublishForm extends React.PureComponent<Props> {
                 {__('By continuing, you accept the')}{' '}
                 <Button
                   button="link"
-                  href="https://www.lbry.io/termsofservice"
+                  href="https://www.lbry.com/termsofservice"
                   label={__('LBRY Terms of Service')}
                 />
                 .

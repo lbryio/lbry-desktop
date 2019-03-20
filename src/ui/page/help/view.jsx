@@ -107,13 +107,13 @@ class HelpPage extends React.PureComponent<Props, State> {
         osName = parseInt(ver.os_release.match(/^\d+/), 10) < 16 ? 'Mac OS X' : 'Mac OS';
 
         platform = `${osName} ${ver.os_release}`;
-        newVerLink = 'https://lbry.io/get/lbry.dmg';
+        newVerLink = 'https://lbry.com/get/lbry.dmg';
       } else if (ver.os_system === 'Linux') {
         platform = `Linux (${ver.platform})`;
-        newVerLink = 'https://lbry.io/get/lbry.deb';
+        newVerLink = 'https://lbry.com/get/lbry.deb';
       } else {
         platform = `Windows (${ver.platform})`;
-        newVerLink = 'https://lbry.io/get/lbry.msi';
+        newVerLink = 'https://lbry.com/get/lbry.msi';
       }
     } else {
       ver = null;
@@ -130,7 +130,7 @@ class HelpPage extends React.PureComponent<Props, State> {
           <div className="card__content">
             <div className="card__actions">
               <Button
-                href="https://lbry.io/faq"
+                href="https://lbry.com/faq"
                 label={__('Read the FAQ')}
                 icon={icons.HELP}
                 button="primary"
@@ -155,7 +155,7 @@ class HelpPage extends React.PureComponent<Props, State> {
                 button="primary"
                 label={__('Join Our Chat')}
                 icon={icons.CHAT}
-                href="https://chat.lbry.io"
+                href="https://chat.lbry.com"
               />
             </div>
           </div>
@@ -167,7 +167,7 @@ class HelpPage extends React.PureComponent<Props, State> {
 
             <p className="card__subtitle">
               {__('Did something go wrong? Have a look in your log file, or send it to')}{' '}
-              <Button button="link" label={__('support')} href="https://lbry.io/faq/support" />.
+              <Button button="link" label={__('support')} href="https://lbry.com/faq/support" />.
             </p>
           </header>
 
@@ -193,7 +193,7 @@ class HelpPage extends React.PureComponent<Props, State> {
 
             <p className="card__subtitle">
               {__('Did you find something wrong? Think LBRY could add something useful and cool?')}{' '}
-              <Button button="link" label={__('Learn more')} href="https://lbry.io/faq/support" />.
+              <Button button="link" label={__('Learn more')} href="https://lbry.com/faq/support" />.
             </p>
           </header>
 
@@ -244,7 +244,7 @@ class HelpPage extends React.PureComponent<Props, State> {
                         {user.primary_email}{' '}
                         <Button
                           button="link"
-                          href={`https://lbry.io/list/edit/${accessToken}`}
+                          href={`https://lbry.com/list/edit/${accessToken}`}
                           label={__('Update mailing preferences')}
                         />
                       </React.Fragment>

@@ -1,77 +1,77 @@
 matrix:
   include:
-  - os: osx
-    env: TARGET=mac
-    osx_image: xcode9.2
-    language: node_js
-    node_js: '10'
-  - os: linux
-    env: TARGET=windows
-    services: docker
-    language: node_js
-    node_js: '10'
-  - os: linux
-    env: TARGET=linux
-    language: node_js
-    node_js: '10'
+    - os: osx
+      env: TARGET=mac
+      osx_image: xcode9.2
+      language: node_js
+      node_js: '10'
+    - os: linux
+      env: TARGET=windows
+      services: docker
+      language: node_js
+      node_js: '10'
+    - os: linux
+      env: TARGET=linux
+      language: node_js
+      node_js: '10'
 cache: false
 before_install:
-- |
-  unset TRAVIS_COMMIT_MESSAGE;
-  if [ "$TRAVIS_OS_NAME" == "osx" ]; then
-    mkdir -p /tmp/git-lfs && curl -L https://github.com/github/git-lfs/releases/download/v2.3.1/git-lfs-$([ "$TRAVIS_OS_NAME" == "linux" ] && echo "linux" || echo "darwin")-amd64-2.3.1.tar.gz | tar -xz -C /tmp/git-lfs --strip-components 1
-    export PATH="/tmp/git-lfs:$PATH"
-  else
-    sudo apt-get -qq update
-    sudo apt-get install -y libsecret-1-dev
-    sudo apt-get install --no-install-recommends -y gcc-multilib g++-multilib
-    curl -o- -L https://yarnpkg.com/install.sh | bash -s -- --version 1.6.0
-    export PATH="$HOME/.yarn/bin:$PATH"
-  fi
+  - |
+    unset TRAVIS_COMMIT_MESSAGE;
+    if [ "$TRAVIS_OS_NAME" == "osx" ]; then
+      mkdir -p /tmp/git-lfs && curl -L https://github.com/github/git-lfs/releases/download/v2.3.1/git-lfs-$([ "$TRAVIS_OS_NAME" == "linux" ] && echo "linux" || echo "darwin")-amd64-2.3.1.tar.gz | tar -xz -C /tmp/git-lfs --strip-components 1
+      export PATH="/tmp/git-lfs:$PATH"
+    else
+      sudo apt-get -qq update
+      sudo apt-get install -y libsecret-1-dev
+      sudo apt-get install --no-install-recommends -y gcc-multilib g++-multilib
+      curl -o- -L https://yarnpkg.com/install.sh | bash -s -- --version 1.6.0
+      export PATH="$HOME/.yarn/bin:$PATH"
+    fi
 before_script:
-- git lfs pull
-- if [ "$TRAVIS_PULL_REQUEST" != "false" ]; then unset WIN_CSC_LINK; unset CSC_LINK; fi
+  - git lfs pull
+  - if [ "$TRAVIS_PULL_REQUEST" != "false" ]; then unset WIN_CSC_LINK; unset CSC_LINK; fi
 script:
-- |
-  if [ "$TARGET" == "windows" ]; then
-    # Remove any special characters before adding to our list of ENVs
-    # https://github.com/electron-userland/electron-builder/issues/2450#issuecomment-421788155
-    ENVS=`env | grep -iE '(DEBUG|NODE_|ELECTRON_|YARN_|NPM_|CI|CIRCLE|TRAVIS|APPVEYOR_|CSC_|_TOKEN|_KEY|AWS_|STRIP|BUILD_|TARGET)([A-Z]|_)*=' | sed -n '/^[^\t]/s/=.*//p' | sed '/^$/d' | sed 's/^/-e /g' | tr '\n' ' '`
-    docker run $ENVS --rm \
-      -v ${PWD}:/project \
-      electronuserland/builder:wine \
-      /bin/bash -c "env | grep -v '\r' | grep -iE 'DEBUG|TARGET|NODE_|ELECTRON_|YARN_|NPM_|CI|CIRCLE|TRAVIS|APPVEYOR_|CSC_|GH_|GITHUB_|BT_|AWS_|STRIP|BUILD_|WIN_' && yarn --link-duplicates --pure-lockfile && yarn build --win --publish onTag";
-  fi
-- if [ "$TARGET" == "mac" ]; then yarn build --publish onTag; fi
-- if [ "$TARGET" == "linux" ]; then yarn --link-duplicates --pure-lockfile && yarn
-  build --linux --publish onTag; fi
+  - |
+    if [ "$TARGET" == "windows" ]; then
+      # Remove any special characters before adding to our list of ENVs
+      # https://github.com/electron-userland/electron-builder/issues/2450#issuecomment-421788155
+      ENVS=`env | grep -iE '(DEBUG|NODE_|ELECTRON_|YARN_|NPM_|CI|CIRCLE|TRAVIS|APPVEYOR_|CSC_|_TOKEN|_KEY|AWS_|STRIP|BUILD_|TARGET)([A-Z]|_)*=' | sed -n '/^[^\t]/s/=.*//p' | sed '/^$/d' | sed 's/^/-e /g' | tr '\n' ' '`
+      docker run $ENVS --rm \
+        -v ${PWD}:/project \
+        electronuserland/builder:wine \
+        /bin/bash -c "env | grep -v '\r' | grep -iE 'DEBUG|TARGET|NODE_|ELECTRON_|YARN_|NPM_|CI|CIRCLE|TRAVIS|APPVEYOR_|CSC_|GH_|GITHUB_|BT_|AWS_|STRIP|BUILD_|WIN_' && yarn --link-duplicates --pure-lockfile && yarn build --win --publish onTag";
+    fi
+  - if [ "$TARGET" == "mac" ]; then yarn build --publish onTag; fi
+  - if [ "$TARGET" == "linux" ]; then yarn --link-duplicates --pure-lockfile && yarn
+    build --linux --publish onTag; fi
 addons:
   artifacts:
     working_dir: dist
     paths:
-    - $(git ls-files -o dist/{*.dmg,*.exe,*.deb} | tr "\n" ":")
+      - $(git ls-files -o dist/{*.dmg,*.exe,*.deb} | tr "\n" ":")
     target_paths:
-    - "/app/build-${TRAVIS_BUILD_NUMBER}_commit-${TRAVIS_COMMIT:0:7}$([ ! -z ${TRAVIS_TAG}
-      ] && echo _tag-${TRAVIS_TAG})"
+      - '/app/build-${TRAVIS_BUILD_NUMBER}_commit-${TRAVIS_COMMIT:0:7}$([ ! -z ${TRAVIS_TAG}
+        ] && echo _tag-${TRAVIS_TAG})'
 env:
   global:
-  - ARTIFACTS_REGION=us-east-1
-  - ARTIFACTS_BUCKET=build.lbry.io
-  - DANGER_GITHUB_API_TOKEN=f8b612049cbda985c251e18ae36c7a2b9c6c92df
-  - ARTIFACTS_DEBUG=1
-  - WIN_CSC_LINK=https://s3.amazonaws.com/files.lbry.io/cert/win-csc-2018-2019-08.p12
-  - CSC_LINK=https://s3.amazonaws.com/files.lbry.io/cert/osx-cert.p12
-    #AWS_SECRET_ACCESS_KEY
-  - secure: aF0dZ1ub0r6X5SaTH7YYRpV8cl2gkU2tA7y2tkvGZQL0+Vv2FvkhwaXREa9IM9djm7r3W7I8vEekk6Skn300kIBwQ04COxgu+Oeqjsc2a529wmF9AN5EwKExKkVQFIjMjpMBmd/fE05PD29C0vULdtIMX8uhDe5zFE+tGD1QmwKVZ+55oCxJmt7vsQwQr46s/BsPODrZhvSUPWTUG4HSsc5DJwe/XYY+35vWQsnpCkBVabAZg+lnOpqLioRNzTsBX1oSkqTX9uvOC6fN+NlpbJWetzXsBciFcMHQCx9UHxu+Ibn3W3V8FVYRuFLAinhIg+JoVQHU8mH60ggjizATpgx12riP9e/Uwho5x5bgIYmnIBf4AHqupPv40iC/THMvsS08hCQHicu+/WiAvvN8wNQ1sqpj0+RTreB+4/qdRdwTs70t4jNV83cP+nAuekMCC7uYQ08GLmFNaa+x8NgDZa3JQv7EmXU0ALWVPeJ9UEV+dhEs5iI+7bLEhTUOuvBBWo17F4pst3pfS1j7md1x4wKFRWyP7IFmjK+L1KiAH94c/LIz2Nlp5yCDfbcwU5W/wCHYAxu5c8qnAlkxeub0GpxtZ66j6oOehk1lsHYxaZcBxyn7XhM1A6Mjxgy9OG0WGyYun8iH3aa4WcY0BO21l7je75s7l0qNSRS80st8kUE=
-    #AWS_ACCESS_KEY_ID
-  - secure: HHlUGaEjk0qsW9qb/93jdFhJypiDuJ0e6Z4UClW3ciMfdZ22Ur4D0oL0mgVguigTjdkf1Yy4Z1kWtWvtvQ8DBI+mdOl5GTMpX5nMattcuK/4gFXmqz30S3c07IPkilGKkAT64JqRGT7AvQTaV/tXqNNN9BbWCTAJSnhfzYJFvZQjnSmAAQvbqzMWEEein53244fWbDio462T7vzfbEHJD1pVUSrAMrKDgFSrIKJf4GQHceUk+fqWBjAsWN8USboo88JSLXn5qhD3ZczsgtZ2gi2KTvdfrHfZ5SpOzwc2AGr8U1laQzzW8c8xsPJPmM/3dCri/clcXassa4t/+2INYTPhKbmaD9hvjFRRMpoNjMCmPRJOmojxit8tqzCrw4nSGdr3/Bt0JjpLq90mfyL83YYU4gJXF97KzTl0lCy/DFXjBiHA9riRJVaXn3CI6L0i1RLCJI+C/rT9ErFB767t0aQtXlIWSZQ+IqWaoUdp57t0e2EtbRcjK7IYIXLNgZSbR0bY/TS005D/xZkexCpAtcV9F6iqDYP3HbGyiQqC75se0MqpNrZAx1a7WsSnumOcmtuU6LRriwjM0GXEACfGLCp4w4LBzKPwrOOg4QOhewHKgxpUff8KMlfTZ+Z8B7NBNjKSPbxiMedmpsiWpPRy6VeyvwNz32PUpjdsF3tIYMk=
-    #GH_TOKEN
-  - secure: g0gSiOmCKFzxLFV//oogmex+MkumCcGJ8CtvLzojAw1qhI1P6dGRH06yuCgBNW4PQGbbrYR2tntGEeq66LZ1bU7BJ2bdkv5lBi15JPH4POpA3OSc88YebitKIyIBI2WHA3VNCkF1JEFvrfTUX+4PjP+9h6vZ9tdfzezNTpc70SrGkWMhaoe+F8u6jCL63VBpnncf0foz3WlqUFNoIdinQLYxI6S2QmHz1p1HToC+MOosBgWDufX2+6B/Efq7JDFZgx/zItFzR1OCafKx8rScUd4woAqK+8mt862IzzEbztTv6IPSdhx/hsbO7rHMcjDFk/MuDeC9TaaXqMvvKmLuvWKH+dy4BvIiJJ/WuDfzumrw+8BvTbcnXFXkEXTlkQnZD0otBZsmI4/OPH5vIGUmVIwBFXjPBcNq/Xwig8hRCxrdioEZPO4C17fMCdOn3gAx+GcMddfAIKnrlG/XK2jL8kCylL7++OEkedzYiHWA7p9eaJDjxYmIxKcfYTyF4VIMYS/wAC5W1zi1AjM5BiUhBGp/Vd+f3UUTOsqWOmS4A8cqhK/rbx4xgdwUuv2DoljeQtWd2xdZFr10L2ErmEIdfdtZBVyauaGOhhXUqpSAB5PAwSRNNWkZFCJXmqMHemih4jlfN/KS+rujh5dbyXz81BPjyxrDAziO4Q19rz7hmVI=
-    #ARTIFACTS_KEY
-  - secure: giJRkODdgvMpaLh58c3UKTy6j3IjUVQ2wVvLmECN8caVLuBnEp3U56rUT7sQPzeMoaF9goOLKXD1o+qKdGsLz2Dedi/3vFr3IXTgpYwO03eMkylYUDUwKXV1Fv14ME+wknw/Fshmty1XAc/RwlTaCks9usIRT9OE75HvV8ILVfLdSwwRR/TKFEdEDjAY/3ROVFsleDKBIe1AG/AHeN37Mwqfo39zpN5Zidm3HUegujsMsHtPQtUUCvCxiaiBtqIz79WQuiXjelLWrV53k+ulpptz4T6M8FO5jxBCL5HQMbYy4J8BhukAPHUcTVzarsDe1XEmP6xtClcAydMiHmzUBh9VbvRF8AKwGGO41g6OasgMaJ/eUlACGWTIS2AsqgkXCEgWRtswwI4edLgT/F74fKxGV82zRYLcmjWceGc9H6m2YfIIQZ2PNsDloFgTWa63oZ1sT20fWmNohD3IgVK21rjrCnMbp5/RfBdihR1+GsS8wMA15nhUW3SHfSHKV0009FZdDjxgmigjjmFt1/SM8YGZDijQc7DoUsrScR9n2JR+KVqEED3BYOviw0M0blb6b2dqK0A3+N5C1RGt8Uu8AAuAzdPDviL38m4n1UOdI1Tij1boSfr1USvfipPfQXrqSWHIY3RITMmjPREmcdj2dbhjoUEFaFfp/b3sJxUI3I4=
-    #ARTIFACTS_SECRET
-  - secure: RtPES82DBisaCkernDm10u8mzNc8K4EyyTJUCopcFFJHfFpleuJOoXNFZGXixjHXWTxqc5+IjLThBZFG6krTpD4ocftfkBNeVDXL91JsGRW6X4VBpKaJp1UJZZiYjpPZRJDwVuIb570WcX3xXmsvAwwdODkeXgBZoOw+LZIz4HV3OACi5iaWCx4+2WvQiaz/6mRkLlw9iY1m9gCGQXXUSWyY+bGWsOdGWpfp/VfzpX7mBJbcIYjvRYSnBtVUFkEzxHlaR/CFc7Jio45EUImhBKqKV8QGAiv9AowcWqQn8y2SuW8J66bkaZGbGpyEdsRQDJKUU5naRIFJ/002e4XjI2moBfSHHnFTMH/AawA4b+gCjein8jDiRugJw8AqC4KpG660SFJwC4A8IxfPcXWcykahrL6kJhs+NFbyxQEJIMUqP6UAAiPAuUr/Whq1F8x5b39pEibRZ3Vv0Bix/lUj4cWZYRBL1ckoUgSCeG7llkAdnxLuQKfDvTw+HFcWGq7yg/ye7H7CwpBJkSSOlnQ61nuucC82hVqBGoPGbFW3vjS0BqesLcaO7kwW/fdBnIxwLiWWHDWol0aLfQLEzjUzpS+tA1YYKvrG+yNMEeYtHEK9ZcltQD52uEtjK26DIY8tQU8PxMlXha6/XTOlt8MIcl8IPULmVWKT9k8LPTFQiXc=
-    #CSC_KEY_PASSWORD
-  - secure: TDKeF7/WGwR+di+JhNp29x7NPzVMO/q+72n58zB5goI1NUKaeKgjeWbfVYx9f+4G9a9/pdDVUfORt8i6OW8ZhhqYS4E8G5F56q+oX3nrjNqM8NqoK09ehZS/wdYGbenG9oTfXYenDdwusZV4Fq0BRRLjqAIXPQCKg3//MKseh/1fHDGVGXpYUimHRSCkwspbbfB/9Qw9KEBjweeXiAwB+5F+E7fPlVtqsIvtkkED1hKe0Z8HdECC6JTZ0ZHPDDFGV3aondXQDgUlfchnZ6HDdNDO5y/hPEj0laiZQ7BssenJ8Z7qjHc5O9AKXfG+6WFICHvtgjQ0+x6rk6gpvJcyI1x2+Kck/s0EcSkFY+Yz81BxdehIeKPn9U8LpGaFbtxsp01661yeaIpAqT/PqFsdj/kFXFT6gwZlGGPMBm2WgQR4A61qkOO1jokqz/z6CnY+MNeE8E1Fh4bFoZ0JwUJFJugoyDahHpVlLw5lZaSipJO6RZ1xjoZ3XGmxvtkM4dQ16xQ++Q8EgD878uCWn2jZ5YTQdKANfXYTKSiQfoEjLeX0T6I6GSdim4ZURjcolmGNMH/3jhISOXj+e2UkLc6jwO4Ek084o6ciJ2JjqEhXvXOCeRJ2I9cf2dEk7CvtbitiDly6XATo2FP4hqNdcNNWyj/jFvuTwFT6hzBqLk1BCBc=
-    #WIN_CSC_KEY_PASSWORD
-  - secure: LBwkNMw5paoxpeLcNvAbrSLghLH0kXmgctBkUK6hgqJ/6WReWKlERUCwWQp/NcAB5Nb8fUTV8hXz1UjeQG1HH65geRcxya9sf9xu446e2gRdYGfYk7AhZdIw97IlwTYv2tpnjejiVXIoClQjKRYtOkRC4BIGW+Ydun1hwEUXTVMCplOzPhpLrkJCIDDDdM4eJjWm6ZMshCKRlnt42sNdx63FHBAH72rqBnt2jd+ISIadASnWz0nQlN5aIvXR6cLZfSl8Qt/JDL+LXzWX+pNA4BegCtW3hBoLrW18QdNPxrvPCvKjRCC3LHuv+KEGbzGv/QkXg5f9BKZehIZ/hjYgxysjeHBI8yOfCoyrDafxSIso5ja2TtL9lLpW90gbkbtEFiaL2XOMUbQcwWQ6RShSoLZxgiAl6zUmrq3UtS30OjnjWgMj+WnU2BcgpmpPzU0Hz/fblX6/EnwXhPNRYZvm5JyhVRYLZypLWuV4XsWGuLbUOOrsYi7UvU+xo+3AaxbUW4A6XuQ/DUh0ZVNlpPGcVi7A2tx4/46Wm0oLwQ5NYVukHbEiHWZ4HuKqSionwtgG0T2a6/7JQdH7gb+/86z4YHmK89dd/aE84hBUGTB/pNvvtDBYBE3c60SzL0CFPJZrbz9E0gVhLfsHO+5/VCFIipgM8mYoVzsq+cONKbqUPCg=
+    - ARTIFACTS_REGION=us-east-1
+    - ARTIFACTS_BUCKET=build.lbry.io
+    - DANGER_GITHUB_API_TOKEN=f8b612049cbda985c251e18ae36c7a2b9c6c92df
+    - ARTIFACTS_DEBUG=1
+    - WIN_CSC_LINK=https://s3.amazonaws.com/files.lbry.io/cert/win-csc-2018-2019-08.p12
+    - CSC_LINK=https://s3.amazonaws.com/files.lbry.io/cert/osx-cert.p12
+      #AWS_SECRET_ACCESS_KEY
+    - secure: aF0dZ1ub0r6X5SaTH7YYRpV8cl2gkU2tA7y2tkvGZQL0+Vv2FvkhwaXREa9IM9djm7r3W7I8vEekk6Skn300kIBwQ04COxgu+Oeqjsc2a529wmF9AN5EwKExKkVQFIjMjpMBmd/fE05PD29C0vULdtIMX8uhDe5zFE+tGD1QmwKVZ+55oCxJmt7vsQwQr46s/BsPODrZhvSUPWTUG4HSsc5DJwe/XYY+35vWQsnpCkBVabAZg+lnOpqLioRNzTsBX1oSkqTX9uvOC6fN+NlpbJWetzXsBciFcMHQCx9UHxu+Ibn3W3V8FVYRuFLAinhIg+JoVQHU8mH60ggjizATpgx12riP9e/Uwho5x5bgIYmnIBf4AHqupPv40iC/THMvsS08hCQHicu+/WiAvvN8wNQ1sqpj0+RTreB+4/qdRdwTs70t4jNV83cP+nAuekMCC7uYQ08GLmFNaa+x8NgDZa3JQv7EmXU0ALWVPeJ9UEV+dhEs5iI+7bLEhTUOuvBBWo17F4pst3pfS1j7md1x4wKFRWyP7IFmjK+L1KiAH94c/LIz2Nlp5yCDfbcwU5W/wCHYAxu5c8qnAlkxeub0GpxtZ66j6oOehk1lsHYxaZcBxyn7XhM1A6Mjxgy9OG0WGyYun8iH3aa4WcY0BO21l7je75s7l0qNSRS80st8kUE=
+      #AWS_ACCESS_KEY_ID
+    - secure: HHlUGaEjk0qsW9qb/93jdFhJypiDuJ0e6Z4UClW3ciMfdZ22Ur4D0oL0mgVguigTjdkf1Yy4Z1kWtWvtvQ8DBI+mdOl5GTMpX5nMattcuK/4gFXmqz30S3c07IPkilGKkAT64JqRGT7AvQTaV/tXqNNN9BbWCTAJSnhfzYJFvZQjnSmAAQvbqzMWEEein53244fWbDio462T7vzfbEHJD1pVUSrAMrKDgFSrIKJf4GQHceUk+fqWBjAsWN8USboo88JSLXn5qhD3ZczsgtZ2gi2KTvdfrHfZ5SpOzwc2AGr8U1laQzzW8c8xsPJPmM/3dCri/clcXassa4t/+2INYTPhKbmaD9hvjFRRMpoNjMCmPRJOmojxit8tqzCrw4nSGdr3/Bt0JjpLq90mfyL83YYU4gJXF97KzTl0lCy/DFXjBiHA9riRJVaXn3CI6L0i1RLCJI+C/rT9ErFB767t0aQtXlIWSZQ+IqWaoUdp57t0e2EtbRcjK7IYIXLNgZSbR0bY/TS005D/xZkexCpAtcV9F6iqDYP3HbGyiQqC75se0MqpNrZAx1a7WsSnumOcmtuU6LRriwjM0GXEACfGLCp4w4LBzKPwrOOg4QOhewHKgxpUff8KMlfTZ+Z8B7NBNjKSPbxiMedmpsiWpPRy6VeyvwNz32PUpjdsF3tIYMk=
+      #GH_TOKEN
+    - secure: g0gSiOmCKFzxLFV//oogmex+MkumCcGJ8CtvLzojAw1qhI1P6dGRH06yuCgBNW4PQGbbrYR2tntGEeq66LZ1bU7BJ2bdkv5lBi15JPH4POpA3OSc88YebitKIyIBI2WHA3VNCkF1JEFvrfTUX+4PjP+9h6vZ9tdfzezNTpc70SrGkWMhaoe+F8u6jCL63VBpnncf0foz3WlqUFNoIdinQLYxI6S2QmHz1p1HToC+MOosBgWDufX2+6B/Efq7JDFZgx/zItFzR1OCafKx8rScUd4woAqK+8mt862IzzEbztTv6IPSdhx/hsbO7rHMcjDFk/MuDeC9TaaXqMvvKmLuvWKH+dy4BvIiJJ/WuDfzumrw+8BvTbcnXFXkEXTlkQnZD0otBZsmI4/OPH5vIGUmVIwBFXjPBcNq/Xwig8hRCxrdioEZPO4C17fMCdOn3gAx+GcMddfAIKnrlG/XK2jL8kCylL7++OEkedzYiHWA7p9eaJDjxYmIxKcfYTyF4VIMYS/wAC5W1zi1AjM5BiUhBGp/Vd+f3UUTOsqWOmS4A8cqhK/rbx4xgdwUuv2DoljeQtWd2xdZFr10L2ErmEIdfdtZBVyauaGOhhXUqpSAB5PAwSRNNWkZFCJXmqMHemih4jlfN/KS+rujh5dbyXz81BPjyxrDAziO4Q19rz7hmVI=
+      #ARTIFACTS_KEY
+    - secure: giJRkODdgvMpaLh58c3UKTy6j3IjUVQ2wVvLmECN8caVLuBnEp3U56rUT7sQPzeMoaF9goOLKXD1o+qKdGsLz2Dedi/3vFr3IXTgpYwO03eMkylYUDUwKXV1Fv14ME+wknw/Fshmty1XAc/RwlTaCks9usIRT9OE75HvV8ILVfLdSwwRR/TKFEdEDjAY/3ROVFsleDKBIe1AG/AHeN37Mwqfo39zpN5Zidm3HUegujsMsHtPQtUUCvCxiaiBtqIz79WQuiXjelLWrV53k+ulpptz4T6M8FO5jxBCL5HQMbYy4J8BhukAPHUcTVzarsDe1XEmP6xtClcAydMiHmzUBh9VbvRF8AKwGGO41g6OasgMaJ/eUlACGWTIS2AsqgkXCEgWRtswwI4edLgT/F74fKxGV82zRYLcmjWceGc9H6m2YfIIQZ2PNsDloFgTWa63oZ1sT20fWmNohD3IgVK21rjrCnMbp5/RfBdihR1+GsS8wMA15nhUW3SHfSHKV0009FZdDjxgmigjjmFt1/SM8YGZDijQc7DoUsrScR9n2JR+KVqEED3BYOviw0M0blb6b2dqK0A3+N5C1RGt8Uu8AAuAzdPDviL38m4n1UOdI1Tij1boSfr1USvfipPfQXrqSWHIY3RITMmjPREmcdj2dbhjoUEFaFfp/b3sJxUI3I4=
+      #ARTIFACTS_SECRET
+    - secure: RtPES82DBisaCkernDm10u8mzNc8K4EyyTJUCopcFFJHfFpleuJOoXNFZGXixjHXWTxqc5+IjLThBZFG6krTpD4ocftfkBNeVDXL91JsGRW6X4VBpKaJp1UJZZiYjpPZRJDwVuIb570WcX3xXmsvAwwdODkeXgBZoOw+LZIz4HV3OACi5iaWCx4+2WvQiaz/6mRkLlw9iY1m9gCGQXXUSWyY+bGWsOdGWpfp/VfzpX7mBJbcIYjvRYSnBtVUFkEzxHlaR/CFc7Jio45EUImhBKqKV8QGAiv9AowcWqQn8y2SuW8J66bkaZGbGpyEdsRQDJKUU5naRIFJ/002e4XjI2moBfSHHnFTMH/AawA4b+gCjein8jDiRugJw8AqC4KpG660SFJwC4A8IxfPcXWcykahrL6kJhs+NFbyxQEJIMUqP6UAAiPAuUr/Whq1F8x5b39pEibRZ3Vv0Bix/lUj4cWZYRBL1ckoUgSCeG7llkAdnxLuQKfDvTw+HFcWGq7yg/ye7H7CwpBJkSSOlnQ61nuucC82hVqBGoPGbFW3vjS0BqesLcaO7kwW/fdBnIxwLiWWHDWol0aLfQLEzjUzpS+tA1YYKvrG+yNMEeYtHEK9ZcltQD52uEtjK26DIY8tQU8PxMlXha6/XTOlt8MIcl8IPULmVWKT9k8LPTFQiXc=
+      #CSC_KEY_PASSWORD
+    - secure: TDKeF7/WGwR+di+JhNp29x7NPzVMO/q+72n58zB5goI1NUKaeKgjeWbfVYx9f+4G9a9/pdDVUfORt8i6OW8ZhhqYS4E8G5F56q+oX3nrjNqM8NqoK09ehZS/wdYGbenG9oTfXYenDdwusZV4Fq0BRRLjqAIXPQCKg3//MKseh/1fHDGVGXpYUimHRSCkwspbbfB/9Qw9KEBjweeXiAwB+5F+E7fPlVtqsIvtkkED1hKe0Z8HdECC6JTZ0ZHPDDFGV3aondXQDgUlfchnZ6HDdNDO5y/hPEj0laiZQ7BssenJ8Z7qjHc5O9AKXfG+6WFICHvtgjQ0+x6rk6gpvJcyI1x2+Kck/s0EcSkFY+Yz81BxdehIeKPn9U8LpGaFbtxsp01661yeaIpAqT/PqFsdj/kFXFT6gwZlGGPMBm2WgQR4A61qkOO1jokqz/z6CnY+MNeE8E1Fh4bFoZ0JwUJFJugoyDahHpVlLw5lZaSipJO6RZ1xjoZ3XGmxvtkM4dQ16xQ++Q8EgD878uCWn2jZ5YTQdKANfXYTKSiQfoEjLeX0T6I6GSdim4ZURjcolmGNMH/3jhISOXj+e2UkLc6jwO4Ek084o6ciJ2JjqEhXvXOCeRJ2I9cf2dEk7CvtbitiDly6XATo2FP4hqNdcNNWyj/jFvuTwFT6hzBqLk1BCBc=
+      #WIN_CSC_KEY_PASSWORD
+    - secure: LBwkNMw5paoxpeLcNvAbrSLghLH0kXmgctBkUK6hgqJ/6WReWKlERUCwWQp/NcAB5Nb8fUTV8hXz1UjeQG1HH65geRcxya9sf9xu446e2gRdYGfYk7AhZdIw97IlwTYv2tpnjejiVXIoClQjKRYtOkRC4BIGW+Ydun1hwEUXTVMCplOzPhpLrkJCIDDDdM4eJjWm6ZMshCKRlnt42sNdx63FHBAH72rqBnt2jd+ISIadASnWz0nQlN5aIvXR6cLZfSl8Qt/JDL+LXzWX+pNA4BegCtW3hBoLrW18QdNPxrvPCvKjRCC3LHuv+KEGbzGv/QkXg5f9BKZehIZ/hjYgxysjeHBI8yOfCoyrDafxSIso5ja2TtL9lLpW90gbkbtEFiaL2XOMUbQcwWQ6RShSoLZxgiAl6zUmrq3UtS30OjnjWgMj+WnU2BcgpmpPzU0Hz/fblX6/EnwXhPNRYZvm5JyhVRYLZypLWuV4XsWGuLbUOOrsYi7UvU+xo+3AaxbUW4A6XuQ/DUh0ZVNlpPGcVi7A2tx4/46Wm0oLwQ5NYVukHbEiHWZ4HuKqSionwtgG0T2a6/7JQdH7gb+/86z4YHmK89dd/aE84hBUGTB/pNvvtDBYBE3c60SzL0CFPJZrbz9E0gVhLfsHO+5/VCFIipgM8mYoVzsq+cONKbqUPCg=

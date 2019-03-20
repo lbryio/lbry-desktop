@@ -4,12 +4,12 @@
 [![GitHub release](https://img.shields.io/github/release/lbryio/lbry-desktop.svg)](https://GitHub.com/lbryio/lbry-desktop/releases/)
 [![Build Status](https://travis-ci.org/lbryio/lbry-desktop.svg?branch=master)](https://travis-ci.org/lbryio/lbry-desktop)
 [![Dependencies](https://david-dm.org/lbryio/lbry-desktop/status.svg)](https://david-dm.org/lbryio/lbry-desktop)
-[![chat on Discord](https://img.shields.io/discord/362322208485277697.svg?logo=discord)](https://chat.lbry.io)
+[![chat on Discord](https://img.shields.io/discord/362322208485277697.svg?logo=discord)](https://chat.lbry.com)
 
 [![forthebadge](https://forthebadge.com/images/badges/60-percent-of-the-time-works-every-time.svg)](https://forthebadge.com)
 
 The LBRY app is a graphical browser for the decentralized content marketplace provided by the
-[LBRY](https://lbry.io) protocol. It is essentially the
+[LBRY](https://lbry.com) protocol. It is essentially the
 [lbry daemon](https://github.com/lbryio/lbry) bundled with a UI using
 [Electron](https://electron.atom.io/).
 
@@ -19,10 +19,10 @@ The LBRY app is a graphical browser for the decentralized content marketplace pr
 
 We provide installers for Windows, macOS (v10.12.4, Sierra, or greater), and Debian-based Linux. See community maintained builds section for alternative Linux installations.
 
-|                       | Windows                                      | macOS                                        | Linux                                        |
-| --------------------- | -------------------------------------------- | -------------------------------------------- | -------------------------------------------- |
-| Latest Stable Release | [Download](https://lbry.io/get/lbry.exe)     | [Download](https://lbry.io/get/lbry.dmg)     | [Download](https://lbry.io/get/lbry.deb)     |
-| Latest Pre-release    | [Download](https://lbry.io/get/lbry.pre.exe) | [Download](https://lbry.io/get/lbry.pre.dmg) | [Download](https://lbry.io/get/lbry.pre.deb) |
+|                       | Windows                                       | macOS                                         | Linux                                         |
+| --------------------- | --------------------------------------------- | --------------------------------------------- | --------------------------------------------- |
+| Latest Stable Release | [Download](https://lbry.com/get/lbry.exe)     | [Download](https://lbry.com/get/lbry.dmg)     | [Download](https://lbry.com/get/lbry.deb)     |
+| Latest Pre-release    | [Download](https://lbry.com/get/lbry.pre.exe) | [Download](https://lbry.com/get/lbry.pre.dmg) | [Download](https://lbry.com/get/lbry.pre.deb) |
 
 Our [releases page](https://github.com/lbryio/lbry-desktop/releases) also contains the latest
 release, pre-releases, and past builds.  
@@ -31,7 +31,7 @@ _Note: If the deb fails to install using the Ubuntu Software Center, install man
 To install from source or make changes to the application, continue to the next section below.
 
 **Community maintained** builds for Arch Linux and Flatpak are available, see below. These installs will need to be updated manually as the in-app update process only supports Debian installs at this time.
-_Note: If coming from a deb install, the directory structure is different and you'll need to [migrate data](https://lbry.io/faq/backup-data)._
+_Note: If coming from a deb install, the directory structure is different and you'll need to [migrate data](https://lbry.com/faq/backup-data)._
 
 |                | Flatpak                                                                   | Arch                                                                                      | Raspberry Pi                                |
 | -------------- | ------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------- | ------------------------------------------- |
@@ -43,8 +43,6 @@ _Note: If coming from a deb install, the directory structure is different and yo
 Double click the installed application to interact with the LBRY network.
 
 ## Running from Source
-
-*Note: We are currently undergoing a lot of internal build changes. If you find any issues, please report them to us.*
 
 #### Prerequisites
 
@@ -80,7 +78,7 @@ This project is MIT licensed. For the full license, see [LICENSE](LICENSE).
 
 ## Security
 
-We take security seriously. Please contact security@lbry.io regarding any security issues. Our PGP key is [here](https://keybase.io/lbry/key.asc) if you need it.
+We take security seriously. Please contact security@lbry.com regarding any security issues. Our PGP key is [here](https://keybase.io/lbry/key.asc) if you need it.
 
 ## Contact
 

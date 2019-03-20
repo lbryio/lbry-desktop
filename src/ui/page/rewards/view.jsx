@@ -63,7 +63,7 @@ class RewardsPage extends PureComponent<Props> {
             )}
           </p>
           <p>
-            {`${__('If you continue to see this message, send us an email to help@lbry.io.')} ${__(
+            {`${__('If you continue to see this message, send us an email to help@lbry.com.')} ${__(
               'Please enjoy free content in the meantime!'
             )}`}
           </p>
@@ -132,8 +132,8 @@ class RewardsPage extends PureComponent<Props> {
             <p className="card__content">
               {claimed && claimed.length
                 ? __(
-                    "You have claimed all available rewards! We're regularly adding more so be sure to check back later."
-                  )
+                  "You have claimed all available rewards! We're regularly adding more so be sure to check back later."
+                )
                 : __('There are no rewards available at this time, please check back later.')}
             </p>
           </section>

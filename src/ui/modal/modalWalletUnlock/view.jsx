@@ -42,23 +42,23 @@ class ModalWalletUnlock extends React.PureComponent<Props, State> {
         isOpen
         title={__('Unlock Wallet')}
         contentLabel={__('Unlock Wallet')}
-        type='confirm'
+        type="confirm"
         shouldCloseOnOverlayClick={false}
         confirmButtonLabel={__('Unlock')}
         abortButtonLabel={__('Exit')}
         onConfirmed={() => unlockWallet(password)}
         onAborted={quit}
       >
-        <section className='card__content'>
+        <section className="card__content">
           <Form onSubmit={() => unlockWallet(password)}>
             <p>
               {__(
                 'Your wallet has been encrypted with a local password. Please enter your wallet password to proceed.'
               )}{' '}
               <Button
-                button='link'
+                button="link"
                 label={__('Learn more')}
-                href='https://lbry.io/faq/wallet-encryption'
+                href="https://lbry.com/faq/wallet-encryption"
               />
               .
             </p>
@@ -66,8 +66,8 @@ class ModalWalletUnlock extends React.PureComponent<Props, State> {
               autoFocus
               error={walletUnlockSucceded === false ? 'Incorrect Password' : false}
               label={__('Wallet Password')}
-              type='password'
-              name='wallet-password'
+              type="password"
+              name="wallet-password"
               onChange={event => this.onChangePassword(event)}
             />
           </Form>

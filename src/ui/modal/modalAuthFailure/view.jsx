@@ -26,7 +26,7 @@ class ModalAuthFailure extends React.PureComponent<Props> {
         <section className="card__content">
           <p>
             {__(
-              'If reloading does not fix this, or you see this at every start up, please email help@lbry.io.'
+              'If reloading does not fix this, or you see this at every start up, please email help@lbry.com.'
             )}
           </p>
         </section>

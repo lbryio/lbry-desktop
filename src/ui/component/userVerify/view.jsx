@@ -64,7 +64,7 @@ class UserVerify extends React.PureComponent<Props> {
               {__('A $1 authorization may temporarily appear with your provider.')}{' '}
               <Button
                 button="link"
-                href="https://lbry.io/faq/identity-requirements"
+                href="https://lbry.com/faq/identity-requirements"
                 label={__('Read more about why we do this.')}
               />
             </div>
@@ -95,7 +95,7 @@ class UserVerify extends React.PureComponent<Props> {
 
             <div className="help">
               {__('Standard messaging rates apply. Having trouble?')}{' '}
-              <Button button="link" href="https://lbry.io/faq/phone" label={__('Read more.')} />
+              <Button button="link" href="https://lbry.com/faq/phone" label={__('Read more.')} />
             </div>
           </div>
         </section>
@@ -116,7 +116,7 @@ class UserVerify extends React.PureComponent<Props> {
           <div className="card__content">
             <div className="card__actions">
               <Button
-                href="https://chat.lbry.io"
+                href="https://chat.lbry.com"
                 button="primary"
                 icon={icons.CHAT}
                 label={__('Join LBRY Chat')}

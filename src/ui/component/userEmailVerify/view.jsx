@@ -71,8 +71,8 @@ class UserEmailVerify extends React.PureComponent<Props> {
           </div>
 
           <p className="help">
-            {__('Email')} <Button button="link" href="mailto:help@lbry.io" label="help@lbry.io" />{' '}
-            or join our <Button button="link" href="https://chat.lbry.io" label="chat" />{' '}
+            {__('Email')} <Button button="link" href="mailto:help@lbry.com" label="help@lbry.com" />{' '}
+            or join our <Button button="link" href="https://chat.lbry.com" label="chat" />{' '}
             {__('if you encounter any trouble verifying.')}
           </p>
         </div>

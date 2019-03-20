@@ -42,14 +42,14 @@ export default () => {
             if (browserWindow) {
               browserWindow.webContents.send('open-menu', '/help');
             } else {
-              shell.openExternal('https://lbry.io/faq');
+              shell.openExternal('https://lbry.com/faq');
             }
           },
         },
         {
           label: 'Frequently Asked Questions',
           click: () => {
-            shell.openExternal('https://lbry.io/faq');
+            shell.openExternal('https://lbry.com/faq');
           },
         },
         { type: 'separator' },

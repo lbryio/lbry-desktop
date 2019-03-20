@@ -104,7 +104,7 @@ class ReportPage extends React.Component {
             </p>
             <p>
               {__('Join our')}{' '}
-              <Button button="link" href="https://discourse.lbry.io/" label={__('tech forum')} />.
+              <Button button="link" href="https://discourse.lbry.com/" label={__('tech forum')} />.
             </p>
           </div>
         </section>

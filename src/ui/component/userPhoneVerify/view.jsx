@@ -45,20 +45,20 @@ class UserPhoneVerify extends React.PureComponent<Props, State> {
     const { cancelButton, phoneErrorMessage, phone, countryCode } = this.props;
     return (
       <React.Fragment>
-        <section className='card__content'>
+        <section className="card__content">
           <p>
             {' '}
             {__(
               `Please enter the verification code sent to +${countryCode}${phone}. Didn't receive it? `
             )}
-            <Button button='link' onClick={this.reset.bind(this)} label='Go back.' />
+            <Button button="link" onClick={this.reset.bind(this)} label="Go back." />
           </p>
         </section>
-        <Form className='card__content' onSubmit={this.handleSubmit.bind(this)}>
+        <Form className="card__content" onSubmit={this.handleSubmit.bind(this)}>
           <FormField
-            type='text'
-            name='code'
-            placeholder='1234'
+            type="text"
+            name="code"
+            placeholder="1234"
             value={this.state.code}
             onChange={event => {
               this.handleCodeChanged(event);
@@ -68,12 +68,12 @@ class UserPhoneVerify extends React.PureComponent<Props, State> {
             inputButton={<Submit label={__('Verify')} />}
           />
 
-          <div className='card__actions'>{cancelButton}</div>
+          <div className="card__actions">{cancelButton}</div>
         </Form>
 
-        <p className='help'>
-          {__('Email')} <Button button='link' href='mailto:help@lbry.io' label='help@lbry.io' /> or
-          join our <Button button='link' href='https://chat.lbry.io' label='chat' />{' '}
+        <p className="help">
+          {__('Email')} <Button button="link" href="mailto:help@lbry.com" label="help@lbry.com" />{' '}
+          or join our <Button button="link" href="https://chat.lbry.com" label="chat" />{' '}
           {__('if you encounter any trouble with your code.')}
         </p>
       </React.Fragment>

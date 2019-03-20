@@ -94,21 +94,21 @@ class ModalWalletEncrypt extends React.PureComponent<Props, State> {
         isOpen
         title={__('Encrypt Wallet')}
         contentLabel={__('Encrypt Wallet')}
-        type='confirm'
+        type="confirm"
         confirmButtonLabel={__('Encrypt Wallet')}
         abortButtonLabel={__('Cancel')}
         onConfirmed={() => this.submitEncryptForm()}
         onAborted={closeModal}
       >
-        <Form className='card__content' onSubmit={() => this.submitEncryptForm()}>
+        <Form className="card__content" onSubmit={() => this.submitEncryptForm()}>
           <p>
             {__(
               'Encrypting your wallet will require a password to access your local wallet data when LBRY starts. Please enter a new password for your wallet.'
             )}{' '}
             <Button
-              button='link'
+              button="link"
               label={__('Learn more')}
-              href='https://lbry.io/faq/wallet-encryption'
+              href="https://lbry.com/faq/wallet-encryption"
             />
             .
           </p>
@@ -118,8 +118,8 @@ class ModalWalletEncrypt extends React.PureComponent<Props, State> {
               error={passwordMismatch === true ? 'Passwords do not match' : false}
               label={__('Password')}
               placeholder={__('Shh...')}
-              type='password'
-              name='wallet-new-password'
+              type="password"
+              name="wallet-new-password"
               onChange={event => this.onChangeNewPassword(event)}
             />
           </fieldset-section>
@@ -128,13 +128,13 @@ class ModalWalletEncrypt extends React.PureComponent<Props, State> {
               error={passwordMismatch === true ? 'Passwords do not match' : false}
               label={__('Confirm Password')}
               placeholder={__('Your eyes only')}
-              type='password'
-              name='wallet-new-password-confirm'
+              type="password"
+              name="wallet-new-password-confirm"
               onChange={event => this.onChangeNewPasswordConfirm(event)}
             />
           </fieldset-section>
 
-          <div className='help help--warning'>
+          <div className="help help--warning">
             {__(
               'If your password is lost, it cannot be recovered. You will not be able to access your wallet without a password.'
             )}
@@ -143,11 +143,11 @@ class ModalWalletEncrypt extends React.PureComponent<Props, State> {
             error={understandError === true ? 'You must enter "I understand"' : false}
             label={__('Enter "I understand"')}
             placeholder={__('Dear computer, I understand')}
-            type='text'
-            name='wallet-understand'
+            type="text"
+            name="wallet-understand"
             onChange={event => this.onChangeUnderstandConfirm(event)}
           />
-          {failMessage && <div className='error-text'>{__(failMessage)}</div>}
+          {failMessage && <div className="error-text">{__(failMessage)}</div>}
         </Form>
       </Modal>
     );
