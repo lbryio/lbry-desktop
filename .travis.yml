@@ -4,16 +4,16 @@ matrix:
     env: TARGET=mac
     osx_image: xcode9.2
     language: node_js
-    node_js: '9'
+    node_js: '10'
   - os: linux
     env: TARGET=windows
     services: docker
     language: node_js
-    node_js: '9'
+    node_js: '10'
   - os: linux
     env: TARGET=linux
     language: node_js
-    node_js: '9'
+    node_js: '10'
 cache: false
 before_install:
 - |

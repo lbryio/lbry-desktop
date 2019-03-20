@@ -83,7 +83,8 @@
   },
   "nsis": {
     "perMachine": true,
-    "createDesktopShortcut": "always"
+    "createDesktopShortcut": "always",
+    "differentialPackage": true
   },
   "win": {
     "target": [
