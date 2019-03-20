@@ -44,14 +44,13 @@ Double click the installed application to interact with the LBRY network.
 
 ## Running from Source
 
-*Note: We are currently undergoing a lot of internal build changes. Linux doesn't seem to be working at the moment.*
+*Note: We are currently undergoing a lot of internal build changes. If you find any issues, please report them to us.*
 
 #### Prerequisites
 
 - [Git](https://git-scm.com/downloads)
-- [Node.js](https://nodejs.org/en/download/) (Use Node v8 if having trouble with keytar)
+- [Node.js](https://nodejs.org/en/download/) (v10 required)
 - [Yarn](https://yarnpkg.com/en/docs/install)
-- [C++ Build Tools](https://github.com/felixrieseberg/windows-build-tools) (Windows only, only install if having trouble with keytar)
 
 #### Steps
 
