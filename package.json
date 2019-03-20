@@ -79,7 +79,7 @@
     "devtron": "^1.4.0",
     "dom-scroll-into-view": "^1.2.1",
     "electron": "4.1.0",
-    "electron-builder": "^20.38.4",
+    "electron-builder": "^20.39.0",
     "electron-devtools-installer": "^2.2.4",
     "electron-is-dev": "^0.3.0",
     "electron-publisher-s3": "^20.8.1",
@@ -169,7 +169,7 @@
     "yarn": "^1.3"
   },
   "lbrySettings": {
-    "lbrynetDaemonVersion": "0.32.4",
+    "lbrynetDaemonVersion": "0.34.0",
     "lbrynetDaemonUrlTemplate": "https://github.com/lbryio/lbry/releases/download/vDAEMONVER/lbrynet-OSNAME.zip",
     "lbrynetDaemonDir": "static/daemon",
     "lbrynetDaemonFileName": "lbrynet"
