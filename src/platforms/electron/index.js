@@ -34,7 +34,7 @@ let daemon;
 
 const appState = {};
 
-const installExtensions = async () => {
+const installExtensions = async() => {
   const devtronExtension = require('devtron');
   return await devtronExtension.install();
 };
@@ -53,7 +53,7 @@ if (isDev) {
   process.env.ELECTRON_DISABLE_SECURITY_WARNINGS = true;
 }
 
-app.on('ready', async () => {
+app.on('ready', async() => {
   let isDaemonRunning = false;
   await Lbry.status()
     .then(() => {
@@ -86,7 +86,7 @@ app.on('ready', async () => {
   startSandbox();
 
   if (isDev) {
-    //await installExtensions();
+    // await installExtensions();
     const {
       default: installExtension,
       REACT_DEVELOPER_TOOLS,
@@ -107,7 +107,10 @@ app.on('ready', async () => {
       .catch(err => console.log('An error occurred: ', err));
   }
 
-  rendererWindow = createWindow(appState);
+  if (app.requestSingleInstanceLock()) {
+    rendererWindow = createWindow(appState);
+  }
+
   rendererWindow.webContents.on('devtools-opened', () => {
     rendererWindow.webContents.send('devtools-is-opened');
   });
@@ -309,7 +312,6 @@ process.on('uncaughtException', error => {
 });
 
 // Force single instance application
-app.requestSingleInstanceLock();
 app.on('second-instance', (event, argv) => {
   if (rendererWindow) {
     if (

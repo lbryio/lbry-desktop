@@ -12,7 +12,7 @@ export default window => {
       break;
     }
     case 'win32': {
-      iconPath = 'static/img/tray/windows/tray.ico';
+      iconPath = 'static/img/tray/windows/tray.png';
       break;
     }
     default: {
