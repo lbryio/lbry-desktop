@@ -160,8 +160,7 @@ ipcRenderer.on('window-is-focused', () => {
 });
 
 ipcRenderer.on('devtools-is-opened', () => {
-  const logOnDevelopment = false;
-  doLogWarningConsoleMessage(logOnDevelopment);
+  doLogWarningConsoleMessage();
 });
 // @endif
 

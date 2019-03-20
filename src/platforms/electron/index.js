@@ -6,13 +6,14 @@ import url from 'url';
 import https from 'https';
 import { app, dialog, ipcMain, session, shell } from 'electron';
 import { autoUpdater } from 'electron-updater';
-import isDev from 'electron-is-dev';
 import { Lbry } from 'lbry-redux';
 import Daemon from './Daemon';
+import isDev from 'electron-is-dev';
 import createTray from './createTray';
 import createWindow from './createWindow';
 import pjson from '../../../package.json';
 import startSandbox from './startSandbox';
+import installDevtools from './installDevtools';
 
 autoUpdater.autoDownload = true;
 
@@ -34,11 +35,6 @@ let daemon;
 
 const appState = {};
 
-const installExtensions = async () => {
-  const devtronExtension = require('devtron');
-  return await devtronExtension.install();
-};
-
 app.setAsDefaultProtocolClient('lbry');
 app.setName('LBRY');
 app.setAppUserModelId('io.lbry.LBRY');
@@ -53,8 +49,9 @@ if (isDev) {
   process.env.ELECTRON_DISABLE_SECURITY_WARNINGS = true;
 }
 
-app.on('ready', async () => {
+const startDaemon = async() => {
   let isDaemonRunning = false;
+
   await Lbry.status()
     .then(() => {
       isDaemonRunning = true;
@@ -82,52 +79,79 @@ app.on('ready', async () => {
     });
     daemon.launch();
   }
+};
 
-  startSandbox();
+// When we are starting the app, ensure there are no other apps already running
+const gotSingleInstanceLock = app.requestSingleInstanceLock();
 
-  if (isDev) {
-    //await installExtensions();
-    const {
-      default: installExtension,
-      REACT_DEVELOPER_TOOLS,
-      REDUX_DEVTOOLS,
-      REACT_PERF,
-    } = require('electron-devtools-installer');
+if (!gotSingleInstanceLock) {
+  // Another instance already has a lock, abort
+  app.quit();
+} else {
+  app.on('second-instance', (event, argv) => {
+    // Send the url to the app to navigate first, then focus
+    if (rendererWindow) {
+      if (
+        (process.platform === 'win32' || process.platform === 'linux') &&
+        String(argv[1]).startsWith('lbry')
+      ) {
+        let URI = argv[1];
 
-    await installExtension(REACT_DEVELOPER_TOOLS)
-      .then(name => console.log(`Added Extension:  ${name}`))
-      .catch(err => console.log('An error occurred: ', err));
+        // Keep only command line / deep linked arguments
+        // Windows normalizes URIs when they're passed in from other apps. On Windows, this tries to
+        // restore the original URI that was typed.
+        //   - If the URI has no path, Windows adds a trailing slash. LBRY URIs can't have a slash with no
+        //     path, so we just strip it off.
+        //   - In a URI with a claim ID, like lbry://channel#claimid, Windows interprets the hash mark as
+        //     an anchor and converts it to lbry://channel/#claimid. We remove the slash here as well.
+        //   - ? also interpreted as an anchor, remove slash also.
+        if (process.platform === 'win32') {
+          URI = URI.replace(/\/$/, '')
+            .replace('/#', '#')
+            .replace('/?', '?');
+        }
 
-    await installExtension(REDUX_DEVTOOLS)
-      .then(name => console.log(`Added Extension:  ${name}`))
-      .catch(err => console.log('An error occurred: ', err));
+        rendererWindow.webContents.send('open-uri-requested', URI);
+      }
 
-    await installExtension(REACT_PERF)
-      .then(name => console.log(`Added Extension:  ${name}`))
-      .catch(err => console.log('An error occurred: ', err));
-  }
-
-  rendererWindow = createWindow(appState);
-  rendererWindow.webContents.on('devtools-opened', () => {
-    rendererWindow.webContents.send('devtools-is-opened');
-  });
-
-  tray = createTray(rendererWindow);
-  // HACK: patch webrequest to fix devtools incompatibility with electron 2.x.
-  // See https://github.com/electron/electron/issues/13008#issuecomment-400261941
-  session.defaultSession.webRequest.onBeforeRequest({}, (details, callback) => {
-    if (details.url.indexOf('7accc8730b0f99b5e7c0702ea89d1fa7c17bfe33') !== -1) {
-      callback({
-        redirectURL: details.url.replace(
-          '7accc8730b0f99b5e7c0702ea89d1fa7c17bfe33',
-          '57c9d07b416b5a2ea23d28247300e4af36329bdc'
-        ),
-      });
-    } else {
-      callback({ cancel: false });
+      rendererWindow.show();
     }
   });
-});
+
+  app.on('ready', async() => {
+    startDaemon();
+    startSandbox();
+
+    if (isDev) {
+      await installDevtools();
+    }
+
+    rendererWindow = createWindow(appState);
+    tray = createTray(rendererWindow);
+
+    if (!isDev) {
+      rendererWindow.webContents.on('devtools-opened', () => {
+        // Send a message to the renderer process so we can log a security warning
+        rendererWindow.webContents.send('devtools-is-opened');
+      });
+    }
+
+    // HACK: patch webrequest to fix devtools incompatibility with electron 2.x.
+    // See https://github.com/electron/electron/issues/13008#issuecomment-400261941
+    session.defaultSession.webRequest.onBeforeRequest({}, (details, callback) => {
+      if (details.url.indexOf('7accc8730b0f99b5e7c0702ea89d1fa7c17bfe33') !== -1) {
+        callback({
+          redirectURL: details.url.replace(
+            '7accc8730b0f99b5e7c0702ea89d1fa7c17bfe33',
+            '57c9d07b416b5a2ea23d28247300e4af36329bdc'
+          ),
+        });
+      } else {
+        callback({ cancel: false });
+      }
+    });
+  });
+}
 
 app.on('activate', () => {
   if (rendererWindow) {
@@ -306,35 +330,4 @@ process.on('uncaughtException', error => {
   appState.isQuitting = true;
   if (daemon) daemon.quit();
   app.exit(1);
-});
-
-// Force single instance application
-app.requestSingleInstanceLock();
-app.on('second-instance', (event, argv) => {
-  if (rendererWindow) {
-    if (
-      (process.platform === 'win32' || process.platform === 'linux') &&
-      String(argv[1]).startsWith('lbry')
-    ) {
-      let URI = argv[1];
-
-      // Keep only command line / deep linked arguments
-      // Windows normalizes URIs when they're passed in from other apps. On Windows, this tries to
-      // restore the original URI that was typed.
-      //   - If the URI has no path, Windows adds a trailing slash. LBRY URIs can't have a slash with no
-      //     path, so we just strip it off.
-      //   - In a URI with a claim ID, like lbry://channel#claimid, Windows interprets the hash mark as
-      //     an anchor and converts it to lbry://channel/#claimid. We remove the slash here as well.
-      //   - ? also interpreted as an anchor, remove slash also.
-      if (process.platform === 'win32') {
-        URI = URI.replace(/\/$/, '')
-          .replace('/#', '#')
-          .replace('/?', '?');
-      }
-
-      rendererWindow.webContents.send('open-uri-requested', URI);
-    }
-
-    rendererWindow.show();
-  }
 });
