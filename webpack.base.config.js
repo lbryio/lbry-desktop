@@ -53,12 +53,9 @@ let baseConfig = {
         },
       },
       {
-        test: /\.glsl/,
+        test: /\.(vert|frag|glsl)$/,
         use: {
-          loader: 'file-loader',
-          options: {
-            outputPath: 'ui/three',
-          },
+          loader: 'raw-loader',
         },
       },
     ],
