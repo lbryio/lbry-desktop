@@ -290,7 +290,7 @@ class MediaPlayer extends React.PureComponent<Props, State> {
     const { mediaType, contentType } = this.props;
     const { unplayable, fileSource, hasMetadata } = this.state;
 
-    if (['audio', 'video'].indexOf(mediaType) === -1) {
+    if (IS_WEB && ['audio', 'video'].indexOf(mediaType) === -1) {
       return {
         isLoading: false,
         loadingStatus: __(
@@ -352,7 +352,7 @@ class MediaPlayer extends React.PureComponent<Props, State> {
         {loadingStatus && <LoadingScreen status={loadingStatus} spinner={isLoading} />}
         {isFileReady && <FileRender claim={claim} source={fileSource} mediaType={mediaType} />}
         <div
-          className="content__view--container"
+          className='content__view--container'
           style={{ opacity: isLoading ? 0 : 1 }}
           ref={this.mediaContainer}
         />
