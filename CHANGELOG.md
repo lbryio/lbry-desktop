@@ -8,11 +8,17 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ### Added
 
+- Report errors to slack for easier debugging ([#2340](https://github.com/lbryio/lbry-desktop/pull/2340))
+- Add viewcount stats to your published content ([#2335](https://github.com/lbryio/lbry-desktop/pull/2335))
+
 ### Changed
 
 - Minor changes for normalization hardfork ([#2297](https://github.com/lbryio/lbry-desktop/pull/2297))
+- New build setup to support lbry.tv ([#2296](https://github.com/lbryio/lbry-desktop/pull/2296))
 
 ### Fixed
+
+- Incorrect snackbar messaging when attempting to navigating to a malformed claim name ([#2336](https://github.com/lbryio/lbry-desktop/pull/2336))
 
 ## [0.29.4] - 2019-3-12
 
