@@ -101,7 +101,9 @@ class FileSelector extends React.PureComponent<Props> {
           }}
           readOnly="readonly"
           value={currentPath || __('No File Chosen')}
-          inputButton={<Button button="primary" label={label} onClick={this.handleButtonClick} />}
+          inputButton={
+            <Button button="primary" label={label} onClick={() => this.handleButtonClick()} />
+          }
         />
       </React.Fragment>
     );

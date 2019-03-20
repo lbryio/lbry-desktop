@@ -1,7 +1,6 @@
 import isDev from 'electron-is-dev';
 
-export default function doLogWarningConsoleMessage(activeOnDev = false) {
-  if (isDev && !activeOnDev) return;
+export default function doLogWarningConsoleMessage() {
   const style = {
     redTitle:
       'color: red; font-size: 36px; text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;, font-weight: bold;',
