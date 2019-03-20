@@ -35,6 +35,7 @@
     "standard/no-callback-literal": 0,
     "comma-dangle": ["error", "always-multiline"],
     "space-before-function-paren": ["error", "never"],
+    "jsx-quotes": ["error", "prefer-double"],
     "semi": [
       "error",
       "always",

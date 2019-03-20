@@ -226,7 +226,7 @@ class FilePage extends React.Component<Props> {
 
           <div className="media__actions media__actions--between">
             <div className="media__action-group--large">
-              {claimIsMine ? (
+              {claimIsMine && (
                 <Button
                   button="primary"
                   icon={icons.EDIT}
@@ -236,16 +236,18 @@ class FilePage extends React.Component<Props> {
                     navigate('/publish');
                   }}
                 />
-              ) : (
-                <SubscribeButton uri={channelUri} channelName={channelName} />
               )}
               {!claimIsMine && (
-                <Button
-                  button="alt"
-                  icon={icons.TIP}
-                  label={__('Send a tip')}
-                  onClick={() => openModal(MODALS.SEND_TIP, { uri })}
-                />
+                <React.Fragment>
+                  {channelUri && <SubscribeButton uri={channelUri} channelName={channelName} />}
+
+                  <Button
+                    button="alt"
+                    icon={icons.TIP}
+                    label={__('Send a tip')}
+                    onClick={() => openModal(MODALS.SEND_TIP, { uri })}
+                  />
+                </React.Fragment>
               )}
               <Button
                 button="alt"

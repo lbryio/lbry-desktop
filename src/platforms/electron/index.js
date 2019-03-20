@@ -34,7 +34,7 @@ let daemon;
 
 const appState = {};
 
-const installExtensions = async() => {
+const installExtensions = async () => {
   const devtronExtension = require('devtron');
   return await devtronExtension.install();
 };
@@ -53,7 +53,7 @@ if (isDev) {
   process.env.ELECTRON_DISABLE_SECURITY_WARNINGS = true;
 }
 
-app.on('ready', async() => {
+app.on('ready', async () => {
   let isDaemonRunning = false;
   await Lbry.status()
     .then(() => {
@@ -90,20 +90,21 @@ app.on('ready', async() => {
     const {
       default: installExtension,
       REACT_DEVELOPER_TOOLS,
-      REDUX_DEVTOOLS, REACT_PERF,
+      REDUX_DEVTOOLS,
+      REACT_PERF,
     } = require('electron-devtools-installer');
 
     await installExtension(REACT_DEVELOPER_TOOLS)
-      .then((name) => console.log(`Added Extension:  ${name}`))
-      .catch((err) => console.log('An error occurred: ', err));
+      .then(name => console.log(`Added Extension:  ${name}`))
+      .catch(err => console.log('An error occurred: ', err));
 
     await installExtension(REDUX_DEVTOOLS)
-      .then((name) => console.log(`Added Extension:  ${name}`))
-      .catch((err) => console.log('An error occurred: ', err));
+      .then(name => console.log(`Added Extension:  ${name}`))
+      .catch(err => console.log('An error occurred: ', err));
 
     await installExtension(REACT_PERF)
-      .then((name) => console.log(`Added Extension:  ${name}`))
-      .catch((err) => console.log('An error occurred: ', err));
+      .then(name => console.log(`Added Extension:  ${name}`))
+      .catch(err => console.log('An error occurred: ', err));
   }
 
   rendererWindow = createWindow(appState);
@@ -235,7 +236,7 @@ ipcMain.on('version-info-requested', () => {
       let json;
       try {
         json = JSON.parse(result);
-      } catch(e) {
+      } catch (e) {
         return;
       }
       const tagName = json.tag_name;
@@ -262,17 +263,20 @@ ipcMain.on('version-info-requested', () => {
   };
 
   const requestLatestRelease = (alreadyRedirected = false) => {
-    const req = https.get({
-      hostname: 'api.github.com',
-      path: '/repos/lbryio/lbry-desktop/releases/latest',
-      headers: { 'user-agent': `LBRY/${localVersion}` },
-    }, res => {
-      if (res.statusCode === 301 || res.statusCode === 302) {
-        requestLatestRelease(res.headers.location, true);
-      } else {
-        onSuccess(res);
+    const req = https.get(
+      {
+        hostname: 'api.github.com',
+        path: '/repos/lbryio/lbry-desktop/releases/latest',
+        headers: { 'user-agent': `LBRY/${localVersion}` },
+      },
+      res => {
+        if (res.statusCode === 301 || res.statusCode === 302) {
+          requestLatestRelease(res.headers.location, true);
+        } else {
+          onSuccess(res);
+        }
       }
-    });
+    );
 
     if (alreadyRedirected) return;
     req.on('error', err => {

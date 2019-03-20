@@ -10,12 +10,14 @@ type Props = {
 const WalletBalance = (props: Props) => {
   const { balance } = props;
   return (
-    <section className="card card--section card--wallet-balance">
+    <section
+      className="card card--section card--wallet-balance"
+      style={{ backgroundImage: `url(${BalanceBackground})` }}
+    >
       <header className="card__header">
         <h2 className="card__title">{__('Balance')}</h2>
         <p className="card__subtitle">{__('You currently have')}</p>
       </header>
-
       <div className="card__content">
         {(balance || balance === 0) && (
           <CreditAmount large badge={false} amount={balance} precision={8} />

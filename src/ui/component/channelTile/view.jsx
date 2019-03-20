@@ -45,7 +45,7 @@ class ChannelTile extends React.PureComponent<Props> {
       subscriptionUri = `lbry://${claim.permanent_url}`;
     }
 
-    const onClick = () => navigate('/show', { uri });
+    const onClick = () => navigate('/show', { uri, page: 1 });
 
     return (
       <section

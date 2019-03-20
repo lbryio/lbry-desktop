@@ -3,9 +3,11 @@ import { spawn, execSync } from 'child_process';
 import { Lbry } from 'lbry-redux';
 
 export default class Daemon {
-  static path = process.env.LBRY_DAEMON || (
-    process.env.NODE_ENV === 'production' ? path.join(process.resourcesPath, 'static', 'lbrynet') : path.join(__static, 'lbrynet')
-  );
+  static path =
+    process.env.LBRY_DAEMON ||
+    (process.env.NODE_ENV === 'production'
+      ? path.join(process.resourcesPath, 'static/daemon', 'lbrynet')
+      : path.join(__static, 'daemon/lbrynet'));
   subprocess;
   handlers;
 

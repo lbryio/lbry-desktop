@@ -1,7 +1,11 @@
 import { connect } from 'react-redux';
-import { doResolveUri, makeSelectClaimForUri, makeSelectIsUriResolving } from 'lbry-redux';
+import {
+  doResolveUri,
+  makeSelectClaimForUri,
+  makeSelectIsUriResolving,
+  makeSelectTotalItemsForChannel,
+} from 'lbry-redux';
 import { doNavigate } from 'redux/actions/navigation';
-import { makeSelectTotalItemsForChannel } from 'redux/selectors/content';
 import ChannelTile from './view';
 
 const select = (state, props) => ({
