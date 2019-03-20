@@ -124,15 +124,17 @@ if (!gotSingleInstanceLock) {
 
     if (isDev) {
       await installDevtools();
-    } else {
+    }
+
+    rendererWindow = createWindow(appState);
+    tray = createTray(rendererWindow);
+
+    if (!isDev) {
       rendererWindow.webContents.on('devtools-opened', () => {
         // Send a message to the renderer process so we can log a security warning
         rendererWindow.webContents.send('devtools-is-opened');
       });
     }
-
-    rendererWindow = createWindow(appState);
-    tray = createTray(rendererWindow);
 
     // HACK: patch webrequest to fix devtools incompatibility with electron 2.x.
     // See https://github.com/electron/electron/issues/13008#issuecomment-400261941
