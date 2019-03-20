@@ -32,21 +32,24 @@ class DocumentViewer extends React.PureComponent<Props, State> {
 
   componentDidMount() {
     const { source } = this.props;
-    const stream = source.stream('utf8');
 
-    let data = '';
+    if (source && source.stream) {
+      const stream = source.stream('utf8');
 
-    stream.on('data', chunk => {
-      data += chunk;
-    });
+      let data = '';
 
-    stream.on('end', () => {
-      this.setState({ content: data, loading: false });
-    });
+      stream.on('data', chunk => {
+        data += chunk;
+      });
 
-    stream.on('error', () => {
-      this.setState({ error: true, loading: false });
-    });
+      stream.on('end', () => {
+        this.setState({ content: data, loading: false });
+      });
+
+      stream.on('error', () => {
+        this.setState({ error: true, loading: false });
+      });
+    }
   }
 
   renderDocument() {
