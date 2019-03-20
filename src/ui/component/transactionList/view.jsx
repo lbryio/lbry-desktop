@@ -90,7 +90,7 @@ class TransactionList extends React.PureComponent<Props> {
                     <Button
                       button="link"
                       icon={icons.HELP}
-                      href="https://lbry.io/faq/transaction-types"
+                      href="https://lbry.com/faq/transaction-types"
                       title={__('Help')}
                     />
                   }

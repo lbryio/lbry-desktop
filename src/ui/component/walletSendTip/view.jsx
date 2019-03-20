@@ -103,7 +103,11 @@ class WalletSendTip extends React.PureComponent<Props, State> {
             helper={
               <p>
                 {__(`This will appear as a tip for "${title}".`)}{' '}
-                <Button label={__('Learn more')} button="link" href="https://lbry.io/faq/tipping" />
+                <Button
+                  label={__('Learn more')}
+                  button="link"
+                  href="https://lbry.com/faq/tipping"
+                />
               </p>
             }
           />

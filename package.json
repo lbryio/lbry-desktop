@@ -6,7 +6,7 @@
     "lbry"
   ],
   "license": "MIT",
-  "homepage": "https://lbry.io/",
+  "homepage": "https://lbry.com/",
   "bugs": {
     "url": "https://github.com/lbryio/lbry-desktop/issues"
   },
@@ -16,7 +16,7 @@
   },
   "author": {
     "name": "LBRY Inc.",
-    "email": "hello@lbry.io"
+    "email": "hello@lbry.com"
   },
   "main": "./dist/electron/main.js",
   "scripts": {

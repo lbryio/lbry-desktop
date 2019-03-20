@@ -34,7 +34,7 @@ class SocialShare extends React.PureComponent<Props> {
     const channelClaimId =
       value && value.publisherSignature && value.publisherSignature.certificateId;
     const speechPrefix = 'https://spee.ch/';
-    const lbryPrefix = 'https://open.lbry.io/';
+    const lbryPrefix = 'https://open.lbry.com/';
 
     let speechURL;
     let lbryURL;

@@ -56,7 +56,7 @@ class BackupPage extends React.PureComponent<Props> {
                   For more details on backing up and best practices,{' '}
                   <Button
                     button="link"
-                    href="https://lbry.io/faq/how-to-backup-wallet"
+                    href="https://lbry.com/faq/how-to-backup-wallet"
                     label={__('see this article')}
                   />
                   .

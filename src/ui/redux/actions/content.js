@@ -187,7 +187,7 @@ function handleLoadVideoError(uri: string, errorType: string = '') {
       } else {
         dispatch(
           doError(
-            `Failed to download ${uri}, please try again or see error details:\n\n${errorText}\n\nIf this problem persists, visit https://lbry.io/support for help. `
+            `Failed to download ${uri}, please try again or see error details:\n\n${errorText}\n\nIf this problem persists, visit https://lbry.com/support for help. `
           )
         );
       }

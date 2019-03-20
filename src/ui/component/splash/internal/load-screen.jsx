@@ -47,11 +47,11 @@ class LoadScreen extends React.PureComponent<Props> {
                   )}
                 </p>
                 <p>
-                  {__('Reach out to hello@lbry.io for help, or check out')}{' '}
+                  {__('Reach out to hello@lbry.com for help, or check out')}{' '}
                   <Button
                     button="link"
                     className="load-screen__button"
-                    href="https://lbry.io/faq/startup-troubleshooting"
+                    href="https://lbry.com/faq/startup-troubleshooting"
                     label="this link"
                   />
                   .

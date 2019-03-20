@@ -50,7 +50,7 @@ class ModalRewardCode extends React.PureComponent<Props, State> {
             {'. '}
             <Button
               button="link"
-              href="https://lbry.io/faq/rewards#reward-code"
+              href="https://lbry.com/faq/rewards#reward-code"
               label={__('Learn more')}
             />
             .

@@ -31,7 +31,7 @@ class ModalIncompatibleDaemon extends React.PureComponent<Props> {
             <Button
               button="link"
               label={__('Learn more')}
-              href="https://lbry.io/faq/incompatible-protocol-version"
+              href="https://lbry.com/faq/incompatible-protocol-version"
             />
             .
           </p>

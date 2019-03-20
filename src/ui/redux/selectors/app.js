@@ -17,11 +17,11 @@ export const selectUpdateUrl = createSelector(
   platform => {
     switch (platform) {
       case 'darwin':
-        return 'https://lbry.io/get/lbry.dmg';
+        return 'https://lbry.com/get/lbry.dmg';
       case 'linux':
-        return 'https://lbry.io/get/lbry.deb';
+        return 'https://lbry.com/get/lbry.deb';
       case 'win32':
-        return 'https://lbry.io/get/lbry.exe';
+        return 'https://lbry.com/get/lbry.exe';
       default:
         throw Error('Unknown platform');
     }

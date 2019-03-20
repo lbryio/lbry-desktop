@@ -7,7 +7,7 @@ Before reporting any issues, please make sure that you're using the latest versi
 - App releases: https://github.com/lbryio/lbry-desktop/releases
 - Standalone daemon: https://github.com/lbryio/lbry/releases
 
-We are also available on live chat at https://chat.lbry.io
+We are also available on live chat at https://chat.lbry.com
 -->
 
 ## The Issue

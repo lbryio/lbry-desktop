@@ -83,7 +83,7 @@ class ShowPage extends React.PureComponent<Props> {
                 </p>
               </div>
               <div className="card__actions">
-                <Button button="link" href="https://lbry.io/faq/dmca" label={__('Read More')} />
+                <Button button="link" href="https://lbry.com/faq/dmca" label={__('Read More')} />
               </div>
             </section>
           </Page>
