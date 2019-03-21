@@ -3,7 +3,6 @@ import * as React from 'react';
 import ReactDOMServer from 'react-dom/server';
 import MarkdownPreview from 'component/common/markdown-preview';
 import SimpleMDE from 'react-simplemde-editor';
-// For now I just added them in the markdown-editor scss file
 import 'easymde/dist/easymde.min.css';
 import Toggle from 'react-toggle';
 import { openEditorMenu, stopContextMenu } from 'util/context-menu';
