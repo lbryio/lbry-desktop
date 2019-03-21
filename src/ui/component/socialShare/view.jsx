@@ -40,19 +40,27 @@ class SocialShare extends React.PureComponent<Props> {
     let lbryURL;
     if (isChannel) {
       // For channel claims, the channel name (@something) is in `claim.name`
-      speechURL = `${speechPrefix}${claimName}:${claimId}`;
-      lbryURL = `${lbryPrefix}${claimName}#${claimId}`;
+      speechURL = `${claimName}:${claimId}`;
+      lbryURL = `${claimName}#${claimId}`;
     } else {
       // If it's for a regular claim, check if it has an associated channel
       speechURL =
         channelName && channelClaimId
-          ? `${speechPrefix}${channelName}:${channelClaimId}/${claimName}`
-          : `${speechPrefix}${claimId}/${claimName}`;
+          ? `${channelName}:${channelClaimId}/${claimName}`
+          : `${claimId}/${claimName}`;
 
       lbryURL =
         channelName && channelClaimId
-          ? `${lbryPrefix}${channelName}#${channelClaimId}/${claimName}`
-          : `${lbryPrefix}${claimName}#${claimId}`;
+          ? `${channelName}#${channelClaimId}/${claimName}`
+          : `${claimName}#${claimId}`;
+    }
+
+    if (lbryURL) {
+      lbryURL = `${lbryPrefix}${encodeURIComponent(lbryURL)}`;
+    }
+
+    if (speechURL) {
+      speechURL = `${speechPrefix}${encodeURIComponent(speechURL)}`;
     }
 
     return (

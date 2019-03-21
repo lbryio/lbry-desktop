@@ -803,10 +803,10 @@
   resolved "https://registry.yarnpkg.com/@lbry/color/-/color-1.1.0.tgz#00d9474de64bafa507d07f137dbe5754ee65c4e6"
   integrity sha512-wtFrKk3wWLcqbbjVMU87yEXsiRkUWHNzsZPspFI0dNX5uzprES1L3ONLwBwtrIkEYDHtszs8+eFDQZdJC6whfw==
 
-"@lbry/components@^2.2.4":
-  version "2.2.5"
-  resolved "https://registry.yarnpkg.com/@lbry/components/-/components-2.2.5.tgz#61d27e99fef18cd494a2daafb7d522880e02cf60"
-  integrity sha512-RPGJvY9HuaK0YtIBompHr67RquCXwqi1QKt1gqSqUGnv+vaMS2S0Vj5Jw4Tf9U2cLEfYt9j9GGiRpBXWEsYjIw==
+"@lbry/components@^2.3.3":
+  version "2.3.3"
+  resolved "https://registry.yarnpkg.com/@lbry/components/-/components-2.3.3.tgz#c9804703a5db9a23b5185cbc9849a287cb47bea6"
+  integrity sha512-AaR0lYxNG/UlWr6UMl5bylwoGNaqV/NhzomVBtuDmQH3tJ9WbUNrDHFC86F5N/ZyejnhdA+aGyb4KyLmwrzkBg==
 
 "@mapbox/hast-util-table-cell-style@^0.1.3":
   version "0.1.3"
@@ -6074,9 +6074,9 @@ lbry-redux@lbryio/lbry-redux#2a7e05940f892f104428eeb37bd1f178da811a09:
     reselect "^3.0.0"
     uuid "^3.3.2"
 
-lbryinc@lbryio/lbryinc#351d0a08806b0f770b50066b61a806171f6424d4:
+lbryinc@lbryio/lbryinc#437260f3dad2321e892388b68749ee6af01aff2b:
   version "0.0.1"
-  resolved "https://codeload.github.com/lbryio/lbryinc/tar.gz/351d0a08806b0f770b50066b61a806171f6424d4"
+  resolved "https://codeload.github.com/lbryio/lbryinc/tar.gz/437260f3dad2321e892388b68749ee6af01aff2b"
   dependencies:
     bluebird "^3.5.1"
     reselect "^3.0.0"

@@ -85,7 +85,7 @@ export class FormField extends React.PureComponent<Props> {
         input = (
           <Wrapper>
             <radio-element>
-              <input id={name} type='radio' {...inputProps} />
+              <input id={name} type="radio" {...inputProps} />
               <label htmlFor={name}>{label}</label>
               <radio-toggle onClick={inputProps.onChange} />
             </radio-element>
@@ -99,7 +99,7 @@ export class FormField extends React.PureComponent<Props> {
         input = (
           <Wrapper>
             <checkbox-element {...elementProps}>
-              <input id={name} type='checkbox' {...inputProps} />
+              <input id={name} type="checkbox" {...inputProps} />
               <label htmlFor={name}>{label}</label>
               <checkbox-toggle onClick={inputProps.onChange} />
             </checkbox-element>
@@ -129,13 +129,13 @@ export class FormField extends React.PureComponent<Props> {
         };
 
         input = (
-          <div className='form-field--SimpleMDE' onContextMenu={stopContextMenu}>
+          <div className="form-field--SimpleMDE" onContextMenu={stopContextMenu}>
             <fieldset-section>
               <label htmlFor={name}>{label}</label>
               <SimpleMDE
                 {...inputProps}
                 id={name}
-                type='textarea'
+                type="textarea"
                 events={handleEvents}
                 options={{
                   hideIcons: ['heading', 'image', 'fullscreen', 'side-by-side'],
@@ -169,10 +169,10 @@ export class FormField extends React.PureComponent<Props> {
           <React.Fragment>
             <fieldset-section>
               <label htmlFor={name}>
-                {errorMessage ? <span className='error-text'>{errorMessage}</span> : label}
+                {errorMessage ? <span className="error-text">{errorMessage}</span> : label}
               </label>
               {prefix && (
-                <label className='form-field--inline-prefix' htmlFor={name}>
+                <label className="form-field--inline-prefix" htmlFor={name}>
                   {prefix}
                 </label>
               )}
@@ -187,7 +187,7 @@ export class FormField extends React.PureComponent<Props> {
       <React.Fragment>
         {input}
 
-        {helper && <div className='form-field__help'>{helper}</div>}
+        {helper && <div className="form-field__help">{helper}</div>}
       </React.Fragment>
     );
   }
