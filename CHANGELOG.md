@@ -15,6 +15,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 - Minor changes for normalization hardfork ([#2297](https://github.com/lbryio/lbry-desktop/pull/2297))
 - New build setup to support lbry.tv ([#2296](https://github.com/lbryio/lbry-desktop/pull/2296))
+- Upgrade Electron and Electron builder to the latest version, including initial differential upgrade support for Windows ([#2366](https://github.com/lbryio/lbry-desktop/pull/2366) / [#2296](https://github.com/lbryio/lbry-desktop/pull/2296))
+- lbry.io > lbry.com ([#2321](https://github.com/lbryio/lbry-desktop/pull/2321))
 
 ### Fixed
 
