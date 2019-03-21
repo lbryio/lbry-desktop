@@ -90,6 +90,9 @@ class MediaPlayer extends React.PureComponent<Props, State> {
 
   componentWillUnmount() {
     const mediaElement = this.mediaContainer.current.children[0];
+
+    document.removeEventListener('keydown', this.togglePlay);
+
     if (mediaElement) {
       mediaElement.removeEventListener('click', this.togglePlay);
     }
