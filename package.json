@@ -58,7 +58,7 @@
     "@babel/register": "^7.0.0",
     "@hot-loader/react-dom": "16.8",
     "@lbry/color": "^1.0.2",
-    "@lbry/components": "^2.2.4",
+    "@lbry/components": "^2.3.3",
     "@types/three": "^0.93.1",
     "async-exit-hook": "^2.0.1",
     "babel-eslint": "^10.0.1",

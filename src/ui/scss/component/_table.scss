@@ -1,5 +1,6 @@
 @import '~@lbry/components/sass/table/_index.scss';
 
+table,
 .table {
   [data-mode='dark'] & {
     background-color: transparent;

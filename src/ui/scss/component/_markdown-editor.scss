@@ -71,8 +71,9 @@
     }
   }
 
-  a {
+  button {
     color: $lbry-black;
+    border-color: transparent;
     transition: opacity 0.3s ease;
 
     &:not(.active),
@@ -82,7 +83,6 @@
 
     &.active,
     &:hover {
-      border-color: transparent;
       opacity: 1;
     }
   }
@@ -94,7 +94,7 @@
   html[data-mode='dark'] & {
     background-color: rgba($lbry-white, 0.2);
 
-    a {
+    button {
       color: $lbry-white !important; // We need to use !important to override the CodeMirror styles
 
       &.active {
@@ -107,12 +107,12 @@
     }
 
     &.disabled-for-preview {
-      a:not(.no-disable) {
+      button:not(.no-disable) {
         background-color: transparent;
       }
 
       // The markdown preview button is highlighted during preview when the other buttons are disabled
-      a.no-disable {
+      button.no-disable {
         background-color: rgba($lbry-white, 0.3);
       }
     }
@@ -131,4 +131,18 @@
 
 .form-field--SimpleMDE {
   margin-top: var(--spacing-vertical-large);
+
+  // Overriding the lbry/components form styling
+  .editor-toolbar {
+    button:not(.button) {
+      padding-right: 0;
+      padding-left: 0;
+      background-color: transparent !important;
+      border: transparent;
+
+      &:hover {
+        background-color: $lbry-white !important;
+      }
+    }
+  }
 }
