@@ -20,6 +20,7 @@ import FileDownloadLink from 'component/fileDownloadLink';
 import classnames from 'classnames';
 import getMediaType from 'util/get-media-type';
 import RecommendedContent from 'component/recommendedContent';
+import CommentsList from 'component/commentsList';
 
 type Props = {
   claim: Claim,
@@ -265,6 +266,7 @@ class FilePage extends React.Component<Props> {
 
           <div className="media__info--large">
             <FileDetails uri={uri} />
+            <CommentsList uri={uri} />
           </div>
         </div>
         <div className="grid-area--related">
