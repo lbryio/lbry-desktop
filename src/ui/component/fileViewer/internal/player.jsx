@@ -1,4 +1,5 @@
 // @flow
+import 'babel-polyfill';
 import type { Claim } from 'types/claim';
 import * as React from 'react';
 // @if TARGET='app'
@@ -107,7 +108,7 @@ class MediaPlayer extends React.PureComponent<Props, State> {
     }
   }
 
-  playMedia() {
+  async playMedia() {
     const container = this.mediaContainer.current;
     const {
       downloadCompleted,
@@ -121,7 +122,6 @@ class MediaPlayer extends React.PureComponent<Props, State> {
     } = this.props;
 
     // @if TARGET='app'
-
     const renderMediaCallback = error => {
       if (error) this.setState({ unplayable: true });
     };
@@ -146,6 +146,10 @@ class MediaPlayer extends React.PureComponent<Props, State> {
       while (currentMediaContainer.firstChild) {
         currentMediaContainer.removeChild(currentMediaContainer.firstChild);
       }
+
+      // A slight delay is a hacky way to improve support for videos that aren't web-optimized
+      // Works... slightly better than not having it ¯\_(ツ)_/¯
+      await this.sleep(400);
 
       player.append(
         {
@@ -195,6 +199,10 @@ class MediaPlayer extends React.PureComponent<Props, State> {
   }
 
   // @if TARGET='app'
+  sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+  }
+
   refreshMetadata() {
     const { onStartCb } = this.props;
     this.setState({ hasMetadata: true });
@@ -354,7 +362,7 @@ class MediaPlayer extends React.PureComponent<Props, State> {
         {loadingStatus && <LoadingScreen status={loadingStatus} spinner={isLoading} />}
         {isFileReady && <FileRender claim={claim} source={fileSource} mediaType={mediaType} />}
         <div
-          className='content__view--container'
+          className="content__view--container"
           style={{ opacity: isLoading ? 0 : 1 }}
           ref={this.mediaContainer}
         />
