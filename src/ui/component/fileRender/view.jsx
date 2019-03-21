@@ -1,4 +1,5 @@
 // @flow
+import type { Claim } from 'types/claim';
 import { remote } from 'electron';
 import React from 'react';
 import LoadingScreen from 'component/common/loading-screen';
@@ -14,6 +15,7 @@ import ThreeViewer from 'component/viewers/threeViewer';
 type Props = {
   mediaType: string,
   poster?: string,
+  claim: Claim,
   source: {
     stream: string => void,
     fileName: string,
@@ -150,7 +152,9 @@ class FileRender extends React.PureComponent<Props> {
     if (!viewer && readableFiles.includes(mediaType)) {
       viewer = <DocumentViewer source={{ stream, fileType, contentType }} theme={currentTheme} />;
     }
-    // temp workaround
+
+    // @if TARGET='web'
+    // temp workaround to disabled paid content on web
     if (claim && claim.value.stream.metadata.fee && claim.value.stream.metadata.fee.amount > 0) {
       const paidMessage = __(
         'Currently, only free content is available on lbry.tv. Try viewing it in the desktop app.'
@@ -158,6 +162,8 @@ class FileRender extends React.PureComponent<Props> {
       const paid = <LoadingScreen status={paidMessage} spinner={false} />;
       return paid;
     }
+    // @endif
+
     // Message Error
     const unsupportedMessage = __("Sorry, looks like we can't preview this file.");
     const unsupported = <LoadingScreen status={unsupportedMessage} spinner={false} />;
