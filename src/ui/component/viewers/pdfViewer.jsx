@@ -2,7 +2,9 @@
 import * as React from 'react';
 import { stopContextMenu } from 'util/context-menu';
 import Button from 'component/button';
+// @if TARGET='app'
 import { shell } from 'electron';
+// @endif
 
 type Props = {
   source: string,
@@ -22,7 +24,12 @@ class PdfViewer extends React.PureComponent<Props> {
   openFile() {
     const { source } = this.props;
     const path = `file://${source}`;
+    // @if TARGET='app'
     shell.openExternal(path);
+    // @endif
+    // @if TARGET='web'
+    console.error('provide stub for shell.openExternal');
+    // @endif
   }
 
   render() {
