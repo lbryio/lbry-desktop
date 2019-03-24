@@ -53,11 +53,6 @@
   }
 }
 
-.button--link {
-  white-space: normal;
-  text-align: left;
-}
-
 // This is a hack and the extra styles are just so this is more specific than the @lbry/components styling
 // Will make a PR there, but just doing it now for the release - Sean
 [type='button'].button--inverse {
