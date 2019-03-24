@@ -4,7 +4,13 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
-## [0.30.0] - [Unreleased]
+## [0.31.1] - [2019-3-23]
+
+### Fixed
+
+- Long links not wrappng on claim pages ([70df697](https://github.com/lbryio/lbry-desktop/commit/70df697aab56de4278acf9d8535c66409f89d959))
+
+## [0.30.0] - [2019-3-21]
 
 ### Added
 
