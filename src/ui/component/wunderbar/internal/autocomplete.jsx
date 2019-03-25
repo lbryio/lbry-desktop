@@ -545,9 +545,9 @@ export default class Autocomplete extends React.Component {
   composeEventHandlers(internal, external) {
     return external
       ? e => {
-        internal(e);
-        external(e);
-      }
+          internal(e);
+          external(e);
+        }
       : internal;
   }
 

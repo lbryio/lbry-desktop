@@ -80,12 +80,12 @@ class FileCard extends React.PureComponent<Props> {
 
     if (!claim && (!pending || placeholder)) {
       return (
-        <li className='media-card media-placeholder'>
-          <div className='media__thumb placeholder' />
-          <div className='media__title placeholder' />
-          <div className='media__channel placeholder' />
-          <div className='media__date placeholder' />
-          <div className='media__properties' />
+        <li className="media-card media-placeholder">
+          <div className="media__thumb placeholder" />
+          <div className="media__title placeholder" />
+          <div className="media__channel placeholder" />
+          <div className="media__date placeholder" />
+          <div className="media__properties" />
         </li>
       );
     }
@@ -110,8 +110,8 @@ class FileCard extends React.PureComponent<Props> {
 
     return (
       <li
-        tabIndex='0'
-        role='button'
+        tabIndex="0"
+        role="button"
         onClick={!pending ? () => navigate('/show', { uri }) : () => {}}
         className={classnames('media-card', {
           'card--link': !pending,
@@ -120,22 +120,22 @@ class FileCard extends React.PureComponent<Props> {
         onContextMenu={handleContextMenu}
       >
         <CardMedia thumbnail={thumbnail} />
-        <div className='media__title'>
+        <div className="media__title">
           <TruncatedText text={title} lines={2} />
         </div>
-        <div className='media__subtitle'>
+        <div className="media__subtitle">
           {pending ? <div>Pending...</div> : <UriIndicator uri={uri} link />}
           <div>
             <DateTime timeAgo block={height} />
           </div>
         </div>
-        <div className='media__properties'>
+        <div className="media__properties">
           <FilePrice hideFree uri={uri} />
-          {isRewardContent && <Icon iconColor='red' icon={icons.FEATURED} />}
+          {isRewardContent && <Icon iconColor="red" icon={icons.FEATURED} />}
           {isSubscribed && <Icon icon={icons.SUBSCRIPTION} />}
           {claimIsMine && <Icon icon={icons.PUBLISHED} />}
           {!claimIsMine && fileInfo && <Icon icon={icons.LOCAL} />}
-          {isNew && <span className='badge badge--alert'>{__('NEW')}</span>}
+          {isNew && <span className="badge badge--alert">{__('NEW')}</span>}
         </div>
       </li>
     );

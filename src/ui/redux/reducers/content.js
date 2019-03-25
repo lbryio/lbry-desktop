@@ -46,9 +46,9 @@ reducers[ACTIONS.CLEAR_CONTENT_HISTORY_URI] = (state, action) => {
   return index === -1
     ? state
     : {
-      ...state,
-      history: history.slice(0, index).concat(history.slice(index + 1)),
-    };
+        ...state,
+        history: history.slice(0, index).concat(history.slice(index + 1)),
+      };
 };
 
 reducers[ACTIONS.CLEAR_CONTENT_HISTORY_ALL] = state => ({ ...state, history: [] });

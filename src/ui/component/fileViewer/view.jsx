@@ -254,7 +254,7 @@ class FileViewer extends React.PureComponent<Props> {
     return (
       <div className={classnames('video', {}, className)}>
         {isPlaying && (
-          <div className='content__view'>
+          <div className="content__view">
             {!isReadyToPlay ? (
               <div className={layoverClass} style={layoverStyle}>
                 <LoadingScreen status={loadStatusMessage} />
@@ -284,7 +284,7 @@ class FileViewer extends React.PureComponent<Props> {
         )}
         {!isPlaying && (
           <div
-            role='button'
+            role="button"
             onClick={this.playContent}
             className={layoverClass}
             style={layoverStyle}

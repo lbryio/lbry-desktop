@@ -70,11 +70,11 @@ class Spinner extends PureComponent<Props, State> {
           'spinner--small': type === 'small',
         })}
       >
-        <div className='rect rect1' />
-        <div className='rect rect2' />
-        <div className='rect rect3' />
-        <div className='rect rect4' />
-        <div className='rect rect5' />
+        <div className="rect rect1" />
+        <div className="rect rect2" />
+        <div className="rect rect3" />
+        <div className="rect rect4" />
+        <div className="rect rect5" />
       </div>
     );
   }

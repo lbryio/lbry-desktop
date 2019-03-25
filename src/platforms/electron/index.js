@@ -49,7 +49,7 @@ if (isDev) {
   process.env.ELECTRON_DISABLE_SECURITY_WARNINGS = true;
 }
 
-const startDaemon = async() => {
+const startDaemon = async () => {
   let isDaemonRunning = false;
 
   await Lbry.status()
@@ -118,7 +118,7 @@ if (!gotSingleInstanceLock) {
     }
   });
 
-  app.on('ready', async() => {
+  app.on('ready', async () => {
     startDaemon();
     startSandbox();
 
