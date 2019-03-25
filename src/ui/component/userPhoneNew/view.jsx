@@ -86,8 +86,8 @@ class UserPhoneNew extends React.PureComponent<Props, State> {
 
     return (
       <React.Fragment>
-        <section className='card__content'>
-          <p className='card__subtitle'>
+        <section className="card__content">
+          <p className="card__subtitle">
             {__(
               'Enter your phone number and we will send you a verification code. We will not share your phone number with third parties.'
             )}
@@ -95,12 +95,12 @@ class UserPhoneNew extends React.PureComponent<Props, State> {
         </section>
 
         <Form onSubmit={this.handleSubmit}>
-          <div className='card__content'>
-            <fieldset-group class='fieldset-group--smushed'>
+          <div className="card__content">
+            <fieldset-group class="fieldset-group--smushed">
               <FormField
                 label={__('Country')}
-                type='select'
-                name='country-codes'
+                type="select"
+                name="country-codes"
                 onChange={this.handleSelect}
               >
                 {countryCodes.map((country, index) => (
@@ -111,10 +111,10 @@ class UserPhoneNew extends React.PureComponent<Props, State> {
                 ))}
               </FormField>
               <FormField
-                type='text'
+                type="text"
                 label={__('Number')}
                 placeholder={this.state.countryCode === '+1' ? '(555) 555-5555' : '5555555555'}
-                name='phone'
+                name="phone"
                 value={this.state.phone}
                 error={phoneErrorMessage}
                 onChange={event => {
@@ -123,8 +123,8 @@ class UserPhoneNew extends React.PureComponent<Props, State> {
               />
             </fieldset-group>
           </div>
-          <div className='card__actions'>
-            <Submit label='Submit' disabled={isPending} />
+          <div className="card__actions">
+            <Submit label="Submit" disabled={isPending} />
             {cancelButton}
           </div>
         </Form>

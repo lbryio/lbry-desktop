@@ -58,25 +58,25 @@ export class Modal extends React.PureComponent<ModalProps> {
           modal: !fullScreen,
           'modal--fullscreen': fullScreen,
         })}
-        overlayClassName='modal-overlay'
+        overlayClassName="modal-overlay"
       >
         {title && (
-          <header className='card__header'>
-            <h1 className='card__title'>{title}</h1>
+          <header className="card__header">
+            <h1 className="card__title">{title}</h1>
           </header>
         )}
         {children}
         {type === 'custom' ? null : ( // custom modals define their own buttons
-          <div className='card__actions'>
+          <div className="card__actions">
             <Button
-              button='primary'
+              button="primary"
               label={confirmButtonLabel}
               disabled={confirmButtonDisabled}
               onClick={onConfirmed}
             />
             {type === 'confirm' ? (
               <Button
-                button='link'
+                button="link"
                 label={abortButtonLabel}
                 disabled={abortButtonDisabled}
                 onClick={onAborted}
@@ -116,19 +116,19 @@ export class ExpandableModal extends React.PureComponent<ModalProps, State> {
 
   render() {
     return (
-      <Modal type='custom' {...this.props}>
+      <Modal type="custom" {...this.props}>
         {this.props.children}
         {this.state.expanded ? (
-          <div className='card__content'>{this.props.extraContent}</div>
+          <div className="card__content">{this.props.extraContent}</div>
         ) : null}
-        <div className='card__actions'>
+        <div className="card__actions">
           <Button
-            button='primary'
+            button="primary"
             label={this.props.confirmButtonLabel}
             onClick={this.props.onConfirmed}
           />
           <Button
-            button='link'
+            button="link"
             label={!this.state.expanded ? this.props.expandButtonLabel : this.props.hideButtonLabel}
             onClick={() => {
               this.toggleExpanded();

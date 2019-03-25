@@ -67,7 +67,7 @@ mainInstance.waitUntilValid(() => {
 
   const child = proc.spawn(electron, ['./dist/electron/webpack/main.js']);
 
-  child.stdout.on('data', (data) => {
+  child.stdout.on('data', data => {
     console.log(data.toString());
   });
 

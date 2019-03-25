@@ -52,7 +52,7 @@ class AuthPage extends React.PureComponent<Props> {
     } else if (user && !user.is_identity_verified) {
       return [<UserVerify />, false];
     }
-    return [<span className='empty'>{__('No further steps.')}</span>, true];
+    return [<span className="empty">{__('No further steps.')}</span>, true];
   }
 
   render() {
@@ -62,15 +62,15 @@ class AuthPage extends React.PureComponent<Props> {
     return (
       <Page>
         {useTemplate ? (
-          <section className='card card--section'>
+          <section className="card card--section">
             {innerContent}
 
-            <p className='help'>
+            <p className="help">
               {`${__(
                 'This information is disclosed only to LBRY, Inc. and not to the LBRY network. It is only required to earn LBRY rewards and may be used to sync usage data across devices.'
               )} `}
               <Button
-                button='link'
+                button="link"
                 onClick={() => navigate('/discover')}
                 label={__('Return home.')}
               />

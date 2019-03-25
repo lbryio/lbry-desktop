@@ -127,12 +127,12 @@ export const doUploadThumbnail = (filePath: string, nsfw: boolean) => (dispatch:
     .then(json =>
       json.success
         ? dispatch({
-          type: ACTIONS.UPDATE_PUBLISH_FORM,
-          data: {
-            uploadThumbnailStatus: THUMBNAIL_STATUSES.COMPLETE,
-            thumbnail: `${json.data.url}${fileExt}`,
-          },
-        })
+            type: ACTIONS.UPDATE_PUBLISH_FORM,
+            data: {
+              uploadThumbnailStatus: THUMBNAIL_STATUSES.COMPLETE,
+              thumbnail: `${json.data.url}${fileExt}`,
+            },
+          })
         : uploadError(json.message)
     )
     .catch(err => uploadError(err.message));

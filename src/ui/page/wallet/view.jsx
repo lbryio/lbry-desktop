@@ -11,7 +11,7 @@ const WalletPage = () => (
   <Page>
     {IS_WEB && <UnsupportedOnWeb />}
     <div className={classnames({ 'card--disabled': IS_WEB })}>
-      <div className='columns'>
+      <div className="columns">
         <WalletBalance />
         <RewardSummary />
       </div>

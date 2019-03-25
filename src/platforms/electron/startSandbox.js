@@ -16,7 +16,7 @@ export default async function startSandbox() {
   const port = 5278;
   const sandbox = express();
 
-  sandbox.get('/set/:outpoint', async(req, res) => {
+  sandbox.get('/set/:outpoint', async (req, res) => {
     const { outpoint } = req.params;
 
     const resolvedPath = await unpackByOutpoint(Lbry, outpoint);

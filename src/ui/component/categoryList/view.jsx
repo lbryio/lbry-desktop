@@ -262,19 +262,19 @@ class CategoryList extends PureComponent<Props, State> {
     const showScrollButtons = isCommunityTopBids ? !obscureNsfw : true;
 
     return (
-      <section className='media-group--row'>
-        <header className='media-group__header'>
-          <div className='media-group__header-title'>
+      <section className="media-group--row">
+        <header className="media-group__header">
+          <div className="media-group__header-title">
             {categoryLink ? (
-              <div className='channel-info__actions'>
-                <div className='channel-info__actions__group'>
+              <div className="channel-info__actions">
+                <div className="channel-info__actions__group">
                   <Button
                     label={category}
-                    navigate='/show'
+                    navigate="/show"
                     navigateParams={{ uri: categoryLink, page: 1 }}
                   />
                   <SubscribeButton
-                    button='alt'
+                    button="alt"
                     showSnackBarOnSubscribe
                     uri={`lbry://${categoryLink}`}
                   />
@@ -285,7 +285,7 @@ class CategoryList extends PureComponent<Props, State> {
             )}
             {isCommunityTopBids && (
               <ToolTip
-                direction='top'
+                direction="top"
                 label={__("What's this?")}
                 body={__(
                   'Community Content is a public space where anyone can share content with the rest of the LBRY community. Bid on the names from "one" to "ten" to put your content here!'
@@ -294,7 +294,7 @@ class CategoryList extends PureComponent<Props, State> {
             )}
           </div>
           {showScrollButtons && (
-            <nav className='media-group__header-navigation'>
+            <nav className="media-group__header-navigation">
               <Button
                 disabled={!canScrollPrevious}
                 onClick={this.handleScrollPrevious}
@@ -309,14 +309,14 @@ class CategoryList extends PureComponent<Props, State> {
           )}
         </header>
         {obscureNsfw && isCommunityTopBids ? (
-          <p className='media__message help--warning'>
+          <p className="media__message help--warning">
             {__(
               'The community top bids section is only visible if you allow mature content in the app. You can change your content viewing preferences'
             )}{' '}
-            <Button button='link' navigate='/settings' label={__('here')} />.
+            <Button button="link" navigate="/settings" label={__('here')} />.
           </p>
         ) : (
-          <ul className='media-scrollhouse' ref={this.scrollWrapper}>
+          <ul className="media-scrollhouse" ref={this.scrollWrapper}>
             {urisInList &&
               urisInList.map(uri => (
                 <FileCard

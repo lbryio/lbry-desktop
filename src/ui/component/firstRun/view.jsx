@@ -89,39 +89,39 @@ export default class FirstRun extends PureComponent<Props> {
     const showHelp = !showWelcome && !showEmail;
 
     return (
-      <div className='banner banner--first-run'>
-        <Yrbl className='yrbl--first-run' />
+      <div className="banner banner--first-run">
+        <Yrbl className="yrbl--first-run" />
 
-        <div className='banner__item'>
-          <div className='banner__item--static-for-animation'>
-            <Welcome className='banner__content' pose={showWelcome ? 'show' : 'hide'}>
+        <div className="banner__item">
+          <div className="banner__item--static-for-animation">
+            <Welcome className="banner__content" pose={showWelcome ? 'show' : 'hide'}>
               <div>
-                <header className='card__header'>
-                  <h1 className='card__title'>{__('Hi There')}</h1>
+                <header className="card__header">
+                  <h1 className="card__title">{__('Hi There')}</h1>
                 </header>
-                <div className='card__content'>
+                <div className="card__content">
                   {this.getWelcomeMessage()}
-                  <div className='card__actions card__actions--top-space'>
-                    <Button button='primary' onClick={acknowledgeWelcome} label={__("I'm In")} />
+                  <div className="card__actions card__actions--top-space">
+                    <Button button="primary" onClick={acknowledgeWelcome} label={__("I'm In")} />
                   </div>
                 </div>
               </div>
             </Welcome>
           </div>
-          <div className='banner__item--static-for-animation'>
+          <div className="banner__item--static-for-animation">
             <Email pose={showEmail ? 'show' : 'hide'}>
               <EmailCollection />
             </Email>
           </div>
-          <div className='banner__item--static-for-animation'>
+          <div className="banner__item--static-for-animation">
             <Help pose={showHelp ? 'show' : 'hide'}>
-              <header className='card__header'>
-                <h1 className='card__title'>{__('You Are Awesome!')}</h1>
+              <header className="card__header">
+                <h1 className="card__title">{__('You Are Awesome!')}</h1>
               </header>
-              <div className='card__content'>
+              <div className="card__content">
                 <p>{__("Check out some of the neat content below me. I'll see you around!")}</p>
-                <div className='card__actions'>
-                  <Button button='primary' onClick={completeFirstRun} label={__('See You Later')} />
+                <div className="card__actions">
+                  <Button button="primary" onClick={completeFirstRun} label={__('See You Later')} />
                 </div>
               </div>
             </Help>
