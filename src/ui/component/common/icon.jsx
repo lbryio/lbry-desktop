@@ -1,9 +1,28 @@
 // @flow
 import * as ICONS from 'constants/icons';
 import React from 'react';
-import * as FeatherIcons from 'react-feather';
 import Tooltip from 'component/common/tooltip';
 import { customIcons } from './icon-custom';
+
+let featherIcons = false;
+const featherIconsPromise = import(/* webpackChunkName: "react-feather" */
+/* webpackPrefetch: true */
+'react-feather').then(result => (featherIcons = result));
+
+const LazyFeatherIcons = new Proxy(
+  {},
+  {
+    get(target, name) {
+      if (featherIcons) {
+        return featherIcons[name];
+      }
+
+      return React.lazy(() =>
+        featherIconsPromise.then(featherIcons => ({ default: featherIcons[name] }))
+      );
+    },
+  }
+);
 
 // It would be nice to standardize this somehow
 // These are copied from `scss/vars`, can they both come from the same source?
@@ -45,9 +64,8 @@ class IconComponent extends React.PureComponent<Props> {
 
   render() {
     const { icon, tooltip, iconColor, size } = this.props;
-    const Icon = customIcons[this.props.icon] || FeatherIcons[this.props.icon];
-    console.log('icon', icon);
-    console.log('Icon', Icon);
+    const Icon = customIcons[this.props.icon] || LazyFeatherIcons[this.props.icon];
+
     if (!Icon) {
       return null;
     }
@@ -63,7 +81,13 @@ class IconComponent extends React.PureComponent<Props> {
     if (tooltip) {
       tooltipText = this.getTooltip(icon);
     }
-    const inner = <Icon size={iconSize} className="icon" color={color} />;
+    const inner = (
+      <React.Suspense
+        fallback={<svg height={iconSize} width={iconSize} className="icon" color={color} />}
+      >
+        <Icon size={iconSize} className="icon" color={color} />
+      </React.Suspense>
+    );
 
     return tooltipText ? (
       <Tooltip icon body={tooltipText} direction={tooltip}>

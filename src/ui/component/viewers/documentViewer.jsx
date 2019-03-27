@@ -2,8 +2,12 @@
 
 import React from 'react';
 import LoadingScreen from 'component/common/loading-screen';
-import CodeViewer from 'component/viewers/codeViewer';
 import MarkdownPreview from 'component/common/markdown-preview';
+
+const LazyCodeViewer = React.lazy(() => import(
+  /* webpackChunkName: "codeViewer" */
+  'component/viewers/codeViewer'
+));
 
 type Props = {
   theme: string,
@@ -64,7 +68,7 @@ class DocumentViewer extends React.PureComponent<Props, State> {
       viewer = <MarkdownPreview content={content} promptLinks />;
     } else {
       // Render plain text
-      viewer = <CodeViewer value={content} contentType={contentType} theme={theme} />;
+      viewer = <LazyCodeViewer value={content} contentType={contentType} theme={theme} />;
     }
 
     return viewer;

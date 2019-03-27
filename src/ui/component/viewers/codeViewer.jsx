@@ -1,7 +1,6 @@
 // @flow
 
 import * as React from 'react';
-import CodeMirror from 'codemirror/lib/codemirror';
 import { openSnippetMenu, stopContextMenu } from 'util/context-menu';
 
 // Addons
@@ -33,24 +32,30 @@ class CodeViewer extends React.PureComponent<Props> {
   }
 
   componentDidMount() {
-    const { theme, contentType } = this.props;
+    const me = this;
+    const { theme, contentType } = me.props;
     // Init CodeMirror
-    this.codeMirror = CodeMirror.fromTextArea(this.textarea, {
-      // Auto detect syntax with file contentType
-      mode: contentType,
-      // Adaptive theme
-      theme: theme === 'dark' ? 'one-dark' : 'default',
-      // Hide the cursor
-      readOnly: true,
-      // Styled text selection
-      styleSelectedText: true,
-      // Additional config opts
-      dragDrop: false,
-      lineNumbers: true,
-      lineWrapping: true,
+    import(
+      /* webpackChunkName: "codeViewer" */
+      'codemirror/lib/codemirror'
+    ).then((CodeMirror) => {
+      me.codeMirror = CodeMirror.fromTextArea(me.textarea, {
+        // Auto detect syntax with file contentType
+        mode: contentType,
+        // Adaptive theme
+        theme: theme === 'dark' ? 'one-dark' : 'default',
+        // Hide the cursor
+        readOnly: true,
+        // Styled text selection
+        styleSelectedText: true,
+        // Additional config opts
+        dragDrop: false,
+        lineNumbers: true,
+        lineWrapping: true,
+      });
+      // Add events
+      me.codeMirror.on('contextmenu', openSnippetMenu);
     });
-    // Add events
-    this.codeMirror.on('contextmenu', openSnippetMenu);
   }
 
   textarea: ?HTMLTextAreaElement;

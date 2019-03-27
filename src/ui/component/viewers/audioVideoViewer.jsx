@@ -2,8 +2,11 @@
 import type { Claim } from 'types/claim';
 import React from 'react';
 import { stopContextMenu } from 'util/context-menu';
-import videojs from 'video.js';
-import 'video.js/dist/video-js.css';
+import(
+    /* webpackChunkName: "videojs" */
+    /* webpackPreload: true */
+    'video.js/dist/video-js.css'
+);
 
 type Props = {
   source: {
@@ -20,7 +23,8 @@ class AudioVideoViewer extends React.PureComponent<Props> {
   player: ?{ dispose: () => void };
 
   componentDidMount() {
-    const { contentType, poster, claim } = this.props;
+    const me = this;
+    const { contentType, poster, claim } = me.props;
 
     const path = `https://api.lbry.tv/content/claims/${claim.name}/${claim.claim_id}/stream.mp4`;
     const sources = [
@@ -38,7 +42,14 @@ class AudioVideoViewer extends React.PureComponent<Props> {
       sources,
     };
 
-    this.player = videojs(this.videoNode, videoJsOptions, () => {});
+    import(
+        /* webpackChunkName: "videojs" */
+        /* webpackMode: "lazy" */
+        /* webpackPreload: true */
+        'video.js'
+    ).then((videojs) => {
+      me.player = videojs(me.videoNode, videoJsOptions, () => {});
+    });
   }
 
   componentWillUnmount() {

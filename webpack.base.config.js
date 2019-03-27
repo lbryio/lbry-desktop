@@ -3,6 +3,8 @@ const webpack = require('webpack');
 const merge = require('webpack-merge');
 const { DefinePlugin, ProvidePlugin } = require('webpack');
 const { getIfUtils, removeEmpty } = require('webpack-config-utils');
+const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
+const TerserPlugin = require('terser-webpack-plugin');
 
 const NODE_ENV = process.env.NODE_ENV || 'development';
 
@@ -12,9 +14,22 @@ const UI_ROOT = path.resolve(__dirname, 'src/ui/');
 const STATIC_ROOT = path.resolve(__dirname, 'static/');
 const DIST_ROOT = path.resolve(__dirname, 'dist/');
 
+console.log(ifProduction('production', 'development'))
+
 let baseConfig = {
   mode: ifProduction('production', 'development'),
-  devtool: ifProduction(false, 'eval-source-map'),
+  devtool: ifProduction(false, 'inline-cheap-source-map'),
+  optimization: {
+    minimizer: [
+      new TerserPlugin({
+        parallel: true,
+        terserOptions: {
+          mangle: true,
+          toplevel: true,
+        },
+      }),
+    ],
+  },
   node: {
     __dirname: false,
   },
@@ -67,6 +82,9 @@ let baseConfig = {
   },
 
   plugins: [
+    new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
+    new webpack.EnvironmentPlugin(['NODE_ENV']),
+    new BundleAnalyzerPlugin(),
     new ProvidePlugin({
       i18n: ['i18n', 'default'],
       __: ['i18n/__', 'default'],
