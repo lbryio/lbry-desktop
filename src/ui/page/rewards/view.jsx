@@ -11,7 +11,6 @@ import { rewards as REWARD_TYPES } from 'lbryinc';
 
 type Props = {
   doAuth: () => void,
-  navigate: string => void,
   fetching: boolean,
   rewards: Array<Reward>,
   claimed: Array<Reward>,
@@ -28,7 +27,7 @@ type Props = {
 
 class RewardsPage extends PureComponent<Props> {
   renderPageHeader() {
-    const { doAuth, navigate, user, daemonSettings } = this.props;
+    const { doAuth, user, daemonSettings } = this.props;
 
     if (user && !user.is_reward_approved && daemonSettings && daemonSettings.share_usage_data) {
       if (!user.primary_email || !user.has_verified_email || !user.is_identity_verified) {
@@ -68,7 +67,7 @@ class RewardsPage extends PureComponent<Props> {
             )}`}
           </p>
           <p>
-            <Button onClick={() => navigate('/discover')} button="primary" label="Return Home" />
+            <Button navigate="/" button="primary" label="Return Home" />
           </p>
         </section>
       );
@@ -93,7 +92,7 @@ class RewardsPage extends PureComponent<Props> {
   }
 
   renderUnclaimedRewards() {
-    const { fetching, rewards, user, daemonSettings, navigate, claimed } = this.props;
+    const { fetching, rewards, user, daemonSettings, claimed } = this.props;
 
     if (daemonSettings && !daemonSettings.share_usage_data) {
       return (
@@ -104,7 +103,7 @@ class RewardsPage extends PureComponent<Props> {
               {__(
                 'Rewards are currently disabled for your account. Turn on diagnostic data sharing, in'
               )}{' '}
-              <Button button="link" onClick={() => navigate('/settings')} label="Settings" />
+              <Button button="link" navigate="/$/settings" label="Settings" />
               {__(', in order to re-enable them.')}
             </p>
           </header>
@@ -132,8 +131,8 @@ class RewardsPage extends PureComponent<Props> {
             <p className="card__content">
               {claimed && claimed.length
                 ? __(
-                    "You have claimed all available rewards! We're regularly adding more so be sure to check back later."
-                  )
+                  "You have claimed all available rewards! We're regularly adding more so be sure to check back later."
+                )
                 : __('There are no rewards available at this time, please check back later.')}
             </p>
           </section>

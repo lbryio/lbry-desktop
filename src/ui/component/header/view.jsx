@@ -15,7 +15,6 @@ type Props = {
   back: () => void,
   forward: () => void,
   downloadUpgradeRequested: any => void,
-  navigate: any => void,
 };
 
 const Header = (props: Props) => {
@@ -24,7 +23,6 @@ const Header = (props: Props) => {
     balance,
     downloadUpgradeRequested,
     isUpgradeAvailable,
-    navigate,
     roundedBalance,
     back,
     isBackDisabled,
@@ -38,6 +36,7 @@ const Header = (props: Props) => {
   return (
     <header className="header">
       <div className="header__navigation">
+        {/* @if TARGET='app' */}
         <Button
           className="header__navigation-item header__navigation-item--wallet"
           description={__('Your wallet')}
@@ -48,7 +47,7 @@ const Header = (props: Props) => {
               <LbcSymbol />
             </React.Fragment>
           }
-          onClick={() => navigate('/wallet')}
+          navigate="/$/wallet"
         />
 
         <Button
@@ -57,7 +56,6 @@ const Header = (props: Props) => {
           disabled={isBackDisabled}
           icon={ICONS.ARROW_LEFT}
           iconSize={15}
-          onClick={back}
         />
 
         <Button
@@ -66,7 +64,6 @@ const Header = (props: Props) => {
           disabled={isForwardDisabled}
           icon={ICONS.ARROW_RIGHT}
           iconSize={15}
-          onClick={forward}
         />
 
         <Button
@@ -74,8 +71,17 @@ const Header = (props: Props) => {
           description={__('Home')}
           icon={ICONS.HOME}
           iconSize={15}
-          onClick={() => navigate('/discover')}
+          navigate="/"
         />
+        {/* @endif */}
+        {/* @if TARGET='web' */}
+        <Button
+          className="header__navigation-item header__navigation-item--lbry"
+          label={__('LBRY  (logo)')}
+          iconRight={ICONS.LBRY}
+          navigate="/"
+        />
+        {/* @endif */}
       </div>
 
       <WunderBar />
@@ -94,7 +100,7 @@ const Header = (props: Props) => {
           icon={ICONS.UPLOAD}
           iconSize={24}
           label={isUpgradeAvailable ? '' : __('Publish')}
-          onClick={() => navigate('/publish')}
+          navigate="/$/publish"
         />
 
         {/* @if TARGET='app' */}

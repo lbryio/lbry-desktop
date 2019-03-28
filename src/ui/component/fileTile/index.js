@@ -9,7 +9,6 @@ import {
 } from 'lbry-redux';
 import { selectRewardContentClaimIds } from 'lbryinc';
 import { selectShowNsfw } from 'redux/selectors/settings';
-import { doNavigate } from 'redux/actions/navigation';
 import { doClearPublish, doUpdatePublishForm } from 'redux/actions/publish';
 import { makeSelectIsSubscribed, makeSelectIsNew } from 'redux/selectors/subscriptions';
 import FileTile from './view';
@@ -28,7 +27,6 @@ const select = (state, props) => ({
 
 const perform = dispatch => ({
   clearPublish: () => dispatch(doClearPublish()),
-  navigate: (path, params) => dispatch(doNavigate(path, params)),
   resolveUri: uri => dispatch(doResolveUri(uri)),
   updatePublishForm: value => dispatch(doUpdatePublishForm(value)),
 });

@@ -1,12 +1,13 @@
 // @flow
 import * as ICONS from 'constants/icons';
 import React, { PureComponent, createRef } from 'react';
-import { normalizeURI } from 'lbry-redux';
+import { normalizeURI, parseURI } from 'lbry-redux';
 import ToolTip from 'component/common/tooltip';
 import FileCard from 'component/fileCard';
 import Button from 'component/button';
 import SubscribeButton from 'component/subscribeButton';
 import throttle from 'util/throttle';
+import { formatLbryUriForWeb } from 'util/uri';
 
 type Props = {
   category: string,
@@ -44,7 +45,7 @@ class CategoryList extends PureComponent<Props, State> {
     (this: any).handleScrollNext = this.handleScrollNext.bind(this);
     (this: any).handleScrollPrevious = this.handleScrollPrevious.bind(this);
     (this: any).handleArrowButtonsOnScroll = this.handleArrowButtonsOnScroll.bind(this);
-    (this: any).handleResolveOnScroll = this.handleResolveOnScroll.bind(this);
+    // (this: any).handleResolveOnScroll = this.handleResolveOnScroll.bind(this);
 
     this.scrollWrapper = createRef();
   }
@@ -75,32 +76,34 @@ class CategoryList extends PureComponent<Props, State> {
     }
   }
 
-  componentDidUpdate(prevProps: Props) {
-    const { scrollY: previousScrollY } = prevProps.currentPageAttributes;
-    const { scrollY } = this.props.currentPageAttributes;
+  // The old lazy loading for home page relied on the navigation reducers copy of the scroll height
+  // Keeping it commented out for now to try and find a better way for better TTI on the homepage
+  // componentDidUpdate(prevProps: Props) {
+  //   const {scrollY: previousScrollY} = prevProps.currentPageAttributes;
+  //   const {scrollY} = this.props.currentPageAttributes;
 
-    if (scrollY > previousScrollY) {
-      this.handleResolveOnScroll();
-    }
-  }
+  //   if(scrollY > previousScrollY) {
+  //     this.handleResolveOnScroll();
+  //   }
+  // }
 
-  handleResolveOnScroll() {
-    const {
-      urisInList,
-      resolveUris,
-      currentPageAttributes: { scrollY },
-    } = this.props;
+  // handleResolveOnScroll() {
+  //   const {
+  //     urisInList,
+  //     resolveUris,
+  //     currentPageAttributes: {scrollY},
+  //   } = this.props;
 
-    const scrollWrapper = this.scrollWrapper.current;
-    if (!scrollWrapper) {
-      return;
-    }
+  //   const scrollWrapper = this.scrollWrapper.current;
+  //   if(!scrollWrapper) {
+  //     return;
+  //   }
 
-    const shouldResolve = window.innerHeight > scrollWrapper.offsetTop - scrollY;
-    if (shouldResolve && urisInList) {
-      resolveUris(urisInList);
-    }
-  }
+  //   const shouldResolve = window.innerHeight > scrollWrapper.offsetTop - scrollY;
+  //   if(shouldResolve && urisInList) {
+  //     resolveUris(urisInList);
+  //   }
+  // }
 
   handleArrowButtonsOnScroll() {
     // Determine if the arrow buttons should be disabled
@@ -261,6 +264,11 @@ class CategoryList extends PureComponent<Props, State> {
     const isCommunityTopBids = category.match(/^community/i);
     const showScrollButtons = isCommunityTopBids ? !obscureNsfw : true;
 
+    let channelLink;
+    if (categoryLink) {
+      channelLink = formatLbryUriForWeb(categoryLink);
+    }
+
     return (
       <section className="media-group--row">
         <header className="media-group__header">
@@ -268,11 +276,7 @@ class CategoryList extends PureComponent<Props, State> {
             {categoryLink ? (
               <div className="channel-info__actions">
                 <div className="channel-info__actions__group">
-                  <Button
-                    label={category}
-                    navigate="/show"
-                    navigateParams={{ uri: categoryLink, page: 1 }}
-                  />
+                  <Button label={category} navigate={channelLink} />
                   <SubscribeButton
                     button="alt"
                     showSnackBarOnSubscribe
@@ -313,7 +317,7 @@ class CategoryList extends PureComponent<Props, State> {
             {__(
               'The community top bids section is only visible if you allow mature content in the app. You can change your content viewing preferences'
             )}{' '}
-            <Button button="link" navigate="/settings" label={__('here')} />.
+            <Button button="link" navigate="/$/settings" label={__('here')} />.
           </p>
         ) : (
           <ul className="media-scrollhouse" ref={this.scrollWrapper}>

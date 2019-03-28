@@ -51,8 +51,7 @@ class UserHistoryItem extends React.PureComponent<Props> {
           constrict
           button="link"
           label={name ? `lbry://${name}` : `lbry://...`}
-          navigate="/show"
-          navigateParams={{ uri }}
+          navigate={uri}
         />
       </div>
     );

@@ -14,7 +14,6 @@ type Props = {
   history: Array<HistoryItem>,
   page: number,
   pageCount: number,
-  navigate: (string, {}) => void,
   clearHistoryUri: string => void,
   params: { page: number },
 };
@@ -54,7 +53,7 @@ class UserHistoryPage extends React.PureComponent<Props, State> {
   changePage(pageNumber: number) {
     const { params } = this.props;
     const newParams = { ...params, page: pageNumber };
-    this.props.navigate('/user_history', newParams);
+    // this.props.navigate('/user_history', newParams);
   }
 
   paginate(e: SyntheticKeyboardEvent<*>) {
@@ -94,7 +93,7 @@ class UserHistoryPage extends React.PureComponent<Props, State> {
   }
 
   render() {
-    const { history, page, pageCount } = this.props;
+    const { history = [], page, pageCount } = this.props;
     const { itemsSelected } = this.state;
     const allSelected = Object.keys(itemsSelected).length === history.length;
     const selectHandler = allSelected ? this.unselectAll : this.selectAll;
@@ -175,7 +174,7 @@ class UserHistoryPage extends React.PureComponent<Props, State> {
 
           <div className="card__content">
             <div className="card__actions card__actions--center">
-              <Button button="primary" navigate="/discover" label={__('Explore new content')} />
+              <Button button="primary" navigate="/" label={__('Explore new content')} />
             </div>
           </div>
         </section>

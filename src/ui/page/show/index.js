@@ -5,16 +5,23 @@ import {
   makeSelectClaimForUri,
   makeSelectIsUriResolving,
   makeSelectTotalPagesForChannel,
+  buildURI,
 } from 'lbry-redux';
 import { selectBlackListedOutpoints } from 'lbryinc';
 import ShowPage from './view';
 
-const select = (state, props) => ({
-  claim: makeSelectClaimForUri(props.uri)(state),
-  isResolvingUri: makeSelectIsUriResolving(props.uri)(state),
-  blackListedOutpoints: selectBlackListedOutpoints(state),
-  totalPages: makeSelectTotalPagesForChannel(props.uri, PAGE_SIZE)(state),
-});
+const select = (state, props) => {
+  // claimName and claimId come from the url `lbry.tv/{claimName}/{claimId}"
+  console.log('props', props);
+  const uri = buildURI({ contentName: props.claimName, claimId: props.claimId });
+  return {
+    claim: makeSelectClaimForUri(uri)(state),
+    isResolvingUri: makeSelectIsUriResolving(uri)(state),
+    blackListedOutpoints: selectBlackListedOutpoints(state),
+    totalPages: makeSelectTotalPagesForChannel(uri, PAGE_SIZE)(state),
+    uri: uri,
+  };
+};
 
 const perform = dispatch => ({
   resolveUri: uri => dispatch(doResolveUri(uri)),

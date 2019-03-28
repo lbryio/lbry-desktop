@@ -1,4 +1,6 @@
 // @flow
+import * as PAGES from 'constants/pages';
+import * as ICONS from 'constants/icons';
 import * as React from 'react';
 import Button from 'component/button';
 import classnames from 'classnames';
@@ -14,86 +16,96 @@ type SideBarLink = {
 };
 
 type Props = {
-  navLinks: {
-    primary: Array<SideBarLink>,
-    secondary: Array<SideBarLink>,
-  },
   unreadSubscriptionTotal: number,
 };
 
 class SideBar extends React.PureComponent<Props> {
-  renderNavLink(navLink: SideBarLink) {
-    const { label, path, active, subLinks = [], icon, guide } = navLink;
+  render() {
+    const { unreadSubscriptionTotal } = this.props;
+    const buildLink = (path, label, icon) => ({
+      navigate: path ? `$/${path}` : '/',
+      label,
+      icon,
+    });
 
-    const inner = (
-      <li
-        className={classnames('navigation__link', {
-          'navigation__link--active': active,
-          'navigation__link--guide': guide,
-        })}
-        key={label}
-      >
-        <Button icon={icon} label={label} navigate={path} />
-
-        {
-          // The sublinks should be animated on open close
-          // Removing it because the current implementation with CSSTransitionGroup
-          // was really slow and looked pretty bad. Possible fix is upgrading to v2
-          // Not sure if that has better performance
-        }
-        {!!subLinks.length && active && (
-          <ul key="0" className="navigation__link-items">
-            {subLinks.map(({ active: subLinkActive, label: subLabel, path: subPath }) => (
-              <li
-                className={classnames('navigation__link-item', {
-                  'navigation__link-item--active': subLinkActive,
-                })}
-                key={subPath}
-              >
-                {subPath ? <Button label={subLabel} navigate={subPath} /> : <span>{subLabel}</span>}
-              </li>
-            ))}
-          </ul>
-        )}
+    const renderLink = (linkProps, index) => (
+      <li key={index}>
+        <Button
+          {...linkProps}
+          className="navigation__link"
+          activeClass="navigation__link--active"
+        />
       </li>
     );
 
-    return guide ? (
-      <Tooltip key={guide} alwaysVisible direction="right" body={guide}>
-        {inner}
-      </Tooltip>
-    ) : (
-      inner
-    );
-  }
-
-  render() {
-    const { navLinks, unreadSubscriptionTotal } = this.props;
-
     return (
       <nav className="navigation">
-        <div className="navigation__links">
-          {navLinks.primary.map(({ label, path, active, icon }) => (
-            <Button
-              icon={icon}
-              className={classnames('navigation__link', {
-                'navigation__link--active': active,
-              })}
-              key={path}
-              label={
-                path === '/subscriptions' && unreadSubscriptionTotal
-                  ? `${label} (${unreadSubscriptionTotal})`
-                  : label
-              }
-              navigate={path}
-            />
-          ))}
+        <ul className="navigation__links">
+          {[
+            {
+              ...buildLink(null, __('Home'), ICONS.HOME),
+            },
+            {
+              ...buildLink(
+                PAGES.SUBSCRIPTIONS,
+                `${__('Subscriptions')} ${
+                  unreadSubscriptionTotal > 0 ? '(' + unreadSubscriptionTotal + ')' : ''
+                }`,
+                ICONS.SUBSCRIPTION
+              ),
+            },
+          ].map(renderLink)}
+        </ul>
 
+        <div className="navigation__link navigation__link--title">My LBRY</div>
+
+        <div className="navigation__links">
           <ul>
-            <li className="navigation__link navigation__link--title">Account</li>
-            {navLinks.secondary.map(this.renderNavLink)}
+            {[
+              {
+                ...buildLink(PAGES.DOWNLOADED, 'Downloads', ICONS.LOCAL),
+              },
+              {
+                ...buildLink(PAGES.PUBLISHED, 'Publishes', ICONS.PUBLISHED),
+              },
+              {
+                ...buildLink(PAGES.USER_HISTORY, 'History', ICONS.HISTORY),
+              },
+              {
+                ...buildLink(PAGES.INVITE, 'Invite', ICONS.INVITE),
+              },
+              {
+                ...buildLink(PAGES.REWARDS, 'Rewards', ICONS.FEATURED),
+              },
+            ].map(renderLink)}
           </ul>
         </div>
+        <div className="navigation__link navigation__link--title">Wallet</div>
+
+        <ul className="navigation__links">
+          {[
+            {
+              ...buildLink(PAGES.WALLET, 'Overview', ICONS.WALLET),
+            },
+            {
+              ...buildLink(PAGES.HISTORY, 'Transactions', ICONS.TRANSACTIONS),
+            },
+            {
+              ...buildLink(PAGES.BACKUP, 'Backup', ICONS.BACKUP),
+            },
+          ].map(renderLink)}
+        </ul>
+
+        <ul className="navigation__links navigation__links--bottom">
+          {[
+            {
+              ...buildLink(PAGES.SETTINGS, 'Settings', ICONS.SETTINGS),
+            },
+            {
+              ...buildLink(PAGES.HELP, 'Help', ICONS.HELP),
+            },
+          ].map(renderLink)}
+        </ul>
       </nav>
     );
   }

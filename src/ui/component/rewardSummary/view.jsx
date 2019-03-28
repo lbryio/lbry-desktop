@@ -51,7 +51,7 @@ class RewardSummary extends React.Component<Props> {
           <div className="card__actions">
             <Button
               button="primary"
-              navigate="/rewards"
+              navigate="/$/rewards"
               label={hasRewards ? __('Claim Rewards') : __('View Rewards')}
             />
           </div>

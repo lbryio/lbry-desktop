@@ -1,19 +1,22 @@
 // @flow
+import * as PAGES from 'constants/pages';
 import * as ICONS from 'constants/icons';
 import React from 'react';
 import classnames from 'classnames';
-import { normalizeURI, SEARCH_TYPES, isURIValid } from 'lbry-redux';
+import { normalizeURI, SEARCH_TYPES, isURIValid, buildURI } from 'lbry-redux';
 import Icon from 'component/common/icon';
 import { parseQueryParams } from 'util/query-params';
 import Autocomplete from './internal/autocomplete';
+import { Location, navigate } from '@reach/router';
 
 const L_KEY_CODE = 76;
 const ESC_KEY_CODE = 27;
 
 type Props = {
+  searchQuery: ?string,
   updateSearchQuery: string => void,
   onSearch: string => void,
-  onSubmit: (string, {}) => void,
+  onSubmit: string => void,
   wunderbarValue: ?string,
   suggestions: Array<string>,
   doFocus: () => void,
@@ -22,9 +25,17 @@ type Props = {
   doShowSnackBar: ({}) => void,
 };
 
-class WunderBar extends React.PureComponent<Props> {
+type State = {
+  query: ?string,
+};
+
+class WunderBar extends React.PureComponent<Props, State> {
   constructor() {
     super();
+
+    this.state = {
+      query: null,
+    };
 
     (this: any).handleSubmit = this.handleSubmit.bind(this);
     (this: any).handleChange = this.handleChange.bind(this);
@@ -61,6 +72,7 @@ class WunderBar extends React.PureComponent<Props> {
         return;
       }
 
+      // @if TARGET='app'
       const shouldFocus =
         process.platform === 'darwin'
           ? keyCode === L_KEY_CODE && metaKey
@@ -70,30 +82,20 @@ class WunderBar extends React.PureComponent<Props> {
         this.input.focus();
         doFocus();
       }
+      // @endif
     }
   }
 
   handleChange(e: SyntheticInputEvent<*>) {
-    const { updateSearchQuery } = this.props;
     const { value } = e.target;
-
+    const { updateSearchQuery } = this.props;
     updateSearchQuery(value);
   }
 
   handleSubmit(value: string, suggestion?: { value: string, type: string }) {
     const { onSubmit, onSearch, doShowSnackBar } = this.props;
+
     const query = value.trim();
-    const getParams = () => {
-      const parts = query.split('?');
-
-      let extraParams = {};
-      if (parts.length > 0) {
-        extraParams = parseQueryParams(parts.join(''));
-      }
-
-      return extraParams;
-    };
-
     const showSnackError = () => {
       doShowSnackBar({
         message: __('Invalid LBRY URL entered. Only A-Z, a-z, 0-9, and "-" allowed.'),
@@ -105,23 +107,20 @@ class WunderBar extends React.PureComponent<Props> {
       if (suggestion.type === 'search') {
         onSearch(query);
       } else if (isURIValid(query)) {
-        const params = getParams();
         const uri = normalizeURI(query);
-        onSubmit(uri, params);
+        onSubmit(uri);
       } else {
         showSnackError();
       }
 
       return;
     }
-
     // Currently no suggestion is highlighted. The user may have started
     // typing, then lost focus and came back later on the same page
     try {
       if (isURIValid(query)) {
         const uri = normalizeURI(query);
-        const params = getParams();
-        onSubmit(uri, params);
+        onSubmit(uri);
       } else {
         showSnackError();
       }
@@ -133,7 +132,7 @@ class WunderBar extends React.PureComponent<Props> {
   input: ?HTMLInputElement;
 
   render() {
-    const { wunderbarValue, suggestions, doFocus, doBlur } = this.props;
+    const { suggestions, doFocus, doBlur, searchQuery } = this.props;
 
     return (
       <div className="wunderbar">
@@ -141,7 +140,7 @@ class WunderBar extends React.PureComponent<Props> {
         <Autocomplete
           autoHighlight
           wrapperStyle={{ flex: 1, position: 'relative' }}
-          value={wunderbarValue || ''}
+          value={searchQuery}
           items={suggestions}
           getItemValue={item => item.value}
           onChange={this.handleChange}

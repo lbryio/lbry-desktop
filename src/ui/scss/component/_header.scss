@@ -27,7 +27,12 @@
     // at smaller screen widths
 
     @media (min-width: 601px) {
+      // @if TARGET='app'
       width: 250px;
+      // @endif
+      // @if TARGET='web'
+      width: 170px;
+      // @endif
     }
 
     @media (max-width: 600px) {
@@ -53,6 +58,21 @@
   &:disabled {
     opacity: 0.3;
   }
+
+  .button__content {
+    line-height: var(--header-height);
+    overflow: hidden;
+    text-align: center;
+    text-overflow: ellipsis;
+    width: 100%;
+  }
+}
+
+.header__navigation-item--lbry {
+  flex: 1;
+  font-weight: 800;
+  font-size: 1.2rem;
+  padding-left: var(--spacing-vertical-large);
 }
 
 .header__navigation-item--back {
@@ -148,13 +168,5 @@
 
   html[data-mode='dark'] & {
     border-color: $lbry-gray-5;
-  }
-
-  .button__content {
-    line-height: var(--header-height);
-    overflow: hidden;
-    text-align: center;
-    text-overflow: ellipsis;
-    width: 100%;
   }
 }

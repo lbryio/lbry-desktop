@@ -6,6 +6,7 @@ import TransactionListRecent from 'component/transactionListRecent';
 import WalletAddress from 'component/walletAddress';
 import Page from 'component/page';
 import UnsupportedOnWeb from 'component/common/unsupported-on-web';
+import WalletSend from 'component/walletSend';
 
 const WalletPage = () => (
   <Page>
@@ -15,6 +16,7 @@ const WalletPage = () => (
         <WalletBalance />
         <RewardSummary />
       </div>
+      <WalletSend />
       <WalletAddress />
       <TransactionListRecent />
     </div>

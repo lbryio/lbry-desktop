@@ -113,6 +113,7 @@ class ModalRouter extends React.PureComponent<Props, State> {
 
   isPaidShowPage(props: Props) {
     const { page, showPageCost } = props;
+    // Fix me
     return page === 'show' && showPageCost > 0;
   }
 

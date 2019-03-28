@@ -1,11 +1,11 @@
 import { connect } from 'react-redux';
-import { doNavigate } from 'redux/actions/navigation';
 import { doSetClientSetting } from 'redux/actions/settings';
 import { selectUserIsRewardApproved, selectUnclaimedRewardValue } from 'lbryinc';
 import { selectBalance } from 'lbry-redux';
 import { doHideModal } from 'redux/actions/app';
 import * as settings from 'constants/settings';
 import ModalCreditIntro from './view';
+import { navigate } from '@reach/router';
 
 const select = state => ({
   currentBalance: selectBalance(state),
@@ -15,8 +15,8 @@ const select = state => ({
 
 const perform = dispatch => () => ({
   addBalance: () => {
+    navigate('/$/getcredits');
     dispatch(doSetClientSetting(settings.CREDIT_REQUIRED_ACKNOWLEDGED, true));
-    dispatch(doNavigate('/getcredits'));
     dispatch(doHideModal());
   },
   closeModal: () => {

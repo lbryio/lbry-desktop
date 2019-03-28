@@ -5,4 +5,8 @@ const port = 1337;
 
 app.use(express.static(__dirname));
 
-app.listen(port, () => console.log(`UI server listening at localhost://${port}`));
+app.get('*', function(req, res) {
+  res.sendFile(path.join(__dirname, '/index.html'));
+});
+
+app.listen(port, () => console.log(`UI server listening at http://localhost:${port}`));

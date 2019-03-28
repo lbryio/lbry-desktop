@@ -13,6 +13,7 @@ import SuggestedSubscriptions from 'component/subscribeSuggested';
 import MarkAsRead from 'component/subscribeMarkAsRead';
 import Tooltip from 'component/common/tooltip';
 import Yrbl from 'component/yrbl';
+import { formatLbryUriForWeb } from 'util/uri';
 
 type Props = {
   viewMode: ViewMode,
@@ -109,12 +110,7 @@ export default (props: Props) => {
                   return (
                     <span>
                       <h2 className="card__title card__title--flex">
-                        <Button
-                          button="link"
-                          navigate="/show"
-                          navigateParams={{ uri: channel, page: 1 }}
-                          label={claimName}
-                        />
+                        <Button button="link" navigate={channel} label={claimName} />
                         <MarkAsRead channel={channel} />
                       </h2>
 

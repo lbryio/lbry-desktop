@@ -1,6 +1,7 @@
 // @flow
 import React from 'react';
 import { Modal } from 'modal/modal';
+import { formatLbryUriForWeb } from 'util/uri';
 // @if TARGET='app'
 import { shell } from 'electron';
 // @endif
@@ -13,10 +14,16 @@ type Props = {
 class ModalOpenExternalLink extends React.PureComponent<Props> {
   openExternalLink() {
     const { uri, closeModal } = this.props;
+    // @if TARGET='app'
     const { openExternal } = shell;
     if (uri) {
       openExternal(uri);
     }
+    // @endif
+    // @if TARGET='web'
+    window.open(uri);
+    // @endif
+
     closeModal();
   }
 

@@ -6,7 +6,7 @@ import {
   selectUser,
   doRewardList,
 } from 'lbryinc';
-import { doAuthNavigate, doNavigate } from 'redux/actions/navigation';
+import { doAuthNavigate } from 'redux/actions/navigation';
 import { selectDaemonSettings } from 'redux/selectors/settings';
 import RewardsPage from './view';
 
@@ -20,7 +20,6 @@ const select = state => ({
 
 const perform = dispatch => ({
   fetchRewards: () => dispatch(doRewardList()),
-  navigate: path => dispatch(doNavigate(path)),
   doAuth: () => {
     dispatch(doAuthNavigate('/rewards'));
   },

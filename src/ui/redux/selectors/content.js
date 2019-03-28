@@ -3,7 +3,7 @@ import { createSelector } from 'reselect';
 import {
   makeSelectClaimForUri,
   selectClaimsByUri,
-  makeSelectClaimsInChannelForCurrentPage,
+  makeSelectClaimsInChannelForCurrentPageState,
 } from 'lbry-redux';
 import { HISTORY_ITEMS_PER_PAGE } from 'constants/content';
 
@@ -68,7 +68,7 @@ export const makeSelectHistoryForUri = (uri: string) =>
 
 export const makeSelectCategoryListUris = (uris: ?Array<string>, channel: string) =>
   createSelector(
-    makeSelectClaimsInChannelForCurrentPage(channel),
+    makeSelectClaimsInChannelForCurrentPageState(channel),
     channelClaims => {
       if (uris) return uris;
 

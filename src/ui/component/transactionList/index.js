@@ -1,6 +1,5 @@
 import { connect } from 'react-redux';
 import { selectClaimedRewardsByTransactionId } from 'lbryinc';
-import { doNavigate } from 'redux/actions/navigation';
 import { doOpenModal } from 'redux/actions/app';
 import {
   selectAllMyClaimsByOutpoint,
@@ -16,7 +15,6 @@ const select = state => ({
 });
 
 const perform = dispatch => ({
-  navigate: (path, params) => dispatch(doNavigate(path, params)),
   openModal: (modal, props) => dispatch(doOpenModal(modal, props)),
   setTransactionFilter: filterSetting => dispatch(doSetTransactionListFilter(filterSetting)),
 });

@@ -1,11 +1,7 @@
 import { connect } from 'react-redux';
 import { doFetchClaimsByChannel } from 'redux/actions/content';
 import { makeSelectCategoryListUris } from 'redux/selectors/content';
-import {
-  makeSelectFetchingChannelClaims,
-  doResolveUris,
-  selectActiveHistoryEntry,
-} from 'lbry-redux';
+import { makeSelectFetchingChannelClaims, doResolveUris } from 'lbry-redux';
 import { selectShowNsfw } from 'redux/selectors/settings';
 import CategoryList from './view';
 
@@ -13,7 +9,6 @@ const select = (state, props) => ({
   urisInList: makeSelectCategoryListUris(props.uris, props.categoryLink)(state),
   fetching: makeSelectFetchingChannelClaims(props.categoryLink)(state),
   obscureNsfw: !selectShowNsfw(state),
-  currentPageAttributes: selectActiveHistoryEntry(state),
 });
 
 const perform = dispatch => ({

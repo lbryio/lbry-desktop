@@ -1,6 +1,5 @@
 import { connect } from 'react-redux';
 import * as settings from 'constants/settings';
-import { doNavigate } from 'redux/actions/navigation';
 import { selectRewardContentClaimIds, selectPlayingUri } from 'redux/selectors/content';
 import { doRemoveUnreadSubscription } from 'redux/actions/subscriptions';
 import { doSetClientSetting } from 'redux/actions/settings';
@@ -15,10 +14,10 @@ import {
   makeSelectChannelForClaimUri,
 } from 'lbry-redux';
 import {
-  makeSelectCostInfoForUri,
-  doFetchCostInfoForUri,
   doFetchViewCount,
   makeSelectViewCountForUri,
+  makeSelectCostInfoForUri,
+  doFetchCostInfoForUri,
 } from 'lbryinc';
 import { selectShowNsfw, makeSelectClientSetting } from 'redux/selectors/settings';
 import { makeSelectIsSubscribed } from 'redux/selectors/subscriptions';
@@ -43,7 +42,6 @@ const select = (state, props) => ({
 });
 
 const perform = dispatch => ({
-  navigate: (path, params) => dispatch(doNavigate(path, params)),
   fetchFileInfo: uri => dispatch(doFetchFileInfo(uri)),
   fetchCostInfo: uri => dispatch(doFetchCostInfoForUri(uri)),
   openModal: (modal, props) => dispatch(doOpenModal(modal, props)),

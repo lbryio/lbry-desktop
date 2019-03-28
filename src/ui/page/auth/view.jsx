@@ -6,6 +6,7 @@ import UserEmailNew from 'component/userEmailNew';
 import UserEmailVerify from 'component/userEmailVerify';
 import UserVerify from 'component/userVerify';
 import Page from 'component/page';
+import { navigate } from '@reach/router';
 
 type Props = {
   isPending: boolean,
@@ -16,7 +17,6 @@ type Props = {
     is_reward_approved: boolean,
     is_identity_verified: boolean,
   },
-  navigate: (string, ?{}) => void,
 };
 
 class AuthPage extends React.PureComponent<Props> {
@@ -29,14 +29,14 @@ class AuthPage extends React.PureComponent<Props> {
   }
 
   navigateIfAuthenticated = (props: Props) => {
-    const { isPending, user, pathAfterAuth, navigate } = props;
+    const { isPending, user } = props;
     if (
       !isPending &&
       user &&
       user.has_verified_email &&
       (user.is_reward_approved || user.is_identity_verified)
     ) {
-      navigate(pathAfterAuth);
+      navigate('/');
     }
   };
 
@@ -56,7 +56,6 @@ class AuthPage extends React.PureComponent<Props> {
   }
 
   render() {
-    const { navigate } = this.props;
     const [innerContent, useTemplate] = this.renderMain();
 
     return (
@@ -69,11 +68,7 @@ class AuthPage extends React.PureComponent<Props> {
               {`${__(
                 'This information is disclosed only to LBRY, Inc. and not to the LBRY network. It is only required to earn LBRY rewards and may be used to sync usage data across devices.'
               )} `}
-              <Button
-                button="link"
-                onClick={() => navigate('/discover')}
-                label={__('Return home.')}
-              />
+              <Button button="link" navigate="/" label={__('Return home.')} />
             </p>
           </section>
         ) : (

@@ -8,7 +8,7 @@ import Button from 'component/button';
 
 const ExpandableOptions = posed.div({
   hide: { height: 0, opacity: 0 },
-  show: { height: 280, opacity: 1 },
+  show: { height: 300, opacity: 1 },
 });
 
 type Props = {
@@ -34,11 +34,11 @@ const SearchOptions = (props: Props) => {
   const resultCount = options[SEARCH_OPTIONS.RESULT_COUNT];
 
   return (
-    <div className="card card--section search__options-wrapper">
+    <div className="search__options-wrapper">
       <div className="card--space-between">
         <Button
           button="alt"
-          label={__('ADVANCED SEARCH')}
+          label={__('FILTER')}
           iconRight={expanded ? ICONS.UP : ICONS.DOWN}
           onClick={toggleSearchExpanded}
         />

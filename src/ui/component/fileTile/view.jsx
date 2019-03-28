@@ -12,6 +12,8 @@ import FilePrice from 'component/filePrice';
 import UriIndicator from 'component/uriIndicator';
 import DateTime from 'component/dateTime';
 import Yrbl from 'component/yrbl';
+import { navigate } from '@reach/router';
+import { formatLbryUriForWeb } from 'util/uri';
 
 type Props = {
   obscureNsfw: boolean,
@@ -23,7 +25,6 @@ type Props = {
   claim: ?Claim,
   metadata: ?Metadata,
   resolveUri: string => void,
-  navigate: (string, ?{}) => void,
   clearPublish: () => void,
   updatePublishForm: ({}) => void,
   hideNoResult: boolean, // don't show the tile if there is no claim at this uri
@@ -83,7 +84,6 @@ class FileTile extends React.PureComponent<Props> {
       claim,
       metadata,
       isResolvingUri,
-      navigate,
       obscureNsfw,
       claimIsMine,
       clearPublish,
@@ -115,7 +115,7 @@ class FileTile extends React.PureComponent<Props> {
       return displayHiddenMessage ? (
         <span className="help">
           {__('This file is hidden because it is marked NSFW. Update your')}{' '}
-          <Button button="link" navigate="/settings" label={__('content viewing preferences')} />{' '}
+          <Button button="link" navigate="/$/settings" label={__('content viewing preferences')} />{' '}
           {__('to see it')}.
         </span>
       ) : null;
@@ -136,9 +136,9 @@ class FileTile extends React.PureComponent<Props> {
 
     const wrapperProps = name
       ? {
-          onClick: () => navigate('/show', { uri }),
-          role: 'button',
-        }
+        onClick: () => navigate(formatLbryUriForWeb(uri)),
+        role: 'button',
+      }
       : {};
 
     return !name && hideNoResult ? null : (

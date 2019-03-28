@@ -21,8 +21,9 @@ import {
 } from 'lbry-redux';
 import { doOpenModal } from 'redux/actions/app';
 import { selectosNotificationsEnabled } from 'redux/selectors/settings';
-import { doNavigate } from 'redux/actions/navigation';
+import { navigate } from '@reach/router';
 import analytics from 'analytics';
+import { formatLbryUriForWeb } from 'util/uri';
 // @if TARGET='app'
 import fs from 'fs';
 import path from 'path';
@@ -127,12 +128,12 @@ export const doUploadThumbnail = (filePath: string, nsfw: boolean) => (dispatch:
     .then(json =>
       json.success
         ? dispatch({
-            type: ACTIONS.UPDATE_PUBLISH_FORM,
-            data: {
-              uploadThumbnailStatus: THUMBNAIL_STATUSES.COMPLETE,
-              thumbnail: `${json.data.url}${fileExt}`,
-            },
-          })
+          type: ACTIONS.UPDATE_PUBLISH_FORM,
+          data: {
+            uploadThumbnailStatus: THUMBNAIL_STATUSES.COMPLETE,
+            thumbnail: `${json.data.url}${fileExt}`,
+          },
+        })
         : uploadError(json.message)
     )
     .catch(err => uploadError(err.message));
@@ -327,11 +328,7 @@ export const doCheckPendingPublishes = () => (dispatch: Dispatch, getState: GetS
               silent: false,
             });
             notif.onclick = () => {
-              dispatch(
-                doNavigate('/show', {
-                  uri: claim.permanent_url,
-                })
-              );
+              navigate(formatLbryUriForWeb(claim.permanent_url));
             };
           }
         }

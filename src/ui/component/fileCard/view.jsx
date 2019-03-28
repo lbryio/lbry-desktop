@@ -11,13 +11,14 @@ import classnames from 'classnames';
 import FilePrice from 'component/filePrice';
 import { openCopyLinkMenu } from 'util/context-menu';
 import DateTime from 'component/dateTime';
+import { navigate } from '@reach/router';
+import { formatLbryUriForWeb } from 'util/uri';
 
 type Props = {
   uri: string,
   claim: ?Claim,
   fileInfo: ?{},
   metadata: ?Metadata,
-  navigate: (string, ?{}) => void,
   rewardedContentClaimIds: Array<string>,
   obscureNsfw: boolean,
   claimIsMine: boolean,
@@ -61,7 +62,6 @@ class FileCard extends React.PureComponent<Props> {
       claim,
       fileInfo,
       metadata,
-      navigate,
       rewardedContentClaimIds,
       obscureNsfw,
       claimIsMine,
@@ -108,11 +108,16 @@ class FileCard extends React.PureComponent<Props> {
       }
     };
 
+    const onClick = e => {
+      e.stopPropagation();
+      navigate(formatLbryUriForWeb(uri));
+    };
+
     return (
       <li
         tabIndex="0"
         role="button"
-        onClick={!pending ? () => navigate('/show', { uri }) : () => {}}
+        onClick={!pending && claim ? onClick : () => {}}
         className={classnames('media-card', {
           'card--link': !pending,
           'media--pending': pending,

@@ -1,20 +1,15 @@
 import { connect } from 'react-redux';
 import * as settings from 'constants/settings';
-import { selectBalance, selectCurrentPage, selectError, doToast } from 'lbry-redux';
+import { selectBalance, makeSelectCostInfoForUri, selectError, doToast } from 'lbry-redux';
 import { makeSelectClientSetting } from 'redux/selectors/settings';
-import {
-  selectUser,
-  selectUserIsVerificationCandidate,
-  selectCostForCurrentPageUri,
-} from 'lbryinc';
+import { selectUser, selectUserIsVerificationCandidate } from 'lbryinc';
 import { selectModal } from 'redux/selectors/app';
 import { doOpenModal } from 'redux/actions/app';
 import ModalRouter from './view';
 
-const select = state => ({
+const select = (state, props) => ({
   balance: selectBalance(state),
-  showPageCost: selectCostForCurrentPageUri(state),
-  page: selectCurrentPage(state),
+  showPageCost: makeSelectCostInfoForUri(props.uri)(state),
   isVerificationCandidate: selectUserIsVerificationCandidate(state),
   isCreditIntroAcknowledged: makeSelectClientSetting(settings.CREDIT_REQUIRED_ACKNOWLEDGED)(state),
   isEmailCollectionAcknowledged: makeSelectClientSetting(settings.EMAIL_COLLECTION_ACKNOWLEDGED)(

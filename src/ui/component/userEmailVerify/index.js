@@ -5,7 +5,6 @@ import {
   doUserCheckEmailVerified,
   selectUser,
 } from 'lbryinc';
-import { doNavigate } from 'redux/actions/navigation';
 import UserEmailVerify from './view';
 
 const select = state => ({
@@ -16,7 +15,6 @@ const select = state => ({
 const perform = dispatch => ({
   resendVerificationEmail: email => dispatch(doUserResendVerificationEmail(email)),
   checkEmailVerified: () => dispatch(doUserCheckEmailVerified()),
-  navigate: path => dispatch(doNavigate(path)),
 });
 
 export default connect(

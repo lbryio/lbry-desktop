@@ -10,7 +10,6 @@ import {
   selectFileInfosByOutpoint,
 } from 'lbry-redux';
 import { doHideModal } from 'redux/actions/app';
-import { doHistoryBack } from 'redux/actions/navigation';
 
 export function doOpenFileInFolder(path) {
   return () => {
@@ -63,7 +62,6 @@ export function doDeleteFileAndGoBack(fileInfo, deleteFromComputer, abandonClaim
   return dispatch => {
     const actions = [];
     actions.push(doHideModal());
-    actions.push(doHistoryBack());
     actions.push(doDeleteFile(fileInfo, deleteFromComputer, abandonClaim));
     dispatch(batchActions(...actions));
   };

@@ -35,9 +35,7 @@ export default appState => {
     },
   };
 
-  const rendererURL = isDev // ? `http://localhost:${process.env.ELECTRON_WEBPACK_WDS_PORT}`
-    ? `http://localhost:8080/index.dev.html`
-    : `file://${__dirname}/index.html`;
+  const rendererURL = isDev ? `http://localhost:8080` : `file://${__dirname}/index.html`;
 
   let window = new BrowserWindow(windowConfiguration);
 

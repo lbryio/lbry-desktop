@@ -7,7 +7,7 @@ import * as MODALS from 'constants/modal_types';
 import { ipcRenderer } from 'electron';
 // @endif
 import { doOpenModal } from 'redux/actions/app';
-import { doNavigate } from 'redux/actions/navigation';
+import { navigate } from '@reach/router';
 import { setSubscriptionLatest, doUpdateUnreadSubscriptions } from 'redux/actions/subscriptions';
 import { makeSelectUnreadByChannel } from 'redux/selectors/subscriptions';
 import {
@@ -24,10 +24,11 @@ import {
   parseURI,
   creditsToString,
   doError,
+  makeSelectCostInfoForUri,
 } from 'lbry-redux';
-import { makeSelectCostInfoForUri } from 'lbryinc';
 import { makeSelectClientSetting, selectosNotificationsEnabled } from 'redux/selectors/settings';
 import analytics from 'analytics';
+import { formatLbryUriForWeb } from 'util/uri';
 
 const DOWNLOAD_POLL_INTERVAL = 250;
 
@@ -82,11 +83,7 @@ export function doUpdateLoadStatus(uri: string, outpoint: string) {
               silent: false,
             });
             notif.onclick = () => {
-              dispatch(
-                doNavigate('/show', {
-                  uri,
-                })
-              );
+              navigate(formatLbryUriForWeb(uri));
             };
           }
 

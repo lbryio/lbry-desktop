@@ -8,13 +8,12 @@ import { PAGES } from 'lbry-redux';
 type Props = {
   fetching: boolean,
   fileInfos: {},
-  navigate: (string, ?{}) => void,
   sortBy: string,
 };
 
 class FileListDownloaded extends React.PureComponent<Props> {
   render() {
-    const { fetching, fileInfos, navigate, sortBy } = this.props;
+    const { fetching, fileInfos, sortBy } = this.props;
     const hasDownloads = fileInfos && Object.values(fileInfos).length > 0;
 
     return (
@@ -32,11 +31,7 @@ class FileListDownloaded extends React.PureComponent<Props> {
 
               <div className="card__content">
                 <div className="card__actions card__actions--center">
-                  <Button
-                    button="primary"
-                    onClick={() => navigate('/discover')}
-                    label={__('Explore new content')}
-                  />
+                  <Button button="primary" navigate="/" label={__('Explore new content')} />
                 </div>
               </div>
             </section>

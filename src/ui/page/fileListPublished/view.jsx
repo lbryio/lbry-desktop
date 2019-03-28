@@ -9,7 +9,6 @@ import { PAGES } from 'lbry-redux';
 type Props = {
   claims: Array<Claim>,
   checkPendingPublishes: () => void,
-  navigate: (string, ?{}) => void,
   fetching: boolean,
   sortBy: string,
 };
@@ -21,7 +20,7 @@ class FileListPublished extends React.PureComponent<Props> {
   }
 
   render() {
-    const { fetching, claims, navigate, sortBy } = this.props;
+    const { fetching, claims, sortBy } = this.props;
     return (
       <Page notContained loading={fetching}>
         {claims && claims.length ? (
@@ -45,7 +44,7 @@ class FileListPublished extends React.PureComponent<Props> {
                 <div className="card__actions card__actions--center">
                   <Button
                     button="primary"
-                    onClick={() => navigate('/publish')}
+                    navigate="/$/publish"
                     label={__('Publish something new')}
                   />
                 </div>

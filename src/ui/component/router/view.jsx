@@ -1,10 +1,10 @@
+import * as PAGES from 'constants/pages';
 import React from 'react';
+import { Router } from '@reach/router';
 import SettingsPage from 'page/settings';
 import HelpPage from 'page/help';
 import ReportPage from 'page/report';
 import WalletPage from 'page/wallet';
-import GetCreditsPage from 'page/getCredits';
-import SendReceivePage from 'page/sendCredits';
 import ShowPage from 'page/show';
 import PublishPage from 'page/publish';
 import DiscoverPage from 'page/discover';
@@ -12,7 +12,6 @@ import RewardsPage from 'page/rewards';
 import FileListDownloaded from 'page/fileListDownloaded';
 import FileListPublished from 'page/fileListPublished';
 import TransactionHistoryPage from 'page/transactionHistory';
-import ChannelPage from 'page/channel';
 import AuthPage from 'page/auth';
 import InvitePage from 'page/invite';
 import BackupPage from 'page/backup';
@@ -20,41 +19,28 @@ import SubscriptionsPage from 'page/subscriptions';
 import SearchPage from 'page/search';
 import UserHistoryPage from 'page/userHistory';
 
-const route = (props, page, routesMap) => {
-  const component = routesMap[page];
-  if (!component) {
-    props.doToast({
-      message: __('Invalid page requested'),
-    });
-  }
-  return component || routesMap.discover;
-};
+export default function AppRouter(props) {
+  return (
+    <Router>
+      <DiscoverPage path="/" />
+      <ShowPage path="/:claimName/:claimId" />
+      <ShowPage path="/:claimName" />
 
-const Router = props => {
-  const { currentPage, params } = props;
-
-  return route(props, currentPage, {
-    auth: <AuthPage params={params} />,
-    backup: <BackupPage params={params} />,
-    channel: <ChannelPage params={params} />,
-    discover: <DiscoverPage params={params} />,
-    downloaded: <FileListDownloaded params={params} />,
-    help: <HelpPage params={params} />,
-    history: <TransactionHistoryPage params={params} />,
-    invite: <InvitePage params={params} />,
-    publish: <PublishPage params={params} />,
-    published: <FileListPublished params={params} />,
-    getcredits: <GetCreditsPage params={params} />,
-    report: <ReportPage params={params} />,
-    rewards: <RewardsPage params={params} />,
-    send: <SendReceivePage params={params} />,
-    settings: <SettingsPage params={params} />,
-    show: <ShowPage {...params} />,
-    wallet: <WalletPage params={params} />,
-    subscriptions: <SubscriptionsPage params={params} />,
-    search: <SearchPage {...params} />,
-    user_history: <UserHistoryPage {...params} />,
-  });
-};
-
-export default Router;
+      <AuthPage path={`$/${PAGES.AUTH}`} />
+      <BackupPage path={`$/${PAGES.BACKUP}`} />
+      <InvitePage path={`$/${PAGES.INVITE}`} />
+      <FileListDownloaded path={`$/${PAGES.DOWNLOADED}`} />
+      <FileListPublished path={`$/${PAGES.PUBLISHED}`} />
+      <HelpPage path={`$/${PAGES.HELP}`} />
+      <PublishPage path={`$/${PAGES.PUBLISH}`} />
+      <ReportPage path={`$/${PAGES.REPORT}`} />
+      <RewardsPage path={`$/${PAGES.REWARDS}`} />
+      <SearchPage path={`$/${PAGES.SEARCH}`} />
+      <SettingsPage path={`$/${PAGES.SETTINGS}`} />
+      <SubscriptionsPage path={`$/${PAGES.SUBSCRIPTIONS}`} />
+      <TransactionHistoryPage path={`$/${PAGES.HISTORY}`} />
+      <UserHistoryPage path={`$/${PAGES.USER_HISTORY}`} />
+      <WalletPage path={`$/${PAGES.WALLET}`} />
+    </Router>
+  );
+}

@@ -14,9 +14,6 @@ const TWO_POINT_FIVE_MINUTES = 1000 * 60 * 2.5;
 
 type Props = {
   alertError: (string | {}) => void,
-  recordScroll: number => void,
-  currentStackIndex: number,
-  currentPageAttributes: { path: string, scrollY: number },
   pageTitle: ?string,
   theme: string,
   updateBlockHeight: () => void,
@@ -25,12 +22,6 @@ type Props = {
 };
 
 class App extends React.PureComponent<Props> {
-  constructor() {
-    super();
-    this.mainContent = undefined;
-    (this: any).scrollListener = this.scrollListener.bind(this);
-  }
-
   componentWillMount() {
     const { alertError, theme } = this.props;
 
@@ -47,12 +38,6 @@ class App extends React.PureComponent<Props> {
   componentDidMount() {
     const { updateBlockHeight, toggleEnhancedLayout } = this.props;
 
-    const mainContent = document.getElementById('content');
-    this.mainContent = mainContent;
-    if (this.mainContent) {
-      this.mainContent.addEventListener('scroll', throttle(this.scrollListener, 750));
-    }
-
     ReactModal.setAppElement('#window'); // fuck this
 
     this.enhance = new EnhancedLayoutListener(() => toggleEnhancedLayout());
@@ -63,18 +48,9 @@ class App extends React.PureComponent<Props> {
     }, TWO_POINT_FIVE_MINUTES);
   }
 
-  componentWillReceiveProps(props: Props) {
-    const { pageTitle } = props;
-    this.setTitleFromProps(pageTitle);
-  }
-
   componentDidUpdate(prevProps: Props) {
-    const { currentStackIndex: prevStackIndex, theme: prevTheme } = prevProps;
-    const { currentStackIndex, currentPageAttributes, theme } = this.props;
-
-    if (this.mainContent && currentStackIndex !== prevStackIndex && currentPageAttributes) {
-      this.mainContent.scrollTop = currentPageAttributes.scrollY || 0;
-    }
+    const { theme: prevTheme } = prevProps;
+    const { theme } = this.props;
 
     if (prevTheme !== theme) {
       // $FlowFixMe
@@ -83,26 +59,9 @@ class App extends React.PureComponent<Props> {
   }
 
   componentWillUnmount() {
-    if (this.mainContent) {
-      this.mainContent.removeEventListener('scroll', this.scrollListener);
-    }
-
     this.enhance = null;
   }
 
-  setTitleFromProps = (title: ?string) => {
-    window.document.title = title || 'LBRY';
-  };
-
-  scrollListener() {
-    const { recordScroll } = this.props;
-
-    if (this.mainContent) {
-      recordScroll(this.mainContent.scrollTop);
-    }
-  }
-
-  mainContent: ?HTMLElement;
   enhance: ?any;
 
   render() {
