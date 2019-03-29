@@ -31,7 +31,7 @@
       width: 250px;
       /* @endif */
       /* @if TARGET='web' */
-      // width: 170px;
+      width: 170px;
       /* @endif */
     }
 
@@ -89,10 +89,13 @@
   flex: 1;
   font-weight: 800;
   font-size: 1.2rem;
-  padding-left: var(--spacing-vertical-large);
+  margin-left: -1.25rem; // Needed because the lbry icon overflows it's parent so the centering is off
 
-  .button__content {
-    text-align: left;
+  svg {
+    overflow: visible;
+    color: $lbry-white;
+    opacity: 1;
+    top: -0.2rem;
   }
 }
 

@@ -50,4 +50,4 @@ export const SECURE = 'Lock';
 export const MENU = 'Menu';
 export const BACKUP = 'Database';
 export const TRANSACTIONS = 'FileText';
-export const LBRY = '';
+export const LBRY = 'Lbry';

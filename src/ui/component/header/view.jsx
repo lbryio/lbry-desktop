@@ -77,7 +77,7 @@ const Header = (props: Props) => {
         {/* @if TARGET='web' */}
         <Button
           className="header__navigation-item header__navigation-item--lbry"
-          label={__('LBRY  (logo)')}
+          label={__('LBRY')}
           iconRight={ICONS.LBRY}
           navigate="/"
         />
