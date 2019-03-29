@@ -14,7 +14,7 @@ const select = state => ({
 });
 
 const perform = dispatch => ({
-  fetchFeaturedUris: () => dispatch(doFetchFeaturedUris(true)),
+  fetchFeaturedUris: () => dispatch(doFetchFeaturedUris()),
   fetchRewardedContent: () => dispatch(doFetchRewardedContent()),
   fetchRewards: () => dispatch(doRewardList()),
 });

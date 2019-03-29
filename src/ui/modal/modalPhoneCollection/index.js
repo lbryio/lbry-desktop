@@ -1,6 +1,7 @@
 import { connect } from 'react-redux';
 import { doHideModal } from 'redux/actions/app';
 import { selectPhoneToVerify, selectUser } from 'lbryinc';
+import { navigate } from '@reach/router';
 import ModalPhoneCollection from './view';
 
 const select = state => ({
@@ -11,6 +12,7 @@ const select = state => ({
 const perform = dispatch => () => ({
   closeModal: () => {
     dispatch(doHideModal());
+    navigate('/$/rewards');
   },
 });
 

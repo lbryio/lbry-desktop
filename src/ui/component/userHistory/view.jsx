@@ -4,6 +4,7 @@ import Button from 'component/button';
 import { Form, FormField } from 'component/common/form';
 import ReactPaginate from 'react-paginate';
 import UserHistoryItem from 'component/userHistoryItem';
+import { navigate } from '@reach/router';
 
 type HistoryItem = {
   uri: string,
@@ -51,9 +52,8 @@ class UserHistoryPage extends React.PureComponent<Props, State> {
   }
 
   changePage(pageNumber: number) {
-    const { params } = this.props;
-    const newParams = { ...params, page: pageNumber };
-    // this.props.navigate('/user_history', newParams);
+    console.log('new', pageNumber);
+    navigate(`/$/user_history?page=${pageNumber}`);
   }
 
   paginate(e: SyntheticKeyboardEvent<*>) {
@@ -94,6 +94,7 @@ class UserHistoryPage extends React.PureComponent<Props, State> {
 
   render() {
     const { history = [], page, pageCount } = this.props;
+    console.log('this.props', this.props);
     const { itemsSelected } = this.state;
     const allSelected = Object.keys(itemsSelected).length === history.length;
     const selectHandler = allSelected ? this.unselectAll : this.selectAll;
@@ -147,6 +148,7 @@ class UserHistoryPage extends React.PureComponent<Props, State> {
                   onPageChange={e => this.changePage(e.selected)}
                   forcePage={page}
                   initialPage={page}
+                  disableInitialCallback
                   containerClassName="pagination"
                 />
               </fieldset-section>

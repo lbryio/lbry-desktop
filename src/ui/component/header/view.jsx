@@ -53,7 +53,7 @@ const Header = (props: Props) => {
         <Button
           className="header__navigation-item header__navigation-item--back"
           description={__('Navigate back')}
-          disabled={isBackDisabled}
+          onClick={() => window.history.back()}
           icon={ICONS.ARROW_LEFT}
           iconSize={15}
         />
@@ -61,7 +61,7 @@ const Header = (props: Props) => {
         <Button
           className="header__navigation-item header__navigation-item--forward"
           description={__('Navigate forward')}
-          disabled={isForwardDisabled}
+          onClick={() => window.history.forward()}
           icon={ICONS.ARROW_RIGHT}
           iconSize={15}
         />

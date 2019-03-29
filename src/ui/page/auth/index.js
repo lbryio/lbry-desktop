@@ -1,4 +1,3 @@
-import { selectPathAfterAuth } from 'lbry-redux';
 import { connect } from 'react-redux';
 import {
   selectAuthenticationIsPending,
@@ -16,7 +15,6 @@ const select = state => ({
     selectUserIsPending(state) ||
     selectIdentityVerifyIsPending(state),
   email: selectEmailToVerify(state),
-  pathAfterAuth: selectPathAfterAuth(state),
   user: selectUser(state),
   isVerificationCandidate: selectUserIsVerificationCandidate(state),
 });

@@ -236,7 +236,7 @@ const init = () => {
     window.sessionStorage.setItem('loaded', 'y'); // once we've made it here once per session, we don't need to show splash again
     // @endif
 
-    // app.store.dispatch(doDaemonReady());
+    app.store.dispatch(doDaemonReady());
     ReactDOM.render(
       <Provider store={store}>
         <ErrorBoundary>

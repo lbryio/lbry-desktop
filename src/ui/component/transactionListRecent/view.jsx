@@ -53,14 +53,14 @@ class TransactionListRecent extends React.PureComponent<Props> {
                 transactions={transactions}
                 emptyMessage={__("Looks like you don't have any recent transactions.")}
               />
-              <div className="card__actions">
-                <Button
-                  button="primary"
-                  navigate="/$/history"
-                  label={__('Full History')}
-                  icon={icons.HISTORY}
-                />
-              </div>
+            </div>
+            <div className="card__actions">
+              <Button
+                button="primary"
+                navigate="/$/history"
+                label={__('Full History')}
+                icon={icons.HISTORY}
+              />
             </div>
           </Fragment>
         )}

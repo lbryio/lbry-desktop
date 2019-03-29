@@ -27,12 +27,12 @@
     // at smaller screen widths
 
     @media (min-width: 601px) {
-      // @if TARGET='app'
+      /* @if TARGET='app' */
       width: 250px;
-      // @endif
-      // @if TARGET='web'
-      width: 170px;
-      // @endif
+      /* @endif */
+      /* @if TARGET='web' */
+      // width: 170px;
+      /* @endif */
     }
 
     @media (max-width: 600px) {
@@ -43,9 +43,9 @@
 
 .header__navigation-item {
   height: var(--header-height);
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 
   &:not(:disabled):hover {
     background-color: $lbry-gray-1;
@@ -68,73 +68,36 @@
   }
 }
 
-.header__navigation-item--lbry {
-  flex: 1;
-  font-weight: 800;
-  font-size: 1.2rem;
-  padding-left: var(--spacing-vertical-large);
-}
-
-.header__navigation-item--back {
-  html[data-mode='dark'] & {
-    svg {
-      stroke: $lbry-white;
-    }
-  }
-}
-
-.header__navigation-item--forward {
-  html[data-mode='dark'] & {
-    svg {
-      stroke: $lbry-white;
-    }
-  }
-}
-
-.header__navigation-item--home {
-  html[data-mode='dark'] & {
-    svg {
-      stroke: $lbry-white;
-    }
-  }
-}
-
-.header__navigation-item--menu {
-  html[data-mode='dark'] & {
-    svg {
-      stroke: $lbry-white;
-    }
-  }
-
-  // This menu button does not need to be seen
-  // at larger screen widths
-
-  @media (min-width: 601px) {
-    display: none;
-  }
-}
 .header__navigation-item--back,
 .header__navigation-item--forward,
 .header__navigation-item--home,
 .header__navigation-item--menu {
   width: var(--header-height);
+  svg {
+    &:only-child {
+      // Header icons are a little different because they are larger
+      top: 0.25rem;
+    }
+
+    html[data-mode='dark'] & {
+      stroke: $lbry-white;
+    }
+  }
 }
 
-// Currently not used
-// .header__navigation-item--publish,
-// .header__navigation-item--wallet {
-//   // Publish and Wallet links are collapsed
-//   // into a menu at smaller screen widths
-//
-//   @media (max-width: 600px) {
-//     display: none;
-//   }
-// }
+.header__navigation-item--lbry {
+  flex: 1;
+  font-weight: 800;
+  font-size: 1.2rem;
+  padding-left: var(--spacing-vertical-large);
+
+  .button__content {
+    text-align: left;
+  }
+}
 
 // Publish button
 .header__navigation-item--right-action {
-  display: flex;
-  justify-content: center;
   position: relative;
 
   .button__content {
@@ -168,5 +131,25 @@
 
   html[data-mode='dark'] & {
     border-color: $lbry-gray-5;
+  }
+}
+
+.header__navigation-item--menu {
+  @media (min-width: 601px) {
+    display: none;
+  }
+}
+
+// Hide links that will live in the menu bar
+@media (max-width: 601px) {
+  .header__navigation-item--back,
+  .header__navigation-item--forward,
+  .header__navigation-item--home,
+  .header__navigation-item--right-action {
+    display: none;
+  }
+
+  .header__navigation:first-child {
+    display: none;
   }
 }

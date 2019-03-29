@@ -20,7 +20,7 @@ const webConfig = {
   module: {
     rules: [
       {
-        test: /\.jsx?$/,
+        test: /\.(jsx?$|s?css$)/,
         use: [
           {
             loader: 'preprocess-loader',

@@ -317,6 +317,7 @@ export function doDaemonReady() {
     dispatch({ type: ACTIONS.DAEMON_READY });
     dispatch(doFetchDaemonSettings());
     dispatch(doBalanceSubscribe());
+
     // @if TARGET='app'
     dispatch(doFetchFileInfosAndPublishedClaims());
     if (!selectIsUpgradeSkipped(state)) {

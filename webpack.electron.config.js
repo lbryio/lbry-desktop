@@ -24,7 +24,7 @@ let mainConfig = {
   module: {
     rules: [
       {
-        test: /\.jsx?$/,
+        test: /\.(jsx?$|s?css$)/,
         use: [
           {
             loader: 'preprocess-loader',
