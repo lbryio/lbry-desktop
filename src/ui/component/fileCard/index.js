@@ -9,7 +9,6 @@ import {
   makeSelectClaimIsPending,
 } from 'lbry-redux';
 import { selectRewardContentClaimIds } from 'lbryinc';
-import { doNavigate } from 'redux/actions/navigation';
 import { makeSelectContentPositionForUri } from 'redux/selectors/content';
 import { selectShowNsfw } from 'redux/selectors/settings';
 import { makeSelectIsSubscribed, makeSelectIsNew } from 'redux/selectors/subscriptions';
@@ -31,7 +30,6 @@ const select = (state, props) => ({
 });
 
 const perform = dispatch => ({
-  navigate: (path, params) => dispatch(doNavigate(path, params)),
   resolveUri: uri => dispatch(doResolveUri(uri)),
   clearHistoryUri: uri => dispatch(doClearContentHistoryUri(uri)),
 });

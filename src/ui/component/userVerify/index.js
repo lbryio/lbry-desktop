@@ -1,7 +1,6 @@
 import * as MODALS from 'constants/modal_types';
 import { connect } from 'react-redux';
 import { doOpenModal } from 'redux/actions/app';
-import { doNavigate } from 'redux/actions/navigation';
 import {
   doUserIdentityVerify,
   rewards,
@@ -22,7 +21,6 @@ const select = state => {
 };
 
 const perform = dispatch => ({
-  navigate: uri => dispatch(doNavigate(uri)),
   verifyUserIdentity: token => dispatch(doUserIdentityVerify(token)),
   verifyPhone: () => dispatch(doOpenModal(MODALS.PHONE_COLLECTION)),
 });

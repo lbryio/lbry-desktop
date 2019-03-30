@@ -3,7 +3,6 @@ import * as settings from 'constants/settings';
 import { doChangeVolume } from 'redux/actions/app';
 import { selectVolume } from 'redux/selectors/app';
 import { doPlayUri, doSetPlayingUri, savePosition } from 'redux/actions/content';
-import { doNavigate } from 'redux/actions/navigation';
 import { doClaimEligiblePurchaseRewards, makeSelectCostInfoForUri } from 'lbryinc';
 import {
   makeSelectMetadataForUri,
@@ -45,7 +44,6 @@ const perform = dispatch => ({
   claimRewards: () => dispatch(doClaimEligiblePurchaseRewards()),
   savePosition: (claimId, outpoint, position) =>
     dispatch(savePosition(claimId, outpoint, position)),
-  navigate: (path, params) => dispatch(doNavigate(path, params)),
 });
 
 export default connect(

@@ -200,7 +200,7 @@ class HelpPage extends React.PureComponent<Props, State> {
           <div className="card__content">
             <div className="card__actions">
               <Button
-                navigate="/report"
+                navigate="/$/report"
                 label={__('Submit a Bug Report/Feature Request')}
                 icon={icons.REPORT}
                 button="primary"

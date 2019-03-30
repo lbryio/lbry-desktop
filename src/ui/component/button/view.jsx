@@ -2,6 +2,8 @@
 import * as React from 'react';
 import Icon from 'component/common/icon';
 import classnames from 'classnames';
+import { Link } from '@reach/router';
+import { formatLbryUriForWeb } from 'util/uri';
 
 type Props = {
   onClick: ?(any) => any,
@@ -13,9 +15,6 @@ type Props = {
   disabled: ?boolean,
   children: ?React.Node,
   navigate: ?string,
-  // TODO: these (nav) should be a reusable type
-  doNavigate: (string, ?any) => void,
-  navigateParams: any,
   className: ?string,
   description: ?string,
   type: string,
@@ -24,7 +23,7 @@ type Props = {
   iconColor?: string,
   iconSize?: number,
   constrict: ?boolean, // to shorten the button and ellipsis, only use for links
-  selected: ?boolean,
+  activeClass?: string,
 };
 
 class Button extends React.PureComponent<Props> {
@@ -43,8 +42,6 @@ class Button extends React.PureComponent<Props> {
       disabled,
       children,
       navigate,
-      navigateParams,
-      doNavigate,
       className,
       description,
       button,
@@ -53,7 +50,7 @@ class Button extends React.PureComponent<Props> {
       iconColor,
       iconSize,
       constrict,
-      selected,
+      activeClass,
       ...otherProps
     } = this.props;
 
@@ -64,27 +61,18 @@ class Button extends React.PureComponent<Props> {
       },
       button
         ? {
-            'button--primary': button === 'primary',
-            'button--secondary': button === 'secondary',
-            'button--alt': button === 'alt',
-            'button--danger': button === 'danger',
-            'button--inverse': button === 'inverse',
-            'button--disabled': disabled,
-            'button--link': button === 'link',
-            'button--constrict': constrict,
-            'button--selected': selected,
-          }
+          'button--primary': button === 'primary',
+          'button--secondary': button === 'secondary',
+          'button--alt': button === 'alt',
+          'button--danger': button === 'danger',
+          'button--inverse': button === 'inverse',
+          'button--disabled': disabled,
+          'button--link': button === 'link',
+          'button--constrict': constrict,
+        }
         : 'button--no-style',
       className
     );
-
-    const extendedOnClick =
-      !onClick && navigate
-        ? event => {
-            event.stopPropagation();
-            doNavigate(navigate, navigateParams || {});
-          }
-        : onClick;
 
     const content = (
       <span className="button__content">
@@ -95,16 +83,43 @@ class Button extends React.PureComponent<Props> {
       </span>
     );
 
-    return href ? (
-      <a className={combinedClassName} href={href} title={title}>
+    if (href) {
+      return (
+        <a href={href} className={combinedClassName}>
+          {content}
+        </a>
+      );
+    }
+
+    // Handle lbry:// uris passed in, or already formatted web urls
+    let path = navigate;
+    if (path) {
+      if (path.startsWith('lbry://')) {
+        path = formatLbryUriForWeb(path);
+      } else if (!path.startsWith('/')) {
+        // Force a leading slash so new paths aren't appended on to the current path
+        path = `/${path}`;
+      }
+    }
+
+    return path ? (
+      <Link
+        to={path}
+        title={title}
+        onClick={e => e.stopPropagation()}
+        getProps={({ isCurrent }) => ({
+          className:
+            isCurrent && activeClass ? `${combinedClassName} ${activeClass}` : combinedClassName,
+        })}
+      >
         {content}
-      </a>
+      </Link>
     ) : (
       <button
         title={title}
         aria-label={description || label || title}
         className={combinedClassName}
-        onClick={extendedOnClick}
+        onClick={onClick}
         disabled={disabled}
         type={type}
         {...otherProps}

@@ -91,11 +91,6 @@ class Page extends React.PureComponent<Props, State> {
           'main--extra-padding': extraPadding,
         })}
       >
-        {pageTitle && (
-          <div className="page__header">
-            {pageTitle && <h1 className="page__title">{pageTitle}</h1>}
-          </div>
-        )}
         {!loading && children}
         {showLoader && (
           <div className="page__empty">

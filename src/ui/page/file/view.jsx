@@ -39,7 +39,6 @@ type Props = {
   channelUri: string,
   viewCount: number,
   prepareEdit: ({}, string) => void,
-  navigate: (string, ?{}) => void,
   openModal: (id: string, { uri: string }) => void,
   markSubscriptionRead: (string, string) => void,
   fetchViewCount: string => void,
@@ -132,7 +131,6 @@ class FilePage extends React.Component<Props> {
       openModal,
       claimIsMine,
       prepareEdit,
-      navigate,
       costInfo,
       fileInfo,
       channelUri,
@@ -173,6 +171,7 @@ class FilePage extends React.Component<Props> {
     return (
       <Page notContained className="main--file-page">
         <div className="grid-area--content">
+          <h1 className="media__uri">{uri}</h1>
           {showFile && <FileViewer className="content__embedded" uri={uri} mediaType={mediaType} />}
           {!showFile &&
             (thumbnail ? (
@@ -231,9 +230,9 @@ class FilePage extends React.Component<Props> {
                   button="primary"
                   icon={icons.EDIT}
                   label={__('Edit')}
+                  navigate="/$/publish"
                   onClick={() => {
                     prepareEdit(claim, editUri);
-                    navigate('/publish');
                   }}
                 />
               )}

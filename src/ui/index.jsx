@@ -1,8 +1,8 @@
 import ErrorBoundary from 'component/errorBoundary';
 import App from 'component/app';
 import SnackBar from 'component/snackBar';
-import SplashScreen from 'component/splash';
 // @if TARGET='app'
+import SplashScreen from 'component/splash';
 import moment from 'moment';
 import { ipcRenderer, remote, shell } from 'electron';
 import * as ACTIONS from 'constants/action_types';
@@ -19,7 +19,6 @@ import {
   doHideModal,
 } from 'redux/actions/app';
 import { Lbry, doToast, isURIValid, setSearchApi } from 'lbry-redux';
-import { doNavigate, doHistoryBack, doHistoryForward } from 'redux/actions/navigation';
 import { doDownloadLanguages, doUpdateIsNightAsync } from 'redux/actions/settings';
 import { doAuthenticate, Lbryio, rewards, doBlackListedOutpointsSubscribe } from 'lbryinc';
 import 'scss/all.scss';
@@ -46,11 +45,11 @@ if (process.env.SEARCH_API_URL) {
 
 // @if TARGET='app'
 ipcRenderer.on('navigate-backward', () => {
-  app.store.dispatch(doHistoryBack());
+  // app.store.dispatch(doHistoryBack());
 });
 
 ipcRenderer.on('navigate-forward', () => {
-  app.store.dispatch(doHistoryForward());
+  // app.store.dispatch(doHistoryForward());
 });
 // @endif
 
@@ -132,9 +131,9 @@ ipcRenderer.on('open-uri-requested', (event, uri, newSession) => {
       app.store.dispatch(doConditionalAuthNavigate(newSession));
     } else if (uri.startsWith(APPPAGEURL)) {
       const navpage = uri.replace(APPPAGEURL, '').toLowerCase();
-      app.store.dispatch(doNavigate(`/${navpage}`));
+      // app.store.dispatch(doNavigate(`/${navpage}`));
     } else if (isURIValid(uri)) {
-      app.store.dispatch(doNavigate('/show', { uri }));
+      // app.store.dispatch(doNavigate('/show', { uri }));
     } else {
       app.store.dispatch(
         doToast({
@@ -147,7 +146,7 @@ ipcRenderer.on('open-uri-requested', (event, uri, newSession) => {
 
 ipcRenderer.on('open-menu', (event, uri) => {
   if (uri && uri.startsWith('/help')) {
-    app.store.dispatch(doNavigate('/help'));
+    // app.store.dispatch(doNavigate('/help'));
   }
 });
 
@@ -233,9 +232,11 @@ const init = () => {
   app.store.dispatch(doBlackListedOutpointsSubscribe());
 
   function onDaemonReady() {
+    // @if TARGET='app'
     window.sessionStorage.setItem('loaded', 'y'); // once we've made it here once per session, we don't need to show splash again
-    app.store.dispatch(doDaemonReady());
+    // @endif
 
+    app.store.dispatch(doDaemonReady());
     ReactDOM.render(
       <Provider store={store}>
         <ErrorBoundary>
@@ -245,11 +246,9 @@ const init = () => {
       </Provider>,
       document.getElementById('app')
     );
-    // @if TARGET='web'
-    window.sessionStorage.removeItem('loaded');
-    // @endif
   }
 
+  // @if TARGET='app'
   if (window.sessionStorage.getItem('loaded') === 'y') {
     onDaemonReady();
   } else {
@@ -263,6 +262,10 @@ const init = () => {
       document.getElementById('app')
     );
   }
+  // @endif
+  // @if TARGET='web'
+  onDaemonReady();
+  // @endif
 };
 
 init();

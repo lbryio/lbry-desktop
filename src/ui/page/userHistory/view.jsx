@@ -9,7 +9,7 @@ class UserHistoryPage extends React.PureComponent<Props> {
   render() {
     return (
       <Page>
-        <UserHistory />
+        <UserHistory {...this.props} />
       </Page>
     );
   }

@@ -26,7 +26,7 @@ class FileExporter extends React.PureComponent<Props> {
 
   constructor() {
     super();
-    this.handleButtonClick = this.handleButtonClick.bind(this);
+    (this: any).handleButtonClick = this.handleButtonClick.bind(this);
   }
 
   handleFileCreation(filename: string, data: any) {

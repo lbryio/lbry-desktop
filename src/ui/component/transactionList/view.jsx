@@ -105,12 +105,10 @@ class TransactionList extends React.PureComponent<Props> {
             </div>
           )}
         </header>
-        {!transactionList.length && (
-          <p className="card__content">{emptyMessage || __('No transactions to list.')}</p>
-        )}
+        {!transactionList.length && <p>{emptyMessage || __('No transactions to list.')}</p>}
 
         {!!transactionList.length && (
-          <div className="card__content">
+          <React.Fragment>
             <table className="table table--transactions">
               <thead>
                 <tr>
@@ -133,7 +131,7 @@ class TransactionList extends React.PureComponent<Props> {
                 ))}
               </tbody>
             </table>
-          </div>
+          </React.Fragment>
         )}
       </React.Fragment>
     );

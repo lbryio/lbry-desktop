@@ -5,7 +5,6 @@ import {
   selectIsFetchingFileList,
   selectFileListDownloadedSort,
 } from 'lbry-redux';
-import { doNavigate } from 'redux/actions/navigation';
 import FileListDownloaded from './view';
 
 const select = state => ({
@@ -15,11 +14,7 @@ const select = state => ({
   sortBy: selectFileListDownloadedSort(state),
 });
 
-const perform = dispatch => ({
-  navigate: path => dispatch(doNavigate(path)),
-});
-
 export default connect(
   select,
-  perform
+  null
 )(FileListDownloaded);

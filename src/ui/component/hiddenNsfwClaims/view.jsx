@@ -16,7 +16,7 @@ export default (props: Props) => {
       <div className={className || 'help'}>
         {numberOfNsfwClaims} {numberOfNsfwClaims > 1 ? __('files') : __('file')}{' '}
         {__('hidden due to your')}{' '}
-        <Button button="link" navigate="/settings" label={__('content viewing preferences')} />.
+        <Button button="link" navigate="/$/settings" label={__('content viewing preferences')} />.
       </div>
     )
   );

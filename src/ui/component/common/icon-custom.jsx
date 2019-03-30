@@ -1,6 +1,6 @@
 // @flow
 import * as ICONS from 'constants/icons';
-import React from 'react';
+import React, { Fragment } from 'react';
 
 type IconProps = {
   size: number,
@@ -16,7 +16,7 @@ const buildIcon = iconStrokes => (props: IconProps) => {
       viewBox="0 0 24 24"
       width={size}
       height={size}
-      fill="none"
+      fill="solid"
       stroke={color}
       strokeWidth="2"
       strokeLinecap="round"
@@ -113,5 +113,17 @@ export const customIcons = {
   // Extended from the feather-icons Heart
   [ICONS.UNSUBSCRIBE]: buildIcon(
     <path d="M 12,5.67 10.94,4.61 C 5.7533356,-0.57666427 -2.0266644,7.2033357 3.16,12.39 l 1.06,1.06 7.78,7.78 7.78,-7.78 1.06,-1.06 c 2.149101,-2.148092 2.149101,-5.6319078 0,-7.78 -2.148092,-2.1491008 -5.631908,-2.1491008 -7.78,0 L 9.4481298,8.2303201 15.320603,9.2419066 11.772427,13.723825" />
+  ),
+  [ICONS.LBRY]: buildIcon(
+    <Fragment>
+      <path
+        transform="scale(0.15)"
+        d="M296.05, 85.9l0, 14.1l-138.8, 85.3l-104.6, -51.3l0.2, -7.9l104, 51.2l132.2, -81.2l0, -5.8l-124.8, -60.2l-139.2, 86.1l0, 38.5l131.8, 65.2l137.6, -84.4l3.9, 6l-141.1, 86.4l-139.2, -68.8l0, -46.8l145.8, -90.2l132.2, 63.8Z"
+      />
+      <path
+        transform="scale(0.15)"
+        d="M294.25, 150.9l2, -12.6l-12.2, -2.1l0.8, -4.9l17.1, 2.9l-2.8, 17.5l-4.9, -0.8Z"
+      />
+    </Fragment>
   ),
 };

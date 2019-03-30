@@ -35,7 +35,7 @@ class TransactionListRecent extends React.PureComponent<Props> {
 
           <p className="card__subtitle">
             {__('To view all of your transactions, navigate to the')}{' '}
-            <Button button="link" navigate="/history" label={__('transactions page')} />.
+            <Button button="link" navigate="/$/history" label={__('transactions page')} />.
           </p>
         </header>
 
@@ -53,14 +53,14 @@ class TransactionListRecent extends React.PureComponent<Props> {
                 transactions={transactions}
                 emptyMessage={__("Looks like you don't have any recent transactions.")}
               />
-              <div className="card__actions">
-                <Button
-                  button="primary"
-                  navigate="/history"
-                  label={__('Full History')}
-                  icon={icons.HISTORY}
-                />
-              </div>
+            </div>
+            <div className="card__actions">
+              <Button
+                button="primary"
+                navigate="/$/history"
+                label={__('Full History')}
+                icon={icons.HISTORY}
+              />
             </div>
           </Fragment>
         )}

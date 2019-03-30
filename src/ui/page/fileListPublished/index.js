@@ -4,7 +4,6 @@ import {
   selectFileListPublishedSort,
   selectMyClaimsWithoutChannels,
 } from 'lbry-redux';
-import { doNavigate } from 'redux/actions/navigation';
 import { doCheckPendingPublishes } from 'redux/actions/publish';
 import FileListPublished from './view';
 
@@ -15,7 +14,6 @@ const select = state => ({
 });
 
 const perform = dispatch => ({
-  navigate: path => dispatch(doNavigate(path)),
   checkPendingPublishes: () => dispatch(doCheckPendingPublishes()),
 });
 

@@ -52,6 +52,11 @@
   position: relative;
 }
 
+.navigation__links--bottom {
+  position: absolute;
+  bottom: var(--spacing-vertical-large);
+}
+
 .navigation__link {
   display: block;
   line-height: 1.75;
@@ -102,7 +107,7 @@
 
 .navigation__link--title {
   margin-bottom: var(--spacing-vertical-small);
-  padding-top: var(--spacing-vertical-medium);
+  padding-top: var(--spacing-vertical-large);
 
   color: $lbry-gray-5;
   cursor: default;

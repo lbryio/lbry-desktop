@@ -1,4 +1,5 @@
 // @flow
+import type { UrlLocation } from 'types/location';
 import React from 'react';
 import BusyIndicator from 'component/common/busy-indicator';
 import Button from 'component/button';
@@ -6,17 +7,18 @@ import UserEmailNew from 'component/userEmailNew';
 import UserEmailVerify from 'component/userEmailVerify';
 import UserVerify from 'component/userVerify';
 import Page from 'component/page';
+import { navigate } from '@reach/router';
 
 type Props = {
   isPending: boolean,
   email: string,
   pathAfterAuth: string,
+  location: UrlLocation,
   user: ?{
     has_verified_email: boolean,
     is_reward_approved: boolean,
     is_identity_verified: boolean,
   },
-  navigate: (string, ?{}) => void,
 };
 
 class AuthPage extends React.PureComponent<Props> {
@@ -29,14 +31,18 @@ class AuthPage extends React.PureComponent<Props> {
   }
 
   navigateIfAuthenticated = (props: Props) => {
-    const { isPending, user, pathAfterAuth, navigate } = props;
+    const { isPending, user, location } = props;
     if (
       !isPending &&
       user &&
       user.has_verified_email &&
       (user.is_reward_approved || user.is_identity_verified)
     ) {
-      navigate(pathAfterAuth);
+      const { search } = location;
+      const urlParams = new URLSearchParams(search);
+      const redirectTo = urlParams.get('redirect');
+      const path = redirectTo ? `/$/${redirectTo}` : '/';
+      navigate(path);
     }
   };
 
@@ -56,7 +62,6 @@ class AuthPage extends React.PureComponent<Props> {
   }
 
   render() {
-    const { navigate } = this.props;
     const [innerContent, useTemplate] = this.renderMain();
 
     return (
@@ -69,11 +74,7 @@ class AuthPage extends React.PureComponent<Props> {
               {`${__(
                 'This information is disclosed only to LBRY, Inc. and not to the LBRY network. It is only required to earn LBRY rewards and may be used to sync usage data across devices.'
               )} `}
-              <Button
-                button="link"
-                onClick={() => navigate('/discover')}
-                label={__('Return home.')}
-              />
+              <Button button="link" navigate="/" label={__('Return home.')} />
             </p>
           </section>
         ) : (

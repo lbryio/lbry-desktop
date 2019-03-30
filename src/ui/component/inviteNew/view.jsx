@@ -95,7 +95,7 @@ class InviteNew extends React.PureComponent<Props> {
           />
 
           <p className="help">
-            {__('Earn')} <Button button="link" navigate="/rewards" label={__('rewards')} />{' '}
+            {__('Earn')} <Button button="link" navigate="/$/rewards" label={__('rewards')} />{' '}
             {__('for inviting your friends.')} {__('Read our')}{' '}
             <Button button="link" label={__('FAQ')} href="https://lbry.com/faq/referrals" />{' '}
             {__('to learn more about referrals')}.

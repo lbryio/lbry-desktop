@@ -5,7 +5,6 @@ import {
   makeSelectIsUriResolving,
   makeSelectTotalItemsForChannel,
 } from 'lbry-redux';
-import { doNavigate } from 'redux/actions/navigation';
 import ChannelTile from './view';
 
 const select = (state, props) => ({
@@ -15,7 +14,6 @@ const select = (state, props) => ({
 });
 
 const perform = dispatch => ({
-  navigate: (path, params) => dispatch(doNavigate(path, params)),
   resolveUri: uri => dispatch(doResolveUri(uri)),
 });
 

@@ -4,9 +4,13 @@ const merge = require('webpack-merge');
 const baseConfig = require('./webpack.base.config.js');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const { DefinePlugin } = require('webpack');
+const { getIfUtils, removeEmpty } = require('webpack-config-utils');
 
 const STATIC_ROOT = path.resolve(__dirname, 'static/');
 const DIST_ROOT = path.resolve(__dirname, 'dist/');
+const NODE_ENV = process.env.NODE_ENV || 'development';
+
+const { ifProduction } = getIfUtils(NODE_ENV);
 
 let mainConfig = {
   target: 'electron-main',
@@ -20,7 +24,7 @@ let mainConfig = {
   module: {
     rules: [
       {
-        test: /\.jsx?$/,
+        test: /\.(jsx?$|s?css$)/,
         use: [
           {
             loader: 'preprocess-loader',
@@ -40,7 +44,11 @@ let mainConfig = {
       {
         from: `${STATIC_ROOT}/`,
         to: `${DIST_ROOT}/electron/static/`,
-        ignore: ['font/**/*'],
+        ignore: ['font/**/*', 'index.dev.html', 'index.html'],
+      },
+      {
+        from: ifProduction(`${STATIC_ROOT}/index.html`, `${STATIC_ROOT}/index.dev.html`),
+        to: `${DIST_ROOT}/electron/static/index.html`,
       },
     ]),
   ],

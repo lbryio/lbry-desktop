@@ -1,6 +1,5 @@
 import { connect } from 'react-redux';
 import { doResolveUri, selectBalance } from 'lbry-redux';
-import { doNavigate } from 'redux/actions/navigation';
 import {
   selectPublishFormValues,
   selectIsStillEditing,
@@ -35,7 +34,6 @@ const perform = dispatch => ({
   clearPublish: () => dispatch(doClearPublish()),
   resolveUri: uri => dispatch(doResolveUri(uri)),
   publish: params => dispatch(doPublish(params)),
-  navigate: path => dispatch(doNavigate(path)),
   prepareEdit: (claim, uri) => dispatch(doPrepareEdit(claim, uri)),
   resetThumbnailStatus: () => dispatch(doResetThumbnailStatus()),
 });

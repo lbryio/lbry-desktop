@@ -45,7 +45,7 @@ export default class ErrorBoundary extends React.Component<Props, State> {
                     button="link"
                     className="load-screen__button"
                     label={__('refreshing the app')}
-                    onClick={() => window.location.reload()}
+                    onClick={() => (window.location.href = '/')}
                   />{' '}
                   {__('to fix it')}.
                 </p>

@@ -28,7 +28,14 @@ export default class extends React.PureComponent<Props> {
 
     return (
       <div className="yrbl-wrap">
-        <img alt="Friendly gerbil" className={classnames('yrbl', className)} src={image} />
+        <img
+          alt="Friendly gerbil"
+          className={classnames('yrbl', className)}
+          src={
+            // If we don't use a leading `/` @reach/router will try to append the src url to the existing web url
+            `/${image}`
+          }
+        />
         {title && subtitle && (
           <div className="card__content">
             <h2 className="card__title">{title}</h2>

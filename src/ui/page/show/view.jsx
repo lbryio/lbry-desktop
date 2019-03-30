@@ -1,4 +1,5 @@
 // @flow
+import type { UrlLocation } from 'types/location';
 import React from 'react';
 import BusyIndicator from 'component/common/busy-indicator';
 import ChannelPage from 'page/channel';
@@ -13,6 +14,7 @@ type Props = {
   uri: string,
   claim: Claim,
   totalPages: number,
+  location: UrlLocation,
   blackListedOutpoints: Array<{
     txid: string,
     nout: number,
@@ -38,8 +40,7 @@ class ShowPage extends React.PureComponent<Props> {
   }
 
   render() {
-    const { claim, isResolvingUri, uri, blackListedOutpoints } = this.props;
-
+    const { claim, isResolvingUri, uri, blackListedOutpoints, location } = this.props;
     let innerContent = '';
 
     if (!claim || (claim && !claim.name)) {
@@ -58,7 +59,7 @@ class ShowPage extends React.PureComponent<Props> {
         </Page>
       );
     } else if (claim.name.length && claim.name[0] === '@') {
-      innerContent = <ChannelPage uri={uri} />;
+      innerContent = <ChannelPage uri={uri} location={location} />;
     } else if (claim && blackListedOutpoints) {
       let isClaimBlackListed = false;
 
@@ -89,7 +90,7 @@ class ShowPage extends React.PureComponent<Props> {
           </Page>
         );
       } else {
-        innerContent = <FilePage uri={uri} />;
+        innerContent = <FilePage uri={uri} location={location} />;
       }
     }
 

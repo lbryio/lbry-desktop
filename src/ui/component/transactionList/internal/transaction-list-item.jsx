@@ -1,5 +1,6 @@
 // @flow
 import type { Transaction } from 'types/transaction';
+import * as TXN_TYPES from 'constants/transaction_types';
 import * as ICONS from 'constants/icons';
 import React from 'react';
 import ButtonTransaction from 'component/common/transaction-link';
@@ -7,7 +8,7 @@ import CreditAmount from 'component/common/credit-amount';
 import DateTime from 'component/dateTime';
 import Button from 'component/button';
 import { buildURI } from 'lbry-redux';
-import * as txnTypes from 'constants/transaction_types';
+import { formatLbryUriForWeb } from 'util/uri';
 
 type Props = {
   transaction: Transaction,
@@ -26,7 +27,7 @@ class TransactionListItem extends React.PureComponent<Props> {
   }
 
   getLink(type: string) {
-    if (type === txnTypes.TIP) {
+    if (type === TXN_TYPES.TIP) {
       return <Button icon={ICONS.UNLOCK} onClick={this.abandonClaim} title={__('Unlock Tip')} />;
     }
     return <Button icon={ICONS.DELETE} onClick={this.abandonClaim} title={__('Abandon Claim')} />;
@@ -68,12 +69,7 @@ class TransactionListItem extends React.PureComponent<Props> {
         <td className="table__item--actionable">
           {reward && <span>{reward.reward_title}</span>}
           {name && claimId && (
-            <Button
-              constrict
-              button="link"
-              navigate="/show"
-              navigateParams={{ uri: buildURI({ claimName: name, claimId }) }}
-            >
+            <Button constrict button="link" navigate={buildURI({ claimName: name, claimId })}>
               {name}
             </Button>
           )}

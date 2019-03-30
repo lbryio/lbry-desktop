@@ -8,7 +8,6 @@ import { Lbryio } from 'lbryinc';
 type Props = {
   errorMessage: ?string,
   isPending: boolean,
-  navigate: string => void,
   verifyUserIdentity: string => void,
   verifyPhone: () => void,
 };
@@ -25,7 +24,7 @@ class UserVerify extends React.PureComponent<Props> {
   }
 
   render() {
-    const { errorMessage, isPending, navigate, verifyPhone } = this.props;
+    const { errorMessage, isPending, verifyPhone } = this.props;
     return (
       <React.Fragment>
         <section className="card card--section">
@@ -137,11 +136,7 @@ class UserVerify extends React.PureComponent<Props> {
 
           <div className="card__content">
             <div className="card__actions">
-              <Button
-                onClick={() => navigate('/discover')}
-                button="primary"
-                label={__('Skip Rewards')}
-              />
+              <Button navigate="/" button="primary" label={__('Skip Rewards')} />
             </div>
           </div>
         </section>

@@ -21,7 +21,6 @@ class FileListSearch extends React.PureComponent<Props> {
         <React.Fragment>
           <div className="search__results">
             <section className="search__results-section">
-              <div className="search__results-title">{__('Search Results')}</div>
               <HiddenNsfwClaims uris={uris} />
               {!isSearching && uris && uris.length ? (
                 uris.map(uri =>

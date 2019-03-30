@@ -139,6 +139,12 @@
   margin-right: var(--spacing-vertical-small);
 }
 
+.media__uri {
+  font-size: 1.1rem;
+  padding-bottom: 5px;
+  opacity: 0.6;
+}
+
 //  M E D I A
 //  A C T I O N S
 
@@ -508,21 +514,19 @@
     font-size: 2rem;
   }
 
-  @media (max-width: 600px) {
-    font-size: 1.75rem;
-  }
-
   .channel-info__actions__group {
-    button:first-of-type {
-      font-size: 2rem;
+    .button {
+      &:first-child {
+        font-size: 2rem;
 
-      .button__label {
-        margin: 0;
+        .button__label {
+          margin: 0;
+        }
       }
-    }
 
-    button:last-of-type {
-      font-weight: normal;
+      &:last-child {
+        font-weight: normal;
+      }
     }
   }
 }
