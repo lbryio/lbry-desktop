@@ -2,6 +2,7 @@
 import * as ICONS from 'constants/icons';
 import React from 'react';
 import Tooltip from 'component/common/tooltip';
+import classnames from 'classnames';
 import { customIcons } from './icon-custom';
 
 let featherIcons = false;
@@ -35,6 +36,7 @@ type Props = {
   tooltip?: string, // tooltip direction
   iconColor?: string,
   size?: number,
+  className?: string,
 };
 
 class IconComponent extends React.PureComponent<Props> {
@@ -63,7 +65,7 @@ class IconComponent extends React.PureComponent<Props> {
   };
 
   render() {
-    const { icon, tooltip, iconColor, size } = this.props;
+    const { icon, tooltip, iconColor, size, className } = this.props;
     const Icon = customIcons[this.props.icon] || LazyFeatherIcons[this.props.icon];
 
     if (!Icon) {
@@ -83,9 +85,16 @@ class IconComponent extends React.PureComponent<Props> {
     }
     const inner = (
       <React.Suspense
-        fallback={<svg height={iconSize} width={iconSize} className="icon" color={color} />}
+        fallback={
+          <svg
+            height={iconSize}
+            width={iconSize}
+            className={classnames('icon', className)}
+            color={color}
+          />
+        }
       >
-        <Icon size={iconSize} className="icon" color={color} />
+        <Icon size={iconSize} className={classnames('icon', className)} color={color} />
       </React.Suspense>
     );
 

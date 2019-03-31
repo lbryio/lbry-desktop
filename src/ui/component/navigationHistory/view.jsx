@@ -3,7 +3,7 @@ import * as React from 'react';
 import Button from 'component/button';
 import { Form, FormField } from 'component/common/form';
 import ReactPaginate from 'react-paginate';
-import UserHistoryItem from 'component/userHistoryItem';
+import NavigationHistoryItem from 'component/navigationHistoryItem';
 import { navigate } from '@reach/router';
 
 type HistoryItem = {
@@ -52,8 +52,7 @@ class UserHistoryPage extends React.PureComponent<Props, State> {
   }
 
   changePage(pageNumber: number) {
-    console.log('new', pageNumber);
-    navigate(`/$/user_history?page=${pageNumber}`);
+    navigate(`?page=${pageNumber}`);
   }
 
   paginate(e: SyntheticKeyboardEvent<*>) {
@@ -94,7 +93,7 @@ class UserHistoryPage extends React.PureComponent<Props, State> {
 
   render() {
     const { history = [], page, pageCount } = this.props;
-    console.log('this.props', this.props);
+
     const { itemsSelected } = this.state;
     const allSelected = Object.keys(itemsSelected).length === history.length;
     const selectHandler = allSelected ? this.unselectAll : this.selectAll;
@@ -118,7 +117,7 @@ class UserHistoryPage extends React.PureComponent<Props, State> {
         {!!history.length && (
           <section className="card__content item-list">
             {history.map(item => (
-              <UserHistoryItem
+              <NavigationHistoryItem
                 key={item.uri}
                 uri={item.uri}
                 lastViewed={item.lastViewed}

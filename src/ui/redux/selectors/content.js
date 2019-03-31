@@ -5,7 +5,9 @@ import {
   selectClaimsByUri,
   makeSelectClaimsInChannelForCurrentPageState,
 } from 'lbry-redux';
-import { HISTORY_ITEMS_PER_PAGE } from 'constants/content';
+
+const RECENT_HISTORY_AMOUNT = 10;
+const HISTORY_ITEMS_PER_PAGE = 50;
 
 export const selectState = (state: any) => state.content || {};
 
@@ -33,38 +35,39 @@ export const makeSelectContentPositionForUri = (uri: string) =>
     }
   );
 
-export const selectHistoryPageCount = createSelector(
+export const selectHistory = createSelector(
   selectState,
-  state => Math.ceil(state.history.length / HISTORY_ITEMS_PER_PAGE)
+  state => state.history || []
+);
+
+export const selectHistoryPageCount = createSelector(
+  selectHistory,
+  history => Math.ceil(history.length / HISTORY_ITEMS_PER_PAGE)
 );
 
 export const makeSelectHistoryForPage = (page: number) =>
   createSelector(
-    selectState,
+    selectHistory,
     selectClaimsByUri,
-    (state, claimsByUri) => {
+    (history, claimsByUri) => {
       const left = page * HISTORY_ITEMS_PER_PAGE;
-      const historyItems = state.history.slice(left, left + HISTORY_ITEMS_PER_PAGE);
-
-      // See if we have the claim info for the uris in your history
-      // If not, it will need to be fetched in the component
-      return historyItems.map(historyItem => {
-        const { uri, lastViewed } = historyItem;
-        const claimAtUri = claimsByUri[uri];
-
-        if (claimAtUri) {
-          return { lastViewed, uri, ...claimAtUri };
-        }
-        return historyItem;
-      });
+      const historyItemsForPage = history.slice(left, left + HISTORY_ITEMS_PER_PAGE);
+      return historyItemsForPage;
     }
   );
 
 export const makeSelectHistoryForUri = (uri: string) =>
   createSelector(
-    selectState,
-    state => state.history.find(i => i.uri === uri)
+    selectHistory,
+    history => history.find(i => i.uri === uri)
   );
+
+export const selectRecentHistory = createSelector(
+  selectHistory,
+  history => {
+    return history.slice(0, RECENT_HISTORY_AMOUNT);
+  }
+);
 
 export const makeSelectCategoryListUris = (uris: ?Array<string>, channel: string) =>
   createSelector(

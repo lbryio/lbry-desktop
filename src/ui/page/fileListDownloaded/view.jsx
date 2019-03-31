@@ -17,7 +17,9 @@ class FileListDownloaded extends React.PureComponent<Props> {
     const hasDownloads = fileInfos && Object.values(fileInfos).length > 0;
 
     return (
-      <Page notContained loading={fetching}>
+      // Removed the <Page> wapper to try combining this page with UserHistory
+      // This should eventually move into /components if we want to keep it this way
+      <React.Fragment>
         {hasDownloads ? (
           <FileList fileInfos={fileInfos} sortBy={sortBy} page={PAGES.DOWNLOADED} />
         ) : (
@@ -37,7 +39,7 @@ class FileListDownloaded extends React.PureComponent<Props> {
             </section>
           </div>
         )}
-      </Page>
+      </React.Fragment>
     );
   }
 }

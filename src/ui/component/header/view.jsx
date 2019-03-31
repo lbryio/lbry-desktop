@@ -4,6 +4,7 @@ import * as React from 'react';
 import Button from 'component/button';
 import LbcSymbol from 'component/common/lbc-symbol';
 import WunderBar from 'component/wunderbar';
+import Icon from 'component/common/icon';
 
 type Props = {
   autoUpdateDownloaded: boolean,
@@ -37,42 +38,26 @@ const Header = (props: Props) => {
     <header className="header">
       <div className="header__navigation">
         {/* @if TARGET='app' */}
-        <Button
-          className="header__navigation-item header__navigation-item--wallet"
-          description={__('Your wallet')}
-          title={`Your balance is ${balance} LBRY Credits`}
-          label={
-            <React.Fragment>
-              <span>{roundedBalance}</span>
-              <LbcSymbol />
-            </React.Fragment>
-          }
-          navigate="/$/wallet"
-        />
+        <div className="header__navigation-app">
+          <Icon className="lbry-icon" icon={ICONS.LBRY} />
+          <div className="header__navigation-arrows">
+            <Button
+              className="header__navigation-item header__navigation-item--back"
+              description={__('Navigate back')}
+              onClick={() => window.history.back()}
+              icon={ICONS.ARROW_LEFT}
+              iconSize={15}
+            />
 
-        <Button
-          className="header__navigation-item header__navigation-item--back"
-          description={__('Navigate back')}
-          onClick={() => window.history.back()}
-          icon={ICONS.ARROW_LEFT}
-          iconSize={15}
-        />
-
-        <Button
-          className="header__navigation-item header__navigation-item--forward"
-          description={__('Navigate forward')}
-          onClick={() => window.history.forward()}
-          icon={ICONS.ARROW_RIGHT}
-          iconSize={15}
-        />
-
-        <Button
-          className="header__navigation-item header__navigation-item--home"
-          description={__('Home')}
-          icon={ICONS.HOME}
-          iconSize={15}
-          navigate="/"
-        />
+            <Button
+              className="header__navigation-item header__navigation-item--forward"
+              description={__('Navigate forward')}
+              onClick={() => window.history.forward()}
+              icon={ICONS.ARROW_RIGHT}
+              iconSize={15}
+            />
+          </div>
+        </div>
         {/* @endif */}
         {/* @if TARGET='web' */}
         <Button
@@ -92,6 +77,19 @@ const Header = (props: Props) => {
           description={__('Menu')}
           icon={ICONS.MENU}
           iconSize={15}
+        />
+
+        <Button
+          className="header__navigation-item header__navigation-item--wallet"
+          description={__('Your wallet')}
+          title={`Your balance is ${balance} LBRY Credits`}
+          label={
+            <React.Fragment>
+              <span>{roundedBalance}</span>
+              <LbcSymbol />
+            </React.Fragment>
+          }
+          navigate="/$/wallet"
         />
 
         <Button

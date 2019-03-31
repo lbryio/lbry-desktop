@@ -19,25 +19,38 @@
   display: flex;
 
   &:first-of-type {
-    html[data-mode='dark'] & {
-      border-color: $lbry-gray-5;
-    }
-
     // Main navigation collapses into a menu button
     // at smaller screen widths
-
     @media (min-width: 601px) {
-      /* @if TARGET='app' */
-      width: 250px;
-      /* @endif */
-      /* @if TARGET='web' */
       width: 170px;
-      /* @endif */
     }
 
     @media (max-width: 600px) {
       width: calc(var(--header-height) * 3 + 1px);
     }
+  }
+}
+
+.header__navigation-app {
+  flex: 1;
+  display: flex;
+  justify-content: space-between;
+
+  // LBRY logo in the top left corner
+  .lbry-icon {
+    height: 1rem;
+    width: 1rem;
+    padding-left: 3.5rem;
+    padding-top: 1.5rem;
+    margin-right: 3.6rem;
+    overflow: visible;
+  }
+
+  .header__navigation-arrows {
+    flex: 1;
+    display: flex;
+    justify-content: flex-end;
+    border-left: 1px solid $lbry-gray-1;
   }
 }
 
@@ -73,6 +86,7 @@
 .header__navigation-item--home,
 .header__navigation-item--menu {
   width: var(--header-height);
+
   svg {
     &:only-child {
       // Header icons are a little different because they are larger
@@ -95,7 +109,7 @@
     overflow: visible;
     color: $lbry-white;
     opacity: 1;
-    top: -0.2rem;
+    top: -0.8rem;
   }
 }
 
@@ -130,7 +144,7 @@
 
 .header__navigation-item--wallet {
   border-right: 1px solid $lbry-gray-1;
-  width: calc(100% - (var(--header-height) * 3));
+  width: 10rem;
 
   html[data-mode='dark'] & {
     border-color: $lbry-gray-5;

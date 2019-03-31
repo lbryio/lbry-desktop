@@ -1,37 +1,42 @@
 .item-list {
   background-color: $lbry-white;
   margin-top: var(--spacing-vertical-large);
+  margin-bottom: var(--spacing-vertical-large);
   padding: var(--spacing-vertical-large);
 
   html[data-mode='dark'] & {
     background-color: rgba($lbry-white, 0.1);
   }
+
+  .card__actions {
+    margin-top: var(--spacing-vertical-medium);
+    margin-left: var(--spacing-vertical-small);
+  }
 }
 
-.item-list__item {
+.item-list__row {
   align-items: center;
   display: flex;
   padding: var(--spacing-vertical-small);
-
-  input,
-  .item-list__item--cutoff {
-    margin-right: var(--spacing-vertical-large);
-  }
 
   fieldset-section {
     margin-bottom: 0;
   }
 }
 
-.item-list__item--cutoff {
-  max-width: 350px;
+.item-list__element {
   overflow-x: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+
+  &:not(:first-of-type) {
+    padding-left: var(--spacing-vertical-small);
+  }
 }
 
-.item-list__item--selected {
-  background-color: $lbry-gray-1;
+.item-list__row:hover,
+.item-list__row--selected {
+  background-color: rgba($lbry-black, 0.1);
 
   html[data-mode='dark'] & {
     background-color: rgba($lbry-black, 0.5);
