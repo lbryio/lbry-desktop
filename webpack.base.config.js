@@ -14,7 +14,7 @@ const UI_ROOT = path.resolve(__dirname, 'src/ui/');
 const STATIC_ROOT = path.resolve(__dirname, 'static/');
 const DIST_ROOT = path.resolve(__dirname, 'dist/');
 
-console.log(ifProduction('production', 'development'))
+console.log(ifProduction('production', 'development'));
 
 let baseConfig = {
   mode: ifProduction('production', 'development'),
@@ -84,7 +84,7 @@ let baseConfig = {
   plugins: [
     new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
     new webpack.EnvironmentPlugin(['NODE_ENV']),
-    new BundleAnalyzerPlugin(),
+    // new BundleAnalyzerPlugin(),
     new ProvidePlugin({
       i18n: ['i18n', 'default'],
       __: ['i18n/__', 'default'],
