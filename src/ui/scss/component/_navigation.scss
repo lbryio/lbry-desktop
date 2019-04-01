@@ -5,6 +5,9 @@
   padding-top: var(--spacing-vertical-large);
   padding-right: var(--spacing-vertical-small);
   position: relative;
+  display: flex;
+  flex-direction: column;
+  overflow-y: overlay;
 
   html[data-mode='dark'] & {
     background-color: $lbry-black;
@@ -15,7 +18,7 @@
   // on smaller screen widths
 
   @media (min-width: 601px) {
-    min-width: 171px; // 1px is for the border
+    width: 171px; // 1px is for the border
   }
 
   @media (max-width: 600px) {
@@ -53,8 +56,8 @@
 }
 
 .navigation__links--bottom {
-  position: absolute;
-  bottom: var(--spacing-vertical-large);
+  margin-top: auto;
+  margin-bottom: var(--spacing-vertical-large);
 }
 
 .navigation__link {

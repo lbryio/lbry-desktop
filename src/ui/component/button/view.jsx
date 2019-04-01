@@ -107,9 +107,11 @@ class Button extends React.PureComponent<Props> {
         to={path}
         title={title}
         onClick={e => e.stopPropagation()}
-        getProps={({ isCurrent }) => ({
+        getProps={({ isCurrent, isPartiallyCurrent }) => ({
           className:
-            isCurrent && activeClass ? `${combinedClassName} ${activeClass}` : combinedClassName,
+            (path === '/' ? isCurrent : isPartiallyCurrent) && activeClass
+              ? `${combinedClassName} ${activeClass}`
+              : combinedClassName,
         })}
       >
         {content}

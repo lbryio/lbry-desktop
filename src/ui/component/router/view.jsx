@@ -4,7 +4,7 @@ import { Router } from '@reach/router';
 import SettingsPage from 'page/settings';
 import HelpPage from 'page/help';
 import ReportPage from 'page/report';
-import WalletPage from 'page/wallet';
+import AccountPage from 'page/account';
 import ShowPage from 'page/show';
 import PublishPage from 'page/publish';
 import DiscoverPage from 'page/discover';
@@ -18,6 +18,8 @@ import BackupPage from 'page/backup';
 import SubscriptionsPage from 'page/subscriptions';
 import SearchPage from 'page/search';
 import UserHistoryPage from 'page/userHistory';
+import SendCreditsPage from 'page/sendCredits';
+import NavigationHistory from 'page/navigationHistory';
 
 export default function AppRouter(props) {
   return (
@@ -38,9 +40,12 @@ export default function AppRouter(props) {
       <SearchPage path={`$/${PAGES.SEARCH}`} />
       <SettingsPage path={`$/${PAGES.SETTINGS}`} />
       <SubscriptionsPage path={`$/${PAGES.SUBSCRIPTIONS}`} />
-      <TransactionHistoryPage path={`$/${PAGES.HISTORY}`} />
-      <UserHistoryPage path={`$/${PAGES.USER_HISTORY}`} />
-      <WalletPage path={`$/${PAGES.WALLET}`} />
+      <TransactionHistoryPage path={`$/${PAGES.TRANSACTIONS}`} />
+      <UserHistoryPage path={`$/${PAGES.HISTORY}`} />
+      <AccountPage path={`$/${PAGES.ACCOUNT}`} />
+      <SendCreditsPage path={`$/${PAGES.SEND}`} />
+      <UserHistoryPage path={`$/${PAGES.HISTORY}`} />
+      <NavigationHistory path={`$/${PAGES.HISTORY}/all`} />
     </Router>
   );
 }

@@ -1,6 +1,5 @@
 import { connect } from 'react-redux';
 import { selectHistoryPageCount, makeSelectHistoryForPage } from 'redux/selectors/content';
-import { selectCurrentParams, makeSelectCurrentParam } from 'lbry-redux';
 import { doClearContentHistoryUri } from 'redux/actions/content';
 import UserHistory from './view';
 

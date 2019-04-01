@@ -43,7 +43,7 @@ class SideBar extends React.PureComponent<Props> {
         <ul className="navigation__links">
           {[
             {
-              ...buildLink(null, __('Home'), ICONS.HOME),
+              ...buildLink(null, __('Discover'), ICONS.DISCOVER),
             },
             {
               ...buildLink(
@@ -54,53 +54,46 @@ class SideBar extends React.PureComponent<Props> {
                 ICONS.SUBSCRIPTION
               ),
             },
+            {
+              ...buildLink(PAGES.PUBLISHED, 'Publishes', ICONS.PUBLISHED),
+            },
+            {
+              ...buildLink(PAGES.HISTORY, 'History', ICONS.HISTORY),
+            },
           ].map(renderLink)}
         </ul>
-
-        <div className="navigation__link navigation__link--title">My LBRY</div>
-
-        <div className="navigation__links">
-          <ul>
-            {[
-              {
-                ...buildLink(PAGES.DOWNLOADED, 'Downloads', ICONS.LOCAL),
-              },
-              {
-                ...buildLink(PAGES.PUBLISHED, 'Publishes', ICONS.PUBLISHED),
-              },
-              {
-                ...buildLink(PAGES.USER_HISTORY, 'History', ICONS.HISTORY),
-              },
-              {
-                ...buildLink(PAGES.INVITE, 'Invite', ICONS.INVITE),
-              },
-              {
-                ...buildLink(PAGES.REWARDS, 'Rewards', ICONS.FEATURED),
-              },
-            ].map(renderLink)}
-          </ul>
-        </div>
-        <div className="navigation__link navigation__link--title">Wallet</div>
+        <div className="navigation__link navigation__link--title">Account</div>
 
         <ul className="navigation__links">
           {[
             {
-              ...buildLink(PAGES.WALLET, 'Overview', ICONS.WALLET),
+              ...buildLink(PAGES.ACCOUNT, 'Overview', ICONS.ACCOUNT),
             },
             {
-              ...buildLink(PAGES.HISTORY, 'Transactions', ICONS.TRANSACTIONS),
+              ...buildLink(PAGES.INVITE, 'Invite', ICONS.INVITE),
             },
+            {
+              ...buildLink(PAGES.REWARDS, 'Rewards', ICONS.FEATURED),
+            },
+            {
+              ...buildLink(PAGES.SEND, 'Send & Recieve', ICONS.SEND),
+            },
+            {
+              ...buildLink(PAGES.TRANSACTIONS, 'Transactions', ICONS.TRANSACTIONS),
+            },
+            {
+              ...buildLink(PAGES.SETTINGS, 'Settings', ICONS.SETTINGS),
+            },
+            // @if TARGET='app'
             {
               ...buildLink(PAGES.BACKUP, 'Backup', ICONS.BACKUP),
             },
+            // @endif
           ].map(renderLink)}
         </ul>
 
         <ul className="navigation__links navigation__links--bottom">
           {[
-            {
-              ...buildLink(PAGES.SETTINGS, 'Settings', ICONS.SETTINGS),
-            },
             {
               ...buildLink(PAGES.HELP, 'Help', ICONS.HELP),
             },
