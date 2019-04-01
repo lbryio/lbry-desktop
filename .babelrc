@@ -1,10 +1,10 @@
 {
   "presets": ["@babel/react", "@babel/flow"],
   "plugins": [
+    "@babel/plugin-syntax-dynamic-import",
     "react-hot-loader/babel",
     ["@babel/plugin-proposal-decorators", { "decoratorsBeforeExport": true }],
     "@babel/plugin-transform-flow-strip-types",
     "@babel/plugin-proposal-class-properties",
-    "babel-plugin-add-module-exports"
   ]
 }

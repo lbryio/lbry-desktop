@@ -3,7 +3,6 @@ export default async function installDevtools() {
     default: installExtension,
     REACT_DEVELOPER_TOOLS,
     REDUX_DEVTOOLS,
-    REACT_PERF,
   } = require('electron-devtools-installer');
 
   await installExtension(REACT_DEVELOPER_TOOLS)
@@ -14,7 +13,4 @@ export default async function installDevtools() {
     .then(name => console.log(`Added Extension:  ${name}`))
     .catch(err => console.log('An error occurred: ', err));
 
-  await installExtension(REACT_PERF)
-    .then(name => console.log(`Added Extension:  ${name}`))
-    .catch(err => console.log('An error occurred: ', err));
 }

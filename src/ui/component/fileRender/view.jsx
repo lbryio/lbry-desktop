@@ -9,7 +9,10 @@ import DocxViewer from 'component/viewers/docxViewer';
 import HtmlViewer from 'component/viewers/htmlViewer';
 import AudioVideoViewer from 'component/viewers/audioVideoViewer';
 // @if TARGET='app'
-import ThreeViewer from 'component/viewers/threeViewer';
+const ThreeViewer = React.lazy(() => import(
+  /* webpackChunkName: "threeViewer" */
+  'component/viewers/threeViewer'
+));
 // @endif
 
 type Props = {
@@ -173,7 +176,13 @@ class FileRender extends React.PureComponent<Props> {
   }
 
   render() {
-    return <div className="file-render">{this.renderViewer()}</div>;
+    return (
+      <div className="file-render">
+        <React.Suspense fallback={<div></div>}>
+          {this.renderViewer()}
+        </React.Suspense>
+      </div>
+    );
   }
 }
 

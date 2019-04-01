@@ -2,8 +2,9 @@
 import type { Claim } from 'types/claim';
 import React from 'react';
 import { stopContextMenu } from 'util/context-menu';
-import videojs from 'video.js';
-import 'video.js/dist/video-js.css';
+import(/* webpackChunkName: "videojs" */
+/* webpackPreload: true */
+'video.js/dist/video-js.css');
 
 type Props = {
   source: {
@@ -38,7 +39,12 @@ class AudioVideoViewer extends React.PureComponent<Props> {
       sources,
     };
 
-    this.player = videojs(this.videoNode, videoJsOptions, () => {});
+    import(/* webpackChunkName: "videojs" */
+    /* webpackMode: "lazy" */
+    /* webpackPreload: true */
+    'video.js').then(videojs => {
+      this.player = videojs.default(this.videoNode, videoJsOptions, () => {});
+    });
   }
 
   componentWillUnmount() {
