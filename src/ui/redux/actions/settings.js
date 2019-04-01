@@ -30,7 +30,7 @@ export function doSetDaemonSetting(key, value) {
     };
     Lbry.settings_set(newSettings).then(newSettings);
     Lbry.settings_get().then(settings => {
-      analytics.toggle(settings.share_usage_data, true);
+      analytics.toggle(settings.share_usage_data);
       dispatch({
         type: ACTIONS.DAEMON_SETTINGS_RECEIVED,
         data: {

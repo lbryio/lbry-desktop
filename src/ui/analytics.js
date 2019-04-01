@@ -1,48 +1,31 @@
 // @flow
-import mixpanel from 'mixpanel-browser';
 import { Lbryio } from 'lbryinc';
-import isDev from 'electron-is-dev';
-
-if (isDev) {
-  mixpanel.init('691723e855cabb9d27a7a79002216967');
-} else {
-  mixpanel.init('af5c6b8110068fa4f5c4600c81f05e60');
-}
+import ReactGA from 'react-ga';
+import { globalHistory } from '@reach/router';
 
 type Analytics = {
-  track: (string, ?Object) => void,
+  pageView: string => void,
   setUser: Object => void,
   toggle: (boolean, ?boolean) => void,
   apiLogView: (string, string, string, ?number, ?() => void) => void,
   apiLogPublish: () => void,
 };
 
-let analyticsEnabled: boolean = false;
-
+let analyticsEnabled: boolean = true;
 const analytics: Analytics = {
-  track: (name, payload) => {
+  pageView: path => {
     if (analyticsEnabled) {
-      if (payload) {
-        mixpanel.track(name, payload);
-      } else {
-        mixpanel.track(name);
-      }
+      ReactGA.pageview(path);
     }
   },
   setUser: user => {
-    if (user.id) {
-      mixpanel.identify(user.id);
-    }
-    if (user.primary_email) {
-      mixpanel.people.set({
-        $email: 1,
-      });
-    }
+    // Commented out because currently there is some delay before we know the user
+    // We should retrieve this server side so we have it immediately
+    // if (analyticsEnabled && user.id) {
+    //   ReactGA.set('userId', user.id);
+    // }
   },
-  toggle: (enabled: boolean, logDisabled: ?boolean): void => {
-    if (!enabled && logDisabled) {
-      mixpanel.track('DISABLED');
-    }
+  toggle: (enabled: boolean): void => {
     analyticsEnabled = enabled;
   },
   apiLogView: (uri, outpoint, claimId, timeToStart, onSuccessCb) => {
@@ -86,5 +69,22 @@ const analytics: Analytics = {
     Lbryio.call('feedback', 'search', { query, vote });
   },
 };
+
+// Initialize google analytics
+// Set `debug: true` for debug info
+ReactGA.initialize('UA-60403362-12', {
+  gaOptions: { name: IS_WEB ? 'web' : 'desktop' },
+  testMode: process.env.NODE_ENV !== 'production',
+});
+
+// Manually call the first page view
+// Reach Router doesn't include this on `history.listen`
+analytics.pageView(window.location.pathname + window.location.search);
+
+// Listen for url changes and report
+// This will include search queries/filter options
+globalHistory.listen(({ location }) =>
+  analytics.pageView(window.location.pathname + window.location.search)
+);
 
 export default analytics;

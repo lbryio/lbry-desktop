@@ -4,6 +4,7 @@ import Icon from 'component/common/icon';
 import classnames from 'classnames';
 import { Link } from '@reach/router';
 import { formatLbryUriForWeb } from 'util/uri';
+import { OutboundLink } from 'react-ga';
 
 type Props = {
   onClick: ?(any) => any,
@@ -85,9 +86,14 @@ class Button extends React.PureComponent<Props> {
 
     if (href) {
       return (
-        <a href={href} className={combinedClassName}>
+        <OutboundLink
+          eventLabel="outboundClick"
+          to={href}
+          target="_blank"
+          className={combinedClassName}
+        >
           {content}
-        </a>
+        </OutboundLink>
       );
     }
 

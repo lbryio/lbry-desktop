@@ -93,7 +93,6 @@ class UserHistoryPage extends React.PureComponent<Props, State> {
 
   render() {
     const { history = [], page, pageCount } = this.props;
-
     const { itemsSelected } = this.state;
     const allSelected = Object.keys(itemsSelected).length === history.length;
     const selectHandler = allSelected ? this.unselectAll : this.selectAll;
