@@ -16,6 +16,7 @@ const webConfig = {
   output: {
     filename: '[name].js',
     path: __dirname + '/dist/web',
+    publicPath: '/',
   },
   module: {
     rules: [
