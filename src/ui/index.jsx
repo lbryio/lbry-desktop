@@ -173,26 +173,6 @@ document.addEventListener('click', event => {
   let { target } = event;
 
   while (target && target !== document) {
-    if (target.matches('a') || target.matches('button')) {
-      // TODO: Look into using accessiblity labels (this would also make the app more accessible)
-      const hrefParts = window.location.href.split('#');
-
-      // Buttons that we want to track should use `data-id`
-      // This prevents multiple buttons being grouped together if they have the same text
-      const element =
-        target.dataset.id || target.title || (target.textContent && target.textContent.trim());
-      if (element) {
-        analytics.track('CLICK', {
-          target: element,
-          location: hrefParts.length > 1 ? hrefParts[hrefParts.length - 1] : '/',
-        });
-      } else {
-        analytics.track('UNMARKED_CLICK', {
-          location: hrefParts.length > 1 ? hrefParts[hrefParts.length - 1] : '/',
-          source: target.outerHTML,
-        });
-      }
-    }
     if (target.matches('a[href^="http"]') || target.matches('a[href^="mailto"]')) {
       // @if TARGET='app'
       event.preventDefault();
