@@ -1,5 +1,5 @@
 import * as PAGES from 'constants/pages';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Router } from '@reach/router';
 import SettingsPage from 'page/settings';
 import HelpPage from 'page/help';
@@ -21,31 +21,46 @@ import UserHistoryPage from 'page/userHistory';
 import SendCreditsPage from 'page/sendCredits';
 import NavigationHistory from 'page/navigationHistory';
 
-export default function AppRouter(props) {
+const ScrollHandler = props => {
+  const { key } = props.location;
+
+  useEffect(() => {
+    // This shouldn't scroll to top when you click "back"
+    // Might take some more work but fixes scroll position being stuck on navigation for now
+    const main = document.querySelector('main');
+    main.scrollIntoView();
+  }, [key]);
+
+  return props.children;
+};
+
+export default function AppRouter() {
   return (
     <Router>
-      <DiscoverPage path="/" />
-      <ShowPage path="/:claimName/:claimId" />
-      <ShowPage path="/:claimName" />
+      <ScrollHandler path="/">
+        <DiscoverPage path="/" />
+        <ShowPage path="/:claimName/:claimId" />
+        <ShowPage path="/:claimName" />
 
-      <AuthPage path={`$/${PAGES.AUTH}`} />
-      <BackupPage path={`$/${PAGES.BACKUP}`} />
-      <InvitePage path={`$/${PAGES.INVITE}`} />
-      <FileListDownloaded path={`$/${PAGES.DOWNLOADED}`} />
-      <FileListPublished path={`$/${PAGES.PUBLISHED}`} />
-      <HelpPage path={`$/${PAGES.HELP}`} />
-      <PublishPage path={`$/${PAGES.PUBLISH}`} />
-      <ReportPage path={`$/${PAGES.REPORT}`} />
-      <RewardsPage path={`$/${PAGES.REWARDS}`} />
-      <SearchPage path={`$/${PAGES.SEARCH}`} />
-      <SettingsPage path={`$/${PAGES.SETTINGS}`} />
-      <SubscriptionsPage path={`$/${PAGES.SUBSCRIPTIONS}`} />
-      <TransactionHistoryPage path={`$/${PAGES.TRANSACTIONS}`} />
-      <UserHistoryPage path={`$/${PAGES.HISTORY}`} />
-      <AccountPage path={`$/${PAGES.ACCOUNT}`} />
-      <SendCreditsPage path={`$/${PAGES.SEND}`} />
-      <UserHistoryPage path={`$/${PAGES.HISTORY}`} />
-      <NavigationHistory path={`$/${PAGES.HISTORY}/all`} />
+        <AuthPage path={`$/${PAGES.AUTH}`} />
+        <BackupPage path={`$/${PAGES.BACKUP}`} />
+        <InvitePage path={`$/${PAGES.INVITE}`} />
+        <FileListDownloaded path={`$/${PAGES.DOWNLOADED}`} />
+        <FileListPublished path={`$/${PAGES.PUBLISHED}`} />
+        <HelpPage path={`$/${PAGES.HELP}`} />
+        <PublishPage path={`$/${PAGES.PUBLISH}`} />
+        <ReportPage path={`$/${PAGES.REPORT}`} />
+        <RewardsPage path={`$/${PAGES.REWARDS}`} />
+        <SearchPage path={`$/${PAGES.SEARCH}`} />
+        <SettingsPage path={`$/${PAGES.SETTINGS}`} />
+        <SubscriptionsPage path={`$/${PAGES.SUBSCRIPTIONS}`} />
+        <TransactionHistoryPage path={`$/${PAGES.TRANSACTIONS}`} />
+        <UserHistoryPage path={`$/${PAGES.HISTORY}`} />
+        <AccountPage path={`$/${PAGES.ACCOUNT}`} />
+        <SendCreditsPage path={`$/${PAGES.SEND}`} />
+        <UserHistoryPage path={`$/${PAGES.HISTORY}`} />
+        <NavigationHistory path={`$/${PAGES.HISTORY}/all`} />
+      </ScrollHandler>
     </Router>
   );
 }
