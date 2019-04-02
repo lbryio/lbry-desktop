@@ -10,6 +10,16 @@
   .media__properties {
     height: 1em;
   }
+
+  &:hover {
+    box-shadow: 0 0 50px rgba($lbry-black, 0.08);
+    background-color: rgba($lbry-black, 0.04);
+
+    html[data-mode='dark'] & {
+      box-shadow: 0 0 50px rgba($lbry-white, 0.07);
+      background-color: rgba($lbry-white, 0.03);
+    }
+  }
 }
 
 //  M E D I A
