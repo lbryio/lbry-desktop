@@ -47,6 +47,7 @@ type Props = {
   nextFileToPlay: ?string,
   navigate: (string, {}) => void,
   costInfo: ?{ cost: number },
+  insufficientCredits: boolean,
 };
 
 class FileViewer extends React.PureComponent<Props> {
@@ -150,7 +151,11 @@ class FileViewer extends React.PureComponent<Props> {
   }
 
   playContent() {
-    const { play, uri, fileInfo, isDownloading, isLoading } = this.props;
+    const { play, uri, fileInfo, isDownloading, isLoading, insufficientCredits } = this.props;
+
+    if (insufficientCredits) {
+      return;
+    }
 
     // @if TARGET='app'
     if (fileInfo || isDownloading || isLoading) {
@@ -220,6 +225,7 @@ class FileViewer extends React.PureComponent<Props> {
       className,
       obscureNsfw,
       mediaType,
+      insufficientCredits,
     } = this.props;
 
     const isPlaying = playingUri === uri;
@@ -246,7 +252,10 @@ class FileViewer extends React.PureComponent<Props> {
     }
 
     const poster = metadata && metadata.thumbnail;
-    const layoverClass = classnames('content__cover', { 'card__media--nsfw': shouldObscureNsfw });
+    const layoverClass = classnames('content__cover', {
+      'card__media--nsfw': shouldObscureNsfw,
+      'card__media--disabled': insufficientCredits,
+    });
 
     const layoverStyle =
       !shouldObscureNsfw && poster ? { backgroundImage: `url("${poster}")` } : {};

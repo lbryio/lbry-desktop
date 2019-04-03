@@ -14,6 +14,7 @@ import {
   doPublish,
   doPrepareEdit,
 } from 'redux/actions/publish';
+import { selectUnclaimedRewardValue } from 'lbryinc';
 import PublishPage from './view';
 
 const select = state => ({
@@ -27,6 +28,7 @@ const select = state => ({
   isStillEditing: selectIsStillEditing(state),
   balance: selectBalance(state),
   isResolvingUri: selectIsResolvingPublishUris(state),
+  totalRewardValue: selectUnclaimedRewardValue(state),
 });
 
 const perform = dispatch => ({

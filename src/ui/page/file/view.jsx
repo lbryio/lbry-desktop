@@ -42,6 +42,7 @@ type Props = {
   openModal: (id: string, { uri: string }) => void,
   markSubscriptionRead: (string, string) => void,
   fetchViewCount: string => void,
+  balance: number,
 };
 
 class FilePage extends React.Component<Props> {
@@ -135,6 +136,7 @@ class FilePage extends React.Component<Props> {
       fileInfo,
       channelUri,
       viewCount,
+      balance,
     } = this.props;
 
     // File info
@@ -147,6 +149,7 @@ class FilePage extends React.Component<Props> {
     const mediaType = getMediaType(contentType, fileName);
     const showFile =
       PLAYABLE_MEDIA_TYPES.includes(mediaType) || PREVIEW_MEDIA_TYPES.includes(mediaType);
+
     const speechShareable =
       costInfo &&
       costInfo.cost === 0 &&
@@ -168,11 +171,32 @@ class FilePage extends React.Component<Props> {
       editUri = buildURI(uriObject);
     }
 
+    const insufficientCredits = costInfo && costInfo.cost > balance;
+
     return (
       <Page notContained className="main--file-page">
         <div className="grid-area--content">
-          <h1 className="media__uri">{uri}</h1>
-          {showFile && <FileViewer className="content__embedded" uri={uri} mediaType={mediaType} />}
+          <h1 className="media__uri">
+            <Button navigate={uri} label={uri} />
+          </h1>
+          {insufficientCredits && (
+            <div className="media__insufficient-credits help--warning">
+              {__(
+                'The publisher has chosen to charge LBC to view this content. Your balance is currently to low to view it.'
+              )}{' '}
+              {__('Checkout')}{' '}
+              <Button button="link" navigate="/$/rewards" label={__('the rewards page')} />{' '}
+              {__('or send more LBC to your wallet.')}
+            </div>
+          )}
+          {showFile && (
+            <FileViewer
+              insufficientCredits={insufficientCredits}
+              className="content__embedded"
+              uri={uri}
+              mediaType={mediaType}
+            />
+          )}
           {!showFile &&
             (thumbnail ? (
               <Thumbnail shouldObscure={shouldObscureThumbnail} src={thumbnail} />

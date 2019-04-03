@@ -10,7 +10,6 @@ import ModalUpgrade from 'modal/modalUpgrade';
 import ModalWelcome from 'modal/modalWelcome';
 import ModalFirstReward from 'modal/modalFirstReward';
 import ModalRewardApprovalRequired from 'modal/modalRewardApprovalRequired';
-import ModalCreditIntro from 'modal/modalCreditIntro';
 import ModalRemoveFile from 'modal/modalRemoveFile';
 import ModalTransactionFailed from 'modal/modalTransactionFailed';
 import ModalFileTimeout from 'modal/modalFileTimeout';
@@ -32,162 +31,76 @@ import ModalRewardCode from 'modal/modalRewardCode';
 type Props = {
   modal: { id: string, modalProps: {} },
   error: { message: string },
-  openModal: string => void,
-  page: string,
-  isWelcomeAcknowledged: boolean,
-  isEmailCollectionAcknowledged: boolean,
-  isVerificationCandidate: boolean,
-  isCreditIntroAcknowledged: boolean,
-  balance: number,
-  showPageCost: number,
-  user: {
-    is_reward_approved: boolean,
-    is_identity_verified: boolean,
-    has_verified_email: boolean,
-  },
 };
 
-type State = {
-  lastTransitionModal: ?string,
-  lastTransitionPage: ?string,
-};
+function ModalRouter(props: Props) {
+  const { modal, error } = props;
 
-class ModalRouter extends React.PureComponent<Props, State> {
-  constructor(props: Props) {
-    super(props);
-
-    this.state = {
-      lastTransitionModal: null,
-      lastTransitionPage: null,
-    };
+  if (error) {
+    return <ModalError {...error} />;
   }
 
-  componentWillMount() {
-    this.showTransitionModals(this.props);
+  if (!modal) {
+    return null;
   }
 
-  componentWillReceiveProps(nextProps: Props) {
-    this.showTransitionModals(nextProps);
-  }
+  const { id, modalProps } = modal;
 
-  showTransitionModals(props: Props) {
-    const { modal, openModal, page } = props;
-
-    if (modal) {
-      return;
-    }
-
-    const transitionModal = [this.checkShowCreditIntro].reduce(
-      (acc, func) => (!acc ? func.bind(this)(props) : acc),
-      false
-    );
-
-    if (
-      transitionModal &&
-      (transitionModal !== this.state.lastTransitionModal || page !== this.state.lastTransitionPage)
-    ) {
-      openModal(transitionModal);
-      this.setState({
-        lastTransitionModal: transitionModal,
-        lastTransitionPage: page,
-      });
-    }
-  }
-
-  checkShowCreditIntro(props: Props) {
-    // @if TARGET='app'
-    // This doesn't make sense to show until the web has wallet support
-    const { balance, page, isCreditIntroAcknowledged } = props;
-
-    if (
-      balance === 0 &&
-      !isCreditIntroAcknowledged &&
-      (['send', 'publish'].includes(page) || this.isPaidShowPage(props))
-    ) {
-      return MODALS.INSUFFICIENT_CREDITS;
-    }
-    // @endif
-
-    return undefined;
-  }
-
-  isPaidShowPage(props: Props) {
-    const { page, showPageCost } = props;
-    // Fix me
-    return page === 'show' && showPageCost > 0;
-  }
-
-  render() {
-    const { modal, error } = this.props;
-
-    if (error) {
-      return <ModalError {...error} />;
-    }
-
-    if (!modal) {
+  switch (id) {
+    case MODALS.UPGRADE:
+      return <ModalUpgrade {...modalProps} />;
+    case MODALS.DOWNLOADING:
+      return <ModalDownloading {...modalProps} />;
+    case MODALS.AUTO_UPDATE_DOWNLOADED:
+      return <ModalAutoUpdateDownloaded {...modalProps} />;
+    case MODALS.AUTO_UPDATE_CONFIRM:
+      return <ModalAutoUpdateConfirm {...modalProps} />;
+    case MODALS.ERROR:
+      return <ModalError {...modalProps} />;
+    case MODALS.FILE_TIMEOUT:
+      return <ModalFileTimeout {...modalProps} />;
+    case MODALS.WELCOME:
+      return <ModalWelcome {...modalProps} />;
+    case MODALS.FIRST_REWARD:
+      return <ModalFirstReward {...modalProps} />;
+    case MODALS.AUTHENTICATION_FAILURE:
+      return <ModalAuthFailure {...modalProps} />;
+    case MODALS.TRANSACTION_FAILED:
+      return <ModalTransactionFailed {...modalProps} />;
+    case MODALS.REWARD_APPROVAL_REQUIRED:
+      return <ModalRewardApprovalRequired {...modalProps} />;
+    case MODALS.CONFIRM_FILE_REMOVE:
+      return <ModalRemoveFile {...modalProps} />;
+    case MODALS.AFFIRM_PURCHASE:
+      return <ModalAffirmPurchase {...modalProps} />;
+    case MODALS.CONFIRM_CLAIM_REVOKE:
+      return <ModalRevokeClaim {...modalProps} />;
+    case MODALS.PHONE_COLLECTION:
+      return <ModalPhoneCollection {...modalProps} />;
+    case MODALS.FIRST_SUBSCRIPTION:
+      return <ModalFirstSubscription {...modalProps} />;
+    case MODALS.SEND_TIP:
+      return <ModalSendTip {...modalProps} />;
+    case MODALS.SOCIAL_SHARE:
+      return <ModalSocialShare {...modalProps} />;
+    case MODALS.PUBLISH:
+      return <ModalPublish {...modalProps} />;
+    case MODALS.CONFIRM_EXTERNAL_LINK:
+      return <ModalOpenExternalLink {...modalProps} />;
+    case MODALS.CONFIRM_TRANSACTION:
+      return <ModalConfirmTransaction {...modalProps} />;
+    case MODALS.CONFIRM_THUMBNAIL_UPLOAD:
+      return <ModalConfirmThumbnailUpload {...modalProps} />;
+    case MODALS.WALLET_ENCRYPT:
+      return <ModalWalletEncrypt {...modalProps} />;
+    case MODALS.WALLET_DECRYPT:
+      return <ModalWalletDecrypt {...modalProps} />;
+    case MODALS.WALLET_UNLOCK:
+      return <ModalWalletUnlock {...modalProps} />;
+    case MODALS.REWARD_GENERATED_CODE:
+      return <ModalRewardCode {...modalProps} />;
+    default:
       return null;
-    }
-
-    const { id, modalProps } = modal;
-
-    switch (id) {
-      case MODALS.UPGRADE:
-        return <ModalUpgrade {...modalProps} />;
-      case MODALS.DOWNLOADING:
-        return <ModalDownloading {...modalProps} />;
-      case MODALS.AUTO_UPDATE_DOWNLOADED:
-        return <ModalAutoUpdateDownloaded {...modalProps} />;
-      case MODALS.AUTO_UPDATE_CONFIRM:
-        return <ModalAutoUpdateConfirm {...modalProps} />;
-      case MODALS.ERROR:
-        return <ModalError {...modalProps} />;
-      case MODALS.FILE_TIMEOUT:
-        return <ModalFileTimeout {...modalProps} />;
-      case MODALS.INSUFFICIENT_CREDITS:
-        return <ModalCreditIntro {...modalProps} />;
-      case MODALS.WELCOME:
-        return <ModalWelcome {...modalProps} />;
-      case MODALS.FIRST_REWARD:
-        return <ModalFirstReward {...modalProps} />;
-      case MODALS.AUTHENTICATION_FAILURE:
-        return <ModalAuthFailure {...modalProps} />;
-      case MODALS.TRANSACTION_FAILED:
-        return <ModalTransactionFailed {...modalProps} />;
-      case MODALS.REWARD_APPROVAL_REQUIRED:
-        return <ModalRewardApprovalRequired {...modalProps} />;
-      case MODALS.CONFIRM_FILE_REMOVE:
-        return <ModalRemoveFile {...modalProps} />;
-      case MODALS.AFFIRM_PURCHASE:
-        return <ModalAffirmPurchase {...modalProps} />;
-      case MODALS.CONFIRM_CLAIM_REVOKE:
-        return <ModalRevokeClaim {...modalProps} />;
-      case MODALS.PHONE_COLLECTION:
-        return <ModalPhoneCollection {...modalProps} />;
-      case MODALS.FIRST_SUBSCRIPTION:
-        return <ModalFirstSubscription {...modalProps} />;
-      case MODALS.SEND_TIP:
-        return <ModalSendTip {...modalProps} />;
-      case MODALS.SOCIAL_SHARE:
-        return <ModalSocialShare {...modalProps} />;
-      case MODALS.PUBLISH:
-        return <ModalPublish {...modalProps} />;
-      case MODALS.CONFIRM_EXTERNAL_LINK:
-        return <ModalOpenExternalLink {...modalProps} />;
-      case MODALS.CONFIRM_TRANSACTION:
-        return <ModalConfirmTransaction {...modalProps} />;
-      case MODALS.CONFIRM_THUMBNAIL_UPLOAD:
-        return <ModalConfirmThumbnailUpload {...modalProps} />;
-      case MODALS.WALLET_ENCRYPT:
-        return <ModalWalletEncrypt {...modalProps} />;
-      case MODALS.WALLET_DECRYPT:
-        return <ModalWalletDecrypt {...modalProps} />;
-      case MODALS.WALLET_UNLOCK:
-        return <ModalWalletUnlock {...modalProps} />;
-      case MODALS.REWARD_GENERATED_CODE:
-        return <ModalRewardCode {...modalProps} />;
-      default:
-        return null;
-    }
   }
 }
 

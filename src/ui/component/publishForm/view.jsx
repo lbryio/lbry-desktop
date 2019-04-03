@@ -332,6 +332,7 @@ class PublishForm extends React.PureComponent<Props> {
       resetThumbnailStatus,
       isStillEditing,
       amountNeededForTakeover,
+      balance,
     } = this.props;
 
     const formDisabled = (!filePath && !editingURI) || publishing;
@@ -352,7 +353,7 @@ class PublishForm extends React.PureComponent<Props> {
         <Form onSubmit={this.handlePublish}>
           <section
             className={classnames('card card--section', {
-              'card--disabled': IS_WEB || publishing,
+              'card--disabled': IS_WEB || publishing || balance === 0,
             })}
           >
             <header className="card__header">

@@ -41,6 +41,7 @@ export default function AppRouter() {
         <DiscoverPage path="/" />
         <ShowPage path="/:claimName/:claimId" />
         <ShowPage path="/:claimName" />
+        {/* <ShowPage path="/" uri="five" /> */}
 
         <AuthPage path={`$/${PAGES.AUTH}`} />
         <BackupPage path={`$/${PAGES.BACKUP}`} />
