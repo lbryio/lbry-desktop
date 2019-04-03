@@ -1,6 +1,8 @@
 {
   "presets": ["@babel/react", "@babel/flow"],
   "plugins": [
+    "import-glob",
+    "@babel/plugin-transform-runtime",
     "@babel/plugin-syntax-dynamic-import",
     "react-hot-loader/babel",
     ["@babel/plugin-proposal-decorators", { "decoratorsBeforeExport": true }],

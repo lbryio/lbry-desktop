@@ -24,8 +24,10 @@ import {
   parseURI,
   creditsToString,
   doError,
-  makeSelectCostInfoForUri,
 } from 'lbry-redux';
+import {
+  makeSelectCostInfoForUri,
+} from 'lbryinc';
 import { makeSelectClientSetting, selectosNotificationsEnabled } from 'redux/selectors/settings';
 import analytics from 'analytics';
 import { formatLbryUriForWeb } from 'util/uri';

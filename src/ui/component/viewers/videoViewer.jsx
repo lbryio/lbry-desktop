@@ -1,10 +1,12 @@
 // @flow
 import type { Claim } from 'types/claim';
-import React from 'react';
+import React, { Suspense } from 'react';
 import { stopContextMenu } from 'util/context-menu';
-import(/* webpackChunkName: "videojs" */
-/* webpackPreload: true */
-'video.js/dist/video-js.css');
+import(
+  /* webpackChunkName: "videojs" */
+  /* webpackPreload: true */
+  'video.js/dist/video-js.css'
+);
 
 type Props = {
   source: {
@@ -39,11 +41,16 @@ class AudioVideoViewer extends React.PureComponent<Props> {
       sources,
     };
 
-    import(/* webpackChunkName: "videojs" */
-    /* webpackMode: "lazy" */
-    /* webpackPreload: true */
-    'video.js').then(videojs => {
-      this.player = videojs.default(this.videoNode, videoJsOptions, () => {});
+    import(
+      /* webpackChunkName: "videojs" */
+      /* webpackMode: "lazy" */
+      /* webpackPreload: true */
+      'video.js'
+    ).then(videojs => {
+      if (videojs.__esModule) {
+        videojs = videojs.default;
+      }
+      this.player = videojs(this.videoNode, videoJsOptions, () => {});
     });
   }
 

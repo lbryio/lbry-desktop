@@ -1,11 +1,15 @@
 // @flow
-import * as React from 'react';
+import React, { Suspense } from 'react';
 import ReactDOMServer from 'react-dom/server';
 import MarkdownPreview from 'component/common/markdown-preview';
-import SimpleMDE from 'react-simplemde-editor';
 import 'easymde/dist/easymde.min.css';
 import Toggle from 'react-toggle';
 import { openEditorMenu, stopContextMenu } from 'util/context-menu';
+
+const SimpleMDE = React.lazy(() => import(
+  /* webpackChunkName: "SimpleMDE" */
+  'react-simplemde-editor'
+));
 
 type Props = {
   name: string,
@@ -132,19 +136,21 @@ export class FormField extends React.PureComponent<Props> {
           <div className="form-field--SimpleMDE" onContextMenu={stopContextMenu}>
             <fieldset-section>
               <label htmlFor={name}>{label}</label>
-              <SimpleMDE
-                {...inputProps}
-                id={name}
-                type="textarea"
-                events={handleEvents}
-                options={{
-                  hideIcons: ['heading', 'image', 'fullscreen', 'side-by-side'],
-                  previewRender(plainText) {
-                    const preview = <MarkdownPreview content={plainText} />;
-                    return ReactDOMServer.renderToString(preview);
-                  },
-                }}
-              />
+              <Suspense fallback={<div></div>}>
+                <SimpleMDE
+                  {...inputProps}
+                  id={name}
+                  type="textarea"
+                  events={handleEvents}
+                  options={{
+                    hideIcons: ['heading', 'image', 'fullscreen', 'side-by-side'],
+                    previewRender(plainText) {
+                      const preview = <MarkdownPreview content={plainText} />;
+                      return ReactDOMServer.renderToString(preview);
+                    },
+                  }}
+                />
+              </Suspense>
             </fieldset-section>
           </div>
         );

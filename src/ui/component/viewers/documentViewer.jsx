@@ -1,6 +1,6 @@
 // @flow
 
-import React from 'react';
+import React, { Suspense } from 'react';
 import LoadingScreen from 'component/common/loading-screen';
 import MarkdownPreview from 'component/common/markdown-preview';
 
@@ -84,7 +84,7 @@ class DocumentViewer extends React.PureComponent<Props, State> {
       <div className="file-render__viewer document-viewer">
         {loading && !error && <LoadingScreen status={loadingMessage} spinner />}
         {error && <LoadingScreen status={errorMessage} spinner={!error} />}
-        {isReady && this.renderDocument()}
+        {isReady && <Suspense fallback={<div></div>}>{this.renderDocument()}</Suspense>}
       </div>
     );
   }

@@ -1,13 +1,35 @@
 // @flow
 import type { Claim } from 'types/claim';
 import { remote } from 'electron';
-import React from 'react';
+import React, { Suspense } from 'react';
 import LoadingScreen from 'component/common/loading-screen';
-import PdfViewer from 'component/viewers/pdfViewer';
-import DocumentViewer from 'component/viewers/documentViewer';
-import DocxViewer from 'component/viewers/docxViewer';
-import HtmlViewer from 'component/viewers/htmlViewer';
-import AudioVideoViewer from 'component/viewers/audioVideoViewer';
+import VideoViewer from 'component/viewers/videoViewer';
+
+const AudioViewer = React.lazy(() => import(
+  /* webpackChunkName: "audioViewer" */
+  'component/viewers/audioViewer'
+));
+
+const DocumentViewer = React.lazy(() => import(
+  /* webpackChunkName: "documentViewer" */
+  'component/viewers/documentViewer'
+));
+
+const DocxViewer = React.lazy(() => import(
+  /* webpackChunkName: "docxViewer" */
+  'component/viewers/docxViewer'
+));
+
+const HtmlViewer = React.lazy(() => import(
+  /* webpackChunkName: "htmlViewer" */
+  'component/viewers/htmlViewer'
+));
+
+const PdfViewer = React.lazy(() => import(
+  /* webpackChunkName: "pdfViewer" */
+  'component/viewers/pdfViewer'
+));
+
 // @if TARGET='app'
 const ThreeViewer = React.lazy(() => import(
   /* webpackChunkName: "threeViewer" */
@@ -97,6 +119,8 @@ class FileRender extends React.PureComponent<Props> {
   renderViewer() {
     const { source, mediaType, currentTheme, poster, claim } = this.props;
 
+    console.log('mediaType', mediaType);
+
     // Extract relevant data to render file
     const { stream, fileType, contentType, downloadPath, fileName } = source;
 
@@ -123,7 +147,7 @@ class FileRender extends React.PureComponent<Props> {
         />
       ),
       video: (
-        <AudioVideoViewer
+        <VideoViewer
           claim={claim}
           source={{ downloadPath, fileName }}
           contentType={contentType}
@@ -131,7 +155,7 @@ class FileRender extends React.PureComponent<Props> {
         />
       ),
       audio: (
-        <AudioVideoViewer
+        <AudioViewer
           claim={claim}
           source={{ downloadPath, fileName }}
           contentType={contentType}
@@ -176,6 +200,7 @@ class FileRender extends React.PureComponent<Props> {
   }
 
   render() {
+    console.log('RENDER')
     return (
       <div className="file-render">
         <React.Suspense fallback={<div></div>}>
