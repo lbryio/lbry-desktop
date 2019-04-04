@@ -30,7 +30,7 @@
     "run:web": "cross-env NODE_ENV=production yarn compile:web && node ./dist/web/server.js",
     "pack": "electron-builder --dir",
     "dist": "electron-builder",
-    "build": "yarn compile && electron-builder build",
+    "build": "cross-env NODE_ENV=production yarn compile:electron && electron-builder build",
     "build:dir": "yarn build -- --dir -c.compression=store -c.mac.identity=null",
     "lint": "eslint 'src/**/*.{js,jsx}' --fix && flow",
     "format": "prettier 'src/**/*.{js,jsx,scss,json}' --write",

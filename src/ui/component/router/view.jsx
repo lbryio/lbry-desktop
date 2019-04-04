@@ -28,7 +28,9 @@ const ScrollHandler = props => {
     // This shouldn't scroll to top when you click "back"
     // Might take some more work but fixes scroll position being stuck on navigation for now
     const main = document.querySelector('main');
-    main.scrollIntoView();
+    if (main) {
+      main.scrollIntoView();
+    }
   }, [key]);
 
   return props.children;
