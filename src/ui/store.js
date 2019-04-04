@@ -1,31 +1,12 @@
-import appReducer from 'redux/reducers/app';
-import availabilityReducer from 'redux/reducers/availability';
-import contentReducer from 'redux/reducers/content';
-import {
-  claimsReducer,
-  fileInfoReducer,
-  searchReducer,
-  walletReducer,
-  notificationsReducer,
-} from 'lbry-redux';
-import {
-  userReducer,
-  rewardsReducer,
-  costInfoReducer,
-  blacklistReducer,
-  homepageReducer,
-  statsReducer,
-} from 'lbryinc';
-import navigationReducer from 'redux/reducers/navigation';
-import settingsReducer from 'redux/reducers/settings';
-import subscriptionsReducer from 'redux/reducers/subscriptions';
-import publishReducer from 'redux/reducers/publish';
 import { persistStore, autoRehydrate } from 'redux-persist';
 import createCompressor from 'redux-persist-transform-compress';
 import createFilter from 'redux-persist-transform-filter';
 import localForage from 'localforage';
-import { createStore, applyMiddleware, compose, combineReducers } from 'redux';
+import { createStore, applyMiddleware, compose } from 'redux';
 import thunk from 'redux-thunk';
+import { createHashHistory, createBrowserHistory } from 'history';
+import { connectRouter, routerMiddleware } from 'connected-react-router';
+import createRootReducer from './reducers';
 
 function isFunction(object) {
   return typeof object === 'function';
@@ -55,34 +36,18 @@ function enableBatching(reducer) {
   };
 }
 
-const reducers = combineReducers({
-  app: appReducer,
-  navigation: navigationReducer,
-  availability: availabilityReducer,
-  claims: claimsReducer,
-  fileInfo: fileInfoReducer,
-  content: contentReducer,
-  costInfo: costInfoReducer,
-  rewards: rewardsReducer,
-  search: searchReducer,
-  settings: settingsReducer,
-  wallet: walletReducer,
-  user: userReducer,
-  subscriptions: subscriptionsReducer,
-  publish: publishReducer,
-  notifications: notificationsReducer,
-  blacklist: blacklistReducer,
-  homepage: homepageReducer,
-  stats: statsReducer,
-});
-
+// @if TARGET='app'
+const history = createHashHistory();
+// @endif
+// @if TARGET='web'
+const history = createBrowserHistory();
+// @endif
 const bulkThunk = createBulkThunkMiddleware();
-const middleware = [thunk, bulkThunk];
-
+const middleware = [routerMiddleware(history), thunk, bulkThunk];
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
 const store = createStore(
-  enableBatching(reducers),
+  enableBatching(createRootReducer(history)),
   {}, // initial state
   composeEnhancers(
     autoRehydrate({
@@ -126,4 +91,4 @@ window.cacheStore = persistStore(store, persistOptions, err => {
 });
 // @endif
 
-export default store;
+export { store, history };

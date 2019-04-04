@@ -11,7 +11,7 @@ import classnames from 'classnames';
 import FilePrice from 'component/filePrice';
 import { openCopyLinkMenu } from 'util/context-menu';
 import DateTime from 'component/dateTime';
-import { navigate } from '@reach/router';
+import { withRouter } from 'react-router-dom';
 import { formatLbryUriForWeb } from 'util/uri';
 
 type Props = {
@@ -29,6 +29,7 @@ type Props = {
   isNew: boolean,
   placeholder: boolean,
   preventResolve: boolean,
+  history: { push: string => void },
 };
 
 class FileCard extends React.PureComponent<Props> {
@@ -70,6 +71,7 @@ class FileCard extends React.PureComponent<Props> {
       isNew,
       isResolvingUri,
       placeholder,
+      history,
     } = this.props;
 
     const abandoned = !isResolvingUri && !claim && !pending && !placeholder;
@@ -110,7 +112,7 @@ class FileCard extends React.PureComponent<Props> {
 
     const onClick = e => {
       e.stopPropagation();
-      navigate(formatLbryUriForWeb(uri));
+      history.push(formatLbryUriForWeb(uri));
     };
 
     return (
@@ -147,4 +149,4 @@ class FileCard extends React.PureComponent<Props> {
   }
 }
 
-export default FileCard;
+export default withRouter(FileCard);

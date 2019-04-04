@@ -12,7 +12,7 @@ import Page from 'component/page';
 import FileList from 'component/fileList';
 import HiddenNsfwClaims from 'component/hiddenNsfwClaims';
 import Button from 'component/button';
-import { navigate } from '@reach/router';
+import { withRouter } from 'react-router-dom';
 
 type Props = {
   uri: string,
@@ -23,7 +23,7 @@ type Props = {
   claimsInChannel: Array<Claim>,
   channelIsMine: boolean,
   fetchClaims: (string, number) => void,
-  navigate: (string, {}) => void,
+  history: { push: string => void },
   openModal: (id: string, { uri: string }) => void,
   location: UrlLocation,
 };
@@ -39,6 +39,7 @@ function ChannelPage(props: Props) {
     openModal,
     fetchClaims,
     location,
+    history,
   } = props;
 
   const { name, permanent_url: permanentUrl } = claim;
@@ -56,7 +57,7 @@ function ChannelPage(props: Props) {
       return;
     }
 
-    navigate(`?page=${pageNumber}`);
+    history.push(`?page=${pageNumber}`);
   };
 
   const paginate = (e: SyntheticKeyboardEvent<*>) => {
@@ -143,4 +144,4 @@ function ChannelPage(props: Props) {
   );
 }
 
-export default ChannelPage;
+export default withRouter(ChannelPage);

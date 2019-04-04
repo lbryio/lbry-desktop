@@ -4,7 +4,7 @@ import Button from 'component/button';
 import { Form, FormField } from 'component/common/form';
 import ReactPaginate from 'react-paginate';
 import NavigationHistoryItem from 'component/navigationHistoryItem';
-import { navigate } from '@reach/router';
+import { withRouter } from 'react-router-dom';
 
 type HistoryItem = {
   uri: string,
@@ -12,11 +12,12 @@ type HistoryItem = {
 };
 
 type Props = {
-  history: Array<HistoryItem>,
+  historyItems: Array<HistoryItem>,
   page: number,
   pageCount: number,
   clearHistoryUri: string => void,
   params: { page: number },
+  history: { push: string => void },
 };
 
 type State = {
@@ -52,7 +53,8 @@ class UserHistoryPage extends React.PureComponent<Props, State> {
   }
 
   changePage(pageNumber: number) {
-    navigate(`?page=${pageNumber}`);
+    const { history } = this.props;
+    history.push(`?page=${pageNumber}`);
   }
 
   paginate(e: SyntheticKeyboardEvent<*>) {
@@ -69,9 +71,9 @@ class UserHistoryPage extends React.PureComponent<Props, State> {
   }
 
   selectAll() {
-    const { history } = this.props;
+    const { historyItems } = this.props;
     const newSelectedState = {};
-    history.forEach(({ uri }) => (newSelectedState[uri] = true));
+    historyItems.forEach(({ uri }) => (newSelectedState[uri] = true));
     this.setState({ itemsSelected: newSelectedState });
   }
 
@@ -92,7 +94,7 @@ class UserHistoryPage extends React.PureComponent<Props, State> {
   }
 
   render() {
-    const { history = [], page, pageCount } = this.props;
+    const { historyItems = [], page, pageCount } = this.props;
     const { itemsSelected } = this.state;
     const allSelected = Object.keys(itemsSelected).length === history.length;
     const selectHandler = allSelected ? this.unselectAll : this.selectAll;
@@ -113,9 +115,9 @@ class UserHistoryPage extends React.PureComponent<Props, State> {
             onClick={selectHandler}
           />
         </div>
-        {!!history.length && (
+        {!!historyItems.length && (
           <section className="card__content item-list">
-            {history.map(item => (
+            {historyItems.map(item => (
               <NavigationHistoryItem
                 key={item.uri}
                 uri={item.uri}
@@ -182,4 +184,4 @@ class UserHistoryPage extends React.PureComponent<Props, State> {
     );
   }
 }
-export default UserHistoryPage;
+export default withRouter(UserHistoryPage);

@@ -3,7 +3,6 @@ import React from 'react';
 import Router from 'component/router/index';
 import ModalRouter from 'modal/modalRouter';
 import ReactModal from 'react-modal';
-import throttle from 'util/throttle';
 import SideBar from 'component/sideBar';
 import Header from 'component/header';
 import { openContextMenu } from 'util/context-menu';

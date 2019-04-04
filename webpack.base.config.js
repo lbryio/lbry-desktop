@@ -53,7 +53,7 @@ let baseConfig = {
         use: {
           loader: 'file-loader',
           options: {
-            outputPath: '$/static/img',
+            outputPath: 'static/img',
             name: '[name].[ext]',
           },
         },
@@ -63,7 +63,7 @@ let baseConfig = {
         use: {
           loader: 'file-loader',
           options: {
-            outputPath: '$/static/font',
+            outputPath: 'static/font',
           },
         },
       },

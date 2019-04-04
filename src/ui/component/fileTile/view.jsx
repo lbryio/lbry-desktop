@@ -12,7 +12,7 @@ import FilePrice from 'component/filePrice';
 import UriIndicator from 'component/uriIndicator';
 import DateTime from 'component/dateTime';
 import Yrbl from 'component/yrbl';
-import { navigate } from '@reach/router';
+import { withRouter } from 'react-router-dom';
 import { formatLbryUriForWeb } from 'util/uri';
 
 type Props = {
@@ -32,6 +32,7 @@ type Props = {
   size: string,
   isSubscribed: boolean,
   isNew: boolean,
+  history: { push: string => void },
 };
 
 class FileTile extends React.PureComponent<Props> {
@@ -91,6 +92,7 @@ class FileTile extends React.PureComponent<Props> {
       hideNoResult,
       displayHiddenMessage,
       size,
+      history,
     } = this.props;
 
     if (!claim && isResolvingUri) {
@@ -136,7 +138,7 @@ class FileTile extends React.PureComponent<Props> {
 
     const wrapperProps = name
       ? {
-        onClick: () => navigate(formatLbryUriForWeb(uri)),
+        onClick: () => history.push(formatLbryUriForWeb(uri)),
         role: 'button',
       }
       : {};
@@ -209,7 +211,7 @@ class FileTile extends React.PureComponent<Props> {
 
                     clearPublish(); // to remove any existing publish data
                     updatePublishForm({ name: claimName }); // to populate the name
-                    navigate('/publish');
+                    history.push('/publish');
                   }}
                 />
               }
@@ -221,4 +223,4 @@ class FileTile extends React.PureComponent<Props> {
   }
 }
 
-export default FileTile;
+export default withRouter(FileTile);

@@ -4,13 +4,11 @@ import * as ICONS from 'constants/icons';
 import * as React from 'react';
 import { isURIValid } from 'lbry-redux';
 import Button from 'component/button';
-import { navigate } from '@reach/router';
 
 type Props = {
   href: string,
   title?: string,
   children: React.Node,
-  navigate: (string, ?{}) => void,
   openModal: (id: string, { uri: string }) => void,
 };
 
@@ -21,7 +19,7 @@ class ExternalLink extends React.PureComponent<Props> {
   };
 
   createLink() {
-    const { href, title, children, openModal, navigate } = this.props;
+    const { href, title, children, openModal } = this.props;
 
     // Regex for url protocol
     const protocolRegex = new RegExp('^(https?|lbry)+:', 'i');

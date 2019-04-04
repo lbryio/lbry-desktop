@@ -1,6 +1,6 @@
 import * as PAGES from 'constants/pages';
 import React, { useEffect } from 'react';
-import { Router } from '@reach/router';
+import { Route, Switch } from 'react-router-dom';
 import SettingsPage from 'page/settings';
 import HelpPage from 'page/help';
 import ReportPage from 'page/report';
@@ -21,49 +21,32 @@ import UserHistoryPage from 'page/userHistory';
 import SendCreditsPage from 'page/sendCredits';
 import NavigationHistory from 'page/navigationHistory';
 
-const ScrollHandler = props => {
-  const { key } = props.location;
-
-  useEffect(() => {
-    // This shouldn't scroll to top when you click "back"
-    // Might take some more work but fixes scroll position being stuck on navigation for now
-    const main = document.querySelector('main');
-    if (main) {
-      main.scrollIntoView();
-    }
-  }, [key]);
-
-  return props.children;
-};
-
 export default function AppRouter() {
   return (
-    <Router>
-      <ScrollHandler path="/">
-        <DiscoverPage path="/" />
-        <ShowPage path="/:claimName/:claimId" />
-        <ShowPage path="/:claimName" />
-        {/* <ShowPage path="/" uri="five" /> */}
+    <Switch>
+      <Route path="/" exact component={DiscoverPage} />
+      <Route path={`/$/${PAGES.AUTH}`} exact component={AuthPage} />
+      <Route path={`/$/${PAGES.BACKUP}`} exact component={BackupPage} />
+      <Route path={`/$/${PAGES.INVITE}`} exact component={InvitePage} />
+      <Route path={`/$/${PAGES.DOWNLOADED}`} exact component={FileListDownloaded} />
+      <Route path={`/$/${PAGES.PUBLISHED}`} exact component={FileListPublished} />
+      <Route path={`/$/${PAGES.HELP}`} exact component={HelpPage} />
+      <Route path={`/$/${PAGES.PUBLISH}`} exact component={PublishPage} />
+      <Route path={`/$/${PAGES.REPORT}`} exact component={ReportPage} />
+      <Route path={`/$/${PAGES.REWARDS}`} exact component={RewardsPage} />
+      <Route path={`/$/${PAGES.SEARCH}`} exact component={SearchPage} />
+      <Route path={`/$/${PAGES.SETTINGS}`} exact component={SettingsPage} />
+      <Route path={`/$/${PAGES.SUBSCRIPTIONS}`} exact component={SubscriptionsPage} />
+      <Route path={`/$/${PAGES.TRANSACTIONS}`} exact component={TransactionHistoryPage} />
+      <Route path={`/$/${PAGES.HISTORY}`} exact component={UserHistoryPage} />
+      <Route path={`/$/${PAGES.ACCOUNT}`} exact component={AccountPage} />
+      <Route path={`/$/${PAGES.SEND}`} exact component={SendCreditsPage} />
+      <Route path={`/$/${PAGES.HISTORY}`} exact component={UserHistoryPage} />
+      <Route path={`/$/${PAGES.HISTORY}/all`} exact component={NavigationHistory} />
 
-        <AuthPage path={`$/${PAGES.AUTH}`} />
-        <BackupPage path={`$/${PAGES.BACKUP}`} />
-        <InvitePage path={`$/${PAGES.INVITE}`} />
-        <FileListDownloaded path={`$/${PAGES.DOWNLOADED}`} />
-        <FileListPublished path={`$/${PAGES.PUBLISHED}`} />
-        <HelpPage path={`$/${PAGES.HELP}`} />
-        <PublishPage path={`$/${PAGES.PUBLISH}`} />
-        <ReportPage path={`$/${PAGES.REPORT}`} />
-        <RewardsPage path={`$/${PAGES.REWARDS}`} />
-        <SearchPage path={`$/${PAGES.SEARCH}`} />
-        <SettingsPage path={`$/${PAGES.SETTINGS}`} />
-        <SubscriptionsPage path={`$/${PAGES.SUBSCRIPTIONS}`} />
-        <TransactionHistoryPage path={`$/${PAGES.TRANSACTIONS}`} />
-        <UserHistoryPage path={`$/${PAGES.HISTORY}`} />
-        <AccountPage path={`$/${PAGES.ACCOUNT}`} />
-        <SendCreditsPage path={`$/${PAGES.SEND}`} />
-        <UserHistoryPage path={`$/${PAGES.HISTORY}`} />
-        <NavigationHistory path={`$/${PAGES.HISTORY}/all`} />
-      </ScrollHandler>
-    </Router>
+      {/* Below need to go at the end to make sure we don't match any of our pages first */}
+      <Route path="/:claimName/:claimId" component={ShowPage} />
+      <Route path="/:claimName" component={ShowPage} />
+    </Switch>
   );
 }

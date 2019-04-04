@@ -7,13 +7,13 @@ import UserEmailNew from 'component/userEmailNew';
 import UserEmailVerify from 'component/userEmailVerify';
 import UserVerify from 'component/userVerify';
 import Page from 'component/page';
-import { navigate } from '@reach/router';
 
 type Props = {
   isPending: boolean,
   email: string,
   pathAfterAuth: string,
   location: UrlLocation,
+  history: { push: string => void },
   user: ?{
     has_verified_email: boolean,
     is_reward_approved: boolean,
@@ -31,7 +31,7 @@ class AuthPage extends React.PureComponent<Props> {
   }
 
   navigateIfAuthenticated = (props: Props) => {
-    const { isPending, user, location } = props;
+    const { isPending, user, location, history } = props;
     if (
       !isPending &&
       user &&
@@ -42,7 +42,7 @@ class AuthPage extends React.PureComponent<Props> {
       const urlParams = new URLSearchParams(search);
       const redirectTo = urlParams.get('redirect');
       const path = redirectTo ? `/$/${redirectTo}` : '/';
-      navigate(path);
+      history.push(path);
     }
   };
 

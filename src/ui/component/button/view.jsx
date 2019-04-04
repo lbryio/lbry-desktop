@@ -2,7 +2,7 @@
 import * as React from 'react';
 import Icon from 'component/common/icon';
 import classnames from 'classnames';
-import { Link } from '@reach/router';
+import { NavLink } from 'react-router-dom';
 import { formatLbryUriForWeb } from 'util/uri';
 import { OutboundLink } from 'react-ga';
 
@@ -109,19 +109,16 @@ class Button extends React.PureComponent<Props> {
     }
 
     return path ? (
-      <Link
+      <NavLink
+        exact
         to={path}
         title={title}
         onClick={e => e.stopPropagation()}
-        getProps={({ isCurrent, isPartiallyCurrent }) => ({
-          className:
-            (path === '/' ? isCurrent : isPartiallyCurrent) && activeClass
-              ? `${combinedClassName} ${activeClass}`
-              : combinedClassName,
-        })}
+        className={combinedClassName}
+        activeClassName={activeClass}
       >
         {content}
-      </Link>
+      </NavLink>
     ) : (
       <button
         title={title}

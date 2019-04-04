@@ -4,7 +4,6 @@ import Button from 'component/button';
 import { Form, FormField } from 'component/common/form';
 import ReactPaginate from 'react-paginate';
 import NavigationHistoryItem from 'component/navigationHistoryItem';
-import { navigate } from '@reach/router';
 
 type HistoryItem = {
   uri: string,

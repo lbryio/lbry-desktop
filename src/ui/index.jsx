@@ -22,11 +22,12 @@ import { Lbry, doToast, isURIValid, setSearchApi } from 'lbry-redux';
 import { doDownloadLanguages, doUpdateIsNightAsync } from 'redux/actions/settings';
 import { doAuthenticate, Lbryio, rewards, doBlackListedOutpointsSubscribe } from 'lbryinc';
 import 'scss/all.scss';
-import store from 'store';
+import { store, history } from 'store';
 import pjson from 'package.json';
 import app from './app';
 import analytics from './analytics';
 import doLogWarningConsoleMessage from './logWarningConsoleMessage';
+import { ConnectedRouter } from 'connected-react-router';
 
 const APPPAGEURL = 'lbry://?';
 
@@ -219,10 +220,12 @@ const init = () => {
     app.store.dispatch(doDaemonReady());
     ReactDOM.render(
       <Provider store={store}>
-        <ErrorBoundary>
-          <App />
-          <SnackBar />
-        </ErrorBoundary>
+        <ConnectedRouter history={history}>
+          <ErrorBoundary>
+            <App />
+            <SnackBar />
+          </ErrorBoundary>
+        </ConnectedRouter>
       </Provider>,
       document.getElementById('app')
     );

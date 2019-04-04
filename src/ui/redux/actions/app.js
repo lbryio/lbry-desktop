@@ -4,13 +4,11 @@ import isDev from 'electron-is-dev';
 import { ipcRenderer, remote } from 'electron';
 // @endif
 import path from 'path';
-
 import * as ACTIONS from 'constants/action_types';
 import * as MODALS from 'constants/modal_types';
 import { Lbry, doBalanceSubscribe, doFetchFileInfosAndPublishedClaims, doError } from 'lbry-redux';
 import Native from 'native';
 import { doFetchDaemonSettings } from 'redux/actions/settings';
-import { doAuthNavigate } from 'redux/actions/navigation';
 import { doCheckSubscriptionsInit } from 'redux/actions/subscriptions';
 import {
   selectIsUpgradeSkipped,
@@ -390,7 +388,7 @@ export function doConditionalAuthNavigate(newSession) {
     const modal = selectModal(state);
 
     if (newSession || (modal && modal.id !== MODALS.EMAIL_COLLECTION)) {
-      dispatch(doAuthNavigate());
+      // dispatch(doAuthNavigate());
     }
   };
 }

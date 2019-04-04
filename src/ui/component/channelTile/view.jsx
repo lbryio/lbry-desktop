@@ -5,7 +5,7 @@ import TruncatedText from 'component/common/truncated-text';
 import classnames from 'classnames';
 import SubscribeButton from 'component/subscribeButton';
 import type { Claim } from 'types/claim';
-import { navigate } from '@reach/router';
+import { withRouter } from 'react-router-dom';
 import { formatLbryUriForWeb } from 'util/uri';
 
 type Props = {
@@ -15,6 +15,7 @@ type Props = {
   size: string,
   claim: ?Claim,
   resolveUri: string => void,
+  history: { push: string => void },
 };
 
 class ChannelTile extends React.PureComponent<Props> {
@@ -37,7 +38,7 @@ class ChannelTile extends React.PureComponent<Props> {
   }
 
   render() {
-    const { claim, isResolvingUri, totalItems, uri, size } = this.props;
+    const { claim, isResolvingUri, totalItems, uri, size, history } = this.props;
 
     let channelName;
     let subscriptionUri;
@@ -46,7 +47,7 @@ class ChannelTile extends React.PureComponent<Props> {
       subscriptionUri = `lbry://${claim.permanent_url}`;
     }
 
-    const onClick = () => navigate(formatLbryUriForWeb(uri));
+    const onClick = () => history.push(formatLbryUriForWeb(uri));
 
     return (
       <section
@@ -86,4 +87,4 @@ class ChannelTile extends React.PureComponent<Props> {
   }
 }
 
-export default ChannelTile;
+export default withRouter(ChannelTile);

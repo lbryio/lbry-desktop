@@ -4,6 +4,7 @@ import { Modal } from 'modal/modal';
 import Button from 'component/button';
 import UserPhoneNew from 'component/userPhoneNew';
 import UserPhoneVerify from 'component/userPhoneVerify';
+import { withRouter } from 'react-router-dom';
 
 type Props = {
   phone: ?number,
@@ -11,6 +12,7 @@ type Props = {
     phone_number: ?number,
   },
   closeModal: () => void,
+  history: { push: string => void },
 };
 
 class ModalPhoneCollection extends React.PureComponent<Props> {
@@ -24,7 +26,7 @@ class ModalPhoneCollection extends React.PureComponent<Props> {
   }
 
   renderInner() {
-    const { closeModal, phone, user } = this.props;
+    const { closeModal, phone, user, history } = this.props;
 
     const cancelButton = <Button button="link" onClick={closeModal} label={__('Not Now')} />;
 
@@ -33,6 +35,8 @@ class ModalPhoneCollection extends React.PureComponent<Props> {
     } else if (!user.phone_number) {
       return <UserPhoneVerify cancelButton={cancelButton} />;
     }
+
+    history.push('/$/rewards');
     return closeModal();
   }
 
@@ -52,4 +56,4 @@ class ModalPhoneCollection extends React.PureComponent<Props> {
   }
 }
 
-export default ModalPhoneCollection;
+export default withRouter(ModalPhoneCollection);
