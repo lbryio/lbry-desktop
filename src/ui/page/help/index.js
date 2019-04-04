@@ -9,8 +9,8 @@ const select = state => ({
   deamonSettings: selectDaemonSettings(state),
 });
 
-const perform = dispatch => ({
-  // doAuth: () => dispatch(doAuthNavigate('/help')),
+const perform = (dispatch, ownProps) => ({
+  doAuth: () => ownProps.history.push('/$/auth?redirect=help'),
   fetchAccessToken: () => dispatch(doFetchAccessToken()),
 });
 
