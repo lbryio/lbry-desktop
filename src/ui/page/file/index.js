@@ -12,6 +12,7 @@ import {
   makeSelectContentTypeForUri,
   makeSelectMetadataForUri,
   makeSelectChannelForClaimUri,
+  selectBalance,
 } from 'lbry-redux';
 import {
   doFetchViewCount,
@@ -39,6 +40,7 @@ const select = (state, props) => ({
   isSubscribed: makeSelectIsSubscribed(props.uri)(state),
   channelUri: makeSelectChannelForClaimUri(props.uri, true)(state),
   viewCount: makeSelectViewCountForUri(props.uri)(state),
+  balance: selectBalance(state),
 });
 
 const perform = dispatch => ({

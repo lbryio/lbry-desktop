@@ -202,8 +202,8 @@ class MediaPlayer extends React.PureComponent<Props, State> {
   }
 
   // @if TARGET='app'
-  sleep(ms) {
-    return new Promise(resolve => setTimeout(resolve, ms));
+  sleep(ms: number) {
+    return new Promise<void>(resolve => setTimeout(resolve, ms));
   }
 
   refreshMetadata() {

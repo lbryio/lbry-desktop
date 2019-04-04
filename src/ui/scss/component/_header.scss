@@ -81,6 +81,14 @@
   }
 }
 
+.header__navigation-item--active {
+  background-image: linear-gradient(
+    to bottom,
+    transparent 0%,
+    mix(transparent, $lbry-teal-3, 70%) 90%
+  );
+}
+
 .header__navigation-item--back,
 .header__navigation-item--forward,
 .header__navigation-item--home,

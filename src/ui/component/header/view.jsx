@@ -85,8 +85,7 @@ const Header = (props: Props) => {
           title={`Your balance is ${balance} LBRY Credits`}
           label={
             <React.Fragment>
-              <span>{roundedBalance}</span>
-              <LbcSymbol />
+              {roundedBalance} <LbcSymbol />
             </React.Fragment>
           }
           navigate="/$/wallet"
@@ -94,6 +93,7 @@ const Header = (props: Props) => {
 
         <Button
           className="header__navigation-item header__navigation-item--right-action"
+          activeClass="header__navigation-item--active"
           description={__('Publish content')}
           icon={ICONS.UPLOAD}
           iconSize={24}

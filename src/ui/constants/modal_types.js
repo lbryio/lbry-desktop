@@ -6,7 +6,6 @@ export const DOWNLOADING = 'downloading';
 export const AUTO_UPDATE_DOWNLOADED = 'auto_update_downloaded';
 export const AUTO_UPDATE_CONFIRM = 'auto_update_confirm';
 export const ERROR = 'error';
-export const INSUFFICIENT_CREDITS = 'insufficient_credits';
 export const UPGRADE = 'upgrade';
 export const WELCOME = 'welcome';
 export const EMAIL_COLLECTION = 'email_collection';

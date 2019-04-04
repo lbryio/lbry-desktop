@@ -1,7 +1,7 @@
 .card {
   background-color: $lbry-white;
   border: 1px solid $lbry-gray-1;
-  margin-bottom: var(--spacing-vertical-large);
+  margin-bottom: var(--spacing-vertical-xlarge);
   position: relative;
 
   html[data-mode='dark'] & {
@@ -84,6 +84,11 @@
   p:not(:last-child) {
     margin-bottom: var(--spacing-vertical-medium);
   }
+
+  .badge {
+    bottom: -0.15rem;
+    position: relative;
+  }
 }
 
 //  C A R D
@@ -91,10 +96,6 @@
 
 .card__header {
   position: relative;
-
-  + .card__content {
-    margin-top: var(--spacing-vertical-medium);
-  }
 
   &:not(.card__header--flat) {
     margin-bottom: var(--spacing-vertical-small);
@@ -194,6 +195,10 @@
 
   .button {
     font-size: 1.2rem;
+  }
+
+  + .card__content {
+    margin-top: var(--spacing-vertical-medium);
   }
 }
 

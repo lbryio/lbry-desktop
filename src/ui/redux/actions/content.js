@@ -272,7 +272,6 @@ export function doPurchaseUri(
 
     if (cost > balance) {
       dispatch(doSetPlayingUri(null));
-      dispatch(doOpenModal(MODALS.INSUFFICIENT_CREDITS));
       Promise.resolve();
       return;
     }

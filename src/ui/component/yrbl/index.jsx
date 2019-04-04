@@ -27,12 +27,12 @@ export default class extends React.PureComponent<Props> {
     const image = yrblTypes[type];
 
     return (
-      <div className="yrbl-wrap">
-        <img alt="Friendly gerbil" className={classnames('yrbl', className)} src={image} />
+      <div className="yrbl__wrap">
+        <img alt="Friendly gerbil" className={classnames('yrbl', className)} src={`/${image}`} />
         {title && subtitle && (
-          <div className="card__content">
+          <div className="yrbl__content">
             <h2 className="card__title">{title}</h2>
-            <div className="card__subtitle">{subtitle}</div>
+            <div className="card__content">{subtitle}</div>
           </div>
         )}
       </div>
