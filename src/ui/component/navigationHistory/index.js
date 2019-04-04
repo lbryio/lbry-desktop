@@ -11,7 +11,7 @@ const select = (state, props) => {
   return {
     page,
     pageCount: selectHistoryPageCount(state),
-    history: makeSelectHistoryForPage(page)(state),
+    historyItems: makeSelectHistoryForPage(page)(state),
   };
 };
 

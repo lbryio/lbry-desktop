@@ -11,7 +11,7 @@ import {
 } from 'lbry-redux';
 import analytics from 'analytics';
 import Wunderbar from './view';
-import { navigate } from '@reach/router';
+import { withRouter } from 'react-router-dom';
 import { formatLbryUriForWeb } from 'util/uri';
 
 const select = state => ({
@@ -20,14 +20,14 @@ const select = state => ({
   isFocused: selectSearchBarFocused(state),
 });
 
-const perform = dispatch => ({
+const perform = (dispatch, ownProps) => ({
   onSearch: query => {
-    navigate(`/$/search?q=${query}`);
+    ownProps.history.push({ pathname: `/$/search`, search: `?q=${query}` });
     analytics.apiLogSearch();
   },
   onSubmit: uri => {
     const path = formatLbryUriForWeb(uri);
-    navigate(path);
+    ownProps.history.push(path);
     dispatch(doUpdateSearchQuery(''));
   },
   updateSearchQuery: query => dispatch(doUpdateSearchQuery(query)),
@@ -35,7 +35,9 @@ const perform = dispatch => ({
   doBlur: () => dispatch(doBlurSearchInput()),
 });
 
-export default connect(
-  select,
-  perform
-)(Wunderbar);
+export default withRouter(
+  connect(
+    select,
+    perform
+  )(Wunderbar)
+);

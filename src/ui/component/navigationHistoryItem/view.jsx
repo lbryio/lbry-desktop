@@ -5,7 +5,7 @@ import moment from 'moment';
 import classnames from 'classnames';
 import Button from 'component/button';
 import { FormField } from 'component/common/form';
-import { navigate } from '@reach/router';
+import { withRouter } from 'react-router-dom';
 import { formatLbryUriForWeb } from 'util/uri';
 
 type Props = {
@@ -16,6 +16,7 @@ type Props = {
   onSelect?: () => void,
   resolveUri: string => void,
   slim: boolean,
+  history: { push: string => void },
 };
 
 class NavigationHistoryItem extends React.PureComponent<Props> {
@@ -32,7 +33,7 @@ class NavigationHistoryItem extends React.PureComponent<Props> {
   }
 
   render() {
-    const { lastViewed, selected, onSelect, claim, uri, slim } = this.props;
+    const { lastViewed, selected, onSelect, claim, uri, slim, history } = this.props;
 
     let name;
     let title;
@@ -45,7 +46,7 @@ class NavigationHistoryItem extends React.PureComponent<Props> {
     const onClick =
       onSelect ||
       function() {
-        navigate(navigatePath);
+        history.push(navigatePath);
       };
 
     return (
@@ -65,4 +66,4 @@ class NavigationHistoryItem extends React.PureComponent<Props> {
   }
 }
 
-export default NavigationHistoryItem;
+export default withRouter(NavigationHistoryItem);

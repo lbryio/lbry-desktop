@@ -1,7 +1,6 @@
 // @flow
 import { Lbryio } from 'lbryinc';
 import ReactGA from 'react-ga';
-import { globalHistory } from '@reach/router';
 
 type Analytics = {
   pageView: string => void,
@@ -15,7 +14,7 @@ let analyticsEnabled: boolean = true;
 const analytics: Analytics = {
   pageView: path => {
     if (analyticsEnabled) {
-      ReactGA.pageview(path);
+      // ReactGA.pageview(path);
     }
   },
   setUser: user => {
@@ -72,19 +71,19 @@ const analytics: Analytics = {
 
 // Initialize google analytics
 // Set `debug: true` for debug info
-ReactGA.initialize('UA-60403362-12', {
-  gaOptions: { name: IS_WEB ? 'web' : 'desktop' },
-  testMode: process.env.NODE_ENV !== 'production',
-});
+// ReactGA.initialize('UA-60403362-12', {
+//   gaOptions: { name: IS_WEB ? 'web' : 'desktop' },
+//   testMode: process.env.NODE_ENV !== 'production',
+// });
 
 // Manually call the first page view
 // Reach Router doesn't include this on `history.listen`
-analytics.pageView(window.location.pathname + window.location.search);
+// analytics.pageView(window.location.pathname + window.location.search);
 
 // Listen for url changes and report
 // This will include search queries/filter options
-globalHistory.listen(({ location }) =>
-  analytics.pageView(window.location.pathname + window.location.search)
-);
+// globalHistory.listen(({ location }) =>
+//   analytics.pageView(window.location.pathname + window.location.search)
+// );
 
 export default analytics;

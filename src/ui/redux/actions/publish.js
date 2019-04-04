@@ -21,7 +21,7 @@ import {
 } from 'lbry-redux';
 import { doOpenModal } from 'redux/actions/app';
 import { selectosNotificationsEnabled } from 'redux/selectors/settings';
-import { navigate } from '@reach/router';
+import { push } from 'connected-react-router';
 import analytics from 'analytics';
 import { formatLbryUriForWeb } from 'util/uri';
 // @if TARGET='app'
@@ -328,7 +328,7 @@ export const doCheckPendingPublishes = () => (dispatch: Dispatch, getState: GetS
               silent: false,
             });
             notif.onclick = () => {
-              navigate(formatLbryUriForWeb(claim.permanent_url));
+              dispatch(push(formatLbryUriForWeb(claim.permanent_url)));
             };
           }
         }

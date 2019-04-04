@@ -7,7 +7,7 @@ import * as MODALS from 'constants/modal_types';
 import { ipcRenderer } from 'electron';
 // @endif
 import { doOpenModal } from 'redux/actions/app';
-import { navigate } from '@reach/router';
+import { push } from 'connected-react-router';
 import { setSubscriptionLatest, doUpdateUnreadSubscriptions } from 'redux/actions/subscriptions';
 import { makeSelectUnreadByChannel } from 'redux/selectors/subscriptions';
 import {
@@ -83,7 +83,7 @@ export function doUpdateLoadStatus(uri: string, outpoint: string) {
               silent: false,
             });
             notif.onclick = () => {
-              navigate(formatLbryUriForWeb(uri));
+              dispatch(push(formatLbryUriForWeb(uri)));
             };
           }
 

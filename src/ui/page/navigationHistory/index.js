@@ -1,3 +1,3 @@
-import UserHistoryPage from './view';
+import NavigationHistoryPage from './view';
 
-export default UserHistoryPage;
+export default NavigationHistoryPage;

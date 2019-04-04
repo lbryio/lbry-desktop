@@ -7,7 +7,6 @@ import { normalizeURI, SEARCH_TYPES, isURIValid, buildURI } from 'lbry-redux';
 import Icon from 'component/common/icon';
 import { parseQueryParams } from 'util/query-params';
 import Autocomplete from './internal/autocomplete';
-import { Location, navigate } from '@reach/router';
 
 const L_KEY_CODE = 76;
 const ESC_KEY_CODE = 27;

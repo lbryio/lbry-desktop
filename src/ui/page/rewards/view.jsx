@@ -27,7 +27,7 @@ type Props = {
 
 class RewardsPage extends PureComponent<Props> {
   renderPageHeader() {
-    const { doAuth, user, daemonSettings } = this.props;
+    const { user, daemonSettings } = this.props;
 
     if (user && !user.is_reward_approved && daemonSettings && daemonSettings.share_usage_data) {
       if (!user.primary_email || !user.has_verified_email || !user.is_identity_verified) {
@@ -42,7 +42,7 @@ class RewardsPage extends PureComponent<Props> {
             </header>
 
             <div className="card__content">
-              <Button onClick={doAuth} button="primary" label="Prove Humanity" />
+              <Button navigate="/$/auth?redirect=rewards" button="primary" label="Prove Humanity" />
             </div>
           </section>
         );

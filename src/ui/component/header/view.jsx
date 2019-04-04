@@ -88,7 +88,7 @@ const Header = (props: Props) => {
               {roundedBalance} <LbcSymbol />
             </React.Fragment>
           }
-          navigate="/$/wallet"
+          navigate="/$/account"
         />
 
         <Button

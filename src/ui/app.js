@@ -1,4 +1,4 @@
-import store from 'store';
+import { store } from 'store';
 
 const env = process.env.NODE_ENV || 'production';
 
