@@ -25,9 +25,7 @@ import {
   creditsToString,
   doError,
 } from 'lbry-redux';
-import {
-  makeSelectCostInfoForUri,
-} from 'lbryinc';
+import { makeSelectCostInfoForUri } from 'lbryinc';
 import { makeSelectClientSetting, selectosNotificationsEnabled } from 'redux/selectors/settings';
 import analytics from 'analytics';
 import { formatLbryUriForWeb } from 'util/uri';
@@ -305,8 +303,13 @@ export function doFetchClaimsByChannel(
       data: { uri, page },
     });
 
-    Lbry.claim_list_by_channel({ uri, page, page_size: pageSize }).then(result => {
-      const claimResult = result[uri] || {};
+    console.log('uri', uri);
+    // TODO: can we keep uri?
+    const { claimId } = parseURI(uri);
+
+    Lbry.claim_search({ channel_id: claimId, page, page_size: pageSize }).then(result => {
+      console.log('resutl', result);
+      const claimResult = result[claimId] || {};
       const { claims_in_channel: claimsInChannel, returned_page: returnedPage } = claimResult;
 
       if (claimsInChannel && claimsInChannel.length) {
@@ -318,6 +321,7 @@ export function doFetchClaimsByChannel(
                 channelName: latest.channel_name,
                 uri: buildURI(
                   {
+                    // current SDK is not returning this yet....
                     contentName: latest.channel_name,
                     claimId: latest.value.publisherSignature.certificateId,
                   },
@@ -330,6 +334,7 @@ export function doFetchClaimsByChannel(
         }
       }
 
+      console.log({ uri, claimsInChannel });
       dispatch({
         type: ACTIONS.FETCH_CHANNEL_CLAIMS_COMPLETED,
         data: {
@@ -348,51 +353,6 @@ export function doPlayUri(uri: string) {
     // @if TARGET='app'
     dispatch(doPurchaseUri(uri));
     // @endif
-  };
-}
-
-export function doFetchChannelListMine() {
-  return (dispatch: Dispatch) => {
-    dispatch({
-      type: ACTIONS.FETCH_CHANNEL_LIST_STARTED,
-    });
-
-    const callback = channels => {
-      dispatch({
-        type: ACTIONS.FETCH_CHANNEL_LIST_COMPLETED,
-        data: { claims: channels },
-      });
-    };
-
-    Lbry.channel_list().then(callback);
-  };
-}
-
-export function doCreateChannel(name: string, amount: number) {
-  return (dispatch: Dispatch) => {
-    dispatch({
-      type: ACTIONS.CREATE_CHANNEL_STARTED,
-    });
-
-    return new Promise<void>((resolve, reject) => {
-      Lbry.channel_new({
-        channel_name: name,
-        amount: creditsToString(amount),
-      }).then(
-        newChannelClaim => {
-          const channelClaim = newChannelClaim;
-          channelClaim.name = name;
-          dispatch({
-            type: ACTIONS.CREATE_CHANNEL_COMPLETED,
-            data: { channelClaim },
-          });
-          resolve(channelClaim);
-        },
-        error => {
-          reject(error);
-        }
-      );
-    });
   };
 }
 

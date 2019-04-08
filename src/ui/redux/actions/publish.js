@@ -50,7 +50,7 @@ export const doResetThumbnailStatus = () => (dispatch: Dispatch): Promise<Action
         type: ACTIONS.UPDATE_PUBLISH_FORM,
         data: {
           uploadThumbnailStatus: THUMBNAIL_STATUSES.READY,
-          thumbnail: '',
+          thumbnail_url: '',
           nsfw: false,
         },
       });
@@ -60,7 +60,7 @@ export const doResetThumbnailStatus = () => (dispatch: Dispatch): Promise<Action
         type: ACTIONS.UPDATE_PUBLISH_FORM,
         data: {
           uploadThumbnailStatus: THUMBNAIL_STATUSES.API_DOWN,
-          thumbnail: '',
+          thumbnail_url: '',
           nsfw: false,
         },
       })
@@ -101,7 +101,7 @@ export const doUploadThumbnail = (filePath: string, nsfw: boolean) => (dispatch:
           type: ACTIONS.UPDATE_PUBLISH_FORM,
           data: {
             uploadThumbnailStatus: THUMBNAIL_STATUSES.READY,
-            thumbnail: '',
+            thumbnail_url: '',
             nsfw: false,
           },
         },
@@ -131,7 +131,7 @@ export const doUploadThumbnail = (filePath: string, nsfw: boolean) => (dispatch:
           type: ACTIONS.UPDATE_PUBLISH_FORM,
           data: {
             uploadThumbnailStatus: THUMBNAIL_STATUSES.COMPLETE,
-            thumbnail: `${json.data.url}${fileExt}`,
+            thumbnail_url: `${json.data.url}${fileExt}`,
           },
         })
         : uploadError(json.message)
@@ -162,7 +162,7 @@ export const doPrepareEdit = (claim: any, uri: string) => (dispatch: Dispatch) =
     license,
     licenseUrl,
     nsfw,
-    thumbnail,
+    thumbnail_url,
     title,
   } = metadata;
 
@@ -177,7 +177,7 @@ export const doPrepareEdit = (claim: any, uri: string) => (dispatch: Dispatch) =
     fee,
     language,
     nsfw,
-    thumbnail,
+    thumbnail_url,
     title,
     uri,
     uploadThumbnailStatus: thumbnail ? THUMBNAIL_STATUSES.MANUAL : undefined,
@@ -216,7 +216,7 @@ export const doPublish = (params: PublishParams) => (dispatch: Dispatch, getStat
     language,
     license,
     licenseUrl,
-    thumbnail,
+    thumbnail_url,
     nsfw,
     channel,
     title,
@@ -236,7 +236,7 @@ export const doPublish = (params: PublishParams) => (dispatch: Dispatch, getStat
     license,
     licenseUrl,
     language,
-    thumbnail,
+    thumbnail_url,
     description: description || undefined,
   };
 
@@ -322,7 +322,7 @@ export const doCheckPendingPublishes = () => (dispatch: Dispatch, getState: GetS
           // If it's confirmed, check if we should notify the user
           if (selectosNotificationsEnabled(getState())) {
             const notif = new window.Notification('LBRY Publish Complete', {
-              body: `${claim.value.stream.metadata.title} has been published to lbry://${
+              body: `${claim.value.stream.title} has been published to lbry://${
                 claim.name
               }. Click here to view it`,
               silent: false,

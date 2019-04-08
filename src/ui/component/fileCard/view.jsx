@@ -91,7 +91,7 @@ class FileCard extends React.PureComponent<Props> {
         </li>
       );
     }
-
+    // fix to use tags - one of many nsfw tags...
     const shouldHide = !claimIsMine && !pending && obscureNsfw && metadata && metadata.nsfw;
     if (shouldHide) {
       return null;
@@ -99,7 +99,7 @@ class FileCard extends React.PureComponent<Props> {
 
     const uri = !pending ? normalizeURI(this.props.uri) : this.props.uri;
     const title = metadata && metadata.title ? metadata.title : uri;
-    const thumbnail = metadata && metadata.thumbnail ? metadata.thumbnail : null;
+    const thumbnail = metadata && metadata.thumbnail_url ? metadata.thumbnail_url : null;
     const isRewardContent = claim && rewardedContentClaimIds.includes(claim.claim_id);
     const height = claim && claim.height;
     const handleContextMenu = event => {

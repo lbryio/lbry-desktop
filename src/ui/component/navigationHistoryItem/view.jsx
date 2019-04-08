@@ -39,7 +39,7 @@ class NavigationHistoryItem extends React.PureComponent<Props> {
     let title;
     if (claim && claim.value && claim.value.stream) {
       ({ name } = claim);
-      ({ title } = claim.value.stream.metadata);
+      ({ title } = claim.value.stream);
     }
 
     const navigatePath = formatLbryUriForWeb(uri);

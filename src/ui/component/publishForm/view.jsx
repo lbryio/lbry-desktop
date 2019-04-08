@@ -23,7 +23,7 @@ type Props = {
   bid: ?number,
   editingURI: ?string,
   title: ?string,
-  thumbnail: ?string,
+  thumbnail_url: ?string,
   uploadThumbnailStatus: ?string,
   thumbnailPath: ?string,
   description: ?string,
@@ -73,8 +73,8 @@ class PublishForm extends React.PureComponent<Props> {
   }
 
   componentWillMount() {
-    const { thumbnail } = this.props;
-    if (!thumbnail) {
+    const { thumbnail_url } = this.props;
+    if (!thumbnail_url) {
       this.props.resetThumbnailStatus();
     }
   }
@@ -217,7 +217,7 @@ class PublishForm extends React.PureComponent<Props> {
       filePath: filePath || undefined,
       bid: this.props.bid || undefined,
       title: this.props.title || '',
-      thumbnail: this.props.thumbnail,
+      thumbnail_url: this.props.thumbnail_url,
       description: this.props.description,
       language: this.props.language,
       nsfw: this.props.nsfw,
@@ -231,12 +231,6 @@ class PublishForm extends React.PureComponent<Props> {
       channel: this.props.channel,
       isStillEditing: this.props.isStillEditing,
     };
-
-    // Editing a claim
-    if (!filePath && myClaimForUri && myClaimForUri.value) {
-      const { source } = myClaimForUri.value.stream;
-      publishParams.sources = source;
-    }
 
     publish(publishParams);
   }
@@ -306,7 +300,7 @@ class PublishForm extends React.PureComponent<Props> {
       filePath,
       editingURI,
       title,
-      thumbnail,
+      thumbnail_url,
       uploadThumbnailStatus,
       description,
       language,
@@ -436,7 +430,7 @@ class PublishForm extends React.PureComponent<Props> {
 
               <SelectThumbnail
                 thumbnailPath={thumbnailPath}
-                thumbnail={thumbnail}
+                thumbnail={thumbnail_url}
                 uploadThumbnailStatus={uploadThumbnailStatus}
                 updatePublishForm={updatePublishForm}
                 formDisabled={formDisabled}
@@ -589,7 +583,8 @@ class PublishForm extends React.PureComponent<Props> {
                   <option value="zh">{__('Chinese')}</option>
                   <option value="fr">{__('French')}</option>
                   <option value="de">{__('German')}</option>
-                  <option value="jp">{__('Japanese')}</option>
+                  {/* BAD */}
+                  {/* <option value="jp">{__('Japanese')}</option> */}
                   <option value="ru">{__('Russian')}</option>
                   <option value="es">{__('Spanish')}</option>
                   <option value="id">{__('Indonesian')}</option>

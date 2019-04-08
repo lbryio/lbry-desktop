@@ -1,64 +1,92 @@
 // @flow
 
-// Currently incomplete
-
-export type Source = {
-  contentType: string,
-  source: string,
-  sourceType: string,
-  version: string,
-};
-
-export type Metadata = {
-  nsfw: boolean,
-  title: string,
-  thumbnail: ?string,
-  description: ?string,
-  license: ?string,
-  language: string,
-  fee?:
-    | {
-        amount: number, // should be a string https://github.com/lbryio/lbry/issues/1576
-        currency: string,
-        address: string,
-        version: string,
-      }
-    | {
-        // We don't include a version or address in the metadata field when publishing
-        amount: number,
-        currency: string,
-      },
-};
-
-// Actual claim type has more values than this
-// Add them as they are used
-export type Claim = {
-  address: string,
-  amount: number,
-  claim_id: string,
-  claim_sequence: number,
-  decoded_claim: boolean,
-  depth: number,
-  effective_amount: number,
-  has_signature: boolean,
-  height: number,
-  has_signature: boolean,
-  hex: string,
-  name: string,
-  nout: number,
-  permanent_url: string,
-  channel_name: ?string,
-  txid: string,
-  nout: number,
-  signature_is_valid: boolean,
-  valid_at_height: number,
-  value: ?{
-    publisherSignature: ?{
-      certificateId: string,
-    },
-    stream: {
-      metadata: Metadata,
-      source: Source,
-    },
+export type Certificate = GenericClaim & {
+  value: {
+    channel: ChannelMetadata,
   },
 };
+
+export type Claim = GenericClaim & {
+  signature_is_valid?: boolean, // Is claim associated with valid channel private key
+  value: {
+    stream?: StreamMetadata,
+  },
+};
+
+type GenericClaim = {
+  address: string, // address associated with tx
+  amount: number, // bid amount at time of tx
+  claim_id: string, // unique claim identifier
+  claim_sequence: number,
+  decoded_claim: boolean, // claim made in accordance with sdk protobuf types
+  depth: number, // confirmations since tx
+  effective_amount: number, // bid amount + supports
+  has_signature: boolean,
+  height: number, // block height the tx was confirmed
+  hex: string, // `value` hex encoded
+  name: string,
+  normalized_name: string, // `name` normalized via unicode NFD spec,
+  nout: number, // index number for an output of a tx
+  permanent_url: string, // name + claim_id
+  supports: Array<{}>, // TODO: add support type
+  txid: string, // unique tx id
+  valid_at_height?: number, // BUG: this should always exist https://github.com/lbryio/lbry/issues/1728
+};
+
+type GenericMetadata = {
+  title?: string,
+  description?: string,
+  thumbnail_url?: string,
+  languages?: Array<string>,
+  tags?: Array<string>,
+  locations?: Array<Locations>,
+};
+
+export type ChannelMetadata = GenericMetadata & {
+  public_key: string,
+  cover_url?: string,
+  contact_email?: string,
+  homepage_url?: string,
+};
+
+export type StreamMetadata = GenericMetadata & {
+  sd_hash: string,
+  file_hash: string,
+  media_type?: string, // TODO: will this be an object?
+
+  license?: string, // License "title" ex: Creative Commons, Custom copyright
+  license_url?: string, // Link to full license
+  release_time?: number, // linux timestamp
+  author?: string,
+
+  // Only exists if a stream has a fee
+  fee?: {
+    amount: number, // should be a string https://github.com/lbryio/lbry/issues/1576
+    currency: string,
+    address: string,
+  },
+
+  // Below correspond to `media_type`
+  video?: {
+    duration: number,
+    height: number,
+    width: number,
+  },
+  audio?: {
+    duration: number,
+    height: number,
+    width: number,
+  },
+  image?: {
+    height: number,
+    width: number,
+  },
+};
+
+type Locations =
+  | { latitude: number, longitude: number }
+  | {
+      country?: string,
+      state?: string,
+      code?: string,
+    };

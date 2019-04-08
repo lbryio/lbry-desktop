@@ -7,10 +7,10 @@ import type { Claim } from 'types/claim';
 import LoadingScreen from 'component/common/loading-screen';
 import PlayButton from './internal/play-button';
 
-const Player = React.lazy(() => import(
-  /* webpackChunkName: "player-legacy" */
-  './internal/player'
-));
+const Player = React.lazy(() =>
+  import(/* webpackChunkName: "player-legacy" */
+  './internal/player')
+);
 
 const SPACE_BAR_KEYCODE = 32;
 
@@ -29,7 +29,7 @@ type Props = {
   },
   metadata: ?{
     nsfw: boolean,
-    thumbnail: string,
+    thumbnail_url: string,
   },
   autoplay: boolean,
   isLoading: boolean,
@@ -255,7 +255,7 @@ class FileViewer extends React.PureComponent<Props> {
       loadStatusMessage = __('Downloading stream... not long left now!');
     }
 
-    const poster = metadata && metadata.thumbnail;
+    const poster = metadata && metadata.thumbnail_url;
     const layoverClass = classnames('content__cover', {
       'card__media--nsfw': shouldObscureNsfw,
       'card__media--disabled': insufficientCredits,
@@ -273,7 +273,7 @@ class FileViewer extends React.PureComponent<Props> {
                 <LoadingScreen status={loadStatusMessage} />
               </div>
             ) : (
-              <Suspense fallback={<div></div>}>
+              <Suspense fallback={<div />}>
                 <Player
                   fileName={fileInfo.file_name}
                   poster={poster}

@@ -140,7 +140,7 @@ class FilePage extends React.Component<Props> {
     } = this.props;
 
     // File info
-    const { title, thumbnail } = metadata;
+    const { title, thumbnail_url } = metadata;
     const { height, channel_name: channelName } = claim;
     const { PLAYABLE_MEDIA_TYPES, PREVIEW_MEDIA_TYPES } = FilePage;
     const isRewardContent = (rewardedContentClaimIds || []).includes(claim.claim_id);
@@ -203,8 +203,8 @@ class FilePage extends React.Component<Props> {
             />
           )}
           {!showFile &&
-            (thumbnail ? (
-              <Thumbnail shouldObscure={shouldObscureThumbnail} src={thumbnail} />
+            (thumbnail_url ? (
+              <Thumbnail shouldObscure={shouldObscureThumbnail} src={thumbnail_url} />
             ) : (
               <div
                 className={classnames('content__empty', {

@@ -31,10 +31,10 @@ const PdfViewer = React.lazy(() => import(
 ));
 
 // @if TARGET='app'
-const ThreeViewer = React.lazy(() => import(
-  /* webpackChunkName: "threeViewer" */
-  'component/viewers/threeViewer'
-));
+const ThreeViewer = React.lazy(() =>
+  import(/* webpackChunkName: "threeViewer" */
+    'component/viewers/threeViewer')
+);
 // @endif
 
 type Props = {
@@ -182,7 +182,7 @@ class FileRender extends React.PureComponent<Props> {
 
     // @if TARGET='web'
     // temp workaround to disabled paid content on web
-    if (claim && claim.value.stream.metadata.fee && claim.value.stream.metadata.fee.amount > 0) {
+    if (claim && claim.value.stream.fee && claim.value.stream.fee.amount > 0) {
       const paidMessage = __(
         'Currently, only free content is available on lbry.tv. Try viewing it in the desktop app.'
       );
@@ -203,9 +203,7 @@ class FileRender extends React.PureComponent<Props> {
     console.log('RENDER')
     return (
       <div className="file-render">
-        <React.Suspense fallback={<div></div>}>
-          {this.renderViewer()}
-        </React.Suspense>
+        <React.Suspense fallback={<div />}>{this.renderViewer()}</React.Suspense>
       </div>
     );
   }

@@ -239,8 +239,10 @@ export const doCheckSubscription = (subscriptionUri: string, shouldNotify?: bool
     );
   }
 
+  const { claimId } = parseURI(subscriptionUri);
+
   // We may be duplicating calls here. Can this logic be baked into doFetchClaimsByChannel?
-  Lbry.claim_list_by_channel({ uri: subscriptionUri, page: 1, page_size: PAGE_SIZE }).then(
+  Lbry.claim_search({ channel_id: claimId, page: 1, page_size: PAGE_SIZE }).then(
     claimListByChannel => {
       const claimResult = claimListByChannel[subscriptionUri] || {};
       const { claims_in_channel: claimsInChannel } = claimResult;
@@ -268,9 +270,7 @@ export const doCheckSubscription = (subscriptionUri: string, shouldNotify?: bool
           const uri = buildURI({ contentName: claim.name, claimId: claim.claim_id }, true);
           const shouldDownload =
             shouldAutoDownload &&
-            Boolean(
-              downloadCount < SUBSCRIPTION_DOWNLOAD_LIMIT && !claim.value.stream.metadata.fee
-            );
+            Boolean(downloadCount < SUBSCRIPTION_DOWNLOAD_LIMIT && !claim.value.stream.fee);
 
           // Add the new content to the list of "un-read" subscriptions
           if (shouldNotify) {

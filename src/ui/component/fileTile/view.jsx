@@ -128,7 +128,7 @@ class FileTile extends React.PureComponent<Props> {
     const description = isClaimed && metadata && metadata.description ? metadata.description : '';
     const title =
       isClaimed && metadata && metadata.title ? metadata.title : parseURI(uri).contentName;
-    const thumbnail = metadata && metadata.thumbnail ? metadata.thumbnail : null;
+    const thumbnail = metadata && metadata.thumbnail_url ? metadata.thumbnail_url : null;
 
     let height;
     let name;

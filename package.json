@@ -92,7 +92,6 @@
     "electron-webpack": "^2.6.2",
     "electron-window-state": "^4.1.1",
     "eslint": "^5.15.2",
-    "eslint-config-airbnb": "^16.1.0",
     "eslint-config-prettier": "^2.9.0",
     "eslint-config-standard": "^12.0.0",
     "eslint-config-standard-jsx": "^6.0.2",
@@ -185,7 +184,7 @@
     "yarn": "^1.3"
   },
   "lbrySettings": {
-    "lbrynetDaemonVersion": "0.34.0",
+    "lbrynetDaemonVersion": "0.35.0",
     "lbrynetDaemonUrlTemplate": "https://github.com/lbryio/lbry/releases/download/vDAEMONVER/lbrynet-OSNAME.zip",
     "lbrynetDaemonDir": "static/daemon",
     "lbrynetDaemonFileName": "lbrynet"
