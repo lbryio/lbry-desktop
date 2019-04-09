@@ -23,7 +23,7 @@ type Props = {
   bid: ?number,
   editingURI: ?string,
   title: ?string,
-  thumbnail_url: ?string,
+  thumbnail: ?string,
   uploadThumbnailStatus: ?string,
   thumbnailPath: ?string,
   description: ?string,
@@ -73,8 +73,8 @@ class PublishForm extends React.PureComponent<Props> {
   }
 
   componentWillMount() {
-    const { thumbnail_url } = this.props;
-    if (!thumbnail_url) {
+    const { thumbnail } = this.props;
+    if (!thumbnail) {
       this.props.resetThumbnailStatus();
     }
   }
@@ -217,7 +217,7 @@ class PublishForm extends React.PureComponent<Props> {
       filePath: filePath || undefined,
       bid: this.props.bid || undefined,
       title: this.props.title || '',
-      thumbnail_url: this.props.thumbnail_url,
+      thumbnail: this.props.thumbnail,
       description: this.props.description,
       language: this.props.language,
       nsfw: this.props.nsfw,
@@ -300,7 +300,7 @@ class PublishForm extends React.PureComponent<Props> {
       filePath,
       editingURI,
       title,
-      thumbnail_url,
+      thumbnail,
       uploadThumbnailStatus,
       description,
       language,
@@ -430,7 +430,7 @@ class PublishForm extends React.PureComponent<Props> {
 
               <SelectThumbnail
                 thumbnailPath={thumbnailPath}
-                thumbnail={thumbnail_url}
+                thumbnail={thumbnail}
                 uploadThumbnailStatus={uploadThumbnailStatus}
                 updatePublishForm={updatePublishForm}
                 formDisabled={formDisabled}

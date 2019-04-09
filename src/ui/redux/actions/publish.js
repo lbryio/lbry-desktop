@@ -1,6 +1,6 @@
 // @flow
 import type { Dispatch, GetState } from 'types/redux';
-import type { Metadata } from 'types/claim';
+import type { GenericMetadata, StreamClaim } from 'lbry-redux';
 import type {
   UpdatePublishFormData,
   UpdatePublishFormAction,
@@ -50,7 +50,7 @@ export const doResetThumbnailStatus = () => (dispatch: Dispatch): Promise<Action
         type: ACTIONS.UPDATE_PUBLISH_FORM,
         data: {
           uploadThumbnailStatus: THUMBNAIL_STATUSES.READY,
-          thumbnail_url: '',
+          thumbnail: '',
           nsfw: false,
         },
       });
@@ -60,7 +60,7 @@ export const doResetThumbnailStatus = () => (dispatch: Dispatch): Promise<Action
         type: ACTIONS.UPDATE_PUBLISH_FORM,
         data: {
           uploadThumbnailStatus: THUMBNAIL_STATUSES.API_DOWN,
-          thumbnail_url: '',
+          thumbnail: '',
           nsfw: false,
         },
       })
@@ -101,7 +101,7 @@ export const doUploadThumbnail = (filePath: string, nsfw: boolean) => (dispatch:
           type: ACTIONS.UPDATE_PUBLISH_FORM,
           data: {
             uploadThumbnailStatus: THUMBNAIL_STATUSES.READY,
-            thumbnail_url: '',
+            thumbnail: '',
             nsfw: false,
           },
         },
@@ -128,12 +128,12 @@ export const doUploadThumbnail = (filePath: string, nsfw: boolean) => (dispatch:
     .then(json =>
       json.success
         ? dispatch({
-          type: ACTIONS.UPDATE_PUBLISH_FORM,
-          data: {
-            uploadThumbnailStatus: THUMBNAIL_STATUSES.COMPLETE,
-            thumbnail_url: `${json.data.url}${fileExt}`,
-          },
-        })
+            type: ACTIONS.UPDATE_PUBLISH_FORM,
+            data: {
+              uploadThumbnailStatus: THUMBNAIL_STATUSES.COMPLETE,
+              thumbnail: `${json.data.url}${fileExt}`,
+            },
+          })
         : uploadError(json.message)
     )
     .catch(err => uploadError(err.message));
@@ -162,7 +162,7 @@ export const doPrepareEdit = (claim: any, uri: string) => (dispatch: Dispatch) =
     license,
     licenseUrl,
     nsfw,
-    thumbnail_url,
+    thumbnail,
     title,
   } = metadata;
 
@@ -177,7 +177,7 @@ export const doPrepareEdit = (claim: any, uri: string) => (dispatch: Dispatch) =
     fee,
     language,
     nsfw,
-    thumbnail_url,
+    thumbnail,
     title,
     uri,
     uploadThumbnailStatus: thumbnail ? THUMBNAIL_STATUSES.MANUAL : undefined,
@@ -204,6 +204,8 @@ export const doPrepareEdit = (claim: any, uri: string) => (dispatch: Dispatch) =
 };
 
 export const doPublish = (params: PublishParams) => (dispatch: Dispatch, getState: () => {}) => {
+  dispatch({ type: ACTIONS.PUBLISH_START });
+
   const state = getState();
   const myChannels = selectMyChannelClaims(state);
   const myClaims = selectMyClaimsWithoutChannels(state);
@@ -216,8 +218,7 @@ export const doPublish = (params: PublishParams) => (dispatch: Dispatch, getStat
     language,
     license,
     licenseUrl,
-    thumbnail_url,
-    nsfw,
+    thumbnail,
     channel,
     title,
     contentIsFree,
@@ -230,41 +231,47 @@ export const doPublish = (params: PublishParams) => (dispatch: Dispatch, getStat
   const channelId = namedChannelClaim ? namedChannelClaim.claim_id : '';
   const fee = contentIsFree || !price.amount ? undefined : { ...price };
 
-  const metadata: Metadata = {
-    title,
-    nsfw,
-    license,
-    licenseUrl,
-    language,
-    thumbnail_url,
-    description: description || undefined,
-  };
-
-  const publishPayload: {
-    name: ?string,
-    channel_id: string,
-    bid: ?number,
-    metadata: ?Metadata,
+  const publishPayload: GenericMetadata & {
+    name: string,
+    channel_id?: string,
+    bid: number,
     file_path?: string,
   } = {
     name,
-    channel_id: channelId,
     bid: creditsToString(bid),
-    metadata,
+    title,
+    license,
+    license_url: licenseUrl,
+    languages: [language],
+    thumbnail_url: thumbnail,
+    description,
   };
 
-  if (fee) {
-    metadata.fee = {
-      currency: fee.currency,
-      amount: creditsToString(fee.amount),
-    };
+  if (channelId) {
+    publishPayload.channel_id = channelId;
   }
+
+  if (fee) {
+    publishPayload.fee_currency = fee.currency;
+    publishPayload.fee_amount = creditsToString(fee.amount);
+  }
+
   // only pass file on new uploads, not metadata only edits.
   if (filePath) publishPayload.file_path = filePath;
 
-  dispatch({ type: ACTIONS.PUBLISH_START });
-
-  const success = pendingClaim => {
+  const success = (successResponse: {
+    height: number,
+    hex: string,
+    inputs: Array<{}>,
+    // Only first value in outputs is a claim
+    // That's the only value we care about
+    outputs: Array<StreamClaim>,
+    total_fee: string,
+    total_input: string,
+    total_output: string,
+    txid: string,
+  }) => {
+    const pendingClaim = successResponse.outputs[0];
     analytics.apiLogPublish();
     const actions = [];
 
@@ -280,8 +287,8 @@ export const doPublish = (params: PublishParams) => (dispatch: Dispatch, getStat
     const isMatch = claim => claim.claim_id === pendingClaim.claim_id;
     const isEdit = myClaims.some(isMatch);
     const myNewClaims = isEdit
-      ? myClaims.map(claim => (isMatch(claim) ? pendingClaim.output : claim))
-      : myClaims.concat(pendingClaim.output);
+      ? myClaims.map(claim => (isMatch(claim) ? pendingClaim : claim))
+      : myClaims.concat(pendingClaim);
 
     actions.push({
       type: ACTIONS.FETCH_CLAIM_LIST_MINE_COMPLETED,

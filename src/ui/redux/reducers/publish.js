@@ -60,15 +60,14 @@ export type UpdatePublishFormAction = {
 };
 
 export type PublishParams = {
-  name?: string,
-  bid?: number,
+  name: string,
+  bid: number,
   filePath?: string,
   description: ?string,
   language: string,
   publishingLicense?: string,
   publishingLicenseUrl?: string,
-  thumbnail_url: ?string,
-  nsfw: boolean,
+  thumbnail: ?string,
   channel: string,
   channelId?: string,
   title: string,

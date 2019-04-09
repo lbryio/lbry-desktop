@@ -303,14 +303,12 @@ export function doFetchClaimsByChannel(
       data: { uri, page },
     });
 
-    console.log('uri', uri);
     // TODO: can we keep uri?
+    // claim_search should accept a uri (this allows for fetching vanity channel content)
     const { claimId } = parseURI(uri);
 
     Lbry.claim_search({ channel_id: claimId, page, page_size: pageSize }).then(result => {
-      console.log('resutl', result);
-      const claimResult = result[claimId] || {};
-      const { claims_in_channel: claimsInChannel, returned_page: returnedPage } = claimResult;
+      const { items: claimsInChannel, page: returnedPage } = result;
 
       if (claimsInChannel && claimsInChannel.length) {
         if (page === 1) {
@@ -321,9 +319,10 @@ export function doFetchClaimsByChannel(
                 channelName: latest.channel_name,
                 uri: buildURI(
                   {
-                    // current SDK is not returning this yet....
+                    // TODO: change this
+                    // This will need to be changed to get the claim id from the returned channel claims
                     contentName: latest.channel_name,
-                    claimId: latest.value.publisherSignature.certificateId,
+                    claimId: claimId,
                   },
                   false
                 ),
