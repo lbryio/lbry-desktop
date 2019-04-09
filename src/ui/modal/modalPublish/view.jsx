@@ -20,7 +20,7 @@ class ModalSendTip extends React.PureComponent<Props> {
         contentLabel={__('File published')}
         onConfirmed={() => {
           clearPublish();
-          navigate('/published');
+          navigate('/$/published');
           closeModal();
         }}
       >
