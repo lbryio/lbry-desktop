@@ -1,10 +1,14 @@
 // @flow
-import React from 'react';
+import React, { Suspense } from 'react';
 import { Modal } from 'modal/modal';
 import Button from 'component/button';
-import UserPhoneNew from 'component/userPhoneNew';
 import UserPhoneVerify from 'component/userPhoneVerify';
 import { withRouter } from 'react-router-dom';
+
+const LazyUserPhoneNew = React.lazy(() => import(
+  /* webpackChunkName: "userPhoneNew" */
+  'component/userPhoneNew'
+));
 
 type Props = {
   phone: ?number,
@@ -31,7 +35,11 @@ class ModalPhoneCollection extends React.PureComponent<Props> {
     const cancelButton = <Button button="link" onClick={closeModal} label={__('Not Now')} />;
 
     if (!user.phone_number && !phone) {
-      return <UserPhoneNew cancelButton={cancelButton} />;
+      return (
+        <Suspense fallback={<div></div>}>
+          <UserPhoneNew cancelButton={cancelButton} />
+        </Suspense>
+      );
     } else if (!user.phone_number) {
       return <UserPhoneVerify cancelButton={cancelButton} />;
     }

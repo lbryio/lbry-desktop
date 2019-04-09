@@ -147,6 +147,11 @@ class FilePage extends React.Component<Props> {
     const shouldObscureThumbnail = obscureNsfw && metadata.nsfw;
     const fileName = fileInfo ? fileInfo.file_name : null;
     const mediaType = getMediaType(contentType, fileName);
+    console.log({
+      mediaType,
+      contentType,
+      fileName,
+    })
     const showFile =
       PLAYABLE_MEDIA_TYPES.includes(mediaType) || PREVIEW_MEDIA_TYPES.includes(mediaType);
 

@@ -1,12 +1,16 @@
 // @flow
 import * as PAGES from 'constants/pages';
-import React from 'react';
+import React, { Suspense } from 'react';
 import classnames from 'classnames';
 import analytics from 'analytics';
 import type { Claim } from 'types/claim';
 import LoadingScreen from 'component/common/loading-screen';
-import Player from './internal/player';
 import PlayButton from './internal/play-button';
+
+const Player = React.lazy(() => import(
+  /* webpackChunkName: "player-legacy" */
+  './internal/player'
+));
 
 const SPACE_BAR_KEYCODE = 32;
 
@@ -269,25 +273,27 @@ class FileViewer extends React.PureComponent<Props> {
                 <LoadingScreen status={loadStatusMessage} />
               </div>
             ) : (
-              <Player
-                fileName={fileInfo.file_name}
-                poster={poster}
-                downloadPath={fileInfo.download_path}
-                mediaType={mediaType}
-                contentType={contentType}
-                downloadCompleted={fileInfo.completed}
-                changeVolume={changeVolume}
-                volume={volume}
-                savePosition={newPosition =>
-                  savePosition(claim.claim_id, `${claim.txid}:${claim.nout}`, newPosition)
-                }
-                claim={claim}
-                uri={uri}
-                position={position}
-                onStartCb={this.onFileStartCb}
-                onFinishCb={this.onFileFinishCb}
-                playingUri={playingUri}
-              />
+              <Suspense fallback={<div></div>}>
+                <Player
+                  fileName={fileInfo.file_name}
+                  poster={poster}
+                  downloadPath={fileInfo.download_path}
+                  mediaType={mediaType}
+                  contentType={contentType}
+                  downloadCompleted={fileInfo.completed}
+                  changeVolume={changeVolume}
+                  volume={volume}
+                  savePosition={newPosition =>
+                    savePosition(claim.claim_id, `${claim.txid}:${claim.nout}`, newPosition)
+                  }
+                  claim={claim}
+                  uri={uri}
+                  position={position}
+                  onStartCb={this.onFileStartCb}
+                  onFinishCb={this.onFileFinishCb}
+                  playingUri={playingUri}
+                />
+              </Suspense>
             )}
           </div>
         )}

@@ -16,7 +16,6 @@ import { selectSubscriptions, selectUnreadByChannel } from 'redux/selectors/subs
 import { makeSelectClientSetting } from 'redux/selectors/settings';
 import { Lbry, buildURI, parseURI, doResolveUris } from 'lbry-redux';
 import { doPurchaseUri, doFetchClaimsByChannel } from 'redux/actions/content';
-import Promise from 'bluebird';
 
 const CHECK_SUBSCRIPTIONS_INTERVAL = 15 * 60 * 1000;
 const SUBSCRIPTION_DOWNLOAD_LIMIT = 1;

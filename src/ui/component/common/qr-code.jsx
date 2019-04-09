@@ -1,7 +1,11 @@
 // @flow
-import React from 'react';
-import QRCodeElement from 'qrcode.react';
+import React, { Suspense } from 'react';
 import classnames from 'classnames';
+
+const LazyQRCodeElement = React.lazy(() => import(
+  /* webpackChunkName: "qrCode" */
+  'qrcode.react'
+));
 
 type Props = {
   value: string,
@@ -24,7 +28,9 @@ class QRCode extends React.Component<Props> {
           'qr-code--top-padding': paddingTop,
         })}
       >
-        <QRCodeElement value={value} />
+        <Suspense fallback={<div></div>}>
+          <LazyQRCodeElement value={value} />
+        </Suspense>
       </div>
     );
   }

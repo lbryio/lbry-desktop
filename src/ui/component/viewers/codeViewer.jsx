@@ -36,7 +36,7 @@ class CodeViewer extends React.PureComponent<Props> {
     const { theme, contentType } = me.props;
     // Init CodeMirror
     import(
-      /* webpackChunkName: "codeViewer" */
+      /* webpackChunkName: "codemirror" */
       'codemirror/lib/codemirror'
     ).then((CodeMirror) => {
       me.codeMirror = CodeMirror.fromTextArea(me.textarea, {

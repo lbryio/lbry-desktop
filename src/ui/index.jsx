@@ -21,7 +21,11 @@ import {
 import { Lbry, doToast, isURIValid, setSearchApi } from 'lbry-redux';
 import { doDownloadLanguages, doUpdateIsNightAsync } from 'redux/actions/settings';
 import { doAuthenticate, Lbryio, rewards, doBlackListedOutpointsSubscribe } from 'lbryinc';
-import 'scss/all.scss';
+import(
+  /* webpackChunkName: "styles" */
+  /* webpackPrefetch: true */
+  'scss/all.scss'
+);
 import { store, history } from 'store';
 import pjson from 'package.json';
 import app from './app';
