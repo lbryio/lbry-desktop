@@ -9,7 +9,7 @@ type Props = {
   uri: string,
 };
 
-class ModalSendTip extends React.PureComponent<Props> {
+class ModalPublishSuccess extends React.PureComponent<Props> {
   render() {
     const { closeModal, clearPublish, navigate, uri } = this.props;
 
@@ -20,7 +20,7 @@ class ModalSendTip extends React.PureComponent<Props> {
         contentLabel={__('File published')}
         onConfirmed={() => {
           clearPublish();
-          navigate('/published');
+          navigate('/$/published');
           closeModal();
         }}
       >
@@ -38,4 +38,4 @@ class ModalSendTip extends React.PureComponent<Props> {
   }
 }
 
-export default ModalSendTip;
+export default ModalPublishSuccess;
