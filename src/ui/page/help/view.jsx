@@ -2,6 +2,7 @@
 // @flow
 import * as icons from 'constants/icons';
 import * as React from 'react';
+import classnames from 'classnames';
 // @if TARGET='app'
 import { shell } from 'electron';
 // @endif
@@ -160,8 +161,35 @@ class HelpPage extends React.PureComponent<Props, State> {
             </div>
           </div>
         </section>
-
         <section className="card card--section">
+          <header className="card__header">
+            <h2 className="card__title">{__('Report a Bug or Suggest a New Feature')}</h2>
+
+            <p className="card__subtitle">
+              {__('Did you find something wrong? Think LBRY could add something useful and cool?')}{' '}
+              <Button button="link" label={__('Learn more')} href="https://lbry.com/faq/support" />.
+            </p>
+          </header>
+
+          <div className="card__content">
+            <div className="card__actions">
+              <Button
+                navigate="/$/report"
+                label={__('Submit a Bug Report/Feature Request')}
+                icon={icons.REPORT}
+                button="primary"
+              />
+            </div>
+
+            <div className="card__meta">{__('Thanks! LBRY is made by its users.')}</div>
+          </div>
+        </section>
+
+        <section
+          className={classnames('card card--section', {
+            'card--disabled': IS_WEB,
+          })}
+        >
           <header className="card__header">
             <h2 className="card__title">{__('View your Log')}</h2>
 
@@ -187,31 +215,11 @@ class HelpPage extends React.PureComponent<Props, State> {
           </div>
         </section>
 
-        <section className="card card--section">
-          <header className="card__header">
-            <h2 className="card__title">{__('Report a Bug or Suggest a New Feature')}</h2>
-
-            <p className="card__subtitle">
-              {__('Did you find something wrong? Think LBRY could add something useful and cool?')}{' '}
-              <Button button="link" label={__('Learn more')} href="https://lbry.com/faq/support" />.
-            </p>
-          </header>
-
-          <div className="card__content">
-            <div className="card__actions">
-              <Button
-                navigate="/$/report"
-                label={__('Submit a Bug Report/Feature Request')}
-                icon={icons.REPORT}
-                button="primary"
-              />
-            </div>
-
-            <div className="card__meta">{__('Thanks! LBRY is made by its users.')}</div>
-          </div>
-        </section>
-
-        <section className="card card--section">
+        <section
+          className={classnames('card card--section', {
+            'card--disabled': IS_WEB,
+          })}
+        >
           <header className="card__header">
             <h2 className="card__title">{__('About')}</h2>
 
