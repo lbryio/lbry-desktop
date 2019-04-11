@@ -1,9 +1,11 @@
 // @flow
 import React from 'react';
+import classnames from 'classnames';
 import BusyIndicator from 'component/common/busy-indicator';
 import TransactionList from 'component/transactionList';
 import Page from 'component/page';
 import RefreshTransactionButton from 'component/transactionRefreshButton';
+import UnsupportedOnWeb from 'component/common/unsupported-on-web';
 
 type Props = {
   fetchMyClaims: () => void,
@@ -25,7 +27,12 @@ class TransactionHistoryPage extends React.PureComponent<Props> {
 
     return (
       <Page>
-        <section className="card card--section">
+        {IS_WEB && <UnsupportedOnWeb />}
+        <section
+          className={classnames('card card--section', {
+            'card--disabled': IS_WEB,
+          })}
+        >
           <header className="card__header card__header--flat">
             <h2 className="card__title card__title--flex-between ">
               {__('Transaction History')}

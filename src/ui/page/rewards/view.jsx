@@ -8,6 +8,7 @@ import Page from 'component/page';
 import classnames from 'classnames';
 import type { Reward } from 'types/reward';
 import { rewards as REWARD_TYPES } from 'lbryinc';
+import UnsupportedOnWeb from 'component/common/unsupported-on-web';
 
 type Props = {
   doAuth: () => void,
@@ -32,19 +33,25 @@ class RewardsPage extends PureComponent<Props> {
     if (user && !user.is_reward_approved && daemonSettings && daemonSettings.share_usage_data) {
       if (!user.primary_email || !user.has_verified_email || !user.is_identity_verified) {
         return (
-          <section className="card card--section">
-            <header className="card__header">
-              <h2 className="card__title">{__('Humans Only')}</h2>
-              <p className="card__subtitle">
-                {__('Rewards are for human beings only.')}{' '}
-                {__("You'll have to prove you're one of us before you can claim any rewards.")}
-              </p>
-            </header>
+          !IS_WEB && (
+            <section className="card card--section">
+              <header className="card__header">
+                <h2 className="card__title">{__('Humans Only')}</h2>
+                <p className="card__subtitle">
+                  {__('Rewards are for human beings only.')}{' '}
+                  {__("You'll have to prove you're one of us before you can claim any rewards.")}
+                </p>
+              </header>
 
-            <div className="card__content">
-              <Button navigate="/$/auth?redirect=rewards" button="primary" label="Prove Humanity" />
-            </div>
-          </section>
+              <div className="card__content">
+                <Button
+                  navigate="/$/auth?redirect=rewards"
+                  button="primary"
+                  label="Prove Humanity"
+                />
+              </div>
+            </section>
+          )
         );
       }
       return (
@@ -131,8 +138,8 @@ class RewardsPage extends PureComponent<Props> {
             <p className="card__content">
               {claimed && claimed.length
                 ? __(
-                  "You have claimed all available rewards! We're regularly adding more so be sure to check back later."
-                )
+                    "You have claimed all available rewards! We're regularly adding more so be sure to check back later."
+                  )
                 : __('There are no rewards available at this time, please check back later.')}
             </p>
           </section>
@@ -162,6 +169,7 @@ class RewardsPage extends PureComponent<Props> {
   render() {
     return (
       <Page>
+        {IS_WEB && <UnsupportedOnWeb />}
         {this.renderPageHeader()}
         {this.renderUnclaimedRewards()}
         {<RewardListClaimed />}

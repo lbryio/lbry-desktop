@@ -62,7 +62,7 @@ export default class FirstRun extends PureComponent<Props> {
         <p>{__('Thanks for trying out lbry.tv')}</p>
         <p>
           {__(
-            "Some things still don't work they way they are supposed to, but we are working hard to make that better."
+            'Some features are only available on our desktop app. We are working hard to add them here. Check back later or download the app.'
           )}
         </p>
       </React.Fragment>
