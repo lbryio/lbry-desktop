@@ -155,7 +155,7 @@ class SettingsPage extends React.PureComponent<Props, State> {
             <div className="card__title">{__('Failed to load settings.')}</div>
           </section>
         ) : (
-          <div className={classnames({ 'card--hidden': IS_WEB })}>
+          <div className={classnames({ 'card--disabled': IS_WEB })}>
             <section className="card card--section">
               <header className="card__header">
                 <h2 className="card__title">{__('Download Directory')}</h2>

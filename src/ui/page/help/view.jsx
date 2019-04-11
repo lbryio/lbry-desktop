@@ -185,11 +185,8 @@ class HelpPage extends React.PureComponent<Props, State> {
           </div>
         </section>
 
-        <section
-          className={classnames('card card--section', {
-            'card--disabled': IS_WEB,
-          })}
-        >
+        {/* @if TARGET='app' */}
+        <section className="card card--section">
           <header className="card__header">
             <h2 className="card__title">{__('View your Log')}</h2>
 
@@ -215,11 +212,7 @@ class HelpPage extends React.PureComponent<Props, State> {
           </div>
         </section>
 
-        <section
-          className={classnames('card card--section', {
-            'card--disabled': IS_WEB,
-          })}
-        >
+        <section className="card card--section">
           <header className="card__header">
             <h2 className="card__title">{__('About')}</h2>
 
@@ -296,6 +289,7 @@ class HelpPage extends React.PureComponent<Props, State> {
             </table>
           </div>
         </section>
+        {/* @endif */}
       </Page>
     );
   }
