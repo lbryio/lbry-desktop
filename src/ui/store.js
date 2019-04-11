@@ -74,21 +74,37 @@ const walletFilter = createFilter('wallet', ['receiveAddress']);
 const searchFilter = createFilter('search', ['options']);
 
 const persistOptions = {
-  whitelist: ['subscriptions', 'publish', 'wallet', 'content', 'fileInfo', 'app', 'search'],
+  whitelist: [
+    // @if TARGET='app'
+    'publish',
+    'wallet',
+    'fileInfo',
+    // @endif
+    'content',
+    'subscriptions',
+    'app',
+    'search',
+  ],
   // Order is important. Needs to be compressed last or other transforms can't
   // read the data
-  transforms: [walletFilter, contentFilter, fileInfoFilter, appFilter, searchFilter, compressor],
-  debounce: 10000,
+  transforms: [
+    // @if TARGET='app'
+    walletFilter,
+    contentFilter,
+    fileInfoFilter,
+    // @endif
+    appFilter,
+    searchFilter,
+    compressor,
+  ],
+  debounce: IS_WEB ? 5000 : 10000,
   storage: localForage,
 };
 
-// Dont' persist anything on web (for now)
-// @if TARGET='app'
 window.cacheStore = persistStore(store, persistOptions, err => {
   if (err) {
     console.error('Unable to load saved settings');
   }
 });
-// @endif
 
 export { store, history };

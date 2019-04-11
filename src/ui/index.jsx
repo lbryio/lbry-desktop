@@ -58,7 +58,7 @@ ipcRenderer.on('navigate-forward', () => {
 // @endif
 
 // @if TARGET='web'
-const SDK_API_URL = process.env.SDK_API_URL || 'https://api.lbry.tv/api/proxy';
+const SDK_API_URL = process.env.SDK_API_URL || 'https://api.piratebay.com/api/proxy';
 Lbry.setDaemonConnectionString(SDK_API_URL);
 // @endif
 
@@ -89,7 +89,7 @@ Lbryio.setOverride(
         const newAuthToken = response.auth_token;
         authToken = newAuthToken;
         // @if TARGET='web'
-        document.cookie = cookie.serialize('authToken', authToken);
+        document.cookie = cookie.serialize('auth_token', authToken);
         // @endif
         // @if TARGET='app'
         ipcRenderer.send('set-auth-token', authToken);
@@ -115,7 +115,7 @@ Lbryio.setOverride(
         ipcRenderer.send('get-auth-token');
         // @endif
         // @if TARGET='web'
-        const { authToken } = cookie.parse(document.cookie);
+        const { auth_token: authToken } = cookie.parse(document.cookie);
         resolve(authToken);
         // @endif
       }

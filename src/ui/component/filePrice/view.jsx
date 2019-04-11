@@ -33,7 +33,7 @@ class FilePrice extends React.PureComponent<Props> {
     const { costInfo, fetchCostInfo, uri, fetching, claim } = props;
 
     if (costInfo === undefined && !fetching && claim) {
-      fetchCostInfo(uri);
+      // fetchCostInfo(uri);
     }
   };
 
