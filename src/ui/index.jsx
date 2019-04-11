@@ -21,17 +21,16 @@ import {
 import { Lbry, doToast, isURIValid, setSearchApi } from 'lbry-redux';
 import { doDownloadLanguages, doUpdateIsNightAsync } from 'redux/actions/settings';
 import { doAuthenticate, Lbryio, rewards, doBlackListedOutpointsSubscribe } from 'lbryinc';
-import(
-  /* webpackChunkName: "styles" */
-  /* webpackPrefetch: true */
-  'scss/all.scss'
-);
 import { store, history } from 'store';
 import pjson from 'package.json';
 import app from './app';
 import analytics from './analytics';
 import doLogWarningConsoleMessage from './logWarningConsoleMessage';
 import { ConnectedRouter } from 'connected-react-router';
+import cookie from 'cookie';
+import(/* webpackChunkName: "styles" */
+/* webpackPrefetch: true */
+'scss/all.scss');
 
 const APPPAGEURL = 'lbry://?';
 
@@ -67,7 +66,7 @@ Lbry.setDaemonConnectionString(SDK_API_URL);
 // We interect with ipcRenderer to get the auth key from a users keyring
 // We keep a local variable for authToken beacuse `ipcRenderer.send` does not
 // contain a response, so there is no way to know when it's been set
-// @if TARGET='app'
+
 let authToken;
 Lbryio.setOverride(
   'setAuthToken',
@@ -89,6 +88,9 @@ Lbryio.setOverride(
 
         const newAuthToken = response.auth_token;
         authToken = newAuthToken;
+        // @if TARGET='web'
+        document.cookie = cookie.serialize('auth_token', authToken);
+        // @endif
         // @if TARGET='app'
         ipcRenderer.send('set-auth-token', authToken);
         // @endif
@@ -112,10 +114,13 @@ Lbryio.setOverride(
 
         ipcRenderer.send('get-auth-token');
         // @endif
+        // @if TARGET='web'
+        const { auth_token: authToken } = cookie.parse(document.cookie);
+        resolve(authToken);
+        // @endif
       }
     })
 );
-// @endif
 
 rewards.setCallback('claimFirstRewardSuccess', () => {
   app.store.dispatch(doOpenModal(MODALS.FIRST_REWARD));

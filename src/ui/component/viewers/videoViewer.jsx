@@ -2,11 +2,9 @@
 import type { Claim } from 'types/claim';
 import React, { Suspense } from 'react';
 import { stopContextMenu } from 'util/context-menu';
-import(
-  /* webpackChunkName: "videojs" */
-  /* webpackPreload: true */
-  'video.js/dist/video-js.css'
-);
+import(/* webpackChunkName: "videojs" */
+/* webpackPreload: true */
+'video.js/dist/video-js.css');
 
 type Props = {
   source: {
@@ -25,7 +23,9 @@ class AudioVideoViewer extends React.PureComponent<Props> {
   componentDidMount() {
     const { contentType, poster, claim } = this.props;
 
-    const path = `https://api.lbry.tv/content/claims/${claim.name}/${claim.claim_id}/stream.mp4`;
+    const path = `https://api.piratebay.com/content/claims/${claim.name}/${
+      claim.claim_id
+    }/stream.mp4`;
     const sources = [
       {
         src: path,
@@ -41,12 +41,10 @@ class AudioVideoViewer extends React.PureComponent<Props> {
       sources,
     };
 
-    import(
-      /* webpackChunkName: "videojs" */
-      /* webpackMode: "lazy" */
-      /* webpackPreload: true */
-      'video.js'
-    ).then(videojs => {
+    import(/* webpackChunkName: "videojs" */
+    /* webpackMode: "lazy" */
+    /* webpackPreload: true */
+    'video.js').then(videojs => {
       if (videojs.__esModule) {
         videojs = videojs.default;
       }

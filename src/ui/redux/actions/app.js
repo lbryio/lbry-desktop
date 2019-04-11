@@ -23,6 +23,7 @@ import {
 } from 'redux/selectors/app';
 import { doAuthenticate } from 'lbryinc';
 import { lbrySettings as config, version as appVersion } from 'package.json';
+import { push } from 'connected-react-router';
 
 // @if TARGET='app'
 const { autoUpdater } = remote.require('electron-updater');
@@ -388,7 +389,7 @@ export function doConditionalAuthNavigate(newSession) {
     const modal = selectModal(state);
 
     if (newSession || (modal && modal.id !== MODALS.EMAIL_COLLECTION)) {
-      // dispatch(doAuthNavigate());
+      dispatch(push('/$/auth'));
     }
   };
 }
