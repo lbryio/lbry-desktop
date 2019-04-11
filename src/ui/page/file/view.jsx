@@ -21,6 +21,7 @@ import classnames from 'classnames';
 import getMediaType from 'util/get-media-type';
 import RecommendedContent from 'component/recommendedContent';
 import CommentsList from 'component/commentsList';
+import FormField from '../../component/common/form-components/form-field';
 
 type Props = {
   claim: Claim,
@@ -152,7 +153,7 @@ class FilePage extends React.Component<Props> {
       mediaType,
       contentType,
       fileName,
-    })
+    });
     const showFile =
       PLAYABLE_MEDIA_TYPES.includes(mediaType) || PREVIEW_MEDIA_TYPES.includes(mediaType);
 

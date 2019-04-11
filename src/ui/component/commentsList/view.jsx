@@ -1,6 +1,19 @@
 import React, { useEffect, useState } from 'react';
 import { Lbry, parseURI } from 'lbry-redux';
 
+class Comment extends React.PureComponent<Props> {
+  render() {
+    return (
+      <span class="button button--no-style navigation__link card__message">
+        <div class="media__info-text">
+          <div class="media__subtitle__channel">{this.props.message}</div>
+          <div class="card__actions--between">{this.props.author}</div>
+        </div>
+      </span>
+    );
+  }
+}
+
 export default function CommentsList(props) {
   const { uri } = props;
   const { claimId } = parseURI(uri);
@@ -13,7 +26,9 @@ export default function CommentsList(props) {
   // useEffect is saying, when the properties that are passed in to this function change,
   // re-run this function, or re-run this "effect" that will update the local state
   useEffect(() => {
-    console.log('claimID changed: ', claimId);
+    Lbry.comment_list({ claim_id: claimId })
+      .then(result => setComments(result))
+      .catch(error => console.error(error));
     // Lbry.commentsList(claimID)
     //   .then(comments => setComments(comments))
     //   .catch(error => console.error(error))
@@ -27,9 +42,19 @@ export default function CommentsList(props) {
   // If we have comments, we want to return a piece of UI
   // The same way we would return an array, we can return an "array" of <li> elements with the comment data inside
   return (
-    <ul>
-      {comments.map(comment => {
-        <li>{comment.value}</li>;
+    <ul class="navigation__links">
+      {comments.comments.map(comment => {
+        return (
+          <li>
+            <Comment
+              commentId={comment.comment_id}
+              claimId={comment.claim_id}
+              author={comment.author}
+              message={comment.message}
+              timePosted={comment.time_posted}
+            />
+          </li>
+        );
       })}
     </ul>
   );
