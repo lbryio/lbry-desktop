@@ -4,6 +4,19 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [0.32.0] - [Unreleased]
+
+### Fixed
+
+### Added
+
+- New routing setup to allow lbry.tv to use the browser url bar for navigation ([#2408](https://github.com/lbryio/lbry-desktop/pull/2408))
+- New audio player ([#2406](https://github.com/lbryio/lbry-desktop/pull/2406))
+
+### Changed
+
+- Remove nested navigation on side bar ([#2399](https://github.com/lbryio/lbry-desktop/pull/2399))
+
 ## [0.31.1] - [2019-3-23]
 
 ### Fixed
