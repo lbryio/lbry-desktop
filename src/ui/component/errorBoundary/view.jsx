@@ -25,6 +25,11 @@ export default class ErrorBoundary extends React.Component<Props, State> {
   componentDidCatch(error: { stack: string }) {
     declare var app: { env: string };
 
+    const errorMessage = `
+    ${window.location.pathname + window.location.search}\n
+    ${error.stack}
+    `;
+
     if (app.env === 'production') {
       Lbryio.call('event', 'desktop_error', { error_message: error.stack });
     }
