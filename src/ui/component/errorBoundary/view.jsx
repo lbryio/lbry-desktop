@@ -31,7 +31,7 @@ export default class ErrorBoundary extends React.Component<Props, State> {
     `;
 
     if (app.env === 'production') {
-      Lbryio.call('event', 'desktop_error', { error_message: error.stack });
+      Lbryio.call('event', 'desktop_error', { error_message: errorMessage });
     }
   }
 
