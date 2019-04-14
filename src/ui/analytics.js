@@ -26,7 +26,10 @@ const analytics: Analytics = {
     // }
   },
   toggle: (enabled: boolean): void => {
+    // Always collect analytics on lbry.tv
+    // @if TARGET='app'
     analyticsEnabled = enabled;
+    // @endif
   },
   apiLogView: (uri, outpoint, claimId, timeToStart, onSuccessCb) => {
     if (analyticsEnabled) {
@@ -78,6 +81,7 @@ const UA_ID = IS_WEB ? 'UA-60403362-12' : 'UA-60403362-12';
 ReactGA.initialize(UA_ID, {
   gaOptions: { name: IS_WEB ? 'web' : 'desktop' },
   testMode: process.env.NODE_ENV !== 'production',
+  // debug: true,
 });
 
 // Manually call the first page view
@@ -87,9 +91,15 @@ analytics.pageView(window.location.pathname + window.location.search);
 // Listen for url changes and report
 // This will include search queries
 history.listen(location => {
-  const { pathname, search } = location;
-  const page = `${pathname}${search}`;
-  analytics.pageView(page);
+  const {
+    pathname,
+    // search
+  } = location;
+
+  // TODO: include search query somehow but not in the page name
+  // Google analytics separates those into different pages
+  // const page = `${pathname}${search}`;
+  analytics.pageView(pathname);
 });
 
 export default analytics;
