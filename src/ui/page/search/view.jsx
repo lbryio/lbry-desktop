@@ -21,7 +21,8 @@ export default function SearchPage(props: Props) {
   const urlParams = new URLSearchParams(search);
   const urlQuery = urlParams.get('q');
   const isValid = isURIValid(urlQuery);
-
+  console.log({ isValid });
+  console.log({ urlQuery });
   let uri;
   let isChannel;
   let label;
@@ -41,22 +42,20 @@ export default function SearchPage(props: Props) {
       <section className="search">
         {urlQuery && (
           <Fragment>
-            <header className="search__header">
-              {isValid && (
-                <Fragment>
-                  <SearchOptions />
-
-                  <h1 className="media__uri">{uri}</h1>
-                  {isChannel ? (
-                    <ChannelTile size="large" isSearchResult uri={uri} />
-                  ) : (
-                    <FileTile size="large" isSearchResult displayHiddenMessage uri={uri} />
-                  )}
-                </Fragment>
-              )}
-            </header>
+            {isValid && (
+              <header className="search__header">
+                <h1 className="media__uri">{uri}</h1>
+                {isChannel ? (
+                  <ChannelTile size="large" isSearchResult uri={uri} />
+                ) : (
+                  <FileTile size="large" isSearchResult displayHiddenMessage uri={uri} />
+                )}
+              </header>
+            )}
 
             <div className="search__results-wrapper">
+              <SearchOptions />
+
               <FileListSearch query={urlQuery} />
               <div className="card__content help">
                 {__('These search results are provided by LBRY, Inc.')}
