@@ -91,15 +91,10 @@ analytics.pageView(window.location.pathname + window.location.search);
 // Listen for url changes and report
 // This will include search queries
 history.listen(location => {
-  const {
-    pathname,
-    // search
-  } = location;
+  const { pathname, search } = location;
 
-  // TODO: include search query somehow but not in the page name
-  // Google analytics separates those into different pages
-  // const page = `${pathname}${search}`;
-  analytics.pageView(pathname);
+  const page = `${pathname}${search}`;
+  analytics.pageView(page);
 });
 
 export default analytics;
