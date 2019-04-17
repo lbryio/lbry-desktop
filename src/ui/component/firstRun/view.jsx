@@ -90,7 +90,7 @@ export default class FirstRun extends PureComponent<Props> {
 
     return (
       <div className="banner banner--first-run">
-        <Yrbl className="yrbl--first-run" />
+        <Yrbl />
 
         <div className="banner__item">
           <div className="banner__item--static-for-animation">

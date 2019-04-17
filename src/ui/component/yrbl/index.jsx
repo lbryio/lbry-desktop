@@ -1,6 +1,6 @@
 // @flow
 import * as React from 'react';
-import classnames from 'classnames';
+import styles from './yrbl.module.scss';
 import HappyYrbl from './gerbil-happy.png';
 import SadYrbl from './gerbil-sad.png';
 
@@ -22,15 +22,15 @@ export default class extends React.PureComponent<Props> {
   };
 
   render() {
-    const { title, subtitle, type, className } = this.props;
+    const { title, subtitle, type, enhanced } = this.props;
 
     const image = yrblTypes[type];
 
     return (
-      <div className="yrbl__wrap">
-        <img alt="Friendly gerbil" className={classnames('yrbl', className)} src={`${image}`} />
+      <div className={styles.container}>
+        <img alt="Friendly gerbil" className={enhanced ? style.yrblEnhanced : styles.yrbl} src={image} />
         {title && subtitle && (
-          <div className="yrbl__content">
+          <div className={styles.content}>
             <h2 className="card__title">{title}</h2>
             <div className="card__content">{subtitle}</div>
           </div>

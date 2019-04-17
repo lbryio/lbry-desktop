@@ -1,4 +1,4 @@
-.yrbl__wrap {
+.container {
   align-items: center;
   display: flex;
   justify-content: center;
@@ -8,32 +8,20 @@
 }
 
 .yrbl {
-  height: 20rem;
-  margin-right: var(--spacing-vertical-large);
+  height: 20em;
+  max-height: 20vw;
+  max-width: none !important; /* Seriously, what's the the base styles, clean them up */
+  margin-right: 1vw;
+  min-height: 10em;
 }
 
-.yrbl__content {
+.content {
   max-width: 500px;
 }
 
-.yrbl--first-run {
-  align-self: center;
-  height: 250px;
-  width: auto;
-  margin: 0 var(--spacing-vertical-large);
-}
-
-.yrbl--search {
-  justify-content: flex-start;
-  margin: 0;
-
-  .yrbl {
-    height: 18rem;
-  }
-}
 
 // Get weird here
-.yrbl--enhanced {
+.yrblEnhanced {
   position: absolute;
   z-index: 9999;
   height: 95vh;

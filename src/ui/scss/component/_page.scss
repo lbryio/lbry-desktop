@@ -6,6 +6,7 @@
 
   background-color: mix($lbry-white, $lbry-gray-1, 70%);
   display: flex;
+  overflow: hidden;
   position: absolute;
   z-index: 0;
 

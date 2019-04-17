@@ -61,7 +61,7 @@ const Header = (props: Props) => {
         icon={ICONS.ARROW_RIGHT}
       />
 
-      <div class={styles.wunderbar}>
+    <div className={styles.wunderbar}>
         <WunderBar />
       </div>
 
