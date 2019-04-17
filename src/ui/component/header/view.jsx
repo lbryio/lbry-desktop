@@ -5,6 +5,7 @@ import Button from 'component/button';
 import LbcSymbol from 'component/common/lbc-symbol';
 import WunderBar from 'component/wunderbar';
 import Icon from 'component/common/icon';
+import styles from './header.module.scss';
 
 type Props = {
   autoUpdateDownloaded: boolean,
@@ -35,85 +36,66 @@ const Header = (props: Props) => {
     autoUpdateDownloaded || (process.platform === 'linux' && isUpgradeAvailable);
 
   return (
-    <header className="header">
-      <div className="header__navigation">
-        {/* @if TARGET='app' */}
-        <div className="header__navigation-app">
-          <Icon className="lbry-icon" icon={ICONS.LBRY} />
-          <div className="header__navigation-arrows">
-            <Button
-              className="header__navigation-item header__navigation-item--back"
-              description={__('Navigate back')}
-              onClick={() => window.history.back()}
-              icon={ICONS.ARROW_LEFT}
-              iconSize={15}
-            />
+    <header className={styles.header}>
+      <Icon className={styles.menuIcon} icon={ICONS.MENU} />
+      <Button
+        className={styles.logoIcon}
+        description={__('LBRY')}
+        icon={ICONS.LBRY}
+        title={`LBRY`}
+        label={<span className={styles.logoText}>LBRY</span>}
+        navigate="/"
+      />
 
-            <Button
-              className="header__navigation-item header__navigation-item--forward"
-              description={__('Navigate forward')}
-              onClick={() => window.history.forward()}
-              icon={ICONS.ARROW_RIGHT}
-              iconSize={15}
-            />
-          </div>
-        </div>
-        {/* @endif */}
-        {/* @if TARGET='web' */}
-        <Button
-          className="header__navigation-item header__navigation-item--lbry"
-          label={__('LBRY')}
-          iconRight={ICONS.LBRY}
-          navigate="/"
-        />
-        {/* @endif */}
+      <Button
+        className={styles.back}
+        description={__('Navigate back')}
+        onClick={() => window.history.back()}
+        icon={ICONS.ARROW_LEFT}
+      />
+
+      <Button
+        className={styles.forward}
+        description={__('Navigate forward')}
+        onClick={() => window.history.forward()}
+        icon={ICONS.ARROW_RIGHT}
+      />
+
+      <div class={styles.wunderbar}>
+        <WunderBar />
       </div>
 
-      <WunderBar />
+      <Button
+        className={styles.balance}
+        description={__('Your wallet')}
+        icon={ICONS.WALLET}
+        title={`Your balance is ${balance} LBRY Credits`}
+        label={
+          <React.Fragment>
+            {roundedBalance} <LbcSymbol />
+          </React.Fragment>
+        }
+        navigate="/$/account"
+      />
 
-      <div className="header__navigation">
+      <Button
+        className={styles.publish}
+        description={__('Publish content')}
+        icon={ICONS.UPLOAD}
+        label={isUpgradeAvailable ? '' : __('Publish')}
+        navigate="/$/publish"
+      />
+
+      {/* @if TARGET='app' */}
+      {showUpgradeButton && (
         <Button
-          className="header__navigation-item header__navigation-item--menu"
-          description={__('Menu')}
-          icon={ICONS.MENU}
-          iconSize={15}
+          className=""
+          icon={ICONS.DOWNLOAD}
+          label={__('Upgrade App')}
+          onClick={downloadUpgradeRequested}
         />
-
-        <Button
-          className="header__navigation-item header__navigation-item--wallet"
-          description={__('Your wallet')}
-          title={`Your balance is ${balance} LBRY Credits`}
-          label={
-            <React.Fragment>
-              {roundedBalance} <LbcSymbol />
-            </React.Fragment>
-          }
-          navigate="/$/account"
-        />
-
-        <Button
-          className="header__navigation-item header__navigation-item--right-action"
-          activeClass="header__navigation-item--active"
-          description={__('Publish content')}
-          icon={ICONS.UPLOAD}
-          iconSize={24}
-          label={isUpgradeAvailable ? '' : __('Publish')}
-          navigate="/$/publish"
-        />
-
-        {/* @if TARGET='app' */}
-
-        {showUpgradeButton && (
-          <Button
-            className="header__navigation-item header__navigation-item--right-action"
-            icon={ICONS.DOWNLOAD}
-            iconSize={24}
-            label={__('Upgrade App')}
-            onClick={downloadUpgradeRequested}
-          />
-        )}
-        {/* @endif */}
-      </div>
+      )}
+      {/* @endif */}
     </header>
   );
 };

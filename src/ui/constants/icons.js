@@ -63,3 +63,4 @@ export const MUSIC_ALBUM = 'Disc';
 export const MUSIC_ARTIST = 'Mic';
 export const MUSIC_SONG = 'Music';
 export const MUSIC_EQUALIZER = 'Sliders';
+export const WALLET = 'Briefcase';

@@ -1,0 +1,130 @@
+@import '~@lbry/components/sass/init/_color.scss';
+@import '~@lbry/components/sass/init/_mixins.scss';
+@import '~@lbry/components/sass/init/_variables.scss';
+@import 'init/vars';
+@import 'init/mixins';
+
+.header {
+  background-color: $lbry-white;
+  display: flex;
+  font-size: 1.2rem;
+  height: var(--header-height);
+  position: fixed;
+  width: 100%;
+  z-index: 1;
+
+  html[data-mode='dark'] & {
+    background-color: rgba($lbry-black, 0.9);
+    color: $lbry-white;
+  }
+}
+
+.icon {
+  align-items: center;
+  display: flex;
+  height: 100%;
+  padding: 0 10px;
+
+  &::after {
+    content: "";
+    display: block;
+    position: absolute;
+    background: #fff;
+    bottom: 0;
+    left: 0;
+    opacity: 0;
+    right: 0;
+    top: 0;
+    transition: opacity .3s;
+  }
+
+  &:hover::after {
+    opacity: 0.1;
+  }
+}
+
+.menuIcon {
+  composes: icon;
+  display: none;
+
+  @media (max-width: 600px) {
+    & {
+      /* TODO: Implement working menu */
+      /* display: block; */
+      margin-right: -0.4em;
+      padding: 0.2em;
+      padding-right: 0;
+      width: 3.2em;
+    }
+  }
+}
+
+.logoIcon {
+  composes: icon;
+  margin-left: 0.6em;
+  padding: 4px;
+
+  svg { /* TODO: clean up base component & styles */
+    color: $lbry-white !important;
+    height: 2.2em !important;
+    width: 2.6em !important;
+  }
+
+  & > span {
+    align-items: center;
+    display: flex;
+  }
+}
+
+.logoText {
+  margin-left: -5px;
+
+  @media (max-width: 600px) {
+    & {
+      display: none;
+    }
+  }
+}
+
+.back,
+.forward {
+  composes: icon;
+  padding: 0 16px;
+
+  @media (max-width: 600px) {
+    & {
+      padding: 0 4px;
+    }
+  }
+}
+
+.back {
+  padding-right: 8px;
+}
+
+.forward {
+  padding-left: 8px;
+}
+
+.wunderbar {
+  flex: 1;
+  height: 100%;
+  overflow: hidden;
+}
+
+.balance {
+  composes: icon;
+}
+
+.publish {
+  composes: icon;
+  color: $lbry-white !important;
+  background: $lbry-teal-5;
+}
+
+@media (max-width: 600px) {
+  .balance svg,
+  .publish svg {
+    display: none;
+  }
+}

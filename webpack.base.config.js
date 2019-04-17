@@ -50,7 +50,12 @@ let baseConfig = {
             },
           },
           'postcss-loader',
-          'sass-loader',
+          {
+            loader: 'sass-loader',
+            options: {
+              includePaths: [path.resolve('./src/ui/scss')],
+            },
+          },
         ],
       },
       {
