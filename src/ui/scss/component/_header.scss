@@ -93,6 +93,8 @@
   width: var(--header-height);
 
   svg {
+    stroke: $lbry-black;
+
     &:only-child {
       // Header icons are a little different because they are larger
       top: 0.25rem;
@@ -112,8 +114,7 @@
   .lbry-icon {
     height: 2rem;
     width: 2rem;
-    top: 0.5rem;
-    color: $lbry-white;
+    top: 0.6rem;
   }
 }
 

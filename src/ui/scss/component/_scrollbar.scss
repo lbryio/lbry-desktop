@@ -1,0 +1,23 @@
+::-webkit-scrollbar {
+  width: 6px;
+  height: 5px;
+
+  background-color: transparent;
+  overflow: auto;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: $lbry-gray-3;
+
+  html[data-mode='dark'] & {
+    background-color: $lbry-gray-5;
+  }
+}
+
+::-webkit-scrollbar-thumb:active {
+  background-color: $lbry-teal-3;
+}
+
+::-webkit-scrollbar-track {
+  background-color: transparent;
+}
