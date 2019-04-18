@@ -30,9 +30,10 @@ import { ConnectedRouter, push } from 'connected-react-router';
 import cookie from 'cookie';
 import { formatLbryUriForWeb } from 'util/uri';
 
-import(/* webpackChunkName: "styles" */
-/* webpackPrefetch: true */
-  'scss/all.scss');
+// Import our app styles
+// If a style is not necessary for the initial page load, it should be removed from `all.scss`
+// and loaded dynamically in the component that consumes it
+import 'scss/all.scss';
 
 const APPPAGEURL = 'lbry://?';
 
