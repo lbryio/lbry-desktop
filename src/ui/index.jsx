@@ -219,7 +219,10 @@ const init = () => {
   // @endif
 
   app.store.dispatch(doDownloadLanguages());
-  app.store.dispatch(doBlackListedOutpointsSubscribe());
+  
+  if (window.localStorage.getItem('no_blocklist') !== 'true') {
+    app.store.dispatch(doBlackListedOutpointsSubscribe());
+  }
 
   function onDaemonReady() {
     // @if TARGET='app'
