@@ -21,8 +21,7 @@ export default function SearchPage(props: Props) {
   const urlParams = new URLSearchParams(search);
   const urlQuery = urlParams.get('q');
   const isValid = isURIValid(urlQuery);
-  console.log({ isValid });
-  console.log({ urlQuery });
+
   let uri;
   let isChannel;
   let label;
