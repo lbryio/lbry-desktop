@@ -26,11 +26,13 @@ import pjson from 'package.json';
 import app from './app';
 import analytics from './analytics';
 import doLogWarningConsoleMessage from './logWarningConsoleMessage';
-import { ConnectedRouter } from 'connected-react-router';
+import { ConnectedRouter, push } from 'connected-react-router';
 import cookie from 'cookie';
+import { formatLbryUriForWeb } from 'util/uri';
+
 import(/* webpackChunkName: "styles" */
 /* webpackPrefetch: true */
-'scss/all.scss');
+  'scss/all.scss');
 
 const APPPAGEURL = 'lbry://?';
 
@@ -47,16 +49,6 @@ if (process.env.SEARCH_API_URL) {
   setSearchApi(process.env.SEARCH_API_URL);
 }
 
-// @if TARGET='app'
-ipcRenderer.on('navigate-backward', () => {
-  // app.store.dispatch(doHistoryBack());
-});
-
-ipcRenderer.on('navigate-forward', () => {
-  // app.store.dispatch(doHistoryForward());
-});
-// @endif
-
 // @if TARGET='web'
 const SDK_API_URL = process.env.SDK_API_URL || 'https://api.piratebay.com/api/proxy';
 Lbry.setDaemonConnectionString(SDK_API_URL);
@@ -66,7 +58,6 @@ Lbry.setDaemonConnectionString(SDK_API_URL);
 // We interect with ipcRenderer to get the auth key from a users keyring
 // We keep a local variable for authToken beacuse `ipcRenderer.send` does not
 // contain a response, so there is no way to know when it's been set
-
 let authToken;
 Lbryio.setOverride(
   'setAuthToken',
@@ -141,9 +132,10 @@ ipcRenderer.on('open-uri-requested', (event, uri, newSession) => {
       app.store.dispatch(doConditionalAuthNavigate(newSession));
     } else if (uri.startsWith(APPPAGEURL)) {
       const navpage = uri.replace(APPPAGEURL, '').toLowerCase();
-      // app.store.dispatch(doNavigate(`/${navpage}`));
+      app.store.dispatch(push(`/$/${navpage}`));
     } else if (isURIValid(uri)) {
-      // app.store.dispatch(doNavigate('/show', { uri }));
+      const formattedUri = formatLbryUriForWeb(uri);
+      app.store.dispatch(push(formattedUri));
     } else {
       app.store.dispatch(
         doToast({
@@ -156,7 +148,7 @@ ipcRenderer.on('open-uri-requested', (event, uri, newSession) => {
 
 ipcRenderer.on('open-menu', (event, uri) => {
   if (uri && uri.startsWith('/help')) {
-    // app.store.dispatch(doNavigate('/help'));
+    app.store.dispatch(push('/$/help'));
   }
 });
 
