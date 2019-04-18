@@ -164,7 +164,7 @@ class UserHistoryPage extends React.PureComponent<Props, State> {
         )}
       </React.Fragment>
     ) : (
-      <div className="page__empty">
+      <div className="main--empty">
         <section className="card card--section">
           <header className="card__header">
             <h2 className="card__title">

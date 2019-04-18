@@ -1,13 +1,15 @@
 .navigation {
-  background-color: $lbry-white;
-  border-right: 1px solid rgba($lbry-gray-1, 0.9);
-  font-size: 1.25rem;
-  padding-top: var(--spacing-vertical-large);
-  padding-right: var(--spacing-vertical-small);
-  position: relative;
+  position: fixed;
+  top: var(--header-height);
+  height: calc(100vh - var(--header-height));
   display: flex;
   flex-direction: column;
   overflow-y: overlay;
+  background-color: $lbry-white;
+  border-right: 1px solid rgba($lbry-gray-1, 0.9);
+  padding-top: var(--spacing-vertical-large);
+  padding-right: var(--spacing-vertical-small);
+  font-size: 1.2rem;
 
   html[data-mode='dark'] & {
     background-color: $lbry-black;
@@ -18,7 +20,7 @@
   // on smaller screen widths
 
   @media (min-width: 601px) {
-    width: 171px; // 1px is for the border
+    width: var(--side-nav-width);
   }
 
   @media (max-width: 600px) {

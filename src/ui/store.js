@@ -36,12 +36,14 @@ function enableBatching(reducer) {
   };
 }
 
+let history;
 // @if TARGET='app'
-const history = createHashHistory();
+history = createHashHistory();
 // @endif
 // @if TARGET='web'
-const history = createBrowserHistory();
+history = createBrowserHistory();
 // @endif
+
 const bulkThunk = createBulkThunkMiddleware();
 const middleware = [routerMiddleware(history), thunk, bulkThunk];
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;

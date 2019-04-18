@@ -14,7 +14,7 @@ class SuggestedSubscriptions extends PureComponent<Props> {
 
     if (loading) {
       return (
-        <div className="page__empty">
+        <div className="main--empty">
           <Spinner delayed />
         </div>
       );

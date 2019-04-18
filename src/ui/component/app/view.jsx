@@ -69,14 +69,14 @@ class App extends React.PureComponent<Props> {
     return (
       <div id="window" onContextMenu={e => openContextMenu(e)}>
         <Header />
-        <section className="page">
-          {enhancedLayout && <Yrbl className="yrbl--enhanced" />}
-          <SideBar />
-          <div className="content" id="content">
-            <Router />
-            <ModalRouter />
-          </div>
-        </section>
+        <SideBar />
+
+        <div className="main-wrapper">
+          <Router />
+        </div>
+
+        <ModalRouter />
+        {enhancedLayout && <Yrbl className="yrbl--enhanced" />}
       </div>
     );
   }
