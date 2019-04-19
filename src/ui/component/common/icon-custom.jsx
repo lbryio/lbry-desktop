@@ -118,9 +118,16 @@ export const customIcons = {
   ),
   // The LBRY icon is different from the base icon set so don't use buildIcon()
   [ICONS.LBRY]: props => (
-    <svg stroke="currentColor" fill="currentColor" transform="scale(0.1)" {...props}>
-      <path d="M296.05, 85.9l0, 14.1l-138.8, 85.3l-104.6, -51.3l0.2, -7.9l104, 51.2l132.2, -81.2l0, -5.8l-124.8, -60.2l-139.2, 86.1l0, 38.5l131.8, 65.2l137.6, -84.4l3.9, 6l-141.1, 86.4l-139.2, -68.8l0, -46.8l145.8, -90.2l132.2, 63.8Z" />
-      <path d="M294.25, 150.9l2, -12.6l-12.2, -2.1l0.8, -4.9l17.1, 2.9l-2.8, 17.5l-4.9, -0.8Z" />
+    <svg
+      stroke="currentColor"
+      fill="currentColor"
+      x="0px"
+      y="0px"
+      viewBox="0 0 322 254"
+      className="icon lbry-icon"
+    >
+      <path d="M296,85.9V100l-138.8,85.3L52.6,134l0.2-7.9l104,51.2L289,96.1v-5.8L164.2,30.1L25,116.2v38.5l131.8,65.2 l137.6-84.4l3.9,6l-141.1,86.4L18.1,159.1v-46.8l145.8-90.2C163.9,22.1,296,85.9,296,85.9z" />
+      <path d="M294.3,150.9l2-12.6l-12.2-2.1l0.8-4.9l17.1,2.9l-2.8,17.5L294.3,150.9L294.3,150.9z" />
     </svg>
   ),
 };

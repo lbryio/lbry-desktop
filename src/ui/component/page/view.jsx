@@ -93,7 +93,7 @@ class Page extends React.PureComponent<Props, State> {
       >
         {!loading && children}
         {showLoader && (
-          <div className="page__empty">
+          <div className="main--empty">
             <Spinner />
           </div>
         )}

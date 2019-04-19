@@ -1,16 +1,16 @@
 .header {
+  position: fixed;
   width: 100%;
   height: var(--header-height);
-
   align-items: center;
   background-color: $lbry-white;
   display: flex;
   justify-content: space-between;
-  position: fixed;
   z-index: 1;
 
   html[data-mode='dark'] & {
     background-color: rgba($lbry-black, 0.9);
+    background-color: mix($lbry-black, $lbry-gray-3, 90%);
     color: $lbry-white;
   }
 }
@@ -22,7 +22,7 @@
     // Main navigation collapses into a menu button
     // at smaller screen widths
     @media (min-width: 601px) {
-      width: 170px;
+      width: calc(var(--side-nav-width) - 1px);
     }
 
     @media (max-width: 600px) {
@@ -31,28 +31,25 @@
   }
 }
 
-.header__navigation-app {
+// .header__navigation-app {
+//   flex: 1;
+//   display: flex;
+//   justify-content: space-between;
+
+// LBRY logo in the top left corner
+.lbry-icon {
+  height: var(--header-height);
+  width: 1rem;
+  overflow: visible;
+}
+
+.header__navigation-arrows {
   flex: 1;
   display: flex;
-  justify-content: space-between;
-
-  // LBRY logo in the top left corner
-  .lbry-icon {
-    height: 1rem;
-    width: 1rem;
-    padding-left: 3.5rem;
-    padding-top: 1.5rem;
-    margin-right: 3.6rem;
-    overflow: visible;
-  }
-
-  .header__navigation-arrows {
-    flex: 1;
-    display: flex;
-    justify-content: flex-end;
-    border-left: 1px solid $lbry-gray-1;
-  }
+  justify-content: flex-end;
+  border-left: 1px solid $lbry-gray-1;
 }
+// }
 
 .header__navigation-item {
   height: var(--header-height);
@@ -96,6 +93,8 @@
   width: var(--header-height);
 
   svg {
+    stroke: $lbry-black;
+
     &:only-child {
       // Header icons are a little different because they are larger
       top: 0.25rem;
@@ -111,13 +110,11 @@
   flex: 1;
   font-weight: 800;
   font-size: 1.2rem;
-  margin-left: -1.25rem; // Needed because the lbry icon overflows it's parent so the centering is off
 
-  svg {
-    overflow: visible;
-    color: $lbry-white;
-    opacity: 1;
-    top: -0.8rem;
+  .lbry-icon {
+    height: 2rem;
+    width: 2rem;
+    top: 0.6rem;
   }
 }
 
@@ -170,7 +167,8 @@
   .header__navigation-item--back,
   .header__navigation-item--forward,
   .header__navigation-item--home,
-  .header__navigation-item--right-action {
+  .header__navigation-item--right-action,
+  .header__navigation-item--wallet {
     display: none;
   }
 

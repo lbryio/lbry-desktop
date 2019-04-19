@@ -23,7 +23,7 @@ class FileListDownloaded extends React.PureComponent<Props> {
         {hasDownloads ? (
           <FileList fileInfos={fileInfos} sortBy={sortBy} page={PAGES.DOWNLOADED} />
         ) : (
-          <div className="page__empty">
+          <div className="main--empty">
             <section className="card card--section">
               <header className="card__header">
                 <h2 className="card__title">

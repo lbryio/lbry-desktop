@@ -1,6 +1,5 @@
 @charset "utf-8";
 
-// @import '~@lbry/color/lbry-color';
 @import '~@lbry/components/sass/init/_color.scss';
 @import '~@lbry/components/sass/init/_mixins.scss';
 @import '~@lbry/components/sass/init/_variables.scss';
@@ -33,7 +32,6 @@
 @import 'component/modal';
 @import 'component/navigation';
 @import 'component/notice';
-@import 'component/page';
 @import 'component/pagination';
 @import 'component/placeholder';
 @import 'component/scrollbar';

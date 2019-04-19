@@ -32,7 +32,7 @@ class FileListPublished extends React.PureComponent<Props> {
             page={PAGES.PUBLISHED}
           />
         ) : (
-          <div className="page__empty">
+          <div className="main--empty">
             <section className="card card--section">
               <header className="card__header">
                 <h2 className="card__title">

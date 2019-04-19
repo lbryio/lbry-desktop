@@ -37,9 +37,14 @@ const Header = (props: Props) => {
   return (
     <header className="header">
       <div className="header__navigation">
+        <Button
+          className="header__navigation-item header__navigation-item--lbry"
+          label={__('LBRY')}
+          iconRight={ICONS.LBRY}
+          navigate="/"
+        />
         {/* @if TARGET='app' */}
         <div className="header__navigation-app">
-          <Icon className="lbry-icon" icon={ICONS.LBRY} />
           <div className="header__navigation-arrows">
             <Button
               className="header__navigation-item header__navigation-item--back"
@@ -58,14 +63,6 @@ const Header = (props: Props) => {
             />
           </div>
         </div>
-        {/* @endif */}
-        {/* @if TARGET='web' */}
-        <Button
-          className="header__navigation-item header__navigation-item--lbry"
-          label={__('LBRY')}
-          iconRight={ICONS.LBRY}
-          navigate="/"
-        />
         {/* @endif */}
       </div>
 
