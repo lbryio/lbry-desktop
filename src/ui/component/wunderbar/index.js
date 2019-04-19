@@ -22,7 +22,7 @@ const select = state => ({
 
 const perform = (dispatch, ownProps) => ({
   onSearch: query => {
-    ownProps.history.push({ pathname: `/$/search`, search: `?q=${query}` });
+    ownProps.history.push({ pathname: `/$/search`, search: `?q=${encodeURIComponent(query)}` });
     analytics.apiLogSearch();
   },
   onSubmit: uri => {
