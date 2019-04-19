@@ -151,7 +151,7 @@ class FilePage extends React.Component<Props> {
       mediaType,
       contentType,
       fileName,
-    })
+    });
     const showFile =
       PLAYABLE_MEDIA_TYPES.includes(mediaType) || PREVIEW_MEDIA_TYPES.includes(mediaType);
 
@@ -176,7 +176,7 @@ class FilePage extends React.Component<Props> {
       editUri = buildURI(uriObject);
     }
 
-    const insufficientCredits = costInfo && costInfo.cost > balance;
+    const insufficientCredits = !claimIsMine && costInfo && costInfo.cost > balance;
 
     return (
       <Page notContained className="main--file-page">
