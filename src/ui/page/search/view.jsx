@@ -10,6 +10,7 @@ import Page from 'component/page';
 import ToolTip from 'component/common/tooltip';
 import Icon from 'component/common/icon';
 import SearchOptions from 'component/searchOptions';
+import Button from 'component/button';
 
 type Props = { doSearch: string => void, location: UrlLocation };
 
@@ -43,7 +44,9 @@ export default function SearchPage(props: Props) {
           <Fragment>
             {isValid && (
               <header className="search__header">
-                <h1 className="media__uri">{uri}</h1>
+                <Button navigate={uri} className="media__uri">
+                  {uri}
+                </Button>
                 {isChannel ? (
                   <ChannelTile size="large" isSearchResult uri={uri} />
                 ) : (

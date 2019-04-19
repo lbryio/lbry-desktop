@@ -181,9 +181,7 @@ class FilePage extends React.Component<Props> {
     return (
       <Page notContained className="main--file-page">
         <div className="grid-area--content">
-          <h1 className="media__uri">
-            <Button navigate={uri} label={uri} />
-          </h1>
+          <h1 className="media__uri">{uri}</h1>
           {insufficientCredits && (
             <div className="media__insufficient-credits help--warning">
               {__(
