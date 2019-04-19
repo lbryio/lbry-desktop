@@ -35,13 +35,12 @@
   }
 
   .media__thumb {
+    flex-shrink: 0;
     width: 20rem;
   }
 
   .media__info {
     margin-left: var(--spacing-vertical-medium);
-    width: calc(80% - 20rem);
-    min-width: 40rem;
   }
 }
 
@@ -49,12 +48,11 @@
   font-size: 2rem;
 
   .media__thumb {
-    width: 30rem;
+    width: 25rem;
   }
 
   .media__info {
     margin-left: var(--spacing-vertical-large);
-    flex: 1;
   }
 
   .media__subtext {
@@ -71,12 +69,6 @@
 
   .media__thumb {
     width: 11em;
-  }
-
-  .media__info {
-    width: calc(100% - 10em);
-    min-width: auto;
-    position: relative;
   }
 
   .media__title {
