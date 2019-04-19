@@ -104,6 +104,7 @@ class FileDetails extends PureComponent<Props> {
                 {__('Downloaded to')}
                 {': '}
                 <Button
+                  constrict
                   button="link"
                   onClick={() => openFolder(downloadPath)}
                   label={downloadNote || downloadPath}
