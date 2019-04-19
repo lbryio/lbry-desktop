@@ -56,26 +56,28 @@ class RewardsPage extends PureComponent<Props> {
       }
       return (
         <section className="card card--section">
-          <p>
-            {__(
-              'This account must undergo review before you can participate in the rewards program.'
-            )}{' '}
-            {__('This can take anywhere from several minutes to several days.')}
-          </p>
+          <div className="card__content">
+            <p>
+              {__(
+                'This account must undergo review before you can participate in the rewards program.'
+              )}{' '}
+              {__('This can take anywhere from several minutes to several days.')}
+            </p>
 
-          <p>
-            {__(
-              'We apologize for this inconvenience, but have added this additional step to prevent fraud.'
-            )}
-          </p>
-          <p>
-            {`${__('If you continue to see this message, send us an email to help@lbry.com.')} ${__(
-              'Please enjoy free content in the meantime!'
-            )}`}
-          </p>
-          <p>
+            <p>
+              {__(
+                'We apologize for this inconvenience, but have added this additional step to prevent fraud.'
+              )}
+            </p>
+            <p>
+              {`${__(
+                'If you continue to see this message, send us an email to help@lbry.com.'
+              )} ${__('Please enjoy free content in the meantime!')}`}
+            </p>
+          </div>
+          <div className="card__actions">
             <Button navigate="/" button="primary" label="Return Home" />
-          </p>
+          </div>
         </section>
       );
     }
@@ -138,8 +140,8 @@ class RewardsPage extends PureComponent<Props> {
             <p className="card__content">
               {claimed && claimed.length
                 ? __(
-                    "You have claimed all available rewards! We're regularly adding more so be sure to check back later."
-                  )
+                  "You have claimed all available rewards! We're regularly adding more so be sure to check back later."
+                )
                 : __('There are no rewards available at this time, please check back later.')}
             </p>
           </section>
