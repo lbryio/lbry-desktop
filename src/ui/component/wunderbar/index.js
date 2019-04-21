@@ -4,6 +4,7 @@ import {
   doBlurSearchInput,
   doUpdateSearchQuery,
   doSearch,
+  doToast,
   selectSearchValue,
   selectSearchSuggestions,
   selectSearchBarFocused,
@@ -31,6 +32,7 @@ const perform = (dispatch, ownProps) => ({
     dispatch(doUpdateSearchQuery(''));
   },
   updateSearchQuery: query => dispatch(doUpdateSearchQuery(query)),
+  doShowSnackBar: message => dispatch(doToast({ isError: true, message })),
   doFocus: () => dispatch(doFocusSearchInput()),
   doBlur: () => dispatch(doBlurSearchInput()),
 });

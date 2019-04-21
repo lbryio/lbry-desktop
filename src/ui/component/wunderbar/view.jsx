@@ -21,7 +21,7 @@ type Props = {
   doFocus: () => void,
   doBlur: () => void,
   focused: boolean,
-  doShowSnackBar: ({}) => void,
+  doShowSnackBar: string => void,
 };
 
 type State = {
@@ -96,9 +96,7 @@ class WunderBar extends React.PureComponent<Props, State> {
 
     const query = value.trim();
     const showSnackError = () => {
-      doShowSnackBar({
-        message: __('Invalid LBRY URL entered. Only A-Z, a-z, 0-9, and "-" allowed.'),
-      });
+      doShowSnackBar('Invalid LBRY URL entered. Only A-Z, a-z, 0-9, and "-" allowed.');
     };
 
     // User selected a suggestion
