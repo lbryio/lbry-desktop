@@ -33,35 +33,40 @@ class SocialShare extends React.PureComponent<Props> {
     const { speechShareable, onDone } = this.props;
     const channelClaimId =
       value && value.publisherSignature && value.publisherSignature.certificateId;
-    const speechPrefix = 'https://spee.ch/';
-    const lbryPrefix = 'https://open.lbry.com/';
 
-    let speechURL;
-    let lbryURL;
-    if (isChannel) {
-      // For channel claims, the channel name (@something) is in `claim.name`
-      speechURL = `${claimName}:${claimId}`;
-      lbryURL = `${claimName}#${claimId}`;
-    } else {
-      // If it's for a regular claim, check if it has an associated channel
-      speechURL =
-        channelName && channelClaimId
+    const getSpeechUri = (): string => {
+      if (isChannel) {
+        // For channel claims, the channel name (@something) is in `claim.name`
+        return `${claimName}:${claimId}`;
+      } else {
+        // If it's for a regular claim, check if it has an associated channel
+        return channelName && channelClaimId
           ? `${channelName}:${channelClaimId}/${claimName}`
           : `${claimId}/${claimName}`;
+      }
+    };
 
-      lbryURL =
-        channelName && channelClaimId
+    const getLbryUri = (): string => {
+      if (isChannel) {
+        // For channel claims, the channel name (@something) is in `claim.name`
+        return `${claimName}#${claimId}`;
+      } else {
+        // If it's for a regular claim, check if it has an associated channel
+        return channelName && channelClaimId
           ? `${channelName}#${channelClaimId}/${claimName}`
           : `${claimName}#${claimId}`;
-    }
+      }
+    };
 
-    if (lbryURL) {
-      lbryURL = `${lbryPrefix}${encodeURIComponent(lbryURL)}`;
-    }
+    const speechPrefix = 'https://spee.ch/';
+    const lbryPrefix = 'https://open.lbry.com/';
+    const lbryUri = getLbryUri();
+    const speechUri = getSpeechUri();
+    const encodedLbryURL: string = `${lbryPrefix}${encodeURIComponent(lbryUri)}`;
+    const lbryURL: string = `${lbryPrefix}${getLbryUri()}`;
 
-    if (speechURL) {
-      speechURL = `${speechPrefix}${encodeURIComponent(speechURL)}`;
-    }
+    const encodedSpeechURL = `${speechPrefix}${encodeURIComponent(speechUri)}`;
+    const speechURL = `${speechPrefix}${speechUri}`;
 
     return (
       <React.Fragment>
@@ -76,7 +81,7 @@ class SocialShare extends React.PureComponent<Props> {
                   icon={ICONS.FACEBOOK}
                   button="alt"
                   label={__('')}
-                  href={`https://facebook.com/sharer/sharer.php?u=${speechURL}`}
+                  href={`https://facebook.com/sharer/sharer.php?u=${encodedSpeechURL}`}
                 />
               </ToolTip>
               <ToolTip onComponent body={__('Twitter')}>
@@ -85,7 +90,7 @@ class SocialShare extends React.PureComponent<Props> {
                   icon={ICONS.TWITTER}
                   button="alt"
                   label={__('')}
-                  href={`https://twitter.com/home?status=${speechURL}`}
+                  href={`https://twitter.com/home?status=${encodedSpeechURL}`}
                 />
               </ToolTip>
               <ToolTip onComponent body={__('View on Spee.ch')}>
@@ -110,7 +115,7 @@ class SocialShare extends React.PureComponent<Props> {
                 icon={ICONS.FACEBOOK}
                 button="alt"
                 label={__('')}
-                href={`https://facebook.com/sharer/sharer.php?u=${lbryURL}`}
+                href={`https://facebook.com/sharer/sharer.php?u=${encodedLbryURL}`}
               />
             </ToolTip>
             <ToolTip onComponent body={__('Twitter')}>
@@ -119,7 +124,7 @@ class SocialShare extends React.PureComponent<Props> {
                 icon={ICONS.TWITTER}
                 button="alt"
                 label={__('')}
-                href={`https://twitter.com/home?status=${lbryURL}`}
+                href={`https://twitter.com/home?status=${encodedLbryURL}`}
               />
             </ToolTip>
           </div>
