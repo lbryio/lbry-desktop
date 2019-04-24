@@ -6,7 +6,6 @@ import RewardTile from 'component/rewardTile';
 import Button from 'component/button';
 import Page from 'component/page';
 import classnames from 'classnames';
-import type { Reward } from 'types/reward';
 import { rewards as REWARD_TYPES } from 'lbryinc';
 import UnsupportedOnWeb from 'component/common/unsupported-on-web';
 

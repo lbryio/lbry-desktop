@@ -1,6 +1,4 @@
 // @flow
-import type { ViewMode } from 'types/subscription';
-import type { Claim } from 'types/claim';
 import { VIEW_ALL, VIEW_LATEST_FIRST } from 'constants/subscriptions';
 import React, { Fragment } from 'react';
 import Button from 'component/button';
@@ -19,7 +17,7 @@ type Props = {
   viewMode: ViewMode,
   doSetViewMode: ViewMode => void,
   hasSubscriptions: boolean,
-  subscriptions: Array<{ uri: string, ...Claim }>,
+  subscriptions: Array<{ uri: string, ...StreamClaim }>,
   autoDownload: boolean,
   onChangeAutoDownload: (SyntheticInputEvent<*>) => void,
   unreadSubscriptions: Array<{ channel: string, uris: Array<string> }>,

@@ -1,5 +1,4 @@
 // @flow
-import type { Claim } from 'types/claim';
 import * as ICONS from 'constants/icons';
 import React from 'react';
 import Button from 'component/button';
@@ -7,7 +6,7 @@ import ToolTip from 'component/common/tooltip';
 import analytics from 'analytics';
 
 type Props = {
-  claim: Claim,
+  claim: StreamClaim,
   uri: string,
   downloading: boolean,
   fileInfo: ?{

@@ -1,5 +1,4 @@
 // @flow
-import type { Claim, Metadata } from 'types/claim';
 import * as icons from 'constants/icons';
 import * as React from 'react';
 import { normalizeURI, convertToShareLink } from 'lbry-redux';
@@ -13,12 +12,13 @@ import { openCopyLinkMenu } from 'util/context-menu';
 import DateTime from 'component/dateTime';
 import { withRouter } from 'react-router-dom';
 import { formatLbryUriForWeb } from 'util/uri';
+import get from 'lodash.get';
 
 type Props = {
   uri: string,
-  claim: ?Claim,
+  claim: ?StreamClaim,
   fileInfo: ?{},
-  metadata: ?Metadata,
+  metadata: ?StreamMetadata,
   rewardedContentClaimIds: Array<string>,
   obscureNsfw: boolean,
   claimIsMine: boolean,
@@ -30,6 +30,9 @@ type Props = {
   placeholder: boolean,
   preventResolve: boolean,
   history: { push: string => void },
+  thumbnail: string,
+  title: string,
+  nsfw: boolean,
 };
 
 class FileCard extends React.PureComponent<Props> {
@@ -72,6 +75,9 @@ class FileCard extends React.PureComponent<Props> {
       isResolvingUri,
       placeholder,
       history,
+      thumbnail,
+      title,
+      nsfw,
     } = this.props;
 
     const abandoned = !isResolvingUri && !claim && !pending && !placeholder;
@@ -92,14 +98,13 @@ class FileCard extends React.PureComponent<Props> {
       );
     }
 
-    const shouldHide = !claimIsMine && !pending && obscureNsfw && metadata && metadata.nsfw;
+    // fix to use tags - one of many nsfw tags...
+    const shouldHide = !claimIsMine && !pending && obscureNsfw && nsfw;
     if (shouldHide) {
       return null;
     }
 
     const uri = !pending ? normalizeURI(this.props.uri) : this.props.uri;
-    const title = metadata && metadata.title ? metadata.title : uri;
-    const thumbnail = metadata && metadata.thumbnail ? metadata.thumbnail : null;
     const isRewardContent = claim && rewardedContentClaimIds.includes(claim.claim_id);
     const height = claim && claim.height;
     const handleContextMenu = event => {

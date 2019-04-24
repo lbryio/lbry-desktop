@@ -1,5 +1,4 @@
 // @flow
-import type { Transaction } from 'types/transaction';
 import React from 'react';
 import { Modal } from 'modal/modal';
 import * as txnTypes from 'constants/transaction_types';

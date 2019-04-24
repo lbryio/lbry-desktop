@@ -1,5 +1,4 @@
 // @flow
-import type { Transaction } from 'types/transaction';
 import * as TXN_TYPES from 'constants/transaction_types';
 import * as ICONS from 'constants/icons';
 import React from 'react';

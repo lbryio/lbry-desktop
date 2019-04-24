@@ -4,23 +4,22 @@ import { Modal } from 'modal/modal';
 import { FormField } from 'component/common/form';
 
 type Props = {
-  upload: (string, boolean) => void,
+  upload: string => void,
   path: string,
-  nsfw: boolean,
   closeModal: () => void,
   updatePublishForm: ({}) => void,
 };
 
 class ModalConfirmThumbnailUpload extends React.PureComponent<Props> {
   upload() {
-    const { upload, updatePublishForm, closeModal, path, nsfw } = this.props;
-    upload(path, nsfw);
+    const { upload, updatePublishForm, closeModal, path } = this.props;
+    upload(path);
     updatePublishForm({ thumbnailPath: path });
     closeModal();
   }
 
   render() {
-    const { closeModal, path, updatePublishForm, nsfw } = this.props;
+    const { closeModal, path, updatePublishForm } = this.props;
 
     return (
       <Modal
@@ -36,14 +35,6 @@ class ModalConfirmThumbnailUpload extends React.PureComponent<Props> {
           <p>{__('Are you sure you want to upload this thumbnail to spee.ch')}?</p>
 
           <blockquote>{path}</blockquote>
-
-          <FormField
-            type="checkbox"
-            name="content_is_mature"
-            label={__('For mature audiences only')}
-            checked={nsfw}
-            onChange={event => updatePublishForm({ nsfw: event.target.checked })}
-          />
         </section>
       </Modal>
     );

@@ -1,11 +1,15 @@
 // @flow
 import * as React from 'react';
-import type { Price } from 'page/settings';
 import { FormField } from './form-field';
 
+type FormPrice = {
+  amount: ?number,
+  currency: string,
+};
+
 type Props = {
-  price: Price,
-  onChange: Price => void,
+  price: FormPrice,
+  onChange: FormPrice => void,
   placeholder: number,
   min: number,
   disabled: boolean,
@@ -23,7 +27,7 @@ export class FormFieldPrice extends React.PureComponent<Props> {
 
   handleAmountChange(event: SyntheticInputEvent<*>) {
     const { price, onChange } = this.props;
-    const amount = event.target.value ? parseFloat(event.target.value) : '';
+    const amount = event.target.value ? parseFloat(event.target.value) : undefined;
     onChange({
       currency: price.currency,
       amount,

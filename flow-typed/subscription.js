@@ -1,5 +1,4 @@
 // @flow
-import type { Dispatch as ReduxDispatch } from 'types/redux';
 import * as ACTIONS from 'constants/action_types';
 import {
   DOWNLOADED,
@@ -12,7 +11,7 @@ import {
   SUGGESTED_FEATURED,
 } from 'constants/subscriptions';
 
-export type Subscription = {
+declare type Subscription = {
   channelName: string, // @CryptoCandor,
   uri: string, // lbry://@CryptoCandor#9152f3b054f692076a6882d1b58a30e8781cc8e6
   latest?: string, // substratum#b0ab143243020e7831fd070d9f871e1fda948620
@@ -21,26 +20,26 @@ export type Subscription = {
 // Tracking for new content
 // i.e. If a subscription has a DOWNLOADING type, we will trigger an OS notification
 // to tell users there is new content from their subscriptions
-export type SubscriptionNotificationType = DOWNLOADED | DOWNLOADING | NOTIFY_ONLY;
+declare type SubscriptionNotificationType = DOWNLOADED | DOWNLOADING | NOTIFY_ONLY;
 
-export type UnreadSubscription = {
+declare type UnreadSubscription = {
   type: SubscriptionNotificationType,
   uris: Array<string>,
 };
 
-export type UnreadSubscriptions = {
+declare type UnreadSubscriptions = {
   [string]: UnreadSubscription,
 };
 
-export type ViewMode = VIEW_LATEST_FIRST | VIEW_ALL;
+declare type ViewMode = VIEW_LATEST_FIRST | VIEW_ALL;
 
-export type SuggestedType = SUGGESTED_TOP_BID | SUGGESTED_TOP_SUBSCRIBED | SUGGESTED_FEATURED;
+declare type SuggestedType = SUGGESTED_TOP_BID | SUGGESTED_TOP_SUBSCRIBED | SUGGESTED_FEATURED;
 
-export type SuggestedSubscriptions = {
+declare type SuggestedSubscriptions = {
   [SuggestedType]: string,
 };
 
-export type SubscriptionState = {
+declare type SubscriptionState = {
   subscriptions: Array<Subscription>,
   unread: UnreadSubscriptions,
   loading: boolean,
@@ -54,17 +53,17 @@ export type SubscriptionState = {
 //
 // Action types
 //
-export type DoChannelSubscribe = {
+declare type DoChannelSubscribe = {
   type: ACTIONS.CHANNEL_SUBSCRIBE,
   data: Subscription,
 };
 
-export type DoChannelUnsubscribe = {
+declare type DoChannelUnsubscribe = {
   type: ACTIONS.CHANNEL_UNSUBSCRIBE,
   data: Subscription,
 };
 
-export type DoUpdateSubscriptionUnreads = {
+declare type DoUpdateSubscriptionUnreads = {
   type: ACTIONS.UPDATE_SUBSCRIPTION_UNREADS,
   data: {
     channel: string,
@@ -73,7 +72,7 @@ export type DoUpdateSubscriptionUnreads = {
   },
 };
 
-export type DoRemoveSubscriptionUnreads = {
+declare type DoRemoveSubscriptionUnreads = {
   type: ACTIONS.REMOVE_SUBSCRIPTION_UNREADS,
   data: {
     channel: string,
@@ -81,7 +80,7 @@ export type DoRemoveSubscriptionUnreads = {
   },
 };
 
-export type SetSubscriptionLatest = {
+declare type SetSubscriptionLatest = {
   type: ACTIONS.SET_SUBSCRIPTION_LATEST,
   data: {
     subscription: Subscription,
@@ -89,25 +88,25 @@ export type SetSubscriptionLatest = {
   },
 };
 
-export type CheckSubscriptionStarted = {
+declare type CheckSubscriptionStarted = {
   type: ACTIONS.CHECK_SUBSCRIPTION_STARTED,
 };
 
-export type CheckSubscriptionCompleted = {
+declare type CheckSubscriptionCompleted = {
   type: ACTIONS.CHECK_SUBSCRIPTION_COMPLETED,
 };
 
-export type FetchedSubscriptionsSucess = {
+declare type FetchedSubscriptionsSucess = {
   type: ACTIONS.FETCH_SUBSCRIPTIONS_SUCCESS,
   data: Array<Subscription>,
 };
 
-export type SetViewMode = {
+declare type SetViewMode = {
   type: ACTIONS.SET_VIEW_MODE,
   data: ViewMode,
 };
 
-export type GetSuggestedSubscriptionsSuccess = {
+declare type GetSuggestedSubscriptionsSuccess = {
   type: ACTIONS.GET_SUGGESTED_SUBSCRIPTIONS_START,
   data: SuggestedSubscriptions,
 };

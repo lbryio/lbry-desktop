@@ -1,5 +1,4 @@
 // @flow
-import type { Transaction } from 'types/transaction';
 import * as icons from 'constants/icons';
 import React, { Fragment } from 'react';
 import BusyIndicator from 'component/common/busy-indicator';

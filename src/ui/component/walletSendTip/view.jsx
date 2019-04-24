@@ -2,12 +2,11 @@
 import React from 'react';
 import Button from 'component/button';
 import { FormField, Form } from 'component/common/form';
-import type { Claim } from 'types/claim';
 
 type Props = {
   uri: string,
   title: string,
-  claim: Claim,
+  claim: StreamClaim,
   isPending: boolean,
   sendSupport: (number, string, string) => void,
   onCancel: () => void,

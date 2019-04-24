@@ -4,10 +4,10 @@ import React, { Suspense } from 'react';
 import LoadingScreen from 'component/common/loading-screen';
 import MarkdownPreview from 'component/common/markdown-preview';
 
-const LazyCodeViewer = React.lazy(() => import(
-  /* webpackChunkName: "codeViewer" */
-  'component/viewers/codeViewer'
-));
+const LazyCodeViewer = React.lazy<*>(() =>
+  import(/* webpackChunkName: "codeViewer" */
+    'component/viewers/codeViewer')
+);
 
 type Props = {
   theme: string,
@@ -84,7 +84,7 @@ class DocumentViewer extends React.PureComponent<Props, State> {
       <div className="file-render__viewer document-viewer">
         {loading && !error && <LoadingScreen status={loadingMessage} spinner />}
         {error && <LoadingScreen status={errorMessage} spinner={!error} />}
-        {isReady && <Suspense fallback={<div></div>}>{this.renderDocument()}</Suspense>}
+        {isReady && <Suspense fallback={<div />}>{this.renderDocument()}</Suspense>}
       </div>
     );
   }

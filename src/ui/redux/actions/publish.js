@@ -1,11 +1,4 @@
 // @flow
-import type { Dispatch, GetState } from 'types/redux';
-import type { Metadata } from 'types/claim';
-import type {
-  UpdatePublishFormData,
-  UpdatePublishFormAction,
-  PublishParams,
-} from 'redux/reducers/publish';
 import { CC_LICENSES, COPYRIGHT, OTHER, NONE, PUBLIC_DOMAIN } from 'constants/licenses';
 import * as MODALS from 'constants/modal_types';
 import {
@@ -29,9 +22,7 @@ import fs from 'fs';
 import path from 'path';
 // @endif
 
-type Action = UpdatePublishFormAction | { type: ACTIONS.CLEAR_PUBLISH };
-
-export const doResetThumbnailStatus = () => (dispatch: Dispatch): Promise<Action> => {
+export const doResetThumbnailStatus = () => (dispatch: Dispatch) => {
   dispatch({
     type: ACTIONS.UPDATE_PUBLISH_FORM,
     data: {
@@ -67,22 +58,20 @@ export const doResetThumbnailStatus = () => (dispatch: Dispatch): Promise<Action
     );
 };
 
-export const doClearPublish = () => (dispatch: Dispatch): Promise<Action> => {
+export const doClearPublish = () => (dispatch: Dispatch) => {
   dispatch({ type: ACTIONS.CLEAR_PUBLISH });
   return dispatch(doResetThumbnailStatus());
 };
 
 export const doUpdatePublishForm = (publishFormValue: UpdatePublishFormData) => (
   dispatch: Dispatch
-): UpdatePublishFormAction =>
-  dispatch(
-    ({
-      type: ACTIONS.UPDATE_PUBLISH_FORM,
-      data: { ...publishFormValue },
-    }: UpdatePublishFormAction)
-  );
+) =>
+  dispatch({
+    type: ACTIONS.UPDATE_PUBLISH_FORM,
+    data: { ...publishFormValue },
+  });
 
-export const doUploadThumbnail = (filePath: string, nsfw: boolean) => (dispatch: Dispatch) => {
+export const doUploadThumbnail = (filePath: string) => (dispatch: Dispatch) => {
   const thumbnail = fs.readFileSync(filePath);
   const fileExt = path.extname(filePath);
   const fileName = path.basename(filePath);
@@ -119,7 +108,7 @@ export const doUploadThumbnail = (filePath: string, nsfw: boolean) => (dispatch:
   const file = new File([thumbnail], fileName, { type: `image/${fileExt.slice(1)}` });
   data.append('name', name);
   data.append('file', file);
-  data.append('nsfw', nsfw.toString());
+
   return fetch('https://spee.ch/api/claim/publish', {
     method: 'POST',
     body: data,
@@ -139,15 +128,8 @@ export const doUploadThumbnail = (filePath: string, nsfw: boolean) => (dispatch:
     .catch(err => uploadError(err.message));
 };
 
-export const doPrepareEdit = (claim: any, uri: string) => (dispatch: Dispatch) => {
-  const {
-    name,
-    amount,
-    channel_name: channelName,
-    value: {
-      stream: { metadata },
-    },
-  } = claim;
+export const doPrepareEdit = (claim: StreamClaim, uri: string) => (dispatch: Dispatch) => {
+  const { name, amount, channel_name: channelName, value } = claim;
 
   const {
     author,
@@ -158,26 +140,23 @@ export const doPrepareEdit = (claim: any, uri: string) => (dispatch: Dispatch) =
       amount: 0,
       currency: 'LBC',
     },
-    language,
+    languages,
     license,
-    licenseUrl,
-    nsfw,
+    license_url: licenseUrl,
     thumbnail,
     title,
-  } = metadata;
+  } = value;
 
   const publishData: UpdatePublishFormData = {
     name,
     channel: channelName,
     bid: amount,
-    price: { amount: fee.amount, currency: fee.currency },
     contentIsFree: !fee.amount,
     author,
     description,
     fee,
-    language,
-    nsfw,
-    thumbnail,
+    languages,
+    thumbnail: thumbnail ? thumbnail.url : null,
     title,
     uri,
     uploadThumbnailStatus: thumbnail ? THUMBNAIL_STATUSES.MANUAL : undefined,
@@ -204,6 +183,8 @@ export const doPrepareEdit = (claim: any, uri: string) => (dispatch: Dispatch) =
 };
 
 export const doPublish = (params: PublishParams) => (dispatch: Dispatch, getState: () => {}) => {
+  dispatch({ type: ACTIONS.PUBLISH_START });
+
   const state = getState();
   const myChannels = selectMyChannelClaims(state);
   const myClaims = selectMyClaimsWithoutChannels(state);
@@ -217,55 +198,63 @@ export const doPublish = (params: PublishParams) => (dispatch: Dispatch, getStat
     license,
     licenseUrl,
     thumbnail,
-    nsfw,
     channel,
     title,
     contentIsFree,
-    price,
+    fee,
     uri,
+    nsfw,
   } = params;
 
   // get the claim id from the channel name, we will use that instead
   const namedChannelClaim = myChannels.find(myChannel => myChannel.name === channel);
   const channelId = namedChannelClaim ? namedChannelClaim.claim_id : '';
-  const fee = contentIsFree || !price.amount ? undefined : { ...price };
-
-  const metadata: Metadata = {
-    title,
-    nsfw,
-    license,
-    licenseUrl,
-    language,
-    thumbnail,
-    description: description || undefined,
-  };
 
   const publishPayload: {
     name: ?string,
-    channel_id: string,
-    bid: ?number,
-    metadata: ?Metadata,
+    channel_id?: string,
+    bid: number,
     file_path?: string,
+    fee?: { amount: string, currency: string },
+    tags: Array<string>,
   } = {
     name,
-    channel_id: channelId,
     bid: creditsToString(bid),
-    metadata,
+    title,
+    license,
+    license_url: licenseUrl,
+    languages: [language],
+    description,
+    thumbnail_url: thumbnail,
+    tags: [],
   };
 
+  // Temporary solution to keep the same publish flow with the new tags api
+  // Eventually we will allow users to enter their own tags on publish
+  // `nsfw` will probably be removed
+  if (nsfw) {
+    publishPayload.tags.push('mature');
+  }
+
+  if (channelId) {
+    publishPayload.channel_id = channelId;
+  }
+
   if (fee) {
-    metadata.fee = {
+    publishPayload.fee = {
       currency: fee.currency,
       amount: creditsToString(fee.amount),
     };
   }
-  // only pass file on new uploads, not metadata only edits.
+
+  // Only pass file on new uploads, not metadata only edits.
+  // The sdk will figure it out
   if (filePath) publishPayload.file_path = filePath;
 
-  dispatch({ type: ACTIONS.PUBLISH_START });
-
-  const success = pendingClaim => {
+  const success = successResponse => {
     analytics.apiLogPublish();
+
+    const pendingClaim = successResponse.outputs[0];
     const actions = [];
 
     actions.push({
@@ -280,8 +269,8 @@ export const doPublish = (params: PublishParams) => (dispatch: Dispatch, getStat
     const isMatch = claim => claim.claim_id === pendingClaim.claim_id;
     const isEdit = myClaims.some(isMatch);
     const myNewClaims = isEdit
-      ? myClaims.map(claim => (isMatch(claim) ? pendingClaim.output : claim))
-      : myClaims.concat(pendingClaim.output);
+      ? myClaims.map(claim => (isMatch(claim) ? pendingClaim : claim))
+      : myClaims.concat(pendingClaim);
 
     actions.push({
       type: ACTIONS.FETCH_CLAIM_LIST_MINE_COMPLETED,
@@ -313,7 +302,7 @@ export const doCheckPendingPublishes = () => (dispatch: Dispatch, getState: GetS
   let publishCheckInterval;
 
   const checkFileList = () => {
-    Lbry.claim_list_mine().then(claims => {
+    Lbry.claim_list().then(claims => {
       claims.forEach(claim => {
         // If it's confirmed, check if it was pending previously
         if (claim.confirmations > 0 && pendingById[claim.claim_id]) {
@@ -322,7 +311,7 @@ export const doCheckPendingPublishes = () => (dispatch: Dispatch, getState: GetS
           // If it's confirmed, check if we should notify the user
           if (selectosNotificationsEnabled(getState())) {
             const notif = new window.Notification('LBRY Publish Complete', {
-              body: `${claim.value.stream.metadata.title} has been published to lbry://${
+              body: `${claim.value.stream.title} has been published to lbry://${
                 claim.name
               }. Click here to view it`,
               silent: false,

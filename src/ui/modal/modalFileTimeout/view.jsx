@@ -1,16 +1,17 @@
 // @flow
 import React from 'react';
 import { Modal } from 'modal/modal';
-import type { Metadata } from 'types/claim';
 
 type Props = {
-  metadata: Metadata,
+  uri: string,
+  metadata: StreamMetadata,
   closeModal: () => void,
 };
 
 class ModalFileTimeout extends React.PureComponent<Props> {
   render() {
     const {
+      uri,
       metadata: { title },
       closeModal,
     } = this.props;
@@ -26,7 +27,7 @@ class ModalFileTimeout extends React.PureComponent<Props> {
           <p className="error-modal__error-list">
             {__('LBRY was unable to download the stream')}:
             <div>
-              <b>{`"${title}"`}</b>
+              <b>{title ? `"${title}"` : uri}</b>
             </div>
           </p>
         </section>

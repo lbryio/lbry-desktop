@@ -1,12 +1,17 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>lbry.tv</title>
     <meta charset="utf-8" />
+    <!-- @if TARGET='app' -->
+    <title>LBRY</title>
+    <!-- @endif -->
+    <!-- @if TARGET='web' -->
+    <title>lbry.tv</title>
     <meta property="og:url" content="https://beta.lbry.tv" />
     <meta property="og:title" content="LBRY On The Web" />
     <meta property="og:description" content="All your favorite LBRY content in your browser." />
     <meta property="og:image" content="/og.png" />
+    <!-- @endif -->
   </head>
 
   <body>

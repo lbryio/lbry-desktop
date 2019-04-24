@@ -1,5 +1,5 @@
 // @flow
-import React, { PureComponent, Node } from 'react';
+import React, { PureComponent } from 'react';
 import classnames from 'classnames';
 import Button from 'component/button';
 
@@ -8,7 +8,7 @@ import Button from 'component/button';
 // add props for collapsed height
 
 type Props = {
-  children: Node | Array<Node>,
+  children: React$Node | Array<React$Node>,
 };
 
 type State = {

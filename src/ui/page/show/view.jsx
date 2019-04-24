@@ -1,18 +1,16 @@
 // @flow
-import type { UrlLocation } from 'types/location';
 import React from 'react';
 import BusyIndicator from 'component/common/busy-indicator';
 import ChannelPage from 'page/channel';
 import FilePage from 'page/file';
 import Page from 'component/page';
 import Button from 'component/button';
-import type { Claim } from 'types/claim';
 
 type Props = {
   isResolvingUri: boolean,
   resolveUri: string => void,
   uri: string,
-  claim: Claim,
+  claim: StreamClaim,
   totalPages: number,
   location: UrlLocation,
   blackListedOutpoints: Array<{

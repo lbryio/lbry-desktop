@@ -1,6 +1,6 @@
 // @flow
 
-export type UrlLocation = {
+declare type UrlLocation = {
   search: string,
   hash: string,
   host: string,

@@ -113,7 +113,12 @@ class Button extends React.PureComponent<Props> {
         exact
         to={path}
         title={title}
-        onClick={e => e.stopPropagation()}
+        onClick={e => {
+          e.stopPropagation();
+          if (onClick) {
+            onClick();
+          }
+        }}
         className={combinedClassName}
         activeClassName={activeClass}
       >

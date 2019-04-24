@@ -1,4 +1,5 @@
 // @flow
+import type { ElementRef } from 'react';
 import React, { Suspense } from 'react';
 import ReactDOMServer from 'react-dom/server';
 import MarkdownPreview from 'component/common/markdown-preview';
@@ -6,24 +7,24 @@ import 'easymde/dist/easymde.min.css';
 import Toggle from 'react-toggle';
 import { openEditorMenu, stopContextMenu } from 'util/context-menu';
 
-const SimpleMDE = React.lazy(() => import(
-  /* webpackChunkName: "SimpleMDE" */
-  'react-simplemde-editor'
-));
+const SimpleMDE = React.lazy(() =>
+  import(/* webpackChunkName: "SimpleMDE" */
+    'react-simplemde-editor')
+);
 
 type Props = {
   name: string,
   label?: string,
-  render?: () => React.Node,
+  render?: () => React$Node,
   prefix?: string,
   postfix?: string,
   error?: string | boolean,
-  helper?: string | React.Node,
+  helper?: string | React$Node,
   type?: string,
   onChange?: any => any,
   defaultValue?: string | number,
   placeholder?: string | number,
-  children?: React.Node,
+  children?: React$Node,
   stretch?: boolean,
   affixClass?: string, // class applied to prefix/postfix label
   firstInList?: boolean, // at the top of a list, no padding top
@@ -32,7 +33,7 @@ type Props = {
   inputProps?: {
     disabled?: boolean,
   },
-  inputButton?: React.Node,
+  inputButton?: React$Node,
   blockWrap: boolean,
 };
 
@@ -42,7 +43,7 @@ export class FormField extends React.PureComponent<Props> {
     blockWrap: true,
   };
 
-  input: { current: React.ElementRef<any> };
+  input: { current: ElementRef<any> };
 
   constructor(props: Props) {
     super(props);
@@ -136,7 +137,7 @@ export class FormField extends React.PureComponent<Props> {
           <div className="form-field--SimpleMDE" onContextMenu={stopContextMenu}>
             <fieldset-section>
               <label htmlFor={name}>{label}</label>
-              <Suspense fallback={<div></div>}>
+              <Suspense fallback={<div />}>
                 <SimpleMDE
                   {...inputProps}
                   id={name}

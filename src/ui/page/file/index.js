@@ -13,6 +13,9 @@ import {
   makeSelectMetadataForUri,
   makeSelectChannelForClaimUri,
   selectBalance,
+  makeSelectTitleForUri,
+  makeSelectThumbnailForUri,
+  makeSelectClaimIsNsfw,
 } from 'lbry-redux';
 import {
   doFetchViewCount,
@@ -41,6 +44,9 @@ const select = (state, props) => ({
   channelUri: makeSelectChannelForClaimUri(props.uri, true)(state),
   viewCount: makeSelectViewCountForUri(props.uri)(state),
   balance: selectBalance(state),
+  title: makeSelectTitleForUri(props.uri)(state),
+  thumbnail: makeSelectThumbnailForUri(props.uri)(state),
+  nsfw: makeSelectClaimIsNsfw(props.uri)(state),
 });
 
 const perform = dispatch => ({

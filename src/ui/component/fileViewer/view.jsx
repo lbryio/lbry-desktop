@@ -3,14 +3,13 @@ import * as PAGES from 'constants/pages';
 import React, { Suspense } from 'react';
 import classnames from 'classnames';
 import analytics from 'analytics';
-import type { Claim } from 'types/claim';
 import LoadingScreen from 'component/common/loading-screen';
 import PlayButton from './internal/play-button';
 
-const Player = React.lazy(() => import(
-  /* webpackChunkName: "player-legacy" */
-  './internal/player'
-));
+const Player = React.lazy(() =>
+  import(/* webpackChunkName: "player-legacy" */
+    './internal/player')
+);
 
 const SPACE_BAR_KEYCODE = 32;
 
@@ -27,10 +26,6 @@ type Props = {
   fileInfoErrors: ?{
     [string]: boolean,
   },
-  metadata: ?{
-    nsfw: boolean,
-    thumbnail: string,
-  },
   autoplay: boolean,
   isLoading: boolean,
   isDownloading: boolean,
@@ -38,7 +33,7 @@ type Props = {
   contentType: string,
   changeVolume: number => void,
   volume: number,
-  claim: Claim,
+  claim: StreamClaim,
   uri: string,
   savePosition: (string, string, number) => void,
   position: ?number,
@@ -52,6 +47,8 @@ type Props = {
   navigate: (string, {}) => void,
   costInfo: ?{ cost: number },
   insufficientCredits: boolean,
+  nsfw: boolean,
+  thumbnail: ?string,
 };
 
 class FileViewer extends React.PureComponent<Props> {
@@ -135,9 +132,9 @@ class FileViewer extends React.PureComponent<Props> {
   }
 
   handleAutoplay = (props: Props) => {
-    const { autoplay, playingUri, fileInfo, costInfo, isDownloading, uri, metadata } = props;
+    const { autoplay, playingUri, fileInfo, costInfo, isDownloading, uri, nsfw } = props;
 
-    const playable = autoplay && playingUri !== uri && metadata && !metadata.nsfw;
+    const playable = autoplay && playingUri !== uri && !nsfw;
 
     if (playable && costInfo && costInfo.cost === 0 && !fileInfo && !isDownloading) {
       this.playContent();
@@ -184,7 +181,7 @@ class FileViewer extends React.PureComponent<Props> {
     }
   }
 
-  fireAnalyticsEvent(claim: Claim, startTime: ?number, playTime: ?number) {
+  fireAnalyticsEvent(claim: StreamClaim, startTime: ?number, playTime: ?number) {
     const { claimRewards } = this.props;
     const { name, claim_id: claimId, txid, nout } = claim;
 
@@ -214,7 +211,6 @@ class FileViewer extends React.PureComponent<Props> {
 
   render() {
     const {
-      metadata,
       isLoading,
       isDownloading,
       playingUri,
@@ -230,19 +226,21 @@ class FileViewer extends React.PureComponent<Props> {
       obscureNsfw,
       mediaType,
       insufficientCredits,
+      thumbnail,
+      nsfw,
     } = this.props;
 
     const isPlaying = playingUri === uri;
+    let isReadyToPlay = false;
     // @if TARGET='app'
-    const isReadyToPlay = fileInfo && fileInfo.download_path && fileInfo.written_bytes > 0;
+    isReadyToPlay = fileInfo && fileInfo.download_path && fileInfo.written_bytes > 0;
     // @endif
     // @if TARGET='web'
     // try to play immediately on web, we don't need to call file_list since we are streaming from reflector
-    // $FlowFixMe
-    const isReadyToPlay = isPlaying;
+    isReadyToPlay = isPlaying;
     // @endif
 
-    const shouldObscureNsfw = obscureNsfw && metadata && metadata.nsfw;
+    const shouldObscureNsfw = obscureNsfw && nsfw;
     let loadStatusMessage = '';
 
     if (fileInfo && fileInfo.completed && (!fileInfo.download_path || !fileInfo.written_bytes)) {
@@ -255,14 +253,13 @@ class FileViewer extends React.PureComponent<Props> {
       loadStatusMessage = __('Downloading stream... not long left now!');
     }
 
-    const poster = metadata && metadata.thumbnail;
     const layoverClass = classnames('content__cover', {
       'card__media--nsfw': shouldObscureNsfw,
       'card__media--disabled': insufficientCredits,
     });
 
     const layoverStyle =
-      !shouldObscureNsfw && poster ? { backgroundImage: `url("${poster}")` } : {};
+      !shouldObscureNsfw && thumbnail ? { backgroundImage: `url("${thumbnail}")` } : {};
 
     return (
       <div className={classnames('video', {}, className)}>
@@ -273,10 +270,10 @@ class FileViewer extends React.PureComponent<Props> {
                 <LoadingScreen status={loadStatusMessage} />
               </div>
             ) : (
-              <Suspense fallback={<div></div>}>
+              <Suspense fallback={<div />}>
                 <Player
                   fileName={fileInfo.file_name}
-                  poster={poster}
+                  poster={thumbnail}
                   downloadPath={fileInfo.download_path}
                   mediaType={mediaType}
                   contentType={contentType}

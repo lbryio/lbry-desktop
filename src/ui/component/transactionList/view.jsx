@@ -1,9 +1,8 @@
 // @flow
-import type { Transaction } from 'types/transaction';
 import * as icons from 'constants/icons';
 import * as MODALS from 'constants/modal_types';
 import * as React from 'react';
-import { List } from 'react-virtualized'
+import { List } from 'react-virtualized';
 import { FormField, Form } from 'component/common/form';
 import Button from 'component/button';
 import FileExporter from 'component/common/file-exporter';

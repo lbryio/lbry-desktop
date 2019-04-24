@@ -1,5 +1,4 @@
 // @flow
-import type { Claim, Metadata } from 'types/claim';
 import * as ICONS from 'constants/icons';
 import React, { Fragment } from 'react';
 import { normalizeURI, parseURI } from 'lbry-redux';
@@ -22,8 +21,8 @@ type Props = {
   uri: string,
   isResolvingUri: boolean,
   rewardedContentClaimIds: Array<string>,
-  claim: ?Claim,
-  metadata: ?Metadata,
+  claim: ?StreamClaim,
+  metadata: ?StreamMetadata,
   resolveUri: string => void,
   clearPublish: () => void,
   updatePublishForm: ({}) => void,
@@ -33,6 +32,9 @@ type Props = {
   isSubscribed: boolean,
   isNew: boolean,
   history: { push: string => void },
+  thumbnail: ?string,
+  title: ?string,
+  nsfw: boolean,
 };
 
 class FileTile extends React.PureComponent<Props> {
@@ -93,6 +95,9 @@ class FileTile extends React.PureComponent<Props> {
       displayHiddenMessage,
       size,
       history,
+      thumbnail,
+      title,
+      nsfw,
     } = this.props;
 
     if (!claim && isResolvingUri) {
@@ -112,7 +117,7 @@ class FileTile extends React.PureComponent<Props> {
       );
     }
 
-    const shouldHide = !claimIsMine && obscureNsfw && metadata && metadata.nsfw;
+    const shouldHide = !claimIsMine && obscureNsfw && nsfw;
     if (shouldHide) {
       return displayHiddenMessage ? (
         <span className="help">
@@ -126,9 +131,6 @@ class FileTile extends React.PureComponent<Props> {
     const uri = normalizeURI(this.props.uri);
     const isClaimed = !!claim;
     const description = isClaimed && metadata && metadata.description ? metadata.description : '';
-    const title =
-      isClaimed && metadata && metadata.title ? metadata.title : parseURI(uri).contentName;
-    const thumbnail = metadata && metadata.thumbnail ? metadata.thumbnail : null;
 
     let height;
     let name;
@@ -211,7 +213,7 @@ class FileTile extends React.PureComponent<Props> {
 
                     clearPublish(); // to remove any existing publish data
                     updatePublishForm({ name: claimName }); // to populate the name
-                    history.push('/publish');
+                    history.push('/$/publish');
                   }}
                 />
               }
