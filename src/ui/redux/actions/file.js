@@ -10,6 +10,7 @@ import {
   selectFileInfosByOutpoint,
 } from 'lbry-redux';
 import { doHideModal } from 'redux/actions/app';
+import { goBack } from 'connected-react-router';
 
 export function doOpenFileInFolder(path) {
   return () => {
@@ -58,11 +59,14 @@ export function doDeleteFile(outpoint, deleteFromComputer, abandonClaim) {
   };
 }
 
-export function doDeleteFileAndGoBack(fileInfo, deleteFromComputer, abandonClaim) {
+export function doDeleteFileAndMaybeGoBack(fileInfo, deleteFromComputer, abandonClaim) {
   return dispatch => {
     const actions = [];
     actions.push(doHideModal());
     actions.push(doDeleteFile(fileInfo, deleteFromComputer, abandonClaim));
     dispatch(batchActions(...actions));
+    if (abandonClaim) {
+      dispatch(goBack());
+    }
   };
 }

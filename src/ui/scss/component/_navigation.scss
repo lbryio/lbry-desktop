@@ -4,12 +4,13 @@
   height: calc(100vh - var(--header-height));
   display: flex;
   flex-direction: column;
-  overflow-y: overlay;
+  overflow: visible;
   background-color: $lbry-white;
   border-right: 1px solid rgba($lbry-gray-1, 0.9);
   padding-top: var(--spacing-vertical-large);
   padding-right: var(--spacing-vertical-small);
   font-size: 1.2rem;
+  z-index: 2;
 
   html[data-mode='dark'] & {
     background-color: $lbry-black;
@@ -41,7 +42,6 @@
     );
     content: '';
     position: absolute;
-    z-index: 0;
 
     html[data-mode='dark'] & {
       background-image: linear-gradient(

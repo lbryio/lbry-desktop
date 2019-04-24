@@ -138,3 +138,11 @@ export const selectSearchOptionsExpanded = createSelector(
   selectState,
   state => state.searchOptionsExpanded
 );
+
+export const selectShouldShowInviteGuide = createSelector(
+  makeSelectClientSetting(SETTINGS.FIRST_RUN_COMPLETED),
+  makeSelectClientSetting(SETTINGS.INVITE_ACKNOWLEDGED),
+  (firstRunCompleted, inviteAcknowledged) => {
+    return firstRunCompleted ? !inviteAcknowledged : false;
+  }
+);

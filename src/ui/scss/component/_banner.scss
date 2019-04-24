@@ -7,6 +7,7 @@
 
 .banner--first-run {
   height: 310px;
+  padding-right: var(--spacing-vertical-medium);
 
   // Adjust this class inside other `.banner--xxx` styles for control over animation
   .banner__item--static-for-animation {

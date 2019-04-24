@@ -6,37 +6,46 @@ import Button from 'component/button';
 import classnames from 'classnames';
 import Tooltip from 'component/common/tooltip';
 
-type SideBarLink = {
-  label: string,
-  path: string,
-  active: boolean,
-  icon: ?string,
-  subLinks: Array<SideBarLink>,
-  guide: ?string,
-};
-
 type Props = {
   unreadSubscriptionTotal: number,
+  shouldShowInviteGuide: string,
 };
 
 class SideBar extends React.PureComponent<Props> {
   render() {
-    const { unreadSubscriptionTotal } = this.props;
-    const buildLink = (path, label, icon) => ({
+    const { unreadSubscriptionTotal, shouldShowInviteGuide } = this.props;
+    const buildLink = (path, label, icon, guide) => ({
       navigate: path ? `$/${path}` : '/',
       label,
       icon,
+      guide,
     });
 
-    const renderLink = (linkProps, index) => (
-      <li key={index}>
+    const renderLink = (linkProps, index) => {
+      const { guide } = linkProps;
+
+      const inner = (
         <Button
           {...linkProps}
-          className="navigation__link"
+          className={classnames('navigation__link', {
+            'navigation__link--guide': guide,
+          })}
           activeClass="navigation__link--active"
         />
-      </li>
-    );
+      );
+
+      return (
+        <li key={index}>
+          {guide ? (
+            <Tooltip key={guide} alwaysVisible direction="right" body={guide}>
+              {inner}
+            </Tooltip>
+          ) : (
+            inner
+          )}
+        </li>
+      );
+    };
 
     return (
       <nav className="navigation">
@@ -70,7 +79,12 @@ class SideBar extends React.PureComponent<Props> {
               ...buildLink(PAGES.ACCOUNT, 'Overview', ICONS.ACCOUNT),
             },
             {
-              ...buildLink(PAGES.INVITE, 'Invite', ICONS.INVITE),
+              ...buildLink(
+                PAGES.INVITE,
+                'Invite',
+                ICONS.INVITE,
+                shouldShowInviteGuide && __('Check this out!')
+              ),
             },
             {
               ...buildLink(PAGES.REWARDS, 'Rewards', ICONS.FEATURED),

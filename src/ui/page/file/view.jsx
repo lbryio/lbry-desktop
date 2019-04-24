@@ -151,7 +151,7 @@ class FilePage extends React.Component<Props> {
       mediaType,
       contentType,
       fileName,
-    })
+    });
     const showFile =
       PLAYABLE_MEDIA_TYPES.includes(mediaType) || PREVIEW_MEDIA_TYPES.includes(mediaType);
 
@@ -176,14 +176,12 @@ class FilePage extends React.Component<Props> {
       editUri = buildURI(uriObject);
     }
 
-    const insufficientCredits = costInfo && costInfo.cost > balance;
+    const insufficientCredits = !claimIsMine && costInfo && costInfo.cost > balance;
 
     return (
       <Page notContained className="main--file-page">
         <div className="grid-area--content">
-          <h1 className="media__uri">
-            <Button navigate={uri} label={uri} />
-          </h1>
+          <h1 className="media__uri">{uri}</h1>
           {insufficientCredits && (
             <div className="media__insufficient-credits help--warning">
               {__(

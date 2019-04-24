@@ -6,7 +6,6 @@
 
   overflow: hidden;
   position: absolute;
-  z-index: 1;
 
   html[data-mode='dark'] & {
     border: 1px solid rgba($lbry-gray-1, 0.3);

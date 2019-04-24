@@ -20,4 +20,8 @@
 
 ::-webkit-scrollbar-track {
   background-color: transparent;
+
+  html[data-mode='dark'] & {
+    background-color: $lbry-black;
+  }
 }
