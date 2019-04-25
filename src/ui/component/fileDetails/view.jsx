@@ -5,6 +5,7 @@ import MarkdownPreview from 'component/common/markdown-preview';
 import Button from 'component/button';
 import Expandable from 'component/expandable';
 import path from 'path';
+import FormField from '../common/form-components/form-field';
 
 type Props = {
   claim: StreamClaim,
@@ -28,10 +29,9 @@ class FileDetails extends PureComponent<Props> {
     const { clickCommentButton, showSnackBar } = this.props;
 
     clickCommentButton();
-    Lbryio.call('user_tag', 'edit', { add: 'comments-waitlist' });
     showSnackBar(
       <span>
-        {__('Thanks! Comments are coming soon')}
+        {__('Your Comment Has Been Posted')}
         <sup>TM</sup>
       </span>
     );
@@ -114,26 +114,44 @@ class FileDetails extends PureComponent<Props> {
             )}
           </div>
         </Expandable>
-
-        <div className="media__info-title">Comments</div>
-
-        <div className="card__actions--center">
-          <Button
-            data-id="add-comment"
-            disabled={hasClickedComment}
-            button="primary"
-            label={__('Want to comment?')}
-            onClick={this.handleCommentClick}
-          />
-        </div>
-        <br />
-        {hasClickedComment && (
-          <p className="media__info-text media__info-text--center">
-            {user
-              ? __('Your support has been added. You will be notified when comments are available.')
-              : __('Your support has been added. Comments are coming soon.')}
-          </p>
-        )}
+        <form className="form">
+          <header className="card__header">
+            <h2 className="card__header">Comments</h2>
+          </header>
+          <FormField
+            name="comment"
+            className="form-field--stretch"
+            placeholder="Leave a Comment... "
+          >
+            <fieldset-section>
+              <input
+                className="form-field--SimpleMDE"
+                placeholder="Leave a comment..."
+                type="text"
+                value=""
+                id="comment-field"
+              />
+              <div className="card__actions--center">
+                <Button
+                  data-id="add-comment"
+                  disabled={hasClickedComment}
+                  button="primary"
+                  label={__('Want to comment?')}
+                  onClick={this.handleCommentClick}
+                />
+              </div>
+              {hasClickedComment && (
+                <p className="media__info-text media__info-text--center">
+                  {user
+                    ? __(
+                      'Your support has been added. You will be notified when comments are available.'
+                    )
+                    : __('Your support has been added. Comments are coming soon.')}
+                </p>
+              )}
+            </fieldset-section>
+          </FormField>
+        </form>
       </Fragment>
     );
   }
