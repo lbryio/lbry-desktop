@@ -1,5 +1,4 @@
 // @flow
-import type { Node } from 'react';
 import * as ICONS from 'constants/icons';
 import React from 'react';
 
@@ -9,7 +8,7 @@ type IconProps = {
 };
 
 // Returns a react component
-const buildIcon = (iconStrokes: Node, options?: {} = {}) => (props: IconProps) => {
+const buildIcon = (iconStrokes: React$Node, options?: {} = {}) => (props: IconProps) => {
   const { size = 24, color = 'currentColor', ...otherProps } = props;
   return (
     <svg

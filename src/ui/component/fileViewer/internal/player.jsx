@@ -1,6 +1,5 @@
 // @flow
 import 'babel-polyfill';
-import type { Claim } from 'types/claim';
 import * as React from 'react';
 // @if TARGET='app'
 import { remote } from 'electron';
@@ -19,7 +18,7 @@ type Props = {
   position: ?number,
   downloadPath: string,
   fileName: string,
-  claim: Claim,
+  claim: StreamClaim,
   onStartCb: ?() => void,
   onFinishCb: ?() => void,
   savePosition: number => void,
@@ -263,11 +262,6 @@ class MediaPlayer extends React.PureComponent<Props, State> {
     // This files are supported using a custom viewer
     const { mediaType, contentType } = this.props;
 
-    console.log({
-      mediaType,
-      contentType
-    })
-
     return (
       MediaPlayer.FILE_MEDIA_TYPES.indexOf(mediaType) > -1 ||
       MediaPlayer.SANDBOX_TYPES.indexOf(contentType) > -1
@@ -361,13 +355,6 @@ class MediaPlayer extends React.PureComponent<Props, State> {
     const isFileReady = fileSource && isFileType;
     const isPlayableType = this.playableType();
     const { isLoading, loadingStatus } = this.showLoadingScreen(isFileType, isPlayableType);
-
-    console.log({
-      mediaType,
-      fileSource,
-      isFileReady,
-      isFileType
-    })
 
     return (
       <React.Fragment>

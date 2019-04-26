@@ -1,5 +1,4 @@
 // @flow
-import type { UrlLocation } from 'types/location';
 import * as ICONS from 'constants/icons';
 import React, { useEffect, Fragment } from 'react';
 import { isURIValid, normalizeURI, parseURI } from 'lbry-redux';

@@ -1,7 +1,4 @@
 // @flow
-import type { Claim, Metadata } from 'types/claim';
-import type { FileInfo } from 'types/file_info';
-import type { Node } from 'react';
 import React, { Fragment, PureComponent } from 'react';
 import { Lbryio } from 'lbryinc';
 import MarkdownPreview from 'component/common/markdown-preview';
@@ -10,13 +7,13 @@ import Expandable from 'component/expandable';
 import path from 'path';
 
 type Props = {
-  claim: Claim,
-  fileInfo: FileInfo,
-  metadata: Metadata,
+  claim: StreamClaim,
+  fileInfo: FileListItem,
+  metadata: StreamMetadata,
   openFolder: string => void,
   contentType: string,
   clickCommentButton: () => void,
-  showSnackBar: Node => void,
+  showSnackBar: React$Node => void,
   hasClickedComment: boolean,
   user: ?any,
 };
@@ -59,7 +56,7 @@ class FileDetails extends PureComponent<Props> {
       );
     }
 
-    const { description, language, license } = metadata;
+    const { description, languages, license } = metadata;
 
     const mediaType = contentType || 'unknown';
     let downloadPath =
@@ -90,9 +87,9 @@ class FileDetails extends PureComponent<Props> {
               {mediaType}
             </div>
             <div>
-              {__('Language')}
+              {__('Languages')}
               {': '}
-              {language}
+              {languages ? languages.join(' ') : null}
             </div>
             <div>
               {__('License')}
@@ -106,7 +103,11 @@ class FileDetails extends PureComponent<Props> {
                 <Button
                   constrict
                   button="link"
-                  onClick={() => openFolder(downloadPath)}
+                  onClick={() => {
+                    if (downloadPath) {
+                      openFolder(downloadPath);
+                    }
+                  }}
                   label={downloadNote || downloadPath}
                 />
               </div>

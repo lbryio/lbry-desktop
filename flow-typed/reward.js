@@ -1,6 +1,6 @@
 // @flow
 
-export type Reward = {
+declare type Reward = {
   created_at: string,
   id: number,
   reward_amount: number,

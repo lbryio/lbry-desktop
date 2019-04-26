@@ -9,7 +9,7 @@ import Page from 'component/page';
 import FileSelector from 'component/common/file-selector';
 import UnsupportedOnWeb from 'component/common/unsupported-on-web';
 
-export type Price = {
+type Price = {
   currency: string,
   amount: number,
 };

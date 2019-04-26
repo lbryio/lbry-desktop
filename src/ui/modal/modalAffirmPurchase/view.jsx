@@ -2,14 +2,13 @@
 import React from 'react';
 import FilePrice from 'component/filePrice';
 import { Modal } from 'modal/modal';
-import type { Metadata } from 'types/claim';
 
 type Props = {
   closeModal: () => void,
   loadVideo: string => void,
   uri: string,
   cancelPurchase: () => void,
-  metadata: Metadata,
+  metadata: StreamMetadata,
 };
 
 class ModalAffirmPurchase extends React.PureComponent<Props> {
@@ -42,7 +41,7 @@ class ModalAffirmPurchase extends React.PureComponent<Props> {
       >
         <section className="card__content">
           <p>
-            {__('This will purchase')} <strong>{`"${title}"`}</strong> {__('for')}{' '}
+            {__('This will purchase')} <strong>{title ? `"${title}"` : uri}</strong> {__('for')}{' '}
             <strong>
               <FilePrice uri={uri} showFullPrice inheritStyle showLBC={false} />
             </strong>{' '}

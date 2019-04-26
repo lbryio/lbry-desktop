@@ -1,10 +1,8 @@
 // @flow
-import type { Claim, Metadata } from 'types/claim';
-import type { FileInfo } from 'types/file_info';
 import * as MODALS from 'constants/modal_types';
 import * as icons from 'constants/icons';
 import * as React from 'react';
-import { buildURI, normalizeURI } from 'lbry-redux';
+import {buildURI, normalizeURI} from 'lbry-redux';
 import FileViewer from 'component/fileViewer';
 import Thumbnail from 'component/common/thumbnail';
 import FilePrice from 'component/filePrice';
@@ -22,15 +20,15 @@ import getMediaType from 'util/get-media-type';
 import RecommendedContent from 'component/recommendedContent';
 
 type Props = {
-  claim: Claim,
-  fileInfo: FileInfo,
-  metadata: Metadata,
+  claim: StreamClaim,
+  fileInfo: FileListItem,
+  metadata: StreamMetadata,
   contentType: string,
   uri: string,
   rewardedContentClaimIds: Array<string>,
   obscureNsfw: boolean,
   claimIsMine: boolean,
-  costInfo: ?{ cost: number },
+  costInfo: ?{cost: number},
   fetchFileInfo: string => void,
   fetchCostInfo: string => void,
   setViewed: string => void,
@@ -39,10 +37,13 @@ type Props = {
   channelUri: string,
   viewCount: number,
   prepareEdit: ({}, string) => void,
-  openModal: (id: string, { uri: string }) => void,
+  openModal: (id: string, {uri: string}) => void,
   markSubscriptionRead: (string, string) => void,
   fetchViewCount: string => void,
   balance: number,
+  title: string,
+  thumbnail: ?string,
+  nsfw: boolean,
 };
 
 class FilePage extends React.Component<Props> {
@@ -71,11 +72,11 @@ class FilePage extends React.Component<Props> {
       claim,
     } = this.props;
 
-    if (isSubscribed) {
+    if(isSubscribed) {
       this.removeFromSubscriptionNotifications();
     }
 
-    if (claimIsMine) {
+    if(claimIsMine) {
       fetchViewCount(claim.claim_id);
     }
 
@@ -90,26 +91,26 @@ class FilePage extends React.Component<Props> {
   }
 
   componentWillReceiveProps(nextProps: Props) {
-    const { fetchFileInfo, uri, setViewed } = this.props;
+    const {fetchFileInfo, uri, setViewed} = this.props;
     // @if TARGET='app'
-    if (nextProps.fileInfo === undefined) {
+    if(nextProps.fileInfo === undefined) {
       fetchFileInfo(uri);
     }
     // @endif
 
-    if (uri !== nextProps.uri) {
+    if(uri !== nextProps.uri) {
       setViewed(nextProps.uri);
     }
   }
 
   componentDidUpdate(prevProps: Props) {
-    const { isSubscribed, claim, uri, fetchViewCount, claimIsMine } = this.props;
+    const {isSubscribed, claim, uri, fetchViewCount, claimIsMine} = this.props;
 
-    if (!prevProps.isSubscribed && isSubscribed) {
+    if(!prevProps.isSubscribed && isSubscribed) {
       this.removeFromSubscriptionNotifications();
     }
 
-    if (prevProps.uri !== uri && claimIsMine) {
+    if(prevProps.uri !== uri && claimIsMine) {
       fetchViewCount(claim.claim_id);
     }
   }
@@ -117,7 +118,7 @@ class FilePage extends React.Component<Props> {
   removeFromSubscriptionNotifications() {
     // Always try to remove
     // If it doesn't exist, nothing will happen
-    const { markSubscriptionRead, uri, channelUri } = this.props;
+    const {markSubscriptionRead, uri, channelUri} = this.props;
     markSubscriptionRead(channelUri, uri);
   }
 
@@ -137,21 +138,18 @@ class FilePage extends React.Component<Props> {
       channelUri,
       viewCount,
       balance,
+      title,
+      thumbnail,
+      nsfw,
     } = this.props;
 
     // File info
-    const { title, thumbnail } = metadata;
-    const { height, channel_name: channelName } = claim;
-    const { PLAYABLE_MEDIA_TYPES, PREVIEW_MEDIA_TYPES } = FilePage;
+    const {height, channel_name: channelName} = claim;
+    const {PLAYABLE_MEDIA_TYPES, PREVIEW_MEDIA_TYPES} = FilePage;
     const isRewardContent = (rewardedContentClaimIds || []).includes(claim.claim_id);
-    const shouldObscureThumbnail = obscureNsfw && metadata.nsfw;
+    const shouldObscureThumbnail = obscureNsfw && nsfw;
     const fileName = fileInfo ? fileInfo.file_name : null;
     const mediaType = getMediaType(contentType, fileName);
-    console.log({
-      mediaType,
-      contentType,
-      fileName,
-    });
     const showFile =
       PLAYABLE_MEDIA_TYPES.includes(mediaType) || PREVIEW_MEDIA_TYPES.includes(mediaType);
 
@@ -164,12 +162,12 @@ class FilePage extends React.Component<Props> {
     // This is what the user is used to seeing, they don't care about the claim id
     // We will select the claim id before they publish
     let editUri;
-    if (claimIsMine) {
-      const uriObject: { contentName: string, claimId: string, channelName?: string } = {
+    if(claimIsMine) {
+      const uriObject: {contentName: string, claimId: string, channelName?: string} = {
         contentName: claim.name,
         claimId: claim.claim_id,
       };
-      if (channelName) {
+      if(channelName) {
         uriObject.channelName = channelName;
       }
 
@@ -204,16 +202,16 @@ class FilePage extends React.Component<Props> {
             (thumbnail ? (
               <Thumbnail shouldObscure={shouldObscureThumbnail} src={thumbnail} />
             ) : (
-              <div
-                className={classnames('content__empty', {
-                  'content__empty--nsfw': shouldObscureThumbnail,
-                })}
-              >
-                <div className="card__media-text">
-                  {__("Sorry, looks like we can't preview this file.")}
+                <div
+                  className={classnames('content__empty', {
+                    'content__empty--nsfw': shouldObscureThumbnail,
+                  })}
+                >
+                  <div className="card__media-text">
+                    {__("Sorry, looks like we can't preview this file.")}
+                  </div>
                 </div>
-              </div>
-            ))}
+              ))}
         </div>
 
         <div className="grid-area--info media__content media__content--large">
@@ -225,13 +223,13 @@ class FilePage extends React.Component<Props> {
                 size={20}
                 iconColor="red"
                 icon={icons.FEATURED}
-                // Figure out how to get the tooltip to overlap the navbar on the file page and I will love you
-                // https://stackoverflow.com/questions/6421966/css-overflow-x-visible-and-overflow-y-hidden-causing-scrollbar-issue
-                // https://spee.ch/4/overflow-issue
-                // tooltip="bottom"
+              // Figure out how to get the tooltip to overlap the navbar on the file page and I will love you
+              // https://stackoverflow.com/questions/6421966/css-overflow-x-visible-and-overflow-y-hidden-causing-scrollbar-issue
+              // https://spee.ch/4/overflow-issue
+              // tooltip="bottom"
               />
             )}
-            {metadata.nsfw && <div className="badge badge--nsfw">NSFW</div>}
+            {nsfw && <div className="badge badge--nsfw">MATURE</div>}
             <FilePrice badge uri={normalizeURI(uri)} />
           </div>
 
@@ -271,7 +269,7 @@ class FilePage extends React.Component<Props> {
                     button="alt"
                     icon={icons.TIP}
                     label={__('Send a tip')}
-                    onClick={() => openModal(MODALS.SEND_TIP, { uri })}
+                    onClick={() => openModal(MODALS.SEND_TIP, {uri})}
                   />
                 </React.Fragment>
               )}
@@ -279,7 +277,7 @@ class FilePage extends React.Component<Props> {
                 button="alt"
                 icon={icons.SHARE}
                 label={__('Share')}
-                onClick={() => openModal(MODALS.SOCIAL_SHARE, { uri, speechShareable })}
+                onClick={() => openModal(MODALS.SOCIAL_SHARE, {uri, speechShareable})}
               />
             </div>
 

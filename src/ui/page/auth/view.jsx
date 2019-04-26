@@ -1,5 +1,4 @@
 // @flow
-import type { UrlLocation } from 'types/location';
 import React from 'react';
 import BusyIndicator from 'component/common/busy-indicator';
 import Button from 'component/button';

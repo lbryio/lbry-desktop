@@ -2,11 +2,10 @@
 import * as React from 'react';
 import Button from 'component/button';
 import { buildURI } from 'lbry-redux';
-import type { Claim } from 'types/claim';
 
 type Props = {
   uri: ?string,
-  myClaimForUri: ?Claim,
+  myClaimForUri: ?StreamClaim,
   isStillEditing: boolean,
   onEditMyClaim: (any, string) => void,
 };

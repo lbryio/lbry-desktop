@@ -4,7 +4,6 @@ import { buildURI } from 'lbry-redux';
 import * as ACTIONS from 'constants/action_types';
 import * as THUMBNAIL_STATUSES from 'constants/thumbnail_upload_statuses';
 import { CHANNEL_ANONYMOUS } from 'constants/claim';
-import type { Source } from 'types/claim';
 
 type PublishState = {
   editingURI: ?string,
@@ -15,7 +14,7 @@ type PublishState = {
     currency: string,
   },
   title: string,
-  thumbnail: string,
+  thumbnail_url: string,
   thumbnailPath: string,
   uploadThumbnailStatus: string,
   description: string,
@@ -30,60 +29,6 @@ type PublishState = {
   licenseUrl: string,
 };
 
-export type UpdatePublishFormData = {
-  filePath?: string,
-  contentIsFree?: boolean,
-  price?: {
-    amount: number,
-    currency: string,
-  },
-  title?: string,
-  thumbnail?: string,
-  uploadThumbnailStatus?: string,
-  thumbnailPath?: string,
-  description?: string,
-  language?: string,
-  channel?: string,
-  channelId?: string,
-  name?: string,
-  nameError?: string,
-  bid?: number,
-  bidError?: string,
-  otherLicenseDescription?: string,
-  licenseUrl?: string,
-  licenseType?: string,
-  uri?: string,
-};
-
-export type UpdatePublishFormAction = {
-  type: ACTIONS.UPDATE_PUBLISH_FORM | ACTIONS.DO_PREPARE_EDIT,
-  data: UpdatePublishFormData,
-};
-
-export type PublishParams = {
-  name?: string,
-  bid?: number,
-  filePath?: string,
-  description: ?string,
-  language: string,
-  publishingLicense?: string,
-  publishingLicenseUrl?: string,
-  thumbnail: ?string,
-  nsfw: boolean,
-  channel: string,
-  channelId?: string,
-  title: string,
-  contentIsFree: boolean,
-  uri?: string,
-  license: ?string,
-  licenseUrl: ?string,
-  price: {
-    currency: string,
-    amount: number,
-  },
-  sources?: Source,
-};
-
 const defaultState: PublishState = {
   editingURI: undefined,
   filePath: undefined,
@@ -93,7 +38,7 @@ const defaultState: PublishState = {
     currency: 'LBC',
   },
   title: '',
-  thumbnail: '',
+  thumbnail_url: '',
   thumbnailPath: '',
   uploadThumbnailStatus: THUMBNAIL_STATUSES.API_DOWN,
   description: '',

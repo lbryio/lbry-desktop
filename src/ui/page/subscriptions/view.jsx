@@ -1,6 +1,4 @@
 // @flow
-import type { ViewMode } from 'types/subscription';
-import type { Claim } from 'types/claim';
 import * as SETTINGS from 'constants/settings';
 import React, { PureComponent } from 'react';
 import Page from 'component/page';
@@ -13,7 +11,7 @@ type Props = {
     channel: string,
     uris: Array<string>,
   }>,
-  allSubscriptions: Array<{ uri: string, ...Claim }>,
+  allSubscriptions: Array<{ uri: string, ...StreamClaim }>,
   loading: boolean,
   autoDownload: boolean,
   viewMode: ViewMode,

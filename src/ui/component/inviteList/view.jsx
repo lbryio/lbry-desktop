@@ -1,5 +1,4 @@
 // @flow
-import type { Reward } from 'types/reward';
 import React from 'react';
 import RewardLink from 'component/rewardLink';
 import Yrbl from 'component/yrbl';

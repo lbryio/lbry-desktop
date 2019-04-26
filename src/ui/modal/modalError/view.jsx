@@ -10,7 +10,9 @@ type Props = {
 
 class ModalError extends React.PureComponent<Props> {
   componentDidMount() {
-    Lbryio.call('event', 'desktop_error', { error_message: JSON.stringify(this.props.error) });
+    if (process.env.NODE_ENV === 'production') {
+      Lbryio.call('event', 'desktop_error', { error_message: JSON.stringify(this.props.error) });
+    }
   }
   render() {
     const { closeModal, error } = this.props;

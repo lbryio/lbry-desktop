@@ -1,5 +1,4 @@
 // @flow
-import type { Status } from 'types/status';
 import * as React from 'react';
 import * as MODALS from 'constants/modal_types';
 import { Lbry } from 'lbry-redux';
@@ -97,11 +96,11 @@ export default class SplashScreen extends React.PureComponent<Props, State> {
     });
   }
 
-  updateStatusCallback(status: Status) {
+  updateStatusCallback(status: StatusResponse) {
     const { notifyUnlockWallet, authenticate, modal } = this.props;
     const { launchedModal } = this.state;
 
-    if (status.error) {
+    if (status.connection_status.code !== 'connected') {
       this.setState({ error: true });
       return;
     }

@@ -13,6 +13,8 @@ import {
   makeSelectDownloadingForUri,
   selectSearchBarFocused,
   makeSelectFirstRecommendedFileForUri,
+  makeSelectClaimIsNsfw,
+  makeSelectThumbnailForUri,
 } from 'lbry-redux';
 import { makeSelectClientSetting, selectShowNsfw } from 'redux/selectors/settings';
 import { selectPlayingUri, makeSelectContentPositionForUri } from 'redux/selectors/content';
@@ -35,6 +37,8 @@ const select = (state, props) => ({
   searchBarFocused: selectSearchBarFocused(state),
   fileInfoErrors: selectFileInfoErrors(state),
   nextFileToPlay: makeSelectFirstRecommendedFileForUri(props.uri)(state),
+  nsfw: makeSelectClaimIsNsfw(props.uri)(state),
+  thumbnail: makeSelectThumbnailForUri(props.uri)(state),
 });
 
 const perform = dispatch => ({

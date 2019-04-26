@@ -2,18 +2,6 @@
 import * as ACTIONS from 'constants/action_types';
 import { VIEW_ALL } from 'constants/subscriptions';
 import { handleActions } from 'util/redux-utils';
-import type {
-  SubscriptionState,
-  Subscription,
-  DoChannelSubscribe,
-  DoChannelUnsubscribe,
-  SetSubscriptionLatest,
-  DoUpdateSubscriptionUnreads,
-  DoRemoveSubscriptionUnreads,
-  FetchedSubscriptionsSucess,
-  SetViewMode,
-  GetSuggestedSubscriptionsSuccess,
-} from 'types/subscription';
 
 const defaultState: SubscriptionState = {
   subscriptions: [],

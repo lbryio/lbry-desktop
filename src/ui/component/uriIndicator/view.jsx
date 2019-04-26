@@ -2,12 +2,13 @@
 import React from 'react';
 import Button from 'component/button';
 import { buildURI } from 'lbry-redux';
-import type { Claim } from 'types/claim';
 
 type Props = {
   isResolvingUri: boolean,
-  claim: Claim,
+  channelUri: ?string,
   link: ?boolean,
+  claim: ?StreamClaim,
+  channelClaim: ?ChannelClaim,
   // Lint thinks we aren't using these, even though we are.
   // Possibly because the resolve function is an arrow function that is passed in props?
   resolveUri: string => void,
@@ -32,25 +33,23 @@ class UriIndicator extends React.PureComponent<Props> {
   };
 
   render() {
-    const { claim, link, isResolvingUri } = this.props;
+    const { link, isResolvingUri, claim } = this.props;
+
     if (!claim) {
       return <span className="empty">{isResolvingUri ? 'Validating...' : 'Unused'}</span>;
     }
-    const { channel_name: channelName, signature_is_valid: signatureIsValid, value } = claim;
 
-    const channelClaimId =
-      value && value.publisherSignature && value.publisherSignature.certificateId;
-
-    if (!channelName) {
+    if (!claim.signing_channel) {
       return <span className="channel-name">Anonymous</span>;
     }
 
+    const { name, claim_id: claimId } = claim.signing_channel;
     let channelLink;
-    if (signatureIsValid) {
-      channelLink = link ? buildURI({ channelName, claimId: channelClaimId }) : false;
+    if (claim.is_channel_signature_valid) {
+      channelLink = link ? buildURI({ channelName: name, claimId }) : false;
     }
 
-    const inner = <span className="channel-name">{channelName}</span>;
+    const inner = <span className="channel-name">{name}</span>;
 
     if (!channelLink) {
       return inner;
