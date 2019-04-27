@@ -6,7 +6,7 @@
   background-color: $lbry-white;
   display: flex;
   justify-content: space-between;
-  z-index: 1;
+  z-index: 2;
 
   html[data-mode='dark'] & {
     background-color: rgba($lbry-black, 0.9);
