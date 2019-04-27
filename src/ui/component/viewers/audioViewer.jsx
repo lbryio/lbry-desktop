@@ -6,7 +6,7 @@ import { stopContextMenu } from 'util/context-menu';
 import butterchurn from 'butterchurn';
 import detectButterchurnSupport from 'butterchurn/lib/isSupported.min';
 import butterchurnPresets from 'butterchurn-presets';
-import jsmediatags from 'jsmediatags/dist/jsmediatags';
+import * as musicMetadata from 'music-metadata-browser';
 import WaveSurfer from 'wavesurfer.js';
 
 import styles from './audioViewer.module.scss';
@@ -133,16 +133,16 @@ class AudioVideoViewer extends React.PureComponent {
 
     wavesurfer.load(audioNode);
 
-    jsmediatags.Config.setDisallowedXhrHeaders(['If-Modified-Since', 'Range']);
-    jsmediatags.read(path, {
-      onSuccess: function(result) {
-        const { album, artist, title, picture } = result.tags;
+    musicMetadata
+      .fetchFromUrl(path)
+      .then(metadata => {
+        const { album, artist, title, picture } = metadata.common;
 
-        if (picture) {
-          const byteArray = new Uint8Array(picture.data);
-          const blob = new Blob([byteArray], { type: picture.type });
-          const albumArtUrl = URL.createObjectURL(blob);
-          me.artNode.src = albumArtUrl;
+        if (picture && picture.length >= 1) {
+          const cover = picture[0]; // ToDo: select cover smart
+          const byteArray = new Uint8Array(cover.data);
+          const blob = new Blob([byteArray], { type: cover.format });
+          me.artNode.src = URL.createObjectURL(blob);
 
           me.setState({ artLoaded: true });
         }
@@ -152,11 +152,10 @@ class AudioVideoViewer extends React.PureComponent {
           artist,
           title,
         });
-      },
-      onError: function(error) {
+      })
+      .catch(error => {
         console.log(':(', error.type, error.info);
-      },
-    });
+      });
   }
 
   componentWillUnmount() {
