@@ -261,7 +261,7 @@ export const doCheckSubscription = (subscriptionUri: string, shouldNotify?: bool
           const uri = buildURI({ contentName: claim.name, claimId: claim.claim_id }, true);
           const shouldDownload =
             shouldAutoDownload &&
-            Boolean(downloadCount < SUBSCRIPTION_DOWNLOAD_LIMIT && !claim.value.fee;
+            Boolean(downloadCount < SUBSCRIPTION_DOWNLOAD_LIMIT && !claim.value.fee);
 
           // Add the new content to the list of "un-read" subscriptions
           if (shouldNotify) {
