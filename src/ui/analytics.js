@@ -15,7 +15,7 @@ let analyticsEnabled: boolean = true;
 const analytics: Analytics = {
   pageView: path => {
     if (analyticsEnabled) {
-      ReactGA.pageview(path, IS_WEB ? ['web'] : ['desktop']);
+      ReactGA.pageview(path);
     }
   },
   setUser: user => {
@@ -76,10 +76,10 @@ const analytics: Analytics = {
 // Initialize google analytics
 // Set `debug: true` for debug info
 // Will change once we have separate ids for desktop/web
-const UA_ID = IS_WEB ? 'UA-60403362-12' : 'UA-60403362-12';
+const UA_ID = IS_WEB ? 'UA-60403362-12' : 'UA-60403362-13';
 
 ReactGA.initialize(UA_ID, {
-  gaOptions: { name: IS_WEB ? 'web' : 'desktop' },
+  gaOptions: {},
   testMode: process.env.NODE_ENV !== 'production',
   // debug: true,
 });
