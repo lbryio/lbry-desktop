@@ -2,8 +2,11 @@
 import { Lbryio } from 'lbryinc';
 import ReactGA from 'react-ga';
 import { history } from './store';
+import cookie from 'cookie';
+import uuid from 'uuid/v4';
 
 type Analytics = {
+  gaClientId: ?string,
   pageView: string => void,
   setUser: Object => void,
   toggle: (boolean, ?boolean) => void,
@@ -13,6 +16,7 @@ type Analytics = {
 
 let analyticsEnabled: boolean = true;
 const analytics: Analytics = {
+  gaClientId: undefined,
   pageView: path => {
     if (analyticsEnabled) {
       ReactGA.pageview(path);
@@ -73,15 +77,22 @@ const analytics: Analytics = {
   },
 };
 
-// Initialize google analytics
-// Set `debug: true` for debug info
-// Will change once we have separate ids for desktop/web
+const { ga_client_id: storedClientId } = cookie.parse(document.cookie);
+const clientId = storedClientId || uuid();
+
+analytics.gaClientId = clientId;
+
+if (!storedClientId) {
+  document.cookie = cookie.serialize('ga_client_id', clientId);
+}
+
 const UA_ID = IS_WEB ? 'UA-60403362-12' : 'UA-60403362-13';
 
+// Initialize google analytics with different UA id's depending on web/desktop
+// Set `debug: true` for debug info
 ReactGA.initialize(UA_ID, {
-  gaOptions: {},
+  gaOptions: { clientId },
   testMode: process.env.NODE_ENV !== 'production',
-  // debug: true,
 });
 
 // Manually call the first page view
