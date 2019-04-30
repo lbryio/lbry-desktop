@@ -311,7 +311,7 @@ export const doCheckPendingPublishes = () => (dispatch: Dispatch, getState: GetS
           // If it's confirmed, check if we should notify the user
           if (selectosNotificationsEnabled(getState())) {
             const notif = new window.Notification('LBRY Publish Complete', {
-              body: `${claim.value.stream.title} has been published to lbry://${
+              body: `${claim.value.title} has been published to lbry://${
                 claim.name
               }. Click here to view it`,
               silent: false,
