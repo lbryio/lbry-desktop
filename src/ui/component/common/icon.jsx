@@ -65,7 +65,9 @@ class IconComponent extends React.PureComponent<Props> {
       tooltipText = this.getTooltip(icon);
     }
 
-    const inner = <Icon size={iconSize} className={classnames('icon', className)} color={color} />;
+    const inner = (
+      <Icon size={iconSize} className={classnames(`icon icon--${icon}`, className)} color={color} />
+    );
 
     return tooltipText ? (
       <Tooltip icon body={tooltipText} direction={tooltip}>

@@ -1,6 +1,13 @@
 @import '~@lbry/components/sass/form/_index.scss';
 
 // lbry/components overrides and minor styles
+// Some items have very specific styling
+// This is because many styles inside `lbry/components/sass/form/` are very specific
+// As styles become hardened here, they _should_ slowly move over to that repo
+
+input-submit {
+  align-items: center;
+}
 
 input[type='number'] {
   width: 8em;
@@ -160,10 +167,6 @@ form {
         border-color: $lbry-teal-3;
       }
     }
-
-    &.button--inverse {
-      @extend .button--inverse;
-    }
   }
 }
 
@@ -176,9 +179,21 @@ fieldset-section {
       }
     }
 
-    .button__content {
-      position: relative;
-      top: -0.1em;
+    // input-submit is connected to a button
+    // The input height needs to match the button height to lineup correctly
+    // Other inputs are fine since they are on their own and are used under different circumstances
+    input[type='text'] {
+      height: var(--button-height);
+
+      [data-mode='dark'] & {
+        &:not(:focus) {
+          border-color: $lbry-gray-5;
+        }
+      }
+    }
+
+    .button {
+      border-radius: 0;
     }
   }
 

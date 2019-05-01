@@ -272,20 +272,18 @@ class CategoryList extends PureComponent<Props, State> {
     return (
       <section className="media-group--row">
         <header className="media-group__header">
-          <div className="media-group__header-title">
+          <h2 className="media-group__header-title">
             {categoryLink ? (
-              <div className="channel-info__actions">
-                <div className="channel-info__actions__group">
-                  <Button label={category} navigate={channelLink} />
-                  <SubscribeButton
-                    button="alt"
-                    showSnackBarOnSubscribe
-                    uri={`lbry://${categoryLink}`}
-                  />
-                </div>
-              </div>
+              <React.Fragment>
+                <Button label={category} navigate={channelLink} />
+                <SubscribeButton
+                  button="alt"
+                  showSnackBarOnSubscribe
+                  uri={`lbry://${categoryLink}`}
+                />
+              </React.Fragment>
             ) : (
-              category
+              <span>{category}</span>
             )}
             {isCommunityTopBids && (
               <ToolTip
@@ -296,7 +294,7 @@ class CategoryList extends PureComponent<Props, State> {
                 )}
               />
             )}
-          </div>
+          </h2>
           {showScrollButtons && (
             <nav className="media-group__header-navigation">
               <Button

@@ -44,24 +44,22 @@ const Header = (props: Props) => {
           navigate="/"
         />
         {/* @if TARGET='app' */}
-        <div className="header__navigation-app">
-          <div className="header__navigation-arrows">
-            <Button
-              className="header__navigation-item header__navigation-item--back"
-              description={__('Navigate back')}
-              onClick={() => window.history.back()}
-              icon={ICONS.ARROW_LEFT}
-              iconSize={15}
-            />
+        <div className="header__navigation-arrows">
+          <Button
+            className="header__navigation-item header__navigation-item--back"
+            description={__('Navigate back')}
+            onClick={() => window.history.back()}
+            icon={ICONS.ARROW_LEFT}
+            iconSize={15}
+          />
 
-            <Button
-              className="header__navigation-item header__navigation-item--forward"
-              description={__('Navigate forward')}
-              onClick={() => window.history.forward()}
-              icon={ICONS.ARROW_RIGHT}
-              iconSize={15}
-            />
-          </div>
+          <Button
+            className="header__navigation-item header__navigation-item--forward"
+            description={__('Navigate forward')}
+            onClick={() => window.history.forward()}
+            icon={ICONS.ARROW_RIGHT}
+            iconSize={15}
+          />
         </div>
         {/* @endif */}
       </div>
@@ -77,7 +75,8 @@ const Header = (props: Props) => {
         />
 
         <Button
-          className="header__navigation-item header__navigation-item--wallet"
+          className="header__navigation-item header__navigation-item--right-action"
+          activeClass="header__navigation-item--active"
           description={__('Your wallet')}
           title={`Your balance is ${balance} LBRY Credits`}
           label={
@@ -102,7 +101,7 @@ const Header = (props: Props) => {
 
         {showUpgradeButton && (
           <Button
-            className="header__navigation-item header__navigation-item--right-action"
+            className="header__navigation-item header__navigation-item--right-action header__navigation-item--upgrade"
             icon={ICONS.DOWNLOAD}
             iconSize={24}
             label={__('Upgrade App')}
