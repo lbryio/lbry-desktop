@@ -154,7 +154,7 @@ class FileViewer extends React.PureComponent<Props> {
   playContent() {
     const { play, uri, fileInfo, isDownloading, isLoading, insufficientCredits } = this.props;
 
-    if (insufficientCredits) {
+    if (!fileInfo && insufficientCredits) {
       return;
     }
 
@@ -255,7 +255,7 @@ class FileViewer extends React.PureComponent<Props> {
 
     const layoverClass = classnames('content__cover', {
       'card__media--nsfw': shouldObscureNsfw,
-      'card__media--disabled': insufficientCredits,
+      'card__media--disabled': !fileInfo && insufficientCredits,
     });
 
     const layoverStyle =
