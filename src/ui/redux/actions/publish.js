@@ -161,6 +161,7 @@ export const doPrepareEdit = (claim: StreamClaim, uri: string) => (dispatch: Dis
     uri,
     uploadThumbnailStatus: thumbnail ? THUMBNAIL_STATUSES.MANUAL : undefined,
     licenseUrl,
+    replace: true,
   };
 
   // Make sure custom liscence's are mapped properly
