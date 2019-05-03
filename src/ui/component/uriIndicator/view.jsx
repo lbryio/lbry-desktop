@@ -56,7 +56,7 @@ class UriIndicator extends React.PureComponent<Props> {
     }
 
     return (
-      <Button noPadding className="button--uri-indicator" navigate={channelLink}>
+      <Button className="button--uri-indicator" navigate={channelLink}>
         {inner}
       </Button>
     );

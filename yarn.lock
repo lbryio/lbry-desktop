@@ -838,10 +838,10 @@
   resolved "https://registry.yarnpkg.com/@lbry/color/-/color-1.1.1.tgz#b80ec25fb515d436129332b20c767c5a7014ac09"
   integrity sha512-BdxqWmm84WYOd1ZsPruJiGr7WBEophVfJKg7oywFOAMb0h6ERe4Idx1ceweMSvCOyPlR5GAhil9Gvk70SBFdxQ==
 
-"@lbry/components@^2.3.3":
-  version "2.4.0"
-  resolved "https://registry.yarnpkg.com/@lbry/components/-/components-2.4.0.tgz#1fae33575647417929dec64e3cff1d2541fa7418"
-  integrity sha512-p1Y4c9YiURQCGlYNSpN8nJgyznn10oEUWhDBui6IwW+ZlI40ILN4aiG1RRURQM2mj9b+9qczV6uUpm0IdOB67g==
+"@lbry/components@^2.7.0":
+  version "2.7.0"
+  resolved "https://registry.yarnpkg.com/@lbry/components/-/components-2.7.0.tgz#246aa8c482f63940b2d235f21bd5a5ddd6c44a0b"
+  integrity sha512-SuoqHb/ycZBVBuhFONeGntL3Qs0J9akATd8/ytJAdtI2xPWL3yXdext3e/F8VJRE4hW7hkJooTsCX6WbANZYTQ==
 
 "@mapbox/hast-util-table-cell-style@^0.1.3":
   version "0.1.3"

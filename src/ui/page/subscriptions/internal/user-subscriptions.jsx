@@ -41,7 +41,7 @@ export default (props: Props) => {
             <div className="card__actions card__actions--no-margin">
               <Button
                 disabled={viewMode === VIEW_ALL}
-                selected={viewMode === VIEW_ALL}
+                className={viewMode === VIEW_ALL && 'button--subscription-view-selected'}
                 button="link"
                 label="All Subscriptions"
                 onClick={() => doSetViewMode(VIEW_ALL)}
@@ -49,7 +49,7 @@ export default (props: Props) => {
               <Button
                 button="link"
                 disabled={viewMode === VIEW_LATEST_FIRST}
-                selected={viewMode === VIEW_LATEST_FIRST}
+                className={viewMode === VIEW_LATEST_FIRST && 'button--subscription-view-selected'}
                 label={__('Latest Only')}
                 onClick={() => doSetViewMode(VIEW_LATEST_FIRST)}
               />
@@ -92,8 +92,8 @@ export default (props: Props) => {
         <div className="card__content">
           {viewMode === VIEW_ALL && (
             <Fragment>
-              <div className="card__title--flex">
-                <h2 className="card__title">{__('Your subscriptions')}</h2>
+              <div className="card__title card__title--flex">
+                <span>{__('Your subscriptions')}</span>
                 {unreadSubscriptions.length > 0 && <MarkAsRead />}
               </div>
               <FileList hideFilter sortByHeight fileInfos={subscriptions} />
@@ -106,20 +106,20 @@ export default (props: Props) => {
                 unreadSubscriptions.map(({ channel, uris }) => {
                   const { claimName } = parseURI(channel);
                   return (
-                    <span>
+                    <section key={channel}>
                       <h2 className="card__title card__title--flex">
                         <Button button="link" navigate={channel} label={claimName} />
                         <MarkAsRead channel={channel} />
                       </h2>
 
-                      <section className="media-group--list" key={channel}>
+                      <section className="media-group--list">
                         <ul className="card__list">
                           {uris.map(uri => (
                             <FileCard key={uri} uri={uri} />
                           ))}
                         </ul>
                       </section>
-                    </span>
+                    </section>
                   );
                 })
               ) : (

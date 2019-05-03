@@ -181,7 +181,7 @@ class HelpPage extends React.PureComponent<Props, State> {
               />
             </div>
 
-            <div className="card__meta">{__('Thanks! LBRY is made by its users.')}</div>
+            <div className="help">{__('Thanks! LBRY is made by its users.')}</div>
           </div>
         </section>
 

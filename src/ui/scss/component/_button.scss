@@ -1,105 +1,68 @@
 @import '~@lbry/components/sass/button/_index.scss';
 
 .button {
-  border-radius: 0;
-  font-size: 1em;
+  display: inline-block;
+
+  .button__content {
+    display: flex;
+    align-items: center;
+    height: 100%;
+  }
 
   svg {
     stroke-width: 1.9;
     width: 1.2rem;
     height: 1.2rem;
     position: relative;
-    top: 1px;
     color: $lbry-gray-5;
 
     // Buttons that don't have a label
     &:only-child {
       color: inherit;
-      stroke-opacity: 1;
       width: 1.4rem;
       height: 1.4rem;
-      top: 0.1em;
     }
   }
 
+  // Handle icons on the left or right side of the button label
   svg + .button__label,
   .button__label + svg {
-    margin-left: var(--spacing-vertical-small);
-  }
-
-  &.button--icon {
-    border-radius: 50%;
-  }
-}
-
-.button--primary,
-.button--alt,
-.button--no-style {
-  svg {
-    width: 1.2rem;
-    height: 1.2rem;
+    margin-left: var(--spacing-vertical-miniscule);
   }
 }
 
 .button--primary {
-  height: var(--spacing-l);
-
   svg {
     color: white;
   }
-
-  svg + .button__label {
-    position: relative;
-    top: -0.05em;
-  }
 }
 
-// This is a hack and the extra styles are just so this is more specific than the @lbry/components styling
-// Will make a PR there, but just doing it now for the release - Sean
-[type='button'].button--inverse {
-  font-size: 1rem;
-  transition: background-color 0.2s;
-  border-radius: 0;
-
-  html[data-mode='dark'] & {
-    &:not(:hover) {
-      border-color: rgba($lbry-white, 0.1);
-      background-color: rgba($lbry-black, 0.3);
-    }
-
-    &:hover {
-      border-color: rgba($lbry-white, 0.1);
-      background-color: rgba($lbry-white, 0.1);
-      color: $lbry-white;
-    }
-  }
-
-  html[data-mode='light'] & {
-    &:not(:hover) {
-      background-color: $lbry-white;
-      color: $lbry-black;
-    }
-
-    &:hover {
-      background-color: $lbry-gray-1;
-      color: $lbry-black;
-    }
-  }
-
-  .button__content {
-    svg {
-      color: $lbry-gray-4;
-    }
-  }
+// Play/View button that is overlayed ontop of the video player
+.button--icon {
+  height: 5rem;
+  width: 5rem;
+  border-radius: 2.5rem;
 }
 
-.button--selected {
-  font-weight: 800;
+.button--primary,
+.button--alt,
+.button--inverse {
+  height: var(--button-height);
+  line-height: var(--button-height);
+  border-radius: var(--button-radius);
+  font-size: 1.1rem;
+  padding-top: 0;
+  padding-bottom: 0;
+  box-sizing: border-box;
+}
+
+// We need the :disabled to override the default disabled button styles
+// This is a little different because we still want to keep the button styled
+// since it acts as an "active" state
+.button--subscription-view-selected:disabled {
   color: $lbry-teal-5;
-
-  &:disabled {
-    opacity: 1;
-  }
+  border-bottom: 1px solid $lbry-teal-5;
+  opacity: 1;
 
   html[data-mode='dark'] & {
     color: $lbry-teal-3;
@@ -108,6 +71,7 @@
 
 .button--uri-indicator {
   max-width: 100%;
+  height: 1.2em;
   overflow: hidden;
   text-align: left;
   text-overflow: ellipsis;

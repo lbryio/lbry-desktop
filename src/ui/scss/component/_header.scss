@@ -2,108 +2,81 @@
   position: fixed;
   width: 100%;
   height: var(--header-height);
-  align-items: center;
-  background-color: $lbry-white;
   display: flex;
   justify-content: space-between;
-  z-index: 2;
+  z-index: 2; // Main content uses z-index: 1, this ensures it always scrolls under the header
+  background-color: $lbry-white;
+  border-bottom: 1px solid $lbry-gray-1;
 
   html[data-mode='dark'] & {
     background-color: rgba($lbry-black, 0.9);
     background-color: mix($lbry-black, $lbry-gray-3, 90%);
     color: $lbry-white;
+    border-bottom: none;
   }
 }
 
 .header__navigation {
   display: flex;
 
+  // First navigation item is the top left wrapper
+  // This contains the Lbry logo (home link) and forward/back arrows on desktop
   &:first-of-type {
-    // Main navigation collapses into a menu button
-    // at smaller screen widths
     @media (min-width: 601px) {
       width: calc(var(--side-nav-width) - 1px);
-    }
-
-    @media (max-width: 600px) {
-      width: calc(var(--header-height) * 3 + 1px);
     }
   }
 }
 
-// .header__navigation-app {
-//   flex: 1;
-//   display: flex;
-//   justify-content: space-between;
-
-// LBRY logo in the top left corner
-.lbry-icon {
-  height: var(--header-height);
-  width: 1rem;
-  overflow: visible;
-}
-
 .header__navigation-arrows {
-  flex: 1;
   display: flex;
-  justify-content: flex-end;
-  border-left: 1px solid $lbry-gray-1;
+
+  .button__content {
+    justify-content: center;
+  }
 }
-// }
 
 .header__navigation-item {
   height: var(--header-height);
   display: flex;
   justify-content: center;
   align-items: center;
+  border-radius: 0;
 
-  &:not(:disabled):hover {
+  svg {
+    stroke: $lbry-black;
+  }
+
+  &:hover {
     background-color: $lbry-gray-1;
+  }
 
-    html[data-mode='dark'] & {
-      background-color: $lbry-gray-5;
+  &.header__navigation-item--active {
+    &::after {
+      height: 0.2em;
+      bottom: 0;
+      width: 100%;
+      background-color: $lbry-teal-3;
+      content: '';
+      position: absolute;
     }
   }
 
-  &:disabled {
-    opacity: 0.3;
-  }
+  html[data-mode='dark'] & {
+    &:hover {
+      background-color: $lbry-gray-5;
+    }
 
-  .button__content {
-    line-height: var(--header-height);
-    overflow: hidden;
-    text-align: center;
-    text-overflow: ellipsis;
-    width: 100%;
+    svg {
+      stroke: $lbry-white;
+    }
   }
-}
-
-.header__navigation-item--active {
-  background-image: linear-gradient(
-    to bottom,
-    transparent 0%,
-    mix(transparent, $lbry-teal-3, 70%) 90%
-  );
 }
 
 .header__navigation-item--back,
 .header__navigation-item--forward,
-.header__navigation-item--home,
 .header__navigation-item--menu {
   width: var(--header-height);
-
-  svg {
-    stroke: $lbry-black;
-
-    &:only-child {
-      // Header icons are a little different because they are larger
-      top: 0.25rem;
-    }
-
-    html[data-mode='dark'] & {
-      stroke: $lbry-white;
-    }
-  }
 }
 
 .header__navigation-item--lbry {
@@ -114,65 +87,52 @@
   .lbry-icon {
     height: 2rem;
     width: 2rem;
-    top: 0.6rem;
   }
 }
 
-// Publish button
 .header__navigation-item--right-action {
-  position: relative;
-
   .button__content {
-    display: flex;
     padding: 0 var(--spacing-vertical-large);
   }
+}
 
-  .button__label {
-    line-height: 1.4;
-    padding-left: 0.5rem;
-  }
-
-  svg {
-    top: 0.1em;
-  }
-
-  &:not(:last-child) {
-    border-right: 1px solid $lbry-gray-1;
-  }
+.header__navigation-item--right-action:not(:last-child),
+.header__navigation-item--lbry {
+  border-right: 1px solid $lbry-gray-1;
 
   html[data-mode='dark'] & {
-    svg {
-      stroke: $lbry-white;
-    }
+    border-right: 1px solid $lbry-gray-5;
   }
 }
 
-.header__navigation-item--wallet {
-  border-right: 1px solid $lbry-gray-1;
-  width: 10rem;
+.header__navigation-item--upgrade {
+  background-color: $lbry-teal-5;
+  color: $lbry-white;
+  svg {
+    stroke: $lbry-white;
+  }
 
-  html[data-mode='dark'] & {
-    border-color: $lbry-gray-5;
+  &:hover {
+    background-color: $lbry-teal-4;
   }
 }
 
 .header__navigation-item--menu {
-  @media (min-width: 601px) {
-    display: none;
-  }
+  // Add this back once we have an actual menu for mobile
+  // @media (min-width: 601px) {
+  display: none;
+  // }
 }
 
 // Hide links that will live in the menu bar
-@media (max-width: 601px) {
+@media (max-width: 600px) {
   .header__navigation-item--back,
   .header__navigation-item--forward,
-  .header__navigation-item--home,
-  .header__navigation-item--right-action,
-  .header__navigation-item--wallet {
+  .header__navigation-item--right-action {
     display: none;
   }
 
-  .header__navigation:first-child {
-    display: none;
+  .header__navigation-item--lbry {
+    padding: var(--spacing-vertical-medium);
   }
 }

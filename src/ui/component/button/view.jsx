@@ -20,7 +20,6 @@ type Props = {
   description: ?string,
   type: string,
   button: ?string, // primary, secondary, alt, link
-  noPadding: ?boolean, // to remove padding and allow circular buttons
   iconColor?: string,
   iconSize?: number,
   constrict: ?boolean, // to shorten the button and ellipsis, only use for links
@@ -39,6 +38,8 @@ class Button extends React.PureComponent<Props> {
       title,
       label,
       icon,
+      // This should rarely be used. Regular buttons should just use `icon`
+      // `iconRight` is used for the header (home) button with the LBRY icon and external links that are displayed inline
       iconRight,
       disabled,
       children,
@@ -47,7 +48,6 @@ class Button extends React.PureComponent<Props> {
       description,
       button,
       type,
-      noPadding,
       iconColor,
       iconSize,
       constrict,
@@ -57,9 +57,6 @@ class Button extends React.PureComponent<Props> {
 
     const combinedClassName = classnames(
       'button',
-      {
-        'button--no-padding': noPadding,
-      },
       button
         ? {
           'button--primary': button === 'primary',

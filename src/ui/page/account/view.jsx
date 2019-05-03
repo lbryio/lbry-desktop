@@ -16,8 +16,6 @@ const WalletPage = () => (
         <WalletBalance />
         <RewardSummary />
       </div>
-      <WalletSend />
-      <WalletAddress />
       <TransactionListRecent />
     </div>
   </Page>

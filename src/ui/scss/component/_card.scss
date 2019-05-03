@@ -42,6 +42,7 @@
 //  A C T I O N S
 
 .card__actions {
+  display: flex;
   font-size: 1.15rem;
 
   > *:not(:last-child) {
@@ -98,7 +99,7 @@
   position: relative;
 
   &:not(.card__header--flat) {
-    margin-bottom: var(--spacing-vertical-small);
+    margin-bottom: var(--spacing-vertical-medium);
   }
 }
 
@@ -129,15 +130,6 @@
     margin: 0 0 var(--spacing-vertical-medium);
     width: 100%;
   }
-}
-
-//  C A R D
-//  M E T A
-
-.card__meta {
-  color: $lbry-gray-5;
-  padding-top: var(--spacing-vertical-medium);
-  padding-bottom: var(--spacing-vertical-medium);
 }
 
 //  C A R D
@@ -193,10 +185,6 @@
   font-size: 2rem;
   font-weight: 600;
 
-  .button {
-    font-size: 1.2rem;
-  }
-
   + .card__content {
     margin-top: var(--spacing-vertical-medium);
   }
@@ -206,9 +194,8 @@
   display: flex;
   align-items: center;
 
-  .card__title + .button,
-  .button:not(:first-of-type) {
-    margin-left: var(--spacing-vertical-medium);
+  & > *:not(:last-child) {
+    margin-right: var(--spacing-vertical-medium);
   }
 }
 
