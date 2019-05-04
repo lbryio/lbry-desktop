@@ -6375,15 +6375,16 @@ multistream@^2.0.2:
     inherits "^2.0.1"
     readable-stream "^2.0.5"
 
-music-metadata-browser@^0.9.0:
-  version "0.9.0"
-  resolved "https://registry.yarnpkg.com/music-metadata-browser/-/music-metadata-browser-0.9.0.tgz#5ad92bccc881ee5872281199717ab6926cc16423"
+music-metadata-browser@^0.10.0:
+  version "0.10.0"
+  resolved "https://registry.yarnpkg.com/music-metadata-browser/-/music-metadata-browser-0.10.0.tgz#8aa99b8f21ea2dad5e950e6e3871c6e8395a6ec8"
   dependencies:
     assert "^1.4.1"
     buffer "^5.2.1"
     debug "^4.0.1"
     music-metadata "^3.7.0"
     readable-stream "^3.3.0"
+    readable-web-to-node-stream "^1.0.0"
     remove "^0.1.5"
     typedarray-to-buffer "^3.1.5"
 
@@ -8267,6 +8268,12 @@ readable-stream@~2.1.5:
     process-nextick-args "~1.0.6"
     string_decoder "~0.10.x"
     util-deprecate "~1.0.1"
+
+readable-web-to-node-stream@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/readable-web-to-node-stream/-/readable-web-to-node-stream-1.0.0.tgz#dec81947215beb4b39ef46d6686b06a1090be2ea"
+  dependencies:
+    debug "^4.1.1"
 
 readdirp@^2.2.1:
   version "2.2.1"
