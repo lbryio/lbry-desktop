@@ -12,6 +12,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 - New routing setup to allow lbry.tv to use the browser url bar for navigation ([#2408](https://github.com/lbryio/lbry-desktop/pull/2408))
 - New audio player ([#2406](https://github.com/lbryio/lbry-desktop/pull/2406))
+- Always show new suggested subscriptions ([#2541](https://github.com/lbryio/lbry-desktop/pull/2451))
 
 ### Changed
 
