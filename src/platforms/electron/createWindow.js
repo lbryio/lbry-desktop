@@ -4,6 +4,7 @@ import isDev from 'electron-is-dev';
 import windowStateKeeper from 'electron-window-state';
 
 import setupBarMenu from './menu/setupBarMenu';
+import * as PAGES from '../../ui/constants/pages';
 
 export default appState => {
   // Get primary display dimensions from Electron.
@@ -34,7 +35,8 @@ export default appState => {
       plugins: true,
     },
   };
-
+  const lbryProto = 'lbry://';
+  const lbryProtoQ = 'lbry://?';
   const rendererURL = isDev ? `http://localhost:8080` : `file://${__dirname}/index.html`;
 
   let window = new BrowserWindow(windowConfiguration);
@@ -44,14 +46,13 @@ export default appState => {
   // and restore the maximized or full screen state.
   windowState.manage(window);
 
-  window.loadURL(rendererURL);
-
   let deepLinkingURI;
+
   if (
     (process.platform === 'win32' || process.platform === 'linux') &&
     String(process.argv[1]).startsWith('lbry')
   ) {
-    [, deepLinkingURI] = process.argv;
+    [, deepLinkingURI] = process.argv || '';
     // Keep only command line / deep linked arguments
     // Windows normalizes URIs when they're passed in from other apps. On Windows, this tries to
     // restore the original URI that was typed.
@@ -67,9 +68,24 @@ export default appState => {
         .replace('/?', '?');
     }
   } else {
-    deepLinkingURI = appState.macDeepLinkingURI;
+    deepLinkingURI = appState.macDeepLinkingURI || '';
   }
 
+  // is it a lbry://? pointing to an app page
+  if (deepLinkingURI.includes(lbryProtoQ)) {
+    if (Object.values(PAGES).includes(deepLinkingURI.substr(lbryProtoQ.length))) {
+      deepLinkingURI = deepLinkingURI.replace(lbryProtoQ, '#/$/');
+    } else {
+      deepLinkingURI = '';
+    }
+    // else is it a claim
+  } else if (deepLinkingURI.includes(lbryProto)) {
+    deepLinkingURI = deepLinkingURI.replace(lbryProto, '#');
+  } else {
+    deepLinkingURI = '';
+  }
+
+  window.loadURL(rendererURL + deepLinkingURI);
   setupBarMenu();
 
   // Windows back/forward mouse navigation
@@ -119,13 +135,11 @@ export default appState => {
       }
     );
   });
-
   window.once('ready-to-show', () => {
     window.show();
   });
 
   window.webContents.on('did-finish-load', () => {
-    window.webContents.send('open-uri-requested', deepLinkingURI, true);
     window.webContents.session.setUserAgent(`LBRY/${app.getVersion()}`);
     if (isDev) {
       window.webContents.openDevTools();

@@ -73,7 +73,7 @@ const startDaemon = async () => {
         app.quit();
       }
     });
-    daemon.launch();
+    await daemon.launch();
   }
 };
 
@@ -115,7 +115,7 @@ if (!gotSingleInstanceLock) {
   });
 
   app.on('ready', async () => {
-    startDaemon();
+    await startDaemon();
     startSandbox();
 
     if (isDev) {
@@ -193,21 +193,6 @@ app.on('will-quit', event => {
   if (rendererWindow) {
     rendererWindow = null;
   }
-});
-
-// https://electronjs.org/docs/api/app#event-will-finish-launching
-app.on('will-finish-launching', () => {
-  // Protocol handler for macOS
-  app.on('open-url', (event, URL) => {
-    event.preventDefault();
-
-    if (rendererWindow) {
-      rendererWindow.webContents.send('open-uri-requested', URL);
-      rendererWindow.show();
-    } else {
-      appState.macDeepLinkingURI = URL;
-    }
-  });
 });
 
 app.on('before-quit', () => {
