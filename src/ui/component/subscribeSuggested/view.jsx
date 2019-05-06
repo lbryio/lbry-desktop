@@ -1,14 +1,19 @@
 // @flow
-import React, { PureComponent } from 'react';
+import React, { Component } from 'react';
 import CategoryList from 'component/categoryList';
 import Spinner from 'component/spinner';
 
 type Props = {
-  suggested: Array<{ label: string, uri: string }>,
+  suggested: ?Array<{ label: string, uri: string }>,
   loading: boolean,
 };
 
-class SuggestedSubscriptions extends PureComponent<Props> {
+class SuggestedSubscriptions extends Component<Props> {
+  shouldComponentUpdate(nextProps: Props) {
+    const { suggested } = this.props;
+    return !suggested && !!nextProps.suggested;
+  }
+
   render() {
     const { suggested, loading } = this.props;
 
