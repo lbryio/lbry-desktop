@@ -138,7 +138,7 @@ class FileCard extends React.PureComponent<Props> {
         <div className="media__subtitle">
           {pending ? <div>Pending...</div> : <UriIndicator uri={uri} link />}
           <div>
-            <DateTime timeAgo block={height} />
+            <DateTime timeAgo uri={uri} />
           </div>
         </div>
         <div className="media__properties">

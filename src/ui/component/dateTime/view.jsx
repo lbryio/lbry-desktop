@@ -1,9 +1,10 @@
 // @flow
 import React from 'react';
 import moment from 'moment';
+import i18n from 'i18n';
 
 type Props = {
-  date?: number | {},
+  date?: any,
   timeAgo?: boolean,
   formatOptions: {},
   show?: string,
@@ -29,16 +30,6 @@ class DateTime extends React.PureComponent<Props> {
   componentWillReceiveProps() {
     // this.refreshDate(props);
   }
-
-  // Removing this for performance reasons. Can be un-commented once block_show is better with large numbers of calls
-  // Or the date is included in the claim
-  //
-  // refreshDate(props: Props) {
-  //   const { block, date, fetchBlock } = props;
-  //   if (block && date === undefined) {
-  //     fetchBlock(block);
-  //   }
-  // }
 
   render() {
     const { date, formatOptions, timeAgo } = this.props;

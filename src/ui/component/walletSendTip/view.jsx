@@ -95,7 +95,7 @@ class WalletSendTip extends React.PureComponent<Props, State> {
               <Button
                 button="primary"
                 label={__('Send')}
-                disabled={isPending || tipError}
+                disabled={isPending || tipError || !tipAmount}
                 onClick={this.handleSendButtonClicked}
               />
             }

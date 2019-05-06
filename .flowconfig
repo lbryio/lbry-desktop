@@ -22,6 +22,7 @@ module.name_mapper='^modal\(.*\)$' -> '<PROJECT_ROOT>/src/ui/modal\1'
 module.name_mapper='^app\(.*\)$' -> '<PROJECT_ROOT>/src/ui/app\1'
 module.name_mapper='^native\(.*\)$' -> '<PROJECT_ROOT>/src/ui/native\1'
 module.name_mapper='^analytics\(.*\)$' -> '<PROJECT_ROOT>/src/ui/analytics\1'
+module.name_mapper='^i18n\(.*\)$' -> '<PROJECT_ROOT>/src/ui/i18n\1'
 
 
 [strict]
