@@ -7,7 +7,7 @@ import { withRouter } from 'react-router-dom';
 
 const LazyUserPhoneNew = React.lazy(() =>
   import(/* webpackChunkName: "userPhoneNew" */
-    'component/userPhoneNew')
+  'component/userPhoneNew')
 );
 
 type Props = {

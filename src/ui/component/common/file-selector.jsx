@@ -44,8 +44,7 @@ class FileSelector extends React.PureComponent<Props> {
     remote.dialog.showOpenDialog(
       remote.getCurrentWindow(),
       {
-        properties:
-          this.props.type === 'file' ? ['openFile'] : ['openDirectory', 'createDirectory'],
+        properties: this.props.type === 'file' ? ['openFile'] : ['openDirectory', 'createDirectory'],
         filters: this.props.filters,
       },
       paths => {
@@ -86,8 +85,7 @@ class FileSelector extends React.PureComponent<Props> {
   render() {
     const { type, currentPath, fileLabel, directoryLabel } = this.props;
 
-    const label =
-      type === 'file' ? fileLabel || __('Choose File') : directoryLabel || __('Choose Directory');
+    const label = type === 'file' ? fileLabel || __('Choose File') : directoryLabel || __('Choose Directory');
 
     return (
       <React.Fragment>
@@ -101,9 +99,7 @@ class FileSelector extends React.PureComponent<Props> {
           }}
           readOnly="readonly"
           value={currentPath || __('No File Chosen')}
-          inputButton={
-            <Button button="primary" label={label} onClick={() => this.handleButtonClick()} />
-          }
+          inputButton={<Button button="primary" label={label} onClick={() => this.handleButtonClick()} />}
         />
       </React.Fragment>
     );

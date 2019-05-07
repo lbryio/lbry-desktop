@@ -45,18 +45,8 @@ const SearchOptions = (props: Props) => {
 
         <div className="media__action-group">
           <span>{__('Find what you were looking for?')}</span>
-          <Button
-            button="alt"
-            description={__('Yes')}
-            onClick={() => onFeedbackPositive(query)}
-            icon={ICONS.YES}
-          />
-          <Button
-            button="alt"
-            description={__('No')}
-            onClick={() => onFeedbackNegative(query)}
-            icon={ICONS.NO}
-          />
+          <Button button="alt" description={__('Yes')} onClick={() => onFeedbackPositive(query)} icon={ICONS.YES} />
+          <Button button="alt" description={__('No')} onClick={() => onFeedbackNegative(query)} icon={ICONS.NO} />
         </div>
       </div>
       <ExpandableOptions pose={expanded ? 'show' : 'hide'}>

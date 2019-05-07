@@ -17,12 +17,7 @@ import {
   makeSelectThumbnailForUri,
   makeSelectClaimIsNsfw,
 } from 'lbry-redux';
-import {
-  doFetchViewCount,
-  makeSelectViewCountForUri,
-  makeSelectCostInfoForUri,
-  doFetchCostInfoForUri,
-} from 'lbryinc';
+import { doFetchViewCount, makeSelectViewCountForUri, makeSelectCostInfoForUri, doFetchCostInfoForUri } from 'lbryinc';
 import { selectShowNsfw, makeSelectClientSetting } from 'redux/selectors/settings';
 import { makeSelectIsSubscribed } from 'redux/selectors/subscriptions';
 import { doPrepareEdit } from 'redux/actions/publish';

@@ -74,9 +74,7 @@ class UserVerify extends React.PureComponent<Props> {
           <header className="card__header">
             <h2 className="card__title">{__('2) Proof via Phone')}</h2>
             <p className="card__subtitle">
-              {`${__(
-                'You will receive an SMS text message confirming that your phone number is correct.'
-              )}`}
+              {`${__('You will receive an SMS text message confirming that your phone number is correct.')}`}
             </p>
           </header>
 
@@ -114,12 +112,7 @@ class UserVerify extends React.PureComponent<Props> {
 
           <div className="card__content">
             <div className="card__actions">
-              <Button
-                href="https://chat.lbry.com"
-                button="primary"
-                icon={icons.CHAT}
-                label={__('Join LBRY Chat')}
-              />
+              <Button href="https://chat.lbry.com" button="primary" icon={icons.CHAT} label={__('Join LBRY Chat')} />
             </div>
           </div>
         </section>
@@ -128,9 +121,7 @@ class UserVerify extends React.PureComponent<Props> {
           <header className="card__header">
             <h2 className="card__title">{__('Or, Skip It Entirely')}</h2>
             <p className="card__subtitle">
-              {__(
-                'You can continue without this step, but you will not be eligible to earn rewards.'
-              )}
+              {__('You can continue without this step, but you will not be eligible to earn rewards.')}
             </p>
           </header>
 

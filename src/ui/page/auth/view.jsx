@@ -31,12 +31,7 @@ class AuthPage extends React.PureComponent<Props> {
 
   navigateIfAuthenticated = (props: Props) => {
     const { isPending, user, location, history } = props;
-    if (
-      !isPending &&
-      user &&
-      user.has_verified_email &&
-      (user.is_reward_approved || user.is_identity_verified)
-    ) {
+    if (!isPending && user && user.has_verified_email && (user.is_reward_approved || user.is_identity_verified)) {
       const { search } = location;
       const urlParams = new URLSearchParams(search);
       const redirectTo = urlParams.get('redirect');

@@ -9,7 +9,7 @@ import { openEditorMenu, stopContextMenu } from 'util/context-menu';
 
 const SimpleMDE = React.lazy(() =>
   import(/* webpackChunkName: "SimpleMDE" */
-    'react-simplemde-editor')
+  'react-simplemde-editor')
 );
 
 type Props = {
@@ -175,9 +175,7 @@ export class FormField extends React.PureComponent<Props> {
         input = (
           <React.Fragment>
             <fieldset-section>
-              <label htmlFor={name}>
-                {errorMessage ? <span className="error-text">{errorMessage}</span> : label}
-              </label>
+              <label htmlFor={name}>{errorMessage ? <span className="error-text">{errorMessage}</span> : label}</label>
               {prefix && (
                 <label className="form-field--inline-prefix" htmlFor={name}>
                   {prefix}

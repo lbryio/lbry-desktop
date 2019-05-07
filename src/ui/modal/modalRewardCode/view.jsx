@@ -48,12 +48,7 @@ class ModalRewardCode extends React.PureComponent<Props, State> {
           <p>
             {__('Redeem a custom reward code for LBC')}
             {'. '}
-            <Button
-              button="link"
-              href="https://lbry.com/faq/rewards#reward-code"
-              label={__('Learn more')}
-            />
-            .
+            <Button button="link" href="https://lbry.com/faq/rewards#reward-code" label={__('Learn more')} />.
           </p>
           <FormField
             autoFocus

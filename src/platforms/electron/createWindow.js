@@ -48,10 +48,7 @@ export default appState => {
 
   let deepLinkingURI;
 
-  if (
-    (process.platform === 'win32' || process.platform === 'linux') &&
-    String(process.argv[1]).startsWith('lbry')
-  ) {
+  if ((process.platform === 'win32' || process.platform === 'linux') && String(process.argv[1]).startsWith('lbry')) {
     [, deepLinkingURI] = process.argv || '';
     // Keep only command line / deep linked arguments
     // Windows normalizes URIs when they're passed in from other apps. On Windows, this tries to

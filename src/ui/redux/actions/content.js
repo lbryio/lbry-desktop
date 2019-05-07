@@ -203,8 +203,7 @@ export function doLoadVideo(uri: string, shouldRecordViewEvent: boolean = false)
     Lbry.get({ uri })
       .then(streamInfo => {
         // need error code from SDK to capture properly
-        const timeout =
-          streamInfo === null || typeof streamInfo !== 'object' || streamInfo.error === 'Timeout';
+        const timeout = streamInfo === null || typeof streamInfo !== 'object' || streamInfo.error === 'Timeout';
 
         if (timeout) {
           dispatch(handleLoadVideoError(uri, 'timeout'));
@@ -226,11 +225,7 @@ export function doLoadVideo(uri: string, shouldRecordViewEvent: boolean = false)
   };
 }
 
-export function doPurchaseUri(
-  uri: string,
-  specificCostInfo?: ?{},
-  shouldRecordViewEvent?: boolean = false
-) {
+export function doPurchaseUri(uri: string, specificCostInfo?: ?{}, shouldRecordViewEvent?: boolean = false) {
   return (dispatch: Dispatch, getState: GetState) => {
     const state = getState();
     const balance = selectBalance(state);
@@ -291,11 +286,7 @@ export function doPurchaseUri(
   };
 }
 
-export function doFetchClaimsByChannel(
-  uri: string,
-  page: number = 1,
-  pageSize: number = PAGE_SIZE
-) {
+export function doFetchClaimsByChannel(uri: string, page: number = 1, pageSize: number = PAGE_SIZE) {
   return (dispatch: Dispatch) => {
     dispatch({
       type: ACTIONS.FETCH_CHANNEL_CLAIMS_STARTED,

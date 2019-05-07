@@ -190,14 +190,7 @@ class PublishForm extends React.PureComponent<Props> {
   }
 
   handlePublish() {
-    const {
-      filePath,
-      licenseType,
-      licenseUrl,
-      otherLicenseDescription,
-      myClaimForUri,
-      publish,
-    } = this.props;
+    const { filePath, licenseType, licenseUrl, otherLicenseDescription, myClaimForUri, publish } = this.props;
 
     let publishingLicense;
     switch (licenseType) {
@@ -248,12 +241,7 @@ class PublishForm extends React.PureComponent<Props> {
 
     // If they are editing, they don't need a new file chosen
     const formValidLessFile =
-      name &&
-      !nameError &&
-      title &&
-      bid &&
-      !bidError &&
-      !(uploadThumbnailStatus === THUMBNAIL_STATUSES.IN_PROGRESS);
+      name && !nameError && title && bid && !bidError && !(uploadThumbnailStatus === THUMBNAIL_STATUSES.IN_PROGRESS);
     return editingURI && !filePath ? isStillEditing && formValidLessFile : formValidLessFile;
   }
 
@@ -352,24 +340,12 @@ class PublishForm extends React.PureComponent<Props> {
               <h2 className="card__title card__title--flex-between">
                 {__('Content')}
                 {(filePath || !!editingURI) && (
-                  <Button
-                    button="inverse"
-                    icon={ICONS.CLOSE}
-                    label={__('Clear')}
-                    onClick={clearPublish}
-                  />
+                  <Button button="inverse" icon={ICONS.CLOSE} label={__('Clear')} onClick={clearPublish} />
                 )}
               </h2>
               <p className="card__subtitle">
-                {isStillEditing
-                  ? __('You are currently editing a claim.')
-                  : __('What are you publishing?')}{' '}
-                {__('Read our')}{' '}
-                <Button
-                  button="link"
-                  label={__('FAQ')}
-                  href="https://lbry.com/faq/how-to-publish"
-                />{' '}
+                {isStillEditing ? __('You are currently editing a claim.') : __('What are you publishing?')}{' '}
+                {__('Read our')} <Button button="link" label={__('FAQ')} href="https://lbry.com/faq/how-to-publish" />{' '}
                 {__('to learn more.')}
               </p>
             </header>
@@ -496,14 +472,8 @@ class PublishForm extends React.PureComponent<Props> {
               <header className="card__header">
                 <h2 className="card__title">{__('Where can people find this content?')}</h2>
                 <p className="card__subtitle">
-                  {__(
-                    'The LBRY URL is the exact address where people find your content (ex. lbry://myvideo).'
-                  )}{' '}
-                  <Button
-                    button="link"
-                    label={__('Learn more')}
-                    href="https://lbry.com/faq/naming"
-                  />
+                  {__('The LBRY URL is the exact address where people find your content (ex. lbry://myvideo).')}{' '}
+                  <Button button="link" label={__('Learn more')} href="https://lbry.com/faq/naming" />
                 </p>
               </header>
 
@@ -512,9 +482,7 @@ class PublishForm extends React.PureComponent<Props> {
                   <fieldset-section>
                     <label>{__('Name')}</label>
                     <span className="form-field__prefix">{`lbry://${
-                      !channel || channel === CHANNEL_ANONYMOUS || channel === CHANNEL_NEW
-                        ? ''
-                        : `${channel}/`
+                      !channel || channel === CHANNEL_ANONYMOUS || channel === CHANNEL_NEW ? '' : `${channel}/`
                     }`}</span>
                   </fieldset-section>
                   <FormField
@@ -607,9 +575,7 @@ class PublishForm extends React.PureComponent<Props> {
                       otherLicenseDescription: event.target.value,
                     })
                   }
-                  handleLicenseUrlChange={event =>
-                    updatePublishForm({ licenseUrl: event.target.value })
-                  }
+                  handleLicenseUrlChange={event => updatePublishForm({ licenseUrl: event.target.value })}
                 />
               </div>
             </section>
@@ -617,12 +583,7 @@ class PublishForm extends React.PureComponent<Props> {
             <section className="card card--section">
               <div className="card__content">
                 {__('By continuing, you accept the')}{' '}
-                <Button
-                  button="link"
-                  href="https://www.lbry.com/termsofservice"
-                  label={__('LBRY Terms of Service')}
-                />
-                .
+                <Button button="link" href="https://www.lbry.com/termsofservice" label={__('LBRY Terms of Service')} />.
               </div>
             </section>
 
@@ -631,11 +592,7 @@ class PublishForm extends React.PureComponent<Props> {
                 <div className="card__actions">
                   <Submit
                     label={submitLabel}
-                    disabled={
-                      formDisabled ||
-                      !formValid ||
-                      uploadThumbnailStatus === THUMBNAIL_STATUSES.IN_PROGRESS
-                    }
+                    disabled={formDisabled || !formValid || uploadThumbnailStatus === THUMBNAIL_STATUSES.IN_PROGRESS}
                   />
                   <Button button="link" onClick={this.handleCancelPublish} label={__('Cancel')} />
                 </div>

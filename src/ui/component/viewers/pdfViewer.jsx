@@ -39,8 +39,7 @@ class PdfViewer extends React.PureComponent<Props> {
     return (
       <div className="file-render__viewer file-render--pdf" onContextMenu={stopContextMenu}>
         <p>
-          {__('PDF opened externally.')}{' '}
-          <Button button="link" label={__('Click here')} onClick={this.openFile} />{' '}
+          {__('PDF opened externally.')} <Button button="link" label={__('Click here')} onClick={this.openFile} />{' '}
           {__('to open it again.')}
         </p>
       </div>

@@ -80,12 +80,7 @@ class FileExporter extends React.PureComponent<Props> {
   render() {
     const { label } = this.props;
     return (
-      <Button
-        button="primary"
-        icon={ICONS.DOWNLOAD}
-        label={label || __('Export')}
-        onClick={this.handleButtonClick}
-      />
+      <Button button="primary" icon={ICONS.DOWNLOAD} label={label || __('Export')} onClick={this.handleButtonClick} />
     );
   }
 }

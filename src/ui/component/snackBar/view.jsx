@@ -51,9 +51,7 @@ class SnackBar extends React.PureComponent<Props> {
           <div>&#9432;</div>
           <div>{message}</div>
         </div>
-        {linkText && linkTarget && (
-          <Button navigate={linkTarget} className="snack-bar__action" label={linkText} />
-        )}
+        {linkText && linkTarget && <Button navigate={linkTarget} className="snack-bar__action" label={linkText} />}
       </div>
     );
   }

@@ -28,12 +28,7 @@ class ModalIncompatibleDaemon extends React.PureComponent<Props> {
             {__(
               'This app is running with an incompatible version of the LBRY protocol. You can still use it, but there may be issues. Re-run the installation package for best results.'
             )}{' '}
-            <Button
-              button="link"
-              label={__('Learn more')}
-              href="https://lbry.com/faq/incompatible-protocol-version"
-            />
-            .
+            <Button button="link" label={__('Learn more')} href="https://lbry.com/faq/incompatible-protocol-version" />.
           </p>
         </div>
       </Modal>

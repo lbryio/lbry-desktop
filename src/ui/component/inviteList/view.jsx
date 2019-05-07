@@ -45,9 +45,7 @@ class InviteList extends React.PureComponent<Props> {
       rewardAmount = referralReward.reward_amount;
       rewardHelp = referralReward.reward_description;
     }
-    const showClaimable = invitees.some(
-      invite => invite.invite_reward_claimable && !invite.invite_reward_claimed
-    );
+    const showClaimable = invitees.some(invite => invite.invite_reward_claimable && !invite.invite_reward_claimed);
 
     return (
       <section className="card card--section">
@@ -89,11 +87,7 @@ class InviteList extends React.PureComponent<Props> {
                     )}
 
                     {!invitee.invite_reward_claimed &&
-                      (invitee.invite_reward_claimable ? (
-                        <span>{__('Claimable')}</span>
-                      ) : (
-                        __('Unclaimable')
-                      ))}
+                      (invitee.invite_reward_claimable ? <span>{__('Claimable')}</span> : __('Unclaimable'))}
                   </td>
                 </tr>
               ))}

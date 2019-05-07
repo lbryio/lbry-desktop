@@ -27,18 +27,7 @@ class CreditAmount extends React.PureComponent<Props> {
   };
 
   render() {
-    const {
-      amount,
-      precision,
-      showFullPrice,
-      showFree,
-      showPlus,
-      large,
-      isEstimate,
-      fee,
-      showLBC,
-      badge,
-    } = this.props;
+    const { amount, precision, showFullPrice, showFree, showPlus, large, isEstimate, fee, showLBC, badge } = this.props;
 
     const minimumRenderableAmount = 10 ** (-1 * precision);
     const fullPrice = formatFullPrice(amount, 2);
@@ -86,10 +75,7 @@ class CreditAmount extends React.PureComponent<Props> {
         {amountText}
 
         {isEstimate ? (
-          <span
-            className="credit-amount__estimate"
-            title={__('This is an estimate and does not include data fees')}
-          >
+          <span className="credit-amount__estimate" title={__('This is an estimate and does not include data fees')}>
             *
           </span>
         ) : null}

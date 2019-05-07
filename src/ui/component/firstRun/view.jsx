@@ -45,13 +45,11 @@ export default class FirstRun extends PureComponent<Props> {
     const message = (
       <React.Fragment>
         <p>
-          {__('Using LBRY is like dating a centaur. Totally normal up top, and')}{' '}
-          <em>{__('way different')}</em> {__('underneath.')}
+          {__('Using LBRY is like dating a centaur. Totally normal up top, and')} <em>{__('way different')}</em>{' '}
+          {__('underneath.')}
         </p>
         <p>{__('Up top, LBRY is similar to popular media sites.')}</p>
-        <p>
-          {__('Below, LBRY is controlled by users -- you -- via blockchain and decentralization.')}
-        </p>
+        <p>{__('Below, LBRY is controlled by users -- you -- via blockchain and decentralization.')}</p>
       </React.Fragment>
     );
     // @endif
@@ -121,11 +119,7 @@ export default class FirstRun extends PureComponent<Props> {
               <div className="card__content">
                 <p>{__("Check out some of the neat content below me. I'll see you around!")}</p>
                 <div className="card__actions">
-                  <Button
-                    button="primary"
-                    onClick={completeFirstRun}
-                    label={__('Lets Get Started')}
-                  />
+                  <Button button="primary" onClick={completeFirstRun} label={__('Lets Get Started')} />
                 </div>
               </div>
             </Help>

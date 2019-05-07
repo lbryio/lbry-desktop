@@ -6,7 +6,7 @@ import MarkdownPreview from 'component/common/markdown-preview';
 
 const LazyCodeViewer = React.lazy<*>(() =>
   import(/* webpackChunkName: "codeViewer" */
-    'component/viewers/codeViewer')
+  'component/viewers/codeViewer')
 );
 
 type Props = {

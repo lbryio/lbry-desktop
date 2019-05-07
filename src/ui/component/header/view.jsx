@@ -31,8 +31,7 @@ const Header = (props: Props) => {
     isForwardDisabled,
   } = props;
 
-  const showUpgradeButton =
-    autoUpdateDownloaded || (process.platform === 'linux' && isUpgradeAvailable);
+  const showUpgradeButton = autoUpdateDownloaded || (process.platform === 'linux' && isUpgradeAvailable);
 
   return (
     <header className="header">

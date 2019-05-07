@@ -131,11 +131,7 @@ class CategoryList extends PureComponent<Props, State> {
     }
   }
 
-  scrollCardsAnimated = (
-    scrollWrapper: HTMLUListElement,
-    scrollTarget: number,
-    direction: string
-  ) => {
+  scrollCardsAnimated = (scrollWrapper: HTMLUListElement, scrollTarget: number, direction: string) => {
     let start;
     const step = timestamp => {
       if (!start) start = timestamp;
@@ -174,10 +170,7 @@ class CategoryList extends PureComponent<Props, State> {
     const scrollWrapper = this.scrollWrapper.current;
     if (scrollWrapper) {
       const rect = card.getBoundingClientRect();
-      const isVisible =
-        scrollWrapper.scrollLeft < card.offsetLeft &&
-        rect.left >= 0 &&
-        rect.right <= window.innerWidth;
+      const isVisible = scrollWrapper.scrollLeft < card.offsetLeft && rect.left >= 0 && rect.right <= window.innerWidth;
       return isVisible;
     }
 
@@ -276,11 +269,7 @@ class CategoryList extends PureComponent<Props, State> {
             {categoryLink ? (
               <React.Fragment>
                 <Button label={category} navigate={channelLink} />
-                <SubscribeButton
-                  button="alt"
-                  showSnackBarOnSubscribe
-                  uri={`lbry://${categoryLink}`}
-                />
+                <SubscribeButton button="alt" showSnackBarOnSubscribe uri={`lbry://${categoryLink}`} />
               </React.Fragment>
             ) : (
               <span>{category}</span>
@@ -297,16 +286,8 @@ class CategoryList extends PureComponent<Props, State> {
           </h2>
           {showScrollButtons && (
             <nav className="media-group__header-navigation">
-              <Button
-                disabled={!canScrollPrevious}
-                onClick={this.handleScrollPrevious}
-                icon={ICONS.ARROW_LEFT}
-              />
-              <Button
-                disabled={!canScrollNext}
-                onClick={this.handleScrollNext}
-                icon={ICONS.ARROW_RIGHT}
-              />
+              <Button disabled={!canScrollPrevious} onClick={this.handleScrollPrevious} icon={ICONS.ARROW_LEFT} />
+              <Button disabled={!canScrollNext} onClick={this.handleScrollNext} icon={ICONS.ARROW_RIGHT} />
             </nav>
           )}
         </header>
@@ -321,13 +302,7 @@ class CategoryList extends PureComponent<Props, State> {
           <ul className="media-scrollhouse" ref={this.scrollWrapper}>
             {urisInList &&
               urisInList.map(uri => (
-                <FileCard
-                  placeholder
-                  preventResolve={lazyLoad}
-                  showSubscribedLogo
-                  key={uri}
-                  uri={normalizeURI(uri)}
-                />
+                <FileCard placeholder preventResolve={lazyLoad} showSubscribedLogo key={uri} uri={normalizeURI(uri)} />
               ))}
 
             {!urisInList && new Array(10).fill(1).map((x, i) => <FileCard placeholder key={i} />)}

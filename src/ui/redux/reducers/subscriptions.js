@@ -16,10 +16,7 @@ const defaultState: SubscriptionState = {
 
 export default handleActions(
   {
-    [ACTIONS.CHANNEL_SUBSCRIBE]: (
-      state: SubscriptionState,
-      action: DoChannelSubscribe
-    ): SubscriptionState => {
+    [ACTIONS.CHANNEL_SUBSCRIBE]: (state: SubscriptionState, action: DoChannelSubscribe): SubscriptionState => {
       const newSubscription: Subscription = action.data;
       const newSubscriptions: Array<Subscription> = state.subscriptions.slice();
       newSubscriptions.unshift(newSubscription);
@@ -29,10 +26,7 @@ export default handleActions(
         subscriptions: newSubscriptions,
       };
     },
-    [ACTIONS.CHANNEL_UNSUBSCRIBE]: (
-      state: SubscriptionState,
-      action: DoChannelUnsubscribe
-    ): SubscriptionState => {
+    [ACTIONS.CHANNEL_UNSUBSCRIBE]: (state: SubscriptionState, action: DoChannelUnsubscribe): SubscriptionState => {
       const subscriptionToRemove: Subscription = action.data;
       const newSubscriptions = state.subscriptions
         .slice()
@@ -120,10 +114,7 @@ export default handleActions(
       loading: false,
       subscriptions: action.data,
     }),
-    [ACTIONS.SET_VIEW_MODE]: (
-      state: SubscriptionState,
-      action: SetViewMode
-    ): SubscriptionState => ({
+    [ACTIONS.SET_VIEW_MODE]: (state: SubscriptionState, action: SetViewMode): SubscriptionState => ({
       ...state,
       viewMode: action.data,
     }),

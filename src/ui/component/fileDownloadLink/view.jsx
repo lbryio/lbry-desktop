@@ -43,17 +43,7 @@ class FileDownloadLink extends React.PureComponent<Props> {
   uri: ?string;
 
   render() {
-    const {
-      fileInfo,
-      downloading,
-      uri,
-      openInShell,
-      purchaseUri,
-      costInfo,
-      loading,
-      pause,
-      claim,
-    } = this.props;
+    const { fileInfo, downloading, uri, openInShell, purchaseUri, costInfo, loading, pause, claim } = this.props;
 
     const openFile = () => {
       if (fileInfo) {
@@ -63,13 +53,8 @@ class FileDownloadLink extends React.PureComponent<Props> {
     };
 
     if (loading || downloading) {
-      const progress =
-        fileInfo && fileInfo.written_bytes
-          ? (fileInfo.written_bytes / fileInfo.total_bytes) * 100
-          : 0;
-      const label = fileInfo
-        ? __('Downloading: ') + progress.toFixed(0) + __('% complete')
-        : __('Connecting...');
+      const progress = fileInfo && fileInfo.written_bytes ? (fileInfo.written_bytes / fileInfo.total_bytes) * 100 : 0;
+      const label = fileInfo ? __('Downloading: ') + progress.toFixed(0) + __('% complete') : __('Connecting...');
 
       return <span className="file-download">{label}</span>;
     } else if ((fileInfo === null && !downloading) || (fileInfo && !fileInfo.download_path)) {

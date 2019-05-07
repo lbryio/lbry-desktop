@@ -8,7 +8,7 @@ import PlayButton from './internal/play-button';
 
 const Player = React.lazy(() =>
   import(/* webpackChunkName: "player-legacy" */
-    './internal/player')
+  './internal/player')
 );
 
 const SPACE_BAR_KEYCODE = 32;
@@ -144,11 +144,7 @@ class FileViewer extends React.PureComponent<Props> {
   };
 
   isMediaSame(nextProps: Props) {
-    return (
-      this.props.fileInfo &&
-      nextProps.fileInfo &&
-      this.props.fileInfo.outpoint === nextProps.fileInfo.outpoint
-    );
+    return this.props.fileInfo && nextProps.fileInfo && this.props.fileInfo.outpoint === nextProps.fileInfo.outpoint;
   }
 
   playContent() {
@@ -258,8 +254,7 @@ class FileViewer extends React.PureComponent<Props> {
       'card__media--disabled': !fileInfo && insufficientCredits,
     });
 
-    const layoverStyle =
-      !shouldObscureNsfw && thumbnail ? { backgroundImage: `url("${thumbnail}")` } : {};
+    const layoverStyle = !shouldObscureNsfw && thumbnail ? { backgroundImage: `url("${thumbnail}")` } : {};
 
     return (
       <div className={classnames('video', {}, className)}>
@@ -280,9 +275,7 @@ class FileViewer extends React.PureComponent<Props> {
                   downloadCompleted={fileInfo.completed}
                   changeVolume={changeVolume}
                   volume={volume}
-                  savePosition={newPosition =>
-                    savePosition(claim.claim_id, `${claim.txid}:${claim.nout}`, newPosition)
-                  }
+                  savePosition={newPosition => savePosition(claim.claim_id, `${claim.txid}:${claim.nout}`, newPosition)}
                   claim={claim}
                   uri={uri}
                   position={position}
@@ -295,12 +288,7 @@ class FileViewer extends React.PureComponent<Props> {
           </div>
         )}
         {!isPlaying && (
-          <div
-            role="button"
-            onClick={this.playContent}
-            className={layoverClass}
-            style={layoverStyle}
-          >
+          <div role="button" onClick={this.playContent} className={layoverClass} style={layoverStyle}>
             <PlayButton
               play={(e: SyntheticInputEvent<*>) => {
                 e.stopPropagation();

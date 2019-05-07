@@ -22,9 +22,7 @@ import { makeSelectClientSetting } from 'redux/selectors/settings';
 import SubscriptionsPage from './view';
 
 const select = state => ({
-  loading:
-    selectIsFetchingSubscriptions(state) ||
-    Boolean(Object.keys(selectSubscriptionsBeingFetched(state)).length),
+  loading: selectIsFetchingSubscriptions(state) || Boolean(Object.keys(selectSubscriptionsBeingFetched(state)).length),
   subscribedChannels: selectSubscriptions(state),
   autoDownload: makeSelectClientSetting(settings.AUTO_DOWNLOAD)(state),
   allSubscriptions: selectSubscriptionClaims(state),

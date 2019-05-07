@@ -81,10 +81,7 @@ class SelectThumbnail extends React.PureComponent<Props, State> {
       <div className="card__content">
         {status === THUMBNAIL_STATUSES.API_DOWN || status === THUMBNAIL_STATUSES.MANUAL ? (
           <div className="column">
-            <div
-              className="column__item thumbnail-preview"
-              style={{ backgroundImage: `url(${thumbnailSrc})` }}
-            >
+            <div className="column__item thumbnail-preview" style={{ backgroundImage: `url(${thumbnailSrc})` }}>
               <img
                 style={{ display: 'none' }}
                 src={thumbnailSrc}
@@ -110,9 +107,7 @@ class SelectThumbnail extends React.PureComponent<Props, State> {
                 <Button
                   button="link"
                   label={__('Use thumbnail upload tool')}
-                  onClick={() =>
-                    updatePublishForm({ uploadThumbnailStatus: THUMBNAIL_STATUSES.READY })
-                  }
+                  onClick={() => updatePublishForm({ uploadThumbnailStatus: THUMBNAIL_STATUSES.READY })}
                 />
               </div>
             </div>
@@ -129,21 +124,13 @@ class SelectThumbnail extends React.PureComponent<Props, State> {
             )}
             {status === THUMBNAIL_STATUSES.COMPLETE && thumbnail && (
               <div className="column column--space-between">
-                <div
-                  className="column__item thumbnail-preview"
-                  style={{ backgroundImage: `url(${thumbnail})` }}
-                />
+                <div className="column__item thumbnail-preview" style={{ backgroundImage: `url(${thumbnail})` }} />
                 <div className="column__item">
                   <p>
-                    Upload complete.{' '}
-                    <Button button="link" href={thumbnail} label={__('View it on spee.ch')} />.
+                    Upload complete. <Button button="link" href={thumbnail} label={__('View it on spee.ch')} />.
                   </p>
                   <div className="card__actions">
-                    <Button
-                      button="link"
-                      label={__('New thumbnail')}
-                      onClick={resetThumbnailStatus}
-                    />
+                    <Button button="link" label={__('New thumbnail')} onClick={resetThumbnailStatus} />
                   </div>
                 </div>
               </div>
@@ -155,9 +142,7 @@ class SelectThumbnail extends React.PureComponent<Props, State> {
             <Button
               button="link"
               label={__('Or enter a URL manually')}
-              onClick={() =>
-                updatePublishForm({ uploadThumbnailStatus: THUMBNAIL_STATUSES.MANUAL })
-              }
+              onClick={() => updatePublishForm({ uploadThumbnailStatus: THUMBNAIL_STATUSES.MANUAL })}
             />
           </div>
         )}

@@ -5,8 +5,8 @@ export default function UnsupportedOnWeb() {
   return (
     <div className="card__content help help--warning">
       This page is not currently supported on the web.{' '}
-      <Button button="link" label={__('Download the desktop app')} href="https://lbry.com/get" />{' '}
-      for full feature support.
+      <Button button="link" label={__('Download the desktop app')} href="https://lbry.com/get" /> for full feature
+      support.
     </div>
   );
 }

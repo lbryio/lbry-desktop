@@ -2,13 +2,7 @@ import * as ACTIONS from 'constants/action_types';
 // @if TARGET='app'
 import { shell } from 'electron';
 // @endif
-import {
-  Lbry,
-  batchActions,
-  doAbandonClaim,
-  selectMyClaimsOutpoints,
-  selectFileInfosByOutpoint,
-} from 'lbry-redux';
+import { Lbry, batchActions, doAbandonClaim, selectMyClaimsOutpoints, selectFileInfosByOutpoint } from 'lbry-redux';
 import { doHideModal } from 'redux/actions/app';
 import { goBack } from 'connected-react-router';
 

@@ -26,9 +26,7 @@ class FileListDownloaded extends React.PureComponent<Props> {
           <div className="main--empty">
             <section className="card card--section">
               <header className="card__header">
-                <h2 className="card__title">
-                  {__("You haven't downloaded anything from LBRY yet.")}
-                </h2>
+                <h2 className="card__title">{__("You haven't downloaded anything from LBRY yet.")}</h2>
               </header>
 
               <div className="card__content">

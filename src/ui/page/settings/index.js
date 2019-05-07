@@ -1,12 +1,7 @@
 import { connect } from 'react-redux';
 import * as settings from 'constants/settings';
 import { doClearCache, doNotifyEncryptWallet, doNotifyDecryptWallet } from 'redux/actions/app';
-import {
-  doSetDaemonSetting,
-  doSetClientSetting,
-  doGetThemes,
-  doChangeLanguage,
-} from 'redux/actions/settings';
+import { doSetDaemonSetting, doSetClientSetting, doGetThemes, doChangeLanguage } from 'redux/actions/settings';
 import {
   makeSelectClientSetting,
   selectDaemonSettings,

@@ -17,8 +17,7 @@ const select = state => ({
 
 const perform = dispatch => ({
   closeModal: () => dispatch(doHideModal()),
-  submitRewardCode: code =>
-    dispatch(doClaimRewardType(REWARD_TYPES.TYPE_REWARD_CODE, { params: { code } })),
+  submitRewardCode: code => dispatch(doClaimRewardType(REWARD_TYPES.TYPE_REWARD_CODE, { params: { code } })),
 });
 
 export default connect(

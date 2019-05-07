@@ -17,19 +17,13 @@ const GetCreditsPage = () => (
       <header className="card__header">
         <h2 className="card__title">{__('More Ways To Get LBRY Credits')}</h2>
         <p className="card__subtitle">
-          {
-            'LBRY credits can be purchased on exchanges, earned for contributions, for mining, and more.'
-          }
+          {'LBRY credits can be purchased on exchanges, earned for contributions, for mining, and more.'}
         </p>
       </header>
 
       <div className="card__content">
         <div className="card__actions">
-          <Button
-            button="primary"
-            href="https://lbry.com/faq/earn-credits"
-            label={__('Read More')}
-          />
+          <Button button="primary" href="https://lbry.com/faq/earn-credits" label={__('Read More')} />
         </div>
       </div>
     </section>

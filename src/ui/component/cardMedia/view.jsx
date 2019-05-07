@@ -12,11 +12,7 @@ class CardMedia extends React.PureComponent<Props> {
 
     return (
       <div
-        style={
-          thumbnail
-            ? { backgroundImage: `url('${thumbnail}')` }
-            : { backgroundImage: `url(${Placeholder})` }
-        }
+        style={thumbnail ? { backgroundImage: `url('${thumbnail}')` } : { backgroundImage: `url(${Placeholder})` }}
         className="media__thumb"
       />
     );

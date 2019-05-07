@@ -1,10 +1,6 @@
 // @flow
 import { createSelector } from 'reselect';
-import {
-  makeSelectClaimForUri,
-  selectClaimsByUri,
-  makeSelectClaimsInChannelForCurrentPageState,
-} from 'lbry-redux';
+import { makeSelectClaimForUri, selectClaimsByUri, makeSelectClaimsInChannelForCurrentPageState } from 'lbry-redux';
 
 const RECENT_HISTORY_AMOUNT = 10;
 const HISTORY_ITEMS_PER_PAGE = 50;
@@ -77,9 +73,7 @@ export const makeSelectCategoryListUris = (uris: ?Array<string>, channel: string
 
       if (channelClaims) {
         const CATEGORY_LIST_SIZE = 10;
-        return channelClaims
-          .slice(0, CATEGORY_LIST_SIZE)
-          .map(({ name, claim_id: claimId }) => `${name}#${claimId}`);
+        return channelClaims.slice(0, CATEGORY_LIST_SIZE).map(({ name, claim_id: claimId }) => `${name}#${claimId}`);
       }
 
       return null;

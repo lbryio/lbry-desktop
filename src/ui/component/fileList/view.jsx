@@ -28,47 +28,47 @@ class FileList extends React.PureComponent<Props> {
       [SORT_OPTIONS.DATE_NEW]: fileInfos =>
         this.props.sortByHeight
           ? fileInfos.sort((fileInfo1, fileInfo2) => {
-            if (fileInfo1.confirmations < 1) {
-              return -1;
-            } else if (fileInfo2.confirmations < 1) {
-              return 1;
-            }
+              if (fileInfo1.confirmations < 1) {
+                return -1;
+              } else if (fileInfo2.confirmations < 1) {
+                return 1;
+              }
 
-            const height1 = this.props.claimsById[fileInfo1.claim_id]
-              ? this.props.claimsById[fileInfo1.claim_id].height
-              : 0;
-            const height2 = this.props.claimsById[fileInfo2.claim_id]
-              ? this.props.claimsById[fileInfo2.claim_id].height
-              : 0;
+              const height1 = this.props.claimsById[fileInfo1.claim_id]
+                ? this.props.claimsById[fileInfo1.claim_id].height
+                : 0;
+              const height2 = this.props.claimsById[fileInfo2.claim_id]
+                ? this.props.claimsById[fileInfo2.claim_id].height
+                : 0;
 
-            if (height1 !== height2) {
-              // flipped because heigher block height is newer
-              return height2 - height1;
-            }
+              if (height1 !== height2) {
+                // flipped because heigher block height is newer
+                return height2 - height1;
+              }
 
-            if (fileInfo1.absolute_channel_position && fileInfo2.absolute_channel_position) {
-              return fileInfo1.absolute_channel_position - fileInfo2.absolute_channel_position;
-            }
+              if (fileInfo1.absolute_channel_position && fileInfo2.absolute_channel_position) {
+                return fileInfo1.absolute_channel_position - fileInfo2.absolute_channel_position;
+              }
 
-            return 0;
-          })
+              return 0;
+            })
           : [...fileInfos].reverse(),
       [SORT_OPTIONS.DATE_OLD]: fileInfos =>
         this.props.sortByHeight
           ? fileInfos.slice().sort((fileInfo1, fileInfo2) => {
-            const height1 = this.props.claimsById[fileInfo1.claim_id]
-              ? this.props.claimsById[fileInfo1.claim_id].height
-              : 999999;
-            const height2 = this.props.claimsById[fileInfo2.claim_id]
-              ? this.props.claimsById[fileInfo2.claim_id].height
-              : 999999;
-            if (height1 < height2) {
-              return -1;
-            } else if (height1 > height2) {
-              return 1;
-            }
-            return 0;
-          })
+              const height1 = this.props.claimsById[fileInfo1.claim_id]
+                ? this.props.claimsById[fileInfo1.claim_id].height
+                : 999999;
+              const height2 = this.props.claimsById[fileInfo2.claim_id]
+                ? this.props.claimsById[fileInfo2.claim_id].height
+                : 999999;
+              if (height1 < height2) {
+                return -1;
+              } else if (height1 > height2) {
+                return 1;
+              }
+              return 0;
+            })
           : fileInfos,
       [SORT_OPTIONS.TITLE]: fileInfos =>
         fileInfos.slice().sort((fileInfo1, fileInfo2) => {
@@ -127,14 +127,7 @@ class FileList extends React.PureComponent<Props> {
     }
 
     this.sortFunctions[sortBy](fileInfos).forEach(fileInfo => {
-      const {
-        name: claimName,
-        claim_name: claimNameDownloaded,
-        claim_id: claimId,
-        txid,
-        nout,
-        isNew,
-      } = fileInfo;
+      const { name: claimName, claim_name: claimNameDownloaded, claim_id: claimId, txid, nout, isNew } = fileInfo;
       const uriParams = {};
 
       // This is unfortunate
@@ -153,12 +146,7 @@ class FileList extends React.PureComponent<Props> {
       <section>
         {!hideFilter && (
           <Form>
-            <FormField
-              label={__('Sort by')}
-              type="select"
-              value={sortBy}
-              onChange={this.handleSortChanged}
-            >
+            <FormField label={__('Sort by')} type="select" value={sortBy} onChange={this.handleSortChanged}>
               <option value={SORT_OPTIONS.DATE_NEW}>{__('Newest First')}</option>
               <option value={SORT_OPTIONS.DATE_OLD}>{__('Oldest First')}</option>
               <option value={SORT_OPTIONS.TITLE}>{__('Title')}</option>

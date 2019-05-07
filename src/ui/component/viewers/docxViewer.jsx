@@ -62,9 +62,7 @@ class DocxViewer extends React.PureComponent<Props, State> {
       <div className="document-viewer file-render__viewer">
         {loading && <LoadingScreen status={loadingMessage} spinner />}
         {error && <LoadingScreen status={errorMessage} spinner={false} />}
-        {content && (
-          <div className="document-viewer__content" dangerouslySetInnerHTML={{ __html: content }} />
-        )}
+        {content && <div className="document-viewer__content" dangerouslySetInnerHTML={{ __html: content }} />}
       </div>
     );
   }

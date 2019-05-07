@@ -1,10 +1,5 @@
 import { connect } from 'react-redux';
-import {
-  doCheckAddressIsMine,
-  doGetNewAddress,
-  selectReceiveAddress,
-  selectGettingNewAddress,
-} from 'lbry-redux';
+import { doCheckAddressIsMine, doGetNewAddress, selectReceiveAddress, selectGettingNewAddress } from 'lbry-redux';
 import WalletAddress from './view';
 
 const select = state => ({

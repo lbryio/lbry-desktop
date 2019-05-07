@@ -6,9 +6,7 @@ import { selectEmailToVerify, selectUser } from 'lbryinc';
 import FirstRunEmailCollection from './view';
 
 const select = state => ({
-  emailCollectionAcknowledged: makeSelectClientSetting(SETTINGS.EMAIL_COLLECTION_ACKNOWLEDGED)(
-    state
-  ),
+  emailCollectionAcknowledged: makeSelectClientSetting(SETTINGS.EMAIL_COLLECTION_ACKNOWLEDGED)(state),
   email: selectEmailToVerify(state),
   user: selectUser(state),
 });

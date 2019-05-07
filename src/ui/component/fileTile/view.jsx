@@ -53,15 +53,7 @@ class FileTile extends React.PureComponent<Props> {
   }
 
   renderFileProperties() {
-    const {
-      isSubscribed,
-      isDownloaded,
-      claim,
-      uri,
-      rewardedContentClaimIds,
-      isNew,
-      claimIsMine,
-    } = this.props;
+    const { isSubscribed, isDownloaded, claim, uri, rewardedContentClaimIds, isNew, claimIsMine } = this.props;
     const isRewardContent = claim && rewardedContentClaimIds.includes(claim.claim_id);
 
     if (!isNew && !isSubscribed && !isRewardContent && !isDownloaded) {
@@ -122,8 +114,7 @@ class FileTile extends React.PureComponent<Props> {
       return displayHiddenMessage ? (
         <span className="help">
           {__('This file is hidden because it is marked NSFW. Update your')}{' '}
-          <Button button="link" navigate="/$/settings" label={__('content viewing preferences')} />{' '}
-          {__('to see it')}.
+          <Button button="link" navigate="/$/settings" label={__('content viewing preferences')} /> {__('to see it')}.
         </span>
       ) : null;
     }
@@ -140,9 +131,9 @@ class FileTile extends React.PureComponent<Props> {
 
     const wrapperProps = name
       ? {
-        onClick: () => history.push(formatLbryUriForWeb(uri)),
-        role: 'button',
-      }
+          onClick: () => history.push(formatLbryUriForWeb(uri)),
+          role: 'button',
+        }
       : {};
 
     return !name && hideNoResult ? null : (
@@ -159,17 +150,14 @@ class FileTile extends React.PureComponent<Props> {
           {name && (
             <Fragment>
               <div className="media__title">
-                {(title || name) && (
-                  <TruncatedText text={title || name} lines={size !== 'small' ? 1 : 2} />
-                )}
+                {(title || name) && <TruncatedText text={title || name} lines={size !== 'small' ? 1 : 2} />}
               </div>
 
               {size === 'small' && this.renderFileProperties()}
 
               {size !== 'small' ? (
                 <div className="media__subtext">
-                  {__('Published to')} <UriIndicator uri={uri} link />{' '}
-                  <DateTime timeAgo uri={uri} />
+                  {__('Published to')} <UriIndicator uri={uri} link /> <DateTime timeAgo uri={uri} />
                 </div>
               ) : (
                 <Fragment>

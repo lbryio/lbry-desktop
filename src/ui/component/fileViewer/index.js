@@ -46,8 +46,7 @@ const perform = dispatch => ({
   cancelPlay: () => dispatch(doSetPlayingUri(null)),
   changeVolume: volume => dispatch(doChangeVolume(volume)),
   claimRewards: () => dispatch(doClaimEligiblePurchaseRewards()),
-  savePosition: (claimId, outpoint, position) =>
-    dispatch(savePosition(claimId, outpoint, position)),
+  savePosition: (claimId, outpoint, position) => dispatch(savePosition(claimId, outpoint, position)),
 });
 
 export default connect(

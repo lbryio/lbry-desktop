@@ -29,8 +29,6 @@ export default class MarkAsRead extends PureComponent<Props> {
   render() {
     const { channel } = this.props;
     const label = channel ? __('Mark as read') : __('Mark all as read');
-    return (
-      <Button button="inverse" icon={ICONS.COMPLETE} label={label} onClick={this.handleClick} />
-    );
+    return <Button button="inverse" icon={ICONS.COMPLETE} label={label} onClick={this.handleClick} />;
   }
 }

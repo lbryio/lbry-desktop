@@ -150,14 +150,10 @@ class FilePage extends React.Component<Props> {
     const shouldObscureThumbnail = obscureNsfw && nsfw;
     const fileName = fileInfo ? fileInfo.file_name : null;
     const mediaType = getMediaType(contentType, fileName);
-    const showFile =
-      PLAYABLE_MEDIA_TYPES.includes(mediaType) || PREVIEW_MEDIA_TYPES.includes(mediaType);
+    const showFile = PLAYABLE_MEDIA_TYPES.includes(mediaType) || PREVIEW_MEDIA_TYPES.includes(mediaType);
 
     const speechShareable =
-      costInfo &&
-      costInfo.cost === 0 &&
-      contentType &&
-      ['video', 'image'].includes(contentType.split('/')[0]);
+      costInfo && costInfo.cost === 0 && contentType && ['video', 'image'].includes(contentType.split('/')[0]);
     // We want to use the short form uri for editing
     // This is what the user is used to seeing, they don't care about the claim id
     // We will select the claim id before they publish
@@ -185,8 +181,7 @@ class FilePage extends React.Component<Props> {
               {__(
                 'The publisher has chosen to charge LBC to view this content. Your balance is currently to low to view it.'
               )}{' '}
-              {__('Checkout')}{' '}
-              <Button button="link" navigate="/$/rewards" label={__('the rewards page')} />{' '}
+              {__('Checkout')} <Button button="link" navigate="/$/rewards" label={__('the rewards page')} />{' '}
               {__('or send more LBC to your wallet.')}
             </div>
           )}
@@ -207,9 +202,7 @@ class FilePage extends React.Component<Props> {
                   'content__empty--nsfw': shouldObscureThumbnail,
                 })}
               >
-                <div className="card__media-text">
-                  {__("Sorry, looks like we can't preview this file.")}
-                </div>
+                <div className="card__media-text">{__("Sorry, looks like we can't preview this file.")}</div>
               </div>
             ))}
         </div>

@@ -96,8 +96,7 @@ class WalletSend extends React.PureComponent<Props> {
                   <span className="error-text">
                     {(!!values.address && touched.address && errors.address) ||
                       (!!values.amount && touched.amount && errors.amount) ||
-                      (values.amount === balance &&
-                        __('Decrease amount to account for transaction fee')) ||
+                      (values.amount === balance && __('Decrease amount to account for transaction fee')) ||
                       (values.amount > balance && __('Not enough credits'))}
                   </span>
                 )}

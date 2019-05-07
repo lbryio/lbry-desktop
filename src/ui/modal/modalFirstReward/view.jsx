@@ -20,21 +20,13 @@ class ModalFirstReward extends React.PureComponent<Props> {
       >
         <section className="card__content">
           <p>{__('You just earned your first reward!')}</p>
-          <p>
-            {__(
-              "This reward will show in your Wallet in the top left momentarily (if it hasn't already)."
-            )}
-          </p>
+          <p>{__("This reward will show in your Wallet in the top left momentarily (if it hasn't already).")}</p>
           <p>
             {__(
               'These credits are used to compensate creators, to publish your own content, and to have say in how the network works.'
             )}
           </p>
-          <p>
-            {__(
-              'No need to understand it all just yet! Try watching or publishing something next.'
-            )}
-          </p>
+          <p>{__('No need to understand it all just yet! Try watching or publishing something next.')}</p>
         </section>
       </Modal>
     );

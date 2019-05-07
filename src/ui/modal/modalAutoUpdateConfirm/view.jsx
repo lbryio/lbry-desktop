@@ -33,12 +33,7 @@ class ModalAutoUpdateConfirm extends React.PureComponent<Props> {
           <p>{__('Your LBRY update is ready. Restart LBRY now to use it!')}</p>
           <p className="help">
             {__('Want to know what has changed?')} See the{' '}
-            <Button
-              button="link"
-              label={__('release notes')}
-              href="https://github.com/lbryio/lbry-desktop/releases"
-            />
-            .
+            <Button button="link" label={__('release notes')} href="https://github.com/lbryio/lbry-desktop/releases" />.
           </p>
         </section>
       </Modal>

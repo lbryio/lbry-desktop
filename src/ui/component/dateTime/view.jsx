@@ -50,9 +50,7 @@ class DateTime extends React.PureComponent<Props> {
           (show === DateTime.SHOW_BOTH || show === DateTime.SHOW_DATE) &&
           date.toLocaleDateString(locales, formatOptions)}
         {show === DateTime.SHOW_BOTH && ' '}
-        {date &&
-          (show === DateTime.SHOW_BOTH || show === DateTime.SHOW_TIME) &&
-          date.toLocaleTimeString()}
+        {date && (show === DateTime.SHOW_BOTH || show === DateTime.SHOW_TIME) && date.toLocaleTimeString()}
         {!date && '...'}
       </span>
     );

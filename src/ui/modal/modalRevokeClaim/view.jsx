@@ -59,8 +59,7 @@ class ModalRevokeClaim extends React.PureComponent<Props> {
 
   render() {
     const { transactionItems, txid, nout, closeModal } = this.props;
-    const { type } =
-      transactionItems.find(claim => claim.txid === txid && claim.nout === nout) || {};
+    const { type } = transactionItems.find(claim => claim.txid === txid && claim.nout === nout) || {};
 
     return (
       <Modal

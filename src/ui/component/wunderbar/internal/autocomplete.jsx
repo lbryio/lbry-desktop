@@ -226,10 +226,7 @@ export default class Autocomplete extends React.Component {
     if (this.state.highlightedIndex !== null) {
       this.setState(this.ensureHighlightedIndex);
     }
-    if (
-      nextProps.autoHighlight &&
-      (this.props.value !== nextProps.value || this.state.highlightedIndex === null)
-    ) {
+    if (nextProps.autoHighlight && (this.props.value !== nextProps.value || this.state.highlightedIndex === null)) {
       this.setState(this.maybeAutoCompleteText);
     }
   }
@@ -241,10 +238,7 @@ export default class Autocomplete extends React.Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    if (
-      (this.state.isOpen && !prevState.isOpen) ||
-      ('open' in this.props && this.props.open && !prevProps.open)
-    ) {
+    if ((this.state.isOpen && !prevState.isOpen) || ('open' in this.props && this.props.open && !prevProps.open)) {
       this.setMenuPositions();
     }
 
@@ -289,10 +283,7 @@ export default class Autocomplete extends React.Component {
       const itemsLength = this.getFilteredItems(this.props).length;
       if (!itemsLength) return;
       const { highlightedIndex } = this.state;
-      const index =
-        highlightedIndex === null || highlightedIndex === itemsLength - 1
-          ? 0
-          : highlightedIndex + 1;
+      const index = highlightedIndex === null || highlightedIndex === itemsLength - 1 ? 0 : highlightedIndex + 1;
       this.setState({
         highlightedIndex: index,
         isOpen: true,
@@ -304,10 +295,7 @@ export default class Autocomplete extends React.Component {
       const itemsLength = this.getFilteredItems(this.props).length;
       if (!itemsLength) return;
       const { highlightedIndex } = this.state;
-      const index =
-        highlightedIndex === 0 || highlightedIndex === null
-          ? itemsLength - 1
-          : highlightedIndex - 1;
+      const index = highlightedIndex === 0 || highlightedIndex === null ? itemsLength - 1 : highlightedIndex - 1;
       this.setState({
         highlightedIndex: index,
         isOpen: true,
@@ -587,10 +575,7 @@ export default class Autocomplete extends React.Component {
         {this.props.debug && (
           <pre style={{ marginLeft: 300 }}>
             {JSON.stringify(
-              this._debugStates.slice(
-                Math.max(0, this._debugStates.length - 5),
-                this._debugStates.length
-              ),
+              this._debugStates.slice(Math.max(0, this._debugStates.length - 5), this._debugStates.length),
               null,
               2
             )}

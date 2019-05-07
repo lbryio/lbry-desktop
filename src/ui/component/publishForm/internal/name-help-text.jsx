@@ -30,11 +30,7 @@ class NameHelpText extends React.PureComponent<Props> {
         <React.Fragment>
           {__('You already have a claim at')}
           {` ${uri} `}
-          <Button
-            button="link"
-            label="Edit it"
-            onClick={() => onEditMyClaim(myClaimForUri, editUri)}
-          />
+          <Button button="link" label="Edit it" onClick={() => onEditMyClaim(myClaimForUri, editUri)} />
           <br />
           {__('Publishing will update your existing claim.')}
         </React.Fragment>
@@ -44,9 +40,7 @@ class NameHelpText extends React.PureComponent<Props> {
     return (
       <React.Fragment>
         {nameHelpText || (
-          <span>
-            {__('Create a URL for this content. Simpler names are easier to find and remember.')}
-          </span>
+          <span>{__('Create a URL for this content. Simpler names are easier to find and remember.')}</span>
         )}
       </React.Fragment>
     );

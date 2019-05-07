@@ -157,12 +157,7 @@ class ChannelSection extends React.PureComponent<Props, State> {
           <BusyIndicator message="Updating channels" />
         ) : (
           <fieldset-section>
-            <FormField
-              name="channel"
-              type="select"
-              onChange={this.handleChannelChange}
-              value={channel}
-            >
+            <FormField name="channel" type="select" onChange={this.handleChannelChange} value={channel}>
               <option value={CHANNEL_ANONYMOUS}>{__('Anonymous')}</option>
               {channels.map(({ name }) => (
                 <option key={name} value={name}>
@@ -192,9 +187,7 @@ class ChannelSection extends React.PureComponent<Props, State> {
               step="any"
               min="0"
               type="number"
-              helper={__(
-                'This LBC remains yours. It is a deposit to reserve the name and can be undone at any time.'
-              )}
+              helper={__('This LBC remains yours. It is a deposit to reserve the name and can be undone at any time.')}
               error={newChannelBidError}
               value={newChannelBid}
               onChange={event => this.handleNewChannelBidChange(parseFloat(event.target.value))}
@@ -206,11 +199,7 @@ class ChannelSection extends React.PureComponent<Props, State> {
                 label={!creatingChannel ? __('Create channel') : __('Creating channel...')}
                 onClick={this.handleCreateChannelClick}
                 disabled={
-                  !newChannelName ||
-                  !newChannelBid ||
-                  creatingChannel ||
-                  newChannelNameError ||
-                  newChannelBidError
+                  !newChannelName || !newChannelBid || creatingChannel || newChannelNameError || newChannelBidError
                 }
               />
             </div>

@@ -1,11 +1,5 @@
 import { connect } from 'react-redux';
-import {
-  selectFetchingRewards,
-  selectUnclaimedRewards,
-  selectClaimedRewards,
-  selectUser,
-  doRewardList,
-} from 'lbryinc';
+import { selectFetchingRewards, selectUnclaimedRewards, selectClaimedRewards, selectUser, doRewardList } from 'lbryinc';
 import { selectDaemonSettings } from 'redux/selectors/settings';
 import RewardsPage from './view';
 

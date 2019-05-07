@@ -6,9 +6,7 @@ import { doSetClientSetting } from 'redux/actions/settings';
 import FirstRun from './view';
 
 const select = state => ({
-  emailCollectionAcknowledged: makeSelectClientSetting(SETTINGS.EMAIL_COLLECTION_ACKNOWLEDGED)(
-    state
-  ),
+  emailCollectionAcknowledged: makeSelectClientSetting(SETTINGS.EMAIL_COLLECTION_ACKNOWLEDGED)(state),
   welcomeAcknowledged: makeSelectClientSetting(SETTINGS.NEW_USER_ACKNOWLEDGED)(state),
   firstRunComplete: makeSelectClientSetting(SETTINGS.FIRST_RUN_COMPLETED)(state),
   user: selectUser(state),

@@ -17,12 +17,7 @@ class ModalFileTimeout extends React.PureComponent<Props> {
     } = this.props;
 
     return (
-      <Modal
-        isOpen
-        title={__('Unable to Download')}
-        contentLabel={__('Download failed')}
-        onConfirmed={closeModal}
-      >
+      <Modal isOpen title={__('Unable to Download')} contentLabel={__('Download failed')} onConfirmed={closeModal}>
         <section className="card__content">
           <p className="error-modal__error-list">
             {__('LBRY was unable to download the stream')}:

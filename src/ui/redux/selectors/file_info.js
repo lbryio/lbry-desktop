@@ -69,11 +69,7 @@ export const selectFileInfosDownloaded = createSelector(
     Object.values(byOutpoint).filter(fileInfo => {
       const myClaimIds = myClaims.map(claim => claim.claim_id);
 
-      return (
-        fileInfo &&
-        myClaimIds.indexOf(fileInfo.claim_id) === -1 &&
-        (fileInfo.completed || fileInfo.written_bytes)
-      );
+      return fileInfo && myClaimIds.indexOf(fileInfo.claim_id) === -1 && (fileInfo.completed || fileInfo.written_bytes);
     })
 );
 

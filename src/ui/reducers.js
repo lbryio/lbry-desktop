@@ -1,20 +1,7 @@
 import { combineReducers } from 'redux';
 import { connectRouter } from 'connected-react-router';
-import {
-  claimsReducer,
-  fileInfoReducer,
-  searchReducer,
-  walletReducer,
-  notificationsReducer,
-} from 'lbry-redux';
-import {
-  userReducer,
-  rewardsReducer,
-  costInfoReducer,
-  blacklistReducer,
-  homepageReducer,
-  statsReducer,
-} from 'lbryinc';
+import { claimsReducer, fileInfoReducer, searchReducer, walletReducer, notificationsReducer } from 'lbry-redux';
+import { userReducer, rewardsReducer, costInfoReducer, blacklistReducer, homepageReducer, statsReducer } from 'lbryinc';
 import appReducer from 'redux/reducers/app';
 import availabilityReducer from 'redux/reducers/availability';
 import contentReducer from 'redux/reducers/content';

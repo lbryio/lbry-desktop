@@ -105,12 +105,7 @@ class ModalWalletEncrypt extends React.PureComponent<Props, State> {
             {__(
               'Encrypting your wallet will require a password to access your local wallet data when LBRY starts. Please enter a new password for your wallet.'
             )}{' '}
-            <Button
-              button="link"
-              label={__('Learn more')}
-              href="https://lbry.com/faq/wallet-encryption"
-            />
-            .
+            <Button button="link" label={__('Learn more')} href="https://lbry.com/faq/wallet-encryption" />.
           </p>
           <fieldset-section>
             <FormField

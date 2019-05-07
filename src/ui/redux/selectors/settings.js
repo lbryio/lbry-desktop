@@ -28,9 +28,7 @@ export const selectLanguages = createSelector(
 );
 
 export const selectTheme = makeSelectClientSetting(SETTINGS.THEME);
-export const selectAutomaticDarkModeEnabled = makeSelectClientSetting(
-  SETTINGS.AUTOMATIC_DARK_MODE_ENABLED
-);
+export const selectAutomaticDarkModeEnabled = makeSelectClientSetting(SETTINGS.AUTOMATIC_DARK_MODE_ENABLED);
 export const selectIsNight = createSelector(
   selectState,
   state => state.isNight
@@ -46,6 +44,4 @@ export const selectThemePath = createSelector(
   }
 );
 
-export const selectosNotificationsEnabled = makeSelectClientSetting(
-  SETTINGS.OS_NOTIFICATIONS_ENABLED
-);
+export const selectosNotificationsEnabled = makeSelectClientSetting(SETTINGS.OS_NOTIFICATIONS_ENABLED);

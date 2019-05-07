@@ -15,12 +15,7 @@ class ModalSocialShare extends React.PureComponent<Props> {
     const { closeModal, uri, speechShareable, isChannel } = this.props;
     return (
       <Modal isOpen onAborted={closeModal} type="custom" title={__('Share')}>
-        <SocialShare
-          uri={uri}
-          onDone={closeModal}
-          speechShareable={speechShareable}
-          isChannel={isChannel}
-        />
+        <SocialShare uri={uri} onDone={closeModal} speechShareable={speechShareable} isChannel={isChannel} />
       </Modal>
     );
   }

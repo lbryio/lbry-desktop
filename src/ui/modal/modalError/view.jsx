@@ -40,13 +40,7 @@ class ModalError extends React.PureComponent<Props> {
     }
 
     return (
-      <Modal
-        isOpen
-        contentLabel={__('Error')}
-        title={__('Error')}
-        className="error-modal"
-        onConfirmed={closeModal}
-      >
+      <Modal isOpen contentLabel={__('Error')} title={__('Error')} className="error-modal" onConfirmed={closeModal}>
         <section className="card__content">
           <p>
             {__(

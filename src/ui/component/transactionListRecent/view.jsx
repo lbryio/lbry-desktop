@@ -54,12 +54,7 @@ class TransactionListRecent extends React.PureComponent<Props> {
               />
             </div>
             <div className="card__actions">
-              <Button
-                button="primary"
-                navigate="/$/transactions"
-                label={__('Full History')}
-                icon={icons.HISTORY}
-              />
+              <Button button="primary" navigate="/$/transactions" label={__('Full History')} icon={icons.HISTORY} />
             </div>
           </Fragment>
         )}

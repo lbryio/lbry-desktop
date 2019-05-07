@@ -75,12 +75,7 @@ export class Modal extends React.PureComponent<ModalProps> {
               onClick={onConfirmed}
             />
             {type === 'confirm' ? (
-              <Button
-                button="link"
-                label={abortButtonLabel}
-                disabled={abortButtonDisabled}
-                onClick={onAborted}
-              />
+              <Button button="link" label={abortButtonLabel} disabled={abortButtonDisabled} onClick={onAborted} />
             ) : null}
           </div>
         )}
@@ -118,15 +113,9 @@ export class ExpandableModal extends React.PureComponent<ModalProps, State> {
     return (
       <Modal type="custom" {...this.props}>
         {this.props.children}
-        {this.state.expanded ? (
-          <div className="card__content">{this.props.extraContent}</div>
-        ) : null}
+        {this.state.expanded ? <div className="card__content">{this.props.extraContent}</div> : null}
         <div className="card__actions">
-          <Button
-            button="primary"
-            label={this.props.confirmButtonLabel}
-            onClick={this.props.onConfirmed}
-          />
+          <Button button="primary" label={this.props.confirmButtonLabel} onClick={this.props.onConfirmed} />
           <Button
             button="link"
             label={!this.state.expanded ? this.props.expandButtonLabel : this.props.hideButtonLabel}

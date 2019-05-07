@@ -1,14 +1,14 @@
 import React, { Suspense } from 'react';
 
-const MarkdownPreviewInternal = React.lazy(() => import(
-  /* webpackChunkName: "markdownPreview" */
+const MarkdownPreviewInternal = React.lazy(() =>
+  import(/* webpackChunkName: "markdownPreview" */
   /* webpackPrefetch: true */
-  './markdown-preview-internal'
-));
+  './markdown-preview-internal')
+);
 
-const MarkdownPreview = (props) => {
+const MarkdownPreview = props => {
   return (
-    <Suspense fallback={<div className="markdown-preview"></div>}>
+    <Suspense fallback={<div className="markdown-preview" />}>
       <MarkdownPreviewInternal {...props} />
     </Suspense>
   );

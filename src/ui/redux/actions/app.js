@@ -246,10 +246,7 @@ export function doCheckUpgradeAvailable() {
  */
 export function doCheckUpgradeSubscribe() {
   return dispatch => {
-    const checkUpgradeTimer = setInterval(
-      () => dispatch(doCheckUpgradeAvailable()),
-      CHECK_UPGRADE_INTERVAL
-    );
+    const checkUpgradeTimer = setInterval(() => dispatch(doCheckUpgradeAvailable()), CHECK_UPGRADE_INTERVAL);
     dispatch({
       type: ACTIONS.CHECK_UPGRADE_SUBSCRIBE,
       data: { checkUpgradeTimer },

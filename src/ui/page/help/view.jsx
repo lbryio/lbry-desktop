@@ -130,12 +130,7 @@ class HelpPage extends React.PureComponent<Props, State> {
 
           <div className="card__content">
             <div className="card__actions">
-              <Button
-                href="https://lbry.com/faq"
-                label={__('Read the FAQ')}
-                icon={icons.HELP}
-                button="primary"
-              />
+              <Button href="https://lbry.com/faq" label={__('Read the FAQ')} icon={icons.HELP} button="primary" />
             </div>
           </div>
         </section>
@@ -152,12 +147,7 @@ class HelpPage extends React.PureComponent<Props, State> {
 
           <div className="card__content">
             <div className="card__actions">
-              <Button
-                button="primary"
-                label={__('Join Our Chat')}
-                icon={icons.CHAT}
-                href="https://chat.lbry.com"
-              />
+              <Button button="primary" label={__('Join Our Chat')} icon={icons.CHAT} href="https://chat.lbry.com" />
             </div>
           </div>
         </section>
@@ -198,16 +188,8 @@ class HelpPage extends React.PureComponent<Props, State> {
 
           <div className="card__content">
             <div className="card__actions">
-              <Button
-                button="primary"
-                label={__('Open Log')}
-                onClick={() => this.openLogFile(dataDirectory)}
-              />
-              <Button
-                button="primary"
-                label={__('Open Log Folder')}
-                onClick={() => shell.openItem(dataDirectory)}
-              />
+              <Button button="primary" label={__('Open Log')} onClick={() => this.openLogFile(dataDirectory)} />
+              <Button button="primary" label={__('Open Log Folder')} onClick={() => shell.openItem(dataDirectory)} />
             </div>
           </div>
         </section>

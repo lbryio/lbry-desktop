@@ -1,10 +1,5 @@
 import { connect } from 'react-redux';
-import {
-  selectSearchOptions,
-  doUpdateSearchOptions,
-  makeSelectQueryWithOptions,
-  doToast,
-} from 'lbry-redux';
+import { selectSearchOptions, doUpdateSearchOptions, makeSelectQueryWithOptions, doToast } from 'lbry-redux';
 import { doToggleSearchExpanded } from 'redux/actions/app';
 import { selectSearchOptionsExpanded } from 'redux/selectors/app';
 import analytics from 'analytics';

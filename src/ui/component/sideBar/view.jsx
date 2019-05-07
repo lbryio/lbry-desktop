@@ -57,9 +57,7 @@ class SideBar extends React.PureComponent<Props> {
             {
               ...buildLink(
                 PAGES.SUBSCRIPTIONS,
-                `${__('Subscriptions')} ${
-                  unreadSubscriptionTotal > 0 ? '(' + unreadSubscriptionTotal + ')' : ''
-                }`,
+                `${__('Subscriptions')} ${unreadSubscriptionTotal > 0 ? '(' + unreadSubscriptionTotal + ')' : ''}`,
                 ICONS.SUBSCRIPTION
               ),
             },
@@ -79,12 +77,7 @@ class SideBar extends React.PureComponent<Props> {
               ...buildLink(PAGES.ACCOUNT, 'Overview', ICONS.ACCOUNT),
             },
             {
-              ...buildLink(
-                PAGES.INVITE,
-                'Invite',
-                ICONS.INVITE,
-                shouldShowInviteGuide && __('Check this out!')
-              ),
+              ...buildLink(PAGES.INVITE, 'Invite', ICONS.INVITE, shouldShowInviteGuide && __('Check this out!')),
             },
             {
               ...buildLink(PAGES.REWARDS, 'Rewards', ICONS.FEATURED),

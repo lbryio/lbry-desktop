@@ -48,9 +48,7 @@ class UserPhoneVerify extends React.PureComponent<Props, State> {
         <section className="card__content">
           <p>
             {' '}
-            {__(
-              `Please enter the verification code sent to +${countryCode}${phone}. Didn't receive it? `
-            )}
+            {__(`Please enter the verification code sent to +${countryCode}${phone}. Didn't receive it? `)}
             <Button button="link" onClick={this.reset.bind(this)} label="Go back." />
           </p>
         </section>
@@ -72,8 +70,8 @@ class UserPhoneVerify extends React.PureComponent<Props, State> {
         </Form>
 
         <p className="help">
-          {__('Email')} <Button button="link" href="mailto:help@lbry.com" label="help@lbry.com" />{' '}
-          or join our <Button button="link" href="https://chat.lbry.com" label="chat" />{' '}
+          {__('Email')} <Button button="link" href="mailto:help@lbry.com" label="help@lbry.com" /> or join our{' '}
+          <Button button="link" href="https://chat.lbry.com" label="chat" />{' '}
           {__('if you encounter any trouble with your code.')}
         </p>
       </React.Fragment>

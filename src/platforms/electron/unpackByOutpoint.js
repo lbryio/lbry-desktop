@@ -8,9 +8,7 @@ async function unpackByOutpoint(lbry, outpoint) {
   if (claimFiles && claimFiles.length) {
     const claimFileInfo = claimFiles[0];
     const packFilePath = path.resolve(claimFileInfo.download_path);
-    const unpackPath = path.normalize(
-      path.join(claimFileInfo.download_directory, claimFileInfo.claim_name)
-    );
+    const unpackPath = path.normalize(path.join(claimFileInfo.download_directory, claimFileInfo.claim_name));
 
     if (!fs.existsSync(unpackPath)) {
       await unpackDirectory(unpackPath, {

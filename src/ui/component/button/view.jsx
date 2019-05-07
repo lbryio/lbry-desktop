@@ -59,15 +59,15 @@ class Button extends React.PureComponent<Props> {
       'button',
       button
         ? {
-          'button--primary': button === 'primary',
-          'button--secondary': button === 'secondary',
-          'button--alt': button === 'alt',
-          'button--danger': button === 'danger',
-          'button--inverse': button === 'inverse',
-          'button--disabled': disabled,
-          'button--link': button === 'link',
-          'button--constrict': constrict,
-        }
+            'button--primary': button === 'primary',
+            'button--secondary': button === 'secondary',
+            'button--alt': button === 'alt',
+            'button--danger': button === 'danger',
+            'button--inverse': button === 'inverse',
+            'button--disabled': disabled,
+            'button--link': button === 'link',
+            'button--constrict': constrict,
+          }
         : 'button--no-style',
       className
     );
@@ -83,12 +83,7 @@ class Button extends React.PureComponent<Props> {
 
     if (href) {
       return (
-        <OutboundLink
-          eventLabel="outboundClick"
-          to={href}
-          target="_blank"
-          className={combinedClassName}
-        >
+        <OutboundLink eventLabel="outboundClick" to={href} target="_blank" className={combinedClassName}>
           {content}
         </OutboundLink>
       );

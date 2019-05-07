@@ -1,10 +1,6 @@
 import * as SETTINGS from 'constants/settings';
 import { connect } from 'react-redux';
-import {
-  doFetchInviteStatus,
-  selectUserInviteStatusFailed,
-  selectUserInviteStatusIsPending,
-} from 'lbryinc';
+import { doFetchInviteStatus, selectUserInviteStatusFailed, selectUserInviteStatusIsPending } from 'lbryinc';
 import { makeSelectClientSetting } from 'redux/selectors/settings';
 import { doSetClientSetting } from 'redux/actions/settings';
 import InvitePage from './view';

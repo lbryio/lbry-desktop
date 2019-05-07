@@ -73,9 +73,7 @@ class WunderBar extends React.PureComponent<Props, State> {
 
       // @if TARGET='app'
       const shouldFocus =
-        process.platform === 'darwin'
-          ? keyCode === L_KEY_CODE && metaKey
-          : keyCode === L_KEY_CODE && ctrlKey;
+        process.platform === 'darwin' ? keyCode === L_KEY_CODE && metaKey : keyCode === L_KEY_CODE && ctrlKey;
 
       if (shouldFocus) {
         this.input.focus();

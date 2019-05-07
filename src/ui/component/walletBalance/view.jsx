@@ -19,9 +19,7 @@ const WalletBalance = (props: Props) => {
         <p className="card__subtitle">{__('You currently have')}</p>
       </header>
       <div className="card__content">
-        {(balance || balance === 0) && (
-          <CreditAmount large badge={false} amount={balance} precision={8} />
-        )}
+        {(balance || balance === 0) && <CreditAmount large badge={false} amount={balance} precision={8} />}
       </div>
     </section>
   );

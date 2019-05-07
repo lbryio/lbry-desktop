@@ -27,9 +27,7 @@ class ModalRemoveFile extends React.PureComponent<Props, State> {
     };
 
     (this: any).handleDeleteCheckboxClicked = this.handleDeleteCheckboxClicked.bind(this);
-    (this: any).handleAbandonClaimCheckboxClicked = this.handleAbandonClaimCheckboxClicked.bind(
-      this
-    );
+    (this: any).handleAbandonClaimCheckboxClicked = this.handleAbandonClaimCheckboxClicked.bind(this);
   }
 
   handleDeleteCheckboxClicked() {
@@ -63,8 +61,7 @@ class ModalRemoveFile extends React.PureComponent<Props, State> {
       >
         <section className="card__content">
           <p>
-            {__("Are you sure you'd like to remove")} <cite>{`"${title}"`}</cite>{' '}
-            {__('from the LBRY app?')}
+            {__("Are you sure you'd like to remove")} <cite>{`"${title}"`}</cite> {__('from the LBRY app?')}
           </p>
         </section>
         <section className="card__content">

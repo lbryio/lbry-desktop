@@ -75,9 +75,7 @@ class InviteNew extends React.PureComponent<Props> {
         <header className="card__header">
           <h2 className="card__title">{__('Invite a Friend')}</h2>
 
-          <p className="card__subtitle">
-            {__('When your friends start using LBRY, the network gets stronger!')}
-          </p>
+          <p className="card__subtitle">{__('When your friends start using LBRY, the network gets stronger!')}</p>
         </header>
 
         <div className="card__content">
@@ -89,10 +87,7 @@ class InviteNew extends React.PureComponent<Props> {
           />
         </div>
         <div className="card__content">
-          <CopyableText
-            label={__('Or share this link with your friends')}
-            copyable={referralLink}
-          />
+          <CopyableText label={__('Or share this link with your friends')} copyable={referralLink} />
 
           <p className="help">
             {__('Earn')} <Button button="link" navigate="/$/rewards" label={__('rewards')} />{' '}

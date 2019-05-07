@@ -6,33 +6,33 @@ import VideoViewer from 'component/viewers/videoViewer';
 
 const AudioViewer = React.lazy<*>(() =>
   import(/* webpackChunkName: "audioViewer" */
-    'component/viewers/audioViewer')
+  'component/viewers/audioViewer')
 );
 
 const DocumentViewer = React.lazy<*>(() =>
   import(/* webpackChunkName: "documentViewer" */
-    'component/viewers/documentViewer')
+  'component/viewers/documentViewer')
 );
 
 const DocxViewer = React.lazy<*>(() =>
   import(/* webpackChunkName: "docxViewer" */
-    'component/viewers/docxViewer')
+  'component/viewers/docxViewer')
 );
 
 const HtmlViewer = React.lazy<*>(() =>
   import(/* webpackChunkName: "htmlViewer" */
-    'component/viewers/htmlViewer')
+  'component/viewers/htmlViewer')
 );
 
 const PdfViewer = React.lazy<*>(() =>
   import(/* webpackChunkName: "pdfViewer" */
-    'component/viewers/pdfViewer')
+  'component/viewers/pdfViewer')
 );
 
 // @if TARGET='app'
 const ThreeViewer = React.lazy<*>(() =>
   import(/* webpackChunkName: "threeViewer" */
-    'component/viewers/threeViewer')
+  'component/viewers/threeViewer')
 );
 // @endif
 
@@ -144,16 +144,9 @@ class FileRender extends React.PureComponent<Props> {
         />
       ),
       video: (
-        <VideoViewer
-          claim={claim}
-          source={{ downloadPath, fileName }}
-          contentType={contentType}
-          poster={poster}
-        />
+        <VideoViewer claim={claim} source={{ downloadPath, fileName }} contentType={contentType} poster={poster} />
       ),
-      audio: (
-        <AudioViewer claim={claim} source={{ downloadPath, fileName }} contentType={contentType} />
-      ),
+      audio: <AudioViewer claim={claim} source={{ downloadPath, fileName }} contentType={contentType} />,
       // Add routes to viewer...
     };
 

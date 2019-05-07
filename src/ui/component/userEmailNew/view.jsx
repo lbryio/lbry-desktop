@@ -54,9 +54,7 @@ class UserEmailNew extends React.PureComponent<Props, State> {
             {__("We'll let you know about LBRY updates, security issues, and great new content.")}
             {/* @endif */}
             {/* @if TARGET='web' */}
-            {__(
-              'Stay up to date with lbry.tv and be the first to know about the progress we make.'
-            )}
+            {__('Stay up to date with lbry.tv and be the first to know about the progress we make.')}
             {/* @endif */}
           </p>
         </header>
@@ -74,9 +72,7 @@ class UserEmailNew extends React.PureComponent<Props, State> {
           />
         </Form>
         <div className="card__actions">{cancelButton}</div>
-        <p className="help">
-          {__('Your email address will never be sold and you can unsubscribe at any time.')}
-        </p>
+        <p className="help">{__('Your email address will never be sold and you can unsubscribe at any time.')}</p>
       </React.Fragment>
     );
   }

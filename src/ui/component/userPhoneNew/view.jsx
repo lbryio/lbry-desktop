@@ -5,10 +5,7 @@ import { Form, FormField, Submit } from 'component/common/form';
 const os = require('os').type();
 const countryCodes = require('country-data')
   .callingCountries.all.filter(_ => _.emoji)
-  .reduce(
-    (acc, cur) => acc.concat(cur.countryCallingCodes.map(_ => ({ ...cur, countryCallingCode: _ }))),
-    []
-  )
+  .reduce((acc, cur) => acc.concat(cur.countryCallingCodes.map(_ => ({ ...cur, countryCallingCode: _ }))), [])
   .sort((a, b) => {
     if (a.countryCallingCode < b.countryCallingCode) {
       return -1;
@@ -97,16 +94,10 @@ class UserPhoneNew extends React.PureComponent<Props, State> {
         <Form onSubmit={this.handleSubmit}>
           <div className="card__content">
             <fieldset-group class="fieldset-group--smushed">
-              <FormField
-                label={__('Country')}
-                type="select"
-                name="country-codes"
-                onChange={this.handleSelect}
-              >
+              <FormField label={__('Country')} type="select" name="country-codes" onChange={this.handleSelect}>
                 {countryCodes.map((country, index) => (
                   <option key={index} value={country.countryCallingCode}>
-                    {os === 'Darwin' ? country.emoji : `(${country.alpha2})`}{' '}
-                    {country.countryCallingCode}
+                    {os === 'Darwin' ? country.emoji : `(${country.alpha2})`} {country.countryCallingCode}
                   </option>
                 ))}
               </FormField>

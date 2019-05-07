@@ -20,9 +20,7 @@ export default window => {
     }
   }
 
-  tray = new Tray(
-    process.env.NODE_ENV === 'development' ? iconPath : path.join(process.resourcesPath, iconPath)
-  );
+  tray = new Tray(process.env.NODE_ENV === 'development' ? iconPath : path.join(process.resourcesPath, iconPath));
 
   tray.on('double-click', () => {
     window.show();

@@ -179,9 +179,7 @@ class SettingsPage extends React.PureComponent<Props, State> {
               <header className="card__header">
                 <h2 className="card__title">{__('Max Purchase Price')}</h2>
                 <p className="card__subtitle">
-                  {__(
-                    'This will prevent you from purchasing any content over a certain cost, as a safety measure.'
-                  )}
+                  {__('This will prevent you from purchasing any content over a certain cost, as a safety measure.')}
                 </p>
               </header>
 
@@ -211,9 +209,7 @@ class SettingsPage extends React.PureComponent<Props, State> {
                     name="max_key_fee"
                     min={0}
                     onChange={this.onKeyFeeChange}
-                    price={
-                      daemonSettings.max_key_fee ? daemonSettings.max_key_fee : defaultMaxKeyFee
-                    }
+                    price={daemonSettings.max_key_fee ? daemonSettings.max_key_fee : defaultMaxKeyFee}
                   />
                 )}
               </Form>
@@ -223,9 +219,7 @@ class SettingsPage extends React.PureComponent<Props, State> {
               <header className="card__header">
                 <h2 className="card__title">{__('Purchase Confirmations')}</h2>
                 <p className="card__subtitle">
-                  {__(
-                    "When this option is chosen, LBRY won't ask you to confirm downloads below your chosen price."
-                  )}
+                  {__("When this option is chosen, LBRY won't ask you to confirm downloads below your chosen price.")}
                 </p>
               </header>
 
@@ -287,14 +281,10 @@ class SettingsPage extends React.PureComponent<Props, State> {
                 <FormField
                   type="setting"
                   name="desktopNotification"
-                  onChange={() =>
-                    setClientSetting(SETTINGS.OS_NOTIFICATIONS_ENABLED, !osNotificationsEnabled)
-                  }
+                  onChange={() => setClientSetting(SETTINGS.OS_NOTIFICATIONS_ENABLED, !osNotificationsEnabled)}
                   checked={osNotificationsEnabled}
                   label={__('Show Desktop Notifications')}
-                  helper={__(
-                    'Get notified when a publish is confirmed, or when new content is available to watch.'
-                  )}
+                  helper={__('Get notified when a publish is confirmed, or when new content is available to watch.')}
                 />
               </Form>
             </section>
@@ -308,16 +298,10 @@ class SettingsPage extends React.PureComponent<Props, State> {
                 <FormField
                   type="setting"
                   name="share_usage_data"
-                  onChange={() =>
-                    setDaemonSetting('share_usage_data', !daemonSettings.share_usage_data)
-                  }
+                  onChange={() => setDaemonSetting('share_usage_data', !daemonSettings.share_usage_data)}
                   checked={daemonSettings.share_usage_data}
-                  label={__(
-                    'Help make LBRY better by contributing analytics and diagnostic data about my usage.'
-                  )}
-                  helper={__(
-                    'You will be ineligible to earn rewards while diagnostics are not being shared.'
-                  )}
+                  label={__('Help make LBRY better by contributing analytics and diagnostic data about my usage.')}
+                  helper={__('You will be ineligible to earn rewards while diagnostics are not being shared.')}
                 />
               </Form>
             </section>
@@ -373,12 +357,7 @@ class SettingsPage extends React.PureComponent<Props, State> {
                     <React.Fragment>
                       {__('Secure your local wallet data with a custom password.')}{' '}
                       <strong>{__('Lost passwords cannot be recovered.')} </strong>
-                      <Button
-                        button="link"
-                        label={__('Learn more')}
-                        href="https://lbry.com/faq/wallet-encryption"
-                      />
-                      .
+                      <Button button="link" label={__('Learn more')} href="https://lbry.com/faq/wallet-encryption" />.
                     </React.Fragment>
                   }
                 />

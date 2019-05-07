@@ -94,16 +94,12 @@ class AudioVideoViewer extends React.PureComponent {
     audioSource.connect(audioContext.destination);
 
     if (isButterchurnSupported) {
-      const visualizer = (me.visualizer = butterchurn.createVisualizer(
-        audioContext,
-        me.canvasNode,
-        {
-          height: canvasHeight,
-          width: canvasWidth,
-          pixelRatio: window.devicePixelRatio || 1,
-          textureRatio: 1,
-        }
-      ));
+      const visualizer = (me.visualizer = butterchurn.createVisualizer(audioContext, me.canvasNode, {
+        height: canvasHeight,
+        width: canvasWidth,
+        pixelRatio: window.devicePixelRatio || 1,
+        textureRatio: 1,
+      }));
 
       visualizer.connectAudio(audioSource);
       visualizer.loadPreset(presets[Math.floor(Math.random() * presets.length)], 2.0);
@@ -220,10 +216,7 @@ class AudioVideoViewer extends React.PureComponent {
                   }
 
                   // Get new preset
-                  this.visualizer.loadPreset(
-                    presets[Math.floor(Math.random() * presets.length)],
-                    2.0
-                  );
+                  this.visualizer.loadPreset(presets[Math.floor(Math.random() * presets.length)], 2.0);
 
                   this.setState({ enableMilkdrop: !enableMilkdrop });
                 }}
@@ -242,10 +235,7 @@ class AudioVideoViewer extends React.PureComponent {
               />
             </Tooltip>
             <Tooltip onComponent body={__('Equalizer')}>
-              <Button
-                icon={ICONS.MUSIC_EQUALIZER}
-                onClick={() => this.setState({ showEqualizer: !showEqualizer })}
-              />
+              <Button icon={ICONS.MUSIC_EQUALIZER} onClick={() => this.setState({ showEqualizer: !showEqualizer })} />
             </Tooltip>
           </div>
           <div ref={node => (this.waveNode = node)} className={styles.wave} />

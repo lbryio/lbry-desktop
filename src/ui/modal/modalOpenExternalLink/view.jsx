@@ -42,11 +42,7 @@ class ModalOpenExternalLink extends React.PureComponent<Props> {
         <section className="card__content">
           <p>{__('This link leads to an external website.')}</p>
           <blockquote>{uri}</blockquote>
-          <p>
-            {__(
-              'LBRY Inc is not responsible for its content, click continue to proceed at your own risk.'
-            )}
-          </p>
+          <p>{__('LBRY Inc is not responsible for its content, click continue to proceed at your own risk.')}</p>
         </section>
       </Modal>
     );

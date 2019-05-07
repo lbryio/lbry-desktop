@@ -87,10 +87,7 @@ if (!gotSingleInstanceLock) {
   app.on('second-instance', (event, argv) => {
     // Send the url to the app to navigate first, then focus
     if (rendererWindow) {
-      if (
-        (process.platform === 'win32' || process.platform === 'linux') &&
-        String(argv[1]).startsWith('lbry')
-      ) {
+      if ((process.platform === 'win32' || process.platform === 'linux') && String(argv[1]).startsWith('lbry')) {
         let URI = argv[1];
 
         // Keep only command line / deep linked arguments
@@ -172,8 +169,7 @@ app.on('will-quit', event => {
       {
         type: 'info',
         title: 'LBRY Will Upgrade',
-        message:
-          'LBRY has a pending upgrade. Please select "Yes" to install it on the prompt shown after this one.',
+        message: 'LBRY has a pending upgrade. Please select "Yes" to install it on the prompt shown after this one.',
       },
       () => {
         app.quit();
@@ -208,9 +204,7 @@ ipcMain.on('upgrade', (event, installerPath) => {
   });
   // what to do if no shutdown in a long time?
   console.log('Update downloaded to', installerPath);
-  console.log(
-    'The app will close, and you will be prompted to install the latest version of LBRY.'
-  );
+  console.log('The app will close, and you will be prompted to install the latest version of LBRY.');
   console.log('After the install is complete, please reopen the app.');
   app.quit();
 });

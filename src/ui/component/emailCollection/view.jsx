@@ -14,13 +14,7 @@ type Props = {
 
 class FirstRunEmailCollection extends React.PureComponent<Props> {
   render() {
-    const {
-      completeFirstRun,
-      email,
-      user,
-      emailCollectionAcknowledged,
-      acknowledgeEmail,
-    } = this.props;
+    const { completeFirstRun, email, user, emailCollectionAcknowledged, acknowledgeEmail } = this.props;
 
     // this shouldn't happen
     if (!user) {

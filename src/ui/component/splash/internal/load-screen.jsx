@@ -41,11 +41,7 @@ class LoadScreen extends React.PureComponent<Props> {
                 />
               </div>
               <div className="load-screen__help">
-                <p>
-                  {__(
-                    'If you still have issues, your anti-virus software or firewall may be preventing startup.'
-                  )}
-                </p>
+                <p>{__('If you still have issues, your anti-virus software or firewall may be preventing startup.')}</p>
                 <p>
                   {__('Reach out to hello@lbry.com for help, or check out')}{' '}
                   <Button

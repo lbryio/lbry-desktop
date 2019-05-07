@@ -15,9 +15,7 @@ const logRealtime = str => {
 };
 
 console.log(
-  chalk.magenta(
-    `Compiling ${chalk.underline('main')} and ${chalk.underline('render')}, this will take a while.`
-  )
+  chalk.magenta(`Compiling ${chalk.underline('main')} and ${chalk.underline('render')}, this will take a while.`)
 );
 
 let [mainConfig, renderConfig] = require('../../../webpack.electron.config.js');
@@ -52,12 +50,8 @@ app.listen(8080, () => {
   console.log(chalk.yellow.bold('Renderer listening on port 8080 (still compiling)'));
 });
 
-mainInstance.waitUntilValid(() =>
-  console.log(chalk.green(`${chalk.underline('main')} compilation complete.`))
-);
-renderInstance.waitUntilValid(() =>
-  console.log(chalk.green(`${chalk.underline('render')} compilation complete.`))
-);
+mainInstance.waitUntilValid(() => console.log(chalk.green(`${chalk.underline('main')} compilation complete.`)));
+renderInstance.waitUntilValid(() => console.log(chalk.green(`${chalk.underline('render')} compilation complete.`)));
 
 mainInstance.waitUntilValid(() => {
   console.log(chalk.yellow('Spawning electron...'));

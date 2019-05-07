@@ -139,9 +139,7 @@ export default class SplashScreen extends React.PureComponent<Props, State> {
       if (blockChainHeaders.download_progress < 100) {
         this.setState({
           message: __('Blockchain Sync'),
-          details: `${__('Catching up with the blockchain')} (${
-            blockchainHeaders.download_progress
-          }%)`,
+          details: `${__('Catching up with the blockchain')} (${blockchainHeaders.download_progress}%)`,
         });
       }
     } else if (wallet && wallet.blocks_behind > 0) {

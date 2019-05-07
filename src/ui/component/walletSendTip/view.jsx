@@ -79,10 +79,7 @@ class WalletSendTip extends React.PureComponent<Props, State> {
             autoFocus
             name="tip-input"
             label={
-              (tipAmount &&
-                tipAmount !== 0 &&
-                `Tip ${tipAmount.toFixed(8).replace(/\.?0+$/, '')} LBC`) ||
-              __('Amount')
+              (tipAmount && tipAmount !== 0 && `Tip ${tipAmount.toFixed(8).replace(/\.?0+$/, '')} LBC`) || __('Amount')
             }
             className="form-field--price-amount"
             error={tipError}
@@ -102,11 +99,7 @@ class WalletSendTip extends React.PureComponent<Props, State> {
             helper={
               <p>
                 {__(`This will appear as a tip for "${title}".`)}{' '}
-                <Button
-                  label={__('Learn more')}
-                  button="link"
-                  href="https://lbry.com/faq/tipping"
-                />
+                <Button label={__('Learn more')} button="link" href="https://lbry.com/faq/tipping" />
               </p>
             }
           />

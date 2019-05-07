@@ -39,16 +39,7 @@ type State = {
 
 class MediaPlayer extends React.PureComponent<Props, State> {
   static SANDBOX_TYPES = ['application/x-lbry', 'application/x-ext-lbry'];
-  static FILE_MEDIA_TYPES = [
-    'text',
-    'script',
-    'e-book',
-    'comic-book',
-    'document',
-    '3D-file',
-    'video',
-    'audio',
-  ];
+  static FILE_MEDIA_TYPES = ['text', 'script', 'e-book', 'comic-book', 'document', '3D-file', 'video', 'audio'];
   static SANDBOX_SET_BASE_URL = 'http://localhost:5278/set/';
   static SANDBOX_CONTENT_BASE_URL = 'http://localhost:5278';
 
@@ -253,8 +244,7 @@ class MediaPlayer extends React.PureComponent<Props, State> {
     // Files supported by render-media
     const { contentType } = this.props;
     return (
-      Object.values(player.mime).indexOf(contentType) !== -1 ||
-      MediaPlayer.SANDBOX_TYPES.indexOf(contentType) > -1
+      Object.values(player.mime).indexOf(contentType) !== -1 || MediaPlayer.SANDBOX_TYPES.indexOf(contentType) > -1
     );
   }
 
@@ -262,10 +252,7 @@ class MediaPlayer extends React.PureComponent<Props, State> {
     // This files are supported using a custom viewer
     const { mediaType, contentType } = this.props;
 
-    return (
-      MediaPlayer.FILE_MEDIA_TYPES.indexOf(mediaType) > -1 ||
-      MediaPlayer.SANDBOX_TYPES.indexOf(contentType) > -1
-    );
+    return MediaPlayer.FILE_MEDIA_TYPES.indexOf(mediaType) > -1 || MediaPlayer.SANDBOX_TYPES.indexOf(contentType) > -1;
   }
 
   renderFile() {
@@ -302,9 +289,7 @@ class MediaPlayer extends React.PureComponent<Props, State> {
     if (IS_WEB && ['audio', 'video'].indexOf(mediaType) === -1) {
       return {
         isLoading: false,
-        loadingStatus: __(
-          'This file type is not currently supported on lbry.tv. Try viewing it in the desktop app.'
-        ),
+        loadingStatus: __('This file type is not currently supported on lbry.tv. Try viewing it in the desktop app.'),
       };
     }
 
@@ -360,11 +345,7 @@ class MediaPlayer extends React.PureComponent<Props, State> {
       <React.Fragment>
         {loadingStatus && <LoadingScreen status={loadingStatus} spinner={isLoading} />}
         {isFileReady && <FileRender claim={claim} source={fileSource} mediaType={mediaType} />}
-        <div
-          className="content__view--container"
-          style={{ opacity: isLoading ? 0 : 1 }}
-          ref={this.mediaContainer}
-        />
+        <div className="content__view--container" style={{ opacity: isLoading ? 0 : 1 }} ref={this.mediaContainer} />
       </React.Fragment>
     );
   }
