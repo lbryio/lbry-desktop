@@ -1,7 +1,7 @@
 {
   "parser": "babel-eslint",
-  "extends": ["standard", "standard-jsx", "plugin:flowtype/recommended"],
-  "plugins": ["flowtype", "import"],
+  "extends": ["standard", "standard-jsx", "plugin:react/recommended", "plugin:flowtype/recommended"],
+  "plugins": ["flowtype", "import", "react-hooks"],
   "settings": {
     "import/resolver": {
       "webpack": {
@@ -22,20 +22,21 @@
     "IS_WEB": true
   },
   "rules": {
-    "no-multi-spaces": 0,
-    "new-cap": 0,
-    "prefer-promise-reject-errors": 0,
-    "no-unused-vars": 0,
-    "standard/object-curly-even-spacing": 0,
+    "comma-dangle": ["error", "always-multiline"],
     "handle-callback-err": 0,
-    "one-var": 0,
-    "object-curly-spacing": 0,
+    "jsx-quotes": ["error", "prefer-double"],
+    "new-cap": 0,
+    "no-multi-spaces": 0,
     "no-redeclare": 0,
     "no-return-await": 0,
-    "standard/no-callback-literal": 0,
-    "comma-dangle": ["error", "always-multiline"],
+    "object-curly-spacing": 0,
+    "one-var": 0,
+    "prefer-promise-reject-errors": 0,
+    "react-hooks/exhaustive-deps": "warn",
+    "react-hooks/rules-of-hooks": "error",
     "space-before-function-paren": ["error", "never"],
-    "jsx-quotes": ["error", "prefer-double"],
+    "standard/object-curly-even-spacing": 0,
+    "standard/no-callback-literal": 0,
     "semi": [
       "error",
       "always",

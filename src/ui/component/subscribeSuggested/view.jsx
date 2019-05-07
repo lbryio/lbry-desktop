@@ -26,7 +26,7 @@ class SuggestedSubscriptions extends Component<Props> {
     }
 
     return suggested ? (
-      <div className="card__content subscriptions__suggested">
+      <div className="card__content subscriptions__suggested main__item--extend-outside">
         {suggested.map(({ uri, label }) => (
           <CategoryList key={uri} category={label} categoryLink={uri} />
         ))}

@@ -11,20 +11,13 @@ import * as MODALS from 'constants/modal_types';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
-import {
-  doConditionalAuthNavigate,
-  doDaemonReady,
-  doAutoUpdate,
-  doOpenModal,
-  doHideModal,
-} from 'redux/actions/app';
+import { doConditionalAuthNavigate, doDaemonReady, doAutoUpdate, doOpenModal, doHideModal } from 'redux/actions/app';
 import { Lbry, doToast, isURIValid, setSearchApi } from 'lbry-redux';
 import { doDownloadLanguages, doUpdateIsNightAsync } from 'redux/actions/settings';
 import { doAuthenticate, Lbryio, rewards, doBlackListedOutpointsSubscribe } from 'lbryinc';
 import { store, history } from 'store';
 import pjson from 'package.json';
 import app from './app';
-import analytics from './analytics';
 import doLogWarningConsoleMessage from './logWarningConsoleMessage';
 import { ConnectedRouter, push } from 'connected-react-router';
 import cookie from 'cookie';

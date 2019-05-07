@@ -1,8 +1,4 @@
-// The gerbil is tied to subscriptions currently, but this style should move to it's own file once
-// the gerbil is added in more places with different layouts
 .subscriptions__suggested {
   animation: expand 0.2s;
-  left: -2rem;
   position: relative;
-  width: calc(100% + 4rem);
 }

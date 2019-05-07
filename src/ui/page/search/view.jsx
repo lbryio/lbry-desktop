@@ -1,13 +1,10 @@
 // @flow
-import * as ICONS from 'constants/icons';
 import React, { useEffect, Fragment } from 'react';
 import { isURIValid, normalizeURI, parseURI } from 'lbry-redux';
 import FileTile from 'component/fileTile';
 import ChannelTile from 'component/channelTile';
 import FileListSearch from 'component/fileListSearch';
 import Page from 'component/page';
-import ToolTip from 'component/common/tooltip';
-import Icon from 'component/common/icon';
 import SearchOptions from 'component/searchOptions';
 import Button from 'component/button';
 
@@ -24,7 +21,6 @@ export default function SearchPage(props: Props) {
 
   let uri;
   let isChannel;
-  let label;
   if (isValid) {
     uri = normalizeURI(urlQuery);
     ({ isChannel } = parseURI(uri));
@@ -34,10 +30,10 @@ export default function SearchPage(props: Props) {
     if (urlQuery) {
       doSearch(urlQuery);
     }
-  }, [urlQuery]);
+  }, [doSearch, urlQuery]);
 
   return (
-    <Page noPadding>
+    <Page>
       <section className="search">
         {urlQuery && (
           <Fragment>
@@ -58,9 +54,7 @@ export default function SearchPage(props: Props) {
               <SearchOptions />
 
               <FileListSearch query={urlQuery} />
-              <div className="card__content help">
-                {__('These search results are provided by LBRY, Inc.')}
-              </div>
+              <div className="card__content help">{__('These search results are provided by LBRY, Inc.')}</div>
             </div>
           </Fragment>
         )}

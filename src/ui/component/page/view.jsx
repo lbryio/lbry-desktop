@@ -9,8 +9,6 @@ const LOADER_TIMEOUT = 1000;
 type Props = {
   children: React.Node | Array<React.Node>,
   pageTitle: ?string,
-  noPadding: ?boolean,
-  extraPadding: ?boolean,
   notContained: ?boolean, // No max-width, but keep the padding
   loading: ?boolean,
   className: ?string,
@@ -46,7 +44,6 @@ class Page extends React.PureComponent<Props, State> {
       this.beginLoadingTimeout();
     } else if (!loading && this.loaderTimeout) {
       clearTimeout(this.loaderTimeout);
-
       if (showLoader) {
         this.removeLoader();
       }
@@ -72,23 +69,14 @@ class Page extends React.PureComponent<Props, State> {
   loaderTimeout: ?TimeoutID;
 
   render() {
-    const {
-      pageTitle,
-      children,
-      noPadding,
-      extraPadding,
-      notContained,
-      loading,
-      className,
-    } = this.props;
+    const { children, notContained, loading, className } = this.props;
     const { showLoader } = this.state;
 
     return (
       <main
         className={classnames('main', className, {
-          'main--contained': !notContained && !noPadding && !extraPadding,
-          'main--no-padding': noPadding,
-          'main--extra-padding': extraPadding,
+          'main--contained': !notContained,
+          'main--not-contained': notContained,
         })}
       >
         {!loading && children}

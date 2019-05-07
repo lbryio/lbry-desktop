@@ -1,6 +1,6 @@
 import * as PAGES from 'constants/pages';
 import React, { useEffect } from 'react';
-import { Route, Switch, withRouter } from 'react-router-dom';
+import { Route, Redirect, Switch, withRouter } from 'react-router-dom';
 import SettingsPage from 'page/settings';
 import HelpPage from 'page/help';
 import ReportPage from 'page/report';
@@ -58,8 +58,11 @@ export default function AppRouter() {
         <Route path={`/$/${PAGES.HISTORY}/all`} exact component={NavigationHistory} />
 
         {/* Below need to go at the end to make sure we don't match any of our pages first */}
-        <Route path="/:claimName/:claimId" component={ShowPage} />
-        <Route path="/:claimName" component={ShowPage} />
+        <Route path="/:claimName" exact component={ShowPage} />
+        <Route path="/:claimName/:claimId" exact component={ShowPage} />
+
+        {/* Route not found. Mostly for people typing crazy urls into the url */}
+        <Route render={() => <Redirect to="/" />} />
       </Switch>
     </Scroll>
   );

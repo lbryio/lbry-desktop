@@ -1,5 +1,5 @@
 // @flow
-import React, { Fragment } from 'react';
+import React from 'react';
 import Button from 'component/button';
 import SuggestedSubscriptions from 'component/subscribeSuggested';
 import Yrbl from 'component/yrbl';
@@ -12,17 +12,11 @@ type Props = {
   doShowSuggestedSubs: () => void,
 };
 
-export default (props: Props) => {
-  const {
-    showSuggested,
-    loadingSuggested,
-    numberOfSubscriptions,
-    doShowSuggestedSubs,
-    onFinish,
-  } = props;
+export default function SubscriptionsFirstRun(props: Props) {
+  const { showSuggested, loadingSuggested, numberOfSubscriptions, doShowSuggestedSubs, onFinish } = props;
 
   return (
-    <Fragment>
+    <div>
       <Yrbl
         title={numberOfSubscriptions > 0 ? __('Woohoo!') : __('No subscriptions... yet.')}
         subtitle={
@@ -52,6 +46,6 @@ export default (props: Props) => {
         }
       />
       {showSuggested && !loadingSuggested && <SuggestedSubscriptions />}
-    </Fragment>
+    </div>
   );
-};
+}

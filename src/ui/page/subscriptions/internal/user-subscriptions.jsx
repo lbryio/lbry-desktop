@@ -11,7 +11,7 @@ import SuggestedSubscriptions from 'component/subscribeSuggested';
 import MarkAsRead from 'component/subscribeMarkAsRead';
 import Tooltip from 'component/common/tooltip';
 import Yrbl from 'component/yrbl';
-import { formatLbryUriForWeb } from 'util/uri';
+import { Tabs, TabList, Tab, TabPanels, TabPanel } from 'component/common/tabs';
 
 type Props = {
   viewMode: ViewMode,
@@ -33,27 +33,18 @@ export default (props: Props) => {
     onChangeAutoDownload,
     unreadSubscriptions,
   } = props;
+
+  const index = viewMode === VIEW_ALL ? 0 : 1;
+  const onTabChange = index => (index === 0 ? doSetViewMode(VIEW_ALL) : doSetViewMode(VIEW_LATEST_FIRST));
+
   return (
     <Fragment>
       {hasSubscriptions && (
-        <section className="card card--section">
-          <div className="card__content card--space-between">
-            <div className="card__actions card__actions--no-margin">
-              <Button
-                disabled={viewMode === VIEW_ALL}
-                className={viewMode === VIEW_ALL && 'button--subscription-view-selected'}
-                button="link"
-                label="All Subscriptions"
-                onClick={() => doSetViewMode(VIEW_ALL)}
-              />
-              <Button
-                button="link"
-                disabled={viewMode === VIEW_LATEST_FIRST}
-                className={viewMode === VIEW_LATEST_FIRST && 'button--subscription-view-selected'}
-                label={__('Latest Only')}
-                onClick={() => doSetViewMode(VIEW_LATEST_FIRST)}
-              />
-            </div>
+        <Tabs onChange={onTabChange} index={index}>
+          <TabList className="main__item--extend-outside">
+            <Tab>{__('All Subscriptions')}</Tab>
+            <Tab>{__('Latest Only')}</Tab>
+
             <Tooltip onComponent body={__('Automatically download new subscriptions.')}>
               <FormField
                 type="setting"
@@ -64,44 +55,29 @@ export default (props: Props) => {
                 labelOnLeft
               />
             </Tooltip>
-          </div>
-        </section>
-      )}
+          </TabList>
 
-      <HiddenNsfwClaims
-        uris={subscriptions.reduce((arr, { name, claim_id: claimId }) => {
-          if (name && claimId) {
-            arr.push(`lbry://${name}#${claimId}`);
-          }
-          return arr;
-        }, [])}
-      />
-
-      {!hasSubscriptions && (
-        <Fragment>
-          <Yrbl
-            type="sad"
-            title={__('Oh no! What happened to your subscriptions?')}
-            subtitle={__('These channels look pretty cool.')}
-          />
-          <SuggestedSubscriptions />
-        </Fragment>
-      )}
-
-      {hasSubscriptions && (
-        <div className="card__content">
-          {viewMode === VIEW_ALL && (
-            <Fragment>
+          <TabPanels
+            header={
+              <HiddenNsfwClaims
+                uris={subscriptions.reduce((arr, { name, claim_id: claimId }) => {
+                  if (name && claimId) {
+                    arr.push(`lbry://${name}#${claimId}`);
+                  }
+                  return arr;
+                }, [])}
+              />
+            }
+          >
+            <TabPanel>
               <div className="card__title card__title--flex">
                 <span>{__('Your subscriptions')}</span>
                 {unreadSubscriptions.length > 0 && <MarkAsRead />}
               </div>
               <FileList hideFilter sortByHeight fileInfos={subscriptions} />
-            </Fragment>
-          )}
+            </TabPanel>
 
-          {viewMode === VIEW_LATEST_FIRST && (
-            <Fragment>
+            <TabPanel>
               {unreadSubscriptions.length ? (
                 unreadSubscriptions.map(({ channel, uris }) => {
                   const { claimName } = parseURI(channel);
@@ -124,16 +100,24 @@ export default (props: Props) => {
                 })
               ) : (
                 <Fragment>
-                  <Yrbl
-                    title={__('All caught up!')}
-                    subtitle={__('You might like the channels below.')}
-                  />
+                  <Yrbl title={__('All caught up!')} subtitle={__('You might like the channels below.')} />
                   <SuggestedSubscriptions />
                 </Fragment>
               )}
-            </Fragment>
-          )}
-        </div>
+            </TabPanel>
+          </TabPanels>
+        </Tabs>
+      )}
+
+      {!hasSubscriptions && (
+        <Fragment>
+          <Yrbl
+            type="sad"
+            title={__('Oh no! What happened to your subscriptions?')}
+            subtitle={__('These channels look pretty cool.')}
+          />
+          <SuggestedSubscriptions />
+        </Fragment>
       )}
     </Fragment>
   );

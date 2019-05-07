@@ -10,10 +10,7 @@ function getLocalStorageSetting(setting, fallback) {
 const reducers = {};
 const defaultState = {
   clientSettings: {
-    [SETTINGS.INSTANT_PURCHASE_ENABLED]: getLocalStorageSetting(
-      SETTINGS.INSTANT_PURCHASE_ENABLED,
-      false
-    ),
+    [SETTINGS.INSTANT_PURCHASE_ENABLED]: getLocalStorageSetting(SETTINGS.INSTANT_PURCHASE_ENABLED, false),
     [SETTINGS.INSTANT_PURCHASE_MAX]: getLocalStorageSetting(SETTINGS.INSTANT_PURCHASE_MAX, {
       currency: 'LBC',
       amount: 0.1,
@@ -21,26 +18,18 @@ const defaultState = {
     [SETTINGS.SHOW_NSFW]: getLocalStorageSetting(SETTINGS.SHOW_NSFW, false),
     [SETTINGS.SHOW_UNAVAILABLE]: getLocalStorageSetting(SETTINGS.SHOW_UNAVAILABLE, true),
     [SETTINGS.NEW_USER_ACKNOWLEDGED]: getLocalStorageSetting(SETTINGS.NEW_USER_ACKNOWLEDGED, false),
-    [SETTINGS.EMAIL_COLLECTION_ACKNOWLEDGED]: getLocalStorageSetting(
-      SETTINGS.EMAIL_COLLECTION_ACKNOWLEDGED,
-      false
-    ),
+    [SETTINGS.EMAIL_COLLECTION_ACKNOWLEDGED]: getLocalStorageSetting(SETTINGS.EMAIL_COLLECTION_ACKNOWLEDGED, false),
     [SETTINGS.INVITE_ACKNOWLEDGED]: getLocalStorageSetting(SETTINGS.INVITE_ACKNOWLEDGED, false),
     [SETTINGS.FIRST_RUN_COMPLETED]: getLocalStorageSetting(SETTINGS.FIRST_RUN_COMPLETED, false),
     [SETTINGS.CREDIT_REQUIRED_ACKNOWLEDGED]: false, // this needs to be re-acknowledged every run
     [SETTINGS.LANGUAGE]: getLocalStorageSetting(SETTINGS.LANGUAGE, 'en'),
     [SETTINGS.THEME]: getLocalStorageSetting(SETTINGS.THEME, 'dark'),
     [SETTINGS.THEMES]: getLocalStorageSetting(SETTINGS.THEMES, []),
-    [SETTINGS.AUTOMATIC_DARK_MODE_ENABLED]: getLocalStorageSetting(
-      SETTINGS.AUTOMATIC_DARK_MODE_ENABLED,
-      false
-    ),
+    [SETTINGS.AUTOMATIC_DARK_MODE_ENABLED]: getLocalStorageSetting(SETTINGS.AUTOMATIC_DARK_MODE_ENABLED, false),
     [SETTINGS.AUTOPLAY]: getLocalStorageSetting(SETTINGS.AUTOPLAY, false),
     [SETTINGS.RESULT_COUNT]: Number(getLocalStorageSetting(SETTINGS.RESULT_COUNT, 50)),
     [SETTINGS.AUTO_DOWNLOAD]: getLocalStorageSetting(SETTINGS.AUTO_DOWNLOAD, true),
-    [SETTINGS.OS_NOTIFICATIONS_ENABLED]: Boolean(
-      getLocalStorageSetting(SETTINGS.OS_NOTIFICATIONS_ENABLED, true)
-    ),
+    [SETTINGS.OS_NOTIFICATIONS_ENABLED]: Boolean(getLocalStorageSetting(SETTINGS.OS_NOTIFICATIONS_ENABLED, true)),
   },
   isNight: false,
   languages: {},

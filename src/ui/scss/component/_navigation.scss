@@ -35,11 +35,7 @@
     right: 0;
 
     // TODO: Make this gradient "to bottom" on mobile view
-    background-image: linear-gradient(
-      to right,
-      transparent,
-      rgba(mix($lbry-blue-3, $lbry-gray-4, 15%), 0.2) 100%
-    );
+    background-image: linear-gradient(to right, transparent, rgba(mix($lbry-blue-3, $lbry-gray-4, 15%), 0.2) 100%);
     content: '';
     position: absolute;
 
@@ -93,7 +89,7 @@
     }
 
     &::before {
-      width: 0.5rem;
+      width: var(--tab-indicator-size);
     }
   }
 
