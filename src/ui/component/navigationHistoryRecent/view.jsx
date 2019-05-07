@@ -1,8 +1,6 @@
 // @flow
-import React, { Fragment } from 'react';
+import React from 'react';
 import Button from 'component/button';
-import { Form, FormField } from 'component/common/form';
-import ReactPaginate from 'react-paginate';
 import NavigationHistoryItem from 'component/navigationHistoryItem';
 
 type HistoryItem = {
@@ -12,14 +10,10 @@ type HistoryItem = {
 
 type Props = {
   history: Array<HistoryItem>,
-  page: number,
-  pageCount: number,
-  clearHistoryUri: string => void,
-  params: { page: number },
 };
 
-export default function UserHistoryRecent(props: Props) {
-  const { history = [], page, pageCount } = props;
+export default function NavigationHistoryRecent(props: Props) {
+  const { history = [] } = props;
 
   return history.length ? (
     <div className="item-list">

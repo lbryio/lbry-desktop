@@ -345,42 +345,6 @@
 //  G R O U P
 
 .media-group--list {
-  .card__list {
-    padding-top: var(--spacing-vertical-large);
-    padding-bottom: var(--spacing-vertical-large);
-
-    // Depending on screen width, the amount of items in
-    // each row change and are auto-sized
-
-    @media (min-width: 2001px) {
-      grid-template-columns: repeat(auto-fill, minmax(calc(100% / 10), 1fr));
-    }
-
-    @media (min-width: 1801px) and (max-width: 2000px) {
-      grid-template-columns: repeat(auto-fill, minmax(calc(100% / 8), 1fr));
-    }
-
-    @media (min-width: 1551px) and (max-width: 1800px) {
-      grid-template-columns: repeat(auto-fill, minmax(calc(100% / 7), 1fr));
-    }
-
-    @media (min-width: 1051px) and (max-width: 1550px) {
-      grid-template-columns: repeat(auto-fill, minmax(calc(100% / 6), 1fr));
-    }
-
-    @media (min-width: 901px) and (max-width: 1050px) {
-      grid-template-columns: repeat(auto-fill, minmax(calc(100% / 5), 1fr));
-    }
-
-    @media (min-width: 751px) and (max-width: 900px) {
-      grid-template-columns: repeat(auto-fill, minmax(calc(100% / 4), 1fr));
-    }
-
-    @media (max-width: 750px) {
-      grid-template-columns: repeat(auto-fill, minmax(calc(100% / 3), 1fr));
-    }
-  }
-
   .media-card {
     display: inline-block;
     margin-bottom: var(--spacing-vertical-large);
@@ -473,11 +437,7 @@
     background-image: linear-gradient(to right, $lbry-white 80%, transparent 100%);
 
     html[data-mode='dark'] & {
-      background-image: linear-gradient(
-        to right,
-        mix($lbry-white, $lbry-gray-3, 50%) 80%,
-        transparent 100%
-      );
+      background-image: linear-gradient(to right, mix($lbry-white, $lbry-gray-3, 50%) 80%, transparent 100%);
     }
   }
 

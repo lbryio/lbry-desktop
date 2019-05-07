@@ -26,7 +26,7 @@ type Props = {
   showSuggestedSubs: boolean,
 };
 
-export default class extends PureComponent<Props> {
+export default class SubscriptionsPage extends PureComponent<Props> {
   constructor() {
     super();
 
@@ -78,7 +78,7 @@ export default class extends PureComponent<Props> {
       // Only pass in the loading prop if there are no subscriptions
       // If there are any, let the page update in the background
       // The loading prop removes children and shows a loading spinner
-      <Page notContained loading={loading && !subscribedChannels}>
+      <Page notContained loading={loading && !subscribedChannels} className="main--no-padding-top">
         {firstRunCompleted ? (
           <UserSubscriptions
             viewMode={viewMode}

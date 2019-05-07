@@ -1,24 +1,12 @@
 .search__header {
-  background-color: $lbry-black;
-  color: $lbry-white;
   padding: var(--spacing-vertical-large);
 
   .placeholder {
     background-color: rgba($lbry-white, 0.1);
   }
 
-  .media__subtext {
-    color: rgba($lbry-white, 0.6);
-  }
-
   .media__subtitle {
-    color: rgba($lbry-white, 0.9);
     font-size: 0.7em;
-  }
-
-  html[data-mode='dark'] & {
-    background-color: transparent;
-    border-bottom: 1px solid rgba($lbry-white, 0.1);
   }
 }
 
@@ -37,7 +25,7 @@
 }
 
 .search__results-wrapper {
-  padding: var(--spacing-vertical-large);
+  margin: var(--spacing-vertical-large);
 }
 
 .search__results-section {
@@ -53,7 +41,7 @@
 
 .search__options-wrapper {
   font-size: 1.25em;
-  padding-bottom: var(--spacing-vertical-large);
+  margin-bottom: var(--spacing-vertical-large);
 }
 
 .search__options {

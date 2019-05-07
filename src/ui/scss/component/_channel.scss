@@ -1,27 +1,71 @@
-.channel-info {
-  .media__title {
-    display: block;
-    user-select: text;
-    margin-bottom: var(--spacing-vertical-medium);
-  }
+$cover-z-index: 0;
+$metadata-z-index: 1;
 
-  .channel-info__actions__group {
-    margin-bottom: var(--spacing-vertical-large);
-  }
-}
-
-.channel-info__actions {
+.channel__cover {
+  background-image: linear-gradient(to right, $lbry-indigo-4, $lbry-cyan-5 80%);
   display: flex;
+  align-items: flex-end;
+  box-sizing: content-box;
+  color: $lbry-white;
 }
 
-.channel-info__actions__group {
-  @extend .media__action-group;
-  @extend .media__action-group--large;
+.channel__cover--custom {
+  z-index: $cover-z-index;
+  align-self: flex-start;
+  position: absolute;
+  object-fit: cover;
+  filter: brightness(40%);
 }
 
-.channel-name {
-  overflow: hidden;
-  text-align: left;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+.channel__cover,
+.channel__cover--custom {
+  height: var(--cover-photo-height);
+  width: 100%;
 }
+
+.channel__thumbnail {
+  position: absolute;
+  left: var(--spacing-main-padding);
+  height: var(--channel-thumbnail-size);
+  width: var(--channel-thumbnail-size);
+  background-color: $lbry-gray-3;
+  background-image: linear-gradient(to right, $lbry-white, $lbry-gray-3 80%);
+  background-size: cover;
+  box-shadow: 0px 8px 40px -3px $lbry-black;
+}
+
+.channel__thumbnail--custom {
+  width: 100%;
+  object-fit: cover;
+}
+
+.channel__thumbnail,
+.channel__thumbnail--custom {
+  border-radius: var(--card-radius);
+}
+
+.channel__primary-info {
+  // Ensure the profile pic/title sit ontop of the default cover background
+  z-index: $metadata-z-index;
+  // Jump over the thumbnail photo because it is absolutely positioned
+  // Then add normal page spacing, _then_ add the actual padding
+  margin-left: calc(var(--channel-thumbnail-size) + var(--spacing-main-padding));
+  padding-left: var(--spacing-vertical-large);
+  padding-bottom: var(--spacing-vertical-medium);
+}
+
+.channel__title {
+  font-size: 3rem;
+  font-weight: 800;
+}
+
+.channel__url {
+  font-size: 1.2rem;
+  user-select: all;
+  margin-top: -0.25rem;
+}
+
+// .channel__description {
+//   font-size: 1.3rem;
+//   margin: var(--spacing-vertical-large) 0;
+// }

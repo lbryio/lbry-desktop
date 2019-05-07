@@ -1,0 +1,62 @@
+.tabs {
+  position: relative;
+}
+
+.tabs__list {
+  display: flex;
+  align-items: center;
+  background-color: $lbry-black;
+  color: $lbry-white;
+  padding: var(--spacing-vertical-medium) var(--spacing-main-padding);
+
+  & > *:not(.tab) {
+    // If there is anything after the tabs, render it on the opposite side of the page
+    margin-left: auto;
+  }
+
+  [data-mode='dark'] & {
+    background-color: darken($lbry-black, 5%);
+  }
+}
+
+.tabs__list--channel-page {
+  padding-left: calc(var(--channel-thumbnail-size) + var(--spacing-main-padding) + var(--spacing-vertical-large));
+}
+
+.tab {
+  margin-right: var(--spacing-vertical-large);
+  padding: 5px 0;
+  font-weight: 700;
+  font-size: var(--tab-header-size);
+  color: $lbry-white;
+  position: relative;
+
+  &::after {
+    position: absolute;
+    bottom: calc(var(--tab-indicator-size) * -2);
+    height: 0;
+    width: 100%;
+    content: '';
+  }
+}
+
+.tab__divider {
+  position: absolute;
+  margin-top: calc(var(--tab-indicator-size) * -1);
+}
+
+.tab::after,
+.tab__divider {
+  display: block;
+  transition: all var(--animation-duration) var(--animation-style);
+}
+
+.tab:hover::after,
+.tab__divider {
+  height: var(--tab-indicator-size);
+  background-color: $lbry-teal-3;
+}
+
+.tab__panel {
+  margin-top: var(--spacing-vertical-large);
+}

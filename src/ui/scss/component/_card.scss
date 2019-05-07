@@ -3,10 +3,13 @@
   border: 1px solid $lbry-gray-1;
   margin-bottom: var(--spacing-vertical-xlarge);
   position: relative;
+  border-radius: var(--card-radius);
+  box-shadow: var(--box-shadow) $lbry-gray-1;
 
   html[data-mode='dark'] & {
     background-color: rgba($lbry-white, 0.1);
     border-color: rgba($lbry-white, 0.1);
+    box-shadow: var(--box-shadow) darken($lbry-gray-1, 80%);
   }
 }
 
@@ -46,7 +49,7 @@
   font-size: 1.15rem;
 
   > *:not(:last-child) {
-    margin-right: var(--spacing-vertical-large);
+    margin-right: var(--spacing-vertical-medium);
   }
 }
 
@@ -118,6 +121,37 @@
 .card__list {
   display: grid;
   grid-gap: var(--spacing-vertical-medium);
+
+  // Depending on screen width, the amount of items in
+  // each row change and are auto-sized
+
+  @media (min-width: 2001px) {
+    grid-template-columns: repeat(auto-fill, minmax(calc(100% / 10), 1fr));
+  }
+
+  @media (min-width: 1801px) and (max-width: 2000px) {
+    grid-template-columns: repeat(auto-fill, minmax(calc(100% / 8), 1fr));
+  }
+
+  @media (min-width: 1551px) and (max-width: 1800px) {
+    grid-template-columns: repeat(auto-fill, minmax(calc(100% / 7), 1fr));
+  }
+
+  @media (min-width: 1051px) and (max-width: 1550px) {
+    grid-template-columns: repeat(auto-fill, minmax(calc(100% / 6), 1fr));
+  }
+
+  @media (min-width: 901px) and (max-width: 1050px) {
+    grid-template-columns: repeat(auto-fill, minmax(calc(100% / 5), 1fr));
+  }
+
+  @media (min-width: 751px) and (max-width: 900px) {
+    grid-template-columns: repeat(auto-fill, minmax(calc(100% / 4), 1fr));
+  }
+
+  @media (max-width: 750px) {
+    grid-template-columns: repeat(auto-fill, minmax(calc(100% / 3), 1fr));
+  }
 }
 
 .card__list--rewards {
@@ -137,8 +171,8 @@
 
 .card__message {
   border-left: 0.5rem solid;
-  padding: var(--spacing-vertical-medium) var(--spacing-vertical-medium)
-    var(--spacing-vertical-medium) var(--spacing-vertical-large);
+  padding: var(--spacing-vertical-medium) var(--spacing-vertical-medium) var(--spacing-vertical-medium)
+    var(--spacing-vertical-large);
 
   &:not(&--error):not(&--failure):not(&--success) {
     background-color: rgba($lbry-teal-1, 0.1);
@@ -184,6 +218,7 @@
 .card__title {
   font-size: 2rem;
   font-weight: 600;
+  padding-bottom: var(--spacing-vertical-medium);
 
   + .card__content {
     margin-top: var(--spacing-vertical-medium);

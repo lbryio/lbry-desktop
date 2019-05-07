@@ -16,6 +16,7 @@ $large-breakpoint: 1921px;
   --spacing-vertical-medium: calc(2rem / 2);
   --spacing-vertical-large: 2rem;
   --spacing-vertical-xlarge: 3rem;
+  --spacing-main-padding: var(--spacing-vertical-xlarge);
 
   --file-page-max-width: 1787px;
   --file-max-height: 788px;
@@ -23,9 +24,15 @@ $large-breakpoint: 1921px;
 
   --video-aspect-ratio: 56.25%; // 9 x 16
 
+  --channel-thumbnail-size: 10rem;
+
   // Text
   --text-max-width: 660px;
   --text-link-padding: 4px;
+
+  // Tabs
+  --tab-indicator-size: 0.5rem;
+  --tab-header-size: 1.5rem; // Needs to be static so the animated styling always works
 
   // Input
   --input-border-size: 1px;
@@ -44,8 +51,9 @@ $large-breakpoint: 1921px;
   --search-modal-input-height: 70px;
 
   // Card
-  --card-radius: 2px;
+  --card-radius: 5px;
   --card-max-width: 1000px;
+  --card-box-shadow: 0px 8px 20px;
 
   // File
   --file-tile-media-height: 125px;
@@ -62,10 +70,11 @@ $large-breakpoint: 1921px;
   --modal-width: 440px;
 
   // Animation :)
-  --animation-duration: 0.3s;
-  --animation-style: cubic-bezier(0.55, 0, 0.1, 1);
+  --animation-duration: 0.2s;
+  --animation-style: ease-in-out;
 
   // Image
   --thumbnail-preview-height: 100px;
   --thumbnail-preview-width: 177px;
+  --cover-photo-height: 250px;
 }

@@ -1,13 +1,17 @@
 .main-wrapper {
   position: absolute;
   top: var(--header-height);
-  left: var(--side-nav-width);
   min-height: calc(100% - var(--header-height));
-  width: calc(100% - var(--side-nav-width));
+  width: 100%;
   background-color: mix($lbry-white, $lbry-gray-1, 70%);
 
   html[data-mode='dark'] & {
     background-color: $lbry-black;
+  }
+
+  @media (min-width: 600px) {
+    left: var(--side-nav-width);
+    width: calc(100% - var(--side-nav-width));
   }
 }
 
@@ -19,13 +23,23 @@
 
 .main--contained {
   max-width: 900px;
+  padding: var(--spacing-main-padding);
 }
 
-.main:not(.main--no-padding) {
-  padding: var(--spacing-vertical-large);
+.main--not-contained {
+  padding: var(--spacing-main-padding);
+}
+
+.main--no-padding {
+  padding: 0;
+}
+
+.main--no-padding-top {
+  padding-top: 0;
 }
 
 .main--file-page {
+  padding: var(--spacing-main-padding);
   max-width: var(--file-page-max-width);
   display: grid;
   grid-gap: var(--spacing-vertical-large);
@@ -35,7 +49,7 @@
     'content content'
     'info    related';
 
-  @media (min-width: 1470px) {
+  @media (min-width: 1300px) {
     grid-template-areas:
       'content related'
       'info    related';
@@ -59,4 +73,17 @@
   margin-top: 100px;
   margin-bottom: 100px;
   text-align: center;
+}
+
+// On pages that are not contained, they still might want to have items inside the page
+// that extend the full width ex: cover photo
+// But the components inside of those pages should be still have "page" padding
+.main__item--extend-outside {
+  $main-width: calc(100vw - var(--side-nav-width));
+  width: $main-width;
+  position: relative;
+  left: 50%;
+  right: 50%;
+  margin-left: calc(-50vw + (var(--side-nav-width) * 0.5));
+  margin-right: calc(-50vw + (var(--side-nav-width) * 0.5));
 }

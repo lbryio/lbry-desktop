@@ -1,143 +1,86 @@
 // @flow
-import * as icons from 'constants/icons';
-import * as MODALS from 'constants/modal_types';
-import React, { useEffect } from 'react';
-import BusyIndicator from 'component/common/busy-indicator';
-import { FormField, Form } from 'component/common/form';
-import ReactPaginate from 'react-paginate';
-import SubscribeButton from 'component/subscribeButton';
+import React from 'react';
+import { parseURI } from 'lbry-redux';
 import Page from 'component/page';
-import FileList from 'component/fileList';
-import HiddenNsfwClaims from 'component/hiddenNsfwClaims';
-import Button from 'component/button';
-import { withRouter } from 'react-router-dom';
+import SubscribeButton from 'component/subscribeButton';
+import ShareButton from 'component/shareButton';
+import { Tabs, TabList, Tab, TabPanels, TabPanel } from 'component/common/tabs';
+import { withRouter } from 'react-router';
+import { formatLbryUriForWeb } from 'util/uri';
+import ChannelContent from 'component/channelContent';
+import ChannelAbout from 'component/channelAbout';
+import ChannelThumbnail from 'component/channelThumbnail';
+
+const PAGE_VIEW_QUERY = `view`;
+const ABOUT_PAGE = `about`;
 
 type Props = {
   uri: string,
-  totalPages: number,
-  fetching: boolean,
-  params: { page: number },
-  claim: ChannelClaim,
-  claimsInChannel: Array<StreamClaim>,
-  channelIsMine: boolean,
-  fetchClaims: (string, number) => void,
+  title: ?string,
+  cover: ?string,
+  thumbnail: ?string,
+  location: { search: string },
   history: { push: string => void },
-  openModal: (id: string, { uri: string }) => void,
-  location: UrlLocation,
+  match: { params: { attribute: ?string } },
 };
 
 function ChannelPage(props: Props) {
-  const {
-    uri,
-    fetching,
-    claimsInChannel,
-    claim,
-    totalPages,
-    channelIsMine,
-    openModal,
-    fetchClaims,
-    location,
-    history,
-  } = props;
-
-  const { name, permanent_url: permanentUrl } = claim;
+  const { uri, title, cover, history, location } = props;
+  const { channelName, claimName, claimId } = parseURI(uri);
   const { search } = location;
   const urlParams = new URLSearchParams(search);
-  const page = Number(urlParams.get('page')) || 1;
+  const currentView = urlParams.get(PAGE_VIEW_QUERY) || undefined;
 
-  useEffect(() => {
-    // Fetch new claims if the channel or page number changes
-    fetchClaims(uri, page);
-  }, [uri, page]);
-
-  const changePage = (pageNumber: number) => {
-    if (!page && pageNumber === 1) {
-      return;
+  // If a user changes tabs, update the url so it stays on the same page if they refresh.
+  // We don't want to use links here because we can't animate the tab change and using links
+  // would alter the Tab label's role attribute, which should stay role="tab" to work with keyboards/screen readers.
+  const tabIndex = currentView === ABOUT_PAGE ? 1 : 0;
+  const onTabChange = newTabIndex => {
+    let url = formatLbryUriForWeb(uri);
+    if (newTabIndex !== 0) {
+      url += `?${PAGE_VIEW_QUERY}=${ABOUT_PAGE}`;
     }
 
-    history.push(`?page=${pageNumber}`);
-  };
-
-  const paginate = (e: SyntheticKeyboardEvent<*>) => {
-    // Change page if enter was pressed, and the given page is between the first and the last page
-    const pageFromInput = Number(e.currentTarget.value);
-
-    if (
-      pageFromInput &&
-      e.keyCode === 13 &&
-      !Number.isNaN(pageFromInput) &&
-      pageFromInput > 0 &&
-      pageFromInput <= totalPages
-    ) {
-      changePage(pageFromInput);
-    }
+    history.push(url);
   };
 
   return (
-    <Page notContained>
-      <header className="channel-info">
-        <h1 className="media__title media__title--large">
-          {name}
-          {fetching && <BusyIndicator />}
-        </h1>
-        <span>{permanentUrl}</span>
+    <Page notContained className="main--no-padding-top">
+      <header className="channel__cover main__item--extend-outside">
+        {cover && <img className="channel__cover--custom" src={cover} />}
 
-        <div className="channel-info__actions__group">
-          <SubscribeButton uri={permanentUrl} channelName={name} />
-          <Button
-            button="alt"
-            icon={icons.SHARE}
-            label={__('Share Channel')}
-            onClick={() =>
-              openModal(MODALS.SOCIAL_SHARE, { uri, speechShareable: true, isChannel: true })
-            }
-          />
+        <div className="channel__primary-info">
+          <ChannelThumbnail uri={uri} />
+
+          <div>
+            <h1 className="channel__title">{title || channelName}</h1>
+            <h2 className="channel__url">
+              {claimName}
+              {claimId && `#${claimId}`}
+            </h2>
+          </div>
         </div>
       </header>
 
-      <section className="media-group--list">
-        {claimsInChannel && claimsInChannel.length ? (
-          <FileList sortByHeight hideFilter fileInfos={claimsInChannel} />
-        ) : (
-          !fetching && <span className="empty">{__('No content found.')}</span>
-        )}
-      </section>
+      <Tabs onChange={onTabChange} index={tabIndex}>
+        <TabList className="main__item--extend-outside tabs__list--channel-page">
+          <Tab>{__('Content')}</Tab>
+          <Tab>{__('About')}</Tab>
+          <div className="card__actions">
+            <ShareButton uri={uri} />
+            <SubscribeButton uri={uri} />
+          </div>
+        </TabList>
 
-      {(!fetching || (claimsInChannel && claimsInChannel.length)) && totalPages > 1 && (
-        <Form>
-          <fieldset-group class="fieldset-group--smushed fieldgroup--paginate">
-            <fieldset-section>
-              <ReactPaginate
-                pageCount={totalPages}
-                pageRangeDisplayed={2}
-                previousLabel="‹"
-                nextLabel="›"
-                activeClassName="pagination__item--selected"
-                pageClassName="pagination__item"
-                previousClassName="pagination__item pagination__item--previous"
-                nextClassName="pagination__item pagination__item--next"
-                breakClassName="pagination__item pagination__item--break"
-                marginPagesDisplayed={2}
-                onPageChange={e => changePage(e.selected + 1)}
-                forcePage={page - 1}
-                initialPage={page - 1}
-                disableInitialCallback
-                containerClassName="pagination"
-              />
-            </fieldset-section>
-
-            <FormField
-              className="paginate-channel"
-              onKeyUp={e => paginate(e)}
-              label={__('Go to page:')}
-              type="text"
-              name="paginate-file"
-            />
-          </fieldset-group>
-        </Form>
-      )}
-
-      {!channelIsMine && <HiddenNsfwClaims className="card__content help" uri={uri} />}
+        <TabPanels>
+          <TabPanel>
+            <ChannelContent uri={uri} />
+          </TabPanel>
+          <TabPanel>
+            <ChannelAbout uri={uri} />
+          </TabPanel>
+        </TabPanels>
+      </Tabs>
     </Page>
   );
 }
