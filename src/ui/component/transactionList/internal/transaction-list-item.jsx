@@ -43,7 +43,6 @@ class TransactionListItem extends React.PureComponent<Props> {
   render() {
     const { reward, transaction, isRevokeable } = this.props;
     const { amount, claim_id: claimId, claim_name: name, date, fee, txid, type } = transaction;
-
     const dateFormat = {
       month: 'short',
       day: 'numeric',

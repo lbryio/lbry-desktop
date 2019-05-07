@@ -238,7 +238,7 @@ class FilePage extends React.Component<Props> {
               <div className="media__subtitle__channel">
                 <UriIndicator uri={uri} link />
               </div>
-              {__('Published on')} <DateTime block={height} show={DateTime.SHOW_DATE} />
+              {__('Published on')} <DateTime uri={uri} show={DateTime.SHOW_DATE} />
             </div>
 
             {claimIsMine && (

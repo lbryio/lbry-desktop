@@ -169,7 +169,7 @@ class FileTile extends React.PureComponent<Props> {
               {size !== 'small' ? (
                 <div className="media__subtext">
                   {__('Published to')} <UriIndicator uri={uri} link />{' '}
-                  <DateTime timeAgo block={height} />
+                  <DateTime timeAgo uri={uri} />
                 </div>
               ) : (
                 <Fragment>
