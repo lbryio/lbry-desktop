@@ -1,16 +1,14 @@
 // @flow
 import type { ElementRef } from 'react';
-import React, { Suspense } from 'react';
+import React from 'react';
 import ReactDOMServer from 'react-dom/server';
-import MarkdownPreview from 'component/common/markdown-preview';
 import 'easymde/dist/easymde.min.css';
 import Toggle from 'react-toggle';
 import { openEditorMenu, stopContextMenu } from 'util/context-menu';
-
-const SimpleMDE = React.lazy(() =>
-  import(/* webpackChunkName: "SimpleMDE" */
-  'react-simplemde-editor')
-);
+import SimpleMDE from 'react-simplemde-editor';
+// It would be nice to use the lazy markdown preview component but react-dom/server
+// doesn't support it yet. We use that for renderToString on our markdown text
+import MarkdownPreview from 'component/common/markdown-preview-internal';
 
 type Props = {
   name: string,
@@ -137,21 +135,20 @@ export class FormField extends React.PureComponent<Props> {
           <div className="form-field--SimpleMDE" onContextMenu={stopContextMenu}>
             <fieldset-section>
               <label htmlFor={name}>{label}</label>
-              <Suspense fallback={<div />}>
-                <SimpleMDE
-                  {...inputProps}
-                  id={name}
-                  type="textarea"
-                  events={handleEvents}
-                  options={{
-                    hideIcons: ['heading', 'image', 'fullscreen', 'side-by-side'],
-                    previewRender(plainText) {
-                      const preview = <MarkdownPreview content={plainText} />;
-                      return ReactDOMServer.renderToString(preview);
-                    },
-                  }}
-                />
-              </Suspense>
+              <SimpleMDE
+                {...inputProps}
+                id={name}
+                type="textarea"
+                events={handleEvents}
+                options={{
+                  spellChecker: false,
+                  hideIcons: ['heading', 'image', 'fullscreen', 'side-by-side'],
+                  previewRender(plainText) {
+                    const preview = <MarkdownPreview content={plainText} />;
+                    return ReactDOMServer.renderToString(preview);
+                  },
+                }}
+              />
             </fieldset-section>
           </div>
         );
