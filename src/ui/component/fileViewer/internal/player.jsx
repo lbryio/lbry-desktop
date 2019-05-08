@@ -39,7 +39,18 @@ type State = {
 
 class MediaPlayer extends React.PureComponent<Props, State> {
   static SANDBOX_TYPES = ['application/x-lbry', 'application/x-ext-lbry'];
-  static FILE_MEDIA_TYPES = ['text', 'script', 'e-book', 'comic-book', 'document', '3D-file', 'video', 'audio'];
+  static FILE_MEDIA_TYPES = [
+    'text',
+    'script',
+    'e-book',
+    'comic-book',
+    'document',
+    '3D-file',
+    // @if TARGET='web'
+    'video',
+    'audio',
+    // @endif
+  ];
   static SANDBOX_SET_BASE_URL = 'http://localhost:5278/set/';
   static SANDBOX_CONTENT_BASE_URL = 'http://localhost:5278';
 
