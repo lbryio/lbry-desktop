@@ -70,7 +70,7 @@ class PublishForm extends React.PureComponent<Props> {
     (this: any).getNewUri = this.getNewUri.bind(this);
   }
 
-  componentWillMount() {
+  componentDidMount() {
     const { thumbnail } = this.props;
     if (!thumbnail) {
       this.props.resetThumbnailStatus();
@@ -190,7 +190,7 @@ class PublishForm extends React.PureComponent<Props> {
   }
 
   handlePublish() {
-    const { filePath, licenseType, licenseUrl, otherLicenseDescription, myClaimForUri, publish } = this.props;
+    const { filePath, licenseType, licenseUrl, otherLicenseDescription, publish } = this.props;
 
     let publishingLicense;
     switch (licenseType) {
@@ -264,7 +264,7 @@ class PublishForm extends React.PureComponent<Props> {
     // If there is an error it will be presented as an inline error as well
     return (
       !isFormValid && (
-        <div className="card__content card__subtitle error-text">
+        <div className="card__content error-text">
           {!title && <div>{__('A title is required')}</div>}
           {!name && <div>{__('A URL is required')}</div>}
           {name && nameError && <div>{__('The URL you created is not valid')}</div>}
@@ -581,22 +581,17 @@ class PublishForm extends React.PureComponent<Props> {
             </section>
 
             <section className="card card--section">
-              <div className="card__content">
+              <div className="card__actions">
+                <Submit
+                  label={submitLabel}
+                  disabled={formDisabled || !formValid || uploadThumbnailStatus === THUMBNAIL_STATUSES.IN_PROGRESS}
+                />
+                <Button button="link" onClick={this.handleCancelPublish} label={__('Cancel')} />
+              </div>
+              <p className="help">
                 {__('By continuing, you accept the')}{' '}
                 <Button button="link" href="https://www.lbry.com/termsofservice" label={__('LBRY Terms of Service')} />.
-              </div>
-            </section>
-
-            <section className="card card--section">
-              <div className="card__content">
-                <div className="card__actions">
-                  <Submit
-                    label={submitLabel}
-                    disabled={formDisabled || !formValid || uploadThumbnailStatus === THUMBNAIL_STATUSES.IN_PROGRESS}
-                  />
-                  <Button button="link" onClick={this.handleCancelPublish} label={__('Cancel')} />
-                </div>
-              </div>
+              </p>
             </section>
           </div>
 

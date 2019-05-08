@@ -35,17 +35,6 @@
 }
 
 .media-tile--large.media-placeholder {
-  .media__title,
-  .media__channel,
-  .media__subtitle {
-    // display: block;
-    // padding-left: var(--spacing-vertical-large);
-  }
-
-  .media__thumb {
-    // margin-right: var(--spacing-vertical-large);
-  }
-
   .media__title {
     width: 60%;
     height: 3rem;

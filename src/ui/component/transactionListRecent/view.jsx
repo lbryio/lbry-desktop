@@ -31,11 +31,6 @@ class TransactionListRecent extends React.PureComponent<Props> {
             {__('Recent Transactions')}
             <RefreshTransactionButton />
           </h2>
-
-          <p className="card__subtitle">
-            {__('To view all of your transactions, navigate to the')}{' '}
-            <Button button="link" navigate="/$/transactions" label={__('transactions page')} />.
-          </p>
         </header>
 
         {fetchingTransactions && !hasTransactions && (

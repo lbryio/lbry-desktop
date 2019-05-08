@@ -7,7 +7,6 @@ import CreditAmount from 'component/common/credit-amount';
 import DateTime from 'component/dateTime';
 import Button from 'component/button';
 import { buildURI } from 'lbry-redux';
-import { formatLbryUriForWeb } from 'util/uri';
 
 type Props = {
   transaction: Transaction,
@@ -67,7 +66,7 @@ class TransactionListItem extends React.PureComponent<Props> {
         <td className="table__item--actionable">
           {reward && <span>{reward.reward_title}</span>}
           {name && claimId && (
-            <Button constrict button="link" navigate={buildURI({ claimName: name, claimId })}>
+            <Button button="link" navigate={buildURI({ claimName: name, claimId })}>
               {name}
             </Button>
           )}

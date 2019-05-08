@@ -159,7 +159,6 @@ class SettingsPage extends React.PureComponent<Props, State> {
             <section className="card card--section">
               <header className="card__header">
                 <h2 className="card__title">{__('Download Directory')}</h2>
-                <p className="card__subtitle">{__('LBRY downloads will be saved here.')}</p>
               </header>
 
               <div className="card__content">
@@ -171,6 +170,7 @@ class SettingsPage extends React.PureComponent<Props, State> {
                       setDaemonSetting('download_dir', newDirectory);
                     }}
                   />
+                  <p className="help">{__('LBRY downloads will be saved here.')}</p>
                 </Form>
               </div>
             </section>
@@ -178,9 +178,6 @@ class SettingsPage extends React.PureComponent<Props, State> {
             <section className="card card--section">
               <header className="card__header">
                 <h2 className="card__title">{__('Max Purchase Price')}</h2>
-                <p className="card__subtitle">
-                  {__('This will prevent you from purchasing any content over a certain cost, as a safety measure.')}
-                </p>
               </header>
 
               <Form className="card__content">
@@ -212,15 +209,16 @@ class SettingsPage extends React.PureComponent<Props, State> {
                     price={daemonSettings.max_key_fee ? daemonSettings.max_key_fee : defaultMaxKeyFee}
                   />
                 )}
+
+                <p className="help">
+                  {__('This will prevent you from purchasing any content over a certain cost, as a safety measure.')}
+                </p>
               </Form>
             </section>
 
             <section className="card card--section">
               <header className="card__header">
                 <h2 className="card__title">{__('Purchase Confirmations')}</h2>
-                <p className="card__subtitle">
-                  {__("When this option is chosen, LBRY won't ask you to confirm downloads below your chosen price.")}
-                </p>
               </header>
 
               <Form className="card__content">
@@ -251,6 +249,10 @@ class SettingsPage extends React.PureComponent<Props, State> {
                     price={instantPurchaseMax}
                   />
                 )}
+
+                <p className="help">
+                  {__("When this option is chosen, LBRY won't ask you to confirm downloads below your chosen price.")}
+                </p>
               </Form>
             </section>
 
@@ -397,10 +399,11 @@ class SettingsPage extends React.PureComponent<Props, State> {
             <section className="card card--section">
               <header className="card__header">
                 <h2 className="card__title">{__('Application Cache')}</h2>
-                <p className="card__subtitle">
-                  {__('This will clear the application cache. Your wallet will not be affected.')}
-                </p>
               </header>
+
+              <p className="help--warning">
+                {__('This will clear the application cache. Your wallet will not be affected.')}
+              </p>
 
               <div className="card__content">
                 <Button

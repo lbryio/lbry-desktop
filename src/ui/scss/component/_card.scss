@@ -4,12 +4,12 @@
   margin-bottom: var(--spacing-vertical-xlarge);
   position: relative;
   border-radius: var(--card-radius);
-  box-shadow: var(--box-shadow) $lbry-gray-1;
+  box-shadow: var(--card-box-shadow) $lbry-gray-1;
 
   html[data-mode='dark'] & {
     background-color: rgba($lbry-white, 0.1);
     border-color: rgba($lbry-white, 0.1);
-    box-shadow: var(--box-shadow) darken($lbry-gray-1, 80%);
+    box-shadow: var(--card-box-shadow) darken($lbry-gray-1, 80%);
   }
 }
 
@@ -199,6 +199,9 @@
 //  S U B T I T L E
 
 .card__subtitle {
+  @extend .help;
+  background-color: lighten($lbry-gray-1, 7%);
+  color: darken($lbry-gray-5, 30%);
   font-size: 1.15rem;
   margin-bottom: var(--spacing-vertical-small);
 
@@ -210,6 +213,10 @@
     bottom: -0.12rem;
     position: relative;
   }
+
+  [data-mode='dark'] & {
+    background-color: darken($lbry-gray-5, 20%);
+  }
 }
 
 //  C A R D
@@ -218,7 +225,7 @@
 .card__title {
   font-size: 2rem;
   font-weight: 600;
-  padding-bottom: var(--spacing-vertical-medium);
+  margin-bottom: var(--spacing-vertical-medium);
 
   + .card__content {
     margin-top: var(--spacing-vertical-medium);

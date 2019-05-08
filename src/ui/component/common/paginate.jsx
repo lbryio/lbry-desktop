@@ -40,12 +40,13 @@ function Paginate(props: Props) {
     }
   }
 
-  if (totalPages <= 1 || loading) {
-    return null;
-  }
-
   return (
-    <Form>
+    // Hide the paginate controls if we are loading or there is only one page
+    // This is a little weird but it makes the <Paginate /> component
+    // really nice to work with. It will always handle fetching your data,
+    // even if the data returned doesn't have more than one page
+    // <Paginate onPageChange={(page) => fetchStuff(page)} />
+    <Form style={totalPages <= 1 || loading ? { display: 'none' } : null}>
       <fieldset-group class="fieldset-group--smushed fieldgroup--paginate">
         <fieldset-section>
           <ReactPaginate

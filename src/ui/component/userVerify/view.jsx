@@ -28,7 +28,7 @@ class UserVerify extends React.PureComponent<Props> {
     return (
       <React.Fragment>
         <section className="card card--section">
-          <header className="card__header">
+          <header className="card__header--flat">
             <h1 className="card__title">{__('Final Human Proof')}</h1>
             <p className="card__subtitle">
               Finally, please complete <strong>one and only one</strong> of the options below.
