@@ -36,7 +36,7 @@ export default appState => {
   };
   const lbryProto = 'lbry://';
   const lbryProtoQ = 'lbry://?';
-  const rendererURL = isDev ? `http://localhost:8080` : `file://${__dirname}/index.html`;
+  const rendererURL = isDev ? `http://localhost:${WEBPACK_PORT}` : `file://${__dirname}/index.html`;
 
   let window = new BrowserWindow(windowConfiguration);
 

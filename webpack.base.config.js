@@ -12,6 +12,7 @@ const { ifProduction } = getIfUtils(NODE_ENV);
 const UI_ROOT = path.resolve(__dirname, 'src/ui/');
 const STATIC_ROOT = path.resolve(__dirname, 'static/');
 const DIST_ROOT = path.resolve(__dirname, 'dist/');
+const WEBPACK_PORT = 9090;
 
 console.log(ifProduction('production', 'development'));
 
@@ -31,6 +32,10 @@ let baseConfig = {
   },
   node: {
     __dirname: false,
+  },
+  devServer: {
+    historyApiFallback: true,
+    port: WEBPACK_PORT,
   },
   module: {
     rules: [
@@ -117,6 +122,7 @@ let baseConfig = {
       'process.env.NODE_ENV': JSON.stringify(NODE_ENV),
       'process.env.SDK_API_URL': JSON.stringify(process.env.SDK_API_URL),
       'process.env.LBRY_API_URL': JSON.stringify(process.env.LBRY_API_URL),
+      WEBPACK_PORT,
     }),
   ],
 };

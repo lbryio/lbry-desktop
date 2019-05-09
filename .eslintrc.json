@@ -19,7 +19,8 @@
     "__": true,
     "__n": true,
     "app": true,
-    "IS_WEB": true
+    "IS_WEB": true,
+    "WEBPACK_PORT": true
   },
   "rules": {
     "comma-dangle": ["error", "always-multiline"],

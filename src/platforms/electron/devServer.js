@@ -1,5 +1,3 @@
-const fs = require('fs');
-const path = require('path');
 const chalk = require('chalk');
 const webpack = require('webpack');
 const merge = require('webpack-merge');
@@ -7,12 +5,9 @@ const middleware = require('webpack-dev-middleware');
 const express = require('express');
 const app = express();
 
-// TODO: Spawn separate threads so realtime status logging can be used
-// without overwriting information/execptions logged by the compilers
-const logRealtime = str => {
-  let lineCount = (str.match(/\n/) || []).length + 1;
-  console.log('\u001B[' + lineCount + 'F\u001B[G\u001B[2K' + str);
-};
+// Ideally this would come from the same source that sets this port in webpack.web.config.js
+// but we can't inject a variable into this file because it is not being touched by webpack
+const WEBPACK_PORT = 9090;
 
 console.log(
   chalk.magenta(`Compiling ${chalk.underline('main')} and ${chalk.underline('render')}, this will take a while.`)
@@ -46,8 +41,8 @@ app.use(require('webpack-hot-middleware')(renderCompiler));
 app.use(renderInstance);
 app.use(express.static('dist/electron/static'));
 
-app.listen(8080, () => {
-  console.log(chalk.yellow.bold('Renderer listening on port 8080 (still compiling)'));
+app.listen(WEBPACK_PORT, () => {
+  console.log(chalk.yellow.bold('Renderer listening on port 9090 (still compiling)'));
 });
 
 mainInstance.waitUntilValid(() => console.log(chalk.green(`${chalk.underline('main')} compilation complete.`)));
