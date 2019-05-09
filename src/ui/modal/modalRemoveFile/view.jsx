@@ -4,6 +4,7 @@ import { Modal } from 'modal/modal';
 import { FormField } from 'component/common/form';
 
 type Props = {
+  claim: StreamClaim,
   claimIsMine: boolean,
   closeModal: () => void,
   deleteFile: (string, boolean, boolean) => void,
@@ -45,10 +46,12 @@ class ModalRemoveFile extends React.PureComponent<Props, State> {
   }
 
   render() {
-    const { claimIsMine, closeModal, deleteFile, fileInfo, title } = this.props;
+    const { claim, claimIsMine, closeModal, deleteFile, fileInfo, title } = this.props;
     const { deleteChecked, abandonClaimChecked } = this.state;
 
-    const outpoint = fileInfo ? fileInfo.outpoint : '';
+    const { txid, nout } = claim;
+
+    const outpoint = fileInfo ? fileInfo.outpoint : `${txid}:${nout}`;
     return (
       <Modal
         isOpen

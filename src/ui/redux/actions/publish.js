@@ -11,6 +11,7 @@ import {
   selectPendingById,
   selectMyClaimsWithoutChannels,
   doError,
+  isClaimNsfw,
 } from 'lbry-redux';
 import { doOpenModal } from 'redux/actions/app';
 import { selectosNotificationsEnabled } from 'redux/selectors/settings';
@@ -152,15 +153,20 @@ export const doPrepareEdit = (claim: StreamClaim, uri: string) => (dispatch: Dis
     contentIsFree: !fee.amount,
     author,
     description,
-    fee,
+    fee: { amount: fee.amount, currency: fee.currency },
     languages,
     thumbnail: thumbnail ? thumbnail.url : null,
     title,
     uri,
     uploadThumbnailStatus: thumbnail ? THUMBNAIL_STATUSES.MANUAL : undefined,
     licenseUrl,
-    replace: true,
   };
+
+  if (claim && isClaimNsfw(claim)) {
+    publishData.nsfw = true;
+  } else {
+    publishData.nsfw = false;
+  }
 
   // Make sure custom liscence's are mapped properly
   // If the license isn't one of the standard licenses, map the custom license and description/url
@@ -200,9 +206,11 @@ export const doPublish = (params: PublishParams) => (dispatch: Dispatch, getStat
     channel,
     title,
     contentIsFree,
-    fee,
+    feeAmount,
+    feeCurrency,
     uri,
     nsfw,
+    claim,
   } = params;
 
   // get the claim id from the channel name, we will use that instead
@@ -214,36 +222,56 @@ export const doPublish = (params: PublishParams) => (dispatch: Dispatch, getStat
     channel_id?: string,
     bid: number,
     file_path?: string,
-    fee?: { amount: string, currency: string },
     tags: Array<string>,
+    locations?: Array<Location>,
+    license_url: string,
+    thumbnail_url: string,
+    release_time: number,
   } = {
     name,
     bid: creditsToString(bid),
     title,
     license,
-    license_url: licenseUrl,
     languages: [language],
     description,
-    thumbnail_url: thumbnail,
-    tags: [],
+    tags: claim.value.tags,
+    locations: claim.value.locations,
   };
 
   // Temporary solution to keep the same publish flow with the new tags api
   // Eventually we will allow users to enter their own tags on publish
   // `nsfw` will probably be removed
+
+  if (licenseUrl) {
+    publishPayload.license_url = licenseUrl;
+  }
+
+  if (thumbnail) {
+    publishPayload.thumbnail_url = thumbnail;
+  }
+
+  if (claim.value.release_time) {
+    publishPayload.release_time = Number(claim.value.release_time);
+  }
+
   if (nsfw) {
-    publishPayload.tags.push('mature');
+    if (!publishPayload.tags.includes('mature')) {
+      publishPayload.tags.push('mature');
+    }
+  } else {
+    const remove = publishPayload.tags.indexOf('mature');
+    if (remove > -1) {
+      publishPayload.tags.splice(remove, 1);
+    }
   }
 
   if (channelId) {
     publishPayload.channel_id = channelId;
   }
 
-  if (fee) {
-    publishPayload.fee = {
-      currency: fee.currency,
-      amount: creditsToString(fee.amount),
-    };
+  if (!contentIsFree && (feeCurrency && Number(feeAmount) > 0)) {
+    publishPayload.fee_currency = feeCurrency;
+    publishPayload.fee_amount = creditsToString(feeAmount);
   }
 
   // Only pass file on new uploads, not metadata only edits.
