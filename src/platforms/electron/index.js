@@ -2,7 +2,6 @@
 import '@babel/polyfill';
 import keytar from 'keytar';
 import SemVer from 'semver';
-import url from 'url';
 import https from 'https';
 import { app, dialog, ipcMain, session, shell } from 'electron';
 import { autoUpdater } from 'electron-updater';
@@ -189,6 +188,20 @@ app.on('will-quit', event => {
   if (rendererWindow) {
     rendererWindow = null;
   }
+});
+
+app.on('will-finish-launching', () => {
+  // Protocol handler for macOS
+  app.on('open-url', (event, URL) => {
+    event.preventDefault();
+
+    if (rendererWindow) {
+      rendererWindow.webContents.send('open-uri-requested', URL);
+      rendererWindow.show();
+    } else {
+      appState.macDeepLinkingURI = URL;
+    }
+  });
 });
 
 app.on('before-quit', () => {
