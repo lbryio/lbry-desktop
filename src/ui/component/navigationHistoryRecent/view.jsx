@@ -16,7 +16,7 @@ export default function NavigationHistoryRecent(props: Props) {
   const { history = [] } = props;
 
   return history.length ? (
-    <div className="item-list">
+    <div className="card item-list">
       <section className="card__content">
         {history.map(({ lastViewed, uri }) => (
           <NavigationHistoryItem slim key={uri} uri={uri} lastViewed={lastViewed} />

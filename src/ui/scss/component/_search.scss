@@ -1,5 +1,5 @@
 .search__header {
-  padding: var(--spacing-vertical-large);
+  margin-bottom: var(--spacing-vertical-large);
 
   .placeholder {
     background-color: rgba($lbry-white, 0.1);
@@ -22,10 +22,6 @@
   > * {
     margin-left: var(--spacing-vertical-small);
   }
-}
-
-.search__results-wrapper {
-  margin: var(--spacing-vertical-large);
 }
 
 .search__results-section {
