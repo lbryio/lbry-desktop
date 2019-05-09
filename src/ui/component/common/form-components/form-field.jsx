@@ -6,8 +6,6 @@ import 'easymde/dist/easymde.min.css';
 import Toggle from 'react-toggle';
 import { openEditorMenu, stopContextMenu } from 'util/context-menu';
 import SimpleMDE from 'react-simplemde-editor';
-// It would be nice to use the lazy markdown preview component but react-dom/server
-// doesn't support it yet. We use that for renderToString on our markdown text
 import MarkdownPreview from 'component/common/markdown-preview-internal';
 
 type Props = {

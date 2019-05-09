@@ -34,6 +34,8 @@ type State = {
     contentType?: string,
     downloadPath?: string,
     fileType?: string,
+    // Just using `any` because flow isn't working with `fs.createReadStream`
+    stream?: ({}) => any,
   },
 };
 
@@ -287,6 +289,10 @@ class MediaPlayer extends React.PureComponent<Props, State> {
       contentType,
       downloadPath,
       fileType: path.extname(fileName).substring(1),
+      // Readable stream from file
+      // @if TARGET='app'
+      stream: opts => fs.createReadStream(downloadPath, opts),
+      // @endif
     };
 
     // Update state
