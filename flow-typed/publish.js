@@ -4,7 +4,7 @@ declare type UpdatePublishFormData = {
   filePath?: string,
   contentIsFree?: boolean,
   fee?: {
-    amount: string,
+    amount: number,
     currency: string,
   },
   title?: string,
@@ -46,8 +46,6 @@ declare type PublishParams = {
     amount: string,
     currency: string,
   },
-  feeCurrency: string,
-  feeAmount: string,
   claim: StreamClaim,
   nsfw: boolean,
 };

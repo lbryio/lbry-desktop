@@ -160,13 +160,8 @@ export const doPrepareEdit = (claim: StreamClaim, uri: string) => (dispatch: Dis
     uri,
     uploadThumbnailStatus: thumbnail ? THUMBNAIL_STATUSES.MANUAL : undefined,
     licenseUrl,
+    nsfw: isClaimNsfw(claim),
   };
-
-  if (claim && isClaimNsfw(claim)) {
-    publishData.nsfw = true;
-  } else {
-    publishData.nsfw = false;
-  }
 
   // Make sure custom liscence's are mapped properly
   // If the license isn't one of the standard licenses, map the custom license and description/url
@@ -221,11 +216,13 @@ export const doPublish = (params: PublishParams) => (dispatch: Dispatch, getStat
     channel_id?: string,
     bid: number,
     file_path?: string,
-    tags?: Array<string>,
+    tags: Array<string>,
     locations?: Array<Location>,
     license_url?: string,
     thumbnail_url?: string,
     release_time?: number,
+    fee_currency?: string,
+    fee_amount?: string,
   } = {
     name,
     bid: creditsToString(bid),
@@ -250,7 +247,7 @@ export const doPublish = (params: PublishParams) => (dispatch: Dispatch, getStat
   }
 
   if (claim && claim.value.release_time) {
-    publishPayload.release_time = claim && Number(claim.value.release_time);
+    publishPayload.release_time = Number(claim.value.release_time);
   }
 
   if (nsfw) {
@@ -258,9 +255,9 @@ export const doPublish = (params: PublishParams) => (dispatch: Dispatch, getStat
       publishPayload.tags.push('mature');
     }
   } else {
-    const remove = publishPayload.tags.indexOf('mature');
-    if (remove > -1) {
-      publishPayload.tags.splice(remove, 1);
+    const indexToRemove = publishPayload.tags.indexOf('mature');
+    if (indexToRemove > -1) {
+      publishPayload.tags.splice(indexToRemove, 1);
     }
   }
 
@@ -268,7 +265,7 @@ export const doPublish = (params: PublishParams) => (dispatch: Dispatch, getStat
     publishPayload.channel_id = channelId;
   }
 
-  if (!contentIsFree && (fee.currency && Number(fee.amount) > 0)) {
+  if (!contentIsFree && fee && (fee.currency && Number(fee.amount) > 0)) {
     publishPayload.fee_currency = fee.currency;
     publishPayload.fee_amount = creditsToString(fee.amount);
   }
