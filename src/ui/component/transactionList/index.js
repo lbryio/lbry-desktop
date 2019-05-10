@@ -1,12 +1,12 @@
 import { connect } from 'react-redux';
 import { selectClaimedRewardsByTransactionId } from 'lbryinc';
 import { doOpenModal } from 'redux/actions/app';
-import { selectAllMyClaimsByOutpoint, selectTransactionListFilter, doSetTransactionListFilter } from 'lbry-redux';
+import { selectSupportsById, selectTransactionListFilter, doSetTransactionListFilter } from 'lbry-redux';
 import TransactionList from './view';
 
 const select = state => ({
   rewards: selectClaimedRewardsByTransactionId(state),
-  myClaims: selectAllMyClaimsByOutpoint(state),
+  mySupports: selectSupportsById(state),
   filterSetting: selectTransactionListFilter(state),
 });
 
