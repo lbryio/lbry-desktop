@@ -206,8 +206,7 @@ export const doPublish = (params: PublishParams) => (dispatch: Dispatch, getStat
     channel,
     title,
     contentIsFree,
-    feeAmount,
-    feeCurrency,
+    fee,
     uri,
     nsfw,
     claim,
@@ -234,7 +233,7 @@ export const doPublish = (params: PublishParams) => (dispatch: Dispatch, getStat
     license,
     languages: [language],
     description,
-    tags: claim && claim.value.tags,
+    tags: (claim && claim.value.tags) || [],
     locations: claim && claim.value.locations,
   };
 
@@ -255,11 +254,11 @@ export const doPublish = (params: PublishParams) => (dispatch: Dispatch, getStat
   }
 
   if (nsfw) {
-    if (publishPayload.tags && !publishPayload.tags.includes('mature')) {
+    if (!publishPayload.tags.includes('mature')) {
       publishPayload.tags.push('mature');
     }
   } else {
-    const remove = publishPayload.tags && publishPayload.tags.indexOf('mature');
+    const remove = publishPayload.tags.indexOf('mature');
     if (remove > -1) {
       publishPayload.tags.splice(remove, 1);
     }
@@ -269,9 +268,9 @@ export const doPublish = (params: PublishParams) => (dispatch: Dispatch, getStat
     publishPayload.channel_id = channelId;
   }
 
-  if (!contentIsFree && (feeCurrency && Number(feeAmount) > 0)) {
-    publishPayload.fee_currency = feeCurrency;
-    publishPayload.fee_amount = creditsToString(feeAmount);
+  if (!contentIsFree && (fee.currency && Number(fee.amount) > 0)) {
+    publishPayload.fee_currency = fee.currency;
+    publishPayload.fee_amount = creditsToString(fee.amount);
   }
 
   // Only pass file on new uploads, not metadata only edits.

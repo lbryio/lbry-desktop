@@ -71,9 +71,12 @@ class PublishForm extends React.PureComponent<Props> {
   }
 
   componentDidMount() {
-    const { thumbnail } = this.props;
+    const { thumbnail, name, channel, editingURI } = this.props;
     if (!thumbnail) {
       this.props.resetThumbnailStatus();
+    }
+    if (editingURI) {
+      this.getNewUri(name, channel);
     }
   }
 
@@ -156,7 +159,7 @@ class PublishForm extends React.PureComponent<Props> {
 
     let previousBidAmount = 0;
     if (myClaimForUri) {
-      previousBidAmount = myClaimForUri.amount;
+      previousBidAmount = Number(myClaimForUri.amount);
     }
 
     const totalAvailableBidAmount = previousBidAmount + balance;
@@ -217,8 +220,7 @@ class PublishForm extends React.PureComponent<Props> {
       otherLicenseDescription,
       name: this.props.name || undefined,
       contentIsFree: this.props.contentIsFree,
-      feeAmount: this.props.fee.amount,
-      feeCurrency: this.props.fee.currency,
+      fee: this.props.fee,
       uri: this.props.uri || undefined,
       channel: this.props.channel,
       isStillEditing: this.props.isStillEditing,
