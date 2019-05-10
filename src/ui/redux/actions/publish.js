@@ -43,7 +43,6 @@ export const doResetThumbnailStatus = () => (dispatch: Dispatch) => {
         data: {
           uploadThumbnailStatus: THUMBNAIL_STATUSES.READY,
           thumbnail: '',
-          nsfw: false,
         },
       });
     })
@@ -53,7 +52,6 @@ export const doResetThumbnailStatus = () => (dispatch: Dispatch) => {
         data: {
           uploadThumbnailStatus: THUMBNAIL_STATUSES.API_DOWN,
           thumbnail: '',
-          nsfw: false,
         },
       })
     );

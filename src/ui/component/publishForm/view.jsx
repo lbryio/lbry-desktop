@@ -29,7 +29,7 @@ type Props = {
   nsfw: boolean,
   contentIsFree: boolean,
   fee: {
-    amount: number,
+    amount: string,
     currency: string,
   },
   channel: string,
