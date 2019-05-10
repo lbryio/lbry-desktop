@@ -9,7 +9,7 @@ type PublishState = {
   editingURI: ?string,
   filePath: ?string,
   contentIsFree: boolean,
-  price: {
+  fee: {
     amount: number,
     currency: string,
   },
@@ -33,7 +33,7 @@ const defaultState: PublishState = {
   editingURI: undefined,
   filePath: undefined,
   contentIsFree: true,
-  price: {
+  fee: {
     amount: 1,
     currency: 'LBC',
   },

@@ -1,4 +1,3 @@
-import path from 'path';
 import { app, BrowserWindow, dialog, shell, screen } from 'electron';
 import isDev from 'electron-is-dev';
 import windowStateKeeper from 'electron-window-state';
@@ -28,7 +27,7 @@ export default appState => {
     // If state is undefined, create window as maximized.
     width: windowState.width === undefined ? width : windowState.width,
     height: windowState.height === undefined ? height : windowState.height,
-    icon: 'static/img/tray/default/tray.png',
+    icon: 'static/img/tray/windows/tray.png',
     webPreferences: {
       // Disable renderer process's webSecurity on development to enable CORS.
       webSecurity: !isDev,

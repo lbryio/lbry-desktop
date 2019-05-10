@@ -28,7 +28,7 @@ type Props = {
   language: string,
   nsfw: boolean,
   contentIsFree: boolean,
-  price: {
+  fee: {
     amount: number,
     currency: string,
   },
@@ -71,9 +71,12 @@ class PublishForm extends React.PureComponent<Props> {
   }
 
   componentDidMount() {
-    const { thumbnail } = this.props;
+    const { thumbnail, name, channel, editingURI } = this.props;
     if (!thumbnail) {
       this.props.resetThumbnailStatus();
+    }
+    if (editingURI) {
+      this.getNewUri(name, channel);
     }
   }
 
@@ -156,7 +159,7 @@ class PublishForm extends React.PureComponent<Props> {
 
     let previousBidAmount = 0;
     if (myClaimForUri) {
-      previousBidAmount = myClaimForUri.amount;
+      previousBidAmount = Number(myClaimForUri.amount);
     }
 
     const totalAvailableBidAmount = previousBidAmount + balance;
@@ -217,10 +220,11 @@ class PublishForm extends React.PureComponent<Props> {
       otherLicenseDescription,
       name: this.props.name || undefined,
       contentIsFree: this.props.contentIsFree,
-      price: this.props.price,
+      fee: this.props.fee,
       uri: this.props.uri || undefined,
       channel: this.props.channel,
       isStillEditing: this.props.isStillEditing,
+      claim: this.props.myClaimForUri,
     };
 
     publish(publishParams);
@@ -292,7 +296,7 @@ class PublishForm extends React.PureComponent<Props> {
       language,
       nsfw,
       contentIsFree,
-      price,
+      fee,
       channel,
       name,
       updatePublishForm,
@@ -440,11 +444,11 @@ class PublishForm extends React.PureComponent<Props> {
                   <FormFieldPrice
                     name="content_cost_amount"
                     min="0"
-                    price={price}
-                    onChange={newPrice => updatePublishForm({ price: newPrice })}
+                    price={fee}
+                    onChange={newFee => updatePublishForm({ fee: newFee })}
                   />
                 )}
-                {price.currency !== 'LBC' && (
+                {fee && fee.currency !== 'LBC' && (
                   <p className="form-field__help">
                     {__(
                       'All content fees are charged in LBC. For non-LBC payment methods, the number of credits charged will be adjusted based on the value of LBRY credits at the time of purchase.'
