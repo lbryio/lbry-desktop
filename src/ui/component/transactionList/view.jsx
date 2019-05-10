@@ -15,6 +15,7 @@ type Props = {
   rewards: {},
   openModal: (id: string, { nout: number, txid: string }) => void,
   mySupports: {},
+  myClaims: any,
   filterSetting: string,
   setTransactionFilter: string => void,
 };
@@ -41,9 +42,9 @@ class TransactionList extends React.PureComponent<Props> {
     return this.props.filterSetting === TRANSACTIONS.ALL || this.props.filterSetting === transaction.type;
   }
 
-  isRevokeable(txid: string) {
-    const { mySupports } = this.props;
-    return !!mySupports[txid];
+  isRevokeable(txid: string, nout: number) {
+    const { mySupports, myClaims } = this.props;
+    return !!mySupports[txid] || myClaims.has(`${txid}:${nout}`);
   }
 
   revokeClaim(txid: string, nout: number) {
@@ -120,7 +121,7 @@ class TransactionList extends React.PureComponent<Props> {
                     key={`${t.txid}:${t.nout}`}
                     transaction={t}
                     reward={rewards && rewards[t.txid]}
-                    isRevokeable={this.isRevokeable(t.txid)}
+                    isRevokeable={this.isRevokeable(t.txid, t.nout)}
                     revokeClaim={this.revokeClaim}
                   />
                 ))}
