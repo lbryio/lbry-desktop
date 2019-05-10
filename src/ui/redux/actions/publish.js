@@ -222,11 +222,11 @@ export const doPublish = (params: PublishParams) => (dispatch: Dispatch, getStat
     channel_id?: string,
     bid: number,
     file_path?: string,
-    tags: Array<string>,
+    tags?: Array<string>,
     locations?: Array<Location>,
-    license_url: string,
-    thumbnail_url: string,
-    release_time: number,
+    license_url?: string,
+    thumbnail_url?: string,
+    release_time?: number,
   } = {
     name,
     bid: creditsToString(bid),
@@ -234,8 +234,8 @@ export const doPublish = (params: PublishParams) => (dispatch: Dispatch, getStat
     license,
     languages: [language],
     description,
-    tags: claim.value.tags,
-    locations: claim.value.locations,
+    tags: claim && claim.value.tags,
+    locations: claim && claim.value.locations,
   };
 
   // Temporary solution to keep the same publish flow with the new tags api
@@ -250,8 +250,8 @@ export const doPublish = (params: PublishParams) => (dispatch: Dispatch, getStat
     publishPayload.thumbnail_url = thumbnail;
   }
 
-  if (claim.value.release_time) {
-    publishPayload.release_time = Number(claim.value.release_time);
+  if (claim && claim.value.release_time) {
+    publishPayload.release_time = claim && Number(claim.value.release_time);
   }
 
   if (nsfw) {
@@ -259,7 +259,7 @@ export const doPublish = (params: PublishParams) => (dispatch: Dispatch, getStat
       publishPayload.tags.push('mature');
     }
   } else {
-    const remove = publishPayload.tags.indexOf('mature');
+    const remove = publishPayload.tags && publishPayload.tags.indexOf('mature');
     if (remove > -1) {
       publishPayload.tags.splice(remove, 1);
     }
