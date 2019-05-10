@@ -255,7 +255,7 @@ export const doPublish = (params: PublishParams) => (dispatch: Dispatch, getStat
   }
 
   if (nsfw) {
-    if (!publishPayload.tags.includes('mature')) {
+    if (publishPayload.tags && !publishPayload.tags.includes('mature')) {
       publishPayload.tags.push('mature');
     }
   } else {
