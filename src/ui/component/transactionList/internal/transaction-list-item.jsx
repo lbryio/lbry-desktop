@@ -6,7 +6,7 @@ import ButtonTransaction from 'component/common/transaction-link';
 import CreditAmount from 'component/common/credit-amount';
 import DateTime from 'component/dateTime';
 import Button from 'component/button';
-import { buildURI } from 'lbry-redux';
+import { buildURI, parseURI } from 'lbry-redux';
 
 type Props = {
   transaction: Transaction,
@@ -42,6 +42,9 @@ class TransactionListItem extends React.PureComponent<Props> {
   render() {
     const { reward, transaction, isRevokeable } = this.props;
     const { amount, claim_id: claimId, claim_name: name, date, fee, txid, type } = transaction;
+    // Ensure the claim name is valid
+    const { claimName } = parseURI(name);
+
     const dateFormat = {
       month: 'short',
       day: 'numeric',
@@ -65,9 +68,9 @@ class TransactionListItem extends React.PureComponent<Props> {
         </td>
         <td className="table__item--actionable">
           {reward && <span>{reward.reward_title}</span>}
-          {name && claimId && (
-            <Button button="link" navigate={buildURI({ claimName: name, claimId })}>
-              {name}
+          {claimName && claimId && (
+            <Button button="link" navigate={buildURI({ claimName: claimName, claimId })}>
+              {claimName}
             </Button>
           )}
         </td>
