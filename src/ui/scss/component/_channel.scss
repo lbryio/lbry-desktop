@@ -14,7 +14,7 @@ $metadata-z-index: 1;
   align-self: flex-start;
   position: absolute;
   object-fit: cover;
-  filter: brightness(40%);
+  filter: brightness(60%);
 }
 
 .channel__cover,
@@ -23,25 +23,46 @@ $metadata-z-index: 1;
   width: 100%;
 }
 
-.channel__thumbnail {
+.channel-thumbnail {
   position: absolute;
+  display: flex;
   left: var(--spacing-main-padding);
   height: var(--channel-thumbnail-size);
   width: var(--channel-thumbnail-size);
-  background-color: $lbry-gray-3;
-  background-image: linear-gradient(to right, $lbry-white, $lbry-gray-3 80%);
   background-size: cover;
   box-shadow: 0px 8px 40px -3px $lbry-black;
 }
 
-.channel__thumbnail--custom {
+.channel-thumbnail__custom {
   width: 100%;
   object-fit: cover;
 }
 
-.channel__thumbnail,
-.channel__thumbnail--custom {
+.channel-thumbnail__default {
+  width: 80%;
+  height: 80%;
+  margin-left: auto;
+  margin-right: auto;
+  align-self: flex-end;
+  margin-bottom: -1px;
+}
+
+.channel-thumbnail,
+.channel-thumbnail__custom {
   border-radius: var(--card-radius);
+}
+
+.channel-thumbnail__default--1 {
+  background-color: $lbry-indigo-3;
+}
+.channel-thumbnail__default--2 {
+  background-color: $lbry-orange-2;
+}
+.channel-thumbnail__default--3 {
+  background-color: $lbry-blue-3;
+}
+.channel-thumbnail__default--4 {
+  background-color: $lbry-red-1;
 }
 
 .channel__primary-info {
@@ -63,9 +84,5 @@ $metadata-z-index: 1;
   font-size: 1.2rem;
   user-select: all;
   margin-top: -0.25rem;
+  color: rgba($lbry-white, 0.75);
 }
-
-// .channel__description {
-//   font-size: 1.3rem;
-//   margin: var(--spacing-vertical-large) 0;
-// }
