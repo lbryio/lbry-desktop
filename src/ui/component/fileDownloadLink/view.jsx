@@ -81,12 +81,10 @@ class FileDownloadLink extends React.PureComponent<Props> {
             button="alt"
             iconColor="green"
             icon={ICONS.EXTERNAL}
-            onClick={
-              () => {
-                pause();
-                openModal(MODALS.CONFIRM_EXTERNAL_RESOURCE, { path: fileInfo.download_path });
-              }
-            }
+            onClick={() => {
+              pause();
+              openModal(MODALS.CONFIRM_EXTERNAL_RESOURCE, { path: fileInfo.download_path });
+            }}
           />
         </ToolTip>
       );

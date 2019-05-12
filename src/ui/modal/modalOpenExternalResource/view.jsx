@@ -19,7 +19,7 @@ class ModalOpenExternalResource extends React.PureComponent<Props> {
     const { openExternal, openItem, showItemInFolder } = shell;
     if (uri) {
       openExternal(uri);
-    } else if(path) {
+    } else if (path) {
       const success = openItem(path);
       if (!success) {
         showItemInFolder(path);
@@ -58,10 +58,8 @@ class ModalOpenExternalResource extends React.PureComponent<Props> {
       >
         <section className="card__content">
           <p>
-            {
-              (uri && __('This link leads to an external website.')) ||
-              (path && __('This file has been shared with you by other people.'))
-            }
+            {(uri && __('This link leads to an external website.')) ||
+              (path && __('This file has been shared with you by other people.'))}
           </p>
           <blockquote>{uri || path}</blockquote>
           <p>{__('LBRY Inc is not responsible for its content, click continue to proceed at your own risk.')}</p>
