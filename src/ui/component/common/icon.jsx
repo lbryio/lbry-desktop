@@ -25,7 +25,7 @@ class IconComponent extends React.PureComponent<Props> {
     switch (icon) {
       case ICONS.FEATURED:
         return __('Featured content. Earn rewards for watching.');
-      case ICONS.LOCAL:
+      case ICONS.DOWNLOAD:
         return __('This file is downloaded.');
       default:
         return null;

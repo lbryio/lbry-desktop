@@ -151,7 +151,6 @@
     "react-router-dom": "^5.0.0",
     "react-simplemde-editor": "^4.0.0",
     "react-toggle": "^4.0.2",
-    "react-virtualized": "^9.21.0",
     "redux": "^3.6.0",
     "redux-persist": "^4.8.0",
     "redux-persist-transform-compress": "^4.2.0",

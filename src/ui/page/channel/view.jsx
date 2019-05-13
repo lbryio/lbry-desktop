@@ -46,8 +46,8 @@ function ChannelPage(props: Props) {
 
   return (
     <Page notContained className="main--no-padding-top">
-      <header className="channel__cover main__item--extend-outside">
-        {cover && <img className="channel__cover--custom" src={cover} />}
+      <header className="channel-cover main__item--extend-outside">
+        {cover && <img className="channel-cover__custom" src={cover} />}
 
         <div className="channel__primary-info">
           <ChannelThumbnail uri={uri} />

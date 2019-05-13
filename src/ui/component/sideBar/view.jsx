@@ -62,10 +62,10 @@ class SideBar extends React.PureComponent<Props> {
               ),
             },
             {
-              ...buildLink(PAGES.PUBLISHED, 'Publishes', ICONS.PUBLISHED),
+              ...buildLink(PAGES.PUBLISHED, __('Publishes'), ICONS.PUBLISHED),
             },
             {
-              ...buildLink(PAGES.HISTORY, 'History', ICONS.HISTORY),
+              ...buildLink(PAGES.HISTORY, __('Library'), ICONS.DOWNLOAD),
             },
           ].map(renderLink)}
         </ul>
@@ -74,26 +74,26 @@ class SideBar extends React.PureComponent<Props> {
         <ul className="navigation__links">
           {[
             {
-              ...buildLink(PAGES.ACCOUNT, 'Overview', ICONS.ACCOUNT),
+              ...buildLink(PAGES.ACCOUNT, __('Overview'), ICONS.ACCOUNT),
             },
             {
-              ...buildLink(PAGES.INVITE, 'Invite', ICONS.INVITE, shouldShowInviteGuide && __('Check this out!')),
+              ...buildLink(PAGES.INVITE, __('Invite'), ICONS.INVITE, shouldShowInviteGuide && __('Check this out!')),
             },
             {
-              ...buildLink(PAGES.REWARDS, 'Rewards', ICONS.FEATURED),
+              ...buildLink(PAGES.REWARDS, __('Rewards'), ICONS.FEATURED),
             },
             {
-              ...buildLink(PAGES.SEND, 'Send & Recieve', ICONS.SEND),
+              ...buildLink(PAGES.SEND, __('Send & Recieve'), ICONS.SEND),
             },
             {
-              ...buildLink(PAGES.TRANSACTIONS, 'Transactions', ICONS.TRANSACTIONS),
+              ...buildLink(PAGES.TRANSACTIONS, __('Transactions'), ICONS.TRANSACTIONS),
             },
             {
-              ...buildLink(PAGES.SETTINGS, 'Settings', ICONS.SETTINGS),
+              ...buildLink(PAGES.SETTINGS, __('Settings'), ICONS.SETTINGS),
             },
             // @if TARGET='app'
             {
-              ...buildLink(PAGES.BACKUP, 'Backup', ICONS.BACKUP),
+              ...buildLink(PAGES.BACKUP, __('Backup'), ICONS.BACKUP),
             },
             // @endif
           ].map(renderLink)}
@@ -102,7 +102,7 @@ class SideBar extends React.PureComponent<Props> {
         <ul className="navigation__links navigation__links--bottom">
           {[
             {
-              ...buildLink(PAGES.HELP, 'Help', ICONS.HELP),
+              ...buildLink(PAGES.HELP, __('Help'), ICONS.HELP),
             },
           ].map(renderLink)}
         </ul>

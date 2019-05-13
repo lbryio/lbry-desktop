@@ -78,7 +78,7 @@ class UserHistoryPage extends React.PureComponent<Props, State> {
 
     return historyItems.length ? (
       <React.Fragment>
-        <div className="card__actions card__actions--between">
+        <div className="card__header card__actions card__actions--between">
           {Object.keys(itemsSelected).length ? (
             <Button button="link" label={__('Delete')} onClick={this.removeSelected} />
           ) : (

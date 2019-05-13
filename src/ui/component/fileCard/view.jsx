@@ -12,7 +12,6 @@ import { openCopyLinkMenu } from 'util/context-menu';
 import DateTime from 'component/dateTime';
 import { withRouter } from 'react-router-dom';
 import { formatLbryUriForWeb } from 'util/uri';
-import get from 'lodash.get';
 
 type Props = {
   uri: string,
@@ -65,7 +64,6 @@ class FileCard extends React.PureComponent<Props> {
     const {
       claim,
       fileInfo,
-      metadata,
       rewardedContentClaimIds,
       obscureNsfw,
       claimIsMine,
@@ -106,7 +104,6 @@ class FileCard extends React.PureComponent<Props> {
 
     const uri = !pending ? normalizeURI(this.props.uri) : this.props.uri;
     const isRewardContent = claim && rewardedContentClaimIds.includes(claim.claim_id);
-    const height = claim && claim.height;
     const handleContextMenu = event => {
       event.preventDefault();
       event.stopPropagation();
@@ -146,7 +143,7 @@ class FileCard extends React.PureComponent<Props> {
           {isRewardContent && <Icon iconColor="red" icon={icons.FEATURED} />}
           {isSubscribed && <Icon icon={icons.SUBSCRIPTION} />}
           {claimIsMine && <Icon icon={icons.PUBLISHED} />}
-          {!claimIsMine && fileInfo && <Icon icon={icons.LOCAL} />}
+          {!claimIsMine && fileInfo && <Icon icon={icons.DOWNLOAD} />}
           {isNew && <span className="badge badge--alert">{__('NEW')}</span>}
         </div>
       </li>

@@ -125,15 +125,15 @@
   // Depending on screen width, the amount of items in
   // each row change and are auto-sized
 
-  @media (min-width: 2001px) {
-    grid-template-columns: repeat(auto-fill, minmax(calc(100% / 10), 1fr));
-  }
+  // @media (min-width: 2001px) {
+  //   grid-template-columns: repeat(auto-fill, minmax(calc(100% / 10), 1fr));
+  // }
 
-  @media (min-width: 1801px) and (max-width: 2000px) {
-    grid-template-columns: repeat(auto-fill, minmax(calc(100% / 8), 1fr));
-  }
+  // @media (min-width: 1801px) and (max-width: 2000px) {
+  //   grid-template-columns: repeat(auto-fill, minmax(calc(100% / 8), 1fr));
+  // }
 
-  @media (min-width: 1551px) and (max-width: 1800px) {
+  @media (min-width: 1551px) {
     grid-template-columns: repeat(auto-fill, minmax(calc(100% / 7), 1fr));
   }
 

@@ -1,7 +1,7 @@
 $cover-z-index: 0;
 $metadata-z-index: 1;
 
-.channel__cover {
+.channel-cover {
   background-image: linear-gradient(to right, $lbry-indigo-4, $lbry-cyan-5 80%);
   display: flex;
   align-items: flex-end;
@@ -9,7 +9,7 @@ $metadata-z-index: 1;
   color: $lbry-white;
 }
 
-.channel__cover--custom {
+.channel-cover__custom {
   z-index: $cover-z-index;
   align-self: flex-start;
   position: absolute;
@@ -17,8 +17,8 @@ $metadata-z-index: 1;
   filter: brightness(60%);
 }
 
-.channel__cover,
-.channel__cover--custom {
+.channel-cover,
+.channel-cover__custom {
   height: var(--cover-photo-height);
   width: 100%;
 }
