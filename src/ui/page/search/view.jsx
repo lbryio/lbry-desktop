@@ -39,7 +39,7 @@ export default function SearchPage(props: Props) {
           <Fragment>
             {isValid && (
               <header className="search__header">
-                <Button navigate={uri} className="media__uri">
+                <Button button="alt" navigate={uri} className="media__uri">
                   {uri}
                 </Button>
                 {isChannel ? (
