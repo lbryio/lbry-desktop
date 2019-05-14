@@ -19,13 +19,14 @@ type Props = {
   title: ?string,
   cover: ?string,
   thumbnail: ?string,
+  page: number,
   location: { search: string },
   history: { push: string => void },
   match: { params: { attribute: ?string } },
 };
 
 function ChannelPage(props: Props) {
-  const { uri, title, cover, history, location } = props;
+  const { uri, title, cover, history, location, page } = props;
   const { channelName, claimName, claimId } = parseURI(uri);
   const { search } = location;
   const urlParams = new URLSearchParams(search);
@@ -37,11 +38,14 @@ function ChannelPage(props: Props) {
   const tabIndex = currentView === ABOUT_PAGE ? 1 : 0;
   const onTabChange = newTabIndex => {
     let url = formatLbryUriForWeb(uri);
+    let search = '?';
     if (newTabIndex !== 0) {
-      url += `?${PAGE_VIEW_QUERY}=${ABOUT_PAGE}`;
+      search += `${PAGE_VIEW_QUERY}=${ABOUT_PAGE}`;
+    } else {
+      search += `page=${page}`;
     }
 
-    history.push(url);
+    history.push(`${url}${search}`);
   };
 
   return (
