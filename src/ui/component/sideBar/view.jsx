@@ -91,11 +91,6 @@ class SideBar extends React.PureComponent<Props> {
             {
               ...buildLink(PAGES.SETTINGS, __('Settings'), ICONS.SETTINGS),
             },
-            // @if TARGET='app'
-            {
-              ...buildLink(PAGES.BACKUP, __('Backup'), ICONS.BACKUP),
-            },
-            // @endif
           ].map(renderLink)}
         </ul>
 
