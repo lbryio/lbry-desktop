@@ -43,8 +43,9 @@ class TransactionList extends React.PureComponent<Props> {
   }
 
   isRevokeable(txid: string, nout: number) {
+    const outpoint = `${txid}:${nout}`;
     const { mySupports, myClaims } = this.props;
-    return !!mySupports[txid] || myClaims.has(`${txid}:${nout}`);
+    return !!mySupports[outpoint] || myClaims.has(outpoint);
   }
 
   revokeClaim(txid: string, nout: number) {

@@ -3,7 +3,7 @@ import { selectClaimedRewardsByTransactionId } from 'lbryinc';
 import { doOpenModal } from 'redux/actions/app';
 import {
   selectAllMyClaimsByOutpoint,
-  selectSupportsById,
+  selectSupportsByOutpoint,
   selectTransactionListFilter,
   doSetTransactionListFilter,
 } from 'lbry-redux';
@@ -11,7 +11,7 @@ import TransactionList from './view';
 
 const select = state => ({
   rewards: selectClaimedRewardsByTransactionId(state),
-  mySupports: selectSupportsById(state),
+  mySupports: selectSupportsByOutpoint(state),
   myClaims: selectAllMyClaimsByOutpoint(state),
   filterSetting: selectTransactionListFilter(state),
 });
