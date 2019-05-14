@@ -5,8 +5,8 @@ const middleware = require('webpack-dev-middleware');
 const express = require('express');
 const app = express();
 
-// Ideally this would come from the same source that sets this port in webpack.web.config.js
-// but we can't inject a variable into this file because it is not being touched by webpack
+// Primary definition for this is in webpack.web.config.js
+// We can't access it here because webpack isn't running on this file
 const WEBPACK_PORT = 9090;
 
 console.log(
@@ -42,7 +42,7 @@ app.use(renderInstance);
 app.use(express.static('dist/electron/static'));
 
 app.listen(WEBPACK_PORT, () => {
-  console.log(chalk.yellow.bold('Renderer listening on port 9090 (still compiling)'));
+  console.log(chalk.yellow.bold(`Renderer listening on port ${WEBPACK_PORT} (still compiling)`));
 });
 
 mainInstance.waitUntilValid(() => console.log(chalk.green(`${chalk.underline('main')} compilation complete.`)));

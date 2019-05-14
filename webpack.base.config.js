@@ -12,6 +12,11 @@ const { ifProduction } = getIfUtils(NODE_ENV);
 const UI_ROOT = path.resolve(__dirname, 'src/ui/');
 const STATIC_ROOT = path.resolve(__dirname, 'static/');
 const DIST_ROOT = path.resolve(__dirname, 'dist/');
+
+// There are a two other uses of this value that can't access it from webpack
+// They exist in
+//    src/platforms/electron/devServer.js
+//    static/index.dev.html
 const WEBPACK_PORT = 9090;
 
 console.log(ifProduction('production', 'development'));
