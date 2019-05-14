@@ -2,6 +2,9 @@
 import { Lbryio } from 'lbryinc';
 import ReactGA from 'react-ga';
 import { history } from './store';
+// @if TARGET='app'
+import ElectronCookies from '@exponent/electron-cookies';
+// @endif
 
 type Analytics = {
   pageView: string => void,
@@ -15,7 +18,7 @@ let analyticsEnabled: boolean = true;
 const analytics: Analytics = {
   pageView: path => {
     if (analyticsEnabled) {
-      ReactGA.pageview(path, IS_WEB ? ['web'] : ['desktop']);
+      ReactGA.pageview(path);
     }
   },
   setUser: user => {
@@ -78,15 +81,26 @@ const analytics: Analytics = {
 // Will change once we have separate ids for desktop/web
 const UA_ID = IS_WEB ? 'UA-60403362-12' : 'UA-60403362-13';
 
+// @if TARGET='app'
+ElectronCookies.enable({
+  origin: 'https://lbry.tv',
+});
+// @endif
+
 ReactGA.initialize(UA_ID, {
-  gaOptions: { name: IS_WEB ? 'web' : 'desktop' },
   testMode: process.env.NODE_ENV !== 'production',
-  // debug: true,
+  cookieDomain: 'auto',
 });
 
 // Manually call the first page view
 // React Router doesn't include this on `history.listen`
 analytics.pageView(window.location.pathname + window.location.search);
+
+// @if TARGET='app'
+ReactGA.set({ checkProtocolTask: null });
+ReactGA.set({ location: 'https://lbry.tv' });
+analytics.pageView(window.location.pathname.split('.html')[1] + window.location.search || '/');
+// @endif;
 
 // Listen for url changes and report
 // This will include search queries
