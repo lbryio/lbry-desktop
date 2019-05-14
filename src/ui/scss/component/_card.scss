@@ -1,6 +1,5 @@
 .card {
   background-color: $lbry-white;
-  border: 1px solid $lbry-gray-1;
   margin-bottom: var(--spacing-vertical-xlarge);
   position: relative;
   border-radius: var(--card-radius);
@@ -8,7 +7,6 @@
 
   html[data-mode='dark'] & {
     background-color: rgba($lbry-white, 0.1);
-    border-color: rgba($lbry-white, 0.1);
     box-shadow: var(--card-box-shadow) darken($lbry-gray-1, 80%);
   }
 }
