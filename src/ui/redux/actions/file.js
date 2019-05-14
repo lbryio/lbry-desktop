@@ -35,7 +35,7 @@ export function doDeleteFile(outpoint, deleteFromComputer, abandonClaim) {
     if (abandonClaim && myClaimsOutpoints.indexOf(outpoint) !== -1) {
       const [txid, nout] = outpoint.split(':');
 
-      dispatch(doAbandonClaim(txid, nout));
+      dispatch(doAbandonClaim(txid, Number(nout)));
     }
 
     dispatch({

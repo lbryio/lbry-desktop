@@ -4,7 +4,7 @@ declare type UpdatePublishFormData = {
   filePath?: string,
   contentIsFree?: boolean,
   fee?: {
-    amount: number,
+    amount: string,
     currency: string,
   },
   title?: string,

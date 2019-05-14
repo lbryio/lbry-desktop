@@ -30,14 +30,9 @@
   position: relative;
 }
 
-.search__results-title {
-  @extend .media-group__header-title;
-  margin-bottom: var(--spacing-vertical-large);
-}
-
 .search__options-wrapper {
   font-size: 1.25em;
-  margin-bottom: var(--spacing-vertical-large);
+  margin: var(--spacing-vertical-xlarge) 0;
 }
 
 .search__options {

@@ -16,7 +16,7 @@ type Props = {
 };
 
 function Paginate(props: Props) {
-  const { totalPages, loading, location, history, onPageChange } = props;
+  const { totalPages = 1, loading, location, history, onPageChange } = props;
   const { search } = location;
   const urlParams = new URLSearchParams(search);
   const currentPage = Number(urlParams.get(PAGINATE_PARAM)) || 1;

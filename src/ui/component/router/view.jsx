@@ -14,7 +14,6 @@ import FileListPublished from 'page/fileListPublished';
 import TransactionHistoryPage from 'page/transactionHistory';
 import AuthPage from 'page/auth';
 import InvitePage from 'page/invite';
-import BackupPage from 'page/backup';
 import SubscriptionsPage from 'page/subscriptions';
 import SearchPage from 'page/search';
 import UserHistoryPage from 'page/userHistory';
@@ -39,7 +38,6 @@ export default function AppRouter() {
       <Switch>
         <Route path="/" exact component={DiscoverPage} />
         <Route path={`/$/${PAGES.AUTH}`} exact component={AuthPage} />
-        <Route path={`/$/${PAGES.BACKUP}`} exact component={BackupPage} />
         <Route path={`/$/${PAGES.INVITE}`} exact component={InvitePage} />
         <Route path={`/$/${PAGES.DOWNLOADED}`} exact component={FileListDownloaded} />
         <Route path={`/$/${PAGES.PUBLISHED}`} exact component={FileListPublished} />

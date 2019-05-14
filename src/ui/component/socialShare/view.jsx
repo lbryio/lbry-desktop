@@ -27,7 +27,7 @@ class SocialShare extends React.PureComponent<Props> {
 
   render() {
     const { claim, isChannel } = this.props;
-    const { claim_id: claimId, name: claimName, channel_name: channelName, value } = claim;
+    const { claim_id: claimId, name: claimName, channel_name: channelName } = claim;
 
     const { speechShareable, onDone } = this.props;
     const channelClaimId = claim.signing_channel && claim.signing_channel.claim_id;
@@ -70,7 +70,7 @@ class SocialShare extends React.PureComponent<Props> {
       <React.Fragment>
         {speechShareable && (
           <div className="card__content">
-            <label className="card__subtitle">{__('Web link')}</label>
+            <label className="help">{__('Web link')}</label>
             <CopyableText copyable={speechURL} />
             <div className="card__actions card__actions--center">
               <ToolTip onComponent body={__('Facebook')}>
@@ -98,7 +98,7 @@ class SocialShare extends React.PureComponent<Props> {
           </div>
         )}
         <div className="card__content">
-          <label className="card__subtitle">{__('LBRY App link')}</label>
+          <label className="help">{__('LBRY App link')}</label>
           <CopyableText copyable={lbryURL} noSnackbar />
           <div className="card__actions card__actions--center">
             <ToolTip onComponent body={__('Facebook')}>

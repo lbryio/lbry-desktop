@@ -29,6 +29,8 @@ table,
 }
 
 .table--transactions {
+  table-layout: fixed;
+
   td:nth-of-type(1) {
     // TX amounts
     font-size: 0.9em;
@@ -36,10 +38,13 @@ table,
   }
 
   td:nth-of-type(3) {
-    max-width: 150px;
-    overflow: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
+    // Only add ellipsis to the links in the table
+    // We still want to show the entire message if a TX includes one
+    .button__content {
+      @include constrict(10rem);
+      vertical-align: bottom;
+      display: inline-block;
+    }
   }
 }
 

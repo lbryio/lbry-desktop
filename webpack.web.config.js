@@ -18,9 +18,6 @@ const webConfig = {
     path: __dirname + '/dist/web',
     publicPath: '/',
   },
-  devServer: {
-    historyApiFallback: true,
-  },
   module: {
     rules: [
       {

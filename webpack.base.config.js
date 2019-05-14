@@ -13,6 +13,12 @@ const UI_ROOT = path.resolve(__dirname, 'src/ui/');
 const STATIC_ROOT = path.resolve(__dirname, 'static/');
 const DIST_ROOT = path.resolve(__dirname, 'dist/');
 
+// There are a two other uses of this value that can't access it from webpack
+// They exist in
+//    src/platforms/electron/devServer.js
+//    static/index.dev.html
+const WEBPACK_PORT = 9090;
+
 console.log(ifProduction('production', 'development'));
 
 let baseConfig = {
@@ -31,6 +37,10 @@ let baseConfig = {
   },
   node: {
     __dirname: false,
+  },
+  devServer: {
+    historyApiFallback: true,
+    port: WEBPACK_PORT,
   },
   module: {
     rules: [
@@ -117,6 +127,7 @@ let baseConfig = {
       'process.env.NODE_ENV': JSON.stringify(NODE_ENV),
       'process.env.SDK_API_URL': JSON.stringify(process.env.SDK_API_URL),
       'process.env.LBRY_API_URL': JSON.stringify(process.env.LBRY_API_URL),
+      WEBPACK_PORT,
     }),
   ],
 };
