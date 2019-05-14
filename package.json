@@ -1,6 +1,6 @@
 {
   "name": "LBRY",
-  "version": "0.32.0",
+  "version": "0.32.1",
   "description": "A browser for the LBRY network, a digital marketplace controlled by its users.",
   "keywords": [
     "lbry"
@@ -59,6 +59,7 @@
     "@babel/preset-flow": "^7.0.0",
     "@babel/preset-react": "^7.0.0",
     "@babel/register": "^7.0.0",
+    "@exponent/electron-cookies": "^2.0.0",
     "@hot-loader/react-dom": "16.8",
     "@lbry/color": "^1.0.2",
     "@lbry/components": "^2.7.0",
