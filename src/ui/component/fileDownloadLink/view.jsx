@@ -1,5 +1,6 @@
 // @flow
 import * as ICONS from 'constants/icons';
+import * as MODALS from 'constants/modal_types';
 import React from 'react';
 import Button from 'component/button';
 import ToolTip from 'component/common/tooltip';
@@ -20,7 +21,7 @@ type Props = {
   loading: boolean,
   costInfo: ?{},
   restartDownload: (string, number) => void,
-  openInShell: string => void,
+  openModal: (id: string, { path: string }) => void,
   purchaseUri: string => void,
   pause: () => void,
 };
@@ -43,14 +44,7 @@ class FileDownloadLink extends React.PureComponent<Props> {
   uri: ?string;
 
   render() {
-    const { fileInfo, downloading, uri, openInShell, purchaseUri, costInfo, loading, pause, claim } = this.props;
-
-    const openFile = () => {
-      if (fileInfo) {
-        openInShell(fileInfo.download_path);
-        pause();
-      }
-    };
+    const { fileInfo, downloading, uri, openModal, purchaseUri, costInfo, loading, pause, claim } = this.props;
 
     if (loading || downloading) {
       const progress = fileInfo && fileInfo.written_bytes ? (fileInfo.written_bytes / fileInfo.total_bytes) * 100 : 0;
@@ -83,7 +77,15 @@ class FileDownloadLink extends React.PureComponent<Props> {
     } else if (fileInfo && fileInfo.download_path) {
       return (
         <ToolTip onComponent body={__('Open file')}>
-          <Button button="alt" iconColor="green" icon={ICONS.EXTERNAL} onClick={() => openFile()} />
+          <Button
+            button="alt"
+            iconColor="green"
+            icon={ICONS.EXTERNAL}
+            onClick={() => {
+              pause();
+              openModal(MODALS.CONFIRM_EXTERNAL_RESOURCE, { path: fileInfo.download_path });
+            }}
+          />
         </ToolTip>
       );
     }

@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import { doHideModal } from 'redux/actions/app';
-import ModalOpenExternalLink from './view';
+import ModalOpenExternalResource from './view';
 
 const perform = dispatch => ({
   closeModal: () => dispatch(doHideModal()),
@@ -9,4 +9,4 @@ const perform = dispatch => ({
 export default connect(
   null,
   perform
-)(ModalOpenExternalLink);
+)(ModalOpenExternalResource);
