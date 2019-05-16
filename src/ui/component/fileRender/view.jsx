@@ -133,7 +133,7 @@ class FileRender extends React.PureComponent<Props> {
     const mediaTypes = {
       // @if TARGET='app'
       '3D-file': <ThreeViewer source={{ fileType, downloadPath }} theme={currentTheme} />,
-      'comic-book': <ComicBookViewer source={{ fileType, downloadPath }} />,
+      'comic-book': <ComicBookViewer source={{ fileType, downloadPath }} theme={currentTheme} />,
       // @endif
 
       application: !source.url ? null : (

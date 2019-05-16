@@ -1,26 +1,26 @@
 // @flow
-
 import * as React from 'react';
+import Villain from 'villain';
+
+import 'villain/dist/style.css';
 
 type Props = {
-  theme: string,
   source: {
-    stream: string => any,
     fileType: string,
-    contentType: string,
+    downloadPath: string,
   },
 };
 
+const opts = {
+  workerPath: '/webworkers/worker-bundle.js',
+};
+
 class ComicBookViewer extends React.PureComponent<Props> {
-  constructor(props: Props) {
-    super(props);
-  }
-
-  componentDidMount() {}
-
   render() {
-    const { source, theme } = this.props;
-    return <div>template</div>;
+    const { downloadPath } = this.props.source || {};
+    const file = `file://${downloadPath}`;
+
+    return <Villain file={file} width={'100%'} height={'100%'} options={opts} />;
   }
 }
 
