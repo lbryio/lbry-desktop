@@ -2,7 +2,6 @@
 // @flow
 import * as icons from 'constants/icons';
 import * as React from 'react';
-import classnames from 'classnames';
 // @if TARGET='app'
 import { shell } from 'electron';
 // @endif
@@ -10,6 +9,7 @@ import { Lbry } from 'lbry-redux';
 import Native from 'native';
 import Button from 'component/button';
 import Page from 'component/page';
+import BackupSection from 'component/walletBackup';
 
 type DeamonSettings = {
   data_dir: string | any,
@@ -193,6 +193,10 @@ class HelpPage extends React.PureComponent<Props, State> {
             </div>
           </div>
         </section>
+
+        {/* @if TARGET='app' */}
+        <BackupSection />
+        {/* @endif */}
 
         <section className="card card--section">
           <header className="card__header">

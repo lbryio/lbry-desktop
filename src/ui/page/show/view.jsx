@@ -26,8 +26,8 @@ class ShowPage extends React.PureComponent<Props> {
     if (!isResolvingUri) resolveUri(uri);
   }
 
-  componentWillReceiveProps(nextProps: Props) {
-    const { isResolvingUri, resolveUri, claim, uri, totalPages } = nextProps;
+  componentDidUpdate() {
+    const { isResolvingUri, resolveUri, claim, uri, totalPages } = this.props;
     if (
       !isResolvingUri &&
       uri &&

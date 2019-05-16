@@ -132,8 +132,8 @@ code {
   color: $lbry-gray-5;
   display: block;
   padding: 1rem;
-  margin-top: var(--spacing-vertical-large);
-  margin-bottom: var(--spacing-vertical-large);
+  margin-top: var(--spacing-vertical-medium);
+  margin-bottom: var(--spacing-vertical-medium);
   border-radius: 5px;
 
   html[data-mode='dark'] & {
@@ -142,6 +142,7 @@ code {
 }
 
 .help--warning {
+  @extend .help;
   background-color: $lbry-yellow-3;
   color: $lbry-black;
 

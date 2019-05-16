@@ -19,11 +19,13 @@
     "__": true,
     "__n": true,
     "app": true,
-    "IS_WEB": true
+    "IS_WEB": true,
+    "WEBPACK_PORT": true
   },
   "rules": {
     "comma-dangle": ["error", "always-multiline"],
     "handle-callback-err": 0,
+    "indent": 0,
     "jsx-quotes": ["error", "prefer-double"],
     "new-cap": 0,
     "no-multi-spaces": 0,

@@ -1,8 +1,21 @@
 @mixin placeholder {
   animation: pulse 2s infinite ease-in-out;
   background-color: $lbry-gray-2;
+  border-radius: var(--card-radius);
 
   html[data-mode='dark'] & {
     background-color: rgba($lbry-white, 0.1);
+  }
+}
+
+@mixin mediaThumbHoverZoom {
+  .media__thumb {
+    transition: all 0.2s ease;
+  }
+
+  &:hover {
+    .media__thumb {
+      transform: scale(1.05);
+    }
   }
 }

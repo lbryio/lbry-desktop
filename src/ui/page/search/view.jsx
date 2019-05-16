@@ -39,7 +39,7 @@ export default function SearchPage(props: Props) {
           <Fragment>
             {isValid && (
               <header className="search__header">
-                <Button navigate={uri} className="media__uri">
+                <Button button="alt" navigate={uri} className="media__uri">
                   {uri}
                 </Button>
                 {isChannel ? (
@@ -52,7 +52,6 @@ export default function SearchPage(props: Props) {
 
             <div className="search__results-wrapper">
               <SearchOptions />
-
               <FileListSearch query={urlQuery} />
               <div className="card__content help">{__('These search results are provided by LBRY, Inc.')}</div>
             </div>

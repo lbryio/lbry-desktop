@@ -1,9 +1,9 @@
 import { connect } from 'react-redux';
 import { selectDaemonSettings } from 'redux/selectors/settings';
-import BackupPage from './view';
+import WalletBackup from './view';
 
 const select = state => ({
   daemonSettings: selectDaemonSettings(state),
 });
 
-export default connect(select)(BackupPage);
+export default connect(select)(WalletBackup);

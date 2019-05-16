@@ -37,7 +37,7 @@ class ExternalLink extends React.PureComponent<Props> {
           title={title || href}
           label={children}
           className="button--external-link"
-          onClick={() => openModal(MODALS.CONFIRM_EXTERNAL_LINK, { uri: href })}
+          onClick={() => openModal(MODALS.CONFIRM_EXTERNAL_RESOURCE, { uri: href })}
         />
       );
     }

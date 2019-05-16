@@ -1,5 +1,5 @@
 .search__header {
-  padding: var(--spacing-vertical-large);
+  margin-bottom: var(--spacing-vertical-large);
 
   .placeholder {
     background-color: rgba($lbry-white, 0.1);
@@ -24,24 +24,15 @@
   }
 }
 
-.search__results-wrapper {
-  margin: var(--spacing-vertical-large);
-}
-
 .search__results-section {
   margin-bottom: var(--spacing-vertical-large);
   min-height: 200px;
   position: relative;
 }
 
-.search__results-title {
-  @extend .media-group__header-title;
-  margin-bottom: var(--spacing-vertical-large);
-}
-
 .search__options-wrapper {
   font-size: 1.25em;
-  margin-bottom: var(--spacing-vertical-large);
+  margin: var(--spacing-vertical-xlarge) 0;
 }
 
 .search__options {

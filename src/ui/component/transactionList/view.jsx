@@ -2,7 +2,6 @@
 import * as icons from 'constants/icons';
 import * as MODALS from 'constants/modal_types';
 import * as React from 'react';
-import { List } from 'react-virtualized';
 import { FormField, Form } from 'component/common/form';
 import Button from 'component/button';
 import FileExporter from 'component/common/file-exporter';
@@ -15,6 +14,7 @@ type Props = {
   transactions: Array<Transaction>,
   rewards: {},
   openModal: (id: string, { nout: number, txid: string }) => void,
+  mySupports: {},
   myClaims: any,
   filterSetting: string,
   setTransactionFilter: string => void,
@@ -43,10 +43,9 @@ class TransactionList extends React.PureComponent<Props> {
   }
 
   isRevokeable(txid: string, nout: number) {
-    const { myClaims } = this.props;
-    // a claim/support/update is revokable if it
-    // is in my claim list(claim_list_mine)
-    return myClaims.has(`${txid}:${nout}`);
+    const outpoint = `${txid}:${nout}`;
+    const { mySupports, myClaims } = this.props;
+    return !!mySupports[outpoint] || myClaims.has(outpoint);
   }
 
   revokeClaim(txid: string, nout: number) {
@@ -103,7 +102,7 @@ class TransactionList extends React.PureComponent<Props> {
             </div>
           )}
         </header>
-        {!transactionList.length && <p>{emptyMessage || __('No transactions to list.')}</p>}
+        {!transactionList.length && <p className="card__subtitle">{emptyMessage || __('No transactions to list.')}</p>}
 
         {!!transactionList.length && (
           <React.Fragment>

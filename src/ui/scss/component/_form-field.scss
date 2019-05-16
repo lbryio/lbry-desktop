@@ -5,6 +5,12 @@
 // This is because many styles inside `lbry/components/sass/form/` are very specific
 // As styles become hardened here, they _should_ slowly move over to that repo
 
+input,
+textarea,
+select {
+  border-radius: var(--input-border-radius);
+}
+
 input-submit {
   align-items: center;
 }
@@ -82,6 +88,16 @@ fieldset-group {
       &:first-of-type {
         input {
           border-right: none;
+          border-top-right-radius: 0;
+          border-bottom-right-radius: 0;
+        }
+      }
+
+      &:nth-of-type(2) {
+        input,
+        select {
+          border-top-left-radius: 0;
+          border-bottom-left-radius: 0;
         }
       }
     }
@@ -126,7 +142,12 @@ fieldset-group {
         padding-right: 0;
         border: 1px solid;
         border-right: 0;
+        border-color: $lbry-black;
         color: $lbry-gray-4;
+
+        [data-mode='dark'] & {
+          border-color: $lbry-gray-4;
+        }
       }
     }
 
@@ -135,6 +156,8 @@ fieldset-group {
 
       input {
         border-left: 0;
+        border-top-left-radius: 0;
+        border-bottom-left-radius: 0;
         padding-left: var(--spacing-xs);
 
         &:focus {
@@ -172,10 +195,11 @@ form {
 
 fieldset-section {
   input-submit {
-    input,
-    select {
-      &:first-child:not(:focus) {
+    input {
+      &:first-child {
         border-right-color: transparent;
+        border-top-right-radius: 0;
+        border-bottom-right-radius: 0;
       }
     }
 
@@ -193,7 +217,10 @@ fieldset-section {
     }
 
     .button {
-      border-radius: 0;
+      border-top-left-radius: 0;
+      border-bottom-left-radius: 0;
+      border-top-right-radius: var(--input-border-radius);
+      border-bottom-right-radius: var(--input-border-radius);
     }
   }
 

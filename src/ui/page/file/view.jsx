@@ -2,6 +2,7 @@
 import * as MODALS from 'constants/modal_types';
 import * as icons from 'constants/icons';
 import * as React from 'react';
+import { clipboard } from 'electron';
 import { buildURI, normalizeURI } from 'lbry-redux';
 import FileViewer from 'component/fileViewer';
 import Thumbnail from 'component/common/thumbnail';
@@ -22,7 +23,6 @@ import RecommendedContent from 'component/recommendedContent';
 type Props = {
   claim: StreamClaim,
   fileInfo: FileListItem,
-  metadata: StreamMetadata,
   contentType: string,
   uri: string,
   rewardedContentClaimIds: Array<string>,
@@ -44,6 +44,7 @@ type Props = {
   title: string,
   thumbnail: ?string,
   nsfw: boolean,
+  showToast: ({}) => void,
 };
 
 class FilePage extends React.Component<Props> {
@@ -126,7 +127,6 @@ class FilePage extends React.Component<Props> {
   render() {
     const {
       claim,
-      metadata,
       contentType,
       uri,
       rewardedContentClaimIds,
@@ -142,10 +142,11 @@ class FilePage extends React.Component<Props> {
       title,
       thumbnail,
       nsfw,
+      showToast,
     } = this.props;
 
     // File info
-    const { height, channel_name: channelName } = claim;
+    const { channel_name: channelName } = claim;
     const { PLAYABLE_MEDIA_TYPES, PREVIEW_MEDIA_TYPES } = FilePage;
     const isRewardContent = (rewardedContentClaimIds || []).includes(claim.claim_id);
     const shouldObscureThumbnail = obscureNsfw && nsfw;
@@ -176,7 +177,17 @@ class FilePage extends React.Component<Props> {
     return (
       <Page notContained className="main--file-page">
         <div className="grid-area--content">
-          <h1 className="media__uri">{uri}</h1>
+          <Button
+            className="media__uri"
+            button="alt"
+            label={uri}
+            onClick={() => {
+              clipboard.writeText(uri);
+              showToast({
+                message: __('Text copied'),
+              });
+            }}
+          />
           {!fileInfo && insufficientCredits && (
             <div className="media__insufficient-credits help--warning">
               {__(

@@ -28,8 +28,8 @@ type Props = {
   language: string,
   nsfw: boolean,
   contentIsFree: boolean,
-  price: {
-    amount: number,
+  fee: {
+    amount: string,
     currency: string,
   },
   channel: string,
@@ -70,10 +70,13 @@ class PublishForm extends React.PureComponent<Props> {
     (this: any).getNewUri = this.getNewUri.bind(this);
   }
 
-  componentWillMount() {
-    const { thumbnail } = this.props;
+  componentDidMount() {
+    const { thumbnail, name, channel, editingURI } = this.props;
     if (!thumbnail) {
       this.props.resetThumbnailStatus();
+    }
+    if (editingURI) {
+      this.getNewUri(name, channel);
     }
   }
 
@@ -156,7 +159,7 @@ class PublishForm extends React.PureComponent<Props> {
 
     let previousBidAmount = 0;
     if (myClaimForUri) {
-      previousBidAmount = myClaimForUri.amount;
+      previousBidAmount = Number(myClaimForUri.amount);
     }
 
     const totalAvailableBidAmount = previousBidAmount + balance;
@@ -190,7 +193,7 @@ class PublishForm extends React.PureComponent<Props> {
   }
 
   handlePublish() {
-    const { filePath, licenseType, licenseUrl, otherLicenseDescription, myClaimForUri, publish } = this.props;
+    const { filePath, licenseType, licenseUrl, otherLicenseDescription, publish } = this.props;
 
     let publishingLicense;
     switch (licenseType) {
@@ -217,10 +220,11 @@ class PublishForm extends React.PureComponent<Props> {
       otherLicenseDescription,
       name: this.props.name || undefined,
       contentIsFree: this.props.contentIsFree,
-      price: this.props.price,
+      fee: this.props.fee,
       uri: this.props.uri || undefined,
       channel: this.props.channel,
       isStillEditing: this.props.isStillEditing,
+      claim: this.props.myClaimForUri,
     };
 
     publish(publishParams);
@@ -264,7 +268,7 @@ class PublishForm extends React.PureComponent<Props> {
     // If there is an error it will be presented as an inline error as well
     return (
       !isFormValid && (
-        <div className="card__content card__subtitle error-text">
+        <div className="card__content error-text">
           {!title && <div>{__('A title is required')}</div>}
           {!name && <div>{__('A URL is required')}</div>}
           {name && nameError && <div>{__('The URL you created is not valid')}</div>}
@@ -292,7 +296,7 @@ class PublishForm extends React.PureComponent<Props> {
       language,
       nsfw,
       contentIsFree,
-      price,
+      fee,
       channel,
       name,
       updatePublishForm,
@@ -440,11 +444,11 @@ class PublishForm extends React.PureComponent<Props> {
                   <FormFieldPrice
                     name="content_cost_amount"
                     min="0"
-                    price={price}
-                    onChange={newPrice => updatePublishForm({ price: newPrice })}
+                    price={fee}
+                    onChange={newFee => updatePublishForm({ fee: newFee })}
                   />
                 )}
-                {price.currency !== 'LBC' && (
+                {fee && fee.currency !== 'LBC' && (
                   <p className="form-field__help">
                     {__(
                       'All content fees are charged in LBC. For non-LBC payment methods, the number of credits charged will be adjusted based on the value of LBRY credits at the time of purchase.'
@@ -581,22 +585,17 @@ class PublishForm extends React.PureComponent<Props> {
             </section>
 
             <section className="card card--section">
-              <div className="card__content">
+              <div className="card__actions">
+                <Submit
+                  label={submitLabel}
+                  disabled={formDisabled || !formValid || uploadThumbnailStatus === THUMBNAIL_STATUSES.IN_PROGRESS}
+                />
+                <Button button="link" onClick={this.handleCancelPublish} label={__('Cancel')} />
+              </div>
+              <p className="help">
                 {__('By continuing, you accept the')}{' '}
                 <Button button="link" href="https://www.lbry.com/termsofservice" label={__('LBRY Terms of Service')} />.
-              </div>
-            </section>
-
-            <section className="card card--section">
-              <div className="card__content">
-                <div className="card__actions">
-                  <Submit
-                    label={submitLabel}
-                    disabled={formDisabled || !formValid || uploadThumbnailStatus === THUMBNAIL_STATUSES.IN_PROGRESS}
-                  />
-                  <Button button="link" onClick={this.handleCancelPublish} label={__('Cancel')} />
-                </div>
-              </div>
+              </p>
             </section>
           </div>
 

@@ -16,7 +16,7 @@ type Props = {
 };
 
 function Paginate(props: Props) {
-  const { totalPages, loading, location, history, onPageChange } = props;
+  const { totalPages = 1, loading, location, history, onPageChange } = props;
   const { search } = location;
   const urlParams = new URLSearchParams(search);
   const currentPage = Number(urlParams.get(PAGINATE_PARAM)) || 1;
@@ -40,12 +40,10 @@ function Paginate(props: Props) {
     }
   }
 
-  if (totalPages <= 1 || loading) {
-    return null;
-  }
-
   return (
-    <Form>
+    // Hide the paginate controls if we are loading or there is only one page
+    // It should still be rendered to trigger the onPageChange callback
+    <Form style={totalPages <= 1 || loading ? { display: 'none' } : null}>
       <fieldset-group class="fieldset-group--smushed fieldgroup--paginate">
         <fieldset-section>
           <ReactPaginate

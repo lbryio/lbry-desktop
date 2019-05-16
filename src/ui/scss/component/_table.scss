@@ -29,27 +29,22 @@ table,
 }
 
 .table--transactions {
+  table-layout: fixed;
+
   td:nth-of-type(1) {
     // TX amounts
-    width: 25%;
     font-size: 0.9em;
     font-weight: 600;
   }
 
-  td:nth-of-type(2) {
-    width: 20%;
-  }
-
   td:nth-of-type(3) {
-    width: 22.5%;
-  }
-
-  td:nth-of-type(4) {
-    width: 17.5%;
-  }
-
-  td:nth-of-type(5) {
-    width: 15%;
+    // Only add ellipsis to the links in the table
+    // We still want to show the entire message if a TX includes one
+    .button__content {
+      @include constrict(10rem);
+      vertical-align: bottom;
+      display: inline-block;
+    }
   }
 }
 

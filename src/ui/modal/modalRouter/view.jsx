@@ -21,7 +21,7 @@ import ModalConfirmTransaction from 'modal/modalConfirmTransaction';
 import ModalSocialShare from 'modal/modalSocialShare';
 import ModalSendTip from 'modal/modalSendTip';
 import ModalPublish from 'modal/modalPublish';
-import ModalOpenExternalLink from 'modal/modalOpenExternalLink';
+import ModalOpenExternalResource from 'modal/modalOpenExternalResource';
 import ModalConfirmThumbnailUpload from 'modal/modalConfirmThumbnailUpload';
 import ModalWalletEncrypt from 'modal/modalWalletEncrypt';
 import ModalWalletDecrypt from 'modal/modalWalletDecrypt';
@@ -85,8 +85,8 @@ function ModalRouter(props: Props) {
       return <ModalSocialShare {...modalProps} />;
     case MODALS.PUBLISH:
       return <ModalPublish {...modalProps} />;
-    case MODALS.CONFIRM_EXTERNAL_LINK:
-      return <ModalOpenExternalLink {...modalProps} />;
+    case MODALS.CONFIRM_EXTERNAL_RESOURCE:
+      return <ModalOpenExternalResource {...modalProps} />;
     case MODALS.CONFIRM_TRANSACTION:
       return <ModalConfirmTransaction {...modalProps} />;
     case MODALS.CONFIRM_THUMBNAIL_UPLOAD:

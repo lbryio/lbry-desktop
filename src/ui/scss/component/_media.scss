@@ -1,7 +1,9 @@
 //  M E D I A
 //  C A R D
 .media-card {
+  @include mediaThumbHoverZoom;
   font-size: 1.2rem;
+  border-radius: var(--card-radius);
 
   .media__title {
     margin-bottom: var(--spacing-vertical-small);
@@ -10,22 +12,13 @@
   .media__properties {
     height: 1em;
   }
-
-  &:hover {
-    box-shadow: 0 0 50px rgba($lbry-black, 0.08);
-    background-color: rgba($lbry-black, 0.04);
-
-    html[data-mode='dark'] & {
-      box-shadow: 0 0 50px rgba($lbry-white, 0.07);
-      background-color: rgba($lbry-white, 0.03);
-    }
-  }
 }
 
 //  M E D I A
 //  T I L E
 
 .media-tile {
+  @include mediaThumbHoverZoom;
   display: flex;
   font-size: 1.5rem;
   position: relative;
@@ -106,6 +99,7 @@
 
 .media__thumb {
   @include thumbnail;
+  border-radius: var(--card-radius);
 
   &:not(.media__thumb--nsfw) {
     background-color: $lbry-gray-2;
@@ -266,6 +260,7 @@
 
 .media__info-text {
   font-size: 1.15rem;
+  word-break: break-all;
 
   &:not(:last-of-type) {
     margin-bottom: var(--spacing-vertical-large);

@@ -47,8 +47,8 @@ class FileTile extends React.PureComponent<Props> {
     if (!isResolvingUri && !claim && uri) resolveUri(uri);
   }
 
-  componentWillReceiveProps(nextProps: Props) {
-    const { isResolvingUri, claim, uri, resolveUri } = nextProps;
+  componentDidUpdate() {
+    const { isResolvingUri, claim, uri, resolveUri } = this.props;
     if (!isResolvingUri && claim === undefined && uri) resolveUri(uri);
   }
 
@@ -68,7 +68,7 @@ class FileTile extends React.PureComponent<Props> {
         {isNew && <span className="badge badge--alert icon">{__('NEW')}</span>}
         {isSubscribed && <Icon icon={ICONS.SUBSCRIPTION} />}
         {isRewardContent && <Icon iconColor="red" icon={ICONS.FEATURED} />}
-        {!claimIsMine && isDownloaded && <Icon icon={ICONS.LOCAL} />}
+        {!claimIsMine && isDownloaded && <Icon icon={ICONS.DOWNLOAD} />}
         {claimIsMine && <Icon icon={ICONS.PUBLISHED} />}
       </div>
     );

@@ -6,7 +6,7 @@ import {
   makeSelectClaimForUri,
 } from 'lbry-redux';
 import { makeSelectCostInfoForUri } from 'lbryinc';
-import { doOpenFileInShell } from 'redux/actions/file';
+import { doOpenModal } from 'redux/actions/app';
 import { doPurchaseUri, doStartDownload, doSetPlayingUri } from 'redux/actions/content';
 import FileDownloadLink from './view';
 
@@ -20,7 +20,7 @@ const select = (state, props) => ({
 });
 
 const perform = dispatch => ({
-  openInShell: path => dispatch(doOpenFileInShell(path)),
+  openModal: (modal, props) => dispatch(doOpenModal(modal, props)),
   purchaseUri: uri => dispatch(doPurchaseUri(uri)),
   restartDownload: (uri, outpoint) => dispatch(doStartDownload(uri, outpoint)),
   pause: () => dispatch(doSetPlayingUri(null)),

@@ -1,15 +1,13 @@
 .card {
   background-color: $lbry-white;
-  border: 1px solid $lbry-gray-1;
   margin-bottom: var(--spacing-vertical-xlarge);
   position: relative;
   border-radius: var(--card-radius);
-  box-shadow: var(--box-shadow) $lbry-gray-1;
+  box-shadow: var(--card-box-shadow) $lbry-gray-1;
 
   html[data-mode='dark'] & {
     background-color: rgba($lbry-white, 0.1);
-    border-color: rgba($lbry-white, 0.1);
-    box-shadow: var(--box-shadow) darken($lbry-gray-1, 80%);
+    box-shadow: var(--card-box-shadow) darken($lbry-gray-1, 80%);
   }
 }
 
@@ -125,15 +123,15 @@
   // Depending on screen width, the amount of items in
   // each row change and are auto-sized
 
-  @media (min-width: 2001px) {
-    grid-template-columns: repeat(auto-fill, minmax(calc(100% / 10), 1fr));
-  }
+  // @media (min-width: 2001px) {
+  //   grid-template-columns: repeat(auto-fill, minmax(calc(100% / 10), 1fr));
+  // }
 
-  @media (min-width: 1801px) and (max-width: 2000px) {
-    grid-template-columns: repeat(auto-fill, minmax(calc(100% / 8), 1fr));
-  }
+  // @media (min-width: 1801px) and (max-width: 2000px) {
+  //   grid-template-columns: repeat(auto-fill, minmax(calc(100% / 8), 1fr));
+  // }
 
-  @media (min-width: 1551px) and (max-width: 1800px) {
+  @media (min-width: 1551px) {
     grid-template-columns: repeat(auto-fill, minmax(calc(100% / 7), 1fr));
   }
 
@@ -199,6 +197,9 @@
 //  S U B T I T L E
 
 .card__subtitle {
+  @extend .help;
+  background-color: lighten($lbry-gray-1, 7%);
+  color: darken($lbry-gray-5, 30%);
   font-size: 1.15rem;
   margin-bottom: var(--spacing-vertical-small);
 
@@ -210,6 +211,10 @@
     bottom: -0.12rem;
     position: relative;
   }
+
+  [data-mode='dark'] & {
+    background-color: darken($lbry-gray-5, 20%);
+  }
 }
 
 //  C A R D
@@ -218,7 +223,7 @@
 .card__title {
   font-size: 2rem;
   font-weight: 600;
-  padding-bottom: var(--spacing-vertical-medium);
+  margin-bottom: var(--spacing-vertical-medium);
 
   + .card__content {
     margin-top: var(--spacing-vertical-medium);

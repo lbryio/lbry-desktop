@@ -3,8 +3,8 @@
 declare type UpdatePublishFormData = {
   filePath?: string,
   contentIsFree?: boolean,
-  price?: {
-    amount: number,
+  fee?: {
+    amount: string,
     currency: string,
   },
   title?: string,
@@ -23,7 +23,7 @@ declare type UpdatePublishFormData = {
   licenseUrl?: string,
   licenseType?: string,
   uri?: string,
-  replace?: boolean,
+  nsfw: boolean,
 };
 
 declare type PublishParams = {
@@ -43,12 +43,9 @@ declare type PublishParams = {
   license: ?string,
   licenseUrl: ?string,
   fee?: {
+    amount: string,
     currency: string,
-    amount: number,
   },
-  replace?: boolean,
-
-  // This is bad.
-  // Will be removed for tags soon
+  claim: StreamClaim,
   nsfw: boolean,
 };

@@ -3,7 +3,7 @@ import React, { Suspense } from 'react';
 import { Modal } from 'modal/modal';
 import Button from 'component/button';
 import UserPhoneVerify from 'component/userPhoneVerify';
-import { withRouter } from 'react-router-dom';
+import { Redirect } from 'react-router';
 
 const LazyUserPhoneNew = React.lazy(() =>
   import(/* webpackChunkName: "userPhoneNew" */
@@ -13,7 +13,7 @@ const LazyUserPhoneNew = React.lazy(() =>
 type Props = {
   phone: ?number,
   user: {
-    phone_number: ?number,
+    is_identity_verified: boolean,
   },
   closeModal: () => void,
   history: { push: string => void },
@@ -23,29 +23,30 @@ class ModalPhoneCollection extends React.PureComponent<Props> {
   getTitle() {
     const { user, phone } = this.props;
 
-    if (!user.phone_number && !phone) {
+    if (!user.is_identity_verified && !phone) {
       return __('Enter Your Phone Number');
     }
+
     return __('Enter The Verification Code');
   }
 
   renderInner() {
-    const { closeModal, phone, user, history } = this.props;
+    const { closeModal, phone, user } = this.props;
 
     const cancelButton = <Button button="link" onClick={closeModal} label={__('Not Now')} />;
 
-    if (!user.phone_number && !phone) {
+    if (!user.is_identity_verified && !phone) {
       return (
         <Suspense fallback={<div />}>
           <LazyUserPhoneNew cancelButton={cancelButton} />
         </Suspense>
       );
-    } else if (!user.phone_number) {
+    } else if (!user.is_identity_verified) {
       return <UserPhoneVerify cancelButton={cancelButton} />;
     }
 
-    history.push('/$/rewards');
-    return closeModal();
+    closeModal();
+    return <Redirect to="/$/rewards" />;
   }
 
   render() {
@@ -64,4 +65,4 @@ class ModalPhoneCollection extends React.PureComponent<Props> {
   }
 }
 
-export default withRouter(ModalPhoneCollection);
+export default ModalPhoneCollection;

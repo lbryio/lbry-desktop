@@ -78,7 +78,7 @@ class UserHistoryPage extends React.PureComponent<Props, State> {
 
     return historyItems.length ? (
       <React.Fragment>
-        <div className="card__actions card__actions--between">
+        <div className="card__header card__actions card__actions--between">
           {Object.keys(itemsSelected).length ? (
             <Button button="link" label={__('Delete')} onClick={this.removeSelected} />
           ) : (
@@ -87,7 +87,7 @@ class UserHistoryPage extends React.PureComponent<Props, State> {
           <Button button="link" label={allSelected ? __('Cancel') : __('Select All')} onClick={selectHandler} />
         </div>
         {!!historyItems.length && (
-          <section className="card__content item-list">
+          <section className="card card__content item-list">
             {historyItems.map(item => (
               <NavigationHistoryItem
                 key={item.uri}
@@ -107,9 +107,7 @@ class UserHistoryPage extends React.PureComponent<Props, State> {
       <div className="main--empty">
         <section className="card card--section">
           <header className="card__header">
-            <h2 className="card__title">
-              {__("You don't have anything saved in history yet, go check out some content on LBRY!")}
-            </h2>
+            <h2 className="card__title">{__('Your history is empty, what are you doing here?')}</h2>
           </header>
 
           <div className="card__content">

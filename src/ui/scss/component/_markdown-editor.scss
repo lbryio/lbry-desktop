@@ -3,7 +3,8 @@
   border-right: 1px solid $lbry-gray-1;
   border-bottom: 1px solid $lbry-gray-1;
   border-left: 1px solid $lbry-gray-1;
-  border-radius: 0;
+  border-bottom-left-radius: var(--input-border-radius);
+  border-bottom-right-radius: var(--input-border-radius);
   background: $lbry-white;
   color: $lbry-black;
 
@@ -49,7 +50,8 @@
 .editor-toolbar {
   background-color: $lbry-gray-1;
   border: none;
-  border-radius: 0;
+  border-top-left-radius: var(--input-border-radius);
+  border-top-right-radius: var(--input-border-radius);
   opacity: 1; // ?
 
   &:hover {

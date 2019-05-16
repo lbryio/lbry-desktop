@@ -1,15 +1,30 @@
 // @flow
 import React from 'react';
+import { parseURI } from 'lbry-redux';
+import classnames from 'classnames';
+import Gerbil from './gerbil.png';
 
 type Props = {
   thumbnail: ?string,
+  uri: string,
 };
 
 function ChannelThumbnail(props: Props) {
-  const { thumbnail } = props;
+  const { thumbnail, uri } = props;
+
+  // Generate a random color class based on the first letter of the channel name
+  const { channelName } = parseURI(uri);
+  const initializer = channelName.charCodeAt(0) - 65; // will be between 0 and 57
+  const className = `channel-thumbnail__default--${initializer % 4}`;
+
   return (
-    <div className="channel__thumbnail">
-      {thumbnail && <img className="channel__thumbnail--custom" src={thumbnail} />}
+    <div
+      className={classnames('channel-thumbnail', {
+        [className]: !thumbnail,
+      })}
+    >
+      {!thumbnail && <img className="channel-thumbnail__default" src={Gerbil} />}
+      {thumbnail && <img className="channel-thumbnail__custom" src={thumbnail} />}
     </div>
   );
 }

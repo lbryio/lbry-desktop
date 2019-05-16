@@ -1,6 +1,11 @@
 import { connect } from 'react-redux';
 import { doDeleteFileAndMaybeGoBack } from 'redux/actions/file';
-import { makeSelectTitleForUri, makeSelectClaimIsMine, makeSelectFileInfoForUri } from 'lbry-redux';
+import {
+  makeSelectTitleForUri,
+  makeSelectClaimIsMine,
+  makeSelectFileInfoForUri,
+  makeSelectClaimForUri,
+} from 'lbry-redux';
 import { doHideModal } from 'redux/actions/app';
 import ModalRemoveFile from './view';
 
@@ -8,6 +13,7 @@ const select = (state, props) => ({
   claimIsMine: makeSelectClaimIsMine(props.uri)(state),
   title: makeSelectTitleForUri(props.uri)(state),
   fileInfo: makeSelectFileInfoForUri(props.uri)(state),
+  claim: makeSelectClaimForUri(props.uri)(state),
 });
 
 const perform = dispatch => ({

@@ -14,7 +14,6 @@ type Props = {
   claimsInChannel: Array<StreamClaim>,
   channelIsMine: boolean,
   fetchClaims: (string, number) => void,
-  location: UrlLocation,
 };
 
 function ChannelContent(props: Props) {

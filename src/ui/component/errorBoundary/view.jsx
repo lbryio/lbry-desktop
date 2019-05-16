@@ -3,19 +3,25 @@ import { Lbryio } from 'lbryinc';
 import * as React from 'react';
 import Yrbl from 'component/yrbl';
 import Button from 'component/button';
+import { withRouter } from 'react-router';
 
 type Props = {
   children: React.Node,
+  history: {
+    replace: string => void,
+  },
 };
 
 type State = {
   hasError: boolean,
 };
 
-export default class ErrorBoundary extends React.Component<Props, State> {
+class ErrorBoundary extends React.Component<Props, State> {
   constructor() {
     super();
     this.state = { hasError: false };
+
+    (this: any).refresh = this.refresh.bind(this);
   }
 
   static getDerivedStateFromError() {
@@ -35,6 +41,13 @@ export default class ErrorBoundary extends React.Component<Props, State> {
     }
   }
 
+  refresh() {
+    const { history } = this.props;
+    // use history.replace instead of history.push so the user can't click back to the errored page
+    history.replace('');
+    this.setState({ hasError: false });
+  }
+
   render() {
     if (this.state.hasError) {
       return (
@@ -50,7 +63,7 @@ export default class ErrorBoundary extends React.Component<Props, State> {
                     button="link"
                     className="load-screen__button"
                     label={__('refreshing the app')}
-                    onClick={() => (window.location.href = '/')}
+                    onClick={this.refresh}
                   />{' '}
                   {__('to fix it')}.
                 </p>
@@ -64,3 +77,5 @@ export default class ErrorBoundary extends React.Component<Props, State> {
     return this.props.children;
   }
 }
+
+export default withRouter(ErrorBoundary);
