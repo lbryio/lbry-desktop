@@ -31,14 +31,14 @@ class FileDetails extends PureComponent<Props> {
     Lbryio.call('user_tag', 'edit', { add: 'comments-waitlist' });
     showSnackBar(
       <span>
-        {__('Thanks! Comments are coming soon')}
+        {__('Your Comment Has Been Posted')}
         <sup>TM</sup>
       </span>
     );
   }
 
   render() {
-    const { claim, contentType, fileInfo, metadata, openFolder, hasClickedComment, user } = this.props;
+    const { claim, contentType, fileInfo, metadata, openFolder } = this.props;
 
     if (!claim || !metadata) {
       return (
@@ -104,26 +104,6 @@ class FileDetails extends PureComponent<Props> {
             )}
           </div>
         </Expandable>
-
-        <div className="media__info-title">Comments</div>
-
-        <div className="card__actions--center">
-          <Button
-            data-id="add-comment"
-            disabled={hasClickedComment}
-            button="primary"
-            label={__('Want to comment?')}
-            onClick={this.handleCommentClick}
-          />
-        </div>
-        <br />
-        {hasClickedComment && (
-          <p className="media__info-text media__info-text--center">
-            {user
-              ? __('Your support has been added. You will be notified when comments are available.')
-              : __('Your support has been added. Comments are coming soon.')}
-          </p>
-        )}
       </Fragment>
     );
   }
