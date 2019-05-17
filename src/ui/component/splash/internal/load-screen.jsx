@@ -4,6 +4,7 @@ import React, { Fragment } from 'react';
 import Icon from 'component/common/icon';
 import Spinner from 'component/spinner';
 import Button from 'component/button';
+import Doodle from 'component/doodle';
 
 type Props = {
   message: string,
@@ -11,6 +12,8 @@ type Props = {
   isWarning: boolean,
   error: boolean,
 };
+
+const FancyDoodle = Doodle``; // this looks dumb but it prevents repetition from `_load-screen.scss`
 
 class LoadScreen extends React.PureComponent<Props> {
   static defaultProps = {
@@ -22,7 +25,7 @@ class LoadScreen extends React.PureComponent<Props> {
 
     return (
       <div className="load-screen">
-        <div>
+        <div className="load-screen__overlay">
           <div className="load-screen__header">
             <h1 className="load-screen__title">
               {__('LBRY')}
@@ -70,6 +73,8 @@ class LoadScreen extends React.PureComponent<Props> {
             </Fragment>
           )}
         </div>
+
+        <FancyDoodle />
       </div>
     );
   }

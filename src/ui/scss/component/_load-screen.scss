@@ -1,26 +1,48 @@
 .load-screen {
-  min-width: 100vw;
-  min-height: 100vh;
+  width: 100vw;
+  height: 100vh;
 
   align-items: center;
-  background-image: linear-gradient(to right, $lbry-teal-5, $lbry-cyan-5 100%);
-  background-size: cover;
-  color: $lbry-white;
-  cursor: default;
+  background-color: #270f34;
   display: flex;
   justify-content: center;
-  text-align: center;
+  overflow: hidden;
 
-  .spinner {
-    margin-right: auto;
-    margin-left: auto;
+  css-doodle {
+    width: 100%;
+    height: 100%;
+
+    overflow: hidden;
+    position: absolute;
+
+    --color: @p (var(--lbry-teal-1), var(--lbry-orange-1), var(--lbry-cyan-3), var(--lbry-pink-5));
+
+    --rule: (
+      : doodle {@grid: 30x1 / 18vmin; --deg: @p (-180deg, 180deg) ;}: container {perspective: 30vmin;}: before,
+      : after {@place-cell: @r (100%) @r (100%) ; @shape: star; @size: @r (6px) ; background-color: var(--color) ;
+        content: '' ;} @place-cell: center; @size: 100%; animation: scale-up 12s linear infinite; animation-delay: calc(
+          -12s / @size () * @i ()
+        ) ; background-image: @m100 (
+          radial-gradient(var(--color) 50%, transparent 0) @r (-20%, 120%) @r (-20%, 100%) / 1px 1px no-repeat
+        ) ; box-shadow: @m2 (0 0 50px var(--color)) ; will-change: transform,
+      opacity; @keyframes scale-up {0%,
+      95.01%,
+      100% {opacity: 0; transform: translateZ(0) rotate(0) ;} 10% {opacity: 1;} 95% {transform: translateZ(35vmin) rotateZ(
+          @var (--deg)
+        ) ;}}
+    );
   }
 }
 
+.load-screen__actions {
+  font-size: 1.2em;
+  margin-top: var(--spacing-vertical-medium);
+}
+
 .load-screen__button {
-  transition: none;
-  color: $lbry-white;
   border-bottom: 1px solid $lbry-white;
+  color: $lbry-white;
+  transition: none;
 
   &:hover {
     border-bottom: 1px solid $lbry-blue-1;
@@ -52,6 +74,18 @@
   margin-bottom: var(--spacing-vertical-medium);
 }
 
+.load-screen__overlay {
+  @include center;
+  width: 100vw;
+  height: 100vh;
+
+  color: $lbry-white;
+  flex-direction: column;
+  position: relative;
+  text-align: center;
+  z-index: 1;
+}
+
 .load-screen__title {
   font-size: 60px;
   font-weight: 700;
@@ -78,9 +112,4 @@
 .load-screen--help {
   font-size: 14px;
   padding-top: $spacing-vertical;
-}
-
-.load-screen__actions {
-  font-size: 1.2em;
-  margin-top: var(--spacing-vertical-medium);
 }
