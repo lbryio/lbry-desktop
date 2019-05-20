@@ -4,14 +4,31 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
-## [0.32.0] - [Unreleased]
+## [0.32.2] - [2019-5-20]
 
 ### Fixed
+
+- Upgraded LBRY SDK to 0.37.0 for better network stability
+- Better error logging
+
+## [0.32.1] - [2019-5-14]
+
+### Fixed
+
+- Fix analytics on desktop ([#2480](https://github.com/lbryio/lbry-desktop/pull/2480))
+- Fix text wrapping on file page ([#2480](https://github.com/lbryio/lbry-desktop/pull/2480))
+
+## [0.32.0] - [2019-5-14]
+
+### Fixed
+
+- Updating claims after they are tipped
+- Opening html, markdown, and other text documents
+- Opening links from open.lbry.com
 
 ### Added
 
 - New routing setup to allow lbry.tv to use the browser url bar for navigation ([#2408](https://github.com/lbryio/lbry-desktop/pull/2408))
-- New audio player ([#2406](https://github.com/lbryio/lbry-desktop/pull/2406))
 - Always show new suggested subscriptions ([#2541](https://github.com/lbryio/lbry-desktop/pull/2451))
 
 ### Changed
