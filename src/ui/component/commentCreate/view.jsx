@@ -33,11 +33,14 @@ class CommentCreate extends React.PureComponent<Props> {
   }
 
   handleSubmit() {
-    const { createComment, claim, channelUri } = this.props;
-    console.log('claim', claim)
+    // const { createComment, claim, channelUri } = this.props;
+    const { channelUri, claim } = this.props; // eslint-disable-line react/prop-types
+    console.log('claim', claim);
+
     const { claim_id: claimId } = claim;
     const { message } = this.state;
     let cmt = { message, channelId: parseURI(channelUri).claimId, claimId };
+
     console.log('CMT', cmt);
     console.log('PURI', claimId);
     console.log('PURI', parseURI(channelUri));

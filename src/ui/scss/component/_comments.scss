@@ -1,0 +1,20 @@
+.comments {
+}
+
+.comment {
+  padding-bottom: var(--spacing-vertical-large);
+
+  &:not(:first-of-type) {
+    padding-top: var(--spacing-vertical-large);
+  }
+
+  &:not(:last-of-type) {
+    border-bottom: 1px solid $lbry-gray-1;
+  }
+}
+
+.comment__content {
+  font-size: 1.15rem;
+  padding-top: var(--spacing-vertical-medium);
+  padding-bottom: var(--spacing-vertical-medium);
+}
