@@ -170,14 +170,14 @@ export default class SplashScreen extends React.PureComponent<Props, State> {
     const { daemonVersionMatched, onReadyToLaunch } = this.props;
     const { isRunning, launchWithIncompatibleDaemon } = this.state;
 
-    if (daemonVersionMatched) {
-      onReadyToLaunch();
-    } else if (launchWithIncompatibleDaemon && isRunning) {
-      // The user may have decided to run the app with mismatched daemons
-      // They could make this decision before the daemon is finished starting up
-      // If it isn't running, this function will be called after the daemon is started
-      onReadyToLaunch();
-    }
+    // if (daemonVersionMatched) {
+    //   onReadyToLaunch();
+    // } else if (launchWithIncompatibleDaemon && isRunning) {
+    //   // The user may have decided to run the app with mismatched daemons
+    //   // They could make this decision before the daemon is finished starting up
+    //   // If it isn't running, this function will be called after the daemon is started
+    //   onReadyToLaunch();
+    // }
   }
 
   hasRecordedUser: boolean;
