@@ -407,6 +407,7 @@ class PublishForm extends React.PureComponent<Props> {
               </header>
 
               <SelectThumbnail
+                filePath={filePath}
                 thumbnailPath={thumbnailPath}
                 thumbnail={thumbnail}
                 uploadThumbnailStatus={uploadThumbnailStatus}

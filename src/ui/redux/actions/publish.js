@@ -68,10 +68,22 @@ export const doUpdatePublishForm = (publishFormValue: UpdatePublishFormData) => 
     data: { ...publishFormValue },
   });
 
-export const doUploadThumbnail = (filePath: string) => (dispatch: Dispatch) => {
-  const thumbnail = fs.readFileSync(filePath);
-  const fileExt = path.extname(filePath);
-  const fileName = path.basename(filePath);
+export const doUploadThumbnail = (filePath: string, thumbnailBuffer: Uint8Array) => (dispatch: Dispatch) => {
+  let thumbnail, fileExt, fileName, fileType;
+
+  if (filePath) {
+    thumbnail = fs.readFileSync(filePath);
+    fileExt = path.extname(filePath);
+    fileName = path.basename(filePath);
+    fileType = `image/${fileExt.slice(1)}`;
+  } else if (thumbnailBuffer) {
+    thumbnail = thumbnailBuffer;
+    fileExt = '.png';
+    fileName = 'thumbnail.png';
+    fileType = 'image/png';
+  } else {
+    return null;
+  }
 
   const makeid = () => {
     let text = '';
@@ -102,7 +114,7 @@ export const doUploadThumbnail = (filePath: string) => (dispatch: Dispatch) => {
 
   const data = new FormData();
   const name = makeid();
-  const file = new File([thumbnail], fileName, { type: `image/${fileExt.slice(1)}` });
+  const file = new File([thumbnail], fileName, { type: fileType });
   data.append('name', name);
   data.append('file', file);
 

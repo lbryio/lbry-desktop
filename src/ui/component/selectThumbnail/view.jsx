@@ -2,6 +2,7 @@
 import * as MODALS from 'constants/modal_types';
 import { THUMBNAIL_STATUSES } from 'lbry-redux';
 import * as React from 'react';
+import getMediaType from 'util/get-media-type';
 import { FormField } from 'component/common/form';
 import FileSelector from 'component/common/file-selector';
 import Button from 'component/button';
@@ -9,6 +10,7 @@ import ThumbnailMissingImage from './thumbnail-missing.png';
 import ThumbnailBrokenImage from './thumbnail-broken.png';
 
 type Props = {
+  filePath: ?string,
   thumbnail: ?string,
   formDisabled: boolean,
   uploadThumbnailStatus: string,
@@ -50,6 +52,7 @@ class SelectThumbnail extends React.PureComponent<Props, State> {
 
   render() {
     const {
+      filePath,
       thumbnail,
       formDisabled,
       uploadThumbnailStatus: status,
@@ -60,6 +63,8 @@ class SelectThumbnail extends React.PureComponent<Props, State> {
     } = this.props;
 
     const { thumbnailError } = this.state;
+
+    const isSupportedVideo = getMediaType(null, filePath) === 'video';
 
     let thumbnailSrc;
     if (!thumbnail) {
@@ -141,9 +146,16 @@ class SelectThumbnail extends React.PureComponent<Props, State> {
           <div className="card__actions">
             <Button
               button="link"
-              label={__('Or enter a URL manually')}
+              label={__('Enter a thumbnail URL')}
               onClick={() => updatePublishForm({ uploadThumbnailStatus: THUMBNAIL_STATUSES.MANUAL })}
             />
+            {isSupportedVideo && (
+              <Button
+                button="link"
+                label={__('Take a snapshot from your video')}
+                onClick={() => openModal(MODALS.AUTO_GENERATE_THUMBNAIL, { filePath })}
+              />
+            )}
           </div>
         )}
 

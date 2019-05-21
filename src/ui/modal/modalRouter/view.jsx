@@ -4,6 +4,7 @@ import * as MODALS from 'constants/modal_types';
 import ModalError from 'modal/modalError';
 import ModalAuthFailure from 'modal/modalAuthFailure';
 import ModalDownloading from 'modal/modalDownloading';
+import ModalAutoGenerateThumbnail from 'modal/modalAutoGenerateThumbnail';
 import ModalAutoUpdateDownloaded from 'modal/modalAutoUpdateDownloaded';
 import ModalAutoUpdateConfirm from 'modal/modalAutoUpdateConfirm';
 import ModalUpgrade from 'modal/modalUpgrade';
@@ -51,6 +52,8 @@ function ModalRouter(props: Props) {
       return <ModalUpgrade {...modalProps} />;
     case MODALS.DOWNLOADING:
       return <ModalDownloading {...modalProps} />;
+    case MODALS.AUTO_GENERATE_THUMBNAIL:
+      return <ModalAutoGenerateThumbnail {...modalProps} />;
     case MODALS.AUTO_UPDATE_DOWNLOADED:
       return <ModalAutoUpdateDownloaded {...modalProps} />;
     case MODALS.AUTO_UPDATE_CONFIRM:
