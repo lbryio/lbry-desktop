@@ -5,6 +5,7 @@ import { CommentCreate } from './view';
 
 const select = (state, props) => ({
   claim: makeSelectClaimForUri(props.uri)(state),
+  channelUri: selectMyActiveChannelUri(state),
 });
 
 const perform = dispatch => ({
