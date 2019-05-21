@@ -6,6 +6,7 @@ import Button from 'component/button';
 import ChannelSection from 'component/selectChannel';
 import usePersistedState from 'util/use-persisted-state';
 
+// props:
 type Props = {
   uri: string,
   claim: StreamClaim,
