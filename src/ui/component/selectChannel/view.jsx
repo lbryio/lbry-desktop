@@ -7,13 +7,16 @@ import Button from 'component/button';
 import { CHANNEL_NEW, CHANNEL_ANONYMOUS } from 'constants/claim';
 
 type Props = {
+  channelUri: string,
   channel: string, // currently selected channel
   channels: Array<{ name: string }>,
   balance: number,
-  onChannelChange: string => void,
+  onChannelChange?: string => void,
   createChannel: (string, number) => Promise<any>,
   fetchChannelListMine: () => void,
   fetchingChannels: boolean,
+  activeChannelUri: string,
+  setMyActiveChannelUri: string => void,
 };
 
 type State = {
@@ -53,18 +56,27 @@ class ChannelSection extends React.PureComponent<Props, State> {
     }
   }
 
-  handleChannelChange(event: SyntheticInputEvent<*>) {
+  onChannelChangeProxy(channelUri) {
     const { onChannelChange } = this.props;
-    const { newChannelBid } = this.state;
-    const channel = event.target.value;
+    if (onChannelChange) {
+      onChannelChange(channelUri);
+    }
+  }
 
-    if (channel === CHANNEL_NEW) {
+  handleChannelChange(event: SyntheticInputEvent<*>) {
+    const { setMyActiveChannelUri } = this.props;
+    const { newChannelBid } = this.state;
+    const channelUri = event.target.value;
+    console.log('HCC', channelUri);
+
+    if (channelUri === CHANNEL_NEW) {
       this.setState({ addingChannel: true });
-      onChannelChange(channel);
+      this.onChannelChangeProxy(channelUri);
       this.handleNewChannelBidChange(newChannelBid);
     } else {
       this.setState({ addingChannel: false });
-      onChannelChange(channel);
+      setMyActiveChannelUri(channelUri);
+      this.onChannelChangeProxy(channelUri);
     }
   }
 
@@ -104,7 +116,7 @@ class ChannelSection extends React.PureComponent<Props, State> {
   }
 
   handleCreateChannelClick() {
-    const { balance, createChannel, onChannelChange } = this.props;
+    const { balance, createChannel } = this.props;
     const { newChannelBid, newChannelName } = this.state;
 
     const channelName = `@${newChannelName}`;
@@ -123,8 +135,7 @@ class ChannelSection extends React.PureComponent<Props, State> {
         creatingChannel: false,
         addingChannel: false,
       });
-
-      onChannelChange(channelName);
+      this.onChannelChangeProxy(channelName);
     };
 
     const failure = () => {
@@ -138,7 +149,7 @@ class ChannelSection extends React.PureComponent<Props, State> {
   }
 
   render() {
-    const channel = this.state.addingChannel ? 'new' : this.props.channel;
+    const channelUri = this.state.addingChannel ? 'new' : this.props.channelUri;
     const { fetchingChannels, channels = [] } = this.props;
     const {
       newChannelName,
@@ -157,10 +168,10 @@ class ChannelSection extends React.PureComponent<Props, State> {
           <BusyIndicator message="Updating channels" />
         ) : (
           <fieldset-section>
-            <FormField name="channel" type="select" onChange={this.handleChannelChange} value={channel}>
+            <FormField name="channel" type="select" onChange={this.handleChannelChange} value={channelUri}>
               <option value={CHANNEL_ANONYMOUS}>{__('Anonymous')}</option>
-              {channels.map(({ name }) => (
-                <option key={name} value={name}>
+              {channels.map(({ name, permanent_url: channelUri }) => (
+                <option key={name} value={channelUri}>
                   {name}
                 </option>
               ))}

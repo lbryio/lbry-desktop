@@ -290,7 +290,7 @@ class FilePage extends React.Component<Props> {
             <header className="card__header">
               <h2 className="card__header">Comments</h2>
             </header>
-            <CommentCreate comment={''} uri={uri} />
+            <CommentCreate uri={uri} />
             <CommentsList uri={uri} />
           </div>
         </div>

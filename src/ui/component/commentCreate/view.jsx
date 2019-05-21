@@ -1,55 +1,71 @@
 // @flow
 import React from 'react';
-import { FormField } from 'component/common/form';
+import { FormField, Form } from 'component/common/form';
 import Button from 'component/button';
 import ChannelSection from 'component/selectChannel';
+import { parseURI } from 'lbry-redux';
 
+// props:
 type Props = {
-  comment: string,
-  claimId: string,
-  authorChannelId: string,
+  uri: string,
+  channelUri: string,
+  createComment: params => {},
 };
 
 class CommentCreate extends React.PureComponent<Props> {
   constructor(props: Props) {
     super(props);
     this.state = {
-      channel: 'Anonymous',
-      comment: '',
-      channelId: '',
+      message: '',
     };
+    // set state or props for comment form
     (this: any).handleCommentChange = this.handleCommentChange.bind(this);
     (this: any).handleChannelChange = this.handleChannelChange.bind(this);
+    (this: any).handleSubmit = this.handleSubmit.bind(this);
   }
 
   handleCommentChange(event) {
-    this.setState({ comment: event.comment.target.value });
+    this.setState({ message: event.target.value });
   }
 
-  handleChannelChange(channel) {
-    this.setState({ channel: channel });
+  handleChannelChange(channelUri) {
+    this.setState({ channelUri: channelUri });
+  }
+
+  handleSubmit() {
+    const { createComment, claim, channelUri } = this.props;
+    console.log('claim', claim)
+    const { claim_id: claimId } = claim;
+    const { message } = this.state;
+    let cmt = { message, channelId: parseURI(channelUri).claimId, claimId };
+    console.log('CMT', cmt);
+    console.log('PURI', claimId);
+    console.log('PURI', parseURI(channelUri));
   }
 
   render() {
-    console.log(this.state);
+    const { channelUri } = this.props;
+
     return (
       <section className="card card--section">
-        <div className="card__content">
-          <FormField
-            type="textarea"
-            name="content_description"
-            label={__('Text')}
-            placeholder={__('Your comment')}
-            value={this.state.comment}
-            onChange={text => this.handleCommentChange({ comment: text })}
-          />
-        </div>
-        <div className="card__actions--between">
+        <Form onSubmit={this.handleSubmit}>
           <div className="card__content">
-            <ChannelSection channel={this.state.channel} onChannelChange={this.handleChannelChange} />
+            <FormField
+              type="textarea"
+              name="content_description"
+              label={__('Text')}
+              placeholder={__('Your comment')}
+              value={this.state.message}
+              onChange={this.handleCommentChange}
+            />
           </div>
-          <Button button="primary" type="submit" label={__('Post')} />
-        </div>
+          <div className="card__actions--between">
+            <div className="card__content">
+              <ChannelSection channel={channelUri} />
+            </div>
+            <Button button="primary" type="submit" label={__('Post')} />
+          </div>
+        </Form>
       </section>
     );
   }

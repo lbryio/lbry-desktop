@@ -1,13 +1,12 @@
 import { connect } from 'react-redux';
 
-import { makeSelectClaimForUri, selectMyChannelClaims, doCommentCreate, makeSelectCommentsForUri } from 'lbry-redux';
+import { doCommentCreate, makeSelectClaimForUri, selectMyActiveChannelUri, } from 'lbry-redux';
 
 import CommentCreate from './view';
 
 const select = (state, props) => ({
-  channels: selectMyChannelClaims(state),
-  comments: makeSelectCommentsForUri(props.uri)(state),
   claim: makeSelectClaimForUri(props.uri)(state),
+  channelUri: selectMyActiveChannelUri(state),
 });
 
 const perform = dispatch => ({
