@@ -1,8 +1,8 @@
 [main]
 host = https://www.transifex.com
 
-[lbry-deskop.app-strings]
-file_filter = dist/locales/<lang>.json
-source_file = dist/locales/en.json
+[lbry-desktop.app-strings]
+file_filter = static/locales/<lang>.json
+source_file = static/locales/en.json
 source_lang = en
 type = KEYVALUEJSON
