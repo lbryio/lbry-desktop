@@ -23,6 +23,10 @@ class AudioVideoViewer extends React.PureComponent<Props> {
   componentDidMount() {
     const { contentType, poster, claim } = this.props;
     const { name, claim_id: claimId, txid, nout } = claim;
+    
+    // Quick fix to get file view events on lbry.tv
+    // Will need to be changed to include time to start
+    analytics.apiLogView(`${name}#${claimId}`, `${txid}:${nout}`, claimId);
 
     const path = `https://api.piratebay.com/content/claims/${claim.name}/${claim.claim_id}/stream.mp4`;
     const sources = [
