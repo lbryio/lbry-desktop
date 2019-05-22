@@ -37,7 +37,7 @@
     "flow-defs": "flow-typed install",
     "precommit": "lint-staged",
     "preinstall": "yarn cache clean lbry-redux && yarn cache clean lbryinc",
-    "postinstall": "electron-builder install-app-deps && node build/downloadDaemon.js"
+    "postinstall": "electron-builder install-app-deps"
   },
   "dependencies": {
     "electron-dl": "^1.11.0",
