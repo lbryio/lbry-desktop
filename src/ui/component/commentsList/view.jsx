@@ -14,6 +14,7 @@ type CommentProps = {
   claimId: string,
   author: string,
   message: string,
+  parentId: number,
   timePosted: number,
 };
 
@@ -45,6 +46,7 @@ class CommentList extends React.PureComponent<CommentListProps> {
               commentId={comment.comment_id}
               key={comment.author + comment.comment_id}
               message={comment.message}
+              parentId={comment.parent_id}
               timePosted={comment.time_posted}
             />
           );
@@ -57,10 +59,10 @@ class CommentList extends React.PureComponent<CommentListProps> {
 class Comment extends React.PureComponent<CommentProps> {
   render() {
     return (
-      <li className="comment">
+      <li className={this.props.parentId ? 'comment reply' : 'comment'}>
         <div className="comment__meta card__actions--between">
-          <div>{this.props.author}</div>
-          <time datatime={this.props.timePosted}>{relativeDate(this.props.timePosted)}</time>
+          <strong>{this.props.author}</strong>
+          <time dateTime={this.props.timePosted}>{relativeDate(this.props.timePosted)}</time>
         </div>
 
         <div className="comment__content">{this.props.message}</div>
@@ -68,9 +70,9 @@ class Comment extends React.PureComponent<CommentProps> {
         <div className="comment__actions card__actions--between">
           <button className={'button button--primary'}>Reply</button>
 
-          <span>
-            <button className="comment__action button button--secondary">Up</button>
-            <button className="comment__action button button--secondary">Down</button>
+          <span className="comment__actions-wrap">
+            <button className="comment__action upvote">Up</button>
+            <button className="comment__action downvote">Down</button>
           </span>
         </div>
       </li>
