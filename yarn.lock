@@ -11805,8 +11805,8 @@ videostream@^2.5.1:
     range-slice-stream "^2.0.0"
 
 villain@btzr-io/Villain:
-  version "0.0.4"
-  resolved "https://codeload.github.com/btzr-io/Villain/tar.gz/e587ed3c7b3499e6250f557f3891f040da5a6846"
+  version "0.0.7"
+  resolved "https://codeload.github.com/btzr-io/Villain/tar.gz/1f39a679cd78b08f8acc0b36615550eb91f6ee03"
   dependencies:
     clsx "^1.0.4"
     libarchive.js "^1.1.0"

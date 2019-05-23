@@ -44,7 +44,8 @@
     "electron-log": "^2.2.12",
     "electron-updater": "^4.0.6",
     "express": "^4.16.4",
-    "keytar": "^4.4.1"
+    "keytar": "^4.4.1",
+    "villain": "btzr-io/Villain"
   },
   "devDependencies": {
     "@babel/core": "^7.0.0",
@@ -172,7 +173,6 @@
     "three-full": "^17.1.0",
     "tree-kill": "^1.1.0",
     "video.js": "^7.2.2",
-    "villain": "btzr-io/Villain",
     "wavesurfer.js": "^2.2.1",
     "webpack": "^4.28.4",
     "webpack-bundle-analyzer": "^3.1.0",
