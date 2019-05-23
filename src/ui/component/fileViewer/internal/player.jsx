@@ -1,5 +1,5 @@
 // @flow
-import 'babel-polyfill';
+import '@babel/polyfill';
 import * as React from 'react';
 // @if TARGET='app'
 import { remote } from 'electron';

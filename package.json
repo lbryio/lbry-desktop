@@ -1,6 +1,6 @@
 {
   "name": "LBRY",
-  "version": "0.32.1",
+  "version": "0.32.2",
   "description": "A browser for the LBRY network, a digital marketplace controlled by its users.",
   "keywords": [
     "lbry"
@@ -40,8 +40,6 @@
     "postinstall": "electron-builder install-app-deps && node build/downloadDaemon.js"
   },
   "dependencies": {
-    "@reach/rect": "^0.2.1",
-    "@reach/tabs": "^0.1.5",
     "electron-dl": "^1.11.0",
     "electron-log": "^2.2.12",
     "electron-updater": "^4.0.6",
@@ -63,6 +61,8 @@
     "@hot-loader/react-dom": "16.8",
     "@lbry/color": "^1.0.2",
     "@lbry/components": "^2.7.0",
+    "@reach/rect": "^0.2.1",
+    "@reach/tabs": "^0.1.5",
     "@types/three": "^0.93.1",
     "async-exit-hook": "^2.0.1",
     "babel-eslint": "^10.0.1",
@@ -76,7 +76,7 @@
     "chalk": "^2.4.2",
     "classnames": "^2.2.5",
     "codemirror": "^5.39.2",
-    "connected-react-router": "^6.3.2",
+    "connected-react-router": "^6.4.0",
     "cookie": "^0.3.1",
     "copy-webpack-plugin": "^4.6.0",
     "country-data": "^0.0.31",
@@ -89,7 +89,7 @@
     "devtron": "^1.4.0",
     "dom-scroll-into-view": "^1.2.1",
     "electron": "4.1.0",
-    "electron-builder": "^20.39.0",
+    "electron-builder": "^20.41.0",
     "electron-devtools-installer": "^2.2.4",
     "electron-is-dev": "^0.3.0",
     "electron-publisher-s3": "^20.8.1",
@@ -149,6 +149,7 @@
     "react-paginate": "^5.2.1",
     "react-pose": "^4.0.5",
     "react-redux": "^6.0.1",
+    "react-router": "^5.0.0",
     "react-router-dom": "^5.0.0",
     "react-simplemde-editor": "^4.0.0",
     "react-toggle": "^4.0.2",
@@ -189,7 +190,7 @@
     "yarn": "^1.3"
   },
   "lbrySettings": {
-    "lbrynetDaemonVersion": "0.37.0",
+    "lbrynetDaemonVersion": "0.37.1",
     "lbrynetDaemonUrlTemplate": "https://github.com/lbryio/lbry/releases/download/vDAEMONVER/lbrynet-OSNAME.zip",
     "lbrynetDaemonDir": "static/daemon",
     "lbrynetDaemonFileName": "lbrynet"

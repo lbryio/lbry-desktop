@@ -6,5 +6,6 @@
 /static/locales
 yarn-error.log
 package-lock.json
+.transifexrc
 .idea/
 /build/daemon*

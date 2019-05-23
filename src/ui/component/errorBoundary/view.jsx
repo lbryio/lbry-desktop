@@ -4,6 +4,7 @@ import * as React from 'react';
 import Yrbl from 'component/yrbl';
 import Button from 'component/button';
 import { withRouter } from 'react-router';
+import Native from 'native';
 
 type Props = {
   children: React.Node,
@@ -29,15 +30,28 @@ class ErrorBoundary extends React.Component<Props, State> {
   }
 
   componentDidCatch(error: { stack: string }) {
+    let errorMessage = '\n';
+
+    // @if TARGET='web'
+    errorMessage += 'lbry.tv error\n';
+    errorMessage += window.location.pathname + window.location.search;
+    this.log(errorMessage);
+    // @endif
+    // @if TARGET='app'
+    Native.getAppVersionInfo().then(({ localVersion }) => {
+      errorMessage += `version: ${localVersion}\n`;
+      errorMessage += `page: ${window.location.href.split('.html')[1]}\n`;
+      errorMessage += `${error.stack}`;
+
+      this.log(errorMessage);
+    });
+    // @endif
+  }
+
+  log(message) {
     declare var app: { env: string };
-
-    const errorMessage = `
-    ${window.location.pathname + window.location.search}\n
-    ${error.stack}
-    `;
-
     if (app.env === 'production') {
-      Lbryio.call('event', 'desktop_error', { error_message: errorMessage });
+      Lbryio.call('event', 'desktop_error', { error_message: message });
     }
   }
 
