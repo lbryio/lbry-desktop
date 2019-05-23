@@ -1,7 +1,6 @@
 // @flow
 import * as React from 'react';
 import Villain from 'villain';
-
 import 'villain/dist/style.css';
 
 type Props = {
@@ -13,6 +12,8 @@ type Props = {
 
 const opts = {
   workerPath: '/webworkers/worker-bundle.js',
+  allowFullScreen: false,
+  autoHideControls: true,
 };
 
 class ComicBookViewer extends React.PureComponent<Props> {
