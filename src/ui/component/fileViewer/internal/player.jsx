@@ -351,7 +351,6 @@ class MediaPlayer extends React.PureComponent<Props, State> {
   render() {
     const { mediaType, claim } = this.props;
     const { fileSource } = this.state;
-
     const isFileType = this.isSupportedFile();
 
     const isFileReady = fileSource && isFileType;

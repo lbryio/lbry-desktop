@@ -7,6 +7,7 @@ const formats = [
   [/\.(json|csv|txt|log|md|markdown|docx|pdf|xml|yml|yaml)$/i, 'document'],
   [/\.(pdf|odf|doc|docx|epub|org|rtf)$/i, 'e-book'],
   [/\.(stl|obj|fbx|gcode)$/i, '3D-file'],
+  [/\.(cbr|cbt|cbz)$/i, 'comic-book'],
 ];
 
 export default function getMediaType(contentType, fileName) {

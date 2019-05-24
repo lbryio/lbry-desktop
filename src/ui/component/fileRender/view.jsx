@@ -30,6 +30,11 @@ const PdfViewer = React.lazy<*>(() =>
 );
 
 // @if TARGET='app'
+const ComicBookViewer = React.lazy<*>(() =>
+  import(/* webpackChunkName: "comicBookViewer" */
+  'component/viewers/comicBookViewer')
+);
+
 const ThreeViewer = React.lazy<*>(() =>
   import(/* webpackChunkName: "threeViewer" */
   'component/viewers/threeViewer')
@@ -128,6 +133,7 @@ class FileRender extends React.PureComponent<Props> {
     const mediaTypes = {
       // @if TARGET='app'
       '3D-file': <ThreeViewer source={{ fileType, downloadPath }} theme={currentTheme} />,
+      'comic-book': <ComicBookViewer source={{ fileType, downloadPath }} theme={currentTheme} />,
       // @endif
 
       application: !source.url ? null : (

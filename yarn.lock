@@ -762,7 +762,7 @@
     pirates "^4.0.0"
     source-map-support "^0.5.9"
 
-"@babel/runtime@^7.0.0", "@babel/runtime@^7.1.2", "@babel/runtime@^7.2.0", "@babel/runtime@^7.3.1":
+"@babel/runtime@^7.0.0", "@babel/runtime@^7.1.2", "@babel/runtime@^7.2.0", "@babel/runtime@^7.3.1", "@babel/runtime@^7.4.3":
   version "7.4.5"
   resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.4.5.tgz#582bb531f5f9dc67d2fcb682979894f75e253f12"
   integrity sha512-TuI4qpWZP6lGOGIuGWtp9sPluqYICmbk8T/1vpSysqJxRPkudh/ofFWyqdcMsDf2s7KvDL4/YHgKyvcS3g9CJQ==
@@ -2484,6 +2484,11 @@ clone@^1.0.2:
   resolved "https://registry.yarnpkg.com/clone/-/clone-1.0.4.tgz#da309cc263df15994c688ca902179ca3c7cd7c7e"
   integrity sha1-2jCcwmPfFZlMaIypAheco8fNfH4=
 
+clsx@^1.0.4:
+  version "1.0.4"
+  resolved "https://registry.yarnpkg.com/clsx/-/clsx-1.0.4.tgz#0c0171f6d5cb2fe83848463c15fcc26b4df8c2ec"
+  integrity sha512-1mQ557MIZTrL/140j+JVdRM6e31/OA4vTYxXgqIIZlndyfjHpyawKZia1Im05Vp9BWmImkcNrNtFYQMyFcgJDg==
+
 coa@^2.0.2:
   version "2.0.2"
   resolved "https://registry.yarnpkg.com/coa/-/coa-2.0.2.tgz#43f6c21151b4ef2bf57187db0d73de229e3e7ec3"
@@ -3225,6 +3230,11 @@ cyclist@~0.2.2:
   version "0.2.2"
   resolved "https://registry.yarnpkg.com/cyclist/-/cyclist-0.2.2.tgz#1b33792e11e914a2fd6d6ed6447464444e5fa640"
   integrity sha1-GzN5LhHpFKL9bW7WRHRkRE5fpkA=
+
+d3-array@^1.2.4:
+  version "1.2.4"
+  resolved "https://registry.yarnpkg.com/d3-array/-/d3-array-1.2.4.tgz#635ce4d5eea759f6f605863dbcfc30edc737f71f"
+  integrity sha512-KHW6M86R+FUPYGb3R5XiYjXPq7VzwxZ22buHhAEVG5ztoEcZZMLov530mmccaqA1GghZArjQV46fuc8kUqhhHw==
 
 damerau-levenshtein@^1.0.4:
   version "1.0.5"
@@ -6598,6 +6608,11 @@ levn@^0.3.0, levn@~0.3.0:
     prelude-ls "~1.1.2"
     type-check "~0.3.2"
 
+libarchive.js@^1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/libarchive.js/-/libarchive.js-1.1.0.tgz#8cc21a5a8ee59e5a02ce6eb966e140a7a44622bc"
+  integrity sha512-vh0dHBPK00ggbmTupqFWfws46a5QO/S5ZQ36Ymdyo4R93crXewXKJpYDpC/HROgOofvO8ogDdOLmU5MX8xGfmQ==
+
 lie@3.1.1:
   version "3.1.1"
   resolved "https://registry.yarnpkg.com/lie/-/lie-3.1.1.tgz#9a436b2cc7746ca59de7a41fa469b3efb76bd87e"
@@ -7892,6 +7907,11 @@ opener@^1.5.1:
   version "1.5.1"
   resolved "https://registry.yarnpkg.com/opener/-/opener-1.5.1.tgz#6d2f0e77f1a0af0032aca716c2c1fbb8e7e8abed"
   integrity sha512-goYSy5c2UXE4Ra1xixabeVh1guIX/ZV/YokJksb6q2lubWu6UbvPQ20p542/sFIll1nl8JnCyK9oBaOcCWXwvA==
+
+openseadragon@^2.4.0:
+  version "2.4.0"
+  resolved "https://registry.yarnpkg.com/openseadragon/-/openseadragon-2.4.0.tgz#d0b28b37a953602c82432a0dbd8a3779dadf756f"
+  integrity sha512-e2fsoEiCDkmwc3vyrv396lkYu4c9CGlpbSX4kYE07eW0ZlEF5DnLbeY2PhqPTskkC1jlsPu2TGZwaZ9VhaAn/w==
 
 opn@^5.5.0:
   version "5.5.0"
@@ -9340,7 +9360,17 @@ rc@^1.0.1, rc@^1.1.6, rc@^1.2.1, rc@^1.2.7:
     minimist "^1.2.0"
     strip-json-comments "~2.0.1"
 
-react-dom@^16.8.2:
+react-compound-slider@^1.2.2:
+  version "1.2.2"
+  resolved "https://registry.yarnpkg.com/react-compound-slider/-/react-compound-slider-1.2.2.tgz#1cc6809bb2d0282ad90a06040e2b10635edfbea3"
+  integrity sha512-G2wD5CTjAOTjCnslpfjopB5qU6Kg0//3ChPifezSGtMali/1M/CRDCJAh6SQOgyDaQlNi/QV1Noo8Tvnjy2gcg==
+  dependencies:
+    "@babel/runtime" "^7.4.3"
+    d3-array "^1.2.4"
+    prop-types "^15.7.2"
+    warning "^3.0.0"
+
+react-dom@^16.8.2, react-dom@^16.8.6:
   version "16.8.6"
   resolved "https://registry.yarnpkg.com/react-dom/-/react-dom-16.8.6.tgz#71d6303f631e8b0097f56165ef608f051ff6e10f"
   integrity sha512-1nL7PIq9LTL3fthPqwkvr2zY7phIPjYrT0jp4HjyEQrEROnw4dG41VVwi/wfoCneoleqrNX7iAD+pXebJZwrwA==
@@ -9468,7 +9498,7 @@ react-toggle@^4.0.2:
   dependencies:
     classnames "^2.2.5"
 
-react@^16.8.2:
+react@^16.8.2, react@^16.8.6:
   version "16.8.6"
   resolved "https://registry.yarnpkg.com/react/-/react-16.8.6.tgz#ad6c3a9614fd3a4e9ef51117f54d888da01f2bbe"
   integrity sha512-pC0uMkhLaHm11ZSJULfOBqV4tIZkx87ZLvbbQYunNixAAvjnC+snJCg0XQXn9VIsttVsbZP/H/ewzgsd5fxKXw==
@@ -11773,6 +11803,18 @@ videostream@^2.5.1:
     multistream "^2.0.2"
     pump "^3.0.0"
     range-slice-stream "^2.0.0"
+
+villain@btzr-io/Villain:
+  version "0.0.7"
+  resolved "https://codeload.github.com/btzr-io/Villain/tar.gz/1f39a679cd78b08f8acc0b36615550eb91f6ee03"
+  dependencies:
+    clsx "^1.0.4"
+    libarchive.js "^1.1.0"
+    openseadragon "^2.4.0"
+    prop-types "^15.7.2"
+    react "^16.8.6"
+    react-compound-slider "^1.2.2"
+    react-dom "^16.8.6"
 
 vm-browserify@0.0.4:
   version "0.0.4"
