@@ -41,6 +41,7 @@ export const ACCOUNT = 'User';
 export const SETTINGS = 'Settings';
 export const INVITE = 'Users';
 export const FILE = 'File';
+export const FULLSCREEN = 'Maximize';
 export const OPTIONS = 'Sliders';
 export const YES = 'ThumbsUp';
 export const NO = 'ThumbsDown';

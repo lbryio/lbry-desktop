@@ -7,10 +7,13 @@ import LoadingScreen from 'component/common/loading-screen';
 import PlayButton from './internal/play-button';
 
 const Player = React.lazy(() =>
-  import(/* webpackChunkName: "player-legacy" */
-  './internal/player')
+  import(
+    /* webpackChunkName: "player-legacy" */
+    './internal/player'
+  )
 );
 
+const F_KEYCODE = 70;
 const SPACE_BAR_KEYCODE = 32;
 
 type Props = {
@@ -49,6 +52,7 @@ type Props = {
   insufficientCredits: boolean,
   nsfw: boolean,
   thumbnail: ?string,
+  isPlayableType: boolean,
 };
 
 class FileViewer extends React.PureComponent<Props> {
@@ -63,6 +67,8 @@ class FileViewer extends React.PureComponent<Props> {
     // Don't add these variables to state because we don't need to re-render when their values change
     (this: any).startTime = undefined;
     (this: any).playTime = undefined;
+
+    (this: any).container = React.createRef();
   }
 
   componentDidMount() {
@@ -125,9 +131,40 @@ class FileViewer extends React.PureComponent<Props> {
 
   handleKeyDown(event: SyntheticKeyboardEvent<*>) {
     const { searchBarFocused } = this.props;
-    if (!searchBarFocused && event.keyCode === SPACE_BAR_KEYCODE) {
-      event.preventDefault(); // prevent page scroll
-      this.playContent();
+
+    if (!searchBarFocused) {
+      if (event.keyCode === SPACE_BAR_KEYCODE) {
+        event.preventDefault(); // prevent page scroll
+        this.playContent();
+      }
+
+      // Handle fullscreen shortcut key (f)
+      if (event.keyCode === F_KEYCODE) {
+        this.toggleFullscreen();
+      }
+    }
+  }
+
+  toggleFullscreen() {
+    const { isPlayableType } = this.props;
+
+    if (!document.webkitFullscreenElement) {
+      // Enter fullscreen mode if content is not playable
+      // Otherwise it should be handle internally on the video player
+      // or it will break the toggle fullscreen button
+      if (!isPlayableType) {
+        this.container.current.webkitRequestFullScreen();
+      }
+      // Request fullscreen mode for the video player
+      // Don't use this with the new player
+      // @if TARGET='app'
+      else {
+        const video = document.getElementsByTagName('video')[0];
+        video && video.webkitRequestFullscreen();
+      }
+      // @endif
+    } else {
+      document.webkitExitFullscreen();
     }
   }
 
@@ -257,7 +294,7 @@ class FileViewer extends React.PureComponent<Props> {
     const layoverStyle = !shouldObscureNsfw && thumbnail ? { backgroundImage: `url("${thumbnail}")` } : {};
 
     return (
-      <div className={classnames('video', {}, className)}>
+      <div className={classnames('video', {}, className)} ref={this.container}>
         {isPlaying && (
           <div className="content__view">
             {!isReadyToPlay ? (

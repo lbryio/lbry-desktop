@@ -92,7 +92,9 @@ class FilePage extends React.Component<Props> {
     setViewed(uri);
   }
 
-  componentWillReceiveProps(nextProps: Props) {
+  // This is now marked as a react lecacy method:
+  // https://reactjs.org/docs/react-component.html#unsafe_componentwillmount
+  UNSAFE_componentWillReceiveProps(nextProps: Props) {
     const { fetchFileInfo, uri, setViewed } = this.props;
     // @if TARGET='app'
     if (nextProps.fileInfo === undefined) {
@@ -152,7 +154,9 @@ class FilePage extends React.Component<Props> {
     const shouldObscureThumbnail = obscureNsfw && nsfw;
     const fileName = fileInfo ? fileInfo.file_name : null;
     const mediaType = getMediaType(contentType, fileName);
-    const showFile = PLAYABLE_MEDIA_TYPES.includes(mediaType) || PREVIEW_MEDIA_TYPES.includes(mediaType);
+    const isPreviewType = PREVIEW_MEDIA_TYPES.includes(mediaType);
+    const isPlayableType = PLAYABLE_MEDIA_TYPES.includes(mediaType);
+    const showFile = isPlayableType || isPreviewType;
 
     const speechShareable =
       costInfo && costInfo.cost === 0 && contentType && ['video', 'image'].includes(contentType.split('/')[0]);
@@ -203,6 +207,7 @@ class FilePage extends React.Component<Props> {
               className="content__embedded"
               uri={uri}
               mediaType={mediaType}
+              isPlayableType={isPlayableType}
             />
           )}
           {!showFile &&
@@ -288,7 +293,7 @@ class FilePage extends React.Component<Props> {
 
             <div className="media__action-group--large">
               <FileDownloadLink uri={uri} />
-              <FileActions uri={uri} claimId={claim.claim_id} />
+              <FileActions uri={uri} claimId={claim.claim_id} showFullscreen={isPreviewType} />
             </div>
           </div>
 

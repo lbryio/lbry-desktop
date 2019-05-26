@@ -15,15 +15,34 @@ type Props = {
   openModal: (id: string, { uri: string }) => void,
   claimIsMine: boolean,
   fileInfo: FileInfo,
+  showFullscreen: boolean,
 };
 
 class FileActions extends React.PureComponent<Props> {
+  MaximizeViewer() {
+    // Get viewer container
+    const viewer = document.getElementsByClassName('content__embedded')[0];
+    viewer.webkitRequestFullscreen();
+  }
+
   render() {
-    const { fileInfo, uri, openModal, claimIsMine, claimId } = this.props;
+    const { fileInfo, uri, openModal, claimIsMine, claimId, showFullscreen } = this.props;
     const showDelete = claimIsMine || (fileInfo && Object.keys(fileInfo).length > 0);
 
     return (
       <React.Fragment>
+        {showFullscreen && (
+          <Tooltip onComponent body={__('Full screen (f)')}>
+            <Button
+              button="alt"
+              description={__('Fullscreen')}
+              icon={ICONS.FULLSCREEN}
+              onClick={() => {
+                this.MaximizeViewer();
+              }}
+            />
+          </Tooltip>
+        )}
         {showDelete && (
           <Tooltip onComponent body={__('Delete this file')}>
             <Button
