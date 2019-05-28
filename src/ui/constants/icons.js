@@ -3,6 +3,9 @@
 // Note: Icons should be named for their purpose, rather than the actual icon.
 //       The goal being to reduce multiple uses of the same icon for different purposes.
 //
+export const LIGHT = 'Sun';
+export const DARK = 'Moon';
+export const AUTO = 'Clock';
 export const FEATURED = 'Award';
 export const LOCAL = 'Folder';
 export const ALERT = 'AlertCircle';

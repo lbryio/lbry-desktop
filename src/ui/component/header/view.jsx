@@ -4,6 +4,7 @@ import * as React from 'react';
 import Button from 'component/button';
 import LbcSymbol from 'component/common/lbc-symbol';
 import WunderBar from 'component/wunderbar';
+import ThemeToggler from 'component/themeToggler';
 import Icon from 'component/common/icon';
 
 type Props = {
@@ -108,6 +109,9 @@ const Header = (props: Props) => {
           />
         )}
         {/* @endif */}
+
+        <ThemeToggler />
+
       </div>
     </header>
   );
