@@ -92,23 +92,8 @@ class FilePage extends React.Component<Props> {
     setViewed(uri);
   }
 
-  // This is now marked as a react lecacy method:
-  // https://reactjs.org/docs/react-component.html#unsafe_componentwillmount
-  UNSAFE_componentWillReceiveProps(nextProps: Props) {
-    const { fetchFileInfo, uri, setViewed } = this.props;
-    // @if TARGET='app'
-    if (nextProps.fileInfo === undefined) {
-      fetchFileInfo(uri);
-    }
-    // @endif
-
-    if (uri !== nextProps.uri) {
-      setViewed(nextProps.uri);
-    }
-  }
-
   componentDidUpdate(prevProps: Props) {
-    const { isSubscribed, claim, uri, fetchViewCount, claimIsMine } = this.props;
+    const { isSubscribed, claim, uri, fileInfo, setViewed, fetchViewCount, claimIsMine, fetchFileInfo } = this.props;
 
     if (!prevProps.isSubscribed && isSubscribed) {
       this.removeFromSubscriptionNotifications();
@@ -116,6 +101,16 @@ class FilePage extends React.Component<Props> {
 
     if (prevProps.uri !== uri && claimIsMine) {
       fetchViewCount(claim.claim_id);
+    }
+
+    // @if TARGET='app'
+    if (fileInfo === undefined) {
+      fetchFileInfo(uri);
+    }
+    // @endif
+
+    if (prevProps.uri !== uri) {
+      setViewed(uri);
     }
   }
 

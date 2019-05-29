@@ -19,11 +19,11 @@ type Props = {
 };
 
 class FileActions extends React.PureComponent<Props> {
-  MaximizeViewer() {
+  maximizeViewer = () => {
     // Get viewer container
     const viewer = document.getElementsByClassName('content__embedded')[0];
     viewer.webkitRequestFullscreen();
-  }
+  };
 
   render() {
     const { fileInfo, uri, openModal, claimIsMine, claimId, showFullscreen } = this.props;
@@ -33,14 +33,7 @@ class FileActions extends React.PureComponent<Props> {
       <React.Fragment>
         {showFullscreen && (
           <Tooltip onComponent body={__('Full screen (f)')}>
-            <Button
-              button="alt"
-              description={__('Fullscreen')}
-              icon={ICONS.FULLSCREEN}
-              onClick={() => {
-                this.MaximizeViewer();
-              }}
-            />
+            <Button button="alt" description={__('Fullscreen')} icon={ICONS.FULLSCREEN} onClick={this.maximizeViewer} />
           </Tooltip>
         )}
         {showDelete && (
