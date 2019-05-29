@@ -1,5 +1,6 @@
 // @flow
 import React, { Fragment } from 'react';
+import MarkdownPreview from 'component/common/markdown-preview';
 
 type Props = {
   description: ?string,
@@ -16,7 +17,11 @@ function ChannelContent(props: Props) {
       {!showAbout && <h2 className="empty">{__('Nothing here yet')}</h2>}
       {showAbout && (
         <Fragment>
-          {description && <div className="media__info-text">{description}</div>}
+          {description && (
+            <div className="media__info-text">
+              <MarkdownPreview content={description} promptLinks />
+            </div>
+          )}
           {email && (
             <Fragment>
               <div className="media__info-title">{__('Contact')}</div>
@@ -26,7 +31,9 @@ function ChannelContent(props: Props) {
           {website && (
             <Fragment>
               <div className="media__info-title">{__('Site')}</div>
-              <div className="media__info-text">{website}</div>
+              <div className="media__info-text">
+                <MarkdownPreview content={website} promptLinks />
+              </div>
             </Fragment>
           )}
         </Fragment>
