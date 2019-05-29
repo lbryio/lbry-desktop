@@ -24,14 +24,13 @@ const downloadDaemon = targetPlatform =>
     const daemonFilePath = path.join(daemonDir, daemonFileName);
     const daemonVersionPath = path.join(__dirname, 'daemon.ver');
     const tmpZipPath = path.join(__dirname, '..', 'dist', 'daemon.zip');
-    const daemonURL = daemonURLTemplate
-      .replace(/DAEMONVER/g, daemonVersion)
-      .replace(/OSNAME/g, daemonPlatform);
+    const daemonURL = daemonURLTemplate.replace(/DAEMONVER/g, daemonVersion).replace(/OSNAME/g, daemonPlatform);
 
     // If a daemon and daemon.ver exists, check to see if it matches the current daemon version
     const hasDaemonDownloaded = fs.existsSync(daemonFilePath);
     const hasDaemonVersion = fs.existsSync(daemonVersionPath);
     let downloadedDaemonVersion;
+
     if (hasDaemonVersion) {
       downloadedDaemonVersion = fs.readFileSync(daemonVersionPath, 'utf8');
     }
@@ -65,6 +64,7 @@ const downloadDaemon = targetPlatform =>
             })
         )
         .then(() => del(`${daemonFilePath}*`))
+        .then()
         .then(() =>
           decompress(tmpZipPath, daemonDir, {
             filter: file => path.basename(file.path) === daemonFileName,
@@ -80,9 +80,7 @@ const downloadDaemon = targetPlatform =>
           resolve('Done');
         })
         .catch(error => {
-          console.error(
-            `\x1b[31merror\x1b[0m Daemon download failed due to: \x1b[35m${error}\x1b[0m`
-          );
+          console.error(`\x1b[31merror\x1b[0m Daemon download failed due to: \x1b[35m${error}\x1b[0m`);
           reject(error);
         });
     }

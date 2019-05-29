@@ -1,14 +1,15 @@
 // @flow
-import * as React from 'react';
 import * as MODALS from 'constants/modal_types';
+import React from 'react';
 import { Lbry } from 'lbry-redux';
+import Button from 'component/button';
 import ModalWalletUnlock from 'modal/modalWalletUnlock';
 import ModalIncompatibleDaemon from 'modal/modalIncompatibleDaemon';
 import ModalUpgrade from 'modal/modalUpgrade';
 import ModalDownloading from 'modal/modalDownloading';
-import LoadScreen from './internal/load-screen';
+import 'css-doodle';
 
-const ONE_MINUTE = 60 * 1000;
+const FORTY_FIVE_SECONDS = 45 * 1000;
 
 type Props = {
   checkDaemonVersion: () => Promise<any>,
@@ -87,7 +88,7 @@ export default class SplashScreen extends React.PureComponent<Props, State> {
     // If nothing changes after 1 minute, show the error message.
     this.timeout = setTimeout(() => {
       this.setState({ error: true });
-    }, ONE_MINUTE);
+    }, FORTY_FIVE_SECONDS);
   }
 
   updateStatus() {
@@ -170,14 +171,14 @@ export default class SplashScreen extends React.PureComponent<Props, State> {
     const { daemonVersionMatched, onReadyToLaunch } = this.props;
     const { isRunning, launchWithIncompatibleDaemon } = this.state;
 
-    // if (daemonVersionMatched) {
-    //   onReadyToLaunch();
-    // } else if (launchWithIncompatibleDaemon && isRunning) {
-    //   // The user may have decided to run the app with mismatched daemons
-    //   // They could make this decision before the daemon is finished starting up
-    //   // If it isn't running, this function will be called after the daemon is started
-    //   onReadyToLaunch();
-    // }
+    if (daemonVersionMatched) {
+      onReadyToLaunch();
+    } else if (launchWithIncompatibleDaemon && isRunning) {
+      // The user may have decided to run the app with mismatched daemons
+      // They could make this decision before the daemon is finished starting up
+      // If it isn't running, this function will be called after the daemon is started
+      onReadyToLaunch();
+    }
   }
 
   hasRecordedUser: boolean;
@@ -206,16 +207,32 @@ export default class SplashScreen extends React.PureComponent<Props, State> {
   }
 
   render() {
-    const { message, details, error } = this.state;
+    const { error } = this.state;
 
     return (
-      <React.Fragment>
-        <LoadScreen message={message} details={details} error={error} />
+      <div className="splash">
+        <css-doodle use="var(--rule)" />
+        <h1 className="splash__title">LBRY</h1>
+        {error && (
+          <div className="splash__error card card--section">
+            <h3>{__('Uh oh. The flux in our Retro Encabulator must be out of whack. Try refreshing to fix it.')}</h3>
+            <div className="splash__actions">
+              <Button button="primary" label={__('Refresh')} onClick={() => window.location.reload()} />
+            </div>
+            <div className="help">
+              <p>{__('If you still have issues, your anti-virus software or firewall may be preventing startup.')}</p>
+              <p>
+                {__('Reach out to hello@lbry.com for help, or check out')}{' '}
+                <Button button="link" href="https://lbry.com/faq/startup-troubleshooting" label="this link" />.
+              </p>
+            </div>
+          </div>
+        )}
         {/* Temp hack: don't show any modals on splash screen daemon is running;
             daemon doesn't let you quit during startup, so the "Quit" buttons
-            in the modals won't work. */}
+          in the modals won't work. */}
         {this.renderModals()}
-      </React.Fragment>
+      </div>
     );
   }
 }
