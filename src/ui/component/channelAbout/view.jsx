@@ -8,6 +8,15 @@ type Props = {
   website: ?string,
 };
 
+const formatEmail = (email: string) => {
+  if (email) {
+    const protocolRegex = new RegExp('^mailto:', 'i');
+    const protocol = protocolRegex.exec(email);
+    return protocol ? email : `mailto:${email}`;
+  }
+  return null;
+};
+
 function ChannelContent(props: Props) {
   const { description, email, website } = props;
   const showAbout = description || email || website;
@@ -25,7 +34,9 @@ function ChannelContent(props: Props) {
           {email && (
             <Fragment>
               <div className="media__info-title">{__('Contact')}</div>
-              <div className="media__info-text">{email}</div>
+              <div className="media__info-text">
+                <MarkdownPreview content={formatEmail(email)} promptLinks />
+              </div>
             </Fragment>
           )}
           {website && (
