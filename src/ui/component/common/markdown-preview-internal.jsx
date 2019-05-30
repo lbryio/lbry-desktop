@@ -1,8 +1,9 @@
 // @flow
 import * as React from 'react';
 import remark from 'remark';
-import reactRenderer from 'remark-react';
+import remarkLBRY from 'util/remark-lbry';
 import remarkEmoji from 'remark-emoji';
+import reactRenderer from 'remark-react';
 import ExternalLink from 'component/externalLink';
 import defaultSchema from 'hast-util-sanitize/lib/github.json';
 
@@ -30,7 +31,7 @@ const SimpleLink = (props: SimpleLinkProps) => {
 const schema = { ...defaultSchema };
 
 // Extend sanitation schema to support lbry protocol
-schema.protocols.href[3] = 'lbry';
+schema.protocols.href.push('lbry');
 
 const MarkdownPreview = (props: MarkdownProps) => {
   const { content, promptLinks } = props;
@@ -44,6 +45,7 @@ const MarkdownPreview = (props: MarkdownProps) => {
     <div className="markdown-preview">
       {
         remark()
+          .use(remarkLBRY)
           .use(remarkEmoji)
           .use(reactRenderer, remarkOptions)
           .processSync(content).contents

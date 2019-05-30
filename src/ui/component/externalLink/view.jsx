@@ -20,14 +20,11 @@ class ExternalLink extends React.PureComponent<Props> {
 
   createLink() {
     const { href, title, children, openModal } = this.props;
-
     // Regex for url protocol
     const protocolRegex = new RegExp('^(https?|lbry)+:', 'i');
     const protocol = href ? protocolRegex.exec(href) : null;
-
     // Return plain text if no valid url
     let element = <span>{children}</span>;
-
     // Return external link if protocol is http or https
     if (protocol && (protocol[0] === 'http:' || protocol[0] === 'https:')) {
       element = (
@@ -41,7 +38,6 @@ class ExternalLink extends React.PureComponent<Props> {
         />
       );
     }
-
     // Return local link if protocol is lbry uri
     if (protocol && protocol[0] === 'lbry:' && isURIValid(href)) {
       element = <Button button="link" title={title || href} label={children} navigate={href} />;
