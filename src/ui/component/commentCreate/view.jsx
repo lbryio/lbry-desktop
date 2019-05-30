@@ -4,6 +4,7 @@ import { FormField, Form } from 'component/common/form';
 import Button from 'component/button';
 import ChannelSection from 'component/selectChannel';
 import { parseURI } from 'lbry-redux';
+import { usePersistedState } from 'util/use-persisted-state';
 
 // props:
 type Props = {
@@ -51,6 +52,21 @@ class CommentCreate extends React.PureComponent<Props> {
 
     return (
       <section className="card card--section">
+        {!acksComments && (
+          <React.Fragment>
+            <div className="media__title">
+              <TruncatedText text={channelName || uri} lines={1} />
+            </div>
+            <div className="media__subtitle">
+              {totalItems > 0 && (
+                <span>
+                  {totalItems} {totalItems === 1 ? 'publish' : 'publishes'}
+                </span>
+              )}
+              {!isResolvingUri && !totalItems && <span>This is an empty channel.</span>}
+            </div>
+          </React.Fragment>
+        )}
         <Form onSubmit={this.handleSubmit}>
           <div className="card__content">
             <FormField

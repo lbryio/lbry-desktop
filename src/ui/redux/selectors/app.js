@@ -23,9 +23,15 @@ export const selectUpdateUrl = createSelector(
   }
 );
 
+// HERE
 export const selectHasClickedComment = createSelector(
   selectState,
   state => state.hasClickedComment
+);
+
+export const selectCommentsInfoAck = createSelector(
+  selectState,
+  state => state.commentsInfoAck
 );
 
 export const selectRemoteVersion = createSelector(

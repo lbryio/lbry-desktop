@@ -36,6 +36,8 @@ export type AppState = {
   isUpgradeAvailable: ?boolean,
   isUpgradeSkipped: ?boolean,
   hasClickedComment: boolean,
+  commentsInfoAck: boolean,
+  enhancedLayout: boolean,
   searchOptionsExpanded: boolean,
 };
 
@@ -54,6 +56,7 @@ const defaultState: AppState = {
   autoUpdateDeclined: false,
   modalsAllowed: true,
   hasClickedComment: false,
+  commentsInfoAck: false,
   downloadProgress: undefined,
   upgradeDownloading: undefined,
   upgradeDownloadComplete: undefined,
@@ -194,6 +197,8 @@ reducers[ACTIONS.CLEAR_UPGRADE_TIMER] = state =>
   Object.assign({}, state, {
     checkUpgradeTimer: undefined,
   });
+// HERE
+reducers[ACTIONS.COMMENTS_ACK] = state => Object.assign({}, state, { commentsInfoAck: true });
 
 reducers[ACTIONS.ADD_COMMENT] = state =>
   Object.assign({}, state, {
