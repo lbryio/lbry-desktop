@@ -260,9 +260,14 @@
 
 .media__info-text {
   font-size: 1.15rem;
+  word-break: break-word;
 
   &:not(:last-of-type) {
     margin-bottom: var(--spacing-vertical-large);
+  }
+
+  &.media__info-text--small {
+    max-width: 70%;
   }
 
   &.media__info-text--center {

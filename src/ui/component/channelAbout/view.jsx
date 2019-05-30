@@ -27,7 +27,7 @@ function ChannelContent(props: Props) {
       {showAbout && (
         <Fragment>
           {description && (
-            <div className="media__info-text">
+            <div className="media__info-text media__info-text--small">
               <MarkdownPreview content={description} promptLinks />
             </div>
           )}
