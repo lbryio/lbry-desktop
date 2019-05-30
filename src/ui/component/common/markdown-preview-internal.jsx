@@ -30,7 +30,7 @@ const SimpleLink = (props: SimpleLinkProps) => {
 const schema = { ...defaultSchema };
 
 // Extend sanitation schema to support lbry protocol
-schema.protocols.href[3] = 'lbry';
+schema.protocols.href.push('lbry');
 
 const MarkdownPreview = (props: MarkdownProps) => {
   const { content, promptLinks } = props;
