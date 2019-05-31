@@ -37,6 +37,7 @@ export default function AppRouter() {
     <Scroll>
       <Switch>
         <Route path="/" exact component={DiscoverPage} />
+        <Route path={`/$/${PAGES.DISCOVER}`} exact component={DiscoverPage} />
         <Route path={`/$/${PAGES.AUTH}`} exact component={AuthPage} />
         <Route path={`/$/${PAGES.INVITE}`} exact component={InvitePage} />
         <Route path={`/$/${PAGES.DOWNLOADED}`} exact component={FileListDownloaded} />
