@@ -5,6 +5,7 @@ import classnames from 'classnames';
 import analytics from 'analytics';
 import LoadingScreen from 'component/common/loading-screen';
 import PlayButton from './internal/play-button';
+import { requestFullscreen, exitFullscreen } from 'util/full-screen';
 
 const Player = React.lazy(() =>
   import(
@@ -153,18 +154,18 @@ class FileViewer extends React.PureComponent<Props> {
       // Otherwise it should be handle internally on the video player
       // or it will break the toggle fullscreen button
       if (!isPlayableType) {
-        this.container.current.webkitRequestFullScreen();
+        requestFullscreen(this.container.current);
       }
       // Request fullscreen mode for the video player
       // Don't use this with the new player
       // @if TARGET='app'
       else {
         const video = document.getElementsByTagName('video')[0];
-        video && video.webkitRequestFullscreen();
+        video && requestFullscreen(video);
       }
       // @endif
     } else {
-      document.webkitExitFullscreen();
+      exitFullscreen();
     }
   }
 

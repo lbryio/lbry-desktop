@@ -4,6 +4,7 @@ import * as ICONS from 'constants/icons';
 import * as React from 'react';
 import Button from 'component/button';
 import Tooltip from 'component/common/tooltip';
+import { requestFullscreen } from 'util/full-screen';
 
 type FileInfo = {
   claim_id: string,
@@ -22,7 +23,7 @@ class FileActions extends React.PureComponent<Props> {
   maximizeViewer = () => {
     // Get viewer container
     const viewer = document.getElementsByClassName('content__embedded')[0];
-    viewer.webkitRequestFullscreen();
+    requestFullscreen(viewer);
   };
 
   render() {
