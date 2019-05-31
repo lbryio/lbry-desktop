@@ -1,9 +1,14 @@
+/*
+  Polyfill functions for the HTML5 fullscreen api:
+  https://developer.mozilla.org/en-US/docs/Web/API/Fullscreen_API
+*/
+
 const prefixes = {
-  fullscreenElement: ['fullscreenElement', 'msFullscreenElement', 'mozFullScreenElement', 'webkitFullscreenElement'],
-  fullscreenEnabled: ['fullscreenEnabled', 'msFullscreenEnabled', 'mozFullScreenEnabled', 'webkitFullscreenEnabled'],
-  requestFullscreen: ['requestFullscreen', 'msRequestFullscreen', 'mozRequestFullScreen', 'webkitRequestFullscreen'],
   exitFullscreen: ['exitFullscreen', 'msExitFullscreen', 'mozCancelFullScreen', 'webkitExitFullscreen'],
   fullscreenChange: ['fullscreenChange', 'MSFullscreenChange', 'mozfullscreenchange', 'webkitfullscreenchange'],
+  fullscreenEnabled: ['fullscreenEnabled', 'msFullscreenEnabled', 'mozFullScreenEnabled', 'webkitFullscreenEnabled'],
+  fullscreenElement: ['fullscreenElement', 'msFullscreenElement', 'mozFullScreenElement', 'webkitFullscreenElement'],
+  requestFullscreen: ['requestFullscreen', 'msRequestFullscreen', 'mozRequestFullScreen', 'webkitRequestFullscreen'],
 };
 
 const getPrefix = () => {
