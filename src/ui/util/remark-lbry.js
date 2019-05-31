@@ -5,41 +5,39 @@ const locateURI = (value, fromIndex) => value.indexOf(protocol, fromIndex);
 const locateMention = (value, fromIndex) => value.indexOf('@', fromIndex);
 
 // Generate a valid markdown link
-const createURI = (text, uri, addProtocol = true) => ({
+const createURI = (text, uri) => ({
   type: 'link',
-  url: (addProtocol ? protocol : '') + uri,
+  url: (uri.startsWith(protocol) ? '' : protocol) + uri,
   children: [{ type: 'text', value: text }],
 });
+
+const validateURI = (match) => {
+  if (match) {
+    try {
+      const text = match[0];
+      const uri = parseURI(text);
+      // Create channel link
+      if (uri.isChannel) {
+        return eat(text)(createURI(uri.claimName, text));
+      }
+      // Create uri link
+      return eat(text)(createURI(text, text));
+    } catch (err) {
+      // Silent errors: console.error(err)
+    }
+  }
+}
 
 // Generate a markdown link from channel name
 function tokenizeMention(eat, value, silent) {
   const match = /^@(\w+)/.exec(value);
-
-  if (match) {
-    const text = match[0];
-    const href = match[0];
-    return silent ? true : eat(text)(createURI(text, href));
-  }
+  return validateURI(match);
 }
 
 // Generate a markdown link from lbry url
 function tokenizeURI(eat, value, silent) {
   const match = /^(lbry:\/\/)+([A-z0-9-_#@])+/.exec(value);
-
-  if (match) {
-    try {
-      const text = match[0];
-      const uri = parseURI(text, true);
-      // Create channel link
-      if (uri.isChannel) {
-        return eat(text)(createURI(uri.claimName, uri.claimName));
-      }
-      // Create uri link
-      return eat(text)(createURI(text, text, false));
-    } catch (err) {
-      // Silent errors: console.error(err)
-    }
-  }
+  return validateURI(match);
 }
 
 // Configure tokenizer for lbry urls
