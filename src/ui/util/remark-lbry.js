@@ -11,11 +11,12 @@ const createURI = (text, uri) => ({
   children: [{ type: 'text', value: text }],
 });
 
-const validateURI = (match) => {
+const validateURI = (match, eat) => {
   if (match) {
     try {
       const text = match[0];
       const uri = parseURI(text);
+      console.info(text);
       // Create channel link
       if (uri.isChannel) {
         return eat(text)(createURI(uri.claimName, text));
@@ -26,18 +27,18 @@ const validateURI = (match) => {
       // Silent errors: console.error(err)
     }
   }
-}
+};
 
 // Generate a markdown link from channel name
 function tokenizeMention(eat, value, silent) {
   const match = /^@(\w+)/.exec(value);
-  return validateURI(match);
+  return validateURI(match, eat);
 }
 
 // Generate a markdown link from lbry url
 function tokenizeURI(eat, value, silent) {
-  const match = /^(lbry:\/\/)+([A-z0-9-_#@])+/.exec(value);
-  return validateURI(match);
+  const match = /^(lbry:\/\/)+([A-z0-9-_#@:])+/.exec(value);
+  return validateURI(match, eat);
 }
 
 // Configure tokenizer for lbry urls
