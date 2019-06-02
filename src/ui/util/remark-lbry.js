@@ -16,9 +16,8 @@ const validateURI = (match, eat) => {
     try {
       const text = match[0];
       const uri = parseURI(text);
-      console.info(text);
       // Create channel link
-      if (uri.isChannel) {
+      if (uri.isChannel && !uri.path) {
         return eat(text)(createURI(uri.claimName, text));
       }
       // Create uri link
@@ -31,13 +30,13 @@ const validateURI = (match, eat) => {
 
 // Generate a markdown link from channel name
 function tokenizeMention(eat, value, silent) {
-  const match = /^@(\w+)/.exec(value);
+  const match = /^@+[a-zA-Z0-9-#:/]+/.exec(value);
   return validateURI(match, eat);
 }
 
 // Generate a markdown link from lbry url
 function tokenizeURI(eat, value, silent) {
-  const match = /^(lbry:\/\/)+([A-z0-9-_#@:])+/.exec(value);
+  const match = /^(lbry:\/\/)+[a-zA-Z0-9-@#:/]+/.exec(value);
   return validateURI(match, eat);
 }
 
