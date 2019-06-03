@@ -14,6 +14,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 - Comic book reader ([#2484](https://github.com/lbryio/lbry-desktop/pull/2484))
 - Base functionality for more language support ([#2495](https://github.com/lbryio/lbry-desktop/pull2495))
+- Add easy thumbnail selector for videos ([#2492](https://github.com/lbryio/lbry-desktop/pull2492))
 
 ## [0.32.2] - [2019-5-20]
 
