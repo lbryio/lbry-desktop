@@ -380,12 +380,6 @@ export function doClickCommentButton() {
   };
 }
 
-export function doAckComments() {
-  return {
-    type: ACTIONS.COMMENTS_ACK,
-  };
-}
-
 export function doConditionalAuthNavigate(newSession) {
   return (dispatch, getState) => {
     const state = getState();

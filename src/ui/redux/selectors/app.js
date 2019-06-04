@@ -29,11 +29,6 @@ export const selectHasClickedComment = createSelector(
   state => state.hasClickedComment
 );
 
-export const selectCommentsInfoAck = createSelector(
-  selectState,
-  state => state.commentsInfoAck
-);
-
 export const selectRemoteVersion = createSelector(
   selectState,
   state => state.remoteVersion
