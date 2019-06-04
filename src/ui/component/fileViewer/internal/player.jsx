@@ -156,7 +156,9 @@ class MediaPlayer extends React.PureComponent<Props, State> {
 
     // Render custom viewer: FileRender
     if (this.isSupportedFile()) {
-      downloadCompleted && this.renderFile();
+      if (downloadCompleted) {
+        this.renderFile();
+      }
     } else {
       // Render default viewer: render-media (video, audio, img, iframe)
       const currentMediaContainer = this.mediaContainer.current;
