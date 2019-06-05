@@ -211,12 +211,46 @@ export default class SplashScreen extends React.PureComponent<Props, State> {
 
     return (
       <div className="splash">
-        <css-doodle use="var(--rule)" />
+        <css-doodle>
+          {`
+            --color: @p(var(--lbry-teal-1), var(--lbry-orange-1), var(--lbry-cyan-3), var(--lbry-pink-5));
+            :doodle {
+              @grid: 30x1 / 18vmin;
+              --deg: @p(-180deg, 180deg);
+            }
+            :container {
+              perspective: 30vmin;
+            }
+          
+            @place-cell: center;
+            @size: 100%;
+          
+            box-shadow: @m2(0 0 50px var(--color));            
+            will-change: transform, opacity;
+            animation: scale-up 12s linear infinite;
+            animation-delay: calc(-12s / @size() * @i());
+
+            @keyframes scale-up {
+              0%, 95.01%, 100% {
+                transform: translateZ(0) rotate(0);
+                opacity: 0;
+              }
+              10% { 
+                opacity: 1; 
+              }
+              95% {
+                transform: 
+                  translateZ(35vmin) rotateZ(@var(--deg));
+              }
+            }
+          )
+          `}
+        </css-doodle>
         <h1 className="splash__title">LBRY</h1>
         {error && (
           <div className="splash__error card card--section">
             <h3>{__('Uh oh. The flux in our Retro Encabulator must be out of whack. Try refreshing to fix it.')}</h3>
-            <div className="splash__actions">
+            <div className="card__actions--top-space card__actions--center">
               <Button button="primary" label={__('Refresh')} onClick={() => window.location.reload()} />
             </div>
             <div className="help">
