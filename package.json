@@ -81,6 +81,7 @@
     "copy-webpack-plugin": "^4.6.0",
     "country-data": "^0.0.31",
     "cross-env": "^5.2.0",
+    "css-doodle": "^0.7.1",
     "css-loader": "^2.1.0",
     "cssnano": "^4.1.10",
     "dat.gui": "^0.7.2",
