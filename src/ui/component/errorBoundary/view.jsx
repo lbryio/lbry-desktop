@@ -53,9 +53,9 @@ class ErrorBoundary extends React.Component<Props, State> {
 
   log(message) {
     declare var app: { env: string };
-    // if (app.env === 'production') {
-    Lbryio.call('event', 'desktop_error', { error_message: message });
-    // }
+    if (app.env === 'production') {
+      Lbryio.call('event', 'desktop_error', { error_message: message });
+    }
   }
 
   refresh() {
