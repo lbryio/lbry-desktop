@@ -44,7 +44,7 @@ if (process.env.SEARCH_API_URL) {
 }
 
 // @if TARGET='web'
-const SDK_API_URL = process.env.SDK_API_URL || 'https://api.piratebay.com/api/proxy';
+const SDK_API_URL = process.env.SDK_API_URL || 'https://api.lbry.tv/api/proxy';
 Lbry.setDaemonConnectionString(SDK_API_URL);
 // @endif
 
