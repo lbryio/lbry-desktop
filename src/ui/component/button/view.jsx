@@ -7,7 +7,6 @@ import { formatLbryUriForWeb } from 'util/uri';
 import { OutboundLink } from 'react-ga';
 
 type Props = {
-  onClick: ?(any) => any,
   href: ?string,
   title: ?string,
   label: ?string,
@@ -24,6 +23,11 @@ type Props = {
   iconSize?: number,
   constrict: ?boolean, // to shorten the button and ellipsis, only use for links
   activeClass?: string,
+  innerRef: ?any,
+  // Events
+  onClick: ?(any) => any,
+  onMouseEnter: ?(any) => any,
+  onMouseLeave: ?(any) => any,
 };
 
 class Button extends React.PureComponent<Props> {
@@ -34,6 +38,9 @@ class Button extends React.PureComponent<Props> {
   render() {
     const {
       onClick,
+      onMouseEnter,
+      onMouseLeave,
+      innerRef,
       href,
       title,
       label,
@@ -111,8 +118,11 @@ class Button extends React.PureComponent<Props> {
             onClick();
           }
         }}
+        onMouseEnter={onMouseEnter}
+        onMouseLeave={onMouseLeave}
         className={combinedClassName}
         activeClassName={activeClass}
+        innerRef={innerRef}
       >
         {content}
       </NavLink>

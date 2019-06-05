@@ -147,6 +147,7 @@
     "react-hot-loader": "^4.7.2",
     "react-modal": "^3.1.7",
     "react-paginate": "^5.2.1",
+    "react-portal-tooltip": "^2.4.7",
     "react-pose": "^4.0.5",
     "react-redux": "^6.0.1",
     "react-router": "^5.0.0",

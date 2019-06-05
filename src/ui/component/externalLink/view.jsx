@@ -4,6 +4,7 @@ import * as ICONS from 'constants/icons';
 import * as React from 'react';
 import { isURIValid } from 'lbry-redux';
 import Button from 'component/button';
+import ChannelLink from 'component/channelLink';
 
 type Props = {
   href: string,
@@ -40,7 +41,7 @@ class ExternalLink extends React.PureComponent<Props> {
     }
     // Return local link if protocol is lbry uri
     if (protocol && protocol[0] === 'lbry:' && isURIValid(href)) {
-      element = <Button button="link" title={title || href} label={children} navigate={href} />;
+      element = <ChannelLink uri={href}>{children}</ChannelLink>;
     }
 
     return element;
