@@ -26,7 +26,8 @@ const getPrefix = () => {
 
 export const fullscreenElement = () => {
   const index = getPrefix();
-  return prefixes.fullscreenElement[index];
+  const prefix = prefixes.fullscreenElement[index];
+  return document[prefix];
 };
 
 export const requestFullscreen = elem => {

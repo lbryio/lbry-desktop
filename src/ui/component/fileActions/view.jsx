@@ -4,7 +4,7 @@ import * as ICONS from 'constants/icons';
 import * as React from 'react';
 import Button from 'component/button';
 import Tooltip from 'component/common/tooltip';
-import { requestFullscreen } from 'util/full-screen';
+import { requestFullscreen, fullscreenElement } from 'util/full-screen';
 
 type FileInfo = {
   claim_id: string,
@@ -16,14 +16,19 @@ type Props = {
   openModal: (id: string, { uri: string }) => void,
   claimIsMine: boolean,
   fileInfo: FileInfo,
+  viewerContainer: React.Ref,
   showFullscreen: boolean,
 };
 
 class FileActions extends React.PureComponent<Props> {
   maximizeViewer = () => {
-    // Get viewer container
-    const viewer = document.getElementsByClassName('content__embedded')[0];
-    requestFullscreen(viewer);
+    const { viewerContainer } = this.props;
+    const isFullscreen = fullscreenElement();
+    // Request fullscreen if viewer is ready
+    // And if there is no fullscreen element active
+    if (!isFullscreen && viewerContainer && viewerContainer.current !== null) {
+      requestFullscreen(viewerContainer.current);
+    }
   };
 
   render() {

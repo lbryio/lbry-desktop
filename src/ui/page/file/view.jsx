@@ -62,16 +62,21 @@ class FilePage extends React.Component<Props> {
     'application',
   ];
 
+  constructor(props: Props) {
+    super(props);
+    (this: any).viewerContainer = React.createRef();
+  }
+
   componentDidMount() {
     const {
       uri,
+      claim,
       fetchFileInfo,
       fetchCostInfo,
       setViewed,
       isSubscribed,
       claimIsMine,
       fetchViewCount,
-      claim,
     } = this.props;
 
     if (isSubscribed) {
@@ -198,11 +203,12 @@ class FilePage extends React.Component<Props> {
           )}
           {showFile && (
             <FileViewer
-              insufficientCredits={insufficientCredits}
-              className="content__embedded"
               uri={uri}
+              className="content__embedded"
               mediaType={mediaType}
               isPlayableType={isPlayableType}
+              viewerContainer={this.viewerContainer}
+              insufficientCredits={insufficientCredits}
             />
           )}
           {!showFile &&
@@ -288,7 +294,12 @@ class FilePage extends React.Component<Props> {
 
             <div className="media__action-group--large">
               <FileDownloadLink uri={uri} />
-              <FileActions uri={uri} claimId={claim.claim_id} showFullscreen={isPreviewType} />
+              <FileActions
+                uri={uri}
+                claimId={claim.claim_id}
+                showFullscreen={isPreviewType}
+                viewerContainer={this.viewerContainer}
+              />
             </div>
           </div>
 

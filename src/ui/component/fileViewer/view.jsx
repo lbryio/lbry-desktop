@@ -5,7 +5,6 @@ import classnames from 'classnames';
 import analytics from 'analytics';
 import LoadingScreen from 'component/common/loading-screen';
 import PlayButton from './internal/play-button';
-import { requestFullscreen, exitFullscreen } from 'util/full-screen';
 
 const Player = React.lazy(() =>
   import(
@@ -14,7 +13,6 @@ const Player = React.lazy(() =>
   )
 );
 
-const F_KEYCODE = 70;
 const SPACE_BAR_KEYCODE = 32;
 
 type Props = {
@@ -54,6 +52,7 @@ type Props = {
   nsfw: boolean,
   thumbnail: ?string,
   isPlayableType: boolean,
+  viewerContainer: React.Ref,
 };
 
 class FileViewer extends React.PureComponent<Props> {
@@ -68,8 +67,6 @@ class FileViewer extends React.PureComponent<Props> {
     // Don't add these variables to state because we don't need to re-render when their values change
     (this: any).startTime = undefined;
     (this: any).playTime = undefined;
-
-    (this: any).container = React.createRef();
   }
 
   componentDidMount() {
@@ -138,34 +135,6 @@ class FileViewer extends React.PureComponent<Props> {
         event.preventDefault(); // prevent page scroll
         this.playContent();
       }
-
-      // Handle fullscreen shortcut key (f)
-      if (event.keyCode === F_KEYCODE) {
-        this.toggleFullscreen();
-      }
-    }
-  }
-
-  toggleFullscreen() {
-    const { isPlayableType } = this.props;
-
-    if (!document.webkitFullscreenElement) {
-      // Enter fullscreen mode if content is not playable
-      // Otherwise it should be handle internally on the video player
-      // or it will break the toggle fullscreen button
-      if (!isPlayableType) {
-        requestFullscreen(this.container.current);
-      }
-      // Request fullscreen mode for the video player
-      // Don't use this with the new player
-      // @if TARGET='app'
-      else {
-        const video = document.getElementsByTagName('video')[0];
-        video && requestFullscreen(video);
-      }
-      // @endif
-    } else {
-      exitFullscreen();
     }
   }
 
@@ -260,6 +229,8 @@ class FileViewer extends React.PureComponent<Props> {
       obscureNsfw,
       mediaType,
       insufficientCredits,
+      viewerContainer,
+      searchBarFocused,
       thumbnail,
       nsfw,
     } = this.props;
@@ -295,7 +266,7 @@ class FileViewer extends React.PureComponent<Props> {
     const layoverStyle = !shouldObscureNsfw && thumbnail ? { backgroundImage: `url("${thumbnail}")` } : {};
 
     return (
-      <div className={classnames('video', {}, className)} ref={this.container}>
+      <div className={classnames('video', {}, className)} ref={viewerContainer}>
         {isPlaying && (
           <div className="content__view">
             {!isReadyToPlay ? (
@@ -320,6 +291,8 @@ class FileViewer extends React.PureComponent<Props> {
                   onStartCb={this.onFileStartCb}
                   onFinishCb={this.onFileFinishCb}
                   playingUri={playingUri}
+                  searchBarFocused={searchBarFocused}
+                  viewerContainer={viewerContainer}
                 />
               </Suspense>
             )}
