@@ -120,8 +120,7 @@ class ChannelLink extends React.Component<Props, State> {
     const { channelName, claimName, claimId } = parseURI(uri);
     const blackListed = this.isClaimBlackListed();
     const isReady = !blackListed && !isResolvingUri && claim !== null;
-    const tooltipReady = isReady && this.buttonRef.current !== null;
-
+    const tooltipReady = this.buttonRef.current !== null;
     const bgColor = '#32373b';
 
     const tooltipStyle = {
@@ -129,10 +128,10 @@ class ChannelLink extends React.Component<Props, State> {
       arrowStyle: { color: bgColor },
     };
 
-    return isReady ? (
+    return (
       <React.Fragment>
         <Button
-          button="link"
+          button={'link'}
           label={children}
           navigate={uri}
           innerRef={this.buttonRef}
@@ -149,13 +148,11 @@ class ChannelLink extends React.Component<Props, State> {
             channelName={channelName}
             thumbnail={thumbnail}
             description={description}
-            active={this.state.isTooltipActive}
+            active={isReady && this.state.isTooltipActive}
             parent={this.buttonRef.current}
           />
         )}
       </React.Fragment>
-    ) : (
-      <span>{children}</span>
     );
   }
 }
