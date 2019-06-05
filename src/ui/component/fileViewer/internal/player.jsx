@@ -115,7 +115,9 @@ class MediaPlayer extends React.PureComponent<Props, State> {
         this.toggleFullscreen();
       }
       // Handle toggle play
+      // @if TARGET='app'
       this.togglePlay(event);
+      // @endif
     }
   };
 
@@ -130,19 +132,20 @@ class MediaPlayer extends React.PureComponent<Props, State> {
   toggleFullscreen = () => {
     const { viewerContainer } = this.props;
     const isFullscreen = fullscreenElement();
+    const isSupportedFile = this.isSupportedFile();
     const isPlayableType = this.playableType();
 
     if (!isFullscreen) {
       // Enter fullscreen mode if content is not playable
       // Otherwise it should be handle internally on the video player
       // or it will break the toggle fullscreen button
-      if (!isPlayableType && viewerContainer && viewerContainer.current !== null) {
+      if (!isPlayableType && isSupportedFile && viewerContainer && viewerContainer.current !== null) {
         requestFullscreen(viewerContainer.current);
       }
       // Request fullscreen mode for the media player (renderMedia)
       // Don't use this with the new player
       // @if TARGET='app'
-      else {
+      else if (isPlayableType) {
         const mediaContainer = this.mediaContainer.current;
         const mediaElement = mediaContainer && mediaContainer.children[0];
         if (mediaElement) {
@@ -209,8 +212,6 @@ class MediaPlayer extends React.PureComponent<Props, State> {
       );
     }
 
-    document.addEventListener('keydown', this.handleKeyDown);
-
     const mediaElement = container.children[0];
     if (mediaElement) {
       if (position) {
@@ -244,6 +245,9 @@ class MediaPlayer extends React.PureComponent<Props, State> {
       this.renderFile();
     }
     // @endif
+
+    // Fullscreen event for web and app
+    document.addEventListener('keydown', this.handleKeyDown);
   }
 
   // @if TARGET='app'
