@@ -28,7 +28,7 @@ class AudioVideoViewer extends React.PureComponent<Props> {
     // Will need to be changed to include time to start
     analytics.apiLogView(`${name}#${claimId}`, `${txid}:${nout}`, claimId);
 
-    const path = `https://api.piratebay.com/content/claims/${claim.name}/${claim.claim_id}/stream.mp4`;
+    const path = `https://api.lbry.tv/content/claims/${claim.name}/${claim.claim_id}/stream.mp4`;
     const sources = [
       {
         src: path,
