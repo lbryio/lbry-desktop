@@ -14,6 +14,7 @@ const TWO_POINT_FIVE_MINUTES = 1000 * 60 * 2.5;
 type Props = {
   alertError: (string | {}) => void,
   pageTitle: ?string,
+  language: string,
   theme: string,
   updateBlockHeight: () => void,
   toggleEnhancedLayout: () => void,
@@ -21,7 +22,8 @@ type Props = {
 };
 
 class App extends React.PureComponent<Props> {
-  componentWillMount() {
+  // eslint-disable-next-line
+  UNSAFE_componentWillMount() {
     const { alertError, theme } = this.props;
 
     // TODO: create type for this object
@@ -64,12 +66,12 @@ class App extends React.PureComponent<Props> {
   enhance: ?any;
 
   render() {
-    const { enhancedLayout } = this.props;
+    const { enhancedLayout, language } = this.props;
 
     return (
       <div id="window" onContextMenu={e => openContextMenu(e)}>
-        <Header />
-        <SideBar />
+        <Header language={language} />
+        <SideBar language={language} />
 
         <div className="main-wrapper">
           <Router />

@@ -3,6 +3,7 @@ import fs from 'fs';
 import http from 'http';
 // @endif
 import { Lbry, ACTIONS, SETTINGS } from 'lbry-redux';
+import { makeSelectClientSetting } from 'redux/selectors/settings';
 import moment from 'moment';
 import analytics from 'analytics';
 
@@ -133,33 +134,10 @@ export function doDownloadLanguage(langFile) {
   };
 }
 
-export function doDownloadLanguages() {
-  return () => {
-    // temporarily disable i18n so I can get a working build out -- Jeremy
-    // if (!fs.existsSync(i18n.directory)) {
-    //   fs.mkdirSync(i18n.directory);
-    // }
-    //
-    // function checkStatus(response) {
-    //   if (response.status >= 200 && response.status < 300) {
-    //     return response;
-    //   }
-    //   throw new Error(
-    //     __("The list of available languages could not be retrieved.")
-    //   );
-    // }
-    //
-    // function parseJSON(response) {
-    //   return response.json();
-    // }
-    //
-    // return fetch("http://i18n.lbry.com")
-    //   .then(checkStatus)
-    //   .then(parseJSON)
-    //   .then(files => {
-    //     const actions = files.map(doDownloadLanguage);
-    //     dispatch(batchActions(...actions));
-    //   });
+export function doInitLanguage() {
+  return (dispatch, getState) => {
+    const language = makeSelectClientSetting(SETTINGS.LANGUAGE)(getState());
+    i18n.setLocale(language);
   };
 }
 

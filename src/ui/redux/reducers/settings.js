@@ -32,7 +32,7 @@ const defaultState = {
     [SETTINGS.OS_NOTIFICATIONS_ENABLED]: Boolean(getLocalStorageSetting(SETTINGS.OS_NOTIFICATIONS_ENABLED, true)),
   },
   isNight: false,
-  languages: {},
+  languages: { en: 'English', pl: 'Polish' }, // temporarily hard code these so we can advance i18n testing
   daemonSettings: {},
 };
 

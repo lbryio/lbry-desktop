@@ -24,7 +24,7 @@ export const selectShowNsfw = makeSelectClientSetting(SETTINGS.SHOW_NSFW);
 
 export const selectLanguages = createSelector(
   selectState,
-  state => state.languages || {}
+  state => state.languages
 );
 
 export const selectTheme = makeSelectClientSetting(SETTINGS.THEME);

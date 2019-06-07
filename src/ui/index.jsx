@@ -13,7 +13,7 @@ import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import { doConditionalAuthNavigate, doDaemonReady, doAutoUpdate, doOpenModal, doHideModal } from 'redux/actions/app';
 import { Lbry, doToast, isURIValid, setSearchApi } from 'lbry-redux';
-import { doDownloadLanguages, doUpdateIsNightAsync } from 'redux/actions/settings';
+import { doInitLanguage, doUpdateIsNightAsync } from 'redux/actions/settings';
 import { doAuthenticate, Lbryio, rewards, doBlackListedOutpointsSubscribe } from 'lbryinc';
 import { store, history } from 'store';
 import pjson from 'package.json';
@@ -211,7 +211,7 @@ const init = () => {
   app.store.dispatch(doUpdateIsNightAsync());
   // @endif
 
-  app.store.dispatch(doDownloadLanguages());
+  app.store.dispatch(doInitLanguage());
   app.store.dispatch(doBlackListedOutpointsSubscribe());
 
   function onDaemonReady() {

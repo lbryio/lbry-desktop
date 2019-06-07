@@ -8,7 +8,6 @@ import {
   selectLanguages,
   selectosNotificationsEnabled,
 } from 'redux/selectors/settings';
-import { selectCurrentLanguage } from 'redux/selectors/app';
 import { doWalletStatus, selectWalletIsEncrypted } from 'lbry-redux';
 import SettingsPage from './view';
 
@@ -19,7 +18,7 @@ const select = state => ({
   instantPurchaseMax: makeSelectClientSetting(settings.INSTANT_PURCHASE_MAX)(state),
   currentTheme: makeSelectClientSetting(settings.THEME)(state),
   themes: makeSelectClientSetting(settings.THEMES)(state),
-  language: selectCurrentLanguage(state),
+  currentLanguage: makeSelectClientSetting(settings.LANGUAGE)(state),
   languages: selectLanguages(state),
   automaticDarkModeEnabled: makeSelectClientSetting(settings.AUTOMATIC_DARK_MODE_ENABLED)(state),
   autoplay: makeSelectClientSetting(settings.AUTOPLAY)(state),
