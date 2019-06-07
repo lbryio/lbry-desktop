@@ -1,8 +1,5 @@
 import * as SETTINGS from 'constants/settings';
-import * as PAGES from 'constants/pages';
-import * as ICONS from 'constants/icons';
 import { createSelector } from 'reselect';
-import { selectCurrentPage, selectHistoryStack } from 'lbry-redux';
 import { makeSelectClientSetting } from 'redux/selectors/settings';
 
 export const selectState = state => state.app || {};
@@ -98,11 +95,6 @@ export const selectAutoUpdateDeclined = createSelector(
 export const selectDaemonVersionMatched = createSelector(
   selectState,
   state => state.daemonVersionMatched
-);
-
-export const selectCurrentLanguage = createSelector(
-  selectState,
-  () => i18n.getLocale() || 'en'
 );
 
 export const selectVolume = createSelector(
