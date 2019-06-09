@@ -5,6 +5,7 @@ import Yrbl from 'component/yrbl';
 import Button from 'component/button';
 import { withRouter } from 'react-router';
 import Native from 'native';
+import { Lbry } from 'lbry-redux';
 
 type Props = {
   children: React.Node,
@@ -30,20 +31,22 @@ class ErrorBoundary extends React.Component<Props, State> {
   }
 
   componentDidCatch(error: { stack: string }) {
-    let errorMessage = '\n';
+    let errorMessage = 'Uncaught error\n';
 
     // @if TARGET='web'
-    errorMessage += 'lbry.tv error\n';
+    errorMessage += 'lbry.tv\n';
     errorMessage += window.location.pathname + window.location.search;
     this.log(errorMessage);
     // @endif
     // @if TARGET='app'
     Native.getAppVersionInfo().then(({ localVersion }) => {
-      errorMessage += `version: ${localVersion}\n`;
-      errorMessage += `page: ${window.location.href.split('.html')[1]}\n`;
-      errorMessage += `${error.stack}`;
-
-      this.log(errorMessage);
+      Lbry.version().then(({ lbrynet_version: sdkVersion }) => {
+        errorMessage += `app version: ${localVersion}\n`;
+        errorMessage += `sdk version: ${sdkVersion}\n`;
+        errorMessage += `page: ${window.location.href.split('.html')[1]}\n`;
+        errorMessage += `${error.stack}`;
+        this.log(errorMessage);
+      });
     });
     // @endif
   }

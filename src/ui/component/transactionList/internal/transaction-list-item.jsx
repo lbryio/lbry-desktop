@@ -37,13 +37,17 @@ class TransactionListItem extends React.PureComponent<Props> {
     this.props.revokeClaim(txid, nout);
   }
 
-  capitalize = (string: string) => string.charAt(0).toUpperCase() + string.slice(1);
+  capitalize = (string: ?string) => string && string.charAt(0).toUpperCase() + string.slice(1);
 
   render() {
     const { reward, transaction, isRevokeable } = this.props;
     const { amount, claim_id: claimId, claim_name: name, date, fee, txid, type } = transaction;
-    // Ensure the claim name is valid
-    const { claimName } = parseURI(name);
+
+    // Ensure the claim name exists and is valid
+    let claimName = name;
+    if (claimName) {
+      ({ claimName } = parseURI(name));
+    }
 
     const dateFormat = {
       month: 'short',

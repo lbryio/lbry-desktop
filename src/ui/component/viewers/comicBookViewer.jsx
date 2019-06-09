@@ -10,8 +10,14 @@ type Props = {
   },
 };
 
+let workerPath = 'webworkers/worker-bundle.js';
+if (process.env.NODE_ENV !== 'production') {
+  // Don't add a leading slash in production because electron treats it as an absolute path
+  workerPath = `/${workerPath}`;
+}
+
 const opts = {
-  workerPath: '/webworkers/worker-bundle.js',
+  workerPath,
   allowFullScreen: false,
   autoHideControls: true,
 };

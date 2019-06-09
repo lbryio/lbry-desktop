@@ -9,7 +9,6 @@ $large-breakpoint: 1921px;
   // Width & spacing
   --side-nav-width: 180px;
   --font-size-subtext-multiple: 0.92;
-
   --spacing-vertical-miniscule: calc(2rem / 5);
   --spacing-vertical-tiny: calc(2rem / 4);
   --spacing-vertical-small: calc(2rem / 3);
@@ -17,14 +16,14 @@ $large-breakpoint: 1921px;
   --spacing-vertical-large: 2rem;
   --spacing-vertical-xlarge: 3rem;
   --spacing-main-padding: var(--spacing-vertical-xlarge);
-
   --file-page-max-width: 1787px;
   --file-max-height: 788px;
   --file-max-width: 1400px;
-
   --video-aspect-ratio: 56.25%; // 9 x 16
-
   --channel-thumbnail-size: 10rem;
+
+  // Color
+  --color-background: #270f34;
 
   // Text
   --text-max-width: 660px;
