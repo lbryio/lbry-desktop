@@ -8,7 +8,10 @@ const locateMention = (value, fromIndex) => value.indexOf('@', fromIndex);
 const createURI = (text, uri, autoEmbed = false) => ({
   type: 'link',
   url: (uri.startsWith(protocol) ? '' : protocol) + uri,
-  data: { hProperties: { dataPreview: autoEmbed } },
+  data: {
+    // Custom attribute
+    hProperties: { 'data-preview': autoEmbed },
+  },
   children: [{ type: 'text', value: text }],
 });
 
