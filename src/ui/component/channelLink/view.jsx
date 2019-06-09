@@ -1,8 +1,8 @@
 // @flow
 import * as React from 'react';
 import { parseURI } from 'lbry-redux';
-import ToolTip from 'react-portal-tooltip';
 import Button from 'component/button';
+import ChannelTooltip from 'component/common/channel-tooltip';
 
 type Props = {
   uri: string,
@@ -20,46 +20,8 @@ type Props = {
   }>,
 };
 
-type TooltipProps = {
-  uri: string,
-  style: Object,
-  title: ?string,
-  active: ?boolean,
-  parent: ?HTMLElement,
-  claimId: ?string,
-  thumbnail: ?string,
-  claimName: ?string,
-  channelName: ?string,
-  description: ?string,
-};
-
 type State = {
   isTooltipActive: boolean,
-};
-
-const ChannelTooltip = (props: TooltipProps) => {
-  const { style, title, active, parent, claimId, thumbnail, claimName, channelName, description } = props;
-
-  return (
-    <ToolTip active={active} position="bottom" style={style} arrow="left" align="left" parent={parent}>
-      <div className={'channel-tooltip'}>
-        <div className={'channel-tooltip__info'}>
-          <img className={'channel-tooltip__thumbnail'} src={thumbnail} />
-          <div>
-            <h2 className={'channel-tooltip__title'}>{title || channelName}</h2>
-            <h3 className={'channel-tooltip__url'}>
-              {claimName}
-              {claimId && `#${claimId}`}
-            </h3>
-          </div>
-        </div>
-        <div className={'channel-tooltip__description'}>
-          <p>{description}</p>
-        </div>
-        <div className={'channel-tooltip__stats'} />
-      </div>
-    </ToolTip>
-  );
 };
 
 class ChannelLink extends React.Component<Props, State> {
@@ -102,15 +64,15 @@ class ChannelLink extends React.Component<Props, State> {
   }
 
   componentDidMount() {
-    const { isResolvingUri, resolveUri, uri } = this.props;
-    if (!isResolvingUri) {
+    const { isResolvingUri, resolveUri, claim, uri } = this.props;
+    if (!isResolvingUri && uri && !claim) {
       resolveUri(uri);
     }
   }
 
   componentDidUpdate() {
     const { isResolvingUri, resolveUri, claim, uri } = this.props;
-    if (!isResolvingUri && uri && claim === undefined) {
+    if (!isResolvingUri && uri && !claim) {
       resolveUri(uri);
     }
   }
@@ -121,12 +83,6 @@ class ChannelLink extends React.Component<Props, State> {
     const blackListed = this.isClaimBlackListed();
     const isReady = !blackListed && !isResolvingUri && claim !== null;
     const tooltipReady = this.buttonRef.current !== null;
-    const bgColor = '#32373b';
-
-    const tooltipStyle = {
-      style: { background: bgColor },
-      arrowStyle: { color: bgColor },
-    };
 
     return (
       <React.Fragment>
@@ -141,7 +97,6 @@ class ChannelLink extends React.Component<Props, State> {
         {tooltipReady && (
           <ChannelTooltip
             uri={uri}
-            style={tooltipStyle}
             title={title}
             claimId={claimId}
             claimName={claimName}

@@ -5,9 +5,10 @@ const locateURI = (value, fromIndex) => value.indexOf(protocol, fromIndex);
 const locateMention = (value, fromIndex) => value.indexOf('@', fromIndex);
 
 // Generate a valid markdown link
-const createURI = (text, uri) => ({
+const createURI = (text, uri, autoEmbed = false) => ({
   type: 'link',
   url: (uri.startsWith(protocol) ? '' : protocol) + uri,
+  data: { hProperties: { dataPreview: autoEmbed } },
   children: [{ type: 'text', value: text }],
 });
 
@@ -18,10 +19,10 @@ const validateURI = (match, eat) => {
       const uri = parseURI(text);
       // Create channel link
       if (uri.isChannel && !uri.path) {
-        return eat(text)(createURI(uri.claimName, text));
+        return eat(text)(createURI(uri.claimName, text, false));
       }
       // Create uri link
-      return eat(text)(createURI(text, text));
+      return eat(text)(createURI(text, text, true));
     } catch (err) {
       // Silent errors: console.error(err)
     }

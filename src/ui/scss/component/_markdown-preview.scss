@@ -116,4 +116,19 @@
     white-space: normal;
     text-align: left;
   }
+
+  .preview-link {
+    margin: var(--spacing-vertical-medium) 0;
+    padding: 1.2rem 0.8rem;
+    background-color: rgba($lbry-teal-5, 0.1);
+    border-left: 0.5rem solid $lbry-teal-5;
+    display: block;
+    align-items: center;
+    width: 40rem;
+  }
+
+  .preview-link--description {
+    display: block;
+    margin: var(--spacing-vertical-medium) 0;
+  }
 }
