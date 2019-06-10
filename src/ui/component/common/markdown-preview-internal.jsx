@@ -1,12 +1,12 @@
 // @flow
 import * as React from 'react';
 import remark from 'remark';
-import remarkLBRY from 'util/remark-lbry';
 import remarkStrip from 'strip-markdown';
 import remarkEmoji from 'remark-emoji';
 import reactRenderer from 'remark-react';
 import ExternalLink from 'component/externalLink';
 import defaultSchema from 'hast-util-sanitize/lib/github.json';
+import { formatedLinks, inlineLinks } from 'util/remark-lbry';
 
 type SimpleTextProps = {
   children?: React.Node,
@@ -77,7 +77,11 @@ const MarkdownPreview = (props: MarkdownProps) => {
     <div className="markdown-preview">
       {
         remark()
-          .use(remarkLBRY)
+          // Remark plugins for lbry urls
+          // Note: The order is important
+          .use(formatedLinks)
+          .use(inlineLinks)
+          // Emojis
           .use(remarkEmoji)
           .use(reactRenderer, remarkOptions)
           .processSync(content).contents

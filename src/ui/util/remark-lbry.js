@@ -1,4 +1,5 @@
 import { parseURI } from 'lbry-redux';
+import visit from 'unist-util-visit';
 
 const protocol = 'lbry://';
 const locateURI = (value, fromIndex) => value.indexOf(protocol, fromIndex);
@@ -46,16 +47,44 @@ function tokenizeURI(eat, value, silent) {
 
 // Configure tokenizer for lbry urls
 tokenizeURI.locator = locateURI;
+tokenizeURI.notInList = true;
 tokenizeURI.notInLink = true;
 tokenizeURI.notInBlock = true;
 
 // Configure tokenizer for lbry channels
 tokenizeMention.locator = locateMention;
+tokenizeMention.notInList = true;
 tokenizeMention.notInLink = true;
 tokenizeMention.notInBlock = true;
 
+const visitor = (node, index, parent) => {
+  if (node.type === 'link') {
+    try {
+      const url = parseURI(node.url);
+      // Handle lbry link
+      if (!url.isChannel || (url.isChannel && url.path)) {
+        // Auto-embed lbry url
+        if (parent && parent.type === 'paragraph' && !node.data) {
+          node.data = {
+            hProperties: { 'data-preview': true },
+          };
+        }
+      }
+    } catch (err) {
+      // Silent errors: console.error(err)
+    }
+  }
+};
+
+// transform
+const transform = tree => {
+  visit(tree, ['link'], visitor);
+};
+
+export const formatedLinks = () => transform;
+
 // Main module
-export default function remarkLBRY() {
+export function inlineLinks() {
   const Parser = this.Parser;
   const tokenizers = Parser.prototype.inlineTokenizers;
   const methods = Parser.prototype.inlineMethods;
