@@ -1,6 +1,7 @@
 // @flow
 import * as React from 'react';
 import remark from 'remark';
+import remarkAttr from 'remark-attr';
 import remarkStrip from 'strip-markdown';
 import remarkEmoji from 'remark-emoji';
 import reactRenderer from 'remark-react';
@@ -57,6 +58,12 @@ const MarkdownPreview = (props: MarkdownProps) => {
     },
   };
 
+  const remarkAttrOpts = {
+    scope: 'extended',
+    elements: ['link'],
+    extend: { link: ['data-preview'] },
+  };
+
   // Strip all content and just render text
   if (strip) {
     // Remove new lines and extra space
@@ -77,6 +84,7 @@ const MarkdownPreview = (props: MarkdownProps) => {
     <div className="markdown-preview">
       {
         remark()
+          .use(remarkAttr, remarkAttrOpts)
           // Remark plugins for lbry urls
           // Note: The order is important
           .use(formatedLinks)

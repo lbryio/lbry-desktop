@@ -62,7 +62,7 @@ class ClaimLink extends React.Component<Props> {
     const { uri, claim, title, description, autoEmbed, thumbnail, children, isResolvingUri } = this.props;
     const { claimName } = parseURI(uri);
     const blackListed = this.isClaimBlackListed();
-    const showPreview = autoEmbed && !blackListed && !isResolvingUri && claim !== null;
+    const showPreview = autoEmbed === true && !blackListed && !isResolvingUri && claim !== null;
 
     return (
       <React.Fragment>

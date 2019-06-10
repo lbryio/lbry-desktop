@@ -161,6 +161,7 @@
     "redux-persist-transform-filter": "0.0.16",
     "redux-thunk": "^2.2.0",
     "remark": "^9.0.0",
+    "remark-attr": "^0.8.3",
     "remark-emoji": "^2.0.1",
     "remark-react": "^4.0.3",
     "remark-squeeze-paragraphs": "^3.0.3",

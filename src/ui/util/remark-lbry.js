@@ -58,13 +58,13 @@ tokenizeMention.notInLink = true;
 tokenizeMention.notInBlock = true;
 
 const visitor = (node, index, parent) => {
-  if (node.type === 'link') {
+  if (node.type === 'link' && parent && parent.type === 'paragraph') {
     try {
       const url = parseURI(node.url);
       // Handle lbry link
       if (!url.isChannel || (url.isChannel && url.path)) {
         // Auto-embed lbry url
-        if (parent && parent.type === 'paragraph' && !node.data) {
+        if (!node.data) {
           node.data = {
             hProperties: { 'data-preview': true },
           };
