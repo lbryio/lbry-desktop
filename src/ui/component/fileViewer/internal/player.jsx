@@ -1,14 +1,20 @@
 // @flow
 import '@babel/polyfill';
 import * as React from 'react';
+
 // @if TARGET='app'
-import { remote } from 'electron';
 import fs from 'fs';
+import { remote } from 'electron';
 // @endif
+
 import path from 'path';
 import player from 'render-media';
 import FileRender from 'component/fileRender';
 import LoadingScreen from 'component/common/loading-screen';
+import { fullscreenElement, requestFullscreen, exitFullscreen } from 'util/full-screen';
+
+// Shorcut key code for fullscreen (f)
+const F_KEYCODE = 70;
 
 type Props = {
   contentType: string,
@@ -23,6 +29,8 @@ type Props = {
   onFinishCb: ?() => void,
   savePosition: number => void,
   changeVolume: number => void,
+  viewerContainer: React.Ref,
+  searchBarFocused: boolean,
 };
 
 type State = {
@@ -69,7 +77,6 @@ class MediaPlayer extends React.PureComponent<Props, State> {
 
     this.mediaContainer = React.createRef();
     (this: any).togglePlay = this.togglePlay.bind(this);
-    (this: any).toggleFullScreen = this.toggleFullScreen.bind(this);
   }
 
   componentDidMount() {
@@ -107,25 +114,65 @@ class MediaPlayer extends React.PureComponent<Props, State> {
   componentWillUnmount() {
     const mediaElement = this.mediaContainer.current.children[0];
 
-    document.removeEventListener('keydown', this.togglePlay);
+    document.removeEventListener('keydown', this.handleKeyDown);
 
     if (mediaElement) {
       mediaElement.removeEventListener('click', this.togglePlay);
+      mediaElement.removeEventListener('dbclick', this.handleDoubleClick);
     }
   }
 
-  toggleFullScreen() {
-    const mediaElement = this.mediaContainer.current;
-    if (mediaElement) {
-      // $FlowFixMe
-      if (document.webkitIsFullScreen) {
-        // $FlowFixMe
-        document.webkitExitFullscreen();
-      } else {
-        mediaElement.webkitRequestFullScreen();
+  handleKeyDown = (event: SyntheticKeyboardEvent<*>) => {
+    const { searchBarFocused } = this.props;
+
+    if (!searchBarFocused) {
+      // Handle fullscreen shortcut key (f)
+      if (event.keyCode === F_KEYCODE) {
+        this.toggleFullscreen();
       }
+      // Handle toggle play
+      // @if TARGET='app'
+      this.togglePlay(event);
+      // @endif
     }
-  }
+  };
+
+  handleDoubleClick = (event: SyntheticInputEvent<*>) => {
+    // Prevent pause / play
+    event.preventDefault();
+    event.stopPropagation();
+    // Trigger fullscreen mode
+    this.toggleFullscreen();
+  };
+
+  toggleFullscreen = () => {
+    const { viewerContainer } = this.props;
+    const isFullscreen = fullscreenElement();
+    const isSupportedFile = this.isSupportedFile();
+    const isPlayableType = this.playableType();
+
+    if (!isFullscreen) {
+      // Enter fullscreen mode if content is not playable
+      // Otherwise it should be handle internally on the video player
+      // or it will break the toggle fullscreen button
+      if (!isPlayableType && isSupportedFile && viewerContainer && viewerContainer.current !== null) {
+        requestFullscreen(viewerContainer.current);
+      }
+      // Request fullscreen mode for the media player (renderMedia)
+      // Don't use this with the new player
+      // @if TARGET='app'
+      else if (isPlayableType) {
+        const mediaContainer = this.mediaContainer.current;
+        const mediaElement = mediaContainer && mediaContainer.children[0];
+        if (mediaElement) {
+          requestFullscreen(mediaElement);
+        }
+      }
+      // @endif
+    } else {
+      exitFullscreen();
+    }
+  };
 
   async playMedia() {
     const container = this.mediaContainer.current;
@@ -183,7 +230,6 @@ class MediaPlayer extends React.PureComponent<Props, State> {
       );
     }
 
-    document.addEventListener('keydown', this.togglePlay);
     const mediaElement = container.children[0];
     if (mediaElement) {
       if (position) {
@@ -206,7 +252,7 @@ class MediaPlayer extends React.PureComponent<Props, State> {
         changeVolume(mediaElement.volume);
       });
       mediaElement.volume = volume;
-      mediaElement.addEventListener('dblclick', this.toggleFullScreen);
+      mediaElement.addEventListener('dblclick', this.handleDoubleClick);
     }
     // @endif
 
@@ -217,6 +263,9 @@ class MediaPlayer extends React.PureComponent<Props, State> {
       this.renderFile();
     }
     // @endif
+
+    // Fullscreen event for web and app
+    document.addEventListener('keydown', this.handleKeyDown);
   }
 
   // @if TARGET='app'

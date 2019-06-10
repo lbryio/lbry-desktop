@@ -157,6 +157,13 @@ ipcRenderer.on('window-is-focused', () => {
 ipcRenderer.on('devtools-is-opened', () => {
   doLogWarningConsoleMessage();
 });
+
+// Force exit mode for html5 fullscreen api
+// See: https://github.com/electron/electron/issues/18188
+remote.getCurrentWindow().on('leave-full-screen', event => {
+  document.webkitExitFullscreen();
+});
+
 // @endif
 
 document.addEventListener('dragover', event => {
