@@ -25,7 +25,7 @@ function ChannelThumbnail(props: Props) {
       })}
     >
       {!thumbnail && <img className="channel-thumbnail__default" src={Gerbil} />}
-      {thumbnail && <img className={classnames('channel-thumbnail__custom', className)} src={thumbnail} />}
+      {thumbnail && <img className="channel-thumbnail__custom" src={thumbnail} />}
     </div>
   );
 }
