@@ -19,7 +19,6 @@ type Props = {
 function ChannelContent(props: Props) {
   const { uri, fetching, claimsInChannel, totalPages, channelIsMine, fetchClaims } = props;
   const hasContent = Boolean(claimsInChannel && claimsInChannel.length);
-
   return (
     <Fragment>
       {fetching && !hasContent && (
@@ -28,11 +27,15 @@ function ChannelContent(props: Props) {
         </section>
       )}
 
-      {!fetching && !hasContent && <h2 className="empty">{__("This channel hasn't uploaded anything.")}</h2>}
+      {!fetching && !hasContent && (
+        <div className="card--section">
+          <h2 className="card__content help">{__("This channel hasn't uploaded anything.")}</h2>
+        </div>
+      )}
 
       {!channelIsMine && <HiddenNsfwClaims className="card__content help" uri={uri} />}
 
-      {hasContent && <FileList sortByHeight hideFilter fileInfos={claimsInChannel} />}
+      {hasContent && <FileList noHeader uris={claimsInChannel.map(claim => claim.permanent_url)} />}
 
       <Paginate
         onPageChange={page => fetchClaims(uri, page)}

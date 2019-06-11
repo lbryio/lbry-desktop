@@ -103,13 +103,10 @@ fieldset-group {
     }
 
     &.fieldgroup--paginate {
-      margin: var(--spacing-vertical-large) 0;
-      align-items: center;
+      padding-bottom: var(--spacing-large);
+      margin-top: var(--spacing-large);
+      align-items: flex-end;
       justify-content: center;
-
-      .pagination {
-        margin-bottom: -1em;
-      }
     }
   }
 
@@ -271,12 +268,12 @@ fieldset-section {
 
 label + .react-toggle,
 .react-toggle + label {
-  margin-left: var(--spacing-vertical-small);
+  margin-left: var(--spacing-small);
 }
 
 .form-field__help {
   @extend .help;
-  margin-top: var(--spacing-vertical-medium);
+  margin-top: var(--spacing-medium);
 }
 
 .form-field--price-amount {

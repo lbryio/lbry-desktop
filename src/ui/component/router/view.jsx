@@ -19,6 +19,8 @@ import SearchPage from 'page/search';
 import UserHistoryPage from 'page/userHistory';
 import SendCreditsPage from 'page/sendCredits';
 import NavigationHistory from 'page/navigationHistory';
+import TagsPage from 'page/tags';
+import TagsEditPage from 'page/tagsEdit';
 
 const Scroll = withRouter(function ScrollWrapper(props) {
   const { pathname } = props.location;
@@ -50,11 +52,12 @@ export default function AppRouter() {
         <Route path={`/$/${PAGES.SETTINGS}`} exact component={SettingsPage} />
         <Route path={`/$/${PAGES.SUBSCRIPTIONS}`} exact component={SubscriptionsPage} />
         <Route path={`/$/${PAGES.TRANSACTIONS}`} exact component={TransactionHistoryPage} />
-        <Route path={`/$/${PAGES.HISTORY}`} exact component={UserHistoryPage} />
+        <Route path={`/$/${PAGES.LIBRARY}`} exact component={UserHistoryPage} />
         <Route path={`/$/${PAGES.ACCOUNT}`} exact component={AccountPage} />
         <Route path={`/$/${PAGES.SEND}`} exact component={SendCreditsPage} />
-        <Route path={`/$/${PAGES.HISTORY}`} exact component={UserHistoryPage} />
-        <Route path={`/$/${PAGES.HISTORY}/all`} exact component={NavigationHistory} />
+        <Route path={`/$/${PAGES.LIBRARY}/all`} exact component={NavigationHistory} />
+        <Route path={`/$/${PAGES.TAGS}`} exact component={TagsPage} />
+        <Route path={`/$/${PAGES.TAGS}/edit`} exact component={TagsEditPage} />
 
         {/* Below need to go at the end to make sure we don't match any of our pages first */}
         <Route path="/:claimName" exact component={ShowPage} />

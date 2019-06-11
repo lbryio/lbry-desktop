@@ -6,80 +6,7 @@
   border-radius: var(--card-radius);
 
   .media__title {
-    margin-bottom: var(--spacing-vertical-small);
-  }
-
-  .media__properties {
-    height: 1em;
-  }
-}
-
-//  M E D I A
-//  T I L E
-
-.media-tile {
-  @include mediaThumbHoverZoom;
-  display: flex;
-  font-size: 1.5rem;
-  position: relative;
-
-  &:not(:last-of-type) {
-    margin-bottom: var(--spacing-vertical-large);
-  }
-
-  .media__thumb {
-    flex-shrink: 0;
-    width: 20rem;
-  }
-
-  .media__info {
-    margin-left: var(--spacing-vertical-medium);
-  }
-}
-
-.media-tile--large {
-  font-size: 2rem;
-
-  .media__thumb {
-    width: 25rem;
-  }
-
-  .media__info {
-    margin-left: var(--spacing-vertical-large);
-  }
-
-  .media__subtext {
-    font-size: 0.7em;
-  }
-}
-
-.media-tile--small {
-  font-size: 1.2rem;
-
-  &:not(:last-of-type) {
-    margin-bottom: var(--spacing-vertical-medium);
-  }
-
-  .media__thumb {
-    width: 11em;
-  }
-
-  .media__title {
-    margin-bottom: var(--spacing-vertical-small);
-  }
-
-  .media__subtext:last-child {
-    margin-bottom: 0;
-  }
-
-  .media__properties {
-    bottom: 0.5rem;
-    left: calc(-100% - -2rem);
-    position: absolute;
-    padding: 0 var(--spacing-vertical-small);
-    border-radius: 5px;
-    background-color: $lbry-white;
-    color: $lbry-black;
+    margin-bottom: var(--spacing-small);
   }
 }
 
@@ -118,6 +45,13 @@
   background-image: linear-gradient(to bottom right, $lbry-teal-3, $lbry-grape-5 100%);
 }
 
+.media__thumb--profile {
+  // height: var(--channel-thumbnail-width);
+  width: 70px;
+  height: 70px;
+  background-size: cover;
+}
+
 //  M E D I A
 //  T I T L E
 
@@ -132,7 +66,7 @@
   display: inline;
   font-size: 2rem;
   line-height: 1.33;
-  margin-right: var(--spacing-vertical-small);
+  margin-right: var(--spacing-small);
 }
 
 .media__uri {
@@ -140,6 +74,11 @@
   padding-bottom: 5px;
   opacity: 0.6;
   user-select: all;
+  height: 2rem;
+  // position: absolute;
+  // top: 2rem;
+  // transform: translateY(-2rem);
+  // margin-bottom: -50px;
 }
 
 .media__insufficient-credits {
@@ -152,8 +91,8 @@
 .media__actions {
   display: flex;
   flex-wrap: wrap;
-  margin-top: var(--spacing-vertical-small);
-  margin-bottom: var(--spacing-vertical-small);
+  margin-top: var(--spacing-small);
+  margin-bottom: var(--spacing-small);
 }
 
 .media__actions--between {
@@ -162,26 +101,26 @@
 
 .media__action-group {
   > *:not(:last-child) {
-    margin-right: var(--spacing-vertical-medium);
+    margin-right: var(--spacing-medium);
   }
 }
 
 .media__action-group--large {
   display: flex;
   align-items: flex-end;
-  margin-top: var(--spacing-vertical-small);
-  margin-bottom: var(--spacing-vertical-small);
+  margin-top: var(--spacing-small);
+  margin-bottom: var(--spacing-small);
 
   > * {
     font-size: 1.15rem;
 
     &:not(:last-child) {
-      margin-right: var(--spacing-vertical-large);
+      margin-right: var(--spacing-large);
     }
   }
 
   &:not(:last-child) {
-    margin-right: var(--spacing-vertical-large);
+    margin-right: var(--spacing-large);
   }
 }
 
@@ -189,7 +128,7 @@
 //  C O N T E N T
 
 .media__content--large {
-  padding-right: var(--spacing-vertical-large);
+  padding-right: var(--spacing-large);
 }
 
 // M E D I A
@@ -202,7 +141,7 @@
   font-size: 0.9em;
 
   &:not(:last-child) {
-    margin-bottom: var(--spacing-vertical-medium);
+    margin-bottom: var(--spacing-medium);
   }
 
   html[data-mode='dark'] & {
@@ -251,7 +190,7 @@
 
 .media__info--large {
   border-top: 1px solid $lbry-gray-1;
-  padding-top: var(--spacing-vertical-medium);
+  padding-top: var(--spacing-medium);
 
   html[data-mode='dark'] & {
     border-color: rgba($lbry-gray-5, 0.2);
@@ -263,7 +202,7 @@
   word-break: break-word;
 
   &:not(:last-of-type) {
-    margin-bottom: var(--spacing-vertical-large);
+    margin-bottom: var(--spacing-large);
   }
 
   &.media__info-text--small {
@@ -278,7 +217,7 @@
 .media__info-title {
   font-size: 1.25rem;
   font-weight: 500;
-  margin-bottom: var(--spacing-vertical-small);
+  margin-bottom: var(--spacing-small);
 }
 
 //  M E D I A
@@ -286,47 +225,9 @@
 
 .media__message {
   font-size: 1.1rem;
-  padding: var(--spacing-vertical-medium);
-  margin: var(--spacing-vertical-medium) var(--spacing-vertical-large);
+  padding: var(--spacing-medium);
+  margin: var(--spacing-medium) var(--spacing-large);
   white-space: normal;
-}
-
-//  M E D I A
-//  P R O P E R T I E S
-
-.media__properties {
-  display: flex;
-  align-items: center;
-
-  &:not(:empty) {
-    margin-top: var(--spacing-vertical-small);
-  }
-
-  > *:not(:last-child) {
-    margin-right: var(--spacing-vertical-small);
-  }
-}
-
-.media__properties--large {
-  display: inline-block;
-  vertical-align: top;
-
-  &:not(:empty) {
-    height: 2.55rem;
-    margin-top: 0px;
-
-    margin-bottom: var(--spacing-vertical-small);
-    padding-top: var(--spacing-vertical-small);
-  }
-
-  .badge {
-    align-items: center;
-    position: relative;
-
-    > *:not(:last-child) {
-      margin-right: var(--spacing-vertical-small);
-    }
-  }
 }
 
 //  M E D I A
@@ -338,200 +239,4 @@
   html[data-mode='dark'] & {
     color: $lbry-white;
   }
-}
-
-//  M E D I A
-//  G R O U P
-
-.media-group--list {
-  .media-card {
-    display: inline-block;
-    margin-bottom: var(--spacing-vertical-large);
-    vertical-align: top;
-    width: 100%;
-  }
-
-  .media__thumb {
-    margin-bottom: var(--spacing-vertical-medium);
-  }
-}
-
-.media-group--list-recommended {
-  border-left: 1px solid $lbry-gray-1;
-  min-height: 50vh;
-  overflow: hidden;
-  width: 30rem;
-  padding-left: var(--spacing-vertical-large);
-
-  html[data-mode='dark'] & {
-    border-color: rgba($lbry-gray-5, 0.2);
-  }
-
-  > span {
-    border-bottom: 1px solid $lbry-gray-1;
-    display: block;
-    font-size: 1.25rem;
-    font-weight: 500;
-    justify-content: space-between;
-    margin-bottom: var(--spacing-vertical-large);
-    padding-top: var(--spacing-vertical-small);
-    padding-bottom: var(--spacing-vertical-medium);
-
-    html[data-mode='dark'] & {
-      border-color: rgba($lbry-gray-5, 0.2);
-    }
-  }
-}
-
-.media-group--row {
-  padding-top: var(--spacing-vertical-large);
-  white-space: nowrap;
-  width: 100%;
-
-  html[data-mode='dark'] & {
-    color: mix($lbry-white, $lbry-gray-3, 50%);
-  }
-
-  &:first-of-type {
-    background-image: linear-gradient(to bottom right, $lbry-black, $lbry-cyan-5 80%);
-    color: $lbry-white;
-
-    html[data-mode='dark'] & {
-      background-image: linear-gradient(
-        to bottom right,
-        transparent,
-        rgba(mix($lbry-blue-3, $lbry-black, 70%), 0.8) 100%
-      );
-    }
-    .media-group__header-title {
-      background-image: linear-gradient(to right, $lbry-white 80%, transparent 100%);
-    }
-
-    .channel-info__actions {
-      color: $lbry-white;
-    }
-
-    .media__subtitle {
-      color: mix($lbry-cyan-5, $lbry-white, 20%);
-    }
-  }
-
-  &:not(:first-of-type):not(:last-of-type) {
-    border-bottom: 1px solid rgba($lbry-gray-1, 0.7);
-
-    html[data-mode='dark'] & {
-      border-color: rgba($lbry-gray-5, 0.2);
-    }
-  }
-
-  .media-group__header {
-    flex-direction: row;
-    padding-left: var(--spacing-vertical-large);
-  }
-
-  .media-group__header-title {
-    // color: transparent; // TODO: Add this back for lbryweb, it helps with long titles but was causing issues. A better solution is needed. - Sean
-    // !exist unprefixed, needs SVG for LBRY web
-    -webkit-background-clip: text;
-    background-image: linear-gradient(to right, $lbry-white 80%, transparent 100%);
-
-    html[data-mode='dark'] & {
-      background-image: linear-gradient(to right, mix($lbry-white, $lbry-gray-3, 50%) 80%, transparent 100%);
-    }
-  }
-
-  .media__thumb {
-    margin-bottom: var(--spacing-vertical-medium);
-  }
-}
-
-//  M E D I A   G R O U P
-//  H E A D E R
-
-.media-group__header {
-  display: flex;
-  font-weight: 700;
-  justify-content: space-between;
-}
-
-.media-group__header-navigation {
-  display: flex;
-  padding-right: var(--spacing-vertical-large);
-
-  button:not(:last-of-type) {
-    margin-right: var(--spacing-vertical-medium);
-  }
-
-  svg {
-    display: block;
-  }
-}
-
-.media-group__header-title {
-  display: flex;
-  align-items: flex-end;
-  font-weight: 700;
-  font-size: 2rem;
-  padding-bottom: var(--spacing-vertical-small);
-
-  & > *:not(:first-child) {
-    font-weight: normal;
-    margin-left: var(--spacing-vertical-medium);
-  }
-}
-
-//  M E D I A
-//  S C R O L L H O U S E
-
-.media-scrollhouse {
-  min-height: 200px;
-  padding-bottom: var(--spacing-vertical-large);
-
-  // Show the scroll bar on hover
-  // `overlay` doesn't take up any vertical space
-  overflow-x: hidden;
-  overflow-y: hidden;
-  &:hover {
-    overflow-x: overlay;
-  }
-
-  // The media queries in this block ensure that a row of
-  // content and its' child elements look good at certain breakpoints
-
-  @media (min-width: 601px) {
-    padding-top: var(--spacing-vertical-small);
-  }
-
-  @media (max-width: 600px) {
-    padding-top: var(--spacing-vertical-medium);
-  }
-
-  // Handles the margin on the right side of the last item
-  // Overflow: hidden makes doesn't care if the margin is off the screen, just the content
-  // Using padding shrinks the last item
-  &::after {
-    content: '';
-    display: inline-block;
-    width: var(--spacing-vertical-large);
-    height: 1px;
-  }
-
-  .media-card {
-    cursor: pointer;
-    display: inline-block;
-    max-width: 250px;
-    min-width: 150px;
-    overflow-y: visible;
-    vertical-align: top;
-
-    @media (min-width: 601px) {
-      width: calc((100% / 6) - 2.25rem);
-      margin-left: var(--spacing-vertical-large);
-    }
-  }
-}
-
-.badge--alert {
-  background-color: $lbry-red-2;
-  color: $lbry-white;
 }

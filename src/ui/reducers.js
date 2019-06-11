@@ -1,6 +1,13 @@
 import { combineReducers } from 'redux';
 import { connectRouter } from 'connected-react-router';
-import { claimsReducer, fileInfoReducer, searchReducer, walletReducer, notificationsReducer } from 'lbry-redux';
+import {
+  claimsReducer,
+  fileInfoReducer,
+  searchReducer,
+  walletReducer,
+  notificationsReducer,
+  tagsReducer,
+} from 'lbry-redux';
 import { userReducer, rewardsReducer, costInfoReducer, blacklistReducer, homepageReducer, statsReducer } from 'lbryinc';
 import appReducer from 'redux/reducers/app';
 import availabilityReducer from 'redux/reducers/availability';
@@ -27,6 +34,7 @@ export default history =>
     settings: settingsReducer,
     stats: statsReducer,
     subscriptions: subscriptionsReducer,
+    tags: tagsReducer,
     user: userReducer,
     wallet: walletReducer,
   });

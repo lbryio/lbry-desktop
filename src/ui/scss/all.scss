@@ -10,7 +10,6 @@
 @import 'init/gui';
 @import 'component/animation';
 @import 'component/badge';
-@import 'component/banner';
 @import 'component/button';
 @import 'component/card';
 @import 'component/channel';
@@ -19,6 +18,8 @@
 @import 'component/dat-gui';
 @import 'component/expandable';
 @import 'component/file-download';
+@import 'component/file-list';
+@import 'component/file-properties';
 @import 'component/file-render';
 @import 'component/form-field';
 @import 'component/header';
@@ -33,7 +34,6 @@
 @import 'component/notice';
 @import 'component/pagination';
 @import 'component/placeholder';
-@import 'component/scrollbar';
 @import 'component/search';
 @import 'component/snack-bar';
 @import 'component/spinner';
@@ -42,6 +42,7 @@
 @import 'component/syntax-highlighter';
 @import 'component/table';
 @import 'component/tabs';
+@import 'component/tags';
 @import 'component/time';
 @import 'component/toggle';
 @import 'component/tooltip';

@@ -1,165 +1,70 @@
 // @flow
 import * as React from 'react';
-import { buildURI, SORT_OPTIONS } from 'lbry-redux';
-import { FormField, Form } from 'component/common/form';
-import FileCard from 'component/fileCard';
+import classnames from 'classnames';
+import FileListItem from 'component/fileListItem';
+import Spinner from 'component/spinner';
+import { FormField } from 'component/common/form';
+import usePersistedState from 'util/use-persisted-state';
+
+const SORT_NEW = 'new';
+const SORT_OLD = 'old';
 
 type Props = {
-  hideFilter: boolean,
-  sortByHeight?: boolean,
-  claimsById: Array<StreamClaim>,
-  fileInfos: Array<FileListItem>,
-  sortBy: string,
-  page?: string,
-  setFileListSort: (?string, string) => void,
+  uris: Array<string>,
+  header: React.Node,
+  headerAltControls: React.Node,
+  injectedItem?: React.Node,
+  loading: boolean,
+  noHeader?: boolean,
+  slim?: string,
+  empty?: string,
+  // If using the default header, this is a unique ID needed to persist the state of the filter setting
+  persistedStorageKey?: string,
 };
 
-class FileList extends React.PureComponent<Props> {
-  static defaultProps = {
-    hideFilter: false,
-    sortBy: SORT_OPTIONS.DATE_NEW,
-  };
+export default function FileList(props: Props) {
+  const { uris, header, headerAltControls, injectedItem, loading, persistedStorageKey, noHeader, slim, empty } = props;
+  const [currentSort, setCurrentSort] = usePersistedState(persistedStorageKey || 'file-list-global-sort', SORT_NEW);
+  const sortedUris = uris && currentSort === SORT_OLD ? uris.reverse() : uris;
+  const hasUris = uris && !!uris.length;
 
-  constructor(props: Props) {
-    super(props);
-    (this: any).handleSortChanged = this.handleSortChanged.bind(this);
-
-    this.sortFunctions = {
-      [SORT_OPTIONS.DATE_NEW]: fileInfos =>
-        this.props.sortByHeight
-          ? fileInfos.sort((fileInfo1, fileInfo2) => {
-              if (fileInfo1.confirmations < 1) {
-                return -1;
-              } else if (fileInfo2.confirmations < 1) {
-                return 1;
-              }
-
-              const height1 = this.props.claimsById[fileInfo1.claim_id]
-                ? this.props.claimsById[fileInfo1.claim_id].height
-                : 0;
-              const height2 = this.props.claimsById[fileInfo2.claim_id]
-                ? this.props.claimsById[fileInfo2.claim_id].height
-                : 0;
-
-              if (height1 !== height2) {
-                // flipped because heigher block height is newer
-                return height2 - height1;
-              }
-
-              if (fileInfo1.absolute_channel_position && fileInfo2.absolute_channel_position) {
-                return fileInfo1.absolute_channel_position - fileInfo2.absolute_channel_position;
-              }
-
-              return 0;
-            })
-          : [...fileInfos].reverse(),
-      [SORT_OPTIONS.DATE_OLD]: fileInfos =>
-        this.props.sortByHeight
-          ? fileInfos.slice().sort((fileInfo1, fileInfo2) => {
-              const height1 = this.props.claimsById[fileInfo1.claim_id]
-                ? this.props.claimsById[fileInfo1.claim_id].height
-                : 999999;
-              const height2 = this.props.claimsById[fileInfo2.claim_id]
-                ? this.props.claimsById[fileInfo2.claim_id].height
-                : 999999;
-              if (height1 < height2) {
-                return -1;
-              } else if (height1 > height2) {
-                return 1;
-              }
-              return 0;
-            })
-          : fileInfos,
-      [SORT_OPTIONS.TITLE]: fileInfos =>
-        fileInfos.slice().sort((fileInfo1, fileInfo2) => {
-          const getFileTitle = fileInfo => {
-            const { value, name, claim_name: claimName } = fileInfo;
-            if (value) {
-              return value.title || claimName;
-            }
-
-            // Invalid claim
-            return '';
-          };
-          const title1 = getFileTitle(fileInfo1).toLowerCase();
-          const title2 = getFileTitle(fileInfo2).toLowerCase();
-          if (title1 < title2) {
-            return -1;
-          } else if (title1 > title2) {
-            return 1;
-          }
-          return 0;
-        }),
-      [SORT_OPTIONS.FILENAME]: fileInfos =>
-        fileInfos.slice().sort(({ file_name: fileName1 }, { file_name: fileName2 }) => {
-          const fileName1Lower = fileName1.toLowerCase();
-          const fileName2Lower = fileName2.toLowerCase();
-          if (fileName1Lower < fileName2Lower) {
-            return -1;
-          } else if (fileName2Lower > fileName1Lower) {
-            return 1;
-          }
-          return 0;
-        }),
-    };
+  function handleSortChange() {
+    setCurrentSort(currentSort === SORT_NEW ? SORT_OLD : SORT_NEW);
   }
 
-  getChannelSignature = (fileInfo: { pending: boolean } & FileListItem) => {
-    if (fileInfo.pending) {
-      return undefined;
-    }
-
-    return fileInfo.channel_claim_id;
-  };
-
-  handleSortChanged(event: SyntheticInputEvent<*>) {
-    this.props.setFileListSort(this.props.page, event.target.value);
-  }
-
-  sortFunctions: {};
-
-  render() {
-    const { fileInfos, hideFilter, sortBy } = this.props;
-
-    const content = [];
-    if (!fileInfos) {
-      return null;
-    }
-
-    this.sortFunctions[sortBy](fileInfos).forEach(fileInfo => {
-      const { name: claimName, claim_name: claimNameDownloaded, claim_id: claimId, txid, nout, isNew } = fileInfo;
-      const uriParams = {};
-
-      // This is unfortunate
-      // https://github.com/lbryio/lbry/issues/1159
-      const name = claimName || claimNameDownloaded;
-      uriParams.contentName = name;
-      uriParams.claimId = claimId;
-      const uri = buildURI(uriParams);
-      const outpoint = `${txid}:${nout}`;
-
-      // See https://github.com/lbryio/lbry-desktop/issues/1327 for discussion around using outpoint as the key
-      content.push(<FileCard key={outpoint} uri={uri} isNew={isNew} />);
-    });
-
-    return (
-      <section>
-        {!hideFilter && (
-          <Form>
-            <FormField label={__('Sort by')} type="select" value={sortBy} onChange={this.handleSortChanged}>
-              <option value={SORT_OPTIONS.DATE_NEW}>{__('Newest First')}</option>
-              <option value={SORT_OPTIONS.DATE_OLD}>{__('Oldest First')}</option>
-              <option value={SORT_OPTIONS.TITLE}>{__('Title')}</option>
+  return (
+    <section className={classnames('file-list')}>
+      {!noHeader && (
+        <div className="file-list__header">
+          {header || (
+            <FormField
+              className="file-list__dropdown"
+              type="select"
+              name="file_sort"
+              value={currentSort}
+              onChange={handleSortChange}
+            >
+              <option value={SORT_NEW}>{__('Newest First')}</option>
+              <option value={SORT_OLD}>{__('Oldest First')}</option>
             </FormField>
-          </Form>
-        )}
-
-        <section className="media-group--list">
-          <div className="card__list">{content}</div>
-        </section>
-      </section>
-    );
-  }
+          )}
+          {loading && <Spinner light type="small" />}
+          <div className="file-list__alt-controls">{headerAltControls}</div>
+        </div>
+      )}
+      {hasUris && (
+        <ul>
+          {sortedUris.map((uri, index) => (
+            <React.Fragment key={uri}>
+              <FileListItem uri={uri} slim={slim} />
+              {index === 4 && injectedItem && <li className="file-list__item--injected">{injectedItem}</li>}
+            </React.Fragment>
+          ))}
+        </ul>
+      )}
+      {!hasUris && !loading && (
+        <div className="main--empty">{empty || <h3 className="card__title">{__('No results')}</h3>}</div>
+      )}
+    </section>
+  );
 }
-
-export default FileList;

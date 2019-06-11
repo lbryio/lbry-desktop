@@ -40,11 +40,9 @@ table,
   td:nth-of-type(3) {
     // Only add ellipsis to the links in the table
     // We still want to show the entire message if a TX includes one
-    .button__content {
-      @include constrict(10rem);
-      vertical-align: bottom;
-      display: inline-block;
-    }
+    @include constrict(10rem);
+    vertical-align: bottom;
+    display: inline-block;
   }
 }
 
@@ -69,6 +67,6 @@ table,
 .table--invites {
   svg {
     margin-bottom: -2px;
-    margin-left: var(--spacing-vertical-small);
+    margin-left: var(--spacing-small);
   }
 }

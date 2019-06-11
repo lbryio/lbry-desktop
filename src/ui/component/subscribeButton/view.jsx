@@ -22,7 +22,7 @@ type Props = {
   buttonStyle: string,
 };
 
-export default (props: Props) => {
+export default function SubscribeButton(props: Props) {
   const {
     uri,
     doChannelSubscribe,
@@ -36,14 +36,14 @@ export default (props: Props) => {
   } = props;
 
   const subscriptionHandler = isSubscribed ? doChannelUnsubscribe : doChannelSubscribe;
-  const subscriptionLabel = isSubscribed ? __('Unsubscribe') : __('Subscribe');
+  const subscriptionLabel = isSubscribed ? __('Subscribed') : __('Subscribe');
 
   const { claimName } = parseURI(uri);
 
   return (
     <Button
       iconColor="red"
-      icon={isSubscribed ? ICONS.UNSUBSCRIBE : ICONS.SUBSCRIPTION}
+      icon={ICONS.SUBSCRIPTION}
       button={buttonStyle || 'alt'}
       label={subscriptionLabel}
       onClick={e => {
@@ -64,4 +64,4 @@ export default (props: Props) => {
       }}
     />
   );
-};
+}

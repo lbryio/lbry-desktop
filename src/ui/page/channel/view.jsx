@@ -49,42 +49,44 @@ function ChannelPage(props: Props) {
   };
 
   return (
-    <Page notContained className="main--no-padding-top">
-      <header className="channel-cover main__item--extend-outside">
-        {cover && <img className="channel-cover__custom" src={cover} />}
+    <Page>
+      <div className="card">
+        <header className="channel-cover">
+          {cover && <img className="channel-cover__custom" src={cover} />}
 
-        <div className="channel__primary-info">
-          <ChannelThumbnail uri={uri} />
+          <div className="channel__primary-info">
+            <ChannelThumbnail className="channel__thumbnail--channel-page" uri={uri} />
 
-          <div>
-            <h1 className="channel__title">{title || channelName}</h1>
-            <h2 className="channel__url">
-              {claimName}
-              {claimId && `#${claimId}`}
-            </h2>
+            <div>
+              <h1 className="channel__title">{title || channelName}</h1>
+              <h2 className="channel__url">
+                {claimName}
+                {claimId && `#${claimId}`}
+              </h2>
+            </div>
           </div>
-        </div>
-      </header>
+        </header>
 
-      <Tabs onChange={onTabChange} index={tabIndex}>
-        <TabList className="main__item--extend-outside tabs__list--channel-page">
-          <Tab>{__('Content')}</Tab>
-          <Tab>{__('About')}</Tab>
-          <div className="card__actions">
-            <ShareButton uri={uri} />
-            <SubscribeButton uri={uri} />
-          </div>
-        </TabList>
+        <Tabs onChange={onTabChange} index={tabIndex}>
+          <TabList className="tabs__list--channel-page">
+            <Tab>{__('Content')}</Tab>
+            <Tab>{__('About')}</Tab>
+            <div className="card__actions">
+              <ShareButton uri={uri} />
+              <SubscribeButton uri={uri} />
+            </div>
+          </TabList>
 
-        <TabPanels>
-          <TabPanel>
-            <ChannelContent uri={uri} />
-          </TabPanel>
-          <TabPanel>
-            <ChannelAbout uri={uri} />
-          </TabPanel>
-        </TabPanels>
-      </Tabs>
+          <TabPanels className="channel__data">
+            <TabPanel>
+              <ChannelContent uri={uri} />
+            </TabPanel>
+            <TabPanel>
+              <ChannelAbout uri={uri} />
+            </TabPanel>
+          </TabPanels>
+        </Tabs>
+      </div>
     </Page>
   );
 }

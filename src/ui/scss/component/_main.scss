@@ -1,58 +1,52 @@
 .main-wrapper {
   position: absolute;
-  top: var(--header-height);
-  min-height: calc(100% - var(--header-height));
-  width: 100%;
+  min-height: 100vh;
+  width: 100vw;
+  padding-top: var(--spacing-main-padding);
+  padding-left: var(--spacing-medium);
   background-color: mix($lbry-white, $lbry-gray-1, 70%);
+  display: flex;
 
-  html[data-mode='dark'] & {
+  [data-mode='dark'] & {
     background-color: $lbry-black;
   }
+}
 
-  @media (min-width: 600px) {
-    left: var(--side-nav-width);
-    width: calc(100% - var(--side-nav-width));
-  }
+.main-wrapper-inner {
+  display: flex;
+  max-width: 1200px;
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: var(--spacing-main-padding);
+  position: relative;
 }
 
 .main {
-  display: flex;
-  flex-direction: column;
-  margin: auto;
-}
+  min-width: 0;
+  width: calc(100% - var(--side-nav-width) - var(--spacing-main-padding));
+  position: relative;
 
-.main--contained {
-  max-width: 900px;
-  padding: var(--spacing-main-padding);
-}
-
-.main--not-contained {
-  padding: var(--spacing-main-padding);
-}
-
-.main--no-padding {
-  padding: 0;
-}
-
-.main--no-padding-top {
-  padding-top: 0;
+  @media (max-width: 600px) {
+    width: 100%;
+    margin-right: 0;
+    margin-left: 0;
+  }
 }
 
 .main--file-page {
-  padding: var(--spacing-main-padding);
-  max-width: var(--file-page-max-width);
   display: grid;
-  grid-gap: var(--spacing-vertical-large);
+  grid-gap: var(--spacing-large);
   grid-template-rows: auto 1fr;
   grid-template-columns: 1fr auto;
+  max-width: calc(100% - var(--side-nav-width) - var(--spacing-main-padding));
+
   grid-template-areas:
     'content content'
-    'info    related';
+    'info related';
 
-  @media (min-width: 1300px) {
-    grid-template-areas:
-      'content related'
-      'info    related';
+  .grid-area--content {
+    width: 100%;
   }
 
   .grid-area--content {
@@ -63,6 +57,7 @@
   }
   .grid-area--related {
     grid-area: related;
+    width: 40rem;
   }
 }
 
@@ -70,20 +65,7 @@
   align-items: center;
   display: flex;
   flex-direction: column;
-  margin-top: 100px;
-  margin-bottom: 100px;
+  padding-top: 100px;
+  padding-bottom: 100px;
   text-align: center;
-}
-
-// On pages that are not contained, they still might want to have items inside the page
-// that extend the full width ex: cover photo
-// But the components inside of those pages should be still have "page" padding
-.main__item--extend-outside {
-  $main-width: calc(100vw - var(--side-nav-width));
-  width: $main-width;
-  position: relative;
-  left: 50%;
-  right: 50%;
-  margin-left: calc(-50vw + (var(--side-nav-width) * 0.5));
-  margin-right: calc(-50vw + (var(--side-nav-width) * 0.5));
 }

@@ -9,7 +9,6 @@ const LOADER_TIMEOUT = 1000;
 type Props = {
   children: React.Node | Array<React.Node>,
   pageTitle: ?string,
-  notContained: ?boolean, // No max-width, but keep the padding
   loading: ?boolean,
   className: ?string,
 };
@@ -69,16 +68,11 @@ class Page extends React.PureComponent<Props, State> {
   loaderTimeout: ?TimeoutID;
 
   render() {
-    const { children, notContained, loading, className } = this.props;
+    const { children, loading, className } = this.props;
     const { showLoader } = this.state;
 
     return (
-      <main
-        className={classnames('main', className, {
-          'main--contained': !notContained,
-          'main--not-contained': notContained,
-        })}
-      >
+      <main className={classnames('main', className)}>
         {!loading && children}
         {showLoader && (
           <div className="main--empty">

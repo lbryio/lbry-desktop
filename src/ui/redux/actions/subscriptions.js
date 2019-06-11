@@ -7,7 +7,7 @@ import { Lbryio, rewards, doClaimRewardType } from 'lbryinc';
 import { selectSubscriptions, selectUnreadByChannel } from 'redux/selectors/subscriptions';
 import { makeSelectClientSetting } from 'redux/selectors/settings';
 import { Lbry, buildURI, parseURI, doResolveUris } from 'lbry-redux';
-import { doPurchaseUri, doFetchClaimsByChannel } from 'redux/actions/content';
+import { doPurchaseUri } from 'redux/actions/content';
 
 const CHECK_SUBSCRIPTIONS_INTERVAL = 15 * 60 * 1000;
 const SUBSCRIPTION_DOWNLOAD_LIMIT = 1;
@@ -35,8 +35,7 @@ export const doFetchMySubscriptions = () => (dispatch: Dispatch, getState: GetSt
   Lbryio.call('subscription', 'list')
     .then(dbSubscriptions => {
       const storedSubscriptions = dbSubscriptions || [];
-
-      // User has no subscriptions in db or redux
+      // // User has no subscriptions in db or redux
       if (!storedSubscriptions.length && (!reduxSubscriptions || !reduxSubscriptions.length)) {
         return [];
       }
@@ -45,25 +44,12 @@ export const doFetchMySubscriptions = () => (dispatch: Dispatch, getState: GetSt
       // If something is in the db, but not in redux, add it to redux
       // If something is in redux, but not in the db, add it to the db
       if (storedSubscriptions.length !== reduxSubscriptions.length) {
-        const dbSubMap = {};
         const reduxSubMap = {};
-        const subsNotInDB = [];
         const subscriptionsToReturn = reduxSubscriptions.slice();
-
-        storedSubscriptions.forEach(sub => {
-          dbSubMap[sub.claim_id] = 1;
-        });
 
         reduxSubscriptions.forEach(sub => {
           const { claimId } = parseURI(sub.uri);
           reduxSubMap[claimId] = 1;
-
-          if (!dbSubMap[claimId]) {
-            subsNotInDB.push({
-              claim_id: claimId,
-              channel_name: sub.channelName,
-            });
-          }
         });
 
         storedSubscriptions.forEach(sub => {
@@ -73,13 +59,7 @@ export const doFetchMySubscriptions = () => (dispatch: Dispatch, getState: GetSt
           }
         });
 
-        return Promise.all(subsNotInDB.map(payload => Lbryio.call('subscription', 'new', payload)))
-          .then(() => subscriptionsToReturn)
-          .catch(
-            () =>
-              // let it fail, we will try again when the navigate to the subscriptions page
-              subscriptionsToReturn
-          );
+        return subscriptionsToReturn;
       }
 
       // DB is already synced, just return the subscriptions in redux
@@ -223,85 +203,85 @@ export const doCheckSubscription = (subscriptionUri: string, shouldNotify?: bool
     throw Error(`Trying to find new content for ${subscriptionUri} but it doesn't exist in your subscriptions`);
   }
 
-  const { claimId } = parseURI(subscriptionUri);
-
   // We may be duplicating calls here. Can this logic be baked into doFetchClaimsByChannel?
-  Lbry.claim_search({ channel_id: claimId, page: 1, page_size: PAGE_SIZE }).then(claimListByChannel => {
-    const { items: claimsInChannel } = claimListByChannel;
+  Lbry.claim_search({ channel: subscriptionUri, is_controlling: true, page: 1, page_size: PAGE_SIZE }).then(
+    claimListByChannel => {
+      const { items: claimsInChannel } = claimListByChannel;
 
-    // may happen if subscribed to an abandoned channel or an empty channel
-    if (!claimsInChannel || !claimsInChannel.length) {
-      return;
-    }
+      // may happen if subscribed to an abandoned channel or an empty channel
+      if (!claimsInChannel || !claimsInChannel.length) {
+        return;
+      }
 
-    // Determine if the latest subscription currently saved is actually the latest subscription
-    const latestIndex = claimsInChannel.findIndex(
-      claim => `${claim.name}#${claim.claim_id}` === savedSubscription.latest
-    );
+      // Determine if the latest subscription currently saved is actually the latest subscription
+      const latestIndex = claimsInChannel.findIndex(
+        claim => `${claim.name}#${claim.claim_id}` === savedSubscription.latest
+      );
 
-    // If latest is -1, it is a newly subscribed channel or there have been 10+ claims published since last viewed
-    const latestIndexToNotify = latestIndex === -1 ? 10 : latestIndex;
+      // If latest is -1, it is a newly subscribed channel or there have been 10+ claims published since last viewed
+      const latestIndexToNotify = latestIndex === -1 ? 10 : latestIndex;
 
-    // If latest is 0, nothing has changed
-    // Do not download/notify about new content, it would download/notify 10 claims per channel
-    if (latestIndex !== 0 && savedSubscription.latest) {
-      let downloadCount = 0;
+      // If latest is 0, nothing has changed
+      // Do not download/notify about new content, it would download/notify 10 claims per channel
+      if (latestIndex !== 0 && savedSubscription.latest) {
+        let downloadCount = 0;
 
-      const newUnread = [];
-      claimsInChannel.slice(0, latestIndexToNotify).forEach(claim => {
-        const uri = buildURI({ contentName: claim.name, claimId: claim.claim_id }, true);
-        const shouldDownload =
-          shouldAutoDownload && Boolean(downloadCount < SUBSCRIPTION_DOWNLOAD_LIMIT && !claim.value.fee);
+        const newUnread = [];
+        claimsInChannel.slice(0, latestIndexToNotify).forEach(claim => {
+          const uri = buildURI({ contentName: claim.name, claimId: claim.claim_id }, true);
+          const shouldDownload =
+            shouldAutoDownload && Boolean(downloadCount < SUBSCRIPTION_DOWNLOAD_LIMIT && !claim.value.fee);
 
-        // Add the new content to the list of "un-read" subscriptions
-        if (shouldNotify) {
-          newUnread.push(uri);
-        }
+          // Add the new content to the list of "un-read" subscriptions
+          if (shouldNotify) {
+            newUnread.push(uri);
+          }
 
-        if (shouldDownload) {
-          downloadCount += 1;
-          dispatch(doPurchaseUri(uri, { cost: 0 }, true));
-        }
-      });
+          if (shouldDownload) {
+            downloadCount += 1;
+            dispatch(doPurchaseUri(uri, { cost: 0 }, true));
+          }
+        });
 
+        dispatch(
+          doUpdateUnreadSubscriptions(
+            subscriptionUri,
+            newUnread,
+            downloadCount > 0 ? NOTIFICATION_TYPES.DOWNLOADING : NOTIFICATION_TYPES.NOTIFY_ONLY
+          )
+        );
+      }
+
+      // Set the latest piece of content for a channel
+      // This allows the app to know if there has been new content since it was last set
       dispatch(
-        doUpdateUnreadSubscriptions(
-          subscriptionUri,
-          newUnread,
-          downloadCount > 0 ? NOTIFICATION_TYPES.DOWNLOADING : NOTIFICATION_TYPES.NOTIFY_ONLY
+        setSubscriptionLatest(
+          {
+            channelName: claimsInChannel[0].channel_name,
+            uri: buildURI(
+              {
+                channelName: claimsInChannel[0].channel_name,
+                claimId: claimsInChannel[0].claim_id,
+              },
+              false
+            ),
+          },
+          buildURI({ contentName: claimsInChannel[0].name, claimId: claimsInChannel[0].claim_id }, false)
         )
       );
-    }
 
-    // Set the latest piece of content for a channel
-    // This allows the app to know if there has been new content since it was last set
-    dispatch(
-      setSubscriptionLatest(
-        {
-          channelName: claimsInChannel[0].channel_name,
-          uri: buildURI(
-            {
-              channelName: claimsInChannel[0].channel_name,
-              claimId: claimsInChannel[0].claim_id,
-            },
-            false
-          ),
+      // calling FETCH_CHANNEL_CLAIMS_COMPLETED after not calling STARTED
+      // means it will delete a non-existant fetchingChannelClaims[uri]
+      dispatch({
+        type: ACTIONS.FETCH_CHANNEL_CLAIMS_COMPLETED,
+        data: {
+          uri: subscriptionUri,
+          claims: claimsInChannel || [],
+          page: 1,
         },
-        buildURI({ contentName: claimsInChannel[0].name, claimId: claimsInChannel[0].claim_id }, false)
-      )
-    );
-
-    // calling FETCH_CHANNEL_CLAIMS_COMPLETED after not calling STARTED
-    // means it will delete a non-existant fetchingChannelClaims[uri]
-    dispatch({
-      type: ACTIONS.FETCH_CHANNEL_CLAIMS_COMPLETED,
-      data: {
-        uri: subscriptionUri,
-        claims: claimsInChannel || [],
-        page: 1,
-      },
-    });
-  });
+      });
+    }
+  );
 };
 
 export const doChannelSubscribe = (subscription: Subscription) => (dispatch: Dispatch, getState: GetState) => {
@@ -394,13 +374,3 @@ export const doFetchRecommendedSubscriptions = () => (dispatch: Dispatch) => {
       })
     );
 };
-
-export const doCompleteFirstRun = () => (dispatch: Dispatch) =>
-  dispatch({
-    type: ACTIONS.SUBSCRIPTION_FIRST_RUN_COMPLETED,
-  });
-
-export const doShowSuggestedSubs = () => (dispatch: Dispatch) =>
-  dispatch({
-    type: ACTIONS.VIEW_SUGGESTED_SUBSCRIPTIONS,
-  });

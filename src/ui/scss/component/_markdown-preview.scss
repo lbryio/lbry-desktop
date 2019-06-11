@@ -8,14 +8,14 @@
   h6 {
     font-size: inherit;
     font-weight: 600;
-    margin-bottom: var(--spacing-vertical-medium);
-    padding-top: var(--spacing-vertical-medium);
+    margin-bottom: var(--spacing-medium);
+    padding-top: var(--spacing-medium);
   }
 
   // Paragraphs
   p {
     font-size: 1.15rem;
-    margin-bottom: var(--spacing-vertical-medium);
+    margin-bottom: var(--spacing-medium);
     // word-break: break-all;
 
     svg {
@@ -35,7 +35,7 @@
   // Tables
   table {
     margin-bottom: 1.2rem;
-    padding: var(--spacing-vertical-medium);
+    padding: var(--spacing-medium);
 
     tr {
       td,
@@ -44,15 +44,15 @@
       th:first-of-type,
       td:last-of-type,
       th:last-of-type {
-        padding: var(--spacing-vertical-medium);
+        padding: var(--spacing-medium);
       }
     }
   }
 
   // Image
   img {
-    margin-bottom: var(--spacing-vertical-medium);
-    padding-top: var(--spacing-vertical-medium);
+    margin-bottom: var(--spacing-medium);
+    padding-top: var(--spacing-medium);
   }
 
   // Horizontal Rule
@@ -76,8 +76,8 @@
   }
 
   code {
-    margin-bottom: var(--spacing-vertical-medium);
-    padding: var(--spacing-vertical-medium);
+    margin-bottom: var(--spacing-medium);
+    padding: var(--spacing-medium);
 
     background-color: $lbry-gray-1;
     color: $lbry-gray-5;
@@ -93,7 +93,7 @@
   // Lists
   ul,
   ol {
-    margin-bottom: var(--spacing-vertical-medium);
+    margin-bottom: var(--spacing-medium);
 
     > li {
       list-style-position: outside;
@@ -105,7 +105,7 @@
   }
 
   li {
-    margin-left: var(--spacing-vertical-large);
+    margin-left: var(--spacing-large);
 
     p {
       display: inline-block;

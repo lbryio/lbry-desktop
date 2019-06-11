@@ -25,6 +25,7 @@ body {
   overflow: hidden;
 
   html[data-mode='dark'] & {
+    background-color: $lbry-black;
     color: mix($lbry-white, $lbry-gray-3, 50%);
   }
 }
@@ -132,8 +133,8 @@ code {
   color: $lbry-gray-5;
   display: block;
   padding: 1rem;
-  margin-top: var(--spacing-vertical-medium);
-  margin-bottom: var(--spacing-vertical-medium);
+  margin-top: var(--spacing-medium);
+  margin-bottom: var(--spacing-medium);
   border-radius: 5px;
 
   html[data-mode='dark'] & {

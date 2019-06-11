@@ -3,16 +3,8 @@
 .button {
   display: inline-block;
 
-  .button__content {
-    display: flex;
-    align-items: center;
-    height: 100%;
-  }
-
   svg {
     stroke-width: 1.9;
-    width: 1.2rem;
-    height: 1.2rem;
     position: relative;
     color: $lbry-gray-5;
 
@@ -22,12 +14,6 @@
       width: 1.4rem;
       height: 1.4rem;
     }
-  }
-
-  // Handle icons on the left or right side of the button label
-  svg + .button__label,
-  .button__label + svg {
-    margin-left: var(--spacing-vertical-miniscule);
   }
 }
 
@@ -56,16 +42,57 @@
   box-sizing: border-box;
 }
 
+.button--alt {
+  padding: 0;
+}
+
 .button--uri-indicator {
   max-width: 100%;
   height: 1.2em;
   vertical-align: text-top;
-  overflow: hidden;
   text-align: left;
   text-overflow: ellipsis;
   transition: color 0.2s;
 
   &:hover {
-    color: $lbry-teal-3;
+    color: $lbry-teal-5;
   }
+}
+
+.button--close {
+  position: absolute;
+  top: var(--spacing-miniscule);
+  right: var(--spacing-miniscule);
+  padding: 0.3rem;
+  transition: all var(--transition-duration) var(--transition-style);
+
+  &:hover {
+    background-color: $lbry-red-3;
+    color: $lbry-white;
+    border-radius: var(--card-radius);
+  }
+}
+
+.button--subscribe {
+  vertical-align: text-top;
+  align-items: flex-start;
+}
+
+.button__label {
+  // white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  // display: flex;
+  // align-items: center;
+}
+
+// Handle icons on the left or right side of the button label
+svg + .button__label,
+.button__label + svg {
+  margin-left: var(--spacing-miniscule);
+}
+
+.button__content {
+  display: flex;
+  align-items: center;
 }

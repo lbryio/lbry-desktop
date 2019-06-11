@@ -5,8 +5,7 @@
   background-color: $lbry-teal-4;
   border-radius: 0.5rem;
   color: $lbry-white;
-  padding: var(--spacing-vertical-small) var(--spacing-vertical-large) var(--spacing-vertical-small)
-    var(--spacing-vertical-medium);
+  padding: var(--spacing-small) var(--spacing-large) var(--spacing-small) var(--spacing-medium);
   position: fixed;
   transition: all var(--transition-duration) var(--transition-type);
   z-index: 10000; // hack to get it over react modal
@@ -18,7 +17,7 @@
 
 .snack-bar__action {
   display: inline-block;
-  margin: var(--spacing-vertical-small) 0;
+  margin: var(--spacing-small) 0;
   min-width: min-content;
   text-transform: uppercase;
 
@@ -35,7 +34,7 @@
   div {
     &:nth-of-type(1) {
       font-size: 1.5rem;
-      margin-right: var(--spacing-vertical-medium);
+      margin-right: var(--spacing-medium);
     }
 
     &:nth-of-type(2) {

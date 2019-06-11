@@ -1,12 +1,13 @@
 .card {
   background-color: $lbry-white;
-  margin-bottom: var(--spacing-vertical-xlarge);
+  margin-bottom: var(--spacing-xlarge);
   position: relative;
   border-radius: var(--card-radius);
   box-shadow: var(--card-box-shadow) $lbry-gray-1;
+  overflow: hidden;
 
   html[data-mode='dark'] & {
-    background-color: rgba($lbry-white, 0.1);
+    background-color: lighten($lbry-black, 5%);
     box-shadow: var(--card-box-shadow) darken($lbry-gray-1, 80%);
   }
 }
@@ -21,10 +22,11 @@
 }
 
 .card--section {
-  padding: var(--spacing-vertical-large);
+  position: relative;
+  padding: var(--spacing-large);
 
   .card__content:not(:last-of-type) {
-    margin-bottom: var(--spacing-vertical-large);
+    margin-bottom: var(--spacing-large);
   }
 }
 
@@ -39,6 +41,10 @@
   justify-content: space-between;
 }
 
+.card--modal {
+  box-shadow: none;
+}
+
 //  C A R D
 //  A C T I O N S
 
@@ -47,7 +53,7 @@
   font-size: 1.15rem;
 
   > *:not(:last-child) {
-    margin-right: var(--spacing-vertical-medium);
+    margin-right: var(--spacing-medium);
   }
 }
 
@@ -74,7 +80,7 @@
 }
 
 .card__actions--top-space {
-  padding-top: var(--spacing-vertical-small);
+  padding-top: var(--spacing-small);
 }
 
 //  C A R D
@@ -84,13 +90,12 @@
   font-size: 1.25rem;
 
   p:not(:last-child) {
-    margin-bottom: var(--spacing-vertical-medium);
+    margin-bottom: var(--spacing-medium);
   }
+}
 
-  .badge {
-    bottom: -0.15rem;
-    position: relative;
-  }
+.card__content--large {
+  font-size: 4rem;
 }
 
 //  C A R D
@@ -100,17 +105,8 @@
   position: relative;
 
   &:not(.card__header--flat) {
-    margin-bottom: var(--spacing-vertical-medium);
+    margin-bottom: var(--spacing-medium);
   }
-}
-
-//  C A R D
-//  I N T E R N A L
-
-.card__internal-links {
-  top: 2rem;
-  right: 2rem;
-  position: absolute;
 }
 
 //  C A R D
@@ -118,7 +114,8 @@
 
 .card__list {
   display: grid;
-  grid-gap: var(--spacing-vertical-medium);
+  grid-gap: var(--spacing-medium);
+  margin-top: var(--spacing-large);
 
   // Depending on screen width, the amount of items in
   // each row change and are auto-sized
@@ -135,31 +132,21 @@
     grid-template-columns: repeat(auto-fill, minmax(calc(100% / 7), 1fr));
   }
 
-  @media (min-width: 1051px) and (max-width: 1550px) {
+  @media (min-width: 1200px) and (max-width: 1550px) {
     grid-template-columns: repeat(auto-fill, minmax(calc(100% / 6), 1fr));
   }
 
-  @media (min-width: 901px) and (max-width: 1050px) {
-    grid-template-columns: repeat(auto-fill, minmax(calc(100% / 5), 1fr));
-  }
-
-  @media (min-width: 751px) and (max-width: 900px) {
-    grid-template-columns: repeat(auto-fill, minmax(calc(100% / 4), 1fr));
-  }
-
-  @media (max-width: 750px) {
-    grid-template-columns: repeat(auto-fill, minmax(calc(100% / 3), 1fr));
-  }
+  grid-template-columns: repeat(auto-fill, minmax(calc(100% / 5), 1fr));
 }
 
 .card__list--rewards {
   column-count: 2;
-  column-gap: var(--spacing-vertical-medium);
-  margin-bottom: var(--spacing-vertical-large);
+  column-gap: var(--spacing-medium);
+  margin-bottom: var(--spacing-large);
 
   .card {
     display: inline-block;
-    margin: 0 0 var(--spacing-vertical-medium);
+    margin: 0 0 var(--spacing-medium);
     width: 100%;
   }
 }
@@ -169,8 +156,7 @@
 
 .card__message {
   border-left: 0.5rem solid;
-  padding: var(--spacing-vertical-medium) var(--spacing-vertical-medium) var(--spacing-vertical-medium)
-    var(--spacing-vertical-large);
+  padding: var(--spacing-medium) var(--spacing-medium) var(--spacing-medium) var(--spacing-large);
 
   &:not(&--error):not(&--failure):not(&--success) {
     background-color: rgba($lbry-teal-1, 0.1);
@@ -198,22 +184,24 @@
 
 .card__subtitle {
   @extend .help;
-  background-color: lighten($lbry-gray-1, 7%);
-  color: darken($lbry-gray-5, 30%);
+  color: darken($lbry-gray-5, 25%);
   font-size: 1.15rem;
-  margin-bottom: var(--spacing-vertical-small);
+  margin-bottom: var(--spacing-small);
+  flex: 1;
 
   p {
-    margin-bottom: var(--spacing-vertical-small);
+    margin-bottom: var(--spacing-small);
   }
 
   .badge {
     bottom: -0.12rem;
     position: relative;
+    margin-left: 0;
   }
 
   [data-mode='dark'] & {
-    background-color: darken($lbry-gray-5, 20%);
+    // TODO: dark
+    // background-color: darken($lbry-gray-5, 20%);
   }
 }
 
@@ -223,10 +211,10 @@
 .card__title {
   font-size: 2rem;
   font-weight: 600;
-  margin-bottom: var(--spacing-vertical-medium);
+  margin-bottom: var(--spacing-medium);
 
   + .card__content {
-    margin-top: var(--spacing-vertical-medium);
+    margin-top: var(--spacing-medium);
   }
 }
 
@@ -235,7 +223,7 @@
   align-items: center;
 
   & > *:not(:last-child) {
-    margin-right: var(--spacing-vertical-medium);
+    margin-right: var(--spacing-medium);
   }
 }
 

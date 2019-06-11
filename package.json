@@ -60,7 +60,7 @@
     "@exponent/electron-cookies": "^2.0.0",
     "@hot-loader/react-dom": "16.8",
     "@lbry/color": "^1.0.2",
-    "@lbry/components": "^2.7.0",
+    "@lbry/components": "^2.7.2",
     "@reach/rect": "^0.2.1",
     "@reach/tabs": "^0.1.5",
     "@types/three": "^0.93.1",
@@ -119,7 +119,7 @@
     "jsmediatags": "^3.8.1",
     "json-loader": "^0.5.4",
     "lbry-format": "https://github.com/lbryio/lbry-format.git",
-    "lbry-redux": "lbryio/lbry-redux#02f6918238110726c0b3b4248c61a84ac0b969e3",
+    "lbry-redux": "lbryio/lbry-redux#08ed1be3905896452536c92f17997bcde4533aea",
     "lbryinc": "lbryio/lbryinc#43d382d9b74d396a581a74d87e4c53105e04f845",
     "lint-staged": "^7.0.2",
     "localforage": "^1.7.1",
@@ -153,6 +153,7 @@
     "react-router": "^5.0.0",
     "react-router-dom": "^5.0.0",
     "react-simplemde-editor": "^4.0.0",
+    "react-spring": "^8.0.20",
     "react-toggle": "^4.0.2",
     "redux": "^3.6.0",
     "redux-persist": "^4.8.0",
@@ -191,7 +192,7 @@
     "yarn": "^1.3"
   },
   "lbrySettings": {
-    "lbrynetDaemonVersion": "0.37.4",
+    "lbrynetDaemonVersion": "0.38.0rc6",
     "lbrynetDaemonUrlTemplate": "https://github.com/lbryio/lbry/releases/download/vDAEMONVER/lbrynet-OSNAME.zip",
     "lbrynetDaemonDir": "static/daemon",
     "lbrynetDaemonFileName": "lbrynet"

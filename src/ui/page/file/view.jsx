@@ -108,15 +108,15 @@ class FilePage extends React.Component<Props> {
       fetchViewCount(claim.claim_id);
     }
 
+    if (prevProps.uri !== uri) {
+      setViewed(uri);
+    }
+
     // @if TARGET='app'
     if (fileInfo === undefined) {
       fetchFileInfo(uri);
     }
     // @endif
-
-    if (prevProps.uri !== uri) {
-      setViewed(uri);
-    }
   }
 
   removeFromSubscriptionNotifications() {
@@ -148,7 +148,8 @@ class FilePage extends React.Component<Props> {
     } = this.props;
 
     // File info
-    const { channel_name: channelName } = claim;
+    const { signing_channel: signingChannel } = claim;
+    const channelName = signingChannel && signingChannel.name;
     const { PLAYABLE_MEDIA_TYPES, PREVIEW_MEDIA_TYPES } = FilePage;
     const isRewardContent = (rewardedContentClaimIds || []).includes(claim.claim_id);
     const shouldObscureThumbnail = obscureNsfw && nsfw;
@@ -179,23 +180,12 @@ class FilePage extends React.Component<Props> {
     const insufficientCredits = !claimIsMine && costInfo && costInfo.cost > balance;
 
     return (
-      <Page notContained className="main--file-page">
+      <Page className="main--file-page">
         <div className="grid-area--content">
-          <Button
-            className="media__uri"
-            button="alt"
-            label={uri}
-            onClick={() => {
-              clipboard.writeText(uri);
-              showToast({
-                message: __('Text copied'),
-              });
-            }}
-          />
           {!fileInfo && insufficientCredits && (
             <div className="media__insufficient-credits help--warning">
               {__(
-                'The publisher has chosen to charge LBC to view this content. Your balance is currently to low to view it.'
+                'The publisher has chosen to charge LBC to view this content. Your balance is currently too low to view it.'
               )}{' '}
               {__('Checkout')} <Button button="link" navigate="/$/rewards" label={__('the rewards page')} />{' '}
               {__('or send more LBC to your wallet.')}
@@ -223,12 +213,23 @@ class FilePage extends React.Component<Props> {
                 <div className="card__media-text">{__("Sorry, looks like we can't preview this file.")}</div>
               </div>
             ))}
+          <Button
+            className="media__uri"
+            button="alt"
+            label={uri}
+            onClick={() => {
+              clipboard.writeText(uri);
+              showToast({
+                message: __('Copied'),
+              });
+            }}
+          />
         </div>
 
         <div className="grid-area--info media__content media__content--large">
           <h1 className="media__title media__title--large">{title}</h1>
 
-          <div className="media__properties media__properties--large">
+          <div className="file-properties">
             {isRewardContent && (
               <Icon
                 size={20}

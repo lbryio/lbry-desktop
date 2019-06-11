@@ -41,7 +41,7 @@ class TransactionListRecent extends React.PureComponent<Props> {
 
         {!fetchingTransactions && !hasTransactions && (
           <div className="card__content">
-            <p className="card__subtitle">{__('No transactions... yet.')}</p>
+            <p className="card__subtitle">{__('No transactions.')}</p>
           </div>
         )}
 

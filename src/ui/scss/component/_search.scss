@@ -1,5 +1,5 @@
 .search__header {
-  margin-bottom: var(--spacing-vertical-large);
+  margin-bottom: var(--spacing-large);
 
   .placeholder {
     background-color: rgba($lbry-white, 0.1);
@@ -10,63 +10,24 @@
   }
 }
 
-.search__title {
-  font-size: 3em;
-  align-items: center;
-  cursor: default;
-  display: flex;
-  font-weight: 700;
-  line-height: 1.33;
-  margin-bottom: var(--spacing-vertical-large);
-
-  > * {
-    margin-left: var(--spacing-vertical-small);
-  }
-}
-
-.search__results-section {
-  margin-bottom: var(--spacing-vertical-large);
-  min-height: 200px;
-  position: relative;
-}
-
-.search__options-wrapper {
-  font-size: 1.25em;
-  margin: var(--spacing-vertical-xlarge) 0;
-}
-
 .search__options {
-  margin-top: var(--spacing-vertical-large);
+  margin-top: var(--spacing-large);
 
   legend {
     &.search__legend--1 {
-      background-color: $lbry-teal-1;
+      background-color: $lbry-teal-4;
     }
 
     &.search__legend--2 {
-      background-color: $lbry-cyan-1;
+      background-color: $lbry-cyan-4;
     }
 
     &.search__legend--3 {
-      background-color: $lbry-pink-1;
-    }
-
-    [data-mode='dark'] & {
-      &.search__legend--1 {
-        background-color: $lbry-teal-5;
-      }
-
-      &.search__legend--2 {
-        background-color: $lbry-cyan-5;
-      }
-
-      &.search__legend--3 {
-        background-color: $lbry-pink-5;
-      }
+      background-color: $lbry-pink-4;
     }
   }
 
   fieldset:not(:first-child) {
-    margin-top: var(--spacing-vertical-large);
+    margin-top: var(--spacing-large);
   }
 }

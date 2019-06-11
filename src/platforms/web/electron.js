@@ -1,11 +1,7 @@
 export const clipboard = () => {
-  throw 'Fix me!';
+  throw new Error('Fix me!');
 };
 
 export const ipcRenderer = () => {
-  throw 'Fix me!';
-};
-
-export const remote = () => {
-  throw 'Fix me!';
+  throw new Error('Fix me!');
 };

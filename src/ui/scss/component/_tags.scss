@@ -1,0 +1,94 @@
+$main: $lbry-teal-5;
+
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  min-width: 0;
+
+  .tag {
+    margin-top: var(--spacing-small);
+    margin-right: var(--spacing-small);
+  }
+}
+
+.tags,
+.tags--remove,
+.tags--add {
+  .button__label {
+    display: flex;
+    align-items: center;
+  }
+}
+
+.tags--remove {
+  @extend .tags;
+  margin-bottom: var(--spacing-large);
+  font-size: 18px;
+}
+
+.tags--vertical {
+  @extend .tags;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.tags--selected {
+  @extend .tags;
+  margin: var(--spacing-large) 0;
+}
+
+.tags__empty-message {
+  margin-top: var(--spacing-medium);
+}
+
+.tag {
+  @extend .badge--tag;
+  user-select: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  text-transform: lowercase;
+  font-size: 0.7em;
+  max-width: 10rem;
+
+  &:hover:not(:disabled) {
+    background-color: $main;
+    color: $lbry-white;
+  }
+
+  &:active,
+  &:focus {
+    background-color: $main;
+  }
+}
+
+.tag--remove {
+  @extend .tag;
+  font-size: 1em !important;
+  max-width: 20rem;
+}
+
+.tag--add {
+  @extend .tag;
+  background-color: rgba($main, 0.05);
+  border: 1px solid rgba($main, 0.3);
+  border-radius: 1rem;
+  transition: all var(--animation-duration) var(--animation-style);
+
+  &:hover {
+    border-radius: 3px;
+  }
+}
+
+.tag__action-label {
+  border-left: 1px solid rgba($lbry-black, 0.1);
+  margin-left: 0.5rem;
+  padding-left: 0.5rem;
+
+  html[data-mode='dark'] & {
+    border-color: rgba($lbry-white, 0.1);
+  }
+}

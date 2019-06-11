@@ -7,8 +7,7 @@ type Props = {
   isResolvingUri: boolean,
   channelUri: ?string,
   link: ?boolean,
-  claim: ?StreamClaim,
-  channelClaim: ?ChannelClaim,
+  claim: ?Claim,
   // Lint thinks we aren't using these, even though we are.
   // Possibly because the resolve function is an arrow function that is passed in props?
   resolveUri: string => void,
@@ -16,12 +15,12 @@ type Props = {
 };
 
 class UriIndicator extends React.PureComponent<Props> {
-  componentWillMount() {
+  componentDidMount() {
     this.resolve(this.props);
   }
 
-  componentWillReceiveProps(nextProps: Props) {
-    this.resolve(nextProps);
+  componentDidUpdate() {
+    this.resolve(this.props);
   }
 
   resolve = (props: Props) => {
@@ -39,27 +38,35 @@ class UriIndicator extends React.PureComponent<Props> {
       return <span className="empty">{isResolvingUri ? 'Validating...' : 'Unused'}</span>;
     }
 
-    if (!claim.signing_channel) {
+    const isChannelClaim = claim.value_type === 'channel';
+
+    if (!claim.signing_channel && !isChannelClaim) {
       return <span className="channel-name">Anonymous</span>;
     }
 
-    const { name, claim_id: claimId } = claim.signing_channel;
-    let channelLink;
-    if (claim.is_channel_signature_valid) {
-      channelLink = link ? buildURI({ channelName: name, claimId }) : false;
+    const channelClaim = isChannelClaim ? claim : claim.signing_channel;
+
+    if (channelClaim) {
+      const { name, claim_id: claimId } = channelClaim;
+      let channelLink;
+      if (claim.is_channel_signature_valid) {
+        channelLink = link ? buildURI({ channelName: name, claimId }) : false;
+      }
+
+      const inner = <span className="channel-name">{name}</span>;
+
+      if (!channelLink) {
+        return inner;
+      }
+
+      return (
+        <Button className="button--uri-indicator" navigate={channelLink}>
+          {inner}
+        </Button>
+      );
+    } else {
+      return null;
     }
-
-    const inner = <span className="channel-name">{name}</span>;
-
-    if (!channelLink) {
-      return inner;
-    }
-
-    return (
-      <Button className="button--uri-indicator" navigate={channelLink}>
-        {inner}
-      </Button>
-    );
   }
 }
 

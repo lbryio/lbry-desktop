@@ -12,10 +12,6 @@ const select = state => ({
 });
 
 const perform = dispatch => () => ({
-  completeFirstRun: () => {
-    dispatch(doSetClientSetting(SETTINGS.EMAIL_COLLECTION_ACKNOWLEDGED, true));
-    dispatch(doSetClientSetting(SETTINGS.FIRST_RUN_COMPLETED, true));
-  },
   acknowledgeEmail: () => {
     dispatch(doSetClientSetting(SETTINGS.EMAIL_COLLECTION_ACKNOWLEDGED, true));
   },

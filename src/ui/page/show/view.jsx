@@ -49,7 +49,7 @@ class ShowPage extends React.PureComponent<Props> {
       }
 
       innerContent = (
-        <Page notContained>
+        <Page>
           {isResolvingUri && <BusyIndicator message={__('Loading decentralized data...')} />}
           {!isResolvingUri && <span className="empty">{__("There's nothing available at this location.")}</span>}
         </Page>

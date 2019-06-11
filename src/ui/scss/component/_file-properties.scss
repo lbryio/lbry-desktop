@@ -1,0 +1,13 @@
+.file-properties {
+  display: flex;
+  position: relative;
+  align-items: center;
+
+  & > *:not(:first-child) {
+    margin-left: var(--spacing-small);
+  }
+
+  @media (max-width: 600px) {
+    display: none;
+  }
+}

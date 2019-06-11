@@ -13,6 +13,7 @@ export const DOWNLOAD = 'Download';
 export const UPLOAD = 'UploadCloud';
 export const PUBLISHED = 'Cloud';
 export const CLOSE = 'X';
+export const ADD = 'Plus';
 export const EDIT = 'Edit3';
 export const DELETE = 'Trash';
 export const REPORT = 'Flag';

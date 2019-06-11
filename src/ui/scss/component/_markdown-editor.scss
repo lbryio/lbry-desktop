@@ -124,7 +124,7 @@
 .editor-statusbar {
   color: rgba($lbry-black, 0.5);
   font-size: 1rem;
-  padding: var(--spacing-vertical-medium) 0; // overriding styles from elsewhere
+  padding: var(--spacing-medium) 0; // overriding styles from elsewhere
 
   html[data-mode='dark'] & {
     color: inherit;
@@ -132,7 +132,7 @@
 }
 
 .form-field--SimpleMDE {
-  margin-top: var(--spacing-vertical-large);
+  margin-top: var(--spacing-large);
 
   // Overriding the lbry/components form styling
   .editor-toolbar {

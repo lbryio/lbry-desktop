@@ -1,3 +1,20 @@
+import { useEffect, useState } from 'react';
+
+export default function useKonamiListener() {
+  const [isActive, setIsActive] = useState(false);
+  useEffect(() => {
+    let listener;
+    if (!listener) {
+      listener = new Konami(() => setIsActive(!isActive));
+    }
+    return () => {
+      listener = null;
+    };
+  }, [isActive]);
+
+  return isActive;
+}
+
 /* eslint-disable */
 /*
  * Konami-JS ~
@@ -9,7 +26,6 @@
  * Licensed under the MIT License (http://opensource.org/licenses/MIT)
  * Tested in: Safari 4+, Google Chrome 4+, Firefox 3+, IE7+, Mobile Safari 2.2.1+ and Android
  */
-
 var Konami = function(callback) {
   var konami = {
     addEvent: function(obj, type, fn, ref_obj) {
@@ -137,16 +153,4 @@ var Konami = function(callback) {
 
   return konami;
 };
-
-if (typeof module !== 'undefined' && typeof module.exports !== 'undefined') {
-  module.exports = Konami;
-} else {
-  if (typeof define === 'function' && define.amd) {
-    define([], function() {
-      return Konami;
-    });
-  } else {
-    window.Konami = Konami;
-  }
-}
 /* eslint-enable */
