@@ -62,9 +62,7 @@ export default function FileList(props: Props) {
           ))}
         </ul>
       )}
-      {!hasUris && !loading && (
-        <div className="main--empty">{empty || <h3 className="card__title">{__('No results')}</h3>}</div>
-      )}
+      {!hasUris && !loading && <h2 className="main--empty empty">{empty || __('No results')}</h2>}
     </section>
   );
 }
