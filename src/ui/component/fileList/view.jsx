@@ -24,7 +24,7 @@ type Props = {
 
 export default function FileList(props: Props) {
   const { uris, header, headerAltControls, injectedItem, loading, persistedStorageKey, noHeader, slim, empty } = props;
-  const [currentSort, setCurrentSort] = usePersistedState(persistedStorageKey || 'file-list-global-sort', SORT_NEW);
+  const [currentSort, setCurrentSort] = usePersistedState(persistedStorageKey, SORT_NEW);
   const sortedUris = uris && currentSort === SORT_OLD ? uris.reverse() : uris;
   const hasUris = uris && !!uris.length;
 

@@ -5,27 +5,23 @@ import FileList from 'component/fileList';
 import Page from 'component/page';
 
 type Props = {
-  claims: Array<StreamClaim>,
+  uris: Array<string>,
   checkPendingPublishes: () => void,
   fetching: boolean,
 };
 
 function FileListPublished(props: Props) {
-  const { checkPendingPublishes, fetching, claims } = props;
+  const { checkPendingPublishes, fetching, uris } = props;
 
   useEffect(() => {
     checkPendingPublishes();
   }, [checkPendingPublishes]);
 
   return (
-    <Page notContained loading={fetching}>
-      {claims && claims.length ? (
+    <Page notContained>
+      {uris && uris.length ? (
         <div className="card">
-          <FileList
-            persistedStorageKey="file-list-published"
-            // TODO: adjust selector to only return uris
-            uris={claims.map(info => `lbry://${info.name}#${info.claim_id}`)}
-          />
+          <FileList loading={fetching} persistedStorageKey="file-list-published" uris={uris} />
         </div>
       ) : (
         <div className="main--empty">
