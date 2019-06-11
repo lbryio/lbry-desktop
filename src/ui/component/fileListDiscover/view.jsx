@@ -10,14 +10,14 @@ const TIME_WEEK = 'week';
 const TIME_MONTH = 'month';
 const TIME_YEAR = 'year';
 const TIME_ALL = 'all';
-const TRENDING_SORT_YOU = 'you';
-const TRENDING_SORT_ALL = 'everyone';
+const SEARCH_SORT_YOU = 'you';
+const SEARCH_SORT_ALL = 'everyone';
 const TYPE_TRENDING = 'trending';
 const TYPE_TOP = 'top';
 const TYPE_NEW = 'new';
-const TRENDING_FILTER_TYPES = [TRENDING_SORT_YOU, TRENDING_SORT_ALL];
-const TRENDING_TYPES = ['trending', 'top', 'new'];
-const TRENDING_TIMES = [TIME_DAY, TIME_WEEK, TIME_MONTH, TIME_YEAR, TIME_ALL];
+const SEARCH_FILTER_TYPES = [SEARCH_SORT_YOU, SEARCH_SORT_ALL];
+const SEARCH_TYPES = ['trending', 'top', 'new'];
+const SEARCH_TIMES = [TIME_DAY, TIME_WEEK, TIME_MONTH, TIME_YEAR, TIME_ALL];
 
 type Props = {
   uris: Array<string>,
@@ -30,7 +30,7 @@ type Props = {
 
 function FileListDiscover(props: Props) {
   const { doClaimSearch, uris, tags, loading, personal, injectedItem } = props;
-  const [personalSort, setPersonalSort] = usePersistedState('file-list-trending:personalSort', TRENDING_SORT_YOU);
+  const [personalSort, setPersonalSort] = usePersistedState('file-list-trending:personalSort', SEARCH_SORT_YOU);
   const [typeSort, setTypeSort] = usePersistedState('file-list-trending:typeSort', TYPE_TRENDING);
   const [timeSort, setTimeSort] = usePersistedState('file-list-trending:timeSort', TIME_WEEK);
 
@@ -40,7 +40,7 @@ function FileListDiscover(props: Props) {
     const options = {};
     const newTags = tagsString.split(',');
 
-    if (personalSort === TRENDING_SORT_YOU) {
+    if ((tags && !personal) || (tags && personal && personalSort === SEARCH_SORT_YOU)) {
       options.any_tags = newTags;
     }
 
@@ -82,7 +82,7 @@ function FileListDiscover(props: Props) {
           value={personalSort}
           onChange={e => setPersonalSort(e.target.value)}
         >
-          {TRENDING_FILTER_TYPES.map(type => (
+          {SEARCH_FILTER_TYPES.map(type => (
             <option key={type} value={type}>
               {toCapitalCase(type)}
             </option>
@@ -101,7 +101,7 @@ function FileListDiscover(props: Props) {
         value={typeSort}
         onChange={e => setTypeSort(e.target.value)}
       >
-        {TRENDING_TYPES.map(type => (
+        {SEARCH_TYPES.map(type => (
           <option key={type} value={type}>
             {toCapitalCase(type)}
           </option>
@@ -115,7 +115,7 @@ function FileListDiscover(props: Props) {
           value={timeSort}
           onChange={e => setTimeSort(e.target.value)}
         >
-          {TRENDING_TIMES.map(time => (
+          {SEARCH_TIMES.map(time => (
             <option key={time} value={time}>
               {toCapitalCase(time)}
             </option>
@@ -129,7 +129,7 @@ function FileListDiscover(props: Props) {
     <FileList
       loading={loading}
       uris={uris}
-      injectedItem={personalSort === TRENDING_SORT_YOU && injectedItem}
+      injectedItem={personalSort === SEARCH_SORT_YOU && injectedItem}
       header={header}
       headerAltControls={headerAltControls}
     />
