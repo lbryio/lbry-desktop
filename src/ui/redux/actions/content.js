@@ -292,7 +292,13 @@ export function doFetchClaimsByChannel(uri: string, page: number = 1, pageSize: 
       data: { uri, page },
     });
 
-    Lbry.claim_search({ channel: uri, is_controlling: true, page, page_size: pageSize }).then(result => {
+    Lbry.claim_search({
+      channel: uri,
+      page,
+      page_size: pageSize,
+      valid_channel_signatures: true,
+      order_by: ['release_time'],
+    }).then(result => {
       const { items: claimsInChannel, page: returnedPage } = result;
 
       if (claimsInChannel && claimsInChannel.length) {
