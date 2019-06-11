@@ -1,6 +1,6 @@
 // @flow
 import React from 'react';
-import Button from 'component/button';
+import ChannelLink from 'component/channelLink';
 import { buildURI } from 'lbry-redux';
 
 type Props = {
@@ -55,11 +55,7 @@ class UriIndicator extends React.PureComponent<Props> {
       return inner;
     }
 
-    return (
-      <Button className="button--uri-indicator" navigate={channelLink}>
-        {inner}
-      </Button>
-    );
+    return <ChannelLink uri={channelLink}>{inner}</ChannelLink>;
   }
 }
 

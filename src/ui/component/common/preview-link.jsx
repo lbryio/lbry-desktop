@@ -4,24 +4,32 @@ import DateTime from 'component/dateTime';
 import UriIndicator from 'component/uriIndicator';
 import TruncatedText from 'component/common/truncated-text';
 import MarkdownPreview from 'component/common/markdown-preview';
+import { withRouter } from 'react-router-dom';
+import { formatLbryUriForWeb } from 'util/uri';
 
 type Props = {
   uri: string,
   title: ?string,
   thumbnail: ?string,
   description: ?string,
+  history: { push: string => void },
 };
 
 const PreviewLink = (props: Props) => {
-  const { uri, title, description, thumbnail } = props;
+  const { uri, title, history, description, thumbnail } = props;
   const placeholder = 'static/img/placeholder.png';
 
   const thumbnailStyle = {
     backgroundImage: `url(${thumbnail || placeholder})`,
   };
 
+  const wrapperProps = {
+    role: 'button',
+    onClick: () => history.push(formatLbryUriForWeb(uri)),
+  };
+
   return (
-    <span className={'preview-link'}>
+    <span className={'preview-link'} {...wrapperProps}>
       <span className={'media-tile media-tile--small card--link'}>
         <span style={thumbnailStyle} className={'preview-link--thumbnail media__thumb'} />
         <span className={'preview-link--text media__info'}>
@@ -44,4 +52,4 @@ const PreviewLink = (props: Props) => {
   );
 };
 
-export default PreviewLink;
+export default withRouter(PreviewLink);

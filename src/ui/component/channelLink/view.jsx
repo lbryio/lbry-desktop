@@ -7,7 +7,6 @@ import ChannelTooltip from 'component/common/channel-tooltip';
 type Props = {
   uri: string,
   title: ?string,
-  cover: ?string,
   claim: StreamClaim,
   children: React.Node,
   thumbnail: ?string,
@@ -39,12 +38,23 @@ class ChannelLink extends React.Component<Props, State> {
   }
 
   showTooltip = () => {
-    this.setState({ isTooltipActive: true });
+    if (this.isTooltipReady()) {
+      setTimeout(() => this.setState({ isTooltipActive: true }), 500);
+    }
   };
 
   hideTooltip = () => {
-    this.setState({ isTooltipActive: false });
+    if (this.isTooltipReady()) {
+      setTimeout(() => this.setState({ isTooltipActive: false }), 500);
+    }
   };
+
+  isTooltipReady() {
+    const { claim, isResolvingUri } = this.props;
+    const blackListed = this.isClaimBlackListed();
+    const isReady = !blackListed && !isResolvingUri && claim !== null;
+    return isReady && this.buttonRef.current !== null;
+  }
 
   isClaimBlackListed() {
     const { claim, blackListedOutpoints } = this.props;
@@ -80,14 +90,18 @@ class ChannelLink extends React.Component<Props, State> {
   render() {
     const { uri, claim, title, description, thumbnail, children, isResolvingUri } = this.props;
     const { channelName, claimName, claimId } = parseURI(uri);
-    const blackListed = this.isClaimBlackListed();
-    const isReady = !blackListed && !isResolvingUri && claim !== null;
-    const tooltipReady = this.buttonRef.current !== null;
+    const tooltipReady = this.isTooltipReady();
+    const isUnresolved = (!isResolvingUri && !claim) || !claim;
+    const isBlacklisted = this.isClaimBlackListed();
+
+    if (isBlacklisted || isUnresolved) {
+      return <span className="channel-name">{children}</span>;
+    }
 
     return (
       <React.Fragment>
         <Button
-          button={'link'}
+          className="button--uri-indicator"
           label={children}
           navigate={uri}
           innerRef={this.buttonRef}
@@ -103,7 +117,7 @@ class ChannelLink extends React.Component<Props, State> {
             channelName={channelName}
             thumbnail={thumbnail}
             description={description}
-            active={isReady && this.state.isTooltipActive}
+            active={this.state.isTooltipActive}
             parent={this.buttonRef.current}
           />
         )}

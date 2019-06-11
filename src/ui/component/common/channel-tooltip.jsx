@@ -1,6 +1,8 @@
 // @flow
 import * as React from 'react';
 import ToolTip from 'react-portal-tooltip';
+import TruncatedText from 'component/common/truncated-text';
+import ChannelThumbnail from 'component/common/channelThumbnail';
 
 type TooltipProps = {
   uri: string,
@@ -15,7 +17,7 @@ type TooltipProps = {
 };
 
 const ChannelTooltip = (props: TooltipProps) => {
-  const { title, active, parent, claimId, thumbnail, claimName, channelName, description } = props;
+  const { uri, title, active, parent, claimId, thumbnail, claimName, channelName, description } = props;
 
   const bgColor = '#32373b';
 
@@ -25,21 +27,35 @@ const ChannelTooltip = (props: TooltipProps) => {
   };
 
   return (
-    <ToolTip active={active} position="bottom" style={style} arrow="left" align="left" parent={parent}>
+    <ToolTip
+      align="left"
+      arrow="left"
+      group="channel-tooltip"
+      active={active}
+      style={style}
+      parent={parent}
+      position="bottom"
+      tooltipTimeout={0}
+    >
       <div className={'channel-tooltip'}>
-        <div className={'channel-tooltip__info'}>
-          <img className={'channel-tooltip__thumbnail'} src={thumbnail} />
-          <div>
-            <h2 className={'channel-tooltip__title'}>{title || channelName}</h2>
+        <div className={'media-tile media-tile--small card--link'}>
+          <ChannelThumbnail uri={uri} thumbnail={thumbnail} />
+          <div className={'channel-tooltip__info'}>
+            <h2 className={'channel-tooltip__title'}>
+              <TruncatedText lines={1}>{title || channelName}</TruncatedText>
+            </h2>
             <h3 className={'channel-tooltip__url'}>
-              {claimName}
-              {claimId && `#${claimId}`}
+              <TruncatedText lines={1}>{claimName + (claimId ? `#${claimId}` : '')}</TruncatedText>
             </h3>
           </div>
         </div>
-        <div className={'channel-tooltip__description'}>
-          <p>{description}</p>
-        </div>
+        {description && (
+          <div className={'channel-tooltip__description'}>
+            <p>
+              <TruncatedText lines={2}>{description}</TruncatedText>
+            </p>
+          </div>
+        )}
         <div className={'channel-tooltip__stats'} />
       </div>
     </ToolTip>

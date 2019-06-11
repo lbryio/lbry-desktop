@@ -46,7 +46,11 @@ class ExternalLink extends React.PureComponent<Props> {
       try {
         const uri = parseURI(href);
         if (uri.isChannel && !uri.path) {
-          element = <ChannelLink uri={href}>{children}</ChannelLink>;
+          element = (
+            <ChannelLink uri={href} link>
+              {children}
+            </ChannelLink>
+          );
         } else if (uri) {
           element = (
             <ClaimLink uri={href} autoEmbed={this.props['data-preview']}>

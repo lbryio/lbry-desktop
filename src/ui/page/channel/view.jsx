@@ -9,7 +9,7 @@ import { withRouter } from 'react-router';
 import { formatLbryUriForWeb } from 'util/uri';
 import ChannelContent from 'component/channelContent';
 import ChannelAbout from 'component/channelAbout';
-import ChannelThumbnail from 'component/channelThumbnail';
+import ChannelThumbnail from 'component/common/channelThumbnail';
 
 const PAGE_VIEW_QUERY = `view`;
 const ABOUT_PAGE = `about`;
@@ -26,7 +26,7 @@ type Props = {
 };
 
 function ChannelPage(props: Props) {
-  const { uri, title, cover, history, location, page } = props;
+  const { uri, title, cover, thumbnail, history, location, page } = props;
   const { channelName, claimName, claimId } = parseURI(uri);
   const { search } = location;
   const urlParams = new URLSearchParams(search);
@@ -54,7 +54,7 @@ function ChannelPage(props: Props) {
         {cover && <img className="channel-cover__custom" src={cover} />}
 
         <div className="channel__primary-info">
-          <ChannelThumbnail uri={uri} />
+          <ChannelThumbnail uri={uri} thumbnail={thumbnail} />
 
           <div>
             <h1 className="channel__title">{title || channelName}</h1>
