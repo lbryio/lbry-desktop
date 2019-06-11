@@ -11,15 +11,30 @@ table,
   }
 }
 
+td {
+  max-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+tr {
+  padding: 0 var(--spacing-small);
+}
+
 .table__item--actionable {
   .button svg {
     top: 3px;
   }
 }
 
+.table__item-label {
+  font-size: 0.9em;
+  font-weight: 300;
+}
+
 .table--help {
   td:nth-of-type(1) {
-    font-weight: 600;
     min-width: 130px;
   }
 
@@ -30,20 +45,6 @@ table,
 
 .table--transactions {
   table-layout: fixed;
-
-  td:nth-of-type(1) {
-    // TX amounts
-    font-size: 0.9em;
-    font-weight: 600;
-  }
-
-  td:nth-of-type(3) {
-    // Only add ellipsis to the links in the table
-    // We still want to show the entire message if a TX includes one
-    @include constrict(10rem);
-    vertical-align: bottom;
-    display: inline-block;
-  }
 }
 
 .table--rewards {
