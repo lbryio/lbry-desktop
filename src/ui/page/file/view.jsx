@@ -36,7 +36,7 @@ type Props = {
   isSubscribed: boolean,
   channelUri: string,
   viewCount: number,
-  prepareEdit: ({}, string) => void,
+  prepareEdit: ({}, string, {}) => void,
   openModal: (id: string, { uri: string }) => void,
   markSubscriptionRead: (string, string) => void,
   fetchViewCount: string => void,
@@ -268,7 +268,7 @@ class FilePage extends React.Component<Props> {
                   label={__('Edit')}
                   navigate="/$/publish"
                   onClick={() => {
-                    prepareEdit(claim, editUri);
+                    prepareEdit(claim, editUri, fileInfo);
                   }}
                 />
               )}

@@ -394,15 +394,16 @@ class PublishForm extends React.PureComponent<Props> {
               <header className="card__header">
                 <h2 className="card__title">{__('Thumbnail')}</h2>
                 <p className="card__subtitle">
-                  {uploadThumbnailStatus === THUMBNAIL_STATUSES.API_DOWN ? (
-                    __('Enter a URL for your thumbnail.')
-                  ) : (
-                    <React.Fragment>
-                      {__('Upload your thumbnail (.png/.jpg/.jpeg/.gif) to')}{' '}
-                      <Button button="link" label={__('spee.ch')} href="https://spee.ch/about" />.{' '}
-                      {__('Recommended size: 800x450 (16:9)')}
-                    </React.Fragment>
-                  )}
+                  {(uploadThumbnailStatus === undefined && __('You should reselect your file to choose a thumbnail')) ||
+                    (uploadThumbnailStatus === THUMBNAIL_STATUSES.API_DOWN ? (
+                      __('Enter a URL for your thumbnail.')
+                    ) : (
+                      <React.Fragment>
+                        {__('Upload your thumbnail (.png/.jpg/.jpeg/.gif) to')}{' '}
+                        <Button button="link" label={__('spee.ch')} href="https://spee.ch/about" />.{' '}
+                        {__('Recommended size: 800x450 (16:9)')}
+                      </React.Fragment>
+                    ))}
                 </p>
               </header>
 

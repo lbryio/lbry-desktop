@@ -49,7 +49,7 @@ const perform = dispatch => ({
   fetchFileInfo: uri => dispatch(doFetchFileInfo(uri)),
   fetchCostInfo: uri => dispatch(doFetchCostInfoForUri(uri)),
   openModal: (modal, props) => dispatch(doOpenModal(modal, props)),
-  prepareEdit: (publishData, uri) => dispatch(doPrepareEdit(publishData, uri)),
+  prepareEdit: (publishData, uri, fileInfo) => dispatch(doPrepareEdit(publishData, uri, fileInfo)),
   setClientSetting: (key, value) => dispatch(doSetClientSetting(key, value)),
   setViewed: uri => dispatch(doSetContentHistoryItem(uri)),
   markSubscriptionRead: (channel, uri) => dispatch(doRemoveUnreadSubscription(channel, uri)),
