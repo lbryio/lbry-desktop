@@ -3,7 +3,7 @@ import * as React from 'react';
 import relativeDate from 'tiny-relative-date';
 
 type CommentListProps = {
-  comments: {},
+  comments: Array<any>,
   fetchList: string => void,
   uri: string,
   isLoading: boolean,
@@ -23,7 +23,7 @@ class CommentList extends React.PureComponent<CommentListProps> {
     this.fetchComments(this.props);
   }
 
-  fetchComments = (props: Props) => {
+  fetchComments = (props: CommentListProps) => {
     const { fetchList, uri } = props;
     fetchList(uri);
   };
@@ -36,22 +36,23 @@ class CommentList extends React.PureComponent<CommentListProps> {
     }
 
     return (
-      <ul className="comments">
-        {comments['comments'].map(comment => {
-          console.log(comment.message);
-          return (
-            <Comment
-              author={comment.author}
-              claimId={comment.claim_id}
-              commentId={comment.comment_id}
-              key={comment.author + comment.comment_id}
-              message={comment.message}
-              parentId={comment.parent_id}
-              timePosted={comment.time_posted}
-            />
-          );
-        })}
-      </ul>
+      <section>
+        <ul className="comments">
+          {comments.map(comment => {
+            return (
+              <Comment
+                author={comment.channel_name}
+                claimId={comment.channel_id}
+                commentId={comment.comment_id}
+                key={comment.channel_id + comment.comment_id}
+                message={comment.comment}
+                parentId={comment.parent_id || null}
+                timePosted={comment.timestamp * 1000}
+              />
+            );
+          })}
+        </ul>
+      </section>
     );
   }
 }
@@ -61,20 +62,22 @@ class Comment extends React.PureComponent<CommentProps> {
     return (
       <li className={this.props.parentId ? 'comment reply' : 'comment'}>
         <div className="comment__meta card__actions--between">
-          <strong>{this.props.author}</strong>
+          {this.props.author && <strong>{this.props.author}</strong>}
+          {!this.props.author && <strong>Anonymous</strong>}
+
           <time dateTime={this.props.timePosted}>{relativeDate(this.props.timePosted)}</time>
         </div>
 
         <div className="comment__content">{this.props.message}</div>
+        {/* The following is for adding threaded replies, upvoting and downvoting */}
+        {/* <div className="comment__actions card__actions--between"> */}
+        {/*  <button className={'button button--primary'}>Reply</button> */}
 
-        <div className="comment__actions card__actions--between">
-          <button className={'button button--primary'}>Reply</button>
-
-          <span className="comment__actions-wrap">
-            <button className="comment__action upvote">Up</button>
-            <button className="comment__action downvote">Down</button>
-          </span>
-        </div>
+        {/*  <span className="comment__actions-wrap"> */}
+        {/*    <button className="comment__action upvote">Up</button> */}
+        {/*    <button className="comment__action downvote">Down</button> */}
+        {/*  </span> */}
+        {/* </div> */}
       </li>
     );
   }

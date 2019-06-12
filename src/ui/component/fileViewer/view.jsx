@@ -76,7 +76,7 @@ class FileViewer extends React.PureComponent<Props> {
     }
 
     this.handleAutoplay(this.props);
-    window.addEventListener('keydown', this.handleKeyDown);
+    // window.addEventListener('keydown', this.handleKeyDown);
   }
 
   componentDidUpdate(prev: Props) {

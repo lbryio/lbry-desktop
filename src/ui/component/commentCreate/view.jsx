@@ -3,91 +3,82 @@ import React from 'react';
 import { FormField, Form } from 'component/common/form';
 import Button from 'component/button';
 import ChannelSection from 'component/selectChannel';
-import { parseURI } from 'lbry-redux';
+import { COMMENT_ACKNOWLEDGED, COMMENT_ACKNOWLEDGED_TRUE } from 'constants/settings';
 import { usePersistedState } from 'util/use-persisted-state';
 
 // props:
 type Props = {
   uri: string,
-  channelUri: string,
-  createComment: params => {},
+  claim: StreamClaim,
+  createComment: (string, string, string) => void,
 };
 
-class CommentCreate extends React.PureComponent<Props> {
-  constructor(props: Props) {
-    super(props);
-    this.state = {
-      message: '',
-    };
-    // set state or props for comment form
-    (this: any).handleCommentChange = this.handleCommentChange.bind(this);
-    (this: any).handleChannelChange = this.handleChannelChange.bind(this);
-    (this: any).handleSubmit = this.handleSubmit.bind(this);
+export function CommentCreate(props: Props) {
+  const { createComment, claim } = props;
+  const { claim_id: claimId } = claim;
+  const [commentValue, setCommentValue] = usePersistedState(`comment-${claimId}`, '');
+  const [commentAck, setCommentAck] = usePersistedState(COMMENT_ACKNOWLEDGED, 'no');
+  const [channel, setChannel] = usePersistedState('COMMENT_CHANNEL', 'anonymous');
+
+  function handleCommentChange(event) {
+    setCommentValue(event.target.value);
   }
 
-  handleCommentChange(event) {
-    this.setState({ message: event.target.value });
+  function handleChannelChange(channel) {
+    setChannel(channel);
   }
 
-  handleChannelChange(channelUri) {
-    this.setState({ channelUri: channelUri });
+  function handleCommentAck(event) {
+    setCommentAck(COMMENT_ACKNOWLEDGED_TRUE);
+  }
+  function handleSubmit() {
+    if (channel !== 'new' && commentValue.length) createComment(commentValue, claimId, channel);
+    setCommentValue('');
   }
 
-  handleSubmit() {
-    // const { createComment, claim, channelUri } = this.props;
-    const { channelUri, claim } = this.props; // eslint-disable-line react/prop-types
-    console.log('claim', claim);
-
-    const { claim_id: claimId } = claim;
-    const { message } = this.state;
-    let cmt = { message, channelId: parseURI(channelUri).claimId, claimId };
-
-    console.log('CMT', cmt);
-    console.log('PURI', claimId);
-    console.log('PURI', parseURI(channelUri));
-  }
-
-  render() {
-    const { channelUri } = this.props;
-
-    return (
-      <section className="card card--section">
-        {!acksComments && (
-          <React.Fragment>
-            <div className="media__title">
-              <TruncatedText text={channelName || uri} lines={1} />
-            </div>
-            <div className="media__subtitle">
-              {totalItems > 0 && (
-                <span>
-                  {totalItems} {totalItems === 1 ? 'publish' : 'publishes'}
-                </span>
-              )}
-              {!isResolvingUri && !totalItems && <span>This is an empty channel.</span>}
-            </div>
-          </React.Fragment>
-        )}
-        <Form onSubmit={this.handleSubmit}>
+  return (
+    <React.Fragment>
+      {commentAck !== COMMENT_ACKNOWLEDGED_TRUE && (
+        <section className="card card--section">
           <div className="card__content">
-            <FormField
-              type="textarea"
-              name="content_description"
-              label={__('Text')}
-              placeholder={__('Your comment')}
-              value={this.state.message}
-              onChange={this.handleCommentChange}
-            />
+            <div className="media__title">About comments..</div>
           </div>
-          <div className="card__actions--between">
+          <div className="card__content">
+            <div className="media__subtitle">Seriously, don&apos;t comment.</div>
+          </div>
+          <div className="card__content">
+            <Button button="primary" onClick={handleCommentAck} label={__('Got it!')} />
+          </div>
+        </section>
+      )}
+      {commentAck === COMMENT_ACKNOWLEDGED_TRUE && (
+        <section className="card card--section">
+          <Form onSubmit={handleSubmit}>
             <div className="card__content">
-              <ChannelSection channel={channelUri} />
+              <ChannelSection channel={channel} onChannelChange={handleChannelChange} />
             </div>
-            <Button button="primary" type="submit" label={__('Post')} />
-          </div>
-        </Form>
-      </section>
-    );
-  }
+            <div className="card__content">
+              <FormField
+                disabled={channel === 'new'}
+                type="textarea"
+                name="content_description"
+                label={__('Text')}
+                placeholder={__('Your comment')}
+                value={commentValue}
+                onChange={handleCommentChange}
+              />
+            </div>
+            <div className="card__content">
+              <Button
+                button="primary"
+                disabled={channel === 'new' || !commentValue.length}
+                type="submit"
+                label={__('Post')}
+              />
+            </div>
+          </Form>
+        </section>
+      )}
+    </React.Fragment>
+  );
 }
-
-export default CommentCreate;

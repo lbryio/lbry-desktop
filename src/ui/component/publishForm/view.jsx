@@ -331,7 +331,6 @@ class PublishForm extends React.PureComponent<Props> {
 
     const shortUri = buildURI({ contentName: name });
 
-    console.log('URI', uri);
     return (
       <React.Fragment>
         {IS_WEB && <UnsupportedOnWeb />}
