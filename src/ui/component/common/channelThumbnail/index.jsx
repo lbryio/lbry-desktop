@@ -7,11 +7,10 @@ import Gerbil from './gerbil.png';
 type Props = {
   uri: string,
   thumbnail: ?string,
-  className?: string,
 };
 
 function ChannelThumbnail(props: Props) {
-  const { className, thumbnail, uri } = props;
+  const { thumbnail, uri } = props;
 
   // Generate a random color class based on the first letter of the channel name
   const { channelName } = parseURI(uri);
@@ -22,7 +21,6 @@ function ChannelThumbnail(props: Props) {
     <div
       className={classnames('channel-thumbnail', {
         [thumbnailClass]: !thumbnail,
-        [className]: className,
       })}
     >
       {!thumbnail && <img className="channel-thumbnail__default" src={Gerbil} />}

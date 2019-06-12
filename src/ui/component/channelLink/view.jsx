@@ -1,8 +1,8 @@
 // @flow
 import * as React from 'react';
-import { parseURI } from 'lbry-redux';
 import Button from 'component/button';
 import ChannelTooltip from 'component/common/channel-tooltip';
+import uniqid from 'uniqid';
 
 type Props = {
   uri: string,
@@ -11,6 +11,7 @@ type Props = {
   children: React.Node,
   thumbnail: ?string,
   description: ?string,
+  currentTheme: ?string,
   isResolvingUri: boolean,
   resolveUri: string => void,
   blackListedOutpoints: Array<{
@@ -24,6 +25,7 @@ type State = {
 };
 
 class ChannelLink extends React.Component<Props, State> {
+  parentId: string;
   buttonRef: { current: ?any };
 
   static defaultProps = {
@@ -34,27 +36,20 @@ class ChannelLink extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
     this.state = { isTooltipActive: false };
-    (this: any).buttonRef = React.createRef();
+
+    // The tooltip component don't work very well with refs,
+    // so we need to use an unique id for each link:
+    // (this: any).buttonRef = React.createRef();
+    (this: any).parentId = uniqid.time('channnel-');
   }
 
   showTooltip = () => {
-    if (this.isTooltipReady()) {
-      setTimeout(() => this.setState({ isTooltipActive: true }), 500);
-    }
+    this.setState({ isTooltipActive: true });
   };
 
   hideTooltip = () => {
-    if (this.isTooltipReady()) {
-      setTimeout(() => this.setState({ isTooltipActive: false }), 500);
-    }
+    this.setState({ isTooltipActive: false });
   };
-
-  isTooltipReady() {
-    const { claim, isResolvingUri } = this.props;
-    const blackListed = this.isClaimBlackListed();
-    const isReady = !blackListed && !isResolvingUri && claim !== null;
-    return isReady && this.buttonRef.current !== null;
-  }
 
   isClaimBlackListed() {
     const { claim, blackListedOutpoints } = this.props;
@@ -88,9 +83,7 @@ class ChannelLink extends React.Component<Props, State> {
   }
 
   render() {
-    const { uri, claim, title, description, thumbnail, children, isResolvingUri } = this.props;
-    const { channelName, claimName, claimId } = parseURI(uri);
-    const tooltipReady = this.isTooltipReady();
+    const { uri, claim, title, description, thumbnail, children, currentTheme, isResolvingUri } = this.props;
     const isUnresolved = (!isResolvingUri && !claim) || !claim;
     const isBlacklisted = this.isClaimBlackListed();
 
@@ -98,29 +91,30 @@ class ChannelLink extends React.Component<Props, State> {
       return <span className="channel-name">{children}</span>;
     }
 
+    const { claim_id: claimId, name: channelName } = claim;
+
     return (
       <React.Fragment>
         <Button
+          id={this.parentId}
           className="button--uri-indicator"
           label={children}
           navigate={uri}
-          innerRef={this.buttonRef}
           onMouseEnter={this.showTooltip}
           onMouseLeave={this.hideTooltip}
         />
-        {tooltipReady && (
-          <ChannelTooltip
-            uri={uri}
-            title={title}
-            claimId={claimId}
-            claimName={claimName}
-            channelName={channelName}
-            thumbnail={thumbnail}
-            description={description}
-            active={this.state.isTooltipActive}
-            parent={this.buttonRef.current}
-          />
-        )}
+        <ChannelTooltip
+          uri={uri}
+          title={title}
+          claimId={claimId}
+          channelName={channelName}
+          currentTheme={currentTheme}
+          thumbnail={thumbnail}
+          description={description}
+          active={this.state.isTooltipActive}
+          parent={`#${this.parentId}`}
+          group={'channel-tooltip'}
+        />
       </React.Fragment>
     );
   }

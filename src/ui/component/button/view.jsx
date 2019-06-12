@@ -7,6 +7,7 @@ import { formatLbryUriForWeb } from 'util/uri';
 import { OutboundLink } from 'react-ga';
 
 type Props = {
+  id: ?string,
   href: ?string,
   title: ?string,
   label: ?string,
@@ -37,6 +38,7 @@ class Button extends React.PureComponent<Props> {
 
   render() {
     const {
+      id,
       onClick,
       onMouseEnter,
       onMouseLeave,
@@ -109,6 +111,7 @@ class Button extends React.PureComponent<Props> {
 
     return path ? (
       <NavLink
+        id={id}
         exact
         to={path}
         title={title}
@@ -128,6 +131,7 @@ class Button extends React.PureComponent<Props> {
       </NavLink>
     ) : (
       <button
+        id={id}
         title={title}
         aria-label={description || label || title}
         className={combinedClassName}

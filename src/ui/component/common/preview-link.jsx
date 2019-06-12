@@ -52,4 +52,4 @@ const PreviewLink = (props: Props) => {
   );
 };
 
-export default withRouter(PreviewLink);
+export default withRouter(React.memo(PreviewLink));

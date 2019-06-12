@@ -1,4 +1,6 @@
 import { connect } from 'react-redux';
+import { THEME } from 'constants/settings';
+import { makeSelectClientSetting } from 'redux/selectors/settings';
 
 import {
   doResolveUri,
@@ -21,6 +23,7 @@ const select = (state, props) => {
     title: makeSelectTitleForUri(props.uri)(state),
     thumbnail: makeSelectThumbnailForUri(props.uri)(state),
     description: makeSelectMetadataItemForUri(props.uri, 'description')(state),
+    currentTheme: makeSelectClientSetting(THEME)(state),
     channelIsMine: makeSelectClaimIsMine(props.uri)(state),
     isResolvingUri: makeSelectIsUriResolving(props.uri)(state),
     blackListedOutpoints: selectBlackListedOutpoints(state),

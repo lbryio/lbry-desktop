@@ -45,6 +45,7 @@ class ExternalLink extends React.PureComponent<Props> {
     if (protocol && protocol[0] === 'lbry:' && isURIValid(href)) {
       try {
         const uri = parseURI(href);
+
         if (uri.isChannel && !uri.path) {
           element = (
             <ChannelLink uri={href} link>

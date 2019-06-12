@@ -62,6 +62,7 @@ const MarkdownPreview = (props: MarkdownProps) => {
     scope: 'extended',
     elements: ['link'],
     extend: { link: ['data-preview'] },
+    defaultValue: true,
   };
 
   // Strip all content and just render text

@@ -7,45 +7,55 @@ import ChannelThumbnail from 'component/common/channelThumbnail';
 type TooltipProps = {
   uri: string,
   title: ?string,
+  group: ?string,
   active: ?boolean,
-  parent: ?HTMLElement,
-  claimId: ?string,
+  parent: ?HTMLElement | ?string,
+  claimId: string,
   thumbnail: ?string,
-  claimName: ?string,
-  channelName: ?string,
+  channelName: string,
   description: ?string,
+  currentTheme: ?string,
 };
 
 const ChannelTooltip = (props: TooltipProps) => {
-  const { uri, title, active, parent, claimId, thumbnail, claimName, channelName, description } = props;
+  const { uri, group, title, active, parent, claimId, thumbnail, description, channelName, currentTheme } = props;
 
-  const bgColor = '#32373b';
+  let bgColor = 'var(--lbry-white)';
+
+  if (currentTheme === 'dark') {
+    // Background color of the tooltip component,
+    // taken from the header component:
+    // mix($lbry-black, $lbry-gray-3, 90%);
+    bgColor = '#32373b';
+  }
 
   const style = {
-    style: { background: bgColor },
-    arrowStyle: { color: bgColor },
+    style: { background: bgColor, padding: 0 },
+    arrowStyle: { color: bgColor, borderColor: false },
   };
+
+  const channelUrl = `${channelName}#${claimId}`;
+  const formatedName = channelName.replace('@', '');
 
   return (
     <ToolTip
       align="left"
       arrow="left"
-      group="channel-tooltip"
-      active={active}
+      active={parent && active}
+      group={group}
       style={style}
       parent={parent}
       position="bottom"
-      tooltipTimeout={0}
     >
       <div className={'channel-tooltip'}>
-        <div className={'media-tile media-tile--small card--link'}>
+        <div className={'channel-tooltip__profile'}>
           <ChannelThumbnail uri={uri} thumbnail={thumbnail} />
           <div className={'channel-tooltip__info'}>
             <h2 className={'channel-tooltip__title'}>
-              <TruncatedText lines={1}>{title || channelName}</TruncatedText>
+              <TruncatedText lines={1}>{title || formatedName}</TruncatedText>
             </h2>
             <h3 className={'channel-tooltip__url'}>
-              <TruncatedText lines={1}>{claimName + (claimId ? `#${claimId}` : '')}</TruncatedText>
+              <TruncatedText lines={1}>{channelUrl}</TruncatedText>
             </h3>
           </div>
         </div>
@@ -62,4 +72,4 @@ const ChannelTooltip = (props: TooltipProps) => {
   );
 };
 
-export default ChannelTooltip;
+export default React.memo<TooltipProps>(ChannelTooltip);
