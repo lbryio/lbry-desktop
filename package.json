@@ -1,6 +1,6 @@
 {
   "name": "LBRY",
-  "version": "0.33.0",
+  "version": "0.33.1-rc.1",
   "description": "A browser for the LBRY network, a digital marketplace controlled by its users.",
   "keywords": [
     "lbry"
@@ -190,7 +190,7 @@
     "yarn": "^1.3"
   },
   "lbrySettings": {
-    "lbrynetDaemonVersion": "0.37.2",
+    "lbrynetDaemonVersion": "0.37.4",
     "lbrynetDaemonUrlTemplate": "https://github.com/lbryio/lbry/releases/download/vDAEMONVER/lbrynet-OSNAME.zip",
     "lbrynetDaemonDir": "static/daemon",
     "lbrynetDaemonFileName": "lbrynet"
