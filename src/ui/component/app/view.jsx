@@ -22,9 +22,8 @@ type Props = {
 };
 
 class App extends React.PureComponent<Props> {
-  // eslint-disable-next-line
-  UNSAFE_componentWillMount() {
-    const { alertError, theme } = this.props;
+  componentDidMount() {
+    const { updateBlockHeight, toggleEnhancedLayout, alertError, theme } = this.props;
 
     // TODO: create type for this object
     // it lives in jsonrpc.js
@@ -34,10 +33,6 @@ class App extends React.PureComponent<Props> {
 
     // $FlowFixMe
     document.documentElement.setAttribute('data-mode', theme);
-  }
-
-  componentDidMount() {
-    const { updateBlockHeight, toggleEnhancedLayout } = this.props;
 
     ReactModal.setAppElement('#window'); // fuck this
 
@@ -66,12 +61,12 @@ class App extends React.PureComponent<Props> {
   enhance: ?any;
 
   render() {
-    const { enhancedLayout, language } = this.props;
+    const { enhancedLayout } = this.props;
 
     return (
       <div id="window" onContextMenu={e => openContextMenu(e)}>
-        <Header language={language} />
-        <SideBar language={language} />
+        <Header />
+        <SideBar />
 
         <div className="main-wrapper">
           <Router />
