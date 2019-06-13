@@ -1,6 +1,6 @@
 // @flow
 import React from 'react';
-import ChannelLink from 'component/channelLink';
+import ClaimLink from 'component/claimLink';
 import { buildURI } from 'lbry-redux';
 
 type Props = {
@@ -44,18 +44,18 @@ class UriIndicator extends React.PureComponent<Props> {
     }
 
     const { name, claim_id: claimId } = claim.signing_channel;
-    let channelLink;
+    let claimLink;
     if (claim.is_channel_signature_valid) {
-      channelLink = link ? buildURI({ channelName: name, claimId }) : false;
+      claimLink = link ? buildURI({ channelName: name, claimId }) : false;
     }
 
     const inner = <span className="channel-name">{name}</span>;
 
-    if (!channelLink) {
+    if (!claimLink) {
       return inner;
     }
 
-    return <ChannelLink uri={channelLink}>{inner}</ChannelLink>;
+    return <ClaimLink uri={claimLink}>{inner}</ClaimLink>;
   }
 }
 

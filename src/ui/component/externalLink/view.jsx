@@ -2,10 +2,9 @@
 import * as MODALS from 'constants/modal_types';
 import * as ICONS from 'constants/icons';
 import * as React from 'react';
-import { isURIValid, parseURI } from 'lbry-redux';
+import { isURIValid } from 'lbry-redux';
 import Button from 'component/button';
 import ClaimLink from 'component/claimLink';
-import ChannelLink from 'component/channelLink';
 
 type Props = {
   href: string,
@@ -43,25 +42,11 @@ class ExternalLink extends React.PureComponent<Props> {
     }
     // Return local link if protocol is lbry uri
     if (protocol && protocol[0] === 'lbry:' && isURIValid(href)) {
-      try {
-        const uri = parseURI(href);
-
-        if (uri.isChannel && !uri.path) {
-          element = (
-            <ChannelLink uri={href} link>
-              {children}
-            </ChannelLink>
-          );
-        } else if (uri) {
-          element = (
-            <ClaimLink uri={href} autoEmbed={this.props['data-preview']}>
-              {children}
-            </ClaimLink>
-          );
-        }
-      } catch (err) {
-        // Silent error: console.error(err);
-      }
+      element = (
+        <ClaimLink uri={href} autoEmbed={this.props['data-preview']}>
+          {children}
+        </ClaimLink>
+      );
     }
 
     return element;
