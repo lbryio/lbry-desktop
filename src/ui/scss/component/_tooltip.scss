@@ -150,3 +150,52 @@
     margin-left: -5px;
   }
 }
+
+// Channel-tooltip
+
+.channel-tooltip {
+  width: 20rem;
+
+  .channel-thumbnail {
+    left: 0;
+    position: relative;
+    flex-shrink: 0;
+    text-align: center;
+    display: flex;
+    max-width: 5rem;
+    max-height: 5rem;
+    margin-right: 1rem;
+    box-shadow: 0px 2px 10px -2px $lbry-black;
+  }
+}
+
+.channel-tooltip__profile {
+  display: flex;
+  align-items: center;
+  padding: 1rem;
+}
+
+.channel-tooltip__description {
+  padding: 1rem;
+  visibility: visible;
+  border-top: 1px solid rgba($lbry-gray-4, 0.4);
+
+  html[data-mode='dark'] & {
+    border-top: 1px solid rgba($lbry-black, 0.8);
+  }
+}
+
+.channel-tooltip__info {
+  align-items: center;
+  visibility: visible;
+}
+
+.channel-tooltip__title {
+  font-weight: bold;
+  font-size: 1.4rem;
+  line-height: 1.5em;
+}
+
+.channel-tooltip__url {
+  font-size: 1rem;
+}
