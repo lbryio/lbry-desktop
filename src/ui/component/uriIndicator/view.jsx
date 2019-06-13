@@ -16,21 +16,19 @@ type Props = {
 };
 
 class UriIndicator extends React.PureComponent<Props> {
-  componentWillMount() {
-    this.resolve(this.props);
-  }
-
-  componentWillReceiveProps(nextProps: Props) {
-    this.resolve(nextProps);
-  }
-
-  resolve = (props: Props) => {
-    const { isResolvingUri, resolveUri, claim, uri } = props;
-
-    if (!isResolvingUri && claim === undefined && uri) {
+  componentDidMount() {
+    const { isResolvingUri, resolveUri, uri, claim } = this.props;
+    if (!isResolvingUri && !claim && uri) {
       resolveUri(uri);
     }
-  };
+  }
+
+  componentDidUpdate(prevProps: Props) {
+    const { isResolvingUri, resolveUri, claim, uri } = this.props;
+    if (!isResolvingUri && uri && !claim) {
+      resolveUri(uri);
+    }
+  }
 
   render() {
     const { link, isResolvingUri, claim } = this.props;
