@@ -2,12 +2,12 @@
 import * as React from 'react';
 import { parseURI } from 'lbry-redux';
 import Button from 'component/button';
-import PreviewLink from 'component/common/preview-link';
+
+import PreviewLink from 'component/previewLink';
 
 type Props = {
   uri: string,
   title: ?string,
-  cover: ?string,
   claim: StreamClaim,
   children: React.Node,
   thumbnail: ?string,
@@ -59,17 +59,15 @@ class ClaimLink extends React.Component<Props> {
   }
 
   render() {
-    const { uri, claim, title, description, autoEmbed, thumbnail, children, isResolvingUri } = this.props;
+    const { uri, claim, title, autoEmbed, children, isResolvingUri } = this.props;
     const { claimName } = parseURI(uri);
     const blackListed = this.isClaimBlackListed();
     const showPreview = autoEmbed === true && !blackListed && !isResolvingUri && claim !== null;
 
     return (
       <React.Fragment>
-        <Button title={title} button={'link'} label={children} navigate={uri} />
-        {showPreview && (
-          <PreviewLink uri={uri} title={title || claimName} thumbnail={thumbnail} description={description} />
-        )}
+        <Button title={title || claimName} button={'link'} label={children} navigate={uri} />
+        {showPreview && <PreviewLink uri={uri} />}
       </React.Fragment>
     );
   }
