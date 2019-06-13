@@ -9,19 +9,20 @@ import ClaimLink from 'component/claimLink';
 type Props = {
   href: string,
   title?: string,
+  embed?: boolean,
   children: React.Node,
   openModal: (id: string, { uri: string }) => void,
-  'data-preview'?: boolean,
 };
 
 class ExternalLink extends React.PureComponent<Props> {
   static defaultProps = {
     href: null,
     title: null,
+    embed: false,
   };
 
   createLink() {
-    const { href, title, children, openModal } = this.props;
+    const { href, title, embed, children, openModal } = this.props;
     // Regex for url protocol
     const protocolRegex = new RegExp('^(https?|lbry|mailto)+:', 'i');
     const protocol = href ? protocolRegex.exec(href) : null;
@@ -43,7 +44,7 @@ class ExternalLink extends React.PureComponent<Props> {
     // Return local link if protocol is lbry uri
     if (protocol && protocol[0] === 'lbry:' && isURIValid(href)) {
       element = (
-        <ClaimLink uri={href} autoEmbed={this.props['data-preview']}>
+        <ClaimLink uri={href} autoEmbed={embed}>
           {children}
         </ClaimLink>
       );

@@ -43,7 +43,7 @@ const schema = { ...defaultSchema };
 
 // Extend sanitation schema to support lbry protocol
 schema.protocols.href.push('lbry');
-schema.attributes.a.push('data-preview');
+schema.attributes.a.push('embed');
 
 const MarkdownPreview = (props: MarkdownProps) => {
   const { content, strip, promptLinks } = props;
@@ -61,7 +61,7 @@ const MarkdownPreview = (props: MarkdownProps) => {
   const remarkAttrOpts = {
     scope: 'extended',
     elements: ['link'],
-    extend: { link: ['data-preview'] },
+    extend: { link: ['embed'] },
     defaultValue: true,
   };
 

@@ -6,12 +6,12 @@ const locateURI = (value, fromIndex) => value.indexOf(protocol, fromIndex);
 const locateMention = (value, fromIndex) => value.indexOf('@', fromIndex);
 
 // Generate a valid markdown link
-const createURI = (text, uri, autoEmbed = false) => ({
+const createURI = (text, uri, embed = false) => ({
   type: 'link',
   url: (uri.startsWith(protocol) ? '' : protocol) + uri,
   data: {
     // Custom attribute
-    hProperties: { 'data-preview': autoEmbed },
+    hProperties: { embed },
   },
   children: [{ type: 'text', value: text }],
 });
@@ -21,12 +21,17 @@ const validateURI = (match, eat) => {
     try {
       const text = match[0];
       const uri = parseURI(text);
-      // Create channel link
-      if (uri.isChannel && !uri.path) {
-        return eat(text)(createURI(uri.claimName, text, false));
+      const isValid = uri && uri.claimName;
+      const isChannel = uri.isChannel && !uri.path;
+
+      if (isValid) {
+        // Create channel link
+        if (isChannel) {
+          return eat(text)(createURI(uri.claimName, text, false));
+        }
+        // Create claim link
+        return eat(text)(createURI(text, text, true));
       }
-      // Create uri link
-      return eat(text)(createURI(text, text, true));
     } catch (err) {
       // Silent errors: console.error(err)
     }
@@ -60,13 +65,20 @@ tokenizeMention.notInBlock = true;
 const visitor = (node, index, parent) => {
   if (node.type === 'link' && parent && parent.type === 'paragraph') {
     try {
-      const url = parseURI(node.url);
-      // Handle lbry link
-      if (!url.isChannel || (url.isChannel && url.path)) {
-        // Auto-embed lbry url
-        if (!node.data) {
+      const uri = parseURI(node.url);
+      const isValid = uri && uri.claimName;
+      const isChannel = uri.isChannel && !uri.path;
+      if (isValid && !isChannel) {
+        if (!node.data || !node.data.hProperties) {
+          // Create new node data
           node.data = {
-            hProperties: { 'data-preview': true },
+            hProperties: { embed: true },
+          };
+        } else if (node.data.hProperties) {
+          // Don't overwrite current attributes
+          node.data.hProperties = {
+            embed: true,
+            ...node.data.hProperties,
           };
         }
       }
