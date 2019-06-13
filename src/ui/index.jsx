@@ -29,7 +29,7 @@ import { formatLbryUriForWeb } from 'util/uri';
 import 'scss/all.scss';
 
 const APPPAGEURL = 'lbry://?';
-
+const COOKIE_EXPIRE_TIME = 60 * 60 * 24 * 365; // 1 year
 // @if TARGET='app'
 const { autoUpdater } = remote.require('electron-updater');
 autoUpdater.logger = remote.require('electron-log');
@@ -73,8 +73,11 @@ Lbryio.setOverride(
 
         const newAuthToken = response.auth_token;
         authToken = newAuthToken;
+
         // @if TARGET='web'
-        document.cookie = cookie.serialize('auth_token', authToken);
+        document.cookie = cookie.serialize('auth_token', authToken, {
+          maxAge: COOKIE_EXPIRE_TIME,
+        });
         // @endif
         // @if TARGET='app'
         ipcRenderer.send('set-auth-token', authToken);
