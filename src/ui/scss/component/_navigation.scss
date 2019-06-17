@@ -6,9 +6,9 @@
 }
 
 .navigation {
-  position: fixed;
   width: var(--side-nav-width);
   font-size: 1.4rem;
+  position: fixed;
 
   @media (max-width: 600px) {
     display: none;
@@ -22,11 +22,11 @@
 .navigation__links--small {
   @extend .navigation__links;
   font-size: 1.2rem;
+  margin-top: var(--spacing-small);
 }
 
 .navigation__link {
   display: block;
-  line-height: 1.75;
   position: relative;
   text-align: left;
   transition: color 0.2s;
@@ -34,6 +34,7 @@
   white-space: nowrap;
   text-overflow: ellipsis;
   color: lighten($lbry-black, 20%);
+  margin-top: var(--spacing-miniscule);
 
   &:hover {
     color: $lbry-teal-4;
@@ -111,4 +112,8 @@
       }
     }
   }
+}
+
+.navigation__link--indented {
+  padding-left: 2rem;
 }

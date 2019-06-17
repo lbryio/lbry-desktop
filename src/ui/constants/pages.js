@@ -19,3 +19,4 @@ export const SUBSCRIPTIONS = 'subscriptions';
 export const SEARCH = 'search';
 export const TRANSACTIONS = 'transactions';
 export const TAGS = 'tags';
+export const WALLET = 'wallet';

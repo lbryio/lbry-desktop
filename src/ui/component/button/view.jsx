@@ -105,6 +105,7 @@ class Button extends React.PureComponent<Props> {
         exact
         to={path}
         title={title}
+        disabled={disabled}
         onClick={e => {
           e.stopPropagation();
           if (onClick) {

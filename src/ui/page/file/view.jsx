@@ -19,6 +19,7 @@ import FileDownloadLink from 'component/fileDownloadLink';
 import classnames from 'classnames';
 import getMediaType from 'util/get-media-type';
 import RecommendedContent from 'component/recommendedContent';
+import FileTags from 'component/fileTags';
 
 type Props = {
   claim: StreamClaim,
@@ -66,6 +67,8 @@ class FilePage extends React.Component<Props> {
     super(props);
     (this: any).viewerContainer = React.createRef();
   }
+
+  viewerContainer: { current: React.ElementRef<any> };
 
   componentDidMount() {
     const {
@@ -181,7 +184,7 @@ class FilePage extends React.Component<Props> {
 
     return (
       <Page className="main--file-page">
-        <div className="grid-area--content">
+        <div className="grid-area--content card">
           {!fileInfo && insufficientCredits && (
             <div className="media__insufficient-credits help--warning">
               {__(
@@ -213,37 +216,10 @@ class FilePage extends React.Component<Props> {
                 <div className="card__media-text">{__("Sorry, looks like we can't preview this file.")}</div>
               </div>
             ))}
-          <Button
-            className="media__uri"
-            button="alt"
-            label={uri}
-            onClick={() => {
-              clipboard.writeText(uri);
-              showToast({
-                message: __('Copied'),
-              });
-            }}
-          />
         </div>
 
         <div className="grid-area--info media__content media__content--large">
           <h1 className="media__title media__title--large">{title}</h1>
-
-          <div className="file-properties">
-            {isRewardContent && (
-              <Icon
-                size={20}
-                iconColor="red"
-                icon={icons.FEATURED}
-                // Figure out how to get the tooltip to overlap the navbar on the file page and I will love you
-                // https://stackoverflow.com/questions/6421966/css-overflow-x-visible-and-overflow-y-hidden-causing-scrollbar-issue
-                // https://spee.ch/4/overflow-issue
-                // tooltip="bottom"
-              />
-            )}
-            {nsfw && <div className="badge badge--nsfw">MATURE</div>}
-            <FilePrice badge uri={normalizeURI(uri)} />
-          </div>
 
           <div className="media__actions media__actions--between">
             <div className="media__subtext media__subtext--large">
@@ -305,10 +281,39 @@ class FilePage extends React.Component<Props> {
           </div>
 
           <div className="media__info--large">
+            <FileTags uri={uri} large />
             <FileDetails uri={uri} />
           </div>
         </div>
         <div className="grid-area--related">
+          <div className="media__uri-wrapper">
+            <Button
+              className="media__uri"
+              button="alt"
+              label={uri}
+              onClick={() => {
+                clipboard.writeText(uri);
+                showToast({
+                  message: __('Copied'),
+                });
+              }}
+            />
+            <div className="file-properties">
+              {isRewardContent && (
+                <Icon
+                  size={20}
+                  iconColor="red"
+                  icon={icons.FEATURED}
+                  // Figure out how to get the tooltip to overlap the navbar on the file page and I will love you
+                  // https://stackoverflow.com/questions/6421966/css-overflow-x-visible-and-overflow-y-hidden-causing-scrollbar-issue
+                  // https://spee.ch/4/overflow-issue
+                  // tooltip="bottom"
+                />
+              )}
+              {nsfw && <div className="badge badge--nsfw">MATURE</div>}
+              <FilePrice badge uri={normalizeURI(uri)} />
+            </div>
+          </div>
           <RecommendedContent uri={uri} />
         </div>
       </Page>

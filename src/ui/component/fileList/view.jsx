@@ -1,5 +1,6 @@
 // @flow
-import * as React from 'react';
+import type { Node } from 'react';
+import React from 'react';
 import classnames from 'classnames';
 import FileListItem from 'component/fileListItem';
 import Spinner from 'component/spinner';
@@ -11,19 +12,31 @@ const SORT_OLD = 'old';
 
 type Props = {
   uris: Array<string>,
-  header: React.Node,
-  headerAltControls: React.Node,
-  injectedItem?: React.Node,
+  header: Node,
+  headerAltControls: Node,
+  injectedItem?: Node,
   loading: boolean,
   noHeader?: boolean,
   slim?: string,
   empty?: string,
+  meta?: Node,
   // If using the default header, this is a unique ID needed to persist the state of the filter setting
   persistedStorageKey?: string,
 };
 
 export default function FileList(props: Props) {
-  const { uris, header, headerAltControls, injectedItem, loading, persistedStorageKey, noHeader, slim, empty } = props;
+  const {
+    uris,
+    header,
+    headerAltControls,
+    injectedItem,
+    loading,
+    persistedStorageKey,
+    noHeader,
+    slim,
+    empty,
+    meta,
+  } = props;
   const [currentSort, setCurrentSort] = usePersistedState(persistedStorageKey, SORT_NEW);
   const sortedUris = uris && currentSort === SORT_OLD ? uris.reverse() : uris;
   const hasUris = uris && !!uris.length;
@@ -35,7 +48,7 @@ export default function FileList(props: Props) {
   return (
     <section className={classnames('file-list')}>
       {!noHeader && (
-        <div className="file-list__header">
+        <div className={classnames('file-list__header', { 'file-list__header--slim': slim })}>
           {header || (
             <FormField
               className="file-list__dropdown"
@@ -52,6 +65,7 @@ export default function FileList(props: Props) {
           <div className="file-list__alt-controls">{headerAltControls}</div>
         </div>
       )}
+      {meta && <div className="file-list__meta">{meta}</div>}
       {hasUris && (
         <ul>
           {sortedUris.map((uri, index) => (

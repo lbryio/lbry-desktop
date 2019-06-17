@@ -1,8 +1,10 @@
 // @flow
+import type { Node } from 'react';
 import React, { useEffect } from 'react';
+import moment from 'moment';
 import { FormField } from 'component/common/form';
 import FileList from 'component/fileList';
-import moment from 'moment';
+import Tag from 'component/tag';
 import usePersistedState from 'util/use-persisted-state';
 
 const TIME_DAY = 'day';
@@ -26,10 +28,12 @@ type Props = {
   tags: Array<string>,
   loading: boolean,
   personal: boolean,
+  doToggleTagFollow: string => void,
+  meta?: Node,
 };
 
 function FileListDiscover(props: Props) {
-  const { doClaimSearch, uris, tags, loading, personal, injectedItem } = props;
+  const { doClaimSearch, uris, tags, loading, personal, injectedItem, meta } = props;
   const [personalSort, setPersonalSort] = usePersistedState('file-list-trending:personalSort', SEARCH_SORT_YOU);
   const [typeSort, setTypeSort] = usePersistedState('file-list-trending:typeSort', TYPE_TRENDING);
   const [timeSort, setTimeSort] = usePersistedState('file-list-trending:timeSort', TIME_WEEK);
@@ -40,7 +44,7 @@ function FileListDiscover(props: Props) {
     const options = {};
     const newTags = tagsString.split(',');
 
-    if ((tags && !personal) || (tags && personal && personalSort === SEARCH_SORT_YOU)) {
+    if ((newTags && !personal) || (newTags && personal && personalSort === SEARCH_SORT_YOU)) {
       options.any_tags = newTags;
     }
 
@@ -61,19 +65,26 @@ function FileListDiscover(props: Props) {
     }
 
     doClaimSearch(20, options);
-  }, [personalSort, typeSort, timeSort, doClaimSearch, tagsString]);
+  }, [personal, personalSort, typeSort, timeSort, doClaimSearch, tagsString]);
 
   const header = (
-    <React.Fragment>
-      <h1 className={`card__title--flex`}>
-        {toCapitalCase(typeSort)} {'For'}
-      </h1>
+    <h1 className="card__title--flex">
+      <FormField
+        className="file-list__dropdown"
+        type="select"
+        name="trending_sort"
+        value={typeSort}
+        onChange={e => setTypeSort(e.target.value)}
+      >
+        {SEARCH_TYPES.map(type => (
+          <option key={type} value={type}>
+            {toCapitalCase(type)}
+          </option>
+        ))}
+      </FormField>
+      <span>{__('For')}</span>
       {!personal && tags && tags.length ? (
-        tags.map(tag => (
-          <span key={tag} className="tag tag--remove" disabled>
-            {tag}
-          </span>
-        ))
+        tags.map(tag => <Tag key={tag} name={tag} disabled />)
       ) : (
         <FormField
           type="select"
@@ -89,24 +100,11 @@ function FileListDiscover(props: Props) {
           ))}
         </FormField>
       )}
-    </React.Fragment>
+    </h1>
   );
 
   const headerAltControls = (
     <React.Fragment>
-      <FormField
-        className="file-list__dropdown"
-        type="select"
-        name="trending_sort"
-        value={typeSort}
-        onChange={e => setTypeSort(e.target.value)}
-      >
-        {SEARCH_TYPES.map(type => (
-          <option key={type} value={type}>
-            {toCapitalCase(type)}
-          </option>
-        ))}
-      </FormField>
       {typeSort === 'top' && (
         <FormField
           className="file-list__dropdown"
@@ -126,13 +124,16 @@ function FileListDiscover(props: Props) {
   );
 
   return (
-    <FileList
-      loading={loading}
-      uris={uris}
-      injectedItem={personalSort === SEARCH_SORT_YOU && injectedItem}
-      header={header}
-      headerAltControls={headerAltControls}
-    />
+    <div className="card">
+      <FileList
+        meta={meta}
+        loading={loading}
+        uris={uris}
+        injectedItem={personalSort === SEARCH_SORT_YOU && injectedItem}
+        header={header}
+        headerAltControls={headerAltControls}
+      />
+    </div>
   );
 }
 

@@ -11,7 +11,7 @@ type Props = {
 function DiscoverPage(props: Props) {
   const { followedTags } = props;
   return (
-    <Page className="card">
+    <Page>
       <FileListDiscover
         personal
         tags={followedTags.map(tag => tag.name)}

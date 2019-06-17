@@ -2,6 +2,8 @@
 
 table,
 .table {
+  margin-bottom: var(--spacing-small);
+
   [data-mode='dark'] & {
     background-color: transparent;
 
@@ -9,17 +11,23 @@ table,
       border-bottom: 2px solid $lbry-white;
     }
   }
+
+  th,
+  td {
+    padding-left: var(--spacing-large);
+  }
 }
 
 td {
-  max-width: 0;
   overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
 }
 
-tr {
-  padding: 0 var(--spacing-small);
+.table__header {
+  margin: var(--spacing-large);
+
+  & + .table__header {
+    margin-top: 0;
+  }
 }
 
 .table__item--actionable {
@@ -45,6 +53,17 @@ tr {
 
 .table--transactions {
   table-layout: fixed;
+
+  td:nth-of-type(3) {
+    // Only add ellipsis to the links in the table
+    // We still want to show the entire message if a TX includes one
+    a,
+    button {
+      @include constrict(10rem);
+      vertical-align: bottom;
+      display: inline-block;
+    }
+  }
 }
 
 .table--rewards {

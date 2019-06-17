@@ -15,7 +15,7 @@ type Props = {
 };
 
 export default function FileProperties(props: Props) {
-  const { uri, downloaded, claimIsMine, rewardedContentClaimIds, isSubscribed, isNew } = props;
+  const { uri, downloaded, claimIsMine, rewardedContentClaimIds, isSubscribed } = props;
   const { claimId } = parseURI(uri);
   const isRewardContent = rewardedContentClaimIds.includes(claimId);
 
@@ -24,7 +24,6 @@ export default function FileProperties(props: Props) {
       {isSubscribed && <Icon icon={icons.SUBSCRIPTION} />}
       {!claimIsMine && downloaded && <Icon icon={icons.DOWNLOAD} />}
       {isRewardContent && <Icon iconColor="red" icon={icons.FEATURED} />}
-      {isNew && <span className="badge badge--alert">{__('NEW')}</span>}
       <FilePrice hideFree uri={uri} />
     </div>
   );

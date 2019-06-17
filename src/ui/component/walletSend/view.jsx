@@ -1,6 +1,6 @@
 // @flow
-import React from 'react';
 import * as MODALS from 'constants/modal_types';
+import React from 'react';
 import Button from 'component/button';
 import { Form, FormField } from 'component/common/form';
 import { Formik } from 'formik';
@@ -82,7 +82,7 @@ class WalletSend extends React.PureComponent<Props> {
               </div>
               <div className="card__actions">
                 <Button
-                  button="primary"
+                  button="inverse"
                   type="submit"
                   label={__('Send')}
                   disabled={

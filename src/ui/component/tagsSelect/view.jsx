@@ -37,6 +37,7 @@ export default function TagSelect(props: Props) {
           {title}
           {showClose && !hasClosed && <Button button="close" icon={ICONS.CLOSE} onClick={handleClose} />}
         </h2>
+        <p className="help">{__("The tags you follow will change what's trending for you.")}</p>
 
         <div className="card__content">
           <ul className="tags--remove">

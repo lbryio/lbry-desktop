@@ -85,9 +85,13 @@
     font-family: Consolas, 'Lucida Console', 'Source Sans', monospace;
   }
 
-  a {
-    color: $lbry-blue-1;
+  a,
+  button {
     display: inline-block;
+
+    .button__label {
+      white-space: normal;
+    }
   }
 
   // Lists

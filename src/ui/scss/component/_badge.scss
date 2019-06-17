@@ -4,6 +4,9 @@
   @extend .badge;
   background-color: lighten($lbry-teal-5, 55%);
   color: darken($lbry-teal-5, 20%);
+  svg {
+    stroke: $lbry-teal-5;
+  }
 
   [data-mode='dark'] & {
     color: lighten($lbry-teal-5, 60%);
