@@ -247,5 +247,9 @@
   "No": "No",
   "These search results are provided by LBRY, Inc.": "These search results are provided by LBRY, Inc.",
   "FILTER": "FILTER",
-  "View file": "View file"
+  "View file": "View file",
+  "Waiting for blob.": "Waiting for blob.",
+  "Waiting for metadata.": "Waiting for metadata.",
+  "Sorry, looks like we can't play this file.": "Sorry, looks like we can't play this file.",
+  "Sorry, looks like we can't preview this file.": "Sorry, looks like we can't preview this file."
 }
