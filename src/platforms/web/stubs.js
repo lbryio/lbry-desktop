@@ -1,7 +1,6 @@
 const callable = () => {
   throw Error('Need to fix this stub');
 };
-const returningCallable = value => () => value;
 
 export const remote = {
   dialog: {

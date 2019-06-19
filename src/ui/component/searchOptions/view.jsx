@@ -16,39 +16,20 @@ type Props = {
   options: {},
   expanded: boolean,
   toggleSearchExpanded: () => void,
-  query: string,
-  onFeedbackPositive: string => void,
-  onFeedbackNegative: string => void,
 };
 
 const SearchOptions = (props: Props) => {
-  const {
-    options,
-    setSearchOption,
-    expanded,
-    toggleSearchExpanded,
-    query,
-    onFeedbackPositive,
-    onFeedbackNegative,
-  } = props;
+  const { options, setSearchOption, expanded, toggleSearchExpanded } = props;
   const resultCount = options[SEARCH_OPTIONS.RESULT_COUNT];
 
   return (
-    <div className="search__options-wrapper">
-      <div className="card--space-between">
-        <Button
-          button="alt"
-          label={__('FILTER')}
-          iconRight={expanded ? ICONS.UP : ICONS.DOWN}
-          onClick={toggleSearchExpanded}
-        />
-
-        <div className="media__action-group">
-          <span>{__('Find what you were looking for?')}</span>
-          <Button button="alt" description={__('Yes')} onClick={() => onFeedbackPositive(query)} icon={ICONS.YES} />
-          <Button button="alt" description={__('No')} onClick={() => onFeedbackNegative(query)} icon={ICONS.NO} />
-        </div>
-      </div>
+    <div>
+      <Button
+        button="alt"
+        label={__('FILTER')}
+        iconRight={expanded ? ICONS.UP : ICONS.DOWN}
+        onClick={toggleSearchExpanded}
+      />
       <ExpandableOptions pose={expanded ? 'show' : 'hide'}>
         {expanded && (
           <Form className="card__content search__options">

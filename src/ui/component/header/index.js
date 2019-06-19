@@ -1,21 +1,21 @@
+import * as SETTINGS from 'constants/settings';
 import { connect } from 'react-redux';
-import { selectBalance, SETTINGS } from 'lbry-redux';
+import { selectBalance, SETTINGS as LBRY_REDUX_SETTINGS } from 'lbry-redux';
 import { formatCredits } from 'util/format-credits';
-import { selectIsUpgradeAvailable, selectAutoUpdateDownloaded } from 'redux/selectors/app';
-import { doDownloadUpgradeRequested } from 'redux/actions/app';
-import Header from './view';
+import { doSetClientSetting } from 'redux/actions/settings';
 import { makeSelectClientSetting } from 'redux/selectors/settings';
+import Header from './view';
 
 const select = state => ({
-  autoUpdateDownloaded: selectAutoUpdateDownloaded(state),
   balance: selectBalance(state),
-  language: makeSelectClientSetting(SETTINGS.LANGUAGE)(state), // trigger redraw on language change
-  isUpgradeAvailable: selectIsUpgradeAvailable(state),
+  language: makeSelectClientSetting(LBRY_REDUX_SETTINGS.LANGUAGE)(state), // trigger redraw on language change
   roundedBalance: formatCredits(selectBalance(state) || 0, 2),
+  currentTheme: makeSelectClientSetting(SETTINGS.THEME)(state),
+  automaticDarkModeEnabled: makeSelectClientSetting(SETTINGS.AUTOMATIC_DARK_MODE_ENABLED)(state),
 });
 
 const perform = dispatch => ({
-  downloadUpgradeRequested: () => dispatch(doDownloadUpgradeRequested()),
+  setClientSetting: (key, value) => dispatch(doSetClientSetting(key, value)),
 });
 
 export default connect(

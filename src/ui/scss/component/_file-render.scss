@@ -52,7 +52,7 @@
   .markdown-preview {
     height: 100%;
     overflow: auto;
-    padding: var(--spacing-vertical-large);
+    padding: var(--spacing-large);
   }
 }
 
@@ -75,7 +75,7 @@
 
   .CodeMirror .CodeMirror-lines {
     // is there really a .CodeMirror inside a .CodeMirror?
-    padding: var(--spacing-vertical-small) 0;
+    padding: var(--spacing-small) 0;
   }
 
   .CodeMirror-code {
@@ -86,11 +86,11 @@
   .CodeMirror-gutters {
     background-color: $lbry-gray-1;
     border-right: 1px solid $lbry-gray-2;
-    padding-right: var(--spacing-vertical-medium);
+    padding-right: var(--spacing-medium);
   }
 
   .CodeMirror-line {
-    padding-left: var(--spacing-vertical-medium);
+    padding-left: var(--spacing-medium);
   }
 
   .CodeMirror-linenumber {

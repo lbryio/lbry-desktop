@@ -4,12 +4,12 @@
   align-items: flex-end;
 
   &:not(.form-row--padded):not(:last-of-type) {
-    margin-bottom: var(--spacing-vertical-medium);
+    margin-bottom: var(--spacing-medium);
   }
 
   .form-field {
     &:not(:first-of-type) {
-      padding-left: var(--spacing-vertical-medium);
+      padding-left: var(--spacing-medium);
     }
 
     &.form-field--stretch {
@@ -24,7 +24,7 @@
 
   button + input,
   input + button {
-    margin-left: var(--spacing-vertical-medium);
+    margin-left: var(--spacing-medium);
   }
 }
 
@@ -34,8 +34,8 @@
 
 .form-row--padded {
   // Ignore the class name, margin allows these to collapse with other items
-  margin-top: var(--spacing-vertical-large);
-  margin-bottom: var(--spacing-vertical-large);
+  margin-top: var(--spacing-large);
+  margin-bottom: var(--spacing-large);
 }
 
 .form-row--right {

@@ -23,7 +23,7 @@
 
     .button--view,
     .button--play {
-      background-color: $lbry-green-3;
+      background-color: $lbry-teal-2;
     }
   }
 }
@@ -78,7 +78,7 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
-  padding: 0 var(--spacing-vertical-large);
+  padding: 0 var(--spacing-large);
   background-color: #000;
 }
 
@@ -104,6 +104,7 @@
 }
 
 .content__view--container {
+  background-color: black;
   width: 100%;
   height: 100%;
   top: 0;

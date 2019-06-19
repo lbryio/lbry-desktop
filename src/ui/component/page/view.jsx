@@ -1,93 +1,34 @@
 // @flow
+import * as ICONS from 'constants/icons';
 import * as React from 'react';
 import classnames from 'classnames';
-import Spinner from 'component/spinner';
-
-// time in ms to wait to show loading spinner
-const LOADER_TIMEOUT = 1000;
+import Button from 'component/button';
 
 type Props = {
   children: React.Node | Array<React.Node>,
-  pageTitle: ?string,
-  notContained: ?boolean, // No max-width, but keep the padding
-  loading: ?boolean,
   className: ?string,
+  autoUpdateDownloaded: boolean,
+  isUpgradeAvailable: boolean,
+  doDownloadUpgradeRequested: () => void,
 };
 
-type State = {
-  showLoader: ?boolean,
-};
+function Page(props: Props) {
+  const { children, className, autoUpdateDownloaded, isUpgradeAvailable, doDownloadUpgradeRequested } = props;
+  const showUpgradeButton = autoUpdateDownloaded || (process.platform === 'linux' && isUpgradeAvailable);
 
-class Page extends React.PureComponent<Props, State> {
-  constructor() {
-    super();
-
-    this.state = {
-      showLoader: false,
-    };
-
-    this.loaderTimeout = null;
-  }
-
-  componentDidMount() {
-    const { loading } = this.props;
-    if (loading) {
-      this.beginLoadingTimeout();
-    }
-  }
-
-  componentDidUpdate(prevProps: Props) {
-    const { loading } = this.props;
-    const { showLoader } = this.state;
-
-    if (!this.loaderTimeout && !prevProps.loading && loading) {
-      this.beginLoadingTimeout();
-    } else if (!loading && this.loaderTimeout) {
-      clearTimeout(this.loaderTimeout);
-      if (showLoader) {
-        this.removeLoader();
-      }
-    }
-  }
-
-  componentWillUnmount() {
-    if (this.loaderTimeout) {
-      clearTimeout(this.loaderTimeout);
-    }
-  }
-
-  beginLoadingTimeout() {
-    this.loaderTimeout = setTimeout(() => {
-      this.setState({ showLoader: true });
-    }, LOADER_TIMEOUT);
-  }
-
-  removeLoader() {
-    this.setState({ showLoader: false });
-  }
-
-  loaderTimeout: ?TimeoutID;
-
-  render() {
-    const { children, notContained, loading, className } = this.props;
-    const { showLoader } = this.state;
-
-    return (
-      <main
-        className={classnames('main', className, {
-          'main--contained': !notContained,
-          'main--not-contained': notContained,
-        })}
-      >
-        {!loading && children}
-        {showLoader && (
-          <div className="main--empty">
-            <Spinner />
-          </div>
-        )}
-      </main>
-    );
-  }
+  return (
+    <main className={classnames('main', className)}>
+      {/* @if TARGET='app' */}
+      {showUpgradeButton && (
+        <div className="main__status">
+          {__('Update ready to install')}
+          <Button button="alt" icon={ICONS.DOWNLOAD} label={__('Install now')} onClick={doDownloadUpgradeRequested} />
+        </div>
+      )}
+      {/* @endif */}
+      {children}
+    </main>
+  );
 }
 
 export default Page;

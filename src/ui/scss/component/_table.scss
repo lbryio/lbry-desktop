@@ -2,12 +2,31 @@
 
 table,
 .table {
+  margin-bottom: var(--spacing-small);
+
   [data-mode='dark'] & {
     background-color: transparent;
 
     th {
       border-bottom: 2px solid $lbry-white;
     }
+  }
+
+  th,
+  td {
+    padding-left: var(--spacing-large);
+  }
+}
+
+td {
+  overflow: hidden;
+}
+
+.table__header {
+  margin: var(--spacing-large);
+
+  & + .table__header {
+    margin-top: 0;
   }
 }
 
@@ -17,9 +36,13 @@ table,
   }
 }
 
+.table__item-label {
+  font-size: 0.9em;
+  font-weight: 300;
+}
+
 .table--help {
   td:nth-of-type(1) {
-    font-weight: 600;
     min-width: 130px;
   }
 
@@ -31,16 +54,11 @@ table,
 .table--transactions {
   table-layout: fixed;
 
-  td:nth-of-type(1) {
-    // TX amounts
-    font-size: 0.9em;
-    font-weight: 600;
-  }
-
   td:nth-of-type(3) {
     // Only add ellipsis to the links in the table
     // We still want to show the entire message if a TX includes one
-    .button__content {
+    a,
+    button {
       @include constrict(10rem);
       vertical-align: bottom;
       display: inline-block;
@@ -69,6 +87,6 @@ table,
 .table--invites {
   svg {
     margin-bottom: -2px;
-    margin-left: var(--spacing-vertical-small);
+    margin-left: var(--spacing-small);
   }
 }

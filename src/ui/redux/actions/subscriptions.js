@@ -7,7 +7,7 @@ import { Lbryio, rewards, doClaimRewardType } from 'lbryinc';
 import { selectSubscriptions, selectUnreadByChannel } from 'redux/selectors/subscriptions';
 import { makeSelectClientSetting } from 'redux/selectors/settings';
 import { Lbry, buildURI, parseURI, doResolveUris } from 'lbry-redux';
-import { doPurchaseUri, doFetchClaimsByChannel } from 'redux/actions/content';
+import { doPurchaseUri } from 'redux/actions/content';
 
 const CHECK_SUBSCRIPTIONS_INTERVAL = 15 * 60 * 1000;
 const SUBSCRIPTION_DOWNLOAD_LIMIT = 1;
@@ -35,8 +35,7 @@ export const doFetchMySubscriptions = () => (dispatch: Dispatch, getState: GetSt
   Lbryio.call('subscription', 'list')
     .then(dbSubscriptions => {
       const storedSubscriptions = dbSubscriptions || [];
-
-      // User has no subscriptions in db or redux
+      // // User has no subscriptions in db or redux
       if (!storedSubscriptions.length && (!reduxSubscriptions || !reduxSubscriptions.length)) {
         return [];
       }
@@ -45,25 +44,12 @@ export const doFetchMySubscriptions = () => (dispatch: Dispatch, getState: GetSt
       // If something is in the db, but not in redux, add it to redux
       // If something is in redux, but not in the db, add it to the db
       if (storedSubscriptions.length !== reduxSubscriptions.length) {
-        const dbSubMap = {};
         const reduxSubMap = {};
-        const subsNotInDB = [];
         const subscriptionsToReturn = reduxSubscriptions.slice();
-
-        storedSubscriptions.forEach(sub => {
-          dbSubMap[sub.claim_id] = 1;
-        });
 
         reduxSubscriptions.forEach(sub => {
           const { claimId } = parseURI(sub.uri);
           reduxSubMap[claimId] = 1;
-
-          if (!dbSubMap[claimId]) {
-            subsNotInDB.push({
-              claim_id: claimId,
-              channel_name: sub.channelName,
-            });
-          }
         });
 
         storedSubscriptions.forEach(sub => {
@@ -73,13 +59,7 @@ export const doFetchMySubscriptions = () => (dispatch: Dispatch, getState: GetSt
           }
         });
 
-        return Promise.all(subsNotInDB.map(payload => Lbryio.call('subscription', 'new', payload)))
-          .then(() => subscriptionsToReturn)
-          .catch(
-            () =>
-              // let it fail, we will try again when the navigate to the subscriptions page
-              subscriptionsToReturn
-          );
+        return subscriptionsToReturn;
       }
 
       // DB is already synced, just return the subscriptions in redux
@@ -223,10 +203,14 @@ export const doCheckSubscription = (subscriptionUri: string, shouldNotify?: bool
     throw Error(`Trying to find new content for ${subscriptionUri} but it doesn't exist in your subscriptions`);
   }
 
-  const { claimId } = parseURI(subscriptionUri);
-
   // We may be duplicating calls here. Can this logic be baked into doFetchClaimsByChannel?
-  Lbry.claim_search({ channel_id: claimId, page: 1, page_size: PAGE_SIZE }).then(claimListByChannel => {
+  Lbry.claim_search({
+    channel: subscriptionUri,
+    valid_channel_signatures: true,
+    order_by: ['release_time'],
+    page: 1,
+    page_size: PAGE_SIZE,
+  }).then(claimListByChannel => {
     const { items: claimsInChannel } = claimListByChannel;
 
     // may happen if subscribed to an abandoned channel or an empty channel
@@ -394,13 +378,3 @@ export const doFetchRecommendedSubscriptions = () => (dispatch: Dispatch) => {
       })
     );
 };
-
-export const doCompleteFirstRun = () => (dispatch: Dispatch) =>
-  dispatch({
-    type: ACTIONS.SUBSCRIPTION_FIRST_RUN_COMPLETED,
-  });
-
-export const doShowSuggestedSubs = () => (dispatch: Dispatch) =>
-  dispatch({
-    type: ACTIONS.VIEW_SUGGESTED_SUBSCRIPTIONS,
-  });

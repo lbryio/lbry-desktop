@@ -3,7 +3,6 @@
 export const CREDIT_REQUIRED_ACKNOWLEDGED = 'credit_required_acknowledged';
 export const NEW_USER_ACKNOWLEDGED = 'welcome_acknowledged';
 export const EMAIL_COLLECTION_ACKNOWLEDGED = 'email_collection_acknowledged';
-export const FIRST_RUN_COMPLETED = 'first_run_completed';
 export const INVITE_ACKNOWLEDGED = 'invite_acknowledged';
 export const LANGUAGE = 'language';
 export const SHOW_NSFW = 'showNsfw';

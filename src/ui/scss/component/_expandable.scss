@@ -1,7 +1,7 @@
 .expandable {
   border-bottom: 1px solid $lbry-gray-1;
-  margin-bottom: var(--spacing-vertical-medium);
-  padding-bottom: var(--spacing-vertical-medium);
+  margin-bottom: var(--spacing-medium);
+  padding-bottom: var(--spacing-medium);
 
   html[data-mode='dark'] & {
     border-color: rgba($lbry-gray-5, 0.2);
@@ -14,7 +14,7 @@
 
 .expandable--closed,
 .expandable--open {
-  margin-bottom: var(--spacing-vertical-small);
+  margin-bottom: var(--spacing-small);
 }
 
 .expandable--closed {
@@ -29,11 +29,7 @@
     left: 0;
     pointer-events: none;
 
-    background-image: linear-gradient(
-      to bottom,
-      transparent 0%,
-      mix($lbry-white, $lbry-gray-1, 70%) 90%
-    );
+    background-image: linear-gradient(to bottom, transparent 0%, mix($lbry-white, $lbry-gray-1, 70%) 90%);
     content: '';
     position: absolute;
 

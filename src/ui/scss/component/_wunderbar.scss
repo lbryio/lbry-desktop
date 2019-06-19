@@ -1,28 +1,24 @@
 .wunderbar {
   min-width: 175px;
   height: 100%;
-
   cursor: text;
   display: flex;
+  align-items: center;
   flex: 1;
   position: relative;
   z-index: 1;
+  margin-right: calc(var(--spacing-large));
 
-  html[data-mode='dark'] & {
-    border-color: $lbry-gray-5;
+  @media (max-width: 600px) {
+    margin-right: 0;
   }
 
   > .icon {
     top: 0;
-    left: var(--spacing-vertical-small);
-
+    left: var(--spacing-small);
     height: 100%;
     position: absolute;
     z-index: 1;
-
-    html[data-mode='dark'] & {
-      color: $lbry-gray-5;
-    }
   }
 }
 
@@ -38,31 +34,35 @@
 
 .wunderbar__input {
   width: 100%;
-  height: 100%;
-
+  height: var(--button-height);
+  border-radius: var(--button-radius);
+  background-color: $lbry-gray-1;
   align-items: center;
-  border-right: 1px solid $lbry-gray-1;
-  border-left: 1px solid $lbry-gray-1;
-  border-bottom: none;
-  border-top: none;
-  display: flex;
-  justify-content: center;
-  padding-left: var(--spacing-vertical-large);
-  transition: background-color 0.2s;
+  border: none;
+  min-width: 0;
+  padding-right: var(--spacing-small);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+
+  padding-left: 2.5rem;
+  transition: all 0.2s;
+
+  &:focus {
+    border-radius: var(--input-border-radius);
+  }
+
+  &::placeholder {
+    color: $lbry-black;
+    opacity: 0.9;
+  }
 
   html[data-mode='dark'] & {
-    border-right: 1px solid;
-    border-left: 1px solid;
     color: $lbry-white;
+    background-color: darken($lbry-gray-5, 20%);
 
-    &:not(:focus) {
-      border-color: $lbry-gray-5;
-    }
-
-    &:focus {
-      background-color: $lbry-gray-1;
-      border-color: $lbry-gray-1;
-      color: $lbry-black;
+    &::placeholder {
+      color: $lbry-gray-1;
     }
   }
 }
@@ -85,7 +85,7 @@
   display: flex;
   flex-direction: row;
   justify-items: flex-start;
-  padding: var(--spacing-vertical-small) var(--spacing-vertical-medium);
+  padding: var(--spacing-small) var(--spacing-medium);
 
   &:not(:first-of-type) {
     border-top: 1px solid transparent;
@@ -98,7 +98,7 @@
 
 .wunderbar__suggestion-label {
   overflow: hidden;
-  padding-left: var(--spacing-vertical-large);
+  padding-left: var(--spacing-large);
   text-overflow: ellipsis;
   white-space: nowrap;
 }
@@ -107,7 +107,7 @@
   font-size: 1rem;
   font-weight: 600;
   line-height: 0.1; // to vertically align because the font size is smaller
-  margin-left: var(--spacing-vertical-small);
+  margin-left: var(--spacing-small);
   opacity: 0.7;
   text-transform: uppercase;
   white-space: nowrap;

@@ -73,9 +73,7 @@ class TransactionListItem extends React.PureComponent<Props> {
         <td className="table__item--actionable">
           {reward && <span>{reward.reward_title}</span>}
           {claimName && claimId && (
-            <Button button="link" navigate={buildURI({ claimName: claimName, claimId })}>
-              {claimName}
-            </Button>
+            <Button button="link" navigate={buildURI({ claimName: claimName, claimId })} label={claimName} />
           )}
         </td>
 

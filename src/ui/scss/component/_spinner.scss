@@ -3,7 +3,7 @@
   height: 40px;
 
   font-size: 10px;
-  margin: var(--spacing-vertical-small);
+  margin: var(--spacing-small);
   text-align: center;
 
   .rect {
@@ -45,22 +45,16 @@
 }
 
 .spinner--small {
-  width: 40px;
-  height: 32px;
-
-  font-size: 10px;
-  margin: var(--spacing-vertical-small) 0;
-  text-align: center;
+  height: 10px;
+  display: inline-block;
 
   .rect {
     width: 3px;
-    height: 100%;
-    margin: 0 2px;
   }
 }
 
 .spinner--splash {
-  margin-top: var(--spacing-vertical-large);
+  margin-top: var(--spacing-large);
 
   .rect {
     background-color: $lbry-white;

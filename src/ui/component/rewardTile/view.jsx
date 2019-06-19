@@ -33,10 +33,10 @@ const RewardTile = (props: Props) => {
       <div className="card__content">
         <div className="card__actions">
           {reward.reward_type === rewards.TYPE_GENERATED_CODE && (
-            <Button button="primary" onClick={openRewardCodeModal} label={__('Enter Code')} />
+            <Button button="inverse" onClick={openRewardCodeModal} label={__('Enter Code')} />
           )}
           {reward.reward_type === rewards.TYPE_REFERRAL && (
-            <Button button="primary" navigate="/$/invite" label={__('Go To Invites')} />
+            <Button button="inverse" navigate="/$/invite" label={__('Go To Invites')} />
           )}
           {reward.reward_type !== rewards.TYPE_REFERRAL &&
             (claimed ? (

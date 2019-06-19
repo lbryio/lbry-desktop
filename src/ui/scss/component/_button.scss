@@ -2,17 +2,10 @@
 
 .button {
   display: inline-block;
-
-  .button__content {
-    display: flex;
-    align-items: center;
-    height: 100%;
-  }
+  font-weight: 400;
 
   svg {
     stroke-width: 1.9;
-    width: 1.2rem;
-    height: 1.2rem;
     position: relative;
     color: $lbry-gray-5;
 
@@ -23,15 +16,11 @@
       height: 1.4rem;
     }
   }
-
-  // Handle icons on the left or right side of the button label
-  svg + .button__label,
-  .button__label + svg {
-    margin-left: var(--spacing-vertical-miniscule);
-  }
 }
 
-.button--primary {
+// Fix this in lbry/components
+.button--primary:not(:hover) {
+  background-color: $lbry-teal-4;
   svg {
     color: white;
   }
@@ -42,10 +31,12 @@
   height: 5rem;
   width: 5rem;
   border-radius: 2.5rem;
+  &:not(:hover) {
+    background-color: $lbry-teal-4;
+  }
 }
 
 .button--primary,
-.button--alt,
 .button--inverse {
   height: var(--button-height);
   line-height: var(--button-height);
@@ -56,16 +47,68 @@
   box-sizing: border-box;
 }
 
+.button--inverse {
+  border-color: $lbry-teal-4;
+
+  &:hover {
+    color: $lbry-white;
+    background-color: $lbry-teal-4;
+    .icon {
+      stroke: $lbry-white;
+    }
+  }
+}
+
+.button--alt {
+  padding: 0;
+}
+
 .button--uri-indicator {
   max-width: 100%;
   height: 1.2em;
   vertical-align: text-top;
-  overflow: hidden;
   text-align: left;
   text-overflow: ellipsis;
   transition: color 0.2s;
 
   &:hover {
-    color: $lbry-teal-3;
+    color: $lbry-teal-5;
   }
+}
+
+.button--close {
+  position: absolute;
+  top: var(--spacing-miniscule);
+  right: var(--spacing-miniscule);
+  padding: 0.3rem;
+  transition: all var(--transition-duration) var(--transition-style);
+
+  &:hover {
+    background-color: $lbry-black;
+    color: $lbry-white;
+    border-radius: var(--card-radius);
+  }
+}
+
+.button--subscribe {
+  vertical-align: text-top;
+  align-items: flex-start;
+}
+
+.button__content {
+  display: flex;
+  align-items: center;
+  min-width: 0;
+}
+
+.button__label {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+// Handle icons on the left or right side of the button label
+svg + .button__label,
+.button__label + svg {
+  margin-left: var(--spacing-miniscule);
 }
