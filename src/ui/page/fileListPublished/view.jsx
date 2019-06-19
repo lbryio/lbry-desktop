@@ -1,7 +1,7 @@
 // @flow
 import React, { useEffect } from 'react';
 import Button from 'component/button';
-import FileList from 'component/fileList';
+import ClaimList from 'component/claimList';
 import Page from 'component/page';
 
 type Props = {
@@ -21,7 +21,7 @@ function FileListPublished(props: Props) {
     <Page notContained>
       {uris && uris.length ? (
         <div className="card">
-          <FileList loading={fetching} persistedStorageKey="file-list-published" uris={uris} />
+          <ClaimList loading={fetching} persistedStorageKey="claim-list-published" uris={uris} />
         </div>
       ) : (
         <div className="main--empty">

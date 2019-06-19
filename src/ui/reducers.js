@@ -6,7 +6,7 @@ import {
   searchReducer,
   walletReducer,
   notificationsReducer,
-  tagsReducer,
+  tagsReducerBuilder,
 } from 'lbry-redux';
 import { userReducer, rewardsReducer, costInfoReducer, blacklistReducer, homepageReducer, statsReducer } from 'lbryinc';
 import appReducer from 'redux/reducers/app';
@@ -15,6 +15,17 @@ import contentReducer from 'redux/reducers/content';
 import settingsReducer from 'redux/reducers/settings';
 import subscriptionsReducer from 'redux/reducers/subscriptions';
 import publishReducer from 'redux/reducers/publish';
+import { defaultKnownTags, defaultFollowedTags } from 'constants/tags';
+
+function getDefaultKnownTags() {
+  return defaultFollowedTags.concat(defaultKnownTags).reduce(
+    (tagsMap, tag) => ({
+      ...tagsMap,
+      [tag]: { name: tag },
+    }),
+    {}
+  );
+}
 
 export default history =>
   combineReducers({
@@ -34,7 +45,7 @@ export default history =>
     settings: settingsReducer,
     stats: statsReducer,
     subscriptions: subscriptionsReducer,
-    tags: tagsReducer,
+    tags: tagsReducerBuilder({ followedTags: defaultFollowedTags, knownTags: getDefaultKnownTags() }),
     user: userReducer,
     wallet: walletReducer,
   });

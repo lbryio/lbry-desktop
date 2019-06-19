@@ -1,9 +1,13 @@
 // @flow
 import * as ICONS from 'constants/icons';
+import * as SETTINGS from 'constants/settings';
 import * as React from 'react';
+import { withRouter } from 'react-router';
 import Button from 'component/button';
 import LbcSymbol from 'component/common/lbc-symbol';
 import WunderBar from 'component/wunderbar';
+import Icon from 'component/common/icon';
+import { Menu, MenuList, MenuButton, MenuItem } from '@reach/menu-button';
 
 type Props = {
   autoUpdateDownloaded: boolean,
@@ -11,16 +15,29 @@ type Props = {
   isUpgradeAvailable: boolean,
   roundedBalance: number,
   downloadUpgradeRequested: any => void,
+  history: { push: string => void },
+  currentTheme: string,
+  automaticDarkModeEnabled: boolean,
+  setClientSetting: (string, boolean | string) => void,
 };
 
 const Header = (props: Props) => {
-  const { autoUpdateDownloaded, downloadUpgradeRequested, isUpgradeAvailable, roundedBalance } = props;
+  const { roundedBalance, history, setClientSetting, currentTheme, automaticDarkModeEnabled } = props;
 
-  const showUpgradeButton = autoUpdateDownloaded || (process.platform === 'linux' && isUpgradeAvailable);
+  function handleThemeToggle() {
+    if (automaticDarkModeEnabled) {
+      setClientSetting(SETTINGS.AUTOMATIC_DARK_MODE_ENABLED, false);
+    }
+
+    if (currentTheme === 'dark') {
+      setClientSetting(SETTINGS.THEME, 'light');
+    } else {
+      setClientSetting(SETTINGS.THEME, 'dark');
+    }
+  }
 
   return (
     <header className="header">
-      <div className="title-bar" />
       <div className="header__contents">
         <div className="header__navigation">
           <Button
@@ -53,54 +70,55 @@ const Header = (props: Props) => {
         <WunderBar />
 
         <div className="header__navigation">
-          <Button
-            className="header__navigation-item header__navigation-item--right-action"
-            activeClass="header__navigation-item--active"
-            label={
-              roundedBalance > 0 ? (
+          <Menu>
+            <MenuButton className="header__navigation-item menu__title">
+              <Icon icon={ICONS.ACCOUNT} />
+              {roundedBalance > 0 ? (
                 <React.Fragment>
                   {roundedBalance} <LbcSymbol />
                 </React.Fragment>
               ) : (
                 __('Account')
-              )
-            }
-            icon={ICONS.ACCOUNT}
-            navigate="/$/account"
-          />
-
-          <Button
-            className="header__navigation-item header__navigation-item--right-action"
-            activeClass="header__navigation-item--active"
-            description={__('Publish content')}
-            icon={ICONS.UPLOAD}
-            iconSize={24}
-            navigate="/$/publish"
-          />
-
-          {/* @if TARGET='app' */}
-          {showUpgradeButton && (
-            <Button
-              className="header__navigation-item header__navigation-item--right-action header__navigation-item--upgrade"
-              icon={ICONS.DOWNLOAD}
-              iconSize={24}
-              label={__('Upgrade App')}
-              onClick={downloadUpgradeRequested}
-            />
-          )}
-          {/* @endif */}
-
-          <Button
-            className="header__navigation-item header__navigation-item--right-action"
-            activeClass="header__navigation-item--active"
-            icon={ICONS.SETTINGS}
-            iconSize={24}
-            navigate="/$/settings"
-          />
+              )}
+            </MenuButton>
+            <MenuList>
+              <MenuItem className="menu__link" onSelect={() => history.push(`/$/account`)}>
+                <Icon aria-hidden icon={ICONS.OVERVIEW} />
+                {__('Overview')}
+              </MenuItem>
+              <MenuItem className="menu__link" onSelect={() => history.push(`/$/wallet`)}>
+                <Icon aria-hidden icon={ICONS.WALLET} />
+                {__('Wallet')}
+              </MenuItem>
+              <MenuItem className="menu__link" onSelect={() => history.push(`/$/publish`)}>
+                <Icon aria-hidden icon={ICONS.UPLOAD} />
+                {__('Publish')}
+              </MenuItem>
+            </MenuList>
+          </Menu>
+          <Menu>
+            <MenuButton className="header__navigation-item menu__title">
+              <Icon icon={ICONS.SETTINGS} />
+            </MenuButton>
+            <MenuList>
+              <MenuItem className="menu__link" onSelect={() => history.push(`/$/settings`)}>
+                <Icon aria-hidden icon={ICONS.SETTINGS} />
+                {__('Settings')}
+              </MenuItem>
+              <MenuItem className="menu__link" onSelect={() => history.push(`/$/help`)}>
+                <Icon aria-hidden icon={ICONS.HELP} />
+                {__('Help')}
+              </MenuItem>
+              <MenuItem className="menu__link" onSelect={handleThemeToggle}>
+                <Icon icon={currentTheme === 'light' ? ICONS.DARK : ICONS.LIGHT} />
+                {currentTheme === 'light' ? 'Dark' : 'Light'}
+              </MenuItem>
+            </MenuList>
+          </Menu>
         </div>
       </div>
     </header>
   );
 };
 
-export default Header;
+export default withRouter(Header);

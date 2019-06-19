@@ -1,7 +1,7 @@
 // @flow
 import React from 'react';
 import Button from 'component/button';
-import FileList from 'component/fileList';
+import ClaimList from 'component/claimList';
 
 type Props = {
   fetching: boolean,
@@ -18,7 +18,7 @@ function FileListDownloaded(props: Props) {
     <React.Fragment>
       {hasDownloads ? (
         <div className="card">
-          <FileList persistedStorageKey="file-list-downloaded" uris={downloadedUris} loading={fetching} />
+          <ClaimList persistedStorageKey="claim-list-downloaded" uris={downloadedUris} loading={fetching} />
         </div>
       ) : (
         <div className="main--empty">

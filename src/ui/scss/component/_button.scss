@@ -2,6 +2,7 @@
 
 .button {
   display: inline-block;
+  font-weight: 400;
 
   svg {
     stroke-width: 1.9;
@@ -17,7 +18,9 @@
   }
 }
 
-.button--primary {
+// Fix this in lbry/components
+.button--primary:not(:hover) {
+  background-color: $lbry-teal-4;
   svg {
     color: white;
   }
@@ -28,10 +31,12 @@
   height: 5rem;
   width: 5rem;
   border-radius: 2.5rem;
+  &:not(:hover) {
+    background-color: $lbry-teal-4;
+  }
 }
 
 .button--primary,
-.button--alt,
 .button--inverse {
   height: var(--button-height);
   line-height: var(--button-height);
@@ -40,6 +45,18 @@
   padding-top: 0;
   padding-bottom: 0;
   box-sizing: border-box;
+}
+
+.button--inverse {
+  border-color: $lbry-teal-4;
+
+  &:hover {
+    color: $lbry-white;
+    background-color: $lbry-teal-4;
+    .icon {
+      stroke: $lbry-white;
+    }
+  }
 }
 
 .button--alt {
@@ -67,7 +84,7 @@
   transition: all var(--transition-duration) var(--transition-style);
 
   &:hover {
-    background-color: $lbry-red-3;
+    background-color: $lbry-black;
     color: $lbry-white;
     border-radius: var(--card-radius);
   }
@@ -78,21 +95,20 @@
   align-items: flex-start;
 }
 
+.button__content {
+  display: flex;
+  align-items: center;
+  min-width: 0;
+}
+
 .button__label {
-  // white-space: nowrap;
+  white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  // display: flex;
-  // align-items: center;
 }
 
 // Handle icons on the left or right side of the button label
 svg + .button__label,
 .button__label + svg {
   margin-left: var(--spacing-miniscule);
-}
-
-.button__content {
-  display: flex;
-  align-items: center;
 }

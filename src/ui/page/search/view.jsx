@@ -2,8 +2,8 @@
 import * as ICONS from 'constants/icons';
 import React, { useEffect, Fragment } from 'react';
 import { isURIValid, normalizeURI } from 'lbry-redux';
-import FileListItem from 'component/fileListItem';
-import FileList from 'component/fileList';
+import ClaimListItem from 'component/claimListItem';
+import ClaimList from 'component/claimList';
 import Page from 'component/page';
 import SearchOptions from 'component/searchOptions';
 import Button from 'component/button';
@@ -49,12 +49,12 @@ export default function SearchPage(props: Props) {
                 <Button button="alt" navigate={uri} className="media__uri">
                   {uri}
                 </Button>
-                <FileListItem uri={uri} large />
+                <ClaimListItem uri={uri} type="large" />
               </header>
             )}
 
             <div className="card">
-              <FileList
+              <ClaimList
                 uris={uris}
                 header={<SearchOptions />}
                 headerAltControls={

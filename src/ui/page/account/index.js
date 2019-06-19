@@ -1,3 +1,9 @@
-import WalletPage from './view';
+import { connect } from 'react-redux';
+import AccountPage from './view';
 
-export default WalletPage;
+const select = state => ({});
+
+export default connect(
+  select,
+  null
+)(AccountPage);

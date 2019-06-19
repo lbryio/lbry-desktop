@@ -5,8 +5,11 @@ export function formatCredits(amount, precision = 1) {
 }
 
 export function formatFullPrice(amount, precision = 1) {
-  let formated = '';
+  if (!amount) {
+    return 0;
+  }
 
+  let formated = '';
   const quantity = amount.toString().split('.');
   const fraction = quantity[1];
 

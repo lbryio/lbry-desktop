@@ -40,6 +40,8 @@
     "postinstall": "electron-builder install-app-deps && node ./build/downloadDaemon.js"
   },
   "dependencies": {
+    "@reach/menu-button": "^0.1.18",
+    "@reach/tooltip": "^0.2.1",
     "electron-dl": "^1.11.0",
     "electron-log": "^2.2.12",
     "electron-updater": "^4.0.6",
@@ -119,7 +121,7 @@
     "jsmediatags": "^3.8.1",
     "json-loader": "^0.5.4",
     "lbry-format": "https://github.com/lbryio/lbry-format.git",
-    "lbry-redux": "lbryio/lbry-redux#291324d03f694c4fefa6967aa7be02d9245596a8",
+    "lbry-redux": "lbryio/lbry-redux#6a447d0542d23b9a37e266f5f85d3bde5297a451",
     "lbryinc": "lbryio/lbryinc#43d382d9b74d396a581a74d87e4c53105e04f845",
     "lint-staged": "^7.0.2",
     "localforage": "^1.7.1",

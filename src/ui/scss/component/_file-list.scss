@@ -1,8 +1,9 @@
 .file-list__header {
   display: flex;
   align-items: center;
-  min-height: 4rem;
+  height: 4.5rem;
   padding: var(--spacing-medium);
+  font-size: 1rem; // Ensures select & header text have same font-size
   color: $lbry-white;
   border-top-left-radius: var(--card-radius);
   border-top-right-radius: var(--card-radius);
@@ -14,6 +15,20 @@
   fieldset-section {
     margin-bottom: 0;
   }
+
+  // Normal link buttons are too dark on the black file list background
+  .button--link {
+    color: $lbry-teal-3;
+
+    &:hover {
+      color: $lbry-teal-1;
+    }
+  }
+}
+
+.file-list__header--small {
+  height: 3rem;
+  font-size: 1em;
 }
 
 .file-list__dropdown {
@@ -53,6 +68,7 @@
   display: flex;
   align-items: center;
   margin-left: auto;
+  font-size: 1.4em;
 
   & > * {
     margin-left: var(--spacing-small);
@@ -79,10 +95,6 @@
     width: var(--file-list-thumbnail-width);
     flex-shrink: 0;
     margin-right: var(--spacing-medium);
-  }
-
-  .media__thumb--profile {
-    width: 6rem;
   }
 }
 
@@ -134,4 +146,9 @@
 
 .file-list__item-tags {
   margin-left: 0;
+}
+
+.file-list__meta {
+  padding: var(--spacing-medium);
+  background-color: lighten($lbry-teal-5, 55%);
 }

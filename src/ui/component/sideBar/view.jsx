@@ -20,7 +20,9 @@ function SideBar(props: Props) {
   });
 
   const renderLink = linkProps => (
-    <Button {...linkProps} key={linkProps.label} className="navigation__link" activeClass="navigation__link--active" />
+    <li key={linkProps.label}>
+      <Button {...linkProps} className="navigation__link" activeClass="navigation__link--active" />
+    </li>
   );
 
   return (
@@ -41,31 +43,34 @@ function SideBar(props: Props) {
               ...buildLink(PAGES.LIBRARY, __('Library'), ICONS.DOWNLOAD),
             },
           ].map(renderLink)}
-        </ul>
 
-        <Button
-          navigate="/$/tags/edit"
-          iconRight={ICONS.SETTINGS}
-          className="navigation__link--title navigation__link"
-          activeClass="navigation__link--active"
-          label={__('Following')}
-        />
-        <ul className="tags--vertical navigation__links">
+          <li>
+            <Button
+              navigate="/$/tags/edit"
+              icon={ICONS.EDIT}
+              className="navigation__link"
+              activeClass="navigation__link--active"
+              label={__('Following')}
+            />
+          </li>
+        </ul>
+        <ul className="navigation__links tags--vertical">
           {followedTags.map(({ name }, key) => (
-            <li key={name}>
+            <li className="navigation__link--indented" key={name}>
               <Tag navigate={`/$/tags?t${name}`} name={name} />
             </li>
           ))}
         </ul>
         <ul className="navigation__links--small">
-          {subscriptions.map(({ uri, channelName }) => (
-            <Button
-              key={uri}
-              navigate={uri}
-              label={channelName}
-              className="navigation__link"
-              activeClass="navigation__link--active"
-            />
+          {subscriptions.map(({ uri, channelName }, index) => (
+            <li key={uri} className="navigation__link--indented">
+              <Button
+                navigate={uri}
+                label={channelName}
+                className="navigation__link"
+                activeClass="navigation__link--active"
+              />
+            </li>
           ))}
         </ul>
       </nav>

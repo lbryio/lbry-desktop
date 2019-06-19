@@ -176,15 +176,15 @@ fieldset-group {
 form {
   [type='button'],
   [type='submit'] {
-    &.button--primary {
+    &.button--inverse {
       &:not(:hover) {
-        background-color: $lbry-teal-5;
-        border-color: $lbry-teal-5;
+        background-color: transparent;
+        border-color: $lbry-black;
+        color: $lbry-black;
       }
 
       &:hover {
-        background-color: $lbry-teal-3;
-        border-color: $lbry-teal-3;
+        background-color: $lbry-teal-4;
       }
     }
   }
@@ -203,6 +203,7 @@ fieldset-section {
     // input-submit is connected to a button
     // The input height needs to match the button height to lineup correctly
     // Other inputs are fine since they are on their own and are used under different circumstances
+    input[type='email'],
     input[type='text'] {
       height: var(--button-height);
 
@@ -218,6 +219,7 @@ fieldset-section {
       border-bottom-left-radius: 0;
       border-top-right-radius: var(--input-border-radius);
       border-bottom-right-radius: var(--input-border-radius);
+      border-color: $lbry-black;
     }
   }
 
