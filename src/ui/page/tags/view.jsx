@@ -1,7 +1,7 @@
 // @flow
 import React from 'react';
 import Page from 'component/page';
-import FileListDiscover from 'component/fileListDiscover';
+import ClaimListDiscover from 'component/claimListDiscover';
 import Button from 'component/button';
 
 type Props = {
@@ -28,7 +28,7 @@ function TagsPage(props: Props) {
 
   return (
     <Page>
-      <FileListDiscover
+      <ClaimListDiscover
         tags={tags}
         meta={
           <Button

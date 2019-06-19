@@ -2,7 +2,7 @@
 import * as PAGES from 'constants/pages';
 import React, { useEffect } from 'react';
 import Page from 'component/page';
-import FileList from 'component/fileList';
+import ClaimList from 'component/claimList';
 import Button from 'component/button';
 
 type Props = {
@@ -62,7 +62,7 @@ export default function SubscriptionsPage(props: Props) {
   return (
     <Page>
       <div className="card">
-        <FileList
+        <ClaimList
           loading={loading}
           header={<h1>{viewingSuggestedSubs ? __('Discover New Channels') : __('Latest From Your Subscriptions')}</h1>}
           headerAltControls={

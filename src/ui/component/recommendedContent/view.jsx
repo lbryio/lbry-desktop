@@ -1,6 +1,6 @@
 // @flow
 import React from 'react';
-import FileList from 'component/fileList';
+import ClaimList from 'component/claimList';
 
 type Props = {
   uri: string,
@@ -52,8 +52,8 @@ export default class RecommendedContent extends React.PureComponent<Props> {
 
     return (
       <section className="card">
-        <FileList
-          slim
+        <ClaimList
+          type="small"
           loading={isSearching}
           uris={recommendedContent}
           header={<span>{__('Related')}</span>}

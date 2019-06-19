@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import { doClaimSearch, selectLastClaimSearchUris, selectFetchingClaimSearch, doToggleTagFollow } from 'lbry-redux';
-import FileListDiscover from './view';
+import ClaimListDiscover from './view';
 
 const select = state => ({
   uris: selectLastClaimSearchUris(state),
@@ -15,4 +15,4 @@ const perform = {
 export default connect(
   select,
   perform
-)(FileListDiscover);
+)(ClaimListDiscover);

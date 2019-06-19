@@ -3,7 +3,7 @@ import type { Node } from 'react';
 import React, { useEffect } from 'react';
 import moment from 'moment';
 import { FormField } from 'component/common/form';
-import FileList from 'component/fileList';
+import ClaimList from 'component/claimList';
 import Tag from 'component/tag';
 import usePersistedState from 'util/use-persisted-state';
 
@@ -32,7 +32,7 @@ type Props = {
   meta?: Node,
 };
 
-function FileListDiscover(props: Props) {
+function ClaimListDiscover(props: Props) {
   const { doClaimSearch, uris, tags, loading, personal, injectedItem, meta } = props;
   const [personalSort, setPersonalSort] = usePersistedState('file-list-trending:personalSort', SEARCH_SORT_YOU);
   const [typeSort, setTypeSort] = usePersistedState('file-list-trending:typeSort', TYPE_TRENDING);
@@ -125,7 +125,7 @@ function FileListDiscover(props: Props) {
 
   return (
     <div className="card">
-      <FileList
+      <ClaimList
         meta={meta}
         loading={loading}
         uris={uris}
@@ -137,4 +137,4 @@ function FileListDiscover(props: Props) {
   );
 }
 
-export default FileListDiscover;
+export default ClaimListDiscover;

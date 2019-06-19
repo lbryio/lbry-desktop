@@ -2,7 +2,7 @@
 import type { Node } from 'react';
 import React from 'react';
 import classnames from 'classnames';
-import FileListItem from 'component/fileListItem';
+import ClaimListItem from 'component/claimListItem';
 import Spinner from 'component/spinner';
 import { FormField } from 'component/common/form';
 import usePersistedState from 'util/use-persisted-state';
@@ -12,31 +12,19 @@ const SORT_OLD = 'old';
 
 type Props = {
   uris: Array<string>,
-  header: Node,
+  header: Node | boolean,
   headerAltControls: Node,
   injectedItem?: Node,
   loading: boolean,
-  noHeader?: boolean,
-  slim?: string,
+  type: string,
   empty?: string,
   meta?: Node,
   // If using the default header, this is a unique ID needed to persist the state of the filter setting
   persistedStorageKey?: string,
 };
 
-export default function FileList(props: Props) {
-  const {
-    uris,
-    header,
-    headerAltControls,
-    injectedItem,
-    loading,
-    persistedStorageKey,
-    noHeader,
-    slim,
-    empty,
-    meta,
-  } = props;
+export default function ClaimList(props: Props) {
+  const { uris, headerAltControls, injectedItem, loading, persistedStorageKey, empty, meta, type, header } = props;
   const [currentSort, setCurrentSort] = usePersistedState(persistedStorageKey, SORT_NEW);
   const sortedUris = uris && currentSort === SORT_OLD ? uris.reverse() : uris;
   const hasUris = uris && !!uris.length;
@@ -47,8 +35,8 @@ export default function FileList(props: Props) {
 
   return (
     <section className={classnames('file-list')}>
-      {!noHeader && (
-        <div className={classnames('file-list__header', { 'file-list__header--slim': slim })}>
+      {header !== false && (
+        <div className={classnames('file-list__header', { 'file-list__header--small': type === 'small' })}>
           {header || (
             <FormField
               className="file-list__dropdown"
@@ -70,7 +58,7 @@ export default function FileList(props: Props) {
         <ul>
           {sortedUris.map((uri, index) => (
             <React.Fragment key={uri}>
-              <FileListItem uri={uri} slim={slim} />
+              <ClaimListItem uri={uri} type={type} />
               {index === 4 && injectedItem && <li className="file-list__item--injected">{injectedItem}</li>}
             </React.Fragment>
           ))}

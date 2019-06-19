@@ -73,7 +73,7 @@
   padding-right: 0;
 
   span {
-    margin-left: var(--spacing-tiny);
+    margin-left: var(--spacing-small);
   }
 }
 
@@ -85,7 +85,8 @@
 
 .menu__title,
 .menu__link {
-  font-size: 1.2rem;
+  font-size: 1.3rem;
+  color: lighten($lbry-black, 20%);
 
   .icon {
     margin-right: var(--spacing-small);

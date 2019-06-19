@@ -22,6 +22,7 @@ class RewardSummary extends React.Component<Props> {
           {fetching && __('You have...')}
           {!fetching && hasRewards ? (
             <React.Fragment>
+              {/* @i18nfixme */}
               {__('You have')}
               &nbsp;
               <CreditAmount inheritStyle amount={unclaimedRewardAmount} precision={8} />

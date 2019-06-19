@@ -10,7 +10,7 @@ import UriIndicator from 'component/uriIndicator';
 import TruncatedText from 'component/common/truncated-text';
 import DateTime from 'component/dateTime';
 import FileProperties from 'component/fileProperties';
-import FileTags from 'component/fileTags';
+import ClaimTags from 'component/claimTags';
 import SubscribeButton from 'component/subscribeButton';
 import ChannelThumbnail from 'component/channelThumbnail';
 
@@ -27,12 +27,11 @@ type Props = {
   thumbnail: string,
   title: string,
   nsfw: boolean,
-  large: boolean,
   placeholder: boolean,
-  slim: boolean,
+  type: string,
 };
 
-function FileListItem(props: Props) {
+function ClaimListItem(props: Props) {
   const {
     obscureNsfw,
     claimIsMine,
@@ -45,9 +44,8 @@ function FileListItem(props: Props) {
     nsfw,
     resolveUri,
     claim,
-    large,
     placeholder,
-    slim,
+    type,
   } = props;
 
   const haventFetched = claim === undefined;
@@ -98,7 +96,7 @@ function FileListItem(props: Props) {
       onClick={onClick}
       onContextMenu={handleContextMenu}
       className={classnames('file-list__item', {
-        'file-list__item--large': large,
+        'file-list__item--large': type === 'large',
       })}
     >
       {isChannel ? <ChannelThumbnail uri={uri} /> : <CardMedia thumbnail={thumbnail} />}
@@ -107,7 +105,7 @@ function FileListItem(props: Props) {
           <div className="file-list__item-title">
             <TruncatedText text={title || (claim && claim.name)} lines={1} />
           </div>
-          {!slim && (
+          {type !== 'small' && (
             <div>
               {isChannel && <SubscribeButton uri={uri.startsWith('lbry://') ? uri : `lbry://${uri}`} />}
               {!isChannel && <FileProperties uri={uri} />}
@@ -122,11 +120,11 @@ function FileListItem(props: Props) {
             <div>{isChannel ? `${claimsInChannel} ${__('publishes')}` : <DateTime timeAgo uri={uri} />}</div>
           </div>
 
-          <FileTags uri={uri} slim={slim} />
+          <ClaimTags uri={uri} type={type} />
         </div>
       </div>
     </li>
   );
 }
 
-export default withRouter(FileListItem);
+export default withRouter(ClaimListItem);

@@ -19,7 +19,7 @@ import FileDownloadLink from 'component/fileDownloadLink';
 import classnames from 'classnames';
 import getMediaType from 'util/get-media-type';
 import RecommendedContent from 'component/recommendedContent';
-import FileTags from 'component/fileTags';
+import ClaimTags from 'component/claimTags';
 
 type Props = {
   claim: StreamClaim,
@@ -281,7 +281,9 @@ class FilePage extends React.Component<Props> {
           </div>
 
           <div className="media__info--large">
-            <FileTags uri={uri} large />
+            <ClaimTags uri={uri} type="large" />
+          </div>
+          <div className="media__info--large">
             <FileDetails uri={uri} />
           </div>
         </div>

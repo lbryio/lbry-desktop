@@ -10,7 +10,7 @@ import {
   makeSelectClaimIsNsfw,
 } from 'lbry-redux';
 import { selectShowNsfw } from 'redux/selectors/settings';
-import FileListItem from './view';
+import ClaimListItem from './view';
 
 const select = (state, props) => ({
   pending: makeSelectClaimIsPending(props.uri)(state),
@@ -30,4 +30,4 @@ const perform = dispatch => ({
 export default connect(
   select,
   perform
-)(FileListItem);
+)(ClaimListItem);

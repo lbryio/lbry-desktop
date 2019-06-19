@@ -283,5 +283,8 @@
   "Open file": "Otwórz plik",
   "NEW": "NEW",
   "Failed to load settings.": "Failed to load settings.",
-  "Multi-language support is brand new and incomplete. Switching your language may have unintended consequences.": "Multi-language support is brand new and incomplete. Switching your language may have unintended consequences."
+  "Multi-language support is brand new and incomplete. Switching your language may have unintended consequences.": "Multi-language support is brand new and incomplete. Switching your language may have unintended consequences.",
+  "Wallet": "Wallet",
+  "Home": "Home",
+  "Following": "Following"
 }

@@ -10,13 +10,12 @@ const LARGE_TAGS = 10;
 type Props = {
   tags: Array<string>,
   followedTags: Array<Tag>,
-  large: boolean,
-  slim: boolean,
+  type: string,
 };
 
-export default function FileTags(props: Props) {
-  const { tags, followedTags, large, slim } = props;
-  const numberOfTags = slim ? SLIM_TAGS : large ? LARGE_TAGS : NORMAL_TAGS;
+export default function ClaimTags(props: Props) {
+  const { tags, followedTags, type } = props;
+  const numberOfTags = type === 'small' ? SLIM_TAGS : type === 'large' ? LARGE_TAGS : NORMAL_TAGS;
 
   let tagsToDisplay = [];
   for (var i = 0; tagsToDisplay.length < numberOfTags - 2; i++) {
@@ -44,7 +43,7 @@ export default function FileTags(props: Props) {
   }
 
   return (
-    <div className={classnames('file-properties', { 'file-properties--large': large })}>
+    <div className={classnames('file-properties', { 'file-properties--large': type === 'large' })}>
       {tagsToDisplay.map(tag => (
         <Button key={tag} title={tag} navigate={`$/tags?t=${tag}`} className="tag" label={tag} />
       ))}

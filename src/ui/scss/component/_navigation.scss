@@ -8,7 +8,6 @@
 .navigation {
   width: var(--side-nav-width);
   font-size: 1.4rem;
-  position: fixed;
 
   @media (max-width: 600px) {
     display: none;
@@ -35,6 +34,10 @@
   text-overflow: ellipsis;
   color: lighten($lbry-black, 20%);
   margin-top: var(--spacing-miniscule);
+
+  .icon {
+    margin-right: var(--spacing-small);
+  }
 
   &:hover {
     color: $lbry-teal-4;
