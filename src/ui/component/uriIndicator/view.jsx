@@ -17,18 +17,20 @@ type Props = {
 
 class UriIndicator extends React.PureComponent<Props> {
   componentDidMount() {
-    const { isResolvingUri, resolveUri, uri, claim } = this.props;
-    if (!isResolvingUri && !claim && uri) {
-      resolveUri(uri);
-    }
+    this.resolve(this.props);
   }
 
-  componentDidUpdate(prevProps: Props) {
-    const { isResolvingUri, resolveUri, claim, uri } = this.props;
-    if (!isResolvingUri && uri && !claim) {
+  componentDidUpdate() {
+    this.resolve(this.props);
+  }
+
+  resolve = (props: Props) => {
+    const { isResolvingUri, resolveUri, claim, uri } = props;
+
+    if (!isResolvingUri && claim === undefined && uri) {
       resolveUri(uri);
     }
-  }
+  };
 
   render() {
     const { link, isResolvingUri, claim } = this.props;
@@ -37,23 +39,31 @@ class UriIndicator extends React.PureComponent<Props> {
       return <span className="empty">{isResolvingUri ? 'Validating...' : 'Unused'}</span>;
     }
 
-    if (!claim.signing_channel) {
+    const isChannelClaim = claim.value_type === 'channel';
+
+    if (!claim.signing_channel && !isChannelClaim) {
       return <span className="channel-name">Anonymous</span>;
     }
 
-    const { name, claim_id: claimId } = claim.signing_channel;
-    let claimLink;
-    if (claim.is_channel_signature_valid) {
-      claimLink = link ? buildURI({ channelName: name, claimId }) : false;
+    const channelClaim = isChannelClaim ? claim : claim.signing_channel;
+
+    if (channelClaim) {
+      const { name, claim_id: claimId } = channelClaim;
+      let channelLink;
+      if (claim.is_channel_signature_valid) {
+        channelLink = link ? buildURI({ channelName: name, claimId }) : false;
+      }
+
+      const inner = <span className="channel-name">{name}</span>;
+
+      if (!channelLink) {
+        return inner;
+      }
+
+      return <ClaimLink uri={channelLink}>{inner}</ClaimLink>;
+    } else {
+      return null;
     }
-
-    const inner = <span className="channel-name">{name}</span>;
-
-    if (!claimLink) {
-      return inner;
-    }
-
-    return <ClaimLink uri={claimLink}>{inner}</ClaimLink>;
   }
 }
 

@@ -154,7 +154,28 @@
 // Channel-tooltip
 
 .channel-tooltip {
+  color: $lbry-black;
+  background-color: $lbry-white;
   width: 20rem;
+  border: none;
+  border-radius: var(--card-radius);
+  z-index: 2;
+
+  html[data-mode='dark'] & {
+    color: mix($lbry-white, $lbry-gray-3, 50%);
+    background-color: mix($lbry-black, $lbry-gray-3, 90%);
+  }
+
+  box-shadow: 0px 2px 10px -2px black;
+}
+
+.channel-tooltip__content {
+  width: 100%;
+  margin: 0;
+  display: block;
+  word-break: break-all;
+  word-wrap: break-word;
+  white-space: pre-wrap;
 
   .channel-thumbnail {
     left: 0;
@@ -169,6 +190,39 @@
   }
 }
 
+.channel-tooltip__arrow {
+  width: 0;
+  height: 0;
+  border-left: 10px solid transparent;
+  border-right: 10px solid transparent;
+
+  html[data-mode='dark'] & {
+    z-index: 3;
+  }
+}
+
+.channel-tooltip__arrow--top {
+  border-top: 10px solid $lbry-gray-5;
+  border-bottom: 0;
+
+  html[data-mode='dark'] & {
+    z-index: 3;
+    border-top: 10px solid mix($lbry-black, $lbry-gray-3, 90%);
+    border-bottom: 0;
+  }
+}
+
+.channel-tooltip__arrow--bottom {
+  border-top: 0;
+  border-bottom: 10px solid $lbry-gray-5;
+
+  html[data-mode='dark'] & {
+    z-index: 3;
+    border-top: 0;
+    border-bottom: 10px solid mix($lbry-black, $lbry-gray-3, 90%);
+  }
+}
+
 .channel-tooltip__profile {
   display: flex;
   align-items: center;
@@ -179,6 +233,7 @@
   padding: 1rem;
   visibility: visible;
   border-top: 1px solid rgba($lbry-gray-4, 0.4);
+  width: 100%;
 
   html[data-mode='dark'] & {
     border-top: 1px solid rgba($lbry-black, 0.8);
@@ -186,16 +241,16 @@
 }
 
 .channel-tooltip__info {
-  align-items: center;
-  visibility: visible;
 }
 
 .channel-tooltip__title {
   font-weight: bold;
   font-size: 1.4rem;
   line-height: 1.5em;
+  visibility: visible;
 }
 
 .channel-tooltip__url {
   font-size: 1rem;
+  visibility: visible;
 }

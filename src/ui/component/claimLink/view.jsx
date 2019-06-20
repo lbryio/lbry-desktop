@@ -1,10 +1,9 @@
 // @flow
-import uniqid from 'uniqid';
 import * as React from 'react';
-import { parseURI } from 'lbry-redux';
 import Button from 'component/button';
 import PreviewLink from 'component/previewLink';
-import ChannelTooltip from 'component/common/channel-tooltip';
+import ChannelTooltip from 'component/channelTooltip';
+import { parseURI } from 'lbry-redux';
 
 type Props = {
   uri: string,
@@ -23,13 +22,7 @@ type Props = {
   }>,
 };
 
-type State = {
-  isTooltipActive: boolean,
-};
-
-class ClaimLink extends React.Component<Props, State> {
-  parentId: string;
-
+class ClaimLink extends React.Component<Props> {
   static defaultProps = {
     href: null,
     title: null,
@@ -37,24 +30,6 @@ class ClaimLink extends React.Component<Props, State> {
     autoEmbed: false,
     description: null,
     isResolvingUri: false,
-  };
-
-  constructor(props: Props) {
-    super(props);
-    this.state = { isTooltipActive: false };
-
-    // The tooltip component don't work very well with refs,
-    // so we need to use an unique id for each link:
-    // (this: any).buttonRef = React.createRef();
-    (this: any).parentId = uniqid.time('claim-link-');
-  }
-
-  showTooltip = () => {
-    this.setState({ isTooltipActive: true });
-  };
-
-  hideTooltip = () => {
-    this.setState({ isTooltipActive: false });
   };
 
   isClaimBlackListed() {
@@ -97,38 +72,40 @@ class ClaimLink extends React.Component<Props, State> {
       return <span>{children}</span>;
     }
 
-    const { isChannel, path } = parseURI(uri);
     const { claim_id: claimId, name: claimName } = claim;
+    const { isChannel, path } = parseURI(uri);
+    const isChannelClaim = isChannel && !path;
     const showPreview = autoEmbed === true && !isUnresolved;
-    const renderChannelTooltip = isChannel && !path;
+
+    const link = (
+      <Button
+        label={children}
+        title={!isChannelClaim ? title || claimName : undefined}
+        button={!isChannel ? 'link' : undefined}
+        navigate={uri}
+        className="button--uri-indicator"
+      />
+    );
+
+    const wrappedLink = (
+      <ChannelTooltip
+        uri={uri}
+        title={title}
+        claimId={claimId}
+        channelName={claimName}
+        ariaLabel={title || claimName}
+        currentTheme={currentTheme}
+        thumbnail={thumbnail}
+        description={description}
+      >
+        <span>{link}</span>
+      </ChannelTooltip>
+    );
 
     return (
       <React.Fragment>
-        <Button
-          id={this.parentId}
-          label={children}
-          title={title || claimName}
-          button={'link'}
-          navigate={uri}
-          className="button--uri-indicator"
-          onMouseEnter={this.showTooltip}
-          onMouseLeave={this.hideTooltip}
-        />
+        {isChannelClaim ? wrappedLink : link}
         {showPreview && <PreviewLink uri={uri} />}
-        {renderChannelTooltip && (
-          <ChannelTooltip
-            uri={uri}
-            title={title}
-            claimId={claimId}
-            channelName={claimName}
-            currentTheme={currentTheme}
-            thumbnail={thumbnail}
-            description={description}
-            active={this.state.isTooltipActive}
-            parent={`#${this.parentId}`}
-            group={'channel-tooltip'}
-          />
-        )}
       </React.Fragment>
     );
   }
