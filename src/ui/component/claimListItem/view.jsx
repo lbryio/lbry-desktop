@@ -29,6 +29,10 @@ type Props = {
   nsfw: boolean,
   placeholder: boolean,
   type: string,
+  blackListedOutpoints: Array<{
+    txid: string,
+    nout: number,
+  }>,
 };
 
 function ClaimListItem(props: Props) {
@@ -46,13 +50,23 @@ function ClaimListItem(props: Props) {
     claim,
     placeholder,
     type,
+    blackListedOutpoints,
   } = props;
-
   const haventFetched = claim === undefined;
   const abandoned = !isResolvingUri && !claim;
-  const shouldHide = abandoned || (!claimIsMine && obscureNsfw && nsfw);
   const isChannel = claim && claim.value_type === 'channel';
   const claimsInChannel = (claim && claim.meta.claims_in_channel) || 0;
+  let shouldHide = abandoned || (!claimIsMine && obscureNsfw && nsfw);
+
+  // This will be replaced once blocking is done at the wallet server level
+  if (claim && !shouldHide) {
+    for (let i = 0; i < blackListedOutpoints.length; i += 1) {
+      const outpoint = blackListedOutpoints[i];
+      if (outpoint.txid === claim.txid && outpoint.nout === claim.nout) {
+        shouldHide = true;
+      }
+    }
+  }
 
   function handleContextMenu(e) {
     e.preventDefault();
