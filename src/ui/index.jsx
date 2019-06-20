@@ -13,7 +13,7 @@ import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import { doConditionalAuthNavigate, doDaemonReady, doAutoUpdate, doOpenModal, doHideModal } from 'redux/actions/app';
 import { Lbry, doToast, isURIValid, setSearchApi } from 'lbry-redux';
-import { doDownloadLanguages, doUpdateIsNightAsync } from 'redux/actions/settings';
+import { doInitLanguage, doUpdateIsNightAsync } from 'redux/actions/settings';
 import { doAuthenticate, Lbryio, rewards, doBlackListedOutpointsSubscribe } from 'lbryinc';
 import { store, history } from 'store';
 import pjson from 'package.json';
@@ -29,7 +29,7 @@ import { formatLbryUriForWeb } from 'util/uri';
 import 'scss/all.scss';
 
 const APPPAGEURL = 'lbry://?';
-
+const COOKIE_EXPIRE_TIME = 60 * 60 * 24 * 365; // 1 year
 // @if TARGET='app'
 const { autoUpdater } = remote.require('electron-updater');
 autoUpdater.logger = remote.require('electron-log');
@@ -73,8 +73,11 @@ Lbryio.setOverride(
 
         const newAuthToken = response.auth_token;
         authToken = newAuthToken;
+
         // @if TARGET='web'
-        document.cookie = cookie.serialize('auth_token', authToken);
+        document.cookie = cookie.serialize('auth_token', authToken, {
+          maxAge: COOKIE_EXPIRE_TIME,
+        });
         // @endif
         // @if TARGET='app'
         ipcRenderer.send('set-auth-token', authToken);
@@ -157,6 +160,13 @@ ipcRenderer.on('window-is-focused', () => {
 ipcRenderer.on('devtools-is-opened', () => {
   doLogWarningConsoleMessage();
 });
+
+// Force exit mode for html5 fullscreen api
+// See: https://github.com/electron/electron/issues/18188
+remote.getCurrentWindow().on('leave-full-screen', event => {
+  document.webkitExitFullscreen();
+});
+
 // @endif
 
 document.addEventListener('dragover', event => {
@@ -204,7 +214,7 @@ const init = () => {
   app.store.dispatch(doUpdateIsNightAsync());
   // @endif
 
-  app.store.dispatch(doDownloadLanguages());
+  app.store.dispatch(doInitLanguage());
   app.store.dispatch(doBlackListedOutpointsSubscribe());
 
   function onDaemonReady() {

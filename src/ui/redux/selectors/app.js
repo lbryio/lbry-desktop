@@ -1,9 +1,4 @@
-import * as SETTINGS from 'constants/settings';
-import * as PAGES from 'constants/pages';
-import * as ICONS from 'constants/icons';
 import { createSelector } from 'reselect';
-import { selectCurrentPage, selectHistoryStack } from 'lbry-redux';
-import { makeSelectClientSetting } from 'redux/selectors/settings';
 
 export const selectState = state => state.app || {};
 
@@ -100,11 +95,6 @@ export const selectDaemonVersionMatched = createSelector(
   state => state.daemonVersionMatched
 );
 
-export const selectCurrentLanguage = createSelector(
-  selectState,
-  () => i18n.getLocale() || 'en'
-);
-
 export const selectVolume = createSelector(
   selectState,
   state => state.volume
@@ -129,20 +119,7 @@ export const selectModal = createSelector(
   }
 );
 
-export const selectEnhancedLayout = createSelector(
-  selectState,
-  state => state.enhancedLayout
-);
-
 export const selectSearchOptionsExpanded = createSelector(
   selectState,
   state => state.searchOptionsExpanded
-);
-
-export const selectShouldShowInviteGuide = createSelector(
-  makeSelectClientSetting(SETTINGS.FIRST_RUN_COMPLETED),
-  makeSelectClientSetting(SETTINGS.INVITE_ACKNOWLEDGED),
-  (firstRunCompleted, inviteAcknowledged) => {
-    return firstRunCompleted ? !inviteAcknowledged : false;
-  }
 );

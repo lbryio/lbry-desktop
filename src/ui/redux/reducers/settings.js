@@ -19,11 +19,9 @@ const defaultState = {
     [SETTINGS.SHOW_UNAVAILABLE]: getLocalStorageSetting(SETTINGS.SHOW_UNAVAILABLE, true),
     [SETTINGS.NEW_USER_ACKNOWLEDGED]: getLocalStorageSetting(SETTINGS.NEW_USER_ACKNOWLEDGED, false),
     [SETTINGS.EMAIL_COLLECTION_ACKNOWLEDGED]: getLocalStorageSetting(SETTINGS.EMAIL_COLLECTION_ACKNOWLEDGED, false),
-    [SETTINGS.INVITE_ACKNOWLEDGED]: getLocalStorageSetting(SETTINGS.INVITE_ACKNOWLEDGED, false),
-    [SETTINGS.FIRST_RUN_COMPLETED]: getLocalStorageSetting(SETTINGS.FIRST_RUN_COMPLETED, false),
     [SETTINGS.CREDIT_REQUIRED_ACKNOWLEDGED]: false, // this needs to be re-acknowledged every run
     [SETTINGS.LANGUAGE]: getLocalStorageSetting(SETTINGS.LANGUAGE, 'en'),
-    [SETTINGS.THEME]: getLocalStorageSetting(SETTINGS.THEME, 'dark'),
+    [SETTINGS.THEME]: getLocalStorageSetting(SETTINGS.THEME, 'light'),
     [SETTINGS.THEMES]: getLocalStorageSetting(SETTINGS.THEMES, []),
     [SETTINGS.AUTOMATIC_DARK_MODE_ENABLED]: getLocalStorageSetting(SETTINGS.AUTOMATIC_DARK_MODE_ENABLED, false),
     [SETTINGS.AUTOPLAY]: getLocalStorageSetting(SETTINGS.AUTOPLAY, false),
@@ -32,7 +30,7 @@ const defaultState = {
     [SETTINGS.OS_NOTIFICATIONS_ENABLED]: Boolean(getLocalStorageSetting(SETTINGS.OS_NOTIFICATIONS_ENABLED, true)),
   },
   isNight: false,
-  languages: {},
+  languages: { en: 'English', pl: 'Polish' }, // temporarily hard code these so we can advance i18n testing
   daemonSettings: {},
 };
 

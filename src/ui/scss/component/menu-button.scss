@@ -1,0 +1,97 @@
+// Extends reach-ui menu button base stylesheet
+/* Used to detect in JavaScript if apps have loaded styles or not. */
+:root {
+  --reach-menu-button: 1;
+}
+
+[data-reach-menu] {
+  font-family: sans-serif;
+  display: block;
+  position: absolute;
+}
+
+[data-reach-menu-list] {
+  display: block;
+  white-space: nowrap;
+  outline: none;
+  font-size: 1.2rem;
+  background-color: $lbry-white;
+  box-shadow: 0px 10px 30px 2px $lbry-gray-2;
+  border: 1px solid $lbry-gray-1;
+  border-top: none;
+
+  [data-mode='dark'] & {
+    background-color: lighten($lbry-black, 10%);
+    color: $lbry-white;
+    box-shadow: 0 10px 30px 2px $lbry-black;
+    border: 1px solid $lbry-gray-5;
+    border-top: none;
+  }
+}
+
+[data-reach-menu-item] {
+  display: block;
+}
+
+[data-reach-menu-item] {
+  cursor: pointer;
+  display: block;
+  color: inherit;
+  font: inherit;
+  text-decoration: initial;
+}
+
+[data-reach-menu-item][data-selected] {
+  background: lighten($lbry-teal-5, 55%);
+  color: darken($lbry-teal-5, 15%);
+  outline: none;
+
+  &:active {
+    background-color: $lbry-teal-4;
+    color: $lbry-white;
+    .icon {
+      stroke: $lbry-white;
+    }
+  }
+
+  [data-mode='dark'] & {
+    background-color: $lbry-teal-5;
+    color: $lbry-white;
+
+    &:hover,
+    &:focus {
+      .icon {
+        stroke: $lbry-white;
+      }
+    }
+  }
+}
+
+.menu__title {
+  padding: var(--spacing-large) 0;
+  padding-left: var(--spacing-medium);
+  padding-right: 0;
+
+  span {
+    margin-left: var(--spacing-small);
+  }
+}
+
+.menu__link {
+  display: flex;
+  align-items: center;
+  padding: var(--spacing-medium);
+}
+
+.menu__title,
+.menu__link {
+  font-size: 1.3rem;
+  color: lighten($lbry-black, 20%);
+
+  .icon {
+    margin-right: var(--spacing-small);
+    margin-bottom: 0.2rem;
+
+    stroke: $lbry-gray-5;
+  }
+}

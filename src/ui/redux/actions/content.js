@@ -21,7 +21,6 @@ import {
   selectBalance,
   makeSelectChannelForClaimUri,
   parseURI,
-  creditsToString,
   doError,
 } from 'lbry-redux';
 import { makeSelectCostInfoForUri } from 'lbryinc';
@@ -293,13 +292,13 @@ export function doFetchClaimsByChannel(uri: string, page: number = 1, pageSize: 
       data: { uri, page },
     });
 
-    const { claimName, claimId } = parseURI(uri);
-    let channelName = claimName;
-    if (claimId) {
-      channelName += `#${claimId}`;
-    }
-
-    Lbry.claim_search({ channel_name: channelName, page, page_size: pageSize }).then(result => {
+    Lbry.claim_search({
+      channel: uri,
+      page,
+      page_size: pageSize,
+      valid_channel_signatures: true,
+      order_by: ['release_time'],
+    }).then(result => {
       const { items: claimsInChannel, page: returnedPage } = result;
 
       if (claimsInChannel && claimsInChannel.length) {

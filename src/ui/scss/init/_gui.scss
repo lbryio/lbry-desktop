@@ -25,6 +25,7 @@ body {
   overflow: hidden;
 
   html[data-mode='dark'] & {
+    background-color: $lbry-black;
     color: mix($lbry-white, $lbry-gray-3, 50%);
   }
 }
@@ -53,10 +54,10 @@ code {
   justify-content: space-between;
 
   > * {
-    flex-basis: 0;
     flex-grow: 1;
+    flex-basis: 0;
 
-    &:not(:last-of-type) {
+    &:first-child {
       margin-right: 1.5rem;
     }
   }
@@ -129,11 +130,11 @@ code {
 .help {
   font-size: 1rem;
   background-color: rgba($lbry-blue-1, 0.1);
-  color: $lbry-gray-5;
+  color: darken($lbry-gray-5, 15%);
   display: block;
   padding: 1rem;
-  margin-top: var(--spacing-vertical-medium);
-  margin-bottom: var(--spacing-vertical-medium);
+  margin-top: var(--spacing-medium);
+  margin-bottom: var(--spacing-medium);
   border-radius: 5px;
 
   html[data-mode='dark'] & {

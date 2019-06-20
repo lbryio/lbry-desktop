@@ -1,51 +1,16 @@
+.navigation-wrapper {
+  width: var(--side-nav-width);
+  left: calc(100% - var(--side-nav-width));
+  height: 100%;
+  position: absolute;
+}
+
 .navigation {
-  position: fixed;
-  top: var(--header-height);
-  height: calc(100vh - var(--header-height));
-  display: flex;
-  flex-direction: column;
-  overflow: visible;
-  background-color: $lbry-white;
-  border-right: 1px solid rgba($lbry-gray-1, 0.9);
-  padding-top: var(--spacing-vertical-large);
-  padding-right: var(--spacing-vertical-small);
-  font-size: 1.2rem;
-  z-index: 2;
-
-  html[data-mode='dark'] & {
-    background-color: $lbry-black;
-    border-right: 1px solid $lbry-black;
-  }
-
-  // The navigation does not need to be visible
-  // on smaller screen widths
-
-  @media (min-width: 601px) {
-    width: var(--side-nav-width);
-  }
+  width: var(--side-nav-width);
+  font-size: 1.4rem;
 
   @media (max-width: 600px) {
     display: none;
-  }
-
-  &::before {
-    top: 0;
-    left: 0;
-    bottom: 0;
-    right: 0;
-
-    // TODO: Make this gradient "to bottom" on mobile view
-    background-image: linear-gradient(to right, transparent, rgba(mix($lbry-blue-3, $lbry-gray-4, 15%), 0.2) 100%);
-    content: '';
-    position: absolute;
-
-    html[data-mode='dark'] & {
-      background-image: linear-gradient(
-        to bottom right,
-        transparent,
-        rgba(mix($lbry-blue-3, $lbry-gray-4, 15%), 0.2) 100%
-      );
-    }
   }
 }
 
@@ -53,74 +18,68 @@
   position: relative;
 }
 
-.navigation__links--bottom {
-  margin-top: auto;
-  margin-bottom: var(--spacing-vertical-large);
+.navigation__links--small {
+  @extend .navigation__links;
+  font-size: 1.2rem;
+  margin-top: var(--spacing-small);
 }
 
 .navigation__link {
   display: block;
-  line-height: 1.75;
-  padding-left: var(--spacing-vertical-large);
   position: relative;
   text-align: left;
   transition: color 0.2s;
+  overflow: hidden;
   white-space: nowrap;
-  width: 100%;
-  color: $lbry-gray-5;
+  text-overflow: ellipsis;
+  color: lighten($lbry-black, 20%);
+  margin-top: var(--spacing-miniscule);
 
-  &::before {
-    top: 0;
-    left: 0;
-    width: 0;
-    background-color: $lbry-teal-3;
-    content: '';
-    height: 100%;
-    position: absolute;
-    transition: width 0.2s;
+  .icon {
+    margin-right: var(--spacing-small);
   }
 
-  &:not(.navigation__link--title):hover,
-  &.navigation__link--active {
-    color: $lbry-black;
+  &:hover {
+    color: $lbry-teal-4;
+    .icon {
+      color: $lbry-teal-4;
+    }
+  }
 
-    html[data-mode='dark'] & {
+  &.navigation__link--active {
+    color: $lbry-teal-5;
+    .icon {
+      color: $lbry-teal-4;
+    }
+  }
+
+  [data-mode='dark'] & {
+    color: $lbry-gray-1;
+    svg {
       color: $lbry-gray-1;
     }
 
-    &::before {
-      width: var(--tab-indicator-size);
-    }
-  }
-
-  &.navigation__link--guide:not(:hover) {
-    color: rgba($lbry-black, 0.75);
-
-    html[data-mode='dark'] & {
-      color: rgba($lbry-white, 0.75);
-    }
-
-    &::before {
-      animation: bounce 1.75s infinite;
+    &:hover,
+    &.navigation__link--active {
+      color: $lbry-teal-4;
+      .icon {
+        color: $lbry-teal-4;
+      }
     }
   }
 }
 
 .navigation__link--title {
-  margin-bottom: var(--spacing-vertical-small);
-  padding-top: var(--spacing-vertical-large);
-
+  margin-top: var(--spacing-large);
   color: $lbry-gray-5;
-  cursor: default;
   font-size: 1.15rem;
   font-weight: 700;
   letter-spacing: 0.1rem;
-  text-transform: uppercase;
 }
 
 .navigation__link-items {
   font-size: 1.15rem;
-  padding-left: var(--spacing-vertical-large);
+  padding-left: var(--spacing-large);
 }
 
 .navigation__link-item {
@@ -156,4 +115,8 @@
       }
     }
   }
+}
+
+.navigation__link--indented {
+  padding-left: 2rem;
 }

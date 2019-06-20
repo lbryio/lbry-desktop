@@ -19,6 +19,7 @@ import FileDownloadLink from 'component/fileDownloadLink';
 import classnames from 'classnames';
 import getMediaType from 'util/get-media-type';
 import RecommendedContent from 'component/recommendedContent';
+import ClaimTags from 'component/claimTags';
 
 type Props = {
   claim: StreamClaim,
@@ -36,7 +37,7 @@ type Props = {
   isSubscribed: boolean,
   channelUri: string,
   viewCount: number,
-  prepareEdit: ({}, string) => void,
+  prepareEdit: ({}, string, {}) => void,
   openModal: (id: string, { uri: string }) => void,
   markSubscriptionRead: (string, string) => void,
   fetchViewCount: string => void,
@@ -62,16 +63,23 @@ class FilePage extends React.Component<Props> {
     'application',
   ];
 
+  constructor(props: Props) {
+    super(props);
+    (this: any).viewerContainer = React.createRef();
+  }
+
+  viewerContainer: { current: React.ElementRef<any> };
+
   componentDidMount() {
     const {
       uri,
+      claim,
       fetchFileInfo,
       fetchCostInfo,
       setViewed,
       isSubscribed,
       claimIsMine,
       fetchViewCount,
-      claim,
     } = this.props;
 
     if (isSubscribed) {
@@ -92,21 +100,8 @@ class FilePage extends React.Component<Props> {
     setViewed(uri);
   }
 
-  componentWillReceiveProps(nextProps: Props) {
-    const { fetchFileInfo, uri, setViewed } = this.props;
-    // @if TARGET='app'
-    if (nextProps.fileInfo === undefined) {
-      fetchFileInfo(uri);
-    }
-    // @endif
-
-    if (uri !== nextProps.uri) {
-      setViewed(nextProps.uri);
-    }
-  }
-
   componentDidUpdate(prevProps: Props) {
-    const { isSubscribed, claim, uri, fetchViewCount, claimIsMine } = this.props;
+    const { isSubscribed, claim, uri, fileInfo, setViewed, fetchViewCount, claimIsMine, fetchFileInfo } = this.props;
 
     if (!prevProps.isSubscribed && isSubscribed) {
       this.removeFromSubscriptionNotifications();
@@ -115,6 +110,16 @@ class FilePage extends React.Component<Props> {
     if (prevProps.uri !== uri && claimIsMine) {
       fetchViewCount(claim.claim_id);
     }
+
+    if (prevProps.uri !== uri) {
+      setViewed(uri);
+    }
+
+    // @if TARGET='app'
+    if (fileInfo === undefined) {
+      fetchFileInfo(uri);
+    }
+    // @endif
   }
 
   removeFromSubscriptionNotifications() {
@@ -146,13 +151,16 @@ class FilePage extends React.Component<Props> {
     } = this.props;
 
     // File info
-    const { channel_name: channelName } = claim;
+    const { signing_channel: signingChannel } = claim;
+    const channelName = signingChannel && signingChannel.name;
     const { PLAYABLE_MEDIA_TYPES, PREVIEW_MEDIA_TYPES } = FilePage;
     const isRewardContent = (rewardedContentClaimIds || []).includes(claim.claim_id);
     const shouldObscureThumbnail = obscureNsfw && nsfw;
     const fileName = fileInfo ? fileInfo.file_name : null;
     const mediaType = getMediaType(contentType, fileName);
-    const showFile = PLAYABLE_MEDIA_TYPES.includes(mediaType) || PREVIEW_MEDIA_TYPES.includes(mediaType);
+    const isPreviewType = PREVIEW_MEDIA_TYPES.includes(mediaType);
+    const isPlayableType = PLAYABLE_MEDIA_TYPES.includes(mediaType);
+    const showFile = isPlayableType || isPreviewType;
 
     const speechShareable =
       costInfo && costInfo.cost === 0 && contentType && ['video', 'image'].includes(contentType.split('/')[0]);
@@ -175,23 +183,12 @@ class FilePage extends React.Component<Props> {
     const insufficientCredits = !claimIsMine && costInfo && costInfo.cost > balance;
 
     return (
-      <Page notContained className="main--file-page">
-        <div className="grid-area--content">
-          <Button
-            className="media__uri"
-            button="alt"
-            label={uri}
-            onClick={() => {
-              clipboard.writeText(uri);
-              showToast({
-                message: __('Text copied'),
-              });
-            }}
-          />
+      <Page className="main--file-page">
+        <div className="grid-area--content card">
           {!fileInfo && insufficientCredits && (
             <div className="media__insufficient-credits help--warning">
               {__(
-                'The publisher has chosen to charge LBC to view this content. Your balance is currently to low to view it.'
+                'The publisher has chosen to charge LBC to view this content. Your balance is currently too low to view it.'
               )}{' '}
               {__('Checkout')} <Button button="link" navigate="/$/rewards" label={__('the rewards page')} />{' '}
               {__('or send more LBC to your wallet.')}
@@ -199,10 +196,12 @@ class FilePage extends React.Component<Props> {
           )}
           {showFile && (
             <FileViewer
-              insufficientCredits={insufficientCredits}
-              className="content__embedded"
               uri={uri}
+              className="content__embedded"
               mediaType={mediaType}
+              isPlayableType={isPlayableType}
+              viewerContainer={this.viewerContainer}
+              insufficientCredits={insufficientCredits}
             />
           )}
           {!showFile &&
@@ -221,22 +220,6 @@ class FilePage extends React.Component<Props> {
 
         <div className="grid-area--info media__content media__content--large">
           <h1 className="media__title media__title--large">{title}</h1>
-
-          <div className="media__properties media__properties--large">
-            {isRewardContent && (
-              <Icon
-                size={20}
-                iconColor="red"
-                icon={icons.FEATURED}
-                // Figure out how to get the tooltip to overlap the navbar on the file page and I will love you
-                // https://stackoverflow.com/questions/6421966/css-overflow-x-visible-and-overflow-y-hidden-causing-scrollbar-issue
-                // https://spee.ch/4/overflow-issue
-                // tooltip="bottom"
-              />
-            )}
-            {nsfw && <div className="badge badge--nsfw">MATURE</div>}
-            <FilePrice badge uri={normalizeURI(uri)} />
-          </div>
 
           <div className="media__actions media__actions--between">
             <div className="media__subtext media__subtext--large">
@@ -262,7 +245,7 @@ class FilePage extends React.Component<Props> {
                   label={__('Edit')}
                   navigate="/$/publish"
                   onClick={() => {
-                    prepareEdit(claim, editUri);
+                    prepareEdit(claim, editUri, fileInfo);
                   }}
                 />
               )}
@@ -288,15 +271,51 @@ class FilePage extends React.Component<Props> {
 
             <div className="media__action-group--large">
               <FileDownloadLink uri={uri} />
-              <FileActions uri={uri} claimId={claim.claim_id} />
+              <FileActions
+                uri={uri}
+                claimId={claim.claim_id}
+                showFullscreen={isPreviewType}
+                viewerContainer={this.viewerContainer}
+              />
             </div>
           </div>
 
+          <div className="media__info--large">
+            <ClaimTags uri={uri} type="large" />
+          </div>
           <div className="media__info--large">
             <FileDetails uri={uri} />
           </div>
         </div>
         <div className="grid-area--related">
+          <div className="media__uri-wrapper">
+            <Button
+              className="media__uri"
+              button="alt"
+              label={uri}
+              onClick={() => {
+                clipboard.writeText(uri);
+                showToast({
+                  message: __('Copied'),
+                });
+              }}
+            />
+            <div className="file-properties">
+              {isRewardContent && (
+                <Icon
+                  size={20}
+                  iconColor="red"
+                  icon={icons.FEATURED}
+                  // Figure out how to get the tooltip to overlap the navbar on the file page and I will love you
+                  // https://stackoverflow.com/questions/6421966/css-overflow-x-visible-and-overflow-y-hidden-causing-scrollbar-issue
+                  // https://spee.ch/4/overflow-issue
+                  // tooltip="bottom"
+                />
+              )}
+              {nsfw && <div className="badge badge--nsfw">MATURE</div>}
+              <FilePrice badge uri={normalizeURI(uri)} />
+            </div>
+          </div>
           <RecommendedContent uri={uri} />
         </div>
       </Page>

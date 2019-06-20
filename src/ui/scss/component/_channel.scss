@@ -7,6 +7,8 @@ $metadata-z-index: 1;
   align-items: flex-end;
   box-sizing: content-box;
   color: $lbry-white;
+  border-top-left-radius: var(--card-radius);
+  border-top-right-radius: var(--card-radius);
 }
 
 .channel-cover__custom {
@@ -24,13 +26,19 @@ $metadata-z-index: 1;
 }
 
 .channel-thumbnail {
-  position: absolute;
   display: flex;
-  left: var(--spacing-main-padding);
-  height: var(--channel-thumbnail-size);
-  width: var(--channel-thumbnail-size);
+  height: 5.3rem;
+  width: 5.4rem;
   background-size: cover;
+  margin-right: var(--spacing-medium);
+}
+
+.channel__thumbnail--channel-page {
+  position: absolute;
+  height: var(--channel-thumbnail-width);
+  width: var(--channel-thumbnail-width);
   box-shadow: 0px 8px 40px -3px $lbry-black;
+  left: var(--spacing-medium);
 }
 
 .channel-thumbnail__custom {
@@ -44,7 +52,7 @@ $metadata-z-index: 1;
   margin-left: auto;
   margin-right: auto;
   align-self: flex-end;
-  margin-bottom: -1px;
+  // margin-bottom: -1px;
 }
 
 .channel-thumbnail,
@@ -70,18 +78,24 @@ $metadata-z-index: 1;
   z-index: $metadata-z-index;
   // Jump over the thumbnail photo because it is absolutely positioned
   // Then add normal page spacing, _then_ add the actual padding
-  margin-left: calc(var(--channel-thumbnail-size) + var(--spacing-main-padding));
-  padding-left: var(--spacing-vertical-large);
-  padding-bottom: var(--spacing-vertical-medium);
+  padding-left: calc(var(--channel-thumbnail-width) + var(--spacing-large));
+  // padding-left: var(--spacing-large);
+  padding-bottom: var(--spacing-medium);
 }
 
 .channel__title {
   font-size: 3rem;
   font-weight: 800;
+  margin-right: var(--spacing-large);
 }
 
 .channel__url {
   font-size: 1.2rem;
   margin-top: -0.25rem;
   color: rgba($lbry-white, 0.75);
+}
+
+// TODO: rename
+.channel__data {
+  min-height: 10rem;
 }

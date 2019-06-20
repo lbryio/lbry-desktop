@@ -129,7 +129,7 @@ class RewardsPage extends PureComponent<Props> {
             </p>
           </section>
 
-          <div className="card__list--rewards">{this.renderCustomRewardCode()}</div>
+          <div className="card__list">{this.renderCustomRewardCode()}</div>
         </Fragment>
       );
     }
@@ -138,7 +138,7 @@ class RewardsPage extends PureComponent<Props> {
 
     return (
       <div
-        className={classnames('card__list--rewards', {
+        className={classnames('card__list', {
           'card--disabled': isNotEligible,
         })}
       >

@@ -1,22 +1,22 @@
 .item-list {
   background-color: $lbry-white;
-  margin-bottom: var(--spacing-vertical-large);
-  padding: var(--spacing-vertical-large);
+  margin-bottom: var(--spacing-large);
+  padding: var(--spacing-large);
 
   html[data-mode='dark'] & {
     background-color: rgba($lbry-white, 0.1);
   }
 
   .card__actions {
-    margin-top: var(--spacing-vertical-medium);
-    margin-left: var(--spacing-vertical-small);
+    margin-top: var(--spacing-medium);
+    margin-left: var(--spacing-small);
   }
 }
 
 .item-list__row {
   align-items: center;
   display: flex;
-  padding: var(--spacing-vertical-small);
+  padding: var(--spacing-small);
 
   fieldset-section {
     margin-bottom: 0;
@@ -29,7 +29,7 @@
   white-space: nowrap;
 
   &:not(:first-of-type) {
-    padding-left: var(--spacing-vertical-small);
+    padding-left: var(--spacing-small);
   }
 }
 

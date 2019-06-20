@@ -3,107 +3,79 @@ import * as PAGES from 'constants/pages';
 import * as ICONS from 'constants/icons';
 import * as React from 'react';
 import Button from 'component/button';
-import classnames from 'classnames';
-import Tooltip from 'component/common/tooltip';
+import Tag from 'component/tag';
 
 type Props = {
-  unreadSubscriptionTotal: number,
-  shouldShowInviteGuide: string,
+  subscriptions: Array<Subscription>,
+  followedTags: Array<Tag>,
 };
 
-class SideBar extends React.PureComponent<Props> {
-  render() {
-    const { unreadSubscriptionTotal, shouldShowInviteGuide } = this.props;
-    const buildLink = (path, label, icon, guide) => ({
-      navigate: path ? `$/${path}` : '/',
-      label,
-      icon,
-      guide,
-    });
+function SideBar(props: Props) {
+  const { subscriptions, followedTags } = props;
+  const buildLink = (path, label, icon, guide) => ({
+    navigate: path ? `$/${path}` : '/',
+    label,
+    icon,
+    guide,
+  });
 
-    const renderLink = (linkProps, index) => {
-      const { guide } = linkProps;
+  const renderLink = linkProps => (
+    <li key={linkProps.label}>
+      <Button {...linkProps} className="navigation__link" activeClass="navigation__link--active" />
+    </li>
+  );
 
-      const inner = (
-        <Button
-          {...linkProps}
-          className={classnames('navigation__link', {
-            'navigation__link--guide': guide,
-          })}
-          activeClass="navigation__link--active"
-        />
-      );
-
-      return (
-        <li key={index}>
-          {guide ? (
-            <Tooltip key={guide} alwaysVisible direction="right" body={guide}>
-              {inner}
-            </Tooltip>
-          ) : (
-            inner
-          )}
-        </li>
-      );
-    };
-
-    return (
+  return (
+    <div className="navigation-wrapper">
       <nav className="navigation">
         <ul className="navigation__links">
           {[
             {
-              ...buildLink(null, __('Discover'), ICONS.DISCOVER),
+              ...buildLink(null, __('Home'), ICONS.HOME),
             },
             {
-              ...buildLink(
-                PAGES.SUBSCRIPTIONS,
-                `${__('Subscriptions')} ${unreadSubscriptionTotal > 0 ? '(' + unreadSubscriptionTotal + ')' : ''}`,
-                ICONS.SUBSCRIPTION
-              ),
+              ...buildLink(PAGES.SUBSCRIPTIONS, __('Subscriptions'), ICONS.SUBSCRIPTION),
             },
             {
               ...buildLink(PAGES.PUBLISHED, __('Publishes'), ICONS.PUBLISHED),
             },
             {
-              ...buildLink(PAGES.HISTORY, __('Library'), ICONS.DOWNLOAD),
+              ...buildLink(PAGES.LIBRARY, __('Library'), ICONS.DOWNLOAD),
             },
           ].map(renderLink)}
-        </ul>
-        <div className="navigation__link navigation__link--title">Account</div>
 
-        <ul className="navigation__links">
-          {[
-            {
-              ...buildLink(PAGES.ACCOUNT, __('Overview'), ICONS.ACCOUNT),
-            },
-            {
-              ...buildLink(PAGES.INVITE, __('Invite'), ICONS.INVITE, shouldShowInviteGuide && __('Check this out!')),
-            },
-            {
-              ...buildLink(PAGES.REWARDS, __('Rewards'), ICONS.FEATURED),
-            },
-            {
-              ...buildLink(PAGES.SEND, __('Send & Recieve'), ICONS.SEND),
-            },
-            {
-              ...buildLink(PAGES.TRANSACTIONS, __('Transactions'), ICONS.TRANSACTIONS),
-            },
-            {
-              ...buildLink(PAGES.SETTINGS, __('Settings'), ICONS.SETTINGS),
-            },
-          ].map(renderLink)}
+          <li>
+            <Button
+              navigate="/$/tags/edit"
+              icon={ICONS.EDIT}
+              className="navigation__link"
+              activeClass="navigation__link--active"
+              label={__('Following')}
+            />
+          </li>
         </ul>
-
-        <ul className="navigation__links navigation__links--bottom">
-          {[
-            {
-              ...buildLink(PAGES.HELP, __('Help'), ICONS.HELP),
-            },
-          ].map(renderLink)}
+        <ul className="navigation__links tags--vertical">
+          {followedTags.map(({ name }, key) => (
+            <li className="navigation__link--indented" key={name}>
+              <Tag navigate={`/$/tags?t${name}`} name={name} />
+            </li>
+          ))}
+        </ul>
+        <ul className="navigation__links--small">
+          {subscriptions.map(({ uri, channelName }, index) => (
+            <li key={uri} className="navigation__link--indented">
+              <Button
+                navigate={uri}
+                label={channelName}
+                className="navigation__link"
+                activeClass="navigation__link--active"
+              />
+            </li>
+          ))}
         </ul>
       </nav>
-    );
-  }
+    </div>
+  );
 }
 
 export default SideBar;

@@ -5,7 +5,7 @@
   right: 0;
 
   align-items: center;
-  background-color: rgba($lbry-white, 0.7);
+  background-color: rgba($lbry-black, 0.7);
   display: flex;
   justify-content: center;
   position: fixed;
@@ -22,7 +22,7 @@
   line-height: 1.55;
   max-width: var(--modal-width);
   overflow: auto;
-  padding: var(--spacing-vertical-large);
+  padding: var(--spacing-large);
   word-break: break-word;
 
   @media (min-width: 501px) {
@@ -35,7 +35,7 @@
   }
 
   .card__content:not(:last-child) {
-    margin-bottom: var(--spacing-vertical-large);
+    margin-bottom: var(--spacing-large);
   }
 
   .button.button--alt {
@@ -47,50 +47,13 @@
   }
 }
 
-.modal--fullscreen {
-  top: 0;
-  left: 0;
-  bottom: 0;
-  right: 0;
-
-  background-color: rgba($lbry-gray-1, 0.5);
-  padding: var(--spacing-vertical-large);
-  overflow-y: scroll;
-  position: absolute;
-
-  .main {
-    // I will come back to these when I do media queries
-    // They should be variables
-    padding: 130px 80px 0 80px;
-  }
-}
-
-// For slide down animation on the search modal
-// Slide down isn"t possible without doing a lot of re-work to the modal component
-.ReactModal__Overlay {
-  .modal--fullscreen {
-    height: 0;
-    transition: height var(--animation-duration) var(--animation-style);
-  }
-}
-
-.ReactModal__Overlay--after-open {
-  .modal--fullscreen {
-    height: 100vh;
-  }
-}
-
-.ReactModal__Overlay--before-close {
-  height: 0;
-}
-
 .modal__header {
   font-size: 2em;
 }
 
 .error-modal__content {
   display: flex;
-  padding: 0 var(--spacing-vertical-medium) var(--spacing-vertical-medium) var(--spacing-vertical-medium);
+  padding: 0 var(--spacing-medium) var(--spacing-medium) var(--spacing-medium);
 }
 
 .error-modal__warning-symbol {
@@ -111,8 +74,8 @@
 .error-modal__error-list {
   max-width: var(--modal-width);
   max-height: 400px;
-  margin-top: var(--spacing-vertical-small);
-  padding: var(--spacing-vertical-small);
+  margin-top: var(--spacing-small);
+  padding: var(--spacing-small);
 
   background-color: $lbry-red-1;
   border-left: 2px solid $lbry-red-5;

@@ -7,7 +7,7 @@
   align-items: center;
   background-color: $lbry-black;
   color: $lbry-white;
-  padding: var(--spacing-vertical-medium) var(--spacing-main-padding);
+  padding: var(--spacing-medium) var(--spacing-main-padding);
 
   & > *:not(.tab) {
     // If there is anything after the tabs, render it on the opposite side of the page
@@ -20,11 +20,12 @@
 }
 
 .tabs__list--channel-page {
-  padding-left: calc(var(--channel-thumbnail-size) + var(--spacing-main-padding) + var(--spacing-vertical-large));
+  padding-left: calc(var(--channel-thumbnail-width) + var(--spacing-large));
+  padding-right: var(--spacing-medium);
 }
 
 .tab {
-  margin-right: var(--spacing-vertical-large);
+  margin-right: var(--spacing-large);
   padding: 5px 0;
   font-weight: 700;
   font-size: var(--tab-header-size);
@@ -55,8 +56,4 @@
 .tab__divider {
   height: var(--tab-indicator-size);
   background-color: $lbry-teal-3;
-}
-
-.tab__panel {
-  margin-top: var(--spacing-vertical-large);
 }

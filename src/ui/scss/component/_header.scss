@@ -1,39 +1,45 @@
 .header {
-  position: fixed;
-  width: 100%;
-  height: var(--header-height);
-  display: flex;
-  justify-content: space-between;
   z-index: 2; // Main content uses z-index: 1, this ensures it always scrolls under the header
+  position: fixed;
+  top: 0;
+  width: 100%;
   background-color: $lbry-white;
   border-bottom: 1px solid $lbry-gray-1;
-
+  box-shadow: var(--card-box-shadow) $lbry-gray-1;
+  padding-left: var(--spacing-large);
+  padding-right: var(--spacing-large);
   html[data-mode='dark'] & {
-    background-color: rgba($lbry-black, 0.9);
     background-color: mix($lbry-black, $lbry-gray-3, 90%);
     color: $lbry-white;
     border-bottom: none;
+    box-shadow: var(--card-box-shadow) $lbry-black;
   }
+}
+
+.header__contents {
+  width: 100%;
+  height: calc(var(--header-height) - 1px);
+  max-width: var(--page-max-width);
+  display: flex;
+  justify-content: space-between;
+  margin: auto;
 }
 
 .header__navigation {
   display: flex;
+  justify-content: space-between;
 
-  // First navigation item is the top left wrapper
-  // This contains the Lbry logo (home link) and forward/back arrows on desktop
-  &:first-of-type {
-    @media (min-width: 601px) {
-      width: calc(var(--side-nav-width) - 1px);
+  &:last-of-type {
+    width: calc(var(--side-nav-width) + var(--spacing-medium));
+    @media (max-width: 600px) {
+      display: none;
     }
   }
 }
 
 .header__navigation-arrows {
   display: flex;
-
-  .button__content {
-    justify-content: center;
-  }
+  margin-right: var(--spacing-small);
 }
 
 .header__navigation-item {
@@ -44,11 +50,15 @@
   border-radius: 0;
 
   svg {
-    stroke: $lbry-black;
+    stroke: $lbry-gray-5;
   }
 
   &:hover {
-    background-color: $lbry-gray-1;
+    color: $lbry-teal-5;
+
+    svg {
+      stroke: $lbry-teal-5;
+    }
   }
 
   &.header__navigation-item--active {
@@ -56,15 +66,24 @@
       height: 0.2em;
       bottom: 0;
       width: 100%;
-      background-color: $lbry-teal-3;
+      background-color: $lbry-teal-5;
       content: '';
       position: absolute;
+
+      html[data-mode='dark'] & {
+        background-color: $lbry-teal-3;
+      }
     }
   }
 
+  // TODO: dark
   html[data-mode='dark'] & {
     &:hover {
-      background-color: $lbry-gray-5;
+      color: $lbry-teal-3;
+
+      svg {
+        stroke: $lbry-teal-3;
+      }
     }
 
     svg {
@@ -74,15 +93,15 @@
 }
 
 .header__navigation-item--back,
-.header__navigation-item--forward,
-.header__navigation-item--menu {
-  width: var(--header-height);
+.header__navigation-item--forward {
+  width: 3rem;
 }
 
 .header__navigation-item--lbry {
   flex: 1;
   font-weight: 800;
   font-size: 1.2rem;
+  margin-right: var(--spacing-medium);
 
   .lbry-icon {
     height: 2rem;
@@ -91,48 +110,22 @@
 }
 
 .header__navigation-item--right-action {
-  .button__content {
-    padding: 0 var(--spacing-vertical-large);
-  }
-}
-
-.header__navigation-item--right-action:not(:last-child),
-.header__navigation-item--lbry {
-  border-right: 1px solid $lbry-gray-1;
-
-  html[data-mode='dark'] & {
-    border-right: 1px solid $lbry-gray-5;
-  }
+  align-self: flex-end;
+  margin-left: auto;
+  padding: 0 var(--spacing-small);
 }
 
 .header__navigation-item--upgrade {
-  background-color: $lbry-teal-5;
-  color: $lbry-white;
+  color: $lbry-teal-5;
   svg {
-    stroke: $lbry-white;
-  }
-
-  &:hover {
-    background-color: $lbry-teal-4;
+    stroke: $lbry-teal-5;
   }
 }
 
-.header__navigation-item--menu {
-  // Add this back once we have an actual menu for mobile
-  // @media (min-width: 601px) {
-  display: none;
-  // }
-}
-
-// Hide links that will live in the menu bar
 @media (max-width: 600px) {
   .header__navigation-item--back,
   .header__navigation-item--forward,
   .header__navigation-item--right-action {
     display: none;
-  }
-
-  .header__navigation-item--lbry {
-    padding: var(--spacing-vertical-medium);
   }
 }

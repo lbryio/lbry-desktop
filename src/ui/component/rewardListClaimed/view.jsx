@@ -23,8 +23,8 @@ const RewardListClaimed = (props: Props) => {
   }
 
   return (
-    <section className="card card--section">
-      <header className="card__header">
+    <section className="card">
+      <header className="table__header">
         <h2 className="card__title">Claimed Rewards</h2>
 
         <p className="card__subtitle">

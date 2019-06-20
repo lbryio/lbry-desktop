@@ -23,7 +23,7 @@ export default function NavigationHistoryRecent(props: Props) {
         ))}
       </section>
       <div className="card__actions">
-        <Button navigate="/$/history/all" button="link" label={__('See All Visited Links')} />
+        <Button navigate="/$/library/all" button="link" label={__('See All Visited Links')} />
       </div>
     </div>
   ) : null;

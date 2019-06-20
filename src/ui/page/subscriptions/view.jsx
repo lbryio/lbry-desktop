@@ -1,105 +1,80 @@
 // @flow
-import * as SETTINGS from 'constants/settings';
-import React, { PureComponent } from 'react';
+import * as PAGES from 'constants/pages';
+import React, { useEffect } from 'react';
 import Page from 'component/page';
-import FirstRun from './internal/first-run';
-import UserSubscriptions from './internal/user-subscriptions';
+import ClaimList from 'component/claimList';
+import Button from 'component/button';
 
 type Props = {
-  subscribedChannels: Array<string>, // The channels a user is subscribed to
-  unreadSubscriptions: Array<{
-    channel: string,
-    uris: Array<string>,
-  }>,
-  allSubscriptions: Array<{ uri: string, ...StreamClaim }>,
+  subscribedChannels: Array<{ uri: string }>, // The channels a user is subscribed to
+  suggestedSubscriptions: Array<{ uri: string }>,
   loading: boolean,
-  autoDownload: boolean,
-  viewMode: ViewMode,
-  doSetViewMode: ViewMode => void,
   doFetchMySubscriptions: () => void,
-  doSetClientSetting: (string, boolean) => void,
   doFetchRecommendedSubscriptions: () => void,
-  loadingSuggested: boolean,
-  firstRunCompleted: boolean,
-  doCompleteFirstRun: () => void,
-  doShowSuggestedSubs: () => void,
-  showSuggestedSubs: boolean,
+  location: { search: string },
+  history: { push: string => void },
+  doClaimSearch: (number, {}) => void,
+  uris: Array<string>,
 };
 
-export default class SubscriptionsPage extends PureComponent<Props> {
-  constructor() {
-    super();
+export default function SubscriptionsPage(props: Props) {
+  const {
+    subscribedChannels,
+    doFetchMySubscriptions,
+    doFetchRecommendedSubscriptions,
+    suggestedSubscriptions,
+    loading,
+    location,
+    history,
+    doClaimSearch,
+    uris,
+  } = props;
 
-    (this: any).onAutoDownloadChange = this.onAutoDownloadChange.bind(this);
+  const hasSubscriptions = !!subscribedChannels.length;
+  const { search } = location;
+  const urlParams = new URLSearchParams(search);
+  const viewingSuggestedSubs = urlParams.get('view');
+
+  function onClick() {
+    let url = `/$/${PAGES.SUBSCRIPTIONS}`;
+    if (!viewingSuggestedSubs) {
+      url += '?view=discover';
+    }
+
+    history.push(url);
   }
 
-  componentDidMount() {
-    const {
-      doFetchMySubscriptions,
-      doFetchRecommendedSubscriptions,
-      allSubscriptions,
-      firstRunCompleted,
-      doShowSuggestedSubs,
-    } = this.props;
-
+  useEffect(() => {
     doFetchMySubscriptions();
     doFetchRecommendedSubscriptions();
+  }, [doFetchMySubscriptions, doFetchRecommendedSubscriptions]);
 
-    // For channels that already have subscriptions, show the suggested subs right away
-    // This can probably be removed at a future date, it is just to make it so the "view your x subscriptions" button shows up right away
-    // Existing users will still go through the "first run"
-    if (!firstRunCompleted && allSubscriptions.length) {
-      doShowSuggestedSubs();
-    }
-  }
+  const idString = subscribedChannels.map(channel => channel.uri.split('#')[1]).join(',');
+  useEffect(() => {
+    const ids = idString.split(',');
+    const options = {
+      channel_ids: ids,
+    };
 
-  onAutoDownloadChange(event: SyntheticInputEvent<*>) {
-    this.props.doSetClientSetting(SETTINGS.AUTO_DOWNLOAD, event.target.checked);
-  }
+    doClaimSearch(20, options);
+  }, [idString, doClaimSearch]);
 
-  render() {
-    const {
-      subscribedChannels,
-      allSubscriptions,
-      loading,
-      autoDownload,
-      viewMode,
-      doSetViewMode,
-      loadingSuggested,
-      firstRunCompleted,
-      doCompleteFirstRun,
-      doShowSuggestedSubs,
-      showSuggestedSubs,
-      unreadSubscriptions,
-    } = this.props;
-    const numberOfSubscriptions = subscribedChannels && subscribedChannels.length;
-
-    return (
-      // Only pass in the loading prop if there are no subscriptions
-      // If there are any, let the page update in the background
-      // The loading prop removes children and shows a loading spinner
-      <Page notContained loading={loading && !subscribedChannels} className="main--no-padding-top">
-        {firstRunCompleted ? (
-          <UserSubscriptions
-            viewMode={viewMode}
-            doSetViewMode={doSetViewMode}
-            hasSubscriptions={numberOfSubscriptions > 0}
-            subscriptions={allSubscriptions}
-            autoDownload={autoDownload}
-            onChangeAutoDownload={this.onAutoDownloadChange}
-            unreadSubscriptions={unreadSubscriptions}
-            loadingSuggested={loadingSuggested}
-          />
-        ) : (
-          <FirstRun
-            showSuggested={showSuggestedSubs}
-            doShowSuggestedSubs={doShowSuggestedSubs}
-            loadingSuggested={loadingSuggested}
-            numberOfSubscriptions={numberOfSubscriptions}
-            onFinish={doCompleteFirstRun}
-          />
-        )}
-      </Page>
-    );
-  }
+  return (
+    <Page>
+      <div className="card">
+        <ClaimList
+          loading={loading}
+          header={<h1>{viewingSuggestedSubs ? __('Discover New Channels') : __('Latest From Your Subscriptions')}</h1>}
+          headerAltControls={
+            <Button
+              button="link"
+              label={viewingSuggestedSubs ? hasSubscriptions && __('View Your Subscriptions') : __('Find New Channels')}
+              onClick={() => onClick()}
+            />
+          }
+          uris={viewingSuggestedSubs ? suggestedSubscriptions.map(sub => sub.uri) : uris}
+        />
+      </div>
+    </Page>
+  );
 }

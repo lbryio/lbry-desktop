@@ -71,8 +71,8 @@ class Button extends React.PureComponent<Props> {
             'button--primary': button === 'primary',
             'button--secondary': button === 'secondary',
             'button--alt': button === 'alt',
-            'button--danger': button === 'danger',
             'button--inverse': button === 'inverse',
+            'button--close': button === 'close',
             'button--disabled': disabled,
             'button--link': button === 'link',
             'button--constrict': constrict,
@@ -115,6 +115,7 @@ class Button extends React.PureComponent<Props> {
         exact
         to={path}
         title={title}
+        disabled={disabled}
         onClick={e => {
           e.stopPropagation();
           if (onClick) {

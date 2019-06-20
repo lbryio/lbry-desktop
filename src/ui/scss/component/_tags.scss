@@ -1,0 +1,79 @@
+$main: $lbry-teal-5;
+
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  min-width: 0;
+
+  .tag {
+    margin-top: var(--spacing-small);
+    margin-right: var(--spacing-small);
+  }
+}
+
+.tags--remove {
+  @extend .tags;
+  margin-bottom: var(--spacing-large);
+  font-size: 18px;
+}
+
+.tags--vertical {
+  @extend .tags;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.tags--selected {
+  @extend .tags;
+  margin: var(--spacing-large) 0;
+}
+
+.tags__empty-message {
+  margin-top: var(--spacing-medium);
+}
+
+.tag {
+  @extend .badge--tag;
+  user-select: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  text-transform: lowercase;
+  font-size: 0.7em;
+  max-width: 10rem;
+  min-width: 0;
+
+  &:hover {
+    background-color: $lbry-teal-4;
+    color: $lbry-white;
+    svg {
+      stroke: $lbry-white;
+    }
+  }
+
+  &:active {
+    background-color: $main;
+  }
+}
+
+.tag--remove {
+  @extend .tag;
+  max-width: 20rem;
+}
+
+.tag--add {
+  background-color: lighten($lbry-teal-5, 60%);
+}
+
+.tag__action-label {
+  margin-left: 0.5rem;
+  padding-left: 0.5rem;
+  padding-top: 0.7rem;
+
+  html[data-mode='dark'] & {
+    border-color: rgba($lbry-white, 0.1);
+  }
+}

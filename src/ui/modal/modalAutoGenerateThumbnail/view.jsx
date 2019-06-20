@@ -50,8 +50,6 @@ function ModalAutoGenerateThumbnail(props: Props) {
       return;
     }
 
-    console.log('resized');
-
     const fixedWidth = 450;
     const videoWidth = player.videoWidth;
     const videoHeight = player.videoHeight;

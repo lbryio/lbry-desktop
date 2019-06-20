@@ -1,7 +1,7 @@
 .notice {
   border: 1px solid;
   border-radius: 5px;
-  padding: var(--spacing-vertical-medium) var(--spacing-vertical-large);
+  padding: var(--spacing-medium) var(--spacing-large);
   text-shadow: 0 1px 0 rgba($lbry-white, 0.5);
 
   &:not(.notice--error) {

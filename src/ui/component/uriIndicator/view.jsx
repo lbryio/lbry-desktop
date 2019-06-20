@@ -7,8 +7,7 @@ type Props = {
   isResolvingUri: boolean,
   channelUri: ?string,
   link: ?boolean,
-  claim: ?StreamClaim,
-  channelClaim: ?ChannelClaim,
+  claim: ?Claim,
   // Lint thinks we aren't using these, even though we are.
   // Possibly because the resolve function is an arrow function that is passed in props?
   resolveUri: string => void,
@@ -59,7 +58,7 @@ class UriIndicator extends React.PureComponent<Props> {
       if (!channelLink) {
         return inner;
       }
-
+      
       return <ClaimLink uri={channelLink}>{inner}</ClaimLink>;
     } else {
       return null;

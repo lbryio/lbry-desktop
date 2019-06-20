@@ -6,6 +6,8 @@ import { history } from './store';
 import ElectronCookies from '@exponent/electron-cookies';
 // @endif
 
+const isProduction = process.env.NODE_ENV === 'production';
+
 type Analytics = {
   pageView: string => void,
   setUser: Object => void,
@@ -61,18 +63,20 @@ const analytics: Analytics = {
     }
   },
   apiLogSearch: () => {
-    if (analyticsEnabled) {
+    if (analyticsEnabled && isProduction) {
       Lbryio.call('event', 'search');
     }
   },
   apiLogPublish: () => {
-    if (analyticsEnabled) {
+    if (analyticsEnabled && isProduction) {
       Lbryio.call('event', 'publish');
     }
   },
   apiSearchFeedback: (query, vote) => {
-    // We don't need to worry about analytics enabled here because users manually click on the button to provide feedback
-    Lbryio.call('feedback', 'search', { query, vote });
+    if (isProduction) {
+      // We don't need to worry about analytics enabled here because users manually click on the button to provide feedback
+      Lbryio.call('feedback', 'search', { query, vote });
+    }
   },
 };
 

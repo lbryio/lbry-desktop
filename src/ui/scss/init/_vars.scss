@@ -7,20 +7,21 @@ $large-breakpoint: 1921px;
 
 :root {
   // Width & spacing
-  --side-nav-width: 180px;
+  --page-max-width: 1200px;
+  --mobile: 600px;
+  --side-nav-width: 170px;
   --font-size-subtext-multiple: 0.92;
-  --spacing-vertical-miniscule: calc(2rem / 5);
-  --spacing-vertical-tiny: calc(2rem / 4);
-  --spacing-vertical-small: calc(2rem / 3);
-  --spacing-vertical-medium: calc(2rem / 2);
-  --spacing-vertical-large: 2rem;
-  --spacing-vertical-xlarge: 3rem;
-  --spacing-main-padding: var(--spacing-vertical-xlarge);
+  --spacing-miniscule: calc(2rem / 5);
+  --spacing-tiny: calc(2rem / 4);
+  --spacing-small: calc(2rem / 3);
+  --spacing-medium: calc(2rem / 2);
+  --spacing-large: 2rem;
+  --spacing-xlarge: 3rem;
+  --spacing-main-padding: var(--spacing-xlarge);
   --file-page-max-width: 1787px;
   --file-max-height: 788px;
   --file-max-width: 1400px;
   --video-aspect-ratio: 56.25%; // 9 x 16
-  --channel-thumbnail-size: 10rem;
 
   // Color
   --color-background: #270f34;
@@ -45,26 +46,12 @@ $large-breakpoint: 1921px;
   --button-height: 2.6rem;
 
   // Header
-  --header-height: 3.5rem;
-
-  // Header -> search
-  --search-modal-input-height: 70px;
+  --header-height: 6rem;
 
   // Card
   --card-radius: 5px;
   --card-max-width: 1000px;
   --card-box-shadow: 0px 0px 30px 2px;
-
-  // File
-  --file-tile-media-height: 125px;
-  --file-tile-media-width: calc(125px * (16 / 9));
-  --file-tile-media-height-small: 60px;
-  --file-tile-media-width-small: calc(60px * (16 / 9));
-  --file-tile-media-height-large: 200px;
-  --file-tile-media-width-large: calc(200px * (16 / 9));
-  --file-page-min-width: 400px;
-  --recommended-content-width: 300px;
-  --recommended-content-width-medium: 400px;
 
   // Modal
   --modal-width: 440px;
@@ -77,4 +64,6 @@ $large-breakpoint: 1921px;
   --thumbnail-preview-height: 100px;
   --thumbnail-preview-width: 177px;
   --cover-photo-height: 300px;
+  --channel-thumbnail-width: 10rem;
+  --file-list-thumbnail-width: 10rem;
 }

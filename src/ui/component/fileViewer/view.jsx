@@ -7,8 +7,10 @@ import LoadingScreen from 'component/common/loading-screen';
 import PlayButton from './internal/play-button';
 
 const Player = React.lazy(() =>
-  import(/* webpackChunkName: "player-legacy" */
-  './internal/player')
+  import(
+    /* webpackChunkName: "player-legacy" */
+    './internal/player'
+  )
 );
 
 const SPACE_BAR_KEYCODE = 32;
@@ -49,6 +51,8 @@ type Props = {
   insufficientCredits: boolean,
   nsfw: boolean,
   thumbnail: ?string,
+  isPlayableType: boolean,
+  viewerContainer: React.Ref,
 };
 
 class FileViewer extends React.PureComponent<Props> {
@@ -125,9 +129,12 @@ class FileViewer extends React.PureComponent<Props> {
 
   handleKeyDown(event: SyntheticKeyboardEvent<*>) {
     const { searchBarFocused } = this.props;
-    if (!searchBarFocused && event.keyCode === SPACE_BAR_KEYCODE) {
-      event.preventDefault(); // prevent page scroll
-      this.playContent();
+
+    if (!searchBarFocused) {
+      if (event.keyCode === SPACE_BAR_KEYCODE) {
+        event.preventDefault(); // prevent page scroll
+        this.playContent();
+      }
     }
   }
 
@@ -222,6 +229,8 @@ class FileViewer extends React.PureComponent<Props> {
       obscureNsfw,
       mediaType,
       insufficientCredits,
+      viewerContainer,
+      searchBarFocused,
       thumbnail,
       nsfw,
     } = this.props;
@@ -257,7 +266,7 @@ class FileViewer extends React.PureComponent<Props> {
     const layoverStyle = !shouldObscureNsfw && thumbnail ? { backgroundImage: `url("${thumbnail}")` } : {};
 
     return (
-      <div className={classnames('video', {}, className)}>
+      <div className={classnames('video', {}, className)} ref={viewerContainer}>
         {isPlaying && (
           <div className="content__view">
             {!isReadyToPlay ? (
@@ -282,6 +291,8 @@ class FileViewer extends React.PureComponent<Props> {
                   onStartCb={this.onFileStartCb}
                   onFinishCb={this.onFileFinishCb}
                   playingUri={playingUri}
+                  searchBarFocused={searchBarFocused}
+                  viewerContainer={viewerContainer}
                 />
               </Suspense>
             )}

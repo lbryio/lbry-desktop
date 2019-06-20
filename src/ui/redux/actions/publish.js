@@ -137,7 +137,7 @@ export const doUploadThumbnail = (filePath: string, thumbnailBuffer: Uint8Array)
     .catch(err => uploadError(err.message));
 };
 
-export const doPrepareEdit = (claim: StreamClaim, uri: string) => (dispatch: Dispatch) => {
+export const doPrepareEdit = (claim: StreamClaim, uri: string, fileInfo: FileListItem) => (dispatch: Dispatch) => {
   const { name, amount, channel_name: channelName, value } = claim;
 
   const {
@@ -187,6 +187,15 @@ export const doPrepareEdit = (claim: StreamClaim, uri: string) => (dispatch: Dis
     publishData.otherLicenseDescription = license;
   } else {
     publishData.licenseType = license;
+  }
+
+  if (fileInfo && fileInfo.download_path) {
+    try {
+      fs.accessSync(fileInfo.download_path, fs.constants.R_OK);
+      publishData.filePath = fileInfo.download_path;
+    } catch (e) {
+      console.error(e.name, e.message);
+    }
   }
 
   dispatch({ type: ACTIONS.DO_PREPARE_EDIT, data: publishData });
