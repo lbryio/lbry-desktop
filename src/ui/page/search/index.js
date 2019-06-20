@@ -9,7 +9,7 @@ const select = state => ({
 });
 
 const perform = dispatch => ({
-  doSearch: query => doSearch(query),
+  search: query => dispatch(doSearch(query)),
   onFeedbackPositive: query => {
     analytics.apiSearchFeedback(query, 1);
     dispatch(

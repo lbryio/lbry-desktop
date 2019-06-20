@@ -9,7 +9,7 @@ import SearchOptions from 'component/searchOptions';
 import Button from 'component/button';
 
 type Props = {
-  doSearch: string => void,
+  search: string => void,
   location: UrlLocation,
   uris: Array<string>,
   onFeedbackNegative: string => void,
@@ -17,14 +17,8 @@ type Props = {
 };
 
 export default function SearchPage(props: Props) {
-  const {
-    doSearch,
-    uris,
-    onFeedbackPositive,
-    onFeedbackNegative,
-    location: { search },
-  } = props;
-  const urlParams = new URLSearchParams(search);
+  const { search, uris, onFeedbackPositive, onFeedbackNegative, location } = props;
+  const urlParams = new URLSearchParams(location.search);
   const urlQuery = urlParams.get('q');
   const isValid = isURIValid(urlQuery);
 
@@ -35,9 +29,10 @@ export default function SearchPage(props: Props) {
 
   useEffect(() => {
     if (urlQuery) {
-      doSearch(urlQuery);
+      console.log('search', urlQuery);
+      search(urlQuery);
     }
-  }, [doSearch, urlQuery]);
+  }, [search, urlQuery]);
 
   return (
     <Page>

@@ -1,7 +1,7 @@
 .file-list__header {
   display: flex;
   align-items: center;
-  height: 4.5rem;
+  min-height: 4.5rem;
   padding: var(--spacing-medium);
   font-size: 1rem; // Ensures select & header text have same font-size
   color: $lbry-white;
@@ -23,6 +23,11 @@
     &:hover {
       color: $lbry-teal-1;
     }
+  }
+
+  // Fix this in @lbry/components, we shouldn't need to be this specific
+  checkbox-element input[type='checkbox']:checked + label {
+    color: $lbry-white;
   }
 }
 
