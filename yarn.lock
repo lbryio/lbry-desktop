@@ -992,7 +992,7 @@
   resolved "https://registry.yarnpkg.com/@reach/window-size/-/window-size-0.1.4.tgz#3257b646548f61c2708a661a683620fbe0a706cb"
   integrity sha512-JZshEuGsLvi6fUIJ7Unx12yNeM5SmqWjber2MLr9tfwf1hpNv73EiPBOIJyV0DjW7GXzjcOEvwnqysm59s2s/A==
   dependencies:
-    "@reach/component-component" "^0.1.3
+    "@reach/component-component" "^0.1.3"
     
 "@samverschueren/stream-to-observable@^0.3.0":
   version "0.3.0"
