@@ -102,7 +102,7 @@ class UserVerify extends React.PureComponent<Props> {
             <h2 className="card__title">{__('3) Proof via Chat')}</h2>
             <p className="card__subtitle">
               {__(
-                'A moderator capable of approving you is typically available in the #verification channel of our chat room.'
+                'A moderator capable of approving you is typically available in the #rewardsapproval channel of our chat room.'
               )}{' '}
               {__(
                 'This process will likely involve providing proof of a stable and established online or real-life identity.'
