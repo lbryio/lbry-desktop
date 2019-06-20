@@ -344,7 +344,7 @@ class PublishForm extends React.PureComponent<Props> {
               <h2 className="card__title card__title--flex-between">
                 {__('Content')}
                 {(filePath || !!editingURI) && (
-                  <Button button="inverse" icon={ICONS.CLOSE} label={__('Clear')} onClick={clearPublish} />
+                  <Button button="inverse" icon={ICONS.REMOVE} label={__('Clear')} onClick={clearPublish} />
                 )}
               </h2>
               <p className="card__subtitle">

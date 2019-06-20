@@ -3,7 +3,7 @@ import * as ICONS from 'constants/icons';
 import React from 'react';
 import Button from 'component/button';
 import CopyableText from 'component/copyableText';
-import ToolTip from 'component/common/tooltip';
+import Tooltip from 'component/common/tooltip';
 
 type Props = {
   claim: StreamClaim,
@@ -73,7 +73,7 @@ class SocialShare extends React.PureComponent<Props> {
             <label className="help">{__('Web link')}</label>
             <CopyableText copyable={speechURL} />
             <div className="card__actions card__actions--center">
-              <ToolTip onComponent body={__('Facebook')}>
+              <Tooltip label={__('Facebook')}>
                 <Button
                   iconColor="blue"
                   icon={ICONS.FACEBOOK}
@@ -81,8 +81,8 @@ class SocialShare extends React.PureComponent<Props> {
                   label={__('')}
                   href={`https://facebook.com/sharer/sharer.php?u=${encodedSpeechURL}`}
                 />
-              </ToolTip>
-              <ToolTip onComponent body={__('Twitter')}>
+              </Tooltip>
+              <Tooltip label={__('Twitter')}>
                 <Button
                   iconColor="blue"
                   icon={ICONS.TWITTER}
@@ -90,10 +90,10 @@ class SocialShare extends React.PureComponent<Props> {
                   label={__('')}
                   href={`https://twitter.com/home?status=${encodedSpeechURL}`}
                 />
-              </ToolTip>
-              <ToolTip onComponent body={__('View on Spee.ch')}>
+              </Tooltip>
+              <Tooltip label={__('View on Spee.ch')}>
                 <Button icon={ICONS.WEB} iconColor="blue" button="alt" label={__('')} href={`${speechURL}`} />
-              </ToolTip>
+              </Tooltip>
             </div>
           </div>
         )}
@@ -101,7 +101,7 @@ class SocialShare extends React.PureComponent<Props> {
           <label className="help">{__('LBRY App link')}</label>
           <CopyableText copyable={lbryURL} noSnackbar />
           <div className="card__actions card__actions--center">
-            <ToolTip onComponent body={__('Facebook')}>
+            <Tooltip label={__('Facebook')}>
               <Button
                 iconColor="blue"
                 icon={ICONS.FACEBOOK}
@@ -109,8 +109,8 @@ class SocialShare extends React.PureComponent<Props> {
                 label={__('')}
                 href={`https://facebook.com/sharer/sharer.php?u=${encodedLbryURL}`}
               />
-            </ToolTip>
-            <ToolTip onComponent body={__('Twitter')}>
+            </Tooltip>
+            <Tooltip label={__('Twitter')}>
               <Button
                 iconColor="blue"
                 icon={ICONS.TWITTER}
@@ -118,7 +118,7 @@ class SocialShare extends React.PureComponent<Props> {
                 label={__('')}
                 href={`https://twitter.com/home?status=${encodedLbryURL}`}
               />
-            </ToolTip>
+            </Tooltip>
           </div>
         </div>
         <div className="card__actions">

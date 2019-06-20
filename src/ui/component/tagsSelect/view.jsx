@@ -35,7 +35,7 @@ export default function TagSelect(props: Props) {
       <div className="card--section">
         <h2 className="card__title card__title--flex-between">
           {title}
-          {showClose && !hasClosed && <Button button="close" icon={ICONS.CLOSE} onClick={handleClose} />}
+          {showClose && !hasClosed && <Button button="close" icon={ICONS.REMOVE} onClick={handleClose} />}
         </h2>
         <p className="help">{__("The tags you follow will change what's trending for you.")}</p>
 

@@ -40,7 +40,7 @@ function SideBar(props: Props) {
               ...buildLink(PAGES.PUBLISHED, __('Publishes'), ICONS.PUBLISHED),
             },
             {
-              ...buildLink(PAGES.LIBRARY, __('Library'), ICONS.DOWNLOAD),
+              ...buildLink(PAGES.LIBRARY, __('Library'), ICONS.LIBRARY),
             },
           ].map(renderLink)}
 

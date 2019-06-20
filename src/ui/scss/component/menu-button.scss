@@ -91,7 +91,14 @@
   .icon {
     margin-right: var(--spacing-small);
     margin-bottom: 0.2rem;
-
     stroke: $lbry-gray-5;
+  }
+
+  [data-mode='dark'] & {
+    color: $lbry-gray-2;
+
+    .icon {
+      stroke: $lbry-gray-2;
+    }
   }
 }

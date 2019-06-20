@@ -38,14 +38,19 @@ class FileActions extends React.PureComponent<Props> {
     return (
       <React.Fragment>
         {showFullscreen && (
-          <Tooltip onComponent body={__('Full screen (f)')}>
-            <Button button="alt" description={__('Fullscreen')} icon={ICONS.FULLSCREEN} onClick={this.maximizeViewer} />
+          <Tooltip label={__('Full screen (f)')}>
+            <Button
+              button="link"
+              description={__('Fullscreen')}
+              icon={ICONS.FULLSCREEN}
+              onClick={this.maximizeViewer}
+            />
           </Tooltip>
         )}
         {showDelete && (
-          <Tooltip onComponent body={__('Delete this file')}>
+          <Tooltip label={__('Remove from your library')}>
             <Button
-              button="alt"
+              button="link"
               icon={ICONS.DELETE}
               description={__('Delete')}
               onClick={() => openModal(MODALS.CONFIRM_FILE_REMOVE, { uri })}
@@ -53,8 +58,8 @@ class FileActions extends React.PureComponent<Props> {
           </Tooltip>
         )}
         {!claimIsMine && (
-          <Tooltip onComponent body={__('Report content')}>
-            <Button icon={ICONS.REPORT} href={`https://lbry.com/dmca?claim_id=${claimId}`} />
+          <Tooltip label={__('Report content')}>
+            <Button button="link" icon={ICONS.REPORT} href={`https://lbry.com/dmca?claim_id=${claimId}`} />
           </Tooltip>
         )}
       </React.Fragment>

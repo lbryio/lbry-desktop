@@ -53,7 +53,7 @@ const Header = (props: Props) => {
               description={__('Navigate back')}
               onClick={() => window.history.back()}
               icon={ICONS.ARROW_LEFT}
-              iconSize={15}
+              iconSize={18}
             />
 
             <Button
@@ -61,7 +61,7 @@ const Header = (props: Props) => {
               description={__('Navigate forward')}
               onClick={() => window.history.forward()}
               icon={ICONS.ARROW_RIGHT}
-              iconSize={15}
+              iconSize={18}
             />
           </div>
           {/* @endif */}
@@ -98,11 +98,11 @@ const Header = (props: Props) => {
           </Menu>
           <Menu>
             <MenuButton className="header__navigation-item menu__title">
-              <Icon icon={ICONS.SETTINGS} />
+              <Icon size={18} icon={ICONS.SETTINGS} />
             </MenuButton>
             <MenuList>
               <MenuItem className="menu__link" onSelect={() => history.push(`/$/settings`)}>
-                <Icon aria-hidden icon={ICONS.SETTINGS} />
+                <Icon aria-hidden tootlip icon={ICONS.SETTINGS} />
                 {__('Settings')}
               </MenuItem>
               <MenuItem className="menu__link" onSelect={() => history.push(`/$/help`)}>
