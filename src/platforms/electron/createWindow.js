@@ -88,10 +88,10 @@ export default appState => {
   window.on('app-command', (e, cmd) => {
     switch (cmd) {
       case 'browser-backward':
-        window.webContents.send('navigate-backward', null);
+        window.webContents.goBack();
         break;
       case 'browser-forward':
-        window.webContents.send('navigate-forward', null);
+        window.webContents.goForward();
         break;
       default: // Do nothing
     }
