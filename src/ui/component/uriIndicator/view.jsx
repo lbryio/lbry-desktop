@@ -58,8 +58,12 @@ class UriIndicator extends React.PureComponent<Props> {
       if (!channelLink) {
         return inner;
       }
-      
-      return <ClaimLink uri={channelLink}>{inner}</ClaimLink>;
+
+      return (
+        <ClaimLink uri={channelLink} className={'button--uri-indicator'}>
+          {inner}
+        </ClaimLink>
+      );
     } else {
       return null;
     }

@@ -7,9 +7,11 @@ import { parseURI } from 'lbry-redux';
 
 type Props = {
   uri: string,
+  link?: boolean,
   title: ?string,
   claim: StreamClaim,
   children: React.Node,
+  className: ?string,
   thumbnail: ?string,
   autoEmbed: ?boolean,
   description: ?string,
@@ -25,6 +27,7 @@ type Props = {
 class ClaimLink extends React.Component<Props> {
   static defaultProps = {
     href: null,
+    link: false,
     title: null,
     thumbnail: null,
     autoEmbed: false,
@@ -64,7 +67,19 @@ class ClaimLink extends React.Component<Props> {
   }
 
   render() {
-    const { uri, claim, title, description, thumbnail, currentTheme, autoEmbed, children, isResolvingUri } = this.props;
+    const {
+      uri,
+      link,
+      claim,
+      title,
+      className,
+      description,
+      thumbnail,
+      currentTheme,
+      autoEmbed,
+      children,
+      isResolvingUri,
+    } = this.props;
     const isUnresolved = (!isResolvingUri && !claim) || !claim;
     const isBlacklisted = this.isClaimBlackListed();
 
@@ -77,13 +92,13 @@ class ClaimLink extends React.Component<Props> {
     const isChannelClaim = isChannel && !path;
     const showPreview = autoEmbed === true && !isUnresolved;
 
-    const link = (
+    const innerContent = (
       <Button
         label={children}
         title={!isChannelClaim ? title || claimName : undefined}
-        button={!isChannel ? 'link' : undefined}
+        button={link ? 'link' : undefined}
+        className={className}
         navigate={uri}
-        className="button--uri-indicator"
       />
     );
 
@@ -98,13 +113,13 @@ class ClaimLink extends React.Component<Props> {
         thumbnail={thumbnail}
         description={description}
       >
-        <span>{link}</span>
+        <span>{innerContent}</span>
       </ChannelTooltip>
     );
 
     return (
       <React.Fragment>
-        {isChannelClaim ? wrappedLink : link}
+        {isChannelClaim ? wrappedLink : innerContent}
         {showPreview && <PreviewLink uri={uri} />}
       </React.Fragment>
     );

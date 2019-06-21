@@ -1,6 +1,5 @@
 // @flow
 import * as React from 'react';
-import DateTime from 'component/dateTime';
 import UriIndicator from 'component/uriIndicator';
 import TruncatedText from 'component/common/truncated-text';
 import MarkdownPreview from 'component/common/markdown-preview';
@@ -31,21 +30,23 @@ class PreviewLink extends React.PureComponent<Props> {
 
     return (
       <span className={'preview-link'} role="button" onClick={this.handleClick}>
-        <span className={'media-tile media-tile--small card--link'}>
-          <span style={thumbnailStyle} className={'preview-link--thumbnail media__thumb'} />
-          <span className={'preview-link--text media__info'}>
-            <span className={'preview-link--title media__title'}>
-              <TruncatedText text={title} lines={1} />
-            </span>
-            <span className={'preview-link--description media__subtext'}>
-              <span className={'truncated-text'}>
-                {__('Published to')} <UriIndicator uri={uri} link /> <DateTime timeAgo uri={uri} />
+        <span className={'file-list__item'}>
+          <span style={thumbnailStyle} className={'preview-link__thumbnail media__thumb'} />
+          <span className={'file-list__item-metadata'}>
+            <span className={'file-list__item-info'}>
+              <span className={'file-list__item-title'}>
+                <TruncatedText text={title} lines={1} />
               </span>
             </span>
-            <span className={'preview-link--description media__subtext'}>
-              <TruncatedText lines={2} showTooltip={false}>
-                <MarkdownPreview content={description} promptLinks strip />
-              </TruncatedText>
+            <span className={'preview-link__description media__subtext'}>
+              <UriIndicator uri={uri} link />
+            </span>
+            <span className={'file-list__item-properties'}>
+              <span className={'preview-link__description media__subtext'}>
+                <TruncatedText lines={2} showTooltip={false}>
+                  <MarkdownPreview content={description} promptLinks strip />
+                </TruncatedText>
+              </span>
             </span>
           </span>
         </span>
