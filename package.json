@@ -68,6 +68,7 @@
     "@reach/tabs": "^0.1.5",
     "@reach/tooltip": "^0.2.1",
     "@types/three": "^0.93.1",
+    "adm-zip": "^0.4.13",
     "async-exit-hook": "^2.0.1",
     "babel-eslint": "^10.0.1",
     "babel-loader": "^8.0.5",
