@@ -12,10 +12,8 @@ type Props = {
   claim: StreamClaim,
   children: React.Node,
   className: ?string,
-  thumbnail: ?string,
   autoEmbed: ?boolean,
   description: ?string,
-  currentTheme: ?string,
   isResolvingUri: boolean,
   resolveUri: string => void,
   blackListedOutpoints: Array<{
@@ -35,6 +33,14 @@ class ClaimLink extends React.Component<Props> {
     isResolvingUri: false,
   };
 
+  componentDidMount() {
+    this.resolve(this.props);
+  }
+
+  componentDidUpdate() {
+    this.resolve(this.props);
+  }
+
   isClaimBlackListed() {
     const { claim, blackListedOutpoints } = this.props;
 
@@ -52,34 +58,16 @@ class ClaimLink extends React.Component<Props> {
     }
   }
 
-  componentDidMount() {
-    const { isResolvingUri, resolveUri, uri, claim } = this.props;
-    if (!isResolvingUri && !claim) {
-      resolveUri(uri);
-    }
-  }
+  resolve = (props: Props) => {
+    const { isResolvingUri, resolveUri, claim, uri } = props;
 
-  componentDidUpdate() {
-    const { isResolvingUri, resolveUri, claim, uri } = this.props;
-    if (!isResolvingUri && uri && !claim) {
+    if (!isResolvingUri && claim === undefined && uri) {
       resolveUri(uri);
     }
-  }
+  };
 
   render() {
-    const {
-      uri,
-      link,
-      claim,
-      title,
-      className,
-      description,
-      thumbnail,
-      currentTheme,
-      autoEmbed,
-      children,
-      isResolvingUri,
-    } = this.props;
+    const { uri, link, claim, title, className, autoEmbed, children, isResolvingUri } = this.props;
     const isUnresolved = (!isResolvingUri && !claim) || !claim;
     const isBlacklisted = this.isClaimBlackListed();
 
@@ -87,7 +75,7 @@ class ClaimLink extends React.Component<Props> {
       return <span>{children}</span>;
     }
 
-    const { claim_id: claimId, name: claimName } = claim;
+    const { name: claimName } = claim;
     const { isChannel, path } = parseURI(uri);
     const isChannelClaim = isChannel && !path;
     const showPreview = autoEmbed === true && !isUnresolved;
@@ -103,16 +91,7 @@ class ClaimLink extends React.Component<Props> {
     );
 
     const wrappedLink = (
-      <ChannelTooltip
-        uri={uri}
-        title={title}
-        claimId={claimId}
-        channelName={claimName}
-        ariaLabel={title || claimName}
-        currentTheme={currentTheme}
-        thumbnail={thumbnail}
-        description={description}
-      >
+      <ChannelTooltip uri={uri}>
         <span>{innerContent}</span>
       </ChannelTooltip>
     );

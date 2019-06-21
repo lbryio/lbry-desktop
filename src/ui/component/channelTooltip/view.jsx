@@ -16,11 +16,18 @@ const ARROW_SIZE = 10;
 
 type ChannelTooltipProps = {
   uri: string,
+  claim: ?Claim,
+  title: ?string,
+  children: any,
+  resolveUri: string => void,
+  description: ?string,
+  isResolvingUri: boolean,
+};
+
+type LabelProps = {
+  uri: string,
   title: ?string,
   claimId: string,
-  children: any,
-  ariaLabel: ?string,
-  thumbnail: ?string,
   channelName: string,
   description: ?string,
 };
@@ -28,7 +35,6 @@ type ChannelTooltipProps = {
 type TriangleTooltipProps = {
   label: any,
   children: any,
-
   ariaLabel: ?string,
 };
 
@@ -87,15 +93,15 @@ function TriangleTooltip(props: TriangleTooltipProps) {
   );
 }
 
-const ChannelTooltipLabel = (props: ChannelTooltipProps) => {
-  const { uri, title, claimId, thumbnail, description, channelName } = props;
+const ChannelTooltipLabel = (props: LabelProps) => {
+  const { uri, title, claimId, description, channelName } = props;
   const channelUrl = `${channelName}#${claimId}`;
   const formatedName = channelName.replace('@', '');
 
   return (
     <div className={'channel-tooltip__content'}>
       <div className={'channel-tooltip__profile'}>
-        <ChannelThumbnail uri={uri} thumbnail={thumbnail} />
+        <ChannelThumbnail uri={uri} />
         <div className={'channel-tooltip__info'}>
           <h2 className={'channel-tooltip__title'}>
             <TruncatedText lines={1}>{title || formatedName}</TruncatedText>
@@ -117,14 +123,51 @@ const ChannelTooltipLabel = (props: ChannelTooltipProps) => {
   );
 };
 
-const ChannelTooltip = (props: ChannelTooltipProps) => {
-  const { children, ariaLabel } = props;
-  const label = <ChannelTooltipLabel {...props} />;
-  return (
-    <TriangleTooltip label={label} ariaLabel={ariaLabel}>
-      {children}
-    </TriangleTooltip>
-  );
-};
+class ChannelTooltip extends React.Component<ChannelTooltipProps> {
+  componentDidMount() {
+    this.resolve(this.props);
+  }
 
-export default React.memo<ChannelTooltipProps>(ChannelTooltip);
+  componentDidUpdate() {
+    this.resolve(this.props);
+  }
+
+  resolve = (props: ChannelTooltipProps) => {
+    const { isResolvingUri, resolveUri, claim, uri } = props;
+
+    if (!isResolvingUri && claim === undefined && uri) {
+      resolveUri(uri);
+    }
+  };
+
+  render() {
+    const { uri, claim, children, title, description } = this.props;
+
+    if (!uri || !claim) {
+      return children;
+    }
+
+    const { claim_id: claimId, name: channelName } = claim;
+
+    // Generate aria-label
+    const ariaLabel = title || channelName;
+
+    const label = (
+      <ChannelTooltipLabel
+        uri={uri}
+        title={title}
+        claimId={claimId}
+        channelName={channelName}
+        description={description}
+      />
+    );
+
+    return (
+      <TriangleTooltip label={label} ariaLabel={ariaLabel}>
+        {children}
+      </TriangleTooltip>
+    );
+  }
+}
+
+export default ChannelTooltip;
