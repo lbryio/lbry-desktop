@@ -2,12 +2,9 @@
 import * as React from 'react';
 import Button from 'component/button';
 import PreviewLink from 'component/previewLink';
-import ChannelTooltip from 'component/channelTooltip';
-import { parseURI } from 'lbry-redux';
 
 type Props = {
   uri: string,
-  link?: boolean,
   title: ?string,
   claim: StreamClaim,
   children: React.Node,
@@ -67,7 +64,7 @@ class ClaimLink extends React.Component<Props> {
   };
 
   render() {
-    const { uri, link, claim, title, className, autoEmbed, children, isResolvingUri } = this.props;
+    const { uri, claim, title, className, autoEmbed, children, isResolvingUri } = this.props;
     const isUnresolved = (!isResolvingUri && !claim) || !claim;
     const isBlacklisted = this.isClaimBlackListed();
 
@@ -76,29 +73,11 @@ class ClaimLink extends React.Component<Props> {
     }
 
     const { name: claimName } = claim;
-    const { isChannel, path } = parseURI(uri);
-    const isChannelClaim = isChannel && !path;
     const showPreview = autoEmbed === true && !isUnresolved;
-
-    const innerContent = (
-      <Button
-        label={children}
-        title={!isChannelClaim ? title || claimName : undefined}
-        button={link ? 'link' : undefined}
-        className={className}
-        navigate={uri}
-      />
-    );
-
-    const wrappedLink = (
-      <ChannelTooltip uri={uri}>
-        <span>{innerContent}</span>
-      </ChannelTooltip>
-    );
 
     return (
       <React.Fragment>
-        {isChannelClaim ? wrappedLink : innerContent}
+        <Button label={children} title={title || claimName} button={'link'} navigate={uri} className={className} />
         {showPreview && <PreviewLink uri={uri} />}
       </React.Fragment>
     );

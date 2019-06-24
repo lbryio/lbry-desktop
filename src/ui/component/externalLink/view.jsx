@@ -44,7 +44,7 @@ class ExternalLink extends React.PureComponent<Props> {
     // Return local link if protocol is lbry uri
     if (protocol && protocol[0] === 'lbry:' && isURIValid(href)) {
       element = (
-        <ClaimLink uri={href} autoEmbed={embed} link>
+        <ClaimLink uri={href} autoEmbed={embed}>
           {children}
         </ClaimLink>
       );

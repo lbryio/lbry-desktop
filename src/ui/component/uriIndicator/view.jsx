@@ -1,6 +1,6 @@
 // @flow
 import React from 'react';
-import ClaimLink from 'component/claimLink';
+import Button from 'component/button';
 import { buildURI } from 'lbry-redux';
 
 type Props = {
@@ -60,9 +60,9 @@ class UriIndicator extends React.PureComponent<Props> {
       }
 
       return (
-        <ClaimLink uri={channelLink} className={'button--uri-indicator'}>
+        <Button className="button--uri-indicator" navigate={channelLink}>
           {inner}
-        </ClaimLink>
+        </Button>
       );
     } else {
       return null;
