@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import { doHideModal } from 'redux/actions/app';
-import ModalPublishSuccess from './view';
+import ModalPublishUpdateSuccess from './view';
 import { doClearPublish } from 'redux/actions/publish';
 import { push } from 'connected-react-router';
 
@@ -13,4 +13,4 @@ const perform = dispatch => ({
 export default connect(
   null,
   perform
-)(ModalPublishSuccess);
+)(ModalPublishUpdateSuccess);

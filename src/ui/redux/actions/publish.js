@@ -303,13 +303,16 @@ export const doPublish = (params: PublishParams) => (dispatch: Dispatch, getStat
       type: ACTIONS.PUBLISH_SUCCESS,
     });
 
-    actions.push(doOpenModal(MODALS.PUBLISH, { uri }));
-
     // We have to fake a temp claim until the new pending one is returned by claim_list_mine
     // We can't rely on claim_list_mine because there might be some delay before the new claims are returned
     // Doing this allows us to show the pending claim immediately, it will get overwritten by the real one
     const isMatch = claim => claim.claim_id === pendingClaim.claim_id;
     const isEdit = myClaims.some(isMatch);
+
+    const publishModal = isEdit ? MODALS.PUBLISH_UPDATE : MODALS.PUBLISH;
+
+    actions.push(doOpenModal(publishModal, { uri }));
+
     const myNewClaims = isEdit
       ? myClaims.map(claim => (isMatch(claim) ? pendingClaim : claim))
       : myClaims.concat(pendingClaim);
