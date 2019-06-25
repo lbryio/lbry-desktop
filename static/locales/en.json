@@ -285,7 +285,32 @@
   "Downloading stream... not long left now!": "Downloading stream... not long left now!",
   "Downloading: ": "Downloading: ",
   "% complete": "% complete",
+<<<<<<< HEAD
   "Updates published": "Updates published",
   "Your updates have been published to LBRY at the address": "Your updates have been published to LBRY at the address",
   "The updates will take a few minutes to appear for other LBRY users. Until then your file will be listed as \"pending\" under your published files.": "The updates will take a few minutes to appear for other LBRY users. Until then your file will be listed as \"pending\" under your published files."
 }
+=======
+  "Incompatible Daemon": "Incompatible Daemon",
+  "Incompatible daemon running": "Incompatible daemon running",
+  "Close App and LBRY Processes": "Close App and LBRY Processes",
+  "Continue Anyway": "Continue Anyway",
+  "This app is running with an incompatible version of the LBRY protocol. You can still use it, but there may be issues. Re-run the installation package for best results.": "This app is running with an incompatible version of the LBRY protocol. You can still use it, but there may be issues. Re-run the installation package for best results.",
+  "Update ready to install": "Update ready to install",
+  "Install now": "Install now",
+  "Upgrade available": "Upgrade available",
+  "LBRY Leveled Up": "LBRY Leveled Up",
+  "Upgrade": "Upgrade",
+  "Skip": "Skip",
+  "An updated version of LBRY is now available.": "An updated version of LBRY is now available.",
+  "Your version is out of date and may be unreliable or insecure.": "Your version is out of date and may be unreliable or insecure.",
+  "Want to know what has changed?": "Want to know what has changed?",
+  "release notes": "release notes",
+  "Your comment": "Your comment",
+  "Post": "Post",
+  "Uh oh. The flux in our Retro Encabulator must be out of whack. Try refreshing to fix it.": "Uh oh. The flux in our Retro Encabulator must be out of whack. Try refreshing to fix it.",
+  "If you still have issues, your anti-virus software or firewall may be preventing startup.": "If you still have issues, your anti-virus software or firewall may be preventing startup.",
+  "Reach out to hello@lbry.com for help, or check out": "Reach out to hello@lbry.com for help, or check out",
+  "Got it!": "Got it!"
+}
+>>>>>>> comments cleanup

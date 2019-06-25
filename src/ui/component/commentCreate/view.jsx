@@ -3,8 +3,7 @@ import React from 'react';
 import { FormField, Form } from 'component/common/form';
 import Button from 'component/button';
 import ChannelSection from 'component/selectChannel';
-import { COMMENT_ACKNOWLEDGED, COMMENT_ACKNOWLEDGED_TRUE } from 'constants/settings';
-import { usePersistedState } from 'util/use-persisted-state';
+import usePersistedState from 'util/use-persisted-state';
 
 // props:
 type Props = {
@@ -14,10 +13,11 @@ type Props = {
 };
 
 export function CommentCreate(props: Props) {
+  const COMMENT_ACKNOWLEDGED = 'COMMENT_ACKNOWLEDGED';
   const { createComment, claim } = props;
   const { claim_id: claimId } = claim;
   const [commentValue, setCommentValue] = usePersistedState(`comment-${claimId}`, '');
-  const [commentAck, setCommentAck] = usePersistedState(COMMENT_ACKNOWLEDGED, 'no');
+  const [commentAck, setCommentAck] = usePersistedState(COMMENT_ACKNOWLEDGED, false);
   const [channel, setChannel] = usePersistedState('COMMENT_CHANNEL', 'anonymous');
 
   function handleCommentChange(event) {
@@ -29,7 +29,7 @@ export function CommentCreate(props: Props) {
   }
 
   function handleCommentAck(event) {
-    setCommentAck(COMMENT_ACKNOWLEDGED_TRUE);
+    setCommentAck(true);
   }
   function handleSubmit() {
     if (channel !== 'new' && commentValue.length) createComment(commentValue, claimId, channel);
@@ -38,7 +38,7 @@ export function CommentCreate(props: Props) {
 
   return (
     <React.Fragment>
-      {commentAck !== COMMENT_ACKNOWLEDGED_TRUE && (
+      {commentAck !== true && (
         <section className="card card--section">
           <div className="card__content">
             <div className="media__title">About comments..</div>
@@ -51,7 +51,7 @@ export function CommentCreate(props: Props) {
           </div>
         </section>
       )}
-      {commentAck === COMMENT_ACKNOWLEDGED_TRUE && (
+      {commentAck === true && (
         <section className="card card--section">
           <Form onSubmit={handleSubmit}>
             <div className="card__content">

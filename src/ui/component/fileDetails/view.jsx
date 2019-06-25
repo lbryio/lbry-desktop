@@ -1,6 +1,5 @@
 // @flow
 import React, { Fragment, PureComponent } from 'react';
-import { Lbryio } from 'lbryinc';
 import MarkdownPreview from 'component/common/markdown-preview';
 import Button from 'component/button';
 import Expandable from 'component/expandable';
@@ -12,31 +11,10 @@ type Props = {
   metadata: StreamMetadata,
   openFolder: string => void,
   contentType: string,
-  clickCommentButton: () => void,
-  showSnackBar: React$Node => void,
-  hasClickedComment: boolean,
   user: ?any,
 };
 
 class FileDetails extends PureComponent<Props> {
-  constructor() {
-    super();
-    (this: any).handleCommentClick = this.handleCommentClick.bind(this);
-  }
-
-  handleCommentClick() {
-    const { clickCommentButton, showSnackBar } = this.props;
-
-    clickCommentButton();
-    Lbryio.call('user_tag', 'edit', { add: 'comments-waitlist' });
-    showSnackBar(
-      <span>
-        {__('Your Comment Has Been Posted')}
-        <sup>TM</sup>
-      </span>
-    );
-  }
-
   render() {
     const { claim, contentType, fileInfo, metadata, openFolder } = this.props;
 

@@ -23,7 +23,6 @@ export const selectUpdateUrl = createSelector(
   }
 );
 
-// HERE
 export const selectHasClickedComment = createSelector(
   selectState,
   state => state.hasClickedComment

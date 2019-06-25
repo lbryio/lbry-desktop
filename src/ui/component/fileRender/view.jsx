@@ -1,43 +1,57 @@
 // @flow
 import { remote } from 'electron';
-import React, { Suspense } from 'react';
+import React from 'react';
 import LoadingScreen from 'component/common/loading-screen';
 import VideoViewer from 'component/viewers/videoViewer';
 
 const AudioViewer = React.lazy<*>(() =>
-  import(/* webpackChunkName: "audioViewer" */
-  'component/viewers/audioViewer')
+  import(
+    /* webpackChunkName: "audioViewer" */
+    'component/viewers/audioViewer'
+  )
 );
 
 const DocumentViewer = React.lazy<*>(() =>
-  import(/* webpackChunkName: "documentViewer" */
-  'component/viewers/documentViewer')
+  import(
+    /* webpackChunkName: "documentViewer" */
+    'component/viewers/documentViewer'
+  )
 );
 
 const DocxViewer = React.lazy<*>(() =>
-  import(/* webpackChunkName: "docxViewer" */
-  'component/viewers/docxViewer')
+  import(
+    /* webpackChunkName: "docxViewer" */
+    'component/viewers/docxViewer'
+  )
 );
 
 const HtmlViewer = React.lazy<*>(() =>
-  import(/* webpackChunkName: "htmlViewer" */
-  'component/viewers/htmlViewer')
+  import(
+    /* webpackChunkName: "htmlViewer" */
+    'component/viewers/htmlViewer'
+  )
 );
 
 const PdfViewer = React.lazy<*>(() =>
-  import(/* webpackChunkName: "pdfViewer" */
-  'component/viewers/pdfViewer')
+  import(
+    /* webpackChunkName: "pdfViewer" */
+    'component/viewers/pdfViewer'
+  )
 );
 
 // @if TARGET='app'
 const ComicBookViewer = React.lazy<*>(() =>
-  import(/* webpackChunkName: "comicBookViewer" */
-  'component/viewers/comicBookViewer')
+  import(
+    /* webpackChunkName: "comicBookViewer" */
+    'component/viewers/comicBookViewer'
+  )
 );
 
 const ThreeViewer = React.lazy<*>(() =>
-  import(/* webpackChunkName: "threeViewer" */
-  'component/viewers/threeViewer')
+  import(
+    /* webpackChunkName: "threeViewer" */
+    'component/viewers/threeViewer'
+  )
 );
 // @endif
 
@@ -174,7 +188,7 @@ class FileRender extends React.PureComponent<Props> {
 
     // @if TARGET='web'
     // temp workaround to disabled paid content on web
-    if (claim && claim.value.fee && claim.value.fee.amount > 0) {
+    if (claim && claim.value.fee && Number(claim.value.fee.amount) > 0) {
       const paidMessage = __(
         'Currently, only free content is available on lbry.tv. Try viewing it in the desktop app.'
       );

@@ -1,10 +1,12 @@
 // @flow
-import React, { Suspense } from 'react';
+import React from 'react';
 import { stopContextMenu } from 'util/context-menu';
 import analytics from 'analytics';
-import(/* webpackChunkName: "videojs" */
-/* webpackPreload: true */
-'video.js/dist/video-js.css');
+import(
+  /* webpackChunkName: "videojs" */
+  /* webpackPreload: true */
+  'video.js/dist/video-js.css'
+);
 
 type Props = {
   source: {
@@ -23,7 +25,7 @@ class AudioVideoViewer extends React.PureComponent<Props> {
   componentDidMount() {
     const { contentType, poster, claim } = this.props;
     const { name, claim_id: claimId, txid, nout } = claim;
-    
+
     // Quick fix to get file view events on lbry.tv
     // Will need to be changed to include time to start
     analytics.apiLogView(`${name}#${claimId}`, `${txid}:${nout}`, claimId);
@@ -44,10 +46,12 @@ class AudioVideoViewer extends React.PureComponent<Props> {
       sources,
     };
 
-    import(/* webpackChunkName: "videojs" */
-    /* webpackMode: "lazy" */
-    /* webpackPreload: true */
-    'video.js').then(videojs => {
+    import(
+      /* webpackChunkName: "videojs" */
+      /* webpackMode: "lazy" */
+      /* webpackPreload: true */
+      'video.js'
+    ).then(videojs => {
       if (videojs.__esModule) {
         videojs = videojs.default;
         this.player = videojs(this.videoNode, videoJsOptions, () => {});
