@@ -206,7 +206,7 @@ export const doCheckSubscription = (subscriptionUri: string, shouldNotify?: bool
   // We may be duplicating calls here. Can this logic be baked into doFetchClaimsByChannel?
   Lbry.claim_search({
     channel: subscriptionUri,
-    valid_channel_signatures: true,
+    valid_channel_signature: true,
     order_by: ['release_time'],
     page: 1,
     page_size: PAGE_SIZE,

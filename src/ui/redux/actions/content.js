@@ -296,7 +296,7 @@ export function doFetchClaimsByChannel(uri: string, page: number = 1, pageSize: 
       channel: uri,
       page,
       page_size: pageSize,
-      valid_channel_signatures: true,
+      valid_channel_signature: true,
       order_by: ['release_time'],
     }).then(result => {
       const { items: claimsInChannel, page: returnedPage } = result;
