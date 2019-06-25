@@ -14,6 +14,7 @@ type Props = {
 };
 
 export function CommentCreate(props: Props) {
+  const COMMENT_ACKNOWLEDGED = 'COMMENT_ACKNOWLEDGED';
   const { createComment, claim } = props;
   const { claim_id: claimId } = claim;
   const [commentValue, setCommentValue] = usePersistedState(`comment-${claimId}`, '');
