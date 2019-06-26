@@ -285,19 +285,13 @@
   "Downloading stream... not long left now!": "Downloading stream... not long left now!",
   "Downloading: ": "Downloading: ",
   "% complete": "% complete",
-<<<<<<< HEAD
   "Updates published": "Updates published",
   "Your updates have been published to LBRY at the address": "Your updates have been published to LBRY at the address",
-<<<<<<< HEAD
   "The updates will take a few minutes to appear for other LBRY users. Until then your file will be listed as \"pending\" under your published files.": "The updates will take a few minutes to appear for other LBRY users. Until then your file will be listed as \"pending\" under your published files.",
-<<<<<<< HEAD
   "Comments": "Comments",
   "Comment": "Comment",
   "Your comment": "Your comment",
   "Post": "Post",
-  "Channel": "Channel"
-}
-=======
   "You haven't downloaded anything from LBRY yet.": "You haven't downloaded anything from LBRY yet.",
   "Explore new content": "Explore new content",
   "You are subscribed to this channel.": "You are subscribed to this channel.",
