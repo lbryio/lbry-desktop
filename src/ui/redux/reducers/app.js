@@ -195,7 +195,6 @@ reducers[ACTIONS.CLEAR_UPGRADE_TIMER] = state =>
   Object.assign({}, state, {
     checkUpgradeTimer: undefined,
   });
-// HERE
 
 reducers[ACTIONS.ADD_COMMENT] = state =>
   Object.assign({}, state, {

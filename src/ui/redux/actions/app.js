@@ -373,7 +373,7 @@ export function doChangeVolume(volume) {
     });
   };
 }
-// HERE
+
 export function doClickCommentButton() {
   return {
     type: ACTIONS.ADD_COMMENT,

@@ -287,9 +287,8 @@ class FilePage extends React.Component<Props> {
           </div>
           <div className="media__info--large">
             <FileDetails uri={uri} />
-            <header className="card__header">
-              <h2 className="card__header">Comments</h2>
-            </header>
+
+            <div className="media__info-title">{__('Comments')}</div>
             <CommentCreate uri={uri} />
             <CommentsList uri={uri} />
           </div>

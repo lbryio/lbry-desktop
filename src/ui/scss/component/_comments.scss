@@ -1,16 +1,9 @@
+.comments {
+  margin-top: var(--spacing-large);
+}
+
 .comment {
-  padding-bottom: var(--spacing-vertical-large);
-
-  &.reply {
-    border-left: 3px solid var(--lbry-teal-5);
-    padding-left: var(--spacing-vertical-large);
-    position: relative;
-    top: -1px;
-  }
-
-  &:not(:first-of-type) {
-    padding-top: var(--spacing-vertical-large);
-  }
+  padding: var(--spacing-medium) 0;
 
   &:not(:last-of-type) {
     border-bottom: 1px solid var(--lbry-gray-1);
@@ -21,44 +14,39 @@
   }
 }
 
-.comment__actions-wrap {
-  align-items: center;
-  display: flex;
-  justify-content: space-between;
-  width: 4.5rem;
-}
+// .comment__actions-wrap {
+//   align-items: center;
+//   display: flex;
+//   justify-content: space-between;
+//   width: 4.5rem;
+// }
 
-.comment__action {
-  @include hide-text;
-  width: 0; height: 0;
-  transition: border-color 0.2s;
+// .comment__action {
+//   @include hide-text;
+//   width: 0;
+//   height: 0;
+//   transition: border-color 0.2s;
 
-  &.downvote {
-    border-top: 2rem solid var(--lbry-orange-3);
-    border-right: 1rem solid transparent;
-    border-left: 1rem solid transparent;
+//   &.downvote {
+//     border-top: 2rem solid var(--lbry-orange-3);
+//     border-right: 1rem solid transparent;
+//     border-left: 1rem solid transparent;
 
-    &:hover {
-      border-top-color: var(--lbry-yellow-3);
-    }
-  }
+//     &:hover {
+//       border-top-color: var(--lbry-yellow-3);
+//     }
+//   }
 
-  &.upvote {
-    border-right: 1rem solid transparent;
-    border-bottom: 2rem solid var(--lbry-teal-4);
-    border-left: 1rem solid transparent;
+//   &.upvote {
+//     border-right: 1rem solid transparent;
+//     border-bottom: 2rem solid var(--lbry-teal-4);
+//     border-left: 1rem solid transparent;
 
-    &:hover {
-      border-bottom-color: var(--lbry-green-2);
-    }
-  }
-}
-
-.comment__content {
-  font-size: 1.15rem;
-  padding-top: var(--spacing-vertical-medium);
-  padding-bottom: var(--spacing-vertical-large);
-}
+//     &:hover {
+//       border-bottom-color: var(--lbry-green-2);
+//     }
+//   }
+// }
 
 .comment__meta {
   time {

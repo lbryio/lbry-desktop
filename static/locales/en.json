@@ -311,6 +311,10 @@
   "Uh oh. The flux in our Retro Encabulator must be out of whack. Try refreshing to fix it.": "Uh oh. The flux in our Retro Encabulator must be out of whack. Try refreshing to fix it.",
   "If you still have issues, your anti-virus software or firewall may be preventing startup.": "If you still have issues, your anti-virus software or firewall may be preventing startup.",
   "Reach out to hello@lbry.com for help, or check out": "Reach out to hello@lbry.com for help, or check out",
-  "Got it!": "Got it!"
-}
->>>>>>> comments cleanup
+  "Got it!": "Got it!",
+  "URI does not include name.": "URI does not include name.",
+  "Invalid claim ID %s.": "Invalid claim ID %s.",
+  "Comment": "Comment",
+  "Channel": "Channel",
+  "Comments": "Comments"
+}>>>>>>> comments cleanup

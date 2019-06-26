@@ -157,7 +157,13 @@ class ChannelSection extends React.PureComponent<Props, State> {
           <BusyIndicator message="Updating channels" />
         ) : (
           <fieldset-section>
-            <FormField name="channel" type="select" onChange={this.handleChannelChange} value={channel}>
+            <FormField
+              name="channel"
+              label={__('Channel')}
+              type="select"
+              onChange={this.handleChannelChange}
+              value={channel}
+            >
               <option value={CHANNEL_ANONYMOUS}>{__('Anonymous')}</option>
               {channels.map(({ name }) => (
                 <option key={name} value={name}>

@@ -1,11 +1,11 @@
 // @flow
+import { CHANNEL_NEW } from 'constants/claim';
 import React from 'react';
 import { FormField, Form } from 'component/common/form';
 import Button from 'component/button';
 import ChannelSection from 'component/selectChannel';
 import usePersistedState from 'util/use-persisted-state';
 
-// props:
 type Props = {
   uri: string,
   claim: StreamClaim,
@@ -13,12 +13,11 @@ type Props = {
 };
 
 export function CommentCreate(props: Props) {
-  const COMMENT_ACKNOWLEDGED = 'COMMENT_ACKNOWLEDGED';
   const { createComment, claim } = props;
   const { claim_id: claimId } = claim;
   const [commentValue, setCommentValue] = usePersistedState(`comment-${claimId}`, '');
-  const [commentAck, setCommentAck] = usePersistedState(COMMENT_ACKNOWLEDGED, false);
-  const [channel, setChannel] = usePersistedState('COMMENT_CHANNEL', 'anonymous');
+  const [commentAck, setCommentAck] = usePersistedState('comment-acknowledge', false);
+  const [channel, setChannel] = usePersistedState('comment-channel', 'anonymous');
 
   function handleCommentChange(event) {
     setCommentValue(event.target.value);
@@ -32,19 +31,19 @@ export function CommentCreate(props: Props) {
     setCommentAck(true);
   }
   function handleSubmit() {
-    if (channel !== 'new' && commentValue.length) createComment(commentValue, claimId, channel);
+    if (channel !== CHANNEL_NEW && commentValue.length) createComment(commentValue, claimId, channel);
     setCommentValue('');
   }
 
   return (
     <React.Fragment>
       {commentAck !== true && (
-        <section className="card card--section">
+        <section>
           <div className="card__content">
             <div className="media__title">About comments..</div>
           </div>
           <div className="card__content">
-            <div className="media__subtitle">Seriously, don&apos;t comment.</div>
+            <div className="media__subtitle">I acknowledge something.</div>
           </div>
           <div className="card__content">
             <Button button="primary" onClick={handleCommentAck} label={__('Got it!')} />
@@ -52,26 +51,26 @@ export function CommentCreate(props: Props) {
         </section>
       )}
       {commentAck === true && (
-        <section className="card card--section">
+        <section>
           <Form onSubmit={handleSubmit}>
             <div className="card__content">
               <ChannelSection channel={channel} onChannelChange={handleChannelChange} />
             </div>
             <div className="card__content">
               <FormField
-                disabled={channel === 'new'}
+                disabled={channel === CHANNEL_NEW}
                 type="textarea"
                 name="content_description"
-                label={__('Text')}
+                label={__('Comment')}
                 placeholder={__('Your comment')}
                 value={commentValue}
                 onChange={handleCommentChange}
               />
             </div>
-            <div className="card__content">
+            <div className="card__actions">
               <Button
                 button="primary"
-                disabled={channel === 'new' || !commentValue.length}
+                disabled={channel === CHANNEL_NEW || !commentValue.length}
                 type="submit"
                 label={__('Post')}
               />

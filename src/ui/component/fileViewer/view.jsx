@@ -76,6 +76,8 @@ class FileViewer extends React.PureComponent<Props> {
     }
 
     this.handleAutoplay(this.props);
+    // Commented out because it would play/pause if you were typing in the comment field
+    // Need a way to check if you are typing
     // window.addEventListener('keydown', this.handleKeyDown);
   }
 
