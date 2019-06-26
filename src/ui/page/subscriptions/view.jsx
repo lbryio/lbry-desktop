@@ -73,7 +73,8 @@ export default function SubscriptionsPage(props: Props) {
               onClick={() => onClick()}
             />
           }
-          uris={viewingSuggestedSubs ? suggestedSubscriptions.map(sub => sub.uri) : uris}
+          // Fix the need to reverse this
+          uris={viewingSuggestedSubs ? suggestedSubscriptions.map(sub => sub.uri) : uris.reverse()}
         />
       </div>
     </Page>
