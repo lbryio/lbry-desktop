@@ -309,13 +309,11 @@ export const doPublish = (params: PublishParams) => (dispatch: Dispatch, getStat
     const isMatch = claim => claim.claim_id === pendingClaim.claim_id;
     const isEdit = myClaims.some(isMatch);
 
-    const publishModal = isEdit ? MODALS.PUBLISH_UPDATE : MODALS.PUBLISH;
-
-    actions.push(doOpenModal(publishModal, { uri }));
-
     const myNewClaims = isEdit
       ? myClaims.map(claim => (isMatch(claim) ? pendingClaim : claim))
       : myClaims.concat(pendingClaim);
+
+    actions.push(doOpenModal(MODALS.PUBLISH, { uri, isEdit }));
 
     actions.push({
       type: ACTIONS.FETCH_CLAIM_LIST_MINE_COMPLETED,
