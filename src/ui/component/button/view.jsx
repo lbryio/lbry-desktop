@@ -22,6 +22,7 @@ type Props = {
   type: string,
   button: ?string, // primary, secondary, alt, link
   iconSize?: number,
+  iconColor?: string,
   constrict: ?boolean, // to shorten the button and ellipsis, only use for links
   activeClass?: string,
   innerRef: ?any,
@@ -51,6 +52,7 @@ const Button = forwardRef<any, {}>((props: Props, ref: any) => {
     description,
     button,
     iconSize,
+    iconColor,
     constrict,
     activeClass,
     ...otherProps
@@ -75,10 +77,10 @@ const Button = forwardRef<any, {}>((props: Props, ref: any) => {
 
   const content = (
     <span className="button__content">
-      {icon && <Icon icon={icon} size={iconSize} />}
+      {icon && <Icon icon={icon} iconColor={iconColor} size={iconSize} />}
       {label && <span className="button__label">{label}</span>}
       {children && children}
-      {iconRight && <Icon icon={iconRight} size={iconSize} />}
+      {iconRight && <Icon icon={iconRight} iconColor={iconColor} size={iconSize} />}
     </span>
   );
 
