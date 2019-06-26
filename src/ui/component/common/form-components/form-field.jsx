@@ -2,11 +2,12 @@
 import type { ElementRef } from 'react';
 import React from 'react';
 import ReactDOMServer from 'react-dom/server';
-import 'easymde/dist/easymde.min.css';
 import Toggle from 'react-toggle';
-import { openEditorMenu, stopContextMenu } from 'util/context-menu';
 import SimpleMDE from 'react-simplemde-editor';
 import MarkdownPreview from 'component/common/markdown-preview-internal';
+import { openEditorMenu, stopContextMenu } from 'util/context-menu';
+
+import 'easymde/dist/easymde.min.css';
 
 type Props = {
   name: string,

@@ -120,4 +120,23 @@
     white-space: normal;
     text-align: left;
   }
+
+  .preview-link {
+    padding: 0;
+    margin: 1rem 0;
+    background-color: rgba($lbry-teal-5, 0.1);
+    border-left: 0.5rem solid $lbry-teal-5;
+    display: block;
+    align-items: center;
+    width: 40rem;
+    word-break: break-all;
+  }
+
+  .preview-link__thumbnail {
+    width: 12rem;
+  }
+
+  .preview-link__description {
+    display: block;
+  }
 }

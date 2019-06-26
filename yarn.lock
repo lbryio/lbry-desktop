@@ -993,7 +993,7 @@
   integrity sha512-JZshEuGsLvi6fUIJ7Unx12yNeM5SmqWjber2MLr9tfwf1hpNv73EiPBOIJyV0DjW7GXzjcOEvwnqysm59s2s/A==
   dependencies:
     "@reach/component-component" "^0.1.3"
-
+    
 "@samverschueren/stream-to-observable@^0.3.0":
   version "0.3.0"
   resolved "https://registry.yarnpkg.com/@samverschueren/stream-to-observable/-/stream-to-observable-0.3.0.tgz#ecdf48d532c58ea477acfcab80348424f8d0662f"
@@ -5498,6 +5498,11 @@ html-comment-regex@^1.1.0:
   resolved "https://registry.yarnpkg.com/html-comment-regex/-/html-comment-regex-1.1.2.tgz#97d4688aeb5c81886a364faa0cad1dda14d433a7"
   integrity sha512-P+M65QY2JQ5Y0G9KKdlDpo0zK+/OHptU5AaBwUfAIDJZk1MYf32Frm84EcOytfJE0t5JvkAnKlmjsXDnWzCJmQ==
 
+html-element-attributes@^2.0.0:
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/html-element-attributes/-/html-element-attributes-2.1.0.tgz#ff674b8716526b8a9ee1d8e454466eda56d6d0cc"
+  integrity sha512-uWNlZuzM3MfRvZLAHWUzwwU6He2NvX9szpXwjG7+hoVqZzY3e0vc6mlujiSnJ/i9zVFZDhBDN33Pm9HNEzcyPg==
+
 html-entities@^1.2.0, html-entities@^1.2.1:
   version "1.2.1"
   resolved "https://registry.yarnpkg.com/html-entities/-/html-entities-1.2.1.tgz#0df29351f0721163515dfb9e5543e5f6eed5162f"
@@ -7113,6 +7118,11 @@ math-expression-evaluator@^1.2.14:
   version "1.2.17"
   resolved "https://registry.yarnpkg.com/math-expression-evaluator/-/math-expression-evaluator-1.2.17.tgz#de819fdbcd84dccd8fae59c6aeb79615b9d266ac"
   integrity sha1-3oGf282E3M2PrlnGrreWFbnSZqw=
+
+md-attr-parser@^1.2.1:
+  version "1.2.1"
+  resolved "https://registry.yarnpkg.com/md-attr-parser/-/md-attr-parser-1.2.1.tgz#1043f6451c33ed3e392b40504df08010f4d03e3d"
+  integrity sha512-dZqt2L4Q7FUcx6ZcuownAxa74Y7d5jcsHRB2MIgQ0vT10Pa+/0Som6hhJ+jgAjP3vnFtrd4aO+ZMc5K7QVfbiQ==
 
 md5.js@^1.3.4:
   version "1.3.5"
@@ -9841,6 +9851,14 @@ relateurl@0.2.x:
   resolved "https://registry.yarnpkg.com/relateurl/-/relateurl-0.2.7.tgz#54dbf377e51440aca90a4cd274600d3ff2d888a9"
   integrity sha1-VNvzd+UUQKypCkzSdGANP/LYiKk=
 
+remark-attr@^0.8.3:
+  version "0.8.3"
+  resolved "https://registry.yarnpkg.com/remark-attr/-/remark-attr-0.8.3.tgz#0263045acb958e1556b0c6955b5d66a4b36d4d92"
+  integrity sha512-JMP6rmLwhj5VmDRG99kGr+HNXQ6MmAs+UojeAHGMQFiIitEmJZBkmgOBsWadxu/RTACD4XnMuJXY1QWEFdw31A==
+  dependencies:
+    html-element-attributes "^2.0.0"
+    md-attr-parser "^1.2.1"
+
 remark-emoji@^2.0.1:
   version "2.0.2"
   resolved "https://registry.yarnpkg.com/remark-emoji/-/remark-emoji-2.0.2.tgz#49c134021132c192ee4cceed1988ec9b8ced7eb8"
@@ -10912,6 +10930,11 @@ strip-json-comments@^2.0.1, strip-json-comments@~2.0.1:
   resolved "https://registry.yarnpkg.com/strip-json-comments/-/strip-json-comments-2.0.1.tgz#3c531942e908c2697c0ec344858c286c7ca0a60a"
   integrity sha1-PFMZQukIwml8DsNEhYwobHygpgo=
 
+strip-markdown@^3.0.3:
+  version "3.0.3"
+  resolved "https://registry.yarnpkg.com/strip-markdown/-/strip-markdown-3.0.3.tgz#93b4526abe32a1d69e5ca943f4d9ba25c01a4d48"
+  integrity sha512-G2DSM9wy3PWxY3miAibWpsTqZgXLXgRoq0yVyaVs9O7FDGEwPO6pmSE8CyzHhU88Z2w1dkFqFmWUklFNsQKwqg==
+
 style-loader@^0.23.1:
   version "0.23.1"
   resolved "https://registry.yarnpkg.com/style-loader/-/style-loader-0.23.1.tgz#cb9154606f3e771ab6c4ab637026a1049174d925"
@@ -11564,7 +11587,7 @@ unist-util-visit-parents@^2.0.0:
   dependencies:
     unist-util-is "^2.1.2"
 
-unist-util-visit@^1.0.0, unist-util-visit@^1.1.0, unist-util-visit@^1.3.0, unist-util-visit@^1.4.0:
+unist-util-visit@^1.0.0, unist-util-visit@^1.1.0, unist-util-visit@^1.3.0, unist-util-visit@^1.4.0, unist-util-visit@^1.4.1:
   version "1.4.1"
   resolved "https://registry.yarnpkg.com/unist-util-visit/-/unist-util-visit-1.4.1.tgz#4724aaa8486e6ee6e26d7ff3c8685960d560b1e3"
   integrity sha512-AvGNk7Bb//EmJZyhtRUnNMEpId/AZ5Ph/KUpTI09WHQuDZHKovQ1oEv3mfmKpWKtoMzyMC4GLBm1Zy5k12fjIw==

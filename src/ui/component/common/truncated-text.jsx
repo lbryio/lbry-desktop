@@ -2,14 +2,24 @@
 import * as React from 'react';
 
 type Props = {
-  text: ?string,
+  text?: ?string,
   lines: number,
+  showTooltip?: boolean,
+  children?: React.Node,
 };
 
-const TruncatedText = (props: Props) => (
-  <span title={props.text} className="truncated-text" style={{ WebkitLineClamp: props.lines }}>
-    {props.text}
-  </span>
-);
+const TruncatedText = (props: Props) => {
+  const { text, children, lines, showTooltip } = props;
+  const tooltip = showTooltip ? children || text : '';
+  return (
+    <span title={tooltip} className="truncated-text" style={{ WebkitLineClamp: lines }}>
+      {children || text}
+    </span>
+  );
+};
+
+TruncatedText.defaultProps = {
+  showTooltip: true,
+};
 
 export default TruncatedText;
