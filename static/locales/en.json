@@ -287,19 +287,5 @@
   "% complete": "% complete",
   "Updates published": "Updates published",
   "Your updates have been published to LBRY at the address": "Your updates have been published to LBRY at the address",
-  "The updates will take a few minutes to appear for other LBRY users. Until then your file will be listed as \"pending\" under your published files.": "The updates will take a few minutes to appear for other LBRY users. Until then your file will be listed as \"pending\" under your published files.",
-  "Clear": "Clear",
-  "You are currently editing a claim.": "You are currently editing a claim.",
-  "If you don't choose a file, the file from your existing claim": "If you don't choose a file, the file from your existing claim",
-  "will be used.": "will be used.",
-  "You should reselect your file to choose a thumbnail": "You should reselect your file to choose a thumbnail",
-  "You are currently editing this claim. If you change the URL, you will need to reselect a file.": "You are currently editing this claim. If you change the URL, you will need to reselect a file.",
-  "Checking the winning claim amount...": "Checking the winning claim amount...",
-  "If you bid more than": "If you bid more than",
-  "when someone navigates to": "when someone navigates to",
-  "it will load your published content": "it will load your published content",
-  "However, you can get a longer version of this URL for any bid": "However, you can get a longer version of this URL for any bid",
-  "Take a snapshot from your video": "Take a snapshot from your video",
-  "Editing...": "Editing...",
-  "Success": "Success"
+  "The updates will take a few minutes to appear for other LBRY users. Until then your file will be listed as \"pending\" under your published files.": "The updates will take a few minutes to appear for other LBRY users. Until then your file will be listed as \"pending\" under your published files."
 }
