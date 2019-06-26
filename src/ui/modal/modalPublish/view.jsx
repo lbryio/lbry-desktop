@@ -13,11 +13,8 @@ type Props = {
 class ModalPublishSuccess extends React.PureComponent<Props> {
   render() {
     const { closeModal, clearPublish, navigate, uri, isEdit } = this.props;
-
     const contentLabel = isEdit ? 'Updates published' : 'File published';
-
     const publishMessage = isEdit ? 'updates have been' : 'file has been';
-
     const publishType = isEdit ? 'updates' : 'file';
 
     return (
