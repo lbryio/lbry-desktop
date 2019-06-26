@@ -7,17 +7,21 @@ type Props = {
   clearPublish: () => void,
   navigate: string => void,
   uri: string,
+  isEdit: boolean,
 };
 
 class ModalPublishSuccess extends React.PureComponent<Props> {
   render() {
-    const { closeModal, clearPublish, navigate, uri } = this.props;
+    const { closeModal, clearPublish, navigate, uri, isEdit } = this.props;
+    const contentLabel = isEdit ? 'Updates published' : 'File published';
+    const publishMessage = isEdit ? 'updates have been' : 'file has been';
+    const publishType = isEdit ? 'updates' : 'file';
 
     return (
       <Modal
         isOpen
         title={__('Success')}
-        contentLabel={__('File published')}
+        contentLabel={__(contentLabel)}
         onConfirmed={() => {
           clearPublish();
           navigate('/$/published');
@@ -25,11 +29,11 @@ class ModalPublishSuccess extends React.PureComponent<Props> {
         }}
       >
         <section className="card__content">
-          <p>{__('Your file has been published to LBRY at the address')}</p>
+          <p>{__(`Your ${publishMessage} published to LBRY at the address`)}</p>
           <blockquote>{uri}</blockquote>
           <p>
             {__(
-              'The file will take a few minutes to appear for other LBRY users. Until then it will be listed as "pending" under your published files.'
+              `The ${publishType} will take a few minutes to appear for other LBRY users. Until then it will be listed as "pending" under your published files.`
             )}
           </p>
         </section>

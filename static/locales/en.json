@@ -284,5 +284,8 @@
   "Connecting...": "Connecting...",
   "Downloading stream... not long left now!": "Downloading stream... not long left now!",
   "Downloading: ": "Downloading: ",
-  "% complete": "% complete"
+  "% complete": "% complete",
+  "Updates published": "Updates published",
+  "Your updates have been published to LBRY at the address": "Your updates have been published to LBRY at the address",
+  "The updates will take a few minutes to appear for other LBRY users. Until then your file will be listed as \"pending\" under your published files.": "The updates will take a few minutes to appear for other LBRY users. Until then your file will be listed as \"pending\" under your published files."
 }
