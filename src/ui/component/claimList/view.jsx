@@ -26,8 +26,8 @@ type Props = {
 export default function ClaimList(props: Props) {
   const { uris, headerAltControls, injectedItem, loading, persistedStorageKey, empty, meta, type, header } = props;
   const [currentSort, setCurrentSort] = usePersistedState(persistedStorageKey, SORT_NEW);
-  const sortedUris = uris && currentSort === SORT_NEW ? uris.slice().reverse() : uris;
   const hasUris = uris && !!uris.length;
+  const sortedUris = (hasUris && (currentSort === SORT_NEW ? uris : uris.slice().reverse())) || [];
 
   function handleSortChange() {
     setCurrentSort(currentSort === SORT_NEW ? SORT_OLD : SORT_NEW);

@@ -69,12 +69,11 @@ export default function SubscriptionsPage(props: Props) {
           headerAltControls={
             <Button
               button="link"
-              label={viewingSuggestedSubs ? hasSubscriptions && __('View Your Subscriptions') : __('Find New Channels')}
+              label={viewingSuggestedSubs ? hasSubscriptions && __('Following') : __('Find New Channels')}
               onClick={() => onClick()}
             />
           }
-          // Fix the need to reverse this
-          uris={viewingSuggestedSubs ? suggestedSubscriptions.map(sub => sub.uri) : uris.reverse()}
+          uris={viewingSuggestedSubs ? suggestedSubscriptions.map(sub => sub.uri) : uris}
         />
       </div>
     </Page>
