@@ -232,9 +232,9 @@ class FilePage extends React.Component<Props> {
             </div>
 
             {claimIsMine && (
-              <div className="media__subtext--large">
+              <p>
                 {viewCount} {viewCount !== 1 ? __('Views') : __('View')}
-              </div>
+              </p>
             )}
           </div>
 

@@ -2,7 +2,7 @@
 import * as ICONS from 'constants/icons';
 import React, { useEffect, Fragment } from 'react';
 import { isURIValid, normalizeURI } from 'lbry-redux';
-import ClaimListItem from 'component/claimListItem';
+import ClaimPreview from 'component/claimPreview';
 import ClaimList from 'component/claimList';
 import Page from 'component/page';
 import SearchOptions from 'component/searchOptions';
@@ -29,7 +29,6 @@ export default function SearchPage(props: Props) {
 
   useEffect(() => {
     if (urlQuery) {
-      console.log('search', urlQuery);
       search(urlQuery);
     }
   }, [search, urlQuery]);
@@ -44,7 +43,7 @@ export default function SearchPage(props: Props) {
                 <Button button="alt" navigate={uri} className="media__uri">
                   {uri}
                 </Button>
-                <ClaimListItem uri={uri} type="large" />
+                <ClaimPreview uri={uri} type="large" />
               </header>
             )}
 

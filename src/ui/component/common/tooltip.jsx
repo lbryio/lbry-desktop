@@ -1,11 +1,12 @@
 // @flow
-import * as React from 'react';
+import type { Node } from 'react';
+import React from 'react';
 import ReachTooltip from '@reach/tooltip';
 import '@reach/tooltip/styles.css';
 
 type Props = {
-  label: string,
-  children?: React.Node,
+  label: string | Node,
+  children?: Node,
 };
 
 function Tooltip(props: Props) {

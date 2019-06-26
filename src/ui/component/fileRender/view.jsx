@@ -4,6 +4,8 @@ import React from 'react';
 import LoadingScreen from 'component/common/loading-screen';
 import VideoViewer from 'component/viewers/videoViewer';
 
+// Audio player on hold until the current player is dropped
+// This component is half working
 // const AudioViewer = React.lazy<*>(() =>
 //   import(/* webpackChunkName: "audioViewer" */
 //   'component/viewers/audioViewer')

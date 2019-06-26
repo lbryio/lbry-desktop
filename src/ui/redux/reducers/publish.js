@@ -27,6 +27,7 @@ type PublishState = {
   bidError: ?string,
   otherLicenseDescription: string,
   licenseUrl: string,
+  tags: Array<string>,
 };
 
 const defaultState: PublishState = {
@@ -53,6 +54,7 @@ const defaultState: PublishState = {
   licenseType: 'None',
   otherLicenseDescription: 'All rights reserved',
   licenseUrl: '',
+  tags: [],
   publishing: false,
   publishSuccess: false,
   publishError: undefined,

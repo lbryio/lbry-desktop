@@ -57,7 +57,7 @@ class FileDownloadLink extends React.PureComponent<Props> {
       }
 
       return (
-        <ToolTip label={__('Download')}>
+        <ToolTip label={__('Add to your library')}>
           <Button
             button="link"
             icon={ICONS.DOWNLOAD}

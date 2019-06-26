@@ -70,7 +70,7 @@ function ClaimListDiscover(props: Props) {
   const header = (
     <h1 className="card__title--flex">
       <FormField
-        className="file-list__dropdown"
+        className="claim-list__dropdown"
         type="select"
         name="trending_sort"
         value={typeSort}
@@ -89,7 +89,7 @@ function ClaimListDiscover(props: Props) {
         <FormField
           type="select"
           name="trending_overview"
-          className="file-list__dropdown"
+          className="claim-list__dropdown"
           value={personalSort}
           onChange={e => setPersonalSort(e.target.value)}
         >
@@ -107,7 +107,7 @@ function ClaimListDiscover(props: Props) {
     <React.Fragment>
       {typeSort === 'top' && (
         <FormField
-          className="file-list__dropdown"
+          className="claim-list__dropdown"
           type="select"
           name="trending_time"
           value={timeSort}

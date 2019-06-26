@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import { doResolveUri } from 'lbry-redux';
+import { doResolveUri, selectBalance } from 'lbry-redux';
 import {
   selectPublishFormValues,
   selectIsStillEditing,
@@ -14,7 +14,6 @@ import {
   doPublish,
   doPrepareEdit,
 } from 'redux/actions/publish';
-import { doOpenModal } from 'redux/actions/app';
 import { selectUnclaimedRewardValue } from 'lbryinc';
 import PublishPage from './view';
 
@@ -29,6 +28,7 @@ const select = state => ({
   isStillEditing: selectIsStillEditing(state),
   isResolvingUri: selectIsResolvingPublishUris(state),
   totalRewardValue: selectUnclaimedRewardValue(state),
+  balance: selectBalance(state),
 });
 
 const perform = dispatch => ({
@@ -38,7 +38,6 @@ const perform = dispatch => ({
   publish: params => dispatch(doPublish(params)),
   prepareEdit: (claim, uri) => dispatch(doPrepareEdit(claim, uri)),
   resetThumbnailStatus: () => dispatch(doResetThumbnailStatus()),
-  openModal: (modal, props) => dispatch(doOpenModal(modal, props)),
 });
 
 export default connect(

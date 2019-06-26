@@ -1,4 +1,4 @@
-.file-list__header {
+.claim-list__header {
   display: flex;
   align-items: center;
   min-height: 4.5rem;
@@ -31,12 +31,13 @@
   }
 }
 
-.file-list__header--small {
+.claim-list__header--small {
   height: 3rem;
+  min-height: 3rem;
   font-size: 1em;
 }
 
-.file-list__dropdown {
+.claim-list__dropdown {
   background-position: 95% center;
   background-repeat: no-repeat;
   background-size: 1.2rem;
@@ -50,8 +51,8 @@
   background-color: lighten($lbry-black, 10%);
 }
 
-.file-list__header,
-.file-list__dropdown {
+.claim-list__header,
+.claim-list__dropdown {
   background-color: lighten($lbry-black, 10%);
 
   [data-mode='dark'] & {
@@ -59,17 +60,17 @@
   }
 }
 
-.file-list__header-text {
+.claim-list__header-text {
   display: flex;
   align-items: center;
 }
 
-.file-list__header-text,
-.file-list__dropdown {
+.claim-list__header-text,
+.claim-list__dropdown {
   font-size: 1.3rem;
 }
 
-.file-list__alt-controls {
+.claim-list__alt-controls {
   display: flex;
   align-items: center;
   margin-left: auto;
@@ -80,7 +81,7 @@
   }
 }
 
-.file-list__item {
+.claim-list__item {
   display: flex;
   position: relative;
   font-size: 1.3rem;
@@ -103,12 +104,12 @@
   }
 }
 
-.file-list__item--injected,
-.file-list__item {
-  border-bottom: 1px solid rgba($lbry-teal-5, 0.1);
+.claim-list__item--injected,
+.claim-list__item + .claim-list__item {
+  border-top: 1px solid rgba($lbry-teal-5, 0.1);
 }
 
-.file-list__item--large {
+.claim-list__item--large {
   @include mediaThumbHoverZoom;
   font-size: 1.6rem;
   border-bottom: 0;
@@ -124,36 +125,49 @@
   }
 }
 
-.file-list__item-metadata {
+.claim-list__pending {
+  cursor: pointer;
+  opacity: 0.6;
+
+  &:hover {
+    background-color: $lbry-white;
+
+    [data-mode='dark'] & {
+      background-color: lighten($lbry-black, 5%);
+    }
+  }
+}
+
+.claim-list__item-metadata {
   display: flex;
   flex-direction: column;
   width: 100%;
 }
 
-.file-list__item-info {
+.claim-list__item-info {
   align-items: flex-start;
 }
 
-.file-list__item-info,
-.file-list__item-properties {
+.claim-list__item-info,
+.claim-list__item-properties {
   display: flex;
   justify-content: space-between;
 }
 
-.file-list__item-properties {
+.claim-list__item-properties {
   align-items: flex-end;
 }
 
-.file-list__item-title {
+.claim-list__item-title {
   font-weight: 600;
   margin-right: auto;
 }
 
-.file-list__item-tags {
+.claim-list__item-tags {
   margin-left: 0;
 }
 
-.file-list__meta {
+.claim-list__meta {
   padding: var(--spacing-medium);
   background-color: lighten($lbry-teal-5, 55%);
 }

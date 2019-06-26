@@ -13,7 +13,7 @@ const BLUE_COLOR = '#49b2e2';
 
 type Props = {
   icon: string,
-  tooltip?: string, // tooltip direction
+  tooltip?: boolean,
   iconColor?: string,
   size?: number,
   className?: string,

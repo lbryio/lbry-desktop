@@ -4,7 +4,7 @@ import { FormField } from 'component/common/form';
 import { CC_LICENSES, COPYRIGHT, OTHER, PUBLIC_DOMAIN, NONE } from 'constants/licenses';
 
 type Props = {
-  licenseType: string,
+  licenseType: ?string,
   licenseUrl: ?string,
   otherLicenseDescription: ?string,
   handleLicenseChange: (string, string) => void,

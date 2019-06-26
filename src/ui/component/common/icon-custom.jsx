@@ -1,5 +1,5 @@
 // @flow
-// A housing for all of our icons. Mostly taken fromhttps://github.com/feathericons/react-feather
+// A housing for all of our icons. Mostly taken from https://github.com/feathericons/react-feather
 import * as ICONS from 'constants/icons';
 import React, { forwardRef } from 'react';
 
@@ -9,7 +9,8 @@ type IconProps = {
 };
 
 // Returns a react component
-const buildIcon = (iconStrokes: React$Node, options?: {} = {}) =>
+// Icons with tooltips need to use this function so the ref can be properly forwarded
+const buildIcon = (iconStrokes: React$Node) =>
   forwardRef((props: IconProps, ref) => {
     const { size = 24, color = 'currentColor', ...otherProps } = props;
     return (
@@ -24,7 +25,6 @@ const buildIcon = (iconStrokes: React$Node, options?: {} = {}) =>
         strokeWidth="2"
         strokeLinecap="round"
         strokeLinejoin="round"
-        {...options}
         {...otherProps}
       >
         {iconStrokes}
@@ -34,7 +34,7 @@ const buildIcon = (iconStrokes: React$Node, options?: {} = {}) =>
 
 export const icons = {
   // The LBRY icon is different from the base icon set so don't use buildIcon()
-  [ICONS.LBRY]: (
+  [ICONS.LBRY]: () => (
     <svg stroke="currentColor" fill="currentColor" x="0px" y="0px" viewBox="0 0 322 254" className="icon lbry-icon">
       <path d="M296,85.9V100l-138.8,85.3L52.6,134l0.2-7.9l104,51.2L289,96.1v-5.8L164.2,30.1L25,116.2v38.5l131.8,65.2 l137.6-84.4l3.9,6l-141.1,86.4L18.1,159.1v-46.8l145.8-90.2C163.9,22.1,296,85.9,296,85.9z" />
       <path d="M294.3,150.9l2-12.6l-12.2-2.1l0.8-4.9l17.1,2.9l-2.8,17.5L294.3,150.9L294.3,150.9z" />

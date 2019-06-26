@@ -1,7 +1,8 @@
 // @flow
+import type { Node } from 'react';
 import * as MODALS from 'constants/modal_types';
 import * as ICONS from 'constants/icons';
-import * as React from 'react';
+import React from 'react';
 import Button from 'component/button';
 import Tooltip from 'component/common/tooltip';
 import { requestFullscreen, fullscreenElement } from 'util/full-screen';
@@ -16,7 +17,7 @@ type Props = {
   openModal: (id: string, { uri: string }) => void,
   claimIsMine: boolean,
   fileInfo: FileInfo,
-  viewerContainer: React.Ref,
+  viewerContainer: ?{ current: Node },
   showFullscreen: boolean,
 };
 

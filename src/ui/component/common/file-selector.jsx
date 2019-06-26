@@ -1,13 +1,6 @@
 // @flow
 import * as React from 'react';
-// @if TARGET='app'
-// $FlowFixMe
 import { remote } from 'electron';
-// @endif
-// @if TARGET='web'
-// $FlowFixMe
-import { remote } from 'web/stubs';
-// @endif
 import Button from 'component/button';
 import { FormField } from 'component/common/form';
 import path from 'path';
@@ -21,6 +14,8 @@ type Props = {
   type: string,
   currentPath: ?string,
   onFileChosen: (string, string) => void,
+  label?: string,
+  placeholder?: string,
   fileLabel?: string,
   directoryLabel?: string,
   filters?: FileFilters[],
@@ -83,13 +78,14 @@ class FileSelector extends React.PureComponent<Props> {
   input: ?HTMLInputElement;
 
   render() {
-    const { type, currentPath, fileLabel, directoryLabel } = this.props;
+    const { type, currentPath, label, fileLabel, directoryLabel, placeholder } = this.props;
 
-    const label = type === 'file' ? fileLabel || __('Choose File') : directoryLabel || __('Choose Directory');
+    const buttonLabel = type === 'file' ? fileLabel || __('Choose File') : directoryLabel || __('Choose Directory');
 
     return (
       <React.Fragment>
         <FormField
+          label={label}
           webkitdirectory="true"
           className="form-field--copyable"
           type="text"
@@ -98,8 +94,8 @@ class FileSelector extends React.PureComponent<Props> {
             if (this.fileInput) this.fileInput.current.select();
           }}
           readOnly="readonly"
-          value={currentPath || __('No File Chosen')}
-          inputButton={<Button button="primary" label={label} onClick={() => this.handleButtonClick()} />}
+          value={currentPath || placeholder || __('Choose a file')}
+          inputButton={<Button button="primary" label={buttonLabel} onClick={() => this.handleButtonClick()} />}
         />
       </React.Fragment>
     );

@@ -48,4 +48,5 @@ declare type PublishParams = {
   },
   claim: StreamClaim,
   nsfw: boolean,
+  tags: Array<Tag>,
 };

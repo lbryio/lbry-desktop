@@ -1,4 +1,5 @@
 // @flow
+import type { Node } from 'react';
 import React, { forwardRef } from 'react';
 import Icon from 'component/common/icon';
 import classnames from 'classnames';
@@ -14,13 +15,12 @@ type Props = {
   icon: ?string,
   iconRight: ?string,
   disabled: ?boolean,
-  children: ?React.Node,
+  children: ?Node,
   navigate: ?string,
   className: ?string,
   description: ?string,
   type: string,
   button: ?string, // primary, secondary, alt, link
-  iconColor?: string,
   iconSize?: number,
   constrict: ?boolean, // to shorten the button and ellipsis, only use for links
   activeClass?: string,
@@ -31,7 +31,9 @@ type Props = {
   onMouseLeave: ?(any) => any,
 };
 
-const Button = forwardRef((props: Props, ref) => {
+// use forwardRef to allow consumers to pass refs to the button content if they want to
+// flow requires forwardRef have default type arguments passed to it
+const Button = forwardRef<any, {}>((props: Props, ref: any) => {
   const {
     type = 'button',
     onClick,
@@ -48,7 +50,6 @@ const Button = forwardRef((props: Props, ref) => {
     className,
     description,
     button,
-    iconColor,
     iconSize,
     constrict,
     activeClass,
@@ -74,10 +75,10 @@ const Button = forwardRef((props: Props, ref) => {
 
   const content = (
     <span className="button__content">
-      {icon && <Icon icon={icon} iconColor={iconColor} size={iconSize} />}
+      {icon && <Icon icon={icon} size={iconSize} />}
       {label && <span className="button__label">{label}</span>}
       {children && children}
-      {iconRight && <Icon icon={iconRight} iconColor={iconColor} size={iconSize} />}
+      {iconRight && <Icon icon={iconRight} size={iconSize} />}
     </span>
   );
 

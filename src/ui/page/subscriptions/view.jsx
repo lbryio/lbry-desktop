@@ -36,7 +36,7 @@ export default function SubscriptionsPage(props: Props) {
   const viewingSuggestedSubs = urlParams.get('view');
 
   function onClick() {
-    let url = `/$/${PAGES.SUBSCRIPTIONS}`;
+    let url = `/$/${PAGES.FOLLOWING}`;
     if (!viewingSuggestedSubs) {
       url += '?view=discover';
     }
@@ -54,6 +54,7 @@ export default function SubscriptionsPage(props: Props) {
     const ids = idString.split(',');
     const options = {
       channel_ids: ids,
+      order_by: ['release_time'],
     };
 
     doClaimSearch(20, options);
@@ -72,7 +73,8 @@ export default function SubscriptionsPage(props: Props) {
               onClick={() => onClick()}
             />
           }
-          uris={viewingSuggestedSubs ? suggestedSubscriptions.map(sub => sub.uri) : uris}
+          // Fix the need to reverse this
+          uris={viewingSuggestedSubs ? suggestedSubscriptions.map(sub => sub.uri) : uris.reverse()}
         />
       </div>
     </Page>
