@@ -56,7 +56,7 @@ export default function TagSelect(props: Props) {
     if (onSelect) {
       onSelect(tag);
     } else {
-      doToggleTagFollow(tag);
+      doToggleTagFollow(tag.name);
     }
   }
 

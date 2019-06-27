@@ -1,12 +1,14 @@
 // @flow
 import type { Node } from 'react';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import moment from 'moment';
+import usePersistedState from 'util/use-persisted-state';
 import { FormField } from 'component/common/form';
 import ClaimList from 'component/claimList';
 import Tag from 'component/tag';
-import usePersistedState from 'util/use-persisted-state';
+import ClaimPreview from 'component/claimPreview';
 
+const PAGE_SIZE = 20;
 const TIME_DAY = 'day';
 const TIME_WEEK = 'week';
 const TIME_MONTH = 'month';
@@ -37,11 +39,17 @@ function ClaimListDiscover(props: Props) {
   const [personalSort, setPersonalSort] = usePersistedState('file-list-trending:personalSort', SEARCH_SORT_YOU);
   const [typeSort, setTypeSort] = usePersistedState('file-list-trending:typeSort', TYPE_TRENDING);
   const [timeSort, setTimeSort] = usePersistedState('file-list-trending:timeSort', TIME_WEEK);
+  const [page, setPage] = useState(1);
 
   const toCapitalCase = string => string.charAt(0).toUpperCase() + string.slice(1);
   const tagsString = tags.join(',');
   useEffect(() => {
-    const options = {};
+    const options: {
+      page_size: number,
+      any_tags?: Array<string>,
+      order_by?: Array<string>,
+      release_time?: string,
+    } = { page_size: PAGE_SIZE, page };
     const newTags = tagsString.split(',');
 
     if ((newTags && !personal) || (newTags && personal && personalSort === SEARCH_SORT_YOU)) {
@@ -65,7 +73,7 @@ function ClaimListDiscover(props: Props) {
     }
 
     doClaimSearch(20, options);
-  }, [personal, personalSort, typeSort, timeSort, doClaimSearch, tagsString]);
+  }, [personal, personalSort, typeSort, timeSort, doClaimSearch, page, tagsString]);
 
   const header = (
     <h1 className="card__title--flex">
@@ -91,7 +99,10 @@ function ClaimListDiscover(props: Props) {
           name="trending_overview"
           className="claim-list__dropdown"
           value={personalSort}
-          onChange={e => setPersonalSort(e.target.value)}
+          onChange={e => {
+            setPage(1);
+            setPersonalSort(e.target.value);
+          }}
         >
           {SEARCH_FILTER_TYPES.map(type => (
             <option key={type} value={type}>
@@ -132,7 +143,10 @@ function ClaimListDiscover(props: Props) {
         injectedItem={personalSort === SEARCH_SORT_YOU && injectedItem}
         header={header}
         headerAltControls={headerAltControls}
+        onScrollBottom={() => setPage(page + 1)}
       />
+
+      {loading && page > 1 && new Array(PAGE_SIZE).fill(1).map((x, i) => <ClaimPreview key={i} placeholder />)}
     </div>
   );
 }

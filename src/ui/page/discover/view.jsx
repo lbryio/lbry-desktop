@@ -15,7 +15,7 @@ function DiscoverPage(props: Props) {
       <ClaimListDiscover
         personal
         tags={followedTags.map(tag => tag.name)}
-        injectedItem={<TagsSelect showClose title={__('Make This Your Own')} />}
+        injectedItem={<TagsSelect showClose title={__('Customize Your Homepage')} />}
       />
     </Page>
   );
