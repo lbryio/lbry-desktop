@@ -132,10 +132,6 @@
   color: rgba($lbry-black, 0.8);
   font-size: 0.9em;
 
-  &:not(:last-child) {
-    margin-bottom: var(--spacing-medium);
-  }
-
   html[data-mode='dark'] & {
     color: rgba($lbry-white, 0.7);
   }
@@ -150,7 +146,7 @@
 
 .media__subtitle {
   font-size: 0.8em;
-  color: rgba($lbry-black, 0.8);
+  color: rgba($lbry-black, 0.6);
 
   [data-mode='dark'] & {
     color: rgba($lbry-white, 0.8);
@@ -167,6 +163,7 @@
 
 .media__subtitle__channel {
   font-weight: 600;
+  margin: var(--spacing-small) 0;
 }
 
 //  M E D I A
@@ -181,7 +178,7 @@
 }
 
 .media__info--large {
-  border-top: 1px solid $lbry-gray-1;
+  // border-top: 1px solid $lbry-gray-1;
   margin-top: var(--spacing-medium);
 
   html[data-mode='dark'] & {

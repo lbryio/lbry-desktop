@@ -1,6 +1,7 @@
 // @flow
+import { MAIN_WRAPPER_CLASS } from 'component/app/view';
 import type { Node } from 'react';
-import React from 'react';
+import React, { useEffect } from 'react';
 import classnames from 'classnames';
 import ClaimPreview from 'component/claimPreview';
 import Spinner from 'component/spinner';
@@ -19,14 +20,25 @@ type Props = {
   type: string,
   empty?: string,
   meta?: Node,
+  onScrollBottom?: any => void,
   // If using the default header, this is a unique ID needed to persist the state of the filter setting
   persistedStorageKey?: string,
 };
 
 export default function ClaimList(props: Props) {
-  const { uris, headerAltControls, injectedItem, loading, persistedStorageKey, empty, meta, type, header } = props;
+  const {
+    uris,
+    headerAltControls,
+    injectedItem,
+    loading,
+    persistedStorageKey,
+    empty,
+    meta,
+    type,
+    header,
+    onScrollBottom,
+  } = props;
   const [currentSort, setCurrentSort] = usePersistedState(persistedStorageKey, SORT_NEW);
-  const sortedUris = uris && currentSort === SORT_NEW ? uris.slice().reverse() : uris;
   const hasUris = uris && !!uris.length;
   const sortedUris = (hasUris && (currentSort === SORT_NEW ? uris : uris.slice().reverse())) || [];
 
@@ -34,8 +46,31 @@ export default function ClaimList(props: Props) {
     setCurrentSort(currentSort === SORT_NEW ? SORT_OLD : SORT_NEW);
   }
 
+  useEffect(() => {
+    if (onScrollBottom) {
+      window.addEventListener('scroll', handleScroll);
+
+      return () => {
+        window.removeEventListener('scroll', handleScroll);
+      };
+    }
+  }, [loading, handleScroll]);
+
+  function handleScroll(e) {
+    if (onScrollBottom) {
+      const x = document.querySelector(`.${MAIN_WRAPPER_CLASS}`);
+
+      if (x && window.scrollY + window.innerHeight >= x.offsetHeight) {
+        // fix this
+        if (!loading && uris.length > 19) {
+          onScrollBottom();
+        }
+      }
+    }
+  }
+
   return (
-    <section className={classnames('file-list')}>
+    <section className={classnames('claim-list')}>
       {header !== false && (
         <div className={classnames('claim-list__header', { 'claim-list__header--small': type === 'small' })}>
           {header || (
@@ -60,7 +95,7 @@ export default function ClaimList(props: Props) {
           {sortedUris.map((uri, index) => (
             <React.Fragment key={uri}>
               <ClaimPreview uri={uri} type={type} />
-              {index === 4 && injectedItem && <li className="claim-list__item--injected">{injectedItem}</li>}
+              {index === 4 && injectedItem && <li className="claim-preview--injected">{injectedItem}</li>}
             </React.Fragment>
           ))}
         </ul>

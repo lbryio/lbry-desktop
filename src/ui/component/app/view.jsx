@@ -9,6 +9,8 @@ import { openContextMenu } from 'util/context-menu';
 import useKonamiListener from 'util/enhanced-layout';
 import Yrbl from 'component/yrbl';
 
+export const MAIN_WRAPPER_CLASS = 'main-wrapper';
+
 type Props = {
   alertError: (string | {}) => void,
   pageTitle: ?string,
@@ -16,18 +18,23 @@ type Props = {
   theme: string,
   fetchRewards: () => void,
   fetchRewardedContent: () => void,
+  fetchTransactions: () => void,
 };
 
 function App(props: Props) {
-  const { theme, fetchRewards, fetchRewardedContent } = props;
+  const { theme, fetchRewards, fetchRewardedContent, fetchTransactions } = props;
   const appRef = useRef();
   const isEnhancedLayout = useKonamiListener();
 
   useEffect(() => {
     ReactModal.setAppElement(appRef.current);
-    fetchRewards();
     fetchRewardedContent();
-  }, [fetchRewards, fetchRewardedContent]);
+
+    // @if TARGET='app'
+    fetchRewards();
+    fetchTransactions();
+    // @endif
+  }, [fetchRewards, fetchRewardedContent, fetchTransactions]);
 
   useEffect(() => {
     // $FlowFixMe
@@ -38,7 +45,7 @@ function App(props: Props) {
     <div ref={appRef} onContextMenu={e => openContextMenu(e)}>
       <Header />
 
-      <div className="main-wrapper">
+      <div className={MAIN_WRAPPER_CLASS}>
         <div className="main-wrapper-inner">
           <Router />
           <SideBar />
