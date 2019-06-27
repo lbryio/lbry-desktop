@@ -3,6 +3,14 @@
   position: relative;
   align-items: center;
 
+  .icon {
+    stroke: rgba($lbry-black, 0.5);
+
+    html[data-mode='dark'] & {
+      stroke: rgba($lbry-white, 0.7);
+    }
+  }
+
   & > *:not(:last-child) {
     margin-right: var(--spacing-small);
   }

@@ -1,6 +1,6 @@
 // @flow
 import * as PAGES from 'constants/pages';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import Page from 'component/page';
 import ClaimList from 'component/claimList';
 import Button from 'component/button';
@@ -29,7 +29,7 @@ export default function SubscriptionsPage(props: Props) {
     doClaimSearch,
     uris,
   } = props;
-
+  const [page, setPage] = useState(1);
   const hasSubscriptions = !!subscribedChannels.length;
   const { search } = location;
   const urlParams = new URLSearchParams(search);
@@ -53,27 +53,31 @@ export default function SubscriptionsPage(props: Props) {
   useEffect(() => {
     const ids = idString.split(',');
     const options = {
+      page,
       channel_ids: ids,
       order_by: ['release_time'],
     };
 
     doClaimSearch(20, options);
-  }, [idString, doClaimSearch]);
+  }, [idString, doClaimSearch, page]);
 
   return (
     <Page>
       <div className="card">
         <ClaimList
           loading={loading}
-          header={<h1>{viewingSuggestedSubs ? __('Discover New Channels') : __('Latest From Your Subscriptions')}</h1>}
+          header={
+            <h1>{viewingSuggestedSubs ? __('Discover New Channels') : __("Latest From Who You're Following")}</h1>
+          }
           headerAltControls={
             <Button
               button="link"
-              label={viewingSuggestedSubs ? hasSubscriptions && __('Following') : __('Find New Channels')}
+              label={viewingSuggestedSubs ? hasSubscriptions && __('View Your Feed') : __('Find New Channels')}
               onClick={() => onClick()}
             />
           }
           uris={viewingSuggestedSubs ? suggestedSubscriptions.map(sub => sub.uri) : uris}
+          onScrollBottom={() => console.log('scroll bottom') || setPage(page + 1)}
         />
       </div>
     </Page>

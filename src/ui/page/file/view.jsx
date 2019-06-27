@@ -184,6 +184,21 @@ class FilePage extends React.Component<Props> {
 
     const insufficientCredits = !claimIsMine && costInfo && costInfo.cost > balance;
 
+    const video = claim && claim.value && claim.value.video;
+    let duration;
+    if (video && video.duration) {
+      // $FlowFixMe
+      let date = new Date(null);
+      date.setSeconds(video.duration);
+      let timeString = date.toISOString().substr(11, 8);
+
+      if (timeString.startsWith('00:')) {
+        timeString = timeString.substr(3);
+      }
+
+      duration = timeString;
+    }
+
     return (
       <Page className="main--file-page">
         <div className="grid-area--content card">
@@ -222,22 +237,11 @@ class FilePage extends React.Component<Props> {
 
         <div className="grid-area--info media__content media__content--large">
           <h1 className="media__title media__title--large">{title}</h1>
-
-          <div className="media__actions media__actions--between">
-            <div className="media__subtext media__subtext--large">
-              <div className="media__subtitle__channel">
-                <UriIndicator uri={uri} link />
-              </div>
-              {__('Published on')} <DateTime uri={uri} show={DateTime.SHOW_DATE} />
+          <div className="media__subtext media__subtext--large">
+            <div className="media__subtitle__channel">
+              <UriIndicator uri={uri} link />
             </div>
-
-            {claimIsMine && (
-              <p>
-                {viewCount} {viewCount !== 1 ? __('Views') : __('View')}
-              </p>
-            )}
           </div>
-
           <div className="media__actions media__actions--between">
             <div className="media__action-group--large">
               {claimIsMine && (
@@ -279,6 +283,25 @@ class FilePage extends React.Component<Props> {
                 showFullscreen={isPreviewType}
                 viewerContainer={this.viewerContainer}
               />
+            </div>
+          </div>
+
+          <div
+            className="media__actions media__actions--between"
+            style={{ marginTop: '1rem', paddingTop: '1rem', borderTop: '1px solid #ddd' }}
+          >
+            <div className="media__subtext media__subtext--large">
+              <DateTime uri={uri} show={DateTime.SHOW_DATE} />
+            </div>
+
+            <div className="media__subtext media__subtext--large">
+              {video && <p className="media__info-text">{duration}</p>}
+
+              {claimIsMine && (
+                <p>
+                  {viewCount} {viewCount !== 1 ? __('Views') : __('View')}
+                </p>
+              )}
             </div>
           </div>
 

@@ -4,6 +4,7 @@ import Button from 'component/button';
 import { FormField } from 'component/common/form';
 import UserEmailNew from 'component/userEmailNew';
 import UserEmailVerify from 'component/userEmailVerify';
+import cookie from 'cookie';
 
 type Props = {
   cancelButton: React.Node,
@@ -21,6 +22,15 @@ function UserEmail(props: Props) {
   if (user) {
     isVerified = user.has_verified_email;
   }
+
+  const buttonsProps = IS_WEB
+    ? {
+        onClick: () => {
+          document.cookie = cookie.serialize('auth_token', '');
+          window.location.reload();
+        },
+      }
+    : { href: 'https://lbry.com/faq/how-to-change-email' };
 
   return (
     <section className="card card--section">
@@ -43,9 +53,7 @@ function UserEmail(props: Props) {
               readOnly
               label={__('Your Email')}
               value={email}
-              inputButton={
-                <Button button="inverse" label={__('Change')} href="https://lbry.com/faq/how-to-change-email" />
-              }
+              inputButton={<Button button="inverse" label={__('Change')} {...buttonsProps} />}
             />
           )}
           <p className="help">

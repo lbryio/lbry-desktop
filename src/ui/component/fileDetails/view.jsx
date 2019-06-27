@@ -42,7 +42,6 @@ class FileDetails extends PureComponent<Props> {
         <Expandable>
           {description && (
             <Fragment>
-              <div className="media__info-title">About</div>
               <div className="media__info-text">
                 <MarkdownPreview content={description} promptLinks />
               </div>

@@ -40,6 +40,12 @@ export const icons = {
       <path d="M294.3,150.9l2-12.6l-12.2-2.1l0.8-4.9l17.1,2.9l-2.8,17.5L294.3,150.9L294.3,150.9z" />
     </svg>
   ),
+  [ICONS.FEATURED]: buildIcon(
+    <g fill="none" fillRule="evenodd" strokeLinecap="round">
+      <circle cx="12" cy="8" r="7" />
+      <polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88" />
+    </g>
+  ),
   [ICONS.ARROW_LEFT]: buildIcon(
     <g fill="none" fillRule="evenodd" strokeLinecap="round">
       <path d="M4, 12 L21, 12" />
@@ -210,4 +216,12 @@ export const icons = {
   [ICONS.CHAT]: buildIcon(
     <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z" />
   ),
+  [ICONS.YES]: buildIcon(
+    <path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3zM7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3" />
+  ),
+  [ICONS.NO]: buildIcon(
+    <path d="M10 15v4a3 3 0 0 0 3 3l4-9V2H5.72a2 2 0 0 0-2 1.7l-1.38 9a2 2 0 0 0 2 2.3zm7-13h2.67A2.31 2.31 0 0 1 22 4v7a2.31 2.31 0 0 1-2.33 2H17" />
+  ),
+  [ICONS.UP]: buildIcon(<polyline points="18 15 12 9 6 15" />),
+  [ICONS.DOWN]: buildIcon(<polyline points="6 9 12 15 18 9" />),
 };

@@ -1,6 +1,6 @@
 import { hot } from 'react-hot-loader/root';
 import { connect } from 'react-redux';
-import { doUpdateBlockHeight, doError } from 'lbry-redux';
+import { doUpdateBlockHeight, doError, doFetchTransactions } from 'lbry-redux';
 import { selectUser, doRewardList, doFetchRewardedContent } from 'lbryinc';
 import { selectThemePath } from 'redux/selectors/settings';
 import App from './view';
@@ -15,6 +15,7 @@ const perform = dispatch => ({
   updateBlockHeight: () => dispatch(doUpdateBlockHeight()),
   fetchRewards: () => dispatch(doRewardList()),
   fetchRewardedContent: () => dispatch(doFetchRewardedContent()),
+  fetchTransactions: () => dispatch(doFetchTransactions()),
 });
 
 export default hot(
