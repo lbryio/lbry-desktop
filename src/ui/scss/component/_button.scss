@@ -18,9 +18,16 @@
   }
 }
 
-// Fix this in lbry/components
-.button--primary:not(:hover) {
-  background-color: $lbry-teal-4;
+.button--primary {
+  &:not(:hover) {
+    // fix this in components repo
+    background-color: $lbry-teal-4;
+  }
+
+  &:hover {
+    background-color: $lbry-teal-3;
+  }
+
   svg {
     color: white;
   }

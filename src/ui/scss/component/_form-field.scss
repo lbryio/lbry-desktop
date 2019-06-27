@@ -1,25 +1,5 @@
 @import '~@lbry/components/sass/form/_index.scss';
 
-// replace this
-form {
-  // setting the font size here sizes everything within
-  &:not(:last-child) {
-    margin-bottom: var(--spacing-s);
-  }
-}
-
-input,
-select {
-  height: var(--spacing-l);
-  border: 1px solid;
-}
-
-checkbox-element,
-radio-element,
-select {
-  cursor: pointer;
-}
-
 textarea {
   &::placeholder {
     opacity: 0.4;

@@ -15,3 +15,7 @@
     }
   }
 }
+
+@mixin focus {
+  box-shadow: 0 0 0 2px $lbry-blue-1;
+}

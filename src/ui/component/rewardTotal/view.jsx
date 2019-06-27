@@ -10,7 +10,7 @@ type Props = {
 function RewardTotal(props: Props) {
   const { rewards } = props;
   const rewardTotal = rewards.reduce((acc, val) => acc + val.reward_amount, 0);
-  const total = useTween(rewardTotal * 25);
+  const total = useTween(rewardTotal * 40);
   const integer = Math.round(total * rewardTotal);
 
   return (

@@ -22,6 +22,7 @@ import RecommendedContent from 'component/recommendedContent';
 import ClaimTags from 'component/claimTags';
 import CommentsList from 'component/commentsList';
 import CommentCreate from 'component/commentCreate';
+import VideoDuration from 'component/videoDuration';
 
 type Props = {
   claim: StreamClaim,
@@ -184,21 +185,6 @@ class FilePage extends React.Component<Props> {
 
     const insufficientCredits = !claimIsMine && costInfo && costInfo.cost > balance;
 
-    const video = claim && claim.value && claim.value.video;
-    let duration;
-    if (video && video.duration) {
-      // $FlowFixMe
-      let date = new Date(null);
-      date.setSeconds(video.duration);
-      let timeString = date.toISOString().substr(11, 8);
-
-      if (timeString.startsWith('00:')) {
-        timeString = timeString.substr(3);
-      }
-
-      duration = timeString;
-    }
-
     return (
       <Page className="main--file-page">
         <div className="grid-area--content card">
@@ -295,7 +281,7 @@ class FilePage extends React.Component<Props> {
             </div>
 
             <div className="media__subtext media__subtext--large">
-              {video && <p className="media__info-text">{duration}</p>}
+              <VideoDuration uri={uri} />
 
               {claimIsMine && (
                 <p>
