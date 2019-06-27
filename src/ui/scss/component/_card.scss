@@ -25,10 +25,6 @@
 .card--section {
   position: relative;
   padding: var(--spacing-large);
-
-  .card__content:not(:last-of-type) {
-    margin-bottom: var(--spacing-large);
-  }
 }
 
 .card--space-between {
@@ -100,6 +96,10 @@
 //  C O N T E N T
 
 .card__content {
+  &:not(:last-of-type) {
+    margin-bottom: var(--spacing-medium);
+  }
+
   p:not(:last-child) {
     margin-bottom: var(--spacing-medium);
   }

@@ -36,6 +36,7 @@ export type AppState = {
   isUpgradeAvailable: ?boolean,
   isUpgradeSkipped: ?boolean,
   hasClickedComment: boolean,
+  enhancedLayout: boolean,
   searchOptionsExpanded: boolean,
 };
 

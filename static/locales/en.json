@@ -287,5 +287,11 @@
   "% complete": "% complete",
   "Updates published": "Updates published",
   "Your updates have been published to LBRY at the address": "Your updates have been published to LBRY at the address",
-  "The updates will take a few minutes to appear for other LBRY users. Until then your file will be listed as \"pending\" under your published files.": "The updates will take a few minutes to appear for other LBRY users. Until then your file will be listed as \"pending\" under your published files."
+  "The updates will take a few minutes to appear for other LBRY users. Until then your file will be listed as \"pending\" under your published files.": "The updates will take a few minutes to appear for other LBRY users. Until then your file will be listed as \"pending\" under your published files.",
+  "Comments": "Comments",
+  "Comment": "Comment",
+  "Your comment": "Your comment",
+  "Post": "Post",
+  "Channel": "Channel",
+  "No modifier provided after separator %s.": "No modifier provided after separator %s."
 }

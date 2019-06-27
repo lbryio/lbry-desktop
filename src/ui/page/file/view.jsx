@@ -20,6 +20,8 @@ import classnames from 'classnames';
 import getMediaType from 'util/get-media-type';
 import RecommendedContent from 'component/recommendedContent';
 import ClaimTags from 'component/claimTags';
+import CommentsList from 'component/commentsList';
+import CommentCreate from 'component/commentCreate';
 
 type Props = {
   claim: StreamClaim,
@@ -285,6 +287,10 @@ class FilePage extends React.Component<Props> {
           </div>
           <div className="media__info--large">
             <FileDetails uri={uri} />
+
+            <div className="media__info-title">{__('Comments')}</div>
+            <CommentCreate uri={uri} />
+            <CommentsList uri={uri} />
           </div>
         </div>
         <div className="grid-area--related">

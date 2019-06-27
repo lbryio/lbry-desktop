@@ -7,6 +7,7 @@ import {
   walletReducer,
   notificationsReducer,
   tagsReducerBuilder,
+  commentReducer,
 } from 'lbry-redux';
 import { userReducer, rewardsReducer, costInfoReducer, blacklistReducer, homepageReducer, statsReducer } from 'lbryinc';
 import appReducer from 'redux/reducers/app';
@@ -34,6 +35,7 @@ export default history =>
     availability: availabilityReducer,
     blacklist: blacklistReducer,
     claims: claimsReducer,
+    comments: commentReducer,
     content: contentReducer,
     costInfo: costInfoReducer,
     fileInfo: fileInfoReducer,
