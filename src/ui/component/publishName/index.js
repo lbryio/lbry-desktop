@@ -14,6 +14,7 @@ const select = state => ({
   name: makeSelectPublishFormValue('name')(state),
   channel: makeSelectPublishFormValue('channel')(state),
   uri: makeSelectPublishFormValue('uri')(state),
+  bid: makeSelectPublishFormValue('bid')(state),
   isStillEditing: selectIsStillEditing(state),
   isResolvingUri: selectIsResolvingPublishUris(state),
   amountNeededForTakeover: selectTakeOverAmount(state),

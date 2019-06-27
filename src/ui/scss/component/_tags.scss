@@ -57,6 +57,10 @@ $main: $lbry-teal-5;
   &:active {
     background-color: $main;
   }
+
+  &:focus {
+    @include focus;
+  }
 }
 
 .tag--remove {

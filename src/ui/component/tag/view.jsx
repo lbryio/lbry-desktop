@@ -20,6 +20,7 @@ export default function Tag(props: Props) {
     <Button
       {...clickProps}
       disabled={disabled}
+      title={type === 'add' ? __('Add tag') : __('Remove tag')}
       className={classnames('tag', {
         'tag--add': type === 'add',
         'tag--remove': type === 'remove',

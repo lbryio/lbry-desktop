@@ -10,7 +10,7 @@ type Props = {
   name: string,
   channel: string,
   uri: string,
-  bid: string,
+  bid: number,
   balance: number,
   isStillEditing: boolean,
   myClaimForUri: ?StreamClaim,
@@ -27,7 +27,7 @@ function PublishText(props: Props) {
     uri,
     isStillEditing,
     myClaimForUri,
-    bid: bidString,
+    bid,
     isResolvingUri,
     amountNeededForTakeover,
     prepareEdit,
@@ -37,7 +37,6 @@ function PublishText(props: Props) {
   const [nameError, setNameError] = useState(undefined);
   const [bidError, setBidError] = useState(undefined);
   const previousBidAmount = myClaimForUri && Number(myClaimForUri.amount);
-  const bid = Number(bidString);
 
   function editExistingClaim() {
     if (myClaimForUri) {
