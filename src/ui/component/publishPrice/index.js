@@ -1,4 +1,5 @@
 import { connect } from 'react-redux';
+import { doUpdatePublishForm } from 'redux/actions/publish';
 import { makeSelectPublishFormValue } from 'redux/selectors/publish';
 import PublishPage from './view';
 
@@ -7,7 +8,11 @@ const select = state => ({
   fee: makeSelectPublishFormValue('fee')(state),
 });
 
+const perform = dispatch => ({
+  updatePublishForm: values => dispatch(doUpdatePublishForm(values)),
+});
+
 export default connect(
   select,
-  null
+  perform
 )(PublishPage);

@@ -96,8 +96,8 @@
 }
 
 .claim-preview--injected,
-.claim-preview {
-  border-top: 1px solid rgba($lbry-teal-5, 0.1);
+.claim-preview + .claim-preview {
+  border-bottom: 1px solid rgba($lbry-teal-5, 0.1);
 }
 
 .claim-preview--large {
@@ -147,6 +147,7 @@
 
 .claim-preview-properties {
   align-items: flex-end;
+  flex: 1;
 }
 
 .claim-preview-title {
