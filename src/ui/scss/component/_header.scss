@@ -8,11 +8,16 @@
   box-shadow: var(--card-box-shadow) $lbry-gray-1;
   padding-left: var(--spacing-large);
   padding-right: var(--spacing-large);
+
   html[data-mode='dark'] & {
     background-color: mix($lbry-black, $lbry-gray-3, 90%);
     color: $lbry-white;
     border-bottom: none;
     box-shadow: var(--card-box-shadow) $lbry-black;
+  }
+
+  & > * {
+    user-select: none;
   }
 }
 
@@ -48,10 +53,6 @@
   justify-content: center;
   align-items: center;
   border-radius: 0;
-
-  svg {
-    stroke: $lbry-gray-5;
-  }
 
   &:hover {
     color: $lbry-teal-5;

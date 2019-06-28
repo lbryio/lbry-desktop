@@ -18,7 +18,13 @@ function FileListDownloaded(props: Props) {
     <React.Fragment>
       {hasDownloads ? (
         <div className="card">
-          <ClaimList persistedStorageKey="claim-list-downloaded" uris={downloadedUris} loading={fetching} />
+          <ClaimList
+            header={<h1>{__('Your Library')}</h1>}
+            defaultSort
+            persistedStorageKey="claim-list-downloaded"
+            uris={downloadedUris}
+            loading={fetching}
+          />
         </div>
       ) : (
         <div className="main--empty">

@@ -35,7 +35,7 @@ function ChannelContent(props: Props) {
 
       {!channelIsMine && <HiddenNsfwClaims className="card__content help" uri={uri} />}
 
-      {hasContent && <ClaimList header={false} uris={claimsInChannel.map(claim => claim.permanent_url).reverse()} />}
+      {hasContent && <ClaimList header={false} uris={claimsInChannel.map(claim => claim.permanent_url)} />}
 
       <Paginate
         onPageChange={page => fetchClaims(uri, page)}

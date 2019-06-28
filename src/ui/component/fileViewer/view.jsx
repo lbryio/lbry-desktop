@@ -1,4 +1,5 @@
 // @flow
+import type { ElementRef } from 'react';
 import * as PAGES from 'constants/pages';
 import React, { Suspense } from 'react';
 import classnames from 'classnames';
@@ -52,7 +53,7 @@ type Props = {
   nsfw: boolean,
   thumbnail: ?string,
   isPlayableType: boolean,
-  viewerContainer: React.Ref,
+  viewerContainer: { current: ElementRef<any> },
 };
 
 class FileViewer extends React.PureComponent<Props> {
@@ -126,7 +127,7 @@ class FileViewer extends React.PureComponent<Props> {
     }
 
     this.props.cancelPlay();
-    window.removeEventListener('keydown', this.handleKeyDown);
+    // window.removeEventListener('keydown', this.handleKeyDown);
   }
 
   handleKeyDown(event: SyntheticKeyboardEvent<*>) {

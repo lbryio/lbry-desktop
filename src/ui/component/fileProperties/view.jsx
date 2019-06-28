@@ -22,7 +22,7 @@ export default function FileProperties(props: Props) {
 
   return (
     <div className="file-properties">
-      {isSubscribed && <Icon tooltip icon={icons.SUBSCRIPTION} />}
+      {isSubscribed && <Icon tooltip icon={icons.SUBSCRIBE} />}
       {!claimIsMine && downloaded && <Icon tooltip icon={icons.DOWNLOAD} />}
       {isRewardContent && <Icon tooltip icon={icons.FEATURED} />}
       <FilePrice hideFree uri={uri} />

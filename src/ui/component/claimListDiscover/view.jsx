@@ -116,6 +116,7 @@ function ClaimListDiscover(props: Props) {
 
   const headerAltControls = (
     <React.Fragment>
+      {meta}
       {typeSort === 'top' && (
         <FormField
           className="claim-list__dropdown"
@@ -137,7 +138,6 @@ function ClaimListDiscover(props: Props) {
   return (
     <div className="card">
       <ClaimList
-        meta={meta}
         loading={loading}
         uris={uris}
         injectedItem={personalSort === SEARCH_SORT_YOU && injectedItem}

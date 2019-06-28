@@ -14,10 +14,10 @@ function FollowingEditPage(props: Props) {
   return (
     <Page>
       <div className="card">
-        <TagsSelect showClose={false} title={__('Find New Tags To Follow')} />
+        <TagsSelect showClose={false} title={__('Customize Your Tags')} />
       </div>
       <div className="card">
-        <ClaimList uris={channelUris} />
+        <ClaimList header={<h1>{__('Channels You Follow')}</h1>} uris={channelUris} />
       </div>
     </Page>
   );

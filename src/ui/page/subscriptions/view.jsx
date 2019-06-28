@@ -3,6 +3,7 @@ import * as PAGES from 'constants/pages';
 import React, { useEffect, useState } from 'react';
 import Page from 'component/page';
 import ClaimList from 'component/claimList';
+import ClaimPreview from 'component/claimPreview';
 import Button from 'component/button';
 
 type Props = {
@@ -79,6 +80,7 @@ export default function SubscriptionsPage(props: Props) {
           uris={viewingSuggestedSubs ? suggestedSubscriptions.map(sub => sub.uri) : uris}
           onScrollBottom={() => console.log('scroll bottom') || setPage(page + 1)}
         />
+        {loading && page > 1 && new Array(20).fill(1).map((x, i) => <ClaimPreview key={i} placeholder />)}
       </div>
     </Page>
   );

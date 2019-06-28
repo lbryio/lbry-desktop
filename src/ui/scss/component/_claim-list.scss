@@ -65,7 +65,7 @@
   display: flex;
   align-items: center;
   margin-left: auto;
-  font-size: 1.4em;
+  font-size: 1.1em;
 
   & > * {
     margin-left: var(--spacing-small);
@@ -96,7 +96,7 @@
 }
 
 .claim-preview--injected,
-.claim-preview + .claim-preview {
+.claim-preview {
   border-bottom: 1px solid rgba($lbry-teal-5, 0.1);
 }
 
@@ -157,9 +157,4 @@
 
 .claim-preview-tags {
   margin-left: 0;
-}
-
-.claim-list__meta {
-  padding: var(--spacing-medium);
-  background-color: lighten($lbry-teal-5, 55%);
 }
