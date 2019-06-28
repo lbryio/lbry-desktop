@@ -1,4 +1,5 @@
 // @flow
+import type { ElementRef } from 'react';
 import '@babel/polyfill';
 import * as React from 'react';
 
@@ -29,7 +30,7 @@ type Props = {
   onFinishCb: ?() => void,
   savePosition: number => void,
   changeVolume: number => void,
-  viewerContainer: React.Ref,
+  viewerContainer: { current: ElementRef<any> },
   searchBarFocused: boolean,
 };
 
@@ -114,7 +115,9 @@ class MediaPlayer extends React.PureComponent<Props, State> {
   componentWillUnmount() {
     const mediaElement = this.mediaContainer.current.children[0];
 
-    document.removeEventListener('keydown', this.handleKeyDown);
+    // Temorarily removing for comments the keydown handler needs to know
+    // if a user is typing
+    // document.removeEventListener('keydown', this.handleKeyDown);
 
     if (mediaElement) {
       mediaElement.removeEventListener('click', this.togglePlay);
@@ -128,11 +131,11 @@ class MediaPlayer extends React.PureComponent<Props, State> {
     if (!searchBarFocused) {
       // Handle fullscreen shortcut key (f)
       if (event.keyCode === F_KEYCODE) {
-        this.toggleFullscreen();
+        // this.toggleFullscreen();
       }
       // Handle toggle play
       // @if TARGET='app'
-      this.togglePlay(event);
+      // this.togglePlay(event);
       // @endif
     }
   };
@@ -263,9 +266,6 @@ class MediaPlayer extends React.PureComponent<Props, State> {
       this.renderFile();
     }
     // @endif
-
-    // Fullscreen event for web and app
-    document.addEventListener('keydown', this.handleKeyDown);
   }
 
   // @if TARGET='app'

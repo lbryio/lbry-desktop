@@ -13,6 +13,10 @@
 .search__options {
   margin-top: var(--spacing-large);
 
+  .button {
+    font-size: 2rem;
+  }
+
   legend {
     &.search__legend--1 {
       background-color: $lbry-teal-4;

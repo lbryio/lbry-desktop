@@ -26,7 +26,7 @@ const SearchOptions = (props: Props) => {
     <div>
       <Button
         button="alt"
-        label={__('FILTER')}
+        label={__('Filter')}
         iconRight={expanded ? ICONS.UP : ICONS.DOWN}
         onClick={toggleSearchExpanded}
       />

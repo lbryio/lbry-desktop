@@ -34,23 +34,23 @@ function SideBar(props: Props) {
               ...buildLink(null, __('Home'), ICONS.HOME),
             },
             {
-              ...buildLink(PAGES.FOLLOWING, __('Following'), ICONS.SUBSCRIPTION),
+              ...buildLink(PAGES.FOLLOWING, __('Following'), ICONS.SUBSCRIBE),
             },
             {
               ...buildLink(PAGES.LIBRARY, __('Library'), ICONS.LIBRARY),
             },
             {
-              ...buildLink(PAGES.PUBLISHED, __('Publishes'), ICONS.PUBLISHED),
+              ...buildLink(PAGES.PUBLISHED, __('Publishes'), ICONS.PUBLISH),
             },
           ].map(renderLink)}
 
           <li>
             <Button
-              navigate="/$/following/edit"
+              navigate="/$/following/customize"
               icon={ICONS.EDIT}
               className="navigation__link"
               activeClass="navigation__link--active"
-              label={__('Edit')}
+              label={__('Customize')}
             />
           </li>
         </ul>

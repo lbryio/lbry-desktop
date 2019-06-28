@@ -10,6 +10,7 @@ type Props = {
 
 function DiscoverPage(props: Props) {
   const { followedTags } = props;
+
   return (
     <Page>
       <ClaimListDiscover
