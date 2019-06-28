@@ -26,7 +26,7 @@ function PublishFormErrors(props: Props) {
         <div>{__('Please wait for thumbnail to finish uploading')}</div>
       )}
       {!!editingURI && !isStillEditing && !filePath && (
-        <div>{__('You need to reselect a file after changing the LBRY URL')}</div>
+        <div>{__('Please reselect a file after changing the LBRY URL')}</div>
       )}
     </div>
   );

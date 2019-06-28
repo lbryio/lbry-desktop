@@ -41,6 +41,7 @@ function PublishFile(props: Props) {
         <FileSelector currentPath={filePath} onFileChosen={handleFileChange} />
         {!!isStillEditing && name && (
           <p className="help">
+            {/* @i18nfixme */}
             {__("If you don't choose a file, the file from your existing claim")}
             {` "${name}" `}
             {__('will be used.')}

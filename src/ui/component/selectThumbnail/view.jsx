@@ -167,7 +167,7 @@ class SelectThumbnail extends React.PureComponent<Props, State> {
               __('Enter a URL for your thumbnail.')
             ) : (
               <React.Fragment>
-                {__('Upload your thumbnail (.png/.jpg/.jpeg/.gif) to')}{' '}
+                {__('Upload your thumbnail to')}{' '}
                 <Button button="link" label={__('spee.ch')} href="https://spee.ch/about" />.{' '}
                 {__('Recommended size: 800x450 (16:9)')}
               </React.Fragment>
