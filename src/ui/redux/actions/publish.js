@@ -139,8 +139,7 @@ export const doUploadThumbnail = (filePath: string, thumbnailBuffer: Uint8Array)
 };
 
 export const doPrepareEdit = (claim: StreamClaim, uri: string, fileInfo: FileListItem) => (dispatch: Dispatch) => {
-  const { name, amount, channel_name: channelName, value } = claim;
-
+  const { name, amount, signing_channel: signingChannel, value } = claim;
   const {
     author,
     description,
@@ -159,7 +158,7 @@ export const doPrepareEdit = (claim: StreamClaim, uri: string, fileInfo: FileLis
 
   const publishData: UpdatePublishFormData = {
     name,
-    channel: channelName,
+    channel: signingChannel && signingChannel.name,
     bid: Number(amount),
     contentIsFree: !fee.amount,
     author,
@@ -254,6 +253,7 @@ export const doPublish = () => (dispatch: Dispatch, getState: () => {}) => {
     tags: Array<string>,
     locations?: Array<Location>,
     license_url?: string,
+    license?: string,
     thumbnail_url?: string,
     release_time?: number,
     fee_currency?: string,
@@ -264,12 +264,18 @@ export const doPublish = () => (dispatch: Dispatch, getState: () => {}) => {
     description,
     locations,
     bid: creditsToString(bid),
-    license: publishingLicense,
     languages: [language],
     tags: tags && tags.map(tag => tag.name),
-    license_url: licenseType === COPYRIGHT ? '' : licenseUrl,
     thumbnail_url: thumbnail,
   };
+
+  if (publishingLicense) {
+    publishPayload.license = publishingLicense;
+  }
+
+  if (licenseUrl) {
+    publishPayload.license_url = licenseUrl;
+  }
 
   if (myClaimForUri && myClaimForUri.value.release_time) {
     publishPayload.release_time = Number(myClaimForUri.value.release_time);

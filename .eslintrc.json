@@ -23,6 +23,7 @@
     "WEBPACK_PORT": true
   },
   "rules": {
+    "brace-style": 0,
     "comma-dangle": ["error", "always-multiline"],
     "handle-callback-err": 0,
     "indent": 0,

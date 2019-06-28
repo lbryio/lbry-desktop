@@ -1,5 +1,5 @@
 // @flow
-import type { Node } from 'react';
+import type { ElementRef } from 'react';
 import * as MODALS from 'constants/modal_types';
 import * as ICONS from 'constants/icons';
 import React from 'react';
@@ -17,7 +17,7 @@ type Props = {
   openModal: (id: string, { uri: string }) => void,
   claimIsMine: boolean,
   fileInfo: FileInfo,
-  viewerContainer: ?{ current: Node },
+  viewerContainer: { current: ElementRef<any> },
   showFullscreen: boolean,
 };
 

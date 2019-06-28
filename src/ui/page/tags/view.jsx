@@ -32,9 +32,9 @@ function TagsPage(props: Props) {
         tags={tags}
         meta={
           <Button
-            button="alt"
+            button="link"
             onClick={() => doToggleTagFollow(tag)}
-            label={isFollowing ? __('Unfollow this tag') : __('Follow this tag')}
+            label={isFollowing ? __('Following') : __('Follow')}
           />
         }
       />

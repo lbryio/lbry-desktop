@@ -1,7 +1,7 @@
 // @flow
 import * as MODALS from 'constants/modal_types';
 import * as ICONS from 'constants/icons';
-import React from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { parseURI } from 'lbry-redux';
 import Button from 'component/button';
 
@@ -32,18 +32,36 @@ export default function SubscribeButton(props: Props) {
     showSnackBarOnSubscribe,
     doToast,
   } = props;
-
+  const buttonRef = useRef();
+  const [isHovering, setIsHovering] = useState(false);
+  const { claimName } = parseURI(uri);
   const subscriptionHandler = isSubscribed ? doChannelUnsubscribe : doChannelSubscribe;
   const subscriptionLabel = isSubscribed ? __('Following') : __('Follow');
+  const unfollowOverride = isSubscribed && isHovering && __('Unfollow');
 
-  const { claimName } = parseURI(uri);
+  useEffect(() => {
+    function handleHover() {
+      setIsHovering(!isHovering);
+    }
+
+    const button = buttonRef.current;
+    if (button) {
+      button.addEventListener('mouseover', handleHover);
+      button.addEventListener('mouseleave', handleHover);
+      return () => {
+        button.removeEventListener('mouseover', handleHover);
+        button.removeEventListener('mouseleave', handleHover);
+      };
+    }
+  }, [buttonRef, isHovering]);
 
   return (
     <Button
+      ref={buttonRef}
       iconColor="red"
-      icon={ICONS.SUBSCRIPTION}
+      icon={unfollowOverride ? ICONS.UNSUBSCRIBE : ICONS.SUBSCRIBE}
       button={'alt'}
-      label={subscriptionLabel}
+      label={unfollowOverride || subscriptionLabel}
       onClick={e => {
         e.stopPropagation();
 

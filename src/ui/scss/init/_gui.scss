@@ -1,15 +1,9 @@
 // Generic html styles used accross the App
 // component specific styling should go in the component scss file
 
-*,
-*::before,
-*::after {
-  -webkit-user-select: text;
-}
-
 html {
   @include font-sans;
-  background-color: $lbry-white;
+
   font-size: 12px;
   height: 100%;
   overflow-x: hidden;
@@ -23,6 +17,7 @@ body {
   height: 100%;
   line-height: 1.5;
   overflow: hidden;
+  background-color: mix($lbry-white, $lbry-gray-1, 70%);
 
   html[data-mode='dark'] & {
     background-color: $lbry-black;

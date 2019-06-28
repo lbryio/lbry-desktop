@@ -3,10 +3,9 @@ import * as ICONS from 'constants/icons';
 import React from 'react';
 import Button from 'component/button';
 import CopyableText from 'component/copyableText';
-import Tooltip from 'component/common/tooltip';
 
 type Props = {
-  claim: StreamClaim,
+  claim: Claim,
   onDone: () => void,
   speechShareable: boolean,
   isChannel: boolean,
@@ -27,21 +26,15 @@ class SocialShare extends React.PureComponent<Props> {
 
   render() {
     const { claim, isChannel } = this.props;
-    const { claim_id: claimId, name: claimName, channel_name: channelName } = claim;
+    const { claim_id: claimId, name: claimName } = claim;
 
     const { speechShareable, onDone } = this.props;
-    const channelClaimId = claim.signing_channel && claim.signing_channel.claim_id;
+    const signingChannel = claim.signing_channel;
+    const channelClaimId = signingChannel && signingChannel.claim_id;
+    const channelName = signingChannel && signingChannel.name;
 
-    const getSpeechUri = (): string => {
-      if (isChannel) {
-        // For channel claims, the channel name (@something) is in `claim.name`
-        return `${claimName}:${claimId}`;
-      } else {
-        // If it's for a regular claim, check if it has an associated channel
-        return channelName && channelClaimId
-          ? `${channelName}:${channelClaimId}/${claimName}`
-          : `${claimId}/${claimName}`;
-      }
+    const getLbryTvUri = (): string => {
+      return `${claimName}/${claimId}`;
     };
 
     const getLbryUri = (): string => {
@@ -56,69 +49,57 @@ class SocialShare extends React.PureComponent<Props> {
       }
     };
 
-    const speechPrefix = 'https://spee.ch/';
+    const lbryTvPrefix = 'https://beta.lbry.tv/';
     const lbryPrefix = 'https://open.lbry.com/';
     const lbryUri = getLbryUri();
-    const speechUri = getSpeechUri();
+    const lbryTvUri = getLbryTvUri();
     const encodedLbryURL: string = `${lbryPrefix}${encodeURIComponent(lbryUri)}`;
     const lbryURL: string = `${lbryPrefix}${getLbryUri()}`;
+    const encodedLbryTvUrl = `${lbryTvPrefix}${encodeURIComponent(lbryTvUri)}`;
+    const lbryTvUrl = `${lbryTvPrefix}${lbryTvUri}`;
 
-    const encodedSpeechURL = `${speechPrefix}${encodeURIComponent(speechUri)}`;
-    const speechURL = `${speechPrefix}${speechUri}`;
+    const shareOnFb = __('Share on Facebook');
+    const shareOnTwitter = __('Share On Twitter');
 
     return (
       <React.Fragment>
         {speechShareable && (
           <div className="card__content">
-            <label className="help">{__('Web link')}</label>
-            <CopyableText copyable={speechURL} />
+            <label className="card__subtitle">{__('Web link')}</label>
+            <CopyableText copyable={lbryTvUrl} />
             <div className="card__actions card__actions--center">
-              <Tooltip label={__('Facebook')}>
-                <Button
-                  iconColor="blue"
-                  icon={ICONS.FACEBOOK}
-                  button="alt"
-                  label={__('')}
-                  href={`https://facebook.com/sharer/sharer.php?u=${encodedSpeechURL}`}
-                />
-              </Tooltip>
-              <Tooltip label={__('Twitter')}>
-                <Button
-                  iconColor="blue"
-                  icon={ICONS.TWITTER}
-                  button="alt"
-                  label={__('')}
-                  href={`https://twitter.com/home?status=${encodedSpeechURL}`}
-                />
-              </Tooltip>
-              <Tooltip label={__('View on Spee.ch')}>
-                <Button icon={ICONS.WEB} iconColor="blue" button="alt" label={__('')} href={`${speechURL}`} />
-              </Tooltip>
+              <Button
+                icon={ICONS.FACEBOOK}
+                button="link"
+                description={shareOnFb}
+                href={`https://facebook.com/sharer/sharer.php?u=${encodedLbryTvUrl}`}
+              />
+              <Button
+                icon={ICONS.TWITTER}
+                button="link"
+                description={shareOnTwitter}
+                href={`https://twitter.com/home?status=${encodedLbryTvUrl}`}
+              />
+              <Button icon={ICONS.WEB} button="link" description={__('View on lbry.tv')} href={`${lbryTvUrl}`} />
             </div>
           </div>
         )}
         <div className="card__content">
-          <label className="help">{__('LBRY App link')}</label>
+          <label className="card__subtitle">{__('LBRY App link')}</label>
           <CopyableText copyable={lbryURL} noSnackbar />
           <div className="card__actions card__actions--center">
-            <Tooltip label={__('Facebook')}>
-              <Button
-                iconColor="blue"
-                icon={ICONS.FACEBOOK}
-                button="alt"
-                label={__('')}
-                href={`https://facebook.com/sharer/sharer.php?u=${encodedLbryURL}`}
-              />
-            </Tooltip>
-            <Tooltip label={__('Twitter')}>
-              <Button
-                iconColor="blue"
-                icon={ICONS.TWITTER}
-                button="alt"
-                label={__('')}
-                href={`https://twitter.com/home?status=${encodedLbryURL}`}
-              />
-            </Tooltip>
+            <Button
+              icon={ICONS.FACEBOOK}
+              button="link"
+              description={shareOnFb}
+              href={`https://facebook.com/sharer/sharer.php?u=${encodedLbryURL}`}
+            />
+            <Button
+              icon={ICONS.TWITTER}
+              button="link"
+              description={shareOnTwitter}
+              href={`https://twitter.com/home?status=${encodedLbryURL}`}
+            />
           </div>
         </div>
         <div className="card__actions">

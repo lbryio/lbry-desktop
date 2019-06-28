@@ -19,7 +19,7 @@ type Props = {
   loading: boolean,
   type: string,
   empty?: string,
-  meta?: Node,
+  defaultSort?: boolean,
   onScrollBottom?: any => void,
   // If using the default header, this is a unique ID needed to persist the state of the filter setting
   persistedStorageKey?: string,
@@ -33,7 +33,7 @@ export default function ClaimList(props: Props) {
     loading,
     persistedStorageKey,
     empty,
-    meta,
+    defaultSort,
     type,
     header,
     onScrollBottom,
@@ -46,7 +46,21 @@ export default function ClaimList(props: Props) {
     setCurrentSort(currentSort === SORT_NEW ? SORT_OLD : SORT_NEW);
   }
 
+  const urisLength = uris && uris.length;
   useEffect(() => {
+    function handleScroll(e) {
+      if (onScrollBottom) {
+        const x = document.querySelector(`.${MAIN_WRAPPER_CLASS}`);
+
+        if (x && window.scrollY + window.innerHeight >= x.offsetHeight) {
+          // fix this
+          if (!loading && urisLength > 19) {
+            onScrollBottom();
+          }
+        }
+      }
+    }
+
     if (onScrollBottom) {
       window.addEventListener('scroll', handleScroll);
 
@@ -54,42 +68,35 @@ export default function ClaimList(props: Props) {
         window.removeEventListener('scroll', handleScroll);
       };
     }
-  }, [loading, handleScroll]);
-
-  function handleScroll(e) {
-    if (onScrollBottom) {
-      const x = document.querySelector(`.${MAIN_WRAPPER_CLASS}`);
-
-      if (x && window.scrollY + window.innerHeight >= x.offsetHeight) {
-        // fix this
-        if (!loading && uris.length > 19) {
-          onScrollBottom();
-        }
-      }
-    }
-  }
+  }, [loading, onScrollBottom, urisLength]);
 
   return (
-    <section className={classnames('claim-list')}>
+    <section
+      className={classnames('claim-list', {
+        'claim-list--small': type === 'small',
+      })}
+    >
       {header !== false && (
         <div className={classnames('claim-list__header', { 'claim-list__header--small': type === 'small' })}>
-          {header || (
-            <FormField
-              className="claim-list__dropdown"
-              type="select"
-              name="file_sort"
-              value={currentSort}
-              onChange={handleSortChange}
-            >
-              <option value={SORT_NEW}>{__('Newest First')}</option>
-              <option value={SORT_OLD}>{__('Oldest First')}</option>
-            </FormField>
-          )}
+          {header}
           {loading && <Spinner light type="small" />}
-          <div className="claim-list__alt-controls">{headerAltControls}</div>
+          <div className="claim-list__alt-controls">
+            {headerAltControls}
+            {defaultSort && (
+              <FormField
+                className="claim-list__dropdown"
+                type="select"
+                name="file_sort"
+                value={currentSort}
+                onChange={handleSortChange}
+              >
+                <option value={SORT_NEW}>{__('Newest First')}</option>
+                <option value={SORT_OLD}>{__('Oldest First')}</option>
+              </FormField>
+            )}
+          </div>
         </div>
       )}
-      {meta && <div className="claim-list__meta">{meta}</div>}
       {hasUris && (
         <ul>
           {sortedUris.map((uri, index) => (

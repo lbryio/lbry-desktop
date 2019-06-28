@@ -21,7 +21,14 @@ function FileListPublished(props: Props) {
     <Page notContained>
       {uris && uris.length ? (
         <div className="card">
-          <ClaimList loading={fetching} persistedStorageKey="claim-list-published" uris={uris} />
+          <ClaimList
+            header={<h1>{__('Your Publishes')}</h1>}
+            loading={fetching}
+            persistedStorageKey="claim-list-published"
+            uris={uris}
+            defaultSort
+            headerAltControls={<Button button="link" label={__('New Publish')} navigate="/$/publish" />}
+          />
         </div>
       ) : (
         <div className="main--empty">

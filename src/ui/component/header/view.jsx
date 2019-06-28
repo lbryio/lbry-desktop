@@ -91,11 +91,12 @@ const Header = (props: Props) => {
                 {__('Wallet')}
               </MenuItem>
               <MenuItem className="menu__link" onSelect={() => history.push(`/$/publish`)}>
-                <Icon aria-hidden icon={ICONS.UPLOAD} />
+                <Icon aria-hidden icon={ICONS.PUBLISH} />
                 {__('Publish')}
               </MenuItem>
             </MenuList>
           </Menu>
+
           <Menu>
             <MenuButton className="header__navigation-item menu__title">
               <Icon size={18} icon={ICONS.SETTINGS} />
