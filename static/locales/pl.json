@@ -286,5 +286,8 @@
   "Multi-language support is brand new and incomplete. Switching your language may have unintended consequences.": "Multi-language support is brand new and incomplete. Switching your language may have unintended consequences.",
   "Wallet": "Wallet",
   "Home": "Home",
-  "Following": "Following"
+  "Following": "Following",
+  "Update ready to install": "Update ready to install",
+  "Install now": "Install now",
+  "Edit": "Edit"
 }

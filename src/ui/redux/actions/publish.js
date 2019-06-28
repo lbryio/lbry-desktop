@@ -345,7 +345,7 @@ export const doPublish = () => (dispatch: Dispatch, getState: () => {}) => {
     dispatch({ type: ACTIONS.PUBLISH_FAIL });
     dispatch(doError(error.message));
   };
-
+  console.log('PP', publishPayload);
   return Lbry.publish(publishPayload).then(success, failure);
 };
 
