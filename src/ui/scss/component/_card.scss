@@ -7,8 +7,8 @@
   overflow: hidden;
   font-size: 1.25rem;
 
-  html[data-mode='dark'] & {
-    background-color: lighten($lbry-black, 5%);
+  [data-mode='dark'] & {
+    background-color: #353434;
     box-shadow: var(--card-box-shadow) darken($lbry-gray-1, 80%);
   }
 }

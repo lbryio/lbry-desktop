@@ -11,7 +11,7 @@
   position: fixed;
   z-index: 9999;
 
-  html[data-mode='dark'] & {
+  [data-mode='dark'] & {
     background-color: rgba($lbry-black, 0.7);
   }
 }
@@ -29,7 +29,7 @@
     min-width: 500px;
   }
 
-  html[data-mode='dark'] & {
+  [data-mode='dark'] & {
     background-color: $lbry-black;
     border-color: $lbry-gray-5;
   }
@@ -41,7 +41,7 @@
   .button.button--alt {
     background-color: $lbry-white; // Set modal buttons bg color
 
-    html[data-mode='dark'] & {
+    [data-mode='dark'] & {
       background-color: transparent;
     }
   }

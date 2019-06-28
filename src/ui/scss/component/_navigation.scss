@@ -55,9 +55,9 @@
   }
 
   [data-mode='dark'] & {
-    color: $lbry-gray-1;
+    color: #ddd;
     svg {
-      color: $lbry-gray-1;
+      color: #ddd;
     }
 
     &:hover,
@@ -111,7 +111,7 @@
     &::before {
       background-color: $lbry-black;
 
-      html[data-mode='dark'] & {
+      [data-mode='dark'] & {
         color: $lbry-gray-1;
       }
     }

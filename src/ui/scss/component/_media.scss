@@ -34,8 +34,8 @@
     background-repeat: no-repeat;
     background-size: cover;
 
-    html[data-mode='dark'] & {
-      background-color: rgba($lbry-white, 0.1);
+    [data-mode='dark'] & {
+      background-color: #555254;
     }
   }
 }
@@ -173,7 +173,7 @@
 .media__info {
   word-wrap: break-word;
 
-  html[data-mode='dark'] & {
+  [data-mode='dark'] & {
     border-color: rgba($lbry-gray-5, 0.2);
   }
 }
@@ -182,7 +182,7 @@
   border-top: 1px solid $lbry-gray-1;
   margin-top: var(--spacing-medium);
 
-  html[data-mode='dark'] & {
+  [data-mode='dark'] & {
     border-color: rgba($lbry-gray-5, 0.2);
   }
 }
@@ -231,7 +231,7 @@
 .media__text {
   font-size: 2.5rem;
 
-  html[data-mode='dark'] & {
+  [data-mode='dark'] & {
     color: $lbry-white;
   }
 }

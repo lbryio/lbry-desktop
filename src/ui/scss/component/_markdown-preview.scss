@@ -57,17 +57,9 @@
 
   // Horizontal Rule
   hr {
-    width: 100%;
-    height: 1px;
-
-    background-color: $lbry-gray-1;
     margin-bottom: 2rem;
     position: relative;
     top: 1rem;
-
-    html[data-mode='dark'] & {
-      background-color: rgba($lbry-gray-5, 0.2);
-    }
   }
 
   // Code

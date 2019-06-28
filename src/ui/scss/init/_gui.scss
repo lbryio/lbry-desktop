@@ -7,6 +7,10 @@ html {
   font-size: 12px;
   height: 100%;
   overflow-x: hidden;
+
+  &[data-mode='dark'] {
+    background-color: #1e1e1e;
+  }
 }
 
 body {
@@ -19,9 +23,9 @@ body {
   overflow: hidden;
   background-color: mix($lbry-white, $lbry-gray-1, 70%);
 
-  html[data-mode='dark'] & {
-    background-color: $lbry-black;
-    color: mix($lbry-white, $lbry-gray-3, 50%);
+  [data-mode='dark'] & {
+    background-color: #1e1e1e;
+    color: #ddd;
   }
 }
 
@@ -42,6 +46,16 @@ code {
   @include font-mono;
   background-color: $lbry-gray-1;
   font-size: 1.5rem;
+}
+
+hr {
+  width: 100%;
+  height: 1px;
+  background-color: $lbry-gray-1;
+
+  [data-mode='dark'] & {
+    background-color: #555254;
+  }
 }
 
 .columns {
@@ -111,7 +125,7 @@ code {
   color: $lbry-red-3;
   font-weight: 600;
 
-  html[data-mode='dark'] & {
+  [data-mode='dark'] & {
     color: $lbry-red-1;
   }
 }
@@ -132,7 +146,8 @@ code {
   margin-bottom: var(--spacing-medium);
   border-radius: 5px;
 
-  html[data-mode='dark'] & {
+  [data-mode='dark'] & {
+    background-color: #2e2d2e;
     color: inherit;
   }
 }
@@ -156,7 +171,7 @@ code {
         color: $altered-hover-color;
       }
 
-      html[data-mode='dark'] & {
+      [data-mode='dark'] & {
         color: $altered-color;
         border-bottom: 1px solid $altered-color;
 
@@ -167,7 +182,7 @@ code {
     }
   }
 
-  html[data-mode='dark'] & {
+  [data-mode='dark'] & {
     background-color: $lbry-yellow-3;
     color: $lbry-black;
   }
@@ -177,7 +192,7 @@ code {
   color: $lbry-gray-5;
   font-style: italic;
 
-  html[data-mode='dark'] & {
+  [data-mode='dark'] & {
     color: inherit;
   }
 }
@@ -211,4 +226,26 @@ code {
   background-position: 50% 50%;
   background-repeat: no-repeat;
   background-size: cover;
+}
+
+fieldset,
+.fieldset {
+  [data-mode='dark'] & {
+    border-top-color: #555254;
+  }
+}
+
+legend {
+  [data-mode='dark'] & {
+    border-color: transparent;
+  }
+}
+
+checkbox-toggle,
+.checkbox-toggle,
+radio-toggle,
+.radio-toggle {
+  [data-mode='dark'] & {
+    border-color: #555254;
+  }
 }

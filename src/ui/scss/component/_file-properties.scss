@@ -6,7 +6,7 @@
   .icon {
     stroke: rgba($lbry-black, 0.5);
 
-    html[data-mode='dark'] & {
+    [data-mode='dark'] & {
       stroke: rgba($lbry-white, 0.7);
     }
   }

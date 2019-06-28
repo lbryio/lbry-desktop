@@ -74,7 +74,7 @@ $main: $lbry-teal-5;
   padding-left: 0.5rem;
   padding-top: 0.7rem;
 
-  html[data-mode='dark'] & {
+  [data-mode='dark'] & {
     border-color: rgba($lbry-white, 0.1);
   }
 }
