@@ -515,5 +515,17 @@
   "Uh oh. The flux in our Retro Encabulator must be out of whack. Try refreshing to fix it.": "Uh oh. The flux in our Retro Encabulator must be out of whack. Try refreshing to fix it.",
   "If you still have issues, your anti-virus software or firewall may be preventing startup.": "If you still have issues, your anti-virus software or firewall may be preventing startup.",
   "Reach out to hello@lbry.com for help, or check out": "Reach out to hello@lbry.com for help, or check out",
-  "Got it!": "Got it!"
+  "Got it!": "Got it!",
+  "Customize": "Customize",
+  "Remove tag": "Remove tag",
+  "Your Library": "Your Library",
+  "This file is downloaded.": "This file is downloaded.",
+  "You are subscribed to this channel.": "You are subscribed to this channel.",
+  "Your Publishes": "Your Publishes",
+  "New Publish": "New Publish",
+  "Customize Your Homepage": "Customize Your Homepage",
+  "Featured content. Earn rewards for watching.": "Featured content. Earn rewards for watching.",
+  "Add tag": "Add tag",
+  "Customize Your Tags": "Customize Your Tags",
+  "Channels You Follow": "Channels You Follow"
 }
