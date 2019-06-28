@@ -122,7 +122,8 @@ class SelectThumbnail extends React.PureComponent<Props, State> {
             {status === THUMBNAIL_STATUSES.READY && (
               <FileSelector
                 currentPath={thumbnailPath}
-                fileLabel={__('Choose Thumbnail')}
+                label={__('Thumbnail')}
+                placeholder={__('Choose a thumbnail')}
                 filters={filters}
                 onFileChosen={path => openModal(MODALS.CONFIRM_THUMBNAIL_UPLOAD, { path })}
               />
@@ -160,6 +161,18 @@ class SelectThumbnail extends React.PureComponent<Props, State> {
         )}
 
         {status === THUMBNAIL_STATUSES.IN_PROGRESS && <p>{__('Uploading thumbnail')}...</p>}
+        <p className="help">
+          {(status === undefined && __('You should reselect your file to choose a thumbnail')) ||
+            (status === THUMBNAIL_STATUSES.API_DOWN ? (
+              __('Enter a URL for your thumbnail.')
+            ) : (
+              <React.Fragment>
+                {__('Upload your thumbnail to')}{' '}
+                <Button button="link" label={__('spee.ch')} href="https://spee.ch/about" />.{' '}
+                {__('Recommended size: 800x450 (16:9)')}
+              </React.Fragment>
+            ))}
+        </p>
       </div>
     );
   }

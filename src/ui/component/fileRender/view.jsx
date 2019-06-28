@@ -4,12 +4,12 @@ import React from 'react';
 import LoadingScreen from 'component/common/loading-screen';
 import VideoViewer from 'component/viewers/videoViewer';
 
-const AudioViewer = React.lazy<*>(() =>
-  import(
-    /* webpackChunkName: "audioViewer" */
-    'component/viewers/audioViewer'
-  )
-);
+// Audio player on hold until the current player is dropped
+// This component is half working
+// const AudioViewer = React.lazy<*>(() =>
+//   import(/* webpackChunkName: "audioViewer" */
+//   'component/viewers/audioViewer')
+// );
 
 const DocumentViewer = React.lazy<*>(() =>
   import(
@@ -166,7 +166,7 @@ class FileRender extends React.PureComponent<Props> {
       video: (
         <VideoViewer claim={claim} source={{ downloadPath, fileName }} contentType={contentType} poster={poster} />
       ),
-      audio: <AudioViewer claim={claim} source={{ downloadPath, fileName }} contentType={contentType} />,
+      // audio: <AudioViewer claim={claim} source={{ downloadPath, fileName }} contentType={contentType} />,
       // Add routes to viewer...
     };
 
@@ -208,7 +208,7 @@ class FileRender extends React.PureComponent<Props> {
   render() {
     return (
       <div className="file-render">
-        <React.Suspense fallback={<div />}>{this.renderViewer()}</React.Suspense>
+        <Suspense fallback={<div />}>{this.renderViewer()}</Suspense>
       </div>
     );
   }

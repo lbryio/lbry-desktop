@@ -68,7 +68,7 @@ class ErrorBoundary extends React.Component<Props, State> {
   render() {
     if (this.state.hasError) {
       return (
-        <div className="load-screen">
+        <div className="main main--empty">
           <Yrbl
             type="sad"
             title={__('Aw shucks!')}

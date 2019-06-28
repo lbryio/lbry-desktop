@@ -45,7 +45,7 @@ export default class CopyableText extends React.PureComponent<Props> {
         inputButton={
           <Button
             button="inverse"
-            icon={ICONS.CLIPBOARD}
+            icon={ICONS.COPY}
             onClick={() => {
               clipboard.writeText(copyable);
               doToast({

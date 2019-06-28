@@ -39,6 +39,7 @@
     "space-before-function-paren": ["error", "never"],
     "standard/object-curly-even-spacing": 0,
     "standard/no-callback-literal": 0,
+    "react/display-name": 0,
     "semi": [
       "error",
       "always",

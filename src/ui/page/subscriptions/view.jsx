@@ -36,7 +36,7 @@ export default function SubscriptionsPage(props: Props) {
   const viewingSuggestedSubs = urlParams.get('view');
 
   function onClick() {
-    let url = `/$/${PAGES.SUBSCRIPTIONS}`;
+    let url = `/$/${PAGES.FOLLOWING}`;
     if (!viewingSuggestedSubs) {
       url += '?view=discover';
     }
@@ -54,6 +54,7 @@ export default function SubscriptionsPage(props: Props) {
     const ids = idString.split(',');
     const options = {
       channel_ids: ids,
+      order_by: ['release_time'],
     };
 
     doClaimSearch(20, options);
@@ -68,7 +69,7 @@ export default function SubscriptionsPage(props: Props) {
           headerAltControls={
             <Button
               button="link"
-              label={viewingSuggestedSubs ? hasSubscriptions && __('View Your Subscriptions') : __('Find New Channels')}
+              label={viewingSuggestedSubs ? hasSubscriptions && __('Following') : __('Find New Channels')}
               onClick={() => onClick()}
             />
           }

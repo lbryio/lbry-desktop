@@ -15,33 +15,48 @@ type Props = {
   followedTags: Array<Tag>,
   doToggleTagFollow: string => void,
   doAddTag: string => void,
+  onSelect?: Tag => void,
 };
 
 export default function TagSelect(props: Props) {
-  const { unfollowedTags, followedTags, doToggleTagFollow, doAddTag } = props;
+  const { unfollowedTags, followedTags, doToggleTagFollow, doAddTag, onSelect } = props;
   const [newTag, setNewTag] = useState('');
+
   let tags = unfollowedTags.slice();
   if (newTag) {
-    tags = [{ name: newTag }, ...tags];
+    tags.unshift({ name: newTag });
   }
-  const suggestedTags = tags
-    .filter(({ name }) => (newTag ? name.toLowerCase().includes(newTag.toLowerCase()) : true))
-    .slice(0, 5);
+
+  const doesTagMatch = ({ name }) => (newTag ? name.toLowerCase().includes(newTag.toLowerCase()) : true);
+  const suggestedTags = tags.filter(doesTagMatch).slice(0, 5);
   const suggestedTransitions = useTransition(suggestedTags, tag => tag.name, unfollowedTagsAnimation);
 
   function onChange(e) {
     setNewTag(e.target.value);
   }
 
-  function handleSubmit() {
+  function handleSubmit(e) {
+    e.preventDefault();
     setNewTag('');
 
-    if (!unfollowedTags.includes(newTag)) {
-      doAddTag(newTag);
-    }
+    if (onSelect) {
+      onSelect({ name: newTag });
+    } else {
+      if (!unfollowedTags.includes(newTag)) {
+        doAddTag(newTag);
+      }
 
-    if (!followedTags.includes(newTag)) {
-      doToggleTagFollow(newTag);
+      if (!followedTags.includes(newTag)) {
+        doToggleTagFollow(newTag);
+      }
+    }
+  }
+
+  function handleTagClick(tag) {
+    if (onSelect) {
+      onSelect(tag);
+    } else {
+      doToggleTagFollow(tag);
     }
   }
 
@@ -59,7 +74,7 @@ export default function TagSelect(props: Props) {
       <ul className="tags">
         {suggestedTransitions.map(({ item, key, props }) => (
           <animated.li key={key} style={props}>
-            <Tag name={item.name} type="add" onClick={() => doToggleTagFollow(item.name)} />
+            <Tag name={item.name} type="add" onClick={() => handleTagClick(item)} />
           </animated.li>
         ))}
         {!suggestedTransitions.length && <p className="empty tags__empty-message">No suggested tags</p>}

@@ -26,7 +26,7 @@ export default function Tag(props: Props) {
       })}
       label={name}
       iconSize={12}
-      iconRight={type !== 'link' && (type === 'remove' ? ICONS.CLOSE : ICONS.ADD)}
+      iconRight={type !== 'link' && (type === 'remove' ? ICONS.REMOVE : ICONS.ADD)}
     />
   );
 }

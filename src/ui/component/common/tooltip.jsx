@@ -1,71 +1,18 @@
 // @flow
-import * as React from 'react';
-import classnames from 'classnames';
+import type { Node } from 'react';
+import React from 'react';
+import ReachTooltip from '@reach/tooltip';
+import '@reach/tooltip/styles.css';
 
 type Props = {
-  body: string,
-  label?: string,
-  children?: React.Node,
-  icon?: boolean,
-  direction: string,
-  onComponent?: boolean, // extra padding to account for button/form field size
-  alwaysVisible?: boolean, // should tooltip stay open, guide callbacks will close it manually
+  label: string | Node,
+  children?: Node,
 };
 
-type State = {
-  direction: string,
-};
+function Tooltip(props: Props) {
+  const { children, label } = props;
 
-class ToolTip extends React.PureComponent<Props, State> {
-  static defaultProps = {
-    direction: 'bottom',
-    alwaysVisible: false,
-  };
-
-  constructor(props: Props) {
-    super(props);
-    this.state = {
-      direction: this.props.direction,
-    };
-  }
-
-  tooltip: ?HTMLSpanElement;
-
-  render() {
-    const { direction } = this.state;
-    const { children, label, body, icon, onComponent, alwaysVisible } = this.props;
-
-    const tooltipContent = children || label;
-    const bodyLength = body.length;
-    const isShortDescription = bodyLength < 30;
-
-    return (
-      <span
-        className={classnames('tooltip', {
-          'tooltip--label': label && !icon,
-          'tooltip--icon': icon,
-          'tooltip--top': direction === 'top',
-          'tooltip--right': direction === 'right',
-          'tooltip--bottom': direction === 'bottom',
-          'tooltip--left': direction === 'left',
-          'tooltip--on-component': onComponent,
-          'tooltip--always-visible': alwaysVisible,
-        })}
-      >
-        {tooltipContent}
-        <span
-          ref={ref => {
-            this.tooltip = ref;
-          }}
-          className={classnames('tooltip__body', {
-            'tooltip__body--short': isShortDescription,
-          })}
-        >
-          {body}
-        </span>
-      </span>
-    );
-  }
+  return <ReachTooltip label={label}>{children}</ReachTooltip>;
 }
 
-export default ToolTip;
+export default Tooltip;

@@ -8,10 +8,18 @@ import usePersistedState from 'util/use-persisted-state';
 import { useTransition, animated } from 'react-spring';
 
 type Props = {
-  followedTags: Array<Tag>,
   showClose: boolean,
-  title: string,
-  doDeleteTag: string => void,
+  followedTags: Array<Tag>,
+  doToggleTagFollow: string => void,
+
+  // Ovverides
+  // The default component is for following tags
+  title?: string,
+  help?: string,
+  empty?: string,
+  tagsChosen?: Array<Tag>,
+  onSelect?: Tag => void,
+  onRemove?: Tag => void,
 };
 
 const tagsAnimation = {
@@ -21,23 +29,32 @@ const tagsAnimation = {
 };
 
 export default function TagSelect(props: Props) {
-  const { title, followedTags, showClose, doDeleteTag } = props;
+  const { showClose, followedTags, doToggleTagFollow, title, help, empty, tagsChosen, onSelect, onRemove } = props;
   const [hasClosed, setHasClosed] = usePersistedState('tag-select:has-closed', false);
+  const tagsToDisplay = tagsChosen || followedTags;
+  const transitions = useTransition(tagsToDisplay, tag => tag.name, tagsAnimation);
 
   function handleClose() {
     setHasClosed(true);
   }
 
-  const transitions = useTransition(followedTags.map(tag => tag), tag => tag.name, tagsAnimation);
+  function handleTagClick(tag) {
+    if (onRemove) {
+      onRemove(tag);
+    } else {
+      doToggleTagFollow(tag.name);
+    }
+  }
 
   return (
     ((showClose && !hasClosed) || !showClose) && (
       <div className="card--section">
-        <h2 className="card__title card__title--flex-between">
-          {title}
-          {showClose && !hasClosed && <Button button="close" icon={ICONS.CLOSE} onClick={handleClose} />}
-        </h2>
-        <p className="help">{__("The tags you follow will change what's trending for you.")}</p>
+        {title !== false && (
+          <h2 className="card__title card__title--flex-between">
+            {title}
+            {showClose && !hasClosed && <Button button="close" icon={ICONS.REMOVE} onClick={handleClose} />}
+          </h2>
+        )}
 
         <div className="card__content">
           <ul className="tags--remove">
@@ -47,16 +64,19 @@ export default function TagSelect(props: Props) {
                   name={item.name}
                   type="remove"
                   onClick={() => {
-                    doDeleteTag(item.name);
+                    handleTagClick(item);
                   }}
                 />
               </animated.li>
             ))}
             {!transitions.length && (
-              <div className="card__subtitle">{__("You aren't following any tags, try searching for one.")}</div>
+              <div className="empty">{empty || __("You aren't following any tags, try searching for one.")}</div>
             )}
           </ul>
-          <TagsSearch />
+          <TagsSearch onSelect={onSelect} />
+          {help !== false && (
+            <p className="help">{help || __("The tags you follow will change what's trending for you.")}</p>
+          )}
         </div>
       </div>
     )

@@ -29,9 +29,13 @@ type Props = {
   nsfw: boolean,
   placeholder: boolean,
   type: string,
+  blackListedOutpoints: Array<{
+    txid: string,
+    nout: number,
+  }>,
 };
 
-function ClaimListItem(props: Props) {
+function ClaimPreview(props: Props) {
   const {
     obscureNsfw,
     claimIsMine,
@@ -46,13 +50,23 @@ function ClaimListItem(props: Props) {
     claim,
     placeholder,
     type,
+    blackListedOutpoints,
   } = props;
-
   const haventFetched = claim === undefined;
   const abandoned = !isResolvingUri && !claim;
-  const shouldHide = abandoned || (!claimIsMine && obscureNsfw && nsfw);
   const isChannel = claim && claim.value_type === 'channel';
   const claimsInChannel = (claim && claim.meta.claims_in_channel) || 0;
+  let shouldHide = abandoned || (!claimIsMine && obscureNsfw && nsfw);
+
+  // This will be replaced once blocking is done at the wallet server level
+  if (claim && !shouldHide) {
+    for (let i = 0; i < blackListedOutpoints.length; i += 1) {
+      const outpoint = blackListedOutpoints[i];
+      if (outpoint.txid === claim.txid && outpoint.nout === claim.nout) {
+        shouldHide = true;
+      }
+    }
+  }
 
   function handleContextMenu(e) {
     e.preventDefault();
@@ -80,10 +94,10 @@ function ClaimListItem(props: Props) {
 
   if (placeholder && !claim) {
     return (
-      <li className="file-list__item" disabled>
+      <li className="claim-list__item" disabled>
         <div className="placeholder media__thumb" />
         <div className="placeholder__wrapper">
-          <div className="placeholder file-list__item-title" />
+          <div className="placeholder claim-list__item-title" />
           <div className="placeholder media__subtitle" />
         </div>
       </li>
@@ -93,16 +107,17 @@ function ClaimListItem(props: Props) {
   return (
     <li
       role="link"
-      onClick={onClick}
+      onClick={pending ? undefined : onClick}
       onContextMenu={handleContextMenu}
-      className={classnames('file-list__item', {
-        'file-list__item--large': type === 'large',
+      className={classnames('claim-list__item', {
+        'claim-list__item--large': type === 'large',
+        'claim-list__pending': pending,
       })}
     >
       {isChannel ? <ChannelThumbnail uri={uri} /> : <CardMedia thumbnail={thumbnail} />}
-      <div className="file-list__item-metadata">
-        <div className="file-list__item-info">
-          <div className="file-list__item-title">
+      <div className="claim-list__item-metadata">
+        <div className="claim-list__item-info">
+          <div className="claim-list__item-title">
             <TruncatedText text={title || (claim && claim.name)} lines={1} />
           </div>
           {type !== 'small' && (
@@ -113,7 +128,7 @@ function ClaimListItem(props: Props) {
           )}
         </div>
 
-        <div className="file-list__item-properties">
+        <div className="claim-list__item-properties">
           <div className="media__subtitle">
             <UriIndicator uri={uri} link />
             {pending && <div>Pending...</div>}
@@ -127,4 +142,4 @@ function ClaimListItem(props: Props) {
   );
 }
 
-export default withRouter(ClaimListItem);
+export default withRouter(ClaimPreview);

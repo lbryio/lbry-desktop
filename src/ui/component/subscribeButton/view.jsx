@@ -34,7 +34,7 @@ export default function SubscribeButton(props: Props) {
   } = props;
 
   const subscriptionHandler = isSubscribed ? doChannelUnsubscribe : doChannelSubscribe;
-  const subscriptionLabel = isSubscribed ? __('Subscribed') : __('Subscribe');
+  const subscriptionLabel = isSubscribed ? __('Following') : __('Follow');
 
   const { claimName } = parseURI(uri);
 
@@ -57,7 +57,7 @@ export default function SubscribeButton(props: Props) {
         });
 
         if (showSnackBarOnSubscribe) {
-          doToast({ message: `${__('Successfully subscribed to')} ${claimName}!` });
+          doToast({ message: `${__('Now following ')} ${claimName}!` });
         }
       }}
     />

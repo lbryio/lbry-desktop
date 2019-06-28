@@ -18,6 +18,12 @@ export const selectPublishFormValues = createSelector(
   }
 );
 
+export const makeSelectPublishFormValue = item =>
+  createSelector(
+    selectState,
+    state => state[item]
+  );
+
 // Is the current uri the same as the uri they clicked "edit" on
 export const selectIsStillEditing = createSelector(
   selectPublishFormValues,

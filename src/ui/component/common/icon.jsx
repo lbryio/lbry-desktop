@@ -1,10 +1,9 @@
 // @flow
 import * as ICONS from 'constants/icons';
-import * as FEATHER_ICONS from 'react-feather';
 import React from 'react';
 import Tooltip from 'component/common/tooltip';
 import classnames from 'classnames';
-import { customIcons } from './icon-custom';
+import { icons } from './icon-custom';
 
 // It would be nice to standardize this somehow
 // These are copied from `scss/vars`, can they both come from the same source?
@@ -14,7 +13,7 @@ const BLUE_COLOR = '#49b2e2';
 
 type Props = {
   icon: string,
-  tooltip?: string, // tooltip direction
+  tooltip?: boolean,
   iconColor?: string,
   size?: number,
   className?: string,
@@ -27,6 +26,10 @@ class IconComponent extends React.PureComponent<Props> {
         return __('Featured content. Earn rewards for watching.');
       case ICONS.DOWNLOAD:
         return __('This file is downloaded.');
+      case ICONS.SUBSCRIPTION:
+        return __('You are subscribed to this channel.');
+      case ICONS.SETTINGS:
+        return __('Your settings.');
       default:
         return null;
     }
@@ -47,9 +50,10 @@ class IconComponent extends React.PureComponent<Props> {
 
   render() {
     const { icon, tooltip, iconColor, size, className } = this.props;
-    const Icon = customIcons[this.props.icon] || FEATHER_ICONS[this.props.icon];
+    const Icon = icons[this.props.icon];
 
     if (!Icon) {
+      console.error('no icon found for ', icon);
       return null;
     }
 
@@ -67,13 +71,7 @@ class IconComponent extends React.PureComponent<Props> {
 
     const inner = <Icon size={iconSize} className={classnames(`icon icon--${icon}`, className)} color={color} />;
 
-    return tooltipText ? (
-      <Tooltip icon body={tooltipText} direction={tooltip}>
-        {inner}
-      </Tooltip>
-    ) : (
-      inner
-    );
+    return tooltipText ? <Tooltip label={tooltipText}>{inner}</Tooltip> : inner;
   }
 }
 

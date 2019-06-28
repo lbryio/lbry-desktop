@@ -20,7 +20,7 @@ import UserHistoryPage from 'page/userHistory';
 import WalletPage from 'page/wallet';
 import NavigationHistory from 'page/navigationHistory';
 import TagsPage from 'page/tags';
-import TagsEditPage from 'page/tagsEdit';
+import FollowingPage from 'page/following';
 
 const Scroll = withRouter(function ScrollWrapper(props) {
   const { pathname } = props.location;
@@ -50,17 +50,17 @@ export default function AppRouter() {
         <Route path={`/$/${PAGES.REWARDS}`} exact component={RewardsPage} />
         <Route path={`/$/${PAGES.SEARCH}`} exact component={SearchPage} />
         <Route path={`/$/${PAGES.SETTINGS}`} exact component={SettingsPage} />
-        <Route path={`/$/${PAGES.SUBSCRIPTIONS}`} exact component={SubscriptionsPage} />
         <Route path={`/$/${PAGES.TRANSACTIONS}`} exact component={TransactionHistoryPage} />
         <Route path={`/$/${PAGES.LIBRARY}`} exact component={UserHistoryPage} />
         <Route path={`/$/${PAGES.ACCOUNT}`} exact component={AccountPage} />
         <Route path={`/$/${PAGES.LIBRARY}/all`} exact component={NavigationHistory} />
         <Route path={`/$/${PAGES.TAGS}`} exact component={TagsPage} />
-        <Route path={`/$/${PAGES.TAGS}/edit`} exact component={TagsEditPage} />
+        <Route path={`/$/${PAGES.FOLLOWING}`} exact component={SubscriptionsPage} />
+        <Route path={`/$/${PAGES.FOLLOWING}/edit`} exact component={FollowingPage} />
         <Route path={`/$/${PAGES.WALLET}`} exact component={WalletPage} />
         {/* Below need to go at the end to make sure we don't match any of our pages first */}
         <Route path="/:claimName" exact component={ShowPage} />
-        <Route path="/:claimName/:claimId" exact component={ShowPage} />
+        <Route path="/:claimName/:contentName" exact component={ShowPage} />
 
         {/* Route not found. Mostly for people typing crazy urls into the url */}
         <Route render={() => <Redirect to="/" />} />

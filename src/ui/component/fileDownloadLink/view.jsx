@@ -57,11 +57,10 @@ class FileDownloadLink extends React.PureComponent<Props> {
       }
 
       return (
-        <ToolTip onComponent body={__('Download')}>
+        <ToolTip label={__('Add to your library')}>
           <Button
-            button="alt"
+            button="link"
             icon={ICONS.DOWNLOAD}
-            iconColor="green"
             onClick={() => {
               purchaseUri(uri);
 
@@ -76,10 +75,9 @@ class FileDownloadLink extends React.PureComponent<Props> {
       );
     } else if (fileInfo && fileInfo.download_path) {
       return (
-        <ToolTip onComponent body={__('Open file')}>
+        <ToolTip label={__('Open file')}>
           <Button
-            button="alt"
-            iconColor="green"
+            button="link"
             icon={ICONS.EXTERNAL}
             onClick={() => {
               pause();

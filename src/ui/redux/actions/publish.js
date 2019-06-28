@@ -15,6 +15,7 @@ import {
 } from 'lbry-redux';
 import { doOpenModal } from 'redux/actions/app';
 import { selectosNotificationsEnabled } from 'redux/selectors/settings';
+import { selectMyClaimForUri, selectPublishFormValues } from 'redux/selectors/publish';
 import { push } from 'connected-react-router';
 import analytics from 'analytics';
 import { formatLbryUriForWeb } from 'util/uri';
@@ -146,7 +147,7 @@ export const doPrepareEdit = (claim: StreamClaim, uri: string, fileInfo: FileLis
     // use same values as default state
     // fee will be undefined for free content
     fee = {
-      amount: 0,
+      amount: '0',
       currency: 'LBC',
     },
     languages,
@@ -159,11 +160,11 @@ export const doPrepareEdit = (claim: StreamClaim, uri: string, fileInfo: FileLis
   const publishData: UpdatePublishFormData = {
     name,
     channel: channelName,
-    bid: amount,
+    bid: Number(amount),
     contentIsFree: !fee.amount,
     author,
     description,
-    fee: { amount: fee.amount, currency: fee.currency },
+    fee,
     languages,
     thumbnail: thumbnail ? thumbnail.url : null,
     title,
@@ -201,10 +202,13 @@ export const doPrepareEdit = (claim: StreamClaim, uri: string, fileInfo: FileLis
   dispatch({ type: ACTIONS.DO_PREPARE_EDIT, data: publishData });
 };
 
-export const doPublish = (params: PublishParams) => (dispatch: Dispatch, getState: () => {}) => {
+export const doPublish = () => (dispatch: Dispatch, getState: () => {}) => {
   dispatch({ type: ACTIONS.PUBLISH_START });
 
   const state = getState();
+  const publishData = selectPublishFormValues(state);
+  const myClaimForUri = selectMyClaimForUri(state);
+
   const myChannels = selectMyChannelClaims(state);
   const myClaims = selectMyClaimsWithoutChannels(state);
 
@@ -214,8 +218,9 @@ export const doPublish = (params: PublishParams) => (dispatch: Dispatch, getStat
     filePath,
     description,
     language,
-    license,
     licenseUrl,
+    licenseType,
+    otherLicenseDescription,
     thumbnail,
     channel,
     title,
@@ -223,8 +228,19 @@ export const doPublish = (params: PublishParams) => (dispatch: Dispatch, getStat
     fee,
     uri,
     nsfw,
-    claim,
-  } = params;
+    tags,
+    locations,
+  } = publishData;
+
+  let publishingLicense;
+  switch (licenseType) {
+    case COPYRIGHT:
+    case OTHER:
+      publishingLicense = otherLicenseDescription;
+      break;
+    default:
+      publishingLicense = licenseType;
+  }
 
   // get the claim id from the channel name, we will use that instead
   const namedChannelClaim = myChannels.find(myChannel => myChannel.name === channel);
@@ -244,29 +260,19 @@ export const doPublish = (params: PublishParams) => (dispatch: Dispatch, getStat
     fee_amount?: string,
   } = {
     name,
-    bid: creditsToString(bid),
     title,
-    license,
-    languages: [language],
     description,
-    tags: (claim && claim.value.tags) || [],
-    locations: claim && claim.value.locations,
+    locations,
+    bid: creditsToString(bid),
+    license: publishingLicense,
+    languages: [language],
+    tags: tags && tags.map(tag => tag.name),
+    license_url: licenseType === COPYRIGHT ? '' : licenseUrl,
+    thumbnail_url: thumbnail,
   };
 
-  // Temporary solution to keep the same publish flow with the new tags api
-  // Eventually we will allow users to enter their own tags on publish
-  // `nsfw` will probably be removed
-
-  if (licenseUrl) {
-    publishPayload.license_url = licenseUrl;
-  }
-
-  if (thumbnail) {
-    publishPayload.thumbnail_url = thumbnail;
-  }
-
-  if (claim && claim.value.release_time) {
-    publishPayload.release_time = Number(claim.value.release_time);
+  if (myClaimForUri && myClaimForUri.value.release_time) {
+    publishPayload.release_time = Number(myClaimForUri.value.release_time);
   }
 
   if (nsfw) {
@@ -346,23 +352,25 @@ export const doCheckPendingPublishes = () => (dispatch: Dispatch, getState: GetS
 
   const checkFileList = () => {
     Lbry.claim_list().then(claims => {
-      claims.forEach(claim => {
-        // If it's confirmed, check if it was pending previously
-        if (claim.confirmations > 0 && pendingById[claim.claim_id]) {
-          delete pendingById[claim.claim_id];
+      if (claims) {
+        claims.forEach(claim => {
+          // If it's confirmed, check if it was pending previously
+          if (claim.confirmations > 0 && pendingById[claim.claim_id]) {
+            delete pendingById[claim.claim_id];
 
-          // If it's confirmed, check if we should notify the user
-          if (selectosNotificationsEnabled(getState())) {
-            const notif = new window.Notification('LBRY Publish Complete', {
-              body: `${claim.value.title} has been published to lbry://${claim.name}. Click here to view it`,
-              silent: false,
-            });
-            notif.onclick = () => {
-              dispatch(push(formatLbryUriForWeb(claim.permanent_url)));
-            };
+            // If it's confirmed, check if we should notify the user
+            if (selectosNotificationsEnabled(getState())) {
+              const notif = new window.Notification('LBRY Publish Complete', {
+                body: `${claim.value.title} has been published to lbry://${claim.name}. Click here to view it`,
+                silent: false,
+              });
+              notif.onclick = () => {
+                dispatch(push(formatLbryUriForWeb(claim.permanent_url)));
+              };
+            }
           }
-        }
-      });
+        });
+      }
 
       dispatch({
         type: ACTIONS.FETCH_CLAIM_LIST_MINE_COMPLETED,
