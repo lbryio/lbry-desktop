@@ -38,7 +38,7 @@ function PublishText(props: Props) {
           placeholder={__('My description for this and that')}
           value={description}
           disabled={disabled}
-          onChange={value => updatePublishForm({ description: advancedEditor ? value : value.target.text })}
+          onChange={value => updatePublishForm({ description: advancedEditor ? value : value.target.value })}
         />
         <div className="card__actions">
           <Button button="link" onClick={toggleMarkdown} label={advancedEditor ? 'Simple Editor' : 'Advanced Editor'} />
