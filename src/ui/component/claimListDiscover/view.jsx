@@ -155,6 +155,7 @@ function ClaimListDiscover(props: Props) {
         header={header}
         headerAltControls={meta}
         onScrollBottom={() => setPage(page + 1)}
+        page={page}
       />
 
       {loading && page > 1 && new Array(PAGE_SIZE).fill(1).map((x, i) => <ClaimPreview key={i} placeholder />)}
