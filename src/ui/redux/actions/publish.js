@@ -139,8 +139,8 @@ export const doUploadThumbnail = (filePath: string, thumbnailBuffer: Uint8Array)
 };
 
 export const doPrepareEdit = (claim: StreamClaim, uri: string, fileInfo: FileListItem) => (dispatch: Dispatch) => {
-  const { name, amount, channel_name: channelName, value } = claim;
-
+  const { name, amount, value } = claim;
+  const channelName = (claim && claim.signing_channel && claim.signing_channel.normalized_name) || null;
   const {
     author,
     description,
@@ -159,7 +159,6 @@ export const doPrepareEdit = (claim: StreamClaim, uri: string, fileInfo: FileLis
 
   const publishData: UpdatePublishFormData = {
     name,
-    channel: channelName,
     bid: Number(amount),
     contentIsFree: !fee.amount,
     author,
@@ -173,6 +172,10 @@ export const doPrepareEdit = (claim: StreamClaim, uri: string, fileInfo: FileLis
     licenseUrl,
     nsfw: isClaimNsfw(claim),
   };
+
+  if (channelName) {
+    publishData['channel'] = channelName;
+  }
 
   // Make sure custom liscence's are mapped properly
   // If the license isn't one of the standard licenses, map the custom license and description/url

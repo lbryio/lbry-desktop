@@ -48,6 +48,20 @@ function PublishAdvanced(props: Props) {
             <option value="tr">{__('Turkish')}</option>
             <option value="pl">{__('Polish')}</option>
             <option value="ms">{__('Malay')}</option>
+            <option value="pt">{__('Portuguese')}</option>
+            <option value="tr">{__('Turkish')}</option>
+            <option value="vi">{__('Vietnamese')}</option>
+            <option value="th">{__('Thai')}</option>
+            <option value="ar">{__('Arabic')}</option>
+            <option value="cs">{__('Czech')}</option>
+            <option value="hr">{__('Croatian')}</option>
+            <option value="km">{__('Cambodian')}</option>
+            <option value="ko">{__('Korean')}</option>
+            <option value="no">{__('Norwegian')}</option>
+            <option value="ro">{__('Romanian')}</option>
+            <option value="zh">{__('Chinese')}</option>
+            <option value="hi">{__('Hindi')}</option>
+            <option value="el">{__('Greek')}</option>
           </FormField>
 
           <LicenseType
