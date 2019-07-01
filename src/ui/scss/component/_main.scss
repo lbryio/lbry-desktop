@@ -9,7 +9,7 @@
   display: flex;
 
   [data-mode='dark'] & {
-    background-color: #1e1e1e;
+    background-color: var(--dm-color-08);
   }
 }
 

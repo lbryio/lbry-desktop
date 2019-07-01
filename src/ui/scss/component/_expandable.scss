@@ -4,7 +4,7 @@
   padding-bottom: var(--spacing-medium);
 
   [data-mode='dark'] & {
-    border-color: #555254;
+    border-color: var(--dm-color-04);
   }
 }
 
@@ -34,7 +34,7 @@
     position: absolute;
 
     [data-mode='dark'] & {
-      background-image: linear-gradient(to bottom, transparent 0%, #1e1e1e 90%);
+      background-image: linear-gradient(to bottom, transparent 0%, var(--dm-color-08) 90%);
     }
   }
 }

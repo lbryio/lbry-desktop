@@ -8,7 +8,7 @@
   font-size: 1.25rem;
 
   [data-mode='dark'] & {
-    background-color: #353434;
+    background-color: var(--dm-color-05);
     box-shadow: var(--card-box-shadow) darken($lbry-gray-1, 80%);
   }
 }

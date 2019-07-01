@@ -35,7 +35,7 @@
     background-size: cover;
 
     [data-mode='dark'] & {
-      background-color: #555254;
+      background-color: var(--dm-color-04);
     }
   }
 }

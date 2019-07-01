@@ -58,11 +58,11 @@
   }
 
   [data-mode='dark'] & {
-    background-color: #6a6a6a;
+    background-color: var(--dm-color-03);
     color: $lbry-white;
 
     &::placeholder {
-      color: #90908f;
+      color: var(--dm-color-02);
     }
   }
 }

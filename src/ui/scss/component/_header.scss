@@ -10,8 +10,8 @@
   padding-right: var(--spacing-large);
 
   [data-mode='dark'] & {
-    background-color: #353434;
-    color: #ddd;
+    background-color: var(--dm-color-05);
+    color: var(--dm-color-01);
     border-bottom: none;
     box-shadow: var(--card-box-shadow) $lbry-black;
   }
@@ -88,7 +88,7 @@
     }
 
     svg {
-      stroke: #ddd;
+      stroke: var(--dm-color-01);
     }
   }
 }

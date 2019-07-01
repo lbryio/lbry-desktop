@@ -255,7 +255,7 @@ fieldset-section {
     input:not(:focus):not(.form-field--copyable),
     textarea:not(:focus),
     select:not(:focus) {
-      border-color: #555254;
+      border-color: var(--dm-color-04);
     }
   }
 }

@@ -9,7 +9,7 @@ html {
   overflow-x: hidden;
 
   &[data-mode='dark'] {
-    background-color: #1e1e1e;
+    background-color: var(--dm-color-08);
   }
 }
 
@@ -24,8 +24,8 @@ body {
   background-color: mix($lbry-white, $lbry-gray-1, 70%);
 
   [data-mode='dark'] & {
-    background-color: #1e1e1e;
-    color: #ddd;
+    background-color: var(--dm-color-08);
+    color: var(--dm-color-01);
   }
 }
 
@@ -54,7 +54,7 @@ hr {
   background-color: $lbry-gray-1;
 
   [data-mode='dark'] & {
-    background-color: #555254;
+    background-color: var(--dm-color-04);
   }
 }
 
@@ -147,7 +147,7 @@ hr {
   border-radius: 5px;
 
   [data-mode='dark'] & {
-    background-color: #2e2d2e;
+    background-color: var(--dm-color-06);
     color: inherit;
   }
 }
@@ -231,7 +231,7 @@ hr {
 fieldset,
 .fieldset {
   [data-mode='dark'] & {
-    border-top-color: #555254;
+    border-top-color: var(--dm-color-04);
   }
 }
 
@@ -246,6 +246,6 @@ checkbox-toggle,
 radio-toggle,
 .radio-toggle {
   [data-mode='dark'] & {
-    border-color: #555254;
+    border-color: var(--dm-color-04);
   }
 }

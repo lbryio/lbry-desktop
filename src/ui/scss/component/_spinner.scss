@@ -43,7 +43,7 @@
     background-color: $lbry-white;
 
     [data-mode='dark'] & {
-      background-color: #ddd;
+      background-color: var(--dm-color-01);
     }
   }
 }
