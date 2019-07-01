@@ -3,6 +3,7 @@ import React from 'react';
 import ClaimListDiscover from 'component/claimListDiscover';
 import TagsSelect from 'component/tagsSelect';
 import Page from 'component/page';
+import Button from 'component/button';
 
 type Props = {
   followedTags: Array<Tag>,
@@ -16,6 +17,7 @@ function DiscoverPage(props: Props) {
       <ClaimListDiscover
         personal
         tags={followedTags.map(tag => tag.name)}
+        meta={<Button button="link" label={__('Customize')} navigate="/$/following/customize" />}
         injectedItem={<TagsSelect showClose title={__('Customize Your Homepage')} />}
       />
     </Page>

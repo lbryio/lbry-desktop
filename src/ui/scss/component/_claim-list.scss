@@ -19,6 +19,7 @@
   // Normal link buttons are too dark on the black file list background
   .button--link {
     color: $lbry-teal-3;
+    font-size: 1.2em;
 
     &:hover {
       color: $lbry-teal-1;

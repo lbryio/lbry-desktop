@@ -34,36 +34,23 @@ function SideBar(props: Props) {
               ...buildLink(null, __('Home'), ICONS.HOME),
             },
             {
-              ...buildLink(PAGES.FOLLOWING, __('Following'), ICONS.SUBSCRIBE),
-            },
-            {
               ...buildLink(PAGES.LIBRARY, __('Library'), ICONS.LIBRARY),
             },
             {
               ...buildLink(PAGES.PUBLISHED, __('Publishes'), ICONS.PUBLISH),
             },
           ].map(renderLink)}
-
-          <li>
-            <Button
-              navigate="/$/following/customize"
-              icon={ICONS.EDIT}
-              className="navigation__link"
-              activeClass="navigation__link--active"
-              label={__('Customize')}
-            />
-          </li>
         </ul>
         <ul className="navigation__links tags--vertical">
           {followedTags.map(({ name }, key) => (
-            <li className="navigation__link--indented" key={name}>
+            <li className="" key={name}>
               <Tag navigate={`/$/tags?t${name}`} name={name} />
             </li>
           ))}
         </ul>
         <ul className="navigation__links--small">
           {subscriptions.map(({ uri, channelName }, index) => (
-            <li key={uri} className="navigation__link--indented">
+            <li key={uri} className="">
               <Button
                 navigate={uri}
                 label={channelName}
