@@ -39,9 +39,9 @@ type Props = {
 
 function ClaimListDiscover(props: Props) {
   const { doClaimSearch, uris, tags, loading, personal, injectedItem, meta, subscribedChannels } = props;
-  const [personalSort, setPersonalSort] = usePersistedState('file-list-trending:personalSort', SEARCH_SORT_YOU);
-  const [typeSort, setTypeSort] = usePersistedState('file-list-trending:typeSort', TYPE_TRENDING);
-  const [timeSort, setTimeSort] = usePersistedState('file-list-trending:timeSort', TIME_WEEK);
+  const [personalSort, setPersonalSort] = usePersistedState('claim-list-discover:personalSort', SEARCH_SORT_YOU);
+  const [typeSort, setTypeSort] = usePersistedState('claim-list-discover:typeSort', TYPE_TRENDING);
+  const [timeSort, setTimeSort] = usePersistedState('claim-list-discover:timeSort', TIME_WEEK);
   const [page, setPage] = useState(1);
 
   const toCapitalCase = string => string.charAt(0).toUpperCase() + string.slice(1);

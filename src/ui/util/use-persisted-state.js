@@ -9,6 +9,8 @@ export default function usePersistedState(key, firstTimeDefault) {
       defaultValue = true;
     } else if (item === 'false') {
       defaultValue = false;
+    } else {
+      defaultValue = item;
     }
   }
 
