@@ -19,11 +19,6 @@
 }
 
 .button--primary {
-  &:not(:hover) {
-    // fix this in components repo
-    background-color: $lbry-teal-4;
-  }
-
   &:hover {
     background-color: $lbry-teal-3;
   }

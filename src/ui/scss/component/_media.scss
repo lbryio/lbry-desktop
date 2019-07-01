@@ -179,7 +179,7 @@
 }
 
 .media__info--large {
-  // border-top: 1px solid $lbry-gray-1;
+  border-top: 1px solid $lbry-gray-1;
   margin-top: var(--spacing-medium);
 
   html[data-mode='dark'] & {

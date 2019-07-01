@@ -272,10 +272,7 @@ class FilePage extends React.Component<Props> {
             </div>
           </div>
 
-          <div
-            className="media__actions media__actions--between"
-            style={{ marginTop: '1rem', paddingTop: '1rem', borderTop: '1px solid #ddd' }}
-          >
+          <div className="media__actions media__actions--between">
             <div className="media__subtext media__subtext--large">
               <DateTime uri={uri} show={DateTime.SHOW_DATE} />
             </div>
@@ -293,8 +290,6 @@ class FilePage extends React.Component<Props> {
 
           <div className="media__info--large">
             <ClaimTags uri={uri} type="large" />
-          </div>
-          <div className="media__info--large">
             <FileDetails uri={uri} />
 
             <div className="media__info-title">{__('Comments')}</div>

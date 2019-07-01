@@ -8,7 +8,7 @@ import UnsupportedOnWeb from 'component/common/unsupported-on-web';
 
 const WalletPage = () => (
   <Page>
-    {IS_WEB && <UnsupportedOnWeb />}
+    <UnsupportedOnWeb />
     <div className={IS_WEB && 'card--disabled'}>
       <WalletBalance />
       <TransactionListRecent />
