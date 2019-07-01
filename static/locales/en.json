@@ -527,5 +527,17 @@
   "Featured content. Earn rewards for watching.": "Featured content. Earn rewards for watching.",
   "Add tag": "Add tag",
   "Customize Your Tags": "Customize Your Tags",
-  "Channels You Follow": "Channels You Follow"
+  "Channels You Follow": "Channels You Follow",
+  "Incompatible Daemon": "Incompatible Daemon",
+  "Upload your thumbnail to": "Upload your thumbnail to",
+  "Filter": "Filter",
+  "Invalid character in path: %s": "Invalid character in path: %s",
+  "Latest From Who You're Following": "Latest From Who You're Following",
+  "Tags You Follow": "Tags You Follow",
+  "Everyone": "Everyone",
+  "this": "this",
+  "This": "This",
+  "Remove from your library": "Remove from your library",
+  "Unfollow": "Unfollow",
+  "View tag": "View tag"
 }
