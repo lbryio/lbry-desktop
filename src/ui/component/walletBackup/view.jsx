@@ -1,7 +1,8 @@
 // @flow
 import * as React from 'react';
-import { shell, clipboard, remote } from 'electron';
+import { shell, remote } from 'electron';
 import Button from 'component/button';
+import CopyableText from 'component/copyableText';
 import AdmZip from 'adm-zip';
 import path from 'path';
 
@@ -32,12 +33,6 @@ class WalletBackup extends React.PureComponent<Props, State> {
 
   showSuccessMessage(message: string) {
     this.setState({ successMessage: message });
-  }
-
-  flashSuccessMessage(message: string, delay: ?number) {
-    delay = delay || 2000;
-    this.showSuccessMessage(message);
-    setTimeout(() => this.setState({ successMessage: null }), delay, { once: true });
   }
 
   clearMessages() {
@@ -89,17 +84,6 @@ class WalletBackup extends React.PureComponent<Props, State> {
     shell.showItemInFolder(outputPath);
   }
 
-  copyWalletDirToClipboard(lbryumWalletDir: ?string) {
-    this.clearMessages();
-
-    if (lbryumWalletDir) {
-      clipboard.writeText(lbryumWalletDir);
-      this.flashSuccessMessage(__('Copied path to clipboard.'));
-    } else {
-      this.showErrorMessage(__('No wallet folder was found.'));
-    }
-  }
-
   render() {
     const { daemonSettings } = this.props;
     const { wallet_dir: lbryumWalletDir } = daemonSettings;
@@ -135,7 +119,7 @@ class WalletBackup extends React.PureComponent<Props, State> {
                   'However, it is fairly easy to back up manually. To backup your wallet, make a copy of the folder listed below:'
                 )}
               </p>
-              <p className="card__message">{lbryumWalletDir}</p>
+              <CopyableText copyable={lbryumWalletDir} snackMessage={__('Path copied.')} />
               <p>
                 {__(
                   'Access to these files are equivalent to having access to your credits. Keep any copies you make of your wallet in a secure place.'
@@ -153,11 +137,6 @@ class WalletBackup extends React.PureComponent<Props, State> {
                 {this.state.successMessage}
               </p>
               <div className="card__actions">
-                <Button
-                  button="primary"
-                  label={__('Copy Folder Path')}
-                  onClick={() => this.copyWalletDirToClipboard(lbryumWalletDir)}
-                />
                 <Button button="primary" label={__('Open Folder')} onClick={() => shell.openItem(lbryumWalletDir)} />
                 <Button
                   button="primary"
