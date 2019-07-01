@@ -92,7 +92,7 @@ function ClaimPreview(props: Props) {
     return null;
   }
 
-  if (placeholder && !claim) {
+  if (placeholder || isResolvingUri) {
     return (
       <li className="claim-preview" disabled>
         <div className="placeholder media__thumb" />

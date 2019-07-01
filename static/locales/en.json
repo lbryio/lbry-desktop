@@ -292,6 +292,7 @@
   "Comment": "Comment",
   "Your comment": "Your comment",
   "Post": "Post",
+<<<<<<< HEAD
   "No modifier provided after separator %s.": "No modifier provided after separator %s.",
   "Incompatible Daemon": "Incompatible Daemon",
   "Incompatible daemon running": "Incompatible daemon running",
@@ -308,6 +309,9 @@
   "Your version is out of date and may be unreliable or insecure.": "Your version is out of date and may be unreliable or insecure.",
   "Want to know what has changed?": "Want to know what has changed?",
   "release notes": "release notes",
+=======
+  "You haven't downloaded anything from LBRY yet.": "You haven't downloaded anything from LBRY yet.",
+>>>>>>> ca0fd40a... add placeholders to claim previews
   "Read the FAQ": "Read the FAQ",
   "Our FAQ answers many common questions.": "Our FAQ answers many common questions.",
   "Get Live Help": "Get Live Help",

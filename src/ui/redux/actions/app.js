@@ -24,6 +24,7 @@ import {
 import { doAuthenticate } from 'lbryinc';
 import { lbrySettings as config, version as appVersion } from 'package.json';
 import { push } from 'connected-react-router';
+import { whiteListedReducers } from 'store';
 
 // @if TARGET='app'
 const { autoUpdater } = remote.require('electron-updater');
@@ -327,7 +328,8 @@ export function doDaemonReady() {
 
 export function doClearCache() {
   return () => {
-    window.cacheStore.purge();
+    const reducersToClear = whiteListedReducers.filter(reducerKey => reducerKey !== 'tags');
+    window.cacheStore.purge(reducersToClear);
 
     return Promise.resolve();
   };

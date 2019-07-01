@@ -21,6 +21,7 @@ type Props = {
   empty?: string,
   defaultSort?: boolean,
   onScrollBottom?: any => void,
+  page?: number,
   // If using the default header, this is a unique ID needed to persist the state of the filter setting
   persistedStorageKey?: string,
 };
@@ -37,6 +38,7 @@ export default function ClaimList(props: Props) {
     type,
     header,
     onScrollBottom,
+    page,
   } = props;
   const [currentSort, setCurrentSort] = usePersistedState(persistedStorageKey, SORT_NEW);
   const hasUris = uris && !!uris.length;
@@ -101,7 +103,7 @@ export default function ClaimList(props: Props) {
         <ul>
           {sortedUris.map((uri, index) => (
             <React.Fragment key={uri}>
-              <ClaimPreview uri={uri} type={type} />
+              <ClaimPreview uri={uri} type={type} placeholder={loading && (!page || page === 1)} />
               {index === 4 && injectedItem && <li className="claim-preview--injected">{injectedItem}</li>}
             </React.Fragment>
           ))}
