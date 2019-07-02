@@ -137,9 +137,9 @@ class WalletBackup extends React.PureComponent<Props, State> {
                 {this.state.successMessage}
               </p>
               <div className="card__actions">
-                <Button button="primary" label={__('Open Folder')} onClick={() => shell.openItem(lbryumWalletDir)} />
+                <Button button="inverse" label={__('Open Folder')} onClick={() => shell.openItem(lbryumWalletDir)} />
                 <Button
-                  button="primary"
+                  button="inverse"
                   label={__('Create Backup')}
                   onClick={() => this.backupWalletDir(lbryumWalletDir)}
                 />
