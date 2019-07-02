@@ -9,9 +9,9 @@
   padding-left: var(--spacing-large);
   padding-right: var(--spacing-large);
 
-  html[data-mode='dark'] & {
-    background-color: mix($lbry-black, $lbry-gray-3, 90%);
-    color: $lbry-white;
+  [data-mode='dark'] & {
+    background-color: var(--dm-color-05);
+    color: var(--dm-color-01);
     border-bottom: none;
     box-shadow: var(--card-box-shadow) $lbry-black;
   }
@@ -71,14 +71,14 @@
       content: '';
       position: absolute;
 
-      html[data-mode='dark'] & {
+      [data-mode='dark'] & {
         background-color: $lbry-teal-3;
       }
     }
   }
 
   // TODO: dark
-  html[data-mode='dark'] & {
+  [data-mode='dark'] & {
     &:hover {
       color: $lbry-teal-3;
 
@@ -88,7 +88,7 @@
     }
 
     svg {
-      stroke: $lbry-white;
+      stroke: var(--dm-color-01);
     }
   }
 }

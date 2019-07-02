@@ -9,7 +9,7 @@
   }
 
   [data-mode='dark'] & {
-    color: lighten($lbry-teal-5, 60%);
+    color: var(--dm-color-01);
     background-color: rgba($lbry-teal-5, 0.3);
   }
 }

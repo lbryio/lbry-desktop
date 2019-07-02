@@ -26,7 +26,7 @@
   background-color: $lbry-blue-2;
   color: $lbry-black;
 
-  html[data-mode='dark'] & {
+  [data-mode='dark'] & {
     background-color: $lbry-blue-4;
     color: inherit;
   }
@@ -57,12 +57,12 @@
     opacity: 0.9;
   }
 
-  html[data-mode='dark'] & {
+  [data-mode='dark'] & {
+    background-color: var(--dm-color-03);
     color: $lbry-white;
-    background-color: darken($lbry-gray-5, 20%);
 
     &::placeholder {
-      color: $lbry-gray-1;
+      color: var(--dm-color-02);
     }
   }
 }
@@ -73,7 +73,7 @@
   min-width: 100%;
   overflow: hidden;
 
-  html[data-mode='dark'] & {
+  [data-mode='dark'] & {
     background-color: $lbry-gray-5;
     color: $lbry-white;
   }

@@ -7,7 +7,7 @@
   overflow: hidden;
   position: absolute;
 
-  html[data-mode='dark'] & {
+  [data-mode='dark'] & {
     border: 1px solid rgba($lbry-gray-1, 0.3);
   }
 }
@@ -16,7 +16,7 @@
 .document-viewer {
   background-color: $lbry-white;
 
-  html[data-mode='dark'] & {
+  [data-mode='dark'] & {
     background-color: transparent;
   }
 }

@@ -41,6 +41,10 @@
 .spinner--light {
   .rect {
     background-color: $lbry-white;
+
+    [data-mode='dark'] & {
+      background-color: var(--dm-color-01);
+    }
   }
 }
 

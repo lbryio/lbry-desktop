@@ -55,14 +55,16 @@
   }
 
   [data-mode='dark'] & {
-    color: $lbry-gray-1;
+    color: var(--dm-color-01);
+
     svg {
-      color: $lbry-gray-1;
+      color: var(--dm-color-01);
     }
 
     &:hover,
     &.navigation__link--active {
       color: $lbry-teal-4;
+
       .icon {
         color: $lbry-teal-4;
       }
@@ -111,7 +113,7 @@
     &::before {
       background-color: $lbry-black;
 
-      html[data-mode='dark'] & {
+      [data-mode='dark'] & {
         color: $lbry-gray-1;
       }
     }

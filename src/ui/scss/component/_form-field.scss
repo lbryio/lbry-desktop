@@ -255,7 +255,7 @@ fieldset-section {
     input:not(:focus):not(.form-field--copyable),
     textarea:not(:focus),
     select:not(:focus) {
-      border-color: $lbry-gray-4;
+      border-color: var(--dm-color-04);
     }
   }
 }
@@ -270,7 +270,7 @@ fieldset-section {
   user-select: text;
   cursor: default;
 
-  html[data-mode='dark'] & {
+  [data-mode='dark'] & {
     background-color: rgba($lbry-white, 0.3);
     border-color: $lbry-gray-5;
     color: inherit;

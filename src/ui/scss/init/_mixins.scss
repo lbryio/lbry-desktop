@@ -2,6 +2,10 @@
   animation: pulse 2s infinite ease-in-out;
   background-color: $lbry-gray-1;
   border-radius: var(--card-radius);
+
+  [data-mode='dark'] & {
+    background-color: var(--dm-color-04);
+  }
 }
 
 @mixin mediaThumbHoverZoom {

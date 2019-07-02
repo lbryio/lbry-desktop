@@ -3,8 +3,8 @@
   margin-bottom: var(--spacing-medium);
   padding-bottom: var(--spacing-medium);
 
-  html[data-mode='dark'] & {
-    border-color: rgba($lbry-gray-5, 0.2);
+  [data-mode='dark'] & {
+    border-color: var(--dm-color-04);
   }
 }
 
@@ -33,8 +33,8 @@
     content: '';
     position: absolute;
 
-    html[data-mode='dark'] & {
-      background-image: linear-gradient(to bottom, transparent 0%, $lbry-black 90%);
+    [data-mode='dark'] & {
+      background-image: linear-gradient(to bottom, transparent 0%, var(--dm-color-08) 90%);
     }
   }
 }

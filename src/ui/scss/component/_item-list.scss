@@ -3,7 +3,7 @@
   margin-bottom: var(--spacing-large);
   padding: var(--spacing-large);
 
-  html[data-mode='dark'] & {
+  [data-mode='dark'] & {
     background-color: rgba($lbry-white, 0.1);
   }
 
@@ -37,7 +37,7 @@
 .item-list__row--selected {
   background-color: rgba($lbry-black, 0.1);
 
-  html[data-mode='dark'] & {
+  [data-mode='dark'] & {
     background-color: rgba($lbry-black, 0.5);
   }
 }
