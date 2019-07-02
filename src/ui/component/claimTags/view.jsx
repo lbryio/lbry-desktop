@@ -1,7 +1,7 @@
 // @flow
 import * as React from 'react';
 import classnames from 'classnames';
-import Button from 'component/button';
+import Tag from 'component/tag';
 
 const SLIM_TAGS = 1;
 const NORMAL_TAGS = 4;
@@ -45,7 +45,7 @@ export default function ClaimTags(props: Props) {
   return (
     <div className={classnames('file-properties', { 'file-properties--large': type === 'large' })}>
       {tagsToDisplay.map(tag => (
-        <Button key={tag} title={tag} navigate={`$/tags?t=${tag}`} className="tag" label={tag} />
+        <Tag key={tag} title={tag} name={tag} />
       ))}
     </div>
   );

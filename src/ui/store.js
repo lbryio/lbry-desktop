@@ -74,6 +74,7 @@ const appFilter = createFilter('app', ['hasClickedComment', 'searchOptionsExpand
 // We only need to persist the receiveAddress for the wallet
 const walletFilter = createFilter('wallet', ['receiveAddress']);
 const searchFilter = createFilter('search', ['options']);
+const tagsFilter = createFilter('tags', ['followedTags']);
 const whiteListedReducers = [
   // @if TARGET='app'
   'publish',
@@ -86,6 +87,7 @@ const whiteListedReducers = [
   'search',
   'tags',
 ];
+
 const persistOptions = {
   whitelist: whiteListedReducers,
   // Order is important. Needs to be compressed last or other transforms can't
@@ -98,6 +100,7 @@ const persistOptions = {
     // @endif
     appFilter,
     searchFilter,
+    tagsFilter,
     compressor,
   ],
   debounce: 5000,

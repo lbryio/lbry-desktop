@@ -132,6 +132,7 @@ function PublishForm(props: Props) {
         <div className="card">
           <TagSelect
             title={false}
+            suggestMature
             help={__('The better your tags are, the easier it will be for people to discover your content.')}
             empty={__('No tags added')}
             onSelect={tag => updatePublishForm({ tags: [...tags, tag] })}

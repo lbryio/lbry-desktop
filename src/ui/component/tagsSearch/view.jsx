@@ -16,10 +16,11 @@ type Props = {
   doToggleTagFollow: string => void,
   doAddTag: string => void,
   onSelect?: Tag => void,
+  suggestMature?: boolean,
 };
 
 export default function TagSelect(props: Props) {
-  const { unfollowedTags = [], followedTags = [], doToggleTagFollow, doAddTag, onSelect } = props;
+  const { unfollowedTags = [], followedTags = [], doToggleTagFollow, doAddTag, onSelect, suggestMature } = props;
   const [newTag, setNewTag] = useState('');
 
   let tags = unfollowedTags.slice();
@@ -33,6 +34,10 @@ export default function TagSelect(props: Props) {
   const suggestedTags = Array.from(suggestedTagsSet)
     .filter(doesTagMatch)
     .slice(0, 5);
+
+  if (!newTag && suggestMature) {
+    suggestedTags.push('mature');
+  }
 
   const suggestedTransitions = useTransition(suggestedTags, tag => tag, unfollowedTagsAnimation);
 
