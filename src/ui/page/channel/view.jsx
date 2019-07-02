@@ -11,7 +11,7 @@ import { formatLbryUriForWeb } from 'util/uri';
 import ChannelContent from 'component/channelContent';
 import ChannelAbout from 'component/channelAbout';
 import ChannelThumbnail from 'component/channelThumbnail';
-import ChannelForm from 'component/channelForm';
+import ChannelEdit from 'component/channelEdit';
 import * as ICONS from 'constants/icons';
 
 const PAGE_VIEW_QUERY = `view`;
@@ -43,7 +43,7 @@ function ChannelPage(props: Props) {
   // If a user changes tabs, update the url so it stays on the same page if they refresh.
   // We don't want to use links here because we can't animate the tab change and using links
   // would alter the Tab label's role attribute, which should stay role="tab" to work with keyboards/screen readers.
-  const tabIndex = currentView === ABOUT_PAGE ? 1 : 0;
+  const tabIndex = currentView === ABOUT_PAGE || editing ? 1 : 0;
   const onTabChange = newTabIndex => {
     let url = formatLbryUriForWeb(uri);
     let search = '?';
@@ -75,7 +75,7 @@ function ChannelPage(props: Props) {
             <h1 className="channel__title">
               {title || channelName}
               {channelIsMine && !editing && (
-                <Button onClick={() => setEditing(!editing)} icon={ICONS.EDIT} iconSize={49} />
+                <Button title={__('Edit')} onClick={() => setEditing(!editing)} icon={ICONS.EDIT} iconSize={49} />
               )}
             </h1>
             <h2 className="channel__url">
@@ -84,35 +84,34 @@ function ChannelPage(props: Props) {
             </h2>
           </div>
         </header>
-        {!editing && (
-          <Tabs onChange={onTabChange} index={tabIndex}>
-            <TabList className="tabs__list--channel-page">
-              <Tab>{__('Content')}</Tab>
-              <Tab>{__('About')}</Tab>
-              <div className="card__actions">
-                <ShareButton uri={uri} />
-                <SubscribeButton uri={uri} />
-              </div>
-            </TabList>
+        <Tabs onChange={onTabChange} index={tabIndex}>
+          <TabList className="tabs__list--channel-page">
+            <Tab disabled={editing}>{__('Content')}</Tab>
+            <Tab>{editing ? __('Editing Your Channel') : __('About')}</Tab>
+            <div className="card__actions">
+              <ShareButton uri={uri} />
+              <SubscribeButton uri={uri} />
+            </div>
+          </TabList>
 
-            <TabPanels>
-              <TabPanel>
-                <ChannelContent uri={uri} />
-              </TabPanel>
-              <TabPanel>
+          <TabPanels>
+            <TabPanel>
+              <ChannelContent uri={uri} />
+            </TabPanel>
+            <TabPanel>
+              {editing ? (
+                <ChannelEdit
+                  uri={uri}
+                  setEditing={setEditing}
+                  updateThumb={v => setThumbPreview(v)}
+                  updateCover={v => setCoverPreview(v)}
+                />
+              ) : (
                 <ChannelAbout uri={uri} />
-              </TabPanel>
-            </TabPanels>
-          </Tabs>
-        )}
-        {editing && (
-          <ChannelForm
-            uri={uri}
-            setEditing={setEditing}
-            updateThumb={v => setThumbPreview(v)}
-            updateCover={v => setCoverPreview(v)}
-          />
-        )}
+              )}
+            </TabPanel>
+          </TabPanels>
+        </Tabs>
       </div>
     </Page>
   );

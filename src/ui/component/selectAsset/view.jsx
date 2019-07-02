@@ -6,7 +6,7 @@ import FileSelector from 'component/common/file-selector';
 import Button from 'component/button';
 import fs from 'fs';
 import path from 'path';
-import { v4 as uuidv4 } from 'uuid';
+import uuid from 'uuid/v4';
 
 const filters = [
   {
@@ -61,7 +61,7 @@ function SelectAsset(props: Props) {
     setUploadStatus(SPEECH_UPLOADING);
 
     const data = new FormData();
-    const name = uuidv4();
+    const name = uuid();
     const file = new File([thumbnail], fileName, { type: fileType });
     data.append('name', name);
     data.append('file', file);

@@ -86,6 +86,12 @@ $metadata-z-index: 1;
   font-size: 3rem;
   font-weight: 800;
   margin-right: var(--spacing-large);
+
+  // Quick hack to get this to work
+  // We should have a generic style for "header with button next to it"
+  .button {
+    margin-left: var(--spacing-medium);
+  }
 }
 
 .channel__url {
