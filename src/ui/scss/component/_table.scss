@@ -18,6 +18,10 @@ table,
   }
 }
 
+.table--empty {
+  // padding: var(--spacing-large);
+}
+
 td {
   overflow: hidden;
 }
