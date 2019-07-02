@@ -106,8 +106,10 @@ function PublishForm(props: Props) {
 
     if (channelName) {
       // resolve without the channel name so we know the winning bid for it
-      const uriLessChannel = buildURI({ contentName: name });
-      resolveUri(uriLessChannel);
+      try {
+        const uriLessChannel = buildURI({ contentName: name });
+        resolveUri(uriLessChannel);
+      } catch (e) {}
     }
 
     if (uri) {
