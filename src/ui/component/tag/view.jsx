@@ -15,11 +15,18 @@ export default function Tag(props: Props) {
   const { name, onClick, type = 'link', disabled = false } = props;
 
   const clickProps = onClick ? { onClick } : { navigate: `/$/tags?t=${name}` };
+  let title;
+  if (!onClick) {
+    title = __('View tag');
+  } else {
+    type === 'add' ? __('Add tag') : __('Remove tag');
+  }
 
   return (
     <Button
       {...clickProps}
       disabled={disabled}
+      title={title}
       className={classnames('tag', {
         'tag--add': type === 'add',
         'tag--remove': type === 'remove',

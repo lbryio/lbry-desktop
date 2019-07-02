@@ -5,26 +5,22 @@ import TagsSelect from 'component/tagsSelect';
 import ClaimList from 'component/claimList';
 
 type Props = {
-  subscribedChannels: Array<{ uri: string }>,
+  subscribedChannels: Array<Subscription>,
 };
 
-function DiscoverPage(props: Props) {
+function FollowingEditPage(props: Props) {
   const { subscribedChannels } = props;
-
+  const channelUris = subscribedChannels.map(({ uri }) => uri);
   return (
     <Page>
       <div className="card">
-        <TagsSelect showClose={false} title={__('Find New Tags To Follow')} />
+        <TagsSelect showClose={false} title={__('Customize Your Tags')} />
       </div>
       <div className="card">
-        <ClaimList
-          header={<h1>{__('Channels You Are Following')}</h1>}
-          empty={__("You aren't following any channels.")}
-          uris={subscribedChannels.map(({ uri }) => uri)}
-        />
+        <ClaimList header={<h1>{__('Channels You Follow')}</h1>} uris={channelUris} />
       </div>
     </Page>
   );
 }
 
-export default DiscoverPage;
+export default FollowingEditPage;

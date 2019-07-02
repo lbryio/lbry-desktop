@@ -132,10 +132,6 @@
   color: rgba($lbry-black, 0.8);
   font-size: 0.9em;
 
-  &:not(:last-child) {
-    margin-bottom: var(--spacing-medium);
-  }
-
   html[data-mode='dark'] & {
     color: rgba($lbry-white, 0.7);
   }
@@ -149,8 +145,9 @@
 //  S U B T I T L E
 
 .media__subtitle {
+  align-self: flex-start;
   font-size: 0.8em;
-  color: rgba($lbry-black, 0.8);
+  color: rgba($lbry-black, 0.6);
 
   [data-mode='dark'] & {
     color: rgba($lbry-white, 0.8);
@@ -167,6 +164,7 @@
 
 .media__subtitle__channel {
   font-weight: 600;
+  margin: var(--spacing-small) 0;
 }
 
 //  M E D I A

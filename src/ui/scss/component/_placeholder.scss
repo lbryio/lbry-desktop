@@ -9,7 +9,7 @@
 .placeholder {
   display: flex;
 
-  &.claim-list__item-title {
+  &.claim-preview-title {
     width: 100%;
     height: 3rem;
   }
@@ -18,6 +18,6 @@
     margin-top: var(--spacing-small);
 
     width: 30%;
-    height: 2em;
+    height: 1.5em;
   }
 }

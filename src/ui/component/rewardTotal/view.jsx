@@ -10,7 +10,8 @@ type Props = {
 function RewardTotal(props: Props) {
   const { rewards } = props;
   const rewardTotal = rewards.reduce((acc, val) => acc + val.reward_amount, 0);
-  const total = useTween(rewardTotal * 25);
+  const modifier = rewardTotal > 500 ? 1 : 15; // used to tweak the reward count speed
+  const total = useTween(rewardTotal * modifier);
   const integer = Math.round(total * rewardTotal);
 
   return (

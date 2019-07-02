@@ -19,7 +19,7 @@ type Props = {
 };
 
 export default function TagSelect(props: Props) {
-  const { unfollowedTags, followedTags, doToggleTagFollow, doAddTag, onSelect } = props;
+  const { unfollowedTags = [], followedTags = [], doToggleTagFollow, doAddTag, onSelect } = props;
   const [newTag, setNewTag] = useState('');
 
   let tags = unfollowedTags.slice();
@@ -27,9 +27,14 @@ export default function TagSelect(props: Props) {
     tags.unshift({ name: newTag });
   }
 
-  const doesTagMatch = ({ name }) => (newTag ? name.toLowerCase().includes(newTag.toLowerCase()) : true);
-  const suggestedTags = tags.filter(doesTagMatch).slice(0, 5);
-  const suggestedTransitions = useTransition(suggestedTags, tag => tag.name, unfollowedTagsAnimation);
+  const doesTagMatch = name => (newTag ? name.toLowerCase().includes(newTag.toLowerCase()) : true);
+  // Make sure there are no duplicates, then trim
+  const suggestedTagsSet = new Set(tags.map(tag => tag.name));
+  const suggestedTags = Array.from(suggestedTagsSet)
+    .filter(doesTagMatch)
+    .slice(0, 5);
+
+  const suggestedTransitions = useTransition(suggestedTags, tag => tag, unfollowedTagsAnimation);
 
   function onChange(e) {
     setNewTag(e.target.value);
@@ -42,11 +47,11 @@ export default function TagSelect(props: Props) {
     if (onSelect) {
       onSelect({ name: newTag });
     } else {
-      if (!unfollowedTags.includes(newTag)) {
+      if (!unfollowedTags.map(({ name }) => name).includes(newTag)) {
         doAddTag(newTag);
       }
 
-      if (!followedTags.includes(newTag)) {
+      if (!followedTags.map(({ name }) => name).includes(newTag)) {
         doToggleTagFollow(newTag);
       }
     }
@@ -54,7 +59,7 @@ export default function TagSelect(props: Props) {
 
   function handleTagClick(tag) {
     if (onSelect) {
-      onSelect(tag);
+      onSelect({ name: tag });
     } else {
       doToggleTagFollow(tag);
     }
@@ -74,7 +79,7 @@ export default function TagSelect(props: Props) {
       <ul className="tags">
         {suggestedTransitions.map(({ item, key, props }) => (
           <animated.li key={key} style={props}>
-            <Tag name={item.name} type="add" onClick={() => handleTagClick(item)} />
+            <Tag name={item} type="add" onClick={() => handleTagClick(item)} />
           </animated.li>
         ))}
         {!suggestedTransitions.length && <p className="empty tags__empty-message">No suggested tags</p>}

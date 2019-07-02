@@ -51,7 +51,11 @@ class SnackBar extends React.PureComponent<Props> {
           <div>&#9432;</div>
           <div>{message}</div>
         </div>
-        {linkText && linkTarget && <Button navigate={linkTarget} className="snack-bar__action" label={linkText} />}
+        {linkText && linkTarget && (
+          // This is a little weird because of `linkTarget` code in `lbry-redux`
+          // Any navigation code should happen in the app, and that should be removed from lbry-redux
+          <Button navigate={`/$${linkTarget}`} className="snack-bar__action" label={linkText} />
+        )}
       </div>
     );
   }

@@ -21,6 +21,7 @@ $main: $lbry-teal-5;
   @extend .tags;
   flex-direction: column;
   align-items: flex-start;
+  margin-top: var(--spacing-medium);
 }
 
 .tags--selected {

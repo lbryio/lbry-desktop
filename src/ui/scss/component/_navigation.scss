@@ -7,6 +7,7 @@
 
 .navigation {
   width: var(--side-nav-width);
+  padding-bottom: var(--spacing-main-padding);
   font-size: 1.4rem;
 
   @media (max-width: 600px) {

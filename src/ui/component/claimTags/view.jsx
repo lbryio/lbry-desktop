@@ -3,7 +3,7 @@ import * as React from 'react';
 import classnames from 'classnames';
 import Button from 'component/button';
 
-const SLIM_TAGS = 2;
+const SLIM_TAGS = 1;
 const NORMAL_TAGS = 4;
 const LARGE_TAGS = 10;
 

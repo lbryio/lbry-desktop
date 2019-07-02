@@ -1,6 +1,7 @@
 // @flow
+import { MAIN_WRAPPER_CLASS } from 'component/app/view';
 import type { Node } from 'react';
-import React from 'react';
+import React, { useEffect } from 'react';
 import classnames from 'classnames';
 import ClaimPreview from 'component/claimPreview';
 import Spinner from 'component/spinner';
@@ -18,13 +19,29 @@ type Props = {
   loading: boolean,
   type: string,
   empty?: string,
-  meta?: Node,
+  defaultSort?: boolean,
+  onScrollBottom?: any => void,
+  page?: number,
+  pageSize?: number,
   // If using the default header, this is a unique ID needed to persist the state of the filter setting
   persistedStorageKey?: string,
 };
 
 export default function ClaimList(props: Props) {
-  const { uris, headerAltControls, injectedItem, loading, persistedStorageKey, empty, meta, type, header } = props;
+  const {
+    uris,
+    headerAltControls,
+    injectedItem,
+    loading,
+    persistedStorageKey,
+    empty,
+    defaultSort,
+    type,
+    header,
+    onScrollBottom,
+    page,
+    pageSize,
+  } = props;
   const [currentSort, setCurrentSort] = usePersistedState(persistedStorageKey, SORT_NEW);
   const hasUris = uris && !!uris.length;
   const sortedUris = (hasUris && (currentSort === SORT_NEW ? uris : uris.slice().reverse())) || [];
@@ -33,33 +50,62 @@ export default function ClaimList(props: Props) {
     setCurrentSort(currentSort === SORT_NEW ? SORT_OLD : SORT_NEW);
   }
 
+  const urisLength = uris && uris.length;
+  useEffect(() => {
+    function handleScroll(e) {
+      if (pageSize && onScrollBottom) {
+        const x = document.querySelector(`.${MAIN_WRAPPER_CLASS}`);
+
+        if (x && window.scrollY + window.innerHeight >= x.offsetHeight) {
+          if (!loading && urisLength >= pageSize) {
+            onScrollBottom();
+          }
+        }
+      }
+    }
+
+    if (onScrollBottom) {
+      window.addEventListener('scroll', handleScroll);
+
+      return () => {
+        window.removeEventListener('scroll', handleScroll);
+      };
+    }
+  }, [loading, onScrollBottom, urisLength]);
+
   return (
-    <section className={classnames('file-list')}>
+    <section
+      className={classnames('claim-list', {
+        'claim-list--small': type === 'small',
+      })}
+    >
       {header !== false && (
         <div className={classnames('claim-list__header', { 'claim-list__header--small': type === 'small' })}>
-          {header || (
-            <FormField
-              className="claim-list__dropdown"
-              type="select"
-              name="file_sort"
-              value={currentSort}
-              onChange={handleSortChange}
-            >
-              <option value={SORT_NEW}>{__('Newest First')}</option>
-              <option value={SORT_OLD}>{__('Oldest First')}</option>
-            </FormField>
-          )}
+          {header}
           {loading && <Spinner light type="small" />}
-          <div className="claim-list__alt-controls">{headerAltControls}</div>
+          <div className="claim-list__alt-controls">
+            {headerAltControls}
+            {defaultSort && (
+              <FormField
+                className="claim-list__dropdown"
+                type="select"
+                name="file_sort"
+                value={currentSort}
+                onChange={handleSortChange}
+              >
+                <option value={SORT_NEW}>{__('Newest First')}</option>
+                <option value={SORT_OLD}>{__('Oldest First')}</option>
+              </FormField>
+            )}
+          </div>
         </div>
       )}
-      {meta && <div className="claim-list__meta">{meta}</div>}
       {hasUris && (
         <ul>
           {sortedUris.map((uri, index) => (
             <React.Fragment key={uri}>
-              <ClaimPreview uri={uri} type={type} />
-              {index === 4 && injectedItem && <li className="claim-list__item--injected">{injectedItem}</li>}
+              <ClaimPreview uri={uri} type={type} placeholder={loading && (!page || page === 1)} />
+              {index === 4 && injectedItem && <li className="claim-preview--injected">{injectedItem}</li>}
             </React.Fragment>
           ))}
         </ul>

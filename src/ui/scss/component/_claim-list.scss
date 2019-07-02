@@ -19,6 +19,7 @@
   // Normal link buttons are too dark on the black file list background
   .button--link {
     color: $lbry-teal-3;
+    font-size: 1.2em;
 
     &:hover {
       color: $lbry-teal-1;
@@ -43,6 +44,7 @@
   background-size: 1.2rem;
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 96 96' xmlns='http://www.w3.org/2000/svg' fill='%23ffffff'%3E%3Cpath d='M17.172, 31.172c1.562, -1.562 4.095, -1.562 5.656, 0l25.172, 25.171l25.172, -25.171c1.562, -1.562 4.095, -1.562 5.656, 0c1.562, 1.562 1.562, 4.095 0, 5.656l-28, 28c-1.562, 1.562 -4.095, 1.562 -5.656, 0l-28, -28c-0.781, -0.781 -1.172, -1.805 -1.172, -2.828c0, -1.023 0.391, -2.047 1.172, -2.828Z'/%3E%3C/svg%3E%0A");
   height: 2.5rem;
+  font-size: 1.3rem;
   padding: 0 var(--spacing-medium);
   padding-right: var(--spacing-large);
   margin-bottom: 0;
@@ -60,28 +62,18 @@
   }
 }
 
-.claim-list__header-text {
-  display: flex;
-  align-items: center;
-}
-
-.claim-list__header-text,
-.claim-list__dropdown {
-  font-size: 1.3rem;
-}
-
 .claim-list__alt-controls {
   display: flex;
   align-items: center;
   margin-left: auto;
-  font-size: 1.4em;
+  font-size: 1.1em;
 
   & > * {
     margin-left: var(--spacing-small);
   }
 }
 
-.claim-list__item {
+.claim-preview {
   display: flex;
   position: relative;
   font-size: 1.3rem;
@@ -104,12 +96,12 @@
   }
 }
 
-.claim-list__item--injected,
-.claim-list__item + .claim-list__item {
-  border-top: 1px solid rgba($lbry-teal-5, 0.1);
+.claim-preview--injected,
+.claim-preview {
+  border-bottom: 1px solid rgba($lbry-teal-5, 0.1);
 }
 
-.claim-list__item--large {
+.claim-preview--large {
   @include mediaThumbHoverZoom;
   font-size: 1.6rem;
   border-bottom: 0;
@@ -138,36 +130,32 @@
   }
 }
 
-.claim-list__item-metadata {
+.claim-preview-metadata {
   display: flex;
   flex-direction: column;
   width: 100%;
 }
 
-.claim-list__item-info {
+.claim-preview-info {
   align-items: flex-start;
 }
 
-.claim-list__item-info,
-.claim-list__item-properties {
+.claim-preview-info,
+.claim-preview-properties {
   display: flex;
   justify-content: space-between;
 }
 
-.claim-list__item-properties {
+.claim-preview-properties {
   align-items: flex-end;
+  flex: 1;
 }
 
-.claim-list__item-title {
+.claim-preview-title {
   font-weight: 600;
   margin-right: auto;
 }
 
-.claim-list__item-tags {
+.claim-preview-tags {
   margin-left: 0;
-}
-
-.claim-list__meta {
-  padding: var(--spacing-medium);
-  background-color: lighten($lbry-teal-5, 55%);
 }

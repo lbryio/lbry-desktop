@@ -74,20 +74,20 @@ const appFilter = createFilter('app', ['hasClickedComment', 'searchOptionsExpand
 // We only need to persist the receiveAddress for the wallet
 const walletFilter = createFilter('wallet', ['receiveAddress']);
 const searchFilter = createFilter('search', ['options']);
-
+const whiteListedReducers = [
+  // @if TARGET='app'
+  'publish',
+  'wallet',
+  'fileInfo',
+  // @endif
+  'content',
+  'subscriptions',
+  'app',
+  'search',
+  'tags',
+];
 const persistOptions = {
-  whitelist: [
-    // @if TARGET='app'
-    'publish',
-    'wallet',
-    'fileInfo',
-    // @endif
-    'content',
-    'subscriptions',
-    'app',
-    'search',
-    'tags',
-  ],
+  whitelist: whiteListedReducers,
   // Order is important. Needs to be compressed last or other transforms can't
   // read the data
   transforms: [
@@ -110,4 +110,4 @@ window.cacheStore = persistStore(store, persistOptions, err => {
   }
 });
 
-export { store, history };
+export { store, history, whiteListedReducers };

@@ -22,6 +22,7 @@ import RecommendedContent from 'component/recommendedContent';
 import ClaimTags from 'component/claimTags';
 import CommentsList from 'component/commentsList';
 import CommentCreate from 'component/commentCreate';
+import VideoDuration from 'component/videoDuration';
 
 type Props = {
   claim: StreamClaim,
@@ -222,22 +223,11 @@ class FilePage extends React.Component<Props> {
 
         <div className="grid-area--info media__content media__content--large">
           <h1 className="media__title media__title--large">{title}</h1>
-
-          <div className="media__actions media__actions--between">
-            <div className="media__subtext media__subtext--large">
-              <div className="media__subtitle__channel">
-                <UriIndicator uri={uri} link />
-              </div>
-              {__('Published on')} <DateTime uri={uri} show={DateTime.SHOW_DATE} />
+          <div className="media__subtext media__subtext--large">
+            <div className="media__subtitle__channel">
+              <UriIndicator uri={uri} link />
             </div>
-
-            {claimIsMine && (
-              <p>
-                {viewCount} {viewCount !== 1 ? __('Views') : __('View')}
-              </p>
-            )}
           </div>
-
           <div className="media__actions media__actions--between">
             <div className="media__action-group--large">
               {claimIsMine && (
@@ -282,10 +272,24 @@ class FilePage extends React.Component<Props> {
             </div>
           </div>
 
+          <div className="media__actions media__actions--between">
+            <div className="media__subtext media__subtext--large">
+              <DateTime uri={uri} show={DateTime.SHOW_DATE} />
+            </div>
+
+            <div className="media__subtext media__subtext--large">
+              <VideoDuration uri={uri} />
+
+              {claimIsMine && (
+                <p>
+                  {viewCount} {viewCount !== 1 ? __('Views') : __('View')}
+                </p>
+              )}
+            </div>
+          </div>
+
           <div className="media__info--large">
             <ClaimTags uri={uri} type="large" />
-          </div>
-          <div className="media__info--large">
             <FileDetails uri={uri} />
 
             <div className="media__info-title">{__('Comments')}</div>

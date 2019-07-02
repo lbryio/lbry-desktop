@@ -16,7 +16,7 @@ import AuthPage from 'page/auth';
 import InvitePage from 'page/invite';
 import SubscriptionsPage from 'page/subscriptions';
 import SearchPage from 'page/search';
-import UserHistoryPage from 'page/userHistory';
+import LibraryPage from 'page/library';
 import WalletPage from 'page/wallet';
 import NavigationHistory from 'page/navigationHistory';
 import TagsPage from 'page/tags';
@@ -24,6 +24,7 @@ import FollowingPage from 'page/following';
 
 const Scroll = withRouter(function ScrollWrapper(props) {
   const { pathname } = props.location;
+
   useEffect(() => {
     // Auto scroll to the top of a window for new pages
     // The browser will handle scrolling if it needs to, but
@@ -51,12 +52,12 @@ export default function AppRouter() {
         <Route path={`/$/${PAGES.SEARCH}`} exact component={SearchPage} />
         <Route path={`/$/${PAGES.SETTINGS}`} exact component={SettingsPage} />
         <Route path={`/$/${PAGES.TRANSACTIONS}`} exact component={TransactionHistoryPage} />
-        <Route path={`/$/${PAGES.LIBRARY}`} exact component={UserHistoryPage} />
+        <Route path={`/$/${PAGES.LIBRARY}`} exact component={LibraryPage} />
         <Route path={`/$/${PAGES.ACCOUNT}`} exact component={AccountPage} />
         <Route path={`/$/${PAGES.LIBRARY}/all`} exact component={NavigationHistory} />
         <Route path={`/$/${PAGES.TAGS}`} exact component={TagsPage} />
         <Route path={`/$/${PAGES.FOLLOWING}`} exact component={SubscriptionsPage} />
-        <Route path={`/$/${PAGES.FOLLOWING}/edit`} exact component={FollowingPage} />
+        <Route path={`/$/${PAGES.FOLLOWING}/customize`} exact component={FollowingPage} />
         <Route path={`/$/${PAGES.WALLET}`} exact component={WalletPage} />
         {/* Below need to go at the end to make sure we don't match any of our pages first */}
         <Route path="/:claimName" exact component={ShowPage} />

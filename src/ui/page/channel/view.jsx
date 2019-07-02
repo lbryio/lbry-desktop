@@ -77,7 +77,7 @@ function ChannelPage(props: Props) {
             </div>
           </TabList>
 
-          <TabPanels className="channel__data">
+          <TabPanels>
             <TabPanel>
               <ChannelContent uri={uri} />
             </TabPanel>

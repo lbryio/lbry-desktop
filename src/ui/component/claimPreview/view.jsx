@@ -1,7 +1,7 @@
 // @flow
 import React, { useEffect } from 'react';
 import classnames from 'classnames';
-import { convertToShareLink } from 'lbry-redux';
+import { parseURI, convertToShareLink } from 'lbry-redux';
 import { withRouter } from 'react-router-dom';
 import { openCopyLinkMenu } from 'util/context-menu';
 import { formatLbryUriForWeb } from 'util/uri';
@@ -53,8 +53,8 @@ function ClaimPreview(props: Props) {
     blackListedOutpoints,
   } = props;
   const haventFetched = claim === undefined;
-  const abandoned = !isResolvingUri && !claim;
-  const isChannel = claim && claim.value_type === 'channel';
+  const abandoned = !isResolvingUri && !claim && !placeholder;
+  const { isChannel } = parseURI(uri);
   const claimsInChannel = (claim && claim.meta.claims_in_channel) || 0;
   let shouldHide = abandoned || (!claimIsMine && obscureNsfw && nsfw);
 
@@ -92,12 +92,12 @@ function ClaimPreview(props: Props) {
     return null;
   }
 
-  if (placeholder && !claim) {
+  if (placeholder || isResolvingUri) {
     return (
-      <li className="claim-list__item" disabled>
+      <li className="claim-preview" disabled>
         <div className="placeholder media__thumb" />
         <div className="placeholder__wrapper">
-          <div className="placeholder claim-list__item-title" />
+          <div className="placeholder claim-preview-title" />
           <div className="placeholder media__subtitle" />
         </div>
       </li>
@@ -109,15 +109,15 @@ function ClaimPreview(props: Props) {
       role="link"
       onClick={pending ? undefined : onClick}
       onContextMenu={handleContextMenu}
-      className={classnames('claim-list__item', {
-        'claim-list__item--large': type === 'large',
+      className={classnames('claim-preview', {
+        'claim-preview--large': type === 'large',
         'claim-list__pending': pending,
       })}
     >
       {isChannel ? <ChannelThumbnail uri={uri} /> : <CardMedia thumbnail={thumbnail} />}
-      <div className="claim-list__item-metadata">
-        <div className="claim-list__item-info">
-          <div className="claim-list__item-title">
+      <div className="claim-preview-metadata">
+        <div className="claim-preview-info">
+          <div className="claim-preview-title">
             <TruncatedText text={title || (claim && claim.name)} lines={1} />
           </div>
           {type !== 'small' && (
@@ -128,7 +128,7 @@ function ClaimPreview(props: Props) {
           )}
         </div>
 
-        <div className="claim-list__item-properties">
+        <div className="claim-preview-properties">
           <div className="media__subtitle">
             <UriIndicator uri={uri} link />
             {pending && <div>Pending...</div>}

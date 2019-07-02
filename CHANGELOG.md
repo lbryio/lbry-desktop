@@ -4,6 +4,18 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [0.34.0] - [Unreleased]
+
+### Fixed
+
+- Lots of speed improvements
+
+### Added
+
+- New app design for better content discovery ([2477](https://github.com/lbryio/lbry-desktop/pull/2477))
+- New loading page ([2491](https://github.com/lbryio/lbry-desktop/pull/2491))
+- Comments ([2510](https://github.com/lbryio/lbry-desktop/pull/2510))
+
 ## [0.33.1] - [2019-06-12]
 
 ### Fixed

@@ -31,6 +31,7 @@
 
 [data-reach-menu-item] {
   display: block;
+  z-index: 2;
 }
 
 [data-reach-menu-item] {
@@ -90,7 +91,6 @@
 
   .icon {
     margin-right: var(--spacing-small);
-    margin-bottom: 0.2rem;
     stroke: $lbry-gray-5;
   }
 

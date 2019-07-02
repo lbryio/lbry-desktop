@@ -257,6 +257,7 @@ export const doPublish = () => (dispatch: Dispatch, getState: () => {}) => {
     tags: Array<string>,
     locations?: Array<Location>,
     license_url?: string,
+    license?: string,
     thumbnail_url?: string,
     release_time?: number,
     fee_currency?: string,
@@ -267,12 +268,18 @@ export const doPublish = () => (dispatch: Dispatch, getState: () => {}) => {
     description,
     locations,
     bid: creditsToString(bid),
-    license: publishingLicense,
     languages: [language],
     tags: tags && tags.map(tag => tag.name),
-    license_url: licenseType === COPYRIGHT ? '' : licenseUrl,
     thumbnail_url: thumbnail,
   };
+
+  if (publishingLicense) {
+    publishPayload.license = publishingLicense;
+  }
+
+  if (licenseUrl) {
+    publishPayload.license_url = licenseUrl;
+  }
 
   if (myClaimForUri && myClaimForUri.value.release_time) {
     publishPayload.release_time = Number(myClaimForUri.value.release_time);

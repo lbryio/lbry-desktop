@@ -1,6 +1,6 @@
 @mixin placeholder {
   animation: pulse 2s infinite ease-in-out;
-  background-color: $lbry-gray-2;
+  background-color: $lbry-gray-1;
   border-radius: var(--card-radius);
 }
 
@@ -14,4 +14,8 @@
       transform: scale(1.05);
     }
   }
+}
+
+@mixin focus {
+  box-shadow: 0 0 0 2px $lbry-blue-1;
 }
