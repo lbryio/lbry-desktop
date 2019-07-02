@@ -22,7 +22,7 @@ const TYPE_TRENDING = 'trending';
 const TYPE_TOP = 'top';
 const TYPE_NEW = 'new';
 const SEARCH_FILTER_TYPES = [SEARCH_SORT_YOU, SEARCH_SORT_CHANNELS, SEARCH_SORT_ALL];
-const SEARCH_TYPES = ['trending', 'top', 'new'];
+const SEARCH_TYPES = [TYPE_TRENDING, TYPE_TOP, TYPE_NEW];
 const SEARCH_TIMES = [TIME_DAY, TIME_WEEK, TIME_MONTH, TIME_YEAR, TIME_ALL];
 
 type Props = {
@@ -138,7 +138,9 @@ function ClaimListDiscover(props: Props) {
           {SEARCH_TIMES.map(time => (
             <option key={time} value={time}>
               {/* i18fixme */}
-              {__('This')} {toCapitalCase(time)}
+              {time === TIME_DAY && __('Today')}
+              {time !== TIME_ALL && time !== TIME_DAY && `${__('This')} ${toCapitalCase(time)}`}
+              {time === TIME_ALL && __('All time')}
             </option>
           ))}
         </FormField>
