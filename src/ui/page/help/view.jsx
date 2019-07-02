@@ -4,12 +4,12 @@ import * as icons from 'constants/icons';
 import * as React from 'react';
 // @if TARGET='app'
 import { shell } from 'electron';
+import WalletBackup from 'component/walletBackup';
 // @endif
 import { Lbry } from 'lbry-redux';
 import Native from 'native';
 import Button from 'component/button';
 import Page from 'component/page';
-import BackupSection from 'component/walletBackup';
 
 type DeamonSettings = {
   data_dir: string | any,
@@ -195,7 +195,7 @@ class HelpPage extends React.PureComponent<Props, State> {
         </section>
 
         {/* @if TARGET='app' */}
-        <BackupSection />
+        <WalletBackup />
         {/* @endif */}
 
         <section className="card">
