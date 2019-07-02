@@ -115,7 +115,9 @@
   border-bottom: 1px solid rgba($lbry-teal-5, 0.1);
 
   [data-mode='dark'] & {
+    color: $lbry-white;
     border-top: 1px solid var(--dm-color-04);
+    background-color: var(--dm-color-05);
   }
 }
 
