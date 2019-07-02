@@ -22,6 +22,7 @@ type Props = {
   defaultSort?: boolean,
   onScrollBottom?: any => void,
   page?: number,
+  pageSize?: number,
   // If using the default header, this is a unique ID needed to persist the state of the filter setting
   persistedStorageKey?: string,
 };
@@ -39,6 +40,7 @@ export default function ClaimList(props: Props) {
     header,
     onScrollBottom,
     page,
+    pageSize,
   } = props;
   const [currentSort, setCurrentSort] = usePersistedState(persistedStorageKey, SORT_NEW);
   const hasUris = uris && !!uris.length;
@@ -51,12 +53,11 @@ export default function ClaimList(props: Props) {
   const urisLength = uris && uris.length;
   useEffect(() => {
     function handleScroll(e) {
-      if (onScrollBottom) {
+      if (pageSize && onScrollBottom) {
         const x = document.querySelector(`.${MAIN_WRAPPER_CLASS}`);
 
         if (x && window.scrollY + window.innerHeight >= x.offsetHeight) {
-          // fix this
-          if (!loading && urisLength > 19) {
+          if (!loading && urisLength >= pageSize) {
             onScrollBottom();
           }
         }
