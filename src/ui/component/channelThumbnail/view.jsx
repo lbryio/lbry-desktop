@@ -8,10 +8,11 @@ type Props = {
   thumbnail: ?string,
   uri: string,
   className?: string,
+  thumbnailPreview: ?string,
 };
 
 function ChannelThumbnail(props: Props) {
-  const { thumbnail, uri, className } = props;
+  const { thumbnail, uri, className, thumbnailPreview } = props;
 
   // Generate a random color class based on the first letter of the channel name
   const { channelName } = parseURI(uri);
@@ -24,8 +25,8 @@ function ChannelThumbnail(props: Props) {
         [colorClassName]: !thumbnail,
       })}
     >
-      {!thumbnail && <img className="channel-thumbnail__default" src={Gerbil} />}
-      {thumbnail && <img className="channel-thumbnail__custom" src={thumbnail} />}
+      {!thumbnail && <img className="channel-thumbnail__default" src={thumbnailPreview || Gerbil} />}
+      {thumbnail && <img className="channel-thumbnail__custom" src={thumbnailPreview || thumbnail} />}
     </div>
   );
 }

@@ -12,7 +12,7 @@ type FileFilters = {
 
 type Props = {
   type: string,
-  currentPath: ?string,
+  currentPath?: ?string,
   onFileChosen: (string, string) => void,
   label?: string,
   placeholder?: string,
