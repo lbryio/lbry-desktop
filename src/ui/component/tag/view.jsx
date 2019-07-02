@@ -19,7 +19,7 @@ export default function Tag(props: Props) {
   if (!onClick) {
     title = __('View tag');
   } else {
-    type === 'add' ? __('Add tag') : __('Remove tag');
+    title = type === 'add' ? __('Add tag') : __('Remove tag');
   }
 
   return (
