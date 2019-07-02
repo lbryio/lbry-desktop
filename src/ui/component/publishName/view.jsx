@@ -20,7 +20,7 @@ type Props = {
   updatePublishForm: ({}) => void,
 };
 
-function PublishText(props: Props) {
+function PublishName(props: Props) {
   const {
     name,
     channel,
@@ -120,4 +120,4 @@ function PublishText(props: Props) {
   );
 }
 
-export default PublishText;
+export default PublishName;
