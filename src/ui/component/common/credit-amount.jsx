@@ -44,7 +44,7 @@ class CreditAmount extends React.PureComponent<Props> {
 
     let amountText;
     if (showFree && isFree) {
-      amountText = __('FREE');
+      amountText = __('Free');
     } else {
       amountText = formattedAmount;
 

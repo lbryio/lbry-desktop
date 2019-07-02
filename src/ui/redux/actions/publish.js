@@ -155,6 +155,7 @@ export const doPrepareEdit = (claim: StreamClaim, uri: string, fileInfo: FileLis
     license_url: licenseUrl,
     thumbnail,
     title,
+    tags,
   } = value;
 
   const publishData: UpdatePublishFormData = {
@@ -171,6 +172,7 @@ export const doPrepareEdit = (claim: StreamClaim, uri: string, fileInfo: FileLis
     uploadThumbnailStatus: thumbnail ? THUMBNAIL_STATUSES.MANUAL : undefined,
     licenseUrl,
     nsfw: isClaimNsfw(claim),
+    tags: tags ? tags.map(tag => ({ name: tag })) : [],
   };
 
   if (channelName) {

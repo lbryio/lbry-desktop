@@ -312,7 +312,7 @@ class FilePage extends React.Component<Props> {
             />
             <div className="file-properties">
               {isRewardContent && <Icon size={20} iconColor="red" icon={icons.FEATURED} />}
-              {nsfw && <div className="badge badge--nsfw">MATURE</div>}
+              {nsfw && <div className="badge badge--mature">{__('Mature')}</div>}
               <FilePrice badge uri={normalizeURI(uri)} />
             </div>
           </div>
