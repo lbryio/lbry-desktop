@@ -59,7 +59,7 @@ function ClaimPreview(props: Props) {
   let shouldHide = abandoned || (!claimIsMine && obscureNsfw && nsfw);
 
   // This will be replaced once blocking is done at the wallet server level
-  if (claim && !shouldHide) {
+  if (claim && !shouldHide && blackListedOutpoints) {
     for (let i = 0; i < blackListedOutpoints.length; i += 1) {
       const outpoint = blackListedOutpoints[i];
       if (outpoint.txid === claim.txid && outpoint.nout === claim.nout) {
