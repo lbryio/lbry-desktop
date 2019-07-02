@@ -1,9 +1,10 @@
 // @flow
 import * as MODALS from 'constants/modal_types';
 import * as ICONS from 'constants/icons';
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useRef } from 'react';
 import { parseURI } from 'lbry-redux';
 import Button from 'component/button';
+import useHover from 'util/use-hover';
 
 type SubscribtionArgs = {
   channelName: string,
@@ -33,27 +34,11 @@ export default function SubscribeButton(props: Props) {
     doToast,
   } = props;
   const buttonRef = useRef();
-  const [isHovering, setIsHovering] = useState(false);
+  const isHovering = useHover(buttonRef);
   const { claimName } = parseURI(uri);
   const subscriptionHandler = isSubscribed ? doChannelUnsubscribe : doChannelSubscribe;
   const subscriptionLabel = isSubscribed ? __('Following') : __('Follow');
   const unfollowOverride = isSubscribed && isHovering && __('Unfollow');
-
-  useEffect(() => {
-    function handleHover() {
-      setIsHovering(!isHovering);
-    }
-
-    const button = buttonRef.current;
-    if (button) {
-      button.addEventListener('mouseover', handleHover);
-      button.addEventListener('mouseleave', handleHover);
-      return () => {
-        button.removeEventListener('mouseover', handleHover);
-        button.removeEventListener('mouseleave', handleHover);
-      };
-    }
-  }, [buttonRef, isHovering]);
 
   return (
     <Button
