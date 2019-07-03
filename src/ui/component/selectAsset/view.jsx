@@ -4,7 +4,9 @@ import React, { useState } from 'react';
 import { FormField } from 'component/common/form';
 import FileSelector from 'component/common/file-selector';
 import Button from 'component/button';
+// @if TARGET='app'
 import fs from 'fs';
+// @endif
 import path from 'path';
 import uuid from 'uuid/v4';
 
@@ -34,6 +36,7 @@ function SelectAsset(props: Props) {
 
   function doUploadAsset(filePath, thumbnailBuffer) {
     let thumbnail, fileExt, fileName, fileType;
+    // @if TARGET='app'
     if (filePath) {
       thumbnail = fs.readFileSync(filePath);
       fileExt = path.extname(filePath);
@@ -47,6 +50,7 @@ function SelectAsset(props: Props) {
     } else {
       return null;
     }
+    // @endif
 
     const uploadError = (error = '') => {
       console.log('error', error);
