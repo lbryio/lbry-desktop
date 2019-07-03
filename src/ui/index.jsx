@@ -12,7 +12,16 @@ import React, { useState, useEffect } from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import { doConditionalAuthNavigate, doDaemonReady, doAutoUpdate, doOpenModal, doHideModal } from 'redux/actions/app';
-import { Lbry, doToast, isURIValid, setSearchApi } from 'lbry-redux';
+import {
+  Lbry,
+  doToast,
+  isURIValid,
+  setSearchApi,
+  // reduxCallbacks,
+  // batchActions,
+  // selectMyClaimsWithoutChannels,
+  // doError,
+} from 'lbry-redux';
 import { doInitLanguage, doUpdateIsNightAsync } from 'redux/actions/settings';
 import {
   doAuthenticate,
@@ -129,6 +138,45 @@ rewards.setCallback('claimRewardSuccess', () => {
   app.store.dispatch(doHideModal(MODALS.REWARD_APPROVAL_REQUIRED));
 });
 
+// mimicking app.js.doOpenModal(id, modalProps {}) here
+// reduxCallbacks.setCallback('streamPublishSuccess', successResponse => {
+//   const state = store.getState();
+//   analytics.apiLogPublish();
+//   const myClaims = selectMyClaimsWithoutChannels(state);
+//   const pendingClaim = successResponse.outputs[0];
+//   const uri = pendingClaim.permanent_url;
+//   const actions = [];
+//
+//   actions.push({
+//     type: ACTIONS.PUBLISH_SUCCESS,
+//   });
+//
+//   // We have to fake a temp claim until the new pending one is returned by claim_list_mine
+//   // We can't rely on claim_list_mine because there might be some delay before the new claims are returned
+//   // Doing this allows us to show the pending claim immediately, it will get overwritten by the real one
+//   const isMatch = claim => claim.claim_id === pendingClaim.claim_id;
+//   const isEdit = myClaims.some(isMatch);
+//
+//   const myNewClaims = isEdit
+//     ? myClaims.map(claim => (isMatch(claim) ? pendingClaim : claim))
+//     : myClaims.concat(pendingClaim);
+//
+//   actions.push(doOpenModal(MODALS.PUBLISH, { uri, isEdit }));
+//
+//   actions.push({
+//     type: ACTIONS.FETCH_CLAIM_LIST_MINE_COMPLETED,
+//     data: {
+//       claims: myNewClaims,
+//     },
+//   });
+//
+//   store.dispatch(batchActions(...actions));
+// });
+//
+// reduxCallbacks.setCallback('streamPublishFail', error => {
+//   store.dispatch({ type: ACTIONS.PUBLISH_FAIL });
+//   store.dispatch(doError(error.message));
+// });
 // @if TARGET='app'
 ipcRenderer.on('open-uri-requested', (event, uri, newSession) => {
   if (uri && uri.startsWith('lbry://')) {

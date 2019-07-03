@@ -1,6 +1,5 @@
 import { connect } from 'react-redux';
-import { selectIsFetchingClaimListMine, selectMyClaimUrisWithoutChannels } from 'lbry-redux';
-import { doCheckPendingPublishes } from 'redux/actions/publish';
+import { selectIsFetchingClaimListMine, selectMyClaimUrisWithoutChannels, doCheckPendingPublishes } from 'lbry-redux';
 import FileListPublished from './view';
 
 const select = state => ({

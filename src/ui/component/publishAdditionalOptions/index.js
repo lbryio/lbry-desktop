@@ -1,19 +1,18 @@
 import { connect } from 'react-redux';
-import { doResolveUri, selectBalance } from 'lbry-redux';
 import {
+  doResolveUri,
+  selectBalance,
   selectPublishFormValues,
   selectIsStillEditing,
   selectMyClaimForUri,
   selectIsResolvingPublishUris,
   selectTakeOverAmount,
-} from 'redux/selectors/publish';
-import {
   doResetThumbnailStatus,
   doClearPublish,
   doUpdatePublishForm,
-  doPublish,
   doPrepareEdit,
-} from 'redux/actions/publish';
+} from 'lbry-redux';
+import { doPublish } from 'redux/actions/publish';
 import { selectUnclaimedRewardValue } from 'lbryinc';
 import PublishPage from './view';
 

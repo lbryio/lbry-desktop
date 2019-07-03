@@ -9,19 +9,23 @@ import {
   batchActions,
   creditsToString,
   selectPendingById,
-  selectMyClaimsWithoutChannels,
   doError,
   isClaimNsfw,
+  selectMyClaimForUri,
+  selectPublishFormValues,
+  selectMyClaimsWithoutChannels,
 } from 'lbry-redux';
-import { doOpenModal } from 'redux/actions/app';
+// import { doOpenModal } from 'redux/actions/app';
 import { selectosNotificationsEnabled } from 'redux/selectors/settings';
-import { selectMyClaimForUri, selectPublishFormValues } from 'redux/selectors/publish';
 import { push } from 'connected-react-router';
-import analytics from 'analytics';
+// import analytics from 'analytics';
 import { formatLbryUriForWeb } from 'util/uri';
 // @if TARGET='app'
 import fs from 'fs';
 import path from 'path';
+import { store } from '../../store';
+import analytics from '../../analytics';
+import { doOpenModal } from './app';
 // @endif
 
 export const doResetThumbnailStatus = () => (dispatch: Dispatch) => {
@@ -207,6 +211,49 @@ export const doPrepareEdit = (claim: StreamClaim, uri: string, fileInfo: FileLis
   dispatch({ type: ACTIONS.DO_PREPARE_EDIT, data: publishData });
 };
 
+const publishSuccess = successResponse => {
+  const state = store.getState();
+  analytics.apiLogPublish();
+  const myClaims = selectMyClaimsWithoutChannels(state);
+  const pendingClaim = successResponse.outputs[0];
+  const uri = pendingClaim.permanent_url;
+  const actions = [];
+
+  actions.push({
+    type: ACTIONS.PUBLISH_SUCCESS,
+  });
+
+  // We have to fake a temp claim until the new pending one is returned by claim_list_mine
+  // We can't rely on claim_list_mine because there might be some delay before the new claims are returned
+  // Doing this allows us to show the pending claim immediately, it will get overwritten by the real one
+  const isMatch = claim => claim.claim_id === pendingClaim.claim_id;
+  const isEdit = myClaims.some(isMatch);
+
+  const myNewClaims = isEdit
+    ? myClaims.map(claim => (isMatch(claim) ? pendingClaim : claim))
+    : myClaims.concat(pendingClaim);
+
+  actions.push(doOpenModal(MODALS.PUBLISH, { uri, isEdit }));
+
+  actions.push({
+    type: ACTIONS.FETCH_CLAIM_LIST_MINE_COMPLETED,
+    data: {
+      claims: myNewClaims,
+    },
+  });
+
+  store.dispatch(batchActions(...actions));
+};
+
+const publishFail = error => {
+  store.dispatch({ type: ACTIONS.PUBLISH_FAIL });
+  store.dispatch(doError(error.message));
+};
+
+export const doPublishDesktop = (publishSuccess, publishFail) => {
+  doPublish(publishSuccess, publishFail);
+};
+
 export const doPublish = () => (dispatch: Dispatch, getState: () => {}) => {
   dispatch({ type: ACTIONS.PUBLISH_START });
 
@@ -252,17 +299,20 @@ export const doPublish = () => (dispatch: Dispatch, getState: () => {}) => {
 
   const publishPayload: {
     name: ?string,
-    channel_id?: string,
     bid: number,
+    description?: string,
+    channel_id?: string,
     file_path?: string,
-    tags: Array<string>,
-    locations?: Array<Location>,
+
     license_url?: string,
     license?: string,
     thumbnail_url?: string,
     release_time?: number,
     fee_currency?: string,
     fee_amount?: string,
+    tags: Array<string>,
+    locations?: Array<Location>,
+    languages?: Array<string>,
   } = {
     name,
     title,

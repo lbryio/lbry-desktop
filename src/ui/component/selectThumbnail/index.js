@@ -1,20 +1,19 @@
 import { connect } from 'react-redux';
-import { doResolveUri } from 'lbry-redux';
 import {
+  doResolveUri,
   selectPublishFormValues,
   selectIsStillEditing,
   selectMyClaimForUri,
   selectIsResolvingPublishUris,
   selectTakeOverAmount,
-} from 'redux/selectors/publish';
-import {
   doResetThumbnailStatus,
   doClearPublish,
   doUpdatePublishForm,
-  doPublish,
   doPrepareEdit,
-} from 'redux/actions/publish';
+} from 'lbry-redux';
+
 import { doOpenModal } from 'redux/actions/app';
+import { doPublish } from 'redux/actions/publish';
 import { selectUnclaimedRewardValue } from 'lbryinc';
 import PublishPage from './view';
 

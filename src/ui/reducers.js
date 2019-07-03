@@ -8,6 +8,7 @@ import {
   notificationsReducer,
   tagsReducer,
   commentReducer,
+  publishReducer,
 } from 'lbry-redux';
 import {
   userReducer,
@@ -23,7 +24,7 @@ import availabilityReducer from 'redux/reducers/availability';
 import contentReducer from 'redux/reducers/content';
 import settingsReducer from 'redux/reducers/settings';
 import subscriptionsReducer from 'redux/reducers/subscriptions';
-import publishReducer from 'redux/reducers/publish';
+
 
 export default history =>
   combineReducers({

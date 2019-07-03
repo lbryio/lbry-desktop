@@ -5,9 +5,11 @@ import {
   selectMyClaimForUri,
   selectIsResolvingPublishUris,
   selectTakeOverAmount,
-} from 'redux/selectors/publish';
-import { doUpdatePublishForm, doPrepareEdit } from 'redux/actions/publish';
-import { selectBalance } from 'lbry-redux';
+  doUpdatePublishForm,
+  doPrepareEdit,
+  selectBalance,
+} from 'lbry-redux';
+
 import PublishPage from './view';
 
 const select = state => ({
@@ -15,7 +17,6 @@ const select = state => ({
   channel: makeSelectPublishFormValue('channel')(state),
   bid: makeSelectPublishFormValue('bid')(state),
   uri: makeSelectPublishFormValue('uri')(state),
-  bid: makeSelectPublishFormValue('bid')(state),
   isStillEditing: selectIsStillEditing(state),
   isResolvingUri: selectIsResolvingPublishUris(state),
   amountNeededForTakeover: selectTakeOverAmount(state),
