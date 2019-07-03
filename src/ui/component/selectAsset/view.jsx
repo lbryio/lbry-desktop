@@ -36,7 +36,11 @@ function SelectAsset(props: Props) {
 
   function doUploadAsset(filePath, thumbnailBuffer) {
     let thumbnail, fileExt, fileName, fileType;
-    // @if TARGET='app'
+    if (IS_WEB) {
+      console.error('no upload support for web');
+      return;
+    }
+
     if (filePath) {
       thumbnail = fs.readFileSync(filePath);
       fileExt = path.extname(filePath);
@@ -50,7 +54,6 @@ function SelectAsset(props: Props) {
     } else {
       return null;
     }
-    // @endif
 
     const uploadError = (error = '') => {
       console.log('error', error);

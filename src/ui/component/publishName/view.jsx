@@ -49,7 +49,7 @@ function PublishName(props: Props) {
     if (!name) {
       nameError = __('A name is required');
     } else if (!isNameValid(name, false)) {
-      nameError = __('LBRY names cannot contain that symbol ($, #, @)');
+      nameError = __('LBRY names cannot contain spaces or reserved symbols ($#@;/"<>%{}|^~[]`)');
     }
 
     setNameError(nameError);

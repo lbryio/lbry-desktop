@@ -1,7 +1,7 @@
 // @flow
 import React, { useEffect, Fragment } from 'react';
 import { CHANNEL_NEW, CHANNEL_ANONYMOUS } from 'constants/claim';
-import { buildURI, THUMBNAIL_STATUSES } from 'lbry-redux';
+import { buildURI, isURIValid, THUMBNAIL_STATUSES } from 'lbry-redux';
 import Button from 'component/button';
 import ChannelSection from 'component/selectChannel';
 import classnames from 'classnames';
@@ -112,7 +112,8 @@ function PublishForm(props: Props) {
       } catch (e) {}
     }
 
-    if (uri) {
+    const isValid = isURIValid(uri);
+    if (uri && isValid) {
       resolveUri(uri);
       updatePublishForm({ uri });
     }
