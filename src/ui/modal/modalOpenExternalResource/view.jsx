@@ -1,20 +1,27 @@
 // @flow
 import React from 'react';
 import { Modal } from 'modal/modal';
-import { formatLbryUriForWeb } from 'util/uri';
+import { formatPathForWeb } from 'util/uri';
 // @if TARGET='app'
 import { shell } from 'electron';
 // @endif
 
 type Props = {
   uri: string,
+  isTrusted: boolean,
   path: string,
+  isMine: boolean,
   closeModal: () => void,
 };
 
-class ModalOpenExternalResource extends React.PureComponent<Props> {
-  openExternalResource() {
-    const { uri, path, closeModal } = this.props;
+function ModalOpenExternalResource(props: Props) {
+  const { uri, isTrusted, path, isMine, closeModal } = props;
+
+  if ((uri && isTrusted) || (path && isMine)) {
+    openResource();
+  }
+
+  function openResource() {
     // @if TARGET='app'
     const { openExternal, openItem, showItemInFolder } = shell;
     if (uri) {
@@ -30,43 +37,33 @@ class ModalOpenExternalResource extends React.PureComponent<Props> {
     if (uri) {
       window.open(uri);
     } else if (path) {
-      // Converintg path into uri, like "file://path/to/file"
-      let _uri = path.replace(/\\/g, '/');
-      // Windows drive letter must be prefixed with a slash
-      if (_uri[0] !== '/') {
-        _uri = `/${_uri}`;
-      }
-      _uri = encodeURI(`file://${_uri}`).replace(/[?#]/g, encodeURIComponent);
-      window.open(_uri);
+      window.open(formatPathForWeb(path));
     }
     // @endif
 
     closeModal();
   }
 
-  render() {
-    const { uri, path, closeModal } = this.props;
-    return (
-      <Modal
-        isOpen
-        title={__('Warning!')}
-        contentLabel={__('Confirm External Resource')}
-        type="confirm"
-        confirmButtonLabel={__('Continue')}
-        onConfirmed={() => this.openExternalResource()}
-        onAborted={closeModal}
-      >
-        <section className="card__content">
-          <p>
-            {(uri && __('This link leads to an external website.')) ||
-              (path && __('This file has been shared with you by other people.'))}
-          </p>
-          <blockquote>{uri || path}</blockquote>
-          <p>{__('LBRY Inc is not responsible for its content, click continue to proceed at your own risk.')}</p>
-        </section>
-      </Modal>
-    );
-  }
+  return (
+    <Modal
+      isOpen
+      title={__('Warning!')}
+      contentLabel={__('Confirm External Resource')}
+      type="confirm"
+      confirmButtonLabel={__('Continue')}
+      onConfirmed={() => openResource()}
+      onAborted={closeModal}
+    >
+      <section className="card__content">
+        <p>
+          {(uri && __('This link leads to an external website.')) ||
+            (path && __('This file has been shared with you by other people.'))}
+        </p>
+        <blockquote>{uri || path}</blockquote>
+        <p>{__('LBRY Inc is not responsible for its content, click continue to proceed at your own risk.')}</p>
+      </section>
+    </Modal>
+  );
 }
 
 export default ModalOpenExternalResource;
