@@ -6,6 +6,7 @@ import classnames from 'classnames';
 import analytics from 'analytics';
 import LoadingScreen from 'component/common/loading-screen';
 import PlayButton from './internal/play-button';
+import detectTyping from 'util/detect-typing';
 
 const Player = React.lazy(() =>
   import(
@@ -43,7 +44,6 @@ type Props = {
   className: ?string,
   obscureNsfw: boolean,
   play: string => void,
-  searchBarFocused: boolean,
   mediaType: string,
   claimRewards: () => void,
   nextFileToPlay: ?string,
@@ -77,9 +77,7 @@ class FileViewer extends React.PureComponent<Props> {
     }
 
     this.handleAutoplay(this.props);
-    // Commented out because it would play/pause if you were typing in the comment field
-    // Need a way to check if you are typing
-    // window.addEventListener('keydown', this.handleKeyDown);
+    window.addEventListener('keydown', this.handleKeyDown);
   }
 
   componentDidUpdate(prev: Props) {
@@ -127,13 +125,11 @@ class FileViewer extends React.PureComponent<Props> {
     }
 
     this.props.cancelPlay();
-    // window.removeEventListener('keydown', this.handleKeyDown);
+    window.removeEventListener('keydown', this.handleKeyDown);
   }
 
-  handleKeyDown(event: SyntheticKeyboardEvent<*>) {
-    const { searchBarFocused } = this.props;
-
-    if (!searchBarFocused) {
+  handleKeyDown(event: KeyboardEvent) {
+    if (!detectTyping()) {
       if (event.keyCode === SPACE_BAR_KEYCODE) {
         event.preventDefault(); // prevent page scroll
         this.playContent();
@@ -233,7 +229,6 @@ class FileViewer extends React.PureComponent<Props> {
       mediaType,
       insufficientCredits,
       viewerContainer,
-      searchBarFocused,
       thumbnail,
       nsfw,
     } = this.props;
@@ -294,7 +289,6 @@ class FileViewer extends React.PureComponent<Props> {
                   onStartCb={this.onFileStartCb}
                   onFinishCb={this.onFileFinishCb}
                   playingUri={playingUri}
-                  searchBarFocused={searchBarFocused}
                   viewerContainer={viewerContainer}
                 />
               </Suspense>
