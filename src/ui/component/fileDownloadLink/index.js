@@ -4,6 +4,7 @@ import {
   makeSelectDownloadingForUri,
   makeSelectLoadingForUri,
   makeSelectClaimForUri,
+  makeSelectClaimIsMine,
 } from 'lbry-redux';
 import { makeSelectCostInfoForUri } from 'lbryinc';
 import { doOpenModal } from 'redux/actions/app';
@@ -17,6 +18,7 @@ const select = (state, props) => ({
   costInfo: makeSelectCostInfoForUri(props.uri)(state),
   loading: makeSelectLoadingForUri(props.uri)(state),
   claim: makeSelectClaimForUri(props.uri)(state),
+  claimIsMine: makeSelectClaimIsMine(props.uri)(state),
 });
 
 const perform = dispatch => ({
