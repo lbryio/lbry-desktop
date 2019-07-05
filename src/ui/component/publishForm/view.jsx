@@ -1,7 +1,7 @@
 // @flow
 import React, { useEffect, Fragment } from 'react';
 import { CHANNEL_NEW, CHANNEL_ANONYMOUS } from 'constants/claim';
-import { buildURI, THUMBNAIL_STATUSES } from 'lbry-redux';
+import { buildURI, isURIValid, THUMBNAIL_STATUSES } from 'lbry-redux';
 import Button from 'component/button';
 import ChannelSection from 'component/selectChannel';
 import classnames from 'classnames';
@@ -106,11 +106,14 @@ function PublishForm(props: Props) {
 
     if (channelName) {
       // resolve without the channel name so we know the winning bid for it
-      const uriLessChannel = buildURI({ contentName: name });
-      resolveUri(uriLessChannel);
+      try {
+        const uriLessChannel = buildURI({ contentName: name });
+        resolveUri(uriLessChannel);
+      } catch (e) {}
     }
 
-    if (uri) {
+    const isValid = isURIValid(uri);
+    if (uri && isValid) {
       resolveUri(uri);
       updatePublishForm({ uri });
     }
@@ -130,6 +133,7 @@ function PublishForm(props: Props) {
         <div className="card">
           <TagSelect
             title={false}
+            suggestMature
             help={__('The better your tags are, the easier it will be for people to discover your content.')}
             empty={__('No tags added')}
             onSelect={tag => updatePublishForm({ tags: [...tags, tag] })}

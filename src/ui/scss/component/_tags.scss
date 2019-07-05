@@ -34,6 +34,7 @@ $main: $lbry-teal-5;
 }
 
 .tag {
+  @extend .badge;
   @extend .badge--tag;
   user-select: none;
   cursor: pointer;
@@ -61,12 +62,20 @@ $main: $lbry-teal-5;
 }
 
 .tag--remove {
-  @extend .tag;
   max-width: 20rem;
 }
 
 .tag--add {
   background-color: lighten($lbry-teal-5, 60%);
+
+  &.tag--mature {
+    @extend .badge--mature;
+  }
+}
+
+.tag--mature {
+  @extend .badge--mature;
+  // Lighten the color a little so it doesn't stand out as much on claim previews
 }
 
 .tag__action-label {

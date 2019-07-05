@@ -11,6 +11,7 @@ type Props = {
   showClose: boolean,
   followedTags: Array<Tag>,
   doToggleTagFollow: string => void,
+  suggestMature: boolean,
 
   // Ovverides
   // The default component is for following tags
@@ -29,10 +30,22 @@ const tagsAnimation = {
 };
 
 export default function TagSelect(props: Props) {
-  const { showClose, followedTags, doToggleTagFollow, title, help, empty, tagsChosen, onSelect, onRemove } = props;
+  const {
+    showClose,
+    followedTags,
+    doToggleTagFollow,
+    title,
+    help,
+    empty,
+    tagsChosen,
+    onSelect,
+    onRemove,
+    suggestMature,
+  } = props;
   const [hasClosed, setHasClosed] = usePersistedState('tag-select:has-closed', false);
   const tagsToDisplay = tagsChosen || followedTags;
   const transitions = useTransition(tagsToDisplay, tag => tag.name, tagsAnimation);
+  const hasMatureTag = tagsToDisplay.map(tag => tag.name).includes('mature');
 
   function handleClose() {
     setHasClosed(true);
@@ -73,7 +86,7 @@ export default function TagSelect(props: Props) {
               <div className="empty">{empty || __("You aren't following any tags, try searching for one.")}</div>
             )}
           </ul>
-          <TagsSearch onSelect={onSelect} />
+          <TagsSearch onSelect={onSelect} suggestMature={suggestMature && !hasMatureTag} />
           {help !== false && (
             <p className="help">{help || __("The tags you follow will change what's trending for you.")}</p>
           )}

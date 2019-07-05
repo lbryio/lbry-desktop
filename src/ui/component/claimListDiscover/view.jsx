@@ -3,6 +3,7 @@ import type { Node } from 'react';
 import React, { useEffect, useState } from 'react';
 import moment from 'moment';
 import usePersistedState from 'util/use-persisted-state';
+import { MATURE_TAGS } from 'lbry-redux';
 import { FormField } from 'component/common/form';
 import ClaimList from 'component/claimList';
 import Tag from 'component/tag';
@@ -22,7 +23,7 @@ const TYPE_TRENDING = 'trending';
 const TYPE_TOP = 'top';
 const TYPE_NEW = 'new';
 const SEARCH_FILTER_TYPES = [SEARCH_SORT_YOU, SEARCH_SORT_CHANNELS, SEARCH_SORT_ALL];
-const SEARCH_TYPES = ['trending', 'top', 'new'];
+const SEARCH_TYPES = [TYPE_TRENDING, TYPE_TOP, TYPE_NEW];
 const SEARCH_TIMES = [TIME_DAY, TIME_WEEK, TIME_MONTH, TIME_YEAR, TIME_ALL];
 
 type Props = {
@@ -35,10 +36,11 @@ type Props = {
   personal: boolean,
   doToggleTagFollow: string => void,
   meta?: Node,
+  showNsfw: boolean,
 };
 
 function ClaimListDiscover(props: Props) {
-  const { doClaimSearch, uris, tags, loading, personal, injectedItem, meta, subscribedChannels } = props;
+  const { doClaimSearch, uris, tags, loading, personal, injectedItem, meta, subscribedChannels, showNsfw } = props;
   const [personalSort, setPersonalSort] = usePersistedState('claim-list-discover:personalSort', SEARCH_SORT_YOU);
   const [typeSort, setTypeSort] = usePersistedState('claim-list-discover:typeSort', TYPE_TRENDING);
   const [timeSort, setTimeSort] = usePersistedState('claim-list-discover:timeSort', TIME_WEEK);
@@ -54,6 +56,7 @@ function ClaimListDiscover(props: Props) {
       order_by?: Array<string>,
       channel_ids?: Array<string>,
       release_time?: string,
+      not_tags?: Array<string>,
     } = { page_size: PAGE_SIZE, page };
     const newTags = tagsString.split(',');
     const newChannelIds = channelsIdString.split(',');
@@ -62,6 +65,10 @@ function ClaimListDiscover(props: Props) {
       options.any_tags = newTags;
     } else if (personalSort === SEARCH_SORT_CHANNELS) {
       options.channel_ids = newChannelIds;
+    }
+
+    if (!showNsfw) {
+      options.not_tags = MATURE_TAGS;
     }
 
     if (typeSort === TYPE_TRENDING) {
@@ -81,7 +88,7 @@ function ClaimListDiscover(props: Props) {
     }
 
     doClaimSearch(20, options);
-  }, [personal, personalSort, typeSort, timeSort, doClaimSearch, page, tagsString, channelsIdString]);
+  }, [personal, personalSort, typeSort, timeSort, doClaimSearch, page, tagsString, channelsIdString, showNsfw]);
 
   function getLabel(type) {
     if (type === SEARCH_SORT_ALL) {
@@ -138,7 +145,9 @@ function ClaimListDiscover(props: Props) {
           {SEARCH_TIMES.map(time => (
             <option key={time} value={time}>
               {/* i18fixme */}
-              {__('This')} {toCapitalCase(time)}
+              {time === TIME_DAY && __('Today')}
+              {time !== TIME_ALL && time !== TIME_DAY && `${__('This')} ${toCapitalCase(time)}`}
+              {time === TIME_ALL && __('All time')}
             </option>
           ))}
         </FormField>

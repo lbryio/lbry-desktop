@@ -19,3 +19,12 @@
   background-color: $lbry-red-2;
   color: $lbry-white;
 }
+
+.badge--mature {
+  background-color: lighten($lbry-grape-1, 10%);
+  color: $lbry-black;
+
+  svg {
+    stroke: $lbry-black;
+  }
+}

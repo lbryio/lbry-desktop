@@ -20,7 +20,7 @@ type Props = {
   updatePublishForm: ({}) => void,
 };
 
-function PublishText(props: Props) {
+function PublishName(props: Props) {
   const {
     name,
     channel,
@@ -49,7 +49,7 @@ function PublishText(props: Props) {
     if (!name) {
       nameError = __('A name is required');
     } else if (!isNameValid(name, false)) {
-      nameError = __('LBRY names cannot contain that symbol ($, #, @)');
+      nameError = __('LBRY names cannot contain spaces or reserved symbols ($#@;/"<>%{}|^~[]`)');
     }
 
     setNameError(nameError);
@@ -120,4 +120,4 @@ function PublishText(props: Props) {
   );
 }
 
-export default PublishText;
+export default PublishName;

@@ -121,7 +121,7 @@ class TransactionList extends React.PureComponent<Props> {
         )}
 
         {!loading && !transactionList.length && (
-          <p className="main--empty empty">{emptyMessage || __('No transactions.')}</p>
+          <h2 className="main--empty empty">{emptyMessage || __('No transactions.')}</h2>
         )}
 
         {!!transactionList.length && (
