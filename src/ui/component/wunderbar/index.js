@@ -3,12 +3,10 @@ import {
   doFocusSearchInput,
   doBlurSearchInput,
   doUpdateSearchQuery,
-  doSearch,
   doToast,
   selectSearchValue,
   selectSearchSuggestions,
   selectSearchBarFocused,
-  parseURI,
 } from 'lbry-redux';
 import analytics from 'analytics';
 import Wunderbar from './view';
@@ -24,6 +22,7 @@ const select = state => ({
 const perform = (dispatch, ownProps) => ({
   onSearch: query => {
     ownProps.history.push({ pathname: `/$/search`, search: `?q=${encodeURIComponent(query)}` });
+    dispatch(doUpdateSearchQuery(query));
     analytics.apiLogSearch();
   },
   onSubmit: uri => {

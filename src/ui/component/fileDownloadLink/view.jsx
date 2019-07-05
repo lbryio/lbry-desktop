@@ -8,6 +8,7 @@ import analytics from 'analytics';
 
 type Props = {
   claim: StreamClaim,
+  claimIsMine: boolean,
   uri: string,
   downloading: boolean,
   fileInfo: ?{
@@ -44,7 +45,18 @@ class FileDownloadLink extends React.PureComponent<Props> {
   uri: ?string;
 
   render() {
-    const { fileInfo, downloading, uri, openModal, purchaseUri, costInfo, loading, pause, claim } = this.props;
+    const {
+      fileInfo,
+      downloading,
+      uri,
+      openModal,
+      purchaseUri,
+      costInfo,
+      loading,
+      pause,
+      claim,
+      claimIsMine,
+    } = this.props;
 
     if (loading || downloading) {
       const progress = fileInfo && fileInfo.written_bytes ? (fileInfo.written_bytes / fileInfo.total_bytes) * 100 : 0;
@@ -81,7 +93,7 @@ class FileDownloadLink extends React.PureComponent<Props> {
             icon={ICONS.EXTERNAL}
             onClick={() => {
               pause();
-              openModal(MODALS.CONFIRM_EXTERNAL_RESOURCE, { path: fileInfo.download_path });
+              openModal(MODALS.CONFIRM_EXTERNAL_RESOURCE, { path: fileInfo.download_path, isMine: claimIsMine });
             }}
           />
         </ToolTip>

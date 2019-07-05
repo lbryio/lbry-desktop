@@ -1,6 +1,7 @@
 // @flow
 import React, { useRef } from 'react';
 import { Modal } from 'modal/modal';
+import { formatPathForWeb } from 'util/uri';
 
 type Props = {
   upload: Buffer => void,
@@ -12,10 +13,7 @@ type Props = {
 function ModalAutoGenerateThumbnail(props: Props) {
   const { closeModal, filePath, upload, showToast } = props;
   const playerRef = useRef();
-
-  let src = filePath.replace(/\\/g, '/');
-  src = src[0] !== '/' ? `/${src}` : src;
-  src = encodeURI(`file://${src}`).replace(/[?#]/g, encodeURIComponent);
+  const videoSrc = formatPathForWeb(filePath);
 
   function uploadImage() {
     const imageBuffer = captureSnapshot();
@@ -73,7 +71,7 @@ function ModalAutoGenerateThumbnail(props: Props) {
     >
       <section className="card__content">
         <p className="card__subtitle">{__('Pause at any time to select a thumbnail from your video')}.</p>
-        <video ref={playerRef} src={src} onLoadedMetadata={resize} onError={onError} controls />
+        <video ref={playerRef} src={videoSrc} onLoadedMetadata={resize} onError={onError} controls />
       </section>
     </Modal>
   );
