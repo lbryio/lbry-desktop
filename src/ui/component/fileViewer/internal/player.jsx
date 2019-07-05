@@ -12,6 +12,7 @@ import path from 'path';
 import player from 'render-media';
 import FileRender from 'component/fileRender';
 import LoadingScreen from 'component/common/loading-screen';
+import detectTyping from 'util/detect-typing';
 import { fullscreenElement, requestFullscreen, exitFullscreen } from 'util/full-screen';
 
 // Shorcut key code for fullscreen (f)
@@ -31,7 +32,6 @@ type Props = {
   savePosition: number => void,
   changeVolume: number => void,
   viewerContainer: { current: ElementRef<any> },
-  searchBarFocused: boolean,
 };
 
 type State = {
@@ -96,6 +96,9 @@ class MediaPlayer extends React.PureComponent<Props, State> {
       }
     }, 5000);
     // @endif
+
+    // Register handler for custom shortcut keys
+    document.addEventListener('keydown', this.handleKeyDown);
   }
 
   componentDidUpdate(prevProps: Props) {
@@ -115,27 +118,23 @@ class MediaPlayer extends React.PureComponent<Props, State> {
   componentWillUnmount() {
     const mediaElement = this.mediaContainer.current.children[0];
 
-    // Temorarily removing for comments the keydown handler needs to know
-    // if a user is typing
-    // document.removeEventListener('keydown', this.handleKeyDown);
-
     if (mediaElement) {
       mediaElement.removeEventListener('click', this.togglePlay);
       mediaElement.removeEventListener('dbclick', this.handleDoubleClick);
     }
+
+    document.removeEventListener('keydown', this.handleKeyDown);
   }
 
-  handleKeyDown = (event: SyntheticKeyboardEvent<*>) => {
-    const { searchBarFocused } = this.props;
-
-    if (!searchBarFocused) {
+  handleKeyDown = (event: KeyboardEvent) => {
+    if (!detectTyping()) {
       // Handle fullscreen shortcut key (f)
       if (event.keyCode === F_KEYCODE) {
-        // this.toggleFullscreen();
+        this.toggleFullscreen();
       }
       // Handle toggle play
       // @if TARGET='app'
-      // this.togglePlay(event);
+      this.togglePlay(event);
       // @endif
     }
   };
