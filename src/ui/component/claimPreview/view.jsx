@@ -56,17 +56,14 @@ function ClaimPreview(props: Props) {
   const abandoned = !isResolvingUri && !claim && !placeholder;
   const { isChannel } = parseURI(uri);
   const claimsInChannel = (claim && claim.meta.claims_in_channel) || 0;
-  let shouldHide = abandoned || (!claimIsMine && obscureNsfw && nsfw);
-
-  // This will be replaced once blocking is done at the wallet server level
-  if (claim && !shouldHide && blackListedOutpoints) {
-    for (let i = 0; i < blackListedOutpoints.length; i += 1) {
-      const outpoint = blackListedOutpoints[i];
-      if (outpoint.txid === claim.txid && outpoint.nout === claim.nout) {
-        shouldHide = true;
-      }
-    }
-  }
+  const shouldHide =
+    abandoned ||
+    (!claimIsMine && obscureNsfw && nsfw) ||
+    (claim &&
+      blackListedOutpoints &&
+      blackListedOutpoints.reduce((hide, outpoint) => {
+        return hide || (outpoint.txid === claim.txid && outpoint.nout === claim.nout);
+      }));
 
   function handleContextMenu(e) {
     e.preventDefault();
