@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { parseURI } from 'lbry-redux';
 import Page from 'component/page';
 import SubscribeButton from 'component/subscribeButton';
+import BlockButton from 'component/blockButton';
 import ShareButton from 'component/shareButton';
 import { Tabs, TabList, Tab, TabPanels, TabPanel } from 'component/common/tabs';
 import { withRouter } from 'react-router';
@@ -92,6 +93,7 @@ function ChannelPage(props: Props) {
             <div className="card__actions--inline">
               <ShareButton uri={uri} />
               <SubscribeButton uri={permanentUrl} />
+              <BlockButton uri={uri} />
             </div>
           </TabList>
 
