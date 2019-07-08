@@ -1,5 +1,4 @@
 // @flow
-import * as icons from 'constants/icons';
 import * as React from 'react';
 import Button from 'component/button';
 import CardVerify from 'component/cardVerify';
@@ -84,8 +83,7 @@ class UserVerify extends React.PureComponent<Props> {
                 onClick={() => {
                   verifyPhone();
                 }}
-                button="primary"
-                icon={icons.PHONE}
+                button="inverse"
                 label={__('Submit Phone Number')}
               />
             </div>
@@ -112,7 +110,7 @@ class UserVerify extends React.PureComponent<Props> {
 
           <div className="card__content">
             <div className="card__actions">
-              <Button href="https://chat.lbry.com" button="primary" icon={icons.CHAT} label={__('Join LBRY Chat')} />
+              <Button href="https://chat.lbry.com" button="inverse" label={__('Join LBRY Chat')} />
             </div>
           </div>
         </section>
