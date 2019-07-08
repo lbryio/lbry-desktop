@@ -16,7 +16,6 @@ import {
   makeSelectTitleForUri,
   makeSelectThumbnailForUri,
   makeSelectClaimIsNsfw,
-  doToast,
 } from 'lbry-redux';
 import { doFetchViewCount, makeSelectViewCountForUri, makeSelectCostInfoForUri, doFetchCostInfoForUri } from 'lbryinc';
 import { selectShowNsfw, makeSelectClientSetting } from 'redux/selectors/settings';
@@ -54,7 +53,6 @@ const perform = dispatch => ({
   setViewed: uri => dispatch(doSetContentHistoryItem(uri)),
   markSubscriptionRead: (channel, uri) => dispatch(doRemoveUnreadSubscription(channel, uri)),
   fetchViewCount: claimId => dispatch(doFetchViewCount(claimId)),
-  showToast: options => dispatch(doToast(options)),
 });
 
 export default connect(

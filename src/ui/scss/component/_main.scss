@@ -57,8 +57,7 @@
   }
   .grid-area--related {
     grid-area: related;
-    min-width: 30rem;
-    max-width: 35rem;
+    width: 35rem;
   }
 
   @media (max-width: 600px) {

@@ -2,7 +2,6 @@
 import * as MODALS from 'constants/modal_types';
 import * as icons from 'constants/icons';
 import * as React from 'react';
-import { clipboard } from 'electron';
 import { buildURI, normalizeURI } from 'lbry-redux';
 import FileViewer from 'component/fileViewer';
 import Thumbnail from 'component/common/thumbnail';
@@ -23,6 +22,7 @@ import ClaimTags from 'component/claimTags';
 import CommentsList from 'component/commentsList';
 import CommentCreate from 'component/commentCreate';
 import VideoDuration from 'component/videoDuration';
+import ClaimUri from 'component/claimUri';
 
 type Props = {
   claim: StreamClaim,
@@ -48,7 +48,6 @@ type Props = {
   title: string,
   thumbnail: ?string,
   nsfw: boolean,
-  showToast: ({}) => void,
 };
 
 class FilePage extends React.Component<Props> {
@@ -150,7 +149,6 @@ class FilePage extends React.Component<Props> {
       title,
       thumbnail,
       nsfw,
-      showToast,
     } = this.props;
 
     // File info
@@ -298,18 +296,8 @@ class FilePage extends React.Component<Props> {
           </div>
         </div>
         <div className="grid-area--related">
-          <div className="media__uri-wrapper">
-            <Button
-              className="media__uri"
-              button="alt"
-              label={uri}
-              onClick={() => {
-                clipboard.writeText(uri);
-                showToast({
-                  message: __('Copied'),
-                });
-              }}
-            />
+          <div className="media__actions media__actions--between">
+            <ClaimUri uri={uri} />
             <div className="file-properties">
               {isRewardContent && <Icon size={20} iconColor="red" icon={icons.FEATURED} />}
               {nsfw && <div className="badge badge--mature">{__('Mature')}</div>}
