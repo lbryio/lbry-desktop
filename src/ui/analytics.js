@@ -89,6 +89,14 @@ const analytics: Analytics = {
       });
     }
   },
+  channelBlockEvent: (uri, blocked, location) => {
+    if (analyticsEnabled) {
+      ReactGA.event({
+        category: blocked ? 'Channel-Hidden' : 'Channel-Unhidden',
+        action: uri,
+      });
+    }
+  },
 };
 
 // Initialize google analytics

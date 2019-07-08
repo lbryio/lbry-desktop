@@ -6,6 +6,7 @@ import {
   makeSelectFetchingChannelClaims,
   makeSelectClaimIsMine,
   makeSelectTotalPagesForChannel,
+  selectChannelIsBlocked,
 } from 'lbry-redux';
 import { withRouter } from 'react-router';
 import ChannelPage from './view';
@@ -19,6 +20,7 @@ const select = (state, props) => {
     fetching: makeSelectFetchingChannelClaims(props.uri)(state),
     totalPages: makeSelectTotalPagesForChannel(props.uri, PAGE_SIZE)(state),
     channelIsMine: makeSelectClaimIsMine(props.uri)(state),
+    channelIsBlocked: selectChannelIsBlocked(props.uri)(state),
   };
 };
 

@@ -8,10 +8,13 @@ import {
   makeSelectThumbnailForUri,
   makeSelectTitleForUri,
   makeSelectClaimIsNsfw,
+  selectBlockedChannels,
+  selectChannelIsBlocked,
 } from 'lbry-redux';
 import { selectBlackListedOutpoints, selectFilteredOutpoints } from 'lbryinc';
 import { selectShowNsfw } from 'redux/selectors/settings';
 import { makeSelectHasVisitedUri } from 'redux/selectors/content';
+import { makeSelectIsSubscribed } from 'redux/selectors/subscriptions';
 import ClaimPreview from './view';
 
 const select = (state, props) => ({
@@ -25,7 +28,10 @@ const select = (state, props) => ({
   nsfw: makeSelectClaimIsNsfw(props.uri)(state),
   blackListedOutpoints: selectBlackListedOutpoints(state),
   filteredOutpoints: selectFilteredOutpoints(state),
+  blockedChannelUris: selectBlockedChannels(state),
   hasVisitedUri: makeSelectHasVisitedUri(props.uri)(state),
+  channelIsBlocked: selectChannelIsBlocked(props.uri)(state),
+  isSubscribed: makeSelectIsSubscribed(props.uri, true)(state),
 });
 
 const perform = dispatch => ({

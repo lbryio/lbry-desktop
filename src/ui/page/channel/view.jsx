@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { parseURI } from 'lbry-redux';
 import Page from 'component/page';
 import SubscribeButton from 'component/subscribeButton';
+import BlockButton from 'component/blockButton';
 import ShareButton from 'component/shareButton';
 import { Tabs, TabList, Tab, TabPanels, TabPanel } from 'component/common/tabs';
 import { withRouter } from 'react-router';
@@ -29,10 +30,24 @@ type Props = {
   history: { push: string => void },
   match: { params: { attribute: ?string } },
   channelIsMine: boolean,
+  isSubscribed: boolean,
+  channelIsBlocked: boolean,
 };
 
 function ChannelPage(props: Props) {
-  const { uri, title, cover, history, location, page, channelIsMine, thumbnail, claim } = props;
+  const {
+    uri,
+    title,
+    cover,
+    history,
+    location,
+    page,
+    channelIsMine,
+    thumbnail,
+    claim,
+    isSubscribed,
+    channelIsBlocked,
+  } = props;
   const { channelName } = parseURI(uri);
   const { search } = location;
   const urlParams = new URLSearchParams(search);
@@ -91,7 +106,8 @@ function ChannelPage(props: Props) {
             <Tab>{editing ? __('Editing Your Channel') : __('About')}</Tab>
             <div className="card__actions--inline">
               <ShareButton uri={uri} />
-              <SubscribeButton uri={permanentUrl} />
+              {!channelIsBlocked && <SubscribeButton uri={permanentUrl} />}
+              {!isSubscribed && <BlockButton uri={permanentUrl} />}
             </div>
           </TabList>
 

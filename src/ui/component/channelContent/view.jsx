@@ -12,12 +12,13 @@ type Props = {
   fetching: boolean,
   params: { page: number },
   claimsInChannel: Array<StreamClaim>,
+  channelIsBlocked: boolean,
   channelIsMine: boolean,
   fetchClaims: (string, number) => void,
 };
 
 function ChannelContent(props: Props) {
-  const { uri, fetching, claimsInChannel, totalPages, channelIsMine, fetchClaims } = props;
+  const { uri, fetching, claimsInChannel, totalPages, channelIsMine, channelIsBlocked, fetchClaims } = props;
   const hasContent = Boolean(claimsInChannel && claimsInChannel.length);
   return (
     <Fragment>
@@ -27,21 +28,30 @@ function ChannelContent(props: Props) {
         </section>
       )}
 
-      {!fetching && !hasContent && (
+      {!fetching && !hasContent && !channelIsBlocked && (
         <div className="card--section">
           <h2 className="help">{__("This channel hasn't uploaded anything.")}</h2>
         </div>
       )}
 
+      {!fetching && channelIsBlocked && (
+        <div className="card--section">
+          <h2 className="card__content help">{__('You have blocked this channel content.')}</h2>
+        </div>
+      )}
+
       {!channelIsMine && <HiddenNsfwClaims className="card__subtitle" uri={uri} />}
 
-      {hasContent && <ClaimList header={false} uris={claimsInChannel.map(claim => claim.permanent_url)} />}
-
-      <Paginate
-        onPageChange={page => fetchClaims(uri, page)}
-        totalPages={totalPages}
-        loading={fetching && !hasContent}
-      />
+      {hasContent && !channelIsBlocked && (
+        <ClaimList header={false} uris={claimsInChannel.map(claim => claim.permanent_url)} />
+      )}
+      {!channelIsBlocked && (
+        <Paginate
+          onPageChange={page => fetchClaims(uri, page)}
+          totalPages={totalPages}
+          loading={fetching && !hasContent}
+        />
+      )}
     </Fragment>
   );
 }
