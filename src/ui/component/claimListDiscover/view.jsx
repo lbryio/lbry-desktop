@@ -98,6 +98,10 @@ function ClaimListDiscover(props: Props) {
     return type === SEARCH_SORT_YOU ? __('Tags You Follow') : __('Channels You Follow');
   }
 
+  function resetList() {
+    setPage(1);
+  }
+
   const header = (
     <h1 className="card__title--flex">
       <FormField
@@ -105,7 +109,10 @@ function ClaimListDiscover(props: Props) {
         type="select"
         name="trending_sort"
         value={typeSort}
-        onChange={e => setTypeSort(e.target.value)}
+        onChange={e => {
+          resetList();
+          setTypeSort(e.target.value);
+        }}
       >
         {SEARCH_TYPES.map(type => (
           <option key={type} value={type}>
@@ -123,7 +130,7 @@ function ClaimListDiscover(props: Props) {
           className="claim-list__dropdown"
           value={personalSort}
           onChange={e => {
-            setPage(1);
+            resetList();
             setPersonalSort(e.target.value);
           }}
         >
@@ -140,7 +147,10 @@ function ClaimListDiscover(props: Props) {
           type="select"
           name="trending_time"
           value={timeSort}
-          onChange={e => setTimeSort(e.target.value)}
+          onChange={e => {
+            resetList();
+            setTimeSort(e.target.value);
+          }}
         >
           {SEARCH_TIMES.map(time => (
             <option key={time} value={time}>
