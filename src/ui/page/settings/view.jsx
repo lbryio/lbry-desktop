@@ -173,16 +173,14 @@ class SettingsPage extends React.PureComponent<Props, State> {
               </header>
 
               <div className="card__content">
-                <Form>
-                  <FileSelector
-                    type="openDirectory"
-                    currentPath={daemonSettings.download_dir}
-                    onFileChosen={(newDirectory: string) => {
-                      setDaemonSetting('download_dir', newDirectory);
-                    }}
-                  />
-                  <p className="help">{__('LBRY downloads will be saved here.')}</p>
-                </Form>
+                <FileSelector
+                  type="openDirectory"
+                  currentPath={daemonSettings.download_dir}
+                  onFileChosen={(newDirectory: string) => {
+                    setDaemonSetting('download_dir', newDirectory);
+                  }}
+                />
+                <p className="help">{__('LBRY downloads will be saved here.')}</p>
               </div>
             </section>
 

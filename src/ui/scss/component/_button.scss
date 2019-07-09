@@ -44,8 +44,7 @@
   line-height: var(--button-height);
   border-radius: var(--button-radius);
   font-size: 1.1rem;
-  padding-top: 0;
-  padding-bottom: 0;
+  padding: 0 var(--spacing-medium);
   box-sizing: border-box;
 }
 
