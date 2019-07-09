@@ -12,6 +12,7 @@ import ChannelContent from 'component/channelContent';
 import ChannelAbout from 'component/channelAbout';
 import ChannelThumbnail from 'component/channelThumbnail';
 import ChannelEdit from 'component/channelEdit';
+import ClaimUri from 'component/claimUri';
 import * as ICONS from 'constants/icons';
 
 const PAGE_VIEW_QUERY = `view`;
@@ -31,7 +32,7 @@ type Props = {
 
 function ChannelPage(props: Props) {
   const { uri, title, cover, history, location, page, channelIsMine, thumbnail } = props;
-  const { channelName, claimName, claimId } = parseURI(uri);
+  const { channelName } = parseURI(uri);
   const { search } = location;
   const urlParams = new URLSearchParams(search);
   const currentView = urlParams.get(PAGE_VIEW_QUERY) || undefined;
@@ -79,8 +80,7 @@ function ChannelPage(props: Props) {
               )}
             </h1>
             <h2 className="channel__url">
-              {claimName}
-              {claimId && `#${claimId}`}
+              <ClaimUri uri={uri} />
             </h2>
           </div>
         </header>

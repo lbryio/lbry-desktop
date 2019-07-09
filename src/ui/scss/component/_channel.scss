@@ -16,7 +16,7 @@ $metadata-z-index: 1;
   align-self: flex-start;
   position: absolute;
   object-fit: cover;
-  filter: brightness(50%);
+  filter: brightness(40%);
 }
 
 .channel-cover,
@@ -28,7 +28,7 @@ $metadata-z-index: 1;
 .channel-thumbnail {
   display: flex;
   height: 5rem;
-  width: 6rem;
+  width: 5rem;
   background-size: cover;
   margin-right: var(--spacing-medium);
 }

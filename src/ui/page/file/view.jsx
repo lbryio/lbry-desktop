@@ -2,7 +2,6 @@
 import * as MODALS from 'constants/modal_types';
 import * as icons from 'constants/icons';
 import * as React from 'react';
-import { clipboard } from 'electron';
 import { buildURI, normalizeURI } from 'lbry-redux';
 import FileViewer from 'component/fileViewer';
 import Thumbnail from 'component/common/thumbnail';
@@ -23,6 +22,7 @@ import ClaimTags from 'component/claimTags';
 import CommentsList from 'component/commentsList';
 import CommentCreate from 'component/commentCreate';
 import VideoDuration from 'component/videoDuration';
+import ClaimUri from 'component/claimUri';
 
 type Props = {
   claim: StreamClaim,
@@ -48,7 +48,6 @@ type Props = {
   title: string,
   thumbnail: ?string,
   nsfw: boolean,
-  showToast: ({}) => void,
 };
 
 class FilePage extends React.Component<Props> {
@@ -150,7 +149,6 @@ class FilePage extends React.Component<Props> {
       title,
       thumbnail,
       nsfw,
-      showToast,
     } = this.props;
 
     // File info
@@ -221,102 +219,94 @@ class FilePage extends React.Component<Props> {
             ))}
         </div>
 
-        <div className="grid-area--info media__content media__content--large">
-          <h1 className="media__title media__title--large">{title}</h1>
-          <div className="media__subtext media__subtext--large">
-            <div className="media__subtitle__channel">
-              <UriIndicator uri={uri} link />
+        <div className="columns">
+          <div className="grid-area--info">
+            <h1 className="media__title media__title--large">{title}</h1>
+            <div className="media__subtext media__subtext--large">
+              <div className="media__subtitle__channel">
+                <UriIndicator uri={uri} link />
+              </div>
             </div>
-          </div>
-          <div className="media__actions media__actions--between">
-            <div className="media__action-group--large">
-              {claimIsMine && (
-                <Button
-                  button="primary"
-                  icon={icons.EDIT}
-                  label={__('Edit')}
-                  navigate="/$/publish"
-                  onClick={() => {
-                    prepareEdit(claim, editUri, fileInfo);
-                  }}
-                />
-              )}
-              {!claimIsMine && (
-                <React.Fragment>
-                  {channelUri && <SubscribeButton uri={channelUri} channelName={channelName} />}
-
+            <div className="media__actions media__actions--between">
+              <div className="media__action-group--large">
+                {claimIsMine && (
                   <Button
-                    button="alt"
-                    icon={icons.TIP}
-                    label={__('Send a tip')}
-                    onClick={() => openModal(MODALS.SEND_TIP, { uri })}
+                    button="primary"
+                    icon={icons.EDIT}
+                    label={__('Edit')}
+                    navigate="/$/publish"
+                    onClick={() => {
+                      prepareEdit(claim, editUri, fileInfo);
+                    }}
                   />
-                </React.Fragment>
-              )}
-              <Button
-                button="alt"
-                icon={icons.SHARE}
-                label={__('Share')}
-                onClick={() => openModal(MODALS.SOCIAL_SHARE, { uri, speechShareable })}
-              />
+                )}
+                {!claimIsMine && (
+                  <React.Fragment>
+                    {channelUri && <SubscribeButton uri={channelUri} channelName={channelName} />}
+
+                    <Button
+                      button="alt"
+                      icon={icons.TIP}
+                      label={__('Send a tip')}
+                      onClick={() => openModal(MODALS.SEND_TIP, { uri })}
+                    />
+                  </React.Fragment>
+                )}
+                <Button
+                  button="alt"
+                  icon={icons.SHARE}
+                  label={__('Share')}
+                  onClick={() => openModal(MODALS.SOCIAL_SHARE, { uri, speechShareable })}
+                />
+              </div>
+
+              <div className="media__action-group--large">
+                <FileDownloadLink uri={uri} />
+                <FileActions
+                  uri={uri}
+                  claimId={claim.claim_id}
+                  showFullscreen={isPreviewType}
+                  viewerContainer={this.viewerContainer}
+                />
+              </div>
             </div>
 
-            <div className="media__action-group--large">
-              <FileDownloadLink uri={uri} />
-              <FileActions
-                uri={uri}
-                claimId={claim.claim_id}
-                showFullscreen={isPreviewType}
-                viewerContainer={this.viewerContainer}
-              />
+            <div className="media__actions media__actions--between">
+              <div className="media__subtext media__subtext--large">
+                <DateTime uri={uri} show={DateTime.SHOW_DATE} />
+              </div>
+
+              <div className="media__subtext media__subtext--large">
+                <VideoDuration uri={uri} />
+
+                {claimIsMine && (
+                  <p>
+                    {viewCount} {viewCount !== 1 ? __('Views') : __('View')}
+                  </p>
+                )}
+              </div>
             </div>
-          </div>
 
-          <div className="media__actions media__actions--between">
-            <div className="media__subtext media__subtext--large">
-              <DateTime uri={uri} show={DateTime.SHOW_DATE} />
-            </div>
+            <div className="media__info--large">
+              <ClaimTags uri={uri} type="large" />
+              <FileDetails uri={uri} />
 
-            <div className="media__subtext media__subtext--large">
-              <VideoDuration uri={uri} />
-
-              {claimIsMine && (
-                <p>
-                  {viewCount} {viewCount !== 1 ? __('Views') : __('View')}
-                </p>
-              )}
-            </div>
-          </div>
-
-          <div className="media__info--large">
-            <ClaimTags uri={uri} type="large" />
-            <FileDetails uri={uri} />
-
-            <div className="media__info-title">{__('Comments')}</div>
-            <CommentCreate uri={uri} />
-            <CommentsList uri={uri} />
-          </div>
-        </div>
-        <div className="grid-area--related">
-          <div className="media__uri-wrapper">
-            <Button
-              className="media__uri"
-              button="alt"
-              label={uri}
-              onClick={() => {
-                clipboard.writeText(uri);
-                showToast({
-                  message: __('Copied'),
-                });
-              }}
-            />
-            <div className="file-properties">
-              {isRewardContent && <Icon size={20} iconColor="red" icon={icons.FEATURED} />}
-              {nsfw && <div className="badge badge--mature">{__('Mature')}</div>}
-              <FilePrice badge uri={normalizeURI(uri)} />
+              <div className="media__info-title">{__('Comments')}</div>
+              <CommentCreate uri={uri} />
+              <CommentsList uri={uri} />
             </div>
           </div>
-          <RecommendedContent uri={uri} />
+          <div className="grid-area--related">
+            <div className="media__actions media__actions--between media__actions--nowrap">
+              <ClaimUri uri={uri} />
+              <div className="file-properties">
+                {isRewardContent && <Icon size={20} iconColor="red" icon={icons.FEATURED} />}
+                {nsfw && <div className="badge badge--mature">{__('Mature')}</div>}
+                <FilePrice badge uri={normalizeURI(uri)} />
+              </div>
+            </div>
+            <RecommendedContent uri={uri} />
+          </div>
         </div>
       </Page>
     );
