@@ -98,7 +98,9 @@ ReactGA.initialize(UA_ID, {
 
 // Manually call the first page view
 // React Router doesn't include this on `history.listen`
+// @if TARGET='web'
 analytics.pageView(window.location.pathname + window.location.search);
+// @endif
 
 // @if TARGET='app'
 ReactGA.set({ checkProtocolTask: null });
