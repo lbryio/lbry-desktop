@@ -9,7 +9,15 @@ import {
   tagsReducer,
   commentReducer,
 } from 'lbry-redux';
-import { userReducer, rewardsReducer, costInfoReducer, blacklistReducer, homepageReducer, statsReducer } from 'lbryinc';
+import {
+  userReducer,
+  rewardsReducer,
+  costInfoReducer,
+  blacklistReducer,
+  filteredReducer,
+  homepageReducer,
+  statsReducer,
+} from 'lbryinc';
 import appReducer from 'redux/reducers/app';
 import availabilityReducer from 'redux/reducers/availability';
 import contentReducer from 'redux/reducers/content';
@@ -23,6 +31,7 @@ export default history =>
     app: appReducer,
     availability: availabilityReducer,
     blacklist: blacklistReducer,
+    filtered: filteredReducer,
     claims: claimsReducer,
     comments: commentReducer,
     content: contentReducer,

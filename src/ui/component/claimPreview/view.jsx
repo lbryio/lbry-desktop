@@ -33,6 +33,10 @@ type Props = {
     txid: string,
     nout: number,
   }>,
+  filteredOutpoints: Array<{
+    txid: string,
+    nout: number,
+  }>,
 };
 
 function ClaimPreview(props: Props) {
@@ -51,6 +55,7 @@ function ClaimPreview(props: Props) {
     placeholder,
     type,
     blackListedOutpoints,
+    filteredOutpoints,
   } = props;
   const haventFetched = claim === undefined;
   const abandoned = !isResolvingUri && !claim && !placeholder;
@@ -63,6 +68,16 @@ function ClaimPreview(props: Props) {
   if (claim && !shouldHide && blackListedOutpoints) {
     for (let i = 0; i < blackListedOutpoints.length; i += 1) {
       const outpoint = blackListedOutpoints[i];
+      if (outpoint.txid === claim.txid && outpoint.nout === claim.nout) {
+        shouldHide = true;
+        break;
+      }
+    }
+  }
+
+  if (claim && !shouldHide && filteredOutpoints) {
+    for (let i = 0; i < filteredOutpoints.length; i += 1) {
+      const outpoint = filteredOutpoints[i];
       if (outpoint.txid === claim.txid && outpoint.nout === claim.nout) {
         shouldHide = true;
         break;

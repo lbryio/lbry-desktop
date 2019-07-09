@@ -9,7 +9,7 @@ import {
   makeSelectTitleForUri,
   makeSelectClaimIsNsfw,
 } from 'lbry-redux';
-import { selectBlackListedOutpoints } from 'lbryinc';
+import { selectBlackListedOutpoints, selectFilteredOutpoints } from 'lbryinc';
 import { selectShowNsfw } from 'redux/selectors/settings';
 import ClaimPreview from './view';
 
@@ -23,6 +23,7 @@ const select = (state, props) => ({
   title: makeSelectTitleForUri(props.uri)(state),
   nsfw: makeSelectClaimIsNsfw(props.uri)(state),
   blackListedOutpoints: selectBlackListedOutpoints(state),
+  filteredOutpoints: selectFilteredOutpoints(state),
 });
 
 const perform = dispatch => ({
