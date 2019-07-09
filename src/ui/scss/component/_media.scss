@@ -56,7 +56,9 @@
 
 .media__title--large {
   cursor: default;
-  display: inline;
+  overflow: hidden;
+  width: 100%;
+  text-overflow: ellipsis;
   font-size: 2rem;
   line-height: 1.33;
   margin-right: var(--spacing-small);
@@ -86,6 +88,10 @@
   justify-content: space-between;
 }
 
+.media__actions--nowrap {
+  flex-wrap: nowrap;
+}
+
 .media__action-group {
   > *:not(:last-child) {
     margin-right: var(--spacing-medium);
@@ -108,13 +114,6 @@
   &:not(:last-child) {
     margin-right: var(--spacing-large);
   }
-}
-
-//  M E D I A
-//  C O N T E N T
-
-.media__content--large {
-  padding-right: var(--spacing-large);
 }
 
 // M E D I A
