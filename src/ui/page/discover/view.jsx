@@ -1,4 +1,5 @@
 // @flow
+import * as PAGES from 'constants/pages';
 import React from 'react';
 import ClaimListDiscover from 'component/claimListDiscover';
 import TagsSelect from 'component/tagsSelect';
@@ -17,7 +18,7 @@ function DiscoverPage(props: Props) {
       <ClaimListDiscover
         personal
         tags={followedTags.map(tag => tag.name)}
-        meta={<Button button="link" label={__('Customize')} navigate="/$/following/customize" />}
+        meta={<Button button="link" label={__('Customize')} navigate={`/$/${PAGES.FOLLOWING}`} />}
         injectedItem={<TagsSelect showClose title={__('Customize Your Homepage')} />}
       />
     </Page>

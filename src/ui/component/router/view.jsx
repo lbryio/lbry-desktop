@@ -14,7 +14,6 @@ import FileListPublished from 'page/fileListPublished';
 import TransactionHistoryPage from 'page/transactionHistory';
 import AuthPage from 'page/auth';
 import InvitePage from 'page/invite';
-import SubscriptionsPage from 'page/subscriptions';
 import SearchPage from 'page/search';
 import LibraryPage from 'page/library';
 import WalletPage from 'page/wallet';
@@ -56,8 +55,7 @@ export default function AppRouter() {
         <Route path={`/$/${PAGES.ACCOUNT}`} exact component={AccountPage} />
         <Route path={`/$/${PAGES.LIBRARY}/all`} exact component={NavigationHistory} />
         <Route path={`/$/${PAGES.TAGS}`} exact component={TagsPage} />
-        <Route path={`/$/${PAGES.FOLLOWING}`} exact component={SubscriptionsPage} />
-        <Route path={`/$/${PAGES.FOLLOWING}/customize`} exact component={FollowingPage} />
+        <Route path={`/$/${PAGES.FOLLOWING}`} exact component={FollowingPage} />
         <Route path={`/$/${PAGES.WALLET}`} exact component={WalletPage} />
         {/* Below need to go at the end to make sure we don't match any of our pages first */}
         <Route path="/:claimName" exact component={ShowPage} />
