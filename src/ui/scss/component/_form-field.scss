@@ -236,10 +236,8 @@ fieldset-section {
 
     .button,
     // specificity needed because of @lbry/component rules
-    // @lbry/componentsfixme
-    .button[type='submit']:not(:hover),
-    .button[type='submit']:hover {
-      border-color: $lbry-black;
+    // @lbry/componentfixme
+    .button[type='submit']:not(:hover) {
       border-top-left-radius: 0;
       border-bottom-left-radius: 0;
       border-top-right-radius: var(--input-border-radius);
