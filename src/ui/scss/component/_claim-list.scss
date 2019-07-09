@@ -82,20 +82,13 @@
 }
 
 .claim-preview {
+  @include mediaThumbHoverZoom;
   display: flex;
   position: relative;
+  overflow: visible;
+  cursor: pointer;
   font-size: 1.3rem;
   padding: var(--spacing-medium);
-  cursor: pointer;
-  overflow: hidden;
-
-  &:hover {
-    background-color: darken($lbry-white, 5%);
-
-    [data-mode='dark'] & {
-      background-color: var(--dm-color-04);
-    }
-  }
 
   .media__thumb {
     width: var(--file-list-thumbnail-width);
@@ -122,11 +115,10 @@
 }
 
 .claim-preview--large {
-  @include mediaThumbHoverZoom;
   font-size: 1.6rem;
   border-bottom: 0;
   padding: 0;
-  padding-bottom: var(--spacing-medium);
+  margin: var(--spacing-small) 0;
 
   &:hover {
     background-color: transparent;
@@ -153,7 +145,7 @@
 .claim-preview-metadata {
   display: flex;
   flex-direction: column;
-  width: 100%;
+  flex: 1;
 }
 
 .claim-preview-info {
