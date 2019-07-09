@@ -1,5 +1,16 @@
 @import '~@lbry/components/sass/form/_index.scss';
 
+// Reset lbry components style that turns buttons inside of forms black
+form {
+  .button--primary,
+  [type='submit'] {
+    &:not(:hover),
+    &:hover {
+      @extend .button--primary;
+    }
+  }
+}
+
 textarea {
   &::placeholder {
     opacity: 0.4;
@@ -223,7 +234,10 @@ fieldset-section {
       }
     }
 
-    .button {
+    .button,
+    // specificity needed because of @lbry/component rules
+    // @lbry/componentfixme
+    .button[type='submit']:not(:hover) {
       border-top-left-radius: 0;
       border-bottom-left-radius: 0;
       border-top-right-radius: var(--input-border-radius);
