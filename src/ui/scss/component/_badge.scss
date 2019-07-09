@@ -31,4 +31,8 @@
   svg {
     stroke: $lbry-black;
   }
+
+  [data-mode='dark'] & {
+    background-color: rgba($lbry-grape-1, 0.3);
+  }
 }
