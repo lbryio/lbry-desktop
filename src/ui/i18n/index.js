@@ -1,8 +1,9 @@
 // @if TARGET='app'
 import y18n from 'y18n';
+import path from 'path';
 
 const i18n = y18n({
-  directory: `static/locales`.replace(/\\/g, '\\\\'),
+  directory: path.join(__static, `locales`),
   updateFiles: true,
   locale: 'en',
 });
