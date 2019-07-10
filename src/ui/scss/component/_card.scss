@@ -179,12 +179,6 @@
     margin-bottom: var(--spacing-small);
   }
 
-  .badge {
-    bottom: -0.12rem;
-    position: relative;
-    margin-left: 0;
-  }
-
   [data-mode='dark'] & {
     background-color: darken($lbry-gray-5, 20%);
   }

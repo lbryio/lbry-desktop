@@ -1,5 +1,9 @@
 @import '~@lbry/components/sass/badge/_index.scss';
 
+.badge {
+  vertical-align: middle;
+}
+
 .badge--tag {
   @extend .badge;
   background-color: lighten($lbry-teal-5, 55%);
