@@ -1,5 +1,4 @@
 // @flow
-import * as ICONS from 'constants/icons';
 import React from 'react';
 import Button from 'component/button';
 
@@ -10,6 +9,7 @@ let scriptDidError = false;
 type Props = {
   disabled: boolean,
   label: ?string,
+  email: string,
 
   // =====================================================
   // Required by stripe
@@ -72,14 +72,14 @@ class CardVerify extends React.Component<Props, State> {
           this.onScriptError(event);
         };
       });
-      const wrappedPromise = new Promise((accept, cancel) => {
-        promise.then(() => (canceled ? cancel({ isCanceled: true }) : accept()));
-        promise.catch(error => (canceled ? cancel({ isCanceled: true }) : cancel(error)));
+      const wrappedPromise = new Promise((resolve, reject) => {
+        promise.then(() => (canceled ? reject({ isCanceled: true }) : resolve()));
+        promise.catch(error => (canceled ? reject({ isCanceled: true }) : reject(error)));
       });
 
       return {
         promise: wrappedPromise,
-        cancel() {
+        reject() {
           canceled = true;
         },
       };
@@ -161,9 +161,8 @@ class CardVerify extends React.Component<Props, State> {
   render() {
     return (
       <Button
-        button="primary"
+        button="inverse"
         label={this.props.label}
-        icon={ICONS.SECURE}
         disabled={this.props.disabled || this.state.open || this.hasPendingClick}
         onClick={this.onClick.bind(this)}
       />

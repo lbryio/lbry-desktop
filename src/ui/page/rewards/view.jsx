@@ -35,10 +35,11 @@ class RewardsPage extends PureComponent<Props> {
           !IS_WEB && (
             <section className="card card--section">
               <header className="card__header">
-                <h2 className="card__title">{__('Humans Only')}</h2>
+                <h2 className="card__title">{__('Verification For Rewards')}</h2>
                 <p className="card__subtitle">
                   {__('Rewards are for human beings only.')}{' '}
-                  {__("You'll have to prove you're one of us before you can claim any rewards.")}
+                  {__("You'll have to prove you're one of us before you can claim any rewards.")}{' '}
+                  {__('This is optional.')}
                 </p>
               </header>
 

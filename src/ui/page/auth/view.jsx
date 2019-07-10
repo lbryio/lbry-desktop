@@ -38,7 +38,7 @@ class AuthPage extends React.PureComponent<Props> {
 
   render() {
     const { user, email } = this.props;
-    return <Page>{user && email && !user.is_identity_verified ? <UserVerify /> : <UserEmail />}</Page>;
+    return <Page>{user && email && user.has_verified_email ? <UserVerify /> : <UserEmail />}</Page>;
   }
 }
 

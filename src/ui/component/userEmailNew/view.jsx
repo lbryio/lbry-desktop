@@ -1,6 +1,7 @@
 // @flow
 import * as React from 'react';
-import { FormField, Form, Submit } from 'component/common/form';
+import { FormField, Form } from 'component/common/form';
+import Button from 'component/button';
 import { Lbryio } from 'lbryinc';
 
 type Props = {
@@ -48,7 +49,7 @@ class UserEmailNew extends React.PureComponent<Props, State> {
     return (
       <React.Fragment>
         <header className="card__header">
-          <h2 className="card__title">{__("Don't Miss Out")}</h2>
+          <h2 className="card__title">{__('Verify Your Email')}</h2>
           <p className="card__subtitle">
             {/* @if TARGET='app' */}
             {__("We'll let you know about LBRY updates, security issues, and great new content.")}
@@ -68,7 +69,9 @@ class UserEmailNew extends React.PureComponent<Props, State> {
             value={this.state.email}
             error={errorMessage}
             onChange={this.handleEmailChanged}
-            inputButton={<Submit label="Submit" disabled={isPending || !this.state.email} />}
+            inputButton={
+              <Button type="submit" button="inverse" label="Submit" disabled={isPending || !this.state.email} />
+            }
           />
         </Form>
         <div className="card__actions">{cancelButton}</div>
