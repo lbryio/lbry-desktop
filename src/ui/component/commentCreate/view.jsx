@@ -39,13 +39,20 @@ export function CommentCreate(props: Props) {
     <section>
       {commentAck !== true && (
         <div className="card__content markdown-preview">
-          <p>A few things to know before participating in the comment alpha:</p>
+          <p>{__('A few things to know before participating in the comment alpha:')}</p>
           <ul>
-            <li>During the alpha, all comments are sent to a LBRY, Inc. server, not the LBRY network itself.</li>
-            <li>During the alpha, comments are not decentralized or censorship resistant (but we repeat ourselves).</li>
             <li>
-              When the alpha ends, we will attempt to transition comments, but do not promise to so. Any transition will
-              likely involve publishing previous comments under a single archive handle.
+              {__('During the alpha, all comments are sent to a LBRY, Inc. server, not the LBRY network itself.')}
+            </li>
+            <li>
+              {__(
+                'During the alpha, comments are not decentralized or censorship resistant (but we repeat ourselves).'
+              )}
+            </li>
+            <li>
+              {__(
+                'When the alpha ends, we will attempt to transition comments, but do not promise to do so. Any transition will likely involve publishing previous comments under a single archive handle.'
+              )}
             </li>
           </ul>
           <Button button="primary" onClick={handleCommentAck} label={__('Got it!')} />
