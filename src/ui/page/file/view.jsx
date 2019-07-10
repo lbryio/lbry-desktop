@@ -291,7 +291,9 @@ class FilePage extends React.Component<Props> {
               <ClaimTags uri={uri} type="large" />
               <FileDetails uri={uri} />
 
-              <div className="media__info-title">{__('Comments')}</div>
+              <div className="media__info-title">
+                {__('Comments')} <span className="badge badge--alert">ALPHA</span>
+              </div>
               <CommentCreate uri={uri} />
               <CommentsList uri={uri} />
             </div>
