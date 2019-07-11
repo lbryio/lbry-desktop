@@ -65,24 +65,13 @@ function ClaimPreview(props: Props) {
   let shouldHide = abandoned || (!claimIsMine && obscureNsfw && nsfw);
 
   // This will be replaced once blocking is done at the wallet server level
+
   if (claim && !shouldHide && blackListedOutpoints) {
-    for (let i = 0; i < blackListedOutpoints.length; i += 1) {
-      const outpoint = blackListedOutpoints[i];
-      if (outpoint.txid === claim.txid && outpoint.nout === claim.nout) {
-        shouldHide = true;
-        break;
-      }
-    }
+    shouldHide = blackListedOutpoints.some(outpoint => outpoint.txid === claim.txid && outpoint.nout === claim.nout);
   }
 
   if (claim && !shouldHide && filteredOutpoints) {
-    for (let i = 0; i < filteredOutpoints.length; i += 1) {
-      const outpoint = filteredOutpoints[i];
-      if (outpoint.txid === claim.txid && outpoint.nout === claim.nout) {
-        shouldHide = true;
-        break;
-      }
-    }
+    shouldHide = filteredOutpoints.some(outpoint => outpoint.txid === claim.txid && outpoint.nout === claim.nout);
   }
 
   function handleContextMenu(e) {
