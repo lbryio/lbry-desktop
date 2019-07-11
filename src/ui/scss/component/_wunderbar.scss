@@ -72,6 +72,7 @@
   box-shadow: 0 1px 5px rgba($lbry-black, 0.15);
   min-width: 100%;
   overflow: hidden;
+  font-size: 14px;
 
   [data-mode='dark'] & {
     background-color: $lbry-gray-5;
