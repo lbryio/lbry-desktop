@@ -544,5 +544,6 @@
   "Abandon the claim for this URI": "Abandon the claim for this URI",
   "View Tag": "View Tag",
   "Invalid claim ID %s.": "Invalid claim ID %s.",
-  "Invalid character %s in name: %s.": "Invalid character %s in name: %s."
+  "Invalid character %s in name: %s.": "Invalid character %s in name: %s.",
+  "LBRY names cannot contain spaces or reserved symbols ($#@;/\"<>%{}|^~[]`)": "LBRY names cannot contain spaces or reserved symbols ($#@;/\"<>%{}|^~[]`)"
 }
