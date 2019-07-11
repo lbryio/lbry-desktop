@@ -15,6 +15,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - New app design for better content discovery ([2477](https://github.com/lbryio/lbry-desktop/pull/2477))
 - New loading page ([2491](https://github.com/lbryio/lbry-desktop/pull/2491))
 - Comments ([2510](https://github.com/lbryio/lbry-desktop/pull/2510))
+- Remember file delete preference ([2132](https://github.com/lbryio/lbry-desktop/pull/2132))
+- Add first version of language support (with Polish and Indonesian)
 
 ## [0.33.1] - [2019-06-12]
 
