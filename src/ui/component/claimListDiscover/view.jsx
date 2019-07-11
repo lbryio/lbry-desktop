@@ -29,7 +29,7 @@ const SEARCH_TIMES = [TIME_DAY, TIME_WEEK, TIME_MONTH, TIME_YEAR, TIME_ALL];
 type Props = {
   uris: Array<string>,
   subscribedChannels: Array<Subscription>,
-  doClaimSearch: (number, {}) => void,
+  doClaimSearch: ({}) => void,
   injectedItem: any,
   tags: Array<string>,
   loading: boolean,
@@ -87,7 +87,8 @@ function ClaimListDiscover(props: Props) {
       }
     }
 
-    doClaimSearch(20, options);
+    options.page_size = PAGE_SIZE;
+    doClaimSearch(options);
   }, [personal, personalSort, typeSort, timeSort, doClaimSearch, page, tagsString, channelsIdString, showNsfw]);
 
   function getLabel(type) {

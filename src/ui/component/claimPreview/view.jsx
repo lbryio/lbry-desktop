@@ -29,6 +29,7 @@ type Props = {
   nsfw: boolean,
   placeholder: boolean,
   type: string,
+  hasVisitedUri: boolean,
   blackListedOutpoints: Array<{
     txid: string,
     nout: number,
@@ -51,6 +52,7 @@ function ClaimPreview(props: Props) {
     placeholder,
     type,
     blackListedOutpoints,
+    hasVisitedUri,
   } = props;
   const haventFetched = claim === undefined;
   const abandoned = !isResolvingUri && !claim && !placeholder;
@@ -113,7 +115,8 @@ function ClaimPreview(props: Props) {
       onContextMenu={handleContextMenu}
       className={classnames('claim-preview', {
         'claim-preview--large': type === 'large',
-        'claim-list__pending': pending,
+        'claim-preview--visited': hasVisitedUri,
+        'claim-preview--pending': pending,
       })}
     >
       {isChannel ? <ChannelThumbnail uri={uri} /> : <CardMedia thumbnail={thumbnail} />}
