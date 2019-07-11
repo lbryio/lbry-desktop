@@ -14,7 +14,7 @@ export default function usePersistedState(key, firstTimeDefault) {
     }
   }
 
-  if (!defaultValue) {
+  if (!defaultValue && defaultValue !== false) {
     defaultValue = firstTimeDefault;
   }
 

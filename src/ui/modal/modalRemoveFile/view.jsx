@@ -2,6 +2,7 @@
 import React from 'react';
 import { Modal } from 'modal/modal';
 import { FormField } from 'component/common/form';
+import usePersistedState from 'util/use-persisted-state';
 
 type Props = {
   claim: StreamClaim,
@@ -14,80 +15,50 @@ type Props = {
   },
 };
 
-type State = {
-  deleteChecked: boolean,
-  abandonClaimChecked: boolean,
-};
+function ModalRemoveFile(props: Props) {
+  const { claim, claimIsMine, closeModal, deleteFile, fileInfo, title } = props;
+  const [deleteChecked, setDeleteChecked] = usePersistedState('modal-remove-file:delete', true);
+  const [abandonChecked, setAbandonChecked] = usePersistedState('modal-remove-file:abandon', true);
+  const { txid, nout } = claim;
+  const outpoint = fileInfo ? fileInfo.outpoint : `${txid}:${nout}`;
 
-class ModalRemoveFile extends React.PureComponent<Props, State> {
-  constructor(props: Props) {
-    super(props);
-    this.state = {
-      deleteChecked: false,
-      abandonClaimChecked: true,
-    };
+  return (
+    <Modal
+      isOpen
+      title="Remove File"
+      contentLabel={__('Confirm File Remove')}
+      type="confirm"
+      confirmButtonLabel={__('Remove')}
+      confirmButtonDisabled={!deleteChecked && !abandonChecked}
+      onConfirmed={() => deleteFile(outpoint || '', deleteChecked, abandonChecked)}
+      onAborted={closeModal}
+    >
+      <section className="card__content">
+        <p>
+          {__("Are you sure you'd like to remove")} <cite>{`"${title}"`}</cite> {__('from the LBRY app?')}
+        </p>
+      </section>
+      <section className="card__content">
+        <FormField
+          name="file_delete"
+          label={__('Also delete this file from my computer')}
+          type="checkbox"
+          checked={deleteChecked}
+          onChange={() => setDeleteChecked(!deleteChecked)}
+        />
 
-    (this: any).handleDeleteCheckboxClicked = this.handleDeleteCheckboxClicked.bind(this);
-    (this: any).handleAbandonClaimCheckboxClicked = this.handleAbandonClaimCheckboxClicked.bind(this);
-  }
-
-  handleDeleteCheckboxClicked() {
-    const { deleteChecked } = this.state;
-    this.setState({
-      deleteChecked: !deleteChecked,
-    });
-  }
-
-  handleAbandonClaimCheckboxClicked() {
-    const { abandonClaimChecked } = this.state;
-    this.setState({
-      abandonClaimChecked: !abandonClaimChecked,
-    });
-  }
-
-  render() {
-    const { claim, claimIsMine, closeModal, deleteFile, fileInfo, title } = this.props;
-    const { deleteChecked, abandonClaimChecked } = this.state;
-    const { txid, nout } = claim;
-    const outpoint = fileInfo ? fileInfo.outpoint : `${txid}:${nout}`;
-
-    return (
-      <Modal
-        isOpen
-        title="Remove File"
-        contentLabel={__('Confirm File Remove')}
-        type="confirm"
-        confirmButtonLabel={__('Remove')}
-        onConfirmed={() => deleteFile(outpoint || '', deleteChecked, abandonClaimChecked)}
-        onAborted={closeModal}
-      >
-        <section className="card__content">
-          <p>
-            {__("Are you sure you'd like to remove")} <cite>{`"${title}"`}</cite> {__('from the LBRY app?')}
-          </p>
-        </section>
-        <section className="card__content">
+        {claimIsMine && (
           <FormField
-            name="file_delete"
-            label={__('Also delete this file from my computer')}
+            name="claim_abandon"
+            label={__('Abandon the claim for this URI')}
             type="checkbox"
-            checked={deleteChecked}
-            onChange={this.handleDeleteCheckboxClicked}
+            checked={abandonChecked}
+            onChange={() => setAbandonChecked(!abandonChecked)}
           />
-
-          {claimIsMine && (
-            <FormField
-              name="claim_abandon"
-              label={__('Abandon the claim for this URI')}
-              type="checkbox"
-              checked={abandonClaimChecked}
-              onChange={this.handleAbandonClaimCheckboxClicked}
-            />
-          )}
-        </section>
-      </Modal>
-    );
-  }
+        )}
+      </section>
+    </Modal>
+  );
 }
 
 export default ModalRemoveFile;
