@@ -29,6 +29,7 @@ type Props = {
   nsfw: boolean,
   placeholder: boolean,
   type: string,
+  hasVisitedUri: boolean,
   blackListedOutpoints: Array<{
     txid: string,
     nout: number,
@@ -56,6 +57,7 @@ function ClaimPreview(props: Props) {
     type,
     blackListedOutpoints,
     filteredOutpoints,
+    hasVisitedUri,
   } = props;
   const haventFetched = claim === undefined;
   const abandoned = !isResolvingUri && !claim && !placeholder;
@@ -65,7 +67,6 @@ function ClaimPreview(props: Props) {
   let shouldHide = abandoned || (!claimIsMine && obscureNsfw && nsfw);
 
   // This will be replaced once blocking is done at the wallet server level
-
   if (claim && !shouldHide && blackListedOutpoints) {
     shouldHide = blackListedOutpoints.some(outpoint => outpoint.txid === claim.txid && outpoint.nout === claim.nout);
   }
@@ -117,7 +118,8 @@ function ClaimPreview(props: Props) {
       onContextMenu={handleContextMenu}
       className={classnames('claim-preview', {
         'claim-preview--large': type === 'large',
-        'claim-list__pending': pending,
+        'claim-preview--visited': hasVisitedUri,
+        'claim-preview--pending': pending,
       })}
     >
       {isChannel ? <ChannelThumbnail uri={uri} /> : <CardMedia thumbnail={thumbnail} />}

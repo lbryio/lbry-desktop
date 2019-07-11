@@ -129,7 +129,18 @@
   }
 }
 
-.claim-list__pending {
+.claim-preview--visited {
+  // Still keep the normal styles on hover regardless of if they have visited the claim
+  &:not(:hover) {
+    color: lighten($lbry-black, 35%);
+
+    [data-mode='dark'] & {
+      color: darken($lbry-white, 35%);
+    }
+  }
+}
+
+.claim-preview--pending {
   cursor: pointer;
   opacity: 0.6;
 
