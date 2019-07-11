@@ -58,6 +58,12 @@ export const makeSelectHistoryForUri = (uri: string) =>
     history => history.find(i => i.uri === uri)
   );
 
+export const makeSelectHasVisitedUri = (uri: string) =>
+  createSelector(
+    makeSelectHistoryForUri(uri),
+    history => Boolean(history)
+  );
+
 export const selectRecentHistory = createSelector(
   selectHistory,
   history => {
