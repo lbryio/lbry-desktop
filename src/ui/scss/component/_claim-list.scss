@@ -24,6 +24,13 @@
     &:hover {
       color: $lbry-teal-1;
     }
+
+    [data-mode='dark'] & {
+      color: $lbry-teal-4;
+      &:hover {
+        color: $lbry-teal-1;
+      }
+    }
   }
 
   // Fix this in @lbry/components, we shouldn't need to be this specific
@@ -177,6 +184,7 @@
 .claim-preview-title {
   font-weight: 600;
   margin-right: auto;
+  padding-right: var(--spacing-medium);
 }
 
 .claim-preview-tags {
