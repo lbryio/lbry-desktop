@@ -67,4 +67,8 @@
   svg {
     stroke: $lbry-white;
   }
+
+  [data-mode='dark'] & {
+    background-color: $lbry-teal-5;
+  }
 }
