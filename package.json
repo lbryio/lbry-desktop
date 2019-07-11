@@ -128,7 +128,7 @@
     "lbryinc": "lbryio/lbryinc#43d382d9b74d396a581a74d87e4c53105e04f845",
     "lint-staged": "^7.0.2",
     "localforage": "^1.7.1",
-    "lodash-es": "^4.17.11",
+    "lodash-es": "^4.17.14",
     "make-runnable": "^1.3.6",
     "mammoth": "^1.4.6",
     "mime": "^2.3.1",
