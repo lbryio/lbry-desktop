@@ -69,4 +69,5 @@ export const MUSIC_EQUALIZER = 'Sliders';
 export const LIGHT = 'Sun';
 export const DARK = 'Moon';
 export const LIBRARY = 'Folder';
+export const TAG = 'Tag';
 export const SUPPORT = 'TrendingUp';
