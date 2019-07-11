@@ -540,5 +540,6 @@
   "During the alpha, comments are not decentralized or censorship resistant (but we repeat ourselves).": "During the alpha, comments are not decentralized or censorship resistant (but we repeat ourselves).",
   "When the alpha ends, we will attempt to transition comments, but do not promise to do so. Any transition will likely involve publishing previous comments under a single archive handle.": "When the alpha ends, we will attempt to transition comments, but do not promise to do so. Any transition will likely involve publishing previous comments under a single archive handle.",
   "Upgrade is ready to install": "Upgrade is ready to install",
-  "Upgrade is ready": "Upgrade is ready"
+  "Upgrade is ready": "Upgrade is ready",
+  "Abandon the claim for this URI": "Abandon the claim for this URI"
 }
