@@ -17,8 +17,8 @@ class ModalAutoUpdateConfirm extends React.PureComponent<Props> {
       <Modal
         isOpen
         type="confirm"
-        contentLabel={__('Update Downloaded')}
-        title={__('LBRY Update Ready')}
+        contentLabel={__('Upgrade Downloaded')}
+        title={__('LBRY Upgrade Ready')}
         confirmButtonLabel={__('Upgrade')}
         abortButtonLabel={__('Not now')}
         onConfirmed={() => {
@@ -30,7 +30,7 @@ class ModalAutoUpdateConfirm extends React.PureComponent<Props> {
         }}
       >
         <section className="card__content">
-          <p>{__('Your LBRY update is ready. Restart LBRY now to use it!')}</p>
+          <p>{__('Your LBRY upgrade is ready. Restart LBRY now to use it!')}</p>
           <p className="help">
             {__('Want to know what has changed?')} See the{' '}
             <Button button="link" label={__('release notes')} href="https://github.com/lbryio/lbry-desktop/releases" />.

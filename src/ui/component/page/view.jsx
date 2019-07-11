@@ -21,7 +21,7 @@ function Page(props: Props) {
       {/* @if TARGET='app' */}
       {showUpgradeButton && (
         <div className="main__status">
-          {__('Update ready to install')}
+          {__('Upgrade is ready')}
           <Button button="alt" icon={ICONS.DOWNLOAD} label={__('Install now')} onClick={doDownloadUpgradeRequested} />
         </div>
       )}
