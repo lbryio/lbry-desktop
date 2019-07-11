@@ -56,9 +56,16 @@ function ClaimPreview(props: Props) {
   } = props;
   const haventFetched = claim === undefined;
   const abandoned = !isResolvingUri && !claim && !placeholder;
-  const { isChannel } = parseURI(uri);
   const claimsInChannel = (claim && claim.meta.claims_in_channel) || 0;
+  let isValid;
+  try {
+    parseURI(uri);
+    isValid = true;
+  } catch (e) {
+    isValid = false;
+  }
 
+  const isChannel = isValid ? parseURI(uri).isChannel : false;
   let shouldHide = abandoned || (!claimIsMine && obscureNsfw && nsfw);
 
   // This will be replaced once blocking is done at the wallet server level
@@ -87,7 +94,7 @@ function ClaimPreview(props: Props) {
   }
 
   useEffect(() => {
-    if (!isResolvingUri && haventFetched && uri) {
+    if (isValid && !isResolvingUri && haventFetched && uri) {
       resolveUri(uri);
     }
   }, [isResolvingUri, uri, resolveUri, haventFetched]);
@@ -115,7 +122,7 @@ function ClaimPreview(props: Props) {
       onContextMenu={handleContextMenu}
       className={classnames('claim-preview', {
         'claim-preview--large': type === 'large',
-        'claim-preview--visited': hasVisitedUri,
+        'claim-preview--visited': !isChannel && hasVisitedUri,
         'claim-preview--pending': pending,
       })}
     >
