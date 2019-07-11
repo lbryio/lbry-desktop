@@ -541,5 +541,8 @@
   "When the alpha ends, we will attempt to transition comments, but do not promise to do so. Any transition will likely involve publishing previous comments under a single archive handle.": "When the alpha ends, we will attempt to transition comments, but do not promise to do so. Any transition will likely involve publishing previous comments under a single archive handle.",
   "Upgrade is ready to install": "Upgrade is ready to install",
   "Upgrade is ready": "Upgrade is ready",
-  "Abandon the claim for this URI": "Abandon the claim for this URI"
+  "Abandon the claim for this URI": "Abandon the claim for this URI",
+  "View Tag": "View Tag",
+  "Invalid claim ID %s.": "Invalid claim ID %s.",
+  "Invalid character %s in name: %s.": "Invalid character %s in name: %s."
 }
