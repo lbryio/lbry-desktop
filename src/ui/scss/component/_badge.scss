@@ -14,7 +14,7 @@
 
   [data-mode='dark'] & {
     color: var(--dm-color-01);
-    background-color: rgba($lbry-teal-5, 0.3);
+    background-color: lighten(mix($lbry-black, $lbry-teal-5, 80%), 10%);
   }
 }
 
@@ -33,6 +33,6 @@
   }
 
   [data-mode='dark'] & {
-    background-color: rgba($lbry-grape-1, 0.3);
+    background-color: darken(mix($lbry-grape-1, $lbry-gray-5, 50%), 20%);
   }
 }
