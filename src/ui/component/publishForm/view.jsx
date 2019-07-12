@@ -170,7 +170,7 @@ function PublishForm(props: Props) {
           <div className="card__actions">
             <Button
               button="primary"
-              onClick={() => publish(success, fail)}
+              onClick={publish}
               label={submitLabel}
               disabled={formDisabled || !formValid || uploadThumbnailStatus === THUMBNAIL_STATUSES.IN_PROGRESS}
             />
