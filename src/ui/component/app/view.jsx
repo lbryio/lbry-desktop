@@ -1,5 +1,6 @@
 // @flow
 import React from 'react';
+import analytics from 'analytics';
 import Router from 'component/router/index';
 import ModalRouter from 'modal/modalRouter';
 import ReactModal from 'react-modal';
@@ -48,8 +49,12 @@ class App extends React.PureComponent<Props> {
   }
 
   componentDidUpdate(prevProps: Props) {
-    const { theme: prevTheme } = prevProps;
-    const { theme } = this.props;
+    const { theme: prevTheme, user: prevUser } = prevProps;
+    const { theme, user } = this.props;
+
+    if (!prevUser && user) {
+      analytics.setUser(user.id);
+    }
 
     if (prevTheme !== theme) {
       // $FlowFixMe

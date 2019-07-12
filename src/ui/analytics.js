@@ -21,12 +21,16 @@ const analytics: Analytics = {
       ReactGA.pageview(path);
     }
   },
-  setUser: user => {
+  setUser: userId => {
     // Commented out because currently there is some delay before we know the user
     // We should retrieve this server side so we have it immediately
-    // if (analyticsEnabled && user.id) {
-    //   ReactGA.set('userId', user.id);
-    // }
+    if (analyticsEnabled && userId) {
+      ReactGA.event({
+        category: 'user',
+        action: 'userId',
+        value: userId,
+      });
+    }
   },
   toggle: (enabled: boolean): void => {
     // Always collect analytics on lbry.tv
