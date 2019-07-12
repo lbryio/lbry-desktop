@@ -23,7 +23,7 @@ type Props = {
   costInfo: ?{},
   restartDownload: (string, number) => void,
   openModal: (id: string, { path: string }) => void,
-  purchaseUri: string => void,
+  purchaseUri: (string, boolean) => void,
   pause: () => void,
 };
 
@@ -42,8 +42,6 @@ class FileDownloadLink extends React.PureComponent<Props> {
     }
   }
 
-  uri: ?string;
-
   render() {
     const {
       fileInfo,
@@ -59,8 +57,12 @@ class FileDownloadLink extends React.PureComponent<Props> {
     } = this.props;
 
     if (loading || downloading) {
-      const progress = fileInfo && fileInfo.written_bytes ? (fileInfo.written_bytes / fileInfo.total_bytes) * 100 : 0;
-      const label = fileInfo ? __('Downloading: ') + progress.toFixed(0) + __('% complete') : __('Connecting...');
+      const progress =
+        fileInfo && fileInfo.written_bytes > 0 ? (fileInfo.written_bytes / fileInfo.total_bytes) * 100 : 0;
+      const label =
+        fileInfo && fileInfo.written_bytes > 0
+          ? __('Downloading: ') + progress.toFixed(0) + __('% complete')
+          : __('Connecting...');
 
       return <span className="file-download">{label}</span>;
     } else if ((fileInfo === null && !downloading) || (fileInfo && !fileInfo.download_path)) {
@@ -69,18 +71,19 @@ class FileDownloadLink extends React.PureComponent<Props> {
       }
 
       return (
-        <ToolTip label={__('Add to your library')}>
+        <ToolTip label={__('Save file to your library')}>
           <Button
             button="link"
             icon={ICONS.DOWNLOAD}
             onClick={() => {
-              purchaseUri(uri);
-
-              const { name, claim_id: claimId, nout, txid } = claim;
-              // // ideally outpoint would exist inside of claim information
-              // // we can use it after https://github.com/lbryio/lbry/issues/1306 is addressed
-              const outpoint = `${txid}:${nout}`;
-              analytics.apiLogView(`${name}#${claimId}`, outpoint, claimId);
+              if (!fileInfo) {
+                const { name, claim_id: claimId, nout, txid } = claim;
+                // // ideally outpoint would exist inside of claim information
+                // // we can use it after https://github.com/lbryio/lbry/issues/1306 is addressed
+                const outpoint = `${txid}:${nout}`;
+                analytics.apiLogView(`${name}#${claimId}`, outpoint, claimId);
+              }
+              purchaseUri(uri, true);
             }}
           />
         </ToolTip>

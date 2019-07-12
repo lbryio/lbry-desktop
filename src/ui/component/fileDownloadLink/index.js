@@ -23,7 +23,7 @@ const select = (state, props) => ({
 
 const perform = dispatch => ({
   openModal: (modal, props) => dispatch(doOpenModal(modal, props)),
-  purchaseUri: uri => dispatch(doPurchaseUri(uri)),
+  purchaseUri: (uri, saveFile) => dispatch(doPurchaseUri(uri, saveFile)),
   restartDownload: (uri, outpoint) => dispatch(doStartDownload(uri, outpoint)),
   pause: () => dispatch(doSetPlayingUri(null)),
 });

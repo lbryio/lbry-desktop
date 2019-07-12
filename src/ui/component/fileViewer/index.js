@@ -40,7 +40,7 @@ const select = (state, props) => ({
 });
 
 const perform = dispatch => ({
-  play: uri => dispatch(doPlayUri(uri)),
+  play: (uri, saveFile) => dispatch(doPlayUri(uri, saveFile)),
   cancelPlay: () => dispatch(doSetPlayingUri(null)),
   changeVolume: volume => dispatch(doChangeVolume(volume)),
   claimRewards: () => dispatch(doClaimEligiblePurchaseRewards()),

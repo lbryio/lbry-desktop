@@ -19,14 +19,7 @@ const SPACE_BAR_KEYCODE = 32;
 
 type Props = {
   cancelPlay: () => void,
-  fileInfo: {
-    outpoint: string,
-    file_name: string,
-    written_bytes: number,
-    download_path: string,
-    completed: boolean,
-    blobs_completed: number,
-  },
+  fileInfo: FileListItem,
   fileInfoErrors: ?{
     [string]: boolean,
   },
@@ -72,7 +65,7 @@ class FileViewer extends React.PureComponent<Props> {
 
   componentDidMount() {
     const { fileInfo } = this.props;
-    if (!fileInfo) {
+    if (!fileInfo || (fileInfo && (fileInfo.written_bytes === 0 || fileInfo.blobs_completed < 1))) {
       this.onFileStartCb = this.logTimeToStart;
     }
 
@@ -144,7 +137,12 @@ class FileViewer extends React.PureComponent<Props> {
 
     if (playable && costInfo && costInfo.cost === 0 && !fileInfo && !isDownloading) {
       this.playContent();
-    } else if (playable && fileInfo && fileInfo.download_path && fileInfo.written_bytes > 0) {
+    } else if (
+      playable &&
+      fileInfo &&
+      ((fileInfo.download_path && fileInfo.written_bytes > 0) ||
+        (fileInfo.blobs_completed === 0 && fileInfo.status === 'running'))
+    ) {
       this.playContent();
     }
   };
@@ -153,8 +151,13 @@ class FileViewer extends React.PureComponent<Props> {
     return this.props.fileInfo && nextProps.fileInfo && this.props.fileInfo.outpoint === nextProps.fileInfo.outpoint;
   }
 
+  playableType(): boolean {
+    const { mediaType } = this.props;
+    return ['audio', 'video', 'image'].indexOf(mediaType) !== -1;
+  }
+
   playContent() {
-    const { play, uri, fileInfo, isDownloading, isLoading, insufficientCredits } = this.props;
+    const { play, uri, fileInfo, isDownloading, isLoading, insufficientCredits, mediaType } = this.props;
 
     if (!fileInfo && insufficientCredits) {
       return;
@@ -170,8 +173,12 @@ class FileViewer extends React.PureComponent<Props> {
       this.startTime = Date.now();
     }
     // @endif
-
-    play(uri);
+    // Passing true means saving file to disk, required for any non-streamable types
+    if (this.playableType()) {
+      play(uri, false);
+    } else {
+      play(uri, true);
+    }
   }
 
   logTimeToStart() {
@@ -236,7 +243,8 @@ class FileViewer extends React.PureComponent<Props> {
     const isPlaying = playingUri === uri;
     let isReadyToPlay = false;
     // @if TARGET='app'
-    isReadyToPlay = fileInfo && fileInfo.download_path && fileInfo.written_bytes > 0;
+    isReadyToPlay =
+      fileInfo && ((fileInfo.download_path && fileInfo.written_bytes > 0) || fileInfo.status === 'running');
     // @endif
     // @if TARGET='web'
     // try to play immediately on web, we don't need to call file_list since we are streaming from reflector
@@ -246,14 +254,14 @@ class FileViewer extends React.PureComponent<Props> {
     const shouldObscureNsfw = obscureNsfw && nsfw;
     let loadStatusMessage = '';
 
-    if (fileInfo && fileInfo.completed && (!fileInfo.download_path || !fileInfo.written_bytes)) {
+    if (fileInfo && fileInfo.blobs_completed >= 1 && (!fileInfo.download_path || !fileInfo.written_bytes)) {
       loadStatusMessage = __(
         "It looks like you deleted or moved this file. We're rebuilding it now. It will only take a few seconds."
       );
     } else if (isLoading) {
-      loadStatusMessage = __('Requesting stream...');
+      loadStatusMessage = __('Loading stream...');
     } else if (isDownloading) {
-      loadStatusMessage = __('Downloading stream... not long left now!');
+      loadStatusMessage = __('Requesting stream... not long left now!');
     }
 
     const layoverClass = classnames('content__cover', {
@@ -280,14 +288,10 @@ class FileViewer extends React.PureComponent<Props> {
                   mediaType={mediaType}
                   contentType={contentType}
                   downloadCompleted={fileInfo.completed}
-                  changeVolume={changeVolume}
-                  volume={volume}
-                  savePosition={newPosition => savePosition(claim.claim_id, `${claim.txid}:${claim.nout}`, newPosition)}
+                  fileStatus={fileInfo.status}
+                  streamingUrl={fileInfo.streaming_url}
                   claim={claim}
                   uri={uri}
-                  position={position}
-                  onStartCb={this.onFileStartCb}
-                  onFinishCb={this.onFileFinishCb}
                   playingUri={playingUri}
                   viewerContainer={viewerContainer}
                 />

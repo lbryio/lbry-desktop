@@ -54,7 +54,6 @@ function SelectAsset(props: Props) {
     } else {
       return null;
     }
-    // @endif
 
     const uploadError = (error = '') => {
       console.log('error', error);

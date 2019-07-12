@@ -17,6 +17,13 @@ import VideoViewer from 'component/viewers/videoViewer';
 //   'component/viewers/audioViewer')
 // );
 
+const AudioViewer = React.lazy<*>(() =>
+  import(
+    /* webpackChunkName: "audioViewer" */
+    'component/viewers/audioViewer'
+  )
+);
+
 const DocumentViewer = React.lazy<*>(() =>
   import(
     /* webpackChunkName: "documentViewer" */
@@ -63,15 +70,15 @@ const ThreeViewer = React.lazy<*>(() =>
 
 type Props = {
   mediaType: string,
-  poster?: string,
   claim: StreamClaim,
   source: {
     stream: string => void,
-    fileName: string,
     fileType: string,
     contentType: string,
-    downloadPath: string,
+    downloadPath: ?string,
+    downloadCompleted: boolean,
     url: ?string,
+    status: string,
   },
   currentTheme: string,
 };
@@ -141,10 +148,12 @@ class FileRender extends React.PureComponent<Props> {
   }
 
   renderViewer() {
-    const { source, mediaType, currentTheme, poster, claim } = this.props;
+    const { source, mediaType, currentTheme, claim } = this.props;
+
+    const poster = claim.value.thumbnail && claim.value.thumbnail.url;
 
     // Extract relevant data to render file
-    const { stream, fileType, contentType, downloadPath, fileName } = source;
+    const { stream, url, fileType, contentType, downloadPath, downloadCompleted, status } = source;
 
     // Human-readable files (scripts and plain-text files)
     const readableFiles = ['text', 'document', 'script'];
@@ -170,9 +179,20 @@ class FileRender extends React.PureComponent<Props> {
         />
       ),
       video: (
-        <VideoViewer claim={claim} source={{ downloadPath, fileName }} contentType={contentType} poster={poster} />
+        <VideoViewer
+          claim={claim}
+          source={{ stream, url, downloadPath, downloadCompleted, status }}
+          contentType={contentType}
+          poster={poster}
+        />
       ),
-      // audio: <AudioViewer claim={claim} source={{ downloadPath, fileName }} contentType={contentType} />,
+      audio: (
+        <AudioViewer
+          claim={claim}
+          source={{ stream, url, downloadPath, downloadCompleted, status }}
+          contentType={contentType}
+        />
+      ),
       // Add routes to viewer...
     };
 

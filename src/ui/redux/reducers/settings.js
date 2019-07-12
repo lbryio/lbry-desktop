@@ -28,6 +28,7 @@ const defaultState = {
     [SETTINGS.RESULT_COUNT]: Number(getLocalStorageSetting(SETTINGS.RESULT_COUNT, 50)),
     [SETTINGS.AUTO_DOWNLOAD]: getLocalStorageSetting(SETTINGS.AUTO_DOWNLOAD, true),
     [SETTINGS.OS_NOTIFICATIONS_ENABLED]: Boolean(getLocalStorageSetting(SETTINGS.OS_NOTIFICATIONS_ENABLED, true)),
+    [SETTINGS.MAX_CONNECTIONS]: Number(getLocalStorageSetting(SETTINGS.MAX_CONNECTIONS, 4)),
   },
   isNight: false,
   languages: { en: 'English', pl: 'Polish', id: 'Bahasa Indonesia' }, // temporarily hard code these so we can advance i18n testing

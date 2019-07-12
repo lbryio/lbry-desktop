@@ -88,7 +88,7 @@ export function doUpdateLoadStatus(uri: string, outpoint: string) {
           dispatch(doUpdateUnreadSubscriptions(channelUri, null, NOTIFICATION_TYPES.DOWNLOADED));
         } else {
           // If notifications are disabled(false) just return
-          if (!selectosNotificationsEnabled(getState())) return;
+          if (!selectosNotificationsEnabled(getState()) || !fileInfo.written_bytes) return;
 
           const notif = new window.Notification('LBRY Download Complete', {
             body: fileInfo.metadata.title,
@@ -182,7 +182,7 @@ function handleLoadVideoError(uri: string, errorType: string = '') {
       } else {
         dispatch(
           doError(
-            `Failed to download ${uri}, please try again or see error details:\n\n${errorText}\n\nIf this problem persists, visit https://lbry.com/support for help. `
+            `Failed to start ${uri}, please try again or see error details:\n\n${errorText}\n\nIf this problem persists, visit https://lbry.com/support for help. `
           )
         );
       }
@@ -190,7 +190,7 @@ function handleLoadVideoError(uri: string, errorType: string = '') {
   };
 }
 
-export function doLoadVideo(uri: string, shouldRecordViewEvent: boolean = false) {
+export function doLoadVideo(uri: string, shouldRecordViewEvent: boolean = false, saveFile: boolean = false) {
   return (dispatch: Dispatch) => {
     dispatch({
       type: ACTIONS.LOADING_VIDEO_STARTED,
@@ -199,7 +199,7 @@ export function doLoadVideo(uri: string, shouldRecordViewEvent: boolean = false)
       },
     });
 
-    Lbry.get({ uri })
+    Lbry.get({ uri, save_file: saveFile })
       .then(streamInfo => {
         // need error code from SDK to capture properly
         const timeout = streamInfo === null || typeof streamInfo !== 'object' || streamInfo.error === 'Timeout';
@@ -224,7 +224,7 @@ export function doLoadVideo(uri: string, shouldRecordViewEvent: boolean = false)
   };
 }
 
-export function doPurchaseUri(uri: string, specificCostInfo?: ?{}, shouldRecordViewEvent?: boolean = false) {
+export function doPurchaseUri(uri: string, saveFile: boolean = false, specificCostInfo?: ?{}, shouldRecordViewEvent?: boolean = false) {
   return (dispatch: Dispatch, getState: GetState) => {
     const state = getState();
     const balance = selectBalance(state);
@@ -237,17 +237,17 @@ export function doPurchaseUri(uri: string, specificCostInfo?: ?{}, shouldRecordV
       if (cost > 0 && (!instantPurchaseMax || cost > instantPurchaseMax) && !fileInfo) {
         dispatch(doOpenModal(MODALS.AFFIRM_PURCHASE, { uri }));
       } else {
-        dispatch(doLoadVideo(uri, shouldRecordViewEvent));
+        dispatch(doLoadVideo(uri, shouldRecordViewEvent, saveFile));
       }
     }
 
     // we already fully downloaded the file.
-    if (fileInfo && fileInfo.completed) {
+    if (fileInfo && fileInfo.completed && fileInfo.status === 'stopped') {
       // If path is null or bytes written is 0 means the user has deleted/moved the
       // file manually on their file system, so we need to dispatch a
       // doLoadVideo action to reconstruct the file from the blobs
       if (!fileInfo.download_path || !fileInfo.written_bytes) {
-        dispatch(doLoadVideo(uri, shouldRecordViewEvent));
+        dispatch(doLoadVideo(uri, shouldRecordViewEvent, saveFile));
       }
 
       Promise.resolve();
@@ -334,11 +334,11 @@ export function doFetchClaimsByChannel(uri: string, page: number = 1, pageSize: 
   };
 }
 
-export function doPlayUri(uri: string) {
+export function doPlayUri(uri: string, saveFile: boolean) {
   return (dispatch: Dispatch) => {
     dispatch(doSetPlayingUri(uri));
     // @if TARGET='app'
-    dispatch(doPurchaseUri(uri));
+    dispatch(doPurchaseUri(uri, saveFile));
     // @endif
   };
 }

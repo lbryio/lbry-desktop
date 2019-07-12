@@ -214,7 +214,7 @@ class FilePage extends React.Component<Props> {
                   'content__empty--nsfw': shouldObscureThumbnail,
                 })}
               >
-                <div className="card__media-text">{__("Sorry, looks like we can't preview this file.")}</div>
+                <div className="card__media-text">{__("Sorry, looks like we can't preview this file. ")}</div>
               </div>
             ))}
         </div>

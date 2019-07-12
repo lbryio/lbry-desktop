@@ -244,7 +244,7 @@ export const doCheckSubscription = (subscriptionUri: string, shouldNotify?: bool
 
         if (shouldDownload) {
           downloadCount += 1;
-          dispatch(doPurchaseUri(uri, { cost: 0 }, true));
+          dispatch(doPurchaseUri(uri, true, { cost: 0 }, true));
         }
       });
 

@@ -10,8 +10,11 @@ import(
 
 type Props = {
   source: {
+    url: string,
+    stream: string => void,
+    downloadCompleted: string,
     downloadPath: string,
-    fileName: string,
+    status: string,
   },
   contentType: string,
   poster?: string,
@@ -23,14 +26,14 @@ class AudioVideoViewer extends React.PureComponent<Props> {
   player: ?{ dispose: () => void };
 
   componentDidMount() {
-    const { contentType, poster, claim } = this.props;
+    const { contentType, poster, claim, source } = this.props;
     const { name, claim_id: claimId, txid, nout } = claim;
 
     // Quick fix to get file view events on lbry.tv
     // Will need to be changed to include time to start
     analytics.apiLogView(`${name}#${claimId}`, `${txid}:${nout}`, claimId);
 
-    const path = `https://api.lbry.tv/content/claims/${claim.name}/${claim.claim_id}/stream.mp4`;
+    const path = source.downloadCompleted ? source.downloadPath : source.url;
     const sources = [
       {
         src: path,
@@ -44,6 +47,8 @@ class AudioVideoViewer extends React.PureComponent<Props> {
       preload: 'auto',
       poster,
       sources,
+      playbackRates: [0.5, 1, 1.25, 1.5, 2],
+      fluid: true,
     };
 
     import(
