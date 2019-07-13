@@ -80,12 +80,15 @@ $metadata-z-index: 1;
   padding-left: calc(var(--channel-thumbnail-width) + var(--spacing-large));
   // padding-left: var(--spacing-large);
   padding-bottom: var(--spacing-medium);
+  min-width: 0;
 }
 
 .channel__title {
   font-size: 3rem;
   font-weight: 800;
-  margin-right: var(--spacing-large);
+  margin-right: var(--spacing-small);
+  overflow: hidden;
+  text-overflow: ellipsis;
 
   // Quick hack to get this to work
   // We should have a generic style for "header with button next to it"
@@ -98,4 +101,5 @@ $metadata-z-index: 1;
   font-size: 1.2rem;
   margin-top: -0.25rem;
   color: rgba($lbry-white, 0.75);
+  margin-right: var(--spacing-large);
 }
