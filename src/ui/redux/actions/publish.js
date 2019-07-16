@@ -1,13 +1,6 @@
 // @flow
 import * as MODALS from 'constants/modal_types';
-import {
-  batchActions,
-  // selectPendingById,
-  doError,
-  selectMyClaims,
-  doPublish,
-  doCheckPendingPublishes,
-} from 'lbry-redux';
+import { batchActions, doError, selectMyClaims, doPublish, doCheckPendingPublishes } from 'lbry-redux';
 import * as ACTIONS from 'constants/action_types';
 import { selectosNotificationsEnabled } from 'redux/selectors/settings';
 import { push } from 'connected-react-router';
