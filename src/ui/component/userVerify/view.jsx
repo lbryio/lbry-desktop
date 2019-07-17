@@ -30,8 +30,8 @@ class UserVerify extends React.PureComponent<Props> {
           <header className="card__header--flat">
             <h1 className="card__title">{__('Final Human Proof')}</h1>
             <p className="card__subtitle">
-              To be approved for rewards, please complete <strong>one and only one</strong> of the options below. This
-              is optional, and you can be skipped at the bottom.
+              To start the rewards approval process, please complete <strong>one and only one</strong> of the options
+              below. This is optional, and can be skipped at the bottom of the page.
             </p>
           </header>
         </section>
