@@ -35,7 +35,7 @@ class ModalConfirmTransaction extends React.PureComponent<Props> {
           <blockquote>{address}</blockquote>
           <p>{__('Once the transaction is sent, it cannot be reversed.')}</p>
           <div className="card__actions">
-            <Button type="submit" button="primary" label={__('Send')} onClick={() => this.onConfirmed()} />
+            <Button autoFocus button="primary" label={__('Send')} onClick={() => this.onConfirmed()} />
             <Button button="link" label={__('Cancel')} onClick={closeModal} />
           </div>
         </Form>
