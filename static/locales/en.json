@@ -542,7 +542,6 @@
   "Upgrade is ready to install": "Upgrade is ready to install",
   "Upgrade is ready": "Upgrade is ready",
   "Abandon the claim for this URI": "Abandon the claim for this URI",
-<<<<<<< HEAD
   "For video content, use MP4s in H264/AAC format for best compatibility.": "For video content, use MP4s in H264/AAC format for best compatibility.",
   "Read the App Basics FAQ": "Read the App Basics FAQ",
   "View all LBRY FAQs": "View all LBRY FAQs",
@@ -578,23 +577,3 @@
   "These credits are permanently yours and can be removed at any time. Removing this support will reduce the claim's discoverability and return the LBC to your spendable balance.": "These credits are permanently yours and can be removed at any time. Removing this support will reduce the claim's discoverability and return the LBC to your spendable balance.",
   "The better your tags are, the easier it will be for people to discover your channel.": "The better your tags are, the easier it will be for people to discover your channel."
 }
-=======
-  "View Tag": "View Tag",
-  "Invalid claim ID %s.": "Invalid claim ID %s.",
-  "Invalid character %s in name: %s.": "Invalid character %s in name: %s.",
-  "LBRY names cannot contain spaces or reserved symbols ($#@;/\"<>%{}|^~[]`)": "LBRY names cannot contain spaces or reserved symbols ($#@;/\"<>%{}|^~[]`)",
-  "No transactions.": "No transactions.",
-  "Today": "Today",
-  "This": "This",
-  "All time": "All time",
-  "Thumbnail (300 x 300)": "Thumbnail (300 x 300)",
-  "Cover (1000 x 160)": "Cover (1000 x 160)",
-  "No path provided after /": "No path provided after /",
-  "Connection Failure": "Connection Failure",
-  "Try closing all LBRY processes and starting again. If this still happens, your anti-virus software or firewall may be preventing LBRY from connecting. Contact hello@lbry.com if you think this is a software bug.": "Try closing all LBRY processes and starting again. If this still happens, your anti-virus software or firewall may be preventing LBRY from connecting. Contact hello@lbry.com if you think this is a software bug.",
-  "Unable to Authenticate": "Unable to Authenticate",
-  "Authentication Failure": "Authentication Failure",
-  "Reload": "Reload",
-  "If reloading does not fix this, or you see this at every start up, please email help@lbry.com.": "If reloading does not fix this, or you see this at every start up, please email help@lbry.com."
-}
->>>>>>> restore that shit
