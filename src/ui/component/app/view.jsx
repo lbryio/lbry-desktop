@@ -51,7 +51,7 @@ function App(props: Props) {
   }, [userId]);
 
   return (
-    <div className={MAIN_WRAPPER_CLASS} ref={appRef} onContextMenu={e => openContextMenu(e)}>
+    <div className="main-wrapper" ref={appRef} onContextMenu={e => openContextMenu(e)}>
       <Header />
 
       <div className="main-wrapper__inner">
