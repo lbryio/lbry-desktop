@@ -10,10 +10,10 @@ export default function useHover(ref) {
 
     const refElement = ref.current;
     if (refElement) {
-      refElement.addEventListener('mouseover', handleHover);
+      refElement.addEventListener('mouseenter', handleHover);
       refElement.addEventListener('mouseleave', handleHover);
       return () => {
-        refElement.removeEventListener('mouseover', handleHover);
+        refElement.removeEventListener('mouseenter', handleHover);
         refElement.removeEventListener('mouseleave', handleHover);
       };
     }

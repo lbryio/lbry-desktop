@@ -1,9 +1,10 @@
 // @flow
 import * as PAGES from 'constants/pages';
 import * as ICONS from 'constants/icons';
-import * as React from 'react';
+import React from 'react';
 import Button from 'component/button';
 import Tag from 'component/tag';
+import StickyBox from 'react-sticky-box/dist/esnext';
 
 type Props = {
   subscriptions: Array<Subscription>,
@@ -12,21 +13,18 @@ type Props = {
 
 function SideBar(props: Props) {
   const { subscriptions, followedTags } = props;
-  const buildLink = (path, label, icon, guide) => ({
-    navigate: path ? `$/${path}` : '/',
-    label,
-    icon,
-    guide,
-  });
 
-  const renderLink = linkProps => (
-    <li key={linkProps.label}>
-      <Button {...linkProps} className="navigation__link" activeClass="navigation__link--active" />
-    </li>
-  );
+  function buildLink(path, label, icon, guide) {
+    return {
+      navigate: path ? `$/${path}` : '/',
+      label,
+      icon,
+      guide,
+    };
+  }
 
   return (
-    <div className="navigation-wrapper">
+    <StickyBox offsetBottom={40} offsetTop={100}>
       <nav className="navigation">
         <ul className="navigation__links">
           {[
@@ -39,7 +37,14 @@ function SideBar(props: Props) {
             {
               ...buildLink(PAGES.PUBLISHED, __('Publishes'), ICONS.PUBLISH),
             },
-          ].map(renderLink)}
+            {
+              ...buildLink(PAGES.FOLLOWING, __('Customize'), ICONS.EDIT),
+            },
+          ].map(linkProps => (
+            <li key={linkProps.label}>
+              <Button {...linkProps} className="navigation__link" activeClass="navigation__link--active" />
+            </li>
+          ))}
         </ul>
         <ul className="navigation__links tags--vertical">
           {followedTags.map(({ name }, key) => (
@@ -61,7 +66,7 @@ function SideBar(props: Props) {
           ))}
         </ul>
       </nav>
-    </div>
+    </StickyBox>
   );
 }
 
