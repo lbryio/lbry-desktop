@@ -63,7 +63,7 @@ class UriIndicator extends React.PureComponent<Props> {
 
       return (
         <Button className="button--uri-indicator" navigate={channelLink}>
-          <Tooltip label={<ClaimPreview uri={channelLink} type="small" />}>{inner}</Tooltip>
+          <Tooltip label={'test' || <ClaimPreview uri={channelLink} type="small" />}>{inner}</Tooltip>
         </Button>
       );
     } else {
