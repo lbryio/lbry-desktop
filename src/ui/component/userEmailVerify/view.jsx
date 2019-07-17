@@ -1,9 +1,9 @@
 // @flow
 import * as React from 'react';
 import Button from 'component/button';
+import cookie from 'cookie';
 
 type Props = {
-  cancelButton: React.Node,
   email: string,
   resendVerificationEmail: string => void,
   checkEmailVerified: () => void,
@@ -47,7 +47,19 @@ class UserEmailVerify extends React.PureComponent<Props> {
   emailVerifyCheckInterval: ?IntervalID;
 
   render() {
-    const { cancelButton, email } = this.props;
+    const { email } = this.props;
+
+    // Below is duplicated in UserEmail
+    // This should just be a UserEmailResetButton component
+    const buttonProps = IS_WEB
+      ? {
+          onClick: () => {
+            clearInterval(this.emailVerifyCheckInterval);
+            document.cookie = cookie.serialize('auth_token', '');
+            window.location.reload();
+          },
+        }
+      : { href: 'https://lbry.com/faq/how-to-change-email' };
 
     return (
       <React.Fragment>
@@ -67,7 +79,8 @@ class UserEmailVerify extends React.PureComponent<Props> {
               label={__('Resend verification email')}
               onClick={this.handleResendVerificationEmail}
             />
-            {cancelButton}
+
+            <Button button="link" label={__('Reset')} {...buttonProps} />
           </div>
 
           <p className="help">

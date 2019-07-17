@@ -232,7 +232,6 @@ export const doPublish = () => (dispatch: Dispatch, getState: () => {}) => {
     contentIsFree,
     fee,
     uri,
-    nsfw,
     tags,
     locations,
   } = publishData;
@@ -285,17 +284,6 @@ export const doPublish = () => (dispatch: Dispatch, getState: () => {}) => {
 
   if (myClaimForUri && myClaimForUri.value.release_time) {
     publishPayload.release_time = Number(myClaimForUri.value.release_time);
-  }
-
-  if (nsfw) {
-    if (!publishPayload.tags.includes('mature')) {
-      publishPayload.tags.push('mature');
-    }
-  } else {
-    const indexToRemove = publishPayload.tags.indexOf('mature');
-    if (indexToRemove > -1) {
-      publishPayload.tags.splice(indexToRemove, 1);
-    }
   }
 
   if (channelId) {
