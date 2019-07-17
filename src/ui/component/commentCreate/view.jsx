@@ -30,6 +30,7 @@ export function CommentCreate(props: Props) {
   function handleCommentAck(event) {
     setCommentAck(true);
   }
+
   function handleSubmit() {
     if (channel !== CHANNEL_NEW && commentValue.length) createComment(commentValue, claimId, channel);
     setCommentValue('');

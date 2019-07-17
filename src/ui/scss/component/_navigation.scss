@@ -1,13 +1,12 @@
 .navigation-wrapper {
-  width: var(--side-nav-width);
-  left: calc(100% - var(--side-nav-width));
-  height: 100%;
-  position: absolute;
+  // width: var(--side-nav-width);
+  // left: calc(100% - var(--side-nav-width));
+  // height: 100%;
+  // position: absolute;
 }
 
 .navigation {
   width: var(--side-nav-width);
-  padding-bottom: var(--spacing-main-padding);
   font-size: 1.4rem;
 
   @media (max-width: 600px) {

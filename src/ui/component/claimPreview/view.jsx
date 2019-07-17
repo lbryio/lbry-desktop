@@ -100,13 +100,13 @@ function ClaimPreview(props: Props) {
     if (isValid && !isResolvingUri && haventFetched && uri) {
       resolveUri(uri);
     }
-  }, [isResolvingUri, uri, resolveUri, haventFetched]);
+  }, [isValid, isResolvingUri, uri, resolveUri, haventFetched]);
 
   if (shouldHide) {
     return null;
   }
 
-  if (placeholder || isResolvingUri) {
+  if (placeholder || (isResolvingUri && !claim)) {
     return (
       <li className="claim-preview" disabled>
         <div className="placeholder media__thumb" />

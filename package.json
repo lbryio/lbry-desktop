@@ -158,6 +158,7 @@
     "react-router-dom": "^5.0.0",
     "react-simplemde-editor": "^4.0.0",
     "react-spring": "^8.0.20",
+    "react-sticky-box": "^0.8.0",
     "react-toggle": "^4.0.2",
     "redux": "^3.6.0",
     "redux-persist": "^4.8.0",
