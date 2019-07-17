@@ -27,7 +27,6 @@ export function toQueryString(params) {
   return parts.join('&');
 }
 
-// https://stackoverflow.com/questions/5999118/how-can-i-add-or-update-a-query-string-parameter
 export function updateQueryParam(uri, key, value) {
   const re = new RegExp('([?&])' + key + '=.*?(&|$)', 'i');
   const separator = uri.indexOf('?') !== -1 ? '&' : '?';
