@@ -27,7 +27,6 @@ class SocialShare extends React.PureComponent<Props> {
   render() {
     const { claim } = this.props;
     const { short_url: shortUrl } = claim;
-
     const { speechShareable, onDone } = this.props;
 
     const lbryTvPrefix = 'https://beta.lbry.tv/';

@@ -245,7 +245,7 @@ class FilePage extends React.Component<Props> {
                     {!claimIsMine && channelUri && <SubscribeButton uri={channelUri} channelName={channelName} />}
                     <Button
                       button="alt"
-                      icon={claimIsMine ? icons.TRENDING_UP : icons.TIP}
+                      icon={claimIsMine ? icons.SUPPORT : icons.TIP}
                       label={claimIsMine ? __('Add support') : __('Send a tip')}
                       onClick={() => openModal(MODALS.SEND_TIP, { uri, claimIsMine })}
                     />

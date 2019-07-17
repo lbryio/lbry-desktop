@@ -1,5 +1,6 @@
 // @flow
-import * as React from 'react';
+import type { Node } from 'react';
+import React, { useEffect } from 'react';
 import Button from 'component/button';
 import { FormField } from 'component/common/form';
 import UserEmailNew from 'component/userEmailNew';
@@ -7,7 +8,7 @@ import UserEmailVerify from 'component/userEmailVerify';
 import cookie from 'cookie';
 
 type Props = {
-  cancelButton: React.Node,
+  cancelButton: Node,
   email: string,
   resendVerificationEmail: string => void,
   checkEmailVerified: () => void,
@@ -20,13 +21,6 @@ type Props = {
 
 function UserEmail(props: Props) {
   const { email, user, accessToken, fetchAccessToken } = props;
-  let isVerified = false;
-  if (user) {
-    isVerified = user.has_verified_email;
-  }
-
-  if (!accessToken) fetchAccessToken();
-
   const buttonsProps = IS_WEB
     ? {
         onClick: () => {
@@ -35,6 +29,17 @@ function UserEmail(props: Props) {
         },
       }
     : { href: 'https://lbry.com/faq/how-to-change-email' };
+
+  let isVerified = false;
+  if (user) {
+    isVerified = user.has_verified_email;
+  }
+
+  useEffect(() => {
+    if (!accessToken) {
+      fetchAccessToken();
+    }
+  }, [accessToken, fetchAccessToken]);
 
   return (
     <section className="card card--section">
@@ -57,7 +62,7 @@ function UserEmail(props: Props) {
               readOnly
               label={
                 <React.Fragment>
-                  {__('Your Email - ')}{' '}
+                  {__('Your Email')}{' '}
                   <Button
                     button="link"
                     label={__('Update mailing preferences')}
