@@ -186,3 +186,12 @@
   margin-right: auto;
   padding-right: var(--spacing-medium);
 }
+
+.claim-preview-tags {
+  margin-left: 0;
+
+  // change this
+  .tag {
+    max-width: 10rem;
+  }
+}
