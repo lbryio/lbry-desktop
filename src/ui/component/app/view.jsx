@@ -42,14 +42,12 @@ function App(props: Props) {
   }, [theme]);
 
   return (
-    <div ref={appRef} onContextMenu={e => openContextMenu(e)}>
+    <div className="main-wrapper" ref={appRef} onContextMenu={e => openContextMenu(e)}>
       <Header />
 
-      <div className={MAIN_WRAPPER_CLASS}>
-        <div className="main-wrapper-inner">
-          <Router />
-          <SideBar />
-        </div>
+      <div className="main-wrapper__inner">
+        <Router />
+        <SideBar />
       </div>
 
       <ModalRouter />

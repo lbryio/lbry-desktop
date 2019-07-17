@@ -6,6 +6,7 @@ html {
 
   font-size: 12px;
   height: 100%;
+  min-height: 100%;
   overflow-x: hidden;
 
   &[data-mode='dark'] {
@@ -20,7 +21,6 @@ body {
   font-weight: 400;
   height: 100%;
   line-height: 1.5;
-  overflow: hidden;
   background-color: mix($lbry-white, $lbry-gray-1, 70%);
 
   [data-mode='dark'] & {

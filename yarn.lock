@@ -769,6 +769,13 @@
   dependencies:
     regenerator-runtime "^0.13.2"
 
+"@babel/runtime@^7.1.5":
+  version "7.5.4"
+  resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.5.4.tgz#cb7d1ad7c6d65676e66b47186577930465b5271b"
+  integrity sha512-Na84uwyImZZc3FKf4aUF1tysApzwf3p2yuFBIyBfbzT5glzKTdvYI4KVW4kcgjrzoGUjC7w3YyCHcJKaRxsr2Q==
+  dependencies:
+    regenerator-runtime "^0.13.2"
+
 "@babel/runtime@^7.4.3":
   version "7.4.4"
   resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.4.4.tgz#dc2e34982eb236803aa27a07fea6857af1b9171d"
@@ -6646,9 +6653,9 @@ lazy-val@^1.0.3, lazy-val@^1.0.4:
     yargs "^13.2.2"
     zstd-codec "^0.1.1"
 
-lbry-redux@lbryio/lbry-redux#eb3a7afc46ef69678149ad5caff3829473d75b43:
+lbry-redux@lbryio/lbry-redux#6406f184e8c87d79f4adb2b8792ff3643f4527ea:
   version "0.0.1"
-  resolved "https://codeload.github.com/lbryio/lbry-redux/tar.gz/eb3a7afc46ef69678149ad5caff3829473d75b43"
+  resolved "https://codeload.github.com/lbryio/lbry-redux/tar.gz/6406f184e8c87d79f4adb2b8792ff3643f4527ea"
   dependencies:
     proxy-polyfill "0.1.6"
     reselect "^3.0.0"
@@ -9578,6 +9585,15 @@ react-spring@^8.0.20:
     "@babel/runtime" "^7.3.1"
     prop-types "^15.5.8"
 
+react-sticky-box@^0.8.0:
+  version "0.8.0"
+  resolved "https://registry.yarnpkg.com/react-sticky-box/-/react-sticky-box-0.8.0.tgz#1c191936af8f5420087b703ec6da4ef46060076c"
+  integrity sha512-al7fY+VzTKBgVrn14l21jQfhuG582Z6FD8tVbWVQDDqzcjLmUrFb+ljG2phxHhRRazg64L3yH4nOKjn78PZmag==
+  dependencies:
+    "@babel/runtime" "^7.1.5"
+    prop-types "^15.6.2"
+    resize-observer-polyfill "^1.5.1"
+
 react-toggle@^4.0.2:
   version "4.0.2"
   resolved "https://registry.yarnpkg.com/react-toggle/-/react-toggle-4.0.2.tgz#77f487860efb87fafd197672a2db8c885be1440f"
@@ -10031,6 +10047,11 @@ reselect@^3.0.0:
   version "3.0.1"
   resolved "https://registry.yarnpkg.com/reselect/-/reselect-3.0.1.tgz#efdaa98ea7451324d092b2b2163a6a1d7a9a2147"
   integrity sha1-79qpjqdFEyTQkrKyFjpqHXqaIUc=
+
+resize-observer-polyfill@^1.5.1:
+  version "1.5.1"
+  resolved "https://registry.yarnpkg.com/resize-observer-polyfill/-/resize-observer-polyfill-1.5.1.tgz#0e9020dd3d21024458d4ebd27e23e40269810464"
+  integrity sha512-LwZrotdHOo12nQuZlHEmtuXdqGoOD0OhaxopaNFxWzInpEgaLWoVuAMbTzixuosCx2nEG58ngzW3vxdWoxIgdg==
 
 resolve-cwd@^2.0.0:
   version "2.0.0"
