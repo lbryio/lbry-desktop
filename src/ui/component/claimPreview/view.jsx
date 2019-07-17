@@ -33,6 +33,10 @@ type Props = {
     txid: string,
     nout: number,
   }>,
+  filteredOutpoints: Array<{
+    txid: string,
+    nout: number,
+  }>,
 };
 
 function ClaimPreview(props: Props) {
@@ -51,6 +55,7 @@ function ClaimPreview(props: Props) {
     placeholder,
     type,
     blackListedOutpoints,
+    filteredOutpoints,
   } = props;
   const haventFetched = claim === undefined;
   const abandoned = !isResolvingUri && !claim && !placeholder;
@@ -60,14 +65,13 @@ function ClaimPreview(props: Props) {
   let shouldHide = abandoned || (!claimIsMine && obscureNsfw && nsfw);
 
   // This will be replaced once blocking is done at the wallet server level
+
   if (claim && !shouldHide && blackListedOutpoints) {
-    for (let i = 0; i < blackListedOutpoints.length; i += 1) {
-      const outpoint = blackListedOutpoints[i];
-      if (outpoint.txid === claim.txid && outpoint.nout === claim.nout) {
-        shouldHide = true;
-        break;
-      }
-    }
+    shouldHide = blackListedOutpoints.some(outpoint => outpoint.txid === claim.txid && outpoint.nout === claim.nout);
+  }
+
+  if (claim && !shouldHide && filteredOutpoints) {
+    shouldHide = filteredOutpoints.some(outpoint => outpoint.txid === claim.txid && outpoint.nout === claim.nout);
   }
 
   function handleContextMenu(e) {
