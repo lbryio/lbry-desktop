@@ -104,7 +104,10 @@ export const selectTakeOverAmount = createSelector(
       // is needed to win the claim. Currently this is not possible during a takeover.
       // With this, we could say something like, "You have x lbc in support, if you bid y additional LBC you will control the claim"
       // For now just ignore supports. We will just show the winning claim's bid amount
-      return claimForShortUri.meta.effective_amount || claimForShortUri.amount;
+      // If the top claim is your claim, no takeover is necessary so we return 0.
+      return claimForShortUri.claim_id === myClaimForUri.claim_id
+        ? 0
+        : claimForShortUri.meta.effective_amount || claimForShortUri.amount;
     }
 
     return null;

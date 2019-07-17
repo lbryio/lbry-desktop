@@ -35,11 +35,17 @@ class RewardsPage extends PureComponent<Props> {
           !IS_WEB && (
             <section className="card card--section">
               <header className="card__header">
-                <h2 className="card__title">{__('Verification For Rewards')}</h2>
+                <h2 className="card__title">{__('Rewards Approval to Earn Credits (LBC)')}</h2>
                 <p className="card__subtitle">
-                  {__('Rewards are for human beings only.')}{' '}
-                  {__("You'll have to prove you're one of us before you can claim any rewards.")}{' '}
-                  {__('This is optional.')}
+                  {__(
+                    'This step optional. You can continue to use this app without Rewards, but LBC may be needed for some tasks.'
+                  )}{' '}
+                </p>
+                <p className="card__subtitle">
+                  {__(
+                    "Rewards are for human beings only. You'll have to prove you're one of us before you can claim any."
+                  )}{' '}
+                  {<Button button="link" label={__('Learn more')} href="https://lbry.com/faq/rewards" />}
                 </p>
               </header>
 

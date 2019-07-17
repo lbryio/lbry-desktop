@@ -25,36 +25,17 @@ class SocialShare extends React.PureComponent<Props> {
   input: ?HTMLInputElement;
 
   render() {
-    const { claim, isChannel } = this.props;
-    const { claim_id: claimId, name: claimName } = claim;
+    const { claim } = this.props;
+    const { short_url: shortUrl } = claim;
 
     const { speechShareable, onDone } = this.props;
-    const signingChannel = claim.signing_channel;
-    const channelClaimId = signingChannel && signingChannel.claim_id;
-    const channelName = signingChannel && signingChannel.name;
-
-    const getLbryTvUri = (): string => {
-      return `${claimName}/${claimId}`;
-    };
-
-    const getLbryUri = (): string => {
-      if (isChannel) {
-        // For channel claims, the channel name (@something) is in `claim.name`
-        return `${claimName}#${claimId}`;
-      } else {
-        // If it's for a regular claim, check if it has an associated channel
-        return channelName && channelClaimId
-          ? `${channelName}#${channelClaimId}/${claimName}`
-          : `${claimName}#${claimId}`;
-      }
-    };
 
     const lbryTvPrefix = 'https://beta.lbry.tv/';
     const lbryPrefix = 'https://open.lbry.com/';
-    const lbryUri = getLbryUri();
-    const lbryTvUri = getLbryTvUri();
+    const lbryUri = shortUrl.split('lbry://')[1];
+    const lbryTvUri = lbryUri.replace('#', '/');
     const encodedLbryURL: string = `${lbryPrefix}${encodeURIComponent(lbryUri)}`;
-    const lbryURL: string = `${lbryPrefix}${getLbryUri()}`;
+    const lbryURL: string = `${lbryPrefix}${lbryUri}`;
     const encodedLbryTvUrl = `${lbryTvPrefix}${encodeURIComponent(lbryTvUri)}`;
     const lbryTvUrl = `${lbryTvPrefix}${lbryTvUri}`;
 

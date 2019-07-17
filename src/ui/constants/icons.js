@@ -53,6 +53,7 @@ export const SECURE = 'Lock';
 export const MENU = 'Menu';
 export const BACKUP = 'Database';
 export const TRANSACTIONS = 'FileText';
+export const TRENDING_UP = 'TrendingUp';
 export const LBRY = 'Lbry';
 export const SEND = 'Send';
 export const DISCOVER = 'Compass';

@@ -37,6 +37,17 @@ class ModalRevokeClaim extends React.PureComponent<Props> {
           </p>
         </React.Fragment>
       );
+    } else if (type === txnTypes.SUPPORT) {
+      return (
+        <React.Fragment>
+          <p>{__('Are you sure you want to remove this support?')}</p>
+          <p>
+            {__(
+              "These credits are permanently yours and can be removed at any time. Removing this support will reduce the claim's discoverability and return the LBC to your spendable balance."
+            )}
+          </p>
+        </React.Fragment>
+      );
     }
     return (
       <React.Fragment>

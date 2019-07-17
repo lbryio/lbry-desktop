@@ -30,14 +30,43 @@ class UserVerify extends React.PureComponent<Props> {
           <header className="card__header--flat">
             <h1 className="card__title">{__('Final Human Proof')}</h1>
             <p className="card__subtitle">
-              Finally, please complete <strong>one and only one</strong> of the options below.
+              To be approved for rewards, please complete <strong>one and only one</strong> of the options below. This
+              is optional, and you can click back or Skip Rewards at the bottom.
             </p>
           </header>
         </section>
 
         <section className="card card--section">
           <header className="card__header">
-            <h2 className="card__title">{__('1) Proof via Credit')}</h2>
+            <h2 className="card__title">{__('1) Proof via Phone')}</h2>
+            <p className="card__subtitle">
+              {`${__(
+                'You will receive an SMS text message confirming that your phone number is correct. Does not work for Canada and possibly other regions'
+              )}`}
+            </p>
+          </header>
+
+          <div className="card__content">
+            <div className="card__actions">
+              <Button
+                onClick={() => {
+                  verifyPhone();
+                }}
+                button="inverse"
+                label={__('Submit Phone Number')}
+              />
+            </div>
+
+            <div className="help">
+              {__('Standard messaging rates apply. LBRY will not text or call you otherwise. Having trouble?')}{' '}
+              <Button button="link" href="https://lbry.com/faq/phone" label={__('Read more.')} />
+            </div>
+          </div>
+        </section>
+
+        <section className="card card--section">
+          <header className="card__header">
+            <h2 className="card__title">{__('2) Proof via Credit')}</h2>
             <p className="card__subtitle">
               {`${__(
                 'If you have a valid credit or debit card, you can use it to instantly prove your humanity.'
@@ -65,32 +94,6 @@ class UserVerify extends React.PureComponent<Props> {
                 href="https://lbry.com/faq/identity-requirements"
                 label={__('Read more about why we do this.')}
               />
-            </div>
-          </div>
-        </section>
-
-        <section className="card card--section">
-          <header className="card__header">
-            <h2 className="card__title">{__('2) Proof via Phone')}</h2>
-            <p className="card__subtitle">
-              {`${__('You will receive an SMS text message confirming that your phone number is correct.')}`}
-            </p>
-          </header>
-
-          <div className="card__content">
-            <div className="card__actions">
-              <Button
-                onClick={() => {
-                  verifyPhone();
-                }}
-                button="inverse"
-                label={__('Submit Phone Number')}
-              />
-            </div>
-
-            <div className="help">
-              {__('Standard messaging rates apply. Having trouble?')}{' '}
-              <Button button="link" href="https://lbry.com/faq/phone" label={__('Read more.')} />
             </div>
           </div>
         </section>

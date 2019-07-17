@@ -130,24 +130,36 @@ class HelpPage extends React.PureComponent<Props, State> {
 
           <div className="card__content">
             <div className="card__actions">
-              <Button href="https://lbry.com/faq" label={__('Read the FAQ')} icon={icons.HELP} button="inverse" />
+              <Button
+                href="https://lbry.com/faq/lbry-basics"
+                label={__('Read the App Basics FAQ')}
+                icon={icons.HELP}
+                button="inverse"
+              />
+              <Button
+                href="https://lbry.com/faq"
+                label={__('See the All LBRY FAQs')}
+                icon={icons.HELP}
+                button="inverse"
+              />
             </div>
           </div>
         </section>
 
         <section className="card card--section">
           <header className="card__header">
-            <h2 className="card__title">{__('Get Live Help')}</h2>
+            <h2 className="card__title">{__('Find Assistance')}</h2>
 
             <p className="card__subtitle">
               {__('Live help is available most hours in the')} <strong>#help</strong>{' '}
-              {__('channel of our Discord chat room.')}
+              {__('channel of our Discord chat room. Or you can always email us at help@lbry.com.')}
             </p>
           </header>
 
           <div className="card__content">
             <div className="card__actions">
               <Button button="inverse" label={__('Join Our Chat')} icon={icons.CHAT} href="https://chat.lbry.com" />
+              <Button button="inverse" label={__('Email Us')} icon={icons.WEB} href="mailto:help@lbry.com" />
             </div>
           </div>
         </section>
