@@ -136,12 +136,7 @@ class HelpPage extends React.PureComponent<Props, State> {
                 icon={icons.HELP}
                 button="inverse"
               />
-              <Button
-                href="https://lbry.com/faq"
-                label={__('See the All LBRY FAQs')}
-                icon={icons.HELP}
-                button="inverse"
-              />
+              <Button href="https://lbry.com/faq" label={__('View all LBRY FAQs')} icon={icons.HELP} button="inverse" />
             </div>
           </div>
         </section>
