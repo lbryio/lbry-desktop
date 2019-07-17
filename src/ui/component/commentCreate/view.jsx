@@ -51,6 +51,11 @@ export function CommentCreate(props: Props) {
             </li>
             <li>
               {__(
+                'For the initial release, deleting or editing comments is not possible. Please be mindful of this when posting.'
+              )}
+            </li>
+            <li>
+              {__(
                 'When the alpha ends, we will attempt to transition comments, but do not promise to do so. Any transition will likely involve publishing previous comments under a single archive handle.'
               )}
             </li>

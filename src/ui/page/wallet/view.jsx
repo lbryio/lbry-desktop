@@ -11,9 +11,9 @@ const WalletPage = () => (
     <UnsupportedOnWeb />
     <div className={IS_WEB && 'card--disabled'}>
       <WalletBalance />
-      <TransactionListRecent />
       <WalletSend />
       <WalletAddress />
+      <TransactionListRecent />
     </div>
   </Page>
 );

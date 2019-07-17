@@ -253,4 +253,10 @@ export const icons = {
       <path d="M7 11V7a5 5 0 0 1 9.9-1" />
     </g>
   ),
+  [ICONS.SUPPORT]: buildIcon(
+    <g>
+      <polyline points="23 6 13.5 15.5 8.5 10.5 1 18" />
+      <polyline points="17 6 23 6 23 12" />
+    </g>
+  ),
 };

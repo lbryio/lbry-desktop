@@ -313,7 +313,12 @@ class SettingsPage extends React.PureComponent<Props, State> {
                   name="share_usage_data"
                   onChange={() => setDaemonSetting('share_usage_data', !daemonSettings.share_usage_data)}
                   checked={daemonSettings.share_usage_data}
-                  label={__('Help make LBRY better by contributing analytics and diagnostic data about my usage.')}
+                  label={
+                    <React.Fragment>
+                      {__('Help make LBRY better by contributing analytics and diagnostic data about my usage.')}{' '}
+                      <Button button="link" label={__('Learn more')} href="https://lbry.com/privacypolicy" />.
+                    </React.Fragment>
+                  }
                   helper={__('You will be ineligible to earn rewards while diagnostics are not being shared.')}
                 />
               </Form>

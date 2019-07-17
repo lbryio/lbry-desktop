@@ -5,6 +5,7 @@ import { FormField, Form } from 'component/common/form';
 
 type Props = {
   uri: string,
+  claimIsMine: boolean,
   title: string,
   claim: StreamClaim,
   isPending: boolean,
@@ -69,7 +70,7 @@ class WalletSendTip extends React.PureComponent<Props, State> {
   }
 
   render() {
-    const { title, isPending, uri, onCancel } = this.props;
+    const { title, isPending, uri, onCancel, claimIsMine } = this.props;
     const { tipAmount, tipError } = this.state;
 
     return (
@@ -98,7 +99,10 @@ class WalletSendTip extends React.PureComponent<Props, State> {
             }
             helper={
               <p>
-                {__(`This will appear as a tip for "${title}".`)}{' '}
+                {claimIsMine
+                  ? __('This will increase your overall bid amount for ')
+                  : __('This will appear as a tip for ')}
+                {`"${title}" which will boost its ability to be discovered while active.`}{' '}
                 <Button label={__('Learn more')} button="link" href="https://lbry.com/faq/tipping" />
               </p>
             }

@@ -3,6 +3,7 @@ import React from 'react';
 import { regexInvalidURI } from 'lbry-redux';
 import classnames from 'classnames';
 import FileSelector from 'component/common/file-selector';
+import Button from 'component/button';
 
 type Props = {
   name: ?string,
@@ -39,6 +40,12 @@ function PublishFile(props: Props) {
 
       <div className="card__content">
         <FileSelector currentPath={filePath} onFileChosen={handleFileChange} />
+        {!isStillEditing && (
+          <p className="help">
+            {__('For video content, use MP4s in H264/AAC format for best compatibility.')}{' '}
+            <Button button="link" label={__('Learn more')} href="https://lbry.com/faq/how-to-publish" />.
+          </p>
+        )}
         {!!isStillEditing && name && (
           <p className="help">
             {/* @i18nfixme */}

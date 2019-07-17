@@ -164,7 +164,7 @@ class FilePage extends React.Component<Props> {
     const showFile = isPlayableType || isPreviewType;
 
     const speechShareable =
-      costInfo && costInfo.cost === 0 && contentType && ['video', 'image'].includes(contentType.split('/')[0]);
+      costInfo && costInfo.cost === 0 && contentType && ['video', 'image', 'audio'].includes(contentType.split('/')[0]);
     // We want to use the short form uri for editing
     // This is what the user is used to seeing, they don't care about the claim id
     // We will select the claim id before they publish
@@ -240,18 +240,17 @@ class FilePage extends React.Component<Props> {
                     }}
                   />
                 )}
-                {!claimIsMine && (
+                {
                   <React.Fragment>
-                    {channelUri && <SubscribeButton uri={channelUri} channelName={channelName} />}
-
+                    {!claimIsMine && channelUri && <SubscribeButton uri={channelUri} channelName={channelName} />}
                     <Button
                       button="alt"
-                      icon={icons.TIP}
-                      label={__('Send a tip')}
-                      onClick={() => openModal(MODALS.SEND_TIP, { uri })}
+                      icon={claimIsMine ? icons.SUPPORT : icons.TIP}
+                      label={claimIsMine ? __('Add support') : __('Send a tip')}
+                      onClick={() => openModal(MODALS.SEND_TIP, { uri, claimIsMine })}
                     />
                   </React.Fragment>
-                )}
+                }
                 <Button
                   button="alt"
                   icon={icons.SHARE}

@@ -71,9 +71,7 @@ class WalletAddress extends React.PureComponent<Props, State> {
           </div>
 
           <p className="help">
-            {__(
-              'You can generate a new address at any time, and any previous addresses will continue to work. Using multiple addresses can be helpful for keeping track of incoming payments from multiple sources.'
-            )}
+            {__('You can generate a new address at any time, and any previous addresses will continue to work.')}
           </p>
         </div>
 

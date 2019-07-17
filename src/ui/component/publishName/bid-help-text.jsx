@@ -13,6 +13,8 @@ function BidHelpText(props: Props) {
   if (uri) {
     if (isResolvingUri) {
       bidHelpText = __('Checking the winning claim amount...');
+    } else if (amountNeededForTakeover === 0) {
+      bidHelpText = __('You currently have the highest bid for this name.');
     } else if (!amountNeededForTakeover) {
       bidHelpText = __('Any amount will give you the winning bid.');
     } else {

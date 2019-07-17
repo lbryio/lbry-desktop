@@ -57,7 +57,7 @@ function ClaimListDiscover(props: Props) {
       channel_ids?: Array<string>,
       release_time?: string,
       not_tags?: Array<string>,
-    } = { page_size: PAGE_SIZE, page };
+    } = { page_size: PAGE_SIZE, page, no_totals: true };
     const newTags = tagsString.split(',');
     const newChannelIds = channelsIdString.split(',');
 

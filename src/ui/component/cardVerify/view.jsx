@@ -98,7 +98,7 @@ class CardVerify extends React.Component<Props, State> {
 
   componentWillUnmount() {
     if (this.loadPromise) {
-      this.loadPromise.cancel();
+      this.loadPromise.reject();
     }
     if (CardVerify.stripeHandler && this.state.open) {
       CardVerify.stripeHandler.close();
