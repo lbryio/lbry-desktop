@@ -12,6 +12,9 @@
       border-color: rgba($lbry-gray-5, 0.2);
     }
   }
+  display: flex;
+  flex-direction: column;
+  padding: 0;
 }
 
 // .comment__actions-wrap {
@@ -52,4 +55,26 @@
   time {
     opacity: 0.3;
   }
+  text-overflow: ellipsis;
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+
+.comment__message {
+  white-space: pre-line;
+  margin-bottom: 1rem;
+}
+
+.comment__author {
+  margin-bottom: 1rem;
+  text-overflow: ellipsis; // This is where the magic happens
+  flex-basis: 400px;
+  flex-shrink: 1;
+  font-weight: 600;
+}
+
+.comment__time {
+  flex-basis: 200px;
+  text-align: right;
 }
