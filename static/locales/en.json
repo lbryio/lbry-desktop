@@ -582,5 +582,10 @@
   "URI does not include name.": "URI does not include name.",
   "View Tag": "View Tag",
   "Reset": "Reset",
-  "Mature": "Mature"
+  "Mature": "Mature",
+  "Unlock Wallet": "Unlock Wallet",
+  "Unlock": "Unlock",
+  "Exit": "Exit",
+  "Your wallet has been encrypted with a local password. Please enter your wallet password to proceed.": "Your wallet has been encrypted with a local password. Please enter your wallet password to proceed.",
+  "Wallet Password": "Wallet Password"
 }
