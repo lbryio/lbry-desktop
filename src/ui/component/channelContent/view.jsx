@@ -38,7 +38,7 @@ function ChannelContent(props: Props) {
       {hasContent && <ClaimList header={false} uris={claimsInChannel.map(claim => claim.permanent_url)} />}
 
       <Paginate
-        onPageChange={page => console.log('fetch') || fetchClaims(uri, page)}
+        onPageChange={page => fetchClaims(uri, page)}
         totalPages={totalPages}
         loading={fetching && !hasContent}
       />
