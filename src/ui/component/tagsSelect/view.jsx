@@ -8,14 +8,14 @@ import usePersistedState from 'util/use-persisted-state';
 import { useTransition, animated } from 'react-spring';
 
 type Props = {
-  showClose: boolean,
+  showClose?: boolean,
   followedTags: Array<Tag>,
-  doToggleTagFollow: string => void,
+  doToggleTagFollow?: string => void,
   suggestMature: boolean,
 
   // Ovverides
   // The default component is for following tags
-  title?: string,
+  title?: string | boolean,
   help?: string,
   empty?: string,
   tagsChosen?: Array<Tag>,
@@ -33,7 +33,7 @@ export default function TagSelect(props: Props) {
   const {
     showClose,
     followedTags,
-    doToggleTagFollow,
+    doToggleTagFollow = null,
     title,
     help,
     empty,
@@ -54,7 +54,7 @@ export default function TagSelect(props: Props) {
   function handleTagClick(tag) {
     if (onRemove) {
       onRemove(tag);
-    } else {
+    } else if (doToggleTagFollow) {
       doToggleTagFollow(tag.name);
     }
   }

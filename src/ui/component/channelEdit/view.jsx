@@ -5,6 +5,7 @@ import { Form, FormField } from 'component/common/form';
 import Button from 'component/button';
 
 import SelectAsset from '../selectAsset/view';
+import TagSelect from '../tagsSelect/view';
 
 type Props = {
   uri: string,
@@ -59,7 +60,11 @@ function ChannelForm(props: Props) {
     locations: locations || [],
     title: title,
     thumbnail: thumbnail,
-    tags: tags || [],
+    tags: tags
+      ? tags.map(tag => {
+          return { name: tag };
+        })
+      : [],
     claim_id: claimId,
     amount: amount,
   };
@@ -176,6 +181,25 @@ function ChannelForm(props: Props) {
             value={params.description}
             disabled={false}
             onChange={text => setParams({ ...params, description: text })}
+          />
+          <TagSelect
+            title={false}
+            suggestMature
+            help={__('The better your tags are, the easier it will be for people to discover your content.')}
+            empty={__('No tags added')}
+            onSelect={newTag => {
+              if (!params.tags.map(savedTag => savedTag.name).includes(newTag.name)) {
+                setParams({ ...params, tags: [...params.tags, newTag] });
+              } else {
+                // If it already exists and the user types it in, remove it
+                setParams({ ...params, tags: params.tags.filter(tag => tag.name !== newTag.name) });
+              }
+            }}
+            onRemove={clickedTag => {
+              const newTags = params.tags.slice().filter(tag => tag.name !== clickedTag.name);
+              setParams({ ...params, tags: newTags });
+            }}
+            tagsChosen={params.tags || []}
           />
           <div className={'card__actions'}>
             <Button
