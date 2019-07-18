@@ -52,8 +52,6 @@ export default class SplashScreen extends React.PureComponent<Props, State> {
   }
 
   componentDidMount() {
-    this.props.onReadyToLaunch();
-
     const { checkDaemonVersion } = this.props;
     this.adjustErrorTimeout();
     Lbry.connect()
@@ -223,11 +221,11 @@ export default class SplashScreen extends React.PureComponent<Props, State> {
             :container {
               perspective: 30vmin;
             }
-          
+
             @place-cell: center;
             @size: 100%;
-          
-            box-shadow: @m2(0 0 50px var(--color));            
+
+            box-shadow: @m2(0 0 50px var(--color));
             will-change: transform, opacity;
             animation: scale-up 12s linear infinite;
             animation-delay: calc(-12s / @size() * @i());
@@ -237,11 +235,11 @@ export default class SplashScreen extends React.PureComponent<Props, State> {
                 transform: translateZ(0) rotate(0);
                 opacity: 0;
               }
-              10% { 
-                opacity: 1; 
+              10% {
+                opacity: 1;
               }
               95% {
-                transform: 
+                transform:
                   translateZ(35vmin) rotateZ(@var(--deg));
               }
             }

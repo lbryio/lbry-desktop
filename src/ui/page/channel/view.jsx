@@ -60,7 +60,6 @@ function ChannelPage(props: Props) {
 
   return (
     <Page>
-      {window.location.href}
       <div className="card">
         <header className="channel-cover">
           {!editing && cover && <img className="channel-cover__custom" src={cover} />}
