@@ -5,7 +5,7 @@ import Button from 'component/button';
 import { FormField } from 'component/common/form';
 import UserEmailNew from 'component/userEmailNew';
 import UserEmailVerify from 'component/userEmailVerify';
-import cookie from 'cookie';
+import UserEmailResetButton from 'component/userEmailResetButton';
 
 type Props = {
   cancelButton: Node,
@@ -21,14 +21,6 @@ type Props = {
 
 function UserEmail(props: Props) {
   const { email, user, accessToken, fetchAccessToken } = props;
-  const buttonsProps = IS_WEB
-    ? {
-        onClick: () => {
-          document.cookie = cookie.serialize('auth_token', '');
-          window.location.reload();
-        },
-      }
-    : { href: 'https://lbry.com/faq/how-to-change-email' };
 
   let isVerified = false;
   if (user) {
@@ -71,7 +63,7 @@ function UserEmail(props: Props) {
                 </React.Fragment>
               }
               value={email}
-              inputButton={<Button button="inverse" label={__('Change')} {...buttonsProps} />}
+              inputButton={<UserEmailResetButton button="inverse" />}
             />
           )}
           <p className="help">
