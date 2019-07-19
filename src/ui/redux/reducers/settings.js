@@ -24,6 +24,7 @@ const defaultState = {
     [SETTINGS.THEME]: getLocalStorageSetting(SETTINGS.THEME, 'light'),
     [SETTINGS.THEMES]: getLocalStorageSetting(SETTINGS.THEMES, []),
     [SETTINGS.AUTOMATIC_DARK_MODE_ENABLED]: getLocalStorageSetting(SETTINGS.AUTOMATIC_DARK_MODE_ENABLED, false),
+    [SETTINGS.SUPPORT_OPTION]: getLocalStorageSetting(SETTINGS.SUPPORT_OPTION, false),
     [SETTINGS.AUTOPLAY]: getLocalStorageSetting(SETTINGS.AUTOPLAY, false),
     [SETTINGS.RESULT_COUNT]: Number(getLocalStorageSetting(SETTINGS.RESULT_COUNT, 50)),
     [SETTINGS.AUTO_DOWNLOAD]: getLocalStorageSetting(SETTINGS.AUTO_DOWNLOAD, true),

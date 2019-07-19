@@ -16,3 +16,4 @@ export const AUTOPLAY = 'autoplay';
 export const RESULT_COUNT = 'resultCount';
 export const OS_NOTIFICATIONS_ENABLED = 'osNotificationsEnabled';
 export const AUTO_DOWNLOAD = 'autoDownload';
+export const SUPPORT_OPTION = 'supportOption';

@@ -41,13 +41,14 @@ type Props = {
   channelUri: string,
   viewCount: number,
   prepareEdit: ({}, string, {}) => void,
-  openModal: (id: string, { uri: string }) => void,
+  openModal: (id: string, { uri: string, claimIsMine: boolean, isSupport: boolean }) => void,
   markSubscriptionRead: (string, string) => void,
   fetchViewCount: string => void,
   balance: number,
   title: string,
   thumbnail: ?string,
   nsfw: boolean,
+  supportOption: boolean,
 };
 
 class FilePage extends React.Component<Props> {
@@ -149,6 +150,7 @@ class FilePage extends React.Component<Props> {
       title,
       thumbnail,
       nsfw,
+      supportOption,
     } = this.props;
 
     // File info
@@ -246,9 +248,17 @@ class FilePage extends React.Component<Props> {
                     <Button
                       button="alt"
                       icon={claimIsMine ? icons.SUPPORT : icons.TIP}
-                      label={claimIsMine ? __('Add support') : __('Send a tip')}
-                      onClick={() => openModal(MODALS.SEND_TIP, { uri, claimIsMine })}
+                      label={claimIsMine ? __('Support') : __('Tip')}
+                      onClick={() => openModal(MODALS.SEND_TIP, { uri, claimIsMine, isSupport: false })}
                     />
+                    {!claimIsMine && supportOption && (
+                      <Button
+                        button="alt"
+                        icon={icons.SUPPORT}
+                        label={__('Support')}
+                        onClick={() => openModal(MODALS.SEND_TIP, { uri, claimIsMine, isSupport: true })}
+                      />
+                    )}
                   </React.Fragment>
                 }
                 <Button

@@ -8,11 +8,12 @@ type Props = {
   closeModal: () => void,
   uri: string,
   claimIsMine: boolean,
+  isSupport: boolean,
 };
 
 class ModalSendTip extends React.PureComponent<Props> {
   render() {
-    const { closeModal, uri, claimIsMine } = this.props;
+    const { closeModal, uri, claimIsMine, isSupport } = this.props;
 
     return (
       <Modal
@@ -25,7 +26,13 @@ class ModalSendTip extends React.PureComponent<Props> {
           </React.Fragment>
         }
       >
-        <SendTip uri={uri} claimIsMine={claimIsMine} onCancel={closeModal} sendTipCallback={closeModal} />
+        <SendTip
+          uri={uri}
+          claimIsMine={claimIsMine}
+          isSupport={isSupport}
+          onCancel={closeModal}
+          sendTipCallback={closeModal}
+        />
       </Modal>
     );
   }

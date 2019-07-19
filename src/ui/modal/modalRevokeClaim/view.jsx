@@ -21,6 +21,8 @@ class ModalRevokeClaim extends React.PureComponent<Props> {
   getButtonLabel(type: string) {
     if (type === txnTypes.TIP) {
       return 'Confirm Tip Unlock';
+    } else if (type === txnTypes.SUPPORT) {
+      return 'Confirm Support Revoke';
     }
     return 'Confirm Claim Revoke';
   }
@@ -75,8 +77,8 @@ class ModalRevokeClaim extends React.PureComponent<Props> {
     return (
       <Modal
         isOpen
-        title={type === txnTypes.TIP ? __('Confirm Tip Unlock') : __('Confirm Claim Revoke')}
-        contentLabel={__('Confirm Claim Revoke')}
+        title={this.getButtonLabel(type)}
+        contentLabel={this.getButtonLabel(type)}
         type="confirm"
         confirmButtonLabel={this.getButtonLabel(type)}
         onConfirmed={this.revokeClaim}
