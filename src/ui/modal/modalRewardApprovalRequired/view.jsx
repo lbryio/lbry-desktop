@@ -22,13 +22,11 @@ class ModalRewardApprovalRequired extends React.PureComponent<Props> {
         confirmButtonLabel={__("I'm Totally Real")}
         abortButtonLabel={__('Never Mind')}
       >
-        <section className="card__content">
-          <p>
-            {__(
-              "Before we can give you any credits, we need to perform a brief check to make sure you're a new and unique person."
-            )}
-          </p>
-        </section>
+        <p>
+          {__(
+            "Before we can give you any credits, we need to perform a brief check to make sure you're a new and unique person."
+          )}
+        </p>
       </Modal>
     );
   }

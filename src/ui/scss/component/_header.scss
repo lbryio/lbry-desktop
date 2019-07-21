@@ -6,8 +6,7 @@
   background-color: $lbry-white;
   border-bottom: 1px solid $lbry-gray-1;
   box-shadow: var(--card-box-shadow) $lbry-gray-1;
-  padding-left: var(--spacing-large);
-  padding-right: var(--spacing-large);
+  font-size: var(--font-body);
 
   [data-mode='dark'] & {
     background-color: var(--dm-color-05);
@@ -22,9 +21,9 @@
 }
 
 .header__contents {
-  width: 100%;
-  height: calc(var(--header-height) - 1px);
   max-width: var(--page-max-width);
+  height: calc(var(--header-height) - 1px);
+  padding: 0 var(--spacing-large);
   display: flex;
   justify-content: space-between;
   margin: auto;
@@ -101,7 +100,6 @@
 .header__navigation-item--lbry {
   flex: 1;
   font-weight: 800;
-  font-size: 1.2rem;
   margin-right: var(--spacing-medium);
 
   .lbry-icon {

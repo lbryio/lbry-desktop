@@ -18,7 +18,7 @@ function PublishFormErrors(props: Props) {
   // These are extra help
   // If there is an error it will be presented as an inline error as well
   return (
-    <div className="card__content error-text">
+    <div className="error-text">
       {!title && <div>{__('A title is required')}</div>}
       {!name && <div>{__('A URL is required')}</div>}
       {!bid && <div>{__('A deposit amount is required')}</div>}

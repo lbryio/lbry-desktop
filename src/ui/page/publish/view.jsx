@@ -51,9 +51,7 @@ function PublishPage(props: Props) {
             }
           />
           <section className="card card--section">
-            <header className="card__header">
-              <h1 className="card__title">{__('LBRY Credits Required')}</h1>
-            </header>
+            <h1 className="card__title">{__('LBRY Credits Required')}</h1>
             <p className="card__subtitle">
               {__(' There are a variety of ways to get credits, including more than')}{' '}
               <CreditAmount inheritStyle amount={totalRewardRounded} />{' '}

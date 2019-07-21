@@ -47,39 +47,20 @@ class WalletAddress extends React.PureComponent<Props, State> {
 
     return (
       <section className="card card--section">
-        <header className="card__header">
-          <h2 className="card__title">{__('Receive Credits')}</h2>
-          <p className="card__subtitle">
-            {__('Use this wallet address to receive credits sent by another user (or yourself).')}
-          </p>
-        </header>
+        <h2 className="card__title">{__('Receive Credits')}</h2>
+        <p className="card__subtitle">
+          {__(
+            'Use this address to receive LBC. You can generate a new address at any time, and any previous addresses will continue to work.'
+          )}
+        </p>
+        <CopyableText label={__('Your Address')} copyable={receiveAddress} snackMessage={__('Address copied.')} />
 
-        <div className="card__content">
-          <CopyableText copyable={receiveAddress} snackMessage={__('Address copied.')} />
+        <div className="card__actions">
+          <Button button="inverse" label={__('Get New Address')} onClick={getNewAddress} disabled={gettingNewAddress} />
+          <Button button="link" label={showQR ? __('Hide QR code') : __('Show QR code')} onClick={this.toggleQR} />
         </div>
 
-        <div className="card__content">
-          <div className="card__actions">
-            <Button
-              button="inverse"
-              label={__('Get New Address')}
-              onClick={getNewAddress}
-              disabled={gettingNewAddress}
-            />
-
-            <Button button="link" label={showQR ? __('Hide QR code') : __('Show QR code')} onClick={this.toggleQR} />
-          </div>
-
-          <p className="help">
-            {__('You can generate a new address at any time, and any previous addresses will continue to work.')}
-          </p>
-        </div>
-
-        {showQR && (
-          <div className="card__content">
-            <QRCode value={receiveAddress} paddingTop />
-          </div>
-        )}
+        {showQR && <QRCode value={receiveAddress} paddingTop />}
       </section>
     );
   }

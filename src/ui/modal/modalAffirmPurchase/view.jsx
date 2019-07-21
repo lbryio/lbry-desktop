@@ -39,15 +39,13 @@ class ModalAffirmPurchase extends React.PureComponent<Props> {
         onConfirmed={this.onAffirmPurchase}
         onAborted={cancelPurchase}
       >
-        <section className="card__content">
-          <p className="card__subtitle">
-            {__('This will purchase')} <strong>{title ? `"${title}"` : uri}</strong> {__('for')}{' '}
-            <strong>
-              <FilePrice uri={uri} showFullPrice inheritStyle showLBC={false} />
-            </strong>{' '}
-            {__('credits')}.
-          </p>
-        </section>
+        <p className="card__subtitle">
+          {__('This will purchase')} <strong>{title ? `"${title}"` : uri}</strong> {__('for')}{' '}
+          <strong>
+            <FilePrice uri={uri} showFullPrice inheritStyle showLBC={false} />
+          </strong>{' '}
+          {__('credits')}.
+        </p>
       </Modal>
     );
   }

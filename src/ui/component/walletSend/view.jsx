@@ -37,10 +37,8 @@ class WalletSend extends React.PureComponent<Props> {
 
     return (
       <section className="card card--section">
-        <header className="card__header">
-          <h2 className="card__title">{__('Send Credits')}</h2>
-          <p className="card__subtitle">{__('Send LBC to your friends or favorite creators')}</p>
-        </header>
+        <h2 className="card__title">{__('Send Credits')}</h2>
+        <p className="card__subtitle">{__('Send LBC to your friends or favorite creators.')}</p>
 
         <Formik
           initialValues={{
@@ -51,35 +49,33 @@ class WalletSend extends React.PureComponent<Props> {
           validate={validateSendTx}
           render={({ values, errors, touched, handleChange, handleBlur, handleSubmit }) => (
             <Form onSubmit={handleSubmit}>
-              <div className="card__content">
-                <fieldset-group class="fieldset-group--smushed">
-                  <FormField
-                    type="number"
-                    name="amount"
-                    label={__('Amount')}
-                    postfix={__('LBC')}
-                    className="form-field--price-amount"
-                    affixClass="form-field--fix-no-height"
-                    min="0"
-                    step="any"
-                    placeholder="12.34"
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                    value={values.amount}
-                  />
+              <fieldset-group class="fieldset-group--smushed">
+                <FormField
+                  type="number"
+                  name="amount"
+                  label={__('Amount')}
+                  postfix={__('LBC')}
+                  className="form-field--price-amount"
+                  affixClass="form-field--fix-no-height"
+                  min="0"
+                  step="any"
+                  placeholder="12.34"
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  value={values.amount}
+                />
 
-                  <FormField
-                    type="text"
-                    name="address"
-                    placeholder="bbFxRyXXXXXXXXXXXZD8nE7XTLUxYnddTs"
-                    className="form-field--address"
-                    label={__('Recipient address')}
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                    value={values.address}
-                  />
-                </fieldset-group>
-              </div>
+                <FormField
+                  type="text"
+                  name="address"
+                  placeholder="bbFxRyXXXXXXXXXXXZD8nE7XTLUxYnddTs"
+                  className="form-field--address"
+                  label={__('Recipient address')}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  value={values.address}
+                />
+              </fieldset-group>
               <div className="card__actions">
                 <Button
                   button="inverse"

@@ -47,64 +47,56 @@ class ReportPage extends React.Component {
     return (
       <Page>
         <section className="card card--section">
-          <header className="card__header">
-            <h2 className="card__title">{__('Report an Issue/Request a Feature')}</h2>
-            <p className="card__subtitle">
-              {__(
-                'Please describe the problem you experienced or the feature you want to see and any information you think might be useful to us. Links to screenshots are great!'
-              )}
-            </p>
-          </header>
+          <h2 className="card__title">{__('Report an Issue/Request a Feature')}</h2>
+          <p className="card__subtitle">
+            {__(
+              'Please describe the problem you experienced or the feature you want to see and any information you think might be useful to us. Links to screenshots are great!'
+            )}
+          </p>
 
-          <div className="card__content">
-            <FormField
-              type="textarea"
-              rows="10"
-              name="message"
-              stretch
-              value={this.state.message}
-              onChange={event => {
-                this.onMessageChange(event);
+          <FormField
+            type="textarea"
+            rows="10"
+            name="message"
+            stretch
+            value={this.state.message}
+            onChange={event => {
+              this.onMessageChange(event);
+            }}
+            placeholder={__('Description of your issue or feature request')}
+          />
+
+          <div className="card__actions">
+            <Button
+              button="primary"
+              onClick={event => {
+                this.submitMessage(event);
               }}
-              placeholder={__('Description of your issue or feature request')}
-            />
-
-            <div className="card__actions">
-              <Button
-                button="primary"
-                onClick={event => {
-                  this.submitMessage(event);
-                }}
-                className={`button-block button-primary ${this.state.submitting ? 'disabled' : ''}`}
-              >
-                {this.state.submitting ? __('Submitting...') : __('Submit Report')}
-              </Button>
-            </div>
+              className={`button-block button-primary ${this.state.submitting ? 'disabled' : ''}`}
+            >
+              {this.state.submitting ? __('Submitting...') : __('Submit Report')}
+            </Button>
           </div>
         </section>
 
         <section className="card card--section">
-          <header className="card__header">
-            <h2 className="card__title">{__('Developer?')}</h2>
-          </header>
+          <h2 className="card__title">{__('Developer?')}</h2>
 
-          <div className="card__content">
-            <p>
-              {__('You can also')}{' '}
-              <Button
-                button="link"
-                href="https://github.com/lbryio/lbry-desktop/issues"
-                label={__('submit an issue on GitHub')}
-              />
-              .
-            </p>
-            <p>
-              {__('Explore our')} <Button button="link" href="https://lbry.tech" label={__('technical resources')} />.
-            </p>
-            <p>
-              {__('Join our')} <Button button="link" href="https://discourse.lbry.com/" label={__('tech forum')} />.
-            </p>
-          </div>
+          <p>
+            {__('You can also')}{' '}
+            <Button
+              button="link"
+              href="https://github.com/lbryio/lbry-desktop/issues"
+              label={__('submit an issue on GitHub')}
+            />
+            .
+          </p>
+          <p>
+            {__('Explore our')} <Button button="link" href="https://lbry.tech" label={__('technical resources')} />.
+          </p>
+          <p>
+            {__('Join our')} <Button button="link" href="https://discourse.lbry.com/" label={__('tech forum')} />.
+          </p>
         </section>
       </Page>
     );

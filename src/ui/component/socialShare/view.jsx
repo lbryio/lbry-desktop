@@ -44,9 +44,8 @@ class SocialShare extends React.PureComponent<Props> {
     return (
       <React.Fragment>
         {speechShareable && (
-          <div className="card__content">
-            <label className="card__subtitle">{__('Web link')}</label>
-            <CopyableText copyable={lbryTvUrl} />
+          <div>
+            <CopyableText label={__('Web link')} copyable={lbryTvUrl} />
             <div className="card__actions card__actions--center">
               <Button
                 icon={ICONS.FACEBOOK}
@@ -64,23 +63,21 @@ class SocialShare extends React.PureComponent<Props> {
             </div>
           </div>
         )}
-        <div className="card__content">
-          <label className="card__subtitle">{__('LBRY App link')}</label>
-          <CopyableText copyable={lbryURL} noSnackbar />
-          <div className="card__actions card__actions--center">
-            <Button
-              icon={ICONS.FACEBOOK}
-              button="link"
-              description={shareOnFb}
-              href={`https://facebook.com/sharer/sharer.php?u=${encodedLbryURL}`}
-            />
-            <Button
-              icon={ICONS.TWITTER}
-              button="link"
-              description={shareOnTwitter}
-              href={`https://twitter.com/home?status=${encodedLbryURL}`}
-            />
-          </div>
+
+        <CopyableText label={__('LBRY App Link')} copyable={lbryURL} noSnackbar />
+        <div className="card__actions card__actions--center">
+          <Button
+            icon={ICONS.FACEBOOK}
+            button="link"
+            description={shareOnFb}
+            href={`https://facebook.com/sharer/sharer.php?u=${encodedLbryURL}`}
+          />
+          <Button
+            icon={ICONS.TWITTER}
+            button="link"
+            description={shareOnTwitter}
+            href={`https://twitter.com/home?status=${encodedLbryURL}`}
+          />
         </div>
         <div className="card__actions">
           <Button button="link" label={__('Done')} onClick={onDone} />

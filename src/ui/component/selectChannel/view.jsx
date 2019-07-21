@@ -1,5 +1,5 @@
 // @flow
-import React from 'react';
+import React, { Fragment } from 'react';
 import { isNameValid } from 'lbry-redux';
 import { FormField } from 'component/common/form';
 import BusyIndicator from 'component/common/busy-indicator';
@@ -151,7 +151,7 @@ class ChannelSection extends React.PureComponent<Props, State> {
     } = this.state;
 
     return (
-      <div className="card__content">
+      <Fragment>
         {createChannelError && <div className="error-text">{createChannelError}</div>}
         {fetchingChannels ? (
           <BusyIndicator message="Updating channels" />
@@ -175,7 +175,7 @@ class ChannelSection extends React.PureComponent<Props, State> {
           </fieldset-section>
         )}
         {addingChannel && (
-          <div className="card__content">
+          <div>
             <FormField
               label={__('Name')}
               name="channel-input"
@@ -211,7 +211,7 @@ class ChannelSection extends React.PureComponent<Props, State> {
             </div>
           </div>
         )}
-      </div>
+      </Fragment>
     );
   }
 }

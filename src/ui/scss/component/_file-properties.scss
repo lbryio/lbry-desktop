@@ -2,6 +2,7 @@
   display: flex;
   position: relative;
   align-items: center;
+  font-size: var(--font-label);
 
   .icon {
     stroke: rgba($lbry-black, 0.5);
@@ -22,8 +23,7 @@
 
 .file-properties--large {
   flex-wrap: wrap;
-  font-size: 18px;
-  margin: var(--spacing-medium) 0;
+  margin-bottom: var(--spacing-large);
 
   & > * {
     margin-top: var(--spacing-small);

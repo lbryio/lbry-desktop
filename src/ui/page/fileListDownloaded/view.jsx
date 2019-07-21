@@ -19,7 +19,7 @@ function FileListDownloaded(props: Props) {
       {hasDownloads ? (
         <div className="card">
           <ClaimList
-            header={<h1>{__('Your Library')}</h1>}
+            header={__('Your Library')}
             defaultSort
             persistedStorageKey="claim-list-downloaded"
             uris={downloadedUris}
@@ -29,14 +29,9 @@ function FileListDownloaded(props: Props) {
       ) : (
         <div className="main--empty">
           <section className="card card--section">
-            <header className="card__header">
-              <h2 className="card__title">{__("You haven't downloaded anything from LBRY yet.")}</h2>
-            </header>
-
-            <div className="card__content">
-              <div className="card__actions card__actions--center">
-                <Button button="primary" navigate="/" label={__('Explore new content')} />
-              </div>
+            <h2 className="card__title">{__("You haven't downloaded anything from LBRY yet.")}</h2>
+            <div className="card__actions card__actions--center">
+              <Button button="primary" navigate="/" label={__('Explore new content')} />
             </div>
           </section>
         </div>

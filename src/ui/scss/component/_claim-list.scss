@@ -3,23 +3,22 @@
   align-items: center;
   min-height: 4.5rem;
   padding: var(--spacing-medium);
-  font-size: 1rem; // Ensures select & header text have same font-size
-  color: $lbry-white;
+  font-size: var(--font-body);
   border-top-left-radius: var(--card-radius);
   border-top-right-radius: var(--card-radius);
+  color: $lbry-white;
 
   & > *:not(:last-child) {
     margin-right: 0.5rem;
   }
 
   fieldset-section {
-    margin-bottom: 0;
+    margin: 0;
   }
 
   // Normal link buttons are too dark on the black file list background
   .button--link {
     color: $lbry-teal-3;
-    font-size: 1.2em;
 
     &:hover {
       color: $lbry-teal-1;
@@ -46,19 +45,13 @@
 .claim-list__header--small {
   height: 3rem;
   min-height: 3rem;
-  font-size: 1em;
 }
 
 .claim-list__dropdown {
-  background-position: 95% center;
-  background-repeat: no-repeat;
-  background-size: 1.2rem;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 96 96' xmlns='http://www.w3.org/2000/svg' fill='%23ffffff'%3E%3Cpath d='M17.172, 31.172c1.562, -1.562 4.095, -1.562 5.656, 0l25.172, 25.171l25.172, -25.171c1.562, -1.562 4.095, -1.562 5.656, 0c1.562, 1.562 1.562, 4.095 0, 5.656l-28, 28c-1.562, 1.562 -4.095, 1.562 -5.656, 0l-28, -28c-0.781, -0.781 -1.172, -1.805 -1.172, -2.828c0, -1.023 0.391, -2.047 1.172, -2.828Z'/%3E%3C/svg%3E%0A");
-  height: 2.5rem;
-  font-size: 1.3rem;
+  margin-bottom: 0;
   padding: 0 var(--spacing-medium);
   padding-right: var(--spacing-large);
-  margin-bottom: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 96 96' xmlns='http://www.w3.org/2000/svg' fill='%23ffffff'%3E%3Cpath d='M17.172, 31.172c1.562, -1.562 4.095, -1.562 5.656, 0l25.172, 25.171l25.172, -25.171c1.562, -1.562 4.095, -1.562 5.656, 0c1.562, 1.562 1.562, 4.095 0, 5.656l-28, 28c-1.562, 1.562 -4.095, 1.562 -5.656, 0l-28, -28c-0.781, -0.781 -1.172, -1.805 -1.172, -2.828c0, -1.023 0.391, -2.047 1.172, -2.828Z'/%3E%3C/svg%3E%0A");
   border: 1px solid $lbry-white;
   color: $lbry-white;
   background-color: lighten($lbry-black, 10%);
@@ -81,7 +74,6 @@
   display: flex;
   align-items: center;
   margin-left: auto;
-  font-size: 1.1em;
 
   & > * {
     margin-left: var(--spacing-small);
@@ -89,25 +81,26 @@
 }
 
 .claim-preview {
-  @include mediaThumbHoverZoom;
   display: flex;
   position: relative;
   overflow: visible;
-  cursor: pointer;
-  font-size: 1.3rem;
   padding: var(--spacing-medium);
+
+  &:not(.claim-preview--inline) {
+    @include mediaThumbHoverZoom;
+    cursor: pointer;
+  }
 
   .media__thumb {
     width: var(--file-list-thumbnail-width);
     flex-shrink: 0;
     margin-right: var(--spacing-medium);
   }
+}
 
-  ul & {
-    &:first-of-type {
-      border-top: none;
-    }
-  }
+.claim-preview--injected {
+  padding: var(--spacing-medium);
+  position: relative;
 }
 
 .claim-preview--injected,
@@ -116,23 +109,45 @@
 
   [data-mode='dark'] & {
     color: $lbry-white;
-    border-top: 1px solid var(--dm-color-04);
-    background-color: var(--dm-color-05);
+    border-color: var(--dm-color-04);
   }
 }
 
 .claim-preview--large {
-  font-size: 1.6rem;
-  border-bottom: 0;
+  border: none;
   padding: 0;
-  margin: var(--spacing-small) 0;
+  margin: var(--spacing-medium);
+  font-size: var(--font-multiplier-large);
 
   &:hover {
     background-color: transparent;
   }
 
   .media__thumb {
-    width: 20rem;
+    width: 14rem;
+  }
+
+  .channel-thumbnail {
+    width: 7.5rem;
+    height: 7.5rem;
+  }
+
+  [data-mode='dark'] & {
+    border: none;
+  }
+}
+
+.claim-preview--small {
+  font-size: var(--font-multiplier-small);
+  padding: var(--spacing-small);
+
+  .media__thumb {
+    width: 8rem;
+  }
+
+  .channel-thumbnail {
+    width: 4rem;
+    height: 4rem;
   }
 }
 
@@ -160,6 +175,25 @@
   }
 }
 
+.claim-preview--inline {
+  padding: 0;
+  padding-top: var(--spacing-large);
+  border-bottom: none;
+  border-top: 1px solid $lbry-gray-1;
+
+  .channel-thumbnail {
+    width: var(--channel-thumbnail-width--small);
+    height: var(--channel-thumbnail-width--small);
+  }
+}
+
+.claim-preview-title {
+  font-weight: 600;
+  margin-right: auto;
+  padding-right: var(--spacing-medium);
+  font-size: larger;
+}
+
 .claim-preview-metadata {
   display: flex;
   flex-direction: column;
@@ -179,10 +213,5 @@
 .claim-preview-properties {
   align-items: flex-end;
   flex: 1;
-}
-
-.claim-preview-title {
-  font-weight: 600;
-  margin-right: auto;
-  padding-right: var(--spacing-medium);
+  font-size: var(--font-subtext);
 }

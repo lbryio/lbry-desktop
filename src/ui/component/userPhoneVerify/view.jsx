@@ -45,14 +45,12 @@ class UserPhoneVerify extends React.PureComponent<Props, State> {
     const { cancelButton, phoneErrorMessage, phone, countryCode } = this.props;
     return (
       <React.Fragment>
-        <section className="card__content">
-          <p>
-            {' '}
-            {__(`Please enter the verification code sent to +${countryCode}${phone}. Didn't receive it? `)}
-            <Button button="link" onClick={this.reset.bind(this)} label="Go back." />
-          </p>
-        </section>
-        <Form className="card__content" onSubmit={this.handleSubmit.bind(this)}>
+        <p>
+          {' '}
+          {__(`Please enter the verification code sent to +${countryCode}${phone}. Didn't receive it? `)}
+          <Button button="link" onClick={this.reset.bind(this)} label="Go back." />
+        </p>
+        <Form onSubmit={this.handleSubmit.bind(this)}>
           <FormField
             type="text"
             name="code"

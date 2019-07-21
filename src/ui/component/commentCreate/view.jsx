@@ -39,7 +39,7 @@ export function CommentCreate(props: Props) {
   return (
     <section>
       {commentAck !== true && (
-        <div className="card__content markdown-preview">
+        <div>
           <p>{__('A few things to know before participating in the comment alpha:')}</p>
           <ul>
             <li>
@@ -66,20 +66,16 @@ export function CommentCreate(props: Props) {
       )}
       {commentAck === true && (
         <Form onSubmit={handleSubmit}>
-          <div className="card__content">
-            <ChannelSection channel={channel} onChannelChange={handleChannelChange} />
-          </div>
-          <div className="card__content">
-            <FormField
-              disabled={channel === CHANNEL_NEW}
-              type="textarea"
-              name="content_description"
-              label={__('Comment')}
-              placeholder={__('Your comment')}
-              value={commentValue}
-              onChange={handleCommentChange}
-            />
-          </div>
+          <ChannelSection channel={channel} onChannelChange={handleChannelChange} />
+          <FormField
+            disabled={channel === CHANNEL_NEW}
+            type="textarea"
+            name="content_description"
+            label={__('Comment')}
+            placeholder={__('Your comment')}
+            value={commentValue}
+            onChange={handleCommentChange}
+          />
           <div className="card__actions">
             <Button
               button="primary"

@@ -5,26 +5,22 @@
   font-weight: 400;
 
   svg {
-    stroke-width: 1.9;
-    position: relative;
-    color: $lbry-gray-5;
-
     // Buttons that don't have a label
     &:only-child {
       color: inherit;
-      width: 1.4rem;
-      height: 1.4rem;
+      width: 1.3rem;
+      height: 1.3rem;
     }
   }
 }
 
 .button--primary {
   &:hover {
-    background-color: $lbry-teal-3;
+    background-color: $lbry-teal-4;
   }
 
   svg {
-    color: white;
+    stroke: $lbry-teal-4;
   }
 }
 
@@ -41,15 +37,15 @@
 .button--primary,
 .button--inverse {
   height: var(--button-height);
-  line-height: var(--button-height);
   border-radius: var(--button-radius);
-  font-size: 1.1rem;
-  padding: 0 var(--spacing-medium);
+  padding-top: 0;
+  padding-bottom: 0;
   box-sizing: border-box;
 }
 
 .button--inverse {
   border-color: $lbry-teal-4;
+  color: $lbry-teal-5;
 
   &:hover {
     color: $lbry-white;
@@ -62,6 +58,12 @@
 
 .button--alt {
   padding: 0;
+}
+
+.button--link {
+  [data-mode='dark'] & {
+    color: $lbry-teal-5;
+  }
 }
 
 .button--uri-indicator {
@@ -100,6 +102,7 @@
   display: flex;
   align-items: center;
   min-width: 0;
+  height: 100%;
 }
 
 .button__label {
@@ -111,5 +114,5 @@
 // Handle icons on the left or right side of the button label
 svg + .button__label,
 .button__label + svg {
-  margin-left: var(--spacing-miniscule);
+  margin-left: var(--spacing-small);
 }

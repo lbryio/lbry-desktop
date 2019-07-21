@@ -28,15 +28,13 @@ class ModalPublishSuccess extends React.PureComponent<Props> {
           closeModal();
         }}
       >
-        <section className="card__content">
-          <p>{__(`Your ${publishMessage} published to LBRY at the address`)}</p>
-          <blockquote>{uri}</blockquote>
-          <p>
-            {__(
-              `The ${publishType} will take a few minutes to appear for other LBRY users. Until then it will be listed as "pending" under your published files.`
-            )}
-          </p>
-        </section>
+        <p>{__(`Your ${publishMessage} published to LBRY at the address`)}</p>
+        <blockquote>{uri}</blockquote>
+        <p>
+          {__(
+            `The ${publishType} will take a few minutes to appear for other LBRY users. Until then it will be listed as "pending" under your published files.`
+          )}
+        </p>
       </Modal>
     );
   }
