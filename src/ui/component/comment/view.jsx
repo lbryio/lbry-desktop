@@ -1,7 +1,7 @@
 // @flow
 import React from 'react';
 import relativeDate from 'tiny-relative-date';
-import Button from '../button';
+import Button from 'component/button';
 
 type Props = {
   author: string,
