@@ -29,13 +29,11 @@ class ModalAutoUpdateConfirm extends React.PureComponent<Props> {
           closeModal();
         }}
       >
-        <section className="card__content">
-          <p>{__('Your LBRY upgrade is ready. Restart LBRY now to use it!')}</p>
-          <p className="help">
-            {__('Want to know what has changed?')} See the{' '}
-            <Button button="link" label={__('release notes')} href="https://github.com/lbryio/lbry-desktop/releases" />.
-          </p>
-        </section>
+        <p>{__('Your LBRY upgrade is ready. Restart LBRY now to use it!')}</p>
+        <p className="help">
+          {__('Want to know what has changed?')} See the{' '}
+          <Button button="link" label={__('release notes')} href="https://github.com/lbryio/lbry-desktop/releases" />.
+        </p>
       </Modal>
     );
   }

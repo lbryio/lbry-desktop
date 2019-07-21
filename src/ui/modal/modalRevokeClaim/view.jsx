@@ -84,7 +84,7 @@ class ModalRevokeClaim extends React.PureComponent<Props> {
         onConfirmed={this.revokeClaim}
         onAborted={closeModal}
       >
-        <section className="card__content">{this.getMsgBody(type)}</section>
+        <section>{this.getMsgBody(type)}</section>
       </Modal>
     );
   }

@@ -38,11 +38,11 @@ class PreviewLink extends React.PureComponent<Props> {
                 <TruncatedText text={title} lines={1} />
               </span>
             </span>
-            <span className={'preview-link__description media__subtext'}>
+            <span className={'preview-link__description media__subtitle'}>
               <UriIndicator uri={uri} link />
             </span>
             <span className={'file-list__item-properties'}>
-              <span className={'preview-link__description media__subtext'}>
+              <span className={'preview-link__description media__subtitle'}>
                 <TruncatedText lines={2} showTooltip={false}>
                   <MarkdownPreview content={description} promptLinks strip />
                 </TruncatedText>

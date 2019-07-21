@@ -48,7 +48,9 @@ class FormInviteNew extends React.PureComponent<FormProps, FormState> {
           name="email"
           value={this.state.email}
           error={errorMessage}
-          inputButton={<Button button="inverse" type="submit" label="Invite" disabled={isPending} />}
+          inputButton={
+            <Button button="inverse" type="submit" label="Invite" disabled={isPending || !this.state.email} />
+          }
           onChange={event => {
             this.handleEmailChanged(event);
           }}
@@ -72,30 +74,23 @@ class InviteNew extends React.PureComponent<Props> {
 
     return (
       <section className="card card--section">
-        <header className="card__header">
-          <h2 className="card__title">{__('Invite a Friend')}</h2>
+        <h2 className="card__title">{__('Invite a Friend')}</h2>
+        <p className="card__subtitle">{__('When your friends start using LBRY, the network gets stronger!')}</p>
 
-          <p className="card__subtitle">{__('When your friends start using LBRY, the network gets stronger!')}</p>
-        </header>
+        <FormInviteNew
+          errorMessage={errorMessage}
+          inviteNew={inviteNew}
+          isPending={isPending}
+          rewardAmount={rewardAmount}
+        />
+        <CopyableText label={__('Or share this link with your friends')} copyable={referralLink} />
 
-        <div className="card__content">
-          <FormInviteNew
-            errorMessage={errorMessage}
-            inviteNew={inviteNew}
-            isPending={isPending}
-            rewardAmount={rewardAmount}
-          />
-        </div>
-        <div className="card__content">
-          <CopyableText label={__('Or share this link with your friends')} copyable={referralLink} />
-
-          <p className="help">
-            {__('Earn')} <Button button="link" navigate="/$/rewards" label={__('rewards')} />{' '}
-            {__('for inviting your friends.')} {__('Read our')}{' '}
-            <Button button="link" label={__('FAQ')} href="https://lbry.com/faq/referrals" />{' '}
-            {__('to learn more about referrals')}.
-          </p>
-        </div>
+        <p className="help">
+          {__('Earn')} <Button button="link" navigate="/$/rewards" label={__('rewards')} />{' '}
+          {__('for inviting your friends.')} {__('Read our')}{' '}
+          <Button button="link" label={__('FAQ')} href="https://lbry.com/faq/referrals" />{' '}
+          {__('to learn more about referrals')}.
+        </p>
       </section>
     );
   }

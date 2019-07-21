@@ -45,7 +45,7 @@ class ShowPage extends React.PureComponent<Props> {
       if (claim && !claim.name) {
         // While testing the normalization changes, Brannon found that `name` was missing sometimes
         // This shouldn't happen, so hopefully this helps track it down
-        console.error('No name for associated claim: ', claim.claim_id);
+        console.error('No name for associated claim: ', claim.claim_id); // eslint-disable-line no-console
       }
 
       innerContent = (
@@ -72,13 +72,11 @@ class ShowPage extends React.PureComponent<Props> {
           <Page>
             <section className="card card--section">
               <div className="card__title">{uri}</div>
-              <div className="card__content">
-                <p>
-                  {__(
-                    'In response to a complaint we received under the US Digital Millennium Copyright Act, we have blocked access to this content from our applications.'
-                  )}
-                </p>
-              </div>
+              <p>
+                {__(
+                  'In response to a complaint we received under the US Digital Millennium Copyright Act, we have blocked access to this content from our applications.'
+                )}
+              </p>
               <div className="card__actions">
                 <Button button="link" href="https://lbry.com/faq/dmca" label={__('Read More')} />
               </div>

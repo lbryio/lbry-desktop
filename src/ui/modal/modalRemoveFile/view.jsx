@@ -33,30 +33,26 @@ function ModalRemoveFile(props: Props) {
       onConfirmed={() => deleteFile(outpoint || '', deleteChecked, abandonChecked)}
       onAborted={closeModal}
     >
-      <section className="card__content">
-        <p>
-          {__("Are you sure you'd like to remove")} <cite>{`"${title}"`}</cite> {__('from the LBRY app?')}
-        </p>
-      </section>
-      <section className="card__content">
-        <FormField
-          name="file_delete"
-          label={__('Also delete this file from my computer')}
-          type="checkbox"
-          checked={deleteChecked}
-          onChange={() => setDeleteChecked(!deleteChecked)}
-        />
+      <p>
+        {__("Are you sure you'd like to remove")} <cite>{`"${title}"`}</cite> {__('from the LBRY app?')}
+      </p>
+      <FormField
+        name="file_delete"
+        label={__('Also delete this file from my computer')}
+        type="checkbox"
+        checked={deleteChecked}
+        onChange={() => setDeleteChecked(!deleteChecked)}
+      />
 
-        {claimIsMine && (
-          <FormField
-            name="claim_abandon"
-            label={__('Abandon the claim for this URI')}
-            type="checkbox"
-            checked={abandonChecked}
-            onChange={() => setAbandonChecked(!abandonChecked)}
-          />
-        )}
-      </section>
+      {claimIsMine && (
+        <FormField
+          name="claim_abandon"
+          label={__('Abandon the claim for this URI')}
+          type="checkbox"
+          checked={abandonChecked}
+          onChange={() => setAbandonChecked(!abandonChecked)}
+        />
+      )}
     </Modal>
   );
 }

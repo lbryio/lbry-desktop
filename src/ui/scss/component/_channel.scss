@@ -84,11 +84,12 @@ $metadata-z-index: 1;
 }
 
 .channel__title {
-  font-size: 3rem;
-  font-weight: 800;
   margin-right: var(--spacing-small);
   overflow: hidden;
   text-overflow: ellipsis;
+  // line-height: var(--font-heading);
+  font-size: var(--font-heading);
+  font-weight: 800;
 
   // Quick hack to get this to work
   // We should have a generic style for "header with button next to it"
@@ -98,8 +99,6 @@ $metadata-z-index: 1;
 }
 
 .channel__url {
-  font-size: 1.2rem;
-  margin-top: -0.25rem;
   color: rgba($lbry-white, 0.75);
   margin-right: var(--spacing-large);
 }

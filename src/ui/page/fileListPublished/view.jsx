@@ -22,7 +22,7 @@ function FileListPublished(props: Props) {
       {uris && uris.length ? (
         <div className="card">
           <ClaimList
-            header={<h1>{__('Your Publishes')}</h1>}
+            header={__('Your Publishes')}
             loading={fetching}
             persistedStorageKey="claim-list-published"
             uris={uris}
@@ -33,14 +33,10 @@ function FileListPublished(props: Props) {
       ) : (
         <div className="main--empty">
           <section className="card card--section">
-            <header className="card__header">
-              <h2 className="card__title">{__("It looks like you haven't published anything to LBRY yet.")}</h2>
-            </header>
+            <h2 className="card__title">{__("It looks like you haven't published anything to LBRY yet.")}</h2>
 
-            <div className="card__content">
-              <div className="card__actions card__actions--center">
-                <Button button="primary" navigate="/$/publish" label={__('Publish something new')} />
-              </div>
+            <div className="card__actions card__actions--center">
+              <Button button="primary" navigate="/$/publish" label={__('Publish something new')} />
             </div>
           </section>
         </div>

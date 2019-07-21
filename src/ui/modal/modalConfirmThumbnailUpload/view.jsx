@@ -1,7 +1,6 @@
 // @flow
 import React from 'react';
 import { Modal } from 'modal/modal';
-import { FormField } from 'component/common/form';
 
 type Props = {
   upload: string => void,
@@ -19,7 +18,7 @@ class ModalConfirmThumbnailUpload extends React.PureComponent<Props> {
   }
 
   render() {
-    const { closeModal, path, updatePublishForm } = this.props;
+    const { closeModal, path } = this.props;
 
     return (
       <Modal
@@ -31,11 +30,9 @@ class ModalConfirmThumbnailUpload extends React.PureComponent<Props> {
         onConfirmed={() => this.upload()}
         onAborted={closeModal}
       >
-        <section className="card__content">
-          <p>{__('Are you sure you want to upload this thumbnail to spee.ch')}?</p>
+        <p>{__('Are you sure you want to upload this thumbnail to spee.ch')}?</p>
 
-          <blockquote>{path}</blockquote>
-        </section>
+        <blockquote>{path}</blockquote>
       </Modal>
     );
   }

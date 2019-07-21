@@ -99,7 +99,7 @@ export default function ClaimList(props: Props) {
         </div>
       )}
       {urisLength > 0 && (
-        <ul>
+        <ul className="ul--no-style">
           {sortedUris.map((uri, index) => (
             <React.Fragment key={uri}>
               <ClaimPreview uri={uri} type={type} />
@@ -108,7 +108,7 @@ export default function ClaimList(props: Props) {
           ))}
         </ul>
       )}
-      {urisLength === 0 && !loading && <h2 className="main--empty empty">{empty || __('No results')}</h2>}
+      {urisLength === 0 && !loading && <p className="main--empty empty">{empty || __('No results')}</p>}
     </section>
   );
 }

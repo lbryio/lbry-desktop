@@ -1,11 +1,13 @@
 $main: $lbry-teal-5;
 
 .tags {
+  @extend .ul--no-style;
   display: flex;
   flex-wrap: wrap;
   min-width: 0;
 
   .tag {
+    margin-left: 0;
     margin-top: var(--spacing-small);
     margin-right: var(--spacing-small);
   }
@@ -13,15 +15,15 @@ $main: $lbry-teal-5;
 
 .tags--remove {
   @extend .tags;
+  @extend .ul--no-style;
   margin-bottom: var(--spacing-large);
-  font-size: 18px;
 }
 
 .tags--vertical {
   @extend .tags;
   flex-direction: column;
   align-items: flex-start;
-  margin-top: var(--spacing-medium);
+  margin: 0;
 }
 
 .tags--selected {
@@ -44,7 +46,7 @@ $main: $lbry-teal-5;
   text-overflow: ellipsis;
   white-space: nowrap;
   text-transform: lowercase;
-  font-size: 0.7em;
+  max-width: 10rem;
   min-width: 0;
 
   &:hover {
@@ -62,6 +64,7 @@ $main: $lbry-teal-5;
 
 .tag--remove {
   max-width: 20rem;
+  font-size: var(--font-body);
 }
 
 .tag--add {
