@@ -38,12 +38,12 @@ function FollowingPage(props: Props) {
 
   return (
     <Page>
-      <div className="card">
+      <div className="card card--section">
         <TagsSelect showClose={false} title={__('Customize Your Tags')} />
       </div>
       <div className="card">
         <ClaimList
-          header={<h1>{viewingSuggestedSubs ? __('Discover New Channels') : __('Channels You Follow')}</h1>}
+          header={viewingSuggestedSubs ? __('Discover New Channels') : __('Channels You Follow')}
           headerAltControls={
             <Button
               button="link"

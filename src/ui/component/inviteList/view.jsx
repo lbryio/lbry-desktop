@@ -48,9 +48,9 @@ class InviteList extends React.PureComponent<Props> {
     const showClaimable = invitees.some(invite => invite.invite_reward_claimable && !invite.invite_reward_claimed);
 
     return (
-      <section className="card card--section">
-        <header className="card__header">
-          <h2 className="card__title card__title--flex-between">
+      <section className="card">
+        <div className="table__header">
+          <h2 className="card__title">
             {__('Invite History')}
             {referralReward && showClaimable && (
               <RewardLink
@@ -60,42 +60,39 @@ class InviteList extends React.PureComponent<Props> {
               />
             )}
           </h2>
-        </header>
-
-        <div className="card__content">
-          <table className="table table--invites">
-            <thead>
-              <tr>
-                <th>{__('Invitee Email')}</th>
-                <th>{__('Invite Status')}</th>
-                <th>{__('Reward')}</th>
-              </tr>
-            </thead>
-            <tbody>
-              {invitees.map(invitee => (
-                <tr key={invitee.email}>
-                  <td>{invitee.email}</td>
-                  <td>
-                    <span>{invitee.invite_accepted ? __('Accepted') : __('Not Accepted')}</span>
-                  </td>
-                  <td>
-                    {invitee.invite_reward_claimed && (
-                      <React.Fragment>
-                        <span>{__('Claimed')}</span>
-                        <Icon icon={ICONS.COMPLETE} />
-                      </React.Fragment>
-                    )}
-
-                    {!invitee.invite_reward_claimed &&
-                      (invitee.invite_reward_claimable ? <span>{__('Claimable')}</span> : __('Unclaimable'))}
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-
-          <div className="help">{rewardHelp}</div>
+          <p className="card__subtitle">{rewardHelp}</p>
         </div>
+
+        <table className="table table--invites">
+          <thead>
+            <tr>
+              <th>{__('Invitee Email')}</th>
+              <th>{__('Invite Status')}</th>
+              <th>{__('Reward')}</th>
+            </tr>
+          </thead>
+          <tbody>
+            {invitees.map(invitee => (
+              <tr key={invitee.email}>
+                <td>{invitee.email}</td>
+                <td>
+                  <span>{invitee.invite_accepted ? __('Accepted') : __('Not Accepted')}</span>
+                </td>
+                <td>
+                  {invitee.invite_reward_claimed && (
+                    <React.Fragment>
+                      <span>{__('Claimed')}</span>
+                      <Icon icon={ICONS.COMPLETE} />
+                    </React.Fragment>
+                  )}
+
+                  {!invitee.invite_reward_claimed &&
+                    (invitee.invite_reward_claimable ? <span>{__('Claimable')}</span> : __('Unclaimable'))}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       </section>
     );
   }

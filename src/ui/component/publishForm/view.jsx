@@ -130,7 +130,7 @@ function PublishForm(props: Props) {
           {/* This should probably be PublishThumbnail */}
           <SelectThumbnail />
         </div>
-        <div className="card">
+        <div className="card card--section">
           <TagSelect
             title={false}
             suggestMature
@@ -152,20 +152,18 @@ function PublishForm(props: Props) {
           />
         </div>
         <section className="card card--section">
-          <div className="card__content">
-            <ChannelSection channel={channel} onChannelChange={channel => updatePublishForm({ channel })} />
-            <p className="help">
-              {__('This is a username or handle that your content can be found under.')}{' '}
-              {__('Ex. @Marvel, @TheBeatles, @BooksByJoe')}
-            </p>
-          </div>
+          <ChannelSection channel={channel} onChannelChange={channel => updatePublishForm({ channel })} />
+          <p className="help">
+            {__('This is a username or handle that your content can be found under.')}{' '}
+            {__('Ex. @Marvel, @TheBeatles, @BooksByJoe')}
+          </p>
         </section>
 
         <PublishName disabled={formDisabled} />
         <PublishPrice disabled={formDisabled} />
         <PublishAdditionalOptions disabled={formDisabled} />
 
-        <section className="card card--section">
+        <section>
           {!formDisabled && !formValid && <PublishFormErrors />}
 
           <div className="card__actions">

@@ -66,7 +66,7 @@ class WalletBackup extends React.PureComponent<Props, State> {
     try {
       zip.addLocalFolder(lbryumWalletDir);
     } catch (err) {
-      console.error(err);
+      console.error(err); // eslint-disable-line no-console
       this.showErrorMessage(__('The wallet folder could not be added to the zip archive.'));
       return;
     }
@@ -74,7 +74,7 @@ class WalletBackup extends React.PureComponent<Props, State> {
     try {
       zip.writeZip(outputPath);
     } catch (err) {
-      console.error(err);
+      console.error(err); // eslint-disable-line no-console
       this.showErrorMessage(__('There was a problem writing the zip archive to disk.'));
       return;
     }
@@ -85,68 +85,49 @@ class WalletBackup extends React.PureComponent<Props, State> {
   }
 
   render() {
-    const { daemonSettings } = this.props;
+    const { daemonSettings = {} } = this.props;
     const { wallet_dir: lbryumWalletDir } = daemonSettings;
-
-    const noDaemonSettings = Object.keys(daemonSettings).length === 0;
 
     return (
       <section className="card card--section">
-        {noDaemonSettings ? (
-          <header className="card__header">
-            <h2 className="card__title">{__('Failed to load settings.')}</h2>
-          </header>
-        ) : (
-          <React.Fragment>
-            <header className="card__header">
-              <h2 className="card__title">{__('Backup Your LBRY Credits')}</h2>
+        <h2 className="card__title">{__('Backup Your LBRY Credits')}</h2>
 
-              <p className="card__subtitle">
-                {__(
-                  'Your LBRY credits are controllable by you and only you, via wallet file(s) stored locally on your computer.'
-                )}
-              </p>
-            </header>
-
-            <div className="card__content">
-              <p>
-                {__(
-                  'Currently, there is no automatic wallet backup. If you lose access to these files, you will lose your credits permanently.'
-                )}
-              </p>
-              <p>
-                {__(
-                  'However, it is fairly easy to back up manually. To backup your wallet, make a copy of the folder listed below:'
-                )}
-              </p>
-              <CopyableText copyable={lbryumWalletDir} snackMessage={__('Path copied.')} />
-              <p>
-                {__(
-                  'Access to these files are equivalent to having access to your credits. Keep any copies you make of your wallet in a secure place.'
-                )}
-              </p>
-              <p>
-                For more details on backing up and best practices,{' '}
-                <Button button="link" href="https://lbry.com/faq/how-to-backup-wallet" label={__('see this article')} />
-                .
-              </p>
-              <p className={'card__message card__message--error' + (this.state.errorMessage ? '' : ' hidden')}>
-                {this.state.errorMessage}
-              </p>
-              <p className={'card__message card__message--success' + (this.state.successMessage ? '' : ' hidden')}>
-                {this.state.successMessage}
-              </p>
-              <div className="card__actions">
-                <Button button="inverse" label={__('Open Folder')} onClick={() => shell.openItem(lbryumWalletDir)} />
-                <Button
-                  button="inverse"
-                  label={__('Create Backup')}
-                  onClick={() => this.backupWalletDir(lbryumWalletDir)}
-                />
-              </div>
-            </div>
-          </React.Fragment>
-        )}
+        <ul className="card__subtitle ol--bulleted">
+          <li>
+            {__(
+              'Your LBRY credits are controllable by you and only you, via wallet file(s) stored locally on your computer.'
+            )}
+          </li>
+          <li>
+            {__(
+              'Currently, there is no automatic backup. If you lose access to these files, you will lose your credits.'
+            )}
+          </li>
+          <li>
+            {__(
+              'However, it is fairly easy to back up manually. To backup your wallet, make a copy of the folder listed below:'
+            )}
+          </li>
+        </ul>
+        <CopyableText copyable={lbryumWalletDir} snackMessage={__('Path copied.')} />
+        <p className="help">
+          {__(
+            'Access to these files are equivalent to having access to your credits. Keep any copies you make of your wallet in a secure place.'
+          )}{' '}
+          {/* @i18fixme */}
+          {__('For more details on backing up and best practices')},{' '}
+          <Button button="link" href="https://lbry.com/faq/how-to-backup-wallet" label={__('see this article')} />.
+        </p>
+        <p className={'card__message card__message--error' + (this.state.errorMessage ? '' : ' hidden')}>
+          {this.state.errorMessage}
+        </p>
+        <p className={'card__message card__message--success' + (this.state.successMessage ? '' : ' hidden')}>
+          {this.state.successMessage}
+        </p>
+        <div className="card__actions">
+          <Button button="inverse" label={__('Create Backup')} onClick={() => this.backupWalletDir(lbryumWalletDir)} />
+          <Button button="link" label={__('Open Folder')} onClick={() => shell.openItem(lbryumWalletDir)} />
+        </div>
       </section>
     );
   }

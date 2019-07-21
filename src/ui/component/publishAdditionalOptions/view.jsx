@@ -27,7 +27,7 @@ function PublishAdvanced(props: Props) {
   return (
     <section className="card card--section">
       {!hideSection && (
-        <div className={classnames('card__content', { 'card--disabled': !name })}>
+        <div className={classnames({ 'card--disabled': !name })}>
           <FormField
             label={__('Language')}
             type="select"

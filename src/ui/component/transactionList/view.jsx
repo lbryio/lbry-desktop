@@ -69,12 +69,12 @@ class TransactionList extends React.PureComponent<Props> {
     return (
       <React.Fragment>
         <header className="table__header">
-          <h2 className="card__title card__title--flex-between">
+          <h2 className="card__title--between">
             <span>
               {title}
               {loading && <Spinner type="small" />}
             </span>
-            <div className="card__actions">
+            <div className="card__actions--inline">
               {slim && (
                 <Button button="link" className="button--alt" navigate="/$/transactions" label={__('Full History')} />
               )}
@@ -83,8 +83,8 @@ class TransactionList extends React.PureComponent<Props> {
           </h2>
         </header>
         {!slim && !!transactions.length && (
-          <header className="card__header table__header">
-            <div className="card__actions card__actions--between">
+          <header className="table__header">
+            <div className="card__actions">
               <FileExporter
                 data={transactionList}
                 label={__('Export')}

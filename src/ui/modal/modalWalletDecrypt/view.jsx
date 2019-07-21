@@ -47,14 +47,12 @@ class ModalWalletDecrypt extends React.PureComponent<Props, State> {
         onConfirmed={() => this.submitDecryptForm()}
         onAborted={closeModal}
       >
-        <section className="card__content">
-          <p>
-            {__(
-              'Your wallet has been encrypted with a local password, performing this action will remove this password.'
-            )}{' '}
-            <Button button="link" label={__('Learn more')} href="https://lbry.com/faq/wallet-encryption" />.
-          </p>
-        </section>
+        <p>
+          {__(
+            'Your wallet has been encrypted with a local password, performing this action will remove this password.'
+          )}{' '}
+          <Button button="link" label={__('Learn more')} href="https://lbry.com/faq/wallet-encryption" />.
+        </p>
       </Modal>
     );
   }

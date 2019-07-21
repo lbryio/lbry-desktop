@@ -23,7 +23,7 @@ class TransactionListRecent extends React.PureComponent<Props> {
   render() {
     const { transactions } = this.props;
     return (
-      <section className="card card__content">
+      <section className="card">
         <TransactionList
           slim
           title={__('Recent Transactions')}
