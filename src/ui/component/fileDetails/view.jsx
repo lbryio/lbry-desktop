@@ -19,11 +19,7 @@ class FileDetails extends PureComponent<Props> {
     const { claim, contentType, fileInfo, metadata, openFolder } = this.props;
 
     if (!claim || !metadata) {
-      return (
-        <div className="card__content">
-          <span className="empty">{__('Empty claim or metadata info.')}</span>
-        </div>
-      );
+      return <span className="empty">{__('Empty claim or metadata info.')}</span>;
     }
 
     const { description, languages, license } = metadata;

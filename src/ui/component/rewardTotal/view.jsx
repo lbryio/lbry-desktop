@@ -16,9 +16,7 @@ function RewardTotal(props: Props) {
 
   return (
     <section className="card  card--section card--reward-total" style={{ backgroundImage: `url(${TotalBackground})` }}>
-      <span className="card__title">
-        {integer} LBC {__('Earned From Rewards')}
-      </span>
+      {integer} LBC {__('Earned From Rewards')}
     </section>
   );
 }

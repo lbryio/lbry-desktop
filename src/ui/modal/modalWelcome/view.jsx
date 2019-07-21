@@ -12,14 +12,12 @@ const ModalWelcome = (props: Props) => {
 
   return (
     <Modal type="custom" isOpen contentLabel="Welcome to LBRY" title={__('Welcome to LBRY')}>
-      <section className="card__content">
-        <p>
-          {__('Using LBRY is like dating a centaur. Totally normal up top, and')} <em>{__('way different')}</em>{' '}
-          {__('underneath.')}
-        </p>
-        <p>{__('Up top, LBRY is similar to popular media sites.')}</p>
-        <p>{__('Below, LBRY is controlled by users -- you -- via blockchain and decentralization.')}</p>
-      </section>
+      <p>
+        {__('Using LBRY is like dating a centaur. Totally normal up top, and')} <em>{__('way different')}</em>{' '}
+        {__('underneath.')}
+      </p>
+      <p>{__('Up top, LBRY is similar to popular media sites.')}</p>
+      <p>{__('Below, LBRY is controlled by users -- you -- via blockchain and decentralization.')}</p>
       <div className="card__actions">
         <Button button="primary" onClick={closeModal} label={__("I'm In")} />
       </div>

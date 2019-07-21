@@ -9,12 +9,14 @@
 }
 
 @mixin mediaThumbHoverZoom {
-  .media__thumb {
+  .media__thumb,
+  img {
     transition: all 0.2s ease;
   }
 
   &:hover {
-    .media__thumb {
+    .media__thumb,
+    img {
       transform: scale(1.05);
     }
   }

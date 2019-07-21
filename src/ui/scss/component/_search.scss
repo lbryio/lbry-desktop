@@ -4,18 +4,10 @@
   .placeholder {
     background-color: rgba($lbry-white, 0.1);
   }
-
-  .media__subtitle {
-    font-size: 0.7em;
-  }
 }
 
 .search__options {
   margin-top: var(--spacing-large);
-
-  .button {
-    font-size: 2rem;
-  }
 
   legend {
     &.search__legend--1 {
@@ -33,5 +25,9 @@
 
   fieldset:not(:first-child) {
     margin-top: var(--spacing-large);
+  }
+
+  label {
+    color: $lbry-white;
   }
 }

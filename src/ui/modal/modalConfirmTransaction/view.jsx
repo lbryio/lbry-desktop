@@ -28,13 +28,11 @@ class ModalConfirmTransaction extends React.PureComponent<Props> {
         onConfirmed={() => this.onConfirmed()}
         onAborted={closeModal}
       >
-        <section className="card__content">
-          <p>{__('Sending: ')}</p>
-          <blockquote>{amount} LBC</blockquote>
-          <p>{__('To address: ')}</p>
-          <blockquote>{address}</blockquote>
-          <p>{__('Once the transaction is sent, it cannot be reversed.')}</p>
-        </section>
+        <p>{__('Sending: ')}</p>
+        <blockquote>{amount} LBC</blockquote>
+        <p>{__('To address: ')}</p>
+        <blockquote>{address}</blockquote>
+        <p>{__('Once the transaction is sent, it cannot be reversed.')}</p>
       </Modal>
     );
   }

@@ -32,7 +32,7 @@ export default class extends React.PureComponent<Props> {
         {title && subtitle && (
           <div className="yrbl__content">
             <h2 className="card__title">{title}</h2>
-            <div className="card__content">{subtitle}</div>
+            <p>{subtitle}</p>
           </div>
         )}
       </div>

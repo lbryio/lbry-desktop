@@ -1,6 +1,6 @@
 // @flow
 import * as React from 'react';
-import { FormField, Form, Submit } from 'component/common/form';
+import { FormField, Form } from 'component/common/form';
 import { Modal } from 'modal/modal';
 import Button from 'component/button';
 
@@ -44,7 +44,7 @@ class ModalRewardCode extends React.PureComponent<Props, State> {
         type="custom"
         onAborted={closeModal}
       >
-        <Form className="card__content" onSubmit={this.handleSubmit}>
+        <Form onSubmit={this.handleSubmit}>
           <p>
             {__('Redeem a custom reward code for LBC')}
             {'. '}
@@ -55,7 +55,8 @@ class ModalRewardCode extends React.PureComponent<Props, State> {
             type="text"
             name="reward-code"
             inputButton={
-              <Submit
+              <Button
+                button="primary"
                 disabled={!rewardCode || rewardIsPending}
                 label={rewardIsPending ? __('Redeeming') : __('Redeem')}
               />

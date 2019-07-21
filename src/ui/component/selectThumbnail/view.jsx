@@ -83,7 +83,7 @@ class SelectThumbnail extends React.PureComponent<Props, State> {
     */
 
     return (
-      <div className="card__content">
+      <div>
         {status === THUMBNAIL_STATUSES.API_DOWN || status === THUMBNAIL_STATUSES.MANUAL ? (
           <div className="column">
             <div className="column__item thumbnail-preview" style={{ backgroundImage: `url(${thumbnailSrc})` }}>
