@@ -10,6 +10,7 @@ import Button from 'component/button';
 
 type Props = {
   search: string => void,
+  isSearching: boolean,
   location: UrlLocation,
   uris: Array<string>,
   onFeedbackNegative: string => void,
@@ -17,7 +18,7 @@ type Props = {
 };
 
 export default function SearchPage(props: Props) {
-  const { search, uris, onFeedbackPositive, onFeedbackNegative, location } = props;
+  const { search, uris, onFeedbackPositive, onFeedbackNegative, location, isSearching } = props;
   const urlParams = new URLSearchParams(location.search);
   const urlQuery = urlParams.get('q');
   const isValid = isURIValid(urlQuery);
@@ -50,6 +51,7 @@ export default function SearchPage(props: Props) {
             <div className="card">
               <ClaimList
                 uris={uris}
+                loading={isSearching}
                 header={<SearchOptions />}
                 headerAltControls={
                   <Fragment>
