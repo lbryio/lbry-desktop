@@ -2,7 +2,6 @@
 import React, { useState } from 'react';
 import { parseURI } from 'lbry-redux';
 import { Form, FormField } from 'component/common/form';
-import Button from 'component/button';
 
 import SelectAsset from '../selectAsset/view';
 
@@ -21,12 +20,9 @@ type Props = {
   tags: Array<string>,
   locations: Array<string>,
   languages: Array<string>,
-
   updateChannel: any => void,
-
   updateThumb: string => void,
   updateCover: string => void,
-  setEditing: boolean => void,
 };
 
 function ChannelForm(props: Props) {
@@ -43,7 +39,6 @@ function ChannelForm(props: Props) {
     languages,
     amount,
     updateChannel,
-    setEditing,
     updateThumb,
     updateCover,
   } = props;
@@ -109,93 +104,73 @@ function ChannelForm(props: Props) {
         </p>
       </div>
       <Form onSubmit={channelParams => updateChannel(channelParams)}>
-        <div className="card__content">
-          <SelectAsset
-            onUpdate={v => handleThumbnailChange(v)}
-            currentValue={params.thumbnail}
-            assetName={'Thumbnail'}
-            recommended={'(300 x 300)'}
-          />
+        <SelectAsset
+          onUpdate={v => handleThumbnailChange(v)}
+          currentValue={params.thumbnail}
+          assetName={'Thumbnail'}
+          recommended={'(300 x 300)'}
+        />
 
-          <SelectAsset
-            onUpdate={v => handleCoverChange(v)}
-            currentValue={params.cover}
-            assetName={'Cover'}
-            recommended={'(1000 x 160)'}
-          />
+        <SelectAsset
+          onUpdate={v => handleCoverChange(v)}
+          currentValue={params.cover}
+          assetName={'Cover'}
+          recommended={'(1000 x 160)'}
+        />
 
-          <FormField
-            type="text"
-            name="channel_title2"
-            label={__('Title')}
-            placeholder={__('Titular Title')}
-            disabled={false}
-            value={params.title}
-            onChange={e => setParams({ ...params, title: e.target.value })}
-          />
-          <FormField
-            className="form-field--price-amount"
-            type="number"
-            name="content_bid2"
-            step="any"
-            label={__('Deposit (LBC)')}
-            postfix="LBC"
-            value={params.amount}
-            error={bidError}
-            min="0.0"
-            disabled={false}
-            onChange={event => handleBidChange(parseFloat(event.target.value))}
-            placeholder={0.1}
-          />
+        <FormField
+          type="text"
+          name="channel_title2"
+          label={__('Title')}
+          placeholder={__('Titular Title')}
+          disabled={false}
+          value={params.title}
+          onChange={e => setParams({ ...params, title: e.target.value })}
+        />
+        <FormField
+          className="form-field--price-amount"
+          type="number"
+          name="content_bid2"
+          step="any"
+          label={__('Deposit (LBC)')}
+          postfix="LBC"
+          value={params.amount}
+          error={bidError}
+          min="0.0"
+          disabled={false}
+          onChange={event => handleBidChange(parseFloat(event.target.value))}
+          placeholder={0.1}
+        />
 
-          <FormField
-            type="text"
-            name="channel_website2"
-            label={__('Website')}
-            placeholder={__('aprettygoodsite.com')}
-            disabled={false}
-            value={params.website}
-            onChange={e => setParams({ ...params, website: e.target.value })}
-          />
+        <FormField
+          type="text"
+          name="channel_website2"
+          label={__('Website')}
+          placeholder={__('aprettygoodsite.com')}
+          disabled={false}
+          value={params.website}
+          onChange={e => setParams({ ...params, website: e.target.value })}
+        />
 
-          <FormField
-            type="text"
-            name="content_email2"
-            label={__('Email')}
-            placeholder={__('yourstruly@example.com')}
-            disabled={false}
-            value={params.email}
-            onChange={e => setParams({ ...params, email: e.target.value })}
-          />
+        <FormField
+          type="text"
+          name="content_email2"
+          label={__('Email')}
+          placeholder={__('yourstruly@example.com')}
+          disabled={false}
+          value={params.email}
+          onChange={e => setParams({ ...params, email: e.target.value })}
+        />
 
-          <FormField
-            type="markdown"
-            name="content_description2"
-            label={__('Description')}
-            placeholder={__('Description of your content')}
-            value={params.description}
-            disabled={false}
-            onChange={text => setParams({ ...params, description: text })}
-          />
-          <div className={'card__actions'}>
-            <Button
-              button="primary"
-              label={__('Submit')}
-              onClick={() => {
-                updateChannel(params);
-                setEditing(false);
-              }}
-            />
-            <Button
-              button="link"
-              label={__('Cancel')}
-              onClick={() => {
-                setParams({ ...channelParams });
-                setEditing(false);
-              }}
-            />
-          </div>
-        </div>
+        <FormField
+          type="markdown"
+          name="content_description2"
+          label={__('Description')}
+          placeholder={__('Description of your content')}
+          value={params.description}
+          disabled={false}
+          onChange={text => setParams({ ...params, description: text })}
+        />
       </Form>
     </section>
   );

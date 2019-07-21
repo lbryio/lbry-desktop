@@ -23,16 +23,14 @@ class ModalUpgrade extends React.PureComponent<Props> {
         onConfirmed={downloadUpgrade}
         onAborted={skipUpgrade}
       >
-        <div className="card__content">
-          <p>
-            {__('An updated version of LBRY is now available.')}{' '}
-            {__('Your version is out of date and may be unreliable or insecure.')}
-          </p>
-          <p className="help">
-            {__('Want to know what has changed?')} See the{' '}
-            <Button button="link" label={__('release notes')} href="https://github.com/lbryio/lbry-desktop/releases" />.
-          </p>
-        </div>
+        <p>
+          {__('An updated version of LBRY is now available.')}{' '}
+          {__('Your version is out of date and may be unreliable or insecure.')}
+        </p>
+        <p className="help">
+          {__('Want to know what has changed?')} See the{' '}
+          <Button button="link" label={__('release notes')} href="https://github.com/lbryio/lbry-desktop/releases" />.
+        </p>
       </Modal>
     );
   }

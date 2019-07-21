@@ -8,7 +8,7 @@
   display: flex;
   align-items: flex-start;
   min-height: 100vh;
-  max-width: 1200px;
+  max-width: var(--page-max-width);
   margin-left: auto;
   margin-right: auto;
   padding-bottom: var(--spacing-main-padding);
@@ -16,8 +16,8 @@
 
 .main {
   min-width: 0;
-  width: calc(100% - var(--side-nav-width) - var(--spacing-main-padding));
   position: relative;
+  width: calc(100% - var(--side-nav-width) - var(--spacing-main-padding));
   margin-top: calc(var(--header-height) + var(--spacing-large));
   margin-right: var(--spacing-main-padding);
 
@@ -33,11 +33,11 @@
 
   .grid-area--info {
     margin-right: var(--spacing-large);
-    width: 50%;
+    width: 52.5%;
   }
 
   .grid-area--related {
-    width: calc(50% - var(--spacing-large));
+    width: calc(47.5% - var(--spacing-large));
   }
 }
 

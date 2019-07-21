@@ -39,13 +39,11 @@ function UserEmail(props: Props) {
       {user && email && !isVerified && <UserEmailVerify />}
       {email && isVerified && (
         <React.Fragment>
-          <div className="card__header">
-            <h2 className="card__title">{__('Email')}</h2>
-            <p className="card__subtitle">
-              {email && isVerified && __('Your email has been successfully verified')}
-              {!email && __('')}.
-            </p>
-          </div>
+          <h2 className="card__title">{__('Email')}</h2>
+          <p className="card__subtitle">
+            {email && isVerified && __('Your email has been successfully verified')}
+            {!email && __('')}.
+          </p>
 
           {isVerified && (
             <FormField

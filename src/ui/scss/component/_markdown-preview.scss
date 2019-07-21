@@ -86,28 +86,6 @@
     }
   }
 
-  // Lists
-  ul,
-  ol {
-    margin-bottom: var(--spacing-medium);
-
-    > li {
-      list-style-position: outside;
-    }
-  }
-
-  ul {
-    list-style: initial;
-  }
-
-  li {
-    margin-left: var(--spacing-large);
-
-    p {
-      display: inline-block;
-    }
-  }
-
   button {
     white-space: normal;
     text-align: left;
