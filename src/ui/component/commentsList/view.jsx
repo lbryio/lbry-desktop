@@ -21,6 +21,7 @@ function CommentList(props: Props) {
         comments.map(comment => {
           return (
             <Comment
+              authorUri={comment.channel_url}
               author={comment.channel_name}
               claimId={comment.channel_id}
               commentId={comment.comment_id}
