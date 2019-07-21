@@ -2,7 +2,7 @@
 
 table,
 .table {
-  margin-bottom: var(--spacing-small);
+  margin: var(--spacing-small) 0;
 
   [data-mode='dark'] & {
     background-color: transparent;
@@ -24,10 +24,7 @@ td {
 
 .table__header {
   margin: var(--spacing-large);
-
-  & + .table__header {
-    margin-top: 0;
-  }
+  margin-bottom: 0;
 }
 
 .table__item--actionable {
@@ -37,7 +34,7 @@ td {
 }
 
 .table__item-label {
-  font-size: 0.9em;
+  font-size: var(--font-multiplier-small);
   font-weight: 300;
 }
 

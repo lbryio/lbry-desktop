@@ -74,30 +74,28 @@ function PublishName(props: Props) {
 
   return (
     <section className="card card--section">
-      <div className="card__content">
-        <fieldset-group class="fieldset-group--smushed fieldset-group--disabled-prefix">
-          <fieldset-section>
-            <label>{__('Name')}</label>
-            <span className="form-field__prefix">{`lbry://${
-              !channel || channel === CHANNEL_ANONYMOUS || channel === CHANNEL_NEW ? '' : `${channel}/`
-            }`}</span>
-          </fieldset-section>
-          <FormField
-            type="text"
-            name="content_name"
-            value={name}
-            error={nameError}
-            onChange={event => updatePublishForm({ name: event.target.value })}
-          />
-        </fieldset-group>
-        <div className="form-field__help">
-          <NameHelpText
-            uri={uri}
-            isStillEditing={isStillEditing}
-            myClaimForUri={myClaimForUri}
-            onEditMyClaim={editExistingClaim}
-          />
-        </div>
+      <fieldset-group class="fieldset-group--smushed fieldset-group--disabled-prefix">
+        <fieldset-section>
+          <label>{__('Name')}</label>
+          <div className="form-field__prefix">{`lbry://${
+            !channel || channel === CHANNEL_ANONYMOUS || channel === CHANNEL_NEW ? '' : `${channel}/`
+          }`}</div>
+        </fieldset-section>
+        <FormField
+          type="text"
+          name="content_name"
+          value={name}
+          error={nameError}
+          onChange={event => updatePublishForm({ name: event.target.value })}
+        />
+      </fieldset-group>
+      <div className="form-field__help">
+        <NameHelpText
+          uri={uri}
+          isStillEditing={isStillEditing}
+          myClaimForUri={myClaimForUri}
+          onEditMyClaim={editExistingClaim}
+        />
       </div>
       <FormField
         type="number"

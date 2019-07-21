@@ -1,10 +1,15 @@
 // Generic html styles used accross the App
 // component specific styling should go in the component scss file
 
+*::selection {
+  background-color: $lbry-teal-3;
+  color: $lbry-white;
+}
+
 html {
   @include font-sans;
 
-  font-size: 12px;
+  font-size: 14px;
   height: 100%;
   min-height: 100%;
   overflow-x: hidden;
@@ -29,9 +34,39 @@ body {
   }
 }
 
-*::selection {
-  background-color: $lbry-teal-3;
-  color: $lbry-white;
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-size: 1rem;
+}
+
+p {
+  font-size: var(--font-body);
+}
+
+ul,
+ol {
+  margin-bottom: var(--spacing-large);
+}
+
+ul {
+  list-style: initial;
+
+  li {
+    margin: var(--spacing-medium) 0;
+  }
+}
+
+.ul--no-style {
+  list-style: none;
+  margin-bottom: 0;
+
+  li {
+    margin: 0;
+  }
 }
 
 blockquote {
@@ -61,6 +96,7 @@ hr {
 .columns {
   display: flex;
   justify-content: space-between;
+  align-items: flex-start;
 
   > * {
     flex-grow: 1;
@@ -137,53 +173,20 @@ hr {
 }
 
 .help {
-  font-size: 1rem;
-  background-color: rgba($lbry-blue-1, 0.1);
-  color: darken($lbry-gray-5, 15%);
   display: block;
-  padding: 1rem;
-  margin-top: var(--spacing-medium);
-  margin-bottom: var(--spacing-medium);
-  border-radius: 5px;
+  font-size: var(--font-label);
+  color: lighten($lbry-gray-5, 10%);
+  margin-top: var(--spacing-small);
 
   [data-mode='dark'] & {
-    background-color: var(--dm-color-06);
-    color: inherit;
+    color: $lbry-gray-5;
   }
 }
 
 .help--warning {
-  @extend .help;
-  background-color: $lbry-yellow-3;
-  color: $lbry-black;
-
-  .button--link:not(:disabled) {
-    // The normal colors we use for .button--link are too light for the warning background
-    // This just darkens them a bit and adds an border-bottom so they are easier to see.
-    $altered-color: mix($lbry-teal-5, $lbry-black, 80%);
-    $altered-hover-color: mix($lbry-teal-5, $lbry-black, 60%);
-
-    &:not(.button--disabled) {
-      color: $altered-color;
-      border-bottom: 1px solid $altered-color;
-
-      &:hover {
-        color: $altered-hover-color;
-      }
-
-      [data-mode='dark'] & {
-        color: $altered-color;
-        border-bottom: 1px solid $altered-color;
-
-        &:hover {
-          color: $altered-hover-color;
-        }
-      }
-    }
-  }
+  background-color: $lbry-yellow-1;
 
   [data-mode='dark'] & {
-    background-color: $lbry-yellow-3;
     color: $lbry-black;
   }
 }

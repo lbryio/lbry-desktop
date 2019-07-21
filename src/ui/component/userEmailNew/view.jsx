@@ -48,19 +48,17 @@ class UserEmailNew extends React.PureComponent<Props, State> {
 
     return (
       <React.Fragment>
-        <header className="card__header">
-          <h2 className="card__title">{__('Verify Your Email')}</h2>
-          <p className="card__subtitle">
-            {/* @if TARGET='app' */}
-            {__("We'll let you know about LBRY updates, security issues, and great new content.")}
-            {/* @endif */}
-            {/* @if TARGET='web' */}
-            {__('Stay up to date with lbry.tv and be the first to know about the progress we make.')}
-            {/* @endif */}
-          </p>
-        </header>
+        <h2 className="card__title">{__('Verify Your Email')}</h2>
+        <p className="card__subtitle">
+          {/* @if TARGET='app' */}
+          {__("We'll let you know about LBRY updates, security issues, and great new content.")}
+          {/* @endif */}
+          {/* @if TARGET='web' */}
+          {__('Stay up to date with lbry.tv and be the first to know about the progress we make.')}
+          {/* @endif */}
+        </p>
 
-        <Form className="card__content" onSubmit={this.handleSubmit}>
+        <Form onSubmit={this.handleSubmit}>
           <FormField
             type="email"
             label="Email"

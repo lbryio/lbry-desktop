@@ -2,11 +2,9 @@
 import type { ElementRef } from 'react';
 import React from 'react';
 import ReactDOMServer from 'react-dom/server';
-import Toggle from 'react-toggle';
 import SimpleMDE from 'react-simplemde-editor';
 import MarkdownPreview from 'component/common/markdown-preview-internal';
 import { openEditorMenu, stopContextMenu } from 'util/context-menu';
-
 import 'easymde/dist/easymde.min.css';
 
 type Props = {
@@ -106,15 +104,6 @@ export class FormField extends React.PureComponent<Props> {
               <checkbox-toggle onClick={inputProps.onChange} />
             </checkbox-element>
           </Wrapper>
-        );
-      } else if (type === 'setting') {
-        // 'setting' should only be used for settings. Forms should use "checkbox"
-        input = (
-          <input-submit>
-            {labelOnLeft && <label htmlFor={name}>{label}</label>}
-            <Toggle id={name} {...inputProps} />
-            {!labelOnLeft && <label htmlFor={name}>{label}</label>}
-          </input-submit>
         );
       } else if (type === 'select') {
         input = (

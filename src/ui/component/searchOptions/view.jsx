@@ -8,7 +8,7 @@ import Button from 'component/button';
 
 const ExpandableOptions = posed.div({
   hide: { height: 0, opacity: 0 },
-  show: { height: 300, opacity: 1 },
+  show: { height: 380, opacity: 1 },
 });
 
 type Props = {
@@ -32,7 +32,7 @@ const SearchOptions = (props: Props) => {
       />
       <ExpandableOptions pose={expanded ? 'show' : 'hide'}>
         {expanded && (
-          <Form className="card__content search__options">
+          <Form className="search__options">
             <fieldset>
               <legend className="search__legend--1">{__('Search For')}</legend>
               {[

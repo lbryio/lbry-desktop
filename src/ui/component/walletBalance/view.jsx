@@ -14,15 +14,10 @@ const WalletBalance = (props: Props) => {
       className="card card--section card--wallet-balance"
       style={{ backgroundImage: `url(${BalanceBackground})` }}
     >
-      <header className="card__header">
-        <h2 className="card__title">{__('Balance')}</h2>
-      </header>
-      <div className="card__content">
-        <h3>{__('You currently have')}</h3>
-        <span className="card__content--large">
-          {(balance || balance === 0) && <CreditAmount badge={false} amount={balance} precision={8} />}
-        </span>
-      </div>
+      <h2 className="card__title">{__('Balance')}</h2>
+      <span className="card__content--large">
+        {(balance || balance === 0) && <CreditAmount badge={false} amount={balance} precision={8} />}
+      </span>
     </section>
   );
 };

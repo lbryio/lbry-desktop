@@ -25,18 +25,18 @@ function ModalRemoveFile(props: Props) {
 
   return (
     <Modal isOpen title="Remove File" contentLabel={__('Confirm File Remove')} type="custom" onAborted={closeModal}>
-      <section className="card__content">
+      <section>
         <p>
           {__("Are you sure you'd like to remove")} <cite>{`"${title}"`}</cite> {__('from the LBRY app?')}
         </p>
       </section>
-      <Form className="card__content" onSubmit={() => deleteFile(outpoint || '', deleteChecked, abandonChecked)}>
+      <Form onSubmit={() => deleteFile(outpoint || '', deleteChecked, abandonChecked)}>
         <FormField
-          name="file_delete"
-          label={__('Also delete this file from my computer')}
+          name="claim_abandon"
+          label={__('Abandon the claim for this URI')}
           type="checkbox"
-          checked={deleteChecked}
-          onChange={() => setDeleteChecked(!deleteChecked)}
+          checked={abandonChecked}
+          onChange={() => setAbandonChecked(!abandonChecked)}
         />
 
         {claimIsMine && (

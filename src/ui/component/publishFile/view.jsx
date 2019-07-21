@@ -33,10 +33,8 @@ function PublishFile(props: Props) {
         'card--disabled': balance === 0,
       })}
     >
-      <header className="card__header">
-        <h2 className="card__title card__title--flex-between">{isStillEditing ? __('Edit') : __('Publish')}</h2>
-        {isStillEditing && <p className="card__subtitle">{__('You are currently editing a claim.')}</p>}
-      </header>
+      <h2 className="card__title">{isStillEditing ? __('Edit') : __('Publish')}</h2>
+      {isStillEditing && <p className="card__subtitle">{__('You are currently editing a claim.')}</p>}
 
       <div className="card__content">
         <FileSelector currentPath={filePath} onFileChosen={handleFileChange} />

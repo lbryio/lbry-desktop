@@ -76,7 +76,7 @@ class WalletSendTip extends React.PureComponent<Props, State> {
 
     return (
       <React.Fragment>
-        <Form className="card__content">
+        <Form>
           <FormField
             autoFocus
             name="tip-input"
@@ -100,13 +100,13 @@ class WalletSendTip extends React.PureComponent<Props, State> {
               />
             }
             helper={
-              <p>
-                {claimIsMine || isSupport
-                  ? __('This will increase the overall bid amount for ')
+              <React.Fragment>
+                {claimIsMine
+                  ? __('This will increase your overall bid amount for ')
                   : __('This will appear as a tip for ')}
                 {`"${title}" which will boost its ability to be discovered while active.`}{' '}
                 <Button label={__('Learn more')} button="link" href="https://lbry.com/faq/tipping" />.
-              </p>
+              </React.Fragment>
             }
           />
         </Form>

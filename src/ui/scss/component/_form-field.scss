@@ -30,10 +30,13 @@ input[type='number'] {
   width: 8em;
 }
 
+input,
 input[type='text'],
 input[type='number'],
+input[type='email'],
 select,
 textarea {
+  height: var(--input-height);
   padding-bottom: 0.1em;
 
   [data-mode='dark'] & {
@@ -52,16 +55,12 @@ textarea {
 }
 
 fieldset-section {
+  margin-bottom: var(--spacing-small);
+
   label {
     width: auto;
     text-transform: none;
-  }
-
-  checkbox-element,
-  radio-element {
-    label {
-      font-size: medium;
-    }
+    font-size: var(--font-multiplier-medium);
   }
 }
 
@@ -80,20 +79,19 @@ fieldset-section:last-child {
 
 checkbox-element,
 radio-element {
-  input[type='checkbox']:checked + label {
-    color: $lbry-black;
-
-    [data-mode='dark'] & {
-      color: $lbry-white;
-
-      &:hover {
-        color: $lbry-teal-4;
-      }
-    }
-  }
-
   label {
+    color: lighten($lbry-black, 20%);
     margin-bottom: 0;
+    margin-left: var(--spacing-miniscule);
+  }
+}
+
+checkbox-toggle {
+  &:before {
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: 100%;
+    transition: all 0.2s;
   }
 }
 
@@ -155,7 +153,8 @@ fieldset-group {
     fieldset-section:first-child {
       .form-field__prefix {
         white-space: nowrap;
-        padding: 0.2rem var(--spacing-s);
+        padding: var(--spacing-miniscule);
+        height: var(--input-height);
         padding-right: 0;
         border: 1px solid;
         border-right: 0;
@@ -214,19 +213,13 @@ fieldset-section {
   input-submit {
     input {
       &:first-child {
-        border-right-color: transparent;
         border-top-right-radius: 0;
         border-bottom-right-radius: 0;
       }
     }
 
-    // input-submit is connected to a button
-    // The input height needs to match the button height to lineup correctly
-    // Other inputs are fine since they are on their own and are used under different circumstances
     input[type='email'],
     input[type='text'] {
-      height: var(--button-height);
-
       [data-mode='dark'] & {
         &:not(:focus) {
           border-color: $lbry-gray-5;
@@ -236,17 +229,22 @@ fieldset-section {
 
     .button,
     // specificity needed because of @lbry/component rules
-    // @lbry/componentfixme
-    .button[type='submit']:not(:hover) {
+    // @lbry/componentsfixme
+    .button[type='submit']:not(:hover),
+    .button[type='submit']:hover {
+      border-color: $lbry-black;
+      border-radius: var(--button-radius);
       border-top-left-radius: 0;
       border-bottom-left-radius: 0;
-      border-top-right-radius: var(--input-border-radius);
-      border-bottom-right-radius: var(--input-border-radius);
+      border-color: $lbry-black;
+      opacity: 1;
     }
   }
 
   select {
     max-width: 12em;
+    background-position: 95% center;
+    background-size: 1.2rem;
     background-color: $lbry-white;
 
     [data-mode='dark'] & {
@@ -274,7 +272,7 @@ fieldset-section {
 }
 
 .form-field--copyable {
-  background-color: rgba($lbry-gray-1, 0.3);
+  background-color: rgba($lbry-gray-1, 0.5);
   border: 1px solid $lbry-gray-1;
   color: $lbry-gray-5;
   flex: 1;
@@ -290,14 +288,10 @@ fieldset-section {
   }
 }
 
-label + .react-toggle,
-.react-toggle + label {
-  margin-left: var(--spacing-small);
-}
-
 .form-field__help {
   @extend .help;
-  margin-top: var(--spacing-medium);
+  margin-top: var(--spacing-small);
+  margin-bottom: var(--spacing-large);
 }
 
 .form-field--price-amount {

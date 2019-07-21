@@ -1,4 +1,5 @@
 .pagination {
+  @extend .ul--no-style;
   display: flex;
   align-items: center;
 
@@ -34,6 +35,7 @@
 
   > a {
     display: block;
+    height: 100%;
   }
 }
 
@@ -43,9 +45,10 @@
 
 .pagination__item--previous,
 .pagination__item--next {
-  font-size: 2.5rem;
+  font-size: var(--font-multiplier-xlarge);
   line-height: 1;
   position: relative;
+  padding-top: var(--spacing-small);
 }
 
 .pagination__item--selected {

@@ -54,14 +54,12 @@ function ModalOpenExternalResource(props: Props) {
       onConfirmed={() => openResource()}
       onAborted={closeModal}
     >
-      <section className="card__content">
-        <p>
-          {(uri && __('This link leads to an external website.')) ||
-            (path && __('This file has been shared with you by other people.'))}
-        </p>
-        <blockquote>{uri || path}</blockquote>
-        <p>{__('LBRY Inc is not responsible for its content, click continue to proceed at your own risk.')}</p>
-      </section>
+      <p>
+        {(uri && __('This link leads to an external website.')) ||
+          (path && __('This file has been shared with you by other people.'))}
+      </p>
+      <blockquote>{uri || path}</blockquote>
+      <p>{__('LBRY Inc is not responsible for its content, click continue to proceed at your own risk.')}</p>
     </Modal>
   );
 }

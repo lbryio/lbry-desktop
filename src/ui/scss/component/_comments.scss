@@ -1,4 +1,5 @@
 .comments {
+  @extend .ul--no-style;
   margin-top: var(--spacing-large);
 }
 

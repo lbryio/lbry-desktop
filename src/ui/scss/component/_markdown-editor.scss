@@ -123,8 +123,8 @@
 
 .editor-statusbar {
   color: rgba($lbry-black, 0.5);
-  font-size: 1rem;
-  padding: var(--spacing-medium) 0; // overriding styles from elsewhere
+  font-size: var(--font-label);
+  // padding: var(--spacing-medium) 0; // overriding styles from elsewhere
 
   [data-mode='dark'] & {
     color: inherit;
