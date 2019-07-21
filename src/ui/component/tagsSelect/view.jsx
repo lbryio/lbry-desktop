@@ -6,6 +6,7 @@ import Tag from 'component/tag';
 import TagsSearch from 'component/tagsSearch';
 import usePersistedState from 'util/use-persisted-state';
 import { useTransition, animated } from 'react-spring';
+import analytics from 'analytics';
 
 type Props = {
   showClose: boolean,
@@ -56,6 +57,10 @@ export default function TagSelect(props: Props) {
       onRemove(tag);
     } else {
       doToggleTagFollow(tag.name);
+
+      const wasFollowing = followedTags.map(tag => tag.name).includes(tag.name);
+      const nowFollowing = !wasFollowing;
+      analytics.tagFollowEvent(tag.name, nowFollowing, 'tag-select');
     }
   }
 

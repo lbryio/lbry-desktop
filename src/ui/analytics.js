@@ -14,6 +14,7 @@ type Analytics = {
   toggle: (boolean, ?boolean) => void,
   apiLogView: (string, string, string, ?number, ?() => void) => void,
   apiLogPublish: () => void,
+  tagFollowEvent: (string, boolean, string) => void,
 };
 
 let analyticsEnabled: boolean = true;
@@ -76,6 +77,16 @@ const analytics: Analytics = {
     if (isProduction) {
       // We don't need to worry about analytics enabled here because users manually click on the button to provide feedback
       Lbryio.call('feedback', 'search', { query, vote });
+    }
+  },
+  tagFollowEvent: (tag, following, location) => {
+    console.log('yep');
+    if (analyticsEnabled) {
+      ReactGA.event({
+        category: 'Tag',
+        action: following ? 'follow' : 'unfollow',
+        value: tag,
+      });
     }
   },
 };
