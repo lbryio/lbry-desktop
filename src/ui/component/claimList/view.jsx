@@ -39,18 +39,16 @@ export default function ClaimList(props: Props) {
     type,
     header,
     onScrollBottom,
-    page,
     pageSize,
   } = props;
   const [currentSort, setCurrentSort] = usePersistedState(persistedStorageKey, SORT_NEW);
-  const hasUris = uris && !!uris.length;
-  const sortedUris = (hasUris && (currentSort === SORT_NEW ? uris : uris.slice().reverse())) || [];
+  const urisLength = (uris && uris.length) || 0;
+  const sortedUris = (urisLength > 0 && (currentSort === SORT_NEW ? uris : uris.slice().reverse())) || [];
 
   function handleSortChange() {
     setCurrentSort(currentSort === SORT_NEW ? SORT_OLD : SORT_NEW);
   }
 
-  const urisLength = uris && uris.length;
   useEffect(() => {
     function handleScroll(e) {
       if (pageSize && onScrollBottom) {
@@ -71,7 +69,7 @@ export default function ClaimList(props: Props) {
         window.removeEventListener('scroll', handleScroll);
       };
     }
-  }, [loading, onScrollBottom, urisLength]);
+  }, [loading, onScrollBottom, urisLength, pageSize]);
 
   return (
     <section
@@ -100,17 +98,17 @@ export default function ClaimList(props: Props) {
           </div>
         </div>
       )}
-      {hasUris && (
+      {urisLength > 0 && (
         <ul>
           {sortedUris.map((uri, index) => (
             <React.Fragment key={uri}>
-              <ClaimPreview uri={uri} type={type} placeholder={loading && (!page || page === 1)} />
+              <ClaimPreview uri={uri} type={type} />
               {index === 4 && injectedItem && <li className="claim-preview--injected">{injectedItem}</li>}
             </React.Fragment>
           ))}
         </ul>
       )}
-      {!hasUris && !loading && <h2 className="main--empty empty">{empty || __('No results')}</h2>}
+      {urisLength === 0 && !loading && <h2 className="main--empty empty">{empty || __('No results')}</h2>}
     </section>
   );
 }

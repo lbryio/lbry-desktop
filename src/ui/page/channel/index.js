@@ -5,6 +5,7 @@ import {
   makeSelectThumbnailForUri,
   makeSelectCoverForUri,
   selectCurrentChannelPage,
+  makeSelectClaimForUri,
 } from 'lbry-redux';
 import ChannelPage from './view';
 
@@ -14,6 +15,7 @@ const select = (state, props) => ({
   cover: makeSelectCoverForUri(props.uri)(state),
   channelIsMine: makeSelectClaimIsMine(props.uri)(state),
   page: selectCurrentChannelPage(state),
+  claim: makeSelectClaimForUri(props.uri)(state),
 });
 
 export default connect(

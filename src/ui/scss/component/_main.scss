@@ -1,32 +1,27 @@
 .main-wrapper {
-  position: absolute;
-  min-height: 100vh;
-  width: 100vw;
-  padding-top: var(--header-height);
-  padding-left: var(--spacing-large);
-  padding-right: var(--spacing-large);
-  padding-bottom: var(--spacing-large);
-  display: flex;
-
   [data-mode='dark'] & {
     background-color: var(--dm-color-08);
   }
 }
 
-.main-wrapper-inner {
+.main-wrapper__inner {
   display: flex;
+  align-items: flex-start;
+  min-height: 100vh;
   max-width: 1200px;
-  width: 100%;
   margin-left: auto;
   margin-right: auto;
-  margin-top: var(--spacing-large);
-  position: relative;
+  padding-left: var(--spacing-large);
+  padding-right: var(--spacing-large);
+  padding-bottom: var(--spacing-main-padding);
 }
 
 .main {
   min-width: 0;
   width: calc(100% - var(--side-nav-width) - var(--spacing-main-padding));
   position: relative;
+  margin-top: calc(var(--header-height) + var(--spacing-large));
+  margin-right: var(--spacing-main-padding);
 
   @media (max-width: 600px) {
     width: 100%;
@@ -66,5 +61,9 @@
 
   svg {
     stroke: $lbry-white;
+  }
+
+  [data-mode='dark'] & {
+    background-color: $lbry-teal-5;
   }
 }

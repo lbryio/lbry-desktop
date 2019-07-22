@@ -15,7 +15,7 @@ type Props = {
   isUpgradeAvailable: boolean,
   roundedBalance: number,
   downloadUpgradeRequested: any => void,
-  history: { push: string => void },
+  history: { push: string => void, goBack: () => void, goForward: () => void },
   currentTheme: string,
   automaticDarkModeEnabled: boolean,
   setClientSetting: (string, boolean | string) => void,
@@ -51,7 +51,7 @@ const Header = (props: Props) => {
             <Button
               className="header__navigation-item header__navigation-item--back"
               description={__('Navigate back')}
-              onClick={() => window.history.back()}
+              onClick={() => history.goBack()}
               icon={ICONS.ARROW_LEFT}
               iconSize={18}
             />
@@ -59,7 +59,7 @@ const Header = (props: Props) => {
             <Button
               className="header__navigation-item header__navigation-item--forward"
               description={__('Navigate forward')}
-              onClick={() => window.history.forward()}
+              onClick={() => history.goForward()}
               icon={ICONS.ARROW_RIGHT}
               iconSize={18}
             />

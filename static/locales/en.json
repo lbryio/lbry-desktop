@@ -575,5 +575,8 @@
   "Confirm Claim Revoke": "Confirm Claim Revoke",
   "Are you sure you want to remove this support?": "Are you sure you want to remove this support?",
   "These credits are permanently yours and can be removed at any time. Removing this support will reduce the claim's discoverability and return the LBC to your spendable balance.": "These credits are permanently yours and can be removed at any time. Removing this support will reduce the claim's discoverability and return the LBC to your spendable balance.",
-  "The better your tags are, the easier it will be for people to discover your channel.": "The better your tags are, the easier it will be for people to discover your channel."
+  "Invalid character %s in name: %s.": "Invalid character %s in name: %s.",
+  "The better your tags are, the easier it will be for people to discover your channel.": "The better your tags are, the easier it will be for people to discover your channel.",
+  "Thumbnail (300 x 300)": "Thumbnail (300 x 300)",
+  "Cover (1000 x 160)": "Cover (1000 x 160)"
 }

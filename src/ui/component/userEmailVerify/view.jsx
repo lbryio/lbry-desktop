@@ -1,9 +1,9 @@
 // @flow
 import * as React from 'react';
 import Button from 'component/button';
+import UserEmailResetButton from 'component/userEmailResetButton';
 
 type Props = {
-  cancelButton: React.Node,
   email: string,
   resendVerificationEmail: string => void,
   checkEmailVerified: () => void,
@@ -47,7 +47,7 @@ class UserEmailVerify extends React.PureComponent<Props> {
   emailVerifyCheckInterval: ?IntervalID;
 
   render() {
-    const { cancelButton, email } = this.props;
+    const { email } = this.props;
 
     return (
       <React.Fragment>
@@ -67,7 +67,8 @@ class UserEmailVerify extends React.PureComponent<Props> {
               label={__('Resend verification email')}
               onClick={this.handleResendVerificationEmail}
             />
-            {cancelButton}
+
+            <UserEmailResetButton />
           </div>
 
           <p className="help">

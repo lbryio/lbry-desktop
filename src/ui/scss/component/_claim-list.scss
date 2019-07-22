@@ -24,6 +24,13 @@
     &:hover {
       color: $lbry-teal-1;
     }
+
+    [data-mode='dark'] & {
+      color: $lbry-teal-4;
+      &:hover {
+        color: $lbry-teal-1;
+      }
+    }
   }
 
   // Fix this in @lbry/components, we shouldn't need to be this specific
@@ -129,7 +136,18 @@
   }
 }
 
-.claim-list__pending {
+.claim-preview--visited {
+  // Still keep the normal styles on hover regardless of if they have visited the claim
+  &:not(:hover) {
+    color: lighten($lbry-black, 35%);
+
+    [data-mode='dark'] & {
+      color: darken($lbry-white, 35%);
+    }
+  }
+}
+
+.claim-preview--pending {
   cursor: pointer;
   opacity: 0.6;
 
@@ -166,8 +184,5 @@
 .claim-preview-title {
   font-weight: 600;
   margin-right: auto;
-}
-
-.claim-preview-tags {
-  margin-left: 0;
+  padding-right: var(--spacing-medium);
 }

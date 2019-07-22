@@ -11,6 +11,7 @@ import {
 } from 'lbry-redux';
 import { selectBlackListedOutpoints, selectFilteredOutpoints } from 'lbryinc';
 import { selectShowNsfw } from 'redux/selectors/settings';
+import { makeSelectHasVisitedUri } from 'redux/selectors/content';
 import ClaimPreview from './view';
 
 const select = (state, props) => ({
@@ -24,6 +25,7 @@ const select = (state, props) => ({
   nsfw: makeSelectClaimIsNsfw(props.uri)(state),
   blackListedOutpoints: selectBlackListedOutpoints(state),
   filteredOutpoints: selectFilteredOutpoints(state),
+  hasVisitedUri: makeSelectHasVisitedUri(props.uri)(state),
 });
 
 const perform = dispatch => ({

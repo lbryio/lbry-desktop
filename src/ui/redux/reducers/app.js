@@ -63,6 +63,31 @@ const defaultState: AppState = {
   isUpgradeSkipped: undefined,
   enhancedLayout: false,
   searchOptionsExpanded: false,
+  currentScroll: 0,
+  scrollHistory: [0],
+};
+
+// @@router comes from react-router
+// This action is dispatched any time a user navigates forward or back
+reducers['@@router/LOCATION_CHANGE'] = (state, action) => {
+  const { currentScroll } = state;
+  const scrollHistory = state.scrollHistory.slice();
+  const { action: name } = action.payload;
+
+  let newCurrentScroll = currentScroll;
+  if (name === 'PUSH') {
+    scrollHistory.push(window.scrollY);
+    newCurrentScroll = 0;
+  } else if (name === 'POP') {
+    newCurrentScroll = scrollHistory[scrollHistory.length - 1];
+    scrollHistory.pop();
+  }
+
+  return {
+    ...state,
+    scrollHistory,
+    currentScroll: newCurrentScroll,
+  };
 };
 
 reducers[ACTIONS.DAEMON_READY] = state =>

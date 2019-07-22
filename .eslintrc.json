@@ -29,6 +29,7 @@
     "indent": 0,
     "jsx-quotes": ["error", "prefer-double"],
     "new-cap": 0,
+    "no-console": 1,
     "no-multi-spaces": 0,
     "no-redeclare": 0,
     "no-return-await": 0,

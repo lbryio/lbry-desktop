@@ -44,10 +44,12 @@ class TransactionListItem extends React.PureComponent<Props> {
     const { amount, claim_id: claimId, claim_name: name, date, fee, txid, type } = transaction;
 
     // Ensure the claim name exists and is valid
+    let uri;
     let claimName = name;
-    if (claimName) {
+    try {
       ({ claimName } = parseURI(name));
-    }
+      uri = buildURI({ claimName: claimName, claimId });
+    } catch (e) {}
 
     const dateFormat = {
       month: 'short',
@@ -72,9 +74,7 @@ class TransactionListItem extends React.PureComponent<Props> {
         </td>
         <td className="table__item--actionable">
           {reward && <span>{reward.reward_title}</span>}
-          {claimName && claimId && (
-            <Button button="link" navigate={buildURI({ claimName: claimName, claimId })} label={claimName} />
-          )}
+          {claimName && claimId ? <Button button="link" navigate={uri} label={claimName} /> : claimName}
         </td>
 
         <td>

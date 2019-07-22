@@ -232,7 +232,6 @@ export const doPublish = () => (dispatch: Dispatch, getState: () => {}) => {
     contentIsFree,
     fee,
     uri,
-    nsfw,
     tags,
     locations,
   } = publishData;
@@ -287,17 +286,6 @@ export const doPublish = () => (dispatch: Dispatch, getState: () => {}) => {
     publishPayload.release_time = Number(myClaimForUri.value.release_time);
   }
 
-  if (nsfw) {
-    if (!publishPayload.tags.includes('mature')) {
-      publishPayload.tags.push('mature');
-    }
-  } else {
-    const indexToRemove = publishPayload.tags.indexOf('mature');
-    if (indexToRemove > -1) {
-      publishPayload.tags.splice(indexToRemove, 1);
-    }
-  }
-
   if (channelId) {
     publishPayload.channel_id = channelId;
   }
@@ -347,7 +335,7 @@ export const doPublish = () => (dispatch: Dispatch, getState: () => {}) => {
     dispatch({ type: ACTIONS.PUBLISH_FAIL });
     dispatch(doError(error.message));
   };
-  console.log('PP', publishPayload);
+
   return Lbry.publish(publishPayload).then(success, failure);
 };
 

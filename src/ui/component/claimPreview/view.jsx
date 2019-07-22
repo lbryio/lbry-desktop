@@ -29,6 +29,7 @@ type Props = {
   nsfw: boolean,
   placeholder: boolean,
   type: string,
+  hasVisitedUri: boolean,
   blackListedOutpoints: Array<{
     txid: string,
     nout: number,
@@ -56,16 +57,23 @@ function ClaimPreview(props: Props) {
     type,
     blackListedOutpoints,
     filteredOutpoints,
+    hasVisitedUri,
   } = props;
   const haventFetched = claim === undefined;
   const abandoned = !isResolvingUri && !claim && !placeholder;
-  const { isChannel } = parseURI(uri);
   const claimsInChannel = (claim && claim.meta.claims_in_channel) || 0;
+  let isValid;
+  try {
+    parseURI(uri);
+    isValid = true;
+  } catch (e) {
+    isValid = false;
+  }
 
+  const isChannel = isValid ? parseURI(uri).isChannel : false;
   let shouldHide = abandoned || (!claimIsMine && obscureNsfw && nsfw);
 
   // This will be replaced once blocking is done at the wallet server level
-
   if (claim && !shouldHide && blackListedOutpoints) {
     shouldHide = blackListedOutpoints.some(outpoint => outpoint.txid === claim.txid && outpoint.nout === claim.nout);
   }
@@ -89,16 +97,16 @@ function ClaimPreview(props: Props) {
   }
 
   useEffect(() => {
-    if (!isResolvingUri && haventFetched && uri) {
+    if (isValid && !isResolvingUri && haventFetched && uri) {
       resolveUri(uri);
     }
-  }, [isResolvingUri, uri, resolveUri, haventFetched]);
+  }, [isValid, isResolvingUri, uri, resolveUri, haventFetched]);
 
   if (shouldHide) {
     return null;
   }
 
-  if (placeholder || isResolvingUri) {
+  if (placeholder || (isResolvingUri && !claim)) {
     return (
       <li className="claim-preview" disabled>
         <div className="placeholder media__thumb" />
@@ -117,7 +125,8 @@ function ClaimPreview(props: Props) {
       onContextMenu={handleContextMenu}
       className={classnames('claim-preview', {
         'claim-preview--large': type === 'large',
-        'claim-list__pending': pending,
+        'claim-preview--visited': !isChannel && hasVisitedUri,
+        'claim-preview--pending': pending,
       })}
     >
       {isChannel ? <ChannelThumbnail uri={uri} /> : <CardMedia thumbnail={thumbnail} />}
