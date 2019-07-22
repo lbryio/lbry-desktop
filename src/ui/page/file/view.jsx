@@ -224,7 +224,7 @@ class FilePage extends React.Component<Props> {
             <div className="media__subtitle">
               <div className="media__actions media__actions--between">
                 <DateTime uri={uri} show={DateTime.SHOW_DATE} />
-                {'claimIsMine' && (
+                {claimIsMine && (
                   <span>
                     {viewCount} {viewCount !== 1 ? __('Views') : __('View')}
                   </span>
@@ -274,7 +274,13 @@ class FilePage extends React.Component<Props> {
               </div>
             </div>
 
-            <ClaimPreview uri={channelUri} type="inline" />
+            <hr />
+
+            {channelUri ? (
+              <ClaimPreview uri={channelUri} type="inline" />
+            ) : (
+              <div className="claim-preview--inline claim-preview-title">{__('Anonymous')}</div>
+            )}
 
             <div className="media__info--large">
               <FileDetails uri={uri} />
