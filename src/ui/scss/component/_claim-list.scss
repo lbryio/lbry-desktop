@@ -107,6 +107,10 @@
 .claim-preview {
   border-bottom: 1px solid rgba($lbry-teal-5, 0.1);
 
+  &:only-of-type {
+    border: none;
+  }
+
   [data-mode='dark'] & {
     color: $lbry-white;
     border-color: var(--dm-color-04);
@@ -179,7 +183,6 @@
   padding: 0;
   padding-top: var(--spacing-large);
   border-bottom: none;
-  border-top: 1px solid $lbry-gray-1;
 
   .channel-thumbnail {
     width: var(--channel-thumbnail-width--small);

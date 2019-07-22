@@ -39,6 +39,10 @@
   color: lighten($lbry-black, 20%);
   margin-top: var(--spacing-small);
 
+  .icon {
+    stroke: $lbry-gray-5;
+  }
+
   &:hover {
     color: $lbry-teal-4;
     .icon {
@@ -57,7 +61,7 @@
     color: var(--dm-color-01);
 
     svg {
-      color: var(--dm-color-01);
+      stroke: var(--dm-color-01);
     }
 
     &:hover,
@@ -65,7 +69,7 @@
       color: $lbry-teal-4;
 
       .icon {
-        color: $lbry-teal-4;
+        stroke: $lbry-teal-4;
       }
     }
   }

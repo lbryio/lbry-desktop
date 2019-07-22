@@ -60,7 +60,6 @@ fieldset-section {
   label {
     width: auto;
     text-transform: none;
-    font-size: var(--font-multiplier-medium);
   }
 }
 
@@ -83,6 +82,7 @@ radio-element {
     color: lighten($lbry-black, 20%);
     margin-bottom: 0;
     margin-left: var(--spacing-miniscule);
+    font-size: var(--font-body);
   }
 }
 
