@@ -587,5 +587,6 @@
   "Unlock": "Unlock",
   "Exit": "Exit",
   "Your wallet has been encrypted with a local password. Please enter your wallet password to proceed.": "Your wallet has been encrypted with a local password. Please enter your wallet password to proceed.",
-  "Wallet Password": "Wallet Password"
+  "Wallet Password": "Wallet Password",
+  "Find New Tags": "Find New Tags"
 }

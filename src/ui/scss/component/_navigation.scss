@@ -13,10 +13,6 @@
   align-items: flex-start;
   position: relative;
   list-style: none;
-
-  &:not(:first-of-type) {
-    margin-left: 1.75rem;
-  }
 }
 
 .navigation-links--small {
