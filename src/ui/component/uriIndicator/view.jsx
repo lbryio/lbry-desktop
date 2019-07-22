@@ -10,6 +10,7 @@ type Props = {
   channelUri: ?string,
   link: ?boolean,
   claim: ?Claim,
+  addTooltip: boolean,
   // Lint thinks we aren't using these, even though we are.
   // Possibly because the resolve function is an arrow function that is passed in props?
   resolveUri: string => void,
@@ -17,6 +18,10 @@ type Props = {
 };
 
 class UriIndicator extends React.PureComponent<Props> {
+  static defaultProps = {
+    addTooltip: true,
+  };
+
   componentDidMount() {
     this.resolve(this.props);
   }
@@ -34,7 +39,7 @@ class UriIndicator extends React.PureComponent<Props> {
   };
 
   render() {
-    const { link, isResolvingUri, claim } = this.props;
+    const { link, isResolvingUri, claim, addTooltip } = this.props;
 
     if (!claim) {
       return <span className="empty">{isResolvingUri ? 'Validating...' : 'Unused'}</span>;
@@ -51,9 +56,12 @@ class UriIndicator extends React.PureComponent<Props> {
     if (channelClaim) {
       const { name, claim_id: claimId } = channelClaim;
       let channelLink;
-      if (claim.is_channel_signature_valid) {
-        channelLink = link ? buildURI({ channelName: name, claimId }) : false;
-      }
+
+      // Disabling now because it mostly causes issues
+      // Add this back to ensure we only add links to signed channels
+      // if (claim.is_channel_signature_valid) {
+      channelLink = link ? buildURI({ channelName: name, claimId }) : false;
+      // }
 
       const inner = <span className="channel-name">{name}</span>;
 
@@ -61,9 +69,15 @@ class UriIndicator extends React.PureComponent<Props> {
         return inner;
       }
 
+      const Wrapper = addTooltip
+        ? ({ children }) => (
+            <Tooltip label={<ClaimPreview uri={channelLink} type="tooltip" placeholder={false} />}>{children}</Tooltip>
+          )
+        : 'span';
+
       return (
         <Button className="button--uri-indicator" navigate={channelLink}>
-          <Tooltip label={<ClaimPreview uri={channelLink} type="small" />}>{inner}</Tooltip>
+          <Wrapper>{inner}</Wrapper>
         </Button>
       );
     } else {
