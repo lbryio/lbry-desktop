@@ -4,6 +4,7 @@ import Page from 'component/page';
 import ClaimListDiscover from 'component/claimListDiscover';
 import Button from 'component/button';
 import useHover from 'util/use-hover';
+import analytics from 'analytics';
 
 type Props = {
   location: { search: string },
@@ -33,11 +34,18 @@ function TagsPage(props: Props) {
     label = __('Unfollow');
   }
 
+  function handleFollowClick() {
+    doToggleTagFollow(tag);
+
+    const nowFollowing = !isFollowing;
+    analytics.tagFollowEvent(tag, nowFollowing, 'tag-page');
+  }
+
   return (
     <Page>
       <ClaimListDiscover
         tags={tags}
-        meta={<Button ref={buttonRef} button="link" onClick={() => doToggleTagFollow(tag)} label={label} />}
+        meta={<Button ref={buttonRef} button="link" onClick={handleFollowClick} label={label} />}
       />
     </Page>
   );

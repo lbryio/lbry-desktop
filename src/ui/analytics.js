@@ -14,6 +14,7 @@ type Analytics = {
   toggle: (boolean, ?boolean) => void,
   apiLogView: (string, string, string, ?number, ?() => void) => void,
   apiLogPublish: () => void,
+  tagFollowEvent: (string, boolean, string) => void,
 };
 
 let analyticsEnabled: boolean = true;
@@ -23,12 +24,14 @@ const analytics: Analytics = {
       ReactGA.pageview(path);
     }
   },
-  setUser: user => {
-    // Commented out because currently there is some delay before we know the user
-    // We should retrieve this server side so we have it immediately
-    // if (analyticsEnabled && user.id) {
-    //   ReactGA.set('userId', user.id);
-    // }
+  setUser: userId => {
+    if (analyticsEnabled && userId) {
+      ReactGA.event({
+        category: 'User',
+        action: 'userId',
+        value: userId,
+      });
+    }
   },
   toggle: (enabled: boolean): void => {
     // Always collect analytics on lbry.tv
@@ -76,6 +79,15 @@ const analytics: Analytics = {
     if (isProduction) {
       // We don't need to worry about analytics enabled here because users manually click on the button to provide feedback
       Lbryio.call('feedback', 'search', { query, vote });
+    }
+  },
+  tagFollowEvent: (tag, following, location) => {
+    if (analyticsEnabled) {
+      ReactGA.event({
+        category: 'Tag',
+        action: following ? 'follow' : 'unfollow',
+        value: tag,
+      });
     }
   },
 };
