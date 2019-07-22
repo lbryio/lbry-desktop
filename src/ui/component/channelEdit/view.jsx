@@ -4,12 +4,11 @@ import { parseURI } from 'lbry-redux';
 import { Form, FormField } from 'component/common/form';
 import Button from 'component/button';
 
-import SelectAsset from '../selectAsset/view';
-import TagSelect from '../tagsSelect/view';
+import SelectAsset from 'component/selectAsset';
+import TagSelect from 'component/tagsSelect';
 
 type Props = {
   uri: string,
-
   title: ?string,
   amount: string,
   cover: ?string,
@@ -185,7 +184,7 @@ function ChannelForm(props: Props) {
           <TagSelect
             title={false}
             suggestMature
-            help={__('The better your tags are, the easier it will be for people to discover your content.')}
+            help={__('The better your tags are, the easier it will be for people to discover your channel.')}
             empty={__('No tags added')}
             onSelect={newTag => {
               if (!params.tags.map(savedTag => savedTag.name).includes(newTag.name)) {
