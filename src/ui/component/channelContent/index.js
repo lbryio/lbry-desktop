@@ -11,7 +11,6 @@ import { withRouter } from 'react-router';
 import ChannelPage from './view';
 
 const select = (state, props) => {
-  console.log('props', props);
   const { search } = props.location;
   const urlParams = new URLSearchParams(search);
   const page = urlParams.get('page') || 0;
