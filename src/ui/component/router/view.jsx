@@ -22,7 +22,7 @@ import NavigationHistory from 'page/navigationHistory';
 import TagsPage from 'page/tags';
 import FollowingPage from 'page/following';
 
-// Let app handle scroll
+// Tell the browser we are handling scroll restoration
 if ('scrollRestoration' in history) {
   history.scrollRestoration = 'manual';
 }

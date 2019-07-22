@@ -123,3 +123,8 @@ export const selectSearchOptionsExpanded = createSelector(
   selectState,
   state => state.searchOptionsExpanded
 );
+
+export const selectScrollStartingPosition = createSelector(
+  selectState,
+  state => state.currentScroll
+);

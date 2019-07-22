@@ -67,6 +67,8 @@ const defaultState: AppState = {
   scrollHistory: [0],
 };
 
+// @@router comes from react-router
+// This action is dispatched any time a user navigates forward or back
 reducers['@@router/LOCATION_CHANGE'] = (state, action) => {
   const { currentScroll } = state;
   const scrollHistory = state.scrollHistory.slice();

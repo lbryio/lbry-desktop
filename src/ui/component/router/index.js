@@ -1,10 +1,9 @@
 import { connect } from 'react-redux';
+import { selectScrollStartingPosition } from 'redux/selectors/app';
 import Router from './view';
 
 const select = state => ({
-  scroll: state.app.scrollHistory[state.app.scrollHistory.length - 1],
-  scrollHistory: state.app.scrollHistory,
-  currentScroll: state.app.currentScroll || 0,
+  currentScroll: selectScrollStartingPosition(state),
 });
 
 export default connect(select)(Router);
