@@ -1,6 +1,6 @@
 // @flow
 import React from 'react';
-import { Form, FormField } from 'component/common/form';
+import { Form, FormField, Submit } from 'component/common/form';
 import { Modal } from 'modal/modal';
 import Button from 'component/button';
 
@@ -94,9 +94,7 @@ class ModalWalletEncrypt extends React.PureComponent<Props, State> {
         isOpen
         title={__('Encrypt Wallet')}
         contentLabel={__('Encrypt Wallet')}
-        type="confirm"
-        confirmButtonLabel={__('Encrypt Wallet')}
-        abortButtonLabel={__('Cancel')}
+        type="custom"
         onConfirmed={() => this.submitEncryptForm()}
         onAborted={closeModal}
       >
@@ -135,6 +133,7 @@ class ModalWalletEncrypt extends React.PureComponent<Props, State> {
             )}
           </div>
           <FormField
+            inputButton={<Submit label={failMessage ? __('Encrypting Wallet') : __('Encrypt Wallet')} />}
             error={understandError === true ? 'You must enter "I understand"' : false}
             label={__('Enter "I understand"')}
             placeholder={__('Dear computer, I understand')}
@@ -144,6 +143,9 @@ class ModalWalletEncrypt extends React.PureComponent<Props, State> {
           />
           {failMessage && <div className="error-text">{__(failMessage)}</div>}
         </Form>
+        <div className="card__actions">
+          <Button button="link" label={__('Cancel')} onClick={closeModal} />
+        </div>
       </Modal>
     );
   }
