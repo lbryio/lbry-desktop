@@ -36,6 +36,7 @@
     "object-curly-spacing": 0,
     "one-var": 0,
     "prefer-promise-reject-errors": 0,
+    "react/jsx-indent": 0,
     "react-hooks/exhaustive-deps": "warn",
     "react-hooks/rules-of-hooks": "error",
     "space-before-function-paren": ["error", "never"],
