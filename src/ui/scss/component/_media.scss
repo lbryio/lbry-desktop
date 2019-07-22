@@ -70,6 +70,10 @@
 
 .media__actions--between {
   justify-content: space-between;
+
+  &:last-of-type:not(:only-of-type) {
+    margin-bottom: var(--spacing-large);
+  }
 }
 
 .media__actions--nowrap {
@@ -84,7 +88,6 @@
 
 .media__action-group--large {
   display: flex;
-  margin-bottom: var(--spacing-medium);
   font-size: var(--font-multiplier-medium);
 
   > * {

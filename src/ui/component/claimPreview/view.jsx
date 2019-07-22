@@ -64,6 +64,7 @@ function ClaimPreview(props: Props) {
   const abandoned = !isResolvingUri && !claim;
   const claimsInChannel = (claim && claim.meta.claims_in_channel) || 0;
   const showPublishLink = abandoned && placeholder === 'publish';
+  const minimal = type === 'small' || type === 'tooltip';
 
   let isValid;
   try {
@@ -75,7 +76,7 @@ function ClaimPreview(props: Props) {
 
   const isChannel = isValid ? parseURI(uri).isChannel : false;
   let shouldHide =
-    placeholder !== 'loading' && ((abandoned && !showPublishLink) || (!claimIsMine && obscureNsfw && nsfw));
+    placeholder !== 'loading' && ((abandoned && !showPublishLink) || (!claimIsMine && obscureNsfw && nsfw) || !claim);
 
   // This will be replaced once blocking is done at the wallet server level
   if (claim && !shouldHide && blackListedOutpoints) {
@@ -133,7 +134,7 @@ function ClaimPreview(props: Props) {
       onClick={pending || type === 'inline' ? undefined : onClick}
       onContextMenu={handleContextMenu}
       className={classnames('claim-preview', {
-        'claim-preview--small': type === 'small',
+        'claim-preview--small': minimal,
         'claim-preview--large': type === 'large',
         'claim-preview--inline': type === 'inline',
         'claim-preview--visited': !isChannel && hasVisitedUri,
@@ -146,7 +147,7 @@ function ClaimPreview(props: Props) {
           <div className="claim-preview-title">
             {claim ? <TruncatedText text={title || claim.name} lines={1} /> : <span>{__('Nothing here')}</span>}
           </div>
-          {type !== 'small' && (
+          {!minimal && (
             <div>
               {isChannel && <SubscribeButton uri={uri.startsWith('lbry://') ? uri : `lbry://${uri}`} />}
               {!isChannel && <FileProperties uri={uri} />}
@@ -160,7 +161,7 @@ function ClaimPreview(props: Props) {
             {!isResolvingUri && (
               <div>
                 {claim ? (
-                  <UriIndicator uri={uri} link />
+                  <UriIndicator uri={uri} link addTooltip={!minimal} />
                 ) : (
                   <Fragment>
                     <div>{__('Publish something and claim this spot!')}</div>
