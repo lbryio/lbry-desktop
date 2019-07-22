@@ -3,6 +3,7 @@
   position: fixed;
   top: 0;
   width: 100%;
+  padding: 0 var(--spacing-large);
   background-color: $lbry-white;
   border-bottom: 1px solid $lbry-gray-1;
   box-shadow: var(--card-box-shadow) $lbry-gray-1;
@@ -23,7 +24,6 @@
 .header__contents {
   max-width: var(--page-max-width);
   height: calc(var(--header-height) - 1px);
-  padding: 0 var(--spacing-large);
   display: flex;
   justify-content: space-between;
   margin: auto;
