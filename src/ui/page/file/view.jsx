@@ -252,19 +252,18 @@ class FilePage extends React.Component<Props> {
                       icon={icons.TIP}
                       label={__('Tip')}
                       title={__('Send a tip to this creator')}
-                      onClick={() => openModal(MODALS.SEND_TIP, { uri, claimIsMine })}
+                      onClick={() => openModal(MODALS.SEND_TIP, { uri, claimIsMine, isSupport: false })}
                     />
                   )}
-                  {claimIsMine ||
-                    (!claimIsMine && supportOption && (
-                      <Button
-                        button="alt"
-                        icon={icons.SUPPORT}
-                        label={__('Support')}
-                        title={__('Support this claim')}
-                        onClick={() => openModal(MODALS.SEND_TIP, { uri, claimIsMine, isSupport: true })}
-                      />
-                    ))}
+                  {(claimIsMine || (!claimIsMine && supportOption)) && (
+                    <Button
+                      button="alt"
+                      icon={icons.SUPPORT}
+                      label={__('Support')}
+                      title={__('Support this claim')}
+                      onClick={() => openModal(MODALS.SEND_TIP, { uri, claimIsMine, isSupport: true })}
+                    />
+                  )}
                   <Button
                     button="alt"
                     icon={icons.SHARE}
