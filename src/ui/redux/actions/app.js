@@ -24,7 +24,6 @@ import {
 import { doAuthenticate } from 'lbryinc';
 import { lbrySettings as config, version as appVersion } from 'package.json';
 import { push } from 'connected-react-router';
-import { whiteListedReducers } from 'store';
 
 // @if TARGET='app'
 const { autoUpdater } = remote.require('electron-updater');
@@ -188,7 +187,7 @@ export function doCancelUpgrade() {
       try {
         upgradeDownloadItem.cancel();
       } catch (err) {
-        console.error(err);
+        console.error(err); // eslint-disable-line no-console
       }
     }
 
@@ -328,10 +327,11 @@ export function doDaemonReady() {
 
 export function doClearCache() {
   return () => {
-    const reducersToClear = whiteListedReducers.filter(reducerKey => reducerKey !== 'tags');
-    window.cacheStore.purge(reducersToClear);
-
-    return Promise.resolve();
+    // Need to update this to work with new version of redux-persist
+    // Leaving for now
+    // const reducersToClear = whiteListedReducers.filter(reducerKey => reducerKey !== 'tags');
+    // window.cacheStore.purge(reducersToClear);
+    return window.persistor.purge();
   };
 }
 

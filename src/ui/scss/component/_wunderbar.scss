@@ -7,7 +7,7 @@
   flex: 1;
   position: relative;
   z-index: 1;
-  margin-right: calc(var(--spacing-large));
+  margin-right: var(--spacing-main-padding);
   font-size: var(--font-label);
 
   @media (max-width: 600px) {

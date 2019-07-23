@@ -21,6 +21,7 @@ type Props = {
   tagsChosen?: Array<Tag>,
   onSelect?: Tag => void,
   onRemove?: Tag => void,
+  className?: string,
 };
 
 const tagsAnimation = {
@@ -41,6 +42,7 @@ export default function TagSelect(props: Props) {
     onSelect,
     onRemove,
     suggestMature,
+    className,
   } = props;
   const [hasClosed, setHasClosed] = usePersistedState('tag-select:has-closed', false);
   const tagsToDisplay = tagsChosen || followedTags;
@@ -65,7 +67,7 @@ export default function TagSelect(props: Props) {
 
   return (
     ((showClose && !hasClosed) || !showClose) && (
-      <div>
+      <div className={className}>
         {title !== false && (
           <h2 className="card__title">
             {title}

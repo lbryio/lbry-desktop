@@ -71,7 +71,7 @@ const defaultState: AppState = {
 // This action is dispatched any time a user navigates forward or back
 reducers['@@router/LOCATION_CHANGE'] = (state, action) => {
   const { currentScroll } = state;
-  const scrollHistory = state.scrollHistory.slice();
+  const scrollHistory = (state.scrollHistory && state.scrollHistory.slice()) || [];
   const { action: name } = action.payload;
 
   let newCurrentScroll = currentScroll;

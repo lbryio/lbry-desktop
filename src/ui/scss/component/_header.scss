@@ -3,7 +3,6 @@
   position: fixed;
   top: 0;
   width: 100%;
-  padding: 0 var(--spacing-large);
   background-color: $lbry-white;
   border-bottom: 1px solid $lbry-gray-1;
   box-shadow: var(--card-box-shadow) $lbry-gray-1;
@@ -27,6 +26,7 @@
   display: flex;
   justify-content: space-between;
   margin: auto;
+  padding: 0 var(--spacing-large);
 }
 
 .header__navigation {
@@ -34,7 +34,8 @@
   justify-content: space-between;
 
   &:last-of-type {
-    width: calc(var(--side-nav-width) + var(--spacing-medium));
+    width: var(--side-nav-width);
+
     @media (max-width: 600px) {
       display: none;
     }
