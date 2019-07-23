@@ -86,6 +86,10 @@ const Header = (props: Props) => {
                 <Icon aria-hidden icon={ICONS.OVERVIEW} />
                 {__('Overview')}
               </MenuItem>
+              <MenuItem className="menu__link" onSelect={() => history.push(`/$/account`)}>
+                <Icon aria-hidden icon={ICONS.FEATURED} />
+                {__('Rewards')}
+              </MenuItem>
               <MenuItem className="menu__link" onSelect={() => history.push(`/$/wallet`)}>
                 <Icon aria-hidden icon={ICONS.WALLET} />
                 {__('Wallet')}
