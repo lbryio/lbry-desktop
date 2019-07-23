@@ -370,7 +370,7 @@ class SettingsPage extends React.PureComponent<Props, State> {
 
               <Form>
                 <FormField
-                  type="setting"
+                  type="checkbox"
                   name="support_option"
                   onChange={() => setClientSetting(SETTINGS.SUPPORT_OPTION, !supportOption)}
                   checked={supportOption}
@@ -387,7 +387,6 @@ class SettingsPage extends React.PureComponent<Props, State> {
                 />
 
                 <FormField
-                  type="setting"
                   type="checkbox"
                   name="auto_download"
                   onChange={() => setClientSetting(SETTINGS.AUTO_DOWNLOAD, !autoDownload)}

@@ -72,7 +72,7 @@
   justify-content: space-between;
 
   &:last-of-type:not(:only-of-type) {
-    margin-bottom: var(--spacing-large);
+    margin: 0;
   }
 }
 
@@ -89,6 +89,7 @@
 .media__action-group--large {
   display: flex;
   font-size: var(--font-multiplier-medium);
+  margin-bottom: var(--spacing-large);
 
   > * {
     &:not(:last-child) {
