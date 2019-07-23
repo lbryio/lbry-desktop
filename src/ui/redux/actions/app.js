@@ -331,6 +331,7 @@ export function doClearCache() {
     // Leaving for now
     // const reducersToClear = whiteListedReducers.filter(reducerKey => reducerKey !== 'tags');
     // window.cacheStore.purge(reducersToClear);
+    window.localStorage.clear();
     return window.persistor.purge();
   };
 }

@@ -9,7 +9,7 @@ type Props = {
   title: string,
   claim: StreamClaim,
   isPending: boolean,
-  sendSupport: (number, string, string) => void,
+  sendSupport: (number, string) => void,
   onCancel: () => void,
   sendTipCallback?: () => void,
   balance: number,
@@ -71,7 +71,7 @@ class WalletSendTip extends React.PureComponent<Props, State> {
   }
 
   render() {
-    const { title, isPending, uri, onCancel, claimIsMine, isSupport } = this.props;
+    const { title, isPending, onCancel, claimIsMine, isSupport } = this.props;
     const { tipAmount, tipError } = this.state;
 
     return (
@@ -81,7 +81,10 @@ class WalletSendTip extends React.PureComponent<Props, State> {
             autoFocus
             name="tip-input"
             label={
-              (tipAmount && tipAmount !== 0 && `Tip ${tipAmount.toFixed(8).replace(/\.?0+$/, '')} LBC`) || __('Amount')
+              (tipAmount &&
+                tipAmount !== 0 &&
+                `${isSupport ? __('Support') : __('Tip')} ${tipAmount.toFixed(8).replace(/\.?0+$/, '')} LBC`) ||
+              __('Amount')
             }
             className="form-field--price-amount"
             error={tipError}
@@ -93,6 +96,7 @@ class WalletSendTip extends React.PureComponent<Props, State> {
             inputButton={
               <Button
                 button="primary"
+                type="submit"
                 label={__('Send')}
                 disabled={isPending || tipError || !tipAmount}
                 onClick={this.handleSendButtonClicked}
@@ -111,7 +115,7 @@ class WalletSendTip extends React.PureComponent<Props, State> {
           />
         </Form>
         <div className="card__actions">
-          <Button button="link" label={__('Cancel')} onClick={onCancel} navigateParams={{ uri }} />
+          <Button button="link" label={__('Cancel')} onClick={onCancel} />
         </div>
       </React.Fragment>
     );
