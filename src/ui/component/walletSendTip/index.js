@@ -16,7 +16,7 @@ const select = (state, props) => ({
 });
 
 const perform = dispatch => ({
-  sendSupport: (amount, claimId, uri) => dispatch(doSendTip(amount, claimId, uri)),
+  sendSupport: (amount, claimId) => dispatch(doSendTip(amount, claimId)),
 });
 
 export default connect(

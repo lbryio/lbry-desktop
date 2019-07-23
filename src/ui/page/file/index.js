@@ -42,6 +42,7 @@ const select = (state, props) => ({
   title: makeSelectTitleForUri(props.uri)(state),
   thumbnail: makeSelectThumbnailForUri(props.uri)(state),
   nsfw: makeSelectClaimIsNsfw(props.uri)(state),
+  supportOption: makeSelectClientSetting(settings.SUPPORT_OPTION)(state),
 });
 
 const perform = dispatch => ({

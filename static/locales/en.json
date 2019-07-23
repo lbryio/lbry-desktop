@@ -578,5 +578,19 @@
   "Invalid character %s in name: %s.": "Invalid character %s in name: %s.",
   "The better your tags are, the easier it will be for people to discover your channel.": "The better your tags are, the easier it will be for people to discover your channel.",
   "Thumbnail (300 x 300)": "Thumbnail (300 x 300)",
-  "Cover (1000 x 160)": "Cover (1000 x 160)"
+  "Cover (1000 x 160)": "Cover (1000 x 160)",
+  "The tags you follow will change what's trending for you. ": "The tags you follow will change what's trending for you. ",
+  "Mature": "Mature",
+  "This will increase the overall bid amount for ": "This will increase the overall bid amount for ",
+  "This will appear as a tip for ": "This will appear as a tip for ",
+  "Show mature content": "Show mature content",
+  "Mature content may include nudity, intense sexuality, profanity, or other adult content. By displaying mature content, you are affirming you are of legal age to view mature content in your country or jurisdiction.  ": "Mature content may include nudity, intense sexuality, profanity, or other adult content. By displaying mature content, you are affirming you are of legal age to view mature content in your country or jurisdiction.  ",
+  "Encrypt my wallet with a custom password": "Encrypt my wallet with a custom password",
+  "Enable claim support": "Enable claim support",
+  "This will add a Support button along side tipping. Similar to tips, supports help ": "This will add a Support button along side tipping. Similar to tips, supports help ",
+  " discovery ": " discovery ",
+  " but the LBC is returned to your wallet if revoked.": " but the LBC is returned to your wallet if revoked.",
+  " Both also help secure ": " Both also help secure ",
+  "vanity names": "vanity names",
+  "Add support to this claim": "Add support to this claim"
 }

@@ -40,7 +40,7 @@ class RewardsPage extends PureComponent<Props> {
                   {__(
                     'This step is optional. You can continue to use this app without rewards, but LBC may be needed for some tasks.'
                   )}{' '}
-                  <Button button="link" label={__('Learn more')} href="https://lbry.com/faq/rewards" />
+                  <Button button="link" label={__('Learn more')} href="https://lbry.com/faq/rewards" />.
                 </p>
               </header>
 

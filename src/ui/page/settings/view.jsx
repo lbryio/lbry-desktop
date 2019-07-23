@@ -44,6 +44,7 @@ type Props = {
   updateWalletStatus: () => void,
   walletEncrypted: boolean,
   osNotificationsEnabled: boolean,
+  supportOption: boolean,
 };
 
 type State = {
@@ -150,6 +151,7 @@ class SettingsPage extends React.PureComponent<Props, State> {
       autoDownload,
       setDaemonSetting,
       setClientSetting,
+      supportOption,
     } = this.props;
 
     const noDaemonSettings = !daemonSettings || Object.keys(daemonSettings).length === 0;
@@ -276,9 +278,9 @@ class SettingsPage extends React.PureComponent<Props, State> {
                   name="show_nsfw"
                   onChange={() => setClientSetting(SETTINGS.SHOW_NSFW, !showNsfw)}
                   checked={showNsfw}
-                  label={__('Show NSFW content')}
+                  label={__('Show mature content')}
                   helper={__(
-                    'NSFW content may include nudity, intense sexuality, profanity, or other adult content. By displaying NSFW content, you are affirming you are of legal age to view mature content in your country or jurisdiction.  '
+                    'Mature content may include nudity, intense sexuality, profanity, or other adult content. By displaying mature content, you are affirming you are of legal age to view mature content in your country or jurisdiction.  '
                   )}
                 />
               </Form>
@@ -368,7 +370,7 @@ class SettingsPage extends React.PureComponent<Props, State> {
                   name="encrypt_wallet"
                   onChange={() => this.onChangeEncryptWallet()}
                   checked={walletEncrypted}
-                  label={__('Encrypt my wallet with a custom password.')}
+                  label={__('Encrypt my wallet with a custom password')}
                   helper={
                     <React.Fragment>
                       {__('Secure your local wallet data with a custom password.')}{' '}
@@ -386,6 +388,23 @@ class SettingsPage extends React.PureComponent<Props, State> {
               </header>
 
               <Form className="card__content">
+                <FormField
+                  type="setting"
+                  name="support_option"
+                  onChange={() => setClientSetting(SETTINGS.SUPPORT_OPTION, !supportOption)}
+                  checked={supportOption}
+                  label={__('Enable claim support')}
+                  helper={
+                    <React.Fragment>
+                      {__('This will add a Support button along side tipping. Similar to tips, supports help ')}
+                      <Button button="link" label={__(' discovery ')} href="https://lbry.com/faq/trending" />
+                      {__(' but the LBC is returned to your wallet if revoked.')}
+                      {__(' Both also help secure ')}
+                      <Button button="link" label={__('vanity names')} href="https://lbry.com/faq/naming" />.
+                    </React.Fragment>
+                  }
+                />
+
                 <FormField
                   type="setting"
                   name="auto_download"

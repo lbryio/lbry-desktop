@@ -92,7 +92,10 @@ export default function TagSelect(props: Props) {
           </ul>
           <TagsSearch onSelect={onSelect} suggestMature={suggestMature && !hasMatureTag} />
           {help !== false && (
-            <p className="help">{help || __("The tags you follow will change what's trending for you.")}</p>
+            <p className="help">
+              {help || __("The tags you follow will change what's trending for you. ")}
+              <Button button="link" label={__('Learn more')} href="https://lbry.com/faq/trending" />.
+            </p>
           )}
         </div>
       </div>

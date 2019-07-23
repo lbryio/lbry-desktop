@@ -25,6 +25,7 @@ const select = state => ({
   walletEncrypted: selectWalletIsEncrypted(state),
   osNotificationsEnabled: selectosNotificationsEnabled(state),
   autoDownload: makeSelectClientSetting(settings.AUTO_DOWNLOAD)(state),
+  supportOption: makeSelectClientSetting(settings.SUPPORT_OPTION)(state),
 });
 
 const perform = dispatch => ({
