@@ -105,7 +105,10 @@ function ClaimListDiscover(props: Props) {
 
   const claimSearchCacheQuery = buildClaimSearchCacheQuery(options);
   const uris = claimSearchByQuery[claimSearchCacheQuery] || [];
-  const shouldPerformSearch = uris.length === 0 || didNavigateForward || (!loading && uris.length < PAGE_SIZE * page);
+  const shouldPerformSearch =
+    uris.length === 0 ||
+    didNavigateForward ||
+    (!loading && uris.length < PAGE_SIZE * page && uris.length % PAGE_SIZE === 0);
   // Don't use the query from buildClaimSearchCacheQuery for the effect since that doesn't include page & release_time
   const optionsStringForEffect = JSON.stringify(options);
 
@@ -211,6 +214,7 @@ function ClaimListDiscover(props: Props) {
   return (
     <div className="card">
       <ClaimList
+        id={claimSearchCacheQuery}
         loading={loading}
         uris={uris}
         injectedItem={personalSort === SEARCH_SORT_YOU && injectedItem}

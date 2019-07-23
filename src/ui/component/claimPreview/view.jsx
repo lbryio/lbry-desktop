@@ -64,7 +64,8 @@ function ClaimPreview(props: Props) {
   const abandoned = !isResolvingUri && !claim;
   const claimsInChannel = (claim && claim.meta.claims_in_channel) || 0;
   const showPublishLink = abandoned && placeholder === 'publish';
-  const minimal = type === 'small' || type === 'tooltip';
+  const includeChannelTooltip = type !== 'inline' && type !== 'tooltip';
+  const hideActions = type === 'small' || type === 'tooltip';
 
   let isValid;
   try {
@@ -134,10 +135,11 @@ function ClaimPreview(props: Props) {
       onClick={pending || type === 'inline' ? undefined : onClick}
       onContextMenu={handleContextMenu}
       className={classnames('claim-preview', {
-        'claim-preview--small': minimal,
+        'claim-preview--small': type === 'small' || type === 'tooltip',
         'claim-preview--large': type === 'large',
         'claim-preview--inline': type === 'inline',
-        'claim-preview--visited': !isChannel && hasVisitedUri,
+        'claim-preview--tooltip': type === 'tooltip',
+        'claim-preview--visited': !isChannel && !claimIsMine && hasVisitedUri,
         'claim-preview--pending': pending,
       })}
     >
@@ -147,7 +149,7 @@ function ClaimPreview(props: Props) {
           <div className="claim-preview-title">
             {claim ? <TruncatedText text={title || claim.name} lines={1} /> : <span>{__('Nothing here')}</span>}
           </div>
-          {!minimal && (
+          {!hideActions && (
             <div>
               {isChannel && <SubscribeButton uri={uri.startsWith('lbry://') ? uri : `lbry://${uri}`} />}
               {!isChannel && <FileProperties uri={uri} />}
@@ -161,7 +163,7 @@ function ClaimPreview(props: Props) {
             {!isResolvingUri && (
               <div>
                 {claim ? (
-                  <UriIndicator uri={uri} link addTooltip={!minimal} />
+                  <UriIndicator uri={uri} link addTooltip={includeChannelTooltip} />
                 ) : (
                   <Fragment>
                     <div>{__('Publish something and claim this spot!')}</div>

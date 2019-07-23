@@ -78,7 +78,7 @@ class WalletSend extends React.PureComponent<Props> {
               </fieldset-group>
               <div className="card__actions">
                 <Button
-                  button="inverse"
+                  button="primary"
                   type="submit"
                   label={__('Send')}
                   disabled={

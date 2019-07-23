@@ -83,6 +83,14 @@ radio-element {
     margin-bottom: 0;
     margin-left: var(--spacing-miniscule);
     font-size: var(--font-body);
+
+    [data-mode='dark'] & {
+      color: $lbry-gray-1;
+
+      &:hover {
+        color: $lbry-teal-4;
+      }
+    }
   }
 }
 
@@ -229,11 +237,8 @@ fieldset-section {
 
     .button,
     // specificity needed because of @lbry/component rules
-    // @lbry/componentsfixme
-    .button[type='submit']:not(:hover),
-    .button[type='submit']:hover {
-      border-color: $lbry-black;
-      border-radius: var(--button-radius);
+    // @lbry/componentfixme
+    .button[type='submit']:not(:hover) {
       border-top-left-radius: 0;
       border-bottom-left-radius: 0;
       border-color: $lbry-black;

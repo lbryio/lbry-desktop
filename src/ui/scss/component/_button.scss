@@ -18,10 +18,6 @@
   &:hover {
     background-color: $lbry-teal-4;
   }
-
-  svg {
-    stroke: $lbry-teal-4;
-  }
 }
 
 // Play/View button that is overlayed ontop of the video player
@@ -62,7 +58,7 @@
 
 .button--link {
   [data-mode='dark'] & {
-    color: $lbry-teal-5;
+    color: $lbry-teal-3;
   }
 }
 

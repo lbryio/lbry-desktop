@@ -70,9 +70,11 @@
 }
 
 .menu__title {
-  padding: var(--spacing-large) 0;
-  padding-left: var(--spacing-medium);
-  padding-right: 0;
+  // padding: var(--spacing-large) 0;
+  &:not(:last-of-type) {
+    margin-right: var(--spacing-medium);
+  }
+  // padding-right: 0;
 
   span {
     margin-left: var(--spacing-small);
