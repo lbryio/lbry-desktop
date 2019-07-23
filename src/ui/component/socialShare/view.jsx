@@ -57,7 +57,7 @@ class SocialShare extends React.PureComponent<Props> {
                 icon={ICONS.TWITTER}
                 button="link"
                 description={shareOnTwitter}
-                href={`https://twitter.com/home?status=${encodedLbryTvUrl}`}
+                href={`https://twitter.com/intent/tweet?text=${encodedLbryTvUrl}`}
               />
               <Button icon={ICONS.WEB} button="link" description={__('View on lbry.tv')} href={`${lbryTvUrl}`} />
             </div>
@@ -76,7 +76,7 @@ class SocialShare extends React.PureComponent<Props> {
             icon={ICONS.TWITTER}
             button="link"
             description={shareOnTwitter}
-            href={`https://twitter.com/home?status=${encodedLbryURL}`}
+            href={`https://twitter.com/intent/tweet?text=${encodedLbryURL}`}
           />
         </div>
         <div className="card__actions">
