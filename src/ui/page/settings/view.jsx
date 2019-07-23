@@ -30,8 +30,8 @@ type Props = {
   showNsfw: boolean,
   instantPurchaseEnabled: boolean,
   instantPurchaseMax: Price,
-  currentLanguage: string,
-  languages: {},
+  // currentLanguage: string,
+  // languages: {},
   currentTheme: string,
   themes: Array<string>,
   automaticDarkModeEnabled: boolean,
@@ -140,8 +140,8 @@ class SettingsPage extends React.PureComponent<Props, State> {
       instantPurchaseEnabled,
       instantPurchaseMax,
       currentTheme,
-      currentLanguage,
-      languages,
+      // currentLanguage,
+      // languages,
       themes,
       automaticDarkModeEnabled,
       autoplay,
@@ -409,7 +409,7 @@ class SettingsPage extends React.PureComponent<Props, State> {
                   )}
                 />
 
-                <FormField
+                {/* <FormField
                   name="language_select"
                   type="select"
                   label={__('Language')}
@@ -424,7 +424,7 @@ class SettingsPage extends React.PureComponent<Props, State> {
                       {languages[language]}
                     </option>
                   ))}
-                </FormField>
+                </FormField> */}
               </Form>
             </section>
 

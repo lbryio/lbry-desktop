@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import { parseURI } from 'lbry-redux';
 import { Form, FormField } from 'component/common/form';
-
+import Button from 'component/button';
 import SelectAsset from 'component/selectAsset';
 import TagSelect from 'component/tagsSelect';
 
@@ -23,6 +23,7 @@ type Props = {
   updateChannel: any => void,
   updateThumb: string => void,
   updateCover: string => void,
+  setEditing: boolean => void,
 };
 
 function ChannelForm(props: Props) {
@@ -38,6 +39,7 @@ function ChannelForm(props: Props) {
     locations,
     languages,
     amount,
+    setEditing,
     updateChannel,
     updateThumb,
     updateCover,
@@ -99,11 +101,11 @@ function ChannelForm(props: Props) {
   // TODO clear and bail after submit
   return (
     <section className={'card--section'}>
-      <div className="help">
+      <div className="card__subtitle">
         <p>{__('We can explain...')}</p>
         <p>
           {__(
-            "We know this page won't win any design awards, we just wanted to release a very very very basic version that just barely kinda works so people can use it right now. There is a much nicer version being worked on."
+            "We know this page won't win any design awards, we just wanted to release a very basic version that works so people can use it right now. There is a much nicer version being worked on."
           )}
         </p>
       </div>

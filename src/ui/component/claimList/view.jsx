@@ -1,7 +1,7 @@
 // @flow
 import { MAIN_WRAPPER_CLASS } from 'component/app/view';
 import type { Node } from 'react';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import classnames from 'classnames';
 import ClaimPreview from 'component/claimPreview';
 import Spinner from 'component/spinner';
@@ -23,6 +23,7 @@ type Props = {
   onScrollBottom?: any => void,
   page?: number,
   pageSize?: number,
+  id?: string,
   // If using the default header, this is a unique ID needed to persist the state of the filter setting
   persistedStorageKey?: string,
 };
@@ -40,7 +41,10 @@ export default function ClaimList(props: Props) {
     header,
     onScrollBottom,
     pageSize,
+    page,
+    id,
   } = props;
+  const [scrollBottomCbMap, setScrollBottomCbMap] = useState({});
   const [currentSort, setCurrentSort] = usePersistedState(persistedStorageKey, SORT_NEW);
   const urisLength = (uris && uris.length) || 0;
   const sortedUris = (urisLength > 0 && (currentSort === SORT_NEW ? uris : uris.slice().reverse())) || [];
@@ -50,13 +54,20 @@ export default function ClaimList(props: Props) {
   }
 
   useEffect(() => {
+    setScrollBottomCbMap({});
+  }, [id]);
+
+  useEffect(() => {
     function handleScroll(e) {
-      if (pageSize && onScrollBottom) {
+      if (page && pageSize && onScrollBottom && !scrollBottomCbMap[page]) {
         const x = document.querySelector(`.${MAIN_WRAPPER_CLASS}`);
 
         if (x && window.scrollY + window.innerHeight >= x.offsetHeight) {
           if (!loading && urisLength >= pageSize) {
             onScrollBottom();
+
+            // Save that we've fetched this page to avoid weird stuff happening with fast scrolling
+            setScrollBottomCbMap({ ...scrollBottomCbMap, [page]: true });
           }
         }
       }
@@ -69,7 +80,7 @@ export default function ClaimList(props: Props) {
         window.removeEventListener('scroll', handleScroll);
       };
     }
-  }, [loading, onScrollBottom, urisLength, pageSize]);
+  }, [loading, onScrollBottom, urisLength, pageSize, page, setScrollBottomCbMap]);
 
   return (
     <section
@@ -103,7 +114,7 @@ export default function ClaimList(props: Props) {
           {sortedUris.map((uri, index) => (
             <React.Fragment key={uri}>
               <ClaimPreview uri={uri} type={type} />
-              {index === 4 && injectedItem && <li className="claim-preview--injected">{injectedItem}</li>}
+              {index === 4 && injectedItem && injectedItem}
             </React.Fragment>
           ))}
         </ul>

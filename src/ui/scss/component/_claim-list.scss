@@ -1,3 +1,6 @@
+$border-color: rgba($lbry-teal-5, 0.1);
+$border-color--dark: var(--dm-color-04);
+
 .claim-list__header {
   display: flex;
   align-items: center;
@@ -13,7 +16,8 @@
   }
 
   fieldset-section {
-    margin: 0;
+    margin-top: 0;
+    margin-bottom: 0;
   }
 
   // Normal link buttons are too dark on the black file list background
@@ -105,7 +109,7 @@
 
 .claim-preview--injected,
 .claim-preview {
-  border-bottom: 1px solid rgba($lbry-teal-5, 0.1);
+  border-bottom: 1px solid $border-color;
 
   &:only-of-type {
     border: none;
@@ -113,7 +117,15 @@
 
   [data-mode='dark'] & {
     color: $lbry-white;
-    border-color: var(--dm-color-04);
+    border-color: $border-color--dark;
+  }
+}
+
+.claim-preview--injected + .claim-preview {
+  border-top: 1px solid $border-color;
+
+  [data-mode='dark'] & {
+    border-color: $border-color--dark;
   }
 }
 
@@ -187,6 +199,12 @@
   .channel-thumbnail {
     width: var(--channel-thumbnail-width--small);
     height: var(--channel-thumbnail-width--small);
+  }
+}
+
+.claim-preview--tooltip {
+  [data-mode='dark'] & {
+    background-color: $lbry-black;
   }
 }
 

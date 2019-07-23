@@ -28,8 +28,8 @@ td {
 }
 
 .table__item--actionable {
-  .button svg {
-    top: 3px;
+  span {
+    vertical-align: top;
   }
 }
 

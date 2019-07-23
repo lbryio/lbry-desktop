@@ -19,7 +19,9 @@ function DiscoverPage(props: Props) {
         personalView
         tags={followedTags.map(tag => tag.name)}
         meta={<Button button="link" label={__('Customize')} navigate={`/$/${PAGES.FOLLOWING}`} />}
-        injectedItem={<TagsSelect showClose title={__('Customize Your Homepage')} />}
+        injectedItem={
+          <TagsSelect showClose title={__('Customize Your Homepage')} className="claim-preview--injected" />
+        }
       />
     </Page>
   );

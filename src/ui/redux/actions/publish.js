@@ -200,7 +200,7 @@ export const doPrepareEdit = (claim: StreamClaim, uri: string, fileInfo: FileLis
       fs.accessSync(fileInfo.download_path, fs.constants.R_OK);
       publishData.filePath = fileInfo.download_path;
     } catch (e) {
-      console.error(e.name, e.message);
+      console.error(e.name, e.message); // eslint-disable-line no-console
     }
   }
 
@@ -282,8 +282,13 @@ export const doPublish = () => (dispatch: Dispatch, getState: () => {}) => {
     publishPayload.license_url = licenseUrl;
   }
 
+  // Set release time to curret date. On edits, keep original release/transaction time as release_time
   if (myClaimForUri && myClaimForUri.value.release_time) {
     publishPayload.release_time = Number(myClaimForUri.value.release_time);
+  } else if (myClaimForUri && myClaimForUri.timestamp) {
+    publishPayload.release_time = Number(myClaimForUri.timestamp);
+  } else {
+    publishPayload.release_time = Number(Math.round(Date.now() / 1000));
   }
 
   if (channelId) {
