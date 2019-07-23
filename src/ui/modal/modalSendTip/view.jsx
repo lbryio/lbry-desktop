@@ -22,7 +22,13 @@ class ModalSendTip extends React.PureComponent<Props> {
         type="custom"
         title={
           <React.Fragment>
-            {claimIsMine ? __('Add support to') : __('Send a tip')} <UriIndicator uri={uri} />
+            {claimIsMine || isSupport ? (
+              __('Add support to this claim')
+            ) : (
+              <span>
+                {__('Send a tip to')} <UriIndicator uri={uri} />
+              </span>
+            )}
           </React.Fragment>
         }
       >
