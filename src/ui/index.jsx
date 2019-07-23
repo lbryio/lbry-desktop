@@ -229,9 +229,8 @@ function AppWrapper() {
       app.store.dispatch(doInitLanguage());
       app.store.dispatch(doBlackListedOutpointsSubscribe());
       app.store.dispatch(doFilteredOutpointsSubscribe());
+      window.sessionStorage.setItem('loaded', 'y');
     }
-
-    window.sessionStorage.setItem('loaded', 'y');
   }, [readyToLaunch, haveLaunched]);
 
   return (

@@ -10,10 +10,19 @@ type Props = {
 
 class ModalError extends React.PureComponent<Props> {
   componentDidMount() {
-    if (process.env.NODE_ENV === 'production') {
-      Lbryio.call('event', 'desktop_error', { error_message: JSON.stringify(this.props.error) });
+    const { error } = this.props;
+
+    // Yuck
+    // https://github.com/lbryio/lbry-sdk/issues/1118
+    // The sdk logs failed downloads, they happen so often that it's mostly noise in the desktop logs
+    const errorMessage = typeof error === 'string' ? error : error.message;
+    const failedToDownloadError = errorMessage.startsWith('Failed to download');
+
+    if (process.env.NODE_ENV === 'production' && !failedToDownloadError) {
+      Lbryio.call('event', 'desktop_error', { error_message: JSON.stringify(error) });
     }
   }
+
   render() {
     const { closeModal, error } = this.props;
 
