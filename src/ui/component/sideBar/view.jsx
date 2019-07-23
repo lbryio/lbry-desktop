@@ -24,7 +24,7 @@ function SideBar(props: Props) {
   }
 
   return (
-    <StickyBox offsetBottom={40} offsetTop={90}>
+    <StickyBox offsetTop={100} offsetBottom={20}>
       <nav className="navigation">
         <ul className="navigation-links">
           {[

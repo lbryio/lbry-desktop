@@ -30,8 +30,8 @@ type Props = {
   showNsfw: boolean,
   instantPurchaseEnabled: boolean,
   instantPurchaseMax: Price,
-  currentLanguage: string,
-  languages: {},
+  // currentLanguage: string,
+  // languages: {},
   currentTheme: string,
   themes: Array<string>,
   automaticDarkModeEnabled: boolean,
@@ -139,8 +139,8 @@ class SettingsPage extends React.PureComponent<Props, State> {
       instantPurchaseEnabled,
       instantPurchaseMax,
       currentTheme,
-      currentLanguage,
-      languages,
+      // currentLanguage,
+      // languages,
       themes,
       automaticDarkModeEnabled,
       autoplay,
@@ -267,9 +267,9 @@ class SettingsPage extends React.PureComponent<Props, State> {
                   name="show_nsfw"
                   onChange={() => setClientSetting(SETTINGS.SHOW_NSFW, !showNsfw)}
                   checked={showNsfw}
-                  label={__('Show NSFW content')}
+                  label={__('Show mature content')}
                   helper={__(
-                    'NSFW content may include nudity, intense sexuality, profanity, or other adult content. By displaying NSFW content, you are affirming you are of legal age to view mature content in your country or jurisdiction.  '
+                    'Mature content may include nudity, intense sexuality, profanity, or other adult content. By displaying NSFW content, you are affirming you are of legal age to view mature content in your country or jurisdiction.  '
                   )}
                 />
               </Form>
@@ -389,7 +389,7 @@ class SettingsPage extends React.PureComponent<Props, State> {
                   )}
                 />
 
-                <FormField
+                {/* <FormField
                   name="language_select"
                   type="select"
                   label={__('Language')}
@@ -404,7 +404,7 @@ class SettingsPage extends React.PureComponent<Props, State> {
                       {languages[language]}
                     </option>
                   ))}
-                </FormField>
+                </FormField> */}
               </Form>
             </section>
 

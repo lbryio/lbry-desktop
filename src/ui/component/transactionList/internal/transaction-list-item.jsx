@@ -72,8 +72,9 @@ class TransactionListItem extends React.PureComponent<Props> {
         <td className="table__item--actionable">
           <span>{this.capitalize(type)}</span> {isRevokeable && this.getLink(type)}
         </td>
-        <td className="table__item--actionable">
-          {reward ? <span>{reward.reward_title}</span> : <Button button="link" navigate={uri} label={claimName} />}
+        <td>
+          {reward && <span>{reward.reward_title}</span>}
+          {name && claimId && <Button button="link" navigate={uri} label={claimName} />}
         </td>
 
         <td>
