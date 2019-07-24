@@ -9,6 +9,13 @@ form {
       @extend .button--primary;
     }
   }
+
+  .button--inverse {
+    &:not(:hover),
+    &:hover {
+      // @extend .button--inverse;
+    }
+  }
 }
 
 textarea {
@@ -223,6 +230,7 @@ fieldset-section {
       &:first-child {
         border-top-right-radius: 0;
         border-bottom-right-radius: 0;
+        border-right: none;
       }
     }
 
@@ -243,6 +251,11 @@ fieldset-section {
       border-bottom-left-radius: 0;
       border-color: $lbry-black;
       opacity: 1;
+
+      [data-mode='dark'] & {
+        border-color: $lbry-gray-5;
+        color: $lbry-white;
+      }
     }
   }
 

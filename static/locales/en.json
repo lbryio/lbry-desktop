@@ -629,5 +629,11 @@
   "Enter Reward Code": "Enter Reward Code",
   "Redeem a custom reward code for LBC": "Redeem a custom reward code for LBC",
   "Redeem": "Redeem",
-  "Code": "Code"
+  "Code": "Code",
+  "Nothing here": "Nothing here",
+  "Publish something and claim this spot!": "Publish something and claim this spot!",
+  "Publish to": "Publish to",
+  "Help Us Out": "Help Us Out",
+  "Currently, there is no automatic backup. If you lose access to these files, you will lose your credits.": "Currently, there is no automatic backup. If you lose access to these files, you will lose your credits.",
+  "For more details on backing up and best practices": "For more details on backing up and best practices"
 }
