@@ -316,7 +316,7 @@ class MediaPlayer extends React.PureComponent<Props, State> {
 
   playableType(): boolean {
     const { mediaType } = this.props;
-    return ['audio', 'video'].indexOf(mediaType) !== -1;
+    return ['audio', 'video', 'image'].indexOf(mediaType) !== -1;
   }
 
   isRenderMediaSupported() {
