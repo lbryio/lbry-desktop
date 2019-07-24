@@ -77,7 +77,7 @@ function ClaimPreview(props: Props) {
 
   const isChannel = isValid ? parseURI(uri).isChannel : false;
   let shouldHide =
-    placeholder !== 'loading' && ((abandoned && !showPublishLink) || (!claimIsMine && obscureNsfw && nsfw) || !claim);
+    placeholder !== 'loading' && ((abandoned && !showPublishLink) || (!claimIsMine && obscureNsfw && nsfw));
 
   // This will be replaced once blocking is done at the wallet server level
   if (claim && !shouldHide && blackListedOutpoints) {
