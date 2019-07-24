@@ -2,6 +2,7 @@
 import React from 'react';
 import relativeDate from 'tiny-relative-date';
 import Button from 'component/button';
+import Expandable from 'component/expandable';
 
 type Props = {
   author: string,
@@ -25,8 +26,11 @@ function Comment(props: Props) {
           {relativeDate(timePosted)}
         </time>
       </div>
-
-      <p className={'comment__message'}>{message}</p>
+      <div>
+        <Expandable>
+          <p className={'comment__message'}>{message}</p>
+        </Expandable>
+      </div>
     </li>
   );
 }

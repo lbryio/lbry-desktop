@@ -1,7 +1,8 @@
 // @flow
-import React, { PureComponent } from 'react';
+import React, { useRef, useState } from 'react';
 import classnames from 'classnames';
 import Button from 'component/button';
+import { useRect } from '@reach/rect';
 
 // Note:
 // When we use this in other parts of the app, we will probably need to
@@ -11,48 +12,38 @@ type Props = {
   children: React$Node | Array<React$Node>,
 };
 
-type State = {
-  expanded: boolean,
-};
+export default function Expandable(props: Props) {
+  const [expanded, setExpanded] = useState(false);
+  const { children } = props;
+  const ref = useRef();
+  const rect = useRect(ref);
 
-export default class Expandable extends PureComponent<Props, State> {
-  constructor() {
-    super();
-
-    this.state = {
-      expanded: false,
-    };
-
-    (this: any).handleClick = this.handleClick.bind(this);
+  function handleClick() {
+    setExpanded(!expanded);
   }
 
-  handleClick() {
-    this.setState({
-      expanded: !this.state.expanded,
-    });
-  }
-
-  render() {
-    const { children } = this.props;
-    const { expanded } = this.state;
-
-    return (
-      <div className="expandable">
-        <div
-          className={classnames({
-            'expandable--open': expanded,
-            'expandable--closed': !expanded,
-          })}
-        >
-          {children}
+  return (
+    <div ref={ref}>
+      {rect && rect.height > 120 ? (
+        <div ref={ref} className="expandable">
+          <div
+            className={classnames({
+              'expandable--open': expanded,
+              'expandable--closed': !expanded,
+            })}
+          >
+            {children}
+          </div>
+          <Button
+            button="link"
+            className="expandable__button"
+            label={expanded ? __('Less') : __('More')}
+            onClick={handleClick}
+          />
         </div>
-        <Button
-          button="link"
-          className="expandable__button"
-          label={expanded ? __('Less') : __('More')}
-          onClick={this.handleClick}
-        />
-      </div>
-    );
-  }
+      ) : (
+        <div>{children}</div>
+      )}
+    </div>
+  );
 }
