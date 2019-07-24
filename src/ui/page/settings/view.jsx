@@ -30,8 +30,8 @@ type Props = {
   showNsfw: boolean,
   instantPurchaseEnabled: boolean,
   instantPurchaseMax: Price,
-  // currentLanguage: string,
-  // languages: {},
+  currentLanguage: string,
+  languages: {},
   currentTheme: string,
   themes: Array<string>,
   automaticDarkModeEnabled: boolean,
@@ -140,8 +140,8 @@ class SettingsPage extends React.PureComponent<Props, State> {
       instantPurchaseEnabled,
       instantPurchaseMax,
       currentTheme,
-      // currentLanguage,
-      // languages,
+      currentLanguage,
+      languages,
       themes,
       automaticDarkModeEnabled,
       autoplay,
@@ -408,22 +408,24 @@ class SettingsPage extends React.PureComponent<Props, State> {
                   )}
                 />
 
-                {/* <FormField
-                  name="language_select"
-                  type="select"
-                  label={__('Language')}
-                  onChange={this.onLanguageChange}
-                  value={currentLanguage}
-                  helper={__(
-                    'Multi-language support is brand new and incomplete. Switching your language may have unintended consequences.'
-                  )}
-                >
-                  {Object.keys(languages).map(language => (
-                    <option key={language} value={language}>
-                      {languages[language]}
-                    </option>
-                  ))}
-                </FormField> */}
+                {
+                  <FormField
+                    name="language_select"
+                    type="select"
+                    label={__('Language')}
+                    onChange={this.onLanguageChange}
+                    value={currentLanguage}
+                    helper={__(
+                      'Multi-language support is brand new and incomplete. Switching your language may have unintended consequences.'
+                    )}
+                  >
+                    {Object.keys(languages).map(language => (
+                      <option key={language} value={language}>
+                        {languages[language]}
+                      </option>
+                    ))}
+                  </FormField>
+                }
               </Form>
             </section>
 
@@ -431,7 +433,9 @@ class SettingsPage extends React.PureComponent<Props, State> {
               <h2 className="card__title">{__('Application Cache')}</h2>
 
               <p className="card__subtitle--status">
-                {__('This will clear the application cache. Your wallet will not be affected.')}
+                {__(
+                  'This will clear the application cache. Your wallet will not be affected. Currently, followed tags will be cleared.'
+                )}
               </p>
 
               <Button
