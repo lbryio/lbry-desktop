@@ -593,6 +593,7 @@
   " Both also help secure ": " Both also help secure ",
   "vanity names": "vanity names",
   "Add support to this claim": "Add support to this claim",
+<<<<<<< HEAD
   "Find New Tags": "Find New Tags",
   "Send LBC to your friends or favorite creators.": "Send LBC to your friends or favorite creators.",
   "Use this address to receive LBC. You can generate a new address at any time, and any previous addresses will continue to work.": "Use this address to receive LBC. You can generate a new address at any time, and any previous addresses will continue to work.",
@@ -639,4 +640,7 @@
   "File Size": "File Size",
   "You deposited 1 LBC as a support!": "You deposited 1 LBC as a support!",
   "Refreshed!": "Refreshed!"
+=======
+  "%s blocks behind": "%s blocks behind"
+>>>>>>> fix claim preview on description (markdown)
 }

@@ -98,8 +98,17 @@
     border-left: 0.5rem solid $lbry-teal-5;
     display: block;
     align-items: center;
-    width: 40rem;
     word-break: break-all;
+    overflow: hidden;
+
+    .claim-preview {
+      border: 0;
+      background: transparent;
+    }
+
+    .media__subtitle {
+      display: block;
+    }
   }
 
   .preview-link__thumbnail {
@@ -107,6 +116,6 @@
   }
 
   .preview-link__description {
-    display: block;
+    margin-top: var(--spacing-small);
   }
 }
