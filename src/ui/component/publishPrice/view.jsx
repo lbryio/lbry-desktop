@@ -9,7 +9,7 @@ type Props = {
   updatePublishForm: ({}) => void,
 };
 
-function PublishText(props: Props) {
+function PublishPrice(props: Props) {
   const { contentIsFree, fee, updatePublishForm, disabled } = props;
 
   return (
@@ -50,4 +50,4 @@ function PublishText(props: Props) {
   );
 }
 
-export default PublishText;
+export default PublishPrice;
