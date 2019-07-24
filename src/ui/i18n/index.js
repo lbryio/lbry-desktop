@@ -3,7 +3,7 @@ import y18n from 'y18n';
 import path from 'path';
 
 const i18n = y18n({
-  directory: path.join(__static, `locales`),
+  directory: path.join(__dirname, `locales`),
   updateFiles: true,
   locale: 'en',
 });
