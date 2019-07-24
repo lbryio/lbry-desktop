@@ -1,7 +1,7 @@
 // @flow
 import React, { useEffect, Fragment } from 'react';
 import { CHANNEL_NEW, CHANNEL_ANONYMOUS } from 'constants/claim';
-import { buildURI, isURIValid, THUMBNAIL_STATUSES } from 'lbry-redux';
+import { buildURI, isURIValid, isNameValid, THUMBNAIL_STATUSES } from 'lbry-redux';
 import Button from 'component/button';
 import ChannelSection from 'component/selectChannel';
 import classnames from 'classnames';
@@ -77,7 +77,8 @@ function PublishForm(props: Props) {
   } = props;
   const formDisabled = (!filePath && !editingURI) || publishing;
   // If they are editing, they don't need a new file chosen
-  const formValidLessFile = name && title && bid && !(uploadThumbnailStatus === THUMBNAIL_STATUSES.IN_PROGRESS);
+  const formValidLessFile =
+    name && isNameValid(name, false) && title && bid && !(uploadThumbnailStatus === THUMBNAIL_STATUSES.IN_PROGRESS);
   const formValid = editingURI && !filePath ? isStillEditing && formValidLessFile : formValidLessFile;
 
   let submitLabel;
