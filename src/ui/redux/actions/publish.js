@@ -161,7 +161,7 @@ export const doPrepareEdit = (claim: StreamClaim, uri: string, fileInfo: FileLis
   const publishData: UpdatePublishFormData = {
     name,
     bid: Number(amount),
-    contentIsFree: !fee.amount,
+    contentIsFree: fee.amount === '0',
     author,
     description,
     fee,
