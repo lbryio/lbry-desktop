@@ -57,6 +57,7 @@ class ModalRewardCode extends React.PureComponent<Props, State> {
             inputButton={
               <Button
                 button="primary"
+                type="submit"
                 disabled={!rewardCode || rewardIsPending}
                 label={rewardIsPending ? __('Redeeming') : __('Redeem')}
               />
