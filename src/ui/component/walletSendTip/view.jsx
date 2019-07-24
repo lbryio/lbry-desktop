@@ -33,11 +33,11 @@ class WalletSendTip extends React.PureComponent<Props, State> {
   }
 
   handleSendButtonClicked() {
-    const { claim, sendSupport, sendTipCallback } = this.props;
+    const { claim, sendSupport, isSupport, sendTipCallback } = this.props;
     const { claim_id: claimId } = claim;
     const { tipAmount } = this.state;
 
-    sendSupport(tipAmount, claimId);
+    sendSupport(tipAmount, claimId, isSupport);
 
     // ex: close modal
     if (sendTipCallback) {
