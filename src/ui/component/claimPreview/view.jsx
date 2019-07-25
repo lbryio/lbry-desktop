@@ -68,14 +68,18 @@ function ClaimPreview(props: Props) {
   const hideActions = type === 'small' || type === 'tooltip';
 
   let isValid;
+  let parsedUrl;
   try {
-    parseURI(uri);
+    parsedUrl = parseURI(uri);
+    if (claim.signing_channel) {
+      parseURI(claim.signing_channel.permanent_url);
+    }
     isValid = true;
   } catch (e) {
     isValid = false;
   }
 
-  const isChannel = isValid ? parseURI(uri).isChannel : false;
+  const isChannel = isValid ? parsedUrl.isChannel : false;
   let shouldHide =
     placeholder !== 'loading' && ((abandoned && !showPublishLink) || (!claimIsMine && obscureNsfw && nsfw));
 
