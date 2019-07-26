@@ -71,7 +71,7 @@ function ClaimPreview(props: Props) {
   let parsedUrl;
   try {
     parsedUrl = parseURI(uri);
-    if (claim.signing_channel) {
+    if (claim && claim.signing_channel) {
       parseURI(claim.signing_channel.permanent_url);
     }
     isValid = true;
