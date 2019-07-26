@@ -1,4 +1,5 @@
 // @flow
+import SubscribeButton from 'component/subscribeButton';
 import * as PAGES from 'constants/pages';
 import * as ICONS from 'constants/icons';
 import React from 'react';
@@ -56,12 +57,15 @@ function SideBar(props: Props) {
         <ul className="navigation__links--small">
           {subscriptions.map(({ uri, channelName }, index) => (
             <li key={uri} className="">
-              <Button
-                navigate={uri}
-                label={channelName}
-                className="navigation__link"
-                activeClass="navigation__link--active"
-              />
+              <div className="card__actions">
+                <SubscribeButton uri={uri} mini />
+                <Button
+                  navigate={uri}
+                  label={channelName}
+                  className="navigation__link"
+                  activeClass="navigation__link--active"
+                />
+              </div>
             </li>
           ))}
         </ul>

@@ -20,6 +20,7 @@ type Props = {
   doOpenModal: (id: string) => void,
   showSnackBarOnSubscribe: boolean,
   doToast: ({ message: string }) => void,
+  mini: Boolean,
 };
 
 export default function SubscribeButton(props: Props) {
@@ -32,6 +33,7 @@ export default function SubscribeButton(props: Props) {
     isSubscribed,
     showSnackBarOnSubscribe,
     doToast,
+    mini,
   } = props;
   const buttonRef = useRef();
   const isHovering = useHover(buttonRef);
@@ -46,7 +48,7 @@ export default function SubscribeButton(props: Props) {
       iconColor="red"
       icon={unfollowOverride ? ICONS.UNSUBSCRIBE : ICONS.SUBSCRIBE}
       button={'alt'}
-      label={unfollowOverride || subscriptionLabel}
+      label={mini ? null : unfollowOverride || subscriptionLabel}
       onClick={e => {
         e.stopPropagation();
 
