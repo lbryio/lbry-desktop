@@ -200,7 +200,7 @@ document.addEventListener('click', event => {
 function AppWrapper() {
   const haveLaunched = window.sessionStorage.getItem('loaded') === 'y';
   const [readyToLaunch, setReadyToLaunch] = useState(haveLaunched || IS_WEB);
-
+  // @if TARGET='app'
   useEffect(() => {
     moment.locale(remote.app.getLocale());
 
@@ -221,7 +221,7 @@ function AppWrapper() {
       });
     }
   }, []);
-
+  // @endif
   useEffect(() => {
     if (readyToLaunch) {
       app.store.dispatch(doUpdateIsNightAsync());
