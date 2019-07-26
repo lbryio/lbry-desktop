@@ -5,7 +5,6 @@
   align-items: center;
   background-color: var(--color-background);
   display: flex;
-  flex-direction: column;
   justify-content: center;
   overflow: hidden;
 }
@@ -27,12 +26,9 @@
 }
 
 .splash__details {
-  position: absolute;
-  font-size: 12px;
+  font-weight: 600;
   line-height: 1;
-  font-weight: 300;
-  color: $lbry-white;
-  margin-top: 2rem;
+  max-width: 400px;
 }
 
 .splash__title {
@@ -41,7 +37,6 @@
   line-height: 1;
   font-weight: 700;
   color: $lbry-white;
-  margin-top: -1rem;
 }
 
 .splash__error {
