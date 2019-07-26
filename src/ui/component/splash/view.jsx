@@ -115,7 +115,7 @@ export default class SplashScreen extends React.PureComponent<Props, State> {
     const { wallet, blockchain_headers: blockchainHeaders } = status;
 
     // If the wallet is locked, stop doing anything and make the user input their password
-    if (wallet && wallet.is_locked) {
+    if (status.is_running && wallet && wallet.is_locked) {
       // Clear the error timeout, it might sit on this step for a while until someone enters their password
       if (this.timeout) {
         clearTimeout(this.timeout);
