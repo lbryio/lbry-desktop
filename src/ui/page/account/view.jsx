@@ -9,6 +9,7 @@ import InvitePage from 'page/invite';
 
 const WalletPage = () => (
   <Page>
+    <UserEmail />
     <UnsupportedOnWeb />
     <div className={classnames({ 'card--disabled': IS_WEB })}>
       <div className="columns">

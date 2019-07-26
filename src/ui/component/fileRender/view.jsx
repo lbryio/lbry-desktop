@@ -172,7 +172,7 @@ class FileRender extends React.PureComponent<Props> {
       video: (
         <VideoViewer claim={claim} source={{ downloadPath, fileName }} contentType={contentType} poster={poster} />
       ),
-      // audio: <AudioViewer claim={claim} source={{ downloadPath, fileName }} contentType={contentType} />,
+      audio: <VideoViewer claim={claim} source={{ downloadPath, fileName }} contentType={contentType} />,
       // Add routes to viewer...
     };
 

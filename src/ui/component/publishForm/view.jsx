@@ -124,8 +124,8 @@ function PublishForm(props: Props) {
     <Fragment>
       <UnsupportedOnWeb />
 
-      <PublishFile />
       <div className={classnames({ 'card--disabled': formDisabled })}>
+        <PublishFile />
         <PublishText disabled={formDisabled} />
         <div className="card card--section">
           {/* This should probably be PublishThumbnail */}

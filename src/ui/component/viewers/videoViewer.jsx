@@ -44,6 +44,7 @@ class AudioVideoViewer extends React.PureComponent<Props> {
       preload: 'auto',
       poster,
       sources,
+      playbackRates: [0.5, 1, 1.25, 1.5, 2],
     };
 
     import(
