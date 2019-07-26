@@ -35,7 +35,7 @@ export default function BlockButton(props: Props) {
     <Button
       ref={buttonRef}
       iconColor="red"
-      icon={ICONS.DOWN}
+      icon={ICONS.NO}
       button={'alt'}
       label={channelIsBlocked ? __('Unblock') : __('Block')}
       onClick={e => {
