@@ -51,6 +51,7 @@ const defaultState: AppState = {
   hasSignature: false,
   badgeNumber: 0,
   volume: Number(sessionStorage.getItem('volume')) || 1,
+  muted: false,
   autoUpdateDownloaded: false,
   autoUpdateDeclined: false,
   modalsAllowed: true,
@@ -208,6 +209,11 @@ reducers[ACTIONS.WINDOW_FOCUSED] = state =>
 reducers[ACTIONS.VOLUME_CHANGED] = (state, action) =>
   Object.assign({}, state, {
     volume: action.data.volume,
+  });
+
+reducers[ACTIONS.VOLUME_MUTED] = (state, action) =>
+  Object.assign({}, state, {
+    muted: action.data.muted,
   });
 
 reducers[ACTIONS.HISTORY_NAVIGATE] = state =>

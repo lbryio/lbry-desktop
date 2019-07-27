@@ -54,6 +54,8 @@ type Props = {
   thumbnail: ?string,
   isPlayableType: boolean,
   viewerContainer: { current: ElementRef<any> },
+  changeMute: boolean => void,
+  muted: boolean,
 };
 
 class FileViewer extends React.PureComponent<Props> {
@@ -231,6 +233,8 @@ class FileViewer extends React.PureComponent<Props> {
       viewerContainer,
       thumbnail,
       nsfw,
+      muted,
+      changeMute,
     } = this.props;
 
     const isPlaying = playingUri === uri;
@@ -290,6 +294,8 @@ class FileViewer extends React.PureComponent<Props> {
                   onFinishCb={this.onFileFinishCb}
                   playingUri={playingUri}
                   viewerContainer={viewerContainer}
+                  muted={muted}
+                  changeMute={changeMute}
                 />
               </Suspense>
             )}
