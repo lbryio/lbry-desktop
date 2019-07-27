@@ -8,6 +8,7 @@ import Button from 'component/button';
 
 type Props = {
   uri: string,
+  isSubscribed: boolean,
   toggleBlockChannel: (uri: string) => void,
   channelIsBlocked: boolean,
   blockedChannels: Array<string>,
@@ -25,15 +26,16 @@ export default function BlockButton(props: Props) {
     // props
   } = props;
 
-  const buttonRef = useRef();
-  // const isHovering = useHover(buttonRef);
+  const blockRef = useRef();
+  // const isHovering = useHover(blockRef);
   // const subscriptionHandler = isSubscribed ? doChannelUnsubscribe : doChannelSubscribe;
   // const subscriptionLabel = isSubscribed ? __('Following') : __('Follow');
   // const unfollowOverride = isSubscribed && isHovering && __('Unfollow');
+  // const blockedOverride = channelIsBlocked && isHovering
 
   return (
     <Button
-      ref={buttonRef}
+      ref={blockRef}
       iconColor="red"
       icon={ICONS.NO}
       button={'alt'}

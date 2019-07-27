@@ -6,7 +6,9 @@ import {
   makeSelectCoverForUri,
   selectCurrentChannelPage,
   makeSelectClaimForUri,
+  selectChannelIsBlocked,
 } from 'lbry-redux';
+import { makeSelectIsSubscribed } from 'redux/selectors/subscriptions';
 import ChannelPage from './view';
 
 const select = (state, props) => ({
@@ -16,6 +18,8 @@ const select = (state, props) => ({
   channelIsMine: makeSelectClaimIsMine(props.uri)(state),
   page: selectCurrentChannelPage(state),
   claim: makeSelectClaimForUri(props.uri)(state),
+  isSubscribed: makeSelectIsSubscribed(props.uri, true)(state),
+  channelIsBlocked: selectChannelIsBlocked(props.uri)(state),
 });
 
 export default connect(

@@ -8,6 +8,7 @@ import {
   makeSelectThumbnailForUri,
   makeSelectTitleForUri,
   makeSelectClaimIsNsfw,
+  selectBlockedChannels,
 } from 'lbry-redux';
 import { selectBlackListedOutpoints, selectFilteredOutpoints } from 'lbryinc';
 import { selectShowNsfw } from 'redux/selectors/settings';
@@ -25,6 +26,7 @@ const select = (state, props) => ({
   nsfw: makeSelectClaimIsNsfw(props.uri)(state),
   blackListedOutpoints: selectBlackListedOutpoints(state),
   filteredOutpoints: selectFilteredOutpoints(state),
+  blockedChannelUris: selectBlockedChannels,
   hasVisitedUri: makeSelectHasVisitedUri(props.uri)(state),
 });
 

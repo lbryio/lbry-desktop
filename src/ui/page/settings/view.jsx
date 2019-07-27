@@ -1,5 +1,6 @@
 // @flow
 import * as SETTINGS from 'constants/settings';
+import * as PAGES from 'constants/pages';
 import * as React from 'react';
 import classnames from 'classnames';
 import { FormField, FormFieldPrice, Form } from 'component/common/form';
@@ -276,6 +277,14 @@ class SettingsPage extends React.PureComponent<Props, State> {
                   )}
                 />
               </Form>
+            </section>
+
+            <section className="card card--section">
+              <h2 className="card__title">{__('Blocked Channels')}</h2>
+              <p className="card__subtitle card__help ">
+                {__('You have')} {'7'}{' '}
+                <Button button="link" label={__('blocked channels')} navigate={`/$/${PAGES.BLOCKED}`} />.
+              </p>
             </section>
 
             <section className="card card--section">

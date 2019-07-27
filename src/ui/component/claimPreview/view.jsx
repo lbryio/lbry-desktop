@@ -19,6 +19,7 @@ type Props = {
   uri: string,
   claim: ?Claim,
   obscureNsfw: boolean,
+  showUserBlocked: boolean,
   claimIsMine: boolean,
   pending?: boolean,
   resolveUri: string => void,
@@ -39,6 +40,7 @@ type Props = {
     txid: string,
     nout: number,
   }>,
+  blockedChannelUris: Array<string>,
 };
 
 function ClaimPreview(props: Props) {
@@ -58,7 +60,9 @@ function ClaimPreview(props: Props) {
     type,
     blackListedOutpoints,
     filteredOutpoints,
+    blockedChannelUris,
     hasVisitedUri,
+    showUserBlocked,
   } = props;
   const haventFetched = claim === undefined;
   const abandoned = !isResolvingUri && !claim;
@@ -92,6 +96,10 @@ function ClaimPreview(props: Props) {
         (signingChannel && outpoint.txid === signingChannel.txid && outpoint.nout === signingChannel.nout) ||
         (outpoint.txid === claim.txid && outpoint.nout === claim.nout)
     );
+  }
+
+  if (claim && !showUserBlocked && blockedChannelUris.length) {
+    shouldHide = blockedChannelUris.some(blockedUri => blockedUri === uri);
   }
 
   function handleContextMenu(e) {
