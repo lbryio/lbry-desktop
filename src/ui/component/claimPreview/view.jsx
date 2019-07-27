@@ -71,15 +71,22 @@ function ClaimPreview(props: Props) {
   }
 
   const isChannel = isValid ? parseURI(uri).isChannel : false;
+  const signingChannel = claim && claim.signing_channel;
+
   let shouldHide = abandoned || (!claimIsMine && obscureNsfw && nsfw);
 
   // This will be replaced once blocking is done at the wallet server level
   if (claim && !shouldHide && blackListedOutpoints) {
     shouldHide = blackListedOutpoints.some(outpoint => outpoint.txid === claim.txid && outpoint.nout === claim.nout);
   }
-
+  // We're checking to see if the stream outpoint
+  // or signing channel outpoint is in the filter list
   if (claim && !shouldHide && filteredOutpoints) {
-    shouldHide = filteredOutpoints.some(outpoint => outpoint.txid === claim.txid && outpoint.nout === claim.nout);
+    shouldHide = filteredOutpoints.some(
+      outpoint =>
+        (signingChannel && outpoint.txid === signingChannel.txid && outpoint.nout === signingChannel.nout) ||
+        (outpoint.txid === claim.txid && outpoint.nout === claim.nout)
+    );
   }
 
   function handleContextMenu(e) {
