@@ -1,5 +1,7 @@
 // @flow
 import React from 'react';
+import Button from 'component/button';
+import { Form } from 'component/common/form';
 import { Modal } from 'modal/modal';
 
 type Props = {
@@ -23,18 +25,20 @@ class ModalConfirmTransaction extends React.PureComponent<Props> {
         isOpen
         title={__('Send LBC')}
         contentLabel={__('Confirm Transaction')}
-        type="confirm"
-        confirmButtonLabel={__('Send')}
-        onConfirmed={() => this.onConfirmed()}
+        type="custom"
         onAborted={closeModal}
       >
-        <section className="card__content">
+        <Form className="card__content" onSubmit={() => this.onConfirmed()}>
           <p>{__('Sending: ')}</p>
           <blockquote>{amount} LBC</blockquote>
           <p>{__('To address: ')}</p>
           <blockquote>{address}</blockquote>
           <p>{__('Once the transaction is sent, it cannot be reversed.')}</p>
-        </section>
+          <div className="card__actions">
+            <Button autoFocus button="primary" label={__('Send')} onClick={() => this.onConfirmed()} />
+            <Button button="link" label={__('Cancel')} onClick={closeModal} />
+          </div>
+        </Form>
       </Modal>
     );
   }

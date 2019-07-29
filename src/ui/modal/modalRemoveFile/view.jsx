@@ -1,7 +1,8 @@
 // @flow
 import React from 'react';
 import { Modal } from 'modal/modal';
-import { FormField } from 'component/common/form';
+import { Form, FormField } from 'component/common/form';
+import Button from 'component/button';
 import usePersistedState from 'util/use-persisted-state';
 
 type Props = {
@@ -23,22 +24,13 @@ function ModalRemoveFile(props: Props) {
   const outpoint = fileInfo ? fileInfo.outpoint : `${txid}:${nout}`;
 
   return (
-    <Modal
-      isOpen
-      title="Remove File"
-      contentLabel={__('Confirm File Remove')}
-      type="confirm"
-      confirmButtonLabel={__('Remove')}
-      confirmButtonDisabled={!deleteChecked && !abandonChecked}
-      onConfirmed={() => deleteFile(outpoint || '', deleteChecked, abandonChecked)}
-      onAborted={closeModal}
-    >
+    <Modal isOpen title="Remove File" contentLabel={__('Confirm File Remove')} type="custom" onAborted={closeModal}>
       <section className="card__content">
         <p>
           {__("Are you sure you'd like to remove")} <cite>{`"${title}"`}</cite> {__('from the LBRY app?')}
         </p>
       </section>
-      <section className="card__content">
+      <Form className="card__content" onSubmit={() => deleteFile(outpoint || '', deleteChecked, abandonChecked)}>
         <FormField
           name="file_delete"
           label={__('Also delete this file from my computer')}
@@ -56,7 +48,17 @@ function ModalRemoveFile(props: Props) {
             onChange={() => setAbandonChecked(!abandonChecked)}
           />
         )}
-      </section>
+        <div className="card__actions">
+          <Button
+            autoFocus
+            button="primary"
+            label={__('OK')}
+            disabled={!deleteChecked && !abandonChecked}
+            onClick={() => deleteFile(outpoint || '', deleteChecked, abandonChecked)}
+          />
+          <Button button="link" label={__('Cancel')} onClick={closeModal} />
+        </div>
+      </Form>
     </Modal>
   );
 }
