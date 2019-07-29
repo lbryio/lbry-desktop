@@ -32,6 +32,8 @@ type Props = {
   savePosition: number => void,
   changeVolume: number => void,
   viewerContainer: { current: ElementRef<any> },
+  changeMute: boolean => void,
+  muted: boolean,
 };
 
 type State = {
@@ -187,6 +189,8 @@ class MediaPlayer extends React.PureComponent<Props, State> {
       savePosition,
       downloadPath,
       fileName,
+      muted,
+      changeMute,
     } = this.props;
 
     // @if TARGET='app'
@@ -251,9 +255,11 @@ class MediaPlayer extends React.PureComponent<Props, State> {
       });
       mediaElement.addEventListener('webkitfullscreenchange', win32FullScreenChange.bind(this));
       mediaElement.addEventListener('volumechange', () => {
+        changeMute(mediaElement.muted);
         changeVolume(mediaElement.volume);
       });
       mediaElement.volume = volume;
+      mediaElement.muted = muted;
       mediaElement.addEventListener('dblclick', this.handleDoubleClick);
     }
     // @endif

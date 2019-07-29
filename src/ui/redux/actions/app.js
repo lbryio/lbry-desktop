@@ -377,6 +377,17 @@ export function doChangeVolume(volume) {
   };
 }
 
+export function doChangeMute(muted) {
+  return dispatch => {
+    dispatch({
+      type: ACTIONS.VOLUME_MUTED,
+      data: {
+        muted,
+      },
+    });
+  };
+}
+
 export function doClickCommentButton() {
   return {
     type: ACTIONS.ADD_COMMENT,

@@ -100,6 +100,11 @@ export const selectVolume = createSelector(
   state => state.volume
 );
 
+export const selecetMute = createSelector(
+  selectState,
+  state => state.muted
+);
+
 export const selectUpgradeTimer = createSelector(
   selectState,
   state => state.checkUpgradeTimer

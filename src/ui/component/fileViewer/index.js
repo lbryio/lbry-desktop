@@ -1,7 +1,7 @@
 import { connect } from 'react-redux';
 import * as settings from 'constants/settings';
-import { doChangeVolume } from 'redux/actions/app';
-import { selectVolume } from 'redux/selectors/app';
+import { doChangeVolume, doChangeMute } from 'redux/actions/app';
+import { selectVolume, selecetMute } from 'redux/selectors/app';
 import { doPlayUri, doSetPlayingUri, savePosition } from 'redux/actions/content';
 import { doClaimEligiblePurchaseRewards, makeSelectCostInfoForUri } from 'lbryinc';
 import {
@@ -37,6 +37,7 @@ const select = (state, props) => ({
   nextFileToPlay: makeSelectFirstRecommendedFileForUri(props.uri)(state),
   nsfw: makeSelectClaimIsNsfw(props.uri)(state),
   thumbnail: makeSelectThumbnailForUri(props.uri)(state),
+  muted: selecetMute(state),
 });
 
 const perform = dispatch => ({
@@ -45,6 +46,7 @@ const perform = dispatch => ({
   changeVolume: volume => dispatch(doChangeVolume(volume)),
   claimRewards: () => dispatch(doClaimEligiblePurchaseRewards()),
   savePosition: (claimId, outpoint, position) => dispatch(savePosition(claimId, outpoint, position)),
+  changeMute: muted => dispatch(doChangeMute(muted)),
 });
 
 export default connect(
