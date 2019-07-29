@@ -44,6 +44,7 @@ type Props = {
   walletEncrypted: boolean,
   osNotificationsEnabled: boolean,
   supportOption: boolean,
+  hideBalance: boolean,
 };
 
 type State = {
@@ -151,6 +152,7 @@ class SettingsPage extends React.PureComponent<Props, State> {
       setDaemonSetting,
       setClientSetting,
       supportOption,
+      hideBalance,
     } = this.props;
 
     const noDaemonSettings = !daemonSettings || Object.keys(daemonSettings).length === 0;
@@ -359,6 +361,14 @@ class SettingsPage extends React.PureComponent<Props, State> {
                       <Button button="link" label={__('Learn more')} href="https://lbry.com/faq/wallet-encryption" />.
                     </React.Fragment>
                   }
+                />
+
+                <FormField
+                  type="checkbox"
+                  name="hide_balance"
+                  onChange={() => setClientSetting(SETTINGS.HIDE_BALANCE, !hideBalance)}
+                  checked={hideBalance}
+                  label={__('Hide wallet balance in header')}
                 />
               </Form>
             </section>
