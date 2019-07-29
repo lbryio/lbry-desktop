@@ -154,7 +154,6 @@ class SettingsPage extends React.PureComponent<Props, State> {
     } = this.props;
 
     const noDaemonSettings = !daemonSettings || Object.keys(daemonSettings).length === 0;
-    const isDarkModeEnabled = currentTheme === 'dark';
 
     const defaultMaxKeyFee = { currency: 'USD', amount: 50 };
     const disableMaxKeyFee = !(daemonSettings && daemonSettings.max_key_fee);
@@ -337,7 +336,6 @@ class SettingsPage extends React.PureComponent<Props, State> {
                     name="automatic_dark_mode"
                     onChange={() => this.onAutomaticDarkModeChange(!automaticDarkModeEnabled)}
                     checked={automaticDarkModeEnabled}
-                    disabled={isDarkModeEnabled}
                     label={__('Automatic dark mode (9pm to 8am)')}
                   />
                 </fieldset-section>
