@@ -3,10 +3,10 @@ import App from 'component/app';
 import SnackBar from 'component/snackBar';
 // @if TARGET='app'
 import SplashScreen from 'component/splash';
-import moment from 'moment';
-import { ipcRenderer, remote, shell } from 'electron';
 import * as ACTIONS from 'constants/action_types';
 // @endif
+import { ipcRenderer, remote, shell } from 'electron';
+import moment from 'moment';
 import * as MODALS from 'constants/modal_types';
 import React, { useState, useEffect } from 'react';
 import ReactDOM from 'react-dom';
@@ -202,6 +202,7 @@ function AppWrapper() {
   const [readyToLaunch, setReadyToLaunch] = useState(haveLaunched || IS_WEB);
 
   useEffect(() => {
+    // @if TARGET='app'
     moment.locale(remote.app.getLocale());
 
     autoUpdater.on('error', error => {
@@ -220,6 +221,7 @@ function AppWrapper() {
         app.store.dispatch(doAutoUpdate());
       });
     }
+    // @endif
   }, []);
 
   useEffect(() => {

@@ -9,6 +9,7 @@ export const remote = {
   getCurrentWindow: callable,
   app: {
     getAppPath: callable,
+    getLocale: () => 'en',
   },
   BrowserWindow: {
     getFocusedWindow: callable,
