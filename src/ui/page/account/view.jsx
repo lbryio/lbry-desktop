@@ -7,8 +7,11 @@ import UnsupportedOnWeb from 'component/common/unsupported-on-web';
 import UserEmail from 'component/userEmail';
 import InvitePage from 'page/invite';
 
-const WalletPage = () => (
+const AccountPage = () => (
   <Page>
+    {/* @if TARGET='web' */}
+    <UserEmail />
+    {/* @endif */}
     <UnsupportedOnWeb />
     <div className={classnames({ 'card--disabled': IS_WEB })}>
       <div className="columns">
@@ -23,4 +26,4 @@ const WalletPage = () => (
   </Page>
 );
 
-export default WalletPage;
+export default AccountPage;
