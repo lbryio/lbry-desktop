@@ -84,9 +84,8 @@ const analytics: Analytics = {
   tagFollowEvent: (tag, following, location) => {
     if (analyticsEnabled) {
       ReactGA.event({
-        category: 'Tag',
-        action: following ? 'follow' : 'unfollow',
-        value: tag,
+        category: following ? 'Tag-Follow' : 'Tag-Unfollow',
+        action: tag,
       });
     }
   },

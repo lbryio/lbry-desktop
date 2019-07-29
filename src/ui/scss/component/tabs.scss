@@ -25,10 +25,10 @@
 }
 
 .tab {
+  @extend .button--link;
   margin-right: var(--spacing-large);
   padding: 5px 0;
-  font-weight: 700;
-  font-size: var(--tab-header-size);
+  font-size: var(--font-multiplier-large);
   color: $lbry-white;
   position: relative;
 
@@ -38,6 +38,10 @@
     height: 0;
     width: 100%;
     content: '';
+  }
+
+  &[data-selected] {
+    color: $lbry-teal-3;
   }
 }
 

@@ -1,5 +1,4 @@
 // @flow
-import * as ICONS from 'constants/icons';
 import * as SETTINGS from 'constants/settings';
 import * as React from 'react';
 import classnames from 'classnames';
@@ -170,9 +169,7 @@ class SettingsPage extends React.PureComponent<Props, State> {
         ) : (
           <div className={classnames({ 'card--disabled': IS_WEB })}>
             <section className="card card--section">
-              <header className="card__header">
-                <h2 className="card__title">{__('Download Directory')}</h2>
-              </header>
+              <h2 className="card__title">{__('Download Directory')}</h2>
 
               <div className="card__content">
                 <FileSelector
@@ -187,11 +184,9 @@ class SettingsPage extends React.PureComponent<Props, State> {
             </section>
 
             <section className="card card--section">
-              <header className="card__header">
-                <h2 className="card__title">{__('Max Purchase Price')}</h2>
-              </header>
+              <h2 className="card__title">{__('Max Purchase Price')}</h2>
 
-              <Form className="card__content">
+              <Form>
                 <FormField
                   type="radio"
                   name="no_max_purchase_no_limit"
@@ -228,11 +223,9 @@ class SettingsPage extends React.PureComponent<Props, State> {
             </section>
 
             <section className="card card--section">
-              <header className="card__header">
-                <h2 className="card__title">{__('Purchase Confirmations')}</h2>
-              </header>
+              <h2 className="card__title">{__('Purchase Confirmations')}</h2>
 
-              <Form className="card__content">
+              <Form>
                 <FormField
                   type="radio"
                   name="confirm_all_purchases"
@@ -268,13 +261,11 @@ class SettingsPage extends React.PureComponent<Props, State> {
             </section>
 
             <section className="card card--section">
-              <header className="card__header">
-                <h2 className="card__title">{__('Content Settings')}</h2>
-              </header>
+              <h2 className="card__title">{__('Content Settings')}</h2>
 
-              <Form className="card__content">
+              <Form>
                 <FormField
-                  type="setting"
+                  type="checkbox"
                   name="show_nsfw"
                   onChange={() => setClientSetting(SETTINGS.SHOW_NSFW, !showNsfw)}
                   checked={showNsfw}
@@ -287,12 +278,10 @@ class SettingsPage extends React.PureComponent<Props, State> {
             </section>
 
             <section className="card card--section">
-              <header className="card__header">
-                <h2 className="card__title">{__('Notifications')}</h2>
-              </header>
-              <Form className="card__content">
+              <h2 className="card__title">{__('Notifications')}</h2>
+              <Form>
                 <FormField
-                  type="setting"
+                  type="checkbox"
                   name="desktopNotification"
                   onChange={() => setClientSetting(SETTINGS.OS_NOTIFICATIONS_ENABLED, !osNotificationsEnabled)}
                   checked={osNotificationsEnabled}
@@ -303,13 +292,11 @@ class SettingsPage extends React.PureComponent<Props, State> {
             </section>
 
             <section className="card card--section">
-              <header className="card__header">
-                <h2 className="card__title">{__('Share Diagnostic Data')}</h2>
-              </header>
+              <h2 className="card__title">{__('Share Diagnostic Data')}</h2>
 
-              <Form className="card__content">
+              <Form>
                 <FormField
-                  type="setting"
+                  type="checkbox"
                   name="share_usage_data"
                   onChange={() => setDaemonSetting('share_usage_data', !daemonSettings.share_usage_data)}
                   checked={daemonSettings.share_usage_data}
@@ -325,11 +312,9 @@ class SettingsPage extends React.PureComponent<Props, State> {
             </section>
 
             <section className="card card--section">
-              <header className="card__header">
-                <h2 className="card__title">{__('Appearance')}</h2>
-              </header>
+              <h2 className="card__title">{__('Appearance')}</h2>
 
-              <Form className="card__content">
+              <Form>
                 <fieldset-section>
                   <FormField
                     name="theme_select"
@@ -348,7 +333,7 @@ class SettingsPage extends React.PureComponent<Props, State> {
                 </fieldset-section>
                 <fieldset-section>
                   <FormField
-                    type="setting"
+                    type="checkbox"
                     name="automatic_dark_mode"
                     onChange={() => this.onAutomaticDarkModeChange(!automaticDarkModeEnabled)}
                     checked={automaticDarkModeEnabled}
@@ -360,13 +345,11 @@ class SettingsPage extends React.PureComponent<Props, State> {
             </section>
 
             <section className="card card--section">
-              <header className="card__header">
-                <h2 className="card__title">{__('Wallet Security')}</h2>
-              </header>
+              <h2 className="card__title">{__('Wallet Security')}</h2>
 
-              <Form className="card__content">
+              <Form>
                 <FormField
-                  type="setting"
+                  type="checkbox"
                   name="encrypt_wallet"
                   onChange={() => this.onChangeEncryptWallet()}
                   checked={walletEncrypted}
@@ -383,13 +366,11 @@ class SettingsPage extends React.PureComponent<Props, State> {
             </section>
 
             <section className="card card--section">
-              <header className="card__header">
-                <h2 className="card__title">{__('Experimental Settings')}</h2>
-              </header>
+              <h2 className="card__title">{__('Experimental Settings')}</h2>
 
-              <Form className="card__content">
+              <Form>
                 <FormField
-                  type="setting"
+                  type="checkbox"
                   name="support_option"
                   onChange={() => setClientSetting(SETTINGS.SUPPORT_OPTION, !supportOption)}
                   checked={supportOption}
@@ -406,7 +387,7 @@ class SettingsPage extends React.PureComponent<Props, State> {
                 />
 
                 <FormField
-                  type="setting"
+                  type="checkbox"
                   name="auto_download"
                   onChange={() => setClientSetting(SETTINGS.AUTO_DOWNLOAD, !autoDownload)}
                   checked={autoDownload}
@@ -417,7 +398,7 @@ class SettingsPage extends React.PureComponent<Props, State> {
                 />
 
                 <FormField
-                  type="setting"
+                  type="checkbox"
                   name="autoplay"
                   onChange={() => setClientSetting(SETTINGS.AUTOPLAY, !autoplay)}
                   checked={autoplay}
@@ -427,43 +408,42 @@ class SettingsPage extends React.PureComponent<Props, State> {
                   )}
                 />
 
-                <FormField
-                  name="language_select"
-                  type="select"
-                  label={__('Language')}
-                  onChange={this.onLanguageChange}
-                  value={currentLanguage}
-                  helper={__(
-                    'Multi-language support is brand new and incomplete. Switching your language may have unintended consequences.'
-                  )}
-                >
-                  {Object.keys(languages).map(language => (
-                    <option key={language} value={language}>
-                      {languages[language]}
-                    </option>
-                  ))}
-                </FormField>
+                {
+                  <FormField
+                    name="language_select"
+                    type="select"
+                    label={__('Language')}
+                    onChange={this.onLanguageChange}
+                    value={currentLanguage}
+                    helper={__(
+                      'Multi-language support is brand new and incomplete. Switching your language may have unintended consequences.'
+                    )}
+                  >
+                    {Object.keys(languages).map(language => (
+                      <option key={language} value={language}>
+                        {languages[language]}
+                      </option>
+                    ))}
+                  </FormField>
+                }
               </Form>
             </section>
 
             <section className="card card--section">
-              <header className="card__header">
-                <h2 className="card__title">{__('Application Cache')}</h2>
-              </header>
+              <h2 className="card__title">{__('Application Cache')}</h2>
 
-              <p className="help--warning">
-                {__('This will clear the application cache. Your wallet will not be affected.')}
+              <p className="card__subtitle--status">
+                {__(
+                  'This will clear the application cache. Your wallet will not be affected. Currently, followed tags will be cleared.'
+                )}
               </p>
 
-              <div className="card__content">
-                <Button
-                  button="primary"
-                  label={this.state.clearingCache ? __('Clearing') : __('Clear Cache')}
-                  icon={ICONS.ALERT}
-                  onClick={this.clearCache}
-                  disabled={this.state.clearingCache}
-                />
-              </div>
+              <Button
+                button="inverse"
+                label={this.state.clearingCache ? __('Clearing') : __('Clear Cache')}
+                onClick={this.clearCache}
+                disabled={this.state.clearingCache}
+              />
             </section>
           </div>
         )}

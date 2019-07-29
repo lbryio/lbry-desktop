@@ -21,6 +21,7 @@ type Props = {
   tagsChosen?: Array<Tag>,
   onSelect?: Tag => void,
   onRemove?: Tag => void,
+  className?: string,
 };
 
 const tagsAnimation = {
@@ -41,6 +42,7 @@ export default function TagSelect(props: Props) {
     onSelect,
     onRemove,
     suggestMature,
+    className,
   } = props;
   const [hasClosed, setHasClosed] = usePersistedState('tag-select:has-closed', false);
   const tagsToDisplay = tagsChosen || followedTags;
@@ -65,39 +67,37 @@ export default function TagSelect(props: Props) {
 
   return (
     ((showClose && !hasClosed) || !showClose) && (
-      <div className="card--section">
+      <div className={className}>
         {title !== false && (
-          <h2 className="card__title card__title--flex-between">
+          <h2 className="card__title">
             {title}
             {showClose && !hasClosed && <Button button="close" icon={ICONS.REMOVE} onClick={handleClose} />}
           </h2>
         )}
 
-        <div className="card__content">
-          <ul className="tags--remove">
-            {transitions.map(({ item, props, key }) => (
-              <animated.li key={key} style={props}>
-                <Tag
-                  name={item.name}
-                  type="remove"
-                  onClick={() => {
-                    handleTagClick(item);
-                  }}
-                />
-              </animated.li>
-            ))}
-            {!transitions.length && (
-              <div className="empty">{empty || __("You aren't following any tags, try searching for one.")}</div>
-            )}
-          </ul>
-          <TagsSearch onSelect={onSelect} suggestMature={suggestMature && !hasMatureTag} />
-          {help !== false && (
-            <p className="help">
-              {help || __("The tags you follow will change what's trending for you. ")}
-              <Button button="link" label={__('Learn more')} href="https://lbry.com/faq/trending" />.
-            </p>
+        <ul className="tags--remove">
+          {transitions.map(({ item, props, key }) => (
+            <animated.li key={key} style={props}>
+              <Tag
+                name={item.name}
+                type="remove"
+                onClick={() => {
+                  handleTagClick(item);
+                }}
+              />
+            </animated.li>
+          ))}
+          {!transitions.length && (
+            <div className="empty">{empty || __("You aren't following any tags, try searching for one.")}</div>
           )}
-        </div>
+        </ul>
+        <TagsSearch onSelect={onSelect} suggestMature={suggestMature && !hasMatureTag} />
+        {help !== false && (
+          <p className="help">
+            {help || __("The tags you follow will change what's trending for you.")}{' '}
+            <Button button="link" label={__('Learn more')} href="https://lbry.com/faq/trending" />.
+          </p>
+        )}
       </div>
     )
   );

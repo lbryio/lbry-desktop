@@ -49,24 +49,20 @@ class ModalWalletUnlock extends React.PureComponent<Props, State> {
         onConfirmed={() => unlockWallet(password)}
         onAborted={quit}
       >
-        <section className="card__content">
-          <Form onSubmit={() => unlockWallet(password)}>
-            <p>
-              {__(
-                'Your wallet has been encrypted with a local password. Please enter your wallet password to proceed.'
-              )}{' '}
-              <Button button="link" label={__('Learn more')} href="https://lbry.com/faq/wallet-encryption" />.
-            </p>
-            <FormField
-              autoFocus
-              error={walletUnlockSucceded === false ? 'Incorrect Password' : false}
-              label={__('Wallet Password')}
-              type="password"
-              name="wallet-password"
-              onChange={event => this.onChangePassword(event)}
-            />
-          </Form>
-        </section>
+        <Form onSubmit={() => unlockWallet(password)}>
+          <p>
+            {__('Your wallet has been encrypted with a local password. Please enter your wallet password to proceed.')}{' '}
+            <Button button="link" label={__('Learn more')} href="https://lbry.com/faq/wallet-encryption" />.
+          </p>
+          <FormField
+            autoFocus
+            error={walletUnlockSucceded === false ? 'Incorrect Password' : false}
+            label={__('Wallet Password')}
+            type="password"
+            name="wallet-password"
+            onChange={event => this.onChangePassword(event)}
+          />
+        </Form>
       </Modal>
     );
   }

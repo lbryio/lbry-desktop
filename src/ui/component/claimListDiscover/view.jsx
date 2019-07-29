@@ -1,6 +1,6 @@
 // @flow
 import type { Node } from 'react';
-import React, { useEffect } from 'react';
+import React, { Fragment, useEffect } from 'react';
 import { withRouter } from 'react-router';
 import { buildClaimSearchCacheQuery, MATURE_TAGS } from 'lbry-redux';
 import { FormField } from 'component/common/form';
@@ -105,7 +105,10 @@ function ClaimListDiscover(props: Props) {
 
   const claimSearchCacheQuery = buildClaimSearchCacheQuery(options);
   const uris = claimSearchByQuery[claimSearchCacheQuery] || [];
-  const shouldPerformSearch = uris.length === 0 || didNavigateForward || (!loading && uris.length < PAGE_SIZE * page);
+  const shouldPerformSearch =
+    uris.length === 0 ||
+    didNavigateForward ||
+    (!loading && uris.length < PAGE_SIZE * page && uris.length % PAGE_SIZE === 0);
   // Don't use the query from buildClaimSearchCacheQuery for the effect since that doesn't include page & release_time
   const optionsStringForEffect = JSON.stringify(options);
 
@@ -149,7 +152,7 @@ function ClaimListDiscover(props: Props) {
   }, [doClaimSearch, shouldPerformSearch, optionsStringForEffect]);
 
   const header = (
-    <h1 className="card__title--flex">
+    <Fragment>
       <FormField
         className="claim-list__dropdown"
         type="select"
@@ -205,12 +208,13 @@ function ClaimListDiscover(props: Props) {
           ))}
         </FormField>
       )}
-    </h1>
+    </Fragment>
   );
 
   return (
     <div className="card">
       <ClaimList
+        id={claimSearchCacheQuery}
         loading={loading}
         uris={uris}
         injectedItem={personalSort === SEARCH_SORT_YOU && injectedItem}
@@ -221,7 +225,7 @@ function ClaimListDiscover(props: Props) {
         pageSize={PAGE_SIZE}
       />
 
-      {loading && new Array(PAGE_SIZE).fill(1).map((x, i) => <ClaimPreview key={i} placeholder />)}
+      {loading && new Array(PAGE_SIZE).fill(1).map((x, i) => <ClaimPreview key={i} placeholder="loading" />)}
     </div>
   );
 }

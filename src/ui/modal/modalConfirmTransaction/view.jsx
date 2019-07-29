@@ -28,7 +28,7 @@ class ModalConfirmTransaction extends React.PureComponent<Props> {
         type="custom"
         onAborted={closeModal}
       >
-        <Form className="card__content" onSubmit={() => this.onConfirmed()}>
+        <Form onSubmit={() => this.onConfirmed()}>
           <p>{__('Sending: ')}</p>
           <blockquote>{amount} LBC</blockquote>
           <p>{__('To address: ')}</p>

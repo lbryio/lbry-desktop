@@ -7,7 +7,8 @@
   flex: 1;
   position: relative;
   z-index: 1;
-  margin-right: calc(var(--spacing-large));
+  margin-right: var(--spacing-main-padding);
+  font-size: var(--font-label);
 
   @media (max-width: 600px) {
     margin-right: 0;
@@ -23,7 +24,7 @@
 }
 
 .wunderbar__active-suggestion {
-  background-color: $lbry-blue-2;
+  background-color: lighten($lbry-blue-1, 15%);
   color: $lbry-black;
 
   [data-mode='dark'] & {
@@ -34,16 +35,16 @@
 
 .wunderbar__input {
   width: 100%;
-  height: var(--button-height);
-  border-radius: var(--button-radius);
-  background-color: $lbry-gray-1;
   align-items: center;
-  border: none;
   min-width: 0;
-  padding-right: var(--spacing-small);
   overflow: hidden;
-  text-overflow: ellipsis;
   white-space: nowrap;
+  text-overflow: ellipsis;
+  height: var(--input-height);
+  border-radius: var(--input-height);
+  background-color: $lbry-gray-1;
+  border: none;
+  padding-right: var(--spacing-small);
 
   padding-left: 2.5rem;
   transition: all 0.2s;
@@ -62,7 +63,7 @@
     color: $lbry-white;
 
     &::placeholder {
-      color: var(--dm-color-02);
+      color: var(--dm-color-01);
     }
   }
 }
@@ -85,7 +86,7 @@
   display: flex;
   flex-direction: row;
   justify-items: flex-start;
-  padding: var(--spacing-small) var(--spacing-medium);
+  padding: var(--spacing-small) var(--spacing-small);
 
   &:not(:first-of-type) {
     border-top: 1px solid transparent;
@@ -98,17 +99,13 @@
 
 .wunderbar__suggestion-label {
   overflow: hidden;
-  padding-left: var(--spacing-large);
+  padding-left: var(--spacing-small);
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
 .wunderbar__suggestion-label--action {
-  font-size: 1rem;
-  font-weight: 600;
-  line-height: 0.1; // to vertically align because the font size is smaller
-  margin-left: var(--spacing-small);
-  opacity: 0.7;
-  text-transform: uppercase;
+  margin-left: var(--spacing-medium);
+  opacity: 0.6;
   white-space: nowrap;
 }

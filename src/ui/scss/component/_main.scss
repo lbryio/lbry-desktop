@@ -1,4 +1,6 @@
 .main-wrapper {
+  position: relative;
+
   [data-mode='dark'] & {
     background-color: var(--dm-color-08);
   }
@@ -7,21 +9,16 @@
 .main-wrapper__inner {
   display: flex;
   align-items: flex-start;
-  min-height: 100vh;
-  max-width: 1200px;
+  justify-content: space-between;
+  max-width: var(--page-max-width);
   margin-left: auto;
   margin-right: auto;
-  padding-left: var(--spacing-large);
-  padding-right: var(--spacing-large);
-  padding-bottom: var(--spacing-main-padding);
+  margin-top: var(--header-height);
+  padding: var(--spacing-large);
 }
 
 .main {
-  min-width: 0;
   width: calc(100% - var(--side-nav-width) - var(--spacing-main-padding));
-  position: relative;
-  margin-top: calc(var(--header-height) + var(--spacing-large));
-  margin-right: var(--spacing-main-padding);
 
   @media (max-width: 600px) {
     width: 100%;
@@ -35,11 +32,11 @@
 
   .grid-area--info {
     margin-right: var(--spacing-large);
-    width: 50%;
+    width: 52.5%;
   }
 
   .grid-area--related {
-    width: calc(50% - var(--spacing-large));
+    width: calc(47.5% - var(--spacing-large));
   }
 }
 
@@ -52,8 +49,14 @@
   text-align: center;
 }
 
+.main--launching {
+  width: 100vw;
+  height: 100vh;
+  background-color: var(--color-background);
+}
+
 .main__status {
-  @extend .help;
+  @extend .card__subtitle;
   display: flex;
   justify-content: space-between;
   background-color: $lbry-teal-4;
@@ -65,5 +68,6 @@
 
   [data-mode='dark'] & {
     background-color: $lbry-teal-5;
+    color: $lbry-white;
   }
 }

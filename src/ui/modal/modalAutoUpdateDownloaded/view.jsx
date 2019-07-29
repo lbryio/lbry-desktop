@@ -46,13 +46,11 @@ class ModalAutoUpdateDownloaded extends React.PureComponent<Props, State> {
           closeModal();
         }}
       >
-        <section className="card__content">
-          <p>{__('A new version of LBRY is ready for you.')}</p>
-          <p className="help">
-            {__('Want to know what has changed?')} See the{' '}
-            <Button button="link" label={__('release notes')} href="https://github.com/lbryio/lbry-desktop/releases" />.
-          </p>
-        </section>
+        <p>{__('A new version of LBRY is ready for you.')}</p>
+        <p className="help">
+          {__('Want to know what has changed?')} See the{' '}
+          <Button button="link" label={__('release notes')} href="https://github.com/lbryio/lbry-desktop/releases" />.
+        </p>
       </Modal>
     );
   }

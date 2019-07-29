@@ -1,23 +1,30 @@
 .navigation {
   width: var(--side-nav-width);
-  font-size: 1.4rem;
+  font-size: var(--font-body);
+  // padding-top: 100px;
 
   @media (max-width: 600px) {
     display: none;
   }
 }
 
-.navigation__links {
-  position: relative;
+.navigation-links {
+  @extend .ul--no-style;
+  flex-direction: column;
+  align-items: flex-start;
+  list-style: none;
 }
 
-.navigation__links--small {
-  @extend .navigation__links;
-  font-size: 1.2rem;
-  margin-top: var(--spacing-small);
+.navigation-links--small {
+  @extend .navigation-links;
+  font-size: var(--font-multiplier-small);
 }
 
-.navigation__link {
+.navigation-link__wrapper {
+  margin: var(--spacing-miniscule) 0;
+}
+
+.navigation-link {
   display: block;
   position: relative;
   text-align: left;
@@ -26,10 +33,10 @@
   white-space: nowrap;
   text-overflow: ellipsis;
   color: lighten($lbry-black, 20%);
-  margin-top: var(--spacing-miniscule);
+  margin-top: var(--spacing-small);
 
   .icon {
-    margin-right: var(--spacing-small);
+    stroke: $lbry-gray-5;
   }
 
   &:hover {
@@ -39,7 +46,7 @@
     }
   }
 
-  &.navigation__link--active {
+  &.navigation-link--active {
     color: $lbry-teal-5;
     .icon {
       color: $lbry-teal-4;
@@ -50,68 +57,16 @@
     color: var(--dm-color-01);
 
     svg {
-      color: var(--dm-color-01);
+      stroke: var(--dm-color-01);
     }
 
     &:hover,
-    &.navigation__link--active {
+    &.navigation-link--active {
       color: $lbry-teal-4;
 
       .icon {
-        color: $lbry-teal-4;
+        stroke: $lbry-teal-4;
       }
     }
   }
-}
-
-.navigation__link--title {
-  margin-top: var(--spacing-large);
-  color: $lbry-gray-5;
-  font-size: 1.15rem;
-  font-weight: 700;
-  letter-spacing: 0.1rem;
-}
-
-.navigation__link-items {
-  font-size: 1.15rem;
-  padding-left: var(--spacing-large);
-}
-
-.navigation__link-item {
-  position: relative;
-
-  &::before {
-    width: 0.25rem;
-    height: 0.25rem;
-    top: 44%;
-    left: -1rem;
-
-    border-radius: 50%;
-    content: '';
-    position: absolute;
-    transition: background-color 0.2s;
-  }
-
-  &:not(.navigation__link-item--active) {
-    color: $lbry-gray-5;
-
-    &::before {
-      background-color: transparent;
-    }
-  }
-
-  &:hover,
-  .navigation__link-item--active {
-    &::before {
-      background-color: $lbry-black;
-
-      [data-mode='dark'] & {
-        color: $lbry-gray-1;
-      }
-    }
-  }
-}
-
-.navigation__link--indented {
-  padding-left: 2rem;
 }

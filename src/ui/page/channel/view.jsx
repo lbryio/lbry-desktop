@@ -89,7 +89,7 @@ function ChannelPage(props: Props) {
           <TabList className="tabs__list--channel-page">
             <Tab disabled={editing}>{__('Content')}</Tab>
             <Tab>{editing ? __('Editing Your Channel') : __('About')}</Tab>
-            <div className="card__actions">
+            <div className="card__actions--inline">
               <ShareButton uri={uri} />
               <SubscribeButton uri={permanentUrl} />
             </div>

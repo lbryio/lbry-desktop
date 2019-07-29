@@ -1,6 +1,6 @@
 // @flow
 import React from 'react';
-import { THUMBNAIL_STATUSES } from 'lbry-redux';
+import { THUMBNAIL_STATUSES, isNameValid } from 'lbry-redux';
 
 type Props = {
   title: ?string,
@@ -18,9 +18,10 @@ function PublishFormErrors(props: Props) {
   // These are extra help
   // If there is an error it will be presented as an inline error as well
   return (
-    <div className="card__content error-text">
+    <div className="error-text">
       {!title && <div>{__('A title is required')}</div>}
       {!name && <div>{__('A URL is required')}</div>}
+      {!isNameValid(name, false) && __('LBRY names cannot contain spaces or reserved symbols ($#@;/"<>%{}|^~[]`)')}
       {!bid && <div>{__('A deposit amount is required')}</div>}
       {uploadThumbnailStatus === THUMBNAIL_STATUSES.IN_PROGRESS && (
         <div>{__('Please wait for thumbnail to finish uploading')}</div>

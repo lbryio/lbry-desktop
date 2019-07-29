@@ -8,7 +8,7 @@ import { ipcRenderer, remote, shell } from 'electron';
 import * as ACTIONS from 'constants/action_types';
 // @endif
 import * as MODALS from 'constants/modal_types';
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import { doConditionalAuthNavigate, doDaemonReady, doAutoUpdate, doOpenModal, doHideModal } from 'redux/actions/app';
@@ -21,13 +21,14 @@ import {
   doBlackListedOutpointsSubscribe,
   doFilteredOutpointsSubscribe,
 } from 'lbryinc';
-import { store, history } from 'store';
+import { store, persistor, history } from 'store';
 import pjson from 'package.json';
 import app from './app';
 import doLogWarningConsoleMessage from './logWarningConsoleMessage';
 import { ConnectedRouter, push } from 'connected-react-router';
 import cookie from 'cookie';
 import { formatLbryUriForWeb } from 'util/uri';
+import { PersistGate } from 'redux-persist/integration/react';
 
 // Import our app styles
 // If a style is not necessary for the initial page load, it should be removed from `all.scss`
@@ -196,71 +197,63 @@ document.addEventListener('click', event => {
   }
 });
 
-const init = () => {
-  // @if TARGET='app'
-  moment.locale(remote.app.getLocale());
+function AppWrapper() {
+  const haveLaunched = window.sessionStorage.getItem('loaded') === 'y';
+  const [readyToLaunch, setReadyToLaunch] = useState(haveLaunched || IS_WEB);
 
-  autoUpdater.on('error', error => {
-    console.error(error.message);
-  });
+  useEffect(() => {
+    moment.locale(remote.app.getLocale());
 
-  if (['win32', 'darwin'].includes(process.platform)) {
-    autoUpdater.on('update-available', () => {
-      console.log('Update available');
+    autoUpdater.on('error', error => {
+      console.error(error.message); // eslint-disable-line no-console
     });
-    autoUpdater.on('update-not-available', () => {
-      console.log('Update not available');
-    });
-    autoUpdater.on('update-downloaded', () => {
-      console.log('Update downloaded');
-      app.store.dispatch(doAutoUpdate());
-    });
-  }
 
-  app.store.dispatch(doUpdateIsNightAsync());
-  // @endif
+    if (['win32', 'darwin'].includes(process.platform)) {
+      autoUpdater.on('update-available', () => {
+        console.log('Update available'); // eslint-disable-line no-console
+      });
+      autoUpdater.on('update-not-available', () => {
+        console.log('Update not available'); // eslint-disable-line no-console
+      });
+      autoUpdater.on('update-downloaded', () => {
+        console.log('Update downloaded'); // eslint-disable-line no-console
+        app.store.dispatch(doAutoUpdate());
+      });
+    }
+  }, []);
 
-  app.store.dispatch(doInitLanguage());
-  app.store.dispatch(doBlackListedOutpointsSubscribe());
-  app.store.dispatch(doFilteredOutpointsSubscribe());
+  useEffect(() => {
+    if (readyToLaunch) {
+      app.store.dispatch(doUpdateIsNightAsync());
+      app.store.dispatch(doDaemonReady());
+      app.store.dispatch(doInitLanguage());
+      app.store.dispatch(doBlackListedOutpointsSubscribe());
+      app.store.dispatch(doFilteredOutpointsSubscribe());
+      window.sessionStorage.setItem('loaded', 'y');
+    }
+  }, [readyToLaunch, haveLaunched]);
 
-  function onDaemonReady() {
-    // @if TARGET='app'
-    window.sessionStorage.setItem('loaded', 'y'); // once we've made it here once per session, we don't need to show splash again
-    // @endif
+  return (
+    <Provider store={store}>
+      <PersistGate persistor={persistor} loading={<div className="main--launching" />}>
+        <div>
+          {readyToLaunch ? (
+            <ConnectedRouter history={history}>
+              <ErrorBoundary>
+                <App />
+                <SnackBar />
+              </ErrorBoundary>
+            </ConnectedRouter>
+          ) : (
+            <SplashScreen
+              authenticate={() => app.store.dispatch(doAuthenticate(pjson.version))}
+              onReadyToLaunch={() => setReadyToLaunch(true)}
+            />
+          )}
+        </div>
+      </PersistGate>
+    </Provider>
+  );
+}
 
-    app.store.dispatch(doDaemonReady());
-    ReactDOM.render(
-      <Provider store={store}>
-        <ConnectedRouter history={history}>
-          <ErrorBoundary>
-            <App />
-            <SnackBar />
-          </ErrorBoundary>
-        </ConnectedRouter>
-      </Provider>,
-      document.getElementById('app')
-    );
-  }
-
-  // @if TARGET='app'
-  if (window.sessionStorage.getItem('loaded') === 'y') {
-    onDaemonReady();
-  } else {
-    ReactDOM.render(
-      <Provider store={store}>
-        <SplashScreen
-          authenticate={() => app.store.dispatch(doAuthenticate(pjson.version))}
-          onReadyToLaunch={onDaemonReady}
-        />
-      </Provider>,
-      document.getElementById('app')
-    );
-  }
-  // @endif
-  // @if TARGET='web'
-  onDaemonReady();
-  // @endif
-};
-
-init();
+ReactDOM.render(<AppWrapper />, document.getElementById('app'));

@@ -7,10 +7,9 @@ $large-breakpoint: 1921px;
 
 :root {
   // Width & spacing
-  --page-max-width: 1200px;
+  --page-max-width: 1420px;
   --mobile: 600px;
   --side-nav-width: 170px;
-  --font-size-subtext-multiple: 0.92;
   --spacing-miniscule: calc(2rem / 5);
   --spacing-tiny: calc(2rem / 4);
   --spacing-small: calc(2rem / 3);
@@ -22,6 +21,18 @@ $large-breakpoint: 1921px;
   --file-max-height: 788px;
   --file-max-width: 1400px;
   --video-aspect-ratio: 56.25%; // 9 x 16
+
+  // Font
+
+  --font-multiplier-small: 0.9em;
+  --font-multiplier-medium: 1.1em;
+  --font-multiplier-large: 1.4em;
+  --font-multiplier-xlarge: 1.6rem;
+  --font-body: 1.2rem;
+  --font-label: 0.9em;
+  --font-subtext: 1em;
+  --font-title: 1.6em;
+  --font-heading: 3rem;
 
   // Color
   --color-background: #270f34;
@@ -42,26 +53,26 @@ $large-breakpoint: 1921px;
 
   // Tabs
   --tab-indicator-size: 0.5rem;
-  --tab-header-size: 1.5rem; // Needs to be static so the animated styling always works
 
   // Input
   --input-border-size: 1px;
   --input-border-radius: 2px;
+  --input-height: 2.6rem;
 
   // Select
   --select-height: 30px;
 
   // Button
-  --button-radius: 2.6rem;
-  --button-height: 2.6rem;
+  --button-radius: var(--input-border-radius);
+  --button-height: var(--input-height);
 
   // Header
-  --header-height: 6rem;
+  --header-height: 5rem;
 
   // Card
   --card-radius: 5px;
   --card-max-width: 1000px;
-  --card-box-shadow: 0px 0px 30px 2px;
+  --card-box-shadow: 0px 2px 6px 0;
 
   // Modal
   --modal-width: 440px;
@@ -73,7 +84,8 @@ $large-breakpoint: 1921px;
   // Image
   --thumbnail-preview-height: 100px;
   --thumbnail-preview-width: 177px;
-  --cover-photo-height: 160px;
+  --cover-photo-height: 180px;
   --channel-thumbnail-width: 10rem;
+  --channel-thumbnail-width--small: 4rem;
   --file-list-thumbnail-width: 10rem;
 }

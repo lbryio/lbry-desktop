@@ -9,7 +9,7 @@ type Props = {
   title: string,
   claim: StreamClaim,
   isPending: boolean,
-  sendSupport: (number, string, string) => void,
+  sendSupport: (number, string) => void,
   onCancel: () => void,
   sendTipCallback?: () => void,
   balance: number,
@@ -33,11 +33,11 @@ class WalletSendTip extends React.PureComponent<Props, State> {
   }
 
   handleSendButtonClicked() {
-    const { claim, sendSupport, sendTipCallback } = this.props;
+    const { claim, sendSupport, isSupport, sendTipCallback } = this.props;
     const { claim_id: claimId } = claim;
     const { tipAmount } = this.state;
 
-    sendSupport(tipAmount, claimId);
+    sendSupport(tipAmount, claimId, isSupport);
 
     // ex: close modal
     if (sendTipCallback) {
@@ -71,17 +71,20 @@ class WalletSendTip extends React.PureComponent<Props, State> {
   }
 
   render() {
-    const { title, isPending, uri, onCancel, claimIsMine, isSupport } = this.props;
+    const { title, isPending, onCancel, claimIsMine, isSupport } = this.props;
     const { tipAmount, tipError } = this.state;
 
     return (
       <React.Fragment>
-        <Form className="card__content">
+        <Form>
           <FormField
             autoFocus
             name="tip-input"
             label={
-              (tipAmount && tipAmount !== 0 && `Tip ${tipAmount.toFixed(8).replace(/\.?0+$/, '')} LBC`) || __('Amount')
+              (tipAmount &&
+                tipAmount !== 0 &&
+                `${isSupport ? __('Support') : __('Tip')} ${tipAmount.toFixed(8).replace(/\.?0+$/, '')} LBC`) ||
+              __('Amount')
             }
             className="form-field--price-amount"
             error={tipError}
@@ -93,6 +96,7 @@ class WalletSendTip extends React.PureComponent<Props, State> {
             inputButton={
               <Button
                 button="primary"
+                type="submit"
                 label={__('Send')}
                 disabled={isPending || tipError || !tipAmount}
                 onClick={this.handleSendButtonClicked}
@@ -100,18 +104,18 @@ class WalletSendTip extends React.PureComponent<Props, State> {
               />
             }
             helper={
-              <p>
+              <React.Fragment>
                 {claimIsMine || isSupport
                   ? __('This will increase the overall bid amount for ')
                   : __('This will appear as a tip for ')}
                 {`"${title}" which will boost its ability to be discovered while active.`}{' '}
                 <Button label={__('Learn more')} button="link" href="https://lbry.com/faq/tipping" />.
-              </p>
+              </React.Fragment>
             }
           />
         </Form>
         <div className="card__actions">
-          <Button button="link" label={__('Cancel')} onClick={onCancel} navigateParams={{ uri }} />
+          <Button button="link" label={__('Cancel')} onClick={onCancel} />
         </div>
       </React.Fragment>
     );

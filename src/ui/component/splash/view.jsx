@@ -54,6 +54,7 @@ export default class SplashScreen extends React.PureComponent<Props, State> {
   componentDidMount() {
     const { checkDaemonVersion } = this.props;
     this.adjustErrorTimeout();
+
     Lbry.connect()
       .then(checkDaemonVersion)
       .then(() => {

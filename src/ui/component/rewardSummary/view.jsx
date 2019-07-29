@@ -14,9 +14,7 @@ class RewardSummary extends React.Component<Props> {
     const hasRewards = unclaimedRewardAmount > 0;
     return (
       <section className="card card--section">
-        <header className="card__header">
-          <h2 className="card__title">{__('Rewards')}</h2>
-        </header>
+        <h2 className="card__title">{__('Rewards')}</h2>
 
         <p className="card__subtitle">
           {fetching && __('You have...')}
@@ -34,15 +32,13 @@ class RewardSummary extends React.Component<Props> {
           )}
         </p>
 
-        <div className="card__content">
-          <div className="card__actions">
-            <Button
-              button="primary"
-              navigate="/$/rewards"
-              label={hasRewards ? __('Claim Rewards') : __('View Rewards')}
-            />
-            <Button button="link" label={__('Learn more')} href="https://lbry.com/faq/rewards" />.
-          </div>
+        <div className="card__actions">
+          <Button
+            button="primary"
+            navigate="/$/rewards"
+            label={hasRewards ? __('Claim Rewards') : __('View Rewards')}
+          />
+          <Button button="link" label={__('Learn more')} href="https://lbry.com/faq/rewards" />.
         </div>
       </section>
     );

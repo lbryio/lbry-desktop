@@ -74,7 +74,7 @@ export default function TagSelect(props: Props) {
     <div>
       <Form onSubmit={handleSubmit}>
         <FormField
-          label={__('Tag Search')}
+          label={__('Find New Tags')}
           onChange={onChange}
           placeholder={__('Search for more tags')}
           type="text"

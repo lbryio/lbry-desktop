@@ -8,11 +8,9 @@ import Thumbnail from 'component/common/thumbnail';
 import FilePrice from 'component/filePrice';
 import FileDetails from 'component/fileDetails';
 import FileActions from 'component/fileActions';
-import UriIndicator from 'component/uriIndicator';
 import Icon from 'component/common/icon';
 import DateTime from 'component/dateTime';
 import Button from 'component/button';
-import SubscribeButton from 'component/subscribeButton';
 import Page from 'component/page';
 import FileDownloadLink from 'component/fileDownloadLink';
 import classnames from 'classnames';
@@ -21,8 +19,8 @@ import RecommendedContent from 'component/recommendedContent';
 import ClaimTags from 'component/claimTags';
 import CommentsList from 'component/commentsList';
 import CommentCreate from 'component/commentCreate';
-import VideoDuration from 'component/videoDuration';
 import ClaimUri from 'component/claimUri';
+import ClaimPreview from 'component/claimPreview';
 
 type Props = {
   claim: StreamClaim,
@@ -224,81 +222,79 @@ class FilePage extends React.Component<Props> {
         <div className="columns">
           <div className="grid-area--info">
             <h1 className="media__title media__title--large">{title}</h1>
-            <div className="media__subtext media__subtext--large">
-              <div className="media__subtitle__channel">
-                <UriIndicator uri={uri} link />
-              </div>
-            </div>
-            <div className="media__actions media__actions--between">
-              <div className="media__action-group--large">
+
+            <div className="media__subtitle">
+              <div className="media__actions media__actions--between">
+                <DateTime uri={uri} show={DateTime.SHOW_DATE} />
                 {claimIsMine && (
-                  <Button
-                    button="primary"
-                    icon={icons.EDIT}
-                    label={__('Edit')}
-                    navigate="/$/publish"
-                    onClick={() => {
-                      prepareEdit(claim, editUri, fileInfo);
-                    }}
-                  />
+                  <span>
+                    {viewCount} {viewCount !== 1 ? __('Views') : __('View')}
+                  </span>
                 )}
-                {
-                  <React.Fragment>
-                    {!claimIsMine && channelUri && <SubscribeButton uri={channelUri} channelName={channelName} />}
+              </div>
+
+              <div className="media__actions media__actions--between">
+                <div className="media__action-group--large">
+                  {claimIsMine && (
+                    <Button
+                      button="primary"
+                      icon={icons.EDIT}
+                      label={__('Edit')}
+                      navigate="/$/publish"
+                      onClick={() => {
+                        prepareEdit(claim, editUri, fileInfo);
+                      }}
+                    />
+                  )}
+                  {!claimIsMine && (
                     <Button
                       button="alt"
-                      icon={claimIsMine ? icons.SUPPORT : icons.TIP}
-                      label={claimIsMine ? __('Support') : __('Tip')}
+                      icon={icons.TIP}
+                      label={__('Tip')}
+                      title={__('Send a tip to this creator')}
                       onClick={() => openModal(MODALS.SEND_TIP, { uri, claimIsMine, isSupport: false })}
                     />
-                    {!claimIsMine && supportOption && (
-                      <Button
-                        button="alt"
-                        icon={icons.SUPPORT}
-                        label={__('Support')}
-                        onClick={() => openModal(MODALS.SEND_TIP, { uri, claimIsMine, isSupport: true })}
-                      />
-                    )}
-                  </React.Fragment>
-                }
-                <Button
-                  button="alt"
-                  icon={icons.SHARE}
-                  label={__('Share')}
-                  onClick={() => openModal(MODALS.SOCIAL_SHARE, { uri, speechShareable })}
-                />
-              </div>
+                  )}
+                  {(claimIsMine || (!claimIsMine && supportOption)) && (
+                    <Button
+                      button="alt"
+                      icon={icons.SUPPORT}
+                      label={__('Support')}
+                      title={__('Support this claim')}
+                      onClick={() => openModal(MODALS.SEND_TIP, { uri, claimIsMine, isSupport: true })}
+                    />
+                  )}
+                  <Button
+                    button="alt"
+                    icon={icons.SHARE}
+                    label={__('Share')}
+                    onClick={() => openModal(MODALS.SOCIAL_SHARE, { uri, speechShareable })}
+                  />
+                </div>
 
-              <div className="media__action-group--large">
-                <FileDownloadLink uri={uri} />
-                <FileActions
-                  uri={uri}
-                  claimId={claim.claim_id}
-                  showFullscreen={isPreviewType}
-                  viewerContainer={this.viewerContainer}
-                />
-              </div>
-            </div>
-
-            <div className="media__actions media__actions--between">
-              <div className="media__subtext media__subtext--large">
-                <DateTime uri={uri} show={DateTime.SHOW_DATE} />
-              </div>
-
-              <div className="media__subtext media__subtext--large">
-                <VideoDuration uri={uri} />
-
-                {claimIsMine && (
-                  <p>
-                    {viewCount} {viewCount !== 1 ? __('Views') : __('View')}
-                  </p>
-                )}
+                <div className="media__action-group--large">
+                  <FileDownloadLink uri={uri} />
+                  <FileActions
+                    uri={uri}
+                    claimId={claim.claim_id}
+                    showFullscreen={isPreviewType}
+                    viewerContainer={this.viewerContainer}
+                  />
+                </div>
               </div>
             </div>
+
+            <hr />
+
+            {channelUri ? (
+              <ClaimPreview uri={channelUri} type="inline" />
+            ) : (
+              <div className="claim-preview--inline claim-preview-title">{__('Anonymous')}</div>
+            )}
 
             <div className="media__info--large">
-              <ClaimTags uri={uri} type="large" />
               <FileDetails uri={uri} />
+              <ClaimTags uri={uri} type="large" />
 
               <div className="media__info-title">
                 {__('Comments')} <span className="badge badge--alert">ALPHA</span>

@@ -23,7 +23,7 @@ console.log(ifProduction('production', 'development'));
 
 let baseConfig = {
   mode: ifProduction('production', 'development'),
-  devtool: ifProduction(false, 'inline-cheap-source-map'),
+  devtool: ifProduction(false, 'cheap-module-eval-source-map'),
   optimization: {
     minimizer: [
       new TerserPlugin({

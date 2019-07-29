@@ -1,5 +1,5 @@
 // @flow
-import React, { useEffect } from 'react';
+import React, { Fragment, useEffect } from 'react';
 import classnames from 'classnames';
 import { parseURI, convertToShareLink } from 'lbry-redux';
 import { withRouter } from 'react-router-dom';
@@ -13,6 +13,7 @@ import FileProperties from 'component/fileProperties';
 import ClaimTags from 'component/claimTags';
 import SubscribeButton from 'component/subscribeButton';
 import ChannelThumbnail from 'component/channelThumbnail';
+import Button from 'component/button';
 
 type Props = {
   uri: string,
@@ -27,7 +28,7 @@ type Props = {
   thumbnail: string,
   title: string,
   nsfw: boolean,
-  placeholder: boolean,
+  placeholder: string,
   type: string,
   hasVisitedUri: boolean,
   blackListedOutpoints: Array<{
@@ -60,8 +61,12 @@ function ClaimPreview(props: Props) {
     hasVisitedUri,
   } = props;
   const haventFetched = claim === undefined;
-  const abandoned = !isResolvingUri && !claim && !placeholder;
+  const abandoned = !isResolvingUri && !claim;
   const claimsInChannel = (claim && claim.meta.claims_in_channel) || 0;
+  const showPublishLink = abandoned && placeholder === 'publish';
+  const includeChannelTooltip = type !== 'inline' && type !== 'tooltip';
+  const hideActions = type === 'small' || type === 'tooltip';
+
   let isValid;
   try {
     parseURI(uri);
@@ -71,9 +76,8 @@ function ClaimPreview(props: Props) {
   }
 
   const isChannel = isValid ? parseURI(uri).isChannel : false;
-  const signingChannel = claim && claim.signing_channel;
-
-  let shouldHide = abandoned || (!claimIsMine && obscureNsfw && nsfw);
+  let shouldHide =
+    placeholder !== 'loading' && ((abandoned && !showPublishLink) || (!claimIsMine && obscureNsfw && nsfw));
 
   // This will be replaced once blocking is done at the wallet server level
   if (claim && !shouldHide && blackListedOutpoints) {
@@ -113,9 +117,9 @@ function ClaimPreview(props: Props) {
     return null;
   }
 
-  if (placeholder || (isResolvingUri && !claim)) {
+  if (placeholder === 'loading' || (isResolvingUri && !claim)) {
     return (
-      <li className="claim-preview" disabled>
+      <li className={classnames('claim-preview', { 'claim-preview--large': type === 'large' })} disabled>
         <div className="placeholder media__thumb" />
         <div className="placeholder__wrapper">
           <div className="placeholder claim-preview-title" />
@@ -128,11 +132,14 @@ function ClaimPreview(props: Props) {
   return (
     <li
       role="link"
-      onClick={pending ? undefined : onClick}
+      onClick={pending || type === 'inline' ? undefined : onClick}
       onContextMenu={handleContextMenu}
       className={classnames('claim-preview', {
+        'claim-preview--small': type === 'small' || type === 'tooltip',
         'claim-preview--large': type === 'large',
-        'claim-preview--visited': !isChannel && hasVisitedUri,
+        'claim-preview--inline': type === 'inline',
+        'claim-preview--tooltip': type === 'tooltip',
+        'claim-preview--visited': !isChannel && !claimIsMine && hasVisitedUri,
         'claim-preview--pending': pending,
       })}
     >
@@ -140,9 +147,9 @@ function ClaimPreview(props: Props) {
       <div className="claim-preview-metadata">
         <div className="claim-preview-info">
           <div className="claim-preview-title">
-            <TruncatedText text={title || (claim && claim.name)} lines={1} />
+            {claim ? <TruncatedText text={title || claim.name} lines={1} /> : <span>{__('Nothing here')}</span>}
           </div>
-          {type !== 'small' && (
+          {!hideActions && (
             <div>
               {isChannel && <SubscribeButton uri={uri.startsWith('lbry://') ? uri : `lbry://${uri}`} />}
               {!isChannel && <FileProperties uri={uri} />}
@@ -152,11 +159,29 @@ function ClaimPreview(props: Props) {
 
         <div className="claim-preview-properties">
           <div className="media__subtitle">
-            <UriIndicator uri={uri} link />
             {pending && <div>Pending...</div>}
-            <div>{isChannel ? `${claimsInChannel} ${__('publishes')}` : <DateTime timeAgo uri={uri} />}</div>
+            {!isResolvingUri && (
+              <div>
+                {claim ? (
+                  <UriIndicator uri={uri} link addTooltip={includeChannelTooltip} />
+                ) : (
+                  <Fragment>
+                    <div>{__('Publish something and claim this spot!')}</div>
+                    <div className="card__actions">
+                      <Button button="primary" label={`${__('Publish to')}  ${uri}`} />
+                    </div>
+                  </Fragment>
+                )}
+                <div>
+                  {isChannel ? (
+                    type !== 'inline' && `${claimsInChannel} ${__('publishes')}`
+                  ) : (
+                    <DateTime timeAgo uri={uri} />
+                  )}
+                </div>
+              </div>
+            )}
           </div>
-
           <ClaimTags uri={uri} type={type} />
         </div>
       </div>

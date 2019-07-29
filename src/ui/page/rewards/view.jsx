@@ -34,38 +34,32 @@ class RewardsPage extends PureComponent<Props> {
         return (
           !IS_WEB && (
             <section className="card card--section">
-              <header className="card__header">
-                <h2 className="card__title">{__('Rewards Approval to Earn Credits (LBC)')}</h2>
-                <p className="card__subtitle">
-                  {__(
-                    'This step is optional. You can continue to use this app without rewards, but LBC may be needed for some tasks.'
-                  )}{' '}
-                  <Button button="link" label={__('Learn more')} href="https://lbry.com/faq/rewards" />.
-                </p>
-              </header>
+              <h2 className="card__title">{__('Rewards Approval to Earn Credits (LBC)')}</h2>
+              <p className="card__subtitle">
+                {__(
+                  'This step is optional. You can continue to use this app without rewards, but LBC may be needed for some tasks.'
+                )}{' '}
+                <Button button="link" label={__('Learn more')} href="https://lbry.com/faq/rewards" />.
+              </p>
 
-              <div className="card__content">
-                <Button navigate="/$/auth?redirect=rewards" button="primary" label="Prove Humanity" />
-              </div>
+              <Button navigate="/$/auth?redirect=rewards" button="primary" label="Prove Humanity" />
             </section>
           )
         );
       }
       return (
         <section className="card card--section">
-          <div className="card__content">
-            <p>
-              {__('This account must undergo review before you can participate in the rewards program.')}{' '}
-              {__('This can take anywhere from several minutes to several days.')}
-            </p>
+          <p>
+            {__('This account must undergo review before you can participate in the rewards program.')}{' '}
+            {__('This can take anywhere from several minutes to several days.')}
+          </p>
 
-            <p>{__('We apologize for this inconvenience, but have added this additional step to prevent fraud.')}</p>
-            <p>
-              {`${__('If you continue to see this message, send us an email to help@lbry.com.')} ${__(
-                'Please enjoy free content in the meantime!'
-              )}`}
-            </p>
-          </div>
+          <p>{__('We apologize for this inconvenience, but have added this additional step to prevent fraud.')}</p>
+          <p>
+            {`${__('If you continue to see this message, send us an email to help@lbry.com.')} ${__(
+              'Please enjoy free content in the meantime!'
+            )}`}
+          </p>
           <div className="card__actions">
             <Button navigate="/" button="primary" label="Return Home" />
           </div>
@@ -95,34 +89,26 @@ class RewardsPage extends PureComponent<Props> {
     if (daemonSettings && !daemonSettings.share_usage_data) {
       return (
         <section className="card card--section">
-          <header className="card__header">
-            <h2 className="card__title">{__('Disabled')}</h2>
-            <p className="card__subtitle">
-              {__('Rewards are currently disabled for your account. Turn on diagnostic data sharing, in')}{' '}
-              <Button button="link" navigate="/$/settings" label="Settings" />
-              {__(', in order to re-enable them.')}
-            </p>
-          </header>
+          <h2 className="card__title">{__('Disabled')}</h2>
+          <p className="card__subtitle">
+            {__('Rewards are currently disabled for your account. Turn on diagnostic data sharing, in')}{' '}
+            <Button button="link" navigate="/$/settings" label="Settings" />
+            {__(', in order to re-enable them.')}
+          </p>
         </section>
       );
     } else if (fetching) {
-      return (
-        <div className="card__content">
-          <BusyIndicator message={__('Fetching rewards')} />
-        </div>
-      );
+      return <BusyIndicator message={__('Fetching rewards')} />;
     } else if (user === null) {
       return (
-        <section className="card card--section">
-          <p>{__('This application is unable to earn rewards due to an authentication failure.')}</p>
-        </section>
+        <p className="help">{__('This application is unable to earn rewards due to an authentication failure.')}</p>
       );
     } else if (!rewards || rewards.length <= 0) {
       return (
         <Fragment>
           <section className="card card--section">
             <h2 className="card__title">{__('No Rewards Available')}</h2>
-            <p className="card__content">
+            <p>
               {claimed && claimed.length
                 ? __(
                     "You have claimed all available rewards! We're regularly adding more so be sure to check back later."

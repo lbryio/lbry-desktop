@@ -24,9 +24,9 @@ function SideBar(props: Props) {
   }
 
   return (
-    <StickyBox offsetBottom={40} offsetTop={100}>
+    <StickyBox offsetTop={100} offsetBottom={20}>
       <nav className="navigation">
-        <ul className="navigation__links">
+        <ul className="navigation-links">
           {[
             {
               ...buildLink(null, __('Home'), ICONS.HOME),
@@ -42,25 +42,25 @@ function SideBar(props: Props) {
             },
           ].map(linkProps => (
             <li key={linkProps.label}>
-              <Button {...linkProps} className="navigation__link" activeClass="navigation__link--active" />
+              <Button {...linkProps} className="navigation-link" activeClass="navigation-link--active" />
             </li>
           ))}
         </ul>
-        <ul className="navigation__links tags--vertical">
+        <ul className="navigation-links tags--vertical">
           {followedTags.map(({ name }, key) => (
-            <li className="" key={name}>
+            <li className="navigation-link__wrapper" key={name}>
               <Tag navigate={`/$/tags?t${name}`} name={name} />
             </li>
           ))}
         </ul>
-        <ul className="navigation__links--small">
+        <ul className="navigation-links--small">
           {subscriptions.map(({ uri, channelName }, index) => (
-            <li key={uri} className="">
+            <li key={uri} className="navigation-link__wrapper">
               <Button
                 navigate={uri}
                 label={channelName}
-                className="navigation__link"
-                activeClass="navigation__link--active"
+                className="navigation-link"
+                activeClass="navigation-link--active"
               />
             </li>
           ))}

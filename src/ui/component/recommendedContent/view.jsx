@@ -56,8 +56,8 @@ export default class RecommendedContent extends React.PureComponent<Props> {
           type="small"
           loading={isSearching}
           uris={recommendedContent}
-          header={<span>{__('Related')}</span>}
-          empty={<div className="empty">{__('No related content found')}</div>}
+          header={__('Related')}
+          empty={__('No related content found')}
         />
       </section>
     );

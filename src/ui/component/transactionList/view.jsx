@@ -2,7 +2,7 @@
 import * as icons from 'constants/icons';
 import * as MODALS from 'constants/modal_types';
 import * as React from 'react';
-import { FormField, Form } from 'component/common/form';
+import { FormField } from 'component/common/form';
 import Button from 'component/button';
 import FileExporter from 'component/common/file-exporter';
 import { TRANSACTIONS } from 'lbry-redux';
@@ -69,12 +69,12 @@ class TransactionList extends React.PureComponent<Props> {
     return (
       <React.Fragment>
         <header className="table__header">
-          <h2 className="card__title card__title--flex-between">
+          <h2 className="card__title--between">
             <span>
               {title}
               {loading && <Spinner type="small" />}
             </span>
-            <div className="card__actions">
+            <div className="card__actions--inline">
               {slim && (
                 <Button button="link" className="button--alt" navigate="/$/transactions" label={__('Full History')} />
               )}
@@ -83,8 +83,8 @@ class TransactionList extends React.PureComponent<Props> {
           </h2>
         </header>
         {!slim && !!transactions.length && (
-          <header className="card__header table__header">
-            <div className="card__actions card__actions--between">
+          <header className="table__header">
+            <div className="card__actions--between">
               <FileExporter
                 data={transactionList}
                 label={__('Export')}
@@ -93,29 +93,27 @@ class TransactionList extends React.PureComponent<Props> {
                 defaultPath={__('lbry-transactions-history')}
               />
 
-              <Form>
-                <FormField
-                  type="select"
-                  name="file-sort"
-                  value={filterSetting || TRANSACTIONS.ALL}
-                  onChange={this.handleFilterChanged}
-                  label={__('Show')}
-                  postfix={
-                    <Button
-                      button="link"
-                      icon={icons.HELP}
-                      href="https://lbry.com/faq/transaction-types"
-                      title={__('Help')}
-                    />
-                  }
-                >
-                  {transactionTypes.map(tt => (
-                    <option key={tt} value={tt}>
-                      {__(`${this.capitalize(tt)}`)}
-                    </option>
-                  ))}
-                </FormField>
-              </Form>
+              <FormField
+                type="select"
+                name="file-sort"
+                value={filterSetting || TRANSACTIONS.ALL}
+                onChange={this.handleFilterChanged}
+                label={__('Show')}
+                postfix={
+                  <Button
+                    button="link"
+                    icon={icons.HELP}
+                    href="https://lbry.com/faq/transaction-types"
+                    title={__('Help')}
+                  />
+                }
+              >
+                {transactionTypes.map(tt => (
+                  <option key={tt} value={tt}>
+                    {__(`${this.capitalize(tt)}`)}
+                  </option>
+                ))}
+              </FormField>
             </div>
           </header>
         )}

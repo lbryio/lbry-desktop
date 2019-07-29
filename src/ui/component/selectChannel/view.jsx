@@ -1,5 +1,5 @@
 // @flow
-import React from 'react';
+import React, { Fragment } from 'react';
 import { isNameValid } from 'lbry-redux';
 import { FormField } from 'component/common/form';
 import BusyIndicator from 'component/common/busy-indicator';
@@ -76,8 +76,8 @@ class ChannelSection extends React.PureComponent<Props, State> {
     }
 
     let newChannelNameError;
-    if (newChannelName.length > 1 && !isNameValid(newChannelName.substr(1), false)) {
-      newChannelNameError = __('LBRY channel names must contain only letters, numbers and dashes.');
+    if (newChannelName.length > 0 && !isNameValid(newChannelName, false)) {
+      newChannelNameError = __('LBRY names cannot contain spaces or reserved symbols ($#@;/"<>%{}|^~[]`)');
     }
 
     this.setState({
@@ -107,7 +107,7 @@ class ChannelSection extends React.PureComponent<Props, State> {
     const { balance, createChannel, onChannelChange } = this.props;
     const { newChannelBid, newChannelName } = this.state;
 
-    const channelName = `@${newChannelName}`;
+    const channelName = `@${newChannelName.trim()}`;
 
     if (newChannelBid > balance) {
       return;
@@ -151,7 +151,7 @@ class ChannelSection extends React.PureComponent<Props, State> {
     } = this.state;
 
     return (
-      <div className="card__content">
+      <Fragment>
         {createChannelError && <div className="error-text">{createChannelError}</div>}
         {fetchingChannels ? (
           <BusyIndicator message="Updating channels" />
@@ -175,7 +175,7 @@ class ChannelSection extends React.PureComponent<Props, State> {
           </fieldset-section>
         )}
         {addingChannel && (
-          <div className="card__content">
+          <div>
             <FormField
               label={__('Name')}
               name="channel-input"
@@ -211,7 +211,7 @@ class ChannelSection extends React.PureComponent<Props, State> {
             </div>
           </div>
         )}
-      </div>
+      </Fragment>
     );
   }
 }

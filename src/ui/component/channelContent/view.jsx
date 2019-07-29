@@ -29,11 +29,11 @@ function ChannelContent(props: Props) {
 
       {!fetching && !hasContent && (
         <div className="card--section">
-          <h2 className="card__content help">{__("This channel hasn't uploaded anything.")}</h2>
+          <h2 className="help">{__("This channel hasn't uploaded anything.")}</h2>
         </div>
       )}
 
-      {!channelIsMine && <HiddenNsfwClaims className="card__content help" uri={uri} />}
+      {!channelIsMine && <HiddenNsfwClaims className="card__subtitle" uri={uri} />}
 
       {hasContent && <ClaimList header={false} uris={claimsInChannel.map(claim => claim.permanent_url)} />}
 
