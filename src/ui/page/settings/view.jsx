@@ -284,10 +284,10 @@ class SettingsPage extends React.PureComponent<Props, State> {
             <section className="card card--section">
               <h2 className="card__title">{__('Blocked Channels')}</h2>
               <p className="card__subtitle card__help ">
-                {__('You have')} {userBlockedChannelsCount}{' '}
-                <Button button="link" label={__('blocked')} navigate={`/$/${PAGES.BLOCKED}`} />{' '}
+                {__('You have')} {userBlockedChannelsCount} {__('blocked')}{' '}
                 {userBlockedChannelsCount === 1 && __('channel')}
-                {userBlockedChannelsCount !== 1 && __('channels')}.
+                {userBlockedChannelsCount !== 1 && __('channels')}.{' '}
+                <Button button="link" label={__('Manage')} navigate={`/$/${PAGES.BLOCKED}`} />
               </p>
             </section>
 

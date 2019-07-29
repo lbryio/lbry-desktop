@@ -39,7 +39,7 @@ type Props = {
   channelUri: string,
   viewCount: number,
   prepareEdit: ({}, string, {}) => void,
-  openModal: (id: string, { uri: string, claimIsMine: boolean, isSupport: boolean }) => void,
+  openModal: (id: string, { [key: string]: any }) => void,
   markSubscriptionRead: (string, string) => void,
   fetchViewCount: string => void,
   balance: number,

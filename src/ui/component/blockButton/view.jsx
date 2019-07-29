@@ -25,7 +25,7 @@ export default function BlockButton(props: Props) {
     <Button
       ref={blockRef}
       iconColor="red"
-      icon={blockedOverride ? ICONS.YES : ICONS.NO}
+      icon={blockedOverride ? ICONS.UNBLOCK : ICONS.BLOCK}
       button={'alt'}
       label={blockedOverride || blockLabel}
       onClick={e => {

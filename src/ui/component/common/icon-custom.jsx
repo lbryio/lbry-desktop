@@ -128,6 +128,17 @@ export const icons = {
       <line x1="12" y1="17" x2="12" y2="17" />
     </g>
   ),
+  [ICONS.BLOCK]: buildIcon(
+    <g>
+      <circle cx="12" cy="12" r="10" />
+      <line x1="4.93" y1="4.93" x2="19.07" y2="19.07" />
+    </g>
+  ),
+  [ICONS.UNBLOCK]: buildIcon(
+    <g>
+      <circle cx="12" cy="12" r="10" />
+    </g>
+  ),
   [ICONS.LIGHT]: buildIcon(
     <g>
       <circle cx="12" cy="12" r="5" />
