@@ -8,7 +8,7 @@ import {
   selectLanguages,
   selectosNotificationsEnabled,
 } from 'redux/selectors/settings';
-import { doWalletStatus, selectWalletIsEncrypted } from 'lbry-redux';
+import { doWalletStatus, selectWalletIsEncrypted, selectBlockedChannelsCount } from 'lbry-redux';
 import SettingsPage from './view';
 
 const select = state => ({
@@ -26,6 +26,7 @@ const select = state => ({
   osNotificationsEnabled: selectosNotificationsEnabled(state),
   autoDownload: makeSelectClientSetting(settings.AUTO_DOWNLOAD)(state),
   supportOption: makeSelectClientSetting(settings.SUPPORT_OPTION)(state),
+  userBlockedChannelsCount: selectBlockedChannelsCount(state),
   hideBalance: makeSelectClientSetting(settings.HIDE_BALANCE)(state),
 });
 

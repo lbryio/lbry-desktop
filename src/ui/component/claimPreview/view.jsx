@@ -13,6 +13,7 @@ import FileProperties from 'component/fileProperties';
 import ClaimTags from 'component/claimTags';
 import SubscribeButton from 'component/subscribeButton';
 import ChannelThumbnail from 'component/channelThumbnail';
+import BlockButton from 'component/blockButton';
 import Button from 'component/button';
 
 type Props = {
@@ -41,6 +42,8 @@ type Props = {
     nout: number,
   }>,
   blockedChannelUris: Array<string>,
+  channelIsBlocked: boolean,
+  isSubscribed: boolean,
 };
 
 function ClaimPreview(props: Props) {
@@ -63,6 +66,8 @@ function ClaimPreview(props: Props) {
     blockedChannelUris,
     hasVisitedUri,
     showUserBlocked,
+    channelIsBlocked,
+    isSubscribed,
   } = props;
   const haventFetched = claim === undefined;
   const abandoned = !isResolvingUri && !claim;
@@ -97,9 +102,9 @@ function ClaimPreview(props: Props) {
         (outpoint.txid === claim.txid && outpoint.nout === claim.nout)
     );
   }
-
-  if (claim && !showUserBlocked && blockedChannelUris.length) {
-    shouldHide = blockedChannelUris.some(blockedUri => blockedUri === uri);
+  // if showUserBlocked wasnt passed to claimPreview (for blocked page) hide user-blocked channels
+  if (claim && !shouldHide && !showUserBlocked && blockedChannelUris.length && signingChannel) {
+    shouldHide = blockedChannelUris.some(blockedUri => blockedUri === signingChannel.permanent_url);
   }
 
   function handleContextMenu(e) {
@@ -160,7 +165,10 @@ function ClaimPreview(props: Props) {
           </div>
           {!hideActions && (
             <div>
-              {isChannel && <SubscribeButton uri={uri.startsWith('lbry://') ? uri : `lbry://${uri}`} />}
+              {isChannel && !channelIsBlocked && (
+                <SubscribeButton uri={uri.startsWith('lbry://') ? uri : `lbry://${uri}`} />
+              )}
+              {isChannel && !isSubscribed && <BlockButton uri={uri.startsWith('lbry://') ? uri : `lbry://${uri}`} />}
               {!isChannel && <FileProperties uri={uri} />}
             </div>
           )}

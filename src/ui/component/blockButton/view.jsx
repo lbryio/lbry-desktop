@@ -1,47 +1,38 @@
 // @flow
-// import * as MODALS from 'constants/modal_types';
 import * as ICONS from 'constants/icons';
+import * as PAGES from 'constants/pages';
 import React, { useRef } from 'react';
-// import { parseURI } from 'lbry-redux';
 import Button from 'component/button';
-// import useHover from 'util/use-hover';
+import useHover from 'util/use-hover';
 
 type Props = {
   uri: string,
   isSubscribed: boolean,
   toggleBlockChannel: (uri: string) => void,
   channelIsBlocked: boolean,
-  blockedChannels: Array<string>,
-  doToast: ({ message: string }) => void,
+  doToast: ({ message: string, linkText: string, linkTarget: string }) => void,
 };
-//
-// maybe x-octagon or x-square icon
+
 export default function BlockButton(props: Props) {
-  const {
-    uri,
-    toggleBlockChannel,
-    channelIsBlocked,
-    // blockedChannels,
-    // doToast,
-    // props
-  } = props;
+  const { uri, toggleBlockChannel, channelIsBlocked, doToast } = props;
 
   const blockRef = useRef();
-  // const isHovering = useHover(blockRef);
-  // const subscriptionHandler = isSubscribed ? doChannelUnsubscribe : doChannelSubscribe;
-  // const subscriptionLabel = isSubscribed ? __('Following') : __('Follow');
-  // const unfollowOverride = isSubscribed && isHovering && __('Unfollow');
-  // const blockedOverride = channelIsBlocked && isHovering
+  const isHovering = useHover(blockRef);
+  const blockLabel = channelIsBlocked ? __('Blocked') : __('Block');
+  const blockedOverride = channelIsBlocked && isHovering && __('Unblock');
 
   return (
     <Button
       ref={blockRef}
       iconColor="red"
-      icon={ICONS.NO}
+      icon={blockedOverride ? ICONS.YES : ICONS.NO}
       button={'alt'}
-      label={channelIsBlocked ? __('Unblock') : __('Block')}
+      label={blockedOverride || blockLabel}
       onClick={e => {
         e.stopPropagation();
+        if (!channelIsBlocked) {
+          doToast({ message: `Blocked ${uri}`, linkText: 'Manage', linkTarget: `/${PAGES.BLOCKED}` });
+        }
         toggleBlockChannel(uri);
       }}
     />

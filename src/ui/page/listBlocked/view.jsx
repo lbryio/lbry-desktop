@@ -15,7 +15,7 @@ function ListBlocked(props: Props) {
       {uris && uris.length ? (
         <div className="card">
           <ClaimList
-            header={<h1>{__('Your Publishes')}</h1>}
+            header={<h1>{__('Your Blocked Channels')}</h1>}
             persistedStorageKey="block-list-published"
             uris={uris}
             defaultSort
