@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import { selectIsFetchingClaimListMine, selectMyClaimUrisWithoutChannels } from 'lbry-redux';
-import { doCheckPendingPublishes } from 'redux/actions/publish';
+import { doCheckPendingPublishesApp } from 'redux/actions/publish';
 import FileListPublished from './view';
 
 const select = state => ({
@@ -9,7 +9,7 @@ const select = state => ({
 });
 
 const perform = dispatch => ({
-  checkPendingPublishes: () => dispatch(doCheckPendingPublishes()),
+  checkPendingPublishes: () => dispatch(doCheckPendingPublishesApp()),
 });
 
 export default connect(

@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import { doHideModal } from 'redux/actions/app';
-import { doUploadThumbnail, doUpdatePublishForm } from 'redux/actions/publish';
+import { doUploadThumbnail, doUpdatePublishForm } from 'lbry-redux';
 import ModalConfirmThumbnailUpload from './view';
 
 const perform = dispatch => ({

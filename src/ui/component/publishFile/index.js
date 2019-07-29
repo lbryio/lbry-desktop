@@ -1,7 +1,6 @@
 import { connect } from 'react-redux';
-import { selectBalance } from 'lbry-redux';
-import { selectIsStillEditing, makeSelectPublishFormValue } from 'redux/selectors/publish';
-import { doUpdatePublishForm } from 'redux/actions/publish';
+
+import { selectBalance, selectIsStillEditing, makeSelectPublishFormValue, doUpdatePublishForm } from 'lbry-redux';
 import PublishPage from './view';
 
 const select = state => ({

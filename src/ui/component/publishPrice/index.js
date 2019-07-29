@@ -1,6 +1,5 @@
 import { connect } from 'react-redux';
-import { doUpdatePublishForm } from 'redux/actions/publish';
-import { makeSelectPublishFormValue } from 'redux/selectors/publish';
+import { makeSelectPublishFormValue, doUpdatePublishForm } from 'lbry-redux';
 import PublishPage from './view';
 
 const select = state => ({
