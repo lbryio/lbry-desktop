@@ -42,6 +42,10 @@ export default function ClaimTags(props: Props) {
     }
   }
 
+  if (!tagsToDisplay.length) {
+    return null;
+  }
+
   return (
     <div className={classnames('file-properties', { 'file-properties--large': type === 'large' })}>
       {tagsToDisplay.map(tag => (

@@ -4,9 +4,7 @@ import classnames from 'classnames';
 import Button from 'component/button';
 import { useRect } from '@reach/rect';
 
-// Note:
-// When we use this in other parts of the app, we will probably need to
-// add props for collapsed height
+const COLLAPSED_HEIGHT = 120;
 
 type Props = {
   children: React$Node | Array<React$Node>,
@@ -24,7 +22,7 @@ export default function Expandable(props: Props) {
 
   return (
     <div ref={ref}>
-      {rect && rect.height > 120 ? (
+      {rect && rect.height > COLLAPSED_HEIGHT ? (
         <div ref={ref} className="expandable">
           <div
             className={classnames({
