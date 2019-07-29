@@ -76,6 +76,7 @@ function ClaimPreview(props: Props) {
   }
 
   const isChannel = isValid ? parseURI(uri).isChannel : false;
+  const signingChannel = claim && claim.signing_channel;
   let shouldHide =
     placeholder !== 'loading' && ((abandoned && !showPublishLink) || (!claimIsMine && obscureNsfw && nsfw));
 
