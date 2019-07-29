@@ -26,6 +26,7 @@ const select = state => ({
   osNotificationsEnabled: selectosNotificationsEnabled(state),
   autoDownload: makeSelectClientSetting(settings.AUTO_DOWNLOAD)(state),
   supportOption: makeSelectClientSetting(settings.SUPPORT_OPTION)(state),
+  hideBalance: makeSelectClientSetting(settings.HIDE_BALANCE)(state),
 });
 
 const perform = dispatch => ({

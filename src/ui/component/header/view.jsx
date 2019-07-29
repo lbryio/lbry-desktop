@@ -19,10 +19,11 @@ type Props = {
   currentTheme: string,
   automaticDarkModeEnabled: boolean,
   setClientSetting: (string, boolean | string) => void,
+  hideBalance: boolean,
 };
 
 const Header = (props: Props) => {
-  const { roundedBalance, history, setClientSetting, currentTheme, automaticDarkModeEnabled } = props;
+  const { roundedBalance, history, setClientSetting, currentTheme, automaticDarkModeEnabled, hideBalance } = props;
 
   function handleThemeToggle() {
     if (automaticDarkModeEnabled) {
@@ -34,6 +35,18 @@ const Header = (props: Props) => {
     } else {
       setClientSetting(SETTINGS.THEME, 'dark');
     }
+  }
+
+  function getAccountTitle() {
+    if (roundedBalance > 0 && !hideBalance) {
+      return (
+        <React.Fragment>
+          {roundedBalance} <LbcSymbol />
+        </React.Fragment>
+      );
+    }
+
+    return __('Account');
   }
 
   return (
@@ -73,13 +86,7 @@ const Header = (props: Props) => {
           <Menu>
             <MenuButton className="header__navigation-item menu__title">
               <Icon icon={ICONS.ACCOUNT} />
-              {roundedBalance > 0 ? (
-                <React.Fragment>
-                  {roundedBalance} <LbcSymbol />
-                </React.Fragment>
-              ) : (
-                __('Account')
-              )}
+              {getAccountTitle()}
             </MenuButton>
             <MenuList>
               <MenuItem className="menu__link" onSelect={() => history.push(`/$/account`)}>

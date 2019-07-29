@@ -12,6 +12,7 @@ const select = state => ({
   roundedBalance: formatCredits(selectBalance(state) || 0, 2),
   currentTheme: makeSelectClientSetting(SETTINGS.THEME)(state),
   automaticDarkModeEnabled: makeSelectClientSetting(SETTINGS.AUTOMATIC_DARK_MODE_ENABLED)(state),
+  hideBalance: makeSelectClientSetting(SETTINGS.HIDE_BALANCE)(state),
 });
 
 const perform = dispatch => ({
