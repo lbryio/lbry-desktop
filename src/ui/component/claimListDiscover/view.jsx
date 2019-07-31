@@ -2,7 +2,7 @@
 import type { Node } from 'react';
 import React, { Fragment, useEffect } from 'react';
 import { withRouter } from 'react-router';
-import { buildClaimSearchCacheQuery, MATURE_TAGS } from 'lbry-redux';
+import { createNormalizedClaimSearchKey, MATURE_TAGS } from 'lbry-redux';
 import { FormField } from 'component/common/form';
 import moment from 'moment';
 import ClaimList from 'component/claimList';
@@ -103,13 +103,13 @@ function ClaimListDiscover(props: Props) {
     )}`;
   }
 
-  const claimSearchCacheQuery = buildClaimSearchCacheQuery(options);
+  const claimSearchCacheQuery = createNormalizedClaimSearchKey(options);
   const uris = claimSearchByQuery[claimSearchCacheQuery] || [];
   const shouldPerformSearch =
     uris.length === 0 ||
     didNavigateForward ||
     (!loading && uris.length < PAGE_SIZE * page && uris.length % PAGE_SIZE === 0);
-  // Don't use the query from buildClaimSearchCacheQuery for the effect since that doesn't include page & release_time
+  // Don't use the query from createNormalizedClaimSearchKey for the effect since that doesn't include page & release_time
   const optionsStringForEffect = JSON.stringify(options);
 
   function getSearch() {

@@ -124,7 +124,7 @@
     "jsmediatags": "^3.8.1",
     "json-loader": "^0.5.4",
     "lbry-format": "https://github.com/lbryio/lbry-format.git",
-    "lbry-redux": "lbryio/lbry-redux#8910693fe1fc4166fdc748d128344012c3d61874",
+    "lbry-redux": "lbryio/lbry-redux#469d3b70cbe39f28aafee4e072fdfc5bac604c4b",
     "lbryinc": "lbryio/lbryinc#a93596c51c8fb0a226cb84df04c26a6bb60a45fb",
     "lint-staged": "^7.0.2",
     "localforage": "^1.7.1",
