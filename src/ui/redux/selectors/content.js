@@ -1,6 +1,12 @@
 // @flow
 import { createSelector } from 'reselect';
-import { makeSelectClaimForUri, selectClaimsByUri, makeSelectClaimsInChannelForCurrentPageState } from 'lbry-redux';
+import {
+  makeSelectClaimForUri,
+  selectClaimsByUri,
+  makeSelectClaimsInChannelForCurrentPageState,
+  makeSelectClaimIsNsfw,
+} from 'lbry-redux';
+import { selectShowMatureContent } from 'redux/selectors/settings';
 
 const RECENT_HISTORY_AMOUNT = 10;
 const HISTORY_ITEMS_PER_PAGE = 50;
@@ -11,6 +17,12 @@ export const selectPlayingUri = createSelector(
   selectState,
   state => state.playingUri
 );
+
+export const makeSelectIsPlaying = (uri: string) =>
+  createSelector(
+    selectPlayingUri,
+    playingUri => playingUri === uri
+  );
 
 export const selectRewardContentClaimIds = createSelector(
   selectState,
@@ -83,5 +95,14 @@ export const makeSelectCategoryListUris = (uris: ?Array<string>, channel: string
       }
 
       return null;
+    }
+  );
+
+export const makeSelectShouldObscurePreview = (uri: string) =>
+  createSelector(
+    selectShowMatureContent,
+    makeSelectClaimIsNsfw(uri),
+    (showMatureContent, isClaimMature) => {
+      return isClaimMature && !showMatureContent;
     }
   );

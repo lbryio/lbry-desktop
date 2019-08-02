@@ -6,8 +6,7 @@ import * as NOTIFICATION_TYPES from 'constants/subscriptions';
 import { Lbryio, rewards, doClaimRewardType } from 'lbryinc';
 import { selectSubscriptions, selectUnreadByChannel } from 'redux/selectors/subscriptions';
 import { makeSelectClientSetting } from 'redux/selectors/settings';
-import { Lbry, buildURI, parseURI, doResolveUris } from 'lbry-redux';
-import { doPurchaseUri } from 'redux/actions/content';
+import { Lbry, buildURI, parseURI, doResolveUris, doPurchaseUri } from 'lbry-redux';
 
 const CHECK_SUBSCRIPTIONS_INTERVAL = 15 * 60 * 1000;
 const SUBSCRIPTION_DOWNLOAD_LIMIT = 1;
@@ -194,15 +193,12 @@ export const doCheckSubscription = (subscriptionUri: string, shouldNotify?: bool
   getState: GetState
 ) => {
   // no dispatching FETCH_CHANNEL_CLAIMS_STARTED; causes loading issues on <SubscriptionsPage>
-
   const state = getState();
   const shouldAutoDownload = makeSelectClientSetting(SETTINGS.AUTO_DOWNLOAD)(state);
   const savedSubscription = state.subscriptions.subscriptions.find(sub => sub.uri === subscriptionUri);
-
   if (!savedSubscription) {
     throw Error(`Trying to find new content for ${subscriptionUri} but it doesn't exist in your subscriptions`);
   }
-
   // We may be duplicating calls here. Can this logic be baked into doFetchClaimsByChannel?
   Lbry.claim_search({
     channel: subscriptionUri,
@@ -212,42 +208,34 @@ export const doCheckSubscription = (subscriptionUri: string, shouldNotify?: bool
     page_size: PAGE_SIZE,
   }).then(claimListByChannel => {
     const { items: claimsInChannel } = claimListByChannel;
-
     // may happen if subscribed to an abandoned channel or an empty channel
     if (!claimsInChannel || !claimsInChannel.length) {
       return;
     }
-
     // Determine if the latest subscription currently saved is actually the latest subscription
     const latestIndex = claimsInChannel.findIndex(
       claim => `${claim.name}#${claim.claim_id}` === savedSubscription.latest
     );
-
     // If latest is -1, it is a newly subscribed channel or there have been 10+ claims published since last viewed
     const latestIndexToNotify = latestIndex === -1 ? 10 : latestIndex;
-
     // If latest is 0, nothing has changed
     // Do not download/notify about new content, it would download/notify 10 claims per channel
     if (latestIndex !== 0 && savedSubscription.latest) {
       let downloadCount = 0;
-
       const newUnread = [];
       claimsInChannel.slice(0, latestIndexToNotify).forEach(claim => {
         const uri = buildURI({ contentName: claim.name, claimId: claim.claim_id }, true);
         const shouldDownload =
           shouldAutoDownload && Boolean(downloadCount < SUBSCRIPTION_DOWNLOAD_LIMIT && !claim.value.fee);
-
         // Add the new content to the list of "un-read" subscriptions
         if (shouldNotify) {
           newUnread.push(uri);
         }
-
         if (shouldDownload) {
           downloadCount += 1;
           dispatch(doPurchaseUri(uri, { cost: 0 }, true));
         }
       });
-
       dispatch(
         doUpdateUnreadSubscriptions(
           subscriptionUri,
@@ -256,7 +244,6 @@ export const doCheckSubscription = (subscriptionUri: string, shouldNotify?: bool
         )
       );
     }
-
     // Set the latest piece of content for a channel
     // This allows the app to know if there has been new content since it was last set
     dispatch(
@@ -274,7 +261,6 @@ export const doCheckSubscription = (subscriptionUri: string, shouldNotify?: bool
         buildURI({ contentName: claimsInChannel[0].name, claimId: claimsInChannel[0].claim_id }, false)
       )
     );
-
     // calling FETCH_CHANNEL_CLAIMS_COMPLETED after not calling STARTED
     // means it will delete a non-existant fetchingChannelClaims[uri]
     dispatch({

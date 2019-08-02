@@ -32,11 +32,11 @@ function ModalRemoveFile(props: Props) {
       </section>
       <Form onSubmit={() => deleteFile(outpoint || '', deleteChecked, abandonChecked)}>
         <FormField
-          name="claim_abandon"
-          label={__('Abandon the claim for this URI')}
+          name="file_delete"
+          label={__('Also delete this file from my computer')}
           type="checkbox"
-          checked={abandonChecked}
-          onChange={() => setAbandonChecked(!abandonChecked)}
+          checked={deleteChecked}
+          onChange={() => setDeleteChecked(!deleteChecked)}
         />
 
         {claimIsMine && (

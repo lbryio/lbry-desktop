@@ -20,6 +20,9 @@ type DaemonSettings = {
   download_dir: string,
   share_usage_data: boolean,
   max_key_fee?: Price,
+  max_connections_per_download?: number,
+  save_files: boolean,
+  save_blobs: boolean,
 };
 
 type Props = {
@@ -47,6 +50,7 @@ type Props = {
   supportOption: boolean,
   userBlockedChannelsCount?: number,
   hideBalance: boolean,
+  maxConnections: number,
 };
 
 type State = {
@@ -62,6 +66,7 @@ class SettingsPage extends React.PureComponent<Props, State> {
     };
 
     (this: any).onKeyFeeChange = this.onKeyFeeChange.bind(this);
+    (this: any).onMaxConnectionsChange = this.onMaxConnectionsChange.bind(this);
     (this: any).onKeyFeeDisableChange = this.onKeyFeeDisableChange.bind(this);
     (this: any).onInstantPurchaseMaxChange = this.onInstantPurchaseMaxChange.bind(this);
     (this: any).onThemeChange = this.onThemeChange.bind(this);
@@ -73,10 +78,19 @@ class SettingsPage extends React.PureComponent<Props, State> {
   componentDidMount() {
     this.props.getThemes();
     this.props.updateWalletStatus();
+
+    const { daemonSettings } = this.props;
+    this.props.setClientSetting(SETTINGS.MAX_CONNECTIONS, daemonSettings.max_connections_per_download);
   }
 
   onKeyFeeChange(newValue: Price) {
     this.setDaemonSetting('max_key_fee', newValue);
+  }
+
+  onMaxConnectionsChange(event: SyntheticInputEvent<*>) {
+    const { value } = event.target;
+    this.setDaemonSetting('max_connections_per_download', value);
+    this.props.setClientSetting(SETTINGS.MAX_CONNECTIONS, value);
   }
 
   onKeyFeeDisableChange(isDisabled: boolean) {
@@ -156,12 +170,15 @@ class SettingsPage extends React.PureComponent<Props, State> {
       supportOption,
       hideBalance,
       userBlockedChannelsCount,
+      maxConnections,
     } = this.props;
 
     const noDaemonSettings = !daemonSettings || Object.keys(daemonSettings).length === 0;
 
     const defaultMaxKeyFee = { currency: 'USD', amount: 50 };
+
     const disableMaxKeyFee = !(daemonSettings && daemonSettings.max_key_fee);
+    const connectionOptions = [1, 4, 6, 10, 20];
 
     return (
       <Page>
@@ -188,7 +205,41 @@ class SettingsPage extends React.PureComponent<Props, State> {
             </section>
 
             <section className="card card--section">
-              <h2 className="card__title">{__('Max Purchase Price')}</h2>
+              <h2 className="card__title">{__('Network and Data Settings')}</h2>
+
+              <Form>
+                <FormField
+                  type="checkbox"
+                  name="save_files"
+                  onChange={() => setDaemonSetting('save_files', !daemonSettings.save_files)}
+                  checked={daemonSettings.save_files}
+                  label={__(
+                    'Enables saving of all viewed content to your downloads directory. Some file types are saved by default.'
+                  )}
+                  helper={__('This is not retroactive, only works from the time it was changed.')}
+                />
+              </Form>
+              <Form>
+                <FormField
+                  type="checkbox"
+                  name="save_blobs"
+                  onChange={() => setDaemonSetting('save_blobs', !daemonSettings.save_blobs)}
+                  checked={daemonSettings.save_blobs}
+                  label={
+                    <React.Fragment>
+                      {__('Enables saving of hosting data to help the LBRY network.')}{' '}
+                      <Button button="link" label={__('Learn more')} href="https://lbry.com/faq/host-content" />.
+                    </React.Fragment>
+                  }
+                  helper={__("If disabled, LBRY will be very sad and you won't be helping improve the network")}
+                />
+              </Form>
+            </section>
+
+            <section className="card card--section">
+              <header className="card__header">
+                <h2 className="card__title">{__('Max Purchase Price')}</h2>
+              </header>
 
               <Form>
                 <FormField
@@ -429,24 +480,42 @@ class SettingsPage extends React.PureComponent<Props, State> {
                   )}
                 />
 
-                {
+                <FormField
+                  name="language_select"
+                  type="select"
+                  label={__('Language')}
+                  onChange={this.onLanguageChange}
+                  value={currentLanguage}
+                  helper={__(
+                    'Multi-language support is brand new and incomplete. Switching your language may have unintended consequences.'
+                  )}
+                >
+                  {Object.keys(languages).map(language => (
+                    <option key={language} value={language}>
+                      {languages[language]}
+                    </option>
+                  ))}
+                </FormField>
+              </Form>
+              <Form>
+                <fieldset-section>
                   <FormField
-                    name="language_select"
+                    name="max_connections"
                     type="select"
-                    label={__('Language')}
-                    onChange={this.onLanguageChange}
-                    value={currentLanguage}
-                    helper={__(
-                      'Multi-language support is brand new and incomplete. Switching your language may have unintended consequences.'
-                    )}
+                    label={__('Max Connections')}
+                    helper={__('More connections, like, do stuff dude')}
+                    min={1}
+                    max={100}
+                    onChange={this.onMaxConnectionsChange}
+                    value={maxConnections}
                   >
-                    {Object.keys(languages).map(language => (
-                      <option key={language} value={language}>
-                        {languages[language]}
+                    {connectionOptions.map(connectionOption => (
+                      <option key={connectionOption} value={connectionOption}>
+                        {connectionOption}
                       </option>
                     ))}
                   </FormField>
-                }
+                </fieldset-section>
               </Form>
             </section>
 

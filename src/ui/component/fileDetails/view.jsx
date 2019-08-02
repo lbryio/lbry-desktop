@@ -30,10 +30,11 @@ class FileDetails extends PureComponent<Props> {
       : fileInfo && fileInfo.download_path && formatBytes(fileInfo.written_bytes);
     let downloadPath = fileInfo && fileInfo.download_path ? path.normalize(fileInfo.download_path) : null;
     let downloadNote;
-    // If the path is blank, file is not avialable. Create path from name so the folder opens on click.
-    if (fileInfo && fileInfo.download_path === null) {
+    // If the path is blank, file is not avialable. Streamed files won't have any blobs saved
+    // Create path from name so the folder opens on click.
+    if (fileInfo && fileInfo.blobs_completed >= 1 && fileInfo.download_path === null) {
       downloadPath = `${fileInfo.download_directory}/${fileInfo.file_name}`;
-      downloadNote = 'This file may have been moved or deleted';
+      downloadNote = 'This file may have been streamed, moved or deleted';
     }
 
     return (

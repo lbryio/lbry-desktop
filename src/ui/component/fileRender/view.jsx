@@ -3,18 +3,15 @@ import { remote } from 'electron';
 import React, { Suspense } from 'react';
 import LoadingScreen from 'component/common/loading-screen';
 import VideoViewer from 'component/viewers/videoViewer';
+import path from 'path';
+import fs from 'fs';
 
-// Audio player on hold until the current player is dropped
-// This component is half working
+// This is half complete, the video viewer works fine for audio, it just doesn't look pretty
 // const AudioViewer = React.lazy<*>(() =>
 //   import(
 //     /* webpackChunkName: "audioViewer" */
 //     'component/viewers/audioViewer'
 //   )
-// );
-// const AudioViewer = React.lazy<*>(() =>
-//   import(/* webpackChunkName: "audioViewer" */
-//   'component/viewers/audioViewer')
 // );
 
 const DocumentViewer = React.lazy<*>(() =>
@@ -63,17 +60,12 @@ const ThreeViewer = React.lazy<*>(() =>
 
 type Props = {
   mediaType: string,
-  poster?: string,
+  streamingUrl: string,
+  contentType: string,
   claim: StreamClaim,
-  source: {
-    stream: string => void,
-    fileName: string,
-    fileType: string,
-    contentType: string,
-    downloadPath: string,
-    url: ?string,
-  },
   currentTheme: string,
+  downloadPath?: string,
+  fileName?: string,
 };
 
 class FileRender extends React.PureComponent<Props> {
@@ -85,6 +77,23 @@ class FileRender extends React.PureComponent<Props> {
 
   componentDidMount() {
     window.addEventListener('keydown', this.escapeListener, true);
+
+    // ugh
+    // const { claim, streamingUrl, fileStatus, fileName, downloadPath, downloadCompleted, contentType } = this.props;
+    // if(MediaPlayer.SANDBOX_TYPES.indexOf(contentType) > -1) {
+    //   const outpoint = `${claim.txid}:${claim.nout}`;
+    //   // Fetch unpacked url
+    //   fetch(`${MediaPlayer.SANDBOX_SET_BASE_URL}${outpoint}`)
+    //     .then(res => res.text())
+    //     .then(url => {
+    //       const source = {url: `${MediaPlayer.SANDBOX_CONTENT_BASE_URL}${url}`};
+    //       this.setState({source});
+    //     })
+    //     .catch(err => {
+    //       console.error(err);
+    //     });
+    // } else {
+    // File to render
   }
 
   componentWillUnmount() {
@@ -92,39 +101,39 @@ class FileRender extends React.PureComponent<Props> {
   }
 
   // This should use React.createRef()
-  processSandboxRef(element: any) {
-    if (!element) {
-      return;
-    }
+  // processSandboxRef(element: any) {
+  //   if (!element) {
+  //     return;
+  //   }
 
-    window.sandbox = element;
+  //   window.sandbox = element;
 
-    element.addEventListener('permissionrequest', e => {
-      console.log('permissionrequest', e);
-    });
+  //   element.addEventListener('permissionrequest', e => {
+  //     console.log('permissionrequest', e);
+  //   });
 
-    element.addEventListener('console-message', (e: { message: string }) => {
-      if (/^\$LBRY_IPC:/.test(e.message)) {
-        // Process command
-        let message = {};
-        try {
-          // $FlowFixMe
-          message = JSON.parse(/^\$LBRY_IPC:(.*)/.exec(e.message)[1]);
-        } catch (err) {}
-        console.log('IPC', message);
-      } else {
-        console.log('Sandbox:', e.message);
-      }
-    });
+  //   element.addEventListener('console-message', (e: { message: string }) => {
+  //     if (/^\$LBRY_IPC:/.test(e.message)) {
+  //       // Process command
+  //       let message = {};
+  //       try {
+  //         // $FlowFixMe
+  //         message = JSON.parse(/^\$LBRY_IPC:(.*)/.exec(e.message)[1]);
+  //       } catch (err) {}
+  //       console.log('IPC', message);
+  //     } else {
+  //       console.log('Sandbox:', e.message);
+  //     }
+  //   });
 
-    element.addEventListener('enter-html-full-screen', () => {
-      // stub
-    });
+  //   element.addEventListener('enter-html-full-screen', () => {
+  //     // stub
+  //   });
 
-    element.addEventListener('leave-html-full-screen', () => {
-      // stub
-    });
-  }
+  //   element.addEventListener('leave-html-full-screen', () => {
+  //     // stub
+  //   });
+  // }
 
   escapeListener(e: SyntheticKeyboardEvent<*>) {
     if (e.keyCode === 27) {
@@ -141,10 +150,9 @@ class FileRender extends React.PureComponent<Props> {
   }
 
   renderViewer() {
-    const { source, mediaType, currentTheme, poster, claim } = this.props;
+    const { mediaType, currentTheme, claim, contentType, downloadPath, fileName, streamingUrl } = this.props;
 
-    // Extract relevant data to render file
-    const { stream, fileType, contentType, downloadPath, fileName } = source;
+    const fileType = fileName && path.extname(fileName).substring(1);
 
     // Human-readable files (scripts and plain-text files)
     const readableFiles = ['text', 'document', 'script'];
@@ -154,25 +162,30 @@ class FileRender extends React.PureComponent<Props> {
       // @if TARGET='app'
       '3D-file': <ThreeViewer source={{ fileType, downloadPath }} theme={currentTheme} />,
       'comic-book': <ComicBookViewer source={{ fileType, downloadPath }} theme={currentTheme} />,
+      // application: !source.url ? null : (
+      //   <webview
+      //     ref={element => this.processSandboxRef(element)}
+      //     title=""
+      //     sandbox="allow-scripts allow-forms allow-pointer-lock"
+      //     src={source.url}
+      //     autosize="on"
+      //     style={{ border: 0, width: '100%', height: '100%' }}
+      //     useragent="Mozilla/5.0 AppleWebKit/537 Chrome/60 Safari/537"
+      //     enableremotemodule="false"
+      //     webpreferences="sandbox=true,contextIsolation=true,webviewTag=false,enableRemoteModule=false,devTools=false"
+      //   />
+      // ),
       // @endif
 
-      application: !source.url ? null : (
-        <webview
-          ref={element => this.processSandboxRef(element)}
-          title=""
-          sandbox="allow-scripts allow-forms allow-pointer-lock"
-          src={source.url}
-          autosize="on"
-          style={{ border: 0, width: '100%', height: '100%' }}
-          useragent="Mozilla/5.0 AppleWebKit/537 Chrome/60 Safari/537"
-          enableremotemodule="false"
-          webpreferences="sandbox=true,contextIsolation=true,webviewTag=false,enableRemoteModule=false,devTools=false"
-        />
-      ),
-      video: (
-        <VideoViewer claim={claim} source={{ downloadPath, fileName }} contentType={contentType} poster={poster} />
-      ),
-      audio: <VideoViewer claim={claim} source={{ downloadPath, fileName }} contentType={contentType} />,
+      video: <VideoViewer source={streamingUrl} contentType={contentType} />,
+      audio: <VideoViewer source={streamingUrl} contentType={contentType} />,
+      // audio: (
+      //   <AudioViewer
+      //     claim={claim}
+      //     source={{ url: streamingUrl, downloadPath, downloadCompleted, status }}
+      //     contentType={contentType}
+      //   />
+      // ),
       // Add routes to viewer...
     };
 
@@ -189,7 +202,16 @@ class FileRender extends React.PureComponent<Props> {
 
     // Check for Human-readable files
     if (!viewer && readableFiles.includes(mediaType)) {
-      viewer = <DocumentViewer source={{ stream, fileType, contentType }} theme={currentTheme} />;
+      viewer = (
+        <DocumentViewer
+          source={{
+            stream: options => fs.createReadStream(downloadPath, options),
+            fileType,
+            contentType,
+          }}
+          theme={currentTheme}
+        />
+      );
     }
 
     // @if TARGET='web'
@@ -204,7 +226,7 @@ class FileRender extends React.PureComponent<Props> {
     // @endif
 
     // Message Error
-    const unsupportedMessage = __("Sorry, looks like we can't preview this file.");
+    const unsupportedMessage = __("We can't preview this file.");
     const unsupported = <LoadingScreen status={unsupportedMessage} spinner={false} />;
 
     // Return viewer

@@ -10,6 +10,7 @@ import {
   commentReducer,
   blockedReducer,
   publishReducer,
+  fileReducer,
 } from 'lbry-redux';
 import {
   userReducer,
@@ -38,6 +39,7 @@ export default history =>
     content: contentReducer,
     costInfo: costInfoReducer,
     fileInfo: fileInfoReducer,
+    file: fileReducer, // Why is this not in `fileInfoReducer`?
     homepage: homepageReducer,
     notifications: notificationsReducer,
     publish: publishReducer,

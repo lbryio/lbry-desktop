@@ -1,52 +1,27 @@
 import { connect } from 'react-redux';
-import * as settings from 'constants/settings';
-import { doChangeVolume, doChangeMute } from 'redux/actions/app';
-import { selectVolume, selecetMute } from 'redux/selectors/app';
-import { doPlayUri, doSetPlayingUri, savePosition } from 'redux/actions/content';
-import { doClaimEligiblePurchaseRewards, makeSelectCostInfoForUri } from 'lbryinc';
+import { doPlayUri } from 'redux/actions/content';
 import {
-  makeSelectMetadataForUri,
-  makeSelectContentTypeForUri,
-  makeSelectClaimForUri,
   makeSelectFileInfoForUri,
-  makeSelectLoadingForUri,
-  makeSelectDownloadingForUri,
-  makeSelectFirstRecommendedFileForUri,
-  makeSelectClaimIsNsfw,
   makeSelectThumbnailForUri,
+  makeSelectStreamingUrlForUri,
+  makeSelectMediaTypeForUri,
+  makeSelectUriIsStreamable,
 } from 'lbry-redux';
-import { makeSelectClientSetting, selectShowNsfw } from 'redux/selectors/settings';
-import { selectPlayingUri, makeSelectContentPositionForUri } from 'redux/selectors/content';
-import { selectFileInfoErrors } from 'redux/selectors/file_info';
+import { makeSelectIsPlaying, makeSelectShouldObscurePreview } from 'redux/selectors/content';
 import FileViewer from './view';
 
 const select = (state, props) => ({
-  claim: makeSelectClaimForUri(props.uri)(state),
-  costInfo: makeSelectCostInfoForUri(props.uri)(state),
-  fileInfo: makeSelectFileInfoForUri(props.uri)(state),
-  metadata: makeSelectMetadataForUri(props.uri)(state),
-  obscureNsfw: !selectShowNsfw(state),
-  isLoading: makeSelectLoadingForUri(props.uri)(state),
-  isDownloading: makeSelectDownloadingForUri(props.uri)(state),
-  playingUri: selectPlayingUri(state),
-  contentType: makeSelectContentTypeForUri(props.uri)(state),
-  volume: selectVolume(state),
-  position: makeSelectContentPositionForUri(props.uri)(state),
-  autoplay: makeSelectClientSetting(settings.AUTOPLAY)(state),
-  fileInfoErrors: selectFileInfoErrors(state),
-  nextFileToPlay: makeSelectFirstRecommendedFileForUri(props.uri)(state),
-  nsfw: makeSelectClaimIsNsfw(props.uri)(state),
   thumbnail: makeSelectThumbnailForUri(props.uri)(state),
-  muted: selecetMute(state),
+  mediaType: makeSelectMediaTypeForUri(props.uri)(state),
+  fileInfo: makeSelectFileInfoForUri(props.uri)(state),
+  obscurePreview: makeSelectShouldObscurePreview(props.uri)(state),
+  isPlaying: makeSelectIsPlaying(props.uri)(state),
+  streamingUrl: makeSelectStreamingUrlForUri(props.uri)(state),
+  isStreamable: makeSelectUriIsStreamable(props.uri)(state),
 });
 
 const perform = dispatch => ({
-  play: uri => dispatch(doPlayUri(uri)),
-  cancelPlay: () => dispatch(doSetPlayingUri(null)),
-  changeVolume: volume => dispatch(doChangeVolume(volume)),
-  claimRewards: () => dispatch(doClaimEligiblePurchaseRewards()),
-  savePosition: (claimId, outpoint, position) => dispatch(savePosition(claimId, outpoint, position)),
-  changeMute: muted => dispatch(doChangeMute(muted)),
+  play: (uri, saveFile) => dispatch(doPlayUri(uri, saveFile)),
 });
 
 export default connect(
