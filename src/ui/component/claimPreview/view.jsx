@@ -13,12 +13,14 @@ import FileProperties from 'component/fileProperties';
 import ClaimTags from 'component/claimTags';
 import SubscribeButton from 'component/subscribeButton';
 import ChannelThumbnail from 'component/channelThumbnail';
+import BlockButton from 'component/blockButton';
 import Button from 'component/button';
 
 type Props = {
   uri: string,
   claim: ?Claim,
   obscureNsfw: boolean,
+  showUserBlocked: boolean,
   claimIsMine: boolean,
   pending?: boolean,
   resolveUri: string => void,
@@ -39,6 +41,9 @@ type Props = {
     txid: string,
     nout: number,
   }>,
+  blockedChannelUris: Array<string>,
+  channelIsBlocked: boolean,
+  isSubscribed: boolean,
 };
 
 function ClaimPreview(props: Props) {
@@ -58,7 +63,11 @@ function ClaimPreview(props: Props) {
     type,
     blackListedOutpoints,
     filteredOutpoints,
+    blockedChannelUris,
     hasVisitedUri,
+    showUserBlocked,
+    channelIsBlocked,
+    isSubscribed,
   } = props;
   const haventFetched = claim === undefined;
   const abandoned = !isResolvingUri && !claim;
@@ -92,6 +101,15 @@ function ClaimPreview(props: Props) {
         (signingChannel && outpoint.txid === signingChannel.txid && outpoint.nout === signingChannel.nout) ||
         (outpoint.txid === claim.txid && outpoint.nout === claim.nout)
     );
+  }
+  // block stream claims
+  if (claim && !shouldHide && !showUserBlocked && blockedChannelUris.length && signingChannel) {
+    shouldHide = blockedChannelUris.some(blockedUri => blockedUri === signingChannel.permanent_url);
+  }
+  // block channel claims if we can't control for them in claim search
+  // e.g. fetchRecommendedSubscriptions
+  if (claim && isChannel && !shouldHide && !showUserBlocked && blockedChannelUris.length && isChannel) {
+    shouldHide = blockedChannelUris.some(blockedUri => blockedUri === claim.permanent_url);
   }
 
   function handleContextMenu(e) {
@@ -144,15 +162,18 @@ function ClaimPreview(props: Props) {
         'claim-preview--pending': pending,
       })}
     >
-      {isChannel ? <ChannelThumbnail uri={uri} /> : <CardMedia thumbnail={thumbnail} />}
+      {isChannel ? <ChannelThumbnail uri={uri} obscure={channelIsBlocked} /> : <CardMedia thumbnail={thumbnail} />}
       <div className="claim-preview-metadata">
         <div className="claim-preview-info">
           <div className="claim-preview-title">
             {claim ? <TruncatedText text={title || claim.name} lines={1} /> : <span>{__('Nothing here')}</span>}
           </div>
           {!hideActions && (
-            <div>
-              {isChannel && <SubscribeButton uri={uri.startsWith('lbry://') ? uri : `lbry://${uri}`} />}
+            <div className="card__actions--inline">
+              {isChannel && !channelIsBlocked && (
+                <SubscribeButton uri={uri.startsWith('lbry://') ? uri : `lbry://${uri}`} />
+              )}
+              {isChannel && !isSubscribed && <BlockButton uri={uri.startsWith('lbry://') ? uri : `lbry://${uri}`} />}
               {!isChannel && <FileProperties uri={uri} />}
             </div>
           )}

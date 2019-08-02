@@ -6,7 +6,7 @@ import { parseURI } from 'lbry-redux';
 import Button from 'component/button';
 import useHover from 'util/use-hover';
 
-type SubscribtionArgs = {
+type SubscriptionArgs = {
   channelName: string,
   uri: string,
 };
@@ -16,7 +16,7 @@ type Props = {
   isSubscribed: boolean,
   subscriptions: Array<string>,
   doChannelSubscribe: ({ channelName: string, uri: string }) => void,
-  doChannelUnsubscribe: SubscribtionArgs => void,
+  doChannelUnsubscribe: SubscriptionArgs => void,
   doOpenModal: (id: string) => void,
   showSnackBarOnSubscribe: boolean,
   doToast: ({ message: string }) => void,

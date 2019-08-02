@@ -26,6 +26,7 @@ type Props = {
   id?: string,
   // If using the default header, this is a unique ID needed to persist the state of the filter setting
   persistedStorageKey?: string,
+  showHiddenByUser: boolean,
 };
 
 export default function ClaimList(props: Props) {
@@ -43,6 +44,7 @@ export default function ClaimList(props: Props) {
     pageSize,
     page,
     id,
+    showHiddenByUser,
   } = props;
   const [scrollBottomCbMap, setScrollBottomCbMap] = useState({});
   const [currentSort, setCurrentSort] = usePersistedState(persistedStorageKey, SORT_NEW);
@@ -113,7 +115,7 @@ export default function ClaimList(props: Props) {
         <ul className="ul--no-style">
           {sortedUris.map((uri, index) => (
             <React.Fragment key={uri}>
-              <ClaimPreview uri={uri} type={type} />
+              <ClaimPreview uri={uri} type={type} showUserBlocked={showHiddenByUser} />
               {index === 4 && injectedItem && injectedItem}
             </React.Fragment>
           ))}

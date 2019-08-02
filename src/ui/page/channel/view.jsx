@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { parseURI } from 'lbry-redux';
 import Page from 'component/page';
 import SubscribeButton from 'component/subscribeButton';
+import BlockButton from 'component/blockButton';
 import ShareButton from 'component/shareButton';
 import { Tabs, TabList, Tab, TabPanels, TabPanel } from 'component/common/tabs';
 import { withRouter } from 'react-router';
@@ -14,6 +15,7 @@ import ChannelThumbnail from 'component/channelThumbnail';
 import ChannelEdit from 'component/channelEdit';
 import ClaimUri from 'component/claimUri';
 import * as ICONS from 'constants/icons';
+import classnames from 'classnames';
 
 const PAGE_VIEW_QUERY = `view`;
 const ABOUT_PAGE = `about`;
@@ -29,10 +31,24 @@ type Props = {
   history: { push: string => void },
   match: { params: { attribute: ?string } },
   channelIsMine: boolean,
+  isSubscribed: boolean,
+  channelIsBlocked: boolean,
 };
 
 function ChannelPage(props: Props) {
-  const { uri, title, cover, history, location, page, channelIsMine, thumbnail, claim } = props;
+  const {
+    uri,
+    title,
+    cover,
+    history,
+    location,
+    page,
+    channelIsMine,
+    thumbnail,
+    claim,
+    isSubscribed,
+    channelIsBlocked,
+  } = props;
   const { channelName } = parseURI(uri);
   const { search } = location;
   const urlParams = new URLSearchParams(search);
@@ -62,11 +78,18 @@ function ChannelPage(props: Props) {
     <Page>
       <div className="card">
         <header className="channel-cover">
-          {!editing && cover && <img className="channel-cover__custom" src={cover} />}
+          {!editing && cover && (
+            <img
+              className={classnames('channel-cover__custom', { 'channel__image--blurred': channelIsBlocked })}
+              src={cover}
+            />
+          )}
           {editing && <img className="channel-cover__custom" src={coverPreview} />}
           {/* component that offers select/upload */}
           <div className="channel__primary-info ">
-            {!editing && <ChannelThumbnail className="channel__thumbnail--channel-page" uri={uri} />}
+            {!editing && (
+              <ChannelThumbnail className="channel__thumbnail--channel-page" uri={uri} obscure={channelIsBlocked} />
+            )}
             {editing && (
               <ChannelThumbnail
                 className="channel__thumbnail--channel-page"
@@ -91,7 +114,8 @@ function ChannelPage(props: Props) {
             <Tab>{editing ? __('Editing Your Channel') : __('About')}</Tab>
             <div className="card__actions--inline">
               <ShareButton uri={uri} />
-              <SubscribeButton uri={permanentUrl} />
+              {!channelIsBlocked && <SubscribeButton uri={permanentUrl} />}
+              {!isSubscribed && <BlockButton uri={permanentUrl} />}
             </div>
           </TabList>
 

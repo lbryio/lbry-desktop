@@ -71,3 +71,5 @@ export const DARK = 'Moon';
 export const LIBRARY = 'Folder';
 export const TAG = 'Tag';
 export const SUPPORT = 'TrendingUp';
+export const BLOCK = 'Slash';
+export const UNBLOCK = 'Circle';

@@ -102,3 +102,7 @@ $metadata-z-index: 1;
   color: rgba($lbry-white, 0.75);
   margin-right: var(--spacing-large);
 }
+
+.channel__image--blurred {
+  filter: blur(16px);
+}

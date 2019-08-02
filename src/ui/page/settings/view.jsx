@@ -1,5 +1,6 @@
 // @flow
 import * as SETTINGS from 'constants/settings';
+import * as PAGES from 'constants/pages';
 import * as React from 'react';
 import classnames from 'classnames';
 import { FormField, FormFieldPrice, Form } from 'component/common/form';
@@ -44,6 +45,7 @@ type Props = {
   walletEncrypted: boolean,
   osNotificationsEnabled: boolean,
   supportOption: boolean,
+  userBlockedChannelsCount?: number,
   hideBalance: boolean,
 };
 
@@ -153,6 +155,7 @@ class SettingsPage extends React.PureComponent<Props, State> {
       setClientSetting,
       supportOption,
       hideBalance,
+      userBlockedChannelsCount,
     } = this.props;
 
     const noDaemonSettings = !daemonSettings || Object.keys(daemonSettings).length === 0;
@@ -276,6 +279,16 @@ class SettingsPage extends React.PureComponent<Props, State> {
                   )}
                 />
               </Form>
+            </section>
+
+            <section className="card card--section">
+              <h2 className="card__title">{__('Blocked Channels')}</h2>
+              <p className="card__subtitle card__help ">
+                {__('You have')} {userBlockedChannelsCount} {__('blocked')}{' '}
+                {userBlockedChannelsCount === 1 && __('channel')}
+                {userBlockedChannelsCount !== 1 && __('channels')}.{' '}
+                <Button button="link" label={__('Manage')} navigate={`/$/${PAGES.BLOCKED}`} />
+              </p>
             </section>
 
             <section className="card card--section">

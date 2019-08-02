@@ -8,6 +8,7 @@ import {
   notificationsReducer,
   tagsReducer,
   commentReducer,
+  blockedReducer,
   publishReducer,
 } from 'lbry-redux';
 import {
@@ -24,7 +25,6 @@ import availabilityReducer from 'redux/reducers/availability';
 import contentReducer from 'redux/reducers/content';
 import settingsReducer from 'redux/reducers/settings';
 import subscriptionsReducer from 'redux/reducers/subscriptions';
-
 
 export default history =>
   combineReducers({
@@ -47,6 +47,7 @@ export default history =>
     stats: statsReducer,
     subscriptions: subscriptionsReducer,
     tags: tagsReducer,
+    blocked: blockedReducer,
     user: userReducer,
     wallet: walletReducer,
   });
