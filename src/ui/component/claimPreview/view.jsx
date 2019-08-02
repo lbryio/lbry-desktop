@@ -169,7 +169,7 @@ function ClaimPreview(props: Props) {
             {claim ? <TruncatedText text={title || claim.name} lines={1} /> : <span>{__('Nothing here')}</span>}
           </div>
           {!hideActions && (
-            <div className={'card__actions'}>
+            <div className="card__actions--inline">
               {isChannel && !channelIsBlocked && (
                 <SubscribeButton uri={uri.startsWith('lbry://') ? uri : `lbry://${uri}`} />
               )}
