@@ -102,9 +102,13 @@ function ClaimPreview(props: Props) {
         (outpoint.txid === claim.txid && outpoint.nout === claim.nout)
     );
   }
-  // if showUserBlocked wasnt passed to claimPreview (for blocked page) hide user-blocked channels
+  // block stream claims
   if (claim && !shouldHide && !showUserBlocked && blockedChannelUris.length && signingChannel) {
     shouldHide = blockedChannelUris.some(blockedUri => blockedUri === signingChannel.permanent_url);
+  }
+  // block channel claims if we can't control for them in claim search
+  if (claim && isChannel && !shouldHide && !showUserBlocked && blockedChannelUris.length && isChannel) {
+    shouldHide = blockedChannelUris.some(blockedUri => blockedUri === claim.permanent_url);
   }
 
   function handleContextMenu(e) {
@@ -157,7 +161,7 @@ function ClaimPreview(props: Props) {
         'claim-preview--pending': pending,
       })}
     >
-      {isChannel ? <ChannelThumbnail uri={uri} /> : <CardMedia thumbnail={thumbnail} />}
+      {isChannel ? <ChannelThumbnail uri={uri} obscure={channelIsBlocked} /> : <CardMedia thumbnail={thumbnail} />}
       <div className="claim-preview-metadata">
         <div className="claim-preview-info">
           <div className="claim-preview-title">

@@ -15,6 +15,7 @@ import ChannelThumbnail from 'component/channelThumbnail';
 import ChannelEdit from 'component/channelEdit';
 import ClaimUri from 'component/claimUri';
 import * as ICONS from 'constants/icons';
+import classnames from 'classnames';
 
 const PAGE_VIEW_QUERY = `view`;
 const ABOUT_PAGE = `about`;
@@ -77,11 +78,18 @@ function ChannelPage(props: Props) {
     <Page>
       <div className="card">
         <header className="channel-cover">
-          {!editing && cover && <img className="channel-cover__custom" src={cover} />}
+          {!editing && cover && (
+            <img
+              className={classnames('channel-cover__custom', { 'channel__image--blurred': channelIsBlocked })}
+              src={cover}
+            />
+          )}
           {editing && <img className="channel-cover__custom" src={coverPreview} />}
           {/* component that offers select/upload */}
           <div className="channel__primary-info ">
-            {!editing && <ChannelThumbnail className="channel__thumbnail--channel-page" uri={uri} />}
+            {!editing && (
+              <ChannelThumbnail className="channel__thumbnail--channel-page" uri={uri} obscure={channelIsBlocked} />
+            )}
             {editing && (
               <ChannelThumbnail
                 className="channel__thumbnail--channel-page"

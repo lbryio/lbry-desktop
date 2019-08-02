@@ -44,6 +44,7 @@ type Props = {
   claimSearchByQuery: {
     [string]: Array<string>,
   },
+  hiddenUris: Array<string>,
 };
 
 function ClaimListDiscover(props: Props) {
@@ -59,6 +60,7 @@ function ClaimListDiscover(props: Props) {
     showNsfw,
     history,
     location,
+    hiddenUris,
   } = props;
   const didNavigateForward = history.action === 'PUSH';
   const { search, pathname } = location;
@@ -75,6 +77,7 @@ function ClaimListDiscover(props: Props) {
     no_totals: boolean,
     any_tags: Array<string>,
     channel_ids: Array<string>,
+    not_channel_ids: Array<string>,
     not_tags: Array<string>,
     order_by: Array<string>,
     release_time?: string,
@@ -86,6 +89,7 @@ function ClaimListDiscover(props: Props) {
     no_totals: true,
     any_tags: (personalView && personalSort === SEARCH_SORT_YOU) || !personalView ? tags : [],
     channel_ids: personalSort === SEARCH_SORT_CHANNELS ? subscribedChannels.map(sub => sub.uri.split('#')[1]) : [],
+    not_channel_ids: hiddenUris && hiddenUris.length ? hiddenUris.map(hiddenUri => hiddenUri.split('#')[1]) : [],
     not_tags: !showNsfw ? MATURE_TAGS : [],
     order_by:
       typeSort === TYPE_TRENDING
