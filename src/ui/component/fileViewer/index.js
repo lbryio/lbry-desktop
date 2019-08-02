@@ -21,7 +21,7 @@ const select = (state, props) => ({
 });
 
 const perform = dispatch => ({
-  play: (uri, saveFile) => dispatch(doPlayUri(uri, saveFile)),
+  play: uri => dispatch(doPlayUri(uri)),
 });
 
 export default connect(

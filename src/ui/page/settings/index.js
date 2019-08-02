@@ -28,7 +28,6 @@ const select = state => ({
   supportOption: makeSelectClientSetting(settings.SUPPORT_OPTION)(state),
   userBlockedChannelsCount: selectBlockedChannelsCount(state),
   hideBalance: makeSelectClientSetting(settings.HIDE_BALANCE)(state),
-  maxConnections: makeSelectClientSetting(settings.MAX_CONNECTIONS)(state),
 });
 
 const perform = dispatch => ({

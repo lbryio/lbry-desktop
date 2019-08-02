@@ -2,7 +2,7 @@
 import * as MODALS from 'constants/modal_types';
 import * as icons from 'constants/icons';
 import * as React from 'react';
-import { Lbry, buildURI, normalizeURI } from 'lbry-redux';
+import { buildURI, normalizeURI } from 'lbry-redux';
 import FileViewer from 'component/fileViewer';
 import FilePrice from 'component/filePrice';
 import FileDetails from 'component/fileDetails';
@@ -35,7 +35,7 @@ type Props = {
   channelUri: string,
   viewCount: number,
   prepareEdit: ({}, string, {}) => void,
-  openModal: (id: string, { [key: string]: any }) => void,
+  openModal: (id: string, { uri: string, claimIsMine?: boolean, isSupport?: boolean }) => void,
   markSubscriptionRead: (string, string) => void,
   fetchViewCount: string => void,
   balance: number,
@@ -45,15 +45,6 @@ type Props = {
 };
 
 class FilePage extends React.Component<Props> {
-  static PREVIEW_MEDIA_TYPES = ['text', 'model', 'image', 'script', 'document', '3D-file', 'comic-book'];
-
-  constructor(props: Props) {
-    super(props);
-    (this: any).viewerContainer = React.createRef();
-  }
-
-  viewerContainer: { current: React.ElementRef<any> };
-
   componentDidMount() {
     const {
       uri,
@@ -135,12 +126,7 @@ class FilePage extends React.Component<Props> {
     // File info
     const { signing_channel: signingChannel } = claim;
     const channelName = signingChannel && signingChannel.name;
-    const { PREVIEW_MEDIA_TYPES } = FilePage;
     const isRewardContent = (rewardedContentClaimIds || []).includes(claim.claim_id);
-    const fileName = fileInfo ? fileInfo.file_name : null;
-    const mediaType = Lbry.getMediaType(contentType, fileName);
-    const isPreviewType = PREVIEW_MEDIA_TYPES.includes(mediaType);
-
     const speechShareable =
       costInfo && costInfo.cost === 0 && contentType && ['video', 'image', 'audio'].includes(contentType.split('/')[0]);
     // We want to use the short form uri for editing
@@ -173,7 +159,7 @@ class FilePage extends React.Component<Props> {
               {__('or send more LBC to your wallet.')}
             </div>
           )}
-          <FileViewer uri={uri} viewerContainer={this.viewerContainer} insufficientCredits={insufficientCredits} />
+          <FileViewer uri={uri} insufficientCredits={insufficientCredits} />
         </div>
 
         <div className="columns">
@@ -231,12 +217,7 @@ class FilePage extends React.Component<Props> {
 
                 <div className="media__action-group--large">
                   <FileDownloadLink uri={uri} />
-                  <FileActions
-                    uri={uri}
-                    claimId={claim.claim_id}
-                    showFullscreen={isPreviewType}
-                    viewerContainer={this.viewerContainer}
-                  />
+                  <FileActions uri={uri} claimId={claim.claim_id} />
                 </div>
               </div>
             </div>

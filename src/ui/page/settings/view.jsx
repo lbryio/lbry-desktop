@@ -78,9 +78,6 @@ class SettingsPage extends React.PureComponent<Props, State> {
   componentDidMount() {
     this.props.getThemes();
     this.props.updateWalletStatus();
-
-    const { daemonSettings } = this.props;
-    this.props.setClientSetting(SETTINGS.MAX_CONNECTIONS, daemonSettings.max_connections_per_download);
   }
 
   onKeyFeeChange(newValue: Price) {
@@ -90,7 +87,6 @@ class SettingsPage extends React.PureComponent<Props, State> {
   onMaxConnectionsChange(event: SyntheticInputEvent<*>) {
     const { value } = event.target;
     this.setDaemonSetting('max_connections_per_download', value);
-    this.props.setClientSetting(SETTINGS.MAX_CONNECTIONS, value);
   }
 
   onKeyFeeDisableChange(isDisabled: boolean) {
@@ -214,7 +210,7 @@ class SettingsPage extends React.PureComponent<Props, State> {
                   onChange={() => setDaemonSetting('save_files', !daemonSettings.save_files)}
                   checked={daemonSettings.save_files}
                   label={__(
-                    'Enables saving of all viewed content to your downloads directory. Some file types are saved by default.'
+                    'Enables saving of all viewed content to your downloads directory. Paid content and some file types are saved by default.'
                   )}
                   helper={__('This is not retroactive, only works from the time it was changed.')}
                 />

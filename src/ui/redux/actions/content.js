@@ -21,9 +21,10 @@ import {
   parseURI,
   doPurchaseUri,
   makeSelectUriIsStreamable,
+  selectDownloadingByOutpoint,
 } from 'lbry-redux';
 import { makeSelectCostInfoForUri } from 'lbryinc';
-import { makeSelectClientSetting, selectosNotificationsEnabled } from 'redux/selectors/settings';
+import { makeSelectClientSetting, selectosNotificationsEnabled, selectDaemonSettings } from 'redux/selectors/settings';
 import { formatLbryUriForWeb } from 'util/uri';
 
 const DOWNLOAD_POLL_INTERVAL = 250;
@@ -179,63 +180,65 @@ export function doFetchClaimsByChannel(uri: string, page: number = 1, pageSize: 
   };
 }
 
-export function doPurchaseUriWrapper(uri: string, costInfo: {}, saveFile: boolean) {
+export function doPurchaseUriWrapper(uri: string, cost: number, saveFile: boolean) {
   return (dispatch: Dispatch, getState: () => any) => {
-    const state = getState();
-    const isUriStreamable = makeSelectUriIsStreamable(uri)(state);
-
     function onSuccess(fileInfo) {
       dispatch(doUpdateLoadStatus(uri, fileInfo.outpoint));
     }
 
-    // Only pass the sucess callback for non streamable files because we don't show the download percentage while streaming
-    const successCallBack = isUriStreamable ? undefined : onSuccess;
-    dispatch(doPurchaseUri(uri, costInfo, saveFile, successCallBack));
+    // Only pass the sucess callback if we are saving the file, otherwise we don't show the download percentage
+    const successCallBack = saveFile ? onSuccess : undefined;
+    dispatch(doPurchaseUri(uri, { costInfo: cost }, saveFile, successCallBack));
   };
 }
 
-export function doPlayUri(uri: string, saveFile: boolean) {
+export function doPlayUri(uri: string, skipCostCheck: boolean = false, saveFileOverride: boolean = false) {
   return (dispatch: Dispatch, getState: () => any) => {
-    function attemptPlay(cost, instantPurchaseMax = null) {
-      // If you have a file entry with correct manifest, you won't pay for the key fee again
-      if (cost > 0 && (!instantPurchaseMax || cost > instantPurchaseMax) && !fileInfo) {
-        dispatch(doOpenModal(MODALS.AFFIRM_PURCHASE, { uri }));
-      } else {
-        dispatch(doPurchaseUriWrapper(uri, { costInfo: cost }, saveFile));
-      }
-    }
-
     // Set the active playing uri so we can avoid showing error notifications if a previously started download fails
     dispatch(doSetPlayingUri(uri));
 
     const state = getState();
     const fileInfo = makeSelectFileInfoForUri(uri)(state);
-    const { cost } = makeSelectCostInfoForUri(uri)(state);
-
-    // we already fully downloaded the file.
-    if (fileInfo && fileInfo.completed && (fileInfo.status === 'stopped' || fileInfo.status === 'finished')) {
-      // If path is null or bytes written is 0 means the user has deleted/moved the
-      // file manually on their file system, so we need to dispatch a
-      // doPurchaseUri action to reconstruct the file from the blobs
-      if (!fileInfo.download_path || !fileInfo.written_bytes) {
-        dispatch(doPurchaseUriWrapper(uri, { costInfo: cost }, saveFile));
-      }
-
+    const uriIsStreamable = makeSelectUriIsStreamable(uri)(state);
+    const downloadingByOutpoint = selectDownloadingByOutpoint(state);
+    const alreadyDownloaded = fileInfo && (fileInfo.completed || (fileInfo.blobs_remaining === 0 && uriIsStreamable));
+    const alreadyDownloading = fileInfo && !!downloadingByOutpoint[fileInfo.outpoint];
+    if (alreadyDownloading || alreadyDownloaded) {
       return;
     }
 
-    if (cost === 0 || !makeSelectClientSetting(SETTINGS.INSTANT_PURCHASE_ENABLED)(state)) {
-      attemptPlay(cost);
-    } else {
-      const instantPurchaseMax = makeSelectClientSetting(SETTINGS.INSTANT_PURCHASE_MAX)(state);
-      if (instantPurchaseMax.currency === 'LBC') {
-        attemptPlay(cost, instantPurchaseMax.amount);
+    const daemonSettings = selectDaemonSettings(state);
+    const costInfo = makeSelectCostInfoForUri(uri)(state);
+    const cost = Number(costInfo.cost);
+    const saveFile = !uriIsStreamable ? true : daemonSettings.save_files || saveFileOverride || cost > 0;
+    const instantPurchaseEnabled = makeSelectClientSetting(SETTINGS.INSTANT_PURCHASE_ENABLED)(state);
+    const instantPurchaseMax = makeSelectClientSetting(SETTINGS.INSTANT_PURCHASE_MAX)(state);
+
+    function beginGetFile() {
+      dispatch(doPurchaseUriWrapper(uri, cost, saveFile));
+    }
+
+    function attemptPlay(instantPurchaseMax = null) {
+      // If you have a file_list entry, you have already purchased the file
+      if (!fileInfo && (!instantPurchaseMax || cost > instantPurchaseMax)) {
+        dispatch(doOpenModal(MODALS.AFFIRM_PURCHASE, { uri }));
       } else {
-        // Need to convert currency of instant purchase maximum before trying to play
-        Lbryapi.getExchangeRates().then(({ LBC_USD }) => {
-          attemptPlay(cost, instantPurchaseMax.amount / LBC_USD);
-        });
+        beginGetFile();
       }
+    }
+
+    if (cost === 0 || skipCostCheck) {
+      beginGetFile();
+      return;
+    }
+
+    if (instantPurchaseEnabled || instantPurchaseMax.currency === 'LBC') {
+      attemptPlay(instantPurchaseMax.amount);
+    } else {
+      // Need to convert currency of instant purchase maximum before trying to play
+      Lbryapi.getExchangeRates().then(({ LBC_USD }) => {
+        attemptPlay(instantPurchaseMax.amount / LBC_USD);
+      });
     }
   };
 }
