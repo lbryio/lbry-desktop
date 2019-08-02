@@ -231,6 +231,14 @@ $border-color--dark: var(--dm-color-04);
   justify-content: space-between;
 }
 
+.claim-preview-actions {
+  display: flex;
+  justify-content: space-evenly;
+}
+.claim-preview__button {
+  margin-left: 2rem;
+}
+
 .claim-preview-properties {
   align-items: flex-end;
   flex: 1;

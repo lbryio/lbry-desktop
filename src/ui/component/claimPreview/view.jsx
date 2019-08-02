@@ -168,12 +168,22 @@ function ClaimPreview(props: Props) {
             {claim ? <TruncatedText text={title || claim.name} lines={1} /> : <span>{__('Nothing here')}</span>}
           </div>
           {!hideActions && (
-            <div>
+            <div className={'claim-preview-actions'}>
               {isChannel && !channelIsBlocked && (
-                <SubscribeButton uri={uri.startsWith('lbry://') ? uri : `lbry://${uri}`} />
+                <div className={'claim-preview__button'}>
+                  <SubscribeButton uri={uri.startsWith('lbry://') ? uri : `lbry://${uri}`} />
+                </div>
               )}
-              {isChannel && !isSubscribed && <BlockButton uri={uri.startsWith('lbry://') ? uri : `lbry://${uri}`} />}
-              {!isChannel && <FileProperties uri={uri} />}
+              {isChannel && !isSubscribed && (
+                <div className={'claim-preview__button'}>
+                  <BlockButton uri={uri.startsWith('lbry://') ? uri : `lbry://${uri}`} />
+                </div>
+              )}
+              {!isChannel && (
+                <div className={'claim-preview__button'}>
+                  <FileProperties uri={uri} />
+                </div>
+              )}
             </div>
           )}
         </div>
