@@ -107,6 +107,7 @@ function ClaimPreview(props: Props) {
     shouldHide = blockedChannelUris.some(blockedUri => blockedUri === signingChannel.permanent_url);
   }
   // block channel claims if we can't control for them in claim search
+  // e.g. fetchRecommendedSubscriptions
   if (claim && isChannel && !shouldHide && !showUserBlocked && blockedChannelUris.length && isChannel) {
     shouldHide = blockedChannelUris.some(blockedUri => blockedUri === claim.permanent_url);
   }
@@ -168,22 +169,12 @@ function ClaimPreview(props: Props) {
             {claim ? <TruncatedText text={title || claim.name} lines={1} /> : <span>{__('Nothing here')}</span>}
           </div>
           {!hideActions && (
-            <div className={'claim-preview-actions'}>
+            <div className={'card__actions'}>
               {isChannel && !channelIsBlocked && (
-                <div className={'claim-preview__button'}>
-                  <SubscribeButton uri={uri.startsWith('lbry://') ? uri : `lbry://${uri}`} />
-                </div>
+                <SubscribeButton uri={uri.startsWith('lbry://') ? uri : `lbry://${uri}`} />
               )}
-              {isChannel && !isSubscribed && (
-                <div className={'claim-preview__button'}>
-                  <BlockButton uri={uri.startsWith('lbry://') ? uri : `lbry://${uri}`} />
-                </div>
-              )}
-              {!isChannel && (
-                <div className={'claim-preview__button'}>
-                  <FileProperties uri={uri} />
-                </div>
-              )}
+              {isChannel && !isSubscribed && <BlockButton uri={uri.startsWith('lbry://') ? uri : `lbry://${uri}`} />}
+              {!isChannel && <FileProperties uri={uri} />}
             </div>
           )}
         </div>

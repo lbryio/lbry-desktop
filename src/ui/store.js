@@ -48,7 +48,7 @@ const appFilter = createFilter('app', ['hasClickedComment', 'searchOptionsExpand
 const walletFilter = createFilter('wallet', ['receiveAddress']);
 const searchFilter = createFilter('search', ['options']);
 const tagsFilter = createFilter('tags', ['followedTags']);
-const blockedFilter = createFilter('blockedChannels', ['blockedChannels']);
+const blockedFilter = createFilter('blocked', ['blockedChannels']);
 const whiteListedReducers = [
   // @if TARGET='app'
   'publish',
@@ -60,7 +60,7 @@ const whiteListedReducers = [
   'app',
   'search',
   'tags',
-  'blockedChannels',
+  'blocked',
 ];
 
 const transforms = [

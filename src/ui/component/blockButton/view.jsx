@@ -7,6 +7,7 @@ import useHover from 'util/use-hover';
 
 type Props = {
   uri: string,
+  shortUrl: string,
   isSubscribed: boolean,
   toggleBlockChannel: (uri: string) => void,
   channelIsBlocked: boolean,
@@ -14,7 +15,7 @@ type Props = {
 };
 
 export default function BlockButton(props: Props) {
-  const { uri, toggleBlockChannel, channelIsBlocked, doToast } = props;
+  const { uri, shortUrl, toggleBlockChannel, channelIsBlocked, doToast } = props;
 
   const blockRef = useRef();
   const isHovering = useHover(blockRef);
@@ -25,13 +26,13 @@ export default function BlockButton(props: Props) {
     <Button
       ref={blockRef}
       iconColor="red"
-      icon={blockedOverride ? ICONS.UNBLOCK : ICONS.BLOCK}
+      icon={ICONS.BLOCK}
       button={'alt'}
       label={blockedOverride || blockLabel}
       onClick={e => {
         e.stopPropagation();
         if (!channelIsBlocked) {
-          doToast({ message: `Blocked ${uri}`, linkText: 'Manage', linkTarget: `/${PAGES.BLOCKED}` });
+          doToast({ message: `Blocked ${shortUrl}`, linkText: 'Manage', linkTarget: `/${PAGES.BLOCKED}` });
         }
         toggleBlockChannel(uri);
       }}

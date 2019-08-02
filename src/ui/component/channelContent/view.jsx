@@ -36,7 +36,7 @@ function ChannelContent(props: Props) {
 
       {!fetching && channelIsBlocked && (
         <div className="card--section">
-          <h2 className="card__content help">{__('You have blocked this channel content.')}</h2>
+          <h2 className="help">{__('You have blocked this channel content.')}</h2>
         </div>
       )}
 

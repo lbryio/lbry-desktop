@@ -19,15 +19,15 @@ function ChannelThumbnail(props: Props) {
   const { channelName } = parseURI(uri);
   const initializer = channelName.charCodeAt(0) - 65; // will be between 0 and 57
   const colorClassName = `channel-thumbnail__default--${initializer % 4}`;
-
+  const showThumb = !obscure && !!thumbnail;
   return (
     <div
       className={classnames('channel-thumbnail', className, {
-        [colorClassName]: !thumbnail,
+        [colorClassName]: !showThumb,
       })}
     >
-      {(!thumbnail || obscure) && <img className="channel-thumbnail__default" src={thumbnailPreview || Gerbil} />}
-      {!obscure && thumbnail && <img className="channel-thumbnail__custom" src={thumbnailPreview || thumbnail} />}
+      {!showThumb && <img className="channel-thumbnail__default" src={thumbnailPreview || Gerbil} />}
+      {showThumb && <img className="channel-thumbnail__custom" src={thumbnailPreview || thumbnail} />}
     </div>
   );
 }

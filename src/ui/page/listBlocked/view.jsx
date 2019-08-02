@@ -11,7 +11,7 @@ function ListBlocked(props: Props) {
   const { uris } = props;
 
   return (
-    <Page notContained>
+    <Page>
       {uris && uris.length ? (
         <div className="card">
           <ClaimList
@@ -25,9 +25,8 @@ function ListBlocked(props: Props) {
       ) : (
         <div className="main--empty">
           <section className="card card--section">
-            <header className="card__header">
-              <h2 className="card__title">{__('It looks like you have no blocked channels.')}</h2>
-            </header>
+            <h2 className="card__title">{__('You aren’t blocking any channels')}</h2>
+            <p className="card__subtitle">When you block a channel, all content from that channel will be hidden.</p>
           </section>
         </div>
       )}
