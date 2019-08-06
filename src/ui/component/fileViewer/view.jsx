@@ -34,8 +34,6 @@ export default function FileViewer(props: Props) {
     thumbnail,
     streamingUrl,
     isStreamable,
-    // Add this back for full-screen support
-    // viewerContainer,
   } = props;
 
   const isPlayable = ['audio', 'video'].indexOf(mediaType) !== -1;

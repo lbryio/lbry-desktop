@@ -208,7 +208,7 @@ reducers[ACTIONS.WINDOW_FOCUSED] = state =>
 
 reducers[ACTIONS.VOLUME_CHANGED] = (state, action) =>
   Object.assign({}, state, {
-    muted: action.data.volume,
+    volume: action.data.volume,
   });
 
 reducers[ACTIONS.VOLUME_MUTED] = (state, action) =>

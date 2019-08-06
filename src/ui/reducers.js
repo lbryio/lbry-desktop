@@ -39,7 +39,7 @@ export default history =>
     content: contentReducer,
     costInfo: costInfoReducer,
     fileInfo: fileInfoReducer,
-    file: fileReducer, // Why is this not in `fileInfoReducer`?
+    file: fileReducer,
     homepage: homepageReducer,
     notifications: notificationsReducer,
     publish: publishReducer,

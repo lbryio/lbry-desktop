@@ -8,14 +8,6 @@ import AppViewer from 'component/viewers/appViewer';
 import path from 'path';
 import fs from 'fs';
 
-// This is half complete, the video viewer works fine for audio, it just doesn't look pretty
-// const AudioViewer = React.lazy<*>(() =>
-//   import(
-//     /* webpackChunkName: "audioViewer" */
-//     'component/viewers/audioViewer'
-//   )
-// );
-
 const DocumentViewer = React.lazy<*>(() =>
   import(
     /* webpackChunkName: "documentViewer" */
@@ -131,7 +123,7 @@ class FileRender extends React.PureComponent<Props> {
     };
 
     // Check for a valid fileType or mediaType
-    let viewer = fileType ? fileTypes[fileType] : mediaTypes[mediaType];
+    let viewer = (fileType && fileTypes[fileType]) || mediaTypes[mediaType];
 
     // Check for Human-readable files
     if (!viewer && readableFiles.includes(mediaType)) {

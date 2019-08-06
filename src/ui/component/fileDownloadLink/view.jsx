@@ -34,7 +34,6 @@ function FileDownloadLink(props: Props) {
     return (
       <ToolTip label={__('Open file')}>
         <Button
-          title="Remove from library"
           button="link"
           icon={ICONS.EXTERNAL}
           onClick={() => {
