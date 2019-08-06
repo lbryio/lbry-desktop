@@ -23,10 +23,11 @@ type Props = {
   fetchRewards: () => void,
   fetchRewardedContent: () => void,
   fetchTransactions: () => void,
+  fetchAccessToken: () => void,
 };
 
 function App(props: Props) {
-  const { theme, fetchRewards, fetchRewardedContent, fetchTransactions, user, accessToken } = props;
+  const { theme, fetchRewards, fetchRewardedContent, fetchTransactions, user, fetchAccessToken, accessToken } = props;
   const appRef = useRef();
   const isEnhancedLayout = useKonamiListener();
   const userId = user && user.id;
@@ -34,6 +35,7 @@ function App(props: Props) {
 
   useEffect(() => {
     ReactModal.setAppElement(appRef.current);
+    fetchAccessToken();
     fetchRewardedContent();
 
     // @if TARGET='app'
