@@ -3,6 +3,8 @@ import { remote } from 'electron';
 import React, { Suspense } from 'react';
 import LoadingScreen from 'component/common/loading-screen';
 import VideoViewer from 'component/viewers/videoViewer';
+import ImageViewer from 'component/viewers/imageViewer';
+import AppViewer from 'component/viewers/appViewer';
 import path from 'path';
 import fs from 'fs';
 
@@ -59,13 +61,14 @@ const ThreeViewer = React.lazy<*>(() =>
 // @endif
 
 type Props = {
+  uri: string,
   mediaType: string,
   streamingUrl: string,
   contentType: string,
   claim: StreamClaim,
   currentTheme: string,
-  downloadPath?: string,
-  fileName?: string,
+  downloadPath: string,
+  fileName: string,
 };
 
 class FileRender extends React.PureComponent<Props> {
@@ -77,63 +80,11 @@ class FileRender extends React.PureComponent<Props> {
 
   componentDidMount() {
     window.addEventListener('keydown', this.escapeListener, true);
-
-    // ugh
-    // const { claim, streamingUrl, fileStatus, fileName, downloadPath, downloadCompleted, contentType } = this.props;
-    // if(MediaPlayer.SANDBOX_TYPES.indexOf(contentType) > -1) {
-    //   const outpoint = `${claim.txid}:${claim.nout}`;
-    //   // Fetch unpacked url
-    //   fetch(`${MediaPlayer.SANDBOX_SET_BASE_URL}${outpoint}`)
-    //     .then(res => res.text())
-    //     .then(url => {
-    //       const source = {url: `${MediaPlayer.SANDBOX_CONTENT_BASE_URL}${url}`};
-    //       this.setState({source});
-    //     })
-    //     .catch(err => {
-    //       console.error(err);
-    //     });
-    // } else {
-    // File to render
   }
 
   componentWillUnmount() {
     window.removeEventListener('keydown', this.escapeListener, true);
   }
-
-  // This should use React.createRef()
-  // processSandboxRef(element: any) {
-  //   if (!element) {
-  //     return;
-  //   }
-
-  //   window.sandbox = element;
-
-  //   element.addEventListener('permissionrequest', e => {
-  //     console.log('permissionrequest', e);
-  //   });
-
-  //   element.addEventListener('console-message', (e: { message: string }) => {
-  //     if (/^\$LBRY_IPC:/.test(e.message)) {
-  //       // Process command
-  //       let message = {};
-  //       try {
-  //         // $FlowFixMe
-  //         message = JSON.parse(/^\$LBRY_IPC:(.*)/.exec(e.message)[1]);
-  //       } catch (err) {}
-  //       console.log('IPC', message);
-  //     } else {
-  //       console.log('Sandbox:', e.message);
-  //     }
-  //   });
-
-  //   element.addEventListener('enter-html-full-screen', () => {
-  //     // stub
-  //   });
-
-  //   element.addEventListener('leave-html-full-screen', () => {
-  //     // stub
-  //   });
-  // }
 
   escapeListener(e: SyntheticKeyboardEvent<*>) {
     if (e.keyCode === 27) {
@@ -150,7 +101,7 @@ class FileRender extends React.PureComponent<Props> {
   }
 
   renderViewer() {
-    const { mediaType, currentTheme, claim, contentType, downloadPath, fileName, streamingUrl } = this.props;
+    const { mediaType, currentTheme, claim, contentType, downloadPath, fileName, streamingUrl, uri } = this.props;
 
     const fileType = fileName && path.extname(fileName).substring(1);
 
@@ -162,30 +113,12 @@ class FileRender extends React.PureComponent<Props> {
       // @if TARGET='app'
       '3D-file': <ThreeViewer source={{ fileType, downloadPath }} theme={currentTheme} />,
       'comic-book': <ComicBookViewer source={{ fileType, downloadPath }} theme={currentTheme} />,
-      // application: !source.url ? null : (
-      //   <webview
-      //     ref={element => this.processSandboxRef(element)}
-      //     title=""
-      //     sandbox="allow-scripts allow-forms allow-pointer-lock"
-      //     src={source.url}
-      //     autosize="on"
-      //     style={{ border: 0, width: '100%', height: '100%' }}
-      //     useragent="Mozilla/5.0 AppleWebKit/537 Chrome/60 Safari/537"
-      //     enableremotemodule="false"
-      //     webpreferences="sandbox=true,contextIsolation=true,webviewTag=false,enableRemoteModule=false,devTools=false"
-      //   />
-      // ),
+      application: <AppViewer uri={uri} />,
       // @endif
 
       video: <VideoViewer source={streamingUrl} contentType={contentType} />,
       audio: <VideoViewer source={streamingUrl} contentType={contentType} />,
-      // audio: (
-      //   <AudioViewer
-      //     claim={claim}
-      //     source={{ url: streamingUrl, downloadPath, downloadCompleted, status }}
-      //     contentType={contentType}
-      //   />
-      // ),
+      image: <ImageViewer source={streamingUrl} />,
       // Add routes to viewer...
     };
 
@@ -198,7 +131,7 @@ class FileRender extends React.PureComponent<Props> {
     };
 
     // Check for a valid fileType or mediaType
-    let viewer = fileTypes[fileType] || mediaTypes[mediaType];
+    let viewer = fileType ? fileTypes[fileType] : mediaTypes[mediaType];
 
     // Check for Human-readable files
     if (!viewer && readableFiles.includes(mediaType)) {

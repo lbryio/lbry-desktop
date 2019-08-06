@@ -11,12 +11,12 @@ const VIDEO_JS_OPTIONS = {
   controls: true,
   preload: 'auto',
   playbackRates: [0.5, 1, 1.25, 1.5, 2],
-  fluid: true,
 };
 
 type Props = {
   source: string,
   contentType: string,
+  muted: boolean,
 };
 
 function VideoViewer(props: Props) {
@@ -25,21 +25,21 @@ function VideoViewer(props: Props) {
 
   // Handle any other effects separately to avoid re-mounting the video player when props change
   useEffect(() => {
-    if (videoRef && source && contentType) {
-      const videoNode = videoRef.current;
-      const videoJsOptions = {
-        ...VIDEO_JS_OPTIONS,
-        sources: [
-          {
-            src: source,
-            type: contentType,
-          },
-        ],
-      };
+    const videoNode = videoRef.current;
+    const videoJsOptions = {
+      ...VIDEO_JS_OPTIONS,
+      sources: [
+        {
+          src: source,
+          type: contentType,
+        },
+      ],
+    };
 
-      const player = videojs(videoNode, videoJsOptions);
-      return () => player.dispose();
-    }
+    const player = videojs(videoNode, videoJsOptions);
+    return () => {
+      player.dispose();
+    };
   }, [videoRef, source, contentType]);
 
   useEffect(() => {
@@ -47,8 +47,6 @@ function VideoViewer(props: Props) {
       const videoNode = videoRef && videoRef.current;
       if (!videoNode) return;
 
-      // This should be done in a reusable way
-      // maybe a custom useKeyboardListener hook?
       if (!isUserTyping() && e.keyCode === SPACE_BAR_KEYCODE) {
         e.preventDefault();
 

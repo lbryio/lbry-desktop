@@ -6,19 +6,21 @@ import Button from 'component/button';
 import ToolTip from 'component/common/tooltip';
 
 type Props = {
+  uri: string,
   claimIsMine: boolean,
   downloading: boolean,
   loading: boolean,
   isStreamable: boolean,
-  fileInfo: ?FileInfo,
+  fileInfo: ?FileListItem,
   openModal: (id: string, { path: string }) => void,
   pause: () => void,
+  download: string => void,
 };
 
 function FileDownloadLink(props: Props) {
-  const { fileInfo, downloading, loading, openModal, pause, claimIsMine, isStreamable } = props;
+  const { fileInfo, downloading, loading, openModal, pause, claimIsMine, download, uri } = props;
 
-  if (!isStreamable && (loading || downloading)) {
+  if (loading || downloading) {
     const progress = fileInfo && fileInfo.written_bytes > 0 ? (fileInfo.written_bytes / fileInfo.total_bytes) * 100 : 0;
     const label =
       fileInfo && fileInfo.written_bytes > 0
@@ -32,6 +34,7 @@ function FileDownloadLink(props: Props) {
     return (
       <ToolTip label={__('Open file')}>
         <Button
+          title="Remove from library"
           button="link"
           icon={ICONS.EXTERNAL}
           onClick={() => {
@@ -41,9 +44,19 @@ function FileDownloadLink(props: Props) {
         />
       </ToolTip>
     );
+  } else {
+    return (
+      <ToolTip label={__('Add to your library')}>
+        <Button
+          button="link"
+          icon={ICONS.DOWNLOAD}
+          onClick={() => {
+            download(uri);
+          }}
+        />
+      </ToolTip>
+    );
   }
-
-  return null;
 }
 
 export default FileDownloadLink;

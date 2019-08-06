@@ -5,24 +5,18 @@ import React from 'react';
 import Button from 'component/button';
 import Tooltip from 'component/common/tooltip';
 
-type FileInfo = {
-  claim_id: string,
-};
-
 type Props = {
   uri: string,
   claimId: string,
   openModal: (id: string, { uri: string }) => void,
   claimIsMine: boolean,
-  fileInfo: FileInfo,
+  fileInfo: FileListItem,
 };
 
 class FileActions extends React.PureComponent<Props> {
   render() {
     const { fileInfo, uri, openModal, claimIsMine, claimId } = this.props;
-    const showDelete = claimIsMine || (fileInfo && Object.keys(fileInfo).length > 0);
-    // fix me
-    // const showDelete = claimIsMine || (fileInfo && fileInfo.writtenBytes > 0 || fileInfo.blobs_completed;
+    const showDelete = claimIsMine || (fileInfo && (fileInfo.written_bytes > 0 || fileInfo.blobs_completed === true));
 
     return (
       <React.Fragment>

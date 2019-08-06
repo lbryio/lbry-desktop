@@ -13,7 +13,7 @@ type Props = {
   mediaType: string,
   isLoading: boolean,
   isPlaying: boolean,
-  fileInfo: FileInfo,
+  fileInfo: FileListItem,
   uri: string,
   obscurePreview: boolean,
   insufficientCredits: boolean,
