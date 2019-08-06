@@ -1,6 +1,7 @@
 // @flow
 import React, { useEffect, useRef } from 'react';
 import analytics from 'analytics';
+import { Lbry } from 'lbry-redux';
 import Router from 'component/router/index';
 import ModalRouter from 'modal/modalRouter';
 import ReactModal from 'react-modal';
@@ -17,17 +18,19 @@ type Props = {
   pageTitle: ?string,
   language: string,
   theme: string,
-  user: ?{ id: string },
+  accessToken: ?string,
+  user: ?{ id: string, has_verified_email: boolean },
   fetchRewards: () => void,
   fetchRewardedContent: () => void,
   fetchTransactions: () => void,
 };
 
 function App(props: Props) {
-  const { theme, fetchRewards, fetchRewardedContent, fetchTransactions, user } = props;
+  const { theme, fetchRewards, fetchRewardedContent, fetchTransactions, user, accessToken } = props;
   const appRef = useRef();
   const isEnhancedLayout = useKonamiListener();
   const userId = user && user.id;
+  const hasVerifiedEmail = user && user.has_verified_email;
 
   useEffect(() => {
     ReactModal.setAppElement(appRef.current);
@@ -49,6 +52,14 @@ function App(props: Props) {
       analytics.setUser(userId);
     }
   }, [userId]);
+
+  // @if TARGET='web'
+  useEffect(() => {
+    if (hasVerifiedEmail && accessToken) {
+      Lbry.setApiHeader('X-Lbry-Auth-Token', accessToken);
+    }
+  }, [hasVerifiedEmail, accessToken]);
+  // @endif
 
   return (
     <div className={MAIN_WRAPPER_CLASS} ref={appRef} onContextMenu={e => openContextMenu(e)}>
