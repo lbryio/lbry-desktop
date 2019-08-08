@@ -37,7 +37,8 @@
     "flow-defs": "flow-typed install",
     "precommit": "lint-staged",
     "preinstall": "yarn cache clean lbry-redux && yarn cache clean lbryinc",
-    "postinstall": "electron-builder install-app-deps && node ./build/downloadDaemon.js"
+    "postinstall": "if-env APP_ENV=web && echo 'Done installing deps' || yarn postinstall:electron",
+    "postinstall:electron": "electron-builder install-app-deps && node ./build/downloadDaemon.js"
   },
   "dependencies": {
     "@reach/menu-button": "^0.1.18",
@@ -121,6 +122,7 @@
     "hast-util-sanitize": "^1.1.2",
     "history": "^4.9.0",
     "husky": "^0.14.3",
+    "if-env": "^1.0.4",
     "jsmediatags": "^3.8.1",
     "json-loader": "^0.5.4",
     "lbry-format": "https://github.com/lbryio/lbry-format.git",
