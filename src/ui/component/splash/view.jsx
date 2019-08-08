@@ -1,5 +1,6 @@
 // @flow
 import * as MODALS from 'constants/modal_types';
+import * as SETTINGS from 'constants/settings';
 import React from 'react';
 import { Lbry } from 'lbry-redux';
 import Button from 'component/button';
@@ -10,6 +11,7 @@ import ModalDownloading from 'modal/modalDownloading';
 import 'css-doodle';
 
 const FORTY_FIVE_SECONDS = 45 * 1000;
+type SetDaemonSettingArg = boolean | string | number;
 
 type Props = {
   checkDaemonVersion: () => Promise<any>,
@@ -21,6 +23,8 @@ type Props = {
   modal: ?{
     id: string,
   },
+  animationHidden: boolean,
+  setClientSetting: (string, SetDaemonSettingArg) => void,
 };
 
 type State = {
@@ -37,7 +41,7 @@ export default class SplashScreen extends React.PureComponent<Props, State> {
     super(props);
 
     this.state = {
-      details: __('Starting up'),
+      details: __('Starting...'),
       message: __('Connecting'),
       launchedModal: false,
       error: false,
@@ -112,10 +116,10 @@ export default class SplashScreen extends React.PureComponent<Props, State> {
       this.hasRecordedUser = true;
     }
 
-    const { wallet, blockchain_headers: blockchainHeaders } = status;
+    const { wallet, startup_status: startupStatus, blockchain_headers: blockchainHeaders } = status;
 
     // If the wallet is locked, stop doing anything and make the user input their password
-    if (wallet && wallet.is_locked) {
+    if (status.is_running && wallet && wallet.is_locked) {
       // Clear the error timeout, it might sit on this step for a while until someone enters their password
       if (this.timeout) {
         clearTimeout(this.timeout);
@@ -141,20 +145,31 @@ export default class SplashScreen extends React.PureComponent<Props, State> {
       if (blockChainHeaders.download_progress < 100) {
         this.setState({
           message: __('Blockchain Sync'),
-          details: `${__('Catching up with the blockchain')} (${blockchainHeaders.download_progress}%)`,
+          details: `${__('Catching up...')} (${blockchainHeaders.download_progress}%)`,
         });
+        if (this.timeout) {
+          clearTimeout(this.timeout);
+        }
       }
     } else if (wallet && wallet.blocks_behind > 0) {
       const format = wallet.blocks_behind === 1 ? '%s block behind' : '%s blocks behind';
       this.setState({
         message: __('Blockchain Sync'),
-        details: __(format, wallet.blocks_behind),
+        details: `${__('Catching up...')} (${__(format, wallet.blocks_behind)})`,
       });
-    } else if (wallet && wallet.blocks_behind === 0) {
-      this.setState({
-        message: 'Network Loading',
-        details: 'Initializing LBRY service...',
-      });
+      if (this.timeout) {
+        clearTimeout(this.timeout);
+      }
+    } else if (wallet && wallet.blocks_behind === 0 && !status.is_running && startupStatus.database) {
+      // Usually the transaction sync state, there's no status for this yet
+      // Only show after user has been waiting 10 seconds
+      // https://github.com/lbryio/lbry-sdk/issues/2314
+      setTimeout(() => {
+        this.setState({
+          message: 'Initializing',
+          details: 'Almost done...',
+        });
+      }, 10000);
     }
 
     setTimeout(() => {
@@ -208,12 +223,17 @@ export default class SplashScreen extends React.PureComponent<Props, State> {
   }
 
   render() {
-    const { error } = this.state;
+    const { error, details } = this.state;
+    const { animationHidden, setClientSetting } = this.props;
 
     return (
       <div className="splash">
-        <css-doodle>
-          {`
+        <h1 className="splash__title">LBRY</h1>
+        <div className="splash__details">{details}</div>
+
+        {!animationHidden && (
+          <css-doodle class="doodle">
+            {`
             --color: @p(var(--lbry-teal-1), var(--lbry-orange-1), var(--lbry-cyan-3), var(--lbry-pink-5));
             :doodle {
               @grid: 30x1 / 18vmin;
@@ -246,8 +266,14 @@ export default class SplashScreen extends React.PureComponent<Props, State> {
             }
           )
           `}
-        </css-doodle>
-        <h1 className="splash__title">LBRY</h1>
+          </css-doodle>
+        )}
+        <Button
+          className="splash__controls"
+          button="splash"
+          label={!animationHidden ? __('I feel woosy! Stop spinning!') : 'Spin Spin Sugar'}
+          onClick={() => setClientSetting(SETTINGS.HIDE_SPLASH_ANIMATION, !animationHidden)}
+        />
         {error && (
           <div className="splash__error card card--section">
             <h3>{__('Uh oh. The flux in our Retro Encabulator must be out of whack. Try refreshing to fix it.')}</h3>

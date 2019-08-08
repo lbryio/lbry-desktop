@@ -5,6 +5,7 @@
   align-items: center;
   background-color: var(--color-background);
   display: flex;
+  flex-direction: column;
   justify-content: center;
   overflow: hidden;
 }
@@ -26,9 +27,12 @@
 }
 
 .splash__details {
-  font-weight: 600;
+  position: absolute;
+  font-size: 12px;
   line-height: 1;
-  max-width: 400px;
+  font-weight: 300;
+  color: $lbry-white;
+  margin-top: 2rem;
 }
 
 .splash__title {
@@ -37,10 +41,21 @@
   line-height: 1;
   font-weight: 700;
   color: $lbry-white;
+  margin-top: -1rem;
+}
+
+.splash__controls {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
 }
 
 .splash__error {
   position: absolute;
-  margin-top: 25rem;
+  margin-top: 20rem;
   box-shadow: var(--card-box-shadow) $lbry-gray-5;
+}
+
+.doodle {
+  position: fixed;
 }
