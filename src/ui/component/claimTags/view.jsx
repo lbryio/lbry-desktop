@@ -18,6 +18,11 @@ export default function ClaimTags(props: Props) {
   const numberOfTags = type === 'small' ? SLIM_TAGS : type === 'large' ? LARGE_TAGS : NORMAL_TAGS;
 
   let tagsToDisplay = [];
+
+  if (tags.includes('mature')) {
+    tagsToDisplay.push('mature');
+  }
+
   for (var i = 0; tagsToDisplay.length < numberOfTags - 2; i++) {
     const tag = followedTags[i];
     if (!tag) {
