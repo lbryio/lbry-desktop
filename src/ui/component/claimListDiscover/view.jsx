@@ -106,7 +106,10 @@ function ClaimListDiscover(props: Props) {
         .unix()
     )}`;
   }
-
+  const hasContent =
+    (personalSort === SEARCH_SORT_CHANNELS && subscribedChannels.length) ||
+    (personalSort === SEARCH_SORT_YOU && !!tags.length);
+  console.log('has content', String(hasContent));
   const claimSearchCacheQuery = createNormalizedClaimSearchKey(options);
   const uris = claimSearchByQuery[claimSearchCacheQuery] || [];
   const shouldPerformSearch =
