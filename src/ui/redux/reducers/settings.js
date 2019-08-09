@@ -30,6 +30,7 @@ const defaultState = {
     [SETTINGS.AUTO_DOWNLOAD]: getLocalStorageSetting(SETTINGS.AUTO_DOWNLOAD, true),
     [SETTINGS.OS_NOTIFICATIONS_ENABLED]: Boolean(getLocalStorageSetting(SETTINGS.OS_NOTIFICATIONS_ENABLED, true)),
     [SETTINGS.HIDE_BALANCE]: Boolean(getLocalStorageSetting(SETTINGS.HIDE_BALANCE, false)),
+    [SETTINGS.HIDE_SPLASH_ANIMATION]: Boolean(getLocalStorageSetting(SETTINGS.HIDE_SPLASH_ANIMATION, false)),
   },
   isNight: false,
   languages: { en: 'English', pl: 'Polish', id: 'Bahasa Indonesia' }, // temporarily hard code these so we can advance i18n testing

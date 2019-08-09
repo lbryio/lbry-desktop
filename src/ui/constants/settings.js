@@ -18,3 +18,4 @@ export const OS_NOTIFICATIONS_ENABLED = 'osNotificationsEnabled';
 export const AUTO_DOWNLOAD = 'autoDownload';
 export const SUPPORT_OPTION = 'supportOption';
 export const HIDE_BALANCE = 'hideBalance';
+export const HIDE_SPLASH_ANIMATION = 'hideSplashAnimation';
