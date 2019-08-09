@@ -108,14 +108,16 @@ function ClaimListDiscover(props: Props) {
   }
   const hasContent =
     (personalSort === SEARCH_SORT_CHANNELS && subscribedChannels.length) ||
-    (personalSort === SEARCH_SORT_YOU && !!tags.length);
+    (personalSort === SEARCH_SORT_YOU && !!tags.length) ||
+    personalSort === SEARCH_SORT_ALL;
   console.log('has content', String(hasContent));
   const claimSearchCacheQuery = createNormalizedClaimSearchKey(options);
-  const uris = claimSearchByQuery[claimSearchCacheQuery] || [];
+  const uris = (hasContent && claimSearchByQuery[claimSearchCacheQuery]) || [];
   const shouldPerformSearch =
-    uris.length === 0 ||
-    didNavigateForward ||
-    (!loading && uris.length < PAGE_SIZE * page && uris.length % PAGE_SIZE === 0);
+    hasContent &&
+    (uris.length === 0 ||
+      didNavigateForward ||
+      (!loading && uris.length < PAGE_SIZE * page && uris.length % PAGE_SIZE === 0));
   // Don't use the query from createNormalizedClaimSearchKey for the effect since that doesn't include page & release_time
   const optionsStringForEffect = JSON.stringify(options);
 
