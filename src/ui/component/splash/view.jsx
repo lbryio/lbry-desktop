@@ -153,20 +153,29 @@ export default class SplashScreen extends React.PureComponent<Props, State> {
       }
     } else if (wallet && wallet.blocks_behind > 0) {
       const format = wallet.blocks_behind === 1 ? '%s block behind' : '%s blocks behind';
-      this.setState({
-        message: __('Blockchain Sync'),
-        details: `${__('Catching up...')} (${__(format, wallet.blocks_behind)})`,
-      });
+      // Only show blocks behind if it takes more than a few seconds.
+      setTimeout(() => {
+        this.setState({
+          message: __('Blockchain Sync'),
+          details: `${__('Catching up...')} (${__(format, wallet.blocks_behind)})`,
+        });
+      }, 5000);
       if (this.timeout) {
         clearTimeout(this.timeout);
       }
-    } else if (wallet && wallet.blocks_behind === 0 && !status.is_running && startupStatus.database) {
+    } else if (
+      wallet &&
+      wallet.blocks_behind === 0 &&
+      !wallet.is_locked &&
+      !status.is_running &&
+      startupStatus.database
+    ) {
       // Usually the transaction sync state, there's no status for this yet
       // Only show after user has been waiting 10 seconds
       // https://github.com/lbryio/lbry-sdk/issues/2314
       setTimeout(() => {
         this.setState({
-          message: 'Initializing',
+          message: 'Finalizing',
           details: 'Almost done...',
         });
       }, 10000);
