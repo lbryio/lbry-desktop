@@ -11,7 +11,6 @@ import ModalDownloading from 'modal/modalDownloading';
 import 'css-doodle';
 
 const FORTY_FIVE_SECONDS = 45 * 1000;
-type SetDaemonSettingArg = boolean | string | number;
 
 type Props = {
   checkDaemonVersion: () => Promise<any>,
@@ -24,7 +23,7 @@ type Props = {
     id: string,
   },
   animationHidden: boolean,
-  setClientSetting: (string, SetDaemonSettingArg) => void,
+  setClientSetting: (string, boolean) => void,
 };
 
 type State = {
@@ -147,22 +146,13 @@ export default class SplashScreen extends React.PureComponent<Props, State> {
           message: __('Blockchain Sync'),
           details: `${__('Catching up...')} (${blockchainHeaders.download_progress}%)`,
         });
-        if (this.timeout) {
-          clearTimeout(this.timeout);
-        }
       }
     } else if (wallet && wallet.blocks_behind > 0) {
       const format = wallet.blocks_behind === 1 ? '%s block behind' : '%s blocks behind';
-      // Only show blocks behind if it takes more than a few seconds.
-      setTimeout(() => {
-        this.setState({
-          message: __('Blockchain Sync'),
-          details: `${__('Catching up...')} (${__(format, wallet.blocks_behind)})`,
-        });
-      }, 5000);
-      if (this.timeout) {
-        clearTimeout(this.timeout);
-      }
+      this.setState({
+        message: __('Blockchain Sync'),
+        details: `${__('Catching up...')} (${__(format, wallet.blocks_behind)})`,
+      });
     } else if (
       wallet &&
       wallet.blocks_behind === 0 &&
@@ -170,15 +160,10 @@ export default class SplashScreen extends React.PureComponent<Props, State> {
       !status.is_running &&
       startupStatus.database
     ) {
-      // Usually the transaction sync state, there's no status for this yet
-      // Only show after user has been waiting 10 seconds
-      // https://github.com/lbryio/lbry-sdk/issues/2314
-      setTimeout(() => {
-        this.setState({
-          message: 'Finalizing',
-          details: 'Almost done...',
-        });
-      }, 10000);
+      this.setState({
+        message: 'Finalizing',
+        details: 'Almost ready...',
+      });
     }
 
     setTimeout(() => {
@@ -278,14 +263,15 @@ export default class SplashScreen extends React.PureComponent<Props, State> {
           </css-doodle>
         )}
         <Button
-          className="splash__controls"
-          button="splash"
-          label={!animationHidden ? __('I feel woosy! Stop spinning!') : 'Spin Spin Sugar'}
+          className="splash__animation-toggle"
+          label={!animationHidden ? __('I feel woosy! Stop spinning!') : __('Spin Spin Sugar')}
           onClick={() => setClientSetting(SETTINGS.HIDE_SPLASH_ANIMATION, !animationHidden)}
         />
         {error && (
           <div className="splash__error card card--section">
-            <h3>{__('Uh oh. The flux in our Retro Encabulator must be out of whack. Try refreshing to fix it.')}</h3>
+            <p className="card__subtitle">
+              {__('Uh oh. The flux in our Retro Encabulator must be out of whack. Try refreshing to fix it.')}
+            </p>
             <div className="card__actions--top-space card__actions--center">
               <Button button="primary" label={__('Refresh')} onClick={() => window.location.reload()} />
             </div>

@@ -31,14 +31,11 @@
 }
 
 .button--primary,
-.button--inverse,
-.button--splash {
+.button--inverse {
   height: var(--button-height);
   border-radius: var(--button-radius);
   padding-top: 0;
   padding-bottom: 0;
-  padding-right: 1em;
-  padding-left: 1em;
   box-sizing: border-box;
 }
 
@@ -49,21 +46,6 @@
   &:hover {
     color: $lbry-white;
     background-color: $lbry-teal-4;
-    .icon {
-      stroke: $lbry-white;
-    }
-  }
-}
-
-.button--splash {
-  border-color: $lbry-white;
-  color: $lbry-white;
-  background-color: rgba($lbry-white, 0.2);
-  font-size: var(--font-label);
-
-  &:hover {
-    color: $lbry-white;
-    background-color: rgba($lbry-white, 0.5);
     .icon {
       stroke: $lbry-white;
     }

@@ -70,7 +70,6 @@ const Button = forwardRef<any, {}>((props: Props, ref: any) => {
           'button--disabled': disabled,
           'button--link': button === 'link',
           'button--constrict': constrict,
-          'button--splash': button === 'splash',
         }
       : 'button--no-style',
     className

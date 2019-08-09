@@ -10,11 +10,6 @@
   overflow: hidden;
 }
 
-// .splash__actions {
-//   margin-top: var(--spacing-medium);
-//   align-items: center;
-// }
-
 .splash__button {
   border-bottom: 1px solid $lbry-white;
   color: $lbry-white;
@@ -28,7 +23,6 @@
 
 .splash__details {
   position: absolute;
-  font-size: 12px;
   line-height: 1;
   font-weight: 300;
   color: $lbry-white;
@@ -44,10 +38,23 @@
   margin-top: -1rem;
 }
 
-.splash__controls {
+.splash__animation-toggle {
   position: fixed;
-  bottom: 30px;
-  right: 30px;
+  bottom: var(--spacing-large);
+  right: var(--spacing-large);
+  padding: var(--spacing-medium);
+  border-color: $lbry-white;
+  color: $lbry-white;
+  background-color: rgba($lbry-white, 0.2);
+  font-size: var(--font-label);
+
+  &:hover {
+    color: $lbry-white;
+    background-color: rgba($lbry-white, 0.5);
+    .icon {
+      stroke: $lbry-white;
+    }
+  }
 }
 
 .splash__error {
