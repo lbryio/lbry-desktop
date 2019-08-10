@@ -14,6 +14,7 @@ import ChannelAbout from 'component/channelAbout';
 import ChannelThumbnail from 'component/channelThumbnail';
 import ChannelEdit from 'component/channelEdit';
 import ClaimUri from 'component/claimUri';
+import TipButton from 'component/tipButton';
 import * as ICONS from 'constants/icons';
 import classnames from 'classnames';
 
@@ -113,6 +114,7 @@ function ChannelPage(props: Props) {
             <Tab disabled={editing}>{__('Content')}</Tab>
             <Tab>{editing ? __('Editing Your Channel') : __('About')}</Tab>
             <div className="card__actions--inline">
+              <TipButton uri={uri} channelIsMine={channelIsMine} />
               <ShareButton uri={uri} />
               {!channelIsBlocked && <SubscribeButton uri={permanentUrl} />}
               {!isSubscribed && <BlockButton uri={permanentUrl} />}
