@@ -1,15 +1,13 @@
 FROM node:10
+EXPOSE 1337
 
-RUN apt-get update -y && apt-get upgrade -y && apt-get install libsecret-1-0 -y
+RUN yarn -v && npm -v
+RUN apt-get update -y && apt-get upgrade -y && apt-get install -y libsecret-1-0 libsecret-1-dev
 
 WORKDIR /app
+ENV PATH="/app/node_modules/.bin:${PATH}"
+
 COPY ./ ./
 
-ENV APP_ENV=web
-ENV NODE_ENV=production
-ENV SDK_API_URL='https://api.dev.lbry.tv/api/proxy'
-
-RUN rm -rf package-lock.json
-RUN rm -rf node_modules && APP_ENV=web yarn
-RUN yarn compile:web --display errors-only && rm -rf node_modules
+RUN rm -rf node_modules && APP_ENV=web yarn && SDK_API_URL='https://api.dev.lbry.tv/api/proxy' NODE_ENV=production yarn compile:web --display errors-only
 CMD node ./dist/web/server.js
