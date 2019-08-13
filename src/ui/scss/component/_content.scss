@@ -41,21 +41,6 @@
   .button {
     position: relative;
     margin-left: var(--spacing-small);
-
-    .icon:not(:hover) {
-      [data-mode='dark'] & {
-        stroke: $lbry-black;
-      }
-    }
-  }
-}
-
-.content__hide-viewer {
-  background-color: $lbry-white;
-  stroke: $lbry-black;
-
-  &:hover {
-    background-color: $lbry-teal-5;
   }
 }
 

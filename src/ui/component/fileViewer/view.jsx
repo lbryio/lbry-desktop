@@ -119,10 +119,10 @@ export default function FileViewer(props: Props) {
           {!inline && (
             <div className="content__actions">
               <Tooltip label={__('View File')}>
-                <Button navigate={uri} icon={ICONS.VIEW} button="close" className="content__hide-viewer" />
+                <Button navigate={uri} icon={ICONS.VIEW} button="primary" />
               </Tooltip>
               <Tooltip label={__('Close')}>
-                <Button onClick={clearPlayingUri} icon={ICONS.REMOVE} button="close" className="content__hide-viewer" />
+                <Button onClick={clearPlayingUri} icon={ICONS.REMOVE} button="primary" />
               </Tooltip>
             </div>
           )}
