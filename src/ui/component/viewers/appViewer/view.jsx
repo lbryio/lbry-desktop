@@ -40,7 +40,10 @@ function AppViewer(props: Props) {
   return (
     <div className="file-render__viewer">
       {!appUrl && (
-        <LoadingScreen status={loading ? __('Almost there') : __('Unable to view this file')} spinner={loading} />
+        <LoadingScreen
+          status={loading ? __('Almost there') : __('Unable to view this file in the app')}
+          spinner={loading}
+        />
       )}
       {appUrl && (
         <webview

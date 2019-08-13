@@ -193,3 +193,12 @@
   @extend .card__title;
   justify-content: space-between;
 }
+
+.card__media--nsfw {
+  background-color: $lbry-grape-3;
+}
+
+.card__media--disabled {
+  opacity: 0.5;
+  pointer-events: none;
+}

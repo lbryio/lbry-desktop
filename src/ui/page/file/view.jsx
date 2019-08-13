@@ -3,7 +3,7 @@ import * as MODALS from 'constants/modal_types';
 import * as icons from 'constants/icons';
 import * as React from 'react';
 import { buildURI, normalizeURI } from 'lbry-redux';
-import FileViewer from 'component/fileViewer';
+import FileViewerInitiator from 'component/fileViewerInitiator';
 import FilePrice from 'component/filePrice';
 import FileDetails from 'component/fileDetails';
 import FileActions from 'component/fileActions';
@@ -18,6 +18,8 @@ import CommentsList from 'component/commentsList';
 import CommentCreate from 'component/commentCreate';
 import ClaimUri from 'component/claimUri';
 import ClaimPreview from 'component/claimPreview';
+
+export const FILE_WRAPPER_CLASS = 'grid-area--content';
 
 type Props = {
   claim: StreamClaim,
@@ -149,7 +151,7 @@ class FilePage extends React.Component<Props> {
 
     return (
       <Page className="main--file-page">
-        <div className="grid-area--content card">
+        <div className={`card ${FILE_WRAPPER_CLASS}`}>
           {!fileInfo && insufficientCredits && (
             <div className="media__insufficient-credits help--warning">
               {__(
@@ -159,7 +161,7 @@ class FilePage extends React.Component<Props> {
               {__('or send more LBC to your wallet.')}
             </div>
           )}
-          <FileViewer uri={uri} insufficientCredits={insufficientCredits} />
+          <FileViewerInitiator uri={uri} insufficientCredits={insufficientCredits} />
         </div>
 
         <div className="columns">

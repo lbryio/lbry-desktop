@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import * as settings from 'constants/settings';
-import { selectRewardContentClaimIds, selectPlayingUri } from 'redux/selectors/content';
+import { selectRewardContentClaimIds } from 'redux/selectors/content';
 import { doRemoveUnreadSubscription } from 'redux/actions/subscriptions';
 import { doSetClientSetting } from 'redux/actions/settings';
 import { doSetContentHistoryItem } from 'redux/actions/content';
@@ -32,9 +32,7 @@ const select = (state, props) => ({
   obscureNsfw: !selectShowMatureContent(state),
   fileInfo: makeSelectFileInfoForUri(props.uri)(state),
   rewardedContentClaimIds: selectRewardContentClaimIds(state, props),
-  playingUri: selectPlayingUri(state),
   claimIsMine: makeSelectClaimIsMine(props.uri)(state),
-  autoplay: makeSelectClientSetting(settings.AUTOPLAY)(state),
   isSubscribed: makeSelectIsSubscribed(props.uri)(state),
   channelUri: makeSelectChannelForClaimUri(props.uri, true)(state),
   viewCount: makeSelectViewCountForUri(props.uri)(state),

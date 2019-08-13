@@ -19,3 +19,4 @@ export const AUTO_DOWNLOAD = 'autoDownload';
 export const SUPPORT_OPTION = 'supportOption';
 export const HIDE_BALANCE = 'hideBalance';
 export const HIDE_SPLASH_ANIMATION = 'hideSplashAnimation';
+export const FLOATING_PLAYER = 'floatingPlayer';

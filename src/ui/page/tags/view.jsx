@@ -1,5 +1,5 @@
 // @flow
-import React, { createRef } from 'react';
+import React, { useRef } from 'react';
 import Page from 'component/page';
 import ClaimListDiscover from 'component/claimListDiscover';
 import Button from 'component/button';
@@ -18,7 +18,7 @@ function TagsPage(props: Props) {
     followedTags,
     doToggleTagFollow,
   } = props;
-  const buttonRef = createRef();
+  const buttonRef = useRef();
   const isHovering = useHover(buttonRef);
 
   const urlParams = new URLSearchParams(search);

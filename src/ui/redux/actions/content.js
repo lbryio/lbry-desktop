@@ -22,6 +22,7 @@ import {
   doPurchaseUri,
   makeSelectUriIsStreamable,
   selectDownloadingByOutpoint,
+  makeSelectClaimForUri,
 } from 'lbry-redux';
 import { makeSelectCostInfoForUri } from 'lbryinc';
 import { makeSelectClientSetting, selectosNotificationsEnabled, selectDaemonSettings } from 'redux/selectors/settings';
@@ -89,7 +90,7 @@ export function doUpdateLoadStatus(uri: string, outpoint: string) {
           // If notifications are disabled(false) just return
           if (!selectosNotificationsEnabled(getState()) || !fileInfo.written_bytes) return;
 
-          const notif = new window.Notification('LBRY Download Complete', {
+          const notif = new window.Notification(__('LBRY Download Complete'), {
             body: fileInfo.metadata.title,
             silent: false,
           });
@@ -194,9 +195,6 @@ export function doPurchaseUriWrapper(uri: string, cost: number, saveFile: boolea
 
 export function doPlayUri(uri: string, skipCostCheck: boolean = false, saveFileOverride: boolean = false) {
   return (dispatch: Dispatch, getState: () => any) => {
-    // Set the active playing uri so we can avoid showing error notifications if a previously started download fails
-    dispatch(doSetPlayingUri(uri));
-
     const state = getState();
     const fileInfo = makeSelectFileInfoForUri(uri)(state);
     const uriIsStreamable = makeSelectUriIsStreamable(uri)(state);
@@ -243,8 +241,13 @@ export function doPlayUri(uri: string, skipCostCheck: boolean = false, saveFileO
   };
 }
 
-export function savePosition(claimId: string, outpoint: string, position: number) {
-  return (dispatch: Dispatch) => {
+export function savePosition(uri: string, position: number) {
+  return (dispatch: Dispatch, getState: () => any) => {
+    const state = getState();
+    const claim = makeSelectClaimForUri(uri)(state);
+    const { claim_id: claimId, txid, nout } = claim;
+    const outpoint = `${txid}:${nout}`;
+
     dispatch({
       type: ACTIONS.SET_CONTENT_POSITION,
       data: { claimId, outpoint, position },

@@ -35,8 +35,10 @@ class CodeViewer extends React.PureComponent<Props> {
     const me = this;
     const { theme, contentType } = me.props;
     // Init CodeMirror
-    import(/* webpackChunkName: "codemirror" */
-    'codemirror/lib/codemirror').then(CodeMirror => {
+    import(
+      /* webpackChunkName: "codemirror" */
+      'codemirror/lib/codemirror'
+    ).then(CodeMirror => {
       me.codeMirror = CodeMirror.fromTextArea(me.textarea, {
         // Auto detect syntax with file contentType
         mode: contentType,
@@ -62,7 +64,7 @@ class CodeViewer extends React.PureComponent<Props> {
   render() {
     const { value } = this.props;
     return (
-      <div className="code-viewer" onContextMenu={stopContextMenu}>
+      <div className="file-render__content" onContextMenu={stopContextMenu}>
         <textarea ref={textarea => (this.textarea = textarea)} disabled value={value} />
       </div>
     );

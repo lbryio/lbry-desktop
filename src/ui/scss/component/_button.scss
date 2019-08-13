@@ -81,11 +81,11 @@
   right: var(--spacing-miniscule);
   padding: 0.3rem;
   transition: all var(--transition-duration) var(--transition-style);
+  border-radius: var(--card-radius);
 
   &:hover {
     background-color: $lbry-black;
     color: $lbry-white;
-    border-radius: var(--card-radius);
   }
 }
 

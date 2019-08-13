@@ -1,15 +1,17 @@
 // @flow
-import React, { Fragment, useEffect, useCallback } from 'react';
+import * as ICONS from 'constants/icons';
+import React, { useEffect } from 'react';
+import Button from 'component/button';
 import classnames from 'classnames';
 import LoadingScreen from 'component/common/loading-screen';
-import Button from 'component/button';
 import FileRender from 'component/fileRender';
-import isUserTyping from 'util/detect-typing';
-
-const SPACE_BAR_KEYCODE = 32;
+import UriIndicator from 'component/uriIndicator';
+import usePersistedState from 'util/use-persisted-state';
+import { FILE_WRAPPER_CLASS } from 'page/file/view';
+import Draggable from 'react-draggable';
+import Tooltip from 'component/common/tooltip';
 
 type Props = {
-  play: (string, boolean) => void,
   mediaType: string,
   isLoading: boolean,
   isPlaying: boolean,
@@ -20,87 +22,122 @@ type Props = {
   isStreamable: boolean,
   thumbnail?: string,
   streamingUrl?: string,
+  floatingPlayer: boolean,
+  pageUri: ?string,
+  title: ?string,
+  floatingPlayerEnabled: boolean,
+  clearPlayingUri: () => void,
 };
 
 export default function FileViewer(props: Props) {
   const {
-    play,
-    mediaType,
     isPlaying,
     fileInfo,
     uri,
-    obscurePreview,
-    insufficientCredits,
-    thumbnail,
     streamingUrl,
     isStreamable,
+    pageUri,
+    title,
+    clearPlayingUri,
+    floatingPlayerEnabled,
   } = props;
+  const [fileViewerRect, setFileViewerRect] = usePersistedState('inline-file-viewer:rect');
+  const [position, setPosition] = usePersistedState('floating-file-viewer:position', {
+    x: -25,
+    y: window.innerHeight - 400,
+  });
 
-  const isPlayable = ['audio', 'video'].indexOf(mediaType) !== -1;
-  const fileStatus = fileInfo && fileInfo.status;
-  const isReadyToPlay = (isStreamable && streamingUrl) || (fileInfo && fileInfo.completed);
+  const inline = pageUri === uri;
+  const isReadyToPlay = (IS_WEB && isStreamable) || (isStreamable && streamingUrl) || (fileInfo && fileInfo.completed);
   const loadingMessage =
     !isStreamable && fileInfo && fileInfo.blobs_completed >= 1 && (!fileInfo.download_path || !fileInfo.written_bytes)
       ? __("It looks like you deleted or moved this file. We're rebuilding it now. It will only take a few seconds.")
       : __('Loading');
 
-  // Wrap this in useCallback because we need to use it to the keyboard effect
-  // If we don't a new instance will be created for every render and react will think the dependencies have change, which will add/remove the listener for every render
-  const viewFile = useCallback(
-    (e: SyntheticInputEvent<*> | KeyboardEvent) => {
-      e.stopPropagation();
-
-      // Check for user setting here
-      const saveFile = !isStreamable;
-
-      play(uri, saveFile);
-    },
-    [play, uri, isStreamable]
-  );
+  function handleDrag(e, ui) {
+    const { x, y } = position;
+    const newX = x + ui.deltaX;
+    const newY = y + ui.deltaY;
+    setPosition({
+      x: newX,
+      y: newY,
+    });
+  }
 
   useEffect(() => {
-    // This is just for beginning to download a file
-    // Play/Pause/Fullscreen will be handled by the respective viewers because not every file type should behave the same
-    function handleKeyDown(e: KeyboardEvent) {
-      if (!isUserTyping() && e.keyCode === SPACE_BAR_KEYCODE) {
-        e.preventDefault();
-
-        if (!isPlaying || fileStatus === 'stopped') {
-          viewFile(e);
-        }
+    function handleResize() {
+      const element = document.querySelector(`.${FILE_WRAPPER_CLASS}`);
+      if (!element) {
+        throw new Error("Can't find file viewer wrapper to attach to");
       }
+
+      const rect = element.getBoundingClientRect();
+      // @FlowFixMe
+      setFileViewerRect(rect);
     }
 
-    window.addEventListener('keydown', handleKeyDown);
-    return () => {
-      window.removeEventListener('keydown', handleKeyDown);
-    };
-  }, [isPlaying, fileStatus, viewFile]);
+    if (inline) {
+      handleResize();
+      window.addEventListener('resize', handleResize);
+      return () => {
+        window.removeEventListener('resize', handleResize);
+      };
+    }
+  }, [setFileViewerRect, inline]);
+
+  const hidePlayer = !isPlaying || !uri || (!inline && (!floatingPlayerEnabled || !isStreamable));
+  if (hidePlayer) {
+    clearPlayingUri();
+    return null;
+  }
 
   return (
-    <div
-      onClick={viewFile}
-      style={!obscurePreview && thumbnail ? { backgroundImage: `url("${thumbnail}")` } : {}}
-      className={classnames('video content__cover content__embedded', {
-        'card__media--nsfw': obscurePreview,
-        'card__media--disabled': !fileInfo && insufficientCredits,
-      })}
+    <Draggable
+      onDrag={handleDrag}
+      defaultPosition={position}
+      position={inline ? { x: 0, y: 0 } : position}
+      bounds="parent"
+      disabled={inline}
+      handle=".content__info"
+      cancel=".button"
     >
-      {isPlaying && (
-        <Fragment>{isReadyToPlay ? <FileRender uri={uri} /> : <LoadingScreen status={loadingMessage} />}</Fragment>
-      )}
-
-      {!isPlaying && (
-        <Button
-          onClick={viewFile}
-          iconSize={30}
-          title={isPlayable ? __('Play') : __('View')}
-          className={classnames('button--icon', {
-            'button--play': isPlayable,
-            'button--view': !isPlayable,
+      <div
+        className={classnames('content__viewer', {
+          'content__viewer--floating': !inline,
+        })}
+        style={
+          inline && fileViewerRect
+            ? { width: fileViewerRect.width, height: fileViewerRect.height, left: fileViewerRect.x }
+            : {}
+        }
+      >
+        <div
+          className={classnames('content__wrapper', {
+            'content__wrapper--floating': !inline,
           })}
-        />
-      )}
-    </div>
+        >
+          {!inline && (
+            <div className="content__actions">
+              <Tooltip label={__('View File')}>
+                <Button navigate={uri} icon={ICONS.VIEW} button="close" className="content__hide-viewer" />
+              </Tooltip>
+              <Tooltip label={__('Close')}>
+                <Button onClick={clearPlayingUri} icon={ICONS.REMOVE} button="close" className="content__hide-viewer" />
+              </Tooltip>
+            </div>
+          )}
+
+          {isReadyToPlay ? <FileRender uri={uri} /> : <LoadingScreen status={loadingMessage} />}
+          {!inline && (
+            <div className="content__info">
+              <div className="claim-preview-title" title={title || uri}>
+                {title || uri}
+              </div>
+              <UriIndicator link addTooltip={false} uri={uri} />
+            </div>
+          )}
+        </div>
+      </div>
+    </Draggable>
   );
 }

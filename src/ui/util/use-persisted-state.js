@@ -4,13 +4,19 @@ export default function usePersistedState(key, firstTimeDefault) {
   // If no key is passed in, act as a normal `useState`
   let defaultValue;
   if (key) {
-    const item = localStorage.getItem(key);
-    if (item === 'true') {
-      defaultValue = true;
-    } else if (item === 'false') {
-      defaultValue = false;
-    } else {
-      defaultValue = item;
+    let item = localStorage.getItem(key);
+
+    if (item) {
+      let parsedItem;
+      try {
+        parsedItem = JSON.parse(item);
+      } catch (e) {}
+
+      if (parsedItem) {
+        defaultValue = parsedItem;
+      } else {
+        defaultValue = item;
+      }
     }
   }
 
@@ -22,7 +28,7 @@ export default function usePersistedState(key, firstTimeDefault) {
 
   useEffect(() => {
     if (key) {
-      localStorage.setItem(key, value);
+      localStorage.setItem(key, typeof value === 'object' ? JSON.stringify(value) : value);
     }
   }, [key, value]);
 

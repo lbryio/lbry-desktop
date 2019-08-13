@@ -14,7 +14,10 @@ const perform = dispatch => ({
     dispatch(doHideModal());
   },
   closeModal: () => dispatch(doHideModal()),
-  loadVideo: uri => dispatch(doPlayUri(uri, true)),
+  loadVideo: uri => {
+    dispatch(doSetPlayingUri(uri));
+    dispatch(doPlayUri(uri, true));
+  },
 });
 
 export default connect(

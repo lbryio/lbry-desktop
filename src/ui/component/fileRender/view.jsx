@@ -94,8 +94,11 @@ class FileRender extends React.PureComponent<Props> {
 
   renderViewer() {
     const { mediaType, currentTheme, claim, contentType, downloadPath, fileName, streamingUrl, uri } = this.props;
-
     const fileType = fileName && path.extname(fileName).substring(1);
+
+    // Ideally the lbrytv api server would just replace the streaming_url returned by the sdk so we don't need this check
+    // https://github.com/lbryio/lbrytv/issues/51
+    const source = IS_WEB ? `https://api.lbry.tv/content/claims/${claim.name}/${claim.claim_id}/stream` : streamingUrl;
 
     // Human-readable files (scripts and plain-text files)
     const readableFiles = ['text', 'document', 'script'];
@@ -108,17 +111,19 @@ class FileRender extends React.PureComponent<Props> {
       application: <AppViewer uri={uri} />,
       // @endif
 
-      video: <VideoViewer source={streamingUrl} contentType={contentType} />,
-      audio: <VideoViewer source={streamingUrl} contentType={contentType} />,
-      image: <ImageViewer source={streamingUrl} />,
+      video: <VideoViewer uri={uri} source={source} contentType={contentType} />,
+      audio: <VideoViewer uri={uri} source={source} contentType={contentType} />,
+      image: <ImageViewer uri={uri} source={source} />,
       // Add routes to viewer...
     };
 
     // Supported fileType
     const fileTypes = {
+      // @if TARGET='app'
       pdf: <PdfViewer source={downloadPath} />,
       docx: <DocxViewer source={downloadPath} />,
       html: <HtmlViewer source={downloadPath} />,
+      // @endif
       // Add routes to viewer...
     };
 
@@ -151,7 +156,7 @@ class FileRender extends React.PureComponent<Props> {
     // @endif
 
     // Message Error
-    const unsupportedMessage = __("We can't preview this file.");
+    const unsupportedMessage = __("Sorry, we can't preview this file.");
     const unsupported = <LoadingScreen status={unsupportedMessage} spinner={false} />;
 
     // Return viewer

@@ -1,7 +1,7 @@
 // @flow
 import React, { useEffect, useRef } from 'react';
 import analytics from 'analytics';
-import { Lbry } from 'lbry-redux';
+import { Lbry, buildURI } from 'lbry-redux';
 import Router from 'component/router/index';
 import ModalRouter from 'modal/modalRouter';
 import ReactModal from 'react-modal';
@@ -10,6 +10,8 @@ import Header from 'component/header';
 import { openContextMenu } from 'util/context-menu';
 import useKonamiListener from 'util/enhanced-layout';
 import Yrbl from 'component/yrbl';
+import FileViewer from 'component/fileViewer';
+import { withRouter } from 'react-router';
 
 export const MAIN_WRAPPER_CLASS = 'main-wrapper';
 
@@ -20,6 +22,7 @@ type Props = {
   theme: string,
   accessToken: ?string,
   user: ?{ id: string, has_verified_email: boolean },
+  location: { pathname: string },
   fetchRewards: () => void,
   fetchRewardedContent: () => void,
   fetchTransactions: () => void,
@@ -33,6 +36,18 @@ function App(props: Props) {
   const userId = user && user.id;
   const hasVerifiedEmail = user && user.has_verified_email;
 
+  const { pathname } = props.location;
+  const urlParts = pathname.split('/');
+  const claimName = urlParts[1];
+  const claimId = urlParts[2];
+
+  // @routingfixme
+  // claimName and claimId come from the url `{domain}/{claimName}/{claimId}"
+  let uri;
+  try {
+    uri = buildURI({ contentName: claimName, claimId: claimId });
+  } catch (e) {}
+
   useEffect(() => {
     ReactModal.setAppElement(appRef.current);
     fetchAccessToken();
@@ -42,7 +57,7 @@ function App(props: Props) {
     fetchRewards();
     fetchTransactions();
     // @endif
-  }, [fetchRewards, fetchRewardedContent, fetchTransactions]);
+  }, [fetchRewards, fetchRewardedContent, fetchTransactions, fetchAccessToken]);
 
   useEffect(() => {
     // $FlowFixMe
@@ -73,9 +88,11 @@ function App(props: Props) {
       </div>
 
       <ModalRouter />
+      <FileViewer pageUri={uri} />
+
       {isEnhancedLayout && <Yrbl className="yrbl--enhanced" />}
     </div>
   );
 }
 
-export default App;
+export default withRouter(App);

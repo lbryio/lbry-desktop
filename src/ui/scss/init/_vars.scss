@@ -20,10 +20,12 @@ $large-breakpoint: 1921px;
   --file-page-max-width: 1787px;
   --file-max-height: 788px;
   --file-max-width: 1400px;
-  --video-aspect-ratio: 56.25%; // 9 x 16
+  --floating-viewer-width: 32rem;
+  --floating-viewer-height: 18rem; // 32 * 9/16
+  --floating-viewer-info-height: 5rem;
+  --floating-viewer-container-height: calc(var(--floating-viewer-height) + var(--floating-viewer-info-height));
 
   // Font
-
   --font-multiplier-small: 0.9em;
   --font-multiplier-medium: 1.1em;
   --font-multiplier-large: 1.4em;

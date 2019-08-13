@@ -28,7 +28,7 @@ class PdfViewer extends React.PureComponent<Props> {
     shell.openExternal(path);
     // @endif
     // @if TARGET='web'
-    console.error('provide stub for shell.openExternal');
+    console.error('provide stub for shell.openExternal'); // eslint-disable-line
     // @endif
   }
 
@@ -37,7 +37,7 @@ class PdfViewer extends React.PureComponent<Props> {
     // This was disabled on electron@3
     // https://github.com/electron/electron/issues/12337
     return (
-      <div className="file-render__viewer file-render--pdf" onContextMenu={stopContextMenu}>
+      <div className="file-render__viewer--pdf" onContextMenu={stopContextMenu}>
         <p>
           {__('PDF opened externally.')} <Button button="link" label={__('Click here')} onClick={this.openFile} />{' '}
           {__('to open it again.')}
