@@ -27,7 +27,9 @@ const select = (state, props) => ({
 const perform = dispatch => ({
   play: uri => {
     dispatch(doSetPlayingUri(uri));
+    // @if TARGET='app'
     dispatch(doPlayUri(uri));
+    // @endif
   },
 });
 
