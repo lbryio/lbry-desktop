@@ -17,15 +17,15 @@ import {
   buildURI,
   makeSelectFileInfoForUri,
   selectFileInfosByOutpoint,
-  selectDownloadingByOutpoint,
-  selectBalance,
   makeSelectChannelForClaimUri,
   parseURI,
-  doError,
+  doPurchaseUri,
+  makeSelectUriIsStreamable,
+  selectDownloadingByOutpoint,
+  makeSelectClaimForUri,
 } from 'lbry-redux';
 import { makeSelectCostInfoForUri } from 'lbryinc';
-import { makeSelectClientSetting, selectosNotificationsEnabled } from 'redux/selectors/settings';
-import analytics from 'analytics';
+import { makeSelectClientSetting, selectosNotificationsEnabled, selectDaemonSettings } from 'redux/selectors/settings';
 import { formatLbryUriForWeb } from 'util/uri';
 
 const DOWNLOAD_POLL_INTERVAL = 250;
@@ -88,9 +88,9 @@ export function doUpdateLoadStatus(uri: string, outpoint: string) {
           dispatch(doUpdateUnreadSubscriptions(channelUri, null, NOTIFICATION_TYPES.DOWNLOADED));
         } else {
           // If notifications are disabled(false) just return
-          if (!selectosNotificationsEnabled(getState())) return;
+          if (!selectosNotificationsEnabled(getState()) || !fileInfo.written_bytes) return;
 
-          const notif = new window.Notification('LBRY Download Complete', {
+          const notif = new window.Notification(__('LBRY Download Complete'), {
             body: fileInfo.metadata.title,
             silent: false,
           });
@@ -123,165 +123,12 @@ export function doUpdateLoadStatus(uri: string, outpoint: string) {
   // @endif
 }
 
-export function doStartDownload(uri: string, outpoint: string) {
-  return (dispatch: Dispatch, getState: GetState) => {
-    const state = getState();
-
-    if (!outpoint) {
-      throw new Error('outpoint is required to begin a download');
-    }
-
-    const { downloadingByOutpoint = {} } = state.fileInfo;
-
-    if (downloadingByOutpoint[outpoint]) return;
-
-    Lbry.file_list({ outpoint, full_status: true }).then(([fileInfo]) => {
-      dispatch({
-        type: ACTIONS.DOWNLOADING_STARTED,
-        data: {
-          uri,
-          outpoint,
-          fileInfo,
-        },
-      });
-
-      dispatch(doUpdateLoadStatus(uri, outpoint));
-    });
-  };
-}
-
-export function doDownloadFile(uri: string, streamInfo: { outpoint: string }) {
-  return (dispatch: Dispatch) => {
-    dispatch(doStartDownload(uri, streamInfo.outpoint));
-  };
-}
-
 export function doSetPlayingUri(uri: ?string) {
   return (dispatch: Dispatch) => {
     dispatch({
       type: ACTIONS.SET_PLAYING_URI,
       data: { uri },
     });
-  };
-}
-
-function handleLoadVideoError(uri: string, errorType: string = '') {
-  return (dispatch: Dispatch, getState: GetState) => {
-    // suppress error when another media is playing
-    const { playingUri } = getState().content;
-    const errorText = typeof errorType === 'object' ? errorType.message : errorType;
-    if (playingUri && playingUri === uri) {
-      dispatch({
-        type: ACTIONS.LOADING_VIDEO_FAILED,
-        data: { uri },
-      });
-      dispatch(doSetPlayingUri(null));
-      // this is not working, but should be it's own separate modal in the future (https://github.com/lbryio/lbry-desktop/issues/892)
-      if (errorType === 'timeout') {
-        doOpenModal(MODALS.FILE_TIMEOUT, { uri });
-      } else {
-        dispatch(
-          doError(
-            `Failed to download ${uri}, please try again or see error details:\n\n${errorText}\n\nIf this problem persists, visit https://lbry.com/support for help. `
-          )
-        );
-      }
-    }
-  };
-}
-
-export function doLoadVideo(uri: string, shouldRecordViewEvent: boolean = false) {
-  return (dispatch: Dispatch) => {
-    dispatch({
-      type: ACTIONS.LOADING_VIDEO_STARTED,
-      data: {
-        uri,
-      },
-    });
-
-    Lbry.get({ uri })
-      .then(streamInfo => {
-        // need error code from SDK to capture properly
-        const timeout = streamInfo === null || typeof streamInfo !== 'object' || streamInfo.error === 'Timeout';
-
-        if (timeout) {
-          dispatch(handleLoadVideoError(uri, 'timeout'));
-        } else {
-          dispatch(doDownloadFile(uri, streamInfo));
-
-          if (shouldRecordViewEvent) {
-            analytics.apiLogView(
-              `${streamInfo.claim_name}#${streamInfo.claim_id}`,
-              streamInfo.outpoint,
-              streamInfo.claim_id
-            );
-          }
-        }
-      })
-      .catch(error => {
-        dispatch(handleLoadVideoError(uri, error));
-      });
-  };
-}
-
-export function doPurchaseUri(uri: string, specificCostInfo?: ?{}, shouldRecordViewEvent?: boolean = false) {
-  return (dispatch: Dispatch, getState: GetState) => {
-    const state = getState();
-    const balance = selectBalance(state);
-    const fileInfo = makeSelectFileInfoForUri(uri)(state);
-    const downloadingByOutpoint = selectDownloadingByOutpoint(state);
-    const alreadyDownloading = fileInfo && !!downloadingByOutpoint[fileInfo.outpoint];
-
-    function attemptPlay(cost, instantPurchaseMax = null) {
-      // If you have a file entry with correct manifest, you won't pay for the key fee again
-      if (cost > 0 && (!instantPurchaseMax || cost > instantPurchaseMax) && !fileInfo) {
-        dispatch(doOpenModal(MODALS.AFFIRM_PURCHASE, { uri }));
-      } else {
-        dispatch(doLoadVideo(uri, shouldRecordViewEvent));
-      }
-    }
-
-    // we already fully downloaded the file.
-    if (fileInfo && fileInfo.completed) {
-      // If path is null or bytes written is 0 means the user has deleted/moved the
-      // file manually on their file system, so we need to dispatch a
-      // doLoadVideo action to reconstruct the file from the blobs
-      if (!fileInfo.download_path || !fileInfo.written_bytes) {
-        dispatch(doLoadVideo(uri, shouldRecordViewEvent));
-      }
-
-      Promise.resolve();
-      return;
-    }
-
-    // we are already downloading the file
-    if (alreadyDownloading) {
-      Promise.resolve();
-      return;
-    }
-
-    const costInfo = makeSelectCostInfoForUri(uri)(state) || specificCostInfo;
-    const { cost } = costInfo;
-
-    if (cost > balance) {
-      dispatch(doSetPlayingUri(null));
-      Promise.resolve();
-      return;
-    }
-
-    if (cost === 0 || !makeSelectClientSetting(SETTINGS.INSTANT_PURCHASE_ENABLED)(state)) {
-      attemptPlay(cost);
-    } else {
-      const instantPurchaseMax = makeSelectClientSetting(SETTINGS.INSTANT_PURCHASE_MAX)(state);
-      if (instantPurchaseMax.currency === 'LBC') {
-        attemptPlay(cost, instantPurchaseMax.amount);
-      } else {
-        // Need to convert currency of instant purchase maximum before trying to play
-        Lbryapi.getExchangeRates().then(({ LBC_USD }) => {
-          attemptPlay(cost, instantPurchaseMax.amount / LBC_USD);
-        });
-      }
-    }
   };
 }
 
@@ -334,17 +181,73 @@ export function doFetchClaimsByChannel(uri: string, page: number = 1, pageSize: 
   };
 }
 
-export function doPlayUri(uri: string) {
-  return (dispatch: Dispatch) => {
-    dispatch(doSetPlayingUri(uri));
-    // @if TARGET='app'
-    dispatch(doPurchaseUri(uri));
-    // @endif
+export function doPurchaseUriWrapper(uri: string, cost: number, saveFile: boolean) {
+  return (dispatch: Dispatch, getState: () => any) => {
+    function onSuccess(fileInfo) {
+      dispatch(doUpdateLoadStatus(uri, fileInfo.outpoint));
+    }
+
+    // Only pass the sucess callback if we are saving the file, otherwise we don't show the download percentage
+    const successCallBack = saveFile ? onSuccess : undefined;
+    dispatch(doPurchaseUri(uri, { costInfo: cost }, saveFile, successCallBack));
   };
 }
 
-export function savePosition(claimId: string, outpoint: string, position: number) {
-  return (dispatch: Dispatch) => {
+export function doPlayUri(uri: string, skipCostCheck: boolean = false, saveFileOverride: boolean = false) {
+  return (dispatch: Dispatch, getState: () => any) => {
+    const state = getState();
+    const fileInfo = makeSelectFileInfoForUri(uri)(state);
+    const uriIsStreamable = makeSelectUriIsStreamable(uri)(state);
+    const downloadingByOutpoint = selectDownloadingByOutpoint(state);
+    const alreadyDownloaded = fileInfo && (fileInfo.completed || (fileInfo.blobs_remaining === 0 && uriIsStreamable));
+    const alreadyDownloading = fileInfo && !!downloadingByOutpoint[fileInfo.outpoint];
+    if (alreadyDownloading || alreadyDownloaded) {
+      return;
+    }
+
+    const daemonSettings = selectDaemonSettings(state);
+    const costInfo = makeSelectCostInfoForUri(uri)(state);
+    const cost = Number(costInfo.cost);
+    const saveFile = !uriIsStreamable ? true : daemonSettings.save_files || saveFileOverride || cost > 0;
+    const instantPurchaseEnabled = makeSelectClientSetting(SETTINGS.INSTANT_PURCHASE_ENABLED)(state);
+    const instantPurchaseMax = makeSelectClientSetting(SETTINGS.INSTANT_PURCHASE_MAX)(state);
+
+    function beginGetFile() {
+      dispatch(doPurchaseUriWrapper(uri, cost, saveFile));
+    }
+
+    function attemptPlay(instantPurchaseMax = null) {
+      // If you have a file_list entry, you have already purchased the file
+      if (!fileInfo && (!instantPurchaseMax || cost > instantPurchaseMax)) {
+        dispatch(doOpenModal(MODALS.AFFIRM_PURCHASE, { uri }));
+      } else {
+        beginGetFile();
+      }
+    }
+
+    if (cost === 0 || skipCostCheck) {
+      beginGetFile();
+      return;
+    }
+
+    if (instantPurchaseEnabled || instantPurchaseMax.currency === 'LBC') {
+      attemptPlay(instantPurchaseMax.amount);
+    } else {
+      // Need to convert currency of instant purchase maximum before trying to play
+      Lbryapi.getExchangeRates().then(({ LBC_USD }) => {
+        attemptPlay(instantPurchaseMax.amount / LBC_USD);
+      });
+    }
+  };
+}
+
+export function savePosition(uri: string, position: number) {
+  return (dispatch: Dispatch, getState: () => any) => {
+    const state = getState();
+    const claim = makeSelectClaimForUri(uri)(state);
+    const { claim_id: claimId, txid, nout } = claim;
+    const outpoint = `${txid}:${nout}`;
+
     dispatch({
       type: ACTIONS.SET_CONTENT_POSITION,
       data: { claimId, outpoint, position },

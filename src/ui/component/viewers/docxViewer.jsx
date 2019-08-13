@@ -3,7 +3,6 @@
 import React from 'react';
 import mammoth from 'mammoth';
 import LoadingScreen from 'component/common/loading-screen';
-import MarkdownPreview from 'component/common/markdown-preview';
 
 type Props = {
   source: string,
@@ -59,10 +58,10 @@ class DocxViewer extends React.PureComponent<Props, State> {
     const errorMessage = __("Sorry, looks like we can't load the document.");
 
     return (
-      <div className="document-viewer file-render__viewer">
+      <div className="file-render__viewer--document">
         {loading && <LoadingScreen status={loadingMessage} spinner />}
         {error && <LoadingScreen status={errorMessage} spinner={false} />}
-        {content && <div className="document-viewer__content" dangerouslySetInnerHTML={{ __html: content }} />}
+        {content && <div className="file-render__content" dangerouslySetInnerHTML={{ __html: content }} />}
       </div>
     );
   }

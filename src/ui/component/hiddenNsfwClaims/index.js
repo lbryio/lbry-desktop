@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import { makeSelectNsfwCountForChannel, makeSelectNsfwCountFromUris, parseURI } from 'lbry-redux';
-import { selectShowNsfw } from 'redux/selectors/settings';
+import { selectShowMatureContent } from 'redux/selectors/settings';
 import HiddenNsfwClaims from './view';
 
 const select = (state, props) => {
@@ -18,7 +18,7 @@ const select = (state, props) => {
 
   return {
     numberOfNsfwClaims,
-    obscureNsfw: !selectShowNsfw(state),
+    obscureNsfw: !selectShowMatureContent(state),
   };
 };
 

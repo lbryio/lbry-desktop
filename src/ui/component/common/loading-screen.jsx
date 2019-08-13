@@ -3,7 +3,7 @@ import React from 'react';
 import Spinner from 'component/spinner';
 
 type Props = {
-  status: string,
+  status?: string,
   spinner: boolean,
 };
 

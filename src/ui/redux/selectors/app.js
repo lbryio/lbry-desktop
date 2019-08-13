@@ -100,7 +100,7 @@ export const selectVolume = createSelector(
   state => state.volume
 );
 
-export const selecetMute = createSelector(
+export const selectMute = createSelector(
   selectState,
   state => state.muted
 );

@@ -1,7 +1,7 @@
 // A simple function to detect if a user is typing:
 // useful when hanlding shorcut keys.
 
-export default function detectTyping() {
+export default function isUserTyping() {
   const activeElement = document.activeElement;
 
   if (activeElement) {

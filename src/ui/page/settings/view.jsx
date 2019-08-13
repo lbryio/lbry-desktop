@@ -20,6 +20,9 @@ type DaemonSettings = {
   download_dir: string,
   share_usage_data: boolean,
   max_key_fee?: Price,
+  max_connections_per_download?: number,
+  save_files: boolean,
+  save_blobs: boolean,
 };
 
 type Props = {
@@ -47,6 +50,8 @@ type Props = {
   supportOption: boolean,
   userBlockedChannelsCount?: number,
   hideBalance: boolean,
+  floatingPlayer: boolean,
+  clearPlayingUri: () => void,
 };
 
 type State = {
@@ -62,6 +67,7 @@ class SettingsPage extends React.PureComponent<Props, State> {
     };
 
     (this: any).onKeyFeeChange = this.onKeyFeeChange.bind(this);
+    (this: any).onMaxConnectionsChange = this.onMaxConnectionsChange.bind(this);
     (this: any).onKeyFeeDisableChange = this.onKeyFeeDisableChange.bind(this);
     (this: any).onInstantPurchaseMaxChange = this.onInstantPurchaseMaxChange.bind(this);
     (this: any).onThemeChange = this.onThemeChange.bind(this);
@@ -77,6 +83,11 @@ class SettingsPage extends React.PureComponent<Props, State> {
 
   onKeyFeeChange(newValue: Price) {
     this.setDaemonSetting('max_key_fee', newValue);
+  }
+
+  onMaxConnectionsChange(event: SyntheticInputEvent<*>) {
+    const { value } = event.target;
+    this.setDaemonSetting('max_connections_per_download', value);
   }
 
   onKeyFeeDisableChange(isDisabled: boolean) {
@@ -156,12 +167,15 @@ class SettingsPage extends React.PureComponent<Props, State> {
       supportOption,
       hideBalance,
       userBlockedChannelsCount,
+      floatingPlayer,
     } = this.props;
 
     const noDaemonSettings = !daemonSettings || Object.keys(daemonSettings).length === 0;
 
     const defaultMaxKeyFee = { currency: 'USD', amount: 50 };
+
     const disableMaxKeyFee = !(daemonSettings && daemonSettings.max_key_fee);
+    const connectionOptions = [1, 2, 4, 6, 10, 20];
 
     return (
       <Page>
@@ -188,7 +202,41 @@ class SettingsPage extends React.PureComponent<Props, State> {
             </section>
 
             <section className="card card--section">
-              <h2 className="card__title">{__('Max Purchase Price')}</h2>
+              <h2 className="card__title">{__('Network and Data Settings')}</h2>
+
+              <Form>
+                <FormField
+                  type="checkbox"
+                  name="save_files"
+                  onChange={() => setDaemonSetting('save_files', !daemonSettings.save_files)}
+                  checked={daemonSettings.save_files}
+                  label={__('Save all viewed content to your downloads directory')}
+                  helper={__(
+                    'Paid content and some file types are saved by default. Changing this setting will not affect previously downloaded content.'
+                  )}
+                />
+              </Form>
+              <Form>
+                <FormField
+                  type="checkbox"
+                  name="save_blobs"
+                  onChange={() => setDaemonSetting('save_blobs', !daemonSettings.save_blobs)}
+                  checked={daemonSettings.save_blobs}
+                  label={__('Save hosting data to help the LBRY network')}
+                  helper={
+                    <React.Fragment>
+                      {__("If disabled, LBRY will be very sad and you won't be helping improve the network.")}{' '}
+                      <Button button="link" label={__('Learn more')} href="https://lbry.com/faq/host-content" />.
+                    </React.Fragment>
+                  }
+                />
+              </Form>
+            </section>
+
+            <section className="card card--section">
+              <header className="card__header">
+                <h2 className="card__title">{__('Max Purchase Price')}</h2>
+              </header>
 
               <Form>
                 <FormField
@@ -266,19 +314,38 @@ class SettingsPage extends React.PureComponent<Props, State> {
 
             <section className="card card--section">
               <h2 className="card__title">{__('Content Settings')}</h2>
+              <FormField
+                type="checkbox"
+                name="floating_player"
+                onChange={() => {
+                  setClientSetting(SETTINGS.FLOATING_PLAYER, !floatingPlayer);
+                }}
+                checked={floatingPlayer}
+                label={__('Floating video player')}
+                helper={__('Keep content playing in the corner when navigating to a different page.')}
+              />
 
-              <Form>
-                <FormField
-                  type="checkbox"
-                  name="show_nsfw"
-                  onChange={() => setClientSetting(SETTINGS.SHOW_NSFW, !showNsfw)}
-                  checked={showNsfw}
-                  label={__('Show mature content')}
-                  helper={__(
-                    'Mature content may include nudity, intense sexuality, profanity, or other adult content. By displaying mature content, you are affirming you are of legal age to view mature content in your country or jurisdiction.  '
-                  )}
-                />
-              </Form>
+              <FormField
+                type="checkbox"
+                name="autoplay"
+                onChange={() => setClientSetting(SETTINGS.AUTOPLAY, !autoplay)}
+                checked={autoplay}
+                label={__('Autoplay media files')}
+                helper={__(
+                  'Autoplay video and audio files when navigating to a file, as well as the next related item when a file finishes playing.'
+                )}
+              />
+
+              <FormField
+                type="checkbox"
+                name="show_nsfw"
+                onChange={() => setClientSetting(SETTINGS.SHOW_NSFW, !showNsfw)}
+                checked={showNsfw}
+                label={__('Show mature content')}
+                helper={__(
+                  'Mature content may include nudity, intense sexuality, profanity, or other adult content. By displaying mature content, you are affirming you are of legal age to view mature content in your country or jurisdiction.  '
+                )}
+              />
             </section>
 
             <section className="card card--section">
@@ -419,34 +486,43 @@ class SettingsPage extends React.PureComponent<Props, State> {
                 />
 
                 <FormField
-                  type="checkbox"
-                  name="autoplay"
-                  onChange={() => setClientSetting(SETTINGS.AUTOPLAY, !autoplay)}
-                  checked={autoplay}
-                  label={__('Autoplay media files')}
+                  name="language_select"
+                  type="select"
+                  label={__('Language')}
+                  onChange={this.onLanguageChange}
+                  value={currentLanguage}
                   helper={__(
-                    'Autoplay video and audio files when navigating to a file, as well as the next related item when a file finishes playing.'
+                    'Multi-language support is brand new and incomplete. Switching your language may have unintended consequences.'
                   )}
-                />
-
-                {
+                >
+                  {Object.keys(languages).map(language => (
+                    <option key={language} value={language}>
+                      {languages[language]}
+                    </option>
+                  ))}
+                </FormField>
+              </Form>
+              <Form>
+                <fieldset-section>
                   <FormField
-                    name="language_select"
+                    name="max_connections"
                     type="select"
-                    label={__('Language')}
-                    onChange={this.onLanguageChange}
-                    value={currentLanguage}
+                    label={__('Max Connections')}
                     helper={__(
-                      'Multi-language support is brand new and incomplete. Switching your language may have unintended consequences.'
+                      'For users with good bandwidth, try a higher value to improve streaming and download speeds. Low bandwidth users may benefit from a lower setting. Default is 4.'
                     )}
+                    min={1}
+                    max={100}
+                    onChange={this.onMaxConnectionsChange}
+                    value={daemonSettings.max_connections_per_download}
                   >
-                    {Object.keys(languages).map(language => (
-                      <option key={language} value={language}>
-                        {languages[language]}
+                    {connectionOptions.map(connectionOption => (
+                      <option key={connectionOption} value={connectionOption}>
+                        {connectionOption}
                       </option>
                     ))}
                   </FormField>
-                }
+                </fieldset-section>
               </Form>
             </section>
 
@@ -455,7 +531,7 @@ class SettingsPage extends React.PureComponent<Props, State> {
 
               <p className="card__subtitle--status">
                 {__(
-                  'This will clear the application cache. Your wallet will not be affected. Currently, followed tags will be cleared.'
+                  'This will clear the application cache. Your wallet will not be affected. Currently, followed tags and blocked channels will be cleared.'
                 )}
               </p>
 

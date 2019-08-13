@@ -1,5 +1,6 @@
 .main-wrapper {
   position: relative;
+  min-height: 100vh;
 
   [data-mode='dark'] & {
     background-color: var(--dm-color-08);

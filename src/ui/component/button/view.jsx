@@ -127,7 +127,12 @@ const Button = forwardRef<any, {}>((props: Props, ref: any) => {
       title={title}
       aria-label={description || label || title}
       className={combinedClassName}
-      onClick={onClick}
+      onClick={e => {
+        if (onClick) {
+          e.stopPropagation();
+          onClick(e);
+        }
+      }}
       disabled={disabled}
       type={type}
       {...otherProps}

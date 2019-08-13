@@ -43,7 +43,7 @@ const fileInfoFilter = createFilter('fileInfo', [
   'fileListDownloadedSort',
   'fileListSubscriptionSort',
 ]);
-const appFilter = createFilter('app', ['hasClickedComment', 'searchOptionsExpanded']);
+const appFilter = createFilter('app', ['hasClickedComment', 'searchOptionsExpanded', 'volume', 'muted']);
 // We only need to persist the receiveAddress for the wallet
 const walletFilter = createFilter('wallet', ['receiveAddress']);
 const searchFilter = createFilter('search', ['options']);

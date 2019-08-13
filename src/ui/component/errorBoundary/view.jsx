@@ -1,6 +1,7 @@
 // @flow
+import type { Node } from 'react';
 import { Lbryio } from 'lbryinc';
-import * as React from 'react';
+import React, { Fragment } from 'react';
 import Yrbl from 'component/yrbl';
 import Button from 'component/button';
 import { withRouter } from 'react-router';
@@ -8,7 +9,7 @@ import Native from 'native';
 import { Lbry } from 'lbry-redux';
 
 type Props = {
-  children: React.Node,
+  children: Node,
   history: {
     replace: string => void,
   },
@@ -73,7 +74,7 @@ class ErrorBoundary extends React.Component<Props, State> {
             type="sad"
             title={__('Aw shucks!')}
             subtitle={
-              <div>
+              <Fragment>
                 <p>
                   {__("There was an error. It's been reported and will be fixed")}. {__('Try')}{' '}
                   <Button
@@ -84,7 +85,7 @@ class ErrorBoundary extends React.Component<Props, State> {
                   />{' '}
                   {__('to fix it')}.
                 </p>
-              </div>
+              </Fragment>
             }
           />
         </div>

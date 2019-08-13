@@ -1,8 +1,7 @@
 // @flow
 import * as MODALS from 'constants/modal_types';
-import { THUMBNAIL_STATUSES } from 'lbry-redux';
+import { Lbry, THUMBNAIL_STATUSES } from 'lbry-redux';
 import * as React from 'react';
-import getMediaType from 'util/get-media-type';
 import { FormField } from 'component/common/form';
 import FileSelector from 'component/common/file-selector';
 import Button from 'component/button';
@@ -64,7 +63,7 @@ class SelectThumbnail extends React.PureComponent<Props, State> {
 
     const { thumbnailError } = this.state;
 
-    const isSupportedVideo = getMediaType(null, filePath) === 'video';
+    const isSupportedVideo = Lbry.getMediaType(null, filePath) === 'video';
 
     let thumbnailSrc;
     if (!thumbnail) {

@@ -213,6 +213,9 @@ $border-color--dark: var(--dm-color-04);
   margin-right: auto;
   padding-right: var(--spacing-medium);
   font-size: larger;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
 }
 
 .claim-preview-metadata {

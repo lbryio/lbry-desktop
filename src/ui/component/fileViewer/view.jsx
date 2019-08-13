@@ -1,323 +1,143 @@
 // @flow
-import type { ElementRef } from 'react';
-import * as PAGES from 'constants/pages';
-import React, { Suspense } from 'react';
+import * as ICONS from 'constants/icons';
+import React, { useEffect } from 'react';
+import Button from 'component/button';
 import classnames from 'classnames';
-import analytics from 'analytics';
 import LoadingScreen from 'component/common/loading-screen';
-import PlayButton from './internal/play-button';
-import detectTyping from 'util/detect-typing';
-
-const Player = React.lazy(() =>
-  import(
-    /* webpackChunkName: "player-legacy" */
-    './internal/player'
-  )
-);
-
-const SPACE_BAR_KEYCODE = 32;
+import FileRender from 'component/fileRender';
+import UriIndicator from 'component/uriIndicator';
+import usePersistedState from 'util/use-persisted-state';
+import { FILE_WRAPPER_CLASS } from 'page/file/view';
+import Draggable from 'react-draggable';
+import Tooltip from 'component/common/tooltip';
 
 type Props = {
-  cancelPlay: () => void,
-  fileInfo: {
-    outpoint: string,
-    file_name: string,
-    written_bytes: number,
-    download_path: string,
-    completed: boolean,
-    blobs_completed: number,
-  },
-  fileInfoErrors: ?{
-    [string]: boolean,
-  },
-  autoplay: boolean,
-  isLoading: boolean,
-  isDownloading: boolean,
-  playingUri: ?string,
-  contentType: string,
-  changeVolume: number => void,
-  volume: number,
-  claim: StreamClaim,
-  uri: string,
-  savePosition: (string, string, number) => void,
-  position: ?number,
-  className: ?string,
-  obscureNsfw: boolean,
-  play: string => void,
   mediaType: string,
-  claimRewards: () => void,
-  nextFileToPlay: ?string,
-  navigate: (string, {}) => void,
-  costInfo: ?{ cost: number },
+  isLoading: boolean,
+  isPlaying: boolean,
+  fileInfo: FileListItem,
+  uri: string,
+  obscurePreview: boolean,
   insufficientCredits: boolean,
-  nsfw: boolean,
-  thumbnail: ?string,
-  isPlayableType: boolean,
-  viewerContainer: { current: ElementRef<any> },
-  changeMute: boolean => void,
-  muted: boolean,
+  isStreamable: boolean,
+  thumbnail?: string,
+  streamingUrl?: string,
+  floatingPlayer: boolean,
+  pageUri: ?string,
+  title: ?string,
+  floatingPlayerEnabled: boolean,
+  clearPlayingUri: () => void,
 };
 
-class FileViewer extends React.PureComponent<Props> {
-  constructor() {
-    super();
-    (this: any).playContent = this.playContent.bind(this);
-    (this: any).handleKeyDown = this.handleKeyDown.bind(this);
-    (this: any).logTimeToStart = this.logTimeToStart.bind(this);
-    (this: any).onFileFinishCb = this.onFileFinishCb.bind(this);
-    (this: any).onFileStartCb = undefined;
+export default function FileViewer(props: Props) {
+  const {
+    isPlaying,
+    fileInfo,
+    uri,
+    streamingUrl,
+    isStreamable,
+    pageUri,
+    title,
+    clearPlayingUri,
+    floatingPlayerEnabled,
+  } = props;
+  const [fileViewerRect, setFileViewerRect] = usePersistedState('inline-file-viewer:rect');
+  const [position, setPosition] = usePersistedState('floating-file-viewer:position', {
+    x: -25,
+    y: window.innerHeight - 400,
+  });
 
-    // Don't add these variables to state because we don't need to re-render when their values change
-    (this: any).startTime = undefined;
-    (this: any).playTime = undefined;
-  }
+  const inline = pageUri === uri;
+  const isReadyToPlay = (IS_WEB && isStreamable) || (isStreamable && streamingUrl) || (fileInfo && fileInfo.completed);
+  const loadingMessage =
+    !isStreamable && fileInfo && fileInfo.blobs_completed >= 1 && (!fileInfo.download_path || !fileInfo.written_bytes)
+      ? __("It looks like you deleted or moved this file. We're rebuilding it now. It will only take a few seconds.")
+      : __('Loading');
 
-  componentDidMount() {
-    const { fileInfo } = this.props;
-    if (!fileInfo) {
-      this.onFileStartCb = this.logTimeToStart;
-    }
-
-    this.handleAutoplay(this.props);
-    window.addEventListener('keydown', this.handleKeyDown);
-  }
-
-  componentDidUpdate(prev: Props) {
-    const { fileInfo } = this.props;
-
-    if (this.props.uri !== prev.uri) {
-      // User just directly navigated to another piece of content
-      if (this.startTime && !this.playTime) {
-        // They started playing a file but it didn't start streaming
-        // Fire the analytics event with the previous file
-        this.fireAnalyticsEvent(prev.claim);
-      }
-
-      this.startTime = null;
-      this.playTime = null;
-
-      // If this new file is already downloaded, remove the startedPlayingCallback
-      if (fileInfo && this.onFileStartCb) {
-        this.onFileStartCb = null;
-      } else if (!fileInfo && !this.onFileStartCb) {
-        this.onFileStartCb = this.logTimeToStart;
-      }
-    }
-
-    if (
-      this.props.autoplay !== prev.autoplay ||
-      this.props.fileInfo !== prev.fileInfo ||
-      this.props.isDownloading !== prev.isDownloading ||
-      this.props.playingUri !== prev.playingUri
-    ) {
-      // suppress autoplay after download error
-      if (!this.props.fileInfoErrors || !(this.props.uri in this.props.fileInfoErrors)) {
-        this.handleAutoplay(this.props);
-      }
-    }
-  }
-
-  componentWillUnmount() {
-    const { claim } = this.props;
-
-    if (this.startTime && !this.playTime) {
-      // The user is navigating away before the file started playing, or a play time was never set
-      // Currently will not be set for files that don't use render-media
-      this.fireAnalyticsEvent(claim);
-    }
-
-    this.props.cancelPlay();
-    window.removeEventListener('keydown', this.handleKeyDown);
-  }
-
-  handleKeyDown(event: KeyboardEvent) {
-    if (!detectTyping()) {
-      if (event.keyCode === SPACE_BAR_KEYCODE) {
-        event.preventDefault(); // prevent page scroll
-        this.playContent();
-      }
-    }
-  }
-
-  handleAutoplay = (props: Props) => {
-    const { autoplay, playingUri, fileInfo, costInfo, isDownloading, uri, nsfw } = props;
-
-    const playable = autoplay && playingUri !== uri && !nsfw;
-
-    if (playable && costInfo && costInfo.cost === 0 && !fileInfo && !isDownloading) {
-      this.playContent();
-    } else if (playable && fileInfo && fileInfo.download_path && fileInfo.written_bytes > 0) {
-      this.playContent();
-    }
-  };
-
-  isMediaSame(nextProps: Props) {
-    return this.props.fileInfo && nextProps.fileInfo && this.props.fileInfo.outpoint === nextProps.fileInfo.outpoint;
-  }
-
-  playContent() {
-    const { play, uri, fileInfo, isDownloading, isLoading, insufficientCredits } = this.props;
-
-    if (!fileInfo && insufficientCredits) {
-      return;
-    }
-
-    // @if TARGET='app'
-    if (fileInfo || isDownloading || isLoading) {
-      // User may have pressed download before clicking play
-      this.onFileStartCb = null;
-    }
-
-    if (this.onFileStartCb) {
-      this.startTime = Date.now();
-    }
-    // @endif
-
-    play(uri);
-  }
-
-  logTimeToStart() {
-    const { claim } = this.props;
-
-    if (this.startTime) {
-      this.playTime = Date.now();
-      this.fireAnalyticsEvent(claim, this.startTime, this.playTime);
-    }
-  }
-
-  fireAnalyticsEvent(claim: StreamClaim, startTime: ?number, playTime: ?number) {
-    const { claimRewards } = this.props;
-    const { name, claim_id: claimId, txid, nout } = claim;
-
-    // ideally outpoint would exist inside of claim information
-    // we can use it after https://github.com/lbryio/lbry/issues/1306 is addressed
-    const outpoint = `${txid}:${nout}`;
-
-    let timeToStart;
-    if (playTime && startTime) {
-      timeToStart = playTime - startTime;
-    }
-
-    analytics.apiLogView(`${name}#${claimId}`, outpoint, claimId, timeToStart, claimRewards);
-  }
-
-  onFileFinishCb() {
-    // If a user has `autoplay` enabled, start playing the next file at the top of "related"
-    const { autoplay, nextFileToPlay, navigate } = this.props;
-    if (autoplay && nextFileToPlay) {
-      navigate(PAGES.SHOW, { uri: nextFileToPlay });
-    }
-  }
-
-  onFileStartCb: ?() => void;
-  startTime: ?number;
-  playTime: ?number;
-
-  render() {
-    const {
-      isLoading,
-      isDownloading,
-      playingUri,
-      fileInfo = {},
-      contentType,
-      changeVolume,
-      volume,
-      claim,
-      uri,
-      savePosition,
-      position,
-      className,
-      obscureNsfw,
-      mediaType,
-      insufficientCredits,
-      viewerContainer,
-      thumbnail,
-      nsfw,
-      muted,
-      changeMute,
-    } = this.props;
-
-    const isPlaying = playingUri === uri;
-    let isReadyToPlay = false;
-    // @if TARGET='app'
-    isReadyToPlay = fileInfo && fileInfo.download_path && fileInfo.written_bytes > 0;
-    // @endif
-    // @if TARGET='web'
-    // try to play immediately on web, we don't need to call file_list since we are streaming from reflector
-    isReadyToPlay = isPlaying;
-    // @endif
-
-    const shouldObscureNsfw = obscureNsfw && nsfw;
-    let loadStatusMessage = '';
-
-    if (fileInfo && fileInfo.completed && (!fileInfo.download_path || !fileInfo.written_bytes)) {
-      loadStatusMessage = __(
-        "It looks like you deleted or moved this file. We're rebuilding it now. It will only take a few seconds."
-      );
-    } else if (isLoading) {
-      loadStatusMessage = __('Requesting stream...');
-    } else if (isDownloading) {
-      loadStatusMessage = __('Downloading stream... not long left now!');
-    }
-
-    const layoverClass = classnames('content__cover', {
-      'card__media--nsfw': shouldObscureNsfw,
-      'card__media--disabled': !fileInfo && insufficientCredits,
+  function handleDrag(e, ui) {
+    const { x, y } = position;
+    const newX = x + ui.deltaX;
+    const newY = y + ui.deltaY;
+    setPosition({
+      x: newX,
+      y: newY,
     });
-
-    const layoverStyle = !shouldObscureNsfw && thumbnail ? { backgroundImage: `url("${thumbnail}")` } : {};
-
-    return (
-      <div className={classnames('video', {}, className)} ref={viewerContainer}>
-        {isPlaying && (
-          <div className="content__view">
-            {!isReadyToPlay ? (
-              <div className={layoverClass} style={layoverStyle}>
-                <LoadingScreen status={loadStatusMessage} />
-              </div>
-            ) : (
-              <Suspense fallback={<div />}>
-                <Player
-                  fileName={fileInfo.file_name}
-                  poster={thumbnail}
-                  downloadPath={fileInfo.download_path}
-                  mediaType={mediaType}
-                  contentType={contentType}
-                  downloadCompleted={fileInfo.completed}
-                  changeVolume={changeVolume}
-                  volume={volume}
-                  savePosition={newPosition => savePosition(claim.claim_id, `${claim.txid}:${claim.nout}`, newPosition)}
-                  claim={claim}
-                  uri={uri}
-                  position={position}
-                  onStartCb={this.onFileStartCb}
-                  onFinishCb={this.onFileFinishCb}
-                  playingUri={playingUri}
-                  viewerContainer={viewerContainer}
-                  muted={muted}
-                  changeMute={changeMute}
-                />
-              </Suspense>
-            )}
-          </div>
-        )}
-        {!isPlaying && (
-          <div role="button" onClick={this.playContent} className={layoverClass} style={layoverStyle}>
-            <PlayButton
-              play={(e: SyntheticInputEvent<*>) => {
-                e.stopPropagation();
-                this.playContent();
-              }}
-              fileInfo={fileInfo}
-              uri={uri}
-              isLoading={isLoading}
-              mediaType={mediaType}
-            />
-          </div>
-        )}
-      </div>
-    );
   }
-}
 
-export default FileViewer;
+  useEffect(() => {
+    function handleResize() {
+      const element = document.querySelector(`.${FILE_WRAPPER_CLASS}`);
+      if (!element) {
+        throw new Error("Can't find file viewer wrapper to attach to");
+      }
+
+      const rect = element.getBoundingClientRect();
+      // @FlowFixMe
+      setFileViewerRect(rect);
+    }
+
+    if (inline) {
+      handleResize();
+      window.addEventListener('resize', handleResize);
+      return () => {
+        window.removeEventListener('resize', handleResize);
+      };
+    }
+  }, [setFileViewerRect, inline]);
+
+  const hidePlayer = !isPlaying || !uri || (!inline && (!floatingPlayerEnabled || !isStreamable));
+  if (hidePlayer) {
+    clearPlayingUri();
+    return null;
+  }
+
+  return (
+    <Draggable
+      onDrag={handleDrag}
+      defaultPosition={position}
+      position={inline ? { x: 0, y: 0 } : position}
+      bounds="parent"
+      disabled={inline}
+      handle=".content__info"
+      cancel=".button"
+    >
+      <div
+        className={classnames('content__viewer', {
+          'content__viewer--floating': !inline,
+        })}
+        style={
+          inline && fileViewerRect
+            ? { width: fileViewerRect.width, height: fileViewerRect.height, left: fileViewerRect.x }
+            : {}
+        }
+      >
+        <div
+          className={classnames('content__wrapper', {
+            'content__wrapper--floating': !inline,
+          })}
+        >
+          {!inline && (
+            <div className="content__actions">
+              <Tooltip label={__('View File')}>
+                <Button navigate={uri} icon={ICONS.VIEW} button="primary" />
+              </Tooltip>
+              <Tooltip label={__('Close')}>
+                <Button onClick={clearPlayingUri} icon={ICONS.REMOVE} button="primary" />
+              </Tooltip>
+            </div>
+          )}
+
+          {isReadyToPlay ? <FileRender uri={uri} /> : <LoadingScreen status={loadingMessage} />}
+          {!inline && (
+            <div className="content__info">
+              <div className="claim-preview-title" title={title || uri}>
+                {title || uri}
+              </div>
+              <UriIndicator link addTooltip={false} uri={uri} />
+            </div>
+          )}
+        </div>
+      </div>
+    </Draggable>
+  );
+}

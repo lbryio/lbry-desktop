@@ -69,6 +69,11 @@ ul {
   }
 }
 
+input,
+label {
+  user-select: none;
+}
+
 blockquote {
   margin-bottom: 1rem;
   padding: 0.8rem;

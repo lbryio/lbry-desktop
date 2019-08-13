@@ -90,6 +90,7 @@
   display: flex;
   font-size: var(--font-multiplier-medium);
   margin-bottom: var(--spacing-large);
+  line-height: 1;
 
   > * {
     &:not(:last-child) {

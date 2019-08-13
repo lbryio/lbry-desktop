@@ -12,7 +12,7 @@ import {
   selectChannelIsBlocked,
 } from 'lbry-redux';
 import { selectBlackListedOutpoints, selectFilteredOutpoints } from 'lbryinc';
-import { selectShowNsfw } from 'redux/selectors/settings';
+import { selectShowMatureContent } from 'redux/selectors/settings';
 import { makeSelectHasVisitedUri } from 'redux/selectors/content';
 import { makeSelectIsSubscribed } from 'redux/selectors/subscriptions';
 import ClaimPreview from './view';
@@ -20,7 +20,7 @@ import ClaimPreview from './view';
 const select = (state, props) => ({
   pending: makeSelectClaimIsPending(props.uri)(state),
   claim: makeSelectClaimForUri(props.uri)(state),
-  obscureNsfw: !selectShowNsfw(state),
+  obscureNsfw: !selectShowMatureContent(state),
   claimIsMine: makeSelectClaimIsMine(props.uri)(state),
   isResolvingUri: makeSelectIsUriResolving(props.uri)(state),
   thumbnail: makeSelectThumbnailForUri(props.uri)(state),

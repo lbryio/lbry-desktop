@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import * as settings from 'constants/settings';
-import { selectRewardContentClaimIds, selectPlayingUri } from 'redux/selectors/content';
+import { selectRewardContentClaimIds } from 'redux/selectors/content';
 import { doRemoveUnreadSubscription } from 'redux/actions/subscriptions';
 import { doSetClientSetting } from 'redux/actions/settings';
 import { doSetContentHistoryItem } from 'redux/actions/content';
@@ -19,7 +19,7 @@ import {
   doPrepareEdit,
 } from 'lbry-redux';
 import { doFetchViewCount, makeSelectViewCountForUri, makeSelectCostInfoForUri, doFetchCostInfoForUri } from 'lbryinc';
-import { selectShowNsfw, makeSelectClientSetting } from 'redux/selectors/settings';
+import { selectShowMatureContent, makeSelectClientSetting } from 'redux/selectors/settings';
 import { makeSelectIsSubscribed } from 'redux/selectors/subscriptions';
 import { doOpenModal } from 'redux/actions/app';
 import FilePage from './view';
@@ -29,12 +29,10 @@ const select = (state, props) => ({
   contentType: makeSelectContentTypeForUri(props.uri)(state),
   costInfo: makeSelectCostInfoForUri(props.uri)(state),
   metadata: makeSelectMetadataForUri(props.uri)(state),
-  obscureNsfw: !selectShowNsfw(state),
+  obscureNsfw: !selectShowMatureContent(state),
   fileInfo: makeSelectFileInfoForUri(props.uri)(state),
   rewardedContentClaimIds: selectRewardContentClaimIds(state, props),
-  playingUri: selectPlayingUri(state),
   claimIsMine: makeSelectClaimIsMine(props.uri)(state),
-  autoplay: makeSelectClientSetting(settings.AUTOPLAY)(state),
   isSubscribed: makeSelectIsSubscribed(props.uri)(state),
   channelUri: makeSelectChannelForClaimUri(props.uri, true)(state),
   viewCount: makeSelectViewCountForUri(props.uri)(state),

@@ -1,5 +1,5 @@
 // @flow
-import React, { Fragment, useEffect } from 'react';
+import React, { Fragment, useEffect, forwardRef } from 'react';
 import classnames from 'classnames';
 import { parseURI, convertToShareLink } from 'lbry-redux';
 import { withRouter } from 'react-router-dom';
@@ -46,7 +46,7 @@ type Props = {
   isSubscribed: boolean,
 };
 
-function ClaimPreview(props: Props) {
+const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
   const {
     obscureNsfw,
     claimIsMine,
@@ -150,6 +150,7 @@ function ClaimPreview(props: Props) {
 
   return (
     <li
+      ref={ref}
       role="link"
       onClick={pending || type === 'inline' ? undefined : onClick}
       onContextMenu={handleContextMenu}
@@ -209,6 +210,6 @@ function ClaimPreview(props: Props) {
       </div>
     </li>
   );
-}
+});
 
 export default withRouter(ClaimPreview);

@@ -3,8 +3,7 @@ import * as MODALS from 'constants/modal_types';
 import * as icons from 'constants/icons';
 import * as React from 'react';
 import { buildURI, normalizeURI } from 'lbry-redux';
-import FileViewer from 'component/fileViewer';
-import Thumbnail from 'component/common/thumbnail';
+import FileViewerInitiator from 'component/fileViewerInitiator';
 import FilePrice from 'component/filePrice';
 import FileDetails from 'component/fileDetails';
 import FileActions from 'component/fileActions';
@@ -13,8 +12,6 @@ import DateTime from 'component/dateTime';
 import Button from 'component/button';
 import Page from 'component/page';
 import FileDownloadLink from 'component/fileDownloadLink';
-import classnames from 'classnames';
-import getMediaType from 'util/get-media-type';
 import RecommendedContent from 'component/recommendedContent';
 import ClaimTags from 'component/claimTags';
 import CommentsList from 'component/commentsList';
@@ -22,13 +19,14 @@ import CommentCreate from 'component/commentCreate';
 import ClaimUri from 'component/claimUri';
 import ClaimPreview from 'component/claimPreview';
 
+export const FILE_WRAPPER_CLASS = 'grid-area--content';
+
 type Props = {
   claim: StreamClaim,
   fileInfo: FileListItem,
   contentType: string,
   uri: string,
   rewardedContentClaimIds: Array<string>,
-  obscureNsfw: boolean,
   claimIsMine: boolean,
   costInfo: ?{ cost: number },
   fetchFileInfo: string => void,
@@ -39,38 +37,16 @@ type Props = {
   channelUri: string,
   viewCount: number,
   prepareEdit: ({}, string, {}) => void,
-  openModal: (id: string, { [key: string]: any }) => void,
+  openModal: (id: string, { uri: string, claimIsMine?: boolean, isSupport?: boolean }) => void,
   markSubscriptionRead: (string, string) => void,
   fetchViewCount: string => void,
   balance: number,
   title: string,
-  thumbnail: ?string,
   nsfw: boolean,
   supportOption: boolean,
 };
 
 class FilePage extends React.Component<Props> {
-  static PLAYABLE_MEDIA_TYPES = ['audio', 'video'];
-  static PREVIEW_MEDIA_TYPES = [
-    'text',
-    'model',
-    'image',
-    'script',
-    'document',
-    '3D-file',
-    'comic-book',
-    // Bypass unplayable files
-    // TODO: Find a better way to detect supported types
-    'application',
-  ];
-
-  constructor(props: Props) {
-    super(props);
-    (this: any).viewerContainer = React.createRef();
-  }
-
-  viewerContainer: { current: React.ElementRef<any> };
-
   componentDidMount() {
     const {
       uri,
@@ -136,7 +112,6 @@ class FilePage extends React.Component<Props> {
       contentType,
       uri,
       rewardedContentClaimIds,
-      obscureNsfw,
       openModal,
       claimIsMine,
       prepareEdit,
@@ -146,7 +121,6 @@ class FilePage extends React.Component<Props> {
       viewCount,
       balance,
       title,
-      thumbnail,
       nsfw,
       supportOption,
     } = this.props;
@@ -154,15 +128,7 @@ class FilePage extends React.Component<Props> {
     // File info
     const { signing_channel: signingChannel } = claim;
     const channelName = signingChannel && signingChannel.name;
-    const { PLAYABLE_MEDIA_TYPES, PREVIEW_MEDIA_TYPES } = FilePage;
     const isRewardContent = (rewardedContentClaimIds || []).includes(claim.claim_id);
-    const shouldObscureThumbnail = obscureNsfw && nsfw;
-    const fileName = fileInfo ? fileInfo.file_name : null;
-    const mediaType = getMediaType(contentType, fileName);
-    const isPreviewType = PREVIEW_MEDIA_TYPES.includes(mediaType);
-    const isPlayableType = PLAYABLE_MEDIA_TYPES.includes(mediaType);
-    const showFile = isPlayableType || isPreviewType;
-
     const speechShareable =
       costInfo && costInfo.cost === 0 && contentType && ['video', 'image', 'audio'].includes(contentType.split('/')[0]);
     // We want to use the short form uri for editing
@@ -185,7 +151,7 @@ class FilePage extends React.Component<Props> {
 
     return (
       <Page className="main--file-page">
-        <div className="grid-area--content card">
+        <div className={`card ${FILE_WRAPPER_CLASS}`}>
           {!fileInfo && insufficientCredits && (
             <div className="media__insufficient-credits help--warning">
               {__(
@@ -195,28 +161,7 @@ class FilePage extends React.Component<Props> {
               {__('or send more LBC to your wallet.')}
             </div>
           )}
-          {showFile && (
-            <FileViewer
-              uri={uri}
-              className="content__embedded"
-              mediaType={mediaType}
-              isPlayableType={isPlayableType}
-              viewerContainer={this.viewerContainer}
-              insufficientCredits={insufficientCredits}
-            />
-          )}
-          {!showFile &&
-            (thumbnail ? (
-              <Thumbnail shouldObscure={shouldObscureThumbnail} src={thumbnail} />
-            ) : (
-              <div
-                className={classnames('content__empty', {
-                  'content__empty--nsfw': shouldObscureThumbnail,
-                })}
-              >
-                <div className="card__media-text">{__("Sorry, looks like we can't preview this file.")}</div>
-              </div>
-            ))}
+          <FileViewerInitiator uri={uri} insufficientCredits={insufficientCredits} />
         </div>
 
         <div className="columns">
@@ -274,12 +219,7 @@ class FilePage extends React.Component<Props> {
 
                 <div className="media__action-group--large">
                   <FileDownloadLink uri={uri} />
-                  <FileActions
-                    uri={uri}
-                    claimId={claim.claim_id}
-                    showFullscreen={isPreviewType}
-                    viewerContainer={this.viewerContainer}
-                  />
+                  <FileActions uri={uri} claimId={claim.claim_id} />
                 </div>
               </div>
             </div>

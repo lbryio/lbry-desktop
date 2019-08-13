@@ -6,8 +6,7 @@ import * as NOTIFICATION_TYPES from 'constants/subscriptions';
 import { Lbryio, rewards, doClaimRewardType } from 'lbryinc';
 import { selectSubscriptions, selectUnreadByChannel } from 'redux/selectors/subscriptions';
 import { makeSelectClientSetting } from 'redux/selectors/settings';
-import { Lbry, buildURI, parseURI, doResolveUris } from 'lbry-redux';
-import { doPurchaseUri } from 'redux/actions/content';
+import { Lbry, buildURI, parseURI, doResolveUris, doPurchaseUri } from 'lbry-redux';
 
 const CHECK_SUBSCRIPTIONS_INTERVAL = 15 * 60 * 1000;
 const SUBSCRIPTION_DOWNLOAD_LIMIT = 1;

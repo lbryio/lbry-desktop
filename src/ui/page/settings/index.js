@@ -28,6 +28,7 @@ const select = state => ({
   supportOption: makeSelectClientSetting(settings.SUPPORT_OPTION)(state),
   userBlockedChannelsCount: selectBlockedChannelsCount(state),
   hideBalance: makeSelectClientSetting(settings.HIDE_BALANCE)(state),
+  floatingPlayer: makeSelectClientSetting(settings.FLOATING_PLAYER)(state),
 });
 
 const perform = dispatch => ({
