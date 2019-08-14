@@ -16,9 +16,7 @@ type Props = {
 class FileActions extends React.PureComponent<Props> {
   render() {
     const { fileInfo, uri, openModal, claimIsMine, claimId } = this.props;
-    const showDelete =
-      claimIsMine ||
-      (fileInfo && (fileInfo.written_bytes > 0 || fileInfo.blobs_completed === fileInfo.blobs_in_stream));
+    const showDelete = claimIsMine || (fileInfo && (fileInfo.written_bytes > 0 || fileInfo.blobs_completed > 0));
     return (
       <React.Fragment>
         {showDelete && (
