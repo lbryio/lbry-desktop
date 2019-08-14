@@ -225,6 +225,11 @@ export function doPlayUri(uri: string, skipCostCheck: boolean = false, saveFileO
       }
     }
 
+    if (fileInfo && saveFile && (!fileInfo.download_path || !fileInfo.written_bytes)) {
+      beginGetFile();
+      return;
+    }
+
     if (cost === 0 || skipCostCheck) {
       beginGetFile();
       return;
