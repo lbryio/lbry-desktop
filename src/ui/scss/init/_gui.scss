@@ -98,6 +98,11 @@ hr {
   }
 }
 
+img,
+a {
+  -webkit-user-drag: none;
+}
+
 .columns {
   display: flex;
   justify-content: space-between;
