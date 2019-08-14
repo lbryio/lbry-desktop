@@ -4,19 +4,57 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
-## [0.34.0] - [Unreleased]
+## [0.35.0] - [Unreleased]
 
 ### Fixed
 
-- Lots of speed improvements
+- Add startup statuses back to splash screen ([#2721](https://github.com/lbryio/lbry-desktop/issues/2721))
+- Ensure 'mature' tag is always visible on claim previews for mature content ([#2720](https://github.com/lbryio/lbry-desktop/issues/2720))
 
 ### Added
 
-- New app design for better content discovery ([2477](https://github.com/lbryio/lbry-desktop/pull/2477))
-- New loading page ([2491](https://github.com/lbryio/lbry-desktop/pull/2491))
-- Comments ([2510](https://github.com/lbryio/lbry-desktop/pull/2510))
-- Remember file delete preference ([2132](https://github.com/lbryio/lbry-desktop/pull/2132))
-- Add first version of language support (with Polish and Indonesian)
+- New video player with better file type support and pop out player ([#2707](https://github.com/lbryio/lbry-desktop/issues/2707))
+- Ability to block channels ([#2706](https://github.com/lbryio/lbry-desktop/issues/2706))
+- Table styling on file pages ([#2717](https://github.com/lbryio/lbry-desktop/issues/2717))
+- Option to disable startup animation ([#2721](https://github.com/lbryio/lbry-desktop/issues/2721))
+
+## [0.34.2] - [2019-07-26]
+
+### Fixed
+
+- Library and other pages not displaying correctly in some instances
+
+## [0.34.1] - [2019-07-25]
+
+### Fixed
+
+- Fixed wallet unlock while still syncing transactions
+- Fixed invalid character checking on channel and content URLs ([#2661](https://github.com/lbryio/lbry-desktop/issues/2661))
+- Upgrade [SDK to 0.38.5](https://github.com/lbryio/lbry-sdk/releases/tag/v0.38.5) to improve download speeds
+
+## [0.34.0] - [2019-07-23]
+
+### Fixed
+
+- Lots of speed, UI, and style improvements
+- Content is now sorted correctly by the date it was released
+
+### Changed
+
+- Share content options now use beta.lbry.tv instead of spee.ch ([#2614](https://github.com/lbryio/lbry-desktop/pull/2614))
+
+### Added
+
+- New app design for better [content discovery](https://lbry.com/faq/trending) with infinite scroll ([#2477](https://github.com/lbryio/lbry-desktop/pull/2477))
+- First implementation of comments ([#2510](https://github.com/lbryio/lbry-desktop/pull/2510))
+- Ability to edit channels with new metadata and tags ([#2584](https://github.com/lbryio/lbry-desktop/pull/2584))
+- Tagging content on publish page ([#2593](https://github.com/lbryio/lbry-desktop/pull/2593))
+- New loading page ([#2491](https://github.com/lbryio/lbry-desktop/pull/2491))
+- Remember file delete preference ([#2132](https://github.com/lbryio/lbry-desktop/pull/2132))
+- Experimental setting for sending supports ([#2647](https://github.com/lbryio/lbry-desktop/pull/2647))
+- Experimental setting for language with Indonesian and Polish as first translations ([#2539](https://github.com/lbryio/lbry-desktop/pull/2539))
+- Short URLs throughout app ([#2614](https://github.com/lbryio/lbry-desktop/pull/2614))
+- Wallet backup zipping option on Help page ([#2585](https://github.com/lbryio/lbry-desktop/pull/2585))
 
 ## [0.33.1] - [2019-06-12]
 
