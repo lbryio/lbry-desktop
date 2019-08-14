@@ -22,6 +22,7 @@ import { doFetchViewCount, makeSelectViewCountForUri, makeSelectCostInfoForUri, 
 import { selectShowMatureContent, makeSelectClientSetting } from 'redux/selectors/settings';
 import { makeSelectIsSubscribed } from 'redux/selectors/subscriptions';
 import { doOpenModal } from 'redux/actions/app';
+import fs from 'fs';
 import FilePage from './view';
 
 const select = (state, props) => ({
@@ -47,7 +48,7 @@ const perform = dispatch => ({
   fetchFileInfo: uri => dispatch(doFetchFileInfo(uri)),
   fetchCostInfo: uri => dispatch(doFetchCostInfoForUri(uri)),
   openModal: (modal, props) => dispatch(doOpenModal(modal, props)),
-  prepareEdit: (publishData, uri, fileInfo) => dispatch(doPrepareEdit(publishData, uri, fileInfo)),
+  prepareEdit: (publishData, uri, fileInfo) => dispatch(doPrepareEdit(publishData, uri, fileInfo, fs)),
   setClientSetting: (key, value) => dispatch(doSetClientSetting(key, value)),
   setViewed: uri => dispatch(doSetContentHistoryItem(uri)),
   markSubscriptionRead: (channel, uri) => dispatch(doRemoveUnreadSubscription(channel, uri)),

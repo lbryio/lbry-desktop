@@ -1,3 +1,4 @@
+import * as PAGES from 'constants/pages';
 import { connect } from 'react-redux';
 import {
   doResolveUri,
@@ -10,11 +11,15 @@ import {
   makeSelectClaimIsNsfw,
   selectBlockedChannels,
   selectChannelIsBlocked,
+  doClearPublish,
+  doPrepareEdit,
 } from 'lbry-redux';
 import { selectBlackListedOutpoints, selectFilteredOutpoints } from 'lbryinc';
 import { selectShowMatureContent } from 'redux/selectors/settings';
 import { makeSelectHasVisitedUri } from 'redux/selectors/content';
 import { makeSelectIsSubscribed } from 'redux/selectors/subscriptions';
+import { push } from 'connected-react-router';
+
 import ClaimPreview from './view';
 
 const select = (state, props) => ({
@@ -36,6 +41,11 @@ const select = (state, props) => ({
 
 const perform = dispatch => ({
   resolveUri: uri => dispatch(doResolveUri(uri)),
+  beginPublish: name => {
+    dispatch(doClearPublish());
+    dispatch(doPrepareEdit({ name }));
+    dispatch(push(`/$/${PAGES.PUBLISH}`));
+  },
 });
 
 export default connect(

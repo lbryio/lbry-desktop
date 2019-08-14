@@ -87,7 +87,7 @@ export default function FileViewer(props: Props) {
 
   const hidePlayer = !isPlaying || !uri || (!inline && (!floatingPlayerEnabled || !isStreamable));
   if (hidePlayer) {
-    clearPlayingUri();
+    // clearPlayingUri();
     return null;
   }
 
