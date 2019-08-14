@@ -23,9 +23,7 @@ function FileDownloadLink(props: Props) {
   if (loading || downloading) {
     const progress = fileInfo && fileInfo.written_bytes > 0 ? (fileInfo.written_bytes / fileInfo.total_bytes) * 100 : 0;
     const label =
-      fileInfo && fileInfo.written_bytes > 0
-        ? __('Downloading: ') + progress.toFixed(0) + __('% complete')
-        : __('Connecting...');
+      fileInfo && fileInfo.written_bytes > 0 ? progress.toFixed(0) + __('% downloaded') : __('Connecting...');
 
     return <span>{label}</span>;
   }

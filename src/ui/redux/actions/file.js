@@ -5,6 +5,7 @@ import { shell } from 'electron';
 import { Lbry, batchActions, doAbandonClaim, selectMyClaimsOutpoints } from 'lbry-redux';
 import { doHideModal } from 'redux/actions/app';
 import { goBack } from 'connected-react-router';
+import { doSetPlayingUri } from 'redux/actions/content';
 
 export function doOpenFileInFolder(path) {
   return () => {
@@ -52,7 +53,9 @@ export function doDeleteFileAndMaybeGoBack(fileInfo, deleteFromComputer, abandon
     const actions = [];
     actions.push(doHideModal());
     actions.push(doDeleteFile(fileInfo, deleteFromComputer, abandonClaim));
+    actions.push(doSetPlayingUri(null));
     dispatch(batchActions(...actions));
+
     if (abandonClaim) {
       dispatch(goBack());
     }
