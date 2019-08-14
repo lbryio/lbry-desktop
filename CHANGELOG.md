@@ -13,7 +13,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ### Added
 
-- New video player with better file type support and pop out player ([#2707](https://github.com/lbryio/lbry-desktop/issues/2707))
+- New video player ([#2707](https://github.com/lbryio/lbry-desktop/issues/2707))
+  - Uses range requests which allow seeking ahead in a video instead of waiting for the file download up to that point
+  - Better support video and audio
+  - Pop out player to keep browsing the app while watching content
 - Ability to block channels ([#2706](https://github.com/lbryio/lbry-desktop/issues/2706))
 - Table styling on file pages ([#2717](https://github.com/lbryio/lbry-desktop/issues/2717))
 - Option to disable startup animation ([#2721](https://github.com/lbryio/lbry-desktop/issues/2721))
