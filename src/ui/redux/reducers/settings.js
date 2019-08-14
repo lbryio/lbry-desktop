@@ -34,7 +34,7 @@ const defaultState = {
     [SETTINGS.FLOATING_PLAYER]: Boolean(getLocalStorageSetting(SETTINGS.FLOATING_PLAYER, true)),
   },
   isNight: false,
-  languages: { en: 'English', pl: 'Polish', id: 'Bahasa Indonesia' }, // temporarily hard code these so we can advance i18n testing
+  languages: { en: 'English', pl: 'Polish', id: 'Bahasa Indonesia', ger: 'German' }, // temporarily hard code these so we can advance i18n testing
   daemonSettings: {},
 };
 
