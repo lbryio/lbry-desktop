@@ -94,6 +94,16 @@
   align-items: flex-start;
 }
 
+// Quick fix because this is a pain
+// There is something weird with wrapping buttons. Some places we want to wrap and others we want to ellips
+// Probably requires some nested style cleanup
+.button--download-link {
+  .button__label {
+    white-space: normal;
+    text-align: left;
+  }
+}
+
 .button__content {
   display: flex;
   align-items: center;

@@ -77,6 +77,7 @@ class FileDetails extends PureComponent<Props> {
                 {': '}
                 <Button
                   button="link"
+                  className="button--download-link"
                   onClick={() => {
                     if (downloadPath) {
                       openFolder(downloadPath);

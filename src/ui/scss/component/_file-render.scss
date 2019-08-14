@@ -95,4 +95,11 @@
   .vjs-big-play-button {
     display: none;
   }
+
+  .vjs-modal-dialog .vjs-modal-dialog-content {
+    position: relative;
+    padding-top: 5rem;
+    // Make sure no videojs message interferes with overlaying buttons
+    pointer-events: none;
+  }
 }
