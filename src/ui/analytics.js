@@ -3,6 +3,7 @@ import { Lbryio } from 'lbryinc';
 import ReactGA from 'react-ga';
 import { history } from './store';
 // @if TARGET='app'
+import Native from 'native';
 import ElectronCookies from '@exponent/electron-cookies';
 // @endif
 
@@ -15,6 +16,9 @@ type Analytics = {
   apiLogView: (string, string, string, ?number, ?() => void) => void,
   apiLogPublish: () => void,
   tagFollowEvent: (string, boolean, string) => void,
+  emailProvidedEvent: () => void,
+  emailVerifiedEvent: () => void,
+  rewardEligibleEvent: () => void,
 };
 
 let analyticsEnabled: boolean = true;
@@ -26,11 +30,18 @@ const analytics: Analytics = {
   },
   setUser: userId => {
     if (analyticsEnabled && userId) {
-      ReactGA.event({
-        category: 'User',
-        action: 'userId',
-        value: userId,
+      ReactGA.set({
+        userId,
       });
+
+      // @if TARGET='app'
+      Native.getAppVersionInfo().then(({ localVersion }) => {
+        ReactGA.event({
+          category: 'Desktop-Version',
+          action: localVersion,
+        });
+      });
+      // @endif
     }
   },
   toggle: (enabled: boolean): void => {
@@ -89,6 +100,30 @@ const analytics: Analytics = {
       ReactGA.event({
         category: blocked ? 'Channel-Hidden' : 'Channel-Unhidden',
         action: uri,
+      });
+    }
+  },
+  emailProvidedEvent: () => {
+    if (analyticsEnabled && isProduction) {
+      ReactGA.event({
+        category: 'Engagement',
+        action: 'Email-Provided',
+      });
+    }
+  },
+  emailVerifiedEvent: () => {
+    if (analyticsEnabled && isProduction) {
+      ReactGA.event({
+        category: 'Engagement',
+        action: 'Email-Verified',
+      });
+    }
+  },
+  rewardEligibleEvent: () => {
+    if (analyticsEnabled && isProduction) {
+      ReactGA.event({
+        category: 'Engagement',
+        action: 'Reward-Eligible',
       });
     }
   },
