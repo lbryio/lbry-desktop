@@ -39,7 +39,7 @@ const analytics: Analytics = {
     analyticsEnabled = enabled;
     // @endif
   },
-  apiLogView: (uri, outpoint, claimId, timeToStart, onSuccessCb) => {
+  apiLogView: (uri, outpoint, claimId, timeToStart) => {
     if (analyticsEnabled) {
       const params: {
         uri: string,
@@ -52,17 +52,12 @@ const analytics: Analytics = {
         claim_id: claimId,
       };
 
-      if (timeToStart) {
+      // lbry.tv streams from AWS so we don't care about the time to start
+      if (timeToStart && !IS_WEB) {
         params.time_to_start = timeToStart;
       }
 
-      Lbryio.call('file', 'view', params)
-        .then(() => {
-          if (onSuccessCb) {
-            onSuccessCb();
-          }
-        })
-        .catch(() => {});
+      Lbryio.call('file', 'view', params);
     }
   },
   apiLogSearch: () => {
