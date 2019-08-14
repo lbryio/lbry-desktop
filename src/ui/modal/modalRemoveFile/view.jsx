@@ -54,7 +54,7 @@ function ModalRemoveFile(props: Props) {
             button="primary"
             label={__('OK')}
             disabled={!deleteChecked && !abandonChecked}
-            onClick={() => deleteFile(outpoint || '', deleteChecked, abandonChecked)}
+            onClick={() => deleteFile(outpoint || '', deleteChecked, claimIsMine ? abandonChecked : false)}
           />
           <Button button="link" label={__('Cancel')} onClick={closeModal} />
         </div>

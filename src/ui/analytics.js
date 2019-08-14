@@ -40,7 +40,7 @@ const analytics: Analytics = {
     // @endif
   },
   apiLogView: (uri, outpoint, claimId, timeToStart) => {
-    if (analyticsEnabled) {
+    if (analyticsEnabled && isProduction) {
       const params: {
         uri: string,
         outpoint: string,
