@@ -6,7 +6,14 @@ import { ipcRenderer, remote } from 'electron';
 import path from 'path';
 import * as ACTIONS from 'constants/action_types';
 import * as MODALS from 'constants/modal_types';
-import { Lbry, doBalanceSubscribe, doFetchFileInfosAndPublishedClaims, doError } from 'lbry-redux';
+import {
+  Lbry,
+  doBalanceSubscribe,
+  doFetchFileInfosAndPublishedClaims,
+  doError,
+  makeSelectClaimForUri,
+  makeSelectClaimIsMine,
+} from 'lbry-redux';
 import Native from 'native';
 import { doFetchDaemonSettings } from 'redux/actions/settings';
 import { doCheckSubscriptionsInit } from 'redux/actions/subscriptions';
@@ -24,6 +31,7 @@ import {
 import { doAuthenticate } from 'lbryinc';
 import { lbrySettings as config, version as appVersion } from 'package.json';
 import { push } from 'connected-react-router';
+import analytics from 'analytics';
 
 // @if TARGET='app'
 const { autoUpdater } = remote.require('electron-updater');
@@ -408,5 +416,20 @@ export function doConditionalAuthNavigate(newSession) {
 export function doToggleSearchExpanded() {
   return {
     type: ACTIONS.TOGGLE_SEARCH_EXPANDED,
+  };
+}
+
+export function doAnalyticsView(uri, timeToStart) {
+  return (dispatch, getState) => {
+    const state = getState();
+    const { txid, nout, claim_id: claimId } = makeSelectClaimForUri(uri)(state);
+    const claimIsMine = makeSelectClaimIsMine(uri)(state);
+    const outpoint = `${txid}:${nout}`;
+
+    if (claimIsMine) {
+      return;
+    }
+
+    analytics.apiLogView(uri, outpoint, claimId, timeToStart);
   };
 }
