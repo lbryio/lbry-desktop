@@ -9,7 +9,6 @@ type Props = {
   uri: string,
   claimIsMine: boolean,
   downloading: boolean,
-  loading: boolean,
   isStreamable: boolean,
   fileInfo: ?FileListItem,
   openModal: (id: string, { path: string }) => void,
@@ -18,9 +17,9 @@ type Props = {
 };
 
 function FileDownloadLink(props: Props) {
-  const { fileInfo, downloading, loading, openModal, pause, claimIsMine, download, uri } = props;
+  const { fileInfo, downloading, openModal, pause, claimIsMine, download, uri } = props;
 
-  if (downloading || loading) {
+  if (downloading) {
     const progress = fileInfo && fileInfo.written_bytes > 0 ? (fileInfo.written_bytes / fileInfo.total_bytes) * 100 : 0;
     const label =
       fileInfo && fileInfo.written_bytes > 0 ? progress.toFixed(0) + __('% downloaded') : __('Connecting...');

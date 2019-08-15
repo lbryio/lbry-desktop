@@ -48,7 +48,7 @@ function ModalRemoveFile(props: Props) {
           />
         )}
         <div className="card__actions">
-          <Button type="submit" button="primary" label={__('OK')} disabled={!deleteChecked && !abandonChecked} />
+          <Button type="submit" button="primary" label={__('OK')} />
           <Button button="link" label={__('Cancel')} onClick={closeModal} />
         </div>
       </Form>
