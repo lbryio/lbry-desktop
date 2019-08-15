@@ -8,6 +8,7 @@ import {
   makeSelectUriIsStreamable,
   makeSelectTitleForUri,
 } from 'lbry-redux';
+import { doClaimEligiblePurchaseRewards } from 'lbryinc';
 import { makeSelectIsPlaying, makeSelectShouldObscurePreview, selectPlayingUri } from 'redux/selectors/content';
 import { makeSelectClientSetting } from 'redux/selectors/settings';
 import { doSetPlayingUri } from 'redux/actions/content';
@@ -34,6 +35,7 @@ const select = (state, props) => {
 const perform = dispatch => ({
   clearPlayingUri: () => dispatch(doSetPlayingUri(null)),
   triggerAnalyticsView: (uri, timeToStart) => dispatch(doAnalyticsView(uri, timeToStart)),
+  claimRewards: () => dispatch(doClaimEligiblePurchaseRewards()),
 });
 
 export default withRouter(

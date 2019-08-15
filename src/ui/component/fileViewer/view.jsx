@@ -29,6 +29,7 @@ type Props = {
   floatingPlayerEnabled: boolean,
   clearPlayingUri: () => void,
   triggerAnalyticsView: (string, number) => void,
+  claimRewards: () => void,
 };
 
 export default function FileViewer(props: Props) {
@@ -43,6 +44,7 @@ export default function FileViewer(props: Props) {
     clearPlayingUri,
     floatingPlayerEnabled,
     triggerAnalyticsView,
+    claimRewards,
   } = props;
   const [playTime, setPlayTime] = useState();
   const [fileViewerRect, setFileViewerRect] = usePersistedState('inline-file-viewer:rect');
@@ -73,9 +75,10 @@ export default function FileViewer(props: Props) {
     if (playTime && isReadyToPlay && wasntReadyButNowItIs) {
       const timeToStart = Date.now() - playTime;
       triggerAnalyticsView(uri, timeToStart);
+      claimRewards();
       setPlayTime(null);
     }
-  }, [setPlayTime, triggerAnalyticsView, isReadyToPlay, wasntReadyButNowItIs, playTime, uri]);
+  }, [setPlayTime, triggerAnalyticsView, isReadyToPlay, wasntReadyButNowItIs, playTime, uri, claimRewards]);
 
   useEffect(() => {
     function handleResize() {
