@@ -1,13 +1,12 @@
 // @flow
 import React, { useState } from 'react';
-import { parseURI } from 'lbry-redux';
 import { Form, FormField } from 'component/common/form';
 import Button from 'component/button';
 import SelectAsset from 'component/selectAsset';
 import TagSelect from 'component/tagsSelect';
 
 type Props = {
-  uri: string,
+  claim: ChannelClaim,
   title: ?string,
   amount: string,
   cover: ?string,
@@ -28,7 +27,7 @@ type Props = {
 
 function ChannelForm(props: Props) {
   const {
-    uri,
+    claim,
     title,
     cover,
     description,
@@ -44,7 +43,7 @@ function ChannelForm(props: Props) {
     updateThumb,
     updateCover,
   } = props;
-  const { claimId } = parseURI(uri);
+  const { claim_id: claimId } = claim;
 
   // fill this in with sdk data
   const channelParams = {

@@ -53,7 +53,7 @@ export function doDeleteFileAndMaybeGoBack(uri, deleteFromComputer, abandonClaim
   return (dispatch, getState) => {
     const state = getState();
     const playingUri = selectPlayingUri(state);
-    const { outpoint } = makeSelectFileInfoForUri(uri)(state);
+    const { outpoint } = makeSelectFileInfoForUri(uri)(state) || '';
     const actions = [];
     actions.push(doHideModal());
     actions.push(doDeleteFile(outpoint, deleteFromComputer, abandonClaim));
