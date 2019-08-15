@@ -2,10 +2,11 @@ import * as ACTIONS from 'constants/action_types';
 // @if TARGET='app'
 import { shell } from 'electron';
 // @endif
-import { Lbry, batchActions, doAbandonClaim, selectMyClaimsOutpoints } from 'lbry-redux';
+import { Lbry, batchActions, doAbandonClaim, selectMyClaimsOutpoints, makeSelectFileInfoForUri } from 'lbry-redux';
 import { doHideModal } from 'redux/actions/app';
 import { goBack } from 'connected-react-router';
 import { doSetPlayingUri } from 'redux/actions/content';
+import { selectPlayingUri } from 'redux/selectors/content';
 
 export function doOpenFileInFolder(path) {
   return () => {
@@ -48,16 +49,23 @@ export function doDeleteFile(outpoint, deleteFromComputer, abandonClaim) {
   };
 }
 
-export function doDeleteFileAndMaybeGoBack(fileInfo, deleteFromComputer, abandonClaim) {
-  return dispatch => {
+export function doDeleteFileAndMaybeGoBack(uri, deleteFromComputer, abandonClaim) {
+  return (dispatch, getState) => {
+    const state = getState();
+    const playingUri = selectPlayingUri(state);
+    const { outpoint } = makeSelectFileInfoForUri(uri)(state);
     const actions = [];
     actions.push(doHideModal());
-    actions.push(doDeleteFile(fileInfo, deleteFromComputer, abandonClaim));
-    actions.push(doSetPlayingUri(null));
-    dispatch(batchActions(...actions));
+    actions.push(doDeleteFile(outpoint, deleteFromComputer, abandonClaim));
+
+    if (playingUri === uri) {
+      actions.push(doSetPlayingUri(null));
+    }
 
     if (abandonClaim) {
-      dispatch(goBack());
+      actions.push(goBack());
     }
+
+    dispatch(batchActions(...actions));
   };
 }
