@@ -4,6 +4,7 @@ import React, { Fragment, useEffect } from 'react';
 import { withRouter } from 'react-router';
 import { createNormalizedClaimSearchKey, MATURE_TAGS } from 'lbry-redux';
 import { FormField } from 'component/common/form';
+import Button from 'component/button';
 import moment from 'moment';
 import ClaimList from 'component/claimList';
 import Tag from 'component/tag';
@@ -106,15 +107,34 @@ function ClaimListDiscover(props: Props) {
         .unix()
     )}`;
   }
-
+  const hasContent =
+    (personalSort === SEARCH_SORT_CHANNELS && subscribedChannels.length) ||
+    (personalSort === SEARCH_SORT_YOU && !!tags.length) ||
+    personalSort === SEARCH_SORT_ALL;
   const claimSearchCacheQuery = createNormalizedClaimSearchKey(options);
-  const uris = claimSearchByQuery[claimSearchCacheQuery] || [];
+  const uris = (hasContent && claimSearchByQuery[claimSearchCacheQuery]) || [];
   const shouldPerformSearch =
-    uris.length === 0 ||
-    didNavigateForward ||
-    (!loading && uris.length < PAGE_SIZE * page && uris.length % PAGE_SIZE === 0);
+    hasContent &&
+    (uris.length === 0 ||
+      didNavigateForward ||
+      (!loading && uris.length < PAGE_SIZE * page && uris.length % PAGE_SIZE === 0));
   // Don't use the query from createNormalizedClaimSearchKey for the effect since that doesn't include page & release_time
   const optionsStringForEffect = JSON.stringify(options);
+
+  const noChannels = (
+    <div>
+      <p>{__("You're not following any channels.")}</p>
+      <Button button={'link'} navigate={'/?type=trending&sort=everyone'}>
+        {__("Look what's trending for everyone")}
+      </Button>{' '}
+      {__('or')}{' '}
+      <Button button={'link'} navigate={'/$/following'}>
+        {__('Discover some channels!')}
+      </Button>
+    </div>
+  );
+
+  const emptyState = personalSort === SEARCH_SORT_CHANNELS ? noChannels : false;
 
   function getSearch() {
     let search = `?`;
@@ -227,6 +247,7 @@ function ClaimListDiscover(props: Props) {
         onScrollBottom={handleScrollBottom}
         page={page}
         pageSize={PAGE_SIZE}
+        empty={emptyState}
       />
 
       {loading && new Array(PAGE_SIZE).fill(1).map((x, i) => <ClaimPreview key={i} placeholder="loading" />)}
