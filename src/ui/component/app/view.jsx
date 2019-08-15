@@ -75,6 +75,8 @@ function App(props: Props) {
   }, [previousUserId, userId]);
 
   useEffect(() => {
+    // Check that previousHasVerifiedEmail was not undefined instead of just not truthy
+    // This ensures we don't fire the emailVerified event on the initial user fetch
     if (previousHasVerifiedEmail !== undefined && hasVerifiedEmail) {
       analytics.emailVerifiedEvent();
     }

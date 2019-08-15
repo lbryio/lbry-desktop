@@ -36,10 +36,7 @@ const analytics: Analytics = {
 
       // @if TARGET='app'
       Native.getAppVersionInfo().then(({ localVersion }) => {
-        ReactGA.event({
-          category: 'Desktop-Version',
-          action: localVersion,
-        });
+        sendGaEvent('Desktop-Version', localVersion);
       });
       // @endif
     }
@@ -88,46 +85,30 @@ const analytics: Analytics = {
     }
   },
   tagFollowEvent: (tag, following, location) => {
-    if (analyticsEnabled) {
-      ReactGA.event({
-        category: following ? 'Tag-Follow' : 'Tag-Unfollow',
-        action: tag,
-      });
-    }
+    sendGaEvent(following ? 'Tag-Follow' : 'Tag-Unfollow', tag);
   },
   channelBlockEvent: (uri, blocked, location) => {
-    if (analyticsEnabled) {
-      ReactGA.event({
-        category: blocked ? 'Channel-Hidden' : 'Channel-Unhidden',
-        action: uri,
-      });
-    }
+    sendGaEvent(blocked ? 'Channel-Hidden' : 'Channel-Unhidden', uri);
   },
   emailProvidedEvent: () => {
-    if (analyticsEnabled && isProduction) {
-      ReactGA.event({
-        category: 'Engagement',
-        action: 'Email-Provided',
-      });
-    }
+    sendGaEvent('Engagement', 'Email-Provided');
   },
   emailVerifiedEvent: () => {
-    if (analyticsEnabled && isProduction) {
-      ReactGA.event({
-        category: 'Engagement',
-        action: 'Email-Verified',
-      });
-    }
+    sendGaEvent('Engagement', 'Email-Verified');
   },
   rewardEligibleEvent: () => {
-    if (analyticsEnabled && isProduction) {
-      ReactGA.event({
-        category: 'Engagement',
-        action: 'Reward-Eligible',
-      });
-    }
+    sendGaEvent('Engagement', 'Reward-Eligible');
   },
 };
+
+function sendGaEvent(category, action) {
+  if (analyticsEnabled && isProduction) {
+    ReactGA.event({
+      category,
+      action,
+    });
+  }
+}
 
 // Initialize google analytics
 // Set `debug: true` for debug info
@@ -143,6 +124,8 @@ ElectronCookies.enable({
 ReactGA.initialize(UA_ID, {
   testMode: process.env.NODE_ENV !== 'production',
   cookieDomain: 'auto',
+  // un-comment to see events as they are sent to google
+  // debug: true,
 });
 
 // Manually call the first page view
