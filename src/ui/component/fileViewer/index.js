@@ -12,6 +12,7 @@ import { makeSelectIsPlaying, makeSelectShouldObscurePreview, selectPlayingUri }
 import { makeSelectClientSetting } from 'redux/selectors/settings';
 import { doSetPlayingUri } from 'redux/actions/content';
 import { withRouter } from 'react-router';
+import { doAnalyticsView } from 'redux/actions/app';
 import FileViewer from './view';
 
 const select = (state, props) => {
@@ -32,6 +33,7 @@ const select = (state, props) => {
 
 const perform = dispatch => ({
   clearPlayingUri: () => dispatch(doSetPlayingUri(null)),
+  triggerAnalyticsView: (uri, timeToStart) => dispatch(doAnalyticsView(uri, timeToStart)),
 });
 
 export default withRouter(

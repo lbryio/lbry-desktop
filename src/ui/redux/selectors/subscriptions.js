@@ -266,7 +266,11 @@ export const makeSelectIsSubscribed = uri =>
       }
 
       // If we couldn't get a channel uri from the claim uri, the uri passed in might be a channel already
-      const { isChannel } = parseURI(uri);
+      let isChannel;
+      try {
+        ({ isChannel } = parseURI(uri));
+      } catch (e) {}
+
       if (isChannel) {
         const uriWithPrefix = uri.startsWith('lbry://') ? uri : `lbry://${uri}`;
         return subscriptions.some(sub => sub.uri === uriWithPrefix);

@@ -3,6 +3,7 @@ import { Lbryio } from 'lbryinc';
 import ReactGA from 'react-ga';
 import { history } from './store';
 // @if TARGET='app'
+import Native from 'native';
 import ElectronCookies from '@exponent/electron-cookies';
 // @endif
 
@@ -15,6 +16,9 @@ type Analytics = {
   apiLogView: (string, string, string, ?number, ?() => void) => void,
   apiLogPublish: () => void,
   tagFollowEvent: (string, boolean, string) => void,
+  emailProvidedEvent: () => void,
+  emailVerifiedEvent: () => void,
+  rewardEligibleEvent: () => void,
 };
 
 let analyticsEnabled: boolean = true;
@@ -26,11 +30,15 @@ const analytics: Analytics = {
   },
   setUser: userId => {
     if (analyticsEnabled && userId) {
-      ReactGA.event({
-        category: 'User',
-        action: 'userId',
-        value: userId,
+      ReactGA.set({
+        userId,
       });
+
+      // @if TARGET='app'
+      Native.getAppVersionInfo().then(({ localVersion }) => {
+        sendGaEvent('Desktop-Version', localVersion);
+      });
+      // @endif
     }
   },
   toggle: (enabled: boolean): void => {
@@ -39,8 +47,8 @@ const analytics: Analytics = {
     analyticsEnabled = enabled;
     // @endif
   },
-  apiLogView: (uri, outpoint, claimId, timeToStart, onSuccessCb) => {
-    if (analyticsEnabled) {
+  apiLogView: (uri, outpoint, claimId, timeToStart) => {
+    if (analyticsEnabled && isProduction) {
       const params: {
         uri: string,
         outpoint: string,
@@ -52,17 +60,12 @@ const analytics: Analytics = {
         claim_id: claimId,
       };
 
-      if (timeToStart) {
+      // lbry.tv streams from AWS so we don't care about the time to start
+      if (timeToStart && !IS_WEB) {
         params.time_to_start = timeToStart;
       }
 
-      Lbryio.call('file', 'view', params)
-        .then(() => {
-          if (onSuccessCb) {
-            onSuccessCb();
-          }
-        })
-        .catch(() => {});
+      Lbryio.call('file', 'view', params);
     }
   },
   apiLogSearch: () => {
@@ -82,22 +85,30 @@ const analytics: Analytics = {
     }
   },
   tagFollowEvent: (tag, following, location) => {
-    if (analyticsEnabled) {
-      ReactGA.event({
-        category: following ? 'Tag-Follow' : 'Tag-Unfollow',
-        action: tag,
-      });
-    }
+    sendGaEvent(following ? 'Tag-Follow' : 'Tag-Unfollow', tag);
   },
   channelBlockEvent: (uri, blocked, location) => {
-    if (analyticsEnabled) {
-      ReactGA.event({
-        category: blocked ? 'Channel-Hidden' : 'Channel-Unhidden',
-        action: uri,
-      });
-    }
+    sendGaEvent(blocked ? 'Channel-Hidden' : 'Channel-Unhidden', uri);
+  },
+  emailProvidedEvent: () => {
+    sendGaEvent('Engagement', 'Email-Provided');
+  },
+  emailVerifiedEvent: () => {
+    sendGaEvent('Engagement', 'Email-Verified');
+  },
+  rewardEligibleEvent: () => {
+    sendGaEvent('Engagement', 'Reward-Eligible');
   },
 };
+
+function sendGaEvent(category, action) {
+  if (analyticsEnabled && isProduction) {
+    ReactGA.event({
+      category,
+      action,
+    });
+  }
+}
 
 // Initialize google analytics
 // Set `debug: true` for debug info
@@ -113,6 +124,8 @@ ElectronCookies.enable({
 ReactGA.initialize(UA_ID, {
   testMode: process.env.NODE_ENV !== 'production',
   cookieDomain: 'auto',
+  // un-comment to see events as they are sent to google
+  // debug: true,
 });
 
 // Manually call the first page view

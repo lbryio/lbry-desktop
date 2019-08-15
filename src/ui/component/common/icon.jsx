@@ -25,7 +25,7 @@ class IconComponent extends React.PureComponent<Props> {
       case ICONS.FEATURED:
         return __('Featured content. Earn rewards for watching.');
       case ICONS.DOWNLOAD:
-        return __('This file is downloaded.');
+        return __('This file is in your library.');
       case ICONS.SUBSCRIBE:
         return __('You are subscribed to this channel.');
       case ICONS.SETTINGS:

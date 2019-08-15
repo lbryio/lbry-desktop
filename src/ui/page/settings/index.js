@@ -2,6 +2,7 @@ import { connect } from 'react-redux';
 import * as settings from 'constants/settings';
 import { doClearCache, doNotifyEncryptWallet, doNotifyDecryptWallet } from 'redux/actions/app';
 import { doSetDaemonSetting, doSetClientSetting, doGetThemes, doChangeLanguage } from 'redux/actions/settings';
+import { doSetPlayingUri } from 'redux/actions/content';
 import {
   makeSelectClientSetting,
   selectDaemonSettings,
@@ -40,6 +41,7 @@ const perform = dispatch => ({
   encryptWallet: () => dispatch(doNotifyEncryptWallet()),
   decryptWallet: () => dispatch(doNotifyDecryptWallet()),
   updateWalletStatus: () => dispatch(doWalletStatus()),
+  clearPlayingUri: () => dispatch(doSetPlayingUri(null)),
 });
 
 export default connect(

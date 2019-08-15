@@ -1,12 +1,13 @@
 // @flow
 import * as ICONS from 'constants/icons';
-import React, { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import Button from 'component/button';
 import classnames from 'classnames';
 import LoadingScreen from 'component/common/loading-screen';
 import FileRender from 'component/fileRender';
 import UriIndicator from 'component/uriIndicator';
 import usePersistedState from 'util/use-persisted-state';
+import usePrevious from 'util/use-previous';
 import { FILE_WRAPPER_CLASS } from 'page/file/view';
 import Draggable from 'react-draggable';
 import Tooltip from 'component/common/tooltip';
@@ -27,6 +28,7 @@ type Props = {
   title: ?string,
   floatingPlayerEnabled: boolean,
   clearPlayingUri: () => void,
+  triggerAnalyticsView: (string, number) => void,
 };
 
 export default function FileViewer(props: Props) {
@@ -40,7 +42,9 @@ export default function FileViewer(props: Props) {
     title,
     clearPlayingUri,
     floatingPlayerEnabled,
+    triggerAnalyticsView,
   } = props;
+  const [playTime, setPlayTime] = useState();
   const [fileViewerRect, setFileViewerRect] = usePersistedState('inline-file-viewer:rect');
   const [position, setPosition] = usePersistedState('floating-file-viewer:position', {
     x: -25,
@@ -54,15 +58,24 @@ export default function FileViewer(props: Props) {
       ? __("It looks like you deleted or moved this file. We're rebuilding it now. It will only take a few seconds.")
       : __('Loading');
 
-  function handleDrag(e, ui) {
-    const { x, y } = position;
-    const newX = x + ui.deltaX;
-    const newY = y + ui.deltaY;
-    setPosition({
-      x: newX,
-      y: newY,
-    });
-  }
+  const previousUri = usePrevious(uri);
+  const previousIsReadyToPlay = usePrevious(isReadyToPlay);
+  const isNewView = uri && previousUri !== uri && isPlaying;
+  const wasntReadyButNowItIs = isReadyToPlay && !previousIsReadyToPlay;
+
+  useEffect(() => {
+    if (isNewView) {
+      setPlayTime(Date.now());
+    }
+  }, [isNewView, uri]);
+
+  useEffect(() => {
+    if (playTime && isReadyToPlay && wasntReadyButNowItIs) {
+      const timeToStart = Date.now() - playTime;
+      triggerAnalyticsView(uri, timeToStart);
+      setPlayTime(null);
+    }
+  }, [setPlayTime, triggerAnalyticsView, isReadyToPlay, wasntReadyButNowItIs, playTime, uri]);
 
   useEffect(() => {
     function handleResize() {
@@ -85,9 +98,18 @@ export default function FileViewer(props: Props) {
     }
   }, [setFileViewerRect, inline]);
 
+  function handleDrag(e, ui) {
+    const { x, y } = position;
+    const newX = x + ui.deltaX;
+    const newY = y + ui.deltaY;
+    setPosition({
+      x: newX,
+      y: newY,
+    });
+  }
+
   const hidePlayer = !isPlaying || !uri || (!inline && (!floatingPlayerEnabled || !isStreamable));
   if (hidePlayer) {
-    clearPlayingUri();
     return null;
   }
 

@@ -3,6 +3,7 @@ import * as React from 'react';
 import { FormField, Form } from 'component/common/form';
 import Button from 'component/button';
 import { Lbryio } from 'lbryinc';
+import analytics from 'analytics';
 
 type Props = {
   cancelButton: React.Node,
@@ -37,6 +38,7 @@ class UserEmailNew extends React.PureComponent<Props, State> {
     const { email } = this.state;
     const { addUserEmail } = this.props;
     addUserEmail(email);
+    analytics.emailProvidedEvent();
 
     // @if TARGET='web'
     Lbryio.call('user_tag', 'edit', { add: 'lbrytv' });

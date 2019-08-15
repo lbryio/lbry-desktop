@@ -44,6 +44,7 @@ type Props = {
   blockedChannelUris: Array<string>,
   channelIsBlocked: boolean,
   isSubscribed: boolean,
+  beginPublish: string => void,
 };
 
 const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
@@ -68,6 +69,7 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
     showUserBlocked,
     channelIsBlocked,
     isSubscribed,
+    beginPublish,
   } = props;
   const haventFetched = claim === undefined;
   const abandoned = !isResolvingUri && !claim;
@@ -77,8 +79,9 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
   const hideActions = type === 'small' || type === 'tooltip';
 
   let isValid;
+  let name;
   try {
-    parseURI(uri);
+    ({ claimName: name } = parseURI(uri));
     isValid = true;
   } catch (e) {
     isValid = false;
@@ -191,7 +194,11 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
                   <Fragment>
                     <div>{__('Publish something and claim this spot!')}</div>
                     <div className="card__actions">
-                      <Button button="primary" label={`${__('Publish to')}  ${uri}`} />
+                      <Button
+                        onClick={() => beginPublish(name)}
+                        button="primary"
+                        label={`${__('Publish to')}  ${uri}`}
+                      />
                     </div>
                   </Fragment>
                 )}

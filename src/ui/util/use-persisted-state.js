@@ -12,7 +12,7 @@ export default function usePersistedState(key, firstTimeDefault) {
         parsedItem = JSON.parse(item);
       } catch (e) {}
 
-      if (parsedItem) {
+      if (parsedItem !== undefined) {
         defaultValue = parsedItem;
       } else {
         defaultValue = item;

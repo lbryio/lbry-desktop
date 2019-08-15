@@ -12,6 +12,7 @@ import useKonamiListener from 'util/enhanced-layout';
 import Yrbl from 'component/yrbl';
 import FileViewer from 'component/fileViewer';
 import { withRouter } from 'react-router';
+import usePrevious from 'util/use-previous';
 
 export const MAIN_WRAPPER_CLASS = 'main-wrapper';
 
@@ -21,7 +22,7 @@ type Props = {
   language: string,
   theme: string,
   accessToken: ?string,
-  user: ?{ id: string, has_verified_email: boolean },
+  user: ?{ id: string, has_verified_email: boolean, is_reward_approved: boolean },
   location: { pathname: string },
   fetchRewards: () => void,
   fetchRewardedContent: () => void,
@@ -35,7 +36,10 @@ function App(props: Props) {
   const isEnhancedLayout = useKonamiListener();
   const userId = user && user.id;
   const hasVerifiedEmail = user && user.has_verified_email;
-
+  const isRewardApproved = user && user.is_reward_approved;
+  const previousUserId = usePrevious(userId);
+  const previousHasVerifiedEmail = usePrevious(hasVerifiedEmail);
+  const previousRewardApproved = usePrevious(isRewardApproved);
   const { pathname } = props.location;
   const urlParts = pathname.split('/');
   const claimName = urlParts[1];
@@ -65,10 +69,24 @@ function App(props: Props) {
   }, [theme]);
 
   useEffect(() => {
-    if (userId) {
+    if (previousUserId === undefined && userId) {
       analytics.setUser(userId);
     }
-  }, [userId]);
+  }, [previousUserId, userId]);
+
+  useEffect(() => {
+    // Check that previousHasVerifiedEmail was not undefined instead of just not truthy
+    // This ensures we don't fire the emailVerified event on the initial user fetch
+    if (previousHasVerifiedEmail !== undefined && hasVerifiedEmail) {
+      analytics.emailVerifiedEvent();
+    }
+  }, [previousHasVerifiedEmail, hasVerifiedEmail]);
+
+  useEffect(() => {
+    if (previousRewardApproved !== undefined && isRewardApproved) {
+      analytics.rewardEligibleEvent();
+    }
+  }, [previousRewardApproved, isRewardApproved]);
 
   // @if TARGET='web'
   useEffect(() => {

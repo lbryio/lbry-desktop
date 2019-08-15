@@ -168,6 +168,7 @@ class SettingsPage extends React.PureComponent<Props, State> {
       hideBalance,
       userBlockedChannelsCount,
       floatingPlayer,
+      clearPlayingUri,
     } = this.props;
 
     const noDaemonSettings = !daemonSettings || Object.keys(daemonSettings).length === 0;
@@ -319,6 +320,7 @@ class SettingsPage extends React.PureComponent<Props, State> {
                 name="floating_player"
                 onChange={() => {
                   setClientSetting(SETTINGS.FLOATING_PLAYER, !floatingPlayer);
+                  clearPlayingUri();
                 }}
                 checked={floatingPlayer}
                 label={__('Floating video player')}
