@@ -4,7 +4,6 @@ import http from 'http';
 // @endif
 import { Lbry, ACTIONS, SETTINGS } from 'lbry-redux';
 import { makeSelectClientSetting } from 'redux/selectors/settings';
-import moment from 'moment';
 import analytics from 'analytics';
 
 const UPDATE_IS_NIGHT_INTERVAL = 10 * 60 * 1000;
@@ -60,16 +59,8 @@ export function doGetThemes() {
 }
 
 export function doUpdateIsNight() {
-  const momentNow = moment();
   return {
     type: ACTIONS.UPDATE_IS_NIGHT,
-    data: {
-      isNight: (() => {
-        const startNightMoment = moment('21:00', 'HH:mm');
-        const endNightMoment = moment('8:00', 'HH:mm');
-        return !(momentNow.isAfter(endNightMoment) && momentNow.isBefore(startNightMoment));
-      })(),
-    },
   };
 }
 

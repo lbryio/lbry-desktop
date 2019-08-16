@@ -422,6 +422,34 @@ class SettingsPage extends React.PureComponent<Props, State> {
                     checked={automaticDarkModeEnabled}
                     label={__('Automatic dark mode (9pm to 8am)')}
                   />
+                  <FormField
+                    type="select"
+                    name="automatic_dark_mode_range"
+                    // onChange={() => this.onAutomaticDarkModeChange(!automaticDarkModeEnabled)}
+                    // checked={automaticDarkModeEnabled}
+                    disabled={!automaticDarkModeEnabled}
+                    label={__('from:')}
+                  >
+                    {['18:00', '19:00', '20:00', '21:00'].map(time => (
+                      <option key={time} value={time}>
+                        {time}
+                      </option>
+                    ))}
+                  </FormField>
+                  <FormField
+                    type="select"
+                    name="automatic_dark_mode_range"
+                    // onChange={() => this.onAutomaticDarkModeChange(!automaticDarkModeEnabled)}
+                    // checked={automaticDarkModeEnabled}
+                    disabled={!automaticDarkModeEnabled}
+                    label={__('To:')}
+                  >
+                    {['5:00', '6:00', '7:00', '8:00'].map(time => (
+                      <option key={time} value={time}>
+                        {time}
+                      </option>
+                    ))}
+                  </FormField>
                 </fieldset-section>
               </Form>
             </section>
