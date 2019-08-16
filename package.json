@@ -1,6 +1,6 @@
 {
   "name": "LBRY",
-  "version": "0.35.0",
+  "version": "0.35.1-rc.1",
   "description": "A browser for the LBRY network, a digital marketplace controlled by its users.",
   "keywords": [
     "lbry"
