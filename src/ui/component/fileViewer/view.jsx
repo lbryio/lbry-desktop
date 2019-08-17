@@ -84,7 +84,8 @@ export default function FileViewer(props: Props) {
     function handleResize() {
       const element = document.querySelector(`.${FILE_WRAPPER_CLASS}`);
       if (!element) {
-        throw new Error("Can't find file viewer wrapper to attach to");
+        console.error("Can't find file viewer wrapper to attach to the inline viewer to");
+        return;
       }
 
       const rect = element.getBoundingClientRect();
