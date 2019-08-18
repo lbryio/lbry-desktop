@@ -16,6 +16,16 @@ type Price = {
 
 type SetDaemonSettingArg = boolean | string | number | Price;
 
+type DarkModeTimes = {
+  from: { hour: string, min: string, formattedTime: string },
+  to: { hour: string, min: string, formattedTime: string },
+};
+
+type OptionTimes = {
+  fromTo: string,
+  time: string,
+};
+
 type DaemonSettings = {
   download_dir: string,
   share_usage_data: boolean,
@@ -52,10 +62,7 @@ type Props = {
   hideBalance: boolean,
   floatingPlayer: boolean,
   clearPlayingUri: () => void,
-  darkModeTimes: {
-    from: { hour: string, min: string, formattedTime: string },
-    to: { hour: string, min: string, formattedTime: string },
-  },
+  darkModeTimes: DarkModeTimes,
   setDarkTime: (string, {}) => void,
 };
 
@@ -136,7 +143,7 @@ class SettingsPage extends React.PureComponent<Props, State> {
     }
   }
 
-  onChangeTime(event: SyntheticInputEvent<*>, options: Object) {
+  onChangeTime(event: SyntheticInputEvent<*>, options: OptionTimes) {
     const { value } = event.target;
 
     this.props.setDarkTime(value, options);
