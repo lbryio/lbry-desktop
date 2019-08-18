@@ -454,73 +454,73 @@ class SettingsPage extends React.PureComponent<Props, State> {
                     label={__('Automatic dark mode')}
                   />
 
-                  <h3>{__('From: ')}</h3>
-                  <div className="time-section">
-                    <FormField
-                      className="select-hours"
-                      type="select"
-                      name="automatic_dark_mode_range"
-                      disabled={!automaticDarkModeEnabled}
-                      onChange={value => this.onChangeTime(value, { fromTo: 'from', time: 'hour' })}
-                      value={darkModeTimes.from.hour}
-                      label={__('Hours:')}
-                    >
-                      {startHours.map(time => (
-                        <option key={time} value={time}>
-                          {this.to12Hour(time)}
-                        </option>
-                      ))}
-                    </FormField>
-                    <FormField
-                      className="select-hours"
-                      label={__('minutes')}
-                      type="select"
-                      name="automatic_dark_mode_range"
-                      disabled={!automaticDarkModeEnabled}
-                      onChange={value => this.onChangeTime(value, { fromTo: 'from', time: 'min' })}
-                      value={darkModeTimes.from.min}
-                    >
-                      {enabledMinutes.map(time => (
-                        <option key={time} value={time}>
-                          {time}
-                        </option>
-                      ))}
-                    </FormField>
-                  </div>
+                  <Form>
+                    <h3>{__('From: ')}</h3>
+                    <fieldset-group class="fieldset-group--smushed">
+                      <FormField
+                        type="select"
+                        name="automatic_dark_mode_range"
+                        disabled={!automaticDarkModeEnabled}
+                        onChange={value => this.onChangeTime(value, { fromTo: 'from', time: 'hour' })}
+                        value={darkModeTimes.from.hour}
+                        label={__('Hours:')}
+                      >
+                        {startHours.map(time => (
+                          <option key={time} value={time}>
+                            {this.to12Hour(time)}
+                          </option>
+                        ))}
+                      </FormField>
+                      <FormField
+                        label={__('minutes')}
+                        type="select"
+                        name="automatic_dark_mode_range"
+                        disabled={!automaticDarkModeEnabled}
+                        onChange={value => this.onChangeTime(value, { fromTo: 'from', time: 'min' })}
+                        value={darkModeTimes.from.min}
+                      >
+                        {enabledMinutes.map(time => (
+                          <option key={time} value={time}>
+                            {time}
+                          </option>
+                        ))}
+                      </FormField>
+                    </fieldset-group>
+                  </Form>
 
-                  <h3>{__('To: ')}</h3>
-                  <div className="time-section">
-                    <FormField
-                      className="select-hours"
-                      type="select"
-                      name="automatic_dark_mode_range"
-                      disabled={!automaticDarkModeEnabled}
-                      label={__('Hours:')}
-                      onChange={value => this.onChangeTime(value, { fromTo: 'to', time: 'hour' })}
-                      value={darkModeTimes.to.hour}
-                    >
-                      {endHours.map(time => (
-                        <option key={time} value={time}>
-                          {this.to12Hour(time)}
-                        </option>
-                      ))}
-                    </FormField>
-                    <FormField
-                      className="select-hours"
-                      label={__('minutes')}
-                      type="select"
-                      name="automatic_dark_mode_range"
-                      disabled={!automaticDarkModeEnabled}
-                      onChange={value => this.onChangeTime(value, { fromTo: 'to', time: 'min' })}
-                      value={darkModeTimes.to.min}
-                    >
-                      {enabledMinutes.map(time => (
-                        <option key={time} value={time}>
-                          {time}
-                        </option>
-                      ))}
-                    </FormField>
-                  </div>
+                  <Form>
+                    <h3>{__('To: ')}</h3>
+                    <fieldset-group class="fieldset-group--smushed">
+                      <FormField
+                        type="select"
+                        name="automatic_dark_mode_range"
+                        disabled={!automaticDarkModeEnabled}
+                        label={__('Hours:')}
+                        onChange={value => this.onChangeTime(value, { fromTo: 'to', time: 'hour' })}
+                        value={darkModeTimes.to.hour}
+                      >
+                        {endHours.map(time => (
+                          <option key={time} value={time}>
+                            {this.to12Hour(time)}
+                          </option>
+                        ))}
+                      </FormField>
+                      <FormField
+                        label={__('minutes')}
+                        type="select"
+                        name="automatic_dark_mode_range"
+                        disabled={!automaticDarkModeEnabled}
+                        onChange={value => this.onChangeTime(value, { fromTo: 'to', time: 'min' })}
+                        value={darkModeTimes.to.min}
+                      >
+                        {enabledMinutes.map(time => (
+                          <option key={time} value={time}>
+                            {time}
+                          </option>
+                        ))}
+                      </FormField>
+                    </fieldset-group>
+                  </Form>
                 </fieldset-section>
               </Form>
             </section>
