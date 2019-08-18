@@ -52,6 +52,11 @@ type Props = {
   hideBalance: boolean,
   floatingPlayer: boolean,
   clearPlayingUri: () => void,
+  darkModeTimes: {
+    from: { hour: string, min: string, formattedTime: string },
+    to: { hour: string, min: string, formattedTime: string },
+  },
+  setDarkTime: (string, {}) => void,
 };
 
 type State = {
@@ -74,6 +79,7 @@ class SettingsPage extends React.PureComponent<Props, State> {
     (this: any).onAutomaticDarkModeChange = this.onAutomaticDarkModeChange.bind(this);
     (this: any).onLanguageChange = this.onLanguageChange.bind(this);
     (this: any).clearCache = this.clearCache.bind(this);
+    (this: any).onChangeTime = this.onChangeTime.bind(this);
   }
 
   componentDidMount() {
@@ -130,6 +136,20 @@ class SettingsPage extends React.PureComponent<Props, State> {
     }
   }
 
+  onChangeTime(event: SyntheticInputEvent<*>, options: Object) {
+    const { value } = event.target;
+
+    this.props.setDarkTime(value, options);
+  }
+
+  to12Hour(time: string) {
+    const now = new Date(0, 0, 0, Number(time));
+
+    const hour = now.toLocaleTimeString('en-US', { hour12: true, hour: '2-digit' });
+
+    return hour;
+  }
+
   setDaemonSetting(name: string, value: ?SetDaemonSettingArg): void {
     this.props.setDaemonSetting(name, value);
   }
@@ -169,6 +189,7 @@ class SettingsPage extends React.PureComponent<Props, State> {
       userBlockedChannelsCount,
       floatingPlayer,
       clearPlayingUri,
+      darkModeTimes,
     } = this.props;
 
     const noDaemonSettings = !daemonSettings || Object.keys(daemonSettings).length === 0;
@@ -177,6 +198,9 @@ class SettingsPage extends React.PureComponent<Props, State> {
 
     const disableMaxKeyFee = !(daemonSettings && daemonSettings.max_key_fee);
     const connectionOptions = [1, 2, 4, 6, 10, 20];
+    const startHours = ['18', '19', '20', '21'];
+    const endHours = ['5', '6', '7', '8'];
+    const enabledMinutes = ['00', '15', '30', '45'];
 
     return (
       <Page>
@@ -420,36 +444,76 @@ class SettingsPage extends React.PureComponent<Props, State> {
                     name="automatic_dark_mode"
                     onChange={() => this.onAutomaticDarkModeChange(!automaticDarkModeEnabled)}
                     checked={automaticDarkModeEnabled}
-                    label={__('Automatic dark mode (9pm to 8am)')}
+                    label={__('Automatic dark mode')}
                   />
-                  <FormField
-                    type="select"
-                    name="automatic_dark_mode_range"
-                    // onChange={() => this.onAutomaticDarkModeChange(!automaticDarkModeEnabled)}
-                    // checked={automaticDarkModeEnabled}
-                    disabled={!automaticDarkModeEnabled}
-                    label={__('from:')}
-                  >
-                    {['18:00', '19:00', '20:00', '21:00'].map(time => (
-                      <option key={time} value={time}>
-                        {time}
-                      </option>
-                    ))}
-                  </FormField>
-                  <FormField
-                    type="select"
-                    name="automatic_dark_mode_range"
-                    // onChange={() => this.onAutomaticDarkModeChange(!automaticDarkModeEnabled)}
-                    // checked={automaticDarkModeEnabled}
-                    disabled={!automaticDarkModeEnabled}
-                    label={__('To:')}
-                  >
-                    {['5:00', '6:00', '7:00', '8:00'].map(time => (
-                      <option key={time} value={time}>
-                        {time}
-                      </option>
-                    ))}
-                  </FormField>
+
+                  <h3>{__('From: ')}</h3>
+                  <div className="time-section">
+                    <FormField
+                      className="select-hours"
+                      type="select"
+                      name="automatic_dark_mode_range"
+                      disabled={!automaticDarkModeEnabled}
+                      onChange={value => this.onChangeTime(value, { fromTo: 'from', time: 'hour' })}
+                      value={darkModeTimes.from.hour}
+                      label={__('Hours:')}
+                    >
+                      {startHours.map(time => (
+                        <option key={time} value={time}>
+                          {this.to12Hour(time)}
+                        </option>
+                      ))}
+                    </FormField>
+                    <FormField
+                      className="select-hours"
+                      label={__('minutes')}
+                      type="select"
+                      name="automatic_dark_mode_range"
+                      disabled={!automaticDarkModeEnabled}
+                      onChange={value => this.onChangeTime(value, { fromTo: 'from', time: 'min' })}
+                      value={darkModeTimes.from.min}
+                    >
+                      {enabledMinutes.map(time => (
+                        <option key={time} value={time}>
+                          {time}
+                        </option>
+                      ))}
+                    </FormField>
+                  </div>
+
+                  <h3>{__('To: ')}</h3>
+                  <div className="time-section">
+                    <FormField
+                      className="select-hours"
+                      type="select"
+                      name="automatic_dark_mode_range"
+                      disabled={!automaticDarkModeEnabled}
+                      label={__('Hours:')}
+                      onChange={value => this.onChangeTime(value, { fromTo: 'to', time: 'hour' })}
+                      value={darkModeTimes.to.hour}
+                    >
+                      {endHours.map(time => (
+                        <option key={time} value={time}>
+                          {this.to12Hour(time)}
+                        </option>
+                      ))}
+                    </FormField>
+                    <FormField
+                      className="select-hours"
+                      label={__('minutes')}
+                      type="select"
+                      name="automatic_dark_mode_range"
+                      disabled={!automaticDarkModeEnabled}
+                      onChange={value => this.onChangeTime(value, { fromTo: 'to', time: 'min' })}
+                      value={darkModeTimes.to.min}
+                    >
+                      {enabledMinutes.map(time => (
+                        <option key={time} value={time}>
+                          {time}
+                        </option>
+                      ))}
+                    </FormField>
+                  </div>
                 </fieldset-section>
               </Form>
             </section>

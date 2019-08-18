@@ -6,7 +6,7 @@ import { Lbry, ACTIONS, SETTINGS } from 'lbry-redux';
 import { makeSelectClientSetting } from 'redux/selectors/settings';
 import analytics from 'analytics';
 
-const UPDATE_IS_NIGHT_INTERVAL = 10 * 60 * 1000;
+const UPDATE_IS_NIGHT_INTERVAL = 5 * 60 * 1000;
 
 export function doFetchDaemonSettings() {
   return dispatch => {
@@ -136,5 +136,27 @@ export function doChangeLanguage(language) {
   return dispatch => {
     dispatch(doSetClientSetting(SETTINGS.LANGUAGE, language));
     i18n.setLocale(language);
+  };
+}
+
+export function doSetDarkTime(value, options) {
+  const { fromTo, time } = options;
+  return (dispatch, getState) => {
+    const state = getState();
+    const { darkModeTimes } = state.settings.clientSettings;
+    const { hour, min } = darkModeTimes[fromTo];
+    const newHour = time === 'hour' ? value : hour;
+    const newMin = time === 'min' ? value : min;
+    const modifiedTimes = {
+      [fromTo]: {
+        hour: newHour,
+        min: newMin,
+        formattedTime: newHour + ':' + newMin,
+      },
+    };
+    const mergedTimes = { ...darkModeTimes, ...modifiedTimes };
+
+    dispatch(doSetClientSetting(SETTINGS.DARK_MODE_TIMES, mergedTimes));
+    dispatch(doUpdateIsNight());
   };
 }

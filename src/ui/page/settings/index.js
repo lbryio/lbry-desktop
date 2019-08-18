@@ -1,7 +1,13 @@
 import { connect } from 'react-redux';
 import * as settings from 'constants/settings';
 import { doClearCache, doNotifyEncryptWallet, doNotifyDecryptWallet } from 'redux/actions/app';
-import { doSetDaemonSetting, doSetClientSetting, doGetThemes, doChangeLanguage } from 'redux/actions/settings';
+import {
+  doSetDaemonSetting,
+  doSetClientSetting,
+  doGetThemes,
+  doChangeLanguage,
+  doSetDarkTime,
+} from 'redux/actions/settings';
 import { doSetPlayingUri } from 'redux/actions/content';
 import {
   makeSelectClientSetting,
@@ -30,6 +36,7 @@ const select = state => ({
   userBlockedChannelsCount: selectBlockedChannelsCount(state),
   hideBalance: makeSelectClientSetting(settings.HIDE_BALANCE)(state),
   floatingPlayer: makeSelectClientSetting(settings.FLOATING_PLAYER)(state),
+  darkModeTimes: makeSelectClientSetting(settings.DARK_MODE_TIMES)(state),
 });
 
 const perform = dispatch => ({
@@ -42,6 +49,7 @@ const perform = dispatch => ({
   decryptWallet: () => dispatch(doNotifyDecryptWallet()),
   updateWalletStatus: () => dispatch(doWalletStatus()),
   clearPlayingUri: () => dispatch(doSetPlayingUri(null)),
+  setDarkTime: (time, options) => dispatch(doSetDarkTime(time, options)),
 });
 
 export default connect(
