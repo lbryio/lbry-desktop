@@ -11,11 +11,12 @@ type Props = {
   isSubscribed: boolean,
   toggleBlockChannel: (uri: string) => void,
   channelIsBlocked: boolean,
+  claimIsMine: boolean,
   doToast: ({ message: string, linkText: string, linkTarget: string }) => void,
 };
 
 export default function BlockButton(props: Props) {
-  const { uri, shortUrl, toggleBlockChannel, channelIsBlocked, doToast } = props;
+  const { uri, shortUrl, toggleBlockChannel, channelIsBlocked, claimIsMine, doToast } = props;
 
   const blockRef = useRef();
   const isHovering = useHover(blockRef);
@@ -23,19 +24,21 @@ export default function BlockButton(props: Props) {
   const blockedOverride = channelIsBlocked && isHovering && __('Unblock');
 
   return (
-    <Button
-      ref={blockRef}
-      iconColor="red"
-      icon={ICONS.BLOCK}
-      button={'alt'}
-      label={blockedOverride || blockLabel}
-      onClick={e => {
-        e.stopPropagation();
-        if (!channelIsBlocked) {
-          doToast({ message: `Blocked ${shortUrl}`, linkText: 'Manage', linkTarget: `/${PAGES.BLOCKED}` });
-        }
-        toggleBlockChannel(uri);
-      }}
-    />
+    !claimIsMine && (
+      <Button
+        ref={blockRef}
+        iconColor="red"
+        icon={ICONS.BLOCK}
+        button={'alt'}
+        label={blockedOverride || blockLabel}
+        onClick={e => {
+          e.stopPropagation();
+          if (!channelIsBlocked) {
+            doToast({ message: `Blocked ${shortUrl}`, linkText: 'Manage', linkTarget: `/${PAGES.BLOCKED}` });
+          }
+          toggleBlockChannel(uri);
+        }}
+      />
+    )
   );
 }
