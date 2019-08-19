@@ -1,17 +1,9 @@
 // @flow
-import { parseURI } from 'lbry-redux';
 
 const LBRY_INC_DOMAINS = ['lbry.io', 'lbry.com', 'lbry.tv', 'lbry.tech', 'lbry.fund', 'spee.ch'];
 
 export const formatLbryUriForWeb = (uri: string) => {
-  const { claimName, claimId } = parseURI(uri);
-
-  let webUrl = `/${claimName}`;
-  if (claimId) {
-    webUrl += `/${claimId}`;
-  }
-
-  return webUrl;
+  return uri.replace('lbry://', '/').replace(/#/g, ':');
 };
 
 export const formatPathForWeb = (path: string) => {

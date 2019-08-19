@@ -111,13 +111,13 @@ export default function ClaimList(props: Props) {
           </div>
         </div>
       )}
+
+      {injectedItem && <div>{injectedItem}</div>}
+
       {urisLength > 0 && (
         <ul className="ul--no-style">
           {sortedUris.map((uri, index) => (
-            <React.Fragment key={uri}>
-              <ClaimPreview uri={uri} type={type} showUserBlocked={showHiddenByUser} />
-              {index === 4 && injectedItem && injectedItem}
-            </React.Fragment>
+            <ClaimPreview key={uri} uri={uri} type={type} showUserBlocked={showHiddenByUser} />
           ))}
         </ul>
       )}
