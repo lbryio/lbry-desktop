@@ -1,0 +1,193 @@
+.wrapper {
+  composes: 'file-render__viewer' from global;
+}
+
+.userActive {
+  composes: wrapper;
+}
+
+.container {
+  background: #212529;
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  display: flex;
+}
+
+.containerWithMilkdrop {
+  composes: container;
+
+  background: rgba(50, 50, 55, 0.7);
+}
+
+.wave {
+  position: absolute;
+  bottom: -20%;
+  height: 40%;
+  opacity: 0.5;
+  overflow: hidden;
+  width: 100%;
+}
+
+.infoContainer {
+  padding: 0 20%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 42%;
+  align-self: center;
+  width: 100%;
+  margin-top: -10%;
+}
+
+.infoArtContainer {
+  align-self: flex-start;
+  width: 40%;
+  float: left;
+  position: relative;
+  background: rgba(0, 0, 0, 0.4);
+}
+
+.infoArtContainerHidden {
+  display: none;
+}
+
+.infoArtImage {
+  display: block;
+  opacity: 1;
+  transition: opacity 0.7s;
+
+  .userActive & {
+    opacity: 0.2;
+  }
+}
+
+.songDetailsContainer {
+  text-align: left;
+  padding: 3%;
+  width: 50%;
+}
+
+.songDetailsContainerHidden {
+  display: none;
+}
+
+.songDetailsContainerNoArt {
+  composes: songDetailsContainer;
+
+  text-align: center;
+}
+
+.songDetails {
+  width: 150%;
+  text-shadow: 2px 2px 3px #000;
+}
+
+.songDetailsNoArt {
+  composes: songDetails;
+
+  width: 200%;
+  margin-left: -50%;
+}
+
+.detailsIcon {
+  color: rgba(255, 255, 255, 0.5);
+  top: -3px;
+  padding-right: 10px;
+  width: 30px;
+}
+
+.detailsIconArtist {
+  composes: detailsIcon;
+
+  top: -3px;
+}
+
+.detailsIconSong {
+  composes: detailsIcon;
+
+  top: -5px;
+}
+
+.detailsIconAlbum {
+  composes: detailsIcon;
+}
+
+.detailsLineArtist {
+  font-size: 26px;
+  padding-bottom: 5px;
+}
+
+.detailsLineSong {
+  font-size: 34px;
+  line-height: 36px;
+}
+
+.detailsLineAlbum {
+  font-size: 20px;
+  padding-top: 8px;
+}
+
+.playButton {
+  position: absolute;
+  border: 5px solid #fff;
+  border-radius: 45px;
+  color: #fff;
+  font-family: arial;
+  font-size: 60px;
+  left: 50%;
+  line-height: 80px;
+  margin-left: -45px;
+  padding-left: 20px;
+  bottom: 50%;
+  margin-bottom: -45px;
+  height: 90px;
+  width: 90px;
+  opacity: 0;
+  transition: opacity 0.7s;
+
+  .userActive & {
+    opacity: 0.6;
+  }
+}
+
+.playButtonPlay {
+  composes: playButton;
+
+  &::after {
+    display: block;
+    content: '▶';
+  }
+}
+
+.playButtonPause {
+  composes: playButton;
+
+  font-size: 50px;
+  line-height: 75px;
+  padding-left: 20px;
+  letter-spacing: -24px;
+
+  &::after {
+    display: block;
+    content: '▎▎';
+  }
+}
+
+.playButtonDetachedContainer {
+  bottom: 35%;
+  position: absolute;
+  left: 50%;
+}
+
+.milkdrop {
+  top: 0;
+  z-index: 100;
+  height: 100%;
+  width: 100%;
+  display: block;
+}
+
+.milkdropDisabled {
+  display: none;
+}
