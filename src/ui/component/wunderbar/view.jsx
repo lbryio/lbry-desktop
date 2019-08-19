@@ -11,6 +11,9 @@ import Tag from 'component/tag';
 
 const L_KEY_CODE = 76;
 const ESC_KEY_CODE = 27;
+const WEB_DEV_PREFIX = 'http://localhost:1337/';
+const WEB_PROD_PREFIX = 'https://beta.lbry.tv/';
+const SEARCH_PREFIX = `$/${PAGES.SEARCH}q=`;
 
 type Props = {
   searchQuery: ?string,
@@ -95,11 +98,36 @@ class WunderBar extends React.PureComponent<Props, State> {
 
   handleSubmit(value: string, suggestion?: { value: string, type: string }) {
     const { onSubmit, onSearch, doShowSnackBar, history } = this.props;
+    let query = value.trim();
 
-    const query = value.trim();
     const showSnackError = () => {
       doShowSnackBar('Invalid LBRY URL entered. Only A-Z, a-z, 0-9, and "-" allowed.');
     };
+
+    // Allow copying a lbry.tv url and pasting it into the search bar
+    const includesLbryTvProd = query.includes(WEB_PROD_PREFIX);
+    const includesLbryTvDev = query.includes(WEB_DEV_PREFIX);
+    const wasCopiedFromWeb = includesLbryTvDev || includesLbryTvProd;
+
+    if (wasCopiedFromWeb) {
+      if (includesLbryTvDev) {
+        query = query.slice(WEB_DEV_PREFIX.length);
+      } else {
+        query = query.slice(WEB_PROD_PREFIX.length);
+      }
+
+      query = query.replace(/:/g, '#');
+
+      if (query.includes(SEARCH_PREFIX)) {
+        query = query.slice(SEARCH_PREFIX.length);
+        onSearch(query);
+        return;
+      } else {
+        query = `lbry://${query}`;
+        onSubmit(query);
+        return;
+      }
+    }
 
     // User selected a suggestion
     if (suggestion) {

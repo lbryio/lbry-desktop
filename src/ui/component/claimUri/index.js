@@ -1,9 +1,9 @@
 import { connect } from 'react-redux';
-import { makeSelectShortUrlForUri, doToast } from 'lbry-redux';
+import { makeSelectCanonicalUrlForUri, doToast } from 'lbry-redux';
 import ClaimUri from './view';
 
 const select = (state, props) => ({
-  shortUrl: makeSelectShortUrlForUri(props.uri)(state),
+  shortUrl: makeSelectCanonicalUrlForUri(props.uri)(state),
 });
 
 export default connect(

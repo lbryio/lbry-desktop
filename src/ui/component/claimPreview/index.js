@@ -23,20 +23,20 @@ import { push } from 'connected-react-router';
 import ClaimPreview from './view';
 
 const select = (state, props) => ({
-  pending: makeSelectClaimIsPending(props.uri)(state),
-  claim: makeSelectClaimForUri(props.uri)(state),
+  pending: props.uri && makeSelectClaimIsPending(props.uri)(state),
+  claim: props.uri && makeSelectClaimForUri(props.uri)(state),
   obscureNsfw: !selectShowMatureContent(state),
-  claimIsMine: makeSelectClaimIsMine(props.uri)(state),
-  isResolvingUri: makeSelectIsUriResolving(props.uri)(state),
-  thumbnail: makeSelectThumbnailForUri(props.uri)(state),
-  title: makeSelectTitleForUri(props.uri)(state),
-  nsfw: makeSelectClaimIsNsfw(props.uri)(state),
+  claimIsMine: props.uri && makeSelectClaimIsMine(props.uri)(state),
+  isResolvingUri: props.uri && makeSelectIsUriResolving(props.uri)(state),
+  thumbnail: props.uri && makeSelectThumbnailForUri(props.uri)(state),
+  title: props.uri && makeSelectTitleForUri(props.uri)(state),
+  nsfw: props.uri && makeSelectClaimIsNsfw(props.uri)(state),
   blackListedOutpoints: selectBlackListedOutpoints(state),
   filteredOutpoints: selectFilteredOutpoints(state),
   blockedChannelUris: selectBlockedChannels(state),
-  hasVisitedUri: makeSelectHasVisitedUri(props.uri)(state),
-  channelIsBlocked: selectChannelIsBlocked(props.uri)(state),
-  isSubscribed: makeSelectIsSubscribed(props.uri, true)(state),
+  hasVisitedUri: props.uri && makeSelectHasVisitedUri(props.uri)(state),
+  channelIsBlocked: props.uri && selectChannelIsBlocked(props.uri)(state),
+  isSubscribed: props.uri && makeSelectIsSubscribed(props.uri, true)(state),
 });
 
 const perform = dispatch => ({

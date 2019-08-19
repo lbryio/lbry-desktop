@@ -78,13 +78,15 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
   const includeChannelTooltip = type !== 'inline' && type !== 'tooltip';
   const hideActions = type === 'small' || type === 'tooltip';
 
-  let isValid;
   let name;
-  try {
-    ({ claimName: name } = parseURI(uri));
-    isValid = true;
-  } catch (e) {
-    isValid = false;
+  let isValid = false;
+  if (uri) {
+    try {
+      ({ claimName: name } = parseURI(uri));
+      isValid = true;
+    } catch (e) {
+      isValid = false;
+    }
   }
 
   const isChannel = isValid ? parseURI(uri).isChannel : false;

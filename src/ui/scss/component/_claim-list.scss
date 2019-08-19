@@ -109,7 +109,7 @@ $border-color--dark: var(--dm-color-04);
 
 .claim-preview--injected,
 .claim-preview {
-  border-bottom: 1px solid $border-color;
+  border-top: 1px solid $border-color;
 
   &:only-of-type {
     border: none;
