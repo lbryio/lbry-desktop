@@ -4,7 +4,29 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
-## [0.35.0] - [Unreleased]
+## [0.36.0] - [Unreleased]
+
+### Fixed
+
+- Don't show block button on your own channel ([#2744](https://github.com/lbryio/lbry-desktop/pull/2744))
+- App crash when automatically playing content originally priced in USD ([b347d3fc](https://github.com/lbryio/lbry-desktop/commit/b347d3fc5b492641124d763625e626a340916cb2))
+
+### Changed
+
+- Upgraded lbry-sdk to 0.39.1 for performance and reliability improvements
+- Upgraded windows certificate so builds continue to be signed properly
+
+### Added
+
+- Set automatic dark mode times ([#2747](https://github.com/lbryio/lbry-desktop/pull/2747))
+
+## [0.35.1] - [2019-08-16]
+
+### Fixed
+
+- Unable to upload thumbnail on publish page ([cad067ad](https://github.com/lbryio/lbry-desktop/commit/cad067ad95ea885db0fc58df3437989298bf5160))
+
+## [0.35.0] - [2019-08-15]
 
 ### Fixed
 
