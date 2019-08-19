@@ -207,7 +207,6 @@ class SettingsPage extends React.PureComponent<Props, State> {
     const connectionOptions = [1, 2, 4, 6, 10, 20];
     const startHours = ['18', '19', '20', '21'];
     const endHours = ['5', '6', '7', '8'];
-    const enabledMinutes = ['00', '15', '30', '45'];
 
     return (
       <Page>
@@ -453,17 +452,14 @@ class SettingsPage extends React.PureComponent<Props, State> {
                     checked={automaticDarkModeEnabled}
                     label={__('Automatic dark mode')}
                   />
-
-                  <Form>
-                    <h3>{__('From: ')}</h3>
+                  {automaticDarkModeEnabled && (
                     <fieldset-group class="fieldset-group--smushed">
                       <FormField
                         type="select"
                         name="automatic_dark_mode_range"
-                        disabled={!automaticDarkModeEnabled}
                         onChange={value => this.onChangeTime(value, { fromTo: 'from', time: 'hour' })}
                         value={darkModeTimes.from.hour}
-                        label={__('Hours:')}
+                        label={__('From')}
                       >
                         {startHours.map(time => (
                           <option key={time} value={time}>
@@ -472,30 +468,9 @@ class SettingsPage extends React.PureComponent<Props, State> {
                         ))}
                       </FormField>
                       <FormField
-                        label={__('minutes')}
                         type="select"
                         name="automatic_dark_mode_range"
-                        disabled={!automaticDarkModeEnabled}
-                        onChange={value => this.onChangeTime(value, { fromTo: 'from', time: 'min' })}
-                        value={darkModeTimes.from.min}
-                      >
-                        {enabledMinutes.map(time => (
-                          <option key={time} value={time}>
-                            {time}
-                          </option>
-                        ))}
-                      </FormField>
-                    </fieldset-group>
-                  </Form>
-
-                  <Form>
-                    <h3>{__('To: ')}</h3>
-                    <fieldset-group class="fieldset-group--smushed">
-                      <FormField
-                        type="select"
-                        name="automatic_dark_mode_range"
-                        disabled={!automaticDarkModeEnabled}
-                        label={__('Hours:')}
+                        label={__('To')}
                         onChange={value => this.onChangeTime(value, { fromTo: 'to', time: 'hour' })}
                         value={darkModeTimes.to.hour}
                       >
@@ -505,22 +480,8 @@ class SettingsPage extends React.PureComponent<Props, State> {
                           </option>
                         ))}
                       </FormField>
-                      <FormField
-                        label={__('minutes')}
-                        type="select"
-                        name="automatic_dark_mode_range"
-                        disabled={!automaticDarkModeEnabled}
-                        onChange={value => this.onChangeTime(value, { fromTo: 'to', time: 'min' })}
-                        value={darkModeTimes.to.min}
-                      >
-                        {enabledMinutes.map(time => (
-                          <option key={time} value={time}>
-                            {time}
-                          </option>
-                        ))}
-                      </FormField>
                     </fieldset-group>
-                  </Form>
+                  )}
                 </fieldset-section>
               </Form>
             </section>
