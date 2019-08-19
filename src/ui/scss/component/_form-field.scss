@@ -118,8 +118,9 @@ fieldset-group {
       width: auto;
       margin-bottom: 0;
 
-      &:first-of-type {
-        input {
+      &:first-child {
+        input,
+        select {
           border-right: none;
           border-top-right-radius: 0;
           border-bottom-right-radius: 0;

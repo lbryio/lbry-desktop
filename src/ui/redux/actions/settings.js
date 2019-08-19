@@ -3,11 +3,11 @@ import fs from 'fs';
 import http from 'http';
 // @endif
 import { Lbry, ACTIONS, SETTINGS } from 'lbry-redux';
+import * as DESKTOP_SETTINGS from 'constants/settings';
 import { makeSelectClientSetting } from 'redux/selectors/settings';
-import moment from 'moment';
 import analytics from 'analytics';
 
-const UPDATE_IS_NIGHT_INTERVAL = 10 * 60 * 1000;
+const UPDATE_IS_NIGHT_INTERVAL = 5 * 60 * 1000;
 
 export function doFetchDaemonSettings() {
   return dispatch => {
@@ -60,16 +60,8 @@ export function doGetThemes() {
 }
 
 export function doUpdateIsNight() {
-  const momentNow = moment();
   return {
     type: ACTIONS.UPDATE_IS_NIGHT,
-    data: {
-      isNight: (() => {
-        const startNightMoment = moment('21:00', 'HH:mm');
-        const endNightMoment = moment('8:00', 'HH:mm');
-        return !(momentNow.isAfter(endNightMoment) && momentNow.isBefore(startNightMoment));
-      })(),
-    },
   };
 }
 
@@ -145,5 +137,27 @@ export function doChangeLanguage(language) {
   return dispatch => {
     dispatch(doSetClientSetting(SETTINGS.LANGUAGE, language));
     i18n.setLocale(language);
+  };
+}
+
+export function doSetDarkTime(value, options) {
+  const { fromTo, time } = options;
+  return (dispatch, getState) => {
+    const state = getState();
+    const { darkModeTimes } = state.settings.clientSettings;
+    const { hour, min } = darkModeTimes[fromTo];
+    const newHour = time === 'hour' ? value : hour;
+    const newMin = time === 'min' ? value : min;
+    const modifiedTimes = {
+      [fromTo]: {
+        hour: newHour,
+        min: newMin,
+        formattedTime: newHour + ':' + newMin,
+      },
+    };
+    const mergedTimes = { ...darkModeTimes, ...modifiedTimes };
+
+    dispatch(doSetClientSetting(DESKTOP_SETTINGS.DARK_MODE_TIMES, mergedTimes));
+    dispatch(doUpdateIsNight());
   };
 }

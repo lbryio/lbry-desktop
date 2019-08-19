@@ -47,35 +47,31 @@ export class FormFieldPrice extends React.PureComponent<Props> {
 
     return (
       <fieldset-group class="fieldset-group--smushed">
-        <fieldset-section>
-          <FormField
-            name={`${name}_amount`}
-            label={__('Price')}
-            type="number"
-            className="form-field--price-amount"
-            min={min}
-            value={price.amount}
-            onChange={this.handleAmountChange}
-            placeholder={placeholder || 5}
-            disabled={disabled}
-            step={step || 'any'}
-          />
-        </fieldset-section>
-        <fieldset-section>
-          <FormField
-            label={__('Currency')}
-            name={`${name}_currency`}
-            type="select"
-            id={`${name}_currency`}
-            className="input--currency-select"
-            disabled={disabled}
-            onChange={this.handleCurrencyChange}
-            value={price.currency}
-          >
-            <option value="LBC">{__('LBRY Credits (LBC)')}</option>
-            <option value="USD">{__('US Dollars')}</option>
-          </FormField>
-        </fieldset-section>
+        <FormField
+          name={`${name}_amount`}
+          label={__('Price')}
+          type="number"
+          className="form-field--price-amount"
+          min={min}
+          value={price.amount}
+          onChange={this.handleAmountChange}
+          placeholder={placeholder || 5}
+          disabled={disabled}
+          step={step || 'any'}
+        />
+        <FormField
+          label={__('Currency')}
+          name={`${name}_currency`}
+          type="select"
+          id={`${name}_currency`}
+          className="input--currency-select"
+          disabled={disabled}
+          onChange={this.handleCurrencyChange}
+          value={price.currency}
+        >
+          <option value="LBC">{__('LBRY Credits (LBC)')}</option>
+          <option value="USD">{__('US Dollars')}</option>
+        </FormField>
       </fieldset-group>
     );
   }

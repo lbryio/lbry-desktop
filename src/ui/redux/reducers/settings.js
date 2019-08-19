@@ -1,6 +1,7 @@
 import * as ACTIONS from 'constants/action_types';
 import LANGUAGES from 'constants/languages';
 import * as SETTINGS from 'constants/settings';
+import moment from 'moment';
 
 function getLocalStorageSetting(setting, fallback) {
   const localStorageVal = localStorage.getItem(`setting_${setting}`);
@@ -32,6 +33,10 @@ const defaultState = {
     [SETTINGS.HIDE_BALANCE]: Boolean(getLocalStorageSetting(SETTINGS.HIDE_BALANCE, false)),
     [SETTINGS.HIDE_SPLASH_ANIMATION]: Boolean(getLocalStorageSetting(SETTINGS.HIDE_SPLASH_ANIMATION, false)),
     [SETTINGS.FLOATING_PLAYER]: Boolean(getLocalStorageSetting(SETTINGS.FLOATING_PLAYER, true)),
+    [SETTINGS.DARK_MODE_TIMES]: getLocalStorageSetting(SETTINGS.DARK_MODE_TIMES, {
+      from: { hour: '21', min: '00', formattedTime: '21:00' },
+      to: { hour: '8', min: '00', formattedTime: '8:00' },
+    }),
   },
   isNight: false,
   languages: { en: 'English', pl: 'Polish', id: 'Bahasa Indonesia' }, // temporarily hard code these so we can advance i18n testing
@@ -59,10 +64,17 @@ reducers[ACTIONS.CLIENT_SETTING_CHANGED] = (state, action) => {
   });
 };
 
-reducers[ACTIONS.UPDATE_IS_NIGHT] = (state, action) =>
-  Object.assign({}, state, {
-    isNight: action.data.isNight,
+reducers[ACTIONS.UPDATE_IS_NIGHT] = state => {
+  const { from, to } = state.clientSettings.darkModeTimes;
+  const momentNow = moment();
+  const startNightMoment = moment(from.formattedTime, 'HH:mm');
+  const endNightMoment = moment(to.formattedTime, 'HH:mm');
+  const isNight = !(momentNow.isAfter(endNightMoment) && momentNow.isBefore(startNightMoment));
+
+  return Object.assign({}, state, {
+    isNight,
   });
+};
 
 reducers[ACTIONS.DOWNLOAD_LANGUAGE_SUCCEEDED] = (state, action) => {
   const languages = Object.assign({}, state.languages);
