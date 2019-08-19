@@ -8,6 +8,7 @@ import {
   makeSelectMediaTypeForUri,
   makeSelectUriIsStreamable,
 } from 'lbry-redux';
+import { makeSelectCostInfoForUri } from 'lbryinc';
 import { makeSelectClientSetting } from 'redux/selectors/settings';
 import { makeSelectIsPlaying, makeSelectShouldObscurePreview, selectPlayingUri } from 'redux/selectors/content';
 import FileViewer from './view';
@@ -22,6 +23,7 @@ const select = (state, props) => ({
   streamingUrl: makeSelectStreamingUrlForUri(props.uri)(state),
   isStreamable: makeSelectUriIsStreamable(props.uri)(state),
   autoplay: makeSelectClientSetting(SETTINGS.AUTOPLAY)(state),
+  hasCostInfo: Boolean(makeSelectCostInfoForUri(props.uri)(state)),
 });
 
 const perform = dispatch => ({
