@@ -3,27 +3,35 @@ import React from 'react';
 import { Form, FormField } from 'component/common/form';
 import { Modal } from 'modal/modal';
 import Button from 'component/button';
+import keytar from 'keytar';
 
 type Props = {
   quit: () => void,
   closeModal: () => void,
   unlockWallet: (?string) => void,
   walletUnlockSucceded: boolean,
+  setPasswordSaved: boolean => void,
 };
 
 type State = {
   password: string,
+  rememberPassword: boolean,
 };
 
 class ModalWalletUnlock extends React.PureComponent<Props, State> {
   state = {
     password: '',
+    rememberPassword: false,
   };
 
   componentDidUpdate() {
     const { props } = this;
 
     if (props.walletUnlockSucceded === true) {
+      if (this.state.rememberPassword) {
+        this.props.setPasswordSaved(true);
+        keytar.setPassword('LBRY', 'wallet_password', this.state.password);
+      }
       props.closeModal();
     }
   }
@@ -32,11 +40,14 @@ class ModalWalletUnlock extends React.PureComponent<Props, State> {
     this.setState({ password: event.target.value });
   }
 
+  onChangeRememberPassword(event: SyntheticInputEvent<>) {
+    this.setState({ rememberPassword: event.target.checked });
+  }
+
   render() {
     const { quit, unlockWallet, walletUnlockSucceded } = this.props;
 
-    const { password } = this.state;
-
+    const { password, rememberPassword } = this.state;
     return (
       <Modal
         isOpen
@@ -61,7 +72,18 @@ class ModalWalletUnlock extends React.PureComponent<Props, State> {
             type="password"
             name="wallet-password"
             onChange={event => this.onChangePassword(event)}
+            value={password || ''}
           />
+          <fieldset-section>
+            <FormField
+              label={__('Remember Password')}
+              type="checkbox"
+              name="wallet-remember-password"
+              onChange={event => this.onChangeRememberPassword(event)}
+              checked={rememberPassword}
+              helper={__('You will no longer see this at startup')}
+            />
+          </fieldset-section>
         </Form>
       </Modal>
     );

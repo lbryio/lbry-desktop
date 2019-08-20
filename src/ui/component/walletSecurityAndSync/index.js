@@ -1,0 +1,68 @@
+import * as SETTINGS from 'constants/settings';
+import { connect } from 'react-redux';
+import {
+  doWalletStatus,
+  doWalletEncrypt,
+  doWalletDecrypt,
+  selectWalletEncryptSucceeded,
+  selectWalletEncryptPending,
+  selectWalletEncryptResult,
+  selectWalletIsEncrypted,
+  selectHasTransactions,
+} from 'lbry-redux';
+import { doPasswordSaved } from 'redux/actions/app';
+import WalletSecurityAndSync from './view';
+import {
+  doCheckSync,
+  doGetSync,
+  doSetDefaultAccount,
+  doSyncApply,
+  selectHasSyncedWallet,
+  selectGetSyncIsPending,
+  selectSetSyncIsPending,
+  selectSyncApplyIsPending,
+  selectSyncApplyErrorMessage,
+  selectSyncData,
+  selectSyncHash,
+  selectHashChanged,
+  selectUser,
+} from 'lbryinc';
+import { selectIsPasswordSaved } from 'redux/selectors/app';
+import { doSetClientSetting } from 'redux/actions/settings';
+import { makeSelectClientSetting } from 'redux/selectors/settings';
+
+const select = state => ({
+  walletEncryptSucceeded: selectWalletEncryptSucceeded(state),
+  walletEncryptPending: selectWalletEncryptPending(state),
+  walletEncryptResult: selectWalletEncryptResult(state),
+  walletEncrypted: selectWalletIsEncrypted(state),
+  walletHasTransactions: selectHasTransactions(state),
+  user: selectUser(state),
+  syncEnabled: makeSelectClientSetting(SETTINGS.ENABLE_SYNC)(state),
+  hasSyncedWallet: selectHasSyncedWallet(state),
+  getSyncIsPending: selectGetSyncIsPending(state),
+  setSyncIsPending: selectSetSyncIsPending(state),
+  syncApplyIsPending: selectSyncApplyIsPending(state),
+  syncApplyErrorMessage: selectSyncApplyErrorMessage(state),
+  syncData: selectSyncData(state),
+  syncHash: selectSyncHash(state),
+  isPasswordSaved: selectIsPasswordSaved(state),
+  hashChanged: selectHashChanged(state),
+});
+
+const perform = dispatch => ({
+  encryptWallet: password => dispatch(doWalletEncrypt(password)),
+  decryptWallet: () => dispatch(doWalletDecrypt()),
+  updateWalletStatus: () => dispatch(doWalletStatus()),
+  setPasswordSaved: saved => dispatch(doPasswordSaved(saved)),
+  syncApply: (hash, data, password) => dispatch(doSyncApply(hash, data, password)),
+  getSync: password => dispatch(doGetSync(password)),
+  checkSync: () => dispatch(doCheckSync()),
+  setDefaultAccount: () => dispatch(doSetDefaultAccount()),
+  setClientSetting: (key, value) => dispatch(doSetClientSetting(key, value)),
+});
+
+export default connect(
+  select,
+  perform
+)(WalletSecurityAndSync);

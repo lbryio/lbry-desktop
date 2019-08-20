@@ -38,6 +38,7 @@ export type AppState = {
   hasClickedComment: boolean,
   enhancedLayout: boolean,
   searchOptionsExpanded: boolean,
+  isPasswordSaved: boolean,
 };
 
 const defaultState: AppState = {
@@ -66,6 +67,7 @@ const defaultState: AppState = {
   searchOptionsExpanded: false,
   currentScroll: 0,
   scrollHistory: [0],
+  isPasswordSaved: false,
 };
 
 // @@router comes from react-router
@@ -94,6 +96,11 @@ reducers['@@router/LOCATION_CHANGE'] = (state, action) => {
 reducers[ACTIONS.DAEMON_READY] = state =>
   Object.assign({}, state, {
     daemonReady: true,
+  });
+
+reducers[ACTIONS.PASSWORD_SAVED] = (state, action) =>
+  Object.assign({}, state, {
+    isPasswordSaved: action.data,
   });
 
 reducers[ACTIONS.DAEMON_VERSION_MATCH] = state =>
