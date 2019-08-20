@@ -3,6 +3,7 @@ import React from 'react';
 import { Form, FormField, Submit } from 'component/common/form';
 import { Modal } from 'modal/modal';
 import Button from 'component/button';
+import keytar from 'keytar';
 
 type Props = {
   closeModal: () => void,
@@ -10,6 +11,7 @@ type Props = {
   updateWalletStatus: boolean,
   encryptWallet: (?string) => void,
   updateWalletStatus: () => void,
+  setPasswordSaved: boolean => void,
 };
 
 type State = {
@@ -20,6 +22,7 @@ type State = {
   understandError: boolean,
   submitted: boolean,
   failMessage: ?string,
+  rememberPassword: boolean,
 };
 
 class ModalWalletEncrypt extends React.PureComponent<Props, State> {
@@ -31,6 +34,7 @@ class ModalWalletEncrypt extends React.PureComponent<Props, State> {
     understandError: false,
     submitted: false, // Prior actions could be marked complete
     failMessage: undefined,
+    rememberPassword: false,
   };
 
   componentDidUpdate() {
@@ -49,6 +53,10 @@ class ModalWalletEncrypt extends React.PureComponent<Props, State> {
 
   onChangeNewPassword(event: SyntheticInputEvent<>) {
     this.setState({ newPassword: event.target.value });
+  }
+
+  onChangeRememberPassword(event: SyntheticInputEvent<>) {
+    this.setState({ rememberPassword: event.target.checked });
   }
 
   onChangeNewPasswordConfirm(event: SyntheticInputEvent<>) {
@@ -79,7 +87,10 @@ class ModalWalletEncrypt extends React.PureComponent<Props, State> {
     if (invalidEntries === true) {
       return;
     }
-
+    if (state.rememberPassword === true) {
+      this.props.setPasswordSaved(true);
+      keytar.setPassword('LBRY', 'wallet_password', state.newPassword);
+    }
     this.setState({ submitted: true });
     this.props.encryptWallet(state.newPassword);
   }
@@ -88,7 +99,6 @@ class ModalWalletEncrypt extends React.PureComponent<Props, State> {
     const { closeModal } = this.props;
 
     const { passwordMismatch, understandError, failMessage } = this.state;
-
     return (
       <Modal
         isOpen
@@ -124,6 +134,15 @@ class ModalWalletEncrypt extends React.PureComponent<Props, State> {
               type="password"
               name="wallet-new-password-confirm"
               onChange={event => this.onChangeNewPasswordConfirm(event)}
+            />
+          </fieldset-section>
+          <fieldset-section>
+            <FormField
+              label={__('Remember Password')}
+              type="checkbox"
+              name="wallet-remember-password"
+              onChange={event => this.onChangeRememberPassword(event)}
+              checked={this.state.rememberPassword}
             />
           </fieldset-section>
 

@@ -81,6 +81,7 @@ let baseConfig = {
           loader: 'raw-loader',
         },
       },
+      { test: /\.node$/, loader: 'node-loader' },
     ],
   },
   // Allows imports for all directories inside '/ui'
