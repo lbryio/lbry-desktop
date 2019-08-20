@@ -133,3 +133,8 @@ export const selectScrollStartingPosition = createSelector(
   selectState,
   state => state.currentScroll
 );
+
+export const selectIsPasswordSaved = createSelector(
+  selectState,
+  state => state.isPasswordSaved
+);

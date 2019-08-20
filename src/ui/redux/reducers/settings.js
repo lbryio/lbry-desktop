@@ -31,6 +31,7 @@ const defaultState = {
     [SETTINGS.AUTO_DOWNLOAD]: getLocalStorageSetting(SETTINGS.AUTO_DOWNLOAD, true),
     [SETTINGS.OS_NOTIFICATIONS_ENABLED]: Boolean(getLocalStorageSetting(SETTINGS.OS_NOTIFICATIONS_ENABLED, true)),
     [SETTINGS.HIDE_BALANCE]: Boolean(getLocalStorageSetting(SETTINGS.HIDE_BALANCE, false)),
+    [SETTINGS.ENABLE_SYNC]: Boolean(getLocalStorageSetting(SETTINGS.ENABLE_SYNC, false)),
     [SETTINGS.HIDE_SPLASH_ANIMATION]: Boolean(getLocalStorageSetting(SETTINGS.HIDE_SPLASH_ANIMATION, false)),
     [SETTINGS.FLOATING_PLAYER]: Boolean(getLocalStorageSetting(SETTINGS.FLOATING_PLAYER, true)),
     [SETTINGS.DARK_MODE_TIMES]: getLocalStorageSetting(SETTINGS.DARK_MODE_TIMES, {
