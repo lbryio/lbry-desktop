@@ -307,9 +307,30 @@ export function doNotifyUnlockWallet() {
   };
 }
 
+export function doNotifyForgetPassword() {
+  return dispatch => {
+    dispatch(doOpenModal(MODALS.WALLET_PASSWORD_UNSAVE));
+  };
+}
+
+export function doNotifySyncWallet() {
+  return dispatch => {
+    dispatch(doOpenModal(MODALS.WALLET_SYNC));
+  };
+}
+
 export function doAlertError(errorList) {
   return dispatch => {
     dispatch(doError(errorList));
+  };
+}
+
+export function doPasswordSaved(saved) {
+  return dispatch => {
+    dispatch({
+      type: ACTIONS.PASSWORD_SAVED,
+      data: saved,
+    });
   };
 }
 
