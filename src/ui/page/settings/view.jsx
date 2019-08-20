@@ -9,6 +9,9 @@ import { FormField, FormFieldPrice, Form } from 'component/common/form';
 import Button from 'component/button';
 import Page from 'component/page';
 import FileSelector from 'component/common/file-selector';
+import UnsupportedOnWeb from 'component/common/unsupported-on-web';
+import keytar from 'keytar';
+import WalletSecurityAndSync from '../../component/walletSecurityAndSync';
 
 type Price = {
   currency: string,
@@ -61,6 +64,9 @@ type Props = {
   supportOption: boolean,
   userBlockedChannelsCount?: number,
   hideBalance: boolean,
+  confirmForgetPassword: () => void,
+  isPasswordSaved: boolean,
+  setPasswordSaved: boolean => void,
   floatingPlayer: boolean,
   clearPlayingUri: () => void,
   darkModeTimes: DarkModeTimes,
@@ -69,6 +75,7 @@ type Props = {
 
 type State = {
   clearingCache: boolean,
+  storedPassword: boolean,
 };
 
 class SettingsPage extends React.PureComponent<Props, State> {
@@ -77,6 +84,7 @@ class SettingsPage extends React.PureComponent<Props, State> {
 
     this.state = {
       clearingCache: false,
+      storedPassword: false,
     };
 
     (this: any).onKeyFeeChange = this.onKeyFeeChange.bind(this);
@@ -93,6 +101,13 @@ class SettingsPage extends React.PureComponent<Props, State> {
   componentDidMount() {
     this.props.getThemes();
     this.props.updateWalletStatus();
+    keytar.getPassword('LBRY', 'wallet_password').then(p => {
+      if (p || p === '') {
+        this.props.setPasswordSaved(true);
+      } else {
+        this.props.setPasswordSaved(false);
+      }
+    });
   }
 
   onKeyFeeChange(newValue: Price) {
@@ -142,6 +157,11 @@ class SettingsPage extends React.PureComponent<Props, State> {
     } else {
       encryptWallet();
     }
+  }
+
+  onConfirmForgetPassword() {
+    const { confirmForgetPassword } = this.props;
+    confirmForgetPassword();
   }
 
   onChangeTime(event: SyntheticInputEvent<*>, options: OptionTimes) {
@@ -198,6 +218,7 @@ class SettingsPage extends React.PureComponent<Props, State> {
       floatingPlayer,
       clearPlayingUri,
       darkModeTimes,
+      isPasswordSaved,
     } = this.props;
 
     const noDaemonSettings = !daemonSettings || Object.keys(daemonSettings).length === 0;
@@ -232,6 +253,7 @@ class SettingsPage extends React.PureComponent<Props, State> {
                 <p className="help">{__('LBRY downloads will be saved here.')}</p>
               </div>
             </section>
+            <WalletSecurityAndSync />
             <section className="card card--section">
               <h2 className="card__title">{__('Network and Data Settings')}</h2>
               <Form>
@@ -500,7 +522,16 @@ class SettingsPage extends React.PureComponent<Props, State> {
                     </React.Fragment>
                   }
                 />
-
+                {isPasswordSaved && (
+                  <p className="card__subtitle card__help">
+                    {__('Your password is saved in your OS keychain.')}{' '}
+                    <Button
+                      button="link"
+                      label={__('I want to type it manually')}
+                      onClick={this.onConfirmForgetPassword}
+                    />
+                  </p>
+                )}
                 <FormField
                   type="checkbox"
                   name="hide_balance"
