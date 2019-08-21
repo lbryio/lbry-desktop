@@ -1,13 +1,30 @@
 // @flow
 import * as ICONS from 'constants/icons';
 import * as SETTINGS from 'constants/settings';
-import * as React from 'react';
+import * as PAGES from 'constants/pages';
+import React, { Fragment } from 'react';
 import { withRouter } from 'react-router';
 import Button from 'component/button';
 import LbcSymbol from 'component/common/lbc-symbol';
 import WunderBar from 'component/wunderbar';
 import Icon from 'component/common/icon';
 import { Menu, MenuList, MenuButton, MenuItem } from '@reach/menu-button';
+
+// Move this into jessops password util
+import cookie from 'cookie';
+// @if TARGET='app'
+import keytar from 'keytar';
+// @endif;
+function deleteAuthToken() {
+  // @if TARGET='app'
+  keytar.deletePassword('LBRY', 'auth_token').catch(console.error); //eslint-disable-line
+  // @endif;
+  // @if TARGET='web'
+  document.cookie = cookie.serialize('auth_token', '', {
+    expires: new Date(),
+  });
+  // @endif
+}
 
 type Props = {
   autoUpdateDownloaded: boolean,
@@ -20,10 +37,20 @@ type Props = {
   automaticDarkModeEnabled: boolean,
   setClientSetting: (string, boolean | string) => void,
   hideBalance: boolean,
+  email: ?string,
 };
 
 const Header = (props: Props) => {
-  const { roundedBalance, history, setClientSetting, currentTheme, automaticDarkModeEnabled, hideBalance } = props;
+  const {
+    roundedBalance,
+    history,
+    setClientSetting,
+    currentTheme,
+    automaticDarkModeEnabled,
+    hideBalance,
+    email,
+  } = props;
+  const isAuthenticated = Boolean(email);
 
   function handleThemeToggle() {
     if (automaticDarkModeEnabled) {
@@ -47,6 +74,12 @@ const Header = (props: Props) => {
     }
 
     return __('Account');
+  }
+
+  function signOut() {
+    // Replace this with actual clearUser function
+    window.store.dispatch({ type: 'USER_FETCH_FAILURE' });
+    deleteAuthToken();
   }
 
   return (
@@ -78,55 +111,67 @@ const Header = (props: Props) => {
             />
           </div>
           {/* @endif */}
+          <WunderBar />
         </div>
 
-        <WunderBar />
+        <div className="header__menu">
+          {isAuthenticated ? (
+            <Fragment>
+              <Menu>
+                <MenuButton className="header__navigation-item menu__title">
+                  <Icon icon={ICONS.ACCOUNT} />
+                  {getAccountTitle()}
+                </MenuButton>
+                <MenuList className="menu__list--header">
+                  <MenuItem className="menu__link" onSelect={() => history.push(`/$/account`)}>
+                    <Icon aria-hidden icon={ICONS.OVERVIEW} />
+                    {__('Overview')}
+                  </MenuItem>
+                  <MenuItem className="menu__link" onSelect={() => history.push(`/$/rewards`)}>
+                    <Icon aria-hidden icon={ICONS.FEATURED} />
+                    {__('Rewards')}
+                  </MenuItem>
+                  <MenuItem className="menu__link" onSelect={() => history.push(`/$/wallet`)}>
+                    <Icon aria-hidden icon={ICONS.WALLET} />
+                    {__('Wallet')}
+                  </MenuItem>
+                  <MenuItem className="menu__link" onSelect={() => history.push(`/$/publish`)}>
+                    <Icon aria-hidden icon={ICONS.PUBLISH} />
+                    {__('Publish')}
+                  </MenuItem>
+                  <MenuItem className="menu__link" onSelect={signOut}>
+                    <Icon aria-hidden icon={ICONS.SIGN_OUT} />
+                    {__('Sign Out')}
+                  </MenuItem>
+                </MenuList>
+              </Menu>
 
-        <div className="header__navigation">
-          <Menu>
-            <MenuButton className="header__navigation-item menu__title">
-              <Icon icon={ICONS.ACCOUNT} />
-              {getAccountTitle()}
-            </MenuButton>
-            <MenuList>
-              <MenuItem className="menu__link" onSelect={() => history.push(`/$/account`)}>
-                <Icon aria-hidden icon={ICONS.OVERVIEW} />
-                {__('Overview')}
-              </MenuItem>
-              <MenuItem className="menu__link" onSelect={() => history.push(`/$/rewards`)}>
-                <Icon aria-hidden icon={ICONS.FEATURED} />
-                {__('Rewards')}
-              </MenuItem>
-              <MenuItem className="menu__link" onSelect={() => history.push(`/$/wallet`)}>
-                <Icon aria-hidden icon={ICONS.WALLET} />
-                {__('Wallet')}
-              </MenuItem>
-              <MenuItem className="menu__link" onSelect={() => history.push(`/$/publish`)}>
-                <Icon aria-hidden icon={ICONS.PUBLISH} />
-                {__('Publish')}
-              </MenuItem>
-            </MenuList>
-          </Menu>
-
-          <Menu>
-            <MenuButton className="header__navigation-item menu__title">
-              <Icon size={18} icon={ICONS.SETTINGS} />
-            </MenuButton>
-            <MenuList>
-              <MenuItem className="menu__link" onSelect={() => history.push(`/$/settings`)}>
-                <Icon aria-hidden tootlip icon={ICONS.SETTINGS} />
-                {__('Settings')}
-              </MenuItem>
-              <MenuItem className="menu__link" onSelect={() => history.push(`/$/help`)}>
-                <Icon aria-hidden icon={ICONS.HELP} />
-                {__('Help')}
-              </MenuItem>
-              <MenuItem className="menu__link" onSelect={handleThemeToggle}>
-                <Icon icon={currentTheme === 'light' ? ICONS.DARK : ICONS.LIGHT} />
-                {currentTheme === 'light' ? 'Dark' : 'Light'}
-              </MenuItem>
-            </MenuList>
-          </Menu>
+              <Menu>
+                <MenuButton className="header__navigation-item menu__title">
+                  <Icon size={18} icon={ICONS.SETTINGS} />
+                </MenuButton>
+                <MenuList className="menu__list--header">
+                  <MenuItem className="menu__link" onSelect={() => history.push(`/$/settings`)}>
+                    <Icon aria-hidden tootlip icon={ICONS.SETTINGS} />
+                    {__('Settings')}
+                  </MenuItem>
+                  <MenuItem className="menu__link" onSelect={() => history.push(`/$/help`)}>
+                    <Icon aria-hidden icon={ICONS.HELP} />
+                    {__('Help')}
+                  </MenuItem>
+                  <MenuItem className="menu__link" onSelect={handleThemeToggle}>
+                    <Icon icon={currentTheme === 'light' ? ICONS.DARK : ICONS.LIGHT} />
+                    {currentTheme === 'light' ? 'Dark' : 'Light'}
+                  </MenuItem>
+                </MenuList>
+              </Menu>
+            </Fragment>
+          ) : (
+            <Fragment>
+              <Button navigate={`/$/${PAGES.AUTH}/signin`} button="link" label={__('Sign In')} />
+              <Button navigate={`/$/${PAGES.AUTH}/signup`} button="primary" label={__('Sign Up')} />
+            </Fragment>
+          )}
         </div>
       </div>
     </header>
