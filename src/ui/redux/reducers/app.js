@@ -1,7 +1,6 @@
 // @flow
 
 import * as ACTIONS from 'constants/action_types';
-import * as MODALS from 'constants/modal_types';
 import { remote } from 'electron';
 
 // @if TARGET='app'
@@ -249,14 +248,6 @@ reducers[ACTIONS.HIDE_MODAL] = state =>
   Object.assign({}, state, {
     modal: null,
     modalProps: null,
-  });
-
-// This is fired from the lbryinc module
-// Instead of adding callbacks in that module, we can just listen for this event
-// There will be no other modals at this time as this is a blocking action
-reducers[ACTIONS.AUTHENTICATION_FAILURE] = state =>
-  Object.assign({}, state, {
-    modal: MODALS.AUTHENTICATION_FAILURE,
   });
 
 reducers[ACTIONS.TOGGLE_SEARCH_EXPANDED] = state =>

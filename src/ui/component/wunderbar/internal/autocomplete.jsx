@@ -1,3 +1,4 @@
+/* eslint-disable */
 /*
 This is taken from https://github.com/reactjs/react-autocomplete
 
@@ -208,7 +209,7 @@ export default class Autocomplete extends React.Component {
     this.maybeAutoCompleteText = this.maybeAutoCompleteText.bind(this);
   }
 
-  componentWillMount() {
+  UNSAFE_componentWillMount() {
     // this.refs is frozen, so we need to assign a new object to it
     this.refs = {};
     this._ignoreBlur = false;
@@ -222,7 +223,7 @@ export default class Autocomplete extends React.Component {
     this._scrollTimer = null;
   }
 
-  componentWillReceiveProps(nextProps) {
+  UNSAFE_componentWillReceiveProps(nextProps) {
     if (this.state.highlightedIndex !== null) {
       this.setState(this.ensureHighlightedIndex);
     }
@@ -585,3 +586,4 @@ export default class Autocomplete extends React.Component {
     );
   }
 }
+/* eslint-enable */

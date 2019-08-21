@@ -20,4 +20,7 @@ export const remote = {
   require: callable,
 };
 
+export const clipboard = {};
+export const ipcRenderer = {};
+
 export const isDev = false;
