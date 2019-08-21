@@ -24,14 +24,13 @@
   max-width: var(--page-max-width);
   height: calc(var(--header-height) - 1px);
   display: flex;
-  justify-content: space-between;
   margin: auto;
   padding: 0 var(--spacing-large);
 }
 
 .header__navigation {
+  flex: 1;
   display: flex;
-  justify-content: space-between;
 
   &:last-of-type {
     width: var(--side-nav-width);
@@ -40,6 +39,14 @@
       display: none;
     }
   }
+}
+
+.header__menu {
+  width: var(--side-nav-width);
+  margin-left: auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .header__navigation-arrows {
@@ -126,7 +133,6 @@
 }
 
 .header__navigation-item--lbry {
-  flex: 1;
   font-weight: 800;
   margin-right: var(--spacing-medium);
 

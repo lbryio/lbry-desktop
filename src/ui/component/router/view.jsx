@@ -24,6 +24,8 @@ import FollowingPage from 'page/following';
 import ListBlocked from 'page/listBlocked';
 import FourOhFourPage from 'page/fourOhFour';
 
+import UserEmail from 'component/userEmail';
+
 // Tell the browser we are handling scroll restoration
 if ('scrollRestoration' in history) {
   history.scrollRestoration = 'manual';
@@ -35,7 +37,7 @@ type Props = {
 };
 
 function SignInPage() {
-  return <h1>Sign In</h1>;
+  return <UserEmail />;
 }
 
 function SignUpPage() {

@@ -1,12 +1,12 @@
 import * as SETTINGS from 'constants/settings';
 import { connect } from 'react-redux';
 import { selectBalance, SETTINGS as LBRY_REDUX_SETTINGS } from 'lbry-redux';
+import { selectUserEmail } from 'lbryinc';
 import { formatCredits } from 'util/format-credits';
 import { doSetClientSetting } from 'redux/actions/settings';
 import { makeSelectClientSetting } from 'redux/selectors/settings';
 import { selectIsUpgradeAvailable, selectAutoUpdateDownloaded } from 'redux/selectors/app';
 import { doDownloadUpgradeRequested } from 'redux/actions/app';
-
 import Header from './view';
 
 const select = state => ({
@@ -18,6 +18,7 @@ const select = state => ({
   hideBalance: makeSelectClientSetting(SETTINGS.HIDE_BALANCE)(state),
   autoUpdateDownloaded: selectAutoUpdateDownloaded(state),
   isUpgradeAvailable: selectIsUpgradeAvailable(state),
+  email: selectUserEmail(state),
 });
 
 const perform = dispatch => ({
