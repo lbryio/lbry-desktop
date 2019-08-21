@@ -2,7 +2,6 @@
 import React from 'react';
 import * as MODALS from 'constants/modal_types';
 import ModalError from 'modal/modalError';
-import ModalAuthFailure from 'modal/modalAuthFailure';
 import ModalDownloading from 'modal/modalDownloading';
 import ModalAutoGenerateThumbnail from 'modal/modalAutoGenerateThumbnail';
 import ModalAutoUpdateDownloaded from 'modal/modalAutoUpdateDownloaded';
@@ -67,8 +66,6 @@ function ModalRouter(props: Props) {
       return <ModalWelcome {...modalProps} />;
     case MODALS.FIRST_REWARD:
       return <ModalFirstReward {...modalProps} />;
-    case MODALS.AUTHENTICATION_FAILURE:
-      return <ModalAuthFailure {...modalProps} />;
     case MODALS.TRANSACTION_FAILED:
       return <ModalTransactionFailed {...modalProps} />;
     case MODALS.REWARD_APPROVAL_REQUIRED:
