@@ -1,10 +1,10 @@
 import * as SETTINGS from 'constants/settings';
 import { connect } from 'react-redux';
 import { selectBalance, SETTINGS as LBRY_REDUX_SETTINGS } from 'lbry-redux';
+import { selectUserEmail } from 'lbryinc';
 import { formatCredits } from 'util/format-credits';
 import { doSetClientSetting } from 'redux/actions/settings';
 import { makeSelectClientSetting } from 'redux/selectors/settings';
-
 import Header from './view';
 
 const select = state => ({
@@ -14,6 +14,7 @@ const select = state => ({
   currentTheme: makeSelectClientSetting(SETTINGS.THEME)(state),
   automaticDarkModeEnabled: makeSelectClientSetting(SETTINGS.AUTOMATIC_DARK_MODE_ENABLED)(state),
   hideBalance: makeSelectClientSetting(SETTINGS.HIDE_BALANCE)(state),
+  email: selectUserEmail(state),
 });
 
 const perform = dispatch => ({

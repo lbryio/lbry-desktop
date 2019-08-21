@@ -82,7 +82,7 @@ Lbryio.setOverride(
         authToken = newAuthToken;
 
         // @if TARGET='web'
-        document.cookie = cookie.serialize('auth_token', authToken, {
+        cookie.serialize('auth_token', authToken, {
           maxAge: COOKIE_EXPIRE_TIME,
         });
         // @endif

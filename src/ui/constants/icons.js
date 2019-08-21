@@ -75,3 +75,4 @@ export const UNBLOCK = 'Circle';
 export const VIEW = 'View';
 export const EYE = 'Eye';
 export const EYE_OFF = 'EyeOff';
+export const SIGN_OUT = 'SignOut';
