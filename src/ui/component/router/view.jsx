@@ -33,6 +33,14 @@ type Props = {
   location: { pathname: string, search: string },
 };
 
+function SignInPage() {
+  return <h1>Sign In</h1>;
+}
+
+function SignUpPage() {
+  return <h1>Sign In</h1>;
+}
+
 function AppRouter(props: Props) {
   const { currentScroll, location } = props;
   const { pathname, search } = location;
@@ -49,6 +57,8 @@ function AppRouter(props: Props) {
       <Route path="/" exact component={DiscoverPage} />
       <Route path={`/$/${PAGES.DISCOVER}`} exact component={DiscoverPage} />
       <Route path={`/$/${PAGES.AUTH}`} exact component={AuthPage} />
+      <Route path={`/$/${PAGES.AUTH}/signin`} exact component={SignInPage} />
+      <Route path={`/$/${PAGES.AUTH}/signup`} exact component={SignUpPage} />
       <Route path={`/$/${PAGES.INVITE}`} exact component={InvitePage} />
       <Route path={`/$/${PAGES.DOWNLOADED}`} exact component={FileListDownloaded} />
       <Route path={`/$/${PAGES.PUBLISHED}`} exact component={FileListPublished} />

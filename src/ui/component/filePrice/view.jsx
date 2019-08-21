@@ -21,12 +21,12 @@ class FilePrice extends React.PureComponent<Props> {
     showFullPrice: false,
   };
 
-  componentWillMount() {
+  componentDidMount() {
     this.fetchCost(this.props);
   }
 
-  componentWillReceiveProps(nextProps: Props) {
-    this.fetchCost(nextProps);
+  componentDidUpdate() {
+    this.fetchCost(this.props);
   }
 
   fetchCost = (props: Props) => {
