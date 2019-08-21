@@ -23,14 +23,6 @@ class DateTime extends React.PureComponent<Props> {
     },
   };
 
-  componentWillMount() {
-    // this.refreshDate(this.props);
-  }
-
-  componentWillReceiveProps() {
-    // this.refreshDate(props);
-  }
-
   render() {
     const { date, formatOptions, timeAgo } = this.props;
     const show = this.props.show || DateTime.SHOW_BOTH;
