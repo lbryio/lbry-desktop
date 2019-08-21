@@ -1,11 +1,17 @@
 .navigation {
   width: var(--side-nav-width);
   font-size: var(--font-body);
-  // padding-top: 100px;
 
   @media (max-width: 600px) {
     display: none;
   }
+}
+
+.navigation--placeholder {
+  @extend .navigation;
+  height: 80vh;
+  background-color: $lbry-blue-1;
+  border-radius: var(--card-radius);
 }
 
 .navigation-links {
