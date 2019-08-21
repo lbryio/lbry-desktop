@@ -186,7 +186,7 @@ function ClaimListDiscover(props: Props) {
       >
         {SEARCH_TYPES.map(type => (
           <option key={type} value={type}>
-            {toCapitalCase(type)}
+            {__(toCapitalCase(type))}
           </option>
         ))}
       </FormField>

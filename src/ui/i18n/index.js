@@ -2,8 +2,10 @@
 import y18n from 'y18n';
 import path from 'path';
 
+const isProduction = process.env.NODE_ENV === 'production';
+
 const i18n = y18n({
-  directory: path.join(__dirname, `locales`),
+  directory: path.join(isProduction ? __dirname : __static, `locales`),
   updateFiles: true,
   locale: 'en',
 });
