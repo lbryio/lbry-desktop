@@ -39,7 +39,7 @@ const defaultState = {
     }),
   },
   isNight: false,
-  languages: { en: 'English', pl: 'Polish', id: 'Bahasa Indonesia' }, // temporarily hard code these so we can advance i18n testing
+  languages: { en: 'English', pl: 'Polish', de_DE: 'German', id: 'Bahasa Indonesia' }, // temporarily hard code these so we can advance i18n testing
   daemonSettings: {},
 };
 
