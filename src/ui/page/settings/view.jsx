@@ -2,12 +2,10 @@
 import * as SETTINGS from 'constants/settings';
 import * as PAGES from 'constants/pages';
 import * as React from 'react';
-import classnames from 'classnames';
 import { FormField, FormFieldPrice, Form } from 'component/common/form';
 import Button from 'component/button';
 import Page from 'component/page';
 import FileSelector from 'component/common/file-selector';
-import UnsupportedOnWeb from 'component/common/unsupported-on-web';
 
 type Price = {
   currency: string,
@@ -210,59 +208,61 @@ class SettingsPage extends React.PureComponent<Props, State> {
 
     return (
       <Page>
-        {IS_WEB && <UnsupportedOnWeb />}
-        {noDaemonSettings ? (
+        {noDaemonSettings && !IS_WEB ? (
           <section className="card card--section">
             <div className="card__title">{__('Failed to load settings.')}</div>
           </section>
         ) : (
-          <div className={classnames({ 'card--disabled': IS_WEB })}>
-            <section className="card card--section">
-              <h2 className="card__title">{__('Download Directory')}</h2>
+          <div>
+            {!IS_WEB && (
+              <section className="card card--section">
+                <h2 className="card__title">{__('Download Directory')}</h2>
 
-              <div className="card__content">
-                <FileSelector
-                  type="openDirectory"
-                  currentPath={daemonSettings.download_dir}
-                  onFileChosen={(newDirectory: string) => {
-                    setDaemonSetting('download_dir', newDirectory);
-                  }}
-                />
-                <p className="help">{__('LBRY downloads will be saved here.')}</p>
-              </div>
-            </section>
+                <div className="card__content">
+                  <FileSelector
+                    type="openDirectory"
+                    currentPath={daemonSettings.download_dir}
+                    onFileChosen={(newDirectory: string) => {
+                      setDaemonSetting('download_dir', newDirectory);
+                    }}
+                  />
+                  <p className="help">{__('LBRY downloads will be saved here.')}</p>
+                </div>
+              </section>
+            )}
 
-            <section className="card card--section">
-              <h2 className="card__title">{__('Network and Data Settings')}</h2>
-
-              <Form>
-                <FormField
-                  type="checkbox"
-                  name="save_files"
-                  onChange={() => setDaemonSetting('save_files', !daemonSettings.save_files)}
-                  checked={daemonSettings.save_files}
-                  label={__('Save all viewed content to your downloads directory')}
-                  helper={__(
-                    'Paid content and some file types are saved by default. Changing this setting will not affect previously downloaded content.'
-                  )}
-                />
-              </Form>
-              <Form>
-                <FormField
-                  type="checkbox"
-                  name="save_blobs"
-                  onChange={() => setDaemonSetting('save_blobs', !daemonSettings.save_blobs)}
-                  checked={daemonSettings.save_blobs}
-                  label={__('Save hosting data to help the LBRY network')}
-                  helper={
-                    <React.Fragment>
-                      {__("If disabled, LBRY will be very sad and you won't be helping improve the network.")}{' '}
-                      <Button button="link" label={__('Learn more')} href="https://lbry.com/faq/host-content" />.
-                    </React.Fragment>
-                  }
-                />
-              </Form>
-            </section>
+            {!IS_WEB && (
+              <section className="card card--section">
+                <h2 className="card__title">{__('Network and Data Settings')}</h2>
+                <Form>
+                  <FormField
+                    type="checkbox"
+                    name="save_files"
+                    onChange={() => setDaemonSetting('save_files', !daemonSettings.save_files)}
+                    checked={daemonSettings.save_files}
+                    label={__('Save all viewed content to your downloads directory')}
+                    helper={__(
+                      'Paid content and some file types are saved by default. Changing this setting will not affect previously downloaded content.'
+                    )}
+                  />
+                </Form>
+                <Form>
+                  <FormField
+                    type="checkbox"
+                    name="save_blobs"
+                    onChange={() => setDaemonSetting('save_blobs', !daemonSettings.save_blobs)}
+                    checked={daemonSettings.save_blobs}
+                    label={__('Save hosting data to help the LBRY network')}
+                    helper={
+                      <React.Fragment>
+                        {__("If disabled, LBRY will be very sad and you won't be helping improve the network.")}{' '}
+                        <Button button="link" label={__('Learn more')} href="https://lbry.com/faq/host-content" />.
+                      </React.Fragment>
+                    }
+                  />
+                </Form>
+              </section>
+            )}
 
             <section className="card card--section">
               <header className="card__header">
@@ -389,20 +389,21 @@ class SettingsPage extends React.PureComponent<Props, State> {
                 <Button button="link" label={__('Manage')} navigate={`/$/${PAGES.BLOCKED}`} />
               </p>
             </section>
-
-            <section className="card card--section">
-              <h2 className="card__title">{__('Notifications')}</h2>
-              <Form>
-                <FormField
-                  type="checkbox"
-                  name="desktopNotification"
-                  onChange={() => setClientSetting(SETTINGS.OS_NOTIFICATIONS_ENABLED, !osNotificationsEnabled)}
-                  checked={osNotificationsEnabled}
-                  label={__('Show Desktop Notifications')}
-                  helper={__('Get notified when a publish is confirmed, or when new content is available to watch.')}
-                />
-              </Form>
-            </section>
+            {!IS_WEB && (
+              <section className="card card--section">
+                <h2 className="card__title">{__('Notifications')}</h2>
+                <Form>
+                  <FormField
+                    type="checkbox"
+                    name="desktopNotification"
+                    onChange={() => setClientSetting(SETTINGS.OS_NOTIFICATIONS_ENABLED, !osNotificationsEnabled)}
+                    checked={osNotificationsEnabled}
+                    label={__('Show Desktop Notifications')}
+                    helper={__('Get notified when a publish is confirmed, or when new content is available to watch.')}
+                  />
+                </Form>
+              </section>
+            )}
 
             <section className="card card--section">
               <h2 className="card__title">{__('Share Diagnostic Data')}</h2>
@@ -485,109 +486,110 @@ class SettingsPage extends React.PureComponent<Props, State> {
                 </fieldset-section>
               </Form>
             </section>
+            {!IS_WEB && (
+              <section className="card card--section">
+                <h2 className="card__title">{__('Wallet Security')}</h2>
 
-            <section className="card card--section">
-              <h2 className="card__title">{__('Wallet Security')}</h2>
-
-              <Form>
-                <FormField
-                  type="checkbox"
-                  name="encrypt_wallet"
-                  onChange={() => this.onChangeEncryptWallet()}
-                  checked={walletEncrypted}
-                  label={__('Encrypt my wallet with a custom password')}
-                  helper={
-                    <React.Fragment>
-                      {__('Secure your local wallet data with a custom password.')}{' '}
-                      <strong>{__('Lost passwords cannot be recovered.')} </strong>
-                      <Button button="link" label={__('Learn more')} href="https://lbry.com/faq/wallet-encryption" />.
-                    </React.Fragment>
-                  }
-                />
-
-                <FormField
-                  type="checkbox"
-                  name="hide_balance"
-                  onChange={() => setClientSetting(SETTINGS.HIDE_BALANCE, !hideBalance)}
-                  checked={hideBalance}
-                  label={__('Hide wallet balance in header')}
-                />
-              </Form>
-            </section>
-
-            <section className="card card--section">
-              <h2 className="card__title">{__('Experimental Settings')}</h2>
-
-              <Form>
-                <FormField
-                  type="checkbox"
-                  name="support_option"
-                  onChange={() => setClientSetting(SETTINGS.SUPPORT_OPTION, !supportOption)}
-                  checked={supportOption}
-                  label={__('Enable claim support')}
-                  helper={
-                    <React.Fragment>
-                      {__('This will add a Support button along side tipping. Similar to tips, supports help ')}
-                      <Button button="link" label={__(' discovery ')} href="https://lbry.com/faq/trending" />
-                      {__(' but the LBC is returned to your wallet if revoked.')}
-                      {__(' Both also help secure ')}
-                      <Button button="link" label={__('vanity names')} href="https://lbry.com/faq/naming" />.
-                    </React.Fragment>
-                  }
-                />
-
-                <FormField
-                  type="checkbox"
-                  name="auto_download"
-                  onChange={() => setClientSetting(SETTINGS.AUTO_DOWNLOAD, !autoDownload)}
-                  checked={autoDownload}
-                  label={__('Automatically download new content from my subscriptions')}
-                  helper={__(
-                    "The latest file from each of your subscriptions will be downloaded for quick access as soon as it's published."
-                  )}
-                />
-
-                <FormField
-                  name="language_select"
-                  type="select"
-                  label={__('Language')}
-                  onChange={this.onLanguageChange}
-                  value={currentLanguage}
-                  helper={__(
-                    'Multi-language support is brand new and incomplete. Switching your language may have unintended consequences.'
-                  )}
-                >
-                  {Object.keys(languages).map(language => (
-                    <option key={language} value={language}>
-                      {languages[language]}
-                    </option>
-                  ))}
-                </FormField>
-              </Form>
-              <Form>
-                <fieldset-section>
+                <Form>
                   <FormField
-                    name="max_connections"
-                    type="select"
-                    label={__('Max Connections')}
+                    type="checkbox"
+                    name="encrypt_wallet"
+                    onChange={() => this.onChangeEncryptWallet()}
+                    checked={walletEncrypted}
+                    label={__('Encrypt my wallet with a custom password')}
+                    helper={
+                      <React.Fragment>
+                        {__('Secure your local wallet data with a custom password.')}{' '}
+                        <strong>{__('Lost passwords cannot be recovered.')} </strong>
+                        <Button button="link" label={__('Learn more')} href="https://lbry.com/faq/wallet-encryption" />.
+                      </React.Fragment>
+                    }
+                  />
+
+                  <FormField
+                    type="checkbox"
+                    name="hide_balance"
+                    onChange={() => setClientSetting(SETTINGS.HIDE_BALANCE, !hideBalance)}
+                    checked={hideBalance}
+                    label={__('Hide wallet balance in header')}
+                  />
+                </Form>
+              </section>
+            )}
+            {!IS_WEB && (
+              <section className="card card--section">
+                <h2 className="card__title">{__('Experimental Settings')}</h2>
+
+                <Form>
+                  <FormField
+                    type="checkbox"
+                    name="support_option"
+                    onChange={() => setClientSetting(SETTINGS.SUPPORT_OPTION, !supportOption)}
+                    checked={supportOption}
+                    label={__('Enable claim support')}
+                    helper={
+                      <React.Fragment>
+                        {__('This will add a Support button along side tipping. Similar to tips, supports help ')}
+                        <Button button="link" label={__(' discovery ')} href="https://lbry.com/faq/trending" />
+                        {__(' but the LBC is returned to your wallet if revoked.')}
+                        {__(' Both also help secure ')}
+                        <Button button="link" label={__('vanity names')} href="https://lbry.com/faq/naming" />.
+                      </React.Fragment>
+                    }
+                  />
+
+                  <FormField
+                    type="checkbox"
+                    name="auto_download"
+                    onChange={() => setClientSetting(SETTINGS.AUTO_DOWNLOAD, !autoDownload)}
+                    checked={autoDownload}
+                    label={__('Automatically download new content from my subscriptions')}
                     helper={__(
-                      'For users with good bandwidth, try a higher value to improve streaming and download speeds. Low bandwidth users may benefit from a lower setting. Default is 4.'
+                      "The latest file from each of your subscriptions will be downloaded for quick access as soon as it's published."
                     )}
-                    min={1}
-                    max={100}
-                    onChange={this.onMaxConnectionsChange}
-                    value={daemonSettings.max_connections_per_download}
+                  />
+
+                  <FormField
+                    name="language_select"
+                    type="select"
+                    label={__('Language')}
+                    onChange={this.onLanguageChange}
+                    value={currentLanguage}
+                    helper={__(
+                      'Multi-language support is brand new and incomplete. Switching your language may have unintended consequences.'
+                    )}
                   >
-                    {connectionOptions.map(connectionOption => (
-                      <option key={connectionOption} value={connectionOption}>
-                        {connectionOption}
+                    {Object.keys(languages).map(language => (
+                      <option key={language} value={language}>
+                        {languages[language]}
                       </option>
                     ))}
                   </FormField>
-                </fieldset-section>
-              </Form>
-            </section>
-
+                </Form>
+                <Form>
+                  <fieldset-section>
+                    <FormField
+                      name="max_connections"
+                      type="select"
+                      label={__('Max Connections')}
+                      helper={__(
+                        'For users with good bandwidth, try a higher value to improve streaming and download speeds. Low bandwidth users may benefit from a lower setting. Default is 4.'
+                      )}
+                      min={1}
+                      max={100}
+                      onChange={this.onMaxConnectionsChange}
+                      value={daemonSettings.max_connections_per_download}
+                    >
+                      {connectionOptions.map(connectionOption => (
+                        <option key={connectionOption} value={connectionOption}>
+                          {connectionOption}
+                        </option>
+                      ))}
+                    </FormField>
+                  </fieldset-section>
+                </Form>
+              </section>
+            )}
             <section className="card card--section">
               <h2 className="card__title">{__('Application Cache')}</h2>
 
