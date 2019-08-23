@@ -1,4 +1,5 @@
 // @flow
+import { DOMAIN, DOMAIN_LOCAL, DOMAIN_DEV } from 'config';
 import * as PAGES from 'constants/pages';
 import * as ICONS from 'constants/icons';
 import React from 'react';
@@ -11,8 +12,9 @@ import Tag from 'component/tag';
 
 const L_KEY_CODE = 76;
 const ESC_KEY_CODE = 27;
-const WEB_DEV_PREFIX = 'http://localhost:1337/';
-const WEB_PROD_PREFIX = 'https://beta.lbry.tv/';
+const WEB_DEV_PREFIX = `${DOMAIN_DEV}/`;
+const WEB_LOCAL_PREFIX = `${DOMAIN_LOCAL}/`;
+const WEB_PROD_PREFIX = `${DOMAIN}/`;
 const SEARCH_PREFIX = `$/${PAGES.SEARCH}q=`;
 
 type Props = {
@@ -106,12 +108,15 @@ class WunderBar extends React.PureComponent<Props, State> {
 
     // Allow copying a lbry.tv url and pasting it into the search bar
     const includesLbryTvProd = query.includes(WEB_PROD_PREFIX);
+    const includesLbryTvLocal = query.includes(WEB_LOCAL_PREFIX);
     const includesLbryTvDev = query.includes(WEB_DEV_PREFIX);
-    const wasCopiedFromWeb = includesLbryTvDev || includesLbryTvProd;
+    const wasCopiedFromWeb = includesLbryTvDev || includesLbryTvLocal || includesLbryTvProd;
 
     if (wasCopiedFromWeb) {
       if (includesLbryTvDev) {
         query = query.slice(WEB_DEV_PREFIX.length);
+      } else if (includesLbryTvLocal) {
+        query = query.slice(WEB_LOCAL_PREFIX.length);
       } else {
         query = query.slice(WEB_PROD_PREFIX.length);
       }

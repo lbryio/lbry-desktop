@@ -1,3 +1,4 @@
+const config = require('./config');
 const path = require('path');
 const webpack = require('webpack');
 const merge = require('webpack-merge');
@@ -45,17 +46,14 @@ let mainConfig = {
       {
         from: `${STATIC_ROOT}/`,
         to: `${DIST_ROOT}/electron/static/`,
-        ignore: ['font/**/*', 'index.dev.html', 'index.html'],
+        ignore: ['font/**/*', 'index.dev-web.html', 'index.html'],
       },
       {
-        from: ifProduction(`${STATIC_ROOT}/index.html`, `${STATIC_ROOT}/index.dev.html`),
+        from: ifProduction(`${STATIC_ROOT}/index.html`, `${STATIC_ROOT}/index.dev-electron.html`),
         to: `${DIST_ROOT}/electron/static/index.html`,
       },
     ]),
   ],
-  devServer: {
-    contentBase: path.join(__dirname, 'dist/electron'),
-  },
 };
 
 if (process.env.NODE_ENV === 'production') {

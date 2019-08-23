@@ -1,3 +1,4 @@
+const { WEBPACK_WEB_PORT } = require('./config.js');
 const path = require('path');
 const merge = require('webpack-merge');
 const baseConfig = require('./webpack.base.config.js');
@@ -17,6 +18,9 @@ const webConfig = {
     filename: '[name].js',
     path: __dirname + '/dist/web',
     publicPath: '/',
+  },
+  devServer: {
+    port: WEBPACK_WEB_PORT,
   },
   module: {
     rules: [

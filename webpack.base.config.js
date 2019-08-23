@@ -4,20 +4,11 @@ const merge = require('webpack-merge');
 const { DefinePlugin, ProvidePlugin } = require('webpack');
 const { getIfUtils, removeEmpty } = require('webpack-config-utils');
 const TerserPlugin = require('terser-webpack-plugin');
-
 const NODE_ENV = process.env.NODE_ENV || 'development';
-
 const { ifProduction } = getIfUtils(NODE_ENV);
-
 const UI_ROOT = path.resolve(__dirname, 'src/ui/');
 const STATIC_ROOT = path.resolve(__dirname, 'static/');
 const DIST_ROOT = path.resolve(__dirname, 'dist/');
-
-// There are a two other uses of this value that can't access it from webpack
-// They exist in
-//    src/platforms/electron/devServer.js
-//    static/index.dev.html
-const WEBPACK_PORT = 9090;
 
 console.log(ifProduction('production', 'development'));
 
@@ -40,7 +31,6 @@ let baseConfig = {
   },
   devServer: {
     historyApiFallback: true,
-    port: WEBPACK_PORT,
   },
   module: {
     rules: [
@@ -100,6 +90,7 @@ let baseConfig = {
     modules: [UI_ROOT, 'node_modules', __dirname],
     extensions: ['.js', '.jsx', '.json', '.scss'],
     alias: {
+      config: path.resolve(__dirname, './config.js'),
       'lbry-redux$': 'lbry-redux/dist/bundle.es.js',
 
       // Build optimizations for 'redux-persist-transform-filter'
@@ -127,7 +118,6 @@ let baseConfig = {
       'process.env.NODE_ENV': JSON.stringify(NODE_ENV),
       'process.env.SDK_API_URL': JSON.stringify(process.env.SDK_API_URL),
       'process.env.LBRY_API_URL': JSON.stringify(process.env.LBRY_API_URL),
-      WEBPACK_PORT,
     }),
   ],
 };

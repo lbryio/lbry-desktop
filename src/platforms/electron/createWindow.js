@@ -1,3 +1,4 @@
+import { WEBPACK_ELECTRON_PORT } from 'config';
 import { app, BrowserWindow, dialog, shell, screen } from 'electron';
 import isDev from 'electron-is-dev';
 import windowStateKeeper from 'electron-window-state';
@@ -36,7 +37,7 @@ export default appState => {
   };
   const lbryProto = 'lbry://';
   const lbryProtoQ = 'lbry://?';
-  const rendererURL = isDev ? `http://localhost:${WEBPACK_PORT}` : `file://${__dirname}/index.html`;
+  const rendererURL = isDev ? `http://localhost:${WEBPACK_ELECTRON_PORT}` : `file://${__dirname}/index.html`;
 
   let window = new BrowserWindow(windowConfiguration);
 
