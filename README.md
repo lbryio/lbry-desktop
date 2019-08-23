@@ -44,21 +44,40 @@ Double click the installed application to interact with the LBRY network.
 
 ## Running from Source
 
+You can run the web version (beta.lbry.tv), the electron app, or both at the same time.
+
 #### Prerequisites
 
 - [Git](https://git-scm.com/downloads)
 - [Node.js](https://nodejs.org/en/download/) (v10 required)
 - [Yarn](https://yarnpkg.com/en/docs/install)
 
-#### Steps
+1. Clone (or [fork](https://help.github.com/articles/fork-a-repo/)) this repository: `git clone https://github.com/lbryio/lbry-desktop`
+2. Change directories into the downloaded folder: `cd lbry-desktop`
+3. Install the dependencies: `yarn`
 
-1.  Clone (or [fork](https://help.github.com/articles/fork-a-repo/)) this repository: `git clone https://github.com/lbryio/lbry-desktop`
-2.  Change directories into the downloaded folder: `cd lbry-desktop`
-3.  Install the dependencies: `yarn`
-4.  Compile the app and run it: `yarn dev`
+#### Run the electron app
 
-If you want to just build the app you can run `yarn build`. This will give you an executable inside the `/dist` folder. We use [electron-builder](https://github.com/electron-userland/electron-builder) to create
-distributable packages.
+`yarn dev`
+
+- If you want to build and launch the production app you can run `yarn build`. This will give you an executable inside the `/dist` folder. We use [electron-builder](https://github.com/electron-userland/electron-builder) to create distributable packages.
+
+#### Run the web app
+
+`yarn dev:web`
+
+- This uses webpack-dev-server and includes hot-reloading. If you want to debug the [web server we use in production](https://github.com/lbryio/lbry-desktop/blob/master/src/platforms/web/server.js) you can run `yarn dev:web-server`. This starts a server at `localhost:1337` and does not include hot reloading.
+
+#### Run both at the same time
+
+Run the two commands above in separate terminal windows
+
+```
+yarn dev
+
+// in another terminal window
+yarn dev:web
+```
 
 #### Resetting your Packages
 
