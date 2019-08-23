@@ -1,7 +1,6 @@
 // @flow
 import * as ICONS from 'constants/icons';
 import * as React from 'react';
-import { clipboard } from 'electron';
 import { FormField } from 'component/common/form';
 import Button from 'component/button';
 
@@ -18,9 +17,18 @@ export default class CopyableText extends React.PureComponent<Props> {
 
     this.input = React.createRef();
     (this: any).onFocus = this.onFocus.bind(this);
+    (this: any).copyToClipboard = this.copyToClipboard.bind(this);
   }
 
   input: { current: React.ElementRef<any> };
+
+  copyToClipboard() {
+    const topRef = this.input.current;
+    if (topRef && topRef.input && topRef.input.current) {
+      topRef.input.current.select();
+    }
+    document.execCommand('copy');
+  }
 
   onFocus() {
     // We have to go a layer deep since the input is inside the form component
@@ -47,7 +55,7 @@ export default class CopyableText extends React.PureComponent<Props> {
             button="inverse"
             icon={ICONS.COPY}
             onClick={() => {
-              clipboard.writeText(copyable);
+              this.copyToClipboard();
               doToast({
                 message: snackMessage || __('Text copied'),
               });
