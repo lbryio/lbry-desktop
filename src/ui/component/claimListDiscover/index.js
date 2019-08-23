@@ -2,7 +2,7 @@ import * as SETTINGS from 'constants/settings';
 import { connect } from 'react-redux';
 import {
   doClaimSearch,
-  selectClaimSearchByQueryCanonical,
+  selectClaimSearchByQuery,
   selectFetchingClaimSearch,
   doToggleTagFollow,
   selectBlockedChannels,
@@ -12,7 +12,7 @@ import { makeSelectClientSetting } from 'redux/selectors/settings';
 import ClaimListDiscover from './view';
 
 const select = state => ({
-  claimSearchByQuery: selectClaimSearchByQueryCanonical(state),
+  claimSearchByQuery: selectClaimSearchByQuery(state),
   loading: selectFetchingClaimSearch(state),
   subscribedChannels: selectSubscriptions(state),
   showNsfw: makeSelectClientSetting(SETTINGS.SHOW_NSFW)(state),
