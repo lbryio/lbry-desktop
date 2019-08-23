@@ -322,7 +322,9 @@ export function doDaemonReady() {
 
     // @if TARGET='app'
     dispatch(doFetchDaemonSettings());
+    // @endif
     dispatch(doBalanceSubscribe());
+    // @if TARGET='app'
     dispatch(doFetchFileInfosAndPublishedClaims());
     if (!selectIsUpgradeSkipped(state)) {
       dispatch(doCheckUpgradeAvailable());
