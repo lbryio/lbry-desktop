@@ -7,6 +7,7 @@ import Button from 'component/button';
 import Page from 'component/page';
 import classnames from 'classnames';
 import { rewards as REWARD_TYPES } from 'lbryinc';
+import UnsupportedOnWeb from 'component/common/unsupported-on-web';
 
 type Props = {
   doAuth: () => void,
@@ -28,20 +29,22 @@ class RewardsPage extends PureComponent<Props> {
   renderPageHeader() {
     const { user, daemonSettings } = this.props;
 
-    if (user && !user.is_reward_approved && ((daemonSettings && daemonSettings.share_usage_data) || IS_WEB)) {
+    if (user && !user.is_reward_approved && daemonSettings && daemonSettings.share_usage_data) {
       if (!user.primary_email || !user.has_verified_email || !user.is_identity_verified) {
         return (
-          <section className="card card--section">
-            <h2 className="card__title">{__('Rewards Approval to Earn Credits (LBC)')}</h2>
-            <p className="card__subtitle">
-              {__(
-                'This step is optional. You can continue to use this app without rewards, but LBC may be needed for some tasks.'
-              )}{' '}
-              <Button button="link" label={__('Learn more')} href="https://lbry.com/faq/rewards" />.
-            </p>
+          !IS_WEB && (
+            <section className="card card--section">
+              <h2 className="card__title">{__('Rewards Approval to Earn Credits (LBC)')}</h2>
+              <p className="card__subtitle">
+                {__(
+                  'This step is optional. You can continue to use this app without rewards, but LBC may be needed for some tasks.'
+                )}{' '}
+                <Button button="link" label={__('Learn more')} href="https://lbry.com/faq/rewards" />.
+              </p>
 
-            <Button navigate="/$/auth?redirect=rewards" button="primary" label="Prove Humanity" />
-          </section>
+              <Button navigate="/$/auth?redirect=rewards" button="primary" label="Prove Humanity" />
+            </section>
+          )
         );
       }
       return (
@@ -83,7 +86,7 @@ class RewardsPage extends PureComponent<Props> {
   renderUnclaimedRewards() {
     const { fetching, rewards, user, daemonSettings, claimed } = this.props;
 
-    if (!IS_WEB && daemonSettings && !daemonSettings.share_usage_data) {
+    if (daemonSettings && !daemonSettings.share_usage_data) {
       return (
         <section className="card card--section">
           <h2 className="card__title">{__('Disabled')}</h2>
@@ -138,6 +141,7 @@ class RewardsPage extends PureComponent<Props> {
   render() {
     return (
       <Page>
+        {IS_WEB && <UnsupportedOnWeb />}
         {this.renderPageHeader()}
         {this.renderUnclaimedRewards()}
         {<RewardListClaimed />}
