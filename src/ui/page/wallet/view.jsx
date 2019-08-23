@@ -5,11 +5,12 @@ import WalletAddress from 'component/walletAddress';
 import TransactionListRecent from 'component/transactionListRecent';
 import Page from 'component/page';
 import UnsupportedOnWeb from 'component/common/unsupported-on-web';
+import classnames from 'classnames';
 
 const WalletPage = () => (
   <Page>
     <UnsupportedOnWeb />
-    <div className={IS_WEB && 'card--disabled'}>
+    <div className={classnames({ 'card--disabled': IS_WEB })}>
       <WalletBalance />
       <WalletSend />
       <WalletAddress />
