@@ -11,6 +11,7 @@ import Tag from 'component/tag';
 
 const L_KEY_CODE = 76;
 const ESC_KEY_CODE = 27;
+const A_KEY_CODE = 65;
 
 type Props = {
   searchQuery: ?string,
@@ -21,7 +22,7 @@ type Props = {
   suggestions: Array<string>,
   doFocus: () => void,
   doBlur: () => void,
-  focused: boolean,
+  isFocused: boolean,
   doShowSnackBar: string => void,
   history: { push: string => void },
 };
@@ -66,10 +67,10 @@ class WunderBar extends React.PureComponent<Props, State> {
 
   handleKeyDown(event: SyntheticKeyboardEvent<*>) {
     const { ctrlKey, metaKey, keyCode } = event;
-    const { doFocus, doBlur, focused } = this.props;
+    const { doFocus, doBlur, isFocused } = this.props;
 
     if (this.input) {
-      if (focused && keyCode === ESC_KEY_CODE) {
+      if (isFocused && keyCode === ESC_KEY_CODE) {
         this.input.blur();
         doBlur();
         return;
@@ -82,6 +83,12 @@ class WunderBar extends React.PureComponent<Props, State> {
       if (shouldFocus) {
         this.input.focus();
         doFocus();
+      }
+
+      const shouldSelectAll =
+        process.platform === 'darwin' ? keyCode === A_KEY_CODE && metaKey : keyCode === A_KEY_CODE && ctrlKey;
+      if (isFocused && shouldSelectAll) {
+        this.input.select();
       }
       // @endif
     }
