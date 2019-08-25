@@ -5,6 +5,7 @@ import { parseURI, convertToShareLink } from 'lbry-redux';
 import { withRouter } from 'react-router-dom';
 import { openCopyLinkMenu } from 'util/context-menu';
 import { formatLbryUriForWeb } from 'util/uri';
+import { isEmpty } from 'util/object';
 import CardMedia from 'component/cardMedia';
 import UriIndicator from 'component/uriIndicator';
 import TruncatedText from 'component/common/truncated-text';
@@ -25,7 +26,6 @@ type Props = {
   pending?: boolean,
   resolveUri: string => void,
   isResolvingUri: boolean,
-  preventResolve: boolean,
   history: { push: string => void },
   thumbnail: string,
   title: string,
@@ -71,7 +71,7 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
     isSubscribed,
     beginPublish,
   } = props;
-  const haventFetched = claim === undefined;
+  const shouldFetch = claim === undefined || (claim !== null && claim.value_type === 'channel' && isEmpty(claim.meta));
   const abandoned = !isResolvingUri && !claim;
   const claimsInChannel = (claim && claim.meta.claims_in_channel) || 0;
   const showPublishLink = abandoned && placeholder === 'publish';
@@ -130,10 +130,10 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
   }
 
   useEffect(() => {
-    if (isValid && !isResolvingUri && haventFetched && uri) {
+    if (isValid && !isResolvingUri && shouldFetch && uri) {
       resolveUri(uri);
     }
-  }, [isValid, isResolvingUri, uri, resolveUri, haventFetched]);
+  }, [isValid, isResolvingUri, uri, resolveUri, shouldFetch]);
 
   if (shouldHide) {
     return null;
