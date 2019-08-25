@@ -30,6 +30,7 @@ type Props = {
   onClick: ?(any) => any,
   onMouseEnter: ?(any) => any,
   onMouseLeave: ?(any) => any,
+  labelZise: ?string,
 };
 
 // use forwardRef to allow consumers to pass refs to the button content if they want to
@@ -55,6 +56,7 @@ const Button = forwardRef<any, {}>((props: Props, ref: any) => {
     iconColor,
     constrict,
     activeClass,
+    labelZise,
     ...otherProps
   } = props;
 
@@ -78,7 +80,11 @@ const Button = forwardRef<any, {}>((props: Props, ref: any) => {
   const content = (
     <span className="button__content">
       {icon && <Icon icon={icon} iconColor={iconColor} size={iconSize} />}
-      {label && <span className="button__label">{label}</span>}
+      {label && (
+        <span className="button__label" style={{ width: labelZise }}>
+          {label}
+        </span>
+      )}
       {children && children}
       {iconRight && <Icon icon={iconRight} iconColor={iconColor} size={iconSize} />}
     </span>

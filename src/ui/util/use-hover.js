@@ -4,8 +4,13 @@ export default function useHover(ref) {
   const [isHovering, setIsHovering] = useState(false);
 
   useEffect(() => {
-    function handleHover() {
-      setIsHovering(!isHovering);
+    function handleHover(value) {
+      const { type } = value;
+      const validMouseEnter = !isHovering && type === 'mouseenter';
+      const validMouseLeave = isHovering && type === 'mouseleave';
+      if (validMouseEnter || validMouseLeave) {
+        setIsHovering(!isHovering);
+      }
     }
 
     const refElement = ref.current;

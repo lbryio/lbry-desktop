@@ -47,6 +47,7 @@ export default function SubscribeButton(props: Props) {
       icon={unfollowOverride ? ICONS.UNSUBSCRIBE : ICONS.SUBSCRIBE}
       button={'alt'}
       label={unfollowOverride || subscriptionLabel}
+      labelZise={'71px'}
       onClick={e => {
         e.stopPropagation();
 
