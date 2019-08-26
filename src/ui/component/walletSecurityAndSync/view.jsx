@@ -6,42 +6,8 @@ import UserEmail from 'component/userEmail';
 import * as ICONS from 'constants/icons';
 
 import { getSavedPassword, setSavedPassword, deleteSavedPassword } from 'util/saved-passwords';
-// import { AUTH_ORG } from 'constants/keychain';
+import { KEY_WALLET_PASSWORD } from 'constants/keychain';
 
-/*
-On mount: checkSync()
-  if
-Display on mount
-  if !email
-    SyncWallet.disabled = true
-    SyncWallet.checked = false
-    if walletEncrypted
-      EncryptWallet.checked = true
-      password = savedPassword ? savedPassword : ''
-      rememberPassword.checked = savedPassword
-    if !walletEncrypted
-      password = savedPassword ? savedPassword : ''
-      rememberPassword.checked = savedPassword
-  else email
-    if walletEncrypted
-      EncryptWallet.checked = true
-      password = savedPassword ? savedPassword : ''
-      rememberPassword.checked = savedPassword
-      syncEnabled = settings.syncEnabled
-      if syncEnabled
-        message = 'hi'
-      else
-        message = 'hi'
-    else if !walletEncrypted
-      EncryptWallet.checked = false
-      password = savedPassword ? savedPassword : ''
-      rememberPassword.checked = savedPassword
-      syncEnabled = settings.syncEnabled
-      if syncEnabled
-        message = 'hi'
-      else
-        message = 'hi'
- */
 type Props = {
   // wallet statuses
   walletEncryptSucceeded: boolean,
@@ -90,6 +56,8 @@ type State = {
   enableSync: boolean,
   encryptWallet: boolean,
   obscurePassword: boolean,
+  advancedMode: boolean,
+  showPasswordFields: boolean,
 };
 
 function WalletSecurityAndSync(props: Props) {
@@ -102,10 +70,10 @@ function WalletSecurityAndSync(props: Props) {
     walletEncrypted,
     encryptWallet,
     decryptWallet,
-    // setPasswordSaved,
+    setPasswordSaved,
     syncEnabled,
-    // setClientSetting,
-    // isPasswordSaved,
+    setClientSetting,
+    isPasswordSaved,
     user,
     hasSyncedWallet,
     getSyncIsPending,
@@ -133,14 +101,29 @@ function WalletSecurityAndSync(props: Props) {
     enableSync: syncEnabled,
     encryptWallet: walletEncrypted,
     obscurePassword: true,
+    advancedMode: false,
+    showPasswordFields: false,
   };
   const [componentState, setComponentState] = useState<State>(defaultComponentState);
 
   const safeToSync = !hasTransactions || !hashChanged;
 
+  // on mount
   useEffect(() => {
     checkSync();
+    getSavedPassword(KEY_WALLET_PASSWORD).then(p => {
+      if (p) {
+        setComponentState({
+          ...componentState,
+          newPassword: p,
+          newPasswordConfirm: p,
+          showPasswordFields: true,
+          rememberPassword: true,
+        });
+      }
+    });
   }, []);
+
   useEffect(() => {
     setComponentState({
       ...componentState,
@@ -152,15 +135,18 @@ function WalletSecurityAndSync(props: Props) {
   // const syncDisabledMessage = 'You cannot sync without an email';
 
   function onChangeNewPassword(event: SyntheticInputEvent<>) {
-    setComponentState({ ...componentState, newPassword: event.target.value });
+    setComponentState({ ...componentState, newPassword: event.target.value || '' });
   }
 
   function onChangeRememberPassword(event: SyntheticInputEvent<>) {
+    if (componentState.rememberPassword) {
+      deleteSavedPassword(KEY_WALLET_PASSWORD);
+    }
     setComponentState({ ...componentState, rememberPassword: event.target.checked });
   }
 
   function onChangeNewPasswordConfirm(event: SyntheticInputEvent<>) {
-    setComponentState({ ...componentState, newPasswordConfirm: event.target.value });
+    setComponentState({ ...componentState, newPasswordConfirm: event.target.value || '' });
   }
 
   function onChangeUnderstandConfirm(event: SyntheticInputEvent<>) {
@@ -168,172 +154,254 @@ function WalletSecurityAndSync(props: Props) {
   }
 
   function onChangeSync(event: SyntheticInputEvent<>) {
-    setComponentState({ ...componentState, enableSync: event.target.checked });
+    if (componentState.enableSync) {
+      setComponentState({ ...componentState, enableSync: false, newPassword: '', newPasswordConfirm: '' });
+      setComponentState({ ...componentState, enableSync: false, newPassword: '', newPasswordConfirm: '' });
+    }
+    if (!(walletEncrypted || syncApplyErrorMessage || componentState.advancedMode)) {
+      easyApply();
+    } else {
+      setComponentState({ ...componentState, enableSync: true });
+    }
   }
 
   function onChangeEncrypt(event: SyntheticInputEvent<>) {
     setComponentState({ ...componentState, encryptWallet: event.target.checked });
   }
 
+  async function easyApply() {
+    return new Promise((resolve, reject) => {
+      return syncApply(syncHash, syncData, componentState.newPassword);
+    })
+      .then(() => {
+        setComponentState({ ...componentState, enableSync: event.target.checked });
+      })
+      .catch();
+  }
+
   async function apply() {
     setComponentState({ ...componentState, failed: false });
 
     await checkSync();
+
     if (componentState.enableSync) {
       await syncApply(syncHash, syncData, componentState.newPassword);
       if (syncApplyErrorMessage) {
         setComponentState({ ...componentState, failed: true });
       }
     }
-    await decryptWallet();
-    if (componentState.failed !== true) {
-      await encryptWallet(componentState.newPassword);
-    }
-    if (componentState.encryptWallet) {
-      await encryptWallet(componentState.newPassword);
+
+    if (walletEncrypted) {
+      await decryptWallet();
     }
 
-    if (componentState.failed === false) {
+    if (componentState.encryptWallet && !componentState.failed) {
+      await encryptWallet(componentState.newPassword)
+        .then(() => {})
+        .catch(() => {
+          setComponentState({ ...componentState, failed: false });
+        });
     }
-    // this.setState({ submitted: true });
-    // this.props.encryptWallet(state.newPassword);
+
+    if (componentState.rememberPassword && !componentState.failed) {
+      setSavedPassword(KEY_WALLET_PASSWORD, componentState.newPassword);
+    }
   }
 
   return (
-    <section className="card card--section">
-      <h2 className="card__title">{__('Wallet Sync and Security')}</h2>
-      {!isEmailVerified && (
-        <React.Fragment>
-          <p className="card__subtitle">
-            {__(`It looks like we don't have your email.`)}{' '}
-            <Button
-              button="link"
-              label={__('Verify your email')}
-              onClick={() => setComponentState({ ...componentState, showEmailReg: !componentState.showEmailReg })}
-            />{' '}
-            {__(`and then come back here.`)}
-          </p>
-          {componentState.showEmailReg && <UserEmail />}
-        </React.Fragment>
-      )}
-      <Form onSubmit={() => apply()}>
+    <React.Fragment>
+      <section className="card card--section">
+        <h2 className="card__title">{__('Wallet Sync and Security')}</h2>
+        {!isEmailVerified && (
+          <React.Fragment>
+            <p className="card__subtitle">
+              {__(`It looks like we don't have your email.`)}{' '}
+              <Button
+                button="link"
+                label={__('Verify your email')}
+                onClick={() => setComponentState({ ...componentState, showEmailReg: !componentState.showEmailReg })}
+              />{' '}
+              {__(`and then come back here.`)}
+            </p>
+            {componentState.showEmailReg && <UserEmail />}
+          </React.Fragment>
+        )}
         <p>
           {__(
             'Your LBRY password can help you encrypt your wallet or sync it to another device. You must use the same LBRY password on every device if you wish to sync.'
           )}{' '}
           <Button button="link" label={__('Learn more')} href="https://lbry.com/faq/wallet-encryption" />.
         </p>
-        <fieldset-section>
-          <FormField
-            autoFocus
-            inputButton={
+        {/* Errors and status */}
+        {!componentState.advancedMode && (
+          <React.Fragment>
+            <p className="card__subtitle">
+              {__(`Easy Mode: Sync and go with default security! Don't trust your roommate?`)}{' '}
               <Button
-                icon={componentState.obscurePassword ? ICONS.EYE : ICONS.EYE_OFF}
-                button={'primary'}
-                onClick={() =>
-                  setComponentState({ ...componentState, obscurePassword: !componentState.obscurePassword })
-                }
+                button="link"
+                label={__('Advanced Mode')}
+                onClick={() => setComponentState({ ...componentState, advancedMode: !componentState.advancedMode })}
               />
-            }
-            label={__('Password')}
-            placeholder={__('Shh...')}
-            type={componentState.obscurePassword ? 'password' : 'text'}
-            name="wallet-new-password"
-            onChange={event => onChangeNewPassword(event)}
-          />
-        </fieldset-section>
-        <fieldset-section>
-          <FormField
-            error={componentState.passwordMatch === false ? 'No match' : false}
-            label={__('Same Password')}
-            placeholder={__('Your eyes only')}
-            type="password"
-            name="wallet-new-password-confirm"
-            onChange={event => onChangeNewPasswordConfirm(event)}
-          />
-        </fieldset-section>
+              .
+            </p>
+          </React.Fragment>
+        )}
+        {componentState.advancedMode && (
+          <React.Fragment>
+            <p className="card__subtitle">
+              {__('Advanced Mode: Enter a password that matches your other devices LBRY password.')}{' '}
+              <Button
+                button="link"
+                label={__('Easy Mode')}
+                onClick={() => setComponentState({ ...componentState, advancedMode: !componentState.advancedMode })}
+              />
+              .
+            </p>
+          </React.Fragment>
+        )}
+        {syncApplyErrorMessage && <div className="card__subtitle--status">{__(syncApplyErrorMessage)}</div>}
 
-        <fieldset-section>
-          <FormField
-            label={__('Remember Password')}
-            type="checkbox"
-            name="wallet-remember-password"
-            onChange={event => onChangeRememberPassword(event)}
-            checked={componentState.rememberPassword}
-          />
-          <FormField
-            type="checkbox"
-            name="encrypt_enabled"
-            checked={componentState.encryptWallet}
-            disabled={false}
-            onChange={event => onChangeEncrypt(event)}
-            label={__('Encrypt Wallet')}
-          />
-
-          <FormField
-            type="checkbox"
-            name="sync_enabled"
-            checked={componentState.enableSync}
-            disabled={!isEmailVerified || !safeToSync}
-            error={!!syncApplyErrorMessage && syncApplyErrorMessage}
-            helper={!!syncApplyErrorMessage && syncApplyErrorMessage}
-            prefix={<span className="badge badge--alert">ALPHA</span>}
-            onChange={event => onChangeSync(event)}
-            label={
-              <React.Fragment>
-                {__('Enable Sync')} <Button button="link" label={__('(?)')} href="https://lbry.com/privacypolicy" />{' '}
-                <span className="badge badge--alert">ALPHA</span>
-              </React.Fragment>
-            }
-          />
-        </fieldset-section>
-
-        <div className="card__subtitle--status">
-          {__(
-            'If your password is lost, it cannot be recovered. You will not be able to access your wallet without a password.'
+        <Form onSubmit={() => apply()}>
+          {componentState.advancedMode && (
+            <FormField
+              type="checkbox"
+              name="sync_enabled"
+              checked={componentState.enableSync}
+              disabled={!isEmailVerified || !safeToSync}
+              prefix={<span className="badge badge--alert">ALPHA</span>}
+              onChange={event => onChangeSync(event)}
+              label={
+                <React.Fragment>
+                  {__('Enable Sync')} <Button button="link" label={__('(?)')} href="https://lbry.com/privacypolicy" />{' '}
+                  <span className="badge badge--alert">ALPHA</span>
+                </React.Fragment>
+              }
+            />
           )}
-        </div>
-        <FormField
-          error={componentState.understandError === true ? 'You must enter "I understand"' : false}
-          label={__('Enter "I understand"')}
-          placeholder={__('I understand')}
-          type="text"
-          name="wallet-understand"
-          onChange={event => onChangeUnderstandConfirm(event)}
-        />
-        {componentState.failMessage && <div className="error-text">{__(componentState.failMessage)}</div>}
-        <Submit
-          disabled={!componentState.passwordMatch}
-          label={componentState.failMessage ? __('Encrypting Wallet') : __('Apply')}
-        />
-      </Form>
-      testing stuff
-      <Button
-        button="primary"
-        label={__('Sync Apply')}
-        onClick={() => syncApply(syncHash, syncData, componentState.newPassword)}
-      />{' '}
-      <Button button="primary" label={__('Check Sync')} onClick={() => checkSync()} />{' '}
-      <Button button="primary" label={__('Setpass test')} onClick={() => setSavedPassword('test', 'testpass')} />{' '}
-      <Button
-        button="primary"
-        label={__('Getpass test')}
-        onClick={() => getSavedPassword('test').then(p => setComponentState({ ...componentState, newPassword: p }))}
-      />{' '}
-      <Button button="primary" label={__('Deletepass test')} onClick={() => deleteSavedPassword('test')} />{' '}
-      <p>password: {componentState.newPassword}</p>
-      <p>encryptWallet: {String(componentState.encryptWallet)}</p>
-      <p>enableSync: {String(componentState.enableSync)}</p>
-      <p>syncApplyError: {String(syncApplyErrorMessage)}</p>
-      <p>Has Synced: {String(hasSyncedWallet)}</p>
-      <p>getSyncPending: {String(getSyncIsPending)}</p>
-      <p>syncEnabled: {String(syncEnabled)}</p>
-      <p>syncHash: {syncHash ? syncHash.slice(0, 10) : 'null'}</p>
-      <p>syncData: {syncData ? syncData.slice(0, 10) : 'null'}</p>
-      <p>walletEncrypted: {String(walletEncrypted)}</p>
-      <p>emailRegistered: {String(isEmailVerified)}</p>
-      <p>hashChanged: {String(hashChanged)}</p>
-    </section>
+          {!componentState.advancedMode && (
+            <Button
+              button="primary"
+              label={__('Sync my wallet')}
+              onClick={() => syncApply(syncHash, syncData, componentState.newPassword)}
+            />
+          )}
+          {(walletEncrypted ||
+            syncApplyErrorMessage ||
+            componentState.advancedMode ||
+            componentState.showPasswordFields) && (
+            <React.Fragment>
+              <FormField
+                autoFocus
+                inputButton={
+                  <Button
+                    icon={componentState.obscurePassword ? ICONS.EYE : ICONS.EYE_OFF}
+                    button={'primary'}
+                    onClick={() =>
+                      setComponentState({ ...componentState, obscurePassword: !componentState.obscurePassword })
+                    }
+                  />
+                }
+                label={__('Password')}
+                placeholder={__('Shh...')}
+                type={componentState.obscurePassword ? 'password' : 'text'}
+                name="wallet-new-password"
+                onChange={event => onChangeNewPassword(event)}
+                value={componentState.newPassword}
+              />
+              <FormField
+                error={componentState.passwordMatch === false ? 'No match' : false}
+                label={__('Same Password')}
+                placeholder={__('Your eyes only')}
+                type="password"
+                name="wallet-new-password-confirm"
+                onChange={event => onChangeNewPasswordConfirm(event)}
+                value={componentState.newPasswordConfirm}
+              />
+              <FormField
+                label={__('Remember Password')}
+                type="checkbox"
+                name="wallet-remember-password"
+                onChange={event => onChangeRememberPassword(event)}
+                checked={componentState.rememberPassword}
+              />
+            </React.Fragment>
+          )}
+
+          {/* Confirmation */}
+
+          {(walletEncrypted || componentState.advancedMode) && (
+            <React.Fragment>
+              <FormField
+                type="checkbox"
+                name="encrypt_enabled"
+                checked={componentState.encryptWallet}
+                disabled={false}
+                onChange={event => onChangeEncrypt(event)}
+                label={__('Encrypt Wallet')}
+              />
+              <div className="card__subtitle--status">
+                {__(
+                  'If your password is lost, it cannot be recovered. You will not be able to access your wallet without a password.'
+                )}
+              </div>
+              <FormField
+                error={componentState.understandError === true ? 'You must enter "I understand"' : false}
+                label={__('Enter "I understand"')}
+                placeholder={__('I understand')}
+                type="text"
+                name="wallet-understand"
+                onChange={event => onChangeUnderstandConfirm(event)}
+              />
+            </React.Fragment>
+          )}
+
+          {componentState.failMessage && <div className="error-text">{__(componentState.failMessage)}</div>}
+          {(walletEncrypted || componentState.advancedMode || syncApplyErrorMessage) && (
+            <Submit
+              disabled={!componentState.passwordMatch || (!componentState.enableSync && !componentState.encryptWallet)}
+              label={componentState.failMessage ? __('Encrypting Wallet') : __('Apply')}
+            />
+          )}
+        </Form>
+      </section>
+
+      {/* Testing stuff and Diagnostics */}
+
+      <section className="card card--section">
+        <Button
+          button="primary"
+          label={__('Sync Apply')}
+          onClick={() => syncApply(syncHash, syncData, componentState.newPassword)}
+        />{' '}
+        <Button button="primary" label={__('Check Sync')} onClick={() => checkSync()} />{' '}
+        <Button button="primary" label={__('Setpass test')} onClick={() => setSavedPassword('test', 'testpass')} />{' '}
+        <Button
+          button="primary"
+          label={__('Getpass test')}
+          onClick={() => getSavedPassword('test').then(p => setComponentState({ ...componentState, newPassword: p }))}
+        />{' '}
+        <Button button="primary" label={__('Deletepass test')} onClick={() => deleteSavedPassword('test')} />{' '}
+        <p>
+          password:{' '}
+          {componentState.newPassword
+            ? componentState.newPassword
+            : componentState.newPassword === ''
+            ? 'blankString'
+            : 'null'}
+        </p>
+        <p>encryptWallet: {String(componentState.encryptWallet)}</p>
+        <p>enableSync: {String(componentState.enableSync)}</p>
+        <p>syncApplyError: {String(syncApplyErrorMessage)}</p>
+        <p>Has Synced: {String(hasSyncedWallet)}</p>
+        <p>getSyncPending: {String(getSyncIsPending)}</p>
+        <p>syncEnabled: {String(syncEnabled)}</p>
+        <p>syncHash: {syncHash ? syncHash.slice(0, 10) : 'null'}</p>
+        <p>syncData: {syncData ? syncData.slice(0, 10) : 'null'}</p>
+        <p>walletEncrypted: {String(walletEncrypted)}</p>
+        <p>emailRegistered: {String(isEmailVerified)}</p>
+        <p>hashChanged: {String(hashChanged)}</p>
+      </section>
+    </React.Fragment>
   );
 }
 
