@@ -1,7 +1,7 @@
 // @flow
 import React, { useEffect, useRef } from 'react';
 import analytics from 'analytics';
-import { Lbry, buildURI } from 'lbry-redux';
+import { Lbry, buildURI, parseURI } from 'lbry-redux';
 import Router from 'component/router/index';
 import ModalRouter from 'modal/modalRouter';
 import ReactModal from 'react-modal';
@@ -41,15 +41,10 @@ function App(props: Props) {
   const previousHasVerifiedEmail = usePrevious(hasVerifiedEmail);
   const previousRewardApproved = usePrevious(isRewardApproved);
   const { pathname } = props.location;
-  const urlParts = pathname.split('/');
-  const claimName = urlParts[1];
-  const claimId = urlParts[2];
 
-  // @routingfixme
-  // claimName and claimId come from the url `{domain}/{claimName}/{claimId}"
   let uri;
   try {
-    uri = buildURI({ contentName: claimName, claimId: claimId });
+    uri = buildURI(parseURI(pathname.slice(1).replace(/:/g, '#')));
   } catch (e) {}
 
   useEffect(() => {
