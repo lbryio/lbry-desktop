@@ -155,15 +155,9 @@ export function doFetchClaimsByChannel(uri: string, page: number = 1, pageSize: 
             setSubscriptionLatest(
               {
                 channelName: latest.channel_name,
-                uri: buildURI(
-                  {
-                    contentName: latest.channel_name,
-                    claimId: latest.claim_id,
-                  },
-                  false
-                ),
+                uri: latest.signing_channel.canonical_url,
               },
-              buildURI({ contentName: latest.name, claimId: latest.claim_id }, false)
+              buildURI({ streamName: latest.name, streamClaimId: latest.claim_id }, false)
             )
           );
         }
