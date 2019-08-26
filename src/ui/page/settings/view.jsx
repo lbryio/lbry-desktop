@@ -211,15 +211,13 @@ class SettingsPage extends React.PureComponent<Props, State> {
 
     return (
       <Page>
-        // @if TARGET='app'
-        {noDaemonSettings ? (
+        {!IS_WEB && noDaemonSettings ? (
           <section className="card card--section">
             <div className="card__title">{__('Failed to load settings.')}</div>
           </section>
         ) : (
-          // @endif
           <div>
-            // @if TARGET='app'
+            {/* @if TARGET='app' */}
             <section className="card card--section">
               <h2 className="card__title">{__('Download Directory')}</h2>
 
@@ -234,7 +232,6 @@ class SettingsPage extends React.PureComponent<Props, State> {
                 <p className="help">{__('LBRY downloads will be saved here.')}</p>
               </div>
             </section>
-            // @endif // @if TARGET='app'
             <section className="card card--section">
               <h2 className="card__title">{__('Network and Data Settings')}</h2>
               <Form>
@@ -265,7 +262,6 @@ class SettingsPage extends React.PureComponent<Props, State> {
                 />
               </Form>
             </section>
-            // @endif
             <section className="card card--section">
               <header className="card__header">
                 <h2 className="card__title">{__('Max Purchase Price')}</h2>
@@ -343,6 +339,7 @@ class SettingsPage extends React.PureComponent<Props, State> {
                 </p>
               </Form>
             </section>
+            {/* @endif */}
             <section className="card card--section">
               <h2 className="card__title">{__('Content Settings')}</h2>
               <FormField
@@ -388,7 +385,7 @@ class SettingsPage extends React.PureComponent<Props, State> {
                 <Button button="link" label={__('Manage')} navigate={`/$/${PAGES.BLOCKED}`} />
               </p>
             </section>
-            // @if TARGET='app'
+            {/* @if TARGET='app' */}
             <section className="card card--section">
               <h2 className="card__title">{__('Notifications')}</h2>
               <Form>
@@ -402,7 +399,6 @@ class SettingsPage extends React.PureComponent<Props, State> {
                 />
               </Form>
             </section>
-            // @endif
             <section className="card card--section">
               <h2 className="card__title">{__('Share Diagnostic Data')}</h2>
 
@@ -422,6 +418,7 @@ class SettingsPage extends React.PureComponent<Props, State> {
                 />
               </Form>
             </section>
+            {/* @endif */}
             <section className="card card--section">
               <h2 className="card__title">{__('Appearance')}</h2>
 
@@ -483,7 +480,8 @@ class SettingsPage extends React.PureComponent<Props, State> {
                 </fieldset-section>
               </Form>
             </section>
-            // @if TARGET='app'
+            {/* @if TARGET='app' */}
+
             <section className="card card--section">
               <h2 className="card__title">{__('Wallet Security')}</h2>
 
@@ -512,7 +510,6 @@ class SettingsPage extends React.PureComponent<Props, State> {
                 />
               </Form>
             </section>
-            // @endif // @if TARGET='app'
             <section className="card card--section">
               <h2 className="card__title">{__('Experimental Settings')}</h2>
 
@@ -585,7 +582,7 @@ class SettingsPage extends React.PureComponent<Props, State> {
                 </fieldset-section>
               </Form>
             </section>
-            // @endif
+            {/* @endif */}
             <section className="card card--section">
               <h2 className="card__title">{__('Application Cache')}</h2>
 
