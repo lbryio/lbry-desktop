@@ -23,24 +23,27 @@ function SideBar(props: Props) {
     };
   }
 
+  const menuLinks = [];
+  menuLinks.push({
+    ...buildLink(null, __('Home'), ICONS.HOME),
+  });
+  if (!IS_WEB) {
+    menuLinks.push({
+      ...buildLink(PAGES.LIBRARY, __('Library'), ICONS.LIBRARY),
+    });
+    menuLinks.push({
+      ...buildLink(PAGES.PUBLISHED, __('Publishes'), ICONS.PUBLISH),
+    });
+  }
+  menuLinks.push({
+    ...buildLink(PAGES.FOLLOWING, __('Customize'), ICONS.EDIT),
+  });
+
   return (
     <StickyBox offsetTop={100} offsetBottom={20}>
       <nav className="navigation">
         <ul className="navigation-links">
-          {[
-            {
-              ...buildLink(null, __('Home'), ICONS.HOME),
-            },
-            {
-              ...buildLink(PAGES.LIBRARY, __('Library'), ICONS.LIBRARY),
-            },
-            {
-              ...buildLink(PAGES.PUBLISHED, __('Publishes'), ICONS.PUBLISH),
-            },
-            {
-              ...buildLink(PAGES.FOLLOWING, __('Customize'), ICONS.EDIT),
-            },
-          ].map(linkProps => (
+          {menuLinks.map(linkProps => (
             <li key={linkProps.label}>
               <Button {...linkProps} className="navigation-link" activeClass="navigation-link--active" />
             </li>
