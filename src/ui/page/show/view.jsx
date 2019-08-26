@@ -1,5 +1,7 @@
 // @flow
 import React from 'react';
+import { parseURI } from 'lbry-redux';
+import { Redirect } from 'react-router';
 import BusyIndicator from 'component/common/busy-indicator';
 import ChannelPage from 'page/channel';
 import FilePage from 'page/file';
@@ -39,6 +41,15 @@ class ShowPage extends React.PureComponent<Props> {
 
   render() {
     const { claim, isResolvingUri, uri, blackListedOutpoints, location } = this.props;
+    const { channelName, channelClaimId, streamName, streamClaimId } = parseURI(uri);
+
+    // @routinghax
+    if (channelName && !channelClaimId && streamName && !streamClaimId && !isResolvingUri && !claim) {
+      // Kinda hacky, but this is probably an old url
+      // Just redirect to the vanity channel
+      return <Redirect to={`/@${channelName}`} />;
+    }
+
     let innerContent = '';
 
     if (!claim || (claim && !claim.name)) {

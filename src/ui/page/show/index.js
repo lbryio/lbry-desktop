@@ -14,7 +14,19 @@ const select = (state, props) => {
   const { pathname } = props.location;
   // Remove the leading "/" added by the browser
   const path = pathname.slice(1).replace(/:/g, '#');
-  const uri = normalizeURI(path);
+
+  let uri;
+  try {
+    uri = normalizeURI(path);
+  } catch (e) {
+    // Probably an old channel url, redirect to the vanity channel
+    // @routinghax
+    const match = path.match(/[#/:]/);
+    if (match && match.index) {
+      uri = `lbry://${path.slice(0, match.index)}`;
+      props.history.replace(`/${path.slice(0, match.index)}`);
+    }
+  }
 
   return {
     claim: makeSelectClaimForUri(uri)(state),

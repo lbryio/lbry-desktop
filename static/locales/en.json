@@ -648,5 +648,8 @@
   "Trending": "Trending",
   "Top": "Top",
   "New": "New",
-  "Loading": "Loading"
+  "Loading": "Loading",
+  "I feel woosy! Stop spinning!": "I feel woosy! Stop spinning!",
+  "URI does not include name.": "URI does not include name.",
+  "This file is in your library.": "This file is in your library."
 }
