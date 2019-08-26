@@ -48,7 +48,9 @@
     "electron-updater": "^4.1.2",
     "express": "^4.16.4",
     "if-env": "^1.0.4",
-    "keytar": "^4.4.1"
+    "keytar": "^4.4.1",
+    "mysql": "^2.17.1",
+    "nodemon": "^1.19.1"
   },
   "devDependencies": {
     "@babel/core": "^7.0.0",

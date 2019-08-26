@@ -18,7 +18,7 @@
     {
       "from": "dist/electron/static",
       "to": "./",
-      "filter": ["!dist/!electron/!static/index.html"]
+      "filter": ["!dist/!electron/!static/index-electron.html"]
     }
   ],
   "publish": [

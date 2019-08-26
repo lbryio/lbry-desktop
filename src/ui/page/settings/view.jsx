@@ -168,7 +168,7 @@ class SettingsPage extends React.PureComponent<Props, State> {
     });
     const success = () => {
       this.setState({ clearingCache: false });
-      window.location.href = 'index.html';
+      window.location.reload();
     };
     const clear = () => this.props.clearCache().then(success);
 
