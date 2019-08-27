@@ -24,7 +24,8 @@ class UserEmailVerify extends React.PureComponent<Props> {
   }
 
   componentDidUpdate() {
-    if (this.emailVerifyCheckInterval && this.props.user.has_verified_email) {
+    const { user } = this.props;
+    if (this.emailVerifyCheckInterval && user && user.has_verified_email) {
       clearInterval(this.emailVerifyCheckInterval);
     }
   }
@@ -51,8 +52,6 @@ class UserEmailVerify extends React.PureComponent<Props> {
 
     return (
       <React.Fragment>
-        <h2 className="card__title">{__('Waiting For Verification')}</h2>
-
         <p className="card__subtitle">
           {__('An email was sent to')} {email}.{' '}
           {__('Follow the link and you will be good to go. This will update automatically.')}
@@ -61,7 +60,7 @@ class UserEmailVerify extends React.PureComponent<Props> {
         <div className="card__actions">
           <Button
             button="primary"
-            label={__('Resend verification email')}
+            label={__('Resend Verification Email')}
             onClick={this.handleResendVerificationEmail}
           />
           <UserEmailResetButton />

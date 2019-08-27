@@ -1,6 +1,6 @@
 .main-wrapper {
   position: relative;
-  min-height: 100vh;
+  min-height: 80vh;
 
   [data-mode='dark'] & {
     background-color: var(--dm-color-08);
@@ -41,6 +41,13 @@
   }
 }
 
+.main--auth-page {
+  max-width: 60rem;
+  margin-top: calc(var(--spacing-main-padding) * 2);
+  margin-left: auto;
+  margin-right: auto;
+}
+
 .main--empty {
   align-items: center;
   display: flex;
@@ -54,6 +61,24 @@
   width: 100vw;
   height: 100vh;
   background-color: var(--color-background);
+}
+
+.main--fullscreen {
+  width: 100vw;
+  height: 100vh;
+  z-index: 9999;
+  background-color: $lbry-white;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin: 0;
+  margin-top: 0;
+
+  * {
+    z-index: 10000;
+  }
 }
 
 .main__status {

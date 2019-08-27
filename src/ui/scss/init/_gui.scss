@@ -24,7 +24,6 @@ body {
   cursor: default;
   font-size: 1rem;
   font-weight: 400;
-  height: 100%;
   line-height: 1.5;
   background-color: mix($lbry-white, $lbry-gray-1, 70%);
 
@@ -107,10 +106,13 @@ a {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
+  flex-wrap: wrap;
 
   > * {
     flex-grow: 1;
     flex-basis: 0;
+    min-width: 15rem;
+    margin-bottom: var(--spacing-large);
 
     &:first-child {
       margin-right: 1.5rem;
