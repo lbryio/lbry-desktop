@@ -20,6 +20,12 @@
   }
 }
 
+.header--minimal {
+  box-shadow: none;
+  background-color: transparent;
+  border-bottom: none;
+}
+
 .header__contents {
   max-width: var(--page-max-width);
   height: calc(var(--header-height) - 1px);
@@ -47,6 +53,10 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+
+  .button {
+    margin-left: auto;
+  }
 }
 
 .header__navigation-arrows {

@@ -21,9 +21,8 @@ import WalletPage from 'page/wallet';
 import NavigationHistory from 'page/navigationHistory';
 import TagsPage from 'page/tags';
 import FollowingPage from 'page/following';
-import ListBlocked from 'page/listBlocked';
-
-import UserEmail from 'component/userEmail';
+import ListBlockedPage from 'page/listBlocked';
+import SignInPage from 'page/signIn';
 
 // Tell the browser we are handling scroll restoration
 if ('scrollRestoration' in history) {
@@ -34,14 +33,6 @@ type Props = {
   currentScroll: number,
   location: { pathname: string, search: string },
 };
-
-function SignInPage() {
-  return <UserEmail />;
-}
-
-function SignUpPage() {
-  return <h1>Sign In</h1>;
-}
 
 function AppRouter(props: Props) {
   const { currentScroll, location } = props;
@@ -60,7 +51,6 @@ function AppRouter(props: Props) {
       <Route path={`/$/${PAGES.DISCOVER}`} exact component={DiscoverPage} />
       <Route path={`/$/${PAGES.AUTH}`} exact component={AuthPage} />
       <Route path={`/$/${PAGES.AUTH}/signin`} exact component={SignInPage} />
-      <Route path={`/$/${PAGES.AUTH}/signup`} exact component={SignUpPage} />
       <Route path={`/$/${PAGES.INVITE}`} exact component={InvitePage} />
       <Route path={`/$/${PAGES.DOWNLOADED}`} exact component={FileListDownloaded} />
       <Route path={`/$/${PAGES.PUBLISHED}`} exact component={FileListPublished} />
@@ -77,7 +67,7 @@ function AppRouter(props: Props) {
       <Route path={`/$/${PAGES.TAGS}`} exact component={TagsPage} />
       <Route path={`/$/${PAGES.FOLLOWING}`} exact component={FollowingPage} />
       <Route path={`/$/${PAGES.WALLET}`} exact component={WalletPage} />
-      <Route path={`/$/${PAGES.BLOCKED}`} exact component={ListBlocked} />
+      <Route path={`/$/${PAGES.BLOCKED}`} exact component={ListBlockedPage} />
       {/* Below need to go at the end to make sure we don't match any of our pages first */}
       <Route path="/:claimName" exact component={ShowPage} />
       <Route path="/:claimName/:contentName" exact component={ShowPage} />

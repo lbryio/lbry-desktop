@@ -85,6 +85,10 @@ fieldset-section:last-child {
 
 checkbox-element,
 radio-element {
+  &:hover {
+    cursor: pointer !important;
+  }
+
   label {
     color: lighten($lbry-black, 20%);
     margin-bottom: 0;
@@ -102,6 +106,9 @@ radio-element {
 }
 
 checkbox-toggle {
+  border-width: 1px;
+  border-radius: var(--input-border-radius);
+
   &:before {
     background-position: center;
     background-repeat: no-repeat;
@@ -155,6 +162,10 @@ fieldset-group {
 
     label {
       min-height: 18px;
+      white-space: nowrap;
+      // Set width 0 and overflow visible so the label can act as if it's the input label and not a random text node in a side by side div
+      overflow: visible;
+      width: 0;
     }
 
     fieldset-section:first-child .form-field__prefix,

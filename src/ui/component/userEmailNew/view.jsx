@@ -1,43 +1,23 @@
 // @flow
-import * as React from 'react';
+import React, { useState } from 'react';
 import { FormField, Form } from 'component/common/form';
 import Button from 'component/button';
 import { Lbryio } from 'lbryinc';
 import analytics from 'analytics';
 
 type Props = {
-  cancelButton: React.Node,
   errorMessage: ?string,
   isPending: boolean,
   addUserEmail: string => void,
 };
 
-type State = {
-  email: string,
-};
+function UserEmailNew(props: Props) {
+  const { errorMessage, isPending, addUserEmail } = props;
+  const [newEmail, setEmail] = useState('');
+  const [sync, setSync] = useState(false);
 
-class UserEmailNew extends React.PureComponent<Props, State> {
-  constructor() {
-    super();
-
-    this.state = {
-      email: '',
-    };
-
-    (this: any).handleSubmit = this.handleSubmit.bind(this);
-    (this: any).handleEmailChanged = this.handleEmailChanged.bind(this);
-  }
-
-  handleEmailChanged(event: SyntheticInputEvent<*>) {
-    this.setState({
-      email: event.target.value,
-    });
-  }
-
-  handleSubmit() {
-    const { email } = this.state;
-    const { addUserEmail } = this.props;
-    addUserEmail(email);
+  function handleSubmit() {
+    addUserEmail(newEmail);
     analytics.emailProvidedEvent();
 
     // @if TARGET='web'
@@ -45,40 +25,28 @@ class UserEmailNew extends React.PureComponent<Props, State> {
     // @endif
   }
 
-  render() {
-    const { cancelButton, errorMessage, isPending } = this.props;
+  return (
+    <Form onSubmit={handleSubmit}>
+      <FormField
+        type="email"
+        id="sign_up_email"
+        label={__('Email')}
+        value={newEmail}
+        error={errorMessage}
+        onChange={e => setEmail(e.target.value)}
+      />
+      <FormField
+        type="checkbox"
+        id="sign_up_sync"
+        label={__('Sync my bidnezz on this device')}
+        helper={__('Maybe some additional text with this field')}
+        checked={sync}
+        onChange={() => setSync(!sync)}
+      />
 
-    return (
-      <React.Fragment>
-        <h2 className="card__title">{__('Verify Your Email')}</h2>
-        <p className="card__subtitle">
-          {/* @if TARGET='app' */}
-          {__("We'll let you know about LBRY updates, security issues, and great new content.")}
-          {/* @endif */}
-          {/* @if TARGET='web' */}
-          {__('Stay up to date with lbry.tv and be the first to know about the progress we make.')}
-          {/* @endif */}
-        </p>
-
-        <Form onSubmit={this.handleSubmit}>
-          <FormField
-            type="email"
-            label="Email"
-            placeholder="youremail@example.org"
-            name="email"
-            value={this.state.email}
-            error={errorMessage}
-            onChange={this.handleEmailChanged}
-            inputButton={
-              <Button type="submit" button="inverse" label="Submit" disabled={isPending || !this.state.email} />
-            }
-          />
-        </Form>
-        <div className="card__actions">{cancelButton}</div>
-        <p className="help">{__('Your email address will never be sold and you can unsubscribe at any time.')}</p>
-      </React.Fragment>
-    );
-  }
+      <Button button="primary" type="submit" label={__('Continue')} disabled={isPending} />
+    </Form>
+  );
 }
 
 export default UserEmailNew;

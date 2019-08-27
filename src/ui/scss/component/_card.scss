@@ -49,6 +49,12 @@
   box-shadow: none;
 }
 
+.card--fill {
+  min-width: 25rem;
+  margin-left: auto;
+  margin-right: auto;
+}
+
 //  C A R D
 //  A C T I O N S
 
@@ -187,6 +193,12 @@
   & > *:not(:last-child) {
     margin-right: var(--spacing-medium);
   }
+}
+
+.card__title--large {
+  @extend .card__title;
+  font-weight: 700;
+  font-size: var(--font-heading);
 }
 
 .card__title--between {
