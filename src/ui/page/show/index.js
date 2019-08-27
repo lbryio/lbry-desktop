@@ -11,9 +11,10 @@ import { selectBlackListedOutpoints } from 'lbryinc';
 import ShowPage from './view';
 
 const select = (state, props) => {
-  const { pathname } = props.location;
+  const { pathname, hash } = props.location;
+  const urlPath = pathname + hash;
   // Remove the leading "/" added by the browser
-  const path = pathname.slice(1).replace(/:/g, '#');
+  const path = urlPath.slice(1).replace(/:/g, '#');
 
   let uri;
   try {
