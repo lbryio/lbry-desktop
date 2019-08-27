@@ -13,7 +13,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ### Changed
 
-- Upgraded lbry-sdk to 0.39.2 for performance and reliability improvements
+- Upgraded lbry-sdk to 0.39.0 for performance and reliability improvements
 - Upgraded windows certificate so builds continue to be signed properly
 
 ### Added
