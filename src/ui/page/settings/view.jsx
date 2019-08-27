@@ -12,7 +12,7 @@ import Page from 'component/page';
 import SettingLanguage from 'component/settingLanguage';
 import FileSelector from 'component/common/file-selector';
 import UnsupportedOnWeb from 'component/common/unsupported-on-web';
-import keytar from 'keytar';
+// import keytar from 'keytar';
 import WalletSecurityAndSync from '../../component/walletSecurityAndSync';
 
 type Price = {
@@ -99,13 +99,13 @@ class SettingsPage extends React.PureComponent<Props, State> {
   componentDidMount() {
     this.props.getThemes();
     this.props.updateWalletStatus();
-    keytar.getPassword('LBRY', 'wallet_password').then(p => {
-      if (p || p === '') {
-        this.props.setPasswordSaved(true);
-      } else {
-        this.props.setPasswordSaved(false);
-      }
-    });
+    // keytar.getPassword('LBRY', 'wallet_password').then(p => {
+    //   if (p || p === '') {
+    //     this.props.setPasswordSaved(true);
+    //   } else {
+    //     this.props.setPasswordSaved(false);
+    //   }
+    // });
   }
 
   onKeyFeeChange(newValue: Price) {
