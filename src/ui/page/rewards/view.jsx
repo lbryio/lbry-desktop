@@ -1,4 +1,5 @@
 // @flow
+import * as PAGES from 'constants/pages';
 import React, { PureComponent, Fragment } from 'react';
 import BusyIndicator from 'component/common/busy-indicator';
 import RewardListClaimed from 'component/rewardListClaimed';
@@ -39,15 +40,18 @@ class RewardsPage extends PureComponent<Props> {
         return (
           !IS_WEB && (
             <section className="card card--section">
-              <h2 className="card__title">{__('Rewards Approval to Earn Credits (LBC)')}</h2>
+              <h2 className="card__title">{__('Sign In To Unlock Rewards')}</h2>
               <p className="card__subtitle">
                 {__(
-                  'This step is optional. You can continue to use this app without rewards, but LBC may be needed for some tasks.'
-                )}{' '}
-                <Button button="link" label={__('Learn more')} href="https://lbry.com/faq/rewards" />.
+                  'This is optional. You can continue to use this app without rewards, but LBC may be needed for some tasks.'
+                )}
               </p>
 
-              <Button navigate="/$/auth?redirect=rewards" button="primary" label="Prove Humanity" />
+              <Button
+                navigate={`/$/${PAGES.AUTH}/signin?redirect=rewards`}
+                button="primary"
+                label={__('Unlock Rewards')}
+              />
             </section>
           )
         );

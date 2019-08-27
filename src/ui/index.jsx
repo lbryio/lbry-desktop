@@ -8,7 +8,7 @@ import * as ACTIONS from 'constants/action_types';
 import { ipcRenderer, remote, shell } from 'electron';
 import moment from 'moment';
 import * as MODALS from 'constants/modal_types';
-import React, { useState, useEffect } from 'react';
+import React, { Fragment, useState, useEffect } from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import { doConditionalAuthNavigate, doDaemonReady, doAutoUpdate, doOpenModal, doHideModal } from 'redux/actions/app';
@@ -237,7 +237,7 @@ function AppWrapper() {
   return (
     <Provider store={store}>
       <PersistGate persistor={persistor} loading={<div className="main--launching" />}>
-        <div>
+        <Fragment>
           {readyToLaunch ? (
             <ConnectedRouter history={history}>
               <ErrorBoundary>
@@ -251,7 +251,7 @@ function AppWrapper() {
               onReadyToLaunch={() => setReadyToLaunch(true)}
             />
           )}
-        </div>
+        </Fragment>
       </PersistGate>
     </Provider>
   );
