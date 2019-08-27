@@ -6,9 +6,12 @@ import { Lbry, buildURI, parseURI } from 'lbry-redux';
 import Router from 'component/router/index';
 import ModalRouter from 'modal/modalRouter';
 import ReactModal from 'react-modal';
+<<<<<<< HEAD
 import SideBar from 'component/sideBar';
 import Header from 'component/header';
 import Button from 'component/button';
+=======
+>>>>>>> add createChannel to first run flow
 import { openContextMenu } from 'util/context-menu';
 import useKonamiListener from 'util/enhanced-layout';
 import Yrbl from 'component/yrbl';
@@ -111,13 +114,7 @@ function App(props: Props) {
 
   return (
     <div className={MAIN_WRAPPER_CLASS} ref={appRef} onContextMenu={e => openContextMenu(e)}>
-      <Header />
-
-      <div className="main-wrapper__inner">
-        <Router />
-        <SideBar />
-      </div>
-
+      <Router />
       <ModalRouter />
       <FileViewer pageUri={uri} />
 
