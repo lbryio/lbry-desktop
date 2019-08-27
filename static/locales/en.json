@@ -706,5 +706,15 @@
   "Confirm Transaction": "Confirm Transaction",
   "Sending: ": "Sending: ",
   "To address: ": "To address: ",
-  "Once the transaction is sent, it cannot be reversed.": "Once the transaction is sent, it cannot be reversed."
+  "Once the transaction is sent, it cannot be reversed.": "Once the transaction is sent, it cannot be reversed.",
+  "Wallet Sync and Security": "Wallet Sync and Security",
+  "Your LBRY password can help you encrypt your wallet or sync it to another device. You must use the same LBRY password on every device if you wish to sync.": "Your LBRY password can help you encrypt your wallet or sync it to another device. You must use the same LBRY password on every device if you wish to sync.",
+  "Easy Mode: Sync and go with default security! Don't trust your roommate?": "Easy Mode: Sync and go with default security! Don't trust your roommate?",
+  "Advanced Mode": "Advanced Mode",
+  "Sync my wallet": "Sync my wallet",
+  "Sync Apply": "Sync Apply",
+  "Check Sync": "Check Sync",
+  "Setpass test": "Setpass test",
+  "Getpass test": "Getpass test",
+  "Deletepass test": "Deletepass test"
 }

@@ -14,7 +14,8 @@ const select = (state, props) => {
   const { pathname } = props.location;
   // Remove the leading "/" added by the browser
   const path = pathname.slice(1).replace(/:/g, '#');
-
+  console.log('path', path);
+  debugger;
   let uri;
   try {
     uri = normalizeURI(path);
