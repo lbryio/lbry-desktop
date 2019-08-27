@@ -1,7 +1,7 @@
 // @flow
 import React from 'react';
 import { Modal } from 'modal/modal';
-import keytar from 'keytar';
+// import keytar from 'keytar';
 
 type Props = {
   closeModal: () => void,
@@ -18,11 +18,12 @@ class ModalPasswordUnsave extends React.PureComponent<Props> {
         type="confirm"
         confirmButtonLabel={__('Forget')}
         abortButtonLabel={__('Nevermind')}
-        onConfirmed={() =>
-          keytar.deletePassword('LBRY', 'wallet_password').then(() => {
-            this.props.setPasswordSaved(false);
-            this.props.closeModal();
-          })
+        onConfirmed={
+          () => {}
+          // keytar.deletePassword('LBRY', 'wallet_password').then(() => {
+          //   this.props.setPasswordSaved(false);
+          //   this.props.closeModal();
+          // })
         }
         onAborted={this.props.closeModal}
       >

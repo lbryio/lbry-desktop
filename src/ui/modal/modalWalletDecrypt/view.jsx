@@ -2,7 +2,7 @@
 import React from 'react';
 import { Modal } from 'modal/modal';
 import Button from 'component/button';
-import keytar from 'keytar';
+// import keytar from 'keytar';
 
 type Props = {
   closeModal: () => void,
@@ -26,7 +26,7 @@ class ModalWalletDecrypt extends React.PureComponent<Props, State> {
     const { props, state } = this;
 
     if (state.submitted && props.walletDecryptSucceded === true) {
-      keytar.deletePassword('LBRY', 'wallet_password');
+      // keytar.deletePassword('LBRY', 'wallet_password');
       props.setPasswordSaved(false);
       props.closeModal();
       props.updateWalletStatus();

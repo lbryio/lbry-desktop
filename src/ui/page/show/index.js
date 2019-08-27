@@ -14,8 +14,14 @@ const select = (state, props) => {
   const { pathname, hash } = props.location;
   const urlPath = pathname + hash;
   // Remove the leading "/" added by the browser
+<<<<<<< HEAD
   const path = urlPath.slice(1).replace(/:/g, '#');
 
+=======
+  const path = pathname.slice(1).replace(/:/g, '#');
+  console.log('path', path);
+  debugger;
+>>>>>>> rebase and comment out keytar
   let uri;
   try {
     uri = normalizeURI(path);
