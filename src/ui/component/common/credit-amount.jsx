@@ -1,7 +1,7 @@
 // @flow
 import React from 'react';
 import classnames from 'classnames';
-import { formatCredits, formatFullPrice } from 'util/format-credits';
+import { formatCredits, formatFullPrice } from 'lbry-redux';
 
 type Props = {
   amount: number,
@@ -39,7 +39,7 @@ class CreditAmount extends React.PureComponent<Props> {
       formattedAmount =
         amount > 0 && amount < minimumRenderableAmount
           ? `<${minimumRenderableAmount}`
-          : formatCredits(amount, precision);
+          : formatCredits(amount, precision, true);
     }
 
     let amountText;

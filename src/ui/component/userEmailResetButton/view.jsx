@@ -18,7 +18,7 @@ function UserEmailResetButton(props: Props) {
       }
     : { href: 'https://lbry.com/faq/how-to-change-email' };
 
-  return <Button button={button} label={__('Change')} {...buttonsProps} />;
+  return <Button button={button} label={__('Change... fix me sean')} {...buttonsProps} />;
 }
 
 export default UserEmailResetButton;

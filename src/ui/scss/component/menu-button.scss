@@ -89,7 +89,6 @@
   color: lighten($lbry-black, 20%);
 
   .icon {
-    margin-right: var(--spacing-small);
     stroke: $lbry-gray-5;
   }
 
@@ -99,5 +98,18 @@
     .icon {
       stroke: $lbry-gray-2;
     }
+  }
+}
+
+.menu__link {
+  .icon {
+    margin-right: var(--spacing-small);
+    stroke: $lbry-gray-5;
+  }
+}
+
+.menu__title {
+  span {
+    margin-left: var(--spacing-miniscule);
   }
 }
