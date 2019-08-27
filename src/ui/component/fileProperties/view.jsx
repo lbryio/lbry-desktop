@@ -1,7 +1,6 @@
 // @flow
 import * as icons from 'constants/icons';
 import * as React from 'react';
-import { parseURI } from 'lbry-redux';
 import Icon from 'component/common/icon';
 import FilePrice from 'component/filePrice';
 import VideoDuration from 'component/videoDuration';
@@ -12,12 +11,13 @@ type Props = {
   claimIsMine: boolean,
   isSubscribed: boolean,
   isNew: boolean,
+  claim: Claim,
   rewardedContentClaimIds: Array<string>,
 };
 
 export default function FileProperties(props: Props) {
-  const { uri, downloaded, claimIsMine, rewardedContentClaimIds, isSubscribed } = props;
-  const { claimId } = parseURI(uri);
+  const { uri, downloaded, claimIsMine, rewardedContentClaimIds, isSubscribed, claim } = props;
+  const { claim_id: claimId } = claim;
   const isRewardContent = rewardedContentClaimIds.includes(claimId);
 
   return (

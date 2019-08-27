@@ -651,5 +651,11 @@
   "Loading": "Loading",
   "I feel woosy! Stop spinning!": "I feel woosy! Stop spinning!",
   "URI does not include name.": "URI does not include name.",
-  "This file is in your library.": "This file is in your library."
+  "This file is in your library.": "This file is in your library.",
+  "'claimName', 'channelName', and 'streamName' are all empty. One must be present to build a url.": "'claimName', 'channelName', and 'streamName' are all empty. One must be present to build a url.",
+  "Invalid claim ID %s.": "Invalid claim ID %s.",
+  "'claimId' should no longer be used. Use 'streamClaimId' or 'channelClaimId' instead": "'claimId' should no longer be used. Use 'streamClaimId' or 'channelClaimId' instead",
+  "View Tag": "View Tag",
+  "Block": "Block",
+  "% downloaded": "% downloaded"
 }

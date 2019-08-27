@@ -26,17 +26,16 @@ class SocialShare extends React.PureComponent<Props> {
 
   render() {
     const { claim } = this.props;
-    const { short_url: shortUrl } = claim;
+    const { canonical_url: canonicalUrl } = claim;
     const { speechShareable, onDone } = this.props;
-
     const lbryTvPrefix = 'https://beta.lbry.tv/';
     const lbryPrefix = 'https://open.lbry.com/';
-    const lbryUri = shortUrl.split('lbry://')[1];
-    const lbryTvUri = lbryUri.replace('#', '/');
-    const encodedLbryURL: string = `${lbryPrefix}${encodeURIComponent(lbryUri)}`;
-    const lbryURL: string = `${lbryPrefix}${lbryUri}`;
-    const encodedLbryTvUrl = `${lbryTvPrefix}${encodeURIComponent(lbryTvUri)}`;
-    const lbryTvUrl = `${lbryTvPrefix}${lbryTvUri}`;
+    const lbryUri = canonicalUrl.split('lbry://')[1];
+    const lbryWebUrl = lbryUri.replace(/#/g, ':');
+    const encodedLbryURL: string = `${lbryPrefix}${encodeURIComponent(lbryWebUrl)}`;
+    const lbryURL: string = `${lbryPrefix}${lbryWebUrl}`;
+    const encodedLbryTvUrl = `${lbryTvPrefix}${encodeURIComponent(lbryWebUrl)}`;
+    const lbryTvUrl = `${lbryTvPrefix}${lbryWebUrl}`;
 
     const shareOnFb = __('Share on Facebook');
     const shareOnTwitter = __('Share On Twitter');
