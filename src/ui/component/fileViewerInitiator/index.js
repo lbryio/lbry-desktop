@@ -24,6 +24,7 @@ const select = (state, props) => ({
   isStreamable: makeSelectUriIsStreamable(props.uri)(state),
   autoplay: makeSelectClientSetting(SETTINGS.AUTOPLAY)(state),
   hasCostInfo: Boolean(makeSelectCostInfoForUri(props.uri)(state)),
+  costInfo: makeSelectCostInfoForUri(props.uri)(state),
 });
 
 const perform = dispatch => ({

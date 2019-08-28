@@ -23,6 +23,7 @@ type Props = {
   thumbnail?: string,
   autoplay: boolean,
   hasCostInfo: boolean,
+  costInfo: any,
 };
 
 export default function FileViewer(props: Props) {
@@ -38,6 +39,7 @@ export default function FileViewer(props: Props) {
     autoplay,
     isStreamable,
     hasCostInfo,
+    costInfo,
   } = props;
 
   const isPlayable = ['audio', 'video'].indexOf(mediaType) !== -1;
@@ -77,10 +79,10 @@ export default function FileViewer(props: Props) {
 
   useEffect(() => {
     const videoOnPage = document.querySelector('video');
-    if (autoplay && !videoOnPage && isStreamable && hasCostInfo) {
+    if (autoplay && !videoOnPage && isStreamable && hasCostInfo && costInfo.cost === 0) {
       viewFile();
     }
-  }, [autoplay, viewFile, isStreamable, hasCostInfo]);
+  }, [autoplay, viewFile, isStreamable, hasCostInfo, costInfo]);
 
   return (
     <div
