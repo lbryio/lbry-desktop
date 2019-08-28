@@ -3,14 +3,13 @@ import React from 'react';
 import { Form, FormField } from 'component/common/form';
 import { Modal } from 'modal/modal';
 import Button from 'component/button';
-// import keytar from 'keytar';
+import { getSavedPassword, setSavedPassword } from 'util/saved-passwords';
 
 type Props = {
   quit: () => void,
   closeModal: () => void,
   unlockWallet: (?string) => void,
   walletUnlockSucceded: boolean,
-  setPasswordSaved: boolean => void,
 };
 
 type State = {
@@ -24,13 +23,21 @@ class ModalWalletUnlock extends React.PureComponent<Props, State> {
     rememberPassword: false,
   };
 
+  componentDidMount() {
+    getSavedPassword()
+      .then(p => {
+        if (p) {
+          this.setState({ password: p, rememberPassword: true });
+        }
+      })
+      .catch();
+  }
   componentDidUpdate() {
     const { props } = this;
 
     if (props.walletUnlockSucceded === true) {
       if (this.state.rememberPassword) {
-        this.props.setPasswordSaved(true);
-        // keytar.setPassword('LBRY', 'wallet_password', this.state.password);
+        setSavedPassword(this.state.password);
       }
       props.closeModal();
     }
