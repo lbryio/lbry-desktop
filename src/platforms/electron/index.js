@@ -1,3 +1,5 @@
+/* eslint no-console:0 */
+/* eslint space-before-function-paren:0 */
 // Module imports
 import '@babel/polyfill';
 import keytar from 'keytar';
@@ -29,6 +31,7 @@ let showingAutoUpdateCloseAlert = false;
 // object is garbage collected.
 let rendererWindow;
 
+// eslint-disable-next-line no-unused-vars
 let tray;
 let daemon;
 
@@ -44,6 +47,7 @@ if (isDev) {
   process.env.ELECTRON_DISABLE_SECURITY_WARNINGS = true;
 }
 
+// eslint-disable-next-line space-before-function-paren
 const startDaemon = async () => {
   let isDaemonRunning = false;
 
@@ -110,6 +114,7 @@ if (!gotSingleInstanceLock) {
     }
   });
 
+  // eslint-disable-next-line space-before-function-paren
   app.on('ready', async () => {
     await startDaemon();
     startSandbox();
@@ -310,6 +315,26 @@ ipcMain.on('get-auth-token', event => {
 
 ipcMain.on('set-auth-token', (event, token) => {
   keytar.setPassword('LBRY', 'auth_token', token ? token.toString().trim() : null);
+});
+
+ipcMain.on('get-password', event => {
+  keytar.getPassword('LBRY', 'wallet_password').then(password => {
+    event.sender.send('get-password-response', password ? password.toString() : null);
+  });
+});
+
+ipcMain.on('set-password', (event, password) => {
+  if (password || password === '') {
+    keytar.setPassword('LBRY', 'wallet_password', password).then(res => {
+      event.sender.send('get-password-response', res);
+    });
+  }
+});
+
+ipcMain.on('delete-password', (event, password) => {
+  keytar.deletePassword('LBRY', 'wallet_password', password).then(res => {
+    event.sender.send('get-password-response', res);
+  });
 });
 
 process.on('uncaughtException', error => {

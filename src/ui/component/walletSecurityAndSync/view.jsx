@@ -6,7 +6,6 @@ import UserEmail from 'component/userEmail';
 import * as ICONS from 'constants/icons';
 
 import { getSavedPassword, setSavedPassword, deleteSavedPassword } from 'util/saved-passwords';
-import { KEY_WALLET_PASSWORD } from 'constants/keychain';
 
 type Props = {
   // wallet statuses
@@ -70,10 +69,7 @@ function WalletSecurityAndSync(props: Props) {
     walletEncrypted,
     encryptWallet,
     decryptWallet,
-    setPasswordSaved,
     syncEnabled,
-    setClientSetting,
-    isPasswordSaved,
     user,
     hasSyncedWallet,
     getSyncIsPending,
@@ -84,7 +80,7 @@ function WalletSecurityAndSync(props: Props) {
     syncApply,
     checkSync,
     hasTransactions,
-    // setDefaultAccount,
+    setDefaultAccount,
   } = props;
 
   const defaultComponentState: State = {
@@ -111,7 +107,7 @@ function WalletSecurityAndSync(props: Props) {
   // on mount
   useEffect(() => {
     checkSync();
-    getSavedPassword(KEY_WALLET_PASSWORD).then(p => {
+    getSavedPassword().then(p => {
       if (p) {
         setComponentState({
           ...componentState,
@@ -140,7 +136,7 @@ function WalletSecurityAndSync(props: Props) {
 
   function onChangeRememberPassword(event: SyntheticInputEvent<>) {
     if (componentState.rememberPassword) {
-      deleteSavedPassword(KEY_WALLET_PASSWORD);
+      deleteSavedPassword();
     }
     setComponentState({ ...componentState, rememberPassword: event.target.checked });
   }
@@ -204,7 +200,7 @@ function WalletSecurityAndSync(props: Props) {
     }
 
     if (componentState.rememberPassword && !componentState.failed) {
-      setSavedPassword(KEY_WALLET_PASSWORD, componentState.newPassword);
+      setSavedPassword(componentState.newPassword);
     }
   }
 
@@ -374,13 +370,13 @@ function WalletSecurityAndSync(props: Props) {
           onClick={() => syncApply(syncHash, syncData, componentState.newPassword)}
         />{' '}
         <Button button="primary" label={__('Check Sync')} onClick={() => checkSync()} />{' '}
-        <Button button="primary" label={__('Setpass test')} onClick={() => setSavedPassword('test', 'testpass')} />{' '}
+        <Button button="primary" label={__('Setpass test')} onClick={() => setSavedPassword('testpass')} />{' '}
         <Button
           button="primary"
           label={__('Getpass test')}
-          onClick={() => getSavedPassword('test').then(p => setComponentState({ ...componentState, newPassword: p }))}
+          onClick={() => getSavedPassword().then(p => setComponentState({ ...componentState, newPassword: p }))}
         />{' '}
-        <Button button="primary" label={__('Deletepass test')} onClick={() => deleteSavedPassword('test')} />{' '}
+        <Button button="primary" label={__('Deletepass test')} onClick={() => deleteSavedPassword()} />{' '}
         <p>
           password:{' '}
           {componentState.newPassword

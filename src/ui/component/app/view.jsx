@@ -6,12 +6,6 @@ import { Lbry, buildURI, parseURI } from 'lbry-redux';
 import Router from 'component/router/index';
 import ModalRouter from 'modal/modalRouter';
 import ReactModal from 'react-modal';
-<<<<<<< HEAD
-import SideBar from 'component/sideBar';
-import Header from 'component/header';
-import Button from 'component/button';
-=======
->>>>>>> add createChannel to first run flow
 import { openContextMenu } from 'util/context-menu';
 import useKonamiListener from 'util/enhanced-layout';
 import Yrbl from 'component/yrbl';

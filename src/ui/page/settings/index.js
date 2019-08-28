@@ -36,7 +36,6 @@ const perform = dispatch => ({
   decryptWallet: () => dispatch(doNotifyDecryptWallet()),
   updateWalletStatus: () => dispatch(doWalletStatus()),
   confirmForgetPassword: modalProps => dispatch(doNotifyForgetPassword(modalProps)),
-  setPasswordSaved: saved => dispatch(doPasswordSaved(saved)),
   clearPlayingUri: () => dispatch(doSetPlayingUri(null)),
   setDarkTime: (time, options) => dispatch(doSetDarkTime(time, options)),
 });
