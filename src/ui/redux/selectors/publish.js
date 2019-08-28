@@ -1,12 +1,5 @@
 import { createSelector } from 'reselect';
-import {
-  parseURI,
-  selectClaimsById,
-  selectMyClaimsWithoutChannels,
-  selectResolvingUris,
-  buildURI,
-  selectClaimsByUri,
-} from 'lbry-redux';
+import { parseURI, selectClaimsById, selectMyClaimsWithoutChannels, selectResolvingUris, buildURI } from 'lbry-redux';
 
 const selectState = state => state.publish || {};
 
@@ -84,32 +77,5 @@ export const selectIsResolvingPublishUris = createSelector(
     }
 
     return false;
-  }
-);
-
-export const selectTakeOverAmount = createSelector(
-  selectState,
-  selectMyClaimForUri,
-  selectClaimsByUri,
-  ({ name }, myClaimForUri, claimsByUri) => {
-    // We only care about the winning claim for the short uri
-    const shortUri = buildURI({ contentName: name });
-    const claimForShortUri = claimsByUri[shortUri];
-
-    if (!myClaimForUri && claimForShortUri) {
-      return claimForShortUri.meta.effective_amount;
-    } else if (myClaimForUri && claimForShortUri) {
-      // https://github.com/lbryio/lbry/issues/1476
-      // We should check the current effective_amount on my claim to see how much additional lbc
-      // is needed to win the claim. Currently this is not possible during a takeover.
-      // With this, we could say something like, "You have x lbc in support, if you bid y additional LBC you will control the claim"
-      // For now just ignore supports. We will just show the winning claim's bid amount
-      // If the top claim is your claim, no takeover is necessary so we return 0.
-      return claimForShortUri.claim_id === myClaimForUri.claim_id
-        ? 0
-        : claimForShortUri.meta.effective_amount || claimForShortUri.amount;
-    }
-
-    return null;
   }
 );

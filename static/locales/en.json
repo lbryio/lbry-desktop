@@ -657,5 +657,19 @@
   "'claimId' should no longer be used. Use 'streamClaimId' or 'channelClaimId' instead": "'claimId' should no longer be used. Use 'streamClaimId' or 'channelClaimId' instead",
   "View Tag": "View Tag",
   "Block": "Block",
-  "% downloaded": "% downloaded"
+  "% downloaded": "% downloaded",
+  "'claimName' should no longer be used. Use 'streamClaimName' or 'channelClaimName' instead": "'claimName' should no longer be used. Use 'streamClaimName' or 'channelClaimName' instead",
+  "Portuguese": "Portuguese",
+  "Vietnamese": "Vietnamese",
+  "Thai": "Thai",
+  "Arabic": "Arabic",
+  "Czech": "Czech",
+  "Croatian": "Croatian",
+  "Cambodian": "Cambodian",
+  "Korean": "Korean",
+  "Norwegian": "Norwegian",
+  "Romanian": "Romanian",
+  "Hindi": "Hindi",
+  "Greek": "Greek",
+  "Hide": "Hide"
 }
