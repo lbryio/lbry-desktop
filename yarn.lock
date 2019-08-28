@@ -6704,6 +6704,13 @@ jsesc@~0.5.0:
   resolved "https://registry.yarnpkg.com/jsesc/-/jsesc-0.5.0.tgz#e7dee66e35d6fc16f710fe91d5cf69f70f08911d"
   integrity sha1-597mbjXW/Bb3EP6R1c9p9w8IkR0=
 
+jsmediatags@^3.8.1:
+  version "3.9.2"
+  resolved "https://registry.yarnpkg.com/jsmediatags/-/jsmediatags-3.9.2.tgz#c6846394ea125995c36f196c4a76277b574f0bad"
+  integrity sha512-kbdYK/Jka44aBfIs4+pvu5hJfVqmzcRLs3oT25q94QsT8D6fX31RSZ5nQ+FP/zvmPfllKYZpzw/uoWOE5DmN6Q==
+  dependencies:
+    xhr2 "^0.1.4"
+
 json-buffer@3.0.0:
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/json-buffer/-/json-buffer-3.0.0.tgz#5b1f397afc75d677bde8bcfc0e47e1f9a3d9a898"
@@ -6894,9 +6901,9 @@ lazy-val@^1.0.3, lazy-val@^1.0.4:
     yargs "^13.2.2"
     zstd-codec "^0.1.1"
 
-lbry-redux@lbryio/lbry-redux#3ebbb4470c6c64fdc730f071a94aa30fc4d8e60d:
+lbry-redux@lbryio/lbry-redux#5f97dc03fd71bba01191310f0db33113810e87e2:
   version "0.0.1"
-  resolved "https://codeload.github.com/lbryio/lbry-redux/tar.gz/3ebbb4470c6c64fdc730f071a94aa30fc4d8e60d"
+  resolved "https://codeload.github.com/lbryio/lbry-redux/tar.gz/5f97dc03fd71bba01191310f0db33113810e87e2"
   dependencies:
     proxy-polyfill "0.1.6"
     reselect "^3.0.0"
@@ -12687,6 +12694,11 @@ xdg-basedir@^3.0.0:
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/xdg-basedir/-/xdg-basedir-3.0.0.tgz#496b2cc109eca8dbacfe2dc72b603c17c5870ad4"
   integrity sha1-SWsswQnsqNus/i3HK2A8F8WHCtQ=
+
+xhr2@^0.1.4:
+  version "0.1.4"
+  resolved "https://registry.yarnpkg.com/xhr2/-/xhr2-0.1.4.tgz#7f87658847716db5026323812f818cadab387a5f"
+  integrity sha1-f4dliEdxbbUCYyOBL4GMras4el8=
 
 xhr@2.4.0:
   version "2.4.0"
