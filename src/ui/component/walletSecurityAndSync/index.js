@@ -10,7 +10,6 @@ import {
   selectWalletIsEncrypted,
   selectHasTransactions,
 } from 'lbry-redux';
-import { doPasswordSaved } from 'redux/actions/app';
 import WalletSecurityAndSync from './view';
 import {
   doCheckSync,
@@ -27,7 +26,6 @@ import {
   selectHashChanged,
   selectUser,
 } from 'lbryinc';
-import { selectIsPasswordSaved } from 'redux/selectors/app';
 import { doSetClientSetting } from 'redux/actions/settings';
 import { makeSelectClientSetting } from 'redux/selectors/settings';
 
@@ -46,7 +44,6 @@ const select = state => ({
   syncApplyErrorMessage: selectSyncApplyErrorMessage(state),
   syncData: selectSyncData(state),
   syncHash: selectSyncHash(state),
-  isPasswordSaved: selectIsPasswordSaved(state),
   hashChanged: selectHashChanged(state),
 });
 
@@ -54,7 +51,6 @@ const perform = dispatch => ({
   encryptWallet: password => dispatch(doWalletEncrypt(password)),
   decryptWallet: () => dispatch(doWalletDecrypt()),
   updateWalletStatus: () => dispatch(doWalletStatus()),
-  setPasswordSaved: saved => dispatch(doPasswordSaved(saved)),
   syncApply: (hash, data, password) => dispatch(doSyncApply(hash, data, password)),
   getSync: password => dispatch(doGetSync(password)),
   checkSync: () => dispatch(doCheckSync()),

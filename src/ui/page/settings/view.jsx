@@ -9,9 +9,8 @@ import { FormField, FormFieldPrice, Form } from 'component/common/form';
 import Button from 'component/button';
 import Page from 'component/page';
 import FileSelector from 'component/common/file-selector';
-import UnsupportedOnWeb from 'component/common/unsupported-on-web';
-// import keytar from 'keytar';
 import WalletSecurityAndSync from '../../component/walletSecurityAndSync';
+import { getSavedPassword } from 'util/saved-passwords';
 
 type Price = {
   currency: string,
@@ -65,8 +64,6 @@ type Props = {
   userBlockedChannelsCount?: number,
   hideBalance: boolean,
   confirmForgetPassword: () => void,
-  isPasswordSaved: boolean,
-  setPasswordSaved: boolean => void,
   floatingPlayer: boolean,
   clearPlayingUri: () => void,
   darkModeTimes: DarkModeTimes,
@@ -96,18 +93,17 @@ class SettingsPage extends React.PureComponent<Props, State> {
     (this: any).onLanguageChange = this.onLanguageChange.bind(this);
     (this: any).clearCache = this.clearCache.bind(this);
     (this: any).onChangeTime = this.onChangeTime.bind(this);
+    (this: any).onConfirmForgetPassword = this.onConfirmForgetPassword.bind(this);
   }
 
   componentDidMount() {
     this.props.getThemes();
     this.props.updateWalletStatus();
-    // keytar.getPassword('LBRY', 'wallet_password').then(p => {
-    //   if (p || p === '') {
-    //     this.props.setPasswordSaved(true);
-    //   } else {
-    //     this.props.setPasswordSaved(false);
-    //   }
-    // });
+    getSavedPassword().then(p => {
+      if (p) {
+        this.setState({ storedPassword: true });
+      }
+    });
   }
 
   onKeyFeeChange(newValue: Price) {
@@ -218,7 +214,6 @@ class SettingsPage extends React.PureComponent<Props, State> {
       floatingPlayer,
       clearPlayingUri,
       darkModeTimes,
-      isPasswordSaved,
     } = this.props;
 
     const noDaemonSettings = !daemonSettings || Object.keys(daemonSettings).length === 0;
@@ -522,7 +517,7 @@ class SettingsPage extends React.PureComponent<Props, State> {
                     </React.Fragment>
                   }
                 />
-                {isPasswordSaved && (
+                {this.state.storedPassword && (
                   <p className="card__subtitle card__help">
                     {__('Your password is saved in your OS keychain.')}{' '}
                     <Button

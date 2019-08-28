@@ -716,5 +716,18 @@
   "Check Sync": "Check Sync",
   "Setpass test": "Setpass test",
   "Getpass test": "Getpass test",
-  "Deletepass test": "Deletepass test"
+  "Deletepass test": "Deletepass test",
+  "Advanced Mode: Enter a password that matches your other devices LBRY password.": "Advanced Mode: Enter a password that matches your other devices LBRY password.",
+  "Easy Mode": "Easy Mode",
+  "Enable Sync": "Enable Sync",
+  "(?)": "(?)",
+  "Same Password": "Same Password",
+  "Remember Password": "Remember Password",
+  "I understand": "I understand",
+  "Apply": "Apply",
+  "It looks like we don't have your email.": "It looks like we don't have your email.",
+  "Verify your email": "Verify your email",
+  "and then come back here.": "and then come back here.",
+  "Your password is saved in your OS keychain.": "Your password is saved in your OS keychain.",
+  "I want to type it manually": "I want to type it manually"
 }
