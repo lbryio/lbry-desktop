@@ -180,7 +180,7 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
                 <SubscribeButton uri={uri.startsWith('lbry://') ? uri : `lbry://${uri}`} />
               )}
               {isChannel && !isSubscribed && <BlockButton uri={uri.startsWith('lbry://') ? uri : `lbry://${uri}`} />}
-              {!isChannel && <FileProperties uri={uri} />}
+              {!isChannel && claim && <FileProperties uri={uri} />}
             </div>
           )}
         </div>
