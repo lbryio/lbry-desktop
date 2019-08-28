@@ -14,7 +14,7 @@ console.log(ifProduction('production', 'development'));
 
 let baseConfig = {
   mode: ifProduction('production', 'development'),
-  devtool: ifProduction(false, 'cheap-module-eval-source-map'),
+  devtool: ifProduction(false, 'eval-source-map'),
   optimization: {
     minimizer: [
       new TerserPlugin({
