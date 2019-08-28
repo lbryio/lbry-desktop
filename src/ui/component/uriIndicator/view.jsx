@@ -56,10 +56,7 @@ class UriIndicator extends React.PureComponent<Props> {
     if (channelClaim) {
       const { name, claim_id: claimId } = channelClaim;
       let channelLink;
-
-      // Disabling now because it mostly causes issues
-      // Add this back to ensure we only add links to signed channels
-      if (claim.is_channel_signature_valid) {
+      if (claimId && name) {
         channelLink = link ? buildURI({ channelName: name, channelClaimId: claimId }) : false;
       }
 
