@@ -3,6 +3,7 @@ import React from 'react';
 import { Form, FormField, Submit } from 'component/common/form';
 import { Modal } from 'modal/modal';
 import Button from 'component/button';
+import { setSavedPassword } from 'util/saved-passwords';
 
 type Props = {
   closeModal: () => void,
@@ -10,7 +11,6 @@ type Props = {
   updateWalletStatus: boolean,
   encryptWallet: (?string) => void,
   updateWalletStatus: () => void,
-  setPasswordSaved: boolean => void,
 };
 
 type State = {
@@ -87,8 +87,7 @@ class ModalWalletEncrypt extends React.PureComponent<Props, State> {
       return;
     }
     if (state.rememberPassword === true) {
-      this.props.setPasswordSaved(true);
-      // keytar.setPassword('LBRY', 'wallet_password', state.newPassword);
+      setSavedPassword(state.newPassword);
     }
     this.setState({ submitted: true });
     this.props.encryptWallet(state.newPassword);
