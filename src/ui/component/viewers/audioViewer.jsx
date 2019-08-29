@@ -77,6 +77,8 @@ class AudioVideoViewer extends React.PureComponent {
 
     const audioNode = this.audioNode;
 
+    this.audioNode.src = source;
+
     audioNode.crossOrigin = 'anonymous';
     audioNode.autostart = true;
 
@@ -129,7 +131,7 @@ class AudioVideoViewer extends React.PureComponent {
 
     wavesurfer.load(audioNode);
 
-    console.log('parsing: "' + source + '"');
+    this.audioNode.play();
 
     musicMetadata
       .fetchFromUrl(source)
@@ -150,6 +152,7 @@ class AudioVideoViewer extends React.PureComponent {
           artist,
           title,
         });
+
       })
       .catch(error => {
         console.log(':(', error.type, error.info);
@@ -283,7 +286,6 @@ class AudioVideoViewer extends React.PureComponent {
         />
         <audio
           ref={node => (this.audioNode = node)}
-          src={source}
           style={{ position: 'absolute', top: '-100px' }}
           onPlay={() => this.setState({ playing: true })}
           onPause={() => this.setState({ playing: false })}
