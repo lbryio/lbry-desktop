@@ -22,6 +22,8 @@ type Props = {
 export default function TagSelect(props: Props) {
   const { unfollowedTags = [], followedTags = [], doToggleTagFollow, doAddTag, onSelect, suggestMature } = props;
   const [newTag, setNewTag] = useState('');
+  // Not old, just untouched
+  const [oldTag, setOldTag] = useState('');
 
   let tags = unfollowedTags.slice();
   if (newTag) {
@@ -42,12 +44,18 @@ export default function TagSelect(props: Props) {
   const suggestedTransitions = useTransition(suggestedTags, tag => tag, unfollowedTagsAnimation);
 
   function onChange(e) {
-    setNewTag(e.target.value);
+    setNewTag(e.target.value.trim());
+    setOldTag(e.target.value);
   }
 
   function handleSubmit(e) {
     e.preventDefault();
     setNewTag('');
+    setOldTag('');
+
+    if (newTag.length <= 0) {
+      return;
+    }
 
     if (onSelect) {
       onSelect({ name: newTag });
@@ -78,7 +86,7 @@ export default function TagSelect(props: Props) {
           onChange={onChange}
           placeholder={__('Search for more tags')}
           type="text"
-          value={newTag}
+          value={oldTag}
         />
       </Form>
       <ul className="tags">
