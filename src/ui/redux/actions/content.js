@@ -14,7 +14,6 @@ import {
   SETTINGS,
   Lbry,
   Lbryapi,
-  buildURI,
   makeSelectFileInfoForUri,
   selectFileInfosByOutpoint,
   makeSelectChannelForClaimUri,
@@ -67,14 +66,15 @@ export function doUpdateLoadStatus(uri: string, outpoint: string) {
         });
 
         const channelUri = makeSelectChannelForClaimUri(uri, true)(state);
-        const { claimName: channelName } = parseURI(channelUri);
+        const { channelName } = parseURI(channelUri);
+        const claimName = '@' + channelName;
 
         const unreadForChannel = makeSelectUnreadByChannel(channelUri)(state);
         if (unreadForChannel && unreadForChannel.type === NOTIFICATION_TYPES.DOWNLOADING) {
           const count = unreadForChannel.uris.length;
 
           if (selectosNotificationsEnabled(state)) {
-            const notif = new window.Notification(channelName, {
+            const notif = new window.Notification(claimName, {
               body: `Posted ${fileInfo.metadata.title}${
                 count > 1 && count < 10 ? ` and ${count - 1} other new items` : ''
               }${count > 9 ? ' and 9+ other new items' : ''}`,
@@ -154,10 +154,10 @@ export function doFetchClaimsByChannel(uri: string, page: number = 1, pageSize: 
           dispatch(
             setSubscriptionLatest(
               {
-                channelName: latest.channel_name,
-                uri: latest.signing_channel.canonical_url,
+                channelName: latest.signing_channel.name,
+                uri: latest.signing_channel.permanent_url,
               },
-              buildURI({ streamName: latest.name, streamClaimId: latest.claim_id }, false)
+              latest.permanent_url
             )
           );
         }
@@ -201,7 +201,7 @@ export function doPlayUri(uri: string, skipCostCheck: boolean = false, saveFileO
 
     const daemonSettings = selectDaemonSettings(state);
     const costInfo = makeSelectCostInfoForUri(uri)(state);
-    const cost = Number(costInfo.cost);
+    const cost = (costInfo && Number(costInfo.cost)) || 0;
     const saveFile = !uriIsStreamable ? true : daemonSettings.save_files || saveFileOverride || cost > 0;
     const instantPurchaseEnabled = makeSelectClientSetting(SETTINGS.INSTANT_PURCHASE_ENABLED)(state);
     const instantPurchaseMax = makeSelectClientSetting(SETTINGS.INSTANT_PURCHASE_MAX)(state);

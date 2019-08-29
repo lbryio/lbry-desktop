@@ -111,7 +111,7 @@ function ChannelPage(props: Props) {
               />
             )}
             <h1 className="channel__title">
-              {title || channelName}
+              {title || '@' + channelName}
               {channelIsMine && !editing && (
                 <Button title={__('Edit')} onClick={() => setEditing(!editing)} icon={ICONS.EDIT} iconSize={49} />
               )}

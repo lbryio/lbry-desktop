@@ -1,10 +1,4 @@
-import {
-  selectClaimsByUri,
-  selectIsFetchingClaimListMine,
-  selectMyClaims,
-  selectClaimsById,
-  buildURI,
-} from 'lbry-redux';
+import { selectClaimsByUri, selectIsFetchingClaimListMine, selectMyClaims, selectClaimsById } from 'lbry-redux';
 import { createSelector } from 'reselect';
 
 export const selectState = state => state.fileInfo || {};

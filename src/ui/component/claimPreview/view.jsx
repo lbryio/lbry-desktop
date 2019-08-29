@@ -82,7 +82,7 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
   let isValid = false;
   if (uri) {
     try {
-      ({ claimName: name } = parseURI(uri));
+      ({ streamName: name } = parseURI(uri));
       isValid = true;
     } catch (e) {
       isValid = false;

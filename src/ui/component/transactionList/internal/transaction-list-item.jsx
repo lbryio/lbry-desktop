@@ -45,10 +45,10 @@ class TransactionListItem extends React.PureComponent<Props> {
 
     // Ensure the claim name exists and is valid
     let uri;
-    let claimName = name;
+    let streamName = name;
     try {
-      ({ claimName } = parseURI(name));
-      uri = buildURI({ claimName: claimName, claimId });
+      ({ streamName } = parseURI(name));
+      uri = buildURI({ streamName, streamClaimId: claimId });
     } catch (e) {}
 
     const dateFormat = {
@@ -74,7 +74,7 @@ class TransactionListItem extends React.PureComponent<Props> {
         </td>
         <td>
           {reward && <span>{reward.reward_title}</span>}
-          {name && claimId && <Button button="link" navigate={uri} label={claimName} />}
+          {name && claimId && <Button button="link" navigate={uri} label={streamName} />}
         </td>
 
         <td>
