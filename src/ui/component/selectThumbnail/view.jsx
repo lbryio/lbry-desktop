@@ -10,6 +10,8 @@ import ThumbnailBrokenImage from './thumbnail-broken.png';
 
 type Props = {
   filePath: ?string,
+  fileInfos: { [string]: FileListItem },
+  myClaimForUri: ?StreamClaim,
   thumbnail: ?string,
   formDisabled: boolean,
   uploadThumbnailStatus: string,
@@ -52,6 +54,8 @@ class SelectThumbnail extends React.PureComponent<Props, State> {
   render() {
     const {
       filePath,
+      fileInfos,
+      myClaimForUri,
       thumbnail,
       formDisabled,
       uploadThumbnailStatus: status,
@@ -63,7 +67,12 @@ class SelectThumbnail extends React.PureComponent<Props, State> {
 
     const { thumbnailError } = this.state;
 
-    const isSupportedVideo = Lbry.getMediaType(null, filePath) === 'video';
+    const outpoint = myClaimForUri ? `${myClaimForUri.txid}:${myClaimForUri.nout}` : undefined;
+    const fileInfo = outpoint ? fileInfos[outpoint] : undefined;
+    const downloadPath = fileInfo ? fileInfo.download_path : undefined;
+
+    const actualFilePath = filePath || downloadPath;
+    const isSupportedVideo = Lbry.getMediaType(null, actualFilePath) === 'video';
 
     let thumbnailSrc;
     if (!thumbnail) {
@@ -153,7 +162,7 @@ class SelectThumbnail extends React.PureComponent<Props, State> {
               <Button
                 button="link"
                 label={__('Take a snapshot from your video')}
-                onClick={() => openModal(MODALS.AUTO_GENERATE_THUMBNAIL, { filePath })}
+                onClick={() => openModal(MODALS.AUTO_GENERATE_THUMBNAIL, { filePath: actualFilePath })}
               />
             )}
           </div>
@@ -161,16 +170,15 @@ class SelectThumbnail extends React.PureComponent<Props, State> {
 
         {status === THUMBNAIL_STATUSES.IN_PROGRESS && <p>{__('Uploading thumbnail')}...</p>}
         <p className="help">
-          {(status === undefined && __('You should reselect your file to choose a thumbnail')) ||
-            (status === THUMBNAIL_STATUSES.API_DOWN ? (
-              __('Enter a URL for your thumbnail.')
-            ) : (
-              <React.Fragment>
-                {__('Upload your thumbnail to')}{' '}
-                <Button button="link" label={__('spee.ch')} href="https://spee.ch/about" />.{' '}
-                {__('Recommended size: 800x450 (16:9)')}
-              </React.Fragment>
-            ))}
+          {status === THUMBNAIL_STATUSES.API_DOWN ? (
+            __('Enter a URL for your thumbnail.')
+          ) : (
+            <React.Fragment>
+              {__('Upload your thumbnail to')}{' '}
+              <Button button="link" label={__('spee.ch')} href="https://spee.ch/about" />.{' '}
+              {__('Recommended size: 800x450 (16:9)')}
+            </React.Fragment>
+          )}
         </p>
       </div>
     );
