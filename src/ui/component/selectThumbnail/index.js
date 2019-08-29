@@ -6,6 +6,7 @@ import {
   selectMyClaimForUri,
   selectIsResolvingPublishUris,
   selectTakeOverAmount,
+  selectFileInfosByOutpoint,
   doResetThumbnailStatus,
   doClearPublish,
   doUpdatePublishForm,
@@ -25,6 +26,7 @@ const select = state => ({
   myClaimForUri: selectMyClaimForUri(state),
   // If I clicked the "edit" button, have I changed the uri?
   // Need this to make it easier to find the source on previously published content
+  fileInfos: selectFileInfosByOutpoint(state),
   isStillEditing: selectIsStillEditing(state),
   isResolvingUri: selectIsResolvingPublishUris(state),
   totalRewardValue: selectUnclaimedRewardValue(state),
