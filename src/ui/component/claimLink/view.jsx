@@ -40,17 +40,15 @@ class ClaimLink extends React.Component<Props> {
 
   isClaimBlackListed() {
     const { claim, blackListedOutpoints } = this.props;
-
+    const signingChannel = claim && claim.signing_channel;
     if (claim && blackListedOutpoints) {
       let blackListed = false;
 
-      for (let i = 0; i < blackListedOutpoints.length; i += 1) {
-        const outpoint = blackListedOutpoints[i];
-        if (outpoint.txid === claim.txid && outpoint.nout === claim.nout) {
-          blackListed = true;
-          break;
-        }
-      }
+      blackListed = blackListedOutpoints.some(
+        outpoint =>
+          (signingChannel && outpoint.txid === signingChannel.txid && outpoint.nout === signingChannel.nout) ||
+          (outpoint.txid === claim.txid && outpoint.nout === claim.nout)
+      );
       return blackListed;
     }
   }

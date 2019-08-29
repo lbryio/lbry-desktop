@@ -8,6 +8,7 @@ import {
   makeSelectClaimForUri,
   selectChannelIsBlocked,
 } from 'lbry-redux';
+import { selectBlackListedOutpoints } from 'lbryinc';
 import { makeSelectIsSubscribed } from 'redux/selectors/subscriptions';
 import ChannelPage from './view';
 
@@ -20,6 +21,7 @@ const select = (state, props) => ({
   claim: makeSelectClaimForUri(props.uri)(state),
   isSubscribed: makeSelectIsSubscribed(props.uri, true)(state),
   channelIsBlocked: selectChannelIsBlocked(props.uri)(state),
+  blackListedOutpoints: selectBlackListedOutpoints(state),
 });
 
 export default connect(

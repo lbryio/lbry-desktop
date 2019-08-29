@@ -33,6 +33,10 @@ type Props = {
   channelIsMine: boolean,
   isSubscribed: boolean,
   channelIsBlocked: boolean,
+  blackListedOutpoints: Array<{
+    txid: string,
+    nout: number,
+  }>,
 };
 
 function ChannelPage(props: Props) {
@@ -48,6 +52,7 @@ function ChannelPage(props: Props) {
     claim,
     isSubscribed,
     channelIsBlocked,
+    blackListedOutpoints,
   } = props;
   const { channelName } = parseURI(uri);
   const { search } = location;
@@ -73,6 +78,14 @@ function ChannelPage(props: Props) {
 
     history.push(`${url}${search}`);
   };
+
+  let channelIsBlackListed = false;
+
+  if (claim && blackListedOutpoints) {
+    channelIsBlackListed = blackListedOutpoints.some(
+      outpoint => outpoint.txid === claim.txid && outpoint.nout === claim.nout
+    );
+  }
 
   return (
     <Page>
@@ -113,15 +126,15 @@ function ChannelPage(props: Props) {
             <Tab disabled={editing}>{__('Content')}</Tab>
             <Tab>{editing ? __('Editing Your Channel') : __('About')}</Tab>
             <div className="card__actions--inline">
-              <ShareButton uri={uri} />
-              {!channelIsBlocked && <SubscribeButton uri={permanentUrl} />}
+              {!channelIsBlocked && !channelIsBlackListed && <ShareButton uri={uri} />}
+              {!channelIsBlocked && !channelIsBlackListed && <SubscribeButton uri={permanentUrl} />}
               {!isSubscribed && <BlockButton uri={permanentUrl} />}
             </div>
           </TabList>
 
           <TabPanels>
             <TabPanel>
-              <ChannelContent uri={uri} />
+              <ChannelContent uri={uri} channelIsBlackListed={channelIsBlackListed} />
             </TabPanel>
             <TabPanel>
               {editing ? (

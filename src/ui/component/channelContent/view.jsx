@@ -5,6 +5,7 @@ import HiddenNsfwClaims from 'component/hiddenNsfwClaims';
 import { withRouter } from 'react-router-dom';
 import Paginate from 'component/common/paginate';
 import Spinner from 'component/spinner';
+import Button from 'component/button';
 
 type Props = {
   uri: string,
@@ -15,10 +16,20 @@ type Props = {
   channelIsBlocked: boolean,
   channelIsMine: boolean,
   fetchClaims: (string, number) => void,
+  channelIsBlackListed: boolean,
 };
 
 function ChannelContent(props: Props) {
-  const { uri, fetching, claimsInChannel, totalPages, channelIsMine, channelIsBlocked, fetchClaims } = props;
+  const {
+    uri,
+    fetching,
+    claimsInChannel,
+    totalPages,
+    channelIsMine,
+    channelIsBlocked,
+    fetchClaims,
+    channelIsBlackListed,
+  } = props;
   const hasContent = Boolean(claimsInChannel && claimsInChannel.length);
   return (
     <Fragment>
@@ -28,10 +39,23 @@ function ChannelContent(props: Props) {
         </section>
       )}
 
-      {!fetching && !hasContent && !channelIsBlocked && (
+      {!fetching && !hasContent && !channelIsBlocked && !channelIsBlackListed && (
         <div className="card--section">
           <h2 className="help">{__("This channel hasn't uploaded anything.")}</h2>
         </div>
+      )}
+
+      {!fetching && channelIsBlackListed && (
+        <section className="card card--section">
+          <p>
+            {__(
+              'In response to a complaint we received under the US Digital Millennium Copyright Act, we have blocked access to this channel from our applications.'
+            )}
+          </p>
+          <div className="card__actions">
+            <Button button="link" href="https://lbry.com/faq/dmca" label={__('Read More')} />
+          </div>
+        </section>
       )}
 
       {!fetching && channelIsBlocked && (
@@ -42,10 +66,10 @@ function ChannelContent(props: Props) {
 
       {!channelIsMine && <HiddenNsfwClaims className="card__subtitle" uri={uri} />}
 
-      {hasContent && !channelIsBlocked && (
+      {hasContent && !channelIsBlocked && !channelIsBlackListed && (
         <ClaimList header={false} uris={claimsInChannel.map(claim => claim.canonical_url)} />
       )}
-      {!channelIsBlocked && (
+      {!channelIsBlocked && !channelIsBlackListed && (
         <Paginate
           onPageChange={page => fetchClaims(uri, page)}
           totalPages={totalPages}
