@@ -68,7 +68,7 @@ function AppRouter(props: Props) {
       <Route path={`/$/${PAGES.BLOCKED}`} exact component={ListBlocked} />
       {/* Below need to go at the end to make sure we don't match any of our pages first */}
       <Route path="/:claimName" exact component={ShowPage} />
-      <Route path="/:claimName/:contentName" exact component={ShowPage} />
+      <Route path="/:claimName/:streamName" exact component={ShowPage} />
 
       {/* Route not found. Mostly for people typing crazy urls into the url */}
       <Route render={() => <Redirect to="/" />} />

@@ -35,7 +35,8 @@ export default function SubscribeButton(props: Props) {
   } = props;
   const buttonRef = useRef();
   const isHovering = useHover(buttonRef);
-  const { claimName } = parseURI(uri);
+  const { channelName } = parseURI(uri);
+  const claimName = '@' + channelName;
   const subscriptionHandler = isSubscribed ? doChannelUnsubscribe : doChannelSubscribe;
   const subscriptionLabel = isSubscribed ? __('Following') : __('Follow');
   const unfollowOverride = isSubscribed && isHovering && __('Unfollow');

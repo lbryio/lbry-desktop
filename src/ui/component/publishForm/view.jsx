@@ -102,13 +102,13 @@ function PublishForm(props: Props) {
     // We are only going to store the full uri, but we need to resolve the uri with and without the channel name
     let uri;
     try {
-      uri = buildURI({ contentName: name, channelName });
+      uri = buildURI({ streamName: name, channelName });
     } catch (e) {}
 
     if (channelName) {
       // resolve without the channel name so we know the winning bid for it
       try {
-        const uriLessChannel = buildURI({ contentName: name });
+        const uriLessChannel = buildURI({ streamName: name });
         resolveUri(uriLessChannel);
       } catch (e) {}
     }
