@@ -41,7 +41,7 @@ export default function FileViewer(props: Props) {
     hasCostInfo,
     costInfo,
   } = props;
-
+  const cost = costInfo && costInfo.cost;
   const isPlayable = ['audio', 'video'].indexOf(mediaType) !== -1;
   const fileStatus = fileInfo && fileInfo.status;
 
@@ -79,10 +79,10 @@ export default function FileViewer(props: Props) {
 
   useEffect(() => {
     const videoOnPage = document.querySelector('video');
-    if (autoplay && !videoOnPage && isStreamable && hasCostInfo && costInfo.cost === 0) {
+    if (autoplay && !videoOnPage && isStreamable && hasCostInfo && cost === 0) {
       viewFile();
     }
-  }, [autoplay, viewFile, isStreamable, hasCostInfo, costInfo]);
+  }, [autoplay, viewFile, isStreamable, hasCostInfo, cost]);
 
   return (
     <div
