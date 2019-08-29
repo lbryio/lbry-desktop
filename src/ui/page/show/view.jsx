@@ -42,6 +42,7 @@ class ShowPage extends React.PureComponent<Props> {
   render() {
     const { claim, isResolvingUri, uri, blackListedOutpoints, location } = this.props;
     const { channelName, channelClaimId, streamName, streamClaimId } = parseURI(uri);
+    const signingChannel = claim && claim.signing_channel;
 
     // @routinghax
     if (channelName && !channelClaimId && streamName && !streamClaimId && !isResolvingUri && !claim) {
@@ -70,13 +71,11 @@ class ShowPage extends React.PureComponent<Props> {
     } else if (claim && blackListedOutpoints) {
       let isClaimBlackListed = false;
 
-      for (let i = 0; i < blackListedOutpoints.length; i += 1) {
-        const outpoint = blackListedOutpoints[i];
-        if (outpoint.txid === claim.txid && outpoint.nout === claim.nout) {
-          isClaimBlackListed = true;
-          break;
-        }
-      }
+      isClaimBlackListed = blackListedOutpoints.some(
+        outpoint =>
+          (signingChannel && outpoint.txid === signingChannel.txid && outpoint.nout === signingChannel.nout) ||
+          (outpoint.txid === claim.txid && outpoint.nout === claim.nout)
+      );
 
       if (isClaimBlackListed) {
         innerContent = (
