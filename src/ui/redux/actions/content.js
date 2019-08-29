@@ -210,9 +210,9 @@ export function doPlayUri(uri: string, skipCostCheck: boolean = false, saveFileO
       dispatch(doPurchaseUriWrapper(uri, cost, saveFile));
     }
 
-    function attemptPlay(instantPurchaseMax = null) {
+    function attemptPlay(instantPurchaseEnabled = false, instantPurchaseMax = null) {
       // If you have a file_list entry, you have already purchased the file
-      if (!fileInfo && (!instantPurchaseMax || cost > instantPurchaseMax)) {
+      if (!fileInfo && (!instantPurchaseMax || !instantPurchaseEnabled || cost > instantPurchaseMax)) {
         dispatch(doOpenModal(MODALS.AFFIRM_PURCHASE, { uri }));
       } else {
         beginGetFile();
@@ -230,7 +230,7 @@ export function doPlayUri(uri: string, skipCostCheck: boolean = false, saveFileO
     }
 
     if (instantPurchaseEnabled || instantPurchaseMax.currency === 'LBC') {
-      attemptPlay(instantPurchaseMax.amount);
+      attemptPlay(instantPurchaseEnabled, instantPurchaseMax.amount);
     } else {
       // Need to convert currency of instant purchase maximum before trying to play
       Lbryapi.getExchangeRates().then(({ LBC_USD }) => {
