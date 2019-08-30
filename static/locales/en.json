@@ -651,7 +651,6 @@
   "New": "New",
   "Loading": "Loading",
   "I feel woosy! Stop spinning!": "I feel woosy! Stop spinning!",
-  "URI does not include name.": "URI does not include name.",
   "This file is in your library.": "This file is in your library.",
   "'claimName', 'channelName', and 'streamName' are all empty. One must be present to build a url.": "'claimName', 'channelName', and 'streamName' are all empty. One must be present to build a url.",
   "Invalid claim ID %s.": "Invalid claim ID %s.",
@@ -673,5 +672,9 @@
   "Hindi": "Hindi",
   "Greek": "Greek",
   "Hide": "Hide",
-  "'contentName' should no longer be used. Use 'streamName' instead": "'contentName' should no longer be used. Use 'streamName' instead"
+  "'contentName' should no longer be used. Use 'streamName' instead": "'contentName' should no longer be used. Use 'streamName' instead",
+  "Sorry, we can't preview this file.": "Sorry, we can't preview this file.",
+  "View File": "View File",
+  "Close": "Close",
+  "LBRY Download Complete": "LBRY Download Complete"
 }
