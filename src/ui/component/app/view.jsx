@@ -23,7 +23,7 @@ type Props = {
   theme: string,
   accessToken: ?string,
   user: ?{ id: string, has_verified_email: boolean, is_reward_approved: boolean },
-  location: { pathname: string },
+  location: { pathname: string, hash: string },
   fetchRewards: () => void,
   fetchRewardedContent: () => void,
   fetchTransactions: () => void,
@@ -40,11 +40,12 @@ function App(props: Props) {
   const previousUserId = usePrevious(userId);
   const previousHasVerifiedEmail = usePrevious(hasVerifiedEmail);
   const previousRewardApproved = usePrevious(isRewardApproved);
-  const { pathname } = props.location;
+  const { pathname, hash } = props.location;
 
   let uri;
   try {
-    uri = buildURI(parseURI(pathname.slice(1).replace(/:/g, '#')));
+    const newpath = buildURI(parseURI(pathname.slice(1).replace(/:/g, '#')));
+    uri = newpath + hash;
   } catch (e) {}
 
   useEffect(() => {
