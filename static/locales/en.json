@@ -676,5 +676,8 @@
   "Sorry, we can't preview this file.": "Sorry, we can't preview this file.",
   "View File": "View File",
   "Close": "Close",
-  "LBRY Download Complete": "LBRY Download Complete"
+  "LBRY Download Complete": "LBRY Download Complete",
+  "Blocked": "Blocked",
+  "Unblock": "Unblock",
+  "You have blocked this channel content.": "You have blocked this channel content."
 }
