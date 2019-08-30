@@ -4,21 +4,28 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
-## [0.35.2] - [Unreleased]
+## [0.35.2]
+
+### Added
+
+- Tips and supports on Channel pages ([#2821](https://github.com/lbryio/lbry-desktop/pull/2821))
+- Choose when you want automatic dark mode to take effect ([#2747](https://github.com/lbryio/lbry-desktop/pull/2747))
 
 ### Fixed
 
 - Don't show block button on your own channel ([#2744](https://github.com/lbryio/lbry-desktop/pull/2744))
 - App crash when automatically playing content originally priced in USD ([b347d3fc](https://github.com/lbryio/lbry-desktop/commit/b347d3fc5b492641124d763625e626a340916cb2))
+- Bid amount required on publish page ([#2783](https://github.com/lbryio/lbry-desktop/issues/2783))
+- Fixed subscription auto downloads ([#2767](https://github.com/lbryio/lbry-desktop/issues/2767))
+- Crash with query strings ([#2733](https://github.com/lbryio/lbry-desktop/issues/2733))
+- Autoplay on paid content ([#2762](https://github.com/lbryio/lbry-desktop/issues/2762))
 
 ### Changed
 
-- Upgraded lbry-sdk to 0.39.0 for performance and reliability improvements
-- Upgraded windows certificate so builds continue to be signed properly
-
-### Added
-
-- Set automatic dark mode times ([#2747](https://github.com/lbryio/lbry-desktop/pull/2747))
+- URL format to include both channel and claim short IDs ([#2748](https://github.com/lbryio/lbry-desktop/pull/2748))
+- Upgraded [lbry-sdk to 0.39.0](https://github.com/lbryio/lbry-sdk/releases/tag/v0.39.0) for performance and reliability improvements
+- Upgraded windows certificate so builds continue to be signed properly ([b9bf861b](https://github.com/lbryio/lbry-desktop/commit/b9bf861b5ca2f7209ce54088732bc8e0e7548514))
+- DMCA blocking to include channels ([#2802](https://github.com/lbryio/lbry-desktop/issues/2802))
 
 ## [0.35.1] - [2019-08-16]
 
