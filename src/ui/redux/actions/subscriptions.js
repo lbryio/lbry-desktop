@@ -202,7 +202,13 @@ export const doCheckSubscription = (subscriptionUri: string, shouldNotify?: bool
   if (!savedSubscription) {
     throw Error(`Trying to find new content for ${subscriptionUri} but it doesn't exist in your subscriptions`);
   }
-
+  dispatch({
+    type: ACTIONS.FETCH_CHANNEL_CLAIMS_STARTED,
+    data: {
+      uri: subscriptionUri,
+      page: 1,
+    },
+  });
   // We may be duplicating calls here. Can this logic be baked into doFetchClaimsByChannel?
   Lbry.claim_search({
     channel: subscriptionUri,
@@ -218,6 +224,15 @@ export const doCheckSubscription = (subscriptionUri: string, shouldNotify?: bool
       return;
     }
 
+    dispatch({
+      type: ACTIONS.FETCH_CHANNEL_CLAIMS_COMPLETED,
+      data: {
+        uri: subscriptionUri,
+        claims: claimsInChannel || [],
+        page: 1,
+      },
+    });
+
     // Determine if the latest subscription currently saved is actually the latest subscription
     const latestIndex = claimsInChannel.findIndex(claim => claim.permanent_url === savedSubscription.latest);
 
@@ -231,7 +246,7 @@ export const doCheckSubscription = (subscriptionUri: string, shouldNotify?: bool
 
       const newUnread = [];
       claimsInChannel.slice(0, latestIndexToNotify).forEach(claim => {
-        const uri = claim.permanent_url;
+        const uri = claim.canonical_url;
         const shouldDownload =
           shouldAutoDownload && Boolean(downloadCount < SUBSCRIPTION_DOWNLOAD_LIMIT && !claim.value.fee);
 
@@ -271,14 +286,6 @@ export const doCheckSubscription = (subscriptionUri: string, shouldNotify?: bool
 
     // calling FETCH_CHANNEL_CLAIMS_COMPLETED after not calling STARTED
     // means it will delete a non-existant fetchingChannelClaims[uri]
-    dispatch({
-      type: ACTIONS.FETCH_CHANNEL_CLAIMS_COMPLETED,
-      data: {
-        uri: subscriptionUri,
-        claims: claimsInChannel || [],
-        page: 1,
-      },
-    });
   });
 };
 
