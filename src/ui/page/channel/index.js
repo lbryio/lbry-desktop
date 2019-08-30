@@ -1,4 +1,5 @@
 import { connect } from 'react-redux';
+import * as settings from 'constants/settings';
 import {
   makeSelectClaimIsMine,
   makeSelectTitleForUri,
@@ -10,6 +11,8 @@ import {
 } from 'lbry-redux';
 import { selectBlackListedOutpoints } from 'lbryinc';
 import { makeSelectIsSubscribed } from 'redux/selectors/subscriptions';
+import { doOpenModal } from 'redux/actions/app';
+import { makeSelectClientSetting } from 'redux/selectors/settings';
 import ChannelPage from './view';
 
 const select = (state, props) => ({
@@ -22,9 +25,14 @@ const select = (state, props) => ({
   isSubscribed: makeSelectIsSubscribed(props.uri, true)(state),
   channelIsBlocked: selectChannelIsBlocked(props.uri)(state),
   blackListedOutpoints: selectBlackListedOutpoints(state),
+  supportOption: makeSelectClientSetting(settings.SUPPORT_OPTION)(state),
+});
+
+const perform = dispatch => ({
+  openModal: (modal, props) => dispatch(doOpenModal(modal, props)),
 });
 
 export default connect(
   select,
-  null
+  perform
 )(ChannelPage);

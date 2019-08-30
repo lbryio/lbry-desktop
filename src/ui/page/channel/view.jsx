@@ -16,6 +16,7 @@ import ChannelEdit from 'component/channelEdit';
 import ClaimUri from 'component/claimUri';
 import * as ICONS from 'constants/icons';
 import classnames from 'classnames';
+import * as MODALS from 'constants/modal_types';
 
 const PAGE_VIEW_QUERY = `view`;
 const ABOUT_PAGE = `about`;
@@ -37,6 +38,8 @@ type Props = {
     txid: string,
     nout: number,
   }>,
+  openModal: (id: string, { uri: string, claimIsMine?: boolean, isSupport?: boolean }) => void,
+  supportOption: boolean,
 };
 
 function ChannelPage(props: Props) {
@@ -53,6 +56,8 @@ function ChannelPage(props: Props) {
     isSubscribed,
     channelIsBlocked,
     blackListedOutpoints,
+    openModal,
+    supportOption,
   } = props;
   const { channelName } = parseURI(uri);
   const { search } = location;
@@ -127,6 +132,24 @@ function ChannelPage(props: Props) {
             <Tab>{editing ? __('Editing Your Channel') : __('About')}</Tab>
             <div className="card__actions--inline">
               {!channelIsBlocked && !channelIsBlackListed && <ShareButton uri={uri} />}
+              {!channelIsMine && (
+                <Button
+                  button="alt"
+                  icon={ICONS.TIP}
+                  label={__('Tip')}
+                  title={__('Send a tip to this creator')}
+                  onClick={() => openModal(MODALS.SEND_TIP, { uri, channelIsMine, isSupport: false })}
+                />
+              )}
+              {(channelIsMine || (!channelIsMine && supportOption)) && (
+                <Button
+                  button="alt"
+                  icon={ICONS.SUPPORT}
+                  label={__('Support')}
+                  title={__('Support this creator')}
+                  onClick={() => openModal(MODALS.SEND_TIP, { uri, channelIsMine, isSupport: true })}
+                />
+              )}
               {!channelIsBlocked && !channelIsBlackListed && <SubscribeButton uri={permanentUrl} />}
               {!isSubscribed && <BlockButton uri={permanentUrl} />}
             </div>
