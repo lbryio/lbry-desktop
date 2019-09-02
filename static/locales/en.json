@@ -679,5 +679,9 @@
   "LBRY Download Complete": "LBRY Download Complete",
   "Blocked": "Blocked",
   "Unblock": "Unblock",
-  "You have blocked this channel content.": "You have blocked this channel content."
+  "You have blocked this channel content.": "You have blocked this channel content.",
+  "Content Downloaded": "Content Downloaded",
+  "The viewer doesn't support this file type. See more info below.": "The viewer doesn't support this file type. See more info below.",
+  "Catching up...": "Catching up...",
+  "%s blocks behind": "%s blocks behind"
 }

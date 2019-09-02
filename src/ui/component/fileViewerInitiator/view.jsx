@@ -3,10 +3,11 @@
 // The actual viewer for a file exists in FileViewer
 // They can't exist in one component because we need to handle/listen for the start of a new file view
 // while a file is currently being viewed
-import React, { useEffect, useCallback } from 'react';
+import React, { useEffect, useCallback, Fragment } from 'react';
 import classnames from 'classnames';
 import Button from 'component/button';
 import isUserTyping from 'util/detect-typing';
+import Yrbl from 'component/yrbl';
 
 const SPACE_BAR_KEYCODE = 32;
 
@@ -44,6 +45,7 @@ export default function FileViewer(props: Props) {
   const cost = costInfo && costInfo.cost;
   const isPlayable = ['audio', 'video'].indexOf(mediaType) !== -1;
   const fileStatus = fileInfo && fileInfo.status;
+  const supported = (IS_WEB && isStreamable) || !IS_WEB;
 
   // Wrap this in useCallback because we need to use it to the keyboard effect
   // If we don't a new instance will be created for every render and react will think the dependencies have change, which will add/remove the listener for every render
@@ -87,14 +89,30 @@ export default function FileViewer(props: Props) {
   return (
     <div
       disabled={!hasCostInfo}
-      onClick={viewFile}
       style={!obscurePreview && thumbnail ? { backgroundImage: `url("${thumbnail}")` } : {}}
-      className={classnames('content__cover', {
+      className={classnames({
+        content__cover: supported,
+        'content__cover--disabled': !supported,
         'card__media--nsfw': obscurePreview,
         'card__media--disabled': !fileInfo && insufficientCredits,
       })}
     >
-      {!isPlaying && (
+      {!supported && (
+        <Yrbl
+          type="happy"
+          title={__('Unsupported File')}
+          subtitle={
+            <Fragment>
+              <p>
+                {__('Good news, though! You can')}{' '}
+                <Button button="link" label={__('Download the desktop app')} href="https://lbry.com/get" />{' '}
+                {'and have access to all file types.'}
+              </p>
+            </Fragment>
+          }
+        />
+      )}
+      {!isPlaying && supported && (
         <Button
           onClick={viewFile}
           iconSize={30}
