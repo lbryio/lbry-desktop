@@ -7,6 +7,7 @@ import ImageViewer from 'component/viewers/imageViewer';
 import AppViewer from 'component/viewers/appViewer';
 import path from 'path';
 import fs from 'fs';
+import Yrbl from 'component/yrbl';
 
 const DocumentViewer = React.lazy<*>(() =>
   import(
@@ -155,9 +156,24 @@ class FileRender extends React.PureComponent<Props> {
     }
     // @endif
 
-    // Message Error
-    const unsupportedMessage = __("Sorry, we can't preview this file.");
-    const unsupported = <LoadingScreen status={unsupportedMessage} spinner={false} />;
+    const unsupported = IS_WEB ? (
+      <div className={'content__cover--disabled'}>
+        <Yrbl
+          className={'content__cover--disabled'}
+          title={'Not available on LBRY TV'}
+          subtitle={'You can view or download this file by installing the App'}
+          uri={uri}
+        />
+      </div>
+    ) : (
+      <div className={'content__cover--disabled'}>
+        <Yrbl
+          title={'Content Downloaded'}
+          subtitle={'This file is unsupported here, but you can view the content in an application of your choice'}
+          uri={uri}
+        />
+      </div>
+    );
 
     // Return viewer
     return viewer || unsupported;

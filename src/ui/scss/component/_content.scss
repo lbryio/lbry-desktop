@@ -84,6 +84,28 @@
   }
 }
 
+.content__cover--disabled {
+  @include thumbnail;
+  cursor: default;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-position: 50% 50%;
+  background-repeat: no-repeat;
+  background-size: 100%;
+  margin: auto;
+
+  &:not(.card__media--nsfw) {
+    background-color: #fff; // solid black to blend nicely when the video starts (if it doesn't take the full width)
+  }
+
+  &:-webkit-full-screen {
+    width: 100%;
+    height: 100%;
+  }
+}
+
 .content__loading {
   height: 100%;
   display: flex;
