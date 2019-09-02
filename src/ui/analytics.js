@@ -8,6 +8,7 @@ import ElectronCookies from '@exponent/electron-cookies';
 // @endif
 
 const isProduction = process.env.NODE_ENV === 'production';
+const devInternalApis = process.env.LBRY_API_URL;
 
 type Analytics = {
   pageView: string => void,
@@ -48,7 +49,7 @@ const analytics: Analytics = {
     // @endif
   },
   apiLogView: (uri, outpoint, claimId, timeToStart) => {
-    if (analyticsEnabled && isProduction) {
+    if (analyticsEnabled && (isProduction || devInternalApis)) {
       const params: {
         uri: string,
         outpoint: string,
