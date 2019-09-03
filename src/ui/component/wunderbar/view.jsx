@@ -101,7 +101,7 @@ class WunderBar extends React.PureComponent<Props, State> {
   handleSubmit(value: string, suggestion?: { value: string, type: string }) {
     const { onSubmit, onSearch, doShowSnackBar, history } = this.props;
     let query = value.trim();
-
+    this.input && this.input.blur();
     const showSnackError = () => {
       doShowSnackBar('Invalid LBRY URL entered. Only A-Z, a-z, 0-9, and "-" allowed.');
     };
