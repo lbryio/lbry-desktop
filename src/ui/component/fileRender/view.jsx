@@ -1,10 +1,12 @@
 // @flow
 import { remote } from 'electron';
-import React, { Suspense } from 'react';
+import React, { Suspense, Fragment } from 'react';
 import LoadingScreen from 'component/common/loading-screen';
 import VideoViewer from 'component/viewers/videoViewer';
 import ImageViewer from 'component/viewers/imageViewer';
 import AppViewer from 'component/viewers/appViewer';
+import Button from 'component/button';
+
 import path from 'path';
 import fs from 'fs';
 import Yrbl from 'component/yrbl';
@@ -160,8 +162,16 @@ class FileRender extends React.PureComponent<Props> {
       <div className={'content__cover--disabled'}>
         <Yrbl
           className={'content__cover--disabled'}
-          title={'Not available on LBRY TV'}
-          subtitle={'You can view or download this file by installing the App'}
+          title={'Not available on lbry.tv'}
+          subtitle={
+            <Fragment>
+              <p>
+                {__('Good news, though! You can')}{' '}
+                <Button button="link" label={__('Download the desktop app')} href="https://lbry.com/get" />{' '}
+                {'and have access to all file types.'}
+              </p>
+            </Fragment>
+          }
           uri={uri}
         />
       </div>
