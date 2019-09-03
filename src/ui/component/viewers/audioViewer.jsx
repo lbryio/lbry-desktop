@@ -13,21 +13,6 @@ import styles from './audioViewer.module.scss';
 
 const isButterchurnSupported = detectButterchurnSupport();
 
-const EQ_BANDS_SIMPLE = [55, 150, 250, 400, 500, 1000, 2000, 4000, 8000, 16000];
-/*
-const EQ_LOWSHELF = EQ_BANDS_SIMPLE.shift();
-const EQ_HIGHSHELF = EQ_BANDS_SIMPLE.pop();
-
-const eqFilters = EQ.map(function(band) {
-            var filter = wavesurfer.backend.ac.createBiquadFilter();
-            filter.type = 'peaking';
-            filter.gain.value = 0;
-            filter.Q.value = 1;
-            filter.frequency.value = band.f;
-            return filter;
-        });
-*/
-
 type Props = {
   source: {
     url: string,
