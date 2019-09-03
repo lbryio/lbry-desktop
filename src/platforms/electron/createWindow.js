@@ -37,7 +37,7 @@ export default appState => {
   };
   const lbryProto = 'lbry://';
   const lbryProtoQ = 'lbry://?';
-  const rendererURL = isDev ? `http://localhost:${WEBPACK_ELECTRON_PORT}` : `file://${__dirname}/index-electron.html`;
+  const rendererURL = isDev ? `http://localhost:${WEBPACK_ELECTRON_PORT}` : `file://${__dirname}/index.html`;
 
   let window = new BrowserWindow(windowConfiguration);
 

@@ -46,11 +46,11 @@ let mainConfig = {
       {
         from: `${STATIC_ROOT}/`,
         to: `${DIST_ROOT}/electron/static/`,
-        ignore: ['font/**/*', 'index-electron.html'],
+        ignore: ['font/**/*', 'index-web.html'],
       },
       {
         from: `${STATIC_ROOT}/index-electron.html`,
-        to: `${DIST_ROOT}/electron/static/index-electron.html`,
+        to: `${DIST_ROOT}/electron/static/index.html`,
       },
     ]),
   ],

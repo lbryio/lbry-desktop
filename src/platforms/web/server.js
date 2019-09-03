@@ -55,7 +55,7 @@ const defaultHead =
   '<meta property="og:image" content="/og.png" />';
 
 app.get('*', async (req, res) => {
-  let html = readFileSync(path.join(__dirname, '/index-web.html'), 'utf8');
+  let html = readFileSync(path.join(__dirname, '/index.html'), 'utf8');
   const urlPath = req.path.substr(1); // trim leading slash
 
   if (urlPath.match(/^([^@/:]+)\/([^:/]+)$/)) {

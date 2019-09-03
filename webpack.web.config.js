@@ -52,7 +52,7 @@ const webConfig = {
     new CopyWebpackPlugin([
       {
         from: `${STATIC_ROOT}/index-web.html`,
-        to: `${DIST_ROOT}/web/index-web.html`,
+        to: `${DIST_ROOT}/web/index.html`,
       },
       {
         from: `${STATIC_ROOT}/img/favicon.ico`,
