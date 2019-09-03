@@ -72,8 +72,7 @@ class AudioVideoViewer extends React.PureComponent {
   }
 
   componentDidMount() {
-    const me = this;
-    const { source } = me.props;
+    const { source } = this.props;
 
     const audioNode = this.audioNode;
 
@@ -82,12 +81,12 @@ class AudioVideoViewer extends React.PureComponent {
     audioNode.crossOrigin = 'anonymous';
     audioNode.autostart = true;
 
-    const canvasHeight = me.canvasNode.offsetHeight;
-    const canvasWidth = me.canvasNode.offsetWidth;
+    const canvasHeight = this.canvasNode.offsetHeight;
+    const canvasWidth = this.canvasNode.offsetWidth;
 
     // Required for canvas, nuance of rendering
-    me.canvasNode.height = canvasHeight;
-    me.canvasNode.width = canvasWidth;
+    this.canvasNode.height = canvasHeight;
+    this.canvasNode.width = canvasWidth;
 
     const AudioContext = window.AudioContext || window.webkitAudioContext;
     const audioContext = new AudioContext();
@@ -96,7 +95,7 @@ class AudioVideoViewer extends React.PureComponent {
     audioSource.connect(audioContext.destination);
 
     if (isButterchurnSupported) {
-      const visualizer = (me.visualizer = butterchurn.createVisualizer(audioContext, me.canvasNode, {
+      const visualizer = (this.visualizer = butterchurn.createVisualizer(audioContext, this.canvasNode, {
         height: canvasHeight,
         width: canvasWidth,
         pixelRatio: window.devicePixelRatio || 1,
@@ -106,14 +105,14 @@ class AudioVideoViewer extends React.PureComponent {
       visualizer.connectAudio(audioSource);
       visualizer.loadPreset(presets[Math.floor(Math.random() * presets.length)], 2.0);
 
-      me._frameCycle = () => {
-        requestAnimationFrame(me._frameCycle);
+      this._frameCycle = () => {
+        requestAnimationFrame(this._frameCycle);
 
-        if (me.state.enableMilkdrop === true) {
+        if (this.state.enableMilkdrop === true) {
           visualizer.render();
         }
       };
-      me._frameCycle();
+      this._frameCycle();
     }
 
     const wavesurfer = WaveSurfer.create({
@@ -142,12 +141,12 @@ class AudioVideoViewer extends React.PureComponent {
           const cover = picture[0]; // ToDo: select cover smart
           const byteArray = new Uint8Array(cover.data);
           const blob = new Blob([byteArray], { type: cover.format });
-          me.artNode.src = URL.createObjectURL(blob);
+          this.artNode.src = URL.createObjectURL(blob);
 
-          me.setState({ artLoaded: true });
+          this.setState({ artLoaded: true });
         }
 
-        me.setState({
+        this.setState({
           album,
           artist,
           title,
@@ -177,8 +176,7 @@ class AudioVideoViewer extends React.PureComponent {
   };
 
   render() {
-    const me = this;
-    const { contentType, poster, claim, source } = me.props;
+    const { contentType, poster, claim, source } = this.props;
     const {
       album,
       artist,
@@ -204,8 +202,8 @@ class AudioVideoViewer extends React.PureComponent {
     return (
       <div
         className={userActive ? styles.userActive : styles.wrapper}
-        onMouseEnter={() => me.setState({ userActive: true })}
-        onMouseLeave={() => me.setState({ userActive: false })}
+        onMouseEnter={() => this.setState({ userActive: true })}
+        onMouseLeave={() => this.setState({ userActive: false })}
         onContextMenu={stopContextMenu}
       >
         <div className={enableMilkdrop ? styles.containerWithMilkdrop : styles.container}>
