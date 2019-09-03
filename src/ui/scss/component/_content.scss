@@ -96,8 +96,10 @@
   background-size: 100%;
   margin: auto;
 
-  &:not(.card__media--nsfw) {
-    background-color: #fff; // solid black to blend nicely when the video starts (if it doesn't take the full width)
+  background-color: $lbry-white;
+  [data-mode='dark'] & {
+    background-color: $lbry-black;
+    color: $lbry-white;
   }
 
   &:-webkit-full-screen {
