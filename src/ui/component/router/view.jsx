@@ -71,10 +71,6 @@ function AppRouter(props: Props) {
       <Route path="/:claimName" exact component={ShowPage} />
       <Route path="/:claimName/:streamName" exact component={ShowPage} />
       <Route path="/*" component={FourOhFourPage} />
-
-
-      {/* Route not found. Mostly for people typing crazy urls into the url */}
-      <Route render={() => <Redirect to="/" />} />
     </Switch>
   );
 }
