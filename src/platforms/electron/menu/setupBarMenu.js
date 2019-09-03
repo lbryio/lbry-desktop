@@ -15,6 +15,7 @@ export default () => {
         { role: 'cut' },
         { role: 'copy' },
         { role: 'paste' },
+        { role: 'selectAll' },
       ],
     },
     {
