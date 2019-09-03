@@ -20,13 +20,13 @@ import PublishPage from './view';
 
 const select = state => ({
   ...selectPublishFormValues(state),
+  fileInfos: selectFileInfosByOutpoint(state),
   // The winning claim for a short lbry uri
   amountNeededForTakeover: selectTakeOverAmount(state),
   // My previously published claims under this short lbry uri
   myClaimForUri: selectMyClaimForUri(state),
   // If I clicked the "edit" button, have I changed the uri?
   // Need this to make it easier to find the source on previously published content
-  fileInfos: selectFileInfosByOutpoint(state),
   isStillEditing: selectIsStillEditing(state),
   isResolvingUri: selectIsResolvingPublishUris(state),
   totalRewardValue: selectUnclaimedRewardValue(state),
