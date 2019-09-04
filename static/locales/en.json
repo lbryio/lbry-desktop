@@ -683,5 +683,6 @@
   "Content Downloaded": "Content Downloaded",
   "The viewer doesn't support this file type. See more info below.": "The viewer doesn't support this file type. See more info below.",
   "Catching up...": "Catching up...",
-  "%s blocks behind": "%s blocks behind"
+  "%s blocks behind": "%s blocks behind",
+  "Support this creator": "Support this creator"
 }
