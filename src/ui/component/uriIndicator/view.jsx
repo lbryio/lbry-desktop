@@ -1,7 +1,6 @@
 // @flow
 import React from 'react';
 import Button from 'component/button';
-import { buildURI } from 'lbry-redux';
 import Tooltip from 'component/common/tooltip';
 import ClaimPreview from 'component/claimPreview';
 
@@ -54,11 +53,8 @@ class UriIndicator extends React.PureComponent<Props> {
     const channelClaim = isChannelClaim ? claim : claim.signing_channel;
 
     if (channelClaim) {
-      const { name, claim_id: claimId } = channelClaim;
-      let channelLink;
-      if (claimId && name) {
-        channelLink = link ? buildURI({ channelName: name, channelClaimId: claimId }) : false;
-      }
+      const { name } = channelClaim;
+      const channelLink = link ? channelClaim.canonical_url : false;
 
       const inner = <span className="channel-name">{name}</span>;
 
