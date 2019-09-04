@@ -13,7 +13,7 @@ import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import { doConditionalAuthNavigate, doDaemonReady, doAutoUpdate, doOpenModal, doHideModal } from 'redux/actions/app';
 import { Lbry, doToast, isURIValid, setSearchApi } from 'lbry-redux';
-import { doInitLanguage, doUpdateIsNightAsync } from 'redux/actions/settings';
+import { doUpdateIsNightAsync } from 'redux/actions/settings';
 import {
   doAuthenticate,
   Lbryio,
@@ -228,7 +228,6 @@ function AppWrapper() {
     if (readyToLaunch) {
       app.store.dispatch(doUpdateIsNightAsync());
       app.store.dispatch(doDaemonReady());
-      app.store.dispatch(doInitLanguage());
       app.store.dispatch(doBlackListedOutpointsSubscribe());
       app.store.dispatch(doFilteredOutpointsSubscribe());
       window.sessionStorage.setItem('loaded', 'y');

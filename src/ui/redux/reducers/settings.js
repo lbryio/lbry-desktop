@@ -1,12 +1,12 @@
 import * as ACTIONS from 'constants/action_types';
-import LANGUAGES from 'constants/languages';
 import * as SETTINGS from 'constants/settings';
 import moment from 'moment';
 
 const reducers = {};
 const defaultState = {
   isNight: false,
-  languages: { en: 'English', pl: 'Polish', id: 'Bahasa Indonesia', de: 'German' }, // temporarily hard code these so we can advance i18n testing
+  languages: { en: 'English', pl: 'Polish', id: 'Bahasa Indonesia', de: 'German' }, // this could/should be loaded directly from Transifex and/or lbry.com
+  isFetchingLanguage: false,
   daemonSettings: {},
   clientSettings: {
     // UX
@@ -14,7 +14,7 @@ const defaultState = {
     [SETTINGS.EMAIL_COLLECTION_ACKNOWLEDGED]: false,
 
     // UI
-    [SETTINGS.LANGUAGE]: 'en',
+    [SETTINGS.LANGUAGE]: window.localStorage.getItem(SETTINGS.LANGUAGE) || 'en',
     [SETTINGS.THEME]: 'light',
     [SETTINGS.THEMES]: [],
     [SETTINGS.SUPPORT_OPTION]: false,
@@ -53,11 +53,6 @@ reducers[ACTIONS.CLIENT_SETTING_CHANGED] = (state, action) => {
 
   clientSettings[key] = value;
 
-  // this technically probably shouldn't happen here, and should be fixed when we're no longer using localStorage at all for persistent app state
-  // @if TARGET='app'
-  localStorage.setItem(`setting_${key}`, JSON.stringify(value));
-  // @endif
-
   return Object.assign({}, state, {
     clientSettings,
   });
@@ -73,27 +68,6 @@ reducers[ACTIONS.UPDATE_IS_NIGHT] = state => {
   return Object.assign({}, state, {
     isNight,
   });
-};
-
-reducers[ACTIONS.DOWNLOAD_LANGUAGE_SUCCEEDED] = (state, action) => {
-  const languages = Object.assign({}, state.languages);
-  const { language } = action.data;
-
-  const langCode = language.substring(0, 2);
-
-  if (LANGUAGES[langCode]) {
-    languages[language] = `${LANGUAGES[langCode][0]} (${LANGUAGES[langCode][1]})`;
-  } else {
-    languages[langCode] = langCode;
-  }
-
-  return Object.assign({}, state, { languages });
-};
-
-reducers[ACTIONS.DOWNLOAD_LANGUAGE_FAILED] = (state, action) => {
-  const languages = Object.assign({}, state.languages);
-  delete languages[action.data.language];
-  return Object.assign({}, state, { languages });
 };
 
 export default function reducer(state = defaultState, action) {

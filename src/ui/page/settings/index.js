@@ -1,20 +1,9 @@
 import { connect } from 'react-redux';
 import * as SETTINGS from 'constants/settings';
 import { doClearCache, doNotifyEncryptWallet, doNotifyDecryptWallet } from 'redux/actions/app';
-import {
-  doSetDaemonSetting,
-  doSetClientSetting,
-  doGetThemes,
-  doChangeLanguage,
-  doSetDarkTime,
-} from 'redux/actions/settings';
+import { doSetDaemonSetting, doSetClientSetting, doGetThemes, doSetDarkTime } from 'redux/actions/settings';
 import { doSetPlayingUri } from 'redux/actions/content';
-import {
-  makeSelectClientSetting,
-  selectDaemonSettings,
-  selectLanguages,
-  selectosNotificationsEnabled,
-} from 'redux/selectors/settings';
+import { makeSelectClientSetting, selectDaemonSettings, selectosNotificationsEnabled } from 'redux/selectors/settings';
 import { doWalletStatus, selectWalletIsEncrypted, selectBlockedChannelsCount } from 'lbry-redux';
 import SettingsPage from './view';
 
@@ -25,8 +14,6 @@ const select = state => ({
   instantPurchaseMax: makeSelectClientSetting(SETTINGS.INSTANT_PURCHASE_MAX)(state),
   currentTheme: makeSelectClientSetting(SETTINGS.THEME)(state),
   themes: makeSelectClientSetting(SETTINGS.THEMES)(state),
-  currentLanguage: makeSelectClientSetting(SETTINGS.LANGUAGE)(state),
-  languages: selectLanguages(state),
   automaticDarkModeEnabled: makeSelectClientSetting(SETTINGS.AUTOMATIC_DARK_MODE_ENABLED)(state),
   autoplay: makeSelectClientSetting(SETTINGS.AUTOPLAY)(state),
   walletEncrypted: selectWalletIsEncrypted(state),
@@ -44,7 +31,6 @@ const perform = dispatch => ({
   clearCache: () => dispatch(doClearCache()),
   setClientSetting: (key, value) => dispatch(doSetClientSetting(key, value)),
   getThemes: () => dispatch(doGetThemes()),
-  changeLanguage: newLanguage => dispatch(doChangeLanguage(newLanguage)),
   encryptWallet: () => dispatch(doNotifyEncryptWallet()),
   decryptWallet: () => dispatch(doNotifyDecryptWallet()),
   updateWalletStatus: () => dispatch(doWalletStatus()),

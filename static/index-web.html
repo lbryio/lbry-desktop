@@ -7,7 +7,30 @@
 
   <body>
     <div id="app"></div>
-    <script type="text/javascript" src="/ui.js"></script>
+    <script>
+      window.i18n_messages = {};
+
+      function loadUi () {
+        const script = document.createElement('script');
+        script.setAttribute('src', '/ui.js');
+        document.body.appendChild(script);
+      }
+
+      let lang;
+      try {
+        lang = window.localStorage.getItem('language') || 'en';
+      } catch {
+        lang = 'en';
+      }
+      if (lang && lang != 'en') {
+        fetch('https://lbry.com/i18n/get/lbry-desktop/app-strings/' + lang + '.json')
+                .then(r => r.json())
+                .then(j => { window.i18n_messages[lang] = j; loadUi(); })
+                .catch(loadUi);
+      } else {
+        loadUi();
+      }
+    </script>
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
     <script>
       (adsbygoogle = window.adsbygoogle || []).push({
