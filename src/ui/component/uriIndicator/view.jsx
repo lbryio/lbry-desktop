@@ -54,7 +54,7 @@ class UriIndicator extends React.PureComponent<Props> {
 
     if (channelClaim) {
       const { name } = channelClaim;
-      const channelLink = link ? channelClaim.canonical_url : false;
+      const channelLink = link ? channelClaim.canonical_url || channelClaim.permanent_url : false;
 
       const inner = <span className="channel-name">{name}</span>;
 
