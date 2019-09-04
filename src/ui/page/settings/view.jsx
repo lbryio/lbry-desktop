@@ -7,7 +7,9 @@ import * as PAGES from 'constants/pages';
 import * as React from 'react';
 import { FormField, FormFieldPrice, Form } from 'component/common/form';
 import Button from 'component/button';
+import I18nMessage from 'component/i18nMessage';
 import Page from 'component/page';
+import SettingLanguage from 'component/settingLanguage';
 import FileSelector from 'component/common/file-selector';
 
 type Price = {
@@ -45,14 +47,11 @@ type Props = {
   showNsfw: boolean,
   instantPurchaseEnabled: boolean,
   instantPurchaseMax: Price,
-  currentLanguage: string,
-  languages: {},
   currentTheme: string,
   themes: Array<string>,
   automaticDarkModeEnabled: boolean,
   autoplay: boolean,
   autoDownload: boolean,
-  changeLanguage: string => void,
   encryptWallet: () => void,
   decryptWallet: () => void,
   updateWalletStatus: () => void,
@@ -85,7 +84,6 @@ class SettingsPage extends React.PureComponent<Props, State> {
     (this: any).onInstantPurchaseMaxChange = this.onInstantPurchaseMaxChange.bind(this);
     (this: any).onThemeChange = this.onThemeChange.bind(this);
     (this: any).onAutomaticDarkModeChange = this.onAutomaticDarkModeChange.bind(this);
-    (this: any).onLanguageChange = this.onLanguageChange.bind(this);
     (this: any).clearCache = this.clearCache.bind(this);
     (this: any).onChangeTime = this.onChangeTime.bind(this);
   }
@@ -116,11 +114,6 @@ class SettingsPage extends React.PureComponent<Props, State> {
     }
 
     this.props.setClientSetting(SETTINGS.THEME, value);
-  }
-
-  onLanguageChange(event: SyntheticInputEvent<*>) {
-    const { value } = event.target;
-    this.props.changeLanguage(value);
   }
 
   onAutomaticDarkModeChange(value: boolean) {
@@ -182,8 +175,6 @@ class SettingsPage extends React.PureComponent<Props, State> {
       instantPurchaseEnabled,
       instantPurchaseMax,
       currentTheme,
-      currentLanguage,
-      languages,
       themes,
       automaticDarkModeEnabled,
       autoplay,
@@ -217,6 +208,12 @@ class SettingsPage extends React.PureComponent<Props, State> {
           </section>
         ) : (
           <div>
+            <section className="card card--section">
+              <h2 className="card__title">{__('Language')}</h2>
+              <Form>
+                <SettingLanguage />
+              </Form>
+            </section>
             {/* @if TARGET='app' */}
             <section className="card card--section">
               <h2 className="card__title">{__('Download Directory')}</h2>
@@ -521,13 +518,19 @@ class SettingsPage extends React.PureComponent<Props, State> {
                   checked={supportOption}
                   label={__('Enable claim support')}
                   helper={
-                    <React.Fragment>
-                      {__('This will add a Support button along side tipping. Similar to tips, supports help ')}
-                      <Button button="link" label={__(' discovery ')} href="https://lbry.com/faq/trending" />
-                      {__(' but the LBC is returned to your wallet if revoked.')}
-                      {__(' Both also help secure ')}
-                      <Button button="link" label={__('vanity names')} href="https://lbry.com/faq/naming" />.
-                    </React.Fragment>
+                    <I18nMessage
+                      tokens={{
+                        discovery_link: (
+                          <Button button="link" label={__('discovery')} href="https://lbry.com/faq/trending" />
+                        ),
+                        vanity_names_link: (
+                          <Button button="link" label={__('vanity names')} href="https://lbry.com/faq/naming" />
+                        ),
+                      }}
+                    >
+                      This will add a Support button along side tipping. Similar to tips, supports help %discovery_link%
+                      but the LBC is returned to your wallet if revoked. Both also help secure your %vanity_names_link%.
+                    </I18nMessage>
                   }
                 />
 
@@ -541,23 +544,6 @@ class SettingsPage extends React.PureComponent<Props, State> {
                     "The latest file from each of your subscriptions will be downloaded for quick access as soon as it's published."
                   )}
                 />
-
-                <FormField
-                  name="language_select"
-                  type="select"
-                  label={__('Language')}
-                  onChange={this.onLanguageChange}
-                  value={currentLanguage}
-                  helper={__(
-                    'Multi-language support is brand new and incomplete. Switching your language may have unintended consequences.'
-                  )}
-                >
-                  {Object.keys(languages).map(language => (
-                    <option key={language} value={language}>
-                      {languages[language]}
-                    </option>
-                  ))}
-                </FormField>
               </Form>
               <Form>
                 <fieldset-section>

@@ -2,6 +2,7 @@
 import * as React from 'react';
 import Button from 'component/button';
 import CreditAmount from 'component/common/credit-amount';
+import I18nMessage from 'component/i18nMessage';
 
 type Props = {
   unclaimedRewardAmount: number,
@@ -19,16 +20,15 @@ class RewardSummary extends React.Component<Props> {
         <p className="card__subtitle">
           {fetching && __('You have...')}
           {!fetching && hasRewards ? (
-            <React.Fragment>
-              {/* @i18nfixme */}
-              {__('You have')}
-              &nbsp;
-              <CreditAmount inheritStyle amount={unclaimedRewardAmount} precision={8} />
-              &nbsp;
-              {__('in unclaimed rewards')}.
-            </React.Fragment>
+            <I18nMessage
+              tokens={{
+                credit_amount: <CreditAmount inheritStyle amount={unclaimedRewardAmount} precision={8} />,
+              }}
+            >
+              You have %credit_amount% in unclaimed rewards.
+            </I18nMessage>
           ) : (
-            __('You have no rewards available, please check')
+            <React.Fragment>{__('You have no rewards available, please check')}</React.Fragment>
           )}
         </p>
 

@@ -46,10 +46,7 @@ function PublishFile(props: Props) {
         )}
         {!!isStillEditing && name && (
           <p className="help">
-            {/* @i18nfixme */}
-            {__("If you don't choose a file, the file from your existing claim")}
-            {` "${name}" `}
-            {__('will be used.')}
+            {__("If you don't choose a file, the file from your existing claim %name% will be used", { name: name })}
           </p>
         )}
       </div>

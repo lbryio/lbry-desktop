@@ -10,8 +10,6 @@ const UI_ROOT = path.resolve(__dirname, 'src/ui/');
 const STATIC_ROOT = path.resolve(__dirname, 'static/');
 const DIST_ROOT = path.resolve(__dirname, 'dist/');
 
-console.log(ifProduction('production', 'development'));
-
 let baseConfig = {
   mode: ifProduction('production', 'development'),
   devtool: ifProduction(false, 'eval-source-map'),
@@ -109,9 +107,7 @@ let baseConfig = {
     new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
     new webpack.EnvironmentPlugin(['NODE_ENV']),
     new ProvidePlugin({
-      i18n: ['i18n', 'default'],
-      __: ['i18n/__', 'default'],
-      __n: ['i18n/__n', 'default'],
+      __: ['i18n.js', '__'],
     }),
     new DefinePlugin({
       __static: `"${path.join(__dirname, 'static').replace(/\\/g, '\\\\')}"`,

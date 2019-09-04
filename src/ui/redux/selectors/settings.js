@@ -13,6 +13,11 @@ export const selectClientSettings = createSelector(
   state => state.clientSettings || {}
 );
 
+export const selectIsFetchingLanguage = createSelector(
+  selectState,
+  state => state.isFetchingLanguage || {}
+);
+
 export const makeSelectClientSetting = setting =>
   createSelector(
     selectClientSettings,

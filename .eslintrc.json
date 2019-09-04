@@ -17,7 +17,6 @@
     "__static": true,
     "i18n": true,
     "__": true,
-    "__n": true,
     "app": true,
     "IS_WEB": true,
     "WEBPACK_PORT": true
