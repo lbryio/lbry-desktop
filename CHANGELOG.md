@@ -4,18 +4,24 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
-## [0.35.3] - Unreleased
+## [0.35.3] - [2019-09-04]
 
 ### Added
 
 - Allow easy thumbnail upload with video on file edits ([#2816](https://github.com/lbryio/lbry-desktop/pull/2816))
 - Better message for unsupported file types ([#2834](https://github.com/lbryio/lbry-desktop/pull/2834))
+- Support for daily reward (not live yet) ([#2849](https://github.com/lbryio/lbry-desktop/issues/2849))
 
 ### Fixed
-
-- Popout player showing on app open via deep link ([#2822](https://github.com/lbryio/lbry-desktop/pull/2822))
+- Canonical URL bugs on home and channel pages ([#2829](https://github.com/lbryio/lbry-desktop/issues/2829))
+- Crash when clicking a channel in "Find New Channels" ([#2825](https://github.com/lbryio/lbry-desktop/issues/2825))
+- SVG and lbry file types not showing correctly ([#2830](https://github.com/lbryio/lbry-desktop/issues/2830)) / ([#2827](https://github.com/lbryio/lbry-desktop/issues/2827))
+- Channel not re-selected on edit ([#2828](https://github.com/lbryio/lbry-desktop/issues/2828))
 - Command + A support on mac to select all text in an input ([#2837](https://github.com/lbryio/lbry-desktop/pull/2837))
 - Search bar getting stuck in focus ([#2500](https://github.com/lbryio/lbry-desktop/pull/2500))
+
+### Changed
+- Upgraded [lbry-sdk to 0.40.0](https://github.com/lbryio/lbry-sdk/releases/tag/v0.40.0) to improve wallet syncing and overall connectivity
 
 ## [0.35.2] - [2019-08-30]
 
