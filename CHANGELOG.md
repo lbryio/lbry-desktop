@@ -4,7 +4,20 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
-## [0.35.2]
+## [0.35.3] - Unreleased
+
+### Added
+
+- Allow easy thumbnail upload with video on file edits ([#2816](https://github.com/lbryio/lbry-desktop/pull/2816))
+- Better message for unsupported file types ([#2834](https://github.com/lbryio/lbry-desktop/pull/2834))
+
+### Fixed
+
+- Popout player showing on app open via deep link ([#2822](https://github.com/lbryio/lbry-desktop/pull/2822))
+- Command + A support on mac to select all text in an input ([#2837](https://github.com/lbryio/lbry-desktop/pull/2837))
+- Search bar getting stuck in focus ([#2500](https://github.com/lbryio/lbry-desktop/pull/2500))
+
+## [0.35.2] - [2019-08-30]
 
 ### Added
 

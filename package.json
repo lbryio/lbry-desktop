@@ -94,6 +94,7 @@
     "css-doodle": "^0.7.1",
     "css-loader": "^2.1.0",
     "cssnano": "^4.1.10",
+    "danger": "^9.1.8",
     "dat.gui": "^0.7.2",
     "decompress": "^4.2.0",
     "del": "^3.0.0",
