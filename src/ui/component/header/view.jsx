@@ -20,10 +20,24 @@ type Props = {
   automaticDarkModeEnabled: boolean,
   setClientSetting: (string, boolean | string) => void,
   hideBalance: boolean,
+  autoUpdateDownloaded: boolean,
+  isUpgradeAvailable: boolean,
+  doDownloadUpgradeRequested: () => void,
 };
 
 const Header = (props: Props) => {
-  const { roundedBalance, history, setClientSetting, currentTheme, automaticDarkModeEnabled, hideBalance } = props;
+  const {
+    roundedBalance,
+    history,
+    setClientSetting,
+    currentTheme,
+    automaticDarkModeEnabled,
+    hideBalance,
+    autoUpdateDownloaded,
+    isUpgradeAvailable,
+    doDownloadUpgradeRequested,
+  } = props;
+  const showUpgradeButton = autoUpdateDownloaded || (process.platform === 'linux' && isUpgradeAvailable);
 
   function handleThemeToggle() {
     if (automaticDarkModeEnabled) {
@@ -129,6 +143,16 @@ const Header = (props: Props) => {
           </Menu>
         </div>
       </div>
+      {/* @if TARGET='app' */}
+      {showUpgradeButton && (
+        <div className="header__banner-background">
+          <div className="header__banner-contents">
+            {__('Upgrade is ready')}
+            <Button button="alt" icon={ICONS.DOWNLOAD} label={__('Install now')} onClick={doDownloadUpgradeRequested} />
+          </div>
+        </div>
+      )}
+      {/* @endif */}
     </header>
   );
 };

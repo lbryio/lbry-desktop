@@ -91,6 +91,34 @@
     }
   }
 }
+.header__banner-background {
+  display: flex;
+  background-color: $lbry-teal-4;
+  [data-mode='dark'] & {
+    background-color: $lbry-teal-5;
+    color: $lbry-white;
+  }
+}
+
+.header__banner-contents {
+  display: flex;
+  max-width: var(--page-max-width);
+  width: 100%;
+  margin: auto;
+  padding: 0 var(--spacing-large);
+  justify-content: space-between;
+  background-color: $lbry-teal-4;
+  color: $lbry-white;
+
+  svg {
+    stroke: $lbry-white;
+  }
+
+  [data-mode='dark'] & {
+    background-color: $lbry-teal-5;
+    color: $lbry-white;
+  }
+}
 
 .header__navigation-item--back,
 .header__navigation-item--forward {
