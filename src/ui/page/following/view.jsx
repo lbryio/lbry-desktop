@@ -51,7 +51,7 @@ function FollowingPage(props: Props) {
               onClick={() => onClick()}
             />
           }
-          uris={viewingSuggestedSubs ? suggestedSubscriptions.map(sub => sub.uri) : channelUris}
+          uris={viewingSuggestedSubs ? suggestedSubscriptions.map(sub => `lbry://${sub.uri}`) : channelUris}
         />
       </div>
     </Page>

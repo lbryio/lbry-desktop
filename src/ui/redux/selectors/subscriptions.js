@@ -7,6 +7,7 @@ import {
   makeSelectChannelForClaimUri,
   selectClaimsByUri,
   parseURI,
+  makeSelectClaimForUri,
 } from 'lbry-redux';
 import { swapKeyAndValue } from 'util/swap-json';
 
@@ -260,7 +261,8 @@ export const makeSelectIsSubscribed = uri =>
   createSelector(
     selectSubscriptions,
     makeSelectChannelForClaimUri(uri, true),
-    (subscriptions, channelUri) => {
+    makeSelectClaimForUri(uri),
+    (subscriptions, channelUri, claim) => {
       if (channelUri) {
         return subscriptions.some(sub => sub.uri === channelUri);
       }
@@ -271,9 +273,9 @@ export const makeSelectIsSubscribed = uri =>
         ({ isChannel } = parseURI(uri));
       } catch (e) {}
 
-      if (isChannel) {
-        const uriWithPrefix = uri.startsWith('lbry://') ? uri : `lbry://${uri}`;
-        return subscriptions.some(sub => sub.uri === uriWithPrefix);
+      if (isChannel && claim) {
+        const uri = claim.permanent_url;
+        return subscriptions.some(sub => sub.uri === uri);
       }
 
       return false;
