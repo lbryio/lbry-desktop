@@ -4,6 +4,7 @@ import Button from 'component/button';
 
 type Reward = {
   reward_amount: number,
+  reward_range: string,
 };
 
 type Props = {
@@ -20,7 +21,7 @@ const RewardLink = (props: Props) => {
     <Button
       button={button ? 'inverse' : 'link'}
       disabled={isPending}
-      label={isPending ? __('Claiming...') : label || `${__('Get')} ${reward.reward_amount} LBC`}
+      label={isPending ? __('Claiming...') : label || `${__('Get')} ${reward.reward_range || reward.reward_amount} LBC`}
       onClick={() => {
         claimReward(reward);
       }}
