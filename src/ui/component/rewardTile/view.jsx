@@ -12,6 +12,7 @@ type Props = {
     id: string,
     reward_title: string,
     reward_amount: number,
+    reward_range?: string,
     transaction_id: string,
     created_at: string,
     reward_description: string,

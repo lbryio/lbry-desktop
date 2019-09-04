@@ -4,6 +4,7 @@ declare type Reward = {
   created_at: string,
   id: number,
   reward_amount: number,
+  reward_range?: string,
   reward_description: string,
   reward_notification: string,
   reward_title: string,
