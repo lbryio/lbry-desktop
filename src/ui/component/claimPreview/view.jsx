@@ -209,11 +209,12 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
                   </Fragment>
                 )}
                 <div>
-                  {isChannel ? (
-                    type !== 'inline' && `${claimsInChannel} ${__('publishes')}`
-                  ) : (
-                    <DateTime timeAgo uri={uri} />
-                  )}
+                  {claim &&
+                    (isChannel ? (
+                      type !== 'inline' && `${claimsInChannel} ${__('publishes')}`
+                    ) : (
+                      <DateTime timeAgo uri={uri} />
+                    ))}
                 </div>
               </div>
             )}

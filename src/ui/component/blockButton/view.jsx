@@ -6,7 +6,7 @@ import Button from 'component/button';
 import useHover from 'util/use-hover';
 
 type Props = {
-  uri: string,
+  permanentUrl: ?string,
   shortUrl: string,
   isSubscribed: boolean,
   toggleBlockChannel: (uri: string) => void,
@@ -16,29 +16,28 @@ type Props = {
 };
 
 export default function BlockButton(props: Props) {
-  const { uri, shortUrl, toggleBlockChannel, channelIsBlocked, claimIsMine, doToast } = props;
+  const { permanentUrl, shortUrl, toggleBlockChannel, channelIsBlocked, claimIsMine, doToast } = props;
 
   const blockRef = useRef();
   const isHovering = useHover(blockRef);
   const blockLabel = channelIsBlocked ? __('Blocked') : __('Block');
   const blockedOverride = channelIsBlocked && isHovering && __('Unblock');
 
-  return (
-    !claimIsMine && (
-      <Button
-        ref={blockRef}
-        iconColor="red"
-        icon={ICONS.BLOCK}
-        button={'alt'}
-        label={blockedOverride || blockLabel}
-        onClick={e => {
-          e.stopPropagation();
-          if (!channelIsBlocked) {
-            doToast({ message: `Blocked ${shortUrl}`, linkText: 'Manage', linkTarget: `/${PAGES.BLOCKED}` });
-          }
-          toggleBlockChannel(uri);
-        }}
-      />
-    )
-  );
+  return permanentUrl && !claimIsMine ? (
+    <Button
+      ref={blockRef}
+      iconColor="red"
+      icon={ICONS.BLOCK}
+      button={'alt'}
+      label={blockedOverride || blockLabel}
+      onClick={e => {
+        e.stopPropagation();
+        if (!channelIsBlocked) {
+          doToast({ message: `Blocked ${shortUrl}`, linkText: 'Manage', linkTarget: `/${PAGES.BLOCKED}` });
+        }
+
+        toggleBlockChannel(permanentUrl);
+      }}
+    />
+  ) : null;
 }
