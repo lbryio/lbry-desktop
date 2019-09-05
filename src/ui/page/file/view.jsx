@@ -218,7 +218,9 @@ class FilePage extends React.Component<Props> {
                 </div>
 
                 <div className="media__action-group--large">
+                  {/* @if TARGET='app' */}
                   <FileDownloadLink uri={uri} />
+                  {/* @endif */}
                   <FileActions uri={uri} claimId={claim.claim_id} />
                 </div>
               </div>
