@@ -3,6 +3,10 @@
 All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
+## [] - Unreleased
+
+### Fixed
+- App crash on German language setting ([#2856](https://github.com/lbryio/lbry-desktop/issues/2856))
 
 ## [0.35.3] - [2019-09-04]
 
