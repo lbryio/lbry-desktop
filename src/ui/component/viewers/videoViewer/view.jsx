@@ -37,17 +37,31 @@ function VideoViewer(props: Props) {
     const currentVideo: HTMLVideoElement | null = document.querySelector('video');
 
     function doEnded() {
+      // clear position
       setPlayingUri(null);
       onEndedCB();
+    }
+    function doPause(e: Event) {
+      // store position e.target.currentTime
+      console.log('lets store position', e.target.currentTime);
+    }
+    function doVolume(e: Event) {
+      // store volume e.target.volume
+      console.log('lets store volume', e.target.volume);
+      console.log(e);
     }
 
     if (currentVideo) {
       currentVideo.addEventListener('ended', doEnded);
+      currentVideo.addEventListener('pause', doPause);
+      currentVideo.addEventListener('volumechange', doVolume);
     }
     // cleanup function:
     return () => {
       if (currentVideo) {
         currentVideo.removeEventListener('ended', doEnded);
+        currentVideo.removeEventListener('pause', doPause);
+        currentVideo.removeEventListener('volumechange', doVolume);
       }
     };
   }, []);
