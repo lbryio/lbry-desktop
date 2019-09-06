@@ -2,7 +2,7 @@ import { connect } from 'react-redux';
 import { makeSelectFileInfoForUri } from 'lbry-redux';
 import { doChangeVolume, doChangeMute } from 'redux/actions/app';
 import { selectVolume, selectMute } from 'redux/selectors/app';
-import { savePosition } from 'redux/actions/content';
+import { savePosition, doSetPlayingUri } from 'redux/actions/content';
 import { makeSelectContentPositionForUri } from 'redux/selectors/content';
 import VideoViewer from './view';
 
@@ -17,6 +17,7 @@ const perform = dispatch => ({
   changeVolume: volume => dispatch(doChangeVolume(volume)),
   savePosition: (uri, position) => dispatch(savePosition(uri, position)),
   changeMute: muted => dispatch(doChangeMute(muted)),
+  setPlayingUri: uri => dispatch(doSetPlayingUri(uri)),
 });
 
 export default connect(
