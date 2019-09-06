@@ -14,15 +14,43 @@ const VIDEO_JS_OPTIONS = {
 };
 
 type Props = {
+  volume: number,
+  position: number,
+  muted: boolean,
+  hasFileInfo: boolean,
+  changeVolume: number => void,
+  savePosition: (string, number) => void,
+  changeMute: boolean => void,
+  setPlayingUri: (string | null) => void,
   source: string,
   contentType: string,
   hasFileInfo: boolean,
+  onEndedCB: any,
 };
 
 function VideoViewer(props: Props) {
-  const { contentType, source } = props;
+  const { contentType, source, setPlayingUri, onEndedCB } = props;
   const videoRef = useRef();
   const [requireRedraw, setRequireRedraw] = useState(false);
+
+  useEffect(() => {
+    const currentVideo: HTMLVideoElement | null = document.querySelector('video');
+
+    function doEnded() {
+      setPlayingUri(null);
+      onEndedCB();
+    }
+
+    if (currentVideo) {
+      currentVideo.addEventListener('ended', doEnded);
+    }
+    // cleanup function:
+    return () => {
+      if (currentVideo) {
+        currentVideo.removeEventListener('ended', doEnded);
+      }
+    };
+  }, []);
 
   useEffect(() => {
     const videoNode = videoRef.current;
