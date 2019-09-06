@@ -6,6 +6,9 @@ import VideoViewer from 'component/viewers/videoViewer';
 import ImageViewer from 'component/viewers/imageViewer';
 import AppViewer from 'component/viewers/appViewer';
 import Button from 'component/button';
+// @if TARGET='web'
+import { generateStreamUrl } from 'util/lbrytv';
+// @endif
 
 import path from 'path';
 import fs from 'fs';
@@ -101,7 +104,7 @@ class FileRender extends React.PureComponent<Props> {
 
     // Ideally the lbrytv api server would just replace the streaming_url returned by the sdk so we don't need this check
     // https://github.com/lbryio/lbrytv/issues/51
-    const source = IS_WEB ? `https://api.lbry.tv/content/claims/${claim.name}/${claim.claim_id}/stream` : streamingUrl;
+    const source = IS_WEB ? generateStreamUrl(claim.name, claim.claim_id) : streamingUrl;
 
     // Human-readable files (scripts and plain-text files)
     const readableFiles = ['text', 'document', 'script'];
