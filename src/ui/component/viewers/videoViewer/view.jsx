@@ -6,6 +6,7 @@ import 'video.js/dist/video-js.css';
 import isUserTyping from 'util/detect-typing';
 
 const SPACE_BAR_KEYCODE = 32;
+const TEN_SECONDS = 10;
 const VIDEO_JS_OPTIONS = {
   autoplay: true,
   controls: true,
@@ -26,10 +27,12 @@ type Props = {
   contentType: string,
   hasFileInfo: boolean,
   onEndedCB: any,
+  uri: string,
 };
 
 function VideoViewer(props: Props) {
-  const { contentType, source, setPlayingUri, onEndedCB } = props;
+  const { contentType, source, setPlayingUri, onEndedCB, uri, savePosition, changeVolume, position, volume } = props;
+  console.log(volume);
   const videoRef = useRef();
   const [requireRedraw, setRequireRedraw] = useState(false);
 
@@ -38,30 +41,51 @@ function VideoViewer(props: Props) {
 
     function doEnded() {
       // clear position
+      savePosition(uri, 0);
       setPlayingUri(null);
       onEndedCB();
     }
     function doPause(e: Event) {
       // store position e.target.currentTime
-      console.log('lets store position', e.target.currentTime);
+      if (e.target.currentTime && e.target.duration && e.target.duration - e.target.currentTime > TEN_SECONDS) {
+        savePosition(uri, e.target.currentTime);
+        console.log('store position', e.target.currentTime);
+      }
     }
+    function doSeek() {
+      savePosition(uri, 0);
+    }
+
     function doVolume(e: Event) {
       // store volume e.target.volume
-      console.log('lets store volume', e.target.volume);
+      changeVolume(e.target.volume);
+      console.log('store volume', e.target.volume);
       console.log(e);
     }
+
+    currentVideo.currentTime = position;
+    if (currentVideo) {
+      currentVideo.volume = volume;
+    }
+
+    currentVideo.volume = volume;
+    // this didn't work
+    // currentVideo.volume = volume;
 
     if (currentVideo) {
       currentVideo.addEventListener('ended', doEnded);
       currentVideo.addEventListener('pause', doPause);
       currentVideo.addEventListener('volumechange', doVolume);
+      currentVideo.addEventListener('seeked', doSeek);
     }
+
     // cleanup function:
     return () => {
       if (currentVideo) {
         currentVideo.removeEventListener('ended', doEnded);
         currentVideo.removeEventListener('pause', doPause);
         currentVideo.removeEventListener('volumechange', doVolume);
+        currentVideo.removeEventListener('seeked', doSeek);
       }
     };
   }, []);
