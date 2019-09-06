@@ -1,5 +1,8 @@
 const { parseURI } = require('lbry-redux');
-const { generateStreamUrl } = require('../../src/ui/util/lbrytv');
+// const { generateStreamUrl } = require('../../src/ui/util/lbrytv');
+function generateStreamUrl(claimName, claimId) {
+  return `https://api.lbry.tv/content/claims/${claimName}/${claimId}/stream`;
+}
 const { WEB_SERVER_PORT } = require('../../config');
 const { readFileSync } = require('fs');
 const express = require('express');
@@ -109,14 +112,14 @@ app.get('*', async (req, res) => {
         head += `<meta property="og:url" content="https://beta.lbry.tv/${claim.name}:${claim.claim_id}"/>`;
 
         if (claim.source_media_type && claim.source_media_type.startsWith('video/')) {
-          const videoUrl = generateStreamUrl(claim.name, claim.claim_id);
-          head += `<meta property="og:video" content="${videoUrl}" />`;
-          head += `<meta property="og:video:secure_url" content="${videoUrl}" />`;
-          head += `<meta property="og:video:type" content="${claim.source_media_type}" />`;
-          if (claim.frame_width && claim.frame_height) {
-            head += `<meta property="og:video:width" content="${claim.frame_width}/>`;
-            head += `<meta property="og:video:height" content="${claim.frame_height}/>`;
-          }
+          // const videoUrl = generateStreamUrl(claim.name, claim.claim_id);
+          // head += `<meta property="og:video" content="${videoUrl}" />`;
+          // head += `<meta property="og:video:secure_url" content="${videoUrl}" />`;
+          // head += `<meta property="og:video:type" content="${claim.source_media_type}" />`;
+          // if (claim.frame_width && claim.frame_height) {
+          //   head += `<meta property="og:video:width" content="${claim.frame_width}/>`;
+          //   head += `<meta property="og:video:height" content="${claim.frame_height}/>`;
+          // }
         }
 
         html = insertToHead(html, head);
