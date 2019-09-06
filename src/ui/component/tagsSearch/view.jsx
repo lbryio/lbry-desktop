@@ -22,8 +22,6 @@ type Props = {
 export default function TagSelect(props: Props) {
   const { unfollowedTags = [], followedTags = [], doToggleTagFollow, doAddTag, onSelect, suggestMature } = props;
   const [newTag, setNewTag] = useState('');
-  // Not old, just untouched
-  const [oldTag, setOldTag] = useState('');
 
   let tags = unfollowedTags.slice();
   if (newTag) {
@@ -44,28 +42,27 @@ export default function TagSelect(props: Props) {
   const suggestedTransitions = useTransition(suggestedTags, tag => tag, unfollowedTagsAnimation);
 
   function onChange(e) {
-    setNewTag(e.target.value.trim());
-    setOldTag(e.target.value);
+    setNewTag(e.target.value);
   }
 
   function handleSubmit(e) {
     e.preventDefault();
-    setNewTag('');
-    setOldTag('');
+    const trimmedTag = newTag.trim();
 
-    if (newTag.length <= 0) {
+    if (trimmedTag.length === 0) {
       return;
     }
 
+    setNewTag('');
     if (onSelect) {
-      onSelect({ name: newTag });
+      onSelect({ name: trimmedTag });
     } else {
-      if (!unfollowedTags.map(({ name }) => name).includes(newTag)) {
-        doAddTag(newTag);
+      if (!unfollowedTags.map(({ name }) => name).includes(trimmedTag)) {
+        doAddTag(trimmedTag);
       }
 
-      if (!followedTags.map(({ name }) => name).includes(newTag)) {
-        doToggleTagFollow(newTag);
+      if (!followedTags.map(({ name }) => name).includes(trimmedTag)) {
+        doToggleTagFollow(trimmedTag);
       }
     }
   }
@@ -86,7 +83,7 @@ export default function TagSelect(props: Props) {
           onChange={onChange}
           placeholder={__('Search for more tags')}
           type="text"
-          value={oldTag}
+          value={newTag}
         />
       </Form>
       <ul className="tags">

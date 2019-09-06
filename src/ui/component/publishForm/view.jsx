@@ -140,9 +140,6 @@ function PublishForm(props: Props) {
             onSelect={newTag => {
               if (!tags.map(savedTag => savedTag.name).includes(newTag.name)) {
                 updatePublishForm({ tags: [...tags, newTag] });
-              } else {
-                // If it already exists and the user types it in, remove it
-                updatePublishForm({ tags: tags.filter(tag => tag.name !== newTag.name) });
               }
             }}
             onRemove={clickedTag => {
