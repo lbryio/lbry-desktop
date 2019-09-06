@@ -26,7 +26,7 @@ function ListBlocked(props: Props) {
         <div className="main--empty">
           <section className="card card--section">
             <h2 className="card__title">{__('You aren’t blocking any channels')}</h2>
-            <p className="card__subtitle">When you block a channel, all content from that channel will be hidden.</p>
+            <p className="card__subtitle">{__('When you block a channel, all content from that channel will be hidden.')}</p>
           </section>
         </div>
       )}
