@@ -608,5 +608,20 @@
   "Unlock": "Odblokuj",
   "Exit": "Wyjście",
   "Wallet Password": "Hasło portfela",
-  "Unlock Wallet": "Odblokuj portfel"
+  "Unlock Wallet": "Odblokuj portfel",
+  "URI does not include name.": "URI does not include name.",
+  "You're not following any channels.": "You're not following any channels.",
+  "Look what's trending for everyone": "Look what's trending for everyone",
+  "or": "or",
+  "Discover some channels!": "Discover some channels!",
+  "Block": "Block",
+  "This file is in your library.": "This file is in your library.",
+  "Send a tip to this creator": "Send a tip to this creator",
+  "File Size": "File Size",
+  "Loading": "Loading",
+  "LBRY Download Complete": "LBRY Download Complete",
+  "Find New Tags": "Find New Tags",
+  "View File": "View File",
+  "Close": "Close",
+  "% downloaded": "% downloaded"
 }
