@@ -71,6 +71,7 @@ type Props = {
   fileName: string,
   autoplay: boolean,
   nextFileToPlay: string,
+  nextUnplayed: string,
   history: { push: string => void },
 };
 
@@ -105,9 +106,9 @@ class FileRender extends React.PureComponent<Props> {
   }
 
   onEndedCb() {
-    const { autoplay, nextFileToPlay, history } = this.props;
-    if (autoplay && nextFileToPlay) {
-      history.push(formatLbryUriForWeb(nextFileToPlay));
+    const { autoplay, nextUnplayed, history } = this.props;
+    if (autoplay && nextUnplayed) {
+      history.push(formatLbryUriForWeb(nextUnplayed));
     }
   }
 

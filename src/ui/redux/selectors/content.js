@@ -5,6 +5,7 @@ import {
   selectClaimsByUri,
   makeSelectClaimsInChannelForCurrentPageState,
   makeSelectClaimIsNsfw,
+  makeSelectRecommendedContentForUri,
 } from 'lbry-redux';
 import { selectShowMatureContent } from 'redux/selectors/settings';
 
@@ -74,6 +75,21 @@ export const makeSelectHasVisitedUri = (uri: string) =>
   createSelector(
     makeSelectHistoryForUri(uri),
     history => Boolean(history)
+  );
+
+export const makeSelectNextUnplayedRecommended = (uri: string) =>
+  createSelector(
+    makeSelectRecommendedContentForUri(uri),
+    selectHistory,
+    (possibleNext, history) => {
+      if (possibleNext) {
+        for (let i = 0; i < possibleNext.length; i++) {
+          if (!history.find(item => item.uri === possibleNext[i])) {
+            return possibleNext[i];
+          }
+        }
+      }
+    }
   );
 
 export const selectRecentHistory = createSelector(
