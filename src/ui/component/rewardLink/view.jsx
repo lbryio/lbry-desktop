@@ -17,11 +17,24 @@ type Props = {
 
 const RewardLink = (props: Props) => {
   const { reward, claimReward, label, isPending, button } = props;
+  let displayLabel = label;
+  if (isPending) {
+    displayLabel = __('Claiming...');
+  } else if (label) {
+    displayLabel = label;
+  } else if (reward && reward.reward_range && reward.reward_range.includes('-')) {
+    displayLabel = `${__('Get')} ${reward.reward_range} LBC`;
+  } else if (reward && reward.reward_amount > 0) {
+    displayLabel = `${__('Get')} ${reward.reward_amount} LBC`;
+  } else {
+    displayLabel = __('Get ??? LBC');
+  }
+
   return !reward ? null : (
     <Button
       button={button ? 'inverse' : 'link'}
       disabled={isPending}
-      label={isPending ? __('Claiming...') : label || `${__('Get')} ${reward.reward_range || reward.reward_amount} LBC`}
+      label={displayLabel}
       onClick={() => {
         claimReward(reward);
       }}
