@@ -86,6 +86,40 @@ export default function FileViewer(props: Props) {
     }
   }, [autoplay, viewFile, isStreamable, hasCostInfo, cost]);
 
+  // @if TARGET='web'
+  if (costInfo && costInfo.cost > 0) {
+    return (
+      <div
+        disabled={!hasCostInfo}
+        style={!obscurePreview && thumbnail ? { backgroundImage: `url("${thumbnail}")` } : {}}
+        onClick={supported && viewFile}
+        className={classnames({
+          content__cover: supported,
+          'content__cover--disabled': !supported,
+          'card__media--nsfw': obscurePreview,
+          'card__media--disabled': !fileInfo && insufficientCredits,
+        })}
+      >
+        {!supported && (
+          <Yrbl
+            type="happy"
+            title={__('Paid Content')}
+            subtitle={
+              <Fragment>
+                <p>{__(`We're not ready to keep track of your paid content on LBRY.TV yet.`)}</p>
+                <p>
+                  {__('Good news, though! You can')}{' '}
+                  <Button button="link" label={__('Download the desktop app')} href="https://lbry.com/get" />{' '}
+                  {'and have access to paid content.'}
+                </p>
+              </Fragment>
+            }
+          />
+        )}
+      </div>
+    );
+  }
+  // @endif
   return (
     <div
       disabled={!hasCostInfo}
