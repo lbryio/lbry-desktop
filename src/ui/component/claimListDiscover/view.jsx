@@ -1,6 +1,6 @@
 // @flow
 import type { Node } from 'react';
-import React, { Fragment, useEffect } from 'react';
+import React, { Fragment, useEffect, useState } from 'react';
 import { withRouter } from 'react-router';
 import { createNormalizedClaimSearchKey, MATURE_TAGS } from 'lbry-redux';
 import { FormField } from 'component/common/form';
@@ -9,7 +9,6 @@ import moment from 'moment';
 import ClaimList from 'component/claimList';
 import Tag from 'component/tag';
 import ClaimPreview from 'component/claimPreview';
-import { updateQueryParam } from 'util/query-params';
 import { toCapitalCase } from 'util/string';
 
 const PAGE_SIZE = 20;
@@ -64,14 +63,13 @@ function ClaimListDiscover(props: Props) {
     hiddenUris,
   } = props;
   const didNavigateForward = history.action === 'PUSH';
-  const { search, pathname } = location;
+  const { search } = location;
   const urlParams = new URLSearchParams(search);
   const personalSort = urlParams.get('sort') || SEARCH_SORT_YOU;
   const typeSort = urlParams.get('type') || TYPE_TRENDING;
   const timeSort = urlParams.get('time') || TIME_WEEK;
-  const page = Number(urlParams.get('page')) || 1;
+  const [page, setPage] = useState(1);
   const tagsInUrl = urlParams.get('t') || '';
-  const url = `${pathname}${search}`;
   const options: {
     page_size: number,
     page: number,
@@ -163,8 +161,7 @@ function ClaimListDiscover(props: Props) {
 
   function handleScrollBottom() {
     if (!loading) {
-      const uri = updateQueryParam(url, 'page', page + 1);
-      history.replace(uri);
+      setPage(page + 1);
     }
   }
 
