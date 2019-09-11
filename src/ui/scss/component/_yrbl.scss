@@ -5,6 +5,11 @@
   vertical-align: middle;
   text-align: left;
   margin-bottom: var(--spacing-xlarge);
+  background-color: rgba($lbry-white, 0.8);
+  [data-mode='dark'] & {
+    background-color: rgba($lbry-black, 0.8);
+  }
+  padding: 5px;
 }
 
 .yrbl {
