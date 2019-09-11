@@ -56,7 +56,14 @@ class WalletAddress extends React.PureComponent<Props, State> {
         <CopyableText label={__('Your Address')} copyable={receiveAddress} snackMessage={__('Address copied.')} />
 
         <div className="card__actions">
-          <Button button="inverse" label={__('Get New Address')} onClick={getNewAddress} disabled={gettingNewAddress} />
+          {!IS_WEB && (
+            <Button
+              button="inverse"
+              label={__('Get New Address')}
+              onClick={getNewAddress}
+              disabled={gettingNewAddress}
+            />
+          )}
           <Button button="link" label={showQR ? __('Hide QR code') : __('Show QR code')} onClick={this.toggleQR} />
         </div>
 
