@@ -6,6 +6,7 @@ import Page from 'component/page';
 import UnsupportedOnWeb from 'component/common/unsupported-on-web';
 import UserEmail from 'component/userEmail';
 import InvitePage from 'page/invite';
+import YoutubeChannelList from 'component/youtubeChannelList';
 
 const AccountPage = () => (
   <Page>
@@ -21,6 +22,7 @@ const AccountPage = () => (
           <RewardTotal />
         </div>
       </div>
+      <YoutubeChannelList />
       <InvitePage />
     </div>
   </Page>
