@@ -126,7 +126,6 @@
     "hast-util-sanitize": "^1.1.2",
     "history": "^4.9.0",
     "husky": "^0.14.3",
-    "jsmediatags": "^3.8.1",
     "json-loader": "^0.5.4",
     "lbry-format": "https://github.com/lbryio/lbry-format.git",
     "lbry-redux": "lbryio/lbry-redux#2b3a5a59907f34d4e1c005c4696282b58d626242",
