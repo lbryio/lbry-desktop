@@ -124,7 +124,6 @@ class FilePage extends React.Component<Props> {
       nsfw,
       supportOption,
     } = this.props;
-
     // File info
     const { signing_channel: signingChannel } = claim;
     const channelName = signingChannel && signingChannel.name;

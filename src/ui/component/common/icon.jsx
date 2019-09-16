@@ -17,6 +17,7 @@ type Props = {
   iconColor?: string,
   size?: number,
   className?: string,
+  sectionIcon?: boolean,
 };
 
 class IconComponent extends React.PureComponent<Props> {
@@ -49,11 +50,10 @@ class IconComponent extends React.PureComponent<Props> {
   };
 
   render() {
-    const { icon, tooltip, iconColor, size, className } = this.props;
+    const { icon, tooltip, iconColor, size, className, sectionIcon = false } = this.props;
     const Icon = icons[this.props.icon];
 
     if (!Icon) {
-      console.error('no icon found for ', icon);
       return null;
     }
 
@@ -69,7 +69,11 @@ class IconComponent extends React.PureComponent<Props> {
       tooltipText = this.getTooltip(icon);
     }
 
-    const inner = <Icon size={iconSize} className={classnames(`icon icon--${icon}`, className)} color={color} />;
+    const component = (
+      <Icon size={sectionIcon ? 20 : iconSize} className={classnames(`icon icon--${icon}`, className)} color={color} />
+    );
+
+    const inner = sectionIcon ? <span className="icon__wrapper">{component}</span> : component;
 
     return tooltipText ? <Tooltip label={tooltipText}>{inner}</Tooltip> : inner;
   }

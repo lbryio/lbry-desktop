@@ -8,10 +8,10 @@ import Button from 'component/button';
 import Page from 'component/page';
 import classnames from 'classnames';
 import { rewards as REWARD_TYPES } from 'lbryinc';
-import UnsupportedOnWeb from 'component/common/unsupported-on-web';
 
 type Props = {
   doAuth: () => void,
+  fetchRewards: () => void,
   fetching: boolean,
   rewards: Array<Reward>,
   claimed: Array<Reward>,
@@ -27,6 +27,9 @@ type Props = {
 };
 
 class RewardsPage extends PureComponent<Props> {
+  componentDidMount() {
+    this.props.fetchRewards();
+  }
   renderPageHeader() {
     const { user, daemonSettings } = this.props;
 
@@ -43,7 +46,7 @@ class RewardsPage extends PureComponent<Props> {
               </p>
 
               <Button
-                navigate={`/$/${PAGES.AUTH}/signin?redirect=rewards`}
+                navigate={`/$/${PAGES.AUTH}?redirect=/$/${PAGES.REWARDS}`}
                 button="primary"
                 label={__('Unlock Rewards')}
               />
@@ -90,7 +93,7 @@ class RewardsPage extends PureComponent<Props> {
   renderUnclaimedRewards() {
     const { fetching, rewards, user, daemonSettings, claimed } = this.props;
 
-    if (daemonSettings && !daemonSettings.share_usage_data) {
+    if (!IS_WEB && daemonSettings && !daemonSettings.share_usage_data) {
       return (
         <section className="card card--section">
           <h2 className="card__title">{__('Disabled')}</h2>
@@ -145,7 +148,6 @@ class RewardsPage extends PureComponent<Props> {
   render() {
     return (
       <Page>
-        {IS_WEB && <UnsupportedOnWeb />}
         {this.renderPageHeader()}
         {this.renderUnclaimedRewards()}
         {<RewardListClaimed />}

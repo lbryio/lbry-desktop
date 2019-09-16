@@ -12,22 +12,6 @@ import Icon from 'component/common/icon';
 import { Menu, MenuList, MenuButton, MenuItem } from '@reach/menu-button';
 import Tooltip from 'component/common/tooltip';
 
-// Move this into jessops password util
-import cookie from 'cookie';
-// @if TARGET='app'
-import keytar from 'keytar';
-// @endif;
-function deleteAuthToken() {
-  // @if TARGET='app'
-  keytar.deletePassword('LBRY', 'auth_token').catch(console.error); //eslint-disable-line
-  // @endif;
-  // @if TARGET='web'
-  document.cookie = cookie.serialize('auth_token', '', {
-    expires: new Date(),
-  });
-  // @endif
-}
-
 type Props = {
   autoUpdateDownloaded: boolean,
   balance: string,
@@ -44,6 +28,7 @@ type Props = {
   doDownloadUpgradeRequested: () => void,
   email: ?string,
   minimal: boolean,
+  signOut: () => void,
 };
 
 const Header = (props: Props) => {
@@ -56,14 +41,13 @@ const Header = (props: Props) => {
     hideBalance,
     autoUpdateDownloaded,
     isUpgradeAvailable,
-    doDownloadUpgradeRequested,
+    downloadUpgradeRequested,
     email,
     minimal,
+    signOut,
   } = props;
+  const authenticated = Boolean(email);
   const showUpgradeButton = autoUpdateDownloaded || (process.platform === 'linux' && isUpgradeAvailable);
-  const isAuthenticated = Boolean(email);
-  // Auth is optional in the desktop app
-  const showFullHeader = IS_WEB ? isAuthenticated : true;
 
   function handleThemeToggle() {
     if (automaticDarkModeEnabled) {
@@ -77,42 +61,14 @@ const Header = (props: Props) => {
     }
   }
 
-  function signOut() {
-    // Replace this with actual clearUser function
-    window.store.dispatch({ type: 'USER_FETCH_FAILURE' });
-    deleteAuthToken();
-    location.reload();
-  }
-
-  const accountMenuButtons = [
-    {
-      path: `/$/account`,
-      icon: ICONS.OVERVIEW,
-      label: __('Overview'),
-    },
-    {
-      path: `/$/rewards`,
-      icon: ICONS.FEATURED,
-      label: __('Rewards'),
-    },
-    {
-      path: `/$/wallet`,
-      icon: ICONS.WALLET,
-      label: __('Wallet'),
-    },
-    {
-      path: `/$/publish`,
-      icon: ICONS.PUBLISH,
-      label: __('Publish'),
-    },
-  ];
-
-  if (!isAuthenticated) {
-    accountMenuButtons.push({
-      onClick: signOut,
-      icon: ICONS.PUBLISH,
-      label: __('Publish'),
-    });
+  function getWalletTitle() {
+    return hideBalance ? (
+      __('Wallet')
+    ) : (
+      <React.Fragment>
+        {roundedBalance} <LbcSymbol />
+      </React.Fragment>
+    );
   }
 
   return (
@@ -152,19 +108,17 @@ const Header = (props: Props) => {
         </div>
 
         {!minimal ? (
-          <div className="header__menu">
-            {showFullHeader ? (
+          <div className={classnames('header__menu', { 'header__menu--small': IS_WEB && !authenticated })}>
+            {!IS_WEB || authenticated ? (
               <Fragment>
                 <Menu>
-                  <MenuButton className="header__navigation-item menu__title">
-                    {roundedBalance} <LbcSymbol />
-                  </MenuButton>
+                  <MenuButton className="header__navigation-item menu__title">{getWalletTitle()}</MenuButton>
                   <MenuList className="menu__list--header">
-                    <MenuItem className="menu__link" onSelect={() => history.push(`/$/wallet`)}>
+                    <MenuItem className="menu__link" onSelect={() => history.push(`/$/${PAGES.WALLET}`)}>
                       <Icon aria-hidden icon={ICONS.WALLET} />
                       {__('Wallet')}
                     </MenuItem>
-                    <MenuItem className="menu__link" onSelect={() => history.push(`/$/rewards`)}>
+                    <MenuItem className="menu__link" onSelect={() => history.push(`/$/${PAGES.REWARDS}`)}>
                       <Icon aria-hidden icon={ICONS.FEATURED} />
                       {__('Rewards')}
                     </MenuItem>
@@ -175,19 +129,16 @@ const Header = (props: Props) => {
                     <Icon size={18} icon={ICONS.ACCOUNT} />
                   </MenuButton>
                   <MenuList className="menu__list--header">
-                    <MenuItem
-                      className="menu__link"
-                      onSelect={() => history.push(isAuthenticated ? `/$/account` : `/$/auth/signup`)}
-                    >
+                    <MenuItem className="menu__link" onSelect={() => history.push(`/$/${PAGES.ACCOUNT}`)}>
                       <Icon aria-hidden icon={ICONS.OVERVIEW} />
                       {__('Overview')}
                     </MenuItem>
 
-                    <MenuItem className="menu__link" onSelect={() => history.push(`/$/publish`)}>
+                    <MenuItem className="menu__link" onSelect={() => history.push(`/$/${PAGES.PUBLISH}`)}>
                       <Icon aria-hidden icon={ICONS.PUBLISH} />
                       {__('Publish')}
                     </MenuItem>
-                    {isAuthenticated ? (
+                    {authenticated ? (
                       <MenuItem className="menu__link" onSelect={signOut}>
                         <Icon aria-hidden icon={ICONS.SIGN_OUT} />
                         {__('Sign Out')}
@@ -203,11 +154,11 @@ const Header = (props: Props) => {
                     <Icon size={18} icon={ICONS.SETTINGS} />
                   </MenuButton>
                   <MenuList className="menu__list--header">
-                    <MenuItem className="menu__link" onSelect={() => history.push(`/$/settings`)}>
+                    <MenuItem className="menu__link" onSelect={() => history.push(`/$/${PAGES.SETTINGS}`)}>
                       <Icon aria-hidden tootlip icon={ICONS.SETTINGS} />
                       {__('Settings')}
                     </MenuItem>
-                    <MenuItem className="menu__link" onSelect={() => history.push(`/$/help`)}>
+                    <MenuItem className="menu__link" onSelect={() => history.push(`/$/${PAGES.HELP}`)}>
                       <Icon aria-hidden icon={ICONS.HELP} />
                       {__('Help')}
                     </MenuItem>
@@ -219,10 +170,7 @@ const Header = (props: Props) => {
                 </Menu>
               </Fragment>
             ) : (
-              <Fragment>
-                <span />
-                <Button navigate={`/$/${PAGES.AUTH}/signin`} button="primary" label={__('Sign In')} />
-              </Fragment>
+              <Button navigate={`/$/${PAGES.AUTH}`} button="primary" label={__('Sign In')} />
             )}
           </div>
         ) : (
@@ -238,7 +186,7 @@ const Header = (props: Props) => {
         <div className="header__banner-background">
           <div className="header__banner-contents">
             {__('Upgrade is ready')}
-            <Button button="alt" icon={ICONS.DOWNLOAD} label={__('Install now')} onClick={doDownloadUpgradeRequested} />
+            <Button button="alt" icon={ICONS.DOWNLOAD} label={__('Install now')} onClick={downloadUpgradeRequested} />
           </div>
         </div>
       )}

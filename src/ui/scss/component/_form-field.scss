@@ -58,6 +58,7 @@ select,
 textarea {
   border-color: lighten($lbry-black, 20%);
   border-radius: var(--input-border-radius);
+  background-color: $lbry-white;
   border-width: 1px;
 }
 
@@ -67,6 +68,7 @@ fieldset-section {
   label {
     width: auto;
     text-transform: none;
+    color: lighten($lbry-black, 20%);
   }
 }
 
@@ -90,7 +92,6 @@ radio-element {
   }
 
   label {
-    color: lighten($lbry-black, 20%);
     margin-bottom: 0;
     margin-left: var(--spacing-miniscule);
     font-size: var(--font-body);
@@ -184,9 +185,12 @@ fieldset-group {
         height: var(--input-height);
         padding-right: 0;
         border: 1px solid;
+        border-top-left-radius: var(--input-border-radius);
+        border-bottom-left-radius: var(--input-border-radius);
         border-right: 0;
         border-color: $lbry-black;
         color: $lbry-gray-4;
+        background-color: $lbry-white;
 
         [data-mode='dark'] & {
           border-color: $lbry-gray-4;
@@ -275,7 +279,6 @@ fieldset-section {
     max-width: 12em;
     background-position: 95% center;
     background-size: 1.2rem;
-    background-color: $lbry-white;
 
     [data-mode='dark'] & {
       background-color: transparent;
@@ -305,7 +308,6 @@ fieldset-section {
   background-color: rgba($lbry-gray-1, 0.5);
   border: 1px solid $lbry-gray-1;
   color: $lbry-gray-5;
-  flex: 1;
   padding: 0.2rem 0.75rem;
   text-overflow: ellipsis;
   user-select: text;
@@ -322,6 +324,10 @@ fieldset-section {
   @extend .help;
   margin-top: var(--spacing-small);
   margin-bottom: var(--spacing-large);
+}
+
+.form-field--short {
+  width: 25em;
 }
 
 .form-field--price-amount {

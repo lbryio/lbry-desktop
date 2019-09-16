@@ -15,8 +15,11 @@ $main: $lbry-teal-5;
 
 .tags--remove {
   @extend .tags;
-  @extend .ul--no-style;
-  margin-bottom: var(--spacing-large);
+
+  .tag {
+    margin-top: 0;
+    margin-bottom: var(--spacing-small);
+  }
 }
 
 .tags--vertical {
@@ -31,8 +34,24 @@ $main: $lbry-teal-5;
   margin: var(--spacing-large) 0;
 }
 
-.tags__empty-message {
-  margin-top: var(--spacing-medium);
+.tags__input-wrapper {
+  display: flex;
+
+  // Nested style needed for more specificity
+  .tag__input {
+    @extend .tag--remove;
+    border: 1px dashed;
+    border-color: $lbry-teal-5;
+    background-color: mix($lbry-teal-1, $lbry-white, 10%);
+    height: auto;
+    padding: calc(var(--spacing-miniscule) - 1px) var(--spacing-small);
+    margin-top: -2px;
+    border: 1px dashed lighten($lbry-teal-5, 10%);
+
+    ::placeholder {
+      color: black;
+    }
+  }
 }
 
 .tag {
@@ -68,7 +87,11 @@ $main: $lbry-teal-5;
 }
 
 .tag--add {
-  background-color: lighten($lbry-teal-5, 60%);
+  background-color: $lbry-teal-5;
+  color: $lbry-white;
+  .icon {
+    stroke: $lbry-white;
+  }
 
   &.tag--mature {
     @extend .badge--mature;

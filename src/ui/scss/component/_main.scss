@@ -19,7 +19,8 @@
 }
 
 .main {
-  width: calc(100% - var(--side-nav-width) - var(--spacing-main-padding));
+  position: relative;
+  width: calc(100% - var(--side-nav-width) - var(--spacing-large));
 
   @media (max-width: 600px) {
     width: 100%;
@@ -43,7 +44,7 @@
 
 .main--auth-page {
   max-width: 60rem;
-  margin-top: calc(var(--spacing-main-padding) * 2);
+  margin-top: var(--spacing-main-padding);
   margin-left: auto;
   margin-right: auto;
 }
@@ -63,22 +64,15 @@
   background-color: var(--color-background);
 }
 
-.main--fullscreen {
-  width: 100vw;
-  height: 100vh;
-  z-index: 9999;
-  background-color: $lbry-white;
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  margin: 0;
-  margin-top: 0;
+.main--contained {
+  max-width: 35rem;
+  min-width: 25rem;
+  margin: auto;
+  margin-top: 5rem;
+}
 
-  * {
-    z-index: 10000;
-  }
+.main--full-width {
+  width: 100%;
 }
 
 .main__status {
