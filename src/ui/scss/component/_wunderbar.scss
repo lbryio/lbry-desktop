@@ -29,6 +29,10 @@
   flex: 0;
   margin-right: 0;
   color: $lbry-black;
+
+  fieldset-section {
+    width: 15rem;
+  }
 }
 
 .wunderbar__active-suggestion {
