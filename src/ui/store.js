@@ -8,6 +8,8 @@ import thunk from 'redux-thunk';
 import { createHashHistory, createBrowserHistory } from 'history';
 import { routerMiddleware } from 'connected-react-router';
 import createRootReducer from './reducers';
+import { Lbryio } from 'lbryinc';
+import isEqual from 'util/deep-equal';
 
 function isFunction(object) {
   return typeof object === 'function';
@@ -53,13 +55,12 @@ const whiteListedReducers = [
   // @if TARGET='app'
   'publish',
   'wallet',
+  'tags',
   // 'fileInfo',
   // @endif
   'content',
-  'subscriptions',
   'app',
   'search',
-  'tags',
   'blocked',
 ];
 
@@ -69,10 +70,10 @@ const transforms = [
   contentFilter,
   fileInfoFilter,
   blockedFilter,
+  tagsFilter,
   // @endif
   appFilter,
   searchFilter,
-  tagsFilter,
   createCompressor(),
 ];
 
@@ -104,6 +105,26 @@ const store = createStore(
   {}, // initial state
   composeEnhancers(applyMiddleware(...middleware))
 );
+
+let currentPayload;
+store.subscribe(() => {
+  const state = store.getState();
+  const subscriptions = state.subscriptions.subscriptions.map(({ uri }) => uri);
+  const tags = state.tags.followedTags;
+
+  const newPayload = {
+    version: '0',
+    shared: {
+      subscriptions,
+      tags,
+    },
+  };
+
+  if (!isEqual(newPayload, currentPayload)) {
+    currentPayload = newPayload;
+    Lbryio.call('user_settings', 'set', { settings: newPayload });
+  }
+});
 
 const persistor = persistStore(store);
 window.persistor = persistor;

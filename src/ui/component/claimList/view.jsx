@@ -15,7 +15,6 @@ type Props = {
   uris: Array<string>,
   header: Node | boolean,
   headerAltControls: Node,
-  injectedItem?: Node,
   loading: boolean,
   type: string,
   empty?: string,
@@ -33,7 +32,6 @@ export default function ClaimList(props: Props) {
   const {
     uris,
     headerAltControls,
-    injectedItem,
     loading,
     persistedStorageKey,
     empty,
@@ -57,7 +55,7 @@ export default function ClaimList(props: Props) {
 
   useEffect(() => {
     setScrollBottomCbMap({});
-  }, [id]);
+  }, [id, setScrollBottomCbMap]);
 
   useEffect(() => {
     function handleScroll(e) {
@@ -112,8 +110,6 @@ export default function ClaimList(props: Props) {
         </div>
       )}
 
-      {injectedItem && <div>{injectedItem}</div>}
-
       {urisLength > 0 && (
         <ul className="ul--no-style">
           {sortedUris.map((uri, index) => (
@@ -121,6 +117,7 @@ export default function ClaimList(props: Props) {
           ))}
         </ul>
       )}
+
       {urisLength === 0 && !loading && <p className="main--empty empty">{empty || __('No results')}</p>}
     </section>
   );

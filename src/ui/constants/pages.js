@@ -1,4 +1,4 @@
-export const AUTH = 'auth';
+export const AUTH = 'signin';
 export const BACKUP = 'backup';
 export const CHANNEL = 'channel';
 export const DISCOVER = 'discover';

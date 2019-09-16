@@ -26,13 +26,19 @@ export const getSavedPassword = () => {
   );
 };
 
-export const deleteSavedPassword = () => {
+export const deleteAuthToken = () => {
   return new Promise(
     resolve => {
-      ipcRenderer.once('delete-password-response', (event, success) => {
-        resolve(success);
+      // @if TARGET='app'
+      ipcRenderer.once('delete-auth-token-response', (event, success) => {
+        resolve();
       });
-      ipcRenderer.send('delete-password');
+      ipcRenderer.send('delete-auth-token');
+      // @endif;
+      // @if TARGET='web'
+      document.cookie = 'auth_token= ; expires = Thu, 01 Jan 1970 00:00:00 GMT';
+      resolve();
+      // @endif
     },
     reject => {
       reject(false);

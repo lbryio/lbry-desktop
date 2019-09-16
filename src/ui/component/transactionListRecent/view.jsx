@@ -14,10 +14,8 @@ class TransactionListRecent extends React.PureComponent<Props> {
   componentDidMount() {
     const { fetchMyClaims, fetchTransactions } = this.props;
 
-    // @if TARGET='app'
     fetchMyClaims();
     fetchTransactions();
-    // @endif
   }
 
   render() {

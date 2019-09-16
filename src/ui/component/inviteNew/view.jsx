@@ -3,6 +3,7 @@ import React from 'react';
 import Button from 'component/button';
 import { Form, FormField } from 'component/common/form';
 import CopyableText from 'component/copyableText';
+import Card from 'component/common/card';
 
 type FormProps = {
   inviteNew: string => void,
@@ -73,25 +74,28 @@ class InviteNew extends React.PureComponent<Props> {
     const { errorMessage, inviteNew, isPending, rewardAmount, referralLink } = this.props;
 
     return (
-      <section className="card card--section">
-        <h2 className="card__title">{__('Invite a Friend')}</h2>
-        <p className="card__subtitle">{__('When your friends start using LBRY, the network gets stronger!')}</p>
+      <Card
+        title={__('Invite a Friend')}
+        subtitle={__('When your friends start using LBRY, the network gets stronger!')}
+        body={
+          <React.Fragment>
+            <FormInviteNew
+              errorMessage={errorMessage}
+              inviteNew={inviteNew}
+              isPending={isPending}
+              rewardAmount={rewardAmount}
+            />
+            <CopyableText label={__('Or share this link with your friends')} copyable={referralLink} />
 
-        <FormInviteNew
-          errorMessage={errorMessage}
-          inviteNew={inviteNew}
-          isPending={isPending}
-          rewardAmount={rewardAmount}
-        />
-        <CopyableText label={__('Or share this link with your friends')} copyable={referralLink} />
-
-        <p className="help">
-          {__('Earn')} <Button button="link" navigate="/$/rewards" label={__('rewards')} />{' '}
-          {__('for inviting your friends.')} {__('Read our')}{' '}
-          <Button button="link" label={__('FAQ')} href="https://lbry.com/faq/referrals" />{' '}
-          {__('to learn more about referrals')}.
-        </p>
-      </section>
+            <p className="help">
+              {__('Earn')} <Button button="link" navigate="/$/rewards" label={__('rewards')} />{' '}
+              {__('for inviting your friends.')} {__('Read our')}{' '}
+              <Button button="link" label={__('FAQ')} href="https://lbry.com/faq/referrals" />{' '}
+              {__('to learn more about referrals')}.
+            </p>
+          </React.Fragment>
+        }
+      />
     );
   }
 }

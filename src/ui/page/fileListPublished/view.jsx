@@ -31,15 +31,15 @@ function FileListPublished(props: Props) {
           />
         </div>
       ) : (
-        <div className="main--empty">
-          <section className="card card--section">
-            <h2 className="card__title">{__("It looks like you haven't published anything to LBRY yet.")}</h2>
+        <section className="main--empty">
+          <div className=" section--small">
+            <h2 className="section__title--large">{__('Nothing published to LBRY yet.')}</h2>
 
-            <div className="card__actions card__actions--center">
+            <div className="section__actions">
               <Button button="primary" navigate="/$/publish" label={__('Publish something new')} />
             </div>
-          </section>
-        </div>
+          </div>
+        </section>
       )}
     </Page>
   );
