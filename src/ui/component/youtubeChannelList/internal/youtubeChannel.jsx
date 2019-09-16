@@ -20,24 +20,29 @@ export default function YoutubeChannelItem(props: Props) {
   const {
     yt_channel_name: ytName,
     lbry_channel_name: lbryName,
-    channel_claim_id: claimId,
     sync_status: syncStatus,
     status_token: statusToken,
     transferable,
     transfer_state: transferState,
-    publish_to_address: publishAddresses,
   } = props.channel;
-  const LbryYtUrl = 'https://lbry.com/youtube/status/';
 
-  //  <thead>
-  //   <tr>
-  //    <th>{__('Youtube Name')}</th>
-  //    <th>{__('LBRY Name')} </th>
-  //    <th>{__('Sync Status')} </th>
-  //    <th>{__('Transfer Status')}</th>
-  //   </tr>
-  //  </thead>
-  const doTransfer = () => {};
+  const LBRY_YT_URL = 'https://lbry.com/youtube/status/';
+  const NOT_TRANSFERED = 'not_transferred';
+  const PENDING_TRANSFER = 'pending_transfer';
+  const COMPLETED_TRANSFER = 'completed_transfer';
+
+  function renderSwitch(param) {
+    switch (param) {
+      case NOT_TRANSFERED:
+        return __('Not Transferred');
+      case PENDING_TRANSFER:
+        return __('Pending Transfer');
+      case COMPLETED_TRANSFER:
+        return __('Completed Transfer');
+    }
+  }
+
+  // | Youtube Name | LBRY Name | SyncStatus | TransferStatus |
 
   return (
     <tr>
@@ -46,13 +51,9 @@ export default function YoutubeChannelItem(props: Props) {
         <Button button={'link'} navigate={`lbry://${lbryName}`} label={lbryName} />
       </td>
       <td>
-        <Button button={'link'} href={`${LbryYtUrl}${statusToken}`} label={syncStatus} />
+        <Button button={'link'} href={`${LBRY_YT_URL}${statusToken}`} label={syncStatus} />
       </td>
-      <td>{claimId}</td>
-      <td>
-        {transferable && <Button button={'link'} onClick={doTransfer} label={'Claim It'} />}
-        {!transferable && transferState}
-      </td>
+      <td>{transferable ? renderSwitch(transferState) : __('Not Transferable')}</td>
     </tr>
   );
 }
