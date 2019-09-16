@@ -17,7 +17,7 @@ export default appState => {
   });
 
   const windowConfiguration = {
-    backgroundColor: '#270f34', // Located in src/scss/init/_vars.scss `--color-background`
+    backgroundColor: '#270f34', // Located in src/scss/init/_vars.scss `--color-background--splash`
     minWidth: 950,
     minHeight: 600,
     autoHideMenuBar: true,

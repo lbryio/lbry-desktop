@@ -31,8 +31,7 @@ let showingAutoUpdateCloseAlert = false;
 // object is garbage collected.
 let rendererWindow;
 
-// eslint-disable-next-line no-unused-vars
-let tray;
+let tray; // eslint-disable-line
 let daemon;
 
 const appState = {};
@@ -47,7 +46,6 @@ if (isDev) {
   process.env.ELECTRON_DISABLE_SECURITY_WARNINGS = true;
 }
 
-// eslint-disable-next-line space-before-function-paren
 const startDaemon = async () => {
   let isDaemonRunning = false;
 
@@ -114,7 +112,6 @@ if (!gotSingleInstanceLock) {
     }
   });
 
-  // eslint-disable-next-line space-before-function-paren
   app.on('ready', async () => {
     await startDaemon();
     startSandbox();
@@ -315,6 +312,12 @@ ipcMain.on('get-auth-token', event => {
 
 ipcMain.on('set-auth-token', (event, token) => {
   keytar.setPassword('LBRY', 'auth_token', token ? token.toString().trim() : null);
+});
+
+ipcMain.on('delete-auth-token', (event, password) => {
+  keytar.deletePassword('LBRY', 'auth_token', password).then(res => {
+    event.sender.send('delete-auth-token-response', res);
+  });
 });
 
 ipcMain.on('get-password', event => {

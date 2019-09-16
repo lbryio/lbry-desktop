@@ -54,9 +54,13 @@
   justify-content: space-between;
   align-items: center;
 
-  .button {
+  > .button:only-child {
     margin-left: auto;
   }
+}
+
+.header__menu--small {
+  width: auto;
 }
 
 .header__navigation-arrows {

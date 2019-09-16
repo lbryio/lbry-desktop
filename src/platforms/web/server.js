@@ -1,8 +1,5 @@
 const { parseURI } = require('lbry-redux');
 // const { generateStreamUrl } = require('../../src/ui/util/lbrytv');
-function generateStreamUrl(claimName, claimId) {
-  return `https://api.lbry.tv/content/claims/${claimName}/${claimId}/stream`;
-}
 const { WEB_SERVER_PORT } = require('../../config');
 const { readFileSync } = require('fs');
 const express = require('express');
@@ -72,7 +69,7 @@ app.get('*', async (req, res) => {
   let html = readFileSync(path.join(__dirname, '/index.html'), 'utf8');
   const urlPath = req.path.substr(1); // trim leading slash
 
-  if (urlPath.match(/^([^@/:]+)\/([^:/]+)$/)) {
+  if (!urlPath.startsWith('$/') && urlPath.match(/^([^@/:]+)\/([^:/]+)$/)) {
     return res.redirect(301, req.url.replace(/([^/:]+)\/([^:/]+)/, '$1:$2')); // test against urlPath, but use req.url to retain parameters
   }
 

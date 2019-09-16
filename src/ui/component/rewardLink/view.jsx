@@ -32,7 +32,7 @@ const RewardLink = (props: Props) => {
 
   return !reward ? null : (
     <Button
-      button={button ? 'inverse' : 'link'}
+      button={button ? 'primary' : 'link'}
       disabled={isPending}
       label={displayLabel}
       onClick={() => {

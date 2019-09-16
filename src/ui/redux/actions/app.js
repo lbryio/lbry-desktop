@@ -6,6 +6,7 @@ import { ipcRenderer, remote } from 'electron';
 import path from 'path';
 import * as ACTIONS from 'constants/action_types';
 import * as MODALS from 'constants/modal_types';
+import * as PAGES from 'constants/pages';
 import {
   Lbry,
   doBalanceSubscribe,
@@ -13,6 +14,8 @@ import {
   doError,
   makeSelectClaimForUri,
   makeSelectClaimIsMine,
+  doPopulateUserSettings,
+  doFetchChannelListMine,
 } from 'lbry-redux';
 import Native from 'native';
 import { doFetchDaemonSettings } from 'redux/actions/settings';
@@ -28,10 +31,12 @@ import {
   selectUpgradeTimer,
   selectModal,
 } from 'redux/selectors/app';
-import { doAuthenticate } from 'lbryinc';
+import { Lbryio, doAuthenticate } from 'lbryinc';
 import { lbrySettings as config, version as appVersion } from 'package.json';
 import { push } from 'connected-react-router';
 import analytics from 'analytics';
+import { deleteAuthToken } from 'util/saved-passwords';
+import cookie from 'cookie';
 
 // @if TARGET='app'
 const { autoUpdater } = remote.require('electron-updater');
@@ -322,13 +327,12 @@ export function doAlertError(errorList) {
 export function doDaemonReady() {
   return (dispatch, getState) => {
     const state = getState();
-
     dispatch(doAuthenticate(appVersion));
     dispatch({ type: ACTIONS.DAEMON_READY });
 
     // @if TARGET='app'
-    dispatch(doFetchDaemonSettings());
     dispatch(doBalanceSubscribe());
+    dispatch(doFetchDaemonSettings());
     dispatch(doFetchFileInfosAndPublishedClaims());
     if (!selectIsUpgradeSkipped(state)) {
       dispatch(doCheckUpgradeAvailable());
@@ -414,7 +418,7 @@ export function doConditionalAuthNavigate(newSession) {
     const modal = selectModal(state);
 
     if (newSession || (modal && modal.id !== MODALS.EMAIL_COLLECTION)) {
-      dispatch(push('/$/auth'));
+      dispatch(push(`/$/${PAGES.AUTH}`));
     }
   };
 }
@@ -437,5 +441,34 @@ export function doAnalyticsView(uri, timeToStart) {
     }
 
     return analytics.apiLogView(uri, outpoint, claimId, timeToStart);
+  };
+}
+
+export function doSignIn() {
+  return (dispatch, getState) => {
+    // The balance is subscribed to on launch for desktop
+    // @if TARGET='web'
+    const { auth_token: authToken } = cookie.parse(document.cookie);
+    Lbry.setApiHeader('X-Lbry-Auth-Token', authToken);
+
+    dispatch(doBalanceSubscribe());
+    dispatch(doCheckSubscriptionsInit());
+    dispatch(doFetchChannelListMine());
+    // @endif
+
+    Lbryio.call('user_settings', 'get').then(settings => {
+      dispatch(doPopulateUserSettings(settings));
+    });
+  };
+}
+
+export function doSignOut() {
+  return dispatch => {
+    deleteAuthToken()
+      .then(window.persistor.purge)
+      .then(() => {
+        location.reload();
+      })
+      .catch(() => location.reload());
   };
 }

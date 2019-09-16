@@ -1,4 +1,5 @@
-// @flow
+/* eslint-disable no-undef */
+/* eslint-disable react/prop-types */
 import React from 'react';
 import Button from 'component/button';
 
@@ -6,35 +7,33 @@ let scriptLoading = false;
 let scriptLoaded = false;
 let scriptDidError = false;
 
-type Props = {
-  disabled: boolean,
-  label: ?string,
-  email: string,
+// Flow does not like the way this stripe plugin works
+// Disabled because it was a huge pain
+// type Props = {
+//   disabled: boolean,
+//   label: ?string,
+//   email: string,
 
-  // =====================================================
-  // Required by stripe
-  // see Stripe docs for more info:
-  //   https://stripe.com/docs/checkout#integration-custom
-  // =====================================================
+//   // =====================================================
+//   // Required by stripe
+//   // see Stripe docs for more info:
+//   //   https://stripe.com/docs/checkout#integration-custom
+//   // =====================================================
 
-  // Your publishable key (test or live).
-  // can't use "key" as a prop in react, so have to change the keyname
-  stripeKey: string,
+//   // Your publishable key (test or live).
+//   // can't use "key" as a prop in react, so have to change the keyname
+//   stripeKey: string,
 
-  // The callback to invoke when the Checkout process is complete.
-  //   function(token)
-  //     token is the token object created.
-  //     token.id can be used to create a charge or customer.
-  //     token.email contains the email address entered by the user.
-  token: string,
-};
+//   // The callback to invoke when the Checkout process is complete.
+//   //   function(token)
+//   //     token is the token object created.
+//   //     token.id can be used to create a charge or customer.
+//   //     token.email contains the email address entered by the user.
+//   token: string,
+// };
 
-type State = {
-  open: boolean,
-};
-
-class CardVerify extends React.Component<Props, State> {
-  constructor(props: Props) {
+class CardVerify extends React.Component {
+  constructor(props) {
     super(props);
     this.state = {
       open: false,
@@ -87,6 +86,7 @@ class CardVerify extends React.Component<Props, State> {
 
     this.loadPromise.promise.then(this.onScriptLoaded).catch(this.onScriptError);
 
+    // $FlowFixMe
     document.body.appendChild(script);
   }
 
@@ -161,7 +161,7 @@ class CardVerify extends React.Component<Props, State> {
   render() {
     return (
       <Button
-        button="inverse"
+        button="primary"
         label={this.props.label}
         disabled={this.props.disabled || this.state.open || this.hasPendingClick}
         onClick={this.onClick.bind(this)}
@@ -171,3 +171,5 @@ class CardVerify extends React.Component<Props, State> {
 }
 
 export default CardVerify;
+/* eslint-enable no-undef */
+/* eslint-enable react/prop-types */

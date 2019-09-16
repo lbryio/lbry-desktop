@@ -1,7 +1,7 @@
 // @flow
 import React, { useEffect, useRef } from 'react';
 import analytics from 'analytics';
-import { Lbry, buildURI, parseURI } from 'lbry-redux';
+import { buildURI, parseURI } from 'lbry-redux';
 import Router from 'component/router/index';
 import ModalRouter from 'modal/modalRouter';
 import ReactModal from 'react-modal';
@@ -26,10 +26,21 @@ type Props = {
   fetchRewardedContent: () => void,
   fetchTransactions: () => void,
   fetchAccessToken: () => void,
+  fetchChannelListMine: () => void,
+  onSignedIn: () => void,
 };
 
 function App(props: Props) {
-  const { theme, fetchRewards, fetchRewardedContent, fetchTransactions, user, fetchAccessToken, accessToken } = props;
+  const {
+    theme,
+    fetchRewards,
+    fetchRewardedContent,
+    fetchTransactions,
+    user,
+    fetchAccessToken,
+    fetchChannelListMine,
+    onSignedIn,
+  } = props;
   const appRef = useRef();
   const isEnhancedLayout = useKonamiListener();
   const userId = user && user.id;
@@ -54,8 +65,9 @@ function App(props: Props) {
     // @if TARGET='app'
     fetchRewards();
     fetchTransactions();
+    fetchChannelListMine(); // This needs to be done for web too...
     // @endif
-  }, [fetchRewards, fetchRewardedContent, fetchTransactions, fetchAccessToken]);
+  }, [fetchRewards, fetchRewardedContent, fetchTransactions, fetchAccessToken, fetchChannelListMine]);
 
   useEffect(() => {
     // $FlowFixMe
@@ -74,7 +86,7 @@ function App(props: Props) {
     if (previousHasVerifiedEmail !== undefined && hasVerifiedEmail) {
       analytics.emailVerifiedEvent();
     }
-  }, [previousHasVerifiedEmail, hasVerifiedEmail]);
+  }, [previousHasVerifiedEmail, hasVerifiedEmail, onSignedIn]);
 
   useEffect(() => {
     if (previousRewardApproved !== undefined && isRewardApproved) {
@@ -82,13 +94,16 @@ function App(props: Props) {
     }
   }, [previousRewardApproved, isRewardApproved]);
 
-  // @if TARGET='web'
+  // Keep this at the end to ensure initial setup effects are run first
   useEffect(() => {
-    if (hasVerifiedEmail && accessToken) {
-      Lbry.setApiHeader('X-Lbry-Auth-Token', accessToken);
+    if (!previousHasVerifiedEmail && hasVerifiedEmail) {
+      onSignedIn();
     }
-  }, [hasVerifiedEmail, accessToken]);
-  // @endif
+  }, [previousHasVerifiedEmail, hasVerifiedEmail, onSignedIn]);
+
+  if (!user) {
+    return null;
+  }
 
   return (
     <div className={MAIN_WRAPPER_CLASS} ref={appRef} onContextMenu={e => openContextMenu(e)}>

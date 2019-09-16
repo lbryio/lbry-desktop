@@ -1,7 +1,7 @@
 // @flow
 import * as React from 'react';
 import Button from 'component/button';
-import UserEmailResetButton from 'component/userEmailResetButton';
+import UserSignOutButton from 'component/userSignOutButton';
 
 type Props = {
   email: string,
@@ -52,18 +52,19 @@ class UserEmailVerify extends React.PureComponent<Props> {
 
     return (
       <React.Fragment>
-        <p className="card__subtitle">
-          {__('An email was sent to')} {email}.{' '}
-          {__('Follow the link and you will be good to go. This will update automatically.')}
+        <h1 className="section__title--large">{__('Confirm Your Email')}</h1>
+
+        <p className="section__subtitle">
+          {__('An email was sent to')} {email}. {__('Follow the link to sign in. This will update automatically.')}
         </p>
 
-        <div className="card__actions">
+        <div className="section__body section__actions">
           <Button
             button="primary"
             label={__('Resend Verification Email')}
             onClick={this.handleResendVerificationEmail}
           />
-          <UserEmailResetButton />
+          <UserSignOutButton label={__('Start Over')} />
         </div>
 
         <p className="help">

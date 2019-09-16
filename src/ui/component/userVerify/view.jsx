@@ -1,8 +1,10 @@
 // @flow
-import * as React from 'react';
+import * as ICONS from 'constants/icons';
+import React, { Fragment } from 'react';
 import Button from 'component/button';
 import CardVerify from 'component/cardVerify';
 import { Lbryio } from 'lbryinc';
+import Card from 'component/common/card';
 
 type Props = {
   errorMessage: ?string,
@@ -26,91 +28,87 @@ class UserVerify extends React.PureComponent<Props> {
     const { errorMessage, isPending, verifyPhone } = this.props;
     return (
       <React.Fragment>
-        <section className="card card--section">
-          <h1 className="card__title">{__('Final Human Proof')}</h1>
-          <p className="card__subtitle">
-            To start the rewards approval process, please complete <strong>one and only one</strong> of the options
-            below. This is optional, and can be skipped at the bottom of the page.
-          </p>
-        </section>
-
-        <section className="card card--section">
-          <h2 className="card__title">{__('1) Proof via Phone')}</h2>
-          <p className="card__subtitle">
-            {`${__(
-              'You will receive an SMS text message confirming that your phone number is correct. Does not work for Canada and possibly other regions'
-            )}`}
-          </p>
-
-          <div className="card__actions">
-            <Button
-              onClick={() => {
-                verifyPhone();
-              }}
-              button="inverse"
-              label={__('Submit Phone Number')}
-            />
-          </div>
-          <div className="help">
-            {__('Standard messaging rates apply. LBRY will not text or call you otherwise. Having trouble?')}{' '}
-            <Button button="link" href="https://lbry.com/faq/phone" label={__('Read more.')} />
-          </div>
-        </section>
-
-        <section className="card card--section">
-          <h2 className="card__title">{__('2) Proof via Credit')}</h2>
-          <p className="card__subtitle">
-            {`${__('If you have a valid credit or debit card, you can use it to instantly prove your humanity.')} ${__(
-              'LBRY does not store your credit card information. There is no charge at all for this, now or in the future.'
-            )} `}
-          </p>
-
-          <div className="card__actions">
-            {errorMessage && <p className="error-text">{errorMessage}</p>}
-            <CardVerify
-              label={__('Perform Card Verification')}
-              disabled={isPending}
-              token={this.onToken}
-              stripeKey={Lbryio.getStripeToken()}
-            />
-          </div>
-
-          <div className="help">
-            {__('A $1 authorization may temporarily appear with your provider.')}{' '}
-            <Button
-              button="link"
-              href="https://lbry.com/faq/identity-requirements"
-              label={__('Read more about why we do this.')}
-            />
-          </div>
-        </section>
-
-        <section className="card card--section">
-          <h2 className="card__title">{__('3) Proof via Chat')}</h2>
-          <p className="card__subtitle">
+        <section className="section--large">
+          <h1 className="section__title--large">{__('Extra Verification Needed')}</h1>
+          <p>
             {__(
-              'A moderator capable of approving you is typically available in the discord server. Check out the #rewards-approval channel for more information.'
+              "We weren't able to auto-approve you for rewards. Please complete one of the steps below to unlock them."
             )}{' '}
-            {__(
-              'This process will likely involve providing proof of a stable and established online or real-life identity.'
+            <Button navigate="/" button="link" label={__('Skip')} />.
+          </p>
+        </section>
+
+        <div className="section">
+          <Card
+            icon={ICONS.PHONE}
+            title={__('Proof via Text')}
+            subtitle={__(
+              'You will receive an SMS text message confirming that your phone number is correct. Does not work for Canada and possibly other regions'
             )}
-          </p>
+            actions={
+              <Fragment>
+                <Button
+                  onClick={() => {
+                    verifyPhone();
+                  }}
+                  button="primary"
+                  label={__('Verify Phone Number')}
+                />
+                <p className="help">
+                  {__('Standard messaging rates apply. LBRY will not text or call you otherwise. Having trouble?')}{' '}
+                  <Button button="link" href="https://lbry.com/faq/phone" label={__('Read more.')} />
+                </p>
+              </Fragment>
+            }
+          />
 
-          <div className="card__actions">
-            <Button href="https://chat.lbry.com" button="inverse" label={__('Join LBRY Chat')} />
+          <div className="section__divider">
+            <hr />
+            <p>{__('OR')}</p>
           </div>
-        </section>
 
-        <section className="card card--section">
-          <h2 className="card__title">{__('Or, Skip It Entirely')}</h2>
-          <p className="card__subtitle">
-            {__('You can continue without this step, but you will not be eligible to earn rewards.')}
-          </p>
+          <Card
+            icon={ICONS.WALLET}
+            title={__('Proof via Credit')}
+            subtitle={__(
+              'If you have a valid credit or debit card, you can use it to instantly prove your humanity. LBRY does not store your credit card information. There is no charge at all for this, now or in the future.'
+            )}
+            actions={
+              <Fragment>
+                {errorMessage && <p className="error-text">{errorMessage}</p>}
+                <CardVerify
+                  label={__('Verify Card')}
+                  disabled={isPending}
+                  token={this.onToken}
+                  stripeKey={Lbryio.getStripeToken()}
+                />
+                <p className="help">
+                  {__('A $1 authorization may temporarily appear with your provider.')}{' '}
+                  <Button button="link" href="https://lbry.com/faq/identity-requirements" label={__('Read more')} />.
+                </p>
+              </Fragment>
+            }
+          />
 
-          <div className="card__actions">
-            <Button navigate="/" button="primary" label={__('Skip Rewards')} />
+          <div className="section__divider">
+            <hr />
+            <p>{__('OR')}</p>
           </div>
-        </section>
+
+          <Card
+            icon={ICONS.CHAT}
+            title={__('Proof via Chat')}
+            subtitle={__(
+              'A moderator capable of approving you is typically available in the discord server. Check out the #rewards-approval channel for more information. This process will likely involve providing proof of a stable and established online or real-life identity.'
+            )}
+            actions={
+              <Fragment>
+                <Button href="https://chat.lbry.com" button="primary" label={__('Join LBRY Chat')} />
+                <p className="help">{__("We're friendly. We promise.")}</p>
+              </Fragment>
+            }
+          />
+        </div>
       </React.Fragment>
     );
   }

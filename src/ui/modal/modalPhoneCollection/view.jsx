@@ -6,8 +6,10 @@ import UserPhoneVerify from 'component/userPhoneVerify';
 import { Redirect } from 'react-router';
 
 const LazyUserPhoneNew = React.lazy(() =>
-  import(/* webpackChunkName: "userPhoneNew" */
-  'component/userPhoneNew')
+  import(
+    /* webpackChunkName: "userPhoneNew" */
+    'component/userPhoneNew'
+  )
 );
 
 type Props = {
