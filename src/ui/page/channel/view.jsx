@@ -17,9 +17,13 @@ import ClaimUri from 'component/claimUri';
 import * as ICONS from 'constants/icons';
 import classnames from 'classnames';
 import * as MODALS from 'constants/modal_types';
+import { Form, FormField } from 'component/common/form';
+import ClaimPreview from 'component/claimPreview';
+import Icon from 'component/common/icon';
 
 const PAGE_VIEW_QUERY = `view`;
 const ABOUT_PAGE = `about`;
+const LIGHTHOUSE_URL = 'https://lighthouse.lbry.com/search';
 
 type Props = {
   uri: string,
@@ -67,22 +71,47 @@ function ChannelPage(props: Props) {
   const [editing, setEditing] = useState(false);
   const [thumbPreview, setThumbPreview] = useState(thumbnail);
   const [coverPreview, setCoverPreview] = useState(cover);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [searchResults, setSearchResults] = useState(undefined);
 
   // If a user changes tabs, update the url so it stays on the same page if they refresh.
   // We don't want to use links here because we can't animate the tab change and using links
   // would alter the Tab label's role attribute, which should stay role="tab" to work with keyboards/screen readers.
   const tabIndex = currentView === ABOUT_PAGE || editing ? 1 : 0;
-  const onTabChange = newTabIndex => {
+  function onTabChange(newTabIndex) {
     let url = formatLbryUriForWeb(uri);
     let search = '?';
     if (newTabIndex !== 0) {
       search += `${PAGE_VIEW_QUERY}=${ABOUT_PAGE}`;
     } else {
+      setSearchResults(null);
       search += `page=${page}`;
     }
 
     history.push(`${url}${search}`);
-  };
+  }
+
+  function handleSearch() {
+    const fetchUrl = `${LIGHTHOUSE_URL}?s=${encodeURIComponent(searchQuery)}&channel=${encodeURIComponent(
+      uri.slice('lbry://'.length)
+    )}`;
+    fetch(fetchUrl)
+      .then(res => res.json())
+      .then(results => {
+        const urls = results.map(({ name, claimId }) => {
+          return `lbry://${name}#${claimId}`;
+        });
+        setSearchResults(urls);
+      })
+      .catch(() => {
+        setSearchResults(null);
+      });
+  }
+
+  function handleInputChange(e) {
+    const { value } = e.target;
+    setSearchQuery(value);
+  }
 
   let channelIsBlackListed = false;
 
@@ -96,6 +125,29 @@ function ChannelPage(props: Props) {
     <Page>
       <div className="card">
         <header className="channel-cover">
+          <div className="channel__quick-actions">
+            {!channelIsBlocked && !channelIsBlackListed && <ShareButton uri={uri} />}
+            {!channelIsMine && (
+              <Button
+                button="alt"
+                icon={ICONS.TIP}
+                label={__('Tip')}
+                title={__('Send a tip to this creator')}
+                onClick={() => openModal(MODALS.SEND_TIP, { uri, channelIsMine, isSupport: false })}
+              />
+            )}
+            {(channelIsMine || (!channelIsMine && supportOption)) && (
+              <Button
+                button="alt"
+                icon={ICONS.SUPPORT}
+                label={__('Support')}
+                title={__('Support this creator')}
+                onClick={() => openModal(MODALS.SEND_TIP, { uri, channelIsMine, isSupport: true })}
+              />
+            )}
+            {!channelIsBlocked && !channelIsBlackListed && <SubscribeButton uri={permanentUrl} />}
+            {!isSubscribed && <BlockButton uri={permanentUrl} />}
+          </div>
           {!editing && cover && (
             <img
               className={classnames('channel-cover__custom', { 'channel__image--blurred': channelIsBlocked })}
@@ -130,34 +182,25 @@ function ChannelPage(props: Props) {
           <TabList className="tabs__list--channel-page">
             <Tab disabled={editing}>{__('Content')}</Tab>
             <Tab>{editing ? __('Editing Your Channel') : __('About')}</Tab>
-            <div className="card__actions--inline">
-              {!channelIsBlocked && !channelIsBlackListed && <ShareButton uri={uri} />}
-              {!channelIsMine && (
-                <Button
-                  button="alt"
-                  icon={ICONS.TIP}
-                  label={__('Tip')}
-                  title={__('Send a tip to this creator')}
-                  onClick={() => openModal(MODALS.SEND_TIP, { uri, channelIsMine, isSupport: false })}
-                />
-              )}
-              {(channelIsMine || (!channelIsMine && supportOption)) && (
-                <Button
-                  button="alt"
-                  icon={ICONS.SUPPORT}
-                  label={__('Support')}
-                  title={__('Support this creator')}
-                  onClick={() => openModal(MODALS.SEND_TIP, { uri, channelIsMine, isSupport: true })}
-                />
-              )}
-              {!channelIsBlocked && !channelIsBlackListed && <SubscribeButton uri={permanentUrl} />}
-              {!isSubscribed && <BlockButton uri={permanentUrl} />}
-            </div>
+            <Form onSubmit={handleSearch} className="wunderbar--channel">
+              <Icon icon={ICONS.SEARCH} />
+              <FormField
+                className="wunderbar__input"
+                value={searchQuery}
+                onChange={handleInputChange}
+                type="text"
+                placeholder={__('Search')}
+              />
+            </Form>
           </TabList>
 
           <TabPanels>
             <TabPanel>
-              <ChannelContent uri={uri} channelIsBlackListed={channelIsBlackListed} />
+              {searchResults ? (
+                searchResults.map(url => <ClaimPreview key={url} uri={url} />)
+              ) : (
+                <ChannelContent uri={uri} channelIsBlackListed={channelIsBlackListed} />
+              )}
             </TabPanel>
             <TabPanel>
               {editing ? (

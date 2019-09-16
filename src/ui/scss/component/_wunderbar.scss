@@ -20,7 +20,15 @@
     height: 100%;
     position: absolute;
     z-index: 1;
+    stroke: $lbry-gray-5;
   }
+}
+
+.wunderbar--channel {
+  @extend .wunderbar;
+  flex: 0;
+  margin-right: 0;
+  color: $lbry-black;
 }
 
 .wunderbar__active-suggestion {
