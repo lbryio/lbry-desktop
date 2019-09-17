@@ -83,13 +83,13 @@ function App(props: Props) {
   useEffect(() => {
     // Check that previousHasVerifiedEmail was not undefined instead of just not truthy
     // This ensures we don't fire the emailVerified event on the initial user fetch
-    if (previousHasVerifiedEmail !== undefined && hasVerifiedEmail) {
+    if (previousHasVerifiedEmail === false && hasVerifiedEmail) {
       analytics.emailVerifiedEvent();
     }
   }, [previousHasVerifiedEmail, hasVerifiedEmail, onSignedIn]);
 
   useEffect(() => {
-    if (previousRewardApproved !== undefined && isRewardApproved) {
+    if (previousRewardApproved === false && isRewardApproved) {
       analytics.rewardEligibleEvent();
     }
   }, [previousRewardApproved, isRewardApproved]);
