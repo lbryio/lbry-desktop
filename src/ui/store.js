@@ -113,9 +113,10 @@ store.subscribe(() => {
   const state = store.getState();
   const subscriptions = state.subscriptions.subscriptions.map(({ uri }) => uri);
   const tags = state.tags.followedTags;
+  const authToken = state.user.accessToken;
 
   const newPayload = {
-    version: '0',
+    version: '0.1',
     shared: {
       subscriptions,
       tags,
@@ -124,7 +125,9 @@ store.subscribe(() => {
 
   if (!isEqual(newPayload, currentPayload)) {
     currentPayload = newPayload;
-    Lbryio.call('user_settings', 'set', { settings: newPayload });
+    if (authToken) {
+      Lbryio.call('user_settings', 'set', { settings: newPayload });
+    }
   }
 });
 

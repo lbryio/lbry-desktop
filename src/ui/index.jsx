@@ -79,16 +79,16 @@ Lbryio.setOverride(
 
         authToken = response.auth_token;
 
-        // @if TARGET='web'
         let date = new Date();
         date.setFullYear(date.getFullYear() + 1);
         document.cookie = cookie.serialize('auth_token', authToken, {
           expires: date,
         });
-        // @endif
+
         // @if TARGET='app'
         ipcRenderer.send('set-auth-token', authToken);
         // @endif
+
         resolve(authToken);
       });
     })
