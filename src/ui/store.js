@@ -66,13 +66,13 @@ const whiteListedReducers = [
 const transforms = [
   // @if TARGET='app'
   walletFilter,
-  contentFilter,
   fileInfoFilter,
   blockedFilter,
   // @endif
   appFilter,
   searchFilter,
   tagsFilter,
+  contentFilter,
   createCompressor(),
 ];
 
