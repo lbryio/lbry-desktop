@@ -45,6 +45,7 @@ export default function FileViewer(props: Props) {
     floatingPlayerEnabled,
     triggerAnalyticsView,
     claimRewards,
+    mediaType,
   } = props;
   const [playTime, setPlayTime] = useState();
   const [fileViewerRect, setFileViewerRect] = usePersistedState('inline-file-viewer:rect');
@@ -112,7 +113,9 @@ export default function FileViewer(props: Props) {
     });
   }
 
-  const hidePlayer = !isPlaying || !uri || (!inline && (!floatingPlayerEnabled || !isStreamable));
+  const hidePlayer =
+    !isPlaying || !uri || (!inline && (!floatingPlayerEnabled || (mediaType !== 'video' || mediaType !== 'audio')));
+
   if (hidePlayer) {
     return null;
   }
