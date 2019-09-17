@@ -61,6 +61,7 @@ const whiteListedReducers = [
   'search',
   'tags',
   'blocked',
+  'settings',
 ];
 
 const transforms = [

@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import * as settings from 'constants/settings';
+import * as SETTINGS from 'constants/settings';
 import { doClearCache, doNotifyEncryptWallet, doNotifyDecryptWallet } from 'redux/actions/app';
 import {
   doSetDaemonSetting,
@@ -20,23 +20,23 @@ import SettingsPage from './view';
 
 const select = state => ({
   daemonSettings: selectDaemonSettings(state),
-  showNsfw: makeSelectClientSetting(settings.SHOW_NSFW)(state),
-  instantPurchaseEnabled: makeSelectClientSetting(settings.INSTANT_PURCHASE_ENABLED)(state),
-  instantPurchaseMax: makeSelectClientSetting(settings.INSTANT_PURCHASE_MAX)(state),
-  currentTheme: makeSelectClientSetting(settings.THEME)(state),
-  themes: makeSelectClientSetting(settings.THEMES)(state),
-  currentLanguage: makeSelectClientSetting(settings.LANGUAGE)(state),
+  showNsfw: makeSelectClientSetting(SETTINGS.SHOW_MATURE)(state),
+  instantPurchaseEnabled: makeSelectClientSetting(SETTINGS.INSTANT_PURCHASE_ENABLED)(state),
+  instantPurchaseMax: makeSelectClientSetting(SETTINGS.INSTANT_PURCHASE_MAX)(state),
+  currentTheme: makeSelectClientSetting(SETTINGS.THEME)(state),
+  themes: makeSelectClientSetting(SETTINGS.THEMES)(state),
+  currentLanguage: makeSelectClientSetting(SETTINGS.LANGUAGE)(state),
   languages: selectLanguages(state),
-  automaticDarkModeEnabled: makeSelectClientSetting(settings.AUTOMATIC_DARK_MODE_ENABLED)(state),
-  autoplay: makeSelectClientSetting(settings.AUTOPLAY)(state),
+  automaticDarkModeEnabled: makeSelectClientSetting(SETTINGS.AUTOMATIC_DARK_MODE_ENABLED)(state),
+  autoplay: makeSelectClientSetting(SETTINGS.AUTOPLAY)(state),
   walletEncrypted: selectWalletIsEncrypted(state),
   osNotificationsEnabled: selectosNotificationsEnabled(state),
-  autoDownload: makeSelectClientSetting(settings.AUTO_DOWNLOAD)(state),
-  supportOption: makeSelectClientSetting(settings.SUPPORT_OPTION)(state),
+  autoDownload: makeSelectClientSetting(SETTINGS.AUTO_DOWNLOAD)(state),
+  supportOption: makeSelectClientSetting(SETTINGS.SUPPORT_OPTION)(state),
   userBlockedChannelsCount: selectBlockedChannelsCount(state),
-  hideBalance: makeSelectClientSetting(settings.HIDE_BALANCE)(state),
-  floatingPlayer: makeSelectClientSetting(settings.FLOATING_PLAYER)(state),
-  darkModeTimes: makeSelectClientSetting(settings.DARK_MODE_TIMES)(state),
+  hideBalance: makeSelectClientSetting(SETTINGS.HIDE_BALANCE)(state),
+  floatingPlayer: makeSelectClientSetting(SETTINGS.FLOATING_PLAYER)(state),
+  darkModeTimes: makeSelectClientSetting(SETTINGS.DARK_MODE_TIMES)(state),
 });
 
 const perform = dispatch => ({
