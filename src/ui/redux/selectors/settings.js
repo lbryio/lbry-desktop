@@ -20,7 +20,7 @@ export const makeSelectClientSetting = setting =>
   );
 
 // refactor me
-export const selectShowMatureContent = makeSelectClientSetting(SETTINGS.SHOW_NSFW);
+export const selectShowMatureContent = makeSelectClientSetting(SETTINGS.SHOW_MATURE);
 
 export const selectLanguages = createSelector(
   selectState,

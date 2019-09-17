@@ -144,7 +144,7 @@ export function doSetDarkTime(value, options) {
   const { fromTo, time } = options;
   return (dispatch, getState) => {
     const state = getState();
-    const { darkModeTimes } = state.settings.clientSettings;
+    const darkModeTimes = state.settings.clientSettings[SETTINGS.DARK_MODE_TIMES];
     const { hour, min } = darkModeTimes[fromTo];
     const newHour = time === 'hour' ? value : hour;
     const newMin = time === 'min' ? value : min;

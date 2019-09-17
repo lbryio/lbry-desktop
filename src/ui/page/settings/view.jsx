@@ -368,7 +368,7 @@ class SettingsPage extends React.PureComponent<Props, State> {
               <FormField
                 type="checkbox"
                 name="show_nsfw"
-                onChange={() => setClientSetting(SETTINGS.SHOW_NSFW, !showNsfw)}
+                onChange={() => setClientSetting(SETTINGS.SHOW_MATURE, !showNsfw)}
                 checked={showNsfw}
                 label={__('Show mature content')}
                 helper={__(

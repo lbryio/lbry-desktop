@@ -15,7 +15,7 @@ const select = state => ({
   claimSearchByQuery: selectClaimSearchByQuery(state),
   loading: selectFetchingClaimSearch(state),
   subscribedChannels: selectSubscriptions(state),
-  showNsfw: makeSelectClientSetting(SETTINGS.SHOW_NSFW)(state),
+  showNsfw: makeSelectClientSetting(SETTINGS.SHOW_MATURE)(state),
   hiddenUris: selectBlockedChannels(state),
 });
 

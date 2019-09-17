@@ -3,44 +3,43 @@ import LANGUAGES from 'constants/languages';
 import * as SETTINGS from 'constants/settings';
 import moment from 'moment';
 
-function getLocalStorageSetting(setting, fallback) {
-  const localStorageVal = localStorage.getItem(`setting_${setting}`);
-  return localStorageVal === null ? fallback : JSON.parse(localStorageVal);
-}
-
 const reducers = {};
 const defaultState = {
-  clientSettings: {
-    [SETTINGS.INSTANT_PURCHASE_ENABLED]: getLocalStorageSetting(SETTINGS.INSTANT_PURCHASE_ENABLED, false),
-    [SETTINGS.INSTANT_PURCHASE_MAX]: getLocalStorageSetting(SETTINGS.INSTANT_PURCHASE_MAX, {
-      currency: 'LBC',
-      amount: 0.1,
-    }),
-    [SETTINGS.SHOW_NSFW]: getLocalStorageSetting(SETTINGS.SHOW_NSFW, false),
-    [SETTINGS.SHOW_UNAVAILABLE]: getLocalStorageSetting(SETTINGS.SHOW_UNAVAILABLE, true),
-    [SETTINGS.NEW_USER_ACKNOWLEDGED]: getLocalStorageSetting(SETTINGS.NEW_USER_ACKNOWLEDGED, false),
-    [SETTINGS.EMAIL_COLLECTION_ACKNOWLEDGED]: getLocalStorageSetting(SETTINGS.EMAIL_COLLECTION_ACKNOWLEDGED, false),
-    [SETTINGS.CREDIT_REQUIRED_ACKNOWLEDGED]: false, // this needs to be re-acknowledged every run
-    [SETTINGS.LANGUAGE]: getLocalStorageSetting(SETTINGS.LANGUAGE, 'en'),
-    [SETTINGS.THEME]: getLocalStorageSetting(SETTINGS.THEME, 'light'),
-    [SETTINGS.THEMES]: getLocalStorageSetting(SETTINGS.THEMES, []),
-    [SETTINGS.AUTOMATIC_DARK_MODE_ENABLED]: getLocalStorageSetting(SETTINGS.AUTOMATIC_DARK_MODE_ENABLED, false),
-    [SETTINGS.SUPPORT_OPTION]: getLocalStorageSetting(SETTINGS.SUPPORT_OPTION, false),
-    [SETTINGS.AUTOPLAY]: getLocalStorageSetting(SETTINGS.AUTOPLAY, true),
-    [SETTINGS.RESULT_COUNT]: Number(getLocalStorageSetting(SETTINGS.RESULT_COUNT, 50)),
-    [SETTINGS.AUTO_DOWNLOAD]: getLocalStorageSetting(SETTINGS.AUTO_DOWNLOAD, true),
-    [SETTINGS.OS_NOTIFICATIONS_ENABLED]: Boolean(getLocalStorageSetting(SETTINGS.OS_NOTIFICATIONS_ENABLED, true)),
-    [SETTINGS.HIDE_BALANCE]: Boolean(getLocalStorageSetting(SETTINGS.HIDE_BALANCE, false)),
-    [SETTINGS.HIDE_SPLASH_ANIMATION]: Boolean(getLocalStorageSetting(SETTINGS.HIDE_SPLASH_ANIMATION, false)),
-    [SETTINGS.FLOATING_PLAYER]: Boolean(getLocalStorageSetting(SETTINGS.FLOATING_PLAYER, true)),
-    [SETTINGS.DARK_MODE_TIMES]: getLocalStorageSetting(SETTINGS.DARK_MODE_TIMES, {
-      from: { hour: '21', min: '00', formattedTime: '21:00' },
-      to: { hour: '8', min: '00', formattedTime: '8:00' },
-    }),
-  },
   isNight: false,
   languages: { en: 'English', pl: 'Polish', id: 'Bahasa Indonesia', de: 'German' }, // temporarily hard code these so we can advance i18n testing
   daemonSettings: {},
+  clientSettings: {
+    // UX
+    [SETTINGS.NEW_USER_ACKNOWLEDGED]: false,
+    [SETTINGS.EMAIL_COLLECTION_ACKNOWLEDGED]: false,
+
+    // UI
+    [SETTINGS.LANGUAGE]: 'en',
+    [SETTINGS.THEME]: 'light',
+    [SETTINGS.THEMES]: [],
+    [SETTINGS.SUPPORT_OPTION]: false,
+    [SETTINGS.HIDE_SPLASH_ANIMATION]: false,
+    [SETTINGS.HIDE_BALANCE]: false,
+    [SETTINGS.OS_NOTIFICATIONS_ENABLED]: true,
+    [SETTINGS.AUTOMATIC_DARK_MODE_ENABLED]: false,
+    [SETTINGS.DARK_MODE_TIMES]: {
+      from: { hour: '21', min: '00', formattedTime: '21:00' },
+      to: { hour: '8', min: '00', formattedTime: '8:00' },
+    },
+
+    // Purchasing
+    [SETTINGS.INSTANT_PURCHASE_ENABLED]: false,
+    [SETTINGS.INSTANT_PURCHASE_MAX]: {
+      currency: 'LBC',
+      amount: 0.1,
+    },
+
+    // Content
+    [SETTINGS.SHOW_MATURE]: false,
+    [SETTINGS.AUTOPLAY]: true,
+    [SETTINGS.FLOATING_PLAYER]: true,
+    [SETTINGS.AUTO_DOWNLOAD]: true,
+  },
 };
 
 reducers[ACTIONS.DAEMON_SETTINGS_RECEIVED] = (state, action) =>
@@ -65,7 +64,7 @@ reducers[ACTIONS.CLIENT_SETTING_CHANGED] = (state, action) => {
 };
 
 reducers[ACTIONS.UPDATE_IS_NIGHT] = state => {
-  const { from, to } = state.clientSettings.darkModeTimes;
+  const { from, to } = state.clientSettings[SETTINGS.DARK_MODE_TIMES];
   const momentNow = moment();
   const startNightMoment = moment(from.formattedTime, 'HH:mm');
   const endNightMoment = moment(to.formattedTime, 'HH:mm');
