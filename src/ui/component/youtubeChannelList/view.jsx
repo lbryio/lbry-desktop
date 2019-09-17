@@ -2,22 +2,25 @@
 import * as React from 'react';
 import YoutubeChannelListItem from './internal/youtubeChannel';
 import Button from 'component/button';
+import Spinner from 'component/spinner';
 
 type Props = {
   ytChannels: Array<any>,
+  ytImportPending: boolean,
+  userFetchPending: boolean,
   claimChannels: () => void,
   updateUser: () => void,
 };
 
 export default function YoutubeChannelList(props: Props) {
-  const { ytChannels, claimChannels, updateUser } = props;
+  const { ytChannels, ytImportPending, userFetchPending, claimChannels, updateUser } = props;
   const hasChannels = ytChannels && ytChannels.length;
   const transferEnabled = ytChannels && ytChannels.some(el => el.transferable === true);
   return (
     hasChannels && (
       <section className="card card--section">
         <h2 className="card__title--between">
-          <span>Synced Youtube Channels</span>
+          <span>Synced Youtube Channels{userFetchPending && <Spinner type="small" />}</span>
           <div className="card__actions--inline">
             <Button button="inverse" onClick={updateUser} label={__('Refresh')} />
           </div>
@@ -53,7 +56,12 @@ export default function YoutubeChannelList(props: Props) {
           </tbody>
         </table>
         <div className="card__actions">
-          <Button disabled={IS_WEB} button="primary" onClick={claimChannels} label={__('Claim Channels')} />
+          <Button
+            disabled={IS_WEB || !transferEnabled || ytImportPending}
+            button="primary"
+            onClick={claimChannels}
+            label={__('Claim Channels')}
+          />
           <Button button="link" label={__('Learn more')} href="https://lbry.com/faq/youtube#transfer" />
         </div>
       </section>
