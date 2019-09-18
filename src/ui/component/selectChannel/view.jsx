@@ -8,7 +8,7 @@ import { CHANNEL_NEW, CHANNEL_ANONYMOUS } from 'constants/claim';
 
 type Props = {
   channel: string, // currently selected channel
-  channels: Array<{ name: string }>,
+  channels: ?Array<{ name: string }>,
   balance: number,
   onChannelChange: string => void,
   createChannel: (string, number) => Promise<any>,
@@ -48,7 +48,7 @@ class ChannelSection extends React.PureComponent<Props, State> {
 
   componentDidMount() {
     const { channels, fetchChannelListMine, fetchingChannels } = this.props;
-    if (!channels.length && !fetchingChannels) {
+    if (!channels || (!channels.length && !fetchingChannels)) {
       fetchChannelListMine();
     }
   }
@@ -165,11 +165,12 @@ class ChannelSection extends React.PureComponent<Props, State> {
               value={channel}
             >
               <option value={CHANNEL_ANONYMOUS}>{__('Anonymous')}</option>
-              {channels.map(({ name }) => (
-                <option key={name} value={name}>
-                  {name}
-                </option>
-              ))}
+              {channels &&
+                channels.map(({ name }) => (
+                  <option key={name} value={name}>
+                    {name}
+                  </option>
+                ))}
               <option value={CHANNEL_NEW}>{__('New channel...')}</option>
             </FormField>
           </fieldset-section>
