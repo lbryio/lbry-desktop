@@ -1,3 +1,4 @@
+// @flow
 import React from 'react';
 import classnames from 'classnames';
 import RewardSummary from 'component/rewardSummary';
@@ -8,24 +9,32 @@ import UserEmail from 'component/userEmail';
 import InvitePage from 'page/invite';
 import YoutubeChannelList from 'component/youtubeChannelList';
 
-const AccountPage = () => (
-  <Page>
-    {/* @if TARGET='web' */}
-    <UserEmail />
-    {/* @endif */}
-    <UnsupportedOnWeb />
-    <div className={classnames({ 'card--disabled': IS_WEB })}>
-      <div className="columns">
-        <UserEmail />
-        <div>
-          <RewardSummary />
-          <RewardTotal />
+type Props = {
+  ytChannels: Array<any>,
+};
+
+const AccountPage = (props: Props) => {
+  const { ytChannels } = props;
+  const hasYoutubeChannels = Boolean(ytChannels.length);
+  return (
+    <Page>
+      {/* @if TARGET='web' */}
+      <UserEmail />
+      {/* @endif */}
+      <UnsupportedOnWeb />
+      <div className={classnames({ 'card--disabled': IS_WEB })}>
+        <div className="columns">
+          <UserEmail />
+          <div>
+            <RewardSummary />
+            <RewardTotal />
+          </div>
         </div>
+        {hasYoutubeChannels && <YoutubeChannelList />}
+        <InvitePage />
       </div>
-      <YoutubeChannelList />
-      <InvitePage />
-    </div>
-  </Page>
-);
+    </Page>
+  );
+};
 
 export default AccountPage;
