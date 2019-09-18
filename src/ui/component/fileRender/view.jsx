@@ -6,6 +6,8 @@ import VideoViewer from 'component/viewers/videoViewer';
 import ImageViewer from 'component/viewers/imageViewer';
 import AppViewer from 'component/viewers/appViewer';
 import Button from 'component/button';
+import { withRouter } from 'react-router-dom';
+import { formatLbryUriForWeb } from 'util/uri';
 // @if TARGET='web'
 import { generateStreamUrl } from 'util/lbrytv';
 // @endif
@@ -67,6 +69,10 @@ type Props = {
   currentTheme: string,
   downloadPath: string,
   fileName: string,
+  autoplay: boolean,
+  nextFileToPlay: string,
+  nextUnplayed: string,
+  history: { push: string => void },
 };
 
 class FileRender extends React.PureComponent<Props> {
@@ -74,6 +80,7 @@ class FileRender extends React.PureComponent<Props> {
     super(props);
 
     (this: any).escapeListener = this.escapeListener.bind(this);
+    (this: any).onEndedCb = this.onEndedCb.bind(this);
   }
 
   componentDidMount() {
@@ -98,6 +105,13 @@ class FileRender extends React.PureComponent<Props> {
     remote.getCurrentWindow().setFullScreen(false);
   }
 
+  onEndedCb() {
+    const { autoplay, nextUnplayed, history } = this.props;
+    if (autoplay && nextUnplayed) {
+      history.push(formatLbryUriForWeb(nextUnplayed));
+    }
+  }
+
   renderViewer() {
     const { mediaType, currentTheme, claim, contentType, downloadPath, fileName, streamingUrl, uri } = this.props;
     const fileType = fileName && path.extname(fileName).substring(1);
@@ -117,8 +131,8 @@ class FileRender extends React.PureComponent<Props> {
       application: <AppViewer uri={uri} />,
       // @endif
 
-      video: <VideoViewer uri={uri} source={source} contentType={contentType} />,
-      audio: <VideoViewer uri={uri} source={source} contentType={contentType} />,
+      video: <VideoViewer uri={uri} source={source} contentType={contentType} onEndedCB={this.onEndedCb} />,
+      audio: <VideoViewer uri={uri} source={source} contentType={contentType} onEndedCB={this.onEndedCb} />,
       image: <ImageViewer uri={uri} source={source} />,
       // Add routes to viewer...
     };
@@ -201,4 +215,4 @@ class FileRender extends React.PureComponent<Props> {
   }
 }
 
-export default FileRender;
+export default withRouter(FileRender);
