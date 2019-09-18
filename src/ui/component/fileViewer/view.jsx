@@ -65,6 +65,10 @@ export default function FileViewer(props: Props) {
   const previousIsReadyToPlay = usePrevious(isReadyToPlay);
   const isNewView = uri && previousUri !== uri && isPlaying;
   const wasntReadyButNowItIs = isReadyToPlay && !previousIsReadyToPlay;
+  const logViewAndClaimRewards = async (uri, timeToStart) => {
+    await triggerAnalyticsView(uri, timeToStart);
+    await claimRewards();
+  };
 
   useEffect(() => {
     if (isNewView) {
@@ -75,12 +79,10 @@ export default function FileViewer(props: Props) {
   useEffect(() => {
     if (playTime && isReadyToPlay && wasntReadyButNowItIs) {
       const timeToStart = Date.now() - playTime;
-      triggerAnalyticsView(uri, timeToStart);
-      claimRewards();
+      logViewAndClaimRewards(uri, timeToStart);
       setPlayTime(null);
     }
-  }, [setPlayTime, triggerAnalyticsView, isReadyToPlay, wasntReadyButNowItIs, playTime, uri, claimRewards]);
-
+  }, [setPlayTime, isReadyToPlay, wasntReadyButNowItIs, playTime, uri, logViewAndClaimRewards]);
   useEffect(() => {
     function handleResize() {
       const element = document.querySelector(`.${FILE_WRAPPER_CLASS}`);
