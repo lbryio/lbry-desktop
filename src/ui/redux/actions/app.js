@@ -430,6 +430,6 @@ export function doAnalyticsView(uri, timeToStart) {
       return;
     }
 
-    analytics.apiLogView(uri, outpoint, claimId, timeToStart);
+    return analytics.apiLogView(uri, outpoint, claimId, timeToStart);
   };
 }

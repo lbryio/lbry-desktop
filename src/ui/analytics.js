@@ -14,7 +14,7 @@ type Analytics = {
   pageView: string => void,
   setUser: Object => void,
   toggle: (boolean, ?boolean) => void,
-  apiLogView: (string, string, string, ?number, ?() => void) => void,
+  apiLogView: (string, string, string, ?number, ?() => void) => Promise<any>,
   apiLogPublish: () => void,
   tagFollowEvent: (string, boolean, string) => void,
   emailProvidedEvent: () => void,
@@ -49,25 +49,29 @@ const analytics: Analytics = {
     // @endif
   },
   apiLogView: (uri, outpoint, claimId, timeToStart) => {
-    if (analyticsEnabled && (isProduction || devInternalApis)) {
-      const params: {
-        uri: string,
-        outpoint: string,
-        claim_id: string,
-        time_to_start?: number,
-      } = {
-        uri,
-        outpoint,
-        claim_id: claimId,
-      };
+    return new Promise((resolve, reject) => {
+      if (analyticsEnabled && (isProduction || devInternalApis)) {
+        const params: {
+          uri: string,
+          outpoint: string,
+          claim_id: string,
+          time_to_start?: number,
+        } = {
+          uri,
+          outpoint,
+          claim_id: claimId,
+        };
 
-      // lbry.tv streams from AWS so we don't care about the time to start
-      if (timeToStart && !IS_WEB) {
-        params.time_to_start = timeToStart;
+        // lbry.tv streams from AWS so we don't care about the time to start
+        if (timeToStart && !IS_WEB) {
+          params.time_to_start = timeToStart;
+        }
+
+        resolve(Lbryio.call('file', 'view', params));
+      } else {
+        resolve();
       }
-
-      Lbryio.call('file', 'view', params);
-    }
+    });
   },
   apiLogSearch: () => {
     if (analyticsEnabled && isProduction) {

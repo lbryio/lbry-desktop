@@ -28,7 +28,7 @@ type Props = {
   title: ?string,
   floatingPlayerEnabled: boolean,
   clearPlayingUri: () => void,
-  triggerAnalyticsView: (string, number) => void,
+  triggerAnalyticsView: (string, number) => Promise<any>,
   claimRewards: () => void,
 };
 
@@ -74,10 +74,11 @@ export default function FileViewer(props: Props) {
   useEffect(() => {
     if (playTime && isReadyToPlay && !hasRecordedView) {
       const timeToStart = Date.now() - playTime;
-      triggerAnalyticsView(uri, timeToStart);
-      claimRewards();
-      setPlayTime(null);
-      setHasRecordedView(false);
+      triggerAnalyticsView(uri, timeToStart).then(() => {
+        claimRewards();
+        setHasRecordedView(false);
+        setPlayTime(null);
+      });
     }
   }, [setPlayTime, triggerAnalyticsView, isReadyToPlay, hasRecordedView, playTime, uri, claimRewards]);
 
