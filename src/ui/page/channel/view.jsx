@@ -63,6 +63,7 @@ function ChannelPage(props: Props) {
     openModal,
     supportOption,
   } = props;
+
   const { channelName } = parseURI(uri);
   const { search } = location;
   const urlParams = new URLSearchParams(search);
@@ -93,7 +94,7 @@ function ChannelPage(props: Props) {
 
   function handleSearch() {
     const fetchUrl = `${LIGHTHOUSE_URL}?s=${encodeURIComponent(searchQuery)}&channel=${encodeURIComponent(
-      uri.slice('lbry://'.length)
+      claim.permanent_url.slice('lbry://'.length)
     )}`;
     fetch(fetchUrl)
       .then(res => res.json())
