@@ -115,7 +115,7 @@ export default function FileViewer(props: Props) {
   }
 
   const hidePlayer =
-    !isPlaying || !uri || (!inline && (!floatingPlayerEnabled || ['audio', 'video'].indexOf(mediaType) === -1));
+    !isPlaying || !uri || (!inline && (!floatingPlayerEnabled || ['audio', 'video'].includes(mediaType)));
 
   if (hidePlayer) {
     return null;
