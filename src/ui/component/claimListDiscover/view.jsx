@@ -148,14 +148,18 @@ function ClaimListDiscover(props: Props) {
     if (newTypeSort === TYPE_TOP) {
       url += `&time=${timeSort}`;
     }
+
+    setPage(1);
     history.push(url);
   }
 
   function handlePersonalSort(newPersonalSort) {
+    setPage(1);
     history.push(`${getSearch()}type=${typeSort}&sort=${newPersonalSort}`);
   }
 
   function handleTimeSort(newTimeSort) {
+    setPage(1);
     history.push(`${getSearch()}type=${typeSort}&sort=${personalSort}&time=${newTimeSort}`);
   }
 
