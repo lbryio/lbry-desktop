@@ -11,6 +11,7 @@ import UnsupportedOnWeb from 'component/common/unsupported-on-web';
 
 type Props = {
   doAuth: () => void,
+  fetchRewards: () => void,
   fetching: boolean,
   rewards: Array<Reward>,
   claimed: Array<Reward>,
@@ -26,6 +27,10 @@ type Props = {
 };
 
 class RewardsPage extends PureComponent<Props> {
+  componentDidMount() {
+    this.props.fetchRewards();
+  }
+
   renderPageHeader() {
     const { user, daemonSettings } = this.props;
 

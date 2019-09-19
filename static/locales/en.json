@@ -701,5 +701,6 @@
   "Max Connections": "Max Connections",
   "For users with good bandwidth, try a higher value to improve streaming and download speeds. Low bandwidth users may benefit from a lower setting. Default is 4.": "For users with good bandwidth, try a higher value to improve streaming and download speeds. Low bandwidth users may benefit from a lower setting. Default is 4.",
   "This will clear the application cache. Your wallet will not be affected. Currently, followed tags and blocked channels will be cleared.": "This will clear the application cache. Your wallet will not be affected. Currently, followed tags and blocked channels will be cleared.",
-  "Show All": "Show All"
+  "Show All": "Show All",
+  "Get ??? LBC": "Get ??? LBC"
 }
