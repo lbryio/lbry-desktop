@@ -26,11 +26,11 @@ class SocialShare extends React.PureComponent<Props> {
 
   render() {
     const { claim } = this.props;
-    const { canonical_url: canonicalUrl } = claim;
+    const { canonical_url: canonicalUrl, permanent_url: permanentUrl } = claim;
     const { speechShareable, onDone } = this.props;
     const lbryTvPrefix = 'https://beta.lbry.tv/';
     const lbryPrefix = 'https://open.lbry.com/';
-    const lbryUri = canonicalUrl.split('lbry://')[1];
+    const lbryUri = canonicalUrl ? canonicalUrl.split('lbry://')[1] : permanentUrl.split('lbry://')[1];
     const lbryWebUrl = lbryUri.replace(/#/g, ':');
     const encodedLbryURL: string = `${lbryPrefix}${encodeURIComponent(lbryWebUrl)}`;
     const lbryURL: string = `${lbryPrefix}${lbryWebUrl}`;

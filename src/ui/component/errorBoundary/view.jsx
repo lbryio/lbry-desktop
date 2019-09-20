@@ -83,7 +83,7 @@ class ErrorBoundary extends React.Component<Props, State> {
                     label={__('refreshing the app')}
                     onClick={this.refresh}
                   />{' '}
-                  {__('to fix it')}.
+                  {__("to fix it. If that doesn't work, press CMD/CTRL-R to reset to the homepage.")}.
                 </p>
               </Fragment>
             }
