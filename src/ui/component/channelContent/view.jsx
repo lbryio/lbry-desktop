@@ -67,7 +67,7 @@ function ChannelContent(props: Props) {
       {!channelIsMine && <HiddenNsfwClaims className="card__subtitle" uri={uri} />}
 
       {hasContent && !channelIsBlocked && !channelIsBlackListed && (
-        <ClaimList header={false} uris={claimsInChannel.map(claim => claim.canonical_url)} />
+        <ClaimList header={false} uris={claimsInChannel.map(claim => claim && claim.canonical_url)} />
       )}
       {!channelIsBlocked && !channelIsBlackListed && (
         <Paginate
