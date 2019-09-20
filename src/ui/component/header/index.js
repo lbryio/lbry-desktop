@@ -22,7 +22,7 @@ const select = state => ({
 
 const perform = dispatch => ({
   setClientSetting: (key, value) => dispatch(doSetClientSetting(key, value)),
-  doDownloadUpgradeRequested,
+  doDownloadUpgradeRequested: () => dispatch(doDownloadUpgradeRequested()),
 });
 
 export default connect(
