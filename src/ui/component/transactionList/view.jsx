@@ -29,13 +29,13 @@ function TransactionList(props: Props) {
   const PAGE_QUERY = `page`;
   const { search } = location;
   const urlParams = new URLSearchParams(search);
-  const currentPage = urlParams.get(PAGE_QUERY) || 0;
+  const currentPage = urlParams.get(PAGE_QUERY) || 1;
 
   const PAGE_SIZE = 10;
 
   const paginateTransactions = (pageSize, arr, page) => {
-    const start = Number(page) * Number(pageSize);
-    const end = (Number(page) + 1) * Number(pageSize);
+    const start = (Number(page) - 1) * Number(pageSize);
+    const end = Number(page) * Number(pageSize);
     return arr && arr.length ? arr.slice(start, end) : [];
   };
 
@@ -55,7 +55,7 @@ function TransactionList(props: Props) {
       }
       setTransactionList(txList);
     }
-  }, [loading, currentPage, paginateTransactions, setTransactionList, setNumTransactions]);
+  }, [loading, currentPage, filterSetting]);
 
   // Flow offers little support for Object.values() typing.
   // https://github.com/facebook/flow/issues/2221
@@ -68,7 +68,7 @@ function TransactionList(props: Props) {
 
   function handleFilterChanged(event: SyntheticInputEvent<*>) {
     props.setTransactionFilter(event.target.value);
-    history.replace(`#/$/transactions?page=0`);
+    history.replace(`#/$/transactions`); //
   }
 
   function filterTransaction(transaction: Transaction) {
@@ -134,9 +134,8 @@ function TransactionList(props: Props) {
       {!!transactionList && !!transactionList.length && <TransactionListTable transactionList={transactionList} />}
       {!slim && (
         <Paginate
-          onPageChange={page => history.replace(`#/$/transactions?page=${Number(page) - 1}`)}
-          totalPages={Math.floor(numTransactions / PAGE_SIZE)}
-          loading={loading}
+          onPageChange={page => history.replace(`#/$/transactions?page=${Number(page)}`)}
+          totalPages={Math.ceil(numTransactions / PAGE_SIZE)}
         />
       )}
     </React.Fragment>
