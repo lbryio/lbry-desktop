@@ -536,55 +536,55 @@ class SettingsPage extends React.PureComponent<Props, State> {
                 />
               </Form>
             </section>
+            {/* @endif */}
             <section className="card card--section">
               <h2 className="card__title">{__('Experimental Settings')}</h2>
 
-              <Form>
-                <FormField
-                  type="checkbox"
-                  name="support_option"
-                  onChange={() => setClientSetting(SETTINGS.SUPPORT_OPTION, !supportOption)}
-                  checked={supportOption}
-                  label={__('Enable claim support')}
-                  helper={
-                    <React.Fragment>
-                      {__('This will add a Support button along side tipping. Similar to tips, supports help ')}
-                      <Button button="link" label={__(' discovery ')} href="https://lbry.com/faq/trending" />
-                      {__(' but the LBC is returned to your wallet if revoked.')}
-                      {__(' Both also help secure ')}
-                      <Button button="link" label={__('vanity names')} href="https://lbry.com/faq/naming" />.
-                    </React.Fragment>
-                  }
-                />
+              <FormField
+                type="checkbox"
+                name="support_option"
+                onChange={() => setClientSetting(SETTINGS.SUPPORT_OPTION, !supportOption)}
+                checked={supportOption}
+                label={__('Enable claim support')}
+                helper={
+                  <React.Fragment>
+                    {__('This will add a Support button along side tipping. Similar to tips, supports help ')}
+                    <Button button="link" label={__(' discovery ')} href="https://lbry.com/faq/trending" />
+                    {__(' but the LBC is returned to your wallet if revoked.')}
+                    {__(' Both also help secure ')}
+                    <Button button="link" label={__('vanity names')} href="https://lbry.com/faq/naming" />.
+                  </React.Fragment>
+                }
+              />
+              {/* @if TARGET='app' */}
 
-                <FormField
-                  type="checkbox"
-                  name="auto_download"
-                  onChange={() => setClientSetting(SETTINGS.AUTO_DOWNLOAD, !autoDownload)}
-                  checked={autoDownload}
-                  label={__('Automatically download new content from my subscriptions')}
-                  helper={__(
-                    "The latest file from each of your subscriptions will be downloaded for quick access as soon as it's published."
-                  )}
-                />
+              <FormField
+                type="checkbox"
+                name="auto_download"
+                onChange={() => setClientSetting(SETTINGS.AUTO_DOWNLOAD, !autoDownload)}
+                checked={autoDownload}
+                label={__('Automatically download new content from my subscriptions')}
+                helper={__(
+                  "The latest file from each of your subscriptions will be downloaded for quick access as soon as it's published."
+                )}
+              />
 
-                <FormField
-                  name="language_select"
-                  type="select"
-                  label={__('Language')}
-                  onChange={this.onLanguageChange}
-                  value={currentLanguage}
-                  helper={__(
-                    'Multi-language support is brand new and incomplete. Switching your language may have unintended consequences.'
-                  )}
-                >
-                  {Object.keys(languages).map(language => (
-                    <option key={language} value={language}>
-                      {languages[language]}
-                    </option>
-                  ))}
-                </FormField>
-              </Form>
+              <FormField
+                name="language_select"
+                type="select"
+                label={__('Language')}
+                onChange={this.onLanguageChange}
+                value={currentLanguage}
+                helper={__(
+                  'Multi-language support is brand new and incomplete. Switching your language may have unintended consequences.'
+                )}
+              >
+                {Object.keys(languages).map(language => (
+                  <option key={language} value={language}>
+                    {languages[language]}
+                  </option>
+                ))}
+              </FormField>
               <Form>
                 <fieldset-section>
                   <FormField
@@ -607,8 +607,10 @@ class SettingsPage extends React.PureComponent<Props, State> {
                   </FormField>
                 </fieldset-section>
               </Form>
+              {/* @endif */}
             </section>
-            {/* @endif */}
+            {/* @if TARGET='app' */}
+
             <section className="card card--section">
               <h2 className="card__title">{__('Application Cache')}</h2>
 
@@ -625,6 +627,7 @@ class SettingsPage extends React.PureComponent<Props, State> {
                 disabled={this.state.clearingCache}
               />
             </section>
+            {/* @endif */}
           </div>
         )}
       </Page>
