@@ -427,7 +427,7 @@ export function doAnalyticsView(uri, timeToStart) {
     const outpoint = `${txid}:${nout}`;
 
     if (claimIsMine) {
-      return;
+      return Promise.resolve();
     }
 
     return analytics.apiLogView(uri, outpoint, claimId, timeToStart);
