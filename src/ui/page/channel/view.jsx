@@ -93,8 +93,8 @@ function ChannelPage(props: Props) {
   }
 
   function handleSearch() {
-    const fetchUrl = `${LIGHTHOUSE_URL}?s=${encodeURIComponent(searchQuery)}&channel=${encodeURIComponent(
-      claim.permanent_url.slice('lbry://'.length)
+    const fetchUrl = `${LIGHTHOUSE_URL}?s=${encodeURIComponent(searchQuery)}&channel_id=${encodeURIComponent(
+      claim.claim_id
     )}`;
     fetch(fetchUrl)
       .then(res => res.json())
