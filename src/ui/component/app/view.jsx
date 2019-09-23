@@ -1,4 +1,5 @@
 // @flow
+import * as ICONS from 'constants/icons';
 import React, { useEffect, useRef } from 'react';
 import analytics from 'analytics';
 import { Lbry, buildURI, parseURI } from 'lbry-redux';
@@ -7,6 +8,7 @@ import ModalRouter from 'modal/modalRouter';
 import ReactModal from 'react-modal';
 import SideBar from 'component/sideBar';
 import Header from 'component/header';
+import Button from 'component/button';
 import { openContextMenu } from 'util/context-menu';
 import useKonamiListener from 'util/enhanced-layout';
 import Yrbl from 'component/yrbl';
@@ -28,10 +30,24 @@ type Props = {
   fetchRewardedContent: () => void,
   fetchTransactions: () => void,
   fetchAccessToken: () => void,
+  autoUpdateDownloaded: boolean,
+  isUpgradeAvailable: boolean,
+  requestDownloadUpgrade: () => void,
 };
 
 function App(props: Props) {
-  const { theme, fetchRewards, fetchRewardedContent, fetchTransactions, user, fetchAccessToken, accessToken } = props;
+  const {
+    theme,
+    fetchRewards,
+    fetchRewardedContent,
+    fetchTransactions,
+    user,
+    fetchAccessToken,
+    accessToken,
+    requestDownloadUpgrade,
+    autoUpdateDownloaded,
+    isUpgradeAvailable,
+  } = props;
   const appRef = useRef();
   const isEnhancedLayout = useKonamiListener();
   const userId = user && user.id;
@@ -41,6 +57,7 @@ function App(props: Props) {
   const previousHasVerifiedEmail = usePrevious(hasVerifiedEmail);
   const previousRewardApproved = usePrevious(isRewardApproved);
   const { pathname, hash } = props.location;
+  const showUpgradeButton = autoUpdateDownloaded || (process.platform === 'linux' && isUpgradeAvailable);
 
   let uri;
   try {
@@ -104,6 +121,20 @@ function App(props: Props) {
       <ModalRouter />
       <FileViewer pageUri={uri} />
 
+      {/* @if TARGET='app' */}
+      {showUpgradeButton && (
+        <div className="snack-bar--upgrade">
+          {__('Upgrade is ready')}
+          <Button
+            className="snack-bar__action"
+            button="alt"
+            icon={ICONS.DOWNLOAD}
+            label={__('Install now')}
+            onClick={requestDownloadUpgrade}
+          />
+        </div>
+      )}
+      {/* @endif */}
       {isEnhancedLayout && <Yrbl className="yrbl--enhanced" />}
     </div>
   );

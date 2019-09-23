@@ -1,7 +1,6 @@
 .snack-bar {
   bottom: 2rem;
   left: 2rem;
-
   background-color: $lbry-teal-4;
   border-radius: 0.5rem;
   color: $lbry-white;
@@ -9,6 +8,17 @@
   position: fixed;
   transition: all var(--transition-duration) var(--transition-type);
   z-index: 10000; // hack to get it over react modal
+}
+
+.snack-bar--upgrade {
+  @extend .snack-bar;
+  left: auto;
+  right: 2rem;
+  background-color: $lbry-grape-4;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
 .snack-bar--error {
@@ -19,7 +29,6 @@
   display: inline-block;
   margin: var(--spacing-small) 0;
   min-width: min-content;
-  text-transform: uppercase;
 
   span:hover {
     text-decoration: underline;
