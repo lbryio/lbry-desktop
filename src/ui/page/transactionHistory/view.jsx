@@ -9,7 +9,8 @@ type Props = {
   fetchMyClaims: () => void,
   fetchTransactions: () => void,
   fetchingTransactions: boolean,
-  transactions: Array<{}>,
+  filteredTransactionPage: Array<{}>,
+  filteredTransactionsCount: number,
 };
 
 class TransactionHistoryPage extends React.PureComponent<Props> {
@@ -21,7 +22,7 @@ class TransactionHistoryPage extends React.PureComponent<Props> {
   }
 
   render() {
-    const { transactions } = this.props;
+    const { filteredTransactionPage, filteredTransactionsCount } = this.props;
 
     return (
       <Page>
@@ -31,7 +32,11 @@ class TransactionHistoryPage extends React.PureComponent<Props> {
             'card--disabled': IS_WEB,
           })}
         >
-          <TransactionList transactions={transactions} title={__('Transaction History')} />
+          <TransactionList
+            transactions={filteredTransactionPage}
+            transactionCount={filteredTransactionsCount}
+            title={__('Transaction History')}
+          />
         </section>
       </Page>
     );

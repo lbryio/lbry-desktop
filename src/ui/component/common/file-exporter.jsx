@@ -17,6 +17,7 @@ type Props = {
   defaultPath?: string,
   filters: Array<string>,
   onFileCreated?: string => void,
+  disabled: boolean,
 };
 
 class FileExporter extends React.PureComponent<Props> {
@@ -78,9 +79,15 @@ class FileExporter extends React.PureComponent<Props> {
   }
 
   render() {
-    const { label } = this.props;
+    const { label, disabled } = this.props;
     return (
-      <Button button="primary" icon={ICONS.DOWNLOAD} label={label || __('Export')} onClick={this.handleButtonClick} />
+      <Button
+        button="primary"
+        disabled={disabled}
+        icon={ICONS.DOWNLOAD}
+        label={label || __('Export')}
+        onClick={this.handleButtonClick}
+      />
     );
   }
 }
