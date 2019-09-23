@@ -47,7 +47,7 @@ class ChannelSection extends React.PureComponent<Props, State> {
   }
 
   componentDidMount() {
-    const { channels, fetchChannelListMine, fetchingChannels } = this.props;
+    const { channels = [], fetchChannelListMine, fetchingChannels } = this.props;
     if (!channels.length && !fetchingChannels) {
       fetchChannelListMine();
     }
@@ -165,11 +165,12 @@ class ChannelSection extends React.PureComponent<Props, State> {
               value={channel}
             >
               <option value={CHANNEL_ANONYMOUS}>{__('Anonymous')}</option>
-              {channels.map(({ name }) => (
-                <option key={name} value={name}>
-                  {name}
-                </option>
-              ))}
+              {channels &&
+                channels.map(({ name }) => (
+                  <option key={name} value={name}>
+                    {name}
+                  </option>
+                ))}
               <option value={CHANNEL_NEW}>{__('New channel...')}</option>
             </FormField>
           </fieldset-section>

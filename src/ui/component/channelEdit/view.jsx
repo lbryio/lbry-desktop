@@ -9,8 +9,8 @@ type Props = {
   claim: ChannelClaim,
   title: ?string,
   amount: string,
-  cover: ?string,
-  thumbnail: ?string,
+  coverUrl: ?string,
+  thumbnailUrl: ?string,
   location: { search: string },
   description: string,
   website: string,
@@ -29,11 +29,11 @@ function ChannelForm(props: Props) {
   const {
     claim,
     title,
-    cover,
+    coverUrl,
     description,
     website,
     email,
-    thumbnail,
+    thumbnailUrl,
     tags,
     locations,
     languages,
@@ -47,21 +47,21 @@ function ChannelForm(props: Props) {
 
   // fill this in with sdk data
   const channelParams = {
-    website: website,
-    email: email,
+    website,
+    email,
+    coverUrl,
+    thumbnailUrl,
+    description,
+    title,
+    amount,
+    claim_id: claimId,
     languages: languages || [],
-    cover: cover,
-    description: description,
     locations: locations || [],
-    title: title,
-    thumbnail: thumbnail,
     tags: tags
       ? tags.map(tag => {
           return { name: tag };
         })
       : [],
-    claim_id: claimId,
-    amount: amount,
   };
 
   const [params, setParams] = useState(channelParams);
@@ -88,14 +88,14 @@ function ChannelForm(props: Props) {
     }
   };
 
-  const handleThumbnailChange = (url: string) => {
-    setParams({ ...params, thumbnail: url });
-    updateThumb(url);
+  const handleThumbnailChange = (thumbnailUrl: string) => {
+    setParams({ ...params, thumbnailUrl });
+    updateThumb(thumbnailUrl);
   };
 
-  const handleCoverChange = (url: string) => {
-    setParams({ ...params, cover: url });
-    updateCover(url);
+  const handleCoverChange = (coverUrl: string) => {
+    setParams({ ...params, coverUrl });
+    updateCover(coverUrl);
   };
   // TODO clear and bail after submit
   return (
@@ -108,17 +108,22 @@ function ChannelForm(props: Props) {
           )}
         </p>
       </div>
-      <Form onSubmit={channelParams => updateChannel(channelParams)}>
+      <Form
+        onSubmit={() => {
+          updateChannel(params);
+          setEditing(false);
+        }}
+      >
         <SelectAsset
           onUpdate={v => handleThumbnailChange(v)}
-          currentValue={params.thumbnail}
+          currentValue={params.thumbnailUrl}
           assetName={'Thumbnail'}
           recommended={'(300 x 300)'}
         />
 
         <SelectAsset
           onUpdate={v => handleCoverChange(v)}
-          currentValue={params.cover}
+          currentValue={params.coverUrl}
           assetName={'Cover'}
           recommended={'(1000 x 160)'}
         />
@@ -196,22 +201,8 @@ function ChannelForm(props: Props) {
           tagsChosen={params.tags || []}
         />
         <div className={'card__actions'}>
-          <Button
-            button="primary"
-            label={__('Submit')}
-            onClick={() => {
-              updateChannel(params);
-              setEditing(false);
-            }}
-          />
-          <Button
-            button="link"
-            label={__('Cancel')}
-            onClick={() => {
-              setParams({ ...channelParams });
-              setEditing(false);
-            }}
-          />
+          <Button button="primary" label={__('Submit')} type="submit" />
+          <Button button="link" label={__('Cancel')} />
         </div>
       </Form>
     </section>

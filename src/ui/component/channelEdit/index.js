@@ -13,8 +13,8 @@ import ChannelPage from './view';
 
 const select = (state, props) => ({
   title: makeSelectTitleForUri(props.uri)(state),
-  thumbnail: makeSelectThumbnailForUri(props.uri)(state),
-  cover: makeSelectCoverForUri(props.uri)(state),
+  thumbnailUrl: makeSelectThumbnailForUri(props.uri)(state),
+  coverUrl: makeSelectCoverForUri(props.uri)(state),
   page: selectCurrentChannelPage(state),
   description: makeSelectMetadataItemForUri(props.uri, 'description')(state),
   website: makeSelectMetadataItemForUri(props.uri, 'website_url')(state),

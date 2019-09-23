@@ -702,5 +702,8 @@
   "For users with good bandwidth, try a higher value to improve streaming and download speeds. Low bandwidth users may benefit from a lower setting. Default is 4.": "For users with good bandwidth, try a higher value to improve streaming and download speeds. Low bandwidth users may benefit from a lower setting. Default is 4.",
   "This will clear the application cache. Your wallet will not be affected. Currently, followed tags and blocked channels will be cleared.": "This will clear the application cache. Your wallet will not be affected. Currently, followed tags and blocked channels will be cleared.",
   "Show All": "Show All",
-  "Get ??? LBC": "Get ??? LBC"
+  "Get ??? LBC": "Get ??? LBC",
+  "to fix it. If that doesn't work, press CMD/CTRL-R to reset to the homepage.": "to fix it. If that doesn't work, press CMD/CTRL-R to reset to the homepage.",
+  "LBRY names cannot contain spaces or reserved symbols ($#@;/\"<>%{}|^~[]`)": "LBRY names cannot contain spaces or reserved symbols ($#@;/\"<>%{}|^~[]`)",
+  "Creating channel...": "Creating channel..."
 }
