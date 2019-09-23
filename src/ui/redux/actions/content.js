@@ -1,4 +1,5 @@
 // @flow
+import * as SETTINGS from 'constants/settings';
 import * as NOTIFICATION_TYPES from 'constants/subscriptions';
 import { PAGE_SIZE } from 'constants/claim';
 import * as MODALS from 'constants/modal_types';
@@ -11,7 +12,6 @@ import { setSubscriptionLatest, doUpdateUnreadSubscriptions } from 'redux/action
 import { makeSelectUnreadByChannel } from 'redux/selectors/subscriptions';
 import {
   ACTIONS,
-  SETTINGS,
   Lbry,
   Lbryapi,
   makeSelectFileInfoForUri,
