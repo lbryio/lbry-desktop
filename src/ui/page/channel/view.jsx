@@ -122,6 +122,11 @@ function ChannelPage(props: Props) {
     );
   }
 
+  React.useEffect(() => {
+    setSearchResults(null);
+    setSearchQuery('');
+  }, [uri]);
+
   return (
     <Page>
       <div className="card">
