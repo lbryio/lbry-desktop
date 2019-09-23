@@ -5,11 +5,9 @@ import {
   selectAllMyClaimsByOutpoint,
   selectSupportsByOutpoint,
   selectTransactionListFilter,
-  doSetTransactionListFilter,
   selectIsFetchingTransactions,
 } from 'lbry-redux';
-import { withRouter } from 'react-router';
-import TransactionList from './view';
+import TransactionListTable from './view';
 
 const select = state => ({
   rewards: selectClaimedRewardsByTransactionId(state),
@@ -21,12 +19,9 @@ const select = state => ({
 
 const perform = dispatch => ({
   openModal: (modal, props) => dispatch(doOpenModal(modal, props)),
-  setTransactionFilter: filterSetting => dispatch(doSetTransactionListFilter(filterSetting)),
 });
 
-export default withRouter(
-  connect(
-    select,
-    perform
-  )(TransactionList)
-);
+export default connect(
+  select,
+  perform
+)(TransactionListTable);
