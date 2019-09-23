@@ -705,5 +705,7 @@
   "Get ??? LBC": "Get ??? LBC",
   "to fix it. If that doesn't work, press CMD/CTRL-R to reset to the homepage.": "to fix it. If that doesn't work, press CMD/CTRL-R to reset to the homepage.",
   "LBRY names cannot contain spaces or reserved symbols ($#@;/\"<>%{}|^~[]`)": "LBRY names cannot contain spaces or reserved symbols ($#@;/\"<>%{}|^~[]`)",
-  "Creating channel...": "Creating channel..."
+  "Creating channel...": "Creating channel...",
+  "From": "From",
+  "To": "To"
 }

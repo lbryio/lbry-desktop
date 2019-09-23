@@ -2,8 +2,8 @@
 import fs from 'fs';
 import http from 'http';
 // @endif
-import { Lbry, ACTIONS, SETTINGS } from 'lbry-redux';
-import * as DESKTOP_SETTINGS from 'constants/settings';
+import { Lbry, ACTIONS } from 'lbry-redux';
+import * as SETTINGS from 'constants/settings';
 import { makeSelectClientSetting } from 'redux/selectors/settings';
 import analytics from 'analytics';
 
@@ -157,7 +157,7 @@ export function doSetDarkTime(value, options) {
     };
     const mergedTimes = { ...darkModeTimes, ...modifiedTimes };
 
-    dispatch(doSetClientSetting(DESKTOP_SETTINGS.DARK_MODE_TIMES, mergedTimes));
+    dispatch(doSetClientSetting(SETTINGS.DARK_MODE_TIMES, mergedTimes));
     dispatch(doUpdateIsNight());
   };
 }
