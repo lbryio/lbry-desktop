@@ -6894,29 +6894,17 @@ lazy-val@^1.0.3, lazy-val@^1.0.4:
     yargs "^13.2.2"
     zstd-codec "^0.1.1"
 
-<<<<<<< HEAD
-lbry-redux@lbryio/lbry-redux#6bd56492ad15a0e761b087db29a5441e9b9a04f0:
-  version "0.0.1"
-  resolved "https://codeload.github.com/lbryio/lbry-redux/tar.gz/6bd56492ad15a0e761b087db29a5441e9b9a04f0"
-=======
 lbry-redux@lbryio/lbry-redux#01614094dae83263e213e03319573e34cc922995:
   version "0.0.1"
   resolved "https://codeload.github.com/lbryio/lbry-redux/tar.gz/01614094dae83263e213e03319573e34cc922995"
->>>>>>> update lbry-redux and lbryinc
   dependencies:
     proxy-polyfill "0.1.6"
     reselect "^3.0.0"
     uuid "^3.3.2"
 
-<<<<<<< HEAD
-lbryinc@lbryio/lbryinc#f8bba34b34599a8450ced842b29336d1117d050d:
-  version "0.0.1"
-  resolved "https://codeload.github.com/lbryio/lbryinc/tar.gz/f8bba34b34599a8450ced842b29336d1117d050d"
-=======
 lbryinc@lbryio/lbryinc#d250096a6fc5df16be4f82812ecce28d6e558b6e:
   version "0.0.1"
   resolved "https://codeload.github.com/lbryio/lbryinc/tar.gz/d250096a6fc5df16be4f82812ecce28d6e558b6e"
->>>>>>> update lbry-redux and lbryinc
   dependencies:
     reselect "^3.0.0"
 
