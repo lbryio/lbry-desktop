@@ -1,18 +1,28 @@
 import { connect } from 'react-redux';
-import { selectIsFetchingClaimListMine, selectMyClaimUrisWithoutChannels } from 'lbry-redux';
+import { selectIsFetchingClaimListMine, makeSelectMyStreamUrisForPage, selectMyStreamUrisCount } from 'lbry-redux';
 import { doCheckPendingPublishesApp } from 'redux/actions/publish';
 import FileListPublished from './view';
+import { withRouter } from 'react-router';
 
-const select = state => ({
-  uris: selectMyClaimUrisWithoutChannels(state),
-  fetching: selectIsFetchingClaimListMine(state),
-});
+const select = (state, props) => {
+  const { search } = props.location;
+  const urlParams = new URLSearchParams(search);
+  const page = Number(urlParams.get('page')) || 0;
+  return {
+    page,
+    uris: makeSelectMyStreamUrisForPage(page)(state),
+    uriTotal: selectMyStreamUrisCount(state),
+    fetching: selectIsFetchingClaimListMine(state),
+  };
+};
 
 const perform = dispatch => ({
   checkPendingPublishes: () => dispatch(doCheckPendingPublishesApp()),
 });
 
-export default connect(
-  select,
-  perform
-)(FileListPublished);
+export default withRouter(
+  connect(
+    select,
+    perform
+  )(FileListPublished)
+);
