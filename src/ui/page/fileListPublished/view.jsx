@@ -3,16 +3,20 @@ import React, { useEffect } from 'react';
 import Button from 'component/button';
 import ClaimList from 'component/claimList';
 import Page from 'component/page';
+import Paginate from 'component/common/paginate';
+import { PAGE_SIZE } from 'constants/claim';
 
 type Props = {
-  uris: Array<string>,
   checkPendingPublishes: () => void,
   fetching: boolean,
+  uris: Array<string>,
+  uriTotal: ?number,
+  history: { replace: string => void },
+  page: number,
 };
 
 function FileListPublished(props: Props) {
-  const { checkPendingPublishes, fetching, uris } = props;
-
+  const { checkPendingPublishes, fetching, uris, uriTotal, history, page } = props;
   useEffect(() => {
     checkPendingPublishes();
   }, [checkPendingPublishes]);
@@ -29,12 +33,20 @@ function FileListPublished(props: Props) {
             defaultSort
             headerAltControls={<Button button="link" label={__('New Publish')} navigate="/$/publish" />}
           />
+          <Paginate
+            onPageChange={p => {
+              if (page !== p) {
+                history.replace(`#/$/published?page=${p + 1}`);
+              }
+            }}
+            totalPages={Math.floor(Number(uriTotal) / Number(PAGE_SIZE))}
+            loading={fetching}
+          />
         </div>
       ) : (
         <div className="main--empty">
           <section className="card card--section">
             <h2 className="card__title">{__("It looks like you haven't published anything to LBRY yet.")}</h2>
-
             <div className="card__actions card__actions--center">
               <Button button="primary" navigate="/$/publish" label={__('Publish something new')} />
             </div>
