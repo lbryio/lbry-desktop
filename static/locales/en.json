@@ -703,6 +703,11 @@
   "This will clear the application cache. Your wallet will not be affected. Currently, followed tags and blocked channels will be cleared.": "This will clear the application cache. Your wallet will not be affected. Currently, followed tags and blocked channels will be cleared.",
   "Show All": "Show All",
   "Get ??? LBC": "Get ??? LBC",
+  "No transactions.": "No transactions.",
+  "Are you sure want to revoke this claim?": "Are you sure want to revoke this claim?",
+  "This will prevent others from resolving and accessing the content you published. It will return the LBC to your spendable balance, less a small transaction fee.": "This will prevent others from resolving and accessing the content you published. It will return the LBC to your spendable balance, less a small transaction fee.",
+  "You haven't downloaded anything from LBRY yet.": "You haven't downloaded anything from LBRY yet.",
+  "Explore new content": "Explore new content",
   "to fix it. If that doesn't work, press CMD/CTRL-R to reset to the homepage.": "to fix it. If that doesn't work, press CMD/CTRL-R to reset to the homepage.",
   "LBRY names cannot contain spaces or reserved symbols ($#@;/\"<>%{}|^~[]`)": "LBRY names cannot contain spaces or reserved symbols ($#@;/\"<>%{}|^~[]`)",
   "Creating channel...": "Creating channel..."

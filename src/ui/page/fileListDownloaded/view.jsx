@@ -2,16 +2,20 @@
 import React from 'react';
 import Button from 'component/button';
 import ClaimList from 'component/claimList';
+import Paginate from 'component/common/paginate';
+import { PAGE_SIZE } from 'constants/claim';
 
 type Props = {
   fetching: boolean,
   downloadedUris: Array<string>,
+  downloadedUrisCount: ?number,
+  history: { replace: string => void },
+  page: number,
 };
 
 function FileListDownloaded(props: Props) {
-  const { fetching, downloadedUris } = props;
+  const { fetching, downloadedUris, downloadedUrisCount, history, page } = props;
   const hasDownloads = !!downloadedUris.length;
-
   return (
     // Removed the <Page> wapper to try combining this page with UserHistory
     // This should eventually move into /components if we want to keep it this way
@@ -23,6 +27,15 @@ function FileListDownloaded(props: Props) {
             defaultSort
             persistedStorageKey="claim-list-downloaded"
             uris={downloadedUris}
+            loading={fetching}
+          />
+          <Paginate
+            onPageChange={p => {
+              if (page !== p) {
+                history.replace(`#/$/published?page=${p}`);
+              }
+            }}
+            totalPages={Math.floor(Number(downloadedUrisCount) / Number(PAGE_SIZE))}
             loading={fetching}
           />
         </div>
