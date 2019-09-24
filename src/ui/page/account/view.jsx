@@ -7,15 +7,15 @@ import Page from 'component/page';
 import UnsupportedOnWeb from 'component/common/unsupported-on-web';
 import UserEmail from 'component/userEmail';
 import InvitePage from 'page/invite';
-import YoutubeChannelList from 'component/youtubeChannelList';
+// import YoutubeChannelList from 'component/youtubeChannelList';
 
 type Props = {
-  ytChannels: Array<any>,
+  // ytChannels: Array<any>,
 };
 
 const AccountPage = (props: Props) => {
-  const { ytChannels } = props;
-  const hasYoutubeChannels = Boolean(ytChannels.length);
+  // const { ytChannels } = props;
+  // const hasYoutubeChannels = Boolean(ytChannels.length);
   return (
     <Page>
       {/* @if TARGET='web' */}
@@ -30,7 +30,7 @@ const AccountPage = (props: Props) => {
             <RewardTotal />
           </div>
         </div>
-        {hasYoutubeChannels && <YoutubeChannelList />}
+        {/* {hasYoutubeChannels && <YoutubeChannelList />} */}
         <InvitePage />
       </div>
     </Page>
