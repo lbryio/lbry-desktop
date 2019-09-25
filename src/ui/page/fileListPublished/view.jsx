@@ -9,31 +9,31 @@ import { PAGE_SIZE } from 'constants/claim';
 type Props = {
   checkPendingPublishes: () => void,
   fetching: boolean,
-  uris: Array<string>,
-  uriTotal: ?number,
+  urls: Array<string>,
+  urlTotal: ?number,
   history: { replace: string => void },
   page: number,
 };
 
 function FileListPublished(props: Props) {
-  const { checkPendingPublishes, fetching, uris, uriTotal } = props;
+  const { checkPendingPublishes, fetching, urls, urlTotal } = props;
   useEffect(() => {
     checkPendingPublishes();
   }, [checkPendingPublishes]);
 
   return (
     <Page notContained>
-      {uris && uris.length ? (
+      {urls && urls.length ? (
         <div className="card">
           <ClaimList
             header={__('Your Publishes')}
             loading={fetching}
             persistedStorageKey="claim-list-published"
-            uris={uris}
+            uris={urls}
             defaultSort
             headerAltControls={<Button button="link" label={__('New Publish')} navigate="/$/publish" />}
           />
-          <Paginate totalPages={Math.ceil(Number(uriTotal) / Number(PAGE_SIZE))} loading={fetching} />
+          <Paginate totalPages={Math.ceil(Number(urlTotal) / Number(PAGE_SIZE))} loading={fetching} />
         </div>
       ) : (
         <div className="main--empty">
