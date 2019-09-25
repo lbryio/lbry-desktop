@@ -3,7 +3,7 @@ import React from 'react';
 
 type Props = {
   tokens: Object,
-  children: any,
+  children: string, // e.g. "Read %faq_link% for more detail"
 };
 
 export default function I18nMessage(props: Props) {
@@ -12,7 +12,7 @@ export default function I18nMessage(props: Props) {
     matchingGroups = message.match(regexp);
 
   if (!matchingGroups) {
-    return <React.Fragment>{message}</React.Fragment>;
+    return message;
   }
 
   const messageSubstrings = props.children.split(regexp),

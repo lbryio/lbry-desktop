@@ -28,7 +28,7 @@ class RewardSummary extends React.Component<Props> {
               You have %credit_amount% in unclaimed rewards.
             </I18nMessage>
           ) : (
-            <React.Fragment>{__('You have no rewards available, please check')}</React.Fragment>
+            __('You have no rewards available.')
           )}
         </p>
 
