@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import { makeSelectDownloadUrisForPage, selectDownloadUrisCount, selectIsFetchingFileList } from 'lbry-redux';
+import { makeSelectDownloadUrlsForPage, selectDownloadUrlsCount, selectIsFetchingFileList } from 'lbry-redux';
 import FileListDownloaded from './view';
 import { withRouter } from 'react-router';
 
@@ -9,8 +9,8 @@ const select = (state, props) => {
   const page = Number(urlParams.get('page')) || 1;
   return {
     page,
-    downloadedUris: makeSelectDownloadUrisForPage(page)(state),
-    downloadedUrisCount: selectDownloadUrisCount(state),
+    downloadedUrls: makeSelectDownloadUrlsForPage(page)(state),
+    downloadedUrlsCount: selectDownloadUrlsCount(state),
     fetching: selectIsFetchingFileList(state),
   };
 };

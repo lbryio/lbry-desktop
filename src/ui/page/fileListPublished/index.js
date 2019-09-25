@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import { selectIsFetchingClaimListMine, makeSelectMyStreamUrisForPage, selectMyStreamUrisCount } from 'lbry-redux';
+import { selectIsFetchingClaimListMine, makeSelectMyStreamUrlsForPage, selectMyStreamUrlsCount } from 'lbry-redux';
 import { doCheckPendingPublishesApp } from 'redux/actions/publish';
 import FileListPublished from './view';
 import { withRouter } from 'react-router';
@@ -10,8 +10,8 @@ const select = (state, props) => {
   const page = Number(urlParams.get('page')) || 1;
   return {
     page,
-    uris: makeSelectMyStreamUrisForPage(page)(state),
-    uriTotal: selectMyStreamUrisCount(state),
+    urls: makeSelectMyStreamUrlsForPage(page)(state),
+    urlTotal: selectMyStreamUrlsCount(state),
     fetching: selectIsFetchingClaimListMine(state),
   };
 };
