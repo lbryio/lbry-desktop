@@ -14,7 +14,7 @@ type Props = {
 };
 
 function FileListDownloaded(props: Props) {
-  const { fetching, downloadedUris, downloadedUrisCount, history, page } = props;
+  const { fetching, downloadedUris, downloadedUrisCount } = props;
   const hasDownloads = !!downloadedUris.length;
   return (
     // Removed the <Page> wapper to try combining this page with UserHistory
@@ -29,15 +29,7 @@ function FileListDownloaded(props: Props) {
             uris={downloadedUris}
             loading={fetching}
           />
-          <Paginate
-            onPageChange={p => {
-              if (page !== p) {
-                history.replace(`#/$/published?page=${p}`);
-              }
-            }}
-            totalPages={Math.floor(Number(downloadedUrisCount) / Number(PAGE_SIZE))}
-            loading={fetching}
-          />
+          <Paginate totalPages={Math.ceil(Number(downloadedUrisCount) / Number(PAGE_SIZE))} loading={fetching} />
         </div>
       ) : (
         <div className="main--empty">

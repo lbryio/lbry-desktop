@@ -7,7 +7,7 @@ import { withRouter } from 'react-router';
 const select = (state, props) => {
   const { search } = props.location;
   const urlParams = new URLSearchParams(search);
-  const page = Number(urlParams.get('page')) || 0;
+  const page = Number(urlParams.get('page')) || 1;
   return {
     page,
     uris: makeSelectMyStreamUrisForPage(page)(state),
