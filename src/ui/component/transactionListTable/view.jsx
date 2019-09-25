@@ -13,7 +13,6 @@ type Props = {
   transactionList: Array<any>,
 };
 
-// class TransactionList extends React.PureComponent<Props> {
 function TransactionListTable(props: Props) {
   const { emptyMessage, rewards, loading, transactionList } = props;
 

@@ -4,7 +4,8 @@ import React from 'react';
 import { FormField } from 'component/common/form';
 import Button from 'component/button';
 import FileExporter from 'component/common/file-exporter';
-import { TRANSACTIONS } from 'lbry-redux';
+import { TRANSACTIONS, TX_LIST } from 'lbry-redux';
+import * as PAGES from 'constants/pages';
 import TransactionListTable from 'component/transactionListTable';
 import RefreshTransactionButton from 'component/transactionRefreshButton';
 import Spinner from 'component/spinner';
@@ -25,7 +26,6 @@ type Props = {
 
 function TransactionList(props: Props) {
   const { emptyMessage, slim, filterSetting, title, transactions, loading, history, transactionCount } = props;
-  const PAGE_SIZE = 20;
   // Flow offers little support for Object.values() typing.
   // https://github.com/facebook/flow/issues/2221
   // $FlowFixMe
@@ -37,7 +37,7 @@ function TransactionList(props: Props) {
 
   function handleFilterChanged(event: SyntheticInputEvent<*>) {
     props.setTransactionFilter(event.target.value);
-    history.replace(`#/$/transactions`); //
+    history.replace(`/$/${PAGES.TRANSACTIONS}`); //
   }
 
   return (
@@ -50,7 +50,12 @@ function TransactionList(props: Props) {
           </span>
           <div className="card__actions--inline">
             {slim && (
-              <Button button="link" className="button--alt" navigate="/$/transactions" label={__('Full History')} />
+              <Button
+                button="link"
+                className="button--alt"
+                navigate={`/$/${PAGES.TRANSACTIONS}`}
+                label={__('Full History')}
+              />
             )}
             <RefreshTransactionButton />
           </div>
@@ -99,8 +104,8 @@ function TransactionList(props: Props) {
       {!!transactions && !!transactions.length && <TransactionListTable transactionList={transactions} />}
       {!slim && !!transactionCount && (
         <Paginate
-          onPageChange={page => history.replace(`#/$/transactions?page=${Number(page)}`)}
-          totalPages={Math.ceil(transactionCount / PAGE_SIZE)}
+          onPageChange={page => history.replace(`/$/${PAGES.TRANSACTIONS}?page=${Number(page)}`)}
+          totalPages={Math.ceil(transactionCount / TX_LIST.PAGE_SIZE)}
         />
       )}
     </React.Fragment>
