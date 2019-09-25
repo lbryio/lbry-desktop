@@ -9,7 +9,7 @@ import {
   makeSelectClaimForUri,
   selectChannelIsBlocked,
 } from 'lbry-redux';
-import { selectBlackListedOutpoints } from 'lbryinc';
+import { selectBlackListedOutpoints, doFetchSubCount, makeSelectSubCountForUri } from 'lbryinc';
 import { makeSelectIsSubscribed } from 'redux/selectors/subscriptions';
 import { doOpenModal } from 'redux/actions/app';
 import { makeSelectClientSetting } from 'redux/selectors/settings';
@@ -26,10 +26,12 @@ const select = (state, props) => ({
   channelIsBlocked: selectChannelIsBlocked(props.uri)(state),
   blackListedOutpoints: selectBlackListedOutpoints(state),
   supportOption: makeSelectClientSetting(settings.SUPPORT_OPTION)(state),
+  subCount: makeSelectSubCountForUri(props.uri)(state),
 });
 
 const perform = dispatch => ({
   openModal: (modal, props) => dispatch(doOpenModal(modal, props)),
+  fetchSubCount: claimId => dispatch(doFetchSubCount(claimId)),
 });
 
 export default connect(

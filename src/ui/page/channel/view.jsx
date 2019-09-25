@@ -44,6 +44,8 @@ type Props = {
   }>,
   openModal: (id: string, { uri: string, claimIsMine?: boolean, isSupport?: boolean }) => void,
   supportOption: boolean,
+  fetchSubCount: string => void,
+  subCount: number,
 };
 
 function ChannelPage(props: Props) {
@@ -62,6 +64,8 @@ function ChannelPage(props: Props) {
     blackListedOutpoints,
     openModal,
     supportOption,
+    fetchSubCount,
+    subCount,
   } = props;
 
   const { channelName } = parseURI(uri);
@@ -120,6 +124,10 @@ function ChannelPage(props: Props) {
     channelIsBlackListed = blackListedOutpoints.some(
       outpoint => outpoint.txid === claim.txid && outpoint.nout === claim.nout
     );
+  }
+
+  if (channelIsMine) {
+    fetchSubCount(claim.claim_id);
   }
 
   React.useEffect(() => {
@@ -182,6 +190,11 @@ function ChannelPage(props: Props) {
             <h2 className="channel__url">
               <ClaimUri uri={uri} />
             </h2>
+            {channelIsMine && (
+              <span>
+                {subCount} {subCount !== 1 ? __('Subscribers') : __('Subscriber')}
+              </span>
+            )}
           </div>
         </header>
         <Tabs onChange={onTabChange} index={tabIndex}>
