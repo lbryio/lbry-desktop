@@ -16,7 +16,7 @@ type Props = {
 };
 
 function FileListPublished(props: Props) {
-  const { checkPendingPublishes, fetching, uris, uriTotal, history, page } = props;
+  const { checkPendingPublishes, fetching, uris, uriTotal } = props;
   useEffect(() => {
     checkPendingPublishes();
   }, [checkPendingPublishes]);
@@ -33,15 +33,7 @@ function FileListPublished(props: Props) {
             defaultSort
             headerAltControls={<Button button="link" label={__('New Publish')} navigate="/$/publish" />}
           />
-          <Paginate
-            onPageChange={p => {
-              if (page !== p) {
-                history.replace(`#/$/published?page=${p + 1}`);
-              }
-            }}
-            totalPages={Math.floor(Number(uriTotal) / Number(PAGE_SIZE))}
-            loading={fetching}
-          />
+          <Paginate totalPages={Math.ceil(Number(uriTotal) / Number(PAGE_SIZE))} loading={fetching} />
         </div>
       ) : (
         <div className="main--empty">
