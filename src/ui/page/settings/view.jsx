@@ -11,7 +11,6 @@ import I18nMessage from 'component/i18nMessage';
 import Page from 'component/page';
 import SettingLanguage from 'component/settingLanguage';
 import FileSelector from 'component/common/file-selector';
-import WalletSecurityAndSync from '../../component/walletSecurityAndSync';
 import { getSavedPassword } from 'util/saved-passwords';
 
 type Price = {
@@ -62,7 +61,7 @@ type Props = {
   supportOption: boolean,
   userBlockedChannelsCount?: number,
   hideBalance: boolean,
-  confirmForgetPassword: () => void,
+  confirmForgetPassword: ({}) => void,
   floatingPlayer: boolean,
   clearPlayingUri: () => void,
   darkModeTimes: DarkModeTimes,
@@ -150,7 +149,11 @@ class SettingsPage extends React.PureComponent<Props, State> {
 
   onConfirmForgetPassword() {
     const { confirmForgetPassword } = this.props;
-    confirmForgetPassword();
+    confirmForgetPassword({
+      callback: () => {
+        this.setState({ storedPassword: false });
+      },
+    });
   }
 
   onChangeTime(event: SyntheticInputEvent<*>, options: OptionTimes) {
@@ -245,7 +248,6 @@ class SettingsPage extends React.PureComponent<Props, State> {
                 <p className="help">{__('LBRY downloads will be saved here.')}</p>
               </div>
             </section>
-            <WalletSecurityAndSync />
             <section className="card card--section">
               <h2 className="card__title">{__('Network and Data Settings')}</h2>
               <Form>
@@ -277,9 +279,7 @@ class SettingsPage extends React.PureComponent<Props, State> {
               </Form>
             </section>
             <section className="card card--section">
-              <header className="card__header">
-                <h2 className="card__title">{__('Max Purchase Price')}</h2>
-              </header>
+              <h2 className="card__title">{__('Max Purchase Price')}</h2>
 
               <Form>
                 <FormField
@@ -514,16 +514,18 @@ class SettingsPage extends React.PureComponent<Props, State> {
                     </React.Fragment>
                   }
                 />
-                {this.state.storedPassword && (
-                  <p className="card__subtitle card__help">
-                    {__('Your password is saved in your OS keychain.')}{' '}
-                    <Button
-                      button="link"
-                      label={__('I want to type it manually')}
-                      onClick={this.onConfirmForgetPassword}
-                    />
-                  </p>
+
+                {walletEncrypted && this.state.storedPassword && (
+                  <FormField
+                    type="checkbox"
+                    name="save_password"
+                    onChange={this.onConfirmForgetPassword}
+                    checked={this.state.storedPassword}
+                    label={__('Save Password')}
+                    helper={<React.Fragment>{__('Automatically unlock your wallet on startup')}</React.Fragment>}
+                  />
                 )}
+
                 <FormField
                   type="checkbox"
                   name="hide_balance"

@@ -91,7 +91,6 @@ $border-color--dark: var(--dm-color-04);
   padding: var(--spacing-medium);
 
   &:not(.claim-preview--inline) {
-    @include mediaThumbHoverZoom;
     cursor: pointer;
   }
 
@@ -102,12 +101,6 @@ $border-color--dark: var(--dm-color-04);
   }
 }
 
-.claim-preview--injected {
-  padding: var(--spacing-medium);
-  position: relative;
-}
-
-.claim-preview--injected,
 .claim-preview {
   border-top: 1px solid $border-color;
 

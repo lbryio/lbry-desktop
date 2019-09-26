@@ -50,6 +50,9 @@ function SideBar(props: Props) {
             },
             // @endif
             {
+              ...buildLink(PAGES.CHANNELS, __('Channels'), ICONS.CHANNEL),
+            },
+            {
               ...buildLink(PAGES.PUBLISHED, __('Publishes'), ICONS.PUBLISH),
             },
           ].map(linkProps => (

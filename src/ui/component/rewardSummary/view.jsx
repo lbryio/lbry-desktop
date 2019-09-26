@@ -16,7 +16,7 @@ class RewardSummary extends React.Component<Props> {
     const hasRewards = unclaimedRewardAmount > 0;
     return (
       <Card
-        title={__('Rewards')}
+        title={__('Available Rewards')}
         subtitle={
           <React.Fragment>
             {fetching && __('You have...')}

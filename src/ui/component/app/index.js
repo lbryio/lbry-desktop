@@ -1,7 +1,7 @@
 import * as SETTINGS from 'constants/settings';
 import { hot } from 'react-hot-loader/root';
 import { connect } from 'react-redux';
-import { selectUser, doRewardList, doFetchRewardedContent, doFetchAccessToken, selectAccessToken } from 'lbryinc';
+import { selectUser, doRewardList, doFetchRewardedContent, doFetchAccessToken } from 'lbryinc';
 import { doFetchTransactions, doFetchChannelListMine } from 'lbry-redux';
 import { makeSelectClientSetting, selectThemePath } from 'redux/selectors/settings';
 import { selectIsUpgradeAvailable, selectAutoUpdateDownloaded } from 'redux/selectors/app';
@@ -12,7 +12,6 @@ const select = state => ({
   user: selectUser(state),
   theme: selectThemePath(state),
   language: makeSelectClientSetting(SETTINGS.LANGUAGE)(state),
-  accessToken: selectAccessToken(state),
   autoUpdateDownloaded: selectAutoUpdateDownloaded(state),
   isUpgradeAvailable: selectIsUpgradeAvailable(state),
 });
@@ -22,6 +21,8 @@ const perform = dispatch => ({
   fetchRewardedContent: () => dispatch(doFetchRewardedContent()),
   fetchTransactions: () => dispatch(doFetchTransactions()),
   fetchAccessToken: () => dispatch(doFetchAccessToken()),
+  fetchChannelListMine: () => dispatch(doFetchChannelListMine()),
+  onSignedIn: () => dispatch(doSignIn()),
   requestDownloadUpgrade: () => dispatch(doDownloadUpgradeRequested()),
   fetchChannelListMine: () => dispatch(doFetchChannelListMine()),
   onSignedIn: () => dispatch(doSignIn()),

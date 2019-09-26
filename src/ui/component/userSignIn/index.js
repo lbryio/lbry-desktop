@@ -1,3 +1,4 @@
+import * as SETTINGS from 'constants/settings';
 import { connect } from 'react-redux';
 import {
   selectEmailToVerify,
@@ -7,12 +8,19 @@ import {
   selectClaimedRewards,
   rewards as REWARD_TYPES,
   doClaimRewardType,
+  doUserFetch,
+  selectUserIsPending,
+  selectYoutubeChannels,
+  selectGetSyncIsPending,
+  selectGetSyncErrorMessage,
+  selectSyncHash,
 } from 'lbryinc';
 import { selectMyChannelClaims, selectBalance, selectFetchingMyChannels } from 'lbry-redux';
+import { makeSelectClientSetting } from 'redux/selectors/settings';
 import UserSignIn from './view';
 
 const select = state => ({
-  email: selectEmailToVerify(state),
+  emailToVerify: selectEmailToVerify(state),
   user: selectUser(state),
   accessToken: selectAccessToken(state),
   channels: selectMyChannelClaims(state),
@@ -22,9 +30,16 @@ const select = state => ({
   }),
   balance: selectBalance(state),
   fetchingChannels: selectFetchingMyChannels(state),
+  youtubeChannels: selectYoutubeChannels(state),
+  userFetchPending: selectUserIsPending(state),
+  syncEnabled: makeSelectClientSetting(SETTINGS.ENABLE_SYNC)(state),
+  syncIsPending: selectGetSyncIsPending(state),
+  getSyncError: selectGetSyncErrorMessage(state),
+  syncHash: selectSyncHash(state),
 });
 
 const perform = dispatch => ({
+  fetchUser: () => dispatch(doUserFetch()),
   claimReward: () =>
     dispatch(
       doClaimRewardType(REWARD_TYPES.TYPE_CONFIRM_EMAIL, {

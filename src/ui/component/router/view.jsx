@@ -24,6 +24,7 @@ import FollowingPage from 'page/following';
 import ListBlockedPage from 'page/listBlocked';
 import FourOhFourPage from 'page/fourOhFour';
 import SignInPage from 'page/signIn';
+import ChannelsPage from 'page/channels';
 
 // Tell the browser we are handling scroll restoration
 if ('scrollRestoration' in history) {
@@ -89,6 +90,7 @@ function AppRouter(props: Props) {
       <PrivateRoute {...props} path={`/$/${PAGES.WALLET}`} exact component={WalletPage} />
       <PrivateRoute {...props} path={`/$/${PAGES.WALLET_SEND}`} exact component={WalletSendPage} />
       <PrivateRoute {...props} path={`/$/${PAGES.WALLET_RECEIVE}`} exact component={WalletReceivePage} />
+      <PrivateRoute {...props} path={`/$/${PAGES.CHANNELS}`} component={ChannelsPage} />
 
       {/* Below need to go at the end to make sure we don't match any of our pages first */}
       <Route path="/:claimName" exact component={ShowPage} />

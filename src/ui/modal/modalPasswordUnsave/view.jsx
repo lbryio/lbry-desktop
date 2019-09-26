@@ -1,10 +1,11 @@
 // @flow
 import React from 'react';
 import { Modal } from 'modal/modal';
-import { deleteAuthToken } from 'util/saved-passwords';
+import { deleteSavedPassword } from 'util/saved-passwords';
 
 type Props = {
   closeModal: () => void,
+  callback?: () => void,
 };
 
 class ModalPasswordUnsave extends React.PureComponent<Props> {
@@ -18,8 +19,11 @@ class ModalPasswordUnsave extends React.PureComponent<Props> {
         confirmButtonLabel={__('Forget')}
         abortButtonLabel={__('Nevermind')}
         onConfirmed={() =>
-          deleteAuthToken().then(() => {
+          deleteSavedPassword().then(() => {
             this.props.closeModal();
+            if (this.props.callback) {
+              this.props.callback();
+            }
           })
         }
         onAborted={this.props.closeModal}

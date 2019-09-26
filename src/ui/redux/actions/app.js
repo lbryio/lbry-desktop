@@ -312,9 +312,9 @@ export function doNotifyUnlockWallet() {
   };
 }
 
-export function doNotifyForgetPassword() {
+export function doNotifyForgetPassword(props) {
   return dispatch => {
-    dispatch(doOpenModal(MODALS.WALLET_PASSWORD_UNSAVE));
+    dispatch(doOpenModal(MODALS.WALLET_PASSWORD_UNSAVE, props));
   };
 }
 

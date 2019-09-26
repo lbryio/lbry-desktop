@@ -39,8 +39,10 @@ function UserEmail(props: Props) {
       subtitle={__(
         'This information is disclosed only to LBRY, Inc. and not to the LBRY network. It is only required to save account information and earn rewards.'
       )}
-      body={
-        isVerified ? (
+      actions={
+        !isVerified ? (
+          <Button button="primary" label={__('Add Email')} navigate={`/$/${PAGES.AUTH}`} />
+        ) : (
           <FormField
             type="text"
             className="form-field--copyable"
@@ -58,9 +60,8 @@ function UserEmail(props: Props) {
             inputButton={<UserSignOutButton button="inverse" />}
             value={email || ''}
           />
-        ) : null
+        )
       }
-      actions={!isVerified ? <Button button="primary" label={__('Add Email')} navigate={`/$/${PAGES.AUTH}`} /> : null}
     />
   );
 }

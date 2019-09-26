@@ -5,19 +5,22 @@ import {
   selectUserIsPending,
   doClaimYoutubeChannels,
   doUserFetch,
+  selectYTImportVideosComplete,
+  doCheckYoutubeTransfer,
 } from 'lbryinc';
-
 import YoutubeChannelList from './view';
 
 const select = state => ({
-  ytChannels: selectYoutubeChannels(state),
+  youtubeChannels: selectYoutubeChannels(state),
   ytImportPending: selectYTImportPending(state),
   userFetchPending: selectUserIsPending(state),
+  videosImported: selectYTImportVideosComplete(state),
 });
 
 const perform = dispatch => ({
   claimChannels: () => dispatch(doClaimYoutubeChannels()),
   updateUser: () => dispatch(doUserFetch()),
+  checkYoutubeTransfer: () => dispatch(doCheckYoutubeTransfer()),
 });
 
 export default connect(

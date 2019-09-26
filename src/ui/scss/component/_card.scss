@@ -61,13 +61,27 @@
   margin-bottom: 0;
 }
 
+.card--claim-preview-wrap {
+  @extend .card;
+  margin: var(--spacing-xlarge) 0;
+}
+
+.card--claim-preview-selected {
+  background-color: rgba($lbry-teal-1, 0.1);
+
+  &:hover {
+    transition: transform 0.2s ease-in-out;
+    transform: scale(1.1);
+  }
+}
+
 //  C A R D
 //  A C T I O N S
 
 .card__actions {
   display: flex;
   align-items: center;
-  margin-top: var(--spacing-medium);
+  margin-top: var(--spacing-large);
   font-size: var(--font-body);
 
   &:only-child {

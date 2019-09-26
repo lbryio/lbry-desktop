@@ -4,19 +4,19 @@ import { FormField, Form } from 'component/common/form';
 import Button from 'component/button';
 import { Lbryio } from 'lbryinc';
 import analytics from 'analytics';
+import { EMAIL_REGEX } from 'constants/email';
 
 type Props = {
   errorMessage: ?string,
   isPending: boolean,
   addUserEmail: string => void,
+  syncEnabled: boolean,
+  setSync: boolean => void,
+  balance: number,
 };
 
-// "Email regex that 99.99% works"
-// https://emailregex.com/
-const EMAIL_REGEX = /(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9]))\.){3}(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9])|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])/;
-
 function UserEmailNew(props: Props) {
-  const { errorMessage, isPending, addUserEmail } = props;
+  const { errorMessage, isPending, addUserEmail, syncEnabled, setSync, balance } = props;
   const [newEmail, setEmail] = useState('');
   const valid = newEmail.match(EMAIL_REGEX);
 
@@ -29,6 +29,12 @@ function UserEmailNew(props: Props) {
     // @endif
   }
 
+  React.useEffect(() => {
+    if (syncEnabled && balance) {
+      setSync(false);
+    }
+  }, [balance, syncEnabled, setSync]);
+
   return (
     <div>
       <h1 className="section__title--large">{__('Welcome To LBRY')}</h1>
@@ -39,11 +45,22 @@ function UserEmailNew(props: Props) {
           className="form-field--short"
           placeholder={__('hotstuff_96@hotmail.com')}
           type="email"
-          id="sign_up_email"
+          name="sign_up_email"
           label={__('Email')}
           value={newEmail}
           error={errorMessage}
           onChange={e => setEmail(e.target.value)}
+        />
+        <FormField
+          type="checkbox"
+          name="sync_checkbox"
+          label={__('Sync your balance between devices')}
+          helper={
+            balance > 0 ? __('This is only available for empty wallets') : __('Maybe some more text about something')
+          }
+          checked={syncEnabled}
+          onChange={() => setSync(!syncEnabled)}
+          disabled={balance > 0}
         />
         <div className="card__actions">
           <Button button="primary" type="submit" label={__('Continue')} disabled={!newEmail || !valid || isPending} />

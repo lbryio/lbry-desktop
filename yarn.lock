@@ -6850,17 +6850,17 @@ lazy-val@^1.0.3, lazy-val@^1.0.4:
     yargs "^13.2.2"
     zstd-codec "^0.1.1"
 
-lbry-redux@lbryio/lbry-redux#04ae0913a444abac200731c7ed53796d763a0bbb:
+lbry-redux@lbryio/lbry-redux#d44cd9ca56dee784dba42c0cc13061ae75cbd46c:
   version "0.0.1"
-  resolved "https://codeload.github.com/lbryio/lbry-redux/tar.gz/04ae0913a444abac200731c7ed53796d763a0bbb"
+  resolved "https://codeload.github.com/lbryio/lbry-redux/tar.gz/d44cd9ca56dee784dba42c0cc13061ae75cbd46c"
   dependencies:
     proxy-polyfill "0.1.6"
     reselect "^3.0.0"
     uuid "^3.3.2"
 
-lbryinc@lbryio/lbryinc#d99232ebc754a49649a2ff4132478415faef08e2:
+lbryinc@lbryio/lbryinc#368040d64658cf2a4b8a7a6725ec1787329ce65d:
   version "0.0.1"
-  resolved "https://codeload.github.com/lbryio/lbryinc/tar.gz/d99232ebc754a49649a2ff4132478415faef08e2"
+  resolved "https://codeload.github.com/lbryio/lbryinc/tar.gz/368040d64658cf2a4b8a7a6725ec1787329ce65d"
   dependencies:
     reselect "^3.0.0"
 
@@ -9660,6 +9660,13 @@ react-compound-slider@^1.2.2:
     prop-types "^15.7.2"
     warning "^3.0.0"
 
+react-confetti@^4.0.1:
+  version "4.0.1"
+  resolved "https://registry.yarnpkg.com/react-confetti/-/react-confetti-4.0.1.tgz#f9e76b198ce02f1c13809a1d1ec1bc92f5450dde"
+  integrity sha512-uQrb1Q4p8Wg3xyxSGtsIxdd+hOd3jRNpVq5qET6m9B+fihsjF7mHbMngoiziya3DZtstaqCBPpTcyByXLu8CnQ==
+  dependencies:
+    tween-functions "^1.2.0"
+
 react-dom@^16.8.2, react-dom@^16.8.6:
   version "16.8.6"
   resolved "https://registry.yarnpkg.com/react-dom/-/react-dom-16.8.6.tgz#71d6303f631e8b0097f56165ef608f051ff6e10f"
@@ -11695,6 +11702,11 @@ tunnel-agent@^0.6.0:
   integrity sha1-J6XeoGs2sEoKmWZ3SykIaPD8QP0=
   dependencies:
     safe-buffer "^5.0.1"
+
+tween-functions@^1.2.0:
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/tween-functions/-/tween-functions-1.2.0.tgz#1ae3a50e7c60bb3def774eac707acbca73bbc3ff"
+  integrity sha1-GuOlDnxguz3vd06scHrLynO7w/8=
 
 tweetnacl@^0.14.3, tweetnacl@~0.14.0:
   version "0.14.5"

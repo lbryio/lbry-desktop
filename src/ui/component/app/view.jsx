@@ -12,6 +12,7 @@ import Yrbl from 'component/yrbl';
 import FileViewer from 'component/fileViewer';
 import { withRouter } from 'react-router';
 import usePrevious from 'util/use-previous';
+import SyncBackgroundManager from 'component/syncBackgroundManager';
 import Button from 'component/button';
 
 export const MAIN_WRAPPER_CLASS = 'main-wrapper';
@@ -27,11 +28,13 @@ type Props = {
   fetchRewardedContent: () => void,
   fetchTransactions: () => void,
   fetchAccessToken: () => void,
-  autoUpdateDownloaded: boolean,
-  isUpgradeAvailable: boolean,
+  fetchChannelListMine: () => void,
+  onSignedIn: () => void,
   requestDownloadUpgrade: () => void,
   fetchChannelListMine: () => void,
   onSignedIn: () => void,
+  isUpgradeAvailable: boolean,
+  autoUpdateDownloaded: boolean,
 };
 
 function App(props: Props) {
@@ -42,11 +45,11 @@ function App(props: Props) {
     fetchTransactions,
     user,
     fetchAccessToken,
-    requestDownloadUpgrade,
-    autoUpdateDownloaded,
-    isUpgradeAvailable,
     fetchChannelListMine,
     onSignedIn,
+    autoUpdateDownloaded,
+    isUpgradeAvailable,
+    requestDownloadUpgrade,
   } = props;
   const appRef = useRef();
   const isEnhancedLayout = useKonamiListener();
@@ -118,6 +121,7 @@ function App(props: Props) {
       <Router />
       <ModalRouter />
       <FileViewer pageUri={uri} />
+      <SyncBackgroundManager />
 
       {/* @if TARGET='app' */}
       {showUpgradeButton && (

@@ -75,20 +75,18 @@ export default function TagSelect(props: Props) {
         }
         body={
           <React.Fragment>
-            <section className="section">
-              <TagsSearch
-                onRemove={handleTagClick}
-                onSelect={onSelect}
-                suggestMature={suggestMature && !hasMatureTag}
-                tagsPasssedIn={tagsToDisplay}
-              />
-              {help !== false && (
-                <p className="help">
-                  {help || __("The tags you follow will change what's trending for you.")}{' '}
-                  <Button button="link" label={__('Learn more')} href="https://lbry.com/faq/trending" />.
-                </p>
-              )}
-            </section>
+            <TagsSearch
+              onRemove={handleTagClick}
+              onSelect={onSelect}
+              suggestMature={suggestMature && !hasMatureTag}
+              tagsPasssedIn={tagsToDisplay}
+            />
+            {help !== false && (
+              <p className="help">
+                {help || __("The tags you follow will change what's trending for you.")}{' '}
+                <Button button="link" label={__('Learn more')} href="https://lbry.com/faq/trending" />.
+              </p>
+            )}
           </React.Fragment>
         }
       />

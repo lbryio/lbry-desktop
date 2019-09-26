@@ -23,3 +23,4 @@ export const WALLET = 'wallet';
 export const WALLET_SEND = 'wallet/send';
 export const WALLET_RECEIVE = 'wallet/receive';
 export const BLOCKED = 'blocked';
+export const CHANNELS = 'channels';
