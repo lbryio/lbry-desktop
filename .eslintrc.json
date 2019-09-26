@@ -29,6 +29,7 @@
     "jsx-quotes": ["error", "prefer-double"],
     "new-cap": 0,
     "no-console": 1,
+    "no-control-regex": 0,
     "no-multi-spaces": 0,
     "no-redeclare": 0,
     "no-return-await": 0,
@@ -38,11 +39,14 @@
     "react/jsx-indent": 0,
     "react-hooks/exhaustive-deps": "warn",
     "react-hooks/rules-of-hooks": "error",
-    "space-before-function-paren": ["error", {
-      "anonymous": "never",
-      "named": "never",
-      "asyncArrow": "always"
-    }],
+    "space-before-function-paren": [
+      "error",
+      {
+        "anonymous": "never",
+        "named": "never",
+        "asyncArrow": "always"
+      }
+    ],
     "standard/object-curly-even-spacing": 0,
     "standard/no-callback-literal": 0,
     "react/display-name": 0,

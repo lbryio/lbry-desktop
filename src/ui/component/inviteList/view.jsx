@@ -1,7 +1,6 @@
 // @flow
 import React from 'react';
 import RewardLink from 'component/rewardLink';
-import Yrbl from 'component/yrbl';
 import { rewards } from 'lbryinc';
 import Icon from 'component/common/icon';
 import * as ICONS from 'constants/icons';
@@ -20,20 +19,8 @@ class InviteList extends React.PureComponent<Props> {
   render() {
     const { invitees, referralReward } = this.props;
 
-    if (!invitees) {
+    if (!invitees || !invitees.length) {
       return null;
-    }
-
-    if (!invitees.length) {
-      return (
-        <Yrbl
-          type="happy"
-          title={__('Power To The People')}
-          subtitle={__(
-            'LBRY is powered by the users. More users, more power… and with great power comes great responsibility.'
-          )}
-        />
-      );
     }
 
     let rewardAmount = 0;
@@ -60,10 +47,10 @@ class InviteList extends React.PureComponent<Props> {
               />
             )}
           </h2>
-          <p className="card__subtitle">{rewardHelp}</p>
+          <p className="section__subtitle">{rewardHelp}</p>
         </div>
 
-        <table className="table table--invites">
+        <table className="table section">
           <thead>
             <tr>
               <th>{__('Invitee Email')}</th>

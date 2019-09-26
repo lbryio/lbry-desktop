@@ -1,26 +1,30 @@
 // @flow
 import React, { useState } from 'react';
-import { useTransition, animated } from 'react-spring';
 import { Form, FormField } from 'component/common/form';
 import Tag from 'component/tag';
 
-const unfollowedTagsAnimation = {
-  from: { opacity: 0 },
-  enter: { opacity: 1, maxWidth: 200 },
-  leave: { opacity: 0, maxWidth: 0 },
-};
-
 type Props = {
+  tagsPasssedIn: Array<Tag>,
   unfollowedTags: Array<Tag>,
   followedTags: Array<Tag>,
   doToggleTagFollow: string => void,
   doAddTag: string => void,
   onSelect?: Tag => void,
   suggestMature?: boolean,
+  onRemove: Tag => void,
 };
 
 export default function TagSelect(props: Props) {
-  const { unfollowedTags = [], followedTags = [], doToggleTagFollow, doAddTag, onSelect, suggestMature } = props;
+  const {
+    tagsPasssedIn,
+    unfollowedTags = [],
+    followedTags = [],
+    doToggleTagFollow,
+    doAddTag,
+    onSelect,
+    onRemove,
+    suggestMature,
+  } = props;
   const [newTag, setNewTag] = useState('');
 
   let tags = unfollowedTags.slice();
@@ -38,8 +42,6 @@ export default function TagSelect(props: Props) {
   if (!newTag && suggestMature) {
     suggestedTags.push('mature');
   }
-
-  const suggestedTransitions = useTransition(suggestedTags, tag => tag, unfollowedTagsAnimation);
 
   function onChange(e) {
     setNewTag(e.target.value);
@@ -76,24 +78,37 @@ export default function TagSelect(props: Props) {
   }
 
   return (
-    <div>
-      <Form onSubmit={handleSubmit}>
-        <FormField
-          label={__('Find New Tags')}
-          onChange={onChange}
-          placeholder={__('Search for more tags')}
-          type="text"
-          value={newTag}
-        />
+    <React.Fragment>
+      <Form className="tags__input-wrapper" onSubmit={handleSubmit}>
+        <ul className="tags--remove">
+          {tagsPasssedIn.map(tag => (
+            <Tag
+              key={tag.name}
+              name={tag.name}
+              type="remove"
+              onClick={() => {
+                onRemove(tag);
+              }}
+            />
+          ))}
+          <li>
+            <FormField
+              autoFocus
+              className="tag__input"
+              onChange={onChange}
+              placeholder={__('Follow more tags')}
+              type="text"
+              value={newTag}
+            />
+          </li>
+        </ul>
       </Form>
       <ul className="tags">
-        {suggestedTransitions.map(({ item, key, props }) => (
-          <animated.li key={key} style={props}>
-            <Tag name={item} type="add" onClick={() => handleTagClick(item)} />
-          </animated.li>
+        {suggestedTags.map(tag => (
+          <Tag key={tag} name={tag} type="add" onClick={() => handleTagClick(tag)} />
         ))}
-        {!suggestedTransitions.length && <p className="empty tags__empty-message">No suggested tags</p>}
+        {!suggestedTags.length && <p className="empty tags__empty-message">No suggested tags</p>}
       </ul>
-    </div>
+    </React.Fragment>
   );
 }

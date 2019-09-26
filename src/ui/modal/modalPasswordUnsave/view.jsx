@@ -1,7 +1,7 @@
 // @flow
 import React from 'react';
 import { Modal } from 'modal/modal';
-import { deleteSavedPassword } from 'util/saved-passwords';
+import { deleteAuthToken } from 'util/saved-passwords';
 
 type Props = {
   closeModal: () => void,
@@ -18,7 +18,7 @@ class ModalPasswordUnsave extends React.PureComponent<Props> {
         confirmButtonLabel={__('Forget')}
         abortButtonLabel={__('Nevermind')}
         onConfirmed={() =>
-          deleteSavedPassword().then(() => {
+          deleteAuthToken().then(() => {
             this.props.closeModal();
           })
         }

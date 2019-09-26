@@ -9,9 +9,22 @@
 
 .navigation--placeholder {
   @extend .navigation;
-  height: 80vh;
-  background-color: $lbry-blue-1;
+  padding: 2rem 1.5rem;
   border-radius: var(--card-radius);
+  font-size: var(--font-title);
+  font-weight: 600;
+  color: $lbry-white;
+  position: relative;
+  background-color: $lbry-black;
+
+  h2 {
+    font-size: 2rem;
+    font-weight: 600;
+  }
+
+  p {
+    font-size: 1.5rem;
+  }
 }
 
 .navigation-links {

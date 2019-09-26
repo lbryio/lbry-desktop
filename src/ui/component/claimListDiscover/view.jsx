@@ -32,13 +32,13 @@ type Props = {
   uris: Array<string>,
   subscribedChannels: Array<Subscription>,
   doClaimSearch: ({}) => void,
-  injectedItem: any,
   tags: Array<string>,
   loading: boolean,
   personalView: boolean,
   doToggleTagFollow: string => void,
   meta?: Node,
   showNsfw: boolean,
+  hideCustomization: boolean,
   history: { action: string, push: string => void, replace: string => void },
   location: { search: string, pathname: string },
   claimSearchByQuery: {
@@ -54,21 +54,21 @@ function ClaimListDiscover(props: Props) {
     tags,
     loading,
     personalView,
-    injectedItem,
     meta,
     subscribedChannels,
     showNsfw,
     history,
     location,
     hiddenUris,
+    hideCustomization,
   } = props;
   const didNavigateForward = history.action === 'PUSH';
+  const [page, setPage] = useState(1);
   const { search } = location;
   const urlParams = new URLSearchParams(search);
-  const personalSort = urlParams.get('sort') || SEARCH_SORT_YOU;
+  const personalSort = urlParams.get('sort') || (hideCustomization ? SEARCH_SORT_ALL : SEARCH_SORT_YOU);
   const typeSort = urlParams.get('type') || TYPE_TRENDING;
   const timeSort = urlParams.get('time') || TIME_WEEK;
-  const [page, setPage] = useState(1);
   const tagsInUrl = urlParams.get('t') || '';
   const options: {
     page_size: number,
@@ -86,7 +86,7 @@ function ClaimListDiscover(props: Props) {
     // no_totals makes it so the sdk doesn't have to calculate total number pages for pagination
     // it's faster, but we will need to remove it if we start using total_pages
     no_totals: true,
-    any_tags: (personalView && personalSort === SEARCH_SORT_YOU) || !personalView ? tags : [],
+    any_tags: (personalView && !hideCustomization && personalSort === SEARCH_SORT_YOU) || !personalView ? tags : [],
     channel_ids: personalSort === SEARCH_SORT_CHANNELS ? subscribedChannels.map(sub => sub.uri.split('#')[1]) : [],
     not_channel_ids: hiddenUris && hiddenUris.length ? hiddenUris.map(hiddenUri => hiddenUri.split('#')[1]) : [],
     not_tags: !showNsfw ? MATURE_TAGS : [],
@@ -191,29 +191,33 @@ function ClaimListDiscover(props: Props) {
           </option>
         ))}
       </FormField>
-      <span>{__('For')}</span>
-      {!personalView && tags && tags.length ? (
-        tags.map(tag => <Tag key={tag} name={tag} disabled />)
-      ) : (
-        <FormField
-          type="select"
-          name="trending_overview"
-          className="claim-list__dropdown"
-          value={personalSort}
-          onChange={e => {
-            handlePersonalSort(e.target.value);
-          }}
-        >
-          {SEARCH_FILTER_TYPES.map(type => (
-            <option key={type} value={type}>
-              {type === SEARCH_SORT_ALL
-                ? __('Everyone')
-                : type === SEARCH_SORT_YOU
-                ? __('Tags You Follow')
-                : __('Channels You Follow')}
-            </option>
-          ))}
-        </FormField>
+      {!hideCustomization && (
+        <Fragment>
+          <span>{__('For')}</span>
+          {!personalView && tags && tags.length ? (
+            tags.map(tag => <Tag key={tag} name={tag} disabled />)
+          ) : (
+            <FormField
+              type="select"
+              name="trending_overview"
+              className="claim-list__dropdown"
+              value={personalSort}
+              onChange={e => {
+                handlePersonalSort(e.target.value);
+              }}
+            >
+              {SEARCH_FILTER_TYPES.map(type => (
+                <option key={type} value={type}>
+                  {type === SEARCH_SORT_ALL
+                    ? __('Everyone')
+                    : type === SEARCH_SORT_YOU
+                    ? __('Tags You Follow')
+                    : __('Channels You Follow')}
+                </option>
+              ))}
+            </FormField>
+          )}
+        </Fragment>
       )}
       {typeSort === 'top' && (
         <FormField
@@ -242,7 +246,6 @@ function ClaimListDiscover(props: Props) {
         id={claimSearchCacheQuery}
         loading={loading}
         uris={uris}
-        injectedItem={personalSort === SEARCH_SORT_YOU && injectedItem}
         header={header}
         headerAltControls={meta}
         onScrollBottom={handleScrollBottom}

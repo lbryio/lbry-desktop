@@ -11,6 +11,7 @@ export class Form extends React.PureComponent<Props> {
     const { children, onSubmit, ...otherProps } = this.props;
     return (
       <form
+        noValidate
         className="form"
         onSubmit={event => {
           event.preventDefault();

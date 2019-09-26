@@ -1,4 +1,5 @@
 {
+  "404": "404",
   "Thumbnail Image": "Thumbnail Image",
   "OK": "OK",
   "Cancel": "Cancel",
@@ -708,6 +709,6 @@
   "Tip %amount% LBC": "Tip %amount% LBC",
   "Not enough credits": "Not enough credits",
   "You have %credit_amount% in unclaimed rewards.": "You have %credit_amount% in unclaimed rewards.",
-  "You haven't downloaded anything from LBRY yet.": "You haven't downloaded anything from LBRY yet.",
-  "Explore new content": "Explore new content"
+  "URI does not include name.": "URI does not include name.",
+  "to fix it. If that doesn't work, press CMD/CTRL-R to reset to the homepage.": "to fix it. If that doesn't work, press CMD/CTRL-R to reset to the homepage."
 }

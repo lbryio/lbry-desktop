@@ -1,3 +1,4 @@
+import * as PAGES from 'constants/pages';
 import { connect } from 'react-redux';
 import { doHideModal } from 'redux/actions/app';
 import { withRouter } from 'react-router-dom';
@@ -11,7 +12,7 @@ const perform = (dispatch, ownProps) => ({
     } = ownProps;
     const currentPath = pathname.split('/$/')[1];
     dispatch(doHideModal());
-    history.push(`/$/auth?redirect=${currentPath}`);
+    history.push(`/$/${PAGES.AUTH}?redirect=${currentPath}`);
   },
   closeModal: () => dispatch(doHideModal()),
 });
