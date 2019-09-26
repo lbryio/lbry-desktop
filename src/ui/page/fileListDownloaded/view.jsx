@@ -24,7 +24,6 @@ function FileListDownloaded(props: Props) {
         <div className="card">
           <ClaimList
             header={__('Your Library')}
-            defaultSort
             persistedStorageKey="claim-list-downloaded"
             uris={downloadedUrls}
             loading={fetching}

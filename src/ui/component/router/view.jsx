@@ -1,7 +1,7 @@
 // @flow
 import * as PAGES from 'constants/pages';
 import React, { useEffect } from 'react';
-import { Route, Redirect, Switch, withRouter } from 'react-router-dom';
+import { Route, Switch, withRouter } from 'react-router-dom';
 import SettingsPage from 'page/settings';
 import HelpPage from 'page/help';
 import ReportPage from 'page/report';
@@ -35,15 +35,11 @@ type Props = {
 };
 
 function AppRouter(props: Props) {
-  const { currentScroll, location } = props;
-  const { pathname, search } = location;
-
-  // Don't update the scroll position if only the `page` param changes
-  const url = `${pathname}${search.replace(/&?\??page=\d+/, '')}`;
+  const { currentScroll } = props;
 
   useEffect(() => {
     window.scrollTo(0, currentScroll);
-  }, [currentScroll, url]);
+  }, [currentScroll]);
 
   return (
     <Switch>
