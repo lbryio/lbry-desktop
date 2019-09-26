@@ -3,8 +3,8 @@ import { connect } from 'react-redux';
 import { selectBalance, formatCredits } from 'lbry-redux';
 import { selectUserVerifiedEmail } from 'lbryinc';
 import { doSetClientSetting } from 'redux/actions/settings';
-import { makeSelectClientSetting } from 'redux/selectors/settings';
 import { doSignOut } from 'redux/actions/app';
+import { makeSelectClientSetting } from 'redux/selectors/settings';
 import Header from './view';
 
 const select = state => ({

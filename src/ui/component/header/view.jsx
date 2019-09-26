@@ -13,11 +13,8 @@ import { Menu, MenuList, MenuButton, MenuItem } from '@reach/menu-button';
 import Tooltip from 'component/common/tooltip';
 
 type Props = {
-  autoUpdateDownloaded: boolean,
   balance: string,
-  isUpgradeAvailable: boolean,
   roundedBalance: number,
-  downloadUpgradeRequested: any => void,
   history: { push: string => void, goBack: () => void, goForward: () => void },
   currentTheme: string,
   automaticDarkModeEnabled: boolean,
@@ -137,7 +134,10 @@ const Header = (props: Props) => {
                         {__('Sign Out')}
                       </MenuItem>
                     ) : (
-                      <MenuItem onSelect={() => {}} />
+                      <MenuItem className="menu__link" onSelect={() => history.push(`/$/${PAGES.AUTH}`)}>
+                        <Icon aria-hidden icon={ICONS.SIGN_IN} />
+                        {__('Sign In')}
+                      </MenuItem>
                     )}
                   </MenuList>
                 </Menu>

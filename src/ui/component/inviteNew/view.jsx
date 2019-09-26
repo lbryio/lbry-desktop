@@ -77,7 +77,7 @@ class InviteNew extends React.PureComponent<Props> {
       <Card
         title={__('Invite a Friend')}
         subtitle={__('When your friends start using LBRY, the network gets stronger!')}
-        body={
+        actions={
           <React.Fragment>
             <FormInviteNew
               errorMessage={errorMessage}

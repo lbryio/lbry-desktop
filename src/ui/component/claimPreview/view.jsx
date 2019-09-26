@@ -1,4 +1,5 @@
 // @flow
+import type { Node } from 'react';
 import React, { Fragment, useEffect, forwardRef } from 'react';
 import classnames from 'classnames';
 import { parseURI, convertToShareLink } from 'lbry-redux';
@@ -45,6 +46,9 @@ type Props = {
   channelIsBlocked: boolean,
   isSubscribed: boolean,
   beginPublish: string => void,
+  actions: boolean | Node | string | number,
+  properties: boolean | Node | string | number,
+  onClick?: any => any,
 };
 
 const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
@@ -70,12 +74,14 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
     channelIsBlocked,
     isSubscribed,
     beginPublish,
+    actions,
+    properties,
+    onClick,
   } = props;
   const shouldFetch = claim === undefined || (claim !== null && claim.value_type === 'channel' && isEmpty(claim.meta));
   const abandoned = !isResolvingUri && !claim;
   const claimsInChannel = (claim && claim.meta.claims_in_channel) || 0;
   const showPublishLink = abandoned && placeholder === 'publish';
-  const includeChannelTooltip = type !== 'inline' && type !== 'tooltip';
   const hideActions = type === 'small' || type === 'tooltip';
 
   let name;
@@ -90,6 +96,7 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
   }
 
   const isChannel = isValid ? parseURI(uri).isChannel : false;
+  const includeChannelTooltip = type !== 'inline' && type !== 'tooltip' && !isChannel;
   const signingChannel = claim && claim.signing_channel;
   let shouldHide =
     placeholder !== 'loading' && ((abandoned && !showPublishLink) || (!claimIsMine && obscureNsfw && nsfw));
@@ -129,8 +136,10 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
     }
   }
 
-  function onClick(e) {
-    if ((isChannel || title) && !pending) {
+  function handleOnClick(e) {
+    if (onClick) {
+      onClick(e);
+    } else if ((isChannel || title) && !pending) {
       history.push(formatLbryUriForWeb(uri));
     }
   }
@@ -161,7 +170,7 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
     <li
       ref={ref}
       role="link"
-      onClick={pending || type === 'inline' ? undefined : onClick}
+      onClick={pending || type === 'inline' ? undefined : handleOnClick}
       onContextMenu={handleContextMenu}
       className={classnames('claim-preview', {
         'claim-preview--small': type === 'small' || type === 'tooltip',
@@ -178,15 +187,19 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
           <div className="claim-preview-title">
             {claim ? <TruncatedText text={title || claim.name} lines={1} /> : <span>{__('Nothing here')}</span>}
           </div>
-          {!hideActions && (
-            <div className="card__actions--inline">
-              {isChannel && !channelIsBlocked && (
-                <SubscribeButton uri={uri.startsWith('lbry://') ? uri : `lbry://${uri}`} />
+          {actions !== undefined
+            ? actions
+            : !hideActions && (
+                <div className="card__actions--inline">
+                  {isChannel && !channelIsBlocked && !claimIsMine && (
+                    <SubscribeButton uri={uri.startsWith('lbry://') ? uri : `lbry://${uri}`} />
+                  )}
+                  {isChannel && !isSubscribed && !claimIsMine && (
+                    <BlockButton uri={uri.startsWith('lbry://') ? uri : `lbry://${uri}`} />
+                  )}
+                  {!isChannel && claim && <FileProperties uri={uri} />}
+                </div>
               )}
-              {isChannel && !isSubscribed && <BlockButton uri={uri.startsWith('lbry://') ? uri : `lbry://${uri}`} />}
-              {!isChannel && claim && <FileProperties uri={uri} />}
-            </div>
-          )}
         </div>
 
         <div className="claim-preview-properties">
@@ -219,7 +232,7 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
               </div>
             )}
           </div>
-          <ClaimTags uri={uri} type={type} />
+          {properties !== undefined ? properties : <ClaimTags uri={uri} type={type} />}
         </div>
       </div>
     </li>

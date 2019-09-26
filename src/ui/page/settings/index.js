@@ -1,8 +1,13 @@
 import { connect } from 'react-redux';
 import * as SETTINGS from 'constants/settings';
-import { doClearCache, doNotifyEncryptWallet, doNotifyDecryptWallet } from 'redux/actions/app';
-import { doSetDaemonSetting, doSetClientSetting, doGetThemes, doSetDarkTime } from 'redux/actions/settings';
-import { selectIsPasswordSaved } from 'redux/selectors/app';
+import { doClearCache, doNotifyEncryptWallet, doNotifyDecryptWallet, doNotifyForgetPassword } from 'redux/actions/app';
+import {
+  doSetDaemonSetting,
+  doSetClientSetting,
+  doGetThemes,
+  doChangeLanguage,
+  doSetDarkTime,
+} from 'redux/actions/settings';
 import { doSetPlayingUri } from 'redux/actions/content';
 import { makeSelectClientSetting, selectDaemonSettings, selectosNotificationsEnabled } from 'redux/selectors/settings';
 import { doWalletStatus, selectWalletIsEncrypted, selectBlockedChannelsCount } from 'lbry-redux';

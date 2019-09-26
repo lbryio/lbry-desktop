@@ -124,6 +124,11 @@ export default class SplashScreen extends React.PureComponent<Props, State> {
         clearTimeout(this.timeout);
       }
 
+      //
+      //
+      // Try to unlock by default here
+      //
+      //
       // Make sure there isn't another active modal (like INCOMPATIBLE_DAEMON)
       if (launchedModal === false && !modal) {
         this.setState({ launchedModal: true }, () => notifyUnlockWallet());

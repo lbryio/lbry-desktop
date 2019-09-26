@@ -104,9 +104,11 @@ export class FormField extends React.PureComponent<Props> {
         input = (
           <Wrapper>
             <checkbox-element {...elementProps}>
-              <input id={name} type="checkbox" {...inputProps} />
-              <label htmlFor={name}>{label}</label>
-              <checkbox-toggle onClick={inputProps.onChange} />
+              <input id={name} type="checkbox" {...inputProps} tabIndex={0} />
+              <label htmlFor={name} tabIndex={-1}>
+                {label}
+              </label>
+              <checkbox-toggle onClick={inputProps.onChange} tabIndex={-1} />
             </checkbox-element>
           </Wrapper>
         );

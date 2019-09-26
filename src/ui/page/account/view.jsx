@@ -7,16 +7,16 @@ import UserEmail from 'component/userEmail';
 import InviteNew from 'component/inviteNew';
 import InviteList from 'component/inviteList';
 
-const AccountPage = () => {
+const AccountPage = (props: Props) => {
   return (
     <Page>
-      <div className="columns">
+      <div className="columns section">
         <div>
-          <RewardSummary />
           <RewardTotal />
+          <UserEmail />
         </div>
         <div>
-          <UserEmail />
+          <RewardSummary />
           <InviteNew />
         </div>
       </div>

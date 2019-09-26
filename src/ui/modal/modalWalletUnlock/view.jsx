@@ -67,11 +67,11 @@ class ModalWalletUnlock extends React.PureComponent<Props, State> {
         onConfirmed={() => unlockWallet(password)}
         onAborted={quit}
       >
-        <Form onSubmit={() => unlockWallet(password)}>
-          <p>
-            {__('Your wallet has been encrypted with a local password. Please enter your wallet password to proceed.')}{' '}
-            <Button button="link" label={__('Learn more')} href="https://lbry.com/faq/wallet-encryption" />.
-          </p>
+        <p>
+          {__('Your wallet has been encrypted with a local password. Please enter your wallet password to proceed.')}{' '}
+          <Button button="link" label={__('Learn more')} href="https://lbry.com/faq/wallet-encryption" />.
+        </p>
+        <Form className="section" onSubmit={() => unlockWallet(password)}>
           <FormField
             autoFocus
             error={walletUnlockSucceded === false ? 'Incorrect Password' : false}
@@ -88,7 +88,6 @@ class ModalWalletUnlock extends React.PureComponent<Props, State> {
               name="wallet-remember-password"
               onChange={event => this.onChangeRememberPassword(event)}
               checked={rememberPassword}
-              helper={__('You will no longer see this at startup')}
             />
           </fieldset-section>
         </Form>

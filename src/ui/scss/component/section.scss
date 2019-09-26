@@ -10,8 +10,16 @@
   margin-bottom: var(--spacing-main-padding);
 }
 
+.section--padded {
+  padding: var(--spacing-large);
+}
+
 .section--small {
-  max-width: 30rem;
+  max-width: 35rem;
+}
+
+.section__header {
+  margin-bottom: var(--spacing-large);
 }
 
 .section__flex {
