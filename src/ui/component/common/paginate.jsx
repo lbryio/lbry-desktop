@@ -43,7 +43,7 @@ function Paginate(props: Props) {
   return (
     // Hide the paginate controls if we are loading or there is only one page
     // It should still be rendered to trigger the onPageChange callback
-    <Form onSubmit={e => e.preventDefault()} style={totalPages <= 1 || loading ? { display: 'none' } : null}>
+    <Form style={totalPages <= 1 || loading ? { display: 'none' } : null}>
       <fieldset-group class="fieldset-group--smushed fieldgroup--paginate">
         <fieldset-section>
           <ReactPaginate
@@ -63,7 +63,6 @@ function Paginate(props: Props) {
             containerClassName="pagination"
           />
         </fieldset-section>
-
         <FormField
           className="paginate-channel"
           onKeyUp={handlePaginateKeyUp}
