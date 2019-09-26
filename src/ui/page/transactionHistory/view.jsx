@@ -1,9 +1,7 @@
 // @flow
 import React from 'react';
-import classnames from 'classnames';
 import TransactionList from 'component/transactionList';
 import Page from 'component/page';
-import UnsupportedOnWeb from 'component/common/unsupported-on-web';
 
 type Props = {
   fetchMyClaims: () => void,
@@ -26,12 +24,7 @@ class TransactionHistoryPage extends React.PureComponent<Props> {
 
     return (
       <Page>
-        {IS_WEB && <UnsupportedOnWeb />}
-        <section
-          className={classnames('card', {
-            'card--disabled': IS_WEB,
-          })}
-        >
+        <section className="card">
           <TransactionList
             transactions={filteredTransactionPage}
             transactionCount={filteredTransactionsCount}

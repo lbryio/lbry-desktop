@@ -1,4 +1,3 @@
-import * as SETTINGS from 'constants/settings';
 import { connect } from 'react-redux';
 import {
   doWalletStatus,
@@ -27,7 +26,6 @@ import {
   selectUser,
 } from 'lbryinc';
 import { doSetClientSetting } from 'redux/actions/settings';
-import { makeSelectClientSetting } from 'redux/selectors/settings';
 
 const select = state => ({
   walletEncryptSucceeded: selectWalletEncryptSucceeded(state),
@@ -36,7 +34,6 @@ const select = state => ({
   walletEncrypted: selectWalletIsEncrypted(state),
   walletHasTransactions: selectHasTransactions(state),
   user: selectUser(state),
-  syncEnabled: makeSelectClientSetting(SETTINGS.ENABLE_SYNC)(state),
   hasSyncedWallet: selectHasSyncedWallet(state),
   getSyncIsPending: selectGetSyncIsPending(state),
   setSyncIsPending: selectSetSyncIsPending(state),

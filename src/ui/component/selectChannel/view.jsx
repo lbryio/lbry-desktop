@@ -8,7 +8,7 @@ import { CHANNEL_NEW, CHANNEL_ANONYMOUS } from 'constants/claim';
 
 type Props = {
   channel: string, // currently selected channel
-  channels: Array<{ name: string }>,
+  channels: ?Array<{ name: string }>,
   balance: number,
   onChannelChange: string => void,
   createChannel: (string, number) => Promise<any>,

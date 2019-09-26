@@ -1,3 +1,4 @@
+import * as PAGES from 'constants/pages';
 import { connect } from 'react-redux';
 import { doFetchAccessToken, selectAccessToken, selectUser } from 'lbryinc';
 import { selectDaemonSettings } from 'redux/selectors/settings';
@@ -10,7 +11,7 @@ const select = state => ({
 });
 
 const perform = (dispatch, ownProps) => ({
-  doAuth: () => ownProps.history.push('/$/auth?redirect=help'),
+  doAuth: () => ownProps.history.push(`/$/${PAGES.AUTH}?redirect=help`),
   fetchAccessToken: () => dispatch(doFetchAccessToken()),
 });
 

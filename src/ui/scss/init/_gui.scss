@@ -25,7 +25,7 @@ body {
   font-size: 1rem;
   font-weight: 400;
   line-height: 1.5;
-  background-color: mix($lbry-white, $lbry-gray-1, 70%);
+  background-color: var(--color-background);
 
   [data-mode='dark'] & {
     background-color: var(--dm-color-08);
@@ -48,13 +48,15 @@ p {
 
 ul,
 ol {
-  margin-bottom: var(--spacing-large);
 }
 
-ul {
+ul,
+ol {
   list-style: initial;
+  margin-bottom: var(--spacing-large);
 
   li {
+    list-style-position: outside;
     margin: var(--spacing-medium) 0;
   }
 }

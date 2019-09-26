@@ -36,7 +36,6 @@ import { PersistGate } from 'redux-persist/integration/react';
 import 'scss/all.scss';
 
 const APPPAGEURL = 'lbry://?';
-const COOKIE_EXPIRE_TIME = 60 * 60 * 24 * 365; // 1 year
 // @if TARGET='app'
 const { autoUpdater } = remote.require('electron-updater');
 autoUpdater.logger = remote.require('electron-log');
@@ -78,18 +77,19 @@ Lbryio.setOverride(
           throw new Error(__('auth_token is missing from response'));
         }
 
-        const newAuthToken = response.auth_token;
-        authToken = newAuthToken;
+        authToken = response.auth_token;
 
-        // @if TARGET='web'
-        cookie.serialize('auth_token', authToken, {
-          maxAge: COOKIE_EXPIRE_TIME,
+        let date = new Date();
+        date.setFullYear(date.getFullYear() + 1);
+        document.cookie = cookie.serialize('auth_token', authToken, {
+          expires: date,
         });
-        // @endif
+
         // @if TARGET='app'
         ipcRenderer.send('set-auth-token', authToken);
         // @endif
-        resolve();
+
+        resolve(authToken);
       });
     })
 );

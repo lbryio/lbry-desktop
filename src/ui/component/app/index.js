@@ -1,11 +1,11 @@
+import * as SETTINGS from 'constants/settings';
 import { hot } from 'react-hot-loader/root';
 import { connect } from 'react-redux';
-import { doFetchTransactions } from 'lbry-redux';
 import { selectUser, doRewardList, doFetchRewardedContent, doFetchAccessToken, selectAccessToken } from 'lbryinc';
+import { doFetchTransactions, doFetchChannelListMine } from 'lbry-redux';
 import { makeSelectClientSetting, selectThemePath } from 'redux/selectors/settings';
 import { selectIsUpgradeAvailable, selectAutoUpdateDownloaded } from 'redux/selectors/app';
-import { doDownloadUpgradeRequested } from 'redux/actions/app';
-import * as SETTINGS from 'constants/settings';
+import { doDownloadUpgradeRequested, doSignIn } from 'redux/actions/app';
 import App from './view';
 
 const select = state => ({
@@ -23,6 +23,8 @@ const perform = dispatch => ({
   fetchTransactions: () => dispatch(doFetchTransactions()),
   fetchAccessToken: () => dispatch(doFetchAccessToken()),
   requestDownloadUpgrade: () => dispatch(doDownloadUpgradeRequested()),
+  fetchChannelListMine: () => dispatch(doFetchChannelListMine()),
+  onSignedIn: () => dispatch(doSignIn()),
 });
 
 export default hot(

@@ -2,7 +2,7 @@
 import * as ICONS from 'constants/icons';
 import React, { useEffect, useRef } from 'react';
 import analytics from 'analytics';
-import { Lbry, buildURI, parseURI } from 'lbry-redux';
+import { buildURI, parseURI } from 'lbry-redux';
 import Router from 'component/router/index';
 import ModalRouter from 'modal/modalRouter';
 import ReactModal from 'react-modal';
@@ -12,6 +12,7 @@ import Yrbl from 'component/yrbl';
 import FileViewer from 'component/fileViewer';
 import { withRouter } from 'react-router';
 import usePrevious from 'util/use-previous';
+import Button from 'component/button';
 
 export const MAIN_WRAPPER_CLASS = 'main-wrapper';
 
@@ -20,7 +21,6 @@ type Props = {
   pageTitle: ?string,
   language: string,
   theme: string,
-  accessToken: ?string,
   user: ?{ id: string, has_verified_email: boolean, is_reward_approved: boolean },
   location: { pathname: string, hash: string },
   fetchRewards: () => void,
@@ -30,6 +30,8 @@ type Props = {
   autoUpdateDownloaded: boolean,
   isUpgradeAvailable: boolean,
   requestDownloadUpgrade: () => void,
+  fetchChannelListMine: () => void,
+  onSignedIn: () => void,
 };
 
 function App(props: Props) {
@@ -40,10 +42,11 @@ function App(props: Props) {
     fetchTransactions,
     user,
     fetchAccessToken,
-    accessToken,
     requestDownloadUpgrade,
     autoUpdateDownloaded,
     isUpgradeAvailable,
+    fetchChannelListMine,
+    onSignedIn,
   } = props;
   const appRef = useRef();
   const isEnhancedLayout = useKonamiListener();
@@ -70,8 +73,9 @@ function App(props: Props) {
     // @if TARGET='app'
     fetchRewards();
     fetchTransactions();
+    fetchChannelListMine(); // This needs to be done for web too...
     // @endif
-  }, [fetchRewards, fetchRewardedContent, fetchTransactions, fetchAccessToken]);
+  }, [fetchRewards, fetchRewardedContent, fetchTransactions, fetchAccessToken, fetchChannelListMine]);
 
   useEffect(() => {
     // $FlowFixMe
@@ -87,24 +91,27 @@ function App(props: Props) {
   useEffect(() => {
     // Check that previousHasVerifiedEmail was not undefined instead of just not truthy
     // This ensures we don't fire the emailVerified event on the initial user fetch
-    if (previousHasVerifiedEmail !== undefined && hasVerifiedEmail) {
+    if (previousHasVerifiedEmail === false && hasVerifiedEmail) {
       analytics.emailVerifiedEvent();
     }
-  }, [previousHasVerifiedEmail, hasVerifiedEmail]);
+  }, [previousHasVerifiedEmail, hasVerifiedEmail, onSignedIn]);
 
   useEffect(() => {
-    if (previousRewardApproved !== undefined && isRewardApproved) {
+    if (previousRewardApproved === false && isRewardApproved) {
       analytics.rewardEligibleEvent();
     }
   }, [previousRewardApproved, isRewardApproved]);
 
-  // @if TARGET='web'
+  // Keep this at the end to ensure initial setup effects are run first
   useEffect(() => {
-    if (hasVerifiedEmail && accessToken) {
-      Lbry.setApiHeader('X-Lbry-Auth-Token', accessToken);
+    if (!previousHasVerifiedEmail && hasVerifiedEmail) {
+      onSignedIn();
     }
-  }, [hasVerifiedEmail, accessToken]);
-  // @endif
+  }, [previousHasVerifiedEmail, hasVerifiedEmail, onSignedIn]);
+
+  if (!user) {
+    return null;
+  }
 
   return (
     <div className={MAIN_WRAPPER_CLASS} ref={appRef} onContextMenu={e => openContextMenu(e)}>
