@@ -14,7 +14,7 @@ import {
   doError,
   makeSelectClaimForUri,
   makeSelectClaimIsMine,
-  doPopulateUserSettings,
+  doPopulateSharedUserState,
   doFetchChannelListMine,
 } from 'lbry-redux';
 import Native from 'native';
@@ -457,7 +457,7 @@ export function doSignIn() {
     // @endif
 
     Lbryio.call('user_settings', 'get').then(settings => {
-      dispatch(doPopulateUserSettings(settings));
+      dispatch(doPopulateSharedUserState(settings));
     });
   };
 }
