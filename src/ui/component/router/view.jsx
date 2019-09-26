@@ -1,7 +1,7 @@
 // @flow
 import * as PAGES from 'constants/pages';
 import React, { useEffect } from 'react';
-import { Route, Switch, withRouter } from 'react-router-dom';
+import { Route, Redirect, Switch, withRouter } from 'react-router-dom';
 import SettingsPage from 'page/settings';
 import HelpPage from 'page/help';
 import ReportPage from 'page/report';
