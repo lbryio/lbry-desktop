@@ -5,7 +5,6 @@ import { Form, FormField } from 'component/common/form';
 import ReactPaginate from 'react-paginate';
 
 const PAGINATE_PARAM = 'page';
-const ENTER_KEY_CODE = 13;
 
 type Props = {
   loading: boolean,
@@ -18,6 +17,7 @@ type Props = {
 function Paginate(props: Props) {
   const { totalPages = 1, loading, location, history, onPageChange } = props;
   const { search } = location;
+  const [textValue, setTextValue] = React.useState('');
   const urlParams = new URLSearchParams(search);
   const currentPage = Number(urlParams.get(PAGINATE_PARAM)) || 1;
 
@@ -31,11 +31,9 @@ function Paginate(props: Props) {
     }
   }
 
-  function handlePaginateKeyUp(e: SyntheticKeyboardEvent<*>) {
-    const newPage = Number(e.currentTarget.value);
-    const isEnterKey = e.keyCode === ENTER_KEY_CODE;
-
-    if (newPage && isEnterKey && newPage > 0 && newPage <= totalPages) {
+  function handlePaginateKeyUp() {
+    const newPage = Number(textValue);
+    if (newPage && newPage > 0 && newPage <= totalPages) {
       handleChangePage(newPage);
     }
   }
@@ -43,7 +41,7 @@ function Paginate(props: Props) {
   return (
     // Hide the paginate controls if we are loading or there is only one page
     // It should still be rendered to trigger the onPageChange callback
-    <Form style={totalPages <= 1 || loading ? { display: 'none' } : null}>
+    <Form style={totalPages <= 1 || loading ? { display: 'none' } : null} onSubmit={handlePaginateKeyUp}>
       <fieldset-group class="fieldset-group--smushed fieldgroup--paginate">
         <fieldset-section>
           <ReactPaginate
@@ -64,8 +62,9 @@ function Paginate(props: Props) {
           />
         </fieldset-section>
         <FormField
+          value={textValue}
+          onChange={e => setTextValue(e.target.value)}
           className="paginate-channel"
-          onKeyUp={handlePaginateKeyUp}
           label={__('Go to page:')}
           type="text"
           name="paginate-file"

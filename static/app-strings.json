@@ -709,5 +709,7 @@
   "This will add a Support button along side tipping. Similar to tips, supports help %discovery_link% but the LBC is returned to your wallet if revoked. Both also help secure your %vanity_names_link%.": "This will add a Support button along side tipping. Similar to tips, supports help %discovery_link% but the LBC is returned to your wallet if revoked. Both also help secure your %vanity_names_link%.",
   "Tip %amount% LBC": "Tip %amount% LBC",
   "Not enough credits": "Not enough credits",
-  "You have %credit_amount% in unclaimed rewards.": "You have %credit_amount% in unclaimed rewards."
+  "You have %credit_amount% in unclaimed rewards.": "You have %credit_amount% in unclaimed rewards.",
+  "You haven't downloaded anything from LBRY yet.": "You haven't downloaded anything from LBRY yet.",
+  "Explore new content": "Explore new content"
 }
