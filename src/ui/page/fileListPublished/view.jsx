@@ -30,7 +30,6 @@ function FileListPublished(props: Props) {
             loading={fetching}
             persistedStorageKey="claim-list-published"
             uris={urls}
-            defaultSort
             headerAltControls={<Button button="link" label={__('New Publish')} navigate="/$/publish" />}
           />
           <Paginate totalPages={Math.ceil(Number(urlTotal) / Number(PAGE_SIZE))} loading={fetching} />
