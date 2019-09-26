@@ -710,5 +710,6 @@
   "Not enough credits": "Not enough credits",
   "You have %credit_amount% in unclaimed rewards.": "You have %credit_amount% in unclaimed rewards.",
   "URI does not include name.": "URI does not include name.",
-  "to fix it. If that doesn't work, press CMD/CTRL-R to reset to the homepage.": "to fix it. If that doesn't work, press CMD/CTRL-R to reset to the homepage."
+  "to fix it. If that doesn't work, press CMD/CTRL-R to reset to the homepage.": "to fix it. If that doesn't work, press CMD/CTRL-R to reset to the homepage.",
+  "Add Email": "Add Email"
 }
