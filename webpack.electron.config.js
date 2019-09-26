@@ -4,7 +4,7 @@ const webpack = require('webpack');
 const merge = require('webpack-merge');
 const baseConfig = require('./webpack.base.config.js');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
-const { DefinePlugin } = require('webpack');
+const { DefinePlugin, ProvidePlugin } = require('webpack');
 const { getIfUtils, removeEmpty } = require('webpack-config-utils');
 const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
 
@@ -110,6 +110,9 @@ const renderConfig = {
     // new BundleAnalyzerPlugin(),
     new DefinePlugin({
       IS_WEB: JSON.stringify(false),
+    }),
+    new ProvidePlugin({
+      __: ['i18n.js', '__'],
     }),
   ],
 };

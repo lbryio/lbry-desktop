@@ -106,9 +106,6 @@ let baseConfig = {
   plugins: [
     new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
     new webpack.EnvironmentPlugin(['NODE_ENV']),
-    new ProvidePlugin({
-      __: ['i18n.js', '__'],
-    }),
     new DefinePlugin({
       __static: `"${path.join(__dirname, 'static').replace(/\\/g, '\\\\')}"`,
       'process.env.NODE_ENV': JSON.stringify(NODE_ENV),

@@ -3,7 +3,7 @@ const path = require('path');
 const merge = require('webpack-merge');
 const baseConfig = require('./webpack.base.config.js');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
-const { DefinePlugin } = require('webpack');
+const { DefinePlugin, ProvidePlugin } = require('webpack');
 
 const STATIC_ROOT = path.resolve(__dirname, 'static/');
 const DIST_ROOT = path.resolve(__dirname, 'dist/');
@@ -69,6 +69,9 @@ const webConfig = {
     ]),
     new DefinePlugin({
       IS_WEB: JSON.stringify(true),
+    }),
+    new ProvidePlugin({
+      __: ['i18n.js', '__'],
     }),
   ],
 };
