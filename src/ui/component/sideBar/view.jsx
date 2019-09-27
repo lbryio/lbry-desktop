@@ -69,25 +69,27 @@ function SideBar(props: Props) {
           className="navigation-link"
           activeClass="navigation-link--active"
         />
-        <ul className="navigation-links tags--vertical">
-          {followedTags.map(({ name }, key) => (
-            <li className="navigation-link__wrapper" key={name}>
-              <Tag navigate={`/$/tags?t${name}`} name={name} />
-            </li>
-          ))}
-        </ul>
-        <ul className="navigation-links--small">
-          {subscriptions.map(({ uri, channelName }, index) => (
-            <li key={uri} className="navigation-link__wrapper">
-              <Button
-                navigate={uri}
-                label={channelName}
-                className="navigation-link"
-                activeClass="navigation-link--active"
-              />
-            </li>
-          ))}
-        </ul>
+        <section className="navigation-links__inline">
+          <ul className="navigation-links--small tags--vertical">
+            {followedTags.map(({ name }, key) => (
+              <li className="navigation-link__wrapper" key={name}>
+                <Tag navigate={`/$/tags?t${name}`} name={name} />
+              </li>
+            ))}
+          </ul>
+          <ul className="navigation-links--small">
+            {subscriptions.map(({ uri, channelName }, index) => (
+              <li key={uri} className="navigation-link__wrapper">
+                <Button
+                  navigate={uri}
+                  label={channelName}
+                  className="navigation-link"
+                  activeClass="navigation-link--active"
+                />
+              </li>
+            ))}
+          </ul>
+        </section>
       </nav>
     </StickyBox>
   );

@@ -1,7 +1,7 @@
 // @flow
 import React from 'react';
 import TotalBackground from './total-background.png';
-import useTween from 'util/use-tween';
+import useTween from 'effects/use-tween';
 
 type Props = {
   rewards: Array<Reward>,

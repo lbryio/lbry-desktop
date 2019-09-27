@@ -124,11 +124,6 @@ export default class SplashScreen extends React.PureComponent<Props, State> {
         clearTimeout(this.timeout);
       }
 
-      //
-      //
-      // Try to unlock by default here
-      //
-      //
       // Make sure there isn't another active modal (like INCOMPATIBLE_DAEMON)
       if (launchedModal === false && !modal) {
         this.setState({ launchedModal: true }, () => notifyUnlockWallet());
@@ -153,10 +148,10 @@ export default class SplashScreen extends React.PureComponent<Props, State> {
         });
       }
     } else if (wallet && wallet.blocks_behind > 0) {
-      const format = wallet.blocks_behind === 1 ? '%s block behind' : '%s blocks behind';
+      const amountBehind = wallet.blocks_behind === 1 ? '%amountBehind% block behind' : '%amountBehind% blocks behind';
       this.setState({
         message: __('Blockchain Sync'),
-        details: `${__('Catching up...')} (${__(format, wallet.blocks_behind)})`,
+        details: `${__('Catching up...')} (${__(amountBehind, { amountBehind: wallet.blocks_behind })})`,
       });
     } else if (
       wallet &&

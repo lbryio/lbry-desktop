@@ -1,6 +1,12 @@
 $border-color: rgba($lbry-teal-5, 0.1);
 $border-color--dark: var(--dm-color-04);
 
+.claim-list {
+  .claim-preview {
+    border-top: 1px solid $border-color;
+  }
+}
+
 .claim-list__header {
   display: flex;
   align-items: center;
@@ -85,6 +91,7 @@ $border-color--dark: var(--dm-color-04);
 }
 
 .claim-preview {
+  flex: 1;
   display: flex;
   position: relative;
   overflow: visible;
@@ -99,25 +106,9 @@ $border-color--dark: var(--dm-color-04);
     flex-shrink: 0;
     margin-right: var(--spacing-medium);
   }
-}
-
-.claim-preview {
-  border-top: 1px solid $border-color;
-
-  &:only-of-type {
-    border: none;
-  }
 
   [data-mode='dark'] & {
     color: $lbry-white;
-    border-color: $border-color--dark;
-  }
-}
-
-.claim-preview--injected + .claim-preview {
-  border-top: 1px solid $border-color;
-
-  [data-mode='dark'] & {
     border-color: $border-color--dark;
   }
 }

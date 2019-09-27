@@ -4,7 +4,7 @@ import * as ICONS from 'constants/icons';
 import React, { useRef } from 'react';
 import { parseURI } from 'lbry-redux';
 import Button from 'component/button';
-import useHover from 'util/use-hover';
+import useHover from 'effects/use-hover';
 
 type SubscriptionArgs = {
   channelName: string,

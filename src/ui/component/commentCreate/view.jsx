@@ -5,7 +5,7 @@ import { FormField, Form } from 'component/common/form';
 import Button from 'component/button';
 import ChannelSection from 'component/selectChannel';
 import UnsupportedOnWeb from 'component/common/unsupported-on-web';
-import usePersistedState from 'util/use-persisted-state';
+import usePersistedState from 'effects/use-persisted-state';
 
 type Props = {
   uri: string,

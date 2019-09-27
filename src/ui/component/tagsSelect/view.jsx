@@ -4,7 +4,7 @@ import * as React from 'react';
 import Button from 'component/button';
 import Tag from 'component/tag';
 import TagsSearch from 'component/tagsSearch';
-import usePersistedState from 'util/use-persisted-state';
+import usePersistedState from 'effects/use-persisted-state';
 import analytics from 'analytics';
 import Card from 'component/common/card';
 
@@ -73,7 +73,15 @@ export default function TagSelect(props: Props) {
             )}
           </React.Fragment>
         }
-        body={
+        subtitle={
+          help !== false && (
+            <span>
+              {help || __("The tags you follow will change what's trending for you.")}{' '}
+              <Button button="link" label={__('Learn more')} href="https://lbry.com/faq/trending" />.
+            </span>
+          )
+        }
+        actions={
           <React.Fragment>
             <TagsSearch
               onRemove={handleTagClick}
@@ -81,12 +89,6 @@ export default function TagSelect(props: Props) {
               suggestMature={suggestMature && !hasMatureTag}
               tagsPasssedIn={tagsToDisplay}
             />
-            {help !== false && (
-              <p className="help">
-                {help || __("The tags you follow will change what's trending for you.")}{' '}
-                <Button button="link" label={__('Learn more')} href="https://lbry.com/faq/trending" />.
-              </p>
-            )}
           </React.Fragment>
         }
       />

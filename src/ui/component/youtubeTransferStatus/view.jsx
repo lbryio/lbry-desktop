@@ -13,25 +13,33 @@ type Props = {
   videosImported: ?Array<number>, // [currentAmountImported, totalAmountToImport]
 };
 
-const LBRY_YT_URL = 'https://lbry.com/youtube/status/';
-const NOT_TRANSFERED = 'not_transferred';
+const NOT_TRANSFERRED = 'not_transferred';
 const PENDING_TRANSFER = 'pending_transfer';
 const COMPLETED_TRANSFER = 'completed_transfer';
 
 export default function YoutubeTransferStatus(props: Props) {
   const { youtubeChannels, ytImportPending, claimChannels, videosImported, checkYoutubeTransfer, updateUser } = props;
-
   const hasChannels = youtubeChannels && youtubeChannels.length;
-  const transferEnabled = youtubeChannels && youtubeChannels.some(el => el.transferable === true);
-  const transferComplete =
-    youtubeChannels &&
-    youtubeChannels.some(({ transfer_state: transferState }) => transferState === COMPLETED_TRANSFER);
 
-  let youtubeUrls =
-    youtubeChannels &&
-    youtubeChannels.map(
-      ({ lbry_channel_name: channelName, channel_claim_id: claimId }) => `lbry://${channelName}#${claimId}`
-    );
+  let transferEnabled = false;
+  let transferStarted = false;
+  let transferComplete = false;
+  if (hasChannels) {
+    for (var i = 0; i < youtubeChannels.length; i++) {
+      const { transfer_state: transferState, transferable } = youtubeChannels[i];
+      if (transferable) {
+        transferEnabled = true;
+      }
+
+      if (transferState === COMPLETED_TRANSFER) {
+        transferComplete = true;
+      }
+
+      if (transferState === PENDING_TRANSFER) {
+        transferStarted = true;
+      }
+    }
+  }
 
   let total;
   let complete;
@@ -44,7 +52,7 @@ export default function YoutubeTransferStatus(props: Props) {
     const { transferable, transfer_state: transferState, sync_status: syncStatus } = channel;
     if (!transferable) {
       switch (transferState) {
-        case NOT_TRANSFERED:
+        case NOT_TRANSFERRED:
           return syncStatus[0].toUpperCase() + syncStatus.slice(1);
         case PENDING_TRANSFER:
           return __('Transfer in progress');
@@ -58,7 +66,7 @@ export default function YoutubeTransferStatus(props: Props) {
 
   React.useEffect(() => {
     // If a channel is transferrable, theres nothing to check
-    if (!transferComplete) {
+    if (transferStarted && !transferComplete) {
       checkYoutubeTransfer();
 
       let interval = setInterval(() => {
@@ -70,30 +78,29 @@ export default function YoutubeTransferStatus(props: Props) {
         clearInterval(interval);
       };
     }
-  }, [transferComplete, checkYoutubeTransfer, updateUser]);
+  }, [transferComplete, transferStarted, checkYoutubeTransfer, updateUser]);
 
   return (
     hasChannels &&
     !transferComplete && (
       <div>
         <Card
-          title={youtubeUrls.length > 1 ? __('Your YouTube Channels') : __('Your YouTube Channel')}
+          title={youtubeChannels.length > 1 ? __('Your YouTube Channels') : __('Your YouTube Channel')}
           subtitle={
             <span>
-              {__('Your videos are currently being transferred. There is nothing else for you to do.')}{' '}
-              <Button button="link" href={LBRY_YT_URL} label={__('Learn more')} />.
+              {transferStarted
+                ? __('Your videos are currently being transferred. There is nothing else for you to do.')
+                : __('Your videos are ready to be transferred.')}
             </span>
           }
           body={
             <section>
-              {youtubeUrls.map((url, index) => {
-                const channel = youtubeChannels[index];
+              {youtubeChannels.map((channel, index) => {
+                const { lbry_channel_name: channelName, channel_claim_id: claimId } = channel;
+                const url = `lbry://${channelName}#${claimId}`;
                 const transferState = getMessage(channel);
                 return (
-                  <div
-                    key={url}
-                    style={{ border: '1px solid #ccc', borderRadius: 'var(--card-radius)', marginBottom: '1rem' }}
-                  >
+                  <div key={url} className="card--inline">
                     <ClaimPreview uri={url} actions={<span className="help">{transferState}</span>} properties={''} />
                   </div>
                 );

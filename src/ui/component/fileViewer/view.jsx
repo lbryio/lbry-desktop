@@ -6,8 +6,8 @@ import classnames from 'classnames';
 import LoadingScreen from 'component/common/loading-screen';
 import FileRender from 'component/fileRender';
 import UriIndicator from 'component/uriIndicator';
-import usePersistedState from 'util/use-persisted-state';
-import usePrevious from 'util/use-previous';
+import usePersistedState from 'effects/use-persisted-state';
+import usePrevious from 'effects/use-previous';
 import { FILE_WRAPPER_CLASS } from 'page/file/view';
 import Draggable from 'react-draggable';
 import Tooltip from 'component/common/tooltip';
@@ -86,7 +86,7 @@ export default function FileViewer(props: Props) {
     function handleResize() {
       const element = document.querySelector(`.${FILE_WRAPPER_CLASS}`);
       if (!element) {
-        console.error("Can't find file viewer wrapper to attach to the inline viewer to");
+        console.error("Can't find file viewer wrapper to attach to the inline viewer to"); // eslint-disable-line
         return;
       }
 
