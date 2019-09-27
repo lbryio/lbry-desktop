@@ -16,7 +16,7 @@ $metadata-z-index: 1;
   align-self: flex-start;
   position: absolute;
   object-fit: cover;
-  filter: brightness(40%);
+  filter: brightness(30%);
 }
 
 .channel-cover,
@@ -78,9 +78,10 @@ $metadata-z-index: 1;
   // Jump over the thumbnail photo because it is absolutely positioned
   // Then add normal page spacing, _then_ add the actual padding
   padding-left: calc(var(--channel-thumbnail-width) + var(--spacing-large));
-  // padding-left: var(--spacing-large);
+  padding-right: var(--spacing-medium);
   padding-bottom: var(--spacing-medium);
   min-width: 0;
+  width: 100%;
 }
 
 .channel__title {
@@ -98,9 +99,9 @@ $metadata-z-index: 1;
   }
 }
 
-.channel__url {
-  color: rgba($lbry-white, 0.75);
-  margin-right: var(--spacing-large);
+.channel__meta {
+  display: flex;
+  justify-content: space-between;
 }
 
 .channel__image--blurred {
