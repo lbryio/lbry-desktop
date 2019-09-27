@@ -1,6 +1,9 @@
 // @flow
 import * as React from 'react';
+// @if TARGET='app'
+// $FlowFixMe
 import { remote } from 'electron';
+// @endif
 import Button from 'component/button';
 import { FormField } from 'component/common/form';
 import path from 'path';
@@ -26,7 +29,7 @@ class FileSelector extends React.PureComponent<Props> {
     type: 'file',
   };
 
-  fileInput: { current: React.ElementRef<any> };
+  fileInput: React.ElementRef<any>;
 
   constructor() {
     super();
@@ -61,19 +64,19 @@ class FileSelector extends React.PureComponent<Props> {
   }
 
   // TODO: Add this back for web publishing
-  // handleFileInputSelection() {
-  //   const { files } = this.fileInput.current;
-  //   if (!files) {
-  //     return;
-  //   }
+  handleFileInputSelection() {
+    const { files } = this.fileInput.current;
+    if (!files) {
+      return;
+    }
 
-  //   const filePath = files[0];
-  //   const fileName = filePath.name;
+    const filePath = files[0];
+    const fileName = filePath.name;
 
-  //   if (this.props.onFileChosen) {
-  //     this.props.onFileChosen(filePath, fileName);
-  //   }
-  // }
+    if (this.props.onFileChosen) {
+      this.props.onFileChosen(filePath, fileName);
+    }
+  }
 
   input: ?HTMLInputElement;
 
@@ -84,6 +87,7 @@ class FileSelector extends React.PureComponent<Props> {
 
     return (
       <React.Fragment>
+        {/* @if TARGET='app' */}
         <FormField
           label={label}
           webkitdirectory="true"
@@ -91,12 +95,16 @@ class FileSelector extends React.PureComponent<Props> {
           type="text"
           ref={this.fileInput}
           onFocus={() => {
-            if (this.fileInput) this.fileInput.current.select();
+            if (this.fileInput) this.fileInput.select();
           }}
           readOnly="readonly"
           value={currentPath || placeholder || __('Choose a file')}
-          inputButton={<Button button="primary" label={buttonLabel} onClick={() => this.handleButtonClick()} />}
+          inputButton={<Button button="primary" onClick={() => this.handleButtonClick()} label={buttonLabel} />}
         />
+        {/* @endif */}
+        {/* @if TARGET='web' */}
+        <input type="file" ref={this.fileInput} onChange={() => this.handleFileInputSelection()} />
+        {/* @endif */}
       </React.Fragment>
     );
   }
