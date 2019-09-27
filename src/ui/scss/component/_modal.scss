@@ -23,6 +23,7 @@
   overflow: auto;
   padding: var(--spacing-large);
   word-break: break-word;
+  box-shadow: none;
 
   @media (min-width: 501px) {
     min-width: 500px;

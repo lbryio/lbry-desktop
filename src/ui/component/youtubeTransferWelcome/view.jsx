@@ -37,7 +37,7 @@ export default function UserYoutubeTransfer(props: Props) {
 
       <section className="section">
         {youtubeChannels.map(({ lbry_channel_name: channelName, channel_claim_id: claimId }) => (
-          <div key={channelName} className={classnames('card--claim-preview-wrap')}>
+          <div key={channelName} className={classnames('card--inline')}>
             <ClaimPreview disabled onClick={() => {}} actions={false} uri={`lbry://${channelName}#${claimId}`} />
           </div>
         ))}
@@ -45,10 +45,8 @@ export default function UserYoutubeTransfer(props: Props) {
 
       {hasPendingYoutubeTransfer ? (
         <section className="section">
-          <div className="section__header">
-            <h1 className="section__title">{__('Transfer In Progress...')}</h1>
-            <p className="section__subtitle">{__('You can now publish and comment using your official channel.')}</p>
-          </div>
+          <h1 className="section__title">{__('Transfer In Progress...')}</h1>
+          <p className="section__subtitle">{__('You can now publish and comment using your official channel.')}</p>
 
           <div className="card__actions">
             <Button
@@ -60,10 +58,8 @@ export default function UserYoutubeTransfer(props: Props) {
         </section>
       ) : (
         <section className="section">
-          <div className="section__header">
-            <h1 className="section__title">{__('Begin Transfer')}</h1>
-            <p className="section__subtitle">{__('Do it to it.')}</p>
-          </div>
+          <h1 className="section__title">{__('Begin Transfer')}</h1>
+          <p className="section__subtitle">{__('Do it to it.')}</p>
           <div className="section__actions">
             <Button button="primary" label={__('Transfer')} onClick={claimChannels} />
           </div>

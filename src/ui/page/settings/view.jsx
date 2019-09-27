@@ -5,12 +5,13 @@
 import * as SETTINGS from 'constants/settings';
 import * as PAGES from 'constants/pages';
 import * as React from 'react';
-import { FormField, FormFieldPrice, Form } from 'component/common/form';
+import { FormField, FormFieldPrice } from 'component/common/form';
 import Button from 'component/button';
 import I18nMessage from 'component/i18nMessage';
 import Page from 'component/page';
 import SettingLanguage from 'component/settingLanguage';
 import FileSelector from 'component/common/file-selector';
+import Card from 'component/common/card';
 import { getSavedPassword } from 'util/saved-passwords';
 
 type Price = {
@@ -227,182 +228,193 @@ class SettingsPage extends React.PureComponent<Props, State> {
           </section>
         ) : (
           <div>
-            <section className="card card--section">
-              <h2 className="card__title">{__('Language')}</h2>
-              <Form>
-                <SettingLanguage />
-              </Form>
-            </section>
+            <Card title={__('Language')} actions={<SettingLanguage />} />
             {/* @if TARGET='app' */}
-            <section className="card card--section">
-              <h2 className="card__title">{__('Download Directory')}</h2>
+            <Card
+              title={__('Download Directory')}
+              actions={
+                <React.Fragment>
+                  <FileSelector
+                    type="openDirectory"
+                    currentPath={daemonSettings.download_dir}
+                    onFileChosen={(newDirectory: string) => {
+                      setDaemonSetting('download_dir', newDirectory);
+                    }}
+                  />
+                  <p className="help">{__('LBRY downloads will be saved here.')}</p>
+                </React.Fragment>
+              }
+            />
 
-              <div className="card__content">
-                <FileSelector
-                  type="openDirectory"
-                  currentPath={daemonSettings.download_dir}
-                  onFileChosen={(newDirectory: string) => {
-                    setDaemonSetting('download_dir', newDirectory);
-                  }}
-                />
-                <p className="help">{__('LBRY downloads will be saved here.')}</p>
-              </div>
-            </section>
-            <section className="card card--section">
-              <h2 className="card__title">{__('Network and Data Settings')}</h2>
-              <Form>
-                <FormField
-                  type="checkbox"
-                  name="save_files"
-                  onChange={() => setDaemonSetting('save_files', !daemonSettings.save_files)}
-                  checked={daemonSettings.save_files}
-                  label={__('Save all viewed content to your downloads directory')}
-                  helper={__(
-                    'Paid content and some file types are saved by default. Changing this setting will not affect previously downloaded content.'
+            <Card
+              title={__('Network and Data Settings')}
+              actions={
+                <React.Fragment>
+                  <FormField
+                    type="checkbox"
+                    name="save_files"
+                    onChange={() => setDaemonSetting('save_files', !daemonSettings.save_files)}
+                    checked={daemonSettings.save_files}
+                    label={__('Save all viewed content to your downloads directory')}
+                    helper={__(
+                      'Paid content and some file types are saved by default. Changing this setting will not affect previously downloaded content.'
+                    )}
+                  />
+
+                  <FormField
+                    type="checkbox"
+                    name="save_blobs"
+                    onChange={() => setDaemonSetting('save_blobs', !daemonSettings.save_blobs)}
+                    checked={daemonSettings.save_blobs}
+                    label={__('Save hosting data to help the LBRY network')}
+                    helper={
+                      <React.Fragment>
+                        {__("If disabled, LBRY will be very sad and you won't be helping improve the network.")}{' '}
+                        <Button button="link" label={__('Learn more')} href="https://lbry.com/faq/host-content" />.
+                      </React.Fragment>
+                    }
+                  />
+                </React.Fragment>
+              }
+            />
+
+            <Card
+              title={__('Max Purchase Price')}
+              actions={
+                <React.Fragment>
+                  <FormField
+                    type="radio"
+                    name="no_max_purchase_no_limit"
+                    checked={disableMaxKeyFee}
+                    label={__('No Limit')}
+                    onChange={() => {
+                      this.onKeyFeeDisableChange(true);
+                    }}
+                  />
+                  <FormField
+                    type="radio"
+                    name="max_purchase_limit"
+                    checked={!disableMaxKeyFee}
+                    onChange={() => {
+                      this.onKeyFeeDisableChange(false);
+                      this.onKeyFeeChange(defaultMaxKeyFee);
+                    }}
+                    label={__('Choose limit')}
+                  />
+
+                  {!disableMaxKeyFee && (
+                    <FormFieldPrice
+                      name="max_key_fee"
+                      min={0}
+                      onChange={this.onKeyFeeChange}
+                      price={daemonSettings.max_key_fee ? daemonSettings.max_key_fee : defaultMaxKeyFee}
+                    />
                   )}
-                />
-              </Form>
-              <Form>
-                <FormField
-                  type="checkbox"
-                  name="save_blobs"
-                  onChange={() => setDaemonSetting('save_blobs', !daemonSettings.save_blobs)}
-                  checked={daemonSettings.save_blobs}
-                  label={__('Save hosting data to help the LBRY network')}
-                  helper={
-                    <React.Fragment>
-                      {__("If disabled, LBRY will be very sad and you won't be helping improve the network.")}{' '}
-                      <Button button="link" label={__('Learn more')} href="https://lbry.com/faq/host-content" />.
-                    </React.Fragment>
-                  }
-                />
-              </Form>
-            </section>
-            <section className="card card--section">
-              <h2 className="card__title">{__('Max Purchase Price')}</h2>
 
-              <Form>
-                <FormField
-                  type="radio"
-                  name="no_max_purchase_no_limit"
-                  checked={disableMaxKeyFee}
-                  label={__('No Limit')}
-                  onChange={() => {
-                    this.onKeyFeeDisableChange(true);
-                  }}
-                />
-                <FormField
-                  type="radio"
-                  name="max_purchase_limit"
-                  checked={!disableMaxKeyFee}
-                  onChange={() => {
-                    this.onKeyFeeDisableChange(false);
-                    this.onKeyFeeChange(defaultMaxKeyFee);
-                  }}
-                  label={__('Choose limit')}
-                />
+                  <p className="help">
+                    {__('This will prevent you from purchasing any content over a certain cost, as a safety measure.')}
+                  </p>
+                </React.Fragment>
+              }
+            />
 
-                {!disableMaxKeyFee && (
-                  <FormFieldPrice
-                    name="max_key_fee"
-                    min={0}
-                    onChange={this.onKeyFeeChange}
-                    price={daemonSettings.max_key_fee ? daemonSettings.max_key_fee : defaultMaxKeyFee}
+            <Card
+              title={__('Purchase Confirmations')}
+              actions={
+                <React.Fragment>
+                  <FormField
+                    type="radio"
+                    name="confirm_all_purchases"
+                    checked={!instantPurchaseEnabled}
+                    label={__('Always confirm before purchasing content')}
+                    onChange={() => {
+                      this.onInstantPurchaseEnabledChange(false);
+                    }}
                   />
-                )}
-
-                <p className="help">
-                  {__('This will prevent you from purchasing any content over a certain cost, as a safety measure.')}
-                </p>
-              </Form>
-            </section>
-            <section className="card card--section">
-              <h2 className="card__title">{__('Purchase Confirmations')}</h2>
-
-              <Form>
-                <FormField
-                  type="radio"
-                  name="confirm_all_purchases"
-                  checked={!instantPurchaseEnabled}
-                  label={__('Always confirm before purchasing content')}
-                  onChange={() => {
-                    this.onInstantPurchaseEnabledChange(false);
-                  }}
-                />
-                <FormField
-                  type="radio"
-                  name="instant_purchases"
-                  checked={instantPurchaseEnabled}
-                  label={__('Only confirm purchases over a certain price')}
-                  onChange={() => {
-                    this.onInstantPurchaseEnabledChange(true);
-                  }}
-                />
-
-                {instantPurchaseEnabled && (
-                  <FormFieldPrice
-                    name="confirmation_price"
-                    min={0.1}
-                    onChange={this.onInstantPurchaseMaxChange}
-                    price={instantPurchaseMax}
+                  <FormField
+                    type="radio"
+                    name="instant_purchases"
+                    checked={instantPurchaseEnabled}
+                    label={__('Only confirm purchases over a certain price')}
+                    onChange={() => {
+                      this.onInstantPurchaseEnabledChange(true);
+                    }}
                   />
-                )}
 
-                <p className="help">
-                  {__("When this option is chosen, LBRY won't ask you to confirm downloads below your chosen price.")}
-                </p>
-              </Form>
-            </section>
+                  {instantPurchaseEnabled && (
+                    <FormFieldPrice
+                      name="confirmation_price"
+                      min={0.1}
+                      onChange={this.onInstantPurchaseMaxChange}
+                      price={instantPurchaseMax}
+                    />
+                  )}
+
+                  <p className="help">
+                    {__("When this option is chosen, LBRY won't ask you to confirm downloads below your chosen price.")}
+                  </p>
+                </React.Fragment>
+              }
+            />
+
             {/* @endif */}
-            <section className="card card--section">
-              <h2 className="card__title">{__('Content Settings')}</h2>
-              <FormField
-                type="checkbox"
-                name="floating_player"
-                onChange={() => {
-                  setClientSetting(SETTINGS.FLOATING_PLAYER, !floatingPlayer);
-                  clearPlayingUri();
-                }}
-                checked={floatingPlayer}
-                label={__('Floating video player')}
-                helper={__('Keep content playing in the corner when navigating to a different page.')}
-              />
+            <Card
+              title={__('Content Settings')}
+              actions={
+                <React.Fragment>
+                  <FormField
+                    type="checkbox"
+                    name="floating_player"
+                    onChange={() => {
+                      setClientSetting(SETTINGS.FLOATING_PLAYER, !floatingPlayer);
+                      clearPlayingUri();
+                    }}
+                    checked={floatingPlayer}
+                    label={__('Floating video player')}
+                    helper={__('Keep content playing in the corner when navigating to a different page.')}
+                  />
 
-              <FormField
-                type="checkbox"
-                name="autoplay"
-                onChange={() => setClientSetting(SETTINGS.AUTOPLAY, !autoplay)}
-                checked={autoplay}
-                label={__('Autoplay media files')}
-                helper={__(
-                  'Autoplay video and audio files when navigating to a file, as well as the next related item when a file finishes playing.'
-                )}
-              />
+                  <FormField
+                    type="checkbox"
+                    name="autoplay"
+                    onChange={() => setClientSetting(SETTINGS.AUTOPLAY, !autoplay)}
+                    checked={autoplay}
+                    label={__('Autoplay media files')}
+                    helper={__(
+                      'Autoplay video and audio files when navigating to a file, as well as the next related item when a file finishes playing.'
+                    )}
+                  />
 
-              <FormField
-                type="checkbox"
-                name="show_nsfw"
-                onChange={() => setClientSetting(SETTINGS.SHOW_MATURE, !showNsfw)}
-                checked={showNsfw}
-                label={__('Show mature content')}
-                helper={__(
-                  'Mature content may include nudity, intense sexuality, profanity, or other adult content. By displaying mature content, you are affirming you are of legal age to view mature content in your country or jurisdiction.  '
-                )}
-              />
-            </section>
-            <section className="card card--section">
-              <h2 className="card__title">{__('Blocked Channels')}</h2>
-              <p className="card__subtitle card__help ">
-                {__('You have')} {userBlockedChannelsCount} {__('blocked')}{' '}
-                {userBlockedChannelsCount === 1 && __('channel')}
-                {userBlockedChannelsCount !== 1 && __('channels')}.{' '}
-                <Button button="link" label={__('Manage')} navigate={`/$/${PAGES.BLOCKED}`} />
-              </p>
-            </section>
+                  <FormField
+                    type="checkbox"
+                    name="show_nsfw"
+                    onChange={() => setClientSetting(SETTINGS.SHOW_MATURE, !showNsfw)}
+                    checked={showNsfw}
+                    label={__('Show mature content')}
+                    helper={__(
+                      'Mature content may include nudity, intense sexuality, profanity, or other adult content. By displaying mature content, you are affirming you are of legal age to view mature content in your country or jurisdiction.  '
+                    )}
+                  />
+                </React.Fragment>
+              }
+            />
+
+            <Card
+              title={__('Blocked Channels')}
+              actions={
+                <p>
+                  {__('You have')} {userBlockedChannelsCount} {__('blocked')}{' '}
+                  {userBlockedChannelsCount === 1 && __('channel')}
+                  {userBlockedChannelsCount !== 1 && __('channels')}.{' '}
+                  <Button button="link" label={__('Manage')} navigate={`/$/${PAGES.BLOCKED}`} />
+                </p>
+              }
+            />
+
             {/* @if TARGET='app' */}
-            <section className="card card--section">
-              <h2 className="card__title">{__('Notifications')}</h2>
-              <Form>
+            <Card
+              title={__('Notifications')}
+              actions={
                 <FormField
                   type="checkbox"
                   name="desktopNotification"
@@ -411,12 +423,11 @@ class SettingsPage extends React.PureComponent<Props, State> {
                   label={__('Show Desktop Notifications')}
                   helper={__('Get notified when a publish is confirmed, or when new content is available to watch.')}
                 />
-              </Form>
-            </section>
-            <section className="card card--section">
-              <h2 className="card__title">{__('Share Diagnostic Data')}</h2>
-
-              <Form>
+              }
+            />
+            <Card
+              title={__('Share Diagnostic Data')}
+              actions={
                 <FormField
                   type="checkbox"
                   name="share_usage_data"
@@ -430,189 +441,195 @@ class SettingsPage extends React.PureComponent<Props, State> {
                   }
                   helper={__('You will be ineligible to earn rewards while diagnostics are not being shared.')}
                 />
-              </Form>
-            </section>
+              }
+            />
             {/* @endif */}
-            <section className="card card--section">
-              <h2 className="card__title">{__('Appearance')}</h2>
 
-              <Form>
-                <fieldset-section>
-                  <FormField
-                    name="theme_select"
-                    type="select"
-                    label={__('Theme')}
-                    onChange={this.onThemeChange}
-                    value={currentTheme}
-                    disabled={automaticDarkModeEnabled}
-                  >
-                    {themes.map(theme => (
-                      <option key={theme} value={theme}>
-                        {theme}
-                      </option>
-                    ))}
-                  </FormField>
-                </fieldset-section>
-                <fieldset-section>
-                  <FormField
-                    type="checkbox"
-                    name="automatic_dark_mode"
-                    onChange={() => this.onAutomaticDarkModeChange(!automaticDarkModeEnabled)}
-                    checked={automaticDarkModeEnabled}
-                    label={__('Automatic dark mode')}
-                  />
-                  {automaticDarkModeEnabled && (
-                    <fieldset-group class="fieldset-group--smushed">
-                      <FormField
-                        type="select"
-                        name="automatic_dark_mode_range"
-                        onChange={value => this.onChangeTime(value, { fromTo: 'from', time: 'hour' })}
-                        value={darkModeTimes.from.hour}
-                        label={__('From')}
-                      >
-                        {startHours.map(time => (
-                          <option key={time} value={time}>
-                            {this.to12Hour(time)}
-                          </option>
-                        ))}
-                      </FormField>
-                      <FormField
-                        type="select"
-                        name="automatic_dark_mode_range"
-                        label={__('To')}
-                        onChange={value => this.onChangeTime(value, { fromTo: 'to', time: 'hour' })}
-                        value={darkModeTimes.to.hour}
-                      >
-                        {endHours.map(time => (
-                          <option key={time} value={time}>
-                            {this.to12Hour(time)}
-                          </option>
-                        ))}
-                      </FormField>
-                    </fieldset-group>
-                  )}
-                </fieldset-section>
-              </Form>
-            </section>
-            {/* @if TARGET='app' */}
-
-            <section className="card card--section">
-              <h2 className="card__title">{__('Wallet Security')}</h2>
-
-              <Form>
-                <FormField
-                  type="checkbox"
-                  name="encrypt_wallet"
-                  onChange={() => this.onChangeEncryptWallet()}
-                  checked={walletEncrypted}
-                  label={__('Encrypt my wallet with a custom password')}
-                  helper={
-                    <React.Fragment>
-                      {__('Secure your local wallet data with a custom password.')}{' '}
-                      <strong>{__('Lost passwords cannot be recovered.')} </strong>
-                      <Button button="link" label={__('Learn more')} href="https://lbry.com/faq/wallet-encryption" />.
-                    </React.Fragment>
-                  }
-                />
-
-                {walletEncrypted && this.state.storedPassword && (
-                  <FormField
-                    type="checkbox"
-                    name="save_password"
-                    onChange={this.onConfirmForgetPassword}
-                    checked={this.state.storedPassword}
-                    label={__('Save Password')}
-                    helper={<React.Fragment>{__('Automatically unlock your wallet on startup')}</React.Fragment>}
-                  />
-                )}
-
-                <FormField
-                  type="checkbox"
-                  name="hide_balance"
-                  onChange={() => setClientSetting(SETTINGS.HIDE_BALANCE, !hideBalance)}
-                  checked={hideBalance}
-                  label={__('Hide wallet balance in header')}
-                />
-              </Form>
-            </section>
-            <section className="card card--section">
-              <h2 className="card__title">{__('Experimental Settings')}</h2>
-
-              <Form>
-                <FormField
-                  type="checkbox"
-                  name="support_option"
-                  onChange={() => setClientSetting(SETTINGS.SUPPORT_OPTION, !supportOption)}
-                  checked={supportOption}
-                  label={__('Enable claim support')}
-                  helper={
-                    <I18nMessage
-                      tokens={{
-                        discovery_link: (
-                          <Button button="link" label={__('discovery')} href="https://lbry.com/faq/trending" />
-                        ),
-                        vanity_names_link: (
-                          <Button button="link" label={__('vanity names')} href="https://lbry.com/faq/naming" />
-                        ),
-                      }}
+            <Card
+              title={__('Appearance')}
+              actions={
+                <React.Fragment>
+                  <fieldset-section>
+                    <FormField
+                      name="theme_select"
+                      type="select"
+                      label={__('Theme')}
+                      onChange={this.onThemeChange}
+                      value={currentTheme}
+                      disabled={automaticDarkModeEnabled}
                     >
-                      This will add a Support button along side tipping. Similar to tips, supports help %discovery_link%
-                      but the LBC is returned to your wallet if revoked. Both also help secure your %vanity_names_link%.
-                    </I18nMessage>
-                  }
-                />
-
-                <FormField
-                  type="checkbox"
-                  name="auto_download"
-                  onChange={() => setClientSetting(SETTINGS.AUTO_DOWNLOAD, !autoDownload)}
-                  checked={autoDownload}
-                  label={__('Automatically download new content from my subscriptions')}
-                  helper={__(
-                    "The latest file from each of your subscriptions will be downloaded for quick access as soon as it's published."
-                  )}
-                />
-              </Form>
-              <Form>
-                <fieldset-section>
-                  <FormField
-                    name="max_connections"
-                    type="select"
-                    label={__('Max Connections')}
-                    helper={__(
-                      'For users with good bandwidth, try a higher value to improve streaming and download speeds. Low bandwidth users may benefit from a lower setting. Default is 4.'
+                      {themes.map(theme => (
+                        <option key={theme} value={theme}>
+                          {theme}
+                        </option>
+                      ))}
+                    </FormField>
+                  </fieldset-section>
+                  <fieldset-section>
+                    <FormField
+                      type="checkbox"
+                      name="automatic_dark_mode"
+                      onChange={() => this.onAutomaticDarkModeChange(!automaticDarkModeEnabled)}
+                      checked={automaticDarkModeEnabled}
+                      label={__('Automatic dark mode')}
+                    />
+                    {automaticDarkModeEnabled && (
+                      <fieldset-group class="fieldset-group--smushed">
+                        <FormField
+                          type="select"
+                          name="automatic_dark_mode_range"
+                          onChange={value => this.onChangeTime(value, { fromTo: 'from', time: 'hour' })}
+                          value={darkModeTimes.from.hour}
+                          label={__('From')}
+                        >
+                          {startHours.map(time => (
+                            <option key={time} value={time}>
+                              {this.to12Hour(time)}
+                            </option>
+                          ))}
+                        </FormField>
+                        <FormField
+                          type="select"
+                          name="automatic_dark_mode_range"
+                          label={__('To')}
+                          onChange={value => this.onChangeTime(value, { fromTo: 'to', time: 'hour' })}
+                          value={darkModeTimes.to.hour}
+                        >
+                          {endHours.map(time => (
+                            <option key={time} value={time}>
+                              {this.to12Hour(time)}
+                            </option>
+                          ))}
+                        </FormField>
+                      </fieldset-group>
                     )}
-                    min={1}
-                    max={100}
-                    onChange={this.onMaxConnectionsChange}
-                    value={daemonSettings.max_connections_per_download}
-                  >
-                    {connectionOptions.map(connectionOption => (
-                      <option key={connectionOption} value={connectionOption}>
-                        {connectionOption}
-                      </option>
-                    ))}
-                  </FormField>
-                </fieldset-section>
-              </Form>
-            </section>
+                  </fieldset-section>
+                </React.Fragment>
+              }
+            />
+            {/* @if TARGET='app' */}
+            <Card
+              title={__('Wallet Security')}
+              actions={
+                <React.Fragment>
+                  <FormField
+                    type="checkbox"
+                    name="encrypt_wallet"
+                    onChange={() => this.onChangeEncryptWallet()}
+                    checked={walletEncrypted}
+                    label={__('Encrypt my wallet with a custom password')}
+                    helper={
+                      <React.Fragment>
+                        {__('Secure your local wallet data with a custom password.')}{' '}
+                        <strong>{__('Lost passwords cannot be recovered.')} </strong>
+                        <Button button="link" label={__('Learn more')} href="https://lbry.com/faq/wallet-encryption" />.
+                      </React.Fragment>
+                    }
+                  />
+
+                  {walletEncrypted && this.state.storedPassword && (
+                    <FormField
+                      type="checkbox"
+                      name="save_password"
+                      onChange={this.onConfirmForgetPassword}
+                      checked={this.state.storedPassword}
+                      label={__('Save Password')}
+                      helper={<React.Fragment>{__('Automatically unlock your wallet on startup')}</React.Fragment>}
+                    />
+                  )}
+
+                  <FormField
+                    type="checkbox"
+                    name="hide_balance"
+                    onChange={() => setClientSetting(SETTINGS.HIDE_BALANCE, !hideBalance)}
+                    checked={hideBalance}
+                    label={__('Hide wallet balance in header')}
+                  />
+                </React.Fragment>
+              }
+            />
+
+            <Card
+              title={__('Experimental Settings')}
+              actions={
+                <React.Fragment>
+                  <FormField
+                    type="checkbox"
+                    name="support_option"
+                    onChange={() => setClientSetting(SETTINGS.SUPPORT_OPTION, !supportOption)}
+                    checked={supportOption}
+                    label={__('Enable claim support')}
+                    helper={
+                      <I18nMessage
+                        tokens={{
+                          discovery_link: (
+                            <Button button="link" label={__('discovery')} href="https://lbry.com/faq/trending" />
+                          ),
+                          vanity_names_link: (
+                            <Button button="link" label={__('vanity names')} href="https://lbry.com/faq/naming" />
+                          ),
+                        }}
+                      >
+                        This will add a Support button along side tipping. Similar to tips, supports help
+                        %discovery_link% but the LBC is returned to your wallet if revoked. Both also help secure your
+                        %vanity_names_link%.
+                      </I18nMessage>
+                    }
+                  />
+
+                  <FormField
+                    type="checkbox"
+                    name="auto_download"
+                    onChange={() => setClientSetting(SETTINGS.AUTO_DOWNLOAD, !autoDownload)}
+                    checked={autoDownload}
+                    label={__('Automatically download new content from my subscriptions')}
+                    helper={__(
+                      "The latest file from each of your subscriptions will be downloaded for quick access as soon as it's published."
+                    )}
+                  />
+                  <fieldset-section>
+                    <FormField
+                      name="max_connections"
+                      type="select"
+                      label={__('Max Connections')}
+                      helper={__(
+                        'For users with good bandwidth, try a higher value to improve streaming and download speeds. Low bandwidth users may benefit from a lower setting. Default is 4.'
+                      )}
+                      min={1}
+                      max={100}
+                      onChange={this.onMaxConnectionsChange}
+                      value={daemonSettings.max_connections_per_download}
+                    >
+                      {connectionOptions.map(connectionOption => (
+                        <option key={connectionOption} value={connectionOption}>
+                          {connectionOption}
+                        </option>
+                      ))}
+                    </FormField>
+                  </fieldset-section>
+                </React.Fragment>
+              }
+            />
+
             {/* @endif */}
-            <section className="card card--section">
-              <h2 className="card__title">{__('Application Cache')}</h2>
-
-              <p className="card__subtitle--status">
-                {__(
-                  'This will clear the application cache. Your wallet will not be affected. Currently, followed tags and blocked channels will be cleared.'
-                )}
-              </p>
-
-              <Button
-                button="inverse"
-                label={this.state.clearingCache ? __('Clearing') : __('Clear Cache')}
-                onClick={this.clearCache}
-                disabled={this.state.clearingCache}
-              />
-            </section>
+            <Card
+              title={__('Application Cache')}
+              subtitle={
+                <p className="card__subtitle--status">
+                  {__(
+                    'This will clear the application cache. Your wallet will not be affected. Currently, followed tags and blocked channels will be cleared.'
+                  )}
+                </p>
+              }
+              actions={
+                <Button
+                  button="inverse"
+                  label={this.state.clearingCache ? __('Clearing') : __('Clear Cache')}
+                  onClick={this.clearCache}
+                  disabled={this.state.clearingCache}
+                />
+              }
+            />
           </div>
         )}
       </Page>

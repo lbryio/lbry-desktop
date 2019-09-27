@@ -50,7 +50,7 @@ export class Modal extends React.PureComponent<ModalProps> {
       <ReactModal
         {...modalProps}
         onRequestClose={onAborted || onConfirmed}
-        className={classnames('card card--modal modal', className)}
+        className={classnames('card modal', className)}
         overlayClassName="modal-overlay"
       >
         {title && <h1 className="card__title">{title}</h1>}

@@ -10,6 +10,7 @@ import { Lbry } from 'lbry-redux';
 import Native from 'native';
 import Button from 'component/button';
 import Page from 'component/page';
+import Card from 'component/common/card';
 
 type DeamonSettings = {
   data_dir: string | any,
@@ -122,77 +123,84 @@ class HelpPage extends React.PureComponent<Props, State> {
 
     return (
       <Page>
-        <section className="card card--section">
-          <h2 className="card__title">{__('Read the FAQ')}</h2>
-          <p className="card__subtitle">{__('Our FAQ answers many common questions.')}</p>
+        <Card
+          title={__('Read the FAQ')}
+          subtitle={__('Our FAQ answers many common questions.')}
+          actions={
+            <div className="section__actions">
+              <Button
+                href="https://lbry.com/faq/lbry-basics"
+                label={__('Read the App Basics FAQ')}
+                icon={icons.HELP}
+                button="inverse"
+              />
+              <Button href="https://lbry.com/faq" label={__('View all LBRY FAQs')} icon={icons.HELP} button="inverse" />
+            </div>
+          }
+        />
 
-          <div className="card__actions">
-            <Button
-              href="https://lbry.com/faq/lbry-basics"
-              label={__('Read the App Basics FAQ')}
-              icon={icons.HELP}
-              button="inverse"
-            />
-            <Button href="https://lbry.com/faq" label={__('View all LBRY FAQs')} icon={icons.HELP} button="inverse" />
-          </div>
-        </section>
+        <Card
+          title={__('Find Assistance')}
+          subtitle={
+            <p>
+              {__('Live help is available most hours in the')} <strong>#help</strong>{' '}
+              {__('channel of our Discord chat room. Or you can always email us at help@lbry.com.')}
+            </p>
+          }
+          actions={
+            <div className="section__actions">
+              <Button button="inverse" label={__('Join Our Chat')} icon={icons.CHAT} href="https://chat.lbry.com" />
+              <Button button="inverse" label={__('Email Us')} icon={icons.WEB} href="mailto:help@lbry.com" />
+            </div>
+          }
+        />
 
-        <section className="card card--section">
-          <h2 className="card__title">{__('Find Assistance')}</h2>
-
-          <p className="card__subtitle">
-            {__('Live help is available most hours in the')} <strong>#help</strong>{' '}
-            {__('channel of our Discord chat room. Or you can always email us at help@lbry.com.')}
-          </p>
-
-          <div className="card__actions">
-            <Button button="inverse" label={__('Join Our Chat')} icon={icons.CHAT} href="https://chat.lbry.com" />
-            <Button button="inverse" label={__('Email Us')} icon={icons.WEB} href="mailto:help@lbry.com" />
-          </div>
-        </section>
-        <section className="card card--section">
-          <h2 className="card__title">{__('Report a Bug or Suggest a New Feature')}</h2>
-
-          <p className="card__subtitle">
-            {__('Did you find something wrong? Think LBRY could add something useful and cool?')}{' '}
-            <Button button="link" label={__('Learn more')} href="https://lbry.com/faq/support" />.
-          </p>
-
-          <div className="card__actions">
-            <Button navigate="/$/report" label={__('Help Us Out')} button="inverse" />
-          </div>
-        </section>
-
-        {/* @if TARGET='app' */}
-        <section className="card card--section">
-          <h2 className="card__title">{__('View your Log')}</h2>
-
-          <p className="card__subtitle">
-            {__('Did something go wrong? Have a look in your log file, or send it to')}{' '}
-            <Button button="link" label={__('support')} href="https://lbry.com/faq/support" />.
-          </p>
-
-          <div className="card__actions">
-            <Button button="inverse" label={__('Open Log')} onClick={() => this.openLogFile(dataDirectory)} />
-            <Button button="link" label={__('Open Log Folder')} onClick={() => shell.openItem(dataDirectory)} />
-          </div>
-        </section>
+        <Card
+          title={__('Report a Bug or Suggest a New Feature')}
+          subtitle={
+            <p>
+              {__('Did you find something wrong? Think LBRY could add something useful and cool?')}{' '}
+              <Button button="link" label={__('Learn more')} href="https://lbry.com/faq/support" />.
+            </p>
+          }
+          actions={
+            <div className="section__actions">
+              <Button navigate="/$/report" label={__('Help Us Out')} button="inverse" />
+            </div>
+          }
+        />
 
         {/* @if TARGET='app' */}
+        <Card
+          title={__('View your Log')}
+          subtitle={
+            <p>
+              {__('Did something go wrong? Have a look in your log file, or send it to')}{' '}
+              <Button button="link" label={__('support')} href="https://lbry.com/faq/support" />.
+            </p>
+          }
+          actions={
+            <div className="section__actions">
+              <Button button="inverse" label={__('Open Log')} onClick={() => this.openLogFile(dataDirectory)} />
+              <Button button="link" label={__('Open Log Folder')} onClick={() => shell.openItem(dataDirectory)} />
+            </div>
+          }
+        />
+
         <WalletBackup />
         {/* @endif */}
 
         <section className="card">
           <header className="table__header">
-            <h2 className="card__title">{__('About')}</h2>
+            <h2 className="section__title">{__('About')}</h2>
 
             {this.state.upgradeAvailable !== null && this.state.upgradeAvailable ? (
-              <p className="card__subtitle--status">
+              <p className="section__subtitle">
                 {__('A newer version of LBRY is available.')}{' '}
                 <Button button="link" href={newVerLink} label={__('Download now!')} />
               </p>
             ) : (
-              <p className="card__subtitle">{__('Your LBRY app is up to date.')}</p>
+              <p className="section__subtitle">{__('Your LBRY app is up to date.')}</p>
             )}
           </header>
 
@@ -257,7 +265,6 @@ class HelpPage extends React.PureComponent<Props, State> {
             </tbody>
           </table>
         </section>
-        {/* @endif */}
       </Page>
     );
   }
