@@ -4,7 +4,6 @@ table,
 .table {
   background-color: transparent;
   margin: var(--spacing-small) 0;
-  padding-top: var(--spacing-small);
 
   [data-mode='dark'] & {
     th {

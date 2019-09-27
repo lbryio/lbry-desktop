@@ -272,7 +272,7 @@ export default class SplashScreen extends React.PureComponent<Props, State> {
             <p className="card__subtitle">
               {__('Uh oh. The flux in our Retro Encabulator must be out of whack. Try refreshing to fix it.')}
             </p>
-            <div className="card__actions--top-space card__actions--center">
+            <div className="card__actions--center">
               <Button button="primary" label={__('Refresh')} onClick={() => window.location.reload()} />
             </div>
             <div className="help">

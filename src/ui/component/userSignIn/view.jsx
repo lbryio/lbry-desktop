@@ -68,11 +68,11 @@ function UserSignIn(props: Props) {
   // We may want to keep a component rendered while something is being fetched, instead of replacing it with the large spinner
   // The verbose variable names are an attempt to alleviate _some_ of the confusion from handling all edge cases that come from
   // reward claiming (plus the balance updating after), channel creation, account syncing, and youtube transfer
-  const canHijackSignInFlowWithSpinner = hasVerifiedEmail && balance === 0 && !getSyncError;
+  const canHijackSignInFlowWithSpinner = hasVerifiedEmail && !hasClaimedEmailAward && balance === 0 && !getSyncError;
   const isCurrentlyFetchingSomething = fetchingChannels || claimingReward || syncingWallet;
   const isWaitingForSomethingToFinish =
     // If the user has claimed the email award, we need to wait until the balance updates sometime in the future
-    !hasFetchedReward || (hasFetchedReward && hasClaimedEmailAward) || (syncEnabled && !hasSynced);
+    !hasFetchedReward || (hasFetchedReward && balance === 0) || (syncEnabled && !hasSynced);
 
   // The possible screens for the sign in flow
   const showEmail = !emailToVerify && !hasVerifiedEmail;
@@ -98,7 +98,7 @@ function UserSignIn(props: Props) {
     if (hasVerifiedEmail && !hasClaimedEmailAward && !hasFetchedReward && !delayForSync) {
       claimReward();
     }
-  }, [hasVerifiedEmail, claimReward, hasClaimedEmailAward, hasFetchedReward, syncEnabled, hasSynced]);
+  }, [hasVerifiedEmail, claimReward, hasClaimedEmailAward, hasFetchedReward, syncEnabled, hasSynced, balance]);
 
   // Loop through this list from the end, until it finds a matching component
   // If it never finds one, assume the user has completed every step and redirect them

@@ -49,11 +49,11 @@ p {
 ul,
 ol {
   list-style: initial;
-  margin-bottom: var(--spacing-large);
 
   li {
     list-style-position: outside;
-    margin: var(--spacing-medium) 0;
+    margin: var(--spacing-medium);
+    margin-bottom: 0;
   }
 }
 
@@ -292,8 +292,4 @@ radio-toggle,
   [data-mode='dark'] & {
     border-color: var(--dm-color-04);
   }
-}
-
-.rc-progress-line-path {
-  stroke: $lbry-teal-3;
 }

@@ -5,6 +5,7 @@ import Button from 'component/button';
 import CopyableText from 'component/copyableText';
 import AdmZip from 'adm-zip';
 import path from 'path';
+import Card from 'component/common/card';
 
 type Props = {
   daemonSettings: {
@@ -89,46 +90,55 @@ class WalletBackup extends React.PureComponent<Props, State> {
     const { wallet_dir: lbryumWalletDir } = daemonSettings;
 
     return (
-      <section className="card card--section">
-        <h2 className="card__title">{__('Backup Your LBRY Credits')}</h2>
-
-        <ul className="card__subtitle ol--bulleted">
-          <li>
-            {__(
-              'Your LBRY credits are controllable by you and only you, via wallet file(s) stored locally on your computer.'
-            )}
-          </li>
-          <li>
-            {__(
-              'Currently, there is no automatic backup. If you lose access to these files, you will lose your credits.'
-            )}
-          </li>
-          <li>
-            {__(
-              'However, it is fairly easy to back up manually. To backup your wallet, make a copy of the folder listed below:'
-            )}
-          </li>
-        </ul>
-        <CopyableText copyable={lbryumWalletDir} snackMessage={__('Path copied.')} />
-        <p className="help">
-          {__(
-            'Access to these files are equivalent to having access to your credits. Keep any copies you make of your wallet in a secure place.'
-          )}{' '}
-          {/* @i18fixme */}
-          {__('For more details on backing up and best practices')},{' '}
-          <Button button="link" href="https://lbry.com/faq/how-to-backup-wallet" label={__('see this article')} />.
-        </p>
-        <p className={'card__message card__message--error' + (this.state.errorMessage ? '' : ' hidden')}>
-          {this.state.errorMessage}
-        </p>
-        <p className={'card__message card__message--success' + (this.state.successMessage ? '' : ' hidden')}>
-          {this.state.successMessage}
-        </p>
-        <div className="card__actions">
-          <Button button="inverse" label={__('Create Backup')} onClick={() => this.backupWalletDir(lbryumWalletDir)} />
-          <Button button="link" label={__('Open Folder')} onClick={() => shell.openItem(lbryumWalletDir)} />
-        </div>
-      </section>
+      <Card
+        title={__('Backup Your LBRY Credits')}
+        subtitle={
+          <ul>
+            <li>
+              {__(
+                'Your LBRY credits are controllable by you and only you, via wallet file(s) stored locally on your computer.'
+              )}
+            </li>
+            <li>
+              {__(
+                'Currently, there is no automatic backup. If you lose access to these files, you will lose your credits.'
+              )}
+            </li>
+            <li>
+              {__(
+                'However, it is fairly easy to back up manually. To backup your wallet, make a copy of the folder listed below:'
+              )}
+            </li>
+          </ul>
+        }
+        actions={
+          <React.Fragment>
+            <CopyableText copyable={lbryumWalletDir} snackMessage={__('Path copied.')} />
+            <p className="help">
+              {__(
+                'Access to these files are equivalent to having access to your credits. Keep any copies you make of your wallet in a secure place.'
+              )}{' '}
+              {/* @i18fixme */}
+              {__('For more details on backing up and best practices')},{' '}
+              <Button button="link" href="https://lbry.com/faq/how-to-backup-wallet" label={__('see this article')} />.
+            </p>
+            <p className={'card__message card__message--error' + (this.state.errorMessage ? '' : ' hidden')}>
+              {this.state.errorMessage}
+            </p>
+            <p className={'card__message card__message--success' + (this.state.successMessage ? '' : ' hidden')}>
+              {this.state.successMessage}
+            </p>
+            <div className="card__actions">
+              <Button
+                button="inverse"
+                label={__('Create Backup')}
+                onClick={() => this.backupWalletDir(lbryumWalletDir)}
+              />
+              <Button button="link" label={__('Open Folder')} onClick={() => shell.openItem(lbryumWalletDir)} />
+            </div>
+          </React.Fragment>
+        }
+      />
     );
   }
 }
