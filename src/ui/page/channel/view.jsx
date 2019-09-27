@@ -78,6 +78,7 @@ function ChannelPage(props: Props) {
   const [coverPreview, setCoverPreview] = useState(cover);
   const [searchQuery, setSearchQuery] = useState('');
   const [searchResults, setSearchResults] = useState(undefined);
+  const claimId = claim.claim_id;
 
   // If a user changes tabs, update the url so it stays on the same page if they refresh.
   // We don't want to use links here because we can't animate the tab change and using links
@@ -126,14 +127,12 @@ function ChannelPage(props: Props) {
     );
   }
 
-  if (channelIsMine) {
-    fetchSubCount(claim.claim_id);
-  }
-
   React.useEffect(() => {
     setSearchResults(null);
     setSearchQuery('');
-  }, [uri]);
+
+    fetchSubCount(claimId);
+  }, [uri, fetchSubCount, claimId]);
 
   return (
     <Page>
@@ -187,14 +186,12 @@ function ChannelPage(props: Props) {
                 <Button title={__('Edit')} onClick={() => setEditing(!editing)} icon={ICONS.EDIT} iconSize={49} />
               )}
             </h1>
-            <h2 className="channel__url">
+            <div className="channel__meta">
               <ClaimUri uri={uri} />
-            </h2>
-            {channelIsMine && (
               <span>
                 {subCount} {subCount !== 1 ? __('Subscribers') : __('Subscriber')}
               </span>
-            )}
+            </div>
           </div>
         </header>
         <Tabs onChange={onTabChange} index={tabIndex}>

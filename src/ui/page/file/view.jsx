@@ -48,24 +48,13 @@ type Props = {
 
 class FilePage extends React.Component<Props> {
   componentDidMount() {
-    const {
-      uri,
-      claim,
-      fetchFileInfo,
-      fetchCostInfo,
-      setViewed,
-      isSubscribed,
-      claimIsMine,
-      fetchViewCount,
-    } = this.props;
+    const { uri, claim, fetchFileInfo, fetchCostInfo, setViewed, isSubscribed, fetchViewCount } = this.props;
 
     if (isSubscribed) {
       this.removeFromSubscriptionNotifications();
     }
 
-    if (claimIsMine) {
-      fetchViewCount(claim.claim_id);
-    }
+    fetchViewCount(claim.claim_id);
 
     // always refresh file info when entering file page to see if we have the file
     // @if TARGET='app'
@@ -78,13 +67,13 @@ class FilePage extends React.Component<Props> {
   }
 
   componentDidUpdate(prevProps: Props) {
-    const { isSubscribed, claim, uri, fileInfo, setViewed, fetchViewCount, claimIsMine, fetchFileInfo } = this.props;
+    const { isSubscribed, claim, uri, fileInfo, setViewed, fetchViewCount, fetchFileInfo } = this.props;
 
     if (!prevProps.isSubscribed && isSubscribed) {
       this.removeFromSubscriptionNotifications();
     }
 
-    if (prevProps.uri !== uri && claimIsMine) {
+    if (prevProps.uri !== uri) {
       fetchViewCount(claim.claim_id);
     }
 
@@ -170,11 +159,9 @@ class FilePage extends React.Component<Props> {
             <div className="media__subtitle">
               <div className="media__actions media__actions--between">
                 <DateTime uri={uri} show={DateTime.SHOW_DATE} />
-                {claimIsMine && (
-                  <span>
-                    {viewCount} {viewCount !== 1 ? __('Views') : __('View')}
-                  </span>
-                )}
+                <span>
+                  {viewCount} {viewCount !== 1 ? __('Views') : __('View')}
+                </span>
               </div>
 
               <div className="media__actions media__actions--between">
