@@ -16,6 +16,7 @@ import {
   makeSelectClaimIsMine,
   doPopulateSharedUserState,
   doFetchChannelListMine,
+  getSync,
 } from 'lbry-redux';
 import Native from 'native';
 import { doFetchDaemonSettings } from 'redux/actions/settings';
@@ -454,6 +455,8 @@ export function doSignIn() {
     dispatch(doBalanceSubscribe());
     dispatch(doCheckSubscriptionsInit());
     dispatch(doFetchChannelListMine());
+    dispatch(getSync());
+
     // @endif
 
     Lbryio.call('user_settings', 'get').then(settings => {

@@ -11,8 +11,7 @@ import useKonamiListener from 'util/enhanced-layout';
 import Yrbl from 'component/yrbl';
 import FileViewer from 'component/fileViewer';
 import { withRouter } from 'react-router';
-import usePrevious from 'util/use-previous';
-import SyncBackgroundManager from 'component/syncBackgroundManager';
+import usePrevious from 'effects/use-previous';
 import Button from 'component/button';
 
 export const MAIN_WRAPPER_CLASS = 'main-wrapper';
@@ -121,7 +120,6 @@ function App(props: Props) {
       <Router />
       <ModalRouter />
       <FileViewer pageUri={uri} />
-      <SyncBackgroundManager />
 
       {/* @if TARGET='app' */}
       {showUpgradeButton && (

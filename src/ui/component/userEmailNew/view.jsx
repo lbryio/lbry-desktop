@@ -30,6 +30,7 @@ function UserEmailNew(props: Props) {
   }
 
   React.useEffect(() => {
+    // Sync currently doesn't work for wallets with balances
     if (syncEnabled && balance) {
       setSync(false);
     }
@@ -56,7 +57,9 @@ function UserEmailNew(props: Props) {
           name="sync_checkbox"
           label={__('Sync your balance between devices')}
           helper={
-            balance > 0 ? __('This is only available for empty wallets') : __('Maybe some more text about something')
+            balance > 0
+              ? __("This is only available if you don't have a balance")
+              : __('Maybe some more text about something')
           }
           checked={syncEnabled}
           onChange={() => setSync(!syncEnabled)}

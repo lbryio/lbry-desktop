@@ -24,6 +24,7 @@ module.name_mapper='^app\(.*\)$' -> '<PROJECT_ROOT>/src/ui/app\1'
 module.name_mapper='^native\(.*\)$' -> '<PROJECT_ROOT>/src/ui/native\1'
 module.name_mapper='^analytics\(.*\)$' -> '<PROJECT_ROOT>/src/ui/analytics\1'
 module.name_mapper='^i18n\(.*\)$' -> '<PROJECT_ROOT>/src/ui/i18n\1'
+module.name_mapper='^effects\(.*\)$' -> '<PROJECT_ROOT>/src/ui/effects\1'
 module.name_mapper='^config\(.*\)$' -> '<PROJECT_ROOT>/config\1'
 
 

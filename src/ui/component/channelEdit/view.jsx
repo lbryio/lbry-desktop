@@ -182,7 +182,7 @@ function ChannelForm(props: Props) {
           onChange={text => setParams({ ...params, description: text })}
         />
         <TagSelect
-          title={false}
+          title={__('Add Tags')}
           suggestMature
           help={__('The better your tags are, the easier it will be for people to discover your channel.')}
           empty={__('No tags added')}

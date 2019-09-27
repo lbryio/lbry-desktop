@@ -3,7 +3,7 @@ import React from 'react';
 import { Modal } from 'modal/modal';
 import { Form, FormField } from 'component/common/form';
 import Button from 'component/button';
-import usePersistedState from 'util/use-persisted-state';
+import usePersistedState from 'effects/use-persisted-state';
 
 type Props = {
   uri: string,

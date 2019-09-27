@@ -16,7 +16,7 @@ function DiscoverPage(props: Props) {
 
   return (
     <Page>
-      {email && <TagsSelect showClose title={__('Customize Your Homepage')} />}
+      {(email || !IS_WEB) && <TagsSelect showClose title={__('Customize Your Homepage')} />}
       <ClaimListDiscover
         hideCustomization={IS_WEB && !email}
         personalView

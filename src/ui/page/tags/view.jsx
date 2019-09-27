@@ -3,7 +3,7 @@ import React, { useRef } from 'react';
 import Page from 'component/page';
 import ClaimListDiscover from 'component/claimListDiscover';
 import Button from 'component/button';
-import useHover from 'util/use-hover';
+import useHover from 'effects/use-hover';
 import analytics from 'analytics';
 
 type Props = {

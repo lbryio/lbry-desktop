@@ -55,15 +55,20 @@
   margin-right: auto;
 }
 
+// "cards" inside cards
 .card--inline {
-  box-shadow: none;
-  border-radius: none;
-  margin-bottom: 0;
+  border: 1px solid $lbry-gray-1;
+  border-radius: var(--card-radius);
+
+  [data-mode='dark'] & {
+    border-color: var(--dm-color-03);
+  }
 }
 
 .card--claim-preview-wrap {
   @extend .card;
   margin: var(--spacing-xlarge) 0;
+  min-width: 35rem;
 }
 
 .card--claim-preview-selected {
@@ -241,7 +246,7 @@
 
 .card__main-actions {
   padding: var(--spacing-large);
-  background-color: rgba($lbry-blue-1, 0.1);
+  background-color: var(--color-card-actions);
   color: darken($lbry-gray-5, 15%);
   font-size: var(--font-body);
 

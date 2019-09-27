@@ -6,19 +6,11 @@ import UserEmailVerify from 'component/userEmailVerify';
 import UserFirstChannel from 'component/userFirstChannel';
 import { DEFAULT_BID_FOR_FIRST_CHANNEL } from 'component/userFirstChannel/view';
 import { rewards as REWARDS } from 'lbryinc';
-import usePrevious from 'util/use-previous';
 import UserVerify from 'component/userVerify';
 import Spinner from 'component/spinner';
 import YoutubeTransferWelcome from 'component/youtubeTransferWelcome';
 import SyncPassword from 'component/syncPassword';
-
-/*
-  - Brand new user
-  - Brand new user, not auto approved
-  - Second device (first time user), first device has a password + rewards not approved
-  - Second device (first time user), first device has a password + rewards approved
-
-*/
+import useFetched from 'effects/use-fetched';
 
 type Props = {
   user: ?User,
@@ -33,23 +25,11 @@ type Props = {
   history: { replace: string => void },
   location: { search: string },
   youtubeChannels: Array<any>,
-  syncIsPending: boolean,
+  syncEnabled: boolean,
+  hasSynced: boolean,
+  syncingWallet: boolean,
   getSyncError: ?string,
-  hasSyncedSuccessfully: boolean,
 };
-
-function useFetched(fetching) {
-  const wasFetching = usePrevious(fetching);
-  const [fetched, setFetched] = React.useState(false);
-
-  React.useEffect(() => {
-    if (wasFetching && !fetching) {
-      setFetched(true);
-    }
-  }, [wasFetching, fetching, setFetched]);
-
-  return fetched;
-}
 
 function UserSignIn(props: Props) {
   const {
@@ -65,9 +45,9 @@ function UserSignIn(props: Props) {
     fetchUser,
     youtubeChannels,
     syncEnabled,
-    syncIsPending,
+    syncingWallet,
     getSyncError,
-    syncHash,
+    hasSynced,
     fetchingChannels,
   } = props;
   const { search } = location;
@@ -76,56 +56,64 @@ function UserSignIn(props: Props) {
   const hasVerifiedEmail = user && user.has_verified_email;
   const rewardsApproved = user && user.is_reward_approved;
   const hasFetchedReward = useFetched(claimingReward);
-  // const hasFetchedSync = useFetched(syncIsPending);
-  // const hasTriedSyncForReal = syncEnabled && hasFetchedSync;
   const channelCount = channels ? channels.length : 0;
   const hasClaimedEmailAward = claimedRewards.some(reward => reward.reward_type === REWARDS.TYPE_CONFIRM_EMAIL);
-  const hasYoutubeChannels = youtubeChannels && youtubeChannels.length;
+  const hasYoutubeChannels = youtubeChannels && Boolean(youtubeChannels.length);
   const hasTransferrableYoutubeChannels = hasYoutubeChannels && youtubeChannels.some(channel => channel.transferable);
   const hasPendingYoutubeTransfer =
     hasYoutubeChannels && youtubeChannels.some(channel => channel.transfer_state === 'pending_transfer');
 
-  React.useEffect(() => {
-    if (
-      hasVerifiedEmail &&
-      balance !== undefined &&
-      !hasClaimedEmailAward &&
-      !hasFetchedReward &&
-      (!syncEnabled || (syncEnabled && syncHash))
-    ) {
-      claimReward();
-    }
-  }, [hasVerifiedEmail, claimReward, balance, hasClaimedEmailAward, hasFetchedReward, syncEnabled, syncHash]);
+  // Complexity warning
+  // We can't just check if we are currently fetching something
+  // We may want to keep a component rendered while something is being fetched, instead of replacing it with the large spinner
+  // The verbose variable names are an attempt to alleviate _some_ of the confusion from handling all edge cases that come from
+  // reward claiming (plus the balance updating after), channel creation, account syncing, and youtube transfer
+  const canHijackSignInFlowWithSpinner = hasVerifiedEmail && balance === 0 && !getSyncError;
+  const isCurrentlyFetchingSomething = fetchingChannels || claimingReward || syncingWallet;
+  const isWaitingForSomethingToFinish =
+    // If the user has claimed the email award, we need to wait until the balance updates sometime in the future
+    !hasFetchedReward || (hasFetchedReward && hasClaimedEmailAward) || (syncEnabled && !hasSynced);
+
+  // The possible screens for the sign in flow
+  const showEmail = !emailToVerify && !hasVerifiedEmail;
+  const showEmailVerification = emailToVerify && !hasVerifiedEmail;
+  const showUserVerification = hasVerifiedEmail && !rewardsApproved;
+  const showSyncPassword = syncEnabled && getSyncError && !hasSynced;
+  const showChannelCreation =
+    hasVerifiedEmail && balance && balance > DEFAULT_BID_FOR_FIRST_CHANNEL && channelCount === 0 && !hasYoutubeChannels;
+  const showYoutubeTransfer =
+    hasVerifiedEmail && hasYoutubeChannels && (hasTransferrableYoutubeChannels || hasPendingYoutubeTransfer);
+  const showLoadingSpinner =
+    canHijackSignInFlowWithSpinner && (isCurrentlyFetchingSomething || isWaitingForSomethingToFinish);
 
   React.useEffect(() => {
     fetchUser();
   }, [fetchUser]);
 
+  React.useEffect(() => {
+    // Don't claim the reward if sync is enabled until after a sync has been completed successfully
+    // If we do it before, we could end up trying to sync a wallet with a non-zero balance which will fail to sync
+    const delayForSync = syncEnabled && !hasSynced;
+
+    if (hasVerifiedEmail && !hasClaimedEmailAward && !hasFetchedReward && !delayForSync) {
+      claimReward();
+    }
+  }, [hasVerifiedEmail, claimReward, hasClaimedEmailAward, hasFetchedReward, syncEnabled, hasSynced]);
+
+  // Loop through this list from the end, until it finds a matching component
+  // If it never finds one, assume the user has completed every step and redirect them
   const SIGN_IN_FLOW = [
-    !emailToVerify && !hasVerifiedEmail && <UserEmailNew />,
-    emailToVerify && !hasVerifiedEmail && <UserEmailVerify />,
-    hasVerifiedEmail && !rewardsApproved && <UserVerify />,
-    getSyncError && !syncHash && <SyncPassword />,
-    hasVerifiedEmail && balance > DEFAULT_BID_FOR_FIRST_CHANNEL && channelCount === 0 && !hasYoutubeChannels && (
-      <UserFirstChannel />
+    showEmail && <UserEmailNew />,
+    showEmailVerification && <UserEmailVerify />,
+    showUserVerification && <UserVerify />,
+    showSyncPassword && <SyncPassword />,
+    showChannelCreation && <UserFirstChannel />,
+    showYoutubeTransfer && <YoutubeTransferWelcome />,
+    showLoadingSpinner && (
+      <div className="main--empty">
+        <Spinner />
+      </div>
     ),
-    hasVerifiedEmail && hasYoutubeChannels && (hasTransferrableYoutubeChannels || hasPendingYoutubeTransfer) && (
-      <YoutubeTransferWelcome />
-    ),
-    hasVerifiedEmail &&
-      balance === 0 &&
-      !getSyncError &&
-      (fetchingChannels ||
-        !hasFetchedReward ||
-        claimingReward ||
-        syncIsPending ||
-        (syncEnabled && !syncHash) ||
-        // Just claimed the email award, wait until the balance updates to move forward
-        (balance === 0 && hasFetchedReward && hasClaimedEmailAward)) && (
-        <div className="main--empty">
-          <Spinner />
-        </div>
-      ),
   ];
 
   let componentToRender;

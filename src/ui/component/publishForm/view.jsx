@@ -14,6 +14,7 @@ import PublishName from 'component/publishName';
 import PublishAdditionalOptions from 'component/publishAdditionalOptions';
 import PublishFormErrors from 'component/publishFormErrors';
 import SelectThumbnail from 'component/selectThumbnail';
+import Card from 'component/common/card';
 
 type Props = {
   tags: Array<Tag>,
@@ -127,35 +128,36 @@ function PublishForm(props: Props) {
       <PublishFile />
       <div className={classnames({ 'card--disabled': formDisabled })}>
         <PublishText disabled={formDisabled} />
-        <div className="card card--section">
-          {/* This should probably be PublishThumbnail */}
-          <SelectThumbnail />
-        </div>
-        <div className="card card--section">
-          <TagSelect
-            title={false}
-            suggestMature
-            help={__('The better your tags are, the easier it will be for people to discover your content.')}
-            empty={__('No tags added')}
-            onSelect={newTag => {
-              if (!tags.map(savedTag => savedTag.name).includes(newTag.name)) {
-                updatePublishForm({ tags: [...tags, newTag] });
-              }
-            }}
-            onRemove={clickedTag => {
-              const newTags = tags.slice().filter(tag => tag.name !== clickedTag.name);
-              updatePublishForm({ tags: newTags });
-            }}
-            tagsChosen={tags}
-          />
-        </div>
-        <section className="card card--section">
-          <ChannelSection channel={channel} onChannelChange={channel => updatePublishForm({ channel })} />
-          <p className="help">
-            {__('This is a username or handle that your content can be found under.')}{' '}
-            {__('Ex. @Marvel, @TheBeatles, @BooksByJoe')}
-          </p>
-        </section>
+        <Card actions={<SelectThumbnail />} />
+
+        <TagSelect
+          title={__('Add Tags')}
+          suggestMature
+          help={__('The better your tags are, the easier it will be for people to discover your content.')}
+          empty={__('No tags added')}
+          onSelect={newTag => {
+            if (!tags.map(savedTag => savedTag.name).includes(newTag.name)) {
+              updatePublishForm({ tags: [...tags, newTag] });
+            }
+          }}
+          onRemove={clickedTag => {
+            const newTags = tags.slice().filter(tag => tag.name !== clickedTag.name);
+            updatePublishForm({ tags: newTags });
+          }}
+          tagsChosen={tags}
+        />
+
+        <Card
+          actions={
+            <React.Fragment>
+              <ChannelSection channel={channel} onChannelChange={channel => updatePublishForm({ channel })} />
+              <p className="help">
+                {__('This is a username or handle that your content can be found under.')}{' '}
+                {__('Ex. @Marvel, @TheBeatles, @BooksByJoe')}
+              </p>
+            </React.Fragment>
+          }
+        />
 
         <PublishName disabled={formDisabled} />
         <PublishPrice disabled={formDisabled} />

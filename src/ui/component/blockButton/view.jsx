@@ -3,7 +3,7 @@ import * as ICONS from 'constants/icons';
 import * as PAGES from 'constants/pages';
 import React, { useRef } from 'react';
 import Button from 'component/button';
-import useHover from 'util/use-hover';
+import useHover from 'effects/use-hover';
 
 type Props = {
   permanentUrl: ?string,

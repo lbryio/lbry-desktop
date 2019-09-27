@@ -66,10 +66,13 @@
 }
 
 .main--contained {
-  max-width: 40rem;
-  min-width: 25rem;
   margin: auto;
   margin-top: 5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  max-width: 40rem;
+  text-align: left;
 }
 
 .main--full-width {

@@ -6,7 +6,7 @@ import classnames from 'classnames';
 import ClaimPreview from 'component/claimPreview';
 import Spinner from 'component/spinner';
 import { FormField } from 'component/common/form';
-import usePersistedState from 'util/use-persisted-state';
+import usePersistedState from 'effects/use-persisted-state';
 
 const SORT_NEW = 'new';
 const SORT_OLD = 'old';
