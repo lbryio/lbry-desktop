@@ -29,7 +29,7 @@ type Props = {
 };
 
 function VideoViewer(props: Props) {
-  const { contentType, source, setPlayingUri, onEndedCB } = props;
+  const { contentType, source, setPlayingUri, onEndedCB, changeVolume, changeMute, volume, muted } = props;
   const videoRef = useRef();
   const [requireRedraw, setRequireRedraw] = useState(false);
 
@@ -45,7 +45,10 @@ function VideoViewer(props: Props) {
       // store position e.target.currentTime
     }
     function doVolume(e: Event) {
-      // store volume e.target.volume
+      // $FlowFixMe volume is missing in EventTarget
+      changeVolume(e.target.volume);
+      // $FlowFixMe muted is missing in EventTarget
+      changeMute(e.target.muted);
     }
 
     if (currentVideo) {
@@ -77,7 +80,11 @@ function VideoViewer(props: Props) {
 
     let player;
     if (!requireRedraw) {
-      player = videojs(videoNode, videoJsOptions);
+      player = videojs(videoNode, videoJsOptions, function() {
+        const player = this;
+        player.volume(volume);
+        player.muted(muted);
+      });
     }
 
     return () => {
@@ -92,7 +99,7 @@ function VideoViewer(props: Props) {
       // Then it's set to false immediately after so we can re-mount a new player
       setRequireRedraw(true);
     };
-  }, [videoRef, source, contentType, setRequireRedraw, requireRedraw]);
+  }, [videoRef, source, contentType, setRequireRedraw, requireRedraw, muted, volume]);
 
   useEffect(() => {
     if (requireRedraw) {
