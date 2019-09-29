@@ -9,7 +9,7 @@ type Props = {
 function VideoDuration(props: Props) {
   const { claim, className } = props;
 
-  const video = claim && claim.value && claim.value.video;
+  const video = claim && claim.value && (claim.value.video || claim.value.audio);
   let duration;
   if (video && video.duration) {
     // $FlowFixMe
