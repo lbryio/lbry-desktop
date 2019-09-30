@@ -31,6 +31,7 @@ export const COMPLETED = 'CheckCircle';
 export const SUBSCRIBE = 'Heart';
 export const UNSUBSCRIBE = 'BrokenHeart';
 export const UNLOCK = 'Unlock';
+export const LOCK = 'Lock';
 export const WEB = 'Globe';
 export const SHARE = 'Share2';
 export const EXTERNAL = 'ExternalLink';

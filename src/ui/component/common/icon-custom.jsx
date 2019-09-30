@@ -264,6 +264,14 @@ export const icons = {
       <path d="M7 11V7a5 5 0 0 1 9.9-1" />
     </g>
   ),
+
+  [ICONS.LOCK]: buildIcon(
+    <g>
+      <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+      <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+    </g>
+  ),
+
   [ICONS.TAG]: buildIcon(
     <g>
       <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z" />

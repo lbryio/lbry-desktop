@@ -48,10 +48,6 @@ p {
 
 ul,
 ol {
-}
-
-ul,
-ol {
   list-style: initial;
   margin-bottom: var(--spacing-large);
 
@@ -67,6 +63,37 @@ ol {
 
   li {
     margin: 0;
+  }
+}
+
+dl {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  margin-top: var(--spacing-medium);
+}
+
+dt {
+  flex-basis: 40%;
+  text-align: left;
+  font-weight: bold;
+}
+
+dd {
+  flex-basis: 55%;
+  flex-grow: 1;
+  margin: 0;
+  text-align: right;
+}
+
+dt,
+dd {
+  padding: var(--spacing-medium) var(--spacing-small);
+
+  border-top: 1px solid $lbry-gray-1;
+
+  &:last-of-type {
+    border-bottom: 1px solid $lbry-gray-1;
   }
 }
 
