@@ -12,7 +12,7 @@ import React, { Fragment, useState, useEffect } from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import { doConditionalAuthNavigate, doDaemonReady, doAutoUpdate, doOpenModal, doHideModal } from 'redux/actions/app';
-import { Lbry, doToast, isURIValid, setSearchApi } from 'lbry-redux';
+import { doToast, isURIValid, setSearchApi } from 'lbry-redux';
 import { doUpdateIsNightAsync } from 'redux/actions/settings';
 import {
   doAuthenticate,
@@ -39,6 +39,10 @@ import 'scss/all.scss';
 const startTime = Date.now();
 analytics.startupEvent();
 
+// @if TARGET='web'
+import 'src/platforms/web/api-setup';
+// @endif
+
 const APPPAGEURL = 'lbry://?';
 // @if TARGET='app'
 const { autoUpdater } = remote.require('electron-updater');
@@ -52,11 +56,6 @@ if (process.env.LBRY_API_URL) {
 if (process.env.SEARCH_API_URL) {
   setSearchApi(process.env.SEARCH_API_URL);
 }
-
-// @if TARGET='web'
-const SDK_API_URL = process.env.SDK_API_URL || 'https://api.lbry.tv/api/v1/proxy';
-Lbry.setDaemonConnectionString(SDK_API_URL);
-// @endif
 
 // We need to override Lbryio for getting/setting the authToken
 // We interact with ipcRenderer to get the auth key from a users keyring

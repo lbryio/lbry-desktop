@@ -1,7 +1,6 @@
 // @flow
-import { Lbry } from 'lbry-redux';
-
-function checkAndParseFix(response) {
+import { HEADERS } from 'lbry-redux';
+function checkAndParse(response) {
   if (response.status >= 200 && response.status < 300) {
     return response.json();
   }
@@ -19,8 +18,9 @@ function checkAndParseFix(response) {
 // A modified version of Lbry.apiCall that allows
 // to perform calling methods at arbitrary urls
 // and pass form file fields
-function apiCallViaWeb(
+export default function apiPublishCallViaWeb(
   connectionString: string,
+  token: string,
   method: string,
   params: { file_path: string },
   resolve: Function,
@@ -42,11 +42,12 @@ function apiCallViaWeb(
   body.append('json_payload', jsonPayload);
   const options = {
     method: 'POST',
+    headers: { [HEADERS.AUTH_TOKEN]: token },
     body,
   };
 
   return fetch(connectionString, options)
-    .then(checkAndParseFix)
+    .then(checkAndParse)
     .then(response => {
       const error = response.error || (response.result && response.result.error);
 
@@ -57,11 +58,3 @@ function apiCallViaWeb(
     })
     .catch(reject);
 }
-
-Lbry.setOverride(
-  'publish',
-  params =>
-    new Promise((resolve, reject) => {
-      apiCallViaWeb('/storage/content/', 'publish', params, resolve, reject);
-    })
-);

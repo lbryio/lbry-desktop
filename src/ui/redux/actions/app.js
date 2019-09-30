@@ -16,6 +16,7 @@ import {
   makeSelectClaimIsMine,
   doPopulateSharedUserState,
   doFetchChannelListMine,
+  HEADERS,
   doClearPublish,
   doPreferenceGet,
   doToast,
@@ -437,7 +438,7 @@ export function doSignIn() {
   return (dispatch, getState) => {
     // @if TARGET='web'
     const authToken = getAuthToken();
-    Lbry.setApiHeader('X-Lbry-Auth-Token', authToken);
+    Lbry.setApiHeader(HEADERS.AUTH_TOKEN, authToken);
     dispatch(doBalanceSubscribe());
     dispatch(doFetchChannelListMine());
     // @endif
