@@ -148,7 +148,7 @@ export class FormField extends React.PureComponent<Props> {
       } else if (type === 'textarea') {
         const hasCharCount = charCount !== undefined && charCount >= 0;
         const countInfo = hasCharCount && (
-          <span className="comment__char-count">{`${charCount || ''}/${textAreaMaxLength}`}</span>
+          <span className="comment__char-count">{`${charCount || '0'}/${textAreaMaxLength}`}</span>
         );
         input = (
           <fieldset-section>
