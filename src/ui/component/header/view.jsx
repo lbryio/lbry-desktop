@@ -68,6 +68,13 @@ const Header = (props: Props) => {
     <header className={classnames('header', { 'header--minimal': minimal })}>
       <div className="header__contents">
         <div className="header__navigation">
+          <Button
+            className="header__navigation-item header__navigation-item--lbry"
+            label={__('LBRY')}
+            icon={ICONS.LBRY}
+            navigate="/"
+          />
+
           {/* @if TARGET='app' */}
           {!minimal && (
             <div className="header__navigation-arrows">
@@ -89,13 +96,6 @@ const Header = (props: Props) => {
             </div>
           )}
           {/* @endif */}
-
-          <Button
-            className="header__navigation-item header__navigation-item--lbry"
-            label={__('LBRY')}
-            icon={ICONS.LBRY}
-            navigate="/"
-          />
 
           {!minimal && <WunderBar />}
         </div>

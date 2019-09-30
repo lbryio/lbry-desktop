@@ -21,6 +21,7 @@
 .main {
   position: relative;
   width: calc(100% - var(--side-nav-width) - var(--spacing-large));
+  margin-right: var(--spacing-main-padding);
 
   @media (max-width: 600px) {
     width: 100%;

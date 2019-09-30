@@ -158,7 +158,7 @@ function ChannelPage(props: Props) {
                 onClick={() => openModal(MODALS.SEND_TIP, { uri, channelIsMine, isSupport: true })}
               />
             )}
-            {!channelIsBlocked && !channelIsBlackListed && <SubscribeButton uri={permanentUrl} />}
+            {!channelIsBlocked && (!channelIsBlackListed || isSubscribed) && <SubscribeButton uri={permanentUrl} />}
             {!isSubscribed && <BlockButton uri={permanentUrl} />}
           </div>
           {!editing && cover && (

@@ -17,6 +17,8 @@ import InvitePage from 'page/invite';
 import SearchPage from 'page/search';
 import LibraryPage from 'page/library';
 import WalletPage from 'page/wallet';
+import WalletSendPage from 'page/walletSend';
+import WalletReceivePage from 'page/walletReceive';
 import TagsPage from 'page/tags';
 import FollowingPage from 'page/following';
 import ListBlockedPage from 'page/listBlocked';
@@ -83,8 +85,10 @@ function AppRouter(props: Props) {
       <PrivateRoute {...props} path={`/$/${PAGES.LIBRARY}`} component={LibraryPage} />
       <PrivateRoute {...props} path={`/$/${PAGES.ACCOUNT}`} component={AccountPage} />
       <PrivateRoute {...props} path={`/$/${PAGES.FOLLOWING}`} component={FollowingPage} />
-      <PrivateRoute {...props} path={`/$/${PAGES.WALLET}`} component={WalletPage} />
       <PrivateRoute {...props} path={`/$/${PAGES.BLOCKED}`} component={ListBlockedPage} />
+      <PrivateRoute {...props} path={`/$/${PAGES.WALLET}`} exact component={WalletPage} />
+      <PrivateRoute {...props} path={`/$/${PAGES.WALLET_SEND}`} exact component={WalletSendPage} />
+      <PrivateRoute {...props} path={`/$/${PAGES.WALLET_RECEIVE}`} exact component={WalletReceivePage} />
 
       {/* Below need to go at the end to make sure we don't match any of our pages first */}
       <Route path="/:claimName" exact component={ShowPage} />

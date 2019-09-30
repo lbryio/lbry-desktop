@@ -49,9 +49,7 @@ class WalletAddress extends React.PureComponent<Props, State> {
     return (
       <Card
         title={__('Receive Credits')}
-        subtitle={__(
-          'Use this address to receive LBC. You can generate a new address at any time, and any previous addresses will continue to work.'
-        )}
+        subtitle={__('Use this address to receive LBC.')}
         actions={
           <React.Fragment>
             <CopyableText label={__('Your Address')} copyable={receiveAddress} snackMessage={__('Address copied.')} />
@@ -67,6 +65,9 @@ class WalletAddress extends React.PureComponent<Props, State> {
               )}
               <Button button="link" label={showQR ? __('Hide QR code') : __('Show QR code')} onClick={this.toggleQR} />
             </div>
+            <p className="help">
+              {__('You can generate a new address at any time, and any previous addresses will continue to work.')}
+            </p>
 
             {showQR && <QRCode value={receiveAddress} paddingTop />}
           </React.Fragment>

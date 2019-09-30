@@ -1,5 +1,5 @@
 .section {
-  margin-top: var(--spacing-medium);
+  margin-top: var(--spacing-large);
 
   &:first-of-type {
     margin-top: 0;
@@ -23,14 +23,32 @@
   }
 }
 
+.section__flex-wrap {
+  @extend .section__flex;
+  flex-wrap: wrap;
+  margin-bottom: var(--spacing-large);
+
+  & > * {
+    margin-bottom: var(--spacing-large);
+  }
+}
+
 .section__title {
   text-align: left;
   font-size: var(--font-section-title);
   font-weight: 300;
 }
 
+.section__title--small {
+  @extend .section__title;
+  font-size: var(--font-body);
+  margin-top: var(--spacing-small);
+}
+
 .section__title--large {
   @extend .section__title;
+  margin-right: var(--spacing-medium);
+  display: inline-block;
   font-weight: 700;
   font-size: var(--font-heading);
 }

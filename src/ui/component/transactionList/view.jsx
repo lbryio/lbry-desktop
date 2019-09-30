@@ -49,15 +49,8 @@ function TransactionList(props: Props) {
             {loading && <Spinner type="small" />}
           </span>
           <div className="card__actions--inline">
-            {slim && (
-              <Button
-                button="link"
-                className="button--alt"
-                navigate={`/$/${PAGES.TRANSACTIONS}`}
-                label={__('Full History')}
-              />
-            )}
             <RefreshTransactionButton />
+            {slim && <Button button="primary" navigate={`/$/${PAGES.TRANSACTIONS}`} label={__('Full History')} />}
           </div>
         </h2>
       </header>
