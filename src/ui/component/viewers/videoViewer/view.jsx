@@ -99,7 +99,7 @@ function VideoViewer(props: Props) {
       // Then it's set to false immediately after so we can re-mount a new player
       setRequireRedraw(true);
     };
-  }, [videoRef, source, contentType, setRequireRedraw, requireRedraw, muted, volume]);
+  }, [videoRef, source, contentType, setRequireRedraw, requireRedraw]);
 
   useEffect(() => {
     if (requireRedraw) {
