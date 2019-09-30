@@ -52,19 +52,26 @@ function UserEmailNew(props: Props) {
           error={errorMessage}
           onChange={e => setEmail(e.target.value)}
         />
-        <FormField
-          type="checkbox"
-          name="sync_checkbox"
-          label={__('Sync your balance between devices')}
-          helper={
-            balance > 0
-              ? __("This is only available if you don't have a balance")
-              : __('Maybe some more text about something')
-          }
-          checked={syncEnabled}
-          onChange={() => setSync(!syncEnabled)}
-          disabled={balance > 0}
-        />
+        {!IS_WEB && (
+          <FormField
+            type="checkbox"
+            name="sync_checkbox"
+            label={__('Sync balance and preferences across devices')}
+            helper={
+              balance > 0 ? (
+                __('This feature is not yet available for wallets with balances, but the gerbils are working on it.')
+              ) : (
+                <React.Fragment>
+                  {__('Blockchain expert?')}{' '}
+                  <Button button="link" href="https://lbry.com/faq/account-sync" label={__('Learn More')} />
+                </React.Fragment>
+              )
+            }
+            checked={syncEnabled}
+            onChange={() => setSync(!syncEnabled)}
+            disabled={balance > 0}
+          />
+        )}
         <div className="card__actions">
           <Button button="primary" type="submit" label={__('Continue')} disabled={!newEmail || !valid || isPending} />
         </div>

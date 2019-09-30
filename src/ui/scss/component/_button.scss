@@ -56,6 +56,11 @@
       stroke: $lbry-white;
     }
   }
+
+  [data-mode='dark'] & {
+    border-color: $lbry-teal-4;
+    color: $lbry-teal-3;
+  }
 }
 
 .button--alt {

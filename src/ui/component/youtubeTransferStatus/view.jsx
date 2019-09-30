@@ -21,29 +21,14 @@ export default function YoutubeTransferStatus(props: Props) {
   const { youtubeChannels, ytImportPending, claimChannels, videosImported, checkYoutubeTransfer, updateUser } = props;
   const hasChannels = youtubeChannels && youtubeChannels.length;
 
-  let transferEnabled = false;
-  let transferStarted = false;
-  let transferComplete = false;
-  if (hasChannels) {
-    for (var i = 0; i < youtubeChannels.length; i++) {
-      const { transfer_state: transferState, transferable } = youtubeChannels[i];
-      if (transferable) {
-        transferEnabled = true;
-      }
-
-      if (transferState === COMPLETED_TRANSFER) {
-        transferComplete = true;
-      }
-
-      if (transferState === PENDING_TRANSFER) {
-        transferStarted = true;
-      }
-    }
-  }
+  const transferEnabled = youtubeChannels.some(status => status.transferable);
+  const hasPendingTransfers = youtubeChannels.some(status => status.transfer_state === PENDING_TRANSFER);
+  const hasCompleteTransfers = youtubeChannels.some(status => status.transfer_state === COMPLETED_TRANSFER);
+  console.log('?', hasChannels && (hasPendingTransfers || (!hasPendingTransfers && !hasCompleteTransfers)));
 
   let total;
   let complete;
-  if (!transferComplete && videosImported) {
+  if (hasPendingTransfers && videosImported) {
     complete = videosImported[0];
     total = videosImported[1];
   }
@@ -66,7 +51,7 @@ export default function YoutubeTransferStatus(props: Props) {
 
   React.useEffect(() => {
     // If a channel is transferrable, theres nothing to check
-    if (transferStarted && !transferComplete) {
+    if (hasPendingTransfers) {
       checkYoutubeTransfer();
 
       let interval = setInterval(() => {
@@ -78,17 +63,17 @@ export default function YoutubeTransferStatus(props: Props) {
         clearInterval(interval);
       };
     }
-  }, [transferComplete, transferStarted, checkYoutubeTransfer, updateUser]);
+  }, [hasPendingTransfers, checkYoutubeTransfer, updateUser]);
 
   return (
     hasChannels &&
-    !transferComplete && (
+    (hasPendingTransfers || transferEnabled) && (
       <div>
         <Card
           title={youtubeChannels.length > 1 ? __('Your YouTube Channels') : __('Your YouTube Channel')}
           subtitle={
             <span>
-              {transferStarted
+              {hasPendingTransfers
                 ? __('Your videos are currently being transferred. There is nothing else for you to do.')
                 : __('Your videos are ready to be transferred.')}
             </span>
@@ -113,10 +98,14 @@ export default function YoutubeTransferStatus(props: Props) {
             </section>
           }
           actions={
-            transferEnabled &&
-            !ytImportPending && (
+            transferEnabled && (
               <div className="card__actions">
-                <Button button="primary" onClick={claimChannels} label={__('Claim Channels')} />
+                <Button
+                  button="primary"
+                  disabled={ytImportPending}
+                  onClick={claimChannels}
+                  label={youtubeChannels.length > 1 ? __('Claim Channels') : __('Claim Channel')}
+                />
                 <Button button="link" label={__('Learn more')} href="https://lbry.com/faq/youtube#transfer" />
               </div>
             )
