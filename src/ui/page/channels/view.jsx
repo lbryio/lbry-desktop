@@ -27,7 +27,7 @@ export default function ChannelsPage(props: Props) {
       {channels && channels.length ? (
         <div className="card">
           <ClaimList
-            header={__('Your Channels On LBRY')}
+            header={__('Your Channels')}
             loading={fetchingChannels}
             uris={channels.map(channel => channel.permanent_url)}
           />

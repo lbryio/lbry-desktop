@@ -40,16 +40,16 @@ $main: $lbry-teal-5;
   // Nested style needed for more specificity
   .tag__input {
     @extend .tag--remove;
-    border: 1px dashed;
-    border-color: $lbry-teal-5;
-    background-color: mix($lbry-teal-1, $lbry-white, 10%);
     height: auto;
     padding: calc(var(--spacing-miniscule) - 1px) var(--spacing-small);
-    margin-top: -2px;
-    border: 1px dashed lighten($lbry-teal-5, 10%);
+    background-color: mix($lbry-teal-1, $lbry-white, 10%);
+    border: 1px dashed;
+    border-color: lighten($lbry-teal-5, 10%);
+    margin-top: -2px; // To handle the border height
 
-    ::placeholder {
-      color: black;
+    [data-mode='dark'] & {
+      background-color: var(--dm-color-02);
+      border-color: $lbry-white;
     }
   }
 }

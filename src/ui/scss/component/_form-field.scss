@@ -60,6 +60,10 @@ textarea {
   border-radius: var(--input-border-radius);
   background-color: $lbry-white;
   border-width: 1px;
+
+  [data-mode='dark'] & {
+    background-color: var(--dm-color-02);
+  }
 }
 
 fieldset-section {
@@ -69,6 +73,10 @@ fieldset-section {
     width: auto;
     text-transform: none;
     color: lighten($lbry-black, 20%);
+
+    [data-mode='dark'] & {
+      color: $lbry-gray-3;
+    }
   }
 }
 

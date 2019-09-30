@@ -40,7 +40,7 @@
 }
 
 .navigation-links__inline {
-  margin-left: 1.7rem;
+  margin-left: calc(var(--spacing-medium) + var(--spacing-small));
 }
 
 .navigation-link__wrapper {
