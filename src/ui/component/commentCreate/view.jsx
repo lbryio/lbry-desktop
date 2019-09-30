@@ -1,6 +1,6 @@
 // @flow
 import { CHANNEL_NEW } from 'constants/claim';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { FormField, Form } from 'component/common/form';
 import Button from 'component/button';
 import ChannelSection from 'component/selectChannel';
@@ -19,6 +19,7 @@ export function CommentCreate(props: Props) {
   const [commentValue, setCommentValue] = usePersistedState(`comment-${claimId}`, '');
   const [commentAck, setCommentAck] = usePersistedState('comment-acknowledge', false);
   const [channel, setChannel] = usePersistedState('comment-channel', 'anonymous');
+  const [charCount, setCharCount] = useState(commentValue.length);
 
   function handleCommentChange(event) {
     setCommentValue(event.target.value);
@@ -36,6 +37,8 @@ export function CommentCreate(props: Props) {
     if (channel !== CHANNEL_NEW && commentValue.length) createComment(commentValue, claimId, channel);
     setCommentValue('');
   }
+
+  useEffect(() => setCharCount(commentValue.length), [commentValue]);
 
   return (
     <section>
@@ -77,6 +80,7 @@ export function CommentCreate(props: Props) {
             label={__('Comment')}
             placeholder={__('Your comment')}
             value={commentValue}
+            charCount={charCount}
             onChange={handleCommentChange}
           />
           <div className="card__actions">
