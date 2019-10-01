@@ -60,11 +60,14 @@ type Props = {
 };
 
 function AppRouter(props: Props) {
-  const { currentScroll } = props;
+  const {
+    currentScroll,
+    location: { pathname },
+  } = props;
 
   useEffect(() => {
     window.scrollTo(0, currentScroll);
-  }, [currentScroll]);
+  }, [currentScroll, pathname]);
 
   return (
     <Switch>
