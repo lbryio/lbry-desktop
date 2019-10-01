@@ -157,7 +157,7 @@ const Header = (props: Props) => {
                     </MenuItem>
                     <MenuItem className="menu__link" onSelect={handleThemeToggle}>
                       <Icon icon={currentTheme === 'light' ? ICONS.DARK : ICONS.LIGHT} />
-                      {currentTheme === 'light' ? 'Dark' : 'Light'}
+                      {currentTheme === 'light' ? __('Dark') : __('Light')}
                     </MenuItem>
                   </MenuList>
                 </Menu>
