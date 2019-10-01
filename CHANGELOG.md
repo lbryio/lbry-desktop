@@ -4,14 +4,57 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
-## [0.35.4] - Unreleased
+## [0.36.0] - Unreleased
+
+### Added
+
+- Sync your balance and preferences between devices ([#2925](https://github.com/lbryio/lbry-desktop/pull/2925))
+- Youtube channel transfer ([#2925](https://github.com/lbryio/lbry-desktop/pull/2925))
+- Max character count on comments ([#2944](https://github.com/lbryio/lbry-desktop/pull/2944))
+- Subscription and file view counts ([#2920](https://github.com/lbryio/lbry-desktop/pull/2920))
+- Pagination on Library, Publishes, and Transactions page ([#2923](https://github.com/lbryio/lbry-desktop/pull/2923))
+- Granular balance information ([#2916](https://github.com/lbryio/lbry-desktop/pull/2916))
+
+### Changed
+
+- Upgrade LBRY SDK to [0.42.0](https://github.com/lbryio/lbry-sdk/releases/tag/v0.42.0)
+
+## [0.35.7] - [2019-09-24]
 
 ### Fixed
 
+- Fixes app crash for some users
+
+## [0.35.6] - [2019-09-23]
+
+### Fixed
+
+- Paid content can now be purchased successfully
+
+## [0.35.4] - [2019-09-22]
+
+# Notes
+
+This release includes a breaking change that will reset many of your settings. This was required to get settings on lbry.tv to work properly. Sorry.
+
+### Added
+
+- Searching on channel pages! ([#2887](https://github.com/lbryio/lbry-desktop/pull/2887))
+
+### Changed
+
+- Upgrade LBRY SDK to [0.40.1](https://github.com/lbryio/lbry-sdk/releases/tag/v0.40.1) to improve connectivity
+- Storage of local settings ([#2895](https://github.com/lbryio/lbry-desktop/pull/2895))
+
+### Fixed
+
+- Autoplay next related content ([#2901](https://github.com/lbryio/lbry-desktop/pull/2901))
+- Ensure view counted before checking rewards ([#2898](https://github.com/lbryio/lbry-desktop/pull/2898))
 - App crash on German language setting ([#2856](https://github.com/lbryio/lbry-desktop/issues/2856))
 - Rewards display issue ([#2871](https://github.com/lbryio/lbry-desktop/issues/2871))
 - Display issue with upgrade banner on file page ([#2826](https://github.com/lbryio/lbry-desktop/issues/2826))
 - Prevent duplicate tags being added to a publish ([#2817](https://github.com/lbryio/lbry-desktop/issues/2817))
+- Reset page correctly on app refresh ([#2881](https://github.com/lbryio/lbry-desktop/pull/2881))
 
 ## [0.35.3] - [2019-09-04]
 
