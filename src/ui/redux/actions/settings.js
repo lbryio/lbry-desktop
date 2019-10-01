@@ -48,7 +48,7 @@ export function doSetClientSetting(key, value) {
 
 export function doGetThemes() {
   return dispatch => {
-    const themes = ['light', 'dark'];
+    const themes = [__('light'), __('dark')];
     dispatch(doSetClientSetting(SETTINGS.THEMES, themes));
   };
 }
