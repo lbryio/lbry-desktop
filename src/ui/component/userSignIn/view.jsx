@@ -108,7 +108,9 @@ function UserSignIn(props: Props) {
     showUserVerification && <UserVerify />,
     showSyncPassword && <SyncPassword />,
     showChannelCreation && <UserFirstChannel />,
+    // @if TARGET='app'
     showYoutubeTransfer && <YoutubeTransferWelcome />,
+    // @endif
     showLoadingSpinner && (
       <div className="main--empty">
         <Spinner />
