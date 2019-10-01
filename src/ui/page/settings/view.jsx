@@ -507,11 +507,11 @@ class SettingsPage extends React.PureComponent<Props, State> {
                 </React.Fragment>
               }
             />
-            {/* @if TARGET='app' */}
             <Card
               title={__('Wallet Security')}
               actions={
                 <React.Fragment>
+                  {/* @if TARGET='app' */}
                   <FormField
                     type="checkbox"
                     name="encrypt_wallet"
@@ -537,6 +537,7 @@ class SettingsPage extends React.PureComponent<Props, State> {
                       helper={<React.Fragment>{__('Automatically unlock your wallet on startup')}</React.Fragment>}
                     />
                   )}
+                  {/* @endif */}
 
                   <FormField
                     type="checkbox"
@@ -577,6 +578,7 @@ class SettingsPage extends React.PureComponent<Props, State> {
                     }
                   />
 
+                  {/* @if TARGET='app' */}
                   <FormField
                     type="checkbox"
                     name="auto_download"
@@ -607,11 +609,11 @@ class SettingsPage extends React.PureComponent<Props, State> {
                       ))}
                     </FormField>
                   </fieldset-section>
+                  {/* @endif */}
                 </React.Fragment>
               }
             />
 
-            {/* @endif */}
             <Card
               title={__('Application Cache')}
               subtitle={
