@@ -28,7 +28,7 @@ type Props = {
   fetchTransactions: () => void,
   fetchAccessToken: () => void,
   fetchChannelListMine: () => void,
-  onSignedIn: () => void,
+  signIn: () => void,
   requestDownloadUpgrade: () => void,
   fetchChannelListMine: () => void,
   onSignedIn: () => void,
@@ -45,7 +45,7 @@ function App(props: Props) {
     user,
     fetchAccessToken,
     fetchChannelListMine,
-    onSignedIn,
+    signIn,
     autoUpdateDownloaded,
     isUpgradeAvailable,
     requestDownloadUpgrade,
@@ -96,7 +96,7 @@ function App(props: Props) {
     if (previousHasVerifiedEmail === false && hasVerifiedEmail) {
       analytics.emailVerifiedEvent();
     }
-  }, [previousHasVerifiedEmail, hasVerifiedEmail, onSignedIn]);
+  }, [previousHasVerifiedEmail, hasVerifiedEmail, signIn]);
 
   useEffect(() => {
     if (previousRewardApproved === false && isRewardApproved) {
@@ -107,9 +107,9 @@ function App(props: Props) {
   // Keep this at the end to ensure initial setup effects are run first
   useEffect(() => {
     if (!previousHasVerifiedEmail && hasVerifiedEmail) {
-      onSignedIn();
+      signIn();
     }
-  }, [previousHasVerifiedEmail, hasVerifiedEmail, onSignedIn]);
+  }, [previousHasVerifiedEmail, hasVerifiedEmail, signIn]);
 
   if (!user) {
     return null;

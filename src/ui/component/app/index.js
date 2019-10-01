@@ -22,10 +22,8 @@ const perform = dispatch => ({
   fetchTransactions: () => dispatch(doFetchTransactions()),
   fetchAccessToken: () => dispatch(doFetchAccessToken()),
   fetchChannelListMine: () => dispatch(doFetchChannelListMine()),
-  onSignedIn: () => dispatch(doSignIn()),
+  signIn: () => dispatch(doSignIn()),
   requestDownloadUpgrade: () => dispatch(doDownloadUpgradeRequested()),
-  fetchChannelListMine: () => dispatch(doFetchChannelListMine()),
-  onSignedIn: () => dispatch(doSignIn()),
 });
 
 export default hot(

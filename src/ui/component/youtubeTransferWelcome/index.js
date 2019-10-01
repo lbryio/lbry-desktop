@@ -1,7 +1,7 @@
 import { connect } from 'react-redux';
 import {
   selectYoutubeChannels,
-  selectYTImportPending,
+  selectYouTubeImportPending,
   selectUserIsPending,
   doClaimYoutubeChannels,
   doUserFetch,
@@ -10,7 +10,7 @@ import YoutubeChannelList from './view';
 
 const select = state => ({
   youtubeChannels: selectYoutubeChannels(state),
-  youtubeImportPending: selectYTImportPending(state),
+  youtubeImportPending: selectYouTubeImportPending(state),
   userFetchPending: selectUserIsPending(state),
 });
 

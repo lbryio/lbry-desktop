@@ -75,16 +75,14 @@ class ErrorBoundary extends React.Component<Props, State> {
             title={__('Aw shucks!')}
             subtitle={
               <Fragment>
-                <p>
-                  {__("There was an error. It's been reported and will be fixed")}. {__('Try')}{' '}
-                  <Button
-                    button="link"
-                    className="load-screen__button"
-                    label={__('refreshing the app')}
-                    onClick={this.refresh}
-                  />{' '}
-                  {__("to fix it. If that doesn't work, press CMD/CTRL-R to reset to the homepage.")}.
-                </p>
+                {__("There was an error. It's been reported and will be fixed")}. {__('Try')}{' '}
+                <Button
+                  button="link"
+                  className="load-screen__button"
+                  label={__('refreshing the app')}
+                  onClick={this.refresh}
+                />{' '}
+                {__("to fix it. If that doesn't work, press CMD/CTRL-R to reset to the homepage.")}.
               </Fragment>
             }
           />

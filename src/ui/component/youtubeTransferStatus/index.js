@@ -1,20 +1,20 @@
 import { connect } from 'react-redux';
 import {
   selectYoutubeChannels,
-  selectYTImportPending,
+  selectYouTubeImportPending,
   selectUserIsPending,
   doClaimYoutubeChannels,
   doUserFetch,
-  selectYTImportVideosComplete,
+  selectYouTubeImportVideosComplete,
   doCheckYoutubeTransfer,
 } from 'lbryinc';
 import YoutubeChannelList from './view';
 
 const select = state => ({
   youtubeChannels: selectYoutubeChannels(state),
-  ytImportPending: selectYTImportPending(state),
+  youtubeImportPending: selectYouTubeImportPending(state),
   userFetchPending: selectUserIsPending(state),
-  videosImported: selectYTImportVideosComplete(state),
+  videosImported: selectYouTubeImportVideosComplete(state),
 });
 
 const perform = dispatch => ({

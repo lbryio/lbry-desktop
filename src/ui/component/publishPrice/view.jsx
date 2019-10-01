@@ -37,7 +37,7 @@ function PublishPrice(props: Props) {
           {!contentIsFree && (
             <FormFieldPrice
               name="content_cost_amount"
-              min="0"
+              min={0}
               price={fee}
               onChange={newFee => updatePublishForm({ fee: newFee })}
             />

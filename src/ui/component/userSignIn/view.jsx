@@ -5,7 +5,7 @@ import UserEmailNew from 'component/userEmailNew';
 import UserEmailVerify from 'component/userEmailVerify';
 import UserFirstChannel from 'component/userFirstChannel';
 import { DEFAULT_BID_FOR_FIRST_CHANNEL } from 'component/userFirstChannel/view';
-import { rewards as REWARDS } from 'lbryinc';
+import { rewards as REWARDS, YOUTUBE_STATUSES } from 'lbryinc';
 import UserVerify from 'component/userVerify';
 import Spinner from 'component/spinner';
 import YoutubeTransferWelcome from 'component/youtubeTransferWelcome';
@@ -61,14 +61,14 @@ function UserSignIn(props: Props) {
   const hasYoutubeChannels = youtubeChannels && Boolean(youtubeChannels.length);
   const hasTransferrableYoutubeChannels = hasYoutubeChannels && youtubeChannels.some(channel => channel.transferable);
   const hasPendingYoutubeTransfer =
-    hasYoutubeChannels && youtubeChannels.some(channel => channel.transfer_state === 'pending_transfer');
+    hasYoutubeChannels && youtubeChannels.some(channel => channel.transfer_state === YOUTUBE_STATUSES.PENDING_TRANSFER);
 
   // Complexity warning
   // We can't just check if we are currently fetching something
   // We may want to keep a component rendered while something is being fetched, instead of replacing it with the large spinner
   // The verbose variable names are an attempt to alleviate _some_ of the confusion from handling all edge cases that come from
   // reward claiming (plus the balance updating after), channel creation, account syncing, and youtube transfer
-  const canHijackSignInFlowWithSpinner = hasVerifiedEmail && !hasClaimedEmailAward && balance === 0 && !getSyncError;
+  const canHijackSignInFlowWithSpinner = hasVerifiedEmail && !getSyncError && balance === 0;
   const isCurrentlyFetchingSomething = fetchingChannels || claimingReward || syncingWallet;
   const isWaitingForSomethingToFinish =
     // If the user has claimed the email award, we need to wait until the balance updates sometime in the future
@@ -116,14 +116,16 @@ function UserSignIn(props: Props) {
     ),
   ];
 
-  let componentToRender;
-  for (var i = SIGN_IN_FLOW.length - 1; i > -1; i--) {
-    const Component = SIGN_IN_FLOW[i];
-    if (Component) {
-      componentToRender = Component;
-      break;
+  function getSignInStep() {
+    for (var i = SIGN_IN_FLOW.length - 1; i > -1; i--) {
+      const Component = SIGN_IN_FLOW[i];
+      if (Component) {
+        return Component;
+      }
     }
   }
+
+  const componentToRender = getSignInStep();
 
   if (!componentToRender) {
     history.replace(redirect || '/');
