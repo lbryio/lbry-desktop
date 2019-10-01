@@ -468,7 +468,11 @@ export function doSignIn() {
 export function doSignOut() {
   return dispatch => {
     deleteAuthToken()
-      .then(window.persistor.purge)
+      .then(() => {
+        // @if TARGET='web'
+        window.persistor.purge();
+        // @endif
+      })
       .then(() => {
         location.reload();
       })
