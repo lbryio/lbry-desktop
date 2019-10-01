@@ -712,5 +712,11 @@
   "Read More": "Read More",
   "Subscribers": "Subscribers",
   "Your password is saved in your OS keychain.": "Your password is saved in your OS keychain.",
-  "I want to type it manually": "I want to type it manually"
+  "I want to type it manually": "I want to type it manually",
+  "Enter a LBRY URL here or search for videos, music, games and more": "Enter a LBRY URL here or search for videos, music, games and more",
+  "discovery": "discovery",
+  "Multi-language support is brand new and incomplete. Switching your language may have unintended consequences, like glossolalia.": "Multi-language support is brand new and incomplete. Switching your language may have unintended consequences, like glossolalia.",
+  "This will add a Support button along side tipping. Similar to tips, supports help %discovery_link% but the LBC is returned to your wallet if revoked. Both also help secure your %vanity_names_link%.": "This will add a Support button along side tipping. Similar to tips, supports help %discovery_link% but the LBC is returned to your wallet if revoked. Both also help secure your %vanity_names_link%.",
+  "Save Password": "Save Password",
+  "Automatically unlock your wallet on startup": "Automatically unlock your wallet on startup"
 }
