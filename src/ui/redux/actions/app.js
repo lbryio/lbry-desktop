@@ -16,7 +16,6 @@ import {
   makeSelectClaimIsMine,
   doPopulateSharedUserState,
   doFetchChannelListMine,
-  getSync,
 } from 'lbry-redux';
 import Native from 'native';
 import { doFetchDaemonSettings } from 'redux/actions/settings';
@@ -32,7 +31,7 @@ import {
   selectUpgradeTimer,
   selectModal,
 } from 'redux/selectors/app';
-import { Lbryio, doAuthenticate } from 'lbryinc';
+import { Lbryio, doAuthenticate, doGetSync } from 'lbryinc';
 import { lbrySettings as config, version as appVersion } from 'package.json';
 import { push } from 'connected-react-router';
 import analytics from 'analytics';
@@ -451,12 +450,13 @@ export function doSignIn() {
     // @if TARGET='web'
     const { auth_token: authToken } = cookie.parse(document.cookie);
     Lbry.setApiHeader('X-Lbry-Auth-Token', authToken);
-
     dispatch(doBalanceSubscribe());
-    dispatch(doCheckSubscriptionsInit());
     dispatch(doFetchChannelListMine());
-    dispatch(getSync());
+    dispatch(doCheckSubscriptionsInit());
+    // @endif
 
+    // @if TARGET='app'
+    dispatch(doGetSync());
     // @endif
 
     Lbryio.call('user_settings', 'get').then(settings => {

@@ -3,28 +3,33 @@ import * as React from 'react';
 import Button from 'component/button';
 import ClaimPreview from 'component/claimPreview';
 import Card from 'component/common/card';
+import { YOUTUBE_STATUSES } from 'lbryinc';
+import { buildURI } from 'lbry-redux';
 
 type Props = {
   youtubeChannels: Array<any>,
-  ytImportPending: boolean,
+  youtubeImportPending: boolean,
   claimChannels: () => void,
   updateUser: () => void,
   checkYoutubeTransfer: () => void,
   videosImported: ?Array<number>, // [currentAmountImported, totalAmountToImport]
 };
 
-const NOT_TRANSFERRED = 'not_transferred';
-const PENDING_TRANSFER = 'pending_transfer';
-const COMPLETED_TRANSFER = 'completed_transfer';
-
 export default function YoutubeTransferStatus(props: Props) {
-  const { youtubeChannels, ytImportPending, claimChannels, videosImported, checkYoutubeTransfer, updateUser } = props;
+  const {
+    youtubeChannels,
+    youtubeImportPending,
+    claimChannels,
+    videosImported,
+    checkYoutubeTransfer,
+    updateUser,
+  } = props;
   const hasChannels = youtubeChannels && youtubeChannels.length;
 
   const transferEnabled = youtubeChannels.some(status => status.transferable);
-  const hasPendingTransfers = youtubeChannels.some(status => status.transfer_state === PENDING_TRANSFER);
-  const hasCompleteTransfers = youtubeChannels.some(status => status.transfer_state === COMPLETED_TRANSFER);
-  console.log('?', hasChannels && (hasPendingTransfers || (!hasPendingTransfers && !hasCompleteTransfers)));
+  const hasPendingTransfers = youtubeChannels.some(
+    status => status.transfer_state === YOUTUBE_STATUSES.PENDING_TRANSFER
+  );
 
   let total;
   let complete;
@@ -37,11 +42,11 @@ export default function YoutubeTransferStatus(props: Props) {
     const { transferable, transfer_state: transferState, sync_status: syncStatus } = channel;
     if (!transferable) {
       switch (transferState) {
-        case NOT_TRANSFERRED:
+        case YOUTUBE_STATUSES.NOT_TRANSFERRED:
           return syncStatus[0].toUpperCase() + syncStatus.slice(1);
-        case PENDING_TRANSFER:
+        case YOUTUBE_STATUSES.PENDING_TRANSFER:
           return __('Transfer in progress');
-        case COMPLETED_TRANSFER:
+        case YOUTUBE_STATUSES.COMPLETED_TRANSFER:
           return __('Completed transfer');
       }
     } else {
@@ -82,7 +87,7 @@ export default function YoutubeTransferStatus(props: Props) {
             <section>
               {youtubeChannels.map((channel, index) => {
                 const { lbry_channel_name: channelName, channel_claim_id: claimId } = channel;
-                const url = `lbry://${channelName}#${claimId}`;
+                const url = buildURI({ channelName, channelClaimId: claimId });
                 const transferState = getMessage(channel);
                 return (
                   <div key={url} className="card--inline">
@@ -91,9 +96,7 @@ export default function YoutubeTransferStatus(props: Props) {
                 );
               })}
               {videosImported && (
-                <div className="section help">
-                  {complete} / {total} {__('videos transferred')}
-                </div>
+                <div className="section help">{__('%complete% / %total% videos transferred', { complete, total })}</div>
               )}
             </section>
           }
@@ -102,7 +105,7 @@ export default function YoutubeTransferStatus(props: Props) {
               <div className="card__actions">
                 <Button
                   button="primary"
-                  disabled={ytImportPending}
+                  disabled={youtubeImportPending}
                   onClick={claimChannels}
                   label={youtubeChannels.length > 1 ? __('Claim Channels') : __('Claim Channel')}
                 />

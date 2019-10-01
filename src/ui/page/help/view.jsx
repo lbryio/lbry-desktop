@@ -11,6 +11,7 @@ import Native from 'native';
 import Button from 'component/button';
 import Page from 'component/page';
 import Card from 'component/common/card';
+import I18nMessage from 'component/i18nMessage';
 
 type DeamonSettings = {
   data_dir: string | any,
@@ -142,10 +143,10 @@ class HelpPage extends React.PureComponent<Props, State> {
         <Card
           title={__('Find Assistance')}
           subtitle={
-            <p>
-              {__('Live help is available most hours in the')} <strong>#help</strong>{' '}
-              {__('channel of our Discord chat room. Or you can always email us at help@lbry.com.')}
-            </p>
+            <I18nMessage tokens={{ channel: <strong>#help</strong> }}>
+              Live help is available most hours in the %channel% channel of our Discord chat room. Or you can always
+              email us at help@lbry.com.
+            </I18nMessage>
           }
           actions={
             <div className="section__actions">

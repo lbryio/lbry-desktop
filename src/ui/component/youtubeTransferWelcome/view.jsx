@@ -5,6 +5,7 @@ import classnames from 'classnames';
 import ClaimPreview from 'component/claimPreview';
 import Button from 'component/button';
 import Confetti from 'react-confetti';
+import { YOUTUBE_STATUSES } from 'lbryinc';
 
 type Props = {
   youtubeChannels: Array<{ lbry_channel_name: string, channel_claim_id: string, transfer_state: string }>,
@@ -15,7 +16,7 @@ export default function UserYoutubeTransfer(props: Props) {
   const { youtubeChannels, claimChannels } = props;
   const hasYoutubeChannels = youtubeChannels && youtubeChannels.length;
   const hasPendingYoutubeTransfer =
-    hasYoutubeChannels && youtubeChannels.some(channel => channel.transfer_state === 'pending_transfer');
+    hasYoutubeChannels && youtubeChannels.some(channel => channel.transfer_state === YOUTUBE_STATUSES.PENDING_TRANSFER);
 
   return (
     <div>
@@ -27,7 +28,7 @@ export default function UserYoutubeTransfer(props: Props) {
           </React.Fragment>
         ) : (
           <React.Fragment>
-            <h1 className="section__title--large">{__('Good to Go!')}</h1>
+            <h1 className="section__title--large">{__('Good To Go!')}</h1>
             <p className="section__subtitle">
               {__('You now control your channel and your videos are being transferred to your account.')}
             </p>
@@ -59,7 +60,6 @@ export default function UserYoutubeTransfer(props: Props) {
       ) : (
         <section className="section">
           <h1 className="section__title">{__('Begin Transfer')}</h1>
-          <p className="section__subtitle">{__('Do it to it.')}</p>
           <div className="section__actions">
             <Button button="primary" label={__('Transfer')} onClick={claimChannels} />
           </div>

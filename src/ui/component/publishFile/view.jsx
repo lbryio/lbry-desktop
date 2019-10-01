@@ -31,9 +31,8 @@ function PublishFile(props: Props) {
 
   return (
     <Card
-      className={disabled ? 'card--disabled' : undefined}
       icon={ICONS.PUBLISH}
-      disabled={balance === 0}
+      disabled={disabled || balance === 0}
       title={isStillEditing ? __('Edit') : __('Publish')}
       subtitle={__('You are currently editing a claim.')}
       actions={
