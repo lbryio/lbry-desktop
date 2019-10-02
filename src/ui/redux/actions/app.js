@@ -7,6 +7,7 @@ import path from 'path';
 import * as ACTIONS from 'constants/action_types';
 import * as MODALS from 'constants/modal_types';
 import * as PAGES from 'constants/pages';
+import * as SETTINGS from 'constants/settings';
 import {
   Lbry,
   doBalanceSubscribe,
@@ -16,6 +17,7 @@ import {
   makeSelectClaimIsMine,
   doPopulateSharedUserState,
   doFetchChannelListMine,
+  selectBalance,
 } from 'lbry-redux';
 import Native from 'native';
 import { doFetchDaemonSettings } from 'redux/actions/settings';
@@ -31,12 +33,13 @@ import {
   selectUpgradeTimer,
   selectModal,
 } from 'redux/selectors/app';
-import { Lbryio, doAuthenticate, doGetSync } from 'lbryinc';
+import { Lbryio, doAuthenticate, doGetSync, selectSyncHash } from 'lbryinc';
 import { lbrySettings as config, version as appVersion } from 'package.json';
 import { push } from 'connected-react-router';
 import analytics from 'analytics';
 import { deleteAuthToken } from 'util/saved-passwords';
 import cookie from 'cookie';
+import { makeSelectClientSetting } from 'redux/selectors/settings';
 
 // @if TARGET='app'
 const { autoUpdater } = remote.require('electron-updater');
@@ -456,7 +459,15 @@ export function doSignIn() {
     // @endif
 
     // @if TARGET='app'
-    dispatch(doGetSync());
+    const state = getState();
+    const syncEnabled = makeSelectClientSetting(SETTINGS.ENABLE_SYNC)(state);
+    const syncHash = selectSyncHash(state);
+    const balance = selectBalance(state);
+
+    // For existing users, check if they've synced before, or have 0 balance
+    if (syncEnabled && (!syncHash || balance === 0)) {
+      dispatch(doGetSync());
+    }
     // @endif
 
     Lbryio.call('user_settings', 'get').then(settings => {
