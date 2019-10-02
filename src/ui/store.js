@@ -63,6 +63,7 @@ const whiteListedReducers = [
   'search',
   'blocked',
   'settings',
+  'sync',
 ];
 
 const transforms = [
