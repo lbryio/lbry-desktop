@@ -7,7 +7,7 @@ import UserEmail from 'component/userEmail';
 import InviteNew from 'component/inviteNew';
 import InviteList from 'component/inviteList';
 
-const AccountPage = (props: Props) => {
+const AccountPage = (props: any) => {
   return (
     <Page>
       <div className="columns section">
