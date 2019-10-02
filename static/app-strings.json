@@ -794,5 +794,6 @@
   "channel": "channel",
   "Create": "Create",
   "Use this address to receive LBC.": "Use this address to receive LBC.",
-  "Not a valid LBRY address": "Not a valid LBRY address"
+  "Not a valid LBRY address": "Not a valid LBRY address",
+  "You have no rewards available.": "You have no rewards available."
 }
