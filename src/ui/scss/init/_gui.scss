@@ -70,6 +70,7 @@ dl {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
+  overflow-x: visible;
   margin-top: var(--spacing-medium);
 }
 
