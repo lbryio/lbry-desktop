@@ -63,7 +63,9 @@ const defaultHead =
   '<meta property="og:title" content="LBRY On The Web" />\n' +
   '<meta property="og:site_name" content="LBRY.tv"/>\n' +
   '<meta property="og:description" content="All your favorite LBRY content in your browser." />\n' +
-  '<meta property="og:image" content="/og.png" />';
+  '<meta property="og:image" content="https://beta.lbry.tv/og.png" />';
+  '<meta property="fb:app_id" content="1673146449633983" />';
+
 
 app.get('*', async (req, res) => {
   let html = readFileSync(path.join(__dirname, '/index.html'), 'utf8');
@@ -87,7 +89,7 @@ app.get('*', async (req, res) => {
             ? truncateDescription(claim.description)
             : `Watch ${title} on LBRY.tv`;
         const claimLanguage = claim.language || 'en_US';
-        const claimThumbnail = claim.thumbnail_url || '/og.png';
+        const claimThumbnail = claim.thumbnail_url || 'https://beta.lbry.tv/og.png';
         const claimTitle =
           claim.channel && !isChannel ? `${title} from ${claim.channel} on LBRY.tv` : `${title} on LBRY.tv`;
 
@@ -99,6 +101,7 @@ app.get('*', async (req, res) => {
         if (claim.tags) {
           head += `<meta name="keywords" content="${claim.tags.toString()}"/>`;
         }
+        head += `<meta name="twitter:card" content="summary_large_image"/>`;
         head += `<meta name="twitter:image" content="${claimThumbnail}"/>`;
         head += `<meta property="og:description" content="${claimDescription}"/>`;
         head += `<meta property="og:image" content="${claimThumbnail}"/>`;
