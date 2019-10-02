@@ -5,7 +5,6 @@ export const FILE_TIMEOUT = 'file_timeout';
 export const DOWNLOADING = 'downloading';
 export const AUTO_GENERATE_THUMBNAIL = 'auto_generate_thumbnail';
 export const AUTO_UPDATE_DOWNLOADED = 'auto_update_downloaded';
-export const AUTO_UPDATE_CONFIRM = 'auto_update_confirm';
 export const ERROR = 'error';
 export const UPGRADE = 'upgrade';
 export const WELCOME = 'welcome';
