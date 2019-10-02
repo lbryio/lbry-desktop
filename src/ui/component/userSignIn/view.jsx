@@ -60,9 +60,6 @@ function UserSignIn(props: Props) {
   const channelCount = channels ? channels.length : 0;
   const hasClaimedEmailAward = claimedRewards.some(reward => reward.reward_type === REWARDS.TYPE_CONFIRM_EMAIL);
   const hasYoutubeChannels = youtubeChannels && Boolean(youtubeChannels.length);
-  // const hasTransferrableYoutubeChannels = hasYoutubeChannels && youtubeChannels.some(channel => channel.transferable);
-  // const hasPendingYoutubeTransfer =
-  //   hasYoutubeChannels && youtubeChannels.some(channel => channel.transfer_state === YOUTUBE_STATUSES.PENDING_TRANSFER);
   const isYoutubeTransferComplete =
     hasYoutubeChannels &&
     youtubeChannels.every(channel => channel.transfer_state === YOUTUBE_STATUSES.COMPLETED_TRANSFER);
@@ -71,13 +68,12 @@ function UserSignIn(props: Props) {
   // We can't just check if we are currently fetching something
   // We may want to keep a component rendered while something is being fetched, instead of replacing it with the large spinner
   // The verbose variable names are an attempt to alleviate _some_ of the confusion from handling all edge cases that come from
-  // reward claiming (plus the balance updating after), channel creation, account syncing, and youtube transfer
-  const canHijackSignInFlowWithSpinner = hasVerifiedEmail && !getSyncError && balance === 0;
+  // reward claiming, channel creation, account syncing, and youtube transfer
+  const canHijackSignInFlowWithSpinner = hasVerifiedEmail && !getSyncError;
   const isCurrentlyFetchingSomething = fetchingChannels || claimingReward || syncingWallet;
   const isWaitingForSomethingToFinish =
     // If the user has claimed the email award, we need to wait until the balance updates sometime in the future
-    !hasFetchedReward || (hasFetchedReward && balance === 0) || (syncEnabled && !hasSynced);
-
+    (!hasFetchedReward && !hasClaimedEmailAward) || (syncEnabled && !hasSynced);
   // The possible screens for the sign in flow
   const showEmail = !emailToVerify && !hasVerifiedEmail;
   const showEmailVerification = emailToVerify && !hasVerifiedEmail;
