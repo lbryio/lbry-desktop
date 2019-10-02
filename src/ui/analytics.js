@@ -20,6 +20,8 @@ type Analytics = {
   emailProvidedEvent: () => void,
   emailVerifiedEvent: () => void,
   rewardEligibleEvent: () => void,
+  startupEvent: () => void,
+  readyEvent: number => void,
 };
 
 let analyticsEnabled: boolean = true;
@@ -104,6 +106,13 @@ const analytics: Analytics = {
   rewardEligibleEvent: () => {
     sendGaEvent('Engagement', 'Reward-Eligible');
   },
+  startupEvent: () => {
+    sendGaEvent('Startup', 'Startup');
+  },
+  readyEvent: (timeToReady: number) => {
+    sendGaEvent('Startup', 'App-Ready');
+    sendGaTimingEvent('Startup', 'App-Ready', timeToReady);
+  },
 };
 
 function sendGaEvent(category, action) {
@@ -111,6 +120,16 @@ function sendGaEvent(category, action) {
     ReactGA.event({
       category,
       action,
+    });
+  }
+}
+
+function sendGaTimingEvent(category: string, action: string, timeInMs: number) {
+  if (analyticsEnabled && isProduction) {
+    ReactGA.timing({
+      category,
+      variable: action,
+      value: timeInMs,
     });
   }
 }
@@ -129,6 +148,7 @@ ElectronCookies.enable({
 ReactGA.initialize(UA_ID, {
   testMode: process.env.NODE_ENV !== 'production',
   cookieDomain: 'auto',
+  siteSpeedSampleRate: 100,
   // un-comment to see events as they are sent to google
   // debug: true,
 });

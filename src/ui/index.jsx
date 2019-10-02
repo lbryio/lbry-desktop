@@ -29,11 +29,15 @@ import { ConnectedRouter, push } from 'connected-react-router';
 import cookie from 'cookie';
 import { formatLbryUriForWeb } from 'util/uri';
 import { PersistGate } from 'redux-persist/integration/react';
+import analytics from 'analytics';
 
 // Import our app styles
 // If a style is not necessary for the initial page load, it should be removed from `all.scss`
 // and loaded dynamically in the component that consumes it
 import 'scss/all.scss';
+
+const startTime = Date.now();
+analytics.startupEvent();
 
 const APPPAGEURL = 'lbry://?';
 // @if TARGET='app'
@@ -231,6 +235,10 @@ function AppWrapper() {
       app.store.dispatch(doBlackListedOutpointsSubscribe());
       app.store.dispatch(doFilteredOutpointsSubscribe());
       window.sessionStorage.setItem('loaded', 'y');
+
+      const appReadyTime = Date.now();
+      const timeToStart = appReadyTime - startTime;
+      analytics.readyEvent(timeToStart);
     }
   }, [readyToLaunch, haveLaunched]);
 
