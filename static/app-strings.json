@@ -773,8 +773,6 @@
   "LBC Currently Staked": "LBC Currently Staked",
   "Your Supports": "Your Supports",
   "Add Tags": "Add Tags",
-  "Jeremy please change this": "Jeremy please change this",
-  "Jeremy please change this.": "Jeremy please change this.",
   "Extra Verification Needed": "Extra Verification Needed",
   "We weren't able to auto-approve you for rewards. Please complete one of the steps below to unlock them.": "We weren't able to auto-approve you for rewards. Please complete one of the steps below to unlock them.",
   "Proof via Text": "Proof via Text",
@@ -797,5 +795,17 @@
   "You have no rewards available.": "You have no rewards available.",
   "light": "light",
   "dark": "dark",
-  "Dark": "Dark"
+  "Dark": "Dark",
+  "Blockchain expert?": "Blockchain expert?",
+  "Learn More": "Learn More",
+  "Creating": "Creating",
+  "Enter Your LBRY Password": "Enter Your LBRY Password",
+  "You set your wallet password when you previously installed LBRY.": "You set your wallet password when you previously installed LBRY.",
+  "Remember My Password": "Remember My Password",
+  "Failed to load translations.": "Failed to load translations.",
+  "Terms of Service": "Terms of Service",
+  "I am over the age of 13 and agree to the %terms%.": "I am over the age of 13 and agree to the %terms%.",
+  "Nothing published to LBRY yet.": "Nothing published to LBRY yet.",
+  "Add a tag": "Add a tag",
+  "Claim Your 20 LBC Invite Reward": "Claim Your 20 LBC Invite Reward"
 }
