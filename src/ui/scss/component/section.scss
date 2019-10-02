@@ -30,10 +30,7 @@
 .section__flex-wrap {
   @extend .section__flex;
   flex-wrap: wrap;
-  margin-bottom: var(--spacing-large);
-  overflow-x: visible;
-
-  & > * {
+  margin-bottom: var(--spacing-large) & > * {
     margin-bottom: var(--spacing-large);
   }
 }
