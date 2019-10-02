@@ -133,21 +133,10 @@ export function doDownloadUpgradeRequested() {
   // This will probably be reorganized once we get auto-update going on Linux and remove
   // the old logic.
 
-  return (dispatch, getState) => {
-    const state = getState();
-
-    const autoUpdateDeclined = selectAutoUpdateDeclined(state);
-
+  return dispatch => {
     if (['win32', 'darwin'].includes(process.platform)) {
       // electron-updater behavior
-      if (autoUpdateDeclined) {
-        // The user declined an update before, so show the "confirm" dialog
-        dispatch(doOpenModal(MODALS.AUTO_UPDATE_CONFIRM));
-      } else {
-        // The user was never shown the original update dialog (e.g. because they were
-        // watching a video). So show the inital "update downloaded" dialog.
-        dispatch(doOpenModal(MODALS.AUTO_UPDATE_DOWNLOADED));
-      }
+      dispatch(doOpenModal(MODALS.AUTO_UPDATE_DOWNLOADED));
     } else {
       // Old behavior for Linux
       dispatch(doDownloadUpgrade());

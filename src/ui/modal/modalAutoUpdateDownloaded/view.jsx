@@ -33,8 +33,8 @@ class ModalAutoUpdateDownloaded extends React.PureComponent<Props, State> {
         type="confirm"
         contentLabel={__('Upgrade Downloaded')}
         title={__('LBRY Leveled Up')}
-        confirmButtonLabel={__('Use Now')}
-        abortButtonLabel={__('Upgrade on Close')}
+        confirmButtonLabel={__('Upgrade Now')}
+        abortButtonLabel={__('Not now')}
         confirmButtonDisabled={this.state.disabled}
         onConfirmed={() => {
           this.setState({ disabled: true });
@@ -42,7 +42,6 @@ class ModalAutoUpdateDownloaded extends React.PureComponent<Props, State> {
         }}
         onAborted={() => {
           declineAutoUpdate();
-          ipcRenderer.send('autoUpdateDeclined');
           closeModal();
         }}
       >
