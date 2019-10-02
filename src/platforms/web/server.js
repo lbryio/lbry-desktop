@@ -63,7 +63,7 @@ const defaultHead =
   '<meta property="og:title" content="LBRY On The Web" />\n' +
   '<meta property="og:site_name" content="LBRY.tv"/>\n' +
   '<meta property="og:description" content="All your favorite LBRY content in your browser." />\n' +
-  '<meta property="og:image" content="https://beta.lbry.tv/og.png" />';
+  '<meta property="og:image" content="/og.png" />';
   '<meta property="fb:app_id" content="1673146449633983" />';
 
 
