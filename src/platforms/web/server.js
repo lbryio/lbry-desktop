@@ -1,6 +1,6 @@
 const { parseURI } = require('lbry-redux');
 // const { generateStreamUrl } = require('../../src/ui/util/lbrytv');
-const { WEB_SERVER_PORT } = require('../../config');
+const { WEB_SERVER_PORT, DOMAIN } = require('../../config');
 const { readFileSync } = require('fs');
 const express = require('express');
 const path = require('path');
@@ -59,13 +59,12 @@ function insertToHead(fullHtml, htmlToInsert) {
 
 const defaultHead =
   '<title>lbry.tv</title>\n' +
-  '<meta property="og:url" content="https://beta.lbry.tv" />\n' +
+  `<meta property="og:url" content="${DOMAIN}" />\n` +
   '<meta property="og:title" content="LBRY On The Web" />\n' +
   '<meta property="og:site_name" content="LBRY.tv"/>\n' +
   '<meta property="og:description" content="All your favorite LBRY content in your browser." />\n' +
-  '<meta property="og:image" content="/og.png" />';
+  `<meta property="og:image" content="${DOMAIN}/og.png" />\n` +
   '<meta property="fb:app_id" content="1673146449633983" />';
-
 
 app.get('*', async (req, res) => {
   let html = readFileSync(path.join(__dirname, '/index.html'), 'utf8');
@@ -89,7 +88,7 @@ app.get('*', async (req, res) => {
             ? truncateDescription(claim.description)
             : `Watch ${title} on LBRY.tv`;
         const claimLanguage = claim.language || 'en_US';
-        const claimThumbnail = claim.thumbnail_url || 'https://beta.lbry.tv/og.png';
+        const claimThumbnail = claim.thumbnail_url || `${DOMAIN}/og.png`;
         const claimTitle =
           claim.channel && !isChannel ? `${title} from ${claim.channel} on LBRY.tv` : `${title} on LBRY.tv`;
 
@@ -109,7 +108,7 @@ app.get('*', async (req, res) => {
         head += `<meta property="og:site_name" content="LBRY.tv"/>`;
         head += `<meta property="og:type" content="website"/>`;
         // below should be canonical_url, but not provided by chainquery yet
-        head += `<meta property="og:url" content="https://beta.lbry.tv/${claim.name}:${claim.claim_id}"/>`;
+        head += `<meta property="og:url" content="${DOMAIN}/${claim.name}:${claim.claim_id}"/>`;
 
         if (claim.source_media_type && claim.source_media_type.startsWith('video/')) {
           // const videoUrl = generateStreamUrl(claim.name, claim.claim_id);
@@ -126,6 +125,7 @@ app.get('*', async (req, res) => {
       } else {
         html = insertToHead(html, defaultHead);
       }
+
       res.send(html);
     });
   } else {
