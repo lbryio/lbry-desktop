@@ -20,7 +20,6 @@ type Props = {
   tagsChosen?: Array<Tag>,
   onSelect?: Tag => void,
   onRemove?: Tag => void,
-  placeholder?: string,
 };
 
 export default function TagSelect(props: Props) {
@@ -34,7 +33,6 @@ export default function TagSelect(props: Props) {
     onSelect,
     onRemove,
     suggestMature,
-    placeholder,
   } = props;
   const [hasClosed, setHasClosed] = usePersistedState('tag-select:has-closed', false);
   const tagsToDisplay = tagsChosen || followedTags;
@@ -90,7 +88,6 @@ export default function TagSelect(props: Props) {
               onSelect={onSelect}
               suggestMature={suggestMature && !hasMatureTag}
               tagsPasssedIn={tagsToDisplay}
-              placeholder={placeholder}
             />
           </React.Fragment>
         }

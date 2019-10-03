@@ -186,7 +186,6 @@ function ChannelForm(props: Props) {
           suggestMature
           help={__('The better your tags are, the easier it will be for people to discover your channel.')}
           empty={__('No tags added')}
-          placeholder={__('Add a tag')}
           onSelect={newTag => {
             if (!params.tags.map(savedTag => savedTag.name).includes(newTag.name)) {
               setParams({ ...params, tags: [...params.tags, newTag] });
