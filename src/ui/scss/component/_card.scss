@@ -40,6 +40,11 @@
 .card--inline {
   border: 1px solid $lbry-gray-1;
   border-radius: var(--card-radius);
+  margin-bottom: var(--spacing-medium);
+
+  &:last-of-type {
+    margin-bottom: 0;
+  }
 
   [data-mode='dark'] & {
     border-color: var(--dm-color-03);
@@ -198,7 +203,7 @@
   font-size: var(--font-body);
 
   [data-mode='dark'] & {
-    background-color: var(--dm-color-04);
+    background-color: var(--color-card-actions--dark);
     color: inherit;
   }
 }

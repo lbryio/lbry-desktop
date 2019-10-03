@@ -18,12 +18,6 @@ form {
   }
 }
 
-textarea {
-  &::placeholder {
-    opacity: 0.4;
-  }
-}
-
 // lbry/components overrides and minor styles
 // Some items have very specific styling
 // This is because many styles inside `lbry/components/sass/form/` are very specific
@@ -46,28 +40,34 @@ textarea {
   height: var(--input-height);
   padding-bottom: 0.1em;
 
+  &::placeholder {
+    color: $lbry-gray-5;
+    opacity: 0.4;
+  }
+
   [data-mode='dark'] & {
     &::placeholder {
-      opacity: 0.4;
+      color: $lbry-white;
     }
-  }
-}
-
-input,
-select,
-textarea {
-  border-color: lighten($lbry-black, 20%);
-  border-radius: var(--input-border-radius);
-  background-color: $lbry-white;
-  border-width: 1px;
-
-  [data-mode='dark'] & {
-    background-color: var(--dm-color-02);
   }
 }
 
 fieldset-section {
   margin-bottom: var(--spacing-small);
+
+  input,
+  select,
+  textarea {
+    border-color: lighten($lbry-black, 20%);
+    border-radius: var(--input-border-radius);
+    background-color: $lbry-white;
+    border-width: 1px;
+
+    [data-mode='dark'] & {
+      background-color: var(--dm-color-03);
+      border-color: $lbry-black;
+    }
+  }
 
   label {
     width: auto;
@@ -177,15 +177,6 @@ fieldset-group {
       width: 0;
     }
 
-    fieldset-section:first-child .form-field__prefix,
-    fieldset-section:last-child input {
-      border-color: $lbry-black;
-
-      [data-mode='dark'] {
-        border-color: $lbry-gray-4;
-      }
-    }
-
     fieldset-section:first-child {
       .form-field__prefix {
         white-space: nowrap;
@@ -201,7 +192,8 @@ fieldset-group {
         background-color: $lbry-white;
 
         [data-mode='dark'] & {
-          border-color: $lbry-gray-4;
+          background-color: var(--dm-color-03);
+          border-color: var(--dm-color-02);
         }
       }
     }
@@ -222,7 +214,7 @@ fieldset-group {
 
         [data-mode='dark'] & {
           &:focus {
-            border-image-source: linear-gradient(to right, $lbry-gray-4, $lbry-teal-5 5%);
+            border-image-source: linear-gradient(to right, var(--dm-color-02), $lbry-teal-5 5%);
           }
         }
       }
@@ -289,8 +281,6 @@ fieldset-section {
     background-size: 1.2rem;
 
     [data-mode='dark'] & {
-      background-color: transparent;
-
       option {
         background-color: $lbry-gray-5;
       }
@@ -304,10 +294,10 @@ fieldset-section {
       color: $lbry-white;
     }
 
-    input:not(:focus):not(.form-field--copyable),
-    textarea:not(:focus),
-    select:not(:focus) {
-      border-color: var(--dm-color-04);
+    input:not(.form-field--copyable),
+    textarea,
+    select {
+      border-color: $lbry-gray-5;
     }
   }
 }

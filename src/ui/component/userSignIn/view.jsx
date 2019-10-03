@@ -8,9 +8,10 @@ import { DEFAULT_BID_FOR_FIRST_CHANNEL } from 'component/userFirstChannel/view';
 import { rewards as REWARDS, YOUTUBE_STATUSES } from 'lbryinc';
 import UserVerify from 'component/userVerify';
 import Spinner from 'component/spinner';
-import YoutubeTransferWelcome from 'component/youtubeTransferWelcome';
+import YoutubeTransferStatus from 'component/youtubeTransferStatus';
 import SyncPassword from 'component/syncPassword';
 import useFetched from 'effects/use-fetched';
+import Confetti from 'react-confetti';
 
 type Props = {
   user: ?User,
@@ -29,6 +30,7 @@ type Props = {
   hasSynced: boolean,
   syncingWallet: boolean,
   getSyncError: ?string,
+  creatingChannel: boolean,
 };
 
 function UserSignIn(props: Props) {
@@ -49,6 +51,7 @@ function UserSignIn(props: Props) {
     getSyncError,
     hasSynced,
     fetchingChannels,
+    creatingChannel,
   } = props;
   const { search } = location;
   const urlParams = new URLSearchParams(search);
@@ -59,30 +62,33 @@ function UserSignIn(props: Props) {
   const channelCount = channels ? channels.length : 0;
   const hasClaimedEmailAward = claimedRewards.some(reward => reward.reward_type === REWARDS.TYPE_CONFIRM_EMAIL);
   const hasYoutubeChannels = youtubeChannels && Boolean(youtubeChannels.length);
-  const hasTransferrableYoutubeChannels = hasYoutubeChannels && youtubeChannels.some(channel => channel.transferable);
-  const hasPendingYoutubeTransfer =
-    hasYoutubeChannels && youtubeChannels.some(channel => channel.transfer_state === YOUTUBE_STATUSES.PENDING_TRANSFER);
+  const isYoutubeTransferComplete =
+    hasYoutubeChannels &&
+    youtubeChannels.every(channel => channel.transfer_state === YOUTUBE_STATUSES.COMPLETED_TRANSFER);
 
   // Complexity warning
   // We can't just check if we are currently fetching something
   // We may want to keep a component rendered while something is being fetched, instead of replacing it with the large spinner
   // The verbose variable names are an attempt to alleviate _some_ of the confusion from handling all edge cases that come from
-  // reward claiming (plus the balance updating after), channel creation, account syncing, and youtube transfer
-  const canHijackSignInFlowWithSpinner = hasVerifiedEmail && !getSyncError && balance === 0;
-  const isCurrentlyFetchingSomething = fetchingChannels || claimingReward || syncingWallet;
+  // reward claiming, channel creation, account syncing, and youtube transfer
+  const canHijackSignInFlowWithSpinner = hasVerifiedEmail && !getSyncError;
+  const isCurrentlyFetchingSomething = fetchingChannels || claimingReward || syncingWallet || creatingChannel;
   const isWaitingForSomethingToFinish =
     // If the user has claimed the email award, we need to wait until the balance updates sometime in the future
-    !hasFetchedReward || (hasFetchedReward && balance === 0) || (syncEnabled && !hasSynced);
-
+    (!hasFetchedReward && !hasClaimedEmailAward) || (syncEnabled && !hasSynced);
   // The possible screens for the sign in flow
   const showEmail = !emailToVerify && !hasVerifiedEmail;
   const showEmailVerification = emailToVerify && !hasVerifiedEmail;
   const showUserVerification = hasVerifiedEmail && !rewardsApproved;
   const showSyncPassword = syncEnabled && getSyncError && !hasSynced;
   const showChannelCreation =
-    hasVerifiedEmail && balance && balance > DEFAULT_BID_FOR_FIRST_CHANNEL && channelCount === 0 && !hasYoutubeChannels;
-  const showYoutubeTransfer =
-    hasVerifiedEmail && hasYoutubeChannels && (hasTransferrableYoutubeChannels || hasPendingYoutubeTransfer);
+    hasVerifiedEmail &&
+    balance !== undefined &&
+    balance !== null &&
+    balance > DEFAULT_BID_FOR_FIRST_CHANNEL &&
+    channelCount === 0 &&
+    !hasYoutubeChannels;
+  const showYoutubeTransfer = hasVerifiedEmail && hasYoutubeChannels && !isYoutubeTransferComplete;
   const showLoadingSpinner =
     canHijackSignInFlowWithSpinner && (isCurrentlyFetchingSomething || isWaitingForSomethingToFinish);
 
@@ -109,7 +115,11 @@ function UserSignIn(props: Props) {
     showSyncPassword && <SyncPassword />,
     showChannelCreation && <UserFirstChannel />,
     // @if TARGET='app'
-    showYoutubeTransfer && <YoutubeTransferWelcome />,
+    showYoutubeTransfer && (
+      <div>
+        <YoutubeTransferStatus /> <Confetti recycle={false} style={{ position: 'fixed' }} />
+      </div>
+    ),
     // @endif
     showLoadingSpinner && (
       <div className="main--empty">

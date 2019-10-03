@@ -37,7 +37,7 @@ class InviteList extends React.PureComponent<Props> {
     return (
       <section className="card">
         <div className="table__header">
-          <h2 className="card__title">
+          <h2 className="card__title--between">
             {__('Invite History')}
             {referralReward && showClaimable && (
               <RewardLink

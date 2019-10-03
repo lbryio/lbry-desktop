@@ -70,6 +70,7 @@ dl {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
+  overflow-x: visible;
   margin-top: var(--spacing-medium);
 }
 
@@ -282,14 +283,5 @@ fieldset,
 legend {
   [data-mode='dark'] & {
     border-color: transparent;
-  }
-}
-
-checkbox-toggle,
-.checkbox-toggle,
-radio-toggle,
-.radio-toggle {
-  [data-mode='dark'] & {
-    border-color: var(--dm-color-04);
   }
 }

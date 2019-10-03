@@ -7,7 +7,7 @@
 }
 
 .section--padded {
-  padding: var(--spacing-large);
+  padding: var(--spacing-medium);
 }
 
 .section--small {
@@ -31,7 +31,6 @@
   @extend .section__flex;
   flex-wrap: wrap;
   margin-bottom: var(--spacing-large);
-
   & > * {
     margin-bottom: var(--spacing-large);
   }
