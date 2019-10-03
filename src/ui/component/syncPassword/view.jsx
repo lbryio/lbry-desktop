@@ -3,7 +3,7 @@ import React from 'react';
 import { Form, FormField } from 'component/common/form';
 import Button from 'component/button';
 import Card from 'component/common/card';
-import { setSavedPassword, deleteSavedPassword } from 'util/saved-passwords';
+import { setSavedPassword } from 'util/saved-passwords';
 
 type Props = {
   getSync: (?string) => void,
@@ -18,8 +18,6 @@ function SyncPassword(props: Props) {
   function handleSubmit() {
     if (rememberPassword) {
       setSavedPassword(password);
-    } else {
-      deleteSavedPassword();
     }
 
     getSync(password);
