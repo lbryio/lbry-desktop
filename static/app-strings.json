@@ -818,9 +818,5 @@
   "You aren’t blocking any channels": "You aren’t blocking any channels",
   "When you block a channel, all content from that channel will be hidden.": "When you block a channel, all content from that channel will be hidden.",
   "dfsdfsdf": "dfsdfsdf",
-  "Light": "Light",
-  "Wallet encryption is currently unavailable until it's supported for synced accounts. It will be added back soon. %learn_more%": "Wallet encryption is currently unavailable until it's supported for synced accounts. It will be added back soon. %learn_more%",
-  "... in your publishes": "... in your publishes",
-  "... in your supports": "... in your supports",
-  "Earned and bound in tips": "Earned and bound in tips"
+  "Light": "Light"
 }

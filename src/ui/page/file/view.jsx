@@ -18,7 +18,6 @@ import CommentsList from 'component/commentsList';
 import CommentCreate from 'component/commentCreate';
 import ClaimUri from 'component/claimUri';
 import ClaimPreview from 'component/claimPreview';
-import HelpLink from 'component/common/help-link';
 
 export const FILE_WRAPPER_CLASS = 'grid-area--content';
 
@@ -162,7 +161,6 @@ class FilePage extends React.Component<Props> {
                 <DateTime uri={uri} show={DateTime.SHOW_DATE} />
                 <span>
                   {viewCount} {viewCount !== 1 ? __('Views') : __('View')}
-                  <HelpLink href="https://lbry.com/faq/views" />
                 </span>
               </div>
 
