@@ -5,7 +5,7 @@ import moment from 'moment';
 const reducers = {};
 const defaultState = {
   isNight: false,
-  languages: { en: 'English', pl: 'Polski', id: 'Bahasa Indonesia', de: 'Deutsche' }, // this could/should be loaded directly from Transifex and/or lbry.com
+  languages: { en: 'English', pl: 'Polski', id: 'Bahasa Indonesia', de: 'Deutsche', tr: `Türkçe` }, // this could/should be loaded directly from Transifex and/or lbry.com
   isFetchingLanguage: false,
   daemonSettings: {},
   clientSettings: {
