@@ -1,6 +1,6 @@
 {
   "name": "lbry",
-  "version": "0.36.0-rc.1",
+  "version": "0.36.0-rc.5",
   "description": "A browser for the LBRY network, a digital marketplace controlled by its users.",
   "keywords": [
     "lbry"
@@ -128,8 +128,8 @@
     "husky": "^0.14.3",
     "json-loader": "^0.5.4",
     "lbry-format": "https://github.com/lbryio/lbry-format.git",
-    "lbry-redux": "lbryio/lbry-redux#85fe532d69704a283fd2ec640ad6e3b8dacd6d0d",
-    "lbryinc": "lbryio/lbryinc#a44576194e1f5f60e37d328ddfdca40bd6165c2d",
+    "lbry-redux": "lbryio/lbry-redux#b6a7dd0d99f0f8cfc204d3734b6cfc6eb7f8303d",
+    "lbryinc": "lbryio/lbryinc#f5bee9cd300c4bdc05228e31ea15cfc430975f67",
     "lint-staged": "^7.0.2",
     "localforage": "^1.7.1",
     "lodash-es": "^4.17.14",
