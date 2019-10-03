@@ -19,7 +19,7 @@ type Props = {
 function UserEmailNew(props: Props) {
   const { errorMessage, isPending, addUserEmail, syncEnabled, setSync, balance } = props;
   const [newEmail, setEmail] = useState('');
-  const [ageConfirmation, setAgeConfirmation] = useState(true);
+  const [ageConfirmation, setAgeConfirmation] = useState(false);
   const valid = newEmail.match(EMAIL_REGEX);
 
   function handleSubmit() {

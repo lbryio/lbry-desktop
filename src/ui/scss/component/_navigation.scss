@@ -77,10 +77,10 @@
   }
 
   [data-mode='dark'] & {
-    color: darken($lbry-white, 30%);
+    color: var(--dm-color-01);
 
     svg {
-      stroke: darken($lbry-white, 30%);
+      stroke: var(--dm-color-01);
     }
 
     &:hover,
