@@ -4,6 +4,7 @@ import { Form, FormField } from 'component/common/form';
 import Button from 'component/button';
 import SelectAsset from 'component/selectAsset';
 import TagSelect from 'component/tagsSelect';
+import * as PAGES from 'constants/pages';
 
 type Props = {
   claim: ChannelClaim,
@@ -202,7 +203,7 @@ function ChannelForm(props: Props) {
         />
         <div className={'card__actions'}>
           <Button button="primary" label={__('Submit')} type="submit" />
-          <Button button="link" label={__('Cancel')} />
+          <Button button="link" label={__('Cancel')} navigate={`$/${PAGES.CHANNELS}`} />
         </div>
       </Form>
     </section>
