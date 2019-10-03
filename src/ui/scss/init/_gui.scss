@@ -284,3 +284,12 @@ legend {
     border-color: transparent;
   }
 }
+
+checkbox-toggle,
+.checkbox-toggle,
+radio-toggle,
+.radio-toggle {
+  [data-mode='dark'] & {
+    border-color: var(--dm-color-04);
+  }
+}
