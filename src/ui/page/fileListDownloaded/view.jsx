@@ -1,21 +1,39 @@
 // @flow
-import React from 'react';
+import React, { useState } from 'react';
 import Button from 'component/button';
 import ClaimList from 'component/claimList';
 import Paginate from 'component/common/paginate';
 import { PAGE_SIZE } from 'constants/claim';
+import { Form } from 'component/common/form-components/form';
+import Icon from 'component/common/icon';
+import * as ICONS from '../../constants/icons';
+import { FormField } from '../../component/common/form-components/form-field';
+import { withRouter } from 'react-router';
 
 type Props = {
   fetching: boolean,
+  allDownloadedUrlsCount: number,
   downloadedUrls: Array<string>,
   downloadedUrlsCount: ?number,
   history: { replace: string => void },
   page: number,
+  query: string
 };
 
 function FileListDownloaded(props: Props) {
-  const { fetching, downloadedUrls, downloadedUrlsCount } = props;
-  const hasDownloads = !!downloadedUrls.length;
+  const { fetching, history, query, allDownloadedUrlsCount, downloadedUrls, downloadedUrlsCount } = props;
+  const hasDownloads = allDownloadedUrlsCount > 0;
+
+  const [searchQuery, setSearchQuery] = useState('');
+
+  function handleInputChange(e) {
+    const { value } = e.target;
+    if (value !== searchQuery) {
+      setSearchQuery(value);
+      history.replace(`?query=${value}&page=1`);
+    }
+  }
+
   return (
     // Removed the <Page> wapper to try combining this page with UserHistory
     // This should eventually move into /components if we want to keep it this way
@@ -24,7 +42,20 @@ function FileListDownloaded(props: Props) {
         <div className="card">
           <ClaimList
             header={__('Your Library')}
+            headerAltControls={
+              <Form onSubmit={() => {}} className="wunderbar--inline">
+                <Icon icon={ICONS.SEARCH} />
+                <FormField
+                  className="wunderbar__input"
+                  onChange={handleInputChange}
+                  value={query}
+                  type="text"
+                  placeholder={__('Search')}
+                />
+              </Form>
+            }
             persistedStorageKey="claim-list-downloaded"
+            empty={__('No results for %query%', { query })}
             uris={downloadedUrls}
             loading={fetching}
           />
@@ -44,4 +75,4 @@ function FileListDownloaded(props: Props) {
   );
 }
 
-export default FileListDownloaded;
+export default withRouter(FileListDownloaded);

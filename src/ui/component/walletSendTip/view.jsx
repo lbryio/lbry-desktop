@@ -105,9 +105,14 @@ class WalletSendTip extends React.PureComponent<Props, State> {
             helper={
               <React.Fragment>
                 {claimIsMine || isSupport
-                  ? __('This will increase the overall bid amount for ')
-                  : __('This will appear as a tip for ')}
-                {`"${title}" which will boost its ability to be discovered while active.`}{' '}
+                  ? __(
+                      'This will increase the overall bid amount for %title%, which will boost its ability to be discovered while active.',
+                      { title }
+                    )
+                  : __(
+                      'This will appear as a tip for %title%, which will boost its ability to be discovered while active.',
+                      { title }
+                    )}{' '}
                 <Button label={__('Learn more')} button="link" href="https://lbry.com/faq/tipping" />.
               </React.Fragment>
             }
