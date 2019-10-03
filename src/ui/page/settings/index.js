@@ -1,7 +1,13 @@
 import { connect } from 'react-redux';
 import * as SETTINGS from 'constants/settings';
 import { doClearCache, doNotifyEncryptWallet, doNotifyDecryptWallet, doNotifyForgetPassword } from 'redux/actions/app';
-import { doSetDaemonSetting, doSetClientSetting, doSetDarkTime } from 'redux/actions/settings';
+import {
+  doSetDaemonSetting,
+  doSetClientSetting,
+  doGetThemes,
+  doChangeLanguage,
+  doSetDarkTime,
+} from 'redux/actions/settings';
 import { doSetPlayingUri } from 'redux/actions/content';
 import { makeSelectClientSetting, selectDaemonSettings, selectosNotificationsEnabled } from 'redux/selectors/settings';
 import { doWalletStatus, selectWalletIsEncrypted, selectBlockedChannelsCount } from 'lbry-redux';
@@ -30,6 +36,7 @@ const perform = dispatch => ({
   setDaemonSetting: (key, value) => dispatch(doSetDaemonSetting(key, value)),
   clearCache: () => dispatch(doClearCache()),
   setClientSetting: (key, value) => dispatch(doSetClientSetting(key, value)),
+  getThemes: () => dispatch(doGetThemes()),
   encryptWallet: () => dispatch(doNotifyEncryptWallet()),
   decryptWallet: () => dispatch(doNotifyDecryptWallet()),
   updateWalletStatus: () => dispatch(doWalletStatus()),

@@ -44,6 +44,7 @@ type Props = {
   setDaemonSetting: (string, ?SetDaemonSettingArg) => void,
   setClientSetting: (string, SetDaemonSettingArg) => void,
   clearCache: () => Promise<any>,
+  getThemes: () => void,
   daemonSettings: DaemonSettings,
   showNsfw: boolean,
   instantPurchaseEnabled: boolean,
@@ -94,6 +95,7 @@ class SettingsPage extends React.PureComponent<Props, State> {
   }
 
   componentDidMount() {
+    this.props.getThemes();
     this.props.updateWalletStatus();
     getSavedPassword().then(p => {
       if (p) {
