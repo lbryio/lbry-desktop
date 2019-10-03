@@ -23,7 +23,7 @@ export default function ChannelsPage(props: Props) {
   return (
     <Page>
       {/* @if TARGET='app' */}
-      {hasYoutubeChannels && <YoutubeTransferStatus hideChannelLink />}
+      {hasYoutubeChannels && <YoutubeTransferStatus />}
       {/* @endif */}
 
       {channels && channels.length ? (
