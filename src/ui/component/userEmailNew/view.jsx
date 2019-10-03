@@ -57,7 +57,7 @@ function UserEmailNew(props: Props) {
         <div className="section">
           <FormField
             type="checkbox"
-            name="age_checkbox"
+            name="sync_checkbox"
             label={
               <I18nMessage
                 tokens={{
