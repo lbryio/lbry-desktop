@@ -13,7 +13,6 @@ type Props = {
   resolveUri: string => void,
   uri: string,
   claim: StreamClaim,
-  totalPages: number,
   location: UrlLocation,
   blackListedOutpoints: Array<{
     txid: string,
@@ -29,12 +28,8 @@ class ShowPage extends React.PureComponent<Props> {
   }
 
   componentDidUpdate() {
-    const { isResolvingUri, resolveUri, claim, uri, totalPages } = this.props;
-    if (
-      !isResolvingUri &&
-      uri &&
-      (claim === undefined || (claim && claim.name[0] === '@' && totalPages === undefined))
-    ) {
+    const { isResolvingUri, resolveUri, claim, uri } = this.props;
+    if (!isResolvingUri && uri && claim === undefined) {
       resolveUri(uri);
     }
   }
