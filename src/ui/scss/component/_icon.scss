@@ -15,8 +15,4 @@
     position: absolute;
     stroke: $lbry-gray-5;
   }
-
-  [data-mode='dark'] & {
-    background-color: var(--color-card-actions--dark);
-  }
 }

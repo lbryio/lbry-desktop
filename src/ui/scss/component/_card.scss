@@ -203,7 +203,7 @@
   font-size: var(--font-body);
 
   [data-mode='dark'] & {
-    background-color: var(--color-card-actions--dark);
+    background-color: var(--dm-color-04);
     color: inherit;
   }
 }

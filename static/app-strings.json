@@ -812,11 +812,5 @@
   "Claim Your 20 LBC Invite Reward": "Claim Your 20 LBC Invite Reward",
   "Publish something totally wacky and wild.": "Publish something totally wacky and wild.",
   "LBRY names cannot contain spaces or reserved symbols": "LBRY names cannot contain spaces or reserved symbols",
-  "If you bid more than %amount% LBC, when someone navigates to %uri%, it will load your published content. However, you can get a longer version of this URL for any bid.": "If you bid more than %amount% LBC, when someone navigates to %uri%, it will load your published content. However, you can get a longer version of this URL for any bid.",
-  "Blockchain expert? %learn_more%": "Blockchain expert? %learn_more%",
-  "Your Blocked Channels": "Your Blocked Channels",
-  "You aren’t blocking any channels": "You aren’t blocking any channels",
-  "When you block a channel, all content from that channel will be hidden.": "When you block a channel, all content from that channel will be hidden.",
-  "dfsdfsdf": "dfsdfsdf",
-  "Light": "Light"
+  "If you bid more than %amount% LBC, when someone navigates to %uri%, it will load your published content. However, you can get a longer version of this URL for any bid.": "If you bid more than %amount% LBC, when someone navigates to %uri%, it will load your published content. However, you can get a longer version of this URL for any bid."
 }

@@ -188,27 +188,24 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
           <div className="claim-preview-title">
             {claim ? <TruncatedText text={title || claim.name} lines={1} /> : <span>{__('Nothing here')}</span>}
           </div>
-          {!pending && (
-            <React.Fragment>
-              {!hideActions && actions !== undefined ? (
-                actions
-              ) : (
-                <div className="card__actions--inline">
-                  {isChannel && !channelIsBlocked && !claimIsMine && (
-                    <SubscribeButton uri={uri.startsWith('lbry://') ? uri : `lbry://${uri}`} />
-                  )}
-                  {isChannel && !isSubscribed && !claimIsMine && (
-                    <BlockButton uri={uri.startsWith('lbry://') ? uri : `lbry://${uri}`} />
-                  )}
-                  {!isChannel && claim && <FileProperties uri={uri} />}
-                </div>
+          {!hideActions && actions !== undefined ? (
+            actions
+          ) : (
+            <div className="card__actions--inline">
+              {isChannel && !channelIsBlocked && !claimIsMine && (
+                <SubscribeButton uri={uri.startsWith('lbry://') ? uri : `lbry://${uri}`} />
               )}
-            </React.Fragment>
+              {isChannel && !isSubscribed && !claimIsMine && (
+                <BlockButton uri={uri.startsWith('lbry://') ? uri : `lbry://${uri}`} />
+              )}
+              {!isChannel && claim && <FileProperties uri={uri} />}
+            </div>
           )}
         </div>
 
         <div className="claim-preview-properties">
           <div className="media__subtitle">
+            {pending && <div>Pending...</div>}
             {!isResolvingUri && (
               <div>
                 {claim ? (
@@ -226,16 +223,12 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
                   </Fragment>
                 )}
                 <div>
-                  {pending ? (
-                    <div>Pending...</div>
-                  ) : (
-                    claim &&
+                  {claim &&
                     (isChannel ? (
                       type !== 'inline' && `${claimsInChannel} ${__('publishes')}`
                     ) : (
                       <DateTime timeAgo uri={uri} />
-                    ))
-                  )}
+                    ))}
                 </div>
               </div>
             )}

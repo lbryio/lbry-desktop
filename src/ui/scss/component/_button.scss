@@ -70,11 +70,7 @@
 
 .button--link {
   [data-mode='dark'] & {
-    color: $lbry-teal-4;
-
-    &:hover {
-      color: $lbry-teal-3;
-    }
+    color: $lbry-teal-3;
   }
 }
 
