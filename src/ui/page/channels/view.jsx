@@ -15,22 +15,10 @@ type Props = {
 export default function ChannelsPage(props: Props) {
   const { channels, fetchChannelListMine, fetchingChannels, youtubeChannels } = props;
   const hasYoutubeChannels = youtubeChannels && Boolean(youtubeChannels.length);
-  const hasPendingChannels = channels && channels.some(channel => channel.confirmations === -1);
 
   useEffect(() => {
     fetchChannelListMine();
-
-    let interval;
-    if (hasPendingChannels) {
-      interval = setInterval(() => {
-        fetchChannelListMine();
-      }, 5000);
-    }
-
-    return () => {
-      clearInterval(interval);
-    };
-  }, [fetchChannelListMine, hasPendingChannels]);
+  }, [fetchChannelListMine]);
 
   return (
     <Page>

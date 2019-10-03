@@ -48,8 +48,8 @@ $main: $lbry-teal-5;
     margin-top: -2px; // To handle the border height
 
     [data-mode='dark'] & {
-      background-color: var(--dm-color-03);
-      border-color: $lbry-gray-4;
+      background-color: var(--dm-color-02);
+      border-color: $lbry-white;
     }
   }
 }

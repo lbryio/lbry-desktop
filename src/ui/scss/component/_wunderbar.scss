@@ -20,10 +20,6 @@
     position: absolute;
     z-index: 1;
     stroke: $lbry-gray-5;
-
-    [data-mode='dark'] & {
-      stroke: $lbry-gray-3;
-    }
   }
 }
 
