@@ -732,5 +732,11 @@
   "However, it is easy to back up manually. To backup your wallet, make a copy of the folder listed below:": "However, it is easy to back up manually. To backup your wallet, make a copy of the folder listed below:",
   "Access to these files are equivalent to having access to your credits. Keep any copies you make of your wallet in a secure place. For more details on backing up and best practices %helpLink%.": "Access to these files are equivalent to having access to your credits. Keep any copies you make of your wallet in a secure place. For more details on backing up and best practices %helpLink%.",
   "Your Channels": "Your Channels",
-  "Add Tags": "Add Tags"
+  "Add Tags": "Add Tags",
+  "LBRY names cannot contain spaces or reserved symbols": "LBRY names cannot contain spaces or reserved symbols",
+  "Available Balance": "Available Balance",
+  "Earned and bound in tips": "Earned and bound in tips",
+  "LBC Currently Staked": "LBC Currently Staked",
+  "... in your publishes": "... in your publishes",
+  "... in your supports": "... in your supports"
 }
