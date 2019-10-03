@@ -1,16 +1,21 @@
 import { connect } from 'react-redux';
-import { makeSelectDownloadUrlsForPage, selectDownloadUrlsCount, selectIsFetchingFileList } from 'lbry-redux';
+import { makeSelectSearchDownloadUrlsForPage, makeSelectSearchDownloadUrlsCount, selectDownloadUrlsCount, selectIsFetchingFileList } from 'lbry-redux';
 import FileListDownloaded from './view';
 import { withRouter } from 'react-router';
 
 const select = (state, props) => {
-  const { search } = props.location;
+  const { history, location }  = props;
+  const { search } = location;
   const urlParams = new URLSearchParams(search);
+  const query = urlParams.get('query') || '';
   const page = Number(urlParams.get('page')) || 1;
   return {
     page,
-    downloadedUrls: makeSelectDownloadUrlsForPage(page)(state),
-    downloadedUrlsCount: selectDownloadUrlsCount(state),
+    history,
+    query,
+    allDownloadedUrlsCount: selectDownloadUrlsCount(state),
+    downloadedUrls: makeSelectSearchDownloadUrlsForPage(query, page)(state),
+    downloadedUrlsCount: makeSelectSearchDownloadUrlsCount(query)(state),
     fetching: selectIsFetchingFileList(state),
   };
 };
