@@ -15,7 +15,7 @@ $border-color--dark: var(--dm-color-04);
   font-size: var(--font-body);
   border-top-left-radius: var(--card-radius);
   border-top-right-radius: var(--card-radius);
-  color: $lbry-white;
+  background-color: var(--color-card-actions);
 
   & > *:not(:last-child) {
     margin-right: 0.5rem;
@@ -26,22 +26,6 @@ $border-color--dark: var(--dm-color-04);
     margin-bottom: 0;
   }
 
-  // Normal link buttons are too dark on the black file list background
-  .button--link {
-    color: $lbry-teal-3;
-
-    &:hover {
-      color: $lbry-teal-1;
-    }
-
-    [data-mode='dark'] & {
-      color: $lbry-teal-4;
-      &:hover {
-        color: $lbry-teal-1;
-      }
-    }
-  }
-
   // Fix this in @lbry/components, we shouldn't need to be this specific
   checkbox-element input[type='checkbox']:checked + label {
     color: $lbry-white;
@@ -49,6 +33,7 @@ $border-color--dark: var(--dm-color-04);
 
   [data-mode='dark'] & {
     color: var(--dm-color-01);
+    background-color: var(--color-card-actions--dark);
   }
 }
 
@@ -61,22 +46,9 @@ $border-color--dark: var(--dm-color-04);
   margin-bottom: 0;
   padding: 0 var(--spacing-medium);
   padding-right: var(--spacing-large);
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 96 96' xmlns='http://www.w3.org/2000/svg' fill='%23ffffff'%3E%3Cpath d='M17.172, 31.172c1.562, -1.562 4.095, -1.562 5.656, 0l25.172, 25.171l25.172, -25.171c1.562, -1.562 4.095, -1.562 5.656, 0c1.562, 1.562 1.562, 4.095 0, 5.656l-28, 28c-1.562, 1.562 -4.095, 1.562 -5.656, 0l-28, -28c-0.781, -0.781 -1.172, -1.805 -1.172, -2.828c0, -1.023 0.391, -2.047 1.172, -2.828Z'/%3E%3C/svg%3E%0A");
-  border: 1px solid $lbry-white;
-  color: $lbry-white;
-  background-color: lighten($lbry-black, 10%);
 
   [data-mode='dark'] & {
     color: var(--dm-color-01);
-  }
-}
-
-.claim-list__header,
-.claim-list__dropdown {
-  background-color: lighten($lbry-black, 10%);
-
-  [data-mode='dark'] & {
-    background-color: var(--dm-color-07);
   }
 }
 

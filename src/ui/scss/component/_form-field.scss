@@ -40,30 +40,34 @@ textarea {
   height: var(--input-height);
   padding-bottom: 0.1em;
 
+  &::placeholder {
+    color: $lbry-gray-5;
+    opacity: 0.4;
+  }
+
   [data-mode='dark'] & {
     &::placeholder {
-      opacity: 0.4;
       color: $lbry-white;
     }
   }
 }
 
-input,
-select,
-textarea {
-  border-color: lighten($lbry-black, 20%);
-  border-radius: var(--input-border-radius);
-  background-color: $lbry-white;
-  border-width: 1px;
-
-  [data-mode='dark'] & {
-    background-color: var(--dm-color-02);
-    border-color: $lbry-black;
-  }
-}
-
 fieldset-section {
   margin-bottom: var(--spacing-small);
+
+  input,
+  select,
+  textarea {
+    border-color: lighten($lbry-black, 20%);
+    border-radius: var(--input-border-radius);
+    background-color: $lbry-white;
+    border-width: 1px;
+
+    [data-mode='dark'] & {
+      background-color: var(--dm-color-03);
+      border-color: $lbry-black;
+    }
+  }
 
   label {
     width: auto;
@@ -188,9 +192,8 @@ fieldset-group {
         background-color: $lbry-white;
 
         [data-mode='dark'] & {
-          background-color: var(--dm-color-02);
-          border-color: $lbry-gray-2;
-          color: $lbry-gray-1;
+          background-color: var(--dm-color-03);
+          border-color: var(--dm-color-02);
         }
       }
     }
@@ -211,7 +214,7 @@ fieldset-group {
 
         [data-mode='dark'] & {
           &:focus {
-            border-image-source: linear-gradient(to right, $lbry-gray-4, $lbry-teal-5 5%);
+            border-image-source: linear-gradient(to right, var(--dm-color-02), $lbry-teal-5 5%);
           }
         }
       }
@@ -294,7 +297,7 @@ fieldset-section {
     input:not(.form-field--copyable),
     textarea,
     select {
-      border-color: var(--dm-color-01);
+      border-color: $lbry-gray-5;
     }
   }
 }
