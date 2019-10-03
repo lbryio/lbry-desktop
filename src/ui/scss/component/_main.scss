@@ -1,6 +1,5 @@
 .main-wrapper {
   position: relative;
-  min-height: calc(100vh - var(--header-height));
 
   [data-mode='dark'] & {
     background-color: var(--dm-color-08);
@@ -11,6 +10,7 @@
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
+  min-height: calc(100vh - var(--header-height));
   max-width: var(--page-max-width);
   margin-left: auto;
   margin-right: auto;
