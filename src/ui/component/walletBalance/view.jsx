@@ -12,10 +12,12 @@ type Props = {
   claimsBalance: number,
   supportsBalance: number,
   tipsBalance: number,
+  rewards: Array<Reward>,
 };
 
 const WalletBalance = (props: Props) => {
-  const { balance, claimsBalance, supportsBalance, tipsBalance } = props;
+  const { balance, claimsBalance, supportsBalance, tipsBalance, rewards } = props;
+  const rewardTotal = rewards.reduce((acc, val) => acc + val.reward_amount, 0);
 
   return (
     <React.Fragment>
@@ -27,7 +29,7 @@ const WalletBalance = (props: Props) => {
           </span>
 
           <div className="section__actions">
-            <Button button="inverse" icon={ICONS.SEND} label={__('Send Credits')} navigate={`$/${PAGES.WALLET_SEND}`} />
+            <Button button="inverse" label={__('Send Credits')} navigate={`$/${PAGES.WALLET_SEND}`} />
             <Button button="inverse" label={__('Your Address')} navigate={`$/${PAGES.WALLET_RECEIVE}`} />
           </div>
         </div>
@@ -35,12 +37,24 @@ const WalletBalance = (props: Props) => {
         <div>
           <div className="section">
             <div className="section__flex">
+              <Icon sectionIcon icon={ICONS.FEATURED} />
+              <h2 className="section__title--small">
+                <strong>
+                  <CreditAmount badge={false} amount={rewardTotal} precision={8} />
+                </strong>{' '}
+                {__('Earned From Rewards')}
+              </h2>
+            </div>
+          </div>
+
+          <div className="section">
+            <div className="section__flex">
               <Icon sectionIcon icon={ICONS.TIP} />
               <h2 className="section__title--small">
                 <strong>
                   <CreditAmount badge={false} amount={tipsBalance} precision={8} />
                 </strong>{' '}
-                {__('Earned and bound in tips')}
+                {__('Earned From Tips')}
               </h2>
             </div>
           </div>
@@ -54,12 +68,12 @@ const WalletBalance = (props: Props) => {
                 </h2>
                 <div className="section__subtitle">
                   <dl>
-                    <dt>{__('... in your publishes')}</dt>
+                    <dt>{__('Your Publishes')}</dt>
                     <dd>
                       <CreditAmount badge={false} amount={claimsBalance} precision={8} />
                     </dd>
 
-                    <dt>{__('... in your supports')}</dt>
+                    <dt>{__('Your Supports')}</dt>
                     <dd>
                       <CreditAmount badge={false} amount={supportsBalance} precision={8} />
                     </dd>

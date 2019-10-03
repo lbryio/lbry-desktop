@@ -511,7 +511,6 @@ class SettingsPage extends React.PureComponent<Props, State> {
                 <React.Fragment>
                   {/* @if TARGET='app' */}
                   <FormField
-                    disabled
                     type="checkbox"
                     name="encrypt_wallet"
                     onChange={() => this.onChangeEncryptWallet()}
@@ -519,19 +518,9 @@ class SettingsPage extends React.PureComponent<Props, State> {
                     label={__('Encrypt my wallet with a custom password')}
                     helper={
                       <React.Fragment>
-                        <I18nMessage
-                          tokens={{
-                            learn_more: (
-                              <Button button="link" label={__('Learn more')} href="https://lbry.com/faq/account-sync" />
-                            ),
-                          }}
-                        >
-                          Wallet encryption is currently unavailable until it's supported for synced accounts. It will
-                          be added back soon. %learn_more%
-                        </I18nMessage>
-                        {/* {__('Secure your local wallet data with a custom password.')}{' '}
+                        {__('Secure your local wallet data with a custom password.')}{' '}
                         <strong>{__('Lost passwords cannot be recovered.')} </strong>
-                        <Button button="link" label={__('Learn more')} href="https://lbry.com/faq/wallet-encryption" />. */}
+                        <Button button="link" label={__('Learn more')} href="https://lbry.com/faq/wallet-encryption" />.
                       </React.Fragment>
                     }
                   />
