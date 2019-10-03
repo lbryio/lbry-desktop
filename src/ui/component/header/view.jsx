@@ -71,6 +71,12 @@ const Header = (props: Props) => {
             icon={ICONS.LBRY}
             navigate="/"
           />
+          <Button
+            className="header__navigation-item header__navigation-item--lbry"
+            label={__('auth')}
+            icon={ICONS.LBRY}
+            navigate="/$/signin"
+          />
 
           {/* @if TARGET='app' */}
           {!minimal && (

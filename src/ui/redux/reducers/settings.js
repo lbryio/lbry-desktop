@@ -16,8 +16,8 @@ const defaultState = {
 
     // UI
     [SETTINGS.LANGUAGE]: window.localStorage.getItem(SETTINGS.LANGUAGE) || 'en',
-    [SETTINGS.THEME]: __('light'),
-    [SETTINGS.THEMES]: [__('light'), __('dark')],
+    [SETTINGS.THEME]: 'light',
+    [SETTINGS.THEMES]: [],
     [SETTINGS.SUPPORT_OPTION]: false,
     [SETTINGS.HIDE_SPLASH_ANIMATION]: false,
     [SETTINGS.HIDE_BALANCE]: false,
