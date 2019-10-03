@@ -467,6 +467,10 @@ export function doSignIn() {
     // For existing users, check if they've synced before, or have 0 balance
     if (syncEnabled && (syncHash || balance === 0)) {
       dispatch(doGetSync());
+
+      setInterval(() => {
+        dispatch(doGetSync());
+      }, 1000 * 60 * 5);
     }
     // @endif
 

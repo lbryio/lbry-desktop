@@ -20,6 +20,7 @@ import * as MODALS from 'constants/modal_types';
 import { Form, FormField } from 'component/common/form';
 import ClaimPreview from 'component/claimPreview';
 import Icon from 'component/common/icon';
+import HelpLink from 'component/common/help-link';
 
 const PAGE_VIEW_QUERY = `view`;
 const ABOUT_PAGE = `about`;
@@ -190,6 +191,7 @@ function ChannelPage(props: Props) {
               <ClaimUri uri={uri} />
               <span>
                 {subCount} {subCount !== 1 ? __('Subscribers') : __('Subscriber')}
+                <HelpLink href="https://lbry.com/faq/views" />
               </span>
             </div>
           </div>
