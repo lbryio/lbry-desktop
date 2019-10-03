@@ -1,13 +1,12 @@
 import { connect } from 'react-redux';
 import * as SETTINGS from 'constants/settings';
 import { doSetClientSetting } from 'redux/actions/settings';
-import { makeSelectClientSetting, selectLanguages } from 'redux/selectors/settings';
+import { makeSelectClientSetting } from 'redux/selectors/settings';
 import { doToast } from 'lbry-redux';
 import SettingLanguage from './view';
 
 const select = state => ({
   language: makeSelectClientSetting(SETTINGS.LANGUAGE)(state),
-  languages: selectLanguages(state),
 });
 
 const perform = dispatch => ({
