@@ -34,7 +34,7 @@ function PublishFile(props: Props) {
       icon={ICONS.PUBLISH}
       disabled={disabled || balance === 0}
       title={isStillEditing ? __('Edit') : __('Publish')}
-      subtitle={isStillEditing ? __('You are currently editing a claim.') : __('Jeremy please change this.')}
+      subtitle={__('You are currently editing a claim.')}
       actions={
         <React.Fragment>
           <FileSelector currentPath={filePath} onFileChosen={handleFileChange} />
