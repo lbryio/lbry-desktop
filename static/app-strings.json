@@ -773,8 +773,6 @@
   "LBC Currently Staked": "LBC Currently Staked",
   "Your Supports": "Your Supports",
   "Add Tags": "Add Tags",
-  "Jeremy please change this": "Jeremy please change this",
-  "Jeremy please change this.": "Jeremy please change this.",
   "Extra Verification Needed": "Extra Verification Needed",
   "We weren't able to auto-approve you for rewards. Please complete one of the steps below to unlock them.": "We weren't able to auto-approve you for rewards. Please complete one of the steps below to unlock them.",
   "Proof via Text": "Proof via Text",
@@ -809,8 +807,5 @@
   "I am over the age of 13 and agree to the %terms%.": "I am over the age of 13 and agree to the %terms%.",
   "Nothing published to LBRY yet.": "Nothing published to LBRY yet.",
   "Add a tag": "Add a tag",
-  "Claim Your 20 LBC Invite Reward": "Claim Your 20 LBC Invite Reward",
-  "Publish something totally wacky and wild.": "Publish something totally wacky and wild.",
-  "LBRY names cannot contain spaces or reserved symbols": "LBRY names cannot contain spaces or reserved symbols",
-  "If you bid more than %amount% LBC, when someone navigates to %uri%, it will load your published content. However, you can get a longer version of this URL for any bid.": "If you bid more than %amount% LBC, when someone navigates to %uri%, it will load your published content. However, you can get a longer version of this URL for any bid."
+  "Claim Your 20 LBC Invite Reward": "Claim Your 20 LBC Invite Reward"
 }

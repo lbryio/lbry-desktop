@@ -1,5 +1,5 @@
 // @flow
-import { CHANNEL_NEW, CHANNEL_ANONYMOUS, MINIMUM_PUBLISH_BID, INVALID_NAME_ERROR } from 'constants/claim';
+import { CHANNEL_NEW, CHANNEL_ANONYMOUS, MINIMUM_PUBLISH_BID } from 'constants/claim';
 import React, { useState, useEffect } from 'react';
 import { isNameValid } from 'lbry-redux';
 import { FormField } from 'component/common/form';
@@ -50,7 +50,7 @@ function PublishName(props: Props) {
     if (!name) {
       nameError = __('A name is required');
     } else if (!isNameValid(name, false)) {
-      nameError = INVALID_NAME_ERROR;
+      nameError = __('LBRY names cannot contain spaces or reserved symbols ($#@;/"<>%{}|^~[]`)');
     }
 
     setNameError(nameError);

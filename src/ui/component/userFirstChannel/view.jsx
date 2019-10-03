@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { isNameValid } from 'lbry-redux';
 import Button from 'component/button';
 import { Form, FormField } from 'component/common/form';
-import { INVALID_NAME_ERROR } from 'constants/claim';
+
 export const DEFAULT_BID_FOR_FIRST_CHANNEL = 0.9;
 
 type Props = {
@@ -29,7 +29,7 @@ function UserFirstChannel(props: Props) {
     const { value } = e.target;
     setChannel(value);
     if (!isNameValid(value, false)) {
-      setNameError(INVALID_NAME_ERROR);
+      setNameError(__('LBRY names cannot contain spaces or reserved symbols ($#@;/"<>%{}|^~[]`)'));
     } else {
       setNameError();
     }

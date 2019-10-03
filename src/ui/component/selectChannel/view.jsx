@@ -4,7 +4,7 @@ import { isNameValid } from 'lbry-redux';
 import { FormField } from 'component/common/form';
 import BusyIndicator from 'component/common/busy-indicator';
 import Button from 'component/button';
-import { CHANNEL_NEW, CHANNEL_ANONYMOUS, INVALID_NAME_ERROR } from 'constants/claim';
+import { CHANNEL_NEW, CHANNEL_ANONYMOUS } from 'constants/claim';
 
 type Props = {
   channel: string, // currently selected channel
@@ -77,7 +77,7 @@ class ChannelSection extends React.PureComponent<Props, State> {
 
     let newChannelNameError;
     if (newChannelName.length > 0 && !isNameValid(newChannelName, false)) {
-      newChannelNameError = INVALID_NAME_ERROR;
+      newChannelNameError = __('LBRY names cannot contain spaces or reserved symbols ($#@;/"<>%{}|^~[]`)');
     }
 
     this.setState({
