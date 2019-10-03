@@ -128,7 +128,7 @@
     "husky": "^0.14.3",
     "json-loader": "^0.5.4",
     "lbry-format": "https://github.com/lbryio/lbry-format.git",
-    "lbry-redux": "lbryio/lbry-redux#04ae0913a444abac200731c7ed53796d763a0bbb",
+    "lbry-redux": "lbryio/lbry-redux#85fe532d69704a283fd2ec640ad6e3b8dacd6d0d",
     "lbryinc": "lbryio/lbryinc#a44576194e1f5f60e37d328ddfdca40bd6165c2d",
     "lint-staged": "^7.0.2",
     "localforage": "^1.7.1",
