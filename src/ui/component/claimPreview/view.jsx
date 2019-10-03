@@ -78,8 +78,7 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
     properties,
     onClick,
   } = props;
-  const shouldFetch =
-    claim === undefined || (claim !== null && claim.value_type === 'channel' && isEmpty(claim.meta) && !pending);
+  const shouldFetch = claim === undefined || (claim !== null && claim.value_type === 'channel' && isEmpty(claim.meta));
   const abandoned = !isResolvingUri && !claim;
   const claimsInChannel = (claim && claim.meta.claims_in_channel) || 0;
   const showPublishLink = abandoned && placeholder === 'publish';

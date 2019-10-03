@@ -33,7 +33,7 @@ import {
   selectUpgradeTimer,
   selectModal,
 } from 'redux/selectors/app';
-import { Lbryio, doAuthenticate, doGetSync, selectSyncHash, doResetSync } from 'lbryinc';
+import { Lbryio, doAuthenticate, doGetSync, selectSyncHash } from 'lbryinc';
 import { lbrySettings as config, version as appVersion } from 'package.json';
 import { push } from 'connected-react-router';
 import analytics from 'analytics';
@@ -465,7 +465,7 @@ export function doSignIn() {
     const balance = selectBalance(state);
 
     // For existing users, check if they've synced before, or have 0 balance
-    if (syncEnabled && (syncHash || balance === 0)) {
+    if (syncEnabled && (!syncHash || balance === 0)) {
       dispatch(doGetSync());
     }
     // @endif
@@ -483,14 +483,9 @@ export function doSignOut() {
         // @if TARGET='web'
         window.persistor.purge();
         // @endif
-        // @if TARGET='app'
-        return dispatch(doResetSync());
-        // @endif
       })
       .then(() => {
-        setTimeout(() => {
-          location.reload();
-        });
+        location.reload();
       })
       .catch(() => location.reload());
   };

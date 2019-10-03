@@ -5,7 +5,6 @@ import Button from 'component/button';
 import { Lbryio } from 'lbryinc';
 import analytics from 'analytics';
 import { EMAIL_REGEX } from 'constants/email';
-import I18nMessage from 'component/i18nMessage';
 
 type Props = {
   errorMessage: ?string,
@@ -19,7 +18,6 @@ type Props = {
 function UserEmailNew(props: Props) {
   const { errorMessage, isPending, addUserEmail, syncEnabled, setSync, balance } = props;
   const [newEmail, setEmail] = useState('');
-  const [ageConfirmation, setAgeConfirmation] = useState(false);
   const valid = newEmail.match(EMAIL_REGEX);
 
   function handleSubmit() {
@@ -54,57 +52,28 @@ function UserEmailNew(props: Props) {
           error={errorMessage}
           onChange={e => setEmail(e.target.value)}
         />
-        <div className="section">
+        {!IS_WEB && (
           <FormField
             type="checkbox"
             name="sync_checkbox"
-            label={
-              <I18nMessage
-                tokens={{
-                  terms: (
-                    <Button button="link" href="https://www.lbry.com/termsofservice" label={__('Terms of Service')} />
-                  ),
-                }}
-              >
-                I am over the age of 13 and agree to the %terms%.
-              </I18nMessage>
+            label={__('Sync balance and preferences across devices')}
+            helper={
+              balance > 0 ? (
+                __('This feature is not yet available for wallets with balances, but the gerbils are working on it.')
+              ) : (
+                <React.Fragment>
+                  {__('Blockchain expert?')}{' '}
+                  <Button button="link" href="https://lbry.com/faq/account-sync" label={__('Learn More')} />
+                </React.Fragment>
+              )
             }
-            checked={ageConfirmation}
-            onChange={() => setAgeConfirmation(!ageConfirmation)}
+            checked={syncEnabled}
+            onChange={() => setSync(!syncEnabled)}
+            disabled={balance > 0}
           />
-          {!IS_WEB && (
-            <FormField
-              type="checkbox"
-              name="sync_checkbox"
-              label={__('Sync balance and preferences across devices')}
-              helper={
-                balance > 0 ? (
-                  __('This feature is not yet available for wallets with balances, but the gerbils are working on it.')
-                ) : (
-                  <I18nMessage
-                    tokens={{
-                      learn_more: (
-                        <Button button="link" href="https://lbry.com/faq/account-sync" label={__('Learn More')} />
-                      ),
-                    }}
-                  >
-                    Blockchain expert? %learn_more%
-                  </I18nMessage>
-                )
-              }
-              checked={syncEnabled}
-              onChange={() => setSync(!syncEnabled)}
-              disabled={balance > 0}
-            />
-          )}
-          <div className="card__actions">
-            <Button
-              button="primary"
-              type="submit"
-              label={__('Continue')}
-              disabled={!newEmail || !valid || !ageConfirmation || isPending}
-            />
-          </div>
+        )}
+        <div className="card__actions">
+          <Button button="primary" type="submit" label={__('Continue')} disabled={!newEmail || !valid || isPending} />
         </div>
       </Form>
     </div>
