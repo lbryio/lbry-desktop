@@ -15,7 +15,7 @@ import {
   selectGetSyncErrorMessage,
   selectSyncHash,
 } from 'lbryinc';
-import { selectMyChannelClaims, selectBalance, selectFetchingMyChannels } from 'lbry-redux';
+import { selectMyChannelClaims, selectBalance, selectFetchingMyChannels, selectCreatingChannel } from 'lbry-redux';
 import { makeSelectClientSetting } from 'redux/selectors/settings';
 import UserSignIn from './view';
 
@@ -36,6 +36,7 @@ const select = state => ({
   syncingWallet: selectGetSyncIsPending(state),
   getSyncError: selectGetSyncErrorMessage(state),
   hasSynced: Boolean(selectSyncHash(state)),
+  creatingChannel: selectCreatingChannel(state),
 });
 
 const perform = dispatch => ({
