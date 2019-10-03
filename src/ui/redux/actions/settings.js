@@ -46,6 +46,13 @@ export function doSetClientSetting(key, value) {
   };
 }
 
+export function doGetThemes() {
+  return dispatch => {
+    const themes = [__('light'), __('dark')];
+    dispatch(doSetClientSetting(SETTINGS.THEMES, themes));
+  };
+}
+
 export function doUpdateIsNight() {
   return {
     type: ACTIONS.UPDATE_IS_NIGHT,
