@@ -723,5 +723,12 @@
   "Multi-language support is brand new and incomplete. Switching your language may have unintended consequences, like glossolalia.": "Multi-language support is brand new and incomplete. Switching your language may have unintended consequences, like glossolalia.",
   "This will add a Support button along side tipping. Similar to tips, supports help %discovery_link% but the LBC is returned to your wallet if revoked. Both also help secure your %vanity_names_link%.": "This will add a Support button along side tipping. Similar to tips, supports help %discovery_link% but the LBC is returned to your wallet if revoked. Both also help secure your %vanity_names_link%.",
   "Save Password": "Save Password",
-  "Automatically unlock your wallet on startup": "Automatically unlock your wallet on startup"
+  "Automatically unlock your wallet on startup": "Automatically unlock your wallet on startup",
+  "Dark": "Dark",
+  "light": "light",
+  "dark": "dark",
+  "Live help is available most hours in the %channel% channel of our Discord chat room. Or you can always email us at help@lbry.com.": "Live help is available most hours in the %channel% channel of our Discord chat room. Or you can always email us at help@lbry.com.",
+  "Your LBRY credits are controllable by you and only you, via a wallet file stored locally on your computer.": "Your LBRY credits are controllable by you and only you, via a wallet file stored locally on your computer.",
+  "However, it is easy to back up manually. To backup your wallet, make a copy of the folder listed below:": "However, it is easy to back up manually. To backup your wallet, make a copy of the folder listed below:",
+  "Access to these files are equivalent to having access to your credits. Keep any copies you make of your wallet in a secure place. For more details on backing up and best practices %helpLink%.": "Access to these files are equivalent to having access to your credits. Keep any copies you make of your wallet in a secure place. For more details on backing up and best practices %helpLink%."
 }

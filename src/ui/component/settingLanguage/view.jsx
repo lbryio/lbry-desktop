@@ -7,7 +7,6 @@ import { SETTINGS } from 'lbry-redux';
 
 type Props = {
   language: string,
-  languages: {},
   showToast: ({}) => void,
   setClientSetting: (string, boolean) => void,
 };
@@ -15,7 +14,10 @@ type Props = {
 function SettingLanguage(props: Props) {
   const [isFetching, setIsFetching] = useState(false);
 
-  const { language, languages, showToast, setClientSetting } = props;
+  // this should be fetched from lbry.com/transifex
+  const languages = { en: 'English', pl: 'Polski', id: 'Bahasa Indonesia', de: 'Deutsche' };
+
+  const { language, showToast, setClientSetting } = props;
 
   function onLanguageChange(e) {
     const { value } = e.target;
@@ -33,7 +35,6 @@ function SettingLanguage(props: Props) {
         setClientSetting(SETTINGS.LANGUAGE, value);
       })
       .catch(e => {
-        console.log(e);
         showToast({
           message: __('Failed to load translations.'),
           error: true,

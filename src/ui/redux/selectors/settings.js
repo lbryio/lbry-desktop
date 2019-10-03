@@ -27,11 +27,6 @@ export const makeSelectClientSetting = setting =>
 // refactor me
 export const selectShowMatureContent = makeSelectClientSetting(SETTINGS.SHOW_MATURE);
 
-export const selectLanguages = createSelector(
-  selectState,
-  state => state.languages
-);
-
 export const selectTheme = makeSelectClientSetting(SETTINGS.THEME);
 export const selectAutomaticDarkModeEnabled = makeSelectClientSetting(SETTINGS.AUTOMATIC_DARK_MODE_ENABLED);
 export const selectIsNight = createSelector(
