@@ -746,6 +746,7 @@
   "Transfer in progress": "Transfer in progress",
   "%complete% / %total% videos transferred": "%complete% / %total% videos transferred",
   "Available Rewards": "Available Rewards",
+  "You have %credit_amount% in unclaimed rewards.": "You have %credit_amount% in unclaimed rewards.",
   "No Channels Created Yet": "No Channels Created Yet",
   "Create A Channel": "Create A Channel",
   "Something about it not being here": "Something about it not being here",
@@ -794,8 +795,5 @@
   "Create": "Create",
   "Use this address to receive LBC.": "Use this address to receive LBC.",
   "Not a valid LBRY address": "Not a valid LBRY address",
-  "You have no rewards available.": "You have no rewards available.",
-  "light": "light",
-  "dark": "dark",
-  "Dark": "Dark"
+  "You have no rewards available.": "You have no rewards available."
 }
