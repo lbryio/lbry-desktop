@@ -54,7 +54,10 @@ export const doCheckPendingPublishesApp = () => (dispatch: Dispatch, getState: G
   const onConfirmed = claim => {
     if (selectosNotificationsEnabled(getState())) {
       const notif = new window.Notification('LBRY Publish Complete', {
-        body: `${claim.value.title} has been published to lbry://${claim.name}. Click here to view it`,
+        body: __('%nameOrTitle% has been published to lbry://%name%. Click here to view it.', {
+          nameOrTitle: claim.value_type === 'channel' ? `@${claim.name}` : claim.value.title,
+          name: claim.name,
+        }),
         silent: false,
       });
       notif.onclick = () => {

@@ -15,4 +15,16 @@
     position: absolute;
     stroke: $lbry-gray-5;
   }
+
+  [data-mode='dark'] & {
+    background-color: var(--color-card-actions--dark);
+  }
+}
+
+.icon--help {
+  margin-left: var(--spacing-small);
+  bottom: -0.3rem;
+  opacity: 0.7;
+  height: 1rem;
+  width: 1rem;
 }
