@@ -30,6 +30,7 @@ type Props = {
   hasSynced: boolean,
   syncingWallet: boolean,
   getSyncError: ?string,
+  creatingChannel: boolean,
 };
 
 function UserSignIn(props: Props) {
@@ -50,6 +51,7 @@ function UserSignIn(props: Props) {
     getSyncError,
     hasSynced,
     fetchingChannels,
+    creatingChannel,
   } = props;
   const { search } = location;
   const urlParams = new URLSearchParams(search);
@@ -70,7 +72,7 @@ function UserSignIn(props: Props) {
   // The verbose variable names are an attempt to alleviate _some_ of the confusion from handling all edge cases that come from
   // reward claiming, channel creation, account syncing, and youtube transfer
   const canHijackSignInFlowWithSpinner = hasVerifiedEmail && !getSyncError;
-  const isCurrentlyFetchingSomething = fetchingChannels || claimingReward || syncingWallet;
+  const isCurrentlyFetchingSomething = fetchingChannels || claimingReward || syncingWallet || creatingChannel;
   const isWaitingForSomethingToFinish =
     // If the user has claimed the email award, we need to wait until the balance updates sometime in the future
     (!hasFetchedReward && !hasClaimedEmailAward) || (syncEnabled && !hasSynced);
@@ -80,7 +82,12 @@ function UserSignIn(props: Props) {
   const showUserVerification = hasVerifiedEmail && !rewardsApproved;
   const showSyncPassword = syncEnabled && getSyncError && !hasSynced;
   const showChannelCreation =
-    hasVerifiedEmail && balance && balance > DEFAULT_BID_FOR_FIRST_CHANNEL && channelCount === 0 && !hasYoutubeChannels;
+    hasVerifiedEmail &&
+    balance !== undefined &&
+    balance !== null &&
+    balance > DEFAULT_BID_FOR_FIRST_CHANNEL &&
+    channelCount === 0 &&
+    !hasYoutubeChannels;
   const showYoutubeTransfer = hasVerifiedEmail && hasYoutubeChannels && !isYoutubeTransferComplete;
   const showLoadingSpinner =
     canHijackSignInFlowWithSpinner && (isCurrentlyFetchingSomething || isWaitingForSomethingToFinish);
