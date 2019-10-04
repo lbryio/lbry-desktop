@@ -37,7 +37,7 @@ import { Lbryio, doAuthenticate, doGetSync, selectSyncHash, doResetSync } from '
 import { lbrySettings as config, version as appVersion } from 'package.json';
 import { push } from 'connected-react-router';
 import analytics from 'analytics';
-import { deleteAuthToken } from 'util/saved-passwords';
+import { deleteAuthToken, getSavedPassword } from 'util/saved-passwords';
 import cookie from 'cookie';
 import { makeSelectClientSetting } from 'redux/selectors/settings';
 
@@ -461,16 +461,19 @@ export function doSignIn() {
     // @if TARGET='app'
     const state = getState();
     const syncEnabled = makeSelectClientSetting(SETTINGS.ENABLE_SYNC)(state);
-    const syncHash = selectSyncHash(state);
+    const hasSyncedBefore = selectSyncHash(state);
     const balance = selectBalance(state);
 
     // For existing users, check if they've synced before, or have 0 balance
-    if (syncEnabled && (syncHash || balance === 0)) {
-      dispatch(doGetSync());
+    if (syncEnabled && (hasSyncedBefore || balance === 0)) {
+      getSavedPassword().then(password => {
+        const passwordArgument = password === null ? '' : password;
+        dispatch(doGetSync(passwordArgument, !hasSyncedBefore));
 
-      setInterval(() => {
-        dispatch(doGetSync());
-      }, 1000 * 60 * 5);
+        setInterval(() => {
+          dispatch(doGetSync(passwordArgument));
+        }, 1000 * 60 * 5);
+      });
     }
     // @endif
 

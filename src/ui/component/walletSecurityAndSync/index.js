@@ -49,7 +49,7 @@ const perform = dispatch => ({
   decryptWallet: () => dispatch(doWalletDecrypt()),
   updateWalletStatus: () => dispatch(doWalletStatus()),
   syncApply: (hash, data, password) => dispatch(doSyncApply(hash, data, password)),
-  getSync: password => dispatch(doGetSync(password)),
+  getSync: password => dispatch(doGetSync(password, true)),
   checkSync: () => dispatch(doCheckSync()),
   setDefaultAccount: () => dispatch(doSetDefaultAccount()),
   setClientSetting: (key, value) => dispatch(doSetClientSetting(key, value)),

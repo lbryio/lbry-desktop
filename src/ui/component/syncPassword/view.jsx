@@ -45,7 +45,7 @@ function SyncPassword(props: Props) {
               onChange={() => setRememberPassword(!rememberPassword)}
             />
             <div className="card__actions">
-              <Button type="submit" button="primary" label={__('Continue')} disabled={!password || getSyncIsPending} />
+              <Button type="submit" button="primary" label={__('Continue')} disabled={getSyncIsPending} />
             </div>
           </div>
         }
