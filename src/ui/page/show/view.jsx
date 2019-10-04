@@ -21,7 +21,7 @@ type Props = {
   }>,
 };
 
-class ShowPage extends React.PureComponent<Props> {
+Class ShowPage extends React.PureComponent<Props> {
   componentDidMount() {
     const { isResolvingUri, resolveUri, uri } = this.props;
 
