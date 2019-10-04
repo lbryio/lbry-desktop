@@ -699,7 +699,7 @@
   "This will clear the application cache. Your wallet will not be affected. Currently, followed tags and blocked channels will be cleared.": "This will clear the application cache. Your wallet will not be affected. Currently, followed tags and blocked channels will be cleared.",
   "Show All": "Show All",
   "Get ??? LBC": "Get ??? LBC",
-  "LBRY names cannot contain spaces or reserved symbols ($#@;/\"<>%{}|^~[]`)": "LBRY names cannot contain spaces or reserved symbols ($#@;/\"<>%{}|^~[]`)",
+  "LBRY names cannot contain spaces or reserved symbols": "LBRY names cannot contain spaces or reserved symbols",
   "Creating channel...": "Creating channel...",
   "Remember Password": "Remember Password",
   "You will no longer see this at startup": "You will no longer see this at startup",
