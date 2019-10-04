@@ -4,6 +4,7 @@ import Button from 'component/button';
 import CopyableText from 'component/copyableText';
 import QRCode from 'component/common/qr-code';
 import Card from 'component/common/card';
+import * as PAGES from 'constants/pages';
 
 type Props = {
   checkAddressIsMine: string => void,
@@ -64,6 +65,7 @@ class WalletAddress extends React.PureComponent<Props, State> {
                 />
               )}
               <Button button="link" label={showQR ? __('Hide QR code') : __('Show QR code')} onClick={this.toggleQR} />
+              <Button button="link" label={__('Close')} navigate={`$/${PAGES.WALLET}`}  />
             </div>
             <p className="help">
               {__('You can generate a new address at any time, and any previous addresses will continue to work.')}
