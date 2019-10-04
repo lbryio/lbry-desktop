@@ -34,6 +34,7 @@ type Props = {
   onSignedIn: () => void,
   isUpgradeAvailable: boolean,
   autoUpdateDownloaded: boolean,
+  balance: ?number,
 };
 
 function App(props: Props) {
@@ -49,6 +50,7 @@ function App(props: Props) {
     autoUpdateDownloaded,
     isUpgradeAvailable,
     requestDownloadUpgrade,
+    balance,
   } = props;
   const appRef = useRef();
   const isEnhancedLayout = useKonamiListener();
@@ -106,10 +108,10 @@ function App(props: Props) {
 
   // Keep this at the end to ensure initial setup effects are run first
   useEffect(() => {
-    if (!previousHasVerifiedEmail && hasVerifiedEmail) {
+    if (hasVerifiedEmail && balance !== undefined) {
       signIn();
     }
-  }, [previousHasVerifiedEmail, hasVerifiedEmail, signIn]);
+  }, [hasVerifiedEmail, signIn, balance]);
 
   if (!user) {
     return null;

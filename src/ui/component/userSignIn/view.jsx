@@ -112,7 +112,6 @@ function UserSignIn(props: Props) {
     showEmail && <UserEmailNew />,
     showEmailVerification && <UserEmailVerify />,
     showUserVerification && <UserVerify />,
-    showSyncPassword && <SyncPassword />,
     showChannelCreation && <UserFirstChannel />,
     // @if TARGET='app'
     showYoutubeTransfer && (
@@ -120,6 +119,7 @@ function UserSignIn(props: Props) {
         <YoutubeTransferStatus /> <Confetti recycle={false} style={{ position: 'fixed' }} />
       </div>
     ),
+    showSyncPassword && <SyncPassword />,
     // @endif
     showLoadingSpinner && (
       <div className="main--empty">
