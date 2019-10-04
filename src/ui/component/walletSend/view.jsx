@@ -6,6 +6,7 @@ import { Form, FormField } from 'component/common/form';
 import { Formik } from 'formik';
 import { validateSendTx } from 'util/form-validation';
 import Card from 'component/common/card';
+import * as PAGES from 'constants/pages';
 
 type DraftTransaction = {
   address: string,
@@ -88,7 +89,12 @@ class WalletSend extends React.PureComponent<Props> {
                       !(parseFloat(values.amount) > 0.0) ||
                       parseFloat(values.amount) === balance
                     }
-                  />
+                    />
+                  <Button 
+                      button="link" 
+                      label={__('Cancel')} 
+                      navigate={`$/${PAGES.WALLET}`} 
+                    />
                   {!!Object.keys(errors).length || (
                     <span className="error-text">
                       {(!!values.address && touched.address && errors.address) ||
