@@ -27,8 +27,9 @@ function NameHelpText(props: Props) {
       <React.Fragment>
         {__('You already have a claim at')}
         {` ${uri} `}
-        <Button button="link" label="Edit it" onClick={() => onEditMyClaim(myClaimForUri, editUri)} />
-        <br />
+        <span>
+          <Button button="link" label="Edit it" onClick={() => onEditMyClaim(myClaimForUri, editUri)} />
+        </span>
         {__('Publishing will update your existing claim.')}
       </React.Fragment>
     );
@@ -37,7 +38,9 @@ function NameHelpText(props: Props) {
   return (
     <React.Fragment>
       {nameHelpText || (
-        <span>{__('Create a URL for this content. Simpler names are easier to find and remember.')}</span>
+        <span>
+          {__('Create a URL for this content. Simpler names are easier to find and remember.')}
+        </span>
       )}
     </React.Fragment>
   );
