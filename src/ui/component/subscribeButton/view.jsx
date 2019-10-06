@@ -40,6 +40,7 @@ export default function SubscribeButton(props: Props) {
   const subscriptionHandler = isSubscribed ? doChannelUnsubscribe : doChannelSubscribe;
   const subscriptionLabel = isSubscribed ? __('Following') : __('Follow');
   const unfollowOverride = isSubscribed && isHovering && __('Unfollow');
+  const unfollowStyling = unfollowOverride ? { letterSpacing: '0.3359375px' } : { letterSpacing: '-0.2986111px' };
 
   return permanentUrl ? (
     <Button
@@ -48,6 +49,7 @@ export default function SubscribeButton(props: Props) {
       icon={unfollowOverride ? ICONS.UNSUBSCRIBE : ICONS.SUBSCRIBE}
       button={'alt'}
       label={unfollowOverride || subscriptionLabel}
+      style={unfollowStyling}
       onClick={e => {
         e.stopPropagation();
 
