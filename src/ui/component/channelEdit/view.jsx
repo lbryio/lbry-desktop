@@ -9,7 +9,7 @@ import * as PAGES from 'constants/pages';
 type Props = {
   claim: ChannelClaim,
   title: ?string,
-  amount: string,
+  amount: number,
   coverUrl: ?string,
   thumbnailUrl: ?string,
   location: { search: string },
