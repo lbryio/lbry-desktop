@@ -123,6 +123,7 @@
     "flow-bin": "^0.97.0",
     "flow-typed": "^2.3.0",
     "formik": "^0.10.4",
+    "freezeframe": "^4.0.0-alpha.7",
     "hast-util-sanitize": "^1.1.2",
     "history": "^4.9.0",
     "husky": "^0.14.3",

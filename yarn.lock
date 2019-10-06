@@ -5055,6 +5055,11 @@ fragment-cache@^0.2.1:
   dependencies:
     map-cache "^0.2.2"
 
+freezeframe@^4.0.0-alpha.7:
+  version "4.0.0-alpha.7"
+  resolved "https://registry.yarnpkg.com/freezeframe/-/freezeframe-4.0.0-alpha.7.tgz#b56c987f5802cefcf29a9266a7ff993d48497541"
+  integrity sha512-IhkM6bVdsjNauyumHBRezgJFqKzm9y6wxtd9sYju+PnG5eRTTeUeb2mgL/Kc+fQ1BOwnHd2D+kaRlY6IkK4E2g==
+
 fresh@0.5.2:
   version "0.5.2"
   resolved "https://registry.yarnpkg.com/fresh/-/fresh-0.5.2.tgz#3d8cadd90d976569fa835ab1f8e4b23a105605a7"
