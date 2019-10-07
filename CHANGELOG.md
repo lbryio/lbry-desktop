@@ -12,6 +12,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ### Changed
 
+- Refactor ModalAutoUpdateConfirm into ModalAutoUpdateDownloaded ([#2959](https://github.com/lbryio/lbry-desktop/pull/2959))
+
 ## [0.36.0] - [2019-10-4]
 
 ### Added
