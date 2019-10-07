@@ -15,6 +15,18 @@ However, for those individuals who want a bit more guidance on the best way to c
 * Don't hesitate to contact us with any questions or comments.
 * [Check out this video for a quickstart guide to running and developing the desktop app](https://spee.ch/7da73fc508ffc4ff8b2711e3c3950110430b0c5f/LBRYAppDesign.mp4).
 
+## Contents
+- [Choose an Issue](#choose-an-issue)
+- [Code Overview](#code-overview)
+  - [Libraries](#libraries)
+  - [Flow](#flow)
+  - [Lint](#lint)
+  - [Code Formatting](#code-formatting)
+  - [Debug](#debug)
+- [Submit a Pull Request](#submit-a-pull-request)
+- [Tom's "Voice of the User" Wishlist](#toms-voice-of-the-user-wishlist)
+- [Get in Touch](#get-in-touch)
+- [More Information](#more-information)
 
 ## Choose an Issue
 
@@ -56,7 +68,7 @@ Although all contributions should have good UX, the [UX label, when applied in c
 
 ## Code Overview
 
-The entry point for this application is `src/platforms/electron/index.js`.
+The entry point for this application is [`src/platforms/electron/index.js`](src/platforms/electron/index.js).
 
 This application is primarily written in JavaScript and is built on [Electron](https://electronjs.org)
 while utilizing [React](https://reactjs.org) and [Redux](https://redux.js.org) for UI and
@@ -66,7 +78,7 @@ The project comes with diverse tools for simplifying the development process and
 better code quality. It's recommended to make use of them thoroughly during ongoing development. We follow the well-known [Airbnb JavaScript Style Guide](https://airbnb.io/javascript/) for defining
 our styling rules and code best practices.
 
-### lbry-redux and lbryinc
+### Libraries
 
 This project uses [lbry-redux](https://github.com/lbryio/lbry-redux) and [lbryionc](https://github.com/lbryio/lbryinc) to share Redux and LBRY API specific code with [lbry-android](https://github.com/lbryio/lbry-android) and other LBRY apps. Over time, more Redux code that is suitable to be shared will be moved into lbry-redux. If modifying Redux code, you may be asked to make some of your changes in lbry-redux rather than lbry-desktop. The steps to work with lbry-redux locally can be found [here](https://github.com/lbryio/lbry-redux#local-development).
 
@@ -188,4 +200,4 @@ Join our Discord [here](https://chat.lbry.com/).
 
 # More Information
 
-More information about contributing to LBRY [here](https://lbry.com/faq/contributing).
+More information about contributing to LBRY [here](https://lbry.tech/contribute).

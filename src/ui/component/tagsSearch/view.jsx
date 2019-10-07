@@ -12,9 +12,10 @@ type Props = {
   onSelect?: Tag => void,
   suggestMature?: boolean,
   onRemove: Tag => void,
+  placeholder?: string,
 };
 
-export default function TagSelect(props: Props) {
+export default function TagsSearch(props: Props) {
   const {
     tagsPasssedIn,
     unfollowedTags = [],
@@ -24,6 +25,7 @@ export default function TagSelect(props: Props) {
     onSelect,
     onRemove,
     suggestMature,
+    placeholder,
   } = props;
   const [newTag, setNewTag] = useState('');
 
@@ -96,7 +98,7 @@ export default function TagSelect(props: Props) {
               autoFocus
               className="tag__input"
               onChange={onChange}
-              placeholder={__('Follow more tags')}
+              placeholder={placeholder || __('Follow more tags')}
               type="text"
               value={newTag}
             />
