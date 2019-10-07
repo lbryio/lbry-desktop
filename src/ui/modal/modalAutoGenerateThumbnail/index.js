@@ -1,13 +1,11 @@
 import { connect } from 'react-redux';
 import { doHideModal } from 'redux/actions/app';
 import { doToast, doUploadThumbnail } from 'lbry-redux';
-import fs from 'fs';
-import path from 'path';
 import ModalAutoGenerateThumbnail from './view';
 
 const perform = dispatch => ({
   closeModal: () => dispatch(doHideModal()),
-  upload: buffer => dispatch(doUploadThumbnail(null, buffer, null, fs, path)),
+  upload: file => dispatch(doUploadThumbnail(null, file, null, null, 'Generated')),
   showToast: options => dispatch(doToast(options)),
 });
 

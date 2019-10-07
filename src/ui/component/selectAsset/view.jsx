@@ -4,18 +4,10 @@ import React, { useState } from 'react';
 import { FormField } from 'component/common/form';
 import FileSelector from 'component/common/file-selector';
 import Button from 'component/button';
-// @if TARGET='app'
-import fs from 'fs';
-// @endif
-import path from 'path';
+import { SPEECH_URLS } from 'lbry-redux';
 import uuid from 'uuid/v4';
 
-const filters = [
-  {
-    name: __('Thumbnail Image'),
-    extensions: ['png', 'jpg', 'jpeg', 'gif'],
-  },
-];
+const accept = '.png, .jpg, .jpeg, .gif';
 
 const SOURCE_URL = 'url';
 const SOURCE_UPLOAD = 'upload';
@@ -32,29 +24,10 @@ function SelectAsset(props: Props) {
   const { onUpdate, assetName, currentValue, recommended } = props;
   const [assetSource, setAssetSource] = useState(SOURCE_URL);
   const [pathSelected, setPathSelected] = useState('');
+  const [fileSelected, setFileSelected] = useState(null);
   const [uploadStatus, setUploadStatus] = useState(SPEECH_READY);
 
-  function doUploadAsset(filePath, thumbnailBuffer) {
-    let thumbnail, fileExt, fileName, fileType;
-    if (IS_WEB) {
-      console.error('no upload support for web');
-      return;
-    }
-
-    if (filePath) {
-      thumbnail = fs.readFileSync(filePath);
-      fileExt = path.extname(filePath);
-      fileName = path.basename(filePath);
-      fileType = `image/${fileExt.slice(1)}`;
-    } else if (thumbnailBuffer) {
-      thumbnail = thumbnailBuffer;
-      fileExt = '.png';
-      fileName = 'thumbnail.png';
-      fileType = 'image/png';
-    } else {
-      return null;
-    }
-
+  function doUploadAsset(file) {
     const uploadError = (error = '') => {
       console.log('error', error);
     };
@@ -69,11 +42,10 @@ function SelectAsset(props: Props) {
 
     const data = new FormData();
     const name = uuid();
-    const file = new File([thumbnail], fileName, { type: fileType });
     data.append('name', name);
     data.append('file', file);
 
-    return fetch('https://spee.ch/api/claim/publish', {
+    return fetch(SPEECH_URLS.SPEECH_PUBLISH, {
       method: 'POST',
       body: data,
     })
@@ -104,22 +76,26 @@ function SelectAsset(props: Props) {
               <FileSelector
                 label={'File to upload'}
                 name={'assetSelector'}
-                onFileChosen={path => {
-                  setPathSelected(path);
+                onFileChosen={file => {
+                  if (file.name) {
+                    setPathSelected(file.path);
+                    setFileSelected(file);
+                  }
                 }}
-                filters={filters}
+                accept={accept}
               />
             )}
             {pathSelected && (
               <div>
                 {`...${pathSelected.slice(-18)}`} {uploadStatus}{' '}
-                <Button button={'primary'} onClick={() => doUploadAsset(pathSelected)}>
+                <Button button={'primary'} onClick={() => doUploadAsset(fileSelected)}>
                   Upload
                 </Button>{' '}
                 <Button
                   button={'secondary'}
                   onClick={() => {
                     setPathSelected('');
+                    setFileSelected(null);
                   }}
                 >
                   Clear
