@@ -8,7 +8,7 @@ import Card from 'component/common/card';
 
 type Props = {
   name: ?string,
-  filePath: ?string,
+  filePath: string | WebFile,
   isStillEditing: boolean,
   balance: number,
   updatePublishForm: ({}) => void,
@@ -18,13 +18,26 @@ type Props = {
 function PublishFile(props: Props) {
   const { name, balance, filePath, isStillEditing, updatePublishForm, disabled } = props;
 
-  function handleFileChange(filePath: string, fileName: string) {
-    const publishFormParams: { filePath: string, name?: string } = { filePath };
-
-    if (!name) {
-      const parsedFileName = fileName.replace(regexInvalidURI, '');
-      publishFormParams.name = parsedFileName.replace(' ', '-');
+  let currentFile = '';
+  if (filePath) {
+    if (typeof filePath === 'string') {
+      currentFile = filePath;
+    } else {
+      currentFile = filePath.name;
     }
+  }
+
+  function handleFileChange(file: WebFile) {
+    // if electron, we'll set filePath to the path string because SDK is handling publishing.
+    // if web, we set the filePath (dumb name) to the File() object
+    // file.path will be undefined from web due to browser security, so it will default to the File Object.
+    const publishFormParams: { filePath: string | WebFile, name?: string } = {
+      filePath: file.path || file,
+      name: file.name,
+    };
+    const parsedFileName = file.name.replace(regexInvalidURI, '');
+
+    publishFormParams.name = parsedFileName.replace(' ', '-');
 
     updatePublishForm(publishFormParams);
   }
@@ -39,7 +52,7 @@ function PublishFile(props: Props) {
       }
       actions={
         <React.Fragment>
-          <FileSelector currentPath={filePath} onFileChosen={handleFileChange} />
+          <FileSelector currentPath={currentFile} onFileChosen={handleFileChange} />
           {!isStillEditing && (
             <p className="help">
               {__('For video content, use MP4s in H264/AAC format for best compatibility.')}{' '}

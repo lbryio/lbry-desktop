@@ -25,13 +25,6 @@ type State = {
   thumbnailError: boolean,
 };
 
-const filters = [
-  {
-    name: __('Thumbnail Image'),
-    extensions: ['png', 'jpg', 'jpeg', 'gif'],
-  },
-];
-
 class SelectThumbnail extends React.PureComponent<Props, State> {
   constructor() {
     super();
@@ -66,13 +59,19 @@ class SelectThumbnail extends React.PureComponent<Props, State> {
     } = this.props;
 
     const { thumbnailError } = this.state;
+    const accept = '.png, .jpg, .jpeg, .gif';
 
     const outpoint = myClaimForUri ? `${myClaimForUri.txid}:${myClaimForUri.nout}` : undefined;
     const fileInfo = outpoint ? fileInfos[outpoint] : undefined;
     const downloadPath = fileInfo ? fileInfo.download_path : undefined;
 
     const actualFilePath = filePath || downloadPath;
-    const isSupportedVideo = Lbry.getMediaType(null, actualFilePath) === 'video';
+    let isSupportedVideo = false;
+    if (typeof filePath === 'string') {
+      isSupportedVideo = Lbry.getMediaType(null, actualFilePath) === 'video';
+    } else if (filePath && filePath.type) {
+      isSupportedVideo = filePath.type.split('/')[0] === 'video';
+    }
 
     let thumbnailSrc;
     if (!thumbnail) {
@@ -132,8 +131,8 @@ class SelectThumbnail extends React.PureComponent<Props, State> {
                 currentPath={thumbnailPath}
                 label={__('Thumbnail')}
                 placeholder={__('Choose a thumbnail')}
-                filters={filters}
-                onFileChosen={path => openModal(MODALS.CONFIRM_THUMBNAIL_UPLOAD, { path })}
+                accept={accept}
+                onFileChosen={file => openModal(MODALS.CONFIRM_THUMBNAIL_UPLOAD, { file })}
               />
             )}
             {status === THUMBNAIL_STATUSES.COMPLETE && thumbnail && (

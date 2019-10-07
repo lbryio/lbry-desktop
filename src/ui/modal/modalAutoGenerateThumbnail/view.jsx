@@ -4,7 +4,7 @@ import { Modal } from 'modal/modal';
 import { formatPathForWeb } from 'util/uri';
 
 type Props = {
-  upload: Buffer => void,
+  upload: WebFile => void,
   filePath: string,
   closeModal: () => void,
   showToast: ({}) => void,
@@ -13,12 +13,18 @@ type Props = {
 function ModalAutoGenerateThumbnail(props: Props) {
   const { closeModal, filePath, upload, showToast } = props;
   const playerRef = useRef();
-  const videoSrc = formatPathForWeb(filePath);
+  let videoSrc;
+  if (typeof filePath === 'string') {
+    videoSrc = formatPathForWeb(filePath);
+  } else {
+    videoSrc = URL.createObjectURL(filePath);
+  }
 
   function uploadImage() {
     const imageBuffer = captureSnapshot();
+    const file = new File([imageBuffer], 'thumbnail.png', { type: 'image/png' });
     if (imageBuffer) {
-      upload(imageBuffer);
+      upload(file);
       closeModal();
     } else {
       onError();

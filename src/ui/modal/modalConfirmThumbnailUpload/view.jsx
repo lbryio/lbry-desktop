@@ -3,22 +3,22 @@ import React from 'react';
 import { Modal } from 'modal/modal';
 
 type Props = {
-  upload: string => void,
-  path: string,
+  upload: WebFile => void,
+  file: WebFile,
   closeModal: () => void,
   updatePublishForm: ({}) => void,
 };
 
 class ModalConfirmThumbnailUpload extends React.PureComponent<Props> {
   upload() {
-    const { upload, updatePublishForm, closeModal, path } = this.props;
-    upload(path);
-    updatePublishForm({ thumbnailPath: path });
+    const { upload, updatePublishForm, closeModal, file } = this.props;
+    upload(file);
+    updatePublishForm({ thumbnailPath: file.path });
     closeModal();
   }
 
   render() {
-    const { closeModal, path } = this.props;
+    const { closeModal, file } = this.props;
 
     return (
       <Modal
@@ -32,7 +32,7 @@ class ModalConfirmThumbnailUpload extends React.PureComponent<Props> {
       >
         <p>{__('Are you sure you want to upload this thumbnail to spee.ch')}?</p>
 
-        <blockquote>{path}</blockquote>
+        <blockquote>{file.path || file.name}</blockquote>
       </Modal>
     );
   }
