@@ -8,6 +8,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ### Fixed
 
+- Escape the generated link for tags ([#2984](https://github.com/lbryio/lbry-desktop/pull/2984))
+
 ### Added
 
 ### Changed
