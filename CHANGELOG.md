@@ -4,7 +4,17 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
-## [0.36.0] - Unreleased
+## [0.36.1] - [Unrelased]
+
+### Fixed
+
+- Graphical bug causing the follow button to look glitchy when hovering over a particular part of it (#2677)
+
+### Added
+
+### Changed
+
+## [0.36.0] - [2019-10-4]
 
 ### Added
 
