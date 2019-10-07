@@ -54,14 +54,14 @@ function truncateDescription(description) {
 }
 
 function insertToHead(fullHtml, htmlToInsert) {
-  return fullHtml.replace('<!-- HEAD_REPLACEMENT_TOKEN -->', htmlToInsert);
+  return fullHtml.replace(/<!-- VARIABLE_HEAD_BEGIN -->.*<!-- VARIABLE_HEAD_END -->/s, htmlToInsert);
 }
 
 const defaultHead =
   '<title>lbry.tv</title>\n' +
   `<meta property="og:url" content="${DOMAIN}" />\n` +
-  '<meta property="og:title" content="LBRY On The Web" />\n' +
-  '<meta property="og:site_name" content="LBRY.tv"/>\n' +
+  '<meta property="og:title" content="lbry.tv" />\n' +
+  '<meta property="og:site_name" content="lbry.tv"/>\n' +
   '<meta property="og:description" content="All your favorite LBRY content in your browser." />\n' +
   `<meta property="og:image" content="${DOMAIN}/og.png" />\n` +
   '<meta property="fb:app_id" content="1673146449633983" />';
