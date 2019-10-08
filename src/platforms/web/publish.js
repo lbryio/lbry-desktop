@@ -1,20 +1,5 @@
 // @flow
 import { HEADERS } from 'lbry-redux';
-function checkAndParse(response) {
-  if (response.status >= 200 && response.status < 300) {
-    return response.json();
-  }
-  return response.json().then(json => {
-    let error;
-    if (json.error) {
-      error = new Error(json.error);
-    } else {
-      error = new Error('Protocol error with unknown response signature');
-    }
-    return Promise.reject(error);
-  });
-}
-
 // A modified version of Lbry.apiCall that allows
 // to perform calling methods at arbitrary urls
 // and pass form file fields
@@ -40,21 +25,43 @@ export default function apiPublishCallViaWeb(
   const body = new FormData();
   body.append('file', fileField);
   body.append('json_payload', jsonPayload);
-  const options = {
-    method: 'POST',
-    headers: { [HEADERS.AUTH_TOKEN]: token },
-    body,
-  };
 
-  return fetch(connectionString, options)
-    .then(checkAndParse)
-    .then(response => {
-      const error = response.error || (response.result && response.result.error);
+  function makeRequest(connectionString, method, token, body) {
+    return new Promise((resolve, reject) => {
+      let xhr = new XMLHttpRequest();
+      xhr.open(method, connectionString);
+      xhr.setRequestHeader(HEADERS.AUTH_TOKEN, token);
+      xhr.responseType = 'json';
+      xhr.upload.onprogress = e => {
+        let percentComplete = Math.ceil((e.loaded / e.total) * 100);
+        console.log(percentComplete); // put your upload state update here
+      };
+      xhr.onload = () => {
+        resolve(xhr);
+      };
+      xhr.onerror = () => {
+        reject({ status: xhr.status, statusText: xhr.statusText });
+      };
+      xhr.send(body);
+    });
+  }
+
+  return makeRequest(connectionString, 'POST', token, body)
+    .then(xhr => {
+      let error;
+      if (xhr) {
+        if (xhr.response && xhr.status >= 200 && xhr.status < 300) {
+          return resolve(xhr.response.result);
+        } else if (xhr.statusText) {
+          error = new Error(xhr.statusText);
+        } else {
+          error = new Error('Upload likely timed out. Try a smaller file while we work on this.');
+        }
+      }
 
       if (error) {
-        return reject(error);
+        return Promise.reject(error);
       }
-      return resolve(response.result);
     })
     .catch(reject);
 }
