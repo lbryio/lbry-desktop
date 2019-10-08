@@ -1,5 +1,5 @@
 const { parseURI } = require('lbry-redux');
-// const { generateStreamUrl } = require('../../src/ui/util/lbrytv');
+const { generateStreamUrl } = require('../../src/ui/util/lbrytv');
 const { WEB_SERVER_PORT, DOMAIN } = require('../../config');
 const { readFileSync } = require('fs');
 const express = require('express');
@@ -54,14 +54,14 @@ function truncateDescription(description) {
 }
 
 function insertToHead(fullHtml, htmlToInsert) {
-  return fullHtml.replace('<!-- HEAD_REPLACEMENT_TOKEN -->', htmlToInsert);
+  return fullHtml.replace(/<!-- VARIABLE_HEAD_BEGIN -->.*<!-- VARIABLE_HEAD_END -->/s, htmlToInsert);
 }
 
 const defaultHead =
   '<title>lbry.tv</title>\n' +
   `<meta property="og:url" content="${DOMAIN}" />\n` +
-  '<meta property="og:title" content="LBRY On The Web" />\n' +
-  '<meta property="og:site_name" content="LBRY.tv"/>\n' +
+  '<meta property="og:title" content="lbry.tv" />\n' +
+  '<meta property="og:site_name" content="lbry.tv"/>\n' +
   '<meta property="og:description" content="All your favorite LBRY content in your browser." />\n' +
   `<meta property="og:image" content="${DOMAIN}/og.png" />\n` +
   '<meta property="fb:app_id" content="1673146449633983" />';
@@ -111,14 +111,14 @@ app.get('*', async (req, res) => {
         head += `<meta property="og:url" content="${DOMAIN}/${claim.name}:${claim.claim_id}"/>`;
 
         if (claim.source_media_type && claim.source_media_type.startsWith('video/')) {
-          // const videoUrl = generateStreamUrl(claim.name, claim.claim_id);
-          // head += `<meta property="og:video" content="${videoUrl}" />`;
-          // head += `<meta property="og:video:secure_url" content="${videoUrl}" />`;
-          // head += `<meta property="og:video:type" content="${claim.source_media_type}" />`;
-          // if (claim.frame_width && claim.frame_height) {
-          //   head += `<meta property="og:video:width" content="${claim.frame_width}/>`;
-          //   head += `<meta property="og:video:height" content="${claim.frame_height}/>`;
-          // }
+          const videoUrl = generateStreamUrl(claim.name, claim.claim_id);
+          head += `<meta property="og:video" content="${videoUrl}" />`;
+          head += `<meta property="og:video:secure_url" content="${videoUrl}" />`;
+          head += `<meta property="og:video:type" content="${claim.source_media_type}" />`;
+          if (claim.frame_width && claim.frame_height) {
+            head += `<meta property="og:video:width" content="${claim.frame_width}"/>`;
+            head += `<meta property="og:video:height" content="${claim.frame_height}"/>`;
+          }
         }
 
         html = insertToHead(html, head);

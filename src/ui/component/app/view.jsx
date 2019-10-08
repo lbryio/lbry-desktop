@@ -108,7 +108,9 @@ function App(props: Props) {
 
   // Keep this at the end to ensure initial setup effects are run first
   useEffect(() => {
-    if (hasVerifiedEmail && balance !== undefined) {
+    // Wait for balance to be populated on desktop so we know when we can begin syncing
+    // @syncwithbalancefixme
+    if (hasVerifiedEmail && (IS_WEB || balance !== undefined)) {
       signIn();
     }
   }, [hasVerifiedEmail, signIn, balance]);

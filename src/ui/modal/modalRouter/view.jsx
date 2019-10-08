@@ -5,7 +5,6 @@ import ModalError from 'modal/modalError';
 import ModalDownloading from 'modal/modalDownloading';
 import ModalAutoGenerateThumbnail from 'modal/modalAutoGenerateThumbnail';
 import ModalAutoUpdateDownloaded from 'modal/modalAutoUpdateDownloaded';
-import ModalAutoUpdateConfirm from 'modal/modalAutoUpdateConfirm';
 import ModalUpgrade from 'modal/modalUpgrade';
 import ModalWelcome from 'modal/modalWelcome';
 import ModalFirstReward from 'modal/modalFirstReward';
@@ -56,8 +55,6 @@ function ModalRouter(props: Props) {
       return <ModalAutoGenerateThumbnail {...modalProps} />;
     case MODALS.AUTO_UPDATE_DOWNLOADED:
       return <ModalAutoUpdateDownloaded {...modalProps} />;
-    case MODALS.AUTO_UPDATE_CONFIRM:
-      return <ModalAutoUpdateConfirm {...modalProps} />;
     case MODALS.ERROR:
       return <ModalError {...modalProps} />;
     case MODALS.FILE_TIMEOUT:

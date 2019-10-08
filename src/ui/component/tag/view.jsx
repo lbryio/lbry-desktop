@@ -15,7 +15,7 @@ type Props = {
 export default function Tag(props: Props) {
   const { name, onClick, type = 'link', disabled = false } = props;
   const isMature = MATURE_TAGS.includes(name);
-  const clickProps = onClick ? { onClick } : { navigate: `/$/tags?t=${name}` };
+  const clickProps = onClick ? { onClick } : { navigate: `/$/tags?t=${encodeURIComponent(name)}` };
 
   let title;
   if (!onClick) {

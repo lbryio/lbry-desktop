@@ -46,7 +46,7 @@ function PublishText(props: Props) {
             <Button
               button="link"
               onClick={toggleMarkdown}
-              label={advancedEditor ? 'Simple Editor' : 'Advanced Editor'}
+              label={advancedEditor ? __('Simple Editor') : __('Advanced Editor')}
             />
           </div>
         </React.Fragment>
