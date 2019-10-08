@@ -6,6 +6,24 @@ import 'video.js/dist/video-js.css';
 import isUserTyping from 'util/detect-typing';
 
 const SPACE_BAR_KEYCODE = 32;
+const SMALL_F_KEYCODE = 70;
+const SMALL_M_KEYCODE = 77;
+const ARROW_LEFT_KEYCODE = 37;
+const ARROW_UP_KEYCODE = 38;
+const ARROW_RIGHT_KEYCODE = 39;
+const ARROW_DOWN_KEYCODE = 40;
+
+const FULLSCREEN_KEYCODE = SMALL_F_KEYCODE;
+const MUTE_KEYCODE = SMALL_M_KEYCODE;
+const VOLUME_INCREASE_KEYCODE = ARROW_UP_KEYCODE;
+const VOLUME_DECREASE_KEYCODE = ARROW_DOWN_KEYCODE;
+
+const SEEK_FORWARD_KEYCODE = ARROW_RIGHT_KEYCODE;
+const SEEK_BACKWARD_KEYCODE = ARROW_LEFT_KEYCODE;
+
+const VOLUME_STEP = 0.1; // Volume range is 0 to 1
+const SEEK_STEP = 10; // time to seek in seconds
+
 const VIDEO_JS_OPTIONS = {
   autoplay: true,
   controls: true,
@@ -111,10 +129,49 @@ function VideoViewer(props: Props) {
     function handleKeyDown(e: KeyboardEvent) {
       const videoNode = videoRef.current;
 
-      if (videoNode && !isUserTyping() && e.keyCode === SPACE_BAR_KEYCODE) {
-        e.preventDefault();
+      if (!videoNode || isUserTyping()) {
+        return;
+      }
 
+      // If not needed to prevent the default,
+      // add keycode handler above preventDefault & return after that
+      e.preventDefault();
+
+      if (e.keyCode === SPACE_BAR_KEYCODE) {
         videoNode.paused ? videoNode.play() : videoNode.pause();
+      }
+
+      // Fullscreen Shortcut
+      if (e.keyCode === FULLSCREEN_KEYCODE) {
+        videoNode.webkitEnterFullscreen && videoNode.webkitEnterFullscreen();
+      }
+
+      // Mute/Unmute Shortcuts
+      if (e.keyCode === MUTE_KEYCODE) {
+        videoNode.muted = !videoNode.muted;
+      }
+
+      // Volume Shortcuts
+      const volume = videoNode.volume;
+      if (e.keyCode === VOLUME_INCREASE_KEYCODE) {
+        const newVolume = volume + VOLUME_STEP;
+        videoNode.volume = newVolume > 1 ? 1 : newVolume;
+      }
+      if (e.keyCode === VOLUME_DECREASE_KEYCODE) {
+        const newVolume = volume - VOLUME_STEP;
+        videoNode.volume = newVolume < 0 ? 0 : newVolume;
+      }
+
+      // Seeking Shortcuts
+      const duration = videoNode.duration;
+      const currentTime = videoNode.currentTime;
+      if (e.keyCode === SEEK_FORWARD_KEYCODE) {
+        const newDuration = currentTime + SEEK_STEP;
+        videoNode.currentTime = newDuration > duration ? duration : newDuration;
+      }
+      if (e.keyCode === SEEK_BACKWARD_KEYCODE) {
+        const newDuration = currentTime - SEEK_STEP;
+        videoNode.currentTime = newDuration < 0 ? 0 : newDuration;
       }
     }
 
