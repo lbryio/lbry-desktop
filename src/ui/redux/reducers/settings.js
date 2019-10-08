@@ -36,6 +36,7 @@ const defaultState = {
 
     // Content
     [SETTINGS.SHOW_MATURE]: false,
+    [SETTINGS.SHOW_ANONYMOUS]: true,
     [SETTINGS.AUTOPLAY]: true,
     [SETTINGS.FLOATING_PLAYER]: true,
     [SETTINGS.AUTO_DOWNLOAD]: true,

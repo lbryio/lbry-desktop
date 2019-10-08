@@ -22,6 +22,7 @@ type Props = {
   uri: string,
   claim: ?Claim,
   obscureNsfw: boolean,
+  hideAnonymous: boolean,
   showUserBlocked: boolean,
   claimIsMine: boolean,
   pending?: boolean,
@@ -54,6 +55,7 @@ type Props = {
 const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
   const {
     obscureNsfw,
+    hideAnonymous,
     claimIsMine,
     pending,
     history,
@@ -99,8 +101,9 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
   const isChannel = isValid ? parseURI(uri).isChannel : false;
   const includeChannelTooltip = type !== 'inline' && type !== 'tooltip' && !isChannel;
   const signingChannel = claim && claim.signing_channel;
-  let shouldHide =
-    placeholder !== 'loading' && ((abandoned && !showPublishLink) || (!claimIsMine && obscureNsfw && nsfw));
+  const isAnonymous = !isChannel && !signingChannel;
+  const blocked = !claimIsMine && ((obscureNsfw && nsfw) || (hideAnonymous && isAnonymous));
+  let shouldHide = placeholder !== 'loading' && ((abandoned && !showPublishLink) || (blocked && !showUserBlocked));
 
   // This will be replaced once blocking is done at the wallet server level
   if (claim && !shouldHide && blackListedOutpoints) {
@@ -125,7 +128,7 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
   }
   // block channel claims if we can't control for them in claim search
   // e.g. fetchRecommendedSubscriptions
-  if (claim && isChannel && !shouldHide && !showUserBlocked && blockedChannelUris.length && isChannel) {
+  if (claim && isChannel && !shouldHide && !showUserBlocked && blockedChannelUris.length) {
     shouldHide = blockedChannelUris.some(blockedUri => blockedUri === claim.permanent_url);
   }
 

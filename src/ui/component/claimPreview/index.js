@@ -15,7 +15,7 @@ import {
   doPrepareEdit,
 } from 'lbry-redux';
 import { selectBlackListedOutpoints, selectFilteredOutpoints } from 'lbryinc';
-import { selectShowMatureContent } from 'redux/selectors/settings';
+import { selectShowMatureContent, selectShowAnonymousContent } from 'redux/selectors/settings';
 import { makeSelectHasVisitedUri } from 'redux/selectors/content';
 import { makeSelectIsSubscribed } from 'redux/selectors/subscriptions';
 import { push } from 'connected-react-router';
@@ -26,6 +26,7 @@ const select = (state, props) => ({
   pending: props.uri && makeSelectClaimIsPending(props.uri)(state),
   claim: props.uri && makeSelectClaimForUri(props.uri)(state),
   obscureNsfw: !selectShowMatureContent(state),
+  hideAnonymous: !selectShowAnonymousContent(state),
   claimIsMine: props.uri && makeSelectClaimIsMine(props.uri)(state),
   isResolvingUri: props.uri && makeSelectIsUriResolving(props.uri)(state),
   thumbnail: props.uri && makeSelectThumbnailForUri(props.uri)(state),

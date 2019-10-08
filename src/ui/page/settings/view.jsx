@@ -46,6 +46,7 @@ type Props = {
   clearCache: () => Promise<any>,
   daemonSettings: DaemonSettings,
   showNsfw: boolean,
+  showAnonymous: boolean,
   instantPurchaseEnabled: boolean,
   instantPurchaseMax: Price,
   currentTheme: string,
@@ -190,6 +191,7 @@ class SettingsPage extends React.PureComponent<Props, State> {
     const {
       daemonSettings,
       showNsfw,
+      showAnonymous,
       instantPurchaseEnabled,
       instantPurchaseMax,
       currentTheme,
@@ -380,6 +382,17 @@ class SettingsPage extends React.PureComponent<Props, State> {
                     label={__('Autoplay media files')}
                     helper={__(
                       'Autoplay video and audio files when navigating to a file, as well as the next related item when a file finishes playing.'
+                    )}
+                  />
+
+                  <FormField
+                    type="checkbox"
+                    name="show_anonymous"
+                    onChange={() => setClientSetting(SETTINGS.SHOW_ANONYMOUS, !showAnonymous)}
+                    checked={showAnonymous}
+                    label={__('Show anonymous content')}
+                    helper={__(
+                      'You can opt for displaying contents published anonymously, i.e. contents published without a channel identity.'
                     )}
                   />
 
