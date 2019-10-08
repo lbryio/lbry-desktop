@@ -32,7 +32,6 @@ function SideBar(props: Props) {
           <h2>LBRY</h2>
 
           <p>{__('The best decentralized content platform on the web.')}</p>
-          <div className="card__actions">{/* <Button button="primary" label={__('Do Something')} /> */}</div>
         </div>
       </div>
     </StickyBox>
