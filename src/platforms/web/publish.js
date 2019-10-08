@@ -19,7 +19,7 @@ function checkAndParseFix(response) {
 // A modified version of Lbry.apiCall that allows
 // to perform calling methods at arbitrary urls
 // and pass form file fields
-function apiCallViaWeb(
+async function apiCallViaWeb(
   connectionString: string,
   method: string,
   params: { file_path: string },
