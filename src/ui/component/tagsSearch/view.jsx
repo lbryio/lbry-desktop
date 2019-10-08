@@ -35,9 +35,7 @@ export default function TagsSearch(props: Props) {
   }
 
   const doesTagMatch = name => {
-    let nextTag;
-    nextTag = newTag.substr(newTag.lastIndexOf(',') + 1, newTag.length);
-    nextTag = newTag.substr(newTag.lastIndexOf(' ') + 1, newTag.length);
+    const nextTag = newTag.substr(newTag.lastIndexOf(',') + 1, newTag.length).trim();
     return newTag ? name.toLowerCase().includes(nextTag.toLowerCase()) : true;
   };
   // Make sure there are no duplicates, then trim
