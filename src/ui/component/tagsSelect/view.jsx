@@ -23,7 +23,7 @@ type Props = {
   placeholder?: string,
 };
 
-export default function TagSelect(props: Props) {
+export default function TagsSelect(props: Props) {
   const {
     showClose,
     followedTags,

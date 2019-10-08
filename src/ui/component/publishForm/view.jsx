@@ -6,7 +6,7 @@ import Button from 'component/button';
 import ChannelSection from 'component/selectChannel';
 import classnames from 'classnames';
 import UnsupportedOnWeb from 'component/common/unsupported-on-web';
-import TagSelect from 'component/tagsSelect';
+import TagsSelect from 'component/tagsSelect';
 import PublishText from 'component/publishText';
 import PublishPrice from 'component/publishPrice';
 import PublishFile from 'component/publishFile';
@@ -130,7 +130,7 @@ function PublishForm(props: Props) {
         <PublishText disabled={formDisabled} />
         <Card actions={<SelectThumbnail />} />
 
-        <TagSelect
+        <TagsSelect
           title={__('Add Tags')}
           suggestMature
           help={__('The better your tags are, the easier it will be for people to discover your content.')}
