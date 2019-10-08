@@ -26,6 +26,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Subscription and file view counts ([#2920](https://github.com/lbryio/lbry-desktop/pull/2920))
 - Pagination on Library, Publishes, and Transactions page ([#2923](https://github.com/lbryio/lbry-desktop/pull/2923))
 - Granular balance information ([#2916](https://github.com/lbryio/lbry-desktop/pull/2916))
+- Keyboard shortcuts for the following actions: ([#2999](https://github.com/lbryio/lbry-desktop/pull/2999))
+  - `→` to Seek Forward
+  - `←` to Seek Backward
+  - `f` to Going Fullscreen
+  - `m` to Mute/Unmute
 
 ### Changed
 
