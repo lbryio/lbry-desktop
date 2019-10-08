@@ -8,11 +8,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ### Fixed
 
+- Escape the generated link for tags ([#2984](https://github.com/lbryio/lbry-desktop/pull/2984))
 - Graphical bug causing the follow button to look glitchy when hovering over a particular part of it (#2677)
 
 ### Added
 
 ### Changed
+
+- Refactor ModalAutoUpdateConfirm into ModalAutoUpdateDownloaded ([#2959](https://github.com/lbryio/lbry-desktop/pull/2959))
 
 ## [0.36.0] - [2019-10-4]
 
@@ -24,6 +27,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Subscription and file view counts ([#2920](https://github.com/lbryio/lbry-desktop/pull/2920))
 - Pagination on Library, Publishes, and Transactions page ([#2923](https://github.com/lbryio/lbry-desktop/pull/2923))
 - Granular balance information ([#2916](https://github.com/lbryio/lbry-desktop/pull/2916))
+- Keyboard shortcuts for the following actions: ([#2999](https://github.com/lbryio/lbry-desktop/pull/2999))
+  - `→` to Seek Forward
+  - `←` to Seek Backward
+  - `f` to Going Fullscreen
+  - `m` to Mute/Unmute
 
 ### Changed
 
