@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { Form, FormField } from 'component/common/form';
 import Button from 'component/button';
 import SelectAsset from 'component/selectAsset';
-import TagSelect from 'component/tagsSelect';
+import TagsSelect from 'component/tagsSelect';
 import * as PAGES from 'constants/pages';
 
 type Props = {
@@ -182,7 +182,7 @@ function ChannelForm(props: Props) {
           disabled={false}
           onChange={text => setParams({ ...params, description: text })}
         />
-        <TagSelect
+        <TagsSelect
           title={__('Add Tags')}
           suggestMature
           help={__('The better your tags are, the easier it will be for people to discover your channel.')}

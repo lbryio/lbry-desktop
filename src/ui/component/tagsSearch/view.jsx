@@ -34,7 +34,12 @@ export default function TagsSearch(props: Props) {
     tags.unshift({ name: newTag });
   }
 
-  const doesTagMatch = name => (newTag ? name.toLowerCase().includes(newTag.toLowerCase()) : true);
+  const doesTagMatch = name => {
+    let nextTag;
+    nextTag = newTag.substr(newTag.lastIndexOf(',') + 1, newTag.length);
+    nextTag = newTag.substr(newTag.lastIndexOf(' ') + 1, newTag.length);
+    return newTag ? name.toLowerCase().includes(nextTag.toLowerCase()) : true;
+  };
   // Make sure there are no duplicates, then trim
   const suggestedTagsSet = new Set(tags.map(tag => tag.name));
   const suggestedTags = Array.from(suggestedTagsSet)
@@ -51,32 +56,40 @@ export default function TagsSearch(props: Props) {
 
   function handleSubmit(e) {
     e.preventDefault();
-    const trimmedTag = newTag.trim();
+    let tags = newTag.trim();
 
-    if (trimmedTag.length === 0) {
+    if (tags.length === 0) {
       return;
     }
 
     setNewTag('');
-    if (onSelect) {
-      onSelect({ name: trimmedTag });
-    } else {
-      if (!unfollowedTags.map(({ name }) => name).includes(trimmedTag)) {
-        doAddTag(trimmedTag);
-      }
 
-      if (!followedTags.map(({ name }) => name).includes(trimmedTag)) {
-        doToggleTagFollow(trimmedTag);
+    tags = tags.split(',').map(newTag => newTag.trim());
+    tags.forEach(tag => {
+      if (onSelect) {
+        onSelect({ name: tag });
+      } else {
+        if (!unfollowedTags.map(({ name }) => name).includes(tag)) {
+          doAddTag(tag);
+        }
+
+        if (!followedTags.map(({ name }) => name).includes(tag)) {
+          doToggleTagFollow(tag);
+        }
       }
-    }
+    });
   }
 
-  function handleTagClick(tag) {
-    if (onSelect) {
-      onSelect({ name: tag });
-    } else {
-      doToggleTagFollow(tag);
-    }
+  function handleTagClick(tags) {
+    tags = tags.split(',').map(newTag => newTag.trim());
+
+    tags.forEach(tag => {
+      if (onSelect) {
+        onSelect({ name: tag });
+      } else {
+        doToggleTagFollow(tag);
+      }
+    });
   }
 
   return (
