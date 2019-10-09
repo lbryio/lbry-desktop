@@ -29,7 +29,7 @@ The LBRY app is a graphical browser for the decentralized content marketplace pr
 
 
 
-<h2 align="left">Install</h2>
+## Install
 
 We provide installers for Windows, macOS (v10.12.4, Sierra, or greater), and Debian-based Linux. See community maintained builds section for alternative Linux installations.
 
@@ -52,11 +52,11 @@ _Note: If coming from a deb install, the directory structure is different and yo
 | Latest Release | [FlatHub Page](https://flathub.org/apps/details/io.lbry.lbry-app)         | [AUR Package](https://aur.archlinux.org/packages/lbry-app-bin/)                           | [Pi Installer](https://lbrypi.com)          |
 | Maintainers    | [@choofee](https://github.com/choffee)/[@iuyte](https://github.com/iuyte) | [@kcseb](https://github.com/kcseb)/[@TimurKiyivinski](https://github.com/TimurKiyivinski) | [@Madiator2011](https://github.com/kodxana) |
 
-<h2 align="left">Usage</h2>
+## Usage
 
 Double click the installed application to interact with the LBRY network.
 
-<h2 align="left">Running from Source</h2>
+## Running from Source
 
 You can run the web version (beta.lbry.tv), the electron app, or both at the same time.
 
@@ -99,20 +99,20 @@ If the app isn't building, or `yarn xxx` commands aren't working you may need to
 
 If you _really_ think something might have gone wrong, you can force your repo to clear everything that doesn't match the repo with `git reset --hard HEAD && git clean -fxd && git pull -r`
 
-<h2 align="left">Contributing</h2>
+## Contributing
 
 We :heart: contributions from everyone and contributions to this project are encouraged, and compensated. We welcome [bug reports](https://github.com/lbryio/lbry-desktop/issues/), [bug fixes](https://github.com/lbryio/lbry-desktop/pulls) and feedback is always appreciated. For more details, see [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ## [![contributions welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat)](https://github.com/lbryio/lbry-desktop/issues) [![GitHub contributors](https://img.shields.io/github/contributors/lbryio/lbry-desktop.svg)](https://GitHub.com/lbryio/lbry-desktop/graphs/contributors/)
 
-<h2 align="left">License</h2>
+## License
 
 This project is MIT licensed. For the full license, see [LICENSE](LICENSE).
 
-<h2 align="left">Security</h2>
+## Security
 
 We take security seriously. Please contact security@lbry.com regarding any security issues. Our PGP key is [here](https://keybase.io/lbry/key.asc) if you need it.
 
-<h2 align="left">Contact</h2>
+## Contact
 
 The primary contact for this project is [@seanyesmunt](https://github.com/seanyesmunt).
