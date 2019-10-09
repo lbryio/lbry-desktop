@@ -12,6 +12,8 @@ import Icon from 'component/common/icon';
 import { Menu, MenuList, MenuButton, MenuItem } from '@reach/menu-button';
 import Tooltip from 'component/common/tooltip';
 
+const IS_MAC = process.platform === 'darwin';
+
 type Props = {
   balance: string,
   roundedBalance: number,
@@ -62,7 +64,7 @@ const Header = (props: Props) => {
   }
 
   return (
-    <header className={classnames('header', { 'header--minimal': minimal })}>
+    <header className={classnames('header', { 'header--minimal': minimal, 'header--mac': IS_MAC })}>
       <div className="header__contents">
         <div className="header__navigation">
           <Button

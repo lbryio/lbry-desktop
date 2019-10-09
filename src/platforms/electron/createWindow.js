@@ -21,6 +21,7 @@ export default appState => {
     minWidth: 950,
     minHeight: 600,
     autoHideMenuBar: true,
+    titleBarStyle: 'hiddenInset',
     show: false,
     // Create the window using the state information.
     x: windowState.x,

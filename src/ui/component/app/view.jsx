@@ -1,6 +1,7 @@
 // @flow
 import * as ICONS from 'constants/icons';
 import React, { useEffect, useRef } from 'react';
+import classnames from 'classnames';
 import analytics from 'analytics';
 import { buildURI, parseURI } from 'lbry-redux';
 import Router from 'component/router/index';
@@ -15,6 +16,7 @@ import usePrevious from 'effects/use-previous';
 import Button from 'component/button';
 
 export const MAIN_WRAPPER_CLASS = 'main-wrapper';
+const IS_MAC = process.platform === 'darwin';
 
 type Props = {
   alertError: (string | {}) => void,
@@ -120,7 +122,11 @@ function App(props: Props) {
   }
 
   return (
-    <div className={MAIN_WRAPPER_CLASS} ref={appRef} onContextMenu={e => openContextMenu(e)}>
+    <div
+      className={classnames(MAIN_WRAPPER_CLASS, { [`${MAIN_WRAPPER_CLASS}--mac`]: IS_MAC })}
+      ref={appRef}
+      onContextMenu={e => openContextMenu(e)}
+    >
       <Router />
       <ModalRouter />
       <FileViewer pageUri={uri} />

@@ -7,6 +7,8 @@
   border-bottom: 1px solid $lbry-gray-1;
   box-shadow: var(--card-box-shadow) $lbry-gray-1;
   font-size: var(--font-body);
+  -webkit-user-select: none;
+  -webkit-app-region: drag;
 
   [data-mode='dark'] & {
     background-color: var(--dm-color-05);
@@ -24,6 +26,10 @@
   box-shadow: none;
   background-color: transparent;
   border-bottom: none;
+}
+
+.header--mac {
+  padding-top: var(--mac-titlebar-height);
 }
 
 .header__contents {
