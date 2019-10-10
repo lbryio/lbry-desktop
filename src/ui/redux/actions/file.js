@@ -41,7 +41,7 @@ export function doDeleteFile(outpoint, deleteFromComputer, abandonClaim) {
 
     // If the file is for a claim we published then also abandon the claim
     const myClaimsOutpoints = selectMyClaimsOutpoints(state);
-    if (abandonClaim && myClaimsOutpoints.indexOf(outpoint) !== -1) {
+    if (abandonClaim && myClaimsOutpoints.includes(outpoint)) {
       const [txid, nout] = outpoint.split(':');
 
       dispatch(doAbandonClaim(txid, Number(nout)));
