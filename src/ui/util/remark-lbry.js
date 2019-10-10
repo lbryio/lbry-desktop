@@ -1,9 +1,42 @@
 import { parseURI } from 'lbry-redux';
 import visit from 'unist-util-visit';
+import wordCharacter from 'is-word-character';
 
 const protocol = 'lbry://';
-const locateURI = (value, fromIndex) => value.indexOf(protocol, fromIndex);
-const locateMention = (value, fromIndex) => value.indexOf('@', fromIndex);
+const uriRegex = /^(lbry:\/\/)[^\s]*/g;
+
+const mentionToken = '@';
+const mentionTokenCode = 64; // @
+const mentionRegex = /^@[^\s()]*/gm;
+
+function invalidChar(char) {
+  const dot = 46; //  '.'
+  const dash = 45; //  '-'
+  const slash = 47; //  '/'
+
+  return char === dot || char === dash || char === slash || char === mentionTokenCode || wordCharacter(char);
+}
+
+// Find a possible mention.
+function locateMention(value, fromIndex) {
+  var index = value.indexOf(mentionToken, fromIndex);
+
+  if (index !== -1 && invalidChar(value.charCodeAt(index - 1))) {
+    return locateMention(value, index + 1);
+  }
+
+  return index;
+}
+
+function locateURI(value, fromIndex) {
+  var index = value.indexOf(protocol, fromIndex);
+
+  if (index !== -1 && invalidChar(value.charCodeAt(index - 1))) {
+    return locateMention(value, index + 1);
+  }
+
+  return index;
+}
 
 // Generate a valid markdown link
 const createURI = (text, uri, embed = false) => ({
@@ -16,13 +49,13 @@ const createURI = (text, uri, embed = false) => ({
   children: [{ type: 'text', value: text }],
 });
 
-const validateURI = (match, eat) => {
+const validateURI = (match, eat, self) => {
   if (match) {
     try {
       const text = match[0];
       const uri = parseURI(text);
       const isValid = uri && uri.claimName;
-      const isChannel = uri.isChannel && !uri.path;
+      const isChannel = uri.isChannel && uri.path === uri.claimName;
 
       if (isValid) {
         // Create channel link
@@ -39,14 +72,32 @@ const validateURI = (match, eat) => {
 };
 
 // Generate a markdown link from channel name
-function tokenizeMention(eat, value) {
-  const match = /^@+[a-zA-Z0-9-#:/]+/.exec(value);
-  return validateURI(match, eat);
+function tokenizeMention(eat, value, silent) {
+  if (silent) {
+    return true;
+  }
+
+  if (value.charCodeAt(0) !== mentionTokenCode) {
+    return;
+  }
+
+  const match = value.match(mentionRegex);
+
+  return validateURI(match, eat, self);
 }
 
 // Generate a markdown link from lbry url
-function tokenizeURI(eat, value) {
-  const match = /^(lbry:\/\/)+.+/.exec(value);
+function tokenizeURI(eat, value, silent) {
+  if (silent) {
+    return true;
+  }
+
+  if (!value.startsWith(protocol)) {
+    return;
+  }
+
+  const match = value.match(uriRegex);
+
   return validateURI(match, eat);
 }
 
@@ -67,7 +118,7 @@ const visitor = (node, index, parent) => {
     try {
       const uri = parseURI(node.url);
       const isValid = uri && uri.claimName;
-      const isChannel = uri.isChannel && !uri.path;
+      const isChannel = uri.isChannel && uri.path === uri.claimName;
       if (isValid && !isChannel) {
         if (!node.data || !node.data.hProperties) {
           // Create new node data
