@@ -26,8 +26,4 @@
   fieldset:not(:first-child) {
     margin-top: var(--spacing-large);
   }
-
-  label {
-    color: $lbry-white;
-  }
 }
