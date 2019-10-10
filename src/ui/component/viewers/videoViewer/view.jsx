@@ -5,6 +5,7 @@ import videojs from 'video.js';
 import 'video.js/dist/video-js.css';
 import isUserTyping from 'util/detect-typing';
 
+const F11_KEYCODE = 122;
 const SPACE_BAR_KEYCODE = 32;
 const SMALL_F_KEYCODE = 70;
 const SMALL_M_KEYCODE = 77;
@@ -45,6 +46,7 @@ function VideoViewer(props: Props) {
   const { contentType, source, setPlayingUri, onEndedCB, changeVolume, changeMute, volume, muted } = props;
   const videoRef = useRef();
   const [requireRedraw, setRequireRedraw] = useState(false);
+  let player = null;
 
   useEffect(() => {
     const currentVideo: HTMLVideoElement | null = document.querySelector('video');
@@ -91,12 +93,11 @@ function VideoViewer(props: Props) {
       ],
     };
 
-    let player;
     if (!requireRedraw) {
       player = videojs(videoNode, videoJsOptions, function() {
-        const player = this;
-        player.volume(volume);
-        player.muted(muted);
+        const self = this;
+        self.volume(volume);
+        self.muted(muted);
       });
     }
 
@@ -136,9 +137,13 @@ function VideoViewer(props: Props) {
         videoNode.paused ? videoNode.play() : videoNode.pause();
       }
 
-      // Fullscreen Shortcut
-      if (e.keyCode === FULLSCREEN_KEYCODE) {
-        videoNode.webkitEnterFullscreen && videoNode.webkitEnterFullscreen();
+      // Fullscreen toggle shotcuts
+      if (e.keyCode === FULLSCREEN_KEYCODE || e.keyCode === F11_KEYCODE) {
+        if(!player.isFullscreen()) {
+          player.requestFullscreen();
+        } else {
+          player.exitFullscreen();
+        }
       }
 
       // Mute/Unmute Shortcuts
