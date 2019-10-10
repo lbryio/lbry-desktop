@@ -26,11 +26,6 @@ $border-color--dark: var(--dm-color-04);
     margin-bottom: 0;
   }
 
-  // Fix this in @lbry/components, we shouldn't need to be this specific
-  checkbox-element input[type='checkbox']:checked + label {
-    color: $lbry-white;
-  }
-
   [data-mode='dark'] & {
     color: var(--dm-color-01);
     background-color: var(--color-card-actions--dark);
