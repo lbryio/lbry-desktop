@@ -371,10 +371,10 @@ export default class Autocomplete extends React.Component {
     if (value !== '' && matchedItem) {
       const itemValue = getItemValue(matchedItem);
       const itemValueDoesMatch =
-        itemValue.toLowerCase().indexOf(
+        itemValue.toLowerCase().includes(
           value.toLowerCase()
           // below line is the the only thing that is changed from the real component
-        ) !== -1;
+        );
       if (itemValueDoesMatch) {
         return { highlightedIndex: index };
       }

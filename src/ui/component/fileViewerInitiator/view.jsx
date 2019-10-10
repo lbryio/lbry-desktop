@@ -43,7 +43,7 @@ export default function FileViewer(props: Props) {
     costInfo,
   } = props;
   const cost = costInfo && costInfo.cost;
-  const isPlayable = ['audio', 'video'].indexOf(mediaType) !== -1;
+  const isPlayable = ['audio', 'video'].includes(mediaType);
   const fileStatus = fileInfo && fileInfo.status;
   const supported = (IS_WEB && isStreamable) || !IS_WEB;
 

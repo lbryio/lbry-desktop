@@ -133,7 +133,7 @@ if (!gotSingleInstanceLock) {
     // HACK: patch webrequest to fix devtools incompatibility with electron 2.x.
     // See https://github.com/electron/electron/issues/13008#issuecomment-400261941
     session.defaultSession.webRequest.onBeforeRequest({}, (details, callback) => {
-      if (details.url.indexOf('7accc8730b0f99b5e7c0702ea89d1fa7c17bfe33') !== -1) {
+      if (details.url.includes('7accc8730b0f99b5e7c0702ea89d1fa7c17bfe33')) {
         callback({
           redirectURL: details.url.replace(
             '7accc8730b0f99b5e7c0702ea89d1fa7c17bfe33',
