@@ -48,7 +48,7 @@ export default function FileViewer(props: Props) {
   const supported = (IS_WEB && isStreamable) || !IS_WEB;
 
   // Wrap this in useCallback because we need to use it to the keyboard effect
-  // If we don't a new instance will be created for every render and react will think the dependencies have change, which will add/remove the listener for every render
+  // If we don't a new instance will be created for every render and react will think the dependencies have changed, which will add/remove the listener for every render
   const viewFile = useCallback(
     (e?: SyntheticInputEvent<*> | KeyboardEvent) => {
       if (e) {
