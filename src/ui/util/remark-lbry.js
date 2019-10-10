@@ -39,14 +39,14 @@ const validateURI = (match, eat) => {
 };
 
 // Generate a markdown link from channel name
-function tokenizeMention(eat, value, silent) {
+function tokenizeMention(eat, value) {
   const match = /^@+[a-zA-Z0-9-#:/]+/.exec(value);
   return validateURI(match, eat);
 }
 
 // Generate a markdown link from lbry url
-function tokenizeURI(eat, value, silent) {
-  const match = /^(lbry:\/\/)+[a-zA-Z0-9-@#:/]+/.exec(value);
+function tokenizeURI(eat, value) {
+  const match = /^(lbry:\/\/)+.+/.exec(value);
   return validateURI(match, eat);
 }
 
