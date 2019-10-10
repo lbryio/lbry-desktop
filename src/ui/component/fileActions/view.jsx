@@ -31,7 +31,7 @@ class FileActions extends React.PureComponent<Props> {
         )}
         {!claimIsMine && (
           <Tooltip label={__('Report content')}>
-            <Button button="link" icon={ICONS.REPORT} href={`https://lbry.com/dmca?claim_id=${claimId}`} />
+            <Button button="link" icon={ICONS.REPORT} href={`https://lbry.com/dmca/${claimId}`} />
           </Tooltip>
         )}
       </React.Fragment>
