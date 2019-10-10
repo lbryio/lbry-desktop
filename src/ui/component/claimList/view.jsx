@@ -91,7 +91,7 @@ export default function ClaimList(props: Props) {
       {header !== false && (
         <div className={classnames('claim-list__header', { 'claim-list__header--small': type === 'small' })}>
           {header}
-          {loading && <Spinner light type="small" />}
+          {loading && <Spinner type="small" />}
           <div className="claim-list__alt-controls">
             {headerAltControls}
             {defaultSort && (
