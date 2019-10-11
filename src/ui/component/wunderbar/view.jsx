@@ -191,7 +191,7 @@ class WunderBar extends React.PureComponent<Props, State> {
                 this.input = el;
               }}
               className="wunderbar__input"
-              placeholder={__('Enter a LBRY URL here or search for videos, music, games and more')}
+              placeholder={__('Enter a LBRY URL or search for videos, music, games and more')}
             />
           )}
           renderItem={({ value, type }, isHighlighted) => (
