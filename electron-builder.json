@@ -31,7 +31,9 @@
     "github"
   ],
   "mac": {
-    "category": "public.app-category.entertainment"
+    "category": "public.app-category.entertainment",
+    "hardenedRuntime": true,
+    "entitlements": "./build/entitlements.mac.inherit.plist"
   },
   "dmg": {
     "iconSize": 128,
