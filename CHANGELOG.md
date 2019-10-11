@@ -4,13 +4,18 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
-## [0.36.1] - [Unrelased]
+## [0.36.x] - [Unrelased]
 
 ### Fixed
 
 - Escape the generated link for tags ([#2984](https://github.com/lbryio/lbry-desktop/pull/2984))
 
 ### Added
+- Keyboard shortcuts for the following actions: ([#2999](https://github.com/lbryio/lbry-desktop/pull/2999))
+  - `→` to Seek Forward
+  - `←` to Seek Backward
+  - `f` to Going Fullscreen
+  - `m` to Mute/Unmute
 
 - Ability to add multiple tags at once with commas ([#2833](https://github.com/lbryio/lbry-desktop/pull/2833))
 
@@ -18,25 +23,43 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 - Refactor ModalAutoUpdateConfirm into ModalAutoUpdateDownloaded ([#2959](https://github.com/lbryio/lbry-desktop/pull/2959))
 
+## [0.36.1] - [2019-10-11]
+
+### Added
+
+- Notarized Mac OSX installer to support the Catalina upgrade ([#3014](https://github.com/lbryio/lbry-desktop/issues/3014))
+
+### Fixed
+
+- LBRY.tv share URL missing a slash, preventing opening on web ([#2995](https://github.com/lbryio/lbry-desktop/issues/2995))
+
 ## [0.36.0] - [2019-10-4]
 
 ### Added
 
-- Sync your balance and preferences between devices ([#2925](https://github.com/lbryio/lbry-desktop/pull/2925))
-- Youtube channel transfer ([#2925](https://github.com/lbryio/lbry-desktop/pull/2925))
+- Channels page above Publishes which lists all your channels ([#2925](https://github.com/lbryio/lbry-desktop/pull/2925))
+- Youtube channel claiming and tranfer ([#2925](https://github.com/lbryio/lbry-desktop/pull/2925)). See our [YouTube FAQ](https://lbry.com/faq/youtube) for more information.
+- New user sign in flow now includes automatic redeeming of 1 LBC and channel creation ([#2925](https://github.com/lbryio/lbry-desktop/pull/2925))
+- Ability to save wallet encryption password ([#2925](https://github.com/lbryio/lbry-desktop/pull/2925))
+- Sync your balance (only for users with new wallets) and preferences (subscriptions and tags) between devices ([#2925](https://github.com/lbryio/lbry-desktop/pull/2925)). See our [FAQ for more information](https://lbry.com/faq/account-sync)
 - Max character count on comments ([#2944](https://github.com/lbryio/lbry-desktop/pull/2944))
 - Subscription and file view counts ([#2920](https://github.com/lbryio/lbry-desktop/pull/2920))
 - Pagination on Library, Publishes, and Transactions page ([#2923](https://github.com/lbryio/lbry-desktop/pull/2923))
-- Granular balance information ([#2916](https://github.com/lbryio/lbry-desktop/pull/2916))
-- Keyboard shortcuts for the following actions: ([#2999](https://github.com/lbryio/lbry-desktop/pull/2999))
-  - `→` to Seek Forward
-  - `←` to Seek Backward
-  - `f` to Going Fullscreen
-  - `m` to Mute/Unmute
+- Volume setting is now saved between videos ([#2934](https://github.com/lbryio/lbry-desktop/pull/2934))
+- Granular balance information on wallet page - includes LBC locked in tips/claims/supports ([#2916](https://github.com/lbryio/lbry-desktop/pull/2916))
+- Acknowledgement of [terms of service](https://lbry.com/termsofservice) and age verification on sign in ([#2925](https://github.com/lbryio/lbry-desktop/pull/2925))
 
 ### Changed
 
-- Upgrade LBRY SDK to [0.42.0](https://github.com/lbryio/lbry-sdk/releases/tag/v0.42.0)
+- Upgrade LBRY SDK to [0.42.1](https://github.com/lbryio/lbry-sdk/releases/tag/v0.42.1) to improve overall connectivity
+- Sign out now clears the email address and refreshes the app ([#2925](https://github.com/lbryio/lbry-desktop/pull/2925))
+- Language strings are now pulled dynamically instead of requiring new app releases for better language support ([#2883](https://github.com/lbryio/lbry-desktop/pull/2883))
+- Minor design improvements to styles and cards
+
+### Fixed
+
+- Not being able to abandon claims not which weren't downloaded ([#2945](https://github.com/lbryio/lbry-desktop/pull/2945))
+- Duration not showing for audio ([#2936](https://github.com/lbryio/lbry-desktop/pull/2936))
 
 ## [0.35.7] - [2019-09-24]
 
