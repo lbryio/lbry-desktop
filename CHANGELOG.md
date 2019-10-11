@@ -18,6 +18,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
   - `m` to Mute/Unmute
 
 - Ability to add multiple tags at once with commas ([#2833](https://github.com/lbryio/lbry-desktop/pull/2833))
+- Disable GIF animation unless user hovers ([#2986](https://github.com/lbryio/lbry-desktop/pull/2986))
 
 ### Changed
 
