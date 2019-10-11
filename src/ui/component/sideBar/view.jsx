@@ -6,16 +6,18 @@ import Button from 'component/button';
 import Tag from 'component/tag';
 import StickyBox from 'react-sticky-box/dist/esnext';
 import 'css-doodle';
+import Spinner from 'component/spinner';
 
 type Props = {
   subscriptions: Array<Subscription>,
   followedTags: Array<Tag>,
   email: ?string,
   obscureSideBar: boolean,
+  uploadCount: number,
 };
 
 function SideBar(props: Props) {
-  const { subscriptions, followedTags, obscureSideBar } = props;
+  const { subscriptions, followedTags, obscureSideBar, uploadCount } = props;
   function buildLink(path, label, icon, guide) {
     return {
       navigate: path ? `$/${path}` : '/',
@@ -52,7 +54,18 @@ function SideBar(props: Props) {
               ...buildLink(PAGES.CHANNELS, __('Channels'), ICONS.CHANNEL),
             },
             {
-              ...buildLink(PAGES.PUBLISHED, __('Publishes'), ICONS.PUBLISH),
+              ...buildLink(
+                PAGES.PUBLISHED,
+                uploadCount ? (
+                  <span>
+                    {__('Publishes')}
+                    <Spinner type="small" />
+                  </span>
+                ) : (
+                  __('Publishes')
+                ),
+                ICONS.PUBLISH
+              ),
             },
           ].map(linkProps => (
             <li key={linkProps.label}>
