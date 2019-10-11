@@ -87,6 +87,8 @@ export default appState => {
   window.loadURL(rendererURL + deepLinkingURI);
   setupBarMenu();
 
+  setLanguage(window);
+
   window.on('close', event => {
     if (!appState.isQuitting && !appState.autoUpdateAccepted) {
       event.preventDefault();
@@ -143,3 +145,16 @@ export default appState => {
 
   return window;
 };
+
+async function setLanguage(window) {
+  const storedLanguage = await window.webContents.executeJavaScript("localStorage.getItem('language')");
+  const lang = storedLanguage || app.getLocale().slice(0, 2) || 'en';
+  if (['pl', 'id', 'de'].includes(lang)) {
+    const response = await fetch('https://lbry.com/i18n/get/lbry-desktop/app-strings/' + lang + '.json');
+    const json = await response.json();
+    const messages = {};
+    messages[lang] = json;
+    // Send message to render layer to update language.
+    window.webContents.send('language-update', messages, lang);
+  }
+}
