@@ -198,3 +198,36 @@ $border-color--dark: var(--dm-color-04);
   flex: 1;
   font-size: var(--font-subtext);
 }
+
+.claim-upload {
+  flex: 1;
+  display: flex;
+  position: relative;
+  overflow: visible;
+  padding: var(--spacing-medium);
+
+  .media__thumb {
+    width: var(--file-list-thumbnail-width);
+    flex-shrink: 0;
+    margin-right: var(--spacing-medium);
+  }
+
+  [data-mode='dark'] & {
+    color: $lbry-white;
+    border-color: $border-color--dark;
+  }
+}
+
+.claim-upload__progress--outer {
+  width: 100%;
+}
+
+.claim-upload__progress--inner {
+  background: $lbry-teal-1;
+  color: $lbry-gray-1;
+
+  [data-mode='dark'] & {
+    background: $lbry-teal-4;
+    color: $lbry-white;
+  }
+}

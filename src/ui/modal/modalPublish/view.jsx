@@ -27,6 +27,12 @@ class ModalPublishSuccess extends React.PureComponent<Props> {
           navigate('/$/published');
           closeModal();
         }}
+        confirmButtonLabel={'Show me!'}
+        abortButtonLabel={'Thanks!'}
+        onAborted={() => {
+          clearPublish();
+          closeModal();
+        }}
       >
         <p>{__(`Your ${publishMessage} published to LBRY at the address`)}</p>
         <blockquote>{uri}</blockquote>

@@ -5,6 +5,7 @@ import ClaimList from 'component/claimList';
 import Page from 'component/page';
 import Paginate from 'component/common/paginate';
 import { PAGE_SIZE } from 'constants/claim';
+import WebUploadList from 'component/webUploadList';
 
 type Props = {
   checkPendingPublishes: () => void,
@@ -25,6 +26,7 @@ function FileListPublished(props: Props) {
 
   return (
     <Page notContained>
+      <WebUploadList />
       {urls && urls.length ? (
         <div className="card">
           <ClaimList

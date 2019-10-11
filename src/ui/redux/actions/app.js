@@ -7,6 +7,8 @@ import path from 'path';
 import * as ACTIONS from 'constants/action_types';
 import * as MODALS from 'constants/modal_types';
 import * as PAGES from 'constants/pages';
+import { X_LBRY_AUTH_TOKEN } from 'constants/token';
+import * as SETTINGS from 'constants/settings';
 import {
   Lbry,
   doBalanceSubscribe,
@@ -437,8 +439,9 @@ export function doAnalyticsView(uri, timeToStart) {
 export function doSignIn() {
   return (dispatch, getState) => {
     // @if TARGET='web'
-    const authToken = getAuthToken();
-    Lbry.setApiHeader(HEADERS.AUTH_TOKEN, authToken);
+    const { auth_token: authToken } = cookie.parse(document.cookie);
+    Lbry.setApiHeader(X_LBRY_AUTH_TOKEN, authToken);
+
     dispatch(doBalanceSubscribe());
     dispatch(doFetchChannelListMine());
     // @endif

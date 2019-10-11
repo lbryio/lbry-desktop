@@ -8,6 +8,7 @@ import {
   doFetchAccessToken,
   selectAccessToken,
   selectGetSyncErrorMessage,
+  selectUploadCount,
 } from 'lbryinc';
 import { doFetchTransactions, doFetchChannelListMine, selectBalance } from 'lbry-redux';
 import { makeSelectClientSetting, selectThemePath } from 'redux/selectors/settings';
@@ -26,6 +27,7 @@ const select = state => ({
   syncEnabled: makeSelectClientSetting(SETTINGS.ENABLE_SYNC)(state),
   syncError: selectGetSyncErrorMessage(state),
   accessToken: selectAccessToken(state),
+  uploadCount: selectUploadCount(state),
 });
 
 const perform = dispatch => ({

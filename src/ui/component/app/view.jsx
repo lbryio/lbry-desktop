@@ -47,6 +47,7 @@ type Props = {
   checkSync: () => void,
   setSyncEnabled: boolean => void,
   syncEnabled: boolean,
+  uploadCount: number,
   balance: ?number,
   accessToken: ?string,
   syncError: ?string,
@@ -68,6 +69,7 @@ function App(props: Props) {
     setSyncEnabled,
     syncEnabled,
     checkSync,
+    uploadCount,
     balance,
     accessToken,
     history,
@@ -127,6 +129,16 @@ function App(props: Props) {
       setHasDeterminedIfNewUser(true);
     });
   }, [balance, accessToken, hasDeterminedIfNewUser, setHasDeterminedIfNewUser]);
+
+  useEffect(() => {
+    if (!uploadCount) return;
+    const handleBeforeUnload = event => {
+      event.preventDefault();
+      event.returnValue = 'magic';
+    };
+    window.addEventListener('beforeunload', handleBeforeUnload);
+    return () => window.removeEventListener('beforeunload', handleBeforeUnload);
+  }, [uploadCount]);
 
   useEffect(() => {
     ReactModal.setAppElement(appRef.current);

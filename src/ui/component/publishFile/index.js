@@ -8,6 +8,7 @@ const select = state => ({
   filePath: makeSelectPublishFormValue('filePath')(state),
   isStillEditing: selectIsStillEditing(state),
   balance: selectBalance(state),
+  publishing: makeSelectPublishFormValue('publishing')(state),
 });
 
 const perform = dispatch => ({

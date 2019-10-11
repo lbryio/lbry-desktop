@@ -13,6 +13,8 @@ type Props = {
   fileLabel?: string,
   directoryLabel?: string,
   accept?: string,
+  error?: string,
+  disabled?: boolean,
 };
 
 class FileSelector extends React.PureComponent<Props> {
@@ -48,7 +50,7 @@ class FileSelector extends React.PureComponent<Props> {
   input: ?HTMLInputElement;
 
   render() {
-    const { type, currentPath, label, fileLabel, directoryLabel, placeholder, accept } = this.props;
+    const { type, currentPath, label, fileLabel, directoryLabel, placeholder, accept, error, disabled } = this.props;
 
     const buttonLabel = type === 'file' ? fileLabel || __('Choose File') : directoryLabel || __('Choose Directory');
     const placeHolder = currentPath || placeholder;
@@ -58,10 +60,14 @@ class FileSelector extends React.PureComponent<Props> {
           label={label}
           webkitdirectory="true"
           className="form-field--copyable"
+          error={error}
+          disabled={disabled}
           type="text"
           readOnly="readonly"
           value={placeHolder || __('Choose a file')}
-          inputButton={<Button button="primary" onClick={this.fileInputButton} label={buttonLabel} />}
+          inputButton={
+            <Button button="primary" disabled={disabled} onClick={this.fileInputButton} label={buttonLabel} />
+          }
         />
         <input
           type={'file'}
