@@ -137,7 +137,7 @@ function VideoViewer(props: Props) {
         videoNode.paused ? videoNode.play() : videoNode.pause();
       }
 
-      // Fullscreen toggle shotcuts
+      // Fullscreen toggle shortcuts
       if (e.keyCode === FULLSCREEN_KEYCODE || e.keyCode === F11_KEYCODE) {
         if(!player.isFullscreen()) {
           player.requestFullscreen();
