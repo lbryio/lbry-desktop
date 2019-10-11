@@ -8,28 +8,9 @@
   <body>
     <div id="app"></div>
     <script>
-      window.i18n_messages = {};
-
-      function loadUi () {
-        const script = document.createElement('script');
-        script.setAttribute('src', 'ui.js');
-        document.body.appendChild(script);
-      }
-
-      let lang;
-      try {
-        lang = window.localStorage.getItem('language') || 'en';
-      } catch {
-        lang = 'en';
-      }
-      if (lang && lang != 'en') {
-        fetch('https://lbry.com/i18n/get/lbry-desktop/app-strings/' + lang + '.json')
-                .then(r => r.json())
-                .then(j => { window.i18n_messages[lang] = j; loadUi(); })
-                .catch(loadUi);
-      } else {
-        loadUi();
-      }
+      const script = document.createElement('script');
+      script.setAttribute('src', 'ui.js');
+      document.body.appendChild(script);
     </script>
   </body>
 </html>
