@@ -45,6 +45,7 @@
   "dependencies": {
     "electron-dl": "^1.11.0",
     "electron-log": "^2.2.12",
+    "electron-notarize": "^0.1.1",
     "electron-updater": "^4.1.2",
     "express": "^4.16.4",
     "if-env": "^1.0.4",

@@ -71,15 +71,7 @@
     }
   },
   "deb": {
-    "depends": [
-      "gconf2",
-      "gconf-service",
-      "libnotify4",
-      "libappindicator1",
-      "libxtst6",
-      "libnss3",
-      "libsecret-1-0"
-    ]
+    "depends": ["gconf2", "gconf-service", "libnotify4", "libappindicator1", "libxtst6", "libnss3", "libsecret-1-0"]
   },
   "nsis": {
     "perMachine": true,
@@ -94,5 +86,6 @@
       }
     ]
   },
-  "artifactName": "${productName}_${version}.${ext}"
+  "artifactName": "${productName}_${version}.${ext}",
+  "afterSign": "./build/afterSignHook.js"
 }
