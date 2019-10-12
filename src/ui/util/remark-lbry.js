@@ -14,7 +14,7 @@ const invalidRegex = /[-_.+=?!@#$%^&*:;,{}<>\w/\\]/;
 function locateMention(value, fromIndex) {
   var index = value.indexOf(mentionToken, fromIndex);
 
-  // skip intervalid mention
+  // Skip invalid mention
   if (index > 0 && invalidRegex.test(value.charAt(index - 1))) {
     return locateMention(value, index + 1);
   }
