@@ -1,37 +1,33 @@
 import { parseURI } from 'lbry-redux';
 import visit from 'unist-util-visit';
-import wordCharacter from 'is-word-character';
 
 const protocol = 'lbry://';
-const uriRegex = /^(lbry:\/\/)[^\s]*/g;
+const uriRegex = /(lbry:\/\/)[^\s()"]*/g;
 
 const mentionToken = '@';
 const mentionTokenCode = 64; // @
-const mentionRegex = /^@[^\s()]*/gm;
+const mentionRegex = /@[^\s()"]*/gm;
 
-function invalidChar(char) {
-  const dot = 46; //  '.'
-  const dash = 45; //  '-'
-  const slash = 47; //  '/'
+const invalidRegex = /[-_.+=?!@#$%^&*:;,{}<>\w/\\]/;
 
-  return char === dot || char === dash || char === slash || char === mentionTokenCode || wordCharacter(char);
-}
-
-// Find a possible mention.
+// Find channel mention
 function locateMention(value, fromIndex) {
   var index = value.indexOf(mentionToken, fromIndex);
 
-  if (index !== -1 && invalidChar(value.charCodeAt(index - 1))) {
+  // skip intervalid mention
+  if (index > 0 && invalidRegex.test(value.charAt(index - 1))) {
     return locateMention(value, index + 1);
   }
 
   return index;
 }
 
+// Find claim url
 function locateURI(value, fromIndex) {
   var index = value.indexOf(protocol, fromIndex);
 
-  if (index !== -1 && invalidChar(value.charCodeAt(index - 1))) {
+  // Skip invalid uri
+  if (index > 0 && invalidRegex.test(value.charAt(index - 1))) {
     return locateMention(value, index + 1);
   }
 
@@ -77,10 +73,6 @@ function tokenizeMention(eat, value, silent) {
     return true;
   }
 
-  if (value.charCodeAt(0) !== mentionTokenCode) {
-    return;
-  }
-
   const match = value.match(mentionRegex);
 
   return validateURI(match, eat, self);
@@ -90,10 +82,6 @@ function tokenizeMention(eat, value, silent) {
 function tokenizeURI(eat, value, silent) {
   if (silent) {
     return true;
-  }
-
-  if (!value.startsWith(protocol)) {
-    return;
   }
 
   const match = value.match(uriRegex);
