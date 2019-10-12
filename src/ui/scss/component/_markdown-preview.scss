@@ -63,19 +63,33 @@
     top: 1rem;
   }
 
-  // Code
+  // Code blocks
   pre {
     white-space: normal;
+    background: transparent;
+
+    code {
+      margin-bottom: var(--spacing-medium);
+      padding: var(--spacing-medium);
+      display: block;
+      white-space: pre-wrap;
+    }
   }
 
+  // Inline code
   code {
-    margin-bottom: var(--spacing-medium);
-    padding: var(--spacing-medium);
-
     background-color: $lbry-gray-1;
     color: $lbry-gray-5;
-    display: block;
-    font-family: Consolas, 'Lucida Console', 'Source Sans', monospace;
+    display: inline-block;
+    margin: var(--spacing-miniscule);
+    border-radius: 0.2rem;
+    font-size: var(--font-label);
+    padding: calc(var(--spacing-miniscule) - 4px) var(--spacing-miniscule);
+
+    [data-mode='dark'] & {
+      color: darken($lbry-white, 10%);
+      background-color: rgba($lbry-gray-4, 0.25);
+    }
   }
 
   a,
