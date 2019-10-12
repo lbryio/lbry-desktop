@@ -16,12 +16,20 @@ type Analytics = {
   toggle: (boolean, ?boolean) => void,
   apiLogView: (string, string, string, ?number, ?() => void) => Promise<any>,
   apiLogPublish: () => void,
+  apiPublishNew: (ChannelClaim | StreamClaim) => void,
   tagFollowEvent: (string, boolean, string) => void,
   emailProvidedEvent: () => void,
   emailVerifiedEvent: () => void,
   rewardEligibleEvent: () => void,
   startupEvent: () => void,
   readyEvent: number => void,
+};
+
+type PublishNewParams = {
+  uri?: string,
+  claim_id?: string,
+  outpoint?: string,
+  channel_claim_id?: string,
 };
 
 let analyticsEnabled: boolean = true;
@@ -85,6 +93,23 @@ const analytics: Analytics = {
       Lbryio.call('event', 'publish');
     }
   },
+
+  apiPublishNew: (claimResult: ChannelClaim | StreamClaim) => {
+    if (analyticsEnabled && isProduction) {
+      const { permanent_url: uri, claim_id: claimId, txid, nout, signing_channel: signingChannel } = claimResult;
+      let channelClaimId;
+      if (signingChannel) {
+        channelClaimId = signingChannel.claim_id;
+      }
+      const outpoint = `${txid}:${nout}`;
+      const params: PublishNewParams = { uri, claim_id: claimId, outpoint };
+      if (channelClaimId) {
+        params['channel_claim_id'] = channelClaimId;
+      }
+      Lbryio.call('publish', 'new', params);
+    }
+  },
+
   apiSearchFeedback: (query, vote) => {
     if (isProduction) {
       // We don't need to worry about analytics enabled here because users manually click on the button to provide feedback

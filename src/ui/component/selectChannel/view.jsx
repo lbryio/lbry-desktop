@@ -4,6 +4,8 @@ import { isNameValid } from 'lbry-redux';
 import { FormField } from 'component/common/form';
 import BusyIndicator from 'component/common/busy-indicator';
 import Button from 'component/button';
+import analytics from 'analytics';
+
 import { CHANNEL_NEW, CHANNEL_ANONYMOUS, INVALID_NAME_ERROR } from 'constants/claim';
 
 type Props = {
@@ -118,12 +120,12 @@ class ChannelSection extends React.PureComponent<Props, State> {
       createChannelError: undefined,
     });
 
-    const success = () => {
+    const success = channelClaim => {
       this.setState({
         creatingChannel: false,
         addingChannel: false,
       });
-
+      analytics.apiPublishNew(channelClaim);
       onChannelChange(channelName);
     };
 
