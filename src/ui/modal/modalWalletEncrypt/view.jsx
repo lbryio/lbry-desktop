@@ -24,6 +24,8 @@ type State = {
   rememberPassword: boolean,
 };
 
+const acknowledgementText = __('I Understand');
+
 class ModalWalletEncrypt extends React.PureComponent<Props, State> {
   state = {
     newPassword: null,
@@ -63,8 +65,9 @@ class ModalWalletEncrypt extends React.PureComponent<Props, State> {
   }
 
   onChangeUnderstandConfirm(event: SyntheticInputEvent<>) {
+    const regex = new RegExp('^.?' + acknowledgementText + '.?$', 'i');
     this.setState({
-      understandConfirmed: /^.?i understand.?$/i.test(event.target.value),
+      understandConfirmed: regex.test(event.target.value),
     });
   }
 
@@ -151,9 +154,13 @@ class ModalWalletEncrypt extends React.PureComponent<Props, State> {
           </div>
           <FormField
             inputButton={<Submit label={failMessage ? __('Encrypting Wallet') : __('Encrypt Wallet')} />}
-            error={understandError === true ? 'You must enter "I understand"' : false}
-            label={__('Enter "I understand"')}
-            placeholder={__('Dear computer, I understand')}
+            error={
+              understandError === true
+                ? __('You must enter "%acknowledgement_text%"', { acknowledgement_text: acknowledgementText })
+                : false
+            }
+            label={__('Enter "%acknowledgement_text%"', { acknowledgement_text: acknowledgementText })}
+            placeholder={__('Type "%acknowledgement_text%"', { acknowledgement_text: acknowledgementText })}
             type="text"
             name="wallet-understand"
             onChange={event => this.onChangeUnderstandConfirm(event)}
