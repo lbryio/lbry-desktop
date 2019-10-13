@@ -62,7 +62,7 @@ export default function YoutubeTransferStatus(props: Props) {
   }
 
   React.useEffect(() => {
-    // If a channel is transferrable, theres nothing to check
+    // If a channel is transferable, there's nothing to check
     if (hasPendingTransfers) {
       checkYoutubeTransfer();
 

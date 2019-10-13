@@ -13,7 +13,7 @@ type Props = {
   followedTags: Array<Tag>,
   doToggleTagFollow?: string => void,
   suggestMature: boolean,
-  // Ovverides
+  // Overrides
   // The default component is for following tags
   title?: string | boolean,
   help?: string,

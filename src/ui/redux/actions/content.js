@@ -181,7 +181,7 @@ export function doPurchaseUriWrapper(uri: string, cost: number, saveFile: boolea
       dispatch(doUpdateLoadStatus(uri, fileInfo.outpoint));
     }
 
-    // Only pass the sucess callback if we are saving the file, otherwise we don't show the download percentage
+    // Only pass the success callback if we are saving the file, otherwise we don't show the download percentage
     const successCallBack = saveFile ? onSuccess : undefined;
     dispatch(doPurchaseUri(uri, { costInfo: cost }, saveFile, successCallBack));
   };

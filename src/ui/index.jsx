@@ -59,8 +59,8 @@ Lbry.setDaemonConnectionString(SDK_API_URL);
 // @endif
 
 // We need to override Lbryio for getting/setting the authToken
-// We interect with ipcRenderer to get the auth key from a users keyring
-// We keep a local variable for authToken beacuse `ipcRenderer.send` does not
+// We interact with ipcRenderer to get the auth key from a users keyring
+// We keep a local variable for authToken because `ipcRenderer.send` does not
 // contain a response, so there is no way to know when it's been set
 let authToken;
 Lbryio.setOverride(
