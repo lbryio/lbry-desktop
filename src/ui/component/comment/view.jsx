@@ -3,6 +3,7 @@ import React from 'react';
 import relativeDate from 'tiny-relative-date';
 import Button from 'component/button';
 import Expandable from 'component/expandable';
+import MarkdownPreview from 'component/common/markdown-preview';
 
 type Props = {
   author: string,
@@ -28,7 +29,9 @@ function Comment(props: Props) {
       </div>
       <div>
         <Expandable>
-          <p className={'comment__message'}>{message}</p>
+          <div className={'comment__message'}>
+            <MarkdownPreview content={message} promptLinks />
+          </div>
         </Expandable>
       </div>
     </li>
