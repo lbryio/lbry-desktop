@@ -1,0 +1,7 @@
+[data-reach-tooltip] {
+  [data-mode='dark'] & {
+    color: var(--dm-color-01);
+    background-color: $lbry-black;
+    border-color: $border-color--dark;
+  }
+}
