@@ -285,7 +285,7 @@ export const doCheckSubscription = (subscriptionUri: string, shouldNotify?: bool
     );
 
     // calling FETCH_CHANNEL_CLAIMS_COMPLETED after not calling STARTED
-    // means it will delete a non-existant fetchingChannelClaims[uri]
+    // means it will delete a non-existent fetchingChannelClaims[uri]
   });
 };
 
@@ -297,7 +297,7 @@ export const doChannelSubscribe = (subscription: Subscription) => (dispatch: Dis
 
   const subscriptionUri = subscription.uri;
   if (!subscriptionUri.startsWith('lbry://')) {
-    throw Error(`Subscription uris must inclue the "lbry://" prefix.\nTried to subscribe to ${subscriptionUri}`);
+    throw Error(`Subscription uris must include the "lbry://" prefix.\nTried to subscribe to ${subscriptionUri}`);
   }
 
   dispatch({
@@ -351,7 +351,7 @@ export const doCheckSubscriptions = () => (dispatch: Dispatch, getState: GetStat
 export const doCheckSubscriptionsInit = () => (dispatch: Dispatch) => {
   // doCheckSubscriptionsInit is called by doDaemonReady
   // setTimeout below is a hack to ensure redux is hydrated when subscriptions are checked
-  // this will be replaced with <PersistGate> which reqiures a package upgrade
+  // this will be replaced with <PersistGate> which requires a package upgrade
   setTimeout(() => dispatch(doFetchMySubscriptions()), 5000);
   const checkSubscriptionsTimer = setInterval(() => dispatch(doCheckSubscriptions()), CHECK_SUBSCRIPTIONS_INTERVAL);
   dispatch({
