@@ -98,8 +98,10 @@ export default function FileViewer(props: Props) {
     if (inline) {
       handleResize();
       window.addEventListener('resize', handleResize);
+      window.addEventListener('fullscreenchange', handleResize);
       return () => {
         window.removeEventListener('resize', handleResize);
+        window.removeEventListener('fullscreenchange', handleResize);
       };
     }
   }, [setFileViewerRect, inline]);
