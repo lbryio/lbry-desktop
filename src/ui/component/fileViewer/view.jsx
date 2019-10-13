@@ -11,6 +11,7 @@ import usePrevious from 'effects/use-previous';
 import { FILE_WRAPPER_CLASS } from 'page/file/view';
 import Draggable from 'react-draggable';
 import Tooltip from 'component/common/tooltip';
+import { onFullscreenChange } from 'util/full-screen';
 
 type Props = {
   mediaType: string,
@@ -98,10 +99,10 @@ export default function FileViewer(props: Props) {
     if (inline) {
       handleResize();
       window.addEventListener('resize', handleResize);
-      window.addEventListener('fullscreenchange', handleResize);
+      onFullscreenChange(window, 'add', handleResize);
       return () => {
         window.removeEventListener('resize', handleResize);
-        window.removeEventListener('fullscreenchange', handleResize);
+        onFullscreenChange(window, 'remove', handleResize);
       };
     }
   }, [setFileViewerRect, inline]);
