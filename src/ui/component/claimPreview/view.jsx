@@ -141,7 +141,7 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
     if (onClick) {
       onClick(e);
     } else if ((isChannel || title) && !pending) {
-      history.push(formatLbryUriForWeb(uri));
+      history.push(formatLbryUriForWeb(claim && claim.canonical_url ? claim.canonical_url : uri));
     }
   }
 

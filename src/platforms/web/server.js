@@ -74,6 +74,10 @@ app.get('*', async (req, res) => {
     return res.redirect(301, req.url.replace(/([^/:]+)\/([^:/]+)/, '$1:$2')); // test against urlPath, but use req.url to retain parameters
   }
 
+  if (urlPath.endsWith('/') && urlPath.length > 1) {
+    return res.redirect(301, req.url.replace(/\/$/, ''));
+  }
+
   if (urlPath.length > 0 && urlPath[0] !== '$') {
     const { isChannel, streamName, channelName, channelClaimId, streamClaimId } = parseURI(urlPath.replace(/:/g, '#'));
     const claimName = isChannel ? '@' + channelName : streamName;

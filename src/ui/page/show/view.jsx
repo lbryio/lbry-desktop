@@ -29,6 +29,16 @@ class ShowPage extends React.PureComponent<Props> {
 
   componentDidUpdate() {
     const { isResolvingUri, resolveUri, claim, uri } = this.props;
+
+    // @if TARGET='web'
+    if (claim && claim.canonical_url) {
+      const canonicalUrlPath = '/' + claim.canonical_url.replace(/^lbry:\/\//, '').replace(/#/g, ':');
+      if (canonicalUrlPath !== window.location.pathname) {
+        history.replaceState(history.state, '', canonicalUrlPath);
+      }
+    }
+    // @endif
+
     if (!isResolvingUri && uri && claim === undefined) {
       resolveUri(uri);
     }
