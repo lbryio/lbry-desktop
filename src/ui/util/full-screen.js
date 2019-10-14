@@ -42,8 +42,8 @@ export const exitFullscreen = () => {
   document[prefix] && document[prefix]();
 };
 
-export const onFullscreenChange = (event, callback) => {
+export const onFullscreenChange = (target, action, callback) => {
   const index = getPrefix();
   const prefix = prefixes.fullscreenChange[index];
-  document[`${event}EventListener`](prefix, callback, false);
+  target[`${action}EventListener`](prefix, callback, false);
 };
