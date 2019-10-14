@@ -45,6 +45,7 @@ type Props = {
     [string]: Array<string>,
   },
   hiddenUris: Array<string>,
+  hiddenNsfwMessage?: Node,
 };
 
 function ClaimListDiscover(props: Props) {
@@ -61,6 +62,7 @@ function ClaimListDiscover(props: Props) {
     location,
     hiddenUris,
     hideCustomization,
+    hiddenNsfwMessage,
   } = props;
   const didNavigateForward = history.action === 'PUSH';
   const [page, setPage] = useState(1);
@@ -109,6 +111,7 @@ function ClaimListDiscover(props: Props) {
     (personalSort === SEARCH_SORT_CHANNELS && subscribedChannels.length) ||
     (personalSort === SEARCH_SORT_YOU && !!tags.length) ||
     personalSort === SEARCH_SORT_ALL;
+  const hasMatureTags = tags.some(t => MATURE_TAGS.includes(t));
   const claimSearchCacheQuery = createNormalizedClaimSearchKey(options);
   const uris = (hasContent && claimSearchByQuery[claimSearchCacheQuery]) || [];
   const shouldPerformSearch =
@@ -237,6 +240,7 @@ function ClaimListDiscover(props: Props) {
           ))}
         </FormField>
       )}
+      {hasMatureTags && hiddenNsfwMessage}
     </Fragment>
   );
 
