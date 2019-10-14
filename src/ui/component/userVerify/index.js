@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { doOpenModal } from 'redux/actions/app';
 import {
   doUserIdentityVerify,
+  doUserFetch,
   rewards,
   makeSelectRewardByType,
   selectIdentityVerifyIsPending,
@@ -23,6 +24,7 @@ const select = state => {
 const perform = dispatch => ({
   verifyUserIdentity: token => dispatch(doUserIdentityVerify(token)),
   verifyPhone: () => dispatch(doOpenModal(MODALS.PHONE_COLLECTION)),
+  fetchUser: () => dispatch(doUserFetch()),
 });
 
 export default connect(
