@@ -9,14 +9,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Fixed
 
 - Escape the generated link for tags ([#2984](https://github.com/lbryio/lbry-desktop/pull/2984))
-<<<<<<< HEAD
 - Toggle fullscreen when pressing `f` ([#2159](https://github.com/lbryio/lbry-desktop/issues/2159))
 - Can't exit full-screen from embedded content with key `F11` ([#2514](https://github.com/lbryio/lbry-desktop/issues/2514))
-=======
-- Markdown rendering issues with lbry urls and channel mentions ([#2928](https://github.com/lbryio/lbry-desktop/issues/#2928))
-- Incorrect styles of tooltip on dark theme ([#3031](https://github.com/lbryio/lbry-desktop/issues/#3031))
-- Code tag not formatting content on markdown preview ([#3027](https://github.com/lbryio/lbry-desktop/issues/#3027))
->>>>>>> add missing changes on changelog.md
+- Markdown rendering issues with lbry urls and channel mentions ([#2928](https://github.com/lbryio/lbry-desktop/issues/2928))
+- Incorrect styles of tooltip on dark theme ([#3031](https://github.com/lbryio/lbry-desktop/issues/3031))
+- Code tag not formatting content on markdown preview ([#3027](https://github.com/lbryio/lbry-desktop/issues/3027))
+- Add missing tooltip on channel links ([#3049](https://github.com/lbryio/lbry-desktop/issues/3049))
 
 ### Added
 
