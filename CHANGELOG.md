@@ -14,7 +14,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Markdown rendering issues with lbry urls and channel mentions ([#2928](https://github.com/lbryio/lbry-desktop/issues/2928))
 - Incorrect styles of tooltip on dark theme ([#3031](https://github.com/lbryio/lbry-desktop/issues/3031))
 - Code tag not formatting content on markdown preview ([#3027](https://github.com/lbryio/lbry-desktop/issues/3027))
-- Add missing tooltip on channel links ([#3049](https://github.com/lbryio/lbry-desktop/issues/3049))
+- Missing tooltip on channel mention ([#3036](https://github.com/lbryio/lbry-desktop/issues/3036))
 
 ### Added
 
