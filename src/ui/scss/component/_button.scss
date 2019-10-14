@@ -89,18 +89,21 @@
   &:hover {
     color: $lbry-teal-5;
   }
-  
-  .markdown-preview  & {
+
+  .markdown-preview & {
     height: initial;
     vertical-align: initial;
-    color: darken($lbry-teal-5, 0.4);
-  }
+    color: $lbry-teal-5;
 
-  [data-mode='dark'] .markdown-preview & {
-    color:  $lbry-teal-4;
-   
     &:hover {
       color: $lbry-teal-3;
+    }
+
+    [data-mode='dark'] & {
+      color: $lbry-teal-4;
+      &:hover {
+        color: $lbry-teal-3;
+      }
     }
   }
 }
