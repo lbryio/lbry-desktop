@@ -54,6 +54,7 @@ export class FormFieldPrice extends React.PureComponent<Props> {
           className="form-field--price-amount"
           min={min}
           value={price.amount}
+          onWheel={e => e.preventDefault()}
           onChange={this.handleAmountChange}
           placeholder={placeholder || 5}
           disabled={disabled}
