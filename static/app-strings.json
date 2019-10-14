@@ -799,5 +799,9 @@
   "Type \"%acknowledgement_text%\"": "Type \"%acknowledgement_text%\"",
   "You must enter \"%acknowledgement_text%\"": "You must enter \"%acknowledgement_text%\"",
   "Decrypt Wallet": "Decrypt Wallet",
-  "Your wallet has been encrypted with a local password, performing this action will remove this password.": "Your wallet has been encrypted with a local password, performing this action will remove this password."
+  "Your wallet has been encrypted with a local password, performing this action will remove this password.": "Your wallet has been encrypted with a local password, performing this action will remove this password.",
+  "Enter a LBRY URL or search for videos, music, games and more": "Enter a LBRY URL or search for videos, music, games and more",
+  "This app will automatically download new free content from channels you are subscribed to. You may configure this in Settings or on the Subscriptions page.": "This app will automatically download new free content from channels you are subscribed to. You may configure this in Settings or on the Subscriptions page.",
+  "(Only available on the desktop app.)": "(Only available on the desktop app.)",
+  "If we have your email address, we will send you notifications related to new content. You may configure these emails from the Help page.": "If we have your email address, we will send you notifications related to new content. You may configure these emails from the Help page."
 }

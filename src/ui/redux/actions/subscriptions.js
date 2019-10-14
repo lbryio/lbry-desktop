@@ -21,7 +21,8 @@ export const doSetViewMode = (viewMode: ViewMode) => (dispatch: Dispatch) =>
 export const doFetchMySubscriptions = () => (dispatch: Dispatch, getState: GetState) => {
   const state: { subscriptions: SubscriptionState, settings: any } = getState();
   const { subscriptions: reduxSubscriptions } = state.subscriptions;
-  const { share_usage_data: isSharingData } = state.settings.daemonSettings;
+  const { share_usage_data: shareSetting } = state.settings.daemonSettings;
+  const isSharingData = shareSetting || IS_WEB;
 
   if (!isSharingData && isSharingData !== undefined) {
     // They aren't sharing their data, subscriptions will be handled by persisted redux state
@@ -293,7 +294,8 @@ export const doChannelSubscribe = (subscription: Subscription) => (dispatch: Dis
   const {
     settings: { daemonSettings },
   } = getState();
-  const { share_usage_data: isSharingData } = daemonSettings;
+  const { share_usage_data: shareSetting } = daemonSettings;
+  const isSharingData = shareSetting || IS_WEB;
 
   const subscriptionUri = subscription.uri;
   if (!subscriptionUri.startsWith('lbry://')) {
@@ -306,7 +308,7 @@ export const doChannelSubscribe = (subscription: Subscription) => (dispatch: Dis
   });
 
   // if the user isn't sharing data, keep the subscriptions entirely in the app
-  if (isSharingData) {
+  if (isSharingData || IS_WEB) {
     const { channelClaimId } = parseURI(subscription.uri);
     // They are sharing data, we can store their subscriptions in our internal database
     Lbryio.call('subscription', 'new', {
@@ -324,7 +326,8 @@ export const doChannelUnsubscribe = (subscription: Subscription) => (dispatch: D
   const {
     settings: { daemonSettings },
   } = getState();
-  const { share_usage_data: isSharingData } = daemonSettings;
+  const { share_usage_data: shareSetting } = daemonSettings;
+  const isSharingData = shareSetting || IS_WEB;
 
   dispatch({
     type: ACTIONS.CHANNEL_UNSUBSCRIBE,
