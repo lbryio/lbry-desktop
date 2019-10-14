@@ -26,9 +26,9 @@ type Analytics = {
 };
 
 type PublishNewParams = {
-  uri?: string,
-  claim_id?: string,
-  outpoint?: string,
+  uri: string,
+  claim_id: string,
+  outpoint: string,
   channel_claim_id?: string,
 };
 
