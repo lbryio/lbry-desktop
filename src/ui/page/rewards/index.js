@@ -1,5 +1,12 @@
 import { connect } from 'react-redux';
-import { selectFetchingRewards, selectUnclaimedRewards, selectClaimedRewards, selectUser, doRewardList } from 'lbryinc';
+import {
+  selectFetchingRewards,
+  selectUnclaimedRewards,
+  selectClaimedRewards,
+  selectUser,
+  doRewardList,
+  doUserFetch,
+} from 'lbryinc';
 import { selectDaemonSettings } from 'redux/selectors/settings';
 import RewardsPage from './view';
 
@@ -13,6 +20,7 @@ const select = state => ({
 
 const perform = dispatch => ({
   fetchRewards: () => dispatch(doRewardList()),
+  fetchUser: () => dispatch(doUserFetch()),
 });
 
 export default connect(

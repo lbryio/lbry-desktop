@@ -12,6 +12,7 @@ import { rewards as REWARD_TYPES } from 'lbryinc';
 type Props = {
   doAuth: () => void,
   fetchRewards: () => void,
+  fetchUser: () => void,
   fetching: boolean,
   rewards: Array<Reward>,
   claimed: Array<Reward>,
@@ -31,7 +32,7 @@ class RewardsPage extends PureComponent<Props> {
     this.props.fetchRewards();
   }
   renderPageHeader() {
-    const { user, daemonSettings } = this.props;
+    const { user, daemonSettings, fetchUser } = this.props;
 
     if (user && !user.is_reward_approved && daemonSettings && daemonSettings.share_usage_data) {
       if (!user.primary_email || !user.has_verified_email || !user.is_identity_verified) {
@@ -69,6 +70,7 @@ class RewardsPage extends PureComponent<Props> {
           </p>
           <div className="card__actions">
             <Button navigate="/" button="primary" label="Return Home" />
+            <Button onClick={() => fetchUser()} button="link" label="Refresh" />
           </div>
         </section>
       );
