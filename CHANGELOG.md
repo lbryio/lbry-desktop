@@ -68,6 +68,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Volume setting is now saved between videos ([#2934](https://github.com/lbryio/lbry-desktop/pull/2934))
 - Granular balance information on wallet page - includes LBC locked in tips/claims/supports ([#2916](https://github.com/lbryio/lbry-desktop/pull/2916))
 - Acknowledgement of [terms of service](https://lbry.com/termsofservice) and age verification on sign in ([#2925](https://github.com/lbryio/lbry-desktop/pull/2925))
+- Hidden NSFW content message on tag search results page ([#3038](https://github.com/lbryio/lbry-desktop/pull/3038))
 
 ### Changed
 
