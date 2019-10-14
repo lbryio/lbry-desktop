@@ -15,6 +15,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Incorrect styles of tooltip on dark theme ([#3031](https://github.com/lbryio/lbry-desktop/issues/3031))
 - Code tag not formatting content on markdown preview ([#3027](https://github.com/lbryio/lbry-desktop/issues/3027))
 - Missing tooltip on channel mention ([#3036](https://github.com/lbryio/lbry-desktop/issues/3036))
+- Fix gap between video player and background [(#3025)](https://github.com/lbryio/lbry-desktop/issues/3025)
 
 ### Added
 
