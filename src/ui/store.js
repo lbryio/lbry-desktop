@@ -1,3 +1,5 @@
+import * as ACTIONS from 'constants/action_types';
+import * as SETTINGS from 'constants/settings';
 import { persistStore, persistReducer } from 'redux-persist';
 import autoMergeLevel2 from 'redux-persist/lib/stateReconciler/autoMergeLevel2';
 import createCompressor from 'redux-persist-transform-compress';
@@ -8,8 +10,10 @@ import thunk from 'redux-thunk';
 import { createHashHistory, createBrowserHistory } from 'history';
 import { routerMiddleware } from 'connected-react-router';
 import createRootReducer from './reducers';
-import { Lbryio } from 'lbryinc';
-import isEqual from 'util/deep-equal';
+import { buildSharedStateMiddleware, ACTIONS as LBRY_REDUX_ACTIONS } from 'lbry-redux';
+import { doGetSync, selectUserVerifiedEmail } from 'lbryinc';
+import { getSavedPassword } from 'util/saved-passwords';
+import { makeSelectClientSetting } from 'redux/selectors/settings';
 
 function isFunction(object) {
   return typeof object === 'function';
@@ -50,6 +54,7 @@ const appFilter = createFilter('app', ['hasClickedComment', 'searchOptionsExpand
 const walletFilter = createFilter('wallet', ['receiveAddress']);
 const searchFilter = createFilter('search', ['options']);
 const tagsFilter = createFilter('tags', ['followedTags']);
+const subscriptionsFilter = createFilter('subscriptions', ['subscriptions']);
 const blockedFilter = createFilter('blocked', ['blockedChannels']);
 const whiteListedReducers = [
   // @if TARGET='app'
@@ -64,6 +69,7 @@ const whiteListedReducers = [
   'blocked',
   'settings',
   'sync',
+  'subscriptions',
 ];
 
 const transforms = [
@@ -77,6 +83,7 @@ const transforms = [
   searchFilter,
   tagsFilter,
   contentFilter,
+  subscriptionsFilter,
   createCompressor(),
 ];
 
@@ -98,39 +105,52 @@ history = createHashHistory();
 history = createBrowserHistory();
 // @endif
 
+const sharedStateActions = [
+  ACTIONS.CHANNEL_SUBSCRIBE,
+  ACTIONS.CHANNEL_UNSUBSCRIBE,
+  LBRY_REDUX_ACTIONS.TOGGLE_TAG_FOLLOW,
+  LBRY_REDUX_ACTIONS.TOGGLE_BLOCK_CHANNEL,
+];
+
+/**
+ * source: the reducer name
+ * property: the property in the reducer-specific state
+ * transform: optional method to modify the value to be stored
+ */
+const sharedStateFilters = {
+  tags: { source: 'tags', property: 'followedTags' },
+  subscriptions: {
+    source: 'subscriptions',
+    property: 'subscriptions',
+    transform: function(value) {
+      return value.map(({ uri }) => uri);
+    },
+  },
+  blocked: { source: 'blocked', property: 'blockedChannels' },
+};
+
+const sharedStateCb = ({ dispatch, getState }) => {
+  const state = getState();
+  const syncEnabled = makeSelectClientSetting(SETTINGS.ENABLE_SYNC)(state);
+  const emailVerified = selectUserVerifiedEmail(state);
+  if (syncEnabled && emailVerified) {
+    getSavedPassword().then(savedPassword => {
+      dispatch(doGetSync(savedPassword));
+    });
+  }
+};
+
+const sharedStateMiddleware = buildSharedStateMiddleware(sharedStateActions, sharedStateFilters, sharedStateCb);
 const rootReducer = createRootReducer(history);
 const persistedReducer = persistReducer(persistOptions, rootReducer);
 const bulkThunk = createBulkThunkMiddleware();
-const middleware = [routerMiddleware(history), thunk, bulkThunk];
+const middleware = [sharedStateMiddleware, routerMiddleware(history), thunk, bulkThunk];
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 const store = createStore(
   enableBatching(persistedReducer),
   {}, // initial state
   composeEnhancers(applyMiddleware(...middleware))
 );
-
-let currentPayload;
-store.subscribe(() => {
-  const state = store.getState();
-  const subscriptions = state.subscriptions.subscriptions.map(({ uri }) => uri);
-  const tags = state.tags.followedTags;
-  const authToken = state.user.accessToken;
-
-  const newPayload = {
-    version: '0.1',
-    shared: {
-      subscriptions,
-      tags,
-    },
-  };
-
-  if (!isEqual(newPayload, currentPayload)) {
-    currentPayload = newPayload;
-    if (authToken) {
-      Lbryio.call('user_settings', 'set', { settings: newPayload });
-    }
-  }
-});
 
 const persistor = persistStore(store);
 window.persistor = persistor;

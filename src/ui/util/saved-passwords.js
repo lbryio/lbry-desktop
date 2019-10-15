@@ -11,10 +11,16 @@ export const setSavedPassword = value => {
 
 export const getSavedPassword = () => {
   return new Promise(resolve => {
+    // @if TARGET='app'
     ipcRenderer.once('get-password-response', (event, password) => {
       resolve(password);
     });
     ipcRenderer.send('get-password');
+    // @endif
+
+    // @if TARGET='web'
+    resolve();
+    // @endif
   });
 };
 

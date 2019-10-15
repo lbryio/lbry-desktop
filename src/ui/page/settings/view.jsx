@@ -52,7 +52,7 @@ type Props = {
   themes: Array<string>,
   automaticDarkModeEnabled: boolean,
   autoplay: boolean,
-  autoDownload: boolean,
+  // autoDownload: boolean,
   encryptWallet: () => void,
   decryptWallet: () => void,
   updateWalletStatus: () => void,
@@ -198,7 +198,7 @@ class SettingsPage extends React.PureComponent<Props, State> {
       autoplay,
       walletEncrypted,
       osNotificationsEnabled,
-      autoDownload,
+      // autoDownload,
       setDaemonSetting,
       setClientSetting,
       supportOption,
@@ -588,7 +588,7 @@ class SettingsPage extends React.PureComponent<Props, State> {
                   />
 
                   {/* @if TARGET='app' */}
-                  <FormField
+                  {/* <FormField
                     type="checkbox"
                     name="auto_download"
                     onChange={() => setClientSetting(SETTINGS.AUTO_DOWNLOAD, !autoDownload)}
@@ -597,7 +597,7 @@ class SettingsPage extends React.PureComponent<Props, State> {
                     helper={__(
                       "The latest file from each of your subscriptions will be downloaded for quick access as soon as it's published."
                     )}
-                  />
+                  /> */}
                   <fieldset-section>
                     <FormField
                       name="max_connections"

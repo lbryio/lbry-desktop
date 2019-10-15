@@ -1,6 +1,6 @@
 // @flow
 import * as ICONS from 'constants/icons';
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import classnames from 'classnames';
 import analytics from 'analytics';
 import { buildURI, parseURI } from 'lbry-redux';
@@ -56,6 +56,7 @@ function App(props: Props) {
   } = props;
   const appRef = useRef();
   const isEnhancedLayout = useKonamiListener();
+  const [hasSignedIn, setHasSignedIn] = useState(false);
   const userId = user && user.id;
   const hasVerifiedEmail = user && user.has_verified_email;
   const isRewardApproved = user && user.is_reward_approved;
@@ -112,10 +113,12 @@ function App(props: Props) {
   useEffect(() => {
     // Wait for balance to be populated on desktop so we know when we can begin syncing
     // @syncwithbalancefixme
-    if (hasVerifiedEmail && (IS_WEB || balance !== undefined)) {
+    if (!hasSignedIn && hasVerifiedEmail && (IS_WEB || balance !== undefined)) {
       signIn();
+
+      setHasSignedIn(true);
     }
-  }, [hasVerifiedEmail, signIn, balance]);
+  }, [hasVerifiedEmail, signIn, balance, hasSignedIn]);
 
   if (!user) {
     return null;

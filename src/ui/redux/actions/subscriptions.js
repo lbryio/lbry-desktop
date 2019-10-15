@@ -1,16 +1,8 @@
 // @flow
-import { PAGE_SIZE } from 'constants/claim';
 import * as ACTIONS from 'constants/action_types';
-import * as SETTINGS from 'constants/settings';
-import * as NOTIFICATION_TYPES from 'constants/subscriptions';
 import { Lbryio, rewards, doClaimRewardType } from 'lbryinc';
-import { selectSubscriptions, selectUnreadByChannel } from 'redux/selectors/subscriptions';
-import { makeSelectClientSetting } from 'redux/selectors/settings';
-import { Lbry, parseURI, doResolveUris } from 'lbry-redux';
-import { doPlayUri } from 'redux/actions/content';
-
-const CHECK_SUBSCRIPTIONS_INTERVAL = 15 * 60 * 1000;
-const SUBSCRIPTION_DOWNLOAD_LIMIT = 1;
+import { selectUnreadByChannel } from 'redux/selectors/subscriptions';
+import { parseURI, doResolveUris } from 'lbry-redux';
 
 export const doSetViewMode = (viewMode: ViewMode) => (dispatch: Dispatch) =>
   dispatch({
@@ -73,7 +65,6 @@ export const doFetchMySubscriptions = () => (dispatch: Dispatch, getState: GetSt
       });
 
       dispatch(doResolveUris(subscriptions.map(({ uri }) => uri)));
-      dispatch(doCheckSubscriptions());
     })
     .catch(() => {
       dispatch({
@@ -190,6 +181,7 @@ export const doRemoveUnreadSubscription = (channelUri: string, readUri: string) 
   dispatch(doRemoveUnreadSubscriptions(channelUri, [readUri]));
 };
 
+<<<<<<< HEAD
 export const doCheckSubscription = (subscriptionUri: string, shouldNotify?: boolean) => (
   dispatch: Dispatch,
   getState: GetState
@@ -290,6 +282,8 @@ export const doCheckSubscription = (subscriptionUri: string, shouldNotify?: bool
   });
 };
 
+=======
+>>>>>>> use sdk preference endpoints
 export const doChannelSubscribe = (subscription: Subscription) => (dispatch: Dispatch, getState: GetState) => {
   const {
     settings: { daemonSettings },
@@ -318,8 +312,6 @@ export const doChannelSubscribe = (subscription: Subscription) => (dispatch: Dis
 
     dispatch(doClaimRewardType(rewards.TYPE_SUBSCRIPTION, { failSilently: true }));
   }
-
-  dispatch(doCheckSubscription(subscription.uri, true));
 };
 
 export const doChannelUnsubscribe = (subscription: Subscription) => (dispatch: Dispatch, getState: GetState) => {
@@ -342,6 +334,7 @@ export const doChannelUnsubscribe = (subscription: Subscription) => (dispatch: D
   }
 };
 
+<<<<<<< HEAD
 export const doCheckSubscriptions = () => (dispatch: Dispatch, getState: GetState) => {
   const state = getState();
   const subscriptions = selectSubscriptions(state);
@@ -363,6 +356,8 @@ export const doCheckSubscriptionsInit = () => (dispatch: Dispatch) => {
   });
 };
 
+=======
+>>>>>>> use sdk preference endpoints
 export const doFetchRecommendedSubscriptions = () => (dispatch: Dispatch) => {
   dispatch({
     type: ACTIONS.GET_SUGGESTED_SUBSCRIPTIONS_START,

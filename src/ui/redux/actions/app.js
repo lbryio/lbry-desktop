@@ -19,10 +19,11 @@ import {
   doFetchChannelListMine,
   selectBalance,
   doClearPublish,
+  doPreferenceGet,
+  doToast,
 } from 'lbry-redux';
 import Native from 'native';
 import { doFetchDaemonSettings } from 'redux/actions/settings';
-import { doCheckSubscriptionsInit } from 'redux/actions/subscriptions';
 import {
   selectIsUpgradeSkipped,
   selectUpdateUrl,
@@ -34,7 +35,7 @@ import {
   selectUpgradeTimer,
   selectModal,
 } from 'redux/selectors/app';
-import { Lbryio, doAuthenticate, doGetSync, selectSyncHash, doResetSync } from 'lbryinc';
+import { doAuthenticate, doGetSync, selectSyncHash, doResetSync } from 'lbryinc';
 import { lbrySettings as config, version as appVersion } from 'package.json';
 import { push } from 'connected-react-router';
 import analytics from 'analytics';
@@ -331,7 +332,6 @@ export function doDaemonReady() {
       dispatch(doCheckUpgradeAvailable());
     }
     dispatch(doCheckUpgradeSubscribe());
-    dispatch(doCheckSubscriptionsInit());
     // @endif
   };
 }
@@ -439,37 +439,53 @@ export function doAnalyticsView(uri, timeToStart) {
 
 export function doSignIn() {
   return (dispatch, getState) => {
+    function handlePreferencesAfterSync() {
+      function successCb(savedPreferences) {
+        dispatch(doPopulateSharedUserState(savedPreferences));
+      }
+
+      function failCb() {
+        dispatch(
+          doToast({
+            isError: true,
+            message: __('Unable to load your saved preferences.'),
+          })
+        );
+      }
+
+      doPreferenceGet('shared', successCb, failCb);
+    }
+
     // The balance is subscribed to on launch for desktop
     // @if TARGET='web'
     const { auth_token: authToken } = cookie.parse(document.cookie);
     Lbry.setApiHeader('X-Lbry-Auth-Token', authToken);
     dispatch(doBalanceSubscribe());
     dispatch(doFetchChannelListMine());
-    dispatch(doCheckSubscriptionsInit());
     // @endif
 
-    // @if TARGET='app'
     const state = getState();
     const syncEnabled = makeSelectClientSetting(SETTINGS.ENABLE_SYNC)(state);
+
     const hasSyncedBefore = selectSyncHash(state);
     const balance = selectBalance(state);
 
     // For existing users, check if they've synced before, or have 0 balance
-    if (syncEnabled && (hasSyncedBefore || balance === 0)) {
+    // Always sync for web
+    const canSync = syncEnabled && (hasSyncedBefore || balance === 0 || IS_WEB);
+
+    if (canSync) {
       getSavedPassword().then(password => {
         const passwordArgument = password === null ? '' : password;
-        dispatch(doGetSync(passwordArgument, !hasSyncedBefore));
+
+        // Only set the default account if they have never synced before
+        dispatch(doGetSync(passwordArgument, handlePreferencesAfterSync));
 
         setInterval(() => {
-          dispatch(doGetSync(passwordArgument));
+          dispatch(doGetSync(passwordArgument, handlePreferencesAfterSync));
         }, 1000 * 60 * 5);
       });
     }
-    // @endif
-
-    Lbryio.call('user_settings', 'get').then(settings => {
-      dispatch(doPopulateSharedUserState(settings));
-    });
   };
 }
 

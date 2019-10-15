@@ -119,8 +119,8 @@ function UserSignIn(props: Props) {
         <YoutubeTransferStatus /> <Confetti recycle={false} style={{ position: 'fixed' }} />
       </div>
     ),
-    showSyncPassword && <SyncPassword />,
     // @endif
+    showSyncPassword && <SyncPassword />,
     showLoadingSpinner && (
       <div className="main--empty">
         <Spinner />
