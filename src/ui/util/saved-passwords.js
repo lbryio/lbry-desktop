@@ -19,7 +19,8 @@ export const getSavedPassword = () => {
     // @endif
 
     // @if TARGET='web'
-    resolve();
+    // Will handle saved passwords on web differently
+    resolve('');
     // @endif
   });
 };

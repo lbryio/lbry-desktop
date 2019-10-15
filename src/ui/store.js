@@ -117,6 +117,10 @@ const triggerSharedStateActions = [
  * source: the reducer name
  * property: the property in the reducer-specific state
  * transform: optional method to modify the value to be stored
+ *
+ * See https://github.com/lbryio/lbry-redux/blob/master/src/redux/middleware/shared-state.js for the source
+ * This is based off v0.1
+ * If lbry-redux changes to another version, this code will need to be changed when upgrading
  */
 const sharedStateFilters = {
   tags: { source: 'tags', property: 'followedTags' },
