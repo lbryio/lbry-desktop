@@ -13,7 +13,7 @@ import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import { doConditionalAuthNavigate, doDaemonReady, doAutoUpdate, doOpenModal, doHideModal } from 'redux/actions/app';
 import { Lbry, doToast, isURIValid, setSearchApi } from 'lbry-redux';
-import { doUpdateIsNightAsync, doSetClientSetting } from 'redux/actions/settings';
+import { doUpdateIsNightAsync } from 'redux/actions/settings';
 import {
   doAuthenticate,
   Lbryio,
@@ -176,7 +176,6 @@ ipcRenderer.on('devtools-is-opened', () => {
 ipcRenderer.on('language-update', (event, messages, language) => {
   window.i18n_messages = messages;
   window.localStorage.setItem(SETTINGS.LANGUAGE, language);
-  doSetClientSetting(SETTINGS.LANGUAGE, language);
 });
 
 // Force exit mode for html5 fullscreen api
