@@ -391,9 +391,7 @@ class SettingsPage extends React.PureComponent<Props, State> {
                     onChange={() => setClientSetting(SETTINGS.SHOW_ANONYMOUS, !showAnonymous)}
                     checked={showAnonymous}
                     label={__('Show anonymous content')}
-                    helper={__(
-                      'You can opt for displaying contents published anonymously, i.e. contents published without a channel identity.'
-                    )}
+                    helper={__('Anonymous content is published without a channel.')}
                   />
 
                   <FormField
