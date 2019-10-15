@@ -16,7 +16,9 @@ import usePrevious from 'effects/use-previous';
 import Button from 'component/button';
 
 export const MAIN_WRAPPER_CLASS = 'main-wrapper';
-const IS_MAC = process.platform === 'darwin';
+// @if TARGET='app'
+export const IS_MAC = process.platform === 'darwin';
+// @endif
 
 type Props = {
   alertError: (string | {}) => void,
@@ -126,7 +128,11 @@ function App(props: Props) {
 
   return (
     <div
-      className={classnames(MAIN_WRAPPER_CLASS, { [`${MAIN_WRAPPER_CLASS}--mac`]: IS_MAC })}
+      className={classnames(MAIN_WRAPPER_CLASS, {
+        // @if TARGET='app'
+        [`${MAIN_WRAPPER_CLASS}--mac`]: IS_MAC,
+        // @endif
+      })}
       ref={appRef}
       onContextMenu={e => openContextMenu(e)}
     >
