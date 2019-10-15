@@ -184,6 +184,7 @@ class FilePage extends React.Component<Props> {
                       button="alt"
                       icon={icons.TIP}
                       label={__('Tip')}
+                      requiresAuth={IS_WEB}
                       title={__('Send a tip to this creator')}
                       onClick={() => openModal(MODALS.SEND_TIP, { uri, claimIsMine, isSupport: false })}
                     />
@@ -193,6 +194,7 @@ class FilePage extends React.Component<Props> {
                       button="alt"
                       icon={icons.SUPPORT}
                       label={__('Support')}
+                      requiresAuth={IS_WEB}
                       title={__('Support this claim')}
                       onClick={() => openModal(MODALS.SEND_TIP, { uri, claimIsMine, isSupport: true })}
                     />

@@ -45,7 +45,7 @@ function TagsPage(props: Props) {
     <Page>
       <ClaimListDiscover
         tags={tags}
-        meta={<Button ref={buttonRef} button="link" onClick={handleFollowClick} label={label} />}
+        meta={<Button ref={buttonRef} button="link" onClick={handleFollowClick} requiresAuth={IS_WEB} label={label} />}
       />
     </Page>
   );

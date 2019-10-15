@@ -47,6 +47,7 @@ export default function SubscribeButton(props: Props) {
       iconColor="red"
       icon={unfollowOverride ? ICONS.UNSUBSCRIBE : ICONS.SUBSCRIBE}
       button={'alt'}
+      requiresAuth={IS_WEB}
       label={unfollowOverride || subscriptionLabel}
       onClick={e => {
         e.stopPropagation();
