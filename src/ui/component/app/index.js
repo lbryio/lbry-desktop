@@ -5,7 +5,8 @@ import { selectUser, doRewardList, doFetchRewardedContent, doFetchAccessToken } 
 import { doFetchTransactions, doFetchChannelListMine, selectBalance } from 'lbry-redux';
 import { makeSelectClientSetting, selectThemePath } from 'redux/selectors/settings';
 import { selectIsUpgradeAvailable, selectAutoUpdateDownloaded } from 'redux/selectors/app';
-import { doDownloadUpgradeRequested, doSignIn } from 'redux/actions/app';
+import { doDownloadUpgradeRequested, doSignIn, doSyncWithPreferences } from 'redux/actions/app';
+import { doSetClientSetting } from 'redux/actions/settings';
 import App from './view';
 
 const select = state => ({
@@ -15,6 +16,7 @@ const select = state => ({
   autoUpdateDownloaded: selectAutoUpdateDownloaded(state),
   isUpgradeAvailable: selectIsUpgradeAvailable(state),
   balance: selectBalance(state),
+  syncEnabled: makeSelectClientSetting(SETTINGS.ENABLE_SYNC)(state),
 });
 
 const perform = dispatch => ({
@@ -25,6 +27,8 @@ const perform = dispatch => ({
   fetchChannelListMine: () => dispatch(doFetchChannelListMine()),
   signIn: () => dispatch(doSignIn()),
   requestDownloadUpgrade: () => dispatch(doDownloadUpgradeRequested()),
+  checkSync: () => dispatch(doSyncWithPreferences()),
+  setSyncEnabled: value => dispatch(doSetClientSetting(SETTINGS.ENABLE_SYNC, value)),
 });
 
 export default hot(

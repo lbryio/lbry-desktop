@@ -17,12 +17,13 @@ type Props = {
 };
 
 function UserEmailNew(props: Props) {
-  const { errorMessage, isPending, addUserEmail, syncEnabled, setSync, balance } = props;
+  const { errorMessage, isPending, addUserEmail, setSync } = props;
   const [newEmail, setEmail] = useState('');
-  const [ageConfirmation, setAgeConfirmation] = useState(true);
+  const [formSyncEnabled, setFormSyncEnabled] = useState(true);
   const valid = newEmail.match(EMAIL_REGEX);
 
   function handleSubmit() {
+    setSync(formSyncEnabled);
     addUserEmail(newEmail);
     analytics.emailProvidedEvent();
 
@@ -31,15 +32,8 @@ function UserEmailNew(props: Props) {
     // @endif
   }
 
-  React.useEffect(() => {
-    // Sync currently doesn't work for wallets with balances
-    if (syncEnabled && balance) {
-      setSync(false);
-    }
-  }, [balance, syncEnabled, setSync]);
-
   return (
-    <div>
+    <React.Fragment>
       <h1 className="section__title--large">{__('Welcome To LBRY')}</h1>
       <p className="section__subtitle">{__('Create a new account or sign in.')}</p>
       <Form onSubmit={handleSubmit} className="section__body">
@@ -54,60 +48,39 @@ function UserEmailNew(props: Props) {
           error={errorMessage}
           onChange={e => setEmail(e.target.value)}
         />
-        <div className="section">
+
+        {!IS_WEB && (
           <FormField
             type="checkbox"
-            name="age_checkbox"
+            name="sync_checkbox"
             label={
-              <I18nMessage
-                tokens={{
-                  terms: (
-                    <Button button="link" href="https://www.lbry.com/termsofservice" label={__('Terms of Service')} />
-                  ),
-                }}
-              >
-                I am over the age of 13 and agree to the %terms%.
-              </I18nMessage>
+              <React.Fragment>
+                {__('Sync balance and preferences across devices.')}{' '}
+                <Button button="link" href="https://lbry.com/faq/account-sync" label={__('Learn More')} />
+              </React.Fragment>
             }
-            checked={ageConfirmation}
-            onChange={() => setAgeConfirmation(!ageConfirmation)}
+            helper={
+              <React.Fragment>
+                <I18nMessage
+                  tokens={{
+                    terms: (
+                      <Button button="link" href="https://www.lbry.com/termsofservice" label={__('Terms of Service')} />
+                    ),
+                  }}
+                >
+                  By continuing, I agree to the %terms% and confirm I am over the age of 13.
+                </I18nMessage>
+              </React.Fragment>
+            }
+            checked={formSyncEnabled}
+            onChange={() => setFormSyncEnabled(!formSyncEnabled)}
           />
-          {!IS_WEB && (
-            <FormField
-              type="checkbox"
-              name="sync_checkbox"
-              label={__('Sync balance and preferences across devices')}
-              helper={
-                balance > 0 ? (
-                  __('This feature is not yet available for wallets with balances, but the gerbils are working on it.')
-                ) : (
-                  <I18nMessage
-                    tokens={{
-                      learn_more: (
-                        <Button button="link" href="https://lbry.com/faq/account-sync" label={__('Learn More')} />
-                      ),
-                    }}
-                  >
-                    Blockchain expert? %learn_more%
-                  </I18nMessage>
-                )
-              }
-              checked={syncEnabled}
-              onChange={() => setSync(!syncEnabled)}
-              disabled={balance > 0}
-            />
-          )}
-          <div className="card__actions">
-            <Button
-              button="primary"
-              type="submit"
-              label={__('Continue')}
-              disabled={!newEmail || !valid || !ageConfirmation || isPending}
-            />
-          </div>
+        )}
+        <div className="card__actions">
+          <Button button="primary" type="submit" label={__('Continue')} disabled={!newEmail || !valid || isPending} />
         </div>
       </Form>
-    </div>
+    </React.Fragment>
   );
 }
 

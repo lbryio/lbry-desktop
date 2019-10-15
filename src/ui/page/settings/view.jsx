@@ -11,6 +11,7 @@ import I18nMessage from 'component/i18nMessage';
 import Page from 'component/page';
 import SettingLanguage from 'component/settingLanguage';
 import FileSelector from 'component/common/file-selector';
+import SyncToggle from 'component/syncToggle';
 import Card from 'component/common/card';
 import { getSavedPassword } from 'util/saved-passwords';
 
@@ -229,6 +230,7 @@ class SettingsPage extends React.PureComponent<Props, State> {
         ) : (
           <div>
             <Card title={__('Language')} actions={<SettingLanguage />} />
+            <Card title={__('Sync')} actions={<SyncToggle />} />
             {/* @if TARGET='app' */}
             <Card
               title={__('Download Directory')}
@@ -639,11 +641,11 @@ class SettingsPage extends React.PureComponent<Props, State> {
             <Card
               title={__('Application Cache')}
               subtitle={
-                <p className="card__subtitle--status">
+                <span className="card__subtitle--status">
                   {__(
                     'This will clear the application cache. Your wallet will not be affected. Currently, followed tags and blocked channels will be cleared.'
                   )}
-                </p>
+                </span>
               }
               actions={
                 <Button
