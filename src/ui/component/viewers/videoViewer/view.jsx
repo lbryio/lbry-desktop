@@ -129,17 +129,13 @@ function VideoViewer(props: Props) {
         return;
       }
 
-      // If not needed to prevent the default,
-      // add keycode handler above preventDefault & return after that
-      e.preventDefault();
-
       if (e.keyCode === SPACE_BAR_KEYCODE) {
         videoNode.paused ? videoNode.play() : videoNode.pause();
       }
 
       // Fullscreen toggle shortcuts
       if (e.keyCode === FULLSCREEN_KEYCODE || e.keyCode === F11_KEYCODE) {
-        if(!player.isFullscreen()) {
+        if (!player.isFullscreen()) {
           player.requestFullscreen();
         } else {
           player.exitFullscreen();
