@@ -1,7 +1,7 @@
 import * as SETTINGS from 'constants/settings';
 import { hot } from 'react-hot-loader/root';
 import { connect } from 'react-redux';
-import { selectUser, doRewardList, doFetchRewardedContent, doAuthenticate } from 'lbryinc';
+import { selectUser, doRewardList, doFetchRewardedContent, doFetchAccessToken } from 'lbryinc';
 import { doFetchTransactions, doFetchChannelListMine, selectBalance } from 'lbry-redux';
 import { makeSelectClientSetting, selectThemePath } from 'redux/selectors/settings';
 import { selectIsUpgradeAvailable, selectAutoUpdateDownloaded } from 'redux/selectors/app';
@@ -21,7 +21,7 @@ const perform = dispatch => ({
   fetchRewards: () => dispatch(doRewardList()),
   fetchRewardedContent: () => dispatch(doFetchRewardedContent()),
   fetchTransactions: () => dispatch(doFetchTransactions()),
-  fetchAccessToken: () => dispatch(doAuthenticate()),
+  fetchAccessToken: () => dispatch(doFetchAccessToken()),
   fetchChannelListMine: () => dispatch(doFetchChannelListMine()),
   signIn: () => dispatch(doSignIn()),
   requestDownloadUpgrade: () => dispatch(doDownloadUpgradeRequested()),

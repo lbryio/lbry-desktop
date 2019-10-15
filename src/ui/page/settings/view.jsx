@@ -588,7 +588,9 @@ class SettingsPage extends React.PureComponent<Props, State> {
                   />
 
                   {/* @if TARGET='app' */}
-                  {/* <FormField
+                  {/*
+                  Disabling below until we get downloads to work with shared subscriptions code
+                  <FormField
                     type="checkbox"
                     name="auto_download"
                     onChange={() => setClientSetting(SETTINGS.AUTO_DOWNLOAD, !autoDownload)}

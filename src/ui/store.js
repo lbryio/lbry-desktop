@@ -105,11 +105,12 @@ history = createHashHistory();
 history = createBrowserHistory();
 // @endif
 
-const sharedStateActions = [
+const triggerSharedStateActions = [
   ACTIONS.CHANNEL_SUBSCRIBE,
   ACTIONS.CHANNEL_UNSUBSCRIBE,
   LBRY_REDUX_ACTIONS.TOGGLE_TAG_FOLLOW,
   LBRY_REDUX_ACTIONS.TOGGLE_BLOCK_CHANNEL,
+  LBRY_REDUX_ACTIONS.CREATE_CHANNEL_COMPLETED,
 ];
 
 /**
@@ -140,7 +141,7 @@ const sharedStateCb = ({ dispatch, getState }) => {
   }
 };
 
-const sharedStateMiddleware = buildSharedStateMiddleware(sharedStateActions, sharedStateFilters, sharedStateCb);
+const sharedStateMiddleware = buildSharedStateMiddleware(triggerSharedStateActions, sharedStateFilters, sharedStateCb);
 const rootReducer = createRootReducer(history);
 const persistedReducer = persistReducer(persistOptions, rootReducer);
 const bulkThunk = createBulkThunkMiddleware();
