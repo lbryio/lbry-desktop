@@ -190,7 +190,7 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
           </div>
           {!pending && (
             <React.Fragment>
-              {!hideActions && actions !== undefined ? (
+              {hideActions ? null : actions !== undefined ? (
                 actions
               ) : (
                 <div className="card__actions--inline">
