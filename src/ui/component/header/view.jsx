@@ -11,6 +11,9 @@ import WunderBar from 'component/wunderbar';
 import Icon from 'component/common/icon';
 import { Menu, MenuList, MenuButton, MenuItem } from '@reach/menu-button';
 import Tooltip from 'component/common/tooltip';
+// @if TARGET='app'
+import { IS_MAC } from 'component/app/view';
+// @endif
 
 type Props = {
   balance: string,
@@ -62,7 +65,14 @@ const Header = (props: Props) => {
   }
 
   return (
-    <header className={classnames('header', { 'header--minimal': minimal })}>
+    <header
+      className={classnames('header', {
+        'header--minimal': minimal,
+        // @if TARGET='app'
+        'header--mac': IS_MAC,
+        // @endif
+      })}
+    >
       <div className="header__contents">
         <div className="header__navigation">
           <Button

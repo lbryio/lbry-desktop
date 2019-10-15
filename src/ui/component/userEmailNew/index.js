@@ -2,8 +2,8 @@ import * as SETTINGS from 'constants/settings';
 import { connect } from 'react-redux';
 import { selectBalance } from 'lbry-redux';
 import { selectEmailNewIsPending, selectEmailNewErrorMessage, doUserEmailNew } from 'lbryinc';
-import { makeSelectClientSetting } from 'redux/selectors/settings';
 import { doSetClientSetting } from 'redux/actions/settings';
+import { makeSelectClientSetting } from 'redux/selectors/settings';
 import UserEmailNew from './view';
 
 const select = state => ({
