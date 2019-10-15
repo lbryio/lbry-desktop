@@ -7,7 +7,6 @@ import path from 'path';
 import * as ACTIONS from 'constants/action_types';
 import * as MODALS from 'constants/modal_types';
 import * as PAGES from 'constants/pages';
-import * as SETTINGS from 'constants/settings';
 import {
   Lbry,
   doBalanceSubscribe,
@@ -17,7 +16,6 @@ import {
   makeSelectClaimIsMine,
   doPopulateSharedUserState,
   doFetchChannelListMine,
-  selectBalance,
   doClearPublish,
   doPreferenceGet,
   doToast,
@@ -35,13 +33,12 @@ import {
   selectUpgradeTimer,
   selectModal,
 } from 'redux/selectors/app';
-import { doAuthenticate, doGetSync, selectSyncHash, doResetSync } from 'lbryinc';
+import { doAuthenticate, doGetSync, doResetSync } from 'lbryinc';
 import { lbrySettings as config, version as appVersion } from 'package.json';
 import { push } from 'connected-react-router';
 import analytics from 'analytics';
 import { deleteAuthToken, getSavedPassword } from 'util/saved-passwords';
 import cookie from 'cookie';
-import { makeSelectClientSetting } from 'redux/selectors/settings';
 
 // @if TARGET='app'
 const { autoUpdater } = remote.require('electron-updater');
@@ -439,53 +436,12 @@ export function doAnalyticsView(uri, timeToStart) {
 
 export function doSignIn() {
   return (dispatch, getState) => {
-    function handlePreferencesAfterSync() {
-      function successCb(savedPreferences) {
-        dispatch(doPopulateSharedUserState(savedPreferences));
-      }
-
-      function failCb() {
-        dispatch(
-          doToast({
-            isError: true,
-            message: __('Unable to load your saved preferences.'),
-          })
-        );
-      }
-
-      doPreferenceGet('shared', successCb, failCb);
-    }
-
-    // The balance is subscribed to on launch for desktop
     // @if TARGET='web'
     const { auth_token: authToken } = cookie.parse(document.cookie);
     Lbry.setApiHeader('X-Lbry-Auth-Token', authToken);
     dispatch(doBalanceSubscribe());
     dispatch(doFetchChannelListMine());
     // @endif
-
-    const state = getState();
-    const syncEnabled = makeSelectClientSetting(SETTINGS.ENABLE_SYNC)(state);
-
-    const hasSyncedBefore = selectSyncHash(state);
-    const balance = selectBalance(state);
-
-    // For existing users, check if they've synced before, or have 0 balance
-    // Always sync for web
-    const canSync = syncEnabled && (hasSyncedBefore || balance === 0 || IS_WEB);
-
-    if (canSync) {
-      getSavedPassword().then(password => {
-        const passwordArgument = password === null ? '' : password;
-
-        // Only set the default account if they have never synced before
-        dispatch(doGetSync(passwordArgument, handlePreferencesAfterSync));
-
-        setInterval(() => {
-          dispatch(doGetSync(passwordArgument, handlePreferencesAfterSync));
-        }, 1000 * 60 * 5);
-      });
-    }
   };
 }
 
@@ -506,5 +462,32 @@ export function doSignOut() {
         });
       })
       .catch(() => location.reload());
+  };
+}
+
+export function doSyncWithPreferences() {
+  return dispatch => {
+    function handlePreferencesAfterSync() {
+      function successCb(savedPreferences) {
+        dispatch(doPopulateSharedUserState(savedPreferences));
+      }
+
+      function failCb() {
+        dispatch(
+          doToast({
+            isError: true,
+            message: __('Unable to load your saved preferences.'),
+          })
+        );
+      }
+
+      doPreferenceGet('shared', successCb, failCb);
+    }
+
+    return getSavedPassword().then(password => {
+      const passwordArgument = password === null ? '' : password;
+
+      dispatch(doGetSync(passwordArgument, handlePreferencesAfterSync));
+    });
   };
 }

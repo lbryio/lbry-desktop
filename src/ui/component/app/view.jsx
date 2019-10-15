@@ -19,6 +19,7 @@ export const MAIN_WRAPPER_CLASS = 'main-wrapper';
 // @if TARGET='app'
 export const IS_MAC = process.platform === 'darwin';
 // @endif
+const SYNC_INTERVAL = 1000 * 60 * 5; // 5 minutes
 
 type Props = {
   alertError: (string | {}) => void,
@@ -38,7 +39,9 @@ type Props = {
   onSignedIn: () => void,
   isUpgradeAvailable: boolean,
   autoUpdateDownloaded: boolean,
-  balance: ?number,
+  checkSync: () => void,
+  setSyncEnabled: boolean => void,
+  syncEnabled: boolean,
 };
 
 function App(props: Props) {
@@ -54,7 +57,9 @@ function App(props: Props) {
     autoUpdateDownloaded,
     isUpgradeAvailable,
     requestDownloadUpgrade,
-    balance,
+    syncEnabled,
+    checkSync,
+    setSyncEnabled,
   } = props;
   const appRef = useRef();
   const isEnhancedLayout = useKonamiListener();
@@ -114,13 +119,27 @@ function App(props: Props) {
   // Keep this at the end to ensure initial setup effects are run first
   useEffect(() => {
     // Wait for balance to be populated on desktop so we know when we can begin syncing
-    // @syncwithbalancefixme
-    if (!hasSignedIn && hasVerifiedEmail && (IS_WEB || balance !== undefined)) {
+    if (!hasSignedIn && hasVerifiedEmail) {
       signIn();
-
       setHasSignedIn(true);
     }
-  }, [hasVerifiedEmail, signIn, balance, hasSignedIn]);
+  }, [hasVerifiedEmail, signIn, hasSignedIn]);
+
+  useEffect(() => {
+    if (!hasVerifiedEmail && syncEnabled) {
+      setSyncEnabled(false);
+    } else if (hasVerifiedEmail && syncEnabled) {
+      checkSync();
+
+      let syncInterval = setInterval(() => {
+        checkSync();
+      }, SYNC_INTERVAL);
+
+      return () => {
+        clearInterval(syncInterval);
+      };
+    }
+  }, [hasVerifiedEmail, syncEnabled, checkSync, setSyncEnabled]);
 
   if (!user) {
     return null;

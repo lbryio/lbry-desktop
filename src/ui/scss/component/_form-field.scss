@@ -52,6 +52,11 @@ textarea {
   }
 }
 
+// @lbry/components specificityfixme
+checkbox-element input[type='checkbox']:checked + label {
+  color: lighten($lbry-black, 20%);
+}
+
 fieldset-section {
   margin-bottom: var(--spacing-small);
 
