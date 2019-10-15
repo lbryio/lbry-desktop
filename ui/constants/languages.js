@@ -89,7 +89,7 @@ const LANGUAGES = {
   kv: ['Komi', 'Коми'],
   kw: ['Cornish', 'Kernewek'],
   ky: ['Kirghiz', 'Kırgızca / Кыргызча'],
-  la: ['Latin', 'Latina'],
+  la: ['Latin', 'Latina'],const languages = { en: 'English', pl: 'Polski', id: 'Bahasa Indonesia', de: 'Deutsche' , fr: 'Français', sk: 'Slovenský', tr: 'Türk', zh: '中文' };
   lb: ['Luxembourgish', 'Lëtzebuergesch'],
   lg: ['Ganda', 'Luganda'],
   li: ['Limburgian', 'Limburgs'],

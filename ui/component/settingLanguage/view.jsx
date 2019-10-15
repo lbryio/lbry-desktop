@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import { FormField } from 'component/common/form';
 import Spinner from 'component/spinner';
 import { SETTINGS } from 'lbry-redux';
+import SUPPORTED_LANGUAGES from '../../constants/supported_languages';
 
 type Props = {
   language: string,
@@ -13,9 +14,7 @@ type Props = {
 
 function SettingLanguage(props: Props) {
   const [isFetching, setIsFetching] = useState(false);
-
-  // this should be fetched from lbry.com/transifex
-  const languages = { en: 'English', pl: 'Polski', id: 'Bahasa Indonesia', de: 'Deutsche' , fr: 'Français', sk: 'Slovenský', tr: 'Türk', zh: '中文' };
+  const languages = SUPPORTED_LANGUAGES;
 
   const { language, showToast, setClientSetting } = props;
 
