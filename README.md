@@ -30,9 +30,9 @@ The LBRY app is a graphical browser for the decentralized content marketplace pr
 
 
 ## Install
-[![Windows](https://img.shields.io/badge/Windows-Install-yellowgreen)](https://lbry.com/get/lbry.exe)
+[![Windows](https://img.shields.io/badge/Windows-Install-blue)](https://lbry.com/get/lbry.exe)
 [![Linux](https://img.shields.io/badge/Linux-Install-blue)](https://lbry.com/get/lbry.deb)
-[![MacOS](https://img.shields.io/badge/MacOS-Install-lightgrey)](https://lbry.com/get/lbry.dmg)
+[![MacOS](https://img.shields.io/badge/MacOS-Install-blue)](https://lbry.com/get/lbry.dmg)
 
 We provide installers for Windows, macOS (v10.12.4, Sierra, or greater), and Debian-based Linux. See community maintained builds section for alternative Linux installations.
 
