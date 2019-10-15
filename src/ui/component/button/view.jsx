@@ -6,6 +6,7 @@ import classnames from 'classnames';
 import { NavLink } from 'react-router-dom';
 import { formatLbryUriForWeb } from 'util/uri';
 import { OutboundLink } from 'react-ga';
+import * as PAGES from 'constants/pages';
 
 type Props = {
   id: ?string,
@@ -30,6 +31,11 @@ type Props = {
   onClick: ?(any) => any,
   onMouseEnter: ?(any) => any,
   onMouseLeave: ?(any) => any,
+  pathname: string,
+  emailVerified: boolean,
+  requiresAuth: ?boolean,
+  myref: any,
+  dispatch: any,
 };
 
 // use forwardRef to allow consumers to pass refs to the button content if they want to
@@ -55,9 +61,15 @@ const Button = forwardRef<any, {}>((props: Props, ref: any) => {
     iconColor,
     constrict,
     activeClass,
+    emailVerified,
+    requiresAuth,
+    myref,
+    dispatch, // <button> doesn't know what to do with dispatch
+    pathname,
     ...otherProps
   } = props;
 
+  const currentPath = pathname.split('/$/')[1];
   const combinedClassName = classnames(
     'button',
     button
@@ -101,6 +113,22 @@ const Button = forwardRef<any, {}>((props: Props, ref: any) => {
       // Force a leading slash so new paths aren't appended on to the current path
       path = `/${path}`;
     }
+  }
+
+  if (requiresAuth && !emailVerified) {
+    return (
+      <NavLink
+        ref={ref}
+        exact
+        to={`/$/${PAGES.AUTH}?redirect=${currentPath}`}
+        title={title}
+        disabled={disabled}
+        className={combinedClassName}
+        activeClassName={activeClass}
+      >
+        {content}
+      </NavLink>
+    );
   }
 
   return path ? (

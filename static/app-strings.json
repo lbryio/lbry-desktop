@@ -803,5 +803,15 @@
   "This app will automatically download new free content from channels you are subscribed to. You may configure this in Settings or on the Subscriptions page.": "This app will automatically download new free content from channels you are subscribed to. You may configure this in Settings or on the Subscriptions page.",
   "(Only available on the desktop app.)": "(Only available on the desktop app.)",
   "If we have your email address, we will send you notifications related to new content. You may configure these emails from the Help page.": "If we have your email address, we will send you notifications related to new content. You may configure these emails from the Help page.",
-  "Light": "Light"
+  "Light": "Light",
+  "Subscriber": "Subscriber",
+  "This account must undergo review before you can participate in the rewards program.": "This account must undergo review before you can participate in the rewards program.",
+  "This can take anywhere from several minutes to several days.": "This can take anywhere from several minutes to several days.",
+  "We apologize for this inconvenience, but have added this additional step to prevent fraud.": "We apologize for this inconvenience, but have added this additional step to prevent fraud.",
+  "If you continue to see this message, send us an email to help@lbry.com.": "If you continue to see this message, send us an email to help@lbry.com.",
+  "Please enjoy free content in the meantime!": "Please enjoy free content in the meantime!",
+  "Claimed Rewards": "Claimed Rewards",
+  "This feature is not yet available for wallets with balances, but the gerbils are working on it.": "This feature is not yet available for wallets with balances, but the gerbils are working on it.",
+  "I Understand": "I Understand",
+  "No modifier provided after separator %modSeperator%.": "No modifier provided after separator %modSeperator%."
 }

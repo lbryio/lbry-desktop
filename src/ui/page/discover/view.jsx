@@ -21,7 +21,7 @@ function DiscoverPage(props: Props) {
         hideCustomization={IS_WEB && !email}
         personalView
         tags={followedTags.map(tag => tag.name)}
-        meta={<Button button="link" label={__('Customize')} navigate={`/$/${PAGES.FOLLOWING}`} />}
+        meta={<Button button="link" label={__('Customize')} requiresAuth={IS_WEB} navigate={`/$/${PAGES.FOLLOWING}`} />}
       />
     </Page>
   );
