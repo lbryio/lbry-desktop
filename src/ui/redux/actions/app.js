@@ -467,7 +467,9 @@ export function doSignOut() {
 
 export function doSyncWithPreferences() {
   return dispatch => {
-    function handlePreferencesAfterSync() {
+    function handleSyncComplete() {
+      dispatch(doFetchChannelListMine());
+
       function successCb(savedPreferences) {
         dispatch(doPopulateSharedUserState(savedPreferences));
       }
@@ -487,7 +489,7 @@ export function doSyncWithPreferences() {
     return getSavedPassword().then(password => {
       const passwordArgument = password === null ? '' : password;
 
-      dispatch(doGetSync(passwordArgument, handlePreferencesAfterSync));
+      dispatch(doGetSync(passwordArgument, handleSyncComplete));
     });
   };
 }

@@ -818,5 +818,11 @@
   "Anonymous content is published without a channel.": "Anonymous content is published without a channel.",
   "settings": "settings",
   "Content may be hidden on this %type% because of your %settings%": "Content may be hidden on this %type% because of your %settings%",
-  "Content may be hidden on this %type% because of your %settings%.": "Content may be hidden on this %type% because of your %settings%."
+  "Content may be hidden on this %type% because of your %settings%.": "Content may be hidden on this %type% because of your %settings%.",
+  "Sync balance and preferences across devices.": "Sync balance and preferences across devices.",
+  "By continuing, I agree to the %terms% and confirm I am over the age of 13.": "By continuing, I agree to the %terms% and confirm I am over the age of 13.",
+  "Sync": "Sync",
+  "Sync your balance and preferences accross LBRY apps.": "Sync your balance and preferences accross LBRY apps.",
+  "earned and bound in tips": "earned and bound in tips",
+  "currently staked": "currently staked"
 }
