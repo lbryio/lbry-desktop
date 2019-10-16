@@ -22,7 +22,7 @@ export default function Card(props: Props) {
             {icon && <Icon sectionIcon icon={icon} />}
             <div>
               <h2 className="section__title">{title}</h2>
-              <p className="section__subtitle">{subtitle}</p>
+              <div className="section__subtitle">{subtitle}</div>
             </div>
           </div>
         </div>

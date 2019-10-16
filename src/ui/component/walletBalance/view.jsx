@@ -40,7 +40,7 @@ const WalletBalance = (props: Props) => {
                 <strong>
                   <CreditAmount badge={false} amount={tipsBalance} precision={8} />
                 </strong>{' '}
-                {__('Earned and bound in tips')}
+                {__('earned and bound in tips')}
               </h2>
             </div>
           </div>
@@ -50,7 +50,10 @@ const WalletBalance = (props: Props) => {
               <Icon sectionIcon icon={ICONS.LOCK} />
               <div>
                 <h2 className="section__title--small">
-                  <strong>{(claimsBalance + supportsBalance).toFixed(2)}</strong> {__('LBC Currently Staked')}
+                  <strong>
+                    <CreditAmount badge={false} amount={claimsBalance + supportsBalance} precision={8} />
+                  </strong>{' '}
+                  {__('currently staked')}
                 </h2>
                 <div className="section__subtitle">
                   <dl>

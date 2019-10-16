@@ -11,7 +11,7 @@ type Props = {
 
 function SyncToggle(props: Props) {
   const { setSyncEnabled, syncEnabled, verifiedEmail } = props;
-
+  console.log('??', syncEnabled);
   function handleChange() {
     setSyncEnabled(!syncEnabled);
   }
