@@ -125,7 +125,7 @@ class ChannelSection extends React.PureComponent<Props, State> {
         creatingChannel: false,
         addingChannel: false,
       });
-      analytics.apiPublishNew(channelClaim);
+      analytics.apiLogPublish(channelClaim);
       onChannelChange(channelName);
     };
 

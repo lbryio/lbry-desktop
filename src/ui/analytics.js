@@ -15,8 +15,7 @@ type Analytics = {
   setUser: Object => void,
   toggle: (boolean, ?boolean) => void,
   apiLogView: (string, string, string, ?number, ?() => void) => Promise<any>,
-  apiLogPublish: () => void,
-  apiPublishNew: (ChannelClaim | StreamClaim) => void,
+  apiLogPublish: (ChannelClaim | StreamClaim) => void,
   tagFollowEvent: (string, boolean, string) => void,
   emailProvidedEvent: () => void,
   emailVerifiedEvent: () => void,
@@ -25,7 +24,7 @@ type Analytics = {
   readyEvent: number => void,
 };
 
-type PublishNewParams = {
+type LogPublishParams = {
   uri: string,
   claim_id: string,
   outpoint: string,
@@ -88,13 +87,7 @@ const analytics: Analytics = {
       Lbryio.call('event', 'search');
     }
   },
-  apiLogPublish: () => {
-    if (analyticsEnabled && isProduction) {
-      Lbryio.call('event', 'publish');
-    }
-  },
-
-  apiPublishNew: (claimResult: ChannelClaim | StreamClaim) => {
+  apiLogPublish: (claimResult: ChannelClaim | StreamClaim) => {
     if (analyticsEnabled && isProduction) {
       const { permanent_url: uri, claim_id: claimId, txid, nout, signing_channel: signingChannel } = claimResult;
       let channelClaimId;
@@ -102,11 +95,11 @@ const analytics: Analytics = {
         channelClaimId = signingChannel.claim_id;
       }
       const outpoint = `${txid}:${nout}`;
-      const params: PublishNewParams = { uri, claim_id: claimId, outpoint };
+      const params: LogPublishParams = { uri, claim_id: claimId, outpoint };
       if (channelClaimId) {
         params['channel_claim_id'] = channelClaimId;
       }
-      Lbryio.call('publish', 'new', params);
+      Lbryio.call('event', 'publish', params);
     }
   },
 
