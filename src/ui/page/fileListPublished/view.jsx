@@ -8,6 +8,7 @@ import { PAGE_SIZE } from 'constants/claim';
 
 type Props = {
   checkPendingPublishes: () => void,
+  fetchClaimListMine: () => void,
   fetching: boolean,
   urls: Array<string>,
   urlTotal: ?number,
@@ -16,10 +17,11 @@ type Props = {
 };
 
 function FileListPublished(props: Props) {
-  const { checkPendingPublishes, fetching, urls, urlTotal } = props;
+  const { checkPendingPublishes, fetchClaimListMine, fetching, urls, urlTotal } = props;
   useEffect(() => {
     checkPendingPublishes();
-  }, [checkPendingPublishes]);
+    fetchClaimListMine();
+  }, [checkPendingPublishes, fetchClaimListMine]);
 
   return (
     <Page notContained>
