@@ -137,7 +137,7 @@ export default class SplashScreen extends React.PureComponent<Props, State> {
           }
         } else {
           Lbry.resolve({ urls: 'lbry://one' }).then(() => {
-            this.setState({ isRunning: true }, () => this.continueAppLaunch());
+            return this.setState({ isRunning: true }, () => this.continueAppLaunch());
           });
         }
       });
