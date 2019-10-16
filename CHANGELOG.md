@@ -19,7 +19,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 >>>>>>> add missing changes on changelog.md
 
 ### Added
-
+- Adds `Discussion` tab in the channel page: ([#3048](https://github.com/lbryio/lbry-desktop/pull/3048))
 - Keyboard shortcuts for the following actions: ([#2999](https://github.com/lbryio/lbry-desktop/pull/2999))
 
   - `→` to Seek Forward
