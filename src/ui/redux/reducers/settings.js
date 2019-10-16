@@ -11,7 +11,7 @@ const defaultState = {
     // UX
     [SETTINGS.NEW_USER_ACKNOWLEDGED]: false,
     [SETTINGS.EMAIL_COLLECTION_ACKNOWLEDGED]: false,
-    [SETTINGS.ENABLE_SYNC]: true,
+    [SETTINGS.ENABLE_SYNC]: false,
 
     // UI
     [SETTINGS.LANGUAGE]: window.localStorage.getItem(SETTINGS.LANGUAGE) || 'en',
