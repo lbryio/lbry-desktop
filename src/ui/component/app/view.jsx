@@ -40,7 +40,6 @@ type Props = {
   isUpgradeAvailable: boolean,
   autoUpdateDownloaded: boolean,
   checkSync: () => void,
-  setSyncEnabled: boolean => void,
   syncEnabled: boolean,
 };
 
@@ -59,7 +58,6 @@ function App(props: Props) {
     requestDownloadUpgrade,
     syncEnabled,
     checkSync,
-    setSyncEnabled,
   } = props;
   const appRef = useRef();
   const isEnhancedLayout = useKonamiListener();
@@ -126,9 +124,7 @@ function App(props: Props) {
   }, [hasVerifiedEmail, signIn, hasSignedIn]);
 
   useEffect(() => {
-    if (!hasVerifiedEmail && syncEnabled) {
-      setSyncEnabled(false);
-    } else if (hasVerifiedEmail && syncEnabled) {
+    if (userId && hasVerifiedEmail && syncEnabled) {
       checkSync();
 
       let syncInterval = setInterval(() => {
@@ -139,7 +135,7 @@ function App(props: Props) {
         clearInterval(syncInterval);
       };
     }
-  }, [hasVerifiedEmail, syncEnabled, checkSync, setSyncEnabled]);
+  }, [hasVerifiedEmail, syncEnabled, checkSync, userId]);
 
   if (!user) {
     return null;
