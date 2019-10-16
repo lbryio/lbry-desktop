@@ -58,10 +58,10 @@ export default function TagsSelect(props: Props) {
   }
 
   React.useEffect(() => {
-    if (tagCount === 0) {
+    if (tagCount === 0 && showClose) {
       setHasClosed(false);
     }
-  }, [tagCount, setHasClosed]);
+  }, [tagCount, setHasClosed, showClose]);
 
   return (
     ((showClose && !hasClosed) || !showClose) && (
