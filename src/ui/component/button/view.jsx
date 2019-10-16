@@ -69,7 +69,6 @@ const Button = forwardRef<any, {}>((props: Props, ref: any) => {
     ...otherProps
   } = props;
 
-  const currentPath = pathname.split('/$/')[1];
   const combinedClassName = classnames(
     'button',
     button
@@ -120,7 +119,7 @@ const Button = forwardRef<any, {}>((props: Props, ref: any) => {
       <NavLink
         ref={ref}
         exact
-        to={`/$/${PAGES.AUTH}?redirect=${currentPath}`}
+        to={`/$/${PAGES.AUTH}?redirect=${pathname}`}
         title={title}
         disabled={disabled}
         className={combinedClassName}

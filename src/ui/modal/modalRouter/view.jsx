@@ -8,7 +8,6 @@ import ModalAutoUpdateDownloaded from 'modal/modalAutoUpdateDownloaded';
 import ModalUpgrade from 'modal/modalUpgrade';
 import ModalWelcome from 'modal/modalWelcome';
 import ModalFirstReward from 'modal/modalFirstReward';
-import ModalRewardApprovalRequired from 'modal/modalRewardApprovalRequired';
 import ModalRemoveFile from 'modal/modalRemoveFile';
 import ModalTransactionFailed from 'modal/modalTransactionFailed';
 import ModalFileTimeout from 'modal/modalFileTimeout';
@@ -65,8 +64,6 @@ function ModalRouter(props: Props) {
       return <ModalFirstReward {...modalProps} />;
     case MODALS.TRANSACTION_FAILED:
       return <ModalTransactionFailed {...modalProps} />;
-    case MODALS.REWARD_APPROVAL_REQUIRED:
-      return <ModalRewardApprovalRequired {...modalProps} />;
     case MODALS.CONFIRM_FILE_REMOVE:
       return <ModalRemoveFile {...modalProps} />;
     case MODALS.AFFIRM_PURCHASE:

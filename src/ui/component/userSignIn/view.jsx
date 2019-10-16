@@ -56,6 +56,8 @@ function UserSignIn(props: Props) {
   const { search } = location;
   const urlParams = new URLSearchParams(search);
   const redirect = urlParams.get('redirect');
+  const shouldRedirectImmediately = urlParams.get('immediate');
+  const [initialSignInStep, setInitialSignInStep] = React.useState();
   const hasVerifiedEmail = user && user.has_verified_email;
   const rewardsApproved = user && user.is_reward_approved;
   const hasFetchedReward = useFetched(claimingReward);
@@ -80,7 +82,7 @@ function UserSignIn(props: Props) {
   const showEmail = !emailToVerify && !hasVerifiedEmail;
   const showEmailVerification = emailToVerify && !hasVerifiedEmail;
   const showUserVerification = hasVerifiedEmail && !rewardsApproved;
-  const showSyncPassword = syncEnabled && getSyncError && !hasSynced;
+  const showSyncPassword = syncEnabled && getSyncError;
   const showChannelCreation =
     hasVerifiedEmail &&
     balance !== undefined &&
@@ -111,7 +113,7 @@ function UserSignIn(props: Props) {
   const SIGN_IN_FLOW = [
     showEmail && <UserEmailNew />,
     showEmailVerification && <UserEmailVerify />,
-    showUserVerification && <UserVerify />,
+    showUserVerification && <UserVerify skipLink={redirect} />,
     showChannelCreation && <UserFirstChannel />,
     // @if TARGET='app'
     showYoutubeTransfer && (
@@ -132,6 +134,17 @@ function UserSignIn(props: Props) {
     for (var i = SIGN_IN_FLOW.length - 1; i > -1; i--) {
       const Component = SIGN_IN_FLOW[i];
       if (Component) {
+        // If we want to redirect immediately,
+        // remember the first step so we can redirect once a new step has been reached
+        // Ignore the loading step
+        if (redirect && shouldRedirectImmediately) {
+          if (!initialSignInStep) {
+            setInitialSignInStep(i);
+          } else if (i !== initialSignInStep && i !== SIGN_IN_FLOW.length - 1) {
+            history.replace(redirect);
+          }
+        }
+
         return Component;
       }
     }

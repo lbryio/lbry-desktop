@@ -90,7 +90,6 @@ class SettingsPage extends React.PureComponent<Props, State> {
     (this: any).onInstantPurchaseMaxChange = this.onInstantPurchaseMaxChange.bind(this);
     (this: any).onThemeChange = this.onThemeChange.bind(this);
     (this: any).onAutomaticDarkModeChange = this.onAutomaticDarkModeChange.bind(this);
-    (this: any).clearCache = this.clearCache.bind(this);
     (this: any).onChangeTime = this.onChangeTime.bind(this);
     (this: any).onConfirmForgetPassword = this.onConfirmForgetPassword.bind(this);
   }
@@ -175,19 +174,6 @@ class SettingsPage extends React.PureComponent<Props, State> {
     this.props.setDaemonSetting(name, value);
   }
 
-  clearCache() {
-    this.setState({
-      clearingCache: true,
-    });
-    const success = () => {
-      this.setState({ clearingCache: false });
-      window.location.reload();
-    };
-    const clear = () => this.props.clearCache().then(success);
-
-    setTimeout(clear, 1000, { once: true });
-  }
-
   render() {
     const {
       daemonSettings,
@@ -210,6 +196,7 @@ class SettingsPage extends React.PureComponent<Props, State> {
       floatingPlayer,
       clearPlayingUri,
       darkModeTimes,
+      clearCache,
     } = this.props;
 
     const noDaemonSettings = !daemonSettings || Object.keys(daemonSettings).length === 0;
@@ -651,7 +638,7 @@ class SettingsPage extends React.PureComponent<Props, State> {
                 <Button
                   button="inverse"
                   label={this.state.clearingCache ? __('Clearing') : __('Clear Cache')}
-                  onClick={this.clearCache}
+                  onClick={clearCache}
                   disabled={this.state.clearingCache}
                 />
               }

@@ -11,7 +11,7 @@ const select = state => ({
 });
 
 const perform = (dispatch, ownProps) => ({
-  doAuth: () => ownProps.history.push(`/$/${PAGES.AUTH}?redirect=help`),
+  doAuth: () => ownProps.history.push(`/$/${PAGES.AUTH}?redirect=/$/${PAGES.HELP}`),
   fetchAccessToken: () => dispatch(doFetchAccessToken()),
 });
 
