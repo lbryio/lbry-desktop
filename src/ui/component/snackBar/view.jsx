@@ -1,7 +1,9 @@
 // @flow
+import * as ICONS from 'constants/icons';
 import React from 'react';
 import Button from 'component/button';
 import classnames from 'classnames';
+import Icon from 'component/common/icon';
 
 type Props = {
   removeSnack: any => void,
@@ -48,7 +50,9 @@ class SnackBar extends React.PureComponent<Props> {
         })}
       >
         <div className="snack-bar__message">
-          <div>&#9432;</div>
+          <div>
+            <Icon icon={ICONS.ALERT} size={20} />
+          </div>
           <div>{message}</div>
         </div>
         {linkText && linkTarget && (
