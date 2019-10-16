@@ -776,10 +776,10 @@
   dependencies:
     regenerator-runtime "^0.13.2"
 
-"@babel/runtime@^7.4.3":
-  version "7.4.4"
-  resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.4.4.tgz#dc2e34982eb236803aa27a07fea6857af1b9171d"
-  integrity sha512-w0+uT71b6Yi7i5SE0co4NioIpSYS6lLiXvCzWzGSKvpK5vdQtCbICHMj+gbAKAOtxiV6HsVh/MBdaF9EQ6faSg==
+"@babel/runtime@^7.6.0":
+  version "7.6.3"
+  resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.6.3.tgz#935122c74c73d2240cafd32ddb5fc2a6cd35cf1f"
+  integrity sha512-kq6anf9JGjW8Nt5rYfEuGRaEAaH1mkv3Bbu6rYvLOpPh/RusSJXuKPEAoZ7L7gybZkchE8+NV5g9vKF4AGAtsA==
   dependencies:
     regenerator-runtime "^0.13.2"
 
@@ -6911,10 +6911,10 @@ levn@^0.3.0, levn@~0.3.0:
     prelude-ls "~1.1.2"
     type-check "~0.3.2"
 
-libarchive.js@^1.1.0:
-  version "1.1.0"
-  resolved "https://registry.yarnpkg.com/libarchive.js/-/libarchive.js-1.1.0.tgz#8cc21a5a8ee59e5a02ce6eb966e140a7a44622bc"
-  integrity sha512-vh0dHBPK00ggbmTupqFWfws46a5QO/S5ZQ36Ymdyo4R93crXewXKJpYDpC/HROgOofvO8ogDdOLmU5MX8xGfmQ==
+libarchive.js@^1.3.0:
+  version "1.3.0"
+  resolved "https://registry.yarnpkg.com/libarchive.js/-/libarchive.js-1.3.0.tgz#18c42c6b4ce727a02359c90769e4e454cf3743cd"
+  integrity sha512-EkQfRXt9DhWwj6BnEA2TNpOf4jTnzSTUPGgE+iFxcdNqjktY8GitbDeHnx8qZA0/IukNyyBUR3oQKRdYkO+HFg==
 
 lie@3.1.1:
   version "3.1.1"
@@ -9670,12 +9670,12 @@ rc@^1.0.1, rc@^1.1.6, rc@^1.2.1, rc@^1.2.7, rc@^1.2.8:
     minimist "^1.2.0"
     strip-json-comments "~2.0.1"
 
-react-compound-slider@^1.2.2:
-  version "1.2.2"
-  resolved "https://registry.yarnpkg.com/react-compound-slider/-/react-compound-slider-1.2.2.tgz#1cc6809bb2d0282ad90a06040e2b10635edfbea3"
-  integrity sha512-G2wD5CTjAOTjCnslpfjopB5qU6Kg0//3ChPifezSGtMali/1M/CRDCJAh6SQOgyDaQlNi/QV1Noo8Tvnjy2gcg==
+react-compound-slider@^2.3.0:
+  version "2.3.0"
+  resolved "https://registry.yarnpkg.com/react-compound-slider/-/react-compound-slider-2.3.0.tgz#6eb076e626be621246c2e77107273cca186beb73"
+  integrity sha512-b5gP7KZJwcaqKE8R3zhArR56Npg9I4h2pyAHzXXhII50nzF7boGTSJAfrgZ36mQPhCbijuzxV+9qqVjobfbZ+Q==
   dependencies:
-    "@babel/runtime" "^7.4.3"
+    "@babel/runtime" "^7.6.0"
     d3-array "^1.2.4"
     prop-types "^15.7.2"
     warning "^3.0.0"
@@ -12252,16 +12252,17 @@ videojs-vtt.js@0.14.1:
   dependencies:
     global "^4.3.1"
 
-villain@btzr-io/Villain:
-  version "0.0.7"
-  resolved "https://codeload.github.com/btzr-io/Villain/tar.gz/1f39a679cd78b08f8acc0b36615550eb91f6ee03"
+villain-react@^0.0.9:
+  version "0.0.9"
+  resolved "https://registry.yarnpkg.com/villain-react/-/villain-react-0.0.9.tgz#f967152537c869e4bd44deba5be4adf107cc88fd"
+  integrity sha512-yKwSrawbgfm90WNbvlcL4ekks1LAmBz3d6ERYc/j5Q1IqD5jAoHpOjxDlEZwekjxU7ifcTyIIqN8A/C2c2HYRQ==
   dependencies:
     clsx "^1.0.4"
-    libarchive.js "^1.1.0"
+    libarchive.js "^1.3.0"
     openseadragon "^2.4.0"
     prop-types "^15.7.2"
     react "^16.8.6"
-    react-compound-slider "^1.2.2"
+    react-compound-slider "^2.3.0"
     react-dom "^16.8.6"
 
 vm-browserify@0.0.4:

@@ -1,7 +1,7 @@
 // @flow
 import * as React from 'react';
-import Villain from 'villain';
-import 'villain/dist/style.css';
+import Villain from 'villain-react';
+import 'villain-react/dist/style.css';
 
 type Props = {
   source: {
@@ -16,17 +16,12 @@ if (process.env.NODE_ENV !== 'production') {
   workerPath = `/${workerPath}`;
 }
 
-const opts = {
-  workerPath,
-  allowFullScreen: false,
-  autoHideControls: true,
-};
+const opts = { workerPath };
 
 class ComicBookViewer extends React.PureComponent<Props> {
   render() {
     const { downloadPath } = this.props.source || {};
     const file = `file://${downloadPath}`;
-
     return <Villain file={file} width={'100%'} height={'100%'} options={opts} />;
   }
 }

@@ -188,7 +188,7 @@
     "tree-kill": "^1.1.0",
     "unist-util-visit": "^1.4.1",
     "video.js": "^7.2.2",
-    "villain": "btzr-io/Villain",
+    "villain-react": "^0.0.9",
     "wavesurfer.js": "^2.2.1",
     "webpack": "^4.28.4",
     "webpack-bundle-analyzer": "^3.1.0",
