@@ -11,10 +11,9 @@ import { doOpenModal } from './app';
 export const doPublishDesktop = () => (dispatch: Dispatch, getState: () => {}) => {
   const publishSuccess = successResponse => {
     const state = getState();
-    analytics.apiLogPublish();
     const myClaims = selectMyClaims(state);
     const pendingClaim = successResponse.outputs[0];
-    analytics.apiPublishNew(pendingClaim);
+    analytics.apiLogPublish(pendingClaim);
     const { permanent_url: url } = pendingClaim;
     const actions = [];
 
