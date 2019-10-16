@@ -3,7 +3,8 @@ import React from 'react';
 import { Form, FormField } from 'component/common/form';
 import Button from 'component/button';
 import Card from 'component/common/card';
-import { setSavedPassword, deleteSavedPassword } from 'util/saved-passwords';
+import { setSavedPassword } from 'util/saved-passwords';
+import usePersistedState from 'effects/use-persisted-state';
 
 type Props = {
   getSync: (?string) => void,
@@ -13,15 +14,10 @@ type Props = {
 function SyncPassword(props: Props) {
   const { getSync, getSyncIsPending } = props;
   const [password, setPassword] = React.useState('');
-  const [rememberPassword, setRememberPassword] = React.useState(true);
+  const [rememberPassword, setRememberPassword] = usePersistedState(true);
 
   function handleSubmit() {
-    if (rememberPassword) {
-      setSavedPassword(password);
-    } else {
-      deleteSavedPassword();
-    }
-
+    setSavedPassword(password, rememberPassword);
     getSync(password);
   }
 
@@ -39,6 +35,7 @@ function SyncPassword(props: Props) {
               onChange={e => setPassword(e.target.value)}
             />
             <FormField
+              name="remember-password"
               type="checkbox"
               label={__('Remember My Password')}
               checked={rememberPassword}

@@ -125,12 +125,8 @@ rewards.setCallback('claimFirstRewardSuccess', () => {
   app.store.dispatch(doOpenModal(MODALS.FIRST_REWARD));
 });
 
-rewards.setCallback('rewardApprovalRequired', () => {
-  app.store.dispatch(doOpenModal(MODALS.REWARD_APPROVAL_REQUIRED));
-});
-
 rewards.setCallback('claimRewardSuccess', () => {
-  app.store.dispatch(doHideModal(MODALS.REWARD_APPROVAL_REQUIRED));
+  app.store.dispatch(doHideModal());
 });
 
 // @if TARGET='app'

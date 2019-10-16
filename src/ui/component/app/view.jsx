@@ -124,7 +124,7 @@ function App(props: Props) {
   }, [hasVerifiedEmail, signIn, hasSignedIn]);
 
   useEffect(() => {
-    if (userId && hasVerifiedEmail && syncEnabled) {
+    if (hasVerifiedEmail && syncEnabled) {
       checkSync();
 
       let syncInterval = setInterval(() => {
@@ -135,7 +135,7 @@ function App(props: Props) {
         clearInterval(syncInterval);
       };
     }
-  }, [hasVerifiedEmail, syncEnabled, checkSync, userId]);
+  }, [hasVerifiedEmail, syncEnabled, checkSync]);
 
   if (!user) {
     return null;

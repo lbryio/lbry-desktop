@@ -1,25 +1,44 @@
 // @flow
+import * as PAGES from 'constants/pages';
 import React from 'react';
-import { FormField } from 'component/common/form';
 import Button from 'component/button';
+import { FormField } from 'component/common/form';
+import { withRouter } from 'react-router';
 
 type Props = {
   setSyncEnabled: boolean => void,
   syncEnabled: boolean,
   verifiedEmail: ?string,
+  history: { push: string => void },
+  location: UrlLocation,
+  getSyncError: ?string,
 };
 
 function SyncToggle(props: Props) {
-  const { setSyncEnabled, syncEnabled, verifiedEmail } = props;
-  console.log('??', syncEnabled);
+  const {
+    setSyncEnabled,
+    syncEnabled,
+    verifiedEmail,
+    getSyncError,
+    history,
+    location: { pathname },
+  } = props;
+
   function handleChange() {
     setSyncEnabled(!syncEnabled);
+  }
+
+  if (getSyncError) {
+    return history.push(`/$/${PAGES.AUTH}?redirect=${pathname}&immediate=true`);
   }
 
   return (
     <div>
       {!verifiedEmail ? (
-        <Button requiresAuth button="primary" label={__('Start Syncing')} />
+        <div>
+          <Button requiresAuth button="primary" label={__('Add Email')} />
+          <p className="help">{__('An email address is required to sync your account.')}</p>
+        </div>
       ) : (
         <FormField
           type="checkbox"
@@ -33,4 +52,4 @@ function SyncToggle(props: Props) {
   );
 }
 
-export default SyncToggle;
+export default withRouter(SyncToggle);

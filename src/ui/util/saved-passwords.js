@@ -2,14 +2,16 @@ import { ipcRenderer } from 'electron';
 
 let sessionPassword;
 
-export const setSavedPassword = value => {
+export const setSavedPassword = (value, saveToDisk) => {
   return new Promise(resolve => {
     ipcRenderer.once('set-password-response', (event, success) => {
       resolve(success);
     });
 
     sessionPassword = value;
-    ipcRenderer.send('set-password', value);
+    if (saveToDisk && value) {
+      ipcRenderer.send('set-password', value);
+    }
   });
 };
 
