@@ -29,7 +29,8 @@ function SyncToggle(props: Props) {
   }
 
   if (getSyncError) {
-    return history.push(`/$/${PAGES.AUTH}?redirect=${pathname}&immediate=true`);
+    history.push(`/$/${PAGES.AUTH}?redirect=${pathname}&immediate=true`);
+    return null;
   }
 
   return (
