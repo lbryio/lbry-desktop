@@ -14,12 +14,15 @@ import FileViewer from 'component/fileViewer';
 import { withRouter } from 'react-router';
 import usePrevious from 'effects/use-previous';
 import Button from 'component/button';
+import cookie from 'cookie';
 
 export const MAIN_WRAPPER_CLASS = 'main-wrapper';
 // @if TARGET='app'
 export const IS_MAC = process.platform === 'darwin';
 // @endif
 const SYNC_INTERVAL = 1000 * 60 * 5; // 5 minutes
+
+const { auth_token: authToken } = cookie.parse(document.cookie);
 
 type Props = {
   alertError: (string | {}) => void,
@@ -40,6 +43,7 @@ type Props = {
   isUpgradeAvailable: boolean,
   autoUpdateDownloaded: boolean,
   checkSync: () => void,
+  setSyncEnabled: boolean => void,
   syncEnabled: boolean,
 };
 
@@ -56,9 +60,11 @@ function App(props: Props) {
     autoUpdateDownloaded,
     isUpgradeAvailable,
     requestDownloadUpgrade,
+    setSyncEnabled,
     syncEnabled,
     checkSync,
   } = props;
+
   const appRef = useRef();
   const isEnhancedLayout = useKonamiListener();
   const [hasSignedIn, setHasSignedIn] = useState(false);
@@ -76,6 +82,17 @@ function App(props: Props) {
     const newpath = buildURI(parseURI(pathname.slice(1).replace(/:/g, '#')));
     uri = newpath + hash;
   } catch (e) {}
+
+  // This should not be needed and will be removed after 37 is released
+  // We should just be able to default the enableSync setting to true, but we don't want
+  // to automatically opt-in existing users. Only users that go through the new sign in flow
+  // should be automatically opted-in (they choose to uncheck the option and turn off sync still)
+  useEffect(() => {
+    if (!authToken) {
+      setSyncEnabled(true);
+    }
+    // don't pass in any props to this, we only want the initial value
+  }, []);
 
   useEffect(() => {
     ReactModal.setAppElement(appRef.current);

@@ -44,7 +44,7 @@ function SyncToggle(props: Props) {
         <FormField
           type="checkbox"
           name="sync_toggle"
-          label={__('Sync your balance and preferences accross LBRY apps.')}
+          label={__('Sync your balance and preferences accross devices.')}
           checked={syncEnabled}
           onChange={handleChange}
         />

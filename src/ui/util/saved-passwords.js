@@ -9,7 +9,7 @@ export const setSavedPassword = (value, saveToDisk) => {
     });
 
     sessionPassword = value;
-    if (saveToDisk && value !== undefined && value !== null) {
+    if (saveToDisk && value !== undefined && value !== null && value !== '') {
       ipcRenderer.send('set-password', value);
     }
   });
