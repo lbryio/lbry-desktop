@@ -118,27 +118,29 @@ export default class SplashScreen extends React.PureComponent<Props, State> {
     const { wallet, startup_status: startupStatus, blockchain_headers: blockchainHeaders } = status;
 
     // If the wallet is locked, stop doing anything and make the user input their password
-    if (status.is_running && wallet && wallet.is_locked) {
+    if (status.is_running) {
       // Clear the error timeout, it might sit on this step for a while until someone enters their password
       if (this.timeout) {
         clearTimeout(this.timeout);
       }
 
-      // Make sure there isn't another active modal (like INCOMPATIBLE_DAEMON)
-      if (launchedModal === false && !modal) {
-        this.setState({ launchedModal: true }, () => notifyUnlockWallet());
-      }
-    } else if (status.is_running) {
-      // If we cleared the error timeout due to a wallet being locked, make sure to start it back up
-      if (!this.timeout) {
-        this.adjustErrorTimeout();
-      }
+      Lbry.wallet_status().then(walletStatus => {
+        if (walletStatus.is_locked) {
+          // Make sure there isn't another active modal (like INCOMPATIBLE_DAEMON)
+          if (launchedModal === false && !modal) {
+            this.setState({ launchedModal: true }, () => notifyUnlockWallet());
+          }
 
-      Lbry.resolve({ urls: 'lbry://one' }).then(() => {
-        this.setState({ isRunning: true }, () => this.continueAppLaunch());
+          // If we cleared the error timeout due to a wallet being locked, make sure to start it back up
+          if (!this.timeout) {
+            this.adjustErrorTimeout();
+          }
+        } else {
+          Lbry.resolve({ urls: 'lbry://one' }).then(() => {
+            this.setState({ isRunning: true }, () => this.continueAppLaunch());
+          });
+        }
       });
-
-      return;
     } else if (blockchainHeaders) {
       const blockChainHeaders = blockchainHeaders;
       if (blockChainHeaders.download_progress < 100) {
@@ -153,13 +155,7 @@ export default class SplashScreen extends React.PureComponent<Props, State> {
         message: __('Blockchain Sync'),
         details: `${__('Catching up...')} (${__(amountBehind, { amountBehind: wallet.blocks_behind })})`,
       });
-    } else if (
-      wallet &&
-      wallet.blocks_behind === 0 &&
-      !wallet.is_locked &&
-      !status.is_running &&
-      startupStatus.database
-    ) {
+    } else if (wallet && wallet.blocks_behind === 0 && !status.is_running && startupStatus.database) {
       this.setState({
         message: 'Finalizing',
         details: 'Almost ready...',
