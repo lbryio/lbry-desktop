@@ -813,5 +813,10 @@
   "Claimed Rewards": "Claimed Rewards",
   "This feature is not yet available for wallets with balances, but the gerbils are working on it.": "This feature is not yet available for wallets with balances, but the gerbils are working on it.",
   "I Understand": "I Understand",
-  "No modifier provided after separator %modSeperator%.": "No modifier provided after separator %modSeperator%."
+  "No modifier provided after separator %modSeperator%.": "No modifier provided after separator %modSeperator%.",
+  "Show anonymous content": "Show anonymous content",
+  "Anonymous content is published without a channel.": "Anonymous content is published without a channel.",
+  "settings": "settings",
+  "Content may be hidden on this %type% because of your %settings%": "Content may be hidden on this %type% because of your %settings%",
+  "Content may be hidden on this %type% because of your %settings%.": "Content may be hidden on this %type% because of your %settings%."
 }
