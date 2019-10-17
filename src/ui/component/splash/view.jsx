@@ -130,41 +130,39 @@ export default class SplashScreen extends React.PureComponent<Props, State> {
           if (launchedModal === false && !modal) {
             this.setState({ launchedModal: true }, () => notifyUnlockWallet());
           }
-
-          // If we cleared the error timeout due to a wallet being locked, make sure to start it back up
-          if (!this.timeout) {
-            this.adjustErrorTimeout();
-          }
         } else {
-          Lbry.resolve({ urls: 'lbry://one' }).then(() => {
-            return this.setState({ isRunning: true }, () => this.continueAppLaunch());
+          return Lbry.resolve({ urls: 'lbry://one' }).then(() => {
+            this.setState({ isRunning: true }, () => this.continueAppLaunch());
           });
         }
       });
-    } else if (blockchainHeaders) {
-      const blockChainHeaders = blockchainHeaders;
-      if (blockChainHeaders.download_progress < 100) {
+    } else {
+      if (blockchainHeaders) {
+        const blockChainHeaders = blockchainHeaders;
+        if (blockChainHeaders.download_progress < 100) {
+          this.setState({
+            message: __('Blockchain Sync'),
+            details: `${__('Catching up...')} (${blockchainHeaders.download_progress}%)`,
+          });
+        }
+      } else if (wallet && wallet.blocks_behind > 0) {
+        const amountBehind =
+          wallet.blocks_behind === 1 ? '%amountBehind% block behind' : '%amountBehind% blocks behind';
         this.setState({
           message: __('Blockchain Sync'),
-          details: `${__('Catching up...')} (${blockchainHeaders.download_progress}%)`,
+          details: `${__('Catching up...')} (${__(amountBehind, { amountBehind: wallet.blocks_behind })})`,
+        });
+      } else if (wallet && wallet.blocks_behind === 0 && !status.is_running && startupStatus.database) {
+        this.setState({
+          message: 'Finalizing',
+          details: 'Almost ready...',
         });
       }
-    } else if (wallet && wallet.blocks_behind > 0) {
-      const amountBehind = wallet.blocks_behind === 1 ? '%amountBehind% block behind' : '%amountBehind% blocks behind';
-      this.setState({
-        message: __('Blockchain Sync'),
-        details: `${__('Catching up...')} (${__(amountBehind, { amountBehind: wallet.blocks_behind })})`,
-      });
-    } else if (wallet && wallet.blocks_behind === 0 && !status.is_running && startupStatus.database) {
-      this.setState({
-        message: 'Finalizing',
-        details: 'Almost ready...',
-      });
-    }
 
-    setTimeout(() => {
-      this.updateStatus();
-    }, 500);
+      setTimeout(() => {
+        this.updateStatus();
+      }, 500);
+    }
   }
 
   runWithIncompatibleDaemon() {
