@@ -196,6 +196,7 @@ class SettingsPage extends React.PureComponent<Props, State> {
       darkModeTimes,
       clearCache,
     } = this.props;
+    const { storedPassword } = this.state;
 
     const noDaemonSettings = !daemonSettings || Object.keys(daemonSettings).length === 0;
 
@@ -215,7 +216,15 @@ class SettingsPage extends React.PureComponent<Props, State> {
         ) : (
           <div>
             <Card title={__('Language')} actions={<SettingLanguage />} />
-            <Card title={__('Sync')} actions={<SyncToggle />} />
+            <Card
+              title={__('Sync')}
+              subtitle={
+                walletEncrypted && !storedPassword
+                  ? __("To enable this feature, check 'Save Password' the next time you start the app.")
+                  : null
+              }
+              actions={<SyncToggle disabled={walletEncrypted && !storedPassword} />}
+            />
             {/* @if TARGET='app' */}
             <Card
               title={__('Download Directory')}

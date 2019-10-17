@@ -12,6 +12,7 @@ type Props = {
   history: { push: string => void },
   location: UrlLocation,
   getSyncError: ?string,
+  disabled: boolean,
 };
 
 function SyncToggle(props: Props) {
@@ -22,6 +23,7 @@ function SyncToggle(props: Props) {
     getSyncError,
     history,
     location: { pathname },
+    disabled = false,
   } = props;
 
   function handleChange() {
@@ -47,6 +49,7 @@ function SyncToggle(props: Props) {
           label={__('Sync your balance and preferences accross devices.')}
           checked={syncEnabled}
           onChange={handleChange}
+          disabled={disabled}
         />
       )}
     </div>
