@@ -830,5 +830,6 @@
   "%nameOrTitle% has been published to lbry://%name%. Click here to view it.": "%nameOrTitle% has been published to lbry://%name%. Click here to view it.",
   "Discussion": "Discussion",
   "If you don't choose a file, the file from your existing claim %name% will be used": "If you don't choose a file, the file from your existing claim %name% will be used",
-  "To enable this feature, check 'Save Password' the next time you start the app.": "To enable this feature, check 'Save Password' the next time you start the app."
+  "To enable this feature, check 'Save Password' the next time you start the app.": "To enable this feature, check 'Save Password' the next time you start the app.",
+  "An email address is required to sync your account.": "An email address is required to sync your account."
 }

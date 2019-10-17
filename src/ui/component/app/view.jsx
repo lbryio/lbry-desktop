@@ -93,7 +93,7 @@ function App(props: Props) {
   // to automatically opt-in existing users. Only users that go through the new sign in flow
   // should be automatically opted-in (they choose to uncheck the option and turn off sync still)
   useEffect(() => {
-    if (balance === undefined || accessToken === undefined) {
+    if (balance === undefined || accessToken === undefined || hasDeterminedIfNewUser) {
       return;
     }
 
@@ -121,7 +121,7 @@ function App(props: Props) {
       }
       setHasDeterminedIfNewUser(true);
     });
-  }, [balance, accessToken]);
+  }, [balance, accessToken, hasDeterminedIfNewUser]);
 
   useEffect(() => {
     ReactModal.setAppElement(appRef.current);
