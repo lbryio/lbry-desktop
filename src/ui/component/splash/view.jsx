@@ -119,50 +119,54 @@ export default class SplashScreen extends React.PureComponent<Props, State> {
 
     // If the wallet is locked, stop doing anything and make the user input their password
     if (status.is_running) {
-      // Clear the error timeout, it might sit on this step for a while until someone enters their password
-      if (this.timeout) {
-        clearTimeout(this.timeout);
-      }
-
-      Lbry.wallet_status().then(walletStatus => {
+      return Lbry.wallet_status().then(walletStatus => {
         if (walletStatus.is_locked) {
+          // Clear the error timeout, it might sit on this step for a while until someone enters their password
+          if (this.timeout) {
+            clearTimeout(this.timeout);
+          }
           // Make sure there isn't another active modal (like INCOMPATIBLE_DAEMON)
           if (launchedModal === false && !modal) {
             this.setState({ launchedModal: true }, () => notifyUnlockWallet());
+
+            setTimeout(() => {
+              this.updateStatus();
+            }, 500);
           }
         } else {
-          return Lbry.resolve({ urls: 'lbry://one' }).then(() => {
+          if (!this.timeout) {
+            this.adjustErrorTimeout();
+          }
+
+          Lbry.resolve({ urls: 'lbry://one' }).then(() => {
             this.setState({ isRunning: true }, () => this.continueAppLaunch());
           });
         }
       });
-    } else {
-      if (blockchainHeaders) {
-        const blockChainHeaders = blockchainHeaders;
-        if (blockChainHeaders.download_progress < 100) {
-          this.setState({
-            message: __('Blockchain Sync'),
-            details: `${__('Catching up...')} (${blockchainHeaders.download_progress}%)`,
-          });
-        }
-      } else if (wallet && wallet.blocks_behind > 0) {
-        const amountBehind =
-          wallet.blocks_behind === 1 ? '%amountBehind% block behind' : '%amountBehind% blocks behind';
+    } else if (blockchainHeaders) {
+      const blockChainHeaders = blockchainHeaders;
+      if (blockChainHeaders.download_progress < 100) {
         this.setState({
           message: __('Blockchain Sync'),
-          details: `${__('Catching up...')} (${__(amountBehind, { amountBehind: wallet.blocks_behind })})`,
-        });
-      } else if (wallet && wallet.blocks_behind === 0 && !status.is_running && startupStatus.database) {
-        this.setState({
-          message: 'Finalizing',
-          details: 'Almost ready...',
+          details: `${__('Catching up...')} (${blockchainHeaders.download_progress}%)`,
         });
       }
-
-      setTimeout(() => {
-        this.updateStatus();
-      }, 500);
+    } else if (wallet && wallet.blocks_behind > 0) {
+      const amountBehind = wallet.blocks_behind === 1 ? '%amountBehind% block behind' : '%amountBehind% blocks behind';
+      this.setState({
+        message: __('Blockchain Sync'),
+        details: `${__('Catching up...')} (${__(amountBehind, { amountBehind: wallet.blocks_behind })})`,
+      });
+    } else if (wallet && wallet.blocks_behind === 0 && !status.is_running && startupStatus.database) {
+      this.setState({
+        message: 'Finalizing',
+        details: 'Almost ready...',
+      });
     }
+
+    setTimeout(() => {
+      this.updateStatus();
+    }, 500);
   }
 
   runWithIncompatibleDaemon() {
