@@ -897,7 +897,7 @@
   resolved "https://registry.yarnpkg.com/@posthtml/esm/-/esm-1.0.0.tgz#09bcb28a02438dcee22ad1970ca1d85a000ae0cf"
   integrity sha512-dEVG+ITnvqKGa4v040tP+n8LOKOqr94qjLva7bE5pnfm2KHJwsKz69J4KMxgWLznbpBJzy8vQfCayEk3vLZnZQ==
 
-"@reach/auto-id@0.2.0", "@reach/auto-id@^0.2.0":
+"@reach/auto-id@^0.2.0":
   version "0.2.0"
   resolved "https://registry.yarnpkg.com/@reach/auto-id/-/auto-id-0.2.0.tgz#97f9e48fe736aa5c6f4f32cf73c1f19d005f8550"
   integrity sha512-lVK/svL2HuQdp7jgvlrLkFsUx50Az9chAhxpiPwBqcS83I2pVWvXp98FOcSCCJCV++l115QmzHhFd+ycw1zLBg==
@@ -948,18 +948,6 @@
     "@reach/utils" "^0.2.2"
     warning "^4.0.2"
 
-"@reach/tooltip@^0.2.1":
-  version "0.2.1"
-  resolved "https://registry.yarnpkg.com/@reach/tooltip/-/tooltip-0.2.1.tgz#70a80d6defedee53cedf5480cd3d37dfb20020d0"
-  integrity sha512-3O7oXoymNkEAolHN9WbuspY7mA3zIOrTaibmYkKFtGT6FgyBrAQyOQn1ZhBuSza6RjSIkEtFRpbDEKK1UJEI6A==
-  dependencies:
-    "@reach/auto-id" "0.2.0"
-    "@reach/portal" "^0.2.1"
-    "@reach/rect" "^0.2.1"
-    "@reach/utils" "^0.2.3"
-    "@reach/visually-hidden" "^0.1.4"
-    prop-types "^15.7.2"
-
 "@reach/utils@^0.2.2":
   version "0.2.2"
   resolved "https://registry.yarnpkg.com/@reach/utils/-/utils-0.2.2.tgz#c3a05ae9fd1f921988ae8a89b5a0d28d1a2b92df"
@@ -969,11 +957,6 @@
   version "0.2.3"
   resolved "https://registry.yarnpkg.com/@reach/utils/-/utils-0.2.3.tgz#820f6a6af4301b4c5065cfc04bb89e6a3d1d723f"
   integrity sha512-zM9rA8jDchr05giMhL95dPeYkK67cBQnIhCVrOKKqgWGsv+2GE/HZqeptvU4zqs0BvIqsThwov+YxVNVh5csTQ==
-
-"@reach/visually-hidden@^0.1.4":
-  version "0.1.4"
-  resolved "https://registry.yarnpkg.com/@reach/visually-hidden/-/visually-hidden-0.1.4.tgz#0dc4ecedf523004337214187db70a46183bd945b"
-  integrity sha512-QHbzXjflSlCvDd6vJwdwx16mSB+vUCCQMiU/wK/CgVNPibtpEiIbisyxkpZc55DyDFNUIqP91rSUsNae+ogGDQ==
 
 "@reach/window-size@^0.1.4":
   version "0.1.4"
