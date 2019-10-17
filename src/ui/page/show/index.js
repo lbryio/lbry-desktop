@@ -5,6 +5,7 @@ import {
   makeSelectClaimForUri,
   makeSelectIsUriResolving,
   makeSelectTotalPagesForChannel,
+  makeSelectTitleForUri,
   normalizeURI,
 } from 'lbry-redux';
 import { selectBlackListedOutpoints } from 'lbryinc';
@@ -36,6 +37,7 @@ const select = (state, props) => {
     blackListedOutpoints: selectBlackListedOutpoints(state),
     totalPages: makeSelectTotalPagesForChannel(uri, PAGE_SIZE)(state),
     uri,
+    title: makeSelectTitleForUri(uri)(state),
   };
 };
 
