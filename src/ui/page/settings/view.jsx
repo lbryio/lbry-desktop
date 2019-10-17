@@ -519,17 +519,9 @@ class SettingsPage extends React.PureComponent<Props, State> {
                     label={__('Encrypt my wallet with a custom password')}
                     helper={
                       <React.Fragment>
-                        <I18nMessage
-                          tokens={{
-                            learn_more: (
-                              <Button button="link" label={__('Learn more')} href="https://lbry.com/faq/account-sync" />
-                            ),
-                          }}
-                        >
-                          Wallet encryption is currently unavailable until it's supported for synced accounts. It will
-                          be added back soon. %learn_more%
-                        </I18nMessage>
-                        {/* {__('Secure your local wallet data with a custom password.')}{' '}
+                        {__(
+                          'Secure your local and synced wallet data with a custom password. If sync is enabled, this new password will be required on all devices.'
+                        )}{' '}
                         <strong>{__('Lost passwords cannot be recovered.')} </strong>
                         <Button button="link" label={__('Learn more')} href="https://lbry.com/faq/wallet-encryption" />. */}
                       </React.Fragment>
@@ -629,9 +621,7 @@ class SettingsPage extends React.PureComponent<Props, State> {
               title={__('Application Cache')}
               subtitle={
                 <p className="card__subtitle--status">
-                  {__(
-                    'This will clear the application cache. Your wallet will not be affected. Currently, followed tags and blocked channels will be cleared.'
-                  )}
+                  {__('This will clear the application cache. Your wallet will not be affected.')}
                 </p>
               }
               actions={

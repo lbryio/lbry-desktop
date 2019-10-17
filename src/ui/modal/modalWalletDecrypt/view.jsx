@@ -2,13 +2,16 @@
 import React from 'react';
 import { Modal } from 'modal/modal';
 import Button from 'component/button';
-import { deleteAuthToken } from 'util/saved-passwords';
+import { getSavedPassword, deleteSavedPassword } from 'util/saved-passwords';
 
 type Props = {
   closeModal: () => void,
   decryptWallet: () => void,
   updateWalletStatus: () => void,
   walletDecryptSucceded: boolean,
+  getSync: (?string) => void,
+  syncEnabled: boolean,
+  syncAndDecrypt: (?string, ?string, boolean) => void,
 };
 
 type State = {
@@ -24,15 +27,25 @@ class ModalWalletDecrypt extends React.PureComponent<Props, State> {
     const { props, state } = this;
 
     if (state.submitted && props.walletDecryptSucceded === true) {
-      deleteAuthToken();
       props.closeModal();
       props.updateWalletStatus();
     }
   }
 
   submitDecryptForm() {
+    const { decryptWallet, getSync, syncEnabled, syncAndDecrypt } = this.props;
     this.setState({ submitted: true });
-    this.props.decryptWallet();
+
+    getSavedPassword().then(oldPassword => {
+      if (syncEnabled) {
+        return syncAndDecrypt(oldPassword, '', false)
+          .then(() => getSync(''))
+          .then(() => deleteSavedPassword());
+      } else {
+        decryptWallet();
+        deleteSavedPassword();
+      }
+    });
   }
 
   render() {

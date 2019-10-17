@@ -3,7 +3,7 @@ import React from 'react';
 import { Form, FormField, Submit } from 'component/common/form';
 import { Modal } from 'modal/modal';
 import Button from 'component/button';
-import { setSavedPassword } from 'util/saved-passwords';
+import { setSavedPassword, getSavedPassword } from 'util/saved-passwords';
 
 type Props = {
   closeModal: () => void,
@@ -11,6 +11,9 @@ type Props = {
   updateWalletStatus: boolean,
   encryptWallet: (?string) => void,
   updateWalletStatus: () => void,
+  getSync: (?string) => void,
+  syncEnabled: boolean,
+  syncAndEncrypt: (?string, ?string, boolean) => void,
 };
 
 type State = {
@@ -72,7 +75,8 @@ class ModalWalletEncrypt extends React.PureComponent<Props, State> {
   }
 
   submitEncryptForm() {
-    const { state } = this;
+    const { encryptWallet, getSync, syncEnabled, syncAndEncrypt } = this.props;
+    const { newPassword, rememberPassword, newPasswordConfirm, understandConfirmed } = this.state;
 
     let invalidEntries = false;
 
@@ -93,7 +97,19 @@ class ModalWalletEncrypt extends React.PureComponent<Props, State> {
       setSavedPassword(state.newPassword);
     }
     this.setState({ submitted: true });
-    this.props.encryptWallet(state.newPassword);
+
+    getSavedPassword().then(oldPassword => {
+      if (syncEnabled) {
+        return syncAndEncrypt(oldPassword || '', newPassword, true)
+          .then(() => getSync(newPassword))
+          .then(() => setSavedPassword(newPassword, rememberPassword));
+      } else {
+        encryptWallet(newPassword);
+        if (rememberPassword === true) {
+          setSavedPassword(newPassword, rememberPassword);
+        }
+      }
+    });
   }
 
   render() {
@@ -112,7 +128,7 @@ class ModalWalletEncrypt extends React.PureComponent<Props, State> {
         <Form onSubmit={() => this.submitEncryptForm()}>
           <p>
             {__(
-              'Encrypting your wallet will require a password to access your local wallet data when LBRY starts. Please enter a new password for your wallet.'
+              'Encrypting your wallet will require a password to access your local and synced (if enabled) wallet data when LBRY starts. Please enter a new password for your wallet.'
             )}{' '}
             <Button button="link" label={__('Learn more')} href="https://lbry.com/faq/wallet-encryption" />.
           </p>
