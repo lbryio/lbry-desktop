@@ -5,7 +5,7 @@ import windowStateKeeper from 'electron-window-state';
 
 import setupBarMenu from './menu/setupBarMenu';
 import * as PAGES from '../../ui/constants/pages';
-import SUPPORTED_LANGUAGES from '../../ui/constants/supported_languages';
+import setLanguage from './setLanguage';
 
 export default appState => {
   // Get primary display dimensions from Electron.
@@ -147,18 +147,3 @@ export default appState => {
 
   return window;
 };
-
-async function setLanguage(window) {
-  const storedLanguage = await window.webContents.executeJavaScript("localStorage.getItem('language')");
-  const lang = storedLanguage || app.getLocale().slice(0, 2) || 'en';
-
-  const supportedNonEnglish = Object.keys(SUPPORTED_LANGUAGES).filter(language => language !== 'en');
-  if (supportedNonEnglish.includes(lang)) {
-    const response = await fetch('https://lbry.com/i18n/get/lbry-desktop/app-strings/' + lang + '.json');
-    const json = await response.json();
-    const messages = {};
-    messages[lang] = json;
-    // Send message to render layer to update language.
-    window.webContents.send('language-update', messages, lang);
-  }
-}
