@@ -821,5 +821,13 @@
   "Sync": "Sync",
   "earned and bound in tips": "earned and bound in tips",
   "currently staked": "currently staked",
-  "%amountBehind% block behind": "%amountBehind% block behind"
+  "%amountBehind% block behind": "%amountBehind% block behind",
+  "Sync balance and preferences across devices.": "Sync balance and preferences across devices.",
+  "By continuing, I agree to the %terms% and confirm I am over the age of 13.": "By continuing, I agree to the %terms% and confirm I am over the age of 13.",
+  "Advanced Editor": "Advanced Editor",
+  "If you bid more than %amount% LBC, when someone navigates to %uri%, it will load your published content. However, you can get a longer version of this URL for any bid.": "If you bid more than %amount% LBC, when someone navigates to %uri%, it will load your published content. However, you can get a longer version of this URL for any bid.",
+  "Sync your balance and preferences accross devices.": "Sync your balance and preferences accross devices.",
+  "%nameOrTitle% has been published to lbry://%name%. Click here to view it.": "%nameOrTitle% has been published to lbry://%name%. Click here to view it.",
+  "Discussion": "Discussion",
+  "If you don't choose a file, the file from your existing claim %name% will be used": "If you don't choose a file, the file from your existing claim %name% will be used"
 }

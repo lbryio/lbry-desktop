@@ -41,9 +41,15 @@ export const setSavedPassword = (value?: string, saveToDisk: boolean) => {
       resolve(success);
     });
 
-    sessionPassword = value;
-    if (saveToDisk && value !== undefined && value !== null && value !== '') {
-      ipcRenderer.send('set-password', value);
+    const password = value === undefined || value === null ? '' : value;
+    sessionPassword = password;
+
+    if (saveToDisk) {
+      if (password) {
+        ipcRenderer.send('set-password', password);
+      } else {
+        deleteSavedPassword();
+      }
     }
   });
 };
