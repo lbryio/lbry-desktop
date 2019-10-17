@@ -96,14 +96,34 @@ export default class SplashScreen extends React.PureComponent<Props, State> {
   }
 
   updateStatus() {
+    const { modal, notifyUnlockWallet } = this.props;
+    const { launchedModal } = this.state;
+
     Lbry.status().then(status => {
-      this.updateStatusCallback(status);
+      if (status.is_running) {
+        Lbry.wallet_status().then(walletStatus => {
+          if (walletStatus.is_locked) {
+            // Clear the error timeout, it might sit on this step for a while until someone enters their password
+            if (this.timeout) {
+              clearTimeout(this.timeout);
+            }
+            // Make sure there isn't another active modal (like INCOMPATIBLE_DAEMON)
+            if (launchedModal === false && !modal) {
+              this.setState({ launchedModal: true }, () => notifyUnlockWallet());
+              this.updateStatusCallback(status, true);
+            }
+          } else {
+            this.updateStatusCallback(status);
+          }
+        });
+      } else {
+        this.updateStatusCallback(status);
+      }
     });
   }
 
-  updateStatusCallback(status: StatusResponse) {
-    const { notifyUnlockWallet, authenticate, modal } = this.props;
-    const { launchedModal } = this.state;
+  updateStatusCallback(status: StatusResponse, waitingForUnlock: boolean = false) {
+    const { authenticate } = this.props;
 
     if (status.connection_status.code !== 'connected') {
       this.setState({ error: true });
@@ -118,31 +138,12 @@ export default class SplashScreen extends React.PureComponent<Props, State> {
     const { wallet, startup_status: startupStatus, blockchain_headers: blockchainHeaders } = status;
 
     // If the wallet is locked, stop doing anything and make the user input their password
-    if (status.is_running) {
-      return Lbry.wallet_status().then(walletStatus => {
-        if (walletStatus.is_locked) {
-          // Clear the error timeout, it might sit on this step for a while until someone enters their password
-          if (this.timeout) {
-            clearTimeout(this.timeout);
-          }
-          // Make sure there isn't another active modal (like INCOMPATIBLE_DAEMON)
-          if (launchedModal === false && !modal) {
-            this.setState({ launchedModal: true }, () => notifyUnlockWallet());
-
-            setTimeout(() => {
-              this.updateStatus();
-            }, 500);
-          }
-        } else {
-          if (!this.timeout) {
-            this.adjustErrorTimeout();
-          }
-
-          Lbry.resolve({ urls: 'lbry://one' }).then(() => {
-            this.setState({ isRunning: true }, () => this.continueAppLaunch());
-          });
-        }
+    if (status.is_running && !waitingForUnlock) {
+      Lbry.resolve({ urls: 'lbry://one' }).then(() => {
+        this.setState({ isRunning: true }, () => this.continueAppLaunch());
       });
+
+      return;
     } else if (blockchainHeaders) {
       const blockChainHeaders = blockchainHeaders;
       if (blockChainHeaders.download_progress < 100) {
