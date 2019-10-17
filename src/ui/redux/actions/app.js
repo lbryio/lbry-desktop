@@ -37,8 +37,7 @@ import { doAuthenticate, doGetSync, doResetSync } from 'lbryinc';
 import { lbrySettings as config, version as appVersion } from 'package.json';
 import { push } from 'connected-react-router';
 import analytics from 'analytics';
-import { deleteAuthToken, getSavedPassword } from 'util/saved-passwords';
-import cookie from 'cookie';
+import { deleteAuthToken, getSavedPassword, getAuthToken } from 'util/saved-passwords';
 
 // @if TARGET='app'
 const { autoUpdater } = remote.require('electron-updater');
@@ -437,7 +436,7 @@ export function doAnalyticsView(uri, timeToStart) {
 export function doSignIn() {
   return (dispatch, getState) => {
     // @if TARGET='web'
-    const { auth_token: authToken } = cookie.parse(document.cookie);
+    const authToken = getAuthToken();
     Lbry.setApiHeader('X-Lbry-Auth-Token', authToken);
     dispatch(doBalanceSubscribe());
     dispatch(doFetchChannelListMine());
@@ -471,7 +470,9 @@ export function doSyncWithPreferences() {
       dispatch(doFetchChannelListMine());
 
       function successCb(savedPreferences) {
-        dispatch(doPopulateSharedUserState(savedPreferences));
+        if (savedPreferences !== null) {
+          dispatch(doPopulateSharedUserState(savedPreferences));
+        }
       }
 
       function failCb() {

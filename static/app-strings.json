@@ -820,5 +820,6 @@
   "Content may be hidden on this %type% because of your %settings%.": "Content may be hidden on this %type% because of your %settings%.",
   "Sync": "Sync",
   "earned and bound in tips": "earned and bound in tips",
-  "currently staked": "currently staked"
+  "currently staked": "currently staked",
+  "%amountBehind% block behind": "%amountBehind% block behind"
 }

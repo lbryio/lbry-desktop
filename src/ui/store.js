@@ -68,7 +68,6 @@ const whiteListedReducers = [
   'search',
   'blocked',
   'settings',
-  'sync',
   'subscriptions',
 ];
 

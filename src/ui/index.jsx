@@ -26,10 +26,10 @@ import pjson from 'package.json';
 import app from './app';
 import doLogWarningConsoleMessage from './logWarningConsoleMessage';
 import { ConnectedRouter, push } from 'connected-react-router';
-import cookie from 'cookie';
 import { formatLbryUriForWeb } from 'util/uri';
 import { PersistGate } from 'redux-persist/integration/react';
 import analytics from 'analytics';
+import { getAuthToken, setAuthToken } from 'util/saved-passwords';
 
 // Import our app styles
 // If a style is not necessary for the initial page load, it should be removed from `all.scss`
@@ -82,12 +82,7 @@ Lbryio.setOverride(
         }
 
         authToken = response.auth_token;
-
-        let date = new Date();
-        date.setFullYear(date.getFullYear() + 1);
-        document.cookie = cookie.serialize('auth_token', authToken, {
-          expires: date,
-        });
+        setAuthToken(authToken);
 
         // @if TARGET='app'
         ipcRenderer.send('set-auth-token', authToken);
@@ -114,7 +109,7 @@ Lbryio.setOverride(
         ipcRenderer.send('get-auth-token');
         // @endif
         // @if TARGET='web'
-        const { auth_token: authToken } = cookie.parse(document.cookie);
+        const authToken = getAuthToken();
         resolve(authToken);
         // @endif
       }
