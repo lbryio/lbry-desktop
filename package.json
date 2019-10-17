@@ -72,7 +72,6 @@
     "@reach/menu-button": "^0.1.18",
     "@reach/rect": "^0.2.1",
     "@reach/tabs": "^0.1.5",
-    "@reach/tooltip": "^0.2.1",
     "@types/three": "^0.93.1",
     "adm-zip": "^0.4.13",
     "async-exit-hook": "^2.0.1",
