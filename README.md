@@ -1,12 +1,37 @@
-# LBRY App
+<h1 align=center>
+ <img align=center width="40%" src="https://miro.medium.com/max/5198/1*bTVuL2THG_0mpwmE-n7Ezg.png" />
+</h1>
 
-[![MIT licensed](https://img.shields.io/dub/l/vibe-d.svg?style=flat)](https://github.com/lbryio/lbry-desktop/blob/master/LICENSE)
-[![GitHub release](https://img.shields.io/github/release/lbryio/lbry-desktop.svg)](https://GitHub.com/lbryio/lbry-desktop/releases/)
-[![Build Status](https://travis-ci.org/lbryio/lbry-desktop.svg?branch=master)](https://travis-ci.org/lbryio/lbry-desktop)
-[![Dependencies](https://david-dm.org/lbryio/lbry-desktop/status.svg)](https://david-dm.org/lbryio/lbry-desktop)
-[![chat on Discord](https://img.shields.io/discord/362322208485277697.svg?logo=discord)](https://chat.lbry.com)
+<h1 align=center>LBRY App - https://lbry.com/</h1>
+  
+  
 
-[![forthebadge](https://forthebadge.com/images/badges/60-percent-of-the-time-works-every-time.svg)](https://forthebadge.com)
+
+
+<h2 align=center>
+  <a href="https://github.com/lbryio/lbry-desktop/blob/master/LICENSE" title="MIT licensed">
+    <img alt="npm" src="https://img.shields.io/dub/l/vibe-d.svg?style=flat">
+  </a>
+  <a href="https://GitHub.com/lbryio/lbry-desktop/releases/" title="GitHub release">
+    <img src="https://img.shields.io/github/release/lbryio/lbry-desktop.svg"/>
+  </a>
+  <a href="https://travis-ci.org/lbryio/lbry-desktop">
+    <img src="https://travis-ci.org/lbryio/lbry-desktop.svg?branch=master" alt="Build Status"  />
+  </a>
+   <a href="https://david-dm.org/lbryio/lbry-desktop">
+    <img src="https://david-dm.org/lbryio/lbry-desktop/status.svg" alt="Dependencies"  />
+  </a>
+  <a href="https://chat.lbry.com">
+    <img alt="GitHub contributors" src="https://img.shields.io/discord/362322208485277697.svg?logo=discord" alt="chat on Discord">
+  </a>
+</h2>
+
+<h1 align=center>
+  <a href="https://forthebadge.com" title="forthebadge">
+    <img alt="forthebadge" src="https://forthebadge.com/images/badges/60-percent-of-the-time-works-every-time.svg">
+  </a>
+</h1>  
+
 
 The LBRY app is a graphical browser for the decentralized content marketplace provided by the
 [LBRY](https://lbry.com) protocol. It is essentially the
