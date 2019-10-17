@@ -18,9 +18,11 @@ type Props = {
 };
 
 function ModalRemoveFile(props: Props) {
-  const { uri, claimIsMine, closeModal, deleteFile, title } = props;
+  const { uri, claimIsMine, closeModal, deleteFile, title, claim } = props;
   const [deleteChecked, setDeleteChecked] = usePersistedState('modal-remove-file:delete', true);
   const [abandonChecked, setAbandonChecked] = usePersistedState('modal-remove-file:abandon', true);
+
+  console.log({ claim });
 
   return (
     <Modal isOpen title="Remove File" contentLabel={__('Confirm File Remove')} type="custom" onAborted={closeModal}>
@@ -32,20 +34,28 @@ function ModalRemoveFile(props: Props) {
       <Form onSubmit={() => deleteFile(uri, deleteChecked, claimIsMine ? abandonChecked : false)}>
         <FormField
           name="file_delete"
-          label={__('Also delete this file from my computer')}
+          label={__('Delete this file from my computer')}
           type="checkbox"
           checked={deleteChecked}
           onChange={() => setDeleteChecked(!deleteChecked)}
         />
 
         {claimIsMine && (
-          <FormField
-            name="claim_abandon"
-            label={__('Abandon the claim for this URI')}
-            type="checkbox"
-            checked={abandonChecked}
-            onChange={() => setAbandonChecked(!abandonChecked)}
-          />
+          <div>
+            <FormField
+              name="claim_abandon"
+              label={`${__('Abandon on blockchain')} (${__('reclaim')} ${claim.amount} ${__('LBC')})`}
+              type="checkbox"
+              checked={abandonChecked}
+              onChange={() => setAbandonChecked(!abandonChecked)}
+            />
+            {abandonChecked === false && (
+              <p className="error-text">
+                This file is removed from your publishes area and you can&apos;t remove the deposit from the claim page
+                anymore
+              </p>
+            )}
+          </div>
         )}
         <div className="card__actions">
           <Button type="submit" button="primary" label={__('OK')} />
