@@ -47,7 +47,6 @@ type Props = {
   clearCache: () => Promise<any>,
   daemonSettings: DaemonSettings,
   showNsfw: boolean,
-  showAnonymous: boolean,
   instantPurchaseEnabled: boolean,
   instantPurchaseMax: Price,
   currentTheme: string,
@@ -178,7 +177,6 @@ class SettingsPage extends React.PureComponent<Props, State> {
     const {
       daemonSettings,
       showNsfw,
-      showAnonymous,
       instantPurchaseEnabled,
       instantPurchaseMax,
       currentTheme,
@@ -374,14 +372,14 @@ class SettingsPage extends React.PureComponent<Props, State> {
                     )}
                   />
 
-                  <FormField
+                  {/* <FormField
                     type="checkbox"
                     name="show_anonymous"
                     onChange={() => setClientSetting(SETTINGS.SHOW_ANONYMOUS, !showAnonymous)}
                     checked={showAnonymous}
                     label={__('Show anonymous content')}
                     helper={__('Anonymous content is published without a channel.')}
-                  />
+                  /> */}
 
                   <FormField
                     type="checkbox"
