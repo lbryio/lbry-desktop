@@ -1,5 +1,6 @@
 // @flow
 import * as ICONS from 'constants/icons';
+import * as ACTIONS from 'constants/action_types';
 import React, { useEffect, useRef, useState } from 'react';
 import classnames from 'classnames';
 import analytics from 'analytics';
@@ -14,15 +15,14 @@ import FileViewer from 'component/fileViewer';
 import { withRouter } from 'react-router';
 import usePrevious from 'effects/use-previous';
 import Button from 'component/button';
-import cookie from 'cookie';
+import usePersistedState from 'effects/use-persisted-state';
+import { Lbryio } from 'lbryinc';
 
 export const MAIN_WRAPPER_CLASS = 'main-wrapper';
 // @if TARGET='app'
 export const IS_MAC = process.platform === 'darwin';
 // @endif
 const SYNC_INTERVAL = 1000 * 60 * 5; // 5 minutes
-
-const { auth_token: authToken } = cookie.parse(document.cookie);
 
 type Props = {
   alertError: (string | {}) => void,
@@ -45,6 +45,8 @@ type Props = {
   checkSync: () => void,
   setSyncEnabled: boolean => void,
   syncEnabled: boolean,
+  balance: ?number,
+  accessToken: ?string,
 };
 
 function App(props: Props) {
@@ -63,11 +65,14 @@ function App(props: Props) {
     setSyncEnabled,
     syncEnabled,
     checkSync,
+    balance,
+    accessToken,
   } = props;
 
   const appRef = useRef();
   const isEnhancedLayout = useKonamiListener();
   const [hasSignedIn, setHasSignedIn] = useState(false);
+  const [hasDeterminedIfNewUser, setHasDeterminedIfNewUser] = usePersistedState('is-new-user', false);
   const userId = user && user.id;
   const hasVerifiedEmail = user && user.has_verified_email;
   const isRewardApproved = user && user.is_reward_approved;
@@ -88,11 +93,35 @@ function App(props: Props) {
   // to automatically opt-in existing users. Only users that go through the new sign in flow
   // should be automatically opted-in (they choose to uncheck the option and turn off sync still)
   useEffect(() => {
-    if (!authToken) {
-      setSyncEnabled(true);
+    if (balance === undefined || accessToken === undefined) {
+      return;
     }
-    // don't pass in any props to this, we only want the initial value
-  }, []);
+
+    // Manually call subscription/list once because I was dumb and wasn't persisting it in redux
+    Lbryio.call('subscription', 'list').then(response => {
+      if (response && response.length) {
+        const subscriptions = response.map(value => {
+          const { channel_name: channelName, claim_id: claimId } = value;
+          return {
+            channelName,
+            uri: buildURI({ channelName, channelClaimId: claimId }),
+          };
+        });
+
+        window.store.dispatch({
+          type: ACTIONS.FETCH_SUBSCRIPTIONS_SUCCESS,
+          data: subscriptions,
+        });
+      }
+
+      // Yeah... this isn't the best check, but it works for now
+      const newUser = balance === 0;
+      if (newUser) {
+        setSyncEnabled(true);
+      }
+      setHasDeterminedIfNewUser(true);
+    });
+  }, [balance, accessToken]);
 
   useEffect(() => {
     ReactModal.setAppElement(appRef.current);
@@ -141,7 +170,7 @@ function App(props: Props) {
   }, [hasVerifiedEmail, signIn, hasSignedIn]);
 
   useEffect(() => {
-    if (hasVerifiedEmail && syncEnabled) {
+    if (hasVerifiedEmail && syncEnabled && hasDeterminedIfNewUser) {
       checkSync();
 
       let syncInterval = setInterval(() => {
@@ -152,7 +181,7 @@ function App(props: Props) {
         clearInterval(syncInterval);
       };
     }
-  }, [hasVerifiedEmail, syncEnabled, checkSync]);
+  }, [hasVerifiedEmail, syncEnabled, checkSync, hasDeterminedIfNewUser]);
 
   if (!user) {
     return null;

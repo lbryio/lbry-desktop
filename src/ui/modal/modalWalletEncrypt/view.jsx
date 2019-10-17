@@ -74,6 +74,10 @@ class ModalWalletEncrypt extends React.PureComponent<Props, State> {
   submitEncryptForm() {
     const { state } = this;
 
+    if (!state.newPassword) {
+      return;
+    }
+
     let invalidEntries = false;
 
     if (state.newPassword !== state.newPasswordConfirm) {
@@ -89,9 +93,8 @@ class ModalWalletEncrypt extends React.PureComponent<Props, State> {
     if (invalidEntries === true) {
       return;
     }
-    if (state.rememberPassword === true) {
-      setSavedPassword(state.newPassword);
-    }
+
+    setSavedPassword(state.newPassword, state.rememberPassword);
     this.setState({ submitted: true });
     this.props.encryptWallet(state.newPassword);
   }

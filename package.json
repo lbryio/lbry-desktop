@@ -89,7 +89,6 @@
     "codemirror": "^5.39.2",
     "concurrently": "^4.1.2",
     "connected-react-router": "^6.4.0",
-    "cookie": "^0.3.1",
     "copy-webpack-plugin": "^4.6.0",
     "country-data": "^0.0.31",
     "cross-env": "^5.2.0",

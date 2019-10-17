@@ -39,9 +39,7 @@ class ModalWalletUnlock extends React.PureComponent<Props, State> {
     const { props } = this;
 
     if (props.walletUnlockSucceded === true) {
-      if (this.state.rememberPassword) {
-        setSavedPassword(this.state.password);
-      }
+      setSavedPassword(this.state.password, this.state.rememberPassword);
       props.closeModal();
     }
   }
