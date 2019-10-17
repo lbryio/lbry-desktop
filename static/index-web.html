@@ -24,13 +24,20 @@
         document.body.appendChild(script);
       }
 
+      function supportedNonEnglish(language) {
+        return language === 'pl' ||
+          language === 'id' ||
+          language === 'de'
+      }
+
       let lang;
       try {
-        lang = window.localStorage.getItem('language') || 'en';
+        browserLocale = window.navigator.language.slice(0,2);
+        lang = window.localStorage.getItem('language') || browserLocale || 'en';
       } catch {
         lang = 'en';
       }
-      if (lang && lang != 'en') {
+      if (lang && supportedNonEnglish(lang)) {
         fetch('https://lbry.com/i18n/get/lbry-desktop/app-strings/' + lang + '.json')
                 .then(r => r.json())
                 .then(j => { window.i18n_messages[lang] = j; loadUi(); })

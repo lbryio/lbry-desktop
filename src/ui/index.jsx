@@ -30,7 +30,6 @@ import cookie from 'cookie';
 import { formatLbryUriForWeb } from 'util/uri';
 import { PersistGate } from 'redux-persist/integration/react';
 import analytics from 'analytics';
-import * as SETTINGS from 'constants/settings';
 
 // Import our app styles
 // If a style is not necessary for the initial page load, it should be removed from `all.scss`
@@ -171,11 +170,6 @@ ipcRenderer.on('window-is-focused', () => {
 
 ipcRenderer.on('devtools-is-opened', () => {
   doLogWarningConsoleMessage();
-});
-
-ipcRenderer.on('language-update', (event, messages, language) => {
-  window.i18n_messages = messages;
-  window.localStorage.setItem(SETTINGS.LANGUAGE, language);
 });
 
 // Force exit mode for html5 fullscreen api
