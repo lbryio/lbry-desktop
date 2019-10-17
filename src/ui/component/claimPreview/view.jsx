@@ -22,7 +22,6 @@ type Props = {
   uri: string,
   claim: ?Claim,
   obscureNsfw: boolean,
-  hideAnonymous: boolean,
   showUserBlocked: boolean,
   claimIsMine: boolean,
   pending?: boolean,
@@ -55,7 +54,6 @@ type Props = {
 const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
   const {
     obscureNsfw,
-    hideAnonymous,
     claimIsMine,
     pending,
     history,
@@ -101,9 +99,8 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
   const isChannel = isValid ? parseURI(uri).isChannel : false;
   const includeChannelTooltip = type !== 'inline' && type !== 'tooltip' && !isChannel;
   const signingChannel = claim && claim.signing_channel;
-  const isAnonymous = !isChannel && !signingChannel;
-  const blocked = !claimIsMine && ((obscureNsfw && nsfw) || (hideAnonymous && isAnonymous));
-  let shouldHide = placeholder !== 'loading' && ((abandoned && !showPublishLink) || (blocked && !showUserBlocked));
+  let shouldHide =
+    placeholder !== 'loading' && ((abandoned && !showPublishLink) || (!claimIsMine && obscureNsfw && nsfw));
 
   // This will be replaced once blocking is done at the wallet server level
   if (claim && !shouldHide && blackListedOutpoints) {

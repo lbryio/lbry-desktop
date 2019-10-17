@@ -10,7 +10,6 @@ import SettingsPage from './view';
 const select = state => ({
   daemonSettings: selectDaemonSettings(state),
   showNsfw: makeSelectClientSetting(SETTINGS.SHOW_MATURE)(state),
-  showAnonymous: makeSelectClientSetting(SETTINGS.SHOW_ANONYMOUS)(state),
   instantPurchaseEnabled: makeSelectClientSetting(SETTINGS.INSTANT_PURCHASE_ENABLED)(state),
   instantPurchaseMax: makeSelectClientSetting(SETTINGS.INSTANT_PURCHASE_MAX)(state),
   currentTheme: makeSelectClientSetting(SETTINGS.THEME)(state),

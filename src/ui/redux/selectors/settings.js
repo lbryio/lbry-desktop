@@ -26,7 +26,6 @@ export const makeSelectClientSetting = setting =>
 
 // refactor me
 export const selectShowMatureContent = makeSelectClientSetting(SETTINGS.SHOW_MATURE);
-export const selectShowAnonymousContent = makeSelectClientSetting(SETTINGS.SHOW_ANONYMOUS);
 
 export const selectTheme = makeSelectClientSetting(SETTINGS.THEME);
 export const selectAutomaticDarkModeEnabled = makeSelectClientSetting(SETTINGS.AUTOMATIC_DARK_MODE_ENABLED);
