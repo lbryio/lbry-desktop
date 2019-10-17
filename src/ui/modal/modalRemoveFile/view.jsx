@@ -22,8 +22,6 @@ function ModalRemoveFile(props: Props) {
   const [deleteChecked, setDeleteChecked] = usePersistedState('modal-remove-file:delete', true);
   const [abandonChecked, setAbandonChecked] = usePersistedState('modal-remove-file:abandon', true);
 
-  console.log({ claim });
-
   return (
     <Modal isOpen title="Remove File" contentLabel={__('Confirm File Remove')} type="custom" onAborted={closeModal}>
       <section>
