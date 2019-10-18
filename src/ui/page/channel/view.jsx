@@ -206,16 +206,21 @@ function ChannelPage(props: Props) {
             <Tab disabled={editing}>{__('Content')}</Tab>
             <Tab>{editing ? __('Editing Your Channel') : __('About')}</Tab>
             <Tab disabled={editing}>{__('Discussion')}</Tab>
-            <Form onSubmit={handleSearch} className="wunderbar--channel">
-              <Icon icon={ICONS.SEARCH} />
-              <FormField
-                className="wunderbar__input"
-                value={searchQuery}
-                onChange={handleInputChange}
-                type="text"
-                placeholder={__('Search')}
-              />
-            </Form>
+            {/* only render searchbar on content page (tab index 0 === content page) */}
+            {tabIndex === 0 ? (
+              <Form onSubmit={handleSearch} className="wunderbar--channel">
+                <Icon icon={ICONS.SEARCH} />
+                <FormField
+                  className="wunderbar__input"
+                  value={searchQuery}
+                  onChange={handleInputChange}
+                  type="text"
+                  placeholder={__('Search')}
+                />
+              </Form>
+            ) : (
+              <div />
+            )}
           </TabList>
 
           <TabPanels>
