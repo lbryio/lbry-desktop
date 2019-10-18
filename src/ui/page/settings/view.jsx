@@ -411,7 +411,7 @@ class SettingsPage extends React.PureComponent<Props, State> {
                   {__('You have')} {userBlockedChannelsCount} {__('blocked')}{' '}
                   {userBlockedChannelsCount === 1 && __('channel')}
                   {userBlockedChannelsCount !== 1 && __('channels')}.{' '}
-                  <Button button="link" label={__('Manage')} navigate={`/$/${PAGES.BLOCKED}`} />
+                  <Button button="link" label={__('Manage')} navigate={`/$/${PAGES.BLOCKED}`} />.
                 </p>
               }
             />
@@ -534,7 +534,7 @@ class SettingsPage extends React.PureComponent<Props, State> {
                           }}
                         >
                           Wallet encryption is currently unavailable until it's supported for synced accounts. It will
-                          be added back soon. %learn_more%
+                          be added back soon. %learn_more%.
                         </I18nMessage>
                         {/* {__('Secure your local wallet data with a custom password.')}{' '}
                         <strong>{__('Lost passwords cannot be recovered.')} </strong>
