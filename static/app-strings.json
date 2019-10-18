@@ -778,7 +778,7 @@
   "We're friendly. We promise.": "We're friendly. We promise.",
   "No Channels Created Yet": "No Channels Created Yet",
   "Create A Channel": "Create A Channel",
-  "Wallet encryption is currently unavailable until it's supported for synced accounts. It will be added back soon. %learn_more%": "Wallet encryption is currently unavailable until it's supported for synced accounts. It will be added back soon. %learn_more%",
+  "Wallet encryption is currently unavailable until it's supported for synced accounts. It will be added back soon. %learn_more%.": "Wallet encryption is currently unavailable until it's supported for synced accounts. It will be added back soon. %learn_more%.",
   "Unsave Password": "Unsave Password",
   "Clear Saved Password": "Clear Saved Password",
   "Forget": "Forget",
