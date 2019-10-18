@@ -2,9 +2,10 @@
 import React, { useState } from 'react';
 import { Form, FormField } from 'component/common/form';
 import Tag from 'component/tag';
+import { setUnion, setDifference } from 'util/set-operations';
 
 type Props = {
-  tagsPasssedIn: Array<Tag>,
+  tagsPassedIn: Array<Tag>,
   unfollowedTags: Array<Tag>,
   followedTags: Array<Tag>,
   doToggleTagFollow: string => void,
@@ -15,9 +16,16 @@ type Props = {
   placeholder?: string,
 };
 
+/*
+ We display tagsPassedIn
+ onClick gets the tag when a tag is clicked
+ onSubmit gets an array of tags in object form
+ We suggest tags based on followed, unfollowed, and passedIn
+ */
+
 export default function TagsSearch(props: Props) {
   const {
-    tagsPasssedIn,
+    tagsPassedIn,
     unfollowedTags = [],
     followedTags = [],
     doToggleTagFollow,
@@ -28,23 +36,26 @@ export default function TagsSearch(props: Props) {
     placeholder,
   } = props;
   const [newTag, setNewTag] = useState('');
-
-  let tags = unfollowedTags.slice();
-  if (newTag) {
-    tags.unshift({ name: newTag });
-  }
-
   const doesTagMatch = name => {
     const nextTag = newTag.substr(newTag.lastIndexOf(',') + 1, newTag.length).trim();
     return newTag ? name.toLowerCase().includes(nextTag.toLowerCase()) : true;
   };
+
   // Make sure there are no duplicates, then trim
-  const suggestedTagsSet = new Set(tags.map(tag => tag.name));
+  // suggestedTags = (followedTags - tagsPassedIn) + unfollowedTags
+
+  const followedTagsSet = new Set(followedTags.map(tag => tag.name));
+  const selectedTagsSet = new Set(tagsPassedIn.map(tag => tag.name));
+  const unfollowedTagsSet = new Set(unfollowedTags.map(tag => tag.name));
+  const remainingFollowedTagsSet = setDifference(followedTagsSet, selectedTagsSet);
+  const suggestedTagsSet = setUnion(remainingFollowedTagsSet, unfollowedTagsSet);
+
   const suggestedTags = Array.from(suggestedTagsSet)
     .filter(doesTagMatch)
     .slice(0, 5);
 
-  if (!newTag && suggestMature) {
+  // tack 'mature' onto the end if it's not already in the list
+  if (!newTag && suggestMature && !suggestedTags.some(tag => tag === 'mature')) {
     suggestedTags.push('mature');
   }
 
@@ -62,12 +73,16 @@ export default function TagsSearch(props: Props) {
 
     setNewTag('');
 
+    const newTagsArr = [...new Set(tags.split(',').map(newTag => newTag.trim().toLowerCase()))];
+
     // Split into individual tags, normalize the tags, and remove duplicates with a set.
-    tags = [...new Set(tags.split(',').map(newTag => newTag.trim().toLowerCase()))];
-    tags.forEach(tag => {
-      if (onSelect) {
-        onSelect({ name: tag });
-      } else {
+    if (onSelect) {
+      const arrOfObjectTags = newTagsArr.map(tag => {
+        return { name: tag };
+      });
+      onSelect(arrOfObjectTags);
+    } else {
+      newTagsArr.forEach(tag => {
         if (!unfollowedTags.map(({ name }) => name).includes(tag)) {
           doAddTag(tag);
         }
@@ -75,29 +90,25 @@ export default function TagsSearch(props: Props) {
         if (!followedTags.map(({ name }) => name).includes(tag)) {
           doToggleTagFollow(tag);
         }
-      }
-    });
+      });
+    }
   }
 
-  function handleTagClick(tags) {
-    tags = tags.split(',').map(newTag => newTag.trim());
-
-    tags.forEach(tag => {
-      if (onSelect) {
-        onSelect({ name: tag });
-      } else {
-        doToggleTagFollow(tag);
-      }
-    });
+  function handleTagClick(tag: string) {
+    if (onSelect) {
+      onSelect([{ name: tag }]);
+    } else {
+      doToggleTagFollow(tag);
+    }
   }
 
   return (
     <React.Fragment>
       <Form className="tags__input-wrapper" onSubmit={handleSubmit}>
         <ul className="tags--remove">
-          {tagsPasssedIn.map(tag => (
+          {tagsPassedIn.map(tag => (
             <Tag
-              key={tag.name}
+              key={`passed${tag.name}`}
               name={tag.name}
               type="remove"
               onClick={() => {
@@ -119,7 +130,7 @@ export default function TagsSearch(props: Props) {
       </Form>
       <ul className="tags">
         {suggestedTags.map(tag => (
-          <Tag key={tag} name={tag} type="add" onClick={() => handleTagClick(tag)} />
+          <Tag key={`suggested${tag}`} name={tag} type="add" onClick={() => handleTagClick(tag)} />
         ))}
         {!suggestedTags.length && <p className="empty tags__empty-message">No suggested tags</p>}
       </ul>

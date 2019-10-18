@@ -18,11 +18,14 @@ type Props = {
   title?: string | boolean,
   help?: string,
   tagsChosen?: Array<Tag>,
-  onSelect?: Tag => void,
+  onSelect?: (Array<Tag>) => void,
   onRemove?: Tag => void,
   placeholder?: string,
 };
 
+/*
+  Displays tagsChosen if it exists, otherwise followedTags.
+ */
 export default function TagsSelect(props: Props) {
   const {
     showClose,
@@ -89,7 +92,7 @@ export default function TagsSelect(props: Props) {
               onRemove={handleTagClick}
               onSelect={onSelect}
               suggestMature={suggestMature && !hasMatureTag}
-              tagsPasssedIn={tagsToDisplay}
+              tagsPassedIn={tagsToDisplay}
               placeholder={placeholder}
             />
           </React.Fragment>
