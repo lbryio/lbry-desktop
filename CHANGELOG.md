@@ -4,7 +4,17 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
-## [0.36.x] - [Unrelased]
+## [0.37.1] - [2019-10-17]
+
+### Changed
+
+- Bumped lbry-sdk to `0.43.3` to fix an issue with encrypted wallets
+
+### Fixed
+
+- Only show channel search bar on the content tab ([#3083](https://github.com/lbryio/lbry-desktop/pull/3083))
+
+## [0.37.0] - [2019-10-17]
 
 ### Fixed
 
