@@ -1,5 +1,6 @@
 // @flow
 import { MAIN_WRAPPER_CLASS } from 'component/app/view';
+import { MAIN_CLASS } from 'component/page/view';
 import type { Node } from 'react';
 import React, { useEffect, useState } from 'react';
 import classnames from 'classnames';
@@ -10,6 +11,7 @@ import usePersistedState from 'effects/use-persisted-state';
 
 const SORT_NEW = 'new';
 const SORT_OLD = 'old';
+const PADDING_ALLOWANCE = 100;
 
 type Props = {
   uris: Array<string>,
@@ -61,8 +63,14 @@ export default function ClaimList(props: Props) {
     function handleScroll(e) {
       if (page && pageSize && onScrollBottom && !scrollBottomCbMap[page]) {
         const x = document.querySelector(`.${MAIN_WRAPPER_CLASS}`);
+        const mc = document.querySelector(`.${MAIN_CLASS}`);
 
-        if (x && window.scrollY + window.innerHeight >= x.offsetHeight) {
+        if (
+          x &&
+          mc &&
+          (window.scrollY + window.innerHeight >= x.offsetHeight ||
+            x.offsetHeight - mc.offsetHeight > PADDING_ALLOWANCE)
+        ) {
           if (!loading && urisLength >= pageSize) {
             onScrollBottom();
 
