@@ -71,7 +71,7 @@ app.get('*', async (req, res) => {
   const urlPath = req.path.substr(1); // trim leading slash
 
   if (!urlPath.startsWith('$/') && urlPath.match(/^([^@/:]+)\/([^:/]+)$/)) {
-    return res.redirect(301, req.url.replace(/([^/:]+)\/([^:/]+)/, '$1:$2')); // test against urlPath, but use req.url to retain parameters
+    return res.redirect(301, req.url.replace(/^([^@/:]+)\/([^:/]+)(:(\/.*))/, '$1:$2')); // test against urlPath, but use req.url to retain parameters
   }
 
   if (urlPath.endsWith('/') && urlPath.length > 1) {
