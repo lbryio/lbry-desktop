@@ -18,7 +18,7 @@ class CardMedia extends React.PureComponent<Props> {
     }
 
     const url = thumbnail || Placeholder;
-    return <div style={{ backgroundImage: `url('${url}')` }} className={className} />;
+    return <div style={{ backgroundImage: `url('${url.replace(/'/g,"\\'")}')` }} className={className} />;
   }
 }
 
