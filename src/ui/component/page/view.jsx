@@ -5,6 +5,7 @@ import classnames from 'classnames';
 import SideBar from 'component/sideBar';
 import Header from 'component/header';
 
+export const MAIN_CLASS = 'main';
 type Props = {
   children: Node | Array<Node>,
   className: ?string,
@@ -22,7 +23,7 @@ function Page(props: Props) {
     <Fragment>
       <Header authHeader={authPage} />
       <div className={classnames('main-wrapper__inner')}>
-        <main className={classnames('main', className, { 'main--full-width': authPage })}>{children}</main>
+        <main className={classnames(MAIN_CLASS, className, { 'main--full-width': authPage })}>{children}</main>
         {!authPage && <SideBar obscureSideBar={obscureSideBar} />}
       </div>
     </Fragment>
