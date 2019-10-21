@@ -7,7 +7,7 @@ import ChannelPage from 'page/channel';
 import FilePage from 'page/file';
 import Page from 'component/page';
 import Button from 'component/button';
-import { DOMAIN } from 'config';
+import { SITE_TITLE } from 'config';
 
 type Props = {
   isResolvingUri: boolean,
@@ -28,10 +28,6 @@ function ShowPage(props: Props) {
   const signingChannel = claim && claim.signing_channel;
 
   useEffect(() => {
-    if (!isResolvingUri && resolveUri) resolveUri(uri);
-  }, [resolveUri]);
-
-  useEffect(() => {
     // @if TARGET='web'
     if (claim && claim.canonical_url) {
       const canonicalUrlPath = '/' + claim.canonical_url.replace(/^lbry:\/\//, '').replace(/#/g, ':');
@@ -40,7 +36,7 @@ function ShowPage(props: Props) {
       }
     }
     // @endif
-    if (!isResolvingUri && uri && claim === undefined) {
+    if (resolveUri && !isResolvingUri && uri && claim === undefined) {
       resolveUri(uri);
     }
   }, [resolveUri, isResolvingUri, claim, uri]);
@@ -53,11 +49,11 @@ function ShowPage(props: Props) {
     } else if (channelName) {
       document.title = channelName;
     } else {
-      document.title = IS_WEB ? DOMAIN : 'LBRY';
+      document.title = IS_WEB ? SITE_TITLE : 'LBRY';
     }
 
     return () => {
-      document.title = IS_WEB ? DOMAIN : 'LBRY';
+      document.title = IS_WEB ? SITE_TITLE : 'LBRY';
     };
   }, [title, channelName, streamName]);
 

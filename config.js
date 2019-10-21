@@ -3,6 +3,7 @@ const config = {
   WEBPACK_ELECTRON_PORT: 9091,
   WEB_SERVER_PORT: 1337,
   DOMAIN: 'https://beta.lbry.tv',
+  SITE_TITLE: 'lbry.tv',
 };
 
 config.DOMAIN_LOCAL = `http://localhost:${config.WEB_SERVER_PORT}`;
