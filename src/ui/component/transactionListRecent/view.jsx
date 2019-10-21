@@ -24,7 +24,7 @@ class TransactionListRecent extends React.PureComponent<Props> {
       <section className="card">
         <TransactionList
           slim
-          title={__('Recent Transactions')}
+          title={__('Latest Transactions')}
           transactions={transactions}
           emptyMessage={__("Looks like you don't have any recent transactions.")}
         />
