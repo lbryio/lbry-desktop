@@ -4,15 +4,19 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
-## [0.37.1] - [2019-10-17]
-
-### Changed
-
-- Bumped lbry-sdk to `0.43.3` to fix an issue with encrypted wallets
+## [0.37.1] - [2019-10-22]
 
 ### Fixed
 
+- Wallet unlocking for YouTube Sync users with encrypted wallets ([#2566](https://github.com/lbryio/lbry-sdk/pull/2566))
+
+- Syncing with no password when account first created on LBRY Android ([#3103](https://github.com/lbryio/lbry-desktop/pull/3103))
+
 - Only show channel search bar on the content tab ([#3083](https://github.com/lbryio/lbry-desktop/pull/3083))
+
+### Changed
+
+- Upgrade to [LBRY SDK 0.43.3](https://github.com/lbryio/lbry-sdk/releases/tag/v0.43.3) to support above scenarios
 
 ## [0.37.0] - [2019-10-17]
 
