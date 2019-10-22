@@ -1,6 +1,8 @@
-import { DOMAIN } from 'config';
+const { LBRY_TV_API } = require('../../../config');
 
-export function generateStreamUrl(claimName, claimId) {
-  const prefix = process.env.SDK_API_URL || DOMAIN;
+function generateStreamUrl(claimName, claimId) {
+  const prefix = process.env.SDK_API_URL || LBRY_TV_API;
   return `${prefix}/content/claims/${claimName}/${claimId}/stream`;
 }
+
+module.exports = { generateStreamUrl };
