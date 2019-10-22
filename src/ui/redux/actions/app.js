@@ -33,7 +33,7 @@ import {
   selectUpgradeTimer,
   selectModal,
 } from 'redux/selectors/app';
-import { doAuthenticate, doGetSync, doResetSync } from 'lbryinc';
+import { doAuthenticate, doGetSync } from 'lbryinc';
 import { lbrySettings as config, version as appVersion } from 'package.json';
 import { push } from 'connected-react-router';
 import analytics from 'analytics';
@@ -450,9 +450,6 @@ export function doSignOut() {
       .then(() => {
         // @if TARGET='web'
         window.persistor.purge();
-        // @endif
-        // @if TARGET='app'
-        return dispatch(doResetSync());
         // @endif
       })
       .then(() => {

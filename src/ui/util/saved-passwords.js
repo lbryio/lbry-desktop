@@ -37,16 +37,23 @@ function deleteCookie(name: string) {
 
 export const setSavedPassword = (value?: string, saveToDisk: boolean) => {
   return new Promise<*>(resolve => {
+    // @if TARGET='app'
     ipcRenderer.once('set-password-response', (event, success) => {
       resolve(success);
     });
+    // @endif
 
     const password = value === undefined || value === null ? '' : value;
     sessionPassword = password;
 
     if (saveToDisk) {
       if (password) {
+        // @if TARGET='app'
         ipcRenderer.send('set-password', password);
+        // @endif
+        // @if TARGET='web'
+        setCookie('saved-password', password, 14);
+        // @endif
       } else {
         deleteSavedPassword();
       }
@@ -68,8 +75,8 @@ export const getSavedPassword = () => {
     // @endif
 
     // @if TARGET='web'
-    // Will handle saved passwords on web differently
-    resolve('');
+    const password = getCookie('saved-password');
+    resolve(password);
     // @endif
   });
 };
@@ -82,6 +89,10 @@ export const deleteSavedPassword = () => {
     });
     ipcRenderer.send('delete-password');
     // @endif;
+    // @if TARGET='web'
+    deleteCookie('saved-password');
+    resolve();
+    // @endif
   });
 };
 
