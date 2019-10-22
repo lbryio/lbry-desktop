@@ -189,7 +189,9 @@ function App(props: Props) {
   }, [hasVerifiedEmail, syncEnabled, checkSync, hasDeterminedIfNewUser]);
 
   useEffect(() => {
-    history.push(`/$/${PAGES.AUTH}?redirect=${pathname}`);
+    if (syncError) {
+      history.push(`/$/${PAGES.AUTH}?redirect=${pathname}`);
+    }
   }, [syncError, pathname]);
 
   if (!user) {
