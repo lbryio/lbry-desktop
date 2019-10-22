@@ -224,7 +224,7 @@ $border-color--dark: var(--dm-color-04);
 
 .claim-upload__progress--inner {
   background: $lbry-teal-1;
-  color: $lbry-gray-1;
+  padding: var(--spacing-miniscule);
 
   [data-mode='dark'] & {
     background: $lbry-teal-4;

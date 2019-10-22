@@ -207,7 +207,7 @@ function App(props: Props) {
   }, [syncError, pathname]);
 
   if (!user) {
-    return null;
+    // return null;
   }
 
   return (
