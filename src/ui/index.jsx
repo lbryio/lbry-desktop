@@ -64,7 +64,7 @@ if (process.env.SEARCH_API_URL) {
 let authToken;
 Lbryio.setOverride(
   'setAuthToken',
-  () =>
+  status =>
     new Promise(resolve => {
       Lbryio.call(
         'user',
@@ -72,7 +72,7 @@ Lbryio.setOverride(
         {
           auth_token: '',
           language: 'en',
-          // app_id: status.installation_id,
+          app_id: status.installation_id,
         },
         'post'
       ).then(response => {
