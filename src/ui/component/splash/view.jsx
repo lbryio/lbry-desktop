@@ -14,7 +14,7 @@ const FORTY_FIVE_SECONDS = 45 * 1000;
 
 type Props = {
   checkDaemonVersion: () => Promise<any>,
-  notifyUnlockWallet: () => Promise<any>,
+  notifyUnlockWallet: (?boolean) => Promise<any>,
   daemonVersionMatched: boolean,
   onReadyToLaunch: () => void,
   authenticate: () => void,
@@ -102,10 +102,14 @@ export default class SplashScreen extends React.PureComponent<Props, State> {
     Lbry.status().then(status => {
       if (status.is_running) {
         Lbry.wallet_status().then(walletStatus => {
-          // Fix wallet bug and reset encryption status
-          if (walletStatus.is_encrypted && walletStatus.is_locked === false) {
-            this.setState({ launchedModal: true }, () => notifyUnlockWallet());
-            this.updateStatusCallback(status, true);
+          // Fix blank password bug related to synced Android users and reset encryption status
+          // Remove this on 12/21/2019 to make sure we don't accidentilly decrypt any wallets
+          // This could happen if SDK is already running and app is started.
+          // This may be patched in a future SDK to support lbry.tv
+          // https://github.com/lbryio/lbry-sdk/issues/2576
+          if (walletStatus.is_encrypted && walletStatus.is_locked === false && launchedModal === false) {
+            this.setState({ launchedModal: true }, () => notifyUnlockWallet(true));
+            this.updateStatusCallback(status);
           } else if (walletStatus.is_locked) {
             // Clear the error timeout, it might sit on this step for a while until someone enters their password
             if (this.timeout) {
