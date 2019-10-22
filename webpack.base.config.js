@@ -111,7 +111,6 @@ let baseConfig = {
     new DefinePlugin({
       __static: `"${path.join(__dirname, 'static').replace(/\\/g, '\\\\')}"`,
       'process.env.NODE_ENV': JSON.stringify(NODE_ENV),
-      'process.env.SDK_API_URL': JSON.stringify(process.env.SDK_API_URL),
       'process.env.LBRY_API_URL': JSON.stringify(process.env.LBRY_API_URL),
     }),
   ],

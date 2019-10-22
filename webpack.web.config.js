@@ -1,4 +1,4 @@
-const { WEBPACK_WEB_PORT } = require('./config.js');
+const { WEBPACK_WEB_PORT, LBRY_TV_API } = require('./config.js');
 const path = require('path');
 const merge = require('webpack-merge');
 const baseConfig = require('./webpack.base.config.js');
@@ -69,6 +69,7 @@ const webConfig = {
     ]),
     new DefinePlugin({
       IS_WEB: JSON.stringify(true),
+      'process.env.SDK_API_URL': JSON.stringify(process.env.SDK_API_URL || LBRY_TV_API),
     }),
     new ProvidePlugin({
       __: ['i18n.js', '__'],
