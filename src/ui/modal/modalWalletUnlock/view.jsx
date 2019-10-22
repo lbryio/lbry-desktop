@@ -10,6 +10,7 @@ type Props = {
   closeModal: () => void,
   unlockWallet: (?string) => void,
   walletUnlockSucceded: boolean,
+  shouldTryWithBlankPassword: boolean,
 };
 
 type State = {
@@ -24,18 +25,16 @@ class ModalWalletUnlock extends React.PureComponent<Props, State> {
   };
 
   componentDidMount() {
-    const { unlockWallet } = this.props;
+    const { unlockWallet, shouldTryWithBlankPassword } = this.props;
 
-    getSavedPassword()
-      .then(p => {
-        if (p !== null) {
-          this.setState({ password: p, rememberPassword: true });
-          unlockWallet(p);
-        } else {
-          unlockWallet('');
-        }
-      })
-      .catch();
+    getSavedPassword().then(p => {
+      if (p !== null) {
+        this.setState({ password: p, rememberPassword: true });
+        unlockWallet(p);
+      } else if (shouldTryWithBlankPassword) {
+        unlockWallet('');
+      }
+    });
   }
   componentDidUpdate() {
     const { props } = this;
