@@ -2,7 +2,7 @@ import { Lbry } from 'lbry-redux';
 import apiPublishCallViaWeb from './publish';
 import { X_LBRY_AUTH_TOKEN } from 'constants/token';
 
-export const SDK_API_URL = `${process.env.SDK_API_URL}/api/v1/proxy` || 'https://api.lbry.tv/api/v1/proxy';
+export const SDK_API_URL = process.env.SDK_API_URL || 'https://api.lbry.tv/api/v1/proxy';
 Lbry.setDaemonConnectionString(SDK_API_URL);
 
 Lbry.setOverride(
