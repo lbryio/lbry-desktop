@@ -12,7 +12,7 @@ export default function WebUploadItem(props: Props) {
   const { params, progress, xhr } = props;
 
   return (
-    <li className={'claim-preview'}>
+    <li className={'claim-preview card--inline'}>
       <CardMedia thumbnail={params.thumbnail_url} />
       <div className={'claim-preview-metadata'}>
         <div className="claim-preview-info">
@@ -20,17 +20,17 @@ export default function WebUploadItem(props: Props) {
           {xhr && (
             <div className="card__actions--inline">
               <Button
-                button={'primary'}
+                button="link"
                 onClick={() => {
                   xhr.abort();
                 }}
-                label={'abort'}
+                label={__('Cancel')}
               />
             </div>
           )}
         </div>
-        <h2>{params.name}</h2>
-        <div className={'claim-upload__progress--outer'}>
+        <h2>lbry://{params.name}</h2>
+        <div className={'claim-upload__progress--outer card--inline'}>
           <div className={'claim-upload__progress--inner'} style={{ width: `${progress}%` }}>
             Uploading...
           </div>

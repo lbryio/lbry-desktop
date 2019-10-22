@@ -36,12 +36,12 @@ import { getAuthToken, setAuthToken } from 'util/saved-passwords';
 // and loaded dynamically in the component that consumes it
 import 'scss/all.scss';
 
-const startTime = Date.now();
-analytics.startupEvent();
-
 // @if TARGET='web'
 import 'src/platforms/web/api-setup';
 // @endif
+
+const startTime = Date.now();
+analytics.startupEvent();
 
 const APPPAGEURL = 'lbry://?';
 // @if TARGET='app'
@@ -64,7 +64,7 @@ if (process.env.SEARCH_API_URL) {
 let authToken;
 Lbryio.setOverride(
   'setAuthToken',
-  status =>
+  () =>
     new Promise(resolve => {
       Lbryio.call(
         'user',
@@ -72,7 +72,7 @@ Lbryio.setOverride(
         {
           auth_token: '',
           language: 'en',
-          app_id: status.installation_id,
+          // app_id: status.installation_id,
         },
         'post'
       ).then(response => {

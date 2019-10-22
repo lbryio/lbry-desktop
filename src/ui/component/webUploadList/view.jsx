@@ -22,9 +22,14 @@ export default function WebUploadList(props: Props) {
       <div>
         <Card
           title={__('Currently Uploading')}
-          subtitle={<span>{__('You are currently uploading one or more files for publish.')}</span>}
+          subtitle={
+            uploadCount > 1
+              ? __('You files are currently uploading. This will update automatically.')
+              : __('Your file is currently uploading. This will update automatically.')
+          }
           body={
             <section>
+              {/* $FlowFixMe */}
               {Object.values(currentUploads).map(({ progress, params, xhr }) => (
                 <WebUploadItem key={`upload${params.name}`} progress={progress} params={params} xhr={xhr} />
               ))}
