@@ -23,7 +23,6 @@ type Props = {
   children?: React$Node,
   stretch?: boolean,
   affixClass?: string, // class applied to prefix/postfix label
-  firstInList?: boolean, // at the top of a list, no padding top
   autoFocus?: boolean,
   labelOnLeft: boolean,
   inputProps?: {

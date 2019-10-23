@@ -119,6 +119,9 @@ const Button = forwardRef<any, {}>((props: Props, ref: any) => {
       <NavLink
         ref={ref}
         exact
+        onClick={e => {
+          e.stopPropagation();
+        }}
         to={`/$/${PAGES.AUTH}?redirect=${pathname}`}
         title={title}
         disabled={disabled}

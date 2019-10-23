@@ -5,6 +5,7 @@
 import * as SETTINGS from 'constants/settings';
 import * as PAGES from 'constants/pages';
 import * as React from 'react';
+
 import { FormField, FormFieldPrice } from 'component/common/form';
 import Button from 'component/button';
 import I18nMessage from 'component/i18nMessage';
@@ -14,7 +15,6 @@ import FileSelector from 'component/common/file-selector';
 import SyncToggle from 'component/syncToggle';
 import Card from 'component/common/card';
 import { getSavedPassword } from 'util/saved-passwords';
-
 type Price = {
   currency: string,
   amount: number,
@@ -216,6 +216,7 @@ class SettingsPage extends React.PureComponent<Props, State> {
         ) : (
           <div>
             <Card title={__('Language')} actions={<SettingLanguage />} />
+            {/* @if TARGET='app' */}
             <Card
               title={__('Sync')}
               subtitle={
@@ -225,7 +226,6 @@ class SettingsPage extends React.PureComponent<Props, State> {
               }
               actions={<SyncToggle disabled={walletEncrypted && !storedPassword} />}
             />
-            {/* @if TARGET='app' */}
             <Card
               title={__('Download Directory')}
               actions={

@@ -34,9 +34,7 @@ export default function ChannelsPage(props: Props) {
 
   return (
     <Page>
-      {/* @if TARGET='app' */}
       {hasYoutubeChannels && <YoutubeTransferStatus hideChannelLink />}
-      {/* @endif */}
 
       {channels && channels.length ? (
         <div className="card">
