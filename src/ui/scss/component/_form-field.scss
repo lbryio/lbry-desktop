@@ -63,7 +63,11 @@ checkbox-element input[type='checkbox'] + label {
 }
 
 fieldset-section {
-  margin-bottom: var(--spacing-small);
+  margin: 0;
+
+  &:not(:first-of-type) {
+    margin-top: var(--spacing-small);
+  }
 
   input,
   select,

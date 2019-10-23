@@ -33,8 +33,9 @@ class RewardsPage extends PureComponent<Props> {
   }
   renderPageHeader() {
     const { user, daemonSettings, fetchUser } = this.props;
+    const rewardsEnabled = IS_WEB || (daemonSettings && daemonSettings.share_usage_data);
 
-    if (user && !user.is_reward_approved && daemonSettings && daemonSettings.share_usage_data) {
+    if (user && !user.is_reward_approved && rewardsEnabled) {
       if (!user.primary_email || !user.has_verified_email || !user.is_identity_verified) {
         return (
           !IS_WEB && (
