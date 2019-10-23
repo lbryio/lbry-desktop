@@ -54,6 +54,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ### Added
 
+- Comment Thumbnails ([#3108](https://github.com/lbryio/lbry-desktop/pull/3108))
+
 - Syncing between other wallets is now supported for existing users ([#3058](https://github.com/lbryio/lbry-desktop/pull/3058))
 
 - Keyboard shortcuts for the following actions: ([#2999](https://github.com/lbryio/lbry-desktop/pull/2999))
