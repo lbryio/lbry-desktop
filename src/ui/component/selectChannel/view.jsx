@@ -10,7 +10,7 @@ import { CHANNEL_NEW, CHANNEL_ANONYMOUS, INVALID_NAME_ERROR } from 'constants/cl
 
 type Props = {
   channel: string, // currently selected channel
-  channels: ?Array<{ name: string }>,
+  channels: ?Array<ChannelClaim>,
   balance: number,
   onChannelChange: string => void,
   createChannel: (string, number) => Promise<any>,
@@ -168,8 +168,8 @@ class ChannelSection extends React.PureComponent<Props, State> {
             >
               <option value={CHANNEL_ANONYMOUS}>{__('Anonymous')}</option>
               {channels &&
-                channels.map(({ name }) => (
-                  <option key={name} value={name}>
+                channels.map(({ name, claim_id: claimId }) => (
+                  <option key={claimId} value={name}>
                     {name}
                   </option>
                 ))}

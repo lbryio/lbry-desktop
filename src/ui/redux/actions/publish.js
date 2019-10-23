@@ -1,7 +1,8 @@
 // @flow
 import * as MODALS from 'constants/modal_types';
-import { batchActions, doError, selectMyClaims, doPublish, doCheckPendingPublishes } from 'lbry-redux';
 import * as ACTIONS from 'constants/action_types';
+import * as PAGES from 'constants/pages';
+import { batchActions, doError, selectMyClaims, doPublish, doCheckPendingPublishes } from 'lbry-redux';
 import { selectosNotificationsEnabled } from 'redux/selectors/settings';
 import { push } from 'connected-react-router';
 import analytics from 'analytics';
@@ -46,7 +47,8 @@ export const doPublishDesktop = () => (dispatch: Dispatch, getState: () => {}) =
     dispatch(batchActions(...actions));
   };
 
-  return dispatch(doPublish(publishSuccess, publishFail));
+  dispatch(push(`/$/${PAGES.PUBLISHED}`));
+  dispatch(doPublish(publishSuccess, publishFail));
 };
 
 // Calls claim_list_mine until any pending publishes are confirmed
