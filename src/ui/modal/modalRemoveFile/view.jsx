@@ -42,7 +42,7 @@ function ModalRemoveFile(props: Props) {
           <div>
             <FormField
               name="claim_abandon"
-              label={`${__('Abandon on blockchain')} (${__('reclaim')} ${claim.amount} ${__('LBC')})`}
+              label={__('Abandon on blockchain (reclaim %amount% LBC)', { amount: claim.amount })}
               type="checkbox"
               checked={abandonChecked}
               onChange={() => setAbandonChecked(!abandonChecked)}
