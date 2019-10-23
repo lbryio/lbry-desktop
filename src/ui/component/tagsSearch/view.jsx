@@ -62,7 +62,7 @@ export default function TagsSearch(props: Props) {
 
     setNewTag('');
 
-    tags = tags.split(',').map(newTag => newTag.trim());
+    tags = tags.split(',').map(newTag => newTag.trim().toLowerCase());
     tags.forEach(tag => {
       if (onSelect) {
         onSelect({ name: tag });
