@@ -33,13 +33,29 @@
 }
 
 .comment__author {
+  display: inherit;
+  justify-content: left;
+  vertical-align: center;
+  flex: initial;
+  padding-bottom: inherit;
+}
+
+.comment__author-thumbnail {
+  flex-shrink: 1;
+}
+
+.comment__author-name {
+  margin-bottom: 1rem;
   text-overflow: ellipsis; // This is where the magic happens
   flex-basis: 400px;
   flex-shrink: 1;
-  font-weight: var(--font-weight-bold);
+  font-weight: 600;
+  font-size: medium;
 }
 
 .comment__time {
+  flex: 1;
+  align-self: flex-start;
   flex-basis: 200px;
   text-align: right;
 }
