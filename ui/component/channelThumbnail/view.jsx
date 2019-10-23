@@ -6,7 +6,7 @@ import Gerbil from './gerbil.png';
 
 type Props = {
   thumbnail: ?string,
-  uri: string,
+  uri: ?string,
   className?: string,
   thumbnailPreview: ?string,
   obscure?: boolean,
@@ -14,11 +14,16 @@ type Props = {
 
 function ChannelThumbnail(props: Props) {
   const { thumbnail, uri, className, thumbnailPreview, obscure } = props;
-
   // Generate a random color class based on the first letter of the channel name
-  const { channelName } = parseURI(uri);
-  const initializer = channelName.charCodeAt(0) - 65; // will be between 0 and 57
-  const colorClassName = `channel-thumbnail__default--${Math.abs(initializer % 4)}`;
+  let initializer;
+  if (thumbnail) {
+    const { channelName } = parseURI(uri);
+    initializer = channelName.charCodeAt(0) - 65; // will be between 0 and 57
+  } else {
+    // if we want to default a thumbnail
+    initializer = Math.floor(Math.random() * 104729); // 10000th prime number
+  }
+  const colorClassName = `channel-thumbnail__default--${initializer % 4}`;
   const showThumb = !obscure && !!thumbnail;
   return (
     <div
