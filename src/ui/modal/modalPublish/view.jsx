@@ -1,6 +1,7 @@
 // @flow
 import React from 'react';
 import { Modal } from 'modal/modal';
+import ClaimPreview from 'component/claimPreview';
 
 type Props = {
   closeModal: () => void,
@@ -27,16 +28,18 @@ class ModalPublishSuccess extends React.PureComponent<Props> {
           navigate('/$/published');
           closeModal();
         }}
-        confirmButtonLabel={'Show me!'}
+        confirmButtonLabel={'View My Publishes'}
         abortButtonLabel={'Thanks!'}
         onAborted={() => {
           clearPublish();
           closeModal();
         }}
       >
-        <p>{__(`Your ${publishMessage} published to LBRY at the address`)}</p>
-        <blockquote>{uri}</blockquote>
-        <p>
+        <p className="card__subtitle">{__(`Your %publishMessage% published to LBRY.`, { publishMessage })}</p>
+        <div className="card--inline">
+          <ClaimPreview uri={uri} />
+        </div>
+        <p className="help">
           {__(
             `The ${publishType} will take a few minutes to appear for other LBRY users. Until then it will be listed as "pending" under your published files.`
           )}

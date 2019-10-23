@@ -55,7 +55,6 @@ export default function apiPublishCallViaWeb(
 
       xhr.onabort = () => {
         window.store.dispatch(doUpdateUploadProgress(undefined, params));
-        reject(new Error(__('You aborted your publish upload')));
       };
       xhr.send(body);
     });
