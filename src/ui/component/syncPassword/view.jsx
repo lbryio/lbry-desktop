@@ -9,10 +9,11 @@ import usePersistedState from 'effects/use-persisted-state';
 type Props = {
   getSync: (?string) => void,
   getSyncIsPending: boolean,
+  email: string,
 };
 
 function SyncPassword(props: Props) {
-  const { getSync, getSyncIsPending } = props;
+  const { getSync, getSyncIsPending, email } = props;
   const [password, setPassword] = React.useState('');
   const [rememberPassword, setRememberPassword] = usePersistedState(true);
 
@@ -25,12 +26,14 @@ function SyncPassword(props: Props) {
     <Form onSubmit={handleSubmit}>
       <Card
         title={__('Enter Your LBRY Password')}
-        subtitle={__('You set your wallet password when you previously installed LBRY.')}
+        subtitle={__(
+          'You set your wallet password when you previously installed LBRY. This may have been on different device.'
+        )}
         actions={
           <div>
             <FormField
               type="password"
-              label={__('Password')}
+              label={__('Password for %email%', { email })}
               value={password}
               onChange={e => setPassword(e.target.value)}
             />

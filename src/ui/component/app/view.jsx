@@ -1,6 +1,5 @@
 // @flow
 import * as ICONS from 'constants/icons';
-import * as ACTIONS from 'constants/action_types';
 import * as PAGES from 'constants/pages';
 import React, { useEffect, useRef, useState } from 'react';
 import classnames from 'classnames';
@@ -16,8 +15,6 @@ import FileViewer from 'component/fileViewer';
 import { withRouter } from 'react-router';
 import usePrevious from 'effects/use-previous';
 import Button from 'component/button';
-import usePersistedState from 'effects/use-persisted-state';
-import { Lbryio } from 'lbryinc';
 
 export const MAIN_WRAPPER_CLASS = 'main-wrapper';
 // @if TARGET='app'
@@ -45,7 +42,6 @@ type Props = {
   isUpgradeAvailable: boolean,
   autoUpdateDownloaded: boolean,
   checkSync: () => void,
-  setSyncEnabled: boolean => void,
   syncEnabled: boolean,
   uploadCount: number,
   balance: ?number,
@@ -66,12 +62,9 @@ function App(props: Props) {
     autoUpdateDownloaded,
     isUpgradeAvailable,
     requestDownloadUpgrade,
-    setSyncEnabled,
     syncEnabled,
     checkSync,
     uploadCount,
-    balance,
-    accessToken,
     history,
     syncError,
   } = props;
@@ -79,7 +72,6 @@ function App(props: Props) {
   const appRef = useRef();
   const isEnhancedLayout = useKonamiListener();
   const [hasSignedIn, setHasSignedIn] = useState(false);
-  const [hasDeterminedIfNewUser, setHasDeterminedIfNewUser] = usePersistedState('is-new-user', false);
   const userId = user && user.id;
   const hasVerifiedEmail = user && user.has_verified_email;
   const isRewardApproved = user && user.is_reward_approved;
@@ -94,41 +86,6 @@ function App(props: Props) {
     const newpath = buildURI(parseURI(pathname.slice(1).replace(/:/g, '#')));
     uri = newpath + hash;
   } catch (e) {}
-
-  // This should not be needed and will be removed after 37 is released
-  // We should just be able to default the enableSync setting to true, but we don't want
-  // to automatically opt-in existing users. Only users that go through the new sign in flow
-  // should be automatically opted-in (they choose to uncheck the option and turn off sync still)
-  useEffect(() => {
-    if (balance === undefined || accessToken === undefined || hasDeterminedIfNewUser) {
-      return;
-    }
-
-    // Manually call subscription/list once because I was dumb and wasn't persisting it in redux
-    Lbryio.call('subscription', 'list').then(response => {
-      if (response && response.length) {
-        const subscriptions = response.map(value => {
-          const { channel_name: channelName, claim_id: claimId } = value;
-          return {
-            channelName,
-            uri: buildURI({ channelName, channelClaimId: claimId }),
-          };
-        });
-
-        window.store.dispatch({
-          type: ACTIONS.FETCH_SUBSCRIPTIONS_SUCCESS,
-          data: subscriptions,
-        });
-      }
-
-      // Yeah... this isn't the best check, but it works for now
-      const newUser = balance === 0;
-      if (newUser) {
-        setSyncEnabled(true);
-      }
-      setHasDeterminedIfNewUser(true);
-    });
-  }, [balance, accessToken, hasDeterminedIfNewUser, setHasDeterminedIfNewUser]);
 
   useEffect(() => {
     if (!uploadCount) return;
@@ -187,7 +144,7 @@ function App(props: Props) {
   }, [hasVerifiedEmail, signIn, hasSignedIn]);
 
   useEffect(() => {
-    if (hasVerifiedEmail && syncEnabled && hasDeterminedIfNewUser) {
+    if (hasVerifiedEmail && syncEnabled) {
       checkSync();
 
       let syncInterval = setInterval(() => {
@@ -198,7 +155,7 @@ function App(props: Props) {
         clearInterval(syncInterval);
       };
     }
-  }, [hasVerifiedEmail, syncEnabled, checkSync, hasDeterminedIfNewUser]);
+  }, [hasVerifiedEmail, syncEnabled, checkSync]);
 
   useEffect(() => {
     if (syncError) {

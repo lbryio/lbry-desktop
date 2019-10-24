@@ -72,7 +72,7 @@ Lbryio.setOverride(
         {
           auth_token: '',
           language: 'en',
-          // app_id: status.installation_id,
+          app_id: status.installation_id,
         },
         'post'
       ).then(response => {

@@ -38,7 +38,7 @@ import { doAuthenticate, doGetSync } from 'lbryinc';
 import { lbrySettings as config, version as appVersion } from 'package.json';
 import { push } from 'connected-react-router';
 import analytics from 'analytics';
-import { deleteAuthToken, getSavedPassword, getAuthToken } from 'util/saved-passwords';
+import { deleteAuthToken, deleteSavedPassword, getSavedPassword, getAuthToken } from 'util/saved-passwords';
 
 // @if TARGET='app'
 const { autoUpdater } = remote.require('electron-updater');
@@ -475,12 +475,14 @@ export function doSyncWithPreferences() {
       }
 
       function failCb() {
-        dispatch(
-          doToast({
-            isError: true,
-            message: __('Unable to load your saved preferences.'),
-          })
-        );
+        deleteSavedPassword().then(() => {
+          dispatch(
+            doToast({
+              isError: true,
+              message: __('Unable to load your saved preferences.'),
+            })
+          );
+        });
       }
 
       doPreferenceGet('shared', successCb, failCb);
