@@ -11,7 +11,7 @@ function setCookie(name: string, value: string, days: number) {
     expires = '; expires=' + date.toUTCString();
   }
 
-  document.cookie = `${name}=${value || ''}${expires}; path=/`;
+  document.cookie = `${name}=${value || ''}${expires}; path=/;samesite=strict;`;
 }
 
 function getCookie(name: string) {
@@ -32,7 +32,7 @@ function getCookie(name: string) {
 }
 
 function deleteCookie(name: string) {
-  document.cookie = name + '=; Max-Age=-99999999;';
+  document.cookie = name + '=; Max-Age=-99999999; path=/;';
 }
 
 export const setSavedPassword = (value?: string, saveToDisk: boolean) => {
@@ -106,6 +106,8 @@ export const setAuthToken = (value: string) => {
 
 export const deleteAuthToken = () => {
   return new Promise<*>(resolve => {
+    deleteCookie('auth_token');
+
     // @if TARGET='app'
     ipcRenderer.once('delete-auth-token-response', (event, success) => {
       resolve();
@@ -113,7 +115,6 @@ export const deleteAuthToken = () => {
     ipcRenderer.send('delete-auth-token');
     // @endif;
 
-    deleteCookie('auth_token');
     // @if TARGET='web'
     resolve();
     // @endif
