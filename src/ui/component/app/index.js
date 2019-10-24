@@ -6,15 +6,13 @@ import {
   doRewardList,
   doFetchRewardedContent,
   doFetchAccessToken,
-  selectAccessToken,
   selectGetSyncErrorMessage,
   selectUploadCount,
 } from 'lbryinc';
-import { doFetchTransactions, doFetchChannelListMine, selectBalance } from 'lbry-redux';
+import { doFetchTransactions, doFetchChannelListMine } from 'lbry-redux';
 import { makeSelectClientSetting, selectThemePath } from 'redux/selectors/settings';
 import { selectIsUpgradeAvailable, selectAutoUpdateDownloaded } from 'redux/selectors/app';
 import { doDownloadUpgradeRequested, doSignIn, doSyncWithPreferences } from 'redux/actions/app';
-import { doSetClientSetting } from 'redux/actions/settings';
 import App from './view';
 
 const select = state => ({
@@ -23,10 +21,8 @@ const select = state => ({
   language: makeSelectClientSetting(SETTINGS.LANGUAGE)(state),
   autoUpdateDownloaded: selectAutoUpdateDownloaded(state),
   isUpgradeAvailable: selectIsUpgradeAvailable(state),
-  balance: selectBalance(state),
   syncEnabled: makeSelectClientSetting(SETTINGS.ENABLE_SYNC)(state),
   syncError: selectGetSyncErrorMessage(state),
-  accessToken: selectAccessToken(state),
   uploadCount: selectUploadCount(state),
 });
 
@@ -39,7 +35,6 @@ const perform = dispatch => ({
   signIn: () => dispatch(doSignIn()),
   requestDownloadUpgrade: () => dispatch(doDownloadUpgradeRequested()),
   checkSync: () => dispatch(doSyncWithPreferences()),
-  setSyncEnabled: value => dispatch(doSetClientSetting(SETTINGS.ENABLE_SYNC, value)),
 });
 
 export default hot(
