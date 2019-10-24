@@ -329,14 +329,14 @@ ipcMain.on('get-password', event => {
 ipcMain.on('set-password', (event, password) => {
   if (password || password === '') {
     keytar.setPassword('LBRY', 'wallet_password', password).then(res => {
-      event.sender.send('get-password-response', res);
+      event.sender.send('set-password-response', res);
     });
   }
 });
 
-ipcMain.on('delete-password', (event, password) => {
-  keytar.deletePassword('LBRY', 'wallet_password', password).then(res => {
-    event.sender.send('get-password-response', res);
+ipcMain.on('delete-password', event => {
+  keytar.deletePassword('LBRY', 'wallet_password').then(res => {
+    event.sender.send('delete-password-response', res);
   });
 });
 
