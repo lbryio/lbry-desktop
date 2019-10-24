@@ -57,12 +57,10 @@ const tagsFilter = createFilter('tags', ['followedTags']);
 const subscriptionsFilter = createFilter('subscriptions', ['subscriptions']);
 const blockedFilter = createFilter('blocked', ['blockedChannels']);
 const whiteListedReducers = [
-  // @if TARGET='app'
+  'fileInfo',
   'publish',
   'wallet',
   'tags',
-  // 'fileInfo',
-  // @endif
   'content',
   'app',
   'search',
@@ -72,12 +70,10 @@ const whiteListedReducers = [
 ];
 
 const transforms = [
-  // @if TARGET='app'
-  walletFilter,
   fileInfoFilter,
+  walletFilter,
   blockedFilter,
   tagsFilter,
-  // @endif
   appFilter,
   searchFilter,
   tagsFilter,
