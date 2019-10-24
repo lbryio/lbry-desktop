@@ -1,4 +1,5 @@
-import { Lbry, ACTIONS, SETTINGS } from 'lbry-redux';
+import { Lbry, ACTIONS } from 'lbry-redux';
+import * as SETTINGS from 'constants/settings';
 import analytics from 'analytics';
 
 const UPDATE_IS_NIGHT_INTERVAL = 5 * 60 * 1000;

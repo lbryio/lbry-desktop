@@ -465,7 +465,7 @@ class SettingsPage extends React.PureComponent<Props, State> {
                     >
                       {themes.map(theme => (
                         <option key={theme} value={theme}>
-                          {theme}
+                          {theme === 'light' ? __('Light') : __('Dark')}
                         </option>
                       ))}
                     </FormField>
