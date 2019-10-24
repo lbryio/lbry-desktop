@@ -12,7 +12,7 @@ import React, { Fragment, useState, useEffect } from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import { doConditionalAuthNavigate, doDaemonReady, doAutoUpdate, doOpenModal, doHideModal } from 'redux/actions/app';
-import { doToast, isURIValid, setSearchApi } from 'lbry-redux';
+import { Lbry, doToast, isURIValid, setSearchApi } from 'lbry-redux';
 import { doUpdateIsNightAsync } from 'redux/actions/settings';
 import {
   doAuthenticate,
@@ -30,6 +30,7 @@ import { formatLbryUriForWeb } from 'util/uri';
 import { PersistGate } from 'redux-persist/integration/react';
 import analytics from 'analytics';
 import { getAuthToken, setAuthToken } from 'util/saved-passwords';
+import { X_LBRY_AUTH_TOKEN } from 'constants/token';
 
 // Import our app styles
 // If a style is not necessary for the initial page load, it should be removed from `all.scss`
@@ -109,6 +110,7 @@ Lbryio.setOverride(
         // @endif
         // @if TARGET='web'
         const authToken = getAuthToken();
+        Lbry.setApiHeader(X_LBRY_AUTH_TOKEN, authToken);
         resolve(authToken);
         // @endif
       }

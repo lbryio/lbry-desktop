@@ -7,7 +7,6 @@ import path from 'path';
 import * as ACTIONS from 'constants/action_types';
 import * as MODALS from 'constants/modal_types';
 import * as PAGES from 'constants/pages';
-import { X_LBRY_AUTH_TOKEN } from 'constants/token';
 import {
   Lbry,
   doBalanceSubscribe,
@@ -38,7 +37,7 @@ import { doAuthenticate, doGetSync } from 'lbryinc';
 import { lbrySettings as config, version as appVersion } from 'package.json';
 import { push } from 'connected-react-router';
 import analytics from 'analytics';
-import { deleteAuthToken, deleteSavedPassword, getSavedPassword, getAuthToken } from 'util/saved-passwords';
+import { deleteAuthToken, deleteSavedPassword, getSavedPassword } from 'util/saved-passwords';
 
 // @if TARGET='app'
 const { autoUpdater } = remote.require('electron-updater');
@@ -437,9 +436,6 @@ export function doAnalyticsView(uri, timeToStart) {
 export function doSignIn() {
   return (dispatch, getState) => {
     // @if TARGET='web'
-    const authToken = getAuthToken();
-    Lbry.setApiHeader(X_LBRY_AUTH_TOKEN, authToken);
-
     dispatch(doBalanceSubscribe());
     dispatch(doFetchChannelListMine());
     // @endif
