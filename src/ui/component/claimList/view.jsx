@@ -69,14 +69,14 @@ export default function ClaimList(props: Props) {
           x &&
           mc &&
           (window.scrollY + window.innerHeight >= x.offsetHeight ||
-            x.offsetHeight - mc.offsetHeight > PADDING_ALLOWANCE)
+            x.offsetHeight - mc.offsetHeight > PADDING_ALLOWANCE) &&
+          !loading &&
+          urisLength >= pageSize
         ) {
-          if (!loading && urisLength >= pageSize) {
-            onScrollBottom();
+          onScrollBottom();
 
-            // Save that we've fetched this page to avoid weird stuff happening with fast scrolling
-            setScrollBottomCbMap({ ...scrollBottomCbMap, [page]: true });
-          }
+          // Save that we've fetched this page to avoid weird stuff happening with fast scrolling
+          setScrollBottomCbMap({ ...scrollBottomCbMap, [page]: true });
         }
       }
     }
