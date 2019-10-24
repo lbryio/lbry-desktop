@@ -97,27 +97,28 @@ Lbryio.setOverride(
   'getAuthToken',
   () =>
     new Promise(resolve => {
+      // @if TARGET='app'
       if (authToken) {
         resolve(authToken);
-      } else {
-        // @if TARGET='app'
-        ipcRenderer.once('auth-token-response', (event, token) => {
-          Lbryio.authToken = token;
-          resolve(token);
-        });
-
-        ipcRenderer.send('get-auth-token');
-        // @endif
-        // @if TARGET='web'
-        const authToken = getAuthToken();
-
-        if (authToken) {
-          Lbry.setApiHeader(X_LBRY_AUTH_TOKEN, authToken);
-        }
-
-        resolve(authToken);
-        // @endif
       }
+
+      ipcRenderer.once('auth-token-response', (event, token) => {
+        Lbryio.authToken = token;
+        resolve(token);
+      });
+
+      ipcRenderer.send('get-auth-token');
+      // @endif
+
+      // @if TARGET='web'
+      const authTokenToReturn = authToken || getAuthToken();
+
+      if (authTokenToReturn !== null) {
+        Lbry.setApiHeader(X_LBRY_AUTH_TOKEN, authTokenToReturn);
+      }
+
+      resolve(authTokenToReturn);
+      // @endif
     })
 );
 
