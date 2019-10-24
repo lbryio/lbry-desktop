@@ -21,6 +21,7 @@ type Props = {
   onSelect?: (Array<Tag>) => void,
   onRemove?: Tag => void,
   placeholder?: string,
+  disableAutoFocus?: boolean,
 };
 
 /*
@@ -37,6 +38,7 @@ export default function TagsSelect(props: Props) {
     onSelect,
     onRemove,
     suggestMature,
+    disableAutoFocus,
     placeholder,
   } = props;
   const [hasClosed, setHasClosed] = usePersistedState('tag-select:has-closed', false);
@@ -92,7 +94,8 @@ export default function TagsSelect(props: Props) {
               onRemove={handleTagClick}
               onSelect={onSelect}
               suggestMature={suggestMature && !hasMatureTag}
-              tagsPassedIn={tagsToDisplay}
+              disableAutoFocus={disableAutoFocus}
+              tagsPasssedIn={tagsToDisplay}
               placeholder={placeholder}
             />
           </React.Fragment>
