@@ -110,7 +110,11 @@ Lbryio.setOverride(
         // @endif
         // @if TARGET='web'
         const authToken = getAuthToken();
-        Lbry.setApiHeader(X_LBRY_AUTH_TOKEN, authToken);
+
+        if (authToken) {
+          Lbry.setApiHeader(X_LBRY_AUTH_TOKEN, authToken);
+        }
+
         resolve(authToken);
         // @endif
       }
