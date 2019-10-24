@@ -12,6 +12,7 @@ type Props = {
   doAddTag: string => void,
   onSelect?: Tag => void,
   suggestMature?: boolean,
+  disableAutoFocus?: boolean,
   onRemove: Tag => void,
   placeholder?: string,
 };
@@ -33,6 +34,7 @@ export default function TagsSearch(props: Props) {
     onSelect,
     onRemove,
     suggestMature,
+    disableAutoFocus,
     placeholder,
   } = props;
   const [newTag, setNewTag] = useState('');
@@ -118,7 +120,7 @@ export default function TagsSearch(props: Props) {
           ))}
           <li>
             <FormField
-              autoFocus
+              autoFocus={!disableAutoFocus}
               className="tag__input"
               onChange={onChange}
               placeholder={placeholder || __('Follow more tags')}

@@ -138,6 +138,7 @@ function PublishForm(props: Props) {
         <TagsSelect
           title={__('Add Tags')}
           suggestMature
+          disableAutoFocus
           help={__('The better your tags are, the easier it will be for people to discover your content.')}
           empty={__('No tags added')}
           placeholder={__('Add a tag')}
