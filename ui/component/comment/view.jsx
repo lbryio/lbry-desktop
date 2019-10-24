@@ -43,25 +43,28 @@ function Comment(props: Props) {
 
   return (
     <li className="comment">
-      <div className="comment__author">
-        <div className="comment__author-thumbnail">
-          {authorUri ? <ChannelThumbnail uri={authorUri} obscure={channelIsBlocked} /> : <ChannelThumbnail />}
-        </div>
-        <Button
-          className="button--uri-indicator truncated-text comment__author-name"
-          navigate={authorUri}
-          label={author || __('Anonymous')}
-        />
-        <time className="comment__time" dateTime={timePosted}>
-          {relativeDate(timePosted)}
-        </time>
+      <div className="comment__author-thumbnail">
+        {authorUri ? <ChannelThumbnail uri={authorUri} obscure={channelIsBlocked} /> : <ChannelThumbnail />}
       </div>
-      <div>
-        <Expandable>
-          <div className={'comment__message'}>
-            <MarkdownPreview content={message} />
-          </div>
-        </Expandable>
+
+      <div className="comment__body_container">
+        <span className="comment__meta">
+          <Button
+            className="button--uri-indicator truncated-text comment__author"
+            navigate={authorUri}
+            label={author || __('Anonymous')}
+          />
+          <time className="comment__time" dateTime={timePosted}>
+            {relativeDate(timePosted)}
+          </time>
+        </span>
+        <div>
+          <Expandable>
+            <div className="comment__message">
+              <MarkdownPreview content={message} promptLinks />
+            </div>
+          </Expandable>
+        </div>
       </div>
     </li>
   );
