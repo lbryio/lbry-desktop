@@ -99,8 +99,12 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
   const isChannel = isValid ? parseURI(uri).isChannel : false;
   const includeChannelTooltip = type !== 'inline' && type !== 'tooltip' && !isChannel;
   const signingChannel = claim && claim.signing_channel;
+
+  // do not block abandoned and nsfw claims if showUserBlocked is passed
   let shouldHide =
-    placeholder !== 'loading' && ((abandoned && !showPublishLink) || (!claimIsMine && obscureNsfw && nsfw));
+    placeholder !== 'loading' &&
+    !showUserBlocked &&
+    ((abandoned && !showPublishLink) || (!claimIsMine && obscureNsfw && nsfw));
 
   // This will be replaced once blocking is done at the wallet server level
   if (claim && !shouldHide && blackListedOutpoints) {
