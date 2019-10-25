@@ -46,7 +46,7 @@ function VideoViewer(props: Props) {
   const { contentType, source, setPlayingUri, onEndedCB, changeVolume, changeMute, volume, muted } = props;
   const videoRef = useRef();
   const [requireRedraw, setRequireRedraw] = useState(false);
-  let player = null;
+  let player;
 
   useEffect(() => {
     const currentVideo: HTMLVideoElement | null = document.querySelector('video');
