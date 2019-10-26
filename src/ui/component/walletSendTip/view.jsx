@@ -9,7 +9,7 @@ type Props = {
   title: string,
   claim: StreamClaim,
   isPending: boolean,
-  sendSupport: (number, string) => void,
+  sendSupport: (number, string, boolean) => void,
   onCancel: () => void,
   sendTipCallback?: () => void,
   balance: number,
