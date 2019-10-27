@@ -17,7 +17,7 @@ type Props = {
   downloadedUrlsCount: ?number,
   history: { replace: string => void },
   page: number,
-  query: string
+  query: string,
 };
 
 function FileListDownloaded(props: Props) {
@@ -50,6 +50,7 @@ function FileListDownloaded(props: Props) {
                   onChange={handleInputChange}
                   value={query}
                   type="text"
+                  name="query"
                   placeholder={__('Search')}
                 />
               </Form>

@@ -27,7 +27,9 @@ function Paginate(props: Props) {
     }
 
     if (currentPage !== newPageNumber) {
-      history.push(`?${PAGINATE_PARAM}=${newPageNumber}`);
+      const params = new URLSearchParams(search);
+      params.set(PAGINATE_PARAM, newPageNumber.toString());
+      history.push('?' + params.toString());
     }
   }
 
