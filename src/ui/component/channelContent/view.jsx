@@ -69,6 +69,7 @@ function ChannelContent(props: Props) {
       {hasContent && !channelIsBlocked && !channelIsBlackListed && (
         <ClaimList header={false} uris={claimsInChannel.map(claim => claim && claim.canonical_url)} />
       )}
+
       {!channelIsBlocked && !channelIsBlackListed && (
         <Paginate
           onPageChange={page => fetchClaims(uri, page)}
