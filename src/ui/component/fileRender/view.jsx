@@ -143,6 +143,7 @@ class FileRender extends React.PureComponent<Props> {
       pdf: <PdfViewer source={downloadPath} />,
       docx: <DocxViewer source={downloadPath} />,
       html: <HtmlViewer source={downloadPath} />,
+      htm: <HtmlViewer source={downloadPath} />,
       // @endif
       // Add routes to viewer...
     };
