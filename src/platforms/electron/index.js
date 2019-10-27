@@ -40,11 +40,10 @@ app.setAsDefaultProtocolClient('lbry');
 app.setName('LBRY');
 app.setAppUserModelId('io.lbry.LBRY');
 
-if (isDev) {
+if (isDev) 
+  process.env.ELECTRON_DISABLE_SECURITY_WARNINGS = true;
   // Disable security warnings in dev mode:
   // https://github.com/electron/electron/blob/master/docs/tutorial/security.md#electron-security-warnings
-  process.env.ELECTRON_DISABLE_SECURITY_WARNINGS = true;
-}
 
 const startDaemon = async () => {
   let isDaemonRunning = false;
@@ -81,10 +80,11 @@ const startDaemon = async () => {
 // When we are starting the app, ensure there are no other apps already running
 const gotSingleInstanceLock = app.requestSingleInstanceLock();
 
-if (!gotSingleInstanceLock) {
+if (!gotSingleInstanceLock) 
+    app.quit();
   // Another instance already has a lock, abort
-  app.quit();
-} else {
+
+ else {
   app.on('second-instance', (event, argv) => {
     // Send the url to the app to navigate first, then focus
     if (rendererWindow) {
@@ -133,24 +133,22 @@ if (!gotSingleInstanceLock) {
     // HACK: patch webrequest to fix devtools incompatibility with electron 2.x.
     // See https://github.com/electron/electron/issues/13008#issuecomment-400261941
     session.defaultSession.webRequest.onBeforeRequest({}, (details, callback) => {
-      if (details.url.includes('7accc8730b0f99b5e7c0702ea89d1fa7c17bfe33')) {
+      if (details.url.includes('7accc8730b0f99b5e7c0702ea89d1fa7c17bfe33'))
         callback({
           redirectURL: details.url.replace(
             '7accc8730b0f99b5e7c0702ea89d1fa7c17bfe33',
             '57c9d07b416b5a2ea23d28247300e4af36329bdc'
           ),
         });
-      } else {
+      else 
         callback({ cancel: false });
-      }
     });
   });
 }
 
 app.on('activate', () => {
-  if (rendererWindow) {
+  if (rendererWindow)
     rendererWindow.show();
-  }
 });
 
 app.on('will-quit', event => {
@@ -187,9 +185,8 @@ app.on('will-quit', event => {
     event.preventDefault();
   }
 
-  if (rendererWindow) {
+  if (rendererWindow)
     rendererWindow = null;
-  }
 });
 
 app.on('will-finish-launching', () => {
@@ -200,9 +197,8 @@ app.on('will-finish-launching', () => {
     if (rendererWindow) {
       rendererWindow.webContents.send('open-uri-requested', URL);
       rendererWindow.show();
-    } else {
+    } else
       appState.macDeepLinkingURI = URL;
-    }
   });
 });
 
@@ -257,9 +253,8 @@ ipcMain.on('version-info-requested', () => {
       if (tagName) {
         const [, remoteVersion] = tagName.match(/^v([\d.]+(?:-?rc\d+)?)$/);
         if (!remoteVersion) {
-          if (rendererWindow) {
+          if (rendererWindow)
             rendererWindow.webContents.send('version-info-received', localVersion);
-          }
         } else {
           const upgradeAvailable = SemVer.gt(formatRc(remoteVersion), formatRc(localVersion));
           if (rendererWindow) {
@@ -270,9 +265,8 @@ ipcMain.on('version-info-requested', () => {
             });
           }
         }
-      } else if (rendererWindow) {
+      } else if (rendererWindow)
         rendererWindow.webContents.send('version-info-received', localVersion);
-      }
     });
   };
 
@@ -284,15 +278,15 @@ ipcMain.on('version-info-requested', () => {
         headers: { 'user-agent': `LBRY/${localVersion}` },
       },
       res => {
-        if (res.statusCode === 301 || res.statusCode === 302) {
+        if (res.statusCode === 301 || res.statusCode === 302)
           requestLatestRelease(res.headers.location, true);
-        } else {
+        else
           onSuccess(res);
-        }
       }
     );
 
-    if (alreadyRedirected) return;
+    if (alreadyRedirected) 
+      return;
     req.on('error', err => {
       console.log('Failed to get current version from GitHub. Error:', err);
       if (rendererWindow) {
@@ -327,11 +321,10 @@ ipcMain.on('get-password', event => {
 });
 
 ipcMain.on('set-password', (event, password) => {
-  if (password || password === '') {
+  if (password || password === '')
     keytar.setPassword('LBRY', 'wallet_password', password).then(res => {
       event.sender.send('get-password-response', res);
     });
-  }
 });
 
 ipcMain.on('delete-password', (event, password) => {
