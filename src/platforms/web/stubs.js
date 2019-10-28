@@ -1,5 +1,5 @@
 const callable = () => {
-  throw Error('Need to fix this stub');
+  throw new Error('Need to fix this stub');
 };
 
 export const remote = {
