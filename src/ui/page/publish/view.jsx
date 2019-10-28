@@ -63,7 +63,7 @@ function PublishPage(props: Props) {
           </section>
         </Fragment>
       )}
-      <PublishForm scrollToTop={scrollToTop} />
+      <PublishForm scrollToTop={scrollToTop} disabled={balance === 0} />
     </Page>
   );
 }
