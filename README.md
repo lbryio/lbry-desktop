@@ -95,7 +95,7 @@ You can run the web version (beta.lbry.tv), the electron app, or both at the sam
 - [Yarn](https://yarnpkg.com/en/docs/install)
 
 1. Clone (or [fork](https://help.github.com/articles/fork-a-repo/)) this repository: `git clone https://github.com/lbryio/lbry-desktop`
-2. Change directories into the downloaded folder: `cd lbry-desktop`
+2. Change directory into the cloned repository: `cd lbry-desktop`
 3. Install the dependencies: `yarn`
 
 #### Run the electron app
