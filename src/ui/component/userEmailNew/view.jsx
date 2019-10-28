@@ -2,7 +2,6 @@
 import React, { useState } from 'react';
 import { FormField, Form } from 'component/common/form';
 import Button from 'component/button';
-import { Lbryio } from 'lbryinc';
 import analytics from 'analytics';
 import { EMAIL_REGEX } from 'constants/email';
 import I18nMessage from 'component/i18nMessage';
@@ -26,20 +25,15 @@ function UserEmailNew(props: Props) {
     setSync(formSyncEnabled);
     addUserEmail(newEmail);
     analytics.emailProvidedEvent();
-
-    // @if TARGET='web'
-    Lbryio.call('user_tag', 'edit', { add: 'lbrytv' });
-    // @endif
   }
 
   return (
     <React.Fragment>
-      <h1 className="section__title--large">{__('Welcome To LBRY')}</h1>
+      <h1 className="section__title--large">{__('Sign In To LBRY')}</h1>
       <p className="section__subtitle">{__('Create a new account or sign in.')}</p>
       <Form onSubmit={handleSubmit} className="section__body">
         <FormField
           autoFocus
-          className="form-field--short"
           placeholder={__('hotstuff_96@hotmail.com')}
           type="email"
           name="sign_up_email"
@@ -59,19 +53,6 @@ function UserEmailNew(props: Props) {
                 <Button button="link" href="https://lbry.com/faq/account-sync" label={__('Learn More')} />
               </React.Fragment>
             }
-            helper={
-              <React.Fragment>
-                <I18nMessage
-                  tokens={{
-                    terms: (
-                      <Button button="link" href="https://www.lbry.com/termsofservice" label={__('Terms of Service')} />
-                    ),
-                  }}
-                >
-                  By continuing, I agree to the %terms% and confirm I am over the age of 13.
-                </I18nMessage>
-              </React.Fragment>
-            }
             checked={formSyncEnabled}
             onChange={() => setFormSyncEnabled(!formSyncEnabled)}
           />
@@ -79,6 +60,19 @@ function UserEmailNew(props: Props) {
         <div className="card__actions">
           <Button button="primary" type="submit" label={__('Continue')} disabled={!newEmail || !valid || isPending} />
         </div>
+        <p className="help">
+          <React.Fragment>
+            <I18nMessage
+              tokens={{
+                terms: (
+                  <Button button="link" href="https://www.lbry.com/termsofservice" label={__('Terms of Service')} />
+                ),
+              }}
+            >
+              By continuing, I agree to the %terms% and confirm I am over the age of 13.
+            </I18nMessage>
+          </React.Fragment>
+        </p>
       </Form>
     </React.Fragment>
   );

@@ -21,6 +21,10 @@
     background-color: $lbry-teal-4;
   }
 
+  &:active {
+    background-color: $lbry-teal-3;
+  }
+
   &:disabled {
     opacity: 0.5;
   }

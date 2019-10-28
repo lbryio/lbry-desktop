@@ -65,10 +65,6 @@ checkbox-element input[type='checkbox'] + label {
 fieldset-section {
   margin: 0;
 
-  &:not(:first-of-type) {
-    margin-top: var(--spacing-small);
-  }
-
   input,
   select,
   textarea {
@@ -90,6 +86,13 @@ fieldset-section {
 
     [data-mode='dark'] & {
       color: $lbry-gray-3;
+    }
+  }
+
+  &:not(:first-of-type) {
+    checkbox-element,
+    radio-element {
+      margin-top: var(--spacing-small);
     }
   }
 }
@@ -141,6 +144,8 @@ checkbox-toggle {
 }
 
 fieldset-group {
+  margin-top: var(--spacing-small);
+
   &.fieldset-group--smushed {
     justify-content: flex-start;
 

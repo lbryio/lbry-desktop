@@ -24,7 +24,7 @@ type Props = {
   setClientSetting: (string, boolean | string) => void,
   hideBalance: boolean,
   email: ?string,
-  minimal: boolean,
+  authHeader: boolean,
   signOut: () => void,
 };
 
@@ -37,10 +37,12 @@ const Header = (props: Props) => {
     automaticDarkModeEnabled,
     hideBalance,
     email,
-    minimal,
+    authHeader,
     signOut,
   } = props;
   const authenticated = Boolean(email);
+  const homeButtonNavigationProps = authHeader ? { onClick: signOut } : { navigate: '/' };
+  const closeButtonNavigationProps = authHeader ? { onClick: signOut } : { onClick: () => history.goBack() };
 
   function handleThemeToggle() {
     if (automaticDarkModeEnabled) {
@@ -67,7 +69,7 @@ const Header = (props: Props) => {
   return (
     <header
       className={classnames('header', {
-        'header--minimal': minimal,
+        'header--minimal': authHeader,
         // @if TARGET='app'
         'header--mac': IS_MAC,
         // @endif
@@ -79,11 +81,11 @@ const Header = (props: Props) => {
             className="header__navigation-item header__navigation-item--lbry"
             label={__('LBRY')}
             icon={ICONS.LBRY}
-            navigate="/"
+            {...homeButtonNavigationProps}
           />
 
           {/* @if TARGET='app' */}
-          {!minimal && (
+          {!authHeader && (
             <div className="header__navigation-arrows">
               <Button
                 className="header__navigation-item header__navigation-item--back"
@@ -104,10 +106,10 @@ const Header = (props: Props) => {
           )}
           {/* @endif */}
 
-          {!minimal && <WunderBar />}
+          {!authHeader && <WunderBar />}
         </div>
 
-        {!minimal ? (
+        {!authHeader ? (
           <div className={classnames('header__menu', { 'header__menu--small': IS_WEB && !authenticated })}>
             {!IS_WEB || authenticated ? (
               <Fragment>
@@ -178,8 +180,11 @@ const Header = (props: Props) => {
           </div>
         ) : (
           <div className="header__menu">
+            {/* Add an empty span here so we can use the same style as above */}
+            {/* This pushes the close button to the right side */}
+            <span />
             <Tooltip label={__('Go Back')}>
-              <Button icon={ICONS.REMOVE} onClick={() => history.goBack()} />
+              <Button icon={ICONS.REMOVE} {...closeButtonNavigationProps} />
             </Tooltip>
           </div>
         )}
