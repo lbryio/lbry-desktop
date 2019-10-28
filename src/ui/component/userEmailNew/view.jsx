@@ -29,7 +29,7 @@ function UserEmailNew(props: Props) {
 
   return (
     <React.Fragment>
-      <h1 className="section__title--large">{__('Sign In To LBRY')}</h1>
+      <h1 className="section__title--large">{__('Sign In to LBRY')}</h1>
       <p className="section__subtitle">{__('Create a new account or sign in.')}</p>
       <Form onSubmit={handleSubmit} className="section__body">
         <FormField
