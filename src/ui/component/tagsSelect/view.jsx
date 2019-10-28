@@ -95,7 +95,7 @@ export default function TagsSelect(props: Props) {
               onSelect={onSelect}
               suggestMature={suggestMature && !hasMatureTag}
               disableAutoFocus={disableAutoFocus}
-              tagsPasssedIn={tagsToDisplay}
+              tagsPassedIn={tagsToDisplay}
               placeholder={placeholder}
             />
           </React.Fragment>
