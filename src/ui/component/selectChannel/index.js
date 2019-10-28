@@ -7,11 +7,13 @@ import {
   doFetchChannelListMine,
   doCreateChannel,
 } from 'lbry-redux';
+import { selectUserVerifiedEmail } from 'lbryinc';
 
 const select = state => ({
   channels: selectMyChannelClaims(state),
   fetchingChannels: selectFetchingMyChannels(state),
   balance: selectBalance(state),
+  emailVerified: selectUserVerifiedEmail(state),
 });
 
 const perform = dispatch => ({

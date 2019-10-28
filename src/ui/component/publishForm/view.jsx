@@ -24,6 +24,7 @@ import SelectThumbnail from 'component/selectThumbnail';
 import Card from 'component/common/card';
 
 type Props = {
+  disabled: boolean,
   tags: Array<Tag>,
   publish: PublishParams => void,
   filePath: ?string,
@@ -82,6 +83,7 @@ function PublishForm(props: Props) {
     isStillEditing,
     tags,
     publish,
+    disabled = false,
   } = props;
   const formDisabled = (!filePath && !editingURI) || publishing;
   // If they are editing, they don't need a new file chosen
@@ -130,7 +132,7 @@ function PublishForm(props: Props) {
 
   return (
     <Fragment>
-      <PublishFile disabled={publishing} />
+      <PublishFile disabled={disabled || publishing} />
       <div className={classnames({ 'card--disabled': formDisabled })}>
         <PublishText disabled={formDisabled} />
         <Card actions={<SelectThumbnail />} />

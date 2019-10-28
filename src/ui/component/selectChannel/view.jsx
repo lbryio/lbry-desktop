@@ -16,6 +16,7 @@ type Props = {
   createChannel: (string, number) => Promise<any>,
   fetchChannelListMine: () => void,
   fetchingChannels: boolean,
+  emailVerified: boolean,
 };
 
 type State = {
@@ -49,7 +50,11 @@ class ChannelSection extends React.PureComponent<Props, State> {
   }
 
   componentDidMount() {
-    const { channels, fetchChannelListMine, fetchingChannels } = this.props;
+    const { channels, fetchChannelListMine, fetchingChannels, emailVerified } = this.props;
+    if (IS_WEB && !emailVerified) {
+      return;
+    }
+
     if ((!channels || !channels.length) && !fetchingChannels) {
       fetchChannelListMine();
     }
