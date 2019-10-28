@@ -219,7 +219,7 @@ ipcMain.on('upgrade', (event, installerPath) => {
   });
   // what to do if no shutdown in a long time?
   console.log('Update downloaded to', installerPath);
-  console.log('The app will close, and you will be prompted to install the latest version of LBRY.');
+  console.log('The app will close and you will be prompted to install the latest version of LBRY.');
   console.log('After the install is complete, please reopen the app.');
   app.quit();
 });
