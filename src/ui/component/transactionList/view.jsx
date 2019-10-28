@@ -45,6 +45,7 @@ function TransactionList(props: Props) {
         <h2 className="card__title--between">
           {title}
           <div className="card__actions--inline">
+            <RefreshTransactionButton />
             {/* @if TARGET='app' */}
             {!slim && (
               <FileExporter
@@ -57,7 +58,6 @@ function TransactionList(props: Props) {
               />
             )}
             {/* @endif */}
-            <RefreshTransactionButton />
             {!slim && (
               <FormField
                 type="select"

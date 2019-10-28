@@ -5,8 +5,11 @@ import UserSignOutButton from 'component/userSignOutButton';
 
 type Props = {
   email: string,
+  isReturningUser: boolean,
   resendVerificationEmail: string => void,
+  resendingEmail: boolean,
   checkEmailVerified: () => void,
+  toast: string => void,
   user: {
     has_verified_email: boolean,
   },
@@ -37,7 +40,9 @@ class UserEmailVerify extends React.PureComponent<Props> {
   }
 
   handleResendVerificationEmail() {
-    this.props.resendVerificationEmail(this.props.email);
+    const { email, resendVerificationEmail, toast } = this.props;
+    resendVerificationEmail(email);
+    toast(__('New email sent.'));
   }
 
   checkIfVerified() {
@@ -48,21 +53,25 @@ class UserEmailVerify extends React.PureComponent<Props> {
   emailVerifyCheckInterval: ?IntervalID;
 
   render() {
-    const { email } = this.props;
+    const { email, isReturningUser, resendingEmail } = this.props;
 
     return (
       <React.Fragment>
-        <h1 className="section__title--large">{__('Confirm Your Email')}</h1>
+        <h1 className="section__title--large">{isReturningUser ? __('Check Your Email') : __('Confirm Your Email')}</h1>
 
         <p className="section__subtitle">
-          {__('An email was sent to')} {email}. {__('Follow the link to sign in. This will update automatically.')}
+          {__('An email was sent to %email%. Follow the link to %verify_text%. This will update automatically.', {
+            email,
+            verify_text: isReturningUser ? __('sign in') : __('verify your email'),
+          })}
         </p>
 
         <div className="section__body section__actions">
           <Button
             button="primary"
-            label={__('Resend Verification Email')}
+            label={__('Resend Email')}
             onClick={this.handleResendVerificationEmail}
+            disabled={resendingEmail}
           />
           <UserSignOutButton label={__('Start Over')} />
         </div>

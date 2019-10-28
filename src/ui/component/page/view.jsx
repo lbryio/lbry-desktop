@@ -10,20 +10,20 @@ type Props = {
   className: ?string,
   autoUpdateDownloaded: boolean,
   isUpgradeAvailable: boolean,
-  fullscreen: boolean,
+  authPage: boolean,
   authenticated: boolean,
 };
 
 function Page(props: Props) {
-  const { children, className, fullscreen = false, authenticated } = props;
+  const { children, className, authPage = false, authenticated } = props;
   const obscureSideBar = IS_WEB ? !authenticated : false;
 
   return (
     <Fragment>
-      <Header minimal={fullscreen} />
+      <Header authHeader={authPage} />
       <div className={classnames('main-wrapper__inner')}>
-        <main className={classnames('main', className, { 'main--full-width': fullscreen })}>{children}</main>
-        {!fullscreen && <SideBar obscureSideBar={obscureSideBar} />}
+        <main className={classnames('main', className, { 'main--full-width': authPage })}>{children}</main>
+        {!authPage && <SideBar obscureSideBar={obscureSideBar} />}
       </div>
     </Fragment>
   );

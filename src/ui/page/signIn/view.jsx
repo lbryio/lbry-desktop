@@ -5,7 +5,7 @@ import Page from 'component/page';
 
 export default function SignInPage() {
   return (
-    <Page fullscreen className="main--auth-page">
+    <Page authPage className="main--auth-page">
       <UserSignIn />
     </Page>
   );
