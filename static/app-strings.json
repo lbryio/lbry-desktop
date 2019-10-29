@@ -829,5 +829,19 @@
   "An email address is required to sync your account.": "An email address is required to sync your account.",
   "Sign Out": "Sign Out",
   "Follow more tags": "Follow more tags",
-  "Portuguese": "Portuguese"
+  "Portuguese": "Portuguese",
+  "Sign In to LBRY": "Sign In to LBRY",
+  "Check Your Email": "Check Your Email",
+  "sign in": "sign in",
+  "An email was sent to %email%. Follow the link to %verify_text%. This will update automatically.": "An email was sent to %email%. Follow the link to %verify_text%. This will update automatically.",
+  "Resend Email": "Resend Email",
+  "Sync your balance and preferences across devices.": "Sync your balance and preferences across devices.",
+  "Add Email": "Add Email",
+  "New email sent.": "New email sent.",
+  "Enter Your Wallet Password": "Enter Your Wallet Password",
+  "You set your wallet password when you previously installed LBRY. This may have been on different device.": "You set your wallet password when you previously installed LBRY. This may have been on different device.",
+  "Password for %email%": "Password for %email%",
+  "help guide": "help guide",
+  "If you are having issues, checkout our %help% or email us at %email%.": "If you are having issues, checkout our %help% or email us at %email%.",
+  "Wrong password for %email%": "Wrong password for %email%"
 }

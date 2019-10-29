@@ -128,7 +128,7 @@
     "json-loader": "^0.5.4",
     "lbry-format": "https://github.com/lbryio/lbry-format.git",
     "lbry-redux": "lbryio/lbry-redux#e5440ba86078dcdfced490bc444810c8f57dc774",
-    "lbryinc": "lbryio/lbryinc#980c938310791365615662da2924107128109e4c",
+    "lbryinc": "lbryio/lbryinc#f962cdf31a4c36f7bdb8b71fc403a3377d58a460",
     "lint-staged": "^7.0.2",
     "localforage": "^1.7.1",
     "lodash-es": "^4.17.14",
