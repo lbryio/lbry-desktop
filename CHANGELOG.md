@@ -35,7 +35,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Escape the generated link for tags ([#2984](https://github.com/lbryio/lbry-desktop/pull/2984))
 - Toggle fullscreen when pressing `f` ([#2159](https://github.com/lbryio/lbry-desktop/issues/2159))
 - Can't exit full-screen from embedded content with key `F11` ([#2514](https://github.com/lbryio/lbry-desktop/issues/2514))
-- Markdown rendering issues with lbry urls and channel mentions ([#2928](https://github.com/lbryio/lbry-desktop/issues/2928))
+- Markdown rendering issues with LBRY URLs and channel mentions ([#2928](https://github.com/lbryio/lbry-desktop/issues/2928))
 - Incorrect styles of tooltip on dark theme ([#3031](https://github.com/lbryio/lbry-desktop/issues/3031))
 - Code tag not formatting content on markdown preview ([#3027](https://github.com/lbryio/lbry-desktop/issues/3027))
 - Missing tooltip on channel mention ([#3036](https://github.com/lbryio/lbry-desktop/issues/3036))
@@ -60,11 +60,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
   - `f` or `f11` to toggle player fullscreen mode
 
 - Markdown preview for comments: ([#2986](https://github.com/lbryio/lbry-desktop/pull/2986))
-  - Basic text formating (bold, italic, strike)
-  - Lbry urls preview and channel mentions
+  - Basic text formatting (bold, italic, strike)
+  - LBRY URLs preview and channel mentions
   - Implement URL embedding in comments
   - Code blocks, inline code and blockquotes
-  - Embed Images and gifs
+  - Embed Images and GIFs
 
 ### Changed
 
@@ -85,7 +85,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Added
 
 - Channels page above Publishes which lists all your channels ([#2925](https://github.com/lbryio/lbry-desktop/pull/2925))
-- Youtube channel claiming and tranfer ([#2925](https://github.com/lbryio/lbry-desktop/pull/2925)). See our [YouTube FAQ](https://lbry.com/faq/youtube) for more information.
+- YouTube channel claiming and transfer ([#2925](https://github.com/lbryio/lbry-desktop/pull/2925)). See our [YouTube FAQ](https://lbry.com/faq/youtube) for more information.
 - New user sign in flow now includes automatic redeeming of 1 LBC and channel creation ([#2925](https://github.com/lbryio/lbry-desktop/pull/2925))
 - Ability to save wallet encryption password ([#2925](https://github.com/lbryio/lbry-desktop/pull/2925))
 - Sync your balance (only for users with new wallets) and preferences (subscriptions and tags) between devices ([#2925](https://github.com/lbryio/lbry-desktop/pull/2925)). See our [FAQ for more information](https://lbry.com/faq/account-sync)
