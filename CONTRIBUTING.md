@@ -155,7 +155,7 @@ There are a few tools integrated to the project that will ease the process of de
   contributor wanting to reserve an issue in advance can leave a comment saying that he or she is
   working on it. Contributors should respect other people's efforts to complete issues in a timely
   manner and, therefore, not begin working on anything reserved (or updated) within the last 3 days.
-  If someone has been officially assigned an issue via Github's assignment system, it is also not
+  If someone has been officially assigned an issue via GitHub's assignment system, it is also not
   available. Contributors are encouraged to ask if they have any questions about issue availability.
 * The [changelog](https://github.com/lbryio/lbry-desktop/blob/master/CHANGELOG.md) should be updated to
   include a reference to the fix/change/addition. See previous entries for format.
