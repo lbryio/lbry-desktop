@@ -134,11 +134,13 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
   }
 
   function handleContextMenu(e) {
+    // @if TARGET='app'
     e.preventDefault();
     e.stopPropagation();
     if (claim) {
       openCopyLinkMenu(convertToShareLink(claim.permanent_url), e);
     }
+    // @endif
   }
 
   function handleOnClick(e) {
