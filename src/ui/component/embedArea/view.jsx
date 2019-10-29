@@ -3,19 +3,24 @@ import * as ICONS from 'constants/icons';
 import { FormField } from 'component/common/form';
 import Button from 'component/button';
 import React, { useRef } from 'react';
+import { generateStreamUrl } from 'util/lbrytv';
+import { LBRY_TV_API } from 'config';
 
 type Props = {
   copyable: string,
   snackMessage: ?string,
   doToast: ({ message: string }) => void,
   label?: string,
+  claim: Claim,
 };
 
-export default function CopyableText(props: Props) {
-  const { copyable, doToast, snackMessage, label } = props;
-
+export default function EmbedArea(props: Props) {
+  const { doToast, snackMessage, label, claim } = props;
+  const { claim_id: claimId, name } = claim;
   const input = useRef();
 
+  const streamUrl = generateStreamUrl(name, claimId, LBRY_TV_API);
+  let embedText = `<iframe width="560" height="315" src="${streamUrl}" allowfullscreen></iframe>`;
   function copyToClipboard() {
     const topRef = input.current;
     if (topRef && topRef.input && topRef.input.current) {
@@ -33,26 +38,26 @@ export default function CopyableText(props: Props) {
   }
 
   return (
-    <FormField
-      type="text"
-      className="form-field--copyable"
-      readOnly
-      label={label}
-      value={copyable || ''}
-      ref={input}
-      onFocus={onFocus}
-      inputButton={
+    <fieldset-section>
+      <FormField
+        type="textarea"
+        className="form-field--copyable"
+        label={label}
+        value={embedText || ''}
+        ref={input}
+        readOnly
+        onFocus={onFocus}
+      />
+      <div className="card__actions card__actions--center">
         <Button
-          button="inverse"
           icon={ICONS.COPY}
+          button="inverse"
           onClick={() => {
             copyToClipboard();
-            doToast({
-              message: snackMessage || __('Text copied'),
-            });
+            doToast({ message: snackMessage || 'Embed link copied' });
           }}
         />
-      }
-    />
+      </div>
+    </fieldset-section>
   );
 }

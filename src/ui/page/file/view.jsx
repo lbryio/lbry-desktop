@@ -118,7 +118,7 @@ class FilePage extends React.Component<Props> {
     const { signing_channel: signingChannel } = claim;
     const channelName = signingChannel && signingChannel.name;
     const isRewardContent = (rewardedContentClaimIds || []).includes(claim.claim_id);
-    const speechShareable =
+    const webShareable =
       costInfo && costInfo.cost === 0 && contentType && ['video', 'image', 'audio'].includes(contentType.split('/')[0]);
     // We want to use the short form uri for editing
     // This is what the user is used to seeing, they don't care about the claim id
@@ -203,7 +203,7 @@ class FilePage extends React.Component<Props> {
                     button="alt"
                     icon={icons.SHARE}
                     label={__('Share')}
-                    onClick={() => openModal(MODALS.SOCIAL_SHARE, { uri, speechShareable })}
+                    onClick={() => openModal(MODALS.SOCIAL_SHARE, { uri, webShareable })}
                   />
                 </div>
 
