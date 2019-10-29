@@ -11,11 +11,12 @@ type Props = {
   getSync: (?string) => void,
   getSyncIsPending: boolean,
   email: string,
+  passwordError: boolean,
   signOut: () => void,
 };
 
 function SyncPassword(props: Props) {
-  const { getSync, getSyncIsPending, email, signOut } = props;
+  const { getSync, getSyncIsPending, email, signOut, passwordError } = props;
   const [password, setPassword] = React.useState('');
   const [rememberPassword, setRememberPassword] = usePersistedState(true);
 
@@ -35,6 +36,7 @@ function SyncPassword(props: Props) {
           <div>
             <FormField
               type="password"
+              error={passwordError && __('Wrong password for %email%', { email })}
               label={__('Password for %email%', { email })}
               value={password}
               onChange={e => setPassword(e.target.value)}
