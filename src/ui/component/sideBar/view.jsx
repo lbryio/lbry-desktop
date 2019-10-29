@@ -68,7 +68,7 @@ function SideBar(props: Props) {
               ),
             },
           ].map(linkProps => (
-            <li key={linkProps.label}>
+            <li key={linkProps.navigate}>
               <Button {...linkProps} className="navigation-link" activeClass="navigation-link--active" />
             </li>
           ))}
