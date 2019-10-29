@@ -41,8 +41,9 @@ const Header = (props: Props) => {
     signOut,
   } = props;
   const authenticated = Boolean(email);
-  const homeButtonNavigationProps = authHeader ? { onClick: signOut } : { navigate: '/' };
-  const closeButtonNavigationProps = authHeader ? { onClick: signOut } : { onClick: () => history.goBack() };
+  const authHeaderAction = authenticated ? { onClick: signOut } : { navigate: '/' };
+  const homeButtonNavigationProps = authHeader ? authHeaderAction : { navigate: '/' };
+  const closeButtonNavigationProps = authHeader ? authHeaderAction : { onClick: () => history.goBack() };
 
   function handleThemeToggle() {
     if (automaticDarkModeEnabled) {
