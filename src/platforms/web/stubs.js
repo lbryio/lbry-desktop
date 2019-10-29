@@ -16,11 +16,18 @@ export const remote = {
   },
   Menu: {
     getApplicationMenu: callable,
+    buildFromTemplate: () => {
+      return {
+        popup: () => {},
+      };
+    },
   },
   require: callable,
 };
 
-export const clipboard = {};
+export const clipboard = {
+  readText: () => '',
+};
 export const ipcRenderer = {};
 
 export const isDev = false;
