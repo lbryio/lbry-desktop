@@ -26,7 +26,7 @@ type Props = {
 
 export default function TagsSearch(props: Props) {
   const {
-    tagsPassedIn,
+    tagsPassedIn = [],
     unfollowedTags = [],
     followedTags = [],
     doToggleTagFollow,
