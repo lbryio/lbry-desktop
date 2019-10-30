@@ -1,6 +1,7 @@
 import { connect } from 'react-redux';
 import { doCheckAddressIsMine, doGetNewAddress, selectReceiveAddress, selectGettingNewAddress } from 'lbry-redux';
 import WalletAddress from './view';
+import { withRouter } from 'react-router';
 
 const select = state => ({
   receiveAddress: selectReceiveAddress(state),
@@ -12,7 +13,9 @@ const perform = dispatch => ({
   getNewAddress: () => dispatch(doGetNewAddress()),
 });
 
-export default connect(
-  select,
-  perform
-)(WalletAddress);
+export default withRouter(
+  connect(
+    select,
+    perform
+  )(WalletAddress)
+);
