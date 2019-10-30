@@ -19,6 +19,7 @@ import {
   doClearPublish,
   doPreferenceGet,
   doToast,
+  doClearSupport,
 } from 'lbry-redux';
 import Native from 'native';
 import { doFetchDaemonSettings } from 'redux/actions/settings';
@@ -339,6 +340,7 @@ export function doClearCache() {
     // const reducersToClear = whiteListedReducers.filter(reducerKey => reducerKey !== 'tags');
     // window.cacheStore.purge(reducersToClear);
     window.localStorage.clear();
+    dispatch(doClearSupport());
     return dispatch(doClearPublish());
   };
 }
