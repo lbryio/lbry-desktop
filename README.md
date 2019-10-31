@@ -144,3 +144,4 @@ We take security seriously. Please contact security@lbry.com regarding any secur
 ## Contact
 
 The primary contact for this project is [@seanyesmunt](https://github.com/seanyesmunt).
+Happy Coding !!
