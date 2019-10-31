@@ -6,6 +6,7 @@ import RewardListClaimed from 'component/rewardListClaimed';
 import RewardTile from 'component/rewardTile';
 import Button from 'component/button';
 import Page from 'component/page';
+import Card from 'component/common/card';
 import classnames from 'classnames';
 import { rewards as REWARD_TYPES } from 'lbryinc';
 
@@ -38,22 +39,19 @@ class RewardsPage extends PureComponent<Props> {
     if (user && !user.is_reward_approved && rewardsEnabled) {
       if (!user.primary_email || !user.has_verified_email || !user.is_identity_verified) {
         return (
-          !IS_WEB && (
-            <section className="card card--section">
-              <h2 className="card__title">{__('Sign In To Unlock Rewards')}</h2>
-              <p className="card__subtitle">
-                {__(
-                  'This is optional. You can continue to use this app without rewards, but LBC may be needed for some tasks.'
-                )}
-              </p>
-
+          <Card
+            title={__('Sign In To Unlock Rewards')}
+            subtitle={__(
+              'This is optional. You can continue to use this app without rewards, but LBC may be needed for some tasks.'
+            )}
+            actions={
               <Button
                 navigate={`/$/${PAGES.AUTH}?redirect=/$/${PAGES.REWARDS}`}
                 button="primary"
                 label={__('Unlock Rewards')}
               />
-            </section>
-          )
+            }
+          />
         );
       }
       return (
