@@ -57,6 +57,17 @@ function insertToHead(fullHtml, htmlToInsert) {
   return fullHtml.replace(/<!-- VARIABLE_HEAD_BEGIN -->.*<!-- VARIABLE_HEAD_END -->/s, htmlToInsert);
 }
 
+function escapeHtmlProperty(property) {
+  return property
+    ? String(property)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;')
+    : '';
+}
+
 const defaultHead =
   '<title>lbry.tv</title>\n' +
   `<meta property="og:url" content="${DOMAIN}" />\n` +
@@ -86,13 +97,13 @@ app.get('*', async (req, res) => {
     getClaim(claimName, claimId, channelName, channelClaimId, (err, rows) => {
       if (!err && rows && rows.length > 0) {
         const claim = rows[0];
-        const title = claim.title ? claim.title : claimName;
+        const title = escapeHtmlProperty(claim.title ? claim.title : claimName);
         const claimDescription =
           claim.description && claim.description.length > 0
-            ? truncateDescription(claim.description)
+            ? escapeHtmlProperty(truncateDescription(claim.description))
             : `Watch ${title} on LBRY.tv`;
-        const claimLanguage = claim.language || 'en_US';
-        const claimThumbnail = claim.thumbnail_url || `${DOMAIN}/og.png`;
+        const claimLanguage = escapeHtmlProperty(claim.language) || 'en_US';
+        const claimThumbnail = escapeHtmlProperty(claim.thumbnail_url) || `${DOMAIN}/og.png`;
         const claimTitle =
           claim.channel && !isChannel ? `${title} from ${claim.channel} on LBRY.tv` : `${title} on LBRY.tv`;
 
@@ -111,6 +122,7 @@ app.get('*', async (req, res) => {
         head += `<meta property="og:locale" content="${claimLanguage}"/>`;
         head += `<meta property="og:site_name" content="LBRY.tv"/>`;
         head += `<meta property="og:type" content="website"/>`;
+        head += `<meta property="og:title" content="${claimTitle}"/>`;
         // below should be canonical_url, but not provided by chainquery yet
         head += `<meta property="og:url" content="${DOMAIN}/${claim.name}:${claim.claim_id}"/>`;
 
