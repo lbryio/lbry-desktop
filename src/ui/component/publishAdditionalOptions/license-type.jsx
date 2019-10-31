@@ -1,7 +1,7 @@
 // @flow
 import * as React from 'react';
 import { FormField } from 'component/common/form';
-import { CC_LICENSES, COPYRIGHT, OTHER, PUBLIC_DOMAIN, NONE } from 'constants/licenses';
+import { CC_LICENSES, LEGACY_CC_LICENSES, COPYRIGHT, OTHER, PUBLIC_DOMAIN, NONE } from 'constants/licenses';
 
 type Props = {
   licenseType: ?string,
@@ -59,6 +59,12 @@ class LicenseType extends React.PureComponent<Props> {
 
           <option value={COPYRIGHT}>{__('Copyrighted...')}</option>
           <option value={OTHER}>{__('Other...')}</option>
+          <option disabled>{__('Legacy Licences')}</option>
+          {LEGACY_CC_LICENSES.map(({ value, url }) => (
+            <option key={value} value={value} data-url={url}>
+              {value}
+            </option>
+          ))}
         </FormField>
 
         {licenseType === COPYRIGHT && (

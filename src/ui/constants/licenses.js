@@ -1,9 +1,5 @@
 export const CC_LICENSES = [
   {
-    value: 'Creative Commons Attribution 3.0',
-    url: 'https://creativecommons.org/licenses/by/3.0/legalcode',
-  },
-  {
     value: 'Creative Commons Attribution 4.0 International',
     url: 'https://creativecommons.org/licenses/by/4.0/legalcode',
   },
@@ -26,6 +22,13 @@ export const CC_LICENSES = [
   {
     value: 'Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International',
     url: 'https://creativecommons.org/licenses/by-nc-nd/4.0/legalcode',
+  },
+];
+
+export const LEGACY_CC_LICENSES = [
+  {
+    value: 'Creative Commons Attribution 3.0',
+    url: 'https://creativecommons.org/licenses/by/3.0/legalcode',
   },
 ];
 

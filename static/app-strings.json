@@ -843,5 +843,6 @@
   "Password for %email%": "Password for %email%",
   "help guide": "help guide",
   "If you are having issues, checkout our %help% or email us at %email%.": "If you are having issues, checkout our %help% or email us at %email%.",
-  "Wrong password for %email%": "Wrong password for %email%"
+  "Wrong password for %email%": "Wrong password for %email%",
+  "Legacy Licences": "Legacy Licences"
 }
