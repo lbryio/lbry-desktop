@@ -8,9 +8,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ### Fixed
 
+- Context menu does not open in the webapp when right clicking video tiles ([#3135](https://github.com/lbryio/lbry-desktop/pull/3135))
+- Undefined tags prevents homepage from loading ([#3146](https://github.com/lbryio/lbry-desktop/pull/3146))
+
 ### Added
 
 - Search on downloads page ([#2969](https://github.com/lbryio/lbry-sdk/pull/2969))
+- Clear support state when clearing cache in settings([#3149](https://github.com/lbryio/lbry-desktop/pull/3149))
 
 ### Changed
 
