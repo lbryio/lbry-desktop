@@ -37,7 +37,7 @@ import { doAuthenticate, doGetSync } from 'lbryinc';
 import { lbrySettings as config, version as appVersion } from 'package.json';
 import { push } from 'connected-react-router';
 import analytics from 'analytics';
-import { deleteAuthToken, deleteSavedPassword, getSavedPassword } from 'util/saved-passwords';
+import { deleteCookies, deleteSavedPassword, getSavedPassword } from 'util/saved-passwords';
 
 // @if TARGET='app'
 const { autoUpdater } = remote.require('electron-updater');
@@ -444,7 +444,7 @@ export function doSignIn() {
 
 export function doSignOut() {
   return dispatch => {
-    deleteAuthToken()
+    deleteCookies()
       .then(() => {
         // @if TARGET='web'
         window.persistor.purge();

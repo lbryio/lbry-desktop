@@ -121,6 +121,14 @@ export const deleteAuthToken = () => {
   });
 };
 
+export const deleteCookies = () => {
+  return new Promise<*>(resolve => {
+    deleteCookie('auth_token');
+    deleteCookie('saved-password');
+    resolve();
+  });
+};
+
 export const testKeychain = () => {
   // we should make sure it works on startup
 };
