@@ -1,10 +1,10 @@
 // @flow
 import React from 'react';
 import TransactionList from 'component/transactionList';
-import { LATEST_PAGE_SIZE } from 'constants/claim';
+import { TX_LIST } from 'lbry-redux';
 
 type Props = {
-  fetchTransactions: (page, pageSize) => void,
+  fetchTransactions: (number, number) => void,
   fetchingTransactions: boolean,
   hasTransactions: boolean,
   transactions: Array<Transaction>,
@@ -14,7 +14,7 @@ class TransactionListRecent extends React.PureComponent<Props> {
   componentDidMount() {
     const { fetchTransactions } = this.props;
 
-    fetchTransactions(1, LATEST_PAGE_SIZE);
+    fetchTransactions(1, TX_LIST.LATEST_PAGE_SIZE);
   }
 
   render() {

@@ -25,9 +25,6 @@ export default function FileProperties(props: Props) {
       {isSubscribed && <Icon tooltip icon={icons.SUBSCRIBE} />}
       {!claimIsMine && downloaded && <Icon tooltip icon={icons.DOWNLOAD} />}
       {isRewardContent && <Icon tooltip icon={icons.FEATURED} />}
-      trending group:{claim.meta.trending_group}
-      trending mixed:{claim.meta.trending_mixed}
-      {claim.meta.support_amount}
       <FilePrice hideFree uri={uri} />
       <VideoDuration className="media__subtitle" uri={uri} />
     </div>
