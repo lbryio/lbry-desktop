@@ -26,7 +26,7 @@ import Card from 'component/common/card';
 type Props = {
   disabled: boolean,
   tags: Array<Tag>,
-  publish: PublishParams => void,
+  publish: string => void,
   filePath: ?string,
   bid: ?number,
   editingURI: ?string,
@@ -112,7 +112,7 @@ function PublishForm(props: Props) {
     // We are only going to store the full uri, but we need to resolve the uri with and without the channel name
     let uri;
     try {
-      uri = buildURI({ streamName: name, channelName });
+      uri = name && buildURI({ streamName: name, channelName });
     } catch (e) {}
 
     if (channelName && name) {
@@ -182,7 +182,7 @@ function PublishForm(props: Props) {
           <div className="card__actions">
             <Button
               button="primary"
-              onClick={publish}
+              onClick={() => publish(filePath)}
               label={submitLabel}
               disabled={formDisabled || !formValid || uploadThumbnailStatus === THUMBNAIL_STATUSES.IN_PROGRESS}
             />

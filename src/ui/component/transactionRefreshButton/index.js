@@ -7,7 +7,7 @@ const select = state => ({
 });
 
 const perform = dispatch => ({
-  fetchTransactions: () => dispatch(doFetchTransactions()),
+  fetchTransactions: (page, pageSize) => dispatch(doFetchTransactions(page, pageSize)),
 });
 
 export default connect(

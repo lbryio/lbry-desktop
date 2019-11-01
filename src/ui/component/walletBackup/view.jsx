@@ -102,7 +102,7 @@ class WalletBackup extends React.PureComponent<Props, State> {
             </li>
             <li>
               {__(
-                'Currently, there is no automatic backup. If you lose access to these files, you will lose your credits.'
+                'If Sync is on, LBRY will backup your wallet and preferences. If disabled, you are responsible for keeping a backup.'
               )}
             </li>
             <li>

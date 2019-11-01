@@ -9,7 +9,7 @@ import analytics from 'analytics';
 import { formatLbryUriForWeb } from 'util/uri';
 import { doOpenModal } from './app';
 
-export const doPublishDesktop = () => (dispatch: Dispatch, getState: () => {}) => {
+export const doPublishDesktop = (filePath: string) => (dispatch: Dispatch, getState: () => {}) => {
   const publishSuccess = successResponse => {
     const state = getState();
     const myClaims = selectMyClaims(state);
@@ -30,7 +30,7 @@ export const doPublishDesktop = () => (dispatch: Dispatch, getState: () => {}) =
     const myNewClaims = isEdit
       ? myClaims.map(claim => (isMatch(claim) ? pendingClaim : claim))
       : myClaims.concat(pendingClaim);
-    actions.push(doOpenModal(MODALS.PUBLISH, { uri: url, isEdit }));
+    actions.push(doOpenModal(MODALS.PUBLISH, { uri: url, isEdit, filePath }));
     actions.push({
       type: ACTIONS.FETCH_CLAIM_LIST_MINE_COMPLETED,
       data: {
