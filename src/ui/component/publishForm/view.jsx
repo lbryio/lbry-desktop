@@ -26,7 +26,7 @@ import Card from 'component/common/card';
 type Props = {
   disabled: boolean,
   tags: Array<Tag>,
-  publish: string => void,
+  publish: (?string) => void,
   filePath: ?string,
   bid: ?number,
   editingURI: ?string,

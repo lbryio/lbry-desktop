@@ -1,11 +1,10 @@
 // @flow
 import * as ICONS from 'constants/icons';
 import * as PAGES from 'constants/pages';
-import { LATEST_PAGE_SIZE } from 'constants/claim';
 import React, { useEffect, useRef, useState } from 'react';
 import classnames from 'classnames';
 import analytics from 'analytics';
-import { buildURI, parseURI } from 'lbry-redux';
+import { buildURI, parseURI, TX_LIST } from 'lbry-redux';
 import Router from 'component/router/index';
 import ModalRouter from 'modal/modalRouter';
 import ReactModal from 'react-modal';
@@ -32,7 +31,7 @@ type Props = {
   location: { pathname: string, hash: string },
   history: { push: string => void },
   fetchRewards: () => void,
-  fetchTransactions: (page, pageSize) => void,
+  fetchTransactions: (number, number) => void,
   fetchAccessToken: () => void,
   fetchChannelListMine: () => void,
   signIn: () => void,
@@ -102,7 +101,7 @@ function App(props: Props) {
 
     // @if TARGET='app'
     fetchRewards();
-    fetchTransactions(1, LATEST_PAGE_SIZE);
+    fetchTransactions(1, TX_LIST.LATEST_PAGE_SIZE);
     fetchChannelListMine(); // This needs to be done for web too...
     // @endif
   }, [fetchRewards, fetchTransactions, fetchAccessToken, fetchChannelListMine]);

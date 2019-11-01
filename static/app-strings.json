@@ -849,5 +849,13 @@
   "help guide": "help guide",
   "If you are having issues, checkout our %help% or email us at %email%.": "If you are having issues, checkout our %help% or email us at %email%.",
   "Wrong password for %email%": "Wrong password for %email%",
-  "Legacy Licences": "Legacy Licences"
+  "Legacy Licences": "Legacy Licences",
+  "Latest Transactions": "Latest Transactions",
+  "Looks like you don't have any transactions.": "Looks like you don't have any transactions.",
+  "If Sync is on, LBRY will backup your wallet and preferences. If disabled, you are responsible for keeping a backup.": "If Sync is on, LBRY will backup your wallet and preferences. If disabled, you are responsible for keeping a backup.",
+  "View My Publishes": "View My Publishes",
+  "Your %publishMessage% pending on LBRY. It will take a few minutes to appear for other users.": "Your %publishMessage% pending on LBRY. It will take a few minutes to appear for other users.",
+  "Upload will continue in the background, please do not shut down immediately. Leaving the app running helps the network, thank you!": "Upload will continue in the background, please do not shut down immediately. Leaving the app running helps the network, thank you!",
+  "Are you sure want to revoke this claim?": "Are you sure want to revoke this claim?",
+  "This will prevent others from resolving and accessing the content you published. It will return the LBC to your spendable balance, less a small transaction fee.": "This will prevent others from resolving and accessing the content you published. It will return the LBC to your spendable balance, less a small transaction fee."
 }

@@ -16,7 +16,7 @@ const select = (state, props) => {
 };
 
 const perform = dispatch => ({
-  fetchTransactions: (page, pageSize) => dispatch(doFetchTransactions(page, pageSize)),
+  fetchTransactions: () => dispatch(doFetchTransactions()),
 });
 
 export default withRouter(

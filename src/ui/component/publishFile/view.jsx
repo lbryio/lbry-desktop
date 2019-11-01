@@ -1,6 +1,6 @@
 // @flow
 import * as ICONS from 'constants/icons';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { regexInvalidURI } from 'lbry-redux';
 import FileSelector from 'component/common/file-selector';
 import Button from 'component/button';
@@ -32,12 +32,6 @@ function PublishFile(props: Props) {
     }
   }
 
-  useEffect(() => {
-    if (currentFile) {
-      updatePublishForm();
-    }
-  }, [currentFile]);
-
   function handleFileChange(file: WebFile) {
     // if electron, we'll set filePath to the path string because SDK is handling publishing.
     // if web, we set the filePath (dumb name) to the File() object
@@ -58,7 +52,6 @@ function PublishFile(props: Props) {
     // @endif
     const publishFormParams: { filePath: string | WebFile, name?: string } = {
       filePath: file.path || file,
-      name: '',
     };
     // Strip off extention and replace invalid characters
     let fileName = file.name.substr(0, file.name.lastIndexOf('.')) || file.name;
