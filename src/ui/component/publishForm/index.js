@@ -32,7 +32,7 @@ const perform = dispatch => ({
   updatePublishForm: value => dispatch(doUpdatePublishForm(value)),
   clearPublish: () => dispatch(doClearPublish()),
   resolveUri: uri => dispatch(doResolveUri(uri)),
-  publish: () => dispatch(doPublishDesktop()),
+  publish: filePath => dispatch(doPublishDesktop(filePath)),
   prepareEdit: (claim, uri) => dispatch(doPrepareEdit(claim, uri)),
   resetThumbnailStatus: () => dispatch(doResetThumbnailStatus()),
 });

@@ -73,7 +73,8 @@ class WalletAddress extends React.PureComponent<Props, State> {
               <Button button="link" label={showQR ? __('Hide QR code') : __('Show QR code')} onClick={this.toggleQR} />
             </div>
             <p className="help">
-              {__('You can generate a new address at any time, and any previous addresses will continue to work.')}
+              {!IS_WEB &&
+                __('You can generate a new address at any time, and any previous addresses will continue to work.')}
             </p>
 
             {showQR && <QRCode value={receiveAddress} paddingTop />}

@@ -1,10 +1,5 @@
 import { connect } from 'react-redux';
-import {
-  doFetchTransactions,
-  doFetchClaimListMine,
-  makeSelectFilteredTransactionsForPage,
-  selectFilteredTransactionCount,
-} from 'lbry-redux';
+import { doFetchTransactions, makeSelectFilteredTransactionsForPage, selectFilteredTransactionCount } from 'lbry-redux';
 import { withRouter } from 'react-router';
 
 import TransactionHistoryPage from './view';
@@ -21,8 +16,7 @@ const select = (state, props) => {
 };
 
 const perform = dispatch => ({
-  fetchTransactions: () => dispatch(doFetchTransactions()),
-  fetchMyClaims: () => dispatch(doFetchClaimListMine()),
+  fetchTransactions: (page, pageSize) => dispatch(doFetchTransactions(page, pageSize)),
 });
 
 export default withRouter(

@@ -1,6 +1,7 @@
 // @flow
 import * as ICONS from 'constants/icons';
 import * as PAGES from 'constants/pages';
+import { LATEST_PAGE_SIZE } from 'constants/claim';
 import React, { useEffect, useRef, useState } from 'react';
 import classnames from 'classnames';
 import analytics from 'analytics';
@@ -31,8 +32,7 @@ type Props = {
   location: { pathname: string, hash: string },
   history: { push: string => void },
   fetchRewards: () => void,
-  fetchRewardedContent: () => void,
-  fetchTransactions: () => void,
+  fetchTransactions: (page, pageSize) => void,
   fetchAccessToken: () => void,
   fetchChannelListMine: () => void,
   signIn: () => void,
@@ -53,7 +53,6 @@ function App(props: Props) {
   const {
     theme,
     fetchRewards,
-    fetchRewardedContent,
     fetchTransactions,
     user,
     fetchAccessToken,
@@ -100,14 +99,13 @@ function App(props: Props) {
   useEffect(() => {
     ReactModal.setAppElement(appRef.current);
     fetchAccessToken();
-    fetchRewardedContent();
 
     // @if TARGET='app'
     fetchRewards();
-    fetchTransactions();
+    fetchTransactions(1, LATEST_PAGE_SIZE);
     fetchChannelListMine(); // This needs to be done for web too...
     // @endif
-  }, [fetchRewards, fetchRewardedContent, fetchTransactions, fetchAccessToken, fetchChannelListMine]);
+  }, [fetchRewards, fetchTransactions, fetchAccessToken, fetchChannelListMine]);
 
   useEffect(() => {
     // $FlowFixMe
