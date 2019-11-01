@@ -1,10 +1,10 @@
 // @flow
 import React, { PureComponent } from 'react';
 import Button from 'component/button';
-import { LATEST_PAGE_SIZE } from 'constants/claim';
+import { TX_LIST } from 'lbry-redux';
 
 type Props = {
-  fetchTransactions: () => void,
+  fetchTransactions: (?number, ?number) => void,
   fetchingTransactions: boolean,
   slim: boolean,
 };
@@ -29,9 +29,9 @@ class TransactionRefreshButton extends PureComponent<Props, State> {
     // The fetchTransactions call will be super fast most of the time.
     // Instead of showing a loading spinner for 100ms, change the label and show as "Refreshed!"
     if (slim) {
-      fetchTransactions(1, LATEST_PAGE_SIZE);
+      fetchTransactions(1, TX_LIST.LATEST_PAGE_SIZE);
     } else {
-      fetchTransactions(1, 999999);
+      fetchTransactions();
     }
 
     this.setState({ label: __('Refreshed!'), disabled: true });
