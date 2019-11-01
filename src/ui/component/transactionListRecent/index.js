@@ -1,14 +1,15 @@
 import { connect } from 'react-redux';
-import { doFetchTransactions, selectRecentTransactions, doFetchClaimListMine } from 'lbry-redux';
+import { doFetchTransactions, makeSelectLatestTransactions } from 'lbry-redux';
 import TransactionListRecent from './view';
 
-const select = state => ({
-  transactions: selectRecentTransactions(state),
-});
+const select = state => {
+  return {
+    transactions: makeSelectLatestTransactions(state),
+  };
+};
 
 const perform = dispatch => ({
-  fetchTransactions: () => dispatch(doFetchTransactions()),
-  fetchMyClaims: () => dispatch(doFetchClaimListMine()),
+  fetchTransactions: (page, pageSize) => dispatch(doFetchTransactions(page, pageSize)),
 });
 
 export default connect(

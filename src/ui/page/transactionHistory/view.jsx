@@ -4,8 +4,7 @@ import TransactionList from 'component/transactionList';
 import Page from 'component/page';
 
 type Props = {
-  fetchMyClaims: () => void,
-  fetchTransactions: () => void,
+  fetchTransactions: (page, pageSize) => void,
   fetchingTransactions: boolean,
   filteredTransactionPage: Array<{}>,
   filteredTransactionsCount: number,
@@ -13,10 +12,9 @@ type Props = {
 
 class TransactionHistoryPage extends React.PureComponent<Props> {
   componentDidMount() {
-    const { fetchMyClaims, fetchTransactions } = this.props;
+    const { fetchTransactions } = this.props;
 
-    fetchMyClaims();
-    fetchTransactions();
+    fetchTransactions(1, 999999);
   }
 
   render() {

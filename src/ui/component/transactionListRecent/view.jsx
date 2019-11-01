@@ -1,21 +1,20 @@
 // @flow
 import React from 'react';
 import TransactionList from 'component/transactionList';
+import { LATEST_PAGE_SIZE } from 'constants/claim';
 
 type Props = {
-  fetchTransactions: () => void,
+  fetchTransactions: (page, pageSize) => void,
   fetchingTransactions: boolean,
   hasTransactions: boolean,
   transactions: Array<Transaction>,
-  fetchMyClaims: () => void,
 };
 
 class TransactionListRecent extends React.PureComponent<Props> {
   componentDidMount() {
-    const { fetchMyClaims, fetchTransactions } = this.props;
+    const { fetchTransactions } = this.props;
 
-    fetchMyClaims();
-    fetchTransactions();
+    fetchTransactions(1, LATEST_PAGE_SIZE);
   }
 
   render() {
@@ -24,9 +23,9 @@ class TransactionListRecent extends React.PureComponent<Props> {
       <section className="card">
         <TransactionList
           slim
-          title={__('Recent Transactions')}
+          title={__('Latest Transactions')}
           transactions={transactions}
-          emptyMessage={__("Looks like you don't have any recent transactions.")}
+          emptyMessage={__("Looks like you don't have any transactions.")}
         />
       </section>
     );
