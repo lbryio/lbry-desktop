@@ -25,6 +25,7 @@ type Props = {
   hideBalance: boolean,
   email: ?string,
   authHeader: boolean,
+  syncError: ?string,
   signOut: () => void,
 };
 
@@ -39,9 +40,12 @@ const Header = (props: Props) => {
     email,
     authHeader,
     signOut,
+    syncError,
   } = props;
   const authenticated = Boolean(email);
-  const authHeaderAction = authenticated ? { onClick: signOut } : { navigate: '/' };
+
+  // Sign out if they click the "x" when they are on the password prompt
+  const authHeaderAction = syncError ? { onClick: signOut } : { navigate: '/' };
   const homeButtonNavigationProps = authHeader ? authHeaderAction : { navigate: '/' };
   const closeButtonNavigationProps = authHeader ? authHeaderAction : { onClick: () => history.goBack() };
 

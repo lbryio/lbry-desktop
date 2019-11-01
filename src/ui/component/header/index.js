@@ -1,7 +1,7 @@
 import * as SETTINGS from 'constants/settings';
 import { connect } from 'react-redux';
 import { selectBalance, formatCredits } from 'lbry-redux';
-import { selectUserVerifiedEmail } from 'lbryinc';
+import { selectUserVerifiedEmail, selectGetSyncErrorMessage } from 'lbryinc';
 import { doSetClientSetting } from 'redux/actions/settings';
 import { doSignOut } from 'redux/actions/app';
 import { makeSelectClientSetting } from 'redux/selectors/settings';
@@ -15,6 +15,7 @@ const select = state => ({
   automaticDarkModeEnabled: makeSelectClientSetting(SETTINGS.AUTOMATIC_DARK_MODE_ENABLED)(state),
   hideBalance: makeSelectClientSetting(SETTINGS.HIDE_BALANCE)(state),
   email: selectUserVerifiedEmail(state),
+  syncError: selectGetSyncErrorMessage(state),
 });
 
 const perform = dispatch => ({
