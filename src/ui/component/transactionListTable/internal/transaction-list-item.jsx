@@ -66,7 +66,6 @@ class TransactionListItem extends React.PureComponent<Props> {
       <tr>
         <td>
           <CreditAmount badge={false} showPlus amount={amount} precision={8} />
-          <br />
 
           {fee !== 0 && (
             <span className="table__item-label">
