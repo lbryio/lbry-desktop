@@ -121,11 +121,21 @@ export const deleteAuthToken = () => {
   });
 };
 
-export const deleteCookies = () => {
+export const doSignOutCleanup = () => {
   return new Promise<*>(resolve => {
     deleteCookie('auth_token');
     deleteCookie('saved-password');
+
+    // @if TARGET='app'
+    ipcRenderer.once('delete-auth-token-response', (event, success) => {
+      resolve();
+    });
+    ipcRenderer.send('delete-auth-token');
+    // @endif;
+
+    // @if TARGET='web'
     resolve();
+    // @endif
   });
 };
 
