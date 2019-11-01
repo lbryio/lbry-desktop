@@ -1,6 +1,6 @@
 // @flow
 import React from 'react';
-import { REMOVE } from 'constants/icons';
+import * as ICONS from 'constants/icons';
 import Button from 'component/button';
 import CopyableText from 'component/copyableText';
 import QRCode from 'component/common/qr-code';
@@ -53,7 +53,7 @@ class WalletAddress extends React.PureComponent<Props, State> {
         title={
           <React.Fragment>
             {__('Receive Credits')}
-            <Button button="close" icon={REMOVE} onClick={() => history.goBack()} />
+            <Button button="close" icon={ICONS.REMOVE} onClick={() => history.goBack()} />
           </React.Fragment>
         }
         subtitle={__('Use this address to receive LBC.')}
