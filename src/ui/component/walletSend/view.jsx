@@ -1,6 +1,6 @@
 // @flow
 import * as MODALS from 'constants/modal_types';
-import { REMOVE } from 'constants/icons';
+import * as ICONS from 'constants/icons';
 import React from 'react';
 import Button from 'component/button';
 import { Form, FormField } from 'component/common/form';
@@ -43,7 +43,7 @@ class WalletSend extends React.PureComponent<Props> {
         title={
           <React.Fragment>
             {__('Send Credits')}
-            <Button button="close" icon={REMOVE} onClick={() => history.goBack()} />
+            <Button button="close" icon={ICONS.REMOVE} onClick={() => history.goBack()} />
           </React.Fragment>
         }
         subtitle={__('Send LBC to your friends or favorite creators.')}
