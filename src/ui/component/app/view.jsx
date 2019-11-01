@@ -172,7 +172,7 @@ function App(props: Props) {
         // @endif
       })}
       ref={appRef}
-      onContextMenu={e => openContextMenu(e)}
+      onContextMenu={IS_WEB ? undefined : e => openContextMenu(e)}
     >
       <Router />
       <ModalRouter />
