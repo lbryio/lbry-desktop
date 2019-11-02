@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import { selectUnclaimedRewardValue, selectFetchingRewards, doFetchRewardedContent } from 'lbryinc';
+import { selectUnclaimedRewardValue, selectFetchingRewards } from 'lbryinc';
 import RewardSummary from './view';
 
 const select = state => ({
@@ -7,11 +7,7 @@ const select = state => ({
   fetching: selectFetchingRewards(state),
 });
 
-const perform = dispatch => ({
-  fetchRewardedContent: () => dispatch(doFetchRewardedContent()),
-});
-
 export default connect(
   select,
-  perform
+  null
 )(RewardSummary);
