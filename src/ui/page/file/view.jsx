@@ -7,7 +7,6 @@ import FileViewerInitiator from 'component/fileViewerInitiator';
 import FilePrice from 'component/filePrice';
 import FileDetails from 'component/fileDetails';
 import FileActions from 'component/fileActions';
-import Icon from 'component/common/icon';
 import DateTime from 'component/dateTime';
 import Button from 'component/button';
 import Page from 'component/page';
@@ -27,7 +26,6 @@ type Props = {
   fileInfo: FileListItem,
   contentType: string,
   uri: string,
-  rewardedContentClaimIds: Array<string>,
   claimIsMine: boolean,
   costInfo: ?{ cost: number },
   fetchFileInfo: string => void,
@@ -101,7 +99,6 @@ class FilePage extends React.Component<Props> {
       claim,
       contentType,
       uri,
-      rewardedContentClaimIds,
       openModal,
       claimIsMine,
       prepareEdit,
@@ -117,7 +114,6 @@ class FilePage extends React.Component<Props> {
     // File info
     const { signing_channel: signingChannel } = claim;
     const channelName = signingChannel && signingChannel.name;
-    const isRewardContent = (rewardedContentClaimIds || []).includes(claim.claim_id);
     const speechShareable =
       costInfo && costInfo.cost === 0 && contentType && ['video', 'image', 'audio'].includes(contentType.split('/')[0]);
     // We want to use the short form uri for editing
@@ -239,7 +235,6 @@ class FilePage extends React.Component<Props> {
             <div className="media__actions media__actions--between media__actions--nowrap">
               <ClaimUri uri={uri} />
               <div className="file-properties">
-                {isRewardContent && <Icon size={20} iconColor="red" icon={icons.FEATURED} />}
                 {nsfw && <div className="badge badge--mature">{__('Mature')}</div>}
                 <FilePrice badge uri={normalizeURI(uri)} />
               </div>

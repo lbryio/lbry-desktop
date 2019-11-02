@@ -1,6 +1,5 @@
 import { connect } from 'react-redux';
 import * as settings from 'constants/settings';
-import { selectRewardContentClaimIds } from 'redux/selectors/content';
 import { doRemoveUnreadSubscription } from 'redux/actions/subscriptions';
 import { doSetClientSetting } from 'redux/actions/settings';
 import { doSetContentHistoryItem } from 'redux/actions/content';
@@ -32,7 +31,6 @@ const select = (state, props) => ({
   metadata: makeSelectMetadataForUri(props.uri)(state),
   obscureNsfw: !selectShowMatureContent(state),
   fileInfo: makeSelectFileInfoForUri(props.uri)(state),
-  rewardedContentClaimIds: selectRewardContentClaimIds(state, props),
   claimIsMine: makeSelectClaimIsMine(props.uri)(state),
   isSubscribed: makeSelectIsSubscribed(props.uri)(state),
   channelUri: makeSelectChannelForClaimUri(props.uri, true)(state),

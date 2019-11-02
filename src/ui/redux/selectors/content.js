@@ -25,11 +25,6 @@ export const makeSelectIsPlaying = (uri: string) =>
     playingUri => playingUri === uri
   );
 
-export const selectRewardContentClaimIds = createSelector(
-  selectState,
-  state => state.rewardedContentClaimIds
-);
-
 export const makeSelectContentPositionForUri = (uri: string) =>
   createSelector(
     selectState,
