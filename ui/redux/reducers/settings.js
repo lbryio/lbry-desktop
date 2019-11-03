@@ -23,6 +23,7 @@ const defaultState = {
     [SETTINGS.HIDE_BALANCE]: false,
     [SETTINGS.OS_NOTIFICATIONS_ENABLED]: true,
     [SETTINGS.AUTOMATIC_DARK_MODE_ENABLED]: false,
+
     [SETTINGS.DARK_MODE_TIMES]: {
       from: { hour: '21', min: '00', formattedTime: '21:00' },
       to: { hour: '8', min: '00', formattedTime: '8:00' },
@@ -40,6 +41,9 @@ const defaultState = {
     [SETTINGS.AUTOPLAY]: true,
     [SETTINGS.FLOATING_PLAYER]: true,
     [SETTINGS.AUTO_DOWNLOAD]: true,
+
+    // OS
+    [SETTINGS.AUTO_LAUNCH]: true,
   },
 };
 

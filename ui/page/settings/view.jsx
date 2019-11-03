@@ -11,6 +11,7 @@ import Button from 'component/button';
 import I18nMessage from 'component/i18nMessage';
 import Page from 'component/page';
 import SettingLanguage from 'component/settingLanguage';
+import SettingAutoLaunch from 'component/settingAutoLaunch';
 import FileSelector from 'component/common/file-selector';
 import SyncToggle from 'component/syncToggle';
 import Card from 'component/common/card';
@@ -631,6 +632,7 @@ class SettingsPage extends React.PureComponent<Props, State> {
                 </React.Fragment>
               }
             />
+            <Card title={__('Launch on login')} actions={<SettingAutoLaunch />} />
 
             <Card
               title={__('Application Cache')}
