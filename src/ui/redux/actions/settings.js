@@ -1,6 +1,8 @@
 import { Lbry, ACTIONS } from 'lbry-redux';
 import * as SETTINGS from 'constants/settings';
 import analytics from 'analytics';
+import { launcher } from 'util/autoLaunch';
+import { makeSelectClientSetting } from 'redux/selectors/settings';
 
 const UPDATE_IS_NIGHT_INTERVAL = 5 * 60 * 1000;
 
@@ -80,5 +82,71 @@ export function doSetDarkTime(value, options) {
 
     dispatch(doSetClientSetting(SETTINGS.DARK_MODE_TIMES, mergedTimes));
     dispatch(doUpdateIsNight());
+  };
+}
+
+export function doSetAutoLaunch(value) {
+  return (dispatch, getState) => {
+    const state = getState();
+
+    const autoLaunch = makeSelectClientSetting(SETTINGS.AUTO_LAUNCH)(state);
+
+    if (value === undefined) {
+      console.log('undefined:,', String(autoLaunch), value && String(value));
+      launcher.isEnabled().then(isEnabled => {
+        if (isEnabled) {
+          if (!autoLaunch) {
+            launcher.disable().then(() => {
+              dispatch(doSetClientSetting(SETTINGS.AUTO_LAUNCH, false));
+              dispatch(
+                doToast({
+                  message: __('LBRY auto-launch on login disabled.'),
+                })
+              );
+            });
+          }
+        } else {
+          if (autoLaunch) {
+            launcher.enable().then(() => {
+              dispatch(doSetClientSetting(SETTINGS.AUTO_LAUNCH, true));
+              dispatch(
+                doToast({
+                  message: __('LBRY auto-launch on login enabled.'),
+                })
+              );
+            });
+          }
+        }
+      });
+    } else if (value === true) {
+      launcher.isEnabled().then(function(isEnabled) {
+        if (!isEnabled) {
+          launcher
+            .enable()
+            .then(() => {
+              dispatch(doSetClientSetting(SETTINGS.AUTO_LAUNCH, true));
+              dispatch(
+                doToast({
+                  message: __('LBRY auto-launch on login enabled.'),
+                })
+              );
+            })
+            .catch();
+        }
+      });
+    } else {
+      launcher.isEnabled().then(function(isEnabled) {
+        if (isEnabled) {
+          launcher.disable().then(() => {
+            dispatch(doSetClientSetting(SETTINGS.AUTO_LAUNCH, false));
+            dispatch(
+              doToast({
+                message: __('LBRY auto-launch on login disabled.'),
+              })
+            );
+          });
+        }
+      });
+    }
   };
 }
