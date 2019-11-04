@@ -141,6 +141,7 @@ ipcRenderer.on('open-uri-requested', (event, uri, newSession) => {
     } else if (isURIValid(uri)) {
       const formattedUri = formatLbryUriForWeb(uri);
       app.store.dispatch(push(formattedUri));
+      analytics.openUrlEvent(formattedUri);
     } else {
       app.store.dispatch(
         doToast({
