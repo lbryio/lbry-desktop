@@ -30,7 +30,7 @@ function FileDownloadLink(props: Props) {
     return <span>{label}</span>;
   }
 
-  if (fileInfo && fileInfo.download_path && fileInfo.completed && clicked) {
+  if (fileInfo && fileInfo.download_path && clicked) {
     triggerAnalyticsView(uri, 0);
     setClicked(false);
   }
