@@ -7,6 +7,7 @@
  */
 import { X_LBRY_AUTH_TOKEN } from 'constants/token';
 import { doUpdateUploadProgress } from 'lbryinc';
+import { apiCall } from 'lbry-redux';
 
 // A modified version of Lbry.apiCall that allows
 // to perform calling methods at arbitrary urls
@@ -19,11 +20,19 @@ export default function apiPublishCallViaWeb(
   resolve: Function,
   reject: Function
 ) {
+  const { file_path: filePath } = params;
+
+  if (!filePath) {
+    return apiCall(method, params, resolve, reject);
+  }
+
   const counter = new Date().getTime();
-  const fileField = params.file_path;
+  const fileField = filePath;
+
   // Putting a dummy value here, the server is going to process the POSTed file
   // and set the file_path itself
   params.file_path = '__POST_FILE__';
+
   const jsonPayload = JSON.stringify({
     jsonrpc: '2.0',
     method,
