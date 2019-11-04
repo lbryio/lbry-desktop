@@ -21,17 +21,20 @@ export default function EmbedArea(props: Props) {
 
   const streamUrl = generateStreamUrl(name, claimId, LBRY_TV_API);
   let embedText = `<iframe width="560" height="315" src="${streamUrl}" allowfullscreen></iframe>`;
+
   function copyToClipboard() {
     const topRef = input.current;
+    console.log(topRef);
     if (topRef && topRef.input && topRef.input.current) {
       topRef.input.current.select();
+      document.execCommand('copy');
+      doToast({ message: snackMessage || 'Embed link copied' });
     }
-    document.execCommand('copy');
   }
 
   function onFocus() {
     // We have to go a layer deep since the input is inside the form component
-    const topRef = input.current;
+    const topRef = input && input.current;
     if (topRef && topRef.input && topRef.input.current) {
       topRef.input.current.select();
     }
@@ -45,16 +48,14 @@ export default function EmbedArea(props: Props) {
         label={label}
         value={embedText || ''}
         ref={input}
-        readOnly
         onFocus={onFocus}
       />
       <div className="card__actions card__actions--center">
         <Button
           icon={ICONS.COPY}
-          button="inverse"
+          button="link"
           onClick={() => {
             copyToClipboard();
-            doToast({ message: snackMessage || 'Embed link copied' });
           }}
         />
       </div>

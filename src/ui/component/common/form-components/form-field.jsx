@@ -154,7 +154,7 @@ export class FormField extends React.PureComponent<Props> {
         input = (
           <fieldset-section>
             <label htmlFor={name}>{label}</label>
-            <textarea type={type} id={name} maxLength={textAreaMaxLength} {...inputProps} />
+            <textarea type={type} id={name} maxLength={textAreaMaxLength} ref={this.input} {...inputProps} />
             {countInfo}
           </fieldset-section>
         );
