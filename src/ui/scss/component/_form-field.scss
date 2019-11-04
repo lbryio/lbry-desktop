@@ -313,7 +313,6 @@ fieldset-section {
       color: $lbry-white;
     }
 
-    input:not(.form-field--copyable),
     textarea,
     select {
       border-color: $lbry-gray-5;
@@ -323,7 +322,6 @@ fieldset-section {
 
 .form-field--copyable {
   background-color: rgba($lbry-gray-1, 0.5);
-  border: 1px solid $lbry-gray-1;
   color: $lbry-gray-5;
   padding: 0.2rem 0.75rem;
   text-overflow: ellipsis;
@@ -332,7 +330,6 @@ fieldset-section {
 
   [data-mode='dark'] & {
     background-color: rgba($lbry-white, 0.3);
-    border-color: $lbry-gray-5;
     color: inherit;
   }
 }
