@@ -9,6 +9,15 @@ import ElectronCookies from '@exponent/electron-cookies';
 
 const isProduction = process.env.NODE_ENV === 'production';
 const devInternalApis = process.env.LBRY_API_URL;
+const LBRY_TV_MINUS_PIRATE_BAY_UA_ID = 'UA-60403362-16';
+const LBRY_TV_UA_ID = 'UA-60403362-12';
+const DESKTOP_UA_ID = 'UA-60403362-13';
+
+// @if TARGET='app'
+ElectronCookies.enable({
+  origin: 'https://lbry.tv',
+});
+// @endif
 
 type Analytics = {
   pageView: string => void,
@@ -157,18 +166,29 @@ function sendGaTimingEvent(category: string, action: string, timeInMs: number) {
   }
 }
 
-// Initialize google analytics
-// Set `debug: true` for debug info
-// Will change once we have separate ids for desktop/web
-const UA_ID = IS_WEB ? 'UA-60403362-12' : 'UA-60403362-13';
+let gaTrackers = [];
 
-// @if TARGET='app'
-ElectronCookies.enable({
-  origin: 'https://lbry.tv',
-});
-// @endif
+if (!IS_WEB) {
+  gaTrackers.push({
+    trackingId: DESKTOP_UA_ID,
+  });
+} else {
+  gaTrackers.push({
+    trackingId: LBRY_TV_UA_ID,
+  });
 
-ReactGA.initialize(UA_ID, {
+  const { search } = window.location;
+  const urlParams = new URLSearchParams(search);
+  const isPirateBayUser = urlParams.get('tm_source') === 'PB';
+
+  if (!isPirateBayUser) {
+    gaTrackers.push({
+      trackingId: LBRY_TV_MINUS_PIRATE_BAY_UA_ID,
+    });
+  }
+}
+
+ReactGA.initialize(gaTrackers, {
   testMode: process.env.NODE_ENV !== 'production',
   cookieDomain: 'auto',
   siteSpeedSampleRate: 100,
