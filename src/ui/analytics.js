@@ -22,6 +22,7 @@ type Analytics = {
   rewardEligibleEvent: () => void,
   startupEvent: () => void,
   readyEvent: number => void,
+  openUrlEvent: string => void,
 };
 
 type LogPublishParams = {
@@ -124,6 +125,9 @@ const analytics: Analytics = {
   rewardEligibleEvent: () => {
     sendGaEvent('Engagement', 'Reward-Eligible');
   },
+  openUrlEvent: (url: string) => {
+    sendGaEvent('Engagement', 'Open-Url', url);
+  },
   startupEvent: () => {
     sendGaEvent('Startup', 'Startup');
   },
@@ -133,11 +137,12 @@ const analytics: Analytics = {
   },
 };
 
-function sendGaEvent(category, action) {
+function sendGaEvent(category, action, label) {
   if (analyticsEnabled && isProduction) {
     ReactGA.event({
       category,
       action,
+      ...(label ? { label } : {}),
     });
   }
 }
