@@ -5,7 +5,7 @@ import {
   makeSelectLoadingForUri,
   makeSelectClaimIsMine,
 } from 'lbry-redux';
-import { doOpenModal } from 'redux/actions/app';
+import { doOpenModal, doAnalyticsView } from 'redux/actions/app';
 import { doSetPlayingUri, doPlayUri } from 'redux/actions/content';
 import FileDownloadLink from './view';
 
@@ -20,6 +20,7 @@ const perform = dispatch => ({
   openModal: (modal, props) => dispatch(doOpenModal(modal, props)),
   pause: () => dispatch(doSetPlayingUri(null)),
   download: uri => dispatch(doPlayUri(uri, false, true)),
+  triggerAnalyticsView: (uri, timeToStart) => dispatch(doAnalyticsView(uri, timeToStart)),
 });
 
 export default connect(
