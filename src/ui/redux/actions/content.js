@@ -48,11 +48,7 @@ export function doUpdateLoadStatus(uri: string, outpoint: string) {
     Lbry.file_list({
       outpoint,
       full_status: true,
-      page: 1,
-      page_size: 1,
-    }).then(result => {
-      const { items: fileInfos } = result;
-      const fileInfo = fileInfos[0];
+    }).then(([fileInfo]) => {
       if (!fileInfo || fileInfo.written_bytes === 0) {
         // download hasn't started yet
         setNextStatusUpdate();

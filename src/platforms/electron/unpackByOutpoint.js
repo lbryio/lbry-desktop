@@ -3,7 +3,7 @@ import path from 'path';
 import { unpackDirectory } from 'lbry-format';
 
 async function unpackByOutpoint(lbry, outpoint) {
-  const { items: claimFiles } = await lbry.file_list({ outpoint, full_status: true, page: 1, page_size: 1 });
+  const claimFiles = await lbry.file_list({ outpoint, full_status: true });
 
   if (claimFiles && claimFiles.length) {
     const claimFileInfo = claimFiles[0];
