@@ -27,6 +27,7 @@ function ChannelContent(props: Props) {
     totalPages,
     channelIsMine,
     channelIsBlocked,
+
     fetchClaims,
     channelIsBlackListed,
   } = props;
@@ -72,6 +73,7 @@ function ChannelContent(props: Props) {
 
       {!channelIsBlocked && !channelIsBlackListed && (
         <Paginate
+          key={uri}
           onPageChange={page => fetchClaims(uri, page)}
           totalPages={totalPages}
           loading={fetching && !hasContent}
