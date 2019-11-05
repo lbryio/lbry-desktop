@@ -13,7 +13,7 @@ import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import { doConditionalAuthNavigate, doDaemonReady, doAutoUpdate, doOpenModal, doHideModal } from 'redux/actions/app';
 import { Lbry, doToast, isURIValid, setSearchApi } from 'lbry-redux';
-import { doUpdateIsNightAsync } from 'redux/actions/settings';
+import { doSetLanguage, doUpdateIsNightAsync } from 'redux/actions/settings';
 import {
   doAuthenticate,
   Lbryio,
@@ -173,6 +173,10 @@ ipcRenderer.on('open-uri-requested', (event, uri, newSession) => {
       );
     }
   }
+});
+
+ipcRenderer.on('language-set', (event, language) => {
+  app.store.dispatch(doSetLanguage(language));
 });
 
 ipcRenderer.on('open-menu', (event, uri) => {

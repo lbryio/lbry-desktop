@@ -2,10 +2,10 @@ import { WEBPACK_ELECTRON_PORT } from 'config';
 import { app, BrowserWindow, dialog, shell, screen } from 'electron';
 import isDev from 'electron-is-dev';
 import windowStateKeeper from 'electron-window-state';
+import SUPPORTED_LANGUAGES from 'constants/supported_languages';
 
 import setupBarMenu from './menu/setupBarMenu';
 import * as PAGES from '../../ui/constants/pages';
-import setLanguage from './setLanguage';
 
 export default appState => {
   // Get primary display dimensions from Electron.
@@ -86,10 +86,9 @@ export default appState => {
     deepLinkingURI = '';
   }
 
-  window.loadURL(rendererURL + deepLinkingURI);
   setupBarMenu();
 
-  setLanguage(window);
+  window.loadURL(rendererURL + deepLinkingURI);
 
   window.on('close', event => {
     if (!appState.isQuitting && !appState.autoUpdateAccepted) {
@@ -125,12 +124,25 @@ export default appState => {
       }
     );
   });
+
   window.once('ready-to-show', () => {
     window.show();
   });
 
   window.webContents.on('did-finish-load', () => {
     window.webContents.session.setUserAgent(`LBRY/${app.getVersion()}`);
+
+    // restore the user's previous language - we have to do this from here because only electron process can access app.getLocale()
+    window.webContents.executeJavaScript("localStorage.getItem('language')").then(storedLanguage => {
+      const language =
+        storedLanguage && storedLanguage !== 'undefined' && storedLanguage !== 'null'
+          ? storedLanguage
+          : app.getLocale().slice(0, 2);
+      if (language !== 'en' && SUPPORTED_LANGUAGES[language]) {
+        window.webContents.send('language-set', language);
+      }
+    });
+
     if (isDev) {
       window.webContents.openDevTools();
     }

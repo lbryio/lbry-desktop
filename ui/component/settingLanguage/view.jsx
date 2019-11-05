@@ -3,43 +3,27 @@
 import React, { useState } from 'react';
 import { FormField } from 'component/common/form';
 import Spinner from 'component/spinner';
-import { SETTINGS } from 'lbry-redux';
 import SUPPORTED_LANGUAGES from '../../constants/supported_languages';
 
 type Props = {
   language: string,
-  showToast: ({}) => void,
-  setClientSetting: (string, boolean) => void,
+  setLanguage: string => void,
 };
 
 function SettingLanguage(props: Props) {
-  const [isFetching, setIsFetching] = useState(false);
+  const { language, setLanguage } = props;
+
+  const [previousLanguage, setPreviousLanguage] = useState(null);
   const languages = SUPPORTED_LANGUAGES;
 
-  const { language, showToast, setClientSetting } = props;
+  if (previousLanguage && language !== previousLanguage) {
+    setPreviousLanguage(null);
+  }
 
   function onLanguageChange(e) {
     const { value } = e.target;
-    setIsFetching(true);
-
-    // this should match the behavior/logic in the static index-XXX.html files
-    fetch('https://lbry.com/i18n/get/lbry-desktop/app-strings/' + value + '.json')
-      .then(r => r.json())
-      .then(j => {
-        window.i18n_messages[value] = j;
-      })
-      .then(() => {
-        setIsFetching(false);
-        window.localStorage.setItem(SETTINGS.LANGUAGE, value);
-        setClientSetting(SETTINGS.LANGUAGE, value);
-      })
-      .catch(e => {
-        showToast({
-          message: __('Failed to load translations.'),
-          error: true,
-        });
-        setIsFetching(false);
-      });
+    setPreviousLanguage(language);
+    setLanguage(value);
   }
 
   return (
@@ -60,7 +44,7 @@ function SettingLanguage(props: Props) {
           </option>
         ))}
       </FormField>
-      {isFetching && <Spinner type="small" />}
+      {previousLanguage && <Spinner type="small" />}
     </React.Fragment>
   );
 }
