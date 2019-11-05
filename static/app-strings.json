@@ -852,5 +852,9 @@
   "Your %publishMessage% pending on LBRY. It will take a few minutes to appear for other users.": "Your %publishMessage% pending on LBRY. It will take a few minutes to appear for other users.",
   "Upload will continue in the background, please do not shut down immediately. Leaving the app running helps the network, thank you!": "Upload will continue in the background, please do not shut down immediately. Leaving the app running helps the network, thank you!",
   "Are you sure want to revoke this claim?": "Are you sure want to revoke this claim?",
-  "This will prevent others from resolving and accessing the content you published. It will return the LBC to your spendable balance, less a small transaction fee.": "This will prevent others from resolving and accessing the content you published. It will return the LBC to your spendable balance, less a small transaction fee."
+  "This will prevent others from resolving and accessing the content you published. It will return the LBC to your spendable balance, less a small transaction fee.": "This will prevent others from resolving and accessing the content you published. It will return the LBC to your spendable balance, less a small transaction fee.",
+  "No results for %query%": "No results for %query%",
+  "You haven't downloaded anything from LBRY yet.": "You haven't downloaded anything from LBRY yet.",
+  "Explore new content": "Explore new content",
+  "Use this address to receive LBC.": "Use this address to receive LBC."
 }
