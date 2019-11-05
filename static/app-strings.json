@@ -860,5 +860,6 @@
   "No results for %query%": "No results for %query%",
   "You haven't downloaded anything from LBRY yet.": "You haven't downloaded anything from LBRY yet.",
   "Explore new content": "Explore new content",
-  "Use this address to receive LBC.": "Use this address to receive LBC."
+  "Use this address to receive LBC.": "Use this address to receive LBC.",
+  "Embedded": "Embedded"
 }

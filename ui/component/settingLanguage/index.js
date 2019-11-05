@@ -1,8 +1,7 @@
 import { connect } from 'react-redux';
 import * as SETTINGS from 'constants/settings';
-import { doSetClientSetting } from 'redux/actions/settings';
+import { doSetLanguage } from 'redux/actions/settings';
 import { makeSelectClientSetting } from 'redux/selectors/settings';
-import { doToast } from 'lbry-redux';
 import SettingLanguage from './view';
 
 const select = state => ({
@@ -10,8 +9,7 @@ const select = state => ({
 });
 
 const perform = dispatch => ({
-  setClientSetting: (key, value) => dispatch(doSetClientSetting(key, value)),
-  showToast: options => dispatch(doToast(options)),
+  setLanguage: value => dispatch(doSetLanguage(value)),
 });
 
 export default connect(

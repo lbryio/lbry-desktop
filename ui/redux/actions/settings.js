@@ -1,6 +1,7 @@
-import { Lbry, ACTIONS } from 'lbry-redux';
+import { Lbry, ACTIONS, doToast } from 'lbry-redux';
 import * as SETTINGS from 'constants/settings';
 import analytics from 'analytics';
+import SUPPORTED_LANGUAGES from 'constants/supported_languages';
 
 const UPDATE_IS_NIGHT_INTERVAL = 5 * 60 * 1000;
 
@@ -80,5 +81,32 @@ export function doSetDarkTime(value, options) {
 
     dispatch(doSetClientSetting(SETTINGS.DARK_MODE_TIMES, mergedTimes));
     dispatch(doUpdateIsNight());
+  };
+}
+
+export function doSetLanguage(language) {
+  return dispatch => {
+    // this should match the behavior/logic in index-web.html
+    fetch('https://lbry.com/i18n/get/lbry-desktop/app-strings/' + language + '.json')
+      .then(r => r.json())
+      .then(j => {
+        window.i18n_messages[language] = j;
+      })
+      .then(() => {
+        // set on localStorage so it can be read outside of redux
+        window.localStorage.setItem(SETTINGS.LANGUAGE, language);
+        dispatch(doSetClientSetting(SETTINGS.LANGUAGE, language));
+      })
+      .catch(e => {
+        window.localStorage.setItem(SETTINGS.LANGUAGE, 'en');
+        dispatch(doSetClientSetting(SETTINGS.LANGUAGE, 'en'));
+        const languageName = SUPPORTED_LANGUAGES[language] ? SUPPORTED_LANGUAGES[language] : language;
+        dispatch(
+          doToast({
+            message: __('Failed to load %language% translations.', { language: languageName }),
+            error: true,
+          })
+        );
+      });
   };
 }

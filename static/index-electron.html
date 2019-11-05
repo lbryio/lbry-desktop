@@ -7,22 +7,6 @@
 
   <body>
     <div id="app"></div>
-    <script>
-      function loadUi() {
-        const script = document.createElement('script');
-        script.setAttribute('src', 'ui.js');
-        document.body.appendChild(script);
-      }
-      
-      require('electron').ipcRenderer.on('language-set', (event, messages, language, error) => {
-        window.i18n_messages = messages;   
-        window.localStorage.setItem('language', language);
-        if(error) {
-          console.error('Can\'t set language to ' + language);
-          console.error(error);
-        }
-        loadUi();
-      });
-    </script>
+    <script src="ui.js"></script>
   </body>
 </html>
