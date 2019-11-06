@@ -72,9 +72,11 @@ const defaultHead =
   '<title>lbry.tv</title>\n' +
   `<meta property="og:url" content="${DOMAIN}" />\n` +
   '<meta property="og:title" content="lbry.tv" />\n' +
-  '<meta property="og:site_name" content="lbry.tv"/>\n' +
-  '<meta property="og:description" content="All your favorite LBRY content in your browser." />\n' +
+  '<meta property="og:site_name" content="lbry.tv | Content Freedom"/>\n' +
+  '<meta property="og:description" content="Meet LBRY, an open, free, and community-controlled content wonderland." />\n' +
   `<meta property="og:image" content="${DOMAIN}/og.png" />\n` +
+  '<meta name="twitter:card" content="summary_large_image"/>\n' +
+  `<meta name="twitter:image" content="${DOMAIN}/og.png"/>\n` +
   '<meta property="fb:app_id" content="1673146449633983" />';
 
 app.get('*', async (req, res) => {
