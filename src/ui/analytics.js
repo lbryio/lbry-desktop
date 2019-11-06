@@ -179,7 +179,7 @@ if (!IS_WEB) {
 
   const { search } = window.location;
   const urlParams = new URLSearchParams(search);
-  const isPirateBayUser = urlParams.get('tm_source') === 'PB';
+  const isPirateBayUser = urlParams.get('utm_source') === 'PB';
 
   if (!isPirateBayUser) {
     gaTrackers.push({
