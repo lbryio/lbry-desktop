@@ -12,6 +12,7 @@ const devInternalApis = process.env.LBRY_API_URL;
 const LBRY_TV_MINUS_PIRATE_BAY_UA_ID = 'UA-60403362-16';
 const LBRY_TV_UA_ID = 'UA-60403362-12';
 const DESKTOP_UA_ID = 'UA-60403362-13';
+const SECOND_TRACKER_NAME = 'tracker2';
 
 // @if TARGET='app'
 ElectronCookies.enable({
@@ -45,7 +46,7 @@ let analyticsEnabled: boolean = true;
 const analytics: Analytics = {
   pageView: path => {
     if (analyticsEnabled) {
-      ReactGA.pageview(path);
+      ReactGA.pageview(path, [SECOND_TRACKER_NAME]);
     }
   },
   setUser: userId => {
@@ -148,21 +149,27 @@ const analytics: Analytics = {
 
 function sendGaEvent(category, action, label) {
   if (analyticsEnabled && isProduction) {
-    ReactGA.event({
-      category,
-      action,
-      ...(label ? { label } : {}),
-    });
+    ReactGA.event(
+      {
+        category,
+        action,
+        ...(label ? { label } : {}),
+      },
+      [SECOND_TRACKER_NAME]
+    );
   }
 }
 
 function sendGaTimingEvent(category: string, action: string, timeInMs: number) {
   if (analyticsEnabled && isProduction) {
-    ReactGA.timing({
-      category,
-      variable: action,
-      value: timeInMs,
-    });
+    ReactGA.timing(
+      {
+        category,
+        variable: action,
+        value: timeInMs,
+      },
+      [SECOND_TRACKER_NAME]
+    );
   }
 }
 
@@ -184,6 +191,9 @@ if (!IS_WEB) {
   if (!isPirateBayUser) {
     gaTrackers.push({
       trackingId: LBRY_TV_MINUS_PIRATE_BAY_UA_ID,
+      gaOptions: {
+        name: SECOND_TRACKER_NAME,
+      },
     });
   }
 }
