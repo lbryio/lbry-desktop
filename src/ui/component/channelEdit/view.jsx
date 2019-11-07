@@ -101,14 +101,6 @@ function ChannelForm(props: Props) {
   // TODO clear and bail after submit
   return (
     <section className={'card--section'}>
-      <div className="card__subtitle">
-        <p>{__('We can explain...')}</p>
-        <p>
-          {__(
-            "We know this page won't win any design awards, we just wanted to release a very basic version that works so people can use it right now. There is a much nicer version being worked on."
-          )}
-        </p>
-      </div>
       <Form
         onSubmit={() => {
           updateChannel(params);
