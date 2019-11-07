@@ -4,11 +4,11 @@ const merge = require('webpack-merge');
 const { DefinePlugin, ProvidePlugin } = require('webpack');
 const { getIfUtils, removeEmpty } = require('webpack-config-utils');
 const TerserPlugin = require('terser-webpack-plugin');
+
 const NODE_ENV = process.env.NODE_ENV || 'development';
 const { ifProduction } = getIfUtils(NODE_ENV);
-const UI_ROOT = path.resolve(__dirname, 'src/ui/');
+const UI_ROOT = path.resolve(__dirname, 'ui/');
 const STATIC_ROOT = path.resolve(__dirname, 'static/');
-const DIST_ROOT = path.resolve(__dirname, 'dist/');
 
 let baseConfig = {
   mode: ifProduction('production', 'development'),
@@ -19,7 +19,6 @@ let baseConfig = {
         parallel: true,
         terserOptions: {
           mangle: true,
-          toplevel: true,
         },
       }),
     ],
@@ -34,26 +33,10 @@ let baseConfig = {
     rules: [
       {
         test: /\.jsx?$/,
-        exclude: /node_modules/,
         loader: 'babel-loader',
       },
       {
-        test: /\.module.scss$/,
-        use: [
-          'style-loader',
-          {
-            loader: 'css-loader',
-            options: {
-              modules: true,
-            },
-          },
-          'postcss-loader',
-          'sass-loader',
-        ],
-      },
-      {
         test: /\.s?css$/,
-        exclude: /\.module.scss$/,
         use: ['style-loader', 'css-loader', 'postcss-loader', 'sass-loader'],
       },
       {
@@ -81,7 +64,6 @@ let baseConfig = {
           loader: 'raw-loader',
         },
       },
-      { test: /\.node$/, loader: 'node-loader' },
     ],
   },
   // Allows imports for all directories inside '/ui'

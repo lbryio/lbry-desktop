@@ -12,19 +12,19 @@ node_modules/lbryinc/flow-typed/
 [options]
 suppress_comment=\\(.\\|\n\\)*\\$FlowFixMe
 suppress_comment=\\(.\\|\n\\)*\\$FlowIssue
-module.name_mapper='^constants\(.*\)$' -> '<PROJECT_ROOT>/src/ui/constants\1'
-module.name_mapper='^util\(.*\)$' -> '<PROJECT_ROOT>/src/ui/util\1'
-module.name_mapper='^redux\(.*\)$' -> '<PROJECT_ROOT>/src/ui/redux\1'
-module.name_mapper='^types\(.*\)$' -> '<PROJECT_ROOT>/src/ui/types\1'
-module.name_mapper='^component\(.*\)$' -> '<PROJECT_ROOT>/src/ui/component\1'
-module.name_mapper='^page\(.*\)$' -> '<PROJECT_ROOT>/src/ui/page\1'
-module.name_mapper='^lbry\(.*\)$' -> '<PROJECT_ROOT>/src/ui/lbry\1'
-module.name_mapper='^modal\(.*\)$' -> '<PROJECT_ROOT>/src/ui/modal\1'
-module.name_mapper='^app\(.*\)$' -> '<PROJECT_ROOT>/src/ui/app\1'
-module.name_mapper='^native\(.*\)$' -> '<PROJECT_ROOT>/src/ui/native\1'
-module.name_mapper='^analytics\(.*\)$' -> '<PROJECT_ROOT>/src/ui/analytics\1'
-module.name_mapper='^i18n\(.*\)$' -> '<PROJECT_ROOT>/src/ui/i18n\1'
-module.name_mapper='^effects\(.*\)$' -> '<PROJECT_ROOT>/src/ui/effects\1'
+module.name_mapper='^constants\(.*\)$' -> '<PROJECT_ROOT>/ui/constants\1'
+module.name_mapper='^util\(.*\)$' -> '<PROJECT_ROOT>/ui/util\1'
+module.name_mapper='^redux\(.*\)$' -> '<PROJECT_ROOT>/ui/redux\1'
+module.name_mapper='^types\(.*\)$' -> '<PROJECT_ROOT>/ui/types\1'
+module.name_mapper='^component\(.*\)$' -> '<PROJECT_ROOT>/ui/component\1'
+module.name_mapper='^page\(.*\)$' -> '<PROJECT_ROOT>/ui/page\1'
+module.name_mapper='^lbry\(.*\)$' -> '<PROJECT_ROOT>/ui/lbry\1'
+module.name_mapper='^modal\(.*\)$' -> '<PROJECT_ROOT>/ui/modal\1'
+module.name_mapper='^app\(.*\)$' -> '<PROJECT_ROOT>/ui/app\1'
+module.name_mapper='^native\(.*\)$' -> '<PROJECT_ROOT>/ui/native\1'
+module.name_mapper='^analytics\(.*\)$' -> '<PROJECT_ROOT>/ui/analytics\1'
+module.name_mapper='^i18n\(.*\)$' -> '<PROJECT_ROOT>/ui/i18n\1'
+module.name_mapper='^effects\(.*\)$' -> '<PROJECT_ROOT>/ui/effects\1'
 module.name_mapper='^config\(.*\)$' -> '<PROJECT_ROOT>/config\1'
 
 

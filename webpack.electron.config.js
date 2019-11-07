@@ -17,7 +17,7 @@ const { ifProduction } = getIfUtils(NODE_ENV);
 let mainConfig = {
   target: 'electron-main',
   entry: {
-    main: './src/platforms/electron/index.js',
+    main: './electron/index.js',
   },
   output: {
     filename: '[name].js',

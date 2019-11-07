@@ -1,0 +1,52 @@
+.comments {
+  @extend .ul--no-style;
+  margin-top: var(--spacing-large);
+}
+
+.comment {
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+  font-size: var(--font-multiplier-small);
+  padding: var(--spacing-small) 0;
+
+  &:not(:last-of-type) {
+    border-bottom: 1px solid var(--lbry-gray-1);
+
+    [data-mode='dark'] & {
+      border-color: rgba($lbry-gray-5, 0.2);
+    }
+  }
+}
+
+.comment__meta {
+  text-overflow: ellipsis;
+  display: flex;
+  justify-content: space-between;
+
+  time {
+    opacity: 0.3;
+  }
+}
+
+.comment__message {
+  white-space: pre-line;
+}
+
+.comment__author {
+  margin-bottom: 1rem;
+  text-overflow: ellipsis; // This is where the magic happens
+  flex-basis: 400px;
+  flex-shrink: 1;
+  font-weight: var(--font-weight-bold);
+}
+
+.comment__time {
+  flex-basis: 200px;
+  text-align: right;
+}
+
+.comment__char-count {
+  align-self: flex-end;
+  font-size: var(--font-label);
+}

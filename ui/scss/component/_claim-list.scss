@@ -1,0 +1,233 @@
+$border-color: rgba($lbry-teal-5, 0.1);
+$border-color--dark: var(--dm-color-04);
+
+.claim-list {
+  .claim-preview {
+    border-top: 1px solid $border-color;
+  }
+}
+
+.claim-list__header {
+  display: flex;
+  align-items: center;
+  min-height: 4.5rem;
+  padding: var(--spacing-medium);
+  font-size: var(--font-body);
+  border-top-left-radius: var(--card-radius);
+  border-top-right-radius: var(--card-radius);
+  background-color: var(--color-card-actions);
+
+  & > *:not(:last-child) {
+    margin-right: 0.5rem;
+  }
+
+  fieldset-section {
+    margin-top: 0;
+    margin-bottom: 0;
+  }
+
+  [data-mode='dark'] & {
+    color: var(--dm-color-01);
+    background-color: var(--color-card-actions--dark);
+  }
+}
+
+.claim-list__header--small {
+  height: 3rem;
+  min-height: 3rem;
+}
+
+.claim-list__dropdown {
+  margin-bottom: 0;
+  padding: 0 var(--spacing-medium);
+  padding-right: var(--spacing-large);
+
+  [data-mode='dark'] & {
+    color: var(--dm-color-01);
+  }
+}
+
+.claim-list__alt-controls {
+  display: flex;
+  align-items: center;
+  margin-left: auto;
+
+  & > * {
+    margin-left: var(--spacing-small);
+  }
+}
+
+.claim-preview {
+  flex: 1;
+  display: flex;
+  position: relative;
+  overflow: visible;
+  padding: var(--spacing-medium);
+
+  &:not(.claim-preview--inline) {
+    cursor: pointer;
+  }
+
+  .media__thumb {
+    width: var(--file-list-thumbnail-width);
+    flex-shrink: 0;
+    margin-right: var(--spacing-medium);
+  }
+
+  [data-mode='dark'] & {
+    color: $lbry-white;
+    border-color: $border-color--dark;
+  }
+}
+
+.claim-preview--large {
+  border: none;
+  padding: 0;
+  margin: var(--spacing-medium);
+  font-size: var(--font-multiplier-large);
+
+  &:hover {
+    background-color: transparent;
+  }
+
+  .media__thumb {
+    width: 14rem;
+  }
+
+  .channel-thumbnail {
+    width: 7.5rem;
+    height: 7.5rem;
+  }
+
+  [data-mode='dark'] & {
+    border: none;
+  }
+}
+
+.claim-preview--small {
+  font-size: var(--font-multiplier-small);
+  padding: var(--spacing-small);
+
+  .media__thumb {
+    width: 8rem;
+  }
+
+  .channel-thumbnail {
+    width: 4rem;
+    height: 4rem;
+  }
+}
+
+.claim-preview--visited {
+  // Still keep the normal styles on hover regardless of if they have visited the claim
+  &:not(:hover) {
+    color: lighten($lbry-black, 35%);
+
+    [data-mode='dark'] & {
+      color: darken($lbry-white, 35%);
+    }
+  }
+}
+
+.claim-preview--pending {
+  cursor: pointer;
+  opacity: 0.6;
+
+  &:hover {
+    background-color: $lbry-white;
+
+    [data-mode='dark'] & {
+      background-color: lighten($lbry-black, 5%);
+    }
+  }
+}
+
+.claim-preview--inline {
+  padding: 0;
+  padding-top: var(--spacing-large);
+  border-bottom: none;
+
+  .channel-thumbnail {
+    width: var(--channel-thumbnail-width--small);
+    height: var(--channel-thumbnail-width--small);
+  }
+}
+
+.claim-preview--tooltip {
+  [data-mode='dark'] & {
+    background-color: $lbry-black;
+  }
+}
+
+.claim-preview-title {
+  font-weight: var(--font-weight-bold);
+  margin-right: auto;
+  padding-right: var(--spacing-medium);
+  font-size: larger;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+}
+
+.claim-preview-metadata {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.claim-preview-info {
+  align-items: flex-start;
+}
+
+.claim-preview-info,
+.claim-preview-properties {
+  display: flex;
+  justify-content: space-between;
+}
+
+.claim-preview-actions {
+  display: flex;
+  justify-content: space-evenly;
+}
+.claim-preview__button {
+  margin-left: 2rem;
+}
+
+.claim-preview-properties {
+  align-items: flex-end;
+  flex: 1;
+  font-size: var(--font-subtext);
+}
+
+.claim-upload {
+  flex: 1;
+  display: flex;
+  position: relative;
+  overflow: visible;
+  padding: var(--spacing-medium);
+
+  .media__thumb {
+    width: var(--file-list-thumbnail-width);
+    flex-shrink: 0;
+    margin-right: var(--spacing-medium);
+  }
+
+  [data-mode='dark'] & {
+    color: $lbry-white;
+    border-color: $border-color--dark;
+  }
+}
+
+.claim-upload__progress--outer {
+  width: 100%;
+}
+
+.claim-upload__progress--inner {
+  background: $lbry-teal-1;
+  padding: var(--spacing-miniscule);
+
+  [data-mode='dark'] & {
+    background: $lbry-teal-4;
+    color: $lbry-white;
+  }
+}
