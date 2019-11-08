@@ -1,5 +1,6 @@
 import { Lbry, ACTIONS, doToast } from 'lbry-redux';
 import * as SETTINGS from 'constants/settings';
+import * as LOCAL_ACTIONS from 'constants/action_types';
 import analytics from 'analytics';
 import SUPPORTED_LANGUAGES from 'constants/supported_languages';
 
@@ -91,6 +92,12 @@ export function doSetLanguage(language) {
       .then(r => r.json())
       .then(j => {
         window.i18n_messages[language] = j;
+        dispatch({
+          type: LOCAL_ACTIONS.DOWNLOAD_LANGUAGE_SUCCESS,
+          data: {
+            language,
+          },
+        });
       })
       .then(() => {
         // set on localStorage so it can be read outside of redux

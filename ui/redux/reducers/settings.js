@@ -5,7 +5,7 @@ import moment from 'moment';
 const reducers = {};
 const defaultState = {
   isNight: false,
-  isFetchingLanguage: false,
+  loadedLanguages: Object.keys(window.i18n_messages) || [],
   daemonSettings: {},
   clientSettings: {
     // UX
@@ -68,6 +68,19 @@ reducers[ACTIONS.UPDATE_IS_NIGHT] = state => {
   return Object.assign({}, state, {
     isNight,
   });
+};
+
+reducers[ACTIONS.DOWNLOAD_LANGUAGE_SUCCESS] = (state, action) => {
+  const { loadedLanguages } = state;
+  const { language } = action.data;
+
+  if (language && !loadedLanguages.includes(language)) {
+    return Object.assign({}, state, {
+      loadedLanguages: [...loadedLanguages, language],
+    });
+  } else {
+    return state;
+  }
 };
 
 export default function reducer(state = defaultState, action) {

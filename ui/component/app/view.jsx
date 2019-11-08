@@ -26,6 +26,7 @@ type Props = {
   alertError: (string | {}) => void,
   pageTitle: ?string,
   language: string,
+  languages: Array<string>,
   theme: string,
   user: ?{ id: string, has_verified_email: boolean, is_reward_approved: boolean },
   location: { pathname: string, hash: string },
@@ -38,6 +39,7 @@ type Props = {
   requestDownloadUpgrade: () => void,
   fetchChannelListMine: () => void,
   onSignedIn: () => void,
+  setLanguage: string => void,
   isUpgradeAvailable: boolean,
   autoUpdateDownloaded: boolean,
   checkSync: () => void,
@@ -65,6 +67,9 @@ function App(props: Props) {
     uploadCount,
     history,
     syncError,
+    language,
+    languages,
+    setLanguage,
   } = props;
 
   const appRef = useRef();
@@ -110,6 +115,12 @@ function App(props: Props) {
     // $FlowFixMe
     document.documentElement.setAttribute('data-mode', theme);
   }, [theme]);
+
+  useEffect(() => {
+    if (!languages.includes(language)) {
+      setLanguage(language);
+    }
+  }, [language, languages]);
 
   useEffect(() => {
     if (previousUserId === undefined && userId) {
