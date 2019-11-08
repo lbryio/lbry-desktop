@@ -23,6 +23,7 @@ type Props = {
   fetchAccessToken: () => void,
   doAuth: () => void,
   user: any,
+  upgradeDisabled: boolean,
 };
 
 type VersionInfo = {
@@ -101,7 +102,7 @@ class HelpPage extends React.PureComponent<Props, State> {
     let platform;
     let newVerLink;
 
-    const { accessToken, doAuth, user, deamonSettings } = this.props;
+    const { accessToken, doAuth, user, deamonSettings, upgradeDisabled } = this.props;
     const { data_dir: dataDirectory } = deamonSettings;
 
     if (this.state.versionInfo) {
@@ -194,11 +195,16 @@ class HelpPage extends React.PureComponent<Props, State> {
         <section className="card">
           <header className="table__header">
             <h2 className="section__title">{__('About')}</h2>
-
             {this.state.upgradeAvailable !== null && this.state.upgradeAvailable ? (
               <p className="section__subtitle">
                 {__('A newer version of LBRY is available.')}{' '}
-                <Button button="link" href={newVerLink} label={__('Download now!')} />
+                <React.Fragment>
+                  {upgradeDisabled ? (
+                    __('Updates are available through your OS vendor.')
+                  ) : (
+                    <Button button="link" href={newVerLink} label={__('Download now!')} />
+                  )}
+                </React.Fragment>
               </p>
             ) : (
               <p className="section__subtitle">{__('Your LBRY app is up to date.')}</p>

@@ -46,6 +46,7 @@ type Props = {
   balance: ?number,
   accessToken: ?string,
   syncError: ?string,
+  upgradeDisabled: boolean,
 };
 
 function App(props: Props) {
@@ -65,6 +66,7 @@ function App(props: Props) {
     uploadCount,
     history,
     syncError,
+    upgradeDisabled,
   } = props;
 
   const appRef = useRef();
@@ -77,7 +79,8 @@ function App(props: Props) {
   const previousHasVerifiedEmail = usePrevious(hasVerifiedEmail);
   const previousRewardApproved = usePrevious(isRewardApproved);
   const { pathname, hash } = props.location;
-  const showUpgradeButton = autoUpdateDownloaded || (process.platform === 'linux' && isUpgradeAvailable);
+  const showUpgradeButton =
+    !upgradeDisabled && (autoUpdateDownloaded || (process.platform === 'linux' && isUpgradeAvailable));
 
   let uri;
   try {

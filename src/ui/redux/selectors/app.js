@@ -138,3 +138,8 @@ export const selectIsPasswordSaved = createSelector(
   selectState,
   state => state.isPasswordSaved
 );
+
+export const selectIsUpgradeDisabled = createSelector(
+  selectState,
+  state => state.upgradeDisabled
+);

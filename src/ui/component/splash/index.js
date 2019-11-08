@@ -1,7 +1,7 @@
 import * as MODALS from 'constants/modal_types';
 import { connect } from 'react-redux';
 import { selectDaemonVersionMatched, selectModal } from 'redux/selectors/app';
-import { doCheckDaemonVersion, doOpenModal, doHideModal } from 'redux/actions/app';
+import { doCheckDaemonVersion, doOpenModal, doHideModal, doCheckUpgradeDisabled } from 'redux/actions/app';
 import { doSetClientSetting } from 'redux/actions/settings';
 import * as settings from 'constants/settings';
 import SplashScreen from './view';
@@ -16,6 +16,7 @@ const select = state => ({
 
 const perform = dispatch => ({
   checkDaemonVersion: () => dispatch(doCheckDaemonVersion()),
+  checkUpgradeDisabled: () => dispatch(doCheckUpgradeDisabled()),
   notifyUnlockWallet: shouldTryWithBlankPassword =>
     dispatch(doOpenModal(MODALS.WALLET_UNLOCK, { shouldTryWithBlankPassword })),
   hideModal: () => dispatch(doHideModal()),

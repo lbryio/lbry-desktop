@@ -38,6 +38,7 @@ export type AppState = {
   enhancedLayout: boolean,
   searchOptionsExpanded: boolean,
   isPasswordSaved: boolean,
+  upgradeDisabled: boolean,
 };
 
 const defaultState: AppState = {
@@ -67,6 +68,7 @@ const defaultState: AppState = {
   currentScroll: 0,
   scrollHistory: [0],
   isPasswordSaved: false,
+  upgradeDisabled: false,
 };
 
 // @@router comes from react-router
@@ -253,6 +255,11 @@ reducers[ACTIONS.HIDE_MODAL] = state =>
 reducers[ACTIONS.TOGGLE_SEARCH_EXPANDED] = state =>
   Object.assign({}, state, {
     searchOptionsExpanded: !state.searchOptionsExpanded,
+  });
+
+reducers[ACTIONS.UPGRADE_DISABLED] = (state, action) =>
+  Object.assign({}, state, {
+    upgradeDisabled: action.data,
   });
 
 export default function reducer(state: AppState = defaultState, action: any) {

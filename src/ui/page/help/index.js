@@ -2,12 +2,14 @@ import * as PAGES from 'constants/pages';
 import { connect } from 'react-redux';
 import { doFetchAccessToken, selectAccessToken, selectUser } from 'lbryinc';
 import { selectDaemonSettings } from 'redux/selectors/settings';
+import { selectIsUpgradeDisabled } from 'redux/selectors/app';
 import HelpPage from './view';
 
 const select = state => ({
   user: selectUser(state),
   accessToken: selectAccessToken(state),
   deamonSettings: selectDaemonSettings(state),
+  upgradeDisabled: selectIsUpgradeDisabled(state),
 });
 
 const perform = (dispatch, ownProps) => ({

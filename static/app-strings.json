@@ -860,5 +860,9 @@
   "No results for %query%": "No results for %query%",
   "You haven't downloaded anything from LBRY yet.": "You haven't downloaded anything from LBRY yet.",
   "Explore new content": "Explore new content",
-  "Use this address to receive LBC.": "Use this address to receive LBC."
+  "Use this address to receive LBC.": "Use this address to receive LBC.",
+  "Your videos are ready to be transferred.": "Your videos are ready to be transferred.",
+  "Ready to transfer": "Ready to transfer",
+  "Claim Channel": "Claim Channel",
+  "Updates are available through your OS vendor.": "Updates are available through your OS vendor."
 }

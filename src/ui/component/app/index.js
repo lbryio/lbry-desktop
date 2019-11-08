@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { selectUser, doRewardList, doFetchAccessToken, selectGetSyncErrorMessage, selectUploadCount } from 'lbryinc';
 import { doFetchTransactions, doFetchChannelListMine } from 'lbry-redux';
 import { makeSelectClientSetting, selectThemePath } from 'redux/selectors/settings';
-import { selectIsUpgradeAvailable, selectAutoUpdateDownloaded } from 'redux/selectors/app';
+import { selectIsUpgradeAvailable, selectAutoUpdateDownloaded, selectIsUpgradeDisabled } from 'redux/selectors/app';
 import { doDownloadUpgradeRequested, doSignIn, doSyncWithPreferences } from 'redux/actions/app';
 import App from './view';
 
@@ -17,6 +17,7 @@ const select = state => ({
   syncEnabled: makeSelectClientSetting(SETTINGS.ENABLE_SYNC)(state),
   syncError: selectGetSyncErrorMessage(state),
   uploadCount: selectUploadCount(state),
+  upgradeDisabled: selectIsUpgradeDisabled(state),
 });
 
 const perform = dispatch => ({

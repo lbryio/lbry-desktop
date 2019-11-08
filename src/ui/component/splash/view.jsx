@@ -24,6 +24,7 @@ type Props = {
   },
   animationHidden: boolean,
   setClientSetting: (string, boolean) => void,
+  checkUpgradeDisabled: () => void,
 };
 
 type State = {
@@ -55,8 +56,9 @@ export default class SplashScreen extends React.PureComponent<Props, State> {
   }
 
   componentDidMount() {
-    const { checkDaemonVersion } = this.props;
+    const { checkDaemonVersion, checkUpgradeDisabled } = this.props;
     this.adjustErrorTimeout();
+    checkUpgradeDisabled();
 
     Lbry.connect()
       .then(checkDaemonVersion)

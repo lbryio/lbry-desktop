@@ -33,13 +33,14 @@ import {
   selectRemoteVersion,
   selectUpgradeTimer,
   selectModal,
+  selectIsUpgradeDisabled,
 } from 'redux/selectors/app';
 import { doAuthenticate, doGetSync } from 'lbryinc';
 import { lbrySettings as config, version as appVersion } from 'package.json';
 import { push } from 'connected-react-router';
 import analytics from 'analytics';
 import { doSignOutCleanup, deleteSavedPassword, getSavedPassword } from 'util/saved-passwords';
-
+import { checkUpgradeDisabled } from 'util/checkUpdatesDisabled';
 // @if TARGET='app'
 const { autoUpdater } = remote.require('electron-updater');
 const { download } = remote.require('electron-dl');
@@ -325,7 +326,7 @@ export function doDaemonReady() {
     dispatch(doBalanceSubscribe());
     dispatch(doFetchDaemonSettings());
     dispatch(doFetchFileInfosAndPublishedClaims());
-    if (!selectIsUpgradeSkipped(state)) {
+    if (!selectIsUpgradeSkipped(state) && !selectIsUpgradeDisabled(state)) {
       dispatch(doCheckUpgradeAvailable());
     }
     dispatch(doCheckUpgradeSubscribe());
@@ -490,6 +491,19 @@ export function doSyncWithPreferences() {
       const passwordArgument = password === null ? '' : password;
 
       dispatch(doGetSync(passwordArgument, handleSyncComplete));
+    });
+  };
+}
+
+export function doCheckUpgradeDisabled() {
+  return dispatch => {
+    checkUpgradeDisabled().then(disabled => {
+      if (disabled) {
+        dispatch({
+          type: ACTIONS.UPGRADE_DISABLED,
+          data: disabled,
+        });
+      }
     });
   };
 }

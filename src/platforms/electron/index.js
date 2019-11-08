@@ -15,7 +15,16 @@ import createWindow from './createWindow';
 import pjson from '../../../package.json';
 import startSandbox from './startSandbox';
 import installDevtools from './installDevtools';
-
+import fs from 'fs';
+import path from 'path';
+const filePath = path.join(__static, 'upgradeDisabled');
+let upgradeDisabled;
+try {
+  fs.accessSync(filePath, fs.constants.R_OK);
+  upgradeDisabled = true;
+} catch (err) {
+  upgradeDisabled = false;
+}
 autoUpdater.autoDownload = true;
 
 // This is set to true if an auto update has been downloaded through the Electron
@@ -208,6 +217,10 @@ app.on('will-finish-launching', () => {
 
 app.on('before-quit', () => {
   appState.isQuitting = true;
+});
+
+ipcMain.on('get-updates-disabled', event => {
+  event.sender.send('get-updates-disabled-response', upgradeDisabled);
 });
 
 ipcMain.on('upgrade', (event, installerPath) => {
