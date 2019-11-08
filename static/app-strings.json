@@ -861,5 +861,6 @@
   "You haven't downloaded anything from LBRY yet.": "You haven't downloaded anything from LBRY yet.",
   "Explore new content": "Explore new content",
   "Use this address to receive LBC.": "Use this address to receive LBC.",
-  "Embedded": "Embedded"
+  "Embedded": "Embedded",
+  "Failed to load %language% translations.": "Failed to load %language% translations."
 }
