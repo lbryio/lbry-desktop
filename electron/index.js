@@ -12,7 +12,7 @@ import Daemon from './Daemon';
 import isDev from 'electron-is-dev';
 import createTray from './createTray';
 import createWindow from './createWindow';
-import pjson from '../../../package.json';
+import pjson from '../package.json';
 import startSandbox from './startSandbox';
 import installDevtools from './installDevtools';
 

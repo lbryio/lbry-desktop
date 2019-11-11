@@ -1,5 +1,5 @@
 /* eslint-disable no-console */
-const { WEBPACK_ELECTRON_PORT } = require('../../../config');
+const { WEBPACK_ELECTRON_PORT } = require('../config');
 const chalk = require('chalk');
 const webpack = require('webpack');
 const merge = require('webpack-merge');
@@ -11,7 +11,7 @@ console.log(
   chalk.magenta(`Compiling ${chalk.underline('main')} and ${chalk.underline('render')}, this will take a while.`)
 );
 
-let [mainConfig, renderConfig] = require('../../../webpack.electron.config.js');
+let [mainConfig, renderConfig] = require('../webpack.electron.config.js');
 
 renderConfig = merge(renderConfig, {
   entry: { ui: ['webpack-hot-middleware/client'] },

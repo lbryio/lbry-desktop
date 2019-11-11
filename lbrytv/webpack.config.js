@@ -6,6 +6,7 @@ const CopyWebpackPlugin = require('copy-webpack-plugin');
 const { DefinePlugin, ProvidePlugin } = require('webpack');
 
 const STATIC_ROOT = path.resolve(__dirname, '../static/');
+const UI_ROOT = path.resolve(__dirname, '../ui/');
 const DIST_ROOT = path.resolve(__dirname, 'dist/');
 const WEB_PLATFORM_ROOT = __dirname;
 
@@ -46,6 +47,8 @@ const webConfig = {
     ],
   },
   resolve: {
+    modules: [UI_ROOT, __dirname],
+
     alias: {
       electron: `${WEB_PLATFORM_ROOT}/stubs/electron.js`,
       fs: `${WEB_PLATFORM_ROOT}/stubs/fs.js`,

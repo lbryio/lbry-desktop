@@ -438,6 +438,7 @@ export function doAnalyticsView(uri, timeToStart) {
 export function doSignIn() {
   return (dispatch, getState) => {
     // @if TARGET='web'
+    debugger;
     dispatch(doBalanceSubscribe());
     dispatch(doFetchChannelListMine());
     // @endif

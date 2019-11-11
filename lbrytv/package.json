@@ -31,7 +31,7 @@
     "koa-logger": "^3.2.1",
     "koa-send": "^5.0.0",
     "koa-static": "^5.0.0",
-    "lbry-redux": "lbryio/lbry-redux#ba429043e6fa8144a62bcf4d45ed8d183ea5aff9",
+    "lbry-redux": "lbryio/lbry-redux#4491b975cc3e23bf3733272b7c6079a28c1036b3",
     "mysql": "^2.17.1"
   },
   "devDependencies": {
