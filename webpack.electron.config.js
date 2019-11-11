@@ -82,7 +82,7 @@ if (process.env.NODE_ENV === 'production') {
 const renderConfig = {
   target: 'electron-renderer',
   entry: {
-    ui: ['./src/ui/index.jsx'],
+    ui: ['./ui/index.jsx'],
   },
   output: {
     filename: '[name].js',
@@ -105,6 +105,9 @@ const renderConfig = {
         ],
       },
     ],
+  },
+  resolve: {
+    modules: ['node_modules'],
   },
   plugins: [
     // new BundleAnalyzerPlugin(),

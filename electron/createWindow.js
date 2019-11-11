@@ -4,7 +4,7 @@ import isDev from 'electron-is-dev';
 import windowStateKeeper from 'electron-window-state';
 
 import setupBarMenu from './menu/setupBarMenu';
-import * as PAGES from '../../ui/constants/pages';
+import * as PAGES from '../ui/constants/pages';
 
 export default appState => {
   // Get primary display dimensions from Electron.

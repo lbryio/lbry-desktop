@@ -24,7 +24,7 @@
     "compile:web": "cd ./lbrytv && webpack --config webpack.config.js",
     "compile": "cross-env NODE_ENV=production yarn compile:electron && cross-env NODE_ENV=production yarn compile:web",
     "dev": "yarn dev:electron",
-    "dev:electron": "cross-env NODE_ENV=development node ./src/platforms/electron/devServer.js",
+    "dev:electron": "cross-env NODE_ENV=development node ./electron/devServer.js",
     "dev:web": "cd ./lbrytv && yarn dev",
     "dev:web-server": "cross-env NODE_ENV=development yarn compile:web && concurrently \"cross-env NODE_ENV=development yarn compile:web --watch\" \"cd ./lbrytv && yarn dev:server\"",
     "dev:internal-apis": "LBRY_API_URL='http://localhost:8080' yarn dev:electron",

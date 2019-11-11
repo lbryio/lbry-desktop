@@ -72,8 +72,6 @@ let baseConfig = {
     extensions: ['.js', '.jsx', '.json', '.scss'],
     alias: {
       config: path.resolve(__dirname, './config.js'),
-      'lbry-redux$': 'lbry-redux/dist/bundle.es.js',
-
       // Build optimizations for 'redux-persist-transform-filter'
       'redux-persist-transform-filter': 'redux-persist-transform-filter/index.js',
       'lodash.get': 'lodash-es/get',
