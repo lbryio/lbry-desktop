@@ -17,11 +17,16 @@
 
 .comment__body_container {
   padding: var(--spacing-small) 0;
+  display: inline-block;
+  width: 100%;
+  width: -moz-available;
+  width: -webkit-fill-available;
+  width: available;
 }
 
 .comment__meta {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   justify-content: flex-end;
   text-overflow: ellipsis;
   time {
@@ -36,8 +41,8 @@
 .comment__author {
   margin-bottom: 1rem;
   text-overflow: ellipsis; // This is where the magic happens
+  flex: 1;
   flex-basis: 400px;
-  flex-shrink: 1;
   font-weight: 600;
 }
 
