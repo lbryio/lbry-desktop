@@ -38,7 +38,30 @@ import { X_LBRY_AUTH_TOKEN } from 'constants/token';
 import 'scss/all.scss';
 
 // @if TARGET='web'
-import 'lbrytv/setup/api';
+// These overrides can't live in lbrytv/ because they need to use the same instance of `Lbry`
+import apiPublishCallViaWeb from 'lbrytv/setup/publish';
+
+const PROXY_PATH = 'api/v1/proxy';
+export const SDK_API_URL = `${process.env.SDK_API_URL}/${PROXY_PATH}` || `https://api.lbry.tv/${PROXY_PATH}`;
+
+Lbry.setDaemonConnectionString(SDK_API_URL);
+
+Lbry.setOverride(
+  'publish',
+  params =>
+    new Promise((resolve, reject) => {
+      apiPublishCallViaWeb(
+        SDK_API_URL,
+        Lbry.getApiRequestHeaders() && Object.keys(Lbry.getApiRequestHeaders()).includes(X_LBRY_AUTH_TOKEN)
+          ? Lbry.getApiRequestHeaders()[X_LBRY_AUTH_TOKEN]
+          : '',
+        'publish',
+        params,
+        resolve,
+        reject
+      );
+    })
+);
 // @endif
 
 const startTime = Date.now();
