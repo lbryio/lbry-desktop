@@ -863,5 +863,7 @@
   "Explore new content": "Explore new content",
   "Use this address to receive LBC.": "Use this address to receive LBC.",
   "Launch on login": "Launch on login",
-  "Autolaunch on login": "Autolaunch on login"
+  "Autolaunch on login": "Autolaunch on login",
+  "LBRY Auto-Launch Enabled": "LBRY Auto-Launch Enabled",
+  "LBRY Auto-Launch Disabled": "LBRY Auto-Launch Disabled"
 }
