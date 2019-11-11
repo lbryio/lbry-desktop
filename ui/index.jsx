@@ -259,7 +259,8 @@ function AppWrapper() {
       app.store.dispatch(doDaemonReady());
       app.store.dispatch(doBlackListedOutpointsSubscribe());
       app.store.dispatch(doFilteredOutpointsSubscribe());
-      window.sessionStorage.setItem('loaded', 'y');
+      // Disabled because it allows redux stuff to happen before rehydrate on ctrl+r
+      // window.sessionStorage.setItem('loaded', 'y');
 
       const appReadyTime = Date.now();
       const timeToStart = appReadyTime - startTime;

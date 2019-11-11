@@ -124,6 +124,9 @@ export function doSetLanguage(language) {
 }
 
 export function doSetAutoLaunch(value) {
+  const enabledSnack = __('LBRY Auto-Launch Enabled');
+  const disabledSnack = __('LBRY Auto-Launch Disabled');
+
   return (dispatch, getState) => {
     const state = getState();
 
@@ -138,7 +141,7 @@ export function doSetAutoLaunch(value) {
               dispatch(doSetClientSetting(SETTINGS.AUTO_LAUNCH, false));
               dispatch(
                 doToast({
-                  message: __('LBRY auto-launch on login disabled. UE!A'),
+                  message: disabledSnack,
                 })
               );
             });
@@ -149,7 +152,7 @@ export function doSetAutoLaunch(value) {
               dispatch(doSetClientSetting(SETTINGS.AUTO_LAUNCH, true));
               dispatch(
                 doToast({
-                  message: __('LBRY auto-launch on login enabled. U!EAL'),
+                  message: enabledSnack,
                 })
               );
             });
@@ -165,7 +168,7 @@ export function doSetAutoLaunch(value) {
               dispatch(doSetClientSetting(SETTINGS.AUTO_LAUNCH, true));
               dispatch(
                 doToast({
-                  message: __('LBRY auto-launch on login enabled. T!Eenable'),
+                  message: enabledSnack,
                 })
               );
             })
@@ -179,7 +182,7 @@ export function doSetAutoLaunch(value) {
             dispatch(doSetClientSetting(SETTINGS.AUTO_LAUNCH, false));
             dispatch(
               doToast({
-                message: __('LBRY auto-launch on login disabled. FEdisable'),
+                message: disabledSnack,
               })
             );
           });
