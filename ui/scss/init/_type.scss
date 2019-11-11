@@ -2,6 +2,7 @@
   font-family: 'Inter';
   font-style: normal;
   font-weight: 300;
+  font-display: swap;
   src: url('../../static/font/inter/300.woff2') format('woff2'), url('../../static/font/inter/300.woff') format('woff');
 }
 
@@ -9,6 +10,7 @@
   font-family: 'Inter';
   font-style: italic;
   font-weight: 300;
+  font-display: swap;
   src: url('../../static/font/inter/300i.woff2') format('woff2'),
     url('../../static/font/inter/300i.woff') format('woff');
 }
@@ -17,6 +19,7 @@
   font-family: 'Inter';
   font-style: normal;
   font-weight: 400;
+  font-display: swap;
   src: url('../../static/font/inter/400.woff2') format('woff2'), url('../../static/font/inter/400.woff') format('woff');
 }
 
@@ -24,6 +27,7 @@
   font-family: 'Inter';
   font-style: italic;
   font-weight: 400;
+  font-display: swap;
   src: url('../../static/font/inter/400i.woff2') format('woff2'),
     url('../../static/font/inter/400i.woff') format('woff');
 }
@@ -32,6 +36,7 @@
   font-family: 'Inter';
   font-style: normal;
   font-weight: 700;
+  font-display: swap;
   src: url('../../static/font/inter/700.woff2') format('woff2'), url('../../static/font/inter/700i.woff') format('woff');
 }
 
@@ -39,6 +44,7 @@
   font-family: 'Inter';
   font-style: italic;
   font-weight: 700;
+  font-display: swap;
   src: url('../../static/font/inter/700i.woff2') format('woff2'),
     url('../../static/font/inter/700i.woff') format('woff');
 }
