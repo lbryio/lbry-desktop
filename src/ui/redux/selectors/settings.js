@@ -21,7 +21,10 @@ export const selectIsFetchingLanguage = createSelector(
 export const makeSelectClientSetting = setting =>
   createSelector(
     selectClientSettings,
-    settings => (settings ? settings[setting] : undefined)
+    settings => {
+      settings && console.log(settings);
+      return settings ? settings[setting] : undefined;
+    }
   );
 
 // refactor me

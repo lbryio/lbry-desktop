@@ -17,8 +17,8 @@ function SettingAutoLaunch(props: Props) {
       <FormField
         type="checkbox"
         name="autolaunch"
-        onChange={() => {
-          setAutoLaunch(!autoLaunch);
+        onChange={e => {
+          setAutoLaunch(e.target.checked);
         }}
         checked={autoLaunch}
         label={__('Autolaunch on login')}

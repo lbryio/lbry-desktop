@@ -1,4 +1,4 @@
-import { Lbry, ACTIONS } from 'lbry-redux';
+import { Lbry, ACTIONS, doToast } from 'lbry-redux';
 import * as SETTINGS from 'constants/settings';
 import analytics from 'analytics';
 import { launcher } from 'util/autoLaunch';
@@ -90,9 +90,9 @@ export function doSetAutoLaunch(value) {
     const state = getState();
 
     const autoLaunch = makeSelectClientSetting(SETTINGS.AUTO_LAUNCH)(state);
+    // on page reload, for some reason autoLaunch reads as whatever reducer default is
 
     if (value === undefined) {
-      console.log('undefined:,', String(autoLaunch), value && String(value));
       launcher.isEnabled().then(isEnabled => {
         if (isEnabled) {
           if (!autoLaunch) {
@@ -100,7 +100,7 @@ export function doSetAutoLaunch(value) {
               dispatch(doSetClientSetting(SETTINGS.AUTO_LAUNCH, false));
               dispatch(
                 doToast({
-                  message: __('LBRY auto-launch on login disabled.'),
+                  message: __('LBRY auto-launch on login disabled. UE!A'),
                 })
               );
             });
@@ -111,7 +111,7 @@ export function doSetAutoLaunch(value) {
               dispatch(doSetClientSetting(SETTINGS.AUTO_LAUNCH, true));
               dispatch(
                 doToast({
-                  message: __('LBRY auto-launch on login enabled.'),
+                  message: __('LBRY auto-launch on login enabled. U!EAL'),
                 })
               );
             });
@@ -127,7 +127,7 @@ export function doSetAutoLaunch(value) {
               dispatch(doSetClientSetting(SETTINGS.AUTO_LAUNCH, true));
               dispatch(
                 doToast({
-                  message: __('LBRY auto-launch on login enabled.'),
+                  message: __('LBRY auto-launch on login enabled. T!Eenable'),
                 })
               );
             })
@@ -141,7 +141,7 @@ export function doSetAutoLaunch(value) {
             dispatch(doSetClientSetting(SETTINGS.AUTO_LAUNCH, false));
             dispatch(
               doToast({
-                message: __('LBRY auto-launch on login disabled.'),
+                message: __('LBRY auto-launch on login disabled. FEdisable'),
               })
             );
           });

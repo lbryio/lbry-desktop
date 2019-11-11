@@ -323,6 +323,7 @@ export function doDaemonReady() {
 
     // @if TARGET='app'
     dispatch(doBalanceSubscribe());
+    // setAutoLaunch in splash?
     dispatch(doSetAutoLaunch());
     dispatch(doFetchDaemonSettings());
     dispatch(doFetchFileInfosAndPublishedClaims());
