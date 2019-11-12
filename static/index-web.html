@@ -2,6 +2,7 @@
 <html>
   <head>
     <meta charset="utf-8" />
+    <script src="/ui.js" async></script>
     <!-- VARIABLE_HEAD_BEGIN -->
     <title>lbry.tv</title>
     <meta property="og:url" content="https://beta.lbry.tv" />
@@ -15,42 +16,5 @@
 
   <body>
     <div id="app"></div>
-    <script>
-      window.i18n_messages = {};
-
-      function loadUi () {
-        const script = document.createElement('script');
-        script.setAttribute('src', '/ui.js');
-        document.body.appendChild(script);
-      }
-
-      let lang;
-      try {
-        const browserLocale = window.navigator.language.slice(0,2);
-        lang = window.localStorage.getItem('language') || browserLocale || 'en';
-      } catch {
-        lang = 'en';
-      }
-
-      /*this should match doSetLanguage in action/settings.js*/
-      if (lang && lang != 'en') {
-        fetch('https://lbry.com/i18n/get/lbry-desktop/app-strings/' + lang + '.json')
-                .then(r => r.json())
-                .then(j => { window.i18n_messages[lang] = j; loadUi(); })
-                .catch(() => {
-                  window.localStorage.removeItem('language');
-                  loadUi();
-                });
-      } else {
-        loadUi();
-      }
-    </script>
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-    <script>
-      (adsbygoogle = window.adsbygoogle || []).push({
-        google_ad_client: "ca-pub-7620985872686147",
-        enable_page_level_ads: true
-      });
-    </script>
   </body>
 </html>

@@ -14,7 +14,7 @@ const defaultState = {
     [SETTINGS.ENABLE_SYNC]: true,
 
     // UI
-    [SETTINGS.LANGUAGE]: window.localStorage.getItem(SETTINGS.LANGUAGE) || 'en',
+    [SETTINGS.LANGUAGE]: window.localStorage.getItem(SETTINGS.LANGUAGE) || window.navigator.language.slice(0, 2) || 'en',
     [SETTINGS.THEME]: __('light'),
     [SETTINGS.THEMES]: [__('light'), __('dark')],
     [SETTINGS.SUPPORT_OPTION]: false,
