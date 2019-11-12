@@ -86,34 +86,37 @@ export function doSetDarkTime(value, options) {
 }
 
 export function doSetLanguage(language) {
-  return dispatch => {
-    // this should match the behavior/logic in index-web.html
-    fetch('https://lbry.com/i18n/get/lbry-desktop/app-strings/' + language + '.json')
-      .then(r => r.json())
-      .then(j => {
-        window.i18n_messages[language] = j;
-        dispatch({
-          type: LOCAL_ACTIONS.DOWNLOAD_LANGUAGE_SUCCESS,
-          data: {
-            language,
-          },
+  return (dispatch, getState) => {
+    const { settings } = getState();
+    if (settings.language !== language || !settings.loadedLanguages.include(language)) {
+      // this should match the behavior/logic in index-web.html
+      fetch('https://lbry.com/i18n/get/lbry-desktop/app-strings/' + language + '.json')
+        .then(r => r.json())
+        .then(j => {
+          window.i18n_messages[language] = j;
+          dispatch({
+            type: LOCAL_ACTIONS.DOWNLOAD_LANGUAGE_SUCCESS,
+            data: {
+              language,
+            },
+          });
+        })
+        .then(() => {
+          // set on localStorage so it can be read outside of redux
+          window.localStorage.setItem(SETTINGS.LANGUAGE, language);
+          dispatch(doSetClientSetting(SETTINGS.LANGUAGE, language));
+        })
+        .catch(e => {
+          window.localStorage.setItem(SETTINGS.LANGUAGE, 'en');
+          dispatch(doSetClientSetting(SETTINGS.LANGUAGE, 'en'));
+          const languageName = SUPPORTED_LANGUAGES[language] ? SUPPORTED_LANGUAGES[language] : language;
+          dispatch(
+            doToast({
+              message: __('Failed to load %language% translations.', { language: languageName }),
+              error: true,
+            })
+          );
         });
-      })
-      .then(() => {
-        // set on localStorage so it can be read outside of redux
-        window.localStorage.setItem(SETTINGS.LANGUAGE, language);
-        dispatch(doSetClientSetting(SETTINGS.LANGUAGE, language));
-      })
-      .catch(e => {
-        window.localStorage.setItem(SETTINGS.LANGUAGE, 'en');
-        dispatch(doSetClientSetting(SETTINGS.LANGUAGE, 'en'));
-        const languageName = SUPPORTED_LANGUAGES[language] ? SUPPORTED_LANGUAGES[language] : language;
-        dispatch(
-          doToast({
-            message: __('Failed to load %language% translations.', { language: languageName }),
-            error: true,
-          })
-        );
-      });
+    }
   };
 }
