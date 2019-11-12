@@ -15,8 +15,17 @@ import createWindow from './createWindow';
 import pjson from '../package.json';
 import startSandbox from './startSandbox';
 import installDevtools from './installDevtools';
-
-autoUpdater.autoDownload = true;
+import fs from 'fs';
+import path from 'path';
+const filePath = path.join(process.resourcesPath, 'static', 'upgradeDisabled');
+let upgradeDisabled;
+try {
+  fs.accessSync(filePath, fs.constants.R_OK);
+  upgradeDisabled = true;
+} catch (err) {
+  upgradeDisabled = false;
+}
+autoUpdater.autoDownload = !upgradeDisabled;
 
 // This is set to true if an auto update has been downloaded through the Electron
 // auto-update system and is ready to install. If the user declined an update earlier,
@@ -271,7 +280,7 @@ ipcMain.on('version-info-requested', () => {
           }
         }
       } else if (rendererWindow) {
-        rendererWindow.webContents.send('version-info-received', localVersion);
+        rendererWindow.webContents.send('version-info-received', { localVersion });
       }
     });
   };
@@ -300,6 +309,11 @@ ipcMain.on('version-info-requested', () => {
       }
     });
   };
+
+  if (upgradeDisabled && rendererWindow) {
+    rendererWindow.webContents.send('version-info-received', { localVersion });
+    return;
+  }
 
   requestLatestRelease();
 });
