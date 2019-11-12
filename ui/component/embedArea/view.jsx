@@ -24,7 +24,6 @@ export default function EmbedArea(props: Props) {
 
   function copyToClipboard() {
     const topRef = input.current;
-    console.log(topRef);
     if (topRef && topRef.input && topRef.input.current) {
       topRef.input.current.select();
       document.execCommand('copy');

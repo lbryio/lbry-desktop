@@ -21,10 +21,8 @@ export const selectLoadedLanguages = createSelector(
 export const makeSelectClientSetting = setting =>
   createSelector(
     selectClientSettings,
-    settings => {
-      settings && console.log(settings);
-      return settings ? settings[setting] : undefined;
-    }
+    settings => (settings ? settings[setting] : undefined)
+
   );
 
 // refactor me
