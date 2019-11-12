@@ -38,7 +38,7 @@ function escapeHtmlProperty(property) {
 }
 
 function buildOgMetadata(uri, claim) {
-  const { isChannel } = parseURI(uri);
+  const { isChannel, claimName } = parseURI(uri);
   const title = escapeHtmlProperty(claim.title ? claim.title : claimName);
   const claimDescription =
     claim.description && claim.description.length > 0
