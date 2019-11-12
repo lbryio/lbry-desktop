@@ -6,11 +6,6 @@
   },
   "files": [
     {
-      "from": "dist/electron/ui",
-      "to": "./",
-      "filter": ["!dist/!electron/ui/**/*"]
-    },
-    {
       "from": "dist/electron/webpack",
       "to": "./",
       "filter": ["!dist/!electron/!webpack/*.js", "!dist/!electron/!webpack/!static/**/*"]
