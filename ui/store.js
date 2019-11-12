@@ -3,7 +3,7 @@ import * as SETTINGS from 'constants/settings';
 import { persistStore, persistReducer } from 'redux-persist';
 import autoMergeLevel2 from 'redux-persist/lib/stateReconciler/autoMergeLevel2';
 import createCompressor from 'redux-persist-transform-compress';
-import createFilter from 'redux-persist-transform-filter';
+import { createFilter, createBlacklistFilter } from 'redux-persist-transform-filter';
 import localForage from 'localforage';
 import { createStore, applyMiddleware, compose } from 'redux';
 import thunk from 'redux-thunk';
@@ -56,6 +56,7 @@ const searchFilter = createFilter('search', ['options']);
 const tagsFilter = createFilter('tags', ['followedTags']);
 const subscriptionsFilter = createFilter('subscriptions', ['subscriptions']);
 const blockedFilter = createFilter('blocked', ['blockedChannels']);
+const settingsFilter = createBlacklistFilter('settings', ['loadedLanguages']);
 const whiteListedReducers = [
   'fileInfo',
   'publish',
@@ -79,6 +80,7 @@ const transforms = [
   tagsFilter,
   contentFilter,
   subscriptionsFilter,
+  settingsFilter,
   createCompressor(),
 ];
 
