@@ -2,6 +2,7 @@
 import React from 'react';
 import Button from 'component/button';
 import { FormField, Form } from 'component/common/form';
+import { MINIMUM_PUBLISH_BID } from 'constants/claim';
 
 type Props = {
   uri: string,
@@ -53,13 +54,15 @@ class WalletSendTip extends React.PureComponent<Props, State> {
     let tipError;
 
     if (!tipAmount) {
-      tipError = __('Tip must be a number');
+      tipError = __('Amount must be a number');
     } else if (tipAmount <= 0) {
-      tipError = __('Tip must be a positive number');
+      tipError = __('Amount must be a positive number');
+    } else if (tipAmount < MINIMUM_PUBLISH_BID) {
+      tipError = __('Amount must be higher');
     } else if (!validTipInput) {
-      tipError = __('Tip must have no more than 8 decimal places');
+      tipError = __('Amount must have no more than 8 decimal places');
     } else if (tipAmount === balance) {
-      tipError = __('Please decrease your tip to account for transaction fees');
+      tipError = __('Please decrease the amount to account for transaction fees');
     } else if (tipAmount > balance) {
       tipError = __('Not enough credits');
     }

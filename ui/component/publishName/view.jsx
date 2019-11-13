@@ -66,7 +66,7 @@ function PublishName(props: Props) {
       bidError = __('Please decrease your deposit to account for transaction fees');
     } else if (totalAvailableBidAmount < bid) {
       bidError = __('Deposit cannot be higher than your balance');
-    } else if (bid <= MINIMUM_PUBLISH_BID) {
+    } else if (bid < MINIMUM_PUBLISH_BID) {
       bidError = __('Your deposit must be higher');
     }
 
@@ -115,7 +115,7 @@ function PublishName(props: Props) {
             onChange={event => updatePublishForm({ bid: parseFloat(event.target.value) })}
             helper={
               <BidHelpText
-                uri={uri}
+                uri={'lbry://' + name}
                 amountNeededForTakeover={amountNeededForTakeover}
                 isResolvingUri={isResolvingUri}
               />

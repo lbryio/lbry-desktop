@@ -862,5 +862,12 @@
   "Explore new content": "Explore new content",
   "Use this address to receive LBC.": "Use this address to receive LBC.",
   "Embedded": "Embedded",
-  "Failed to load %language% translations.": "Failed to load %language% translations."
+  "Failed to load %language% translations.": "Failed to load %language% translations.",
+  "trending for everyone": "trending for everyone",
+  "discover some channels!": "discover some channels!",
+  "Please try again in a few seconds.": "Please try again in a few seconds.",
+  "contact support": "contact support",
+  "Look what's %trending% or %discover%": "Look what's %trending% or %discover%",
+  "Sorry, your request timed out. %again%": "Sorry, your request timed out. %again%",
+  "If you continue to have issues, please %support%.": "If you continue to have issues, please %support%."
 }
