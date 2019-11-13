@@ -15,7 +15,7 @@ function SettingLanguage(props: Props) {
   const [isFetching, setIsFetching] = useState(false);
 
   // this should be fetched from lbry.com/transifex
-  const languages = { en: 'English', pl: 'Polski', id: 'Bahasa Indonesia', de: 'Deutsche' , fr: 'Français', sk: 'Slovenský', tr: 'Türk', zh: '中文' };
+  const languages = { en: 'English', pl: 'Polski', id: 'Bahasa Indonesia', de: 'Deutsche' , fr: 'Français', sk: 'Slovenský', tr: 'Türkçe', zh: '中文' };
 
   const { language, showToast, setClientSetting } = props;
 
