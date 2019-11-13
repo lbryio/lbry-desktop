@@ -17,8 +17,8 @@ class CardMedia extends React.PureComponent<Props> {
       return <FreezeframeWrapper src={thumbnail} className={className} />;
     }
 
-    const url = thumbnail || Placeholder;
-    return <div style={{ backgroundImage: `url('${url.replace(/'/g,"\\'")}')` }} className={className} />;
+    const url = thumbnail ? 'https://ext.thumbnails.lbry.com/400x,q55/' + thumbnail : Placeholder;
+    return <div style={{ backgroundImage: `url('${url.replace(/'/g, "\\'")}')` }} className={className} />;
   }
 }
 
