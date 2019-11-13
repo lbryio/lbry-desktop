@@ -35,10 +35,14 @@ function UserEmail(props: Props) {
 
   return (
     <Card
-      title={__('Email')}
-      subtitle={__(
-        'This information is disclosed only to LBRY, Inc. and not to the LBRY network. It is only required to save account information and earn rewards.'
-      )}
+      title={__('lbry.tv Account')}
+      subtitle={
+        isVerified
+          ? undefined
+          : __(
+              'Creating a lbry.tv account will allow you to earn rewards, receive content and security updates, and optionally backup your data.'
+            )
+      }
       actions={
         isVerified ? (
           <FormField
@@ -59,7 +63,7 @@ function UserEmail(props: Props) {
             value={email || ''}
           />
         ) : (
-          <Button button="primary" label={__('Add Email')} navigate={`/$/${PAGES.AUTH}`} />
+          <Button button="primary" label={__('Sign In')} navigate={`/$/${PAGES.AUTH}`} />
         )
       }
     />

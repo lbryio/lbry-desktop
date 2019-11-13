@@ -142,7 +142,7 @@ class FilePage extends React.Component<Props> {
               {__(
                 'The publisher has chosen to charge LBC to view this content. Your balance is currently too low to view it.'
               )}{' '}
-              {__('Checkout')} <Button button="link" navigate="/$/rewards" label={__('the rewards page')} />{' '}
+              {__('Check out')} <Button button="link" navigate="/$/rewards" label={__('the rewards page')} />{' '}
               {__('or send more LBC to your wallet.')}
             </div>
           )}
