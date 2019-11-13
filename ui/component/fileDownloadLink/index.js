@@ -19,8 +19,7 @@ const select = (state, props) => ({
 const perform = dispatch => ({
   openModal: (modal, props) => dispatch(doOpenModal(modal, props)),
   pause: () => dispatch(doSetPlayingUri(null)),
-  download: uri => dispatch(doPlayUri(uri, false, true)),
-  triggerAnalyticsView: (uri, timeToStart) => dispatch(doAnalyticsView(uri, timeToStart)),
+  download: uri => dispatch(doPlayUri(uri, false, true, () => dispatch(doAnalyticsView(uri)))),
 });
 
 export default connect(

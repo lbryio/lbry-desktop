@@ -179,19 +179,28 @@ export function doFetchClaimsByChannel(uri: string, page: number = 1, pageSize: 
   };
 }
 
-export function doPurchaseUriWrapper(uri: string, cost: number, saveFile: boolean) {
+export function doPurchaseUriWrapper(uri: string, cost: number, saveFile: boolean, cb: ?() => void) {
   return (dispatch: Dispatch, getState: () => any) => {
     function onSuccess(fileInfo) {
-      dispatch(doUpdateLoadStatus(uri, fileInfo.outpoint));
+      if (saveFile) {
+        dispatch(doUpdateLoadStatus(uri, fileInfo.outpoint));
+      }
+
+      if (cb) {
+        cb();
+      }
     }
 
-    // Only pass the success callback if we are saving the file, otherwise we don't show the download percentage
-    const successCallBack = saveFile ? onSuccess : undefined;
-    dispatch(doPurchaseUri(uri, { costInfo: cost }, saveFile, successCallBack));
+    dispatch(doPurchaseUri(uri, { costInfo: cost }, saveFile, onSuccess));
   };
 }
 
-export function doPlayUri(uri: string, skipCostCheck: boolean = false, saveFileOverride: boolean = false) {
+export function doPlayUri(
+  uri: string,
+  skipCostCheck: boolean = false,
+  saveFileOverride: boolean = false,
+  cb?: () => void
+) {
   return (dispatch: Dispatch, getState: () => any) => {
     const state = getState();
     const fileInfo = makeSelectFileInfoForUri(uri)(state);
@@ -211,7 +220,7 @@ export function doPlayUri(uri: string, skipCostCheck: boolean = false, saveFileO
     const instantPurchaseMax = makeSelectClientSetting(SETTINGS.INSTANT_PURCHASE_MAX)(state);
 
     function beginGetFile() {
-      dispatch(doPurchaseUriWrapper(uri, cost, saveFile));
+      dispatch(doPurchaseUriWrapper(uri, cost, saveFile, cb));
     }
 
     function attemptPlay(instantPurchaseMax = null) {
