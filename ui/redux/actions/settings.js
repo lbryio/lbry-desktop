@@ -131,7 +131,6 @@ export function doSetAutoLaunch(value) {
     const state = getState();
 
     const autoLaunch = makeSelectClientSetting(SETTINGS.AUTO_LAUNCH)(state);
-    // on page reload, for some reason autoLaunch reads as whatever reducer default is
 
     if (value === undefined) {
       launcher.isEnabled().then(isEnabled => {
@@ -172,10 +171,11 @@ export function doSetAutoLaunch(value) {
                 })
               );
             })
-            .catch();
+        } else {
+          dispatch(doSetClientSetting(SETTINGS.AUTO_LAUNCH, true))
         }
       });
-    } else {
+    } else { // value = false
       launcher.isEnabled().then(function(isEnabled) {
         if (isEnabled) {
           launcher.disable().then(() => {
@@ -186,6 +186,8 @@ export function doSetAutoLaunch(value) {
               })
             );
           });
+        } else {
+          dispatch(doSetClientSetting(SETTINGS.AUTO_LAUNCH, false))
         }
       });
     }
