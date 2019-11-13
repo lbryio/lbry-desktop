@@ -5,7 +5,7 @@ import moment from 'moment';
 const reducers = {};
 const defaultState = {
   isNight: false,
-  loadedLanguages: Object.keys(window.i18n_messages) || [],
+  loadedLanguages: [...Object.keys(window.i18n_messages), 'en'] || ['en'],
   daemonSettings: {},
   clientSettings: {
     // UX
@@ -14,7 +14,8 @@ const defaultState = {
     [SETTINGS.ENABLE_SYNC]: true,
 
     // UI
-    [SETTINGS.LANGUAGE]: window.localStorage.getItem(SETTINGS.LANGUAGE) || window.navigator.language.slice(0, 2) || 'en',
+    [SETTINGS.LANGUAGE]:
+      window.localStorage.getItem(SETTINGS.LANGUAGE) || window.navigator.language.slice(0, 2) || 'en',
     [SETTINGS.THEME]: __('light'),
     [SETTINGS.THEMES]: [__('light'), __('dark')],
     [SETTINGS.SUPPORT_OPTION]: false,
