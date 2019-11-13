@@ -29,8 +29,15 @@ function UserEmailNew(props: Props) {
 
   return (
     <React.Fragment>
-      <h1 className="section__title--large">{__('Sign In to LBRY')}</h1>
-      <p className="section__subtitle">{__('Create a new account or sign in.')}</p>
+      <h1 className="section__title--large">{__('Sign In to lbry.tv')}</h1>
+      <p className="section__subtitle">
+        {/* @if TARGET='web' */}
+        {__('Create a new account or sign in.')}
+        {/* @endif */}
+        {/* @if TARGET='app' */}
+        {__('An account with lbry.tv allows you to earn rewards and backup your data.')}
+        {/* @endif */}
+      </p>
       <Form onSubmit={handleSubmit} className="section__body">
         <FormField
           autoFocus
@@ -49,7 +56,7 @@ function UserEmailNew(props: Props) {
             name="sync_checkbox"
             label={
               <React.Fragment>
-                {__('Sync balance and preferences across devices.')}{' '}
+                {__('Backup your account and wallet data.')}{' '}
                 <Button button="link" href="https://lbry.com/faq/account-sync" label={__('Learn More')} />
               </React.Fragment>
             }

@@ -1,14 +1,13 @@
 // @flow
-import * as PAGES from 'constants/pages';
 import React, { PureComponent, Fragment } from 'react';
 import BusyIndicator from 'component/common/busy-indicator';
 import RewardListClaimed from 'component/rewardListClaimed';
 import RewardTile from 'component/rewardTile';
 import Button from 'component/button';
 import Page from 'component/page';
-import Card from 'component/common/card';
 import classnames from 'classnames';
 import { rewards as REWARD_TYPES } from 'lbryinc';
+import RewardAuthIntro from 'component/rewardAuthIntro';
 
 type Props = {
   doAuth: () => void,
@@ -38,21 +37,7 @@ class RewardsPage extends PureComponent<Props> {
 
     if (user && !user.is_reward_approved && rewardsEnabled) {
       if (!user.primary_email || !user.has_verified_email || !user.is_identity_verified) {
-        return (
-          <Card
-            title={__('Sign In To Unlock Rewards')}
-            subtitle={__(
-              'This is optional. You can continue to use this app without rewards, but LBC may be needed for some tasks.'
-            )}
-            actions={
-              <Button
-                navigate={`/$/${PAGES.AUTH}?redirect=/$/${PAGES.REWARDS}`}
-                button="primary"
-                label={__('Unlock Rewards')}
-              />
-            }
-          />
-        );
+        return <RewardAuthIntro />;
       }
       return (
         <section className="card card--section">

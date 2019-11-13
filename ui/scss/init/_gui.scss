@@ -44,6 +44,9 @@ h6 {
 
 p {
   font-size: var(--font-body);
+  &:not(:last-child) {
+    margin-bottom: var(--spacing-small);
+  }
 }
 
 ul,

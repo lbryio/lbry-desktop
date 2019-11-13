@@ -4,8 +4,7 @@ import PublishForm from 'component/publishForm';
 import Page from 'component/page';
 import Yrbl from 'component/yrbl';
 import LbcSymbol from 'component/common/lbc-symbol';
-import CreditAmount from 'component/common/credit-amount';
-import Button from 'component/button';
+import RewardAuthIntro from 'component/rewardAuthIntro';
 
 type Props = {
   balance: number,
@@ -13,8 +12,7 @@ type Props = {
 };
 
 function PublishPage(props: Props) {
-  const { balance, totalRewardValue } = props;
-  const totalRewardRounded = Math.floor(totalRewardValue / 10) * 10;
+  const { balance } = props;
 
   function scrollToTop() {
     const mainContent = document.querySelector('main');
@@ -50,17 +48,7 @@ function PublishPage(props: Props) {
               </Fragment>
             }
           />
-          <section className="card card--section">
-            <h1 className="card__title">{__('LBRY Credits Required')}</h1>
-            <p className="card__subtitle">
-              {__(' There are a variety of ways to get credits, including more than')}{' '}
-              <CreditAmount inheritStyle amount={totalRewardRounded} />{' '}
-              {__('in free rewards for participating in the LBRY beta.')}
-            </p>
-            <div className="card__actions">
-              <Button button="link" navigate="/$/rewards" label={__('Checkout the rewards')} />
-            </div>
-          </section>
+          <RewardAuthIntro />
         </Fragment>
       )}
       <PublishForm scrollToTop={scrollToTop} disabled={balance === 0} />
