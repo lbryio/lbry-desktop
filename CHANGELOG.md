@@ -13,10 +13,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ### Added
 
-- Search on downloads page ([#2969](https://github.com/lbryio/lbry-sdk/pull/2969))
+- Search on downloads page ([#2969](https://github.com/lbryio/lbry-desktop/pull/2969))
 - Clear support state when clearing cache in settings([#3149](https://github.com/lbryio/lbry-desktop/pull/3149))
+- Allow disabling app updates for some linux based builds ([#3206](https://github.com/lbryio/lbry-desktop/pull/3206))
+- Add French, Turkish, Slovak, and Chinese language support and improved how we are loading languages ([#3180](https://github.com/lbryio/lbry-desktop/pull/3180))
 
 ### Changed
+
+- Updated lbry-sdk to [0.46.1](https://github.com/lbryio/lbry-sdk/releases/tag/v0.46.1)
 
 ## [0.37.1] - [2019-10-22]
 
