@@ -18,7 +18,9 @@ export const doPublishDesktop = (filePath: string) => (dispatch: Dispatch, getSt
     const { permanent_url: url } = pendingClaim;
     const actions = [];
 
+    // @if TARGET='app'
     actions.push(push(`/$/${PAGES.PUBLISHED}`));
+    // @endif
 
     actions.push({
       type: ACTIONS.PUBLISH_SUCCESS,
@@ -32,7 +34,13 @@ export const doPublishDesktop = (filePath: string) => (dispatch: Dispatch, getSt
     const myNewClaims = isEdit
       ? myClaims.map(claim => (isMatch(claim) ? pendingClaim : claim))
       : myClaims.concat(pendingClaim);
-    actions.push(doOpenModal(MODALS.PUBLISH, { uri: url, isEdit, filePath }));
+    actions.push(
+      doOpenModal(MODALS.PUBLISH, {
+        uri: url,
+        isEdit,
+        filePath,
+      })
+    );
     actions.push({
       type: ACTIONS.FETCH_CLAIM_LIST_MINE_COMPLETED,
       data: {
@@ -44,10 +52,19 @@ export const doPublishDesktop = (filePath: string) => (dispatch: Dispatch, getSt
 
   const publishFail = error => {
     const actions = [];
-    actions.push({ type: ACTIONS.PUBLISH_FAIL });
+    actions.push({
+      type: ACTIONS.PUBLISH_FAIL,
+    });
     actions.push(doError(error.message));
     dispatch(batchActions(...actions));
   };
+
+  // Redirect on web immediately because we have a file upload progress componenet
+  // on the publishes page. This doesn't exist on desktop so wait until we get a response
+  // from the SDK
+  // @if TARGET='web'
+  actions.push(push(`/$/${PAGES.PUBLISHED}`));
+  // @endif
 
   dispatch(doPublish(publishSuccess, publishFail));
 };
