@@ -17,7 +17,11 @@ class CardMedia extends React.PureComponent<Props> {
       return <FreezeframeWrapper src={thumbnail} className={className} />;
     }
 
-    const url = thumbnail ? 'https://ext.thumbnails.lbry.com/400x,q55/' + thumbnail : Placeholder;
+    const url = thumbnail
+      ? 'https://ext.thumbnails.lbry.com/400x,q55/' +
+        // The image server will redirect if we don't remove the double slashes after http(s)
+        thumbnail.replace('https://', 'https:/').replace('http://', 'http:/')
+      : Placeholder;
     return <div style={{ backgroundImage: `url('${url.replace(/'/g, "\\'")}')` }} className={className} />;
   }
 }
