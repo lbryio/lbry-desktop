@@ -113,7 +113,7 @@ export function doSetLanguage(language) {
           dispatch(
             doToast({
               message: __('Failed to load %language% translations.', { language: languageName }),
-              error: true,
+              isError: true,
             })
           );
         });
