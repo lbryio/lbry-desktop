@@ -17,8 +17,7 @@ export default appState => {
     defaultHeight: height,
   });
 
-  console.log('ARGV', process.argv)
-  const startMinimized =   (process.argv || []).includes('--hidden');
+  const startMinimized = (process.argv || []).includes('--hidden');
 
   const windowConfiguration = {
     backgroundColor: '#270f34', // Located in src/scss/init/_vars.scss `--color-background--splash`

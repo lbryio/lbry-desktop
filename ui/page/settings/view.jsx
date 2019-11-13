@@ -632,7 +632,8 @@ class SettingsPage extends React.PureComponent<Props, State> {
                 </React.Fragment>
               }
             />
-            <Card title={__('Launch on login')} actions={<SettingAutoLaunch />} />
+
+            <Card title={__('Startup Preferences')} actions={<SettingAutoLaunch />} />
 
             <Card
               title={__('Application Cache')}

@@ -21,9 +21,9 @@ function SettingAutoLaunch(props: Props) {
           setAutoLaunch(e.target.checked);
         }}
         checked={autoLaunch}
-        label={__('Autolaunch on login')}
+        label={__('Start minimized')}
         helper={__(
-          'Autoplay video and audio files when navigating to a file, as well as the next related item when a file finishes playing.'
+          'Improve view speed and help the LBRY network by allowing the app to cuddle up in your system tray.'
         )}
       />
     </React.Fragment>

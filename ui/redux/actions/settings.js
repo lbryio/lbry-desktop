@@ -138,22 +138,12 @@ export function doSetAutoLaunch(value) {
           if (!autoLaunch) {
             launcher.disable().then(() => {
               dispatch(doSetClientSetting(SETTINGS.AUTO_LAUNCH, false));
-              dispatch(
-                doToast({
-                  message: disabledSnack,
-                })
-              );
             });
           }
         } else {
           if (autoLaunch) {
             launcher.enable().then(() => {
               dispatch(doSetClientSetting(SETTINGS.AUTO_LAUNCH, true));
-              dispatch(
-                doToast({
-                  message: enabledSnack,
-                })
-              );
             });
           }
         }
@@ -161,33 +151,22 @@ export function doSetAutoLaunch(value) {
     } else if (value === true) {
       launcher.isEnabled().then(function(isEnabled) {
         if (!isEnabled) {
-          launcher
-            .enable()
-            .then(() => {
-              dispatch(doSetClientSetting(SETTINGS.AUTO_LAUNCH, true));
-              dispatch(
-                doToast({
-                  message: enabledSnack,
-                })
-              );
-            })
+          launcher.enable().then(() => {
+            dispatch(doSetClientSetting(SETTINGS.AUTO_LAUNCH, true));
+          });
         } else {
-          dispatch(doSetClientSetting(SETTINGS.AUTO_LAUNCH, true))
+          dispatch(doSetClientSetting(SETTINGS.AUTO_LAUNCH, true));
         }
       });
-    } else { // value = false
+    } else {
+      // value = false
       launcher.isEnabled().then(function(isEnabled) {
         if (isEnabled) {
           launcher.disable().then(() => {
             dispatch(doSetClientSetting(SETTINGS.AUTO_LAUNCH, false));
-            dispatch(
-              doToast({
-                message: disabledSnack,
-              })
-            );
           });
         } else {
-          dispatch(doSetClientSetting(SETTINGS.AUTO_LAUNCH, false))
+          dispatch(doSetClientSetting(SETTINGS.AUTO_LAUNCH, false));
         }
       });
     }
