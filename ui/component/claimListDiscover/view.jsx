@@ -10,6 +10,7 @@ import ClaimList from 'component/claimList';
 import Tag from 'component/tag';
 import ClaimPreview from 'component/claimPreview';
 import { toCapitalCase } from 'util/string';
+import I18nMessage from 'component/i18nMessage';
 
 const PAGE_SIZE = 20;
 const TIME_DAY = 'day';
@@ -67,6 +68,7 @@ function ClaimListDiscover(props: Props) {
   const didNavigateForward = history.action === 'PUSH';
   const [page, setPage] = useState(1);
   const { search } = location;
+  const [forceRefresh, setForceRefresh] = useState();
   const urlParams = new URLSearchParams(search);
   const personalSort = urlParams.get('sort') || (hideCustomization ? SEARCH_SORT_ALL : SEARCH_SORT_YOU);
   const typeSort = urlParams.get('type') || TYPE_TRENDING;
@@ -124,18 +126,58 @@ function ClaimListDiscover(props: Props) {
 
   const noChannels = (
     <div>
-      <p>{__("You're not following any channels.")}</p>
-      <Button button={'link'} navigate={'/?type=trending&sort=everyone'}>
-        {__("Look what's trending for everyone")}
-      </Button>{' '}
-      {__('or')}{' '}
-      <Button button={'link'} navigate={'/$/following'}>
-        {__('Discover some channels!')}
-      </Button>
+      <p>
+        <I18nMessage>You're not following any channels.</I18nMessage>
+      </p>
+      <p>
+        <I18nMessage
+          tokens={{
+            trending: (
+              <Button
+                button="link"
+                label={__("trending for everyone")}
+                navigate={'/?type=trending&sort=everyone'}
+              />
+            ),
+            discover: <Button button="link" label={__('discover some channels!')} navigate={'/$/following'} />,
+          }}
+        >
+          Look what's %trending% or %discover%
+        </I18nMessage>
+      </p>
     </div>
   );
 
-  const emptyState = personalSort === SEARCH_SORT_CHANNELS ? noChannels : false;
+  const noResults = (
+    <div>
+      <p>
+        <I18nMessage
+          tokens={{
+            again: (
+              <Button
+                button="link"
+                label={__('Please try again in a few seconds.')}
+                onClick={() => setForceRefresh(Date.now())}
+              />
+            ),
+          }}
+        >
+          Sorry, your request timed out. %again%
+        </I18nMessage>
+      </p>
+      <p>
+        <I18nMessage
+          tokens={{
+            support: <Button button="link" label={__('contact support')} href="https://lbry.com/faq/support" />,
+          }}
+        >
+          If you continue to have issues, please %support%.
+        </I18nMessage>
+      </p>
+    </div>
+  );
+
+  const emptyState = personalSort === SEARCH_SORT_CHANNELS && !hasContent ? noChannels : noResults;
 
   function getSearch() {
     let search = `?`;
@@ -177,7 +219,7 @@ function ClaimListDiscover(props: Props) {
       const searchOptions = JSON.parse(optionsStringForEffect);
       doClaimSearch(searchOptions);
     }
-  }, [doClaimSearch, shouldPerformSearch, optionsStringForEffect]);
+  }, [doClaimSearch, shouldPerformSearch, optionsStringForEffect, forceRefresh]);
 
   const header = (
     <Fragment>

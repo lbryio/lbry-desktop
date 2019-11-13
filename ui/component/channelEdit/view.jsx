@@ -5,6 +5,7 @@ import Button from 'component/button';
 import SelectAsset from 'component/selectAsset';
 import TagsSelect from 'component/tagsSelect';
 import * as PAGES from 'constants/pages';
+import { MINIMUM_PUBLISH_BID } from 'constants/claim';
 
 type Props = {
   claim: ChannelClaim,
@@ -68,7 +69,6 @@ function ChannelForm(props: Props) {
   const [params, setParams] = useState(channelParams);
   const [bidError, setBidError] = useState('');
 
-  const MINIMUM_PUBLISH_BID = 0.00000001;
   // If a user changes tabs, update the url so it stays on the same page if they refresh.
   // We don't want to use links here because we can't animate the tab change and using links
   // would alter the Tab label's role attribute, which should stay role="tab" to work with keyboards/screen readers.
@@ -84,7 +84,7 @@ function ChannelForm(props: Props) {
       setBidError(__('Please decrease your deposit to account for transaction fees'));
     } else if (totalAvailableBidAmount < bid) {
       setBidError(__('Deposit cannot be higher than your balance'));
-    } else if (bid <= MINIMUM_PUBLISH_BID) {
+    } else if (bid < MINIMUM_PUBLISH_BID) {
       setBidError(__('Your deposit must be higher'));
     }
   };
