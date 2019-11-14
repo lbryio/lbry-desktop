@@ -1,4 +1,8 @@
 .markdown-preview {
+  > *:last-child {
+    margin-bottom: 0;
+  }
+
   // Headers
   h1,
   h2,
