@@ -6,6 +6,7 @@ import SUPPORTED_LANGUAGES from 'constants/supported_languages';
 import { launcher } from 'util/autoLaunch';
 import { makeSelectClientSetting } from 'redux/selectors/settings';
 
+export const IS_MAC = process.platform === 'darwin';
 const UPDATE_IS_NIGHT_INTERVAL = 5 * 60 * 1000;
 
 export function doFetchDaemonSettings() {
@@ -124,13 +125,14 @@ export function doSetLanguage(language) {
 }
 
 export function doSetAutoLaunch(value) {
-  const enabledSnack = __('LBRY Auto-Launch Enabled');
-  const disabledSnack = __('LBRY Auto-Launch Disabled');
-
   return (dispatch, getState) => {
     const state = getState();
-
     const autoLaunch = makeSelectClientSetting(SETTINGS.AUTO_LAUNCH)(state);
+
+    if (IS_MAC) {
+      launcher.disable();
+      return;
+    }
 
     if (value === undefined) {
       launcher.isEnabled().then(isEnabled => {
