@@ -26,7 +26,7 @@ class SocialShare extends React.PureComponent<Props> {
   input: ?HTMLInputElement;
 
   render() {
-    const { claim } = this.props;
+    const { claim, isChannel } = this.props;
     const { canonical_url: canonicalUrl, permanent_url: permanentUrl } = claim;
     const { webShareable, onDone } = this.props;
     const OPEN_URL = 'https://open.lbry.com/';
@@ -55,7 +55,7 @@ class SocialShare extends React.PureComponent<Props> {
             href={`https://twitter.com/intent/tweet?text=${encodedLbryURL}`}
           />
         </div>
-        {webShareable && <EmbedArea label={__('Embedded')} claim={claim} noSnackbar />}
+        {webShareable && !isChannel && <EmbedArea label={__('Embedded')} claim={claim} noSnackbar />}
         {!webShareable && <p className={'help'}>{__('Paid content cannot be embedded')}</p>}
         <div className="card__actions">
           <Button button="link" label={__('Done')} onClick={onDone} />
