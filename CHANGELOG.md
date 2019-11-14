@@ -244,7 +244,7 @@ This release includes a breaking change that will reset many of your settings. T
 
 ### Changed
 
-- Share content options now use beta.lbry.tv instead of spee.ch ([#2614](https://github.com/lbryio/lbry-desktop/pull/2614))
+- Share content options now use lbry.tv instead of spee.ch ([#2614](https://github.com/lbryio/lbry-desktop/pull/2614))
 
 ### Added
 

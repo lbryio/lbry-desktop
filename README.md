@@ -86,7 +86,7 @@ Double click the installed application to interact with the LBRY network.
 
 ## Running from Source
 
-You can run the web version (beta.lbry.tv), the electron app, or both at the same time.
+You can run the web version (lbry.tv), the electron app, or both at the same time.
 
 #### Prerequisites
 
