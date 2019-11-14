@@ -133,11 +133,7 @@ function ClaimListDiscover(props: Props) {
         <I18nMessage
           tokens={{
             trending: (
-              <Button
-                button="link"
-                label={__("trending for everyone")}
-                navigate={'/?type=trending&sort=everyone'}
-              />
+              <Button button="link" label={__('trending for everyone')} navigate={'/?type=trending&sort=everyone'} />
             ),
             discover: <Button button="link" label={__('discover some channels!')} navigate={'/$/following'} />,
           }}
@@ -177,7 +173,7 @@ function ClaimListDiscover(props: Props) {
     </div>
   );
 
-  const emptyState = personalSort === SEARCH_SORT_CHANNELS && !hasContent ? noChannels : noResults;
+  const emptyState = !loading && (personalSort === SEARCH_SORT_CHANNELS && !hasContent ? noChannels : noResults);
 
   function getSearch() {
     let search = `?`;

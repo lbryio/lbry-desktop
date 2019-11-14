@@ -39,6 +39,7 @@
     "react/jsx-indent": 0,
     "react-hooks/exhaustive-deps": "warn",
     "react-hooks/rules-of-hooks": "error",
+    "react/no-unescaped-entities": 0,
     "space-before-function-paren": [
       "error",
       {
