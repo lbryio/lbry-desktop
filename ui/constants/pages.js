@@ -1,4 +1,5 @@
 export const AUTH = 'signin';
+export const AUTH_VERIFY = 'verify';
 export const BACKUP = 'backup';
 export const CHANNEL = 'channel';
 export const DISCOVER = 'discover';
