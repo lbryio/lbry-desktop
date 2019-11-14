@@ -18,6 +18,7 @@ import CommentCreate from 'component/commentCreate';
 import ClaimUri from 'component/claimUri';
 import ClaimPreview from 'component/claimPreview';
 import HelpLink from 'component/common/help-link';
+import I18nMessage from 'component/i18nMessage/view';
 
 export const FILE_WRAPPER_CLASS = 'grid-area--content';
 
@@ -139,11 +140,14 @@ class FilePage extends React.Component<Props> {
         <div className={`card ${FILE_WRAPPER_CLASS}`}>
           {!fileInfo && insufficientCredits && (
             <div className="media__insufficient-credits help--warning">
-              {__(
-                'The publisher has chosen to charge LBC to view this content. Your balance is currently too low to view it.'
-              )}{' '}
-              {__('Check out')} <Button button="link" navigate="/$/rewards" label={__('the rewards page')} />{' '}
-              {__('or send more LBC to your wallet.')}
+              <I18nMessage
+                tokens={{
+                  reward_link: <Button button="link" navigate="/$/rewards" label={__('Rewards')} />,
+                }}
+              >
+                The publisher has chosen to charge LBC to view this content. Your balance is currently too low to view
+                it. Check out %reward_link% for free LBC or send more LBC to your wallet.
+              </I18nMessage>
             </div>
           )}
           <FileViewerInitiator uri={uri} insufficientCredits={insufficientCredits} />
@@ -215,7 +219,7 @@ class FilePage extends React.Component<Props> {
             <hr />
 
             {channelUri ? (
-              <ClaimPreview uri={channelUri} type="inline" />
+              <ClaimPreview uri={channelUri} type="inline" properties={false} />
             ) : (
               <div className="claim-preview--inline claim-preview-title">{__('Anonymous')}</div>
             )}

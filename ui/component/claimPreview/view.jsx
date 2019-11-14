@@ -233,7 +233,7 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
                 )}
                 <div>
                   {pending ? (
-                    <div>Pending...</div>
+                    <div>{__('Pending...')}</div>
                   ) : (
                     claim &&
                     (isChannel ? (
