@@ -5,15 +5,19 @@ import { FormField, Form } from 'component/common/form';
 import Button from 'component/button';
 import ChannelSection from 'component/selectChannel';
 import usePersistedState from 'effects/use-persisted-state';
+import * as MODALS from 'constants/modal_types';
+import I18nMessage from '../i18nMessage/view';
 
 type Props = {
+  commentingEnabled: boolean,
   uri: string,
   claim: StreamClaim,
+  openModal: (id: string, { onCommentAcknowledge: () => void }) => void,
   createComment: (string, string, string) => void,
 };
 
 export function CommentCreate(props: Props) {
-  const { createComment, claim } = props;
+  const { commentingEnabled, createComment, claim, openModal } = props;
   const { claim_id: claimId } = claim;
   const [commentValue, setCommentValue] = usePersistedState(`comment-${claimId}`, '');
   const [commentAck, setCommentAck] = usePersistedState('comment-acknowledge', false);
@@ -28,8 +32,14 @@ export function CommentCreate(props: Props) {
     setChannel(channel);
   }
 
-  function handleCommentAck(event) {
+  function handleCommentAck() {
     setCommentAck(true);
+  }
+
+  function onTextareaFocus() {
+    if (!commentAck) {
+      openModal(MODALS.COMMENT_ACKNOWEDGEMENT, { onCommentAcknowledge: handleCommentAck });
+    }
   }
 
   function handleSubmit() {
@@ -39,58 +49,35 @@ export function CommentCreate(props: Props) {
 
   useEffect(() => setCharCount(commentValue.length), [commentValue]);
 
+  if (!commentingEnabled) {
+    return (
+      <I18nMessage tokens={{ sign_in_link: <Button button="link" requiresAuth label={__('sign in')} /> }}>
+        Please %sign_in_link% to comment.
+      </I18nMessage>
+    );
+  }
+
   return (
-    <section>
-      {commentAck !== true && (
-        <div>
-          <p>{__('A few things to know before participating in the comment alpha:')}</p>
-          <ul>
-            <li>
-              {__('During the alpha, all comments are sent to a LBRY, Inc. server, not the LBRY network itself.')}
-            </li>
-            <li>
-              {__(
-                'During the alpha, comments are not decentralized or censorship resistant (but we repeat ourselves).'
-              )}
-            </li>
-            <li>
-              {__(
-                'For the initial release, deleting or editing comments is not possible. Please be mindful of this when posting.'
-              )}
-            </li>
-            <li>
-              {__(
-                'When the alpha ends, we will attempt to transition comments, but do not promise to do so. Any transition will likely involve publishing previous comments under a single archive handle.'
-              )}
-            </li>
-          </ul>
-          <Button button="primary" onClick={handleCommentAck} label={__('Got it!')} />
-        </div>
-      )}
-      {commentAck === true && (
-        <Form onSubmit={handleSubmit}>
-          <ChannelSection channel={channel} onChannelChange={handleChannelChange} />
-          <FormField
-            disabled={channel === CHANNEL_NEW}
-            type="textarea"
-            name="content_description"
-            label={__('Comment')}
-            placeholder={__('Your comment')}
-            value={commentValue}
-            charCount={charCount}
-            onChange={handleCommentChange}
-          />
-          <div className="card__actions">
-            <Button
-              button="primary"
-              disabled={channel === CHANNEL_NEW || !commentValue.length}
-              type="submit"
-              label={__('Post')}
-              requiresAuth={IS_WEB}
-            />
-          </div>
-        </Form>
-      )}
-    </section>
+    <Form onSubmit={handleSubmit}>
+      <ChannelSection channel={channel} onChannelChange={handleChannelChange} />
+      <FormField
+        disabled={channel === CHANNEL_NEW}
+        type="textarea"
+        name="content_description"
+        label={__('Comment')}
+        onFocus={onTextareaFocus}
+        placeholder={__('Say something about this...')}
+        value={commentValue}
+        charCount={charCount}
+        onChange={handleCommentChange}
+      />
+      <Button
+        button="primary"
+        disabled={channel === CHANNEL_NEW || !commentValue.length}
+        type="submit"
+        label={__('Post')}
+        requiresAuth={IS_WEB}
+      />
+    </Form>
   );
 }

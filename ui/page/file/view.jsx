@@ -223,13 +223,14 @@ class FilePage extends React.Component<Props> {
             <div className="media__info--large">
               <FileDetails uri={uri} />
               <ClaimTags uri={uri} type="large" />
-
-              <div className="media__info-title">
-                {__('Comments')} <span className="badge badge--alert">ALPHA</span>
-              </div>
-              <CommentCreate uri={uri} />
-              <CommentsList uri={uri} />
             </div>
+            <div className="media__info-title">{__('Comments')}</div>
+            <section className="section">
+              <CommentCreate uri={uri} />
+            </section>
+            <section className="section">
+              <CommentsList uri={uri} />
+            </section>
           </div>
           <div className="grid-area--related">
             <div className="media__actions media__actions--between media__actions--nowrap">

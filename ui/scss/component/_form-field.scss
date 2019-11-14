@@ -95,6 +95,10 @@ fieldset-section {
       margin-top: var(--spacing-small);
     }
   }
+
+  + fieldset-section {
+    margin-top: var(--spacing-medium);
+  }
 }
 
 checkbox-element {
