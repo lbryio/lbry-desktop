@@ -106,9 +106,6 @@ const renderConfig = {
       },
     ],
   },
-  resolve: {
-    modules: ['node_modules'],
-  },
   plugins: [
     // new BundleAnalyzerPlugin(),
     new DefinePlugin({

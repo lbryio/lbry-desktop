@@ -56,7 +56,6 @@ class SocialShare extends React.PureComponent<Props> {
           />
         </div>
         {webShareable && !isChannel && <EmbedArea label={__('Embedded')} claim={claim} noSnackbar />}
-        {!webShareable && <p className={'help'}>{__('Paid content cannot be embedded')}</p>}
         <div className="card__actions">
           <Button button="link" label={__('Done')} onClick={onDone} />
         </div>
