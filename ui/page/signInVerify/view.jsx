@@ -26,7 +26,7 @@ function SignInVerifyPage(props: Props) {
       message: message || __('Authentication failure.'),
       isError: true,
     });
-    //push(`/$/${PAGES.AUTH}`);
+    push(`/$/${PAGES.AUTH}`);
   }
 
   React.useEffect(() => {
