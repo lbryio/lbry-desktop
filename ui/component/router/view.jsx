@@ -24,6 +24,7 @@ import FollowingPage from 'page/following';
 import ListBlockedPage from 'page/listBlocked';
 import FourOhFourPage from 'page/fourOhFour';
 import SignInPage from 'page/signIn';
+import SignInVerifyPage from 'page/signInVerify';
 import ChannelsPage from 'page/channels';
 
 // Tell the browser we are handling scroll restoration
@@ -77,6 +78,7 @@ function AppRouter(props: Props) {
         <Route path={`/$/${PAGES.AUTH}`} exact component={SignInPage} />
         <Route path={`/$/${PAGES.TAGS}`} exact component={TagsPage} />
         <Route path={`/$/${PAGES.HELP}`} exact component={HelpPage} />
+        <Route path={`/$/${PAGES.AUTH_VERIFY}`} exact component={SignInVerifyPage} />
         <Route path={`/$/${PAGES.SEARCH}`} exact component={SearchPage} />
 
         <PrivateRoute {...props} path={`/$/${PAGES.INVITE}`} component={InvitePage} />
