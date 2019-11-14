@@ -4,6 +4,10 @@
   top: var(--spacing-large);
 }
 
+.content__viewer--inline {
+  max-height: var(--inline-player-max-height);
+}
+
 .content__viewer--floating {
   position: fixed;
   margin-bottom: 0;
@@ -63,6 +67,7 @@
   background-position: 50% 50%;
   background-repeat: no-repeat;
   background-size: 100%;
+  max-height: var(--inline-player-max-height);
   margin: auto;
 
   &:not(.card__media--nsfw) {

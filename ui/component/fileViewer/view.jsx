@@ -137,6 +137,7 @@ export default function FileViewer(props: Props) {
       <div
         className={classnames('content__viewer', {
           'content__viewer--floating': !inline,
+          'content__viewer--inline': inline,
         })}
         style={
           inline && fileViewerRect
