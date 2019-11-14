@@ -1,6 +1,6 @@
 // @flow
 import React, { useState } from 'react';
-import { Form, FormField } from 'component/common/form';
+import { FormField } from 'component/common/form';
 import Button from 'component/button';
 import SelectAsset from 'component/selectAsset';
 import TagsSelect from 'component/tagsSelect';
@@ -98,110 +98,108 @@ function ChannelForm(props: Props) {
     setParams({ ...params, coverUrl });
     updateCover(coverUrl);
   };
+
+  const handleSubmit = () => {
+    updateChannel(params);
+    setEditing(false);
+  };
   // TODO clear and bail after submit
   return (
     <section className={'card--section'}>
-      <Form
-        onSubmit={() => {
-          updateChannel(params);
-          setEditing(false);
+      <SelectAsset
+        onUpdate={v => handleThumbnailChange(v)}
+        currentValue={params.thumbnailUrl}
+        assetName={'Thumbnail'}
+        recommended={'(300 x 300)'}
+      />
+
+      <SelectAsset
+        onUpdate={v => handleCoverChange(v)}
+        currentValue={params.coverUrl}
+        assetName={'Cover'}
+        recommended={'(1000 x 160)'}
+      />
+
+      <FormField
+        type="text"
+        name="channel_title2"
+        label={__('Title')}
+        placeholder={__('Titular Title')}
+        disabled={false}
+        value={params.title}
+        onChange={e => setParams({ ...params, title: e.target.value })}
+      />
+      <FormField
+        className="form-field--price-amount"
+        type="number"
+        name="content_bid2"
+        step="any"
+        label={__('Deposit (LBC)')}
+        postfix="LBC"
+        value={params.amount}
+        error={bidError}
+        min="0.0"
+        disabled={false}
+        onChange={event => handleBidChange(parseFloat(event.target.value))}
+        placeholder={0.1}
+      />
+
+      <FormField
+        type="text"
+        name="channel_website2"
+        label={__('Website')}
+        placeholder={__('aprettygoodsite.com')}
+        disabled={false}
+        value={params.website}
+        onChange={e => setParams({ ...params, website: e.target.value })}
+      />
+
+      <FormField
+        type="text"
+        name="content_email2"
+        label={__('Email')}
+        placeholder={__('yourstruly@example.com')}
+        disabled={false}
+        value={params.email}
+        onChange={e => setParams({ ...params, email: e.target.value })}
+      />
+
+      <FormField
+        type="markdown"
+        name="content_description2"
+        label={__('Description')}
+        placeholder={__('Description of your content')}
+        value={params.description}
+        disabled={false}
+        onChange={text => setParams({ ...params, description: text })}
+      />
+      <TagsSelect
+        title={__('Add Tags')}
+        suggestMature
+        disableAutoFocus
+        help={__('The better your tags are, the easier it will be for people to discover your channel.')}
+        empty={__('No tags added')}
+        placeholder={__('Add a tag')}
+        onSelect={newTags => {
+          newTags.forEach(newTag => {
+            if (!params.tags.map(savedTag => savedTag.name).includes(newTag.name)) {
+              setParams({ ...params, tags: [...params.tags, newTag] });
+            } else {
+              // If it already exists and the user types it in, remove it
+              setParams({ ...params, tags: params.tags.filter(tag => tag.name !== newTag.name) });
+            }
+          });
         }}
-      >
-        <SelectAsset
-          onUpdate={v => handleThumbnailChange(v)}
-          currentValue={params.thumbnailUrl}
-          assetName={'Thumbnail'}
-          recommended={'(300 x 300)'}
-        />
-
-        <SelectAsset
-          onUpdate={v => handleCoverChange(v)}
-          currentValue={params.coverUrl}
-          assetName={'Cover'}
-          recommended={'(1000 x 160)'}
-        />
-
-        <FormField
-          type="text"
-          name="channel_title2"
-          label={__('Title')}
-          placeholder={__('Titular Title')}
-          disabled={false}
-          value={params.title}
-          onChange={e => setParams({ ...params, title: e.target.value })}
-        />
-        <FormField
-          className="form-field--price-amount"
-          type="number"
-          name="content_bid2"
-          step="any"
-          label={__('Deposit (LBC)')}
-          postfix="LBC"
-          value={params.amount}
-          error={bidError}
-          min="0.0"
-          disabled={false}
-          onChange={event => handleBidChange(parseFloat(event.target.value))}
-          placeholder={0.1}
-        />
-
-        <FormField
-          type="text"
-          name="channel_website2"
-          label={__('Website')}
-          placeholder={__('aprettygoodsite.com')}
-          disabled={false}
-          value={params.website}
-          onChange={e => setParams({ ...params, website: e.target.value })}
-        />
-
-        <FormField
-          type="text"
-          name="content_email2"
-          label={__('Email')}
-          placeholder={__('yourstruly@example.com')}
-          disabled={false}
-          value={params.email}
-          onChange={e => setParams({ ...params, email: e.target.value })}
-        />
-
-        <FormField
-          type="markdown"
-          name="content_description2"
-          label={__('Description')}
-          placeholder={__('Description of your content')}
-          value={params.description}
-          disabled={false}
-          onChange={text => setParams({ ...params, description: text })}
-        />
-        <TagsSelect
-          title={__('Add Tags')}
-          suggestMature
-          disableAutoFocus
-          help={__('The better your tags are, the easier it will be for people to discover your channel.')}
-          empty={__('No tags added')}
-          placeholder={__('Add a tag')}
-          onSelect={newTags => {
-            newTags.forEach(newTag => {
-              if (!params.tags.map(savedTag => savedTag.name).includes(newTag.name)) {
-                setParams({ ...params, tags: [...params.tags, newTag] });
-              } else {
-                // If it already exists and the user types it in, remove it
-                setParams({ ...params, tags: params.tags.filter(tag => tag.name !== newTag.name) });
-              }
-            });
-          }}
-          onRemove={clickedTag => {
-            const newTags = params.tags.slice().filter(tag => tag.name !== clickedTag.name);
-            setParams({ ...params, tags: newTags });
-          }}
-          tagsChosen={params.tags || []}
-        />
-        <div className={'card__actions'}>
-          <Button button="primary" label={__('Submit')} type="submit" />
-          <Button button="link" label={__('Cancel')} navigate={`$/${PAGES.CHANNELS}`} />
-        </div>
-      </Form>
+        onRemove={clickedTag => {
+          const newTags = params.tags.slice().filter(tag => tag.name !== clickedTag.name);
+          setParams({ ...params, tags: newTags });
+        }}
+        tagsChosen={params.tags || []}
+      />
+      <div className={'card__actions'}>
+        <Button button="primary" label={__('Submit')} onClick={handleSubmit} />
+        <Button button="link" label={__('Cancel')} navigate={`$/${PAGES.CHANNELS}`} />
+      </div>
     </section>
   );
 }
