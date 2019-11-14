@@ -60,7 +60,7 @@ class UserEmailVerify extends React.PureComponent<Props> {
         <h1 className="section__title--large">{isReturningUser ? __('Check Your Email') : __('Confirm Your Email')}</h1>
 
         <p className="section__subtitle">
-          {__('An email was sent to %email%. Follow the link to %verify_text%. This will update automatically.', {
+          {__('An email was sent to %email%. Follow the link to %verify_text%. After, this page will update automatically.', {
             email,
             verify_text: isReturningUser ? __('sign in') : __('verify your email'),
           })}
