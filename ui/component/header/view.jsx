@@ -18,7 +18,7 @@ import { IS_MAC } from 'component/app/view';
 type Props = {
   balance: string,
   roundedBalance: number,
-  history: { push: string => void, goBack: () => void, goForward: () => void },
+  history: { push: string => void, goBack: () => void, goForward: () => void, location: { pathname: string } },
   currentTheme: string,
   automaticDarkModeEnabled: boolean,
   setClientSetting: (string, boolean | string) => void,
@@ -49,9 +49,7 @@ const Header = (props: Props) => {
 
   // Sign out if they click the "x" when they are on the password prompt
   const authHeaderAction = syncError ? { onClick: signOut } : { navigate: '/' };
-  const homeButtonNavigationProps = isVerifyPage ?
-    { } :
-    authHeader ? authHeaderAction : { navigate: '/' };
+  const homeButtonNavigationProps = isVerifyPage ? {} : authHeader ? authHeaderAction : { navigate: '/' };
   const closeButtonNavigationProps = authHeader ? authHeaderAction : { onClick: () => history.goBack() };
 
   function handleThemeToggle() {
@@ -116,7 +114,7 @@ const Header = (props: Props) => {
           )}
           {/* @endif */}
 
-          {!authHeader && <WunderBar/>}
+          {!authHeader && <WunderBar />}
         </div>
 
         {!authHeader ? (
@@ -127,37 +125,37 @@ const Header = (props: Props) => {
                   <MenuButton className="header__navigation-item menu__title">{getWalletTitle()}</MenuButton>
                   <MenuList className="menu__list--header">
                     <MenuItem className="menu__link" onSelect={() => history.push(`/$/${PAGES.WALLET}`)}>
-                      <Icon aria-hidden icon={ICONS.WALLET}/>
+                      <Icon aria-hidden icon={ICONS.WALLET} />
                       {__('Wallet')}
                     </MenuItem>
                     <MenuItem className="menu__link" onSelect={() => history.push(`/$/${PAGES.REWARDS}`)}>
-                      <Icon aria-hidden icon={ICONS.FEATURED}/>
+                      <Icon aria-hidden icon={ICONS.FEATURED} />
                       {__('Rewards')}
                     </MenuItem>
                   </MenuList>
                 </Menu>
                 <Menu>
                   <MenuButton className="header__navigation-item menu__title">
-                    <Icon size={18} icon={ICONS.ACCOUNT}/>
+                    <Icon size={18} icon={ICONS.ACCOUNT} />
                   </MenuButton>
                   <MenuList className="menu__list--header">
                     <MenuItem className="menu__link" onSelect={() => history.push(`/$/${PAGES.ACCOUNT}`)}>
-                      <Icon aria-hidden icon={ICONS.OVERVIEW}/>
+                      <Icon aria-hidden icon={ICONS.OVERVIEW} />
                       {__('Overview')}
                     </MenuItem>
 
                     <MenuItem className="menu__link" onSelect={() => history.push(`/$/${PAGES.PUBLISH}`)}>
-                      <Icon aria-hidden icon={ICONS.PUBLISH}/>
+                      <Icon aria-hidden icon={ICONS.PUBLISH} />
                       {__('Publish')}
                     </MenuItem>
                     {authenticated ? (
                       <MenuItem className="menu__link" onSelect={signOut}>
-                        <Icon aria-hidden icon={ICONS.SIGN_OUT}/>
+                        <Icon aria-hidden icon={ICONS.SIGN_OUT} />
                         {__('Sign Out')}
                       </MenuItem>
                     ) : (
                       <MenuItem className="menu__link" onSelect={() => history.push(`/$/${PAGES.AUTH}`)}>
-                        <Icon aria-hidden icon={ICONS.SIGN_IN}/>
+                        <Icon aria-hidden icon={ICONS.SIGN_IN} />
                         {__('Sign In')}
                       </MenuItem>
                     )}
@@ -166,37 +164,39 @@ const Header = (props: Props) => {
 
                 <Menu>
                   <MenuButton className="header__navigation-item menu__title">
-                    <Icon size={18} icon={ICONS.SETTINGS}/>
+                    <Icon size={18} icon={ICONS.SETTINGS} />
                   </MenuButton>
                   <MenuList className="menu__list--header">
                     <MenuItem className="menu__link" onSelect={() => history.push(`/$/${PAGES.SETTINGS}`)}>
-                      <Icon aria-hidden tootlip icon={ICONS.SETTINGS}/>
+                      <Icon aria-hidden tootlip icon={ICONS.SETTINGS} />
                       {__('Settings')}
                     </MenuItem>
                     <MenuItem className="menu__link" onSelect={() => history.push(`/$/${PAGES.HELP}`)}>
-                      <Icon aria-hidden icon={ICONS.HELP}/>
+                      <Icon aria-hidden icon={ICONS.HELP} />
                       {__('Help')}
                     </MenuItem>
                     <MenuItem className="menu__link" onSelect={handleThemeToggle}>
-                      <Icon icon={currentTheme === 'light' ? ICONS.DARK : ICONS.LIGHT}/>
+                      <Icon icon={currentTheme === 'light' ? ICONS.DARK : ICONS.LIGHT} />
                       {currentTheme === 'light' ? __('Dark') : __('Light')}
                     </MenuItem>
                   </MenuList>
                 </Menu>
               </Fragment>
             ) : (
-              <Button navigate={`/$/${PAGES.AUTH}`} button="primary" label={__('Sign In')}/>
+              <Button navigate={`/$/${PAGES.AUTH}`} button="primary" label={__('Sign In')} />
             )}
           </div>
-        ) : (!isVerifyPage &&
-          <div className="header__menu">
-            {/* Add an empty span here so we can use the same style as above */}
-            {/* This pushes the close button to the right side */}
-            <span/>
-            <Tooltip label={__('Go Back')}>
-              <Button icon={ICONS.REMOVE} {...closeButtonNavigationProps} />
-            </Tooltip>
-          </div>
+        ) : (
+          !isVerifyPage && (
+            <div className="header__menu">
+              {/* Add an empty span here so we can use the same style as above */}
+              {/* This pushes the close button to the right side */}
+              <span />
+              <Tooltip label={__('Go Back')}>
+                <Button icon={ICONS.REMOVE} {...closeButtonNavigationProps} />
+              </Tooltip>
+            </div>
+          )
         )}
       </div>
     </header>
