@@ -63,7 +63,7 @@ export const doPublishDesktop = (filePath: string) => (dispatch: Dispatch, getSt
   // on the publishes page. This doesn't exist on desktop so wait until we get a response
   // from the SDK
   // @if TARGET='web'
-  actions.push(push(`/$/${PAGES.PUBLISHED}`));
+  dispatch(push(`/$/${PAGES.PUBLISHED}`));
   // @endif
 
   dispatch(doPublish(publishSuccess, publishFail));
