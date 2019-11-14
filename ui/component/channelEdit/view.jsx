@@ -181,13 +181,15 @@ function ChannelForm(props: Props) {
           help={__('The better your tags are, the easier it will be for people to discover your channel.')}
           empty={__('No tags added')}
           placeholder={__('Add a tag')}
-          onSelect={newTag => {
-            if (!params.tags.map(savedTag => savedTag.name).includes(newTag.name)) {
-              setParams({ ...params, tags: [...params.tags, newTag] });
-            } else {
-              // If it already exists and the user types it in, remove it
-              setParams({ ...params, tags: params.tags.filter(tag => tag.name !== newTag.name) });
-            }
+          onSelect={newTags => {
+            newTags.forEach(newTag => {
+              if (!params.tags.map(savedTag => savedTag.name).includes(newTag.name)) {
+                setParams({ ...params, tags: [...params.tags, newTag] });
+              } else {
+                // If it already exists and the user types it in, remove it
+                setParams({ ...params, tags: params.tags.filter(tag => tag.name !== newTag.name) });
+              }
+            });
           }}
           onRemove={clickedTag => {
             const newTags = params.tags.slice().filter(tag => tag.name !== clickedTag.name);
