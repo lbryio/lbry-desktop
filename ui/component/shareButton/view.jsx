@@ -6,18 +6,19 @@ import Button from 'component/button';
 
 type Props = {
   uri: string,
+  isChannel: boolean,
   doOpenModal: (id: string, {}) => void,
 };
 
 export default function ShareButton(props: Props) {
-  const { uri, doOpenModal } = props;
+  const { uri, doOpenModal, isChannel = false } = props;
 
   return (
     <Button
       button="alt"
       icon={ICONS.SHARE}
       label={__('Share')}
-      onClick={() => doOpenModal(MODALS.SOCIAL_SHARE, { uri, webShareable: true, isChannel: true })}
+      onClick={() => doOpenModal(MODALS.SOCIAL_SHARE, { uri, webShareable: true, isChannel })}
     />
   );
 }
