@@ -869,5 +869,7 @@
   "contact support": "contact support",
   "Look what's %trending% or %discover%": "Look what's %trending% or %discover%",
   "Sorry, your request timed out. %again%": "Sorry, your request timed out. %again%",
-  "If you continue to have issues, please %support%.": "If you continue to have issues, please %support%."
+  "If you continue to have issues, please %support%.": "If you continue to have issues, please %support%.",
+  "lbry.tv Account": "lbry.tv Account",
+  "Creating a lbry.tv account will allow you to earn rewards, receive content and security updates, and optionally backup your data.": "Creating a lbry.tv account will allow you to earn rewards, receive content and security updates, and optionally backup your data."
 }

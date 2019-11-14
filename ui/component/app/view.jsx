@@ -171,9 +171,14 @@ function App(props: Props) {
     }
   }, [syncError, pathname]);
 
+  // @if TARGET='web'
+  // Require an internal-api user on lbry.tv
+  // This also prevents the site from loading in the un-authed state while we wait for internal-apis to return for the first time
+  // It's not needed on desktop since there is no un-authed state
   if (!user) {
     return null;
   }
+  // @endif
 
   return (
     <div
