@@ -12,7 +12,7 @@ import React, { Fragment, useState, useEffect } from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import { doConditionalAuthNavigate, doDaemonReady, doAutoUpdate, doOpenModal, doHideModal } from 'redux/actions/app';
-import { Lbry, doToast, isURIValid, setSearchApi } from 'lbry-redux';
+import { Lbry, doToast, isURIValid, setSearchApi, apiCall } from 'lbry-redux';
 import { doSetLanguage, doUpdateIsNightAsync } from 'redux/actions/settings';
 import {
   doAuthenticate,
@@ -51,6 +51,7 @@ Lbry.setOverride(
   params =>
     new Promise((resolve, reject) => {
       apiPublishCallViaWeb(
+        apiCall,
         SDK_API_URL,
         Lbry.getApiRequestHeaders() && Object.keys(Lbry.getApiRequestHeaders()).includes(X_LBRY_AUTH_TOKEN)
           ? Lbry.getApiRequestHeaders()[X_LBRY_AUTH_TOKEN]
