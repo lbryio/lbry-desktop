@@ -873,5 +873,9 @@
   "lbry.tv Account": "lbry.tv Account",
   "Creating a lbry.tv account will allow you to earn rewards, receive content and security updates, and optionally backup your data.": "Creating a lbry.tv account will allow you to earn rewards, receive content and security updates, and optionally backup your data.",
   "Paid content cannot be embedded": "Paid content cannot be embedded",
-  "This content cannot be embedded": "This content cannot be embedded"
+  "This content cannot be embedded": "This content cannot be embedded",
+  "Your videos are ready to be transferred.": "Your videos are ready to be transferred.",
+  "Ready to transfer": "Ready to transfer",
+  "Claim Channel": "Claim Channel",
+  "Say something about this...": "Say something about this..."
 }
