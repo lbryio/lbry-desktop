@@ -26,20 +26,22 @@ function ShowPage(props: Props) {
   const { isResolvingUri, resolveUri, uri, claim, blackListedOutpoints, location, title } = props;
   const { channelName, channelClaimId, streamName, streamClaimId } = parseURI(uri);
   const signingChannel = claim && claim.signing_channel;
+  const canonicalUrl = claim && claim.canonical_url;
 
   useEffect(() => {
     // @if TARGET='web'
-    if (claim && claim.canonical_url) {
-      const canonicalUrlPath = '/' + claim.canonical_url.replace(/^lbry:\/\//, '').replace(/#/g, ':');
+    if (canonicalUrl) {
+      const canonicalUrlPath = '/' + canonicalUrl.replace(/^lbry:\/\//, '').replace(/#/g, ':');
       if (canonicalUrlPath !== window.location.pathname) {
         history.replaceState(history.state, '', canonicalUrlPath);
       }
     }
     // @endif
-    if (resolveUri && !isResolvingUri && uri && claim === undefined) {
+
+    if (resolveUri && !isResolvingUri && uri && (claim === undefined || !canonicalUrl)) {
       resolveUri(uri);
     }
-  }, [resolveUri, isResolvingUri, claim, uri]);
+  }, [resolveUri, isResolvingUri, canonicalUrl, uri]);
 
   useEffect(() => {
     if (title) {

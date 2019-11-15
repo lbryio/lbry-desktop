@@ -42,7 +42,7 @@ class ModalPublishSuccess extends React.PureComponent<Props> {
           })}
         </p>
         <div className="card--inline">
-          <ClaimPreview uri={uri} />
+          <ClaimPreview type="small" uri={uri} />
         </div>
         <p className="help">
           {filePath && !IS_WEB && (
