@@ -7,12 +7,12 @@
  */
 import { X_LBRY_AUTH_TOKEN } from '../../ui/constants/token';
 import { doUpdateUploadProgress } from 'lbryinc';
-import { apiCall } from 'lbry-redux';
 
 // A modified version of Lbry.apiCall that allows
 // to perform calling methods at arbitrary urls
 // and pass form file fields
 export default function apiPublishCallViaWeb(
+  apiCall: (any) => void,
   connectionString: string,
   token: string,
   method: string,
