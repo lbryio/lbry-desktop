@@ -894,5 +894,9 @@
   "Start minimized": "Start minimized",
   "Improve view speed and help the LBRY network by allowing the app to cuddle up in your system tray.": "Improve view speed and help the LBRY network by allowing the app to cuddle up in your system tray.",
   "Content Type": "Content Type",
-  "Submit Feedback": "Submit Feedback"
+  "Submit Feedback": "Submit Feedback",
+  "Checking your publishes...": "Checking your publishes...",
+  "Checking your publishes": "Checking your publishes",
+  "Checking for channels": "Checking for channels",
+  "files": "files"
 }
