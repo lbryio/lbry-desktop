@@ -24,7 +24,7 @@ function SelectAsset(props: Props) {
   const { onUpdate, assetName, currentValue, recommended } = props;
   const [assetSource, setAssetSource] = useState(SOURCE_URL);
   const [pathSelected, setPathSelected] = useState('');
-  const [fileSelected, setFileSelected] = useState('');
+  const [fileSelected, setFileSelected] = useState<any>(null);
   const [uploadStatus, setUploadStatus] = useState(SPEECH_READY);
 
   function doUploadAsset(file) {
@@ -78,7 +78,7 @@ function SelectAsset(props: Props) {
                 name={'assetSelector'}
                 onFileChosen={file => {
                   if (file.name) {
-                    setPathSelected(file.path);
+                    setPathSelected(file.path || file.name);
                     setFileSelected(file);
                   }
                 }}
@@ -95,7 +95,7 @@ function SelectAsset(props: Props) {
                   button={'secondary'}
                   onClick={() => {
                     setPathSelected('');
-                    setFileSelected('');
+                    setFileSelected(null);
                   }}
                 >
                   Clear
