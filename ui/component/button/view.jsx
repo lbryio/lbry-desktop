@@ -1,12 +1,13 @@
 // @flow
 import type { Node } from 'react';
-import React, { forwardRef } from 'react';
+import React, { forwardRef, useRef } from 'react';
 import Icon from 'component/common/icon';
 import classnames from 'classnames';
 import { NavLink } from 'react-router-dom';
 import { formatLbryUriForWeb } from 'util/uri';
 import { OutboundLink } from 'react-ga';
 import * as PAGES from 'constants/pages';
+import useCombinedRefs from 'effects/use-combined-refs';
 
 type Props = {
   id: ?string,
@@ -86,6 +87,9 @@ const Button = forwardRef<any, {}>((props: Props, ref: any) => {
     className
   );
 
+  const innerRef = useRef(null);
+  const combinedRef = useCombinedRefs(ref, innerRef, myref);
+
   const content = (
     <span className="button__content">
       {icon && <Icon icon={icon} iconColor={iconColor} size={iconSize} />}
@@ -117,7 +121,7 @@ const Button = forwardRef<any, {}>((props: Props, ref: any) => {
   if (requiresAuth && !emailVerified) {
     return (
       <NavLink
-        ref={ref}
+        ref={combinedRef}
         exact
         onClick={e => {
           e.stopPropagation();
@@ -135,7 +139,7 @@ const Button = forwardRef<any, {}>((props: Props, ref: any) => {
 
   return path ? (
     <NavLink
-      ref={ref}
+      ref={combinedRef}
       exact
       to={path}
       title={title}
@@ -153,7 +157,7 @@ const Button = forwardRef<any, {}>((props: Props, ref: any) => {
     </NavLink>
   ) : (
     <button
-      ref={ref}
+      ref={combinedRef}
       title={title}
       aria-label={description || label || title}
       className={combinedClassName}
