@@ -26,17 +26,19 @@ function ModalRemoveFile(props: Props) {
     <Modal isOpen title="Remove File" contentLabel={__('Confirm File Remove')} type="custom" onAborted={closeModal}>
       <section>
         <p>
-          {__("Are you sure you'd like to remove")} <cite>{`"${title}"`}</cite> {__('from the LBRY app?')}
+          {__("Are you sure you'd like to remove")} <cite>{`"${title}"`}</cite> {__('from LBRY?')}
         </p>
       </section>
       <Form onSubmit={() => deleteFile(uri, deleteChecked, claimIsMine ? abandonChecked : false)}>
-        <FormField
-          name="file_delete"
-          label={__('Delete this file from my computer')}
-          type="checkbox"
-          checked={deleteChecked}
-          onChange={() => setDeleteChecked(!deleteChecked)}
-        />
+        {!IS_WEB && (
+          <FormField
+            name="file_delete"
+            label={__('Delete this file from my computer')}
+            type="checkbox"
+            checked={deleteChecked}
+            onChange={() => setDeleteChecked(!deleteChecked)}
+          />
+        )}
 
         {claimIsMine && (
           <div>
@@ -47,11 +49,13 @@ function ModalRemoveFile(props: Props) {
               checked={abandonChecked}
               onChange={() => setAbandonChecked(!abandonChecked)}
             />
-            {abandonChecked === false && (
-              <p className="error-text">
-                This file is removed from your publishes area and you can&apos;t remove the deposit from the claim page
-                anymore
-              </p>
+            {abandonChecked === true && <p className="error-text">This action is permanent and cannot be undone.</p>}
+
+            {abandonChecked === false && deleteChecked && !IS_WEB && (
+              <p>This file will be removed from your Library and Downloads folder.</p>
+            )}
+            {!deleteChecked && !IS_WEB && (
+              <p>This file removed from your Library but will remain in your Downloads folder.</p>
             )}
           </div>
         )}
