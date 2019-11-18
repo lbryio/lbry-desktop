@@ -195,13 +195,11 @@ class HelpPage extends React.PureComponent<Props, State> {
           <header className="table__header">
             <h2 className="section__title">{__('About')}</h2>
 
-            {this.state.upgradeAvailable !== null && this.state.upgradeAvailable ? (
+            {this.state.upgradeAvailable !== null && this.state.upgradeAvailable && (
               <p className="section__subtitle">
                 {__('A newer version of LBRY is available.')}{' '}
                 <Button button="link" href={newVerLink} label={__('Download now!')} />
               </p>
-            ) : (
-              <p className="section__subtitle">{__('Your LBRY app is up to date.')}</p>
             )}
           </header>
 

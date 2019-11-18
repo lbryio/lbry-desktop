@@ -11,10 +11,16 @@ import Button from 'component/button';
 import I18nMessage from 'component/i18nMessage';
 import Page from 'component/page';
 import SettingLanguage from 'component/settingLanguage';
+import SettingAutoLaunch from 'component/settingAutoLaunch';
 import FileSelector from 'component/common/file-selector';
 import SyncToggle from 'component/syncToggle';
 import Card from 'component/common/card';
 import { getSavedPassword } from 'util/saved-passwords';
+
+// @if TARGET='app'
+export const IS_MAC = process.platform === 'darwin';
+// @endif
+
 type Price = {
   currency: string,
   amount: number,
@@ -631,6 +637,11 @@ class SettingsPage extends React.PureComponent<Props, State> {
                 </React.Fragment>
               }
             />
+
+            {/* @if TARGET='app' */}
+            {/* Auto launch in a hidden state doesn't work on mac https://github.com/Teamwork/node-auto-launch/issues/81 */}
+            {!IS_MAC && <Card title={__('Startup Preferences')} actions={<SettingAutoLaunch />} />}
+            {/* @endif */}
 
             <Card
               title={__('Application Cache')}

@@ -3,7 +3,10 @@ import * as SETTINGS from 'constants/settings';
 import * as LOCAL_ACTIONS from 'constants/action_types';
 import analytics from 'analytics';
 import SUPPORTED_LANGUAGES from 'constants/supported_languages';
+import { launcher } from 'util/autoLaunch';
+import { makeSelectClientSetting } from 'redux/selectors/settings';
 
+export const IS_MAC = process.platform === 'darwin';
 const UPDATE_IS_NIGHT_INTERVAL = 5 * 60 * 1000;
 
 export function doFetchDaemonSettings() {
@@ -117,6 +120,57 @@ export function doSetLanguage(language) {
             })
           );
         });
+    }
+  };
+}
+
+export function doSetAutoLaunch(value) {
+  return (dispatch, getState) => {
+    const state = getState();
+    const autoLaunch = makeSelectClientSetting(SETTINGS.AUTO_LAUNCH)(state);
+
+    if (IS_MAC) {
+      launcher.disable();
+      return;
+    }
+
+    if (value === undefined) {
+      launcher.isEnabled().then(isEnabled => {
+        if (isEnabled) {
+          if (!autoLaunch) {
+            launcher.disable().then(() => {
+              dispatch(doSetClientSetting(SETTINGS.AUTO_LAUNCH, false));
+            });
+          }
+        } else {
+          if (autoLaunch || autoLaunch === null || autoLaunch === undefined) {
+            launcher.enable().then(() => {
+              dispatch(doSetClientSetting(SETTINGS.AUTO_LAUNCH, true));
+            });
+          }
+        }
+      });
+    } else if (value === true) {
+      launcher.isEnabled().then(function(isEnabled) {
+        if (!isEnabled) {
+          launcher.enable().then(() => {
+            dispatch(doSetClientSetting(SETTINGS.AUTO_LAUNCH, true));
+          });
+        } else {
+          dispatch(doSetClientSetting(SETTINGS.AUTO_LAUNCH, true));
+        }
+      });
+    } else {
+      // value = false
+      launcher.isEnabled().then(function(isEnabled) {
+        if (isEnabled) {
+          launcher.disable().then(() => {
+            dispatch(doSetClientSetting(SETTINGS.AUTO_LAUNCH, false));
+          });
+        } else {
+          dispatch(doSetClientSetting(SETTINGS.AUTO_LAUNCH, false));
+        }
+      });
     }
   };
 }

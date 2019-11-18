@@ -228,8 +228,9 @@ document.addEventListener('click', event => {
 });
 
 function AppWrapper() {
-  const haveLaunched = window.sessionStorage.getItem('loaded') === 'y';
-  const [readyToLaunch, setReadyToLaunch] = useState(haveLaunched || IS_WEB);
+  // Splash screen and sdk setup not needed on web
+  const [readyToLaunch, setReadyToLaunch] = useState(IS_WEB);
+  const [persistDone, setPersistDone] = useState(false);
 
   useEffect(() => {
     // @if TARGET='app'
@@ -255,22 +256,25 @@ function AppWrapper() {
   }, []);
 
   useEffect(() => {
-    if (readyToLaunch) {
+    if (readyToLaunch && persistDone) {
       app.store.dispatch(doUpdateIsNightAsync());
       app.store.dispatch(doDaemonReady());
       app.store.dispatch(doBlackListedOutpointsSubscribe());
       app.store.dispatch(doFilteredOutpointsSubscribe());
-      window.sessionStorage.setItem('loaded', 'y');
 
       const appReadyTime = Date.now();
       const timeToStart = appReadyTime - startTime;
       analytics.readyEvent(timeToStart);
     }
-  }, [readyToLaunch, haveLaunched]);
+  }, [readyToLaunch, persistDone]);
 
   return (
     <Provider store={store}>
-      <PersistGate persistor={persistor} loading={<div className="main--launching" />}>
+      <PersistGate
+        persistor={persistor}
+        onBeforeLift={() => setPersistDone(true)}
+        loading={<div className="main--launching" />}
+      >
         <Fragment>
           {readyToLaunch ? (
             <ConnectedRouter history={history}>
