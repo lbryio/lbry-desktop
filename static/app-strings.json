@@ -876,5 +876,17 @@
   "Your videos are ready to be transferred.": "Your videos are ready to be transferred.",
   "Ready to transfer": "Ready to transfer",
   "Claim Channel": "Claim Channel",
-  "Say something about this...": "Say something about this..."
+  "Say something about this...": "Say something about this...",
+  "This will appear as a tip for %title%, which will boost its ability to be discovered while active.": "This will appear as a tip for %title%, which will boost its ability to be discovered while active.",
+  "Awesome! You just subscribed to your first channel. If we have your email address, we will send you notifications related to new content.": "Awesome! You just subscribed to your first channel. If we have your email address, we will send you notifications related to new content.",
+  "Update email preferences": "Update email preferences",
+  "Sign In to lbry.tv": "Sign In to lbry.tv",
+  "An account with lbry.tv allows you to earn rewards and backup your data.": "An account with lbry.tv allows you to earn rewards and backup your data.",
+  "Backup your account and wallet data.": "Backup your account and wallet data.",
+  "Awesome! You just subscribed to your first channel.": "Awesome! You just subscribed to your first channel.",
+  "Sign in": "Sign in",
+  "with lbry.tv to receive notifications related to new content.": "with lbry.tv to receive notifications related to new content.",
+  "An email was sent to %email%. Follow the link to %verify_text%. After, this page will update automatically.": "An email was sent to %email%. Follow the link to %verify_text%. After, this page will update automatically.",
+  "Your email preferences": "Your email preferences",
+  "allow you to receive notifications related to new content.": "allow you to receive notifications related to new content."
 }
