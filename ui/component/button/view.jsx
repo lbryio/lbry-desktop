@@ -121,7 +121,6 @@ const Button = forwardRef<any, {}>((props: Props, ref: any) => {
   if (requiresAuth && !emailVerified) {
     return (
       <NavLink
-        ref={combinedRef}
         exact
         onClick={e => {
           e.stopPropagation();
@@ -139,7 +138,6 @@ const Button = forwardRef<any, {}>((props: Props, ref: any) => {
 
   return path ? (
     <NavLink
-      ref={combinedRef}
       exact
       to={path}
       title={title}
