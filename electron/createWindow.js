@@ -131,6 +131,7 @@ export default appState => {
     startMinimized ? window.hide() : window.show();
   });
 
+  // A backup incase https://github.com/electron/electron/issues/7779 happens
   window.webContents.once('dom-ready', () => {
     startMinimized && window.hide()
   })
