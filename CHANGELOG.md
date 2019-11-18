@@ -17,6 +17,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Clear support state when clearing cache in settings([#3149](https://github.com/lbryio/lbry-desktop/pull/3149))
 - Allow disabling app updates for some linux based builds ([#3206](https://github.com/lbryio/lbry-desktop/pull/3206))
 - Add French, Turkish, Slovak, and Chinese language support and improved how we are loading languages ([#3180](https://github.com/lbryio/lbry-desktop/pull/3180))
+- Setting to start the app minimized when you login ([#3236](https://github.com/lbryio/lbry-desktop/pull/3236))
 
 ### Changed
 
