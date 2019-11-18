@@ -1,12 +1,21 @@
 import { connect } from 'react-redux';
 import { doHideModal } from 'redux/actions/app';
+import { selectAccessToken, selectUser } from 'lbryinc';
+import { withRouter } from 'react-router';
+
+
 import ModalFirstSubscription from './view';
+
+const select = state => ({
+  accessToken: selectAccessToken(state),
+  user: selectUser(state),
+})
 
 const perform = dispatch => () => ({
   closeModal: () => dispatch(doHideModal()),
 });
 
-export default connect(
-  null,
+export default withRouter(connect(
+  select,
   perform
-)(ModalFirstSubscription);
+)(ModalFirstSubscription));
