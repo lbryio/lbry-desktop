@@ -43,6 +43,7 @@
     "postinstall:warning": "echo '\n\nWARNING\n\nNot all node modules were installed because NODE_ENV is set to \"production\".\nThis should only be set after installing dependencies with \"yarn\". The app will not work.\n\n'"
   },
   "dependencies": {
+    "auto-launch": "^5.0.5",
     "electron-dl": "^1.11.0",
     "electron-log": "^2.2.12",
     "electron-notarize": "^0.1.1",
