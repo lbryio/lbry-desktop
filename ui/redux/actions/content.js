@@ -150,11 +150,11 @@ export function doFetchClaimsByChannel(uri: string, page: number = 1, pageSize: 
       valid_channel_signature: true,
       order_by: ['release_time'],
     }).then(result => {
-      const { items: claimsInChannel, page: returnedPage } = result;
+      const { items: claims, total_items: claimsInChannel, page: returnedPage } = result;
 
-      if (claimsInChannel && claimsInChannel.length) {
+      if (claims && claims.length) {
         if (page === 1) {
-          const latest = claimsInChannel[0];
+          const latest = claims[0];
           dispatch(
             setSubscriptionLatest(
               {
@@ -171,7 +171,8 @@ export function doFetchClaimsByChannel(uri: string, page: number = 1, pageSize: 
         type: ACTIONS.FETCH_CHANNEL_CLAIMS_COMPLETED,
         data: {
           uri,
-          claims: claimsInChannel || [],
+          claimsInChannel,
+          claims: claims || [],
           page: returnedPage || undefined,
         },
       });
