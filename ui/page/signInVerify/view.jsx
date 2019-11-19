@@ -3,7 +3,9 @@ import React, { useState } from 'react';
 import { withRouter } from 'react-router';
 import Page from 'component/page';
 import ReCAPTCHA from 'react-google-recaptcha';
+import Button from 'component/button';
 import { Lbryio } from 'lbryinc';
+import I18nMessage from 'component/i18nMessage';
 import * as PAGES from 'constants/pages';
 
 type Props = {
@@ -17,6 +19,8 @@ function SignInVerifyPage(props: Props) {
     doToast,
   } = props;
   const [isAuthenticationSuccess, setIsAuthenticationSuccess] = useState(false);
+  const [showCaptchaMessage, setShowCaptchaMessage] = useState(false);
+  const [captchaLoaded, setCaptchaLoaded] = useState(false);
   const urlParams = new URLSearchParams(location.search);
   const authToken = urlParams.get('auth_token');
   const userSubmittedEmail = urlParams.get('email');
@@ -43,8 +47,28 @@ function SignInVerifyPage(props: Props) {
     }
   }, [needsRecaptcha]);
 
+  React.useEffect(() => {
+    let captchaTimeout;
+
+    if (needsRecaptcha && !captchaLoaded) {
+      captchaTimeout = setTimeout(() => {
+        setShowCaptchaMessage(true);
+      }, 2000);
+    }
+
+    return () => {
+      if (captchaTimeout) {
+        clearTimeout(captchaTimeout);
+      }
+    };
+  }, [needsRecaptcha, captchaLoaded]);
+
   function onCaptchaChange(value) {
     verifyUser(value);
+  }
+
+  function onCaptchaReady() {
+    setCaptchaLoaded(true);
   }
 
   function verifyUser(captchaValue) {
@@ -75,11 +99,23 @@ function SignInVerifyPage(props: Props) {
             ? __('Click below to sign in to lbry.tv')
             : __('Welcome back! You are automatically being signed in.')}
         </p>
+        <p className="section__subtitle">
+          {showCaptchaMessage && !isAuthenticationSuccess && (
+            <I18nMessage
+              tokens={{
+                refresh: <Button button="link" label={__('refreshing')} onClick={() => window.location.reload()} />,
+              }}
+            >
+              Not seeing a captcha? Check your ad blocker or try %refresh%.
+            </I18nMessage>
+          )}
+        </p>
         {!isAuthenticationSuccess && needsRecaptcha && (
           <div className="section__actions">
             <ReCAPTCHA
               sitekey="6LePsJgUAAAAAFTuWOKRLnyoNKhm0HA4C3elrFMG"
               onChange={onCaptchaChange}
+              asyncScriptOnLoad={onCaptchaReady}
               onExpired={onAuthError}
               onErrored={onAuthError}
             />
