@@ -55,7 +55,7 @@ function ModalRemoveFile(props: Props) {
             {abandonChecked === false && deleteChecked && (
               <p>This file will be removed from your Library and Downloads folder.</p>
             )}
-            {!deleteChecked && <p>This file removed from your Library but will remain in your Downloads folder.</p>}
+            {!deleteChecked && <p>This file will be removed from your Library but will remain in your Downloads folder.</p>}
             {/* @endif */}
           </div>
         )}
