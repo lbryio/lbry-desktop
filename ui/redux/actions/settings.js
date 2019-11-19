@@ -130,7 +130,6 @@ export function doSetAutoLaunch(value) {
     const autoLaunch = makeSelectClientSetting(SETTINGS.AUTO_LAUNCH)(state);
 
     if (IS_MAC) {
-      launcher.disable();
       return;
     }
 
