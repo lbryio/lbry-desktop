@@ -1,7 +1,6 @@
 // @flow
 import React, { useEffect } from 'react';
 import { parseURI } from 'lbry-redux';
-import { Redirect } from 'react-router';
 import BusyIndicator from 'component/common/busy-indicator';
 import ChannelPage from 'page/channel';
 import FilePage from 'page/file';
@@ -24,7 +23,7 @@ type Props = {
 
 function ShowPage(props: Props) {
   const { isResolvingUri, resolveUri, uri, claim, blackListedOutpoints, location, title } = props;
-  const { channelName, channelClaimId, streamName, streamClaimId } = parseURI(uri);
+  const { channelName, streamName } = parseURI(uri);
   const signingChannel = claim && claim.signing_channel;
   const canonicalUrl = claim && claim.canonical_url;
   const claimExists = claim !== null && claim !== undefined;
@@ -60,13 +59,6 @@ function ShowPage(props: Props) {
       document.title = IS_WEB ? SITE_TITLE : 'LBRY';
     };
   }, [title, channelName, streamName]);
-
-  // @routinghax
-  if (channelName && !channelClaimId && streamName && !streamClaimId && !isResolvingUri && !claim) {
-    // Kinda hacky, but this is probably an old url
-    // Just redirect to the vanity channel
-    return <Redirect to={`/@${channelName}`} />;
-  }
 
   let innerContent = '';
 

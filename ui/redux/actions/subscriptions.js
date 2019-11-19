@@ -2,76 +2,13 @@
 import * as ACTIONS from 'constants/action_types';
 import { Lbryio, rewards, doClaimRewardType } from 'lbryinc';
 import { selectUnreadByChannel } from 'redux/selectors/subscriptions';
-import { parseURI, doResolveUris } from 'lbry-redux';
+import { parseURI } from 'lbry-redux';
 
 export const doSetViewMode = (viewMode: ViewMode) => (dispatch: Dispatch) =>
   dispatch({
     type: ACTIONS.SET_VIEW_MODE,
     data: viewMode,
   });
-
-export const doFetchMySubscriptions = () => (dispatch: Dispatch, getState: GetState) => {
-  const state: { subscriptions: SubscriptionState, settings: any } = getState();
-  const { subscriptions: reduxSubscriptions } = state.subscriptions;
-  const { share_usage_data: shareSetting } = state.settings.daemonSettings;
-  const isSharingData = shareSetting || IS_WEB;
-
-  if (!isSharingData && isSharingData !== undefined) {
-    // They aren't sharing their data, subscriptions will be handled by persisted redux state
-    return;
-  }
-
-  // most of this logic comes from scenarios where the db isn't synced with redux
-  // this will happen if the user stops sharing data
-  dispatch({ type: ACTIONS.FETCH_SUBSCRIPTIONS_START });
-
-  Lbryio.call('subscription', 'list')
-    .then(dbSubscriptions => {
-      const storedSubscriptions = dbSubscriptions || [];
-      // // User has no subscriptions in db or redux
-      if (!storedSubscriptions.length && (!reduxSubscriptions || !reduxSubscriptions.length)) {
-        return [];
-      }
-
-      // There is some mismatch between redux state and db state
-      // If something is in the db, but not in redux, add it to redux
-      // If something is in redux, but not in the db, add it to the db
-      if (storedSubscriptions.length !== reduxSubscriptions.length) {
-        const reduxSubMap = {};
-        const subscriptionsToReturn = reduxSubscriptions.slice();
-
-        reduxSubscriptions.forEach(sub => {
-          const { channelClaimId } = parseURI(sub.uri);
-          reduxSubMap[channelClaimId] = 1;
-        });
-
-        storedSubscriptions.forEach(sub => {
-          if (!reduxSubMap[sub.claim_id]) {
-            const uri = `lbry://${sub.channel_name}#${sub.claim_id}`;
-            subscriptionsToReturn.push({ uri, channelName: sub.channel_name });
-          }
-        });
-
-        return subscriptionsToReturn;
-      }
-
-      // DB is already synced, just return the subscriptions in redux
-      return reduxSubscriptions;
-    })
-    .then((subscriptions: Array<Subscription>) => {
-      dispatch({
-        type: ACTIONS.FETCH_SUBSCRIPTIONS_SUCCESS,
-        data: subscriptions,
-      });
-
-      dispatch(doResolveUris(subscriptions.map(({ uri }) => uri)));
-    })
-    .catch(() => {
-      dispatch({
-        type: ACTIONS.FETCH_SUBSCRIPTIONS_FAIL,
-      });
-    });
-};
 
 export const setSubscriptionLatest = (subscription: Subscription, uri: string) => (dispatch: Dispatch) =>
   dispatch({
