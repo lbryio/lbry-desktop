@@ -3,7 +3,6 @@ import React, { useState } from 'react';
 import { withRouter } from 'react-router';
 import Page from 'component/page';
 import ReCAPTCHA from 'react-google-recaptcha';
-import Button from 'component/button';
 import { Lbryio } from 'lbryinc';
 import * as PAGES from 'constants/pages';
 
@@ -17,12 +16,12 @@ function SignInVerifyPage(props: Props) {
     history: { push, location },
     doToast,
   } = props;
+  const [isAuthenticationSuccess, setIsAuthenticationSuccess] = useState(false);
   const urlParams = new URLSearchParams(location.search);
   const authToken = urlParams.get('auth_token');
   const userSubmittedEmail = urlParams.get('email');
   const verificationToken = urlParams.get('verification_token');
-
-  const [isAuthenticationSuccess, setIsAuthenticationSuccess] = useState(false);
+  const needsRecaptcha = urlParams.get('needs_recaptcha') === 'true';
 
   function onAuthError(message) {
     doToast({
@@ -38,12 +37,22 @@ function SignInVerifyPage(props: Props) {
     }
   }, [authToken, userSubmittedEmail, verificationToken, doToast, push]);
 
+  React.useEffect(() => {
+    if (!needsRecaptcha) {
+      verifyUser();
+    }
+  }, [needsRecaptcha]);
+
   function onCaptchaChange(value) {
+    verifyUser(value);
+  }
+
+  function verifyUser(captchaValue) {
     Lbryio.call('user_email', 'confirm', {
       auth_token: authToken,
       email: userSubmittedEmail,
       verification_token: verificationToken,
-      recaptcha: value,
+      ...(captchaValue ? { recaptcha: captchaValue } : {}),
     })
       .then(() => {
         setIsAuthenticationSuccess(true);
@@ -60,9 +69,13 @@ function SignInVerifyPage(props: Props) {
           {isAuthenticationSuccess ? __('Sign In Success!') : __('Sign In to lbry.tv')}
         </h1>
         <p className="section__subtitle">
-          {isAuthenticationSuccess ? __('You can now close this tab.') : __('Click below to sign in to lbry.tv')}
+          {isAuthenticationSuccess
+            ? __('You can now close this tab.')
+            : needsRecaptcha
+            ? __('Click below to sign in to lbry.tv')
+            : __('Welcome back! You are automatically being signed in.')}
         </p>
-        {!isAuthenticationSuccess && (
+        {!isAuthenticationSuccess && needsRecaptcha && (
           <div className="section__actions">
             <ReCAPTCHA
               sitekey="6LePsJgUAAAAAFTuWOKRLnyoNKhm0HA4C3elrFMG"
