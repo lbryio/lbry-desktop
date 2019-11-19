@@ -27,7 +27,8 @@ function ShowPage(props: Props) {
   const { channelName, channelClaimId, streamName, streamClaimId } = parseURI(uri);
   const signingChannel = claim && claim.signing_channel;
   const canonicalUrl = claim && claim.canonical_url;
-  const noClaim = claim === undefined;
+  const claimExists = claim !== null && claim !== undefined;
+  const haventFetchedYet = claim === undefined;
 
   useEffect(() => {
     // @if TARGET='web'
@@ -39,10 +40,10 @@ function ShowPage(props: Props) {
     }
     // @endif
 
-    if (resolveUri && !isResolvingUri && uri && (noClaim || !canonicalUrl)) {
+    if ((resolveUri && !isResolvingUri && uri && haventFetchedYet) || (claimExists && !canonicalUrl)) {
       resolveUri(uri);
     }
-  }, [resolveUri, isResolvingUri, canonicalUrl, uri, noClaim]);
+  }, [resolveUri, isResolvingUri, canonicalUrl, uri, claimExists, haventFetchedYet]);
 
   useEffect(() => {
     if (title) {
