@@ -8,7 +8,9 @@ const SUPPORTED_LANGUAGES = {
   fr: LANGUAGES.fr[1],
   sk: LANGUAGES.sk[1],
   tr: LANGUAGES.tr[1],
-  zh: LANGUAGES.zh[1]
+  zh: LANGUAGES.zh[1],
+  ml: LANGUAGES.ml[1],
+  sr: LANGUAGES.sr[1]
 };
 
 export default SUPPORTED_LANGUAGES;
