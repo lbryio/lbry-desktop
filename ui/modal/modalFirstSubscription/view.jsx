@@ -26,30 +26,21 @@ const ModalFirstSubscription = (props: Props) => {
     <Modal type="custom" isOpen contentLabel="Subscriptions 101" title={__('Subscriptions 101')}>
       <div className="section__subtitle">
         <p>{__('Awesome! You just subscribed to your first channel.')}{' '}
-          {/* @if TARGET='web' */}
-          {__('You will receive notifications related to new content.')}
-          {/* @endif */}
-          {/* @if TARGET='app' */}
           { user && user.primary_email ? (
             <React.Fragment>
               {__('You will receive notifications related to new content.')}
             </React.Fragment>
             ) : (
             <React.Fragment>
-              <Button button="link" onClick={() => {
-                closeModal()
-                history.push(`/$/${PAGES.AUTH}?redirect=${pathname}`);
-              }} label={__('Sign in')} />{' '}
-              { __('with lbry.tv to receive notifications related to new content.')}
+              { __('Sign in with lbry.tv to receive notifications about new content.')}
             </React.Fragment>
           )}
-          {/* @endif */}
         </p>
       </div>
       <div className="section__actions">
         <Button button="primary" onClick={closeModal} label={__('Got it')} />
         <React.Fragment>
-          {user && user.primary_email && (
+          {user && user.primary_email ? (
             <React.Fragment>
               <Button
                 button="link"
@@ -57,9 +48,15 @@ const ModalFirstSubscription = (props: Props) => {
                 label={__('Update email preferences')}
               />
             </React.Fragment>
+          ) : (
+            <React.Fragment>
+              <Button button="link" onClick={() => {
+                closeModal()
+                history.push(`/$/${PAGES.AUTH}?redirect=${pathname}`);
+              }} label={__('Sign in')} />
+            </React.Fragment>
           )}
         </React.Fragment>
-
       </div>
     </Modal>
   );
