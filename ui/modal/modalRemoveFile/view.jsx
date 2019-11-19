@@ -30,15 +30,15 @@ function ModalRemoveFile(props: Props) {
         </p>
       </section>
       <Form onSubmit={() => deleteFile(uri, deleteChecked, claimIsMine ? abandonChecked : false)}>
-        {!IS_WEB && (
-          <FormField
-            name="file_delete"
-            label={__('Delete this file from my computer')}
-            type="checkbox"
-            checked={deleteChecked}
-            onChange={() => setDeleteChecked(!deleteChecked)}
-          />
-        )}
+        {/* @if TARGET='app' */}
+        <FormField
+          name="file_delete"
+          label={__('Delete this file from my computer')}
+          type="checkbox"
+          checked={deleteChecked}
+          onChange={() => setDeleteChecked(!deleteChecked)}
+        />
+        {/* @endif */}
 
         {claimIsMine && (
           <div>
@@ -51,12 +51,12 @@ function ModalRemoveFile(props: Props) {
             />
             {abandonChecked === true && <p className="error-text">This action is permanent and cannot be undone.</p>}
 
-            {abandonChecked === false && deleteChecked && !IS_WEB && (
+            {/* @if TARGET='app' */}
+            {abandonChecked === false && deleteChecked && (
               <p>This file will be removed from your Library and Downloads folder.</p>
             )}
-            {!deleteChecked && !IS_WEB && (
-              <p>This file removed from your Library but will remain in your Downloads folder.</p>
-            )}
+            {!deleteChecked && <p>This file removed from your Library but will remain in your Downloads folder.</p>}
+            {/* @endif */}
           </div>
         )}
         <div className="card__actions">
