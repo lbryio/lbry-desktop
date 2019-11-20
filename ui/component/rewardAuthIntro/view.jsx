@@ -1,4 +1,5 @@
 // @flow
+import * as PAGES from 'constants/pages';
 import React from 'react';
 import CreditAmount from 'component/common/credit-amount';
 import Button from 'component/button';
@@ -27,7 +28,13 @@ function RewardAuthIntro(props: Props) {
           and security updates.
         </I18nMessage>
       }
-      actions={<Button button="primary" navigate="/$/rewards" label={__('Unlock Rewards')} />}
+      actions={
+        <Button
+          button="primary"
+          navigate={`/$/${PAGES.AUTH}?redirect=/$/${PAGES.REWARDS}`}
+          label={__('Unlock Rewards')}
+        />
+      }
     />
   );
 }
