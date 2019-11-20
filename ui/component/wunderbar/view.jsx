@@ -1,5 +1,5 @@
 // @flow
-import { DOMAIN, DOMAIN_LOCAL, DOMAIN_DEV } from 'config';
+import { URL, URL_LOCAL, URL_DEV } from 'config';
 import * as PAGES from 'constants/pages';
 import * as ICONS from 'constants/icons';
 import React from 'react';
@@ -12,9 +12,9 @@ import Tag from 'component/tag';
 
 const L_KEY_CODE = 76;
 const ESC_KEY_CODE = 27;
-const WEB_DEV_PREFIX = `${DOMAIN_DEV}/`;
-const WEB_LOCAL_PREFIX = `${DOMAIN_LOCAL}/`;
-const WEB_PROD_PREFIX = `${DOMAIN}/`;
+const WEB_DEV_PREFIX = `${URL_DEV}/`;
+const WEB_LOCAL_PREFIX = `${URL_LOCAL}/`;
+const WEB_PROD_PREFIX = `${URL}/`;
 const SEARCH_PREFIX = `$/${PAGES.SEARCH}q=`;
 
 type Props = {

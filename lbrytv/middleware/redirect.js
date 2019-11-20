@@ -17,7 +17,7 @@ async function redirectMiddleware(ctx, next) {
   }
 
   if (redirectHosts.includes(requestHost)) {
-    const redirectUrl = config.DOMAIN + path;
+    const redirectUrl = config.URL + path;
     ctx.redirect(redirectUrl);
     return;
   }
