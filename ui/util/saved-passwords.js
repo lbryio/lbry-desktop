@@ -1,5 +1,6 @@
 // @flow
 import { ipcRenderer } from 'electron';
+import { DOMAIN } from 'config';
 
 let sessionPassword;
 
@@ -11,7 +12,7 @@ function setCookie(name: string, value: string, days: number) {
     expires = '; expires=' + date.toUTCString();
   }
 
-  document.cookie = `${name}=${value || ''}${expires}; path=/;samesite=strict;`;
+  document.cookie = `${name}=${value || ''}${expires}; domain=.${DOMAIN}; path=/; SameSite=Lax; Secure;`;
 }
 
 function getCookie(name: string) {

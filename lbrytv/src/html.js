@@ -1,4 +1,4 @@
-const { DOMAIN } = require('../../config.js');
+const { URL } = require('../../config.js');
 const { generateStreamUrl } = require('../../ui/util/lbrytv');
 const { getClaim } = require('./chainquery');
 const { parseURI } = require('lbry-redux');
@@ -9,13 +9,13 @@ let html = fs.readFileSync(path.join(__dirname, '/../dist/index.html'), 'utf8');
 
 const defaultHead =
   '<title>lbry.tv</title>\n' +
-  `<meta property="og:url" content="${DOMAIN}" />\n` +
+  `<meta property="og:url" content="${URL}" />\n` +
   '<meta property="og:title" content="lbry.tv" />\n' +
   '<meta property="og:site_name" content="lbry.tv | Content Freedom"/>\n' +
   '<meta property="og:description" content="Meet LBRY, an open, free, and community-controlled content wonderland." />\n' +
-  `<meta property="og:image" content="${DOMAIN}/og.png" />\n` +
+  `<meta property="og:image" content="${URL}/og.png" />\n` +
   '<meta name="twitter:card" content="summary_large_image"/>\n' +
-  `<meta name="twitter:image" content="${DOMAIN}/og.png"/>\n` +
+  `<meta name="twitter:image" content="${URL}/og.png"/>\n` +
   '<meta property="fb:app_id" content="1673146449633983" />';
 
 function insertToHead(fullHtml, htmlToInsert = defaultHead) {
@@ -45,7 +45,7 @@ function buildOgMetadata(uri, claim) {
       ? escapeHtmlProperty(truncateDescription(claim.description))
       : `Watch ${title} on LBRY.tv`;
   const claimLanguage = escapeHtmlProperty(claim.language) || 'en_US';
-  const claimThumbnail = escapeHtmlProperty(claim.thumbnail_url) || `${DOMAIN}/og.png`;
+  const claimThumbnail = escapeHtmlProperty(claim.thumbnail_url) || `${URL}/og.png`;
   const claimTitle = claim.channel && !isChannel ? `${title} from ${claim.channel} on LBRY.tv` : `${title} on LBRY.tv`;
 
   let head = '';
@@ -65,7 +65,7 @@ function buildOgMetadata(uri, claim) {
   head += `<meta property="og:type" content="website"/>`;
   head += `<meta property="og:title" content="${claimTitle}"/>`;
   // below should be canonical_url, but not provided by chainquery yet
-  head += `<meta property="og:url" content="${DOMAIN}/${claim.name}:${claim.claim_id}"/>`;
+  head += `<meta property="og:url" content="${URL}/${claim.name}:${claim.claim_id}"/>`;
 
   if (claim.source_media_type && claim.source_media_type.startsWith('video/')) {
     const videoUrl = generateStreamUrl(claim.name, claim.claim_id);
