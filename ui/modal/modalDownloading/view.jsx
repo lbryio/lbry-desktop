@@ -23,8 +23,14 @@ class ModalDownloading extends React.PureComponent<Props> {
         {downloadComplete ? (
           <React.Fragment>
             <p>{__('Click "Begin Upgrade" to start the upgrade process.')}</p>
-            <p>{__('The app will close, and you will be prompted to install the latest version of LBRY.')}</p>
-            <p>{__('To launch installation manually, close LBRY and run the command below in the terminal.')}</p>
+            <p>
+              {__(
+                'The app will close (if not, quit with CTRL-Q), and you will be prompted to install the latest version of LBRY.'
+              )}
+            </p>
+            <p>
+              {__('To launch installation manually, close LBRY (CTRL-Q) and run the command below in the terminal.')}
+            </p>
             <blockquote>sudo dpkg -i {downloadItem}</blockquote>
             <p>{__('After the install is complete, please reopen the app.')}</p>
           </React.Fragment>

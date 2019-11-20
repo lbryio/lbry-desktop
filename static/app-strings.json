@@ -888,5 +888,8 @@
   "with lbry.tv to receive notifications related to new content.": "with lbry.tv to receive notifications related to new content.",
   "An email was sent to %email%. Follow the link to %verify_text%. After, this page will update automatically.": "An email was sent to %email%. Follow the link to %verify_text%. After, this page will update automatically.",
   "Your email preferences": "Your email preferences",
-  "allow you to receive notifications related to new content.": "allow you to receive notifications related to new content."
+  "allow you to receive notifications related to new content.": "allow you to receive notifications related to new content.",
+  "Thumbnail (Minimum size: 300x300, (1:1)": "Thumbnail (Minimum size: 300x300, (1:1)",
+  "Cover (Minimum: 1000 x 160, (10:1.6)": "Cover (Minimum size: 1000 x 160, (10:1.6)",
+  "Minimum size: 800x450 (16:9)": "Minimum size: 800x450 (16:9)"
 }

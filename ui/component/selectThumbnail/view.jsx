@@ -175,7 +175,7 @@ class SelectThumbnail extends React.PureComponent<Props, State> {
             <React.Fragment>
               {__('Upload your thumbnail to')}{' '}
               <Button button="link" label={__('spee.ch')} href="https://spee.ch/about" />.{' '}
-              {__('Recommended size: 800x450 (16:9)')}
+              {__('Minimum size: 800x450 (16:9)')}
             </React.Fragment>
           )}
         </p>
