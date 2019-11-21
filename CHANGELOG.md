@@ -4,25 +4,26 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
-## [0.37.2] - [Unreleased]
+## [0.37.2] - [2019-11-21]
 
 ### Fixed
 
-- Context menu does not open in the webapp when right clicking video tiles ([#3135](https://github.com/lbryio/lbry-desktop/pull/3135))
+- Channel pages not showing any page numbers ([#3237](https://github.com/lbryio/lbry-desktop/pull/3237))
+- Context menu does not open in the webapp when right-clicking video tiles ([#3135](https://github.com/lbryio/lbry-desktop/pull/3135))
 - Undefined tags prevents homepage from loading ([#3146](https://github.com/lbryio/lbry-desktop/pull/3146))
 
 ### Added
 
+- Setting to start the app minimized when you login (Linux/Windows only) ([#3236](https://github.com/lbryio/lbry-desktop/pull/3236))
 - Search on downloads page ([#2969](https://github.com/lbryio/lbry-desktop/pull/2969))
 - Clear support state when clearing cache in settings([#3149](https://github.com/lbryio/lbry-desktop/pull/3149))
 - Allow disabling app updates for some linux based builds ([#3206](https://github.com/lbryio/lbry-desktop/pull/3206))
 - Add French, Turkish, Slovak, and Chinese language support and improved how we are loading languages ([#3180](https://github.com/lbryio/lbry-desktop/pull/3180))
-- Setting to start the app minimized when you login ([#3236](https://github.com/lbryio/lbry-desktop/pull/3236))
 
 ### Changed
 
 - Updated lbry-sdk to [0.46.1](https://github.com/lbryio/lbry-sdk/releases/tag/v0.46.1)
-
+- Optimized SDK calls for faster app startup and performance ([#3216](https://github.com/lbryio/lbry-desktop/pull/3216))
 ## [0.37.1] - [2019-10-22]
 
 ### Fixed
