@@ -79,6 +79,7 @@
     "babel-plugin-add-module-exports": "^1.0.0",
     "babel-plugin-import-glob": "^2.0.0",
     "babel-plugin-transform-imports": "^1.5.1",
+    "babel-plugin-transform-object-rest-spread": "^6.26.0",
     "bluebird": "^3.5.1",
     "chalk": "^2.4.2",
     "classnames": "^2.2.5",

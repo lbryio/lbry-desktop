@@ -5,7 +5,6 @@ import React from 'react';
 import Button from 'component/button';
 import Tag from 'component/tag';
 import StickyBox from 'react-sticky-box/dist/esnext';
-import 'css-doodle';
 import Spinner from 'component/spinner';
 
 type Props = {
