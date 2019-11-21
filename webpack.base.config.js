@@ -83,6 +83,7 @@ let baseConfig = {
       'lodash.clonedeep': 'lodash-es/cloneDeep',
       ...ifProduction({}, { 'react-dom': '@hot-loader/react-dom' }),
     },
+    symlinks: false,
   },
 
   plugins: [
