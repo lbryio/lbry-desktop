@@ -18,7 +18,9 @@ renderConfig = merge(renderConfig, {
   plugins: [new webpack.HotModuleReplacementPlugin()],
   resolve: {
     alias: { 'react-dom': '@hot-loader/react-dom' },
+    symlinks: false,
   },
+
 });
 
 const mainCompiler = webpack(mainConfig);
