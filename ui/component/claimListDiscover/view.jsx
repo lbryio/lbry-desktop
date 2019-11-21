@@ -96,7 +96,7 @@ function ClaimListDiscover(props: Props) {
     not_tags: !showNsfw ? MATURE_TAGS : [],
     order_by:
       typeSort === TYPE_TRENDING
-        ? ['trending_global', 'trending_mixed']
+        ? ['trending_group', 'trending_mixed']
         : typeSort === TYPE_NEW
         ? ['release_time']
         : ['effective_amount'], // Sort by top
