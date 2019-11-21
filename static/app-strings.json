@@ -55,7 +55,6 @@
   "Thumbnail": "Thumbnail",
   "Upload your thumbnail (.png/.jpg/.jpeg/.gif) to": "Upload your thumbnail (.png/.jpg/.jpeg/.gif) to",
   "spee.ch": "spee.ch",
-  "Recommended size: 800x450 (16:9)": "Recommended size: 800x450 (16:9)",
   "Price": "Price",
   "How much will this content cost?": "How much will this content cost?",
   "Free": "Free",
@@ -889,7 +888,7 @@
   "An email was sent to %email%. Follow the link to %verify_text%. After, this page will update automatically.": "An email was sent to %email%. Follow the link to %verify_text%. After, this page will update automatically.",
   "Your email preferences": "Your email preferences",
   "allow you to receive notifications related to new content.": "allow you to receive notifications related to new content.",
-  "Thumbnail (Minimum size: 300x300, (1:1)": "Thumbnail (Minimum size: 300x300, (1:1)",
-  "Cover (Minimum: 1000 x 160, (10:1.6)": "Cover (Minimum size: 1000 x 160, (10:1.6)",
-  "Minimum size: 800x450 (16:9)": "Minimum size: 800x450 (16:9)"
+  "Thumbnail (Recommended size: 200x200, (1:1)": "Thumbnail (Recommended size: 300x300, (1:1)",
+  "Cover (Recommended: 1000 x 160, (10:1.6)": "Cover (Recommended size: 1000 x 160, (10:1.6)",
+  "Recommended size: 800x450 (16:9)": "Recommended size: 800x450 (16:9)"
 }
