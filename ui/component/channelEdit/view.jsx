@@ -110,14 +110,14 @@ function ChannelForm(props: Props) {
         onUpdate={v => handleThumbnailChange(v)}
         currentValue={params.thumbnailUrl}
         assetName={'Thumbnail'}
-        recommended={'(Minimum size: 300x300, (1:1)'}
+        recommended={'(Recommended size: 200x200, (1:1)'}
       />
 
       <SelectAsset
         onUpdate={v => handleCoverChange(v)}
         currentValue={params.coverUrl}
         assetName={'Cover'}
-        recommended={'(Minimum size: 1000 x 160, (10:1.6)'}
+        recommended={'(Recommended size: 1000 x 160, (10:1.6)'}
       />
 
       <FormField
