@@ -23,7 +23,7 @@ export default function Expandable(props: Props) {
   return (
     <div ref={ref}>
       {rect && rect.height > COLLAPSED_HEIGHT ? (
-        <div ref={ref} className="expandable">
+        <div ref={ref}>
           <div
             className={classnames({
               'expandable--open': expanded,

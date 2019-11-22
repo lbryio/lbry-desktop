@@ -26,55 +26,12 @@ $large-breakpoint: 1921px;
   --floating-viewer-info-height: 5rem;
   --floating-viewer-container-height: calc(var(--floating-viewer-height) + var(--floating-viewer-info-height));
 
-  // Font
-  --font-multiplier-small: 0.9em;
-  --font-multiplier-medium: 1.1em;
-  --font-multiplier-large: 1.4em;
-  --font-multiplier-xlarge: 1.6rem;
-  --font-body: 1.2rem;
-  --font-label: 0.9em;
-  --font-subtext: 1em;
-  --font-title: 1.6em;
-  --font-section-title: 2rem;
-  --font-heading: 3rem;
-  --font-weight-base: 400;
-  --font-weight-light: 300;
-  --font-weight-bold: 700;
-
-  // Color
-  --color-background: #f7f7f7;
-  --color-background--splash: #270f34;
-  --color-card-actions: #f7fbfe;
-  --color-card-actions--dark: #545454;
-
-  // Dark Mode
-  --dm-color-01: #ddd;
-  --dm-color-02: #90908f;
-  --dm-color-03: #6a6a6a;
-  --dm-color-04: #555254;
-  --dm-color-05: #353434;
-  --dm-color-06: #2e2d2e;
-  --dm-color-07: #252424;
-  --dm-color-08: #1e1e1e;
-
   // Text
   --text-max-width: 660px;
   --text-link-padding: 4px;
 
   // Tabs
   --tab-indicator-size: 0.5rem;
-
-  // Input
-  --input-border-size: 1px;
-  --input-border-radius: 2px;
-  --input-height: 2.6rem;
-
-  // Select
-  --select-height: 30px;
-
-  // Button
-  --button-radius: var(--input-border-radius);
-  --button-height: var(--input-height);
 
   // Header
   --header-height: 5rem;
@@ -83,7 +40,7 @@ $large-breakpoint: 1921px;
   --inline-player-max-height: calc(100vh - var(--header-height) - var(--spacing-large) * 2);
 
   // Card
-  --card-radius: 5px;
+  --card-radius: var(--border-radius);
   --card-max-width: 1000px;
   --card-box-shadow: 0px 2px 6px 0px;
   --card-box-shadow--attached: 0px 4px 6px 0px;
@@ -102,4 +59,6 @@ $large-breakpoint: 1921px;
   --channel-thumbnail-width: 10rem;
   --channel-thumbnail-width--small: 4rem;
   --file-list-thumbnail-width: 10rem;
+
+  --tag-height: 1.5rem;
 }

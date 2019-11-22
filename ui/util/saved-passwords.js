@@ -1,4 +1,5 @@
 // @flow
+import config from 'config';
 import { ipcRenderer } from 'electron';
 import { DOMAIN } from 'config';
 

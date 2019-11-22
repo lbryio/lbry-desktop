@@ -25,6 +25,7 @@ class RewardSummary extends React.Component<Props> {
                 tokens={{
                   credit_amount: <CreditAmount inheritStyle amount={unclaimedRewardAmount} precision={8} />,
                 }}
+                f
               >
                 You have %credit_amount% in unclaimed rewards.
               </I18nMessage>
@@ -34,14 +35,14 @@ class RewardSummary extends React.Component<Props> {
           </React.Fragment>
         }
         actions={
-          <div className="section__actions">
+          <React.Fragment>
             <Button
               button="primary"
               navigate="/$/rewards"
               label={hasRewards ? __('Claim Rewards') : __('View Rewards')}
             />
-            <Button button="link" label={__('Learn more')} href="https://lbry.com/faq/rewards" />.
-          </div>
+            <Button button="link" label={__('Learn more')} href="https://lbry.com/faq/rewards" />
+          </React.Fragment>
         }
       />
     );

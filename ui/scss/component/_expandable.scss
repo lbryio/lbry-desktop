@@ -1,12 +1,3 @@
-.expandable {
-  margin-bottom: var(--spacing-medium);
-  padding-bottom: var(--spacing-medium);
-
-  [data-mode='dark'] & {
-    border-color: var(--dm-color-04);
-  }
-}
-
 .expandable--closed,
 .expandable--open {
   margin-bottom: var(--spacing-small);
@@ -16,22 +7,6 @@
   max-height: 10rem;
   overflow: hidden;
   position: relative;
-
-  &::after {
-    width: 100%;
-    height: 40%;
-    bottom: 0;
-    left: 0;
-    pointer-events: none;
-
-    background-image: linear-gradient(to bottom, transparent 0%, mix($lbry-white, $lbry-gray-1, 70%) 90%);
-    content: '';
-    position: absolute;
-
-    [data-mode='dark'] & {
-      background-image: linear-gradient(to bottom, transparent 0%, var(--dm-color-08) 90%);
-    }
-  }
 }
 
 .expandable--open {

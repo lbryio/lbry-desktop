@@ -5,17 +5,18 @@ import { Form, FormField } from 'component/common/form';
 import CopyableText from 'component/copyableText';
 import Card from 'component/common/card';
 
-type FormProps = {
-  inviteNew: string => void,
-  errorMessage: ?string,
-  isPending: boolean,
-};
-
 type FormState = {
   email: string,
 };
 
-class FormInviteNew extends React.PureComponent<FormProps, FormState> {
+type Props = {
+  errorMessage: ?string,
+  inviteNew: string => void,
+  isPending: boolean,
+  referralLink: string,
+};
+
+class InviteNew extends React.PureComponent<Props, FormState> {
   constructor() {
     super();
 
@@ -26,7 +27,7 @@ class FormInviteNew extends React.PureComponent<FormProps, FormState> {
     (this: any).handleSubmit = this.handleSubmit.bind(this);
   }
 
-  handleEmailChanged(event) {
+  handleEmailChanged(event: any) {
     this.setState({
       email: event.target.value,
     });
@@ -38,40 +39,7 @@ class FormInviteNew extends React.PureComponent<FormProps, FormState> {
   }
 
   render() {
-    const { errorMessage, isPending } = this.props;
-
-    return (
-      <Form onSubmit={this.handleSubmit}>
-        <FormField
-          type="text"
-          label="Email"
-          placeholder="youremail@example.org"
-          name="email"
-          value={this.state.email}
-          error={errorMessage}
-          inputButton={
-            <Button button="inverse" type="submit" label="Invite" disabled={isPending || !this.state.email} />
-          }
-          onChange={event => {
-            this.handleEmailChanged(event);
-          }}
-        />
-      </Form>
-    );
-  }
-}
-
-type Props = {
-  errorMessage: ?string,
-  inviteNew: string => void,
-  isPending: boolean,
-  rewardAmount: number,
-  referralLink: string,
-};
-
-class InviteNew extends React.PureComponent<Props> {
-  render() {
-    const { errorMessage, inviteNew, isPending, rewardAmount, referralLink } = this.props;
+    const { errorMessage, isPending, referralLink } = this.props;
 
     return (
       <Card
@@ -79,20 +47,31 @@ class InviteNew extends React.PureComponent<Props> {
         subtitle={__('When your friends start using LBRY, the network gets stronger!')}
         actions={
           <React.Fragment>
-            <FormInviteNew
-              errorMessage={errorMessage}
-              inviteNew={inviteNew}
-              isPending={isPending}
-              rewardAmount={rewardAmount}
-            />
-            <CopyableText label={__('Or share this link with your friends')} copyable={referralLink} />
+            <Form onSubmit={this.handleSubmit}>
+              <FormField
+                type="text"
+                label="Email"
+                placeholder="youremail@example.org"
+                name="email"
+                value={this.state.email}
+                error={errorMessage}
+                inputButton={
+                  <Button button="secondary" type="submit" label="Invite" disabled={isPending || !this.state.email} />
+                }
+                onChange={event => {
+                  this.handleEmailChanged(event);
+                }}
+              />
 
-            <p className="help">
-              {__('Earn')} <Button button="link" navigate="/$/rewards" label={__('rewards')} />{' '}
-              {__('for inviting your friends.')} {__('Read our')}{' '}
-              <Button button="link" label={__('FAQ')} href="https://lbry.com/faq/referrals" />{' '}
-              {__('to learn more about referrals')}.
-            </p>
+              <CopyableText label={__('Or share this link with your friends')} copyable={referralLink} />
+
+              <p className="help">
+                {__('Earn')} <Button button="link" navigate="/$/rewards" label={__('rewards')} />{' '}
+                {__('for inviting your friends.')} {__('Read our')}{' '}
+                <Button button="link" label={__('FAQ')} href="https://lbry.com/faq/referrals" />{' '}
+                {__('to learn more about referrals')}.
+              </p>
+            </Form>
           </React.Fragment>
         }
       />

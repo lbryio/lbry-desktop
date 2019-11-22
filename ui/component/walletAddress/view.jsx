@@ -1,6 +1,5 @@
 // @flow
 import React from 'react';
-import * as ICONS from 'constants/icons';
 import Button from 'component/button';
 import CopyableText from 'component/copyableText';
 import QRCode from 'component/common/qr-code';
@@ -11,7 +10,6 @@ type Props = {
   receiveAddress: string,
   getNewAddress: () => void,
   gettingNewAddress: boolean,
-  history: { goBack: () => void },
 };
 
 type State = {
@@ -45,26 +43,26 @@ class WalletAddress extends React.PureComponent<Props, State> {
   }
 
   render() {
-    const { receiveAddress, getNewAddress, gettingNewAddress, history } = this.props;
+    const { receiveAddress, getNewAddress, gettingNewAddress } = this.props;
     const { showQR } = this.state;
 
     return (
       <Card
-        title={
-          <React.Fragment>
-            {__('Receive Credits')}
-            <Button button="close" icon={ICONS.REMOVE} onClick={() => history.goBack()} />
-          </React.Fragment>
-        }
+        title={__('Receive Credits')}
         subtitle={__('Use this address to receive LBC.')}
         actions={
           <React.Fragment>
-            <CopyableText label={__('Your Address')} copyable={receiveAddress} snackMessage={__('Address copied.')} />
+            <CopyableText
+              primaryButton
+              label={__('Your Address')}
+              copyable={receiveAddress}
+              snackMessage={__('Address copied.')}
+            />
 
             <div className="card__actions">
               {!IS_WEB && (
                 <Button
-                  button="inverse"
+                  button="secondary"
                   label={__('Get New Address')}
                   onClick={getNewAddress}
                   disabled={gettingNewAddress}

@@ -47,17 +47,18 @@ export default function EmbedArea(props: Props) {
         label={label}
         value={embedText || ''}
         ref={input}
+        helper={
+          <Button
+            icon={ICONS.COPY}
+            button="link"
+            label={__('Copy')}
+            onClick={() => {
+              copyToClipboard();
+            }}
+          />
+        }
         onFocus={onFocus}
       />
-      <div className="card__actions card__actions--center">
-        <Button
-          icon={ICONS.COPY}
-          button="link"
-          onClick={() => {
-            copyToClipboard();
-          }}
-        />
-      </div>
     </fieldset-section>
   );
 }

@@ -1,5 +1,6 @@
 // @flow
 // These should probably just be combined into one modal component
+import * as ICONS from 'constants/icons';
 import * as React from 'react';
 import ReactModal from 'react-modal';
 import Button from 'component/button';
@@ -50,12 +51,15 @@ export class Modal extends React.PureComponent<ModalProps> {
       <ReactModal
         {...modalProps}
         onRequestClose={onAborted || onConfirmed}
-        className={classnames('card modal', className)}
+        className={classnames('modal', className, {
+          'modal--card-internal': type === 'card',
+        })}
         overlayClassName="modal-overlay"
       >
-        {title && <h1 className="card__title">{title}</h1>}
+        {title && <h1 className="card__title card__title--deprecated">{title}</h1>}
+        {type === 'card' && <Button button="close" icon={ICONS.REMOVE} onClick={onAborted} />}
         {children}
-        {type === 'custom' ? null : ( // custom modals define their own buttons
+        {type === 'custom' || type === 'card' ? null : ( // custom modals define their own buttons
           <div className="card__actions">
             <Button
               button="primary"

@@ -45,7 +45,7 @@ class TransactionRefreshButton extends PureComponent<Props, State> {
     const { fetchingTransactions } = this.props;
     const { label, disabled } = this.state;
     return (
-      <Button button="link" label={label} onClick={this.handleClick} disabled={disabled || fetchingTransactions} />
+      <Button button="secondary" label={label} onClick={this.handleClick} disabled={disabled || fetchingTransactions} />
     );
   }
 }

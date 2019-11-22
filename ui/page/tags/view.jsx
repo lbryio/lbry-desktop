@@ -1,4 +1,5 @@
 // @flow
+import * as ICONS from 'constants/icons';
 import React, { useRef } from 'react';
 import Page from 'component/page';
 import ClaimListDiscover from 'component/claimListDiscover';
@@ -47,7 +48,17 @@ function TagsPage(props: Props) {
       <ClaimListDiscover
         tags={tags}
         hiddenNsfwMessage={<HiddenNsfw type="page" />}
-        meta={<Button ref={buttonRef} button="link" onClick={handleFollowClick} requiresAuth={IS_WEB} label={label} />}
+        meta={
+          <Button
+            ref={buttonRef}
+            button="alt"
+            icon={ICONS.SUBSCRIBE}
+            iconColor="red"
+            onClick={handleFollowClick}
+            requiresAuth={IS_WEB}
+            label={label}
+          />
+        }
       />
     </Page>
   );

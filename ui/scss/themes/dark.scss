@@ -1,0 +1,84 @@
+/* #2c3237 - 5% */
+/* #383f45 - 10% */
+/* #434b53;  - 15% */
+/* #4e5862;  - 20% */
+/* #5a6570;  - 25% */
+
+[theme='dark'] {
+  --color-primary-alt: #30574e;
+  --color-primary: #60e1ba;
+
+  // Button
+  --color-link: #38d9a9;
+  --color-link-hover: #60e1ba;
+  --color-link-active: #60e1ba;
+  --color-link-icon: #89939e;
+  --color-navigation-link: var(--color-link-icon);
+  --color-button-primary-bg: var(--color-primary-alt);
+  --color-button-primary-bg-hover: #44796c;
+  --color-button-primary-text: var(--color-primary);
+  --color-button-primary-hover-text: var(--color-text);
+  --color-button-secondary-bg: #395877;
+  --color-button-secondary-bg-hover: #4b6d8f;
+  --color-button-secondary-text: #a3c1e0;
+
+  // Color
+  --color-focus: #2d69a5;
+  --color-background-overlay: #212529d7;
+  --color-background: #212529;
+  --color-background-overlay: #21252980;
+  --color-border: #4f5b64;
+  --color-card-background: #2c3237;
+  --color-card-background-highlighted: #384046;
+  --color-header-background: #434b53;
+  --color-file-viewer-background: #212529;
+  --color-tab-text: var(--color-white);
+  --color-tabs-background: #434b53;
+  --color-tab-divider: var(--color-white);
+
+  // Text
+  --color-text: #eeeeee;
+  --color-text-error: var(--lbry-red-1);
+  --color-text-empty: #bbbbbb;
+  --color-text-help: #bbbbbb;
+  --color-text-subtitle: #9fafc0;
+  --color-text-warning: #212529;
+  --color-text-warning--background: var(--lbry-yellow-1);
+  --color-blockquote: var(--color-gray-5);
+
+  // Input
+  --color-input: #f4f4f5;
+  --color-input-label: #d4d4d4;
+  --color-input-placeholder: #f4f4f5;
+  --color-input-bg: #7d8894;
+  --color-input-bg-copyable: #434b53;
+  --color-input-border: var(--color-border);
+  --color-input-border-active: var(--color-secondary);
+
+  // Menu
+  --color-menu-background: var(--color-header-background);
+  --color-menu-background--selected: #89939e;
+  --color-menu-background--active: #89939e;
+  --color-menu-icon: var(--color-link-icon);
+  --color-menu-icon-active: #d6d6d6;
+
+  // Table
+  --color-table-highlight: #3a444e;
+
+  // Search
+  --color-search-suggestion: #212529;
+  --color-search-suggestion-background: #cce6fb;
+  --color-box-shadow: #212529;
+  --color-placeholder-background: #4e5862;
+  --color-spinner-light: #5a6570;
+  --color-spinner-dark: #212529;
+
+  // Tags
+  --color-tag: var(--color-primary);
+  --color-tag-bg: var(--color-primary-alt);
+  --color-tag-hover: var(--color-white);
+  --color-tag-bg-hover: var(--color-primary-alt-2);
+
+  // Snack
+  --color-snack-bg: var(--color-primary-alt);
+}

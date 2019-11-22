@@ -11,11 +11,10 @@
   @extend .navigation;
   padding: 2rem 1.5rem;
   border-radius: var(--card-radius);
-  font-size: var(--font-title);
   font-weight: var(--font-weight-bold);
-  color: $lbry-white;
+  color: #fff;
   position: relative;
-  background-color: $lbry-black;
+  background-color: black; //black;
 
   h2 {
     font-size: 2rem;
@@ -23,7 +22,7 @@
   }
 
   p {
-    font-size: 1.5rem;
+    font-size: 1.2rem;
   }
 }
 
@@ -36,7 +35,7 @@
 
 .navigation-links--small {
   @extend .navigation-links;
-  font-size: var(--font-multiplier-small);
+  font-size: var(--font-small);
 }
 
 .navigation-links__inline {
@@ -55,41 +54,22 @@
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
-  color: lighten($lbry-black, 20%);
+  color: var(--color-navigation-link);
   margin-top: var(--spacing-small);
 
   .icon {
-    stroke: $lbry-gray-5;
+    stroke: var(--color-link-icon);
   }
 
-  &:hover {
-    color: $lbry-teal-4;
-    .icon {
-      color: $lbry-teal-4;
-    }
-  }
-
+  &:hover,
   &.navigation-link--active {
-    color: $lbry-teal-5;
+    color: var(--color-link-active);
     .icon {
-      color: $lbry-teal-4;
+      stroke: var(--color-link-active);
     }
   }
 
-  [data-mode='dark'] & {
-    color: darken($lbry-white, 30%);
-
-    svg {
-      stroke: darken($lbry-white, 30%);
-    }
-
-    &:hover,
-    &.navigation-link--active {
-      color: $lbry-teal-4;
-
-      .icon {
-        stroke: $lbry-teal-4;
-      }
-    }
+  &:focus {
+    box-shadow: none;
   }
 }

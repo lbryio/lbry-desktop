@@ -121,7 +121,13 @@ export default function ClaimList(props: Props) {
       {urisLength > 0 && (
         <ul className="ul--no-style">
           {sortedUris.map((uri, index) => (
-            <ClaimPreview key={uri} uri={uri} type={type} showUserBlocked={showHiddenByUser} />
+            <ClaimPreview
+              key={uri}
+              uri={uri}
+              type={type}
+              properties={type !== 'small' ? undefined : false}
+              showUserBlocked={showHiddenByUser}
+            />
           ))}
         </ul>
       )}

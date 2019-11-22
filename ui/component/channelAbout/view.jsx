@@ -27,13 +27,13 @@ function ChannelContent(props: Props) {
       {showAbout && (
         <Fragment>
           {description && (
-            <div className="media__info-text media__info-text--small">
+            <div className="media__info-text media__info-text--constrained">
               <MarkdownPreview content={description} promptLinks />
             </div>
           )}
           {email && (
             <Fragment>
-              <div className="media__info-title">{__('Contact')}</div>
+              <label>{__('Contact')}</label>
               <div className="media__info-text">
                 <MarkdownPreview content={formatEmail(email)} promptLinks />
               </div>
@@ -41,7 +41,7 @@ function ChannelContent(props: Props) {
           )}
           {website && (
             <Fragment>
-              <div className="media__info-title">{__('Site')}</div>
+              <label>{__('Site')}</label>
               <div className="media__info-text">
                 <MarkdownPreview content={website} promptLinks />
               </div>

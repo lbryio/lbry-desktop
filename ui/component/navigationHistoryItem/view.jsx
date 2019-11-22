@@ -34,10 +34,8 @@ class NavigationHistoryItem extends React.PureComponent<Props> {
   render() {
     const { lastViewed, selected, onSelect, claim, uri, slim, history } = this.props;
 
-    let name;
     let title;
     if (claim && claim.value) {
-      ({ name } = claim);
       ({ title } = claim.value);
     }
 
@@ -58,7 +56,7 @@ class NavigationHistoryItem extends React.PureComponent<Props> {
       >
         {!slim && <FormField checked={selected} type="checkbox" onChange={onSelect} />}
         <span className="time time--ago">{moment(lastViewed).from(moment())}</span>
-        <Button className="item-list__element" constrict button="link" label={uri} navigate={uri} />
+        <Button className="item-list__element" button="link" label={uri} navigate={uri} />
         <span className="item-list__element">{title}</span>
       </div>
     );

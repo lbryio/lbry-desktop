@@ -49,6 +49,7 @@ type Props = {
   actions: boolean | Node | string | number,
   properties: boolean | Node | string | number,
   onClick?: any => any,
+  hideBlock?: boolean,
 };
 
 const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
@@ -77,6 +78,7 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
     actions,
     properties,
     onClick,
+    hideBlock,
   } = props;
   const shouldFetch =
     claim === undefined || (claim !== null && claim.value_type === 'channel' && isEmpty(claim.meta) && !pending);
@@ -184,6 +186,7 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
         'claim-preview--large': type === 'large',
         'claim-preview--inline': type === 'inline',
         'claim-preview--tooltip': type === 'tooltip',
+        'claim-preview--channel': isChannel,
         'claim-preview--visited': !isChannel && !claimIsMine && hasVisitedUri,
         'claim-preview--pending': pending,
       })}
@@ -203,7 +206,7 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
                   {isChannel && !channelIsBlocked && !claimIsMine && (
                     <SubscribeButton uri={uri.startsWith('lbry://') ? uri : `lbry://${uri}`} />
                   )}
-                  {isChannel && !isSubscribed && !claimIsMine && (
+                  {!hideBlock && isChannel && !isSubscribed && !claimIsMine && (
                     <BlockButton uri={uri.startsWith('lbry://') ? uri : `lbry://${uri}`} />
                   )}
                   {!isChannel && claim && <FileProperties uri={uri} />}

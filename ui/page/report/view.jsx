@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import Button from 'component/button';
 import { FormField } from 'component/common/form';
 import { doToast } from 'lbry-redux';
 import { Lbryio } from 'lbryinc';
 import Page from 'component/page';
+import Card from 'component/common/card';
 
 class ReportPage extends React.Component {
   constructor(props) {
@@ -46,58 +47,65 @@ class ReportPage extends React.Component {
   render() {
     return (
       <Page>
-        <section className="card card--section">
-          <h2 className="card__title">{__('Report an Issue/Request a Feature')}</h2>
-          <p className="card__subtitle">
-            {__(
-              'Please describe the problem you experienced or the feature you want to see and any information you think might be useful to us. Links to screenshots are great!'
-            )}
-          </p>
+        <Card
+          title={__('Report an Issue/Request a Feature')}
+          subtitle={__(
+            'Please describe the problem you experienced or the feature you want to see and any information you think might be useful to us. Links to screenshots are great!'
+          )}
+          actions={
+            <Fragment>
+              <FormField
+                type="textarea"
+                rows="10"
+                name="message"
+                stretch
+                value={this.state.message}
+                onChange={event => {
+                  this.onMessageChange(event);
+                }}
+                placeholder={__('Description of your issue or feature request')}
+              />
 
-          <FormField
-            type="textarea"
-            rows="10"
-            name="message"
-            stretch
-            value={this.state.message}
-            onChange={event => {
-              this.onMessageChange(event);
-            }}
-            placeholder={__('Description of your issue or feature request')}
-          />
+              <Button
+                button="primary"
+                onClick={event => {
+                  this.submitMessage(event);
+                }}
+                className={`button-block button-primary ${this.state.submitting ? 'disabled' : ''}`}
+              >
+                {this.state.submitting ? __('Submitting...') : __('Submit Report')}
+              </Button>
+            </Fragment>
+          }
+        />
 
-          <div className="card__actions">
-            <Button
-              button="primary"
-              onClick={event => {
-                this.submitMessage(event);
-              }}
-              className={`button-block button-primary ${this.state.submitting ? 'disabled' : ''}`}
-            >
-              {this.state.submitting ? __('Submitting...') : __('Submit Report')}
-            </Button>
-          </div>
-        </section>
-
-        <section className="card card--section">
-          <h2 className="card__title">{__('Developer?')}</h2>
-
-          <p>
-            {__('You can also')}{' '}
-            <Button
-              button="link"
-              href="https://github.com/lbryio/lbry-desktop/issues"
-              label={__('submit an issue on GitHub')}
-            />
-            .
-          </p>
-          <p>
-            {__('Explore our')} <Button button="link" href="https://lbry.tech" label={__('technical resources')} />.
-          </p>
-          <p>
-            {__('Join our')} <Button button="link" href="https://discourse.lbry.com/" label={__('tech forum')} />.
-          </p>
-        </section>
+        <Card
+          title={__('Developer?')}
+          actions={
+            <Fragment>
+              <div className="markdown-preview">
+                <p>{__('You can also:')}</p>
+                <ul>
+                  <li>
+                    <Button
+                      button="link"
+                      href="https://github.com/lbryio/lbry-desktop/issues"
+                      label={__('Submit an issue on GitHub')}
+                    />
+                    .
+                  </li>
+                  <li>
+                    {__('Explore our')}{' '}
+                    <Button button="link" href="https://lbry.tech" label={__('technical resources')} />.
+                  </li>
+                  <li>
+                    {__('Join our')} <Button button="link" href="https://forum.lbry.tech" label={__('tech forum')} />.
+                  </li>
+                </ul>
+              </div>
+            </Fragment>
+          }
+        />
       </Page>
     );
   }

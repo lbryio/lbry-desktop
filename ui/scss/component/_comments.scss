@@ -5,7 +5,7 @@
 .comment {
   display: flex;
   flex-direction: column;
-  font-size: var(--font-multiplier-small);
+  font-size: var(--font-small);
   padding: var(--spacing-small) 0 var(--spacing-small);
 
   &:first-of-type {
@@ -13,11 +13,7 @@
   }
 
   &:not(:last-of-type) {
-    border-bottom: 1px solid var(--lbry-gray-1);
-
-    [data-mode='dark'] & {
-      border-color: rgba($lbry-gray-5, 0.2);
-    }
+    border-bottom: 1px solid var(--color-border);
   }
 }
 
@@ -50,5 +46,5 @@
 
 .comment__char-count {
   align-self: flex-end;
-  font-size: var(--font-label);
+  font-size: var(--font-small);
 }

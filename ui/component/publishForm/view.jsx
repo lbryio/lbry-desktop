@@ -138,12 +138,12 @@ function PublishForm(props: Props) {
         <Card actions={<SelectThumbnail />} />
 
         <TagsSelect
-          title={__('Add Tags')}
           suggestMature
           disableAutoFocus
-          help={__('The better your tags are, the easier it will be for people to discover your content.')}
+          hideHeader
+          label={__('Selected Tags')}
           empty={__('No tags added')}
-          placeholder={__('Add a tag')}
+          placeholder={__('Add a tag...')}
           onSelect={newTags => {
             const validatedTags = [];
             newTags.forEach(newTag => {

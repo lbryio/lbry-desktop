@@ -3,29 +3,37 @@
   left: 0;
   bottom: 0;
   right: 0;
-
   align-items: center;
-  background-color: rgba($lbry-black, 0.7);
+  background-color: var(--color-background-overlay);
   display: flex;
   justify-content: center;
   position: fixed;
   z-index: 9999;
-
-  [data-mode='dark'] & {
-    background-color: rgba($lbry-black, 0.7);
-  }
 }
 
 .modal {
-  background-color: $lbry-white;
+  @extend .card;
+  background-color: var(--color-card-background);
   line-height: 1.55;
   max-width: var(--modal-width);
   overflow: auto;
   padding: var(--spacing-large);
   word-break: break-word;
 
+  &:focus {
+    box-shadow: none;
+  }
+
   @media (min-width: 501px) {
     min-width: 500px;
+  }
+}
+
+.modal--card-internal {
+  padding: 0;
+
+  .card {
+    margin: 0;
   }
 }
 
@@ -46,9 +54,9 @@
   margin-top: var(--spacing-small);
   padding: var(--spacing-small);
 
-  background-color: $lbry-red-1;
-  border-left: 2px solid $lbry-red-5;
-  color: $lbry-red-5;
+  background-color: black; //red-1;
+  border-left: 2px solid black; //red-5;
+  color: black; //red-5;
   list-style: none;
   overflow-y: scroll;
   white-space: pre-wrap;

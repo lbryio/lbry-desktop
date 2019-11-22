@@ -17,16 +17,16 @@
     height: 100%;
     object-fit: contain;
   }
+
+  video {
+    cursor: pointer;
+  }
 }
 
 .file-render__viewer--document {
   @extend .file-render__viewer;
   overflow: auto;
-  background-color: $lbry-white;
-
-  [data-mode='dark'] & {
-    background-color: transparent;
-  }
+  background-color: var(--color-file-viewer-background);
 
   .markdown-preview {
     height: 100%;
@@ -73,8 +73,8 @@
   }
 
   .CodeMirror-gutters {
-    background-color: $lbry-gray-1;
-    border-right: 1px solid $lbry-gray-2;
+    background-color: black; //gray-1;
+    border-right: 1px solid black; //gray-2;
     padding-right: var(--spacing-medium);
   }
 
@@ -83,7 +83,7 @@
   }
 
   .CodeMirror-linenumber {
-    color: $lbry-gray-5;
+    color: black; //gray-5;
   }
 }
 
