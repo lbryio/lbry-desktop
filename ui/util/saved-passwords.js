@@ -34,6 +34,11 @@ function getCookie(name: string) {
 
 function deleteCookie(name: string) {
   document.cookie = name + `=; Max-Age=-99999999; domain=.${DOMAIN}; path=/;`;
+
+  // Legacy
+  // Adding this here to delete any old cookies before we switched to . + DOMAIN
+  // Remove this if you see it after July 1st, 2020
+  document.cookie = name + `=; Max-Age=-99999999; domain=${DOMAIN}; path=/;`;
 }
 
 export const setSavedPassword = (value?: string, saveToDisk: boolean) => {
