@@ -12,7 +12,7 @@ type Props = {
   totalPages: number,
   fetching: boolean,
   params: { page: number },
-  claimsInChannel: Array<StreamClaim>,
+  pageOfClaimsInChannel: Array<StreamClaim>,
   channelIsBlocked: boolean,
   channelIsMine: boolean,
   fetchClaims: (string, number) => void,
@@ -23,15 +23,14 @@ function ChannelContent(props: Props) {
   const {
     uri,
     fetching,
-    claimsInChannel,
+    pageOfClaimsInChannel,
     totalPages,
     channelIsMine,
     channelIsBlocked,
-
     fetchClaims,
     channelIsBlackListed,
   } = props;
-  const hasContent = Boolean(claimsInChannel && claimsInChannel.length);
+  const hasContent = Boolean(pageOfClaimsInChannel && pageOfClaimsInChannel.length);
   return (
     <Fragment>
       {fetching && !hasContent && (
@@ -68,7 +67,7 @@ function ChannelContent(props: Props) {
       {!channelIsMine && <HiddenNsfwClaims uri={uri} />}
 
       {hasContent && !channelIsBlocked && !channelIsBlackListed && (
-        <ClaimList header={false} uris={claimsInChannel.map(claim => claim && claim.canonical_url)} />
+        <ClaimList header={false} uris={pageOfClaimsInChannel.map(claim => claim && claim.canonical_url)} />
       )}
 
       {!channelIsBlocked && !channelIsBlackListed && (
