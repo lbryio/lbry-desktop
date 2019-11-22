@@ -33,7 +33,7 @@ function getCookie(name: string) {
 }
 
 function deleteCookie(name: string) {
-  document.cookie = name + '=; Max-Age=-99999999; path=/;';
+  document.cookie = name + `=; Max-Age=-99999999; domain=.${DOMAIN}; path=/;`;
 }
 
 export const setSavedPassword = (value?: string, saveToDisk: boolean) => {
