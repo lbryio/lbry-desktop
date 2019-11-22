@@ -17,11 +17,13 @@ type Props = {
   // The default component is for following tags
   title?: string | boolean,
   help?: string,
+  label?: string,
   tagsChosen?: Array<Tag>,
   onSelect?: (Array<Tag>) => void,
   onRemove?: Tag => void,
   placeholder?: string,
   disableAutoFocus?: boolean,
+  hideHeader?: boolean,
 };
 
 /*
@@ -40,6 +42,8 @@ export default function TagsSelect(props: Props) {
     suggestMature,
     disableAutoFocus,
     placeholder,
+    hideHeader,
+    label,
   } = props;
   const [hasClosed, setHasClosed] = usePersistedState('tag-select:has-closed', false);
   const tagsToDisplay = tagsChosen || followedTags;
@@ -71,14 +75,17 @@ export default function TagsSelect(props: Props) {
   return (
     ((showClose && !hasClosed) || !showClose) && (
       <Card
+        actionIconPadding={false}
         icon={ICONS.TAG}
         title={
-          <React.Fragment>
-            {title}
-            {showClose && tagsToDisplay.length > 0 && !hasClosed && (
-              <Button button="close" icon={ICONS.REMOVE} onClick={handleClose} />
-            )}
-          </React.Fragment>
+          hideHeader ? null : (
+            <React.Fragment>
+              {title}
+              {showClose && tagsToDisplay.length > 0 && !hasClosed && (
+                <Button button="close" icon={ICONS.REMOVE} onClick={handleClose} />
+              )}
+            </React.Fragment>
+          )
         }
         subtitle={
           help !== false && (
@@ -91,6 +98,7 @@ export default function TagsSelect(props: Props) {
         actions={
           <React.Fragment>
             <TagsSearch
+              label={label}
               onRemove={handleTagClick}
               onSelect={onSelect}
               suggestMature={suggestMature && !hasMatureTag}

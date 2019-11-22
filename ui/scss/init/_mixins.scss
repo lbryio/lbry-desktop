@@ -1,11 +1,7 @@
 @mixin placeholder {
   animation: pulse 2s infinite ease-in-out;
-  background-color: $lbry-gray-1;
+  background-color: var(--color-placeholder-background);
   border-radius: var(--card-radius);
-
-  [data-mode='dark'] & {
-    background-color: var(--dm-color-04);
-  }
 }
 
 @mixin mediaThumbHoverZoom {
@@ -23,5 +19,5 @@
 }
 
 @mixin focus {
-  box-shadow: 0 0 0 2px $lbry-blue-1;
+  box-shadow: 0 0 0 2px black; //blue-1;
 }

@@ -1,6 +1,6 @@
 // @flow
 import * as PAGES from 'constants/pages';
-import React, { useEffect, lazy, Suspense } from 'react';
+import React, { useEffect, Suspense } from 'react';
 import { Route, Redirect, Switch, withRouter } from 'react-router-dom';
 import SettingsPage from 'page/settings';
 import HelpPage from 'page/help';
@@ -17,8 +17,6 @@ import InvitePage from 'page/invite';
 import SearchPage from 'page/search';
 import LibraryPage from 'page/library';
 import WalletPage from 'page/wallet';
-import WalletSendPage from 'page/walletSend';
-import WalletReceivePage from 'page/walletReceive';
 import TagsPage from 'page/tags';
 import FollowingPage from 'page/following';
 import ListBlockedPage from 'page/listBlocked';
@@ -80,6 +78,7 @@ function AppRouter(props: Props) {
         <Route path={`/$/${PAGES.HELP}`} exact component={HelpPage} />
         <Route path={`/$/${PAGES.AUTH_VERIFY}`} exact component={SignInVerifyPage} />
         <Route path={`/$/${PAGES.SEARCH}`} exact component={SearchPage} />
+        <Route path={`/$/${PAGES.SETTINGS}`} exact component={SettingsPage} />
 
         <PrivateRoute {...props} path={`/$/${PAGES.INVITE}`} component={InvitePage} />
         <PrivateRoute {...props} path={`/$/${PAGES.DOWNLOADED}`} component={FileListDownloaded} />
@@ -87,15 +86,12 @@ function AppRouter(props: Props) {
         <PrivateRoute {...props} path={`/$/${PAGES.PUBLISH}`} component={PublishPage} />
         <PrivateRoute {...props} path={`/$/${PAGES.REPORT}`} component={ReportPage} />
         <PrivateRoute {...props} path={`/$/${PAGES.REWARDS}`} component={RewardsPage} />
-        <PrivateRoute {...props} path={`/$/${PAGES.SETTINGS}`} component={SettingsPage} />
         <PrivateRoute {...props} path={`/$/${PAGES.TRANSACTIONS}`} component={TransactionHistoryPage} />
         <PrivateRoute {...props} path={`/$/${PAGES.LIBRARY}`} component={LibraryPage} />
         <PrivateRoute {...props} path={`/$/${PAGES.ACCOUNT}`} component={AccountPage} />
         <PrivateRoute {...props} path={`/$/${PAGES.FOLLOWING}`} component={FollowingPage} />
         <PrivateRoute {...props} path={`/$/${PAGES.BLOCKED}`} component={ListBlockedPage} />
         <PrivateRoute {...props} path={`/$/${PAGES.WALLET}`} exact component={WalletPage} />
-        <PrivateRoute {...props} path={`/$/${PAGES.WALLET_SEND}`} exact component={WalletSendPage} />
-        <PrivateRoute {...props} path={`/$/${PAGES.WALLET_RECEIVE}`} exact component={WalletReceivePage} />
         <PrivateRoute {...props} path={`/$/${PAGES.CHANNELS}`} component={ChannelsPage} />
 
         {/* Below need to go at the end to make sure we don't match any of our pages first */}

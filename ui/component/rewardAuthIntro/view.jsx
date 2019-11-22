@@ -28,13 +28,7 @@ function RewardAuthIntro(props: Props) {
           and security updates.
         </I18nMessage>
       }
-      actions={
-        <Button
-          button="primary"
-          navigate={`/$/${PAGES.AUTH}?redirect=/$/${PAGES.REWARDS}`}
-          label={__('Unlock Rewards')}
-        />
-      }
+      actions={<Button button="primary" requiresAuth label={__('Unlock Rewards')} />}
     />
   );
 }

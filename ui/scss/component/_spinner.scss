@@ -34,17 +34,13 @@
 
 .spinner--dark {
   .rect {
-    background-color: $lbry-black;
+    background-color: var(--color-spinner-dark);
   }
 }
 
 .spinner--light {
   .rect {
-    background-color: $lbry-white;
-
-    [data-mode='dark'] & {
-      background-color: var(--dm-color-01);
-    }
+    background-color: var(--color-spinner-light);
   }
 }
 
@@ -61,6 +57,6 @@
   margin-top: var(--spacing-large);
 
   .rect {
-    background-color: $lbry-white;
+    background-color: black; //white;
   }
 }

@@ -1,6 +1,5 @@
 // @flow
 import * as MODALS from 'constants/modal_types';
-import * as ICONS from 'constants/icons';
 import React from 'react';
 import Button from 'component/button';
 import { Form, FormField } from 'component/common/form';
@@ -16,7 +15,6 @@ type DraftTransaction = {
 type Props = {
   openModal: (id: string, { address: string, amount: number }) => void,
   balance: number,
-  history: { goBack: () => void },
 };
 
 class WalletSend extends React.PureComponent<Props> {
@@ -36,16 +34,11 @@ class WalletSend extends React.PureComponent<Props> {
   }
 
   render() {
-    const { balance, history } = this.props;
+    const { balance } = this.props;
 
     return (
       <Card
-        title={
-          <React.Fragment>
-            {__('Send Credits')}
-            <Button button="close" icon={ICONS.REMOVE} onClick={() => history.goBack()} />
-          </React.Fragment>
-        }
+        title={__('Send Credits')}
         subtitle={__('Send LBC to your friends or favorite creators.')}
         actions={
           <Formik

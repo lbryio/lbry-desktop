@@ -13,9 +13,11 @@ $transition-duration: 300ms;
     z-index: $base-zindex;
     vertical-align: top;
     opacity: 0;
+    border-radius: var(--border-radius);
   }
 
   .ff-canvas {
+    border-radius: var(--border-radius);
     display: inline-block;
     position: absolute;
     top: 0;

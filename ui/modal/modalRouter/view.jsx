@@ -27,6 +27,8 @@ import ModalWalletUnlock from 'modal/modalWalletUnlock';
 import ModalRewardCode from 'modal/modalRewardCode';
 import ModalPasswordUnsave from 'modal/modalPasswordUnsave';
 import ModalCommentAcknowledgement from 'modal/modalCommentAcknowledgement';
+import ModalWalletSend from 'modal/modalWalletSend';
+import ModalWalletReceive from 'modal/modalWalletReceive';
 
 type Props = {
   modal: { id: string, modalProps: {} },
@@ -99,6 +101,10 @@ function ModalRouter(props: Props) {
       return <ModalRewardCode {...modalProps} />;
     case MODALS.COMMENT_ACKNOWEDGEMENT:
       return <ModalCommentAcknowledgement {...modalProps} />;
+    case MODALS.WALLET_SEND:
+      return <ModalWalletSend {...modalProps} />;
+    case MODALS.WALLET_RECEIVE:
+      return <ModalWalletReceive {...modalProps} />;
     default:
       return null;
   }

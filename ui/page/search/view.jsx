@@ -7,6 +7,7 @@ import ClaimList from 'component/claimList';
 import Page from 'component/page';
 import SearchOptions from 'component/searchOptions';
 import Button from 'component/button';
+import ClaimUri from 'component/claimUri';
 
 type Props = {
   search: string => void,
@@ -41,9 +42,7 @@ export default function SearchPage(props: Props) {
           <Fragment>
             {isValid && (
               <header className="search__header">
-                <Button button="alt" navigate={uri} className="media__uri--large">
-                  {uri}
-                </Button>
+                <ClaimUri uri={uri} />
                 <div className="card">
                   <ClaimPreview uri={uri} type="large" placeholder="publish" />
                 </div>

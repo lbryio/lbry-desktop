@@ -1,5 +1,6 @@
 // @flow
-import React, { PureComponent, Fragment } from 'react';
+import * as PAGES from 'constants/pages';
+import React, { PureComponent } from 'react';
 import BusyIndicator from 'component/common/busy-indicator';
 import RewardListClaimed from 'component/rewardListClaimed';
 import RewardTile from 'component/rewardTile';
@@ -8,6 +9,7 @@ import Page from 'component/page';
 import classnames from 'classnames';
 import { rewards as REWARD_TYPES } from 'lbryinc';
 import RewardAuthIntro from 'component/rewardAuthIntro';
+import Card from 'component/common/card';
 
 type Props = {
   doAuth: () => void,
@@ -82,8 +84,8 @@ class RewardsPage extends PureComponent<Props> {
     if (!IS_WEB && daemonSettings && !daemonSettings.share_usage_data) {
       return (
         <section className="card card--section">
-          <h2 className="card__title">{__('Disabled')}</h2>
-          <p className="card__subtitle">
+          <h2 className="card__title card__title--deprecated">{__('Disabled')}</h2>
+          <p className="section__subtitle">
             {__('Rewards are currently disabled for your account. Turn on diagnostic data sharing, in')}{' '}
             <Button button="link" navigate="/$/settings" label="Settings" />
             {__(', in order to re-enable them.')}
@@ -98,20 +100,17 @@ class RewardsPage extends PureComponent<Props> {
       );
     } else if (!rewards || rewards.length <= 0) {
       return (
-        <Fragment>
-          <section className="card card--section">
-            <h2 className="card__title">{__('No Rewards Available')}</h2>
-            <p>
-              {claimed && claimed.length
-                ? __(
-                    "You have claimed all available rewards! We're regularly adding more so be sure to check back later."
-                  )
-                : __('There are no rewards available at this time, please check back later.')}
-            </p>
-          </section>
-
-          <div className="card__list">{this.renderCustomRewardCode()}</div>
-        </Fragment>
+        <Card
+          title={__('No Rewards Available')}
+          subtitle={
+            claimed && claimed.length
+              ? __(
+                  "You have claimed all available rewards! We're regularly adding more so be sure to check back later."
+                )
+              : __('There are no rewards available at this time, please check back later.')
+          }
+          actions={<Button button="primary" navigate={`/$/${PAGES.DISCOVER}`} label={__('Go Home')} />}
+        />
       );
     }
 

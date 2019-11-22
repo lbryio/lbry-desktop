@@ -8,6 +8,8 @@ import ModalWalletUnlock from 'modal/modalWalletUnlock';
 import ModalIncompatibleDaemon from 'modal/modalIncompatibleDaemon';
 import ModalUpgrade from 'modal/modalUpgrade';
 import ModalDownloading from 'modal/modalDownloading';
+import Card from 'component/common/card';
+import I18nMessage from 'component/i18nMessage';
 import 'css-doodle';
 
 const FORTY_FIVE_SECONDS = 45 * 1000;
@@ -227,7 +229,7 @@ export default class SplashScreen extends React.PureComponent<Props, State> {
         {!animationHidden && (
           <css-doodle class="doodle">
             {`
-            --color: @p(var(--lbry-teal-1), var(--lbry-orange-1), var(--lbry-cyan-3), var(--lbry-pink-5));
+            --color: @p(var(--color-primary), var(--color-secondary), var(--color-focus), var(--color-nothing));
             :doodle {
               @grid: 30x1 / 18vmin;
               --deg: @p(-180deg, 180deg);
@@ -267,21 +269,28 @@ export default class SplashScreen extends React.PureComponent<Props, State> {
           onClick={() => setClientSetting(SETTINGS.HIDE_SPLASH_ANIMATION, !animationHidden)}
         />
         {error && (
-          <div className="splash__error card card--section">
-            <p className="card__subtitle">
-              {__('Uh oh. The flux in our Retro Encabulator must be out of whack. Try refreshing to fix it.')}
-            </p>
-            <div className="card__actions--center">
-              <Button button="primary" label={__('Refresh')} onClick={() => window.location.reload()} />
-            </div>
-            <div className="help">
-              <p>{__('If you still have issues, your anti-virus software or firewall may be preventing startup.')}</p>
-              <p>
-                {__('Reach out to hello@lbry.com for help, or check out')}{' '}
-                <Button button="link" href="https://lbry.com/faq/startup-troubleshooting" label="this link" />.
-              </p>
-            </div>
-          </div>
+          <Card
+            className="splash__error"
+            title={__('Error Starting Up')}
+            subtitle={
+              <React.Fragment>
+                <p>
+                  Try refreshing to fix it. If you still have issues, your anti-virus software or firewall may be
+                  preventing startup.
+                </p>
+                <I18nMessage
+                  tokens={{
+                    help_link: (
+                      <Button button="link" href="https://lbry.com/faq/startup-troubleshooting" label="this link" />
+                    ),
+                  }}
+                >
+                  Reach out to hello@lbry.com for help, or check out %help_link%.
+                </I18nMessage>
+              </React.Fragment>
+            }
+            actions={<Button button="primary" label={__('Refresh')} onClick={() => window.location.reload()} />}
+          />
         )}
         {/* Temp hack: don't show any modals on splash screen daemon is running;
             daemon doesn't let you quit during startup, so the "Quit" buttons

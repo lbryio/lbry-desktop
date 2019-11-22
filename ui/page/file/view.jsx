@@ -12,7 +12,7 @@ import Button from 'component/button';
 import Page from 'component/page';
 import FileDownloadLink from 'component/fileDownloadLink';
 import RecommendedContent from 'component/recommendedContent';
-import ClaimTags from 'component/claimTags';
+
 import CommentsList from 'component/commentsList';
 import CommentCreate from 'component/commentCreate';
 import ClaimUri from 'component/claimUri';
@@ -137,6 +137,8 @@ class FilePage extends React.Component<Props> {
 
     return (
       <Page className="main--file-page">
+        <ClaimUri uri={uri} />
+
         <div className={`card ${FILE_WRAPPER_CLASS}`}>
           {!fileInfo && insufficientCredits && (
             <div className="media__insufficient-credits help--warning">
@@ -153,82 +155,87 @@ class FilePage extends React.Component<Props> {
           <FileViewerInitiator uri={uri} insufficientCredits={insufficientCredits} />
         </div>
 
+        <div className="media__title">
+          <span className="media__title-price">
+            <FilePrice badge uri={normalizeURI(uri)} />
+          </span>
+          <h1 className="media__title-text">{title}</h1>
+        </div>
+
         <div className="columns">
           <div className="grid-area--info">
-            <h1 className="media__title media__title--large">{title}</h1>
-
-            <div className="media__subtitle">
-              <div className="media__actions media__actions--between">
-                <DateTime uri={uri} show={DateTime.SHOW_DATE} />
-                <span>
-                  {viewCount} {viewCount !== 1 ? __('Views') : __('View')}
-                  <HelpLink href="https://lbry.com/faq/views" />
-                </span>
-              </div>
-
-              <div className="media__actions media__actions--between">
-                <div className="media__action-group--large">
-                  {claimIsMine && (
-                    <Button
-                      button="primary"
-                      icon={icons.EDIT}
-                      label={__('Edit')}
-                      navigate="/$/publish"
-                      onClick={() => {
-                        prepareEdit(claim, editUri, fileInfo);
-                      }}
-                    />
-                  )}
-                  {!claimIsMine && (
-                    <Button
-                      button="alt"
-                      icon={icons.TIP}
-                      label={__('Tip')}
-                      requiresAuth={IS_WEB}
-                      title={__('Send a tip to this creator')}
-                      onClick={() => openModal(MODALS.SEND_TIP, { uri, claimIsMine, isSupport: false })}
-                    />
-                  )}
-                  {(claimIsMine || (!claimIsMine && supportOption)) && (
-                    <Button
-                      button="alt"
-                      icon={icons.SUPPORT}
-                      label={__('Support')}
-                      requiresAuth={IS_WEB}
-                      title={__('Support this claim')}
-                      onClick={() => openModal(MODALS.SEND_TIP, { uri, claimIsMine, isSupport: true })}
-                    />
-                  )}
+            <div className="media__subtitle--between">
+              <DateTime uri={uri} show={DateTime.SHOW_DATE} />
+              <span>
+                {viewCount} {viewCount !== 1 ? __('Views') : __('View')}
+                <HelpLink href="https://lbry.com/faq/views" />
+              </span>
+            </div>
+            <div className="media__actions">
+              <div className="section__actions">
+                {claimIsMine && (
                   <Button
                     button="alt"
-                    icon={icons.SHARE}
-                    label={__('Share')}
-                    onClick={() => openModal(MODALS.SOCIAL_SHARE, { uri, webShareable })}
+                    icon={icons.EDIT}
+                    label={__('Edit')}
+                    navigate="/$/publish"
+                    onClick={() => {
+                      prepareEdit(claim, editUri, fileInfo);
+                    }}
                   />
-                </div>
-
-                <div className="media__action-group--large">
-                  {/* @if TARGET='app' */}
-                  <FileDownloadLink uri={uri} />
-                  {/* @endif */}
-                  <FileActions uri={uri} claimId={claim.claim_id} />
-                </div>
+                )}
+                <Button
+                  button="alt"
+                  icon={icons.SHARE}
+                  label={__('Share')}
+                  onClick={() => openModal(MODALS.SOCIAL_SHARE, { uri, webShareable })}
+                />
+                {!claimIsMine && (
+                  <Button
+                    button="alt"
+                    icon={icons.TIP}
+                    label={__('Tip')}
+                    requiresAuth={IS_WEB}
+                    title={__('Send a tip to this creator')}
+                    onClick={() => openModal(MODALS.SEND_TIP, { uri, claimIsMine, isSupport: false })}
+                  />
+                )}
+                {(claimIsMine || (!claimIsMine && supportOption)) && (
+                  <Button
+                    button="alt"
+                    icon={icons.SUPPORT}
+                    label={__('Support')}
+                    requiresAuth={IS_WEB}
+                    title={__('Support this claim')}
+                    onClick={() => openModal(MODALS.SEND_TIP, { uri, claimIsMine, isSupport: true })}
+                  />
+                )}
+              </div>
+              <div className="section__actions">
+                {/* @if TARGET='app' */}
+                <FileDownloadLink uri={uri} />
+                {/* @endif */}
+                <FileActions uri={uri} claimId={claim.claim_id} />
               </div>
             </div>
 
-            <hr />
+            <div className="section__divider">
+              <hr />
+            </div>
 
             {channelUri ? (
-              <ClaimPreview uri={channelUri} type="inline" properties={false} />
+              <ClaimPreview uri={channelUri} type="inline" properties={false} hideBlock />
             ) : (
               <div className="claim-preview--inline claim-preview-title">{__('Anonymous')}</div>
             )}
 
-            <div className="media__info--large">
-              <FileDetails uri={uri} />
-              <ClaimTags uri={uri} type="large" />
+            <FileDetails uri={uri} />
+
+            <div className="section__divider">
+              <hr />
             </div>
-            <div className="media__info-title">{__('Comments')}</div>
+
+            <div className="section__title--small">{__('Comments')}</div>
             <section className="section">
               <CommentCreate uri={uri} />
             </section>
@@ -237,13 +244,8 @@ class FilePage extends React.Component<Props> {
             </section>
           </div>
           <div className="grid-area--related">
-            <div className="media__actions media__actions--between media__actions--nowrap">
-              <ClaimUri uri={uri} />
-              <div className="file-properties">
-                {nsfw && <div className="badge badge--mature">{__('Mature')}</div>}
-                <FilePrice badge uri={normalizeURI(uri)} />
-              </div>
-            </div>
+            {nsfw && <div className="badge badge--mature">{__('Mature')}</div>}
+
             <RecommendedContent uri={uri} />
           </div>
         </div>

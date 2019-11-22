@@ -59,7 +59,7 @@ function UserEmail(props: Props) {
                 />
               </React.Fragment>
             }
-            inputButton={<UserSignOutButton button="inverse" />}
+            inputButton={<UserSignOutButton button="secondary" />}
             value={email || ''}
           />
         ) : (

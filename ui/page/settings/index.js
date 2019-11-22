@@ -6,9 +6,11 @@ import { doSetPlayingUri } from 'redux/actions/content';
 import { makeSelectClientSetting, selectDaemonSettings, selectosNotificationsEnabled } from 'redux/selectors/settings';
 import { doWalletStatus, selectWalletIsEncrypted, selectBlockedChannelsCount } from 'lbry-redux';
 import SettingsPage from './view';
+import { selectUserVerifiedEmail } from 'lbryinc';
 
 const select = state => ({
   daemonSettings: selectDaemonSettings(state),
+  isAuthenticated: selectUserVerifiedEmail(state),
   showNsfw: makeSelectClientSetting(SETTINGS.SHOW_MATURE)(state),
   instantPurchaseEnabled: makeSelectClientSetting(SETTINGS.INSTANT_PURCHASE_ENABLED)(state),
   instantPurchaseMax: makeSelectClientSetting(SETTINGS.INSTANT_PURCHASE_MAX)(state),

@@ -22,7 +22,7 @@ class FileActions extends React.PureComponent<Props> {
         {showDelete && (
           <Tooltip label={__('Remove from your library')}>
             <Button
-              button="link"
+              button="alt"
               icon={ICONS.DELETE}
               description={__('Delete')}
               onClick={() => openModal(MODALS.CONFIRM_FILE_REMOVE, { uri })}
@@ -31,7 +31,7 @@ class FileActions extends React.PureComponent<Props> {
         )}
         {!claimIsMine && (
           <Tooltip label={__('Report content')}>
-            <Button button="link" icon={ICONS.REPORT} href={`https://lbry.com/dmca/${claimId}`} />
+            <Button button="alt" icon={ICONS.REPORT} href={`https://lbry.com/dmca/${claimId}`} />
           </Tooltip>
         )}
       </React.Fragment>

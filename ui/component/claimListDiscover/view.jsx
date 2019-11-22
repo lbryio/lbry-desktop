@@ -234,9 +234,9 @@ function ClaimListDiscover(props: Props) {
       </FormField>
       {!hideCustomization && (
         <Fragment>
-          <span>{__('For')}</span>
+          <span className="claim-list__conjuction">{__('for')}</span>
           {!personalView && tags && tags.length ? (
-            tags.map(tag => <Tag key={tag} name={tag} disabled />)
+            tags.map(tag => <Tag key={tag} name={tag} disabled type="large" />)
           ) : (
             <FormField
               type="select"

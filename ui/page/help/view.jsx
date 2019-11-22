@@ -133,9 +133,14 @@ class HelpPage extends React.PureComponent<Props, State> {
                 href="https://lbry.com/faq/lbry-basics"
                 label={__('Read the App Basics FAQ')}
                 icon={icons.HELP}
-                button="inverse"
+                button="secondary"
               />
-              <Button href="https://lbry.com/faq" label={__('View all LBRY FAQs')} icon={icons.HELP} button="inverse" />
+              <Button
+                href="https://lbry.com/faq"
+                label={__('View all LBRY FAQs')}
+                icon={icons.HELP}
+                button="secondary"
+              />
             </div>
           }
         />
@@ -150,8 +155,8 @@ class HelpPage extends React.PureComponent<Props, State> {
           }
           actions={
             <div className="section__actions">
-              <Button button="inverse" label={__('Join Our Chat')} icon={icons.CHAT} href="https://chat.lbry.com" />
-              <Button button="inverse" label={__('Email Us')} icon={icons.WEB} href="mailto:help@lbry.com" />
+              <Button button="secondary" label={__('Join Our Chat')} icon={icons.CHAT} href="https://chat.lbry.com" />
+              <Button button="secondary" label={__('Email Us')} icon={icons.WEB} href="mailto:help@lbry.com" />
             </div>
           }
         />
@@ -159,14 +164,14 @@ class HelpPage extends React.PureComponent<Props, State> {
         <Card
           title={__('Report a Bug or Suggest a New Feature')}
           subtitle={
-            <p>
+            <React.Fragment>
               {__('Did you find something wrong? Think LBRY could add something useful and cool?')}{' '}
               <Button button="link" label={__('Learn more')} href="https://lbry.com/faq/support" />.
-            </p>
+            </React.Fragment>
           }
           actions={
             <div className="section__actions">
-              <Button navigate="/$/report" label={__('Help Us Out')} button="inverse" />
+              <Button navigate="/$/report" label={__('Submit Feedback')} button="secondary" />
             </div>
           }
         />
@@ -175,15 +180,15 @@ class HelpPage extends React.PureComponent<Props, State> {
         <Card
           title={__('View your Log')}
           subtitle={
-            <p>
+            <React.Fragment>
               {__('Did something go wrong? Have a look in your log file, or send it to')}{' '}
               <Button button="link" label={__('support')} href="https://lbry.com/faq/support" />.
-            </p>
+            </React.Fragment>
           }
           actions={
             <div className="section__actions">
-              <Button button="inverse" label={__('Open Log')} onClick={() => this.openLogFile(dataDirectory)} />
-              <Button button="link" label={__('Open Log Folder')} onClick={() => shell.openItem(dataDirectory)} />
+              <Button button="secondary" label={__('Open Log')} onClick={() => this.openLogFile(dataDirectory)} />
+              <Button button="secondary" label={__('Open Log Folder')} onClick={() => shell.openItem(dataDirectory)} />
             </div>
           }
         />
@@ -193,14 +198,16 @@ class HelpPage extends React.PureComponent<Props, State> {
 
         <section className="card">
           <header className="table__header">
-            <h2 className="section__title">{__('About')}</h2>
+            <div className="table__header-text">
+              <h2 className="section__title">{__('About')}</h2>
 
-            {this.state.upgradeAvailable !== null && this.state.upgradeAvailable && (
-              <p className="section__subtitle">
-                {__('A newer version of LBRY is available.')}{' '}
-                <Button button="link" href={newVerLink} label={__('Download now!')} />
-              </p>
-            )}
+              {this.state.upgradeAvailable !== null && this.state.upgradeAvailable && (
+                <p className="section__subtitle">
+                  {__('A newer version of LBRY is available.')}{' '}
+                  <Button button="link" href={newVerLink} label={__('Download now!')} />
+                </p>
+              )}
+            </div>
           </header>
 
           <table className="table table--stretch">
@@ -254,7 +261,7 @@ class HelpPage extends React.PureComponent<Props, State> {
                   {!this.state.accessTokenHidden && accessToken && (
                     <div>
                       <p>{accessToken}</p>
-                      <div className="alert-text">
+                      <div className="help--warning">
                         {__('This is equivalent to a password. Do not post or share this.')}
                       </div>
                     </div>

@@ -2,14 +2,12 @@
   display: flex;
   position: relative;
   align-items: center;
-  font-size: var(--font-label);
+  font-size: var(--font-small);
+  color: var(--color-text-help);
 
   .icon {
-    stroke: rgba($lbry-black, 0.5);
-
-    [data-mode='dark'] & {
-      stroke: rgba($lbry-white, 0.7);
-    }
+    margin-bottom: -1px;
+    stroke: var(--color-subtitle);
   }
 
   & > *:not(:last-child) {

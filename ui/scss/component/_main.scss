@@ -1,9 +1,5 @@
 .main-wrapper {
   position: relative;
-
-  [data-mode='dark'] & {
-    background-color: var(--dm-color-08);
-  }
 }
 
 .main-wrapper--mac {
@@ -36,6 +32,10 @@
 
 .main--file-page {
   position: relative;
+
+  .grid-area--content {
+    max-height: var(--inline-player-max-height);
+  }
 
   .grid-area--info {
     margin-right: var(--spacing-large);
@@ -86,21 +86,4 @@
 
 .main--full-width {
   width: 100%;
-}
-
-.main__status {
-  @extend .card__subtitle;
-  display: flex;
-  justify-content: space-between;
-  background-color: $lbry-teal-4;
-  color: $lbry-white;
-
-  svg {
-    stroke: $lbry-white;
-  }
-
-  [data-mode='dark'] & {
-    background-color: $lbry-teal-5;
-    color: $lbry-white;
-  }
 }

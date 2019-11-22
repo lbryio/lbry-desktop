@@ -42,8 +42,8 @@ function TransactionList(props: Props) {
   return (
     <React.Fragment>
       <header className="table__header">
-        <h2 className="card__title--between">
-          {title}
+        <div className="table__header-text--between">
+          <h2 className="card__title">{title}</h2>
           <div className="card__actions--inline">
             <RefreshTransactionButton slim={slim} />
             {/* @if TARGET='app' */}
@@ -82,7 +82,7 @@ function TransactionList(props: Props) {
             )}
             {slim && <Button button="primary" navigate={`/$/${PAGES.TRANSACTIONS}`} label={__('Full History')} />}
           </div>
-        </h2>
+        </div>
       </header>
 
       {((loading && !transactions.length) || !transactions.length) && (

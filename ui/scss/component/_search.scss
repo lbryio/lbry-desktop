@@ -2,25 +2,18 @@
   margin-bottom: var(--spacing-large);
 
   .placeholder {
-    background-color: rgba($lbry-white, 0.1);
+    background-color: var(--color-placeholder-background);
   }
 }
 
 .search__options {
   margin-top: var(--spacing-large);
 
-  legend {
-    &.search__legend--1 {
-      background-color: $lbry-teal-4;
-    }
-
-    &.search__legend--2 {
-      background-color: $lbry-cyan-4;
-    }
-
-    &.search__legend--3 {
-      background-color: $lbry-pink-4;
-    }
+  .search__legend {
+    background-color: var(--color-secondary-alt);
+    color: var(--color-secondary);
+    margin-bottom: var(--spacing-small);
+    padding: var(--spacing-miniscule);
   }
 
   fieldset:not(:first-child) {

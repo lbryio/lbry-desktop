@@ -1,15 +1,13 @@
 @charset "utf-8";
 
-@import '~@lbry/components/sass/init/_color.scss';
-@import '~@lbry/components/sass/init/_mixins.scss';
-@import '~@lbry/components/sass/init/_variables.scss';
-@import '~@lbry/components/sass/init/_reset.scss';
+@import '@lbry/components/sass/index.scss';
+@import 'themes/light.scss';
+@import 'themes/dark.scss';
 @import 'init/vars';
 @import 'init/mixins';
 @import 'init/type';
 @import 'init/gui';
 @import 'component/animation';
-@import 'component/badge';
 @import 'component/button';
 @import 'component/card';
 @import 'component/channel';
@@ -23,7 +21,6 @@
 @import 'component/form-field';
 @import 'component/header';
 @import 'component/icon';
-@import 'component/item-list';
 @import 'component/main';
 @import 'component/markdown-editor';
 @import 'component/markdown-preview';
@@ -44,6 +41,5 @@
 @import 'component/tabs';
 @import 'component/tags';
 @import 'component/time';
-@import 'component/tooltip';
 @import 'component/wunderbar';
 @import 'component/yrbl';

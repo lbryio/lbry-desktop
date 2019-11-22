@@ -1,88 +1,10 @@
-@import '~@lbry/components/sass/button/_index.scss';
-
 .button {
   display: inline-block;
   font-weight: var(--font-weight-base);
-
-  svg {
-    // Buttons that don't have a label
-    &:only-child {
-      color: inherit;
-      width: 1.3rem;
-      height: 1.3rem;
-    }
-  }
-}
-
-.button--primary {
-  background-color: $lbry-teal-5;
-
-  &:hover {
-    background-color: $lbry-teal-4;
-  }
-
-  &:active {
-    background-color: $lbry-teal-3;
-  }
-
-  &:disabled {
-    opacity: 0.5;
-  }
-}
-
-// Play/View button that is overlayed ontop of the video player
-.button--icon {
-  height: 5rem;
-  width: 5rem;
-  border-radius: 2.5rem;
-  &:not(:hover) {
-    background-color: $lbry-teal-4;
-  }
-}
-
-.button--primary,
-.button--inverse {
-  height: var(--button-height);
-  border-radius: var(--button-radius);
-  font-size: var(--font-body);
-  padding-top: 0;
-  padding-bottom: 0;
-  box-sizing: border-box;
-}
-
-.button--inverse {
-  border-color: $lbry-teal-4;
-  color: $lbry-teal-5;
-
-  &:hover {
-    color: $lbry-white;
-    background-color: $lbry-teal-4;
-    .icon {
-      stroke: $lbry-white;
-    }
-  }
-
-  [data-mode='dark'] & {
-    border-color: $lbry-teal-4;
-    color: $lbry-teal-3;
-  }
-}
-
-.button--alt {
-  padding: 0;
-}
-
-.button--link {
-  [data-mode='dark'] & {
-    color: $lbry-teal-4;
-
-    &:hover {
-      color: $lbry-teal-3;
-    }
-  }
 }
 
 .button--uri-indicator {
+  @extend .button--link;
   max-width: 100%;
   height: 1.2em;
   vertical-align: text-top;
@@ -90,50 +12,28 @@
   text-overflow: ellipsis;
   transition: color 0.2s;
 
-  &:hover {
-    color: $lbry-teal-5;
-  }
-
   .markdown-preview & {
     height: initial;
     vertical-align: initial;
-    color: $lbry-teal-5;
-
-    &:hover {
-      color: $lbry-teal-3;
-    }
-
-    [data-mode='dark'] & {
-      color: $lbry-teal-4;
-      &:hover {
-        color: $lbry-teal-3;
-      }
-    }
   }
 }
 
 .button--close {
+  z-index: 1;
   position: absolute;
   top: var(--spacing-miniscule);
   right: var(--spacing-miniscule);
   padding: 0.3rem;
   transition: all var(--transition-duration) var(--transition-style);
   border-radius: var(--card-radius);
+  color: var(--color-text);
 
   &:hover {
-    background-color: $lbry-black;
-    color: $lbry-white;
+    color: var(--color-button-primary-text);
+    background-color: var(--color-button-primary-bg);
   }
 }
 
-.button--subscribe {
-  vertical-align: text-top;
-  align-items: flex-start;
-}
-
-// Quick fix because this is a pain
-// There is something weird with wrapping buttons. Some places we want to wrap and others we want to ellips
-// Probably requires some nested style cleanup
 .button--download-link {
   .button__label {
     white-space: normal;

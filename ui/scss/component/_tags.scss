@@ -1,5 +1,3 @@
-$main: $lbry-teal-5;
-
 .tags {
   @extend .ul--no-style;
   display: flex;
@@ -8,13 +6,14 @@ $main: $lbry-teal-5;
 
   .tag {
     margin-left: 0;
-    margin-top: var(--spacing-small);
+    margin-bottom: var(--spacing-small);
     margin-right: var(--spacing-small);
   }
 }
 
 .tags--remove {
   @extend .tags;
+  margin-bottom: var(--spacing-medium);
 
   .tag {
     margin-top: 0;
@@ -27,6 +26,11 @@ $main: $lbry-teal-5;
   flex-direction: column;
   align-items: flex-start;
   margin: 0;
+  margin-top: var(--spacing-small);
+
+  li:last-child .tag {
+    margin-bottom: 0;
+  }
 }
 
 .tags--selected {
@@ -35,80 +39,29 @@ $main: $lbry-teal-5;
 }
 
 .tags__input-wrapper {
-  display: flex;
-
   // Nested style needed for more specificity
   .tag__input {
     @extend .tag--remove;
-    height: auto;
-    padding: calc(var(--spacing-miniscule) - 1px) var(--spacing-small);
-    background-color: mix($lbry-teal-1, $lbry-white, 10%);
-    border: 1px dashed;
-    border-color: lighten($lbry-teal-5, 10%);
-    margin-top: -2px; // To handle the border height
-
-    [data-mode='dark'] & {
-      background-color: var(--dm-color-03);
-      border-color: $lbry-gray-4;
-    }
+    height: var(--tag-height);
+    padding: calc(var(--spacing-miniscule) + 1px) var(--spacing-small);
+    background-color: var(--color-input-bg);
   }
 }
 
 .tag {
   @extend .badge;
   @extend .badge--tag;
-  user-select: none;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  text-transform: lowercase;
-  max-width: 10rem;
-  min-width: 0;
-
-  &:hover {
-    background-color: $lbry-teal-4;
-    color: $lbry-white;
-    svg {
-      stroke: $lbry-white;
-    }
-  }
-
-  &:active {
-    background-color: $main;
-  }
 }
 
 .tag--remove {
   max-width: 20rem;
-  font-size: var(--font-body);
 }
 
-.tag--add {
-  background-color: $lbry-teal-5;
-  color: $lbry-white;
-  .icon {
-    stroke: $lbry-white;
-  }
-
-  &.tag--mature {
-    @extend .badge--mature;
-  }
+.tag--large {
+  height: var(--height-input);
+  padding: 0 var(--spacing-s);
 }
 
 .tag--mature {
-  @extend .badge--mature;
-  // Lighten the color a little so it doesn't stand out as much on claim previews
-}
-
-.tag__action-label {
-  margin-left: 0.5rem;
-  padding-left: 0.5rem;
-  padding-top: 0.7rem;
-
-  [data-mode='dark'] & {
-    border-color: rgba($lbry-white, 0.1);
-  }
+  @extend .badge--tag-mature;
 }

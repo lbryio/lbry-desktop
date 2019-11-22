@@ -6,6 +6,7 @@ import {
   selectSupportsBalance,
   selectTipsBalance,
 } from 'lbry-redux';
+import { doOpenModal } from 'redux/actions/app';
 import { selectClaimedRewards } from 'lbryinc';
 import WalletBalance from './view';
 
@@ -18,4 +19,9 @@ const select = state => ({
   rewards: selectClaimedRewards(state),
 });
 
-export default connect(select)(WalletBalance);
+export default connect(
+  select,
+  {
+    doOpenModal,
+  }
+)(WalletBalance);

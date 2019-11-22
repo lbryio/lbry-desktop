@@ -1,23 +1,3 @@
-@import '~@lbry/components/sass/form/_index.scss';
-
-// Reset lbry components style that turns buttons inside of forms black
-form {
-  .button--primary,
-  [type='submit'] {
-    &:not(:hover),
-    &:hover {
-      @extend .button--primary;
-    }
-  }
-
-  .button--inverse {
-    &:not(:hover),
-    &:hover {
-      @extend .button--inverse;
-    }
-  }
-}
-
 // lbry/components overrides and minor styles
 // Some items have very specific styling
 // This is because many styles inside `lbry/components/sass/form/` are very specific
@@ -31,124 +11,10 @@ input[type='number'] {
   width: 8em;
 }
 
-input,
-input[type='text'],
-input[type='number'],
-input[type='email'],
-select,
-textarea {
-  height: var(--input-height);
-  padding-bottom: 0.1em;
-
-  &::placeholder {
-    color: $lbry-gray-5;
-    opacity: 0.4;
-  }
-
-  [data-mode='dark'] & {
-    &::placeholder {
-      color: $lbry-white;
-    }
-  }
-}
-
-// @lbry/components specificityfixme
-checkbox-element input[type='checkbox']:checked + label,
-checkbox-element input[type='checkbox'] + label {
-  color: lighten($lbry-black, 20%);
-
-  [data-mode='dark'] & {
-    color: $lbry-gray-1;
-  }
-}
-
-fieldset-section {
-  margin: 0;
-
-  input,
-  select,
-  textarea {
-    border-color: lighten($lbry-black, 20%);
-    border-radius: var(--input-border-radius);
-    background-color: $lbry-white;
-    border-width: 1px;
-
-    [data-mode='dark'] & {
-      background-color: var(--dm-color-03);
-      border-color: $lbry-black;
-    }
-  }
-
-  label {
-    width: auto;
-    text-transform: none;
-    color: lighten($lbry-black, 20%);
-
-    [data-mode='dark'] & {
-      color: $lbry-gray-3;
-    }
-  }
-
-  &:not(:first-of-type) {
-    checkbox-element,
-    radio-element {
-      margin-top: var(--spacing-small);
-    }
-  }
-
-  + fieldset-section {
-    margin-top: var(--spacing-medium);
-  }
-}
-
-checkbox-element {
-  &[disabled='true'] {
-    opacity: 0.3;
-  }
-}
-
-checkbox-element,
-radio-element,
-fieldset:last-child,
-fieldset-section:last-child {
-  margin-bottom: 0;
-}
-
-checkbox-element,
-radio-element {
-  &:hover {
-    cursor: pointer !important;
-  }
-
-  label {
-    margin-bottom: 0;
-    margin-left: var(--spacing-miniscule);
-    font-size: var(--font-body);
-
-    [data-mode='dark'] & {
-      color: $lbry-gray-1;
-
-      &:hover {
-        color: $lbry-teal-4;
-      }
-    }
-  }
-}
-
-checkbox-toggle {
-  border-width: 1px;
-  border-radius: var(--input-border-radius);
-
-  &:before {
-    background-position: center;
-    background-repeat: no-repeat;
-    background-size: 100%;
-    transition: all 0.2s;
-  }
-}
-
 fieldset-group {
-  margin-top: var(--spacing-small);
+  + fieldset-group {
+    margin-top: var(--spacing-small);
+  }
 
   &.fieldset-group--smushed {
     justify-content: flex-start;
@@ -203,21 +69,17 @@ fieldset-group {
     fieldset-section:first-child {
       .form-field__prefix {
         white-space: nowrap;
-        padding: var(--spacing-miniscule);
-        height: var(--input-height);
-        padding-right: 0;
+        padding: 0.5rem;
+        padding-left: 0.5rem;
+        height: var(--height-input);
+        padding-right: 1rem;
         border: 1px solid;
-        border-top-left-radius: var(--input-border-radius);
-        border-bottom-left-radius: var(--input-border-radius);
+        border-top-left-radius: var(--border-radius);
+        border-bottom-left-radius: var(--border-radius);
         border-right: 0;
-        border-color: $lbry-black;
-        color: $lbry-gray-4;
-        background-color: $lbry-white;
-
-        [data-mode='dark'] & {
-          background-color: var(--dm-color-03);
-          border-color: var(--dm-color-02);
-        }
+        border-color: var(--color-input-border);
+        color: var(--color-input-placeholder);
+        background-color: var(--color-input-bg);
       }
     }
 
@@ -229,119 +91,23 @@ fieldset-group {
         border-top-left-radius: 0;
         border-bottom-left-radius: 0;
         padding-left: var(--spacing-xs);
-
-        &:focus {
-          border-image-slice: 1;
-          border-image-source: linear-gradient(to right, $lbry-black, $lbry-teal-5 5%);
-        }
-
-        [data-mode='dark'] & {
-          &:focus {
-            border-image-source: linear-gradient(to right, var(--dm-color-02), $lbry-teal-5 5%);
-          }
-        }
+        border-color: var(--color-input-border);
       }
-    }
-  }
-}
-
-// form buttons are black by default
-form {
-  [type='button'],
-  [type='submit'] {
-    &.button--inverse {
-      &:not(:hover) {
-        background-color: transparent;
-        border-color: $lbry-black;
-        color: $lbry-black;
-      }
-
-      &:hover {
-        background-color: $lbry-teal-4;
-      }
-    }
-  }
-}
-
-fieldset-section {
-  input-submit {
-    input {
-      &:first-child {
-        border-top-right-radius: 0;
-        border-bottom-right-radius: 0;
-        border-right: none;
-      }
-    }
-
-    input[type='email'],
-    input[type='text'] {
-      [data-mode='dark'] & {
-        &:not(:focus) {
-          border-color: $lbry-gray-5;
-        }
-      }
-    }
-
-    .button,
-    // specificity needed because of @lbry/component rules
-    // @lbry/componentfixme
-    .button[type='submit']:not(:hover) {
-      border-top-left-radius: 0;
-      border-bottom-left-radius: 0;
-      border-color: $lbry-black;
-      opacity: 1;
-
-      [data-mode='dark'] & {
-        border-color: $lbry-gray-5;
-        color: $lbry-white;
-      }
-    }
-  }
-
-  select {
-    max-width: 13em;
-    background-position: 95% center;
-    background-size: 1.2rem;
-
-    [data-mode='dark'] & {
-      option {
-        background-color: $lbry-gray-5;
-      }
-    }
-  }
-
-  [data-mode='dark'] & {
-    input,
-    textarea,
-    select {
-      color: $lbry-white;
-    }
-
-    textarea,
-    select {
-      border-color: $lbry-gray-5;
     }
   }
 }
 
 .form-field--copyable {
-  background-color: rgba($lbry-gray-1, 0.5);
-  color: $lbry-gray-5;
   padding: 0.2rem 0.75rem;
   text-overflow: ellipsis;
   user-select: text;
   cursor: default;
-
-  [data-mode='dark'] & {
-    background-color: rgba($lbry-white, 0.3);
-    color: inherit;
-  }
 }
 
 .form-field__help {
   @extend .help;
-  margin-top: var(--spacing-small);
-  margin-bottom: var(--spacing-large);
+  margin-top: var(--spacing-miniscule);
+  margin-bottom: var(--spacing-small);
 }
 
 .form-field--short {

@@ -32,7 +32,7 @@ function FileDownloadLink(props: Props) {
     return (
       <ToolTip label={__('Open file')}>
         <Button
-          button="link"
+          button="alt"
           icon={ICONS.EXTERNAL}
           onClick={() => {
             pause();
@@ -45,7 +45,7 @@ function FileDownloadLink(props: Props) {
     return (
       <ToolTip label={__('Add to your library')}>
         <Button
-          button="link"
+          button="alt"
           icon={ICONS.DOWNLOAD}
           onClick={() => {
             download(uri);

@@ -44,7 +44,7 @@ const Header = (props: Props) => {
   } = props;
   const authenticated = Boolean(email);
 
-  //on the verify page don't let anyone escape other than by closing the tab to keep session data consistent
+  // on the verify page don't let anyone escape other than by closing the tab to keep session data consistent
   const isVerifyPage = history.location.pathname.includes(PAGES.AUTH_VERIFY);
 
   // Sign out if they click the "x" when they are on the password prompt
@@ -78,6 +78,9 @@ const Header = (props: Props) => {
     <header
       className={classnames('header', {
         'header--minimal': authHeader,
+        // @if TARGET='web'
+        'header--noauth-web': !authenticated,
+        // @endif
         // @if TARGET='app'
         'header--mac': IS_MAC,
         // @endif
@@ -118,8 +121,8 @@ const Header = (props: Props) => {
         </div>
 
         {!authHeader ? (
-          <div className={classnames('header__menu', { 'header__menu--small': IS_WEB && !authenticated })}>
-            {!IS_WEB || authenticated ? (
+          <div className={classnames('header__menu', { 'header__menu--with-balance': !IS_WEB || authenticated })}>
+            {(!IS_WEB || authenticated) && (
               <Fragment>
                 <Menu>
                   <MenuButton className="header__navigation-item menu__title">{getWalletTitle()}</MenuButton>
@@ -135,7 +138,7 @@ const Header = (props: Props) => {
                   </MenuList>
                 </Menu>
                 <Menu>
-                  <MenuButton className="header__navigation-item menu__title">
+                  <MenuButton className="header__navigation-item menu__title header__navigation-item--icon">
                     <Icon size={18} icon={ICONS.ACCOUNT} />
                   </MenuButton>
                   <MenuList className="menu__list--header">
@@ -161,28 +164,28 @@ const Header = (props: Props) => {
                     )}
                   </MenuList>
                 </Menu>
-
-                <Menu>
-                  <MenuButton className="header__navigation-item menu__title">
-                    <Icon size={18} icon={ICONS.SETTINGS} />
-                  </MenuButton>
-                  <MenuList className="menu__list--header">
-                    <MenuItem className="menu__link" onSelect={() => history.push(`/$/${PAGES.SETTINGS}`)}>
-                      <Icon aria-hidden tootlip icon={ICONS.SETTINGS} />
-                      {__('Settings')}
-                    </MenuItem>
-                    <MenuItem className="menu__link" onSelect={() => history.push(`/$/${PAGES.HELP}`)}>
-                      <Icon aria-hidden icon={ICONS.HELP} />
-                      {__('Help')}
-                    </MenuItem>
-                    <MenuItem className="menu__link" onSelect={handleThemeToggle}>
-                      <Icon icon={currentTheme === 'light' ? ICONS.DARK : ICONS.LIGHT} />
-                      {currentTheme === 'light' ? __('Dark') : __('Light')}
-                    </MenuItem>
-                  </MenuList>
-                </Menu>
               </Fragment>
-            ) : (
+            )}
+            <Menu>
+              <MenuButton className="header__navigation-item menu__title header__navigation-item--icon">
+                <Icon size={18} icon={ICONS.SETTINGS} />
+              </MenuButton>
+              <MenuList className="menu__list--header">
+                <MenuItem className="menu__link" onSelect={() => history.push(`/$/${PAGES.SETTINGS}`)}>
+                  <Icon aria-hidden tootlip icon={ICONS.SETTINGS} />
+                  {__('Settings')}
+                </MenuItem>
+                <MenuItem className="menu__link" onSelect={() => history.push(`/$/${PAGES.HELP}`)}>
+                  <Icon aria-hidden icon={ICONS.HELP} />
+                  {__('Help')}
+                </MenuItem>
+                <MenuItem className="menu__link" onSelect={handleThemeToggle}>
+                  <Icon icon={currentTheme === 'light' ? ICONS.DARK : ICONS.LIGHT} />
+                  {currentTheme === 'light' ? __('Dark') : __('Light')}
+                </MenuItem>
+              </MenuList>
+            </Menu>
+            {IS_WEB && !authenticated && (
               <Button navigate={`/$/${PAGES.AUTH}`} button="primary" label={__('Sign In')} />
             )}
           </div>
@@ -193,7 +196,7 @@ const Header = (props: Props) => {
               {/* This pushes the close button to the right side */}
               <span />
               <Tooltip label={__('Go Back')}>
-                <Button icon={ICONS.REMOVE} {...closeButtonNavigationProps} />
+                <Button button="link" icon={ICONS.REMOVE} {...closeButtonNavigationProps} />
               </Tooltip>
             </div>
           )

@@ -36,11 +36,11 @@ function TransactionListTable(props: Props) {
           <table className="table table--transactions">
             <thead>
               <tr>
-                <th>{__('Amount')}</th>
+                <th>{__('Date')}</th>
                 <th>{__('Type')} </th>
                 <th>{__('Details')} </th>
                 <th>{__('Transaction')}</th>
-                <th>{__('Date')}</th>
+                <th className="table__item--align-right">{__('Amount')}</th>
               </tr>
             </thead>
             <tbody>

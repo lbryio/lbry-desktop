@@ -4,8 +4,10 @@ import MarkdownPreview from 'component/common/markdown-preview';
 import Button from 'component/button';
 import Expandable from 'component/expandable';
 import path from 'path';
+import ClaimTags from 'component/claimTags';
 
 type Props = {
+  uri: string,
   claim: StreamClaim,
   fileInfo: FileListItem,
   metadata: StreamMetadata,
@@ -16,7 +18,7 @@ type Props = {
 
 class FileDetails extends PureComponent<Props> {
   render() {
-    const { claim, contentType, fileInfo, metadata, openFolder } = this.props;
+    const { uri, claim, contentType, fileInfo, metadata, openFolder } = this.props;
 
     if (!claim || !metadata) {
       return <span className="empty">{__('Empty claim or metadata info.')}</span>;
@@ -47,47 +49,49 @@ class FileDetails extends PureComponent<Props> {
               </div>
             </Fragment>
           )}
-          <div className="media__info-title">Info</div>
-          <div className="media__info-text">
-            <div>
-              {__('Content-Type')}
-              {': '}
-              {mediaType}
-            </div>
-            {fileSize && (
-              <div>
-                {__('File Size')}
-                {': '}
-                {fileSize}
-              </div>
-            )}
-            <div>
-              {__('Languages')}
-              {': '}
-              {languages ? languages.join(' ') : null}
-            </div>
-            <div>
-              {__('License')}
-              {': '}
-              {license}
-            </div>
-            {downloadPath && (
-              <div>
-                {__('Downloaded to')}
-                {': '}
-                <Button
-                  button="link"
-                  className="button--download-link"
-                  onClick={() => {
-                    if (downloadPath) {
-                      openFolder(downloadPath);
-                    }
-                  }}
-                  label={downloadNote || downloadPath}
-                />
-              </div>
-            )}
-          </div>
+          <ClaimTags uri={uri} type="large" />
+          <table className="table table--condensed table--fixed table--file-details">
+            <tbody>
+              <tr>
+                <td> {__('Content Type')}</td>
+                <td>{mediaType}</td>
+              </tr>
+              {fileSize && (
+                <tr>
+                  <td> {__('File Size')}</td>
+                  <td>{fileSize}</td>
+                </tr>
+              )}
+              {languages && (
+                <tr>
+                  <td>{__('Languages')}</td>
+                  <td>{languages.join(' ')}</td>
+                </tr>
+              )}
+              <tr>
+                <td>{__('License')}</td>
+                <td>{license}</td>
+              </tr>
+              {downloadPath && (
+                <tr>
+                  <td>{__('Downloaded to')}</td>
+                  <td>
+                    {/* {downloadPath.replace(/(.{10})/g, '$1\u200b')} */}
+                    <Button
+                      button="link"
+                      className="button--download-link"
+                      onClick={() => {
+                        if (downloadPath) {
+                          openFolder(downloadPath);
+                        }
+                      }}
+                      label={downloadNote || downloadPath.replace(/(.{10})/g, '$1\u200b')}
+                    />
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          </table>
         </Expandable>
       </Fragment>
     );

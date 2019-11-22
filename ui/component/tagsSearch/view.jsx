@@ -15,6 +15,7 @@ type Props = {
   disableAutoFocus?: boolean,
   onRemove: Tag => void,
   placeholder?: string,
+  label?: string,
 };
 
 /*
@@ -36,6 +37,7 @@ export default function TagsSearch(props: Props) {
     suggestMature,
     disableAutoFocus,
     placeholder,
+    label,
   } = props;
   const [newTag, setNewTag] = useState('');
   const doesTagMatch = name => {
@@ -107,6 +109,7 @@ export default function TagsSearch(props: Props) {
   return (
     <React.Fragment>
       <Form className="tags__input-wrapper" onSubmit={handleSubmit}>
+        <label>{label || __('Following')}</label>
         <ul className="tags--remove">
           {tagsPassedIn.map(tag => (
             <Tag
@@ -130,6 +133,7 @@ export default function TagsSearch(props: Props) {
           </li>
         </ul>
       </Form>
+      <label>{__('Suggested')}</label>
       <ul className="tags">
         {suggestedTags.map(tag => (
           <Tag key={`suggested${tag}`} name={tag} type="add" onClick={() => handleTagClick(tag)} />
