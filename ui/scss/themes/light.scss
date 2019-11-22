@@ -11,6 +11,8 @@
   --color-background-overlay: #21252980;
 
   // Text
+  --color-text-selection-bg: var(--color-secondary-alt);
+  --color-text-selection: var(--color-secondary);
   --color-text-error: var(--color-danger);
   --color-text-empty: #bbbbbb;
   --color-text-help: #999999;
