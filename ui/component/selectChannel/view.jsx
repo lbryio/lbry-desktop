@@ -6,7 +6,7 @@ import BusyIndicator from 'component/common/busy-indicator';
 import Button from 'component/button';
 import analytics from 'analytics';
 
-import { CHANNEL_NEW, CHANNEL_ANONYMOUS, INVALID_NAME_ERROR } from 'constants/claim';
+import { CHANNEL_NEW, CHANNEL_ANONYMOUS, MINIMUM_PUBLISH_BID, INVALID_NAME_ERROR } from 'constants/claim';
 
 type Props = {
   channel: string, // currently selected channel
@@ -102,6 +102,8 @@ class ChannelSection extends React.PureComponent<Props, State> {
       newChannelBidError = __('Please decrease your deposit to account for transaction fees');
     } else if (newChannelBid > balance) {
       newChannelBidError = __('Deposit cannot be higher than your balance');
+    } else if (newChannelBid < MINIMUM_PUBLISH_BID) {
+      newChannelBidError = __('Your deposit must be higher');
     }
 
     this.setState({

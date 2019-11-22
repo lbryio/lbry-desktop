@@ -57,7 +57,7 @@ function PublishName(props: Props) {
   }, [name]);
 
   useEffect(() => {
-    const totalAvailableBidAmount = previousBidAmount + balance;
+    const totalAvailableBidAmount = previousBidAmount ? previousBidAmount + balance : balance;
 
     let bidError;
     if (bid === 0) {
