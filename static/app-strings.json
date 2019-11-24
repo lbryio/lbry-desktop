@@ -887,5 +887,11 @@
   "An email was sent to %email%. Follow the link to %verify_text%. After, this page will update automatically.": "An email was sent to %email%. Follow the link to %verify_text%. After, this page will update automatically.",
   "Your email preferences": "Your email preferences",
   "allow you to receive notifications related to new content.": "allow you to receive notifications related to new content.",
-  "Suggested": "Suggested"
+  "Suggested": "Suggested",
+  "%amountBehind% blocks behind": "%amountBehind% blocks behind",
+  "Startup Preferences": "Startup Preferences",
+  "This will clear the application cache, and might fix issues you are having. Your wallet will not be affected. ": "This will clear the application cache, and might fix issues you are having. Your wallet will not be affected. ",
+  "Start minimized": "Start minimized",
+  "Improve view speed and help the LBRY network by allowing the app to cuddle up in your system tray.": "Improve view speed and help the LBRY network by allowing the app to cuddle up in your system tray.",
+  "Content Type": "Content Type"
 }

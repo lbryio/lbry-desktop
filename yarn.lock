@@ -1019,10 +1019,10 @@
     prop-types "^15.6.2"
     scheduler "^0.15.0"
 
-"@lbry/components@^3.0.1":
-  version "3.0.1"
-  resolved "https://registry.yarnpkg.com/@lbry/components/-/components-3.0.1.tgz#a61b0aaaa82770438fb4447de96d657ebb5a0bed"
-  integrity sha512-0jeI/u230aN7TsCRwjzfsmU2RCywbeXrtZET0gQ+8Cn/x96eezgerH+rKgasLellcqUH1ZW9zjIYZ6BLZKH3Pw==
+"@lbry/components@^3.0.2":
+  version "3.0.2"
+  resolved "https://registry.yarnpkg.com/@lbry/components/-/components-3.0.2.tgz#46edf7fd70f0e15527ca00481c1352e1e7dbc48c"
+  integrity sha512-tMIUneFp0Rz3a3TZA11V8liIODJHPhiQ3b9R1U6OyZeNftAsswBFTZF5R0IyctbtsVFpovp6mK2aQEReU1Cu/g==
 
 "@mapbox/hast-util-table-cell-style@^0.1.3":
   version "0.1.3"
