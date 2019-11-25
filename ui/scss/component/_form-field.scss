@@ -70,7 +70,7 @@ fieldset-group {
       .form-field__prefix {
         white-space: nowrap;
         padding: 0.5rem;
-        padding-left: 0.5rem;
+        padding-right: var(--spacing-xxs);
         height: var(--height-input);
         padding-right: 1rem;
         border: 1px solid;
@@ -90,8 +90,8 @@ fieldset-group {
         border-left: 0;
         border-top-left-radius: 0;
         border-bottom-left-radius: 0;
-        padding-left: var(--spacing-xs);
         border-color: var(--color-input-border);
+        padding-left: 0;
       }
     }
   }
