@@ -893,5 +893,6 @@
   "This will clear the application cache, and might fix issues you are having. Your wallet will not be affected. ": "This will clear the application cache, and might fix issues you are having. Your wallet will not be affected. ",
   "Start minimized": "Start minimized",
   "Improve view speed and help the LBRY network by allowing the app to cuddle up in your system tray.": "Improve view speed and help the LBRY network by allowing the app to cuddle up in your system tray.",
-  "Content Type": "Content Type"
+  "Content Type": "Content Type",
+  "Submit Feedback": "Submit Feedback"
 }

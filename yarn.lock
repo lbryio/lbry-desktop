@@ -902,10 +902,10 @@
   dependencies:
     regenerator-runtime "^0.13.2"
 
-"@babel/runtime@^7.4.3":
-  version "7.4.4"
-  resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.4.4.tgz#dc2e34982eb236803aa27a07fea6857af1b9171d"
-  integrity sha512-w0+uT71b6Yi7i5SE0co4NioIpSYS6lLiXvCzWzGSKvpK5vdQtCbICHMj+gbAKAOtxiV6HsVh/MBdaF9EQ6faSg==
+"@babel/runtime@^7.6.3":
+  version "7.7.4"
+  resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.7.4.tgz#b23a856751e4bf099262f867767889c0e3fe175b"
+  integrity sha512-r24eVUUr0QqNZa+qrImUk8fn5SPhHq+IfYvIoIMg0do3GdK9sMdiLKP3GYVVaxpPKORgm8KRKaNTEhAjgIpLMw==
   dependencies:
     regenerator-runtime "^0.13.2"
 
@@ -2060,6 +2060,11 @@ body-parser@1.19.0:
     qs "6.7.0"
     raw-body "2.4.0"
     type-is "~1.6.17"
+
+body-scroll-lock@^2.6.4:
+  version "2.6.4"
+  resolved "https://registry.yarnpkg.com/body-scroll-lock/-/body-scroll-lock-2.6.4.tgz#567abc60ef4d656a79156781771398ef40462e94"
+  integrity sha512-NP08WsovlmxEoZP9pdlqrE+AhNaivlTrz9a0FF37BQsnOrpN48eNqivKkE7SYpM9N+YIPjsdVzfLAUQDBm6OQw==
 
 bonjour@^3.5.0:
   version "3.5.0"
@@ -7102,10 +7107,10 @@ levn@^0.3.0, levn@~0.3.0:
     prelude-ls "~1.1.2"
     type-check "~0.3.2"
 
-libarchive.js@^1.1.0:
-  version "1.1.0"
-  resolved "https://registry.yarnpkg.com/libarchive.js/-/libarchive.js-1.1.0.tgz#8cc21a5a8ee59e5a02ce6eb966e140a7a44622bc"
-  integrity sha512-vh0dHBPK00ggbmTupqFWfws46a5QO/S5ZQ36Ymdyo4R93crXewXKJpYDpC/HROgOofvO8ogDdOLmU5MX8xGfmQ==
+libarchive.js@^1.3.0:
+  version "1.3.0"
+  resolved "https://registry.yarnpkg.com/libarchive.js/-/libarchive.js-1.3.0.tgz#18c42c6b4ce727a02359c90769e4e454cf3743cd"
+  integrity sha512-EkQfRXt9DhWwj6BnEA2TNpOf4jTnzSTUPGgE+iFxcdNqjktY8GitbDeHnx8qZA0/IukNyyBUR3oQKRdYkO+HFg==
 
 lie@3.1.1:
   version "3.1.1"
@@ -7242,6 +7247,11 @@ localforage@^1.7.1:
   integrity sha512-1TulyYfc4udS7ECSBT2vwJksWbkwwTX8BzeUIiq8Y07Riy7bDAAnxDaPU/tWyOVmQAcWJIEIFP9lPfBGqVoPgQ==
   dependencies:
     lie "3.1.1"
+
+localized-strings@^0.2.0:
+  version "0.2.4"
+  resolved "https://registry.yarnpkg.com/localized-strings/-/localized-strings-0.2.4.tgz#9d61c06b60cc7b5edf7c46e6c7f2d1ecb84aeb2c"
+  integrity sha512-TKDhqFPkIIN/if2FSvVVZTaM/GP9TzfgdQ2uY65mr32xgFu5nqkKXprXbzy5rfx32DF5LDvS/y1UqYF/mAscYA==
 
 locate-path@^2.0.0:
   version "2.0.0"
@@ -7623,6 +7633,11 @@ mem@^4.0.0:
     map-age-cleaner "^0.1.1"
     mimic-fn "^2.0.0"
     p-is-promise "^2.0.0"
+
+memoize-one@^5.1.1:
+  version "5.1.1"
+  resolved "https://registry.yarnpkg.com/memoize-one/-/memoize-one-5.1.1.tgz#047b6e3199b508eaec03504de71229b8eb1d75c0"
+  integrity sha512-HKeeBpWvqiVJD57ZUAsJNm71eHTykffzcLZVYWiVfQeI1rJtuEaS7hQiEpWfVVk18donPwJEcFKIkCmPJNOhHA==
 
 memory-fs@^0.2.0:
   version "0.2.0"
@@ -8434,10 +8449,10 @@ opener@^1.5.1:
   resolved "https://registry.yarnpkg.com/opener/-/opener-1.5.1.tgz#6d2f0e77f1a0af0032aca716c2c1fbb8e7e8abed"
   integrity sha512-goYSy5c2UXE4Ra1xixabeVh1guIX/ZV/YokJksb6q2lubWu6UbvPQ20p542/sFIll1nl8JnCyK9oBaOcCWXwvA==
 
-openseadragon@^2.4.0:
-  version "2.4.0"
-  resolved "https://registry.yarnpkg.com/openseadragon/-/openseadragon-2.4.0.tgz#d0b28b37a953602c82432a0dbd8a3779dadf756f"
-  integrity sha512-e2fsoEiCDkmwc3vyrv396lkYu4c9CGlpbSX4kYE07eW0ZlEF5DnLbeY2PhqPTskkC1jlsPu2TGZwaZ9VhaAn/w==
+openseadragon@^2.4.1:
+  version "2.4.1"
+  resolved "https://registry.yarnpkg.com/openseadragon/-/openseadragon-2.4.1.tgz#91fda5245558f5e4f939c2173bdf582359154b21"
+  integrity sha512-7fWUnCkGvWcnoRxqeXcg4bSLPApWbI0hHumEZF8K2pziMfPNjvvHL5XB4oQeT2XfrGKfaasVrPe2XqhAr5kogA==
 
 opn@^5.5.0:
   version "5.5.0"
@@ -8888,6 +8903,11 @@ please-upgrade-node@^3.0.2:
   integrity sha512-KY1uHnQ2NlQHqIJQpnh/i54rKkuxCEBx+voJIS/Mvb+L2iYd2NMotwduhKTMjfC1uKoX3VXOxLjIYG66dfJTVQ==
   dependencies:
     semver-compare "^1.0.0"
+
+popper.js@^1.16.0:
+  version "1.16.0"
+  resolved "https://registry.yarnpkg.com/popper.js/-/popper.js-1.16.0.tgz#2e1816bcbbaa518ea6c2e15a466f4cb9c6e2fbb3"
+  integrity sha512-+G+EkOPoE5S/zChTpmBSSDYmhXJ5PsW8eMhH8cP/CQHMFPBG/kC9Y5IIw6qNYgdJ+/COf0ddY2li28iHaZRSjw==
 
 portfinder@^1.0.25:
   version "1.0.25"
@@ -9907,12 +9927,12 @@ react-async-script@^1.1.1:
     hoist-non-react-statics "^3.3.0"
     prop-types "^15.5.0"
 
-react-compound-slider@^1.2.2:
-  version "1.2.2"
-  resolved "https://registry.yarnpkg.com/react-compound-slider/-/react-compound-slider-1.2.2.tgz#1cc6809bb2d0282ad90a06040e2b10635edfbea3"
-  integrity sha512-G2wD5CTjAOTjCnslpfjopB5qU6Kg0//3ChPifezSGtMali/1M/CRDCJAh6SQOgyDaQlNi/QV1Noo8Tvnjy2gcg==
+react-compound-slider@^2.3.0:
+  version "2.4.0"
+  resolved "https://registry.yarnpkg.com/react-compound-slider/-/react-compound-slider-2.4.0.tgz#9116637268a78311f49f9cbb5d0cfdbff1b0997e"
+  integrity sha512-fGlmTjXl3U2A+SZi5r5H0RYYEvIJLOg4plxRtOwhLNXNGgTS75/dFYnlg6ZdjmJdW8frUNe+pKUCYe8sd5ynfw==
   dependencies:
-    "@babel/runtime" "^7.4.3"
+    "@babel/runtime" "^7.6.3"
     d3-array "^1.2.4"
     prop-types "^15.7.2"
     warning "^3.0.0"
@@ -9924,7 +9944,7 @@ react-confetti@^4.0.1:
   dependencies:
     tween-functions "^1.2.0"
 
-react-dom@^16.8.2, react-dom@^16.8.6:
+react-dom@^16.8.2:
   version "16.8.6"
   resolved "https://registry.yarnpkg.com/react-dom/-/react-dom-16.8.6.tgz#71d6303f631e8b0097f56165ef608f051ff6e10f"
   integrity sha512-1nL7PIq9LTL3fthPqwkvr2zY7phIPjYrT0jp4HjyEQrEROnw4dG41VVwi/wfoCneoleqrNX7iAD+pXebJZwrwA==
@@ -9979,6 +9999,13 @@ react-lifecycles-compat@^3.0.0, react-lifecycles-compat@^3.0.4:
   version "3.0.4"
   resolved "https://registry.yarnpkg.com/react-lifecycles-compat/-/react-lifecycles-compat-3.0.4.tgz#4f1a273afdfc8f3488a8c516bfda78f872352362"
   integrity sha512-fBASbA6LnOU9dOU2eW7aQ8xmYBSXUIWr+UmF9b1efZBazGNO+rcXT/icdKnYm2pTwcRylVUYwW7H1PHfLekVzA==
+
+react-localization@^1.0.15:
+  version "1.0.15"
+  resolved "https://registry.yarnpkg.com/react-localization/-/react-localization-1.0.15.tgz#624bd0b514100488a84204e20b398750313d1708"
+  integrity sha512-s+yK3EqPUhN8kAfUIoA5m0a0iGOvxB3DrvngYnSZNLRQRX+yS7LYfTuKT66KVa3Cr6EP4iGRtw4XRqpsi1ZLjw==
+  dependencies:
+    localized-strings "^0.2.0"
 
 react-modal@^3.1.7:
   version "3.8.1"
@@ -10054,6 +10081,14 @@ react-spring@^8.0.20:
     "@babel/runtime" "^7.3.1"
     prop-types "^15.5.8"
 
+react-spring@^8.0.27:
+  version "8.0.27"
+  resolved "https://registry.yarnpkg.com/react-spring/-/react-spring-8.0.27.tgz#97d4dee677f41e0b2adcb696f3839680a3aa356a"
+  integrity sha512-nDpWBe3ZVezukNRandTeLSPcwwTMjNVu1IDq9qA/AMiUqHuRN4BeSWvKr3eIxxg1vtiYiOLy4FqdfCP5IoP77g==
+  dependencies:
+    "@babel/runtime" "^7.3.1"
+    prop-types "^15.5.8"
+
 react-sticky-box@^0.8.0:
   version "0.8.0"
   resolved "https://registry.yarnpkg.com/react-sticky-box/-/react-sticky-box-0.8.0.tgz#1c191936af8f5420087b703ec6da4ef46060076c"
@@ -10063,7 +10098,7 @@ react-sticky-box@^0.8.0:
     prop-types "^15.6.2"
     resize-observer-polyfill "^1.5.1"
 
-react@^16.8.2, react@^16.8.6:
+react@^16.8.2:
   version "16.8.6"
   resolved "https://registry.yarnpkg.com/react/-/react-16.8.6.tgz#ad6c3a9614fd3a4e9ef51117f54d888da01f2bbe"
   integrity sha512-pC0uMkhLaHm11ZSJULfOBqV4tIZkx87ZLvbbQYunNixAAvjnC+snJCg0XQXn9VIsttVsbZP/H/ewzgsd5fxKXw==
@@ -10198,6 +10233,26 @@ readdirp@^2.2.1:
     graceful-fs "^4.1.11"
     micromatch "^3.1.10"
     readable-stream "^2.0.2"
+
+reakit-system@^0.7.1:
+  version "0.7.1"
+  resolved "https://registry.yarnpkg.com/reakit-system/-/reakit-system-0.7.1.tgz#ab794823ed1dce5aa7269fcca5a193097950f8b1"
+  integrity sha512-a7hGv5hVe2yjSmy9EgCe6wgeBC/EPoLXxp9XFuP2VWmFw8ufJ4K7hvY/OWRgqxZHgoEoUWbO6fxYYEfZ7YfoPg==
+
+reakit-utils@^0.7.2:
+  version "0.7.2"
+  resolved "https://registry.yarnpkg.com/reakit-utils/-/reakit-utils-0.7.2.tgz#5e19016f4ad2bf07f70d8c38d3f9a44dbf7f3e87"
+  integrity sha512-cHG5QjimeYQEWJjmrEK+p2YwaOiqbwkbhzZlqQHOfYj5h7B/MrpyssVYlDBSQozEXM9pZwtUFGQSI2bG9jok9A==
+
+reakit@^1.0.0-beta.13:
+  version "1.0.0-beta.13"
+  resolved "https://registry.yarnpkg.com/reakit/-/reakit-1.0.0-beta.13.tgz#f29cb481250a628782e745f44b014a9a7fe3c0be"
+  integrity sha512-lQ50v2801aBi6+8pZ3iD09U7URYNGEo99vrF+NSPlDzYWofbiIAiEZ2hpTnNtc/8OXZusrkrVW1d8rsmJGNWhw==
+  dependencies:
+    body-scroll-lock "^2.6.4"
+    popper.js "^1.16.0"
+    reakit-system "^0.7.1"
+    reakit-utils "^0.7.2"
 
 redent@^1.0.0:
   version "1.0.0"
@@ -12532,17 +12587,19 @@ videojs-vtt.js@0.14.1:
   dependencies:
     global "^4.3.1"
 
-villain@btzr-io/Villain:
-  version "0.0.7"
-  resolved "https://codeload.github.com/btzr-io/Villain/tar.gz/1f39a679cd78b08f8acc0b36615550eb91f6ee03"
+villain-react@^1.0.6:
+  version "1.0.6"
+  resolved "https://registry.yarnpkg.com/villain-react/-/villain-react-1.0.6.tgz#344367f7d67d0acaa0c68b2553da428cb79c0d19"
+  integrity sha512-rqxsLu5uPGQ/k8R1K+6ELKLD/xE9Y6sGWQr3E0oghOWmVb6dRTSX3we9+4FV9kHO5Jg3YvGZr5PxxdyV3VFznA==
   dependencies:
     clsx "^1.0.4"
-    libarchive.js "^1.1.0"
-    openseadragon "^2.4.0"
+    libarchive.js "^1.3.0"
+    memoize-one "^5.1.1"
+    openseadragon "^2.4.1"
     prop-types "^15.7.2"
-    react "^16.8.6"
-    react-compound-slider "^1.2.2"
-    react-dom "^16.8.6"
+    react-compound-slider "^2.3.0"
+    react-localization "^1.0.15"
+    react-spring "^8.0.27"
 
 vm-browserify@0.0.4:
   version "0.0.4"
