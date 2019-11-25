@@ -58,7 +58,7 @@
   overflow: visible;
   padding: var(--spacing-medium);
 
-  &:not(.claim-preview--inline) {
+  &:not(.claim-preview--inline):not(.claim-preview--pending) {
     cursor: pointer;
   }
 
@@ -113,12 +113,7 @@
 }
 
 .claim-preview--pending {
-  cursor: pointer;
   opacity: 0.6;
-
-  &:hover {
-    background-color: black; //white;
-  }
 }
 
 .claim-preview--inline {
