@@ -1,23 +1,23 @@
 import { connect } from 'react-redux';
-import { makeSelectNsfwCountForChannel, makeSelectNsfwCountFromUris, parseURI } from 'lbry-redux';
+import { makeSelectNsfwCountFromUris, makeSelectOmittedCountForChannel, parseURI } from 'lbry-redux';
 import { selectShowMatureContent } from 'redux/selectors/settings';
 import HiddenNsfwClaims from './view';
 
 const select = (state, props) => {
   const { uri, uris } = props;
 
-  let numberOfNsfwClaims;
+  let numberOfHiddenClaims;
   if (uri) {
     const { isChannel } = parseURI(uri);
-    numberOfNsfwClaims = isChannel
-      ? makeSelectNsfwCountForChannel(uri)(state)
+    numberOfHiddenClaims = isChannel
+      ? makeSelectOmittedCountForChannel(uri)(state)
       : makeSelectNsfwCountFromUris([uri])(state);
   } else if (uris) {
-    numberOfNsfwClaims = makeSelectNsfwCountFromUris(uris)(state);
+    numberOfHiddenClaims = makeSelectNsfwCountFromUris(uris)(state);
   }
 
   return {
-    numberOfNsfwClaims,
+    numberOfHiddenClaims,
     obscureNsfw: !selectShowMatureContent(state),
   };
 };
