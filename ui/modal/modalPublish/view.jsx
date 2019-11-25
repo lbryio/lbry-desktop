@@ -36,7 +36,7 @@ class ModalPublishSuccess extends React.PureComponent<Props> {
           closeModal();
         }}
       >
-        <p className="card__subtitle">
+        <p className="section__subtitle">
           {__(`Your %publishMessage% pending on LBRY. It will take a few minutes to appear for other users.`, {
             publishMessage,
           })}
