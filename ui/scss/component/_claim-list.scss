@@ -186,6 +186,6 @@
 }
 
 .claim-upload__progress--inner {
-  background: black; //teal-1;
+  background: var(--color-primary-alt);
   padding: var(--spacing-miniscule);
 }
