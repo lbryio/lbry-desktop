@@ -4,7 +4,6 @@ module.exports = api => {
   return {
     presets: ['@babel/env', '@babel/react', '@babel/flow'],
     plugins: [
-      '@babel/plugin-syntax-dynamic-import',
       'import-glob',
       '@babel/plugin-transform-runtime',
       ['@babel/plugin-proposal-decorators', { decoratorsBeforeExport: true }],

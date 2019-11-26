@@ -5,6 +5,7 @@ import {
   makeSelectThumbnailForUri,
   makeSelectStreamingUrlForUri,
   makeSelectMediaTypeForUri,
+  makeSelectContentTypeForUri,
   makeSelectUriIsStreamable,
   makeSelectTitleForUri,
 } from 'lbry-redux';
@@ -23,6 +24,7 @@ const select = (state, props) => {
     title: makeSelectTitleForUri(uri)(state),
     thumbnail: makeSelectThumbnailForUri(uri)(state),
     mediaType: makeSelectMediaTypeForUri(uri)(state),
+    contentType: makeSelectContentTypeForUri(uri)(state),
     fileInfo: makeSelectFileInfoForUri(uri)(state),
     obscurePreview: makeSelectShouldObscurePreview(uri)(state),
     isPlaying: makeSelectIsPlaying(uri)(state),

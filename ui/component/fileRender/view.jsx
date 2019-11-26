@@ -16,11 +16,11 @@ import path from 'path';
 import fs from 'fs';
 import Yrbl from 'component/yrbl';
 
-// @if TARGET='app'
 import DocumentViewer from 'component/viewers/documentViewer';
-import DocxViewer from 'component/viewers/docxViewer';
-import HtmlViewer from 'component/viewers/htmlViewer';
 import PdfViewer from 'component/viewers/pdfViewer';
+import HtmlViewer from 'component/viewers/htmlViewer';
+// @if TARGET='app'
+import DocxViewer from 'component/viewers/docxViewer';
 import ComicBookViewer from 'component/viewers/comicBookViewer';
 import ThreeViewer from 'component/viewers/threeViewer';
 // @endif
@@ -102,26 +102,33 @@ class FileRender extends React.PureComponent<Props> {
       // Add routes to viewer...
     };
 
+    // Supported contentTypes
+    const contentTypes = {
+      'application/pdf': <PdfViewer source={downloadPath || source} />,
+      'text/html': <HtmlViewer source={downloadPath || source} />,
+      'text/htm': <HtmlViewer source={downloadPath || source} />,
+    };
+
     // Supported fileType
     const fileTypes = {
       // @if TARGET='app'
-      pdf: <PdfViewer source={downloadPath} />,
       docx: <DocxViewer source={downloadPath} />,
-      html: <HtmlViewer source={downloadPath} />,
-      htm: <HtmlViewer source={downloadPath} />,
       // @endif
       // Add routes to viewer...
     };
 
-    // Check for a valid fileType or mediaType
-    let viewer = (fileType && fileTypes[fileType]) || mediaTypes[mediaType];
+    // Check for a valid fileType, mediaType, or contentType
+    let viewer = (fileType && fileTypes[fileType]) || mediaTypes[mediaType] || contentTypes[contentType];
 
     // Check for Human-readable files
     if (!viewer && readableFiles.includes(mediaType)) {
       viewer = (
         <DocumentViewer
           source={{
-            stream: options => fs.createReadStream(downloadPath, options),
+            // @if TARGET='app'
+            file: options => fs.createReadStream(downloadPath, options),
+            // @endif
+            stream: source,
             fileType,
             contentType,
           }}

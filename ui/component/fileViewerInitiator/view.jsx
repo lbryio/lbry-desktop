@@ -14,6 +14,7 @@ const SPACE_BAR_KEYCODE = 32;
 type Props = {
   play: string => void,
   mediaType: string,
+  contentType: string,
   isLoading: boolean,
   isPlaying: boolean,
   fileInfo: FileListItem,
@@ -31,6 +32,7 @@ export default function FileViewer(props: Props) {
   const {
     play,
     mediaType,
+    contentType,
     isPlaying,
     fileInfo,
     uri,
@@ -45,7 +47,8 @@ export default function FileViewer(props: Props) {
   const cost = costInfo && costInfo.cost;
   const isPlayable = ['audio', 'video'].includes(mediaType);
   const fileStatus = fileInfo && fileInfo.status;
-  const supported = (IS_WEB && isStreamable) || !IS_WEB;
+  const webStreamOnly = contentType === 'application/pdf' || mediaType === 'text';
+  const supported = (IS_WEB && (isStreamable || webStreamOnly)) || !IS_WEB;
 
   // Wrap this in useCallback because we need to use it to the keyboard effect
   // If we don't a new instance will be created for every render and react will think the dependencies have changed, which will add/remove the listener for every render
