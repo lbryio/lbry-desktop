@@ -27,21 +27,27 @@ class PdfViewer extends React.PureComponent<Props> {
     // @if TARGET='app'
     shell.openExternal(path);
     // @endif
-    // @if TARGET='web'
-    console.error('provide stub for shell.openExternal'); // eslint-disable-line
-    // @endif
   }
 
   render() {
     // We used to be able to just render a webview and display the pdf inside the app
     // This was disabled on electron@3
     // https://github.com/electron/electron/issues/12337
+    const { source } = this.props;
     return (
       <div className="file-render__viewer--pdf" onContextMenu={stopContextMenu}>
+        {/* @if TARGET='app' */}
         <p>
           {__('PDF opened externally.')} <Button button="link" label={__('Click here')} onClick={this.openFile} />{' '}
           {__('to open it again.')}
         </p>
+        {/* @endif */}
+
+        {/* @if TARGET='web' */}
+        <div className="file-render__viewer">
+          <iframe title={__('File preview')} src={source} />
+        </div>
+        {/* @endif */}
       </div>
     );
   }

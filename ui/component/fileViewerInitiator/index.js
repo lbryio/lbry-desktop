@@ -6,6 +6,7 @@ import {
   makeSelectThumbnailForUri,
   makeSelectStreamingUrlForUri,
   makeSelectMediaTypeForUri,
+  makeSelectContentTypeForUri,
   makeSelectUriIsStreamable,
 } from 'lbry-redux';
 import { makeSelectCostInfoForUri } from 'lbryinc';
@@ -16,6 +17,7 @@ import FileViewer from './view';
 const select = (state, props) => ({
   thumbnail: makeSelectThumbnailForUri(props.uri)(state),
   mediaType: makeSelectMediaTypeForUri(props.uri)(state),
+  contentType: makeSelectContentTypeForUri(props.uri)(state),
   fileInfo: makeSelectFileInfoForUri(props.uri)(state),
   obscurePreview: makeSelectShouldObscurePreview(props.uri)(state),
   isPlaying: makeSelectIsPlaying(props.uri)(state),

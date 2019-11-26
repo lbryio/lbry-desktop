@@ -15,6 +15,7 @@ import { onFullscreenChange } from 'util/full-screen';
 
 type Props = {
   mediaType: string,
+  contentType: string,
   isLoading: boolean,
   isPlaying: boolean,
   fileInfo: FileListItem,
@@ -47,6 +48,7 @@ export default function FileViewer(props: Props) {
     triggerAnalyticsView,
     claimRewards,
     mediaType,
+    contentType,
   } = props;
   const [playTime, setPlayTime] = useState();
   const [fileViewerRect, setFileViewerRect] = usePersistedState('inline-file-viewer:rect');
@@ -56,7 +58,9 @@ export default function FileViewer(props: Props) {
   });
 
   const inline = pageUri === uri;
-  const isReadyToPlay = (IS_WEB && isStreamable) || (isStreamable && streamingUrl) || (fileInfo && fileInfo.completed);
+  const webStreamOnly = contentType === 'application/pdf' || mediaType === 'text';
+  const isReadyToPlay =
+    (IS_WEB && (isStreamable || webStreamOnly)) || (isStreamable && streamingUrl) || (fileInfo && fileInfo.completed);
   const loadingMessage =
     !isStreamable && fileInfo && fileInfo.blobs_completed >= 1 && (!fileInfo.download_path || !fileInfo.written_bytes)
       ? __("It looks like you deleted or moved this file. We're rebuilding it now. It will only take a few seconds.")
