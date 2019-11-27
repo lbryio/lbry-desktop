@@ -19,6 +19,8 @@ type Props = {
   channelIsBlocked: boolean,
 };
 
+const LENGTH_TO_COLLAPSE = 300;
+
 function Comment(props: Props) {
   const {
     author,
@@ -40,7 +42,6 @@ function Comment(props: Props) {
       resolveUri(authorUri);
     }
   }, [isResolvingUri, shouldFetch, author, authorUri, resolveUri]);
-
   return (
     <li className="comment">
       <div className="comment__author-thumbnail">
@@ -59,11 +60,13 @@ function Comment(props: Props) {
           </time>
         </span>
         <div>
-          <Expandable>
-            <div className="comment__message">
+          {message.length >= LENGTH_TO_COLLAPSE ? (
+            <Expandable className="comment__message">
               <MarkdownPreview content={message} promptLinks />
-            </div>
-          </Expandable>
+            </Expandable>
+          ) : (
+            <MarkdownPreview content={message} promptLinks />
+          )}
         </div>
       </div>
     </li>
