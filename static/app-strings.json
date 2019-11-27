@@ -898,5 +898,9 @@
   "Checking your publishes...": "Checking your publishes...",
   "Checking your publishes": "Checking your publishes",
   "Checking for channels": "Checking for channels",
-  "files": "files"
+  "files": "files",
+  "Error Starting Up": "Error Starting Up",
+  "Reach out to hello@lbry.com for help, or check out %help_link%.": "Reach out to hello@lbry.com for help, or check out %help_link%.",
+  "You're not following any tags. Smash that %customize% button!": "You're not following any tags. Smash that %customize% button!",
+  "customize": "customize"
 }
