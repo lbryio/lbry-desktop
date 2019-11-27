@@ -10,7 +10,6 @@ type Props = {
 
 function CommentList(props: Props) {
   const { fetchComments, uri, comments } = props;
-
   useEffect(() => {
     fetchComments(uri);
   }, [fetchComments, uri]);
