@@ -1,8 +1,8 @@
 // @flow
-import config from 'config';
 import { ipcRenderer } from 'electron';
 import { DOMAIN } from 'config';
 
+const isProduction = process.env.NODE_ENV === 'production';
 let sessionPassword;
 
 function setCookie(name: string, value: string, days: number) {
@@ -10,10 +10,15 @@ function setCookie(name: string, value: string, days: number) {
   if (days) {
     let date = new Date();
     date.setTime(date.getTime() + days * 24 * 60 * 60 * 1000);
-    expires = '; expires=' + date.toUTCString();
+    expires = `expires=${date.toUTCString()};`;
   }
 
-  document.cookie = `${name}=${value || ''}${expires}; domain=.${DOMAIN}; path=/; SameSite=Lax; Secure;`;
+  let cookie = `${name}=${value || ''}; ${expires} path=/; SameSite=Lax;`;
+  if (isProduction) {
+    cookie += ` domain=.${DOMAIN}; Secure;`;
+  }
+
+  document.cookie = cookie;
 }
 
 function getCookie(name: string) {
