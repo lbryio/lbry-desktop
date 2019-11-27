@@ -59,16 +59,14 @@ class DocumentViewer extends React.PureComponent<Props, State> {
         source.stream,
         function(response) {
           if (response.statusCode === 200) {
-            let body = '';
-            let i = 0;
+            let data = '';
             response.on('data', function(chunk) {
-              i = i + 1;
-              body += chunk;
+              data += chunk;
             });
             response.on(
               'end',
               function() {
-                this.setState({ content: body, loading: false });
+                this.setState({ content: data, loading: false });
               }.bind(this)
             );
           } else {
