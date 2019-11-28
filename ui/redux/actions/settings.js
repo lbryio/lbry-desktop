@@ -129,7 +129,7 @@ export function doSetAutoLaunch(value) {
     const state = getState();
     const autoLaunch = makeSelectClientSetting(SETTINGS.AUTO_LAUNCH)(state);
 
-    if (IS_MAC) {
+    if (IS_MAC || process.env.NODE_ENV !== 'production') {
       return;
     }
 
