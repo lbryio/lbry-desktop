@@ -21,7 +21,7 @@ const SEEK_BACKWARD_KEYCODE = ARROW_LEFT_KEYCODE;
 const SEEK_STEP = 10; // time to seek in seconds
 
 const VIDEO_JS_OPTIONS: { poster?: string } = {
-  autoplay: 'any',
+  autoplay: true,
   controls: true,
   preload: 'auto',
   playbackRates: [0.25, 0.5, 0.75, 1, 1.1, 1.25, 1.5, 2],
