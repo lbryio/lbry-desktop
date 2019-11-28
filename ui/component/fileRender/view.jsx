@@ -104,6 +104,12 @@ class FileRender extends React.PureComponent<Props> {
 
     // Supported contentTypes
     const contentTypes = {
+      'application/x-ext-mkv': (
+        <VideoViewer uri={uri} source={source} contentType={contentType} onEndedCB={this.onEndedCb} />
+      ),
+      'video/x-matroska': (
+        <VideoViewer uri={uri} source={source} contentType={contentType} onEndedCB={this.onEndedCb} />
+      ),
       'application/pdf': <PdfViewer source={downloadPath || source} />,
       'text/html': <HtmlViewer source={downloadPath || source} />,
       'text/htm': <HtmlViewer source={downloadPath || source} />,
