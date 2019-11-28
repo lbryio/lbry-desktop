@@ -58,9 +58,12 @@ export default function FileViewer(props: Props) {
   });
 
   const inline = pageUri === uri;
+  const forceVideo = ['application/x-ext-mkv', 'video/x-matroska'].includes(contentType);
   const webStreamOnly = contentType === 'application/pdf' || mediaType === 'text';
   const isReadyToPlay =
-    (IS_WEB && (isStreamable || webStreamOnly)) || (isStreamable && streamingUrl) || (fileInfo && fileInfo.completed);
+    (IS_WEB && (isStreamable || webStreamOnly || forceVideo)) ||
+    ((isStreamable || forceVideo) && streamingUrl) ||
+    (fileInfo && fileInfo.completed);
   const loadingMessage =
     !isStreamable && fileInfo && fileInfo.blobs_completed >= 1 && (!fileInfo.download_path || !fileInfo.written_bytes)
       ? __("It looks like you deleted or moved this file. We're rebuilding it now. It will only take a few seconds.")
