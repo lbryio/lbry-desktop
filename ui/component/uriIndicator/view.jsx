@@ -1,4 +1,5 @@
 // @flow
+import type { Node } from 'react';
 import React from 'react';
 import Button from 'component/button';
 import Tooltip from 'component/common/tooltip';
@@ -14,6 +15,8 @@ type Props = {
   // Possibly because the resolve function is an arrow function that is passed in props?
   resolveUri: string => void,
   uri: string,
+  // to allow for other elements to be nested within the UriIndicator
+  children: ?Node,
 };
 
 class UriIndicator extends React.PureComponent<Props> {
@@ -38,7 +41,7 @@ class UriIndicator extends React.PureComponent<Props> {
   };
 
   render() {
-    const { link, isResolvingUri, claim, addTooltip } = this.props;
+    const { link, isResolvingUri, claim, addTooltip, children } = this.props;
 
     if (!claim) {
       return <span className="empty">{isResolvingUri ? 'Validating...' : 'Unused'}</span>;
@@ -67,10 +70,11 @@ class UriIndicator extends React.PureComponent<Props> {
             <Tooltip label={<ClaimPreview uri={channelLink} type="tooltip" placeholder={false} />}>{children}</Tooltip>
           )
         : 'span';
-
+      /* to wrap the UriIndicator element around other DOM nodes as a button */
+      const content = children ? children : (<Wrapper>{inner}</Wrapper>);
       return (
         <Button className="button--uri-indicator" navigate={channelLink}>
-          <Wrapper>{inner}</Wrapper>
+          {content}
         </Button>
       );
     } else {
