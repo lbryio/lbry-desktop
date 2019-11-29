@@ -191,7 +191,12 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
         'claim-preview--pending': pending,
       })}
     >
-      {isChannel ? <ChannelThumbnail uri={uri} obscure={channelIsBlocked} /> : <CardMedia thumbnail={thumbnail} />}
+      {isChannel ? (
+          <UriIndicator uri={uri} link>
+            <ChannelThumbnail uri={uri} obscure={channelIsBlocked} />
+          </UriIndicator>
+      ) : (<CardMedia thumbnail={thumbnail} />)
+      }
       <div className="claim-preview-metadata">
         <div className="claim-preview-info">
           <div className="claim-preview-title">
