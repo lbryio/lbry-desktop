@@ -5,6 +5,8 @@ import Page from 'component/page';
 import Button from 'component/button';
 import YoutubeTransferStatus from 'component/youtubeTransferStatus';
 import Spinner from 'component/spinner';
+import * as PAGES from 'constants/pages';
+import * as ICONS from 'constants/icons';
 
 type Props = {
   channels: Array<ChannelClaim>,
@@ -43,6 +45,15 @@ export default function ChannelsPage(props: Props) {
             header={__('Your Channels')}
             loading={fetchingChannels}
             uris={channels.map(channel => channel.permanent_url)}
+            headerAltControls={
+              <Button
+                iconSize={20}
+                label={__('New Channel')}
+                button="link"
+                icon={ICONS.EDIT}
+                navigate={`/$/${PAGES.CHANNEL_CREATE}`}
+              />
+            }
           />
         </div>
       )}
@@ -54,7 +65,13 @@ export default function ChannelsPage(props: Props) {
                 <h2 className="section__title--large">{__('No Channels Created Yet')}</h2>
 
                 <div className="section__actions">
-                  <Button button="primary" navigate="/$/publish" label={__('Create A Channel')} />
+                  <Button
+                    iconSize={20}
+                    label={__('New Channel')}
+                    button="link"
+                    icon={ICONS.EDIT}
+                    navigate={`/$/${PAGES.CHANNEL_CREATE}`}
+                  />
                 </div>
               </div>
             </section>
