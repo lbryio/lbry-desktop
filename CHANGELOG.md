@@ -13,7 +13,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Undefined tags prevents homepage from loading ([#3146](https://github.com/lbryio/lbry-desktop/pull/3146))
 
 ### Added
-
+- 'New Channel' button in channels page ([#3305](https://github.com/lbryio/lbry-desktop/pull/3305))
+- Dedicated Channel Creation page ([#3305](https://github.com/lbryio/lbry-desktop/pull/3305))
 - Setting to start the app minimized when you login (Linux/Windows only) ([#3236](https://github.com/lbryio/lbry-desktop/pull/3236))
 - Search on downloads page ([#2969](https://github.com/lbryio/lbry-desktop/pull/2969))
 - Clear support state when clearing cache in settings([#3149](https://github.com/lbryio/lbry-desktop/pull/3149))
