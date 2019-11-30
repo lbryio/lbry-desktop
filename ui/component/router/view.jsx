@@ -24,6 +24,7 @@ import FourOhFourPage from 'page/fourOhFour';
 import SignInPage from 'page/signIn';
 import SignInVerifyPage from 'page/signInVerify';
 import ChannelsPage from 'page/channels';
+import ChannelCreatePage from 'page/channelCreate';
 
 // Tell the browser we are handling scroll restoration
 if ('scrollRestoration' in history) {
@@ -93,6 +94,7 @@ function AppRouter(props: Props) {
         <PrivateRoute {...props} path={`/$/${PAGES.BLOCKED}`} component={ListBlockedPage} />
         <PrivateRoute {...props} path={`/$/${PAGES.WALLET}`} exact component={WalletPage} />
         <PrivateRoute {...props} path={`/$/${PAGES.CHANNELS}`} component={ChannelsPage} />
+        <PrivateRoute {...props} path={`/$/${PAGES.CHANNEL_CREATE}`} component={ChannelCreatePage} />
 
         {/* Below need to go at the end to make sure we don't match any of our pages first */}
         <Route path="/:claimName" exact component={ShowPage} />

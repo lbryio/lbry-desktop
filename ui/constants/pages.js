@@ -23,3 +23,4 @@ export const TAGS = 'tags';
 export const WALLET = 'wallet';
 export const BLOCKED = 'blocked';
 export const CHANNELS = 'channels';
+export const CHANNEL_CREATE = 'channelcreate';
