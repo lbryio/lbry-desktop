@@ -898,5 +898,12 @@
   "Checking your publishes...": "Checking your publishes...",
   "Checking your publishes": "Checking your publishes",
   "Checking for channels": "Checking for channels",
-  "files": "files"
+  "files": "files",
+  "New Channel": "New Channel",
+  "Selected Tags": "Selected Tags",
+  "Add a tag...": "Add a tag...",
+  "Simple Editor": "Simple Editor",
+  "Recommended size is 16:9": "Recommended size is 16:9",
+  "Pending...": "Pending...",
+  "ChannelName": "ChannelName"
 }
