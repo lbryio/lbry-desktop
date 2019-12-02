@@ -6,7 +6,7 @@ import { batchActions, doError, selectMyClaims, doPublish, doCheckPendingPublish
 import { selectosNotificationsEnabled } from 'redux/selectors/settings';
 import { push } from 'connected-react-router';
 import analytics from 'analytics';
-import { formatLbryUriForWeb } from 'util/uri';
+import { formatLbryUrlForWeb } from 'util/url';
 import { doOpenModal } from './app';
 
 export const doPublishDesktop = (filePath: string) => (dispatch: Dispatch, getState: () => {}) => {
@@ -81,7 +81,7 @@ export const doCheckPendingPublishesApp = () => (dispatch: Dispatch, getState: G
         silent: false,
       });
       notif.onclick = () => {
-        dispatch(push(formatLbryUriForWeb(claim.permanent_url)));
+        dispatch(push(formatLbryUrlForWeb(claim.permanent_url)));
       };
     }
   };

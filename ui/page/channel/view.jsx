@@ -8,7 +8,7 @@ import ShareButton from 'component/shareButton';
 import { Tabs, TabList, Tab, TabPanels, TabPanel } from 'component/common/tabs';
 import { withRouter } from 'react-router';
 import Button from 'component/button';
-import { formatLbryUriForWeb } from 'util/uri';
+import { formatLbryUrlForWeb } from 'util/url';
 import ChannelContent from 'component/channelContent';
 import ChannelAbout from 'component/channelAbout';
 import ChannelDiscussion from 'component/channelDiscussion';
@@ -93,7 +93,7 @@ function ChannelPage(props: Props) {
   const tabIndex = currentView === ABOUT_PAGE || editing ? 1 : currentView === DISCUSSION_PAGE ? 2 : 0;
 
   function onTabChange(newTabIndex) {
-    let url = formatLbryUriForWeb(uri);
+    let url = formatLbryUrlForWeb(uri);
     let search = '?';
 
     if (newTabIndex === 0) {

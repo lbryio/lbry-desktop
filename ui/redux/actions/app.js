@@ -6,7 +6,6 @@ import { ipcRenderer, remote } from 'electron';
 import path from 'path';
 import * as ACTIONS from 'constants/action_types';
 import * as MODALS from 'constants/modal_types';
-import * as PAGES from 'constants/pages';
 import {
   Lbry,
   doBalanceSubscribe,
@@ -36,7 +35,6 @@ import {
 } from 'redux/selectors/app';
 import { doAuthenticate, doGetSync } from 'lbryinc';
 import { lbrySettings as config, version as appVersion } from 'package.json';
-import { push } from 'connected-react-router';
 import analytics from 'analytics';
 import { doSignOutCleanup, deleteSavedPassword, getSavedPassword } from 'util/saved-passwords';
 
@@ -401,17 +399,6 @@ export function doChangeMute(muted) {
 export function doClickCommentButton() {
   return {
     type: ACTIONS.ADD_COMMENT,
-  };
-}
-
-export function doConditionalAuthNavigate(newSession) {
-  return (dispatch, getState) => {
-    const state = getState();
-    const modal = selectModal(state);
-
-    if (newSession || (modal && modal.id !== MODALS.EMAIL_COLLECTION)) {
-      dispatch(push(`/$/${PAGES.AUTH}`));
-    }
   };
 }
 

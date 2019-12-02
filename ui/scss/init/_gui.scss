@@ -6,6 +6,10 @@
   color: var(--color-text-selection);
 }
 
+*:focus {
+  outline: none;
+}
+
 html {
   @include font-sans;
   height: 100%;

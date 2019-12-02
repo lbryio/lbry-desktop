@@ -4,7 +4,7 @@ import UriIndicator from 'component/uriIndicator';
 import TruncatedText from 'component/common/truncated-text';
 import MarkdownPreview from 'component/common/markdown-preview';
 import { withRouter } from 'react-router-dom';
-import { formatLbryUriForWeb } from 'util/uri';
+import { formatLbryUrlForWeb } from 'util/url';
 
 type Props = {
   uri: string,
@@ -17,7 +17,7 @@ type Props = {
 class PreviewLink extends React.PureComponent<Props> {
   handleClick = () => {
     const { uri, history } = this.props;
-    history.push(formatLbryUriForWeb(uri));
+    history.push(formatLbryUrlForWeb(uri));
   };
 
   render() {

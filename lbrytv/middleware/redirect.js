@@ -1,5 +1,7 @@
 const config = require('../../config');
 const PAGES = require('../../ui/constants/pages');
+const { formatCustomUrl } = require('../../ui/util/url');
+const { parseURI } = require('lbry-redux');
 
 async function redirectMiddleware(ctx, next) {
   const requestHost = ctx.host;
@@ -16,22 +18,14 @@ async function redirectMiddleware(ctx, next) {
     return;
   }
 
-  if (requestHost === 'open.lbry.com') {
-    let redirectUrl = config.URL;
+  if (requestHost === 'open.lbry.com' || requestHost === 'open.lbry.io') {
     const openQuery = '?src=open';
-    const matches = /(\/\?)([a-z]*)(.*)/.exec(url);
+    let redirectUrl = config.URL + formatCustomUrl(url, openQuery);
 
-    if (matches && matches.length) {
-      [, , page, queryString] = matches;
-
-      // This is a lbry app page. Make sure to add the leading `/$/`
-      if (page && Object.values(PAGES).includes(page)) {
-        redirectUrl += '/$/' + page;
-      }
-
-      redirectUrl += openQuery + queryString;
+    if (redirectUrl.includes('?')) {
+      redirectUrl = redirectUrl.replace('?', `${openQuery}&`);
     } else {
-      redirectUrl += path + openQuery;
+      redirectUrl += openQuery;
     }
 
     ctx.redirect(redirectUrl);

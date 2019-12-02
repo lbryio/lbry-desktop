@@ -25,7 +25,7 @@ import {
 } from 'lbry-redux';
 import { makeSelectCostInfoForUri } from 'lbryinc';
 import { makeSelectClientSetting, selectosNotificationsEnabled, selectDaemonSettings } from 'redux/selectors/settings';
-import { formatLbryUriForWeb } from 'util/uri';
+import { formatLbryUrlForWeb } from 'util/url';
 
 const DOWNLOAD_POLL_INTERVAL = 250;
 
@@ -85,7 +85,7 @@ export function doUpdateLoadStatus(uri: string, outpoint: string) {
               silent: false,
             });
             notif.onclick = () => {
-              dispatch(push(formatLbryUriForWeb(uri)));
+              dispatch(push(formatLbryUrlForWeb(uri)));
             };
           }
 

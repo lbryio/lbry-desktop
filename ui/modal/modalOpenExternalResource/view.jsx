@@ -1,7 +1,7 @@
 // @flow
 import React from 'react';
 import { Modal } from 'modal/modal';
-import { formatPathForWeb } from 'util/uri';
+import { formatFileSystemPath } from 'util/url';
 // @if TARGET='app'
 import { shell } from 'electron';
 // @endif
@@ -37,7 +37,7 @@ function ModalOpenExternalResource(props: Props) {
     if (uri) {
       window.open(uri);
     } else if (path) {
-      window.open(formatPathForWeb(path));
+      window.open(formatFileSystemPath(path));
     }
     // @endif
 

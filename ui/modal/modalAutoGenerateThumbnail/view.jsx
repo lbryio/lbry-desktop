@@ -1,7 +1,7 @@
 // @flow
 import React, { useRef } from 'react';
 import { Modal } from 'modal/modal';
-import { formatPathForWeb } from 'util/uri';
+import { formatFileSystemPath } from 'util/url';
 
 type Props = {
   upload: WebFile => void,
@@ -15,7 +15,7 @@ function ModalAutoGenerateThumbnail(props: Props) {
   const playerRef = useRef();
   let videoSrc;
   if (typeof filePath === 'string') {
-    videoSrc = formatPathForWeb(filePath);
+    videoSrc = formatFileSystemPath(filePath);
   } else {
     videoSrc = URL.createObjectURL(filePath);
   }
