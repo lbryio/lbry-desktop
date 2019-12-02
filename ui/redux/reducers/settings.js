@@ -1,6 +1,7 @@
 import * as ACTIONS from 'constants/action_types';
 import * as SETTINGS from 'constants/settings';
 import moment from 'moment';
+import SUPPORTED_LANGUAGES from 'constants/supported_languages';
 
 const reducers = {};
 const defaultState = {
@@ -14,8 +15,11 @@ const defaultState = {
     [SETTINGS.ENABLE_SYNC]: true,
 
     // UI
-    [SETTINGS.LANGUAGE]:
-      window.localStorage.getItem(SETTINGS.LANGUAGE) || window.navigator.language.slice(0, 2) || 'en',
+    [SETTINGS.LANGUAGE]: [
+      window.localStorage.getItem(SETTINGS.LANGUAGE),
+      window.navigator.language.slice(0, 2),
+      'en',
+    ].find(language => SUPPORTED_LANGUAGES[language]),
     [SETTINGS.THEME]: __('light'),
     [SETTINGS.THEMES]: [__('light'), __('dark')],
     [SETTINGS.SUPPORT_OPTION]: false,
