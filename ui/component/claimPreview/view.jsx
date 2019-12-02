@@ -5,7 +5,7 @@ import classnames from 'classnames';
 import { parseURI, convertToShareLink } from 'lbry-redux';
 import { withRouter } from 'react-router-dom';
 import { openCopyLinkMenu } from 'util/context-menu';
-import { formatLbryUriForWeb } from 'util/uri';
+import { formatLbryUrlForWeb } from 'util/url';
 import { isEmpty } from 'util/object';
 import CardMedia from 'component/cardMedia';
 import UriIndicator from 'component/uriIndicator';
@@ -149,7 +149,7 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
     if (onClick) {
       onClick(e);
     } else if ((isChannel || title) && !pending) {
-      history.push(formatLbryUriForWeb(claim && claim.canonical_url ? claim.canonical_url : uri));
+      history.push(formatLbryUrlForWeb(claim && claim.canonical_url ? claim.canonical_url : uri));
     }
   }
 

@@ -4,7 +4,7 @@ import React, { forwardRef, useRef } from 'react';
 import Icon from 'component/common/icon';
 import classnames from 'classnames';
 import { NavLink } from 'react-router-dom';
-import { formatLbryUriForWeb } from 'util/uri';
+import { formatLbryUrlForWeb } from 'util/url';
 import { OutboundLink } from 'react-ga';
 import * as PAGES from 'constants/pages';
 import useCombinedRefs from 'effects/use-combined-refs';
@@ -108,7 +108,7 @@ const Button = forwardRef<any, {}>((props: Props, ref: any) => {
   let path = navigate;
   if (path) {
     if (path.startsWith('lbry://')) {
-      path = formatLbryUriForWeb(path);
+      path = formatLbryUrlForWeb(path);
     } else if (!path.startsWith('/')) {
       // Force a leading slash so new paths aren't appended on to the current path
       path = `/${path}`;

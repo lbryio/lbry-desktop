@@ -13,7 +13,7 @@ import * as MODALS from 'constants/modal_types';
 import React, { Fragment, useState, useEffect } from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
-import { doConditionalAuthNavigate, doDaemonReady, doAutoUpdate, doOpenModal, doHideModal } from 'redux/actions/app';
+import { doDaemonReady, doAutoUpdate, doOpenModal, doHideModal } from 'redux/actions/app';
 import { Lbry, doToast, isURIValid, setSearchApi, apiCall } from 'lbry-redux';
 import { doSetLanguage, doUpdateIsNightAsync } from 'redux/actions/settings';
 import {
@@ -28,7 +28,7 @@ import pjson from 'package.json';
 import app from './app';
 import doLogWarningConsoleMessage from './logWarningConsoleMessage';
 import { ConnectedRouter, push } from 'connected-react-router';
-import { formatLbryUriForWeb } from 'util/uri';
+import { formatLbryUrlForWeb, formatCustomUrl } from 'util/url';
 import { PersistGate } from 'redux-persist/integration/react';
 import analytics from 'analytics';
 import { getAuthToken, setAuthToken } from 'util/saved-passwords';
@@ -70,7 +70,6 @@ Lbry.setOverride(
 const startTime = Date.now();
 analytics.startupEvent();
 
-const APPPAGEURL = 'lbry://?';
 // @if TARGET='app'
 const { autoUpdater } = remote.require('electron-updater');
 autoUpdater.logger = remote.require('electron-log');
@@ -157,25 +156,29 @@ rewards.setCallback('claimRewardSuccess', () => {
 });
 
 // @if TARGET='app'
-ipcRenderer.on('open-uri-requested', (event, uri, newSession) => {
-  if (uri && uri.startsWith('lbry://')) {
-    if (uri.startsWith('lbry://?verify')) {
-      app.store.dispatch(doConditionalAuthNavigate(newSession));
-    } else if (uri.startsWith(APPPAGEURL)) {
-      const navpage = uri.replace(APPPAGEURL, '').toLowerCase();
-      app.store.dispatch(push(`/$/${navpage}`));
-    } else if (isURIValid(uri)) {
-      const formattedUri = formatLbryUriForWeb(uri);
-      app.store.dispatch(push(formattedUri));
-      analytics.openUrlEvent(formattedUri);
-    } else {
-      app.store.dispatch(
-        doToast({
-          message: __('Invalid LBRY URL requested'),
-        })
-      );
-    }
+ipcRenderer.on('open-uri-requested', (event, url, newSession) => {
+  function handleError() {
+    app.store.dispatch(
+      doToast({
+        message: __('Invalid LBRY URL requested'),
+      })
+    );
   }
+
+  const path = url.slice('lbry://'.length);
+  if (path.startsWith('?')) {
+    const redirectUrl = formatCustomUrl(path);
+    return app.store.dispatch(push(redirectUrl));
+  }
+
+  if (isURIValid(url)) {
+    const formattedUrl = formatLbryUrlForWeb(url);
+    analytics.openUrlEvent(formattedUrl);
+    return app.store.dispatch(push(formattedUrl));
+  }
+
+  // If nothing redirected before here the url must be messed up
+  handleError();
 });
 
 ipcRenderer.on('language-set', (event, language) => {

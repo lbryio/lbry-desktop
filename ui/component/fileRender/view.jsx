@@ -7,7 +7,7 @@ import ImageViewer from 'component/viewers/imageViewer';
 import AppViewer from 'component/viewers/appViewer';
 import Button from 'component/button';
 import { withRouter } from 'react-router-dom';
-import { formatLbryUriForWeb } from 'util/uri';
+import { formatLbryUrlForWeb } from 'util/url';
 // @if TARGET='web'
 import { generateStreamUrl } from 'util/lbrytv';
 // @endif
@@ -73,7 +73,7 @@ class FileRender extends React.PureComponent<Props> {
   onEndedCb() {
     const { autoplay, nextUnplayed, history } = this.props;
     if (autoplay && nextUnplayed) {
-      history.push(formatLbryUriForWeb(nextUnplayed));
+      history.push(formatLbryUrlForWeb(nextUnplayed));
     }
   }
 

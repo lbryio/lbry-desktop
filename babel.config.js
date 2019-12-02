@@ -2,7 +2,7 @@ module.exports = api => {
   api.cache(false);
 
   return {
-    presets: ['@babel/env', '@babel/react', '@babel/flow'],
+    presets: [['@babel/env', { loose: true, modules: false }], '@babel/react', '@babel/flow'],
     plugins: [
       'import-glob',
       '@babel/plugin-transform-runtime',

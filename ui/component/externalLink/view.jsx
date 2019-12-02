@@ -5,7 +5,7 @@ import * as React from 'react';
 import { isURIValid } from 'lbry-redux';
 import Button from 'component/button';
 import ClaimLink from 'component/claimLink';
-import { isLBRYDomain } from 'util/uri';
+import { isLBRYDomain } from 'util/url';
 
 type Props = {
   href: string,

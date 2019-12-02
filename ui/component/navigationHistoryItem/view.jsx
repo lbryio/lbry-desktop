@@ -5,7 +5,7 @@ import classnames from 'classnames';
 import Button from 'component/button';
 import { FormField } from 'component/common/form';
 import { withRouter } from 'react-router-dom';
-import { formatLbryUriForWeb } from 'util/uri';
+import { formatLbryUrlForWeb } from 'util/url';
 
 type Props = {
   lastViewed: number,
@@ -39,7 +39,7 @@ class NavigationHistoryItem extends React.PureComponent<Props> {
       ({ title } = claim.value);
     }
 
-    const navigatePath = formatLbryUriForWeb(uri);
+    const navigatePath = formatLbryUrlForWeb(uri);
     const onClick =
       onSelect ||
       function() {

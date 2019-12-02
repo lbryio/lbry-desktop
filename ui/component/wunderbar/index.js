@@ -11,7 +11,7 @@ import {
 import analytics from 'analytics';
 import Wunderbar from './view';
 import { withRouter } from 'react-router-dom';
-import { formatLbryUriForWeb } from 'util/uri';
+import { formatLbryUrlForWeb } from 'util/url';
 
 const select = state => ({
   suggestions: selectSearchSuggestions(state),
@@ -26,7 +26,7 @@ const perform = (dispatch, ownProps) => ({
     analytics.apiLogSearch();
   },
   onSubmit: uri => {
-    const path = formatLbryUriForWeb(uri);
+    const path = formatLbryUrlForWeb(uri);
     ownProps.history.push(path);
     dispatch(doUpdateSearchQuery(''));
   },
