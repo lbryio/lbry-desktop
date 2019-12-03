@@ -44,7 +44,7 @@ class PreviewLink extends React.PureComponent<Props> {
             <span className={'claim-preview-properties'}>
               <span className={'preview-link__description media__subtitle'}>
                 <TruncatedText lines={2} showTooltip={false}>
-                  <MarkdownPreview content={description} promptLinks strip />
+                  <MarkdownPreview content={description} strip />
                 </TruncatedText>
               </span>
             </span>

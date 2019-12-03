@@ -35,7 +35,7 @@ function Comment(props: Props) {
       <div>
         <Expandable>
           <div className={'comment__message'}>
-            <MarkdownPreview content={message} promptLinks />
+            <MarkdownPreview content={message} />
           </div>
         </Expandable>
       </div>

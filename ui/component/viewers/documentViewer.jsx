@@ -86,7 +86,7 @@ class DocumentViewer extends React.PureComponent<Props, State> {
     const markdownType = ['md', 'markdown'];
     if (markdownType.includes(fileType) || contentType === 'text/markdown' || contentType === 'text/md') {
       // Render markdown
-      viewer = <MarkdownPreview content={content} promptLinks />;
+      viewer = <MarkdownPreview content={content} />;
     } else {
       // Render plain text
       viewer = <CodeViewer value={content} contentType={contentType} theme={theme} />;

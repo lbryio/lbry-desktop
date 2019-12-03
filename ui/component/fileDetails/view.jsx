@@ -45,7 +45,7 @@ class FileDetails extends PureComponent<Props> {
           {description && (
             <Fragment>
               <div className="media__info-text">
-                <MarkdownPreview content={description} promptLinks />
+                <MarkdownPreview content={description} />
               </div>
             </Fragment>
           )}
