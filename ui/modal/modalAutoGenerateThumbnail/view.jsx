@@ -1,7 +1,7 @@
 // @flow
 import React, { useRef } from 'react';
 import { Modal } from 'modal/modal';
-import { formatPathForWeb } from 'util/uri';
+import { formatFileSystemPath } from 'util/url';
 
 type Props = {
   upload: WebFile => void,
@@ -15,15 +15,18 @@ function ModalAutoGenerateThumbnail(props: Props) {
   const playerRef = useRef();
   let videoSrc;
   if (typeof filePath === 'string') {
-    videoSrc = formatPathForWeb(filePath);
+    videoSrc = formatFileSystemPath(filePath);
   } else {
     videoSrc = URL.createObjectURL(filePath);
   }
 
   function uploadImage() {
     const imageBuffer = captureSnapshot();
+    // $FlowFixMe
     const file = new File([imageBuffer], 'thumbnail.png', { type: 'image/png' });
+
     if (imageBuffer) {
+      // $FlowFixMe
       upload(file);
       closeModal();
     } else {
@@ -75,7 +78,7 @@ function ModalAutoGenerateThumbnail(props: Props) {
       onConfirmed={uploadImage}
       onAborted={closeModal}
     >
-      <p className="card__subtitle">{__('Pause at any time to select a thumbnail from your video')}.</p>
+      <p className="section__subtitle">{__('Pause at any time to select a thumbnail from your video')}.</p>
       <video ref={playerRef} src={videoSrc} onLoadedMetadata={resize} onError={onError} controls />
     </Modal>
   );

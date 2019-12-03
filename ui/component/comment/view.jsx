@@ -18,11 +18,16 @@ function Comment(props: Props) {
   return (
     <li className="comment">
       <div className="comment__meta">
-        <Button
-          className="button--uri-indicator truncated-text comment__author"
-          navigate={authorUri}
-          label={author || __('Anonymous')}
-        />
+        {!author ? (
+          <span className="comment__author">{__('Anonymous')}</span>
+        ) : (
+          <Button
+            className="button--uri-indicator truncated-text comment__author"
+            navigate={authorUri}
+            label={author}
+          />
+        )}
+
         <time className="comment__time" dateTime={timePosted}>
           {relativeDate(timePosted)}
         </time>
@@ -30,7 +35,7 @@ function Comment(props: Props) {
       <div>
         <Expandable>
           <div className={'comment__message'}>
-            <MarkdownPreview content={message} promptLinks />
+            <MarkdownPreview content={message} />
           </div>
         </Expandable>
       </div>

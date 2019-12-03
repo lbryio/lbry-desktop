@@ -11,7 +11,7 @@ export type UploadItem = {
 
 type Props = {
   currentUploads: { [key: string]: UploadItem },
-  uploadCount: ?number,
+  uploadCount: number,
 };
 
 export default function WebUploadList(props: Props) {

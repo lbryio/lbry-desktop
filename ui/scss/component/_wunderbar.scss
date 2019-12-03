@@ -6,8 +6,7 @@
   align-items: center;
   position: relative;
   z-index: 1;
-  margin-right: var(--spacing-main-padding);
-  font-size: var(--font-label);
+  font-size: var(--font-small);
 
   @media (max-width: 600px) {
     margin-right: 0;
@@ -19,11 +18,7 @@
     height: 100%;
     position: absolute;
     z-index: 1;
-    stroke: $lbry-gray-5;
-
-    [data-mode='dark'] & {
-      stroke: $lbry-gray-3;
-    }
+    stroke: var(--color-input-placeholder);
   }
 }
 
@@ -31,7 +26,7 @@
   @extend .wunderbar;
   flex: 0;
   margin-right: 0;
-  color: $lbry-black;
+  color: black; //black;
 
   fieldset-section {
     width: 15rem;
@@ -39,13 +34,8 @@
 }
 
 .wunderbar__active-suggestion {
-  background-color: lighten($lbry-blue-1, 15%);
-  color: $lbry-black;
-
-  [data-mode='dark'] & {
-    background-color: $lbry-blue-4;
-    color: inherit;
-  }
+  color: var(--color-search-suggestion);
+  background-color: var(--color-search-suggestion-background);
 }
 
 .wunderbar__input {
@@ -55,44 +45,25 @@
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
-  height: var(--input-height);
-  border-radius: var(--input-height);
-  background-color: $lbry-gray-1;
+  height: var(--height-input);
+  border-radius: var(--height-input);
+  background-color: var(--color-input-bg);
+  color: var(--color-input);
   border: none;
   padding-right: var(--spacing-small);
-
   padding-left: 2.5rem;
   transition: all 0.2s;
 
   &:focus {
-    border-radius: var(--input-border-radius);
-  }
-
-  &::placeholder {
-    color: $lbry-black;
-    opacity: 0.9;
-  }
-
-  [data-mode='dark'] & {
-    background-color: var(--dm-color-03);
-    color: $lbry-white;
-
-    &::placeholder {
-      color: var(--dm-color-01);
-    }
+    border-radius: var(--border-radius);
   }
 }
 
 .wunderbar__menu {
-  background-color: $lbry-white;
-  box-shadow: 0 1px 5px rgba($lbry-black, 0.15);
   min-width: 100%;
   overflow: hidden;
-
-  [data-mode='dark'] & {
-    background-color: $lbry-gray-5;
-    color: $lbry-white;
-  }
+  background-color: var(--color-input-bg);
+  margin-top: -4px;
 }
 
 .wunderbar__suggestion {

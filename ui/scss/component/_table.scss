@@ -1,39 +1,22 @@
-@import '~@lbry/components/sass/table/_index.scss';
-
-table,
-.table {
-  background-color: transparent;
-  margin: var(--spacing-small) 0;
-
-  [data-mode='dark'] & {
-    th {
-      border-bottom: 2px solid $lbry-white;
-    }
-  }
-
-  th,
-  td {
-    padding-left: var(--spacing-large);
-  }
-}
-
-td {
-  overflow: hidden;
-}
-
 .table__header {
-  margin: var(--spacing-large);
-}
+  display: flex;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--color-border);
 
-.table__item--actionable {
-  span {
-    vertical-align: top;
+  .section__subtitle {
+    margin-bottom: 0;
   }
 }
 
-.table__item-label {
-  font-size: var(--font-multiplier-small);
-  font-weight: var(--font-weight-light);
+.table__header-text {
+  width: 100%;
+  margin: var(--spacing-medium) var(--spacing-large);
+}
+
+.table__header-text--between {
+  @extend .table__header-text;
+  display: flex;
+  justify-content: space-between;
 }
 
 .table--help {
@@ -47,8 +30,6 @@ td {
 }
 
 .table--transactions {
-  table-layout: fixed;
-
   td:nth-of-type(3) {
     // Only add ellipsis to the links in the table
     // We still want to show the entire message if a TX includes one
@@ -83,5 +64,15 @@ td {
   svg {
     margin-bottom: -2px;
     margin-left: var(--spacing-small);
+  }
+}
+
+.table--file-details {
+  td:nth-of-type(1) {
+    width: 30%;
+  }
+
+  td:nth-of-type(2) {
+    width: 70%;
   }
 }

@@ -53,6 +53,7 @@ type Props = {
   clearCache: () => Promise<any>,
   daemonSettings: DaemonSettings,
   showNsfw: boolean,
+  isAuthenticated: boolean,
   instantPurchaseEnabled: boolean,
   instantPurchaseMax: Price,
   currentTheme: string,
@@ -185,6 +186,7 @@ class SettingsPage extends React.PureComponent<Props, State> {
       showNsfw,
       instantPurchaseEnabled,
       instantPurchaseMax,
+      isAuthenticated,
       currentTheme,
       themes,
       automaticDarkModeEnabled,
@@ -217,7 +219,7 @@ class SettingsPage extends React.PureComponent<Props, State> {
       <Page>
         {!IS_WEB && noDaemonSettings ? (
           <section className="card card--section">
-            <div className="card__title">{__('Failed to load settings.')}</div>
+            <div className="card__title card__title--deprecated">{__('Failed to load settings.')}</div>
           </section>
         ) : (
           <div>
@@ -410,17 +412,19 @@ class SettingsPage extends React.PureComponent<Props, State> {
               }
             />
 
-            <Card
-              title={__('Blocked Channels')}
-              actions={
-                <p>
-                  {__('You have')} {userBlockedChannelsCount} {__('blocked')}{' '}
-                  {userBlockedChannelsCount === 1 && __('channel')}
-                  {userBlockedChannelsCount !== 1 && __('channels')}.{' '}
-                  <Button button="link" label={__('Manage')} navigate={`/$/${PAGES.BLOCKED}`} />.
-                </p>
-              }
-            />
+            {isAuthenticated && (
+              <Card
+                title={__('Blocked Channels')}
+                actions={
+                  <p>
+                    {__('You have')} {userBlockedChannelsCount} {__('blocked')}{' '}
+                    {userBlockedChannelsCount === 1 && __('channel')}
+                    {userBlockedChannelsCount !== 1 && __('channels')}.{' '}
+                    <Button button="link" label={__('Manage')} navigate={`/$/${PAGES.BLOCKED}`} />.
+                  </p>
+                }
+              />
+            )}
 
             {/* @if TARGET='app' */}
             <Card
@@ -518,90 +522,98 @@ class SettingsPage extends React.PureComponent<Props, State> {
                 </React.Fragment>
               }
             />
-            <Card
-              title={__('Wallet Security')}
-              actions={
-                <React.Fragment>
-                  {/* @if TARGET='app' */}
-                  <FormField
-                    disabled
-                    type="checkbox"
-                    name="encrypt_wallet"
-                    onChange={() => this.onChangeEncryptWallet()}
-                    checked={walletEncrypted}
-                    label={__('Encrypt my wallet with a custom password')}
-                    helper={
-                      <React.Fragment>
+
+            {(isAuthenticated || !IS_WEB) && (
+              <Card
+                title={__('Wallet Security')}
+                actions={
+                  <React.Fragment>
+                    {/* @if TARGET='app' */}
+                    <FormField
+                      disabled
+                      type="checkbox"
+                      name="encrypt_wallet"
+                      onChange={() => this.onChangeEncryptWallet()}
+                      checked={walletEncrypted}
+                      label={__('Encrypt my wallet with a custom password')}
+                      helper={
+                        <React.Fragment>
+                          <I18nMessage
+                            tokens={{
+                              learn_more: (
+                                <Button
+                                  button="link"
+                                  label={__('Learn more')}
+                                  href="https://lbry.com/faq/account-sync"
+                                />
+                              ),
+                            }}
+                          >
+                            Wallet encryption is currently unavailable until it's supported for synced accounts. It will
+                            be added back soon. %learn_more%.
+                          </I18nMessage>
+                          {/* {__('Secure your local wallet data with a custom password.')}{' '}
+                        <strong>{__('Lost passwords cannot be recovered.')} </strong>
+                        <Button button="link" label={__('Learn more')} href="https://lbry.com/faq/wallet-encryption" />. */}
+                        </React.Fragment>
+                      }
+                    />
+
+                    {walletEncrypted && this.state.storedPassword && (
+                      <FormField
+                        type="checkbox"
+                        name="save_password"
+                        onChange={this.onConfirmForgetPassword}
+                        checked={this.state.storedPassword}
+                        label={__('Save Password')}
+                        helper={<React.Fragment>{__('Automatically unlock your wallet on startup')}</React.Fragment>}
+                      />
+                    )}
+                    {/* @endif */}
+
+                    <FormField
+                      type="checkbox"
+                      name="hide_balance"
+                      onChange={() => setClientSetting(SETTINGS.HIDE_BALANCE, !hideBalance)}
+                      checked={hideBalance}
+                      label={__('Hide wallet balance in header')}
+                    />
+                  </React.Fragment>
+                }
+              />
+            )}
+
+            {(!IS_WEB || isAuthenticated) && (
+              <Card
+                title={__('Experimental Settings')}
+                actions={
+                  <React.Fragment>
+                    <FormField
+                      type="checkbox"
+                      name="support_option"
+                      onChange={() => setClientSetting(SETTINGS.SUPPORT_OPTION, !supportOption)}
+                      checked={supportOption}
+                      label={__('Enable claim support')}
+                      helper={
                         <I18nMessage
                           tokens={{
-                            learn_more: (
-                              <Button button="link" label={__('Learn more')} href="https://lbry.com/faq/account-sync" />
+                            discovery_link: (
+                              <Button button="link" label={__('discovery')} href="https://lbry.com/faq/trending" />
+                            ),
+                            vanity_names_link: (
+                              <Button button="link" label={__('vanity names')} href="https://lbry.com/faq/naming" />
                             ),
                           }}
                         >
-                          Wallet encryption is currently unavailable until it's supported for synced accounts. It will
-                          be added back soon. %learn_more%.
+                          This will add a Support button along side tipping. Similar to tips, supports help
+                          %discovery_link% but the LBC is returned to your wallet if revoked. Both also help secure your
+                          %vanity_names_link%.
                         </I18nMessage>
-                        {/* {__('Secure your local wallet data with a custom password.')}{' '}
-                        <strong>{__('Lost passwords cannot be recovered.')} </strong>
-                        <Button button="link" label={__('Learn more')} href="https://lbry.com/faq/wallet-encryption" />. */}
-                      </React.Fragment>
-                    }
-                  />
-
-                  {walletEncrypted && this.state.storedPassword && (
-                    <FormField
-                      type="checkbox"
-                      name="save_password"
-                      onChange={this.onConfirmForgetPassword}
-                      checked={this.state.storedPassword}
-                      label={__('Save Password')}
-                      helper={<React.Fragment>{__('Automatically unlock your wallet on startup')}</React.Fragment>}
+                      }
                     />
-                  )}
-                  {/* @endif */}
 
-                  <FormField
-                    type="checkbox"
-                    name="hide_balance"
-                    onChange={() => setClientSetting(SETTINGS.HIDE_BALANCE, !hideBalance)}
-                    checked={hideBalance}
-                    label={__('Hide wallet balance in header')}
-                  />
-                </React.Fragment>
-              }
-            />
-
-            <Card
-              title={__('Experimental Settings')}
-              actions={
-                <React.Fragment>
-                  <FormField
-                    type="checkbox"
-                    name="support_option"
-                    onChange={() => setClientSetting(SETTINGS.SUPPORT_OPTION, !supportOption)}
-                    checked={supportOption}
-                    label={__('Enable claim support')}
-                    helper={
-                      <I18nMessage
-                        tokens={{
-                          discovery_link: (
-                            <Button button="link" label={__('discovery')} href="https://lbry.com/faq/trending" />
-                          ),
-                          vanity_names_link: (
-                            <Button button="link" label={__('vanity names')} href="https://lbry.com/faq/naming" />
-                          ),
-                        }}
-                      >
-                        This will add a Support button along side tipping. Similar to tips, supports help
-                        %discovery_link% but the LBC is returned to your wallet if revoked. Both also help secure your
-                        %vanity_names_link%.
-                      </I18nMessage>
-                    }
-                  />
-
-                  {/* @if TARGET='app' */}
-                  {/*
+                    {/* @if TARGET='app' */}
+                    {/*
                   Disabling below until we get downloads to work with shared subscriptions code
                   <FormField
                     type="checkbox"
@@ -613,30 +625,31 @@ class SettingsPage extends React.PureComponent<Props, State> {
                       "The latest file from each of your subscriptions will be downloaded for quick access as soon as it's published."
                     )}
                   /> */}
-                  <fieldset-section>
-                    <FormField
-                      name="max_connections"
-                      type="select"
-                      label={__('Max Connections')}
-                      helper={__(
-                        'For users with good bandwidth, try a higher value to improve streaming and download speeds. Low bandwidth users may benefit from a lower setting. Default is 4.'
-                      )}
-                      min={1}
-                      max={100}
-                      onChange={this.onMaxConnectionsChange}
-                      value={daemonSettings.max_connections_per_download}
-                    >
-                      {connectionOptions.map(connectionOption => (
-                        <option key={connectionOption} value={connectionOption}>
-                          {connectionOption}
-                        </option>
-                      ))}
-                    </FormField>
-                  </fieldset-section>
-                  {/* @endif */}
-                </React.Fragment>
-              }
-            />
+                    <fieldset-section>
+                      <FormField
+                        name="max_connections"
+                        type="select"
+                        label={__('Max Connections')}
+                        helper={__(
+                          'For users with good bandwidth, try a higher value to improve streaming and download speeds. Low bandwidth users may benefit from a lower setting. Default is 4.'
+                        )}
+                        min={1}
+                        max={100}
+                        onChange={this.onMaxConnectionsChange}
+                        value={daemonSettings.max_connections_per_download}
+                      >
+                        {connectionOptions.map(connectionOption => (
+                          <option key={connectionOption} value={connectionOption}>
+                            {connectionOption}
+                          </option>
+                        ))}
+                      </FormField>
+                    </fieldset-section>
+                    {/* @endif */}
+                  </React.Fragment>
+                }
+              />
+            )}
 
             {/* @if TARGET='app' */}
             {/* Auto launch in a hidden state doesn't work on mac https://github.com/Teamwork/node-auto-launch/issues/81 */}
@@ -646,15 +659,15 @@ class SettingsPage extends React.PureComponent<Props, State> {
             <Card
               title={__('Application Cache')}
               subtitle={
-                <p className="card__subtitle--status">
+                <p className="section__subtitle">
                   {__(
-                    'This will clear the application cache. Your wallet will not be affected and you will not lose any data.'
+                    'This will clear the application cache, and might fix issues you are having. Your wallet will not be affected. '
                   )}
                 </p>
               }
               actions={
                 <Button
-                  button="inverse"
+                  button="secondary"
                   label={this.state.clearingCache ? __('Clearing') : __('Clear Cache')}
                   onClick={clearCache}
                   disabled={this.state.clearingCache}

@@ -27,7 +27,7 @@ const SearchOptions = (props: Props) => {
       {expanded && (
         <Form className="search__options">
           <fieldset>
-            <legend className="search__legend--1">{__('Search For')}</legend>
+            <legend className="search__legend">{__('Search For')}</legend>
             {[
               {
                 option: SEARCH_OPTIONS.INCLUDE_FILES,
@@ -55,7 +55,7 @@ const SearchOptions = (props: Props) => {
           </fieldset>
 
           <fieldset>
-            <legend className="search__legend--2">{__('File Types')}</legend>
+            <legend className="search__legend">{__('File Types')}</legend>
             {[
               {
                 option: SEARCH_OPTIONS.MEDIA_VIDEO,
@@ -92,7 +92,7 @@ const SearchOptions = (props: Props) => {
           </fieldset>
 
           <fieldset>
-            <legend className="search__legend--3">{__('Other Options')}</legend>
+            <legend className="search__legend">{__('Other Options')}</legend>
             <FormField
               type="select"
               name="result-count"

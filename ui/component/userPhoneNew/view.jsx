@@ -83,7 +83,7 @@ class UserPhoneNew extends React.PureComponent<Props, State> {
 
     return (
       <React.Fragment>
-        <p className="card__subtitle">
+        <p className="section__subtitle">
           {__(
             'Enter your phone number and we will send you a verification code. We will not share your phone number with third parties.'
           )}

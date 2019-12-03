@@ -80,36 +80,24 @@ export class FormField extends React.PureComponent<Props> {
     const errorMessage = typeof error === 'object' ? error.message : error;
 
     const Wrapper = blockWrap
-      ? ({ children: innerChildren }) => <fieldset-section>{innerChildren}</fieldset-section>
-      : ({ children: innerChildren }) => <React.Fragment>{innerChildren}</React.Fragment>;
+      ? ({ children: innerChildren }) => <fieldset-section class="radio">{innerChildren}</fieldset-section>
+      : ({ children: innerChildren }) => <span className="radio">{innerChildren}</span>;
 
     let input;
     if (type) {
       if (type === 'radio') {
         input = (
           <Wrapper>
-            <radio-element>
-              <input id={name} type="radio" {...inputProps} />
-              <label htmlFor={name}>{label}</label>
-              <radio-toggle onClick={inputProps.onChange} />
-            </radio-element>
+            <input id={name} type="radio" {...inputProps} />
+            <label htmlFor={name}>{label}</label>
           </Wrapper>
         );
       } else if (type === 'checkbox') {
-        // web components treat props weird
-        // we need to fully remove it for proper component:attribute css styling
-        // $FlowFixMe
-        const elementProps = inputProps.disabled ? { disabled: true } : {};
         input = (
-          <Wrapper>
-            <checkbox-element {...elementProps}>
-              <input id={name} type="checkbox" {...inputProps} tabIndex={0} />
-              <label htmlFor={name} tabIndex={-1}>
-                {label}
-              </label>
-              <checkbox-toggle onClick={inputProps.onChange} tabIndex={-1} />
-            </checkbox-element>
-          </Wrapper>
+          <div className="checkbox">
+            <input id={name} type="checkbox" {...inputProps} />
+            <label htmlFor={name}>{label}</label>
+          </div>
         );
       } else if (type === 'select') {
         input = (
@@ -172,7 +160,11 @@ export class FormField extends React.PureComponent<Props> {
         input = (
           <React.Fragment>
             <fieldset-section>
-              <label htmlFor={name}>{errorMessage ? <span className="error-text">{errorMessage}</span> : label}</label>
+              {label && (
+                <label htmlFor={name}>
+                  {errorMessage ? <span className="error-text">{errorMessage}</span> : label}
+                </label>
+              )}
               {prefix && <label htmlFor={name}>{prefix}</label>}
               {inner}
             </fieldset-section>

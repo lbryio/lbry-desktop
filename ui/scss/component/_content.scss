@@ -76,11 +76,6 @@
 
   &:hover {
     cursor: pointer;
-
-    .button--view,
-    .button--play {
-      background-color: $lbry-teal-2;
-    }
   }
 
   &:-webkit-full-screen {
@@ -101,12 +96,6 @@
   background-size: 100%;
   margin: auto;
 
-  background-color: $lbry-white;
-  [data-mode='dark'] & {
-    background-color: $lbry-black;
-    color: $lbry-white;
-  }
-
   &:-webkit-full-screen {
     width: 100%;
     height: 100%;
@@ -124,5 +113,5 @@
 }
 
 .content__loading-text {
-  color: $lbry-white;
+  color: black; //white;
 }

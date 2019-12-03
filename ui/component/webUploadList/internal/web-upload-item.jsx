@@ -12,7 +12,7 @@ export default function WebUploadItem(props: Props) {
   const { params, progress, xhr } = props;
 
   return (
-    <li className={'claim-preview card--inline'}>
+    <li className={'claim-preview claim-preview--inactive card--inline'}>
       <CardMedia thumbnail={params.thumbnail_url} />
       <div className={'claim-preview-metadata'}>
         <div className="claim-preview-info">

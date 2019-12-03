@@ -30,6 +30,7 @@ export default function Tag(props: Props) {
       disabled={disabled}
       title={title}
       className={classnames('tag', {
+        'tag--large': type === 'large',
         'tag--remove': type === 'remove',
         // tag--add only adjusts the color, which causes issues with mature tag color clashing
         'tag--add': !isMature && type === 'add',
@@ -37,7 +38,7 @@ export default function Tag(props: Props) {
       })}
       label={name}
       iconSize={12}
-      iconRight={type !== 'link' && (type === 'remove' ? ICONS.REMOVE : ICONS.ADD)}
+      iconRight={type !== 'link' && type !== 'large' && (type === 'remove' ? ICONS.REMOVE : ICONS.ADD)}
     />
   );
 }

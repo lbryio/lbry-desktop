@@ -820,7 +820,6 @@
   "Advanced Editor": "Advanced Editor",
   "If you bid more than %amount% LBC, when someone navigates to %uri%, it will load your published content. However, you can get a longer version of this URL for any bid.": "If you bid more than %amount% LBC, when someone navigates to %uri%, it will load your published content. However, you can get a longer version of this URL for any bid.",
   "%nameOrTitle% has been published to lbry://%name%. Click here to view it.": "%nameOrTitle% has been published to lbry://%name%. Click here to view it.",
-  "Discussion": "Discussion",
   "If you don't choose a file, the file from your existing claim %name% will be used": "If you don't choose a file, the file from your existing claim %name% will be used",
   "To enable this feature, check 'Save Password' the next time you start the app.": "To enable this feature, check 'Save Password' the next time you start the app.",
   "for adding a subscription!": "for adding a subscription!",
@@ -890,4 +889,18 @@
   "allow you to receive notifications related to new content.": "allow you to receive notifications related to new content.",
   "files": "files",
   "Invalid claim ID %claimId%.": "Invalid claim ID %claimId%."
-}
+  "Suggested": "Suggested",
+  "%amountBehind% blocks behind": "%amountBehind% blocks behind",
+  "Startup Preferences": "Startup Preferences",
+  "This will clear the application cache, and might fix issues you are having. Your wallet will not be affected. ": "This will clear the application cache, and might fix issues you are having. Your wallet will not be affected. ",
+  "Start minimized": "Start minimized",
+  "Improve view speed and help the LBRY network by allowing the app to cuddle up in your system tray.": "Improve view speed and help the LBRY network by allowing the app to cuddle up in your system tray.",
+  "Content Type": "Content Type",
+  "Submit Feedback": "Submit Feedback",
+  "Checking your publishes...": "Checking your publishes...",
+  "Checking your publishes": "Checking your publishes",
+  "Checking for channels": "Checking for channels",
+  "Error Starting Up": "Error Starting Up",
+  "Reach out to hello@lbry.com for help, or check out %help_link%.": "Reach out to hello@lbry.com for help, or check out %help_link%.",
+  "You're not following any tags. Smash that %customize% button!": "You're not following any tags. Smash that %customize% button!",
+  "customize": "customize"

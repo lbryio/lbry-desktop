@@ -1,15 +1,15 @@
 .CodeMirror {
   border-top: none;
-  border-right: 1px solid $lbry-gray-1;
-  border-bottom: 1px solid $lbry-gray-1;
-  border-left: 1px solid $lbry-gray-1;
-  border-bottom-left-radius: var(--input-border-radius);
-  border-bottom-right-radius: var(--input-border-radius);
-  background: $lbry-white;
-  color: $lbry-black;
+  border-right: 1px solid var(--color-input-border);
+  border-bottom: 1px solid var(--color-input-border);
+  border-left: 1px solid var(--color-input-border);
+  border-bottom-left-radius: var(--border-radius);
+  border-bottom-right-radius: var(--border-radius);
+  background: var(--color-input-bg);
+  color: var(--color-input);
 
   .CodeMirror-cursor {
-    border-color: $lbry-teal-3;
+    border-color: black; //teal-3;
   }
 
   .CodeMirror-placeholder {
@@ -18,25 +18,8 @@
 
   .cm-spell-error:not(.cm-url):not(.cm-comment):not(.cm-tag):not(.cm-word) {
     text-decoration: underline;
-    text-decoration-color: $lbry-red-3;
+    text-decoration-color: black; //red-3;
     text-decoration-style: dotted;
-  }
-
-  [data-mode='dark'] & {
-    border-left: 1px solid rgba($lbry-white, 0.2);
-    border-right: 1px solid rgba($lbry-white, 0.2);
-    border-bottom: 1px solid rgba($lbry-white, 0.2);
-    background-color: rgba($lbry-white, 0.1);
-    color: $lbry-white;
-
-    .CodeMirror-selectedtext {
-      color: $lbry-black;
-    }
-
-    .editor-preview.editor-preview-active {
-      background-color: $lbry-black;
-      color: $lbry-white;
-    }
   }
 }
 
@@ -44,14 +27,18 @@
 .CodeMirror-line::selection,
 .CodeMirror-line > span::selection,
 .CodeMirror-line > span > span::selection {
-  background-color: $lbry-teal-1;
+  background-color: black; //teal-1;
 }
 
 .editor-toolbar {
-  background-color: $lbry-gray-1;
+  background-color: var(--color-header-background);
   border: none;
-  border-top-left-radius: var(--input-border-radius);
-  border-top-right-radius: var(--input-border-radius);
+  border-top-left-radius: var(--border-radius);
+  border-top-right-radius: var(--border-radius);
+  border-right: 1px solid var(--color-input-border);
+  border-top: 1px solid var(--color-input-border);
+  border-left: 1px solid var(--color-input-border);
+
   opacity: 1; // ?
 
   &:hover {
@@ -59,13 +46,13 @@
   }
 
   &.disabled-for-preview a:not(.no-disable) {
-    background-color: $lbry-gray-1;
+    background-color: black; //gray-1;
     border-color: transparent;
     opacity: 0.3;
   }
 
   &.fullscreen {
-    background-color: $lbry-gray-1;
+    background-color: black; //gray-1;
 
     &::before,
     &::after {
@@ -74,60 +61,13 @@
   }
 
   button {
-    color: $lbry-black !important;
+    color: var(--color-header-link);
     border-color: transparent;
     transition: opacity 0.3s ease;
-
-    &:not(.active),
-    &:not(:hover) {
-      opacity: 0.6;
-    }
-
-    &.active,
-    &:hover {
-      opacity: 1;
-    }
   }
 
   i.separator {
     border: none;
-  }
-
-  [data-mode='dark'] & {
-    background-color: rgba($lbry-white, 0.2);
-
-    button {
-      color: $lbry-white !important; // We need to use !important to override the CodeMirror styles
-
-      &.active {
-        background-color: rgba($lbry-black, 0.4);
-      }
-
-      &:hover {
-        color: $lbry-black !important;
-      }
-    }
-
-    &.disabled-for-preview {
-      button:not(.no-disable) {
-        background-color: transparent;
-      }
-
-      // The markdown preview button is highlighted during preview when the other buttons are disabled
-      button.no-disable {
-        background-color: rgba($lbry-white, 0.3);
-      }
-    }
-  }
-}
-
-.editor-statusbar {
-  color: rgba($lbry-black, 0.5);
-  font-size: var(--font-label);
-  // padding: var(--spacing-medium) 0; // overriding styles from elsewhere
-
-  [data-mode='dark'] & {
-    color: inherit;
   }
 }
 
@@ -143,7 +83,7 @@
       border: transparent;
 
       &:hover {
-        background-color: $lbry-white !important;
+        color: var(--color-header-link-active);
       }
     }
   }

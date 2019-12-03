@@ -41,7 +41,7 @@ function ChannelContent(props: Props) {
 
       {!fetching && !hasContent && !channelIsBlocked && !channelIsBlackListed && (
         <div className="card--section">
-          <h2 className="help">{__("This channel hasn't uploaded anything.")}</h2>
+          <h2 className="section__subtitle">{__("This channel hasn't uploaded anything.")}</h2>
         </div>
       )}
 

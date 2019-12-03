@@ -5,7 +5,6 @@ import * as React from 'react';
 import { isURIValid } from 'lbry-redux';
 import Button from 'component/button';
 import ClaimLink from 'component/claimLink';
-import { isLBRYDomain } from 'util/uri';
 
 type Props = {
   href: string,
@@ -39,8 +38,7 @@ class ExternalLink extends React.PureComponent<Props> {
           label={children}
           className="button--external-link"
           onClick={() => {
-            const isTrusted = isLBRYDomain(href);
-            openModal(MODALS.CONFIRM_EXTERNAL_RESOURCE, { uri: href, isTrusted: isTrusted });
+            openModal(MODALS.CONFIRM_EXTERNAL_RESOURCE, { uri: href, isTrusted: false });
           }}
         />
       );

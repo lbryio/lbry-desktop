@@ -1,0 +1,52 @@
+:root {
+  // Button
+  --color-link-icon: var(--color-gray-5);
+  --color-link-active: var(--color-primary);
+  --color-navigation-link: var(--color-link-icon);
+
+  // Color
+  --color-background: #f7f7f7;
+  --color-background--splash: #212529;
+  --color-border: #ededed;
+  --color-background-overlay: #21252980;
+
+  // Text
+  --color-text-selection-bg: var(--color-secondary-alt);
+  --color-text-selection: var(--color-secondary);
+  --color-text-error: var(--color-danger);
+  --color-text-empty: #bbbbbb;
+  --color-text-help: #999999;
+  --color-text-subtitle: #767676;
+  --color-text-warning: #212529;
+  --color-text-warning--background: var(--lbry-yellow-1);
+  --color-blockquote: var(--color-gray-3);
+
+  --color-spinner-light: #5a6570;
+  --color-spinner-dark: #212529;
+  --color-box-shadow: #c4c4c4;
+  --color-placeholder-background: #f0f0f0;
+  --color-header-background: #ffffff;
+  --color-card-background: #ffffff;
+  --color-card-background-highlighted: #f6faff;
+  --color-list-header: #fff;
+  --color-file-viewer-background: var(--color-card-background);
+  --color-tabs-background: var(--color-secondary-alt);
+  --color-tab-divider: var(--color-secondary);
+
+  // Menu
+  --color-menu-background: var(--color-header-background);
+  --color-menu-background--selected: var(--color-secondary-alt);
+  --color-menu-background--active: var(--color-secondary-alt);
+  --color-menu-icon: var(--color-navigation-link);
+  --color-menu-icon-active: var(--color-navigation-link);
+
+  // Search
+  --color-search-suggestion: #212529;
+  --color-search-suggestion-background: #cce6fb;
+
+  // Snack
+  --color-snack-bg: var(--color-primary);
+  --color-snack: var(--color-white);
+  --color-snack-bg-error: var(--color-danger);
+  --color-snack-upgrade: var(--color-tertiary);
+}

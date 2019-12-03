@@ -37,8 +37,12 @@ class InviteList extends React.PureComponent<Props> {
     return (
       <section className="card">
         <div className="table__header">
-          <h2 className="card__title--between">
-            {__('Invite History')}
+          <div className="table__header-text--between">
+            <div>
+              <h2 className="card__title">{__('Invite History')}</h2>
+              <p className="section__subtitle">{rewardHelp}</p>
+            </div>
+
             {referralReward && showClaimable && (
               <RewardLink
                 button
@@ -46,8 +50,7 @@ class InviteList extends React.PureComponent<Props> {
                 reward_type={rewards.TYPE_REFERRAL}
               />
             )}
-          </h2>
-          <p className="section__subtitle">{rewardHelp}</p>
+          </div>
         </div>
 
         <table className="table section">

@@ -1,14 +1,16 @@
 // @flow
 
-import React, { Suspense } from 'react';
+import React from 'react';
 import LoadingScreen from 'component/common/loading-screen';
 import MarkdownPreview from 'component/common/markdown-preview';
 import CodeViewer from 'component/viewers/codeViewer';
+import * as https from 'https';
 
 type Props = {
   theme: string,
   source: {
-    stream: string => any,
+    file: (?string) => any,
+    stream: string,
     fileType: string,
     contentType: string,
   },
@@ -32,9 +34,9 @@ class DocumentViewer extends React.PureComponent<Props, State> {
 
   componentDidMount() {
     const { source } = this.props;
-
-    if (source && source.stream) {
-      const stream = source.stream('utf8');
+    // @if TARGET='app'
+    if (source && source.file) {
+      const stream = source.file('utf8');
 
       let data = '';
 
@@ -50,6 +52,30 @@ class DocumentViewer extends React.PureComponent<Props, State> {
         this.setState({ error: true, loading: false });
       });
     }
+    // @endif
+    // @if TARGET='web'
+    if (source && source.stream) {
+      https.get(
+        source.stream,
+        function(response) {
+          if (response.statusCode === 200) {
+            let data = '';
+            response.on('data', function(chunk) {
+              data += chunk;
+            });
+            response.on(
+              'end',
+              function() {
+                this.setState({ content: data, loading: false });
+              }.bind(this)
+            );
+          } else {
+            this.setState({ error: true, loading: false });
+          }
+        }.bind(this)
+      );
+    }
+    // @endif
   }
 
   renderDocument() {
@@ -58,10 +84,9 @@ class DocumentViewer extends React.PureComponent<Props, State> {
     const { source, theme } = this.props;
     const { fileType, contentType } = source;
     const markdownType = ['md', 'markdown'];
-
-    if (markdownType.includes(fileType)) {
+    if (markdownType.includes(fileType) || contentType === 'text/markdown' || contentType === 'text/md') {
       // Render markdown
-      viewer = <MarkdownPreview content={content} promptLinks />;
+      viewer = <MarkdownPreview content={content} />;
     } else {
       // Render plain text
       viewer = <CodeViewer value={content} contentType={contentType} theme={theme} />;

@@ -3,9 +3,9 @@ import React, { useState } from 'react';
 import { FormField } from 'component/common/form';
 import Button from 'component/button';
 import SelectAsset from 'component/selectAsset';
-import TagsSelect from 'component/tagsSelect';
 import * as PAGES from 'constants/pages';
 import { MINIMUM_PUBLISH_BID } from 'constants/claim';
+import TagsSearch from 'component/tagsSearch';
 
 type Props = {
   claim: ChannelClaim,
@@ -173,13 +173,16 @@ function ChannelForm(props: Props) {
         disabled={false}
         onChange={text => setParams({ ...params, description: text })}
       />
-      <TagsSelect
-        title={__('Add Tags')}
+
+      <TagsSearch
         suggestMature
-        disableAutoFocus
-        help={__('The better your tags are, the easier it will be for people to discover your channel.')}
-        empty={__('No tags added')}
-        placeholder={__('Add a tag')}
+        disabledAutoFocus
+        tagsPassedIn={params.tags || []}
+        label={__('Tags Selected')}
+        onRemove={clickedTag => {
+          const newTags = params.tags.slice().filter(tag => tag.name !== clickedTag.name);
+          setParams({ ...params, tags: newTags });
+        }}
         onSelect={newTags => {
           newTags.forEach(newTag => {
             if (!params.tags.map(savedTag => savedTag.name).includes(newTag.name)) {
@@ -190,11 +193,6 @@ function ChannelForm(props: Props) {
             }
           });
         }}
-        onRemove={clickedTag => {
-          const newTags = params.tags.slice().filter(tag => tag.name !== clickedTag.name);
-          setParams({ ...params, tags: newTags });
-        }}
-        tagsChosen={params.tags || []}
       />
       <div className={'card__actions'}>
         <Button button="primary" label={__('Submit')} onClick={handleSubmit} />

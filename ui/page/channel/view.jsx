@@ -8,7 +8,7 @@ import ShareButton from 'component/shareButton';
 import { Tabs, TabList, Tab, TabPanels, TabPanel } from 'component/common/tabs';
 import { withRouter } from 'react-router';
 import Button from 'component/button';
-import { formatLbryUriForWeb } from 'util/uri';
+import { formatLbryUrlForWeb } from 'util/url';
 import ChannelContent from 'component/channelContent';
 import ChannelAbout from 'component/channelAbout';
 import ChannelDiscussion from 'component/channelDiscussion';
@@ -93,7 +93,7 @@ function ChannelPage(props: Props) {
   const tabIndex = currentView === ABOUT_PAGE || editing ? 1 : currentView === DISCUSSION_PAGE ? 2 : 0;
 
   function onTabChange(newTabIndex) {
-    let url = formatLbryUriForWeb(uri);
+    let url = formatLbryUrlForWeb(uri);
     let search = '?';
 
     if (newTabIndex === 0) {
@@ -196,7 +196,7 @@ function ChannelPage(props: Props) {
           )}
           {editing && <img className="channel-cover__custom" src={coverPreview} />}
           {/* component that offers select/upload */}
-          <div className="channel__primary-info ">
+          <div className="channel__primary-info">
             {!editing && (
               <ChannelThumbnail className="channel__thumbnail--channel-page" uri={uri} obscure={channelIsBlocked} />
             )}
@@ -207,14 +207,12 @@ function ChannelPage(props: Props) {
                 thumbnailPreview={thumbPreview}
               />
             )}
-            <h1 className="channel__title">
-              {title || '@' + channelName}
-              {channelIsMine && !editing && (
-                <Button title={__('Edit')} onClick={() => setEditing(!editing)} icon={ICONS.EDIT} iconSize={49} />
-              )}
-            </h1>
+            <h1 className="channel__title">{title || '@' + channelName}</h1>
+            {channelIsMine && !editing && (
+              <Button button="alt" title={__('Edit')} onClick={() => setEditing(!editing)} icon={ICONS.EDIT} />
+            )}
             <div className="channel__meta">
-              <ClaimUri uri={uri} />
+              <ClaimUri uri={uri} inline />
               <span>
                 {subCount} {subCount !== 1 ? __('Subscribers') : __('Subscriber')}
                 <HelpLink href="https://lbry.com/faq/views" />
@@ -226,7 +224,7 @@ function ChannelPage(props: Props) {
           <TabList className="tabs__list--channel-page">
             <Tab disabled={editing}>{__('Content')}</Tab>
             <Tab>{editing ? __('Editing Your Channel') : __('About')}</Tab>
-            <Tab disabled={editing}>{__('Discussion')}</Tab>
+            <Tab disabled={editing}>{__('Comments')}</Tab>
             {/* only render searchbar on content page (tab index 0 === content page) */}
             {tabIndex === 0 ? (
               <Form onSubmit={handleSearch} className="wunderbar--inline">

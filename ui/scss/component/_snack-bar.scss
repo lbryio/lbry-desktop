@@ -1,9 +1,9 @@
 .snack-bar {
   bottom: 2rem;
   left: 2rem;
-  background-color: $lbry-teal-4;
+  background-color: var(--color-snack-bg);
+  color: var(--color-snack);
   border-radius: 0.5rem;
-  color: $lbry-white;
   padding: var(--spacing-small) var(--spacing-large) var(--spacing-small) var(--spacing-medium);
   position: fixed;
   transition: all var(--transition-duration) var(--transition-type);
@@ -14,7 +14,7 @@
   @extend .snack-bar;
   left: auto;
   right: 2rem;
-  background-color: $lbry-grape-4;
+  background-color: var(--color-snack-bg-upgrade);
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -22,13 +22,14 @@
 }
 
 .snack-bar--error {
-  background-color: $lbry-red-5;
+  background-color: var(--color-snack-bg-error);
 }
 
 .snack-bar__action {
   display: inline-block;
   margin: var(--spacing-small) 0;
   min-width: min-content;
+  color: var(--color-white);
 
   span:hover {
     text-decoration: underline;
@@ -43,7 +44,6 @@
 
   div {
     &:nth-of-type(1) {
-      font-size: var(--font-multiplier-large);
       margin-right: var(--spacing-medium);
     }
   }

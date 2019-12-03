@@ -2,6 +2,7 @@
 import { ipcRenderer } from 'electron';
 import { DOMAIN } from 'config';
 
+const isProduction = process.env.NODE_ENV === 'production';
 let sessionPassword;
 
 function setCookie(name: string, value: string, days: number) {
@@ -9,10 +10,15 @@ function setCookie(name: string, value: string, days: number) {
   if (days) {
     let date = new Date();
     date.setTime(date.getTime() + days * 24 * 60 * 60 * 1000);
-    expires = '; expires=' + date.toUTCString();
+    expires = `expires=${date.toUTCString()};`;
   }
 
-  document.cookie = `${name}=${value || ''}${expires}; domain=.${DOMAIN}; path=/; SameSite=Lax; Secure;`;
+  let cookie = `${name}=${value || ''}; ${expires} path=/; SameSite=Lax;`;
+  if (isProduction) {
+    cookie += ` domain=.${DOMAIN}; Secure;`;
+  }
+
+  document.cookie = cookie;
 }
 
 function getCookie(name: string) {
@@ -33,7 +39,12 @@ function getCookie(name: string) {
 }
 
 function deleteCookie(name: string) {
-  document.cookie = name + '=; Max-Age=-99999999; path=/;';
+  document.cookie = name + `=; Max-Age=-99999999; domain=.${DOMAIN}; path=/;`;
+
+  // Legacy
+  // Adding this here to delete any old cookies before we switched to . + DOMAIN
+  // Remove this if you see it after July 1st, 2020
+  document.cookie = name + `=; Max-Age=-99999999; domain=${DOMAIN}; path=/;`;
 }
 
 export const setSavedPassword = (value?: string, saveToDisk: boolean) => {

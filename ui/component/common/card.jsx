@@ -10,19 +10,21 @@ type Props = {
   body?: string | Node,
   actions?: string | Node,
   icon?: string,
+  className?: string,
+  actionIconPadding?: boolean,
 };
 
 export default function Card(props: Props) {
-  const { title, subtitle, body, actions, icon } = props;
+  const { title, subtitle, body, actions, icon, className, actionIconPadding = true } = props;
   return (
-    <section className={classnames('card')}>
+    <section className={classnames(className, 'card')}>
       {title && (
         <div className="card__header">
           <div className="section__flex">
             {icon && <Icon sectionIcon icon={icon} />}
             <div>
               <h2 className="section__title">{title}</h2>
-              <div className="section__subtitle">{subtitle}</div>
+              {subtitle && <div className="section__subtitle">{subtitle}</div>}
             </div>
           </div>
         </div>
@@ -30,7 +32,11 @@ export default function Card(props: Props) {
 
       {body && <div className={classnames('card__body', { 'card__body--with-icon': icon })}>{body}</div>}
       {actions && (
-        <div className={classnames('card__main-actions', { 'card__main-actions--with-icon': icon })}>{actions}</div>
+        <div
+          className={classnames('card__main-actions', { 'card__main-actions--with-icon': icon && actionIconPadding })}
+        >
+          {actions}
+        </div>
       )}
     </section>
   );

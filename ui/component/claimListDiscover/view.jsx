@@ -1,5 +1,6 @@
 // @flow
 import type { Node } from 'react';
+import * as PAGES from 'constants/pages';
 import React, { Fragment, useEffect, useState } from 'react';
 import { withRouter } from 'react-router';
 import { createNormalizedClaimSearchKey, MATURE_TAGS } from 'lbry-redux';
@@ -173,7 +174,26 @@ function ClaimListDiscover(props: Props) {
     </div>
   );
 
-  const emptyState = !loading && (personalSort === SEARCH_SORT_CHANNELS && !hasContent ? noChannels : noResults);
+  const noTags = (
+    <div>
+      <p>
+      <I18nMessage
+        tokens={{
+          customize: <Button
+            button="link"
+            navigate={`/$/${PAGES.FOLLOWING}`}
+            label={__('customize')}
+          />,
+        }}
+      >
+        You're not following any tags. Add tags above or smash that %customize% button!
+      </I18nMessage>
+      </p>
+    </div>
+  );
+
+  const noFollowing = (personalSort === SEARCH_SORT_YOU && noTags) || (personalSort === SEARCH_SORT_CHANNELS && noChannels);
+  const emptyState = !loading  && !hasContent ? noFollowing : noResults;
 
   function getSearch() {
     let search = `?`;
@@ -234,9 +254,9 @@ function ClaimListDiscover(props: Props) {
       </FormField>
       {!hideCustomization && (
         <Fragment>
-          <span>{__('For')}</span>
+          <span className="claim-list__conjuction">{__('for')}</span>
           {!personalView && tags && tags.length ? (
-            tags.map(tag => <Tag key={tag} name={tag} disabled />)
+            tags.map(tag => <Tag key={tag} name={tag} disabled type="large" />)
           ) : (
             <FormField
               type="select"

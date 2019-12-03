@@ -26,9 +26,9 @@ class TransactionListItem extends React.PureComponent<Props> {
 
   getLink(type: string) {
     if (type === TXN_TYPES.TIP) {
-      return <Button icon={ICONS.UNLOCK} onClick={this.abandonClaim} title={__('Unlock Tip')} />;
+      return <Button button="secondary" icon={ICONS.UNLOCK} onClick={this.abandonClaim} title={__('Unlock Tip')} />;
     }
-    return <Button icon={ICONS.DELETE} onClick={this.abandonClaim} title={__('Abandon Claim')} />;
+    return <Button button="secondary" icon={ICONS.DELETE} onClick={this.abandonClaim} title={__('Abandon Claim')} />;
   }
 
   abandonClaim() {
@@ -65,13 +65,15 @@ class TransactionListItem extends React.PureComponent<Props> {
     return (
       <tr>
         <td>
-          <CreditAmount badge={false} showPlus amount={amount} precision={8} />
-          <br />
-
-          {fee !== 0 && (
-            <span className="table__item-label">
-              <CreditAmount badge={false} fee amount={fee} precision={8} />
-            </span>
+          {date ? (
+            <div>
+              <DateTime date={date} show={DateTime.SHOW_DATE} formatOptions={dateFormat} />
+              <div className="table__item-label">
+                <DateTime date={date} show={DateTime.SHOW_TIME} />
+              </div>
+            </div>
+          ) : (
+            <span className="empty">{__('Pending')}</span>
           )}
         </td>
         <td className="table__item--actionable">
@@ -85,16 +87,14 @@ class TransactionListItem extends React.PureComponent<Props> {
         <td>
           <ButtonTransaction id={txid} />
         </td>
-        <td>
-          {date ? (
-            <div>
-              <DateTime date={date} show={DateTime.SHOW_DATE} formatOptions={dateFormat} />
-              <div className="table__item-label">
-                <DateTime date={date} show={DateTime.SHOW_TIME} />
-              </div>
-            </div>
-          ) : (
-            <span className="empty">{__('Pending')}</span>
+        <td className="table__item--align-right">
+          <CreditAmount badge={false} showPlus amount={amount} precision={8} />
+          <br />
+
+          {fee !== 0 && (
+            <span className="table__item-label">
+              <CreditAmount badge={false} fee amount={fee} precision={8} />
+            </span>
           )}
         </td>
       </tr>

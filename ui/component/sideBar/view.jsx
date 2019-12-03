@@ -5,7 +5,6 @@ import React from 'react';
 import Button from 'component/button';
 import Tag from 'component/tag';
 import StickyBox from 'react-sticky-box/dist/esnext';
-import 'css-doodle';
 import Spinner from 'component/spinner';
 
 type Props = {
@@ -32,7 +31,6 @@ function SideBar(props: Props) {
       <div className="card navigation--placeholder">
         <div className="wrap">
           <h2>LBRY</h2>
-
           <p>{__('The best decentralized content platform on the web.')}</p>
         </div>
       </div>

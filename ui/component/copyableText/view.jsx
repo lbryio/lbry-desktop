@@ -9,10 +9,11 @@ type Props = {
   snackMessage: ?string,
   doToast: ({ message: string }) => void,
   label?: string,
+  primaryButton?: boolean,
 };
 
 export default function CopyableText(props: Props) {
-  const { copyable, doToast, snackMessage, label } = props;
+  const { copyable, doToast, snackMessage, label, primaryButton = false } = props;
 
   const input = useRef();
 
@@ -43,7 +44,7 @@ export default function CopyableText(props: Props) {
       onFocus={onFocus}
       inputButton={
         <Button
-          button="inverse"
+          button={primaryButton ? 'primary' : 'secondary'}
           icon={ICONS.COPY}
           onClick={() => {
             copyToClipboard();

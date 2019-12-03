@@ -20,11 +20,11 @@ const SEEK_BACKWARD_KEYCODE = ARROW_LEFT_KEYCODE;
 
 const SEEK_STEP = 10; // time to seek in seconds
 
-const VIDEO_JS_OPTIONS = {
-  autoplay: true,
+const VIDEO_JS_OPTIONS: { poster?: string } = {
   controls: true,
   preload: 'auto',
   playbackRates: [0.25, 0.5, 0.75, 1, 1.1, 1.25, 1.5, 2],
+  responsive: true,
 };
 
 type Props = {
@@ -38,13 +38,25 @@ type Props = {
   setPlayingUri: (string | null) => void,
   source: string,
   contentType: string,
+  thumbnail: string,
   hasFileInfo: boolean,
   onEndedCB: any,
 };
 
 function VideoViewer(props: Props) {
-  const { contentType, source, setPlayingUri, onEndedCB, changeVolume, changeMute, volume, muted } = props;
+  const { contentType, source, setPlayingUri, onEndedCB, changeVolume, changeMute, volume, muted, thumbnail } = props;
   const videoRef = useRef();
+  const isAudio = contentType.includes('audio');
+  let forceTypes = [
+    'video/quicktime',
+    'application/x-ext-mkv',
+    'video/x-matroska',
+    'application/octet-stream',
+    'video/x-ms-wmv',
+    'video/x-msvideo',
+    'video/mpeg',
+  ];
+  const forceMp4 = forceTypes.includes(contentType);
   const [requireRedraw, setRequireRedraw] = useState(false);
   let player;
 
@@ -88,16 +100,25 @@ function VideoViewer(props: Props) {
       sources: [
         {
           src: source,
-          type: contentType,
+          type: forceMp4 ? 'video/mp4' : contentType,
         },
       ],
     };
 
+    if (isAudio) {
+      videoJsOptions.poster = thumbnail;
+    }
+
     if (!requireRedraw) {
       player = videojs(videoNode, videoJsOptions, function() {
-        const self = this;
-        self.volume(volume);
-        self.muted(muted);
+        player.volume(volume);
+        player.muted(muted);
+        player.ready(() => {
+          // In the future this should be replaced with something that checks if the
+          // video is actually playing after calling play()
+          // If it's not, fall back to the play button
+          player.play();
+        });
       });
     }
 
@@ -172,7 +193,7 @@ function VideoViewer(props: Props) {
     <div className="file-render__viewer" onContextMenu={stopContextMenu}>
       {!requireRedraw && (
         <div data-vjs-player>
-          <video ref={videoRef} className="video-js" />
+          {isAudio ? <audio ref={videoRef} className="video-js" /> : <video ref={videoRef} className="video-js" />}
         </div>
       )}
     </div>

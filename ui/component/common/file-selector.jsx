@@ -66,7 +66,7 @@ class FileSelector extends React.PureComponent<Props> {
           readOnly="readonly"
           value={placeHolder || __('Choose a file')}
           inputButton={
-            <Button button="primary" disabled={disabled} onClick={this.fileInputButton} label={buttonLabel} />
+            <Button button="secondary" disabled={disabled} onClick={this.fileInputButton} label={buttonLabel} />
           }
         />
         <input

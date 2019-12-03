@@ -5,7 +5,7 @@ import classnames from 'classnames';
 import Button from 'component/button';
 import { FormField } from 'component/common/form';
 import { withRouter } from 'react-router-dom';
-import { formatLbryUriForWeb } from 'util/uri';
+import { formatLbryUrlForWeb } from 'util/url';
 
 type Props = {
   lastViewed: number,
@@ -34,14 +34,12 @@ class NavigationHistoryItem extends React.PureComponent<Props> {
   render() {
     const { lastViewed, selected, onSelect, claim, uri, slim, history } = this.props;
 
-    let name;
     let title;
     if (claim && claim.value) {
-      ({ name } = claim);
       ({ title } = claim.value);
     }
 
-    const navigatePath = formatLbryUriForWeb(uri);
+    const navigatePath = formatLbryUrlForWeb(uri);
     const onClick =
       onSelect ||
       function() {
@@ -58,7 +56,7 @@ class NavigationHistoryItem extends React.PureComponent<Props> {
       >
         {!slim && <FormField checked={selected} type="checkbox" onChange={onSelect} />}
         <span className="time time--ago">{moment(lastViewed).from(moment())}</span>
-        <Button className="item-list__element" constrict button="link" label={uri} navigate={uri} />
+        <Button className="item-list__element" button="link" label={uri} navigate={uri} />
         <span className="item-list__element">{title}</span>
       </div>
     );

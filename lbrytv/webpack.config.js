@@ -28,9 +28,9 @@ const webConfig = {
       {
         loader: 'babel-loader',
         test: /\.jsx?$/,
-        exclude: /node_modules/,
         options: {
-          rootMode: 'upward',
+          presets: ['@babel/env', '@babel/react', '@babel/flow'],
+          plugins: ['@babel/plugin-proposal-object-rest-spread', '@babel/plugin-proposal-class-properties'],
         },
       },
       {

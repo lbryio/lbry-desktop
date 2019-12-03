@@ -106,7 +106,9 @@ class UserHistoryPage extends React.PureComponent<Props, State> {
     ) : (
       <div className="main--empty">
         <section className="card card--section">
-          <h2 className="card__title">{__('Your history is empty, what are you doing here?')}</h2>
+          <h2 className="card__title card__title--deprecated">
+            {__('Your history is empty, what are you doing here?')}
+          </h2>
 
           <div className="card__actions card__actions--center">
             <Button button="primary" navigate="/" label={__('Explore new content')} />

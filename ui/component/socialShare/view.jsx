@@ -7,7 +7,6 @@ import EmbedArea from 'component/embedArea';
 
 type Props = {
   claim: Claim,
-  onDone: () => void,
   webShareable: boolean,
   isChannel: boolean,
 };
@@ -28,7 +27,7 @@ class SocialShare extends React.PureComponent<Props> {
   render() {
     const { claim, isChannel } = this.props;
     const { canonical_url: canonicalUrl, permanent_url: permanentUrl } = claim;
-    const { webShareable, onDone } = this.props;
+    const { webShareable } = this.props;
     const OPEN_URL = 'https://open.lbry.com/';
     const lbryUrl = canonicalUrl ? canonicalUrl.split('lbry://')[1] : permanentUrl.split('lbry://')[1];
     const lbryWebUrl = lbryUrl.replace(/#/g, ':');
@@ -41,13 +40,13 @@ class SocialShare extends React.PureComponent<Props> {
     return (
       <React.Fragment>
         <CopyableText label={__('LBRY App Link')} copyable={lbryURL} noSnackbar />
-        <div className="card__actions card__actions--center">
+        <div className="">
           <Button
             icon={ICONS.FACEBOOK}
             button="link"
             description={shareOnFb}
             href={`https://facebook.com/sharer/sharer.php?u=${encodedLbryURL}`}
-          />
+          />{' '}
           <Button
             icon={ICONS.TWITTER}
             button="link"
@@ -56,9 +55,6 @@ class SocialShare extends React.PureComponent<Props> {
           />
         </div>
         {webShareable && !isChannel && <EmbedArea label={__('Embedded')} claim={claim} noSnackbar />}
-        <div className="card__actions">
-          <Button button="link" label={__('Done')} onClick={onDone} />
-        </div>
       </React.Fragment>
     );
   }

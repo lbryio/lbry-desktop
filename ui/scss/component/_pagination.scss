@@ -16,11 +16,15 @@
   text-align: center;
 
   &:not(.pagination__item--selected):hover {
-    color: $lbry-black;
+    background-color: var(--color-button-secondary-bg);
   }
 
   &:not(.pagination__item--selected):not(.pagination__item--break):not(.disabled):hover {
-    background-color: $lbry-gray-1;
+    color: var(--color-button-secondary-text);
+
+    &:hover {
+      background-color: var(--color-button-secondary-bg-hover);
+    }
   }
 
   &:not(.pagination__item--previous):not(.pagination__item--next) {
@@ -45,13 +49,11 @@
 
 .pagination__item--previous,
 .pagination__item--next {
-  font-size: var(--font-multiplier-xlarge);
   line-height: 1;
   position: relative;
   padding-top: var(--spacing-small);
 }
 
 .pagination__item--selected {
-  background-color: $lbry-teal-5;
-  color: $lbry-white;
+  background-color: var(--color-button-secondary-bg);
 }

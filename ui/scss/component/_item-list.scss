@@ -1,11 +1,7 @@
 .item-list {
-  background-color: $lbry-white;
+  background-color: black; //white;
   margin-bottom: var(--spacing-large);
   padding: var(--spacing-large);
-
-  [data-mode='dark'] & {
-    background-color: rgba($lbry-white, 0.1);
-  }
 
   .card__actions {
     margin-top: var(--spacing-medium);
@@ -35,9 +31,5 @@
 
 .item-list__row:hover,
 .item-list__row--selected {
-  background-color: rgba($lbry-black, 0.1);
-
-  [data-mode='dark'] & {
-    background-color: rgba($lbry-black, 0.5);
-  }
+  background-color: black; //black; //black, 0.1);
 }

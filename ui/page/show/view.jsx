@@ -90,7 +90,7 @@ function ShowPage(props: Props) {
       innerContent = (
         <Page>
           <section className="card card--section">
-            <div className="card__title">{uri}</div>
+            <div className="card__title card__title--deprecated">{uri}</div>
             <p>
               {__(
                 'In response to a complaint we received under the US Digital Millennium Copyright Act, we have blocked access to this content from our applications.'

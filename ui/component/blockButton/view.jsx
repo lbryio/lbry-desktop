@@ -26,7 +26,6 @@ export default function BlockButton(props: Props) {
   return permanentUrl && !claimIsMine ? (
     <Button
       ref={blockRef}
-      iconColor="red"
       icon={ICONS.BLOCK}
       button={'alt'}
       label={blockedOverride || blockLabel}

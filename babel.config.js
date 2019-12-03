@@ -2,10 +2,8 @@ module.exports = api => {
   api.cache(false);
 
   return {
-    presets: ['@babel/env', '@babel/react', '@babel/flow'],
+    presets: [['@babel/env', { loose: true, modules: false }], '@babel/react', '@babel/flow'],
     plugins: [
-      '@babel/plugin-proposal-object-rest-spread',
-      '@babel/plugin-syntax-dynamic-import',
       'import-glob',
       '@babel/plugin-transform-runtime',
       ['@babel/plugin-proposal-decorators', { decoratorsBeforeExport: true }],

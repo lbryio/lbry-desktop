@@ -1,5 +1,5 @@
 .icon__wrapper {
-  background-color: var(--color-card-actions);
+  background-color: var(--color-primary-alt);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -13,17 +13,13 @@
 
   .icon {
     position: absolute;
-    stroke: $lbry-gray-5;
-  }
-
-  [data-mode='dark'] & {
-    background-color: var(--color-card-actions--dark);
+    stroke: var(--color-primary);
   }
 }
 
 .icon--help {
   margin-left: var(--spacing-small);
-  bottom: -0.3rem;
+  top: 0.2rem;
   opacity: 0.7;
   height: 1rem;
   width: 1rem;

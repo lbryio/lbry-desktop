@@ -1,6 +1,6 @@
 // @flow
 import * as ICONS from 'constants/icons';
-import * as PAGES from 'constants/pages';
+import * as MODALS from 'constants/modal_types';
 import React from 'react';
 import CreditAmount from 'component/common/credit-amount';
 import Button from 'component/button';
@@ -12,10 +12,11 @@ type Props = {
   claimsBalance: number,
   supportsBalance: number,
   tipsBalance: number,
+  doOpenModal: string => void,
 };
 
 const WalletBalance = (props: Props) => {
-  const { balance, claimsBalance, supportsBalance, tipsBalance } = props;
+  const { balance, claimsBalance, supportsBalance, tipsBalance, doOpenModal } = props;
 
   return (
     <React.Fragment>
@@ -27,8 +28,13 @@ const WalletBalance = (props: Props) => {
           </span>
 
           <div className="section__actions">
-            <Button button="inverse" icon={ICONS.SEND} label={__('Send Credits')} navigate={`$/${PAGES.WALLET_SEND}`} />
-            <Button button="inverse" label={__('Your Address')} navigate={`$/${PAGES.WALLET_RECEIVE}`} />
+            <Button button="primary" label={__('Your Address')} onClick={() => doOpenModal(MODALS.WALLET_RECEIVE)} />
+            <Button
+              button="secondary"
+              icon={ICONS.SEND}
+              label={__('Send Credits')}
+              onClick={() => doOpenModal(MODALS.WALLET_SEND)}
+            />
           </div>
         </div>
 
