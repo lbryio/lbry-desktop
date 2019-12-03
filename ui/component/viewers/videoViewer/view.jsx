@@ -21,7 +21,6 @@ const SEEK_BACKWARD_KEYCODE = ARROW_LEFT_KEYCODE;
 const SEEK_STEP = 10; // time to seek in seconds
 
 const VIDEO_JS_OPTIONS: { poster?: string } = {
-  autoplay: true,
   controls: true,
   preload: 'auto',
   playbackRates: [0.25, 0.5, 0.75, 1, 1.1, 1.25, 1.5, 2],
@@ -112,9 +111,14 @@ function VideoViewer(props: Props) {
 
     if (!requireRedraw) {
       player = videojs(videoNode, videoJsOptions, function() {
-        const self = this;
-        self.volume(volume);
-        self.muted(muted);
+        player.volume(volume);
+        player.muted(muted);
+        player.ready(() => {
+          // In the future this should be replaced with something that checks if the
+          // video is actually playing after calling play()
+          // If it's not, fall back to the play button
+          player.play();
+        });
       });
     }
 
