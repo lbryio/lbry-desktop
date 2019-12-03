@@ -17,6 +17,7 @@ import SubscribeButton from 'component/subscribeButton';
 import ChannelThumbnail from 'component/channelThumbnail';
 import BlockButton from 'component/blockButton';
 import Button from 'component/button';
+import { generateStreamUrl } from '../../util/lbrytv';
 
 type Props = {
   uri: string,
@@ -29,6 +30,7 @@ type Props = {
   isResolvingUri: boolean,
   history: { push: string => void },
   thumbnail: string,
+  mediaType: string,
   title: string,
   nsfw: boolean,
   placeholder: string,
@@ -62,6 +64,7 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
     isResolvingUri,
     thumbnail,
     title,
+    mediaType,
     nsfw,
     resolveUri,
     claim,
@@ -195,13 +198,18 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
         'claim-preview--pending': pending,
       })}
     >
+<<<<<<< HEAD
       {isChannel && claim ? (
+=======
+      {isChannel ? (
+>>>>>>> dirty, unacceptable image rendering
         <UriIndicator uri={uri} link>
           <ChannelThumbnail uri={uri} obscure={channelIsBlocked} />
         </UriIndicator>
       ) : (
         <FileThumbnail thumbnail={thumbnail} />
       )}
+<<<<<<< HEAD
       <div className="claim-preview__text">
         <div className="claim-preview-metadata">
           <div className="claim-preview-info">
@@ -209,6 +217,12 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
               {claim ? <TruncatedText text={title || claim.name} lines={2} /> : <span>{__('Nothing here')}</span>}
             </div>
             {!isChannel && claim && <FileProperties uri={uri} />}
+=======
+      <div className="claim-preview-metadata">
+        <div className="claim-preview-info">
+          <div className="claim-preview-title">
+            {claim ? <TruncatedText text={title || claim.name} lines={1} /> : <span>{__('Nothing here')}</span>}
+>>>>>>> dirty, unacceptable image rendering
           </div>
 
           <div className="media__subtitle">
