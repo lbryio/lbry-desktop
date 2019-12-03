@@ -13,6 +13,7 @@ import {
   selectChannelIsBlocked,
   doClearPublish,
   doPrepareEdit,
+  makeSelectMediaTypeForUri,
 } from 'lbry-redux';
 import { selectBlackListedOutpoints, selectFilteredOutpoints } from 'lbryinc';
 import { selectShowMatureContent } from 'redux/selectors/settings';
@@ -30,6 +31,7 @@ const select = (state, props) => ({
   isResolvingUri: props.uri && makeSelectIsUriResolving(props.uri)(state),
   thumbnail: props.uri && makeSelectThumbnailForUri(props.uri)(state),
   title: props.uri && makeSelectTitleForUri(props.uri)(state),
+  mediaType: makeSelectMediaTypeForUri(props.uri)(state),
   nsfw: props.uri && makeSelectClaimIsNsfw(props.uri)(state),
   blackListedOutpoints: selectBlackListedOutpoints(state),
   filteredOutpoints: selectFilteredOutpoints(state),
