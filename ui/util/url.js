@@ -21,7 +21,7 @@ exports.formatFileSystemPath = path => {
   ex: lbry://?rewards
   ex: open.lbry.com/?rewards
 */
-exports.formatCustomUrl = path => {
+exports.formatInAppUrl = path => {
   // Determine if we need to add a leading "/$/" for app pages
   const APP_PAGE_REGEX = /(\?)([a-z]*)(.*)/;
   const appPageMatches = APP_PAGE_REGEX.exec(path);
@@ -32,16 +32,10 @@ exports.formatCustomUrl = path => {
     let actualUrl = '/$/' + page;
 
     if (queryString) {
-      if (queryString.startsWith('?')) {
-        actualUrl += queryString;
-      } else if (queryString.startsWith('&')) {
-        // Replace the leading "&" with a "?" because we must have lost the "?" from the page name
-        // /?rewards&a=b => /$/rewards?a=b
-        actualUrl += `?${queryString.slice(1)}`;
-      }
-
-      return actualUrl;
+      actualUrl += `?${queryString.slice(1)}`;
     }
+
+    return actualUrl;
   }
 
   // Regular claim url

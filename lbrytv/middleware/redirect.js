@@ -1,6 +1,6 @@
 const config = require('../../config');
 const PAGES = require('../../ui/constants/pages');
-const { formatCustomUrl } = require('../../ui/util/url');
+const { formatInAppUrl } = require('../../ui/util/url');
 const { parseURI } = require('lbry-redux');
 
 async function redirectMiddleware(ctx, next) {
@@ -20,7 +20,7 @@ async function redirectMiddleware(ctx, next) {
 
   if (requestHost === 'open.lbry.com' || requestHost === 'open.lbry.io') {
     const openQuery = '?src=open';
-    let redirectUrl = config.URL + formatCustomUrl(url, openQuery);
+    let redirectUrl = config.URL + formatInAppUrl(url, openQuery);
 
     if (redirectUrl.includes('?')) {
       redirectUrl = redirectUrl.replace('?', `${openQuery}&`);
