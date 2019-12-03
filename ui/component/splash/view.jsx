@@ -146,19 +146,10 @@ export default class SplashScreen extends React.PureComponent<Props, State> {
       });
 
       return;
-    } else if (blockchainHeaders) {
-      const blockChainHeaders = blockchainHeaders;
-      if (blockChainHeaders.download_progress < 100) {
-        this.setState({
-          message: __('Blockchain Sync'),
-          details: `${__('Catching up...')} (${blockchainHeaders.download_progress}%)`,
-        });
-      }
-    } else if (wallet && wallet.blocks_behind > 0) {
-      const amountBehind = wallet.blocks_behind === 1 ? '%amountBehind% block behind' : '%amountBehind% blocks behind';
+    }  else if (wallet && wallet.blocks_behind > 0) {
       this.setState({
         message: __('Blockchain Sync'),
-        details: `${__('Catching up...')} (${__(amountBehind, { amountBehind: wallet.blocks_behind })})`,
+        details: `${__('Catching up...')} (${wallet.headers_synchronization_progress}%)`,
       });
     } else if (wallet && wallet.blocks_behind === 0 && !status.is_running && startupStatus.database) {
       this.setState({
