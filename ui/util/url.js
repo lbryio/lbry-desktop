@@ -1,5 +1,3 @@
-const LBRY_INC_DOMAINS = ['lbry.io', 'lbry.com', 'lbry.tv', 'lbry.tech', 'lbry.fund', 'spee.ch'];
-
 exports.formatLbryUrlForWeb = uri => {
   return uri.replace('lbry://', '/').replace(/#/g, ':');
 };
@@ -16,23 +14,6 @@ exports.formatFileSystemPath = path => {
   }
 
   return encodeURI(`file://${webUrl}`).replace(/[?#]/g, encodeURIComponent);
-};
-
-exports.isLBRYDomain = uri => {
-  if (!uri) {
-    return;
-  }
-
-  const myURL = new URL(uri);
-  const hostname = myURL.hostname;
-
-  for (let domain of LBRY_INC_DOMAINS) {
-    if (hostname.endsWith(domain)) {
-      return true;
-    }
-  }
-
-  return false;
 };
 
 /*
