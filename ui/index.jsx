@@ -28,7 +28,7 @@ import pjson from 'package.json';
 import app from './app';
 import doLogWarningConsoleMessage from './logWarningConsoleMessage';
 import { ConnectedRouter, push } from 'connected-react-router';
-import { formatLbryUrlForWeb, formatCustomUrl } from 'util/url';
+import { formatLbryUrlForWeb, formatInAppUrl } from 'util/url';
 import { PersistGate } from 'redux-persist/integration/react';
 import analytics from 'analytics';
 import { getAuthToken, setAuthToken } from 'util/saved-passwords';
@@ -167,7 +167,7 @@ ipcRenderer.on('open-uri-requested', (event, url, newSession) => {
 
   const path = url.slice('lbry://'.length);
   if (path.startsWith('?')) {
-    const redirectUrl = formatCustomUrl(path);
+    const redirectUrl = formatInAppUrl(path);
     return app.store.dispatch(push(redirectUrl));
   }
 
