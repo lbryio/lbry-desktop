@@ -887,6 +887,8 @@
   "An email was sent to %email%. Follow the link to %verify_text%. After, this page will update automatically.": "An email was sent to %email%. Follow the link to %verify_text%. After, this page will update automatically.",
   "Your email preferences": "Your email preferences",
   "allow you to receive notifications related to new content.": "allow you to receive notifications related to new content.",
+  "files": "files",
+  "Invalid claim ID %claimId%.": "Invalid claim ID %claimId%."
   "Suggested": "Suggested",
   "%amountBehind% blocks behind": "%amountBehind% blocks behind",
   "Startup Preferences": "Startup Preferences",
@@ -898,9 +900,7 @@
   "Checking your publishes...": "Checking your publishes...",
   "Checking your publishes": "Checking your publishes",
   "Checking for channels": "Checking for channels",
-  "files": "files",
   "Error Starting Up": "Error Starting Up",
   "Reach out to hello@lbry.com for help, or check out %help_link%.": "Reach out to hello@lbry.com for help, or check out %help_link%.",
   "You're not following any tags. Smash that %customize% button!": "You're not following any tags. Smash that %customize% button!",
   "customize": "customize"
-}

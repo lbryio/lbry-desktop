@@ -3,19 +3,19 @@ import React from 'react';
 import Button from 'component/button';
 
 type Props = {
-  numberOfNsfwClaims: number,
+  numberOfHiddenClaims: number,
   obscureNsfw: boolean,
   className: ?string,
 };
 
 export default (props: Props) => {
-  const { numberOfNsfwClaims, obscureNsfw } = props;
+  const { numberOfHiddenClaims, obscureNsfw } = props;
 
   return (
     obscureNsfw &&
-    Boolean(numberOfNsfwClaims) && (
+    Boolean(numberOfHiddenClaims) && (
       <div className="section--padded section__subtitle">
-        {numberOfNsfwClaims} {numberOfNsfwClaims > 1 ? __('files') : __('file')} {__('hidden due to your')}{' '}
+        {numberOfHiddenClaims} {numberOfHiddenClaims > 1 ? __('files') : __('file')} {__('hidden due to your')}{' '}
         <Button button="link" navigate="/$/settings" label={__('content viewing preferences')} />.
       </div>
     )

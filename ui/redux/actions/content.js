@@ -12,6 +12,7 @@ import { setSubscriptionLatest, doUpdateUnreadSubscriptions } from 'redux/action
 import { makeSelectUnreadByChannel } from 'redux/selectors/subscriptions';
 import {
   ACTIONS,
+  MATURE_TAGS,
   Lbry,
   Lbryapi,
   makeSelectFileInfoForUri,
@@ -137,21 +138,28 @@ export function doSetPlayingUri(uri: ?string) {
 }
 
 export function doFetchClaimsByChannel(uri: string, page: number = 1, pageSize: number = PAGE_SIZE) {
-  return (dispatch: Dispatch) => {
-    dispatch({
-      type: ACTIONS.FETCH_CHANNEL_CLAIMS_STARTED,
-      data: { uri, page },
-    });
-
-    Lbry.claim_search({
+  return (dispatch: Dispatch, getState: GetState) => {
+    const state = getState();
+    const showMature = makeSelectClientSetting(SETTINGS.SHOW_MATURE)(state);
+    const params = {
       channel: uri,
       page,
       page_size: pageSize,
       valid_channel_signature: true,
       order_by: ['release_time'],
-    }).then(result => {
-      const { items: claims, total_items: claimsInChannel, page: returnedPage } = result;
+    };
 
+    if (!showMature) {
+      params['not_tags'] = MATURE_TAGS;
+    }
+
+    dispatch({
+      type: ACTIONS.FETCH_CHANNEL_CLAIMS_STARTED,
+      data: { uri, page },
+    });
+
+    Lbry.claim_search(params).then(result => {
+      const { items: claims, page: returnedPage, total_items: claimsInChannel, total_pages: pageTotal } = result;
       if (claims && claims.length) {
         if (page === 1) {
           const latest = claims[0];
@@ -174,6 +182,7 @@ export function doFetchClaimsByChannel(uri: string, page: number = 1, pageSize: 
           claimsInChannel,
           claims: claims || [],
           page: returnedPage || undefined,
+          totalPages: pageTotal,
         },
       });
     });
