@@ -78,8 +78,7 @@
 
   // Inline code
   code {
-    background-color: black; //gray-1;
-    color: black; //gray-5;
+    background-color: var(--color-blockquote);
     display: inline-block;
     margin: var(--spacing-miniscule);
     border-radius: 0.2rem;
