@@ -97,7 +97,7 @@ function App(props: Props) {
     if (!uploadCount) return;
     const handleBeforeUnload = event => {
       event.preventDefault();
-      event.returnValue = 'magic';
+      event.returnValue = 'magic'; // without setting this to something it doesn't work
     };
     window.addEventListener('beforeunload', handleBeforeUnload);
     return () => window.removeEventListener('beforeunload', handleBeforeUnload);
