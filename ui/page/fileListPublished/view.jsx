@@ -7,6 +7,7 @@ import Paginate from 'component/common/paginate';
 import { PAGE_SIZE } from 'constants/claim';
 import WebUploadList from 'component/webUploadList';
 import Spinner from 'component/spinner';
+import * as ICONS from 'constants/icons';
 
 type Props = {
   checkPendingPublishes: () => void,
@@ -35,7 +36,9 @@ function FileListPublished(props: Props) {
             loading={fetching}
             persistedStorageKey="claim-list-published"
             uris={urls}
-            headerAltControls={<Button button="link" label={__('New Publish')} navigate="/$/publish" />}
+            headerAltControls={
+              <Button button="link" label={__('New Publish')} navigate="/$/publish" icon={ICONS.NEW_PUBLISH} />
+            }
           />
           <Paginate totalPages={Math.ceil(Number(urlTotal) / Number(PAGE_SIZE))} loading={fetching} />
         </div>

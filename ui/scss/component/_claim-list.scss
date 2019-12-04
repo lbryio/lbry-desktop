@@ -49,6 +49,11 @@
   & > * {
     margin-left: var(--spacing-small);
   }
+
+  .button__content svg {
+    width: var(--claim-list-alt-control-icon-width);
+    height: var(--claim-list-alt-control-icon-height);
+  }
 }
 
 .claim-preview {
