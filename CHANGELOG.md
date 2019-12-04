@@ -4,6 +4,13 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [0.39.0] - [2019-3-19]
+
+### Added
+- Allows channel thumbnails to be clickable on file pages ([#3304](https://github.com/lbryio/lbry-desktop/pull/3304))
+
+
+
 ## [0.37.2] - [2019-11-21]
 
 ### Fixed
@@ -13,7 +20,6 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Undefined tags prevents homepage from loading ([#3146](https://github.com/lbryio/lbry-desktop/pull/3146))
 
 ### Added
-- Allows channel thumbnails to be clickable on file pages ([#3304](https://github.com/lbryio/lbry-desktop/pull/3304))
 - Setting to start the app minimized when you login (Linux/Windows only) ([#3236](https://github.com/lbryio/lbry-desktop/pull/3236))
 - Search on downloads page ([#2969](https://github.com/lbryio/lbry-desktop/pull/2969))
 - Clear support state when clearing cache in settings([#3149](https://github.com/lbryio/lbry-desktop/pull/3149))
