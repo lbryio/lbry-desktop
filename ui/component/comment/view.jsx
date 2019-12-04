@@ -36,36 +36,47 @@ function Comment(props: Props) {
   // to debounce subsequent requests
   const shouldFetch =
     claim === undefined || (claim !== null && claim.value_type === 'channel' && isEmpty(claim.meta) && !pending);
+
   useEffect(() => {
     // If author was extracted from the URI, then it must be valid.
     if (authorUri && author && !isResolvingUri && shouldFetch) {
       resolveUri(authorUri);
     }
   }, [isResolvingUri, shouldFetch, author, authorUri, resolveUri]);
+
   return (
     <li className="comment">
       <div className="comment__author-thumbnail">
-        {authorUri ? <ChannelThumbnail uri={authorUri} obscure={channelIsBlocked} /> : <ChannelThumbnail />}
+        {authorUri ? <ChannelThumbnail uri={authorUri} obscure={channelIsBlocked} small /> : <ChannelThumbnail small />}
       </div>
 
       <div className="comment__body_container">
         <span className="comment__meta">
-          <Button
-            className="button--uri-indicator truncated-text comment__author"
-            navigate={authorUri}
-            label={author || __('Anonymous')}
-          />
+          {!author ? (
+            <span className="comment__author">{__('Anonymous')}</span>
+          ) : (
+            <Button
+              className="button--uri-indicator truncated-text comment__author"
+              navigate={authorUri}
+              label={author}
+            />
+          )}
+
           <time className="comment__time" dateTime={timePosted}>
             {relativeDate(timePosted)}
           </time>
         </span>
         <div>
           {message.length >= LENGTH_TO_COLLAPSE ? (
-            <Expandable className="comment__message">
-              <MarkdownPreview content={message} promptLinks />
-            </Expandable>
+            <div className="comment__message">
+              <Expandable>
+                <MarkdownPreview content={message} />
+              </Expandable>
+            </div>
           ) : (
-            <MarkdownPreview content={message} promptLinks />
+            <div className="comment__message">
+              <MarkdownPreview content={message} />
+            </div>
           )}
         </div>
       </div>

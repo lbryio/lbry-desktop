@@ -10,25 +10,29 @@ type Props = {
   className?: string,
   thumbnailPreview: ?string,
   obscure?: boolean,
+  small?: boolean,
 };
 
 function ChannelThumbnail(props: Props) {
-  const { thumbnail, uri, className, thumbnailPreview, obscure } = props;
-  // Generate a random color class based on the first letter of the channel name
-  let initializer;
-  if (thumbnail) {
-    const { channelName } = parseURI(uri);
-    initializer = channelName.charCodeAt(0) - 65; // will be between 0 and 57
-  } else {
-    // if we want to default a thumbnail
-    initializer = Math.floor(Math.random() * 104729); // 10000th prime number
-  }
-  const colorClassName = `channel-thumbnail__default--${initializer % 4}`;
+  const { thumbnail, uri, className, thumbnailPreview, obscure, small = false } = props;
   const showThumb = !obscure && !!thumbnail;
+
+  // Generate a random color class based on the first letter of the channel name
+  const { channelName } = parseURI(uri);
+
+  let initializer;
+  let colorClassName;
+  if (channelName) {
+    initializer = channelName.charCodeAt(0) - 65; // will be between 0 and 57
+    colorClassName = `channel-thumbnail__default--${Math.abs(initializer % 4)}`;
+  } else {
+    colorClassName = `channel-thumbnail__default--4`;
+  }
   return (
     <div
       className={classnames('channel-thumbnail', className, {
         [colorClassName]: !showThumb,
+        'channel-thumbnail--small': small,
       })}
     >
       {!showThumb && <img className="channel-thumbnail__default" src={thumbnailPreview || Gerbil} />}

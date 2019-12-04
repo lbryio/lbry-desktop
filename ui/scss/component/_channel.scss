@@ -37,6 +37,11 @@ $metadata-z-index: 1;
   margin-right: var(--spacing-medium);
 }
 
+.channel-thumbnail--small {
+  height: 3rem;
+  width: 3rem;
+}
+
 .channel__thumbnail--channel-page {
   position: absolute;
   height: var(--channel-thumbnail-width);
@@ -78,6 +83,10 @@ $metadata-z-index: 1;
 
 .channel-thumbnail__default--3 {
   background-color: #ec8383;
+}
+
+.channel-thumbnail__default--4 {
+  background-color: #ccc;
 }
 
 .channel__primary-info {

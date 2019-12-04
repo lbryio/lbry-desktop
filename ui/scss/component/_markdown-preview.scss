@@ -86,6 +86,10 @@
     padding: calc(var(--spacing-miniscule) - 4px) var(--spacing-miniscule);
   }
 
+  a {
+    @extend .button--link;
+  }
+
   a,
   button {
     display: inline-block;
