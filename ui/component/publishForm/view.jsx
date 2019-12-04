@@ -17,7 +17,6 @@ import TagsSelect from 'component/tagsSelect';
 import PublishText from 'component/publishText';
 import PublishPrice from 'component/publishPrice';
 import PublishFile from 'component/publishFile';
-import PublishName from 'component/publishName';
 import PublishAdditionalOptions from 'component/publishAdditionalOptions';
 import PublishFormErrors from 'component/publishFormErrors';
 import SelectThumbnail from 'component/selectThumbnail';
@@ -172,7 +171,6 @@ function PublishForm(props: Props) {
           }
         />
 
-        <PublishName disabled={formDisabled} />
         <PublishPrice disabled={formDisabled} />
         <PublishAdditionalOptions disabled={formDisabled} />
 
