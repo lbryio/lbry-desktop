@@ -6,24 +6,17 @@ import BusyIndicator from 'component/common/busy-indicator';
 import Button from 'component/button';
 import analytics from 'analytics';
 
-import { CHANNEL_NEW, MINIMUM_PUBLISH_BID, INVALID_NAME_ERROR } from 'constants/claim';
+import { MINIMUM_PUBLISH_BID, INVALID_NAME_ERROR } from 'constants/claim';
 
 type Props = {
-  channel: string, // currently selected channel
-  channels: ?Array<ChannelClaim>,
   balance: number,
-  onChannelChange: string => void,
   createChannel: (string, number) => Promise<any>,
-  fetchChannelListMine: () => void,
-  fetchingChannels: boolean,
-  emailVerified: boolean,
-  onSuccess: () => void,
+  onSuccess?: ({}) => void,
 };
 
 type State = {
   newChannelName: string,
   newChannelBid: number,
-  addingChannel: boolean,
   creatingChannel: boolean,
   newChannelNameError: string,
   newChannelBidError: string,
@@ -37,32 +30,15 @@ class ChannelCreate extends React.PureComponent<Props, State> {
     this.state = {
       newChannelName: '',
       newChannelBid: 0.1,
-      addingChannel: false,
       creatingChannel: false,
       newChannelNameError: '',
       newChannelBidError: '',
       createChannelError: undefined,
     };
 
-    (this: any).handleChannelChange = this.handleChannelChange.bind(this);
     (this: any).handleNewChannelNameChange = this.handleNewChannelNameChange.bind(this);
     (this: any).handleNewChannelBidChange = this.handleNewChannelBidChange.bind(this);
     (this: any).handleCreateChannelClick = this.handleCreateChannelClick.bind(this);
-  }
-
-  handleChannelChange(event: SyntheticInputEvent<*>) {
-    const { onChannelChange } = this.props;
-    const { newChannelBid } = this.state;
-    const channel = event.target.value;
-
-    if (channel === CHANNEL_NEW) {
-      this.setState({ addingChannel: true });
-      onChannelChange(channel);
-      this.handleNewChannelBidChange(newChannelBid);
-    } else {
-      this.setState({ addingChannel: false });
-      onChannelChange(channel);
-    }
   }
 
   handleNewChannelNameChange(event: SyntheticInputEvent<*>) {
@@ -103,7 +79,7 @@ class ChannelCreate extends React.PureComponent<Props, State> {
   }
 
   handleCreateChannelClick() {
-    const { balance, createChannel, onChannelChange } = this.props;
+    const { balance, createChannel, onSuccess } = this.props;
     const { newChannelBid, newChannelName } = this.state;
 
     const channelName = `@${newChannelName.trim()}`;
@@ -120,11 +96,12 @@ class ChannelCreate extends React.PureComponent<Props, State> {
     const success = channelClaim => {
       this.setState({
         creatingChannel: false,
-        addingChannel: false,
       });
       analytics.apiLogPublish(channelClaim);
-      onChannelChange(channelName);
-      this.props.onSuccess();
+
+      if (onSuccess !== undefined) {
+        onSuccess({ ...this.props, ...this.state });
+      }
     };
 
     const failure = () => {
