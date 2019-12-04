@@ -21,7 +21,7 @@ function ChannelCreatePage(props: Props) {
     }
   }
   let history = useHistory();
-  const returnToChannelList = _ => history.push(`/$/${PAGES.CHANNELS}`);
+  const returnToChannelList = () => history.push(`/$/${PAGES.CHANNELS}`);
   return (
     <Page>
       {balance === 0 && (
