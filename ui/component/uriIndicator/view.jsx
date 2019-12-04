@@ -65,18 +65,22 @@ class UriIndicator extends React.PureComponent<Props> {
         return inner;
       }
 
-      const Wrapper = addTooltip
-        ? ({ children }) => (
-            <Tooltip label={<ClaimPreview uri={channelLink} type="tooltip" placeholder={false} />}>{children}</Tooltip>
-          )
-        : 'span';
-      /* to wrap the UriIndicator element around other DOM nodes as a button */
-      const content = children ? children : (<Wrapper>{inner}</Wrapper>);
-      return (
-        <Button className="button--uri-indicator" navigate={channelLink}>
-          {content}
-        </Button>
-      );
+      if (children) {
+        return <Button navigate={channelLink}>{children}</Button>;
+      } else {
+        const Wrapper = addTooltip
+          ? ({ children }) => (
+              <Tooltip label={<ClaimPreview uri={channelLink} type="tooltip" placeholder={false} />}>
+                {children}
+              </Tooltip>
+            )
+          : 'span';
+        return (
+          <Button className="button--uri-indicator" navigate={channelLink}>
+            <Wrapper>{inner}</Wrapper>
+          </Button>
+        );
+      }
     } else {
       return null;
     }
