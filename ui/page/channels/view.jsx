@@ -50,7 +50,7 @@ export default function ChannelsPage(props: Props) {
                 iconSize={20}
                 label={__('New Channel')}
                 button="link"
-                icon={ICONS.EDIT}
+                icon={ICONS.NEW_CHANNEL}
                 navigate={`/$/${PAGES.CHANNEL_CREATE}`}
               />
             }
@@ -69,7 +69,7 @@ export default function ChannelsPage(props: Props) {
                     iconSize={20}
                     label={__('New Channel')}
                     button="link"
-                    icon={ICONS.EDIT}
+                    icon={ICONS.NEW_CHANNEL}
                     navigate={`/$/${PAGES.CHANNEL_CREATE}`}
                   />
                 </div>
