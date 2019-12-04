@@ -1,14 +1,14 @@
-.comments {
-  @extend .ul--no-style;
-}
-
 .comment {
   font-size: var(--font-multiplier-small);
   padding: var(--spacing-small) 0;
   flex-direction: row;
-  display: flex;
-  &:not(:last-of-type) {
-    border-bottom: 1px solid var(--lbry-gray-1);
+  font-size: var(--font-small);
+  padding: var(--spacing-medium) 0;
+  margin: 0;
+
+  &:first-of-type {
+    padding-top: 0;
+  }
 
   &:not(:last-of-type) {
     border-bottom: 1px solid var(--color-border);
@@ -16,44 +16,27 @@
 }
 
 .comment__body_container {
-  padding: var(--spacing-small) 0;
-  display: inline-block;
-  width: 100%;
-  width: -moz-available;
-  width: -webkit-fill-available;
-  width: available;
+  padding-right: var(--spacing-small);
 }
 
 .comment__meta {
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-end;
   text-overflow: ellipsis;
-  time {
-    opacity: 0.3;
-  }
+  margin-bottom: var(--spacing-small);
 }
 
 .comment__message {
   white-space: pre-line;
+  margin-top: var(--spacing-small);
 }
 
 .comment__author {
-  margin-bottom: 1rem;
-  text-overflow: ellipsis; // This is where the magic happens
-  flex: 1;
-  flex-basis: 400px;
-  font-weight: 600;
-}
-
-.comment__author-thumbnail {
-  display: inline-block;
+  text-overflow: ellipsis;
+  padding-right: var(--spacing-small);
 }
 
 .comment__time {
-  flex-basis: 200px;
-  text-align: right;
-  justify-content: flex-end;
+  opacity: 0.3;
+  white-space: nowrap;
 }
 
 .comment__char-count {
