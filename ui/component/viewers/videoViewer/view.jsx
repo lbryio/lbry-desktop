@@ -133,6 +133,7 @@ function VideoViewer(props: Props) {
       // requireRedraw just makes it so the video component is removed from the page _by react_
       // Then it's set to false immediately after so we can re-mount a new player
       setRequireRedraw(true);
+      player.pause();
     };
   }, [videoRef, source, contentType, setRequireRedraw, requireRedraw]);
 
