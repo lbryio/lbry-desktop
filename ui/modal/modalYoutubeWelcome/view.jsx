@@ -14,7 +14,7 @@ const YoutubeWelcome = (props: Props) => {
     <Modal isOpen type="card" onAborted={doHideModal}>
       <Confetti recycle={false} style={{ position: 'fixed' }} numberOfPieces={100} />
       <Card
-        title={__('Welcome To The Promise Land')}
+        title={__('Welcome To The Promised Land')}
         subtitle={__(
           'Looks like you are coming from YouTube, some funny pun or something that introduces them to LBRY.'
         )}
