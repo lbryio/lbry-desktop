@@ -16,7 +16,9 @@ function BidHelpText(props: Props) {
     } else if (amountNeededForTakeover === 0) {
       bidHelpText = __('You currently have the highest bid for this name.');
     } else if (!amountNeededForTakeover) {
-      bidHelpText = __('Any amount will give you the winning bid.');
+      bidHelpText = __(
+        'Any amount will give you the highest bid, but larger amounts help your content be trusted and discovered.'
+      );
     } else {
       bidHelpText = __(
         'If you bid more than %amount% LBC, when someone navigates to %uri%, it will load your published content. However, you can get a longer version of this URL for any bid.',
