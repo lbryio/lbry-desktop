@@ -53,15 +53,6 @@ let baseConfig = {
         },
       },
       {
-        test: /\.(woff|woff2)$/,
-        use: {
-          loader: 'file-loader',
-          options: {
-            outputPath: 'static/font',
-          },
-        },
-      },
-      {
         test: /\.(vert|frag|glsl)$/,
         use: {
           loader: 'raw-loader',

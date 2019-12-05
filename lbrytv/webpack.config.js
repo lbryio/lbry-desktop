@@ -68,6 +68,10 @@ const webConfig = {
         from: `${STATIC_ROOT}/img/og.png`,
         to: `${DIST_ROOT}/og.png`,
       },
+      {
+        from: `${STATIC_ROOT}/font/`,
+        to: `${DIST_ROOT}/font/`,
+      },
     ]),
     new DefinePlugin({
       IS_WEB: JSON.stringify(true),
