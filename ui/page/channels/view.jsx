@@ -7,6 +7,8 @@ import YoutubeTransferStatus from 'component/youtubeTransferStatus';
 import Spinner from 'component/spinner';
 import * as PAGES from 'constants/pages';
 import * as ICONS from 'constants/icons';
+import * as MODALS from 'constants/modal_types';
+import { doOpenModal } from '../../redux/actions/app';
 
 type Props = {
   channels: Array<ChannelClaim>,
@@ -49,9 +51,8 @@ export default function ChannelsPage(props: Props) {
               <Button
                 iconSize={20}
                 label={__('New Channel')}
-                button="link"
                 icon={ICONS.NEW_CHANNEL}
-                navigate={`/$/${PAGES.CHANNEL_CREATE}`}
+                onClick={() => doOpenModal(MODALS.CREATE_CHANNEL)}
               />
             }
           />
