@@ -165,10 +165,10 @@ function ClaimListDiscover(props: Props) {
       <p>
         <I18nMessage
           tokens={{
-            support: <Button button="link" label={__('contact support')} href="https://lbry.com/faq/support" />,
+            contact_support: <Button button="link" label={__('contact support')} href="https://lbry.com/faq/support" />,
           }}
         >
-          If you continue to have issues, please %support%.
+          If you continue to have issues, please %contact_support%.
         </I18nMessage>
       </p>
     </div>
