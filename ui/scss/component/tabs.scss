@@ -36,10 +36,6 @@
     content: '';
   }
 
-  &[data-selected] {
-    color: var(--color-link-active);
-  }
-
   &:focus {
     box-shadow: none;
   }

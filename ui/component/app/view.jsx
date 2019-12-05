@@ -16,6 +16,7 @@ import { withRouter } from 'react-router';
 import usePrevious from 'effects/use-previous';
 import Button from 'component/button';
 // @if TARGET='web'
+import OpenInAppLink from 'component/openInAppLink';
 import YoutubeWelcome from 'component/youtubeWelcome';
 // @endif
 
@@ -199,6 +200,7 @@ function App(props: Props) {
 
       {/* @if TARGET='web' */}
       <YoutubeWelcome />
+      <OpenInAppLink uri={uri} />
       {/* @endif */}
 
       {/* @if TARGET='app' */}
