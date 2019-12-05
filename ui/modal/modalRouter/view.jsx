@@ -29,6 +29,7 @@ import ModalPasswordUnsave from 'modal/modalPasswordUnsave';
 import ModalCommentAcknowledgement from 'modal/modalCommentAcknowledgement';
 import ModalWalletSend from 'modal/modalWalletSend';
 import ModalWalletReceive from 'modal/modalWalletReceive';
+import ModalYoutubeWelcome from 'modal/modalYoutubeWelcome';
 
 type Props = {
   modal: { id: string, modalProps: {} },
@@ -105,6 +106,8 @@ function ModalRouter(props: Props) {
       return <ModalWalletSend {...modalProps} />;
     case MODALS.WALLET_RECEIVE:
       return <ModalWalletReceive {...modalProps} />;
+    case MODALS.YOUTUBE_WELCOME:
+      return <ModalYoutubeWelcome />;
     default:
       return null;
   }

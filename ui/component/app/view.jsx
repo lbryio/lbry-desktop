@@ -15,6 +15,9 @@ import FileViewer from 'component/fileViewer';
 import { withRouter } from 'react-router';
 import usePrevious from 'effects/use-previous';
 import Button from 'component/button';
+// @if TARGET='web'
+import YoutubeWelcome from 'component/youtubeWelcome';
+// @endif
 
 export const MAIN_WRAPPER_CLASS = 'main-wrapper';
 // @if TARGET='app'
@@ -193,6 +196,10 @@ function App(props: Props) {
       <Router />
       <ModalRouter />
       <FileViewer pageUri={uri} />
+
+      {/* @if TARGET='web' */}
+      <YoutubeWelcome />
+      {/* @endif */}
 
       {/* @if TARGET='app' */}
       {showUpgradeButton && (
