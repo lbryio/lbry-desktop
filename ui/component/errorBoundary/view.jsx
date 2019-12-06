@@ -36,7 +36,8 @@ class ErrorBoundary extends React.Component<Props, State> {
 
     // @if TARGET='web'
     errorMessage += 'lbry.tv\n';
-    errorMessage += window.location.pathname + window.location.search;
+    errorMessage += `page: ${window.location.pathname + window.location.search}\n`;
+    errorMessage += error.stack;
     this.log(errorMessage);
     // @endif
     // @if TARGET='app'
