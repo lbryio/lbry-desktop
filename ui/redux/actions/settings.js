@@ -91,7 +91,7 @@ export function doSetDarkTime(value, options) {
 export function doSetLanguage(language) {
   return (dispatch, getState) => {
     const { settings } = getState();
-    if (settings.language !== language || (settings.loadedLanguages && !settings.loadedLanguages.include(language))) {
+    if (settings.language !== language || (settings.loadedLanguages && !settings.loadedLanguages.includes(language))) {
       // this should match the behavior/logic in index-web.html
       fetch('https://lbry.com/i18n/get/lbry-desktop/app-strings/' + language + '.json')
         .then(r => r.json())
