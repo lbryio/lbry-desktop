@@ -1,5 +1,4 @@
 // @flow
-import * as ICONS from 'constants/icons';
 import * as PAGES from 'constants/pages';
 import React, { useEffect, useRef, useState } from 'react';
 import classnames from 'classnames';
@@ -14,7 +13,7 @@ import Yrbl from 'component/yrbl';
 import FileViewer from 'component/fileViewer';
 import { withRouter } from 'react-router';
 import usePrevious from 'effects/use-previous';
-import Button from 'component/button';
+import Nag from 'component/common/nag';
 // @if TARGET='web'
 import OpenInAppLink from 'component/openInAppLink';
 import YoutubeWelcome from 'component/youtubeWelcome';
@@ -205,16 +204,7 @@ function App(props: Props) {
 
       {/* @if TARGET='app' */}
       {showUpgradeButton && (
-        <div className="snack-bar--upgrade">
-          {__('Upgrade is ready')}
-          <Button
-            className="snack-bar__action"
-            button="alt"
-            icon={ICONS.DOWNLOAD}
-            label={__('Install now')}
-            onClick={requestDownloadUpgrade}
-          />
-        </div>
+        <Nag message={__('An upgrade is available.')} actionText={__('Install now')} onClick={requestDownloadUpgrade} />
       )}
       {/* @endif */}
       {isEnhancedLayout && <Yrbl className="yrbl--enhanced" />}
