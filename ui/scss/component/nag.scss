@@ -1,0 +1,36 @@
+.nag {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  padding: var(--spacing-small);
+  background-color: var(--color-nag);
+  color: var(--color-white);
+  font-weight: var(--font-weight-bold);
+  text-align: center;
+}
+
+.nag__button {
+  line-height: 1;
+  margin-left: var(--spacing-small);
+  border-radius: var(--border-radius);
+  border: 1px solid var(--color-white);
+  padding: var(--spacing-miniscule);
+  color: var(--color-white);
+  font-weight: var(--font-weight-bold);
+
+  &:hover {
+    background-color: var(--color-white);
+    color: var(--color-nag);
+  }
+}
+
+.nag__close {
+  margin-left: auto;
+  right: var(--spacing-medium);
+  position: absolute;
+  border: none;
+
+  svg {
+    stroke-width: 4px;
+  }
+}
