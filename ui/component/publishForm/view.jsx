@@ -11,12 +11,13 @@ import React, { useEffect, Fragment } from 'react';
 import { CHANNEL_NEW, CHANNEL_ANONYMOUS } from 'constants/claim';
 import { buildURI, isURIValid, isNameValid, THUMBNAIL_STATUSES } from 'lbry-redux';
 import Button from 'component/button';
-import ChannelSection from 'component/selectChannel';
+import SelectChannel from 'component/selectChannel';
 import classnames from 'classnames';
 import TagsSelect from 'component/tagsSelect';
 import PublishText from 'component/publishText';
 import PublishPrice from 'component/publishPrice';
 import PublishFile from 'component/publishFile';
+import PublishName from 'component/publishName';
 import PublishAdditionalOptions from 'component/publishAdditionalOptions';
 import PublishFormErrors from 'component/publishFormErrors';
 import SelectThumbnail from 'component/selectThumbnail';
@@ -162,7 +163,7 @@ function PublishForm(props: Props) {
         <Card
           actions={
             <React.Fragment>
-              <ChannelSection channel={channel} onChannelChange={channel => updatePublishForm({ channel })} />
+              <SelectChannel channel={channel} onChannelChange={channel => updatePublishForm({ channel })} />
               <p className="help">
                 {__('This is a username or handle that your content can be found under.')}{' '}
                 {__('Ex. @Marvel, @TheBeatles, @BooksByJoe')}
@@ -171,6 +172,7 @@ function PublishForm(props: Props) {
           }
         />
 
+        <PublishName disabled={formDisabled} />
         <PublishPrice disabled={formDisabled} />
         <PublishAdditionalOptions disabled={formDisabled} />
 

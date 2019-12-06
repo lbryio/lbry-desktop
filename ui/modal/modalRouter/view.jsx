@@ -30,6 +30,7 @@ import ModalCommentAcknowledgement from 'modal/modalCommentAcknowledgement';
 import ModalWalletSend from 'modal/modalWalletSend';
 import ModalWalletReceive from 'modal/modalWalletReceive';
 import ModalYoutubeWelcome from 'modal/modalYoutubeWelcome';
+import ModalCreateChannel from 'modal/modalChannelCreate';
 
 type Props = {
   modal: { id: string, modalProps: {} },
@@ -108,6 +109,8 @@ function ModalRouter(props: Props) {
       return <ModalWalletReceive {...modalProps} />;
     case MODALS.YOUTUBE_WELCOME:
       return <ModalYoutubeWelcome />;
+    case MODALS.CREATE_CHANNEL:
+      return <ModalCreateChannel {...modalProps} />;
     default:
       return null;
   }

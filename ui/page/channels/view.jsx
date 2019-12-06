@@ -5,20 +5,18 @@ import Page from 'component/page';
 import Button from 'component/button';
 import YoutubeTransferStatus from 'component/youtubeTransferStatus';
 import Spinner from 'component/spinner';
-import * as PAGES from 'constants/pages';
-import * as ICONS from 'constants/icons';
 import * as MODALS from 'constants/modal_types';
-import { doOpenModal } from '../../redux/actions/app';
 
 type Props = {
   channels: Array<ChannelClaim>,
   fetchChannelListMine: () => void,
   fetchingChannels: boolean,
   youtubeChannels: ?Array<any>,
+  openModal: string => void,
 };
 
 export default function ChannelsPage(props: Props) {
-  const { channels, fetchChannelListMine, fetchingChannels, youtubeChannels } = props;
+  const { channels, fetchChannelListMine, fetchingChannels, youtubeChannels, openModal } = props;
   const hasYoutubeChannels = youtubeChannels && Boolean(youtubeChannels.length);
   const hasPendingChannels = channels && channels.some(channel => channel.confirmations === -1);
 
@@ -48,12 +46,7 @@ export default function ChannelsPage(props: Props) {
             loading={fetchingChannels}
             uris={channels.map(channel => channel.permanent_url)}
             headerAltControls={
-              <Button
-                iconSize={20}
-                label={__('New Channel')}
-                icon={ICONS.NEW_CHANNEL}
-                onClick={() => doOpenModal(MODALS.CREATE_CHANNEL)}
-              />
+              <Button button="link" label={__('New Channel')} onClick={() => openModal(MODALS.CREATE_CHANNEL)} />
             }
           />
         </div>
@@ -66,13 +59,7 @@ export default function ChannelsPage(props: Props) {
                 <h2 className="section__title--large">{__('No Channels Created Yet')}</h2>
 
                 <div className="section__actions">
-                  <Button
-                    iconSize={20}
-                    label={__('New Channel')}
-                    button="link"
-                    icon={ICONS.NEW_CHANNEL}
-                    navigate={`/$/${PAGES.CHANNEL_CREATE}`}
-                  />
+                  <Button button="primary" label={__('New Channel')} onClick={() => openModal(MODALS.CREATE_CHANNEL)} />
                 </div>
               </div>
             </section>

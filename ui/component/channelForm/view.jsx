@@ -1,12 +1,5 @@
 // @flow
 
-/*
-  On submit, this component calls publish, which dispatches doPublishDesktop.
-  doPublishDesktop calls lbry-redux Lbry publish method using lbry-redux publish state as params.
-  Publish simply instructs the SDK to find the file path on disk and publish it with the provided metadata.
-  On web, the Lbry publish method call is overridden in platform/web/api-setup, using a function in platform/web/publish.
-  File upload is carried out in the background by that function.
- */
 import React, { useEffect, Fragment } from 'react';
 import { CHANNEL_NEW, CHANNEL_ANONYMOUS } from 'constants/claim';
 import { buildURI, isURIValid } from 'lbry-redux';
@@ -18,7 +11,6 @@ type Props = {
   name: ?string,
   channel: string,
   resolveUri: string => void,
-  // Add back type
   updatePublishForm: any => void,
   onSuccess: () => void,
 };

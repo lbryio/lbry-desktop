@@ -75,7 +75,7 @@ function SideBar(props: Props) {
         <Button
           navigate={`/$/${PAGES.FOLLOWING}`}
           label={__('Customize')}
-          icon={ICONS.CUSTOMIZE}
+          icon={ICONS.EDIT}
           className="navigation-link"
           activeClass="navigation-link--active"
         />

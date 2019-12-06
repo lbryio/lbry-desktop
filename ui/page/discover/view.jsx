@@ -5,7 +5,6 @@ import ClaimListDiscover from 'component/claimListDiscover';
 import TagsSelect from 'component/tagsSelect';
 import Page from 'component/page';
 import Button from 'component/button';
-import * as ICONS from 'constants/icons';
 
 type Props = {
   followedTags: Array<Tag>,
@@ -22,15 +21,7 @@ function DiscoverPage(props: Props) {
         hideCustomization={IS_WEB && !email}
         personalView
         tags={followedTags.map(tag => tag.name)}
-        meta={
-          <Button
-            button="link"
-            label={__('Customize')}
-            requiresAuth={IS_WEB}
-            navigate={`/$/${PAGES.FOLLOWING}`}
-            icon={ICONS.EDIT}
-          />
-        }
+        meta={<Button button="link" label={__('Customize')} requiresAuth={IS_WEB} navigate={`/$/${PAGES.FOLLOWING}`} />}
       />
     </Page>
   );

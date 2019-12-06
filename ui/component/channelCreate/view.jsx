@@ -1,8 +1,7 @@
 // @flow
-import React, { Fragment } from 'react';
+import React from 'react';
 import { isNameValid } from 'lbry-redux';
-import { FormField } from 'component/common/form';
-import BusyIndicator from 'component/common/busy-indicator';
+import { Form, FormField } from 'component/common/form';
 import Button from 'component/button';
 import analytics from 'analytics';
 
@@ -38,7 +37,7 @@ class ChannelCreate extends React.PureComponent<Props, State> {
 
     (this: any).handleNewChannelNameChange = this.handleNewChannelNameChange.bind(this);
     (this: any).handleNewChannelBidChange = this.handleNewChannelBidChange.bind(this);
-    (this: any).handleCreateChannelClick = this.handleCreateChannelClick.bind(this);
+    (this: any).handleCreateChannel = this.handleCreateChannel.bind(this);
   }
 
   handleNewChannelNameChange(event: SyntheticInputEvent<*>) {
@@ -78,7 +77,7 @@ class ChannelCreate extends React.PureComponent<Props, State> {
     });
   }
 
-  handleCreateChannelClick() {
+  handleCreateChannel() {
     const { balance, createChannel, onSuccess } = this.props;
     const { newChannelBid, newChannelName } = this.state;
 
@@ -125,7 +124,7 @@ class ChannelCreate extends React.PureComponent<Props, State> {
     } = this.state;
 
     return (
-      <Fragment>
+      <Form onSubmit={this.handleCreateChannel}>
         {createChannelError && <div className="error-text">{createChannelError}</div>}
         <div>
           <FormField
@@ -151,17 +150,16 @@ class ChannelCreate extends React.PureComponent<Props, State> {
           />
           <div className="card__actions">
             <Button
+              type="submit"
               button="primary"
               label={!creatingChannel ? __('Create channel') : __('Creating channel...')}
-              onClick={this.handleCreateChannelClick}
               disabled={
                 !newChannelName || !newChannelBid || creatingChannel || newChannelNameError || newChannelBidError
               }
             />
           </div>
         </div>
-        {creatingChannel && <BusyIndicator message={`Creating Channel ${newChannelName}...`} />}
-      </Fragment>
+      </Form>
     );
   }
 }
