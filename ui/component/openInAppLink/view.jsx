@@ -1,16 +1,17 @@
 // @flow
+import * as ICONS from 'constants/icons';
+import * as PAGES from 'constants/pages';
 import React from 'react';
+import Button from 'component/button';
 import { withRouter } from 'react-router';
 import userPersistedState from 'effects/use-persisted-state';
-import { formatWebUrlIntoLbryUrl } from 'util/url';
-import Nag from 'component/common/nag';
 
 const userAgent = navigator.userAgent.toLowerCase();
 const isAndroid = userAgent.includes('android');
 const isDesktop = typeof window.orientation === 'undefined';
 
 type Props = {
-  history: { replace: string => void, push: string => void },
+  history: { replace: string => void },
   location: { search: string, pathname: string },
   uri: string,
   user: ?User,
@@ -34,7 +35,15 @@ function OpenInAppLink(props: Props) {
   let appLink = uri;
 
   if (!appLink) {
-    appLink = formatWebUrlIntoLbryUrl(pathname, search);
+    // If there is no uri, the user is on an internal page
+    // pathname will either be "/" or "/$/{page}"
+    const path = pathname.startsWith('/$/') ? pathname.slice(3) : pathname.slice(1);
+    appLink = `lbry://?${path || PAGES.DISCOVER}`;
+
+    if (search) {
+      // We already have a leading "?" for the query param on internal pages
+      appLink += search.replace('?', '&');
+    }
   }
 
   function handleClose() {
@@ -59,7 +68,13 @@ function OpenInAppLink(props: Props) {
   }
 
   return (
-    <Nag message={__('Want even more freedom?')} actionText={__('Use The App')} href={appLink} onClose={handleClose} />
+    <div className="nag">
+      {__('The app is like, better.')}
+      <Button className="nag__button" href={appLink}>
+        {__('Use The App')}
+      </Button>
+      <Button className="nag__button nag__close" icon={ICONS.REMOVE} onClick={handleClose} />
+    </div>
   );
 }
 
