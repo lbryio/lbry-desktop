@@ -204,7 +204,7 @@ function App(props: Props) {
 
       {/* @if TARGET='app' */}
       {showUpgradeButton && (
-        <Nag message={__('An upgrade is available.')} actionText={__('Install now')} onClick={requestDownloadUpgrade} />
+        <Nag message={__('An upgrade is available.')} actionText={__('Install Now')} onClick={requestDownloadUpgrade} />
       )}
       {/* @endif */}
       {isEnhancedLayout && <Yrbl className="yrbl--enhanced" />}
