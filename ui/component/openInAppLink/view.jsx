@@ -59,7 +59,7 @@ function OpenInAppLink(props: Props) {
   }
 
   return (
-    <Nag message={__('Want even more freedom?')} actionText={__('Use the App')} href={appLink} onClose={handleClose} />
+    <Nag message={__('Want even more freedom?')} actionText={__('Use The App')} href={appLink} onClose={handleClose} />
   );
 }
 
