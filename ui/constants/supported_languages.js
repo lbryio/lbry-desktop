@@ -1,6 +1,7 @@
 import LANGUAGES from './languages';
 
 const SUPPORTED_LANGUAGES = {
+  en: LANGUAGES.en[1],
   zh: LANGUAGES.zh[1],
   hr: LANGUAGES.hr[1],
   nl: LANGUAGES.nl[1],
@@ -18,7 +19,7 @@ const SUPPORTED_LANGUAGES = {
   sr: LANGUAGES.sr[1],
   sk: LANGUAGES.sk[1],
   es: LANGUAGES.es[1],
-  tr: LANGUAGES.tr[1]
+  tr: LANGUAGES.tr[1],
 };
 
 export default SUPPORTED_LANGUAGES;
