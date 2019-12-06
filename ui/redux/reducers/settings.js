@@ -83,7 +83,7 @@ reducers[ACTIONS.DOWNLOAD_LANGUAGE_SUCCESS] = (state, action) => {
   const { loadedLanguages } = state;
   const { language } = action.data;
 
-  if (language && !loadedLanguages.includes(language)) {
+  if (language && loadedLanguages && !loadedLanguages.includes(language)) {
     return Object.assign({}, state, {
       loadedLanguages: [...loadedLanguages, language],
     });
