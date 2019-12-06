@@ -1,3 +1,6 @@
+// Can't use aliases here because we're doing exports/require
+const PAGES = require('../constants/pages');
+
 exports.formatLbryUrlForWeb = uri => {
   return uri.replace('lbry://', '/').replace(/#/g, ':');
 };
@@ -40,4 +43,18 @@ exports.formatInAppUrl = path => {
 
   // Regular claim url
   return path;
+};
+
+exports.formatWebUrlIntoLbryUrl = (pathname, search) => {
+  // If there is no uri, the user is on an internal page
+  // pathname will either be "/" or "/$/{page}"
+  const path = pathname.startsWith('/$/') ? pathname.slice(3) : pathname.slice(1);
+  let appLink = `lbry://?${path || PAGES.DISCOVER}`;
+
+  if (search) {
+    // We already have a leading "?" for the query param on internal pages
+    appLink += search.replace('?', '&');
+  }
+
+  return appLink;
 };
