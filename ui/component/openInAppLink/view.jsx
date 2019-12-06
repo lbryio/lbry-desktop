@@ -28,7 +28,9 @@ function OpenInAppLink(props: Props) {
   const hasSrcParam = params.get('src');
   const initialShouldShowNag = hasSrcParam && (isAndroid || isDesktop);
   const isWebUserOnly =
-    user && !user.device_types.some(usedDevice => usedDevice === 'mobile' || usedDevice === 'desktop');
+    user &&
+    user.device_types &&
+    !user.device_types.some(usedDevice => usedDevice === 'mobile' || usedDevice === 'desktop');
   const [hideNagForGood, setHideNagForGood] = userPersistedState('open-in-app-nag', false);
   const [showNag, setShowNag] = React.useState(initialShouldShowNag);
   let appLink = uri;
