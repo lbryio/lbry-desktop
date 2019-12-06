@@ -175,25 +175,20 @@ function ClaimListDiscover(props: Props) {
   );
 
   const noTags = (
-    <div>
-      <p>
+    <p>
       <I18nMessage
         tokens={{
-          customize: <Button
-            button="link"
-            navigate={`/$/${PAGES.FOLLOWING}`}
-            label={__('customize')}
-          />,
+          customize: <Button button="link" navigate={`/$/${PAGES.FOLLOWING}`} label={__('customize')} />,
         }}
       >
         You're not following any tags. Add tags above or smash that %customize% button!
       </I18nMessage>
-      </p>
-    </div>
+    </p>
   );
 
-  const noFollowing = (personalSort === SEARCH_SORT_YOU && noTags) || (personalSort === SEARCH_SORT_CHANNELS && noChannels);
-  const emptyState = !loading  && !hasContent ? noFollowing : noResults;
+  const noFollowing =
+    (personalSort === SEARCH_SORT_YOU && noTags) || (personalSort === SEARCH_SORT_CHANNELS && noChannels);
+  const emptyState = !loading && !hasContent ? noFollowing : noResults;
 
   function getSearch() {
     let search = `?`;
