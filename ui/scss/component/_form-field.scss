@@ -70,9 +70,8 @@ fieldset-group {
       .form-field__prefix {
         white-space: nowrap;
         padding: 0.5rem;
-        padding-right: var(--spacing-xxs);
+        padding-right: var(--spacing-small);
         height: var(--height-input);
-        padding-right: 1rem;
         border: 1px solid;
         border-top-left-radius: var(--border-radius);
         border-bottom-left-radius: var(--border-radius);
