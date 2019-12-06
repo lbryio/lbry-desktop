@@ -29,7 +29,7 @@ const YoutubeWelcome = (props: Props) => {
           </React.Fragment>
         }
         actions={
-          <div className="card__actions">
+          <React.Fragment>
             <Button
               button="primary"
               label={__('Create an Account')}
@@ -37,7 +37,7 @@ const YoutubeWelcome = (props: Props) => {
               onClick={doHideModal}
             />
             <Button button="link" label={__('Not Yet')} onClick={doHideModal} />
-          </div>
+          </React.Fragment>
         }
       />
     </Modal>
