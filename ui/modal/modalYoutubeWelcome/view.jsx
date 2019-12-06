@@ -1,4 +1,5 @@
 // @flow
+import * as PAGES from 'constants/pages';
 import React from 'react';
 import { Modal } from 'modal/modal';
 import Card from 'component/common/card';
@@ -14,11 +15,30 @@ const YoutubeWelcome = (props: Props) => {
     <Modal isOpen type="card" onAborted={doHideModal}>
       <Confetti recycle={false} style={{ position: 'fixed' }} numberOfPieces={100} />
       <Card
-        title={__('Welcome To The Promised Land')}
-        subtitle={__(
-          'Looks like you are coming from YouTube, some funny pun or something that introduces them to LBRY.'
-        )}
-        actions={<Button button="primary" label={__('Get To The Goods')} onClick={doHideModal} />}
+        title={__("You're Free!")}
+        subtitle={
+          <React.Fragment>
+            <p>
+              {__("You've escaped the land of spying, censorship, and exploitation.")}
+              <span className="emoji"> 💩</span>
+            </p>
+            <p>
+              {__('Welcome to the land of content freedom.')}
+              <span className="emoji"> 🌈</span>
+            </p>
+          </React.Fragment>
+        }
+        actions={
+          <React.Fragment>
+            <Button
+              button="primary"
+              label={__('Create an Account')}
+              navigate={`/$/${PAGES.AUTH}`}
+              onClick={doHideModal}
+            />
+            <Button button="link" label={__('Not Yet')} onClick={doHideModal} />
+          </React.Fragment>
+        }
       />
     </Modal>
   );
