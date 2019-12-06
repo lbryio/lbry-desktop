@@ -31,6 +31,10 @@ h6 {
 
 p {
   font-size: var(--font-body);
+
+  & + p {
+    margin-top: var(--spacing-small);
+  }
 }
 
 ul,
@@ -229,4 +233,8 @@ a {
   background-position: 50% 50%;
   background-repeat: no-repeat;
   background-size: cover;
+}
+
+.emoji {
+  font-size: 1.3em;
 }
