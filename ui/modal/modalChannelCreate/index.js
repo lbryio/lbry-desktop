@@ -8,4 +8,7 @@ const perform = {
   doHideModal,
 };
 
-export default connect(select, perform)(ChannelCreate);
+export default connect(
+  select,
+  perform
+)(ChannelCreate);

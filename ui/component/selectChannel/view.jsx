@@ -77,25 +77,31 @@ class ChannelSection extends React.PureComponent<Props, State> {
         {fetchingChannels ? (
           <BusyIndicator message="Updating channels" />
         ) : (
-          <fieldset-section>
-            <FormField
-              name="channel"
-              label={__('Channel')}
-              type="select"
-              onChange={this.handleChannelChange}
-              value={channel}
-            >
-              <option value={CHANNEL_ANONYMOUS}>{__('Anonymous')}</option>
-              {channels &&
-                channels.map(({ name, claim_id: claimId }) => (
-                  <option key={claimId} value={name}>
-                    {name}
-                  </option>
-                ))}
-              <option value={CHANNEL_NEW}>{__('New channel...')}</option>
-            </FormField>
-            {addingChannel && <ChannelCreate onSuccess={this.handleChangeToNewChannel} />}
-          </fieldset-section>
+          <Fragment>
+            <div className="section">
+              <FormField
+                name="channel"
+                label={__('Channel')}
+                type="select"
+                onChange={this.handleChannelChange}
+                value={channel}
+              >
+                <option value={CHANNEL_ANONYMOUS}>{__('Anonymous')}</option>
+                {channels &&
+                  channels.map(({ name, claim_id: claimId }) => (
+                    <option key={claimId} value={name}>
+                      {name}
+                    </option>
+                  ))}
+                <option value={CHANNEL_NEW}>{__('New channel...')}</option>
+              </FormField>
+            </div>
+            {addingChannel && (
+              <div className="section">
+                <ChannelCreate onSuccess={this.handleChangeToNewChannel} />
+              </div>
+            )}
+          </Fragment>
         )}
       </Fragment>
     );

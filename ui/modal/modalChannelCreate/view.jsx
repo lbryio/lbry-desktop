@@ -1,17 +1,18 @@
 // @flow
 import React from 'react';
-import ChannelCreate from 'component/channelCreate';
+import ChannelForm from 'component/channelForm';
 import { Modal } from 'modal/modal';
 
 type Props = { doHideModal: () => void };
 
-const ChannelCreateModal = (props: Props) => {
+const ModalChannelCreate = (props: Props) => {
   const { doHideModal } = props;
+
   return (
     <Modal isOpen type="card" onAborted={doHideModal}>
-      <ChannelCreate />
+      <ChannelForm onSuccess={doHideModal} />
     </Modal>
   );
 };
 
-export default ChannelCreateModal;
+export default ModalChannelCreate;

@@ -4,11 +4,15 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
-## [0.39.0] - [2019-3-19]
+## [0.38.0] - [Unreleased]
+
+### Fixed
 
 ### Added
 
-- Allows channel thumbnails to be clickable on file pages ([#3304](https://github.com/lbryio/lbry-desktop/pull/3304))
+- Dedicated Channel Creation page ([#3305](https://github.com/lbryio/lbry-desktop/pull/3305))
+
+### Changed
 
 ## [0.37.2] - [2019-11-21]
 
@@ -20,8 +24,6 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ### Added
 
-- 'New Channel' button in channels page ([#3305](https://github.com/lbryio/lbry-desktop/pull/3305))
-- Dedicated Channel Creation page ([#3305](https://github.com/lbryio/lbry-desktop/pull/3305))
 - Setting to start the app minimized when you login (Linux/Windows only) ([#3236](https://github.com/lbryio/lbry-desktop/pull/3236))
 - Search on downloads page ([#2969](https://github.com/lbryio/lbry-desktop/pull/2969))
 - Clear support state when clearing cache in settings([#3149](https://github.com/lbryio/lbry-desktop/pull/3149))
