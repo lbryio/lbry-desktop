@@ -15,7 +15,7 @@ type Props = {
 
 function ChannelThumbnail(props: Props) {
   const { thumbnail, uri, className, thumbnailPreview, obscure, small = false } = props;
-  const showThumb = !obscure && !!thumbnail;
+  const showThumb = (!obscure && !!thumbnail) || thumbnailPreview;
 
   // Generate a random color class based on the first letter of the channel name
   const { channelName } = parseURI(uri);
