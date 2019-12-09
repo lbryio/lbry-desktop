@@ -76,3 +76,14 @@
     width: 70%;
   }
 }
+
+.table__item--actionable {
+  vertical-align: middle;
+  white-space: nowrap;
+
+  .button {
+    height: 1.5rem;
+    padding: var(--spacing-s);
+    margin-left: var(--spacing-m);
+  }
+}

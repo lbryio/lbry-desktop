@@ -906,5 +906,14 @@
   "You're not following any tags. Add tags above or smash that %customize% button!": "You're not following any tags. Add tags above or smash that %customize% button!",
   "New Channel": "New Channel",
   "ChannelName": "ChannelName",
-  "Pending...": "Pending..."
+  "Pending...": "Pending...",
+  "If you continue to have issues, please %contact_support%.": "If you continue to have issues, please %contact_support%.",
+  "Hide QR code": "Hide QR code",
+  "Selected Tags": "Selected Tags",
+  "Add a tag...": "Add a tag...",
+  "Simple Editor": "Simple Editor",
+  "Recommended size is 16:9": "Recommended size is 16:9",
+  "Any amount will give you the highest bid, but larger amounts help your content be trusted and discovered.": "Any amount will give you the highest bid, but larger amounts help your content be trusted and discovered.",
+  "Loading 3D model.": "Loading 3D model.",
+  "Saved zip archive to /Users/sean/Downloads/.lbryum-2019-12-09T17-21-28.429Z.zip": "Saved zip archive to /Users/sean/Downloads/.lbryum-2019-12-09T17-21-28.429Z.zip"
 }
