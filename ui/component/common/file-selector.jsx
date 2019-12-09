@@ -51,9 +51,9 @@ class FileSelector extends React.PureComponent<Props> {
 
   render() {
     const { type, currentPath, label, fileLabel, directoryLabel, placeholder, accept, error, disabled } = this.props;
-
     const buttonLabel = type === 'file' ? fileLabel || __('Choose File') : directoryLabel || __('Choose Directory');
     const placeHolder = currentPath || placeholder;
+
     return (
       <React.Fragment>
         <FormField
