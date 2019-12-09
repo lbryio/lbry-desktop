@@ -5,18 +5,10 @@
   @include thumbnail;
   border-radius: var(--card-radius);
   object-fit: cover;
-
-  &:not(.media__thumb--nsfw) {
-    background-color: var(--color-placeholder-background);
-    background-position: center;
-    background-repeat: no-repeat;
-    background-size: cover;
-  }
-}
-
-.media__thumb--nsfw {
-  background-color: black; //grape-5;
-  // background-image: linear-gradient(to bottom right, black; //teal-3, black; //grape-5 100%);
+  background-color: var(--color-placeholder-background);
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
 }
 
 //  M E D I A
@@ -35,7 +27,7 @@
   display: inline;
 }
 
-.media__title-price {
+.media__title-badge {
   float: right;
   margin-left: var(--spacing-small);
   margin-top: 5px;

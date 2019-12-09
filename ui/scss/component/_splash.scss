@@ -11,17 +11,6 @@
   overflow: hidden;
 }
 
-.splash__button {
-  border-bottom: 1px solid black; //white;
-  color: black; //white;
-  transition: none;
-
-  &:hover {
-    border-bottom: 1px solid black; //blue-1;
-    color: black; //blue-1;
-  }
-}
-
 .splash__details {
   position: absolute;
   line-height: 1;

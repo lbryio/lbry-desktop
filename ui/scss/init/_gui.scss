@@ -103,7 +103,6 @@ blockquote {
 
 code {
   @include font-mono;
-  background-color: black; //gray-1;
   font-size: 1.5rem;
 }
 
@@ -134,11 +133,6 @@ a {
       margin-right: 1.5rem;
     }
   }
-}
-
-.divider__horizontal {
-  border-top: black; //gray-2;
-  margin: 16px 0;
 }
 
 .hidden {
@@ -211,7 +205,7 @@ a {
 .qr-code {
   width: 134px;
   height: 134px;
-  border: 3px solid black; //white;
+  border: 3px solid white;
 
   &.qr-code--right-padding {
     margin-right: $spacing-vertical * 2/3;

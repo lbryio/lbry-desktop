@@ -156,7 +156,10 @@ class FilePage extends React.Component<Props> {
         </div>
 
         <div className="media__title">
-          <span className="media__title-price">
+          <span className="media__title-badge">
+            {nsfw && <span className="badge badge--tag-mature">{__('Mature')}</span>}
+          </span>
+          <span className="media__title-badge">
             <FilePrice badge uri={normalizeURI(uri)} />
           </span>
           <h1 className="media__title-text">{title}</h1>
@@ -244,8 +247,6 @@ class FilePage extends React.Component<Props> {
             </section>
           </div>
           <div className="grid-area--related">
-            {nsfw && <div className="badge badge--mature">{__('Mature')}</div>}
-
             <RecommendedContent uri={uri} />
           </div>
         </div>

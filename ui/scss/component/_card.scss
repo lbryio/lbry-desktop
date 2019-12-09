@@ -17,13 +17,6 @@
   padding: var(--spacing-large);
 }
 
-.card--wallet-balance {
-  background-repeat: no-repeat;
-  background-size: cover;
-  color: black; //white;
-  justify-content: space-between;
-}
-
 .card--reward-total {
   background-repeat: no-repeat;
   background-size: cover;
@@ -91,26 +84,18 @@
 .card__message {
   border-left: 0.5rem solid;
   padding: var(--spacing-medium) var(--spacing-medium) var(--spacing-medium) var(--spacing-large);
-
-  &:not(&--error):not(&--failure):not(&--success) {
-    background-color: black; //black; //teal-1, 0.1);
-    border-color: black; //teal-3;
-  }
+  background-color: var(--color-primary-alt);
+  border-color: var(--color-primary);
 }
 
 .card__message--error {
-  background-color: black; //black; //orange-1, 0.1);
-  border-color: black; //orange-3;
+  background-color: var(--color-error);
+  border-color: var(--color-text-error);
 }
 
 .card__message--failure {
-  background-color: black; //black; //red-1, 0.1);
-  border-color: black; //red-3;
-}
-
-.card__message--success {
-  background-color: black; //black; //green-1, 0.1);
-  border-color: black; //green-3;
+  background-color: var(--color-error);
+  border-color: var(--color-text-error);
 }
 
 .card__title {
@@ -134,7 +119,7 @@
 }
 
 .card__media--nsfw {
-  background-color: black; //grape-3;
+  background-color: black;
 }
 
 .card__media--disabled {

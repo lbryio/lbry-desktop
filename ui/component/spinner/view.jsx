@@ -67,7 +67,6 @@ class Spinner extends PureComponent<Props, State> {
           'spinner--dark': !light && (dark || theme === LIGHT_THEME),
           'spinner--light': !dark && (light || theme === DARK_THEME),
           'spinner--small': type === 'small',
-          'spinner--splash': type === 'splash',
         })}
       >
         <div className="rect rect1" />

@@ -54,9 +54,9 @@
   margin-top: var(--spacing-small);
   padding: var(--spacing-small);
 
-  background-color: black; //red-1;
-  border-left: 2px solid black; //red-5;
-  color: black; //red-5;
+  background-color: var(--color-error);
+  border-left: 2px solid var(--color-text-error);
+  color: var(--color-text-error);
   list-style: none;
   overflow-y: scroll;
   white-space: pre-wrap;

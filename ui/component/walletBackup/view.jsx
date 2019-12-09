@@ -139,7 +139,7 @@ class WalletBackup extends React.PureComponent<Props, State> {
             </p>
             <div className="card__actions">
               <Button
-                button="inverse"
+                button="primary"
                 label={__('Create Backup')}
                 onClick={() => this.backupWalletDir(lbryumWalletDir)}
               />
