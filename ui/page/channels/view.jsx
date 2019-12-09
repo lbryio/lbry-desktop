@@ -18,7 +18,7 @@ type Props = {
 export default function ChannelsPage(props: Props) {
   const { channels, fetchChannelListMine, fetchingChannels, youtubeChannels, openModal } = props;
   const hasYoutubeChannels = youtubeChannels && Boolean(youtubeChannels.length);
-  const hasPendingChannels = channels && channels.some(channel => channel.confirmations === -1);
+  const hasPendingChannels = channels && channels.some(channel => channel.confirmations < 0);
 
   useEffect(() => {
     fetchChannelListMine();
