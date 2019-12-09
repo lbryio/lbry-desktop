@@ -19,4 +19,13 @@
   fieldset:not(:first-child) {
     margin-top: var(--spacing-large);
   }
+
+  .radio,
+  .checkbox {
+    display: inline-block;
+
+    &:not(:first-of-type) {
+      margin-left: var(--spacing-medium);
+    }
+  }
 }
