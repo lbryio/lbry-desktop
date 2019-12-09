@@ -32,13 +32,16 @@ exports.formatInAppUrl = path => {
   if (appPageMatches && appPageMatches.length) {
     // Definitely an app page (or it's formatted like one)
     const [, , page, queryString] = appPageMatches;
-    let actualUrl = '/$/' + page;
 
-    if (queryString) {
-      actualUrl += `?${queryString.slice(1)}`;
+    if (Object.values(PAGES).includes(page)) {
+      let actualUrl = '/$/' + page;
+
+      if (queryString) {
+        actualUrl += `?${queryString.slice(1)}`;
+      }
+
+      return actualUrl;
     }
-
-    return actualUrl;
   }
 
   // Regular claim url
