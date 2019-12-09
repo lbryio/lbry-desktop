@@ -22,6 +22,7 @@ const SEEK_STEP = 10; // time to seek in seconds
 
 const VIDEO_JS_OPTIONS: { poster?: string } = {
   controls: true,
+  autoplay: true,
   preload: 'auto',
   playbackRates: [0.25, 0.5, 0.75, 1, 1.1, 1.25, 1.5, 2],
   responsive: true,
@@ -113,12 +114,6 @@ function VideoViewer(props: Props) {
       player = videojs(videoNode, videoJsOptions, function() {
         player.volume(volume);
         player.muted(muted);
-        player.ready(() => {
-          // In the future this should be replaced with something that checks if the
-          // video is actually playing after calling play()
-          // If it's not, fall back to the play button
-          player.play();
-        });
       });
     }
 
@@ -133,7 +128,6 @@ function VideoViewer(props: Props) {
       // requireRedraw just makes it so the video component is removed from the page _by react_
       // Then it's set to false immediately after so we can re-mount a new player
       setRequireRedraw(true);
-      player.pause();
     };
   }, [videoRef, source, contentType, setRequireRedraw, requireRedraw]);
 
