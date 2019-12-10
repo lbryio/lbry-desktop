@@ -19,7 +19,21 @@ class DateTime extends React.PureComponent<Props> {
     const show = this.props.show || DateTime.SHOW_BOTH;
 
     if (timeAgo) {
-      return date ? <span>{moment(date).from(moment())}</span> : <span />;
+      if (!date) {
+        return null;
+      }
+
+      // Moment is very liberal with it's rounding
+      // Wait to show "two years ago" until it's actually been two years (or higher)
+      const numberOfYearsSincePublish = moment().diff(date, 'years');
+
+      if (numberOfYearsSincePublish === 1) {
+        return <span>{__('%numberOfYearsSincePublish% year ago', { numberOfYearsSincePublish })}</span>;
+      } else if (numberOfYearsSincePublish > 1) {
+        return <span>{__('%numberOfYearsSincePublish% years ago', { numberOfYearsSincePublish })}</span>;
+      }
+
+      return <span>{moment(date).from(moment())}</span>;
     }
 
     return (
