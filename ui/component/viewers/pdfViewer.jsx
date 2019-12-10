@@ -2,6 +2,7 @@
 import * as React from 'react';
 import { stopContextMenu } from 'util/context-menu';
 import Button from 'component/button';
+import I18nMessage from 'component/i18nMessage';
 // @if TARGET='app'
 import { shell } from 'electron';
 // @endif
@@ -38,8 +39,11 @@ class PdfViewer extends React.PureComponent<Props> {
       <div className="file-render__viewer--pdf" onContextMenu={stopContextMenu}>
         {/* @if TARGET='app' */}
         <p>
-          {__('PDF opened externally.')} <Button button="link" label={__('Click here')} onClick={this.openFile} />{' '}
-          {__('to open it again.')}
+          <I18nMessage
+            tokens={{ click_here: <Button button="link" label={__('Click here')} onClick={this.openFile} /> }}
+          >
+            PDF opened externally. %click_here% to open it again.
+          </I18nMessage>
         </p>
         {/* @endif */}
 
