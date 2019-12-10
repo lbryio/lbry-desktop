@@ -26,6 +26,7 @@ type Props = {
   autoplay: boolean,
   hasCostInfo: boolean,
   costInfo: any,
+  isAutoPlayable: boolean,
 };
 
 export default function FileViewer(props: Props) {
@@ -43,6 +44,7 @@ export default function FileViewer(props: Props) {
     isStreamable,
     hasCostInfo,
     costInfo,
+    isAutoPlayable,
   } = props;
   const cost = costInfo && costInfo.cost;
   const forceVideo = ['application/x-ext-mkv', 'video/x-matroska'].includes(contentType);
@@ -85,10 +87,10 @@ export default function FileViewer(props: Props) {
 
   useEffect(() => {
     const videoOnPage = document.querySelector('video');
-    if (autoplay && !videoOnPage && isStreamable && hasCostInfo && cost === 0) {
+    if (autoplay && !videoOnPage && isAutoPlayable && hasCostInfo && cost === 0) {
       viewFile();
     }
-  }, [autoplay, viewFile, isStreamable, hasCostInfo, cost]);
+  }, [autoplay, viewFile, isAutoPlayable, hasCostInfo, cost]);
 
   return (
     <div
