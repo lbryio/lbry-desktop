@@ -81,7 +81,7 @@ class WalletBackup extends React.PureComponent<Props, State> {
       return;
     }
 
-    this.showSuccessMessage(__('Saved zip archive to ' + outputPath));
+    this.showSuccessMessage(__('Saved zip archive to %outputPath%', { outputPath }));
 
     shell.showItemInFolder(outputPath);
   }
