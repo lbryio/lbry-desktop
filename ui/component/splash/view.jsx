@@ -129,7 +129,7 @@ export default class SplashScreen extends React.PureComponent<Props, State> {
         });
       } else if (this.state.waitingForWallet > MAX_WALLET_WAIT && launchedModal === false && !modal) {
         clearWalletServers();
-        doShowSnackBar(__('The wallet server took a bit too long. Resetting defaults just in case. Restart the App and SDK if this continues.'));
+        doShowSnackBar(__('The wallet server took a bit too long. Resetting defaults just in case. Shutdown (Cmd/Ctrl+Q) LBRY and restart if this continues.'));
         this.setState({waitingForWallet: 0});
         this.updateStatusCallback(status);
       } else {
