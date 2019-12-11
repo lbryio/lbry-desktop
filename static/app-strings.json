@@ -926,6 +926,8 @@
   "Unable to load your saved preferences.": "Unable to load your saved preferences.",
   "Add/Delete": "Add/Delete",
   "The wallet server took a bit too long. Resetting defaults just in case.": "The wallet server took a bit too long. Resetting defaults just in case.",
+  "The wallet server took a bit too long. Resetting defaults just in case. Restart the App and SDK if this continues.": "The wallet server took a bit too long. Resetting defaults just in case. Restart the App and SDK if this continues.",
+  "The wallet server took a bit too long. Resetting defaults just in case.": "The wallet server took a bit too long. Resetting defaults just in case.",
   "PDF opened externally. %click_here% to open it again.": "PDF opened externally. %click_here% to open it again.",
   "%numberOfMonthsSincePublish% years ago": "%numberOfMonthsSincePublish% years ago",
   "%numberOfYearsSincePublish% years ago": "%numberOfYearsSincePublish% years ago",
