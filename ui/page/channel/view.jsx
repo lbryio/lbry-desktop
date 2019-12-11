@@ -214,7 +214,7 @@ function ChannelPage(props: Props) {
             <div className="channel__meta">
               <ClaimUri uri={uri} inline />
               <span>
-                {subCount} {subCount !== 1 ? __('Subscribers') : __('Subscriber')}
+                {subCount} {subCount !== 1 ? __('Followers') : __('Follower')}
                 <HelpLink href="https://lbry.com/faq/views" />
               </span>
             </div>
