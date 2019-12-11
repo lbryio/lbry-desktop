@@ -235,7 +235,7 @@ class FilePage extends React.Component<Props> {
               <hr />
             </div>
 
-            <div className="section__title--small">{__('Comments')}</div>
+            <div className="section__title--small">{__('')}</div>
             <section className="section">
               <CommentCreate uri={uri} />
             </section>
