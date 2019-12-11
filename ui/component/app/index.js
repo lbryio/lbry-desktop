@@ -6,7 +6,7 @@ import { doFetchTransactions, doFetchChannelListMine } from 'lbry-redux';
 import { makeSelectClientSetting, selectLoadedLanguages, selectThemePath } from 'redux/selectors/settings';
 import { selectIsUpgradeAvailable, selectAutoUpdateDownloaded } from 'redux/selectors/app';
 import { doSetLanguage } from 'redux/actions/settings';
-import { doDownloadUpgradeRequested, doSignIn, doSyncWithPreferences } from 'redux/actions/app';
+import { doDownloadUpgradeRequested, doSignIn, doSyncWithPreferences, doGetAndPopulatePreferences } from 'redux/actions/app';
 import App from './view';
 
 const select = state => ({
@@ -30,6 +30,7 @@ const perform = dispatch => ({
   signIn: () => dispatch(doSignIn()),
   requestDownloadUpgrade: () => dispatch(doDownloadUpgradeRequested()),
   checkSync: () => dispatch(doSyncWithPreferences()),
+  updatePreferences: () => dispatch(doGetAndPopulatePreferences()),
 });
 
 export default hot(

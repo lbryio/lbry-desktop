@@ -108,6 +108,7 @@ const triggerSharedStateActions = [
   LBRY_REDUX_ACTIONS.TOGGLE_TAG_FOLLOW,
   LBRY_REDUX_ACTIONS.TOGGLE_BLOCK_CHANNEL,
   LBRY_REDUX_ACTIONS.CREATE_CHANNEL_COMPLETED,
+  LBRY_REDUX_ACTIONS.SHARED_PREFERENCE_SET,
 ];
 
 /**
@@ -129,6 +130,7 @@ const sharedStateFilters = {
     },
   },
   blocked: { source: 'blocked', property: 'blockedChannels' },
+  settings: { source: 'settings', property: 'sharedPrefs'},
 };
 
 const sharedStateCb = ({ dispatch, getState }) => {

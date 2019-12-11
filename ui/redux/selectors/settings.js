@@ -34,6 +34,22 @@ export const selectIsNight = createSelector(
   state => state.isNight
 );
 
+export const selectCachedWalletServers = createSelector(
+  selectState,
+  state => state.customWalletServers
+);
+
+export const selectSharedPrefs = createSelector(
+  selectState,
+  state => state.sharedPrefs
+);
+
+export const makeSelectSharedPrefsForKey = key =>
+  createSelector(
+    selectSharedPrefs,
+    prefs => (prefs ? prefs[key] : undefined)
+  );
+
 export const selectThemePath = createSelector(
   selectTheme,
   selectAutomaticDarkModeEnabled,

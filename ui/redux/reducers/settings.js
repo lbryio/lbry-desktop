@@ -2,11 +2,16 @@ import * as ACTIONS from 'constants/action_types';
 import * as SETTINGS from 'constants/settings';
 import moment from 'moment';
 import SUPPORTED_LANGUAGES from 'constants/supported_languages';
+import { ACTIONS as LBRY_REDUX_ACTIONS, SHARED_PREFS } from 'lbry-redux';
 
 const reducers = {};
 const defaultState = {
   isNight: false,
   loadedLanguages: [...Object.keys(window.i18n_messages), 'en'] || ['en'],
+  customWalletServers: [],
+  sharedPrefs: {
+    [SHARED_PREFS.WALLET_SERVERS]: false,
+  },
   daemonSettings: {},
   clientSettings: {
     // UX
@@ -91,6 +96,41 @@ reducers[ACTIONS.DOWNLOAD_LANGUAGE_SUCCESS] = (state, action) => {
     return state;
   }
 };
+
+reducers[LBRY_REDUX_ACTIONS.SHARED_PREFERENCE_SET] = (state, action) => {
+  const { key, value } = action.data;
+  const sharedPrefs = Object.assign({}, state.sharedPrefs);
+  sharedPrefs[key] = value;
+
+  return Object.assign({}, state, {
+    sharedPrefs,
+  });
+}
+
+reducers[ACTIONS.CLIENT_SETTING_CHANGED] = (state, action) => {
+  const { key, value } = action.data;
+  const clientSettings = Object.assign({}, state.clientSettings);
+
+  clientSettings[key] = value;
+
+  return Object.assign({}, state, {
+    clientSettings,
+  });
+};
+
+reducers[LBRY_REDUX_ACTIONS.USER_STATE_POPULATE] = (
+  state,
+  action,
+) => {
+  const { settings: sharedPrefs } = action.data;
+
+  // process clientSettings and daemonSettings
+  return Object.assign({}, state, { sharedPrefs });
+};
+
+reducers[ACTIONS.WALLET_SERVERS_CACHED] = (state, action) => {
+  return Object.assign({}, state, {customWalletServers: action.data});
+}
 
 export default function reducer(state = defaultState, action) {
   const handler = reducers[action.type];

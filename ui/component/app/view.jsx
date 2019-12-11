@@ -46,6 +46,7 @@ type Props = {
   isUpgradeAvailable: boolean,
   autoUpdateDownloaded: boolean,
   checkSync: () => void,
+  updatePreferences: () => void,
   syncEnabled: boolean,
   uploadCount: number,
   balance: ?number,
@@ -73,6 +74,7 @@ function App(props: Props) {
     language,
     languages,
     setLanguage,
+    updatePreferences,
   } = props;
 
   const appRef = useRef();
@@ -167,6 +169,12 @@ function App(props: Props) {
       };
     }
   }, [hasVerifiedEmail, syncEnabled, checkSync]);
+
+  useEffect(() => {
+    if (hasVerifiedEmail === false) {
+      updatePreferences();
+    }
+  }, [hasVerifiedEmail]);
 
   useEffect(() => {
     if (syncError) {

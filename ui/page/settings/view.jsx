@@ -11,6 +11,7 @@ import Button from 'component/button';
 import I18nMessage from 'component/i18nMessage';
 import Page from 'component/page';
 import SettingLanguage from 'component/settingLanguage';
+import SettingWalletServer from 'component/settingWalletServer';
 import SettingAutoLaunch from 'component/settingAutoLaunch';
 import FileSelector from 'component/common/file-selector';
 import SyncToggle from 'component/syncToggle';
@@ -225,6 +226,7 @@ class SettingsPage extends React.PureComponent<Props, State> {
           <div>
             <Card title={__('Language')} actions={<SettingLanguage />} />
             {/* @if TARGET='app' */}
+            <Card title={__('Wallet Server')} actions={<SettingWalletServer />} />
             <Card
               title={__('Sync')}
               subtitle={
