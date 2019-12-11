@@ -17,8 +17,8 @@ const webConfig = {
   },
   output: {
     filename: '[name].js',
-    path: __dirname + '/dist/',
-    publicPath: '/',
+    path: __dirname + '/dist/public/',
+    publicPath: '/public/',
   },
   devServer: {
     port: WEBPACK_WEB_PORT,
@@ -62,15 +62,15 @@ const webConfig = {
       },
       {
         from: `${STATIC_ROOT}/img/favicon.png`,
-        to: `${DIST_ROOT}/favicon.png`,
+        to: `${DIST_ROOT}/public/favicon.png`,
       },
       {
         from: `${STATIC_ROOT}/img/og.png`,
-        to: `${DIST_ROOT}/og.png`,
+        to: `${DIST_ROOT}/public/og.png`,
       },
       {
         from: `${STATIC_ROOT}/font/`,
-        to: `${DIST_ROOT}/font/`,
+        to: `${DIST_ROOT}/public/font/`,
       },
     ]),
     new DefinePlugin({

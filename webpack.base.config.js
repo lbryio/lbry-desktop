@@ -47,7 +47,7 @@ let baseConfig = {
         use: {
           loader: 'file-loader',
           options: {
-            outputPath: 'static/img',
+            outputPath: 'img/',
             name: '[name].[ext]',
           },
         },
