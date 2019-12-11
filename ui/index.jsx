@@ -289,10 +289,13 @@ function AppWrapper() {
               </ErrorBoundary>
             </ConnectedRouter>
           ) : (
+            <Fragment>
             <SplashScreen
               authenticate={() => app.store.dispatch(doAuthenticate(pjson.version))}
               onReadyToLaunch={() => setReadyToLaunch(true)}
             />
+            <SnackBar />
+            </Fragment>
           )}
         </Fragment>
       </PersistGate>
