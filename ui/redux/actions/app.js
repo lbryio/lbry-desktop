@@ -449,29 +449,34 @@ export function doSignOut() {
   };
 }
 
+export function doGetAndPopulatePreferences() {
+  return dispatch => {
+    function successCb(savedPreferences) {
+      if (savedPreferences !== null) {
+        dispatch(doPopulateSharedUserState(savedPreferences));
+      }
+    }
+
+    function failCb() {
+      deleteSavedPassword().then(() => {
+        dispatch(
+          doToast({
+            isError: true,
+            message: __('Unable to load your saved preferences.'),
+          })
+        );
+      });
+    }
+    doPreferenceGet('shared', successCb, failCb);
+  };
+}
+
 export function doSyncWithPreferences() {
   return dispatch => {
     function handleSyncComplete() {
+      // we just got sync data, better update our channels
       dispatch(doFetchChannelListMine());
-
-      function successCb(savedPreferences) {
-        if (savedPreferences !== null) {
-          dispatch(doPopulateSharedUserState(savedPreferences));
-        }
-      }
-
-      function failCb() {
-        deleteSavedPassword().then(() => {
-          dispatch(
-            doToast({
-              isError: true,
-              message: __('Unable to load your saved preferences.'),
-            })
-          );
-        });
-      }
-
-      doPreferenceGet('shared', successCb, failCb);
+      dispatch(doGetAndPopulatePreferences());
     }
 
     return getSavedPassword().then(password => {

@@ -1,4 +1,4 @@
-import { Lbry, ACTIONS, doToast } from 'lbry-redux';
+import { Lbry, ACTIONS, doToast, SHARED_PREFS, doWalletReconnect } from 'lbry-redux';
 import * as SETTINGS from 'constants/settings';
 import * as LOCAL_ACTIONS from 'constants/action_types';
 import analytics from 'analytics';
@@ -23,13 +23,22 @@ export function doFetchDaemonSettings() {
   };
 }
 
-export function doSetDaemonSetting(key, value) {
+export function doClearDaemonSetting(key) {
   return dispatch => {
-    const newSettings = {
+    const clearKey = {
       key,
-      value: !value && value !== false ? null : value,
     };
-    Lbry.settings_set(newSettings).then(newSettings);
+    Lbry.settings_clear(clearKey).then(defaultSettings => {
+      if (Object.values(SHARED_PREFS).includes(key)) {
+        dispatch({
+          type: ACTIONS.SHARED_PREFERENCE_SET,
+          data: { key: key, value: undefined },
+        });
+      }
+      if (key === SHARED_PREFS.WALLET_SERVERS) {
+        dispatch(doWalletReconnect());
+      }
+    });
     Lbry.settings_get().then(settings => {
       analytics.toggle(settings.share_usage_data);
       dispatch({
@@ -41,6 +50,49 @@ export function doSetDaemonSetting(key, value) {
     });
   };
 }
+
+export function doSetDaemonSetting(key, value) {
+  return dispatch => {
+    const newSettings = {
+      key,
+      value: !value && value !== false ? null : value,
+    };
+    Lbry.settings_set(newSettings).then(newSetting => {
+      if (Object.values(SHARED_PREFS).includes(key)) {
+        dispatch({
+          type: ACTIONS.SHARED_PREFERENCE_SET,
+          data: {key: key, value: newSetting[key]},
+        });
+      }
+      // hardcoding this in lieu of a better solution
+      if (key === SHARED_PREFS.WALLET_SERVERS) {
+        dispatch(doWalletReconnect());
+      }
+    });
+    Lbry.settings_get().then(settings => {
+      analytics.toggle(settings.share_usage_data);
+      dispatch({
+        type: ACTIONS.DAEMON_SETTINGS_RECEIVED,
+        data: {
+          settings,
+        },
+      });
+    });
+  };
+}
+
+export function doCacheCustomWalletServers(servers) {
+  return {
+    type: ACTIONS.WALLET_SERVERS_CACHED,
+    data: servers,
+  };
+}
+
+export function doGetDaemonStatus() {
+  return dispatch => {
+    return Lbry.status().then(settings => settings);
+  };
+};
 
 export function doSetClientSetting(key, value) {
   return {
