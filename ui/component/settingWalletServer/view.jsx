@@ -2,11 +2,18 @@
 
 import React, { useState, useEffect } from 'react';
 import { FormField } from 'component/common/form';
+import Button from 'component/button';
+import * as ICONS from 'constants/icons';
+import Icon from 'component/common/icon';
+
 import ServerInputRow from './internal/inputRow';
-import ServerDisplayRow from './internal/displayRow';
 
 type DaemonSettings = {
-  lbryum_servers: Array<>
+  lbryum_servers: Array<>,
+};
+
+type DaemonStatus = {
+  wallet: any,
 };
 
 type StatusOfServer = {
@@ -14,71 +21,69 @@ type StatusOfServer = {
   port: string,
   availability: boolean,
   latency: number,
-}
+};
 
-type ServerInConfig = Array<string> // ['host', 'port']
+type ServerTuple = Array<string>; // ['host', 'port']
 
 type DisplayOfServer = {
   host: string,
   port: string,
   availability: boolean,
-}
+};
 
-type ServerStatus = Array<StatusOfServer>
-type ServerConfig = Array<ServerInConfig>
-type DisplayList = Array<DisplayOfServer>
+type ServerStatus = Array<StatusOfServer>;
+type ServerConfig = Array<ServerTuple>;
+type DisplayList = Array<DisplayOfServer>;
 
 type Props = {
   daemonSettings: DaemonSettings,
   getDaemonStatus: () => void,
-  setWalletServers: any => void,
+  setCustomWalletServers: any => void,
   clearWalletServers: () => void,
-  customServers: ServerConfig,
-  saveServers: string => void,
+  customWalletServers: ServerConfig,
+  saveServerConfig: string => void,
   fetchDaemonSettings: () => void,
-  serverPrefs: ServerConfig,
+  hasWalletServerPrefs: boolean,
+  daemonStatus: DaemonStatus,
 };
 
 function SettingWalletServer(props: Props) {
   const {
     daemonSettings,
+    daemonStatus,
     fetchDaemonSettings,
-    setWalletServers,
+    setCustomWalletServers,
     getDaemonStatus,
     clearWalletServers,
-    saveServers,
-    customServers,
-    serverPrefs,
+    saveServerConfig,
+    customWalletServers,
+    hasWalletServerPrefs,
   } = props;
 
-  const [custom, setCustom] = useState(false);
-  const [status, setStatus] = useState([]);
-  const serversInConfig: ServerConfig = daemonSettings && daemonSettings.lbryum_servers;
-  const servers = customServers.length ? customServers : serversInConfig;
+  const [advancedMode, setAdvancedMode] = useState(false);
+
+  const activeWalletServers: ServerStatus = (daemonStatus && daemonStatus.wallet && daemonStatus.wallet.servers) || [];
+  const currentServerConfig: ServerConfig = daemonSettings && daemonSettings.lbryum_servers;
+  const serverConfig: ServerConfig = customWalletServers.length ? customWalletServers : currentServerConfig;
   const STATUS_INTERVAL = 5000;
+  console.log(hasWalletServerPrefs)
 
   useEffect(() => {
-    if (serverPrefs && serverPrefs.length) {
-      setCustom(true);
+    if (hasWalletServerPrefs) {
+      setAdvancedMode(true);
     }
   }, []);
 
-  // TODO: do this globally to have status updated for the app
   useEffect(() => {
     const interval = setInterval(() => {
-      getDaemonStatus()
-        .then(s => {
-          if (s && s.wallet && s.wallet.servers) {
-            setStatus(s.wallet.servers);
-          }
-        });
+      getDaemonStatus();
     }, STATUS_INTERVAL);
     return () => clearInterval(interval);
   }, []);
 
   useEffect(() => {
     fetchDaemonSettings();
-  }, [custom]);
+  }, []);
 
   function makeDisplayList(l) {
     const displayList = [];
@@ -87,8 +92,7 @@ function SettingWalletServer(props: Props) {
         host: entry[0],
         port: entry[1],
         available:
-          (status && status.some(s => s.host === entry[0] && String(s.port) === entry[1] && s.availability)) ||
-          false,
+          activeWalletServers.some(s => s.host === entry[0] && String(s.port) === entry[1] && s.availability) || false,
       });
     });
     return displayList;
@@ -102,31 +106,36 @@ function SettingWalletServer(props: Props) {
   }
 
   function doClear() {
-    setCustom(false);
+    setAdvancedMode(false);
     clearWalletServers();
   }
 
   function onAdd(serverTuple) {
-    let newServerConfig = servers.concat();
+    let newServerConfig = serverConfig.concat();
     newServerConfig.push(serverTuple);
-    saveServers(newServerConfig);
-    setWalletServers(makeServerParam(newServerConfig));
+    updateServers(newServerConfig);
   }
 
   function onDelete(i) {
-    const newServerList = servers.concat();
-    newServerList.splice(i, 1);
-    saveServers(newServerList);
-    setWalletServers(makeServerParam(newServerList));
+    const newServerConfig = serverConfig.concat();
+    newServerConfig.splice(i, 1);
+    updateServers(newServerConfig);
+  }
+
+  function updateServers(newConfig) {
+    saveServerConfig(newConfig);
+    setCustomWalletServers(makeServerParam(newConfig));
   }
 
   return (
     <React.Fragment>
+      <label>{__('Wallet servers')}</label>
+      <fieldset>
       <FormField
         type="radio"
         name="default_wallet_servers"
-        checked={!custom}
-        label={__('lbry.tv wallet servers')}
+        checked={!advancedMode}
+        label={__('lbry.tv')}
         onChange={e => {
           if (e.target.checked) {
             doClear();
@@ -136,16 +145,17 @@ function SettingWalletServer(props: Props) {
       <FormField
         type="radio"
         name="custom_wallet_servers"
-        checked={custom}
+        checked={advancedMode}
         onChange={e => {
-          setCustom(e.target.checked);
+          setAdvancedMode(e.target.checked);
           if (e.target.checked) {
-            setWalletServers(makeServerParam(customServers));
+            setCustomWalletServers(makeServerParam(customWalletServers));
           }
         }}
-        label={__('Custom wallet servers')}
+        label={__('customize')}
       />
-      {custom && (
+      </fieldset>
+      {advancedMode && (
         <div>
           <table className="table table--transactions">
             <thead>
@@ -157,9 +167,16 @@ function SettingWalletServer(props: Props) {
               </tr>
             </thead>
             <tbody>
-              {servers &&
-                makeDisplayList(servers).map((t, i) => (
-                  <ServerDisplayRow key={`${t.host}:${t.port}`} host={t.host} port={t.port} available={t.available} index={i} remove={onDelete} />
+              {serverConfig &&
+                makeDisplayList(serverConfig).map((t, i) => (
+                  <tr key={`${t.host}:${t.port}`}>
+                    <td>{t.host}</td>
+                    <td>{t.port}</td>
+                    <td>{t.available && <Icon icon={ICONS.SUBSCRIBE} />}</td>
+                    <td>
+                      <Button button={'link'} icon={ICONS.REMOVE} onClick={() => onDelete(i)} />
+                    </td>
+                  </tr>
                 ))}
               <ServerInputRow update={onAdd} />
             </tbody>

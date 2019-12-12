@@ -130,7 +130,7 @@ const sharedStateFilters = {
     },
   },
   blocked: { source: 'blocked', property: 'blockedChannels' },
-  settings: { source: 'settings', property: 'sharedPrefs'},
+  settings: { source: 'settings', property: 'sharedPreferences'},
 };
 
 const sharedStateCb = ({ dispatch, getState }) => {

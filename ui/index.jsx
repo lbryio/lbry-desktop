@@ -290,11 +290,11 @@ function AppWrapper() {
             </ConnectedRouter>
           ) : (
             <Fragment>
-            <SplashScreen
-              authenticate={() => app.store.dispatch(doAuthenticate(pjson.version))}
-              onReadyToLaunch={() => setReadyToLaunch(true)}
-            />
-            <SnackBar />
+              <SplashScreen
+                authenticate={() => app.store.dispatch(doAuthenticate(pjson.version))}
+                onReadyToLaunch={() => setReadyToLaunch(true)}
+              />
+              <SnackBar />
             </Fragment>
           )}
         </Fragment>

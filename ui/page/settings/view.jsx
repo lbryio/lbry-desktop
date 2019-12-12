@@ -226,7 +226,6 @@ class SettingsPage extends React.PureComponent<Props, State> {
           <div>
             <Card title={__('Language')} actions={<SettingLanguage />} />
             {/* @if TARGET='app' */}
-            <Card title={__('Wallet Server')} actions={<SettingWalletServer />} />
             <Card
               title={__('Sync')}
               subtitle={
@@ -647,7 +646,8 @@ class SettingsPage extends React.PureComponent<Props, State> {
                         ))}
                       </FormField>
                     </fieldset-section>
-                    {/* @endif */}
+                    <SettingWalletServer />
+                {/* @endif */}
                   </React.Fragment>
                 }
               />
