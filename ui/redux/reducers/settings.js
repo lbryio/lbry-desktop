@@ -2,17 +2,18 @@ import * as ACTIONS from 'constants/action_types';
 import * as SETTINGS from 'constants/settings';
 import moment from 'moment';
 import SUPPORTED_LANGUAGES from 'constants/supported_languages';
-import { ACTIONS as LBRY_REDUX_ACTIONS, SHARED_PREFS } from 'lbry-redux';
+import { ACTIONS as LBRY_REDUX_ACTIONS, SHARED_PREFERENCES } from 'lbry-redux';
 
 const reducers = {};
 const defaultState = {
   isNight: false,
   loadedLanguages: [...Object.keys(window.i18n_messages), 'en'] || ['en'],
   customWalletServers: [],
-  sharedPrefs: {
-    [SHARED_PREFS.WALLET_SERVERS]: false,
+  sharedPreferences: {
+    [SHARED_PREFERENCES.WALLET_SERVERS]: false,
   },
   daemonSettings: {},
+  daemonStatus: {},
   clientSettings: {
     // UX
     [SETTINGS.NEW_USER_ACKNOWLEDGED]: false,
@@ -56,9 +57,14 @@ const defaultState = {
   },
 };
 
-reducers[ACTIONS.DAEMON_SETTINGS_RECEIVED] = (state, action) =>
+reducers[LBRY_REDUX_ACTIONS.DAEMON_SETTINGS_RECEIVED] = (state, action) =>
   Object.assign({}, state, {
     daemonSettings: action.data.settings,
+  });
+
+reducers[LBRY_REDUX_ACTIONS.DAEMON_STATUS_RECEIVED] = (state, action) =>
+  Object.assign({}, state, {
+    daemonStatus: action.data.status,
   });
 
 reducers[ACTIONS.CLIENT_SETTING_CHANGED] = (state, action) => {
@@ -99,11 +105,11 @@ reducers[ACTIONS.DOWNLOAD_LANGUAGE_SUCCESS] = (state, action) => {
 
 reducers[LBRY_REDUX_ACTIONS.SHARED_PREFERENCE_SET] = (state, action) => {
   const { key, value } = action.data;
-  const sharedPrefs = Object.assign({}, state.sharedPrefs);
-  sharedPrefs[key] = value;
+  const sharedPreferences = Object.assign({}, state.sharedPreferences);
+  sharedPreferences[key] = value;
 
   return Object.assign({}, state, {
-    sharedPrefs,
+    sharedPreferences,
   });
 }
 
@@ -122,13 +128,13 @@ reducers[LBRY_REDUX_ACTIONS.USER_STATE_POPULATE] = (
   state,
   action,
 ) => {
-  const { settings: sharedPrefs } = action.data;
+  const { settings: sharedPreferences } = action.data;
 
   // process clientSettings and daemonSettings
-  return Object.assign({}, state, { sharedPrefs });
+  return Object.assign({}, state, { sharedPreferences });
 };
 
-reducers[ACTIONS.WALLET_SERVERS_CACHED] = (state, action) => {
+reducers[LBRY_REDUX_ACTIONS.SAVE_CUSTOM_WALLET_SERVERS] = (state, action) => {
   return Object.assign({}, state, {customWalletServers: action.data});
 }
 

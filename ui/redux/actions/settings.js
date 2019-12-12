@@ -1,4 +1,4 @@
-import { Lbry, ACTIONS, doToast, SHARED_PREFS, doWalletReconnect } from 'lbry-redux';
+import { Lbry, ACTIONS, doToast, SHARED_PREFERENCES, doWalletReconnect } from 'lbry-redux';
 import * as SETTINGS from 'constants/settings';
 import * as LOCAL_ACTIONS from 'constants/action_types';
 import analytics from 'analytics';
@@ -23,19 +23,34 @@ export function doFetchDaemonSettings() {
   };
 }
 
+export function doGetDaemonStatus() {
+  return dispatch => {
+    return Lbry.status().then(status => {
+      dispatch({
+        type: ACTIONS.DAEMON_STATUS_RECEIVED,
+        data: {
+          status,
+        },
+      });
+      return status;
+      },
+    );
+  };
+};
+
 export function doClearDaemonSetting(key) {
   return dispatch => {
     const clearKey = {
       key,
     };
     Lbry.settings_clear(clearKey).then(defaultSettings => {
-      if (Object.values(SHARED_PREFS).includes(key)) {
+      if (Object.values(SHARED_PREFERENCES).includes(key)) {
         dispatch({
           type: ACTIONS.SHARED_PREFERENCE_SET,
           data: { key: key, value: undefined },
         });
       }
-      if (key === SHARED_PREFS.WALLET_SERVERS) {
+      if (key === SHARED_PREFERENCES.WALLET_SERVERS) {
         dispatch(doWalletReconnect());
       }
     });
@@ -58,14 +73,14 @@ export function doSetDaemonSetting(key, value) {
       value: !value && value !== false ? null : value,
     };
     Lbry.settings_set(newSettings).then(newSetting => {
-      if (Object.values(SHARED_PREFS).includes(key)) {
+      if (Object.values(SHARED_PREFERENCES).includes(key)) {
         dispatch({
           type: ACTIONS.SHARED_PREFERENCE_SET,
           data: {key: key, value: newSetting[key]},
         });
       }
       // hardcoding this in lieu of a better solution
-      if (key === SHARED_PREFS.WALLET_SERVERS) {
+      if (key === SHARED_PREFERENCES.WALLET_SERVERS) {
         dispatch(doWalletReconnect());
       }
     });
@@ -81,18 +96,12 @@ export function doSetDaemonSetting(key, value) {
   };
 }
 
-export function doCacheCustomWalletServers(servers) {
+export function doSaveCustomWalletServers(servers) {
   return {
-    type: ACTIONS.WALLET_SERVERS_CACHED,
+    type: ACTIONS.SAVE_CUSTOM_WALLET_SERVERS,
     data: servers,
   };
 }
-
-export function doGetDaemonStatus() {
-  return dispatch => {
-    return Lbry.status().then(settings => settings);
-  };
-};
 
 export function doSetClientSetting(key, value) {
   return {

@@ -935,5 +935,9 @@
   "%numberOfMonthsSincePublish% months ago": "%numberOfMonthsSincePublish% months ago",
   "%numberOfDaysSincePublish% months ago": "%numberOfDaysSincePublish% months ago",
   "%numberOfDaysSincePublish% days ago": "%numberOfDaysSincePublish% days ago",
-  "The wallet server took a bit too long. Resetting defaults just in case. Shutdown (Cmd/Ctrl+Q) LBRY and restart if this continues.": "The wallet server took a bit too long. Resetting defaults just in case. Shutdown (Cmd/Ctrl+Q) LBRY and restart if this continues."
+  "The wallet server took a bit too long. Resetting defaults just in case. Shutdown (Cmd/Ctrl+Q) LBRY and restart if this continues.": "The wallet server took a bit too long. Resetting defaults just in case. Shutdown (Cmd/Ctrl+Q) LBRY and restart if this continues.",
+  "Provide a description and link to your license": "Provide a description and link to your license",
+  "Walletserver preference": "Walletserver preference",
+  "Wallet servers": "Wallet servers",
+  "lbry.tv": "lbry.tv"
 }

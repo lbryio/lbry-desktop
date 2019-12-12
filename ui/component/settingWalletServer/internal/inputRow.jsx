@@ -8,19 +8,20 @@ type Props = {
   update: (string) => void,
 };
 
+const VALID_IPADDRESS_REGEX = new RegExp('^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\\.)){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$');
+const VALID_HOSTNAME_REGEX = new RegExp('^(([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9-]*[a-zA-Z0-9])(\\.))+([A-Za-z]|[A-Za-z][A-Za-z]*[A-Za-z])$');
+const VALID_PORT_REGEX = new RegExp('^([0-9]){1,5}$');
+
 function ServerInputRow(props: Props) {
   const { update } = props;
-  const ValidIpAddressRegex = new RegExp('^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\\.)){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$');
-  const ValidHostnameRegex = new RegExp('^(([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9-]*[a-zA-Z0-9])(\\.))+([A-Za-z]|[A-Za-z][A-Za-z]*[A-Za-z])$');
-  const ValidPortRegex = new RegExp('^([0-9]){1,5}$');
 
   const [hostString, setHostString] = useState('');
   const [portString, setPortString] = useState('');
-  const [valid, setValid] = useState(false);
+  const [validServerString, setValidServerString] = useState(false);
 
   useEffect(() => {
-    setValid((ValidIpAddressRegex.test(hostString) || ValidHostnameRegex.test(hostString)) && ValidPortRegex.test(portString));
-  }, [hostString, portString, valid, setValid]);
+    setValidServerString((VALID_IPADDRESS_REGEX.test(hostString) || VALID_HOSTNAME_REGEX.test(hostString)) && VALID_PORT_REGEX.test(portString));
+  }, [hostString, portString, validServerString, setValidServerString]);
 
   function onClick() {
     update([hostString, portString]);
@@ -30,15 +31,15 @@ function ServerInputRow(props: Props) {
 
   return (
     <tr>
-      <td> {/* host */}
-        <FormField type="text" value={hostString} onChange={e => setHostString(e.target.value)}/>
+      <td>
+        <FormField type="text" value={hostString} onChange={e => setHostString(e.target.value)} />
       </td>
-      <td> {/* port */}
-        <FormField type="text" value={portString} onChange={e => setPortString(e.target.value)}/>
+      <td>
+        <FormField type="text" value={portString} onChange={e => setPortString(e.target.value)} />
       </td>
       <td />
       <td>
-        <Button button={'link'} icon={ICONS.ADD} disabled={!valid} onClick={onClick}/>
+        <Button button={'link'} icon={ICONS.ADD} disabled={!validServerString} onClick={onClick} />
       </td>
     </tr>
   );

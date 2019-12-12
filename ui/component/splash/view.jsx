@@ -160,7 +160,7 @@ export default class SplashScreen extends React.PureComponent<Props, State> {
       });
 
       return;
-    } else if (startupStatus && !startupStatus.wallet && wallet.available_servers < 1) {
+    } else if (startupStatus && !startupStatus.wallet && wallet && wallet.available_servers < 1) {
       this.setState({waitingForWallet: this.state.waitingForWallet + (UPDATE_INTERVAL / 1000)});
     } else if (wallet && wallet.blocks_behind > 0) {
       this.setState({
