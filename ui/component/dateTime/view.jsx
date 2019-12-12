@@ -25,7 +25,7 @@ class DateTime extends React.PureComponent<Props> {
 
       // Moment is very liberal with it's rounding
       // Wait to show "two years ago" until it's actually been two years (or higher)
-      const numberOfYearsSincePublish = moment().diff(date, 'years');
+      const numberOfYearsSincePublish = Math.floor(moment().diff(date, 'years'));
 
       if (numberOfYearsSincePublish === 1) {
         return <span>{__('%numberOfYearsSincePublish% year ago', { numberOfYearsSincePublish })}</span>;
@@ -33,6 +33,21 @@ class DateTime extends React.PureComponent<Props> {
         return <span>{__('%numberOfYearsSincePublish% years ago', { numberOfYearsSincePublish })}</span>;
       }
 
+      const numberOfMonthsSincePublish = Math.floor(moment().diff(date, 'months'));
+      if (numberOfMonthsSincePublish === 1) {
+        return <span>{__('%numberOfMonthsSincePublish% month ago', { numberOfMonthsSincePublish })}</span>;
+      } else if (numberOfMonthsSincePublish > 1) {
+        return <span>{__('%numberOfMonthsSincePublish% months ago', { numberOfMonthsSincePublish })}</span>;
+      }
+
+      const numberOfDaysSincePublish = Math.floor(moment().diff(date, 'days'));
+      if (numberOfDaysSincePublish === 1) {
+        return <span>{__('%numberOfDaysSincePublish% day ago', { numberOfDaysSincePublish })}</span>;
+      } else if (numberOfDaysSincePublish > 1) {
+        return <span>{__('%numberOfDaysSincePublish% days ago', { numberOfDaysSincePublish })}</span>;
+      }
+
+      // "just now", "a few minutes ago"
       return <span>{moment(date).from(moment())}</span>;
     }
 
