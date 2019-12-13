@@ -4,12 +4,11 @@ import React, { useState, useEffect } from 'react';
 import { FormField } from 'component/common/form';
 import Button from 'component/button';
 import * as ICONS from 'constants/icons';
-import Icon from 'component/common/icon';
 
 import ServerInputRow from './internal/inputRow';
 
 type DaemonSettings = {
-  lbryum_servers: Array<>,
+  lbryum_servers: Array<string>,
 };
 
 type DaemonStatus = {
@@ -33,7 +32,7 @@ type Props = {
   setCustomWalletServers: any => void,
   clearWalletServers: () => void,
   customWalletServers: ServerConfig,
-  saveServerConfig: string => void,
+  saveServerConfig: (Array<string>) => void,
   fetchDaemonSettings: () => void,
   hasWalletServerPrefs: boolean,
   daemonStatus: DaemonStatus,
@@ -88,13 +87,13 @@ function SettingWalletServer(props: Props) {
     clearWalletServers();
   }
 
-  function onAdd(serverTuple) {
+  function onAdd(serverTuple: Array<string>) {
     let newServerConfig = serverConfig.concat();
     newServerConfig.push(serverTuple);
     updateServers(newServerConfig);
   }
 
-  function onDelete(i) {
+  function onDelete(i: number) {
     const newServerConfig = serverConfig.concat();
     newServerConfig.splice(i, 1);
     updateServers(newServerConfig);
@@ -107,13 +106,12 @@ function SettingWalletServer(props: Props) {
 
   return (
     <React.Fragment>
-      <label>{__('Wallet servers')}</label>
-      <fieldset>
+      <fieldset-section>
         <FormField
           type="radio"
           name="default_wallet_servers"
           checked={!advancedMode}
-          label={__('lbry.tv')}
+          label={__('Use official lbry.tv wallet servers')}
           onChange={e => {
             if (e.target.checked) {
               doClear();
@@ -130,42 +128,41 @@ function SettingWalletServer(props: Props) {
               setCustomWalletServers(makeServerParam(customWalletServers));
             }
           }}
-          label={__('customize')}
+          label={__('Use custom wallet servers')}
         />
-      </fieldset>
-      {advancedMode && (
-        <div>
-          <table className="table table--transactions">
-            <thead>
-              <tr>
-                <th>{__('Host')}</th>
-                <th>{__('Port')} </th>
-                <th>{__('Available')} </th>
-                <th>{__('Add/Delete')} </th>
-              </tr>
-            </thead>
-            <tbody>
-              {serverConfig &&
-                serverConfig.map((entry, i) => (
-                  <tr key={`${entry[0]}:${entry[1]}`}>
-                    <td>{entry[0]}</td>
-                    <td>{entry[1]}</td>
-                    <td>
-                      {activeWalletServers.some(
-                        s => s.host === entry[0] && String(s.port) === entry[1] && s.availability
-                      ) && <Icon icon={ICONS.SUBSCRIBE} />}
-                    </td>
-                    <td>
-                      <Button button={'link'} icon={ICONS.REMOVE} onClick={() => onDelete(i)} />
-                    </td>
-                  </tr>
-                ))}
+        {advancedMode && (
+          <div>
+            {serverConfig &&
+              serverConfig.map((entry, index) => {
+                const [host, port] = entry;
+                const available = activeWalletServers.some(
+                  s => s.host === entry[0] && String(s.port) === entry[1] && s.availability
+                );
+
+                return (
+                  <div
+                    key={`${host}:${port}`}
+                    className="section section--padded card--inline form-field__internal-option"
+                  >
+                    <h3>
+                      {host}:{port}
+                    </h3>
+                    <span className="help">{available ? 'Connected' : 'Not connected'}</span>
+                    <Button
+                      button="close"
+                      title={__('Remove custom wallet server')}
+                      icon={ICONS.REMOVE}
+                      onClick={() => onDelete(index)}
+                    />
+                  </div>
+                );
+              })}
+            <div className="form-field__internal-option">
               <ServerInputRow update={onAdd} />
-            </tbody>
-          </table>
-        </div>
-      )}
-      <p className="help">{__(`Choose a different provider's wallet server.`)}</p>
+            </div>
+          </div>
+        )}
+      </fieldset-section>
     </React.Fragment>
   );
 }
