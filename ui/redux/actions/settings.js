@@ -47,7 +47,7 @@ export function doClearDaemonSetting(key) {
       if (Object.values(SHARED_PREFERENCES).includes(key)) {
         dispatch({
           type: ACTIONS.SHARED_PREFERENCE_SET,
-          data: { key: key, value: undefined },
+          data: { key: key, value: null },
         });
       }
       if (key === SHARED_PREFERENCES.WALLET_SERVERS) {
