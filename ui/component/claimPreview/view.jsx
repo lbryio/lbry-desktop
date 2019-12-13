@@ -109,7 +109,7 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
     ((abandoned && !showPublishLink) || (!claimIsMine && obscureNsfw && nsfw));
 
   // This will be replaced once blocking is done at the wallet server level
-  if (claim && !shouldHide && blackListedOutpoints) {
+  if (claim && !claimIsMine && !shouldHide && blackListedOutpoints) {
     shouldHide = blackListedOutpoints.some(
       outpoint =>
         (signingChannel && outpoint.txid === signingChannel.txid && outpoint.nout === signingChannel.nout) ||
@@ -118,7 +118,7 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
   }
   // We're checking to see if the stream outpoint
   // or signing channel outpoint is in the filter list
-  if (claim && !shouldHide && filteredOutpoints) {
+  if (claim && !claimIsMine && !shouldHide && filteredOutpoints) {
     shouldHide = filteredOutpoints.some(
       outpoint =>
         (signingChannel && outpoint.txid === signingChannel.txid && outpoint.nout === signingChannel.nout) ||
