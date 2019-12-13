@@ -39,10 +39,7 @@ type State = {
   error: boolean,
   isRunning: boolean,
   launchWithIncompatibleDaemon: boolean,
-  walletServerAvailable: boolean,
   waitingForWallet: number,
-  hasPopulated: boolean,
-  hasReconnected: boolean,
 };
 
 export default class SplashScreen extends React.PureComponent<Props, State> {
@@ -129,8 +126,12 @@ export default class SplashScreen extends React.PureComponent<Props, State> {
         });
       } else if (this.state.waitingForWallet > MAX_WALLET_WAIT && launchedModal === false && !modal) {
         clearWalletServers();
-        doShowSnackBar(__('The wallet server took a bit too long. Resetting defaults just in case. Shutdown (Cmd/Ctrl+Q) LBRY and restart if this continues.'));
-        this.setState({waitingForWallet: 0});
+        doShowSnackBar(
+          __(
+            'The wallet server took a bit too long. Resetting defaults just in case. Shutdown (Cmd/Ctrl+Q) LBRY and restart if this continues.'
+          )
+        );
+        this.setState({ waitingForWallet: 0 });
         this.updateStatusCallback(status);
       } else {
         this.updateStatusCallback(status);
@@ -151,7 +152,7 @@ export default class SplashScreen extends React.PureComponent<Props, State> {
       this.hasRecordedUser = true;
     }
 
-    const { wallet, startup_status: startupStatus, blockchain_headers: blockchainHeaders } = status;
+    const { wallet, startup_status: startupStatus } = status;
 
     // If the wallet is locked, stop doing anything and make the user input their password
     if (status.is_running && !waitingForUnlock) {
@@ -161,7 +162,7 @@ export default class SplashScreen extends React.PureComponent<Props, State> {
 
       return;
     } else if (startupStatus && !startupStatus.wallet && wallet && wallet.available_servers < 1) {
-      this.setState({waitingForWallet: this.state.waitingForWallet + (UPDATE_INTERVAL / 1000)});
+      this.setState({ waitingForWallet: this.state.waitingForWallet + UPDATE_INTERVAL / 1000 });
     } else if (wallet && wallet.blocks_behind > 0) {
       this.setState({
         message: __('Blockchain Sync'),

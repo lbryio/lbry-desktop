@@ -1,4 +1,5 @@
 .section {
+  position: relative;
   margin-top: var(--spacing-large);
 
   &:first-of-type {
