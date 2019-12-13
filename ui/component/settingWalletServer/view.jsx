@@ -24,16 +24,8 @@ type StatusOfServer = {
 };
 
 type ServerTuple = Array<string>; // ['host', 'port']
-
-type DisplayOfServer = {
-  host: string,
-  port: string,
-  availability: boolean,
-};
-
 type ServerStatus = Array<StatusOfServer>;
 type ServerConfig = Array<ServerTuple>;
-type DisplayList = Array<DisplayOfServer>;
 
 type Props = {
   daemonSettings: DaemonSettings,
@@ -66,7 +58,6 @@ function SettingWalletServer(props: Props) {
   const currentServerConfig: ServerConfig = daemonSettings && daemonSettings.lbryum_servers;
   const serverConfig: ServerConfig = customWalletServers.length ? customWalletServers : currentServerConfig;
   const STATUS_INTERVAL = 5000;
-  console.log(hasWalletServerPrefs)
 
   useEffect(() => {
     if (hasWalletServerPrefs) {
@@ -84,19 +75,6 @@ function SettingWalletServer(props: Props) {
   useEffect(() => {
     fetchDaemonSettings();
   }, []);
-
-  function makeDisplayList(l) {
-    const displayList = [];
-    l.forEach(entry => {
-      displayList.push({
-        host: entry[0],
-        port: entry[1],
-        available:
-          activeWalletServers.some(s => s.host === entry[0] && String(s.port) === entry[1] && s.availability) || false,
-      });
-    });
-    return displayList;
-  }
 
   function makeServerParam(configList) {
     return configList.reduce((acc, cur) => {
@@ -131,29 +109,29 @@ function SettingWalletServer(props: Props) {
     <React.Fragment>
       <label>{__('Wallet servers')}</label>
       <fieldset>
-      <FormField
-        type="radio"
-        name="default_wallet_servers"
-        checked={!advancedMode}
-        label={__('lbry.tv')}
-        onChange={e => {
-          if (e.target.checked) {
-            doClear();
-          }
-        }}
-      />
-      <FormField
-        type="radio"
-        name="custom_wallet_servers"
-        checked={advancedMode}
-        onChange={e => {
-          setAdvancedMode(e.target.checked);
-          if (e.target.checked) {
-            setCustomWalletServers(makeServerParam(customWalletServers));
-          }
-        }}
-        label={__('customize')}
-      />
+        <FormField
+          type="radio"
+          name="default_wallet_servers"
+          checked={!advancedMode}
+          label={__('lbry.tv')}
+          onChange={e => {
+            if (e.target.checked) {
+              doClear();
+            }
+          }}
+        />
+        <FormField
+          type="radio"
+          name="custom_wallet_servers"
+          checked={advancedMode}
+          onChange={e => {
+            setAdvancedMode(e.target.checked);
+            if (e.target.checked) {
+              setCustomWalletServers(makeServerParam(customWalletServers));
+            }
+          }}
+          label={__('customize')}
+        />
       </fieldset>
       {advancedMode && (
         <div>
@@ -168,11 +146,15 @@ function SettingWalletServer(props: Props) {
             </thead>
             <tbody>
               {serverConfig &&
-                makeDisplayList(serverConfig).map((t, i) => (
-                  <tr key={`${t.host}:${t.port}`}>
-                    <td>{t.host}</td>
-                    <td>{t.port}</td>
-                    <td>{t.available && <Icon icon={ICONS.SUBSCRIBE} />}</td>
+                serverConfig.map((entry, i) => (
+                  <tr key={`${entry[0]}:${entry[1]}`}>
+                    <td>{entry[0]}</td>
+                    <td>{entry[1]}</td>
+                    <td>
+                      {activeWalletServers.some(
+                        s => s.host === entry[0] && String(s.port) === entry[1] && s.availability
+                      ) && <Icon icon={ICONS.SUBSCRIBE} />}
+                    </td>
                     <td>
                       <Button button={'link'} icon={ICONS.REMOVE} onClick={() => onDelete(i)} />
                     </td>
