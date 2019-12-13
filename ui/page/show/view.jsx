@@ -7,6 +7,7 @@ import FilePage from 'page/file';
 import Page from 'component/page';
 import Button from 'component/button';
 import { SITE_TITLE } from 'config';
+import Card from 'component/common/card';
 
 type Props = {
   isResolvingUri: boolean,
@@ -20,21 +21,10 @@ type Props = {
   }>,
   title: string,
   claimIsMine: Boolean,
-  fileInfo: FileListItem,
 };
 
 function ShowPage(props: Props) {
-  const {
-    isResolvingUri,
-    resolveUri,
-    uri,
-    claim,
-    blackListedOutpoints,
-    location,
-    title,
-    claimIsMine,
-    fileInfo,
-  } = props;
+  const { isResolvingUri, resolveUri, uri, claim, blackListedOutpoints, location, title, claimIsMine } = props;
   const { channelName, streamName } = parseURI(uri);
   const signingChannel = claim && claim.signing_channel;
   const canonicalUrl = claim && claim.canonical_url;
@@ -98,31 +88,24 @@ function ShowPage(props: Props) {
         (outpoint.txid === claim.txid && outpoint.nout === claim.nout)
     );
 
-    let blockedMessage = (
-      <section className="card card--section">
-        <div className="card__title card__title--deprecated">{uri}</div>
-        <p>
-          {__(
-            'In response to a complaint we received under the US Digital Millennium Copyright Act, we have blocked access to this content from our applications.'
-          )}
-        </p>
-        <div className="card__actions">
-          <Button button="link" href="https://lbry.com/faq/dmca" label={__('Read More')} />
-        </div>
-      </section>
-    );
-
     if (isClaimBlackListed && !claimIsMine) {
-      innerContent = <Page>{blockedMessage}</Page>;
+      innerContent = (
+        <Page>
+          <Card
+            title={uri}
+            subtitle={__(
+              'In response to a complaint we received under the US Digital Millennium Copyright Act, we have blocked access to this content from our applications.'
+            )}
+            actions={
+              <div className="card__actions">
+                <Button button="link" href="https://lbry.com/faq/dmca" label={__('Read More')} />
+              </div>
+            }
+          />
+        </Page>
+      );
     } else {
-      innerContent =
-        isClaimBlackListed || fileInfo ? (
-          <div>
-            {blockedMessage} <FilePage uri={uri} location={location} />
-          </div>
-        ) : (
-          <FilePage uri={uri} location={location} />
-        );
+      innerContent = <FilePage uri={uri} location={location} />;
     }
   }
 
