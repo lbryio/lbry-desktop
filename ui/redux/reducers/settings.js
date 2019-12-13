@@ -10,7 +10,7 @@ const defaultState = {
   loadedLanguages: [...Object.keys(window.i18n_messages), 'en'] || ['en'],
   customWalletServers: [],
   sharedPreferences: {
-    [SHARED_PREFERENCES.WALLET_SERVERS]: false,
+    [SHARED_PREFERENCES.WALLET_SERVERS]: [],
   },
   daemonSettings: {},
   daemonStatus: {},
