@@ -925,7 +925,6 @@
   "Available": "Available",
   "Unable to load your saved preferences.": "Unable to load your saved preferences.",
   "Add/Delete": "Add/Delete",
-  "PDF opened externally. %click_here% to open it again.": "PDF opened externally. %click_here% to open it again.",
   "%numberOfMonthsSincePublish% years ago": "%numberOfMonthsSincePublish% years ago",
   "%numberOfYearsSincePublish% years ago": "%numberOfYearsSincePublish% years ago",
   "%numberOfYearsSincePublish% year ago": "%numberOfYearsSincePublish% year ago",
@@ -939,5 +938,6 @@
   "Provide a description and link to your license": "Provide a description and link to your license",
   "Walletserver preference": "Walletserver preference",
   "Wallet servers": "Wallet servers",
-  "lbry.tv": "lbry.tv"
+  "lbry.tv": "lbry.tv",
+  "In response to a complaint we received under the US Digital Millennium Copyright Act, we have blocked access to this content from our applications.": "In response to a complaint we received under the US Digital Millennium Copyright Act, we have blocked access to this content from our applications."
 }

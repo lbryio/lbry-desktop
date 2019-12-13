@@ -22,6 +22,7 @@ const webConfig = {
   },
   devServer: {
     port: WEBPACK_WEB_PORT,
+    contentBase: path.join(__dirname, 'dist'),
   },
   module: {
     rules: [

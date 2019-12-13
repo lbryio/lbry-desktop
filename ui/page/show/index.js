@@ -8,7 +8,6 @@ import {
   makeSelectTitleForUri,
   normalizeURI,
   makeSelectClaimIsMine,
-  makeSelectFileInfoForUri,
 } from 'lbry-redux';
 import { selectBlackListedOutpoints } from 'lbryinc';
 import ShowPage from './view';
@@ -41,7 +40,6 @@ const select = (state, props) => {
     uri,
     title: makeSelectTitleForUri(uri)(state),
     claimIsMine: makeSelectClaimIsMine(uri)(state),
-    fileInfo: makeSelectFileInfoForUri(uri)(state),
   };
 };
 
