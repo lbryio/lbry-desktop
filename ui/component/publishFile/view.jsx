@@ -56,7 +56,9 @@ function PublishFile(props: Props) {
     let fileName = file.name.substr(0, file.name.lastIndexOf('.')) || file.name;
     let replaceChars = new RegExp(regexInvalidURI, 'gu');
     let parsedFileName = fileName.replace(replaceChars, '-');
-    publishFormParams.name = parsedFileName;
+    if (!isStillEditing) {
+      publishFormParams.name = parsedFileName;
+    }
     updatePublishForm(publishFormParams);
   }
 
