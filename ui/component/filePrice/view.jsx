@@ -39,8 +39,7 @@ class FilePrice extends React.PureComponent<Props> {
 
   render() {
     const { costInfo, showFullPrice, badge, inheritStyle, showLBC, hideFree } = this.props;
-
-    if (costInfo && !costInfo.cost && hideFree) {
+    if (costInfo && (!costInfo.cost || (!costInfo.cost && hideFree))) {
       return null;
     }
 
