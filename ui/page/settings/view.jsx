@@ -102,12 +102,16 @@ class SettingsPage extends React.PureComponent<Props, State> {
   }
 
   componentDidMount() {
-    this.props.updateWalletStatus();
-    getSavedPassword().then(p => {
-      if (p) {
-        this.setState({ storedPassword: true });
-      }
-    });
+    const { isAuthenticated } = this.props;
+    if (isAuthenticated) {
+      this.props.updateWalletStatus();
+
+      getSavedPassword().then(p => {
+        if (p) {
+          this.setState({ storedPassword: true });
+        }
+      });
+    }
   }
 
   onKeyFeeChange(newValue: Price) {
@@ -647,7 +651,7 @@ class SettingsPage extends React.PureComponent<Props, State> {
                       </FormField>
                     </fieldset-section>
                     <SettingWalletServer />
-                {/* @endif */}
+                    {/* @endif */}
                   </React.Fragment>
                 }
               />

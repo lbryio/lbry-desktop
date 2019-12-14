@@ -169,12 +169,13 @@ function App(props: Props) {
       };
     }
   }, [hasVerifiedEmail, syncEnabled, checkSync]);
-
+  // @if TARGET='app'
   useEffect(() => {
     if (hasVerifiedEmail === false) {
       updatePreferences();
     }
   }, [hasVerifiedEmail]);
+  // @endif
 
   useEffect(() => {
     if (syncError) {
