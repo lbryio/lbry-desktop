@@ -922,11 +922,14 @@
   "The wallet server took a bit too long. Resetting defaults just in case. Shutdown (Cmd/Ctrl+Q) LBRY and restart if this continues.": "The wallet server took a bit too long. Resetting defaults just in case. Shutdown (Cmd/Ctrl+Q) LBRY and restart if this continues.",
   "Provide a description and link to your license": "Provide a description and link to your license",
   "Wallet servers": "Wallet servers",
-  "In response to a complaint we received under the US Digital Millennium Copyright Act, we have blocked access to this content from our applications.": "In response to a complaint we received under the US Digital Millennium Copyright Act, we have blocked access to this content from our applications.",
   "Followers": "Followers",
   "%number% files hidden due to your %content_viewing_preferences_link%": "%number% files hidden due to your %content_viewing_preferences_link%",
   "Use official lbry.tv wallet servers": "Use official lbry.tv wallet servers",
   "Use custom wallet servers": "Use custom wallet servers",
   "Remove custom wallet server": "Remove custom wallet server",
-  "Add": "Add"
+  "Add": "Add",
+  "In response to a complaint we received under the US Digital Millennium Copyright Act, we have blocked access to this content from our applications.": "In response to a complaint we received under the US Digital Millennium Copyright Act, we have blocked access to this content from our applications.",
+  "lbry.tv": "lbry.tv",
+  "Your Blocked Channels": "Your Blocked Channels",
+  "Bid position must be a number.": "Bid position must be a number."
 }
