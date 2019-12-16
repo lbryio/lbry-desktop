@@ -46,11 +46,11 @@ function ServerInputRow(props: Props) {
         />
         <span className="form-field__conjuction">:</span>
         <FormField
-          type="text"
+          type="number"
           label={__('Port')}
           placeholder={'50001'}
           value={portString}
-          onChange={e => setPortString(e.target.value)}
+          onChange={e => setPortString(String(e.target.value))}
         />
       </div>
 
