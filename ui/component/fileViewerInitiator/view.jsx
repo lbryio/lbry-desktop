@@ -51,7 +51,15 @@ export default function FileViewer(props: Props) {
   const isPlayable = ['audio', 'video'].includes(mediaType) || forceVideo;
   const fileStatus = fileInfo && fileInfo.status;
   const webStreamOnly = contentType === 'application/pdf' || mediaType === 'text';
-  const supported = (IS_WEB && (isStreamable || webStreamOnly || forceVideo)) || !IS_WEB;
+  const supported = IS_WEB ? (!cost && isStreamable) || webStreamOnly || forceVideo : true;
+
+  function getMessage() {
+    if (IS_WEB && cost) {
+      return __('Paid Content Not Supported on lbry.tv');
+    }
+
+    return __('Unsupported File');
+  }
 
   // Wrap this in useCallback because we need to use it to the keyboard effect
   // If we don't a new instance will be created for every render and react will think the dependencies have changed, which will add/remove the listener for every render
@@ -107,7 +115,7 @@ export default function FileViewer(props: Props) {
       {!supported && (
         <Yrbl
           type="happy"
-          title={__('Unsupported File')}
+          title={getMessage()}
           subtitle={
             <Fragment>
               <p>
