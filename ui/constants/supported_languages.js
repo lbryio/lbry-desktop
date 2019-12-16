@@ -13,12 +13,15 @@ const SUPPORTED_LANGUAGES = {
   it: LANGUAGES.it[1],
   ms: LANGUAGES.ms[1],
   ml: LANGUAGES.ml[1],
+  mr: LANGUAGES.mr[1],
+  pa: LANGUAGES.pa[1],
   pl: LANGUAGES.pl[1],
   pt: LANGUAGES.pt[1],
   ru: LANGUAGES.ru[1],
   sr: LANGUAGES.sr[1],
   sk: LANGUAGES.sk[1],
   es: LANGUAGES.es[1],
+  sv: LANGUAGES.sv[1],
   tr: LANGUAGES.tr[1],
 };
 
