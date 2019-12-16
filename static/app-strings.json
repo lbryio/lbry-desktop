@@ -924,5 +924,9 @@
   "Wallet servers": "Wallet servers",
   "In response to a complaint we received under the US Digital Millennium Copyright Act, we have blocked access to this content from our applications.": "In response to a complaint we received under the US Digital Millennium Copyright Act, we have blocked access to this content from our applications.",
   "Followers": "Followers",
-  "%number% files hidden due to your %content_viewing_preferences_link%": "%number% files hidden due to your %content_viewing_preferences_link%"
+  "%number% files hidden due to your %content_viewing_preferences_link%": "%number% files hidden due to your %content_viewing_preferences_link%",
+  "Use official lbry.tv wallet servers": "Use official lbry.tv wallet servers",
+  "Use custom wallet servers": "Use custom wallet servers",
+  "Remove custom wallet server": "Remove custom wallet server",
+  "Add": "Add"
 }
