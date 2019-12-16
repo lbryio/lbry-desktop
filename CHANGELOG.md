@@ -8,12 +8,17 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ### Fixed
 
+- Issue with adding tags on publishes ([#3375](https://github.com/lbryio/lbry-desktop/pull/3375))
+
 ### Added
 
 - Dedicated Channel Creation page ([#3305](https://github.com/lbryio/lbry-desktop/pull/3305))
+- Ability to use custom wallet servers ([#3361](https://github.com/lbryio/lbry-desktop/pull/3361))
+- Autoplay free text files ([#3357](https://github.com/lbryio/lbry-desktop/pull/3357))
 
 ### Changed
 
+- Updated lbry-sdk to [0.50.0](https://github.com/lbryio/lbry-sdk/releases/tag/v0.50.0)
 - Always round down dates on claim previews for better yotube parity ([#3353](https://github.com/lbryio/lbry-desktop/pull/3353))
 
 ## [0.37.2] - [2019-11-21]
