@@ -1,7 +1,7 @@
 // @flow
 import * as ICONS from 'constants/icons';
 import React, { useEffect, Fragment } from 'react';
-import { isURIValid, normalizeURI } from 'lbry-redux';
+import { isURIValid, normalizeURI, regexInvalidURI } from 'lbry-redux';
 import ClaimPreview from 'component/claimPreview';
 import ClaimList from 'component/claimList';
 import Page from 'component/page';
@@ -22,12 +22,16 @@ export default function SearchPage(props: Props) {
   const { search, uris, onFeedbackPositive, onFeedbackNegative, location, isSearching } = props;
   const urlParams = new URLSearchParams(location.search);
   const urlQuery = urlParams.get('q');
-  const isValid = isURIValid(urlQuery);
 
-  let uri;
-  if (isValid) {
-    uri = normalizeURI(urlQuery);
-  }
+  let INVALID_URI_CHARS = new RegExp(regexInvalidURI, 'gu');
+  let modifiedUrlQuery = urlQuery
+    ? urlQuery
+        .trim()
+        .replace(/\s+/, '-')
+        .replace(INVALID_URI_CHARS, '')
+    : '';
+  const isModifiedUriValid = isURIValid(modifiedUrlQuery);
+  const normalizedModifiedUri = isModifiedUriValid && normalizeURI(modifiedUrlQuery);
 
   useEffect(() => {
     if (urlQuery) {
@@ -40,11 +44,11 @@ export default function SearchPage(props: Props) {
       <section className="search">
         {urlQuery && (
           <Fragment>
-            {isValid && (
+            {isModifiedUriValid && (
               <header className="search__header">
-                <ClaimUri uri={uri} />
+                <ClaimUri uri={normalizedModifiedUri} />
                 <div className="card">
-                  <ClaimPreview uri={uri} type="large" placeholder="publish" />
+                  <ClaimPreview uri={normalizedModifiedUri} type="large" placeholder="publish" />
                 </div>
               </header>
             )}
