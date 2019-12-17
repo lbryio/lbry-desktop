@@ -198,6 +198,9 @@ function ChannelForm(props: Props) {
         <Button button="primary" label={__('Submit')} onClick={handleSubmit} />
         <Button button="link" label={__('Cancel')} navigate={`$/${PAGES.CHANNELS}`} />
       </div>
+      <p className="help">
+        {__('After submitting, you will not see the changes immediately. Please check back in a few minutes.')}
+      </p>
     </section>
   );
 }
