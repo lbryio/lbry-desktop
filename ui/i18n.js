@@ -59,6 +59,6 @@ export function __(message, tokens) {
   }
 
   return translatedMessage.replace(/%([^%]+)%/g, function($1, $2) {
-    return tokens[$2] || $2;
+    return tokens.hasOwnProperty($2) ? tokens[$2] : $2;
   });
 }
