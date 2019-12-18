@@ -27,7 +27,7 @@ export default function SearchPage(props: Props) {
   let modifiedUrlQuery = urlQuery
     ? urlQuery
         .trim()
-        .replace(/\s+/, '-')
+        .replace(/\s+/g, '-')
         .replace(INVALID_URI_CHARS, '')
     : '';
   const isModifiedUriValid = isURIValid(modifiedUrlQuery);
