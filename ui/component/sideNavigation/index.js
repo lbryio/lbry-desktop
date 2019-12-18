@@ -2,21 +2,22 @@ import * as SETTINGS from 'constants/settings';
 import { connect } from 'react-redux';
 import { selectSubscriptions } from 'redux/selectors/subscriptions';
 import { selectFollowedTags } from 'lbry-redux';
-import { selectUserEmail, selectUploadCount } from 'lbryinc';
-import SideBar from './view';
+import { selectUploadCount, selectUserVerifiedEmail } from 'lbryinc';
 import { makeSelectClientSetting } from 'redux/selectors/settings';
+import { doSignOut } from 'redux/actions/app';
+import SideNavigation from './view';
 
 const select = state => ({
   subscriptions: selectSubscriptions(state),
   followedTags: selectFollowedTags(state),
   language: makeSelectClientSetting(SETTINGS.LANGUAGE)(state), // trigger redraw on language change
-  email: selectUserEmail(state),
   uploadCount: selectUploadCount(state),
+  email: selectUserVerifiedEmail(state),
 });
-
-const perform = () => ({});
 
 export default connect(
   select,
-  perform
-)(SideBar);
+  {
+    doSignOut,
+  }
+)(SideNavigation);

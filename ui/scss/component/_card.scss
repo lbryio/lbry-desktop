@@ -5,6 +5,10 @@
   border-radius: var(--card-radius);
   box-shadow: var(--card-box-shadow) var(--color-box-shadow);
   overflow: hidden;
+
+  @media (max-width: $breakpoint-small) {
+    margin-bottom: var(--spacing-medium);
+  }
 }
 
 .card--disabled {
@@ -72,12 +76,19 @@
 
 .card__list {
   column-count: 2;
-  column-gap: var(--spacing-medium);
+  column-gap: var(--spacing-large);
   display: block;
 
   .card {
     display: inline-block;
-    margin: 0 0 var(--spacing-medium);
+    margin: 0 0 var(--spacing-large);
+  }
+
+  @media (max-width: $breakpoint-small) {
+    column-count: 1;
+    .card {
+      display: block;
+    }
   }
 }
 

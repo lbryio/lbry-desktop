@@ -10,6 +10,10 @@
 .yrbl {
   height: 20rem;
   margin-right: var(--spacing-large);
+
+  @media (max-width: $breakpoint-small) {
+    height: 10rem;
+  }
 }
 
 .yrbl__content {

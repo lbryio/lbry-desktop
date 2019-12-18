@@ -27,6 +27,7 @@ type Props = {
   authHeader: boolean,
   syncError: ?string,
   signOut: () => void,
+  openMobileNavigation: () => void,
 };
 
 const Header = (props: Props) => {
@@ -41,6 +42,7 @@ const Header = (props: Props) => {
     authHeader,
     signOut,
     syncError,
+    openMobileNavigation,
   } = props;
   const authenticated = Boolean(email);
 
@@ -201,6 +203,16 @@ const Header = (props: Props) => {
             </div>
           )
         )}
+
+        {!authenticated && (
+          <Button
+            button="primary"
+            label={__('Sign In')}
+            className="header__menu--mobile"
+            onClick={() => history.push(`/$/${PAGES.AUTH}`)}
+          />
+        )}
+        <Button onClick={openMobileNavigation} icon={ICONS.MENU} iconSize={24} className="header__menu--mobile" />
       </div>
     </header>
   );

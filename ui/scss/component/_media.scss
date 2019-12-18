@@ -38,6 +38,11 @@
   transform: translateY(-130%);
   font-size: var(--font-xsmall);
   color: var(--color-text-subtitle);
+
+  @media (max-width: $breakpoint-small) {
+    position: static;
+    transform: none;
+  }
 }
 
 .media__uri--inline {

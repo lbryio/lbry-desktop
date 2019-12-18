@@ -133,6 +133,19 @@ a {
       margin-right: 1.5rem;
     }
   }
+
+  @media (max-width: $breakpoint-small) {
+    flex-direction: column;
+
+    & > * {
+      margin: 0;
+      width: 100%;
+
+      &:first-child {
+        margin-right: 0;
+      }
+    }
+  }
 }
 
 .hidden {

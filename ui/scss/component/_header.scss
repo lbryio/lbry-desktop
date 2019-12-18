@@ -34,22 +34,19 @@
   max-width: var(--page-max-width);
   height: calc(var(--header-height) - 1px);
   display: flex;
+  align-items: center;
   margin: auto;
   padding: 0 var(--spacing-large);
+
+  @media (max-width: $breakpoint-small) {
+    padding: var(--spacing-small);
+  }
 }
 
 .header__navigation {
   flex: 1;
   display: flex;
   align-items: center;
-
-  &:last-of-type {
-    width: var(--side-nav-width);
-
-    @media (max-width: 600px) {
-      display: none;
-    }
-  }
 }
 
 .header__menu {
@@ -60,6 +57,23 @@
 
   > .button:only-child {
     margin-left: auto;
+  }
+
+  @media (max-width: $breakpoint-small) {
+    display: none;
+  }
+}
+
+.header__menu--mobile {
+  display: none;
+
+  @media (max-width: $breakpoint-small) {
+    display: block;
+    margin-left: var(--spacing-medium);
+
+    svg {
+      stroke: var(--color-text);
+    }
   }
 }
 
@@ -109,19 +123,5 @@
   .lbry-icon {
     height: 2rem;
     width: 2rem;
-  }
-}
-
-.header__navigation-item--right-action {
-  align-self: flex-end;
-  margin-left: auto;
-  padding: 0 var(--spacing-small);
-}
-
-@media (max-width: 600px) {
-  .header__navigation-item--back,
-  .header__navigation-item--forward,
-  .header__navigation-item--right-action {
-    display: none;
   }
 }

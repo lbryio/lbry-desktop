@@ -2,7 +2,7 @@
   width: var(--side-nav-width);
   font-size: var(--font-body);
 
-  @media (max-width: 600px) {
+  @media (max-width: $breakpoint-small) {
     display: none;
   }
 }

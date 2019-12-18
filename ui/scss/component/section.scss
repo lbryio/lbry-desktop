@@ -55,6 +55,10 @@
   display: inline-block;
   font-weight: var(--font-weight-bold);
   font-size: var(--font-heading);
+
+  @media (max-width: $breakpoint-small) {
+    font-size: var(--font-title);
+  }
 }
 
 .section__subtitle--status {
@@ -86,4 +90,14 @@
 
 .section__body {
   margin-top: var(--spacing-medium);
+}
+
+@media (max-width: $breakpoint-small) {
+  .section__actions {
+    flex-wrap: wrap;
+
+    .button {
+      margin-bottom: var(--spacing-small);
+    }
+  }
 }

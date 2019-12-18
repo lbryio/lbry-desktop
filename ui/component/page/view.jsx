@@ -2,7 +2,7 @@
 import type { Node } from 'react';
 import React, { Fragment } from 'react';
 import classnames from 'classnames';
-import SideBar from 'component/sideBar';
+import SideNavigation from 'component/sideNavigation';
 import Header from 'component/header';
 
 export const MAIN_CLASS = 'main';
@@ -24,7 +24,7 @@ function Page(props: Props) {
       <Header authHeader={authPage} />
       <div className={classnames('main-wrapper__inner')}>
         <main className={classnames(MAIN_CLASS, className, { 'main--full-width': authPage })}>{children}</main>
-        {!authPage && <SideBar obscureSideBar={obscureSideBar} />}
+        {!authPage && <SideNavigation obscureSideBar={obscureSideBar} />}
       </div>
     </Fragment>
   );

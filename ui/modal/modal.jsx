@@ -57,7 +57,7 @@ export class Modal extends React.PureComponent<ModalProps> {
         overlayClassName="modal-overlay"
       >
         {title && <h1 className="card__title card__title--deprecated">{title}</h1>}
-        {type === 'card' && <Button button="close" icon={ICONS.REMOVE} onClick={onAborted} />}
+        {type === 'card' && <Button iconSize={24} button="close" icon={ICONS.REMOVE} onClick={onAborted} />}
         {children}
         {type === 'custom' || type === 'card' ? null : ( // custom modals define their own buttons
           <div className="card__actions">

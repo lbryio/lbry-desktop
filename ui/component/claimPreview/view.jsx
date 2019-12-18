@@ -198,36 +198,30 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
       ) : (
         <CardMedia thumbnail={thumbnail} />
       )}
-      <div className="claim-preview-metadata">
-        <div className="claim-preview-info">
-          <div className="claim-preview-title">
-            {claim ? <TruncatedText text={title || claim.name} lines={1} /> : <span>{__('Nothing here')}</span>}
+      <div className="claim-preview__text">
+        <div className="claim-preview-metadata">
+          <div className="claim-preview-info">
+            <div className="claim-preview-title">
+              {claim ? <TruncatedText text={title || claim.name} lines={2} /> : <span>{__('Nothing here')}</span>}
+            </div>
+            {!isChannel && claim && <FileProperties uri={uri} />}
           </div>
-          {!pending && (
-            <React.Fragment>
-              {hideActions ? null : actions !== undefined ? (
-                actions
-              ) : (
-                <div className="card__actions--inline">
-                  {isChannel && !channelIsBlocked && !claimIsMine && (
-                    <SubscribeButton uri={uri.startsWith('lbry://') ? uri : `lbry://${uri}`} />
-                  )}
-                  {!hideBlock && isChannel && !isSubscribed && !claimIsMine && (
-                    <BlockButton uri={uri.startsWith('lbry://') ? uri : `lbry://${uri}`} />
-                  )}
-                  {!isChannel && claim && <FileProperties uri={uri} />}
-                </div>
-              )}
-            </React.Fragment>
-          )}
-        </div>
 
-        <div className="claim-preview-properties">
           <div className="media__subtitle">
             {!isResolvingUri && (
               <div>
                 {claim ? (
-                  <UriIndicator uri={uri} link addTooltip={includeChannelTooltip} />
+                  <React.Fragment>
+                    <UriIndicator uri={uri} link addTooltip={includeChannelTooltip} />{' '}
+                    {pending
+                      ? __('Pending...')
+                      : claim &&
+                        (isChannel ? (
+                          type !== 'inline' && `${claimsInChannel} ${__('publishes')}`
+                        ) : (
+                          <DateTime timeAgo uri={uri} />
+                        ))}
+                  </React.Fragment>
                 ) : (
                   <Fragment>
                     <div>{__('Publish something and claim this spot!')}</div>
@@ -240,21 +234,27 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
                     </div>
                   </Fragment>
                 )}
-                <div>
-                  {pending ? (
-                    <div>{__('Pending...')}</div>
-                  ) : (
-                    claim &&
-                    (isChannel ? (
-                      type !== 'inline' && `${claimsInChannel} ${__('publishes')}`
-                    ) : (
-                      <DateTime timeAgo uri={uri} />
-                    ))
-                  )}
-                </div>
               </div>
             )}
           </div>
+        </div>
+        <div className="claim-preview__actions">
+          {!pending && (
+            <React.Fragment>
+              {hideActions ? null : actions !== undefined ? (
+                actions
+              ) : (
+                <div className="card__actions--inline">
+                  {isChannel && !channelIsBlocked && !claimIsMine && (
+                    <SubscribeButton uri={uri.startsWith('lbry://') ? uri : `lbry://${uri}`} />
+                  )}
+                  {!hideBlock && isChannel && !isSubscribed && !claimIsMine && (
+                    <BlockButton uri={uri.startsWith('lbry://') ? uri : `lbry://${uri}`} />
+                  )}
+                </div>
+              )}
+            </React.Fragment>
+          )}
           {properties !== undefined ? properties : <ClaimTags uri={uri} type={type} />}
         </div>
       </div>

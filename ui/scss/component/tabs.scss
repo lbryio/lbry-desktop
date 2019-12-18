@@ -18,6 +18,10 @@
   padding-left: calc(var(--channel-thumbnail-width) + var(--spacing-large));
   padding-right: var(--spacing-medium);
   height: 4rem;
+
+  @media (max-width: $breakpoint-small) {
+    padding-left: var(--spacing-medium);
+  }
 }
 
 .tab {
