@@ -247,7 +247,7 @@ class FilePage extends React.Component<Props> {
             </section>
           </div>
           <div className="grid-area--related">
-            <RecommendedContent uri={uri} />
+            <RecommendedContent uri={uri} claimId={claim.claim_id} />
           </div>
         </div>
       </Page>
