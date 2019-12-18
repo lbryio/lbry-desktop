@@ -53,36 +53,38 @@ class InviteList extends React.PureComponent<Props> {
           </div>
         </div>
 
-        <table className="table section">
-          <thead>
-            <tr>
-              <th>{__('Invitee Email')}</th>
-              <th>{__('Invite Status')}</th>
-              <th>{__('Reward')}</th>
-            </tr>
-          </thead>
-          <tbody>
-            {invitees.map(invitee => (
-              <tr key={invitee.email}>
-                <td>{invitee.email}</td>
-                <td>
-                  <span>{invitee.invite_accepted ? __('Accepted') : __('Not Accepted')}</span>
-                </td>
-                <td>
-                  {invitee.invite_reward_claimed && (
-                    <React.Fragment>
-                      <span>{__('Claimed')}</span>
-                      <Icon icon={ICONS.COMPLETE} />
-                    </React.Fragment>
-                  )}
-
-                  {!invitee.invite_reward_claimed &&
-                    (invitee.invite_reward_claimable ? <span>{__('Claimable')}</span> : __('Unclaimable'))}
-                </td>
+        <div className="table__wrapper">
+          <table className="table section">
+            <thead>
+              <tr>
+                <th>{__('Invitee Email')}</th>
+                <th>{__('Invite Status')}</th>
+                <th>{__('Reward')}</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {invitees.map(invitee => (
+                <tr key={invitee.email}>
+                  <td>{invitee.email}</td>
+                  <td>
+                    <span>{invitee.invite_accepted ? __('Accepted') : __('Not Accepted')}</span>
+                  </td>
+                  <td>
+                    {invitee.invite_reward_claimed && (
+                      <React.Fragment>
+                        <span>{__('Claimed')}</span>
+                        <Icon icon={ICONS.COMPLETE} />
+                      </React.Fragment>
+                    )}
+
+                    {!invitee.invite_reward_claimed &&
+                      (invitee.invite_reward_claimable ? <span>{__('Claimable')}</span> : __('Unclaimable'))}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </section>
     );
   }

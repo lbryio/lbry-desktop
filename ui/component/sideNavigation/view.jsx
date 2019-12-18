@@ -13,30 +13,53 @@ type Props = {
   email: ?string,
   obscureSideBar: boolean,
   uploadCount: number,
+  sticky: boolean,
+  showAllLinks: boolean,
+  doSignOut: () => void,
 };
 
 function SideBar(props: Props) {
-  const { subscriptions, followedTags, obscureSideBar, uploadCount } = props;
-  function buildLink(path, label, icon, guide) {
+  const {
+    subscriptions,
+    followedTags,
+    obscureSideBar,
+    uploadCount,
+    doSignOut,
+    email,
+    sticky = true,
+    showAllLinks = false,
+  } = props;
+  const isAuthenticated = Boolean(email);
+
+  function buildLink(path, label, icon, onClick) {
     return {
       navigate: path ? `$/${path}` : '/',
       label,
       icon,
-      guide,
+      onClick,
     };
   }
 
+  const Wrapper = ({ children }: any) =>
+    sticky ? (
+      <StickyBox offsetTop={100} offsetBottom={20}>
+        {children}
+      </StickyBox>
+    ) : (
+      <div>{children}</div>
+    );
+
   return obscureSideBar ? (
-    <StickyBox offsetTop={100} offsetBottom={20}>
+    <Wrapper>
       <div className="card navigation--placeholder">
         <div className="wrap">
           <h2>LBRY</h2>
           <p>{__('The best decentralized content platform on the web.')}</p>
         </div>
       </div>
-    </StickyBox>
+    </Wrapper>
   ) : (
-    <StickyBox offsetTop={100} offsetBottom={20}>
+    <Wrapper>
       <nav className="navigation">
         <ul className="navigation-links">
           {[
@@ -70,15 +93,47 @@ function SideBar(props: Props) {
               <Button {...linkProps} className="navigation-link" activeClass="navigation-link--active" />
             </li>
           ))}
+
+          {showAllLinks &&
+            [
+              {
+                ...buildLink(PAGES.WALLET, __('Wallet'), ICONS.WALLET),
+              },
+              {
+                ...buildLink(PAGES.REWARDS, __('Rewards'), ICONS.FEATURED),
+              },
+              {
+                ...buildLink(PAGES.ACCOUNT, __('Overview'), ICONS.OVERVIEW),
+              },
+              {
+                ...buildLink(PAGES.PUBLISH, __('Publish'), ICONS.PUBLISH),
+              },
+              {
+                ...buildLink(PAGES.SETTINGS, __('Settings'), ICONS.SETTINGS),
+              },
+              {
+                ...buildLink(PAGES.HELP, __('Help'), ICONS.HELP),
+              },
+              {
+                ...(isAuthenticated ? { ...buildLink(PAGES.AUTH, __('Sign Out'), ICONS.SIGN_OUT, doSignOut) } : {}),
+              },
+            ].map(linkProps => (
+              <li key={linkProps.navigate}>
+                <Button {...linkProps} className="navigation-link" activeClass="navigation-link--active" />
+              </li>
+            ))}
+
+          <li>
+            <Button
+              navigate={`/$/${PAGES.FOLLOWING}`}
+              label={__('Customize')}
+              icon={ICONS.EDIT}
+              className="navigation-link"
+              activeClass="navigation-link--active"
+            />
+          </li>
         </ul>
 
-        <Button
-          navigate={`/$/${PAGES.FOLLOWING}`}
-          label={__('Customize')}
-          icon={ICONS.EDIT}
-          className="navigation-link"
-          activeClass="navigation-link--active"
-        />
         <section className="navigation-links__inline">
           <ul className="navigation-links--small tags--vertical">
             {followedTags.map(({ name }, key) => (
@@ -101,7 +156,7 @@ function SideBar(props: Props) {
           </ul>
         </section>
       </nav>
-    </StickyBox>
+    </Wrapper>
   );
 }
 

@@ -33,3 +33,4 @@ export const WALLET_SEND = 'wallet_send';
 export const WALLET_RECEIVE = 'wallet_receive';
 export const CREATE_CHANNEL = 'create_channel';
 export const YOUTUBE_WELCOME = 'youtube_welcome';
+export const MOBILE_NAVIGATION = 'mobile_navigation';

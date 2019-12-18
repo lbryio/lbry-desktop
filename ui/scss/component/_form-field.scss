@@ -121,6 +121,11 @@ fieldset-group {
   margin-bottom: var(--spacing-small);
 }
 
+.form-field__help + .checkbox,
+.form-field__help + .radio {
+  margin-top: var(--spacing-large);
+}
+
 .form-field__conjuction {
   padding-top: 1rem;
 }

@@ -1,9 +1,10 @@
 import * as SETTINGS from 'constants/settings';
+import * as MODALS from 'constants/modal_types';
 import { connect } from 'react-redux';
 import { selectBalance, formatCredits } from 'lbry-redux';
 import { selectUserVerifiedEmail, selectGetSyncErrorMessage } from 'lbryinc';
 import { doSetClientSetting } from 'redux/actions/settings';
-import { doSignOut } from 'redux/actions/app';
+import { doSignOut, doOpenModal } from 'redux/actions/app';
 import { makeSelectClientSetting } from 'redux/selectors/settings';
 import Header from './view';
 
@@ -21,6 +22,7 @@ const select = state => ({
 const perform = dispatch => ({
   setClientSetting: (key, value) => dispatch(doSetClientSetting(key, value)),
   signOut: () => dispatch(doSignOut()),
+  openMobileNavigation: () => dispatch(doOpenModal(MODALS.MOBILE_NAVIGATION)),
 });
 
 export default connect(

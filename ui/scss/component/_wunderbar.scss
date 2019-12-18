@@ -8,10 +8,6 @@
   z-index: 1;
   font-size: var(--font-small);
 
-  @media (max-width: 600px) {
-    margin-right: 0;
-  }
-
   > .icon {
     top: 0;
     left: var(--spacing-small);
@@ -29,6 +25,10 @@
 
   fieldset-section {
     width: 15rem;
+  }
+
+  @media (max-width: $breakpoint-small) {
+    display: none;
   }
 }
 

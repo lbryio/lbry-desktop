@@ -12,6 +12,7 @@ import { FILE_WRAPPER_CLASS } from 'page/file/view';
 import Draggable from 'react-draggable';
 import Tooltip from 'component/common/tooltip';
 import { onFullscreenChange } from 'util/full-screen';
+import useIsMobile from 'effects/use-is-mobile';
 
 type Props = {
   mediaType: string,
@@ -50,6 +51,7 @@ export default function FileViewer(props: Props) {
     mediaType,
     contentType,
   } = props;
+  const isMobile = useIsMobile();
   const [playTime, setPlayTime] = useState();
   const [fileViewerRect, setFileViewerRect] = usePersistedState('inline-file-viewer:rect');
   const [position, setPosition] = usePersistedState('floating-file-viewer:position', {
@@ -125,7 +127,7 @@ export default function FileViewer(props: Props) {
   }
 
   const hidePlayer =
-    !isPlaying || !uri || (!inline && (!floatingPlayerEnabled || !['audio', 'video'].includes(mediaType)));
+    !isPlaying || !uri || (!inline && (isMobile || !floatingPlayerEnabled || !['audio', 'video'].includes(mediaType)));
 
   if (hidePlayer) {
     return null;

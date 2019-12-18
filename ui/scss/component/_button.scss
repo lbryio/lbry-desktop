@@ -32,6 +32,10 @@
     color: var(--color-button-primary-text);
     background-color: var(--color-button-primary-bg);
   }
+
+  @media (max-width: $breakpoint-small) {
+    padding: var(--spacing-medium) var(--spacing-small);
+  }
 }
 
 .button--download-link {

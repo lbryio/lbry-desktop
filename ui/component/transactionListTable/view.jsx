@@ -32,7 +32,7 @@ function TransactionListTable(props: Props) {
         <h2 className="main--empty empty">{emptyMessage || __('No transactions.')}</h2>
       )}
       {!!transactionList.length && (
-        <React.Fragment>
+        <div className="table__wrapper">
           <table className="table table--transactions">
             <thead>
               <tr>
@@ -55,7 +55,7 @@ function TransactionListTable(props: Props) {
               ))}
             </tbody>
           </table>
-        </React.Fragment>
+        </div>
       )}
     </React.Fragment>
   );

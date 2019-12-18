@@ -2,6 +2,7 @@ $cover-z-index: 0;
 $metadata-z-index: 1;
 
 .channel-cover {
+  position: relative;
   background-image: linear-gradient(to right, #637ad2, #318794 80%);
   display: flex;
   align-items: flex-end;
@@ -49,6 +50,10 @@ $metadata-z-index: 1;
   box-shadow: 0px 8px 40px -3px #000;
   left: var(--spacing-medium);
   top: 4rem;
+
+  @media (max-width: $breakpoint-small) {
+    display: none;
+  }
 }
 
 .channel-thumbnail__custom {
@@ -99,6 +104,10 @@ $metadata-z-index: 1;
   padding-bottom: var(--spacing-medium);
   min-width: 0;
   width: 100%;
+
+  @media (max-width: $breakpoint-small) {
+    padding-left: var(--spacing-medium);
+  }
 }
 
 .channel__title {
