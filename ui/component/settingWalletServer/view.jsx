@@ -3,6 +3,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { FormField } from 'component/common/form';
 import Button from 'component/button';
+import I18nMessage from 'component/i18nMessage';
 import * as ICONS from 'constants/icons';
 
 import ServerInputRow from './internal/inputRow';
@@ -21,6 +22,14 @@ type StatusOfServer = {
 type ServerTuple = [string, string]; // ['host', 'port']
 type ServerStatus = Array<StatusOfServer>;
 type ServerConfig = Array<ServerTuple>;
+
+type DaemonSettings = {
+  lbryum_servers: ServerConfig,
+};
+
+type DaemonStatus = {
+  wallet: any,
+};
 
 type Props = {
   getDaemonStatus: () => void,
@@ -140,6 +149,16 @@ function SettingWalletServer(props: Props) {
           }}
           label={__('Use custom wallet servers')}
         />
+        <p className="help">
+          <I18nMessage
+            tokens={{
+              help_link: <Button button="link" href="http://lbry.com/faq/wallet-servers" label={__('Learn More')} />,
+            }}
+          >
+            Wallet servers control what content is trending, ..., idk. %help_link%.
+          </I18nMessage>
+        </p>
+
         {advancedMode && (
           <div>
             {serverConfig &&
