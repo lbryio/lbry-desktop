@@ -1,13 +1,21 @@
 import path from 'path';
+import fs from 'fs';
 import { spawn, execSync } from 'child_process';
 import { Lbry } from 'lbry-redux';
 
 export default class Daemon {
-  static path =
+  static lbrynetPath =
     process.env.LBRY_DAEMON ||
     (process.env.NODE_ENV === 'production'
       ? path.join(process.resourcesPath, 'static/daemon', 'lbrynet')
       : path.join(__static, 'daemon/lbrynet'));
+
+  static headersPath =
+    process.env.LBRY_DAEMON ||
+    (process.env.NODE_ENV === 'production'
+      ? path.join(process.resourcesPath, 'static/daemon', 'headers')
+      : path.join(__static, 'daemon/headers'));
+
   subprocess;
   handlers;
 
@@ -16,8 +24,13 @@ export default class Daemon {
   }
 
   launch() {
-    this.subprocess = spawn(Daemon.path, ['start']);
+    let flags = ['start'];
 
+    if (fs.existsSync(Daemon.headersPath)) {
+      flags.push(`--initial-headers=${Daemon.headersPath}`);
+    }
+
+    this.subprocess = spawn(Daemon.lbrynetPath, flags);
     this.subprocess.stdout.on('data', data => console.log(`Daemon: ${data}`));
     this.subprocess.stderr.on('data', data => console.error(`Daemon: ${data}`));
     this.subprocess.on('exit', () => this.fire('exit'));
