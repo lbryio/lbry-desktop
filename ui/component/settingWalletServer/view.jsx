@@ -1,15 +1,11 @@
 // @flow
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { FormField } from 'component/common/form';
 import Button from 'component/button';
 import * as ICONS from 'constants/icons';
 
 import ServerInputRow from './internal/inputRow';
-
-type DaemonSettings = {
-  lbryum_servers: Array<string>,
-};
 
 type DaemonStatus = {
   wallet: any,
@@ -22,41 +18,59 @@ type StatusOfServer = {
   latency: number,
 };
 
-type ServerTuple = Array<string>; // ['host', 'port']
+type ServerTuple = [string, string]; // ['host', 'port']
 type ServerStatus = Array<StatusOfServer>;
 type ServerConfig = Array<ServerTuple>;
 
 type Props = {
-  daemonSettings: DaemonSettings,
   getDaemonStatus: () => void,
   setCustomWalletServers: any => void,
   clearWalletServers: () => void,
   customWalletServers: ServerConfig,
-  saveServerConfig: (Array<string>) => void,
-  fetchDaemonSettings: () => void,
+  saveServerConfig: (Array<ServerTuple>) => void,
   hasWalletServerPrefs: boolean,
   daemonStatus: DaemonStatus,
+  walletReconnecting: boolean,
 };
 
 function SettingWalletServer(props: Props) {
   const {
-    daemonSettings,
     daemonStatus,
-    fetchDaemonSettings,
     setCustomWalletServers,
     getDaemonStatus,
     clearWalletServers,
     saveServerConfig,
     customWalletServers,
     hasWalletServerPrefs,
+    walletReconnecting,
   } = props;
 
   const [advancedMode, setAdvancedMode] = useState(false);
 
-  const activeWalletServers: ServerStatus = (daemonStatus && daemonStatus.wallet && daemonStatus.wallet.servers) || [];
-  const currentServerConfig: ServerConfig = daemonSettings && daemonSettings.lbryum_servers;
-  const serverConfig: ServerConfig = customWalletServers.length ? customWalletServers : currentServerConfig;
+  const walletStatus = daemonStatus && daemonStatus.wallet;
+  const activeWalletServers: ServerStatus = (walletStatus && walletStatus.servers) || [];
+  const availableServers = walletStatus && walletStatus.available_servers;
+  const serverConfig: ServerConfig = customWalletServers;
   const STATUS_INTERVAL = 5000;
+
+  // onUnmount, if there are no available servers, doClear()
+  // in order to replicate componentWillUnmount, the effect needs to get the value from a ref
+  const hasAvailableRef = useRef();
+  useEffect(
+    () => () => {
+      hasAvailableRef.current = availableServers;
+    },
+    [availableServers]
+  );
+
+  useEffect(
+    () => () => {
+      if (!hasAvailableRef.current) {
+        doClear();
+      }
+    },
+    []
+  );
 
   useEffect(() => {
     if (hasWalletServerPrefs) {
@@ -71,10 +85,6 @@ function SettingWalletServer(props: Props) {
     return () => clearInterval(interval);
   }, []);
 
-  useEffect(() => {
-    fetchDaemonSettings();
-  }, []);
-
   function makeServerParam(configList) {
     return configList.reduce((acc, cur) => {
       acc.push(`${cur[0]}:${cur[1]}`);
@@ -87,7 +97,7 @@ function SettingWalletServer(props: Props) {
     clearWalletServers();
   }
 
-  function onAdd(serverTuple: Array<string>) {
+  function onAdd(serverTuple: ServerTuple) {
     let newServerConfig = serverConfig.concat();
     newServerConfig.push(serverTuple);
     updateServers(newServerConfig);
@@ -124,7 +134,7 @@ function SettingWalletServer(props: Props) {
           checked={advancedMode}
           onChange={e => {
             setAdvancedMode(e.target.checked);
-            if (e.target.checked) {
+            if (e.target.checked && customWalletServers.length) {
               setCustomWalletServers(makeServerParam(customWalletServers));
             }
           }}
@@ -147,7 +157,9 @@ function SettingWalletServer(props: Props) {
                     <h3>
                       {host}:{port}
                     </h3>
-                    <span className="help">{available ? 'Connected' : 'Not connected'}</span>
+                    <span className="help">
+                      {available ? 'Connected' : walletReconnecting ? 'Connecting...' : 'Not connected'}
+                    </span>
                     <Button
                       button="close"
                       title={__('Remove custom wallet server')}

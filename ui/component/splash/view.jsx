@@ -108,7 +108,8 @@ export default class SplashScreen extends React.PureComponent<Props, State> {
     const { launchedModal } = this.state;
 
     Lbry.status().then(status => {
-      if (status.is_running) {
+      const { wallet } = status;
+      if (status.is_running && wallet && wallet.available_servers) {
         Lbry.wallet_status().then(walletStatus => {
           if (walletStatus.is_locked) {
             // Clear the error timeout, it might sit on this step for a while until someone enters their password
@@ -155,14 +156,14 @@ export default class SplashScreen extends React.PureComponent<Props, State> {
     const { wallet, startup_status: startupStatus } = status;
 
     // If the wallet is locked, stop doing anything and make the user input their password
-    if (status.is_running && !waitingForUnlock) {
+    if (startupStatus && wallet && wallet.available_servers < 1) {
+      this.setState({ waitingForWallet: this.state.waitingForWallet + UPDATE_INTERVAL / 1000 });
+    } else if (status.is_running && !waitingForUnlock) {
       Lbry.resolve({ urls: 'lbry://one' }).then(() => {
         this.setState({ isRunning: true }, () => this.continueAppLaunch());
       });
 
       return;
-    } else if (startupStatus && !startupStatus.wallet && wallet && wallet.available_servers < 1) {
-      this.setState({ waitingForWallet: this.state.waitingForWallet + UPDATE_INTERVAL / 1000 });
     } else if (wallet && wallet.blocks_behind > 0) {
       this.setState({
         message: __('Blockchain Sync'),
