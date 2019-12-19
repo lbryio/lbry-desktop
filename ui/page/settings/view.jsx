@@ -16,7 +16,7 @@ import SettingAutoLaunch from 'component/settingAutoLaunch';
 import FileSelector from 'component/common/file-selector';
 import SyncToggle from 'component/syncToggle';
 import Card from 'component/common/card';
-import { getSavedPassword } from 'util/saved-passwords';
+import { getKeychainPassword } from 'util/saved-passwords';
 
 // @if TARGET='app'
 export const IS_MAC = process.platform === 'darwin';
@@ -105,9 +105,8 @@ class SettingsPage extends React.PureComponent<Props, State> {
     const { isAuthenticated } = this.props;
     if (isAuthenticated) {
       this.props.updateWalletStatus();
-
-      getSavedPassword().then(p => {
-        if (p) {
+      getKeychainPassword().then(p => {
+        if (typeof p === 'string') {
           this.setState({ storedPassword: true });
         }
       });

@@ -935,5 +935,6 @@
   "Copy": "Copy",
   "Text copied": "Text copied",
   "Rewards Disabled": "Rewards Disabled",
-  "Woah, you have a lot of friends! You've claimed the maximum amount of referral rewards. Check back soon to see if more are available!.": "Woah, you have a lot of friends! You've claimed the maximum amount of referral rewards. Check back soon to see if more are available!."
+  "Woah, you have a lot of friends! You've claimed the maximum amount of referral rewards. Check back soon to see if more are available!.": "Woah, you have a lot of friends! You've claimed the maximum amount of referral rewards. Check back soon to see if more are available!.",
+  "Wallet servers are used to relay data to and from the LBRY blockchain. They also determine what content shows in trending or is blocked. %learn_more%.": "Wallet servers are used to relay data to and from the LBRY blockchain. They also determine what content shows in trending or is blocked. %learn_more%."
 }
