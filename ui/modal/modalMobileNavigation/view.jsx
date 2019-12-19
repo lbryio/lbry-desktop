@@ -12,7 +12,7 @@ export default function ModalMobileNavigation(props: Props) {
 
   return (
     <Modal type="card" isOpen contentLabel={__('Navigation')} onAborted={doHideModal}>
-      <SideNavigation sticky={false} showAllLinks />
+      <SideNavigation sticky={false} expanded />
     </Modal>
   );
 }

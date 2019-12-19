@@ -20,4 +20,10 @@
     width: 30%;
     height: 1.5em;
   }
+
+  @media (max-width: $breakpoint-small) {
+    &.media__thumb {
+      display: none;
+    }
+  }
 }

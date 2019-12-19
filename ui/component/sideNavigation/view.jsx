@@ -14,7 +14,7 @@ type Props = {
   obscureSideBar: boolean,
   uploadCount: number,
   sticky: boolean,
-  showAllLinks: boolean,
+  expanded: boolean,
   doSignOut: () => void,
 };
 
@@ -27,7 +27,7 @@ function SideBar(props: Props) {
     doSignOut,
     email,
     sticky = true,
-    showAllLinks = false,
+    expanded = false,
   } = props;
   const isAuthenticated = Boolean(email);
 
@@ -94,7 +94,7 @@ function SideBar(props: Props) {
             </li>
           ))}
 
-          {showAllLinks &&
+          {expanded &&
             [
               {
                 ...buildLink(PAGES.WALLET, __('Wallet'), ICONS.WALLET),
@@ -117,11 +117,15 @@ function SideBar(props: Props) {
               {
                 ...(isAuthenticated ? { ...buildLink(PAGES.AUTH, __('Sign Out'), ICONS.SIGN_OUT, doSignOut) } : {}),
               },
-            ].map(linkProps => (
-              <li key={linkProps.navigate}>
-                <Button {...linkProps} className="navigation-link" activeClass="navigation-link--active" />
-              </li>
-            ))}
+            ].map(
+              linkProps =>
+                Object.keys(linkProps).length > 0 &&
+                (linkProps && (
+                  <li key={linkProps.navigate}>
+                    <Button {...linkProps} className="navigation-link" activeClass="navigation-link--active" />
+                  </li>
+                ))
+            )}
 
           <li>
             <Button

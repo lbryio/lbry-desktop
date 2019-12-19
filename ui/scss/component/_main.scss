@@ -51,6 +51,8 @@
   }
 
   @media (max-width: $breakpoint-small) {
+    overflow-x: hidden;
+
     .grid-area--related,
     .grid-area--info {
       margin-right: 0;
