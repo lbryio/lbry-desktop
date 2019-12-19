@@ -18,10 +18,10 @@ export default function FileProperties(props: Props) {
 
   return (
     <div className="file-properties">
-      <FilePrice hideFree uri={uri} />
-      <VideoDuration uri={uri} />
       {isSubscribed && <Icon tooltip icon={icons.SUBSCRIBE} />}
       {!claimIsMine && downloaded && <Icon tooltip icon={icons.DOWNLOAD} />}
+      <FilePrice hideFree uri={uri} />
+      <VideoDuration uri={uri} />
     </div>
   );
 }
