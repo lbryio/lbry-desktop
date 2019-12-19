@@ -2,6 +2,7 @@
 import * as React from 'react';
 import { FormField } from 'component/common/form';
 import { CC_LICENSES, LEGACY_CC_LICENSES, COPYRIGHT, OTHER, PUBLIC_DOMAIN, NONE } from 'constants/licenses';
+import analytics from 'analytics';
 
 type Props = {
   licenseType: ?string,
@@ -10,6 +11,7 @@ type Props = {
   handleLicenseChange: (string, string) => void,
   handleLicenseDescriptionChange: (SyntheticInputEvent<*>) => void,
   handleLicenseUrlChange: (SyntheticInputEvent<*>) => void,
+  showToast: string => void,
 };
 
 class LicenseType extends React.PureComponent<Props> {
@@ -20,15 +22,26 @@ class LicenseType extends React.PureComponent<Props> {
   }
 
   handleLicenseOnChange(event: SyntheticInputEvent<*>) {
-    const { handleLicenseChange } = this.props;
+    const { handleLicenseChange, showToast } = this.props;
     // $FlowFixMe
     const { options, selectedIndex } = event.target;
 
-    const selectedOption = options[selectedIndex];
-    const licenseType = selectedOption.value;
-    const licenseUrl = selectedOption.getAttribute('data-url');
+    if (options !== null) {
+      const selectedOption = options[selectedIndex];
+      const licenseType = selectedOption.value;
+      const licenseUrl = selectedOption.getAttribute('data-url');
 
-    handleLicenseChange(licenseType, licenseUrl);
+      handleLicenseChange(licenseType, licenseUrl);
+    } else {
+      // There were users where this options were null for some reason
+      // This will at least make it so the app doesn't crash
+      // Hopefully this helps figure it out
+      analytics.error('Error changing the publish license\n' + JSON.stringify(this.props));
+
+      showToast(
+        __('There was an error updating the license type. If it continues to happen send an email to help@lbry.com.')
+      );
+    }
   }
 
   render() {

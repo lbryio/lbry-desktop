@@ -21,6 +21,7 @@ ElectronCookies.enable({
 // @endif
 
 type Analytics = {
+  error: string => void,
   pageView: string => void,
   setUser: Object => void,
   toggle: (boolean, ?boolean) => void,
@@ -44,6 +45,11 @@ type LogPublishParams = {
 
 let analyticsEnabled: boolean = true;
 const analytics: Analytics = {
+  error: message => {
+    if (analyticsEnabled) {
+      Lbryio.call('event', 'desktop_error', { error_message: message });
+    }
+  },
   pageView: path => {
     if (analyticsEnabled) {
       ReactGA.pageview(path, [SECOND_TRACKER_NAME]);
