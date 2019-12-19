@@ -931,5 +931,7 @@
   "In response to a complaint we received under the US Digital Millennium Copyright Act, we have blocked access to this content from our applications.": "In response to a complaint we received under the US Digital Millennium Copyright Act, we have blocked access to this content from our applications.",
   "lbry.tv": "lbry.tv",
   "Your Blocked Channels": "Your Blocked Channels",
-  "Bid position must be a number.": "Bid position must be a number."
+  "Bid position must be a number.": "Bid position must be a number.",
+  "Copy": "Copy",
+  "Text copied": "Text copied"
 }
