@@ -81,11 +81,10 @@
   @media (max-width: $breakpoint-small) {
     .media__thumb {
       position: absolute;
-      z-index: 0;
-      opacity: 0.1;
       right: 0;
       top: var(--spacing-small);
       bottom: var(--spacing-small);
+      opacity: 0.1;
     }
   }
 }
@@ -152,6 +151,16 @@
     width: 100%;
     flex-direction: row;
     justify-content: space-between;
+  }
+
+  @media (max-width: $breakpoint-xsmall) {
+    .claim-preview__text {
+      flex-direction: column;
+    }
+
+    .claim-preview__actions {
+      align-self: flex-start;
+    }
   }
 }
 

@@ -5,14 +5,15 @@ import * as React from 'react';
 import ReactModal from 'react-modal';
 import Button from 'component/button';
 import classnames from 'classnames';
+import useIsMobile from 'effects/use-is-mobile';
 
 type ModalProps = {
-  type: string,
-  overlay: boolean,
-  confirmButtonLabel: string,
-  abortButtonLabel: string,
-  confirmButtonDisabled: boolean,
-  abortButtonDisabled: boolean,
+  type?: string,
+  overlay?: boolean,
+  confirmButtonLabel?: string,
+  abortButtonLabel?: string,
+  confirmButtonDisabled?: boolean,
+  abortButtonDisabled?: boolean,
   onConfirmed?: any => any,
   onAborted?: any => any,
   className?: string,
@@ -23,58 +24,47 @@ type ModalProps = {
   title?: string | React.Node,
 };
 
-export class Modal extends React.PureComponent<ModalProps> {
-  static defaultProps = {
-    type: 'alert',
-    overlay: true,
-    confirmButtonLabel: __('OK'),
-    abortButtonLabel: __('Cancel'),
-    confirmButtonDisabled: false,
-    abortButtonDisabled: false,
-  };
+export function Modal(props: ModalProps) {
+  const {
+    children,
+    type = 'alert',
+    confirmButtonLabel = __('OK'),
+    confirmButtonDisabled = false,
+    onConfirmed,
+    abortButtonLabel = __('Cancel'),
+    abortButtonDisabled = false,
+    onAborted,
+    className,
+    title,
+    ...modalProps
+  } = props;
 
-  render() {
-    const {
-      children,
-      type,
-      confirmButtonLabel,
-      confirmButtonDisabled,
-      onConfirmed,
-      abortButtonLabel,
-      abortButtonDisabled,
-      onAborted,
-      className,
-      title,
-      ...modalProps
-    } = this.props;
-    return (
-      <ReactModal
-        {...modalProps}
-        onRequestClose={onAborted || onConfirmed}
-        className={classnames('modal', className, {
-          'modal--card-internal': type === 'card',
-        })}
-        overlayClassName="modal-overlay"
-      >
-        {title && <h1 className="card__title card__title--deprecated">{title}</h1>}
-        {type === 'card' && <Button iconSize={24} button="close" icon={ICONS.REMOVE} onClick={onAborted} />}
-        {children}
-        {type === 'custom' || type === 'card' ? null : ( // custom modals define their own buttons
-          <div className="card__actions">
-            <Button
-              button="primary"
-              label={confirmButtonLabel}
-              disabled={confirmButtonDisabled}
-              onClick={onConfirmed}
-            />
-            {type === 'confirm' ? (
-              <Button button="link" label={abortButtonLabel} disabled={abortButtonDisabled} onClick={onAborted} />
-            ) : null}
-          </div>
-        )}
-      </ReactModal>
-    );
-  }
+  const isMobile = useIsMobile();
+
+  return (
+    <ReactModal
+      {...modalProps}
+      onRequestClose={onAborted || onConfirmed}
+      className={classnames('modal', className, {
+        'modal--card-internal': type === 'card',
+      })}
+      overlayClassName="modal-overlay"
+    >
+      {title && <h1 className="card__title card__title--deprecated">{title}</h1>}
+      {type === 'card' && (
+        <Button iconSize={isMobile ? 24 : undefined} button="close" icon={ICONS.REMOVE} onClick={onAborted} />
+      )}
+      {children}
+      {type === 'custom' || type === 'card' ? null : ( // custom modals define their own buttons
+        <div className="card__actions">
+          <Button button="primary" label={confirmButtonLabel} disabled={confirmButtonDisabled} onClick={onConfirmed} />
+          {type === 'confirm' ? (
+            <Button button="link" label={abortButtonLabel} disabled={abortButtonDisabled} onClick={onAborted} />
+          ) : null}
+        </div>
+      )}
+    </ReactModal>
+  );
 }
 
 type State = {

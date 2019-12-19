@@ -105,15 +105,13 @@ export default function FileViewer(props: Props) {
       setFileViewerRect(rect);
     }
 
-    if (inline) {
+    return () => {
       handleResize();
       window.addEventListener('resize', handleResize);
       onFullscreenChange(window, 'add', handleResize);
-      return () => {
-        window.removeEventListener('resize', handleResize);
-        onFullscreenChange(window, 'remove', handleResize);
-      };
-    }
+      window.removeEventListener('resize', handleResize);
+      onFullscreenChange(window, 'remove', handleResize);
+    };
   }, [setFileViewerRect, inline]);
 
   function handleDrag(e, ui) {
