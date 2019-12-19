@@ -51,9 +51,7 @@ const RewardListClaimed = (props: Props) => {
             <tr key={reward.id}>
               <td>{reward.reward_title}</td>
               <td>{reward.reward_amount}</td>
-              <td>
-                <ButtonTransaction id={reward.transaction_id} />
-              </td>
+              <td>{reward.transaction_id && <ButtonTransaction id={reward.transaction_id} />}</td>
               <td>{moment(reward.created_at).format('LLL')}</td>
             </tr>
           ))}
