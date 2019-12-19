@@ -78,7 +78,12 @@ export const getSavedPassword = () => {
     if (sessionPassword) {
       resolve(sessionPassword);
     }
+    return getKeychainPassword().then(p => p);
+  });
+};
 
+export const getKeychainPassword = () => {
+  return new Promise<*>(resolve => {
     // @if TARGET='app'
     ipcRenderer.once('get-password-response', (event, password) => {
       resolve(password);
