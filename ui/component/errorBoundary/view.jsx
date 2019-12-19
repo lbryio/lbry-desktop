@@ -1,12 +1,12 @@
 // @flow
 import type { Node } from 'react';
-import { Lbryio } from 'lbryinc';
 import React, { Fragment } from 'react';
 import Yrbl from 'component/yrbl';
 import Button from 'component/button';
 import { withRouter } from 'react-router';
 import Native from 'native';
 import { Lbry } from 'lbry-redux';
+import analytics from 'analytics';
 
 type Props = {
   children: Node,
@@ -38,7 +38,8 @@ class ErrorBoundary extends React.Component<Props, State> {
     errorMessage += 'lbry.tv\n';
     errorMessage += `page: ${window.location.pathname + window.location.search}\n`;
     errorMessage += error.stack;
-    this.log(errorMessage);
+    analytics.error(errorMessage);
+
     // @endif
     // @if TARGET='app'
     Native.getAppVersionInfo().then(({ localVersion }) => {
@@ -47,17 +48,10 @@ class ErrorBoundary extends React.Component<Props, State> {
         errorMessage += `sdk version: ${sdkVersion}\n`;
         errorMessage += `page: ${window.location.href.split('.html')[1]}\n`;
         errorMessage += `${error.stack}`;
-        this.log(errorMessage);
+        analytics.error(errorMessage);
       });
     });
     // @endif
-  }
-
-  log(message) {
-    declare var app: { env: string };
-    if (app.env === 'production') {
-      Lbryio.call('event', 'desktop_error', { error_message: message });
-    }
   }
 
   refresh() {
