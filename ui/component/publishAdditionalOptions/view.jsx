@@ -15,11 +15,10 @@ type Props = {
   licenseUrl: ?string,
   disabled: boolean,
   updatePublishForm: ({}) => void,
-  showToast: string => void,
 };
 
 function PublishAdvanced(props: Props) {
-  const { language, name, licenseType, otherLicenseDescription, licenseUrl, updatePublishForm, showToast } = props;
+  const { language, name, licenseType, otherLicenseDescription, licenseUrl, updatePublishForm } = props;
   const [hideSection, setHideSection] = usePersistedState('publish-advanced-options', true);
 
   function toggleHideSection() {
@@ -67,7 +66,6 @@ function PublishAdvanced(props: Props) {
               </FormField>
 
               <LicenseType
-                showToast={showToast}
                 licenseType={licenseType}
                 otherLicenseDescription={otherLicenseDescription}
                 licenseUrl={licenseUrl}
