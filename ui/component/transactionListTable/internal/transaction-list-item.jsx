@@ -62,6 +62,8 @@ class TransactionListItem extends React.PureComponent<Props> {
       year: 'numeric',
     };
 
+    const forClaim = name && claimId;
+
     return (
       <tr>
         <td>
@@ -80,8 +82,8 @@ class TransactionListItem extends React.PureComponent<Props> {
           <span>{this.capitalize(type)}</span> {isRevokeable && this.getLink(type)}
         </td>
         <td>
-          {reward && <span>{reward.reward_title}</span>}
-          {name && claimId && <Button button="link" navigate={uri} label={claimName} />}
+          {forClaim && <Button button="link" navigate={uri} label={claimName} />}
+          {!forClaim && reward && <span>{reward.reward_title}</span>}
         </td>
 
         <td>
