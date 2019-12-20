@@ -68,7 +68,6 @@ function ClaimListDiscover(props: Props) {
     hiddenNsfwMessage,
   } = props;
   const didNavigateForward = history.action === 'PUSH';
-  let newTagPage = false;
   const previousTags = usePrevious(tags) || [];
   const [page, setPage] = useState(1);
   const { search } = location;
@@ -78,6 +77,9 @@ function ClaimListDiscover(props: Props) {
   const typeSort = urlParams.get('type') || TYPE_TRENDING;
   const timeSort = urlParams.get('time') || TIME_WEEK;
   const tagsInUrl = urlParams.get('t') || '';
+  // this is to stop search, onScrollBottom, and fill from running
+  // until the next render when page is updated
+  let newTagPage = false;
   if (page > 1 && tags && tags.join() !== previousTags.join()) {
     window.scrollTo(0, 0);
     setPage(1);
