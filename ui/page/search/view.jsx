@@ -23,15 +23,22 @@ export default function SearchPage(props: Props) {
   const urlParams = new URLSearchParams(location.search);
   const urlQuery = urlParams.get('q');
 
-  let INVALID_URI_CHARS = new RegExp(regexInvalidURI, 'gu');
-  let modifiedUrlQuery = urlQuery
-    ? urlQuery
-        .trim()
-        .replace(/\s+/g, '-')
-        .replace(INVALID_URI_CHARS, '')
-    : '';
-  const isModifiedUriValid = isURIValid(modifiedUrlQuery);
-  const normalizedModifiedUri = isModifiedUriValid && normalizeURI(modifiedUrlQuery);
+  let normalizedUri;
+  let isUriValid;
+  if (isURIValid(urlQuery)) {
+    isUriValid = true;
+    normalizedUri = normalizeURI(urlQuery);
+  } else {
+    let INVALID_URI_CHARS = new RegExp(regexInvalidURI, 'gu');
+    let modifiedUrlQuery = urlQuery
+      ? urlQuery
+          .trim()
+          .replace(/\s+/g, '-')
+          .replace(INVALID_URI_CHARS, '')
+      : '';
+    isUriValid = isURIValid(modifiedUrlQuery);
+    normalizedUri = isUriValid && normalizeURI(modifiedUrlQuery);
+  }
 
   useEffect(() => {
     if (urlQuery) {
@@ -44,11 +51,11 @@ export default function SearchPage(props: Props) {
       <section className="search">
         {urlQuery && (
           <Fragment>
-            {isModifiedUriValid && (
+            {isUriValid && (
               <header className="search__header">
-                <ClaimUri uri={normalizedModifiedUri} />
+                <ClaimUri uri={normalizedUri} />
                 <div className="card">
-                  <ClaimPreview uri={normalizedModifiedUri} type="large" placeholder="publish" />
+                  <ClaimPreview uri={normalizedUri} type="large" placeholder="publish" />
                 </div>
               </header>
             )}
