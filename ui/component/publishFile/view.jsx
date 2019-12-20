@@ -53,7 +53,7 @@ function PublishFile(props: Props) {
       filePath: file.path || file,
     };
     // Strip off extention and replace invalid characters
-    let fileName = file.name.substr(0, file.name.lastIndexOf('.')) || file.name;
+    let fileName = name || file.name.substr(0, file.name.lastIndexOf('.')) || file.name;
     let INVALID_URI_CHARS = new RegExp(regexInvalidURI, 'gu');
     let parsedFileName = fileName.replace(INVALID_URI_CHARS, '-');
     if (!isStillEditing) {
