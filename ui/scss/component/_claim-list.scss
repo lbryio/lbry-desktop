@@ -79,12 +79,16 @@
   }
 
   @media (max-width: $breakpoint-small) {
+    font-size: 14px;
+
     .media__thumb {
-      position: absolute;
-      right: 0;
-      top: var(--spacing-small);
-      bottom: var(--spacing-small);
-      opacity: 0.1;
+      width: 4rem;
+      height: 2.25rem;
+    }
+
+    .channel-thumbnail {
+      width: 4rem;
+      height: 4rem;
     }
   }
 }
