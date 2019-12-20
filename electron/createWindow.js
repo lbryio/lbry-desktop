@@ -32,7 +32,7 @@ export default appState => {
     // If state is undefined, create window as maximized.
     width: windowState.width === undefined ? width : windowState.width,
     height: windowState.height === undefined ? height : windowState.height,
-    icon: 'static/img/tray/windows/tray.png',
+    icon: 'static/img/tray/default/tray.png',
     webPreferences: {
       // Disable renderer process's webSecurity on development to enable CORS.
       webSecurity: !isDev,
@@ -133,8 +133,8 @@ export default appState => {
 
   // A backup incase https://github.com/electron/electron/issues/7779 happens
   window.webContents.once('dom-ready', () => {
-    startMinimized && window.hide()
-  })
+    startMinimized && window.hide();
+  });
 
   window.webContents.on('did-finish-load', () => {
     window.webContents.session.setUserAgent(`LBRY/${app.getVersion()}`);
