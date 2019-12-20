@@ -175,6 +175,10 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
     );
   }
 
+  if (placeholder === 'publish' && !claim && uri.startsWith('lbry://@')) {
+    return null;
+  }
+
   return (
     <li
       ref={ref}
