@@ -6,7 +6,7 @@ function generateStreamUrl(claimName, claimId, apiUrl) {
 }
 
 function generateEmbedUrl(claimName, claimId) {
-  return `${URL}/embed/${claimName}/${claimId}`;
+  return `${URL}/$/embed/${claimName}/${claimId}`;
 }
 
 // module.exports needed since the web server imports this function
