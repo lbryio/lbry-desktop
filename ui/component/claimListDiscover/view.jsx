@@ -12,6 +12,7 @@ import Tag from 'component/tag';
 import ClaimPreview from 'component/claimPreview';
 import { toCapitalCase } from 'util/string';
 import I18nMessage from 'component/i18nMessage';
+import usePrevious from 'effects/use-previous';
 
 const PAGE_SIZE = 20;
 const TIME_DAY = 'day';
@@ -67,6 +68,8 @@ function ClaimListDiscover(props: Props) {
     hiddenNsfwMessage,
   } = props;
   const didNavigateForward = history.action === 'PUSH';
+  let newTagPage = false;
+  const previousTags = usePrevious(tags) || [];
   const [page, setPage] = useState(1);
   const { search } = location;
   const [forceRefresh, setForceRefresh] = useState();
@@ -75,6 +78,11 @@ function ClaimListDiscover(props: Props) {
   const typeSort = urlParams.get('type') || TYPE_TRENDING;
   const timeSort = urlParams.get('time') || TIME_WEEK;
   const tagsInUrl = urlParams.get('t') || '';
+  if (page > 1 && tags && tags.join() !== previousTags.join()) {
+    window.scrollTo(0, 0);
+    setPage(1);
+    newTagPage = true;
+  }
   const options: {
     page_size: number,
     page: number,
@@ -118,6 +126,7 @@ function ClaimListDiscover(props: Props) {
   const claimSearchCacheQuery = createNormalizedClaimSearchKey(options);
   const uris = (hasContent && claimSearchByQuery[claimSearchCacheQuery]) || [];
   const shouldPerformSearch =
+    !newTagPage &&
     hasContent &&
     (uris.length === 0 ||
       didNavigateForward ||
@@ -220,7 +229,7 @@ function ClaimListDiscover(props: Props) {
   }
 
   function handleScrollBottom() {
-    if (!loading) {
+    if (!loading && !newTagPage) {
       setPage(page + 1);
     }
   }
@@ -311,7 +320,9 @@ function ClaimListDiscover(props: Props) {
         empty={emptyState}
       />
 
-      {loading && new Array(PAGE_SIZE).fill(1).map((x, i) => <ClaimPreview key={i} placeholder="loading" />)}
+      {loading &&
+        !newTagPage &&
+        new Array(PAGE_SIZE).fill(1).map((x, i) => <ClaimPreview key={i} placeholder="loading" />)}
     </div>
   );
 }
