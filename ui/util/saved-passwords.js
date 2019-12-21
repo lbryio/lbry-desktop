@@ -78,7 +78,8 @@ export const getSavedPassword = () => {
     if (sessionPassword) {
       resolve(sessionPassword);
     }
-    return getKeychainPassword().then(p => p);
+
+    return getKeychainPassword().then(p => resolve(p));
   });
 };
 

@@ -48,6 +48,7 @@ const Header = (props: Props) => {
 
   // on the verify page don't let anyone escape other than by closing the tab to keep session data consistent
   const isVerifyPage = history.location.pathname.includes(PAGES.AUTH_VERIFY);
+  const isAuthPage = history.location.pathname.includes(PAGES.AUTH);
 
   // Sign out if they click the "x" when they are on the password prompt
   const authHeaderAction = syncError ? { onClick: signOut } : { navigate: '/' };
@@ -204,7 +205,7 @@ const Header = (props: Props) => {
           )
         )}
 
-        {!authenticated && (
+        {!authenticated && !isAuthPage && (
           <Button
             button="primary"
             label={__('Sign In')}
