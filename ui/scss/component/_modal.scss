@@ -15,6 +15,7 @@
   @extend .card;
   background-color: var(--color-card-background);
   line-height: 1.55;
+  min-width: 500px;
   max-width: var(--modal-width);
   overflow: auto;
   padding: var(--spacing-large);
