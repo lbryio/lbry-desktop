@@ -156,6 +156,13 @@ function App(props: Props) {
     }
   }, [hasVerifiedEmail, signIn, hasSignedIn]);
 
+  // @if TARGET='app'
+  useEffect(() => {
+    console.log('?');
+    updatePreferences();
+  }, []);
+  // @endif
+
   useEffect(() => {
     if (hasVerifiedEmail && syncEnabled) {
       checkSync();
@@ -169,13 +176,6 @@ function App(props: Props) {
       };
     }
   }, [hasVerifiedEmail, syncEnabled, checkSync]);
-  // @if TARGET='app'
-  useEffect(() => {
-    if (hasVerifiedEmail === false) {
-      updatePreferences();
-    }
-  }, [hasVerifiedEmail]);
-  // @endif
 
   useEffect(() => {
     if (syncError) {
