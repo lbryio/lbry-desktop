@@ -158,7 +158,6 @@ function App(props: Props) {
 
   // @if TARGET='app'
   useEffect(() => {
-    console.log('?');
     updatePreferences();
   }, []);
   // @endif
