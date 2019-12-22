@@ -56,6 +56,7 @@ function VideoViewer(props: Props) {
     'video/x-ms-wmv',
     'video/x-msvideo',
     'video/mpeg',
+    'video/m4v',
   ];
   const forceMp4 = forceTypes.includes(contentType);
   const [requireRedraw, setRequireRedraw] = useState(false);
