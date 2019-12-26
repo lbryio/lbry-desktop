@@ -5,6 +5,7 @@ import {
   makeSelectPublishFormValue,
   doUpdatePublishForm,
   doToast,
+  doClearPublish,
 } from 'lbry-redux';
 import PublishPage from './view';
 
@@ -17,6 +18,7 @@ const select = state => ({
 });
 
 const perform = dispatch => ({
+  clearPublish: () => dispatch(doClearPublish()),
   updatePublishForm: value => dispatch(doUpdatePublishForm(value)),
   showToast: message => dispatch(doToast({ message, isError: true })),
 });
