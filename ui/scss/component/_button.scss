@@ -27,6 +27,7 @@
   transition: all var(--transition-duration) var(--transition-style);
   border-radius: var(--card-radius);
   color: var(--color-text);
+  font-size: var(--font-small);
 
   &:hover {
     color: var(--color-button-primary-text);

@@ -86,6 +86,8 @@ function PublishForm(props: Props) {
     disabled = false,
   } = props;
   const formDisabled = (!filePath && !editingURI) || publishing;
+  const isInProgress = filePath || editingURI || name || title;
+
   // If they are editing, they don't need a new file chosen
   const formValidLessFile =
     name && isNameValid(name, false) && title && bid && !(uploadThumbnailStatus === THUMBNAIL_STATUSES.IN_PROGRESS);
@@ -132,7 +134,7 @@ function PublishForm(props: Props) {
 
   return (
     <Fragment>
-      <PublishFile disabled={disabled || publishing} />
+      <PublishFile disabled={disabled || publishing} inProgress={isInProgress} />
       <div className={classnames({ 'card--disabled': formDisabled })}>
         <PublishText disabled={formDisabled} />
         <Card actions={<SelectThumbnail />} />

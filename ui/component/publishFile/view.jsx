@@ -16,10 +16,22 @@ type Props = {
   disabled: boolean,
   publishing: boolean,
   showToast: string => void,
+  inProgress: boolean,
+  clearPublish: () => void,
 };
 
 function PublishFile(props: Props) {
-  const { name, balance, filePath, isStillEditing, updatePublishForm, disabled, publishing } = props;
+  const {
+    name,
+    balance,
+    filePath,
+    isStillEditing,
+    updatePublishForm,
+    disabled,
+    publishing,
+    inProgress,
+    clearPublish,
+  } = props;
 
   let currentFile = '';
   if (filePath) {
@@ -79,7 +91,12 @@ function PublishFile(props: Props) {
       actionIconPadding={false}
       icon={ICONS.PUBLISH}
       disabled={disabled || balance === 0}
-      title={title}
+      title={
+        <React.Fragment>
+          {title}{' '}
+          {inProgress && <Button button="close" label={__('Cancel')} icon={ICONS.REMOVE} onClick={clearPublish} />}
+        </React.Fragment>
+      }
       subtitle={
         isStillEditing ? __('You are currently editing a claim.') : __('Publish something totally wacky and wild.')
       }
