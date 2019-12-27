@@ -117,8 +117,8 @@ export default function YoutubeTransferStatus(props: Props) {
                             channelName,
                           }}
                         >
-                          %channelName% is not ready to be transferred. You can check the status %statusLink% or check
-                          back later.
+                          %channelName% has not finished syncing and is not ready to be transferred to your account. You
+                          can check the status %statusLink% or check back later.
                         </I18nMessage>
                       </p>
                     )}

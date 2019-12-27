@@ -39,7 +39,7 @@ class SocialShare extends React.PureComponent<Props> {
 
     return (
       <React.Fragment>
-        <CopyableText label={__('LBRY App Link')} copyable={lbryURL} noSnackbar />
+        <CopyableText label={__('LBRY Link')} copyable={lbryURL} noSnackbar />
         <div className="">
           <Button
             icon={ICONS.FACEBOOK}
