@@ -27,3 +27,4 @@ exports.CHANNELS_FOLLOWING_MANAGE = 'following/channels/manage';
 exports.WALLET = 'wallet';
 exports.BLOCKED = 'blocked';
 exports.CHANNELS = 'channels';
+exports.EMBED = 'embed';

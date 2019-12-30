@@ -4,6 +4,12 @@ let fs = require('fs');
 
 const isProduction = process.env.NODE_ENV === 'production';
 let knownMessages = null;
+let localStorageAvailable;
+try {
+  localStorageAvailable = Boolean(window.localStorage);
+} catch (e) {
+  localStorageAvailable = false;
+}
 
 window.i18n_messages = window.i18n_messages || {};
 
@@ -44,7 +50,9 @@ function saveMessage(message) {
 // @endif
 
 export function __(message, tokens) {
-  const language = window.localStorage.getItem('language') || 'en';
+  const language = localStorageAvailable
+    ? window.localStorage.getItem('language') || 'en'
+    : window.navigator.language.slice(0, 2) || 'en';
 
   if (!isProduction) {
     saveMessage(message);

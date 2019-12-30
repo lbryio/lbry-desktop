@@ -3,7 +3,7 @@ import * as ICONS from 'constants/icons';
 import React from 'react';
 import Button from 'component/button';
 import CopyableText from 'component/copyableText';
-import EmbedArea from 'component/embedArea';
+import EmbedTextArea from 'component/embedTextArea';
 
 type Props = {
   claim: Claim,
@@ -58,7 +58,7 @@ class SocialShare extends React.PureComponent<Props> {
             href={`https://twitter.com/intent/tweet?text=${encodedLbryURL}`}
           />
         </div>
-        {webShareable && !isChannel && <EmbedArea label={__('Embedded')} claim={claim} noSnackbar />}
+        {webShareable && !isChannel && <EmbedTextArea label={__('Embedded')} claim={claim} noSnackbar />}
       </React.Fragment>
     );
   }
