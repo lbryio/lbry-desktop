@@ -45,12 +45,14 @@ const defaultState: AppState = {
   modal: null,
   modalProps: {},
   platform: process.platform,
-  upgradeSkipped: sessionStorage.getItem('upgradeSkipped') === 'true',
   daemonVersionMatched: null,
   daemonReady: false,
   hasSignature: false,
   badgeNumber: 0,
+  // @if TARGET='app'
+  upgradeSkipped: sessionStorage.getItem('upgradeSkipped') === 'true',
   volume: Number(sessionStorage.getItem('volume')) || 1,
+  // @endif
   muted: false,
   autoUpdateDownloaded: false,
   autoUpdateDeclined: false,

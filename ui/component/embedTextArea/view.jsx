@@ -13,7 +13,7 @@ type Props = {
   claim: Claim,
 };
 
-export default function EmbedArea(props: Props) {
+export default function EmbedTextArea(props: Props) {
   const { doToast, snackMessage, label, claim } = props;
   const { claim_id: claimId, name } = claim;
   const input = useRef();

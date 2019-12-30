@@ -154,6 +154,7 @@
   }
 }
 
+<<<<<<< HEAD
 .video-overlay__wrapper {
   position: absolute;
   left: auto;
@@ -218,3 +219,27 @@
     margin-top: var(--spacing-small);
   }
 }
+=======
+.file-render__embed {
+  height: 100%;
+  width: 100%;
+  position: fixed;
+  .video-js {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    .vjs-big-play-button {
+      @extend .button--icon;
+      @extend .button--play;
+      border: none;
+      position: static;
+      z-index: 2;
+
+      .vjs-icon-placeholder {
+        display: none;
+      }
+    }
+  }
+}
+>>>>>>> app plays embed in iframe

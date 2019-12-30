@@ -3,7 +3,13 @@ import { useState, useEffect } from 'react';
 export default function usePersistedState(key, firstTimeDefault) {
   // If no key is passed in, act as a normal `useState`
   let defaultValue;
-  if (key) {
+  let localStorageAvailable;
+  try {
+    localStorageAvailable = Boolean(window.localStorage);
+  } catch (e) {
+    localStorageAvailable = false;
+  }
+  if (key && localStorageAvailable) {
     let item = localStorage.getItem(key);
 
     if (item) {
@@ -27,7 +33,7 @@ export default function usePersistedState(key, firstTimeDefault) {
   const [value, setValue] = useState(defaultValue);
 
   useEffect(() => {
-    if (key) {
+    if (key && localStorageAvailable) {
       localStorage.setItem(key, typeof value === 'object' ? JSON.stringify(value) : value);
     }
   }, [key, value]);
