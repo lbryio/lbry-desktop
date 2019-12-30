@@ -153,3 +153,26 @@
     }
   }
 }
+
+.file-render__embed {
+  height: 100%;
+  width: 100%;
+  position: fixed;
+  .video-js {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    .vjs-big-play-button {
+      @extend .button--icon;
+      @extend .button--play;
+      border: none;
+      position: static;
+      z-index: 2;
+
+      .vjs-icon-placeholder {
+        display: none;
+      }
+    }
+  }
+}

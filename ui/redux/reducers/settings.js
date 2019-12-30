@@ -5,6 +5,14 @@ import SUPPORTED_LANGUAGES from 'constants/supported_languages';
 import { ACTIONS as LBRY_REDUX_ACTIONS, SHARED_PREFERENCES } from 'lbry-redux';
 
 const reducers = {};
+let settingLanguage = [];
+try {
+  let appLanguage = window.localStorage.getItem(SETTINGS.LANGUAGE);
+  settingLanguage.push(appLanguage);
+} catch (e) {}
+settingLanguage.push(window.navigator.language.slice(0, 2));
+settingLanguage.push('en');
+
 const defaultState = {
   isNight: false,
   loadedLanguages: [...Object.keys(window.i18n_messages), 'en'] || ['en'],
@@ -21,11 +29,7 @@ const defaultState = {
     [SETTINGS.ENABLE_SYNC]: true,
 
     // UI
-    [SETTINGS.LANGUAGE]: [
-      window.localStorage.getItem(SETTINGS.LANGUAGE),
-      window.navigator.language.slice(0, 2),
-      'en',
-    ].find(language => SUPPORTED_LANGUAGES[language]),
+    [SETTINGS.LANGUAGE]: settingLanguage.find(language => SUPPORTED_LANGUAGES[language]),
     [SETTINGS.THEME]: __('light'),
     [SETTINGS.THEMES]: [__('light'), __('dark')],
     [SETTINGS.SUPPORT_OPTION]: false,
@@ -111,7 +115,7 @@ reducers[LBRY_REDUX_ACTIONS.SHARED_PREFERENCE_SET] = (state, action) => {
   return Object.assign({}, state, {
     sharedPreferences,
   });
-}
+};
 
 reducers[ACTIONS.CLIENT_SETTING_CHANGED] = (state, action) => {
   const { key, value } = action.data;
@@ -124,10 +128,7 @@ reducers[ACTIONS.CLIENT_SETTING_CHANGED] = (state, action) => {
   });
 };
 
-reducers[LBRY_REDUX_ACTIONS.USER_STATE_POPULATE] = (
-  state,
-  action,
-) => {
+reducers[LBRY_REDUX_ACTIONS.USER_STATE_POPULATE] = (state, action) => {
   const { settings: sharedPreferences } = action.data;
 
   // process clientSettings and daemonSettings
@@ -135,8 +136,8 @@ reducers[LBRY_REDUX_ACTIONS.USER_STATE_POPULATE] = (
 };
 
 reducers[LBRY_REDUX_ACTIONS.SAVE_CUSTOM_WALLET_SERVERS] = (state, action) => {
-  return Object.assign({}, state, {customWalletServers: action.data});
-}
+  return Object.assign({}, state, { customWalletServers: action.data });
+};
 
 export default function reducer(state = defaultState, action) {
   const handler = reducers[action.type];

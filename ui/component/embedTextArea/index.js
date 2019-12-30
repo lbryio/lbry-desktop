@@ -1,10 +1,10 @@
 import { connect } from 'react-redux';
 import { doToast } from 'lbry-redux';
-import EmbedArea from './view';
+import EmbedTextArea from './view';
 
 export default connect(
   null,
   {
     doToast,
   }
-)(EmbedArea);
+)(EmbedTextArea);

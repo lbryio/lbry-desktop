@@ -910,5 +910,6 @@
   "%claimsInChannel% publishes": "%claimsInChannel% publishes",
   "%claimsInChannel% publish": "%claimsInChannel% publish",
   "Publishing": "Publishing",
-  "Update published": "Update published"
+  "Update published": "Update published",
+  "Install Now": "Install Now"
 }
