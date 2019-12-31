@@ -105,10 +105,10 @@ export default function FileViewer(props: Props) {
       setFileViewerRect(rect);
     }
 
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    onFullscreenChange(window, 'add', handleResize);
     return () => {
-      handleResize();
-      window.addEventListener('resize', handleResize);
-      onFullscreenChange(window, 'add', handleResize);
       window.removeEventListener('resize', handleResize);
       onFullscreenChange(window, 'remove', handleResize);
     };
