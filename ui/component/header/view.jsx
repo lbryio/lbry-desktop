@@ -99,6 +99,7 @@ const Header = (props: Props) => {
             className="header__navigation-item header__navigation-item--lbry"
             label={__('LBRY')}
             icon={ICONS.LBRY}
+            onClick={() => window.scrollTo(0, 0)}
             {...homeButtonNavigationProps}
           />
 
