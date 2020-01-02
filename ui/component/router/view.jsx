@@ -73,7 +73,7 @@ function AppRouter(props: Props) {
 
   return (
     <Switch>
-      {/* <Route path={`/$/${PAGES.HOME}`} exact component={HomePage} /> */}
+      <Route path={`/`} exact component={ChannelsFollowingPage} />
       <Route path={`/$/${PAGES.DISCOVER}`} exact component={DiscoverPage} />
       <Route path={`/$/${PAGES.AUTH}`} exact component={SignInPage} />
       <Route path={`/$/${PAGES.TAGS}`} exact component={TagsPage} />

@@ -1,10 +1,12 @@
 // @flow
 import * as PAGES from 'constants/pages';
+import * as ICONS from 'constants/icons';
 import React from 'react';
 import ClaimListDiscover from 'component/claimListDiscover';
 import ClaimList from 'component/claimList';
 import Page from 'component/page';
 import Button from 'component/button';
+import Icon from 'component/common/icon';
 
 import { TYPE_NEW } from 'component/claimListDiscover/view';
 
@@ -29,24 +31,35 @@ function ChannelsFollowing(props: Props) {
   return (
     <Page>
       {showTab ? (
-        <div className="card">
-          <ClaimList
-            header={__('Find Channels To Follow')}
-            headerAltControls={
-              <Button
-                button="link"
-                label={hasSubsribedChannels && __('View Your Feed')}
-                onClick={() => setShowTab(false)}
-              />
-            }
-            uris={suggestedSubscriptions.map(sub => `lbry://${sub.uri}`)}
-          />
-        </div>
+        <ClaimList
+          headerLabel={__('Find Channels To Follow')}
+          headerAltControls={
+            <Button
+              button="link"
+              label={hasSubsribedChannels && __('View Your Feed')}
+              onClick={() => setShowTab(false)}
+            />
+          }
+          uris={suggestedSubscriptions.map(sub => `lbry://${sub.uri}`)}
+        />
       ) : (
         <ClaimListDiscover
+          headerLabel={
+            <span>
+              <Icon icon={ICONS.SUBSCRIBE} size={10} />
+              {__('Following')}
+            </span>
+          }
           defaultTypeSort={TYPE_NEW}
           channelIds={subscribedChannels.map(sub => sub.uri.split('#')[1])}
-          meta={<Button button="link" label={__('Manage')} navigate={`/$/${PAGES.CHANNELS_FOLLOWING_MANAGE}`} />}
+          meta={
+            <Button
+              icon={ICONS.EDIT}
+              button="link"
+              label={__('Manage')}
+              navigate={`/$/${PAGES.CHANNELS_FOLLOWING_MANAGE}`}
+            />
+          }
         />
       )}
     </Page>

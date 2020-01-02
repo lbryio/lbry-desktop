@@ -9,6 +9,7 @@ import Icon from 'component/common/icon';
 import * as ICONS from '../../constants/icons';
 import { FormField } from '../../component/common/form-components/form-field';
 import { withRouter } from 'react-router';
+import Page from 'component/page';
 
 type Props = {
   fetching: boolean,
@@ -35,11 +36,9 @@ function FileListDownloaded(props: Props) {
   }
 
   return (
-    // Removed the <Page> wapper to try combining this page with UserHistory
-    // This should eventually move into /components if we want to keep it this way
-    <React.Fragment>
+    <Page>
       {hasDownloads ? (
-        <div className="card">
+        <React.Fragment>
           <ClaimList
             header={__('Your Library')}
             headerAltControls={
@@ -61,7 +60,7 @@ function FileListDownloaded(props: Props) {
             loading={fetching}
           />
           <Paginate totalPages={Math.ceil(Number(downloadedUrlsCount) / Number(PAGE_SIZE))} loading={fetching} />
-        </div>
+        </React.Fragment>
       ) : (
         <div className="main--empty">
           <section className="card card--section">
@@ -74,7 +73,7 @@ function FileListDownloaded(props: Props) {
           </section>
         </div>
       )}
-    </React.Fragment>
+    </Page>
   );
 }
 

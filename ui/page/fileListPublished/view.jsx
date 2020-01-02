@@ -26,10 +26,10 @@ function FileListPublished(props: Props) {
   }, [checkPendingPublishes, fetchClaimListMine]);
 
   return (
-    <Page notContained>
+    <Page>
       <WebUploadList />
       {urls && Boolean(urls.length) && (
-        <div className="card">
+        <React.Fragment>
           <ClaimList
             header={__('Your Publishes')}
             loading={fetching}
@@ -38,7 +38,7 @@ function FileListPublished(props: Props) {
             headerAltControls={<Button button="link" label={__('New Publish')} navigate="/$/publish" />}
           />
           <Paginate totalPages={Math.ceil(Number(urlTotal) / Number(PAGE_SIZE))} loading={fetching} />
-        </div>
+        </React.Fragment>
       )}
       {!(urls && urls.length) && (
         <React.Fragment>

@@ -37,19 +37,17 @@ function ChannelsFollowingManagePage(props: Props) {
 
   return (
     <Page>
-      <div className="card">
-        <ClaimList
-          header={viewingSuggestedSubs ? __('Discover New Channels') : __('Channels You Follow')}
-          headerAltControls={
-            <Button
-              button="link"
-              label={viewingSuggestedSubs ? hasSubscriptions && __('View Your Channels') : __('Find New Channels')}
-              onClick={() => onClick()}
-            />
-          }
-          uris={viewingSuggestedSubs ? suggestedSubscriptions.map(sub => `lbry://${sub.uri}`) : channelUris}
-        />
-      </div>
+      <ClaimList
+        header={viewingSuggestedSubs ? __('Discover New Channels') : __('Channels You Follow')}
+        headerAltControls={
+          <Button
+            button="link"
+            label={viewingSuggestedSubs ? hasSubscriptions && __('View Your Channels') : __('Find New Channels')}
+            onClick={() => onClick()}
+          />
+        }
+        uris={viewingSuggestedSubs ? suggestedSubscriptions.map(sub => `lbry://${sub.uri}`) : channelUris}
+      />
     </Page>
   );
 }

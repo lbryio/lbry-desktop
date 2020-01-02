@@ -45,6 +45,7 @@ type Props = {
   hiddenNsfwMessage?: Node,
   channelIds?: Array<string>,
   defaultTypeSort?: string,
+  headerLabel?: string | Node,
 };
 
 function ClaimListDiscover(props: Props) {
@@ -62,6 +63,7 @@ function ClaimListDiscover(props: Props) {
     hiddenUris,
     hiddenNsfwMessage,
     defaultTypeSort,
+    headerLabel,
   } = props;
   const didNavigateForward = history.action === 'PUSH';
   const [page, setPage] = useState(1);
@@ -221,12 +223,13 @@ function ClaimListDiscover(props: Props) {
   );
 
   return (
-    <div className="card">
+    <React.Fragment>
       <ClaimList
         id={claimSearchCacheQuery}
         loading={loading}
         uris={uris}
         header={header}
+        headerLabel={headerLabel}
         headerAltControls={meta}
         onScrollBottom={handleScrollBottom}
         page={page}
@@ -234,8 +237,10 @@ function ClaimListDiscover(props: Props) {
         empty={noResults}
       />
 
-      {loading && new Array(PAGE_SIZE).fill(1).map((x, i) => <ClaimPreview key={i} placeholder="loading" />)}
-    </div>
+      <div className="card">
+        {loading && new Array(PAGE_SIZE).fill(1).map((x, i) => <ClaimPreview key={i} placeholder="loading" />)}
+      </div>
+    </React.Fragment>
   );
 }
 
