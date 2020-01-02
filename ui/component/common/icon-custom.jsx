@@ -329,4 +329,37 @@ export const icons = {
       <line x1="3" y1="18" x2="21" y2="18" />
     </g>
   ),
+  [ICONS.DISCOVER]: buildIcon(
+    <g>
+      <circle cx="12" cy="12" r="10" />
+      <polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76" />
+    </g>
+  ),
+  [ICONS.TRENDING]: buildIcon(
+    <g>
+      <polyline points="23 6 13.5 15.5 8.5 10.5 1 18" />
+      <polyline points="17 6 23 6 23 12" />
+    </g>
+  ),
+  [ICONS.TOP]: buildIcon(
+    <g>
+      <line x1="12" y1="20" x2="12" y2="10" />
+      <line x1="18" y1="20" x2="18" y2="4" />
+      <line x1="6" y1="20" x2="6" y2="16" />
+    </g>
+  ),
+  [ICONS.NEW]: buildIcon(
+    <g>
+      <circle cx="12" cy="12" r="10" />
+      <polyline points="12 6 12 12 16 14" />
+    </g>
+  ),
+  [ICONS.INVITE]: buildIcon(
+    <g>
+      <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+      <circle cx="9" cy="7" r="4" />
+      <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
+      <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+    </g>
+  ),
 };

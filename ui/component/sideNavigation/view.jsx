@@ -2,6 +2,7 @@
 import * as PAGES from 'constants/pages';
 import * as ICONS from 'constants/icons';
 import React from 'react';
+import { withRouter } from 'react-router';
 import Button from 'component/button';
 import Tag from 'component/tag';
 import StickyBox from 'react-sticky-box/dist/esnext';
@@ -11,24 +12,27 @@ type Props = {
   subscriptions: Array<Subscription>,
   followedTags: Array<Tag>,
   email: ?string,
-  obscureSideBar: boolean,
+  obscureSideNavigation: boolean,
   uploadCount: number,
   sticky: boolean,
   expanded: boolean,
   doSignOut: () => void,
+  location: { pathname: string },
 };
 
-function SideBar(props: Props) {
+function SideNavigation(props: Props) {
   const {
     subscriptions,
     followedTags,
-    obscureSideBar,
+    obscureSideNavigation,
     uploadCount,
     doSignOut,
     email,
     sticky = true,
     expanded = false,
+    location,
   } = props;
+  const { pathname } = location;
   const isAuthenticated = Boolean(email);
 
   function buildLink(path, label, icon, onClick) {
@@ -49,7 +53,7 @@ function SideBar(props: Props) {
       <div>{children}</div>
     );
 
-  return obscureSideBar ? (
+  return obscureSideNavigation ? (
     <Wrapper>
       <div className="card navigation--placeholder">
         <div className="wrap">
@@ -64,29 +68,13 @@ function SideBar(props: Props) {
         <ul className="navigation-links">
           {[
             {
-              ...buildLink(null, __('Home'), ICONS.HOME),
-            },
-            // @if TARGET='app'
-            {
-              ...buildLink(PAGES.LIBRARY, __('Library'), ICONS.LIBRARY),
-            },
-            // @endif
-            {
-              ...buildLink(PAGES.CHANNELS, __('Channels'), ICONS.CHANNEL),
+              ...buildLink(PAGES.CHANNELS_FOLLOWING, __('Following'), ICONS.SUBSCRIBE),
             },
             {
-              ...buildLink(
-                PAGES.PUBLISHED,
-                uploadCount ? (
-                  <span>
-                    {__('Publishes')}
-                    <Spinner type="small" />
-                  </span>
-                ) : (
-                  __('Publishes')
-                ),
-                ICONS.PUBLISH
-              ),
+              ...buildLink(PAGES.TAGS_FOLLOWING, __('Your Tags'), ICONS.TAG),
+            },
+            {
+              ...buildLink(PAGES.DISCOVER, __('All Content'), ICONS.DISCOVER),
             },
           ].map(linkProps => (
             <li key={linkProps.navigate}>
@@ -96,6 +84,28 @@ function SideBar(props: Props) {
 
           {expanded &&
             [
+              // @if TARGET='app'
+              {
+                ...buildLink(PAGES.LIBRARY, __('Library'), ICONS.LIBRARY),
+              },
+              // @endif
+              {
+                ...buildLink(PAGES.CHANNELS, __('Channels'), ICONS.CHANNEL),
+              },
+              {
+                ...buildLink(
+                  PAGES.PUBLISHED,
+                  uploadCount ? (
+                    <span>
+                      {__('Publishes')}
+                      <Spinner type="small" />
+                    </span>
+                  ) : (
+                    __('Publishes')
+                  ),
+                  ICONS.PUBLISH
+                ),
+              },
               {
                 ...buildLink(PAGES.WALLET, __('Wallet'), ICONS.WALLET),
               },
@@ -126,27 +136,20 @@ function SideBar(props: Props) {
                   </li>
                 ))
             )}
-
-          <li>
-            <Button
-              navigate={`/$/${PAGES.FOLLOWING}`}
-              label={__('Customize')}
-              icon={ICONS.EDIT}
-              className="navigation-link"
-              activeClass="navigation-link--active"
-            />
-          </li>
         </ul>
 
-        <section className="navigation-links__inline">
-          <ul className="navigation-links--small tags--vertical">
+        {pathname.includes(PAGES.TAGS_FOLLOWING) && (
+          <ul className="navigation__secondary navigation-links--small tags--vertical">
             {followedTags.map(({ name }, key) => (
               <li className="navigation-link__wrapper" key={name}>
                 <Tag navigate={`/$/tags?t${name}`} name={name} />
               </li>
             ))}
           </ul>
-          <ul className="navigation-links--small">
+        )}
+
+        {pathname.includes(PAGES.CHANNELS_FOLLOWING) && (
+          <ul className="navigation__secondary navigation-links--small">
             {subscriptions.map(({ uri, channelName }, index) => (
               <li key={uri} className="navigation-link__wrapper">
                 <Button
@@ -158,10 +161,10 @@ function SideBar(props: Props) {
               </li>
             ))}
           </ul>
-        </section>
+        )}
       </nav>
     </Wrapper>
   );
 }
 
-export default SideBar;
+export default withRouter(SideNavigation);

@@ -1,8 +1,9 @@
 :root {
   // Button
-  --color-link-icon: var(--color-gray-5);
+  --color-link-icon: var(--color-gray-4);
   --color-link-active: var(--color-primary);
-  --color-navigation-link: var(--color-link-icon);
+  --color-navigation-link: var(--color-gray-5);
+  --color-header-button: #f7f7f7;
 
   // Color
   --color-background: #f7f7f7;
@@ -34,6 +35,7 @@
   --color-file-viewer-background: var(--color-card-background);
   --color-tabs-background: var(--color-secondary-alt);
   --color-tab-divider: var(--color-secondary);
+  --color-modal-background: var(--color-card-background);
 
   // Menu
   --color-menu-background: var(--color-header-background);

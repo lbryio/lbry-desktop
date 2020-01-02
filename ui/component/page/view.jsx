@@ -17,14 +17,14 @@ type Props = {
 
 function Page(props: Props) {
   const { children, className, authPage = false, authenticated } = props;
-  const obscureSideBar = IS_WEB ? !authenticated : false;
+  const obscureSideNavigation = IS_WEB ? !authenticated : false;
 
   return (
     <Fragment>
       <Header authHeader={authPage} />
       <div className={classnames('main-wrapper__inner')}>
         <main className={classnames(MAIN_CLASS, className, { 'main--full-width': authPage })}>{children}</main>
-        {!authPage && <SideNavigation obscureSideBar={obscureSideBar} />}
+        {!authPage && <SideNavigation obscureSideNavigation={obscureSideNavigation} />}
       </div>
     </Fragment>
   );

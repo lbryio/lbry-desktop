@@ -467,6 +467,7 @@ export function doGetAndPopulatePreferences() {
         );
       });
     }
+
     doPreferenceGet('shared', successCb, failCb);
   };
 }
