@@ -13,6 +13,11 @@ async function redirectMiddleware(ctx, next) {
     return;
   }
 
+  if (path === '/') {
+    ctx.redirect(`/$/${PAGES.CHANNELS_FOLLOWING}`);
+    return;
+  }
+
   if (!path.startsWith('/$/') && path.match(/^([^@/:]+)\/([^:/]+)$/)) {
     ctx.redirect(url.replace(/^([^@/:]+)\/([^:/]+)(:(\/.*))/, '$1:$2')); // test against path, but use ctx.url to retain parameters
     return;
