@@ -32,7 +32,7 @@ function ChannelsFollowing(props: Props) {
     <Page>
       {showTab ? (
         <ClaimList
-          headerLabel={__('Find Channels To Follow')}
+          header={__('Find Channels to Follow')}
           headerAltControls={
             <Button
               button="link"
