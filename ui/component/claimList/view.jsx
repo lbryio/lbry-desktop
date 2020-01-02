@@ -28,6 +28,7 @@ type Props = {
   // If using the default header, this is a unique ID needed to persist the state of the filter setting
   persistedStorageKey?: string,
   showHiddenByUser: boolean,
+  headerLabel?: string | Node,
 };
 
 export default function ClaimList(props: Props) {
@@ -45,6 +46,7 @@ export default function ClaimList(props: Props) {
     page,
     id,
     showHiddenByUser,
+    headerLabel,
   } = props;
   const [scrollBottomCbMap, setScrollBottomCbMap] = useState({});
   const [currentSort, setCurrentSort] = usePersistedState(persistedStorageKey, SORT_NEW);
@@ -97,29 +99,32 @@ export default function ClaimList(props: Props) {
       })}
     >
       {header !== false && (
-        <div className={classnames('claim-list__header', { 'claim-list__header--small': type === 'small' })}>
-          {header}
-          {loading && <Spinner type="small" />}
-          <div className="claim-list__alt-controls">
-            {headerAltControls}
-            {defaultSort && (
-              <FormField
-                className="claim-list__dropdown"
-                type="select"
-                name="file_sort"
-                value={currentSort}
-                onChange={handleSortChange}
-              >
-                <option value={SORT_NEW}>{__('Newest First')}</option>
-                <option value={SORT_OLD}>{__('Oldest First')}</option>
-              </FormField>
-            )}
+        <React.Fragment>
+          {headerLabel && <label className="claim-list__header-label">{headerLabel}</label>}
+          <div className={classnames('claim-list__header', { 'claim-list__header--small': type === 'small' })}>
+            {header}
+            {loading && <Spinner type="small" />}
+            <div className="claim-list__alt-controls">
+              {headerAltControls}
+              {defaultSort && (
+                <FormField
+                  className="claim-list__dropdown"
+                  type="select"
+                  name="file_sort"
+                  value={currentSort}
+                  onChange={handleSortChange}
+                >
+                  <option value={SORT_NEW}>{__('Newest First')}</option>
+                  <option value={SORT_OLD}>{__('Oldest First')}</option>
+                </FormField>
+              )}
+            </div>
           </div>
-        </div>
+        </React.Fragment>
       )}
 
       {urisLength > 0 && (
-        <ul className="ul--no-style">
+        <ul className="card ul--no-style">
           {sortedUris.map((uri, index) => (
             <ClaimPreview
               key={uri}
@@ -132,7 +137,7 @@ export default function ClaimList(props: Props) {
         </ul>
       )}
 
-      {urisLength === 0 && !loading && <div className="main--empty empty">{empty || __('No results')}</div>}
+      {urisLength === 0 && !loading && <div className="card main--empty empty">{empty || __('No results')}</div>}
     </section>
   );
 }

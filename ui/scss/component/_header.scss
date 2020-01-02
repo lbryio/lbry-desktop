@@ -126,6 +126,10 @@
   &:hover {
     background-color: var(--color-primary-alt);
   }
+
+  &:focus {
+    @include focus;
+  }
 }
 
 .header__navigation-item--lbry {

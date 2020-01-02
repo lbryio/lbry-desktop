@@ -51,8 +51,12 @@ const Header = (props: Props) => {
   const isAuthPage = history.location.pathname.includes(PAGES.AUTH);
 
   // Sign out if they click the "x" when they are on the password prompt
-  const authHeaderAction = syncError ? { onClick: signOut } : { navigate: '/' };
-  const homeButtonNavigationProps = isVerifyPage ? {} : authHeader ? authHeaderAction : { navigate: '/' };
+  const authHeaderAction = syncError ? { onClick: signOut } : { navigate: `/$/${PAGES.CHANNELS_FOLLOWING}` };
+  const homeButtonNavigationProps = isVerifyPage
+    ? {}
+    : authHeader
+    ? authHeaderAction
+    : { navigate: `/$/${PAGES.CHANNELS_FOLLOWING}` };
   const closeButtonNavigationProps = authHeader ? authHeaderAction : { onClick: () => history.goBack() };
 
   function handleThemeToggle() {

@@ -1,13 +1,6 @@
 // Generic html styles used across the App
 // component specific styling should go in the component scss file
 
-.top-bid {
-  width: 100%;
-  height: 400px;
-  background-color: var(--color-primary-alt);
-  padding: 1rem;
-}
-
 *::selection {
   background-color: var(--color-text-selection-bg);
   color: var(--color-text-selection);

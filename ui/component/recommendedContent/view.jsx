@@ -51,15 +51,13 @@ export default class RecommendedContent extends React.PureComponent<Props> {
     const { recommendedContent, isSearching } = this.props;
 
     return (
-      <section className="card">
-        <ClaimList
-          type="small"
-          loading={isSearching}
-          uris={recommendedContent}
-          header={__('Related')}
-          empty={__('No related content found')}
-        />
-      </section>
+      <ClaimList
+        type="small"
+        loading={isSearching}
+        uris={recommendedContent}
+        header={__('Related')}
+        empty={__('No related content found')}
+      />
     );
   }
 }
