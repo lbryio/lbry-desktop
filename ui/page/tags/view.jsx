@@ -7,6 +7,7 @@ import Button from 'component/button';
 import useHover from 'effects/use-hover';
 import analytics from 'analytics';
 import HiddenNsfw from 'component/common/hidden-nsfw';
+import Icon from 'component/common/icon';
 
 type Props = {
   location: { search: string },
@@ -46,6 +47,12 @@ function TagsPage(props: Props) {
   return (
     <Page>
       <ClaimListDiscover
+        headerLabel={
+          <span>
+            <Icon icon={ICONS.TAG} size={10} />
+            {tag}
+          </span>
+        }
         tags={tags}
         hiddenNsfwMessage={<HiddenNsfw type="page" />}
         meta={

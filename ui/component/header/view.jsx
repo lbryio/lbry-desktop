@@ -147,13 +147,17 @@ const Header = (props: Props) => {
                     </MenuItem>
                     <MenuItem className="menu__link" onSelect={() => history.push(`/$/${PAGES.PUBLISHED}`)}>
                       <Icon aria-hidden icon={ICONS.PUBLISH} />
-                      {__('Your Publishes')}
+                      {__('Publishes')}
+                    </MenuItem>
+                    <MenuItem className="menu__link" onSelect={() => history.push(`/$/${PAGES.PUBLISHED}`)}>
+                      <Icon aria-hidden icon={ICONS.CHANNEL} />
+                      {__('Channels')}
                     </MenuItem>
 
                     {/* @if TARGET='app' */}
                     <MenuItem className="menu__link" onSelect={() => history.push(`/$/${PAGES.PUBLISH}`)}>
                       <Icon aria-hidden icon={ICONS.LIBRARY} />
-                      {__('Your Library')}
+                      {__('Library')}
                     </MenuItem>
                     {/* @endif */}
 

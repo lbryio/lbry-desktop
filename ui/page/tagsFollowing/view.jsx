@@ -35,7 +35,7 @@ function DiscoverPage(props: Props) {
             icon={ICONS.EDIT}
             label={__('Manage')}
             requiresAuth={IS_WEB}
-            navigate={`/$/${PAGES.FOLLOWING}`}
+            navigate={`/$/${PAGES.TAGS_FOLLOWING_MANAGE}`}
           />
         }
       />

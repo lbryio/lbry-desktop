@@ -6,33 +6,29 @@
 
 .claim-list__header {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
-  min-height: 3rem;
   margin: var(--spacing-medium) 0;
   margin-top: 0;
   font-size: var(--font-body);
 
-  fieldset-section {
-    margin-top: 0;
-    margin-bottom: 0;
+  .spinner {
+    margin-left: var(--spacing-medium);
   }
 }
 
 .claim-list__header--small {
-  min-height: 0;
   color: var(--color-text-subtitle);
 }
 
 .claim-list__dropdown {
   padding: 0 var(--spacing-medium);
-  padding-right: var(--spacing-large);
-  margin-bottom: 0;
   margin-left: var(--spacing-medium);
+  margin-right: var(--spacing-medium);
 
   @media (max-width: $breakpoint-small) {
-    font-size: var(--font-small);
-    padding: 0 var(--spacing-small);
-    padding-right: var(--spacing-large);
+    margin-top: var(--spacing-small);
+    margin-left: 0;
   }
 }
 

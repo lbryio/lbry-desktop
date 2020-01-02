@@ -24,7 +24,7 @@ function FollowingPage(props: Props) {
   const viewingSuggestedSubs = urlParams.get('view') || !hasSubscriptions;
 
   function onClick() {
-    let url = `/$/${PAGES.FOLLOWING}`;
+    let url = `/$/${PAGES.TAGS_FOLLOWING_MANAGE}`;
     if (!viewingSuggestedSubs) {
       url += '?view=discover';
     }

@@ -60,30 +60,29 @@ export default function SearchPage(props: Props) {
               </header>
             )}
 
-            <div className="card">
-              <ClaimList
-                uris={uris}
-                loading={isSearching}
-                header={<SearchOptions />}
-                headerAltControls={
-                  <Fragment>
-                    <span>{__('Find what you were looking for?')}</span>
-                    <Button
-                      button="alt"
-                      description={__('Yes')}
-                      onClick={() => onFeedbackPositive(urlQuery)}
-                      icon={ICONS.YES}
-                    />
-                    <Button
-                      button="alt"
-                      description={__('No')}
-                      onClick={() => onFeedbackNegative(urlQuery)}
-                      icon={ICONS.NO}
-                    />
-                  </Fragment>
-                }
-              />
-            </div>
+            <ClaimList
+              uris={uris}
+              loading={isSearching}
+              header={<SearchOptions />}
+              headerAltControls={
+                <Fragment>
+                  <span>{__('Find what you were looking for?')}</span>
+                  <Button
+                    button="alt"
+                    description={__('Yes')}
+                    onClick={() => onFeedbackPositive(urlQuery)}
+                    icon={ICONS.YES}
+                  />
+                  <Button
+                    button="alt"
+                    description={__('No')}
+                    onClick={() => onFeedbackNegative(urlQuery)}
+                    icon={ICONS.NO}
+                  />
+                </Fragment>
+              }
+            />
+
             <div className="help">{__('These search results are provided by LBRY, Inc.')}</div>
           </Fragment>
         )}
