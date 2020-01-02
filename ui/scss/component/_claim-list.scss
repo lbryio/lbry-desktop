@@ -7,17 +7,13 @@
 .claim-list__header {
   display: flex;
   align-items: center;
-  min-height: 4.5rem;
+  min-height: 6rem;
   padding: var(--spacing-medium);
   font-size: var(--font-body);
   border-bottom: 1px solid var(--color-border);
 
   border-top-left-radius: var(--card-radius);
   border-top-right-radius: var(--card-radius);
-
-  & > *:not(:last-child) {
-    margin-right: 0.5rem;
-  }
 
   fieldset-section {
     margin-top: 0;
@@ -34,12 +30,17 @@
   margin-bottom: 0;
   padding: 0 var(--spacing-medium);
   padding-right: var(--spacing-large);
+  margin-left: var(--spacing-medium);
 
   @media (max-width: $breakpoint-small) {
     font-size: var(--font-small);
     padding: 0 var(--spacing-small);
     padding-right: var(--spacing-large);
   }
+}
+
+.claim-list__header-title {
+  display: block;
 }
 
 .claim-list__conjuction {

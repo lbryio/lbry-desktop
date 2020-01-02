@@ -46,7 +46,7 @@ type LogPublishParams = {
 let analyticsEnabled: boolean = true;
 const analytics: Analytics = {
   error: message => {
-    if (analyticsEnabled) {
+    if (analyticsEnabled && isProduction) {
       Lbryio.call('event', 'desktop_error', { error_message: message });
     }
   },

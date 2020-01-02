@@ -5,10 +5,10 @@ import { Route, Redirect, Switch, withRouter } from 'react-router-dom';
 import SettingsPage from 'page/settings';
 import HelpPage from 'page/help';
 import ReportPage from 'page/report';
-import AccountPage from 'page/account';
 import ShowPage from 'page/show';
 import PublishPage from 'page/publish';
 import DiscoverPage from 'page/discover';
+// import HomePage from 'page/home';
 import RewardsPage from 'page/rewards';
 import FileListDownloaded from 'page/fileListDownloaded';
 import FileListPublished from 'page/fileListPublished';
@@ -18,6 +18,9 @@ import SearchPage from 'page/search';
 import LibraryPage from 'page/library';
 import WalletPage from 'page/wallet';
 import TagsPage from 'page/tags';
+import TagsFollowingPage from 'page/tagsFollowing';
+import ChannelsFollowingPage from 'page/channelsFollowing';
+import ChannelsFollowingManagePage from 'page/channelsFollowingManage';
 import FollowingPage from 'page/following';
 import ListBlockedPage from 'page/listBlocked';
 import FourOhFourPage from 'page/fourOhFour';
@@ -70,10 +73,13 @@ function AppRouter(props: Props) {
 
   return (
     <Switch>
-      <Route path="/" exact component={DiscoverPage} />
+      {/* <Route path={`/$/${PAGES.HOME}`} exact component={HomePage} /> */}
       <Route path={`/$/${PAGES.DISCOVER}`} exact component={DiscoverPage} />
       <Route path={`/$/${PAGES.AUTH}`} exact component={SignInPage} />
       <Route path={`/$/${PAGES.TAGS}`} exact component={TagsPage} />
+      <Route path={`/$/${PAGES.TAGS_FOLLOWING}`} exact component={TagsFollowingPage} />
+      <Route path={`/$/${PAGES.CHANNELS_FOLLOWING}`} exact component={ChannelsFollowingPage} />
+      <Route path={`/$/${PAGES.CHANNELS_FOLLOWING_MANAGE}`} exact component={ChannelsFollowingManagePage} />
       <Route path={`/$/${PAGES.HELP}`} exact component={HelpPage} />
       <Route path={`/$/${PAGES.AUTH_VERIFY}`} exact component={SignInVerifyPage} />
       <Route path={`/$/${PAGES.SEARCH}`} exact component={SearchPage} />
@@ -87,7 +93,6 @@ function AppRouter(props: Props) {
       <PrivateRoute {...props} path={`/$/${PAGES.REWARDS}`} component={RewardsPage} />
       <PrivateRoute {...props} path={`/$/${PAGES.TRANSACTIONS}`} component={TransactionHistoryPage} />
       <PrivateRoute {...props} path={`/$/${PAGES.LIBRARY}`} component={LibraryPage} />
-      <PrivateRoute {...props} path={`/$/${PAGES.ACCOUNT}`} component={AccountPage} />
       <PrivateRoute {...props} path={`/$/${PAGES.FOLLOWING}`} component={FollowingPage} />
       <PrivateRoute {...props} path={`/$/${PAGES.BLOCKED}`} component={ListBlockedPage} />
       <PrivateRoute {...props} path={`/$/${PAGES.WALLET}`} exact component={WalletPage} />

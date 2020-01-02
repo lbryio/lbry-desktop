@@ -47,6 +47,7 @@
   flex: 1;
   display: flex;
   align-items: center;
+  height: var(--height-input);
 }
 
 .header__menu {
@@ -113,7 +114,18 @@
 .header__navigation-item--back,
 .header__navigation-item--forward,
 .header__navigation-item--icon {
-  width: 3rem;
+  width: var(--height-button);
+  background-color: var(--color-header-button);
+  border-radius: 1.5rem;
+  margin-left: var(--spacing-small);
+
+  svg {
+    stroke: var(--color-text);
+  }
+
+  &:hover {
+    background-color: var(--color-primary-alt);
+  }
 }
 
 .header__navigation-item--lbry {
@@ -124,4 +136,8 @@
     height: 2rem;
     width: 2rem;
   }
+}
+
+.header__navigation-item--balance {
+  margin: 0 var(--spacing-medium);
 }

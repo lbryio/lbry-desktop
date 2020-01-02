@@ -7,14 +7,12 @@ import {
   doToggleTagFollow,
   selectBlockedChannels,
 } from 'lbry-redux';
-import { selectSubscriptions } from 'redux/selectors/subscriptions';
 import { makeSelectClientSetting } from 'redux/selectors/settings';
 import ClaimListDiscover from './view';
 
 const select = state => ({
   claimSearchByQuery: selectClaimSearchByQuery(state),
   loading: selectFetchingClaimSearch(state),
-  subscribedChannels: selectSubscriptions(state),
   showNsfw: makeSelectClientSetting(SETTINGS.SHOW_MATURE)(state),
   hiddenUris: selectBlockedChannels(state),
 });

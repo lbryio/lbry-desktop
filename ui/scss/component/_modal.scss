@@ -13,7 +13,7 @@
 
 .modal {
   @extend .card;
-  background-color: var(--color-card-background);
+  background-color: var(--color-modal-background);
   line-height: 1.55;
   min-width: 500px;
   max-width: var(--modal-width);

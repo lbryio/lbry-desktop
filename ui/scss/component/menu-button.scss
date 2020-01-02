@@ -18,10 +18,6 @@
   outline: none;
   background-color: var(--color-menu-background);
   border-top: none;
-
-  &:focus {
-    box-shadow: none;
-  }
 }
 
 [data-reach-menu-item] {

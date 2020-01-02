@@ -127,33 +127,42 @@ const Header = (props: Props) => {
           <div className={classnames('header__menu', { 'header__menu--with-balance': !IS_WEB || authenticated })}>
             {(!IS_WEB || authenticated) && (
               <Fragment>
-                <Menu>
-                  <MenuButton className="header__navigation-item menu__title">{getWalletTitle()}</MenuButton>
-                  <MenuList className="menu__list--header">
-                    <MenuItem className="menu__link" onSelect={() => history.push(`/$/${PAGES.WALLET}`)}>
-                      <Icon aria-hidden icon={ICONS.WALLET} />
-                      {__('Wallet')}
-                    </MenuItem>
-                    <MenuItem className="menu__link" onSelect={() => history.push(`/$/${PAGES.REWARDS}`)}>
-                      <Icon aria-hidden icon={ICONS.FEATURED} />
-                      {__('Rewards')}
-                    </MenuItem>
-                  </MenuList>
-                </Menu>
+                <Button
+                  navigate={`/$/${PAGES.WALLET}`}
+                  className="header__navigation-item menu__title header__navigation-item--balance"
+                  label={getWalletTitle()}
+                />
                 <Menu>
                   <MenuButton className="header__navigation-item menu__title header__navigation-item--icon">
                     <Icon size={18} icon={ICONS.ACCOUNT} />
                   </MenuButton>
                   <MenuList className="menu__list--header">
-                    <MenuItem className="menu__link" onSelect={() => history.push(`/$/${PAGES.ACCOUNT}`)}>
-                      <Icon aria-hidden icon={ICONS.OVERVIEW} />
-                      {__('Overview')}
-                    </MenuItem>
-
                     <MenuItem className="menu__link" onSelect={() => history.push(`/$/${PAGES.PUBLISH}`)}>
                       <Icon aria-hidden icon={ICONS.PUBLISH} />
-                      {__('Publish')}
+                      {__('New Publish')}
                     </MenuItem>
+                    <MenuItem className="menu__link" onSelect={() => history.push(`/$/${PAGES.PUBLISHED}`)}>
+                      <Icon aria-hidden icon={ICONS.PUBLISH} />
+                      {__('Your Publishes')}
+                    </MenuItem>
+
+                    {/* @if TARGET='app' */}
+                    <MenuItem className="menu__link" onSelect={() => history.push(`/$/${PAGES.PUBLISH}`)}>
+                      <Icon aria-hidden icon={ICONS.LIBRARY} />
+                      {__('Your Library')}
+                    </MenuItem>
+                    {/* @endif */}
+
+                    <MenuItem className="menu__link" onSelect={() => history.push(`/$/${PAGES.REWARDS}`)}>
+                      <Icon aria-hidden icon={ICONS.FEATURED} />
+                      {__('Rewards')}
+                    </MenuItem>
+
+                    <MenuItem className="menu__link" onSelect={() => history.push(`/$/${PAGES.INVITE}`)}>
+                      <Icon aria-hidden icon={ICONS.INVITE} />
+                      {__('Invite A Friend')}
+                    </MenuItem>
+
                     {authenticated ? (
                       <MenuItem className="menu__link" onSelect={signOut}>
                         <Icon aria-hidden icon={ICONS.SIGN_OUT} />

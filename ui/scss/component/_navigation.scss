@@ -7,6 +7,10 @@
   }
 }
 
+.navigation__secondary {
+  margin-top: var(--spacing-large);
+}
+
 .navigation--placeholder {
   @extend .navigation;
   padding: 2rem 1.5rem;

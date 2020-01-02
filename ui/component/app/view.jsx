@@ -147,6 +147,13 @@ function App(props: Props) {
     }
   }, [previousRewardApproved, isRewardApproved]);
 
+  // @if TARGET='app'
+  useEffect(() => {
+    console.log('update prefs');
+    updatePreferences();
+  }, []);
+  // @endif
+
   // Keep this at the end to ensure initial setup effects are run first
   useEffect(() => {
     // Wait for balance to be populated on desktop so we know when we can begin syncing
