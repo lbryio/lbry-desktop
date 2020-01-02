@@ -155,7 +155,7 @@ const Header = (props: Props) => {
                     </MenuItem>
 
                     {/* @if TARGET='app' */}
-                    <MenuItem className="menu__link" onSelect={() => history.push(`/$/${PAGES.PUBLISH}`)}>
+                    <MenuItem className="menu__link" onSelect={() => history.push(`/$/${PAGES.LIBRARY}`)}>
                       <Icon aria-hidden icon={ICONS.LIBRARY} />
                       {__('Library')}
                     </MenuItem>

@@ -943,5 +943,9 @@
   "Accepted": "Accepted",
   "Claimable": "Claimable",
   "Invite A Friend": "Invite A Friend",
-  "Navigation": "Navigation"
+  "Navigation": "Navigation",
+  "Sign In to lbry.tv to Earn Rewards": "Sign In to lbry.tv to Earn Rewards",
+  "Unlock Rewards": "Unlock Rewards",
+  "A lbry.tv account allows you to earn more than %credit_amount% in rewards, backup your data, and get content and security updates.": "A lbry.tv account allows you to earn more than %credit_amount% in rewards, backup your data, and get content and security updates.",
+  "Deposit cannot be higher than your balance": "Deposit cannot be higher than your balance"
 }

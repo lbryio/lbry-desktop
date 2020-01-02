@@ -9,7 +9,6 @@ import Icon from 'component/common/icon';
 import * as ICONS from '../../constants/icons';
 import { FormField } from '../../component/common/form-components/form-field';
 import { withRouter } from 'react-router';
-import Page from 'component/page';
 
 type Props = {
   fetching: boolean,
@@ -36,7 +35,7 @@ function FileListDownloaded(props: Props) {
   }
 
   return (
-    <Page>
+    <React.Fragment>
       {hasDownloads ? (
         <React.Fragment>
           <ClaimList
@@ -73,7 +72,7 @@ function FileListDownloaded(props: Props) {
           </section>
         </div>
       )}
-    </Page>
+    </React.Fragment>
   );
 }
 
