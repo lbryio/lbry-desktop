@@ -43,7 +43,8 @@ type LogPublishParams = {
   channel_claim_id?: string,
 };
 
-let analyticsEnabled: boolean = true;
+let analyticsEnabled: boolean = isProduction;
+
 const analytics: Analytics = {
   error: message => {
     if (analyticsEnabled && isProduction) {

@@ -163,6 +163,8 @@ function ChannelPage(props: Props) {
 
   return (
     <Page>
+      <ClaimUri uri={uri} />
+
       <div className="card">
         <header className="channel-cover">
           <div className="channel__quick-actions">
@@ -212,7 +214,6 @@ function ChannelPage(props: Props) {
               <Button button="alt" title={__('Edit')} onClick={() => setEditing(!editing)} icon={ICONS.EDIT} />
             )}
             <div className="channel__meta">
-              <ClaimUri uri={uri} inline />
               <span>
                 {subCount} {subCount !== 1 ? __('Followers') : __('Follower')}
                 <HelpLink href="https://lbry.com/faq/views" />
