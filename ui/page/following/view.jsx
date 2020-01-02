@@ -39,19 +39,17 @@ function FollowingPage(props: Props) {
   return (
     <Page>
       <TagsSelect showClose={false} title={__('Follow New Tags')} />
-      <div className="card">
-        <ClaimList
-          header={viewingSuggestedSubs ? __('Discover New Channels') : __('Channels You Follow')}
-          headerAltControls={
-            <Button
-              button="link"
-              label={viewingSuggestedSubs ? hasSubscriptions && __('View Your Channels') : __('Find New Channels')}
-              onClick={() => onClick()}
-            />
-          }
-          uris={viewingSuggestedSubs ? suggestedSubscriptions.map(sub => `lbry://${sub.uri}`) : channelUris}
-        />
-      </div>
+      <ClaimList
+        header={viewingSuggestedSubs ? __('Discover New Channels') : __('Channels You Follow')}
+        headerAltControls={
+          <Button
+            button="link"
+            label={viewingSuggestedSubs ? hasSubscriptions && __('View Your Channels') : __('Find New Channels')}
+            onClick={() => onClick()}
+          />
+        }
+        uris={viewingSuggestedSubs ? suggestedSubscriptions.map(sub => `lbry://${sub.uri}`) : channelUris}
+      />
     </Page>
   );
 }

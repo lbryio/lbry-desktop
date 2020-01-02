@@ -65,6 +65,7 @@ function AppRouter(props: Props) {
   const {
     currentScroll,
     location: { pathname },
+    isAuthenticated,
   } = props;
 
   useEffect(() => {
@@ -78,7 +79,11 @@ function AppRouter(props: Props) {
       <Route path={`/$/${PAGES.AUTH}`} exact component={SignInPage} />
       <Route path={`/$/${PAGES.TAGS}`} exact component={TagsPage} />
       <Route path={`/$/${PAGES.TAGS_FOLLOWING}`} exact component={TagsFollowingPage} />
-      <Route path={`/$/${PAGES.CHANNELS_FOLLOWING}`} exact component={ChannelsFollowingPage} />
+      <Route
+        path={`/$/${PAGES.CHANNELS_FOLLOWING}`}
+        exact
+        component={isAuthenticated ? ChannelsFollowingPage : DiscoverPage}
+      />
       <Route path={`/$/${PAGES.CHANNELS_FOLLOWING_MANAGE}`} exact component={ChannelsFollowingManagePage} />
       <Route path={`/$/${PAGES.HELP}`} exact component={HelpPage} />
       <Route path={`/$/${PAGES.AUTH_VERIFY}`} exact component={SignInVerifyPage} />
