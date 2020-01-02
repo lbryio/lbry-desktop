@@ -21,7 +21,7 @@ import TagsPage from 'page/tags';
 import TagsFollowingPage from 'page/tagsFollowing';
 import ChannelsFollowingPage from 'page/channelsFollowing';
 import ChannelsFollowingManagePage from 'page/channelsFollowingManage';
-import FollowingPage from 'page/following';
+import TagsFollowingManagePage from 'page/tagsFollowingManage';
 import ListBlockedPage from 'page/listBlocked';
 import FourOhFourPage from 'page/fourOhFour';
 import SignInPage from 'page/signIn';
@@ -98,7 +98,7 @@ function AppRouter(props: Props) {
       <PrivateRoute {...props} path={`/$/${PAGES.REWARDS}`} component={RewardsPage} />
       <PrivateRoute {...props} path={`/$/${PAGES.TRANSACTIONS}`} component={TransactionHistoryPage} />
       <PrivateRoute {...props} path={`/$/${PAGES.LIBRARY}`} component={LibraryPage} />
-      <PrivateRoute {...props} path={`/$/${PAGES.TAGS_FOLLOWING_MANAGE}`} component={FollowingPage} />
+      <PrivateRoute {...props} path={`/$/${PAGES.TAGS_FOLLOWING_MANAGE}`} component={TagsFollowingManagePage} />
       <PrivateRoute {...props} path={`/$/${PAGES.BLOCKED}`} component={ListBlockedPage} />
       <PrivateRoute {...props} path={`/$/${PAGES.WALLET}`} exact component={WalletPage} />
       <PrivateRoute {...props} path={`/$/${PAGES.CHANNELS}`} component={ChannelsPage} />
