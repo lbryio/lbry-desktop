@@ -24,6 +24,7 @@ type Props = {
   setClientSetting: (string, boolean | string) => void,
   hideBalance: boolean,
   email: ?string,
+  authenticated: boolean,
   authHeader: boolean,
   syncError: ?string,
   signOut: () => void,
@@ -40,13 +41,13 @@ const Header = (props: Props) => {
     automaticDarkModeEnabled,
     hideBalance,
     email,
+    authenticated,
     authHeader,
     signOut,
     syncError,
     openMobileNavigation,
     openChannelCreate,
   } = props;
-  const authenticated = Boolean(email);
 
   // on the verify page don't let anyone escape other than by closing the tab to keep session data consistent
   const isVerifyPage = history.location.pathname.includes(PAGES.AUTH_VERIFY);
@@ -188,9 +189,12 @@ const Header = (props: Props) => {
                     </MenuItem> */}
 
                     {authenticated ? (
-                      <MenuItem className="menu__link" onSelect={signOut}>
-                        <Icon aria-hidden icon={ICONS.SIGN_OUT} />
-                        {__('Sign Out')}
+                      <MenuItem onSelect={signOut}>
+                        <div className="menu__link">
+                          <Icon aria-hidden icon={ICONS.SIGN_OUT} />
+                          {__('Sign Out')}
+                        </div>
+                        <span className="menu__link-help">{email}</span>
                       </MenuItem>
                     ) : (
                       <MenuItem className="menu__link" onSelect={() => history.push(`/$/${PAGES.AUTH}`)}>
