@@ -912,5 +912,7 @@
   "Upload your thumbnail to %speech_link%. Recommended size is 16:9.": "Upload your thumbnail to %speech_link%. Recommended size is 16:9.",
   "Get %amount% LBC": "Get %amount% LBC",
   "Get %range% LBC": "Get %range% LBC",
-  "Did something go wrong? Have a look in your log file, or send it to %support_link%.": "Did something go wrong? Have a look in your log file, or send it to %support_link%."
+  "Did something go wrong? Have a look in your log file, or send it to %support_link%.": "Did something go wrong? Have a look in your log file, or send it to %support_link%.",
+  "%amount% LBC": "%amount% LBC",
+  "%amount% fee": "%amount% fee"
 }
