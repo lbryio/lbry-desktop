@@ -8,8 +8,6 @@ $metadata-z-index: 1;
   align-items: flex-end;
   box-sizing: content-box;
   color: #fff;
-  border-top-left-radius: var(--card-radius);
-  border-top-right-radius: var(--card-radius);
 
   .button {
     color: #fff;
@@ -28,6 +26,8 @@ $metadata-z-index: 1;
 .channel-cover__custom {
   height: var(--cover-photo-height);
   width: 100%;
+  border-top-left-radius: var(--card-radius);
+  border-top-right-radius: var(--card-radius);
 }
 
 .channel-thumbnail {
@@ -47,7 +47,6 @@ $metadata-z-index: 1;
   position: absolute;
   height: var(--channel-thumbnail-width);
   width: var(--channel-thumbnail-width);
-  box-shadow: 0px 8px 40px -3px #000;
   left: var(--spacing-medium);
   top: 4rem;
 
