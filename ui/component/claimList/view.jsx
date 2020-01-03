@@ -136,8 +136,9 @@ export default function ClaimList(props: Props) {
           ))}
         </ul>
       )}
-
-      {urisLength === 0 && !loading && <div className="card main--empty empty">{empty || __('No results')}</div>}
+      {urisLength === 0 && !loading && (
+        <div className="card--section main--empty empty">{empty || __('No results')}</div>
+      )}
     </section>
   );
 }
