@@ -7,6 +7,10 @@ import Button from 'component/button';
 import Tag from 'component/tag';
 import StickyBox from 'react-sticky-box/dist/esnext';
 import Spinner from 'component/spinner';
+import usePersistedState from 'effects/use-persisted-state';
+
+const SHOW_CHANNELS = 'SHOW_CHANNELS';
+const SHOW_TAGS = 'SHOW_TAGS';
 
 type Props = {
   subscriptions: Array<Subscription>,
@@ -34,6 +38,31 @@ function SideNavigation(props: Props) {
   } = props;
   const { pathname } = location;
   const isAuthenticated = Boolean(email);
+  const [sideInformation, setSideInformation] = usePersistedState(
+    'side-navigation:information',
+    getSideInformation(pathname)
+  );
+
+  function getSideInformation(path) {
+    switch (path) {
+      case `/$/${PAGES.CHANNELS_FOLLOWING}`:
+        return SHOW_CHANNELS;
+
+      case `/$/${PAGES.TAGS_FOLLOWING}`:
+        return SHOW_TAGS;
+
+      case `/$/${PAGES.DISCOVER}`:
+        return null;
+
+      default:
+        return sideInformation;
+    }
+  }
+
+  React.useEffect(() => {
+    const sideInfo = getSideInformation(pathname);
+    setSideInformation(sideInfo);
+  }, [pathname, setSideInformation]);
 
   function buildLink(path, label, icon, onClick) {
     return {
@@ -138,7 +167,7 @@ function SideNavigation(props: Props) {
             )}
         </ul>
 
-        {pathname.includes(PAGES.TAGS_FOLLOWING) && (
+        {sideInformation === SHOW_TAGS && (
           <ul className="navigation__secondary navigation-links--small tags--vertical">
             {followedTags.map(({ name }, key) => (
               <li className="navigation-link__wrapper" key={name}>
@@ -148,7 +177,7 @@ function SideNavigation(props: Props) {
           </ul>
         )}
 
-        {pathname.includes(PAGES.CHANNELS_FOLLOWING) && (
+        {sideInformation === SHOW_CHANNELS && (
           <ul className="navigation__secondary navigation-links--small">
             {subscriptions.map(({ uri, channelName }, index) => (
               <li key={uri} className="navigation-link__wrapper">

@@ -23,11 +23,8 @@
 
 .claim-list__dropdown {
   padding: 0 var(--spacing-medium);
-  margin-left: var(--spacing-medium);
-  margin-right: var(--spacing-medium);
 
   @media (max-width: $breakpoint-small) {
-    margin-top: var(--spacing-small);
     margin-left: 0;
   }
 }
