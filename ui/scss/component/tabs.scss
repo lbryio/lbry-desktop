@@ -17,7 +17,10 @@
 .tabs__list--channel-page {
   padding-left: calc(var(--channel-thumbnail-width) + var(--spacing-large));
   padding-right: var(--spacing-medium);
+  margin-bottom: var(--spacing-large);
   height: 4rem;
+  border-bottom-left-radius: var(--card-radius);
+  border-bottom-right-radius: var(--card-radius);
 
   @media (max-width: $breakpoint-small) {
     padding-left: var(--spacing-medium);
@@ -47,7 +50,7 @@
 
 .tab__divider {
   position: absolute;
-  margin-top: calc(var(--tab-indicator-size) * -1);
+  margin-top: calc(var(--tab-indicator-size) * -1 - var(--spacing-large));
 }
 
 .tab::after,
