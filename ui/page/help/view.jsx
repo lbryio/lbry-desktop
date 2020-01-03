@@ -180,10 +180,13 @@ class HelpPage extends React.PureComponent<Props, State> {
         <Card
           title={__('View your Log')}
           subtitle={
-            <React.Fragment>
-              {__('Did something go wrong? Have a look in your log file, or send it to')}{' '}
-              <Button button="link" label={__('support')} href="https://lbry.com/faq/support" />.
-            </React.Fragment>
+            <I18nMessage
+              tokens={{
+                support_link: <Button button="link" label={__('support')} href="https://lbry.com/faq/support" />,
+              }}
+            >
+              Did something go wrong? Have a look in your log file, or send it to %support_link%.
+            </I18nMessage>
           }
           actions={
             <div className="section__actions">
