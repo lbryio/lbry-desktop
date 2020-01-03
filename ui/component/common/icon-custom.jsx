@@ -348,12 +348,6 @@ export const icons = {
       <line x1="6" y1="20" x2="6" y2="16" />
     </g>
   ),
-  [ICONS.NEW]: buildIcon(
-    <g>
-      <circle cx="12" cy="12" r="10" />
-      <polyline points="12 6 12 12 16 14" />
-    </g>
-  ),
   [ICONS.INVITE]: buildIcon(
     <g>
       <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />

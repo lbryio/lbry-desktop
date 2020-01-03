@@ -139,13 +139,25 @@ const Header = (props: Props) => {
                 />
                 <Menu>
                   <MenuButton className="header__navigation-item menu__title header__navigation-item--icon">
+                    <Icon size={18} icon={ICONS.PUBLISH} />
+                  </MenuButton>
+                  <MenuList className="menu__list--header">
+                    <MenuItem className="menu__link" onSelect={() => history.push(`/$/${PAGES.SETTINGS}`)}>
+                      <Icon aria-hidden tootlip icon={ICONS.PUBLISH} />
+                      {__('New Publish')}
+                    </MenuItem>
+                    <MenuItem className="menu__link" onSelect={() => history.push(`/$/${PAGES.HELP}`)}>
+                      <Icon aria-hidden icon={ICONS.CHANNEL} />
+                      {__('New Channel')}
+                    </MenuItem>
+                  </MenuList>
+                </Menu>
+
+                <Menu>
+                  <MenuButton className="header__navigation-item menu__title header__navigation-item--icon">
                     <Icon size={18} icon={ICONS.ACCOUNT} />
                   </MenuButton>
                   <MenuList className="menu__list--header">
-                    <MenuItem className="menu__link" onSelect={() => history.push(`/$/${PAGES.PUBLISH}`)}>
-                      <Icon aria-hidden icon={ICONS.PUBLISH} />
-                      {__('New Publish')}
-                    </MenuItem>
                     <MenuItem className="menu__link" onSelect={() => history.push(`/$/${PAGES.PUBLISHED}`)}>
                       <Icon aria-hidden icon={ICONS.PUBLISH} />
                       {__('Publishes')}
@@ -167,10 +179,11 @@ const Header = (props: Props) => {
                       {__('Rewards')}
                     </MenuItem>
 
-                    <MenuItem className="menu__link" onSelect={() => history.push(`/$/${PAGES.INVITE}`)}>
+                    {/* Commented out until new invite system is implemented */}
+                    {/* <MenuItem className="menu__link" onSelect={() => history.push(`/$/${PAGES.INVITE}`)}>
                       <Icon aria-hidden icon={ICONS.INVITE} />
                       {__('Invite A Friend')}
-                    </MenuItem>
+                    </MenuItem> */}
 
                     {authenticated ? (
                       <MenuItem className="menu__link" onSelect={signOut}>
