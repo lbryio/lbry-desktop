@@ -109,7 +109,7 @@ function SelectAsset(props: Props) {
             type={'text'}
             name={'thumbnail'}
             label={__(assetName + ' ' + recommended)}
-            placeholder={__('https://example.com/image.png')}
+            placeholder={'https://example.com/image.png'}
             disabled={false}
             value={currentValue}
             onChange={e => {
