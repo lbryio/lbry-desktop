@@ -295,7 +295,6 @@
   "Submit a Bug Report/Feature Request": "Submit a Bug Report/Feature Request",
   "Thanks! LBRY is made by its users.": "Thanks! LBRY is made by its users.",
   "View your Log": "View your Log",
-  "Did something go wrong? Have a look in your log file, or send it to": "Did something go wrong? Have a look in your log file, or send it to",
   "support": "support",
   "Open Log": "Open Log",
   "Open Log Folder": "Open Log Folder",
@@ -914,5 +913,6 @@
   "There was an error. It's been reported and will be fixed. Try %refreshing_the_app_link% to fix it. If that doesn't work, try pressing Ctrl+R/Cmd+R.": "There was an error. It's been reported and will be fixed. Try %refreshing_the_app_link% to fix it. If that doesn't work, try pressing Ctrl+R/Cmd+R.",
   "Upload your thumbnail to %speech_link%. Recommended size is 16:9.": "Upload your thumbnail to %speech_link%. Recommended size is 16:9.",
   "Get %amount% LBC": "Get %amount% LBC",
-  "Get %range% LBC": "Get %range% LBC"
+  "Get %range% LBC": "Get %range% LBC",
+  "Did something go wrong? Have a look in your log file, or send it to %support_link%.": "Did something go wrong? Have a look in your log file, or send it to %support_link%."
 }
