@@ -150,7 +150,7 @@ const Header = (props: Props) => {
                       <Icon aria-hidden icon={ICONS.PUBLISH} />
                       {__('Publishes')}
                     </MenuItem>
-                    <MenuItem className="menu__link" onSelect={() => history.push(`/$/${PAGES.PUBLISHED}`)}>
+                    <MenuItem className="menu__link" onSelect={() => history.push(`/$/${PAGES.CHANNELS}`)}>
                       <Icon aria-hidden icon={ICONS.CHANNEL} />
                       {__('Channels')}
                     </MenuItem>

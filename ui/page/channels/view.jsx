@@ -40,16 +40,14 @@ export default function ChannelsPage(props: Props) {
       {hasYoutubeChannels && <YoutubeTransferStatus hideChannelLink />}
 
       {channels && Boolean(channels.length) && (
-        <div className="card">
-          <ClaimList
-            header={__('Your Channels')}
-            loading={fetchingChannels}
-            uris={channels.map(channel => channel.permanent_url)}
-            headerAltControls={
-              <Button button="link" label={__('New Channel')} onClick={() => openModal(MODALS.CREATE_CHANNEL)} />
-            }
-          />
-        </div>
+        <ClaimList
+          header={__('Your Channels')}
+          loading={fetchingChannels}
+          uris={channels.map(channel => channel.permanent_url)}
+          headerAltControls={
+            <Button button="link" label={__('New Channel')} onClick={() => openModal(MODALS.CREATE_CHANNEL)} />
+          }
+        />
       )}
       {!(channels && channels.length) && (
         <React.Fragment>
