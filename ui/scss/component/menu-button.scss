@@ -62,13 +62,18 @@
   align-items: center;
   padding: var(--spacing-medium);
   padding-right: var(--spacing-large);
-}
 
-.menu__link {
   .icon {
     stroke: var(--color-menu-icon);
     margin-right: var(--spacing-small);
   }
+}
+
+.menu__link-help {
+  @extend .menu__link;
+  color: var(--color-text-help);
+  font-size: var(--font-small);
+  padding-top: 0;
 }
 
 .menu__title {
