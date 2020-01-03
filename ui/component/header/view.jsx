@@ -28,6 +28,7 @@ type Props = {
   syncError: ?string,
   signOut: () => void,
   openMobileNavigation: () => void,
+  openChannelCreate: () => void,
 };
 
 const Header = (props: Props) => {
@@ -43,6 +44,7 @@ const Header = (props: Props) => {
     signOut,
     syncError,
     openMobileNavigation,
+    openChannelCreate,
   } = props;
   const authenticated = Boolean(email);
 
@@ -142,11 +144,11 @@ const Header = (props: Props) => {
                     <Icon size={18} icon={ICONS.PUBLISH} />
                   </MenuButton>
                   <MenuList className="menu__list--header">
-                    <MenuItem className="menu__link" onSelect={() => history.push(`/$/${PAGES.SETTINGS}`)}>
-                      <Icon aria-hidden tootlip icon={ICONS.PUBLISH} />
+                    <MenuItem className="menu__link" onSelect={() => history.push(`/$/${PAGES.PUBLISH}`)}>
+                      <Icon aria-hidden icon={ICONS.PUBLISH} />
                       {__('New Publish')}
                     </MenuItem>
-                    <MenuItem className="menu__link" onSelect={() => history.push(`/$/${PAGES.HELP}`)}>
+                    <MenuItem className="menu__link" onSelect={openChannelCreate}>
                       <Icon aria-hidden icon={ICONS.CHANNEL} />
                       {__('New Channel')}
                     </MenuItem>

@@ -23,6 +23,7 @@ const perform = dispatch => ({
   setClientSetting: (key, value) => dispatch(doSetClientSetting(key, value)),
   signOut: () => dispatch(doSignOut()),
   openMobileNavigation: () => dispatch(doOpenModal(MODALS.MOBILE_NAVIGATION)),
+  openChannelCreate: () => dispatch(doOpenModal(MODALS.CREATE_CHANNEL)),
 });
 
 export default connect(
