@@ -2,7 +2,7 @@ import { parseURI } from 'lbry-redux';
 import visit from 'unist-util-visit';
 
 const protocol = 'lbry://';
-const uriRegex = /(lbry:\/\/)[^\s"]*/g;
+const uriRegex = /(lbry:\/\/)[^\s"]*[^)]/g;
 
 const mentionToken = '@';
 const mentionTokenCode = 64; // @
@@ -78,32 +78,13 @@ function tokenizeMention(eat, value, silent) {
   return validateURI(match, eat, self);
 }
 
-function onlyMatchingParens(string) {
-  if (!string) return null;
-  let parens = 0;
-
-  let i;
-  for (i = 0; i < string.length; i++) {
-    switch (string[i]) {
-      case '(':
-        parens++;
-        break;
-      case ')':
-        parens--;
-        break;
-    }
-    if (parens < 0) break;
-  }
-  return string.slice(0, i);
-}
-
 // Generate a markdown link from lbry url
 function tokenizeURI(eat, value, silent) {
   if (silent) {
     return true;
   }
 
-  const match = onlyMatchingParens(value.match(uriRegex));
+  const match = value.match(uriRegex);
 
   return validateURI(match, eat);
 }
