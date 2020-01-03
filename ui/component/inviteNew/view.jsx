@@ -4,6 +4,7 @@ import Button from 'component/button';
 import { Form, FormField } from 'component/common/form';
 import CopyableText from 'component/copyableText';
 import Card from 'component/common/card';
+import I18nMessage from 'component/i18nMessage';
 
 type FormState = {
   email: string,
@@ -66,10 +67,15 @@ class InviteNew extends React.PureComponent<Props, FormState> {
               <CopyableText label={__('Or share this link with your friends')} copyable={referralLink} />
 
               <p className="help">
-                {__('Earn')} <Button button="link" navigate="/$/rewards" label={__('rewards')} />{' '}
-                {__('for inviting your friends.')} {__('Read our')}{' '}
-                <Button button="link" label={__('FAQ')} href="https://lbry.com/faq/referrals" />{' '}
-                {__('to learn more about referrals')}.
+                <I18nMessage
+                  tokens={{
+                    rewards_link: <Button button="link" navigate="/$/rewards" label={__('rewards')} />,
+                    referral_faq_link: <Button button="link" label={__('FAQ')} href="https://lbry.com/faq/referrals" />,
+                  }}
+                >
+                  Earn %rewards_link% for inviting your friends. Read our %referral_faq_link% to learn more about
+                  referrals.
+                </I18nMessage>
               </p>
             </Form>
           </React.Fragment>

@@ -45,9 +45,7 @@
   "Download": "Download",
   "Content": "Content",
   "What are you publishing?": "What are you publishing?",
-  "Read our": "Read our",
   "FAQ": "FAQ",
-  "to learn more.": "to learn more.",
   "Title": "Title",
   "Titular Title": "Titular Title",
   "Description": "Description",
@@ -113,10 +111,6 @@
   "Invite a Friend": "Invite a Friend",
   "When your friends start using LBRY, the network gets stronger!": "When your friends start using LBRY, the network gets stronger!",
   "Or share this link with your friends": "Or share this link with your friends",
-  "Earn": "Earn",
-  "rewards": "rewards",
-  "for inviting your friends.": "for inviting your friends.",
-  "to learn more about referrals": "to learn more about referrals",
   "Power To The People": "Power To The People",
   "LBRY is powered by the users. More users, more power… and with great power comes great responsibility.": "LBRY is powered by the users. More users, more power… and with great power comes great responsibility.",
   "Checking your invite status": "Checking your invite status",
@@ -947,5 +941,6 @@
   "Sign In to lbry.tv to Earn Rewards": "Sign In to lbry.tv to Earn Rewards",
   "Unlock Rewards": "Unlock Rewards",
   "A lbry.tv account allows you to earn more than %credit_amount% in rewards, backup your data, and get content and security updates.": "A lbry.tv account allows you to earn more than %credit_amount% in rewards, backup your data, and get content and security updates.",
-  "Deposit cannot be higher than your balance": "Deposit cannot be higher than your balance"
+  "Deposit cannot be higher than your balance": "Deposit cannot be higher than your balance",
+  "Earn %rewards_link% for inviting your friends. Read our %referral_faq_link% to learn more about referrals.": "Earn %rewards_link% for inviting your friends. Read our %referral_faq_link% to learn more about referrals."
 }
