@@ -23,9 +23,9 @@ const RewardLink = (props: Props) => {
   } else if (label) {
     displayLabel = label;
   } else if (reward && reward.reward_range && reward.reward_range.includes('-')) {
-    displayLabel = `${__('Get')} ${reward.reward_range} LBC`;
+    displayLabel = __('Get %range% LBC', { range: reward.reward_range });
   } else if (reward && reward.reward_amount > 0) {
-    displayLabel = `${__('Get')} ${reward.reward_amount} LBC`;
+    displayLabel = __('Get %amount% LBC', { amount: reward.reward_amount });
   } else {
     displayLabel = __('Get ??? LBC');
   }
