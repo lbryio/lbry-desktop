@@ -1,12 +1,13 @@
 // @flow
 import type { Node } from 'react';
-import React, { Fragment } from 'react';
+import React from 'react';
 import Yrbl from 'component/yrbl';
 import Button from 'component/button';
 import { withRouter } from 'react-router';
 import Native from 'native';
 import { Lbry } from 'lbry-redux';
 import analytics from 'analytics';
+import I18nMessage from 'component/i18nMessage';
 
 type Props = {
   children: Node,
@@ -69,16 +70,21 @@ class ErrorBoundary extends React.Component<Props, State> {
             type="sad"
             title={__('Aw shucks!')}
             subtitle={
-              <Fragment>
-                {__("There was an error. It's been reported and will be fixed")}. {__('Try')}{' '}
-                <Button
-                  button="link"
-                  className="load-screen__button"
-                  label={__('refreshing the app')}
-                  onClick={this.refresh}
-                />{' '}
-                {__("to fix it. If that doesn't work, press CMD/CTRL-R to reset to the homepage.")}.
-              </Fragment>
+              <I18nMessage
+                tokens={{
+                  refreshing_the_app_link: (
+                    <Button
+                      button="link"
+                      className="load-screen__button"
+                      label={__('refreshing the app')}
+                      onClick={this.refresh}
+                    />
+                  ),
+                }}
+              >
+                There was an error. It's been reported and will be fixed. Try %refreshing_the_app_link% to fix it. If
+                that doesn't work, try pressing Ctrl+R/Cmd+R.
+              </I18nMessage>
             }
           />
         </div>

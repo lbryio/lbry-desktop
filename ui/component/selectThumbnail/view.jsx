@@ -7,6 +7,7 @@ import FileSelector from 'component/common/file-selector';
 import Button from 'component/button';
 import ThumbnailMissingImage from './thumbnail-missing.png';
 import ThumbnailBrokenImage from './thumbnail-broken.png';
+import I18nMessage from 'component/i18nMessage';
 
 type Props = {
   filePath: ?string,
@@ -172,11 +173,13 @@ class SelectThumbnail extends React.PureComponent<Props, State> {
           {status === THUMBNAIL_STATUSES.API_DOWN ? (
             __('Enter a URL for your thumbnail.')
           ) : (
-            <React.Fragment>
-              {__('Upload your thumbnail to')}{' '}
-              <Button button="link" label={__('spee.ch')} href="https://spee.ch/about" />.{' '}
-              {__('Recommended size is 16:9')}
-            </React.Fragment>
+            <I18nMessage
+              tokens={{
+                speech_link: <Button button="link" label={__('spee.ch')} href="https://spee.ch/about" />,
+              }}
+            >
+              Upload your thumbnail to %speech_link%. Recommended size is 16:9.
+            </I18nMessage>
           )}
         </p>
       </div>
