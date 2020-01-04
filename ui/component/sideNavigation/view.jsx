@@ -142,9 +142,6 @@ function SideNavigation(props: Props) {
                 ...buildLink(PAGES.REWARDS, __('Rewards'), ICONS.FEATURED),
               },
               {
-                ...buildLink(PAGES.ACCOUNT, __('Overview'), ICONS.OVERVIEW),
-              },
-              {
                 ...buildLink(PAGES.PUBLISH, __('Publish'), ICONS.PUBLISH),
               },
               {
