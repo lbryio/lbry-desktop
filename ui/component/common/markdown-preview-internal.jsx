@@ -36,7 +36,7 @@ const SimpleLink = (props: SimpleLinkProps) => {
   let { href } = props;
   if (href && href.startsWith('lbry://')) {
     href = formatLbryUrlForWeb(href);
-    // using NavLink after format to handle "/" vs "#/"
+    // using Link after formatLbryUrl to handle "/" vs "#/"
     // for web and desktop scenarios respectively
     return (
       <Link
