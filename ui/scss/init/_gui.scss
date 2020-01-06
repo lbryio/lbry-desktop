@@ -23,6 +23,10 @@ html {
 
 body {
   font-size: 1em;
+
+  @media (max-width: $breakpoint-small) {
+    font-size: 1.3em;
+  }
 }
 
 h1,

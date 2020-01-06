@@ -127,3 +127,12 @@ export const makeSelectCanAutoplay = (uri: string) =>
       return canAutoPlay;
     }
   );
+
+export const makeSelectIsText = (uri: string) =>
+  createSelector(
+    makeSelectMediaTypeForUri(uri),
+    mediaType => {
+      const isText = ['text', 'document'].includes(mediaType);
+      return isText;
+    }
+  );

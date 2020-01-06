@@ -9,11 +9,11 @@ import {
   makeSelectMetadataForUri,
   makeSelectChannelForClaimUri,
   selectBalance,
-  makeSelectMediaTypeForUri,
 } from 'lbry-redux';
 import { doFetchViewCount, makeSelectCostInfoForUri, doFetchCostInfoForUri } from 'lbryinc';
 import { selectShowMatureContent } from 'redux/selectors/settings';
 import { makeSelectIsSubscribed } from 'redux/selectors/subscriptions';
+import { makeSelectIsText } from 'redux/selectors/content';
 import FilePage from './view';
 
 const select = (state, props) => ({
@@ -26,7 +26,7 @@ const select = (state, props) => ({
   isSubscribed: makeSelectIsSubscribed(props.uri)(state),
   channelUri: makeSelectChannelForClaimUri(props.uri, true)(state),
   balance: selectBalance(state),
-  mediaType: makeSelectMediaTypeForUri(props.uri)(state),
+  isText: makeSelectIsText(props.uri)(state),
 });
 
 const perform = dispatch => ({

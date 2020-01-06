@@ -29,6 +29,7 @@ import ThreeViewer from 'component/viewers/threeViewer';
 type Props = {
   uri: string,
   mediaType: string,
+  isText: true,
   streamingUrl: string,
   contentType: string,
   claim: StreamClaim,
@@ -187,10 +188,10 @@ class FileRender extends React.PureComponent<Props> {
   }
 
   render() {
-    const { mediaType } = this.props;
+    const { isText } = this.props;
 
     return (
-      <div className={classnames('file-render', { 'file-render--document': mediaType === 'text' })}>
+      <div className={classnames('file-render', { 'file-render--document': isText })}>
         <Suspense fallback={<div />}>{this.renderViewer()}</Suspense>
       </div>
     );
