@@ -8,7 +8,7 @@ import FileRender from 'component/fileRender';
 import UriIndicator from 'component/uriIndicator';
 import usePersistedState from 'effects/use-persisted-state';
 import usePrevious from 'effects/use-previous';
-import { FILE_WRAPPER_CLASS } from 'page/file/view';
+import { FILE_WRAPPER_CLASS } from 'component/layoutWrapperFile/view';
 import Draggable from 'react-draggable';
 import Tooltip from 'component/common/tooltip';
 import { onFullscreenChange } from 'util/full-screen';
@@ -96,7 +96,6 @@ export default function FileViewer(props: Props) {
     function handleResize() {
       const element = document.querySelector(`.${FILE_WRAPPER_CLASS}`);
       if (!element) {
-        console.error("Can't find file viewer wrapper to attach to the inline viewer to"); // eslint-disable-line
         return;
       }
 
@@ -125,7 +124,10 @@ export default function FileViewer(props: Props) {
   }
 
   const hidePlayer =
-    !isPlaying || !uri || (!inline && (isMobile || !floatingPlayerEnabled || !['audio', 'video'].includes(mediaType)));
+    mediaType === 'text' ||
+    !isPlaying ||
+    !uri ||
+    (!inline && (isMobile || !floatingPlayerEnabled || !['audio', 'video'].includes(mediaType)));
 
   if (hidePlayer) {
     return null;

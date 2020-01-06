@@ -1,6 +1,7 @@
 // @flow
 import { remote } from 'electron';
 import React, { Suspense, Fragment } from 'react';
+import classnames from 'classnames';
 import LoadingScreen from 'component/common/loading-screen';
 import VideoViewer from 'component/viewers/videoViewer';
 import ImageViewer from 'component/viewers/imageViewer';
@@ -186,8 +187,10 @@ class FileRender extends React.PureComponent<Props> {
   }
 
   render() {
+    const { mediaType } = this.props;
+
     return (
-      <div className="file-render">
+      <div className={classnames('file-render', { 'file-render--document': mediaType === 'text' })}>
         <Suspense fallback={<div />}>{this.renderViewer()}</Suspense>
       </div>
     );

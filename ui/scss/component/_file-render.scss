@@ -6,6 +6,10 @@
   max-height: var(--inline-player-max-height);
 }
 
+.file-render--document {
+  max-height: none;
+}
+
 .file-render__viewer {
   width: 100%;
   height: 100%;
@@ -26,12 +30,14 @@
 .file-render__viewer--document {
   @extend .file-render__viewer;
   overflow: auto;
-  background-color: var(--color-file-viewer-background);
 
   .markdown-preview {
     height: 100%;
     overflow: auto;
-    padding: var(--spacing-large);
+
+    @media (max-width: $breakpoint-small) {
+      padding: var(--spacing-small);
+    }
   }
 }
 

@@ -7,7 +7,7 @@ import { withRouter } from 'react-router-dom';
 import { openCopyLinkMenu } from 'util/context-menu';
 import { formatLbryUrlForWeb } from 'util/url';
 import { isEmpty } from 'util/object';
-import CardMedia from 'component/cardMedia';
+import FileThumbnail from 'component/fileThumbnail';
 import UriIndicator from 'component/uriIndicator';
 import TruncatedText from 'component/common/truncated-text';
 import DateTime from 'component/dateTime';
@@ -200,7 +200,7 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
           <ChannelThumbnail uri={uri} obscure={channelIsBlocked} />
         </UriIndicator>
       ) : (
-        <CardMedia thumbnail={thumbnail} />
+        <FileThumbnail thumbnail={thumbnail} />
       )}
       <div className="claim-preview__text">
         <div className="claim-preview-metadata">
