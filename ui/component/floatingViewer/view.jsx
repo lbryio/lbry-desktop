@@ -17,6 +17,7 @@ import useIsMobile from 'effects/use-is-mobile';
 type Props = {
   mediaType: string,
   contentType: string,
+  isText: boolean,
   isLoading: boolean,
   isPlaying: boolean,
   fileInfo: FileListItem,
@@ -50,6 +51,7 @@ export default function FileViewer(props: Props) {
     claimRewards,
     mediaType,
     contentType,
+    isText,
   } = props;
   const isMobile = useIsMobile();
   const [playTime, setPlayTime] = useState();
@@ -124,7 +126,7 @@ export default function FileViewer(props: Props) {
   }
 
   const hidePlayer =
-    mediaType === 'text' ||
+    isText ||
     !isPlaying ||
     !uri ||
     (!inline && (isMobile || !floatingPlayerEnabled || !['audio', 'video'].includes(mediaType)));

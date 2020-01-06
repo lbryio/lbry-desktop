@@ -4,10 +4,24 @@
   z-index: 1;
   overflow: hidden;
   max-height: var(--inline-player-max-height);
+
+  @media (max-width: $breakpoint-small) {
+    // margin-top: 10px;
+  }
 }
 
 .file-render--document {
   max-height: none;
+
+  .content__loading {
+    background-color: transparent;
+    padding: 0;
+    margin: var(--spacing-xlarge) 0;
+
+    .content__loading-text {
+      color: var(--color-text);
+    }
+  }
 }
 
 .file-render__viewer {

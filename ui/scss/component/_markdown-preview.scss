@@ -20,26 +20,22 @@
   }
 
   h1 {
-    font-size: 1.8em;
-  }
-  h2 {
     font-size: 1.7em;
   }
-  h3 {
-    font-size: 1.6em;
-  }
-  h4 {
+  h2 {
     font-size: 1.5em;
   }
-  h5 {
+  h3 {
     font-size: 1.4em;
   }
-  h6 {
+  h4 {
     font-size: 1.3em;
   }
-
-  @media (max-width: $breakpoint-small) {
-    font-size: 0.8em;
+  h5 {
+    font-size: 1.2em;
+  }
+  h6 {
+    font-size: 1em;
   }
 
   // Paragraphs

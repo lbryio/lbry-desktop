@@ -6,7 +6,7 @@ type Props = {
   channelUri: string,
 };
 
-function LayoutWrapperDocument(props: Props) {
+function FileAuthor(props: Props) {
   const { channelUri } = props;
 
   return channelUri ? (
@@ -16,4 +16,4 @@ function LayoutWrapperDocument(props: Props) {
   );
 }
 
-export default LayoutWrapperDocument;
+export default FileAuthor;

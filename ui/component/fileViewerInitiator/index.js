@@ -16,6 +16,7 @@ import {
   makeSelectShouldObscurePreview,
   selectPlayingUri,
   makeSelectCanAutoplay,
+  makeSelectIsText,
 } from 'redux/selectors/content';
 import FileViewer from './view';
 
@@ -33,6 +34,7 @@ const select = (state, props) => ({
   hasCostInfo: Boolean(makeSelectCostInfoForUri(props.uri)(state)),
   costInfo: makeSelectCostInfoForUri(props.uri)(state),
   isAutoPlayable: makeSelectCanAutoplay(props.uri)(state),
+  isText: makeSelectIsText(props.uri)(state),
 });
 
 const perform = dispatch => ({

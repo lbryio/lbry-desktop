@@ -14,6 +14,7 @@ const SPACE_BAR_KEYCODE = 32;
 type Props = {
   play: string => void,
   mediaType: string,
+  isText: boolean,
   contentType: string,
   isLoading: boolean,
   isPlaying: boolean,
@@ -34,6 +35,7 @@ export default function FileViewerInitiator(props: Props) {
   const {
     play,
     mediaType,
+    isText,
     contentType,
     isPlaying,
     fileInfo,
@@ -50,7 +52,6 @@ export default function FileViewerInitiator(props: Props) {
   const cost = costInfo && costInfo.cost;
   const forceVideo = ['application/x-ext-mkv', 'video/x-matroska'].includes(contentType);
   const isPlayable = ['audio', 'video'].includes(mediaType) || forceVideo;
-  const isText = mediaType === 'text';
   const fileStatus = fileInfo && fileInfo.status;
   const webStreamOnly = contentType === 'application/pdf' || mediaType === 'text';
   const supported = IS_WEB ? (!cost && isStreamable) || webStreamOnly || forceVideo : true;

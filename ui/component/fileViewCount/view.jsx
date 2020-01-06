@@ -6,7 +6,7 @@ type Props = {
   viewCount: string,
 };
 
-function LayoutWrapperDocument(props: Props) {
+function FileViewCount(props: Props) {
   const { viewCount } = props;
 
   return (
@@ -17,4 +17,4 @@ function LayoutWrapperDocument(props: Props) {
   );
 }
 
-export default LayoutWrapperDocument;
+export default FileViewCount;

@@ -102,8 +102,9 @@
 }
 
 .main__document-wrapper {
-  width: 60%;
+  width: 40em;
   margin: auto;
+  margin-bottom: var(--spacing-xlarge);
 
   @media (max-width: $breakpoint-small) {
     width: 100%;

@@ -22,7 +22,7 @@ type Props = {
   markSubscriptionRead: (string, string) => void,
   fetchViewCount: string => void,
   balance: number,
-  mediaType: string,
+  isText: boolean,
 };
 
 class FilePage extends React.Component<Props> {
@@ -75,9 +75,8 @@ class FilePage extends React.Component<Props> {
   }
 
   render() {
-    const { uri, claimIsMine, costInfo, fileInfo, balance, mediaType } = this.props;
+    const { uri, claimIsMine, costInfo, fileInfo, balance, isText } = this.props;
     const insufficientCredits = !claimIsMine && costInfo && costInfo.cost > balance;
-
     return (
       <Page className="main--file-page">
         {!fileInfo && insufficientCredits && (
@@ -93,7 +92,7 @@ class FilePage extends React.Component<Props> {
           </div>
         )}
 
-        {mediaType === 'text' ? <LayoutWrapperText uri={uri} /> : <LayoutWrapperFile uri={uri} />}
+        {isText ? <LayoutWrapperText uri={uri} /> : <LayoutWrapperFile uri={uri} />}
       </Page>
     );
   }
