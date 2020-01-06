@@ -6,12 +6,15 @@ import {
   makeSelectClaimForUri,
   makeSelectContentTypeForUri,
   doPrepareEdit,
+  makeSelectTitleForUri,
+  makeSelectMetadataForUri,
+  makeSelectThumbnailForUri,
 } from 'lbry-redux';
 import { makeSelectCostInfoForUri } from 'lbryinc';
 import { makeSelectClientSetting } from 'redux/selectors/settings';
 import { doOpenModal } from 'redux/actions/app';
 import fs from 'fs';
-import FilePage from './view';
+import LayoutWrapperNonDocument from './view';
 
 const select = (state, props) => ({
   claim: makeSelectClaimForUri(props.uri)(state),
@@ -20,6 +23,9 @@ const select = (state, props) => ({
   contentType: makeSelectContentTypeForUri(props.uri)(state),
   costInfo: makeSelectCostInfoForUri(props.uri)(state),
   supportOption: makeSelectClientSetting(SETTINGS.SUPPORT_OPTION)(state),
+  title: makeSelectTitleForUri(props.uri)(state),
+  metadata: makeSelectMetadataForUri(props.uri)(state),
+  thumbnail: makeSelectThumbnailForUri(props.uri)(state),
 });
 
 const perform = dispatch => ({
@@ -30,4 +36,4 @@ const perform = dispatch => ({
 export default connect(
   select,
   perform
-)(FilePage);
+)(LayoutWrapperNonDocument);

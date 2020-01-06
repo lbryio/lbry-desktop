@@ -147,6 +147,7 @@ const Button = forwardRef<any, {}>((props: Props, ref: any) => {
       }}
       className={combinedClassName}
       activeClassName={activeClass}
+      {...otherProps}
     >
       {content}
     </NavLink>

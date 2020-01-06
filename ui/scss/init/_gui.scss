@@ -18,6 +18,11 @@ html {
 
   color: var(--color-text);
   background-color: var(--color-background);
+  font-size: 16px;
+}
+
+body {
+  font-size: 1em;
 }
 
 h1,
@@ -30,8 +35,6 @@ h6 {
 }
 
 p {
-  font-size: var(--font-body);
-
   & + p {
     margin-top: var(--spacing-small);
   }
@@ -43,7 +46,7 @@ ol {
 
   li {
     list-style-position: outside;
-    margin: var(--spacing-medium);
+    margin: var(--spacing-xsmall) var(--spacing-medium);
     margin-bottom: 0;
   }
 }

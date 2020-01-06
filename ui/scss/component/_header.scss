@@ -119,10 +119,6 @@
   border-radius: 1.5rem;
   margin-left: var(--spacing-small);
 
-  svg {
-    stroke: var(--color-text);
-  }
-
   &:hover {
     background-color: var(--color-primary-alt);
   }

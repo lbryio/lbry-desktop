@@ -102,6 +102,10 @@
   }
 }
 
+.content__cover--hidden-for-text {
+  display: none;
+}
+
 .content__loading {
   height: 100%;
   display: flex;
