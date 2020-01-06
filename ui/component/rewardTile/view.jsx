@@ -37,6 +37,9 @@ const RewardTile = (props: Props) => {
           {reward.reward_type === rewards.TYPE_REFERRAL && (
             <Button button="primary" navigate="/$/invite" label={__('Go To Invites')} />
           )}
+          {reward.reward_type === rewards.TYPE_REFEREE && (
+            <Button button="primary" onClick={openRewardCodeModal} label={__('Set Referree')} />
+          )}
           {reward.reward_type !== rewards.TYPE_REFERRAL &&
             (claimed ? (
               <span>

@@ -60,6 +60,7 @@ function App(props: Props) {
     fetchRewards,
     fetchTransactions,
     user,
+    accessToken,
     fetchAccessToken,
     fetchChannelListMine,
     signIn,
@@ -186,7 +187,7 @@ function App(props: Props) {
   // Require an internal-api user on lbry.tv
   // This also prevents the site from loading in the un-authed state while we wait for internal-apis to return for the first time
   // It's not needed on desktop since there is no un-authed state
-  if (!user) {
+  if (!accessToken) {
     return null;
   }
   // @endif
