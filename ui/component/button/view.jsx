@@ -98,7 +98,7 @@ const Button = forwardRef<any, {}>((props: Props, ref: any) => {
 
   if (href) {
     return (
-      <OutboundLink eventLabel="outboundClick" to={href} target="_blank" className={combinedClassName}>
+      <OutboundLink eventLabel="outboundClick" to={href} target="_blank" className={combinedClassName} {...otherProps}>
         {content}
       </OutboundLink>
     );

@@ -75,9 +75,7 @@ function FileActions(props: Props) {
       </div>
 
       <div className="section__actions">
-        {/* @if TARGET='app' */}
         <FileDownloadLink uri={uri} />
-        {/* @endif */}
 
         {claimIsMine && (
           <Button
