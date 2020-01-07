@@ -6,6 +6,9 @@ import Button from 'component/button';
 import Expandable from 'component/expandable';
 import MarkdownPreview from 'component/common/markdown-preview';
 import ChannelThumbnail from 'component/channelThumbnail';
+import { Menu, MenuList, MenuButton, MenuItem } from '@reach/menu-button';
+import Icon from 'component/common/icon';
+import * as ICONS from 'constants/icons';
 
 type Props = {
   author: string,
@@ -51,21 +54,34 @@ function Comment(props: Props) {
       </div>
 
       <div className="comment__body_container">
-        <span className="comment__meta">
-          {!author ? (
-            <span className="comment__author">{__('Anonymous')}</span>
-          ) : (
-            <Button
-              className="button--uri-indicator truncated-text comment__author"
-              navigate={authorUri}
-              label={author}
-            />
-          )}
-
-          <time className="comment__time" dateTime={timePosted}>
-            {relativeDate(timePosted)}
-          </time>
-        </span>
+        <div className="comment__meta">
+          <div className="comment__meta-information">
+            {!author ? (
+              <span className="comment__author">{__('Anonymous')}</span>
+            ) : (
+              <Button
+                className="button--uri-indicator truncated-text comment__author"
+                navigate={authorUri}
+                label={author}
+              />
+            )}
+            <time className="comment__time" dateTime={timePosted}>
+              {relativeDate(timePosted)}
+            </time>
+          </div>
+          <div className="comment__meta-menu">
+            <Menu>
+              <MenuButton className="comment__menu-dropdown">
+                <Icon size={18} icon={ICONS.MORE_VERTICAL} />
+              </MenuButton>
+              <MenuList className="comment__menu-list">
+                <MenuItem className="comment__menu-option">{__('Edit')}</MenuItem>
+                <MenuItem className="comment__menu-option">{__('Delete')}</MenuItem>
+                <MenuItem className="comment__menu-option">{__('Hide')}</MenuItem>
+              </MenuList>
+            </Menu>
+          </div>
+        </div>
         <div>
           {message.length >= LENGTH_TO_COLLAPSE ? (
             <div className="comment__message">
