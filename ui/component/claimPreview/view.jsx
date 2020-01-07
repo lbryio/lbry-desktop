@@ -17,7 +17,7 @@ import SubscribeButton from 'component/subscribeButton';
 import ChannelThumbnail from 'component/channelThumbnail';
 import BlockButton from 'component/blockButton';
 import Button from 'component/button';
-import { generateStreamUrl } from '../../util/lbrytv';
+import useGetThumbnail from 'effects/use-get-thumbnail';
 
 type Props = {
   uri: string,
@@ -30,7 +30,6 @@ type Props = {
   isResolvingUri: boolean,
   history: { push: string => void },
   thumbnail: string,
-  mediaType: string,
   title: string,
   nsfw: boolean,
   placeholder: string,
@@ -52,6 +51,8 @@ type Props = {
   properties: boolean | Node | string | number,
   onClick?: any => any,
   hideBlock?: boolean,
+  streamingUrl: ?string,
+  getFile: string => void,
 };
 
 const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
@@ -64,7 +65,6 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
     isResolvingUri,
     thumbnail,
     title,
-    mediaType,
     nsfw,
     resolveUri,
     claim,
@@ -82,6 +82,8 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
     properties,
     onClick,
     hideBlock,
+    getFile,
+    streamingUrl,
   } = props;
   const shouldFetch =
     claim === undefined || (claim !== null && claim.value_type === 'channel' && isEmpty(claim.meta) && !pending);
@@ -89,6 +91,7 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
   const claimsInChannel = (claim && claim.meta.claims_in_channel) || 0;
   const showPublishLink = abandoned && placeholder === 'publish';
   const hideActions = type === 'small' || type === 'tooltip';
+  const thumbnailUrl = useGetThumbnail(uri, claim, streamingUrl, getFile) || thumbnail;
 
   let name;
   let isValid = false;
@@ -198,18 +201,13 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
         'claim-preview--pending': pending,
       })}
     >
-<<<<<<< HEAD
       {isChannel && claim ? (
-=======
-      {isChannel ? (
->>>>>>> dirty, unacceptable image rendering
         <UriIndicator uri={uri} link>
           <ChannelThumbnail uri={uri} obscure={channelIsBlocked} />
         </UriIndicator>
       ) : (
-        <FileThumbnail thumbnail={thumbnail} />
+        <FileThumbnail thumbnail={thumbnailUrl} />
       )}
-<<<<<<< HEAD
       <div className="claim-preview__text">
         <div className="claim-preview-metadata">
           <div className="claim-preview-info">
@@ -217,12 +215,6 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
               {claim ? <TruncatedText text={title || claim.name} lines={2} /> : <span>{__('Nothing here')}</span>}
             </div>
             {!isChannel && claim && <FileProperties uri={uri} />}
-=======
-      <div className="claim-preview-metadata">
-        <div className="claim-preview-info">
-          <div className="claim-preview-title">
-            {claim ? <TruncatedText text={title || claim.name} lines={1} /> : <span>{__('Nothing here')}</span>}
->>>>>>> dirty, unacceptable image rendering
           </div>
 
           <div className="media__subtitle">
