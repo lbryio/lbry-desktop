@@ -6,6 +6,7 @@ import {
   makeSelectClaimIsMine,
   makeSelectClaimForUri,
 } from 'lbry-redux';
+import { makeSelectCostInfoForUri } from 'lbryinc';
 import { doOpenModal, doAnalyticsView } from 'redux/actions/app';
 import { doSetPlayingUri, doPlayUri } from 'redux/actions/content';
 import FileDownloadLink from './view';
@@ -16,12 +17,14 @@ const select = (state, props) => ({
   loading: makeSelectLoadingForUri(props.uri)(state),
   claimIsMine: makeSelectClaimIsMine(props.uri)(state),
   claim: makeSelectClaimForUri(props.uri)(state),
+  costInfo: makeSelectCostInfoForUri(props.uri)(state),
 });
 
 const perform = dispatch => ({
   openModal: (modal, props) => dispatch(doOpenModal(modal, props)),
   pause: () => dispatch(doSetPlayingUri(null)),
   download: uri => dispatch(doPlayUri(uri, false, true, () => dispatch(doAnalyticsView(uri)))),
+  triggerViewEvent: uri => dispatch(doAnalyticsView(uri)),
 });
 
 export default connect(
