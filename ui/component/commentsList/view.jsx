@@ -12,12 +12,10 @@ type Props = {
 
 function CommentList(props: Props) {
   const { fetchComments, uri, comments, claimIsMine, myChannels } = props;
-
-  // todo: implement comment_list --mine in SDK so redux can grab with selectCommentIsMine
-  const isMyComment = (channelId: string) => {
-    if (myChannels != null && channelId != null) {
-      for (let i = 0; i < myChannels.length; i++) {
-        if (myChannels[i].claim_id === channelId) {
+  const isMyComment = (channelId: string, channels: Array<ChannelClaim>) => {
+    if (channels !== null && channelId !== null) {
+      for (let i = 0; i < channels.length; i++) {
+        if (channels[i].claim_id === channelId) {
           return true;
         }
       }
@@ -44,7 +42,7 @@ function CommentList(props: Props) {
               parentId={comment.parent_id || null}
               timePosted={comment.timestamp * 1000}
               claimIsMine={claimIsMine}
-              commentIsMine={comment.channel_id && isMyComment(comment.channel_id)}
+              commentIsMine={isMyComment(comment.channel_id, myChannels)}
             />
           );
         })}
