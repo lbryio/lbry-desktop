@@ -4,6 +4,7 @@ import {
   makeSelectDownloadingForUri,
   makeSelectLoadingForUri,
   makeSelectClaimIsMine,
+  makeSelectClaimForUri,
 } from 'lbry-redux';
 import { doOpenModal, doAnalyticsView } from 'redux/actions/app';
 import { doSetPlayingUri, doPlayUri } from 'redux/actions/content';
@@ -14,6 +15,7 @@ const select = (state, props) => ({
   downloading: makeSelectDownloadingForUri(props.uri)(state),
   loading: makeSelectLoadingForUri(props.uri)(state),
   claimIsMine: makeSelectClaimIsMine(props.uri)(state),
+  claim: makeSelectClaimForUri(props.uri)(state),
 });
 
 const perform = dispatch => ({
