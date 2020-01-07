@@ -80,3 +80,5 @@ export const SIGN_OUT = 'SignOut';
 export const SIGN_IN = 'SignIn';
 export const TRENDING = 'Trending';
 export const TOP = 'Top';
+export const MORE_HORIZONTAL = 'MoreHorizontal';
+export const MORE_VERTICAL = 'MoreVertical';

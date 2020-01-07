@@ -356,4 +356,18 @@ export const icons = {
       <path d="M16 3.13a4 4 0 0 1 0 7.75" />
     </g>
   ),
+  [ICONS.MORE_HORIZONTAL]: buildIcon(
+    <g>
+      <circle cx="12" cy="12" r="1" />
+      <circle cx="19" cy="12" r="1" />
+      <circle cx="5" cy="12" r="1" />
+    </g>
+  ),
+  [ICONS.MORE_VERTICAL]: buildIcon(
+    <g>
+      <circle cx="12" cy="5" r="1" />
+      <circle cx="12" cy="12" r="1" />
+      <circle cx="12" cy="19" r="1" />
+    </g>
+  ),
 };
