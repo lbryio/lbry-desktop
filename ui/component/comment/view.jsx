@@ -9,7 +9,6 @@ import ChannelThumbnail from 'component/channelThumbnail';
 import { Menu, MenuList, MenuButton, MenuItem } from '@reach/menu-button';
 import Icon from 'component/common/icon';
 import * as ICONS from 'constants/icons';
-import { FormField, Form } from 'component/common/form';
 
 type Props = {
   author: ?string, // LBRY Channel Name, e.g. @channel
@@ -132,26 +131,17 @@ function Comment(props: Props) {
               {relativeDate(timePosted)}
             </time>
           </div>
-          <div className="comment__menu">
-            {commentIsMine && (
-              <Menu>
-                <MenuButton>
-                  <Icon
-                    size={18}
-                    className={mouseIsHovering ? 'comment__menu-icon--hovering' : 'comment__menu-icon'}
-                    icon={ICONS.MORE_VERTICAL}
-                  />
-                </MenuButton>
-                <MenuList className="comment__menu-list">
-                  <MenuItem className="comment__menu-option" onSelect={handleSetEditing}>
-                    {__('Edit')}
-                  </MenuItem>
-                  <MenuItem className="comment__menu-option" onSelect={handleDeleteComment}>
-                    {__('Delete')}
-                  </MenuItem>
-                </MenuList>
-              </Menu>
-            )}
+          <div className="comment__meta-menu">
+            <Menu>
+              <MenuButton className="comment__menu-dropdown">
+                <Icon size={18} icon={ICONS.MORE_VERTICAL} />
+              </MenuButton>
+              <MenuList className="comment__menu-list">
+                <MenuItem className="comment__menu-option">{__('Edit')}</MenuItem>
+                <MenuItem className="comment__menu-option">{__('Delete')}</MenuItem>
+                <MenuItem className="comment__menu-option">{__('Hide')}</MenuItem>
+              </MenuList>
+            </Menu>
           </div>
         </div>
         <div>
