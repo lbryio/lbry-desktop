@@ -36,7 +36,6 @@
     "lint": "eslint 'src/**/*.{js,jsx}' --fix && flow",
     "format": "prettier 'src/**/*.{js,jsx,scss,json}' --write",
     "flow-defs": "flow-typed install",
-    "precommit": "lint-staged",
     "preinstall": "yarn cache clean lbry-redux && yarn cache clean lbryinc",
     "postinstall": "cd ./lbrytv && yarn && cd .. && if-env NODE_ENV=production && yarn postinstall:warning || if-env APP_ENV=web && echo 'Done installing deps' || yarn postinstall:electron",
     "postinstall:electron": "electron-builder install-app-deps && node ./build/downloadDaemon.js",

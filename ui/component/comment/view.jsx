@@ -15,30 +15,38 @@ type Props = {
   authorUri: string,
   message: string,
   timePosted: number,
-  claim: ?Claim,
+  commentIsMine: boolean,
+  channel: ?Claim,
+  claimIsMine: boolean,
   pending?: boolean,
   resolveUri: string => void,
   isResolvingUri: boolean,
   channelIsBlocked: boolean,
+  hidden: boolean,
+  claimId: string,
+  commentId: string,
 };
 
 const LENGTH_TO_COLLAPSE = 300;
 
 function Comment(props: Props) {
   const {
+    message,
+    timePosted,
+    commentIsMine,
+    channel,
+    claimIsMine,
+    isResolvingUri,
     author,
     authorUri,
-    timePosted,
-    message,
     pending,
-    claim,
-    isResolvingUri,
     resolveUri,
     channelIsBlocked,
+
   } = props;
   // to debounce subsequent requests
   const shouldFetch =
-    claim === undefined || (claim !== null && claim.value_type === 'channel' && isEmpty(claim.meta) && !pending);
+    channel === undefined || (channel !== null && channel.value_type === 'channel' && isEmpty(channel.meta) && !pending);
 
   useEffect(() => {
     // If author was extracted from the URI, then it must be valid.
@@ -75,9 +83,10 @@ function Comment(props: Props) {
                 <Icon size={18} icon={ICONS.MORE_VERTICAL} />
               </MenuButton>
               <MenuList className="comment__menu-list">
-                <MenuItem className="comment__menu-option">{__('Edit')}</MenuItem>
-                <MenuItem className="comment__menu-option">{__('Delete')}</MenuItem>
-                <MenuItem className="comment__menu-option">{__('Hide')}</MenuItem>
+                {commentIsMine && (<MenuItem className="comment__menu-option">{__('Edit')}</MenuItem>)}
+                {commentIsMine && (<MenuItem className="comment__menu-option">{__('Delete')}</MenuItem>)}
+                {!commentIsMine && (<MenuItem className="comment__menu-option">{__('Report')}</MenuItem>)}
+                {claimIsMine && (<MenuItem className="comment__menu-option">{__('Hide')}</MenuItem>)}
               </MenuList>
             </Menu>
           </div>

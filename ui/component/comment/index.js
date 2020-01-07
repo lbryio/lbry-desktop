@@ -11,11 +11,11 @@ import {
 import Comment from './view';
 
 const select = (state, props) => ({
-  pending: props.authorUri && makeSelectClaimIsPending(props.authorUri)(state),
-  claim: props.authorUri && makeSelectClaimForUri(props.authorUri)(state),
-  isResolvingUri: props.authorUri && makeSelectIsUriResolving(props.authorUri)(state),
-  thumbnail: props.authorUri && makeSelectThumbnailForUri(props.authorUri)(state),
-  channelIsBlocked: props.authorUri && selectChannelIsBlocked(props.authorUri)(state),
+  pending: props.channelUri && makeSelectClaimIsPending(props.channelUri)(state),
+  channel: props.channelUri && makeSelectClaimForUri(props.channelUri)(state),
+  isResolvingUri: props.channelUri && makeSelectIsUriResolving(props.channelUri)(state),
+  thumbnail: props.channelUri && makeSelectThumbnailForUri(props.channelUri)(state),
+  channelIsBlocked: props.channelUri && selectChannelIsBlocked(props.channelUri)(state),
 });
 
 const perform = dispatch => ({
