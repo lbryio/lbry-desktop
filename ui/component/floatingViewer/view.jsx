@@ -142,7 +142,7 @@ export default function FileViewer(props: Props) {
       position={inline ? { x: 0, y: 0 } : position}
       bounds="parent"
       disabled={inline}
-      handle=".content__info"
+      handle=".draggable"
       cancel=".button"
     >
       <div
@@ -162,19 +162,22 @@ export default function FileViewer(props: Props) {
           })}
         >
           {!inline && (
-            <div className="content__actions">
-              <Tooltip label={__('View File')}>
-                <Button navigate={uri} icon={ICONS.VIEW} button="primary" />
-              </Tooltip>
-              <Tooltip label={__('Close')}>
-                <Button onClick={clearPlayingUri} icon={ICONS.REMOVE} button="primary" />
-              </Tooltip>
+            <div className="draggable content__floating-header">
+              <span className="media__uri--inline">{uri}</span>
+              <div className="content__actions">
+                <Tooltip label={__('View File')}>
+                  <Button navigate={uri} icon={ICONS.VIEW} button="primary" />
+                </Tooltip>
+                <Tooltip label={__('Close')}>
+                  <Button onClick={clearPlayingUri} icon={ICONS.REMOVE} button="primary" />
+                </Tooltip>
+              </div>
             </div>
           )}
 
           {isReadyToPlay ? <FileRender uri={uri} /> : <LoadingScreen status={loadingMessage} />}
           {!inline && (
-            <div className="content__info">
+            <div className="draggable content__info">
               <div className="claim-preview-title" title={title || uri}>
                 {title || uri}
               </div>

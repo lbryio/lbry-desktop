@@ -21,7 +21,8 @@
   z-index: 9999;
 
   &:hover {
-    .content__actions {
+    .content__actions,
+    .content__floating-header {
       visibility: visible;
     }
   }
@@ -40,16 +41,37 @@
 
 .content__actions {
   visibility: hidden;
-  position: absolute;
-  right: var(--spacing-small);
-  top: var(--spacing-small);
-  z-index: 1;
   display: flex;
 
   .button {
+    @extend .button--close;
+    height: 1.5rem;
+    top: 0;
     position: relative;
     margin-left: var(--spacing-small);
+
+    svg {
+      color: var(--color-white);
+    }
   }
+}
+
+.content__floating-header {
+  visibility: hidden;
+  position: absolute;
+  top: 0;
+  width: 100%;
+  height: 2rem;
+  display: flex;
+  justify-content: space-between;
+  line-height: 1.5rem;
+  padding: 0.25rem;
+  background-color: var(--color-background);
+}
+
+.content__actions,
+.content__floating-header {
+  z-index: 1;
 }
 
 .content__info {
