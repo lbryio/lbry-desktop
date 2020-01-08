@@ -8,11 +8,13 @@ type Props = {
   closeModal: () => void,
   error: ?string,
   rewardIsPending: boolean,
-  submitRewardCode: string => void,
+  setReferrer: (string, boolean) => void,
+  setReferrerPending: boolean,
+  setReferrerError?: string,
 };
 
 type State = {
-  rewardCode: string,
+  referrer: string,
 };
 
 class ModalSetReferrer extends React.PureComponent<Props, State> {
@@ -20,21 +22,21 @@ class ModalSetReferrer extends React.PureComponent<Props, State> {
     super();
 
     this.state = {
-      rewardCode: '',
+      referrer: '',
     };
 
     (this: any).handleSubmit = this.handleSubmit.bind(this);
   }
 
   handleSubmit() {
-    const { rewardCode } = this.state;
-    const { submitRewardCode } = this.props;
-    submitRewardCode(rewardCode);
+    const { referrer } = this.state;
+    const { setReferrer } = this.props;
+    setReferrer(referrer, true);
   }
 
   render() {
-    const { closeModal, rewardIsPending, error } = this.props;
-    const { rewardCode } = this.state;
+    const { closeModal, rewardIsPending } = this.props;
+    const { referrer } = this.state;
 
     return (
       <Modal
@@ -47,29 +49,23 @@ class ModalSetReferrer extends React.PureComponent<Props, State> {
         <Form onSubmit={this.handleSubmit}>
           <p>
             {__('Tell us who referred you and get a reward!')}
-            {'. '}
-            <Button button="link" href="https://lbry.com/faq/rewards#reward-code" label={__('Fake Help Link')} />.
+            <Button button="link" href="https://lbry.com/faq/referrals" label={__('?')} />.
           </p>
           <FormField
             autoFocus
             type="text"
             name="referrer-code"
             inputButton={
-              <Button
-                button="primary"
-                type="submit"
-                disabled={!rewardCode || rewardIsPending}
-                label={rewardIsPending ? __('Redeeming') : __('Redeem')}
-              />
+              <Button button="primary" type="submit" disabled={!referrer || rewardIsPending} label={__('Set')} />
             }
             label={__('Code')}
             placeholder="0123abc"
-            error={error}
-            value={rewardCode}
-            onChange={e => this.setState({ rewardCode: e.target.value })}
+            value={referrer}
+            onChange={e => this.setState({ referrer: e.target.value })}
           />
         </Form>
         <div className="card__actions">
+          <Button button="primary" label={__('Done')} onClick={closeModal} />
           <Button button="link" label={__('Cancel')} onClick={closeModal} />
         </div>
       </Modal>

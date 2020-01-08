@@ -1,13 +1,16 @@
 import { connect } from 'react-redux';
 import { doHideModal } from 'redux/actions/app';
-import { doUserSetReferrer } from 'lbryinc';
+import { doUserSetReferrer, selectSetReferrerError, selectSetReferrerPending } from 'lbryinc';
 import ModalSetReferrer from './view';
 
-const select = state => ({});
+const select = state => ({
+  setReferrerPending: selectSetReferrerPending(state),
+  setReferrerError: selectSetReferrerError(state),
+});
 
 const perform = dispatch => ({
   closeModal: () => dispatch(doHideModal()),
-  submitReferrer: referrer => dispatch(doUserSetReferrer(referrer)),
+  setReferrer: (referrer, doClaim) => dispatch(doUserSetReferrer(referrer, doClaim)),
 });
 
 export default connect(

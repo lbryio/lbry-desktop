@@ -9,6 +9,7 @@ import { rewards } from 'lbryinc';
 
 type Props = {
   openRewardCodeModal: () => void,
+  openSetReferrerModal: () => void,
   reward: {
     id: string,
     reward_title: string,
@@ -19,10 +20,12 @@ type Props = {
     reward_description: string,
     reward_type: string,
   },
+  user: User,
 };
 
 const RewardTile = (props: Props) => {
-  const { reward, openRewardCodeModal } = props;
+  const { reward, openRewardCodeModal, openSetReferrerModal, user } = props;
+  const referrerSet = user && user.invited_by_id;
   const claimed = !!reward.transaction_id;
 
   return (
@@ -38,7 +41,11 @@ const RewardTile = (props: Props) => {
             <Button button="primary" navigate="/$/invite" label={__('Go To Invites')} />
           )}
           {reward.reward_type === rewards.TYPE_REFEREE && (
-            <Button button="primary" onClick={openRewardCodeModal} label={__('Set Referree')} />
+            <Button
+              button="primary"
+              onClick={openSetReferrerModal}
+              label={referrerSet ? __('Change Referrer') : __('Set Referrer')}
+            />
           )}
           {reward.reward_type !== rewards.TYPE_REFERRAL &&
             (claimed ? (

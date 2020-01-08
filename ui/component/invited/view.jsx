@@ -14,16 +14,26 @@ type Props = {
   setReferrer: string => void,
   setReferrerPending: boolean,
   setReferrerError: string,
+  channelSubscribe: (sub: Subscription) => void,
+  history: { push: string => void },
 };
 
 function Invited(props: Props) {
-  const { user, fetchUser, claimReward, setReferrer, setReferrerPending, setReferrerError } = props;
+  const {
+    user,
+    fetchUser,
+    claimReward,
+    setReferrer,
+    setReferrerPending,
+    setReferrerError,
+    channelSubscribe,
+    history,
+  } = props;
 
   // useParams requires react-router-dom ^v5.1.0
   const { referrer } = useParams();
   const refUri = 'lbry://' + referrer.replace(':', '#');
   const referrerIsChannel = parseURI(refUri).isChannel;
-  // const hasReferrer = user && user['invited_by_id'] ? true : false;
   const rewardsApproved = user && user.is_reward_approved;
   const hasVerifiedEmail = user && user.has_verified_email;
 
@@ -32,32 +42,40 @@ function Invited(props: Props) {
   }, []);
 
   useEffect(() => {
-    if (setReferrerPending && hasVerifiedEmail) {
+    if (!setReferrerPending && hasVerifiedEmail) {
       claimReward();
     }
   }, [setReferrerPending, hasVerifiedEmail]);
 
-  //follow
-
-  // !signed in or approved
   useEffect(() => {
     if (referrer) {
       setReferrer(referrer.replace(':', '#'));
     }
-  }, [referrer, hasVerifiedEmail]);
+  }, [referrer]);
+
+  function handleDone() {
+    if (hasVerifiedEmail && referrerIsChannel) {
+      channelSubscribe({
+        channelName: parseURI(refUri).claimName,
+        uri: refUri,
+      });
+    }
+    history.push(`/$/${PAGES.DISCOVER}`);
+  }
 
   if (setReferrerError) {
     return (
       <Card
         title={__(`Welcome!`)}
-        subtitle={__(`You can visit your referrer, or discover new stuff.`)}
+        subtitle={__(
+          `Something went wrong with this referral link. Take a look around. You can get earn rewards by setting your referrer later.`
+        )}
         actions={
           <>
             <p className="error-text">{__('Not a valid referral')}</p>
             <p className="error-text">{setReferrerError}</p>
-
             <div className="card__actions">
-              <Button button="primary" label={__('Discover')} navigate={`/$/${PAGES.DISCOVER}`} />
+              <Button button="primary" label={__('Explore')} onClick={handleDone} />
             </div>
           </>
         }
@@ -83,7 +101,7 @@ function Invited(props: Props) {
                 label={hasVerifiedEmail ? __('Verify') : __('Sign in')}
                 navigate={`/$/${PAGES.AUTH}?redirect=/$/${PAGES.INVITE}/${referrer}`}
               />
-              <Button button="primary" label={__('Not now')} navigate={`/$/${PAGES.DISCOVER}`} />
+              <Button button="primary" label={__('Skip')} onClick={handleDone} />
             </div>
           </>
         }
@@ -103,8 +121,7 @@ function Invited(props: Props) {
             </div>
           )}
           <div className="card__actions">
-            <Button button="primary" label={__('Referrer')} navigate={`/$/${PAGES.DISCOVER}`} />
-            <Button button="primary" label={__('Discover')} navigate={`/$/${PAGES.DISCOVER}`} />
+            <Button button="primary" label={__('Done!')} onClick={handleDone} />
           </div>
         </>
       }

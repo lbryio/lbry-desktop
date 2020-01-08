@@ -15,6 +15,10 @@ type Props = {
   fetchChannelListMine: () => void,
   fetchingChannels: boolean,
   emailVerified: boolean,
+  includeAnonymous?: boolean,
+  includeNew?: boolean,
+  label?: string,
+  injected?: Array<string>,
 };
 
 type State = {
@@ -69,7 +73,7 @@ class ChannelSection extends React.PureComponent<Props, State> {
 
   render() {
     const channel = this.state.addingChannel ? 'new' : this.props.channel;
-    const { fetchingChannels, channels = [] } = this.props;
+    const { fetchingChannels, channels = [], includeAnonymous, includeNew, label, injected = [] } = this.props;
     const { addingChannel } = this.state;
 
     return (
@@ -81,19 +85,25 @@ class ChannelSection extends React.PureComponent<Props, State> {
             <div className="section">
               <FormField
                 name="channel"
-                label={__('Channel')}
+                label={label || __('Channel')}
                 type="select"
                 onChange={this.handleChannelChange}
                 value={channel}
               >
-                <option value={CHANNEL_ANONYMOUS}>{__('Anonymous')}</option>
+                {includeAnonymous && <option value={CHANNEL_ANONYMOUS}>{__('Anonymous')}</option>}
                 {channels &&
                   channels.map(({ name, claim_id: claimId }) => (
                     <option key={claimId} value={name}>
                       {name}
                     </option>
                   ))}
-                <option value={CHANNEL_NEW}>{__('New channel...')}</option>
+                {injected &&
+                  injected.map(item => (
+                    <option key={item} value={item}>
+                      {item}
+                    </option>
+                  ))}
+                {includeNew && <option value={CHANNEL_NEW}>{__('New channel...')}</option>}
               </FormField>
             </div>
             {addingChannel && (

@@ -8,6 +8,8 @@ import {
   doFetchAccessToken,
   selectGetSyncErrorMessage,
   selectUploadCount,
+  selectUnclaimedRewards,
+  doUserSetReferrer,
 } from 'lbryinc';
 import { doFetchTransactions, doFetchChannelListMine } from 'lbry-redux';
 import { makeSelectClientSetting, selectLoadedLanguages, selectThemePath } from 'redux/selectors/settings';
@@ -32,6 +34,7 @@ const select = state => ({
   syncEnabled: makeSelectClientSetting(SETTINGS.ENABLE_SYNC)(state),
   syncError: selectGetSyncErrorMessage(state),
   uploadCount: selectUploadCount(state),
+  rewards: selectUnclaimedRewards(state),
 });
 
 const perform = dispatch => ({
@@ -44,6 +47,7 @@ const perform = dispatch => ({
   requestDownloadUpgrade: () => dispatch(doDownloadUpgradeRequested()),
   checkSync: () => dispatch(doSyncWithPreferences()),
   updatePreferences: () => dispatch(doGetAndPopulatePreferences()),
+  setReferrer: (referrer, doClaim) => dispatch(doUserSetReferrer(referrer, doClaim)),
 });
 
 export default hot(

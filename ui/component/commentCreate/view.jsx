@@ -59,7 +59,7 @@ export function CommentCreate(props: Props) {
 
   return (
     <Form onSubmit={handleSubmit}>
-      <ChannelSection channel={channel} onChannelChange={handleChannelChange} />
+      <ChannelSection channel={channel} onChannelChange={handleChannelChange} includeAnonymous includeNew />
       <FormField
         disabled={channel === CHANNEL_NEW}
         type="textarea"
