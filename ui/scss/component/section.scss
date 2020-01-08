@@ -46,7 +46,7 @@
 .section__title--small {
   @extend .section__title;
   font-size: var(--font-body);
-  margin-top: var(--spacing-small);
+  margin-top: var(--spacing-medium);
 }
 
 .section__title--large {

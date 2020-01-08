@@ -6,6 +6,10 @@
   + .form-field {
     margin-left: var(--spacing-medium);
   }
+
+  @media (max-width: $breakpoint-small) {
+    font-size: var(--font-small);
+  }
 }
 
 .pagination__item {
@@ -40,6 +44,16 @@
   > a {
     display: block;
     height: 100%;
+  }
+
+  @media (max-width: $breakpoint-small) {
+    width: 2rem;
+    height: 2rem;
+
+    &:not(.pagination__item--previous):not(.pagination__item--next) {
+      font-weight: var(--font-weight-bold);
+      line-height: 2rem;
+    }
   }
 }
 
