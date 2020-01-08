@@ -24,10 +24,16 @@ $metadata-z-index: 1;
 
 .channel-cover,
 .channel-cover__custom {
-  height: var(--cover-photo-height);
+  min-height: var(--cover-photo-height);
   width: 100%;
   border-top-left-radius: var(--card-radius);
   border-top-right-radius: var(--card-radius);
+
+  @media (max-width: $breakpoint-small) {
+    // Yikes
+    // I, Sean Yesmunt, take full responsibility for this monster
+    min-height: calc(var(--cover-photo-height) + 2 * var(--spacing-xlarge) + var(--spacing-medium));
+  }
 }
 
 .channel-thumbnail {
@@ -106,6 +112,7 @@ $metadata-z-index: 1;
 
   @media (max-width: $breakpoint-small) {
     padding-left: var(--spacing-medium);
+    padding-top: calc(2 * var(--spacing-xlarge));
   }
 }
 
@@ -122,6 +129,10 @@ $metadata-z-index: 1;
   .button {
     margin-left: var(--spacing-medium);
   }
+
+  @media (max-width: $breakpoint-small) {
+    padding-top: var(--spacing-xlarge);
+  }
 }
 
 .channel__meta {
@@ -135,9 +146,11 @@ $metadata-z-index: 1;
 
 .channel__quick-actions {
   @extend .card__actions;
+  margin-left: var(--spacing-medium);
   position: absolute;
   top: 0;
   right: var(--spacing-medium);
   margin-top: var(--spacing-medium);
   z-index: $metadata-z-index;
+  flex-wrap: wrap;
 }
