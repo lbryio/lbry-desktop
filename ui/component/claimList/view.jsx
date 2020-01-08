@@ -132,6 +132,16 @@ export default function ClaimList(props: Props) {
               type={type}
               properties={type !== 'small' ? undefined : false}
               showUserBlocked={showHiddenByUser}
+              customShouldHide={(claim: StreamClaim) => {
+                // Hack to hide spee.ch thumbnail publishes
+                // If it meets these requirements, it was probably uploaded here:
+                // https://github.com/lbryio/lbry-redux/blob/master/src/redux/actions/publish.js#L74-L79
+                if (claim.name.length === 24 && !claim.name.includes(' ') && claim.value.author === 'Spee.ch') {
+                  return true;
+                } else {
+                  return false;
+                }
+              }}
             />
           ))}
         </ul>
