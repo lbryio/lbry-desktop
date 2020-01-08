@@ -7,6 +7,12 @@ async function redirectMiddleware(ctx, next) {
   const requestHost = ctx.host;
   const path = ctx.path;
   const url = ctx.url;
+  const decodedUrl = decodeURIComponent(url);
+
+  if (decodedUrl !== url) {
+    ctx.redirect(decodedUrl);
+    return;
+  }
 
   if (path.endsWith('/') && path.length > 1) {
     ctx.redirect(url.replace(/\/$/, ''));
