@@ -53,6 +53,7 @@ type Props = {
   hideBlock?: boolean,
   streamingUrl: ?string,
   getFile: string => void,
+  customShouldHide?: Claim => boolean,
 };
 
 const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
@@ -84,6 +85,7 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
     hideBlock,
     getFile,
     streamingUrl,
+    customShouldHide,
   } = props;
   const shouldFetch =
     claim === undefined || (claim !== null && claim.value_type === 'channel' && isEmpty(claim.meta) && !pending);
@@ -139,6 +141,12 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
   // e.g. fetchRecommendedSubscriptions
   if (claim && isChannel && !shouldHide && !showUserBlocked && blockedChannelUris.length) {
     shouldHide = blockedChannelUris.some(blockedUri => blockedUri === claim.permanent_url);
+  }
+
+  if (!shouldHide && customShouldHide && claim) {
+    if (customShouldHide(claim)) {
+      shouldHide = true;
+    }
   }
 
   function handleContextMenu(e) {
