@@ -10,6 +10,7 @@ import Spinner from 'component/spinner';
 
 type Props = {
   checkPendingPublishes: () => void,
+  clearPublish: () => void,
   fetchClaimListMine: () => void,
   fetching: boolean,
   urls: Array<string>,
@@ -19,7 +20,7 @@ type Props = {
 };
 
 function FileListPublished(props: Props) {
-  const { checkPendingPublishes, fetchClaimListMine, fetching, urls, urlTotal } = props;
+  const { checkPendingPublishes, clearPublish, fetchClaimListMine, fetching, urls, urlTotal } = props;
   useEffect(() => {
     checkPendingPublishes();
     fetchClaimListMine();
@@ -47,7 +48,12 @@ function FileListPublished(props: Props) {
               <div className=" section--small">
                 <h2 className="section__title--large">{__('Nothing published to LBRY yet.')}</h2>
                 <div className="section__actions">
-                  <Button button="primary" navigate="/$/publish" label={__('Publish something new')} />
+                  <Button
+                    button="primary"
+                    navigate="/$/publish"
+                    label={__('Publish something new')}
+                    onClick={() => clearPublish()}
+                  />
                 </div>
               </div>
             </section>
