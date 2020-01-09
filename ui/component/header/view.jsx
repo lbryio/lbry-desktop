@@ -147,7 +147,7 @@ const Header = (props: Props) => {
                   <MenuList className="menu__list--header">
                     <MenuItem className="menu__link" onSelect={() => history.push(`/$/${PAGES.PUBLISH}`)}>
                       <Icon aria-hidden icon={ICONS.PUBLISH} />
-                      {__('New Publish')}
+                      {__('Publish')}
                     </MenuItem>
                     <MenuItem className="menu__link" onSelect={openChannelCreate}>
                       <Icon aria-hidden icon={ICONS.CHANNEL} />

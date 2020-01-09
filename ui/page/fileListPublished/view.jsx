@@ -36,7 +36,9 @@ function FileListPublished(props: Props) {
             loading={fetching}
             persistedStorageKey="claim-list-published"
             uris={urls}
-            headerAltControls={<Button button="link" label={__('New Publish')} navigate="/$/publish" />}
+            headerAltControls={
+              <Button button="link" label={__('New Publish')} navigate="/$/publish" onClick={() => clearPublish()} />
+            }
           />
           <Paginate totalPages={Math.ceil(Number(urlTotal) / Number(PAGE_SIZE))} loading={fetching} />
         </React.Fragment>
