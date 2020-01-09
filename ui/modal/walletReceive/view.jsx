@@ -1,6 +1,6 @@
 import React from 'react';
-import WalletAddress from './node_modules/component/walletAddress';
-import Page from './node_modules/component/page';
+import WalletAddress from 'component/walletAddress';
+import Page from 'component/page';
 
 const WalletAddressPage = () => (
   <Page className="main--contained">

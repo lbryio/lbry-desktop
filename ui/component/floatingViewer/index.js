@@ -10,7 +10,12 @@ import {
   makeSelectTitleForUri,
 } from 'lbry-redux';
 import { doClaimEligiblePurchaseRewards } from 'lbryinc';
-import { makeSelectIsPlaying, makeSelectShouldObscurePreview, selectPlayingUri } from 'redux/selectors/content';
+import {
+  makeSelectIsPlaying,
+  makeSelectShouldObscurePreview,
+  selectPlayingUri,
+  makeSelectIsText,
+} from 'redux/selectors/content';
 import { makeSelectClientSetting } from 'redux/selectors/settings';
 import { doSetPlayingUri } from 'redux/actions/content';
 import { withRouter } from 'react-router';
@@ -31,6 +36,7 @@ const select = (state, props) => {
     streamingUrl: makeSelectStreamingUrlForUri(uri)(state),
     isStreamable: makeSelectUriIsStreamable(uri)(state),
     floatingPlayerEnabled: makeSelectClientSetting(SETTINGS.FLOATING_PLAYER)(state),
+    isText: makeSelectIsText(uri)(state),
   };
 };
 

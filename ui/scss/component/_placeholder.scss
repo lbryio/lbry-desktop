@@ -27,3 +27,8 @@
     }
   }
 }
+
+.placeholder--text-document {
+  @include placeholder;
+  height: 60vh;
+}

@@ -48,6 +48,7 @@ const appState = {};
 app.setAsDefaultProtocolClient('lbry');
 app.setName('LBRY');
 app.setAppUserModelId('io.lbry.LBRY');
+app.commandLine.appendSwitch('force-color-profile', 'srgb');
 
 if (isDev) {
   // Disable security warnings in dev mode:

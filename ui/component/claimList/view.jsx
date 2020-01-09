@@ -101,7 +101,7 @@ export default function ClaimList(props: Props) {
       {header !== false && (
         <React.Fragment>
           {headerLabel && <label className="claim-list__header-label">{headerLabel}</label>}
-          <div className={classnames('claim-list__header', { 'claim-list__header--small': type === 'small' })}>
+          <div className={classnames('claim-list__header', { 'section__title--small': type === 'small' })}>
             {header}
             {loading && <Spinner type="small" />}
             <div className="claim-list__alt-controls">

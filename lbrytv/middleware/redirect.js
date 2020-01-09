@@ -7,14 +7,15 @@ async function redirectMiddleware(ctx, next) {
   const requestHost = ctx.host;
   const path = ctx.path;
   const url = ctx.url;
+  const decodedUrl = decodeURIComponent(url);
 
-  if (path.endsWith('/') && path.length > 1) {
-    ctx.redirect(url.replace(/\/$/, ''));
+  if (decodedUrl !== url) {
+    ctx.redirect(decodedUrl);
     return;
   }
 
-  if (path === '/') {
-    ctx.redirect(`/$/${PAGES.CHANNELS_FOLLOWING}`);
+  if (path.endsWith('/') && path.length > 1) {
+    ctx.redirect(url.replace(/\/$/, ''));
     return;
   }
 
@@ -34,6 +35,11 @@ async function redirectMiddleware(ctx, next) {
     }
 
     ctx.redirect(redirectUrl);
+    return;
+  }
+
+  if (path === '/') {
+    ctx.redirect(`/$/${PAGES.CHANNELS_FOLLOWING}`);
     return;
   }
 

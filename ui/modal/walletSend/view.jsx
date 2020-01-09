@@ -1,5 +1,5 @@
 import React from 'react';
-import WalletSend from './node_modules/component/walletSend';
+import WalletSend from 'component/walletSend';
 
 const WalletSendModal = () => (
   <div>

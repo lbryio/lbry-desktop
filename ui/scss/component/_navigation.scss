@@ -1,9 +1,11 @@
 .navigation {
   width: var(--side-nav-width);
   font-size: var(--font-body);
+  margin-left: var(--spacing-main-padding);
 
   @media (max-width: $breakpoint-small) {
     display: none;
+    margin-left: 0;
   }
 }
 

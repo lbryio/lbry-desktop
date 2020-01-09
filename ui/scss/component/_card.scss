@@ -111,6 +111,7 @@
 
 .card__title {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   font-size: var(--font-title);
   font-weight: var(--font-weight-light);

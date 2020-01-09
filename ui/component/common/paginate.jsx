@@ -3,6 +3,7 @@ import React from 'react';
 import { withRouter } from 'react-router';
 import { Form, FormField } from 'component/common/form';
 import ReactPaginate from 'react-paginate';
+import useIsMobile from 'effects/use-is-mobile';
 
 const PAGINATE_PARAM = 'page';
 
@@ -20,6 +21,7 @@ function Paginate(props: Props) {
   const [textValue, setTextValue] = React.useState('');
   const urlParams = new URLSearchParams(search);
   const currentPage = Number(urlParams.get(PAGINATE_PARAM)) || 1;
+  const isMobile = useIsMobile();
 
   function handleChangePage(newPageNumber: number) {
     if (onPageChange) {
@@ -63,14 +65,16 @@ function Paginate(props: Props) {
             containerClassName="pagination"
           />
         </fieldset-section>
-        <FormField
-          value={textValue}
-          onChange={e => setTextValue(e.target.value)}
-          className="paginate-channel"
-          label={__('Go to page:')}
-          type="text"
-          name="paginate-file"
-        />
+        {!isMobile && (
+          <FormField
+            value={textValue}
+            onChange={e => setTextValue(e.target.value)}
+            className="paginate-channel"
+            label={__('Go to page:')}
+            type="text"
+            name="paginate-file"
+          />
+        )}
       </fieldset-group>
     </Form>
   );

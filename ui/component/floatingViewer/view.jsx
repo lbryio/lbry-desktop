@@ -8,7 +8,7 @@ import FileRender from 'component/fileRender';
 import UriIndicator from 'component/uriIndicator';
 import usePersistedState from 'effects/use-persisted-state';
 import usePrevious from 'effects/use-previous';
-import { FILE_WRAPPER_CLASS } from 'page/file/view';
+import { FILE_WRAPPER_CLASS } from 'component/layoutWrapperFile/view';
 import Draggable from 'react-draggable';
 import Tooltip from 'component/common/tooltip';
 import { onFullscreenChange } from 'util/full-screen';
@@ -17,6 +17,7 @@ import useIsMobile from 'effects/use-is-mobile';
 type Props = {
   mediaType: string,
   contentType: string,
+  isText: boolean,
   isLoading: boolean,
   isPlaying: boolean,
   fileInfo: FileListItem,
@@ -50,6 +51,7 @@ export default function FileViewer(props: Props) {
     claimRewards,
     mediaType,
     contentType,
+    isText,
   } = props;
   const isMobile = useIsMobile();
   const [playTime, setPlayTime] = useState();
@@ -96,7 +98,6 @@ export default function FileViewer(props: Props) {
     function handleResize() {
       const element = document.querySelector(`.${FILE_WRAPPER_CLASS}`);
       if (!element) {
-        console.error("Can't find file viewer wrapper to attach to the inline viewer to"); // eslint-disable-line
         return;
       }
 
@@ -125,7 +126,10 @@ export default function FileViewer(props: Props) {
   }
 
   const hidePlayer =
-    !isPlaying || !uri || (!inline && (isMobile || !floatingPlayerEnabled || !['audio', 'video'].includes(mediaType)));
+    isText ||
+    !isPlaying ||
+    !uri ||
+    (!inline && (isMobile || !floatingPlayerEnabled || !['audio', 'video'].includes(mediaType)));
 
   if (hidePlayer) {
     return null;
@@ -138,7 +142,7 @@ export default function FileViewer(props: Props) {
       position={inline ? { x: 0, y: 0 } : position}
       bounds="parent"
       disabled={inline}
-      handle=".content__info"
+      handle=".draggable"
       cancel=".button"
     >
       <div
@@ -158,19 +162,22 @@ export default function FileViewer(props: Props) {
           })}
         >
           {!inline && (
-            <div className="content__actions">
-              <Tooltip label={__('View File')}>
-                <Button navigate={uri} icon={ICONS.VIEW} button="primary" />
-              </Tooltip>
-              <Tooltip label={__('Close')}>
-                <Button onClick={clearPlayingUri} icon={ICONS.REMOVE} button="primary" />
-              </Tooltip>
+            <div className="draggable content__floating-header">
+              <span className="media__uri--inline">{uri}</span>
+              <div className="content__actions">
+                <Tooltip label={__('View File')}>
+                  <Button navigate={uri} icon={ICONS.VIEW} button="primary" />
+                </Tooltip>
+                <Tooltip label={__('Close')}>
+                  <Button onClick={clearPlayingUri} icon={ICONS.REMOVE} button="primary" />
+                </Tooltip>
+              </div>
             </div>
           )}
 
           {isReadyToPlay ? <FileRender uri={uri} /> : <LoadingScreen status={loadingMessage} />}
           {!inline && (
-            <div className="content__info">
+            <div className="draggable content__info">
               <div className="claim-preview-title" title={title || uri}>
                 {title || uri}
               </div>

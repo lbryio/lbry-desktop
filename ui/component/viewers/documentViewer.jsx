@@ -98,12 +98,11 @@ class DocumentViewer extends React.PureComponent<Props, State> {
   render() {
     const { error, loading, content } = this.state;
     const isReady = content && !error;
-    const loadingMessage = __('Rendering document.');
     const errorMessage = __("Sorry, looks like we can't load the document.");
 
     return (
       <div className="file-render__viewer--document">
-        {loading && !error && <LoadingScreen status={loadingMessage} spinner />}
+        {loading && !error && <div className="placeholder--text-document" />}
         {error && <LoadingScreen status={errorMessage} spinner={!error} />}
         {isReady && this.renderDocument()}
       </div>

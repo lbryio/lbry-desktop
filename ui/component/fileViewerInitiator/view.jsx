@@ -1,6 +1,6 @@
 // @flow
 // This component is entirely for triggering the start of a file view
-// The actual viewer for a file exists in FileViewer
+// The actual viewer for a file exists in TextViewer and FloatingViewer
 // They can't exist in one component because we need to handle/listen for the start of a new file view
 // while a file is currently being viewed
 import React, { useEffect, useCallback, Fragment } from 'react';
@@ -14,6 +14,7 @@ const SPACE_BAR_KEYCODE = 32;
 type Props = {
   play: string => void,
   mediaType: string,
+  isText: boolean,
   contentType: string,
   isLoading: boolean,
   isPlaying: boolean,
@@ -27,12 +28,14 @@ type Props = {
   hasCostInfo: boolean,
   costInfo: any,
   isAutoPlayable: boolean,
+  inline: boolean,
 };
 
-export default function FileViewer(props: Props) {
+export default function FileViewerInitiator(props: Props) {
   const {
     play,
     mediaType,
+    isText,
     contentType,
     isPlaying,
     fileInfo,
@@ -95,10 +98,10 @@ export default function FileViewer(props: Props) {
 
   useEffect(() => {
     const videoOnPage = document.querySelector('video');
-    if (autoplay && !videoOnPage && isAutoPlayable && hasCostInfo && cost === 0) {
+    if (((autoplay && !videoOnPage && isAutoPlayable) || isText) && hasCostInfo && cost === 0) {
       viewFile();
     }
-  }, [autoplay, viewFile, isAutoPlayable, hasCostInfo, cost]);
+  }, [autoplay, viewFile, isAutoPlayable, hasCostInfo, cost, isText]);
 
   return (
     <div
@@ -108,6 +111,7 @@ export default function FileViewer(props: Props) {
       className={classnames({
         content__cover: supported,
         'content__cover--disabled': !supported,
+        'content__cover--hidden-for-text': isText,
         'card__media--nsfw': obscurePreview,
         'card__media--disabled': supported && !fileInfo && insufficientCredits,
       })}
@@ -127,6 +131,7 @@ export default function FileViewer(props: Props) {
           }
         />
       )}
+
       {!isPlaying && supported && (
         <Button
           onClick={viewFile}

@@ -23,7 +23,8 @@
   text-overflow: ellipsis;
   font-weight: var(--font-weight-bold);
   white-space: normal;
-  font-size: var(--font-title);
+  // font-size: var(--font-title);
+  font-size: 2em;
   display: inline;
 }
 
@@ -65,6 +66,7 @@
 .media__subtitle {
   align-self: flex-start;
   color: var(--color-text-subtitle);
+  font-size: var(--font-small);
 
   svg {
     stroke: var(--color-text-subtitle);
@@ -106,5 +108,9 @@
   @extend .section__actions;
   display: flex;
   justify-content: space-between;
+  margin-top: 0;
+}
+
+.media__document-thumbnail {
   margin-top: 0;
 }

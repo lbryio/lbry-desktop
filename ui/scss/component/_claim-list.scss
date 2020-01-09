@@ -17,10 +17,6 @@
   }
 }
 
-.claim-list__header--small {
-  color: var(--color-text-subtitle);
-}
-
 .claim-list__dropdown {
   padding: 0 var(--spacing-medium);
 
@@ -85,13 +81,13 @@
     font-size: 14px;
 
     .media__thumb {
-      width: 4rem;
-      height: 2.25rem;
+      width: 5rem;
+      height: 3rem;
     }
 
     .channel-thumbnail {
-      width: 4rem;
-      height: 4rem;
+      width: 5rem;
+      height: 5rem;
     }
   }
 }
@@ -139,7 +135,6 @@
 .claim-preview--inline {
   padding: 0;
   border-bottom: none;
-  margin-bottom: var(--spacing-medium);
 
   .channel-thumbnail {
     width: var(--channel-thumbnail-width--small);

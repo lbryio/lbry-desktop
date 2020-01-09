@@ -1,7 +1,7 @@
 // @flow
 import React from 'react';
 import Button from 'component/button';
-import CardMedia from 'component/cardMedia';
+import FileThumbnail from 'component/fileThumbnail';
 type Props = {
   params: UpdatePublishFormData,
   progress: string,
@@ -13,7 +13,7 @@ export default function WebUploadItem(props: Props) {
 
   return (
     <li className={'claim-preview claim-preview--inactive card--inline'}>
-      <CardMedia thumbnail={params.thumbnail_url} />
+      <FileThumbnail thumbnail={params.thumbnail_url} />
       <div className={'claim-preview-metadata'}>
         <div className="claim-preview-info">
           <div className="claim-preview-title">{params.title}</div>
