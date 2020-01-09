@@ -11,20 +11,17 @@ import Icon from 'component/common/icon';
 import * as ICONS from 'constants/icons';
 
 type Props = {
-  author: string,
-  authorUri: string,
-  message: string,
-  timePosted: number,
-  commentIsMine: boolean,
-  channel: ?Claim,
-  claimIsMine: boolean,
+  author: ?string, // LBRY Channel Name, e.g. @channel
+  authorUri: string, // full LBRY Channel URI: lbry://@channel#123...
+  message: string, // comment body
+  timePosted: number, // Comment timestamp
+  claim: ?Claim, // Channel Claim, retrieved to obtain thumbnail
   pending?: boolean,
-  resolveUri: string => void,
-  isResolvingUri: boolean,
-  channelIsBlocked: boolean,
-  hidden: boolean,
-  claimId: string,
-  commentId: string,
+  resolveUri: string => void, // resolves the URI
+  isResolvingUri: boolean, // if the URI is currently being resolved
+  channelIsBlocked: boolean, // if the channel is blacklisted in the app
+  claimIsMine: boolean, // if you control the claim which this comment was posted on
+  commentIsMine: boolean, // if this comment was signed by an owned channel
 };
 
 const LENGTH_TO_COLLAPSE = 300;
@@ -32,18 +29,17 @@ const ESCAPE_KEY = 27;
 
 function Comment(props: Props) {
   const {
-    message,
-    timePosted,
-    commentIsMine,
-    channel,
-    claimIsMine,
-    isResolvingUri,
     author,
     authorUri,
+    timePosted,
+    message,
     pending,
+    claim,
+    isResolvingUri,
     resolveUri,
     channelIsBlocked,
-
+    claimIsMine,
+    commentIsMine,
   } = props;
 
   const [isEditing, setEditing] = useState(false);
@@ -55,7 +51,7 @@ function Comment(props: Props) {
 
   // to debounce subsequent requests
   const shouldFetch =
-    channel === undefined || (channel !== null && channel.value_type === 'channel' && isEmpty(channel.meta) && !pending);
+    claim === undefined || (claim !== null && claim.value_type === 'channel' && isEmpty(claim.meta) && !pending);
 
   useEffect(() => {
     // If author was extracted from the URI, then it must be valid.
