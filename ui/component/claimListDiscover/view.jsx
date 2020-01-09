@@ -212,7 +212,9 @@ function ClaimListDiscover(props: Props) {
             <option key={time} value={time}>
               {/* i18fixme */}
               {time === TIME_DAY && __('Today')}
-              {time !== TIME_ALL && time !== TIME_DAY && `${__('This')} ${toCapitalCase(time)}`}
+              {time !== TIME_ALL &&
+                time !== TIME_DAY &&
+                __('This ' + toCapitalCase(time)) /* yes, concat before i18n, since it is read from const */}
               {time === TIME_ALL && __('All time')}
             </option>
           ))}

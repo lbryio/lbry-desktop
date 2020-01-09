@@ -2,6 +2,7 @@
 import * as React from 'react';
 import Button from 'component/button';
 import UserSignOutButton from 'component/userSignOutButton';
+import I18nMessage from 'component/i18nMessage';
 
 type Props = {
   email: string,
@@ -60,10 +61,13 @@ class UserEmailVerify extends React.PureComponent<Props> {
         <h1 className="section__title--large">{isReturningUser ? __('Check Your Email') : __('Confirm Your Email')}</h1>
 
         <p className="section__subtitle">
-          {__('An email was sent to %email%. Follow the link to %verify_text%. After, this page will update automatically.', {
-            email,
-            verify_text: isReturningUser ? __('sign in') : __('verify your email'),
-          })}
+          {__(
+            'An email was sent to %email%. Follow the link to %verify_text%. After, this page will update automatically.',
+            {
+              email,
+              verify_text: isReturningUser ? __('sign in') : __('verify your email'),
+            }
+          )}
         </p>
 
         <div className="section__body section__actions">
@@ -77,9 +81,14 @@ class UserEmailVerify extends React.PureComponent<Props> {
         </div>
 
         <p className="help">
-          {__('Email')} <Button button="link" href="mailto:help@lbry.com" label="help@lbry.com" /> or join our{' '}
-          <Button button="link" href="https://chat.lbry.com" label="chat" />{' '}
-          {__('if you encounter any trouble verifying.')}
+          <I18nMessage
+            tokens={{
+              help_link: <Button button="link" href="mailto:help@lbry.com" label="help@lbry.com" />,
+              chat_link: <Button button="link" href="https://chat.lbry.com" label="chat" />,
+            }}
+          >
+            Email %help_link% or join our %chat_link% if you encounter any trouble verifying.
+          </I18nMessage>
         </p>
       </React.Fragment>
     );

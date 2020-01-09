@@ -250,7 +250,7 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
                       <Button
                         onClick={() => beginPublish(name)}
                         button="primary"
-                        label={`${__('Publish to')}  ${uri}`}
+                        label={__('Publish to %uri%', { uri })}
                       />
                     </div>
                   </Fragment>
