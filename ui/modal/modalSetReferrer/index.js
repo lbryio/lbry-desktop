@@ -4,8 +4,8 @@ import { doUserSetReferrer, selectSetReferrerError, selectSetReferrerPending } f
 import ModalSetReferrer from './view';
 
 const select = state => ({
-  setReferrerPending: selectSetReferrerPending(state),
-  setReferrerError: selectSetReferrerError(state),
+  referrerSetPending: selectSetReferrerPending(state),
+  referrerSetError: selectSetReferrerError(state),
 });
 
 const perform = dispatch => ({

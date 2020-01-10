@@ -41,7 +41,6 @@ type Props = {
   fetchChannelListMine: () => void,
   signIn: () => void,
   requestDownloadUpgrade: () => void,
-  fetchChannelListMine: () => void,
   onSignedIn: () => void,
   setLanguage: string => void,
   isUpgradeAvailable: boolean,

@@ -6,6 +6,7 @@ import CopyableText from 'component/copyableText';
 import Card from 'component/common/card';
 import { URL } from 'config';
 import SelectChannel from 'component/selectChannel';
+import analytics from 'analytics';
 import I18nMessage from 'component/i18nMessage';
 
 type Props = {
@@ -15,14 +16,42 @@ type Props = {
   referralLink: string,
   referralCode: string,
   channels: any,
-  fetchChannelListMine: () => void,
-  fetchingChannels: boolean,
+  resolvingUris: Array<string>,
+  resolveUris: (Array<string>) => void,
 };
 
 function InviteNew(props: Props) {
-  const { inviteNew, fetchChannelListMine, errorMessage, isPending, referralCode, channels } = props;
+  const { inviteNew, errorMessage, isPending, referralCode = '', channels, resolveUris, resolvingUris } = props;
+  // Email
   const [email, setEmail] = useState('');
+  function handleSubmit() {
+    inviteNew(email);
+  }
+
+  function handleEmailChanged(event: any) {
+    setEmail(event.target.value);
+  }
+
+  // Referral link
   const [referralSource, setReferralSource] = useState(referralCode);
+  /* Canonical Referral links
+   * We need to make sure our channels are resolved so that canonical_url is present
+   */
+
+  function handleReferralChange(code) {
+    setReferralSource(code);
+    // TODO: keep track of this in an array?
+    if (code !== referralCode) {
+      analytics.apiLogPublish(channels.find(ch => ch.name === code));
+    }
+  }
+
+  const [resolveStarted, setResolveStarted] = useState(false);
+  const [hasResolved, setHasResolved] = useState(false);
+  // join them so that useEffect doesn't update on new objects
+  const uris = channels && channels.map(channel => channel.permanent_url).join(',');
+  const channelCount = channels && channels.length;
+  const resolvingCount = resolvingUris && resolvingUris.length;
 
   const topChannel =
     channels &&
@@ -31,32 +60,36 @@ function InviteNew(props: Props) {
     );
   const referralString =
     channels && channels.length && referralSource !== referralCode
-      ? getUrlFromName(referralSource, channels)
+      ? lookupUrlByClaimName(referralSource, channels)
       : referralSource;
-  const referral = `${URL}/$/invite/${referralString}`;
+
+  const referral = `${URL}/$/invite/${referralString.replace('#', ':')}`;
 
   useEffect(() => {
-    // check emailverified and is_web?
-    fetchChannelListMine();
-  }, []);
-
-  useEffect(() => {
-    if (topChannel) {
-      setReferralSource(topChannel.name);
+    // resolve once, after we have channel list
+    if (!hasResolved && !resolveStarted && channelCount) {
+      setResolveStarted(true);
+      resolveUris(uris.split(','));
     }
-  }, [topChannel]);
+  }, [channelCount, resolveStarted, hasResolved, resolvingCount, uris]);
 
-  function handleEmailChanged(event: any) {
-    setEmail(event.target.value);
-  }
+  useEffect(() => {
+    // once resolving count is 0, we know we're done
+    if (resolveStarted && !hasResolved && resolvingCount === 0) {
+      setHasResolved(true);
+    }
+  }, [resolveStarted, hasResolved, resolvingCount]);
 
-  function handleSubmit() {
-    inviteNew(email);
-  }
+  useEffect(() => {
+    // set default channel
+    if (topChannel && hasResolved) {
+      handleReferralChange(topChannel.name);
+    }
+  }, [topChannel, hasResolved]);
 
-  function getUrlFromName(name, channels) {
+  function lookupUrlByClaimName(name, channels) {
     const claim = channels.find(channel => channel.name === name);
-    return claim ? claim.permanent_url.replace('lbry://', '') : name;
+    return claim ? claim.canonical_url.replace('lbry://', '') : name;
   }
 
   return (
@@ -68,7 +101,7 @@ function InviteNew(props: Props) {
           <Form onSubmit={handleSubmit}>
             <SelectChannel
               channel={referralSource}
-              onChannelChange={channel => setReferralSource(channel)}
+              onChannelChange={channel => handleReferralChange(channel)}
               label={'Code or Channel'}
               injected={[referralCode]}
             />

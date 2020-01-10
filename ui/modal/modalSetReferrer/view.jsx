@@ -9,8 +9,8 @@ type Props = {
   error: ?string,
   rewardIsPending: boolean,
   setReferrer: (string, boolean) => void,
-  setReferrerPending: boolean,
-  setReferrerError?: string,
+  referrerSetPending: boolean,
+  referrerSetError?: string,
 };
 
 type State = {

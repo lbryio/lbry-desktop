@@ -7,6 +7,7 @@ import {
   selectSetReferrerPending,
   selectSetReferrerError,
   rewards as REWARDS,
+  selectUnclaimedRewards,
 } from 'lbryinc';
 import { doChannelSubscribe } from 'redux/actions/subscriptions';
 import Invited from './view';
@@ -14,8 +15,9 @@ import { withRouter } from 'react-router';
 
 const select = state => ({
   user: selectUser(state),
-  setReferrerPending: selectSetReferrerPending(state),
-  setReferrerError: selectSetReferrerError(state),
+  referrerSetPending: selectSetReferrerPending(state),
+  referrerSetError: selectSetReferrerError(state),
+  rewards: selectUnclaimedRewards(state),
 });
 
 const perform = dispatch => ({
