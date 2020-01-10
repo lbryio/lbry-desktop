@@ -73,7 +73,7 @@
     }
   ],
   "linux": {
-    "target": "deb",
+    "target": ["AppImage", "deb"],
     "executableName": "lbry",
     "category": "AudioVideo;Video",
     "desktop": {
