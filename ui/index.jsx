@@ -109,10 +109,6 @@ Lbryio.setOverride(
         authToken = response.auth_token;
         setAuthToken(authToken);
 
-        // @if TARGET='app'
-        ipcRenderer.send('set-auth-token', authToken);
-        // @endif
-
         resolve(authToken);
       });
     })
@@ -122,20 +118,6 @@ Lbryio.setOverride(
   'getAuthToken',
   () =>
     new Promise(resolve => {
-      // @if TARGET='app'
-      if (authToken) {
-        resolve(authToken);
-      }
-
-      ipcRenderer.once('auth-token-response', (event, token) => {
-        Lbryio.authToken = token;
-        resolve(token);
-      });
-
-      ipcRenderer.send('get-auth-token');
-      // @endif
-
-      // @if TARGET='web'
       const authTokenToReturn = authToken || getAuthToken();
 
       if (authTokenToReturn !== null) {
@@ -143,7 +125,6 @@ Lbryio.setOverride(
       }
 
       resolve(authTokenToReturn);
-      // @endif
     })
 );
 

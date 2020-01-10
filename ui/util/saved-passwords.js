@@ -1,5 +1,4 @@
 // @flow
-import { ipcRenderer } from 'electron';
 import { DOMAIN } from 'config';
 
 const isProduction = process.env.NODE_ENV === 'production';
@@ -49,19 +48,13 @@ function deleteCookie(name: string) {
 
 export const setSavedPassword = (value?: string, saveToDisk: boolean) => {
   return new Promise<*>(resolve => {
-    // @if TARGET='app'
-    ipcRenderer.once('set-password-response', (event, success) => {
-      resolve(success);
-    });
-    // @endif
-
     const password = value === undefined || value === null ? '' : value;
     sessionPassword = password;
 
     if (saveToDisk) {
       if (password) {
         // @if TARGET='app'
-        ipcRenderer.send('set-password', password);
+        setCookie('saved-password', password, 2147483647);
         // @endif
         // @if TARGET='web'
         setCookie('saved-password', password, 14);
@@ -85,32 +78,15 @@ export const getSavedPassword = () => {
 
 export const getKeychainPassword = () => {
   return new Promise<*>(resolve => {
-    // @if TARGET='app'
-    ipcRenderer.once('get-password-response', (event, password) => {
-      resolve(password);
-    });
-    ipcRenderer.send('get-password');
-    // @endif
-
-    // @if TARGET='web'
     const password = getCookie('saved-password');
     resolve(password);
-    // @endif
   });
 };
 
 export const deleteSavedPassword = () => {
   return new Promise<*>(resolve => {
-    // @if TARGET='app'
-    ipcRenderer.once('delete-password-response', (event, success) => {
-      resolve();
-    });
-    ipcRenderer.send('delete-password');
-    // @endif;
-    // @if TARGET='web'
     deleteCookie('saved-password');
     resolve();
-    // @endif
   });
 };
 
@@ -126,16 +102,7 @@ export const deleteAuthToken = () => {
   return new Promise<*>(resolve => {
     deleteCookie('auth_token');
 
-    // @if TARGET='app'
-    ipcRenderer.once('delete-auth-token-response', (event, success) => {
-      resolve();
-    });
-    ipcRenderer.send('delete-auth-token');
-    // @endif;
-
-    // @if TARGET='web'
     resolve();
-    // @endif
   });
 };
 
@@ -144,16 +111,7 @@ export const doSignOutCleanup = () => {
     deleteCookie('auth_token');
     deleteCookie('saved-password');
 
-    // @if TARGET='app'
-    ipcRenderer.once('delete-auth-token-response', (event, success) => {
-      resolve();
-    });
-    ipcRenderer.send('delete-auth-token');
-    // @endif;
-
-    // @if TARGET='web'
     resolve();
-    // @endif
   });
 };
 

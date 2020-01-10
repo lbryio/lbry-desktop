@@ -2,7 +2,7 @@ FROM node:10
 EXPOSE 1337
 
 RUN yarn -v && npm -v
-RUN apt-get update -y && apt-get upgrade -y && apt-get install -y libsecret-1-0 libsecret-1-dev
+RUN apt-get update -y && apt-get upgrade -y
 
 WORKDIR /app
 ENV PATH="/app/node_modules/.bin:${PATH}"

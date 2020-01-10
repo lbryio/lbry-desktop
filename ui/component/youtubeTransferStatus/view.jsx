@@ -110,17 +110,28 @@ export default function YoutubeTransferStatus(props: Props) {
                         properties={false}
                       />
                     ) : (
-                      <p className="section--padded">
-                        <I18nMessage
-                          tokens={{
-                            statusLink: <Button button="link" href={STATUS_URL + statusToken} label={__('here')} />,
-                            channelName,
-                          }}
-                        >
-                          %channelName% has not finished syncing and is not ready to be transferred to your account. You
-                          can check the status %statusLink% or check back later.
-                        </I18nMessage>
-                      </p>
+                      <div>
+                        <p className="section--padded">
+                          <I18nMessage
+                            tokens={{
+                              statusLink: <Button button="link" href={STATUS_URL + statusToken} label={__('here')} />,
+                              channelName,
+                            }}
+                          >
+                            %channelName% is not yet ready to be transferred. Please allow up to one week, though it is
+                            frequently faster.
+                          </I18nMessage>
+                        </p>
+                        <p className="section--padded">
+                          <I18nMessage
+                            tokens={{
+                              faqLink: <Button button="link" label={__('FAQ')} href="https://lbry.com/faq/youtube" />,
+                            }}
+                          >
+                            You can check your status %statusLink%. This %faqLink% explains the program in more detail.
+                          </I18nMessage>
+                        </p>
+                      </div>
                     )}
                   </div>
                 );
