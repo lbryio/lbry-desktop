@@ -81,7 +81,16 @@
     }
   },
   "deb": {
-    "depends": ["gconf2", "gconf-service", "libnotify4", "libappindicator1", "libxtst6", "libnss3", "libsecret-1-0"]
+    "depends": [
+      "gconf2",
+      "gconf-service",
+      "libnotify4",
+      "libappindicator1",
+      "libxtst6",
+      "libnss3",
+      "libsecret-1-0",
+      "libsecret-devel"
+    ]
   },
   "nsis": {
     "perMachine": true,
