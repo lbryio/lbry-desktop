@@ -161,6 +161,12 @@ function ChannelPage(props: Props) {
     fetchSubCount(claimId);
   }, [uri, fetchSubCount, claimId]);
 
+  React.useEffect(() => {
+    if (!channelIsMine && editing) {
+      setEditing(false);
+    }
+  }, [channelIsMine, editing]);
+
   return (
     <Page>
       <ClaimUri uri={uri} />
