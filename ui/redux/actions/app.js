@@ -130,6 +130,7 @@ export function doDownloadUpgradeRequested() {
   // the old logic.
 
   return dispatch => {
+    console.log(process.platform);
     if (['win32', 'darwin'].includes(process.platform)) {
       // electron-updater behavior
       dispatch(doOpenModal(MODALS.AUTO_UPDATE_DOWNLOADED));
