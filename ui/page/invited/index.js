@@ -1,10 +1,24 @@
 import { connect } from 'react-redux';
 import InvitedPage from './view';
+import { makeSelectPermanentUrlForUri } from 'lbry-redux';
+import { withRouter } from 'react-router';
 
-const select = () => ({});
+const select = (state, props) => {
+  const { match } = props;
+  const { params } = match;
+  const { referrer } = params;
+  const sanitizedReferrer = referrer ? referrer.replace(':', '#') : '';
+  const uri = `lbry://${sanitizedReferrer}`;
+  return {
+    fullUri: makeSelectPermanentUrlForUri(uri)(state),
+    referrer: referrer,
+  };
+};
 const perform = () => ({});
 
-export default connect(
-  select,
-  perform
-)(InvitedPage);
+export default withRouter(
+  connect(
+    select,
+    perform
+  )(InvitedPage)
+);

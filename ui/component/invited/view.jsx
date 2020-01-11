@@ -1,7 +1,6 @@
 // @flow
 import * as PAGES from 'constants/pages';
 import React, { useEffect } from 'react';
-import { useParams } from 'react-router';
 import Button from 'component/button';
 import ClaimPreview from 'component/claimPreview';
 import Card from 'component/common/card';
@@ -10,7 +9,6 @@ import { rewards as REWARDS, ERRORS } from 'lbryinc';
 
 type Props = {
   user: any,
-  fetchUser: () => void,
   claimReward: () => void,
   setReferrer: string => void,
   referrerSetPending: boolean,
@@ -18,12 +16,14 @@ type Props = {
   channelSubscribe: (sub: Subscription) => void,
   history: { push: string => void },
   rewards: Array<Reward>,
+  referrer: string,
+  fullUri: string,
+  isSubscribed: boolean,
 };
 
 function Invited(props: Props) {
   const {
     user,
-    fetchUser,
     claimReward,
     setReferrer,
     referrerSetPending,
@@ -31,19 +31,26 @@ function Invited(props: Props) {
     channelSubscribe,
     history,
     rewards,
+    fullUri,
+    referrer,
+    isSubscribed,
   } = props;
 
-  // useParams requires react-router-dom ^v5.1.0
-  const { referrer } = useParams();
-  const refUri = 'lbry://' + referrer.replace(':', '#');
+  const refUri = referrer && 'lbry://' + referrer.replace(':', '#');
   const referrerIsChannel = parseURI(refUri).isChannel;
   const rewardsApproved = user && user.is_reward_approved;
   const hasVerifiedEmail = user && user.has_verified_email;
   const referredRewardAvailable = rewards && rewards.some(reward => reward.reward_type === REWARDS.TYPE_REFEREE);
 
+  // always follow if it's a channel
   useEffect(() => {
-    fetchUser();
-  }, []);
+    if (fullUri && !isSubscribed) {
+      channelSubscribe({
+        channelName: parseURI(fullUri).claimName,
+        uri: fullUri,
+      });
+    }
+  }, [fullUri, isSubscribed]);
 
   useEffect(() => {
     if (!referrerSetPending && hasVerifiedEmail) {
@@ -57,23 +64,7 @@ function Invited(props: Props) {
     }
   }, [referrer]);
 
-  // if they land here due to a referrer but already claimed, make them follow anyway
-  useEffect(() => {
-    if (!referredRewardAvailable && referrerIsChannel) {
-      channelSubscribe({
-        channelName: parseURI(refUri).claimName,
-        uri: refUri,
-      });
-    }
-  }, [referredRewardAvailable, referrerIsChannel]);
-
   function handleDone() {
-    if (hasVerifiedEmail && referrerIsChannel) {
-      channelSubscribe({
-        channelName: parseURI(refUri).claimName,
-        uri: refUri,
-      });
-    }
     history.push(`/$/${PAGES.DISCOVER}`);
   }
 
