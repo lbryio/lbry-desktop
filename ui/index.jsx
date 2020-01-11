@@ -226,7 +226,7 @@ function AppWrapper() {
       console.error(error.message); // eslint-disable-line no-console
     });
 
-    if (['win32', 'darwin'].includes(process.platform)) {
+    if (['win32', 'darwin'].includes(process.platform) || !!process.env.APPIMAGE) {
       autoUpdater.on('update-available', () => {
         console.log('Update available'); // eslint-disable-line no-console
       });
