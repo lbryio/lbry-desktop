@@ -8,6 +8,7 @@ import {
   makeSelectMediaTypeForUri,
   makeSelectContentTypeForUri,
   makeSelectUriIsStreamable,
+  makeSelectClaimForUri,
 } from 'lbry-redux';
 import { makeSelectCostInfoForUri } from 'lbryinc';
 import { makeSelectClientSetting } from 'redux/selectors/settings';
@@ -35,6 +36,7 @@ const select = (state, props) => ({
   costInfo: makeSelectCostInfoForUri(props.uri)(state),
   isAutoPlayable: makeSelectCanAutoplay(props.uri)(state),
   isText: makeSelectIsText(props.uri)(state),
+  claim: makeSelectClaimForUri(props.uri)(state),
 });
 
 const perform = dispatch => ({
