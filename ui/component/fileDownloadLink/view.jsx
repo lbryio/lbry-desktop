@@ -4,7 +4,6 @@ import * as MODALS from 'constants/modal_types';
 import React from 'react';
 import Button from 'component/button';
 import ToolTip from 'component/common/tooltip';
-import { generateDownloadUrl } from 'util/lbrytv';
 
 type Props = {
   uri: string,
@@ -39,7 +38,7 @@ function FileDownloadLink(props: Props) {
   const isPaidContent = cost > 0;
   const { name, claim_id: claimId, value } = claim;
   const fileName = value && value.source && value.source.name;
-  const downloadUrl = generateDownloadUrl(name, claimId, undefined, true);
+  const downloadUrl = `/$/download/${name}/${claimId}`;
 
   function handleDownload() {
     // @if TARGET='app'
