@@ -93,7 +93,6 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
   const claimsInChannel = (claim && claim.meta.claims_in_channel) || 0;
   const showPublishLink = abandoned && placeholder === 'publish';
   const hideActions = type === 'small' || type === 'tooltip';
-  const thumbnailUrl = useGetThumbnail(uri, claim, streamingUrl, getFile) || thumbnail;
 
   let name;
   let isValid = false;
@@ -148,6 +147,10 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
       shouldHide = true;
     }
   }
+
+  // Weird placement warning
+  // Make sure this happens after we figure out if this claim needs to be hidden
+  const thumbnailUrl = useGetThumbnail(uri, claim, streamingUrl, getFile, shouldHide) || thumbnail;
 
   function handleContextMenu(e) {
     // @if TARGET='app'
