@@ -35,9 +35,13 @@
     height: 100%;
     object-fit: contain;
   }
-
   video {
     cursor: pointer;
+  }
+  .video-js.vjs-fullscreen.vjs-user-inactive.vjs-playing {
+    video {
+      cursor: none;
+    }
   }
 }
 

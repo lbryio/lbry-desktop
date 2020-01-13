@@ -17,6 +17,7 @@ import SubscribeButton from 'component/subscribeButton';
 import ChannelThumbnail from 'component/channelThumbnail';
 import BlockButton from 'component/blockButton';
 import Button from 'component/button';
+import useGetThumbnail from 'effects/use-get-thumbnail';
 
 type Props = {
   uri: string,
@@ -50,6 +51,9 @@ type Props = {
   properties: boolean | Node | string | number,
   onClick?: any => any,
   hideBlock?: boolean,
+  streamingUrl: ?string,
+  getFile: string => void,
+  customShouldHide?: Claim => boolean,
 };
 
 const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
@@ -79,6 +83,9 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
     properties,
     onClick,
     hideBlock,
+    getFile,
+    streamingUrl,
+    customShouldHide,
   } = props;
   const shouldFetch =
     claim === undefined || (claim !== null && claim.value_type === 'channel' && isEmpty(claim.meta) && !pending);
@@ -134,6 +141,16 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
   if (claim && isChannel && !shouldHide && !showUserBlocked && blockedChannelUris.length) {
     shouldHide = blockedChannelUris.some(blockedUri => blockedUri === claim.permanent_url);
   }
+
+  if (!shouldHide && customShouldHide && claim) {
+    if (customShouldHide(claim)) {
+      shouldHide = true;
+    }
+  }
+
+  // Weird placement warning
+  // Make sure this happens after we figure out if this claim needs to be hidden
+  const thumbnailUrl = useGetThumbnail(uri, claim, streamingUrl, getFile, shouldHide) || thumbnail;
 
   function handleContextMenu(e) {
     // @if TARGET='app'
@@ -200,7 +217,7 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
           <ChannelThumbnail uri={uri} obscure={channelIsBlocked} />
         </UriIndicator>
       ) : (
-        <FileThumbnail thumbnail={thumbnail} />
+        <FileThumbnail thumbnail={thumbnailUrl} />
       )}
       <div className="claim-preview__text">
         <div className="claim-preview-metadata">

@@ -2,7 +2,7 @@
  <img align=center width="40%" src="https://miro.medium.com/max/5198/1*bTVuL2THG_0mpwmE-n7Ezg.png" />
 </h1>
 
-<h1 align=center>LBRY App - https://lbry.com/</h1>
+<h1 align=center>LBRY App - https://lbry.tv/</h1>
   
   
 

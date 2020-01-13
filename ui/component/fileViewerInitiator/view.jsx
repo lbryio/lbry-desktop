@@ -52,6 +52,7 @@ export default function FileViewerInitiator(props: Props) {
   const cost = costInfo && costInfo.cost;
   const forceVideo = ['application/x-ext-mkv', 'video/x-matroska'].includes(contentType);
   const isPlayable = ['audio', 'video'].includes(mediaType) || forceVideo;
+  const isImage = mediaType === 'image';
   const fileStatus = fileInfo && fileInfo.status;
   const webStreamOnly = contentType === 'application/pdf' || mediaType === 'text';
   const supported = IS_WEB ? (!cost && isStreamable) || webStreamOnly || forceVideo : true;
@@ -98,7 +99,7 @@ export default function FileViewerInitiator(props: Props) {
 
   useEffect(() => {
     const videoOnPage = document.querySelector('video');
-    if (((autoplay && !videoOnPage && isAutoPlayable) || isText) && hasCostInfo && cost === 0) {
+    if (((autoplay && !videoOnPage && isAutoPlayable) || isText || isImage) && hasCostInfo && cost === 0) {
       viewFile();
     }
   }, [autoplay, viewFile, isAutoPlayable, hasCostInfo, cost, isText]);

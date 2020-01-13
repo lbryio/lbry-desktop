@@ -909,5 +909,6 @@
   "Get %range% LBC": "Get %range% LBC",
   "Did something go wrong? Have a look in your log file, or send it to %support_link%.": "Did something go wrong? Have a look in your log file, or send it to %support_link%.",
   "%amount% LBC": "%amount% LBC",
-  "%amount% fee": "%amount% fee"
+  "%amount% fee": "%amount% fee",
+  "1 file hidden due to your %content_viewing_preferences_link%": "1 file hidden due to your %content_viewing_preferences_link%"
 }
