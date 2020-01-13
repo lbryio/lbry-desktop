@@ -1,5 +1,5 @@
 // @flow
-import React from 'react';
+import React, { useEffect } from 'react';
 import classnames from 'classnames';
 import usePersistedState from 'effects/use-persisted-state';
 import { FormField } from 'component/common/form';
@@ -9,6 +9,7 @@ import Card from 'component/common/card';
 
 type Props = {
   language: ?string,
+  defaultLanguage: ?string,
   name: ?string,
   licenseType: ?string,
   otherLicenseDescription: ?string,
@@ -18,8 +19,20 @@ type Props = {
 };
 
 function PublishAdvanced(props: Props) {
-  const { language, name, licenseType, otherLicenseDescription, licenseUrl, updatePublishForm } = props;
+  const {
+    language,
+    defaultLanguage,
+    name,
+    licenseType,
+    otherLicenseDescription,
+    licenseUrl,
+    updatePublishForm,
+  } = props;
   const [hideSection, setHideSection] = usePersistedState('publish-advanced-options', true);
+
+  useEffect(() => {
+    updatePublishForm({ language: defaultLanguage });
+  }, []);
 
   function toggleHideSection() {
     setHideSection(!hideSection);
