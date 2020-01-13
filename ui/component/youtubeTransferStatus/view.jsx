@@ -110,8 +110,8 @@ export default function YoutubeTransferStatus(props: Props) {
                         properties={false}
                       />
                     ) : (
-                      <div>
-                        <p className="section--padded">
+                      <div className="section--padded">
+                        <p>
                           <I18nMessage
                             tokens={{
                               channelName,
@@ -121,7 +121,7 @@ export default function YoutubeTransferStatus(props: Props) {
                             frequently faster.
                           </I18nMessage>
                         </p>
-                        <p className="section--padded">
+                        <p className="help">
                           <I18nMessage
                             tokens={{
                               statusLink: <Button button="link" href={STATUS_URL + statusToken} label={__('here')} />,
