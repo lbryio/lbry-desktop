@@ -2,7 +2,13 @@
 import React from 'react';
 import { generateStreamUrl } from 'util/lbrytv';
 
-export default function useGetThumbnail(uri: string, claim: ?Claim, streamingUrl: ?string, getFile: string => void) {
+export default function useGetThumbnail(
+  uri: string,
+  claim: ?Claim,
+  streamingUrl: ?string,
+  getFile: string => void,
+  shouldHide: boolean
+) {
   const hasClaim = claim !== undefined;
 
   // $FlowFixMe
@@ -27,11 +33,11 @@ export default function useGetThumbnail(uri: string, claim: ?Claim, streamingUrl
     if (hasClaim && isImage && isFree) {
       if (streamingUrl) {
         setThumbnail(streamingUrl);
-      } else {
+      } else if (!shouldHide) {
         getFile(uri);
       }
     }
-  }, [hasClaim, isFree, isImage, streamingUrl, uri]);
+  }, [hasClaim, isFree, isImage, streamingUrl, uri, shouldHide]);
   // @endif
 
   return thumbnail;
