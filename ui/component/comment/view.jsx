@@ -15,7 +15,7 @@ type Props = {
   authorUri: string, // full LBRY Channel URI: lbry://@channel#123...
   message: string, // comment body
   timePosted: number, // Comment timestamp
-  claim: ?Claim, // Channel Claim, retrieved to obtain thumbnail
+  channel: ?Claim, // Channel Claim, retrieved to obtain thumbnail
   pending?: boolean,
   resolveUri: string => void, // resolves the URI
   isResolvingUri: boolean, // if the URI is currently being resolved
@@ -33,7 +33,7 @@ function Comment(props: Props) {
     timePosted,
     message,
     pending,
-    claim,
+    channel,
     isResolvingUri,
     resolveUri,
     channelIsBlocked,
@@ -42,7 +42,7 @@ function Comment(props: Props) {
   } = props;
   // to debounce subsequent requests
   const shouldFetch =
-    claim === undefined || (claim !== null && claim.value_type === 'channel' && isEmpty(claim.meta) && !pending);
+    channel === undefined || (channel !== null && channel.value_type === 'channel' && isEmpty(channel.meta) && !pending);
 
   useEffect(() => {
     // If author was extracted from the URI, then it must be valid.
