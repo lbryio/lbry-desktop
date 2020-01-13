@@ -59,7 +59,7 @@ function Tabs(props: TabsProps) {
         <div
           className="tab__divider"
           style={{
-            left: selectedRect && selectedRect.left - tabsRect.left,
+            left: selectedRect && tabsRect && selectedRect.left - tabsRect.left,
             width: selectedRect && selectedRect.width,
           }}
         />
