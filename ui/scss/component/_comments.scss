@@ -54,3 +54,11 @@
   align-self: flex-end;
   font-size: var(--font-small);
 }
+
+
+.comment__menu-option {
+  display: flex;
+  align-items: center;
+  padding: var(--spacing-small);
+  font-size: var(--font-small);
+}

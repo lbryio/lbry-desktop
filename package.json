@@ -67,7 +67,7 @@
     "@exponent/electron-cookies": "^2.0.0",
     "@hot-loader/react-dom": "^16.8",
     "@lbry/components": "^3.0.5",
-    "@reach/menu-button": "^0.1.18",
+    "@reach/menu-button": "^0.7.0",
     "@reach/rect": "^0.2.1",
     "@reach/tabs": "^0.1.5",
     "@types/three": "^0.93.1",
@@ -126,7 +126,7 @@
     "imagesloaded": "^4.1.4",
     "json-loader": "^0.5.4",
     "lbry-format": "https://github.com/lbryio/lbry-format.git",
-    "lbry-redux": "lbryio/lbry-redux#a2be979986dc93be4c2c596846109f5394f64fa1",
+    "lbry-redux": "lbryio/lbry-redux#c30a8ec66c0d5692cc93ef8adeb95ba830c857f8",
     "lbryinc": "lbryio/lbryinc#6042c6f7bbf5fe7c6db2bd169f5b1c4558485c4c",
     "lint-staged": "^7.0.2",
     "localforage": "^1.7.1",
@@ -204,7 +204,7 @@
     "yarn": "^1.3"
   },
   "lbrySettings": {
-    "lbrynetDaemonVersion": "0.50.1",
+    "lbrynetDaemonVersion": "0.53.1",
     "lbrynetDaemonUrlTemplate": "https://github.com/lbryio/lbry/releases/download/vDAEMONVER/lbrynet-OSNAME.zip",
     "lbrynetDaemonDir": "static/daemon",
     "lbrynetDaemonFileName": "lbrynet"

@@ -1,5 +1,5 @@
 // @flow
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { isEmpty } from 'util/object';
 import relativeDate from 'tiny-relative-date';
 import Button from 'component/button';
@@ -9,10 +9,12 @@ import ChannelThumbnail from 'component/channelThumbnail';
 import { Menu, MenuList, MenuButton, MenuItem } from '@reach/menu-button';
 import Icon from 'component/common/icon';
 import * as ICONS from 'constants/icons';
+import { FormField, Form } from 'component/common/form';
 
 type Props = {
   author: ?string, // LBRY Channel Name, e.g. @channel
   authorUri: string, // full LBRY Channel URI: lbry://@channel#123...
+  commentId: string, // sha256 digest identifying the comment
   message: string, // comment body
   timePosted: number, // Comment timestamp
   channel: ?Claim, // Channel Claim, retrieved to obtain thumbnail
@@ -22,6 +24,9 @@ type Props = {
   channelIsBlocked: boolean, // if the channel is blacklisted in the app
   claimIsMine: boolean, // if you control the claim which this comment was posted on
   commentIsMine: boolean, // if this comment was signed by an owned channel
+  updateComment: (string, string) => void,
+  hideComment: (string) => void,
+  abandonComment: (string) => void,
 };
 
 const LENGTH_TO_COLLAPSE = 300;
@@ -39,7 +44,15 @@ function Comment(props: Props) {
     channelIsBlocked,
     claimIsMine,
     commentIsMine,
+    commentId,
+    updateComment,
   } = props;
+
+  const [isEditing, setEditing] = useState(false);
+  const [editedMessage, setCommentValue] = useState(message);
+  const [currentMessage, setCurrentMessage] = useState(message);
+  const [charCount, setCharCount] = useState(editedMessage.length);
+
   // to debounce subsequent requests
   const shouldFetch =
     channel === undefined || (channel !== null && channel.value_type === 'channel' && isEmpty(channel.meta) && !pending);
@@ -49,7 +62,27 @@ function Comment(props: Props) {
     if (authorUri && author && !isResolvingUri && shouldFetch) {
       resolveUri(authorUri);
     }
-  }, [isResolvingUri, shouldFetch, author, authorUri, resolveUri]);
+
+    // set the charCount here
+    setCharCount(editedMessage.length);
+  }, [isResolvingUri, shouldFetch, author, authorUri, resolveUri, editedMessage]);
+
+  // edit button calls this function
+  function handleSetEditing() {
+    setEditing(true);
+  }
+
+  // when the body is changed, form calls this function
+  function handleEditMessage(event) {
+    setCommentValue(event.target.value);
+  }
+
+  // when the user is done, this function is called
+  function handleSubmit() {
+    updateComment(commentId, editedMessage);
+    setCurrentMessage(editedMessage);
+    setEditing(false);
+  }
 
   return (
     <li className="comment">
@@ -75,31 +108,60 @@ function Comment(props: Props) {
           </div>
           <div className="comment__meta-menu">
             <Menu>
-              <MenuButton className="comment__menu-dropdown">
+              <MenuButton>
                 <Icon size={18} icon={ICONS.MORE_VERTICAL} />
               </MenuButton>
-              <MenuList className="comment__menu-list">
-                {commentIsMine && (<MenuItem className="comment__menu-option">{__('Edit')}</MenuItem>)}
-                {commentIsMine && (<MenuItem className="comment__menu-option">{__('Delete')}</MenuItem>)}
-                {!commentIsMine && (<MenuItem className="comment__menu-option">{__('Report')}</MenuItem>)}
-                {claimIsMine && (<MenuItem className="comment__menu-option">{__('Hide')}</MenuItem>)}
+              <MenuList className="menu__list--header">
+                {commentIsMine && (
+                  <MenuItem className="comment__menu-option" onSelect={handleSetEditing}>
+                    {__('Edit')}
+                  </MenuItem>)
+                }
+                {commentIsMine && (
+                  <MenuItem className="comment__menu-option">{__('Delete')}</MenuItem>
+                )}
+                {!commentIsMine && (
+                  <MenuItem className="comment__menu-option">{__('Report')}</MenuItem>
+                )}
+                {claimIsMine && (
+                  <MenuItem className="comment__menu-option">{__('Hide')}</MenuItem>
+                )}
               </MenuList>
             </Menu>
           </div>
         </div>
         <div>
-          {message.length >= LENGTH_TO_COLLAPSE ? (
-            <div className="comment__message">
-              <Expandable>
-                <MarkdownPreview content={message} />
-              </Expandable>
-            </div>
+          {isEditing ? (
+            <Form onSubmit={handleSubmit}>
+              <FormField
+                type="textarea"
+                name="editing_comment"
+                value={editedMessage}
+                charCount={charCount}
+                onChange={handleEditMessage}
+              />
+              <Button
+                button="primary"
+                type="submit"
+                label={__('Done')}
+                requiresAuth={IS_WEB}
+                disabled={currentMessage === editedMessage}
+                />
+            </Form>
           ) : (
-            <div className="comment__message">
-              <MarkdownPreview content={message} />
-            </div>
-          )}
-        </div>
+            editedMessage.length >= LENGTH_TO_COLLAPSE ? (
+              <div className="comment__message">
+                <Expandable>
+                  <MarkdownPreview content={currentMessage}/>
+                </Expandable>
+              </div>
+            ) : (
+              <div className="comment__message">
+                <MarkdownPreview content={currentMessage}/>
+              </div>
+            )
+
+            )}</div>
       </div>
     </li>
   );
