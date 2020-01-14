@@ -14,7 +14,6 @@ import FloatingViewer from 'component/floatingViewer';
 import { withRouter } from 'react-router';
 import usePrevious from 'effects/use-previous';
 import Nag from 'component/common/nag';
-import { rewards as REWARDS } from 'lbryinc';
 // @if TARGET='web'
 import OpenInAppLink from 'component/openInAppLink';
 import YoutubeWelcome from 'component/youtubeWelcome';
@@ -33,7 +32,7 @@ type Props = {
   languages: Array<string>,
   theme: string,
   user: ?{ id: string, has_verified_email: boolean, is_reward_approved: boolean },
-  location: { pathname: string, hash: string, search: string },
+  location: { pathname: string, hash: string },
   history: { push: string => void },
   fetchRewards: () => void,
   fetchTransactions: (number, number) => void,
@@ -41,6 +40,7 @@ type Props = {
   fetchChannelListMine: () => void,
   signIn: () => void,
   requestDownloadUpgrade: () => void,
+  fetchChannelListMine: () => void,
   onSignedIn: () => void,
   setLanguage: string => void,
   isUpgradeAvailable: boolean,
@@ -52,8 +52,6 @@ type Props = {
   balance: ?number,
   accessToken: ?string,
   syncError: ?string,
-  rewards: Array<Reward>,
-  setReferrer: (string, boolean) => void,
 };
 
 function App(props: Props) {
@@ -62,7 +60,6 @@ function App(props: Props) {
     fetchRewards,
     fetchTransactions,
     user,
-    accessToken,
     fetchAccessToken,
     fetchChannelListMine,
     signIn,
@@ -78,8 +75,6 @@ function App(props: Props) {
     languages,
     setLanguage,
     updatePreferences,
-    rewards,
-    setReferrer,
   } = props;
 
   const appRef = useRef();
@@ -91,13 +86,8 @@ function App(props: Props) {
   const previousUserId = usePrevious(userId);
   const previousHasVerifiedEmail = usePrevious(hasVerifiedEmail);
   const previousRewardApproved = usePrevious(isRewardApproved);
-  const { pathname, hash, search } = props.location;
+  const { pathname, hash } = props.location;
   const showUpgradeButton = autoUpdateDownloaded || (process.platform === 'linux' && isUpgradeAvailable);
-  // referral claiming
-  const referredRewardAvailable = rewards && rewards.some(reward => reward.reward_type === REWARDS.TYPE_REFEREE);
-  const urlParams = new URLSearchParams(search);
-  const rawReferrerParam = urlParams.get('r');
-  const sanitizedReferrerParam = rawReferrerParam && rawReferrerParam.replace(':', '#');
 
   let uri;
   try {
@@ -114,14 +104,6 @@ function App(props: Props) {
     window.addEventListener('beforeunload', handleBeforeUnload);
     return () => window.removeEventListener('beforeunload', handleBeforeUnload);
   }, [uploadCount]);
-
-  useEffect(() => {
-    if (referredRewardAvailable && sanitizedReferrerParam && isRewardApproved) {
-      setReferrer(sanitizedReferrerParam, true);
-    } else if (referredRewardAvailable && sanitizedReferrerParam) {
-      setReferrer(sanitizedReferrerParam, false);
-    }
-  }, [sanitizedReferrerParam, isRewardApproved, referredRewardAvailable]);
 
   useEffect(() => {
     ReactModal.setAppElement(appRef.current);
@@ -204,7 +186,7 @@ function App(props: Props) {
   // Require an internal-api user on lbry.tv
   // This also prevents the site from loading in the un-authed state while we wait for internal-apis to return for the first time
   // It's not needed on desktop since there is no un-authed state
-  if (!accessToken) {
+  if (!user) {
     return null;
   }
   // @endif

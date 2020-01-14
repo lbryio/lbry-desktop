@@ -21,10 +21,7 @@ export default handleActions(
     [ACTIONS.CHANNEL_SUBSCRIBE]: (state: SubscriptionState, action: DoChannelSubscribe): SubscriptionState => {
       const newSubscription: Subscription = action.data;
       const newSubscriptions: Array<Subscription> = state.subscriptions.slice();
-      // prevent duplicates in the sidebar
-      if (!newSubscriptions.some(sub => sub.uri === newSubscription.uri)) {
-        newSubscriptions.unshift(newSubscription);
-      }
+      newSubscriptions.unshift(newSubscription);
 
       return {
         ...state,
