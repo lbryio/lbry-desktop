@@ -71,19 +71,23 @@ function Invited(props: Props) {
   if (referrerSetError === ERRORS.ALREADY_CLAIMED) {
     return (
       <Card
-        title={__(`Welcome!`)}
-        subtitle={referrerIsChannel ? __(`We've followed your referrer for you. Check it out!`) : __(`Congrats!`)}
-        actions={
-          <>
-            {referrerIsChannel && (
-              <div key={refUri} className="claim-preview--channel">
-                <ClaimPreview key={refUri} uri={refUri} actions={''} type={'small'} />
-              </div>
-            )}
-            <div className="card__actions">
-              <Button button="primary" label={__('Done!')} onClick={handleDone} />
+        title={__(`Whoa`)}
+        subtitle={
+          referrerIsChannel
+            ? __(`You've already claimed your referrer, but we've followed this channel for you.`)
+            : __(`You've already claimed your referrer.`)
+        }
+        body={
+          referrerIsChannel && (
+            <div className="claim-preview--channel">
+              <ClaimPreview key={refUri} uri={refUri} actions={''} type={'small'} />
             </div>
-          </>
+          )
+        }
+        actions={
+          <div className="card__actions">
+            <Button button="primary" label={__('Done!')} onClick={handleDone} />
+          </div>
         }
       />
     );
@@ -102,10 +106,10 @@ function Invited(props: Props) {
             <div className="card__actions">
               <Button
                 button="primary"
-                label={hasVerifiedEmail ? __('Verify') : __('Sign in')}
+                label={hasVerifiedEmail ? __('Verify') : __('Create Account')}
                 navigate={`/$/${PAGES.AUTH}?redirect=/$/${PAGES.REWARDS}`}
               />
-              <Button button="primary" label={__('Explore')} onClick={handleDone} />
+              <Button button="link" label={__('Explore')} onClick={handleDone} />
             </div>
           </>
         }
@@ -117,23 +121,30 @@ function Invited(props: Props) {
     return (
       <Card
         title={__(`You're invited!`)}
-        subtitle={__(`A referral reward is waiting for you. Just complete sign-in to claim it.`)}
-        actions={
-          <>
-            {referrerIsChannel && (
-              <div key={refUri} className="claim-preview--channel">
-                <ClaimPreview key={refUri} uri={refUri} actions={''} type={'small'} />
-              </div>
-            )}
-            <div className="card__actions">
-              <Button
-                button="primary"
-                label={hasVerifiedEmail ? __('Verify') : __('Sign in')}
-                navigate={`/$/${PAGES.AUTH}?redirect=/$/${PAGES.INVITE}/${referrer}`}
-              />
-              <Button button="primary" label={__('Skip')} onClick={handleDone} />
+        subtitle={
+          referrerIsChannel
+            ? __(
+                `Content freedom and and a present from %channel_name% are waiting for you. Create an account to claim it.`,
+                { channel_name: referrer }
+              )
+            : __(`Content freedom and a present are waiting for you. Create an account to claim it.`)
+        }
+        body={
+          referrerIsChannel && (
+            <div className="claim-preview--channel">
+              <ClaimPreview key={refUri} uri={refUri} actions={''} type={'small'} />
             </div>
-          </>
+          )
+        }
+        actions={
+          <div className="card__actions">
+            <Button
+              button="primary"
+              label={hasVerifiedEmail ? __('Verify') : __('Create Account')}
+              navigate={`/$/${PAGES.AUTH}?redirect=/$/${PAGES.INVITE}/${referrer}`}
+            />
+            <Button button="link" label={__('Skip')} onClick={handleDone} />
+          </div>
         }
       />
     );
@@ -143,17 +154,17 @@ function Invited(props: Props) {
     <Card
       title={__(`Welcome!`)}
       subtitle={referrerIsChannel ? __(`We've followed your referrer for you. Check it out!`) : __(`Congrats!`)}
-      actions={
-        <>
-          {referrerIsChannel && (
-            <div key={refUri} className="claim-preview--channel">
-              <ClaimPreview key={refUri} uri={refUri} actions={''} type={'small'} />
-            </div>
-          )}
-          <div className="card__actions">
-            <Button button="primary" label={__('Done!')} onClick={handleDone} />
+      body={
+        referrerIsChannel && (
+          <div className="claim-preview--channel">
+            <ClaimPreview key={refUri} uri={refUri} actions={''} type={'small'} />
           </div>
-        </>
+        )
+      }
+      actions={
+        <div className="card__actions">
+          <Button button="primary" label={__('Done!')} onClick={handleDone} />
+        </div>
       }
     />
   );

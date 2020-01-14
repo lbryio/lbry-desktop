@@ -14,11 +14,12 @@ type Props = {
   createChannel: (string, number) => Promise<any>,
   fetchChannelListMine: () => void,
   fetchingChannels: boolean,
-  emailVerified: boolean,
-  includeAnonymous?: boolean,
+  hideNew: boolean,
+  hideAnon: boolean,
   includeNew?: boolean,
   label?: string,
   injected?: Array<string>,
+  emailVerified: boolean,
 };
 
 type State = {
@@ -73,9 +74,47 @@ class ChannelSection extends React.PureComponent<Props, State> {
 
   render() {
     const channel = this.state.addingChannel ? 'new' : this.props.channel;
-    const { fetchingChannels, channels = [], includeAnonymous, includeNew, label, injected = [] } = this.props;
+    const { fetchingChannels, channels = [], hideNew, hideAnon, label, injected = [] } = this.props;
     const { addingChannel } = this.state;
 
+    if (hideNew) {
+      return (
+        <Fragment>
+          {fetchingChannels ? (
+            <BusyIndicator message="Updating channels" />
+          ) : (
+            <>
+              <FormField
+                name="channel"
+                label={label || __('Channel')}
+                type="select"
+                onChange={this.handleChannelChange}
+                value={channel}
+              >
+                {!hideAnon && <option value={CHANNEL_ANONYMOUS}>{__('Anonymous')}</option>}
+                {channels &&
+                  channels.map(({ name, claim_id: claimId }) => (
+                    <option key={claimId} value={name}>
+                      {name}
+                    </option>
+                  ))}
+                {injected &&
+                  injected.map(item => (
+                    <option key={item} value={item}>
+                      {item}
+                    </option>
+                  ))}
+              </FormField>
+              {addingChannel && (
+                <div className="section">
+                  <ChannelCreate onSuccess={this.handleChangeToNewChannel} />
+                </div>
+              )}
+            </>
+          )}
+        </Fragment>
+      );
+    }
     return (
       <Fragment>
         {fetchingChannels ? (
@@ -90,7 +129,7 @@ class ChannelSection extends React.PureComponent<Props, State> {
                 onChange={this.handleChannelChange}
                 value={channel}
               >
-                {includeAnonymous && <option value={CHANNEL_ANONYMOUS}>{__('Anonymous')}</option>}
+                {!hideAnon && <option value={CHANNEL_ANONYMOUS}>{__('Anonymous')}</option>}
                 {channels &&
                   channels.map(({ name, claim_id: claimId }) => (
                     <option key={claimId} value={name}>
@@ -103,7 +142,7 @@ class ChannelSection extends React.PureComponent<Props, State> {
                       {item}
                     </option>
                   ))}
-                {includeNew && <option value={CHANNEL_NEW}>{__('New channel...')}</option>}
+                <option value={CHANNEL_NEW}>{__('New channel...')}</option>}
               </FormField>
             </div>
             {addingChannel && (

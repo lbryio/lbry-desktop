@@ -15,7 +15,7 @@ type Props = {
   isPending: boolean,
   referralLink: string,
   referralCode: string,
-  channels: any,
+  channels: ?Array<ChannelClaim>,
   resolvingUris: Array<string>,
   resolveUris: (Array<string>) => void,
 };
@@ -41,8 +41,9 @@ function InviteNew(props: Props) {
   function handleReferralChange(code) {
     setReferralSource(code);
     // TODO: keep track of this in an array?
-    if (code !== referralCode) {
-      analytics.apiLogPublish(channels.find(ch => ch.name === code));
+    const matchingChannel = channels && channels.find(ch => ch.name === code);
+    if (matchingChannel) {
+      analytics.apiLogPublish(matchingChannel);
     }
   }
 
@@ -55,9 +56,11 @@ function InviteNew(props: Props) {
 
   const topChannel =
     channels &&
-    channels.reduce((top, channel) =>
-      (top && top.meta && top.meta.claims_in_channel) > channel.meta.claims_in_channel ? top : channel
-    );
+    channels.reduce((top, channel) => {
+      const topClaimCount = (top && top.meta && top.meta.claims_in_channel) || 0;
+      const currentClaimCount = (channel && channel.meta && channel.meta.claims_in_channel) || 0;
+      return topClaimCount >= currentClaimCount ? top : channel;
+    });
   const referralString =
     channels && channels.length && referralSource !== referralCode
       ? lookupUrlByClaimName(referralSource, channels)
@@ -67,7 +70,7 @@ function InviteNew(props: Props) {
 
   useEffect(() => {
     // resolve once, after we have channel list
-    if (!hasResolved && !resolveStarted && channelCount) {
+    if (!hasResolved && !resolveStarted && channelCount && uris) {
       setResolveStarted(true);
       resolveUris(uris.split(','));
     }
@@ -93,47 +96,71 @@ function InviteNew(props: Props) {
   }
 
   return (
-    <Card
-      title={__('Invite a Friend')}
-      subtitle={__('When your friends start using LBRY, the network gets stronger!')}
-      actions={
-        <React.Fragment>
-          <Form onSubmit={handleSubmit}>
-            <SelectChannel
-              channel={referralSource}
-              onChannelChange={channel => handleReferralChange(channel)}
-              label={'Code or Channel'}
-              injected={[referralCode]}
-            />
-
-            <CopyableText label={__('Or share this link with your friends')} copyable={referral} />
-            <FormField
-              type="text"
-              label="Email"
-              placeholder="youremail@example.org"
-              name="email"
-              value={email}
-              error={errorMessage}
-              inputButton={<Button button="secondary" type="submit" label="Invite" disabled={isPending || !email} />}
-              onChange={event => {
-                handleEmailChanged(event);
-              }}
-            />
-            <p className="help">
-              <I18nMessage
-                tokens={{
-                  rewards_link: <Button button="link" navigate="/$/rewards" label={__('rewards')} />,
-                  referral_faq_link: <Button button="link" label={__('FAQ')} href="https://lbry.com/faq/referrals" />,
+    <div className={'columns'}>
+      <Card
+        title={__('Refer by Email')}
+        subtitle={__('When your friends start using LBRY, the network gets stronger!')}
+        actions={
+          <React.Fragment>
+            <Form onSubmit={handleSubmit}>
+              <FormField
+                type="text"
+                label="Email"
+                placeholder="youremail@example.org"
+                name="email"
+                value={email}
+                error={errorMessage}
+                inputButton={<Button button="secondary" type="submit" label="Invite" disabled={isPending || !email} />}
+                onChange={event => {
+                  handleEmailChanged(event);
                 }}
-              >
-                Earn %rewards_link% for inviting your friends. Read our %referral_faq_link% to learn more about
-                referrals.
-              </I18nMessage>
-            </p>
-          </Form>
-        </React.Fragment>
-      }
-    />
+              />
+              <p className="help">
+                <I18nMessage
+                  tokens={{
+                    rewards_link: <Button button="link" navigate="/$/rewards" label={__('rewards')} />,
+                    referral_faq_link: <Button button="link" label={__('FAQ')} href="https://lbry.com/faq/referrals" />,
+                  }}
+                >
+                  Earn %rewards_link% for inviting your friends. Read our %referral_faq_link% to learn more about
+                  referrals.
+                </I18nMessage>
+              </p>
+            </Form>
+          </React.Fragment>
+        }
+      />
+      <Card
+        title={__('Referral Codes')}
+        subtitle={__('Users!')}
+        actions={
+          <React.Fragment>
+            <Form onSubmit={handleSubmit}>
+              <SelectChannel
+                channel={referralSource}
+                onChannelChange={channel => handleReferralChange(channel)}
+                label={'Code or Channel'}
+                hideNew
+                hideAnon
+                injected={[referralCode]}
+              />
+              <CopyableText label={__('Or share this link with your friends')} copyable={referral} />
+              <p className="help">
+                <I18nMessage
+                  tokens={{
+                    rewards_link: <Button button="link" navigate="/$/rewards" label={__('rewards')} />,
+                    referral_faq_link: <Button button="link" label={__('FAQ')} href="https://lbry.com/faq/referrals" />,
+                  }}
+                >
+                  Earn %rewards_link% for inviting your friends. Read our %referral_faq_link% to learn more about
+                  referrals.
+                </I18nMessage>
+              </p>
+            </Form>
+          </React.Fragment>
+        }
+      />
+    </div>
   );
 }
 

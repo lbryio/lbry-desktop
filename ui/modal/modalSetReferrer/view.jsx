@@ -3,6 +3,7 @@ import * as React from 'react';
 import { FormField, Form } from 'component/common/form';
 import { Modal } from 'modal/modal';
 import Button from 'component/button';
+import HelpLink from 'component/common/help-link';
 
 type Props = {
   closeModal: () => void,
@@ -49,7 +50,7 @@ class ModalSetReferrer extends React.PureComponent<Props, State> {
         <Form onSubmit={this.handleSubmit}>
           <p>
             {__('Tell us who referred you and get a reward!')}
-            <Button button="link" href="https://lbry.com/faq/referrals" label={__('?')} />.
+            <HelpLink href="https://lbry.com/faq/referrals" />.
           </p>
           <FormField
             autoFocus

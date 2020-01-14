@@ -165,12 +165,7 @@ function PublishForm(props: Props) {
         <Card
           actions={
             <React.Fragment>
-              <SelectChannel
-                channel={channel}
-                onChannelChange={channel => updatePublishForm({ channel })}
-                includeAnonymous
-                includeNew
-              />
+              <SelectChannel channel={channel} onChannelChange={channel => updatePublishForm({ channel })} />
               <p className="help">
                 {__('This is a username or handle that your content can be found under.')}{' '}
                 {__('Ex. @Marvel, @TheBeatles, @BooksByJoe')}
