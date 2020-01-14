@@ -8,6 +8,7 @@ import ReportPage from 'page/report';
 import ShowPage from 'page/show';
 import PublishPage from 'page/publish';
 import DiscoverPage from 'page/discover';
+import InvitedPage from 'page/invited';
 // import HomePage from 'page/home';
 import RewardsPage from 'page/rewards';
 import FileListDownloaded from 'page/fileListDownloaded';
@@ -89,6 +90,7 @@ function AppRouter(props: Props) {
       <Route path={`/$/${PAGES.AUTH_VERIFY}`} exact component={SignInVerifyPage} />
       <Route path={`/$/${PAGES.SEARCH}`} exact component={SearchPage} />
       <Route path={`/$/${PAGES.SETTINGS}`} exact component={SettingsPage} />
+      <Route path={`/$/${PAGES.INVITE}/:referrer`} exact component={InvitedPage} />
 
       <PrivateRoute {...props} path={`/$/${PAGES.INVITE}`} component={InvitePage} />
       <PrivateRoute {...props} path={`/$/${PAGES.DOWNLOADED}`} component={FileListDownloaded} />
