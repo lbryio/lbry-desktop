@@ -98,11 +98,11 @@ function Invited(props: Props) {
       <Card
         title={__(`Welcome!`)}
         subtitle={__(
-          `Something went wrong with your referral link. You can set and claim your referral reward after signing in.`
+          `Something went wrong with your invite link. You can set and claim your invite reward after signing in.`
         )}
         actions={
           <>
-            <p className="error-text">{__('Not a valid referral')}</p>
+            <p className="error-text">{__('Not a valid invite')}</p>
             <div className="card__actions">
               <Button
                 button="primary"
@@ -140,7 +140,7 @@ function Invited(props: Props) {
           <div className="card__actions">
             <Button
               button="primary"
-              label={hasVerifiedEmail ? __('Verify') : __('Create Account')}
+              label={hasVerifiedEmail ? __('Finish Account') : __('Create Account')}
               navigate={`/$/${PAGES.AUTH}?redirect=/$/${PAGES.INVITE}/${referrer}`}
             />
             <Button button="link" label={__('Skip')} onClick={handleDone} />
@@ -153,7 +153,7 @@ function Invited(props: Props) {
   return (
     <Card
       title={__(`Welcome!`)}
-      subtitle={referrerIsChannel ? __(`We've followed your referrer for you. Check it out!`) : __(`Congrats!`)}
+      subtitle={referrerIsChannel ? __(`We've followed your invitee for you. Check them out!`) : __(`Congrats!`)}
       body={
         referrerIsChannel && (
           <div className="claim-preview--channel">
@@ -163,7 +163,7 @@ function Invited(props: Props) {
       }
       actions={
         <div className="card__actions">
-          <Button button="primary" label={__('Done!')} onClick={handleDone} />
+          <Button button="primary" label={__('Done')} onClick={handleDone} />
         </div>
       }
     />
