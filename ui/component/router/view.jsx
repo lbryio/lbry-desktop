@@ -74,7 +74,7 @@ function AppRouter(props: Props) {
 
   return (
     <Switch>
-      <Route path={`/`} exact component={ChannelsFollowingPage} />
+      <Route path={`/`} exact component={() => <Redirect to={`/$/${PAGES.CHANNELS_FOLLOWING}`} />} />
       <Route path={`/$/${PAGES.DISCOVER}`} exact component={DiscoverPage} />
       <Route path={`/$/${PAGES.AUTH}`} exact component={SignInPage} />
       <Route path={`/$/${PAGES.TAGS}`} exact component={TagsPage} />
