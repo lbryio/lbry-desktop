@@ -14,7 +14,6 @@ type Props = {
   createChannel: (string, number) => Promise<any>,
   fetchChannelListMine: () => void,
   fetchingChannels: boolean,
-  hideNew: boolean,
   hideAnon: boolean,
   includeNew?: boolean,
   label?: string,
@@ -74,82 +73,39 @@ class ChannelSection extends React.PureComponent<Props, State> {
 
   render() {
     const channel = this.state.addingChannel ? 'new' : this.props.channel;
-    const { fetchingChannels, channels = [], hideNew, hideAnon, label, injected = [] } = this.props;
+    const { fetchingChannels, channels = [], hideAnon, label, injected = [] } = this.props;
     const { addingChannel } = this.state;
 
-    if (hideNew) {
-      return (
-        <Fragment>
-          {fetchingChannels ? (
-            <BusyIndicator message="Updating channels" />
-          ) : (
-            <>
-              <FormField
-                name="channel"
-                label={label || __('Channel')}
-                type="select"
-                onChange={this.handleChannelChange}
-                value={channel}
-              >
-                {!hideAnon && <option value={CHANNEL_ANONYMOUS}>{__('Anonymous')}</option>}
-                {channels &&
-                  channels.map(({ name, claim_id: claimId }) => (
-                    <option key={claimId} value={name}>
-                      {name}
-                    </option>
-                  ))}
-                {injected &&
-                  injected.map(item => (
-                    <option key={item} value={item}>
-                      {item}
-                    </option>
-                  ))}
-              </FormField>
-              {addingChannel && (
-                <div className="section">
-                  <ChannelCreate onSuccess={this.handleChangeToNewChannel} />
-                </div>
-              )}
-            </>
-          )}
-        </Fragment>
-      );
-    }
     return (
       <Fragment>
         {fetchingChannels ? (
           <BusyIndicator message="Updating channels" />
         ) : (
           <Fragment>
-            <div className="section">
-              <FormField
-                name="channel"
-                label={label || __('Channel')}
-                type="select"
-                onChange={this.handleChannelChange}
-                value={channel}
-              >
-                {!hideAnon && <option value={CHANNEL_ANONYMOUS}>{__('Anonymous')}</option>}
-                {channels &&
-                  channels.map(({ name, claim_id: claimId }) => (
-                    <option key={claimId} value={name}>
-                      {name}
-                    </option>
-                  ))}
-                {injected &&
-                  injected.map(item => (
-                    <option key={item} value={item}>
-                      {item}
-                    </option>
-                  ))}
-                <option value={CHANNEL_NEW}>{__('New channel...')}</option>}
-              </FormField>
-            </div>
-            {addingChannel && (
-              <div className="section">
-                <ChannelCreate onSuccess={this.handleChangeToNewChannel} />
-              </div>
-            )}
+            <FormField
+              name="channel"
+              label={label || __('Channel')}
+              type="select"
+              onChange={this.handleChannelChange}
+              value={channel}
+            >
+              {!hideAnon && <option value={CHANNEL_ANONYMOUS}>{__('Anonymous')}</option>}
+              {channels &&
+                channels.map(({ name, claim_id: claimId }) => (
+                  <option key={claimId} value={name}>
+                    {name}
+                  </option>
+                ))}
+              {injected &&
+                injected.map(item => (
+                  <option key={item} value={item}>
+                    {item}
+                  </option>
+                ))}
+              <option value={CHANNEL_NEW}>{__('New channel...')}</option>}
+            </FormField>
+
+            {addingChannel && <ChannelCreate onSuccess={this.handleChangeToNewChannel} />}
           </Fragment>
         )}
       </Fragment>
