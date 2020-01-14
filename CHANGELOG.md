@@ -4,7 +4,23 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
-## [0.38.0] - [Unreleased]
+## [0.39.0] - [Unreleased]
+
+### Fixed
+
+### Added
+
+### Changed
+
+## [0.38.2] - [2019-12-21]
+
+### Fixed
+
+- Always sync prefernces on startup
+- App no longer crashes on edits in some cases
+- Sign in will no longer get stuck
+
+## [0.38.0] - [2019-12-20]
 
 ### Fixed
 
