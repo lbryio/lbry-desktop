@@ -9,6 +9,8 @@ type Props = {
   claim: Claim,
   webShareable: boolean,
   isChannel: boolean,
+  referralCode: string,
+  user: any,
 };
 
 class SocialShare extends React.PureComponent<Props> {
@@ -25,14 +27,16 @@ class SocialShare extends React.PureComponent<Props> {
   input: ?HTMLInputElement;
 
   render() {
-    const { claim, isChannel } = this.props;
+    const { claim, isChannel, referralCode, user } = this.props;
     const { canonical_url: canonicalUrl, permanent_url: permanentUrl } = claim;
     const { webShareable } = this.props;
+    const rewardsApproved = user && user.is_reward_approved;
     const OPEN_URL = 'https://open.lbry.com/';
     const lbryUrl = canonicalUrl ? canonicalUrl.split('lbry://')[1] : permanentUrl.split('lbry://')[1];
     const lbryWebUrl = lbryUrl.replace(/#/g, ':');
     const encodedLbryURL: string = `${OPEN_URL}${encodeURIComponent(lbryWebUrl)}`;
-    const lbryURL: string = `${OPEN_URL}${lbryWebUrl}`;
+    const referralParam: string = referralCode && rewardsApproved ? `?r=${referralCode}` : '';
+    const lbryURL: string = `${OPEN_URL}${lbryWebUrl}${referralParam}`;
 
     const shareOnFb = __('Share on Facebook');
     const shareOnTwitter = __('Share On Twitter');
