@@ -42,14 +42,14 @@ class ModalSetReferrer extends React.PureComponent<Props, State> {
     return (
       <Modal
         isOpen
-        title={__('Enter Referrer')}
-        contentLabel={__('Enter Referrer')}
+        title={__('Enter Invitee')}
+        contentLabel={__('Enter Invitee')}
         type="custom"
         onAborted={closeModal}
       >
         <Form onSubmit={this.handleSubmit}>
           <p>
-            {__('Tell us who referred you and get a reward!')}
+            {__('Did someone invite you to use lbry.tv? Tell us who and you both get a reward!')}
             <HelpLink href="https://lbry.com/faq/referrals" />.
           </p>
           <FormField
@@ -59,7 +59,7 @@ class ModalSetReferrer extends React.PureComponent<Props, State> {
             inputButton={
               <Button button="primary" type="submit" disabled={!referrer || rewardIsPending} label={__('Set')} />
             }
-            label={__('Code')}
+            label={__('Code or channel')}
             placeholder="0123abc"
             value={referrer}
             onChange={e => this.setState({ referrer: e.target.value })}
@@ -67,7 +67,7 @@ class ModalSetReferrer extends React.PureComponent<Props, State> {
         </Form>
         <div className="card__actions">
           <Button button="primary" label={__('Done')} onClick={closeModal} />
-          <Button button="link" label={__('Cancel')} onClick={closeModal} />
+          <Button button="link" label={__('Close')} onClick={closeModal} />
         </div>
       </Modal>
     );
