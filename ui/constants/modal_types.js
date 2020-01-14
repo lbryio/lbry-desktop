@@ -34,4 +34,3 @@ export const WALLET_RECEIVE = 'wallet_receive';
 export const CREATE_CHANNEL = 'create_channel';
 export const YOUTUBE_WELCOME = 'youtube_welcome';
 export const MOBILE_NAVIGATION = 'mobile_navigation';
-export const SET_REFERRER = 'set_referrer';

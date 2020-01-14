@@ -183,10 +183,10 @@ const Header = (props: Props) => {
                     </MenuItem>
 
                     {/* Commented out until new invite system is implemented */}
-                    <MenuItem className="menu__link" onSelect={() => history.push(`/$/${PAGES.INVITE}`)}>
+                    {/* <MenuItem className="menu__link" onSelect={() => history.push(`/$/${PAGES.INVITE}`)}>
                       <Icon aria-hidden icon={ICONS.INVITE} />
-                      {__('Invites')}
-                    </MenuItem>
+                      {__('Invite A Friend')}
+                    </MenuItem> */}
 
                     {authenticated ? (
                       <MenuItem onSelect={signOut}>
