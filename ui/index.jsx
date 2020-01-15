@@ -109,10 +109,6 @@ Lbryio.setOverride(
         authToken = response.auth_token;
         setAuthToken(authToken);
 
-        // @if TARGET='app'
-        ipcRenderer.send('set-auth-token', authToken);
-        // @endif
-
         resolve(authToken);
       });
     })
@@ -123,6 +119,10 @@ Lbryio.setOverride(
   () =>
     new Promise(resolve => {
       // @if TARGET='app'
+      // NEED TO DO SOMETHING HERE TO CHECK FOR A COOKIE AUTH TOKEN.
+      // IF IT EXISTS, SKIP AND CONTINUE BELOW THE @ENDIF
+      // IF NOT, COPY THE KEYTAR AUTH TOKEN AND PASSWORD TO THE COOKIE (SetAuthToken/SetPassword?)
+      // AND THEN DELETE KEYTAR ONE (Or leave for now?)
       if (authToken) {
         resolve(authToken);
       }
@@ -135,7 +135,6 @@ Lbryio.setOverride(
       ipcRenderer.send('get-auth-token');
       // @endif
 
-      // @if TARGET='web'
       const authTokenToReturn = authToken || getAuthToken();
 
       if (authTokenToReturn !== null) {
@@ -143,7 +142,6 @@ Lbryio.setOverride(
       }
 
       resolve(authTokenToReturn);
-      // @endif
     })
 );
 
@@ -245,7 +243,7 @@ function AppWrapper() {
       console.error(error.message); // eslint-disable-line no-console
     });
 
-    if (['win32', 'darwin'].includes(process.platform)) {
+    if (['win32', 'darwin'].includes(process.platform) || !!process.env.APPIMAGE) {
       autoUpdater.on('update-available', () => {
         console.log('Update available'); // eslint-disable-line no-console
       });

@@ -33,6 +33,12 @@ class ModalDownloading extends React.PureComponent<Props> {
             </p>
             <blockquote>sudo dpkg -i {downloadItem}</blockquote>
             <p>{__('After the install is complete, please reopen the app.')}</p>
+            <p>
+              {__('Note: You can also install the AppImage version for streamlined updates.')}{' '}
+              <span style={{ whiteSpace: 'nowrap' }}>
+                <Button button="link" label={__('Download here.')} href="https://lbry.com/get/lbry.AppImage" />
+              </span>
+            </p>
           </React.Fragment>
         ) : null}
 

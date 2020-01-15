@@ -103,7 +103,7 @@ class SettingsPage extends React.PureComponent<Props, State> {
 
   componentDidMount() {
     const { isAuthenticated } = this.props;
-    if (isAuthenticated) {
+    if (isAuthenticated || !IS_WEB) {
       this.props.updateWalletStatus();
       getKeychainPassword().then(p => {
         if (typeof p === 'string') {
@@ -416,7 +416,7 @@ class SettingsPage extends React.PureComponent<Props, State> {
               }
             />
 
-            {isAuthenticated && (
+            {(isAuthenticated || !IS_WEB) && (
               <Card
                 title={__('Blocked Channels')}
                 actions={

@@ -111,6 +111,9 @@ class HelpPage extends React.PureComponent<Props, State> {
 
         platform = `${osName} ${ver.os_release}`;
         newVerLink = 'https://lbry.com/get/lbry.dmg';
+      } else if (process.env.APPIMAGE !== undefined) {
+        platform = `Linux (AppImage)`;
+        newVerLink = 'https://lbry.com/get/lbry.AppImage';
       } else if (ver.os_system === 'Linux') {
         platform = `Linux (${ver.platform})`;
         newVerLink = 'https://lbry.com/get/lbry.deb';
