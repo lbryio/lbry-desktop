@@ -1026,10 +1026,10 @@
     prop-types "^15.6.2"
     scheduler "^0.15.0"
 
-"@lbry/components@^3.0.6":
-  version "3.0.6"
-  resolved "https://registry.yarnpkg.com/@lbry/components/-/components-3.0.6.tgz#e8040cd3025562eefaf80bb19a41a89637bb25cb"
-  integrity sha512-SJc0nJogFpIAIv+L75Rfw0BeQRBfDNqpH04ZbJUqQlFwk2yE73KdC1LSYoj8+S4j+quO8ELBqOm9OWqylL4sEg==
+"@lbry/components@^3.0.7":
+  version "3.0.7"
+  resolved "https://registry.yarnpkg.com/@lbry/components/-/components-3.0.7.tgz#97bcc5a5c89dce92e88ad0e5575b18833151ec85"
+  integrity sha512-M0uRCQQP9cBYhtln5p2qmVsL/4pBo1bVUACyWrbx+W74h729rLVPvY712nE6P+WW/H2C/Co5KH6za09z+ykhWQ==
 
 "@mapbox/hast-util-table-cell-style@^0.1.3":
   version "0.1.3"
@@ -7071,9 +7071,9 @@ lbry-redux@lbryio/lbry-redux#a2be979986dc93be4c2c596846109f5394f64fa1:
     reselect "^3.0.0"
     uuid "^3.3.2"
 
-lbryinc@lbryio/lbryinc#e7e800b2d2d27ff7fed6d66cba40dd0149fee50c:
+lbryinc@lbryio/lbryinc#1912aa1834f83a5a43e028327d35bd64cfba528e:
   version "0.0.1"
-  resolved "https://codeload.github.com/lbryio/lbryinc/tar.gz/e7e800b2d2d27ff7fed6d66cba40dd0149fee50c"
+  resolved "https://codeload.github.com/lbryio/lbryinc/tar.gz/1912aa1834f83a5a43e028327d35bd64cfba528e"
   dependencies:
     reselect "^3.0.0"
 
