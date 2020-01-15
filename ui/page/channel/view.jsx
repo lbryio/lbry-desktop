@@ -29,6 +29,8 @@ const PAGE_VIEW_QUERY = `view`;
 const ABOUT_PAGE = `about`;
 const DISCUSSION_PAGE = `discussion`;
 const LIGHTHOUSE_URL = 'https://lighthouse.lbry.com/search';
+const ARROW_LEFT_KEYCODE = 37;
+const ARROW_RIGHT_KEYCODE = 39;
 
 type Props = {
   uri: string,
@@ -146,6 +148,17 @@ function ChannelPage(props: Props) {
     setSearchQuery(value);
   }
 
+  /*
+    Since the search is inside of TabList, the left and right arrow keys change the tabIndex.
+    This results in the user not being able to navigate the search string by using arrow keys.
+    This function allows the event to change cursor position and then stops propagation to prevent tab changing.
+  */
+  function handleSearchArrowKeys(e) {
+    if (e.keyCode === ARROW_LEFT_KEYCODE || e.keyCode === ARROW_RIGHT_KEYCODE) {
+      e.stopPropagation();
+    }
+  }
+
   let channelIsBlackListed = false;
 
   if (claim && blackListedOutpoints) {
@@ -235,6 +248,7 @@ function ChannelPage(props: Props) {
                 className="wunderbar__input"
                 value={searchQuery}
                 onChange={handleInputChange}
+                onKeyDown={handleSearchArrowKeys}
                 type="text"
                 placeholder={__('Search')}
               />
