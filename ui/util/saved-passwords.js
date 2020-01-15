@@ -3,6 +3,7 @@ import { ipcRenderer } from 'electron';
 import { DOMAIN } from 'config';
 
 const isProduction = process.env.NODE_ENV === 'production';
+const maxExpiration = 2147483647;
 let sessionPassword;
 
 function setCookie(name: string, value: string, days: number) {
@@ -10,7 +11,8 @@ function setCookie(name: string, value: string, days: number) {
   if (days) {
     let date = new Date();
     date.setTime(date.getTime() + days * 24 * 60 * 60 * 1000);
-    expires = `expires=${date.toUTCString()};`;
+    // If on PC, set to not expire (max)
+    expires = `expires=${IS_WEB ? date.toUTCString() : maxExpiration};`;
   }
 
   let cookie = `${name}=${value || ''}; ${expires} path=/; SameSite=Lax;`;
@@ -49,23 +51,12 @@ function deleteCookie(name: string) {
 
 export const setSavedPassword = (value?: string, saveToDisk: boolean) => {
   return new Promise<*>(resolve => {
-    // @if TARGET='app'
-    ipcRenderer.once('set-password-response', (event, success) => {
-      resolve(success);
-    });
-    // @endif
-
     const password = value === undefined || value === null ? '' : value;
     sessionPassword = password;
 
     if (saveToDisk) {
       if (password) {
-        // @if TARGET='app'
-        ipcRenderer.send('set-password', password);
-        // @endif
-        // @if TARGET='web'
         setCookie('saved-password', password, 14);
-        // @endif
       } else {
         deleteSavedPassword();
       }
@@ -85,32 +76,28 @@ export const getSavedPassword = () => {
 
 export const getKeychainPassword = () => {
   return new Promise<*>(resolve => {
-    // @if TARGET='app'
-    ipcRenderer.once('get-password-response', (event, password) => {
-      resolve(password);
-    });
-    ipcRenderer.send('get-password');
-    // @endif
-
-    // @if TARGET='web'
     const password = getCookie('saved-password');
-    resolve(password);
+    if (password) {
+      resolve(password);
+    }
+    // We can remove this when we remove keytar
+    else {
+      ipcRenderer.once('get-password-response', (event, password) => {
+        resolve(password);
+      });
+      ipcRenderer.send('get-password');
+    }
+
+    // @if TARGET='app'
+
     // @endif
   });
 };
 
 export const deleteSavedPassword = () => {
   return new Promise<*>(resolve => {
-    // @if TARGET='app'
-    ipcRenderer.once('delete-password-response', (event, success) => {
-      resolve();
-    });
-    ipcRenderer.send('delete-password');
-    // @endif;
-    // @if TARGET='web'
     deleteCookie('saved-password');
     resolve();
-    // @endif
   });
 };
 
@@ -125,17 +112,7 @@ export const setAuthToken = (value: string) => {
 export const deleteAuthToken = () => {
   return new Promise<*>(resolve => {
     deleteCookie('auth_token');
-
-    // @if TARGET='app'
-    ipcRenderer.once('delete-auth-token-response', (event, success) => {
-      resolve();
-    });
-    ipcRenderer.send('delete-auth-token');
-    // @endif;
-
-    // @if TARGET='web'
     resolve();
-    // @endif
   });
 };
 
@@ -143,17 +120,7 @@ export const doSignOutCleanup = () => {
   return new Promise<*>(resolve => {
     deleteCookie('auth_token');
     deleteCookie('saved-password');
-
-    // @if TARGET='app'
-    ipcRenderer.once('delete-auth-token-response', (event, success) => {
-      resolve();
-    });
-    ipcRenderer.send('delete-auth-token');
-    // @endif;
-
-    // @if TARGET='web'
     resolve();
-    // @endif
   });
 };
 
