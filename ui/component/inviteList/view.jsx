@@ -25,7 +25,8 @@ class InviteList extends React.PureComponent<Props> {
 
     let rewardAmount = 0;
     let rewardHelp = __(
-      "Woah, you have a lot of friends! You've claimed the maximum amount of referral rewards. Check back soon to see if more are available!."
+      "Woah, you have a lot of friends! You've claimed the maximum amount of invite rewards. Email %email% if you'd like to be whitelisted for more invites.",
+      { email: 'hello@lbry.com' }
     );
 
     if (referralReward) {
