@@ -6,11 +6,11 @@ const isProduction = process.env.NODE_ENV === 'production';
 const maxExpiration = 2147483647;
 let sessionPassword;
 
-function setCookie(name: string, value: string, days: number) {
+function setCookie(name: string, value: string, expirationDaysOnWeb: number) {
   let expires = '';
-  if (days) {
+  if (expirationDaysOnWeb) {
     let date = new Date();
-    date.setTime(date.getTime() + days * 24 * 60 * 60 * 1000);
+    date.setTime(date.getTime() + expirationDaysOnWeb * 24 * 60 * 60 * 1000);
     // If on PC, set to not expire (max)
     expires = `expires=${IS_WEB ? date.toUTCString() : maxExpiration};`;
   }
@@ -76,20 +76,32 @@ export const getSavedPassword = () => {
 
 export const getKeychainPassword = () => {
   return new Promise<*>(resolve => {
-    const password = getCookie('saved-password');
-    if (password) {
-      resolve(password);
-    }
-    // We can remove this when we remove keytar
-    else {
-      ipcRenderer.once('get-password-response', (event, password) => {
-        resolve(password);
-      });
-      ipcRenderer.send('get-password');
-    }
+    let password;
+    // @if TARGET='web'
+    // In the future, this will be the only code in this function
+    // Handling keytar stuff separately so we can easily rip it out later
+    password = getCookie('saved-password');
+    resolve(password);
+    // @endif
 
     // @if TARGET='app'
+    password = getCookie('saved-password');
 
+    if (password) {
+      resolve(password);
+    } else {
+      // No password saved in a cookie, get it from the keychain, then delete the value in the keychain
+      ipcRenderer.once('get-password-response', (event, keychainPassword) => {
+        resolve(keychainPassword);
+
+        if (keychainPassword) {
+          setSavedPassword(keychainPassword, true);
+          ipcRenderer.send('delete-password');
+        }
+      });
+
+      ipcRenderer.send('get-password');
+    }
     // @endif
   });
 };
@@ -121,6 +133,11 @@ export const doSignOutCleanup = () => {
     deleteCookie('auth_token');
     deleteCookie('saved-password');
     resolve();
+
+    // @if TARGET='app'
+    ipcRenderer.send('delete-auth-token');
+    ipcRenderer.send('delete-password');
+    // @endif;
   });
 };
 
