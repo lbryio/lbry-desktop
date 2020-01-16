@@ -13,6 +13,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Hide cursor on fullscreen videos ([#3458](https://github.com/lbryio/lbry-desktop/pull/3458))
 - Force color profile to render correct colors ([#3456](https://github.com/lbryio/lbry-desktop/pull/3456))
 - Video viewer not resizing properly ([#3427](https://github.com/lbryio/lbry-desktop/pull/3427))
+- Don't reset publish language to app language ([#261](https://github.com/lbryio/lbry-redux/pull/261))
+- Same file wasn't able to be reselected on publish after clearing the publish screen ([#3500](https://github.com/lbryio/lbry-desktop/pull/3500))
+- Make sure search results on channel page don't return content from other channels ([#3503](https://github.com/lbryio/lbry-desktop/pull/3503))
 
 ### Added
 
