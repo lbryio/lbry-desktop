@@ -318,14 +318,9 @@ ipcMain.on('version-info-requested', () => {
 
   requestLatestRelease();
 });
+
 // In a few months, we can remove the keytar dependency and below calls once
 // enough users have moved over to cookies
-ipcMain.on('get-auth-token', event => {
-  keytar.getPassword('LBRY', 'auth_token').then(token => {
-    event.sender.send('auth-token-response', token ? token.toString().trim() : null);
-  });
-});
-
 ipcMain.on('delete-auth-token', (event, password) => {
   keytar.deletePassword('LBRY', 'auth_token', password).then(res => {
     event.sender.send('delete-auth-token-response', res);
@@ -336,14 +331,6 @@ ipcMain.on('get-password', event => {
   keytar.getPassword('LBRY', 'wallet_password').then(password => {
     event.sender.send('get-password-response', password ? password.toString() : null);
   });
-});
-
-ipcMain.on('set-password', (event, password) => {
-  if (password || password === '') {
-    keytar.setPassword('LBRY', 'wallet_password', password).then(res => {
-      event.sender.send('set-password-response', res);
-    });
-  }
 });
 
 ipcMain.on('delete-password', event => {

@@ -108,7 +108,6 @@ Lbryio.setOverride(
 
         authToken = response.auth_token;
         setAuthToken(authToken);
-
         resolve(authToken);
       });
     })
@@ -118,23 +117,6 @@ Lbryio.setOverride(
   'getAuthToken',
   () =>
     new Promise(resolve => {
-      // @if TARGET='app'
-      // NEED TO DO SOMETHING HERE TO CHECK FOR A COOKIE AUTH TOKEN.
-      // IF IT EXISTS, SKIP AND CONTINUE BELOW THE @ENDIF
-      // IF NOT, COPY THE KEYTAR AUTH TOKEN AND PASSWORD TO THE COOKIE (SetAuthToken/SetPassword?)
-      // AND THEN DELETE KEYTAR ONE (Or leave for now?)
-      if (authToken) {
-        resolve(authToken);
-      }
-
-      ipcRenderer.once('auth-token-response', (event, token) => {
-        Lbryio.authToken = token;
-        resolve(token);
-      });
-
-      ipcRenderer.send('get-auth-token');
-      // @endif
-
       const authTokenToReturn = authToken || getAuthToken();
 
       if (authTokenToReturn !== null) {
