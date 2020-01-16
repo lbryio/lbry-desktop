@@ -21,6 +21,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ### Changed
 
+- Updated lbry-sdk to [0.53.2](https://github.com/lbryio/lbry-sdk/releases/tag/v0.53.2)
 - Navigation redesign ([#3432](https://github.com/lbryio/lbry-desktop/pull/3432))
 
 ## [0.38.2] - [2019-12-21]
