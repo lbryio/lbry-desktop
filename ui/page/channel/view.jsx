@@ -1,5 +1,5 @@
 // @flow
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { parseURI } from 'lbry-redux';
 import Page from 'component/page';
 import SubscribeButton from 'component/subscribeButton';
@@ -22,7 +22,6 @@ import { Form, FormField } from 'component/common/form';
 import ClaimPreview from 'component/claimPreview';
 import Icon from 'component/common/icon';
 import HelpLink from 'component/common/help-link';
-import debounce from 'util/debounce';
 import { DEBOUNCE_WAIT_DURATION_MS } from 'constants/search';
 
 const PAGE_VIEW_QUERY = `view`;
@@ -85,8 +84,6 @@ function ChannelPage(props: Props) {
   const [coverPreview, setCoverPreview] = useState(cover);
   const [searchQuery, setSearchQuery] = useState('');
   const [searchResults, setSearchResults] = useState(undefined);
-  // passing callback to useState ensures it's only set on initial render. Without this, the debouncing wont work.
-  const [performSearch] = useState(() => debounce(updateResults, DEBOUNCE_WAIT_DURATION_MS));
   const claimId = claim.claim_id;
 
   // If a user changes tabs, update the url so it stays on the same page if they refresh.
@@ -109,22 +106,6 @@ function ChannelPage(props: Props) {
     history.push(`${url}${search}`);
   }
 
-  function handleSearch() {
-    performSearch(searchQuery);
-  }
-
-  function updateResults(query) {
-    // In order to display original search results, search results must be set to null. A query of '' should display original results.
-    if (query === '') return setSearchResults(null);
-
-    const url = generateFetchUrl(query);
-    getResults(url);
-  }
-
-  function generateFetchUrl(query) {
-    return `${LIGHTHOUSE_URL}?s=${encodeURIComponent(query)}&channel_id=${encodeURIComponent(claim.claim_id)}`;
-  }
-
   function getResults(fetchUrl) {
     fetch(fetchUrl)
       .then(res => res.json())
@@ -139,9 +120,17 @@ function ChannelPage(props: Props) {
       });
   }
 
-  React.useEffect(() => {
-    handleSearch();
-  }, [searchQuery]);
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      if (searchQuery === '') {
+        // In order to display original search results, search results must be set to null. A query of '' should display original results.
+        return setSearchResults(null);
+      } else {
+        getResults(`${LIGHTHOUSE_URL}?s=${encodeURIComponent(searchQuery)}&channel_id=${encodeURIComponent(claimId)}`);
+      }
+    }, DEBOUNCE_WAIT_DURATION_MS);
+    return () => clearTimeout(timer);
+  }, [claimId, searchQuery]);
 
   function handleInputChange(e) {
     const { value } = e.target;
@@ -242,7 +231,7 @@ function ChannelPage(props: Props) {
           <Tab disabled={editing}>{__('Comments')}</Tab>
           {/* only render searchbar on content page (tab index 0 === content page) */}
           {tabIndex === 0 ? (
-            <Form onSubmit={handleSearch} className="wunderbar--inline">
+            <Form onSubmit={() => {}} className="wunderbar--inline">
               <Icon icon={ICONS.SEARCH} />
               <FormField
                 className="wunderbar__input"
