@@ -27,6 +27,7 @@ const RewardTile = (props: Props) => {
   const { reward, openRewardCodeModal, openSetReferrerModal, user } = props;
   const referrerSet = user && user.invited_by_id;
   const claimed = !!reward.transaction_id;
+  const customActionsRewards = [rewards.TYPE_REFERRAL, rewards.TYPE_REFEREE];
 
   return (
     <Card
@@ -41,13 +42,16 @@ const RewardTile = (props: Props) => {
             <Button button="primary" navigate="/$/invite" label={__('Go to Invites')} />
           )}
           {reward.reward_type === rewards.TYPE_REFEREE && (
-            <Button
-              button="primary"
-              onClick={openSetReferrerModal}
-              label={referrerSet ? __('Change Invitee') : __('Set Invitee')}
-            />
+            <>
+              {referrerSet && <RewardLink button reward_type={reward.reward_type} />}
+              <Button
+                button={referrerSet ? 'link' : 'primary'}
+                onClick={openSetReferrerModal}
+                label={referrerSet ? __('Change Inviter') : __('Set Inviter')}
+              />
+            </>
           )}
-          {reward.reward_type !== rewards.TYPE_REFERRAL &&
+          {!customActionsRewards.some(i => i === reward.reward_type) &&
             (claimed ? (
               <span>
                 <Icon icon={ICONS.COMPLETED} /> {__('Reward claimed.')}
