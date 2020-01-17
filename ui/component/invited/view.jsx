@@ -37,7 +37,7 @@ function Invited(props: Props) {
   } = props;
 
   const refUri = referrer && 'lbry://' + referrer.replace(':', '#');
-  const referrerIsChannel = parseURI(refUri).isChannel;
+  const { isChannel: referrerIsChannel, claimName: referrerChannelName } = parseURI(refUri);
   const rewardsApproved = user && user.is_reward_approved;
   const hasVerifiedEmail = user && user.has_verified_email;
   const referredRewardAvailable = rewards && rewards.some(reward => reward.reward_type === REWARDS.TYPE_REFEREE);
@@ -125,7 +125,7 @@ function Invited(props: Props) {
           referrerIsChannel
             ? __(
                 `Content freedom and and a present from %channel_name% are waiting for you. Create an account to claim it.`,
-                { channel_name: referrer }
+                { channel_name: referrerChannelName }
               )
             : __(`Content freedom and a present are waiting for you. Create an account to claim it.`)
         }
