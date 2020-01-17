@@ -13,6 +13,7 @@ type Props = {
   setReferrer: (string, boolean) => void,
   referrerSetPending: boolean,
   referrerSetError?: string,
+  resetReferrerError: () => void,
 };
 
 type State = {
@@ -28,6 +29,7 @@ class ModalSetReferrer extends React.PureComponent<Props, State> {
     };
 
     (this: any).handleSubmit = this.handleSubmit.bind(this);
+    (this: any).handleTextChange = this.handleTextChange.bind(this);
   }
 
   handleSubmit() {
@@ -36,14 +38,23 @@ class ModalSetReferrer extends React.PureComponent<Props, State> {
     setReferrer(referrer, true);
   }
 
+  handleTextChange(e: SyntheticInputEvent<*>) {
+    const { referrerSetError, resetReferrerError } = this.props;
+
+    this.setState({ referrer: e.target.value });
+    if (referrerSetError) {
+      resetReferrerError();
+    }
+  }
+
   render() {
-    const { closeModal, rewardIsPending } = this.props;
+    const { closeModal, rewardIsPending, referrerSetError, referrerSetPending } = this.props;
     const { referrer } = this.state;
 
     return (
-      <Modal isOpen contentLabel={__('Enter Invitee')} type="card" onAborted={closeModal}>
+      <Modal isOpen contentLabel={__('Enter Inviter')} type="card" onAborted={closeModal}>
         <Card
-          title={__('Enter Invitee')}
+          title={__('Enter Inviter')}
           subtitle={
             <React.Fragment>
               {__('Did someone invite you to use lbry.tv? Tell us who and you both get a reward!')}
@@ -63,7 +74,8 @@ class ModalSetReferrer extends React.PureComponent<Props, State> {
                   label={__('Code or channel')}
                   placeholder="0123abc"
                   value={referrer}
-                  onChange={e => this.setState({ referrer: e.target.value })}
+                  onChange={this.handleTextChange}
+                  error={!referrerSetPending && referrerSetError}
                 />
               </Form>
               <div className="card__actions">
