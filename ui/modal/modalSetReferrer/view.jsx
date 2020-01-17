@@ -29,6 +29,7 @@ class ModalSetReferrer extends React.PureComponent<Props, State> {
     };
 
     (this: any).handleSubmit = this.handleSubmit.bind(this);
+    (this: any).handleClose = this.handleClose.bind(this);
     (this: any).handleTextChange = this.handleTextChange.bind(this);
   }
 
@@ -36,6 +37,14 @@ class ModalSetReferrer extends React.PureComponent<Props, State> {
     const { referrer } = this.state;
     const { setReferrer } = this.props;
     setReferrer(referrer, true);
+  }
+
+  handleClose() {
+    const { referrerSetError, resetReferrerError, closeModal } = this.props;
+    if (referrerSetError) {
+      resetReferrerError();
+    }
+    closeModal();
   }
 
   handleTextChange(e: SyntheticInputEvent<*>) {
@@ -79,8 +88,7 @@ class ModalSetReferrer extends React.PureComponent<Props, State> {
                 />
               </Form>
               <div className="card__actions">
-                <Button button="primary" label={__('Done')} onClick={closeModal} />
-                <Button button="link" label={__('Close')} onClick={closeModal} />
+                <Button button="primary" label={__('Done')} onClick={this.handleClose} />
               </div>
             </React.Fragment>
           }
