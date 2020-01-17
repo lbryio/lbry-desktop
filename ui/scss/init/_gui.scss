@@ -147,6 +147,7 @@ a {
     & > * {
       margin: 0;
       width: 100%;
+      flex-basis: auto;
 
       &:first-child {
         margin-right: 0;
