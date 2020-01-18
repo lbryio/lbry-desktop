@@ -132,7 +132,7 @@ export const makeSelectIsText = (uri: string) =>
   createSelector(
     makeSelectMediaTypeForUri(uri),
     mediaType => {
-      const isText = ['text', 'document'].includes(mediaType);
+      const isText = ['document', 'script'].includes(mediaType);
       return isText;
     }
   );
