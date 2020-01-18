@@ -102,7 +102,10 @@
 }
 
 .main__document-wrapper {
-  width: 40em;
+  max-width: 100%;
+  min-width: 80%;
+  /* margin: auto needs a set width */
+  width: 0;
   margin: auto;
   margin-bottom: var(--spacing-xlarge);
 
