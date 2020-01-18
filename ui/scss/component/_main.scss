@@ -104,8 +104,7 @@
 .main__document-wrapper {
   max-width: 100%;
   min-width: 80%;
-  /* margin: auto needs a set width */
-  width: 0;
+  width: fit-content;
   margin: auto;
   margin-bottom: var(--spacing-xlarge);
 
