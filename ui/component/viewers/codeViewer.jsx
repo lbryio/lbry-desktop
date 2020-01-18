@@ -31,6 +31,14 @@ class CodeViewer extends React.PureComponent<Props> {
     this.codeMirror = null;
   }
 
+  componentDidUpdate(prevProps: Props): * {
+    if (prevProps.theme === this.props.theme) return;
+
+    // This code is duplicated with componentDidMount
+    const theme = this.props.theme === 'dark' ? 'monokai' : 'default';
+    this.codeMirror.setOption('theme', theme);
+  }
+
   componentDidMount() {
     const me = this;
     const { theme, contentType } = me.props;
