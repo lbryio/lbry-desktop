@@ -35,13 +35,14 @@ class CodeViewer extends React.PureComponent<Props> {
     if (prevProps.theme === this.props.theme) return;
 
     // This code is duplicated with componentDidMount
-    const theme = this.props.theme === 'dark' ? 'monokai' : 'default';
+    const theme = this.props.theme === 'dark' ? 'monokai' : 'ttcn';
     this.codeMirror.setOption('theme', theme);
   }
 
   componentDidMount() {
     const me = this;
     const { theme, contentType } = me.props;
+    alert(theme);
     // Init CodeMirror
     import(
       /* webpackChunkName: "codemirror" */
@@ -51,7 +52,7 @@ class CodeViewer extends React.PureComponent<Props> {
         // Auto detect syntax with file contentType
         mode: contentType,
         // Adaptive theme
-        theme: theme === 'dark' ? 'monokai' : 'default',
+        theme: theme === 'dark' ? 'monokai' : 'ttcn',
         // Hide the cursor
         readOnly: true,
         // Styled text selection
