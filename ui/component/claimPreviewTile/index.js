@@ -7,6 +7,7 @@ import {
   makeSelectTitleForUri,
   doFileGet,
   makeSelectChannelForClaimUri,
+  selectBlockedChannels,
 } from 'lbry-redux';
 import { selectBlackListedOutpoints, selectFilteredOutpoints } from 'lbryinc';
 import ClaimPreviewTile from './view';
@@ -19,6 +20,7 @@ const select = (state, props) => ({
   title: props.uri && makeSelectTitleForUri(props.uri)(state),
   blackListedOutpoints: selectBlackListedOutpoints(state),
   filteredOutpoints: selectFilteredOutpoints(state),
+  blockedChannelUris: selectBlockedChannels(state),
 });
 
 const perform = dispatch => ({

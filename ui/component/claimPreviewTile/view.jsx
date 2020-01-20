@@ -49,6 +49,7 @@ function ClaimPreviewTile(props: Props) {
     filteredOutpoints,
     getFile,
     streamingUrl,
+    blockedChannelUris,
   } = props;
   const shouldFetch = claim === undefined;
   const thumbnailUrl = useGetThumbnail(uri, claim, streamingUrl, getFile, placeholder) || thumbnail;
@@ -107,6 +108,16 @@ function ClaimPreviewTile(props: Props) {
     );
   }
 
+  // block stream claims
+  if (claim && !shouldHide && blockedChannelUris.length && signingChannel) {
+    shouldHide = blockedChannelUris.some(blockedUri => blockedUri === signingChannel.permanent_url);
+  }
+  // block channel claims if we can't control for them in claim search
+  // e.g. fetchRecommendedSubscriptions
+  if (claim && isChannel && !shouldHide && blockedChannelUris.length) {
+    shouldHide = blockedChannelUris.some(blockedUri => blockedUri === claim.permanent_url);
+  }
+
   if (shouldHide) {
     return null;
   }
@@ -136,7 +147,7 @@ function ClaimPreviewTile(props: Props) {
       </NavLink>
       <NavLink to={navigateUrl}>
         <h2 className="claim-tile__title">
-          <TruncatedText text={title} lines={2} />
+          <TruncatedText text={title || (claim && claim.name)} lines={2} />
         </h2>
       </NavLink>
       <div className="claim-tile__info">
