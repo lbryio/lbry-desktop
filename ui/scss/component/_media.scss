@@ -107,6 +107,7 @@
   @extend .section__actions;
   display: flex;
   justify-content: space-between;
+  align-items: flex-start;
   margin-top: 0;
 }
 

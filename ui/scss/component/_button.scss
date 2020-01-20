@@ -5,6 +5,7 @@
 
 .button--uri-indicator {
   @extend .button--link;
+  color: var(--color-text-subtitle);
   max-width: 100%;
   height: 1.2em;
   vertical-align: text-top;

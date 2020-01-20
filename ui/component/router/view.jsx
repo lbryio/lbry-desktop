@@ -8,8 +8,8 @@ import ReportPage from 'page/report';
 import ShowPage from 'page/show';
 import PublishPage from 'page/publish';
 import DiscoverPage from 'page/discover';
+import HomePage from 'page/home';
 import InvitedPage from 'page/invited';
-// import HomePage from 'page/home';
 import RewardsPage from 'page/rewards';
 import FileListDownloaded from 'page/fileListDownloaded';
 import FileListPublished from 'page/fileListPublished';
@@ -75,7 +75,7 @@ function AppRouter(props: Props) {
 
   return (
     <Switch>
-      <Route path={`/`} exact component={() => <Redirect to={`/$/${PAGES.CHANNELS_FOLLOWING}`} />} />
+      <Route path={`/`} exact component={HomePage} />
       <Route path={`/$/${PAGES.DISCOVER}`} exact component={DiscoverPage} />
       <Route path={`/$/${PAGES.AUTH}`} exact component={SignInPage} />
       <Route path={`/$/${PAGES.TAGS}`} exact component={TagsPage} />
