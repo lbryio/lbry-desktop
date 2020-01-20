@@ -97,6 +97,9 @@ function SideNavigation(props: Props) {
         <ul className="navigation-links">
           {[
             {
+              ...buildLink(null, __('Home'), ICONS.HOME),
+            },
+            {
               ...buildLink(PAGES.CHANNELS_FOLLOWING, __('Following'), ICONS.SUBSCRIBE),
             },
             {

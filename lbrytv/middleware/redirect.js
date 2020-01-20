@@ -40,11 +40,6 @@ async function redirectMiddleware(ctx, next) {
     return;
   }
 
-  if (path === '/') {
-    ctx.redirect(`/$/${PAGES.CHANNELS_FOLLOWING}`);
-    return;
-  }
-
   // No redirects needed
   await next();
 }

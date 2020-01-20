@@ -7,7 +7,7 @@ import DiscoverPage from './view';
 const select = state => ({
   followedTags: selectFollowedTags(state),
   subscribedChannels: selectSubscriptions(state),
-  email: selectUserVerifiedEmail(state),
+  authenticated: selectUserVerifiedEmail(state),
 });
 
 const perform = {};
