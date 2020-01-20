@@ -28,7 +28,7 @@ class TransactionListItem extends React.PureComponent<Props> {
     if (type === TXN_TYPES.TIP) {
       return <Button button="secondary" icon={ICONS.UNLOCK} onClick={this.abandonClaim} title={__('Unlock Tip')} />;
     }
-    return <Button button="secondary" icon={ICONS.DELETE} onClick={this.abandonClaim} title={__('Abandon Claim')} />;
+    return <Button button="secondary" icon={ICONS.DELETE} onClick={this.abandonClaim} title={__('Abandon Support')} />;
   }
 
   abandonClaim() {
