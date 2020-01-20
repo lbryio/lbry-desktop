@@ -323,6 +323,7 @@
   font-weight: 600;
   font-size: var(--font-small);
   color: var(--color-text);
+  min-height: 2.5rem;
 
   @media (max-width: $breakpoint-small) {
     font-size: var(--font-xsmall);
@@ -351,5 +352,10 @@
 
 .claim-tile__about--channel {
   @extend .claim-tile__about;
+  flex: 1;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  height: 2.1rem;
   font-size: var(--font-body);
 }
