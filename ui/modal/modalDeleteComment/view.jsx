@@ -17,6 +17,7 @@ class ModalDeleteComment extends React.PureComponent<Props> {
       deleteComment();
     };
 
+    // todo: fix issue where modal uses more width than needed for the child card's width
     return (
       <Modal
         isOpen

@@ -26,8 +26,8 @@ type Props = {
   claimIsMine: boolean, // if you control the claim which this comment was posted on
   commentIsMine: boolean, // if this comment was signed by an owned channel
   updateComment: (string, string) => void,
-  hideComment: (string) => void,
-  deleteComment: (string) => void,
+  hideComment: string => void,
+  deleteComment: string => void,
   openModal: (id: string, { deleteComment: () => void }) => void,
 };
 
@@ -60,7 +60,8 @@ function Comment(props: Props) {
 
   // to debounce subsequent requests
   const shouldFetch =
-    channel === undefined || (channel !== null && channel.value_type === 'channel' && isEmpty(channel.meta) && !pending);
+    channel === undefined ||
+    (channel !== null && channel.value_type === 'channel' && isEmpty(channel.meta) && !pending);
 
   useEffect(() => {
     // If author was extracted from the URI, then it must be valid.
@@ -90,7 +91,11 @@ function Comment(props: Props) {
   }
 
   function handleDeleteComment() {
-    openModal(MODALS.DELETE_COMMENT, { deleteComment: () => deleteComment(commentId) });
+    openModal(MODALS.DELETE_COMMENT, {
+      deleteComment: () => {
+        deleteComment(commentId);
+      },
+    });
   }
 
   return (
@@ -124,17 +129,15 @@ function Comment(props: Props) {
                 {commentIsMine && (
                   <MenuItem className="comment__menu-option" onSelect={handleSetEditing}>
                     {__('Edit')}
-                  </MenuItem>)
-                }
+                  </MenuItem>
+                )}
                 {commentIsMine && (
-                  <MenuItem className="comment__menu-option" onSelect={handleDeleteComment}>{__('Delete')}</MenuItem>
+                  <MenuItem className="comment__menu-option" onSelect={handleDeleteComment}>
+                    {__('Delete')}
+                  </MenuItem>
                 )}
-                {!commentIsMine && (
-                  <MenuItem className="comment__menu-option">{__('Report')}</MenuItem>
-                )}
-                {claimIsMine && (
-                  <MenuItem className="comment__menu-option">{__('Hide')}</MenuItem>
-                )}
+                {!commentIsMine && <MenuItem className="comment__menu-option">{__('Report')}</MenuItem>}
+                {claimIsMine && <MenuItem className="comment__menu-option">{__('Hide')}</MenuItem>}
               </MenuList>
             </Menu>
           </div>
@@ -155,22 +158,20 @@ function Comment(props: Props) {
                 label={__('Done')}
                 requiresAuth={IS_WEB}
                 disabled={currentMessage === editedMessage}
-                />
+              />
             </Form>
-          ) : (
-            editedMessage.length >= LENGTH_TO_COLLAPSE ? (
-              <div className="comment__message">
-                <Expandable>
-                  <MarkdownPreview content={currentMessage} />
-                </Expandable>
-              </div>
-            ) : (
-              <div className="comment__message">
+          ) : editedMessage.length >= LENGTH_TO_COLLAPSE ? (
+            <div className="comment__message">
+              <Expandable>
                 <MarkdownPreview content={currentMessage} />
-              </div>
-            )
-
-            )}</div>
+              </Expandable>
+            </div>
+          ) : (
+            <div className="comment__message">
+              <MarkdownPreview content={currentMessage} />
+            </div>
+          )}
+        </div>
       </div>
     </li>
   );
