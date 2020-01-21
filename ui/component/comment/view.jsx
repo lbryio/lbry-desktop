@@ -9,6 +9,7 @@ import ChannelThumbnail from 'component/channelThumbnail';
 import { Menu, MenuList, MenuButton, MenuItem } from '@reach/menu-button';
 import Icon from 'component/common/icon';
 import * as ICONS from 'constants/icons';
+import * as MODALS from 'constants/modal_types';
 import { FormField, Form } from 'component/common/form';
 
 type Props = {
@@ -26,12 +27,14 @@ type Props = {
   commentIsMine: boolean, // if this comment was signed by an owned channel
   updateComment: (string, string) => void,
   hideComment: (string) => void,
-  abandonComment: (string) => void,
+  deleteComment: (string) => void,
+  openModal: (id: string, { deleteComment: () => void }) => void,
 };
 
 const LENGTH_TO_COLLAPSE = 300;
 const ESCAPE_KEY = 27;
 
+// todo: move all the editing comment stuff out
 function Comment(props: Props) {
   const {
     author,
@@ -47,6 +50,8 @@ function Comment(props: Props) {
     commentIsMine,
     commentId,
     updateComment,
+    openModal,
+    deleteComment,
   } = props;
 
   const [isEditing, setEditing] = useState(false);
@@ -85,6 +90,10 @@ function Comment(props: Props) {
     setEditing(false);
   }
 
+  function handleDeleteComment() {
+    openModal(MODALS.DELETE_COMMENT, { deleteComment: () => deleteComment(commentId) });
+  }
+
   return (
     <li className="comment" onMouseOver={handleMouseOver} onMouseOut={handleMouseOut}>
       <div className="comment__author-thumbnail">
@@ -119,7 +128,7 @@ function Comment(props: Props) {
                   </MenuItem>)
                 }
                 {commentIsMine && (
-                  <MenuItem className="comment__menu-option">{__('Delete')}</MenuItem>
+                  <MenuItem className="comment__menu-option" onSelect={handleDeleteComment}>{__('Delete')}</MenuItem>
                 )}
                 {!commentIsMine && (
                   <MenuItem className="comment__menu-option">{__('Report')}</MenuItem>
@@ -153,12 +162,12 @@ function Comment(props: Props) {
             editedMessage.length >= LENGTH_TO_COLLAPSE ? (
               <div className="comment__message">
                 <Expandable>
-                  <MarkdownPreview content={currentMessage}/>
+                  <MarkdownPreview content={currentMessage} />
                 </Expandable>
               </div>
             ) : (
               <div className="comment__message">
-                <MarkdownPreview content={currentMessage}/>
+                <MarkdownPreview content={currentMessage} />
               </div>
             )
 
