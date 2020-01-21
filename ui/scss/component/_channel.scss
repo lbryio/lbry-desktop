@@ -154,3 +154,7 @@ $metadata-z-index: 1;
   z-index: $metadata-z-index;
   flex-wrap: wrap;
 }
+
+.channel-name--inline {
+  margin-left: var(--spacing-xsmall);
+}
