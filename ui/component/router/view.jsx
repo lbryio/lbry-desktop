@@ -83,7 +83,7 @@ function AppRouter(props: Props) {
       <Route
         path={`/$/${PAGES.CHANNELS_FOLLOWING}`}
         exact
-        component={isAuthenticated ? ChannelsFollowingPage : DiscoverPage}
+        component={isAuthenticated || !IS_WEB ? ChannelsFollowingPage : DiscoverPage}
       />
       <Route path={`/$/${PAGES.CHANNELS_FOLLOWING_MANAGE}`} exact component={ChannelsFollowingManagePage} />
       <Route path={`/$/${PAGES.HELP}`} exact component={HelpPage} />
