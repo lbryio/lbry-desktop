@@ -19,6 +19,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ### Added
 
+- Adds the ability for users to update & delete comments ([#3453](https://github.com/lbryio/lbry-desktop/pull/3453))
 - New homepage design ([#3508](https://github.com/lbryio/lbry-desktop/pull/3508))
 - Better layout for viewing text files ([#3446](https://github.com/lbryio/lbry-desktop/pull/3446))
 - Show file as the thumbnail for free image claims ([#3317](https://github.com/lbryio/lbry-desktop/pull/3317))
