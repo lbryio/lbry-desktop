@@ -13,6 +13,7 @@ type Props = {
 function CommentList(props: Props) {
   const { fetchComments, uri, comments, claimIsMine, myChannels } = props;
 
+  // todo: implement comment_list --mine in SDK so redux can grab with selectCommentIsMine
   const isMyComment = (channelId: string) => {
     if (myChannels !== null && channelId !== null) {
       for (let i = 0; i < myChannels.length; i++) {
