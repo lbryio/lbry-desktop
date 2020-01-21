@@ -18,17 +18,6 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ### Added
 
-- Analytics event for video buffering for easier debugging ([#3534](https://github.com/lbryio/lbry-desktop/pull/3534))
-
-### Fixed
-
-- Home page tiles not loading in some cases ([#3539](https://github.com/lbryio/lbry-desktop/pull/3539))
-- Spellcheck not working on the advanced publish description ([c6230ba](https://github.com/lbryio/lbry-desktop/commit/c6230ba024a1e1e84ea2be32aff234027cbb02d5))
-
-## [0.39.0] - [2019-1-22]
-
-### Added
-
 - Adds the ability for users to update & delete comments ([#3453](https://github.com/lbryio/lbry-desktop/pull/3453))
 - New homepage design ([#3508](https://github.com/lbryio/lbry-desktop/pull/3508))
 - Revamped invites system ([#3462](https://github.com/lbryio/lbry-desktop/pull/3462))
