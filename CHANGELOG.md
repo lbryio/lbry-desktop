@@ -4,7 +4,39 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
-## [0.38.0] - [Unreleased]
+## [0.39.0] - [Unreleased]
+
+### Fixed
+
+- Don't show edit screen for other channels ([#3470](https://github.com/lbryio/lbry-desktop/pull/3470))
+- Clear publish form when clicking "New Publish" ([#3463](https://github.com/lbryio/lbry-desktop/pull/3463))
+- Hide cursor on fullscreen videos ([#3458](https://github.com/lbryio/lbry-desktop/pull/3458))
+- Force color profile to render correct colors ([#3456](https://github.com/lbryio/lbry-desktop/pull/3456))
+- Video viewer not resizing properly ([#3427](https://github.com/lbryio/lbry-desktop/pull/3427))
+- Don't reset publish language to app language ([#261](https://github.com/lbryio/lbry-redux/pull/261))
+- Same file wasn't able to be reselected on publish after clearing the publish screen ([#3500](https://github.com/lbryio/lbry-desktop/pull/3500))
+- Make sure search results on channel page don't return content from other channels ([#3503](https://github.com/lbryio/lbry-desktop/pull/3503))
+
+### Added
+
+- New homepage design ([#3508](https://github.com/lbryio/lbry-desktop/pull/3508))
+- Better layout for viewing text files ([#3446](https://github.com/lbryio/lbry-desktop/pull/3446))
+- Show file as the thumbnail for free image claims ([#3317](https://github.com/lbryio/lbry-desktop/pull/3317))
+
+### Changed
+
+- Updated lbry-sdk to [0.53.2](https://github.com/lbryio/lbry-sdk/releases/tag/v0.53.2)
+- Navigation redesign ([#3432](https://github.com/lbryio/lbry-desktop/pull/3432))
+
+## [0.38.2] - [2019-12-21]
+
+### Fixed
+
+- Always sync prefernces on startup
+- App no longer crashes on edits in some cases
+- Sign in will no longer get stuck
+
+## [0.38.0] - [2019-12-20]
 
 ### Fixed
 

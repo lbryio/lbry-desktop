@@ -2,6 +2,7 @@
 import * as React from 'react';
 import Button from 'component/button';
 import { Form, FormField, Submit } from 'component/common/form';
+import I18nMessage from 'component/i18nMessage';
 
 type Props = {
   verifyUserPhone: string => void,
@@ -68,9 +69,14 @@ class UserPhoneVerify extends React.PureComponent<Props, State> {
         </Form>
 
         <p className="help">
-          {__('Email')} <Button button="link" href="mailto:help@lbry.com" label="help@lbry.com" /> or join our{' '}
-          <Button button="link" href="https://chat.lbry.com" label="chat" />{' '}
-          {__('if you encounter any trouble with your code.')}
+          <I18nMessage
+            tokens={{
+              help_link: <Button button="link" href="mailto:help@lbry.com" label="help@lbry.com" />,
+              chat_link: <Button button="link" href="https://chat.lbry.com" label="chat" />,
+            }}
+          >
+            Email %help_link% or join our %chat_link% if you encounter any trouble with your code.
+          </I18nMessage>
         </p>
       </React.Fragment>
     );

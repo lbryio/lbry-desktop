@@ -97,6 +97,9 @@ function SideNavigation(props: Props) {
         <ul className="navigation-links">
           {[
             {
+              ...buildLink(null, __('Home'), ICONS.HOME),
+            },
+            {
               ...buildLink(PAGES.CHANNELS_FOLLOWING, __('Following'), ICONS.SUBSCRIBE),
             },
             {
@@ -140,6 +143,9 @@ function SideNavigation(props: Props) {
               },
               {
                 ...buildLink(PAGES.REWARDS, __('Rewards'), ICONS.FEATURED),
+              },
+              {
+                ...buildLink(PAGES.INVITE, __('Invites'), ICONS.INVITE),
               },
               {
                 ...buildLink(PAGES.PUBLISH, __('Publish'), ICONS.PUBLISH),

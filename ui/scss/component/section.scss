@@ -96,7 +96,7 @@
   .section__actions {
     flex-wrap: wrap;
 
-    .button {
+    > * {
       margin-bottom: var(--spacing-small);
     }
   }

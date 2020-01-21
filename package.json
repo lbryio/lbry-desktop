@@ -1,6 +1,6 @@
 {
   "name": "lbry",
-  "version": "0.38.2",
+  "version": "0.39.0-rc.6",
   "description": "A browser for the LBRY network, a digital marketplace controlled by its users.",
   "keywords": [
     "lbry"
@@ -28,6 +28,7 @@
     "dev:web": "cd ./lbrytv && yarn dev",
     "dev:web-server": "cross-env NODE_ENV=development yarn compile:web && concurrently \"cross-env NODE_ENV=development yarn compile:web --watch\" \"cd ./lbrytv && yarn dev:server\"",
     "dev:internal-apis": "LBRY_API_URL='http://localhost:8080' yarn dev:electron",
+    "dev:iatv": "LBRY_API_URL='http://localhost:15400' SDK_API_URL='http://localhost:15100' yarn dev:web",
     "run:web": "cross-env NODE_ENV=production yarn compile:web && node ./dist/web/server.js",
     "pack": "electron-builder --dir",
     "dist": "electron-builder",
@@ -66,7 +67,7 @@
     "@babel/register": "^7.0.0",
     "@exponent/electron-cookies": "^2.0.0",
     "@hot-loader/react-dom": "^16.8",
-    "@lbry/components": "^3.0.5",
+    "@lbry/components": "^3.0.7",
     "@reach/menu-button": "^0.7.0",
     "@reach/rect": "^0.2.1",
     "@reach/tabs": "^0.1.5",
@@ -126,8 +127,8 @@
     "imagesloaded": "^4.1.4",
     "json-loader": "^0.5.4",
     "lbry-format": "https://github.com/lbryio/lbry-format.git",
-    "lbry-redux": "lbryio/lbry-redux#c30a8ec66c0d5692cc93ef8adeb95ba830c857f8",
-    "lbryinc": "lbryio/lbryinc#6042c6f7bbf5fe7c6db2bd169f5b1c4558485c4c",
+    "lbry-redux": "lbryio/lbry-redux#a93b09c6bd13870ceca912157dbe998bc7f48454",
+    "lbryinc": "lbryio/lbryinc#138a053754ec8e3da8e9bf153d32f527c962f25c",
     "lint-staged": "^7.0.2",
     "localforage": "^1.7.1",
     "lodash-es": "^4.17.14",
@@ -157,8 +158,8 @@
     "react-modal": "^3.1.7",
     "react-paginate": "^5.2.1",
     "react-redux": "^6.0.1",
-    "react-router": "^5.0.0",
-    "react-router-dom": "^5.0.0",
+    "react-router": "^5.1.0",
+    "react-router-dom": "^5.1.0",
     "react-simplemde-editor": "^4.0.0",
     "react-spring": "^8.0.20",
     "react-sticky-box": "^0.8.0",
@@ -204,7 +205,7 @@
     "yarn": "^1.3"
   },
   "lbrySettings": {
-    "lbrynetDaemonVersion": "0.53.1",
+    "lbrynetDaemonVersion": "0.53.3",
     "lbrynetDaemonUrlTemplate": "https://github.com/lbryio/lbry/releases/download/vDAEMONVER/lbrynet-OSNAME.zip",
     "lbrynetDaemonDir": "static/daemon",
     "lbrynetDaemonFileName": "lbrynet"

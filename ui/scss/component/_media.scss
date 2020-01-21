@@ -23,8 +23,7 @@
   text-overflow: ellipsis;
   font-weight: var(--font-weight-bold);
   white-space: normal;
-  // font-size: var(--font-title);
-  font-size: 2em;
+  font-size: var(--font-title);
   display: inline;
 }
 
@@ -108,6 +107,7 @@
   @extend .section__actions;
   display: flex;
   justify-content: space-between;
+  align-items: flex-start;
   margin-top: 0;
 }
 

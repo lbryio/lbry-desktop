@@ -29,15 +29,18 @@ export default function useGetThumbnail(
   }, [thumbnailToUse]);
 
   // @if TARGET='app'
-  React.useEffect(() => {
-    if (hasClaim && isImage && isFree) {
-      if (streamingUrl) {
-        setThumbnail(streamingUrl);
-      } else if (!shouldHide) {
-        getFile(uri);
-      }
-    }
-  }, [hasClaim, isFree, isImage, streamingUrl, uri, shouldHide]);
+  //
+  // Temporarily disabled until we can call get with "save_blobs: off"
+  //
+  // React.useEffect(() => {
+  //   if (hasClaim && isImage && isFree) {
+  //     if (streamingUrl) {
+  //       setThumbnail(streamingUrl);
+  //     } else if (!shouldHide) {
+  //       getFile(uri);
+  //     }
+  //   }
+  // }, [hasClaim, isFree, isImage, streamingUrl, uri, shouldHide]);
   // @endif
 
   return thumbnail;

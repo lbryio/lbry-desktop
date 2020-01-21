@@ -54,12 +54,8 @@ const Header = (props: Props) => {
   const isAuthPage = history.location.pathname.includes(PAGES.AUTH);
 
   // Sign out if they click the "x" when they are on the password prompt
-  const authHeaderAction = syncError ? { onClick: signOut } : { navigate: `/$/${PAGES.CHANNELS_FOLLOWING}` };
-  const homeButtonNavigationProps = isVerifyPage
-    ? {}
-    : authHeader
-    ? authHeaderAction
-    : { navigate: `/$/${PAGES.CHANNELS_FOLLOWING}` };
+  const authHeaderAction = syncError ? { onClick: signOut } : { navigate: '/' };
+  const homeButtonNavigationProps = isVerifyPage ? {} : authHeader ? authHeaderAction : { navigate: '/' };
   const closeButtonNavigationProps = authHeader ? authHeaderAction : { onClick: () => history.goBack() };
 
   function handleThemeToggle() {
@@ -147,7 +143,7 @@ const Header = (props: Props) => {
                   <MenuList className="menu__list--header">
                     <MenuItem className="menu__link" onSelect={() => history.push(`/$/${PAGES.PUBLISH}`)}>
                       <Icon aria-hidden icon={ICONS.PUBLISH} />
-                      {__('New Publish')}
+                      {__('Publish')}
                     </MenuItem>
                     <MenuItem className="menu__link" onSelect={openChannelCreate}>
                       <Icon aria-hidden icon={ICONS.CHANNEL} />
@@ -183,10 +179,10 @@ const Header = (props: Props) => {
                     </MenuItem>
 
                     {/* Commented out until new invite system is implemented */}
-                    {/* <MenuItem className="menu__link" onSelect={() => history.push(`/$/${PAGES.INVITE}`)}>
+                    <MenuItem className="menu__link" onSelect={() => history.push(`/$/${PAGES.INVITE}`)}>
                       <Icon aria-hidden icon={ICONS.INVITE} />
-                      {__('Invite A Friend')}
-                    </MenuItem> */}
+                      {__('Invites')}
+                    </MenuItem>
 
                     {authenticated ? (
                       <MenuItem onSelect={signOut}>

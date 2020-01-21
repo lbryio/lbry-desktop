@@ -18,6 +18,14 @@ type Props = {
 };
 
 class FileSelector extends React.PureComponent<Props> {
+  componentDidUpdate(prevProps: Props) {
+    // If the form has just been cleared,
+    // clear the file input
+    if (prevProps.currentPath && !this.props.currentPath) {
+      this.fileInput.current.value = null;
+    }
+  }
+
   static defaultProps = {
     type: 'file',
   };

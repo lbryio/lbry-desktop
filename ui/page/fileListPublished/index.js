@@ -3,6 +3,7 @@ import {
   selectIsFetchingClaimListMine,
   makeSelectMyStreamUrlsForPage,
   selectMyStreamUrlsCount,
+  doClearPublish,
   doFetchClaimListMine,
 } from 'lbry-redux';
 import { doCheckPendingPublishesApp } from 'redux/actions/publish';
@@ -24,11 +25,7 @@ const select = (state, props) => {
 const perform = dispatch => ({
   checkPendingPublishes: () => dispatch(doCheckPendingPublishesApp()),
   fetchClaimListMine: () => dispatch(doFetchClaimListMine()),
+  clearPublish: () => dispatch(doClearPublish()),
 });
 
-export default withRouter(
-  connect(
-    select,
-    perform
-  )(FileListPublished)
-);
+export default withRouter(connect(select, perform)(FileListPublished));

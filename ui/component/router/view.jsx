@@ -8,7 +8,8 @@ import ReportPage from 'page/report';
 import ShowPage from 'page/show';
 import PublishPage from 'page/publish';
 import DiscoverPage from 'page/discover';
-// import HomePage from 'page/home';
+import HomePage from 'page/home';
+import InvitedPage from 'page/invited';
 import RewardsPage from 'page/rewards';
 import FileListDownloaded from 'page/fileListDownloaded';
 import FileListPublished from 'page/fileListPublished';
@@ -74,7 +75,7 @@ function AppRouter(props: Props) {
 
   return (
     <Switch>
-      <Route path={`/`} exact component={ChannelsFollowingPage} />
+      <Route path={`/`} exact component={HomePage} />
       <Route path={`/$/${PAGES.DISCOVER}`} exact component={DiscoverPage} />
       <Route path={`/$/${PAGES.AUTH}`} exact component={SignInPage} />
       <Route path={`/$/${PAGES.TAGS}`} exact component={TagsPage} />
@@ -89,6 +90,7 @@ function AppRouter(props: Props) {
       <Route path={`/$/${PAGES.AUTH_VERIFY}`} exact component={SignInVerifyPage} />
       <Route path={`/$/${PAGES.SEARCH}`} exact component={SearchPage} />
       <Route path={`/$/${PAGES.SETTINGS}`} exact component={SettingsPage} />
+      <Route path={`/$/${PAGES.INVITE}/:referrer`} exact component={InvitedPage} />
 
       <PrivateRoute {...props} path={`/$/${PAGES.INVITE}`} component={InvitePage} />
       <PrivateRoute {...props} path={`/$/${PAGES.DOWNLOADED}`} component={FileListDownloaded} />

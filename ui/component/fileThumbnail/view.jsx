@@ -1,6 +1,6 @@
 // @flow
 import React from 'react';
-import FreezeframeWrapper from './FreezeframeWrapper';
+// import FreezeframeWrapper from './FreezeframeWrapper';
 import Placeholder from './placeholder.png';
 
 type Props = {
@@ -13,19 +13,20 @@ class CardMedia extends React.PureComponent<Props> {
   render() {
     const { thumbnail } = this.props;
 
-    if (thumbnail && thumbnail.endsWith('gif')) {
-      return <FreezeframeWrapper src={thumbnail} className={className} />;
-    }
+    // Disabling temporarily to see if people complain
+    // if (thumbnail && thumbnail.endsWith('gif')) {
+    //   return <FreezeframeWrapper src={thumbnail} className={className} />;
+    // }
 
     let url;
     // @if TARGET='web'
     // Pass image urls through a compression proxy
-    // url = thumbnail || Placeholder;
-    url = thumbnail
-      ? 'https://ext.thumbnails.lbry.com/400x,q55/' +
-        // The image server will redirect if we don't remove the double slashes after http(s)
-        thumbnail.replace('https://', 'https:/').replace('http://', 'http:/')
-      : Placeholder;
+    url = thumbnail || Placeholder;
+    // url = thumbnail
+    //   ? 'https://ext.thumbnails.lbry.com/400x,q55/' +
+    //     // The image server will redirect if we don't remove the double slashes after http(s)
+    //     thumbnail.replace('https://', 'https:/').replace('http://', 'http:/')
+    //   : Placeholder;
     // @endif
     // @if TARGET='app'
     url = thumbnail || Placeholder;

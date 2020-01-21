@@ -175,7 +175,7 @@ class SelectThumbnail extends React.PureComponent<Props, State> {
           ) : (
             <I18nMessage
               tokens={{
-                speech_link: <Button button="link" label={__('spee.ch')} href="https://spee.ch/about" />,
+                speech_link: <Button button="link" label="spee.ch" href="https://spee.ch/about" />,
               }}
             >
               Upload your thumbnail to %speech_link%. Recommended size is 16:9.
