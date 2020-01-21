@@ -33,7 +33,7 @@ import ModalWalletReceive from 'modal/modalWalletReceive';
 import ModalYoutubeWelcome from 'modal/modalYoutubeWelcome';
 import ModalCreateChannel from 'modal/modalChannelCreate';
 import ModalMobileNavigation from 'modal/modalMobileNavigation';
-import ModalSetReferrer from 'modal/modalSetReferrer';
+import ModalDeleteComment from 'modal/modalDeleteComment';
 
 type Props = {
   modal: { id: string, modalProps: {} },
@@ -123,8 +123,8 @@ function ModalRouter(props: Props) {
       return <ModalCreateChannel {...modalProps} />;
     case MODALS.MOBILE_NAVIGATION:
       return <ModalMobileNavigation {...modalProps} />;
-    case MODALS.SET_REFERRER:
-      return <ModalSetReferrer {...modalProps} />;
+    case MODALS.DELETE_COMMENT:
+      return <ModalDeleteComment {...modalProps} />;
     default:
       return null;
   }
