@@ -26,14 +26,12 @@ type Props = {
   claimIsMine: boolean, // if you control the claim which this comment was posted on
   commentIsMine: boolean, // if this comment was signed by an owned channel
   updateComment: (string, string) => void,
-  hideComment: string => void,
   deleteComment: string => void,
   openModal: (id: string, { deleteComment: () => void }) => void,
 };
 
 const LENGTH_TO_COLLAPSE = 300;
 
-// todo: move all the editing comment stuff out
 function Comment(props: Props) {
   const {
     author,
@@ -45,7 +43,6 @@ function Comment(props: Props) {
     isResolvingUri,
     resolveUri,
     channelIsBlocked,
-    claimIsMine,
     commentIsMine,
     commentId,
     updateComment,
@@ -136,8 +133,6 @@ function Comment(props: Props) {
                     {__('Delete')}
                   </MenuItem>
                 )}
-                {!commentIsMine && <MenuItem className="comment__menu-option">{__('Report')}</MenuItem>}
-                {claimIsMine && <MenuItem className="comment__menu-option">{__('Hide')}</MenuItem>}
               </MenuList>
             </Menu>
           </div>

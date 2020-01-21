@@ -7,7 +7,6 @@ import {
   makeSelectIsUriResolving,
   selectChannelIsBlocked,
   doCommentUpdate, // doEditComment would be a more fitting name
-  doCommentHide,
   doCommentAbandon,
 } from 'lbry-redux';
 import { doOpenModal } from 'redux/actions/app';
@@ -24,7 +23,6 @@ const select = (state, props) => ({
 const perform = dispatch => ({
   resolveUri: uri => dispatch(doResolveUri(uri)),
   updateComment: (commentId, comment) => dispatch(doCommentUpdate(commentId, comment)),
-  hideComment: (commentId) => dispatch(doCommentHide(commentId)),
   deleteComment: (commentId) => dispatch(doCommentAbandon(commentId)),
   openModal: (modal, props) => dispatch(doOpenModal(modal, props)),
 });
