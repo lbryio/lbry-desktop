@@ -66,9 +66,24 @@ function Comment(props: Props) {
       resolveUri(authorUri);
     }
 
-    // set the charCount here
-    setCharCount(editedMessage.length);
-  }, [isResolvingUri, shouldFetch, author, authorUri, resolveUri, editedMessage]);
+    if (isEditing) {
+      setCharCount(editedMessage.length);
+
+      // a user will try and press the escape key to cancel editing their comment
+      const handleEscape = (event) => {
+        if (event.keyCode === ESCAPE_KEY) {
+          setEditing(false);
+        }
+      };
+
+      window.addEventListener('keydown', handleEscape);
+
+      // removes the listener so it doesn't cause problems elsewhere in the app
+      return () => {
+        window.removeEventListener('keydown', handleEscape);
+      };
+    }
+  }, [isResolvingUri, shouldFetch, author, authorUri, resolveUri, editedMessage, isEditing, setEditing]);
 
   // edit button calls this function
   function handleSetEditing() {
