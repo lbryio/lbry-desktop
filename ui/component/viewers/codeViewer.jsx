@@ -42,7 +42,7 @@ class CodeViewer extends React.PureComponent<Props> {
   componentDidMount() {
     const me = this;
     const { theme, contentType } = me.props;
-    alert(theme);
+
     // Init CodeMirror
     import(
       /* webpackChunkName: "codemirror" */
