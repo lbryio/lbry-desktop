@@ -176,13 +176,20 @@ function Comment(props: Props) {
                 charCount={charCount}
                 onChange={handleEditMessage}
               />
-              <Button
-                button="primary"
-                type="submit"
-                label={__('Done')}
-                requiresAuth={IS_WEB}
-                disabled={currentMessage === editedMessage}
-              />
+              <div className="section__actions">
+                <Button
+                  button="primary"
+                  type="submit"
+                  label={__('Done')}
+                  requiresAuth={IS_WEB}
+                  disabled={currentMessage === editedMessage}
+                />
+                <Button
+                  button="secondary"
+                  label={__('Cancel')}
+                  onClick={() => setEditing(false)}
+                />
+              </div>
             </Form>
           ) : editedMessage.length >= LENGTH_TO_COLLAPSE ? (
             <div className="comment__message">
