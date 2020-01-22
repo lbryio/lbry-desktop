@@ -147,3 +147,17 @@
 .header__navigation-item--balance {
   margin: 0 var(--spacing-medium);
 }
+
+.header__navigaiton-dropdown {
+  list-style-type: none;
+  background-color: var(--color-header-background);
+
+  li {
+    padding: 2px 5px;
+
+    &:hover {
+      cursor: pointer;
+      background-color: var(--color-menu-background--active);
+    }
+  }
+}
