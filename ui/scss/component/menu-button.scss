@@ -53,7 +53,7 @@
 .menu__list--header {
   margin-top: 19px;
   margin-left: calc(var(--spacing-medium) * -1);
-  box-shadow: var(--card-box-shadow--attached) var(--color-box-shadow);
+  box-shadow: var(--card-box-shadow);
   animation: menu-animate-in var(--animation-duration) var(--animation-style);
 }
 
