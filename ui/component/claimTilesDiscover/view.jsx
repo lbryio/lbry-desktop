@@ -39,6 +39,7 @@ function ClaimTilesDiscover(props: Props) {
     claimType,
     timestamp,
   } = props;
+  const [hasSearched, setHasSearched] = React.useState(false);
 
   const options: {
     page_size: number,
@@ -77,7 +78,7 @@ function ClaimTilesDiscover(props: Props) {
 
   const claimSearchCacheQuery = createNormalizedClaimSearchKey(options);
   const uris = claimSearchByQuery[claimSearchCacheQuery] || [];
-  const shouldPerformSearch = uris.length === 0 || (!loading && uris.length < pageSize);
+  const shouldPerformSearch = (!hasSearched && uris.length === 0) || (!loading && uris.length < pageSize);
   // Don't use the query from createNormalizedClaimSearchKey for the effect since that doesn't include page & release_time
   const optionsStringForEffect = JSON.stringify(options);
 
@@ -85,8 +86,13 @@ function ClaimTilesDiscover(props: Props) {
     if (shouldPerformSearch) {
       const searchOptions = JSON.parse(optionsStringForEffect);
       doClaimSearch(searchOptions);
+      setHasSearched(true);
     }
-  }, [doClaimSearch, shouldPerformSearch, optionsStringForEffect]);
+
+    return () => {
+      setHasSearched(false);
+    };
+  }, [doClaimSearch, shouldPerformSearch, optionsStringForEffect, setHasSearched]);
 
   return (
     <ul className="claim-grid">
