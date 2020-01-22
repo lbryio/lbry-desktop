@@ -25,9 +25,10 @@ type RowDataItem = {
 
 function HomePage(props: Props) {
   const { followedTags, subscribedChannels, authenticated } = props;
+  const showAuthenticatedRows = authenticated || !IS_WEB;
   let rowData: Array<RowDataItem> = [];
 
-  if (!authenticated) {
+  if (!showAuthenticatedRows) {
     rowData.push(
       {
         title: 'Trending On LBRY',
@@ -43,7 +44,7 @@ function HomePage(props: Props) {
     );
   }
 
-  if (authenticated) {
+  if (showAuthenticatedRows) {
     if (subscribedChannels && subscribedChannels.length > 0) {
       rowData.push({
         title: 'Recent From Following',
@@ -134,7 +135,7 @@ function HomePage(props: Props) {
     }
   );
 
-  if (!authenticated) {
+  if (!showAuthenticatedRows) {
     rowData.push({
       title: '#lbry',
       link: `/$/${PAGES.TAGS}?t=lbry&type=top&time=all`,
@@ -146,7 +147,7 @@ function HomePage(props: Props) {
     });
   }
 
-  if (authenticated) {
+  if (showAuthenticatedRows) {
     rowData.push({
       title: 'Trending On LBRY',
       link: `/$/${PAGES.DISCOVER}`,
