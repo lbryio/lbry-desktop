@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import { makeSelectFileInfoForUri, makeSelectThumbnailForUri } from 'lbry-redux';
+import { makeSelectClaimForUri, makeSelectFileInfoForUri, makeSelectThumbnailForUri } from 'lbry-redux';
 import { doChangeVolume, doChangeMute } from 'redux/actions/app';
 import { selectVolume, selectMute } from 'redux/selectors/app';
 import { savePosition, doSetPlayingUri } from 'redux/actions/content';
@@ -12,6 +12,7 @@ const select = (state, props) => ({
   muted: selectMute(state),
   hasFileInfo: Boolean(makeSelectFileInfoForUri(props.uri)(state)),
   thumbnail: makeSelectThumbnailForUri(props.uri)(state),
+  claim: makeSelectClaimForUri(props.uri)(state),
 });
 
 const perform = dispatch => ({
