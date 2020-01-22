@@ -56,6 +56,9 @@ function Comment(props: Props) {
   const [currentMessage, setCurrentMessage] = useState(message);
   const [charCount, setCharCount] = useState(editedMessage.length);
 
+  // used for controlling the visibility of the menu icon
+  const [mouseIsHovering, setMouseHover] = useState(false);
+
   // to debounce subsequent requests
   const shouldFetch =
     channel === undefined ||
@@ -111,6 +114,14 @@ function Comment(props: Props) {
     });
   }
 
+  function handleMouseOver() {
+    setMouseHover(true);
+  }
+
+  function handleMouseOut() {
+    setMouseHover(false);
+  }
+
   return (
     <li className="comment" onMouseOver={handleMouseOver} onMouseOut={handleMouseOut}>
       <div className="comment__author-thumbnail">
@@ -134,23 +145,25 @@ function Comment(props: Props) {
             </time>
           </div>
           <div className="comment__meta-menu">
-            <Menu>
-              <MenuButton>
-                <Icon size={18} icon={ICONS.MORE_VERTICAL} />
-              </MenuButton>
-              <MenuList className="menu__list--header">
-                {commentIsMine && (
-                  <MenuItem className="comment__menu-option" onSelect={handleSetEditing}>
-                    {__('Edit')}
-                  </MenuItem>
-                )}
-                {commentIsMine && (
-                  <MenuItem className="comment__menu-option" onSelect={handleDeleteComment}>
-                    {__('Delete')}
-                  </MenuItem>
-                )}
-              </MenuList>
-            </Menu>
+            { commentIsMine && (
+              <Menu>
+                <MenuButton>
+                  <Icon size={18} iconColor={mouseIsHovering ? '#6A6A6A' : '#E0E0E0'} icon={ICONS.MORE_VERTICAL} />
+                </MenuButton>
+                <MenuList className="menu__list--header">
+                  {commentIsMine && (
+                    <MenuItem className="comment__menu-option" onSelect={handleSetEditing}>
+                      {__('Edit')}
+                    </MenuItem>
+                  )}
+                  {commentIsMine && (
+                    <MenuItem className="comment__menu-option" onSelect={handleDeleteComment}>
+                      {__('Delete')}
+                    </MenuItem>
+                  )}
+                </MenuList>
+              </Menu>
+            )}
           </div>
         </div>
         <div>
