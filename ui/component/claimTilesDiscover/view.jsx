@@ -39,7 +39,6 @@ function ClaimTilesDiscover(props: Props) {
     claimType,
     timestamp,
   } = props;
-  // const [hasSearched, setHasSearched] = React.useState(false);
 
   const options: {
     page_size: number,
@@ -86,12 +85,7 @@ function ClaimTilesDiscover(props: Props) {
     if (shouldPerformSearch) {
       const searchOptions = JSON.parse(optionsStringForEffect);
       doClaimSearch(searchOptions);
-      // setHasSearched(true);
     }
-
-    return () => {
-      // setHasSearched(false);
-    };
   }, [doClaimSearch, shouldPerformSearch, optionsStringForEffect]);
 
   return (
