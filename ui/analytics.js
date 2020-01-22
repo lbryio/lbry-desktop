@@ -28,6 +28,8 @@ type Analytics = {
   apiLogView: (string, string, string, ?number, ?() => void) => Promise<any>,
   apiLogPublish: (ChannelClaim | StreamClaim) => void,
   tagFollowEvent: (string, boolean, string) => void,
+  videoStartEvent: (string, number) => void,
+  videoBufferEvent: (string, number) => void,
   emailProvidedEvent: () => void,
   emailVerifiedEvent: () => void,
   rewardEligibleEvent: () => void,
@@ -127,6 +129,12 @@ const analytics: Analytics = {
       Lbryio.call('feedback', 'search', { query, vote });
     }
   },
+  videoStartEvent: (claimId, duration) => {
+    sendGaEvent('Media', 'StartDelay', claimId, duration);
+  },
+  videoBufferEvent: (claimId, currentTime) => {
+    sendGaEvent('Media', 'BufferTimestamp', claimId, currentTime);
+  },
   tagFollowEvent: (tag, following, location) => {
     sendGaEvent(following ? 'Tag-Follow' : 'Tag-Unfollow', tag);
   },
@@ -154,13 +162,14 @@ const analytics: Analytics = {
   },
 };
 
-function sendGaEvent(category, action, label) {
+function sendGaEvent(category, action, label, value) {
   if (analyticsEnabled && isProduction) {
     ReactGA.event(
       {
         category,
         action,
         ...(label ? { label } : {}),
+        ...(value ? { value } : {}),
       },
       [SECOND_TRACKER_NAME]
     );
