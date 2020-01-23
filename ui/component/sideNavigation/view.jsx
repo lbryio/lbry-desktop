@@ -8,6 +8,7 @@ import Tag from 'component/tag';
 import StickyBox from 'react-sticky-box/dist/esnext';
 import Spinner from 'component/spinner';
 import usePersistedState from 'effects/use-persisted-state';
+import Ad from 'lbrytv/component/ad';
 
 const SHOW_CHANNELS = 'SHOW_CHANNELS';
 const SHOW_TAGS = 'SHOW_TAGS';
@@ -84,11 +85,8 @@ function SideNavigation(props: Props) {
 
   return obscureSideNavigation ? (
     <Wrapper>
-      <div className="card navigation--placeholder">
-        <div className="wrap">
-          <h2>LBRY</h2>
-          <p>{__('The best decentralized content platform on the web.')}</p>
-        </div>
+      <div className="navigation--placeholder">
+        <Ad />
       </div>
     </Wrapper>
   ) : (
