@@ -21,9 +21,15 @@ const ButtonNavigation = (props: Props) => {
   const { isBackward, history } = props;
   const [showHistory, setShowHistory] = useState(false);
 
+  const makeEntrySlice = useCallback(() => {
+    const left = isBackward ? 1 : history.index + 1;
+    const right = isBackward ? history.index : history.length;
+    return history.entries.slice(left, right);
+  }, [history, isBackward]);
+
   const makeItem = useCallback(
     (entry, index) => {
-      const goArg = index - history.index;
+      const goArg = isBackward ? index - history.index : history.index - index;
       console.log(`index: ${index}, currentIndex: ${history.index}, goArg: ${goArg}, title: ${entry.title}`);
       return (
         <li
@@ -37,15 +43,15 @@ const ButtonNavigation = (props: Props) => {
         </li>
       );
     },
-    [history, showHistory]
+    [isBackward, history, showHistory]
   );
 
   return (
     <div>
       <Button
-        className="header__navigation-item header__navigation-item--back"
-        description={__('Navigate back')}
-        onClick={() => history.goBack()}
+        className={`header__navigation-item header__navigation-item--${isBackward ? 'back' : 'forward'}`}
+        description={isBackward ? __('Navigate back') : __('Navigate forward')}
+        onClick={() => (isBackward ? history.goBack() : history.goForward())}
         onContextMenu={e => {
           setShowHistory(!showHistory);
           // the following three lines prevent the regular context menu (right click menu) from appearing
@@ -58,7 +64,7 @@ const ButtonNavigation = (props: Props) => {
       />
       {showHistory && (
         <ul className={'header__navigaiton-dropdown'} style={{ position: 'absolute' }}>
-          {history.entries.slice(1, history.length).map(makeItem)}
+          {makeEntrySlice().map(makeItem)}
         </ul>
       )}
     </div>
