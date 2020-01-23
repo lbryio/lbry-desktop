@@ -71,13 +71,15 @@ export function CommentCreate(props: Props) {
         charCount={charCount}
         onChange={handleCommentChange}
       />
-      <Button
-        button="primary"
-        disabled={channel === CHANNEL_NEW || !commentValue.length}
-        type="submit"
-        label={__('Post')}
-        requiresAuth={IS_WEB}
-      />
+      <div className="section__actions">
+        <Button
+          button="primary"
+          disabled={channel === CHANNEL_NEW || !commentValue.length}
+          type="submit"
+          label={__('Post')}
+          requiresAuth={IS_WEB}
+        />
+      </div>
     </Form>
   );
 }
