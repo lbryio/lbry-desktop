@@ -8,7 +8,7 @@ import Tag from 'component/tag';
 import StickyBox from 'react-sticky-box/dist/esnext';
 import Spinner from 'component/spinner';
 import usePersistedState from 'effects/use-persisted-state';
-import Ad from 'lbrytv/component/ad';
+import Ad from 'lbrytv/component/ads';
 
 const SHOW_CHANNELS = 'SHOW_CHANNELS';
 const SHOW_TAGS = 'SHOW_TAGS';
