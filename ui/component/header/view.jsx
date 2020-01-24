@@ -115,7 +115,7 @@ const Header = (props: Props) => {
           {!authHeader && (
             <div className="header__navigation-arrows">
               <ButtonNavigation isBackward history={history} />
-              <ButtonNavigation history={history} />
+              <ButtonNavigation isBackward={false} history={history} />
             </div>
           )}
           {/* @endif */}
