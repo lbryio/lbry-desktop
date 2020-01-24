@@ -25,6 +25,17 @@ type Props = {
   }>,
   title: string,
   claimIsMine: Boolean,
+  history: {
+    entries: { title: string }[],
+    goBack: () => void,
+    goForward: () => void,
+    index: number,
+    length: number,
+    location: { pathname: string },
+    push: string => void,
+    state: {},
+    replaceState: ({}, string, string) => void,
+  },
 };
 
 function ShowPage(props: Props) {
@@ -38,8 +49,11 @@ function ShowPage(props: Props) {
     title,
     claimIsMine,
     isSubscribed,
+    history,
   } = props;
   const { channelName, streamName } = parseURI(uri);
+  const { entries } = history;
+  const entryIndex = history.index;
   const signingChannel = claim && claim.signing_channel;
   const canonicalUrl = claim && claim.canonical_url;
   const claimExists = claim !== null && claim !== undefined;
@@ -71,10 +85,11 @@ function ShowPage(props: Props) {
       document.title = IS_WEB ? SITE_TITLE : 'LBRY';
     }
 
+    entries[entryIndex].title = document.title;
     return () => {
       document.title = IS_WEB ? SITE_TITLE : 'LBRY';
     };
-  }, [title, channelName, streamName]);
+  }, [channelName, entries, entryIndex, streamName, title]);
 
   // Don't navigate directly to repost urls
   // Always redirect to the actual content
