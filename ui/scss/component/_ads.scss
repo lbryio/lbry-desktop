@@ -1,0 +1,9 @@
+.ads-wrapper {
+  @extend .navigation;
+
+  p {
+    margin-left: 0.4rem; // The ads provider adds weird padding to their wrapper
+    font-size: var(--font-xsmall);
+    color: var(--color-text-subtitle);
+  }
+}

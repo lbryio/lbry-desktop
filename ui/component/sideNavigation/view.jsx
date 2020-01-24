@@ -8,7 +8,9 @@ import Tag from 'component/tag';
 import StickyBox from 'react-sticky-box/dist/esnext';
 import Spinner from 'component/spinner';
 import usePersistedState from 'effects/use-persisted-state';
-import Ad from 'lbrytv/component/ads';
+// @if TARGET='web'
+import Ads from 'lbrytv/component/ads';
+// @endif
 
 const SHOW_CHANNELS = 'SHOW_CHANNELS';
 const SHOW_TAGS = 'SHOW_TAGS';
@@ -83,13 +85,17 @@ function SideNavigation(props: Props) {
       <div>{children}</div>
     );
 
-  return obscureSideNavigation ? (
-    <Wrapper>
-      <div className="navigation--placeholder">
-        <Ad />
-      </div>
-    </Wrapper>
-  ) : (
+  // @if TARGET='web'
+  if (obscureSideNavigation) {
+    return (
+      <Wrapper>
+        <Ads />
+      </Wrapper>
+    );
+  }
+  // @endif
+
+  return (
     <Wrapper>
       <nav className="navigation">
         <ul className="navigation-links">
