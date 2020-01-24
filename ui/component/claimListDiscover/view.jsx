@@ -105,6 +105,17 @@ function ClaimListDiscover(props: Props) {
     options.release_time = `>${Math.floor(
       moment()
         .subtract(1, timeSort)
+        .startOf('hour')
+        .unix()
+    )}`;
+  } else if (
+    (typeSort === TYPE_NEW || typeSort === TYPE_TRENDING) &&
+    (options.channel_ids.length > 1 || options.any_tags.length > 1)
+  ) {
+    options.release_time = `>${Math.floor(
+      moment()
+        .subtract(1, TIME_YEAR)
+        .startOf('week')
         .unix()
     )}`;
   }
