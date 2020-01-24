@@ -13,18 +13,6 @@
   margin-top: var(--spacing-large);
 }
 
-.navigation--placeholder {
-  @extend .navigation;
-  border-radius: var(--card-radius);
-  position: relative;
-  margin: auto;
-
-  p {
-    font-size: var(--font-xsmall);
-    color: var(--color-text-subtitle);
-  }
-}
-
 .navigation-links {
   @extend .ul--no-style;
   flex-direction: column;
