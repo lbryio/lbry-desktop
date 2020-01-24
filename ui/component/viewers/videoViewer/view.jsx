@@ -213,13 +213,9 @@ function VideoViewer(props: Props) {
     function doTrackingFirstPlay(e: Event, data: any) {
       analytics.videoStartEvent(claimId, data.secondsToLoad);
     }
-    function doError(e: Event) {
-      console.log('ERROR', e);
-    }
     if (player) {
       player.on('tracking:buffered', (e, d) => doTrackingBuffered(e, d));
       player.on('tracking:firstplay', (e, d) => doTrackingFirstPlay(e, d));
-      player.on('error', e => doError(e));
     }
     return () => {
       if (player) {
