@@ -9,7 +9,7 @@ export default function useGetThumbnail(
   getFile: string => void,
   shouldHide: boolean
 ) {
-  const hasClaim = claim !== undefined;
+  // const hasClaim = claim !== undefined;
 
   // $FlowFixMe
   const isImage = claim && claim.value && claim.value.stream_type === 'image';
@@ -19,7 +19,7 @@ export default function useGetThumbnail(
 
   // @if TARGET='web'
   if (claim && isImage && isFree) {
-    thumbnailToUse = generateStreamUrl(claim.name, claim.claim_id, 'https://api.lbry.tv');
+    thumbnailToUse = generateStreamUrl(claim.name, claim.claim_id);
   }
   // @endif
 

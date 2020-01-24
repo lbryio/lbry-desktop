@@ -1,7 +1,7 @@
-const { URL } = require('../../config');
+const { URL, LBRY_TV_STREAMING_API } = require('../../config');
 
 function generateStreamUrl(claimName, claimId, apiUrl) {
-  const prefix = process.env.SDK_API_URL || apiUrl;
+  const prefix = LBRY_TV_STREAMING_API || apiUrl;
   return `${prefix}/content/claims/${claimName}/${claimId}/stream`;
 }
 
