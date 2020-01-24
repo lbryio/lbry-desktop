@@ -123,7 +123,7 @@ export class FormField extends React.PureComponent<Props> {
                 type="textarea"
                 events={handleEvents}
                 options={{
-                  spellChecker: false,
+                  spellChecker: true,
                   hideIcons: ['heading', 'image', 'fullscreen', 'side-by-side'],
                   previewRender(plainText) {
                     const preview = <MarkdownPreview content={plainText} />;
