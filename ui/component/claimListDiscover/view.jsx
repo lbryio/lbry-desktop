@@ -110,7 +110,9 @@ function ClaimListDiscover(props: Props) {
     )}`;
   } else if (
     (typeSort === TYPE_NEW || typeSort === TYPE_TRENDING) &&
-    (options.channel_ids.length > 1 || options.any_tags.length > 1)
+    // If users are following more than 5 channels or tags, limit results to stuff less than a year old
+    // This helps with timeout issues for users that are following a ton of stuff
+    (options.channel_ids.length > 5 || options.any_tags.length > 5)
   ) {
     options.release_time = `>${Math.floor(
       moment()
