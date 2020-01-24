@@ -40,7 +40,6 @@ function ClaimTilesDiscover(props: Props) {
     timestamp,
   } = props;
   const [hasSearched, setHasSearched] = React.useState(false);
-
   const options: {
     page_size: number,
     no_totals: boolean,
@@ -78,7 +77,7 @@ function ClaimTilesDiscover(props: Props) {
 
   const claimSearchCacheQuery = createNormalizedClaimSearchKey(options);
   const uris = claimSearchByQuery[claimSearchCacheQuery] || [];
-  const shouldPerformSearch = !hasSearched && (uris.length === 0 || (!loading && uris.length < pageSize));
+  const shouldPerformSearch = !hasSearched || (uris.length === 0 || (!loading && uris.length < pageSize));
   // Don't use the query from createNormalizedClaimSearchKey for the effect since that doesn't include page & release_time
   const optionsStringForEffect = JSON.stringify(options);
 
