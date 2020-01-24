@@ -8,9 +8,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ### Added
 
-### Changed
+- Analytics event for video buffering for easier debugging ([#3534](https://github.com/lbryio/lbry-desktop/pull/3534))
 
 ### Fixed
+
+- Home page tiles not loading in some cases ([#3539](https://github.com/lbryio/lbry-desktop/pull/3539))
 
 ## [0.39.0] - [2019-1-22]
 
