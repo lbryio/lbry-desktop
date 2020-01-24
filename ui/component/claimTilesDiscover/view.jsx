@@ -60,7 +60,9 @@ function ClaimTilesDiscover(props: Props) {
     any_tags: tags || [],
     not_tags: !showNsfw ? MATURE_TAGS : [],
     channel_ids: channelIds || [],
-    not_channel_ids: hiddenUris && hiddenUris.length ? hiddenUris.map(hiddenUri => hiddenUri.split('#')[1]) : [],
+    not_channel_ids:
+      // If channelIds were passed in, we don't need not_channel_ids
+      !channelIds && hiddenUris && hiddenUris.length ? hiddenUris.map(hiddenUri => hiddenUri.split('#')[1]) : [],
     order_by: orderBy || ['trending_group', 'trending_mixed'],
   };
 

@@ -91,7 +91,9 @@ function ClaimListDiscover(props: Props) {
     no_totals: true,
     any_tags: tags || [],
     channel_ids: channelIds || [],
-    not_channel_ids: hiddenUris && hiddenUris.length ? hiddenUris.map(hiddenUri => hiddenUri.split('#')[1]) : [],
+    not_channel_ids:
+      // If channelIds were passed in, we don't need not_channel_ids
+      !channelIds && hiddenUris && hiddenUris.length ? hiddenUris.map(hiddenUri => hiddenUri.split('#')[1]) : [],
     not_tags: !showNsfw ? MATURE_TAGS : [],
     order_by:
       typeSort === TYPE_TRENDING
