@@ -110,8 +110,10 @@ function ClaimListDiscover(props: Props) {
     )}`;
   } else if (
     (typeSort === TYPE_NEW || typeSort === TYPE_TRENDING) &&
+    // Warning - hack below
     // If users are following more than 5 channels or tags, limit results to stuff less than a year old
     // This helps with timeout issues for users that are following a ton of stuff
+    // https://github.com/lbryio/lbry-sdk/issues/2420
     (options.channel_ids.length > 5 || options.any_tags.length > 5)
   ) {
     options.release_time = `>${Math.floor(
