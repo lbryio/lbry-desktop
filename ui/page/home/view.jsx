@@ -51,6 +51,12 @@ function HomePage(props: Props) {
         link: `/$/${PAGES.CHANNELS_FOLLOWING}`,
         options: {
           orderBy: ['release_time'],
+          releaseTime: `>${Math.floor(
+            moment()
+              .subtract(1, 'year')
+              .startOf('week')
+              .unix()
+          )}`,
           pageSize: subscribedChannels.length > 3 ? 8 : 4,
           channelIds: subscribedChannels.map(subscription => {
             const { channelClaimId } = parseURI(subscription.uri);
@@ -101,10 +107,11 @@ function HomePage(props: Props) {
       options: {
         orderBy: ['effective_amount'],
         pageSize: 4,
-        // claimType: 'stream',
+        claimType: 'stream',
         releaseTime: `>${Math.floor(
           moment()
             .subtract(1, 'week')
+            .startOf('day')
             .unix()
         )}`,
       },
@@ -129,6 +136,7 @@ function HomePage(props: Props) {
         timestamp: `>${Math.floor(
           moment()
             .subtract(1, 'week')
+            .startOf('day')
             .unix()
         )}`,
       },
