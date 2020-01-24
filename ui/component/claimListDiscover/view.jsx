@@ -108,20 +108,27 @@ function ClaimListDiscover(props: Props) {
         .startOf('hour')
         .unix()
     )}`;
-  } else if (
-    (typeSort === TYPE_NEW || typeSort === TYPE_TRENDING) &&
+  } else if (typeSort === TYPE_NEW || typeSort === TYPE_TRENDING) {
     // Warning - hack below
-    // If users are following more than 5 channels or tags, limit results to stuff less than a year old
+    // If users are following more than 10 channels or tags, limit results to stuff less than a year old
+    // For more than 20, drop it down to 6 months
     // This helps with timeout issues for users that are following a ton of stuff
     // https://github.com/lbryio/lbry-sdk/issues/2420
-    (options.channel_ids.length > 5 || options.any_tags.length > 5)
-  ) {
-    options.release_time = `>${Math.floor(
-      moment()
-        .subtract(1, TIME_YEAR)
-        .startOf('week')
-        .unix()
-    )}`;
+    if (options.channel_ids.length > 10 || options.any_tags.length > 10) {
+      options.release_time = `>${Math.floor(
+        moment()
+          .subtract(1, TIME_YEAR)
+          .startOf('week')
+          .unix()
+      )}`;
+    } else if (options.channel_ids.length > 20 || options.any_tags.length > 20) {
+      options.release_time = `>${Math.floor(
+        moment()
+          .subtract(6, TIME_MONTH)
+          .startOf('week')
+          .unix()
+      )}`;
+    }
   }
 
   const hasMatureTags = tags && tags.some(t => MATURE_TAGS.includes(t));
