@@ -102,13 +102,6 @@ history = createMemoryHistory();
 history = createBrowserHistory();
 // @endif
 
-history.listen((l, a) => {
-  console.log('document.title: ', document.title);
-  console.log('history: ', history);
-  document.oncontextmenu = () => false;
-  l.title = document.title;
-});
-
 const triggerSharedStateActions = [
   ACTIONS.CHANNEL_SUBSCRIBE,
   ACTIONS.CHANNEL_UNSUBSCRIBE,
