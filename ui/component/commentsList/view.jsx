@@ -15,7 +15,7 @@ function CommentList(props: Props) {
 
   // todo: implement comment_list --mine in SDK so redux can grab with selectCommentIsMine
   const isMyComment = (channelId: string) => {
-    if (myChannels !== null && channelId !== null) {
+    if (myChannels != null && channelId != null) {
       for (let i = 0; i < myChannels.length; i++) {
         if (myChannels[i].claim_id === channelId) {
           return true;
