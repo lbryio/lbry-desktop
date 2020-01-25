@@ -6,6 +6,7 @@ import {
   makeSelectClaimsInChannelForCurrentPageState,
   makeSelectClaimIsNsfw,
   makeSelectRecommendedContentForUri,
+  makeSelectMediaTypeForUri,
 } from 'lbry-redux';
 import { selectShowMatureContent } from 'redux/selectors/settings';
 
@@ -115,5 +116,23 @@ export const makeSelectShouldObscurePreview = (uri: string) =>
     makeSelectClaimIsNsfw(uri),
     (showMatureContent, isClaimMature) => {
       return isClaimMature && !showMatureContent;
+    }
+  );
+
+export const makeSelectCanAutoplay = (uri: string) =>
+  createSelector(
+    makeSelectMediaTypeForUri(uri),
+    mediaType => {
+      const canAutoPlay = ['audio', 'video', 'image', 'text', 'document'].includes(mediaType);
+      return canAutoPlay;
+    }
+  );
+
+export const makeSelectIsText = (uri: string) =>
+  createSelector(
+    makeSelectMediaTypeForUri(uri),
+    mediaType => {
+      const isText = ['text', 'document'].includes(mediaType);
+      return isText;
     }
   );

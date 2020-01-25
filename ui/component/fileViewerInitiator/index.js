@@ -8,10 +8,17 @@ import {
   makeSelectMediaTypeForUri,
   makeSelectContentTypeForUri,
   makeSelectUriIsStreamable,
+  makeSelectClaimForUri,
 } from 'lbry-redux';
 import { makeSelectCostInfoForUri } from 'lbryinc';
 import { makeSelectClientSetting } from 'redux/selectors/settings';
-import { makeSelectIsPlaying, makeSelectShouldObscurePreview, selectPlayingUri } from 'redux/selectors/content';
+import {
+  makeSelectIsPlaying,
+  makeSelectShouldObscurePreview,
+  selectPlayingUri,
+  makeSelectCanAutoplay,
+  makeSelectIsText,
+} from 'redux/selectors/content';
 import FileViewer from './view';
 
 const select = (state, props) => ({
@@ -27,6 +34,9 @@ const select = (state, props) => ({
   autoplay: makeSelectClientSetting(SETTINGS.AUTOPLAY)(state),
   hasCostInfo: Boolean(makeSelectCostInfoForUri(props.uri)(state)),
   costInfo: makeSelectCostInfoForUri(props.uri)(state),
+  isAutoPlayable: makeSelectCanAutoplay(props.uri)(state),
+  isText: makeSelectIsText(props.uri)(state),
+  claim: makeSelectClaimForUri(props.uri)(state),
 });
 
 const perform = dispatch => ({

@@ -16,14 +16,17 @@
   margin-right: auto;
   margin-top: var(--header-height);
   padding: var(--spacing-large);
+
+  @media (max-width: $breakpoint-small) {
+    padding: var(--spacing-small);
+  }
 }
 
 .main {
   position: relative;
   width: calc(100% - var(--side-nav-width) - var(--spacing-large));
-  margin-right: var(--spacing-main-padding);
 
-  @media (max-width: 600px) {
+  @media (max-width: $breakpoint-small) {
     width: 100%;
     margin-right: 0;
     margin-left: 0;
@@ -44,6 +47,16 @@
 
   .grid-area--related {
     width: calc(47.5% - var(--spacing-large));
+  }
+
+  @media (max-width: $breakpoint-small) {
+    overflow-x: hidden;
+
+    .grid-area--related,
+    .grid-area--info {
+      margin-right: 0;
+      width: 100%;
+    }
   }
 }
 
@@ -86,4 +99,14 @@
 
 .main--full-width {
   width: 100%;
+}
+
+.main__document-wrapper {
+  width: 40em;
+  margin: auto;
+  margin-bottom: var(--spacing-xlarge);
+
+  @media (max-width: $breakpoint-small) {
+    width: 100%;
+  }
 }

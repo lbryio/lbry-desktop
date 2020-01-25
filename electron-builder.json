@@ -7,13 +7,28 @@
   "files": [
     {
       "from": "dist/electron/webpack",
-      "to": "./",
-      "filter": ["!dist/!electron/!webpack/*.js", "!dist/!electron/!webpack/!static/**/*"]
+      "to": "./"
     },
     {
       "from": "dist/electron/static",
-      "to": "./",
-      "filter": ["!dist/!electron/!static/index-electron.html"]
+      "to": "./"
+    }
+  ],
+  "extraResources": [
+    {
+      "from": "./static/daemon/",
+      "to": "static/daemon/",
+      "filter": ["**/*"]
+    },
+    {
+      "from": "./static/img",
+      "to": "static/img",
+      "filter": ["**/*"]
+    },
+    {
+      "from": "./static/font",
+      "to": "static/font",
+      "filter": ["**/*"]
     }
   ],
   "publish": [
@@ -58,8 +73,8 @@
     }
   ],
   "linux": {
-    "target": "deb",
-    "executableName": "LBRY",
+    "target": ["AppImage", "deb"],
+    "executableName": "lbry",
     "category": "AudioVideo;Video",
     "desktop": {
       "MimeType": "x-scheme-handler/lbry"

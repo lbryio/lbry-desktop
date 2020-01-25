@@ -11,11 +11,12 @@ import Button from 'component/button';
 import I18nMessage from 'component/i18nMessage';
 import Page from 'component/page';
 import SettingLanguage from 'component/settingLanguage';
+import SettingWalletServer from 'component/settingWalletServer';
 import SettingAutoLaunch from 'component/settingAutoLaunch';
 import FileSelector from 'component/common/file-selector';
 import SyncToggle from 'component/syncToggle';
 import Card from 'component/common/card';
-import { getSavedPassword } from 'util/saved-passwords';
+import { getKeychainPassword } from 'util/saved-passwords';
 
 // @if TARGET='app'
 export const IS_MAC = process.platform === 'darwin';
@@ -101,12 +102,15 @@ class SettingsPage extends React.PureComponent<Props, State> {
   }
 
   componentDidMount() {
-    this.props.updateWalletStatus();
-    getSavedPassword().then(p => {
-      if (p) {
-        this.setState({ storedPassword: true });
-      }
-    });
+    const { isAuthenticated } = this.props;
+    if (isAuthenticated || !IS_WEB) {
+      this.props.updateWalletStatus();
+      getKeychainPassword().then(p => {
+        if (typeof p === 'string') {
+          this.setState({ storedPassword: true });
+        }
+      });
+    }
   }
 
   onKeyFeeChange(newValue: Price) {
@@ -412,7 +416,7 @@ class SettingsPage extends React.PureComponent<Props, State> {
               }
             />
 
-            {isAuthenticated && (
+            {(isAuthenticated || !IS_WEB) && (
               <Card
                 title={__('Blocked Channels')}
                 actions={
@@ -645,6 +649,7 @@ class SettingsPage extends React.PureComponent<Props, State> {
                         ))}
                       </FormField>
                     </fieldset-section>
+                    <SettingWalletServer />
                     {/* @endif */}
                   </React.Fragment>
                 }

@@ -1,29 +1,16 @@
 .navigation {
   width: var(--side-nav-width);
   font-size: var(--font-body);
+  margin-left: var(--spacing-main-padding);
 
-  @media (max-width: 600px) {
+  @media (max-width: $breakpoint-small) {
     display: none;
+    margin-left: 0;
   }
 }
 
-.navigation--placeholder {
-  @extend .navigation;
-  padding: 2rem 1.5rem;
-  border-radius: var(--card-radius);
-  font-weight: var(--font-weight-bold);
-  color: #fff;
-  position: relative;
-  background-color: black; //black;
-
-  h2 {
-    font-size: 2rem;
-    font-weight: var(--font-weight-bold);
-  }
-
-  p {
-    font-size: 1.2rem;
-  }
+.navigation__secondary {
+  margin-top: var(--spacing-large);
 }
 
 .navigation-links {

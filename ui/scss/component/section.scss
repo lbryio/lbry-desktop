@@ -1,4 +1,5 @@
 .section {
+  position: relative;
   margin-top: var(--spacing-large);
 
   &:first-of-type {
@@ -45,7 +46,7 @@
 .section__title--small {
   @extend .section__title;
   font-size: var(--font-body);
-  margin-top: var(--spacing-small);
+  margin-top: var(--spacing-medium);
 }
 
 .section__title--large {
@@ -54,6 +55,10 @@
   display: inline-block;
   font-weight: var(--font-weight-bold);
   font-size: var(--font-heading);
+
+  @media (max-width: $breakpoint-small) {
+    font-size: var(--font-title);
+  }
 }
 
 .section__subtitle--status {
@@ -85,4 +90,14 @@
 
 .section__body {
   margin-top: var(--spacing-medium);
+}
+
+@media (max-width: $breakpoint-small) {
+  .section__actions {
+    flex-wrap: wrap;
+
+    > * {
+      margin-bottom: var(--spacing-small);
+    }
+  }
 }

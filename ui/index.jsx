@@ -108,11 +108,6 @@ Lbryio.setOverride(
 
         authToken = response.auth_token;
         setAuthToken(authToken);
-
-        // @if TARGET='app'
-        ipcRenderer.send('set-auth-token', authToken);
-        // @endif
-
         resolve(authToken);
       });
     })
@@ -123,13 +118,24 @@ Lbryio.setOverride(
   () =>
     new Promise(resolve => {
       // @if TARGET='app'
-      if (authToken) {
-        resolve(authToken);
+      const desktopAuthTokenToReturn = authToken || getAuthToken();
+
+      if (desktopAuthTokenToReturn) {
+        resolve(desktopAuthTokenToReturn);
       }
 
-      ipcRenderer.once('auth-token-response', (event, token) => {
-        Lbryio.authToken = token;
-        resolve(token);
+      // Old users who haven't moved to storing the auth_token in a cookie
+      // Get it => set it => delete from keychain
+      ipcRenderer.once('auth-token-response', (event, keychainToken) => {
+        if (keychainToken) {
+          Lbryio.authToken = keychainToken;
+          setAuthToken(keychainToken);
+          resolve(keychainToken);
+          ipcRenderer.send('delete-auth-token');
+        } else {
+          // No auth_token saved anywhere
+          resolve('');
+        }
       });
 
       ipcRenderer.send('get-auth-token');
@@ -245,7 +251,7 @@ function AppWrapper() {
       console.error(error.message); // eslint-disable-line no-console
     });
 
-    if (['win32', 'darwin'].includes(process.platform)) {
+    if (['win32', 'darwin'].includes(process.platform) || !!process.env.APPIMAGE) {
       autoUpdater.on('update-available', () => {
         console.log('Update available'); // eslint-disable-line no-console
       });
@@ -289,10 +295,13 @@ function AppWrapper() {
               </ErrorBoundary>
             </ConnectedRouter>
           ) : (
-            <SplashScreen
-              authenticate={() => app.store.dispatch(doAuthenticate(pjson.version))}
-              onReadyToLaunch={() => setReadyToLaunch(true)}
-            />
+            <Fragment>
+              <SplashScreen
+                authenticate={() => app.store.dispatch(doAuthenticate(pjson.version))}
+                onReadyToLaunch={() => setReadyToLaunch(true)}
+              />
+              <SnackBar />
+            </Fragment>
           )}
         </Fragment>
       </PersistGate>

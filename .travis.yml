@@ -24,13 +24,14 @@ before_install:
     else
       sudo apt-get -qq update
       sudo apt-get install -y libsecret-1-dev
-      sudo apt-get install --no-install-recommends -y gcc-multilib g++-multilib
+      sudo apt-get install --no-install-recommends -y gcc-multilib g++-multilib wget
       curl -o- -L https://yarnpkg.com/install.sh | bash -s -- --version 1.6.0
       export PATH="$HOME/.yarn/bin:$PATH"
     fi
 before_script:
   - git lfs pull
   - if [ "$TRAVIS_PULL_REQUEST" != "false" ]; then unset WIN_CSC_LINK; unset CSC_LINK; fi
+  - wget https://headers.lbry.io/blockchain_headers_latest -O $TRAVIS_BUILD_DIR/static/daemon/headers
 script:
   - |
     if [ "$TARGET" == "windows" ]; then
@@ -49,7 +50,7 @@ addons:
   artifacts:
     working_dir: dist
     paths:
-      - $(git ls-files -o dist/{*.dmg,*.exe,*.deb} | tr "\n" ":")
+      - $(git ls-files -o dist/{*.dmg,*.exe,*.deb,*.AppImage} | tr "\n" ":")
     target_paths:
       - '/app/build-${TRAVIS_BUILD_NUMBER}_commit-${TRAVIS_COMMIT:0:7}$([ ! -z ${TRAVIS_TAG}
         ] && echo _tag-${TRAVIS_TAG})'

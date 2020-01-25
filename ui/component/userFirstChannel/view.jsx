@@ -4,7 +4,7 @@ import { isNameValid } from 'lbry-redux';
 import Button from 'component/button';
 import { Form, FormField } from 'component/common/form';
 import { INVALID_NAME_ERROR } from 'constants/claim';
-export const DEFAULT_BID_FOR_FIRST_CHANNEL = 0.9;
+export const DEFAULT_BID_FOR_FIRST_CHANNEL = 0.5;
 
 type Props = {
   createChannel: (string, number) => void,
@@ -40,7 +40,7 @@ function UserFirstChannel(props: Props) {
       <h1 className="section__title--large">{__('Create A Channel')}</h1>
       <div className="section__subtitle">
         <p>{__('A channel is your identity on the LBRY network.')}</p>
-        <p>{__('You can have more than one or change this later.')}</p>
+        <p>{__('You can have more than one or remove this later.')}</p>
       </div>
       <section className="section__body">
         <fieldset-group class="fieldset-group--smushed fieldset-group--disabled-prefix">

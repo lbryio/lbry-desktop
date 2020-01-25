@@ -1,8 +1,9 @@
 :root {
   // Button
-  --color-link-icon: var(--color-gray-5);
+  --color-link-icon: var(--color-gray-4);
   --color-link-active: var(--color-primary);
-  --color-navigation-link: var(--color-link-icon);
+  --color-navigation-link: var(--color-gray-5);
+  --color-header-button: #f7f7f7;
 
   // Color
   --color-background: #f7f7f7;
@@ -10,6 +11,7 @@
   --color-border: #ededed;
   --color-background-overlay: #21252980;
   --color-nag: #f26522;
+  --color-error: #fcafca;
 
   // Text
   --color-text-selection-bg: var(--color-secondary-alt);
@@ -22,9 +24,8 @@
   --color-text-warning--background: var(--lbry-yellow-1);
   --color-blockquote: var(--color-gray-3);
 
-  --color-spinner-light: #5a6570;
+  --color-spinner-light: #ffffff;
   --color-spinner-dark: #212529;
-  --color-box-shadow: #c4c4c4;
   --color-placeholder-background: #f0f0f0;
   --color-header-background: #ffffff;
   --color-card-background: #ffffff;
@@ -33,6 +34,7 @@
   --color-file-viewer-background: var(--color-card-background);
   --color-tabs-background: var(--color-secondary-alt);
   --color-tab-divider: var(--color-secondary);
+  --color-modal-background: var(--color-card-background);
 
   // Menu
   --color-menu-background: var(--color-header-background);
@@ -50,4 +52,8 @@
   --color-snack: var(--color-white);
   --color-snack-bg-error: var(--color-danger);
   --color-snack-upgrade: var(--color-tertiary);
+
+  // Ads
+  --color-ads-background: #fae5ff;
+  --color-ads-link: var(--color-link);
 }

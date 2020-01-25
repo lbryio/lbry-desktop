@@ -13,7 +13,29 @@
     font-size: inherit;
     font-weight: var(--font-weight-bold);
     margin-bottom: var(--spacing-medium);
-    padding-top: var(--spacing-medium);
+
+    &:not(:first-child) {
+      margin-top: var(--spacing-large);
+    }
+  }
+
+  h1 {
+    font-size: 1.7em;
+  }
+  h2 {
+    font-size: 1.5em;
+  }
+  h3 {
+    font-size: 1.4em;
+  }
+  h4 {
+    font-size: 1.3em;
+  }
+  h5 {
+    font-size: 1.2em;
+  }
+  h6 {
+    font-size: 1em;
   }
 
   // Paragraphs
@@ -26,10 +48,6 @@
       position: relative;
       top: 1px;
     }
-  }
-
-  // Strikethrough text
-  del {
   }
 
   // Tables
@@ -54,6 +72,13 @@
   img {
     margin-bottom: var(--spacing-medium);
     padding-top: var(--spacing-medium);
+    max-height: 40vh;
+    object-position: left;
+
+    @media (max-width: $breakpoint-small) {
+      max-height: 30vh;
+      font-size: 0.8em;
+    }
   }
 
   // Horizontal Rule

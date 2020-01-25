@@ -7,14 +7,13 @@
 
   .icon {
     margin-bottom: -1px;
-    stroke: var(--color-subtitle);
   }
 
   & > *:not(:last-child) {
     margin-right: var(--spacing-small);
   }
 
-  @media (max-width: 600px) {
+  @media (max-width: $breakpoint-xsmall) {
     display: none;
   }
 }

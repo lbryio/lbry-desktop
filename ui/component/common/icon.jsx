@@ -14,6 +14,7 @@ const BLUE_COLOR = '#49b2e2';
 type Props = {
   icon: string,
   tooltip?: boolean,
+  customTooltipText?: string,
   iconColor?: string,
   size?: number,
   className?: string,
@@ -50,7 +51,7 @@ class IconComponent extends React.PureComponent<Props> {
   };
 
   render() {
-    const { icon, tooltip, iconColor, size, className, sectionIcon = false } = this.props;
+    const { icon, tooltip, customTooltipText, iconColor, size, className, sectionIcon = false } = this.props;
     const Icon = icons[this.props.icon];
 
     if (!Icon) {
@@ -66,7 +67,7 @@ class IconComponent extends React.PureComponent<Props> {
 
     let tooltipText;
     if (tooltip) {
-      tooltipText = this.getTooltip(icon);
+      tooltipText = customTooltipText || this.getTooltip(icon);
     }
 
     const component = (

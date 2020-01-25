@@ -7,10 +7,7 @@
   position: relative;
   z-index: 1;
   font-size: var(--font-small);
-
-  @media (max-width: 600px) {
-    margin-right: 0;
-  }
+  height: var(--height-input);
 
   > .icon {
     top: 0;
@@ -26,10 +23,13 @@
   @extend .wunderbar;
   flex: 0;
   margin-right: 0;
-  color: black; //black;
 
   fieldset-section {
     width: 15rem;
+  }
+
+  @media (max-width: $breakpoint-small) {
+    display: none;
   }
 }
 

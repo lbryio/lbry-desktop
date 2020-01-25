@@ -7,12 +7,16 @@ import {
   makeSelectClaimIsMine,
   makeSelectClaimIsPending,
   makeSelectThumbnailForUri,
+  makeSelectCoverForUri,
   makeSelectTitleForUri,
   makeSelectClaimIsNsfw,
   selectBlockedChannels,
   selectChannelIsBlocked,
   doClearPublish,
   doPrepareEdit,
+  makeSelectMediaTypeForUri,
+  doFileGet,
+  makeSelectStreamingUrlForUri,
 } from 'lbry-redux';
 import { selectBlackListedOutpoints, selectFilteredOutpoints } from 'lbryinc';
 import { selectShowMatureContent } from 'redux/selectors/settings';
@@ -29,7 +33,9 @@ const select = (state, props) => ({
   claimIsMine: props.uri && makeSelectClaimIsMine(props.uri)(state),
   isResolvingUri: props.uri && makeSelectIsUriResolving(props.uri)(state),
   thumbnail: props.uri && makeSelectThumbnailForUri(props.uri)(state),
+  cover: props.uri && makeSelectCoverForUri(props.uri)(state),
   title: props.uri && makeSelectTitleForUri(props.uri)(state),
+  mediaType: makeSelectMediaTypeForUri(props.uri)(state),
   nsfw: props.uri && makeSelectClaimIsNsfw(props.uri)(state),
   blackListedOutpoints: selectBlackListedOutpoints(state),
   filteredOutpoints: selectFilteredOutpoints(state),
@@ -37,10 +43,12 @@ const select = (state, props) => ({
   hasVisitedUri: props.uri && makeSelectHasVisitedUri(props.uri)(state),
   channelIsBlocked: props.uri && selectChannelIsBlocked(props.uri)(state),
   isSubscribed: props.uri && makeSelectIsSubscribed(props.uri, true)(state),
+  streamingUrl: props.uri && makeSelectStreamingUrlForUri(props.uri)(state),
 });
 
 const perform = dispatch => ({
   resolveUri: uri => dispatch(doResolveUri(uri)),
+  getFile: uri => dispatch(doFileGet(uri, false)),
   beginPublish: name => {
     dispatch(doClearPublish());
     dispatch(doPrepareEdit({ name }));

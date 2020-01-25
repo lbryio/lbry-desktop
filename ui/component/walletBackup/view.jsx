@@ -81,7 +81,7 @@ class WalletBackup extends React.PureComponent<Props, State> {
       return;
     }
 
-    this.showSuccessMessage(__('Saved zip archive to ' + outputPath));
+    this.showSuccessMessage(__('Saved zip archive to %outputPath%', { outputPath }));
 
     shell.showItemInFolder(outputPath);
   }
@@ -139,7 +139,7 @@ class WalletBackup extends React.PureComponent<Props, State> {
             </p>
             <div className="card__actions">
               <Button
-                button="inverse"
+                button="primary"
                 label={__('Create Backup')}
                 onClick={() => this.backupWalletDir(lbryumWalletDir)}
               />

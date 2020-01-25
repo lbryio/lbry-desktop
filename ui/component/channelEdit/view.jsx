@@ -110,14 +110,14 @@ function ChannelForm(props: Props) {
         onUpdate={v => handleThumbnailChange(v)}
         currentValue={params.thumbnailUrl}
         assetName={'Thumbnail'}
-        recommended={__('Recommended size is 1:1')}
+        recommended={__('Recommended ratio is 1:1')}
       />
 
       <SelectAsset
         onUpdate={v => handleCoverChange(v)}
         currentValue={params.coverUrl}
         assetName={'Cover'}
-        recommended={__('Recommended size is 10:1.6')}
+        recommended={__('Recommended ratio is 6.25:1')}
       />
 
       <FormField
@@ -198,6 +198,9 @@ function ChannelForm(props: Props) {
         <Button button="primary" label={__('Submit')} onClick={handleSubmit} />
         <Button button="link" label={__('Cancel')} navigate={`$/${PAGES.CHANNELS}`} />
       </div>
+      <p className="help">
+        {__('After submitting, you will not see the changes immediately. Please check back in a few minutes.')}
+      </p>
     </section>
   );
 }

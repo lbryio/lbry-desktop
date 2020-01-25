@@ -18,6 +18,15 @@ html {
 
   color: var(--color-text);
   background-color: var(--color-background);
+  font-size: 16px;
+}
+
+body {
+  font-size: 1em;
+
+  @media (max-width: $breakpoint-small) {
+    font-size: 1.3em;
+  }
 }
 
 h1,
@@ -30,8 +39,6 @@ h6 {
 }
 
 p {
-  font-size: var(--font-body);
-
   & + p {
     margin-top: var(--spacing-small);
   }
@@ -43,7 +50,7 @@ ol {
 
   li {
     list-style-position: outside;
-    margin: var(--spacing-medium);
+    margin: var(--spacing-xsmall) var(--spacing-medium);
     margin-bottom: 0;
   }
 }
@@ -103,7 +110,6 @@ blockquote {
 
 code {
   @include font-mono;
-  background-color: black; //gray-1;
   font-size: 1.5rem;
 }
 
@@ -134,11 +140,20 @@ a {
       margin-right: 1.5rem;
     }
   }
-}
 
-.divider__horizontal {
-  border-top: black; //gray-2;
-  margin: 16px 0;
+  @media (max-width: $breakpoint-small) {
+    flex-direction: column;
+
+    & > * {
+      margin: 0;
+      width: 100%;
+      flex-basis: auto;
+
+      &:first-child {
+        margin-right: 0;
+      }
+    }
+  }
 }
 
 .hidden {
@@ -185,12 +200,6 @@ a {
   }
 }
 
-.card {
-  .help:last-child {
-    margin-bottom: 0;
-  }
-}
-
 .help {
   display: block;
   font-size: var(--font-small);
@@ -211,7 +220,7 @@ a {
 .qr-code {
   width: 134px;
   height: 134px;
-  border: 3px solid black; //white;
+  border: 3px solid white;
 
   &.qr-code--right-padding {
     margin-right: $spacing-vertical * 2/3;

@@ -10,6 +10,7 @@ import Spinner from 'component/spinner';
 
 type Props = {
   checkPendingPublishes: () => void,
+  clearPublish: () => void,
   fetchClaimListMine: () => void,
   fetching: boolean,
   urls: Array<string>,
@@ -19,26 +20,28 @@ type Props = {
 };
 
 function FileListPublished(props: Props) {
-  const { checkPendingPublishes, fetchClaimListMine, fetching, urls, urlTotal } = props;
+  const { checkPendingPublishes, clearPublish, fetchClaimListMine, fetching, urls, urlTotal } = props;
   useEffect(() => {
     checkPendingPublishes();
     fetchClaimListMine();
   }, [checkPendingPublishes, fetchClaimListMine]);
 
   return (
-    <Page notContained>
+    <Page>
       <WebUploadList />
       {urls && Boolean(urls.length) && (
-        <div className="card">
+        <React.Fragment>
           <ClaimList
             header={__('Your Publishes')}
             loading={fetching}
             persistedStorageKey="claim-list-published"
             uris={urls}
-            headerAltControls={<Button button="link" label={__('New Publish')} navigate="/$/publish" />}
+            headerAltControls={
+              <Button button="link" label={__('New Publish')} navigate="/$/publish" onClick={() => clearPublish()} />
+            }
           />
           <Paginate totalPages={Math.ceil(Number(urlTotal) / Number(PAGE_SIZE))} loading={fetching} />
-        </div>
+        </React.Fragment>
       )}
       {!(urls && urls.length) && (
         <React.Fragment>
@@ -47,7 +50,12 @@ function FileListPublished(props: Props) {
               <div className=" section--small">
                 <h2 className="section__title--large">{__('Nothing published to LBRY yet.')}</h2>
                 <div className="section__actions">
-                  <Button button="primary" navigate="/$/publish" label={__('Publish something new')} />
+                  <Button
+                    button="primary"
+                    navigate="/$/publish"
+                    label={__('Publish something new')}
+                    onClick={() => clearPublish()}
+                  />
                 </div>
               </div>
             </section>

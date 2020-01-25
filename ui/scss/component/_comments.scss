@@ -3,11 +3,10 @@
 }
 
 .comment {
-  font-size: var(--font-multiplier-small);
   padding: var(--spacing-small) 0;
   display: flex;
   flex-direction: row;
-  font-size: var(--font-small);
+  font-size: var(--font-body);
   padding: var(--spacing-medium) 0;
   margin: 0;
 
@@ -36,7 +35,7 @@
 
 .comment__author {
   text-overflow: ellipsis;
-  padding-right: var(--spacing-small);
+  padding-right: var(--spacing-xsmall);
 }
 
 .comment__time {

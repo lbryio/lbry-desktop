@@ -98,7 +98,14 @@ const Button = forwardRef<any, {}>((props: Props, ref: any) => {
 
   if (href) {
     return (
-      <OutboundLink eventLabel="outboundClick" to={href} target="_blank" className={combinedClassName}>
+      <OutboundLink
+        eventLabel="outboundClick"
+        to={href}
+        target="_blank"
+        className={combinedClassName}
+        onClick={onClick}
+        {...otherProps}
+      >
         {content}
       </OutboundLink>
     );
@@ -147,6 +154,7 @@ const Button = forwardRef<any, {}>((props: Props, ref: any) => {
       }}
       className={combinedClassName}
       activeClassName={activeClass}
+      {...otherProps}
     >
       {content}
     </NavLink>

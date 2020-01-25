@@ -7,7 +7,6 @@ import ChannelSection from 'component/selectChannel';
 import usePersistedState from 'effects/use-persisted-state';
 import * as MODALS from 'constants/modal_types';
 import I18nMessage from '../i18nMessage/view';
-import expandable from 'component/expandable';
 
 type Props = {
   commentingEnabled: boolean,
@@ -24,8 +23,6 @@ export function CommentCreate(props: Props) {
   const [commentAck, setCommentAck] = usePersistedState('comment-acknowledge', false);
   const [channel, setChannel] = usePersistedState('comment-channel', 'anonymous');
   const [charCount, setCharCount] = useState(commentValue.length);
-  const [isTipping, setTippingStatus] = usePersistedState('comment-is-tipping', false);
-  const [tipAmount, setTipAmount] = usePersistedState('comment-tip', 0.0);
 
   function handleCommentChange(event) {
     setCommentValue(event.target.value);
@@ -48,14 +45,6 @@ export function CommentCreate(props: Props) {
   function handleSubmit() {
     if (channel !== CHANNEL_NEW && commentValue.length) createComment(commentValue, claimId, channel);
     setCommentValue('');
-  }
-
-  function handleTippingStatus() {
-    setTippingStatus(!isTipping);
-  }
-
-  function handleTipAmountChanged(event) {
-    setTipAmount(event.target.value);
   }
 
   useEffect(() => setCharCount(commentValue.length), [commentValue]);
@@ -82,33 +71,15 @@ export function CommentCreate(props: Props) {
         charCount={charCount}
         onChange={handleCommentChange}
       />
-        <FormField
-         name="coment-is-tipping"
-         type="checkbox"
-         label={__('Include Tip')}
-         checked={isTipping}
-         onChange={handleTippingStatus}
-         />
-       {isTipping && (
-         <FormField
-            name="comment-tip-amount"
-            className="form-field--price-amount"
-            min="0"
-            step="any"
-            type="number"
-            placeholder="1.23"
-            onChange={handleTipAmountChanged}
-         />
-     )}
-     <div className="section__actions">
-      <Button
-        button="primary"
-        disabled={channel === CHANNEL_NEW || !commentValue.length}
-        type="submit"
-        label={__('Post')}
-        requiresAuth={IS_WEB}
-      />
-  </div>
+      <div className="section__actions">
+        <Button
+          button="primary"
+          disabled={channel === CHANNEL_NEW || !commentValue.length}
+          type="submit"
+          label={__('Post')}
+          requiresAuth={IS_WEB}
+        />
+      </div>
     </Form>
   );
 }

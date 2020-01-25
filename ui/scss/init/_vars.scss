@@ -2,8 +2,8 @@
 $spacing-vertical: 2rem;
 $spacing-width: 36px;
 
-$medium-breakpoint: 1279px;
-$large-breakpoint: 1921px;
+$breakpoint-xsmall: 600px;
+$breakpoint-small: 900px;
 
 :root {
   // Width & spacing
@@ -12,7 +12,7 @@ $large-breakpoint: 1921px;
   --mobile: 600px;
   --side-nav-width: 170px;
   --spacing-miniscule: calc(2rem / 5);
-  --spacing-tiny: calc(2rem / 4);
+  --spacing-xsmall: calc(2rem / 4);
   --spacing-small: calc(2rem / 3);
   --spacing-medium: calc(2rem / 2);
   --spacing-large: 2rem;
@@ -42,8 +42,7 @@ $large-breakpoint: 1921px;
   // Card
   --card-radius: var(--border-radius);
   --card-max-width: 1000px;
-  --card-box-shadow: 0px 2px 6px 0px;
-  --card-box-shadow--attached: 0px 4px 6px 0px;
+  --card-box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
 
   // Modal
   --modal-width: 440px;
@@ -61,4 +60,10 @@ $large-breakpoint: 1921px;
   --file-list-thumbnail-width: 10rem;
 
   --tag-height: 1.5rem;
+}
+
+@media (max-width: $breakpoint-small) {
+  :root {
+    --font-base: 16px;
+  }
 }

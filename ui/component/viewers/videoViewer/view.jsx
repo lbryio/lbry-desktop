@@ -3,7 +3,9 @@ import React, { useRef, useEffect, useState } from 'react';
 import { stopContextMenu } from 'util/context-menu';
 import videojs from 'video.js/dist/alt/video.core.novtt.min.js';
 import 'video.js/dist/alt/video-js-cdn.min.css';
+import eventTracking from 'videojs-event-tracking';
 import isUserTyping from 'util/detect-typing';
+import analytics from 'analytics';
 
 const F11_KEYCODE = 122;
 const SPACE_BAR_KEYCODE = 32;
@@ -42,10 +44,23 @@ type Props = {
   thumbnail: string,
   hasFileInfo: boolean,
   onEndedCB: any,
+  claim: Claim,
 };
 
 function VideoViewer(props: Props) {
-  const { contentType, source, setPlayingUri, onEndedCB, changeVolume, changeMute, volume, muted, thumbnail } = props;
+  const {
+    contentType,
+    source,
+    setPlayingUri,
+    onEndedCB,
+    changeVolume,
+    changeMute,
+    volume,
+    muted,
+    thumbnail,
+    claim,
+  } = props;
+  const claimId = claim && claim.claim_id;
   const videoRef = useRef();
   const isAudio = contentType.includes('audio');
   let forceTypes = [
@@ -56,6 +71,7 @@ function VideoViewer(props: Props) {
     'video/x-ms-wmv',
     'video/x-msvideo',
     'video/mpeg',
+    'video/m4v',
   ];
   const forceMp4 = forceTypes.includes(contentType);
   const [requireRedraw, setRequireRedraw] = useState(false);
@@ -63,6 +79,10 @@ function VideoViewer(props: Props) {
 
   useEffect(() => {
     const currentVideo: HTMLVideoElement | null = document.querySelector('video');
+
+    if (!Object.keys(videojs.getPlugins()).includes('eventTracking')) {
+      videojs.registerPlugin('eventTracking', eventTracking);
+    }
 
     function doEnded() {
       // clear position
@@ -104,6 +124,7 @@ function VideoViewer(props: Props) {
           type: forceMp4 ? 'video/mp4' : contentType,
         },
       ],
+      plugins: { eventTracking: true },
     };
 
     if (isAudio) {
@@ -183,6 +204,26 @@ function VideoViewer(props: Props) {
 
     // include requireRedraw here so the event listener is re-added when we need to manually remove/add the video player
   }, [videoRef, requireRedraw]);
+
+  // player analytics
+  useEffect(() => {
+    function doTrackingBuffered(e: Event, data: any) {
+      analytics.videoBufferEvent(claimId, data.currentTime);
+    }
+    function doTrackingFirstPlay(e: Event, data: any) {
+      analytics.videoStartEvent(claimId, data.secondsToLoad);
+    }
+    if (player) {
+      player.on('tracking:buffered', (e, d) => doTrackingBuffered(e, d));
+      player.on('tracking:firstplay', (e, d) => doTrackingFirstPlay(e, d));
+    }
+    return () => {
+      if (player) {
+        player.off();
+      }
+    };
+    // include requireRedraw here so the event listener is re-added when we need to manually remove/add the video player
+  }, [player]);
 
   return (
     <div className="file-render__viewer" onContextMenu={stopContextMenu}>

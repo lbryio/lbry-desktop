@@ -43,11 +43,9 @@ class FileDetails extends PureComponent<Props> {
       <Fragment>
         <Expandable>
           {description && (
-            <Fragment>
-              <div className="media__info-text">
-                <MarkdownPreview content={description} />
-              </div>
-            </Fragment>
+            <div className="media__info-text">
+              <MarkdownPreview content={description} />
+            </div>
           )}
           <ClaimTags uri={uri} type="large" />
           <table className="table table--condensed table--fixed table--file-details">

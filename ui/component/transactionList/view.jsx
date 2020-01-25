@@ -53,7 +53,7 @@ function TransactionList(props: Props) {
                 label={__('Export')}
                 title={__('Export Transactions')}
                 filters={['nout']}
-                defaultPath={__('lbry-transactions-history')}
+                defaultPath={'lbry-transactions-history'}
                 disabled={!transactions.length}
               />
             )}

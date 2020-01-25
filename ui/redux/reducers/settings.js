@@ -2,12 +2,18 @@ import * as ACTIONS from 'constants/action_types';
 import * as SETTINGS from 'constants/settings';
 import moment from 'moment';
 import SUPPORTED_LANGUAGES from 'constants/supported_languages';
+import { ACTIONS as LBRY_REDUX_ACTIONS, SHARED_PREFERENCES } from 'lbry-redux';
 
 const reducers = {};
 const defaultState = {
   isNight: false,
   loadedLanguages: [...Object.keys(window.i18n_messages), 'en'] || ['en'],
+  customWalletServers: [],
+  sharedPreferences: {
+    [SHARED_PREFERENCES.WALLET_SERVERS]: [],
+  },
   daemonSettings: {},
+  daemonStatus: {},
   clientSettings: {
     // UX
     [SETTINGS.NEW_USER_ACKNOWLEDGED]: false,
@@ -51,9 +57,14 @@ const defaultState = {
   },
 };
 
-reducers[ACTIONS.DAEMON_SETTINGS_RECEIVED] = (state, action) =>
+reducers[LBRY_REDUX_ACTIONS.DAEMON_SETTINGS_RECEIVED] = (state, action) =>
   Object.assign({}, state, {
     daemonSettings: action.data.settings,
+  });
+
+reducers[LBRY_REDUX_ACTIONS.DAEMON_STATUS_RECEIVED] = (state, action) =>
+  Object.assign({}, state, {
+    daemonStatus: action.data.status,
   });
 
 reducers[ACTIONS.CLIENT_SETTING_CHANGED] = (state, action) => {
@@ -91,6 +102,41 @@ reducers[ACTIONS.DOWNLOAD_LANGUAGE_SUCCESS] = (state, action) => {
     return state;
   }
 };
+
+reducers[LBRY_REDUX_ACTIONS.SHARED_PREFERENCE_SET] = (state, action) => {
+  const { key, value } = action.data;
+  const sharedPreferences = Object.assign({}, state.sharedPreferences);
+  sharedPreferences[key] = value;
+
+  return Object.assign({}, state, {
+    sharedPreferences,
+  });
+}
+
+reducers[ACTIONS.CLIENT_SETTING_CHANGED] = (state, action) => {
+  const { key, value } = action.data;
+  const clientSettings = Object.assign({}, state.clientSettings);
+
+  clientSettings[key] = value;
+
+  return Object.assign({}, state, {
+    clientSettings,
+  });
+};
+
+reducers[LBRY_REDUX_ACTIONS.USER_STATE_POPULATE] = (
+  state,
+  action,
+) => {
+  const { settings: sharedPreferences } = action.data;
+
+  // process clientSettings and daemonSettings
+  return Object.assign({}, state, { sharedPreferences });
+};
+
+reducers[LBRY_REDUX_ACTIONS.SAVE_CUSTOM_WALLET_SERVERS] = (state, action) => {
+  return Object.assign({}, state, {customWalletServers: action.data});
+}
 
 export default function reducer(state = defaultState, action) {
   const handler = reducers[action.type];

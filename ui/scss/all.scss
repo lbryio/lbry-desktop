@@ -5,8 +5,8 @@
 @import 'themes/dark.scss';
 @import 'init/vars';
 @import 'init/mixins';
-@import 'init/type';
 @import 'init/gui';
+@import 'component/ads';
 @import 'component/animation';
 @import 'component/button';
 @import 'component/card';
@@ -41,6 +41,5 @@
 @import 'component/table';
 @import 'component/tabs';
 @import 'component/tags';
-@import 'component/time';
 @import 'component/wunderbar';
 @import 'component/yrbl';

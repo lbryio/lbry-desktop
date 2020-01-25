@@ -7,6 +7,7 @@ import {
   makeSelectTotalPagesForChannel,
   makeSelectTitleForUri,
   normalizeURI,
+  makeSelectClaimIsMine,
 } from 'lbry-redux';
 import { selectBlackListedOutpoints } from 'lbryinc';
 import ShowPage from './view';
@@ -38,6 +39,7 @@ const select = (state, props) => {
     totalPages: makeSelectTotalPagesForChannel(uri, PAGE_SIZE)(state),
     uri,
     title: makeSelectTitleForUri(uri)(state),
+    claimIsMine: makeSelectClaimIsMine(uri)(state),
   };
 };
 

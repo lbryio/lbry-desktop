@@ -1,15 +1,21 @@
 const { getHtml } = require('./html');
-const { generateStreamUrl } = require('../../ui/util/lbrytv');
-const { LBRY_TV_API } = require('../../config');
+const { generateStreamUrl, generateDownloadUrl } = require('../../ui/util/lbrytv');
 const Router = require('@koa/router');
 const send = require('koa-send');
 
 const router = new Router();
 
-// TODO
-// router.get(`/embed/:claimName/:claimId`, async ctx => {
-// Proxy request through lbrytv
-// });
+router.get(`/$/embed/:claimName/:claimId`, async ctx => {
+  const { claimName, claimId } = ctx.params;
+  const streamUrl = generateStreamUrl(claimName, claimId);
+  ctx.redirect(streamUrl);
+});
+
+router.get(`/$/download/:claimName/:claimId`, async ctx => {
+  const { claimName, claimId } = ctx.params;
+  const downloadUrl = generateDownloadUrl(claimName, claimId);
+  ctx.redirect(downloadUrl);
+});
 
 router.get('*', async ctx => {
   const html = await getHtml(ctx);

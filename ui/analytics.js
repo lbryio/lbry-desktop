@@ -21,12 +21,15 @@ ElectronCookies.enable({
 // @endif
 
 type Analytics = {
+  error: string => void,
   pageView: string => void,
   setUser: Object => void,
   toggle: (boolean, ?boolean) => void,
   apiLogView: (string, string, string, ?number, ?() => void) => Promise<any>,
   apiLogPublish: (ChannelClaim | StreamClaim) => void,
   tagFollowEvent: (string, boolean, string) => void,
+  videoStartEvent: (string, number) => void,
+  videoBufferEvent: (string, number) => void,
   emailProvidedEvent: () => void,
   emailVerifiedEvent: () => void,
   rewardEligibleEvent: () => void,
@@ -42,8 +45,14 @@ type LogPublishParams = {
   channel_claim_id?: string,
 };
 
-let analyticsEnabled: boolean = true;
+let analyticsEnabled: boolean = isProduction;
+
 const analytics: Analytics = {
+  error: message => {
+    if (analyticsEnabled && isProduction) {
+      Lbryio.call('event', 'desktop_error', { error_message: message });
+    }
+  },
   pageView: path => {
     if (analyticsEnabled) {
       ReactGA.pageview(path, [SECOND_TRACKER_NAME]);
@@ -120,6 +129,12 @@ const analytics: Analytics = {
       Lbryio.call('feedback', 'search', { query, vote });
     }
   },
+  videoStartEvent: (claimId, duration) => {
+    sendGaEvent('Media', 'StartDelay', claimId, duration);
+  },
+  videoBufferEvent: (claimId, currentTime) => {
+    sendGaEvent('Media', 'BufferTimestamp', claimId, currentTime);
+  },
   tagFollowEvent: (tag, following, location) => {
     sendGaEvent(following ? 'Tag-Follow' : 'Tag-Unfollow', tag);
   },
@@ -147,13 +162,14 @@ const analytics: Analytics = {
   },
 };
 
-function sendGaEvent(category, action, label) {
+function sendGaEvent(category, action, label, value) {
   if (analyticsEnabled && isProduction) {
     ReactGA.event(
       {
         category,
         action,
         ...(label ? { label } : {}),
+        ...(value ? { value } : {}),
       },
       [SECOND_TRACKER_NAME]
     );

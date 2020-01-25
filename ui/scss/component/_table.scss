@@ -1,3 +1,7 @@
+.table__wrapper {
+  overflow-x: auto;
+}
+
 .table__header {
   display: flex;
   justify-content: space-between;
@@ -17,6 +21,10 @@
   @extend .table__header-text;
   display: flex;
   justify-content: space-between;
+
+  @media (max-width: $breakpoint-small) {
+    flex-wrap: wrap;
+  }
 }
 
 .table--help {
@@ -74,5 +82,16 @@
 
   td:nth-of-type(2) {
     width: 70%;
+  }
+}
+
+.table__item--actionable {
+  vertical-align: middle;
+  white-space: nowrap;
+
+  .button {
+    height: 1.5rem;
+    padding: var(--spacing-s);
+    margin-left: var(--spacing-m);
   }
 }

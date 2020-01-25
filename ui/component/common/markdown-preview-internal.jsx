@@ -8,6 +8,8 @@ import reactRenderer from 'remark-react';
 import ExternalLink from 'component/externalLink';
 import defaultSchema from 'hast-util-sanitize/lib/github.json';
 import { formatedLinks, inlineLinks } from 'util/remark-lbry';
+import { Link } from 'react-router-dom';
+import { formatLbryUrlForWeb } from 'util/url';
 
 type SimpleTextProps = {
   children?: React.Node,
@@ -30,7 +32,24 @@ const SimpleText = (props: SimpleTextProps) => {
 };
 
 const SimpleLink = (props: SimpleLinkProps) => {
-  const { href, title, children } = props;
+  const { title, children } = props;
+  let { href } = props;
+  if (href && href.startsWith('lbry://')) {
+    href = formatLbryUrlForWeb(href);
+    // using Link after formatLbryUrl to handle "/" vs "#/"
+    // for web and desktop scenarios respectively
+    return (
+      <Link
+        title={title}
+        to={href}
+        onClick={e => {
+          e.stopPropagation();
+        }}
+      >
+        {children}
+      </Link>
+    );
+  }
   return (
     <a href={href} title={title}>
       {children}

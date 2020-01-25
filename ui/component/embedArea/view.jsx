@@ -3,8 +3,7 @@ import * as ICONS from 'constants/icons';
 import { FormField } from 'component/common/form';
 import Button from 'component/button';
 import React, { useRef } from 'react';
-import { generateStreamUrl } from 'util/lbrytv';
-import { LBRY_TV_API } from 'config';
+import { generateEmbedUrl } from 'util/lbrytv';
 
 type Props = {
   copyable: string,
@@ -19,7 +18,7 @@ export default function EmbedArea(props: Props) {
   const { claim_id: claimId, name } = claim;
   const input = useRef();
 
-  const streamUrl = generateStreamUrl(name, claimId, LBRY_TV_API);
+  const streamUrl = generateEmbedUrl(name, claimId);
   let embedText = `<iframe width="560" height="315" src="${streamUrl}" allowfullscreen></iframe>`;
 
   function copyToClipboard() {

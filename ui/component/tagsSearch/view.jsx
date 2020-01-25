@@ -77,7 +77,7 @@ export default function TagsSearch(props: Props) {
 
     setNewTag('');
 
-    const newTagsArr = [...new Set(tags.split(',').map(newTag => newTag.trim().toLowerCase()))];
+    const newTagsArr = Array.from(new Set(tags.split(',').map(newTag => newTag.trim().toLowerCase())));
 
     // Split into individual tags, normalize the tags, and remove duplicates with a set.
     if (onSelect) {
@@ -87,11 +87,11 @@ export default function TagsSearch(props: Props) {
       onSelect(arrOfObjectTags);
     } else {
       newTagsArr.forEach(tag => {
-        if (!unfollowedTags.map(({ name }) => name).includes(tag)) {
+        if (!unfollowedTags.some(({ name }) => name === tag)) {
           doAddTag(tag);
         }
 
-        if (!followedTags.map(({ name }) => name).includes(tag)) {
+        if (!followedTags.some(({ name }) => name === tag)) {
           doToggleTagFollow(tag);
         }
       });
@@ -105,7 +105,6 @@ export default function TagsSearch(props: Props) {
       doToggleTagFollow(tag);
     }
   }
-
   return (
     <React.Fragment>
       <Form className="tags__input-wrapper" onSubmit={handleSubmit}>

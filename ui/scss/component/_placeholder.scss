@@ -20,4 +20,26 @@
     width: 30%;
     height: 1.5em;
   }
+
+  &.claim-tile__title {
+    width: 100%;
+    height: 2.5rem;
+    margin-left: 0;
+  }
+
+  &.claim-tile__info {
+    width: 40%;
+    height: 2rem;
+  }
+
+  @media (max-width: $breakpoint-small) {
+    &.media__thumb {
+      display: none;
+    }
+  }
+}
+
+.placeholder--text-document {
+  @include placeholder;
+  height: 60vh;
 }

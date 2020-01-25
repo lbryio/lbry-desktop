@@ -1,5 +1,5 @@
 // @flow
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { parseURI } from 'lbry-redux';
 import Page from 'component/page';
 import SubscribeButton from 'component/subscribeButton';
@@ -19,16 +19,17 @@ import * as ICONS from 'constants/icons';
 import classnames from 'classnames';
 import * as MODALS from 'constants/modal_types';
 import { Form, FormField } from 'component/common/form';
-import ClaimPreview from 'component/claimPreview';
 import Icon from 'component/common/icon';
 import HelpLink from 'component/common/help-link';
-import debounce from 'util/debounce';
 import { DEBOUNCE_WAIT_DURATION_MS } from 'constants/search';
+import ClaimList from 'component/claimList';
 
 const PAGE_VIEW_QUERY = `view`;
 const ABOUT_PAGE = `about`;
 const DISCUSSION_PAGE = `discussion`;
 const LIGHTHOUSE_URL = 'https://lighthouse.lbry.com/search';
+const ARROW_LEFT_KEYCODE = 37;
+const ARROW_RIGHT_KEYCODE = 39;
 
 type Props = {
   uri: string,
@@ -83,8 +84,6 @@ function ChannelPage(props: Props) {
   const [coverPreview, setCoverPreview] = useState(cover);
   const [searchQuery, setSearchQuery] = useState('');
   const [searchResults, setSearchResults] = useState(undefined);
-  // passing callback to useState ensures it's only set on initial render. Without this, the debouncing wont work.
-  const [performSearch] = useState(() => debounce(updateResults, DEBOUNCE_WAIT_DURATION_MS));
   const claimId = claim.claim_id;
 
   // If a user changes tabs, update the url so it stays on the same page if they refresh.
@@ -107,22 +106,6 @@ function ChannelPage(props: Props) {
     history.push(`${url}${search}`);
   }
 
-  function handleSearch() {
-    performSearch(searchQuery);
-  }
-
-  function updateResults(query) {
-    // In order to display original search results, search results must be set to null. A query of '' should display original results.
-    if (query === '') return setSearchResults(null);
-
-    const url = generateFetchUrl(query);
-    getResults(url);
-  }
-
-  function generateFetchUrl(query) {
-    return `${LIGHTHOUSE_URL}?s=${encodeURIComponent(query)}&channel_id=${encodeURIComponent(claim.claim_id)}`;
-  }
-
   function getResults(fetchUrl) {
     fetch(fetchUrl)
       .then(res => res.json())
@@ -137,13 +120,32 @@ function ChannelPage(props: Props) {
       });
   }
 
-  React.useEffect(() => {
-    handleSearch();
-  }, [searchQuery]);
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      if (searchQuery === '') {
+        // In order to display original search results, search results must be set to null. A query of '' should display original results.
+        return setSearchResults(null);
+      } else {
+        getResults(`${LIGHTHOUSE_URL}?s=${encodeURIComponent(searchQuery)}&channel_id=${encodeURIComponent(claimId)}`);
+      }
+    }, DEBOUNCE_WAIT_DURATION_MS);
+    return () => clearTimeout(timer);
+  }, [claimId, searchQuery]);
 
   function handleInputChange(e) {
     const { value } = e.target;
     setSearchQuery(value);
+  }
+
+  /*
+    Since the search is inside of TabList, the left and right arrow keys change the tabIndex.
+    This results in the user not being able to navigate the search string by using arrow keys.
+    This function allows the event to change cursor position and then stops propagation to prevent tab changing.
+  */
+  function handleSearchArrowKeys(e) {
+    if (e.keyCode === ARROW_LEFT_KEYCODE || e.keyCode === ARROW_RIGHT_KEYCODE) {
+      e.stopPropagation();
+    }
   }
 
   let channelIsBlackListed = false;
@@ -161,113 +163,122 @@ function ChannelPage(props: Props) {
     fetchSubCount(claimId);
   }, [uri, fetchSubCount, claimId]);
 
+  React.useEffect(() => {
+    if (!channelIsMine && editing) {
+      setEditing(false);
+    }
+  }, [channelIsMine, editing]);
+
   return (
     <Page>
-      <div className="card">
-        <header className="channel-cover">
-          <div className="channel__quick-actions">
-            {!channelIsBlocked && !channelIsBlackListed && <ShareButton uri={uri} isChannel />}
-            {!channelIsMine && (
-              <Button
-                button="alt"
-                icon={ICONS.TIP}
-                label={__('Tip')}
-                title={__('Send a tip to this creator')}
-                onClick={() => openModal(MODALS.SEND_TIP, { uri, channelIsMine, isSupport: false })}
-              />
-            )}
-            {(channelIsMine || (!channelIsMine && supportOption)) && (
-              <Button
-                button="alt"
-                icon={ICONS.SUPPORT}
-                label={__('Support')}
-                title={__('Support this creator')}
-                onClick={() => openModal(MODALS.SEND_TIP, { uri, channelIsMine, isSupport: true })}
-              />
-            )}
-            {!channelIsBlocked && (!channelIsBlackListed || isSubscribed) && <SubscribeButton uri={permanentUrl} />}
-            {!isSubscribed && <BlockButton uri={permanentUrl} />}
-          </div>
-          {!editing && cover && (
-            <img
-              className={classnames('channel-cover__custom', { 'channel__image--blurred': channelIsBlocked })}
-              src={cover}
+      <ClaimUri uri={uri} />
+
+      <header className="channel-cover">
+        <div className="channel__quick-actions">
+          {!channelIsBlocked && !channelIsBlackListed && <ShareButton uri={uri} isChannel />}
+          {!channelIsMine && (
+            <Button
+              button="alt"
+              icon={ICONS.TIP}
+              label={__('Tip')}
+              title={__('Send a tip to this creator')}
+              onClick={() => openModal(MODALS.SEND_TIP, { uri, channelIsMine, isSupport: false })}
             />
           )}
-          {editing && <img className="channel-cover__custom" src={coverPreview} />}
-          {/* component that offers select/upload */}
-          <div className="channel__primary-info">
-            {!editing && (
-              <ChannelThumbnail className="channel__thumbnail--channel-page" uri={uri} obscure={channelIsBlocked} />
-            )}
-            {editing && (
-              <ChannelThumbnail
-                className="channel__thumbnail--channel-page"
-                uri={uri}
-                thumbnailPreview={thumbPreview}
-              />
-            )}
-            <h1 className="channel__title">{title || '@' + channelName}</h1>
-            {channelIsMine && !editing && (
-              <Button button="alt" title={__('Edit')} onClick={() => setEditing(!editing)} icon={ICONS.EDIT} />
-            )}
-            <div className="channel__meta">
-              <ClaimUri uri={uri} inline />
-              <span>
-                {subCount} {subCount !== 1 ? __('Subscribers') : __('Subscriber')}
-                <HelpLink href="https://lbry.com/faq/views" />
-              </span>
-            </div>
+          {(channelIsMine || (!channelIsMine && supportOption)) && (
+            <Button
+              button="alt"
+              icon={ICONS.SUPPORT}
+              label={__('Support')}
+              title={__('Support this creator')}
+              onClick={() => openModal(MODALS.SEND_TIP, { uri, channelIsMine, isSupport: true })}
+            />
+          )}
+          {!channelIsBlocked && (!channelIsBlackListed || isSubscribed) && <SubscribeButton uri={permanentUrl} />}
+          {!isSubscribed && <BlockButton uri={permanentUrl} />}
+        </div>
+        {!editing && cover && (
+          <img
+            className={classnames('channel-cover__custom', { 'channel__image--blurred': channelIsBlocked })}
+            src={cover}
+          />
+        )}
+        {editing && <img className="channel-cover__custom" src={coverPreview} />}
+        {/* component that offers select/upload */}
+        <div className="channel__primary-info">
+          {!editing && (
+            <ChannelThumbnail className="channel__thumbnail--channel-page" uri={uri} obscure={channelIsBlocked} />
+          )}
+          {editing && (
+            <ChannelThumbnail className="channel__thumbnail--channel-page" uri={uri} thumbnailPreview={thumbPreview} />
+          )}
+          <h1 className="channel__title">{title || '@' + channelName}</h1>
+          {channelIsMine && !editing && (
+            <Button button="alt" title={__('Edit')} onClick={() => setEditing(!editing)} icon={ICONS.EDIT} />
+          )}
+          <div className="channel__meta">
+            <span>
+              {subCount} {subCount !== 1 ? __('Followers') : __('Follower')}
+              <HelpLink href="https://lbry.com/faq/views" />
+            </span>
           </div>
-        </header>
-        <Tabs onChange={onTabChange} index={tabIndex}>
-          <TabList className="tabs__list--channel-page">
-            <Tab disabled={editing}>{__('Content')}</Tab>
-            <Tab>{editing ? __('Editing Your Channel') : __('About')}</Tab>
-            <Tab disabled={editing}>{__('Comments')}</Tab>
-            {/* only render searchbar on content page (tab index 0 === content page) */}
-            {tabIndex === 0 ? (
-              <Form onSubmit={handleSearch} className="wunderbar--inline">
-                <Icon icon={ICONS.SEARCH} />
-                <FormField
-                  className="wunderbar__input"
-                  value={searchQuery}
-                  onChange={handleInputChange}
-                  type="text"
-                  placeholder={__('Search')}
-                />
-              </Form>
-            ) : (
-              <div />
-            )}
-          </TabList>
+        </div>
+      </header>
+      <Tabs onChange={onTabChange} index={tabIndex}>
+        <TabList className="tabs__list--channel-page">
+          <Tab disabled={editing}>{__('Content')}</Tab>
+          <Tab>{editing ? __('Editing Your Channel') : __('About')}</Tab>
+          <Tab disabled={editing}>{__('Comments')}</Tab>
+          {/* only render searchbar on content page (tab index 0 === content page) */}
+          {tabIndex === 0 ? (
+            <Form onSubmit={() => {}} className="wunderbar--inline">
+              <Icon icon={ICONS.SEARCH} />
+              <FormField
+                className="wunderbar__input"
+                value={searchQuery}
+                onChange={handleInputChange}
+                onKeyDown={handleSearchArrowKeys}
+                type="text"
+                placeholder={__('Search')}
+              />
+            </Form>
+          ) : (
+            <div />
+          )}
+        </TabList>
 
-          <TabPanels>
-            <TabPanel>
-              {searchResults ? (
-                searchResults.map(url => <ClaimPreview key={url} uri={url} />)
-              ) : (
-                <ChannelContent uri={uri} channelIsBlackListed={channelIsBlackListed} />
-              )}
-            </TabPanel>
-            <TabPanel>
-              {editing ? (
-                <ChannelEdit
-                  uri={uri}
-                  setEditing={setEditing}
-                  updateThumb={v => setThumbPreview(v)}
-                  updateCover={v => setCoverPreview(v)}
-                />
-              ) : (
-                <ChannelAbout uri={uri} />
-              )}
-            </TabPanel>
-            <TabPanel>
-              <ChannelDiscussion uri={uri} />
-            </TabPanel>
-          </TabPanels>
-        </Tabs>
-      </div>
+        <TabPanels>
+          <TabPanel>
+            {searchResults ? (
+              <ClaimList
+                header={false}
+                headerAltControls={null}
+                id={`search-results-for-${claimId}`}
+                loading={false}
+                showHiddenByUser={false}
+                uris={searchResults}
+              />
+            ) : (
+              <ChannelContent uri={uri} channelIsBlackListed={channelIsBlackListed} />
+            )}
+          </TabPanel>
+          <TabPanel>
+            {editing ? (
+              <ChannelEdit
+                uri={uri}
+                setEditing={setEditing}
+                updateThumb={v => setThumbPreview(v)}
+                updateCover={v => setCoverPreview(v)}
+              />
+            ) : (
+              <ChannelAbout uri={uri} />
+            )}
+          </TabPanel>
+          <TabPanel>
+            <ChannelDiscussion uri={uri} />
+          </TabPanel>
+        </TabPanels>
+      </Tabs>
     </Page>
   );
 }

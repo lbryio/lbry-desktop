@@ -9,15 +9,16 @@ import I18nMessage from 'component/i18nMessage';
 type Props = {
   balance: number,
   totalRewardValue: number,
+  title?: string,
 };
 
 function RewardAuthIntro(props: Props) {
-  const { totalRewardValue } = props;
+  const { totalRewardValue, title } = props;
   const totalRewardRounded = Math.floor(totalRewardValue / 10) * 10;
 
   return (
     <Card
-      title={__('Sign In to lbry.tv to Earn Rewards')}
+      title={title || __('Sign In to lbry.tv to Earn Rewards')}
       subtitle={
         <I18nMessage
           tokens={{

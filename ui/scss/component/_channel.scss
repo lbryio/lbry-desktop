@@ -2,13 +2,12 @@ $cover-z-index: 0;
 $metadata-z-index: 1;
 
 .channel-cover {
+  position: relative;
   background-image: linear-gradient(to right, #637ad2, #318794 80%);
   display: flex;
   align-items: flex-end;
   box-sizing: content-box;
   color: #fff;
-  border-top-left-radius: var(--card-radius);
-  border-top-right-radius: var(--card-radius);
 
   .button {
     color: #fff;
@@ -25,8 +24,16 @@ $metadata-z-index: 1;
 
 .channel-cover,
 .channel-cover__custom {
-  height: var(--cover-photo-height);
+  min-height: var(--cover-photo-height);
   width: 100%;
+  border-top-left-radius: var(--card-radius);
+  border-top-right-radius: var(--card-radius);
+
+  @media (max-width: $breakpoint-small) {
+    // Yikes
+    // I, Sean Yesmunt, take full responsibility for this monster
+    min-height: calc(var(--cover-photo-height) + 2 * var(--spacing-xlarge) + var(--spacing-medium));
+  }
 }
 
 .channel-thumbnail {
@@ -46,9 +53,12 @@ $metadata-z-index: 1;
   position: absolute;
   height: var(--channel-thumbnail-width);
   width: var(--channel-thumbnail-width);
-  box-shadow: 0px 8px 40px -3px #000;
   left: var(--spacing-medium);
   top: 4rem;
+
+  @media (max-width: $breakpoint-small) {
+    display: none;
+  }
 }
 
 .channel-thumbnail__custom {
@@ -99,6 +109,11 @@ $metadata-z-index: 1;
   padding-bottom: var(--spacing-medium);
   min-width: 0;
   width: 100%;
+
+  @media (max-width: $breakpoint-small) {
+    padding-left: var(--spacing-medium);
+    padding-top: calc(2 * var(--spacing-xlarge));
+  }
 }
 
 .channel__title {
@@ -106,7 +121,6 @@ $metadata-z-index: 1;
   margin-right: var(--spacing-small);
   overflow: hidden;
   text-overflow: ellipsis;
-  // line-height: var(--font-heading);
   font-size: xx-large;
   font-weight: var(--font-weight-bold);
 
@@ -114,6 +128,10 @@ $metadata-z-index: 1;
   // We should have a generic style for "header with button next to it"
   .button {
     margin-left: var(--spacing-medium);
+  }
+
+  @media (max-width: $breakpoint-small) {
+    padding-top: var(--spacing-xlarge);
   }
 }
 
@@ -128,9 +146,15 @@ $metadata-z-index: 1;
 
 .channel__quick-actions {
   @extend .card__actions;
+  margin-left: var(--spacing-medium);
   position: absolute;
   top: 0;
   right: var(--spacing-medium);
   margin-top: var(--spacing-medium);
   z-index: $metadata-z-index;
+  flex-wrap: wrap;
+}
+
+.channel-name--inline {
+  margin-left: var(--spacing-xsmall);
 }

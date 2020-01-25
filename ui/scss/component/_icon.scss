@@ -18,11 +18,10 @@
 }
 
 .icon--help {
-  margin-left: var(--spacing-small);
-  top: 0.2rem;
+  color: var(--color-subtitle);
+  margin-left: var(--spacing-xsmall);
   opacity: 0.7;
-  height: 1rem;
-  width: 1rem;
+  top: 2px;
 }
 
 .icon--hidden {

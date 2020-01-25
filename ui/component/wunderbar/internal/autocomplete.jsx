@@ -522,7 +522,7 @@ export default class Autocomplete extends React.Component {
 
   isInputFocused() {
     const el = this.refs.input;
-    return el.ownerDocument && el === el.ownerDocument.activeElement;
+    return el ? el.ownerDocument && el === el.ownerDocument.activeElement : false;
   }
 
   handleInputClick() {

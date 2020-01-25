@@ -22,7 +22,7 @@ function ChannelContent(props: Props) {
   const showAbout = description || email || website;
 
   return (
-    <section className="card--section">
+    <section className="section">
       {!showAbout && <h2 className="main--empty empty">{__('Nothing here yet')}</h2>}
       {showAbout && (
         <Fragment>

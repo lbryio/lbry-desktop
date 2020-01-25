@@ -1,6 +1,6 @@
 // @flow
 import type { Node } from 'react';
-import * as PAGES from 'constants/pages';
+import classnames from 'classnames';
 import React, { Fragment, useEffect, useState } from 'react';
 import { withRouter } from 'react-router';
 import { createNormalizedClaimSearchKey, MATURE_TAGS } from 'lbry-redux';
@@ -8,7 +8,6 @@ import { FormField } from 'component/common/form';
 import Button from 'component/button';
 import moment from 'moment';
 import ClaimList from 'component/claimList';
-import Tag from 'component/tag';
 import ClaimPreview from 'component/claimPreview';
 import { toCapitalCase } from 'util/string';
 import I18nMessage from 'component/i18nMessage';
@@ -19,15 +18,12 @@ const TIME_WEEK = 'week';
 const TIME_MONTH = 'month';
 const TIME_YEAR = 'year';
 const TIME_ALL = 'all';
-const SEARCH_SORT_YOU = 'you';
-const SEARCH_SORT_ALL = 'everyone';
-const SEARCH_SORT_CHANNELS = 'channels';
 
-const TYPE_TRENDING = 'trending';
-const TYPE_TOP = 'top';
-const TYPE_NEW = 'new';
-const SEARCH_FILTER_TYPES = [SEARCH_SORT_YOU, SEARCH_SORT_CHANNELS, SEARCH_SORT_ALL];
-const SEARCH_TYPES = [TYPE_TRENDING, TYPE_TOP, TYPE_NEW];
+export const TYPE_TRENDING = 'trending';
+export const TYPE_TOP = 'top';
+export const TYPE_NEW = 'new';
+
+const SEARCH_TYPES = [TYPE_TRENDING, TYPE_NEW, TYPE_TOP];
 const SEARCH_TIMES = [TIME_DAY, TIME_WEEK, TIME_MONTH, TIME_YEAR, TIME_ALL];
 
 type Props = {
@@ -40,7 +36,6 @@ type Props = {
   doToggleTagFollow: string => void,
   meta?: Node,
   showNsfw: boolean,
-  hideCustomization: boolean,
   history: { action: string, push: string => void, replace: string => void },
   location: { search: string, pathname: string },
   claimSearchByQuery: {
@@ -48,6 +43,9 @@ type Props = {
   },
   hiddenUris: Array<string>,
   hiddenNsfwMessage?: Node,
+  channelIds?: Array<string>,
+  defaultTypeSort?: string,
+  headerLabel?: string | Node,
 };
 
 function ClaimListDiscover(props: Props) {
@@ -58,21 +56,21 @@ function ClaimListDiscover(props: Props) {
     loading,
     personalView,
     meta,
-    subscribedChannels,
+    channelIds,
     showNsfw,
     history,
     location,
     hiddenUris,
-    hideCustomization,
     hiddenNsfwMessage,
+    defaultTypeSort,
+    headerLabel,
   } = props;
   const didNavigateForward = history.action === 'PUSH';
   const [page, setPage] = useState(1);
   const { search } = location;
   const [forceRefresh, setForceRefresh] = useState();
   const urlParams = new URLSearchParams(search);
-  const personalSort = urlParams.get('sort') || (hideCustomization ? SEARCH_SORT_ALL : SEARCH_SORT_YOU);
-  const typeSort = urlParams.get('type') || TYPE_TRENDING;
+  const typeSort = urlParams.get('type') || defaultTypeSort || TYPE_TRENDING;
   const timeSort = urlParams.get('time') || TIME_WEEK;
   const tagsInUrl = urlParams.get('t') || '';
   const options: {
@@ -91,9 +89,11 @@ function ClaimListDiscover(props: Props) {
     // no_totals makes it so the sdk doesn't have to calculate total number pages for pagination
     // it's faster, but we will need to remove it if we start using total_pages
     no_totals: true,
-    any_tags: (personalView && !hideCustomization && personalSort === SEARCH_SORT_YOU) || !personalView ? tags : [],
-    channel_ids: personalSort === SEARCH_SORT_CHANNELS ? subscribedChannels.map(sub => sub.uri.split('#')[1]) : [],
-    not_channel_ids: hiddenUris && hiddenUris.length ? hiddenUris.map(hiddenUri => hiddenUri.split('#')[1]) : [],
+    any_tags: tags || [],
+    channel_ids: channelIds || [],
+    not_channel_ids:
+      // If channelIds were passed in, we don't need not_channel_ids
+      !channelIds && hiddenUris && hiddenUris.length ? hiddenUris.map(hiddenUri => hiddenUri.split('#')[1]) : [],
     not_tags: !showNsfw ? MATURE_TAGS : [],
     order_by:
       typeSort === TYPE_TRENDING
@@ -107,43 +107,41 @@ function ClaimListDiscover(props: Props) {
     options.release_time = `>${Math.floor(
       moment()
         .subtract(1, timeSort)
+        .startOf('hour')
         .unix()
     )}`;
+  } else if (typeSort === TYPE_NEW || typeSort === TYPE_TRENDING) {
+    // Warning - hack below
+    // If users are following more than 10 channels or tags, limit results to stuff less than a year old
+    // For more than 20, drop it down to 6 months
+    // This helps with timeout issues for users that are following a ton of stuff
+    // https://github.com/lbryio/lbry-sdk/issues/2420
+    if (options.channel_ids.length > 10 || options.any_tags.length > 10) {
+      options.release_time = `>${Math.floor(
+        moment()
+          .subtract(1, TIME_YEAR)
+          .startOf('week')
+          .unix()
+      )}`;
+    } else if (options.channel_ids.length > 20 || options.any_tags.length > 20) {
+      options.release_time = `>${Math.floor(
+        moment()
+          .subtract(6, TIME_MONTH)
+          .startOf('week')
+          .unix()
+      )}`;
+    }
   }
-  const hasContent =
-    (personalSort === SEARCH_SORT_CHANNELS && subscribedChannels.length) ||
-    (personalSort === SEARCH_SORT_YOU && !!tags.length) ||
-    personalSort === SEARCH_SORT_ALL;
-  const hasMatureTags = tags.some(t => MATURE_TAGS.includes(t));
+
+  const hasMatureTags = tags && tags.some(t => MATURE_TAGS.includes(t));
   const claimSearchCacheQuery = createNormalizedClaimSearchKey(options);
-  const uris = (hasContent && claimSearchByQuery[claimSearchCacheQuery]) || [];
+  const uris = claimSearchByQuery[claimSearchCacheQuery] || [];
   const shouldPerformSearch =
-    hasContent &&
-    (uris.length === 0 ||
-      didNavigateForward ||
-      (!loading && uris.length < PAGE_SIZE * page && uris.length % PAGE_SIZE === 0));
+    uris.length === 0 ||
+    didNavigateForward ||
+    (!loading && uris.length < PAGE_SIZE * page && uris.length % PAGE_SIZE === 0);
   // Don't use the query from createNormalizedClaimSearchKey for the effect since that doesn't include page & release_time
   const optionsStringForEffect = JSON.stringify(options);
-
-  const noChannels = (
-    <div>
-      <p>
-        <I18nMessage>You're not following any channels.</I18nMessage>
-      </p>
-      <p>
-        <I18nMessage
-          tokens={{
-            trending: (
-              <Button button="link" label={__('trending for everyone')} navigate={'/?type=trending&sort=everyone'} />
-            ),
-            discover: <Button button="link" label={__('discover some channels!')} navigate={'/$/following'} />,
-          }}
-        >
-          Look what's %trending% or %discover%
-        </I18nMessage>
-      </p>
-    </div>
-  );
 
   const noResults = (
     <div>
@@ -174,22 +172,6 @@ function ClaimListDiscover(props: Props) {
     </div>
   );
 
-  const noTags = (
-    <p>
-      <I18nMessage
-        tokens={{
-          customize: <Button button="link" navigate={`/$/${PAGES.FOLLOWING}`} label={__('customize')} />,
-        }}
-      >
-        You're not following any tags. Add tags above or smash that %customize% button!
-      </I18nMessage>
-    </p>
-  );
-
-  const noFollowing =
-    (personalSort === SEARCH_SORT_YOU && noTags) || (personalSort === SEARCH_SORT_CHANNELS && noChannels);
-  const emptyState = !loading && !hasContent ? noFollowing : noResults;
-
   function getSearch() {
     let search = `?`;
     if (!personalView) {
@@ -200,7 +182,7 @@ function ClaimListDiscover(props: Props) {
   }
 
   function handleTypeSort(newTypeSort) {
-    let url = `${getSearch()}type=${newTypeSort}&sort=${personalSort}`;
+    let url = `${getSearch()}type=${newTypeSort}`;
     if (newTypeSort === TYPE_TOP) {
       url += `&time=${timeSort}`;
     }
@@ -209,14 +191,9 @@ function ClaimListDiscover(props: Props) {
     history.push(url);
   }
 
-  function handlePersonalSort(newPersonalSort) {
-    setPage(1);
-    history.push(`${getSearch()}type=${typeSort}&sort=${newPersonalSort}`);
-  }
-
   function handleTimeSort(newTimeSort) {
     setPage(1);
-    history.push(`${getSearch()}type=${typeSort}&sort=${personalSort}&time=${newTimeSort}`);
+    history.push(`${getSearch()}type=${typeSort}&time=${newTimeSort}`);
   }
 
   function handleScrollBottom() {
@@ -234,47 +211,19 @@ function ClaimListDiscover(props: Props) {
 
   const header = (
     <Fragment>
-      <FormField
-        className="claim-list__dropdown"
-        type="select"
-        name="trending_sort"
-        value={typeSort}
-        onChange={e => handleTypeSort(e.target.value)}
-      >
-        {SEARCH_TYPES.map(type => (
-          <option key={type} value={type}>
-            {__(toCapitalCase(type))}
-          </option>
-        ))}
-      </FormField>
-      {!hideCustomization && (
-        <Fragment>
-          <span className="claim-list__conjuction">{__('for')}</span>
-          {!personalView && tags && tags.length ? (
-            tags.map(tag => <Tag key={tag} name={tag} disabled type="large" />)
-          ) : (
-            <FormField
-              type="select"
-              name="trending_overview"
-              className="claim-list__dropdown"
-              value={personalSort}
-              onChange={e => {
-                handlePersonalSort(e.target.value);
-              }}
-            >
-              {SEARCH_FILTER_TYPES.map(type => (
-                <option key={type} value={type}>
-                  {type === SEARCH_SORT_ALL
-                    ? __('Everyone')
-                    : type === SEARCH_SORT_YOU
-                    ? __('Tags You Follow')
-                    : __('Channels You Follow')}
-                </option>
-              ))}
-            </FormField>
-          )}
-        </Fragment>
-      )}
+      {SEARCH_TYPES.map(type => (
+        <Button
+          key={type}
+          button="alt"
+          onClick={() => handleTypeSort(type)}
+          className={classnames(`button-toggle button-toggle--${type}`, {
+            'button-toggle--active': typeSort === type,
+          })}
+          icon={toCapitalCase(type)}
+          label={__(toCapitalCase(type))}
+        />
+      ))}
+
       {typeSort === 'top' && (
         <FormField
           className="claim-list__dropdown"
@@ -287,7 +236,9 @@ function ClaimListDiscover(props: Props) {
             <option key={time} value={time}>
               {/* i18fixme */}
               {time === TIME_DAY && __('Today')}
-              {time !== TIME_ALL && time !== TIME_DAY && `${__('This')} ${toCapitalCase(time)}`}
+              {time !== TIME_ALL &&
+                time !== TIME_DAY &&
+                __('This ' + toCapitalCase(time)) /* yes, concat before i18n, since it is read from const */}
               {time === TIME_ALL && __('All time')}
             </option>
           ))}
@@ -298,21 +249,24 @@ function ClaimListDiscover(props: Props) {
   );
 
   return (
-    <div className="card">
+    <React.Fragment>
       <ClaimList
         id={claimSearchCacheQuery}
         loading={loading}
         uris={uris}
         header={header}
+        headerLabel={headerLabel}
         headerAltControls={meta}
         onScrollBottom={handleScrollBottom}
         page={page}
         pageSize={PAGE_SIZE}
-        empty={emptyState}
+        empty={noResults}
       />
 
-      {loading && new Array(PAGE_SIZE).fill(1).map((x, i) => <ClaimPreview key={i} placeholder="loading" />)}
-    </div>
+      <div className="card">
+        {loading && new Array(PAGE_SIZE).fill(1).map((x, i) => <ClaimPreview key={i} placeholder="loading" />)}
+      </div>
+    </React.Fragment>
   );
 }
 

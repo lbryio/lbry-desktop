@@ -1,4 +1,4 @@
-import { Lbry, ACTIONS, doToast } from 'lbry-redux';
+import { Lbry, ACTIONS, doToast, SHARED_PREFERENCES, doWalletReconnect } from 'lbry-redux';
 import * as SETTINGS from 'constants/settings';
 import * as LOCAL_ACTIONS from 'constants/action_types';
 import analytics from 'analytics';
@@ -23,13 +23,37 @@ export function doFetchDaemonSettings() {
   };
 }
 
-export function doSetDaemonSetting(key, value) {
+export function doGetDaemonStatus() {
   return dispatch => {
-    const newSettings = {
+    return Lbry.status().then(status => {
+      dispatch({
+        type: ACTIONS.DAEMON_STATUS_RECEIVED,
+        data: {
+          status,
+        },
+      });
+      return status;
+      },
+    );
+  };
+};
+
+export function doClearDaemonSetting(key) {
+  return dispatch => {
+    const clearKey = {
       key,
-      value: !value && value !== false ? null : value,
     };
-    Lbry.settings_set(newSettings).then(newSettings);
+    Lbry.settings_clear(clearKey).then(defaultSettings => {
+      if (Object.values(SHARED_PREFERENCES).includes(key)) {
+        dispatch({
+          type: ACTIONS.SHARED_PREFERENCE_SET,
+          data: { key: key, value: null },
+        });
+      }
+      if (key === SHARED_PREFERENCES.WALLET_SERVERS) {
+        dispatch(doWalletReconnect());
+      }
+    });
     Lbry.settings_get().then(settings => {
       analytics.toggle(settings.share_usage_data);
       dispatch({
@@ -39,6 +63,43 @@ export function doSetDaemonSetting(key, value) {
         },
       });
     });
+  };
+}
+
+export function doSetDaemonSetting(key, value) {
+  return dispatch => {
+    const newSettings = {
+      key,
+      value: !value && value !== false ? null : value,
+    };
+    Lbry.settings_set(newSettings).then(newSetting => {
+      if (Object.values(SHARED_PREFERENCES).includes(key)) {
+        dispatch({
+          type: ACTIONS.SHARED_PREFERENCE_SET,
+          data: {key: key, value: newSetting[key]},
+        });
+      }
+      // hardcoding this in lieu of a better solution
+      if (key === SHARED_PREFERENCES.WALLET_SERVERS) {
+        dispatch(doWalletReconnect());
+      }
+    });
+    Lbry.settings_get().then(settings => {
+      analytics.toggle(settings.share_usage_data);
+      dispatch({
+        type: ACTIONS.DAEMON_SETTINGS_RECEIVED,
+        data: {
+          settings,
+        },
+      });
+    });
+  };
+}
+
+export function doSaveCustomWalletServers(servers) {
+  return {
+    type: ACTIONS.SAVE_CUSTOM_WALLET_SERVERS,
+    data: servers,
   };
 }
 

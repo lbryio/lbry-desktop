@@ -103,12 +103,6 @@ fieldset-group {
   cursor: default;
 }
 
-.form-field__help {
-  @extend .help;
-  margin-top: var(--spacing-miniscule);
-  margin-bottom: var(--spacing-small);
-}
-
 .form-field--short {
   width: 25em;
 }
@@ -119,4 +113,30 @@ fieldset-group {
 
 .form-field--address {
   min-width: 18em;
+}
+
+.form-field__help {
+  @extend .help;
+  margin-top: var(--spacing-miniscule);
+  margin-bottom: var(--spacing-small);
+}
+
+.form-field__help + .checkbox,
+.form-field__help + .radio {
+  margin-top: var(--spacing-large);
+}
+
+.form-field__conjuction {
+  padding-top: 1rem;
+}
+
+fieldset-section {
+  .form-field__internal-option {
+    margin-top: var(--spacing-small);
+    margin-left: 2.2rem;
+
+    &:first-of-type {
+      margin-top: var(--spacing-small); // Extra specificity needed here since _section.scss is applied after this file
+    }
+  }
 }

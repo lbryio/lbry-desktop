@@ -10,10 +10,11 @@ import ReactModal from 'react-modal';
 import { openContextMenu } from 'util/context-menu';
 import useKonamiListener from 'util/enhanced-layout';
 import Yrbl from 'component/yrbl';
-import FileViewer from 'component/fileViewer';
+import FloatingViewer from 'component/floatingViewer';
 import { withRouter } from 'react-router';
 import usePrevious from 'effects/use-previous';
 import Nag from 'component/common/nag';
+import { rewards as REWARDS } from 'lbryinc';
 // @if TARGET='web'
 import OpenInAppLink from 'component/openInAppLink';
 import YoutubeWelcome from 'component/youtubeWelcome';
@@ -32,7 +33,7 @@ type Props = {
   languages: Array<string>,
   theme: string,
   user: ?{ id: string, has_verified_email: boolean, is_reward_approved: boolean },
-  location: { pathname: string, hash: string },
+  location: { pathname: string, hash: string, search: string },
   history: { push: string => void },
   fetchRewards: () => void,
   fetchTransactions: (number, number) => void,
@@ -40,17 +41,18 @@ type Props = {
   fetchChannelListMine: () => void,
   signIn: () => void,
   requestDownloadUpgrade: () => void,
-  fetchChannelListMine: () => void,
   onSignedIn: () => void,
   setLanguage: string => void,
   isUpgradeAvailable: boolean,
   autoUpdateDownloaded: boolean,
   checkSync: () => void,
+  updatePreferences: () => void,
   syncEnabled: boolean,
   uploadCount: number,
   balance: ?number,
-  accessToken: ?string,
   syncError: ?string,
+  rewards: Array<Reward>,
+  setReferrer: (string, boolean) => void,
 };
 
 function App(props: Props) {
@@ -73,6 +75,9 @@ function App(props: Props) {
     language,
     languages,
     setLanguage,
+    updatePreferences,
+    rewards,
+    setReferrer,
   } = props;
 
   const appRef = useRef();
@@ -84,8 +89,13 @@ function App(props: Props) {
   const previousUserId = usePrevious(userId);
   const previousHasVerifiedEmail = usePrevious(hasVerifiedEmail);
   const previousRewardApproved = usePrevious(isRewardApproved);
-  const { pathname, hash } = props.location;
+  const { pathname, hash, search } = props.location;
   const showUpgradeButton = autoUpdateDownloaded || (process.platform === 'linux' && isUpgradeAvailable);
+  // referral claiming
+  const referredRewardAvailable = rewards && rewards.some(reward => reward.reward_type === REWARDS.TYPE_REFEREE);
+  const urlParams = new URLSearchParams(search);
+  const rawReferrerParam = urlParams.get('r');
+  const sanitizedReferrerParam = rawReferrerParam && rawReferrerParam.replace(':', '#');
 
   let uri;
   try {
@@ -97,11 +107,19 @@ function App(props: Props) {
     if (!uploadCount) return;
     const handleBeforeUnload = event => {
       event.preventDefault();
-      event.returnValue = 'magic';
+      event.returnValue = 'magic'; // without setting this to something it doesn't work
     };
     window.addEventListener('beforeunload', handleBeforeUnload);
     return () => window.removeEventListener('beforeunload', handleBeforeUnload);
   }, [uploadCount]);
+
+  useEffect(() => {
+    if (referredRewardAvailable && sanitizedReferrerParam && isRewardApproved) {
+      setReferrer(sanitizedReferrerParam, true);
+    } else if (referredRewardAvailable && sanitizedReferrerParam) {
+      setReferrer(sanitizedReferrerParam, false);
+    }
+  }, [sanitizedReferrerParam, isRewardApproved, referredRewardAvailable]);
 
   useEffect(() => {
     ReactModal.setAppElement(appRef.current);
@@ -154,6 +172,12 @@ function App(props: Props) {
     }
   }, [hasVerifiedEmail, signIn, hasSignedIn]);
 
+  // @if TARGET='app'
+  useEffect(() => {
+    updatePreferences();
+  }, []);
+  // @endif
+
   useEffect(() => {
     if (hasVerifiedEmail && syncEnabled) {
       checkSync();
@@ -195,7 +219,7 @@ function App(props: Props) {
     >
       <Router />
       <ModalRouter />
-      <FileViewer pageUri={uri} />
+      <FloatingViewer pageUri={uri} />
 
       {/* @if TARGET='web' */}
       <YoutubeWelcome />

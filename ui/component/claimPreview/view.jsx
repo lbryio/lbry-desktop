@@ -7,7 +7,7 @@ import { withRouter } from 'react-router-dom';
 import { openCopyLinkMenu } from 'util/context-menu';
 import { formatLbryUrlForWeb } from 'util/url';
 import { isEmpty } from 'util/object';
-import CardMedia from 'component/cardMedia';
+import FileThumbnail from 'component/fileThumbnail';
 import UriIndicator from 'component/uriIndicator';
 import TruncatedText from 'component/common/truncated-text';
 import DateTime from 'component/dateTime';
@@ -17,6 +17,7 @@ import SubscribeButton from 'component/subscribeButton';
 import ChannelThumbnail from 'component/channelThumbnail';
 import BlockButton from 'component/blockButton';
 import Button from 'component/button';
+import useGetThumbnail from 'effects/use-get-thumbnail';
 
 type Props = {
   uri: string,
@@ -50,6 +51,9 @@ type Props = {
   properties: boolean | Node | string | number,
   onClick?: any => any,
   hideBlock?: boolean,
+  streamingUrl: ?string,
+  getFile: string => void,
+  customShouldHide?: Claim => boolean,
 };
 
 const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
@@ -79,6 +83,9 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
     properties,
     onClick,
     hideBlock,
+    getFile,
+    streamingUrl,
+    customShouldHide,
   } = props;
   const shouldFetch =
     claim === undefined || (claim !== null && claim.value_type === 'channel' && isEmpty(claim.meta) && !pending);
@@ -109,7 +116,7 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
     ((abandoned && !showPublishLink) || (!claimIsMine && obscureNsfw && nsfw));
 
   // This will be replaced once blocking is done at the wallet server level
-  if (claim && !shouldHide && blackListedOutpoints) {
+  if (claim && !claimIsMine && !shouldHide && blackListedOutpoints) {
     shouldHide = blackListedOutpoints.some(
       outpoint =>
         (signingChannel && outpoint.txid === signingChannel.txid && outpoint.nout === signingChannel.nout) ||
@@ -118,7 +125,7 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
   }
   // We're checking to see if the stream outpoint
   // or signing channel outpoint is in the filter list
-  if (claim && !shouldHide && filteredOutpoints) {
+  if (claim && !claimIsMine && !shouldHide && filteredOutpoints) {
     shouldHide = filteredOutpoints.some(
       outpoint =>
         (signingChannel && outpoint.txid === signingChannel.txid && outpoint.nout === signingChannel.nout) ||
@@ -134,6 +141,16 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
   if (claim && isChannel && !shouldHide && !showUserBlocked && blockedChannelUris.length) {
     shouldHide = blockedChannelUris.some(blockedUri => blockedUri === claim.permanent_url);
   }
+
+  if (!shouldHide && customShouldHide && claim) {
+    if (customShouldHide(claim)) {
+      shouldHide = true;
+    }
+  }
+
+  // Weird placement warning
+  // Make sure this happens after we figure out if this claim needs to be hidden
+  const thumbnailUrl = useGetThumbnail(uri, claim, streamingUrl, getFile, shouldHide) || thumbnail;
 
   function handleContextMenu(e) {
     // @if TARGET='app'
@@ -175,6 +192,10 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
     );
   }
 
+  if (placeholder === 'publish' && !claim && uri.startsWith('lbry://@')) {
+    return null;
+  }
+
   return (
     <li
       ref={ref}
@@ -191,17 +212,54 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
         'claim-preview--pending': pending,
       })}
     >
-      {isChannel ? (
-          <UriIndicator uri={uri} link>
-            <ChannelThumbnail uri={uri} obscure={channelIsBlocked} />
-          </UriIndicator>
-      ) : (<CardMedia thumbnail={thumbnail} />)
-      }
-      <div className="claim-preview-metadata">
-        <div className="claim-preview-info">
-          <div className="claim-preview-title">
-            {claim ? <TruncatedText text={title || claim.name} lines={1} /> : <span>{__('Nothing here')}</span>}
+      {isChannel && claim ? (
+        <UriIndicator uri={uri} link>
+          <ChannelThumbnail uri={uri} obscure={channelIsBlocked} />
+        </UriIndicator>
+      ) : (
+        <FileThumbnail thumbnail={thumbnailUrl} />
+      )}
+      <div className="claim-preview__text">
+        <div className="claim-preview-metadata">
+          <div className="claim-preview-info">
+            <div className="claim-preview-title">
+              {claim ? <TruncatedText text={title || claim.name} lines={2} /> : <span>{__('Nothing here')}</span>}
+            </div>
+            {!isChannel && claim && <FileProperties uri={uri} />}
           </div>
+
+          <div className="media__subtitle">
+            {!isResolvingUri && (
+              <div>
+                {claim ? (
+                  <React.Fragment>
+                    <UriIndicator uri={uri} link addTooltip={includeChannelTooltip} />{' '}
+                    {pending
+                      ? __('Pending...')
+                      : claim &&
+                        (isChannel ? (
+                          type !== 'inline' && `${claimsInChannel} ${__('publishes')}`
+                        ) : (
+                          <DateTime timeAgo uri={uri} />
+                        ))}
+                  </React.Fragment>
+                ) : (
+                  <Fragment>
+                    <div>{__('Publish something and claim this spot!')}</div>
+                    <div className="card__actions">
+                      <Button
+                        onClick={() => beginPublish(name)}
+                        button="primary"
+                        label={__('Publish to %uri%', { uri })}
+                      />
+                    </div>
+                  </Fragment>
+                )}
+              </div>
+            )}
+          </div>
+        </div>
+        <div className="claim-preview__actions">
           {!pending && (
             <React.Fragment>
               {hideActions ? null : actions !== undefined ? (
@@ -214,46 +272,10 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
                   {!hideBlock && isChannel && !isSubscribed && !claimIsMine && (
                     <BlockButton uri={uri.startsWith('lbry://') ? uri : `lbry://${uri}`} />
                   )}
-                  {!isChannel && claim && <FileProperties uri={uri} />}
                 </div>
               )}
             </React.Fragment>
           )}
-        </div>
-
-        <div className="claim-preview-properties">
-          <div className="media__subtitle">
-            {!isResolvingUri && (
-              <div>
-                {claim ? (
-                  <UriIndicator uri={uri} link addTooltip={includeChannelTooltip} />
-                ) : (
-                  <Fragment>
-                    <div>{__('Publish something and claim this spot!')}</div>
-                    <div className="card__actions">
-                      <Button
-                        onClick={() => beginPublish(name)}
-                        button="primary"
-                        label={`${__('Publish to')}  ${uri}`}
-                      />
-                    </div>
-                  </Fragment>
-                )}
-                <div>
-                  {pending ? (
-                    <div>{__('Pending...')}</div>
-                  ) : (
-                    claim &&
-                    (isChannel ? (
-                      type !== 'inline' && `${claimsInChannel} ${__('publishes')}`
-                    ) : (
-                      <DateTime timeAgo uri={uri} />
-                    ))
-                  )}
-                </div>
-              </div>
-            )}
-          </div>
           {properties !== undefined ? properties : <ClaimTags uri={uri} type={type} />}
         </div>
       </div>

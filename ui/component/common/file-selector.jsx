@@ -18,6 +18,14 @@ type Props = {
 };
 
 class FileSelector extends React.PureComponent<Props> {
+  componentDidUpdate(prevProps: Props) {
+    // If the form has just been cleared,
+    // clear the file input
+    if (prevProps.currentPath && !this.props.currentPath) {
+      this.fileInput.current.value = null;
+    }
+  }
+
   static defaultProps = {
     type: 'file',
   };
@@ -51,9 +59,9 @@ class FileSelector extends React.PureComponent<Props> {
 
   render() {
     const { type, currentPath, label, fileLabel, directoryLabel, placeholder, accept, error, disabled } = this.props;
-
     const buttonLabel = type === 'file' ? fileLabel || __('Choose File') : directoryLabel || __('Choose Directory');
     const placeHolder = currentPath || placeholder;
+
     return (
       <React.Fragment>
         <FormField

@@ -24,9 +24,12 @@ type Props = {
   setClientSetting: (string, boolean | string) => void,
   hideBalance: boolean,
   email: ?string,
+  authenticated: boolean,
   authHeader: boolean,
   syncError: ?string,
   signOut: () => void,
+  openMobileNavigation: () => void,
+  openChannelCreate: () => void,
 };
 
 const Header = (props: Props) => {
@@ -38,14 +41,17 @@ const Header = (props: Props) => {
     automaticDarkModeEnabled,
     hideBalance,
     email,
+    authenticated,
     authHeader,
     signOut,
     syncError,
+    openMobileNavigation,
+    openChannelCreate,
   } = props;
-  const authenticated = Boolean(email);
 
   // on the verify page don't let anyone escape other than by closing the tab to keep session data consistent
   const isVerifyPage = history.location.pathname.includes(PAGES.AUTH_VERIFY);
+  const isAuthPage = history.location.pathname.includes(PAGES.AUTH);
 
   // Sign out if they click the "x" when they are on the password prompt
   const authHeaderAction = syncError ? { onClick: signOut } : { navigate: '/' };
@@ -92,6 +98,7 @@ const Header = (props: Props) => {
             className="header__navigation-item header__navigation-item--lbry"
             label={__('LBRY')}
             icon={ICONS.LBRY}
+            onClick={() => window.scrollTo(0, 0)}
             {...homeButtonNavigationProps}
           />
 
@@ -124,37 +131,66 @@ const Header = (props: Props) => {
           <div className={classnames('header__menu', { 'header__menu--with-balance': !IS_WEB || authenticated })}>
             {(!IS_WEB || authenticated) && (
               <Fragment>
+                <Button
+                  navigate={`/$/${PAGES.WALLET}`}
+                  className="header__navigation-item menu__title header__navigation-item--balance"
+                  label={getWalletTitle()}
+                />
                 <Menu>
-                  <MenuButton className="header__navigation-item menu__title">{getWalletTitle()}</MenuButton>
+                  <MenuButton className="header__navigation-item menu__title header__navigation-item--icon">
+                    <Icon size={18} icon={ICONS.PUBLISH} />
+                  </MenuButton>
                   <MenuList className="menu__list--header">
-                    <MenuItem className="menu__link" onSelect={() => history.push(`/$/${PAGES.WALLET}`)}>
-                      <Icon aria-hidden icon={ICONS.WALLET} />
-                      {__('Wallet')}
+                    <MenuItem className="menu__link" onSelect={() => history.push(`/$/${PAGES.PUBLISH}`)}>
+                      <Icon aria-hidden icon={ICONS.PUBLISH} />
+                      {__('Publish')}
                     </MenuItem>
-                    <MenuItem className="menu__link" onSelect={() => history.push(`/$/${PAGES.REWARDS}`)}>
-                      <Icon aria-hidden icon={ICONS.FEATURED} />
-                      {__('Rewards')}
+                    <MenuItem className="menu__link" onSelect={openChannelCreate}>
+                      <Icon aria-hidden icon={ICONS.CHANNEL} />
+                      {__('New Channel')}
                     </MenuItem>
                   </MenuList>
                 </Menu>
+
                 <Menu>
                   <MenuButton className="header__navigation-item menu__title header__navigation-item--icon">
                     <Icon size={18} icon={ICONS.ACCOUNT} />
                   </MenuButton>
                   <MenuList className="menu__list--header">
-                    <MenuItem className="menu__link" onSelect={() => history.push(`/$/${PAGES.ACCOUNT}`)}>
-                      <Icon aria-hidden icon={ICONS.OVERVIEW} />
-                      {__('Overview')}
+                    <MenuItem className="menu__link" onSelect={() => history.push(`/$/${PAGES.PUBLISHED}`)}>
+                      <Icon aria-hidden icon={ICONS.PUBLISH} />
+                      {__('Publishes')}
+                    </MenuItem>
+                    <MenuItem className="menu__link" onSelect={() => history.push(`/$/${PAGES.CHANNELS}`)}>
+                      <Icon aria-hidden icon={ICONS.CHANNEL} />
+                      {__('Channels')}
                     </MenuItem>
 
-                    <MenuItem className="menu__link" onSelect={() => history.push(`/$/${PAGES.PUBLISH}`)}>
-                      <Icon aria-hidden icon={ICONS.PUBLISH} />
-                      {__('Publish')}
+                    {/* @if TARGET='app' */}
+                    <MenuItem className="menu__link" onSelect={() => history.push(`/$/${PAGES.LIBRARY}`)}>
+                      <Icon aria-hidden icon={ICONS.LIBRARY} />
+                      {__('Library')}
                     </MenuItem>
+                    {/* @endif */}
+
+                    <MenuItem className="menu__link" onSelect={() => history.push(`/$/${PAGES.REWARDS}`)}>
+                      <Icon aria-hidden icon={ICONS.FEATURED} />
+                      {__('Rewards')}
+                    </MenuItem>
+
+                    {/* Commented out until new invite system is implemented */}
+                    <MenuItem className="menu__link" onSelect={() => history.push(`/$/${PAGES.INVITE}`)}>
+                      <Icon aria-hidden icon={ICONS.INVITE} />
+                      {__('Invites')}
+                    </MenuItem>
+
                     {authenticated ? (
-                      <MenuItem className="menu__link" onSelect={signOut}>
-                        <Icon aria-hidden icon={ICONS.SIGN_OUT} />
-                        {__('Sign Out')}
+                      <MenuItem onSelect={signOut}>
+                        <div className="menu__link">
+                          <Icon aria-hidden icon={ICONS.SIGN_OUT} />
+                          {__('Sign Out')}
+                        </div>
+                        <span className="menu__link-help">{email}</span>
                       </MenuItem>
                     ) : (
                       <MenuItem className="menu__link" onSelect={() => history.push(`/$/${PAGES.AUTH}`)}>
@@ -201,6 +237,16 @@ const Header = (props: Props) => {
             </div>
           )
         )}
+
+        {!authenticated && !isAuthPage && (
+          <Button
+            button="primary"
+            label={__('Sign In')}
+            className="header__menu--mobile"
+            onClick={() => history.push(`/$/${PAGES.AUTH}`)}
+          />
+        )}
+        <Button onClick={openMobileNavigation} icon={ICONS.MENU} iconSize={24} className="header__menu--mobile" />
       </div>
     </header>
   );

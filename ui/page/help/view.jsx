@@ -111,6 +111,9 @@ class HelpPage extends React.PureComponent<Props, State> {
 
         platform = `${osName} ${ver.os_release}`;
         newVerLink = 'https://lbry.com/get/lbry.dmg';
+      } else if (process.env.APPIMAGE !== undefined) {
+        platform = `Linux (AppImage)`;
+        newVerLink = 'https://lbry.com/get/lbry.AppImage';
       } else if (ver.os_system === 'Linux') {
         platform = `Linux (${ver.platform})`;
         newVerLink = 'https://lbry.com/get/lbry.deb';
@@ -180,10 +183,13 @@ class HelpPage extends React.PureComponent<Props, State> {
         <Card
           title={__('View your Log')}
           subtitle={
-            <React.Fragment>
-              {__('Did something go wrong? Have a look in your log file, or send it to')}{' '}
-              <Button button="link" label={__('support')} href="https://lbry.com/faq/support" />.
-            </React.Fragment>
+            <I18nMessage
+              tokens={{
+                support_link: <Button button="link" label={__('support')} href="https://lbry.com/faq/support" />,
+              }}
+            >
+              Did something go wrong? Have a look in your log file, or send it to %support_link%.
+            </I18nMessage>
           }
           actions={
             <div className="section__actions">
@@ -210,66 +216,68 @@ class HelpPage extends React.PureComponent<Props, State> {
             </div>
           </header>
 
-          <table className="table table--stretch">
-            <tbody>
-              <tr>
-                <td>{__('App')}</td>
-                <td>{this.state.uiVersion}</td>
-              </tr>
-              <tr>
-                <td>{__('Daemon (lbrynet)')}</td>
-                <td>{ver ? ver.lbrynet_version : __('Loading...')}</td>
-              </tr>
-              <tr>
-                <td>{__('Connected Email')}</td>
-                <td>
-                  {user && user.primary_email ? (
-                    <React.Fragment>
-                      {user.primary_email}{' '}
-                      <Button
-                        button="link"
-                        href={`https://lbry.com/list/edit/${accessToken}`}
-                        label={__('Update mailing preferences')}
-                      />
-                    </React.Fragment>
-                  ) : (
-                    <React.Fragment>
-                      <span className="empty">{__('none')} </span>
-                      <Button button="link" onClick={() => doAuth()} label={__('set email')} />
-                    </React.Fragment>
-                  )}
-                </td>
-              </tr>
-              <tr>
-                <td>{__('Reward Eligible')}</td>
-                <td>{user && user.is_reward_approved ? __('Yes') : __('No')}</td>
-              </tr>
-              <tr>
-                <td>{__('Platform')}</td>
-                <td>{platform}</td>
-              </tr>
-              <tr>
-                <td>{__('Installation ID')}</td>
-                <td>{this.state.lbryId}</td>
-              </tr>
-              <tr>
-                <td>{__('Access Token')}</td>
-                <td>
-                  {this.state.accessTokenHidden && (
-                    <Button button="link" label={__('View')} onClick={this.showAccessToken} />
-                  )}
-                  {!this.state.accessTokenHidden && accessToken && (
-                    <div>
-                      <p>{accessToken}</p>
-                      <div className="help--warning">
-                        {__('This is equivalent to a password. Do not post or share this.')}
+          <div className="table__wrapper">
+            <table className="table table--stretch">
+              <tbody>
+                <tr>
+                  <td>{__('App')}</td>
+                  <td>{this.state.uiVersion}</td>
+                </tr>
+                <tr>
+                  <td>{__('Daemon (lbrynet)')}</td>
+                  <td>{ver ? ver.lbrynet_version : __('Loading...')}</td>
+                </tr>
+                <tr>
+                  <td>{__('Connected Email')}</td>
+                  <td>
+                    {user && user.primary_email ? (
+                      <React.Fragment>
+                        {user.primary_email}{' '}
+                        <Button
+                          button="link"
+                          href={`https://lbry.com/list/edit/${accessToken}`}
+                          label={__('Update mailing preferences')}
+                        />
+                      </React.Fragment>
+                    ) : (
+                      <React.Fragment>
+                        <span className="empty">{__('none')} </span>
+                        <Button button="link" onClick={() => doAuth()} label={__('set email')} />
+                      </React.Fragment>
+                    )}
+                  </td>
+                </tr>
+                <tr>
+                  <td>{__('Reward Eligible')}</td>
+                  <td>{user && user.is_reward_approved ? __('Yes') : __('No')}</td>
+                </tr>
+                <tr>
+                  <td>{__('Platform')}</td>
+                  <td>{platform}</td>
+                </tr>
+                <tr>
+                  <td>{__('Installation ID')}</td>
+                  <td>{this.state.lbryId}</td>
+                </tr>
+                <tr>
+                  <td>{__('Access Token')}</td>
+                  <td>
+                    {this.state.accessTokenHidden && (
+                      <Button button="link" label={__('View')} onClick={this.showAccessToken} />
+                    )}
+                    {!this.state.accessTokenHidden && accessToken && (
+                      <div>
+                        <p>{accessToken}</p>
+                        <div className="help--warning">
+                          {__('This is equivalent to a password. Do not post or share this.')}
+                        </div>
                       </div>
-                    </div>
-                  )}
-                </td>
-              </tr>
-            </tbody>
-          </table>
+                    )}
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
         </section>
       </Page>
     );

@@ -1,5 +1,6 @@
 // @flow
 import React from 'react';
+import { withRouter } from 'react-router';
 import * as MODALS from 'constants/modal_types';
 import ModalError from 'modal/modalError';
 import ModalDownloading from 'modal/modalDownloading';
@@ -31,14 +32,23 @@ import ModalWalletSend from 'modal/modalWalletSend';
 import ModalWalletReceive from 'modal/modalWalletReceive';
 import ModalYoutubeWelcome from 'modal/modalYoutubeWelcome';
 import ModalCreateChannel from 'modal/modalChannelCreate';
+import ModalMobileNavigation from 'modal/modalMobileNavigation';
+import ModalSetReferrer from 'modal/modalSetReferrer';
 
 type Props = {
   modal: { id: string, modalProps: {} },
   error: { message: string },
+  location: { pathname: string },
+  hideModal: () => void,
 };
 
 function ModalRouter(props: Props) {
-  const { modal, error } = props;
+  const { modal, error, location, hideModal } = props;
+  const { pathname } = location;
+
+  React.useEffect(() => {
+    hideModal();
+  }, [pathname, hideModal]);
 
   if (error) {
     return <ModalError {...error} />;
@@ -111,9 +121,13 @@ function ModalRouter(props: Props) {
       return <ModalYoutubeWelcome />;
     case MODALS.CREATE_CHANNEL:
       return <ModalCreateChannel {...modalProps} />;
+    case MODALS.MOBILE_NAVIGATION:
+      return <ModalMobileNavigation {...modalProps} />;
+    case MODALS.SET_REFERRER:
+      return <ModalSetReferrer {...modalProps} />;
     default:
       return null;
   }
 }
 
-export default ModalRouter;
+export default withRouter(ModalRouter);

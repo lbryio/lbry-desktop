@@ -10,7 +10,7 @@ type Props = {
 function ChannelDiscussion(props: Props) {
   const uri = props.uri;
   return (
-    <div className="card--section">
+    <div>
       <section className="section">
         <CommentCreate uri={uri} />
       </section>

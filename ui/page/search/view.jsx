@@ -1,7 +1,7 @@
 // @flow
 import * as ICONS from 'constants/icons';
 import React, { useEffect, Fragment } from 'react';
-import { isURIValid, normalizeURI } from 'lbry-redux';
+import { isURIValid, normalizeURI, regexInvalidURI } from 'lbry-redux';
 import ClaimPreview from 'component/claimPreview';
 import ClaimList from 'component/claimList';
 import Page from 'component/page';
@@ -22,11 +22,22 @@ export default function SearchPage(props: Props) {
   const { search, uris, onFeedbackPositive, onFeedbackNegative, location, isSearching } = props;
   const urlParams = new URLSearchParams(location.search);
   const urlQuery = urlParams.get('q');
-  const isValid = isURIValid(urlQuery);
 
-  let uri;
-  if (isValid) {
-    uri = normalizeURI(urlQuery);
+  let normalizedUri;
+  let isUriValid;
+  if (isURIValid(urlQuery)) {
+    isUriValid = true;
+    normalizedUri = normalizeURI(urlQuery);
+  } else {
+    let INVALID_URI_CHARS = new RegExp(regexInvalidURI, 'gu');
+    let modifiedUrlQuery = urlQuery
+      ? urlQuery
+          .trim()
+          .replace(/\s+/g, '-')
+          .replace(INVALID_URI_CHARS, '')
+      : '';
+    isUriValid = isURIValid(modifiedUrlQuery);
+    normalizedUri = isUriValid && normalizeURI(modifiedUrlQuery);
   }
 
   useEffect(() => {
@@ -40,39 +51,38 @@ export default function SearchPage(props: Props) {
       <section className="search">
         {urlQuery && (
           <Fragment>
-            {isValid && (
+            {isUriValid && (
               <header className="search__header">
-                <ClaimUri uri={uri} />
+                <ClaimUri uri={normalizedUri} />
                 <div className="card">
-                  <ClaimPreview uri={uri} type="large" placeholder="publish" />
+                  <ClaimPreview uri={normalizedUri} type="large" placeholder="publish" />
                 </div>
               </header>
             )}
 
-            <div className="card">
-              <ClaimList
-                uris={uris}
-                loading={isSearching}
-                header={<SearchOptions />}
-                headerAltControls={
-                  <Fragment>
-                    <span>{__('Find what you were looking for?')}</span>
-                    <Button
-                      button="alt"
-                      description={__('Yes')}
-                      onClick={() => onFeedbackPositive(urlQuery)}
-                      icon={ICONS.YES}
-                    />
-                    <Button
-                      button="alt"
-                      description={__('No')}
-                      onClick={() => onFeedbackNegative(urlQuery)}
-                      icon={ICONS.NO}
-                    />
-                  </Fragment>
-                }
-              />
-            </div>
+            <ClaimList
+              uris={uris}
+              loading={isSearching}
+              header={<SearchOptions />}
+              headerAltControls={
+                <Fragment>
+                  <span>{__('Find what you were looking for?')}</span>
+                  <Button
+                    button="alt"
+                    description={__('Yes')}
+                    onClick={() => onFeedbackPositive(urlQuery)}
+                    icon={ICONS.YES}
+                  />
+                  <Button
+                    button="alt"
+                    description={__('No')}
+                    onClick={() => onFeedbackNegative(urlQuery)}
+                    icon={ICONS.NO}
+                  />
+                </Fragment>
+              }
+            />
+
             <div className="help">{__('These search results are provided by LBRY, Inc.')}</div>
           </Fragment>
         )}

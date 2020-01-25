@@ -5,15 +5,15 @@
 /* #5a6570;  - 25% */
 
 [theme='dark'] {
-  --color-primary-alt: #30574e;
-  --color-primary: #60e1ba;
+  --color-primary-alt: #3e675d;
+  --color-primary: #74dfbf;
 
   // Button
-  --color-link: #38d9a9;
+  --color-link: var(--color-primary);
   --color-link-hover: #60e1ba;
   --color-link-active: #60e1ba;
-  --color-link-icon: #89939e;
-  --color-navigation-link: var(--color-link-icon);
+  --color-link-icon: #6a7580;
+  --color-navigation-link: #b3bcc6;
   --color-button-primary-bg: var(--color-primary-alt);
   --color-button-primary-bg-hover: #44796c;
   --color-button-primary-text: var(--color-primary);
@@ -21,6 +21,7 @@
   --color-button-secondary-bg: #395877;
   --color-button-secondary-bg-hover: #4b6d8f;
   --color-button-secondary-text: #a3c1e0;
+  --color-header-button: var(--color-link-icon);
 
   // Color
   --color-focus: #2d69a5;
@@ -34,6 +35,7 @@
   --color-tab-text: var(--color-white);
   --color-tabs-background: #434b53;
   --color-tab-divider: var(--color-white);
+  --color-modal-background: var(--color-header-background);
 
   // Text
   --color-text: #eeeeee;
@@ -49,7 +51,7 @@
   --color-input: #f4f4f5;
   --color-input-label: #d4d4d4;
   --color-input-placeholder: #f4f4f5;
-  --color-input-bg: #7d8894;
+  --color-input-bg: #5d6772;
   --color-input-bg-copyable: #434b53;
   --color-input-border: var(--color-border);
   --color-input-border-active: var(--color-secondary);
@@ -58,7 +60,7 @@
   --color-menu-background: var(--color-header-background);
   --color-menu-background--selected: #89939e;
   --color-menu-background--active: #89939e;
-  --color-menu-icon: var(--color-link-icon);
+  --color-menu-icon: #a7a7a7;
   --color-menu-icon-active: #d6d6d6;
 
   // Table
@@ -67,7 +69,6 @@
   // Search
   --color-search-suggestion: #212529;
   --color-search-suggestion-background: #cce6fb;
-  --color-box-shadow: #212529;
   --color-placeholder-background: #4e5862;
   --color-spinner-light: #5a6570;
   --color-spinner-dark: #212529;
@@ -80,4 +81,9 @@
 
   // Snack
   --color-snack-bg: var(--color-secondary);
+
+  // Ads
+  --color-ads-background: #dce6e8;
+  --color-ads-text: #111;
+  --color-ads-link: var(--color-primary-alt);
 }

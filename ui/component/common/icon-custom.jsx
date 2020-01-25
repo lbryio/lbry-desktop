@@ -48,18 +48,12 @@ export const icons = {
   ),
   [ICONS.ARROW_LEFT]: buildIcon(
     <g fill="none" fillRule="evenodd" strokeLinecap="round">
-      <path d="M4, 12 L21, 12" />
-      <polyline
-        strokeLinejoin="round"
-        transform="translate(7.000000, 12.000000) scale(-1, 1) translate(-7.000000, -12.000000)"
-        points="3 4 11 12 3 20"
-      />
+      <polyline points="15 18 9 12 15 6" />
     </g>
   ),
   [ICONS.ARROW_RIGHT]: buildIcon(
     <g fill="none" fillRule="evenodd" strokeLinecap="round">
-      <path d="M3, 12 L20, 12" />
-      <polyline strokeLinejoin="round" points="13 4 21 12 13 20" />
+      <polyline points="9 18 15 12 9 6" />
     </g>
   ),
   [ICONS.HOME]: buildIcon(
@@ -320,6 +314,57 @@ export const icons = {
   [ICONS.PHONE]: buildIcon(
     <g>
       <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
+    </g>
+  ),
+  [ICONS.MENU]: buildIcon(
+    <g>
+      <line x1="3" y1="12" x2="21" y2="12" />
+      <line x1="3" y1="6" x2="21" y2="6" />
+      <line x1="3" y1="18" x2="21" y2="18" />
+    </g>
+  ),
+  [ICONS.DISCOVER]: buildIcon(
+    <g>
+      <circle cx="12" cy="12" r="10" />
+      <polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76" />
+    </g>
+  ),
+  [ICONS.TRENDING]: buildIcon(
+    <g>
+      <polyline points="23 6 13.5 15.5 8.5 10.5 1 18" />
+      <polyline points="17 6 23 6 23 12" />
+    </g>
+  ),
+  [ICONS.TOP]: buildIcon(
+    <g>
+      <line x1="12" y1="20" x2="12" y2="10" />
+      <line x1="18" y1="20" x2="18" y2="4" />
+      <line x1="6" y1="20" x2="6" y2="16" />
+    </g>
+  ),
+  [ICONS.NEW]: buildIcon(
+    <g>
+      <circle cx="12" cy="12" r="7" />
+      <polyline points="12 9 12 12 13.5 13.5" />
+      <path d="M16.51 17.35l-.35 3.83a2 2 0 0 1-2 1.82H9.83a2 2 0 0 1-2-1.82l-.35-3.83m.01-10.7l.35-3.83A2 2 0 0 1 9.83 1h4.35a2 2 0 0 1 2 1.82l.35 3.83" />{' '}
+    </g>
+  ),
+
+  [ICONS.INVITE]: buildIcon(
+    <g>
+      <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+      <circle cx="9" cy="7" r="4" />
+      <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
+      <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+    </g>
+  ),
+  [ICONS.SHUFFLE]: buildIcon(
+    <g>
+      <polyline points="16 3 21 3 21 8" />
+      <line x1="4" y1="20" x2="21" y2="3" />
+      <polyline points="21 16 21 21 16 21" />
+      <line x1="15" y1="15" x2="21" y2="21" />
+      <line x1="4" y1="4" x2="9" y2="9" />
     </g>
   ),
 };

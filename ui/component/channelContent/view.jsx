@@ -17,6 +17,7 @@ type Props = {
   channelIsMine: boolean,
   fetchClaims: (string, number) => void,
   channelIsBlackListed: boolean,
+  claim: ?Claim,
 };
 
 function ChannelContent(props: Props) {
@@ -29,8 +30,10 @@ function ChannelContent(props: Props) {
     channelIsBlocked,
     fetchClaims,
     channelIsBlackListed,
+    claim,
   } = props;
   const hasContent = Boolean(pageOfClaimsInChannel && pageOfClaimsInChannel.length);
+  const claimsInChannel = (claim && claim.meta.claims_in_channel) || 0;
   return (
     <Fragment>
       {fetching && !hasContent && (
@@ -39,9 +42,15 @@ function ChannelContent(props: Props) {
         </section>
       )}
 
-      {!fetching && !hasContent && !channelIsBlocked && !channelIsBlackListed && (
+      {!fetching && !claimsInChannel && !channelIsBlocked && !channelIsBlackListed && (
         <div className="card--section">
           <h2 className="section__subtitle">{__("This channel hasn't uploaded anything.")}</h2>
+        </div>
+      )}
+
+      {!fetching && !hasContent && Boolean(claimsInChannel) && !channelIsBlocked && !channelIsBlackListed && (
+        <div className="card--section">
+          <HiddenNsfwClaims uri={uri} />
         </div>
       )}
 
@@ -64,7 +73,7 @@ function ChannelContent(props: Props) {
         </div>
       )}
 
-      {!channelIsMine && <HiddenNsfwClaims uri={uri} />}
+      {!channelIsMine && hasContent && <HiddenNsfwClaims uri={uri} />}
 
       {hasContent && !channelIsBlocked && !channelIsBlackListed && (
         <ClaimList header={false} uris={pageOfClaimsInChannel.map(claim => claim && claim.canonical_url)} />

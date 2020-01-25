@@ -80,7 +80,7 @@ const LANGUAGES = {
   kj: ['Kuanyama', 'Kuanyama'],
   kk: ['Kazakh', 'Қазақша'],
   kl: ['Greenlandic', 'Kalaallisut'],
-  km: ['Cambodian', 'ភាសាខ្មែរ'],
+  km: ['Khmer', 'ភាសាខ្មែរ'],
   kn: ['Kannada', 'ಕನ್ನಡ'],
   ko: ['Korean', '한국어'],
   kr: ['Kanuri', 'Kanuri'],

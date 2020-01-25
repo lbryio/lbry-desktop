@@ -23,7 +23,6 @@ class LicenseType extends React.PureComponent<Props> {
     const { handleLicenseChange } = this.props;
     // $FlowFixMe
     const { options, selectedIndex } = event.target;
-
     const selectedOption = options[selectedIndex];
     const licenseType = selectedOption.value;
     const licenseUrl = selectedOption.getAttribute('data-url');

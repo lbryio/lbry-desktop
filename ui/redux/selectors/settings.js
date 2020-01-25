@@ -1,4 +1,5 @@
 import * as SETTINGS from 'constants/settings';
+import { SHARED_PREFERENCES } from 'lbry-redux';
 import { createSelector } from 'reselect';
 
 const selectState = state => state.settings || {};
@@ -6,6 +7,11 @@ const selectState = state => state.settings || {};
 export const selectDaemonSettings = createSelector(
   selectState,
   state => state.daemonSettings
+);
+
+export const selectDaemonStatus = createSelector(
+  selectState,
+  state => state.daemonStatus
 );
 
 export const selectClientSettings = createSelector(
@@ -33,6 +39,31 @@ export const selectIsNight = createSelector(
   selectState,
   state => state.isNight
 );
+
+export const selectSavedWalletServers = createSelector(
+  selectState,
+  state => state.customWalletServers
+);
+
+export const selectSharedPreferences = createSelector(
+  selectState,
+  state => state.sharedPreferences
+);
+
+export const makeSelectSharedPreferencesForKey = key =>
+  createSelector(
+    selectSharedPreferences,
+    prefs => (prefs ? prefs[key] : undefined)
+  );
+
+export const selectHasWalletServerPrefs =
+  createSelector(
+    makeSelectSharedPreferencesForKey(SHARED_PREFERENCES.WALLET_SERVERS),
+    servers => {
+      if (servers && servers.length) return true;
+      return false;
+    }
+  )
 
 export const selectThemePath = createSelector(
   selectTheme,

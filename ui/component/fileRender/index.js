@@ -10,7 +10,7 @@ import {
 } from 'lbry-redux';
 import { THEME, AUTOPLAY } from 'constants/settings';
 import { makeSelectClientSetting } from 'redux/selectors/settings';
-import { makeSelectNextUnplayedRecommended } from 'redux/selectors/content';
+import { makeSelectNextUnplayedRecommended, makeSelectIsText } from 'redux/selectors/content';
 import FileRender from './view';
 
 const select = (state, props) => ({
@@ -24,6 +24,7 @@ const select = (state, props) => ({
   streamingUrl: makeSelectStreamingUrlForUri(props.uri)(state),
   autoplay: makeSelectClientSetting(AUTOPLAY)(state),
   nextUnplayed: makeSelectNextUnplayedRecommended(props.uri)(state),
+  isText: makeSelectIsText(props.uri)(state),
 });
 
 export default connect(select)(FileRender);

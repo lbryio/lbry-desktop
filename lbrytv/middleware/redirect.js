@@ -7,6 +7,14 @@ async function redirectMiddleware(ctx, next) {
   const requestHost = ctx.host;
   const path = ctx.path;
   const url = ctx.url;
+  // Getting err: too many redirects on some urls because of this
+  // Need a better solution
+  // const decodedUrl = decodeURIComponent(url);
+
+  // if (decodedUrl !== url) {
+  //   ctx.redirect(decodedUrl);
+  //   return;
+  // }
 
   if (path.endsWith('/') && path.length > 1) {
     ctx.redirect(url.replace(/\/$/, ''));

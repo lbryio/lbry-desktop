@@ -35,11 +35,9 @@ function FileListDownloaded(props: Props) {
   }
 
   return (
-    // Removed the <Page> wapper to try combining this page with UserHistory
-    // This should eventually move into /components if we want to keep it this way
     <React.Fragment>
       {hasDownloads ? (
-        <div className="card">
+        <React.Fragment>
           <ClaimList
             header={__('Your Library')}
             headerAltControls={
@@ -61,7 +59,7 @@ function FileListDownloaded(props: Props) {
             loading={fetching}
           />
           <Paginate totalPages={Math.ceil(Number(downloadedUrlsCount) / Number(PAGE_SIZE))} loading={fetching} />
-        </div>
+        </React.Fragment>
       ) : (
         <div className="main--empty">
           <section className="card card--section">

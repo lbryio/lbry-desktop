@@ -1,6 +1,6 @@
 // @flow
 import * as ICONS from 'constants/icons';
-import React, { useState } from 'react';
+import React from 'react';
 import { regexInvalidURI } from 'lbry-redux';
 import FileSelector from 'component/common/file-selector';
 import Button from 'component/button';
@@ -15,13 +15,23 @@ type Props = {
   updatePublishForm: ({}) => void,
   disabled: boolean,
   publishing: boolean,
+  showToast: string => void,
+  inProgress: boolean,
+  clearPublish: () => void,
 };
 
 function PublishFile(props: Props) {
-  const { name, balance, filePath, isStillEditing, updatePublishForm, disabled, publishing } = props;
-
-  // This is basically for displaying the 500mb limit
-  const [fileError, setFileError] = useState('');
+  const {
+    name,
+    balance,
+    filePath,
+    isStillEditing,
+    updatePublishForm,
+    disabled,
+    publishing,
+    inProgress,
+    clearPublish,
+  } = props;
 
   let currentFile = '';
   if (filePath) {
@@ -33,6 +43,8 @@ function PublishFile(props: Props) {
   }
 
   function handleFileChange(file: WebFile) {
+    const { showToast } = props;
+
     // if electron, we'll set filePath to the path string because SDK is handling publishing.
     // if web, we set the filePath (dumb name) to the File() object
     // File.path will be undefined from web due to browser security, so it will default to the File Object.
@@ -42,22 +54,23 @@ function PublishFile(props: Props) {
     const PUBLISH_SIZE_LIMIT: number = 512000000;
     if (typeof file !== 'string') {
       if (file && file.size && Number(file.size) > PUBLISH_SIZE_LIMIT) {
-        setFileError('File uploads currently limited to 500MB. Download the app for unlimited publishing.');
+        showToast(__('File uploads currently limited to 500MB. Download the app for unlimited publishing.'));
         updatePublishForm({ filePath: '', name: '' });
         return;
-      } else {
-        setFileError('');
       }
     }
     // @endif
+
     const publishFormParams: { filePath: string | WebFile, name?: string } = {
       filePath: file.path || file,
     };
     // Strip off extention and replace invalid characters
-    let fileName = file.name.substr(0, file.name.lastIndexOf('.')) || file.name;
-    let replaceChars = new RegExp(regexInvalidURI, 'gu');
-    let parsedFileName = fileName.replace(replaceChars, '-');
-    publishFormParams.name = parsedFileName;
+    let fileName = name || file.name.substr(0, file.name.lastIndexOf('.')) || file.name;
+    let INVALID_URI_CHARS = new RegExp(regexInvalidURI, 'gu');
+    let parsedFileName = fileName.replace(INVALID_URI_CHARS, '-');
+    if (!isStillEditing) {
+      publishFormParams.name = parsedFileName;
+    }
     updatePublishForm(publishFormParams);
   }
 
@@ -72,23 +85,24 @@ function PublishFile(props: Props) {
   } else {
     title = isStillEditing ? __('Edit') : __('Publish');
   }
+
   return (
     <Card
       actionIconPadding={false}
       icon={ICONS.PUBLISH}
       disabled={disabled || balance === 0}
-      title={title}
+      title={
+        <React.Fragment>
+          {title}{' '}
+          {inProgress && <Button button="close" label={__('Cancel')} icon={ICONS.REMOVE} onClick={clearPublish} />}
+        </React.Fragment>
+      }
       subtitle={
         isStillEditing ? __('You are currently editing a claim.') : __('Publish something totally wacky and wild.')
       }
       actions={
         <React.Fragment>
-          <FileSelector
-            disabled={disabled}
-            currentPath={currentFile}
-            onFileChosen={handleFileChange}
-            error={fileError}
-          />
+          <FileSelector disabled={disabled} currentPath={currentFile} onFileChosen={handleFileChange} />
           {!isStillEditing && (
             <p className="help">
               {__('For video content, use MP4s in H264/AAC format for best compatibility.')}{' '}

@@ -130,7 +130,7 @@ export function doDownloadUpgradeRequested() {
   // the old logic.
 
   return dispatch => {
-    if (['win32', 'darwin'].includes(process.platform)) {
+    if (['win32', 'darwin'].includes(process.platform) || !!process.env.APPIMAGE) {
       // electron-updater behavior
       dispatch(doOpenModal(MODALS.AUTO_UPDATE_DOWNLOADED));
     } else {
@@ -204,8 +204,8 @@ export function doCheckUpgradeAvailable() {
       type: ACTIONS.CHECK_UPGRADE_START,
     });
 
-    if (['win32', 'darwin'].includes(process.platform)) {
-      // On Windows and Mac, updates happen silently through
+    if (['win32', 'darwin'].includes(process.platform) || !!process.env.APPIMAGE) {
+      // On Windows, Mac, and AppImage, updates happen silently through
       // electron-updater.
       const autoUpdateDeclined = selectAutoUpdateDeclined(state);
 
@@ -449,29 +449,35 @@ export function doSignOut() {
   };
 }
 
+export function doGetAndPopulatePreferences() {
+  return dispatch => {
+    function successCb(savedPreferences) {
+      if (savedPreferences !== null) {
+        dispatch(doPopulateSharedUserState(savedPreferences));
+      }
+    }
+
+    function failCb() {
+      deleteSavedPassword().then(() => {
+        dispatch(
+          doToast({
+            isError: true,
+            message: __('Unable to load your saved preferences.'),
+          })
+        );
+      });
+    }
+
+    doPreferenceGet('shared', successCb, failCb);
+  };
+}
+
 export function doSyncWithPreferences() {
   return dispatch => {
     function handleSyncComplete() {
+      // we just got sync data, better update our channels
       dispatch(doFetchChannelListMine());
-
-      function successCb(savedPreferences) {
-        if (savedPreferences !== null) {
-          dispatch(doPopulateSharedUserState(savedPreferences));
-        }
-      }
-
-      function failCb() {
-        deleteSavedPassword().then(() => {
-          dispatch(
-            doToast({
-              isError: true,
-              message: __('Unable to load your saved preferences.'),
-            })
-          );
-        });
-      }
-
-      doPreferenceGet('shared', successCb, failCb);
+      dispatch(doGetAndPopulatePreferences());
     }
 
     return getSavedPassword().then(password => {

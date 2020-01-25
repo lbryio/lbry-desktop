@@ -5,6 +5,7 @@
 
 .button--uri-indicator {
   @extend .button--link;
+  color: var(--color-text-subtitle);
   max-width: 100%;
   height: 1.2em;
   vertical-align: text-top;
@@ -27,10 +28,20 @@
   transition: all var(--transition-duration) var(--transition-style);
   border-radius: var(--card-radius);
   color: var(--color-text);
+  font-size: var(--font-body);
+
+  svg {
+    height: 1rem;
+    width: 1rem;
+  }
 
   &:hover {
     color: var(--color-button-primary-text);
     background-color: var(--color-button-primary-bg);
+  }
+
+  @media (max-width: $breakpoint-small) {
+    padding: var(--spacing-medium) var(--spacing-small);
   }
 }
 
@@ -58,4 +69,45 @@
 svg + .button__label,
 .button__label + svg {
   margin-left: var(--spacing-small);
+}
+
+.button-toggle {
+  padding: 0 var(--spacing-medium);
+  height: var(--height-button);
+  font-size: var(--font-base);
+  border: 1px solid var(--color-border);
+  border-left-width: 0;
+  border-radius: 0;
+  margin: 0;
+  background-color: var(--color-card-background);
+
+  svg {
+    opacity: 0.5;
+  }
+
+  &:first-of-type {
+    border-left-width: 1px;
+    border-top-left-radius: var(--border-radius);
+    border-bottom-left-radius: var(--border-radius);
+  }
+
+  &:last-of-type {
+    border-top-right-radius: var(--border-radius);
+    border-bottom-right-radius: var(--border-radius);
+    margin-right: var(--spacing-small);
+  }
+}
+
+.button-toggle--active {
+  color: var(--color-primary);
+  background-color: var(--color-primary-alt);
+
+  svg {
+    opacity: 1;
+  }
+
+  &:hover {
+    cursor: default;
+    text-decoration: none;
+  }
 }

@@ -8,8 +8,8 @@ const select = (state, props) => ({
   isSearching: selectIsSearching(state),
 });
 
-const perform = dispatch => ({
-  search: query => dispatch(doSearch(query, 20, undefined, true)),
+const perform = (dispatch, ownProps) => ({
+  search: query => dispatch(doSearch(query, 20, undefined, true, { related_to: ownProps.claimId })),
 });
 
 export default connect(

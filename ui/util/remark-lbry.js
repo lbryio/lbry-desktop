@@ -2,7 +2,7 @@ import { parseURI } from 'lbry-redux';
 import visit from 'unist-util-visit';
 
 const protocol = 'lbry://';
-const uriRegex = /(lbry:\/\/)[^\s()"]*/g;
+const uriRegex = /(lbry:\/\/)[^\s"]*[^)]/g;
 
 const mentionToken = '@';
 const mentionTokenCode = 64; // @
