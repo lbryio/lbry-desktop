@@ -3,14 +3,16 @@ import { ipcRenderer } from 'electron';
 import { DOMAIN } from 'config';
 
 const isProduction = process.env.NODE_ENV === 'production';
+const maxExpiration = 2147483647;
 let sessionPassword;
 
-function setCookie(name: string, value: string, days: number) {
+function setCookie(name: string, value: string, expirationDaysOnWeb: number) {
   let expires = '';
-  if (days) {
+  if (expirationDaysOnWeb) {
     let date = new Date();
-    date.setTime(date.getTime() + days * 24 * 60 * 60 * 1000);
-    expires = `expires=${date.toUTCString()};`;
+    date.setTime(date.getTime() + expirationDaysOnWeb * 24 * 60 * 60 * 1000);
+    // If on PC, set to not expire (max)
+    expires = `expires=${IS_WEB ? date.toUTCString() : maxExpiration};`;
   }
 
   let cookie = `${name}=${value || ''}; ${expires} path=/; SameSite=Lax;`;
@@ -49,23 +51,12 @@ function deleteCookie(name: string) {
 
 export const setSavedPassword = (value?: string, saveToDisk: boolean) => {
   return new Promise<*>(resolve => {
-    // @if TARGET='app'
-    ipcRenderer.once('set-password-response', (event, success) => {
-      resolve(success);
-    });
-    // @endif
-
     const password = value === undefined || value === null ? '' : value;
     sessionPassword = password;
 
     if (saveToDisk) {
       if (password) {
-        // @if TARGET='app'
-        ipcRenderer.send('set-password', password);
-        // @endif
-        // @if TARGET='web'
         setCookie('saved-password', password, 14);
-        // @endif
       } else {
         deleteSavedPassword();
       }
@@ -85,32 +76,40 @@ export const getSavedPassword = () => {
 
 export const getKeychainPassword = () => {
   return new Promise<*>(resolve => {
-    // @if TARGET='app'
-    ipcRenderer.once('get-password-response', (event, password) => {
-      resolve(password);
-    });
-    ipcRenderer.send('get-password');
+    let password;
+    // @if TARGET='web'
+    // In the future, this will be the only code in this function
+    // Handling keytar stuff separately so we can easily rip it out later
+    password = getCookie('saved-password');
+    resolve(password);
     // @endif
 
-    // @if TARGET='web'
-    const password = getCookie('saved-password');
-    resolve(password);
+    // @if TARGET='app'
+    password = getCookie('saved-password');
+
+    if (password) {
+      resolve(password);
+    } else {
+      // No password saved in a cookie, get it from the keychain, then delete the value in the keychain
+      ipcRenderer.once('get-password-response', (event, keychainPassword) => {
+        resolve(keychainPassword);
+
+        if (keychainPassword) {
+          setSavedPassword(keychainPassword, true);
+          ipcRenderer.send('delete-password');
+        }
+      });
+
+      ipcRenderer.send('get-password');
+    }
     // @endif
   });
 };
 
 export const deleteSavedPassword = () => {
   return new Promise<*>(resolve => {
-    // @if TARGET='app'
-    ipcRenderer.once('delete-password-response', (event, success) => {
-      resolve();
-    });
-    ipcRenderer.send('delete-password');
-    // @endif;
-    // @if TARGET='web'
     deleteCookie('saved-password');
     resolve();
-    // @endif
   });
 };
 
@@ -125,17 +124,7 @@ export const setAuthToken = (value: string) => {
 export const deleteAuthToken = () => {
   return new Promise<*>(resolve => {
     deleteCookie('auth_token');
-
-    // @if TARGET='app'
-    ipcRenderer.once('delete-auth-token-response', (event, success) => {
-      resolve();
-    });
-    ipcRenderer.send('delete-auth-token');
-    // @endif;
-
-    // @if TARGET='web'
     resolve();
-    // @endif
   });
 };
 
@@ -143,17 +132,12 @@ export const doSignOutCleanup = () => {
   return new Promise<*>(resolve => {
     deleteCookie('auth_token');
     deleteCookie('saved-password');
+    resolve();
 
     // @if TARGET='app'
-    ipcRenderer.once('delete-auth-token-response', (event, success) => {
-      resolve();
-    });
     ipcRenderer.send('delete-auth-token');
+    ipcRenderer.send('delete-password');
     // @endif;
-
-    // @if TARGET='web'
-    resolve();
-    // @endif
   });
 };
 

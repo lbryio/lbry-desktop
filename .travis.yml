@@ -50,7 +50,7 @@ addons:
   artifacts:
     working_dir: dist
     paths:
-      - $(git ls-files -o dist/{*.dmg,*.exe,*.deb} | tr "\n" ":")
+      - $(git ls-files -o dist/{*.dmg,*.exe,*.deb,*.AppImage} | tr "\n" ":")
     target_paths:
       - '/app/build-${TRAVIS_BUILD_NUMBER}_commit-${TRAVIS_COMMIT:0:7}$([ ! -z ${TRAVIS_TAG}
         ] && echo _tag-${TRAVIS_TAG})'

@@ -25,9 +25,10 @@ type RowDataItem = {
 
 function HomePage(props: Props) {
   const { followedTags, subscribedChannels, authenticated } = props;
+  const showAuthenticatedRows = authenticated || !IS_WEB;
   let rowData: Array<RowDataItem> = [];
 
-  if (!authenticated) {
+  if (!showAuthenticatedRows) {
     rowData.push(
       {
         title: 'Trending On LBRY',
@@ -43,13 +44,34 @@ function HomePage(props: Props) {
     );
   }
 
-  if (authenticated) {
+  if (showAuthenticatedRows) {
     if (subscribedChannels && subscribedChannels.length > 0) {
+      let releaseTime = `>${Math.floor(
+        moment()
+          .subtract(1, 'year')
+          .startOf('week')
+          .unix()
+      )}`;
+
+      // Warning - hack below
+      // If users are following more than 20 channels or tags, limit results to stuff less than 6 months old
+      // This helps with timeout issues for users that are following a ton of stuff
+      // https://github.com/lbryio/lbry-sdk/issues/2420
+      if (subscribedChannels.length > 20) {
+        releaseTime = `>${Math.floor(
+          moment()
+            .subtract(6, 'months')
+            .startOf('week')
+            .unix()
+        )}`;
+      }
+
       rowData.push({
         title: 'Recent From Following',
         link: `/$/${PAGES.CHANNELS_FOLLOWING}`,
         options: {
           orderBy: ['release_time'],
+          releaseTime: releaseTime,
           pageSize: subscribedChannels.length > 3 ? 8 : 4,
           channelIds: subscribedChannels.map(subscription => {
             const { channelClaimId } = parseURI(subscription.uri);
@@ -100,10 +122,11 @@ function HomePage(props: Props) {
       options: {
         orderBy: ['effective_amount'],
         pageSize: 4,
-        // claimType: 'stream',
+        claimType: 'stream',
         releaseTime: `>${Math.floor(
           moment()
             .subtract(1, 'week')
+            .startOf('day')
             .unix()
         )}`,
       },
@@ -128,13 +151,14 @@ function HomePage(props: Props) {
         timestamp: `>${Math.floor(
           moment()
             .subtract(1, 'week')
+            .startOf('day')
             .unix()
         )}`,
       },
     }
   );
 
-  if (!authenticated) {
+  if (!showAuthenticatedRows) {
     rowData.push({
       title: '#lbry',
       link: `/$/${PAGES.TAGS}?t=lbry&type=top&time=all`,
@@ -146,7 +170,7 @@ function HomePage(props: Props) {
     });
   }
 
-  if (authenticated) {
+  if (showAuthenticatedRows) {
     rowData.push({
       title: 'Trending On LBRY',
       link: `/$/${PAGES.DISCOVER}`,

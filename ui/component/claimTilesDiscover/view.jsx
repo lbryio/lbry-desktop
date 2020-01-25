@@ -39,7 +39,7 @@ function ClaimTilesDiscover(props: Props) {
     claimType,
     timestamp,
   } = props;
-
+  const [hasSearched, setHasSearched] = React.useState(false);
   const options: {
     page_size: number,
     no_totals: boolean,
@@ -60,7 +60,9 @@ function ClaimTilesDiscover(props: Props) {
     any_tags: tags || [],
     not_tags: !showNsfw ? MATURE_TAGS : [],
     channel_ids: channelIds || [],
-    not_channel_ids: hiddenUris && hiddenUris.length ? hiddenUris.map(hiddenUri => hiddenUri.split('#')[1]) : [],
+    not_channel_ids:
+      // If channelIds were passed in, we don't need not_channel_ids
+      !channelIds && hiddenUris && hiddenUris.length ? hiddenUris.map(hiddenUri => hiddenUri.split('#')[1]) : [],
     order_by: orderBy || ['trending_group', 'trending_mixed'],
   };
 
@@ -77,7 +79,7 @@ function ClaimTilesDiscover(props: Props) {
 
   const claimSearchCacheQuery = createNormalizedClaimSearchKey(options);
   const uris = claimSearchByQuery[claimSearchCacheQuery] || [];
-  const shouldPerformSearch = uris.length === 0 || (!loading && uris.length < pageSize);
+  const shouldPerformSearch = !hasSearched || (uris.length === 0 || (!loading && uris.length < pageSize));
   // Don't use the query from createNormalizedClaimSearchKey for the effect since that doesn't include page & release_time
   const optionsStringForEffect = JSON.stringify(options);
 
@@ -85,8 +87,9 @@ function ClaimTilesDiscover(props: Props) {
     if (shouldPerformSearch) {
       const searchOptions = JSON.parse(optionsStringForEffect);
       doClaimSearch(searchOptions);
+      setHasSearched(true);
     }
-  }, [doClaimSearch, shouldPerformSearch, optionsStringForEffect]);
+  }, [doClaimSearch, shouldPerformSearch, optionsStringForEffect, hasSearched]);
 
   return (
     <ul className="claim-grid">

@@ -3,9 +3,6 @@
 </h1>
 
 <h1 align=center>LBRY App - https://lbry.tv/</h1>
-  
-  
-
 
 
 <h2 align=center>
@@ -18,9 +15,6 @@
   <a href="https://travis-ci.org/lbryio/lbry-desktop">
     <img src="https://travis-ci.org/lbryio/lbry-desktop.svg?branch=master" alt="Build Status"  />
   </a>
-   <a href="https://david-dm.org/lbryio/lbry-desktop">
-    <img src="https://david-dm.org/lbryio/lbry-desktop/status.svg" alt="Dependencies"  />
-  </a>
   <a href="https://chat.lbry.com">
     <img alt="GitHub contributors" src="https://img.shields.io/discord/362322208485277697.svg?logo=discord" alt="chat on Discord">
   </a>
@@ -30,16 +24,14 @@
   <a href="https://forthebadge.com" title="forthebadge">
     <img alt="forthebadge" src="https://forthebadge.com/images/badges/60-percent-of-the-time-works-every-time.svg">
   </a>
-</h1>  
-
+</h1>
 
 The LBRY app is a graphical browser for the decentralized content marketplace provided by the
 [LBRY](https://lbry.com) protocol. It is essentially the
 [lbry daemon](https://github.com/lbryio/lbry) bundled with a UI using
 [Electron](https://electron.atom.io/).
 
-![App GIF](https://spee.ch/@lbry:3f/darwin-029.gif)
-
+![App GIF](https://spee.ch/@lbrynews:0/lbry-joule.gif)
 
 ## Table of Contents
 
@@ -51,10 +43,8 @@ The LBRY app is a graphical browser for the decentralized content marketplace pr
 6. [Security](#security)
 7. [Contact](#contact)
 
-
-
-
 ## Install
+
 [![Windows](https://img.shields.io/badge/Windows-Install-blue)](https://lbry.com/get/lbry.exe)
 [![Linux](https://img.shields.io/badge/Linux-Install-blue)](https://lbry.com/get/lbry.deb)
 [![MacOS](https://img.shields.io/badge/MacOS-Install-blue)](https://lbry.com/get/lbry.dmg)

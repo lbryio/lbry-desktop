@@ -27,7 +27,7 @@ class ModalSendTip extends React.PureComponent<Props> {
           ) : (
             <I18nMessage
               tokens={{
-                url: <UriIndicator uri={uri} />,
+                url: <UriIndicator uri={uri} inline />,
               }}
             >
               Send a tip to %url%

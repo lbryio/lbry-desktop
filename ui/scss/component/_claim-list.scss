@@ -350,6 +350,10 @@
   color: var(--color-text-subtitle);
 }
 
+.claim-tile__publishes {
+  font-size: var(--font-small);
+}
+
 .claim-tile__about--channel {
   @extend .claim-tile__about;
   flex: 1;

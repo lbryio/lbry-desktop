@@ -4,7 +4,33 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
-## [0.39.0] - [Unreleased]
+## [0.39.1] - [Unreleased]
+
+### Added
+
+- Analytics event for video buffering for easier debugging ([#3534](https://github.com/lbryio/lbry-desktop/pull/3534))
+
+### Fixed
+
+- Home page tiles not loading in some cases ([#3539](https://github.com/lbryio/lbry-desktop/pull/3539))
+- Spellcheck not working on the advanced publish description ([c6230ba](https://github.com/lbryio/lbry-desktop/commit/c6230ba024a1e1e84ea2be32aff234027cbb02d5))
+
+## [0.39.0] - [2019-1-22]
+
+### Added
+
+- Adds the ability for users to update & delete comments ([#3453](https://github.com/lbryio/lbry-desktop/pull/3453))
+- New homepage design ([#3508](https://github.com/lbryio/lbry-desktop/pull/3508))
+- Revamped invites system ([#3462](https://github.com/lbryio/lbry-desktop/pull/3462))
+- Appimage support ([#3497](https://github.com/lbryio/lbry-desktop/pull/3497))
+- Better layout for viewing text files ([#3446](https://github.com/lbryio/lbry-desktop/pull/3446))
+- Show file as the thumbnail for free image claims ([#3317](https://github.com/lbryio/lbry-desktop/pull/3317))
+
+### Changed
+
+- Navigation redesign ([#3432](https://github.com/lbryio/lbry-desktop/pull/3432))
+- Move away from keychain and into a cookie for authentication ([#3497](https://github.com/lbryio/lbry-desktop/pull/3497))
+- Updated lbry-sdk to [0.54.1](https://github.com/lbryio/lbry-sdk/releases/tag/v0.54.1) for faster wallet syncing and improved stability
 
 ### Fixed
 
@@ -16,18 +42,6 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Don't reset publish language to app language ([#261](https://github.com/lbryio/lbry-redux/pull/261))
 - Same file wasn't able to be reselected on publish after clearing the publish screen ([#3500](https://github.com/lbryio/lbry-desktop/pull/3500))
 - Make sure search results on channel page don't return content from other channels ([#3503](https://github.com/lbryio/lbry-desktop/pull/3503))
-
-### Added
-
-- Adds the ability for users to update & delete comments ([#3453](https://github.com/lbryio/lbry-desktop/pull/3453))
-- New homepage design ([#3508](https://github.com/lbryio/lbry-desktop/pull/3508))
-- Better layout for viewing text files ([#3446](https://github.com/lbryio/lbry-desktop/pull/3446))
-- Show file as the thumbnail for free image claims ([#3317](https://github.com/lbryio/lbry-desktop/pull/3317))
-
-### Changed
-
-- Updated lbry-sdk to [0.53.2](https://github.com/lbryio/lbry-sdk/releases/tag/v0.53.2)
-- Navigation redesign ([#3432](https://github.com/lbryio/lbry-desktop/pull/3432))
 
 ## [0.38.2] - [2019-12-21]
 

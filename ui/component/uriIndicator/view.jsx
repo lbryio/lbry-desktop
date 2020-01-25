@@ -1,6 +1,7 @@
 // @flow
 import type { Node } from 'react';
 import React from 'react';
+import classnames from 'classnames';
 import Button from 'component/button';
 import Tooltip from 'component/common/tooltip';
 import ClaimPreview from 'component/claimPreview';
@@ -17,6 +18,7 @@ type Props = {
   uri: string,
   // to allow for other elements to be nested within the UriIndicator
   children: ?Node,
+  inline: boolean,
 };
 
 class UriIndicator extends React.PureComponent<Props> {
@@ -41,7 +43,7 @@ class UriIndicator extends React.PureComponent<Props> {
   };
 
   render() {
-    const { link, isResolvingUri, claim, addTooltip, children } = this.props;
+    const { link, isResolvingUri, claim, addTooltip, children, inline } = this.props;
 
     if (!claim) {
       return <span className="empty">{isResolvingUri ? 'Validating...' : 'Unused'}</span>;
@@ -50,7 +52,7 @@ class UriIndicator extends React.PureComponent<Props> {
     const isChannelClaim = claim.value_type === 'channel';
 
     if (!claim.signing_channel && !isChannelClaim) {
-      return <span className="channel-name">Anonymous</span>;
+      return <span className={classnames('channel-name', { 'channel-name--inline': inline })}>Anonymous</span>;
     }
 
     const channelClaim = isChannelClaim ? claim : claim.signing_channel;
@@ -59,7 +61,7 @@ class UriIndicator extends React.PureComponent<Props> {
       const { name } = channelClaim;
       const channelLink = link ? channelClaim.canonical_url || channelClaim.permanent_url : false;
 
-      const inner = <span className="channel-name">{name}</span>;
+      const inner = <span className={classnames('channel-name', { 'channel-name--inline': inline })}>{name}</span>;
 
       if (!channelLink) {
         return inner;

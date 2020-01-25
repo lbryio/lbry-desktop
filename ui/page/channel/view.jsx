@@ -19,10 +19,10 @@ import * as ICONS from 'constants/icons';
 import classnames from 'classnames';
 import * as MODALS from 'constants/modal_types';
 import { Form, FormField } from 'component/common/form';
-import ClaimPreview from 'component/claimPreview';
 import Icon from 'component/common/icon';
 import HelpLink from 'component/common/help-link';
 import { DEBOUNCE_WAIT_DURATION_MS } from 'constants/search';
+import ClaimList from 'component/claimList';
 
 const PAGE_VIEW_QUERY = `view`;
 const ABOUT_PAGE = `about`;
@@ -250,7 +250,14 @@ function ChannelPage(props: Props) {
         <TabPanels>
           <TabPanel>
             {searchResults ? (
-              searchResults.map(url => <ClaimPreview key={url} uri={url} />)
+              <ClaimList
+                header={false}
+                headerAltControls={null}
+                id={`search-results-for-${claimId}`}
+                loading={false}
+                showHiddenByUser={false}
+                uris={searchResults}
+              />
             ) : (
               <ChannelContent uri={uri} channelIsBlackListed={channelIsBlackListed} />
             )}
