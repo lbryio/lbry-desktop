@@ -1,13 +1,11 @@
 // @flow
 import React, { useEffect } from 'react';
 import { Redirect } from 'react-router-dom';
-import { parseURI } from 'lbry-redux';
 import BusyIndicator from 'component/common/busy-indicator';
 import ChannelPage from 'page/channel';
 import FilePage from 'page/file';
 import Page from 'component/page';
 import Button from 'component/button';
-import { SITE_TITLE } from 'config';
 import Card from 'component/common/card';
 import AbandonedChannelPreview from 'component/abandonedChannelPreview';
 import { formatLbryUrlForWeb } from 'util/url';
@@ -46,14 +44,10 @@ function ShowPage(props: Props) {
     claim,
     blackListedOutpoints,
     location,
-    title,
     claimIsMine,
     isSubscribed,
     history,
   } = props;
-  const { channelName, streamName } = parseURI(uri);
-  const { entries } = history;
-  const entryIndex = history.index;
   const signingChannel = claim && claim.signing_channel;
   const canonicalUrl = claim && claim.canonical_url;
   const claimExists = claim !== null && claim !== undefined;
@@ -72,24 +66,7 @@ function ShowPage(props: Props) {
     if ((resolveUri && !isResolvingUri && uri && haventFetchedYet) || (claimExists && !canonicalUrl)) {
       resolveUri(uri);
     }
-  }, [resolveUri, isResolvingUri, canonicalUrl, uri, claimExists, haventFetchedYet]);
-
-  useEffect(() => {
-    if (title) {
-      document.title = title;
-    } else if (streamName) {
-      document.title = streamName;
-    } else if (channelName) {
-      document.title = channelName;
-    } else {
-      document.title = IS_WEB ? SITE_TITLE : 'LBRY';
-    }
-
-    entries[entryIndex].title = document.title;
-    return () => {
-      document.title = IS_WEB ? SITE_TITLE : 'LBRY';
-    };
-  }, [channelName, entries, entryIndex, streamName, title]);
+  }, [resolveUri, isResolvingUri, canonicalUrl, uri, claimExists, haventFetchedYet, history]);
 
   // Don't navigate directly to repost urls
   // Always redirect to the actual content
