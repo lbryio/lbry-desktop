@@ -46,7 +46,7 @@
   white-space: nowrap;
 }
 
-.comment__meta-menu {
+.comment__menu {
   align-self: flex-end;
 }
 
@@ -55,10 +55,17 @@
   font-size: var(--font-small);
 }
 
-
 .comment__menu-option {
   display: flex;
   align-items: center;
   padding: var(--spacing-small);
   font-size: var(--font-small);
+}
+
+.comment__menu-icon--hovering {
+  stroke: var(--color-comment-menu-hovering);
+}
+
+.comment__menu-icon {
+  stroke: var(--color-comment-menu);
 }
