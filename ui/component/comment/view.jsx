@@ -9,7 +9,6 @@ import ChannelThumbnail from 'component/channelThumbnail';
 import { Menu, MenuList, MenuButton, MenuItem } from '@reach/menu-button';
 import Icon from 'component/common/icon';
 import * as ICONS from 'constants/icons';
-import * as MODALS from 'constants/modal_types';
 import { FormField, Form } from 'component/common/form';
 
 type Props = {
@@ -27,7 +26,6 @@ type Props = {
   commentIsMine: boolean, // if this comment was signed by an owned channel
   updateComment: (string, string) => void,
   deleteComment: string => void,
-  openModal: (id: string, { deleteComment: () => void }) => void,
 };
 
 const LENGTH_TO_COLLAPSE = 300;
@@ -47,7 +45,6 @@ function Comment(props: Props) {
     commentIsMine,
     commentId,
     updateComment,
-    openModal,
     deleteComment,
   } = props;
 
@@ -74,7 +71,7 @@ function Comment(props: Props) {
       setCharCount(editedMessage.length);
 
       // a user will try and press the escape key to cancel editing their comment
-      const handleEscape = (event) => {
+      const handleEscape = event => {
         if (event.keyCode === ESCAPE_KEY) {
           setEditing(false);
         }
@@ -89,13 +86,11 @@ function Comment(props: Props) {
     }
   }, [isResolvingUri, shouldFetch, author, authorUri, resolveUri, editedMessage, isEditing, setEditing]);
 
-  // edit button calls this function
   function handleSetEditing() {
     setEditing(true);
   }
 
-  // when the body is changed, form calls this function
-  function handleEditMessage(event) {
+  function handleEditMessageChanged(event) {
     setCommentValue(event.target.value);
   }
 
@@ -107,13 +102,10 @@ function Comment(props: Props) {
   }
 
   function handleDeleteComment() {
-    openModal(MODALS.DELETE_COMMENT, {
-      deleteComment: () => {
-        deleteComment(commentId);
-      },
-    });
+    deleteComment(commentId);
   }
 
+  // these two are for performing effects when user hovers over comment
   function handleMouseOver() {
     setMouseHover(true);
   }
@@ -145,22 +137,23 @@ function Comment(props: Props) {
             </time>
           </div>
           <div className="comment__meta-menu">
-            { commentIsMine && (
+            {commentIsMine && (
               <Menu>
                 <MenuButton>
-                  <Icon size={18} iconColor={mouseIsHovering ? '#6A6A6A' : '#E0E0E0'} icon={ICONS.MORE_VERTICAL} />
+                  <Icon
+                    size={18}
+                    className="comment__actions-menu"
+                    iconColor={mouseIsHovering ? '#6A6A6A' : '#E0E0E0'}
+                    icon={ICONS.MORE_VERTICAL}
+                  />
                 </MenuButton>
                 <MenuList className="menu__list--header">
-                  {commentIsMine && (
-                    <MenuItem className="comment__menu-option" onSelect={handleSetEditing}>
-                      {__('Edit')}
-                    </MenuItem>
-                  )}
-                  {commentIsMine && (
-                    <MenuItem className="comment__menu-option" onSelect={handleDeleteComment}>
-                      {__('Delete')}
-                    </MenuItem>
-                  )}
+                  <MenuItem className="comment__menu-option" onSelect={handleSetEditing}>
+                    {__('Edit')}
+                  </MenuItem>
+                  <MenuItem className="comment__menu-option" onSelect={handleDeleteComment}>
+                    {__('Delete')}
+                  </MenuItem>
                 </MenuList>
               </Menu>
             )}
@@ -174,7 +167,7 @@ function Comment(props: Props) {
                 name="editing_comment"
                 value={editedMessage}
                 charCount={charCount}
-                onChange={handleEditMessage}
+                onChange={handleEditMessageChanged}
               />
               <div className="section__actions">
                 <Button
@@ -184,11 +177,7 @@ function Comment(props: Props) {
                   requiresAuth={IS_WEB}
                   disabled={currentMessage === editedMessage}
                 />
-                <Button
-                  button="secondary"
-                  label={__('Cancel')}
-                  onClick={() => setEditing(false)}
-                />
+                <Button button="secondary" label={__('Cancel')} onClick={() => setEditing(false)} />
               </div>
             </Form>
           ) : editedMessage.length >= LENGTH_TO_COLLAPSE ? (

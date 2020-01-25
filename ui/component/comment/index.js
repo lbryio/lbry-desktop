@@ -9,7 +9,6 @@ import {
   doCommentUpdate, // doEditComment would be a more fitting name
   doCommentAbandon,
 } from 'lbry-redux';
-import { doOpenModal } from 'redux/actions/app';
 import Comment from './view';
 
 const select = (state, props) => ({
@@ -23,8 +22,7 @@ const select = (state, props) => ({
 const perform = dispatch => ({
   resolveUri: uri => dispatch(doResolveUri(uri)),
   updateComment: (commentId, comment) => dispatch(doCommentUpdate(commentId, comment)),
-  deleteComment: (commentId) => dispatch(doCommentAbandon(commentId)),
-  openModal: (modal, props) => dispatch(doOpenModal(modal, props)),
+  deleteComment: commentId => dispatch(doCommentAbandon(commentId)),
 });
 
 export default connect(select, perform)(Comment);
