@@ -82,5 +82,4 @@ export const TRENDING = 'Trending';
 export const TOP = 'Top';
 export const NEW = 'New';
 export const SHUFFLE = 'Shuffle';
-export const MORE_HORIZONTAL = 'MoreHorizontal';
 export const MORE_VERTICAL = 'MoreVertical';
