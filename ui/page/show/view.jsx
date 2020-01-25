@@ -23,31 +23,10 @@ type Props = {
   }>,
   title: string,
   claimIsMine: Boolean,
-  history: {
-    entries: { title: string }[],
-    goBack: () => void,
-    goForward: () => void,
-    index: number,
-    length: number,
-    location: { pathname: string },
-    push: string => void,
-    state: {},
-    replaceState: ({}, string, string) => void,
-  },
 };
 
 function ShowPage(props: Props) {
-  const {
-    isResolvingUri,
-    resolveUri,
-    uri,
-    claim,
-    blackListedOutpoints,
-    location,
-    claimIsMine,
-    isSubscribed,
-    history,
-  } = props;
+  const { isResolvingUri, resolveUri, uri, claim, blackListedOutpoints, location, claimIsMine, isSubscribed } = props;
   const signingChannel = claim && claim.signing_channel;
   const canonicalUrl = claim && claim.canonical_url;
   const claimExists = claim !== null && claim !== undefined;
