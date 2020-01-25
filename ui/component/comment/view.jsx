@@ -94,7 +94,6 @@ function Comment(props: Props) {
     setCommentValue(event.target.value);
   }
 
-  // when the user is done, this function is called
   function handleSubmit() {
     updateComment(commentId, editedMessage);
     setCurrentMessage(editedMessage);
@@ -105,7 +104,6 @@ function Comment(props: Props) {
     deleteComment(commentId);
   }
 
-  // these two are for performing effects when user hovers over comment
   function handleMouseOver() {
     setMouseHover(true);
   }
@@ -136,18 +134,17 @@ function Comment(props: Props) {
               {relativeDate(timePosted)}
             </time>
           </div>
-          <div className="comment__meta-menu">
+          <div className="comment__menu">
             {commentIsMine && (
               <Menu>
                 <MenuButton>
                   <Icon
                     size={18}
-                    className="comment__actions-menu"
-                    iconColor={mouseIsHovering ? '#6A6A6A' : '#E0E0E0'}
+                    className={mouseIsHovering ? 'comment__menu-icon--hovering' : 'comment__menu-icon'}
                     icon={ICONS.MORE_VERTICAL}
                   />
                 </MenuButton>
-                <MenuList className="menu__list--header">
+                <MenuList className="comment__menu-list">
                   <MenuItem className="comment__menu-option" onSelect={handleSetEditing}>
                     {__('Edit')}
                   </MenuItem>
