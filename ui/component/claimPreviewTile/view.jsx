@@ -13,6 +13,8 @@ import { formatLbryUrlForWeb } from 'util/url';
 import { parseURI } from 'lbry-redux';
 import FileProperties from 'component/fileProperties';
 
+import FileDownloadLink from 'component/fileDownloadLink';
+
 type Props = {
   uri: string,
   claim: ?Claim,
@@ -61,6 +63,8 @@ function ClaimPreviewTile(props: Props) {
     onClick: e => e.stopPropagation(),
   };
 
+  const [isHovering, setHovering] = React.useState(false);
+
   let isChannel;
   let isValid = false;
   if (uri) {
@@ -85,6 +89,14 @@ function ClaimPreviewTile(props: Props) {
     if (navigateUrl) {
       history.push(navigateUrl);
     }
+  }
+
+  function handleOnMouseOver(e) {
+    setHovering(true);
+  }
+
+  function handleOnMouseOut(e) {
+    setHovering(false);
   }
 
   React.useEffect(() => {
@@ -146,6 +158,8 @@ function ClaimPreviewTile(props: Props) {
       className={classnames('card claim-preview--tile', {
         'claim-preview--channel': isChannel,
       })}
+      onMouseOver={handleOnMouseOver}
+      onMouseOut={handleOnMouseOut}
     >
       <NavLink {...navLinkProps}>
         <FileThumbnail thumbnail={thumbnailUrl}>
