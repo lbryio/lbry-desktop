@@ -11,7 +11,7 @@ import WunderBar from 'component/wunderbar';
 import Icon from 'component/common/icon';
 import { Menu, MenuList, MenuButton, MenuItem } from '@reach/menu-button';
 import Tooltip from 'component/common/tooltip';
-import ButtonNavigation from 'component/buttonNavigation';
+import NavigationButton from 'component/navigationButton';
 // @if TARGET='app'
 import { IS_MAC } from 'component/app/view';
 // @endif
@@ -114,8 +114,8 @@ const Header = (props: Props) => {
           {/* @if TARGET='app' */}
           {!authHeader && (
             <div className="header__navigation-arrows">
-              <ButtonNavigation isBackward history={history} />
-              <ButtonNavigation isBackward={false} history={history} />
+              <NavigationButton isBackward history={history} />
+              <NavigationButton isBackward={false} history={history} />
             </div>
           )}
           {/* @endif */}

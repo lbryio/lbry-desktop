@@ -24,7 +24,7 @@ const sliceEntries = (currentIndex, entries, historyLength, isBackward) => {
   return entries.slice(l, r);
 };
 
-const ButtonNavigation = (props: Props) => {
+const NavigationButton = (props: Props) => {
   const { isBackward, history } = props;
   const { entries, go } = history;
   const currentIndex = history.index;
@@ -72,4 +72,4 @@ const ButtonNavigation = (props: Props) => {
     </div>
   );
 };
-export default ButtonNavigation;
+export default NavigationButton;
