@@ -1,12 +1,10 @@
 // @flow
 import React, { useEffect } from 'react';
-import { parseURI } from 'lbry-redux';
 import BusyIndicator from 'component/common/busy-indicator';
 import ChannelPage from 'page/channel';
 import FilePage from 'page/file';
 import Page from 'component/page';
 import Button from 'component/button';
-import { SITE_TITLE } from 'config';
 import Card from 'component/common/card';
 
 type Props = {
@@ -35,10 +33,7 @@ type Props = {
 };
 
 function ShowPage(props: Props) {
-  const { isResolvingUri, resolveUri, uri, claim, blackListedOutpoints, location, title, claimIsMine, history } = props;
-  const { channelName, streamName } = parseURI(uri);
-  const { entries } = history;
-  const entryIndex = history.index;
+  const { isResolvingUri, resolveUri, uri, claim, blackListedOutpoints, location, claimIsMine, history } = props;
   const signingChannel = claim && claim.signing_channel;
   const canonicalUrl = claim && claim.canonical_url;
   const claimExists = claim !== null && claim !== undefined;
@@ -58,23 +53,6 @@ function ShowPage(props: Props) {
       resolveUri(uri);
     }
   }, [resolveUri, isResolvingUri, canonicalUrl, uri, claimExists, haventFetchedYet]);
-
-  useEffect(() => {
-    if (title) {
-      document.title = title;
-    } else if (streamName) {
-      document.title = streamName;
-    } else if (channelName) {
-      document.title = channelName;
-    } else {
-      document.title = IS_WEB ? SITE_TITLE : 'LBRY';
-    }
-
-    entries[entryIndex].title = document.title;
-    return () => {
-      document.title = IS_WEB ? SITE_TITLE : 'LBRY';
-    };
-  }, [channelName, entries, entryIndex, streamName, title]);
 
   let innerContent = '';
 
