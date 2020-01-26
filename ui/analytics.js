@@ -130,10 +130,10 @@ const analytics: Analytics = {
     }
   },
   videoStartEvent: (claimId, duration) => {
-    sendGaEvent('Media', 'StartDelay', claimId, duration);
+    sendGaTimingEvent('Media', 'StartDelay', Number((duration * 1000).toFixed(0)), claimId);
   },
   videoBufferEvent: (claimId, currentTime) => {
-    sendGaEvent('Media', 'BufferTimestamp', claimId, currentTime);
+    sendGaTimingEvent('Media', 'BufferTimestamp', currentTime * 1000, claimId);
   },
   tagFollowEvent: (tag, following, location) => {
     sendGaEvent(following ? 'Tag-Follow' : 'Tag-Unfollow', tag);
@@ -176,13 +176,14 @@ function sendGaEvent(category, action, label, value) {
   }
 }
 
-function sendGaTimingEvent(category: string, action: string, timeInMs: number) {
+function sendGaTimingEvent(category: string, action: string, timeInMs: number, label?: string) {
   if (analyticsEnabled && isProduction) {
     ReactGA.timing(
       {
         category,
         variable: action,
         value: timeInMs,
+        ...(label ? { label } : {}),
       },
       [SECOND_TRACKER_NAME]
     );
