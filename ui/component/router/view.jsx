@@ -102,7 +102,9 @@ function AppRouter(props: Props) {
       document.title = IS_WEB ? SITE_TITLE : 'LBRY';
     }
 
+    // @if TARGET='app'
     entries[entryIndex].title = document.title;
+    // @endif
     return () => {
       document.title = IS_WEB ? SITE_TITLE : 'LBRY';
     };
