@@ -124,7 +124,7 @@ function Invited(props: Props) {
         subtitle={
           referrerIsChannel
             ? __(
-                `Content freedom and and a present from %channel_name% are waiting for you. Create an account to claim it.`,
+                `Content freedom and a present from %channel_name% are waiting for you. Create an account to claim it.`,
                 { channel_name: referrerChannelName }
               )
             : __(`Content freedom and a present are waiting for you. Create an account to claim it.`)

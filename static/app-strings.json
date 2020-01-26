@@ -905,5 +905,10 @@
   "This Month": "This Month",
   "This Year": "This Year",
   "Khmer": "Khmer",
-  "Invites": "Invites"
+  "Invites": "Invites",
+  "This is an experiment, and may be removed in the future. Publish something with the #homepagecagematch tag to battle for the top spot on the home page!": "This is an experiment, and may be removed in the future. Publish something with the #homepagecagematch tag to battle for the top spot on the home page!",
+  "%claimsInChannel% publishes": "%claimsInChannel% publishes",
+  "%claimsInChannel% publish": "%claimsInChannel% publish",
+  "Publishing": "Publishing",
+  "Update published": "Update published"
 }

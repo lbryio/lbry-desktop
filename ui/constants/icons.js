@@ -81,3 +81,4 @@ export const SIGN_IN = 'SignIn';
 export const TRENDING = 'Trending';
 export const TOP = 'Top';
 export const NEW = 'New';
+export const SHUFFLE = 'Shuffle';

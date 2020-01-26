@@ -13,25 +13,6 @@
   margin-top: var(--spacing-large);
 }
 
-.navigation--placeholder {
-  @extend .navigation;
-  padding: 2rem 1.5rem;
-  border-radius: var(--card-radius);
-  font-weight: var(--font-weight-bold);
-  color: #fff;
-  position: relative;
-  background-color: black;
-
-  h2 {
-    font-size: 2rem;
-    font-weight: var(--font-weight-bold);
-  }
-
-  p {
-    font-size: 1.2rem;
-  }
-}
-
 .navigation-links {
   @extend .ul--no-style;
   flex-direction: column;

@@ -48,18 +48,12 @@ export const icons = {
   ),
   [ICONS.ARROW_LEFT]: buildIcon(
     <g fill="none" fillRule="evenodd" strokeLinecap="round">
-      <path d="M4, 12 L21, 12" />
-      <polyline
-        strokeLinejoin="round"
-        transform="translate(7.000000, 12.000000) scale(-1, 1) translate(-7.000000, -12.000000)"
-        points="3 4 11 12 3 20"
-      />
+      <polyline points="15 18 9 12 15 6" />
     </g>
   ),
   [ICONS.ARROW_RIGHT]: buildIcon(
     <g fill="none" fillRule="evenodd" strokeLinecap="round">
-      <path d="M3, 12 L20, 12" />
-      <polyline strokeLinejoin="round" points="13 4 21 12 13 20" />
+      <polyline points="9 18 15 12 9 6" />
     </g>
   ),
   [ICONS.HOME]: buildIcon(
@@ -362,6 +356,15 @@ export const icons = {
       <circle cx="9" cy="7" r="4" />
       <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
       <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+    </g>
+  ),
+  [ICONS.SHUFFLE]: buildIcon(
+    <g>
+      <polyline points="16 3 21 3 21 8" />
+      <line x1="4" y1="20" x2="21" y2="3" />
+      <polyline points="21 16 21 21 16 21" />
+      <line x1="15" y1="15" x2="21" y2="21" />
+      <line x1="4" y1="4" x2="9" y2="9" />
     </g>
   ),
 };

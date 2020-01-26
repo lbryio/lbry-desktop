@@ -3,7 +3,7 @@
   margin-bottom: var(--spacing-large);
   position: relative;
   border-radius: var(--card-radius);
-  box-shadow: var(--card-box-shadow) var(--color-box-shadow);
+  box-shadow: var(--card-box-shadow);
   overflow: hidden;
 
   @media (max-width: $breakpoint-small) {

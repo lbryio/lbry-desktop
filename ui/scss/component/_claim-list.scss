@@ -239,3 +239,127 @@
   background: var(--color-primary-alt);
   padding: var(--spacing-miniscule);
 }
+
+//
+// The _other_ way to view claims
+// A grid of tiles
+// It should probably go into it's own file once we add more to it
+//
+.claim-grid {
+  display: flex;
+  flex-wrap: wrap;
+  list-style: none;
+  align-items: flex-start;
+}
+
+.claim-grid__wrapper {
+  &:not(:first-of-type) {
+    margin-top: var(--spacing-large);
+  }
+
+  @media (max-width: $breakpoint-small) {
+    &:not(:first-of-type) {
+      margin-top: var(--spacing-medium);
+    }
+  }
+}
+
+.claim-grid__title {
+  margin-bottom: var(--spacing-medium);
+
+  &:not(:first-of-type) {
+    margin-top: var(--spacing-xlarge);
+  }
+}
+
+.claim-grid__help {
+  margin-bottom: 12px;
+
+  svg {
+    stroke: var(--color-text-subtitle);
+  }
+}
+
+.claim-preview--tile {
+  width: calc((100% - var(--spacing-medium) * 3) / 4);
+  margin-bottom: var(--spacing-large);
+  margin-right: 0;
+  margin-top: 0;
+  margin-left: var(--spacing-medium);
+  justify-content: flex-start;
+
+  &:first-child,
+  &:nth-child(5n) {
+    margin-left: 0;
+  }
+
+  &:hover {
+    cursor: pointer;
+  }
+
+  .media__thumb {
+    border-bottom-right-radius: 0;
+    border-bottom-left-radius: 0;
+  }
+
+  @media (max-width: $breakpoint-small) {
+    width: calc((100% - var(--spacing-medium) * 1) / 2);
+    margin-bottom: var(--spacing-large);
+
+    .channel-thumbnail {
+      display: none;
+    }
+
+    &:first-child,
+    &:nth-child(2n + 1) {
+      margin-left: 0;
+    }
+  }
+}
+
+.claim-tile__title {
+  margin: var(--spacing-small);
+  margin-bottom: 0;
+  font-weight: 600;
+  font-size: var(--font-small);
+  color: var(--color-text);
+  min-height: 2.5rem;
+
+  @media (max-width: $breakpoint-small) {
+    font-size: var(--font-xsmall);
+  }
+}
+
+.claim-tile__info {
+  display: flex;
+  margin-top: var(--spacing-small);
+  padding: var(--spacing-small);
+  border-top: 1px solid var(--color-border);
+  color: var(--color-subtitle);
+
+  .channel-thumbnail {
+    width: 2.1rem;
+    height: 2.1rem;
+  }
+}
+
+.claim-tile__about {
+  display: flex;
+  flex-direction: column;
+  font-size: var(--font-xsmall);
+  color: var(--color-text-subtitle);
+}
+
+.claim-tile__publishes {
+  font-size: var(--font-small);
+}
+
+.claim-tile__about--channel {
+  @extend .claim-tile__about;
+  flex: 1;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  height: 2.1rem;
+  font-size: var(--font-body);
+}
