@@ -141,7 +141,7 @@ export function doFetchClaimsByChannel(uri: string, page: number = 1, pageSize: 
   return (dispatch: Dispatch, getState: GetState) => {
     const state = getState();
     const showMature = makeSelectClientSetting(SETTINGS.SHOW_MATURE)(state);
-    const params = {
+    const params: any = {
       channel: uri,
       page,
       page_size: pageSize,

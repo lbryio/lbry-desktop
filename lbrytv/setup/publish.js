@@ -12,7 +12,7 @@ import { doUpdateUploadProgress } from 'lbryinc';
 // to perform calling methods at arbitrary urls
 // and pass form file fields
 export default function apiPublishCallViaWeb(
-  apiCall: (any) => void,
+  apiCall: (string, any, Function, Function) => void,
   connectionString: string,
   token: string,
   method: string,
