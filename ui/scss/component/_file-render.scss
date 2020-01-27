@@ -153,3 +153,36 @@
     }
   }
 }
+
+.video-overlay__wrapper {
+  position: absolute;
+  left: auto;
+  right: auto;
+  height: 100%;
+  width: 100%;
+  background-color: rgba(0, 0, 0, 0.9);
+  z-index: 999;
+  color: var(--color-white);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  .button--uri-indicator {
+    color: var(--color-gray-3);
+  }
+}
+
+.video-overlay__title {
+  @extend .section__title;
+  margin-top: var(--spacing-medium);
+  margin-bottom: var(--spacing-small);
+}
+
+.video-overlay__subtitle {
+  color: var(--color-gray-3);
+  margin: var(--spacing-medium) 0;
+}
+.video-overlay__actions {
+  margin-top: var(--spacing-large);
+}

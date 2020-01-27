@@ -8,7 +8,7 @@ import ImageViewer from 'component/viewers/imageViewer';
 import AppViewer from 'component/viewers/appViewer';
 import Button from 'component/button';
 import { withRouter } from 'react-router-dom';
-import { formatLbryUrlForWeb } from 'util/url';
+import AutoplayCountdown from 'component/autoplayCountdown';
 // @if TARGET='web'
 import { generateStreamUrl } from 'util/lbrytv';
 // @endif
@@ -36,15 +36,19 @@ type Props = {
   currentTheme: string,
   downloadPath: string,
   fileName: string,
-  autoplay: boolean,
-  nextFileToPlay: string,
-  nextUnplayed: string,
-  history: { push: string => void },
 };
 
-class FileRender extends React.PureComponent<Props> {
+type State = {
+  showAutoplayCountdown: boolean,
+};
+
+class FileRender extends React.PureComponent<Props, State> {
   constructor(props: Props) {
     super(props);
+
+    this.state = {
+      showAutoplayCountdown: false,
+    };
 
     (this: any).escapeListener = this.escapeListener.bind(this);
     (this: any).onEndedCb = this.onEndedCb.bind(this);
@@ -73,10 +77,7 @@ class FileRender extends React.PureComponent<Props> {
   }
 
   onEndedCb() {
-    const { autoplay, nextUnplayed, history } = this.props;
-    if (autoplay && nextUnplayed) {
-      history.push(formatLbryUrlForWeb(nextUnplayed));
-    }
+    this.setState({ showAutoplayCountdown: true });
   }
 
   renderViewer() {
@@ -188,10 +189,12 @@ class FileRender extends React.PureComponent<Props> {
   }
 
   render() {
-    const { isText } = this.props;
+    const { isText, uri } = this.props;
+    const { showAutoplayCountdown } = this.state;
 
     return (
       <div className={classnames('file-render', { 'file-render--document': isText })}>
+        {showAutoplayCountdown && <AutoplayCountdown uri={uri} />}
         <Suspense fallback={<div />}>{this.renderViewer()}</Suspense>
       </div>
     );

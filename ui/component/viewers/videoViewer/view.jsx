@@ -38,7 +38,6 @@ type Props = {
   changeVolume: number => void,
   savePosition: (string, number) => void,
   changeMute: boolean => void,
-  setPlayingUri: (string | null) => void,
   source: string,
   contentType: string,
   thumbnail: string,
@@ -48,18 +47,7 @@ type Props = {
 };
 
 function VideoViewer(props: Props) {
-  const {
-    contentType,
-    source,
-    setPlayingUri,
-    onEndedCB,
-    changeVolume,
-    changeMute,
-    volume,
-    muted,
-    thumbnail,
-    claim,
-  } = props;
+  const { contentType, source, onEndedCB, changeVolume, changeMute, volume, muted, thumbnail, claim } = props;
   const claimId = claim && claim.claim_id;
   const videoRef = useRef();
   const isAudio = contentType.includes('audio');
@@ -85,13 +73,13 @@ function VideoViewer(props: Props) {
     }
 
     function doEnded() {
-      // clear position
-      setPlayingUri(null);
       onEndedCB();
     }
+
     function doPause(e: Event) {
       // store position e.target.currentTime
     }
+
     function doVolume(e: Event) {
       // $FlowFixMe volume is missing in EventTarget
       changeVolume(e.target.volume);

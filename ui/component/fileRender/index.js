@@ -8,13 +8,13 @@ import {
   makeSelectDownloadPathForUri,
   makeSelectFileNameForUri,
 } from 'lbry-redux';
-import { THEME, AUTOPLAY } from 'constants/settings';
+import * as SETTINGS from 'constants/settings';
 import { makeSelectClientSetting } from 'redux/selectors/settings';
-import { makeSelectNextUnplayedRecommended, makeSelectIsText } from 'redux/selectors/content';
+import { makeSelectIsText } from 'redux/selectors/content';
 import FileRender from './view';
 
 const select = (state, props) => ({
-  currentTheme: makeSelectClientSetting(THEME)(state),
+  currentTheme: makeSelectClientSetting(SETTINGS.THEME)(state),
   claim: makeSelectClaimForUri(props.uri)(state),
   mediaType: makeSelectMediaTypeForUri(props.uri)(state),
   thumbnail: makeSelectThumbnailForUri(props.uri)(state),
@@ -22,8 +22,6 @@ const select = (state, props) => ({
   downloadPath: makeSelectDownloadPathForUri(props.uri)(state),
   fileName: makeSelectFileNameForUri(props.uri)(state),
   streamingUrl: makeSelectStreamingUrlForUri(props.uri)(state),
-  autoplay: makeSelectClientSetting(AUTOPLAY)(state),
-  nextUnplayed: makeSelectNextUnplayedRecommended(props.uri)(state),
   isText: makeSelectIsText(props.uri)(state),
 });
 
