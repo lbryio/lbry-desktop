@@ -130,10 +130,10 @@ const analytics: Analytics = {
     }
   },
   videoStartEvent: (claimId, duration) => {
-    sendGaTimingEvent('Media', 'TimeToStart', Number((duration * 1000).toFixed(0)), claimId);
+    sendGaTimingEvent('Media', 'TimeToStart', Number((duration * 1000).toFixed(0)));
   },
   videoBufferEvent: (claimId, currentTime) => {
-    sendGaTimingEvent('Media', 'BufferTimestamp', currentTime * 1000, claimId);
+    sendGaTimingEvent('Media', 'BufferTimestamp', currentTime * 1000);
   },
   tagFollowEvent: (tag, following, location) => {
     sendGaEvent(following ? 'Tag-Follow' : 'Tag-Unfollow', tag);
