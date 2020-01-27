@@ -174,7 +174,7 @@ function Comment(props: Props) {
                   requiresAuth={IS_WEB}
                   disabled={currentMessage === editedMessage}
                 />
-                <Button button="secondary" label={__('Cancel')} onClick={() => setEditing(false)} />
+                <Button button="link" label={__('Cancel')} onClick={() => setEditing(false)} />
               </div>
             </Form>
           ) : editedMessage.length >= LENGTH_TO_COLLAPSE ? (
