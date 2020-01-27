@@ -157,6 +157,7 @@
   "Details": "Details",
   "Transaction": "Transaction",
   "Date": "Date",
+  "Abandon Support": "Abandon Support",
   "Abandon Claim": "Abandon Claim",
   "Find New Tags To Follow": "Find New Tags To Follow",
   "Aw shucks!": "Aw shucks!",
@@ -910,5 +911,11 @@
   "%claimsInChannel% publishes": "%claimsInChannel% publishes",
   "%claimsInChannel% publish": "%claimsInChannel% publish",
   "Publishing": "Publishing",
-  "Update published": "Update published"
+  "Update published": "Update published",
+  "Delete this file from my computer": "Delete this file from my computer",
+  "Are you sure you'd like to remove %title% from LBRY?": "Are you sure you'd like to remove %title% from LBRY?",
+  "This will increase the overall bid amount for %title%, which will boost its ability to be discovered while active.": "This will increase the overall bid amount for %title%, which will boost its ability to be discovered while active.",
+  "Support %amount% LBC": "Support %amount% LBC",
+  "You deposited %amount% LBC as a support!": "You deposited %amount% LBC as a support!",
+  "LBRY Link": "LBRY Link"
 }

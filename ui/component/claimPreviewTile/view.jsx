@@ -53,8 +53,12 @@ function ClaimPreviewTile(props: Props) {
   } = props;
   const shouldFetch = claim === undefined;
   const thumbnailUrl = useGetThumbnail(uri, claim, streamingUrl, getFile, placeholder) || thumbnail;
-  const navigateUrl = uri ? formatLbryUrlForWeb(uri) : undefined;
   const claimsInChannel = (claim && claim.meta.claims_in_channel) || 0;
+  const navigateUrl = uri ? formatLbryUrlForWeb(uri) : undefined;
+  const navLinkProps = {
+    to: navigateUrl,
+    onClick: e => e.stopPropagation(),
+  };
 
   let isChannel;
   let isValid = false;
@@ -142,10 +146,10 @@ function ClaimPreviewTile(props: Props) {
         'claim-preview--channel': isChannel,
       })}
     >
-      <NavLink to={navigateUrl}>
+      <NavLink {...navLinkProps}>
         <FileThumbnail thumbnail={thumbnailUrl} />
       </NavLink>
-      <NavLink to={navigateUrl}>
+      <NavLink {...navLinkProps}>
         <h2 className="claim-tile__title">
           <TruncatedText text={title || (claim && claim.name)} lines={2} />
         </h2>

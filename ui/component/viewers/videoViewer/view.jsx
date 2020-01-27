@@ -222,7 +222,6 @@ function VideoViewer(props: Props) {
         player.off();
       }
     };
-    // include requireRedraw here so the event listener is re-added when we need to manually remove/add the video player
   }, [player]);
 
   return (
