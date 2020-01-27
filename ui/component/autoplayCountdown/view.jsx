@@ -9,12 +9,14 @@ type Props = {
   history: { push: string => void },
   nextRecommendedClaim: ?StreamClaim,
   nextRecommendedUri: string,
+  setPlayingUri: (string | null) => void,
 };
 
 function AutoplayCountdown(props: Props) {
   const {
     nextRecommendedUri,
     nextRecommendedClaim,
+    setPlayingUri,
     history: { push },
   } = props;
   const nextTitle = nextRecommendedClaim && nextRecommendedClaim.value && nextRecommendedClaim.value.title;
@@ -32,6 +34,8 @@ function AutoplayCountdown(props: Props) {
       interval = setInterval(() => {
         const newTime = timer - 1;
         if (newTime === 0) {
+          // Set the playingUri to null so the app doesn't try to make a floating window with the video that just finished
+          setPlayingUri(null);
           push(navigateUrl);
         } else {
           setTimer(timer - 1);
@@ -41,7 +45,7 @@ function AutoplayCountdown(props: Props) {
     return () => {
       clearInterval(interval);
     };
-  }, [timer, navigateUrl, push, timerCanceled]);
+  }, [timer, navigateUrl, push, timerCanceled, setPlayingUri, nextRecommendedUri]);
 
   if (timerCanceled) {
     return null;
@@ -49,12 +53,14 @@ function AutoplayCountdown(props: Props) {
 
   return (
     <div className="video-overlay__wrapper">
-      <div className="video-overlay__subtitle">Up Next</div>
+      <div className="video-overlay__subtitle">{__('Up Next')}</div>
       <div className="video-overlay__title">{nextTitle}</div>
       <UriIndicator link uri={nextRecommendedUri} />
 
       <div className="video-overlay__actions">
-        <div className="video-overlay__subtitle">Playing in {timer} seconds</div>
+        <div className="video-overlay__subtitle">
+          {__('Playing in %seconds_left% seconds', { seconds_left: timer })}
+        </div>
         <div className="section__actions--centered">
           <Button label={__('Cancel')} button="secondary" onClick={() => setTimerCanceled(true)} />
         </div>

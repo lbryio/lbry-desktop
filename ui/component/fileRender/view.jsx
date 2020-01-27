@@ -36,6 +36,9 @@ type Props = {
   currentTheme: string,
   downloadPath: string,
   fileName: string,
+  autoplay: boolean,
+  setPlayingUri: (string | null) => void,
+  currentlyFloating: boolean,
 };
 
 type State = {
@@ -51,7 +54,8 @@ class FileRender extends React.PureComponent<Props, State> {
     };
 
     (this: any).escapeListener = this.escapeListener.bind(this);
-    (this: any).onEndedCb = this.onEndedCb.bind(this);
+    (this: any).onEndedAutoplay = this.onEndedAutoplay.bind(this);
+    (this: any).getOnEndedCb = this.getOnEndedCb.bind(this);
   }
 
   componentDidMount() {
@@ -76,8 +80,25 @@ class FileRender extends React.PureComponent<Props, State> {
     remote.getCurrentWindow().setFullScreen(false);
   }
 
-  onEndedCb() {
-    this.setState({ showAutoplayCountdown: true });
+  getOnEndedCb() {
+    const { setPlayingUri, currentlyFloating } = this.props;
+
+    if (!currentlyFloating) {
+      return this.onEndedAutoplay;
+    }
+
+    // if (embeded) {
+    //   return this.onEndedEmbed
+    // }
+
+    return () => setPlayingUri(null);
+  }
+
+  onEndedAutoplay() {
+    const { autoplay } = this.props;
+    if (autoplay) {
+      this.setState({ showAutoplayCountdown: true });
+    }
   }
 
   renderViewer() {
@@ -99,8 +120,8 @@ class FileRender extends React.PureComponent<Props, State> {
       application: <AppViewer uri={uri} />,
       // @endif
 
-      video: <VideoViewer uri={uri} source={source} contentType={contentType} onEndedCB={this.onEndedCb} />,
-      audio: <VideoViewer uri={uri} source={source} contentType={contentType} onEndedCB={this.onEndedCb} />,
+      video: <VideoViewer uri={uri} source={source} contentType={contentType} onEndedCB={this.getOnEndedCb()} />,
+      audio: <VideoViewer uri={uri} source={source} contentType={contentType} onEndedCB={this.getOnEndedCb()} />,
       image: <ImageViewer uri={uri} source={source} />,
       // Add routes to viewer...
     };
@@ -108,10 +129,10 @@ class FileRender extends React.PureComponent<Props, State> {
     // Supported contentTypes
     const contentTypes = {
       'application/x-ext-mkv': (
-        <VideoViewer uri={uri} source={source} contentType={contentType} onEndedCB={this.onEndedCb} />
+        <VideoViewer uri={uri} source={source} contentType={contentType} onEndedCB={this.getOnEndedCb()} />
       ),
       'video/x-matroska': (
-        <VideoViewer uri={uri} source={source} contentType={contentType} onEndedCB={this.onEndedCb} />
+        <VideoViewer uri={uri} source={source} contentType={contentType} onEndedCB={this.getOnEndedCb()} />
       ),
       'application/pdf': <PdfViewer source={downloadPath || source} />,
       'text/html': <HtmlViewer source={downloadPath || source} />,
@@ -189,12 +210,12 @@ class FileRender extends React.PureComponent<Props, State> {
   }
 
   render() {
-    const { isText, uri } = this.props;
+    const { isText, uri, currentlyFloating } = this.props;
     const { showAutoplayCountdown } = this.state;
 
     return (
       <div className={classnames('file-render', { 'file-render--document': isText })}>
-        {showAutoplayCountdown && <AutoplayCountdown uri={uri} />}
+        {!currentlyFloating && showAutoplayCountdown && <AutoplayCountdown uri={uri} />}
         <Suspense fallback={<div />}>{this.renderViewer()}</Suspense>
       </div>
     );
