@@ -302,6 +302,12 @@
     border-bottom-left-radius: 0;
   }
 
+  @media (max-width: $breakpoint-medium) {
+    .channel-thumbnail {
+      display: none;
+    }
+  }
+
   @media (max-width: $breakpoint-small) {
     width: calc((100% - var(--spacing-medium) * 1) / 2);
     margin-bottom: var(--spacing-large);
