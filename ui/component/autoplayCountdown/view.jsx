@@ -2,6 +2,7 @@
 import React from 'react';
 import Button from 'component/button';
 import UriIndicator from 'component/uriIndicator';
+import I18nMessage from 'component/i18nMessage';
 import { formatLbryUrlForWeb } from 'util/url';
 import { withRouter } from 'react-router';
 
@@ -53,16 +54,19 @@ function AutoplayCountdown(props: Props) {
 
   return (
     <div className="video-overlay__wrapper">
-      <div className="video-overlay__subtitle">{__('Up Next')}</div>
+      <div className="video-overlay__subtitle">
+        <I18nMessage tokens={{ channel: <UriIndicator link uri={nextRecommendedUri} /> }}>
+          Up Next by %channel%
+        </I18nMessage>
+      </div>
       <div className="video-overlay__title">{nextTitle}</div>
-      <UriIndicator link uri={nextRecommendedUri} />
 
       <div className="video-overlay__actions">
         <div className="video-overlay__subtitle">
           {__('Playing in %seconds_left% seconds', { seconds_left: timer })}
         </div>
         <div className="section__actions--centered">
-          <Button label={__('Cancel')} button="secondary" onClick={() => setTimerCanceled(true)} />
+          <Button label={__('Cancel')} button="link" onClick={() => setTimerCanceled(true)} />
         </div>
       </div>
     </div>
