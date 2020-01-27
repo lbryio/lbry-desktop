@@ -1,18 +1,15 @@
 import { connect } from 'react-redux';
 import EmbedWrapperPage from './view';
-import { doResolveUri, makeSelectClaimForUri } from 'lbry-redux';
-import { generateStreamUrl } from 'util/lbrytv';
+import { doResolveUri, makeSelectClaimForUri, buildURI } from 'lbry-redux';
 
 const select = (state, props) => {
-  const PROTOCOL = 'lbry://';
   const { match } = props;
   const { params } = match;
   const { claimName, claimId } = params;
-  const uri = PROTOCOL + claimName + (claimId ? `#${claimId}` : '');
+  const uri = claimName && claimId ? buildURI({ claimName, claimId }) : '';
   return {
     uri,
     claim: makeSelectClaimForUri(uri)(state),
-    streamUrl: generateStreamUrl(claimName, claimId),
   };
 };
 
