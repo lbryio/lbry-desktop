@@ -67,6 +67,7 @@ const NavigationButton = (props: Props) => {
         }}
         icon={isBackward ? ICONS.ARROW_LEFT : ICONS.ARROW_RIGHT}
         iconSize={18}
+        disabled={slicedEntries.length === 0}
       />
       {showHistory && <ul className={'header__navigaiton-dropdown'}>{slicedEntries.map(makeItem)}</ul>}
     </div>
