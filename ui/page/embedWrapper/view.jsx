@@ -7,10 +7,9 @@ type Props = {
   uri: string,
   resolveUri: string => void,
   claim: Claim,
-  streamUrl: string,
 };
 const EmbedWrapperPage = (props: Props) => {
-  const { resolveUri, claim, uri, streamUrl } = props;
+  const { resolveUri, claim, uri } = props;
   useEffect(() => {
     if (resolveUri && uri) {
       resolveUri(uri);
@@ -20,7 +19,7 @@ const EmbedWrapperPage = (props: Props) => {
   if (uri && claim) {
     return (
       <div className={'embed__wrapper'}>
-        <FileRender uri={uri} embedUrl={streamUrl} />
+        <FileRender uri={uri} embedded />
       </div>
     );
   } else {
