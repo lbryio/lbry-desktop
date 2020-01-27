@@ -49,9 +49,9 @@ const defaultState: AppState = {
   daemonReady: false,
   hasSignature: false,
   badgeNumber: 0,
+  volume: 1,
   // @if TARGET='app'
   upgradeSkipped: sessionStorage.getItem('upgradeSkipped') === 'true',
-  volume: Number(sessionStorage.getItem('volume')) || 1,
   // @endif
   muted: false,
   autoUpdateDownloaded: false,
@@ -73,6 +73,10 @@ const defaultState: AppState = {
 
 // @@router comes from react-router
 // This action is dispatched any time a user navigates forward or back
+try {
+  defaultState.volume = Number(sessionStorage.getItem('volume'));
+} catch (e) {}
+
 reducers['@@router/LOCATION_CHANGE'] = (state, action) => {
   const { currentScroll } = state;
   const scrollHistory = (state.scrollHistory && state.scrollHistory.slice()) || [];
