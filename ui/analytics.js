@@ -130,7 +130,7 @@ const analytics: Analytics = {
     }
   },
   videoStartEvent: (claimId, duration) => {
-    sendGaTimingEvent('Media', 'StartDelay', Number((duration * 1000).toFixed(0)), claimId);
+    sendGaTimingEvent('Media', 'TimeToStart', Number((duration * 1000).toFixed(0)), claimId);
   },
   videoBufferEvent: (claimId, currentTime) => {
     sendGaTimingEvent('Media', 'BufferTimestamp', currentTime * 1000, claimId);
