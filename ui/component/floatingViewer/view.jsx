@@ -175,7 +175,11 @@ export default function FileViewer(props: Props) {
             </div>
           )}
 
-          {isReadyToPlay ? <FileRender uri={uri} /> : <LoadingScreen status={loadingMessage} />}
+          {isReadyToPlay ? (
+            <FileRender currentlyFloating={!inline} uri={uri} />
+          ) : (
+            <LoadingScreen status={loadingMessage} />
+          )}
           {!inline && (
             <div className="draggable content__info">
               <div className="claim-preview-title" title={title || uri}>

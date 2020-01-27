@@ -11,6 +11,7 @@ import {
 import * as SETTINGS from 'constants/settings';
 import { makeSelectClientSetting } from 'redux/selectors/settings';
 import { makeSelectIsText } from 'redux/selectors/content';
+import { doSetPlayingUri } from 'redux/actions/content';
 import FileRender from './view';
 
 const select = (state, props) => ({
@@ -22,7 +23,15 @@ const select = (state, props) => ({
   downloadPath: makeSelectDownloadPathForUri(props.uri)(state),
   fileName: makeSelectFileNameForUri(props.uri)(state),
   streamingUrl: makeSelectStreamingUrlForUri(props.uri)(state),
+  autoplay: makeSelectClientSetting(SETTINGS.AUTOPLAY)(state),
   isText: makeSelectIsText(props.uri)(state),
 });
 
-export default connect(select)(FileRender);
+const perform = dispatch => ({
+  setPlayingUri: uri => dispatch(doSetPlayingUri(uri)),
+});
+
+export default connect(
+  select,
+  perform
+)(FileRender);
