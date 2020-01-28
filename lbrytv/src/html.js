@@ -78,7 +78,7 @@ function buildClaimOgMetadata(uri, claim, overrideOptions = {}) {
   if (claim.tags) {
     head += `<meta name="keywords" content="${claim.tags.toString()}"/>`;
   }
-  head += `<meta name="twitter:card" content="summary_large_image"/>`;
+
   head += `<meta name="twitter:image" content="${claimThumbnail}"/>`;
   head += `<meta property="og:description" content="${description}"/>`;
   head += `<meta property="og:image" content="${claimThumbnail}"/>`;
@@ -102,6 +102,8 @@ function buildClaimOgMetadata(uri, claim, overrideOptions = {}) {
       head += `<meta name="twitter:player:width" content="${claim.frame_width}">`;
       head += `<meta name="twitter:player:height" content="${claim.frame_height}">`;
     }
+  } else {
+    head += `<meta name="twitter:card" content="summary_large_image"/>`;
   }
 
   return head;
