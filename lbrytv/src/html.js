@@ -1,5 +1,5 @@
 const { URL } = require('../../config.js');
-const { generateStreamUrl } = require('../../ui/util/lbrytv');
+const { generateEmbedUrl } = require('../../ui/util/lbrytv');
 const PAGES = require('../../ui/constants/pages');
 const { getClaim } = require('./chainquery');
 const { parseURI } = require('lbry-redux');
@@ -68,7 +68,6 @@ function buildClaimOgMetadata(uri, claim, overrideOptions = {}) {
   // Allow for ovverriding default claim based og metadata
   const title = overrideOptions.title || claimTitle;
   const description = overrideOptions.description || claimDescription;
-  const embedPlayer = overrideOptions.embedPlayer;
 
   let head = '';
 
@@ -90,12 +89,12 @@ function buildClaimOgMetadata(uri, claim, overrideOptions = {}) {
   head += `<meta property="og:url" content="${URL}/${claim.name}:${claim.claim_id}"/>`;
 
   if (claim.source_media_type && claim.source_media_type.startsWith('video/')) {
-    const videoUrl = generateStreamUrl(claim.name, claim.claim_id);
+    const videoUrl = generateEmbedUrl(claim.name, claim.claim_id);
     head += `<meta property="og:video" content="${videoUrl}" />`;
     head += `<meta property="og:video:secure_url" content="${videoUrl}" />`;
     head += `<meta property="og:video:type" content="${claim.source_media_type}" />`;
     head += `<meta name="twitter:card" content="player"/>`;
-    head += `<meta name="twitter:player" content="${embedPlayer}" />`;
+    head += `<meta name="twitter:player" content="${videoUrl}" />`;
     if (claim.frame_width && claim.frame_height) {
       head += `<meta property="og:video:width" content="${claim.frame_width}"/>`;
       head += `<meta property="og:video:height" content="${claim.frame_height}"/>`;
@@ -132,7 +131,6 @@ module.exports.getHtml = async function getHtml(ctx) {
 
   const invitePath = `/$/${PAGES.INVITE}/`;
   const embedPath = `/$/${PAGES.EMBED}/`;
-  const embedPlayer = URL + path;
 
   if (path.includes(invitePath)) {
     const inviteChannel = path.slice(invitePath.length).replace(/:/g, '#');
@@ -163,7 +161,7 @@ module.exports.getHtml = async function getHtml(ctx) {
     const claim = await getClaimFromChainquery(claimUri);
 
     if (claim) {
-      const ogMetadata = buildClaimOgMetadata(claimUri, claim, { embedPlayer: embedPlayer});
+      const ogMetadata = buildClaimOgMetadata(claimUri, claim);
       return insertToHead(html, ogMetadata);
     }
 
