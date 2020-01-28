@@ -4,6 +4,7 @@ import * as React from 'react';
 import Icon from 'component/common/icon';
 import FilePrice from 'component/filePrice';
 import VideoDuration from 'component/videoDuration';
+import FileType from 'component/fileType';
 
 type Props = {
   uri: string,
@@ -22,6 +23,7 @@ export default function FileProperties(props: Props) {
       {!claimIsMine && downloaded && <Icon tooltip icon={icons.DOWNLOAD} />}
       <FilePrice hideFree uri={uri} />
       <VideoDuration uri={uri} />
+      <FileType uri={uri} />
     </div>
   );
 }

@@ -5,10 +5,6 @@
   font-size: var(--font-small);
   color: var(--color-text-help);
 
-  .icon {
-    margin-bottom: -1px;
-  }
-
   & > *:not(:last-child) {
     margin-right: var(--spacing-small);
   }
