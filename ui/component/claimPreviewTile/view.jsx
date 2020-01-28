@@ -11,6 +11,7 @@ import SubscribeButton from 'component/subscribeButton';
 import useGetThumbnail from 'effects/use-get-thumbnail';
 import { formatLbryUrlForWeb } from 'util/url';
 import { parseURI } from 'lbry-redux';
+import VideoDuration from 'component/videoDuration';
 
 type Props = {
   uri: string,
@@ -147,7 +148,9 @@ function ClaimPreviewTile(props: Props) {
       })}
     >
       <NavLink {...navLinkProps}>
-        <FileThumbnail thumbnail={thumbnailUrl} />
+        <FileThumbnail thumbnail={thumbnailUrl}>
+          <VideoDuration uri={uri} className="claim-tile__video-length" />
+        </FileThumbnail>
       </NavLink>
       <NavLink {...navLinkProps}>
         <h2 className="claim-tile__title">
