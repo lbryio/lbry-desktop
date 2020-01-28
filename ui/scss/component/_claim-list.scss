@@ -370,14 +370,21 @@
   font-size: var(--font-body);
 }
 
-.claim-tile__video-length {
+.claim-tile__absolute-info {
   position: absolute;
   bottom: var(--spacing-small);
   right: var(--spacing-small);
-  font-size: var(--font-small);
-  padding: 0.1rem;
+  font-size: var(--font-xsmall);
+  padding: 0.2rem;
   border-radius: var(--border-radius);
   font-weight: bold;
   background-color: black;
   color: white;
+
+  display: flex;
+  align-items: center;
+}
+
+.claim-tile__video-length {
+  margin-right: var(--spacing-xsmall);
 }

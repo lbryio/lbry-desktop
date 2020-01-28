@@ -14,7 +14,6 @@ import {
   selectChannelIsBlocked,
   doClearPublish,
   doPrepareEdit,
-  makeSelectMediaTypeForUri,
   doFileGet,
   makeSelectStreamingUrlForUri,
 } from 'lbry-redux';
@@ -35,7 +34,6 @@ const select = (state, props) => ({
   thumbnail: props.uri && makeSelectThumbnailForUri(props.uri)(state),
   cover: props.uri && makeSelectCoverForUri(props.uri)(state),
   title: props.uri && makeSelectTitleForUri(props.uri)(state),
-  mediaType: makeSelectMediaTypeForUri(props.uri)(state),
   nsfw: props.uri && makeSelectClaimIsNsfw(props.uri)(state),
   blackListedOutpoints: selectBlackListedOutpoints(state),
   filteredOutpoints: selectFilteredOutpoints(state),
