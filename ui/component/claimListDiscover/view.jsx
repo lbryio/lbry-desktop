@@ -130,6 +130,13 @@ function ClaimListDiscover(props: Props) {
           .startOf('week')
           .unix()
       )}`;
+    } else {
+      // Hack for at least the New page until https://github.com/lbryio/lbry-sdk/issues/2591 is fixed
+      options.release_time = `<${Math.floor(
+        moment()
+          .startOf('minute')
+          .unix()
+      )}`;
     }
   }
 
