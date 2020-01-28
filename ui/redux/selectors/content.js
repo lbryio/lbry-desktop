@@ -7,7 +7,10 @@ import {
   makeSelectClaimIsNsfw,
   makeSelectRecommendedContentForUri,
   makeSelectMediaTypeForUri,
+  selectBlockedChannels,
+  parseURI,
 } from 'lbry-redux';
+import { selectAllCostInfoByUri } from 'lbryinc';
 import { selectShowMatureContent } from 'redux/selectors/settings';
 
 const RECENT_HISTORY_AMOUNT = 10;
@@ -77,11 +80,39 @@ export const makeSelectNextUnplayedRecommended = (uri: string) =>
   createSelector(
     makeSelectRecommendedContentForUri(uri),
     selectHistory,
-    (possibleNext, history) => {
-      if (possibleNext) {
-        for (let i = 0; i < possibleNext.length; i++) {
-          if (!history.find(item => item.uri === possibleNext[i])) {
-            return possibleNext[i];
+    selectClaimsByUri,
+    selectAllCostInfoByUri,
+    selectBlockedChannels,
+    (
+      recommendedForUri: Array<string>,
+      history: Array<{ uri: string }>,
+      claimsByUri: { [string]: ?Claim },
+      costInfoByUri: { [string]: { cost: 0 | string } },
+      blockedChannels: Array<string>
+    ) => {
+      if (recommendedForUri) {
+        // Make sure we don't autoplay paid content, channels, or content from blocked channels
+        for (let i = 0; i < recommendedForUri.length; i++) {
+          const recommendedUri = recommendedForUri[i];
+
+          const { isChannel } = parseURI(recommendedUri);
+          if (isChannel) {
+            continue;
+          }
+
+          const costInfo = costInfoByUri[recommendedUri];
+          if (!costInfo || costInfo.cost !== 0) {
+            continue;
+          }
+
+          const claim = claimsByUri[recommendedUri];
+          const channel = claim && claim.signing_channel;
+          if (channel && blockedChannels.find(blockedUri => blockedUri === channel.permanent_url)) {
+            continue;
+          }
+
+          if (!history.find(item => item.uri === recommendedForUri[i])) {
+            return recommendedForUri[i];
           }
         }
       }
