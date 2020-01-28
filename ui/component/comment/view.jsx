@@ -50,7 +50,6 @@ function Comment(props: Props) {
 
   const [isEditing, setEditing] = useState(false);
   const [editedMessage, setCommentValue] = useState(message);
-  const [currentMessage, setCurrentMessage] = useState(message);
   const [charCount, setCharCount] = useState(editedMessage.length);
 
   // used for controlling the visibility of the menu icon
@@ -96,7 +95,6 @@ function Comment(props: Props) {
 
   function handleSubmit() {
     updateComment(commentId, editedMessage);
-    setCurrentMessage(editedMessage);
     setEditing(false);
   }
 
@@ -172,7 +170,7 @@ function Comment(props: Props) {
                   type="submit"
                   label={__('Done')}
                   requiresAuth={IS_WEB}
-                  disabled={currentMessage === editedMessage}
+                  disabled={message === editedMessage}
                 />
                 <Button button="link" label={__('Cancel')} onClick={() => setEditing(false)} />
               </div>
@@ -180,12 +178,12 @@ function Comment(props: Props) {
           ) : editedMessage.length >= LENGTH_TO_COLLAPSE ? (
             <div className="comment__message">
               <Expandable>
-                <MarkdownPreview content={currentMessage} />
+                <MarkdownPreview content={message} />
               </Expandable>
             </div>
           ) : (
             <div className="comment__message">
-              <MarkdownPreview content={currentMessage} />
+              <MarkdownPreview content={message} />
             </div>
           )}
         </div>
