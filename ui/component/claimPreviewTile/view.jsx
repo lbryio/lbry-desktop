@@ -175,7 +175,9 @@ function ClaimPreviewTile(props: Props) {
           </div>
         ) : (
           <React.Fragment>
-            <ChannelThumbnail thumbnailPreview={channelThumbnail} />
+            <UriIndicator uri={uri} link>
+              <ChannelThumbnail thumbnailPreview={channelThumbnail} />
+            </UriIndicator>
 
             <div className="claim-tile__about">
               <UriIndicator uri={uri} link />
