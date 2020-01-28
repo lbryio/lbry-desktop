@@ -44,6 +44,7 @@ type Props = {
 
 type State = {
   showAutoplayCountdown: boolean,
+  showEmbededMessage: boolean,
 };
 
 class FileRender extends React.PureComponent<Props, State> {
@@ -52,10 +53,12 @@ class FileRender extends React.PureComponent<Props, State> {
 
     this.state = {
       showAutoplayCountdown: false,
+      showEmbededMessage: false,
     };
 
     (this: any).escapeListener = this.escapeListener.bind(this);
     (this: any).onEndedAutoplay = this.onEndedAutoplay.bind(this);
+    (this: any).onEndedEmbedded = this.onEndedEmbedded.bind(this);
     (this: any).getOnEndedCb = this.getOnEndedCb.bind(this);
   }
 
@@ -82,15 +85,15 @@ class FileRender extends React.PureComponent<Props, State> {
   }
 
   getOnEndedCb() {
-    const { setPlayingUri, currentlyFloating } = this.props;
+    const { setPlayingUri, currentlyFloating, embedded } = this.props;
+
+    if (embedded) {
+      return this.onEndedEmbedded;
+    }
 
     if (!currentlyFloating) {
       return this.onEndedAutoplay;
     }
-
-    // if (embeded) {
-    //   return this.onEndedEmbed
-    // }
 
     return () => setPlayingUri(null);
   }
@@ -100,6 +103,10 @@ class FileRender extends React.PureComponent<Props, State> {
     if (autoplay) {
       this.setState({ showAutoplayCountdown: true });
     }
+  }
+
+  onEndedEmbedded() {
+    this.setState({ showEmbededMessage: true });
   }
 
   renderViewer() {
@@ -211,7 +218,7 @@ class FileRender extends React.PureComponent<Props, State> {
   }
   render() {
     const { isText, uri, currentlyFloating, embedded } = this.props;
-    const { showAutoplayCountdown } = this.state;
+    const { showAutoplayCountdown, showEmbededMessage } = this.state;
 
     return (
       <div
@@ -221,6 +228,17 @@ class FileRender extends React.PureComponent<Props, State> {
           'file-render__embed': embedded,
         })}
       >
+        {embedded && showEmbededMessage && (
+          <div className="video-overlay__wrapper">
+            <div className="video-overlay__title">{__('View More on lbry.tv')}</div>
+
+            <div className="video-overlay__actions">
+              <div className="section__actions--centered">
+                <Button label={__('Explore')} button="primary" href="https://lbry.tv" />
+              </div>
+            </div>
+          </div>
+        )}
         {!currentlyFloating && showAutoplayCountdown && <AutoplayCountdown uri={uri} />}
         <Suspense fallback={<div />}>{this.renderViewer()}</Suspense>
       </div>
