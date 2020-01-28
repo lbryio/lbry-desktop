@@ -3,6 +3,9 @@ import React, { useState, useCallback } from 'react';
 import * as ICONS from 'constants/icons';
 import Button from 'component/button';
 
+// the maximum length of history to show per button
+const MAX_HISTORY_SIZE = 12;
+
 type Props = {
   isBackward: boolean,
   history: {
@@ -18,9 +21,17 @@ type Props = {
 };
 
 // determines which slice of entries should make up the back or forward button drop-downs (isBackward vs !isBackward respectively)
-const sliceEntries = (currentIndex, entries, historyLength, isBackward) => {
-  const l = isBackward ? 0 : currentIndex + 1;
-  const r = isBackward ? currentIndex : historyLength;
+const sliceEntries = (currentIndex, entries, historyLength, isBackward, maxSize) => {
+  let l = isBackward ? 0 : currentIndex + 1;
+  let r = isBackward ? currentIndex : historyLength;
+  const exceedsMax = maxSize < r - l;
+  if (!exceedsMax) {
+    return entries.slice(l, r);
+  } else if (isBackward) {
+    l = r - maxSize;
+  } else {
+    r = l + maxSize;
+  }
   return entries.slice(l, r);
 };
 
@@ -35,13 +46,14 @@ const NavigationButton = (props: Props) => {
   const makeItem = useCallback(
     (entry, index) => {
       // difference between the current index and the index of the entry
-      const goArg = isBackward ? index - currentIndex : index + 1;
+      const backwardDif = index - (currentIndex < MAX_HISTORY_SIZE ? currentIndex : MAX_HISTORY_SIZE);
+      const forwardDif = index + 1;
       return (
         <li
           key={entry.key}
           onMouseDown={() => {
             setShowHistory(false);
-            go(goArg);
+            go(isBackward ? backwardDif : forwardDif);
           }}
         >
           {entry.title}
@@ -50,7 +62,7 @@ const NavigationButton = (props: Props) => {
     },
     [currentIndex, isBackward, go]
   );
-  const slicedEntries = sliceEntries(currentIndex, entries, historyLength, isBackward);
+  const slicedEntries = sliceEntries(currentIndex, entries, historyLength, isBackward, MAX_HISTORY_SIZE);
   return (
     <div>
       <Button
