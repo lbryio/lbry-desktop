@@ -369,3 +369,15 @@
   height: 2.1rem;
   font-size: var(--font-body);
 }
+
+.claim-tile__video-length {
+  position: absolute;
+  bottom: var(--spacing-small);
+  right: var(--spacing-small);
+  font-size: var(--font-small);
+  padding: 0.1rem;
+  border-radius: var(--border-radius);
+  font-weight: bold;
+  background-color: black;
+  color: white;
+}
