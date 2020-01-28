@@ -234,7 +234,7 @@ class FileRender extends React.PureComponent<Props, State> {
 
             <div className="video-overlay__actions">
               <div className="section__actions--centered">
-                <Button label={__('Explore')} button="primary" href="https://lbry.tv" />
+                <Button label={__('Explore')} button="primary" href="https://lbry.tv?src=embed" />
               </div>
             </div>
           </div>
