@@ -113,6 +113,7 @@ function PublishName(props: Props) {
             error={bidError}
             disabled={!name}
             onChange={event => updatePublishForm({ bid: parseFloat(event.target.value) })}
+            onWheel={e => e.stopPropagation()}
             helper={
               <BidHelpText
                 uri={'lbry://' + name}
