@@ -32,7 +32,7 @@ function escapeHtmlProperty(property) {
 
 //
 // Normal metadata with option to override certain values
-// 
+//
 function buildOgMetadata(overrideOptions = {}) {
   const { title, description } = overrideOptions;
   const head =
@@ -53,10 +53,10 @@ function buildOgMetadata(overrideOptions = {}) {
 //
 // Metadata used for urls that need claim information
 // Also has option to override defaults
-// 
+//
 function buildClaimOgMetadata(uri, claim, overrideOptions = {}) {
   // Initial setup for claim based og metadata
-  const { isChannel, claimName } = parseURI(uri);
+  const { claimName } = parseURI(uri);
   const claimTitle = escapeHtmlProperty(claim.title ? claim.title : claimName);
   const claimDescription =
     claim.description && claim.description.length > 0
@@ -64,12 +64,11 @@ function buildClaimOgMetadata(uri, claim, overrideOptions = {}) {
       : `Watch ${claimTitle} on LBRY.tv`;
   const claimLanguage = escapeHtmlProperty(claim.language) || 'en_US';
   const claimThumbnail = escapeHtmlProperty(claim.thumbnail_url) || `${URL}/og.png`;
-  const defaultClaimTitle =
-    claim.channel && !isChannel ? `${claimTitle} from ${claim.channel} on LBRY.tv` : `${claimTitle} on LBRY.tv`;
 
   // Allow for ovverriding default claim based og metadata
   const title = overrideOptions.title || claimTitle;
   const description = overrideOptions.description || claimDescription;
+  const embedPlayer = overrideOptions.embedPlayer;
 
   let head = '';
 
@@ -95,9 +94,12 @@ function buildClaimOgMetadata(uri, claim, overrideOptions = {}) {
     head += `<meta property="og:video" content="${videoUrl}" />`;
     head += `<meta property="og:video:secure_url" content="${videoUrl}" />`;
     head += `<meta property="og:video:type" content="${claim.source_media_type}" />`;
+    head += `<meta name="twitter:player" content="${embedPlayer}">`;
     if (claim.frame_width && claim.frame_height) {
       head += `<meta property="og:video:width" content="${claim.frame_width}"/>`;
       head += `<meta property="og:video:height" content="${claim.frame_height}"/>`;
+      head += `<meta name="twitter:player:width" content="${claim.frame_width}">`;
+      head += `<meta name="twitter:player:height" content="${claim.frame_height}">`;
     }
   }
 
@@ -126,6 +128,8 @@ module.exports.getHtml = async function getHtml(ctx) {
   }
 
   const invitePath = `/$/${PAGES.INVITE}/`;
+  const embedPath = `/$/${PAGES.EMBED}/`;
+  const embedPlayer = URL + path;
 
   if (path.includes(invitePath)) {
     const inviteChannel = path.slice(invitePath.length).replace(/:/g, '#');
@@ -149,6 +153,18 @@ module.exports.getHtml = async function getHtml(ctx) {
       });
       return insertToHead(html, invitePageMetadata);
     }
+  }
+
+  if (path.includes(embedPath)) {
+    const claimUri = path.replace(embedPath, '').replace(/:/g, '#');
+    const claim = await getClaimFromChainquery(claimUri);
+
+    if (claim) {
+      const ogMetadata = buildClaimOgMetadata(claimUri, claim, { embedPlayer: embedPlayer});
+      return insertToHead(html, ogMetadata);
+    }
+
+    return insertToHead(html);
   }
 
   if (!path.includes('$')) {
