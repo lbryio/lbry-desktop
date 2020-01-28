@@ -8,7 +8,7 @@ import ImageViewer from 'component/viewers/imageViewer';
 import AppViewer from 'component/viewers/appViewer';
 import Button from 'component/button';
 import { withRouter } from 'react-router-dom';
-import { formatLbryUrlForWeb } from 'util/url';
+import AutoplayCountdown from 'component/autoplayCountdown';
 // @if TARGET='web'
 import { generateStreamUrl } from 'util/lbrytv';
 // @endif
@@ -31,23 +31,35 @@ type Props = {
   mediaType: string,
   isText: true,
   streamingUrl: string,
+  embedded?: boolean,
   contentType: string,
   claim: StreamClaim,
   currentTheme: string,
   downloadPath: string,
   fileName: string,
   autoplay: boolean,
-  nextFileToPlay: string,
-  nextUnplayed: string,
-  history: { push: string => void },
+  setPlayingUri: (string | null) => void,
+  currentlyFloating: boolean,
 };
 
-class FileRender extends React.PureComponent<Props> {
+type State = {
+  showAutoplayCountdown: boolean,
+  showEmbededMessage: boolean,
+};
+
+class FileRender extends React.PureComponent<Props, State> {
   constructor(props: Props) {
     super(props);
 
+    this.state = {
+      showAutoplayCountdown: false,
+      showEmbededMessage: false,
+    };
+
     (this: any).escapeListener = this.escapeListener.bind(this);
-    (this: any).onEndedCb = this.onEndedCb.bind(this);
+    (this: any).onEndedAutoplay = this.onEndedAutoplay.bind(this);
+    (this: any).onEndedEmbedded = this.onEndedEmbedded.bind(this);
+    (this: any).getOnEndedCb = this.getOnEndedCb.bind(this);
   }
 
   componentDidMount() {
@@ -72,11 +84,29 @@ class FileRender extends React.PureComponent<Props> {
     remote.getCurrentWindow().setFullScreen(false);
   }
 
-  onEndedCb() {
-    const { autoplay, nextUnplayed, history } = this.props;
-    if (autoplay && nextUnplayed) {
-      history.push(formatLbryUrlForWeb(nextUnplayed));
+  getOnEndedCb() {
+    const { setPlayingUri, currentlyFloating, embedded } = this.props;
+
+    if (embedded) {
+      return this.onEndedEmbedded;
     }
+
+    if (!currentlyFloating) {
+      return this.onEndedAutoplay;
+    }
+
+    return () => setPlayingUri(null);
+  }
+
+  onEndedAutoplay() {
+    const { autoplay } = this.props;
+    if (autoplay) {
+      this.setState({ showAutoplayCountdown: true });
+    }
+  }
+
+  onEndedEmbedded() {
+    this.setState({ showEmbededMessage: true });
   }
 
   renderViewer() {
@@ -98,8 +128,8 @@ class FileRender extends React.PureComponent<Props> {
       application: <AppViewer uri={uri} />,
       // @endif
 
-      video: <VideoViewer uri={uri} source={source} contentType={contentType} onEndedCB={this.onEndedCb} />,
-      audio: <VideoViewer uri={uri} source={source} contentType={contentType} onEndedCB={this.onEndedCb} />,
+      video: <VideoViewer uri={uri} source={source} contentType={contentType} onEndedCB={this.getOnEndedCb()} />,
+      audio: <VideoViewer uri={uri} source={source} contentType={contentType} onEndedCB={this.getOnEndedCb()} />,
       image: <ImageViewer uri={uri} source={source} />,
       // Add routes to viewer...
     };
@@ -107,10 +137,10 @@ class FileRender extends React.PureComponent<Props> {
     // Supported contentTypes
     const contentTypes = {
       'application/x-ext-mkv': (
-        <VideoViewer uri={uri} source={source} contentType={contentType} onEndedCB={this.onEndedCb} />
+        <VideoViewer uri={uri} source={source} contentType={contentType} onEndedCB={this.getOnEndedCb()} />
       ),
       'video/x-matroska': (
-        <VideoViewer uri={uri} source={source} contentType={contentType} onEndedCB={this.onEndedCb} />
+        <VideoViewer uri={uri} source={source} contentType={contentType} onEndedCB={this.getOnEndedCb()} />
       ),
       'application/pdf': <PdfViewer source={downloadPath || source} />,
       'text/html': <HtmlViewer source={downloadPath || source} />,
@@ -186,12 +216,30 @@ class FileRender extends React.PureComponent<Props> {
     // Return viewer
     return viewer || unsupported;
   }
-
   render() {
-    const { isText } = this.props;
+    const { isText, uri, currentlyFloating, embedded } = this.props;
+    const { showAutoplayCountdown, showEmbededMessage } = this.state;
 
     return (
-      <div className={classnames('file-render', { 'file-render--document': isText })}>
+      <div
+        className={classnames({
+          'file-render': !embedded,
+          'file-render--document': isText && !embedded,
+          'file-render__embed': embedded,
+        })}
+      >
+        {embedded && showEmbededMessage && (
+          <div className="video-overlay__wrapper">
+            <div className="video-overlay__title">{__('View More on lbry.tv')}</div>
+
+            <div className="video-overlay__actions">
+              <div className="section__actions--centered">
+                <Button label={__('Explore')} button="primary" href="https://lbry.tv?src=embed" />
+              </div>
+            </div>
+          </div>
+        )}
+        {!currentlyFloating && showAutoplayCountdown && <AutoplayCountdown uri={uri} />}
         <Suspense fallback={<div />}>{this.renderViewer()}</Suspense>
       </div>
     );

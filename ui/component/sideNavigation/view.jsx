@@ -112,6 +112,11 @@ function SideNavigation(props: Props) {
             {
               ...buildLink(PAGES.DISCOVER, __('All Content'), ICONS.DISCOVER),
             },
+            // @if TARGET='app'
+            {
+              ...buildLink(PAGES.LIBRARY, __('Library'), ICONS.LIBRARY),
+            },
+            // @endif
           ].map(linkProps => (
             <li key={linkProps.navigate}>
               <Button {...linkProps} className="navigation-link" activeClass="navigation-link--active" />
@@ -120,11 +125,6 @@ function SideNavigation(props: Props) {
 
           {expanded &&
             [
-              // @if TARGET='app'
-              {
-                ...buildLink(PAGES.LIBRARY, __('Library'), ICONS.LIBRARY),
-              },
-              // @endif
               {
                 ...buildLink(PAGES.CHANNELS, __('Channels'), ICONS.CHANNEL),
               },

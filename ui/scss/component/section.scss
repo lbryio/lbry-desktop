@@ -92,6 +92,15 @@
   margin-top: var(--spacing-medium);
 }
 
+.section__actions--centered {
+  @extend .section__actions;
+  justify-content: center;
+
+  @media (max-width: $breakpoint-small) {
+    justify-content: flex-start;
+  }
+}
+
 @media (max-width: $breakpoint-small) {
   .section__actions {
     flex-wrap: wrap;
