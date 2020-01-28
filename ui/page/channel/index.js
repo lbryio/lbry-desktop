@@ -26,6 +26,7 @@ const select = (state, props) => ({
   channelIsBlocked: selectChannelIsBlocked(props.uri)(state),
   blackListedOutpoints: selectBlackListedOutpoints(state),
   supportOption: makeSelectClientSetting(settings.SUPPORT_OPTION)(state),
+  showMature: makeSelectClientSetting(settings.SHOW_MATURE)(state),
   subCount: makeSelectSubCountForUri(props.uri)(state),
 });
 

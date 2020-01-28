@@ -2,12 +2,19 @@
 import React from 'react';
 import ClaimList from 'component/claimList';
 
+type Options = {
+  related_to: string,
+  nsfw?: boolean,
+};
+
 type Props = {
   uri: string,
   claim: ?StreamClaim,
+  claimId: string,
   recommendedContent: Array<string>,
   isSearching: boolean,
-  search: string => void,
+  search: (string, Options) => void,
+  mature: boolean,
 };
 
 export default class RecommendedContent extends React.PureComponent<Props> {
@@ -34,12 +41,16 @@ export default class RecommendedContent extends React.PureComponent<Props> {
   }
 
   getRecommendedContent() {
-    const { claim, search } = this.props;
+    const { claim, search, mature, claimId } = this.props;
 
     if (claim && claim.value && claim.value) {
+      const options: Options = { related_to: claimId };
+      if (claim && !mature) {
+        options['nsfw'] = false;
+      }
       const { title } = claim.value;
-      if (title) {
-        search(title);
+      if (title && options) {
+        search(title, options);
         this.didSearch = true;
       }
     }
