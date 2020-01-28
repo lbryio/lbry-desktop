@@ -52,6 +52,7 @@ type Props = {
   supportOption: boolean,
   fetchSubCount: string => void,
   subCount: number,
+  showMature: boolean,
 };
 
 function ChannelPage(props: Props) {
@@ -70,6 +71,7 @@ function ChannelPage(props: Props) {
     blackListedOutpoints,
     openModal,
     supportOption,
+    showMature,
     fetchSubCount,
     subCount,
   } = props;
@@ -126,7 +128,11 @@ function ChannelPage(props: Props) {
         // In order to display original search results, search results must be set to null. A query of '' should display original results.
         return setSearchResults(null);
       } else {
-        getResults(`${LIGHTHOUSE_URL}?s=${encodeURIComponent(searchQuery)}&channel_id=${encodeURIComponent(claimId)}`);
+        getResults(
+          `${LIGHTHOUSE_URL}?s=${encodeURIComponent(searchQuery)}&channel_id=${encodeURIComponent(claimId)}${
+            !showMature ? '&nsfw=false' : ''
+          }`
+        );
       }
     }, DEBOUNCE_WAIT_DURATION_MS);
     return () => clearTimeout(timer);
