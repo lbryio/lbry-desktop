@@ -12,6 +12,7 @@ type Props = {
   link: ?boolean,
   claim: ?Claim,
   addTooltip: boolean,
+  hideAnonymous: boolean,
   // Lint thinks we aren't using these, even though we are.
   // Possibly because the resolve function is an arrow function that is passed in props?
   resolveUri: string => void,
@@ -43,7 +44,7 @@ class UriIndicator extends React.PureComponent<Props> {
   };
 
   render() {
-    const { link, isResolvingUri, claim, addTooltip, children, inline } = this.props;
+    const { link, isResolvingUri, claim, addTooltip, children, inline, hideAnonymous = false } = this.props;
 
     if (!claim) {
       return <span className="empty">{isResolvingUri ? 'Validating...' : 'Unused'}</span>;
@@ -52,6 +53,10 @@ class UriIndicator extends React.PureComponent<Props> {
     const isChannelClaim = claim.value_type === 'channel';
 
     if (!claim.signing_channel && !isChannelClaim) {
+      if (hideAnonymous) {
+        return null;
+      }
+
       return <span className={classnames('channel-name', { 'channel-name--inline': inline })}>Anonymous</span>;
     }
 
