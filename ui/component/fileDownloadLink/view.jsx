@@ -3,7 +3,6 @@ import * as ICONS from 'constants/icons';
 import * as MODALS from 'constants/modal_types';
 import React from 'react';
 import Button from 'component/button';
-import ToolTip from 'component/common/tooltip';
 
 type Props = {
   uri: string,
@@ -18,6 +17,7 @@ type Props = {
   download: string => void,
   triggerViewEvent: string => void,
   costInfo: ?{ cost: string },
+  hideOpenButton: boolean,
 };
 
 function FileDownloadLink(props: Props) {
@@ -33,6 +33,7 @@ function FileDownloadLink(props: Props) {
     claim,
     triggerViewEvent,
     costInfo,
+    hideOpenButton = false,
   } = props;
   const cost = costInfo ? Number(costInfo.cost) : 0;
   const isPaidContent = cost > 0;
@@ -40,7 +41,9 @@ function FileDownloadLink(props: Props) {
   const fileName = value && value.source && value.source.name;
   const downloadUrl = `/$/download/${name}/${claimId}`;
 
-  function handleDownload() {
+  function handleDownload(e) {
+    e.preventDefault();
+
     // @if TARGET='app'
     download(uri);
     // @endif;
@@ -58,36 +61,34 @@ function FileDownloadLink(props: Props) {
     const label =
       fileInfo && fileInfo.written_bytes > 0 ? progress.toFixed(0) + __('% downloaded') : __('Connecting...');
 
-    return <span>{label}</span>;
+    return <span className="download-text">{label}</span>;
   }
 
   if (fileInfo && fileInfo.download_path && fileInfo.completed) {
-    return (
-      <ToolTip label={__('Open file')}>
-        <Button
-          button="alt"
-          icon={ICONS.EXTERNAL}
-          onClick={() => {
-            pause();
-            openModal(MODALS.CONFIRM_EXTERNAL_RESOURCE, { path: fileInfo.download_path, isMine: claimIsMine });
-          }}
-        />
-      </ToolTip>
+    return hideOpenButton ? null : (
+      <Button
+        button="alt"
+        title={__('Open file')}
+        icon={ICONS.EXTERNAL}
+        onClick={() => {
+          pause();
+          openModal(MODALS.CONFIRM_EXTERNAL_RESOURCE, { path: fileInfo.download_path, isMine: claimIsMine });
+        }}
+      />
     );
   }
 
   return (
-    <ToolTip label={IS_WEB ? __('Download') : __('Add to your library')}>
-      <Button
-        button="alt"
-        icon={ICONS.DOWNLOAD}
-        onClick={handleDownload}
-        // @if TARGET='web'
-        download={fileName}
-        href={downloadUrl}
-        // @endif
-      />
-    </ToolTip>
+    <Button
+      button="alt"
+      title={IS_WEB ? __('Download') : __('Add to your library')}
+      icon={ICONS.DOWNLOAD}
+      onClick={handleDownload}
+      // @if TARGET='web'
+      download={fileName}
+      href={downloadUrl}
+      // @endif
+    />
   );
 }
 

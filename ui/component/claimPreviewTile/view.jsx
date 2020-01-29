@@ -63,8 +63,6 @@ function ClaimPreviewTile(props: Props) {
     onClick: e => e.stopPropagation(),
   };
 
-  const [isHovering, setHovering] = React.useState(false);
-
   let isChannel;
   let isValid = false;
   if (uri) {
@@ -89,14 +87,6 @@ function ClaimPreviewTile(props: Props) {
     if (navigateUrl) {
       history.push(navigateUrl);
     }
-  }
-
-  function handleOnMouseOver(e) {
-    setHovering(true);
-  }
-
-  function handleOnMouseOut(e) {
-    setHovering(false);
   }
 
   React.useEffect(() => {
@@ -158,15 +148,20 @@ function ClaimPreviewTile(props: Props) {
       className={classnames('card claim-preview--tile', {
         'claim-preview--channel': isChannel,
       })}
-      onMouseOver={handleOnMouseOver}
-      onMouseOut={handleOnMouseOut}
     >
       <NavLink {...navLinkProps}>
         <FileThumbnail thumbnail={thumbnailUrl}>
           {!isChannel && (
-            <div className="claim-tile__file-properties">
-              <FileProperties uri={uri} small />
-            </div>
+            <React.Fragment>
+              {/* @if TARGET='app' */}
+              <div className="claim-tile__hover-actions">
+                <FileDownloadLink uri={uri} hideOpenButton />
+              </div>
+              {/* @endif */}
+              <div className="claim-tile__file-properties">
+                <FileProperties uri={uri} small />
+              </div>
+            </React.Fragment>
           )}
         </FileThumbnail>
       </NavLink>
