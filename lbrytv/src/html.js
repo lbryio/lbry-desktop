@@ -123,7 +123,7 @@ async function getClaimFromChainquery(url) {
 }
 
 module.exports.getHtml = async function getHtml(ctx) {
-  const path = ctx.path;
+  const path = decodeURIComponent(ctx.path);
 
   if (path.length === 0) {
     return insertToHead(html);
