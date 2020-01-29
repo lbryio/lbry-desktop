@@ -11,8 +11,7 @@ import SubscribeButton from 'component/subscribeButton';
 import useGetThumbnail from 'effects/use-get-thumbnail';
 import { formatLbryUrlForWeb } from 'util/url';
 import { parseURI } from 'lbry-redux';
-import VideoDuration from 'component/videoDuration';
-import FileType from 'component/fileType';
+import FileProperties from 'component/fileProperties';
 
 type Props = {
   uri: string,
@@ -149,19 +148,15 @@ function ClaimPreviewTile(props: Props) {
       })}
     >
       <NavLink {...navLinkProps}>
-        <FileThumbnail thumbnail={thumbnailUrl}>
-          {!isChannel && (
-            <div className="claim-tile__absolute-info">
-              <VideoDuration uri={uri} className="claim-tile__video-length" />
-              <FileType uri={uri} />
-            </div>
-          )}
-        </FileThumbnail>
+        <FileThumbnail thumbnail={thumbnailUrl} />
       </NavLink>
       <NavLink {...navLinkProps}>
-        <h2 className="claim-tile__title">
-          <TruncatedText text={title || (claim && claim.name)} lines={2} />
-        </h2>
+        <div className="claim-tile__title-and-properties">
+          <h2 className="claim-tile__title">
+            <TruncatedText text={title || (claim && claim.name)} lines={2} />
+          </h2>
+          {!isChannel && <FileProperties uri={uri} small />}
+        </div>
       </NavLink>
       <div className="claim-tile__info">
         {isChannel ? (
@@ -175,7 +170,7 @@ function ClaimPreviewTile(props: Props) {
           </div>
         ) : (
           <React.Fragment>
-            <UriIndicator uri={uri} link>
+            <UriIndicator uri={uri} link hideAnonymous>
               <ChannelThumbnail thumbnailPreview={channelThumbnail} />
             </UriIndicator>
 

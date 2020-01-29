@@ -4,7 +4,7 @@
   align-items: center;
   font-size: var(--font-small);
   color: var(--color-text-help);
-  margin-left: var(--spacing-small);
+  margin-left: var(--spacing-xsmall);
 
   & > *:not(:last-child) {
     margin-right: var(--spacing-small);
@@ -13,6 +13,10 @@
   @media (max-width: $breakpoint-xsmall) {
     display: none;
   }
+}
+
+.file-properties--small {
+  font-size: var(--font-xsmall);
 }
 
 .file-properties--large {

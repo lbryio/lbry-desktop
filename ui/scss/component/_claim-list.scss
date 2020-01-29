@@ -288,9 +288,11 @@
   margin-left: var(--spacing-medium);
   justify-content: flex-start;
 
-  &:first-child,
-  &:nth-child(5n) {
-    margin-left: 0;
+  @media (min-width: $breakpoint-medium) {
+    &:first-child,
+    &:nth-child(5n) {
+      margin-left: 0;
+    }
   }
 
   &:hover {
@@ -303,6 +305,13 @@
   }
 
   @media (max-width: $breakpoint-medium) {
+    width: calc((100% - var(--spacing-medium) * 2) / 3);
+
+    &:first-child,
+    &:nth-child(3n + 1) {
+      margin-left: 0;
+    }
+
     .channel-thumbnail {
       display: none;
     }
@@ -312,19 +321,24 @@
     width: calc((100% - var(--spacing-medium) * 1) / 2);
     margin-bottom: var(--spacing-large);
 
-    .channel-thumbnail {
-      display: none;
-    }
-
     &:first-child,
     &:nth-child(2n + 1) {
       margin-left: 0;
     }
+
+    .channel-thumbnail {
+      display: none;
+    }
+  }
+}
+
+.claim-preview--channel {
+  .media__thumb {
+    padding-top: 10%;
   }
 }
 
 .claim-tile__title {
-  margin: var(--spacing-small);
   margin-bottom: 0;
   font-weight: 600;
   font-size: var(--font-small);
@@ -357,7 +371,7 @@
 }
 
 .claim-tile__publishes {
-  font-size: var(--font-small);
+  font-size: var(--font-xsmall);
 }
 
 .claim-tile__about--channel {
@@ -370,21 +384,9 @@
   font-size: var(--font-body);
 }
 
-.claim-tile__absolute-info {
-  position: absolute;
-  bottom: var(--spacing-small);
-  right: var(--spacing-small);
-  font-size: var(--font-xsmall);
-  padding: 0.2rem;
-  border-radius: var(--border-radius);
-  font-weight: bold;
-  background-color: black;
-  color: white;
-
+.claim-tile__title-and-properties {
   display: flex;
-  align-items: center;
-}
-
-.claim-tile__video-length {
-  margin-right: var(--spacing-xsmall);
+  align-items: flex-start;
+  justify-content: space-between;
+  margin: var(--spacing-small);
 }

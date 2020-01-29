@@ -1,19 +1,17 @@
 // @flow
-import type { Node } from 'react';
 import React from 'react';
 // import FreezeframeWrapper from './FreezeframeWrapper';
 import Placeholder from './placeholder.png';
 
 type Props = {
   thumbnail: ?string, // externally sourced image
-  children?: Node,
 };
 
 const className = 'media__thumb';
 
 class CardMedia extends React.PureComponent<Props> {
   render() {
-    const { thumbnail, children } = this.props;
+    const { thumbnail } = this.props;
 
     // Disabling temporarily to see if people complain
     // if (thumbnail && thumbnail.endsWith('gif')) {
@@ -34,11 +32,7 @@ class CardMedia extends React.PureComponent<Props> {
     url = thumbnail || Placeholder;
     // @endif
 
-    return (
-      <div style={{ backgroundImage: `url('${url.replace(/'/g, "\\'")}')` }} className={className}>
-        {children}
-      </div>
-    );
+    return <div style={{ backgroundImage: `url('${url.replace(/'/g, "\\'")}')` }} className={className} />;
   }
 }
 
