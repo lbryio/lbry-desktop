@@ -384,11 +384,32 @@
   bottom: var(--spacing-miniscule);
   right: var(--spacing-miniscule);
   background-color: var(--color-black);
-  color: var(--color-white);
   padding: 0.2rem;
   border-radius: var(--border-radius);
 
   .file-properties {
     color: var(--color-white);
+  }
+}
+
+.claim-preview--tile {
+  .claim-tile__hover-actions {
+    display: none;
+    position: absolute;
+    top: var(--spacing-miniscule);
+    right: var(--spacing-miniscule);
+
+    & > * {
+      color: var(--color-black);
+      background-color: var(--color-white);
+      padding: var(--spacing-xsmall);
+      border-radius: var(--border-radius);
+    }
+  }
+
+  &:hover {
+    .claim-tile__hover-actions {
+      display: block;
+    }
   }
 }
