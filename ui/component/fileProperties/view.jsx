@@ -21,11 +21,11 @@ export default function FileProperties(props: Props) {
 
   return (
     <div className={classnames('file-properties', { 'file-properties--small': small })}>
-      {isSubscribed && <Icon tooltip icon={icons.SUBSCRIBE} />}
-      {!claimIsMine && downloaded && <Icon tooltip icon={icons.DOWNLOAD} />}
       <FilePrice hideFree uri={uri} />
       <VideoDuration uri={uri} />
       <FileType uri={uri} />
+      {isSubscribed && <Icon tooltip icon={icons.SUBSCRIBE} />}
+      {!claimIsMine && downloaded && <Icon tooltip icon={icons.LIBRARY} />}
     </div>
   );
 }
