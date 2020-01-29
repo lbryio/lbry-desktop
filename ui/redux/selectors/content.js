@@ -107,11 +107,11 @@ export const makeSelectNextUnplayedRecommended = (uri: string) =>
 
           const claim = claimsByUri[recommendedUri];
           const channel = claim && claim.signing_channel;
-          if (channel && blockedChannels.find(blockedUri => blockedUri === channel.permanent_url)) {
+          if (channel && blockedChannels.some(blockedUri => blockedUri === channel.permanent_url)) {
             continue;
           }
 
-          if (!history.find(item => item.uri === recommendedForUri[i])) {
+          if (!history.some(item => item.uri === recommendedForUri[i])) {
             return recommendedForUri[i];
           }
         }
