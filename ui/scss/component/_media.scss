@@ -3,6 +3,7 @@
 
 .media__thumb {
   @include thumbnail;
+  position: relative;
   border-radius: var(--card-radius);
   object-fit: cover;
   background-color: var(--color-placeholder-background);
