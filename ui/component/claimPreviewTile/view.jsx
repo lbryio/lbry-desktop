@@ -148,15 +148,18 @@ function ClaimPreviewTile(props: Props) {
       })}
     >
       <NavLink {...navLinkProps}>
-        <FileThumbnail thumbnail={thumbnailUrl} />
+        <FileThumbnail thumbnail={thumbnailUrl}>
+          {!isChannel && (
+            <div className="claim-tile__file-properties">
+              <FileProperties uri={uri} small />
+            </div>
+          )}
+        </FileThumbnail>
       </NavLink>
       <NavLink {...navLinkProps}>
-        <div className="claim-tile__title-and-properties">
-          <h2 className="claim-tile__title">
-            <TruncatedText text={title || (claim && claim.name)} lines={2} />
-          </h2>
-          {!isChannel && <FileProperties uri={uri} small />}
-        </div>
+        <h2 className="claim-tile__title">
+          <TruncatedText text={title || (claim && claim.name)} lines={2} />
+        </h2>
       </NavLink>
       <div className="claim-tile__info">
         {isChannel ? (

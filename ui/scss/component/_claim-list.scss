@@ -332,14 +332,9 @@
   }
 }
 
-.claim-preview--channel {
-  .media__thumb {
-    padding-top: 10%;
-  }
-}
-
 .claim-tile__title {
   margin-bottom: 0;
+  margin: var(--spacing-small);
   font-weight: 600;
   font-size: var(--font-small);
   color: var(--color-text);
@@ -384,9 +379,16 @@
   font-size: var(--font-body);
 }
 
-.claim-tile__title-and-properties {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  margin: var(--spacing-small);
+.claim-tile__file-properties {
+  position: absolute;
+  bottom: var(--spacing-miniscule);
+  right: var(--spacing-miniscule);
+  background-color: var(--color-black);
+  color: var(--color-white);
+  padding: 0.2rem;
+  border-radius: var(--border-radius);
+
+  .file-properties {
+    color: var(--color-white);
+  }
 }
