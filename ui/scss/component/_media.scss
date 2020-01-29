@@ -49,6 +49,8 @@
   @extend .media__uri;
   position: relative;
   transform: none;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .media__uri--large {
