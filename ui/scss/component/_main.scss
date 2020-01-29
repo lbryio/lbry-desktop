@@ -103,7 +103,7 @@
 
 .main__document-wrapper {
   max-width: 100%;
-  min-width: 80%;
+  min-width: 40em;
   width: fit-content;
   margin: auto;
   margin-bottom: var(--spacing-xlarge);
@@ -111,4 +111,11 @@
   @media (max-width: $breakpoint-small) {
     width: 100%;
   }
+}
+
+.main__document-wrapper-md {
+  @extend .main__document-wrapper;
+  width: 40em;
+  max-width: unset;
+  min-width: unset;
 }

@@ -20,14 +20,19 @@ type Props = {
   nsfw: boolean,
   claim: StreamClaim,
   thumbnail: ?string,
+  contentType: string,
+  fileType: string,
 };
 
 function LayoutWrapperText(props: Props) {
-  const { uri, claim, title, nsfw } = props;
+  const { uri, claim, title, nsfw, contentType, fileType } = props;
+
+  const markdownType = ['md', 'markdown'];
+  const isMd = markdownType.includes(fileType) || contentType === 'text/markdown' || contentType === 'text/md';
 
   return (
     <div>
-      <div className="main__document-wrapper">
+      <div className={`main__document-wrapper${isMd ? '-md' : ''}`}>
         <ClaimUri uri={uri} />
 
         <div className="media__title">
