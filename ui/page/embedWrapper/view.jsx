@@ -1,7 +1,6 @@
 // @flow
 import React, { useEffect } from 'react';
 import FileRender from 'component/fileRender';
-import Spinner from 'component/spinner';
 
 type Props = {
   uri: string,
@@ -16,15 +15,7 @@ const EmbedWrapperPage = (props: Props) => {
     }
   }, []);
 
-  if (uri && claim) {
-    return (
-      <div className={'embed__wrapper'}>
-        <FileRender uri={uri} embedded />
-      </div>
-    );
-  } else {
-    return <Spinner />;
-  }
+  return <div className={'embed__wrapper'}>{claim && <FileRender uri={uri} embedded />}</div>;
 };
 
 export default EmbedWrapperPage;

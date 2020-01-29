@@ -74,6 +74,14 @@ function AppRouter(props: Props) {
     window.scrollTo(0, currentScroll);
   }, [currentScroll, pathname]);
 
+  // react-router doesn't decode pathanmes before doing the route matching check
+  // We have to redirect here because if we redirect on the server, it might get encoded again
+  // in the browser causing a redirect loop
+  const decodedPathname = decodeURIComponent(pathname);
+  if (decodedPathname !== pathname) {
+    return <Redirect to={decodedPathname} />;
+  }
+
   return (
     <Switch>
       <Route path={`/`} exact component={HomePage} />
