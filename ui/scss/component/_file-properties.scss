@@ -17,6 +17,11 @@
 
 .file-properties--small {
   font-size: var(--font-xsmall);
+  line-height: 1.2;
+
+  & > *:not(:last-child) {
+    margin-right: var(--spacing-miniscule);
+  }
 }
 
 .file-properties--large {

@@ -917,5 +917,6 @@
   "This will increase the overall bid amount for %title%, which will boost its ability to be discovered while active.": "This will increase the overall bid amount for %title%, which will boost its ability to be discovered while active.",
   "Support %amount% LBC": "Support %amount% LBC",
   "You deposited %amount% LBC as a support!": "You deposited %amount% LBC as a support!",
-  "LBRY Link": "LBRY Link"
+  "LBRY Link": "LBRY Link",
+  "Publish to %uri%": "Publish to %uri%"
 }
