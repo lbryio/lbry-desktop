@@ -204,6 +204,11 @@ function VideoViewer(props: Props) {
     if (player) {
       player.on('tracking:buffered', (e, d) => doTrackingBuffered(e, d));
       player.on('tracking:firstplay', (e, d) => doTrackingFirstPlay(e, d));
+
+      // fixes #3498 (https://github.com/lbryio/lbry-desktop/issues/3498)
+      // summary: on firefox the focus would stick to the fullscreen button which caused buggy behavior with spacebar
+      // $FlowFixMe
+      player.on('fullscreenchange', () => document.activeElement && document.activeElement.blur());
     }
     return () => {
       if (player) {
