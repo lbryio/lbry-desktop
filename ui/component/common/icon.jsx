@@ -46,7 +46,7 @@ class IconComponent extends React.PureComponent<Props> {
       case 'blue':
         return BLUE_COLOR;
       default:
-        return undefined;
+        return color;
     }
   };
 
