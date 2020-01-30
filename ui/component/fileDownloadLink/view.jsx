@@ -35,8 +35,13 @@ function FileDownloadLink(props: Props) {
     costInfo,
     hideOpenButton = false,
   } = props;
+
   const cost = costInfo ? Number(costInfo.cost) : 0;
   const isPaidContent = cost > 0;
+  if (!claim || (IS_WEB && isPaidContent)) {
+    return null;
+  }
+
   const { name, claim_id: claimId, value } = claim;
   const fileName = value && value.source && value.source.name;
   const downloadUrl = `/$/download/${name}/${claimId}`;
@@ -50,10 +55,6 @@ function FileDownloadLink(props: Props) {
     // @if TARGET='web'
     triggerViewEvent(uri);
     // @endif;
-  }
-
-  if (IS_WEB && isPaidContent) {
-    return null;
   }
 
   if (downloading || loading) {
