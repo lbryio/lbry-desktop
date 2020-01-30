@@ -304,7 +304,7 @@
     border-bottom-left-radius: 0;
   }
 
-  @media (max-width: $breakpoint-medium) {
+  @media (max-width: $breakpoint-medium) and (min-width: $breakpoint-small) {
     width: calc((100% - var(--spacing-medium) * 2) / 3);
 
     &:first-child,
