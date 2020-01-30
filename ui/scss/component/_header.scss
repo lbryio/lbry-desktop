@@ -126,6 +126,12 @@
   &:focus {
     @include focus;
   }
+
+  span {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
 }
 
 .header__navigation-item--lbry {

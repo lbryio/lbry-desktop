@@ -132,13 +132,16 @@ const Header = (props: Props) => {
             {(!IS_WEB || authenticated) && (
               <Fragment>
                 <Button
+                  aria-label={__('Your wallet')}
                   navigate={`/$/${PAGES.WALLET}`}
                   className="header__navigation-item menu__title header__navigation-item--balance"
                   label={getWalletTitle()}
                 />
                 <Menu>
                   <MenuButton className="header__navigation-item menu__title header__navigation-item--icon">
-                    <Icon size={18} icon={ICONS.PUBLISH} />
+                    <span aria-label={__('Publish a file, or create a channel')}>
+                      <Icon size={18} icon={ICONS.PUBLISH} />
+                    </span>
                   </MenuButton>
                   <MenuList className="menu__list--header">
                     <MenuItem className="menu__link" onSelect={() => history.push(`/$/${PAGES.PUBLISH}`)}>
@@ -154,7 +157,9 @@ const Header = (props: Props) => {
 
                 <Menu>
                   <MenuButton className="header__navigation-item menu__title header__navigation-item--icon">
-                    <Icon size={18} icon={ICONS.ACCOUNT} />
+                    <span aria-label={__('Your account')}>
+                      <Icon size={18} icon={ICONS.ACCOUNT} />
+                    </span>
                   </MenuButton>
                   <MenuList className="menu__list--header">
                     <MenuItem className="menu__link" onSelect={() => history.push(`/$/${PAGES.PUBLISHED}`)}>
@@ -169,8 +174,6 @@ const Header = (props: Props) => {
                       <Icon aria-hidden icon={ICONS.FEATURED} />
                       {__('Rewards')}
                     </MenuItem>
-
-                    {/* Commented out until new invite system is implemented */}
                     <MenuItem className="menu__link" onSelect={() => history.push(`/$/${PAGES.INVITE}`)}>
                       <Icon aria-hidden icon={ICONS.INVITE} />
                       {__('Invites')}
@@ -196,7 +199,9 @@ const Header = (props: Props) => {
             )}
             <Menu>
               <MenuButton className="header__navigation-item menu__title header__navigation-item--icon">
-                <Icon size={18} icon={ICONS.SETTINGS} />
+                <span aria-label={__('Settings')}>
+                  <Icon size={18} icon={ICONS.SETTINGS} />
+                </span>
               </MenuButton>
               <MenuList className="menu__list--header">
                 <MenuItem className="menu__link" onSelect={() => history.push(`/$/${PAGES.SETTINGS}`)}>
