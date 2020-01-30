@@ -34,7 +34,7 @@ class PreviewLink extends React.PureComponent<Props> {
           <span style={thumbnailStyle} className={'preview-link__thumbnail media__thumb'} />
           <span className={'claim-preview-metadata'}>
             <span className={'claim-preview-info'}>
-              <span className={'claim-preview-title'}>
+              <span className={'claim-preview__title'}>
                 <TruncatedText text={title} lines={1} />
               </span>
             </span>

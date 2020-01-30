@@ -16,7 +16,7 @@ export default function WebUploadItem(props: Props) {
       <FileThumbnail thumbnail={params.thumbnail_url} />
       <div className={'claim-preview-metadata'}>
         <div className="claim-preview-info">
-          <div className="claim-preview-title">{params.title}</div>
+          <div className="claim-preview__title">{params.title}</div>
           {xhr && (
             <div className="card__actions--inline">
               <Button
