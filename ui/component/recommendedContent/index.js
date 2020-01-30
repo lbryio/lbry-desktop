@@ -16,7 +16,7 @@ const select = (state, props) => ({
 });
 
 const perform = dispatch => ({
-  search: (query, options) => dispatch(doSearch(query, 20, undefined, true, options)),
+  search: (query, options) => dispatch(doSearch(query, options)),
 });
 
 export default connect(

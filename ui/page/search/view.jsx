@@ -9,19 +9,29 @@ import SearchOptions from 'component/searchOptions';
 import Button from 'component/button';
 import ClaimUri from 'component/claimUri';
 
+type AdditionalOptions = {
+  isBackgroundSearch: boolean,
+  nsfw?: boolean,
+};
+
 type Props = {
-  search: string => void,
+  search: (string, AdditionalOptions) => void,
   isSearching: boolean,
   location: UrlLocation,
   uris: Array<string>,
   onFeedbackNegative: string => void,
   onFeedbackPositive: string => void,
+  showNsfw: boolean,
 };
 
 export default function SearchPage(props: Props) {
-  const { search, uris, onFeedbackPositive, onFeedbackNegative, location, isSearching } = props;
+  const { search, uris, onFeedbackPositive, onFeedbackNegative, location, isSearching, showNsfw } = props;
   const urlParams = new URLSearchParams(location.search);
   const urlQuery = urlParams.get('q');
+  const additionalOptions: AdditionalOptions = { isBackgroundSearch: false };
+  if (!showNsfw) {
+    additionalOptions['nsfw'] = false;
+  }
 
   let normalizedUri;
   let isUriValid;
@@ -42,7 +52,7 @@ export default function SearchPage(props: Props) {
 
   useEffect(() => {
     if (urlQuery) {
-      search(urlQuery);
+      search(urlQuery, additionalOptions);
     }
   }, [search, urlQuery]);
 
@@ -63,7 +73,7 @@ export default function SearchPage(props: Props) {
             <ClaimList
               uris={uris}
               loading={isSearching}
-              header={<SearchOptions />}
+              header={<SearchOptions additionalOptions={additionalOptions} />}
               headerAltControls={
                 <Fragment>
                   <span>{__('Find what you were looking for?')}</span>

@@ -44,7 +44,7 @@ export default class RecommendedContent extends React.PureComponent<Props> {
     const { claim, search, mature, claimId } = this.props;
 
     if (claim && claim.value && claim.value) {
-      const options: Options = { related_to: claimId };
+      const options: Options = { size: 20, related_to: claimId, isBackgroundSearch: true };
       if (claim && !mature) {
         options['nsfw'] = false;
       }

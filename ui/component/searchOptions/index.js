@@ -10,10 +10,13 @@ const select = state => ({
   query: makeSelectQueryWithOptions()(state),
 });
 
-const perform = dispatch => ({
-  setSearchOption: (option, value) => dispatch(doUpdateSearchOptions({ [option]: value })),
-  toggleSearchExpanded: () => dispatch(doToggleSearchExpanded()),
-});
+const perform = (dispatch, ownProps) => {
+  const additionalOptions = ownProps.additionalOptions || {};
+  return {
+    setSearchOption: (option, value) => dispatch(doUpdateSearchOptions({ [option]: value }, additionalOptions)),
+    toggleSearchExpanded: () => dispatch(doToggleSearchExpanded()),
+  };
+};
 
 export default connect(
   select,
