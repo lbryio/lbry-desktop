@@ -81,6 +81,7 @@ export const SIGN_IN = 'SignIn';
 export const TRENDING = 'Trending';
 export const TOP = 'Top';
 export const NEW = 'New';
+export const MORE_VERTICAL = 'MoreVertical';
 export const IMAGE = 'Image';
 export const AUDIO = 'HeadPhones';
 export const VIDEO = 'Video';

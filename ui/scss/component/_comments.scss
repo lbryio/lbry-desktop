@@ -21,9 +21,12 @@
 
 .comment__body_container {
   padding-right: var(--spacing-small);
+  flex: 1;
 }
 
 .comment__meta {
+  display: flex;
+  justify-content: space-between;
   text-overflow: ellipsis;
   margin-bottom: var(--spacing-small);
 }
@@ -43,7 +46,26 @@
   white-space: nowrap;
 }
 
+.comment__menu {
+  align-self: flex-end;
+}
+
 .comment__char-count {
   align-self: flex-end;
   font-size: var(--font-small);
+}
+
+.comment__menu-option {
+  display: flex;
+  align-items: center;
+  padding: var(--spacing-small);
+  font-size: var(--font-small);
+}
+
+.comment__menu-icon--hovering {
+  stroke: var(--color-comment-menu-hovering);
+}
+
+.comment__menu-icon {
+  stroke: var(--color-comment-menu);
 }

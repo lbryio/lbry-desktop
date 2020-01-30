@@ -29,6 +29,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ### Added
 
+- Adds the ability for users to update & delete comments ([#3453](https://github.com/lbryio/lbry-desktop/pull/3453))
 - New homepage design ([#3508](https://github.com/lbryio/lbry-desktop/pull/3508))
 - Revamped invites system ([#3462](https://github.com/lbryio/lbry-desktop/pull/3462))
 - Appimage support ([#3497](https://github.com/lbryio/lbry-desktop/pull/3497))
