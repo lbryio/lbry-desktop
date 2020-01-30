@@ -182,7 +182,7 @@ export default function FileViewer(props: Props) {
           )}
           {!inline && (
             <div className="draggable content__info">
-              <div className="claim-preview-title" title={title || uri}>
+              <div className="claim-preview__title" title={title || uri}>
                 {title || uri}
               </div>
               <UriIndicator link addTooltip={false} uri={uri} />

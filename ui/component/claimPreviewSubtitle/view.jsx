@@ -13,7 +13,7 @@ type Props = {
   beginPublish: string => void,
 };
 
-function ClaimSubtitle(props: Props) {
+function ClaimPreviewSubtitle(props: Props) {
   const { pending, uri, claim, type, beginPublish } = props;
   const claimsInChannel = (claim && claim.meta.claims_in_channel) || 0;
 
@@ -49,4 +49,4 @@ function ClaimSubtitle(props: Props) {
   );
 }
 
-export default ClaimSubtitle;
+export default ClaimPreviewSubtitle;

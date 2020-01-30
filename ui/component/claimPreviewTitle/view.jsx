@@ -8,14 +8,14 @@ type Props = {
   title: string,
 };
 
-function ClaimTitle(props: Props) {
+function ClaimPreviewTitle(props: Props) {
   const { title, claim } = props;
 
   return (
-    <div className="claim-preview-title">
+    <div className="claim-preview__title">
       {claim ? <TruncatedText text={title || claim.name} lines={2} /> : <span>{__('Nothing here')}</span>}
     </div>
   );
 }
 
-export default ClaimTitle;
+export default ClaimPreviewTitle;

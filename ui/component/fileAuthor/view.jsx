@@ -12,7 +12,7 @@ function FileAuthor(props: Props) {
   return channelUri ? (
     <ClaimPreview uri={channelUri} type="inline" properties={false} hideBlock />
   ) : (
-    <div className="claim-preview--inline claim-preview-title">{__('Anonymous')}</div>
+    <div className="claim-preview--inline claim-preview__title">{__('Anonymous')}</div>
   );
 }
 

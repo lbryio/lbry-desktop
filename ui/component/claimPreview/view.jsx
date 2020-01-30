@@ -15,8 +15,8 @@ import SubscribeButton from 'component/subscribeButton';
 import ChannelThumbnail from 'component/channelThumbnail';
 import BlockButton from 'component/blockButton';
 import useGetThumbnail from 'effects/use-get-thumbnail';
-import ClaimTitle from 'component/claimTitle';
-import ClaimSubtitle from 'component/claimSubtitle';
+import ClaimPreviewTitle from 'component/claimPreviewTitle';
+import ClaimPreviewSubtitle from 'component/ClaimPreviewSubtitle';
 
 type Props = {
   uri: string,
@@ -180,7 +180,7 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
       <li className={classnames('claim-preview', { 'claim-preview--large': type === 'large' })} disabled>
         <div className="placeholder media__thumb" />
         <div className="placeholder__wrapper">
-          <div className="placeholder claim-preview-title" />
+          <div className="placeholder claim-preview__title" />
           <div className="placeholder media__subtitle" />
         </div>
       </li>
@@ -217,11 +217,11 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
       <div className="claim-preview__text">
         <div className="claim-preview-metadata">
           <div className="claim-preview-info">
-            <ClaimTitle uri={uri} />
+            <ClaimPreviewTitle uri={uri} />
             {!isChannel && <FileProperties uri={uri} />}
           </div>
 
-          <ClaimSubtitle uri={uri} type={type} />
+          <ClaimPreviewSubtitle uri={uri} type={type} />
         </div>
         <div className="claim-preview__actions">
           {!pending && (
