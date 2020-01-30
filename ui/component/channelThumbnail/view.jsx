@@ -35,8 +35,20 @@ function ChannelThumbnail(props: Props) {
         'channel-thumbnail--small': small,
       })}
     >
-      {!showThumb && <img className="channel-thumbnail__default" src={thumbnailPreview || Gerbil} />}
-      {showThumb && <img className="channel-thumbnail__custom" src={thumbnailPreview || thumbnail} />}
+      {!showThumb && (
+        <img
+          alt={__('Channel profile picture')}
+          className="channel-thumbnail__default"
+          src={thumbnailPreview || Gerbil}
+        />
+      )}
+      {showThumb && (
+        <img
+          alt={__('Channel profile picture')}
+          className="channel-thumbnail__custom"
+          src={thumbnailPreview || thumbnail}
+        />
+      )}
     </div>
   );
 }
