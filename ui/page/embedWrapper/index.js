@@ -1,6 +1,7 @@
 import { connect } from 'react-redux';
 import EmbedWrapperPage from './view';
 import { doResolveUri, makeSelectClaimForUri, buildURI } from 'lbry-redux';
+import { doAnalyticsView } from 'redux/actions/app';
 
 const select = (state, props) => {
   const { match } = props;
@@ -13,9 +14,12 @@ const select = (state, props) => {
   };
 };
 
-const perform = dispatch => ({
-  resolveUri: uri => dispatch(doResolveUri(uri)),
-});
+const perform = dispatch => {
+  return {
+    resolveUri: uri => dispatch(doResolveUri(uri)),
+    triggerAnalyticsView: uri => dispatch(doAnalyticsView(uri)),
+  };
+};
 
 export default connect(
   select,

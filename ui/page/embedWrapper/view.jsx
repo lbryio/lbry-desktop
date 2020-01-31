@@ -1,16 +1,27 @@
 // @flow
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import FileRender from 'component/fileRender';
 
 type Props = {
   uri: string,
   resolveUri: string => void,
   claim: Claim,
+  triggerAnalyticsView: string => Promise<any>,
 };
 // $FlowFixMe apparently flow thinks this is wrong.
 export const EmbedContext = React.createContext();
 const EmbedWrapperPage = (props: Props) => {
-  const { resolveUri, claim, uri } = props;
+  const { resolveUri, claim, uri, triggerAnalyticsView } = props;
+  const [hasRecordedView, setHasRecordedView] = useState(false);
+
+  useEffect(() => {
+    if (!hasRecordedView && uri && claim) {
+      triggerAnalyticsView(uri).then(() => {
+        setHasRecordedView(true);
+      });
+    }
+  }, [triggerAnalyticsView, setHasRecordedView, hasRecordedView, uri, claim]);
+
   useEffect(() => {
     if (resolveUri && uri) {
       resolveUri(uri);
