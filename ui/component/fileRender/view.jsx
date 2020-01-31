@@ -40,6 +40,7 @@ type Props = {
   autoplay: boolean,
   setPlayingUri: (string | null) => void,
   currentlyFloating: boolean,
+  thumbnail: string,
 };
 
 type State = {
