@@ -16,7 +16,7 @@ import ChannelThumbnail from 'component/channelThumbnail';
 import BlockButton from 'component/blockButton';
 import useGetThumbnail from 'effects/use-get-thumbnail';
 import ClaimPreviewTitle from 'component/claimPreviewTitle';
-import ClaimPreviewSubtitle from 'component/ClaimPreviewSubtitle';
+import ClaimPreviewSubtitle from 'component/claimPreviewSubtitle';
 
 type Props = {
   uri: string,
