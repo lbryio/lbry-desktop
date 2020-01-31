@@ -4,8 +4,9 @@ import React, { useEffect } from 'react';
 import Button from 'component/button';
 import ClaimPreview from 'component/claimPreview';
 import Card from 'component/common/card';
-import { parseURI } from 'lbry-redux';
+import { buildURI, parseURI } from 'lbry-redux';
 import { rewards as REWARDS, ERRORS } from 'lbryinc';
+import { formatLbryUrlForWeb } from 'util/url';
 
 type Props = {
   user: any,
@@ -37,10 +38,18 @@ function Invited(props: Props) {
   } = props;
 
   const refUri = referrer && 'lbry://' + referrer.replace(':', '#');
-  const { isChannel: referrerIsChannel, claimName: referrerChannelName } = parseURI(refUri);
+  const {
+    isChannel: referrerIsChannel,
+    claimName: referrerChannelName,
+    channelClaimId: referrerChannelClaimId,
+  } = parseURI(refUri);
+  const channelUri =
+    referrerIsChannel &&
+    formatLbryUrlForWeb(buildURI({ channelName: referrerChannelName, channelClaimId: referrerChannelClaimId }));
   const rewardsApproved = user && user.is_reward_approved;
   const hasVerifiedEmail = user && user.has_verified_email;
   const referredRewardAvailable = rewards && rewards.some(reward => reward.reward_type === REWARDS.TYPE_REFEREE);
+  const redirect = channelUri || `/$/${PAGES.HOME}`;
 
   // always follow if it's a channel
   useEffect(() => {
@@ -65,7 +74,7 @@ function Invited(props: Props) {
   }, [referrer]);
 
   function handleDone() {
-    history.push(`/$/${PAGES.DISCOVER}`);
+    history.push(redirect);
   }
 
   if (referrerSetError === ERRORS.ALREADY_CLAIMED) {
