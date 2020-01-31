@@ -86,3 +86,4 @@ export const AUDIO = 'HeadPhones';
 export const VIDEO = 'Video';
 export const TEXT = 'FileText';
 export const DOWNLOADABLE = 'Downloadable';
+export const REPOST = 'Repeat';

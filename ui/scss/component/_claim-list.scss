@@ -1,5 +1,5 @@
 .claim-list {
-  .claim-preview {
+  .claim-preview__wrapper {
     border-bottom: 1px solid var(--color-border);
   }
 }
@@ -60,12 +60,28 @@
   }
 }
 
+.claim-preview__wrapper {
+  padding: var(--spacing-medium);
+  list-style: none;
+}
+
+.claim-preview__wrapper--channel {
+  background-color: var(--color-card-background-highlighted);
+}
+
+.claim-preview__wrapper--inline {
+  padding: 0;
+}
+
+.claim-preview__wrapper--small {
+  padding: var(--spacing-small);
+}
+
 .claim-preview {
   flex: 1;
   display: flex;
   position: relative;
   overflow: visible;
-  padding: var(--spacing-medium);
 
   &:not(.claim-preview--inline):not(.claim-preview--pending):not(.claim-preview--inactive) {
     cursor: pointer;
@@ -112,8 +128,6 @@
 }
 
 .claim-preview--small {
-  padding: var(--spacing-small);
-
   .media__thumb {
     width: 8rem;
   }
@@ -124,18 +138,11 @@
   }
 }
 
-.claim-preview--channel:not(.claim-preview--inline) {
-  background-color: var(--color-card-background-highlighted);
-}
-
 .claim-preview--pending {
   opacity: 0.6;
 }
 
 .claim-preview--inline {
-  padding: 0;
-  border-bottom: none;
-
   .channel-thumbnail {
     width: var(--channel-thumbnail-width--small);
     height: var(--channel-thumbnail-width--small);
@@ -412,4 +419,21 @@
       display: block;
     }
   }
+}
+
+.claim-preview__repost-author {
+  transform: translateY(calc(var(--spacing-small) * -1));
+  font-size: var(--font-xsmall);
+  color: var(--color-text-subtitle);
+  line-height: 1;
+
+  .icon {
+    margin-right: var(--spacing-miniscule);
+    margin-bottom: -1px; // Offset it slightly because it doesn't look aligned next to all lowercase text + the @ from a channel
+  }
+}
+
+.claim-tile__repost-author {
+  margin: var(--spacing-small);
+  margin-bottom: 0;
 }

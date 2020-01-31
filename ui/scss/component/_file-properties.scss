@@ -28,6 +28,7 @@
 .file-properties--large {
   flex-wrap: wrap;
   margin-bottom: var(--spacing-large);
+  margin-left: 0;
 
   & > * {
     margin-top: var(--spacing-small);
