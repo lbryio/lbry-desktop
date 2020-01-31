@@ -7,6 +7,8 @@ type Props = {
   resolveUri: string => void,
   claim: Claim,
 };
+// $FlowFixMe apparently flow thinks this is wrong.
+export const EmbedContext = React.createContext();
 const EmbedWrapperPage = (props: Props) => {
   const { resolveUri, claim, uri } = props;
   useEffect(() => {
@@ -15,7 +17,15 @@ const EmbedWrapperPage = (props: Props) => {
     }
   }, []);
 
-  return <div className={'embed__wrapper'}>{claim && <FileRender uri={uri} embedded />}</div>;
+  return (
+    <div className={'embed__wrapper'}>
+      {claim && (
+        <EmbedContext.Provider value>
+          <FileRender uri={uri} embedded />
+        </EmbedContext.Provider>
+      )}
+    </div>
+  );
 };
 
 export default EmbedWrapperPage;

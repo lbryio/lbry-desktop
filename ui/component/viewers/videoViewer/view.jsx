@@ -1,11 +1,12 @@
 // @flow
-import React, { useRef, useEffect, useState } from 'react';
+import React, { useRef, useEffect, useState, useContext } from 'react';
 import { stopContextMenu } from 'util/context-menu';
 import videojs from 'video.js/dist/alt/video.core.novtt.min.js';
 import 'video.js/dist/alt/video-js-cdn.min.css';
 import eventTracking from 'videojs-event-tracking';
 import isUserTyping from 'util/detect-typing';
 import analytics from 'analytics';
+import { EmbedContext } from 'page/embedWrapper/view';
 
 const F11_KEYCODE = 122;
 const SPACE_BAR_KEYCODE = 32;
@@ -21,8 +22,15 @@ const SEEK_FORWARD_KEYCODE = ARROW_RIGHT_KEYCODE;
 const SEEK_BACKWARD_KEYCODE = ARROW_LEFT_KEYCODE;
 
 const SEEK_STEP = 10; // time to seek in seconds
-
-const VIDEO_JS_OPTIONS: { poster?: string } = {
+type VideoJSOptions = {
+  controls: boolean,
+  autoplay: boolean,
+  preload: string,
+  playbackRates: Array<number>,
+  responsive: boolean,
+  poster?: string,
+};
+const VIDEO_JS_OPTIONS: VideoJSOptions = {
   controls: true,
   autoplay: true,
   preload: 'auto',
@@ -51,6 +59,11 @@ function VideoViewer(props: Props) {
   const claimId = claim && claim.claim_id;
   const videoRef = useRef();
   const isAudio = contentType.includes('audio');
+  const embedded = useContext(EmbedContext);
+  if (embedded) {
+    VIDEO_JS_OPTIONS.autoplay = false;
+  }
+
   let forceTypes = [
     'video/quicktime',
     'application/x-ext-mkv',
