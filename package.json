@@ -20,7 +20,7 @@
   },
   "main": "./dist/electron/main.js",
   "scripts": {
-    "compile:electron": "webpack --progress --config webpack.electron.config.js",
+    "compile:electron": "webpack --config webpack.electron.config.js",
     "compile:web": "cd ./lbrytv && webpack --config webpack.config.js",
     "compile": "cross-env NODE_ENV=production yarn compile:electron && cross-env NODE_ENV=production yarn compile:web",
     "dev": "yarn dev:electron",
@@ -44,7 +44,6 @@
     "postinstall:warning": "echo '\n\nWARNING\n\nNot all node modules were installed because NODE_ENV is set to \"production\".\nThis should only be set after installing dependencies with \"yarn\". The app will not work.\n\n'"
   },
   "dependencies": {
-    "@octokit/rest": "^16.40.0",
     "auto-launch": "^5.0.5",
     "electron-dl": "^1.11.0",
     "electron-log": "^2.2.12",
@@ -52,8 +51,7 @@
     "electron-updater": "^4.1.2",
     "express": "^4.17.1",
     "if-env": "^1.0.4",
-    "keytar": "^4.4.1",
-    "node-wget": "^0.4.3"
+    "keytar": "^4.4.1"
   },
   "devDependencies": {
     "@babel/core": "^7.0.0",
@@ -71,6 +69,7 @@
     "@exponent/electron-cookies": "^2.0.0",
     "@hot-loader/react-dom": "^16.8",
     "@lbry/components": "^3.0.8",
+    "@octokit/rest": "^16.40.0",
     "@reach/menu-button": "^0.1.18",
     "@reach/rect": "^0.2.1",
     "@reach/tabs": "^0.1.5",
@@ -142,6 +141,7 @@
     "node-libs-browser": "^2.1.0",
     "node-loader": "^0.6.0",
     "node-sass": "^4.11.0",
+    "node-wget": "^0.4.3",
     "nodemon": "^1.19.1",
     "postcss-import": "^12.0.1",
     "postcss-loader": "^3.0.0",
