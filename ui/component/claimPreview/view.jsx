@@ -17,6 +17,7 @@ import BlockButton from 'component/blockButton';
 import useGetThumbnail from 'effects/use-get-thumbnail';
 import ClaimPreviewTitle from 'component/claimPreviewTitle';
 import ClaimPreviewSubtitle from 'component/claimPreviewSubtitle';
+import ClaimRepostAuthor from 'component/claimRepostAuthor';
 
 type Props = {
   uri: string,
@@ -177,11 +178,19 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
 
   if (placeholder === 'loading' || (isResolvingUri && !claim)) {
     return (
-      <li className={classnames('claim-preview', { 'claim-preview--large': type === 'large' })} disabled>
-        <div className="placeholder media__thumb" />
-        <div className="placeholder__wrapper">
-          <div className="placeholder claim-preview__title" />
-          <div className="placeholder media__subtitle" />
+      <li
+        disabled
+        className={classnames('claim-preview__wrapper', {
+          'claim-preview__wrapper--channel': isChannel && type !== 'inline',
+          'claim-preview__wrapper--inline': type === 'inline',
+        })}
+      >
+        <div className={classnames('claim-preview', { 'claim-preview--large': type === 'large' })}>
+          <div className="placeholder media__thumb" />
+          <div className="placeholder__wrapper">
+            <div className="placeholder claim-preview__title" />
+            <div className="placeholder media__subtitle" />
+          </div>
         </div>
       </li>
     );
@@ -197,50 +206,61 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
       role="link"
       onClick={pending || type === 'inline' ? undefined : handleOnClick}
       onContextMenu={handleContextMenu}
-      className={classnames('claim-preview', {
-        'claim-preview--small': type === 'small' || type === 'tooltip',
-        'claim-preview--large': type === 'large',
-        'claim-preview--inline': type === 'inline',
-        'claim-preview--tooltip': type === 'tooltip',
-        'claim-preview--channel': isChannel,
-        'claim-preview--visited': !isChannel && !claimIsMine && hasVisitedUri,
-        'claim-preview--pending': pending,
+      className={classnames('claim-preview__wrapper', {
+        'claim-preview__wrapper--channel': isChannel && type !== 'inline',
+        'claim-preview__wrapper--inline': type === 'inline',
+        'claim-preview__wrapper--small': type === 'small',
       })}
     >
-      {isChannel && claim ? (
-        <UriIndicator uri={uri} link>
-          <ChannelThumbnail uri={uri} obscure={channelIsBlocked} />
-        </UriIndicator>
-      ) : (
-        <FileThumbnail thumbnail={thumbnailUrl} />
-      )}
-      <div className="claim-preview__text">
-        <div className="claim-preview-metadata">
-          <div className="claim-preview-info">
-            <ClaimPreviewTitle uri={uri} />
-            {!isChannel && <FileProperties uri={uri} />}
-          </div>
+      {type !== 'large' && type !== 'inline' && <ClaimRepostAuthor uri={uri} />}
 
-          <ClaimPreviewSubtitle uri={uri} type={type} />
-        </div>
-        <div className="claim-preview__actions">
-          {!pending && (
-            <React.Fragment>
-              {hideActions ? null : actions !== undefined ? (
-                actions
-              ) : (
-                <div className="card__actions--inline">
-                  {isChannel && !channelIsBlocked && !claimIsMine && (
-                    <SubscribeButton uri={uri.startsWith('lbry://') ? uri : `lbry://${uri}`} />
-                  )}
-                  {!hideBlock && isChannel && !isSubscribed && !claimIsMine && (
-                    <BlockButton uri={uri.startsWith('lbry://') ? uri : `lbry://${uri}`} />
-                  )}
-                </div>
-              )}
-            </React.Fragment>
-          )}
-          {properties !== undefined ? properties : <ClaimTags uri={uri} type={type} />}
+      <div
+        className={classnames('claim-preview', {
+          'claim-preview--small': type === 'small' || type === 'tooltip',
+          'claim-preview--large': type === 'large',
+          'claim-preview--inline': type === 'inline',
+          'claim-preview--tooltip': type === 'tooltip',
+          'claim-preview--channel': isChannel,
+          'claim-preview--visited': !isChannel && !claimIsMine && hasVisitedUri,
+          'claim-preview--pending': pending,
+        })}
+      >
+        {isChannel && claim ? (
+          <UriIndicator uri={uri} link>
+            <ChannelThumbnail uri={uri} obscure={channelIsBlocked} />
+          </UriIndicator>
+        ) : (
+          <FileThumbnail thumbnail={thumbnailUrl} />
+        )}
+
+        <div className="claim-preview__text">
+          <div className="claim-preview-metadata">
+            <div className="claim-preview-info">
+              <ClaimPreviewTitle uri={uri} />
+              {!isChannel && <FileProperties uri={uri} />}
+            </div>
+
+            <ClaimPreviewSubtitle uri={uri} type={type} />
+          </div>
+          <div className="claim-preview__actions">
+            {!pending && (
+              <React.Fragment>
+                {hideActions ? null : actions !== undefined ? (
+                  actions
+                ) : (
+                  <div className="card__actions--inline">
+                    {isChannel && !channelIsBlocked && !claimIsMine && (
+                      <SubscribeButton uri={uri.startsWith('lbry://') ? uri : `lbry://${uri}`} />
+                    )}
+                    {!hideBlock && isChannel && !isSubscribed && !claimIsMine && (
+                      <BlockButton uri={uri.startsWith('lbry://') ? uri : `lbry://${uri}`} />
+                    )}
+                  </div>
+                )}
+              </React.Fragment>
+            )}
+            {properties !== undefined ? properties : <ClaimTags uri={uri} type={type} />}
+          </div>
         </div>
       </div>
     </li>

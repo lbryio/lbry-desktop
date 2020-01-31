@@ -12,8 +12,8 @@ import useGetThumbnail from 'effects/use-get-thumbnail';
 import { formatLbryUrlForWeb } from 'util/url';
 import { parseURI } from 'lbry-redux';
 import FileProperties from 'component/fileProperties';
-
 import FileDownloadLink from 'component/fileDownloadLink';
+import ClaimRepostAuthor from 'component/claimRepostAuthor';
 
 type Props = {
   uri: string,
@@ -54,6 +54,7 @@ function ClaimPreviewTile(props: Props) {
     streamingUrl,
     blockedChannelUris,
   } = props;
+  const isRepost = claim && claim.repost_channel_url;
   const shouldFetch = claim === undefined;
   const thumbnailUrl = useGetThumbnail(uri, claim, streamingUrl, getFile, placeholder) || thumbnail;
   const claimsInChannel = (claim && claim.meta.claims_in_channel) || 0;
@@ -146,7 +147,7 @@ function ClaimPreviewTile(props: Props) {
       role="link"
       onClick={handleClick}
       className={classnames('card claim-preview--tile', {
-        'claim-preview--channel': isChannel,
+        'claim-preview__wrapper--channel': isChannel,
       })}
     >
       <NavLink {...navLinkProps}>
@@ -170,27 +171,34 @@ function ClaimPreviewTile(props: Props) {
           <TruncatedText text={title || (claim && claim.name)} lines={2} />
         </h2>
       </NavLink>
-      <div className="claim-tile__info">
-        {isChannel ? (
-          <div className="claim-tile__about--channel">
-            <SubscribeButton uri={uri} />
-            <span className="claim-tile__publishes">
-              {claimsInChannel === 1
-                ? __('%claimsInChannel% publish', { claimsInChannel })
-                : __('%claimsInChannel% publishes', { claimsInChannel })}
-            </span>
-          </div>
-        ) : (
-          <React.Fragment>
-            <UriIndicator uri={uri} link hideAnonymous>
-              <ChannelThumbnail thumbnailPreview={channelThumbnail} />
-            </UriIndicator>
-
-            <div className="claim-tile__about">
-              <UriIndicator uri={uri} link />
-              <DateTime timeAgo uri={uri} />
+      <div>
+        <div className="claim-tile__info">
+          {isChannel ? (
+            <div className="claim-tile__about--channel">
+              <SubscribeButton uri={uri} />
+              <span className="claim-tile__publishes">
+                {claimsInChannel === 1
+                  ? __('%claimsInChannel% publish', { claimsInChannel })
+                  : __('%claimsInChannel% publishes', { claimsInChannel })}
+              </span>
             </div>
-          </React.Fragment>
+          ) : (
+            <React.Fragment>
+              <UriIndicator uri={uri} link hideAnonymous>
+                <ChannelThumbnail thumbnailPreview={channelThumbnail} />
+              </UriIndicator>
+
+              <div className="claim-tile__about">
+                <UriIndicator uri={uri} link />
+                <DateTime timeAgo uri={uri} />
+              </div>
+            </React.Fragment>
+          )}
+        </div>
+        {isRepost && (
+          <div className="claim-tile__repost-author">
+            <ClaimRepostAuthor uri={uri} />
+          </div>
         )}
       </div>
     </li>
