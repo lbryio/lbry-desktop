@@ -66,8 +66,8 @@ const webConfig = {
         to: `${DIST_ROOT}/public/favicon.png`,
       },
       {
-        from: `${STATIC_ROOT}/img/og.png`,
-        to: `${DIST_ROOT}/public/og.png`,
+        from: `${STATIC_ROOT}/img/v1-og.png`,
+        to: `${DIST_ROOT}/public/v1-og.png`,
       },
       {
         from: `${STATIC_ROOT}/font/`,

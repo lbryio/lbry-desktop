@@ -42,9 +42,9 @@ function buildOgMetadata(overrideOptions = {}) {
     '<meta property="og:site_name" content="lbry.tv | Content Freedom"/>\n' +
     `<meta property="og:description" content="${description ||
       'Meet LBRY, an open, free, and community-controlled content wonderland.'}" />\n` +
-    `<meta property="og:image" content="${URL}/og.png" />\n` +
+    `<meta property="og:image" content="${URL}/v1-og.png" />\n` +
     '<meta name="twitter:card" content="summary_large_image"/>\n' +
-    `<meta name="twitter:image" content="${URL}/og.png"/>\n` +
+    `<meta name="twitter:image" content="${URL}/v1-og.png"/>\n` +
     '<meta property="fb:app_id" content="1673146449633983" />';
 
   return head;
@@ -63,7 +63,7 @@ function buildClaimOgMetadata(uri, claim, overrideOptions = {}) {
       ? escapeHtmlProperty(truncateDescription(claim.description))
       : `Watch ${claimTitle} on LBRY.tv`;
   const claimLanguage = escapeHtmlProperty(claim.language) || 'en_US';
-  const claimThumbnail = escapeHtmlProperty(claim.thumbnail_url) || `${URL}/og.png`;
+  const claimThumbnail = escapeHtmlProperty(claim.thumbnail_url) || `${URL}/v1-og.png`;
 
   // Allow for ovverriding default claim based og metadata
   const title = overrideOptions.title || claimTitle;
