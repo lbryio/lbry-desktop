@@ -88,7 +88,7 @@ export default function FileViewer(props: Props) {
       const timeToStart = Date.now() - playTime;
       triggerAnalyticsView(uri, timeToStart).then(() => {
         claimRewards();
-        setHasRecordedView(false);
+        setHasRecordedView(true);
         setPlayTime(null);
       });
     }
