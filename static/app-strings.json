@@ -921,5 +921,6 @@
   "Your account": "Your account",
   "Channel profile picture": "Channel profile picture",
   "refreshing the app": "refreshing the app",
-  "Follower": "Follower"
+  "Follower": "Follower",
+  "%repost_channel_link% reposted": "%repost_channel_link% reposted"
 }
