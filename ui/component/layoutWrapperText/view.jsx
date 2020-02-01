@@ -1,6 +1,7 @@
 // @flow
 import * as React from 'react';
 import { normalizeURI } from 'lbry-redux';
+import classNames from 'classnames';
 import FilePrice from 'component/filePrice';
 import FileAuthor from 'component/fileAuthor';
 import FileViewCount from 'component/fileViewCount';
@@ -28,11 +29,11 @@ function LayoutWrapperText(props: Props) {
   const { uri, claim, title, nsfw, contentType, fileType } = props;
 
   const markdownType = ['md', 'markdown'];
-  const isMd = markdownType.includes(fileType) || contentType === 'text/markdown' || contentType === 'text/md';
+  const isMarkdown = markdownType.includes(fileType) || contentType === 'text/markdown' || contentType === 'text/md';
 
   return (
     <div>
-      <div className={`main__document-wrapper${isMd ? '-md' : ''}`}>
+      <div className={classNames('main__document-wrapper', { 'main__document-wrapper--markdown': isMarkdown })}>
         <ClaimUri uri={uri} />
 
         <div className="media__title">
