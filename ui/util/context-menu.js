@@ -119,6 +119,8 @@ export function openCopyLinkMenu(text, event) {
 
 // Block context menu
 export function stopContextMenu(event) {
-  event.preventDefault();
-  event.stopPropagation();
+  if (navigator.userAgent.toLowerCase().indexOf(' electron/') > -1) {
+    event.preventDefault();
+    event.stopPropagation();
+  }
 }
