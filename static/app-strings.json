@@ -917,5 +917,12 @@
   "This will increase the overall bid amount for %title%, which will boost its ability to be discovered while active.": "This will increase the overall bid amount for %title%, which will boost its ability to be discovered while active.",
   "Support %amount% LBC": "Support %amount% LBC",
   "You deposited %amount% LBC as a support!": "You deposited %amount% LBC as a support!",
-  "LBRY Link": "LBRY Link"
+  "LBRY Link": "LBRY Link",
+  "Comment Acknowledgement": "Comment Acknowledgement",
+  "A few things to know before making your comment:": "A few things to know before making your comment:",
+  "Commenting is in alpha. During the alpha, all comments are sent to a LBRY, Inc. server, not the LBRY network itself.": "Commenting is in alpha. During the alpha, all comments are sent to a LBRY, Inc. server, not the LBRY network itself.",
+  "Deleting or editing comments is not currently possible. Please be mindful of this when posting.": "Deleting or editing comments is not currently possible. Please be mindful of this when posting.",
+  "When the alpha ends, we will attempt to transition comments, but do not promise to do so.": "When the alpha ends, we will attempt to transition comments, but do not promise to do so.",
+  "Reply": "Reply",
+  "refreshing the app": "refreshing the app"
 }
