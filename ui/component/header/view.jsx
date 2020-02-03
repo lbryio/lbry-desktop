@@ -11,7 +11,6 @@ import WunderBar from 'component/wunderbar';
 import Icon from 'component/common/icon';
 import { Menu, MenuList, MenuButton, MenuItem } from '@reach/menu-button';
 import Tooltip from 'component/common/tooltip';
-import NavigationButton from 'component/navigationButton';
 // @if TARGET='app'
 import { IS_MAC } from 'component/app/view';
 // @endif
@@ -19,15 +18,7 @@ import { IS_MAC } from 'component/app/view';
 type Props = {
   balance: string,
   roundedBalance: number,
-  history: {
-    entities: {}[],
-    goBack: () => void,
-    goForward: () => void,
-    index: number,
-    length: number,
-    location: { pathname: string },
-    push: string => void,
-  },
+  history: { push: string => void, goBack: () => void, goForward: () => void, location: { pathname: string } },
   currentTheme: string,
   automaticDarkModeEnabled: boolean,
   setClientSetting: (string, boolean | string) => void,
@@ -114,8 +105,21 @@ const Header = (props: Props) => {
           {/* @if TARGET='app' */}
           {!authHeader && (
             <div className="header__navigation-arrows">
-              <NavigationButton isBackward history={history} />
-              <NavigationButton isBackward={false} history={history} />
+              <Button
+                className="header__navigation-item header__navigation-item--back"
+                description={__('Navigate back')}
+                onClick={() => history.goBack()}
+                icon={ICONS.ARROW_LEFT}
+                iconSize={18}
+              />
+
+              <Button
+                className="header__navigation-item header__navigation-item--forward"
+                description={__('Navigate forward')}
+                onClick={() => history.goForward()}
+                icon={ICONS.ARROW_RIGHT}
+                iconSize={18}
+              />
             </div>
           )}
           {/* @endif */}
