@@ -97,6 +97,5 @@
     ]
   },
   "artifactName": "${productName}_${version}.${ext}",
-  "afterSign": "./build/afterSignHook.js",
-  "afterAllArtifactBuild": "./build/afterAllArtifactBuild"
+  "afterSign": "./build/afterSignHook.js"
 }
