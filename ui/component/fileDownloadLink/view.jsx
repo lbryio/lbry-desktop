@@ -1,8 +1,9 @@
 // @flow
 import * as ICONS from 'constants/icons';
 import * as MODALS from 'constants/modal_types';
-import React from 'react';
+import React, { useState } from 'react';
 import Button from 'component/button';
+import { generateDownloadUrl } from 'util/lbrytv';
 
 type Props = {
   uri: string,
@@ -36,6 +37,8 @@ function FileDownloadLink(props: Props) {
     hideOpenButton = false,
   } = props;
 
+  const [viewEventSent, setViewEventSent] = useState(false);
+
   const cost = costInfo ? Number(costInfo.cost) : 0;
   const isPaidContent = cost > 0;
   if (!claim || (IS_WEB && isPaidContent)) {
@@ -44,16 +47,18 @@ function FileDownloadLink(props: Props) {
 
   const { name, claim_id: claimId, value } = claim;
   const fileName = value && value.source && value.source.name;
-  const downloadUrl = `/$/download/${name}/${claimId}`;
+  const downloadUrl = generateDownloadUrl(name, claimId);
 
   function handleDownload(e) {
-    e.preventDefault();
-
     // @if TARGET='app'
+    e.preventDefault();
     download(uri);
     // @endif;
     // @if TARGET='web'
-    triggerViewEvent(uri);
+    if (!viewEventSent) {
+      triggerViewEvent(uri);
+    }
+    setViewEventSent(true);
     // @endif;
   }
 

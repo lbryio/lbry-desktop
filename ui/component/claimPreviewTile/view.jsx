@@ -58,7 +58,8 @@ function ClaimPreviewTile(props: Props) {
   const shouldFetch = claim === undefined;
   const thumbnailUrl = useGetThumbnail(uri, claim, streamingUrl, getFile, placeholder) || thumbnail;
   const claimsInChannel = (claim && claim.meta.claims_in_channel) || 0;
-  const navigateUrl = uri ? formatLbryUrlForWeb(uri) : undefined;
+  const navigateUrl = claim ? formatLbryUrlForWeb(claim.canonical_url) : undefined;
+
   const navLinkProps = {
     to: navigateUrl,
     onClick: e => e.stopPropagation(),
