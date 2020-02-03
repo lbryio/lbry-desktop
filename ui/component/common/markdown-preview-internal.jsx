@@ -34,7 +34,7 @@ const SimpleText = (props: SimpleTextProps) => {
 const SimpleLink = (props: SimpleLinkProps) => {
   const { title, children } = props;
   let { href } = props;
-  if (href && href.startsWith('lbry://')) {
+  if (IS_WEB && href && href.startsWith('lbry://')) {
     href = formatLbryUrlForWeb(href);
     // using Link after formatLbryUrl to handle "/" vs "#/"
     // for web and desktop scenarios respectively
