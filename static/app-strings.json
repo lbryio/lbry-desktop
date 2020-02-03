@@ -915,7 +915,12 @@
   "Support %amount% LBC": "Support %amount% LBC",
   "You deposited %amount% LBC as a support!": "You deposited %amount% LBC as a support!",
   "LBRY Link": "LBRY Link",
+  "Publish to %uri%": "Publish to %uri%",
   "Your wallet": "Your wallet",
   "Publish a file, or create a channel": "Publish a file, or create a channel",
-  "Your account": "Your account"
+  "Your account": "Your account",
+  "Channel profile picture": "Channel profile picture",
+  "refreshing the app": "refreshing the app",
+  "Follower": "Follower",
+  "%repost_channel_link% reposted": "%repost_channel_link% reposted"
 }

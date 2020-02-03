@@ -147,29 +147,3 @@
 .header__navigation-item--balance {
   margin: 0 var(--spacing-medium);
 }
-
-.header__navigation-dropdown {
-  @extend .menu__list--header;
-  padding: 0;
-  position: absolute;
-  list-style-type: none;
-  background-color: var(--color-header-background);
-}
-
-.header__navigation-button {
-  margin: 0;
-  padding: var(--spacing-miniscule) var(--spacing-medium);
-  display: flex;
-  align-items: center;
-
-  &:hover {
-    cursor: pointer;
-    background-color: var(--color-menu-background--active);
-  }
-}
-
-.header__navigation-button-help {
-  @extend .help;
-  margin-top: 0;
-  margin-left: var(--spacing-small);
-}

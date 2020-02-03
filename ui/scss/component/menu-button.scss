@@ -55,8 +55,6 @@
   margin-left: calc(var(--spacing-medium) * -1);
   box-shadow: var(--card-box-shadow);
   animation: menu-animate-in var(--animation-duration) var(--animation-style);
-  border-bottom-left-radius: var(--border-radius);
-  border-bottom-right-radius: var(--border-radius);
 }
 
 .menu__link {
