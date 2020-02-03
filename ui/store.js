@@ -7,7 +7,7 @@ import { createFilter, createBlacklistFilter } from 'redux-persist-transform-fil
 import localForage from 'localforage';
 import { createStore, applyMiddleware, compose } from 'redux';
 import thunk from 'redux-thunk';
-import { createHashHistory, createBrowserHistory } from 'history';
+import { createMemoryHistory, createBrowserHistory } from 'history';
 import { routerMiddleware } from 'connected-react-router';
 import createRootReducer from './reducers';
 import { buildSharedStateMiddleware, ACTIONS as LBRY_REDUX_ACTIONS } from 'lbry-redux';
@@ -96,7 +96,7 @@ const persistOptions = {
 
 let history;
 // @if TARGET='app'
-history = createHashHistory();
+history = createMemoryHistory();
 // @endif
 // @if TARGET='web'
 history = createBrowserHistory();

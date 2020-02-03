@@ -29,6 +29,8 @@ import SignInPage from 'page/signIn';
 import SignInVerifyPage from 'page/signInVerify';
 import ChannelsPage from 'page/channels';
 import EmbedWrapperPage from 'page/embedWrapper';
+import { parseURI } from 'lbry-redux';
+import { SITE_TITLE } from 'config';
 
 // Tell the browser we are handling scroll restoration
 if ('scrollRestoration' in history) {
@@ -61,6 +63,19 @@ type Props = {
   currentScroll: number,
   location: { pathname: string, search: string },
   isAuthenticated: boolean,
+  history: {
+    entries: { title: string }[],
+    goBack: () => void,
+    goForward: () => void,
+    index: number,
+    length: number,
+    location: { pathname: string },
+    push: string => void,
+    state: {},
+    replaceState: ({}, string, string) => void,
+  },
+  uri: string,
+  title: string,
 };
 
 function AppRouter(props: Props) {
@@ -68,7 +83,37 @@ function AppRouter(props: Props) {
     currentScroll,
     location: { pathname },
     isAuthenticated,
+    history,
+    uri,
+    title,
   } = props;
+  const { entries } = history;
+  const entryIndex = history.index;
+
+  useEffect(() => {
+    if (uri) {
+      const { channelName, streamName } = parseURI(uri);
+
+      if (typeof title !== 'undefined' && title !== '') {
+        document.title = title;
+      } else if (streamName) {
+        document.title = streamName;
+      } else if (channelName) {
+        document.title = channelName;
+      } else {
+        document.title = IS_WEB ? SITE_TITLE : 'LBRY';
+      }
+    } else {
+      document.title = IS_WEB ? SITE_TITLE : 'LBRY';
+    }
+
+    // @if TARGET='app'
+    entries[entryIndex].title = document.title;
+    // @endif
+    return () => {
+      document.title = IS_WEB ? SITE_TITLE : 'LBRY';
+    };
+  }, [entries, entryIndex, title, uri]);
 
   useEffect(() => {
     window.scrollTo(0, currentScroll);
