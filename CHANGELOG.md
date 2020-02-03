@@ -9,10 +9,20 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Added
 
 - Download buttons on file cards ([#3546](https://github.com/lbryio/lbry-desktop/pull/3546))
+- Comment edit and delete ([#3453](https://github.com/lbryio/lbry-desktop/pull/3453))
+- Basic display of reposts ([#3593](https://github.com/lbryio/lbry-desktop/pull/3593))
+- See previous navigation pages when right clicking forward/back buttons ([#3547](https://github.com/lbryio/lbry-desktop/pull/3547))
+- Autoplay countdown timer ([#3556](https://github.com/lbryio/lbry-desktop/pull/3556))
 
 ### Changed
 
+- Better aria-labels for use with voiceover apps ([#3588](https://github.com/lbryio/lbry-desktop/pull/3588))
+
 ### Fixed
+
+- Prevent spacebar from toggling fullscreen on Firefox ([#3546](https://github.com/lbryio/lbry-desktop/pull/3546))
+- Context menu not working properly in some cases ([#3604](https://github.com/lbryio/lbry-desktop/pull/3604))
+- Don't autoplay paid content or content from blocked channels ([#3570](https://github.com/lbryio/lbry-desktop/pull/3570))
 
 ## [0.39.1] - [2019-1-24]
 
