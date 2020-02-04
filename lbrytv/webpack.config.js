@@ -4,11 +4,52 @@ const merge = require('webpack-merge');
 const baseConfig = require('../webpack.base.config.js');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const { DefinePlugin, ProvidePlugin } = require('webpack');
+const SentryWebpackPlugin = require('@sentry/webpack-plugin');
 
 const STATIC_ROOT = path.resolve(__dirname, '../static/');
 const UI_ROOT = path.resolve(__dirname, '../ui/');
 const DIST_ROOT = path.resolve(__dirname, 'dist/');
 const WEB_PLATFORM_ROOT = __dirname;
+const hasSentryToken = process.env.SENTRY_AUTH_TOKEN !== undefined;
+
+let plugins = [
+  new CopyWebpackPlugin([
+    {
+      from: `${STATIC_ROOT}/index-web.html`,
+      to: `${DIST_ROOT}/index.html`,
+    },
+    {
+      from: `${STATIC_ROOT}/img/favicon.png`,
+      to: `${DIST_ROOT}/public/favicon.png`,
+    },
+    {
+      from: `${STATIC_ROOT}/img/v1-og.png`,
+      to: `${DIST_ROOT}/public/v1-og.png`,
+    },
+    {
+      from: `${STATIC_ROOT}/font/`,
+      to: `${DIST_ROOT}/public/font/`,
+    },
+  ]),
+  new DefinePlugin({
+    IS_WEB: JSON.stringify(true),
+    'process.env.SDK_API_URL': JSON.stringify(process.env.SDK_API_URL || LBRY_TV_API),
+  }),
+  new ProvidePlugin({
+    __: ['i18n.js', '__'],
+  }),
+];
+
+if (hasSentryToken) {
+  plugins.push(
+    new SentryWebpackPlugin({
+      include: './dist',
+      ignoreFile: '.sentrycliignore',
+      ignore: ['node_modules', 'webpack.config.js'],
+      configFile: 'sentry.properties',
+    })
+  );
+}
 
 const webConfig = {
   target: 'web',
@@ -17,7 +58,7 @@ const webConfig = {
   },
   output: {
     filename: '[name].js',
-    path: __dirname + '/dist/public/',
+    path: path.join(__dirname, 'dist/public/'),
     publicPath: '/public/',
   },
   devServer: {
@@ -55,33 +96,7 @@ const webConfig = {
       fs: `${WEB_PLATFORM_ROOT}/stubs/fs.js`,
     },
   },
-  plugins: [
-    new CopyWebpackPlugin([
-      {
-        from: `${STATIC_ROOT}/index-web.html`,
-        to: `${DIST_ROOT}/index.html`,
-      },
-      {
-        from: `${STATIC_ROOT}/img/favicon.png`,
-        to: `${DIST_ROOT}/public/favicon.png`,
-      },
-      {
-        from: `${STATIC_ROOT}/img/v1-og.png`,
-        to: `${DIST_ROOT}/public/v1-og.png`,
-      },
-      {
-        from: `${STATIC_ROOT}/font/`,
-        to: `${DIST_ROOT}/public/font/`,
-      },
-    ]),
-    new DefinePlugin({
-      IS_WEB: JSON.stringify(true),
-      'process.env.SDK_API_URL': JSON.stringify(process.env.SDK_API_URL || LBRY_TV_API),
-    }),
-    new ProvidePlugin({
-      __: ['i18n.js', '__'],
-    }),
-  ],
+  plugins,
 };
 
 module.exports = merge(baseConfig, webConfig);
