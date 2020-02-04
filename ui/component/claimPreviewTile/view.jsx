@@ -59,7 +59,7 @@ function ClaimPreviewTile(props: Props) {
   const thumbnailUrl = useGetThumbnail(uri, claim, streamingUrl, getFile, placeholder) || thumbnail;
   const claimsInChannel = (claim && claim.meta.claims_in_channel) || 0;
   const canonicalUrl = claim && claim.canonical_url;
-  const navigateUrl = canonicalUrl ? formatLbryUrlForWeb(canonicalUrl) : undefined;
+  const navigateUrl = formatLbryUrlForWeb(canonicalUrl || uri || '/');
 
   const navLinkProps = {
     to: navigateUrl,
