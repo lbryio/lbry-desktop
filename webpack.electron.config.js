@@ -7,12 +7,10 @@ const CopyWebpackPlugin = require('copy-webpack-plugin');
 const { DefinePlugin, ProvidePlugin } = require('webpack');
 const { getIfUtils, removeEmpty } = require('webpack-config-utils');
 const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
-const SentryWebpackPlugin = require('@sentry/webpack-plugin');
 
 const STATIC_ROOT = path.resolve(__dirname, 'static/');
 const DIST_ROOT = path.resolve(__dirname, 'dist/');
 const NODE_ENV = process.env.NODE_ENV || 'development';
-const hasSentryToken = process.env.SENTRY_AUTH_TOKEN !== undefined;
 
 const { ifProduction } = getIfUtils(NODE_ENV);
 
@@ -94,16 +92,16 @@ let plugins = [
   }),
 ];
 
-if (hasSentryToken) {
-  plugins.push(
-    new SentryWebpackPlugin({
-      include: './dist',
-      ignoreFile: '.sentrycliignore',
-      ignore: ['node_modules', 'webpack.config.js', 'webworkers'],
-      configFile: 'sentry.properties',
-    })
-  );
-}
+// if (hasSentryToken) {
+//   plugins.push(
+//     new SentryWebpackPlugin({
+//       include: './dist',
+//       ignoreFile: '.sentrycliignore',
+//       ignore: ['node_modules', 'webpack.config.js', 'webworkers'],
+//       configFile: 'sentry.properties',
+//     })
+//   );
+// }
 
 const renderConfig = {
   target: 'electron-renderer',
