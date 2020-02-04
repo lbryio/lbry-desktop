@@ -88,7 +88,10 @@ function buildClaimOgMetadata(uri, claim, overrideOptions = {}) {
   // below should be canonical_url, but not provided by chainquery yet
   head += `<meta property="og:url" content="${URL}/${claim.name}:${claim.claim_id}"/>`;
 
-  if (claim.source_media_type && claim.source_media_type.startsWith('video/')) {
+  if (
+    claim.source_media_type &&
+    (claim.source_media_type.startsWith('video/') || claim.source_media_type.startsWith('audio/'))
+  ) {
     const videoUrl = generateEmbedUrl(claim.name, claim.claim_id);
     head += `<meta property="og:video" content="${videoUrl}" />`;
     head += `<meta property="og:video:secure_url" content="${videoUrl}" />`;
