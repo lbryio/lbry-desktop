@@ -23,7 +23,6 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Prevent spacebar from toggling fullscreen on Firefox ([#3546](https://github.com/lbryio/lbry-desktop/pull/3546))
 - Context menu not working properly in some cases ([#3604](https://github.com/lbryio/lbry-desktop/pull/3604))
 - Don't autoplay paid content or content from blocked channels ([#3570](https://github.com/lbryio/lbry-desktop/pull/3570))
-- Make claim previews right clickable ([#3627](https://github.com/lbryio/lbry-desktop/pull/3627))
 
 ## [0.39.1] - [2019-1-24]
 
