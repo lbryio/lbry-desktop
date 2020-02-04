@@ -15,7 +15,7 @@
     height: 100%;
     position: absolute;
     z-index: 1;
-    stroke: white;
+    stroke: var(--color-input-placeholder);
   }
 }
 
@@ -53,13 +53,6 @@
   padding-right: var(--spacing-small);
   padding-left: 2.5rem;
   transition: all 0.2s;
-  background-color: var(--color-wunderbar);
-  color: white;
-
-  &::placeholder {
-    color: white;
-    opacity: 0.8;
-  }
 
   &:focus {
     border-radius: var(--border-radius);
