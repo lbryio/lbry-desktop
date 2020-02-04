@@ -62,7 +62,7 @@ function ClaimPreviewTile(props: Props) {
   const navigateUrl = canonicalUrl ? formatLbryUrlForWeb(canonicalUrl) : undefined;
 
   const navLinkProps = {
-    to: navigateUrl,
+    to: navigateUrl || '/', // Pass in a dummy url while it's resolving, it won't be clickable
     onClick: e => e.stopPropagation(),
   };
 
