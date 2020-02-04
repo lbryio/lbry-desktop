@@ -29,6 +29,8 @@ type VideoJSOptions = {
   playbackRates: Array<number>,
   responsive: boolean,
   poster?: string,
+  muted?: boolean,
+  poseter?: string,
 };
 const VIDEO_JS_OPTIONS: VideoJSOptions = {
   controls: true,
@@ -52,16 +54,32 @@ type Props = {
   hasFileInfo: boolean,
   onEndedCB: any,
   claim: Claim,
+  autoplayParam: ?boolean,
 };
 
 function VideoViewer(props: Props) {
-  const { contentType, source, onEndedCB, changeVolume, changeMute, volume, muted, thumbnail, claim } = props;
+  const {
+    contentType,
+    source,
+    onEndedCB,
+    changeVolume,
+    changeMute,
+    volume,
+    muted,
+    thumbnail,
+    claim,
+    autoplayParam,
+  } = props;
   const claimId = claim && claim.claim_id;
   const videoRef = useRef();
   const isAudio = contentType.includes('audio');
   const embedded = useContext(EmbedContext);
-  if (embedded) {
+  if (embedded && !autoplayParam) {
     VIDEO_JS_OPTIONS.autoplay = false;
+  }
+
+  if (autoplayParam) {
+    VIDEO_JS_OPTIONS.muted = true;
   }
 
   let forceTypes = [
@@ -128,14 +146,15 @@ function VideoViewer(props: Props) {
       plugins: { eventTracking: true },
     };
 
-    if (isAudio) {
+    // thumb looks bad in app, and if autoplay, flashing poster is annoying
+    if (isAudio || (embedded && !autoplayParam)) {
       videoJsOptions.poster = thumbnail;
     }
 
     if (!requireRedraw) {
       player = videojs(videoNode, videoJsOptions, function() {
-        player.volume(volume);
-        player.muted(muted);
+        if (!autoplayParam) player.volume(volume);
+        player.muted(autoplayParam || muted);
       });
     }
 
