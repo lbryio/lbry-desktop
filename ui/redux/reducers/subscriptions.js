@@ -157,14 +157,7 @@ export default handleActions(
             channelName: `@${channelName}`,
           };
         });
-        if (!state.subscriptions || !state.subscriptions.length) {
-          newSubscriptions = parsedSubscriptions;
-        } else {
-          const map = {};
-          newSubscriptions = parsedSubscriptions.concat(state.subscriptions).filter(sub => {
-            return map[sub.uri] ? false : (map[sub.uri] = true);
-          }, {});
-        }
+        newSubscriptions = parsedSubscriptions;
       }
 
       return {
