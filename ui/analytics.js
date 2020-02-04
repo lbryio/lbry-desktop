@@ -1,7 +1,6 @@
 // @flow
 import { Lbryio } from 'lbryinc';
 import ReactGA from 'react-ga';
-import * as Sentry from '@sentry/browser';
 import { history } from './store';
 // @if TARGET='app'
 import Native from 'native';
@@ -22,7 +21,7 @@ ElectronCookies.enable({
 // @endif
 
 type Analytics = {
-  error: ({}, {}) => Promise<any>,
+  error: string => void,
   pageView: string => void,
   setUser: Object => void,
   toggle: (boolean, ?boolean) => void,
@@ -49,18 +48,10 @@ type LogPublishParams = {
 let analyticsEnabled: boolean = isProduction;
 
 const analytics: Analytics = {
-  error: (error, errorInfo) => {
-    return new Promise(resolve => {
-      if (analyticsEnabled && isProduction) {
-        Sentry.withScope(scope => {
-          scope.setExtras(errorInfo);
-          const eventId = Sentry.captureException(error);
-          resolve(eventId);
-        });
-      } else {
-        resolve(null);
-      }
-    });
+  error: message => {
+    if (analyticsEnabled && isProduction) {
+      Lbryio.call('event', 'desktop_error', { error_message: message });
+    }
   },
   pageView: path => {
     if (analyticsEnabled) {
