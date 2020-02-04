@@ -102,8 +102,7 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
 
   const isChannel = isValid ? parseURI(uri).isChannel : false;
   const signingChannel = claim && claim.signing_channel;
-  const canonicalUrl = claim && claim.canonical_url;
-  const navigateUrl = canonicalUrl ? formatLbryUrlForWeb(canonicalUrl) : undefined;
+  const navigateUrl = formatLbryUrlForWeb((claim && claim.canonical_url) || uri || '/');
   const navLinkProps = {
     to: navigateUrl,
     onClick: e => e.stopPropagation(),
@@ -168,7 +167,7 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
     }
 
     if (claim && !pending) {
-      history.push(navigateUrl || uri);
+      history.push(navigateUrl);
     }
   }
 
