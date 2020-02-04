@@ -1,5 +1,5 @@
 import 'babel-polyfill';
-import * as Sentry from '@sentry/browser';
+
 import ErrorBoundary from 'component/errorBoundary';
 import App from 'component/app';
 import SnackBar from 'component/snackBar';
@@ -42,14 +42,6 @@ import 'scss/all.scss';
 // @if TARGET='web'
 // These overrides can't live in lbrytv/ because they need to use the same instance of `Lbry`
 import apiPublishCallViaWeb from 'lbrytv/setup/publish';
-
-// Sentry error logging setup
-// Will only work if you have a SENTRY_AUTH_TOKEN env
-// We still add code in analytics.js to send the error to sentry manually
-// If it's caught by componentDidCatch in component/errorBoundary, it will not bubble up to this error reporter
-if (process.env.NODE_ENV === 'production') {
-  Sentry.init({ dsn: 'https://f93af3fa9c94470d9a0a22602cce3154@sentry.io/1877677' });
-}
 
 const PROXY_PATH = 'api/v1/proxy';
 export const SDK_API_URL = `${process.env.SDK_API_URL}/${PROXY_PATH}` || `https://api.lbry.tv/${PROXY_PATH}`;

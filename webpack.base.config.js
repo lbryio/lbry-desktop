@@ -12,12 +12,14 @@ const STATIC_ROOT = path.resolve(__dirname, 'static/');
 
 let baseConfig = {
   mode: ifProduction('production', 'development'),
-  devtool: ifProduction('source-map', 'eval-cheap-source-map'),
+  devtool: ifProduction(false, 'eval-source-map'),
   optimization: {
     minimizer: [
       new TerserPlugin({
         parallel: true,
-        sourceMap: true,
+        terserOptions: {
+          mangle: true,
+        },
       }),
     ],
   },
@@ -85,7 +87,6 @@ let baseConfig = {
       __static: `"${path.join(__dirname, 'static').replace(/\\/g, '\\\\')}"`,
       'process.env.NODE_ENV': JSON.stringify(NODE_ENV),
       'process.env.LBRY_API_URL': JSON.stringify(process.env.LBRY_API_URL),
-      'process.env.SENTRY_AUTH_TOKEN': JSON.stringify(process.env.SENTRY_AUTH_TOKEN),
     }),
   ],
 };
