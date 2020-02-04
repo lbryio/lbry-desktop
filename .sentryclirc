@@ -1,4 +1,4 @@
 [defaults]
 url = https://sentry.io/
 org = lbry
-project = react
+project = lbry-desktop
