@@ -51,7 +51,7 @@ export default class SplashScreen extends React.PureComponent<Props, State> {
       message: __('Connecting'),
       launchedModal: false,
       error: false,
-      launchWithIncompatibleDaemon: false,
+      launchWithIncompatibleDaemon: !process.env.NODE_ENV === 'production',
       isRunning: false,
       waitingForWallet: 0,
     };

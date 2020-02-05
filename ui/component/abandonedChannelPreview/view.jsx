@@ -22,12 +22,7 @@ function AbandonedChannelPreview(props: Props) {
   const { channelName } = parseURI(uri);
 
   return (
-    <li
-      className={classnames('claim-preview__wrapper', {
-        'claim-preview__wrapper--channel': type !== 'inline',
-        'claim-preview__wrapper--inline': type === 'inline',
-      })}
-    >
+    <li className={classnames('claim-preview__wrapper', 'claim-preview__wrapper--notice')}>
       <div className={classnames('claim-preview', { 'claim-preview--large': type === 'large' })}>
         <ChannelThumbnail uri={uri} />
         <div className="claim-preview__text">
@@ -35,11 +30,11 @@ function AbandonedChannelPreview(props: Props) {
             <div className="claim-preview-info">
               <div className="claim-preview__title">{channelName}</div>
             </div>
-            <div className="media__subtitle">{`This channel may have been abandoned.`}</div>
+            <div className="media__subtitle">{__(`This channel may have been unpublished.`)}</div>
           </div>
           <div className="claim-preview__actions">
+            {/* SubscribeButton uses resolved permanentUri; modifying it didn't seem worth it. */}
             <Button
-              // ref={buttonRef}
               iconColor="red"
               icon={ICONS.UNSUBSCRIBE}
               button={'alt'}
@@ -47,7 +42,7 @@ function AbandonedChannelPreview(props: Props) {
               onClick={e => {
                 e.stopPropagation();
                 doChannelUnsubscribe({
-                  channelName,
+                  channelName: `@${channelName}`,
                   uri,
                 });
               }}
