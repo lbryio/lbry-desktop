@@ -157,7 +157,7 @@ function ClaimPreviewTile(props: Props) {
           {!isChannel && (
             <React.Fragment>
               {/* @if TARGET='app' */}
-              <div className="claim-tile__hover-actions">
+              <div className="claim-preview__hover-actions">
                 <FileDownloadLink uri={canonicalUrl} hideOpenButton />
               </div>
               {/* @endif */}
