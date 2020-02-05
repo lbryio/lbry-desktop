@@ -38,7 +38,7 @@ function ChannelsFollowingManagePage(props: Props) {
   return (
     <Page>
       <ClaimList
-        nullPreviewBehavior={'abandonedChannel'}
+        showUnresolvedClaims
         header={viewingSuggestedSubs ? __('Discover New Channels') : __('Channels You Follow')}
         headerAltControls={
           <Button

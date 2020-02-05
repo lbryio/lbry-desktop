@@ -55,7 +55,7 @@ type Props = {
   streamingUrl: ?string,
   getFile: string => void,
   customShouldHide?: Claim => boolean,
-  nullPreview?: string,
+  showUnresolvedClaim?: boolean,
 };
 
 const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
@@ -86,12 +86,12 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
     getFile,
     streamingUrl,
     customShouldHide,
-    nullPreview,
+    showUnresolvedClaim,
   } = props;
   const shouldFetch =
     claim === undefined || (claim !== null && claim.value_type === 'channel' && isEmpty(claim.meta) && !pending);
   const abandoned = !isResolvingUri && !claim;
-  const showPublishLink = abandoned && placeholder === 'publish';
+  const showPublishLink = abandoned && !showUnresolvedClaim && placeholder === 'publish';
   const hideActions = type === 'small' || type === 'tooltip';
   const canonicalUrl = claim && claim.canonical_url;
 
@@ -117,7 +117,7 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
   let shouldHide =
     placeholder !== 'loading' &&
     !showUserBlocked &&
-    ((abandoned && !nullPreview === 'abandonedChannel' && !showPublishLink) || (!claimIsMine && obscureNsfw && nsfw));
+    ((abandoned && !showUnresolvedClaim && !showPublishLink) || (!claimIsMine && obscureNsfw && nsfw));
 
   // This will be replaced once blocking is done at the wallet server level
   if (claim && !claimIsMine && !shouldHide && blackListedOutpoints) {
@@ -186,7 +186,7 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
     return null;
   }
 
-  if (placeholder === 'loading' || (isResolvingUri && !claim)) {
+  if (placeholder === 'loading' || claim === undefined || (isResolvingUri && !claim)) {
     return (
       <li
         disabled
@@ -206,7 +206,7 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
     );
   }
 
-  if (nullPreview === 'abandonedChannel' && !isResolvingUri && !claim) {
+  if (!shouldFetch && showUnresolvedClaim && !isResolvingUri && claim === null) {
     return <AbandonedChannelPreview uri={uri} type />;
   }
   if (placeholder === 'publish' && !claim && uri.startsWith('lbry://@')) {
@@ -264,7 +264,6 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
               </NavLink>
               {!isChannel && <FileProperties uri={uri} />}
             </div>
-
             <ClaimPreviewSubtitle uri={uri} type={type} />
           </div>
           <div className="claim-preview__actions">

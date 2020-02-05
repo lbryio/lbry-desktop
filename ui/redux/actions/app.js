@@ -262,7 +262,7 @@ export function doCheckDaemonVersion() {
     Lbry.version().then(({ lbrynet_version: lbrynetVersion }) => {
       // Avoid the incompatible daemon modal if running in dev mode
       // Lets you  run a different daemon than the one specified in package.json
-      if (config.lbrynetDaemonVersion === lbrynetVersion) {
+      if (config.lbrynetDaemonVersion === lbrynetVersion || process.env.NODE_ENV !== 'production') {
         return dispatch({
           type: ACTIONS.DAEMON_VERSION_MATCH,
         });
@@ -271,8 +271,9 @@ export function doCheckDaemonVersion() {
       dispatch({
         type: ACTIONS.DAEMON_VERSION_MISMATCH,
       });
-
-      return dispatch(doOpenModal(MODALS.INCOMPATIBLE_DAEMON));
+      if (process.env.NODE_ENV === 'production') {
+        return dispatch(doOpenModal(MODALS.INCOMPATIBLE_DAEMON));
+      }
     });
     // @endif
     // @if TARGET='web'
