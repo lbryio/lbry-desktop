@@ -29,12 +29,31 @@ function CommentList(props: Props) {
     fetchComments(uri);
   }, [fetchComments, uri]);
 
+  function sortByParent(arrayOfComments) {
+    let parentComments = arrayOfComments.filter(comment => comment.parent_id === undefined);
+    let childComments = arrayOfComments.filter(comment => comment.parent_id !== undefined);
+    let sortedArray = [];
+
+    parentComments.forEach(parentComment => {
+      sortedArray.push(parentComment);
+
+      childComments
+        .filter(childComment => childComment.parent_id === parentComment.comment_id)
+        .forEach(childComment => {
+          sortedArray.push(childComment);
+        });
+    });
+
+    return sortedArray;
+  }
+
   return (
     <ul className="comments">
       {comments &&
-        comments.map(comment => {
+        sortByParent(comments).map(comment => {
           return (
             <Comment
+              uri={uri}
               authorUri={comment.channel_url}
               author={comment.channel_name}
               claimId={comment.claim_id}

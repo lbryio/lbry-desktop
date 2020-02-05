@@ -19,6 +19,16 @@
   }
 }
 
+.comment__reply {
+  border-left: 5px solid var(--color-border);
+  padding-left: var(--spacing-small);
+}
+
+.comment__reply-form {
+  border-top: 1px solid var(--color-border);
+  margin-top: var(--spacing-small);
+}
+
 .comment__body_container {
   padding-right: var(--spacing-small);
   flex: 1;
