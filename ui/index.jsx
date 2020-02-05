@@ -48,7 +48,10 @@ import apiPublishCallViaWeb from 'lbrytv/setup/publish';
 // We still add code in analytics.js to send the error to sentry manually
 // If it's caught by componentDidCatch in component/errorBoundary, it will not bubble up to this error reporter
 if (process.env.NODE_ENV === 'production') {
-  Sentry.init({ dsn: 'https://f93af3fa9c94470d9a0a22602cce3154@sentry.io/1877677' });
+  Sentry.init({
+    dsn: 'https://f93af3fa9c94470d9a0a22602cce3154@sentry.io/1877677',
+    blacklistUrls: ['assets.revcontent.com'],
+  });
 }
 
 const PROXY_PATH = 'api/v1/proxy';
