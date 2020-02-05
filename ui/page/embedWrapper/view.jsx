@@ -17,7 +17,7 @@ const EmbedWrapperPage = (props: Props) => {
   useEffect(() => {
     if (!hasRecordedView && uri && claim) {
       triggerAnalyticsView(uri).then(() => {
-        setHasRecordedView(true);
+        setHasRecordedView(false);
       });
     }
   }, [triggerAnalyticsView, setHasRecordedView, hasRecordedView, uri, claim]);

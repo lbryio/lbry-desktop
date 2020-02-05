@@ -83,6 +83,26 @@ if (process.env.NODE_ENV === 'production') {
   });
 }
 
+let plugins = [
+  new DefinePlugin({
+    IS_WEB: JSON.stringify(false),
+  }),
+  new ProvidePlugin({
+    __: ['i18n.js', '__'],
+  }),
+];
+
+// if (hasSentryToken) {
+//   plugins.push(
+//     new SentryWebpackPlugin({
+//       include: './dist',
+//       ignoreFile: '.sentrycliignore',
+//       ignore: ['node_modules', 'webpack.config.js', 'webworkers'],
+//       configFile: 'sentry.properties',
+//     })
+//   );
+// }
+
 const renderConfig = {
   target: 'electron-renderer',
   entry: {
@@ -110,15 +130,7 @@ const renderConfig = {
       },
     ],
   },
-  plugins: [
-    // new BundleAnalyzerPlugin(),
-    new DefinePlugin({
-      IS_WEB: JSON.stringify(false),
-    }),
-    new ProvidePlugin({
-      __: ['i18n.js', '__'],
-    }),
-  ],
+  plugins,
 };
 
 module.exports = [merge(baseConfig, mainConfig), merge(baseConfig, renderConfig)];

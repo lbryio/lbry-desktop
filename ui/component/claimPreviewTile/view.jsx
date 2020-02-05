@@ -58,7 +58,8 @@ function ClaimPreviewTile(props: Props) {
   const shouldFetch = claim === undefined;
   const thumbnailUrl = useGetThumbnail(uri, claim, streamingUrl, getFile, placeholder) || thumbnail;
   const claimsInChannel = (claim && claim.meta.claims_in_channel) || 0;
-  const navigateUrl = claim ? formatLbryUrlForWeb(claim.canonical_url) : undefined;
+  const canonicalUrl = claim && claim.canonical_url;
+  const navigateUrl = formatLbryUrlForWeb(canonicalUrl || uri || '/');
 
   const navLinkProps = {
     to: navigateUrl,
@@ -157,7 +158,7 @@ function ClaimPreviewTile(props: Props) {
             <React.Fragment>
               {/* @if TARGET='app' */}
               <div className="claim-tile__hover-actions">
-                <FileDownloadLink uri={uri} hideOpenButton />
+                <FileDownloadLink uri={canonicalUrl} hideOpenButton />
               </div>
               {/* @endif */}
               <div className="claim-tile__file-properties">

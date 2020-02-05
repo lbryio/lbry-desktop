@@ -1,6 +1,6 @@
 {
   "name": "lbry",
-  "version": "0.41.0-rc.2",
+  "version": "0.41.0-rc.4",
   "description": "A browser for the LBRY network, a digital marketplace controlled by its users.",
   "keywords": [
     "lbry"
@@ -20,12 +20,12 @@
   },
   "main": "./dist/electron/main.js",
   "scripts": {
-    "compile:electron": "webpack --config webpack.electron.config.js",
+    "compile:electron": "node --max_old_space_size=4096 ./node_modules/webpack/bin/webpack.js --config webpack.electron.config.js",
     "compile:web": "cd ./lbrytv && webpack --config webpack.config.js",
     "compile": "cross-env NODE_ENV=production yarn compile:electron && cross-env NODE_ENV=production yarn compile:web",
     "dev": "yarn dev:electron",
     "dev:electron": "cross-env NODE_ENV=development node ./electron/devServer.js",
-    "dev:web": "cd ./lbrytv && yarn dev",
+    "dev:web": "yarn compile:web && cd ./lbrytv && yarn dev",
     "dev:web-server": "cross-env NODE_ENV=development yarn compile:web && concurrently \"cross-env NODE_ENV=development yarn compile:web --watch\" \"cd ./lbrytv && yarn dev:server\"",
     "dev:internal-apis": "LBRY_API_URL='http://localhost:8080' yarn dev:electron",
     "dev:iatv": "LBRY_API_URL='http://localhost:15400' SDK_API_URL='http://localhost:15100' yarn dev:web",
@@ -69,10 +69,11 @@
     "@exponent/electron-cookies": "^2.0.0",
     "@hot-loader/react-dom": "^16.8",
     "@lbry/components": "^3.0.8",
-    "@octokit/rest": "^16.40.0",
     "@reach/menu-button": "^0.1.18",
     "@reach/rect": "^0.2.1",
     "@reach/tabs": "^0.1.5",
+    "@sentry/browser": "^5.12.1",
+    "@sentry/webpack-plugin": "^1.10.0",
     "@types/three": "^0.93.1",
     "adm-zip": "^0.4.13",
     "async-exit-hook": "^2.0.1",
@@ -141,7 +142,6 @@
     "node-libs-browser": "^2.1.0",
     "node-loader": "^0.6.0",
     "node-sass": "^4.11.0",
-    "node-wget": "^0.4.3",
     "nodemon": "^1.19.1",
     "postcss-import": "^12.0.1",
     "postcss-loader": "^3.0.0",

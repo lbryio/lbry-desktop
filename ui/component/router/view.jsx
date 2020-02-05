@@ -1,7 +1,7 @@
 // @flow
 import * as PAGES from 'constants/pages';
 import React, { useEffect } from 'react';
-import { Route, Redirect, Switch, withRouter } from 'react-router-dom';
+import { Route, Redirect, Switch } from 'react-router-dom';
 import SettingsPage from 'page/settings';
 import HelpPage from 'page/help';
 import ReportPage from 'page/report';
@@ -38,7 +38,6 @@ if ('scrollRestoration' in history) {
 type PrivateRouteProps = {
   component: any,
   isAuthenticated: boolean,
-  location: { pathname: string },
 };
 
 function PrivateRoute(props: PrivateRouteProps) {
@@ -50,7 +49,7 @@ function PrivateRoute(props: PrivateRouteProps) {
         isAuthenticated || !IS_WEB ? (
           <Component {...props} />
         ) : (
-          <Redirect to={`/$/${PAGES.AUTH}?redirect=${props.location.pathname}`} />
+          <Redirect to={`/$/${PAGES.AUTH}?redirect=${window.location.pathname}`} />
         )
       }
     />
@@ -59,16 +58,12 @@ function PrivateRoute(props: PrivateRouteProps) {
 
 type Props = {
   currentScroll: number,
-  location: { pathname: string, search: string },
   isAuthenticated: boolean,
 };
 
 function AppRouter(props: Props) {
-  const {
-    currentScroll,
-    location: { pathname },
-    isAuthenticated,
-  } = props;
+  const { currentScroll, isAuthenticated } = props;
+  const { pathname } = window.location;
 
   useEffect(() => {
     window.scrollTo(0, currentScroll);
@@ -125,4 +120,4 @@ function AppRouter(props: Props) {
   );
 }
 
-export default withRouter(AppRouter);
+export default AppRouter;

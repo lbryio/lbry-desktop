@@ -1,9 +1,9 @@
 // @flow
 import type { Node } from 'react';
 import React, { useEffect, forwardRef } from 'react';
+import { NavLink, withRouter } from 'react-router-dom';
 import classnames from 'classnames';
 import { parseURI, convertToShareLink } from 'lbry-redux';
-import { withRouter } from 'react-router-dom';
 import { openCopyLinkMenu } from 'util/context-menu';
 import { formatLbryUrlForWeb } from 'util/url';
 import { isEmpty } from 'util/object';
@@ -103,6 +103,11 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
 
   const isChannel = isValid ? parseURI(uri).isChannel : false;
   const signingChannel = claim && claim.signing_channel;
+  const navigateUrl = formatLbryUrlForWeb((claim && claim.canonical_url) || uri || '/');
+  const navLinkProps = {
+    to: navigateUrl,
+    onClick: e => e.stopPropagation(),
+  };
 
   // do not block abandoned and nsfw claims if showUserBlocked is passed
   let shouldHide =
@@ -163,7 +168,7 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
     }
 
     if (claim && !pending) {
-      history.push(formatLbryUrlForWeb(claim.canonical_url ? claim.canonical_url : uri));
+      history.push(navigateUrl);
     }
   }
 
@@ -231,19 +236,23 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
             <ChannelThumbnail uri={uri} obscure={channelIsBlocked} />
           </UriIndicator>
         ) : (
-          <FileThumbnail thumbnail={thumbnailUrl}>
-            {/* @if TARGET='app' */}
-            <div className="claim-preview__hover-actions">
-              <FileDownloadLink uri={uri} hideOpenButton hideDownloadStatus />
-            </div>
-            {/* @endif */}
-          </FileThumbnail>
+          <NavLink {...navLinkProps}>
+            <FileThumbnail thumbnail={thumbnailUrl}>
+              {/* @if TARGET='app' */}
+              <div className="claim-preview__hover-actions">
+                <FileDownloadLink uri={uri} hideOpenButton hideDownloadStatus />
+              </div>
+              {/* @endif */}
+            </FileThumbnail>
+          </NavLink>
         )}
 
         <div className="claim-preview__text">
           <div className="claim-preview-metadata">
             <div className="claim-preview-info">
-              <ClaimPreviewTitle uri={uri} />
+              <NavLink {...navLinkProps}>
+                <ClaimPreviewTitle uri={uri} />
+              </NavLink>
               {!isChannel && <FileProperties uri={uri} />}
             </div>
 
