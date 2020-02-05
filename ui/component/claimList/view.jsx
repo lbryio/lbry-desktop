@@ -29,6 +29,7 @@ type Props = {
   persistedStorageKey?: string,
   showHiddenByUser: boolean,
   headerLabel?: string | Node,
+  nullPreviewBehavior?: string,
 };
 
 export default function ClaimList(props: Props) {
@@ -47,6 +48,7 @@ export default function ClaimList(props: Props) {
     id,
     showHiddenByUser,
     headerLabel,
+    nullPreviewBehavior,
   } = props;
   const [scrollBottomCbMap, setScrollBottomCbMap] = useState({});
   const [currentSort, setCurrentSort] = usePersistedState(persistedStorageKey, SORT_NEW);
@@ -130,6 +132,7 @@ export default function ClaimList(props: Props) {
               key={uri}
               uri={uri}
               type={type}
+              nullPreview={nullPreviewBehavior}
               properties={type !== 'small' ? undefined : false}
               showUserBlocked={showHiddenByUser}
               customShouldHide={(claim: StreamClaim) => {

@@ -8,10 +8,12 @@ import Page from 'component/page';
 import Button from 'component/button';
 import { SITE_TITLE } from 'config';
 import Card from 'component/common/card';
+import AbandonedChannelPreview from 'component/abandonedChannelPreview';
 
 type Props = {
   isResolvingUri: boolean,
   resolveUri: string => void,
+  isSubscribed: boolean,
   uri: string,
   claim: StreamClaim,
   location: UrlLocation,
@@ -24,7 +26,17 @@ type Props = {
 };
 
 function ShowPage(props: Props) {
-  const { isResolvingUri, resolveUri, uri, claim, blackListedOutpoints, location, title, claimIsMine } = props;
+  const {
+    isResolvingUri,
+    resolveUri,
+    uri,
+    claim,
+    blackListedOutpoints,
+    location,
+    title,
+    claimIsMine,
+    isSubscribed,
+  } = props;
   const { channelName, streamName } = parseURI(uri);
   const signingChannel = claim && claim.signing_channel;
   const canonicalUrl = claim && claim.canonical_url;
@@ -70,11 +82,13 @@ function ShowPage(props: Props) {
       // This shouldn't happen, so hopefully this helps track it down
       console.error('No name for associated claim: ', claim.claim_id); // eslint-disable-line no-console
     }
-
     innerContent = (
       <Page>
         {isResolvingUri && <BusyIndicator message={__('Loading decentralized data...')} />}
-        {!isResolvingUri && <span className="empty">{__("There's nothing available at this location.")}</span>}
+        {!isResolvingUri && !isSubscribed && (
+          <span className="empty">{__("There's nothing available at this location.")}</span>
+        )}
+        {!isResolvingUri && isSubscribed && <AbandonedChannelPreview uri={uri} type={'large'} />}
       </Page>
     );
   } else if (claim.name.length && claim.name[0] === '@') {

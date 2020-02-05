@@ -19,6 +19,7 @@ import ClaimPreviewTitle from 'component/claimPreviewTitle';
 import ClaimPreviewSubtitle from 'component/claimPreviewSubtitle';
 import ClaimRepostAuthor from 'component/claimRepostAuthor';
 import FileDownloadLink from 'component/fileDownloadLink';
+import AbandonedChannelPreview from 'component/abandonedChannelPreview';
 
 type Props = {
   uri: string,
@@ -54,6 +55,7 @@ type Props = {
   streamingUrl: ?string,
   getFile: string => void,
   customShouldHide?: Claim => boolean,
+  nullPreview?: string,
 };
 
 const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
@@ -84,6 +86,7 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
     getFile,
     streamingUrl,
     customShouldHide,
+    nullPreview,
   } = props;
   const shouldFetch =
     claim === undefined || (claim !== null && claim.value_type === 'channel' && isEmpty(claim.meta) && !pending);
@@ -114,7 +117,7 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
   let shouldHide =
     placeholder !== 'loading' &&
     !showUserBlocked &&
-    ((abandoned && !showPublishLink) || (!claimIsMine && obscureNsfw && nsfw));
+    ((abandoned && !nullPreview === 'abandonedChannel' && !showPublishLink) || (!claimIsMine && obscureNsfw && nsfw));
 
   // This will be replaced once blocking is done at the wallet server level
   if (claim && !claimIsMine && !shouldHide && blackListedOutpoints) {
@@ -203,6 +206,9 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
     );
   }
 
+  if (nullPreview === 'abandonedChannel' && !isResolvingUri && !claim) {
+    return <AbandonedChannelPreview uri={uri} type />;
+  }
   if (placeholder === 'publish' && !claim && uri.startsWith('lbry://@')) {
     return null;
   }
