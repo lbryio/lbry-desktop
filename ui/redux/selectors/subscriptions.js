@@ -257,6 +257,12 @@ export const selectSubscriptionClaims = createSelector(
 
 // Returns true if a user is subscribed to the channel associated with the uri passed in
 // Accepts content or channel uris
+export const makeSelectChannelInSubscriptions = uri =>
+  createSelector(
+    selectSubscriptions,
+    subscriptions => subscriptions.some(sub => sub.uri === uri)
+  );
+
 export const makeSelectIsSubscribed = uri =>
   createSelector(
     selectSubscriptions,
