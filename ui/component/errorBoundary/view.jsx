@@ -6,6 +6,8 @@ import Button from 'component/button';
 import { withRouter } from 'react-router';
 import analytics from 'analytics';
 import I18nMessage from 'component/i18nMessage';
+import Native from 'native';
+import { Lbry } from 'lbry-redux';
 
 type Props = {
   children: Node,
@@ -32,9 +34,29 @@ class ErrorBoundary extends React.Component<Props, State> {
   }
 
   componentDidCatch(error, errorInfo) {
-    analytics.error(error, errorInfo).then(eventId => {
-      this.setState({ eventId });
+    // analytics.error(error, errorInfo).then(eventId => {
+    //   this.setState({ eventId });
+    // });
+    let errorMessage = 'Uncaught error\n';
+
+    // @if TARGET='web'
+    errorMessage += 'lbry.tv\n';
+    errorMessage += `page: ${window.location.pathname + window.location.search}\n`;
+    errorMessage += error.stack;
+    analytics.error(errorMessage);
+
+    // @endif
+    // @if TARGET='app'
+    Native.getAppVersionInfo().then(({ localVersion }) => {
+      Lbry.version().then(({ lbrynet_version: sdkVersion }) => {
+        errorMessage += `app version: ${localVersion}\n`;
+        errorMessage += `sdk version: ${sdkVersion}\n`;
+        errorMessage += `page: ${window.location.href.split('.html')[1]}\n`;
+        errorMessage += `${error.stack}`;
+        analytics.error(errorMessage);
+      });
     });
+    // @endif
   }
 
   refresh() {
@@ -46,7 +68,7 @@ class ErrorBoundary extends React.Component<Props, State> {
   }
 
   render() {
-    const { hasError, eventId } = this.state;
+    const { hasError } = this.state;
 
     if (hasError) {
       return (
@@ -72,7 +94,7 @@ class ErrorBoundary extends React.Component<Props, State> {
               </I18nMessage>
             }
           />
-          {eventId === null && (
+          {/* {eventId === null && (
             <div className="error-wrapper">
               <span className="error-text">
                 {__('You are not currently sharing diagnostic data so this error was not reported.')}
@@ -83,7 +105,7 @@ class ErrorBoundary extends React.Component<Props, State> {
             <div className="error-wrapper">
               <span className="error-text">{__('Error ID: %eventId%', { eventId })}</span>
             </div>
-          )}
+          )} */}
         </div>
       );
     }
