@@ -88,3 +88,4 @@ export const VIDEO = 'Video';
 export const TEXT = 'FileText';
 export const DOWNLOADABLE = 'Downloadable';
 export const REPOST = 'Repeat';
+export const SHUFFLE = 'Shuffle';

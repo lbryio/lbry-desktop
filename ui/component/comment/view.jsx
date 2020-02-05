@@ -10,11 +10,15 @@ import { Menu, MenuList, MenuButton, MenuItem } from '@reach/menu-button';
 import Icon from 'component/common/icon';
 import * as ICONS from 'constants/icons';
 import { FormField, Form } from 'component/common/form';
+import CommentReply from '../commentReply/index';
+import classnames from 'classnames';
 
 type Props = {
+  uri: string,
   author: ?string, // LBRY Channel Name, e.g. @channel
   authorUri: string, // full LBRY Channel URI: lbry://@channel#123...
   commentId: string, // sha256 digest identifying the comment
+  parentId: string, // sha256 digest identifying the parent of the comment
   message: string, // comment body
   timePosted: number, // Comment timestamp
   channel: ?Claim, // Channel Claim, retrieved to obtain thumbnail
@@ -33,6 +37,7 @@ const ESCAPE_KEY = 27;
 
 function Comment(props: Props) {
   const {
+    uri,
     author,
     authorUri,
     timePosted,
@@ -44,6 +49,7 @@ function Comment(props: Props) {
     channelIsBlocked,
     commentIsMine,
     commentId,
+    parentId,
     updateComment,
     deleteComment,
   } = props;
@@ -54,6 +60,9 @@ function Comment(props: Props) {
 
   // used for controlling the visibility of the menu icon
   const [mouseIsHovering, setMouseHover] = useState(false);
+
+  // used for controlling visibility of reply comment component
+  const [isReplying, setReplying] = useState(false);
 
   // to debounce subsequent requests
   const shouldFetch =
@@ -96,10 +105,15 @@ function Comment(props: Props) {
   function handleSubmit() {
     updateComment(commentId, editedMessage);
     setEditing(false);
+    setReplying(false);
   }
 
   function handleDeleteComment() {
     deleteComment(commentId);
+  }
+
+  function handleReply() {
+    setReplying(true);
   }
 
   function handleMouseOver() {
@@ -111,7 +125,11 @@ function Comment(props: Props) {
   }
 
   return (
-    <li className="comment" onMouseOver={handleMouseOver} onMouseOut={handleMouseOut}>
+    <li
+      className={classnames('comment', { comment__reply: parentId !== null })}
+      onMouseOver={handleMouseOver}
+      onMouseOut={handleMouseOut}
+    >
       <div className="comment__author-thumbnail">
         {authorUri ? <ChannelThumbnail uri={authorUri} obscure={channelIsBlocked} small /> : <ChannelThumbnail small />}
       </div>
@@ -149,6 +167,13 @@ function Comment(props: Props) {
                   <MenuItem className="comment__menu-option" onSelect={handleDeleteComment}>
                     {__('Delete')}
                   </MenuItem>
+                  {parentId === null ? (
+                    <MenuItem className="comment__menu-option" onSelect={handleReply}>
+                      {__('Reply')}
+                    </MenuItem>
+                  ) : (
+                    ''
+                  )}
                 </MenuList>
               </Menu>
             )}
@@ -187,6 +212,7 @@ function Comment(props: Props) {
             </div>
           )}
         </div>
+        <div>{isReplying ? <CommentReply uri={uri} parentId={commentId} setReplying={setReplying} /> : ''}</div>
       </div>
     </li>
   );
