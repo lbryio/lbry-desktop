@@ -6,6 +6,7 @@ import I18nMessage from 'component/i18nMessage';
 import Button from 'component/button';
 
 const ADS_URL = '//assets.revcontent.com/master/delivery.js';
+const IS_MOBILE = typeof window.orientation !== 'undefined';
 
 type Props = {
   location: { pathname: string },
@@ -15,26 +16,27 @@ function Ads(props: Props) {
   const {
     location: { pathname },
   } = props;
-
   useEffect(() => {
-    const script = document.createElement('script');
+    if (!IS_MOBILE) {
+      const script = document.createElement('script');
 
-    script.src = ADS_URL;
-    script.async = true;
+      script.src = ADS_URL;
+      script.async = true;
 
-    // $FlowFixMe
-    document.body.appendChild(script);
-
-    return () => {
       // $FlowFixMe
-      document.body.removeChild(script);
-      // if user navigates too rapidly, <style> tags can build up
-      // $FlowFixMe
-      if (document.body.getElementsByTagName('style').length) {
+      document.body.appendChild(script);
+
+      return () => {
         // $FlowFixMe
-        document.body.getElementsByTagName('style')[0].remove();
-      }
-    };
+        document.body.removeChild(script);
+        // if user navigates too rapidly, <style> tags can build up
+        // $FlowFixMe
+        if (document.body.getElementsByTagName('style').length) {
+          // $FlowFixMe
+          document.body.getElementsByTagName('style')[0].remove();
+        }
+      };
+    }
   }, []);
 
   return (

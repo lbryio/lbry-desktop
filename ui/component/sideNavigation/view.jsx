@@ -8,7 +8,6 @@ import Tag from 'component/tag';
 import StickyBox from 'react-sticky-box/dist/esnext';
 import Spinner from 'component/spinner';
 import usePersistedState from 'effects/use-persisted-state';
-import useIsMobile from 'effects/use-is-mobile';
 // @if TARGET='web'
 import Ads from 'lbrytv/component/ads';
 // @endif
@@ -42,7 +41,6 @@ function SideNavigation(props: Props) {
   } = props;
   const { pathname } = location;
   const isAuthenticated = Boolean(email);
-  const isMobile = useIsMobile();
   const [sideInformation, setSideInformation] = usePersistedState(
     'side-navigation:information',
     getSideInformation(pathname)
@@ -89,11 +87,7 @@ function SideNavigation(props: Props) {
 
   // @if TARGET='web'
   if (obscureSideNavigation) {
-    return isMobile ? null : (
-      <Wrapper>
-        <Ads />
-      </Wrapper>
-    );
+    return <Ads />;
   }
   // @endif
 
