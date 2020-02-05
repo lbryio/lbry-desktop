@@ -93,20 +93,6 @@
     margin-right: var(--spacing-medium);
   }
 
-  .claim-preview__hover-actions {
-    display: none;
-    position: absolute;
-    top: var(--spacing-miniscule);
-    right: var(--spacing-miniscule);
-
-    & > * {
-      color: var(--color-black);
-      background-color: var(--color-white);
-      padding: var(--spacing-xsmall);
-      border-radius: var(--border-radius);
-    }
-  }
-
   &:hover {
     .claim-preview__hover-actions {
       display: block;
@@ -421,22 +407,8 @@
 }
 
 .claim-preview--tile {
-  .claim-tile__hover-actions {
-    display: none;
-    position: absolute;
-    top: var(--spacing-miniscule);
-    right: var(--spacing-miniscule);
-
-    & > * {
-      color: var(--color-black);
-      background-color: var(--color-white);
-      padding: var(--spacing-xsmall);
-      border-radius: var(--border-radius);
-    }
-  }
-
   &:hover {
-    .claim-tile__hover-actions {
+    .claim-preview__hover-actions {
       display: block;
     }
   }
@@ -457,4 +429,18 @@
 .claim-tile__repost-author {
   margin: var(--spacing-small);
   margin-bottom: 0;
+}
+
+.claim-preview__hover-actions {
+  display: none;
+  position: absolute;
+  top: var(--spacing-miniscule);
+  right: var(--spacing-miniscule);
+
+  & > * {
+    color: var(--color-black);
+    background-color: var(--color-white);
+    padding: var(--spacing-xsmall);
+    border-radius: var(--border-radius);
+  }
 }
