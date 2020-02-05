@@ -94,6 +94,11 @@ export const makeSelectNextUnplayedRecommended = (uri: string) =>
         // Make sure we don't autoplay paid content, channels, or content from blocked channels
         for (let i = 0; i < recommendedForUri.length; i++) {
           const recommendedUri = recommendedForUri[i];
+          const claim = claimsByUri[recommendedUri];
+
+          if (!claim) {
+            continue;
+          }
 
           const { isChannel } = parseURI(recommendedUri);
           if (isChannel) {
@@ -105,7 +110,13 @@ export const makeSelectNextUnplayedRecommended = (uri: string) =>
             continue;
           }
 
-          const claim = claimsByUri[recommendedUri];
+          // We already check if it's a channel above
+          // $FlowFixMe
+          const isVideo = claim.value && claim.value.stream_type === 'video';
+          if (!isVideo) {
+            continue;
+          }
+
           const channel = claim && claim.signing_channel;
           if (channel && blockedChannels.some(blockedUri => blockedUri === channel.permanent_url)) {
             continue;
