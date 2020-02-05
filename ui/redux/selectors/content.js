@@ -113,7 +113,9 @@ export const makeSelectNextUnplayedRecommended = (uri: string) =>
           // We already check if it's a channel above
           // $FlowFixMe
           const isVideo = claim.value && claim.value.stream_type === 'video';
-          if (!isVideo) {
+          // $FlowFixMe
+          const isAudio = claim.value && claim.value.stream_type === 'audio';
+          if (!isVideo || !isAudio) {
             continue;
           }
 
