@@ -90,6 +90,7 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
   const abandoned = !isResolvingUri && !claim;
   const showPublishLink = abandoned && placeholder === 'publish';
   const hideActions = type === 'small' || type === 'tooltip';
+  const canonicalUrl = claim && claim.canonical_url;
 
   let isValid = false;
   if (uri) {
@@ -239,9 +240,11 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
           <NavLink {...navLinkProps}>
             <FileThumbnail thumbnail={thumbnailUrl}>
               {/* @if TARGET='app' */}
-              <div className="claim-preview__hover-actions">
-                <FileDownloadLink uri={uri} hideOpenButton hideDownloadStatus />
-              </div>
+              {claim && (
+                <div className="claim-preview__hover-actions">
+                  <FileDownloadLink uri={canonicalUrl} hideOpenButton hideDownloadStatus />
+                </div>
+              )}
               {/* @endif */}
             </FileThumbnail>
           </NavLink>
