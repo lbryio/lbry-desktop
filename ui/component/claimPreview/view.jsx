@@ -18,6 +18,7 @@ import useGetThumbnail from 'effects/use-get-thumbnail';
 import ClaimPreviewTitle from 'component/claimPreviewTitle';
 import ClaimPreviewSubtitle from 'component/claimPreviewSubtitle';
 import ClaimRepostAuthor from 'component/claimRepostAuthor';
+import FileDownloadLink from 'component/fileDownloadLink';
 
 type Props = {
   uri: string,
@@ -230,7 +231,13 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
             <ChannelThumbnail uri={uri} obscure={channelIsBlocked} />
           </UriIndicator>
         ) : (
-          <FileThumbnail thumbnail={thumbnailUrl} />
+          <FileThumbnail thumbnail={thumbnailUrl}>
+            {/* @if TARGET='app' */}
+            <div className="claim-preview__hover-actions">
+              <FileDownloadLink uri={uri} hideOpenButton hideDownloadStatus />
+            </div>
+            {/* @endif */}
+          </FileThumbnail>
         )}
 
         <div className="claim-preview__text">

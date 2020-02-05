@@ -19,6 +19,7 @@ type Props = {
   triggerViewEvent: string => void,
   costInfo: ?{ cost: string },
   hideOpenButton: boolean,
+  hideDownloadStatus: boolean,
 };
 
 function FileDownloadLink(props: Props) {
@@ -35,6 +36,7 @@ function FileDownloadLink(props: Props) {
     triggerViewEvent,
     costInfo,
     hideOpenButton = false,
+    hideDownloadStatus = false,
   } = props;
 
   const [viewEventSent, setViewEventSent] = useState(false);
@@ -67,7 +69,7 @@ function FileDownloadLink(props: Props) {
     const label =
       fileInfo && fileInfo.written_bytes > 0 ? progress.toFixed(0) + __('% downloaded') : __('Connecting...');
 
-    return <span className="download-text">{label}</span>;
+    return hideDownloadStatus ? null : <span className="download-text">{label}</span>;
   }
 
   if (fileInfo && fileInfo.download_path && fileInfo.completed) {
