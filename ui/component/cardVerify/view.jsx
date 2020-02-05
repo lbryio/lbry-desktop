@@ -37,6 +37,7 @@ class CardVerify extends React.Component {
     super(props);
     this.state = {
       open: false,
+      scriptFailedToLoad: false,
     };
   }
 
@@ -117,7 +118,7 @@ class CardVerify extends React.Component {
   };
 
   onScriptError = (...args) => {
-    throw new Error('Unable to load credit validation script.');
+    this.setState({ scriptFailedToLoad: true });
   };
 
   onClosed = () => {
@@ -159,13 +160,21 @@ class CardVerify extends React.Component {
   };
 
   render() {
+    const { scriptFailedToLoad } = this.props;
+
     return (
-      <Button
-        button="primary"
-        label={this.props.label}
-        disabled={this.props.disabled || this.state.open || this.hasPendingClick}
-        onClick={this.onClick.bind(this)}
-      />
+      <div>
+        {scriptFailedToLoad && (
+          <div className="error-text">There was an error connecting to Stripe. Please try again later.</div>
+        )}
+
+        <Button
+          button="primary"
+          label={this.props.label}
+          disabled={this.props.disabled || this.state.open || this.hasPendingClick}
+          onClick={this.onClick.bind(this)}
+        />
+      </div>
     );
   }
 }
