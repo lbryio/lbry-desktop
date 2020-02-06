@@ -178,6 +178,16 @@ function HomePage(props: Props) {
   }
 
   rowData.push({
+    title: 'Latest From @lbrycast',
+    link: `/@lbrycast:4`,
+    options: {
+      orderBy: ['release_time'],
+      pageSize: 4,
+      channelIds: ['4c29f8b013adea4d5cca1861fb2161d5089613ea'],
+    },
+  });
+
+  rowData.push({
     title: 'Latest From @lbry',
     link: `/@lbry:3f`,
     options: {
