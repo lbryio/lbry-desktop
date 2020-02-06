@@ -126,6 +126,23 @@ fieldset-group {
   margin-top: var(--spacing-large);
 }
 
+.checkbox label:after {
+  border-left-color: var(--color-input);
+  border-bottom-color: var(--color-input);
+  border-right-color: var(--color-input);
+  border-top-color: var(--color-input);
+}
+
+.radio label:after {
+  background-color: var(--color-input);
+}
+
+.checkbox label:hover:before,
+.radio label:hover:before {
+  background-color: var(--color-input-bg-hover);
+  border-color: var(--color-input-bg-hover);
+}
+
 .form-field__conjuction {
   padding-top: 1rem;
 }
