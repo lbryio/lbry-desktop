@@ -84,11 +84,11 @@ function ShowPage(props: Props) {
     }
     innerContent = (
       <Page>
-        {isResolvingUri && <BusyIndicator message={__('Loading decentralized data...')} />}
+        {(claim === undefined || isResolvingUri) && <BusyIndicator message={__('Loading decentralized data...')} />}
         {!isResolvingUri && !isSubscribed && (
           <span className="empty">{__("There's nothing available at this location.")}</span>
         )}
-        {!isResolvingUri && isSubscribed && <AbandonedChannelPreview uri={uri} type={'large'} />}
+        {!isResolvingUri && isSubscribed && claim === null && <AbandonedChannelPreview uri={uri} type={'large'} />}
       </Page>
     );
   } else if (claim.name.length && claim.name[0] === '@') {
