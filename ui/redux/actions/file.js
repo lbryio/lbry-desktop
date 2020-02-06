@@ -63,7 +63,6 @@ export function doDeleteFileAndMaybeGoBack(uri, deleteFromComputer, abandonClaim
     const { outpoint } = makeSelectFileInfoForUri(uri)(state) || '';
     const { nout, txid } = makeSelectClaimForUri(uri)(state);
     const claimOutpoint = `${txid}:${nout}`;
-
     const actions = [];
     actions.push(doHideModal());
     actions.push(doDeleteFile(outpoint || claimOutpoint, deleteFromComputer, abandonClaim));
@@ -71,13 +70,12 @@ export function doDeleteFileAndMaybeGoBack(uri, deleteFromComputer, abandonClaim
     if (playingUri === uri) {
       actions.push(doSetPlayingUri(null));
     }
-
     // it would be nice to stay on the claim if you just want to delete it
     // we need to alter autoplay to not start downloading again after you delete it
-    // if (abandonClaim) {
-    actions.push(goBack());
-    // }
 
     dispatch(batchActions(...actions));
+    if (abandonClaim) {
+      dispatch(goBack());
+    }
   };
 }

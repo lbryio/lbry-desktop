@@ -923,6 +923,7 @@
   "refreshing the app": "refreshing the app",
   "Follower": "Follower",
   "%repost_channel_link% reposted": "%repost_channel_link% reposted",
+  "Abandon on blockchain (reclaim %amount% LBC)": "Abandon on blockchain (reclaim %amount% LBC)",
   "This channel may have been unpublished.": "This channel may have been unpublished.",
   "There was an error. Try %refreshing_the_app_link% to fix it. If that doesn't work, try pressing Ctrl+R/Cmd+R.": "There was an error. Try %refreshing_the_app_link% to fix it. If that doesn't work, try pressing Ctrl+R/Cmd+R."
 }
