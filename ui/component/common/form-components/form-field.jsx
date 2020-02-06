@@ -78,7 +78,6 @@ export class FormField extends React.PureComponent<Props> {
       ...inputProps
     } = this.props;
     const errorMessage = typeof error === 'object' ? error.message : error;
-
     const Wrapper = blockWrap
       ? ({ children: innerChildren }) => <fieldset-section class="radio">{innerChildren}</fieldset-section>
       : ({ children: innerChildren }) => <span className="radio">{innerChildren}</span>;
@@ -160,7 +159,7 @@ export class FormField extends React.PureComponent<Props> {
         input = (
           <React.Fragment>
             <fieldset-section>
-              {label && (
+              {(label || errorMessage) && (
                 <label htmlFor={name}>
                   {errorMessage ? <span className="error-text">{errorMessage}</span> : label}
                 </label>
