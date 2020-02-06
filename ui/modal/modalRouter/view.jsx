@@ -34,6 +34,7 @@ import ModalYoutubeWelcome from 'modal/modalYoutubeWelcome';
 import ModalCreateChannel from 'modal/modalChannelCreate';
 import ModalMobileNavigation from 'modal/modalMobileNavigation';
 import ModalSetReferrer from 'modal/modalSetReferrer';
+import ModalRepost from 'modal/modalRepost';
 
 type Props = {
   modal: { id: string, modalProps: {} },
@@ -125,6 +126,8 @@ function ModalRouter(props: Props) {
       return <ModalMobileNavigation {...modalProps} />;
     case MODALS.SET_REFERRER:
       return <ModalSetReferrer {...modalProps} />;
+    case MODALS.REPOST:
+      return <ModalRepost {...modalProps} />;
     default:
       return null;
   }

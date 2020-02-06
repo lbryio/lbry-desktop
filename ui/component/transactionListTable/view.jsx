@@ -19,6 +19,7 @@ function TransactionListTable(props: Props) {
   function isRevokeable(txid: string, nout: number) {
     const outpoint = `${txid}:${nout}`;
     const { mySupports, myClaims } = props;
+
     return !!mySupports[outpoint] || myClaims.has(outpoint);
   }
 

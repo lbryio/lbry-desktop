@@ -51,6 +51,12 @@ function FileActions(props: Props) {
           label={__('Share')}
           onClick={() => openModal(MODALS.SOCIAL_SHARE, { uri, webShareable })}
         />
+        <Button
+          button="alt"
+          icon={ICONS.REPOST}
+          label={__('Repost')}
+          onClick={() => openModal(MODALS.REPOST, { uri })}
+        />
 
         {!claimIsMine && (
           <Button

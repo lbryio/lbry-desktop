@@ -1,10 +1,8 @@
 // @flow
+import { CHANNEL_NEW, CHANNEL_ANONYMOUS } from 'constants/claim';
 import React, { Fragment } from 'react';
 import { FormField } from 'component/common/form';
-import BusyIndicator from 'component/common/busy-indicator';
 import ChannelCreate from 'component/channelCreate';
-
-import { CHANNEL_NEW, CHANNEL_ANONYMOUS } from 'constants/claim';
 
 type Props = {
   channel: string, // currently selected channel
@@ -78,36 +76,30 @@ class ChannelSection extends React.PureComponent<Props, State> {
 
     return (
       <Fragment>
-        {fetchingChannels ? (
-          <BusyIndicator message="Updating channels" />
-        ) : (
-          <Fragment>
-            <FormField
-              name="channel"
-              label={label || __('Channel')}
-              type="select"
-              onChange={this.handleChannelChange}
-              value={channel}
-            >
-              {!hideAnon && <option value={CHANNEL_ANONYMOUS}>{__('Anonymous')}</option>}
-              {channels &&
-                channels.map(({ name, claim_id: claimId }) => (
-                  <option key={claimId} value={name}>
-                    {name}
-                  </option>
-                ))}
-              {injected &&
-                injected.map(item => (
-                  <option key={item} value={item}>
-                    {item}
-                  </option>
-                ))}
-              <option value={CHANNEL_NEW}>{__('New channel...')}</option>}
-            </FormField>
+        <FormField
+          name="channel"
+          label={label || __('Channel')}
+          type="select"
+          onChange={this.handleChannelChange}
+          value={channel}
+        >
+          {!hideAnon && <option value={CHANNEL_ANONYMOUS}>{__('Anonymous')}</option>}
+          {channels &&
+            channels.map(({ name, claim_id: claimId }) => (
+              <option key={claimId} value={name}>
+                {name}
+              </option>
+            ))}
+          {injected &&
+            injected.map(item => (
+              <option key={item} value={item}>
+                {item}
+              </option>
+            ))}
+          {!fetchingChannels && <option value={CHANNEL_NEW}>{__('New channel...')}</option>}
+        </FormField>
 
-            {addingChannel && <ChannelCreate onSuccess={this.handleChangeToNewChannel} />}
-          </Fragment>
-        )}
+        {addingChannel && <ChannelCreate onSuccess={this.handleChangeToNewChannel} />}
       </Fragment>
     );
   }

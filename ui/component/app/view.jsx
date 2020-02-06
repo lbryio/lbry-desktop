@@ -96,6 +96,7 @@ function App(props: Props) {
   const urlParams = new URLSearchParams(search);
   const rawReferrerParam = urlParams.get('r');
   const sanitizedReferrerParam = rawReferrerParam && rawReferrerParam.replace(':', '#');
+  const wrapperElement = appRef.current;
 
   let uri;
   try {
@@ -122,7 +123,9 @@ function App(props: Props) {
   }, [sanitizedReferrerParam, isRewardApproved, referredRewardAvailable]);
 
   useEffect(() => {
-    ReactModal.setAppElement(appRef.current);
+    if (wrapperElement) {
+      ReactModal.setAppElement(wrapperElement);
+    }
     fetchAccessToken();
 
     // @if TARGET='app'
@@ -130,7 +133,7 @@ function App(props: Props) {
     fetchTransactions(1, TX_LIST.LATEST_PAGE_SIZE);
     fetchChannelListMine(); // This needs to be done for web too...
     // @endif
-  }, [fetchRewards, fetchTransactions, fetchAccessToken, fetchChannelListMine]);
+  }, [fetchRewards, fetchTransactions, fetchAccessToken, fetchChannelListMine, wrapperElement]);
 
   useEffect(() => {
     // $FlowFixMe
