@@ -96,7 +96,16 @@ const persistOptions = {
 
 let history;
 // @if TARGET='app'
-history = createMemoryHistory();
+let initialEntry = '/';
+let hash = window.location.hash;
+if (hash) {
+  hash = hash.replace('#', '');
+  initialEntry = hash.startsWith('/') ? hash : '/' + hash;
+}
+history = createMemoryHistory({
+  initialEntries: [initialEntry],
+  initialIndex: 0,
+});
 // @endif
 // @if TARGET='web'
 history = createBrowserHistory();
