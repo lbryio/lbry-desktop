@@ -10,6 +10,8 @@ import {
   selectRepostLoading,
   doClearRepostError,
   doToast,
+  selectMyClaimsWithoutChannels,
+  doFetchClaimListMine,
 } from 'lbry-redux';
 import ModalRepost from './view';
 
@@ -20,6 +22,7 @@ const select = (state, props) => ({
   balance: selectBalance(state),
   error: selectRepostError(state),
   reposting: selectRepostLoading(state),
+  myClaims: selectMyClaimsWithoutChannels(state),
 });
 
 export default connect(
@@ -29,5 +32,6 @@ export default connect(
     doRepost,
     doClearRepostError,
     doToast,
+    doFetchClaimListMine,
   }
 )(ModalRepost);
