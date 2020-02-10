@@ -929,5 +929,12 @@
   "Custom": "Custom",
   "Playing in %seconds_left% seconds": "Playing in %seconds_left% seconds",
   "Up Next by %channel%": "Up Next by %channel%",
-  "Install Now": "Install Now"
+  "Install Now": "Install Now",
+  "Repost": "Repost",
+  "Repost your favorite claims to help more people discover them!": "Repost your favorite claims to help more people discover them!",
+  "Advanced": "Advanced",
+  "community name": "community name",
+  "Change this to repost to a different %lbry_naming_link%.": "Change this to repost to a different %lbry_naming_link%.",
+  "Reposting": "Reposting",
+  "Woohoo! Sucessfully reposted this claim.": "Woohoo! Sucessfully reposted this claim."
 }

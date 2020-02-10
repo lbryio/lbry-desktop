@@ -31,6 +31,11 @@
   margin-bottom: var(--spacing-small);
 }
 
+.comment__meta-information {
+  justify-content: flex-start;
+  display: flex;
+}
+
 .comment__message {
   white-space: pre-line;
   margin-top: var(--spacing-small);

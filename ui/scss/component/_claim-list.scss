@@ -373,6 +373,7 @@
   .channel-thumbnail {
     width: 2.1rem;
     height: 2.1rem;
+    margin-right: var(--spacing-small);
   }
 }
 
@@ -422,7 +423,6 @@
   transform: translateY(calc(var(--spacing-small) * -1));
   font-size: var(--font-xsmall);
   color: var(--color-text-subtitle);
-  line-height: 1;
 
   .icon {
     margin-right: var(--spacing-miniscule);
