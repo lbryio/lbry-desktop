@@ -1,0 +1,61 @@
+.claim-search__wrapper {
+  width: 100%;
+}
+
+.claim-search__menus {
+  background-color: var(--color-card-background);
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  align-items: center;
+  padding: var(--spacing-medium);
+  padding-bottom: var(--spacing-small);
+  margin-top: var(--spacing-medium);
+  @media (max-width: $breakpoint-small) {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  color: var(--color-text-subtitle);
+}
+
+.claim-search__dropdown {
+  padding: 0 var(--spacing-medium);
+  max-width: 400px;
+  @media (max-width: $breakpoint-small) {
+    margin-left: 0;
+  }
+  background-color: var(--color-card-background);
+  width: var(--option-select-width);
+}
+
+.claim-search__dropdown--selected {
+  background-color: var(--color-primary-alt);
+}
+.claim-search__input-container {
+  &:not(:first-of-type) {
+    padding-left: var(--spacing-medium);
+  }
+  @media (max-width: $breakpoint-small) {
+    &:not(:first-of-type) {
+      margin-top: var(--spacing-small);
+    }
+    padding-left: 0px;
+    &:not(:first-of-type) {
+      padding-left: 0;
+    }
+  }
+}
+
+.claim-search__extra {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.claim-search__top {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}

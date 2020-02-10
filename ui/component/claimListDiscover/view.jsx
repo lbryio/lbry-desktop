@@ -3,6 +3,7 @@ import type { Node } from 'react';
 import classnames from 'classnames';
 import React, { Fragment, useEffect, useState } from 'react';
 import { withRouter } from 'react-router';
+import * as CS from 'constants/claim_search';
 import { createNormalizedClaimSearchKey, MATURE_TAGS } from 'lbry-redux';
 import { FormField } from 'component/common/form';
 import Button from 'component/button';
@@ -11,26 +12,12 @@ import ClaimList from 'component/claimList';
 import ClaimPreview from 'component/claimPreview';
 import { toCapitalCase } from 'util/string';
 import I18nMessage from 'component/i18nMessage';
-
-const PAGE_SIZE = 20;
-export const TIME_DAY = 'day';
-export const TIME_WEEK = 'week';
-export const TIME_MONTH = 'month';
-export const TIME_YEAR = 'year';
-export const TIME_ALL = 'all';
-
-export const TYPE_TRENDING = 'trending';
-export const TYPE_TOP = 'top';
-export const TYPE_NEW = 'new';
-
-const SEARCH_TYPES = [TYPE_TRENDING, TYPE_NEW, TYPE_TOP];
-const SEARCH_TIMES = [TIME_DAY, TIME_WEEK, TIME_MONTH, TIME_YEAR, TIME_ALL];
+import * as ICONS from 'constants/icons';
 
 type Props = {
   uris: Array<string>,
   subscribedChannels: Array<Subscription>,
   doClaimSearch: ({}) => void,
-  tags: Array<string>,
   loading: boolean,
   personalView: boolean,
   doToggleTagFollow: string => void,
@@ -45,17 +32,22 @@ type Props = {
   hiddenUris: Array<string>,
   hiddenNsfwMessage?: Node,
   channelIds?: Array<string>,
-  defaultTypeSort?: string,
-  defaultTimeSort?: string,
-  defaultOrderBy?: Array<string>,
+  tags: Array<string>,
+  orderBy?: Array<string>,
+  defaultOrderBy?: string,
+  freshness?: string,
+  defaultFreshness?: string,
   header?: Node,
   headerLabel?: string | Node,
   name?: string,
-  pageSize?: number,
-  claimType?: Array<string>,
+  hideBlock?: boolean,
+  claimType?: string | Array<string>,
+  defaultClaimType?: string | Array<string>,
+  streamType?: string | Array<string>,
+  defaultStreamType?: string | Array<string>,
   renderProperties?: Claim => Node,
   includeSupportAction?: boolean,
-  hideBlock: boolean,
+  noCustom?: boolean,
 };
 
 function ClaimListDiscover(props: Props) {
@@ -64,7 +56,6 @@ function ClaimListDiscover(props: Props) {
     claimSearchByQuery,
     tags,
     loading,
-    personalView,
     meta,
     channelIds,
     showNsfw,
@@ -73,70 +64,93 @@ function ClaimListDiscover(props: Props) {
     location,
     hiddenUris,
     hiddenNsfwMessage,
-    defaultTypeSort,
-    defaultTimeSort,
     defaultOrderBy,
+    orderBy,
     headerLabel,
     header,
     name,
     claimType,
     pageSize,
+    hideBlock,
+    defaultClaimType,
+    streamType,
+    defaultStreamType,
+    freshness,
+    defaultFreshness,
     renderProperties,
     includeSupportAction,
-    hideBlock,
+    noCustom,
   } = props;
   const didNavigateForward = history.action === 'PUSH';
-  const [page, setPage] = useState(1);
   const { search } = location;
+
+  const [page, setPage] = useState(1);
   const [forceRefresh, setForceRefresh] = useState();
+  const [expanded, setExpanded] = useState(false);
+
   const urlParams = new URLSearchParams(search);
-  const typeSort = urlParams.get('type') || defaultTypeSort || TYPE_TRENDING;
-  const timeSort = urlParams.get('time') || defaultTimeSort || TIME_WEEK;
-  const tagsInUrl = urlParams.get('t') || '';
+  const tagsParam = tags || urlParams.get(CS.TAGS_KEY) || null;
+  const orderParam = orderBy || urlParams.get(CS.ORDER_BY_KEY) || defaultOrderBy || CS.ORDER_BY_TRENDING;
+  const freshnessParam = freshness || urlParams.get(CS.FRESH_KEY) || defaultFreshness || CS.FRESH_WEEK;
+  const contentTypeParam = urlParams.get(CS.CONTENT_KEY);
+  const claimTypeParam =
+    claimType || (CS.CLAIM_TYPES.includes(contentTypeParam) && contentTypeParam) || defaultClaimType || null;
+  const streamTypeParam =
+    streamType || (CS.FILE_TYPES.includes(contentTypeParam) && contentTypeParam) || defaultStreamType || null;
+  const durationParam = urlParams.get(CS.DURATION_KEY) || null;
+
+  const isFiltered = () =>
+    Boolean(urlParams.get(CS.FRESH_KEY) || urlParams.get(CS.CONTENT_KEY) || urlParams.get(CS.DURATION_KEY));
+
+  useEffect(() => {
+    if (isFiltered()) setExpanded(true);
+  }, []);
+
   const options: {
     page_size: number,
     page: number,
     no_totals: boolean,
     any_tags: Array<string>,
+    not_tags: Array<string>,
     channel_ids: Array<string>,
     not_channel_ids: Array<string>,
-    not_tags: Array<string>,
     order_by: Array<string>,
     release_time?: string,
     claim_type?: Array<string>,
     name?: string,
     claim_type?: Array<string>,
+    duration?: string,
+    claim_type?: string | Array<string>,
+    stream_types?: any,
   } = {
-    page_size: pageSize || PAGE_SIZE,
+    page_size: pageSize || CS.PAGE_SIZE,
     page,
     name,
     claim_type: claimType || undefined,
     // no_totals makes it so the sdk doesn't have to calculate total number pages for pagination
     // it's faster, but we will need to remove it if we start using total_pages
     no_totals: true,
-    any_tags: tags || [],
+    any_tags: tagsParam || [],
     channel_ids: channelIds || [],
     not_channel_ids:
       // If channelIds were passed in, we don't need not_channel_ids
       !channelIds && hiddenUris && hiddenUris.length ? hiddenUris.map(hiddenUri => hiddenUri.split('#')[1]) : [],
     not_tags: !showNsfw ? MATURE_TAGS : [],
     order_by:
-      defaultOrderBy ||
-      (typeSort === TYPE_TRENDING
-        ? ['trending_group', 'trending_mixed']
-        : typeSort === TYPE_NEW
-        ? ['release_time']
-        : ['effective_amount']), // Sort by top
+      orderParam === CS.ORDER_BY_TRENDING
+        ? CS.ORDER_BY_TRENDING_VALUE
+        : orderParam === CS.ORDER_BY_NEW
+        ? CS.ORDER_BY_NEW_VALUE
+        : CS.ORDER_BY_TOP_VALUE, // Sort by top
   };
-
-  if (typeSort === TYPE_TOP && timeSort !== TIME_ALL) {
+  if (orderParam === CS.ORDER_BY_TOP && freshnessParam !== CS.FRESH_ALL) {
     options.release_time = `>${Math.floor(
       moment()
-        .subtract(1, timeSort)
+        .subtract(1, freshnessParam)
         .startOf('hour')
         .unix()
     )}`;
-  } else if (typeSort === TYPE_NEW || typeSort === TYPE_TRENDING) {
+  } else if (orderParam === CS.ORDER_BY_NEW || orderParam === CS.ORDER_BY_TRENDING) {
     // Warning - hack below
     // If users are following more than 10 channels or tags, limit results to stuff less than a year old
     // For more than 20, drop it down to 6 months
@@ -145,14 +159,14 @@ function ClaimListDiscover(props: Props) {
     if (options.channel_ids.length > 20 || options.any_tags.length > 20) {
       options.release_time = `>${Math.floor(
         moment()
-          .subtract(6, TIME_MONTH)
+          .subtract(3, CS.FRESH_MONTH)
           .startOf('week')
           .unix()
       )}`;
     } else if (options.channel_ids.length > 10 || options.any_tags.length > 10) {
       options.release_time = `>${Math.floor(
         moment()
-          .subtract(1, TIME_YEAR)
+          .subtract(1, CS.FRESH_YEAR)
           .startOf('week')
           .unix()
       )}`;
@@ -163,6 +177,26 @@ function ClaimListDiscover(props: Props) {
           .startOf('minute')
           .unix()
       )}`;
+    }
+  }
+
+  if (durationParam) {
+    if (durationParam === CS.DURATION_SHORT) {
+      options.duration = '<=1800';
+    } else if (durationParam === CS.DURATION_LONG) {
+      options.duration = '>=1800';
+    }
+  }
+
+  if (streamTypeParam) {
+    if (streamTypeParam !== CS.CONTENT_ALL) {
+      options.stream_types = [streamTypeParam];
+    }
+  }
+
+  if (claimTypeParam) {
+    if (claimTypeParam !== CS.CONTENT_ALL) {
+      options.claim_type = [claimTypeParam];
     }
   }
 
@@ -179,7 +213,7 @@ function ClaimListDiscover(props: Props) {
   const shouldPerformSearch =
     uris.length === 0 ||
     didNavigateForward ||
-    (!loading && uris.length < PAGE_SIZE * page && uris.length % PAGE_SIZE === 0);
+    (!loading && uris.length < CS.PAGE_SIZE * page && uris.length % CS.PAGE_SIZE === 0);
   // Don't use the query from createNormalizedClaimSearchKey for the effect since that doesn't include page & release_time
   const optionsStringForEffect = JSON.stringify(options);
 
@@ -191,13 +225,13 @@ function ClaimListDiscover(props: Props) {
             again: (
               <Button
                 button="link"
-                label={__('Please try again in a few seconds.')}
+                label={__('try again in a few seconds.')}
                 onClick={() => setForceRefresh(Date.now())}
               />
             ),
           }}
         >
-          Sorry, your request timed out. %again%
+          Sorry, your request timed out. Modify your options or %again%
         </I18nMessage>
       </p>
       <p>
@@ -212,28 +246,45 @@ function ClaimListDiscover(props: Props) {
     </div>
   );
 
-  function getSearch() {
-    let search = `?`;
-    if (!personalView) {
-      search += `t=${tagsInUrl}&`;
-    }
-
-    return search;
-  }
-
-  function handleTypeSort(newTypeSort) {
-    let url = `${getSearch()}type=${newTypeSort}`;
-    if (newTypeSort === TYPE_TOP) {
-      url += `&time=${timeSort}`;
-    }
-
+  function handleChange(change) {
+    const url = buildUrl(change);
     setPage(1);
     history.push(url);
   }
 
-  function handleTimeSort(newTimeSort) {
-    setPage(1);
-    history.push(`${getSearch()}type=${typeSort}&time=${newTimeSort}`);
+  function buildUrl(delta) {
+    const newUrlParams = new URLSearchParams();
+    CS.KEYS.forEach(k => {
+      // $FlowFixMe append() can't take null as second arg, but get() can return null
+      if (urlParams.get(k) !== null) newUrlParams.append(k, urlParams.get(k));
+    });
+
+    switch (delta.key) {
+      case CS.ORDER_BY_KEY:
+        newUrlParams.set(CS.ORDER_BY_KEY, delta.value);
+        break;
+      case CS.FRESH_KEY:
+        newUrlParams.set(CS.FRESH_KEY, delta.value);
+        break;
+      case CS.CONTENT_KEY:
+        if (delta.value === CS.CLAIM_CHANNEL || delta.value === CS.CLAIM_REPOST) {
+          newUrlParams.delete(CS.DURATION_KEY);
+          newUrlParams.set(CS.CONTENT_KEY, delta.value);
+        } else if (delta.value === CS.CONTENT_ALL) {
+          newUrlParams.delete(CS.CONTENT_KEY);
+        } else {
+          newUrlParams.set(CS.CONTENT_KEY, delta.value);
+        }
+        break;
+      case CS.DURATION_KEY:
+        if (delta.value === CS.DURATION_ALL) {
+          newUrlParams.delete(CS.DURATION_KEY);
+        } else {
+          newUrlParams.set(CS.DURATION_KEY, delta.value);
+        }
+        break;
+    }
+    return `?${newUrlParams.toString()}`;
   }
 
   function handleScrollBottom() {
@@ -251,39 +302,151 @@ function ClaimListDiscover(props: Props) {
 
   const defaultHeader = (
     <Fragment>
-      {SEARCH_TYPES.map(type => (
-        <Button
-          key={type}
-          button="alt"
-          onClick={() => handleTypeSort(type)}
-          className={classnames(`button-toggle button-toggle--${type}`, {
-            'button-toggle--active': typeSort === type,
-          })}
-          icon={toCapitalCase(type)}
-          label={__(toCapitalCase(type))}
-        />
-      ))}
+      <div className={'claim-search__wrapper'}>
+        <div className={'claim-search__top'}>
+          <div className={'claim-search__top-row'}>
+            {CS.ORDER_BY_TYPES.map(type => (
+              <Button
+                key={type}
+                button="alt"
+                onClick={e =>
+                  handleChange({
+                    key: CS.ORDER_BY_KEY,
+                    value: type,
+                  })
+                }
+                className={classnames(`button-toggle button-toggle--${type}`, {
+                  'button-toggle--active': orderParam === type,
+                })}
+                disabled={orderBy}
+                icon={toCapitalCase(type)}
+                label={__(toCapitalCase(type))}
+              />
+            ))}
+          </div>
+          <div>
+            {!noCustom && (
+              <Button
+                button={'alt'}
+                aria-label={__('More')}
+                className={classnames(`button-toggle button-toggle--top button-toggle--more`, {
+                  'button-toggle--custom': isFiltered(),
+                })}
+                icon={toCapitalCase(ICONS.SLIDERS)}
+                onClick={() => setExpanded(!expanded)}
+              />
+            )}
+          </div>
+        </div>
+        {expanded && (
+          <>
+            <div className={classnames('card--inline', `claim-search__menus`)}>
+              {/* FRESHNESS FIELD */}
+              {orderParam === CS.ORDER_BY_TOP && (
+                <div className={'claim-search__input-container'}>
+                  <FormField
+                    className="claim-search__dropdown"
+                    type="select"
+                    name="trending_time"
+                    label={__('How Fresh')}
+                    value={freshnessParam}
+                    onChange={e =>
+                      handleChange({
+                        key: CS.FRESH_KEY,
+                        value: e.target.value,
+                      })
+                    }
+                  >
+                    {CS.FRESH_TYPES.map(time => (
+                      <option key={time} value={time}>
+                        {/* i18fixme */}
+                        {time === CS.FRESH_DAY && __('Today')}
+                        {time !== CS.FRESH_ALL &&
+                          time !== CS.FRESH_DAY &&
+                          __('This ' + toCapitalCase(time)) /* yes, concat before i18n, since it is read from const */}
+                        {time === CS.FRESH_ALL && __('All time')}
+                      </option>
+                    ))}
+                  </FormField>
+                </div>
+              )}
 
-      {typeSort === 'top' && (
-        <FormField
-          className="claim-list__dropdown"
-          type="select"
-          name="trending_time"
-          value={timeSort}
-          onChange={e => handleTimeSort(e.target.value)}
-        >
-          {SEARCH_TIMES.map(time => (
-            <option key={time} value={time}>
-              {/* i18fixme */}
-              {time === TIME_DAY && __('Today')}
-              {time !== TIME_ALL &&
-                time !== TIME_DAY &&
-                __('This ' + toCapitalCase(time)) /* yes, concat before i18n, since it is read from const */}
-              {time === TIME_ALL && __('All time')}
-            </option>
-          ))}
-        </FormField>
-      )}
+              {/* CONTENT_TYPES FIELD */}
+              <div
+                className={classnames('claim-search__input-container', {
+                  'claim-search__input-container--selected': contentTypeParam,
+                })}
+              >
+                <FormField
+                  className={classnames('claim-search__dropdown', {
+                    'claim-search__dropdown--selected': contentTypeParam,
+                  })}
+                  type="select"
+                  name="claimType"
+                  label={__('Content Type')}
+                  value={contentTypeParam || CS.CONTENT_ALL}
+                  onChange={e =>
+                    handleChange({
+                      key: CS.CONTENT_KEY,
+                      value: e.target.value,
+                    })
+                  }
+                >
+                  {CS.CONTENT_TYPES.map(type => {
+                    if (type !== CS.CLAIM_CHANNEL || (type === CS.CLAIM_CHANNEL && !channelIds)) {
+                      return (
+                        <option key={type} value={type}>
+                          {/* i18fixme */}
+                          {type === CS.CLAIM_CHANNEL && __('Channel')}
+                          {type === CS.CLAIM_REPOST && __('Repost')}
+                          {type === CS.FILE_VIDEO && __('Video')}
+                          {type === CS.FILE_AUDIO && __('Audio')}
+                          {type === CS.FILE_DOCUMENT && __('Document')}
+                          {type === CS.CONTENT_ALL && __('Any')}
+                        </option>
+                      );
+                    }
+                  })}
+                </FormField>
+              </div>
+              {options.claim_type !== CS.CLAIM_CHANNEL &&
+                options.claim_type !== CS.CLAIM_REPOST &&
+                JSON.stringify(options.stream_types) !== JSON.stringify([CS.FILE_DOCUMENT]) && (
+                  <>
+                    {/* DURATIONS FIELD */}
+                    <div className={'claim-search__input-container'}>
+                      <FormField
+                        className={classnames('claim-search__dropdown', {
+                          'claim-search__dropdown--selected': durationParam,
+                        })}
+                        label={__('Duration')}
+                        type="select"
+                        name="duration"
+                        value={durationParam || CS.DURATION_ALL}
+                        onChange={e =>
+                          handleChange({
+                            key: CS.DURATION_KEY,
+                            value: e.target.value,
+                          })
+                        }
+                      >
+                        {CS.DURATION_TYPES.map(dur => (
+                          <option key={dur} value={dur}>
+                            {/* i18fixme */}
+                            {dur === CS.DURATION_SHORT && __('Short')}
+                            {dur === CS.DURATION_LONG && __('Long')}
+                            {dur === CS.DURATION_ALL && __('Any')}
+                          </option>
+                        ))}
+                      </FormField>
+                    </div>
+                  </>
+                )}
+            </div>
+          </>
+        )}
+      </div>
+
       {hasMatureTags && hiddenNsfwMessage}
     </Fragment>
   );
@@ -299,7 +462,7 @@ function ClaimListDiscover(props: Props) {
         headerAltControls={meta}
         onScrollBottom={handleScrollBottom}
         page={page}
-        pageSize={PAGE_SIZE}
+        pageSize={CS.PAGE_SIZE}
         empty={noResults}
         renderProperties={renderProperties}
         includeSupportAction={includeSupportAction}
@@ -307,7 +470,7 @@ function ClaimListDiscover(props: Props) {
       />
 
       <div className="card">
-        {loading && new Array(PAGE_SIZE).fill(1).map((x, i) => <ClaimPreview key={i} placeholder="loading" />)}
+        {loading && new Array(CS.PAGE_SIZE).fill(1).map((x, i) => <ClaimPreview key={i} placeholder="loading" />)}
       </div>
     </React.Fragment>
   );

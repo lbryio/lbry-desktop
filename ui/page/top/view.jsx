@@ -3,7 +3,7 @@ import React from 'react';
 import Page from 'component/page';
 import ClaimListDiscover from 'component/claimListDiscover';
 import ClaimEffectiveAmount from 'component/claimEffectiveAmount';
-import { TYPE_TOP, TIME_ALL } from 'component/claimListDiscover/view';
+import { ORDER_BY_TOP, FRESH_ALL } from 'constants/claim_search';
 
 type Props = {
   name: string,
@@ -16,9 +16,8 @@ function TopPage(props: Props) {
     <Page>
       <ClaimListDiscover
         name={name}
-        defaultTypeSort={TYPE_TOP}
-        defaultTimeSort={TIME_ALL}
-        defaultOrderBy={['effective_amount']}
+        defaultFreshness={FRESH_ALL}
+        defaultOrderBy={ORDER_BY_TOP}
         includeSupportAction
         renderProperties={claim => (
           <span className="media__subtitle">
