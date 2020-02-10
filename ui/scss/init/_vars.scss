@@ -26,6 +26,7 @@ $breakpoint-medium: 1150px;
   --floating-viewer-height: 18rem; // 32 * 9/16
   --floating-viewer-info-height: 5rem;
   --floating-viewer-container-height: calc(var(--floating-viewer-height) + var(--floating-viewer-info-height));
+  --option-select-width: 8rem;
 
   // Text
   --text-max-width: 660px;

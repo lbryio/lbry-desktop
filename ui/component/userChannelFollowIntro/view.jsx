@@ -1,7 +1,7 @@
 // @flow
 import React from 'react';
 import ClaimListDiscover from 'component/claimListDiscover';
-import { TYPE_TOP, TIME_ALL } from 'component/claimListDiscover/view';
+import * as CS from 'constants/claim_search';
 import Nag from 'component/common/nag';
 
 type Props = {
@@ -22,7 +22,12 @@ function UserChannelFollowIntro(props: Props) {
         )}
       </p>
       <div className="section__body">
-        <ClaimListDiscover defaultTypeSort={TYPE_TOP} defaultTimeSort={TIME_ALL} claimType="channel" hideBlock />
+        <ClaimListDiscover
+          defaultTypeSort={CS.ORDER_BY_TOP}
+          defaultTimeSort={CS.FRESH_ALL}
+          claimType="channel"
+          hideBlock
+        />
         {followingCount > 0 && (
           <Nag
             type="helpful"

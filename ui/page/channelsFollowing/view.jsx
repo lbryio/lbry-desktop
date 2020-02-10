@@ -1,14 +1,13 @@
 // @flow
 import * as PAGES from 'constants/pages';
 import * as ICONS from 'constants/icons';
+import { ORDER_BY_NEW } from 'constants/claim_search';
 import React from 'react';
 import ChannelsFollowingDiscoverPage from 'page/channelsFollowingDiscover';
 import ClaimListDiscover from 'component/claimListDiscover';
 import Page from 'component/page';
 import Button from 'component/button';
 import Icon from 'component/common/icon';
-
-import { TYPE_NEW } from 'component/claimListDiscover/view';
 
 type Props = {
   subscribedChannels: Array<Subscription>,
@@ -29,7 +28,7 @@ function ChannelsFollowingPage(props: Props) {
             {__('Following')}
           </span>
         }
-        defaultTypeSort={TYPE_NEW}
+        defaultOrderBy={ORDER_BY_NEW}
         channelIds={subscribedChannels.map(sub => sub.uri.split('#')[1])}
         meta={
           <Button

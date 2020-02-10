@@ -6,7 +6,7 @@ import Page from 'component/page';
 import Button from 'component/button';
 import ClaimTilesDiscover from 'component/claimTilesDiscover';
 import ClaimListDiscover from 'component/claimListDiscover';
-import { TYPE_TOP, TIME_ALL } from 'component/claimListDiscover/view';
+import * as CS from 'constants/claim_search';
 import { toCapitalCase } from 'util/string';
 
 type Props = {
@@ -115,7 +115,7 @@ function ChannelsFollowingDiscover(props: Props) {
         </div>
       ))}
       <h1 className="claim-grid__title">{__('More Channels')}</h1>
-      <ClaimListDiscover defaultTypeSort={TYPE_TOP} defaultTimeSort={TIME_ALL} claimType="channel" />
+      <ClaimListDiscover defaultTypeSort={CS.ORDER_BY_TOP} defaultTimeSort={CS.FRESH_ALL} claimType="channel" />
     </Page>
   );
 }

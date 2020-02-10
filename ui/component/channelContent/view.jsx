@@ -4,7 +4,7 @@ import HiddenNsfwClaims from 'component/hiddenNsfwClaims';
 import { withRouter } from 'react-router-dom';
 import Button from 'component/button';
 import ClaimListDiscover from 'component/claimListDiscover';
-import { TYPE_NEW } from 'component/claimListDiscover/view';
+import * as CS from 'constants/claim_search';
 
 type Props = {
   uri: string,
@@ -51,7 +51,7 @@ function ChannelContent(props: Props) {
       {!channelIsMine && claimsInChannel > 0 && <HiddenNsfwClaims uri={uri} />}
 
       {claim && claimsInChannel > 0 ? (
-        <ClaimListDiscover channelIds={[claim.claim_id]} defaultTypeSort={TYPE_NEW} />
+        <ClaimListDiscover channelIds={[claim.claim_id]} defaultTypeSort={CS.ORDER_BY_NEW} />
       ) : (
         <section className="main--empty">This channel hasn't published anything yet</section>
       )}
