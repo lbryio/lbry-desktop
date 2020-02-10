@@ -29,19 +29,13 @@ function HomePage(props: Props) {
   let rowData: Array<RowDataItem> = [];
 
   if (!showAuthenticatedRows) {
-    rowData.push(
-      {
-        title: 'Trending On LBRY',
-        link: `/$/${PAGES.DISCOVER}`,
+    rowData.push({
+      title: 'Top Channels On LBRY',
+      options: {
+        orderBy: ['effective_amount'],
+        claimType: 'channel',
       },
-      {
-        title: 'Top Channels On LBRY',
-        options: {
-          orderBy: ['effective_amount'],
-          claimType: 'channel',
-        },
-      }
-    );
+    });
   }
 
   if (showAuthenticatedRows) {
