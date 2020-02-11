@@ -54,6 +54,11 @@
   text-overflow: ellipsis;
 }
 
+.media__uri--right {
+  @extend .media__uri;
+  right: 0;
+}
+
 .media__uri--large {
   margin-bottom: var(--spacing-medium);
 }

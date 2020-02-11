@@ -29,6 +29,7 @@ import SignInPage from 'page/signIn';
 import SignInVerifyPage from 'page/signInVerify';
 import ChannelsPage from 'page/channels';
 import EmbedWrapperPage from 'page/embedWrapper';
+import TopPage from 'page/top';
 
 // Tell the browser we are handling scroll restoration
 if ('scrollRestoration' in history) {
@@ -98,6 +99,7 @@ function AppRouter(props: Props) {
       <Route path={`/$/${PAGES.HELP}`} exact component={HelpPage} />
       <Route path={`/$/${PAGES.AUTH_VERIFY}`} exact component={SignInVerifyPage} />
       <Route path={`/$/${PAGES.SEARCH}`} exact component={SearchPage} />
+      <Route path={`/$/${PAGES.TOP}`} exact component={TopPage} />
       <Route path={`/$/${PAGES.SETTINGS}`} exact component={SettingsPage} />
       <Route path={`/$/${PAGES.INVITE}/:referrer`} exact component={InvitedPage} />
 

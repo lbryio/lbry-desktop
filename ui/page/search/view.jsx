@@ -1,5 +1,6 @@
 // @flow
 import * as ICONS from 'constants/icons';
+import * as PAGES from 'constants/pages';
 import React, { useEffect, Fragment } from 'react';
 import { regexInvalidURI } from 'lbry-redux';
 import ClaimPreview from 'component/claimPreview';
@@ -52,7 +53,18 @@ export default function SearchPage(props: Props) {
         {urlQuery && (
           <Fragment>
             <header className="search__header">
-              <ClaimUri uri={uriFromQuery} />
+              <div className="claim-preview__actions--header">
+                <ClaimUri uri={uriFromQuery} />
+                <Button
+                  className="media__uri--right"
+                  button="alt"
+                  label={__('View top claims for %normalized_uri%', {
+                    normalized_uri: uriFromQuery,
+                  })}
+                  navigate={`/$/${PAGES.TOP}?name=${modifiedUrlQuery}`}
+                  icon={ICONS.TOP}
+                />
+              </div>
               <div className="card">
                 <ClaimPreview uri={uriFromQuery} type="large" placeholder="publish" />
               </div>

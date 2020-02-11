@@ -49,7 +49,7 @@ type Props = {
   channelIsBlocked: boolean,
   isSubscribed: boolean,
   actions: boolean | Node | string | number,
-  properties: boolean | Node | string | number,
+  properties: boolean | Node | string | number | (Claim => Node),
   onClick?: any => any,
   hideBlock?: boolean,
   streamingUrl: ?string,
@@ -205,7 +205,6 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
       </li>
     );
   }
-
   if (!shouldFetch && showUnresolvedClaim && !isResolvingUri && claim === null) {
     return <AbandonedChannelPreview uri={uri} type />;
   }
@@ -284,7 +283,17 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
                   )}
                 </React.Fragment>
               )}
-              {properties !== undefined ? properties : <ClaimTags uri={uri} type={type} />}
+              {claim && (
+                <React.Fragment>
+                  {typeof properties === 'function' ? (
+                    properties(claim)
+                  ) : properties !== undefined ? (
+                    properties
+                  ) : (
+                    <ClaimTags uri={uri} type={type} />
+                  )}
+                </React.Fragment>
+              )}
             </div>
           )}
         </div>
