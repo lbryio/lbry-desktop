@@ -74,6 +74,12 @@ function ModalRepost(props: Props) {
     repostNameError = __('You already have a claim with this name.');
   }
 
+  React.useEffect(() => {
+    if ((repostNameError || repostNameError) && !showAdvanced) {
+      setShowAdvanced(true);
+    }
+  }, [repostBidError, repostNameError, showAdvanced, setShowAdvanced]);
+
   const channelStrings = channels && channels.map(channel => channel.permanent_url).join(',');
   React.useEffect(() => {
     if (!repostChannel && channelStrings) {
@@ -111,7 +117,6 @@ function ModalRepost(props: Props) {
     doHideModal();
   }
 
-  const showAdvancedSection = showAdvanced || repostNameError || repostBidError;
   return (
     <Modal isOpen type="card" onAborted={handleCloseModal} onConfirmed={handleCloseModal}>
       <Card
@@ -137,28 +142,32 @@ function ModalRepost(props: Props) {
               channel={repostChannel}
               onChannelChange={newChannel => setRepostChannel(newChannel)}
             />
-            <div className="section__actions">
-              {!showAdvancedSection && (
+            {!showAdvanced && (
+              <div className="section__actions">
                 <Button button="link" label={__('Advanced')} onClick={() => setShowAdvanced(true)} />
-              )}
-            </div>
-            {showAdvancedSection && (
+              </div>
+            )}
+
+            {showAdvanced && (
               <React.Fragment>
-                <fieldset-group class="fieldset-group--smushed fieldset-group--disabled-prefix">
-                  <fieldset-section>
-                    <label>{__('Name')}</label>
-                    <div className="form-field__prefix">{`lbry://${
-                      !repostChannel || repostChannel === CHANNEL_NEW ? '' : `${repostChannel}/`
-                    }`}</div>
-                  </fieldset-section>
-                  <FormField
-                    type="text"
-                    name="repost_name"
-                    value={repostName}
-                    error={repostNameError}
-                    onChange={event => setRepostName(event.target.value)}
-                  />
-                </fieldset-group>
+                <fieldset-section>
+                  <fieldset-group class="fieldset-group--smushed fieldset-group--disabled-prefix">
+                    <fieldset-section>
+                      <label>{__('Name')}</label>
+                      <div className="form-field__prefix">{`lbry://${
+                        !repostChannel || repostChannel === CHANNEL_NEW ? '' : `${repostChannel}/`
+                      }`}</div>
+                    </fieldset-section>
+                    <FormField
+                      type="text"
+                      name="repost_name"
+                      value={repostName}
+                      error={repostNameError}
+                      onChange={event => setRepostName(event.target.value)}
+                    />
+                  </fieldset-group>
+                </fieldset-section>
+
                 <div className="form-field__help">
                   <I18nMessage
                     tokens={{
