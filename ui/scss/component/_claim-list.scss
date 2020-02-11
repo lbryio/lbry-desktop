@@ -120,8 +120,6 @@
 
 .claim-preview--large {
   border: none;
-  padding: 0;
-  padding: var(--spacing-small);
 
   &:hover {
     background-color: transparent;
@@ -226,6 +224,10 @@
   justify-content: space-between;
   margin-top: auto;
   width: 100%;
+}
+
+.claim-preview__actions--header {
+  @extend .claim-preview__actions;
 }
 
 .claim-preview__button {

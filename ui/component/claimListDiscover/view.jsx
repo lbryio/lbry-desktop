@@ -13,11 +13,11 @@ import { toCapitalCase } from 'util/string';
 import I18nMessage from 'component/i18nMessage';
 
 const PAGE_SIZE = 20;
-const TIME_DAY = 'day';
-const TIME_WEEK = 'week';
-const TIME_MONTH = 'month';
-const TIME_YEAR = 'year';
-const TIME_ALL = 'all';
+export const TIME_DAY = 'day';
+export const TIME_WEEK = 'week';
+export const TIME_MONTH = 'month';
+export const TIME_YEAR = 'year';
+export const TIME_ALL = 'all';
 
 export const TYPE_TRENDING = 'trending';
 export const TYPE_TOP = 'top';
@@ -45,7 +45,12 @@ type Props = {
   hiddenNsfwMessage?: Node,
   channelIds?: Array<string>,
   defaultTypeSort?: string,
+  defaultTimeSort?: string,
+  defaultOrderBy?: Array<string>,
+  header?: Node,
   headerLabel?: string | Node,
+  name?: string,
+  renderProperties?: Claim => Node,
 };
 
 function ClaimListDiscover(props: Props) {
@@ -63,7 +68,12 @@ function ClaimListDiscover(props: Props) {
     hiddenUris,
     hiddenNsfwMessage,
     defaultTypeSort,
+    defaultTimeSort,
+    defaultOrderBy,
     headerLabel,
+    header,
+    name,
+    renderProperties,
   } = props;
   const didNavigateForward = history.action === 'PUSH';
   const [page, setPage] = useState(1);
@@ -71,7 +81,7 @@ function ClaimListDiscover(props: Props) {
   const [forceRefresh, setForceRefresh] = useState();
   const urlParams = new URLSearchParams(search);
   const typeSort = urlParams.get('type') || defaultTypeSort || TYPE_TRENDING;
-  const timeSort = urlParams.get('time') || TIME_WEEK;
+  const timeSort = urlParams.get('time') || defaultTimeSort || TIME_WEEK;
   const tagsInUrl = urlParams.get('t') || '';
   const options: {
     page_size: number,
@@ -83,9 +93,11 @@ function ClaimListDiscover(props: Props) {
     not_tags: Array<string>,
     order_by: Array<string>,
     release_time?: string,
+    name?: string,
   } = {
     page_size: PAGE_SIZE,
     page,
+    name,
     // no_totals makes it so the sdk doesn't have to calculate total number pages for pagination
     // it's faster, but we will need to remove it if we start using total_pages
     no_totals: true,
@@ -96,11 +108,12 @@ function ClaimListDiscover(props: Props) {
       !channelIds && hiddenUris && hiddenUris.length ? hiddenUris.map(hiddenUri => hiddenUri.split('#')[1]) : [],
     not_tags: !showNsfw ? MATURE_TAGS : [],
     order_by:
-      typeSort === TYPE_TRENDING
+      defaultOrderBy ||
+      (typeSort === TYPE_TRENDING
         ? ['trending_group', 'trending_mixed']
         : typeSort === TYPE_NEW
         ? ['release_time']
-        : ['effective_amount'], // Sort by top
+        : ['effective_amount']), // Sort by top
   };
 
   if (typeSort === TYPE_TOP && timeSort !== TIME_ALL) {
@@ -216,7 +229,7 @@ function ClaimListDiscover(props: Props) {
     }
   }, [doClaimSearch, shouldPerformSearch, optionsStringForEffect, forceRefresh]);
 
-  const header = (
+  const defaultHeader = (
     <Fragment>
       {SEARCH_TYPES.map(type => (
         <Button
@@ -261,13 +274,14 @@ function ClaimListDiscover(props: Props) {
         id={claimSearchCacheQuery}
         loading={loading}
         uris={uris}
-        header={header}
+        header={header || defaultHeader}
         headerLabel={headerLabel}
         headerAltControls={meta}
         onScrollBottom={handleScrollBottom}
         page={page}
         pageSize={PAGE_SIZE}
         empty={noResults}
+        renderProperties={renderProperties}
       />
 
       <div className="card">

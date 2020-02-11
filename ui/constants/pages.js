@@ -28,3 +28,4 @@ exports.WALLET = 'wallet';
 exports.BLOCKED = 'blocked';
 exports.CHANNELS = 'channels';
 exports.EMBED = 'embed';
+exports.TOP = 'top';

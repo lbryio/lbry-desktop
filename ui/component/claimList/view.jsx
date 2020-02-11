@@ -30,6 +30,7 @@ type Props = {
   showHiddenByUser: boolean,
   headerLabel?: string | Node,
   showUnresolvedClaims?: boolean,
+  renderProperties: ?(Claim) => Node,
 };
 
 export default function ClaimList(props: Props) {
@@ -49,6 +50,7 @@ export default function ClaimList(props: Props) {
     showHiddenByUser,
     headerLabel,
     showUnresolvedClaims,
+    renderProperties,
   } = props;
   const [scrollBottomCbMap, setScrollBottomCbMap] = useState({});
   const [currentSort, setCurrentSort] = usePersistedState(persistedStorageKey, SORT_NEW);
@@ -133,7 +135,7 @@ export default function ClaimList(props: Props) {
               uri={uri}
               type={type}
               showUnresolvedClaim={showUnresolvedClaims}
-              properties={type !== 'small' ? undefined : false}
+              properties={renderProperties || (type !== 'small' ? undefined : false)}
               showUserBlocked={showHiddenByUser}
               customShouldHide={(claim: StreamClaim) => {
                 // Hack to hide spee.ch thumbnail publishes
