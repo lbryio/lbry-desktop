@@ -152,6 +152,10 @@
   opacity: 0.6;
 }
 
+.claim-preview--padded {
+  padding: var(--spacing-small);
+}
+
 .claim-preview--inline {
   .channel-thumbnail {
     width: var(--channel-thumbnail-width--small);
