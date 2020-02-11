@@ -266,25 +266,27 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
             </div>
             <ClaimPreviewSubtitle uri={uri} type={type} />
           </div>
-          <div className="claim-preview__actions">
-            {!pending && (
-              <React.Fragment>
-                {hideActions ? null : actions !== undefined ? (
-                  actions
-                ) : (
-                  <div className="card__actions--inline">
-                    {isChannel && !channelIsBlocked && !claimIsMine && (
-                      <SubscribeButton uri={uri.startsWith('lbry://') ? uri : `lbry://${uri}`} />
-                    )}
-                    {!hideBlock && isChannel && !isSubscribed && !claimIsMine && (
-                      <BlockButton uri={uri.startsWith('lbry://') ? uri : `lbry://${uri}`} />
-                    )}
-                  </div>
-                )}
-              </React.Fragment>
-            )}
-            {properties !== undefined ? properties : <ClaimTags uri={uri} type={type} />}
-          </div>
+          {type !== 'small' && (
+            <div className="claim-preview__actions">
+              {!pending && (
+                <React.Fragment>
+                  {hideActions ? null : actions !== undefined ? (
+                    actions
+                  ) : (
+                    <div className="card__actions--inline">
+                      {isChannel && !channelIsBlocked && !claimIsMine && (
+                        <SubscribeButton uri={uri.startsWith('lbry://') ? uri : `lbry://${uri}`} />
+                      )}
+                      {!hideBlock && isChannel && !isSubscribed && !claimIsMine && (
+                        <BlockButton uri={uri.startsWith('lbry://') ? uri : `lbry://${uri}`} />
+                      )}
+                    </div>
+                  )}
+                </React.Fragment>
+              )}
+              {properties !== undefined ? properties : <ClaimTags uri={uri} type={type} />}
+            </div>
+          )}
         </div>
       </div>
     </li>

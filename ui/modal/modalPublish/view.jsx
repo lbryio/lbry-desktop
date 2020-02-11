@@ -3,6 +3,7 @@ import React from 'react';
 import { Modal } from 'modal/modal';
 import ClaimPreview from 'component/claimPreview';
 import Button from 'component/button';
+import Card from 'component/common/card';
 
 type Props = {
   closeModal: () => void,
@@ -19,41 +20,50 @@ class ModalPublishSuccess extends React.PureComponent<Props> {
     const contentLabel = isEdit ? 'Update published' : 'File published';
     const publishMessage = isEdit ? 'update is now' : 'file is now';
 
+    function handleClose() {
+      clearPublish();
+      closeModal();
+    }
+
     return (
-      <Modal
-        isOpen
-        title={__('Success')}
-        contentLabel={__(contentLabel)}
-        onConfirmed={() => {
-          clearPublish();
-          navigate('/$/published');
-          closeModal();
-        }}
-        confirmButtonLabel={__('View My Publishes')}
-        abortButtonLabel={__('Close')}
-        onAborted={() => {
-          clearPublish();
-          closeModal();
-        }}
-      >
-        <p className="section__subtitle">
-          {__(`Your %publishMessage% pending on LBRY. It will take a few minutes to appear for other users.`, {
+      <Modal isOpen type="card" contentLabel={__(contentLabel)} onAborted={handleClose}>
+        <Card
+          title={__('Success')}
+          subtitle={__(`Your %publishMessage% pending on LBRY. It will take a few minutes to appear for other users.`, {
             publishMessage,
           })}
-        </p>
-        <div className="card--inline">
-          <ClaimPreview type="small" uri={uri} />
-        </div>
-        <p className="help">
-          {filePath && !IS_WEB && (
+          body={
             <React.Fragment>
-              {__(
-                `Upload will continue in the background, please do not shut down immediately. Leaving the app running helps the network, thank you!`
-              )}{' '}
-              <Button button="link" href="https://lbry.com/faq/host-content" label={__('Learn More')} />
+              <div className="card--inline">
+                <ClaimPreview type="small" uri={uri} />
+              </div>
+              {filePath && !IS_WEB && (
+                <p className="help">
+                  <React.Fragment>
+                    {__(
+                      `Upload will continue in the background, please do not shut down immediately. Leaving the app running helps the network, thank you!`
+                    )}{' '}
+                    <Button button="link" href="https://lbry.com/faq/host-content" label={__('Learn More')} />
+                  </React.Fragment>
+                </p>
+              )}
             </React.Fragment>
-          )}
-        </p>
+          }
+          actions={
+            <React.Fragment>
+              <Button
+                button="primary"
+                label={__('View My Publishes')}
+                onClick={() => {
+                  clearPublish();
+                  navigate('/$/published');
+                  closeModal();
+                }}
+              />
+              <Button button="link" label={__('Close')} onClick={handleClose} />
+            </React.Fragment>
+          }
+        />
       </Modal>
     );
   }
