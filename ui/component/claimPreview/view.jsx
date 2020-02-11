@@ -224,7 +224,7 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
         'claim-preview__wrapper--small': type === 'small',
       })}
     >
-      {type !== 'large' && type !== 'inline' && <ClaimRepostAuthor uri={uri} />}
+      <ClaimRepostAuthor uri={uri} />
 
       <div
         className={classnames('claim-preview', {

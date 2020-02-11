@@ -54,7 +54,7 @@ export default function SearchPage(props: Props) {
           <Fragment>
             <header className="search__header">
               <div className="claim-preview__actions--header">
-                <ClaimUri uri={uriFromQuery} />
+                <ClaimUri uri={uriFromQuery} noShortUrl />
                 <Button
                   className="media__uri--right"
                   button="alt"
