@@ -58,6 +58,14 @@ class FileDetails extends PureComponent<Props> {
                 <td> {__('Bid Amount')}</td>
                 <td>{claim.amount} LBC</td>
               </tr>
+              <tr>
+                <td> {__('Effective Amount')}</td>
+                <td>{claim.meta.effective_amount} LBC</td>
+              </tr>
+              <tr>
+                <td> {__('Claim ID')}</td>
+                <td>{claim.claim_id}</td>
+              </tr>
               {fileSize && (
                 <tr>
                   <td> {__('File Size')}</td>
