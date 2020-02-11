@@ -9,16 +9,17 @@ type Props = {
   uri: string,
   doToast: ({ message: string }) => void,
   inline?: boolean,
+  noShortUrl?: boolean,
 };
 
 function ClaimUri(props: Props) {
-  const { shortUrl, uri, doToast, inline = false } = props;
+  const { shortUrl, uri, doToast, inline = false, noShortUrl = false } = props;
 
   return (
     <Button
       className={classnames('media__uri', { 'media__uri--inline': inline })}
       button="alt"
-      label={shortUrl || uri}
+      label={noShortUrl ? uri : shortUrl || uri}
       onClick={() => {
         clipboard.writeText(shortUrl || uri);
         doToast({
