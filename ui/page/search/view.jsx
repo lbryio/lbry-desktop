@@ -1,7 +1,7 @@
 // @flow
 import * as ICONS from 'constants/icons';
 import React, { useEffect, Fragment } from 'react';
-import { isURIValid, normalizeURI, regexInvalidURI } from 'lbry-redux';
+import { regexInvalidURI } from 'lbry-redux';
 import ClaimPreview from 'component/claimPreview';
 import ClaimList from 'component/claimList';
 import Page from 'component/page';
@@ -27,28 +27,18 @@ type Props = {
 export default function SearchPage(props: Props) {
   const { search, uris, onFeedbackPositive, onFeedbackNegative, location, isSearching, showNsfw } = props;
   const urlParams = new URLSearchParams(location.search);
-  const urlQuery = urlParams.get('q');
+  const urlQuery = urlParams.get('q') || '';
   const additionalOptions: AdditionalOptions = { isBackgroundSearch: false };
   if (!showNsfw) {
     additionalOptions['nsfw'] = false;
   }
 
-  let normalizedUri;
-  let isUriValid;
-  if (isURIValid(urlQuery)) {
-    isUriValid = true;
-    normalizedUri = normalizeURI(urlQuery);
-  } else {
-    let INVALID_URI_CHARS = new RegExp(regexInvalidURI, 'gu');
-    let modifiedUrlQuery = urlQuery
-      ? urlQuery
-          .trim()
-          .replace(/\s+/g, '-')
-          .replace(INVALID_URI_CHARS, '')
-      : '';
-    isUriValid = isURIValid(modifiedUrlQuery);
-    normalizedUri = isUriValid && normalizeURI(modifiedUrlQuery);
-  }
+  const INVALID_URI_CHARS = new RegExp(regexInvalidURI, 'gu');
+  const modifiedUrlQuery = urlQuery
+    .trim()
+    .replace(/\s+/g, '-')
+    .replace(INVALID_URI_CHARS, '');
+  const uriFromQuery = `lbry://${modifiedUrlQuery}`;
 
   useEffect(() => {
     if (urlQuery) {
@@ -61,14 +51,12 @@ export default function SearchPage(props: Props) {
       <section className="search">
         {urlQuery && (
           <Fragment>
-            {isUriValid && (
-              <header className="search__header">
-                <ClaimUri uri={normalizedUri} />
-                <div className="card">
-                  <ClaimPreview uri={normalizedUri} type="large" placeholder="publish" />
-                </div>
-              </header>
-            )}
+            <header className="search__header">
+              <ClaimUri uri={uriFromQuery} />
+              <div className="card">
+                <ClaimPreview uri={uriFromQuery} type="large" placeholder="publish" />
+              </div>
+            </header>
 
             <ClaimList
               uris={uris}
