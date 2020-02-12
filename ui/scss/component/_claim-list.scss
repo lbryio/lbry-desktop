@@ -426,7 +426,7 @@
 }
 
 .claim-preview__repost-author {
-  transform: translateY(calc(var(--spacing-small) * -1));
+  transform: translateY(calc(var(--spacing-xsmall) * -1));
   font-size: var(--font-xsmall);
   color: var(--color-text-subtitle);
 
