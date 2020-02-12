@@ -14,6 +14,7 @@ import { buildSharedStateMiddleware, ACTIONS as LBRY_REDUX_ACTIONS } from 'lbry-
 import { doGetSync, selectUserVerifiedEmail } from 'lbryinc';
 import { getSavedPassword } from 'util/saved-passwords';
 import { makeSelectClientSetting } from 'redux/selectors/settings';
+import { generateInitialUrl } from 'util/url';
 
 function isFunction(object) {
   return typeof object === 'function';
@@ -96,14 +97,8 @@ const persistOptions = {
 
 let history;
 // @if TARGET='app'
-let initialEntry = '/';
-let hash = window.location.hash;
-if (hash) {
-  hash = hash.replace('#', '');
-  initialEntry = hash.startsWith('/') ? hash : '/' + hash;
-}
 history = createMemoryHistory({
-  initialEntries: [initialEntry],
+  initialEntries: [generateInitialUrl(window.location.hash)],
   initialIndex: 0,
 });
 // @endif
