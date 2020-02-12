@@ -54,6 +54,12 @@ class FileDetails extends PureComponent<Props> {
                 <td> {__('Content Type')}</td>
                 <td>{mediaType}</td>
               </tr>
+              {fileSize && (
+                <tr>
+                  <td> {__('File Size')}</td>
+                  <td>{fileSize}</td>
+                </tr>
+              )}
               <tr>
                 <td> {__('Bid Amount')}</td>
                 <td>{claim.amount} LBC</td>
@@ -63,15 +69,14 @@ class FileDetails extends PureComponent<Props> {
                 <td>{claim.meta.effective_amount} LBC</td>
               </tr>
               <tr>
+                <td> {__('Is Controlling')}</td>
+                <td>{claim.meta.is_controlling ? __('Yes') : __('No')}</td>
+              </tr>
+              <tr>
                 <td> {__('Claim ID')}</td>
                 <td>{claim.claim_id}</td>
               </tr>
-              {fileSize && (
-                <tr>
-                  <td> {__('File Size')}</td>
-                  <td>{fileSize}</td>
-                </tr>
-              )}
+
               {languages && (
                 <tr>
                   <td>{__('Languages')}</td>
