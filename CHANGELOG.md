@@ -4,7 +4,24 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
-## [0.40.1] - [Unreleased]
+## [0.42.0] - [Unreleased]
+
+### Added
+
+- Ability to repost claims ([#3663](https://github.com/lbryio/lbry-desktop/pull/3663))
+- New page for top claims for a specific claim name ([#3674](https://github.com/lbryio/lbry-desktop/pull/3674))
+- Language support for Danish, Romanian, and Urdu ([#3657](https://github.com/lbryio/lbry-desktop/pull/3657))
+- Ability to unfollow abandoned channels ([#3636](https://github.com/lbryio/lbry-desktop/pull/3636))
+
+### Changed
+
+- Improvements to text file layouts ([#3511](https://github.com/lbryio/lbry-desktop/pull/3511))
+
+### Fixed
+
+- Always navigate backwards after deleting and abandoning a claim ([#3642](https://github.com/lbryio/lbry-desktop/pull/3642))
+
+## [0.41.0] - [2020-2-5]
 
 ### Added
 
@@ -25,7 +42,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Don't autoplay paid content or content from blocked channels ([#3570](https://github.com/lbryio/lbry-desktop/pull/3570))
 - Make claim previews right clickable ([#3631](https://github.com/lbryio/lbry-desktop/pull/3631))
 
-## [0.39.1] - [2019-1-24]
+## [0.39.1] - [2020-1-24]
 
 ### Added
 
@@ -36,7 +53,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Home page tiles not loading in some cases ([#3539](https://github.com/lbryio/lbry-desktop/pull/3539))
 - Spellcheck not working on the advanced publish description ([c6230ba](https://github.com/lbryio/lbry-desktop/commit/c6230ba024a1e1e84ea2be32aff234027cbb02d5))
 
-## [0.39.0] - [2019-1-22]
+## [0.39.0] - [2020-1-22]
 
 ### Added
 
