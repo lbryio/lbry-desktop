@@ -929,7 +929,6 @@
   "Custom": "Custom",
   "Playing in %seconds_left% seconds": "Playing in %seconds_left% seconds",
   "Up Next by %channel%": "Up Next by %channel%",
-  "Install Now": "Install Now",
   "Repost": "Repost",
   "Repost your favorite claims to help more people discover them!": "Repost your favorite claims to help more people discover them!",
   "Advanced": "Advanced",
@@ -941,5 +940,13 @@
   "Effective Amount": "Effective Amount",
   "Is Controlling": "Is Controlling",
   "Claim ID": "Claim ID",
-  "Official YouTube Creator - Last updated %time_ago%": "Official YouTube Creator - Last updated %time_ago%"
+  "Official YouTube Creator - Last updated %time_ago%": "Official YouTube Creator - Last updated %time_ago%",
+  "Install Now": "Install Now",
+  "Invite Link": "Invite Link",
+  "Share this link with friends (or enemies) and get %reward_amount% LBC when they join lbry.tv": "Share this link with friends (or enemies) and get %reward_amount% LBC when they join lbry.tv",
+  "Your invite link": "Your invite link",
+  "rewards": "rewards",
+  "Invite by Email": "Invite by Email",
+  "Invite someone you know by email and earn %reward_amount% LBC when they join lbry.tv.": "Invite someone you know by email and earn %reward_amount% LBC when they join lbry.tv.",
+  "Earn %rewards_link% for inviting your friends. Read our %referral_faq_link% to learn more.": "Earn %rewards_link% for inviting your friends. Read our %referral_faq_link% to learn more."
 }
