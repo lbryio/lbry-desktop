@@ -936,5 +936,10 @@
   "community name": "community name",
   "Change this to repost to a different %lbry_naming_link%.": "Change this to repost to a different %lbry_naming_link%.",
   "Reposting": "Reposting",
-  "Woohoo! Sucessfully reposted this claim.": "Woohoo! Sucessfully reposted this claim."
+  "Woohoo! Sucessfully reposted this claim.": "Woohoo! Sucessfully reposted this claim.",
+  "Bid Amount": "Bid Amount",
+  "Effective Amount": "Effective Amount",
+  "Is Controlling": "Is Controlling",
+  "Claim ID": "Claim ID",
+  "Official YouTube Creator - Last updated %time_ago%": "Official YouTube Creator - Last updated %time_ago%"
 }

@@ -1,6 +1,9 @@
 // @flow
+import * as ICONS from 'constants/icons';
+import * as MODALS from 'constants/modal_types';
 import React, { useState, useEffect } from 'react';
 import { parseURI } from 'lbry-redux';
+import { Lbryio } from 'lbryinc';
 import Page from 'component/page';
 import SubscribeButton from 'component/subscribeButton';
 import BlockButton from 'component/blockButton';
@@ -15,14 +18,13 @@ import ChannelDiscussion from 'component/channelDiscussion';
 import ChannelThumbnail from 'component/channelThumbnail';
 import ChannelEdit from 'component/channelEdit';
 import ClaimUri from 'component/claimUri';
-import * as ICONS from 'constants/icons';
 import classnames from 'classnames';
-import * as MODALS from 'constants/modal_types';
 import { Form, FormField } from 'component/common/form';
 import Icon from 'component/common/icon';
 import HelpLink from 'component/common/help-link';
 import { DEBOUNCE_WAIT_DURATION_MS } from 'constants/search';
 import ClaimList from 'component/claimList';
+import relativeDate from 'tiny-relative-date';
 
 const PAGE_VIEW_QUERY = `view`;
 const ABOUT_PAGE = `about`;
@@ -86,6 +88,7 @@ function ChannelPage(props: Props) {
   const [coverPreview, setCoverPreview] = useState(cover);
   const [searchQuery, setSearchQuery] = useState('');
   const [searchResults, setSearchResults] = useState(undefined);
+  const [lastYtSyncDate, setLastYtSyncDate] = useState();
   const claimId = claim.claim_id;
 
   // If a user changes tabs, update the url so it stays on the same page if they refresh.
@@ -138,6 +141,14 @@ function ChannelPage(props: Props) {
     return () => clearTimeout(timer);
   }, [claimId, searchQuery]);
 
+  useEffect(() => {
+    Lbryio.call('yt', 'get_youtuber', { channel_claim_id: claimId }).then(response => {
+      if (response.is_verified_youtuber) {
+        setLastYtSyncDate(response.last_synced);
+      }
+    });
+  }, [claimId]);
+
   function handleInputChange(e) {
     const { value } = e.target;
     setSearchQuery(value);
@@ -179,6 +190,12 @@ function ChannelPage(props: Props) {
     <Page>
       <ClaimUri uri={uri} />
 
+      {lastYtSyncDate && (
+        <div className="media__uri--right">
+          <Icon icon={ICONS.VALIDATED} size={12} />
+          {__('Official YouTube Creator - Last updated %time_ago%', { time_ago: relativeDate(lastYtSyncDate) })}
+        </div>
+      )}
       <header className="channel-cover">
         <div className="channel__quick-actions">
           {!channelIsBlocked && !channelIsBlackListed && <ShareButton uri={uri} isChannel />}
