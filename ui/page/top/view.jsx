@@ -2,6 +2,7 @@
 import React from 'react';
 import Page from 'component/page';
 import ClaimListDiscover from 'component/claimListDiscover';
+import ClaimEffectiveAmount from 'component/claimEffectiveAmount';
 import { TYPE_TOP, TIME_ALL } from 'component/claimListDiscover/view';
 
 type Props = {
@@ -18,7 +19,11 @@ function TopPage(props: Props) {
         defaultTypeSort={TYPE_TOP}
         defaultTimeSort={TIME_ALL}
         defaultOrderBy={['effective_amount']}
-        renderProperties={claim => <span className="media__subtitle">{claim.meta.effective_amount} LBC</span>}
+        renderProperties={claim => (
+          <span className="media__subtitle">
+            <ClaimEffectiveAmount uri={claim.repost_url || claim.canonical_url} />
+          </span>
+        )}
         header={<span>{__('Top claims at lbry://%name%', { name })}</span>}
       />
     </Page>
