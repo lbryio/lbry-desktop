@@ -6,6 +6,7 @@ import { history } from './store';
 // @if TARGET='app'
 import Native from 'native';
 import ElectronCookies from '@exponent/electron-cookies';
+import { generateInitialUrl } from 'util/url';
 // @endif
 
 const isProduction = process.env.NODE_ENV === 'production';
@@ -253,7 +254,9 @@ analytics.pageView(window.location.pathname + window.location.search);
 // @if TARGET='app'
 ReactGA.set({ checkProtocolTask: null });
 ReactGA.set({ location: 'https://lbry.tv' });
-analytics.pageView(window.location.pathname.split('.html')[1] + window.location.search || '/');
+analytics.pageView(
+  window.location.pathname.split('.html')[1] + window.location.search || generateInitialUrl(window.location.hash)
+);
 // @endif;
 
 // Listen for url changes and report

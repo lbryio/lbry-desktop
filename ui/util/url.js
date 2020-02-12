@@ -61,3 +61,12 @@ exports.formatWebUrlIntoLbryUrl = (pathname, search) => {
 
   return appLink;
 };
+
+exports.generateInitialUrl = hash => {
+  let url = '/';
+  if (hash) {
+    hash = hash.replace('#', '');
+    url = hash.startsWith('/') ? hash : '/' + hash;
+  }
+  return url;
+};
