@@ -44,6 +44,12 @@
     position: static;
     transform: none;
   }
+
+  // This is terrible and should not be removed
+  .icon {
+    margin-right: var(--spacing-xsmall) / 2;
+    margin-bottom: -0.08rem;
+  }
 }
 
 .media__uri--inline {

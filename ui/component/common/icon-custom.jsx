@@ -407,4 +407,9 @@ export const icons = {
       <circle cx="12" cy="19" r="1" />
     </g>
   ),
+  [ICONS.VALIDATED]: buildIcon(
+    <g>
+      <polyline points="20 6 9 17 4 12" />
+    </g>
+  ),
 };
