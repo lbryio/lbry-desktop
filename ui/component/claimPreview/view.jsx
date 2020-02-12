@@ -14,6 +14,7 @@ import ClaimTags from 'component/claimTags';
 import SubscribeButton from 'component/subscribeButton';
 import ChannelThumbnail from 'component/channelThumbnail';
 import BlockButton from 'component/blockButton';
+import ClaimSupportButton from 'component/claimSupportButton';
 import useGetThumbnail from 'effects/use-get-thumbnail';
 import ClaimPreviewTitle from 'component/claimPreviewTitle';
 import ClaimPreviewSubtitle from 'component/claimPreviewSubtitle';
@@ -56,6 +57,7 @@ type Props = {
   getFile: string => void,
   customShouldHide?: Claim => boolean,
   showUnresolvedClaim?: boolean,
+  includeSupportAction?: boolean,
 };
 
 const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
@@ -87,6 +89,7 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
     streamingUrl,
     customShouldHide,
     showUnresolvedClaim,
+    includeSupportAction,
   } = props;
   const shouldFetch =
     claim === undefined || (claim !== null && claim.value_type === 'channel' && isEmpty(claim.meta) && !pending);
@@ -279,6 +282,7 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
                       {!hideBlock && isChannel && !isSubscribed && !claimIsMine && (
                         <BlockButton uri={uri.startsWith('lbry://') ? uri : `lbry://${uri}`} />
                       )}
+                      {includeSupportAction && <ClaimSupportButton uri={uri} />}
                     </div>
                   )}
                 </React.Fragment>

@@ -51,6 +51,7 @@ type Props = {
   headerLabel?: string | Node,
   name?: string,
   renderProperties?: Claim => Node,
+  includeSupportAction?: boolean,
 };
 
 function ClaimListDiscover(props: Props) {
@@ -74,6 +75,7 @@ function ClaimListDiscover(props: Props) {
     header,
     name,
     renderProperties,
+    includeSupportAction,
   } = props;
   const didNavigateForward = history.action === 'PUSH';
   const [page, setPage] = useState(1);
@@ -282,6 +284,7 @@ function ClaimListDiscover(props: Props) {
         pageSize={PAGE_SIZE}
         empty={noResults}
         renderProperties={renderProperties}
+        includeSupportAction={includeSupportAction}
       />
 
       <div className="card">

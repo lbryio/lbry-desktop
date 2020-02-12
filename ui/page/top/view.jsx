@@ -19,6 +19,7 @@ function TopPage(props: Props) {
         defaultTypeSort={TYPE_TOP}
         defaultTimeSort={TIME_ALL}
         defaultOrderBy={['effective_amount']}
+        includeSupportAction
         renderProperties={claim => (
           <span className="media__subtitle">
             <ClaimEffectiveAmount uri={claim.repost_url || claim.canonical_url} />
