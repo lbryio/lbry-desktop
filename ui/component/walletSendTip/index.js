@@ -11,7 +11,7 @@ import WalletSendTip from './view';
 const select = (state, props) => ({
   isPending: selectIsSendingSupport(state),
   title: makeSelectTitleForUri(props.uri)(state),
-  claim: makeSelectClaimForUri(props.uri)(state),
+  claim: makeSelectClaimForUri(props.uri, false)(state),
   balance: selectBalance(state),
 });
 

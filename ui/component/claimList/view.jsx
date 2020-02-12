@@ -31,6 +31,7 @@ type Props = {
   headerLabel?: string | Node,
   showUnresolvedClaims?: boolean,
   renderProperties: ?(Claim) => Node,
+  includeSupportAction?: boolean,
 };
 
 export default function ClaimList(props: Props) {
@@ -51,6 +52,7 @@ export default function ClaimList(props: Props) {
     headerLabel,
     showUnresolvedClaims,
     renderProperties,
+    includeSupportAction,
   } = props;
   const [scrollBottomCbMap, setScrollBottomCbMap] = useState({});
   const [currentSort, setCurrentSort] = usePersistedState(persistedStorageKey, SORT_NEW);
@@ -134,6 +136,7 @@ export default function ClaimList(props: Props) {
               key={uri}
               uri={uri}
               type={type}
+              includeSupportAction={includeSupportAction}
               showUnresolvedClaim={showUnresolvedClaims}
               properties={renderProperties || (type !== 'small' ? undefined : false)}
               showUserBlocked={showHiddenByUser}
