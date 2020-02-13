@@ -88,17 +88,22 @@ function AppRouter(props: Props) {
     uri,
     title,
   } = props;
-  const { channelName, streamName } = parseURI(uri);
   const { entries } = history;
   const entryIndex = history.index;
 
   useEffect(() => {
-    if (typeof title !== 'undefined' && title !== '') {
-      document.title = title;
-    } else if (typeof streamName !== 'undefined' && streamName !== 'undefined' && streamName !== '') {
-      document.title = streamName;
-    } else if (typeof channelName !== 'undefined' && channelName !== '') {
-      document.title = channelName;
+    if (uri) {
+      const { channelName, streamName } = parseURI(uri);
+
+      if (typeof title !== 'undefined' && title !== '') {
+        document.title = title;
+      } else if (streamName) {
+        document.title = streamName;
+      } else if (channelName) {
+        document.title = channelName;
+      } else {
+        document.title = IS_WEB ? SITE_TITLE : 'LBRY';
+      }
     } else {
       document.title = IS_WEB ? SITE_TITLE : 'LBRY';
     }
@@ -109,7 +114,7 @@ function AppRouter(props: Props) {
     return () => {
       document.title = IS_WEB ? SITE_TITLE : 'LBRY';
     };
-  }, [channelName, entries, entryIndex, streamName, title]);
+  }, [entries, entryIndex, title, uri]);
 
   useEffect(() => {
     window.scrollTo(0, currentScroll);
