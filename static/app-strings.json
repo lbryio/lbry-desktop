@@ -948,5 +948,12 @@
   "rewards": "rewards",
   "Invite by Email": "Invite by Email",
   "Invite someone you know by email and earn %reward_amount% LBC when they join lbry.tv.": "Invite someone you know by email and earn %reward_amount% LBC when they join lbry.tv.",
-  "Earn %rewards_link% for inviting your friends. Read our %referral_faq_link% to learn more.": "Earn %rewards_link% for inviting your friends. Read our %referral_faq_link% to learn more."
+  "Earn %rewards_link% for inviting your friends. Read our %referral_faq_link% to learn more.": "Earn %rewards_link% for inviting your friends. Read our %referral_faq_link% to learn more.",
+  "Recommended ratio is 1:1": "Recommended ratio is 1:1",
+  "Recommended ratio is 6.25:1": "Recommended ratio is 6.25:1",
+  "Tags Selected": "Tags Selected",
+  "After submitting, you will not see the changes immediately. Please check back in a few minutes.": "After submitting, you will not see the changes immediately. Please check back in a few minutes.",
+  "Thumbnail Recommended ratio is 1:1": "Thumbnail Recommended ratio is 1:1",
+  "Cover Recommended ratio is 6.25:1": "Cover Recommended ratio is 6.25:1",
+  "You already have a claim with this name.": "You already have a claim with this name."
 }
