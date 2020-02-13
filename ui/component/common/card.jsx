@@ -18,7 +18,7 @@ export default function Card(props: Props) {
   const { title, subtitle, body, actions, icon, className, actionIconPadding = true } = props;
   return (
     <section className={classnames(className, 'card')}>
-      {title && (
+      {(title || subtitle) && (
         <div className="card__header">
           <div className="section__flex">
             {icon && <Icon sectionIcon icon={icon} />}
