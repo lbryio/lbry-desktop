@@ -5,6 +5,7 @@ import Button from 'component/button';
 import CardVerify from 'component/cardVerify';
 import { Lbryio } from 'lbryinc';
 import Card from 'component/common/card';
+import I18nMessage from 'component/i18nMessage';
 
 type Props = {
   errorMessage: ?string,
@@ -31,14 +32,22 @@ class UserVerify extends React.PureComponent<Props> {
     return (
       <React.Fragment>
         <section className="section__header">
-          <h1 className="section__title--large">{__('Extra Verification Needed')}</h1>
+          <h1 className="section__title--large">{__('Rewards Validation')}</h1>
           <p>
-            {__(
-              "We weren't able to auto-approve you for rewards. Please complete one of the steps below to unlock them."
-            )}{' '}
+            <I18nMessage
+              tokens={{
+                rewards_program: (
+                  <Button button="link" label={__('Rewards Program')} href="https://lbry.com/faq/rewards" />
+                ),
+              }}
+            >
+              If you'd like to participate our %rewards_program% to earn credits, please complete one of the steps below
+              to be validated.
+            </I18nMessage>{' '}
             <Button onClick={() => fetchUser()} button="link" label={__('Refresh')} /> {'or'}{' '}
             <Button navigate={skipLink || '/'} button="link" label={__('Skip')} />.
           </p>
+          <p>{__('This step is not required to use LBRY, and not all users or regions may qualify.')}</p>
         </section>
 
         <div className="section">
@@ -102,7 +111,7 @@ class UserVerify extends React.PureComponent<Props> {
             icon={ICONS.CHAT}
             title={__('Proof via Chat')}
             subtitle={__(
-              'A moderator capable of approving you is typically available in the discord server. Check out the #rewards-approval channel for more information. This process will likely involve providing proof of a stable and established online or real-life identity.'
+              'A moderator capable of approving you is typically available in the discord server. See the #rewards-approval instructions carefully and do not message any moderators directly. This process will likely involve providing proof of a stable and established online or real-life identity.'
             )}
             actions={
               <Fragment>

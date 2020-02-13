@@ -145,7 +145,10 @@ function PublishForm(props: Props) {
           hideHeader
           label={__('Selected Tags')}
           empty={__('No tags added')}
-          placeholder={__('Add a tag...')}
+          help={__(
+            'Only apply a few tags that are relevant to your content, and use the Mature tag as appropriate. Tag abuse will not be tolerated.'
+          )}
+          placeholder={__('Add relevant tags...')}
           onSelect={newTags => {
             const validatedTags = [];
             newTags.forEach(newTag => {
