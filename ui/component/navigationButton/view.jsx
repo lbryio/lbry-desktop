@@ -9,7 +9,7 @@ const MAX_HISTORY_SIZE = 12;
 type Props = {
   isBackward: boolean,
   history: {
-    entries: { key: string, title: string }[],
+    entries: Array<{ key: string, title: string, pathname: string }>,
     go: number => void,
     goBack: () => void,
     goForward: () => void,
@@ -44,19 +44,22 @@ const NavigationButton = (props: Props) => {
 
   // creates an <li> intended for the button's <ul>
   const makeItem = useCallback(
-    (entry, index) => {
+    (entry: { pathname: string, title: string, key: string }, index: number) => {
       // difference between the current index and the index of the entry
       const backwardDif = index - (currentIndex < MAX_HISTORY_SIZE ? currentIndex : MAX_HISTORY_SIZE);
       const forwardDif = index + 1;
       return (
         <li
+          className="header__navigation-button"
+          role="link"
           key={entry.key}
           onMouseDown={() => {
             setShowHistory(false);
             go(isBackward ? backwardDif : forwardDif);
           }}
         >
-          {entry.title}
+          <span>{entry.title}</span>
+          <span className="header__navigation-button-help">{entry.pathname === '/' ? __('Home') : entry.pathname}</span>
         </li>
       );
     },
@@ -81,7 +84,7 @@ const NavigationButton = (props: Props) => {
         iconSize={18}
         disabled={slicedEntries.length === 0}
       />
-      {showHistory && <ul className={'header__navigaiton-dropdown'}>{slicedEntries.map(makeItem)}</ul>}
+      {showHistory && <ul className={'header__navigation-dropdown'}>{slicedEntries.map(makeItem)}</ul>}
     </div>
   );
 };
