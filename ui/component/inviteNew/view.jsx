@@ -16,10 +16,12 @@ type Props = {
   referralLink: string,
   referralCode: string,
   channels: ?Array<ChannelClaim>,
+  resolvingUris: Array<string>,
+  resolveUris: (Array<string>) => void,
 };
 
 function InviteNew(props: Props) {
-  const { inviteNew, errorMessage, isPending, referralCode = '', channels } = props;
+  const { inviteNew, errorMessage, isPending, referralCode = '', channels, resolveUris, resolvingUris } = props;
   const rewardAmount = 20;
 
   // Email
@@ -34,6 +36,9 @@ function InviteNew(props: Props) {
 
   // Referral link
   const [referralSource, setReferralSource] = useState(referralCode);
+  /* Canonical Referral links
+   * We need to make sure our channels are resolved so that canonical_url is present
+   */
 
   function handleReferralChange(code) {
     setReferralSource(code);
@@ -43,6 +48,13 @@ function InviteNew(props: Props) {
       analytics.apiLogPublish(matchingChannel);
     }
   }
+
+  const [resolveStarted, setResolveStarted] = useState(false);
+  const [hasResolved, setHasResolved] = useState(false);
+  // join them so that useEffect doesn't update on new objects
+  const uris = channels && channels.map(channel => channel.permanent_url).join(',');
+  const channelCount = channels && channels.length;
+  const resolvingCount = resolvingUris && resolvingUris.length;
 
   const topChannel =
     channels &&
@@ -59,11 +71,26 @@ function InviteNew(props: Props) {
   const referral = `${URL}/$/invite/${referralString.replace('#', ':')}`;
 
   useEffect(() => {
+    // resolve once, after we have channel list
+    if (!hasResolved && !resolveStarted && channelCount && uris) {
+      setResolveStarted(true);
+      resolveUris(uris.split(','));
+    }
+  }, [channelCount, resolveStarted, hasResolved, resolvingCount, uris]);
+
+  useEffect(() => {
+    // once resolving count is 0, we know we're done
+    if (resolveStarted && !hasResolved && resolvingCount === 0) {
+      setHasResolved(true);
+    }
+  }, [resolveStarted, hasResolved, resolvingCount]);
+
+  useEffect(() => {
     // set default channel
-    if (topChannel) {
+    if (topChannel && hasResolved) {
       handleReferralChange(topChannel.name);
     }
-  }, [topChannel]);
+  }, [topChannel, hasResolved]);
 
   function lookupUrlByClaimName(name, channels) {
     const claim = channels.find(channel => channel.name === name);
