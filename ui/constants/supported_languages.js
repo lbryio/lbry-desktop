@@ -1,8 +1,8 @@
 import LANGUAGES from './languages';
 
 const SUPPORTED_LANGUAGES = {
-  da: LANGUAGES.da[1],
   en: LANGUAGES.en[1],
+  da: LANGUAGES.da[1],
   zh: LANGUAGES.zh[1],
   hr: LANGUAGES.hr[1],
   nl: LANGUAGES.nl[1],
@@ -11,6 +11,7 @@ const SUPPORTED_LANGUAGES = {
   gu: LANGUAGES.gu[1],
   hi: LANGUAGES.hi[1],
   id: LANGUAGES.id[1],
+  jv: LANGUAGES.jv[1],
   it: LANGUAGES.it[1],
   ms: LANGUAGES.ms[1],
   ml: LANGUAGES.ml[1],
