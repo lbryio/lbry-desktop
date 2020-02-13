@@ -36,6 +36,8 @@ type Props = {
   getFile: string => void,
   placeholder: boolean,
   streamingUrl: string,
+  isMature: boolean,
+  showMature: boolean,
 };
 
 function ClaimPreviewTile(props: Props) {
@@ -53,6 +55,8 @@ function ClaimPreviewTile(props: Props) {
     getFile,
     streamingUrl,
     blockedChannelUris,
+    isMature,
+    showMature,
   } = props;
   const isRepost = claim && claim.repost_channel_url;
   const shouldFetch = claim === undefined;
@@ -99,6 +103,12 @@ function ClaimPreviewTile(props: Props) {
   }, [isValid, isResolvingUri, uri, resolveUri, shouldFetch]);
 
   let shouldHide = false;
+
+  if (isMature && !showMature) {
+    // Unfortunately needed until this is resolved
+    // https://github.com/lbryio/lbry-sdk/issues/2785
+    shouldHide = true;
+  }
 
   // This will be replaced once blocking is done at the wallet server level
   if (claim && !shouldHide && blackListedOutpoints) {

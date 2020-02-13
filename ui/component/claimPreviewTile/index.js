@@ -8,8 +8,10 @@ import {
   doFileGet,
   makeSelectChannelForClaimUri,
   selectBlockedChannels,
+  makeSelectClaimIsNsfw,
 } from 'lbry-redux';
 import { selectBlackListedOutpoints, selectFilteredOutpoints } from 'lbryinc';
+import { selectShowMatureContent } from 'redux/selectors/settings';
 import ClaimPreviewTile from './view';
 
 const select = (state, props) => ({
@@ -21,6 +23,8 @@ const select = (state, props) => ({
   blackListedOutpoints: selectBlackListedOutpoints(state),
   filteredOutpoints: selectFilteredOutpoints(state),
   blockedChannelUris: selectBlockedChannels(state),
+  showMature: selectShowMatureContent(state),
+  isMature: makeSelectClaimIsNsfw(props.uri)(state),
 });
 
 const perform = dispatch => ({
