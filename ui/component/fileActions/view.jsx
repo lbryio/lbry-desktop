@@ -55,6 +55,7 @@ function FileActions(props: Props) {
           button="alt"
           icon={ICONS.REPOST}
           label={__('Repost')}
+          requiresAuth={IS_WEB}
           onClick={() => openModal(MODALS.REPOST, { uri })}
         />
 
