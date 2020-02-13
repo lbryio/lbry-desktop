@@ -27,9 +27,10 @@ class FileDetails extends PureComponent<Props> {
     const { description, languages, license } = metadata;
 
     const mediaType = contentType || 'unknown';
-    const fileSize = metadata.source.size
-      ? formatBytes(metadata.source.size)
-      : fileInfo && fileInfo.download_path && formatBytes(fileInfo.written_bytes);
+    const fileSize =
+      metadata.source && metadata.source.size
+        ? formatBytes(metadata.source.size)
+        : fileInfo && fileInfo.download_path && formatBytes(fileInfo.written_bytes);
     let downloadPath = fileInfo && fileInfo.download_path ? path.normalize(fileInfo.download_path) : null;
     let downloadNote;
     // If the path is blank, file is not available. Streamed files won't have any blobs saved
