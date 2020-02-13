@@ -83,7 +83,7 @@ class TransactionListItem extends React.PureComponent<Props> {
           <span>{this.capitalize(type)}</span> {isRevokeable && this.getLink(type)}
         </td>
         <td>
-          {forClaim && <Button button="link" navigate={uri} label={claimName} />}
+          {forClaim && <Button button="link" navigate={uri} label={claimName} disabled={!date} />}
           {!forClaim && reward && <span>{reward.reward_title}</span>}
         </td>
 
