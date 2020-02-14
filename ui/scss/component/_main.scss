@@ -118,4 +118,8 @@
   width: 40em;
   max-width: unset;
   min-width: unset;
+  
+  @media (max-width: $breakpoint-small) {
+    width: 100%;
+  }
 }
