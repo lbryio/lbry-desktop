@@ -61,7 +61,7 @@ class FilePage extends React.Component<Props> {
     }
 
     // @if TARGET='app'
-    if (fileInfo === undefined) {
+    if (prevProps.uri !== uri && fileInfo === undefined) {
       fetchFileInfo(uri);
     }
     // @endif
@@ -77,6 +77,7 @@ class FilePage extends React.Component<Props> {
   render() {
     const { uri, claimIsMine, costInfo, fileInfo, balance, isText } = this.props;
     const insufficientCredits = !claimIsMine && costInfo && costInfo.cost > balance;
+
     return (
       <Page className="main--file-page">
         {!fileInfo && insufficientCredits && (

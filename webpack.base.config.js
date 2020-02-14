@@ -12,7 +12,7 @@ const STATIC_ROOT = path.resolve(__dirname, 'static/');
 
 let baseConfig = {
   mode: ifProduction('production', 'development'),
-  devtool: ifProduction('source-map', 'eval-cheap-source-map'),
+  devtool: ifProduction('source-map', 'eval-cheap-module-source-map'),
   optimization: {
     minimizer: [
       new TerserPlugin({

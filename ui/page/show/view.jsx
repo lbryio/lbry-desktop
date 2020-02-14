@@ -1,5 +1,6 @@
 // @flow
 import React, { useEffect } from 'react';
+import { Redirect } from 'react-router-dom';
 import { parseURI } from 'lbry-redux';
 import BusyIndicator from 'component/common/busy-indicator';
 import ChannelPage from 'page/channel';
@@ -9,6 +10,7 @@ import Button from 'component/button';
 import { SITE_TITLE } from 'config';
 import Card from 'component/common/card';
 import AbandonedChannelPreview from 'component/abandonedChannelPreview';
+import { formatLbryUrlForWeb } from 'util/url';
 
 type Props = {
   isResolvingUri: boolean,
@@ -74,14 +76,17 @@ function ShowPage(props: Props) {
     };
   }, [title, channelName, streamName]);
 
-  let innerContent = '';
+  // Don't navigate directly to repost urls
+  // Always redirect to the actual content
+  // Also need to add repost_url to the Claim type for flow
+  // $FlowFixMe
+  if (claim && claim.repost_url === uri) {
+    const newUrl = formatLbryUrlForWeb(claim.canonical_url);
+    return <Redirect to={newUrl} />;
+  }
 
+  let innerContent = '';
   if (!claim || (claim && !claim.name)) {
-    if (claim && !claim.name) {
-      // While testing the normalization changes, Brannon found that `name` was missing sometimes
-      // This shouldn't happen, so hopefully this helps track it down
-      console.error('No name for associated claim: ', claim.claim_id); // eslint-disable-line no-console
-    }
     innerContent = (
       <Page>
         {(claim === undefined || isResolvingUri) && <BusyIndicator message={__('Loading decentralized data...')} />}
