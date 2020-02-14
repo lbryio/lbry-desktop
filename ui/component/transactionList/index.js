@@ -7,6 +7,7 @@ import {
   selectTransactionListFilter,
   doSetTransactionListFilter,
   selectIsFetchingTransactions,
+  selectTransactionItems,
 } from 'lbry-redux';
 import { withRouter } from 'react-router';
 import TransactionList from './view';
@@ -17,6 +18,7 @@ const select = state => ({
   myClaims: selectAllMyClaimsByOutpoint(state),
   filterSetting: selectTransactionListFilter(state),
   loading: selectIsFetchingTransactions(state),
+  allTransactions: selectTransactionItems(state),
 });
 
 const perform = dispatch => ({
