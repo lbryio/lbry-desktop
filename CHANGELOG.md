@@ -9,6 +9,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Added
 
 - Right click to navigate history on desktop ([#3650](https://github.com/lbryio/lbry-desktop/pull/3650))
+- Javanese language support ([#3685](https://github.com/lbryio/lbry-desktop/pull/3685))
 
 ### Changed
 
