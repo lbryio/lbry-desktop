@@ -7,13 +7,7 @@ import {
   selectUserInviteReferralCode,
   doUserInviteNew,
 } from 'lbryinc';
-import {
-  selectMyChannelClaims,
-  selectFetchingMyChannels,
-  doFetchChannelListMine,
-  doResolveUris,
-  selectResolvingUris,
-} from 'lbry-redux';
+import { selectMyChannelClaims, selectFetchingMyChannels, doFetchChannelListMine } from 'lbry-redux';
 import InviteNew from './view';
 
 const select = state => ({
@@ -24,13 +18,11 @@ const select = state => ({
   isPending: selectUserInviteNewIsPending(state),
   channels: selectMyChannelClaims(state),
   fetchingChannels: selectFetchingMyChannels(state),
-  resolvingUris: selectResolvingUris(state),
 });
 
 const perform = dispatch => ({
   inviteNew: email => dispatch(doUserInviteNew(email)),
   fetchChannelListMine: () => dispatch(doFetchChannelListMine()),
-  resolveUris: uris => dispatch(doResolveUris(uris)),
 });
 
 export default connect(
