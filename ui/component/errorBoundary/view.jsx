@@ -18,13 +18,14 @@ type Props = {
 
 type State = {
   hasError: boolean,
-  eventId: ?string,
+  sentryEventId: ?string,
+  desktopErrorReported: boolean,
 };
 
 class ErrorBoundary extends React.Component<Props, State> {
   constructor() {
     super();
-    this.state = { hasError: false, eventId: undefined };
+    this.state = { hasError: false, sentryEventId: undefined, desktopErrorReported: false };
 
     (this: any).refresh = this.refresh.bind(this);
   }
@@ -34,26 +35,23 @@ class ErrorBoundary extends React.Component<Props, State> {
   }
 
   componentDidCatch(error, errorInfo) {
-    // analytics.error(error, errorInfo).then(eventId => {
-    //   this.setState({ eventId });
-    // });
-    let errorMessage = 'Uncaught error\n';
-
     // @if TARGET='web'
-    errorMessage += 'lbry.tv\n';
-    errorMessage += `page: ${window.location.pathname + window.location.search}\n`;
-    errorMessage += error.stack;
-    analytics.error(errorMessage);
-
+    analytics.sentryError(error, errorInfo).then(sentryEventId => {
+      this.setState({ sentryEventId });
+    });
     // @endif
+
     // @if TARGET='app'
+    let errorMessage = 'Uncaught error\n';
     Native.getAppVersionInfo().then(({ localVersion }) => {
       Lbry.version().then(({ lbrynet_version: sdkVersion }) => {
         errorMessage += `app version: ${localVersion}\n`;
         errorMessage += `sdk version: ${sdkVersion}\n`;
         errorMessage += `page: ${window.location.href.split('.html')[1]}\n`;
         errorMessage += `${error.stack}`;
-        analytics.error(errorMessage);
+        analytics.error(errorMessage).then(isSharingData => {
+          this.setState({ desktopErrorReported: isSharingData });
+        });
       });
     });
     // @endif
@@ -69,6 +67,9 @@ class ErrorBoundary extends React.Component<Props, State> {
 
   render() {
     const { hasError } = this.state;
+    const { sentryEventId, desktopErrorReported } = this.state;
+
+    const errorWasReported = IS_WEB ? sentryEventId !== null : desktopErrorReported;
 
     if (hasError) {
       return (
@@ -94,18 +95,24 @@ class ErrorBoundary extends React.Component<Props, State> {
               </I18nMessage>
             }
           />
-          {/* {eventId === null && (
+          {!errorWasReported && (
             <div className="error-wrapper">
               <span className="error-text">
                 {__('You are not currently sharing diagnostic data so this error was not reported.')}
               </span>
             </div>
           )}
-          {eventId && (
+
+          {errorWasReported && (
             <div className="error-wrapper">
-              <span className="error-text">{__('Error ID: %eventId%', { eventId })}</span>
+              {/* @if TARGET='web' */}
+              <span className="error-text">{__('Error ID: %sentryEventId%', { sentryEventId })}</span>
+              {/* @endif */}
+              {/* @if TARGET='app' */}
+              <span className="error-text">{__('This error was reported and will be fixed.')}</span>
+              {/* @endif */}
             </div>
-          )} */}
+          )}
         </div>
       );
     }
