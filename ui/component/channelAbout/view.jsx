@@ -1,8 +1,10 @@
 // @flow
 import React, { Fragment } from 'react';
 import MarkdownPreview from 'component/common/markdown-preview';
+import ClaimTags from 'component/claimTags';
 
 type Props = {
+  uri: string,
   description: ?string,
   email: ?string,
   website: ?string,
@@ -18,7 +20,7 @@ const formatEmail = (email: string) => {
 };
 
 function ChannelContent(props: Props) {
-  const { description, email, website } = props;
+  const { uri, description, email, website } = props;
   const showAbout = description || email || website;
 
   return (
@@ -47,6 +49,11 @@ function ChannelContent(props: Props) {
               </div>
             </Fragment>
           )}
+
+          <label>{__('Tags')}</label>
+          <div className="media__info-text">
+            <ClaimTags uri={uri} type="large" />
+          </div>
         </Fragment>
       )}
     </section>
