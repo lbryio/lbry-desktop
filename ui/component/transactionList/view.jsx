@@ -18,13 +18,24 @@ type Props = {
   setTransactionFilter: string => void,
   slim?: boolean,
   title: string,
+  allTransactions: Array<Transaction>,
   transactions: Array<Transaction>,
   transactionCount?: number,
   history: { replace: string => void },
 };
 
 function TransactionList(props: Props) {
-  const { emptyMessage, slim, filterSetting, title, transactions, loading, history, transactionCount } = props;
+  const {
+    emptyMessage,
+    slim,
+    filterSetting,
+    title,
+    transactions,
+    loading,
+    history,
+    transactionCount,
+    allTransactions,
+  } = props;
   // Flow offers little support for Object.values() typing.
   // https://github.com/facebook/flow/issues/2221
   // $FlowFixMe
@@ -49,7 +60,7 @@ function TransactionList(props: Props) {
             {/* @if TARGET='app' */}
             {!slim && (
               <FileExporter
-                data={transactions}
+                data={allTransactions}
                 label={__('Export')}
                 title={__('Export Transactions')}
                 filters={['nout']}
