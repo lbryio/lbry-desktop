@@ -1,4 +1,4 @@
 [defaults]
-url = https://sentry.io/
+url = https://sentry.lbry.tech/
 org = lbry
-project = lbry-desktop
+project = lbry-desktop-web
