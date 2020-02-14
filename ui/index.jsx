@@ -1,5 +1,5 @@
 import 'babel-polyfill';
-// import * as Sentry from '@sentry/browser';
+import * as Sentry from '@sentry/browser';
 import ErrorBoundary from 'component/errorBoundary';
 import App from 'component/app';
 import SnackBar from 'component/snackBar';
@@ -47,12 +47,12 @@ import apiPublishCallViaWeb from 'lbrytv/setup/publish';
 // Will only work if you have a SENTRY_AUTH_TOKEN env
 // We still add code in analytics.js to send the error to sentry manually
 // If it's caught by componentDidCatch in component/errorBoundary, it will not bubble up to this error reporter
-// if (process.env.NODE_ENV === 'production') {
-// Sentry.init({
-//   dsn: 'https://f93af3fa9c94470d9a0a22602cce3154@sentry.io/1877677',
-//   blacklistUrls: ['assets.revcontent.com'],
-// });
-// }
+if (process.env.NODE_ENV === 'production') {
+  Sentry.init({
+    dsn: 'https://1f3c88e2e4b341328a638e138a60fb73@sentry.lbry.tech/2',
+    whitelistUrls: [/\/public\/ui.js/],
+  });
+}
 
 const PROXY_PATH = 'api/v1/proxy';
 export const SDK_API_URL = `${process.env.SDK_API_URL}/${PROXY_PATH}` || `https://api.lbry.tv/${PROXY_PATH}`;
