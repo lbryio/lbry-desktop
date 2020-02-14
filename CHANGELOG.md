@@ -4,7 +4,17 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
-## [0.42.0] - [Unreleased]
+## [0.4x.x] - [Unreleased]
+
+### Added
+
+- Right click to navigate history on desktop ([#3650](https://github.com/lbryio/lbry-desktop/pull/3650))
+
+### Changed
+
+### Fixed
+
+## [0.42.0] - [2020-02-14]
 
 ### Added
 
@@ -22,7 +32,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 - Always navigate backwards after deleting and abandoning a claim ([#3642](https://github.com/lbryio/lbry-desktop/pull/3642))
 
-## [0.41.0] - [2020-2-5]
+## [0.41.0] - [2020-02-05]
 
 ### Added
 
@@ -43,7 +53,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Don't autoplay paid content or content from blocked channels ([#3570](https://github.com/lbryio/lbry-desktop/pull/3570))
 - Make claim previews right clickable ([#3631](https://github.com/lbryio/lbry-desktop/pull/3631))
 
-## [0.39.1] - [2020-1-24]
+## [0.39.1] - [2020-01-24]
 
 ### Added
 
@@ -54,7 +64,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Home page tiles not loading in some cases ([#3539](https://github.com/lbryio/lbry-desktop/pull/3539))
 - Spellcheck not working on the advanced publish description ([c6230ba](https://github.com/lbryio/lbry-desktop/commit/c6230ba024a1e1e84ea2be32aff234027cbb02d5))
 
-## [0.39.0] - [2020-1-22]
+## [0.39.0] - [2020-01-22]
 
 ### Added
 
