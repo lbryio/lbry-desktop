@@ -7,6 +7,7 @@ import Page from 'component/page';
 import Button from 'component/button';
 import ClaimTilesDiscover from 'component/claimTilesDiscover';
 import Icon from 'component/common/icon';
+import I18nMessage from 'component/i18nMessage';
 import { parseURI } from 'lbry-redux';
 import { toCapitalCase } from 'util/string';
 
@@ -193,6 +194,26 @@ function HomePage(props: Props) {
 
   return (
     <Page>
+      {(authenticated || !IS_WEB) && !subscribedChannels.length && (
+        <div className="notice-message">
+          <h1 className="section__title">{__('LBRY Works Better If You Are Following Channels')}</h1>
+          <p className="section__subtitle">
+            <I18nMessage
+              tokens={{
+                discover_channels_link: (
+                  <Button
+                    button="link"
+                    navigate={`/$/${PAGES.CHANNELS_FOLLOWING_DISCOVER}`}
+                    label={__('Find new channels to follow')}
+                  />
+                ),
+              }}
+            >
+              You aren't currently following any channels. %discover_channels_link%.
+            </I18nMessage>
+          </p>
+        </div>
+      )}
       {rowData.map(({ title, link, help, options = {} }) => (
         <div key={title} className="claim-grid__wrapper">
           <h1 className="section__actions">

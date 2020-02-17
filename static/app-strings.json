@@ -957,5 +957,10 @@
   "Cover Recommended ratio is 6.25:1": "Cover Recommended ratio is 6.25:1",
   "You already have a claim with this name.": "You already have a claim with this name.",
   "You are not currently sharing diagnostic data so this error was not reported.": "You are not currently sharing diagnostic data so this error was not reported.",
-  "Go to Invites": "Go to Invites"
+  "Go to Invites": "Go to Invites",
+  "Find Channels to Follow": "Find Channels to Follow",
+  "Sign in with lbry.tv to receive notifications about new content.": "Sign in with lbry.tv to receive notifications about new content.",
+  "Find new channels to follow": "Find new channels to follow",
+  "You aren't currently following any channels. %discover_channels_link%.": "You aren't currently following any channels. %discover_channels_link%.",
+  "LBRY Works Better If You Are Following Channels": "LBRY Works Better If You Are Following Channels"
 }

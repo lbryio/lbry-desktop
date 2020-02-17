@@ -314,7 +314,7 @@
 
   @media (min-width: $breakpoint-medium) {
     &:first-child,
-    &:nth-child(5n) {
+    &:nth-child(4n + 1) {
       margin-left: 0;
     }
   }

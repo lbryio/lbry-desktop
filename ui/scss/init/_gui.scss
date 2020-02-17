@@ -257,3 +257,9 @@ a {
 .download-text {
   font-size: var(--font-xsmall);
 }
+
+.notice-message {
+  border-radius: var(--border-radius);
+  padding: var(--spacing-large);
+  background-color: var(--color-primary-alt);
+}

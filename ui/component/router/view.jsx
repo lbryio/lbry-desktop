@@ -21,7 +21,7 @@ import WalletPage from 'page/wallet';
 import TagsPage from 'page/tags';
 import TagsFollowingPage from 'page/tagsFollowing';
 import ChannelsFollowingPage from 'page/channelsFollowing';
-import ChannelsFollowingManagePage from 'page/channelsFollowingManage';
+import ChannelsFollowingDiscoverPage from 'page/channelsFollowingDiscover';
 import TagsFollowingManagePage from 'page/tagsFollowingManage';
 import ListBlockedPage from 'page/listBlocked';
 import FourOhFourPage from 'page/fourOhFour';
@@ -130,6 +130,8 @@ function AppRouter(props: Props) {
 
   return (
     <Switch>
+      <Redirect from={`/$/${PAGES.CHANNELS_FOLLOWING_MANAGE}`} to={`/$/${PAGES.CHANNELS_FOLLOWING_DISCOVER}`} />
+
       <Route path={`/`} exact component={HomePage} />
       <Route path={`/$/${PAGES.DISCOVER}`} exact component={DiscoverPage} />
       <Route path={`/$/${PAGES.AUTH}`} exact component={SignInPage} />
@@ -140,7 +142,7 @@ function AppRouter(props: Props) {
         exact
         component={isAuthenticated || !IS_WEB ? ChannelsFollowingPage : DiscoverPage}
       />
-      <Route path={`/$/${PAGES.CHANNELS_FOLLOWING_MANAGE}`} exact component={ChannelsFollowingManagePage} />
+      <Route path={`/$/${PAGES.CHANNELS_FOLLOWING_DISCOVER}`} exact component={ChannelsFollowingDiscoverPage} />
       <Route path={`/$/${PAGES.HELP}`} exact component={HelpPage} />
       <Route path={`/$/${PAGES.AUTH_VERIFY}`} exact component={SignInVerifyPage} />
       <Route path={`/$/${PAGES.SEARCH}`} exact component={SearchPage} />
