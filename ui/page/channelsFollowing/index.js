@@ -1,20 +1,9 @@
 import { connect } from 'react-redux';
-import { selectUserVerifiedEmail } from 'lbryinc';
-import { selectSubscriptions, selectSuggestedChannels } from 'redux/selectors/subscriptions';
-import { doFetchRecommendedSubscriptions } from 'redux/actions/subscriptions';
-import DiscoverPage from './view';
+import { selectSubscriptions } from 'redux/selectors/subscriptions';
+import ChannelsFollowingPage from './view';
 
 const select = state => ({
   subscribedChannels: selectSubscriptions(state),
-  email: selectUserVerifiedEmail(state),
-  suggestedSubscriptions: selectSuggestedChannels(state),
 });
 
-const perform = {
-  doFetchRecommendedSubscriptions,
-};
-
-export default connect(
-  select,
-  perform
-)(DiscoverPage);
+export default connect(select)(ChannelsFollowingPage);

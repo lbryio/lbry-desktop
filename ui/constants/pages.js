@@ -24,6 +24,7 @@ exports.TAGS_FOLLOWING = 'following/tags';
 exports.TAGS_FOLLOWING_MANAGE = 'following/tags/manage';
 exports.CHANNELS_FOLLOWING = 'following/channels';
 exports.CHANNELS_FOLLOWING_MANAGE = 'following/channels/manage';
+exports.CHANNELS_FOLLOWING_DISCOVER = 'following/channels/discover';
 exports.WALLET = 'wallet';
 exports.BLOCKED = 'blocked';
 exports.CHANNELS = 'channels';
