@@ -24,7 +24,7 @@ function ChannelsFollowingDiscover(props: Props) {
     options: {
       pageSize: 12,
       claimType: 'channel',
-      orderBy: ['effective_amount'],
+      orderBy: ['trending_global', 'trending_mixed'],
     },
   });
 
