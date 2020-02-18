@@ -16,6 +16,7 @@ type Props = {
   tags: Array<string>,
   hiddenUris: Array<string>,
   channelIds?: Array<string>,
+  notChannelIds?: Array<string>,
   pageSize: number,
   orderBy?: Array<string>,
   releaseTime?: string,
@@ -33,6 +34,7 @@ function ClaimTilesDiscover(props: Props) {
     // Below are options to pass that are forwarded to claim_search
     tags,
     channelIds,
+    notChannelIds,
     orderBy,
     pageSize = 8,
     releaseTime,
@@ -61,8 +63,9 @@ function ClaimTilesDiscover(props: Props) {
     not_tags: !showNsfw ? MATURE_TAGS : [],
     channel_ids: channelIds || [],
     not_channel_ids:
+      notChannelIds ||
       // If channelIds were passed in, we don't need not_channel_ids
-      !channelIds && hiddenUris && hiddenUris.length ? hiddenUris.map(hiddenUri => hiddenUri.split('#')[1]) : [],
+      (!channelIds && hiddenUris && hiddenUris.length ? hiddenUris.map(hiddenUri => hiddenUri.split('#')[1]) : []),
     order_by: orderBy || ['trending_group', 'trending_mixed'],
   };
 
