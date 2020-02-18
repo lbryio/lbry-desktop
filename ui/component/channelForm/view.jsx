@@ -1,7 +1,7 @@
 // @flow
 
 import React, { useEffect, Fragment } from 'react';
-import { CHANNEL_NEW, CHANNEL_ANONYMOUS } from 'constants/claim';
+import { CHANNEL_NEW } from 'constants/claim';
 import { buildURI, isURIValid } from 'lbry-redux';
 import ChannelCreate from 'component/channelCreate';
 import Card from 'component/common/card';
@@ -21,7 +21,7 @@ function ChannelForm(props: Props) {
   // Every time the channel or name changes, resolve the uris to find winning bid amounts
   useEffect(() => {
     // If they are midway through a channel creation, treat it as anonymous until it completes
-    const channelName = channel === CHANNEL_ANONYMOUS || channel === CHANNEL_NEW ? '' : channel;
+    const channelName = channel === CHANNEL_NEW ? '' : channel;
 
     // We are only going to store the full uri, but we need to resolve the uri with and without the channel name
     let uri;
