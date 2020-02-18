@@ -21,7 +21,7 @@ export function CommentCreate(props: Props) {
   const { claim_id: claimId } = claim;
   const [commentValue, setCommentValue] = usePersistedState(`comment-${claimId}`, '');
   const [commentAck, setCommentAck] = usePersistedState('comment-acknowledge', false);
-  const [channel, setChannel] = usePersistedState('comment-channel', 'anonymous');
+  const [channel, setChannel] = usePersistedState('comment-channel', '');
   const [charCount, setCharCount] = useState(commentValue.length);
 
   function handleCommentChange(event) {
@@ -59,7 +59,7 @@ export function CommentCreate(props: Props) {
 
   return (
     <Form onSubmit={handleSubmit}>
-      <ChannelSection channel={channel} onChannelChange={handleChannelChange} />
+      <ChannelSection channel={channel} hideAnon onChannelChange={handleChannelChange} />
       <FormField
         disabled={channel === CHANNEL_NEW}
         type="textarea"

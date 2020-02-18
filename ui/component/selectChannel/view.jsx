@@ -1,5 +1,5 @@
 // @flow
-import { CHANNEL_NEW } from 'constants/claim';
+import { CHANNEL_NEW, CHANNEL_ANONYMOUS } from 'constants/claim';
 import React, { Fragment } from 'react';
 import { FormField } from 'component/common/form';
 import ChannelCreate from 'component/channelCreate';
@@ -12,6 +12,7 @@ type Props = {
   createChannel: (string, number) => Promise<any>,
   fetchChannelListMine: () => void,
   fetchingChannels: boolean,
+  hideAnon: boolean,
   includeNew?: boolean,
   label?: string,
   injected?: Array<string>,
@@ -70,7 +71,7 @@ class ChannelSection extends React.PureComponent<Props, State> {
 
   render() {
     const channel = this.state.addingChannel ? 'new' : this.props.channel;
-    const { fetchingChannels, channels = [], label, injected = [] } = this.props;
+    const { fetchingChannels, channels = [], hideAnon, label, injected = [] } = this.props;
     const { addingChannel } = this.state;
 
     return (
@@ -82,6 +83,7 @@ class ChannelSection extends React.PureComponent<Props, State> {
           onChange={this.handleChannelChange}
           value={channel}
         >
+          {!hideAnon && <option value={CHANNEL_ANONYMOUS}>{__('Anonymous')}</option>}
           {channels &&
             channels.map(({ name, claim_id: claimId }) => (
               <option key={claimId} value={name}>
