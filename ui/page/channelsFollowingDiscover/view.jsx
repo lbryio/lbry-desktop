@@ -9,6 +9,8 @@ import { toCapitalCase } from 'util/string';
 
 type Props = {
   followedTags: Array<Tag>,
+  subscribedChannels: Array<Subscription>,
+  blockedChannels: Array<string>,
 };
 
 type RowDataItem = {
@@ -19,8 +21,12 @@ type RowDataItem = {
 };
 
 function ChannelsFollowingDiscover(props: Props) {
-  const { followedTags } = props;
+  const { followedTags, subscribedChannels, blockedChannels } = props;
   let rowData: Array<RowDataItem> = [];
+  const notChannels = subscribedChannels
+    .map(({ uri }) => uri)
+    .concat(blockedChannels)
+    .map(uri => uri.split('#')[1]);
 
   rowData.push({
     title: 'Top Channels Of All Time',
@@ -52,7 +58,7 @@ function ChannelsFollowingDiscover(props: Props) {
 
   if (followedTags.length > 0 && followedTags.length < 5) {
     const followedRows = followedTags.map((tag: Tag) => ({
-      title: `Trending for #${toCapitalCase(tag.name)}`,
+      title: `Trending Channels for #${toCapitalCase(tag.name)}`,
       link: `/$/${PAGES.TAGS}?t=${tag.name}`,
       options: {
         claimType: 'channel',
@@ -74,9 +80,19 @@ function ChannelsFollowingDiscover(props: Props) {
     });
   }
 
+  const rowDataWithGenericOptions = rowData.map(row => {
+    return {
+      ...row,
+      options: {
+        ...row.options,
+        notChannels,
+      },
+    };
+  });
+
   return (
     <Page>
-      {rowData.map(({ title, link, help, options = {} }) => (
+      {rowDataWithGenericOptions.map(({ title, link, help, options = {} }) => (
         <div key={title} className="claim-grid__wrapper">
           <h1 className="section__actions">
             {link ? (
