@@ -45,7 +45,7 @@ function ModalRepost(props: Props) {
   const defaultName = claim && claim.name;
   const contentClaimId = claim && claim.claim_id;
   const [repostChannel, setRepostChannel] = usePersistedState('repost-channel');
-  const [repostBid, setRepostBid] = usePersistedState('repost-bid', 0.01);
+  const [repostBid, setRepostBid] = React.useState(0.01);
   const [showAdvanced, setShowAdvanced] = React.useState();
   const [repostName, setRepostName] = React.useState(defaultName);
 
