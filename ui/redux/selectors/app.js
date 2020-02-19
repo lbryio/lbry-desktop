@@ -129,6 +129,16 @@ export const selectSearchOptionsExpanded = createSelector(
   state => state.searchOptionsExpanded
 );
 
+export const selectWelcomeVersion = createSelector(
+  selectState,
+  state => state.welcomeVersion
+);
+
+export const selectAllowAnalytics = createSelector(
+  selectState,
+  state => state.allowAnalytics
+);
+
 export const selectScrollStartingPosition = createSelector(
   selectState,
   state => state.currentScroll

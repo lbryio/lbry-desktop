@@ -2,7 +2,6 @@
 /* eslint react/no-unescaped-entities:0 */
 /* eslint react/jsx-no-comment-textnodes:0 */
 
-import * as SETTINGS from 'constants/settings';
 import * as PAGES from 'constants/pages';
 import * as React from 'react';
 
@@ -15,6 +14,7 @@ import SettingWalletServer from 'component/settingWalletServer';
 import SettingAutoLaunch from 'component/settingAutoLaunch';
 import FileSelector from 'component/common/file-selector';
 import SyncToggle from 'component/syncToggle';
+import { SETTINGS } from 'lbry-redux';
 import Card from 'component/common/card';
 import { getKeychainPassword } from 'util/saved-passwords';
 
@@ -51,8 +51,10 @@ type DaemonSettings = {
 type Props = {
   setDaemonSetting: (string, ?SetDaemonSettingArg) => void,
   setClientSetting: (string, SetDaemonSettingArg) => void,
+  toggle3PAnalytics: boolean => void,
   clearCache: () => Promise<any>,
   daemonSettings: DaemonSettings,
+  allowAnalytics: boolean,
   showNsfw: boolean,
   isAuthenticated: boolean,
   instantPurchaseEnabled: boolean,
@@ -187,6 +189,7 @@ class SettingsPage extends React.PureComponent<Props, State> {
   render() {
     const {
       daemonSettings,
+      allowAnalytics,
       showNsfw,
       instantPurchaseEnabled,
       instantPurchaseMax,
@@ -200,6 +203,7 @@ class SettingsPage extends React.PureComponent<Props, State> {
       // autoDownload,
       setDaemonSetting,
       setClientSetting,
+      toggle3PAnalytics,
       supportOption,
       hideBalance,
       userBlockedChannelsCount,
@@ -445,21 +449,39 @@ class SettingsPage extends React.PureComponent<Props, State> {
               }
             />
             <Card
-              title={__('Share Diagnostic Data')}
+              title={__('Share Usage and Diagnostic Data')}
+              subtitle={
+                <React.Fragment>
+                  {__(
+                    `This is information like error logging, performance tracking, and usage statistics. It includes your IP address and basic system details, but no other identifying information (unless you sign in to lbry.tv)`
+                  )}{' '}
+                  <Button button="link" label={__('Learn more')} href="https://lbry.com/privacypolicy" />
+                </React.Fragment>
+              }
               actions={
-                <FormField
-                  type="checkbox"
-                  name="share_usage_data"
-                  onChange={() => setDaemonSetting('share_usage_data', !daemonSettings.share_usage_data)}
-                  checked={daemonSettings.share_usage_data}
-                  label={
-                    <React.Fragment>
-                      {__('Help make LBRY better by contributing analytics and diagnostic data about my usage.')}{' '}
-                      <Button button="link" label={__('Learn more')} href="https://lbry.com/privacypolicy" />.
-                    </React.Fragment>
-                  }
-                  helper={__('You will be ineligible to earn rewards while diagnostics are not being shared.')}
-                />
+                <>
+                  <FormField
+                    type="checkbox"
+                    name="share_internal"
+                    onChange={() => setDaemonSetting('share_usage_data', !daemonSettings.share_usage_data)}
+                    checked={daemonSettings.share_usage_data}
+                    label={<React.Fragment>{__('Allow the app to share data to LBRY.inc')}</React.Fragment>}
+                    helper={
+                      isAuthenticated
+                        ? __('Internal sharing is required while signed in.')
+                        : __('Internal sharing is required to participate in rewards programs.')
+                    }
+                    disabled={isAuthenticated}
+                  />
+                  <FormField
+                    type="checkbox"
+                    name="share_third_party"
+                    onChange={e => toggle3PAnalytics(e.target.checked)}
+                    checked={allowAnalytics}
+                    label={__('Allow the App to access third party analytics platforms')}
+                    helper={__('We use detailed analytics to improve all aspects of the LBRY experience.')}
+                  />
+                </>
               }
             />
             {/* @endif */}

@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import { selectUserVerifiedEmail } from 'lbryinc';
-import { selectScrollStartingPosition } from 'redux/selectors/app';
+import { selectScrollStartingPosition, selectWelcomeVersion } from 'redux/selectors/app';
 import Router from './view';
 import { normalizeURI, makeSelectTitleForUri } from 'lbry-redux';
 
@@ -26,6 +26,7 @@ const select = state => {
     title: makeSelectTitleForUri(uri)(state),
     currentScroll: selectScrollStartingPosition(state),
     isAuthenticated: selectUserVerifiedEmail(state),
+    welcomeVersion: selectWelcomeVersion(state),
   };
 };
 

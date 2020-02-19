@@ -1,5 +1,4 @@
-import { Lbry, ACTIONS, doToast, SHARED_PREFERENCES, doWalletReconnect } from 'lbry-redux';
-import * as SETTINGS from 'constants/settings';
+import { Lbry, ACTIONS, doToast, SHARED_PREFERENCES, doWalletReconnect, SETTINGS } from 'lbry-redux';
 import * as LOCAL_ACTIONS from 'constants/action_types';
 import analytics from 'analytics';
 import SUPPORTED_LANGUAGES from 'constants/supported_languages';
@@ -12,7 +11,7 @@ const UPDATE_IS_NIGHT_INTERVAL = 5 * 60 * 1000;
 export function doFetchDaemonSettings() {
   return dispatch => {
     Lbry.settings_get().then(settings => {
-      analytics.toggle(settings.share_usage_data);
+      analytics.toggleInternal(settings.share_usage_data);
       dispatch({
         type: ACTIONS.DAEMON_SETTINGS_RECEIVED,
         data: {
@@ -33,10 +32,9 @@ export function doGetDaemonStatus() {
         },
       });
       return status;
-      },
-    );
+    });
   };
-};
+}
 
 export function doClearDaemonSetting(key) {
   return dispatch => {
@@ -55,7 +53,7 @@ export function doClearDaemonSetting(key) {
       }
     });
     Lbry.settings_get().then(settings => {
-      analytics.toggle(settings.share_usage_data);
+      analytics.toggleInternal(settings.share_usage_data);
       dispatch({
         type: ACTIONS.DAEMON_SETTINGS_RECEIVED,
         data: {
@@ -65,27 +63,28 @@ export function doClearDaemonSetting(key) {
     });
   };
 }
-
-export function doSetDaemonSetting(key, value) {
+// if doPopulate is applying settings, we don't want to cause a loop; doNotDispatch = true.
+export function doSetDaemonSetting(key, value, doNotDispatch = false) {
   return dispatch => {
     const newSettings = {
       key,
       value: !value && value !== false ? null : value,
     };
     Lbry.settings_set(newSettings).then(newSetting => {
-      if (Object.values(SHARED_PREFERENCES).includes(key)) {
+      if (Object.values(SHARED_PREFERENCES).includes(key) && !doNotDispatch) {
         dispatch({
           type: ACTIONS.SHARED_PREFERENCE_SET,
-          data: {key: key, value: newSetting[key]},
+          data: { key: key, value: newSetting[key] },
         });
       }
       // hardcoding this in lieu of a better solution
       if (key === SHARED_PREFERENCES.WALLET_SERVERS) {
         dispatch(doWalletReconnect());
+        // todo: add sdk reloadsettings() (or it happens automagically?)
       }
     });
     Lbry.settings_get().then(settings => {
-      analytics.toggle(settings.share_usage_data);
+      analytics.toggleInternal(settings.share_usage_data);
       dispatch({
         type: ACTIONS.DAEMON_SETTINGS_RECEIVED,
         data: {
@@ -104,12 +103,14 @@ export function doSaveCustomWalletServers(servers) {
 }
 
 export function doSetClientSetting(key, value) {
-  return {
-    type: ACTIONS.CLIENT_SETTING_CHANGED,
-    data: {
-      key,
-      value,
-    },
+  return dispatch => {
+    dispatch({
+      type: ACTIONS.CLIENT_SETTING_CHANGED,
+      data: {
+        key,
+        value,
+      },
+    });
   };
 }
 

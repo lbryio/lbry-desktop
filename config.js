@@ -7,6 +7,7 @@ const config = {
   SITE_TITLE: 'lbry.tv',
   LBRY_TV_API: 'https://api.lbry.tv',
   LBRY_TV_STREAMING_API: 'https://player.lbry.tv',
+  WELCOME_VERSION: 1.0,
 };
 
 config.URL_LOCAL = `http://localhost:${config.WEB_SERVER_PORT}`;

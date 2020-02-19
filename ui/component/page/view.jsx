@@ -13,18 +13,19 @@ type Props = {
   isUpgradeAvailable: boolean,
   authPage: boolean,
   authenticated: boolean,
+  noHeader: boolean,
 };
 
 function Page(props: Props) {
-  const { children, className, authPage = false, authenticated } = props;
+  const { children, className, authPage = false, authenticated, noHeader } = props;
   const obscureSideNavigation = IS_WEB ? !authenticated : false;
 
   return (
     <Fragment>
-      <Header authHeader={authPage} />
+      {!noHeader && <Header authHeader={authPage} />}
       <div className={classnames('main-wrapper__inner')}>
         <main className={classnames(MAIN_CLASS, className, { 'main--full-width': authPage })}>{children}</main>
-        {!authPage && <SideNavigation obscureSideNavigation={obscureSideNavigation} />}
+        {!authPage && !noHeader && <SideNavigation obscureSideNavigation={obscureSideNavigation} />}
       </div>
     </Fragment>
   );

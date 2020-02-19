@@ -1,9 +1,8 @@
 import * as ACTIONS from 'constants/action_types';
-import * as SETTINGS from 'constants/settings';
+import * as APP_SETTINGS from 'constants/settings';
 import moment from 'moment';
 import SUPPORTED_LANGUAGES from 'constants/supported_languages';
-import { ACTIONS as LBRY_REDUX_ACTIONS, SHARED_PREFERENCES } from 'lbry-redux';
-
+import { ACTIONS as LBRY_REDUX_ACTIONS, SHARED_PREFERENCES, SETTINGS } from 'lbry-redux';
 const reducers = {};
 let settingLanguage = [];
 try {
@@ -38,7 +37,7 @@ const defaultState = {
     [SETTINGS.OS_NOTIFICATIONS_ENABLED]: true,
     [SETTINGS.AUTOMATIC_DARK_MODE_ENABLED]: false,
 
-    [SETTINGS.DARK_MODE_TIMES]: {
+    [APP_SETTINGS.DARK_MODE_TIMES]: {
       from: { hour: '21', min: '00', formattedTime: '21:00' },
       to: { hour: '8', min: '00', formattedTime: '8:00' },
     },
@@ -83,7 +82,7 @@ reducers[ACTIONS.CLIENT_SETTING_CHANGED] = (state, action) => {
 };
 
 reducers[ACTIONS.UPDATE_IS_NIGHT] = state => {
-  const { from, to } = state.clientSettings[SETTINGS.DARK_MODE_TIMES];
+  const { from, to } = state.clientSettings[APP_SETTINGS.DARK_MODE_TIMES];
   const momentNow = moment();
   const startNightMoment = moment(from.formattedTime, 'HH:mm');
   const endNightMoment = moment(to.formattedTime, 'HH:mm');
@@ -130,8 +129,8 @@ reducers[ACTIONS.CLIENT_SETTING_CHANGED] = (state, action) => {
 
 reducers[LBRY_REDUX_ACTIONS.USER_STATE_POPULATE] = (state, action) => {
   const { settings: sharedPreferences } = action.data;
+  // todo: populate sharedPreferences that match client settings constants
 
-  // process clientSettings and daemonSettings
   return Object.assign({}, state, { sharedPreferences });
 };
 
