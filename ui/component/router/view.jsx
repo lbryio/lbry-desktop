@@ -34,7 +34,8 @@ import ChannelsPage from 'page/channels';
 import EmbedWrapperPage from 'page/embedWrapper';
 import TopPage from 'page/top';
 import { parseURI } from 'lbry-redux';
-import { SITE_TITLE } from 'config';
+import { SITE_TITLE, WELCOME_VERSION } from 'config';
+import Welcome from 'page/welcome';
 
 // Tell the browser we are handling scroll restoration
 if ('scrollRestoration' in history) {
@@ -80,6 +81,7 @@ type Props = {
   },
   uri: string,
   title: string,
+  welcomeVersion: number,
 };
 
 function AppRouter(props: Props) {
@@ -90,6 +92,7 @@ function AppRouter(props: Props) {
     history,
     uri,
     title,
+    welcomeVersion,
   } = props;
   const { entries } = history;
   const entryIndex = history.index;
@@ -133,11 +136,14 @@ function AppRouter(props: Props) {
 
   return (
     <Switch>
+      {/* @if TARGET='app' */}
+      {welcomeVersion < WELCOME_VERSION && <Route path="/*" component={Welcome} />}
+      {/* @endif */}
       <Redirect from={`/$/${PAGES.CHANNELS_FOLLOWING_MANAGE}`} to={`/$/${PAGES.CHANNELS_FOLLOWING_DISCOVER}`} />
-
       <Route path={`/`} exact component={HomePage} />
       <Route path={`/$/${PAGES.DISCOVER}`} exact component={DiscoverPage} />
       <Route path={`/$/${PAGES.AUTH}`} exact component={SignInPage} />
+      <Route path={`/$/${PAGES.WELCOME}`} exact component={Welcome} />
       <Route path={`/$/${PAGES.TAGS}`} exact component={TagsPage} />
       <Route path={`/$/${PAGES.TAGS_FOLLOWING}`} exact component={TagsFollowingPage} />
       <Route

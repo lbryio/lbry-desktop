@@ -16,6 +16,9 @@ const LBRY_TV_UA_ID = 'UA-60403362-12';
 const DESKTOP_UA_ID = 'UA-60403362-13';
 const SECOND_TRACKER_NAME = 'tracker2';
 
+const SHARE_INTERNAL = 'shareInternal';
+const SHARE_THIRD_PARTY = 'shareThirdParty';
+
 // @if TARGET='app'
 ElectronCookies.enable({
   origin: 'https://lbry.tv',
@@ -27,7 +30,8 @@ type Analytics = {
   sentryError: ({}, {}) => Promise<any>,
   pageView: string => void,
   setUser: Object => void,
-  toggle: (boolean, ?boolean) => void,
+  toggleInternal: (boolean, ?boolean) => void,
+  toggleThirdParty: (boolean, ?boolean) => void,
   apiLogView: (string, string, string, ?number, ?() => void) => Promise<any>,
   apiLogPublish: (ChannelClaim | StreamClaim) => void,
   tagFollowEvent: (string, boolean, string) => void,
@@ -48,12 +52,17 @@ type LogPublishParams = {
   channel_claim_id?: string,
 };
 
-let analyticsEnabled: boolean = isProduction;
+let internalAnalyticsEnabled: boolean = IS_WEB || false;
+let thirdPartyAnalyticsEnabled: boolean = IS_WEB || false;
+// @if TARGET='app'
+if (window.localStorage.getItem(SHARE_INTERNAL) === 'true') internalAnalyticsEnabled = true;
+if (window.localStorage.getItem(SHARE_THIRD_PARTY) === 'true') thirdPartyAnalyticsEnabled = true;
+// @endif
 
 const analytics: Analytics = {
   error: message => {
     return new Promise(resolve => {
-      if (analyticsEnabled && isProduction) {
+      if (internalAnalyticsEnabled && isProduction) {
         return Lbryio.call('event', 'desktop_error', { error_message: message }).then(() => {
           resolve(true);
         });
@@ -64,7 +73,7 @@ const analytics: Analytics = {
   },
   sentryError: (error, errorInfo) => {
     return new Promise(resolve => {
-      if (analyticsEnabled && isProduction) {
+      if (internalAnalyticsEnabled && isProduction) {
         Sentry.withScope(scope => {
           scope.setExtras(errorInfo);
           const eventId = Sentry.captureException(error);
@@ -76,12 +85,12 @@ const analytics: Analytics = {
     });
   },
   pageView: path => {
-    if (analyticsEnabled) {
+    if (thirdPartyAnalyticsEnabled) {
       ReactGA.pageview(path, [SECOND_TRACKER_NAME]);
     }
   },
   setUser: userId => {
-    if (analyticsEnabled && userId) {
+    if (thirdPartyAnalyticsEnabled && userId) {
       ReactGA.set({
         userId,
       });
@@ -93,15 +102,25 @@ const analytics: Analytics = {
       // @endif
     }
   },
-  toggle: (enabled: boolean): void => {
+  toggleInternal: (enabled: boolean): void => {
     // Always collect analytics on lbry.tv
     // @if TARGET='app'
-    analyticsEnabled = enabled;
+    internalAnalyticsEnabled = enabled;
+    window.localStorage.setItem(SHARE_INTERNAL, enabled);
     // @endif
   },
+
+  toggleThirdParty: (enabled: boolean): void => {
+    // Always collect analytics on lbry.tv
+    // @if TARGET='app'
+    thirdPartyAnalyticsEnabled = enabled;
+    window.localStorage.setItem(SHARE_THIRD_PARTY, enabled);
+    // @endif
+  },
+
   apiLogView: (uri, outpoint, claimId, timeToStart) => {
     return new Promise((resolve, reject) => {
-      if (analyticsEnabled && (isProduction || devInternalApis)) {
+      if (internalAnalyticsEnabled && (isProduction || devInternalApis)) {
         const params: {
           uri: string,
           outpoint: string,
@@ -125,12 +144,12 @@ const analytics: Analytics = {
     });
   },
   apiLogSearch: () => {
-    if (analyticsEnabled && isProduction) {
+    if (internalAnalyticsEnabled && isProduction) {
       Lbryio.call('event', 'search');
     }
   },
   apiLogPublish: (claimResult: ChannelClaim | StreamClaim) => {
-    if (analyticsEnabled && isProduction) {
+    if (internalAnalyticsEnabled && isProduction) {
       const { permanent_url: uri, claim_id: claimId, txid, nout, signing_channel: signingChannel } = claimResult;
       let channelClaimId;
       if (signingChannel) {
@@ -185,7 +204,7 @@ const analytics: Analytics = {
 };
 
 function sendGaEvent(category, action, label, value) {
-  if (analyticsEnabled && isProduction) {
+  if (thirdPartyAnalyticsEnabled && isProduction) {
     ReactGA.event(
       {
         category,
@@ -199,7 +218,7 @@ function sendGaEvent(category, action, label, value) {
 }
 
 function sendGaTimingEvent(category: string, action: string, timeInMs: number, label?: string) {
-  if (analyticsEnabled && isProduction) {
+  if (thirdPartyAnalyticsEnabled && isProduction) {
     ReactGA.timing(
       {
         category,

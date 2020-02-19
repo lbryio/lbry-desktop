@@ -1,5 +1,4 @@
 import * as ACTIONS from 'constants/action_types';
-import * as SETTINGS from 'constants/settings';
 import { persistStore, persistReducer } from 'redux-persist';
 import autoMergeLevel2 from 'redux-persist/lib/stateReconciler/autoMergeLevel2';
 import createCompressor from 'redux-persist-transform-compress';
@@ -10,7 +9,7 @@ import thunk from 'redux-thunk';
 import { createMemoryHistory, createBrowserHistory } from 'history';
 import { routerMiddleware } from 'connected-react-router';
 import createRootReducer from './reducers';
-import { buildSharedStateMiddleware, ACTIONS as LBRY_REDUX_ACTIONS } from 'lbry-redux';
+import { buildSharedStateMiddleware, ACTIONS as LBRY_REDUX_ACTIONS, SETTINGS } from 'lbry-redux';
 import { doGetSync, selectUserVerifiedEmail } from 'lbryinc';
 import { getSavedPassword } from 'util/saved-passwords';
 import { makeSelectClientSetting } from 'redux/selectors/settings';
@@ -50,7 +49,14 @@ const fileInfoFilter = createFilter('fileInfo', [
   'fileListDownloadedSort',
   'fileListSubscriptionSort',
 ]);
-const appFilter = createFilter('app', ['hasClickedComment', 'searchOptionsExpanded', 'volume', 'muted']);
+const appFilter = createFilter('app', [
+  'hasClickedComment',
+  'searchOptionsExpanded',
+  'volume',
+  'muted',
+  'allowAnalytics',
+  'welcomeVersion',
+]);
 // We only need to persist the receiveAddress for the wallet
 const walletFilter = createFilter('wallet', ['receiveAddress']);
 const searchFilter = createFilter('search', ['options']);
@@ -113,6 +119,8 @@ const triggerSharedStateActions = [
   LBRY_REDUX_ACTIONS.TOGGLE_BLOCK_CHANNEL,
   LBRY_REDUX_ACTIONS.CREATE_CHANNEL_COMPLETED,
   LBRY_REDUX_ACTIONS.SHARED_PREFERENCE_SET,
+  ACTIONS.SET_WELCOME_VERSION,
+  ACTIONS.SET_ALLOW_ANALYTICS,
 ];
 
 /**
@@ -135,6 +143,8 @@ const sharedStateFilters = {
   },
   blocked: { source: 'blocked', property: 'blockedChannels' },
   settings: { source: 'settings', property: 'sharedPreferences' },
+  app_welcome_version: { source: 'app', property: 'welcomeVersion' },
+  sharing_3P: { source: 'app', property: 'allowAnalytics' },
 };
 
 const sharedStateCb = ({ dispatch, getState }) => {

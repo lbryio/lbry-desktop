@@ -21,7 +21,7 @@ import {
   doClearSupport,
 } from 'lbry-redux';
 import Native from 'native';
-import { doFetchDaemonSettings, doSetAutoLaunch } from 'redux/actions/settings';
+import { doFetchDaemonSettings, doSetAutoLaunch, doSetDaemonSetting } from 'redux/actions/settings';
 import {
   selectIsUpgradeSkipped,
   selectUpdateUrl,
@@ -32,6 +32,7 @@ import {
   selectRemoteVersion,
   selectUpgradeTimer,
   selectModal,
+  selectAllowAnalytics,
 } from 'redux/selectors/app';
 import { doAuthenticate, doGetSync } from 'lbryinc';
 import { lbrySettings as config, version as appVersion } from 'package.json';
@@ -450,11 +451,47 @@ export function doSignOut() {
   };
 }
 
+export function doSetWelcomeVersion(version) {
+  return {
+    type: ACTIONS.SET_WELCOME_VERSION,
+    data: version,
+  };
+}
+
+export function doToggle3PAnalytics(allowParam, doNotDispatch) {
+  return (dispatch, getState) => {
+    const state = getState();
+    const allowState = selectAllowAnalytics(state);
+    const allow = allowParam !== undefined ? allowParam : allowState;
+    analytics.toggleThirdParty(allow);
+    if (!doNotDispatch) {
+      return dispatch({
+        type: ACTIONS.SET_ALLOW_ANALYTICS,
+        data: allow,
+      });
+    }
+  };
+}
+
 export function doGetAndPopulatePreferences() {
-  return dispatch => {
+  return (dispatch, getState) => {
     function successCb(savedPreferences) {
+      const state = getState();
+      const { daemonSettings } = state;
+
       if (savedPreferences !== null) {
         dispatch(doPopulateSharedUserState(savedPreferences));
+        // @if TARGET='app'
+        const { settings, sharing_3P: sharing3P } = savedPreferences.value;
+        Object.entries(settings).forEach(([key, val]) => {
+          if (daemonSettings[key] !== val) {
+            dispatch(doSetDaemonSetting(key, val, false));
+          }
+        });
+        if (sharing3P !== undefined) {
+          doToggle3PAnalytics(sharing3P, true);
+        }
+        // @endif
       }
     }
 
