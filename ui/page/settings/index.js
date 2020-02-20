@@ -32,6 +32,7 @@ const select = state => ({
   userBlockedChannelsCount: selectBlockedChannelsCount(state),
   hideBalance: makeSelectClientSetting(SETTINGS.HIDE_BALANCE)(state),
   floatingPlayer: makeSelectClientSetting(SETTINGS.FLOATING_PLAYER)(state),
+  showReposts: makeSelectClientSetting(SETTINGS.SHOW_REPOSTS)(state),
   darkModeTimes: makeSelectClientSetting(SETTINGS.DARK_MODE_TIMES)(state),
 });
 

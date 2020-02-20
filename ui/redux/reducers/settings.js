@@ -52,6 +52,7 @@ const defaultState = {
     [SETTINGS.AUTOPLAY]: true,
     [SETTINGS.FLOATING_PLAYER]: true,
     [SETTINGS.AUTO_DOWNLOAD]: true,
+    [SETTINGS.SHOW_REPOSTS]: true,
 
     // OS
     [SETTINGS.AUTO_LAUNCH]: true,

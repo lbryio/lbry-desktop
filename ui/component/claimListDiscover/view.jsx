@@ -36,6 +36,7 @@ type Props = {
   doToggleTagFollow: string => void,
   meta?: Node,
   showNsfw: boolean,
+  showReposts: boolean,
   history: { action: string, push: string => void, replace: string => void },
   location: { search: string, pathname: string },
   claimSearchByQuery: {
@@ -67,6 +68,7 @@ function ClaimListDiscover(props: Props) {
     meta,
     channelIds,
     showNsfw,
+    showReposts,
     history,
     location,
     hiddenUris,
@@ -101,6 +103,7 @@ function ClaimListDiscover(props: Props) {
     not_tags: Array<string>,
     order_by: Array<string>,
     release_time?: string,
+    claim_type?: string,
     name?: string,
     claim_type?: string | Array<string>,
   } = {
@@ -162,8 +165,8 @@ function ClaimListDiscover(props: Props) {
     }
   }
 
-  if (claimType) {
-    options.claim_type = claimType;
+  if (!showReposts) {
+    options.claim_type = 'stream';
   }
 
   const hasMatureTags = tags && tags.some(t => MATURE_TAGS.includes(t));

@@ -33,6 +33,9 @@ export const makeSelectClientSetting = setting =>
 // refactor me
 export const selectShowMatureContent = makeSelectClientSetting(SETTINGS.SHOW_MATURE);
 
+// and me
+export const selectShowRepostedContent = makeSelectClientSetting(SETTINGS.SHOW_REPOSTS);
+
 export const selectTheme = makeSelectClientSetting(SETTINGS.THEME);
 export const selectAutomaticDarkModeEnabled = makeSelectClientSetting(SETTINGS.AUTOMATIC_DARK_MODE_ENABLED);
 export const selectIsNight = createSelector(
@@ -56,14 +59,13 @@ export const makeSelectSharedPreferencesForKey = key =>
     prefs => (prefs ? prefs[key] : undefined)
   );
 
-export const selectHasWalletServerPrefs =
-  createSelector(
-    makeSelectSharedPreferencesForKey(SHARED_PREFERENCES.WALLET_SERVERS),
-    servers => {
-      if (servers && servers.length) return true;
-      return false;
-    }
-  )
+export const selectHasWalletServerPrefs = createSelector(
+  makeSelectSharedPreferencesForKey(SHARED_PREFERENCES.WALLET_SERVERS),
+  servers => {
+    if (servers && servers.length) return true;
+    return false;
+  }
+);
 
 export const selectThemePath = createSelector(
   selectTheme,
