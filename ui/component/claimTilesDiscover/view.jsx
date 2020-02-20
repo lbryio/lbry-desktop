@@ -8,6 +8,7 @@ type Props = {
   doClaimSearch: ({}) => void,
   loading: boolean,
   showNsfw: boolean,
+  showReposts: boolean,
   history: { action: string, push: string => void, replace: string => void },
   claimSearchByQuery: {
     [string]: Array<string>,
@@ -30,6 +31,7 @@ function ClaimTilesDiscover(props: Props) {
     claimSearchByQuery,
     loading,
     showNsfw,
+    showReposts,
     hiddenUris,
     // Below are options to pass that are forwarded to claim_search
     tags,
@@ -73,9 +75,14 @@ function ClaimTilesDiscover(props: Props) {
     options.release_time = releaseTime;
   }
 
+  if (!showReposts) {
+    options.claim_type = 'stream';
+  }
+
   if (claimType) {
     options.claim_type = claimType;
   }
+
   if (timestamp) {
     options.timestamp = timestamp;
   }

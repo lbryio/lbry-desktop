@@ -74,6 +74,7 @@ type Props = {
   hideBalance: boolean,
   confirmForgetPassword: ({}) => void,
   floatingPlayer: boolean,
+  showReposts: boolean,
   clearPlayingUri: () => void,
   darkModeTimes: DarkModeTimes,
   setDarkTime: (string, {}) => void,
@@ -208,6 +209,7 @@ class SettingsPage extends React.PureComponent<Props, State> {
       hideBalance,
       userBlockedChannelsCount,
       floatingPlayer,
+      showReposts,
       clearPlayingUri,
       darkModeTimes,
       clearCache,
@@ -395,6 +397,17 @@ class SettingsPage extends React.PureComponent<Props, State> {
                     helper={__(
                       'Autoplay video and audio files when navigating to a file, as well as the next related item when a file finishes playing.'
                     )}
+                  />
+
+                  <FormField
+                    type="checkbox"
+                    name="show_reposts"
+                    onChange={() => {
+                      setClientSetting(SETTINGS.SHOW_REPOSTS, !showReposts);
+                    }}
+                    checked={showReposts}
+                    label={__('Show reposts')}
+                    helper={__('Show reposts from the creators you follow.')}
                   />
 
                   {/* <FormField
