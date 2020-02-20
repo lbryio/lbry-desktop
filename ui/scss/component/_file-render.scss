@@ -167,6 +167,7 @@
     .vjs-big-play-button {
       @extend .button--icon;
       @extend .button--play;
+      background-color: rgba(0,0,0,0.6);
       border: none;
       position: static;
       z-index: 2;
@@ -174,6 +175,13 @@
       .vjs-icon-placeholder {
         display: none;
       }
+    }
+  }
+  
+  .video-js:hover {
+    
+    .vjs-big-play-button {
+      background-color: rgba(var(--color-primary),0.6);
     }
   }
 }
