@@ -10,8 +10,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 - Right click to navigate history on desktop ([#3650](https://github.com/lbryio/lbry-desktop/pull/3650))
 - Javanese language support ([#3685](https://github.com/lbryio/lbry-desktop/pull/3685))
+- Wallet sync status on the wallet page ([#3720](https://github.com/lbryio/lbry-desktop/pull/3720))
 
 ### Changed
+
 - Drops support for publishing anonymous comments ([#3705](https://github.com/lbryio/lbry-desktop/pull/3705))
 
 ### Fixed
