@@ -15,6 +15,7 @@ import { withRouter } from 'react-router';
 import usePrevious from 'effects/use-previous';
 import Nag from 'component/common/nag';
 import { rewards as REWARDS } from 'lbryinc';
+import usePersistedState from 'effects/use-persisted-state';
 // @if TARGET='web'
 import OpenInAppLink from 'component/openInAppLink';
 import YoutubeWelcome from 'component/youtubeWelcome';
@@ -89,6 +90,9 @@ function App(props: Props) {
   const previousUserId = usePrevious(userId);
   const previousHasVerifiedEmail = usePrevious(hasVerifiedEmail);
   const previousRewardApproved = usePrevious(isRewardApproved);
+  // @if TARGET='web'
+  const [showAnalyticsNag, setShowAnalyticsNag] = usePersistedState('analytics-nag', true);
+  // @endif
   const { pathname, hash, search } = props.location;
   const showUpgradeButton = autoUpdateDownloaded || (process.platform === 'linux' && isUpgradeAvailable);
   // referral claiming
@@ -103,6 +107,12 @@ function App(props: Props) {
     const newpath = buildURI(parseURI(pathname.slice(1).replace(/:/g, '#')));
     uri = newpath + hash;
   } catch (e) {}
+
+  // @if TARGET='web'
+  function handleAnalyticsDismiss() {
+    setShowAnalyticsNag(false);
+  }
+  // @endif
 
   useEffect(() => {
     if (!uploadCount) return;
@@ -232,6 +242,16 @@ function App(props: Props) {
       {/* @if TARGET='app' */}
       {showUpgradeButton && (
         <Nag message={__('An upgrade is available.')} actionText={__('Install Now')} onClick={requestDownloadUpgrade} />
+      )}
+      {/* @endif */}
+      {/* @if TARGET='web' */}
+      {showAnalyticsNag && (
+        <Nag
+          message={__('lbry.tv collects analytics...')}
+          actionText={__('Get The App')}
+          href="https://lbry.com/get"
+          onClose={handleAnalyticsDismiss}
+        />
       )}
       {/* @endif */}
       {isEnhancedLayout && <Yrbl className="yrbl--enhanced" />}
