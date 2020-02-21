@@ -14,8 +14,11 @@ import FloatingViewer from 'component/floatingViewer';
 import { withRouter } from 'react-router';
 import usePrevious from 'effects/use-previous';
 import Nag from 'component/common/nag';
+import Button from 'component/button';
+import I18nMessage from 'component/i18nMessage';
 import { rewards as REWARDS } from 'lbryinc';
 import usePersistedState from 'effects/use-persisted-state';
+import useIsMobile from 'effects/use-is-mobile';
 // @if TARGET='web'
 import OpenInAppLink from 'component/openInAppLink';
 import YoutubeWelcome from 'component/youtubeWelcome';
@@ -90,6 +93,7 @@ function App(props: Props) {
   const previousUserId = usePrevious(userId);
   const previousHasVerifiedEmail = usePrevious(hasVerifiedEmail);
   const previousRewardApproved = usePrevious(isRewardApproved);
+  const isMobile = useIsMobile();
   // @if TARGET='web'
   const [showAnalyticsNag, setShowAnalyticsNag] = usePersistedState('analytics-nag', true);
   // @endif
@@ -246,12 +250,33 @@ function App(props: Props) {
       {/* @endif */}
       {/* @if TARGET='web' */}
       {showAnalyticsNag && (
-        <Nag
-          message={__('lbry.tv collects analytics...')}
-          actionText={__('Get The App')}
-          href="https://lbry.com/get"
-          onClose={handleAnalyticsDismiss}
-        />
+        <React.Fragment>
+          {isMobile ? (
+            <Nag
+              message={__('lbry.tv collects usage data for itself and 3rd-parties')}
+              actionText={__('OK')}
+              onClose={handleAnalyticsDismiss}
+            />
+          ) : (
+            <Nag
+              message={
+                <I18nMessage
+                  tokens={{
+                    more_information: (
+                      <Button button="link" label={__('more')} href="https://lbry.com/faq/privacy-and-data" />
+                    ),
+                  }}
+                >
+                  lbry.tv collects usage information for itself and third parties (%more_information%). Want control
+                  over this and more?
+                </I18nMessage>
+              }
+              actionText={__('Get The App')}
+              href="https://lbry.com/get"
+              onClose={handleAnalyticsDismiss}
+            />
+          )}
+        </React.Fragment>
       )}
       {/* @endif */}
       {isEnhancedLayout && <Yrbl className="yrbl--enhanced" />}

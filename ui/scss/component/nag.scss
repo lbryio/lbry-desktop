@@ -7,6 +7,12 @@
   color: var(--color-white);
   font-weight: var(--font-weight-bold);
   text-align: center;
+
+  .button--link {
+    font-weight: var(--font-weight-bold);
+    color: var(--color-white);
+    text-decoration: underline;
+  }
 }
 
 .nag__button {
