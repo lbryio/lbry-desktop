@@ -1,10 +1,11 @@
 // @flow
+import type { Node } from 'react';
 import * as ICONS from 'constants/icons';
 import React from 'react';
 import Button from 'component/button';
 
 type Props = {
-  message: string,
+  message: string | Node,
   actionText: string,
   href?: string,
   onClick?: () => void,
