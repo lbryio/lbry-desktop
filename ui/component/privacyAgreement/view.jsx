@@ -51,9 +51,10 @@ function PrivacyAgreement(props: Props) {
           </h3>
         </div>
         <div>
-          <img src={image} />
+          <img src={image} className="privacy-img" />
         </div>
       </div>
+      <hr />
       <Form onSubmit={handleSubmit} className="section__body">
         <p className="section__subtitle">
           {__('Can this app send information about your usage to inform publishers and improve the software?')}
@@ -64,7 +65,7 @@ function PrivacyAgreement(props: Props) {
             type="radio"
             label={
               <>
-                <span className="emoji">😄</span> {__('Yes, including with third-party analytics platforms')}
+                {__('Yes, including with third-party analytics platforms')} <span>😄</span>
               </>
             }
             helper={__(`Sending information to third parties (e.g. Google Analytics or Mixpanel) allows us to use detailed
@@ -78,7 +79,7 @@ function PrivacyAgreement(props: Props) {
             checked={share === LIMITED}
             label={
               <>
-                <span className="emoji">🙂</span> {__('Yes, but only with LBRY, Inc.')}
+                {__('Yes, but only with LBRY, Inc.')} <span>🙂</span>
               </>
             }
             helper={__(
@@ -93,7 +94,7 @@ function PrivacyAgreement(props: Props) {
             checked={share === NONE}
             label={
               <>
-                <span className="emoji">😢</span> {__('No')}
+                {__('No')} <span>😢</span>
               </>
             }
             helper={__(`No information will be sent directly to LBRY, Inc. or third-parties about your usage. Note that as
