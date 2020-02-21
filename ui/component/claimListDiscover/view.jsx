@@ -50,6 +50,7 @@ type Props = {
   header?: Node,
   headerLabel?: string | Node,
   name?: string,
+  claimType?: string | Array<string>,
   renderProperties?: Claim => Node,
   includeSupportAction?: boolean,
 };
@@ -74,6 +75,7 @@ function ClaimListDiscover(props: Props) {
     headerLabel,
     header,
     name,
+    claimType,
     renderProperties,
     includeSupportAction,
   } = props;
@@ -96,6 +98,7 @@ function ClaimListDiscover(props: Props) {
     order_by: Array<string>,
     release_time?: string,
     name?: string,
+    claim_type?: string | Array<string>,
   } = {
     page_size: PAGE_SIZE,
     page,
@@ -153,6 +156,10 @@ function ClaimListDiscover(props: Props) {
           .unix()
       )}`;
     }
+  }
+
+  if (claimType) {
+    options.claim_type = claimType;
   }
 
   const hasMatureTags = tags && tags.some(t => MATURE_TAGS.includes(t));
