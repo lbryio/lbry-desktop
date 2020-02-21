@@ -112,7 +112,6 @@ $metadata-z-index: 1;
 
   @media (max-width: $breakpoint-small) {
     padding-left: var(--spacing-medium);
-    padding-top: calc(2 * var(--spacing-xlarge));
   }
 }
 
