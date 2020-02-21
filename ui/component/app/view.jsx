@@ -255,7 +255,7 @@ function App(props: Props) {
             <Nag
               message={__('lbry.tv collects usage data for itself and 3rd-parties')}
               actionText={__('OK')}
-              onClose={handleAnalyticsDismiss}
+              onClick={handleAnalyticsDismiss}
             />
           ) : (
             <Nag
