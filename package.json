@@ -30,6 +30,7 @@
     "dev:internal-apis": "LBRY_API_URL='http://localhost:8080' yarn dev:electron",
     "dev:iatv": "LBRY_API_URL='http://localhost:15400' SDK_API_URL='http://localhost:15100' yarn dev:web",
     "run:web": "cross-env NODE_ENV=production yarn compile:web && node ./dist/web/server.js",
+    "run:web-server": "cross-env NODE_ENV=production yarn compile:web && cd ./lbrytv && yarn dev:server",
     "pack": "electron-builder --dir",
     "dist": "electron-builder",
     "build": "cross-env NODE_ENV=production yarn compile:electron && electron-builder build",
