@@ -251,9 +251,19 @@ function App(props: Props) {
       {/* @if TARGET='web' */}
       {showAnalyticsNag && (
         <React.Fragment>
-          {isMobile ? (
+          {!isMobile ? (
             <Nag
-              message={__('lbry.tv collects usage data for itself and 3rd-parties')}
+              message={
+                <I18nMessage
+                  tokens={{
+                    more_information: (
+                      <Button button="link" label={__('more')} href="https://lbry.com/faq/privacy-and-data" />
+                    ),
+                  }}
+                >
+                  lbry.tv collects usage information for itself and third parties (%more_information%).
+                </I18nMessage>
+              }
               actionText={__('OK')}
               onClick={handleAnalyticsDismiss}
             />
