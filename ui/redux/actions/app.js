@@ -34,6 +34,7 @@ import {
   selectModal,
   selectAllowAnalytics,
 } from 'redux/selectors/app';
+import { selectDaemonSettings } from 'redux/selectors/settings';
 import { doAuthenticate, doGetSync } from 'lbryinc';
 import { lbrySettings as config, version as appVersion } from 'package.json';
 import analytics from 'analytics';
@@ -477,7 +478,7 @@ export function doGetAndPopulatePreferences() {
   return (dispatch, getState) => {
     function successCb(savedPreferences) {
       const state = getState();
-      const { daemonSettings } = state;
+      const daemonSettings = selectDaemonSettings(state);
 
       if (savedPreferences !== null) {
         dispatch(doPopulateSharedUserState(savedPreferences));
@@ -485,7 +486,7 @@ export function doGetAndPopulatePreferences() {
         const { settings, sharing_3P: sharing3P } = savedPreferences.value;
         Object.entries(settings).forEach(([key, val]) => {
           if (daemonSettings[key] !== val) {
-            dispatch(doSetDaemonSetting(key, val, false));
+            dispatch(doSetDaemonSetting(key, val, true));
           }
         });
         if (sharing3P !== undefined) {
