@@ -59,7 +59,7 @@ function ChannelsFollowingDiscover(props: Props) {
   if (followedTags.length > 0 && followedTags.length < 5) {
     const followedRows = followedTags.map((tag: Tag) => ({
       title: `Trending Channels for #${toCapitalCase(tag.name)}`,
-      link: `/$/${PAGES.TAGS}?t=${tag.name}`,
+      link: `/$/${PAGES.TAGS}?t=${tag.name}&claim_type=channel`,
       options: {
         claimType: 'channel',
         pageSize: 4,
@@ -72,7 +72,7 @@ function ChannelsFollowingDiscover(props: Props) {
   if (followedTags.length > 4) {
     rowData.push({
       title: 'Trending For Your Tags',
-      link: `/$/${PAGES.TAGS_FOLLOWING}`,
+      link: `/$/${PAGES.TAGS_FOLLOWING}?claim_type=channel`,
       options: {
         claimType: 'channel',
         tags: followedTags.map(tag => tag.name),

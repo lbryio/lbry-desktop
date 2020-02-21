@@ -25,6 +25,7 @@ function TagsPage(props: Props) {
   const isHovering = useHover(buttonRef);
 
   const urlParams = new URLSearchParams(search);
+  const claimType = urlParams.get('claim_type');
   const tagsQuery = urlParams.get('t') || '';
   const tags = tagsQuery.split(',');
   // Eventually allow more than one tag on this page
@@ -47,6 +48,7 @@ function TagsPage(props: Props) {
   return (
     <Page>
       <ClaimListDiscover
+        claimType={claimType}
         headerLabel={
           <span>
             <Icon icon={ICONS.TAG} size={10} />
