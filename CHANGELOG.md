@@ -11,12 +11,16 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Right click to navigate history on desktop ([#3650](https://github.com/lbryio/lbry-desktop/pull/3650))
 - Javanese language support ([#3685](https://github.com/lbryio/lbry-desktop/pull/3685))
 - Wallet sync status on the wallet page ([#3720](https://github.com/lbryio/lbry-desktop/pull/3720))
+- Channel discovery page ([#3700](https://github.com/lbryio/lbry-desktop/pull/3700))
 
 ### Changed
 
 - Drops support for publishing anonymous comments ([#3705](https://github.com/lbryio/lbry-desktop/pull/3705))
+- Don't remember past repost bid amount ([bbd263c](https://github.com/lbryio/lbry-desktop/commit/bbd263c4413935ee4fac7b7b79b7f73b42d9c1f6))
 
 ### Fixed
+
+- Download all transactions when exporting from transaction table ([#3692](https://github.com/lbryio/lbry-desktop/pull/3692))
 
 ## [0.42.0] - [2020-02-14]
 
