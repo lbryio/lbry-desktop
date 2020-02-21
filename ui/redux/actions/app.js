@@ -485,7 +485,7 @@ export function doGetAndPopulatePreferences() {
         // @if TARGET='app'
         const { settings, sharing_3P: sharing3P } = savedPreferences.value;
         Object.entries(settings).forEach(([key, val]) => {
-          if (daemonSettings[key] !== val) {
+          if (val !== null && daemonSettings[key] !== val) {
             dispatch(doSetDaemonSetting(key, val, true));
           }
         });
