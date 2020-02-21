@@ -251,7 +251,7 @@ function App(props: Props) {
       {/* @if TARGET='web' */}
       {showAnalyticsNag && (
         <React.Fragment>
-          {!isMobile ? (
+          {isMobile ? (
             <Nag
               message={
                 <I18nMessage
