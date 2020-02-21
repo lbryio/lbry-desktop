@@ -4,6 +4,7 @@ import React, { useEffect } from 'react';
 import { Route, Redirect, Switch, withRouter } from 'react-router-dom';
 import SettingsPage from 'page/settings';
 import HelpPage from 'page/help';
+import BackupPage from 'page/backup';
 import ReportPage from 'page/report';
 import ShowPage from 'page/show';
 import PublishPage from 'page/publish';
@@ -144,6 +145,7 @@ function AppRouter(props: Props) {
       />
       <Route path={`/$/${PAGES.CHANNELS_FOLLOWING_DISCOVER}`} exact component={ChannelsFollowingDiscoverPage} />
       <Route path={`/$/${PAGES.HELP}`} exact component={HelpPage} />
+      <Route path={`/$/${PAGES.BACKUP}`} exact component={BackupPage} />
       <Route path={`/$/${PAGES.AUTH_VERIFY}`} exact component={SignInVerifyPage} />
       <Route path={`/$/${PAGES.SEARCH}`} exact component={SearchPage} />
       <Route path={`/$/${PAGES.TOP}`} exact component={TopPage} />

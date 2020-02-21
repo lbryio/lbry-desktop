@@ -962,5 +962,10 @@
   "Sign in with lbry.tv to receive notifications about new content.": "Sign in with lbry.tv to receive notifications about new content.",
   "Find new channels to follow": "Find new channels to follow",
   "You aren't currently following any channels. %discover_channels_link%.": "You aren't currently following any channels. %discover_channels_link%.",
-  "LBRY Works Better If You Are Following Channels": "LBRY Works Better If You Are Following Channels"
+  "LBRY Works Better If You Are Following Channels": "LBRY Works Better If You Are Following Channels",
+  "Your wallet is not currently synced with lbry.tv. You are in control of backing up your wallet.": "Your wallet is not currently synced with lbry.tv. You are in control of backing up your wallet.",
+  "A copy of your wallet is synced to lbry.tv": "A copy of your wallet is synced to lbry.tv",
+  "Saved zip archive to %outputPath%": "Saved zip archive to %outputPath%",
+  "A backup of your wallet is synced with lbry.tv": "A backup of your wallet is synced with lbry.tv",
+  "A backup of your wallet is synced with lbry.tv.": "A backup of your wallet is synced with lbry.tv."
 }

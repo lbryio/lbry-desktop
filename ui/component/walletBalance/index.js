@@ -7,7 +7,7 @@ import {
   selectTipsBalance,
 } from 'lbry-redux';
 import { doOpenModal } from 'redux/actions/app';
-import { selectClaimedRewards } from 'lbryinc';
+import { selectClaimedRewards, selectSyncHash } from 'lbryinc';
 import WalletBalance from './view';
 
 const select = state => ({
@@ -17,6 +17,7 @@ const select = state => ({
   supportsBalance: selectSupportsBalance(state) || 0,
   tipsBalance: selectTipsBalance(state) || 0,
   rewards: selectClaimedRewards(state),
+  hasSynced: Boolean(selectSyncHash(state)),
 });
 
 export default connect(
