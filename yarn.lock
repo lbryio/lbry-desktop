@@ -1033,10 +1033,10 @@
     prop-types "^15.6.2"
     scheduler "^0.15.0"
 
-"@lbry/components@^3.0.9":
-  version "3.0.9"
-  resolved "https://registry.yarnpkg.com/@lbry/components/-/components-3.0.9.tgz#ce516be752bc58928763f07a1d5c6d5b3304daee"
-  integrity sha512-F346XDI66V4hDwninMWaqw7ZB+nS5yutuQ0Zm9zR5fO9SzoSNohtDQXNHeKxnH4wRL70O1isol2QZaqOsbcJ9Q==
+"@lbry/components@^3.0.10":
+  version "3.0.10"
+  resolved "https://registry.yarnpkg.com/@lbry/components/-/components-3.0.10.tgz#16e03c42f95274743c6ddcec1d541ea73d54e745"
+  integrity sha512-4bfINx7cN03IYRag5NxVkP04SuxsO1cQtey8J+z7ykF+MFbkhEgnZZt4kQmaaL3oK1GuNEpjbXZdntc2Eikyfg==
 
 "@mapbox/hast-util-table-cell-style@^0.1.3":
   version "0.1.3"
