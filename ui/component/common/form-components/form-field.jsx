@@ -1,5 +1,5 @@
 // @flow
-import type { ElementRef } from 'react';
+import type { ElementRef, Node } from 'react';
 import React from 'react';
 import ReactDOMServer from 'react-dom/server';
 import SimpleMDE from 'react-simplemde-editor';
@@ -10,7 +10,7 @@ import 'easymde/dist/easymde.min.css';
 
 type Props = {
   name: string,
-  label?: string,
+  label?: string | Node,
   render?: () => React$Node,
   prefix?: string,
   postfix?: string,

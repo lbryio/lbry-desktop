@@ -85,7 +85,7 @@
 
 .main--contained {
   margin: auto;
-  margin-top: 5rem;
+  margin-top: 2rem;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -118,7 +118,7 @@
   width: 40em;
   max-width: unset;
   min-width: unset;
-  
+
   @media (max-width: $breakpoint-small) {
     width: 100%;
   }
