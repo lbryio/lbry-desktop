@@ -1,10 +1,12 @@
 // @flow
 import * as ICONS from 'constants/icons';
 import * as MODALS from 'constants/modal_types';
+import * as PAGES from 'constants/pages';
 import React from 'react';
 import CreditAmount from 'component/common/credit-amount';
 import Button from 'component/button';
 import Icon from 'component/common/icon';
+import HelpLink from 'component/common/help-link';
 
 type Props = {
   balance: number,
@@ -13,10 +15,11 @@ type Props = {
   supportsBalance: number,
   tipsBalance: number,
   doOpenModal: string => void,
+  hasSynced: boolean,
 };
 
 const WalletBalance = (props: Props) => {
-  const { balance, claimsBalance, supportsBalance, tipsBalance, doOpenModal } = props;
+  const { balance, claimsBalance, supportsBalance, tipsBalance, doOpenModal, hasSynced } = props;
 
   return (
     <React.Fragment>
@@ -36,6 +39,31 @@ const WalletBalance = (props: Props) => {
               onClick={() => doOpenModal(MODALS.WALLET_SEND)}
             />
           </div>
+          {/* @if TARGET='app' */}
+          {hasSynced ? (
+            <div className="section">
+              <div className="section__flex">
+                <Icon sectionIcon iconColor={'blue'} icon={ICONS.LOCK} />
+                <h2 className="section__title--small">
+                  {__('A backup of your wallet is synced with lbry.tv.')}
+                  <HelpLink href="https://lbry.com/faq/account-sync" />
+                </h2>
+              </div>
+            </div>
+          ) : (
+            <div className="section">
+              <div className="section__flex">
+                <Icon sectionIcon iconColor={'blue'} icon={ICONS.UNLOCK} />
+                <h2 className="section__title--small">
+                  {__(
+                    'Your wallet is not currently synced with lbry.tv. You are in control of backing up your wallet.'
+                  )}
+                  <HelpLink navigate={`/$/${PAGES.BACKUP}`} />
+                </h2>
+              </div>
+            </div>
+          )}
+          {/* @endif */}
         </div>
 
         <div>
