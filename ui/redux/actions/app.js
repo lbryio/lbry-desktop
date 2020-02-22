@@ -19,6 +19,7 @@ import {
   doPreferenceGet,
   doToast,
   doClearSupport,
+  SHARED_PREFERENCES,
 } from 'lbry-redux';
 import Native from 'native';
 import { doFetchDaemonSettings, doSetAutoLaunch, doSetDaemonSetting } from 'redux/actions/settings';
@@ -484,9 +485,15 @@ export function doGetAndPopulatePreferences() {
         dispatch(doPopulateSharedUserState(savedPreferences));
         // @if TARGET='app'
         const { settings, sharing_3P: sharing3P } = savedPreferences.value;
+        // apply daemonSettings (todo: separate function)
         Object.entries(settings).forEach(([key, val]) => {
           if (val !== null && daemonSettings[key] !== val) {
-            dispatch(doSetDaemonSetting(key, val, true));
+            if (key === SHARED_PREFERENCES.WALLET_SERVERS) {
+              const servers = val.map(item => `${item[0]}:${item[1]}`);
+              dispatch(doSetDaemonSetting(key, servers, true));
+            } else {
+              dispatch(doSetDaemonSetting(key, val, true));
+            }
           }
         });
         if (sharing3P !== undefined) {
