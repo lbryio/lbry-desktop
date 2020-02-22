@@ -112,6 +112,7 @@ function App(props: Props) {
     uri = newpath + hash;
   } catch (e) {}
 
+  const noNagOnPage = pathname.startsWith(`/$/${PAGES.EMBED}`) || pathname.startsWith(`/$/${PAGES.AUTH_VERIFY}`);
   // @if TARGET='web'
   function handleAnalyticsDismiss() {
     setShowAnalyticsNag(false);
@@ -249,7 +250,7 @@ function App(props: Props) {
       )}
       {/* @endif */}
       {/* @if TARGET='web' */}
-      {showAnalyticsNag && (
+      {showAnalyticsNag && !noNagOnPage && (
         <React.Fragment>
           {isMobile ? (
             <Nag
