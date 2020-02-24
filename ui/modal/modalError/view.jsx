@@ -55,7 +55,7 @@ class ModalError extends React.PureComponent<Props> {
             "We're sorry that LBRY has encountered an error. This has been reported and we will investigate the problem."
           )}
         </p>
-        <ul className="error-modal__error-list">{errorInfoList}</ul>
+        <ul className="error-modal__error-list ul--no-style">{errorInfoList}</ul>
       </Modal>
     );
   }
