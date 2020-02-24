@@ -212,6 +212,11 @@ a {
   color: var(--color-black);
 }
 
+.help--inline {
+  @extend .help;
+  margin-top: 0;
+}
+
 .empty {
   color: var(--color-text-empty);
   font-style: italic;
