@@ -39,7 +39,6 @@ type Props = {
   user: ?{ id: string, has_verified_email: boolean, is_reward_approved: boolean },
   location: { pathname: string, hash: string, search: string },
   history: { push: string => void },
-  fetchRewards: () => void,
   fetchTransactions: (number, number) => void,
   fetchAccessToken: () => void,
   fetchChannelListMine: () => void,
@@ -62,7 +61,6 @@ type Props = {
 function App(props: Props) {
   const {
     theme,
-    fetchRewards,
     fetchTransactions,
     user,
     fetchAccessToken,
@@ -144,11 +142,10 @@ function App(props: Props) {
     fetchAccessToken();
 
     // @if TARGET='app'
-    fetchRewards();
     fetchTransactions(1, TX_LIST.LATEST_PAGE_SIZE);
     fetchChannelListMine(); // This needs to be done for web too...
     // @endif
-  }, [fetchRewards, fetchTransactions, fetchAccessToken, fetchChannelListMine, wrapperElement]);
+  }, [fetchTransactions, fetchAccessToken, fetchChannelListMine, wrapperElement]);
 
   useEffect(() => {
     // $FlowFixMe
