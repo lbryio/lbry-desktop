@@ -14,13 +14,15 @@ const NONE = 'none';
 
 type Props = {
   setWelcomeVersion: () => void,
+  signOut: () => void,
   setShareDataInternal: boolean => void,
   setShareDataThirdParty: boolean => void,
   history: { replace: string => void },
+  authenticated: boolean,
 };
 
 function PrivacyAgreement(props: Props) {
-  const { setWelcomeVersion, setShareDataInternal, setShareDataThirdParty, history } = props;
+  const { setWelcomeVersion, setShareDataInternal, setShareDataThirdParty, history, authenticated, signOut } = props;
   const [share, setShare] = useState(undefined); // preload
   const [agree, setAgree] = useState(false); // preload
 
@@ -55,10 +57,10 @@ function PrivacyAgreement(props: Props) {
         </div>
       </div>
       <hr />
+      <p className="section__body section__subtitle">
+        {__('Can this app send information about your usage to inform publishers and improve the software?')}
+      </p>
       <Form onSubmit={handleSubmit} className="section__body">
-        <p className="section__subtitle">
-          {__('Can this app send information about your usage to inform publishers and improve the software?')}
-        </p>
         <fieldset>
           <FormField
             name={'shareFreely'}
@@ -89,6 +91,7 @@ function PrivacyAgreement(props: Props) {
             onChange={e => setShare(LIMITED)}
           />
           <FormField
+            disabled={authenticated}
             name={'shareNot'}
             type="radio"
             checked={share === NONE}
@@ -102,45 +105,60 @@ function PrivacyAgreement(props: Props) {
                 users, though this information is not stored permanently.`)}
             onChange={e => setShare(NONE)}
           />
+          {authenticated && (
+            <div className="card--inline section--padded">
+              <p className="help--inline">
+                <I18nMessage
+                  tokens={{
+                    signout_button: <Button button="link" label={__('Sign Out')} onClick={signOut} />,
+                  }}
+                >
+                  You are signed into lbry.tv which automatically shares data with LBRY inc. %signout_button%.
+                </I18nMessage>
+              </p>
+            </div>
+          )}
         </fieldset>
 
-        <p className="section__subtitle">
-          <I18nMessage
-            tokens={{
-              terms: <Button button="link" href="https://www.lbry.com/termsofservice" label={__('Terms of Service')} />,
-            }}
-          >
-            Do you agree to the %terms%?
-          </I18nMessage>
-        </p>
-        <fieldset>
-          <FormField
-            name={'agreeButton'}
-            type="radio"
-            label={'Yes'}
-            checked={agree === true}
-            onChange={e => setAgree(e.target.checked)}
-          />
-          <FormField
-            name={'disagreeButton'}
-            type="radio"
-            checked={agree === false}
-            label={__('No')}
-            onChange={e => setAgree(!e.target.checked)}
-          />
-        </fieldset>
-        {share === NONE && (
-          <>
-            <p className="help">
-              {__(
-                'While we respect the desire for maximally private usage, please note that choosing this option hurts the ability for creators to understand how their content is performing.'
-              )}
-            </p>
-          </>
-        )}
+        <div className="section__body">
+          <p className="section__subtitle">
+            <I18nMessage
+              tokens={{
+                terms: (
+                  <Button button="link" href="https://www.lbry.com/termsofservice" label={__('Terms of Service')} />
+                ),
+              }}
+            >
+              Do you agree to the %terms%?
+            </I18nMessage>
+          </p>
+          <fieldset>
+            <FormField
+              name={'agreeButton'}
+              type="radio"
+              label={'Yes'}
+              checked={agree === true}
+              onChange={e => setAgree(e.target.checked)}
+            />
+            <FormField
+              name={'disagreeButton'}
+              type="radio"
+              checked={agree === false}
+              label={__('No')}
+              onChange={e => setAgree(!e.target.checked)}
+            />
+          </fieldset>
+        </div>
         <div className={'card__actions'}>
           <Button button="primary" label={__(`Let's go`)} disabled={!share || !agree} type="submit" />
         </div>
+        {share === NONE && (
+          <p className="help">
+            {__(
+              'While we respect the desire for maximally private usage, please note that choosing this option hurts the ability for creators to understand how their content is performing.'
+            )}
+          </p>
+        )}
       </Form>
     </section>
   );
