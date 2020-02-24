@@ -16,7 +16,7 @@ const LBRY_TV_UA_ID = 'UA-60403362-12';
 const DESKTOP_UA_ID = 'UA-60403362-13';
 const SECOND_TRACKER_NAME = 'tracker2';
 
-const SHARE_INTERNAL = 'shareInternal';
+export const SHARE_INTERNAL = 'shareInternal';
 const SHARE_THIRD_PARTY = 'shareThirdParty';
 
 // @if TARGET='app'

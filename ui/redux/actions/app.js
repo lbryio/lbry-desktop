@@ -38,7 +38,7 @@ import {
 import { selectDaemonSettings } from 'redux/selectors/settings';
 import { doAuthenticate, doGetSync } from 'lbryinc';
 import { lbrySettings as config, version as appVersion } from 'package.json';
-import analytics from 'analytics';
+import analytics, { SHARE_INTERNAL } from 'analytics';
 import { doSignOutCleanup, deleteSavedPassword, getSavedPassword } from 'util/saved-passwords';
 
 // @if TARGET='app'
@@ -320,8 +320,9 @@ export function doAlertError(errorList) {
 export function doDaemonReady() {
   return (dispatch, getState) => {
     const state = getState();
-    const daemonSettings = selectDaemonSettings(state);
-    const { share_usage_data: shareUsageData } = daemonSettings;
+
+    // TODO: call doFetchDaemonSettings, then get usage data, and call doAuthenticate once they are loaded into the store
+    const shareUsageData = window.localStorage.getItem(SHARE_INTERNAL) === 'true';
 
     dispatch(doAuthenticate(appVersion, undefined, undefined, shareUsageData));
     dispatch({ type: ACTIONS.DAEMON_READY });
