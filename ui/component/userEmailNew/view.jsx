@@ -31,7 +31,9 @@ function UserEmailNew(props: Props) {
   function handleSubmit() {
     setSync(formSyncEnabled);
     addUserEmail(newEmail);
+    // @if TARGET='app'
     setShareDiagnosticData(true);
+    // @endif
     analytics.emailProvidedEvent();
   }
 
@@ -73,7 +75,7 @@ function UserEmailNew(props: Props) {
           />
         )}
 
-        {!shareUsageData && (
+        {!shareUsageData && !IS_WEB && (
           <FormField
             type="checkbox"
             name="share_data_checkbox"
