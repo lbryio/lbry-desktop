@@ -4,7 +4,6 @@ import { connect } from 'react-redux';
 import {
   selectUser,
   selectAccessToken,
-  doRewardList,
   doFetchAccessToken,
   selectGetSyncErrorMessage,
   selectUploadCount,
@@ -38,7 +37,6 @@ const select = state => ({
 });
 
 const perform = dispatch => ({
-  fetchRewards: () => dispatch(doRewardList()),
   fetchTransactions: (page, pageSize) => dispatch(doFetchTransactions(page, pageSize)),
   fetchAccessToken: () => dispatch(doFetchAccessToken()),
   fetchChannelListMine: () => dispatch(doFetchChannelListMine()),
