@@ -21,7 +21,6 @@ type Props = {
   notifyUnlockWallet: (?boolean) => Promise<any>,
   daemonVersionMatched: boolean,
   onReadyToLaunch: () => void,
-  authenticate: () => void,
   hideModal: () => void,
   modal: ?{
     id: string,
@@ -58,7 +57,6 @@ export default class SplashScreen extends React.PureComponent<Props, State> {
 
     (this: any).renderModals = this.renderModals.bind(this);
     (this: any).runWithIncompatibleDaemon = this.runWithIncompatibleDaemon.bind(this);
-    this.hasRecordedUser = false;
     this.timeout = undefined;
   }
 
@@ -141,16 +139,9 @@ export default class SplashScreen extends React.PureComponent<Props, State> {
   }
 
   updateStatusCallback(status: StatusResponse, waitingForUnlock: boolean = false) {
-    const { authenticate } = this.props;
-
     if (status.connection_status.code !== 'connected') {
       this.setState({ error: true });
       return;
-    }
-
-    if (!this.hasRecordedUser && status) {
-      authenticate();
-      this.hasRecordedUser = true;
     }
 
     const { wallet, startup_status: startupStatus } = status;
@@ -201,7 +192,6 @@ export default class SplashScreen extends React.PureComponent<Props, State> {
     }
   }
 
-  hasRecordedUser: boolean;
   timeout: ?TimeoutID;
 
   renderModals() {

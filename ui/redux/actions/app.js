@@ -320,7 +320,10 @@ export function doAlertError(errorList) {
 export function doDaemonReady() {
   return (dispatch, getState) => {
     const state = getState();
-    dispatch(doAuthenticate(appVersion));
+    const daemonSettings = selectDaemonSettings(state);
+    const { share_usage_data: shareUsageData } = daemonSettings;
+
+    dispatch(doAuthenticate(appVersion, undefined, undefined, shareUsageData));
     dispatch({ type: ACTIONS.DAEMON_READY });
 
     // @if TARGET='app'
