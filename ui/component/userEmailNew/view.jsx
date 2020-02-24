@@ -4,7 +4,6 @@ import { FormField, Form } from 'component/common/form';
 import Button from 'component/button';
 import analytics from 'analytics';
 import { EMAIL_REGEX } from 'constants/email';
-import I18nMessage from 'component/i18nMessage';
 
 type Props = {
   errorMessage: ?string,
@@ -13,17 +12,26 @@ type Props = {
   syncEnabled: boolean,
   setSync: boolean => void,
   balance: number,
+  daemonSettings: { share_usage_data: boolean },
+  setShareDiagnosticData: boolean => void,
 };
 
 function UserEmailNew(props: Props) {
-  const { errorMessage, isPending, addUserEmail, setSync } = props;
+  const { errorMessage, isPending, addUserEmail, setSync, daemonSettings, setShareDiagnosticData } = props;
+  const { share_usage_data: shareUsageData } = daemonSettings;
   const [newEmail, setEmail] = useState('');
+  const [localShareUsageData, setLocalShareUsageData] = React.useState(false);
   const [formSyncEnabled, setFormSyncEnabled] = useState(true);
   const valid = newEmail.match(EMAIL_REGEX);
+
+  function handleUsageDataChange() {
+    setLocalShareUsageData(!shareUsageData);
+  }
 
   function handleSubmit() {
     setSync(formSyncEnabled);
     addUserEmail(newEmail);
+    setShareDiagnosticData(true);
     analytics.emailProvidedEvent();
   }
 
@@ -64,27 +72,30 @@ function UserEmailNew(props: Props) {
             onChange={() => setFormSyncEnabled(!formSyncEnabled)}
           />
         )}
+
+        {!shareUsageData && (
+          <FormField
+            type="checkbox"
+            name="share_data_checkbox"
+            checked={localShareUsageData}
+            onChange={handleUsageDataChange}
+            label={
+              <React.Fragment>
+                {__('Share usage data with LBRY inc.')}{' '}
+                <Button button="link" href="https://lbry.com/faq/account-sync" label={__('Learn More')} />
+                {!localShareUsageData && <span className="error-text"> ({__('Required')})</span>}
+              </React.Fragment>
+            }
+          />
+        )}
         <div className="card__actions">
-          <Button button="primary" type="submit" label={__('Continue')} disabled={!newEmail || !valid || isPending} />
+          <Button
+            button="primary"
+            type="submit"
+            label={__('Continue')}
+            disabled={!newEmail || !valid || !setShareDiagnosticData || isPending}
+          />
         </div>
-        <p className="help">
-          <React.Fragment>
-            <I18nMessage
-              tokens={{
-                terms: (
-                  <Button
-                    tabIndex="2"
-                    button="link"
-                    href="https://www.lbry.com/termsofservice"
-                    label={__('Terms of Service')}
-                  />
-                ),
-              }}
-            >
-              By continuing, I agree to the %terms% and confirm I am over the age of 13.
-            </I18nMessage>
-          </React.Fragment>
-        </p>
       </Form>
     </React.Fragment>
   );
