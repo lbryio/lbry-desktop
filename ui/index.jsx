@@ -279,7 +279,7 @@ function AppWrapper() {
 
   useEffect(() => {
     if (persistDone) {
-      app.store.dispatch(doToggle3PAnalytics());
+      app.store.dispatch(doToggle3PAnalytics(null, true));
     }
   }, [persistDone]);
 

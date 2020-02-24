@@ -464,7 +464,7 @@ export function doToggle3PAnalytics(allowParam, doNotDispatch) {
   return (dispatch, getState) => {
     const state = getState();
     const allowState = selectAllowAnalytics(state);
-    const allow = allowParam !== undefined ? allowParam : allowState;
+    const allow = allowParam !== undefined && allowParam !== null ? allowParam : allowState;
     analytics.toggleThirdParty(allow);
     if (!doNotDispatch) {
       return dispatch({
