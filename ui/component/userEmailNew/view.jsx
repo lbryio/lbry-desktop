@@ -4,6 +4,7 @@ import { FormField, Form } from 'component/common/form';
 import Button from 'component/button';
 import analytics from 'analytics';
 import { EMAIL_REGEX } from 'constants/email';
+import I18nMessage from 'component/i18nMessage';
 
 type Props = {
   errorMessage: ?string,
@@ -99,6 +100,26 @@ function UserEmailNew(props: Props) {
           />
         </div>
       </Form>
+      {/* @if TARGET='web' */}
+      <p className="help">
+        <React.Fragment>
+          <I18nMessage
+            tokens={{
+              terms: (
+                <Button
+                  tabIndex="2"
+                  button="link"
+                  href="https://www.lbry.com/termsofservice"
+                  label={__('Terms of Service')}
+                />
+              ),
+            }}
+          >
+            By continuing, I agree to the %terms% and confirm I am over the age of 13.
+          </I18nMessage>
+        </React.Fragment>
+      </p>
+      {/* @endif */}
     </React.Fragment>
   );
 }
