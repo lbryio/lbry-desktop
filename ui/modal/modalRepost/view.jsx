@@ -11,6 +11,7 @@ import { FormField } from 'component/common/form';
 import { parseURI, isNameValid, creditsToString } from 'lbry-redux';
 import usePersistedState from 'effects/use-persisted-state';
 import I18nMessage from 'component/i18nMessage';
+import analytics from 'analytics';
 
 type Props = {
   doHideModal: () => void,
@@ -105,7 +106,8 @@ function ModalRepost(props: Props) {
         bid: creditsToString(repostBid),
         channel_id: channelToRepostTo.claim_id,
         claim_id: contentClaimId,
-      }).then(() => {
+      }).then((repostClaim: StreamClaim) => {
+        analytics.apiLogPublish(repostClaim);
         doHideModal();
         doToast({ message: __('Woohoo! Sucessfully reposted this claim.') });
       });
