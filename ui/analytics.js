@@ -160,6 +160,7 @@ const analytics: Analytics = {
       if (channelClaimId) {
         params['channel_claim_id'] = channelClaimId;
       }
+
       Lbryio.call('event', 'publish', params);
     }
   },

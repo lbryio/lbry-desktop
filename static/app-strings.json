@@ -982,5 +982,7 @@
   "Do you agree to the %terms%?": "Do you agree to the %terms%?",
   "While we respect the desire for maximally private usage, please note that choosing this option hurts the ability for creators to understand how their content is performing.": "While we respect the desire for maximally private usage, please note that choosing this option hurts the ability for creators to understand how their content is performing.",
   "A copy of your wallet is synced to lbry.tv": "A copy of your wallet is synced to lbry.tv",
-  "Internal sharing is required while signed in.": "Internal sharing is required while signed in."
+  "Internal sharing is required while signed in.": "Internal sharing is required while signed in.",
+  "Your wallet is not currently synced with lbry.tv. You are in control of backing up your wallet.": "Your wallet is not currently synced with lbry.tv. You are in control of backing up your wallet.",
+  "FINAL WARNING: This action is permanent and cannot be undone.": "FINAL WARNING: This action is permanent and cannot be undone."
 }
