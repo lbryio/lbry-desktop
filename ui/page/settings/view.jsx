@@ -478,7 +478,7 @@ class SettingsPage extends React.PureComponent<Props, State> {
                     name="share_third_party"
                     onChange={e => toggle3PAnalytics(e.target.checked)}
                     checked={allowAnalytics}
-                    label={__('Allow the App to access third party analytics platforms')}
+                    label={__('Allow the app to access third party analytics platforms')}
                     helper={__('We use detailed analytics to improve all aspects of the LBRY experience.')}
                   />
                 </>
