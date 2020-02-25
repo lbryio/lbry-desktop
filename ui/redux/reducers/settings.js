@@ -2,7 +2,7 @@ import * as ACTIONS from 'constants/action_types';
 import * as APP_SETTINGS from 'constants/settings';
 import moment from 'moment';
 import SUPPORTED_LANGUAGES from 'constants/supported_languages';
-import { ACTIONS as LBRY_REDUX_ACTIONS, SHARED_PREFERENCES, SETTINGS } from 'lbry-redux';
+import { ACTIONS as LBRY_REDUX_ACTIONS, SETTINGS } from 'lbry-redux';
 const reducers = {};
 let settingLanguage = [];
 try {
@@ -16,9 +16,7 @@ const defaultState = {
   isNight: false,
   loadedLanguages: [...Object.keys(window.i18n_messages), 'en'] || ['en'],
   customWalletServers: [],
-  sharedPreferences: {
-    [SHARED_PREFERENCES.WALLET_SERVERS]: [],
-  },
+  sharedPreferences: {},
   daemonSettings: {},
   daemonStatus: {},
   clientSettings: {
