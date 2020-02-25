@@ -4,7 +4,13 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
-## [0.4x.x] - [Unreleased]
+## [0.43.1] - [2020-02-25]
+
+### Fixed
+
+- Do not sync invalid preference data ([#3743](https://github.com/lbryio/lbry-desktop/pull/3743))
+
+## [0.43.0] - [2020-02-25]
 
 ### Added
 
