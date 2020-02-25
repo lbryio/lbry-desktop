@@ -96,7 +96,7 @@ function UserEmailNew(props: Props) {
             button="primary"
             type="submit"
             label={__('Continue')}
-            disabled={!newEmail || !valid || !setShareDiagnosticData || isPending}
+            disabled={!newEmail || !valid || !localShareUsageData || isPending}
           />
         </div>
       </Form>
