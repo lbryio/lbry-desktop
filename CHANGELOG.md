@@ -15,7 +15,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ### Changed
 
-- Updated lbry-sdk to [0.60.1](https://github.com/lbryio/lbry-sdk/releases/tag/v0.60.1)
+- Updated lbry-sdk to [0.61.0](https://github.com/lbryio/lbry-sdk/releases/tag/v0.61.0)
 - Drops support for publishing anonymous comments ([#3705](https://github.com/lbryio/lbry-desktop/pull/3705))
 - Don't remember past repost bid amount ([bbd263c](https://github.com/lbryio/lbry-desktop/commit/bbd263c4413935ee4fac7b7b79b7f73b42d9c1f6))
 

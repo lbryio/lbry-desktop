@@ -26,7 +26,7 @@ function UserEmailNew(props: Props) {
   const valid = newEmail.match(EMAIL_REGEX);
 
   function handleUsageDataChange() {
-    setLocalShareUsageData(!shareUsageData);
+    setLocalShareUsageData(!localShareUsageData);
   }
 
   function handleSubmit() {

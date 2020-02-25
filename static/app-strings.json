@@ -985,5 +985,7 @@
   "Internal sharing is required while signed in.": "Internal sharing is required while signed in.",
   "Your wallet is not currently synced with lbry.tv. You are in control of backing up your wallet.": "Your wallet is not currently synced with lbry.tv. You are in control of backing up your wallet.",
   "FINAL WARNING: This action is permanent and cannot be undone.": "FINAL WARNING: This action is permanent and cannot be undone.",
-  "Allow the app to access third party analytics platforms": "Allow the app to access third party analytics platforms"
+  "Allow the app to access third party analytics platforms": "Allow the app to access third party analytics platforms",
+  "Share usage data with LBRY inc.": "Share usage data with LBRY inc.",
+  "Required": "Required"
 }
