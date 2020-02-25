@@ -493,7 +493,7 @@ export function doGetAndPopulatePreferences() {
         Object.entries(settings).forEach(([key, val]) => {
           if (val !== null && daemonSettings[key] !== val) {
             if (key === SHARED_PREFERENCES.WALLET_SERVERS) {
-              const hasSavedServers = Array.isArray(val) && val.length;
+              const hasSavedServers = Array.isArray(val) && val.length > 0;
               if (hasSavedServers) {
                 // Ignore this key if there are no actual saved servers in the list
                 const servers = val.map(item => `${item[0]}:${item[1]}`);
