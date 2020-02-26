@@ -21,25 +21,28 @@ function UserChannelFollowIntro(props: Props) {
           'LBRY works better if you find and follow at least 5 creators you like. You can also block channels you never want to see.'
         )}
       </p>
-      <ClaimListDiscover
-        defaultTypeSort={TYPE_TOP}
-        defaultTimeSort={TIME_ALL}
-        pageSize={99}
-        claimType="channel"
-        noInfiniteScroll
-      />
-      {followingCount > 0 && (
-        <Nag
-          type="helpful"
-          message={
-            followingCount === 1
-              ? __('Nice! You are currently following %followingCount% creator', { followingCount })
-              : __('Nice! You are currently following %followingCount% creators', { followingCount })
-          }
-          actionText={__('Continue')}
-          onClick={onContinue}
+      <div className="section__body">
+        <ClaimListDiscover
+          defaultTypeSort={TYPE_TOP}
+          defaultTimeSort={TIME_ALL}
+          pageSize={99}
+          claimType="channel"
+          noInfiniteScroll
+          hideBlock
         />
-      )}
+        {followingCount > 0 && (
+          <Nag
+            type="helpful"
+            message={
+              followingCount === 1
+                ? __('Nice! You are currently following %followingCount% creator', { followingCount })
+                : __('Nice! You are currently following %followingCount% creators', { followingCount })
+            }
+            actionText={__('Continue')}
+            onClick={onContinue}
+          />
+        )}
+      </div>
     </React.Fragment>
   );
 }
