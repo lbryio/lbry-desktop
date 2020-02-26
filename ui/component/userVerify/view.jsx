@@ -132,7 +132,7 @@ class UserVerify extends React.PureComponent<Props> {
             subtitle={__('Rewards validation is optional.')}
             actions={
               <Fragment>
-                <Button href="https://chat.lbry.com" button="primary" label={__('Continue Without Rewards')} />
+                <Button navigate={skipLink || '/'} button="primary" label={__('Continue Without Rewards')} />
               </Fragment>
             }
           />
