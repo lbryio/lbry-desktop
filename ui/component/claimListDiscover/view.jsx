@@ -54,7 +54,6 @@ type Props = {
   claimType?: string | Array<string>,
   renderProperties?: Claim => Node,
   includeSupportAction?: boolean,
-  noInfiniteScroll: boolean,
   hideBlock: boolean,
 };
 
@@ -82,7 +81,6 @@ function ClaimListDiscover(props: Props) {
     pageSize,
     renderProperties,
     includeSupportAction,
-    noInfiniteScroll,
     hideBlock,
   } = props;
   const didNavigateForward = history.action === 'PUSH';
@@ -232,7 +230,7 @@ function ClaimListDiscover(props: Props) {
   }
 
   function handleScrollBottom() {
-    if (!loading && !noInfiniteScroll) {
+    if (!loading) {
       setPage(page + 1);
     }
   }

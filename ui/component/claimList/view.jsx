@@ -1,6 +1,5 @@
 // @flow
 import { MAIN_WRAPPER_CLASS } from 'component/app/view';
-import { MAIN_CLASS } from 'component/page/view';
 import type { Node } from 'react';
 import React, { useEffect, useState } from 'react';
 import classnames from 'classnames';
@@ -11,7 +10,6 @@ import usePersistedState from 'effects/use-persisted-state';
 
 const SORT_NEW = 'new';
 const SORT_OLD = 'old';
-const PADDING_ALLOWANCE = 100;
 
 type Props = {
   uris: Array<string>,
@@ -73,20 +71,16 @@ export default function ClaimList(props: Props) {
     function handleScroll(e) {
       if (page && pageSize && onScrollBottom && !scrollBottomCbMap[page]) {
         const mainElWrapper = document.querySelector(`.${MAIN_WRAPPER_CLASS}`);
-        const main = document.querySelector(`.${MAIN_CLASS}`);
 
-        if (
-          mainElWrapper &&
-          main &&
-          (window.scrollY + window.innerHeight >= mainElWrapper.offsetHeight ||
-            mainElWrapper.offsetHeight - main.offsetHeight > PADDING_ALLOWANCE) &&
-          !loading &&
-          urisLength >= pageSize
-        ) {
-          onScrollBottom();
+        if (mainElWrapper && !loading && urisLength >= pageSize) {
+          const contentWrapperAtBottomOfPage = window.scrollY + window.innerHeight >= mainElWrapper.offsetHeight;
 
-          // Save that we've fetched this page to avoid weird stuff happening with fast scrolling
-          setScrollBottomCbMap({ ...scrollBottomCbMap, [page]: true });
+          if (contentWrapperAtBottomOfPage) {
+            onScrollBottom();
+
+            // Save that we've fetched this page to avoid weird stuff happening with fast scrolling
+            setScrollBottomCbMap({ ...scrollBottomCbMap, [page]: true });
+          }
         }
       }
     }
