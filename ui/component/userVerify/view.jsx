@@ -120,6 +120,22 @@ class UserVerify extends React.PureComponent<Props> {
               </Fragment>
             }
           />
+
+          <div className="section__divider">
+            <hr />
+            <p>{__('OR')}</p>
+          </div>
+
+          <Card
+            icon={ICONS.REMOVE}
+            title={__('Skip')}
+            subtitle={__('Rewards validation is optional.')}
+            actions={
+              <Fragment>
+                <Button href="https://chat.lbry.com" button="primary" label={__('Continue Without Rewards')} />
+              </Fragment>
+            }
+          />
         </div>
       </React.Fragment>
     );
