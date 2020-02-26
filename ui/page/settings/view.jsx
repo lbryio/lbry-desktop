@@ -471,7 +471,7 @@ class SettingsPage extends React.PureComponent<Props, State> {
                         ? __('Internal sharing is required while signed in.')
                         : __('Internal sharing is required to participate in rewards programs.')
                     }
-                    disabled={isAuthenticated}
+                    disabled={isAuthenticated && daemonSettings.share_usage_data}
                   />
                   <FormField
                     type="checkbox"
