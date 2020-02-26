@@ -21,7 +21,7 @@ type Props = {
   pageSize: number,
   orderBy?: Array<string>,
   releaseTime?: string,
-  claimType?: string,
+  claimType?: Array<string>,
   timestamp?: string,
 };
 
@@ -54,10 +54,11 @@ function ClaimTilesDiscover(props: Props) {
     not_tags: Array<string>,
     order_by: Array<string>,
     release_time?: string,
-    claim_type?: string,
+    claim_type: string,
     timestamp?: string,
   } = {
     page_size: pageSize,
+    claim_type: claimType || ['stream', 'channel', 'repost'],
     // no_totals makes it so the sdk doesn't have to calculate total number pages for pagination
     // it's faster, but we will need to remove it if we start using total_pages
     no_totals: true,
@@ -76,7 +77,7 @@ function ClaimTilesDiscover(props: Props) {
   }
 
   if (!showReposts) {
-    options.claim_type = 'stream';
+    options.claim_type = options.claim_type.filter(claimType => claimType !== 'repost');
   }
 
   if (claimType) {
@@ -89,7 +90,7 @@ function ClaimTilesDiscover(props: Props) {
 
   const claimSearchCacheQuery = createNormalizedClaimSearchKey(options);
   const uris = claimSearchByQuery[claimSearchCacheQuery] || [];
-  const shouldPerformSearch = !hasSearched || (uris.length === 0 || (!loading && uris.length < pageSize));
+  const shouldPerformSearch = !hasSearched || uris.length === 0 || (!loading && uris.length < pageSize);
   // Don't use the query from createNormalizedClaimSearchKey for the effect since that doesn't include page & release_time
   const optionsStringForEffect = JSON.stringify(options);
 
