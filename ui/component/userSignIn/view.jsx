@@ -4,6 +4,7 @@ import { withRouter } from 'react-router';
 import UserEmailNew from 'component/userEmailNew';
 import UserEmailVerify from 'component/userEmailVerify';
 import UserFirstChannel from 'component/userFirstChannel';
+import UserChannelFollowIntro from 'component/userChannelFollowIntro';
 import { DEFAULT_BID_FOR_FIRST_CHANNEL } from 'component/userFirstChannel/view';
 import { rewards as REWARDS, YOUTUBE_STATUSES } from 'lbryinc';
 import UserVerify from 'component/userVerify';
@@ -11,6 +12,7 @@ import Spinner from 'component/spinner';
 import YoutubeTransferStatus from 'component/youtubeTransferStatus';
 import SyncPassword from 'component/syncPassword';
 import useFetched from 'effects/use-fetched';
+import usePersistedState from 'effects/use-persisted-state';
 import Confetti from 'react-confetti';
 
 type Props = {
@@ -58,6 +60,7 @@ function UserSignIn(props: Props) {
   const redirect = urlParams.get('redirect');
   const shouldRedirectImmediately = urlParams.get('immediate');
   const [initialSignInStep, setInitialSignInStep] = React.useState();
+  const [hasSeenFollowList, setHasSeenFollowList] = usePersistedState('channel-follow-intro', false);
   const hasVerifiedEmail = user && user.has_verified_email;
   const rewardsApproved = user && user.is_reward_approved;
   const hasFetchedReward = useFetched(claimingReward);
@@ -73,11 +76,6 @@ function UserSignIn(props: Props) {
   // We may want to keep a component rendered while something is being fetched, instead of replacing it with the large spinner
   // The verbose variable names are an attempt to alleviate _some_ of the confusion from handling all edge cases that come from
   // reward claiming, channel creation, account syncing, and youtube transfer
-  const canHijackSignInFlowWithSpinner = hasVerifiedEmail && !getSyncError;
-  const isCurrentlyFetchingSomething = fetchingChannels || claimingReward || syncingWallet || creatingChannel;
-  const isWaitingForSomethingToFinish =
-    // If the user has claimed the email award, we need to wait until the balance updates sometime in the future
-    (!hasFetchedReward && !hasClaimedEmailAward) || (syncEnabled && !hasSynced);
   // The possible screens for the sign in flow
   const showEmail = !emailToVerify && !hasVerifiedEmail;
   const showEmailVerification = emailToVerify && !hasVerifiedEmail;
@@ -91,6 +89,12 @@ function UserSignIn(props: Props) {
     channelCount === 0 &&
     !hasYoutubeChannels;
   const showYoutubeTransfer = hasVerifiedEmail && hasYoutubeChannels && !isYoutubeTransferComplete;
+  const showFollowIntro = hasVerifiedEmail && !hasSeenFollowList && channelCount > 0;
+  const canHijackSignInFlowWithSpinner = hasVerifiedEmail && !getSyncError && !showFollowIntro;
+  const isCurrentlyFetchingSomething = fetchingChannels || claimingReward || syncingWallet || creatingChannel;
+  const isWaitingForSomethingToFinish =
+    // If the user has claimed the email award, we need to wait until the balance updates sometime in the future
+    (!hasFetchedReward && !hasClaimedEmailAward) || (syncEnabled && !hasSynced);
   const showLoadingSpinner =
     canHijackSignInFlowWithSpinner && (isCurrentlyFetchingSomething || isWaitingForSomethingToFinish);
 
@@ -115,6 +119,7 @@ function UserSignIn(props: Props) {
     showEmailVerification && <UserEmailVerify />,
     showUserVerification && <UserVerify skipLink={redirect} />,
     showChannelCreation && <UserFirstChannel />,
+    showFollowIntro && <UserChannelFollowIntro onContinue={() => setHasSeenFollowList(true)} />,
     showYoutubeTransfer && (
       <div>
         <YoutubeTransferStatus /> <Confetti recycle={false} style={{ position: 'fixed' }} />

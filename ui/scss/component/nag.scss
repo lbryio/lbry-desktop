@@ -1,5 +1,6 @@
 .nag {
   position: fixed;
+  left: 0;
   bottom: 0;
   width: 100%;
   padding: var(--spacing-small);
@@ -15,6 +16,11 @@
   }
 }
 
+.nag--helpful {
+  background-color: var(--color-secondary);
+  color: var(--color-white);
+}
+
 .nag__button {
   line-height: 1;
   margin-left: var(--spacing-small);
@@ -26,7 +32,17 @@
 
   &:hover {
     background-color: var(--color-white);
-    color: var(--color-nag);
+    color: var(--color-white);
+  }
+}
+
+.nag__button--helpful {
+  // color: var(--color-primary);
+  // border-color: var(--color-primary);
+
+  &:hover {
+    background-color: var(--color-secondary-alt);
+    color: var(--color-secondary);
   }
 }
 

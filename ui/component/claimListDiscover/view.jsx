@@ -50,9 +50,11 @@ type Props = {
   header?: Node,
   headerLabel?: string | Node,
   name?: string,
+  pageSize?: number,
   claimType?: string | Array<string>,
   renderProperties?: Claim => Node,
   includeSupportAction?: boolean,
+  noInfiniteScroll: boolean,
 };
 
 function ClaimListDiscover(props: Props) {
@@ -76,8 +78,10 @@ function ClaimListDiscover(props: Props) {
     header,
     name,
     claimType,
+    pageSize,
     renderProperties,
     includeSupportAction,
+    noInfiniteScroll,
   } = props;
   const didNavigateForward = history.action === 'PUSH';
   const [page, setPage] = useState(1);
@@ -100,7 +104,7 @@ function ClaimListDiscover(props: Props) {
     name?: string,
     claim_type?: string | Array<string>,
   } = {
-    page_size: PAGE_SIZE,
+    page_size: pageSize || PAGE_SIZE,
     page,
     name,
     // no_totals makes it so the sdk doesn't have to calculate total number pages for pagination
@@ -226,7 +230,7 @@ function ClaimListDiscover(props: Props) {
   }
 
   function handleScrollBottom() {
-    if (!loading) {
+    if (!loading && !noInfiniteScroll) {
       setPage(page + 1);
     }
   }
