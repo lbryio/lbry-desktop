@@ -139,7 +139,9 @@ function AppRouter(props: Props) {
       {/* @if TARGET='app' */}
       {welcomeVersion < WELCOME_VERSION && <Route path="/*" component={Welcome} />}
       {/* @endif */}
+
       <Redirect from={`/$/${PAGES.CHANNELS_FOLLOWING_MANAGE}`} to={`/$/${PAGES.CHANNELS_FOLLOWING_DISCOVER}`} />
+
       <Route path={`/`} exact component={HomePage} />
       <Route path={`/$/${PAGES.DISCOVER}`} exact component={DiscoverPage} />
       <Route path={`/$/${PAGES.AUTH}`} exact component={SignInPage} />

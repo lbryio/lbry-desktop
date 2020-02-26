@@ -4,7 +4,7 @@ import classnames from 'classnames';
 import Tag from 'component/tag';
 
 const SLIM_TAGS = 1;
-const NORMAL_TAGS = 4;
+const NORMAL_TAGS = 3;
 const LARGE_TAGS = 10;
 
 type Props = {

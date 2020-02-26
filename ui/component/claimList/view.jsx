@@ -70,14 +70,14 @@ export default function ClaimList(props: Props) {
   useEffect(() => {
     function handleScroll(e) {
       if (page && pageSize && onScrollBottom && !scrollBottomCbMap[page]) {
-        const x = document.querySelector(`.${MAIN_WRAPPER_CLASS}`);
-        const mc = document.querySelector(`.${MAIN_CLASS}`);
+        const mainElWrapper = document.querySelector(`.${MAIN_WRAPPER_CLASS}`);
+        const main = document.querySelector(`.${MAIN_CLASS}`);
 
         if (
-          x &&
-          mc &&
-          (window.scrollY + window.innerHeight >= x.offsetHeight ||
-            x.offsetHeight - mc.offsetHeight > PADDING_ALLOWANCE) &&
+          mainElWrapper &&
+          main &&
+          (window.scrollY + window.innerHeight >= mainElWrapper.offsetHeight ||
+            mainElWrapper.offsetHeight - main.offsetHeight > PADDING_ALLOWANCE) &&
           !loading &&
           urisLength >= pageSize
         ) {
