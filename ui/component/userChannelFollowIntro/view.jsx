@@ -22,14 +22,7 @@ function UserChannelFollowIntro(props: Props) {
         )}
       </p>
       <div className="section__body">
-        <ClaimListDiscover
-          defaultTypeSort={TYPE_TOP}
-          defaultTimeSort={TIME_ALL}
-          pageSize={99}
-          claimType="channel"
-          noInfiniteScroll
-          hideBlock
-        />
+        <ClaimListDiscover defaultTypeSort={TYPE_TOP} defaultTimeSort={TIME_ALL} claimType="channel" hideBlock />
         {followingCount > 0 && (
           <Nag
             type="helpful"
