@@ -55,6 +55,7 @@ type Props = {
   renderProperties?: Claim => Node,
   includeSupportAction?: boolean,
   noInfiniteScroll: boolean,
+  hideBlock: boolean,
 };
 
 function ClaimListDiscover(props: Props) {
@@ -82,6 +83,7 @@ function ClaimListDiscover(props: Props) {
     renderProperties,
     includeSupportAction,
     noInfiniteScroll,
+    hideBlock,
   } = props;
   const didNavigateForward = history.action === 'PUSH';
   const [page, setPage] = useState(1);
@@ -296,6 +298,7 @@ function ClaimListDiscover(props: Props) {
         empty={noResults}
         renderProperties={renderProperties}
         includeSupportAction={includeSupportAction}
+        hideBlock={hideBlock}
       />
 
       <div className="card">
