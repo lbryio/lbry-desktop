@@ -1,5 +1,6 @@
 // @flow
 import * as ICONS from 'constants/icons';
+import * as PAGES from 'constants/pages';
 import React from 'react';
 import classnames from 'classnames';
 import { MATURE_TAGS } from 'lbry-redux';
@@ -15,7 +16,7 @@ type Props = {
 export default function Tag(props: Props) {
   const { name, onClick, type = 'link', disabled = false } = props;
   const isMature = MATURE_TAGS.includes(name);
-  const clickProps = onClick ? { onClick } : { navigate: `/$/tags?t=${encodeURIComponent(name)}` };
+  const clickProps = onClick ? { onClick } : { navigate: `/$/${PAGES.DISCOVER}?t=${encodeURIComponent(name)}` };
 
   let title;
   if (!onClick) {

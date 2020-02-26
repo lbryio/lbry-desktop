@@ -21,7 +21,6 @@ import InvitePage from 'page/invite';
 import SearchPage from 'page/search';
 import LibraryPage from 'page/library';
 import WalletPage from 'page/wallet';
-import TagsPage from 'page/tags';
 import TagsFollowingPage from 'page/tagsFollowing';
 import ChannelsFollowingPage from 'page/channelsFollowing';
 import ChannelsFollowingDiscoverPage from 'page/channelsFollowingDiscover';
@@ -140,13 +139,18 @@ function AppRouter(props: Props) {
       {welcomeVersion < WELCOME_VERSION && <Route path="/*" component={Welcome} />}
       {/* @endif */}
 
-      <Redirect from={`/$/${PAGES.CHANNELS_FOLLOWING_MANAGE}`} to={`/$/${PAGES.CHANNELS_FOLLOWING_DISCOVER}`} />
+      <Redirect
+        from={`/$/${PAGES.DEPRECATED__CHANNELS_FOLLOWING_MANAGE}`}
+        to={`/$/${PAGES.CHANNELS_FOLLOWING_DISCOVER}`}
+      />
+      <Redirect from={`/$/${PAGES.DEPRECATED__CHANNELS_FOLLOWING}`} to={`/$/${PAGES.CHANNELS_FOLLOWING}`} />
+      <Redirect from={`/$/${PAGES.DEPRECATED__TAGS_FOLLOWING}`} to={`/$/${PAGES.TAGS_FOLLOWING}`} />
+      <Redirect from={`/$/${PAGES.DEPRECATED__TAGS_FOLLOWING_MANAGE}`} to={`/$/${PAGES.TAGS_FOLLOWING_MANAGE}`} />
 
       <Route path={`/`} exact component={HomePage} />
       <Route path={`/$/${PAGES.DISCOVER}`} exact component={DiscoverPage} />
       <Route path={`/$/${PAGES.AUTH}`} exact component={SignInPage} />
       <Route path={`/$/${PAGES.WELCOME}`} exact component={Welcome} />
-      <Route path={`/$/${PAGES.TAGS}`} exact component={TagsPage} />
       <Route path={`/$/${PAGES.TAGS_FOLLOWING}`} exact component={TagsFollowingPage} />
       <Route
         path={`/$/${PAGES.CHANNELS_FOLLOWING}`}
