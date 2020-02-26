@@ -34,7 +34,7 @@ function HomePage(props: Props) {
       title: 'Top Channels On LBRY',
       options: {
         orderBy: ['effective_amount'],
-        claimType: 'channel',
+        claimType: ['channel'],
       },
     });
   }
@@ -117,7 +117,7 @@ function HomePage(props: Props) {
       options: {
         orderBy: ['effective_amount'],
         pageSize: 4,
-        claimType: 'stream',
+        claimType: ['stream'],
         releaseTime: `>${Math.floor(
           moment()
             .subtract(1, 'week')
