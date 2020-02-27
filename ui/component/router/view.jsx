@@ -86,7 +86,7 @@ type Props = {
 function AppRouter(props: Props) {
   const {
     currentScroll,
-    location: { pathname },
+    location: { pathname, search },
     isAuthenticated,
     history,
     uri,
@@ -95,6 +95,8 @@ function AppRouter(props: Props) {
   } = props;
   const { entries } = history;
   const entryIndex = history.index;
+  const urlParams = new URLSearchParams(search);
+  const resetScroll = urlParams.get('reset_scroll');
 
   useEffect(() => {
     if (uri) {
@@ -123,7 +125,7 @@ function AppRouter(props: Props) {
 
   useEffect(() => {
     window.scrollTo(0, currentScroll);
-  }, [currentScroll, pathname]);
+  }, [currentScroll, pathname, resetScroll]);
 
   // react-router doesn't decode pathanmes before doing the route matching check
   // We have to redirect here because if we redirect on the server, it might get encoded again
@@ -150,6 +152,7 @@ function AppRouter(props: Props) {
       <Route path={`/`} exact component={HomePage} />
       <Route path={`/$/${PAGES.DISCOVER}`} exact component={DiscoverPage} />
       <Route path={`/$/${PAGES.AUTH}`} exact component={SignInPage} />
+      <Route path={`/$/${PAGES.AUTH}/*`} exact component={SignInPage} />
       <Route path={`/$/${PAGES.WELCOME}`} exact component={Welcome} />
       <Route path={`/$/${PAGES.TAGS_FOLLOWING}`} exact component={TagsFollowingPage} />
       <Route

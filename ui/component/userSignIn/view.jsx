@@ -1,4 +1,5 @@
 // @flow
+import * as PAGES from 'constants/pages';
 import React from 'react';
 import { withRouter } from 'react-router';
 import UserEmailNew from 'component/userEmailNew';
@@ -89,7 +90,7 @@ function UserSignIn(props: Props) {
     channelCount === 0 &&
     !hasYoutubeChannels;
   const showYoutubeTransfer = hasVerifiedEmail && hasYoutubeChannels && !isYoutubeTransferComplete;
-  const showFollowIntro = hasVerifiedEmail && !hasSeenFollowList && channelCount > 0;
+  const showFollowIntro = hasVerifiedEmail && !hasSeenFollowList;
   const canHijackSignInFlowWithSpinner = hasVerifiedEmail && !getSyncError && !showFollowIntro;
   const isCurrentlyFetchingSomething = fetchingChannels || claimingReward || syncingWallet || creatingChannel;
   const isWaitingForSomethingToFinish =
@@ -119,7 +120,22 @@ function UserSignIn(props: Props) {
     showEmailVerification && <UserEmailVerify />,
     showUserVerification && <UserVerify skipLink={redirect} />,
     showChannelCreation && <UserFirstChannel />,
-    showFollowIntro && <UserChannelFollowIntro onContinue={() => setHasSeenFollowList(true)} />,
+    showFollowIntro && (
+      <UserChannelFollowIntro
+        onContinue={() => {
+          let url = `/$/${PAGES.AUTH}?reset_scroll=1`;
+          if (redirect) {
+            url += `&redirect=${redirect}`;
+          }
+          if (shouldRedirectImmediately) {
+            url += `&immediate=true`;
+          }
+
+          history.replace(url);
+          setHasSeenFollowList(true);
+        }}
+      />
+    ),
     showYoutubeTransfer && (
       <div>
         <YoutubeTransferStatus /> <Confetti recycle={false} style={{ position: 'fixed' }} />
