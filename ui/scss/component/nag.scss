@@ -32,14 +32,11 @@
 
   &:hover {
     background-color: var(--color-white);
-    color: var(--color-white);
+    color: var(--color-nag);
   }
 }
 
 .nag__button--helpful {
-  // color: var(--color-primary);
-  // border-color: var(--color-primary);
-
   &:hover {
     background-color: var(--color-secondary-alt);
     color: var(--color-secondary);
