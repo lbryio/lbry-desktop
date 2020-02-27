@@ -194,7 +194,7 @@ class WunderBar extends React.PureComponent<Props, State> {
               placeholder={__('Enter a LBRY URL or search for videos, music, games and more')}
             />
           )}
-          renderItem={({ value, type }, isHighlighted) => (
+          renderItem={({ value, type, shorthand }, isHighlighted) => (
             <div
               // Use value + type for key because there might be suggestions with same value but different type
               key={`${value}-${type}`}
@@ -204,7 +204,7 @@ class WunderBar extends React.PureComponent<Props, State> {
             >
               <Icon icon={this.getSuggestionIcon(type)} />
               <span className="wunderbar__suggestion-label">
-                {type === SEARCH_TYPES.TAG ? <Tag name={value} /> : value}
+                {type === SEARCH_TYPES.TAG ? <Tag name={value} /> : shorthand}
               </span>
               {isHighlighted && (
                 <span className="wunderbar__suggestion-label--action">
