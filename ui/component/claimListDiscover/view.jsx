@@ -76,7 +76,7 @@ function ClaimListDiscover(props: Props) {
     streamType,
     defaultStreamType,
     freshness,
-    defaultFreshness,
+    defaultFreshness = CS.FRESH_WEEK,
     renderProperties,
     includeSupportAction,
     noCustom,
@@ -91,7 +91,7 @@ function ClaimListDiscover(props: Props) {
   const urlParams = new URLSearchParams(search);
   const tagsParam = tags || urlParams.get(CS.TAGS_KEY) || null;
   const orderParam = orderBy || urlParams.get(CS.ORDER_BY_KEY) || defaultOrderBy || CS.ORDER_BY_TRENDING;
-  const freshnessParam = freshness || urlParams.get(CS.FRESH_KEY) || defaultFreshness || CS.FRESH_WEEK;
+  const freshnessParam = freshness || urlParams.get(CS.FRESH_KEY) || defaultFreshness;
   const contentTypeParam = urlParams.get(CS.CONTENT_KEY);
   const claimTypeParam =
     claimType || (CS.CLAIM_TYPES.includes(contentTypeParam) && contentTypeParam) || defaultClaimType || null;
@@ -264,7 +264,11 @@ function ClaimListDiscover(props: Props) {
         newUrlParams.set(CS.ORDER_BY_KEY, delta.value);
         break;
       case CS.FRESH_KEY:
-        newUrlParams.set(CS.FRESH_KEY, delta.value);
+        if (delta.value === defaultFreshness || delta.value === CS.FRESH_DEFAULT) {
+          newUrlParams.delete(CS.FRESH_KEY);
+        } else {
+          newUrlParams.set(CS.FRESH_KEY, delta.value);
+        }
         break;
       case CS.CONTENT_KEY:
         if (delta.value === CS.CLAIM_CHANNEL || delta.value === CS.CLAIM_REPOST) {
@@ -345,7 +349,9 @@ function ClaimListDiscover(props: Props) {
               {orderParam === CS.ORDER_BY_TOP && (
                 <div className={'claim-search__input-container'}>
                   <FormField
-                    className="claim-search__dropdown"
+                    className={classnames('claim-search__dropdown', {
+                      'claim-search__dropdown--selected': freshnessParam !== defaultFreshness,
+                    })}
                     type="select"
                     name="trending_time"
                     label={__('How Fresh')}

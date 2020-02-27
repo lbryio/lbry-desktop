@@ -11,7 +11,8 @@ export const FRESH_WEEK = 'week';
 export const FRESH_MONTH = 'month';
 export const FRESH_YEAR = 'year';
 export const FRESH_ALL = 'all';
-export const FRESH_TYPES = [FRESH_DAY, FRESH_WEEK, FRESH_MONTH, FRESH_YEAR, FRESH_ALL];
+export const FRESH_DEFAULT = 'default';
+export const FRESH_TYPES = [FRESH_DEFAULT, FRESH_DAY, FRESH_WEEK, FRESH_MONTH, FRESH_YEAR, FRESH_ALL];
 
 export const ORDER_BY_TRENDING = 'trending';
 export const ORDER_BY_TRENDING_VALUE = ['trending_group', 'trending_mixed'];
