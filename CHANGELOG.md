@@ -8,6 +8,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ### Added
 
+- Czech and Kannada language support ([#3759](https://github.com/lbryio/lbry-desktop/pull/3759))
+
 ### Changed
 
 ### Fixed
