@@ -27,6 +27,7 @@ function UserChannelFollowIntro(props: Props) {
           defaultTimeSort={CS.FRESH_ALL}
           claimType="channel"
           hideBlock
+          hideFilter
         />
         {followingCount > 0 && (
           <Nag
