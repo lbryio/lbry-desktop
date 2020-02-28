@@ -51,7 +51,7 @@ function ChannelContent(props: Props) {
       {!channelIsMine && claimsInChannel > 0 && <HiddenNsfwClaims uri={uri} />}
 
       {claim && claimsInChannel > 0 ? (
-        <ClaimListDiscover channelIds={[claim.claim_id]} defaultTypeSort={CS.ORDER_BY_NEW} />
+        <ClaimListDiscover channelIds={[claim.claim_id]} defaultOrderBy={CS.ORDER_BY_NEW} />
       ) : (
         <section className="main--empty">This channel hasn't published anything yet</section>
       )}
