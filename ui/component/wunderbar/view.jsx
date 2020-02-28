@@ -139,7 +139,7 @@ class WunderBar extends React.PureComponent<Props, State> {
       if (suggestion.type === SEARCH_TYPES.SEARCH) {
         onSearch(query);
       } else if (suggestion.type === SEARCH_TYPES.TAG) {
-        history.push(`/$/${PAGES.TAGS}?t=${suggestion.value}`);
+        history.push(`/$/${PAGES.DISCOVER}?t=${suggestion.value}`);
       } else if (isURIValid(query)) {
         const uri = normalizeURI(query);
         onSubmit(uri);

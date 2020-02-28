@@ -89,7 +89,7 @@ function HomePage(props: Props) {
     if (followedTags.length > 0 && followedTags.length < 5) {
       const followedRows = followedTags.map((tag: Tag) => ({
         title: `Trending for #${toCapitalCase(tag.name)}`,
-        link: `/$/${PAGES.TAGS}?t=${tag.name}`,
+        link: `/$/${PAGES.DISCOVER}?t=${tag.name}`,
         options: {
           pageSize: 4,
           tags: [tag.name],
@@ -128,7 +128,7 @@ function HomePage(props: Props) {
     },
     {
       title: '#HomePageCageMatch',
-      link: `/$/${PAGES.TAGS}?t=homepagecagematch&type=top&time=all`,
+      link: `/$/${PAGES.DISCOVER}?t=homepagecagematch&type=top&time=all`,
       help: (
         <div className="claim-grid__help">
           <Icon
@@ -156,7 +156,7 @@ function HomePage(props: Props) {
   if (!showAuthenticatedRows) {
     rowData.push({
       title: '#lbry',
-      link: `/$/${PAGES.TAGS}?t=lbry&type=top&time=all`,
+      link: `/$/${PAGES.DISCOVER}?t=lbry&type=top&time=all`,
       options: {
         tags: ['lbry'],
         orderBy: ['effective_amount'],
