@@ -77,10 +77,11 @@ function ClaimTilesDiscover(props: Props) {
   }
 
   if (!showReposts) {
-    options.claim_type =
-      options.claim_type === undefined
-        ? ['stream', 'channel']
-        : options.claim_type.filter(claimType => claimType !== 'repost');
+    if (Array.isArray(options.claim_type)) {
+      options.claim_type = options.claim_type.filter(claimType => claimType !== 'repost');
+    } else {
+      options.claim_type = ['stream', 'channel'];
+    }
   }
 
   if (claimType) {
