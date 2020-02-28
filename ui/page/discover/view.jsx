@@ -48,7 +48,7 @@ function TagsPage(props: Props) {
   return (
     <Page>
       <ClaimListDiscover
-        claimType={claimType}
+        claimType={[claimType]}
         headerLabel={
           tag ? (
             <span>

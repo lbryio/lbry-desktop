@@ -41,13 +41,14 @@ type Props = {
   headerLabel?: string | Node,
   name?: string,
   hideBlock?: boolean,
-  claimType?: string | Array<string>,
-  defaultClaimType?: string | Array<string>,
+  hideFilter?: boolean,
+  claimType?: Array<string>,
+  defaultClaimType?: Array<string>,
   streamType?: string | Array<string>,
   defaultStreamType?: string | Array<string>,
   renderProperties?: Claim => Node,
   includeSupportAction?: boolean,
-  noCustom?: boolean,
+  pageSize?: number,
 };
 
 function ClaimListDiscover(props: Props) {
@@ -79,7 +80,7 @@ function ClaimListDiscover(props: Props) {
     defaultFreshness = CS.FRESH_WEEK,
     renderProperties,
     includeSupportAction,
-    noCustom,
+    hideFilter,
   } = props;
   const didNavigateForward = history.action === 'PUSH';
   const { search } = location;
@@ -118,9 +119,7 @@ function ClaimListDiscover(props: Props) {
     release_time?: string,
     claim_type?: Array<string>,
     name?: string,
-    claim_type?: Array<string>,
     duration?: string,
-    claim_type?: string | Array<string>,
     stream_types?: any,
   } = {
     page_size: pageSize || CS.PAGE_SIZE,
@@ -196,7 +195,11 @@ function ClaimListDiscover(props: Props) {
 
   if (claimTypeParam) {
     if (claimTypeParam !== CS.CONTENT_ALL) {
-      options.claim_type = [claimTypeParam];
+      if (Array.isArray(claimTypeParam)) {
+        options.claim_type = claimTypeParam;
+      } else {
+        options.claim_type = [claimTypeParam];
+      }
     }
   }
 
@@ -329,7 +332,7 @@ function ClaimListDiscover(props: Props) {
             ))}
           </div>
           <div>
-            {!noCustom && (
+            {!hideFilter && (
               <Button
                 button={'alt'}
                 aria-label={__('More')}
