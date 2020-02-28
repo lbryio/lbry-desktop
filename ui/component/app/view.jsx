@@ -30,6 +30,10 @@ export const IS_MAC = process.platform === 'darwin';
 // @endif
 const SYNC_INTERVAL = 1000 * 60 * 5; // 5 minutes
 
+// button numbers pulled from https://developer.mozilla.org/en-US/docs/Web/API/MouseEvent/button
+const MOUSE_BACK_BTN = 3;
+const MOUSE_FORWARD_BTN = 4;
+
 type Props = {
   alertError: (string | {}) => void,
   pageTitle: ?string,
@@ -38,7 +42,13 @@ type Props = {
   theme: string,
   user: ?{ id: string, has_verified_email: boolean, is_reward_approved: boolean },
   location: { pathname: string, hash: string, search: string },
-  history: { push: string => void },
+  history: {
+    goBack: () => void,
+    goForward: () => void,
+    index: number,
+    length: number,
+    push: string => void,
+  },
   fetchTransactions: (number, number) => void,
   fetchAccessToken: () => void,
   fetchChannelListMine: () => void,
@@ -126,6 +136,22 @@ function App(props: Props) {
     window.addEventListener('beforeunload', handleBeforeUnload);
     return () => window.removeEventListener('beforeunload', handleBeforeUnload);
   }, [uploadCount]);
+
+  // allows user to navigate history using the forward and backward buttons on a mouse
+  useEffect(() => {
+    const handleForwardAndBackButtons = e => {
+      switch (e.button) {
+        case MOUSE_BACK_BTN:
+          history.index > 0 && history.goBack();
+          break;
+        case MOUSE_FORWARD_BTN:
+          history.index < history.length - 1 && history.goForward();
+          break;
+      }
+    };
+    window.addEventListener('mouseup', handleForwardAndBackButtons);
+    return () => window.removeEventListener('mouseup', handleForwardAndBackButtons);
+  });
 
   useEffect(() => {
     if (referredRewardAvailable && sanitizedReferrerParam && isRewardApproved) {
