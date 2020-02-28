@@ -46,6 +46,8 @@ function PublishAdvanced(props: Props) {
                 <option value="ru">{__('Russian')}</option>
                 <option value="es">{__('Spanish')}</option>
                 <option value="id">{__('Indonesian')}</option>
+                <option value="fi">{__('Finnish')}</option>
+                <option value="kn">{__('Kannada')}</option>
                 <option value="it">{__('Italian')}</option>
                 <option value="nl">{__('Dutch')}</option>
                 <option value="tr">{__('Turkish')}</option>
