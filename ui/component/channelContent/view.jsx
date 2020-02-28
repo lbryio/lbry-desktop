@@ -1,11 +1,10 @@
 // @flow
 import React, { Fragment } from 'react';
-import ClaimList from 'component/claimList';
 import HiddenNsfwClaims from 'component/hiddenNsfwClaims';
 import { withRouter } from 'react-router-dom';
-import Paginate from 'component/common/paginate';
-import Spinner from 'component/spinner';
 import Button from 'component/button';
+import ClaimListDiscover from 'component/claimListDiscover';
+import { TYPE_NEW } from 'component/claimListDiscover/view';
 
 type Props = {
   uri: string,
@@ -21,37 +20,13 @@ type Props = {
 };
 
 function ChannelContent(props: Props) {
-  const {
-    uri,
-    fetching,
-    pageOfClaimsInChannel,
-    totalPages,
-    channelIsMine,
-    channelIsBlocked,
-    fetchClaims,
-    channelIsBlackListed,
-    claim,
-  } = props;
-  const hasContent = Boolean(pageOfClaimsInChannel && pageOfClaimsInChannel.length);
+  const { uri, fetching, channelIsMine, channelIsBlocked, channelIsBlackListed, claim } = props;
   const claimsInChannel = (claim && claim.meta.claims_in_channel) || 0;
+
   return (
     <Fragment>
-      {fetching && !hasContent && (
-        <section className="main--empty">
-          <Spinner delayed />
-        </section>
-      )}
-
-      {!fetching && !claimsInChannel && !channelIsBlocked && !channelIsBlackListed && (
-        <div className="card--section">
-          <h2 className="section__subtitle">{__("This channel hasn't uploaded anything.")}</h2>
-        </div>
-      )}
-
-      {!fetching && !hasContent && Boolean(claimsInChannel) && !channelIsBlocked && !channelIsBlackListed && (
-        <div className="card--section">
-          <HiddenNsfwClaims uri={uri} />
-        </div>
+      {!fetching && Boolean(claimsInChannel) && !channelIsBlocked && !channelIsBlackListed && (
+        <HiddenNsfwClaims uri={uri} />
       )}
 
       {!fetching && channelIsBlackListed && (
@@ -73,19 +48,12 @@ function ChannelContent(props: Props) {
         </div>
       )}
 
-      {!channelIsMine && hasContent && <HiddenNsfwClaims uri={uri} />}
+      {!channelIsMine && claimsInChannel > 0 && <HiddenNsfwClaims uri={uri} />}
 
-      {hasContent && !channelIsBlocked && !channelIsBlackListed && (
-        <ClaimList header={false} uris={pageOfClaimsInChannel.map(claim => claim && claim.canonical_url)} />
-      )}
-
-      {!channelIsBlocked && !channelIsBlackListed && (
-        <Paginate
-          key={uri}
-          onPageChange={page => fetchClaims(uri, page)}
-          totalPages={totalPages}
-          loading={fetching && !hasContent}
-        />
+      {claim && claimsInChannel > 0 ? (
+        <ClaimListDiscover channelIds={[claim.claim_id]} defaultTypeSort={TYPE_NEW} />
+      ) : (
+        <section className="main--empty">This channel hasn't published anything yet</section>
       )}
     </Fragment>
   );
