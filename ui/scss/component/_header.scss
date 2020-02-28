@@ -144,6 +144,14 @@
   }
 }
 
+.header__navigation-item--button-mobile {
+  @media (max-width: $breakpoint-small) {
+    .button__label {
+      display: none;
+    }
+  }
+}
+
 .header__navigation-item--balance {
   margin: 0 var(--spacing-medium);
 }

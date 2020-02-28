@@ -97,6 +97,9 @@ function SideNavigation(props: Props) {
         <ul className="navigation-links">
           {[
             {
+              ...(expanded && !isAuthenticated ? { ...buildLink(PAGES.AUTH, __('Sign In'), ICONS.SIGN_IN) } : {}),
+            },
+            {
               ...buildLink(null, __('Home'), ICONS.HOME),
             },
             {
