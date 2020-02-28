@@ -399,7 +399,8 @@ class SettingsPage extends React.PureComponent<Props, State> {
                     )}
                   />
 
-                  <FormField
+                  {/* https://github.com/lbryio/lbry-desktop/issues/3774 */}
+                  {/* <FormField
                     type="checkbox"
                     name="show_reposts"
                     onChange={() => {
@@ -408,7 +409,7 @@ class SettingsPage extends React.PureComponent<Props, State> {
                     checked={showReposts}
                     label={__('Show reposts')}
                     helper={__('Show reposts from the creators you follow.')}
-                  />
+                  /> */}
 
                   {/* <FormField
                     type="checkbox"

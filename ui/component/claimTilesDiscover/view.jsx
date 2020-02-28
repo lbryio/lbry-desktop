@@ -76,13 +76,14 @@ function ClaimTilesDiscover(props: Props) {
     options.release_time = releaseTime;
   }
 
-  if (!showReposts) {
-    if (Array.isArray(options.claim_type)) {
-      options.claim_type = options.claim_type.filter(claimType => claimType !== 'repost');
-    } else {
-      options.claim_type = ['stream', 'channel'];
-    }
-  }
+  // https://github.com/lbryio/lbry-desktop/issues/3774
+  // if (!showReposts) {
+  //   if (Array.isArray(options.claim_type)) {
+  //     options.claim_type = options.claim_type.filter(claimType => claimType !== 'repost');
+  //   } else {
+  //     options.claim_type = ['stream', 'channel'];
+  //   }
+  // }
 
   if (claimType) {
     options.claim_type = claimType;

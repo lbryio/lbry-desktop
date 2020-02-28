@@ -203,13 +203,14 @@ function ClaimListDiscover(props: Props) {
     }
   }
 
-  if (!showReposts) {
-    if (Array.isArray(options.claim_type)) {
-      options.claim_type = options.claim_type.filter(claimType => claimType !== 'repost');
-    } else {
-      options.claim_type = ['stream', 'channel'];
-    }
-  }
+  // https://github.com/lbryio/lbry-desktop/issues/3774
+  // if (!showReposts) {
+  //   if (Array.isArray(options.claim_type)) {
+  //     options.claim_type = options.claim_type.filter(claimType => claimType !== 'repost');
+  //   } else {
+  //     options.claim_type = ['stream', 'channel'];
+  //   }
+  // }
 
   const hasMatureTags = tags && tags.some(t => MATURE_TAGS.includes(t));
   const claimSearchCacheQuery = createNormalizedClaimSearchKey(options);
