@@ -61,7 +61,7 @@ function ChannelsFollowingDiscover(props: Props) {
   if (followedTags.length > 0 && followedTags.length < 5) {
     const followedRows = followedTags.map((tag: Tag) => ({
       title: `Trending Channels for #${toCapitalCase(tag.name)}`,
-      link: `/$/${PAGES.TAGS}?t=${tag.name}&claim_type=channel`,
+      link: `/$/${PAGES.DISCOVER}?t=${tag.name}&claim_type=channel`,
       options: {
         claimType: 'channel',
         pageSize: 4,
