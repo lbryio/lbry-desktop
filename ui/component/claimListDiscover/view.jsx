@@ -103,14 +103,14 @@ function ClaimListDiscover(props: Props) {
     not_tags: Array<string>,
     order_by: Array<string>,
     release_time?: string,
-    claim_type?: string,
+    claim_type?: Array<string>,
     name?: string,
-    claim_type?: string | Array<string>,
+    claim_type?: Array<string>,
   } = {
     page_size: pageSize || PAGE_SIZE,
     page,
     name,
-    claim_type: claimType || ['stream', 'channel', 'repost'],
+    claim_type: claimType || undefined,
     // no_totals makes it so the sdk doesn't have to calculate total number pages for pagination
     // it's faster, but we will need to remove it if we start using total_pages
     no_totals: true,
@@ -167,7 +167,10 @@ function ClaimListDiscover(props: Props) {
   }
 
   if (!showReposts) {
-    options.claim_type = options.claim_type.filter(claimType => claimType !== 'repost');
+    options.claim_type =
+      options.claim_type === undefined
+        ? ['stream', 'channel']
+        : options.claim_type.filter(claimType => claimType !== 'repost');
   }
 
   const hasMatureTags = tags && tags.some(t => MATURE_TAGS.includes(t));

@@ -1,5 +1,5 @@
 import * as SETTINGS from 'constants/settings';
-import { SHARED_PREFERENCES } from 'lbry-redux';
+import { SHARED_PREFERENCES, SETTINGS as LBRY_REDUX_SETTINGS } from 'lbry-redux';
 import { createSelector } from 'reselect';
 
 const selectState = state => state.settings || {};
@@ -31,10 +31,10 @@ export const makeSelectClientSetting = setting =>
   );
 
 // refactor me
-export const selectShowMatureContent = makeSelectClientSetting(SETTINGS.SHOW_MATURE);
+export const selectShowMatureContent = makeSelectClientSetting(LBRY_REDUX_SETTINGS.SHOW_MATURE);
 
 // and me
-export const selectShowRepostedContent = makeSelectClientSetting(SETTINGS.SHOW_REPOSTS);
+export const selectShowRepostedContent = makeSelectClientSetting(LBRY_REDUX_SETTINGS.SHOW_REPOSTS);
 
 export const selectTheme = makeSelectClientSetting(SETTINGS.THEME);
 export const selectAutomaticDarkModeEnabled = makeSelectClientSetting(SETTINGS.AUTOMATIC_DARK_MODE_ENABLED);

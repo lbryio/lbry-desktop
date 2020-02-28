@@ -1,4 +1,3 @@
-import * as SETTINGS from 'constants/settings';
 import { connect } from 'react-redux';
 import {
   doClaimSearch,
@@ -6,6 +5,7 @@ import {
   selectFetchingClaimSearch,
   doToggleTagFollow,
   selectBlockedChannels,
+  SETTINGS,
 } from 'lbry-redux';
 import { makeSelectClientSetting } from 'redux/selectors/settings';
 import ClaimListDiscover from './view';

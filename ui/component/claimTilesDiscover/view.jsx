@@ -54,11 +54,11 @@ function ClaimTilesDiscover(props: Props) {
     not_tags: Array<string>,
     order_by: Array<string>,
     release_time?: string,
-    claim_type: string,
+    claim_type?: Array<string>,
     timestamp?: string,
   } = {
     page_size: pageSize,
-    claim_type: claimType || ['stream', 'channel', 'repost'],
+    claim_type: claimType || undefined,
     // no_totals makes it so the sdk doesn't have to calculate total number pages for pagination
     // it's faster, but we will need to remove it if we start using total_pages
     no_totals: true,
@@ -77,7 +77,10 @@ function ClaimTilesDiscover(props: Props) {
   }
 
   if (!showReposts) {
-    options.claim_type = options.claim_type.filter(claimType => claimType !== 'repost');
+    options.claim_type =
+      options.claim_type === undefined
+        ? ['stream', 'channel']
+        : options.claim_type.filter(claimType => claimType !== 'repost');
   }
 
   if (claimType) {
