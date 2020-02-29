@@ -236,7 +236,7 @@ function ClaimListDiscover(props: Props) {
             ),
           }}
         >
-          Sorry, your request timed out. Modify your options or %again%
+          Sorry, your request returned no results or timed out. Modify your options or %again%
         </I18nMessage>
       </p>
       <p>
@@ -412,6 +412,9 @@ function ClaimListDiscover(props: Props) {
                           {type === CS.CLAIM_REPOST && __('Repost')}
                           {type === CS.FILE_VIDEO && __('Video')}
                           {type === CS.FILE_AUDIO && __('Audio')}
+                          {type === CS.FILE_IMAGE && __('Image')}
+                          {type === CS.FILE_MODEL && __('Model')}
+                          {type === CS.FILE_BINARY && __('Other')}
                           {type === CS.FILE_DOCUMENT && __('Document')}
                           {type === CS.CONTENT_ALL && __('Any')}
                         </option>
@@ -420,39 +423,40 @@ function ClaimListDiscover(props: Props) {
                   })}
                 </FormField>
               </div>
-              {options.claim_type !== CS.CLAIM_CHANNEL &&
-                options.claim_type !== CS.CLAIM_REPOST &&
-                JSON.stringify(options.stream_types) !== JSON.stringify([CS.FILE_DOCUMENT]) && (
-                  <>
-                    {/* DURATIONS FIELD */}
-                    <div className={'claim-search__input-container'}>
-                      <FormField
-                        className={classnames('claim-search__dropdown', {
-                          'claim-search__dropdown--selected': durationParam,
-                        })}
-                        label={__('Duration')}
-                        type="select"
-                        name="duration"
-                        value={durationParam || CS.DURATION_ALL}
-                        onChange={e =>
-                          handleChange({
-                            key: CS.DURATION_KEY,
-                            value: e.target.value,
-                          })
-                        }
-                      >
-                        {CS.DURATION_TYPES.map(dur => (
-                          <option key={dur} value={dur}>
-                            {/* i18fixme */}
-                            {dur === CS.DURATION_SHORT && __('Short')}
-                            {dur === CS.DURATION_LONG && __('Long')}
-                            {dur === CS.DURATION_ALL && __('Any')}
-                          </option>
-                        ))}
-                      </FormField>
-                    </div>
-                  </>
-                )}
+              {/* DURATIONS FIELD */}
+              <div className={'claim-search__input-container'}>
+                <FormField
+                  className={classnames('claim-search__dropdown', {
+                    'claim-search__dropdown--selected': durationParam,
+                  })}
+                  label={__('Duration')}
+                  type="select"
+                  name="duration"
+                  disabled={
+                    !(
+                      contentTypeParam === null ||
+                      streamTypeParam === CS.FILE_AUDIO ||
+                      streamTypeParam === CS.FILE_VIDEO
+                    )
+                  }
+                  value={durationParam || CS.DURATION_ALL}
+                  onChange={e =>
+                    handleChange({
+                      key: CS.DURATION_KEY,
+                      value: e.target.value,
+                    })
+                  }
+                >
+                  {CS.DURATION_TYPES.map(dur => (
+                    <option key={dur} value={dur}>
+                      {/* i18fixme */}
+                      {dur === CS.DURATION_SHORT && __('Short')}
+                      {dur === CS.DURATION_LONG && __('Long')}
+                      {dur === CS.DURATION_ALL && __('Any')}
+                    </option>
+                  ))}
+                </FormField>
+              </div>
             </div>
           </>
         )}

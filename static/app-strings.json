@@ -989,6 +989,20 @@
   "Share usage data with LBRY inc.": "Share usage data with LBRY inc.",
   "Required": "Required",
   "Email %help_link% or join our %chat_link% if you encounter any trouble verifying.": "Email %help_link% or join our %chat_link% if you encounter any trouble verifying.",
-  "Show reposts": "Show reposts",
-  "Show reposts from the creators you follow.": "Show reposts from the creators you follow."
+  "Only apply a few tags that are relevant to your content, and use the Mature tag as appropriate. Tag abuse will not be tolerated.": "Only apply a few tags that are relevant to your content, and use the Mature tag as appropriate. Tag abuse will not be tolerated.",
+  "Add relevant tags...": "Add relevant tags...",
+  "try again in a few seconds.": "try again in a few seconds.",
+  "Any": "Any",
+  "Video": "Video",
+  "Document": "Document",
+  "Duration": "Duration",
+  "Long": "Long",
+  "Short": "Short",
+  "How Fresh": "How Fresh",
+  "This Default": "This Default",
+  "Sorry, your request returned no results or timed out. Modify your options or %again%": "Sorry, your request returned no results or timed out. Modify your options or %again%",
+  "Image": "Image",
+  "Model": "Model",
+  "Binary": "Binary",
+  "Other": "Other"
 }

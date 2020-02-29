@@ -30,7 +30,10 @@ export const DURATION_TYPES = [DURATION_ALL, DURATION_LONG, DURATION_SHORT];
 export const FILE_VIDEO = 'video';
 export const FILE_AUDIO = 'audio';
 export const FILE_DOCUMENT = 'document';
-export const FILE_TYPES = [FILE_VIDEO, FILE_AUDIO, FILE_DOCUMENT];
+export const FILE_BINARY = 'binary';
+export const FILE_IMAGE = 'image';
+export const FILE_MODEL = 'model';
+export const FILE_TYPES = [FILE_VIDEO, FILE_AUDIO, FILE_DOCUMENT, FILE_IMAGE, FILE_MODEL, FILE_BINARY];
 
 export const CLAIM_CHANNEL = 'channel';
 export const CLAIM_STREAM = 'stream';
