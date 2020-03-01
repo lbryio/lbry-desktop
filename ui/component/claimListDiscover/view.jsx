@@ -100,6 +100,8 @@ function ClaimListDiscover(props: Props) {
     streamType || (CS.FILE_TYPES.includes(contentTypeParam) && contentTypeParam) || defaultStreamType || null;
   const durationParam = urlParams.get(CS.DURATION_KEY) || null;
 
+  const showDuration = !(claimType && claimType === CS.CLAIM_CHANNEL);
+  const showContentType = !(claimType || streamType);
   const isFiltered = () =>
     Boolean(urlParams.get(CS.FRESH_KEY) || urlParams.get(CS.CONTENT_KEY) || urlParams.get(CS.DURATION_KEY));
 
@@ -155,14 +157,20 @@ function ClaimListDiscover(props: Props) {
     // For more than 20, drop it down to 6 months
     // This helps with timeout issues for users that are following a ton of stuff
     // https://github.com/lbryio/lbry-sdk/issues/2420
-    if (options.channel_ids.length > 20 || options.any_tags.length > 20) {
+    if (
+      (options.channel_ids && options.channel_ids.length > 20) ||
+      (options.any_tags && options.any_tags.length > 20)
+    ) {
       options.release_time = `>${Math.floor(
         moment()
           .subtract(3, CS.FRESH_MONTH)
           .startOf('week')
           .unix()
       )}`;
-    } else if (options.channel_ids.length > 10 || options.any_tags.length > 10) {
+    } else if (
+      (options.channel_ids && options.channel_ids.length > 10) ||
+      (options.any_tags && options.any_tags.length > 10)
+    ) {
       options.release_time = `>${Math.floor(
         moment()
           .subtract(1, CS.FRESH_YEAR)
@@ -373,9 +381,11 @@ function ClaimListDiscover(props: Props) {
                         {/* i18fixme */}
                         {time === CS.FRESH_DAY && __('Today')}
                         {time !== CS.FRESH_ALL &&
+                          time !== CS.FRESH_DEFAULT &&
                           time !== CS.FRESH_DAY &&
                           __('This ' + toCapitalCase(time)) /* yes, concat before i18n, since it is read from const */}
                         {time === CS.FRESH_ALL && __('All time')}
+                        {time === CS.FRESH_DEFAULT && __('Default')}
                       </option>
                     ))}
                   </FormField>
@@ -424,39 +434,41 @@ function ClaimListDiscover(props: Props) {
                 </FormField>
               </div>
               {/* DURATIONS FIELD */}
-              <div className={'claim-search__input-container'}>
-                <FormField
-                  className={classnames('claim-search__dropdown', {
-                    'claim-search__dropdown--selected': durationParam,
-                  })}
-                  label={__('Duration')}
-                  type="select"
-                  name="duration"
-                  disabled={
-                    !(
-                      contentTypeParam === null ||
-                      streamTypeParam === CS.FILE_AUDIO ||
-                      streamTypeParam === CS.FILE_VIDEO
-                    )
-                  }
-                  value={durationParam || CS.DURATION_ALL}
-                  onChange={e =>
-                    handleChange({
-                      key: CS.DURATION_KEY,
-                      value: e.target.value,
-                    })
-                  }
-                >
-                  {CS.DURATION_TYPES.map(dur => (
-                    <option key={dur} value={dur}>
-                      {/* i18fixme */}
-                      {dur === CS.DURATION_SHORT && __('Short')}
-                      {dur === CS.DURATION_LONG && __('Long')}
-                      {dur === CS.DURATION_ALL && __('Any')}
-                    </option>
-                  ))}
-                </FormField>
-              </div>
+              {showDuration && (
+                <div className={'claim-search__input-container'}>
+                  <FormField
+                    className={classnames('claim-search__dropdown', {
+                      'claim-search__dropdown--selected': durationParam,
+                    })}
+                    label={__('Duration')}
+                    type="select"
+                    name="duration"
+                    disabled={
+                      !(
+                        contentTypeParam === null ||
+                        streamTypeParam === CS.FILE_AUDIO ||
+                        streamTypeParam === CS.FILE_VIDEO
+                      )
+                    }
+                    value={durationParam || CS.DURATION_ALL}
+                    onChange={e =>
+                      handleChange({
+                        key: CS.DURATION_KEY,
+                        value: e.target.value,
+                      })
+                    }
+                  >
+                    {CS.DURATION_TYPES.map(dur => (
+                      <option key={dur} value={dur}>
+                        {/* i18fixme */}
+                        {dur === CS.DURATION_SHORT && __('Short')}
+                        {dur === CS.DURATION_LONG && __('Long')}
+                        {dur === CS.DURATION_ALL && __('Any')}
+                      </option>
+                    ))}
+                  </FormField>
+                </div>
+              )}
             </div>
           </>
         )}

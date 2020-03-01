@@ -23,8 +23,8 @@ function UserChannelFollowIntro(props: Props) {
       </p>
       <div className="section__body">
         <ClaimListDiscover
-          defaultTypeSort={CS.ORDER_BY_TOP}
-          defaultTimeSort={CS.FRESH_ALL}
+          defaultOrderBy={CS.ORDER_BY_TOP}
+          defaultFreshness={CS.FRESH_ALL}
           claimType="channel"
           hideBlock
           hideFilter
