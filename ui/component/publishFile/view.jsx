@@ -105,7 +105,9 @@ function PublishFile(props: Props) {
           <FileSelector disabled={disabled} currentPath={currentFile} onFileChosen={handleFileChange} />
           {!isStillEditing && (
             <p className="help">
-              {__('For video content, use MP4s in H264/AAC format for best compatibility.')}{' '}
+              {__(
+                'For video content, use MP4s in H264/AAC format and a friendly bitrate (720p) for more reliable streaming.'
+              )}{' '}
               <Button button="link" label={__('Learn more')} href="https://lbry.com/faq/how-to-publish" />.
             </p>
           )}
