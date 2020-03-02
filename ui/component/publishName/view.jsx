@@ -62,15 +62,16 @@ function PublishName(props: Props) {
     let bidError;
     if (bid === 0) {
       bidError = __('Deposit cannot be 0');
-    } else if (totalAvailableBidAmount === bid) {
-      bidError = __('Please decrease your deposit to account for transaction fees');
-    } else if (totalAvailableBidAmount < bid) {
-      bidError = __('Deposit cannot be higher than your balance');
     } else if (bid < MINIMUM_PUBLISH_BID) {
       bidError = __('Your deposit must be higher');
+    } else if (totalAvailableBidAmount < bid) {
+      bidError = __('Deposit cannot be higher than your balance');
+    } else if (totalAvailableBidAmount <= bid + 0.05) {
+      bidError = __('Please decrease your deposit to account for transaction fees or acquire more LBC.');
     }
 
     setBidError(bidError);
+    updatePublishForm({ bidError: bidError });
   }, [bid, previousBidAmount, balance]);
 
   return (

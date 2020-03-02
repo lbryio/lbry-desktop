@@ -29,6 +29,7 @@ type Props = {
   publish: (?string) => void,
   filePath: ?string,
   bid: ?number,
+  bidError: ?string,
   editingURI: ?string,
   title: ?string,
   thumbnail: ?string,
@@ -74,6 +75,7 @@ function PublishForm(props: Props) {
     resolveUri,
     title,
     bid,
+    bidError,
     uploadThumbnailStatus,
     resetThumbnailStatus,
     updatePublishForm,
@@ -90,7 +92,12 @@ function PublishForm(props: Props) {
 
   // If they are editing, they don't need a new file chosen
   const formValidLessFile =
-    name && isNameValid(name, false) && title && bid && !(uploadThumbnailStatus === THUMBNAIL_STATUSES.IN_PROGRESS);
+    name &&
+    isNameValid(name, false) &&
+    title &&
+    bid &&
+    !bidError &&
+    !(uploadThumbnailStatus === THUMBNAIL_STATUSES.IN_PROGRESS);
   const formValid = editingURI && !filePath ? isStillEditing && formValidLessFile : formValidLessFile;
 
   let submitLabel;
