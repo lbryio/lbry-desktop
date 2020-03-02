@@ -1004,5 +1004,6 @@
   "Image": "Image",
   "Model": "Model",
   "Binary": "Binary",
-  "Other": "Other"
+  "Other": "Other",
+  "For video content, use MP4s in H264/AAC format and a friendly bitrate (720p) for more reliable streaming.": "For video content, use MP4s in H264/AAC format and a friendly bitrate (720p) for more reliable streaming."
 }
