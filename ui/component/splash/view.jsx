@@ -225,7 +225,7 @@ export default class SplashScreen extends React.PureComponent<Props, State> {
         <h1 className="splash__title">LBRY</h1>
         <div className="splash__details">{details}</div>
 
-        {!animationHidden && (
+        {!animationHidden && !error && (
           <css-doodle class="doodle">
             {`
             --color: @p(var(--color-primary), var(--color-secondary), var(--color-focus), var(--color-nothing));
@@ -262,30 +262,34 @@ export default class SplashScreen extends React.PureComponent<Props, State> {
           `}
           </css-doodle>
         )}
-        <Button
-          className="splash__animation-toggle"
-          label={!animationHidden ? __('I feel woosy! Stop spinning!') : __('Spin Spin Sugar')}
-          onClick={() => setClientSetting(SETTINGS.HIDE_SPLASH_ANIMATION, !animationHidden)}
-        />
+        {!error && (
+          <Button
+            className="splash__animation-toggle"
+            label={!animationHidden ? __('I feel woosy! Stop spinning!') : __('Spin Spin Sugar')}
+            onClick={() => setClientSetting(SETTINGS.HIDE_SPLASH_ANIMATION, !animationHidden)}
+          />
+        )}
         {error && (
           <Card
-            className="splash__error"
             title={__('Error Starting Up')}
             subtitle={
               <React.Fragment>
                 <p>
-                  Try refreshing to fix it. If you still have issues, your anti-virus software or firewall may be
-                  preventing startup.
+                  {__(
+                    'You can try refreshing to fix it. If you still have issues, your anti-virus software or firewall may be preventing startup.'
+                  )}
                 </p>
-                <I18nMessage
-                  tokens={{
-                    help_link: (
-                      <Button button="link" href="https://lbry.com/faq/startup-troubleshooting" label="this link" />
-                    ),
-                  }}
-                >
-                  Reach out to hello@lbry.com for help, or check out %help_link%.
-                </I18nMessage>
+                <p>
+                  <I18nMessage
+                    tokens={{
+                      help_link: (
+                        <Button button="link" href="https://lbry.com/faq/startup-troubleshooting" label="this link" />
+                      ),
+                    }}
+                  >
+                    Reach out to hello@lbry.com for help, or check out %help_link%.
+                  </I18nMessage>
+                </p>
               </React.Fragment>
             }
             actions={<Button button="primary" label={__('Refresh')} onClick={() => window.location.reload()} />}
