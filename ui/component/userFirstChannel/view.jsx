@@ -4,7 +4,7 @@ import { isNameValid } from 'lbry-redux';
 import Button from 'component/button';
 import { Form, FormField } from 'component/common/form';
 import { INVALID_NAME_ERROR } from 'constants/claim';
-export const DEFAULT_BID_FOR_FIRST_CHANNEL = 0.5;
+export const DEFAULT_BID_FOR_FIRST_CHANNEL = 0.01;
 
 type Props = {
   createChannel: (string, number) => void,
