@@ -14,15 +14,31 @@ type Props = {
   claim: StreamClaim,
   openModal: (id: string, { onCommentAcknowledge: () => void }) => void,
   createComment: (string, string, string) => void,
+  channels: ?Array<ChannelClaim>,
 };
 
 export function CommentCreate(props: Props) {
-  const { commentingEnabled, createComment, claim, openModal } = props;
+  const { commentingEnabled, createComment, claim, openModal, channels } = props;
   const { claim_id: claimId } = claim;
   const [commentValue, setCommentValue] = usePersistedState(`comment-${claimId}`, '');
   const [commentAck, setCommentAck] = usePersistedState('comment-acknowledge', false);
   const [channel, setChannel] = usePersistedState('comment-channel', '');
   const [charCount, setCharCount] = useState(commentValue.length);
+
+  const topChannel =
+    channels &&
+    channels.reduce((top, channel) => {
+      const topClaimCount = (top && top.meta && top.meta.claims_in_channel) || 0;
+      const currentClaimCount = (channel && channel.meta && channel.meta.claims_in_channel) || 0;
+      return topClaimCount >= currentClaimCount ? top : channel;
+    });
+
+  useEffect(() => {
+    // set default channel
+    if ((channel === '' || channel === 'anonymous') && topChannel) {
+      handleChannelChange(topChannel.name);
+    }
+  }, [channel, topChannel]);
 
   function handleCommentChange(event) {
     setCommentValue(event.target.value);
