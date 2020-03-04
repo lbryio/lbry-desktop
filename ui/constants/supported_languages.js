@@ -29,6 +29,7 @@ const SUPPORTED_LANGUAGES = {
   tr: LANGUAGES.tr[1],
   cs: LANGUAGES.cs[1],
   kn: LANGUAGES.kn[1],
+  uk: LANGUAGES.uk[1],
 };
 
 export default SUPPORTED_LANGUAGES;
