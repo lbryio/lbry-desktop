@@ -989,8 +989,6 @@
   "Share usage data with LBRY inc.": "Share usage data with LBRY inc.",
   "Required": "Required",
   "Email %help_link% or join our %chat_link% if you encounter any trouble verifying.": "Email %help_link% or join our %chat_link% if you encounter any trouble verifying.",
-  "Only apply a few tags that are relevant to your content, and use the Mature tag as appropriate. Tag abuse will not be tolerated.": "Only apply a few tags that are relevant to your content, and use the Mature tag as appropriate. Tag abuse will not be tolerated.",
-  "Add relevant tags...": "Add relevant tags...",
   "try again in a few seconds.": "try again in a few seconds.",
   "Any": "Any",
   "Video": "Video",
@@ -1005,5 +1003,12 @@
   "Model": "Model",
   "Binary": "Binary",
   "Other": "Other",
-  "For video content, use MP4s in H264/AAC format and a friendly bitrate (720p) for more reliable streaming.": "For video content, use MP4s in H264/AAC format and a friendly bitrate (720p) for more reliable streaming."
+  "For video content, use MP4s in H264/AAC format and a friendly bitrate (720p) for more reliable streaming.": "For video content, use MP4s in H264/AAC format and a friendly bitrate (720p) for more reliable streaming.",
+  "Show reposts": "Show reposts",
+  "Show reposts from the creators you follow.": "Show reposts from the creators you follow.",
+  "You can try refreshing to fix it. If you still have issues, your anti-virus software or firewall may be preventing startup.": "You can try refreshing to fix it. If you still have issues, your anti-virus software or firewall may be preventing startup.",
+  "Only apply a few tags that are relevant to your content, and use the Mature tag as appropriate. Tag abuse will not be tolerated.": "Only apply a few tags that are relevant to your content, and use the Mature tag as appropriate. Tag abuse will not be tolerated.",
+  "Add relevant tags...": "Add relevant tags...",
+  "Enter up to five (5) tags that are relevant to your content, and use the Mature tag as appropriate. Tag abuse will not be tolerated.": "Enter up to five (5) tags that are relevant to your content, and use the Mature tag as appropriate. Tag abuse will not be tolerated.",
+  "Sorry, your request timed out. Modify your options or %again%": "Sorry, your request timed out. Modify your options or %again%"
 }

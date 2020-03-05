@@ -16,6 +16,7 @@ type Props = {
   onRemove: Tag => void,
   placeholder?: string,
   label?: string,
+  disabled?: boolean,
 };
 
 /*
@@ -38,6 +39,7 @@ export default function TagsSearch(props: Props) {
     disableAutoFocus,
     placeholder,
     label,
+    disabled,
   } = props;
   const [newTag, setNewTag] = useState('');
   const doesTagMatch = name => {
@@ -128,6 +130,7 @@ export default function TagsSearch(props: Props) {
               placeholder={placeholder || __('Follow more tags')}
               type="text"
               value={newTag}
+              disabled={disabled}
             />
           </li>
         </ul>
@@ -135,7 +138,7 @@ export default function TagsSearch(props: Props) {
       <label>{__('Suggested')}</label>
       <ul className="tags">
         {suggestedTags.map(tag => (
-          <Tag key={`suggested${tag}`} name={tag} type="add" onClick={() => handleTagClick(tag)} />
+          <Tag disabled={disabled} key={`suggested${tag}`} name={tag} type="add" onClick={() => handleTagClick(tag)} />
         ))}
         {!suggestedTags.length && <p className="empty tags__empty-message">No suggested tags</p>}
       </ul>

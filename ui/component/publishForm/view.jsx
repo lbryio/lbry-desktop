@@ -87,8 +87,10 @@ function PublishForm(props: Props) {
     publish,
     disabled = false,
   } = props;
+  const TAGS_LIMIT = 5;
   const formDisabled = (!filePath && !editingURI) || publishing;
   const isInProgress = filePath || editingURI || name || title;
+  const tagsCount = tags && tags.length;
 
   // If they are editing, they don't need a new file chosen
   const formValidLessFile =
@@ -152,15 +154,16 @@ function PublishForm(props: Props) {
           hideHeader
           label={__('Selected Tags')}
           empty={__('No tags added')}
+          limit={TAGS_LIMIT}
           help={__(
-            'Only apply a few tags that are relevant to your content, and use the Mature tag as appropriate. Tag abuse will not be tolerated.'
+            'Enter up to five (5) tags that are relevant to your content, and use the Mature tag as appropriate. Tag abuse will not be tolerated.'
           )}
           placeholder={__('Add relevant tags...')}
           onSelect={newTags => {
             const validatedTags = [];
             newTags.forEach(newTag => {
               if (!tags.some(tag => tag.name === newTag.name)) {
-                validatedTags.push(newTag);
+                if (tagsCount + validatedTags.length < TAGS_LIMIT) validatedTags.push(newTag);
               }
             });
             updatePublishForm({ tags: [...tags, ...validatedTags] });
