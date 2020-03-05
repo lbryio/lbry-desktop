@@ -75,7 +75,7 @@ function PublishFile(props: Props) {
       return (
         <p className="help--error">
           {__(UPLOAD_SIZE_MESSAGE)}{' '}
-          <Button button="link" label={__('Learn more')} href="https://lbry.com/faq/how-to-publish" />
+          <Button button="link" label={__('Publishing Guide')} href="https://lbry.com/faq/video-publishing-guide" />
         </p>
       );
     }
@@ -84,7 +84,7 @@ function PublishFile(props: Props) {
       return (
         <p className="help--error">
           {__('Your video has a bitrate over 8 mbps. We suggest transcoding to provide viewers the best experience.')}{' '}
-          <Button button="link" label={__('Learn more')} href="https://lbry.com/faq/how-to-publish" />
+          <Button button="link" label={__('Publishing Guide')} href="https://lbry.com/faq/video-publishing-guide" />
         </p>
       );
     }
@@ -95,7 +95,7 @@ function PublishFile(props: Props) {
           {__(
             'Your video may not be the best format. Use MP4s in H264/AAC format and a friendly bitrate (1080p) for more reliable streaming.'
           )}{' '}
-          <Button button="link" label={__('Learn more')} href="https://lbry.com/faq/how-to-publish" />
+          <Button button="link" label={__('Publishing Guide')} href="https://lbry.com/faq/video-publishing-guide" />
         </p>
       );
     }
@@ -114,7 +114,7 @@ function PublishFile(props: Props) {
           {__(
             'For video content, use MP4s in H264/AAC format and a friendly bitrate (1080p) for more reliable streaming.'
           )}{' '}
-          <Button button="link" label={__('Learn more')} href="https://lbry.com/faq/how-to-publish" />
+          <Button button="link" label={__('Publishing Guide')} href="https://lbry.com/faq/video-publishing-guide" />
         </p>
       );
     }
