@@ -38,7 +38,7 @@ function PublishFile(props: Props) {
   const [oversized, setOversized] = useState(false);
   const [isVid, setIsVid] = useState(false);
   const RECOMMENDED_BITRATE = 8000000;
-  const TV_PUBLISH_SIZE_LIMIT: number = 100000000;
+  const TV_PUBLISH_SIZE_LIMIT: number = 1073741824;
   const UPLOAD_SIZE_MESSAGE = 'Lbrytv uploads are limited to 1 GB. Download the app for unrestricted publishing.';
 
   // clear warnings
