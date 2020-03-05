@@ -246,6 +246,11 @@ a {
   color: var(--color-text-error);
 }
 
+.help--error {
+  @extend .help;
+  color: var(--color-text-error);
+}
+
 .thumbnail-preview {
   width: var(--thumbnail-preview-width);
   height: var(--thumbnail-preview-height);
