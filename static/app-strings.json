@@ -1012,5 +1012,6 @@
   "Unable to validate your video.": "Unable to validate your video.",
   "Checking your video...": "Checking your video...",
   "Your video has a bitrate over 8 mbps. We suggest transcoding to provide viewers the best experience.": "Your video has a bitrate over 8 mbps. We suggest transcoding to provide viewers the best experience.",
-  "Your video may not be the best format. Use MP4s in H264/AAC format and a friendly bitrate (1080p) for more reliable streaming.": "Your video may not be the best format. Use MP4s in H264/AAC format and a friendly bitrate (1080p) for more reliable streaming."
+  "Your video may not be the best format. Use MP4s in H264/AAC format and a friendly bitrate (1080p) for more reliable streaming.": "Your video may not be the best format. Use MP4s in H264/AAC format and a friendly bitrate (1080p) for more reliable streaming.",
+  "Publishing Guide": "Publishing Guide"
 }

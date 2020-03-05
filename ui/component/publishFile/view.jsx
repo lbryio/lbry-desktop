@@ -47,6 +47,7 @@ function PublishFile(props: Props) {
       setDuration(0);
       setSize(0);
       setIsVid(false);
+      setOversized(false);
     }
   }, [filePath]);
 
@@ -71,7 +72,7 @@ function PublishFile(props: Props) {
 
   function getMessage() {
     // @if TARGET='web'
-    if (oversized || Number(size) > TV_PUBLISH_SIZE_LIMIT) {
+    if (oversized) {
       return (
         <p className="help--error">
           {__(UPLOAD_SIZE_MESSAGE)}{' '}
@@ -107,7 +108,20 @@ function PublishFile(props: Props) {
         </p>
       );
     }
+    // @if TARGET='web'
+    if (!isStillEditing) {
+      return (
+        <p className="help">
+          {__(
+            'For video content, use MP4s in H264/AAC format and a friendly bitrate (1080p) for more reliable streaming. Lbrytv uploads are restricted to 1GB.'
+          )}{' '}
+          <Button button="link" label={__('Publishing Guide')} href="https://lbry.com/faq/video-publishing-guide" />
+        </p>
+      );
+    }
+    // @endif
 
+    // @if TARGET='app'
     if (!isStillEditing) {
       return (
         <p className="help">
@@ -118,6 +132,7 @@ function PublishFile(props: Props) {
         </p>
       );
     }
+    // @endif
   }
 
   function handleFileChange(file: WebFile) {
