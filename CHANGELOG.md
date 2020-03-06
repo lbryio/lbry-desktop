@@ -7,14 +7,31 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ## [0.4x.x] - [Unreleased]
 
 ### Added
-- Show reposts setting ([#3712](https://github.com/lbryio/lbry-desktop/pull/3712))
-
-
-- Czech and Kannada language support ([#3759](https://github.com/lbryio/lbry-desktop/pull/3759))
 
 ### Changed
 
 ### Fixed
+
+## [0.43.3] - [2020-03-06]
+
+### Added
+
+- New/Top/Trending options on Channel pages ([#3768](https://github.com/lbryio/lbry-desktop/pull/3768))
+- Encourage following channels through new discovery page on sign in ([#3756](https://github.com/lbryio/lbry-desktop/pull/3756))
+- Warnings about incompatible video format and high bitrates ([#3794](https://github.com/lbryio/lbry-desktop/pull/3794))
+- Additional filtering options (type / duration) alongside Top/Trending/New ([#3778](https://github.com/lbryio/lbry-desktop/pull/3778))
+- Czech and Kannada language support ([#3759](https://github.com/lbryio/lbry-desktop/pull/3759))
+
+### Changed
+
+- Default channel bid to 0.01 LBC and improve publish page warnings around insufficient credits ([#3781](https://github.com/lbryio/lbry-desktop/pull/3781))
+- Publish page - limit # of tags, improve wording on tag selection ([#3796](https://github.com/lbryio/lbry-desktop/pull/3796))
+- Upgrade Electron-builder and updater to latest version to support libcurl changes
+
+### Fixed
+
+- Some posted comments showing up as anonymous ([#3787](https://github.com/lbryio/lbry-desktop/pull/3787))
+- Back/forward mouse navigation on Desktop app ([#3763](https://github.com/lbryio/lbry-desktop/pull/3763))
 
 ## [0.43.2] - [2020-02-25]
 
