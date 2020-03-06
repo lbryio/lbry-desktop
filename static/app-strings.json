@@ -1015,5 +1015,7 @@
   "Autocomplete": "Autocomplete",
   "Followed Tags": "Followed Tags",
   "Add tags that are relevant to your content. If mature content, ensure it is tagged mature. Tag abuse and missing mature tags will not be tolerated.": "Add tags that are relevant to your content. If mature content, ensure it is tagged mature. Tag abuse and missing mature tags will not be tolerated.",
-  "%selectTagsLabel% (%number% left)": "%selectTagsLabel% (%number% left)"
+  "%selectTagsLabel% (%number% left)": "%selectTagsLabel% (%number% left)",
+  "Matching": "Matching",
+  "No matching tags": "No matching tags"
 }
