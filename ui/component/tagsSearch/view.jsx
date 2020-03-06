@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { Form, FormField } from 'component/common/form';
 import Tag from 'component/tag';
 import { setUnion, setDifference } from 'util/set-operations';
-import I18nMessage from '../i18nMessage';
+import I18nMessage from 'component/i18nMessage';
 
 type Props = {
   tagsPassedIn: Array<Tag>,
@@ -154,7 +154,7 @@ export default function TagsSearch(props: Props) {
           label={'Add Tags'}
         />
         <section>
-          <label>{newTag.length ? __('Autocomplete') : __('Followed Tags')}</label>
+          <label>{newTag.length ? __('Matching') : __('Followed Tags')}</label>
           <ul className="tags">
             {Boolean(newTag.length) && !suggestedTags.includes(newTag) && (
               <Tag
@@ -175,7 +175,7 @@ export default function TagsSearch(props: Props) {
               />
             ))}
 
-            {!suggestedTags.length && <p className="empty tags__empty-message">No suggested tags</p>}
+            {!suggestedTags.length && <p className="empty tags__empty-message">{__('No matching tags')}</p>}
           </ul>
         </section>
       </Form>
