@@ -107,7 +107,7 @@ export default function TagsSelect(props: Props) {
               disableAutoFocus={disableAutoFocus}
               tagsPassedIn={tagsToDisplay}
               placeholder={placeholder}
-              disabled={limit && tagCount >= limit}
+              limit={limit}
             />
           </React.Fragment>
         }

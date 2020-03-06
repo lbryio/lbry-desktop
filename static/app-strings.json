@@ -1010,5 +1010,10 @@
   "Only apply a few tags that are relevant to your content, and use the Mature tag as appropriate. Tag abuse will not be tolerated.": "Only apply a few tags that are relevant to your content, and use the Mature tag as appropriate. Tag abuse will not be tolerated.",
   "Add relevant tags...": "Add relevant tags...",
   "Enter up to five (5) tags that are relevant to your content, and use the Mature tag as appropriate. Tag abuse will not be tolerated.": "Enter up to five (5) tags that are relevant to your content, and use the Mature tag as appropriate. Tag abuse will not be tolerated.",
-  "Sorry, your request timed out. Modify your options or %again%": "Sorry, your request timed out. Modify your options or %again%"
+  "Sorry, your request timed out. Modify your options or %again%": "Sorry, your request timed out. Modify your options or %again%",
+  "gaming, crypto": "gaming, crypto",
+  "Autocomplete": "Autocomplete",
+  "Followed Tags": "Followed Tags",
+  "Add tags that are relevant to your content. If mature content, ensure it is tagged mature. Tag abuse and missing mature tags will not be tolerated.": "Add tags that are relevant to your content. If mature content, ensure it is tagged mature. Tag abuse and missing mature tags will not be tolerated.",
+  "%selectTagsLabel% (%number% left)": "%selectTagsLabel% (%number% left)"
 }

@@ -43,6 +43,7 @@
     height: var(--tag-height);
     padding: calc(var(--spacing-miniscule) + 1px) var(--spacing-small);
     background-color: var(--color-input-bg);
+    margin-bottom: var(--spacing-medium);
   }
 }
 
@@ -53,6 +54,10 @@
 
 .tag--remove {
   max-width: 20rem;
+}
+
+.tag--disabled {
+  opacity: 0.3;
 }
 
 .tag--large {
