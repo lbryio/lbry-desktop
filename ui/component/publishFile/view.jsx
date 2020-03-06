@@ -83,7 +83,7 @@ function PublishFile(props: Props) {
     // @endif
     if (isVid && duration && getBitrate(size, duration) > RECOMMENDED_BITRATE) {
       return (
-        <p className="help--error">
+        <p className="help--warning">
           {__('Your video has a bitrate over 8 mbps. We suggest transcoding to provide viewers the best experience.')}{' '}
           <Button button="link" label={__('Publishing Guide')} href="https://lbry.com/faq/video-publishing-guide" />
         </p>
@@ -92,7 +92,7 @@ function PublishFile(props: Props) {
 
     if (isVid && !duration) {
       return (
-        <p className="help--error">
+        <p className="help--warning">
           {__(
             'Your video may not be the best format. Use MP4s in H264/AAC format and a friendly bitrate (1080p) for more reliable streaming.'
           )}{' '}
