@@ -208,8 +208,8 @@ a {
 }
 
 .help--warning {
-  background-color: var(--color-warning);
-  color: var(--color-black);
+  @extend .help;
+  color: var(--color-text-help-warning);
 }
 
 .help--inline {
@@ -243,6 +243,11 @@ a {
 }
 
 .error-text {
+  color: var(--color-text-error);
+}
+
+.help--error {
+  @extend .help;
   color: var(--color-text-error);
 }
 
