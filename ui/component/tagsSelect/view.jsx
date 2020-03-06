@@ -24,6 +24,7 @@ type Props = {
   placeholder?: string,
   disableAutoFocus?: boolean,
   hideHeader?: boolean,
+  limit?: number,
 };
 
 /*
@@ -44,6 +45,7 @@ export default function TagsSelect(props: Props) {
     placeholder,
     hideHeader,
     label,
+    limit,
   } = props;
   const [hasClosed, setHasClosed] = usePersistedState('tag-select:has-closed', false);
   const tagsToDisplay = tagsChosen || followedTags;
@@ -105,6 +107,7 @@ export default function TagsSelect(props: Props) {
               disableAutoFocus={disableAutoFocus}
               tagsPassedIn={tagsToDisplay}
               placeholder={placeholder}
+              limit={limit}
             />
           </React.Fragment>
         }

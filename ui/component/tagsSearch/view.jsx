@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { Form, FormField } from 'component/common/form';
 import Tag from 'component/tag';
 import { setUnion, setDifference } from 'util/set-operations';
+import I18nMessage from 'component/i18nMessage';
 
 type Props = {
   tagsPassedIn: Array<Tag>,
@@ -16,6 +17,8 @@ type Props = {
   onRemove: Tag => void,
   placeholder?: string,
   label?: string,
+  disabled?: boolean,
+  limit?: number,
 };
 
 /*
@@ -38,6 +41,8 @@ export default function TagsSearch(props: Props) {
     disableAutoFocus,
     placeholder,
     label,
+    disabled,
+    limit,
   } = props;
   const [newTag, setNewTag] = useState('');
   const doesTagMatch = name => {
@@ -54,6 +59,8 @@ export default function TagsSearch(props: Props) {
   const remainingFollowedTagsSet = setDifference(followedTagsSet, selectedTagsSet);
   const suggestedTagsSet = setUnion(remainingFollowedTagsSet, unfollowedTagsSet);
 
+  const countWithoutMature = selectedTagsSet.has('mature') ? selectedTagsSet.size - 1 : selectedTagsSet.size;
+  const maxed = Boolean(limit && countWithoutMature >= limit);
   const suggestedTags = Array.from(suggestedTagsSet)
     .filter(doesTagMatch)
     .slice(0, 5);
@@ -108,37 +115,70 @@ export default function TagsSearch(props: Props) {
   return (
     <React.Fragment>
       <Form className="tags__input-wrapper" onSubmit={handleSubmit}>
-        <label>{label || __('Following')}</label>
-        <ul className="tags--remove">
-          {tagsPassedIn.map(tag => (
-            <Tag
-              key={`passed${tag.name}`}
-              name={tag.name}
-              type="remove"
-              onClick={() => {
-                onRemove(tag);
+        <label>
+          {limit ? (
+            <I18nMessage
+              tokens={{
+                number: 5 - countWithoutMature,
+                selectTagsLabel: label,
               }}
-            />
-          ))}
-          <li>
-            <FormField
-              autoFocus={!disableAutoFocus}
-              className="tag__input"
-              onChange={onChange}
-              placeholder={placeholder || __('Follow more tags')}
-              type="text"
-              value={newTag}
-            />
-          </li>
+            >
+              %selectTagsLabel% (%number% left)
+            </I18nMessage>
+          ) : (
+            label || __('Following')
+          )}
+        </label>
+        <ul className="tags--remove">
+          {!tagsPassedIn.length && <Tag key={`placeholder-tag`} name={'example'} disabled type={'remove'} />}
+          {Boolean(tagsPassedIn.length) &&
+            tagsPassedIn.map(tag => (
+              <Tag
+                key={`passed${tag.name}`}
+                name={tag.name}
+                type="remove"
+                onClick={() => {
+                  onRemove(tag);
+                }}
+              />
+            ))}
         </ul>
+        <FormField
+          autoFocus={!disableAutoFocus}
+          className="tag__input"
+          onChange={onChange}
+          placeholder={placeholder || __('gaming, crypto')}
+          type="text"
+          value={newTag}
+          disabled={disabled}
+          label={'Add Tags'}
+        />
+        <section>
+          <label>{newTag.length ? __('Matching') : __('Followed Tags')}</label>
+          <ul className="tags">
+            {Boolean(newTag.length) && !suggestedTags.includes(newTag) && (
+              <Tag
+                disabled={newTag !== 'mature' && maxed}
+                key={`entered${newTag}`}
+                name={newTag}
+                type="add"
+                onClick={newTag.includes('') ? e => handleSubmit(e) : e => handleTagClick(newTag)}
+              />
+            )}
+            {suggestedTags.map(tag => (
+              <Tag
+                disabled={tag !== 'mature' && maxed}
+                key={`suggested${tag}`}
+                name={tag}
+                type="add"
+                onClick={() => handleTagClick(tag)}
+              />
+            ))}
+
+            {!suggestedTags.length && <p className="empty tags__empty-message">{__('No matching tags')}</p>}
+          </ul>
+        </section>
       </Form>
-      <label>{__('Suggested')}</label>
-      <ul className="tags">
-        {suggestedTags.map(tag => (
-          <Tag key={`suggested${tag}`} name={tag} type="add" onClick={() => handleTagClick(tag)} />
-        ))}
-        {!suggestedTags.length && <p className="empty tags__empty-message">No suggested tags</p>}
-      </ul>
     </React.Fragment>
   );
 }
