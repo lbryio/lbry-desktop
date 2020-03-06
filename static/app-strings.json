@@ -1005,5 +1005,11 @@
   "Model": "Model",
   "Binary": "Binary",
   "Other": "Other",
-  "For video content, use MP4s in H264/AAC format and a friendly bitrate (720p) for more reliable streaming.": "For video content, use MP4s in H264/AAC format and a friendly bitrate (720p) for more reliable streaming."
+  "Please check your deposit amount.": "Please check your deposit amount.",
+  "For video content, use MP4s in H264/AAC format and a friendly bitrate (1080p) for more reliable streaming.": "For video content, use MP4s in H264/AAC format and a friendly bitrate (1080p) for more reliable streaming.",
+  "Checking your video...": "Checking your video...",
+  "Your video has a bitrate over 8 mbps. We suggest transcoding to provide viewers the best experience.": "Your video has a bitrate over 8 mbps. We suggest transcoding to provide viewers the best experience.",
+  "Your video may not be the best format. Use MP4s in H264/AAC format and a friendly bitrate (1080p) for more reliable streaming.": "Your video may not be the best format. Use MP4s in H264/AAC format and a friendly bitrate (1080p) for more reliable streaming.",
+  "Publishing Guide": "Publishing Guide",
+  "This is equivalent to a password. Do not post or share this.": "This is equivalent to a password. Do not post or share this."
 }

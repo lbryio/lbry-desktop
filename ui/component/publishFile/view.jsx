@@ -1,6 +1,6 @@
 // @flow
 import * as ICONS from 'constants/icons';
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { regexInvalidURI } from 'lbry-redux';
 import FileSelector from 'component/common/file-selector';
 import Button from 'component/button';
@@ -33,6 +33,24 @@ function PublishFile(props: Props) {
     clearPublish,
   } = props;
 
+  const [duration, setDuration] = useState(0);
+  const [size, setSize] = useState(0);
+  const [oversized, setOversized] = useState(false);
+  const [isVid, setIsVid] = useState(false);
+  const RECOMMENDED_BITRATE = 8000000;
+  const TV_PUBLISH_SIZE_LIMIT: number = 1073741824;
+  const UPLOAD_SIZE_MESSAGE = 'Lbrytv uploads are limited to 1 GB. Download the app for unrestricted publishing.';
+
+  // clear warnings
+  useEffect(() => {
+    if (!filePath || filePath === '' || filePath.name === '') {
+      setDuration(0);
+      setSize(0);
+      setIsVid(false);
+      setOversized(false);
+    }
+  }, [filePath]);
+
   let currentFile = '';
   if (filePath) {
     if (typeof filePath === 'string') {
@@ -42,19 +60,110 @@ function PublishFile(props: Props) {
     }
   }
 
+  function getBitrate(size, duration) {
+    const s = Number(size);
+    const d = Number(duration);
+    if (s && d) {
+      return (s * 8) / d;
+    } else {
+      return 0;
+    }
+  }
+
+  function getMessage() {
+    // @if TARGET='web'
+    if (oversized) {
+      return (
+        <p className="help--error">
+          {__(UPLOAD_SIZE_MESSAGE)}{' '}
+          <Button button="link" label={__('Publishing Guide')} href="https://lbry.com/faq/video-publishing-guide" />
+        </p>
+      );
+    }
+    // @endif
+    if (isVid && duration && getBitrate(size, duration) > RECOMMENDED_BITRATE) {
+      return (
+        <p className="help--warning">
+          {__('Your video has a bitrate over 8 mbps. We suggest transcoding to provide viewers the best experience.')}{' '}
+          <Button button="link" label={__('Publishing Guide')} href="https://lbry.com/faq/video-publishing-guide" />
+        </p>
+      );
+    }
+
+    if (isVid && !duration) {
+      return (
+        <p className="help--warning">
+          {__(
+            'Your video may not be the best format. Use MP4s in H264/AAC format and a friendly bitrate (1080p) for more reliable streaming.'
+          )}{' '}
+          <Button button="link" label={__('Publishing Guide')} href="https://lbry.com/faq/video-publishing-guide" />
+        </p>
+      );
+    }
+
+    if (!!isStillEditing && name) {
+      return (
+        <p className="help">
+          {__("If you don't choose a file, the file from your existing claim %name% will be used", { name: name })}
+        </p>
+      );
+    }
+    // @if TARGET='web'
+    if (!isStillEditing) {
+      return (
+        <p className="help">
+          {__(
+            'For video content, use MP4s in H264/AAC format and a friendly bitrate (1080p) for more reliable streaming. Lbrytv uploads are restricted to 1GB.'
+          )}{' '}
+          <Button button="link" label={__('Publishing Guide')} href="https://lbry.com/faq/video-publishing-guide" />
+        </p>
+      );
+    }
+    // @endif
+
+    // @if TARGET='app'
+    if (!isStillEditing) {
+      return (
+        <p className="help">
+          {__(
+            'For video content, use MP4s in H264/AAC format and a friendly bitrate (1080p) for more reliable streaming.'
+          )}{' '}
+          <Button button="link" label={__('Publishing Guide')} href="https://lbry.com/faq/video-publishing-guide" />
+        </p>
+      );
+    }
+    // @endif
+  }
+
   function handleFileChange(file: WebFile) {
     const { showToast } = props;
-
+    window.URL = window.URL || window.webkitURL;
     // if electron, we'll set filePath to the path string because SDK is handling publishing.
     // if web, we set the filePath (dumb name) to the File() object
     // File.path will be undefined from web due to browser security, so it will default to the File Object.
+    setSize(file ? file.size : 0);
+    setDuration(0);
+    setOversized(false);
+
+    // if video, extract duration so we can warn about bitrate
+    const isVideo = file.type.split('/')[0] === 'video';
+    setIsVid(isVideo);
+    if (isVideo) {
+      const video = document.createElement('video');
+      video.preload = 'metadata';
+      video.onloadedmetadata = function() {
+        setDuration(video.duration);
+        window.URL.revokeObjectURL(video.src);
+      };
+      video.src = window.URL.createObjectURL(file);
+    }
 
     // @if TARGET='web'
     // we only need to enforce file sizes on 'web'
-    const PUBLISH_SIZE_LIMIT: number = 512000000;
     if (typeof file !== 'string') {
-      if (file && file.size && Number(file.size) > PUBLISH_SIZE_LIMIT) {
-        showToast(__('File uploads currently limited to 500MB. Download the app for unlimited publishing.'));
+      if (file && file.size && Number(file.size) > TV_PUBLISH_SIZE_LIMIT) {
+        setOversized(true);
+        showToast(__(UPLOAD_SIZE_MESSAGE));
         updatePublishForm({ filePath: '', name: '' });
         return;
       }
@@ -103,19 +212,7 @@ function PublishFile(props: Props) {
       actions={
         <React.Fragment>
           <FileSelector disabled={disabled} currentPath={currentFile} onFileChosen={handleFileChange} />
-          {!isStillEditing && (
-            <p className="help">
-              {__(
-                'For video content, use MP4s in H264/AAC format and a friendly bitrate (720p) for more reliable streaming.'
-              )}{' '}
-              <Button button="link" label={__('Learn more')} href="https://lbry.com/faq/how-to-publish" />.
-            </p>
-          )}
-          {!!isStillEditing && name && (
-            <p className="help">
-              {__("If you don't choose a file, the file from your existing claim %name% will be used", { name: name })}
-            </p>
-          )}
+          {getMessage()}
         </React.Fragment>
       }
     />
