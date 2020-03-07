@@ -26,7 +26,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 - Default channel bid to 0.01 LBC and improve publish page warnings around insufficient credits ([#3781](https://github.com/lbryio/lbry-desktop/pull/3781))
 - Publish page - limit # of tags, improve wording on tag selection ([#3796](https://github.com/lbryio/lbry-desktop/pull/3796))
-- Upgrade Electron-builder and updater to latest version to support libcurl changes
+- Upgrade Electron-builder and updater to latest version to support libcurl changes ([#3799](https://github.com/lbryio/lbry-desktop/pull/3799))
+- Upgrade [LBRY-SDK to 0.63.0](https://github.com/lbryio/lbry-sdk/releases/tag/v0.63.0) to fix Windows UPNP issues
 
 ### Fixed
 
