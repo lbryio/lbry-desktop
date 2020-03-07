@@ -31,7 +31,7 @@ class ModalCommentAcknowledgement extends React.PureComponent<Props> {
             )}
           </li>
           <li>
-            {__('Deleting or editing comments is not currently possible. Please be mindful of this when posting.')}
+            {__('All comments are viewable by anyone, keep this in mind before writing a comment.')}
           </li>
           <li>{__('When the alpha ends, we will attempt to transition comments, but do not promise to do so.')}</li>
         </ul>
