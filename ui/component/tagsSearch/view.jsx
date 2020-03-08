@@ -154,7 +154,7 @@ export default function TagsSearch(props: Props) {
           label={'Add Tags'}
         />
         <section>
-          <label>{newTag.length ? __('Matching') : __('Followed Tags')}</label>
+          <label>{newTag.length ? __('Matching') : __('Known Tags')}</label>
           <ul className="tags">
             {Boolean(newTag.length) && !suggestedTags.includes(newTag) && (
               <Tag
