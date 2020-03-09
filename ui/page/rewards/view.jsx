@@ -42,24 +42,32 @@ class RewardsPage extends PureComponent<Props> {
       if (!user.primary_email || !user.has_verified_email || !user.is_identity_verified) {
         return <RewardAuthIntro />;
       }
-      return (
-        <section className="card card--section">
-          <p>
-            {__('This account must undergo review before you can participate in the rewards program.')}{' '}
-            {__('This can take anywhere from several minutes to several days.')}
-          </p>
 
-          <p>{__('We apologize for this inconvenience, but have added this additional step to prevent fraud.')}</p>
-          <p>
-            {`${__('If you continue to see this message, send us an email to help@lbry.com.')} ${__(
-              'Please enjoy free content in the meantime!'
-            )}`}
-          </p>
-          <div className="card__actions">
-            <Button navigate="/" button="primary" label="Return Home" />
-            <Button onClick={() => fetchUser()} button="link" label="Refresh" />
-          </div>
-        </section>
+      return (
+        <Card
+          title={__('Reward Validation Pending')}
+          body={
+            <React.Fragment>
+              <p>
+                {__('This account must undergo review before you can participate in the rewards program.')}{' '}
+                {__('This can take anywhere from several minutes to several days.')}
+              </p>
+
+              <p>{__('We apologize for this inconvenience, but have added this additional step to prevent fraud.')}</p>
+              <p>
+                {`${__('If you continue to see this message, send us an email to help@lbry.com.')} ${__(
+                  'Please enjoy free content in the meantime!'
+                )}`}
+              </p>
+            </React.Fragment>
+          }
+          actions={
+            <div className="section__actions">
+              <Button navigate="/" button="primary" label="Return Home" />
+              <Button onClick={() => fetchUser()} button="link" label="Refresh" />
+            </div>
+          }
+        />
       );
     }
 
