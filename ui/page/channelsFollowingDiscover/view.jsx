@@ -32,6 +32,9 @@ function ChannelsFollowingDiscover(props: Props) {
 
   rowData.push({
     title: 'Top Channels Of All Time',
+    link: `/$/${PAGES.DISCOVER}?claim_type=channel&${CS.ORDER_BY_KEY}=${CS.ORDER_BY_TOP}&${CS.FRESH_KEY}=${
+      CS.FRESH_ALL
+    }`,
     options: {
       pageSize: 12,
       claimType: 'channel',
@@ -51,6 +54,7 @@ function ChannelsFollowingDiscover(props: Props) {
 
   rowData.push({
     title: 'Trending Channels',
+    link: `/$/${PAGES.DISCOVER}?claim_type=channel`,
     options: {
       pageSize: 8,
       claimType: 'channel',
