@@ -12,14 +12,14 @@ import Icon from 'component/common/icon';
 type Props = {
   location: { search: string },
   followedTags: Array<Tag>,
-  doToggleTagFollow: string => void,
+  doToggleTagFollowDesktop: string => void,
 };
 
 function TagsPage(props: Props) {
   const {
     location: { search },
     followedTags,
-    doToggleTagFollow,
+    doToggleTagFollowDesktop,
   } = props;
   const buttonRef = useRef();
   const isHovering = useHover(buttonRef);
@@ -39,7 +39,7 @@ function TagsPage(props: Props) {
   }
 
   function handleFollowClick() {
-    doToggleTagFollow(tag);
+    doToggleTagFollowDesktop(tag);
 
     const nowFollowing = !isFollowing;
     analytics.tagFollowEvent(tag, nowFollowing, 'tag-page');

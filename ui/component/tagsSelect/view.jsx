@@ -11,7 +11,7 @@ import Card from 'component/common/card';
 type Props = {
   showClose?: boolean,
   followedTags: Array<Tag>,
-  doToggleTagFollow?: string => void,
+  doToggleTagFollowDesktop?: string => void,
   suggestMature: boolean,
   // Overrides
   // The default component is for following tags
@@ -34,7 +34,7 @@ export default function TagsSelect(props: Props) {
   const {
     showClose,
     followedTags,
-    doToggleTagFollow = null,
+    doToggleTagFollowDesktop = null,
     title,
     help,
     tagsChosen,
@@ -59,8 +59,8 @@ export default function TagsSelect(props: Props) {
   function handleTagClick(tag) {
     if (onRemove) {
       onRemove(tag);
-    } else if (doToggleTagFollow) {
-      doToggleTagFollow(tag.name);
+    } else if (doToggleTagFollowDesktop) {
+      doToggleTagFollowDesktop(tag.name);
 
       const wasFollowing = followedTags.map(tag => tag.name).includes(tag.name);
       const nowFollowing = !wasFollowing;

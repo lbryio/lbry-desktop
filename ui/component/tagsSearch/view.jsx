@@ -9,7 +9,7 @@ type Props = {
   tagsPassedIn: Array<Tag>,
   unfollowedTags: Array<Tag>,
   followedTags: Array<Tag>,
-  doToggleTagFollow: string => void,
+  doToggleTagFollowDesktop: string => void,
   doAddTag: string => void,
   onSelect?: Tag => void,
   suggestMature?: boolean,
@@ -33,7 +33,7 @@ export default function TagsSearch(props: Props) {
     tagsPassedIn = [],
     unfollowedTags = [],
     followedTags = [],
-    doToggleTagFollow,
+    doToggleTagFollowDesktop,
     doAddTag,
     onSelect,
     onRemove,
@@ -99,7 +99,7 @@ export default function TagsSearch(props: Props) {
         }
 
         if (!followedTags.some(({ name }) => name === tag)) {
-          doToggleTagFollow(tag);
+          doToggleTagFollowDesktop(tag);
         }
       });
     }
@@ -109,7 +109,7 @@ export default function TagsSearch(props: Props) {
     if (onSelect) {
       onSelect([{ name: tag }]);
     } else {
-      doToggleTagFollow(tag);
+      doToggleTagFollowDesktop(tag);
     }
   }
   return (

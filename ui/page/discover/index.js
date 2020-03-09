@@ -1,5 +1,6 @@
 import { connect } from 'react-redux';
-import { selectFollowedTags, doToggleTagFollow } from 'lbry-redux';
+import { selectFollowedTags } from 'lbry-redux';
+import { doToggleTagFollowDesktop } from 'redux/actions/tags';
 import Tags from './view';
 
 const select = state => ({
@@ -9,6 +10,6 @@ const select = state => ({
 export default connect(
   select,
   {
-    doToggleTagFollow,
+    doToggleTagFollowDesktop,
   }
 )(Tags);

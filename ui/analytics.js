@@ -34,6 +34,7 @@ type Analytics = {
   toggleThirdParty: (boolean, ?boolean) => void,
   apiLogView: (string, string, string, ?number, ?() => void) => Promise<any>,
   apiLogPublish: (ChannelClaim | StreamClaim) => void,
+  apiSyncTags: ({}) => void,
   tagFollowEvent: (string, boolean, string) => void,
   videoStartEvent: (string, number) => void,
   videoBufferEvent: (string, number) => void,
@@ -162,6 +163,12 @@ const analytics: Analytics = {
       }
 
       Lbryio.call('event', 'publish', params);
+    }
+  },
+
+  apiSyncTags: params => {
+    if (internalAnalyticsEnabled && isProduction) {
+      Lbryio.call('content_tags', 'sync', params);
     }
   },
 
