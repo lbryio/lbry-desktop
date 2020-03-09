@@ -7,7 +7,7 @@
 .claim-list__header {
   display: flex;
   flex-wrap: wrap;
-  align-items: flex-start;
+  align-items: center;
   margin: var(--spacing-medium) 0;
   margin-top: 0;
   font-size: var(--font-body);
@@ -47,6 +47,7 @@
 }
 
 .claim-list__alt-controls {
+  align-self: flex-start;
   display: flex;
   align-items: center;
   margin-left: auto;

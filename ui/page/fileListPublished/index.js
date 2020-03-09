@@ -28,4 +28,9 @@ const perform = dispatch => ({
   clearPublish: () => dispatch(doClearPublish()),
 });
 
-export default withRouter(connect(select, perform)(FileListPublished));
+export default withRouter(
+  connect(
+    select,
+    perform
+  )(FileListPublished)
+);
