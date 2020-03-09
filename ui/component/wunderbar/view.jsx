@@ -204,7 +204,7 @@ class WunderBar extends React.PureComponent<Props, State> {
             >
               <Icon icon={this.getSuggestionIcon(type)} />
               <span className="wunderbar__suggestion-label">
-                {type === SEARCH_TYPES.TAG ? <Tag name={value} /> : shorthand}
+                {type === SEARCH_TYPES.TAG ? <Tag name={value} /> : shorthand || value}
               </span>
               {isHighlighted && (
                 <span className="wunderbar__suggestion-label--action">
