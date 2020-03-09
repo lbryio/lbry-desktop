@@ -1,6 +1,7 @@
 // @flow
 import * as ICONS from 'constants/icons';
 import * as PAGES from 'constants/pages';
+import * as CS from 'constants/claim_search';
 import React from 'react';
 import moment from 'moment';
 import Page from 'component/page';
@@ -113,7 +114,7 @@ function HomePage(props: Props) {
   rowData.push(
     {
       title: 'Top Content Last Week',
-      link: `/$/${PAGES.DISCOVER}?&type=top&time=week`,
+      link: `/$/${PAGES.DISCOVER}?${CS.ORDER_BY_KEY}=${CS.ORDER_BY_TOP}&${CS.FRESH_KEY}=${CS.FRESH_WEEK}`,
       options: {
         orderBy: ['effective_amount'],
         pageSize: 4,
@@ -128,7 +129,9 @@ function HomePage(props: Props) {
     },
     {
       title: '#HomePageCageMatch',
-      link: `/$/${PAGES.DISCOVER}?t=homepagecagematch&type=top&time=all`,
+      link: `/$/${PAGES.DISCOVER}?t=homepagecagematch&${CS.ORDER_BY_KEY}=${CS.ORDER_BY_TOP}&${CS.FRESH_KEY}=${
+        CS.FRESH_ALL
+      }`,
       help: (
         <div className="claim-grid__help">
           <Icon
@@ -156,7 +159,7 @@ function HomePage(props: Props) {
   if (!showAuthenticatedRows) {
     rowData.push({
       title: '#lbry',
-      link: `/$/${PAGES.DISCOVER}?t=lbry&type=top&time=all`,
+      link: `/$/${PAGES.DISCOVER}?t=lbry&${CS.ORDER_BY_KEY}=${CS.ORDER_BY_TOP}&${CS.FRESH_KEY}=${CS.FRESH_ALL}`,
       options: {
         tags: ['lbry'],
         orderBy: ['effective_amount'],
