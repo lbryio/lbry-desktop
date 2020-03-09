@@ -1,4 +1,4 @@
-const Octokit = require('@octokit/rest');
+const { Octokit } = require('@octokit/rest');
 const octokit = new Octokit();
 var wget = require('node-wget');
 const fs = require('fs');
