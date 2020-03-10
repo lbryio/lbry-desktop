@@ -68,7 +68,7 @@ _Note: If coming from a deb install, the directory structure is different and yo
 |                | Flatpak                                                                   | Arch                                                                                      | Raspberry Pi                                |
 | -------------- | ------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------- | ------------------------------------------- |
 | Latest Release | [FlatHub Page](https://flathub.org/apps/details/io.lbry.lbry-app)         | [AUR Package](https://aur.archlinux.org/packages/lbry-app-bin/)                           | [Pi Installer](https://lbrypi.com)          |
-| Maintainers    | [@choofee](https://github.com/choffee)/[@iuyte](https://github.com/iuyte) | [@kcseb](https://github.com/kcseb)/[@TimurKiyivinski](https://github.com/TimurKiyivinski) | [@Madiator2011](https://github.com/kodxana) |
+| Maintainers    | [@kcSeb](https://keybase.io/kcseb) | [@kcSeb](https://keybase.io/kcseb)/[@TimurKiyivinski](https://github.com/TimurKiyivinski) | [@Madiator2011](https://github.com/kodxana) |
 
 ## Usage
 
