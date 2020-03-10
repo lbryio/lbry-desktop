@@ -33,6 +33,7 @@ before_script:
   - if [ "$TRAVIS_PULL_REQUEST" != "false" ]; then unset WIN_CSC_LINK; unset CSC_LINK; fi
   - wget https://headers.lbry.io/blockchain_headers_latest -O $TRAVIS_BUILD_DIR/static/daemon/headers
 script:
+  - travis_wait 30
   - |
     if [ "$TARGET" == "windows" ]; then
       # Remove any special characters before adding to our list of ENVs
