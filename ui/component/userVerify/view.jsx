@@ -14,6 +14,7 @@ type Props = {
   verifyPhone: () => void,
   fetchUser: () => void,
   skipLink?: string,
+  onSkip: () => void,
 };
 
 class UserVerify extends React.PureComponent<Props> {
@@ -28,7 +29,12 @@ class UserVerify extends React.PureComponent<Props> {
   }
 
   render() {
-    const { errorMessage, isPending, verifyPhone, fetchUser, skipLink } = this.props;
+    const { errorMessage, isPending, verifyPhone, fetchUser, skipLink, onSkip } = this.props;
+    const skipButtonProps = {
+      onClick: onSkip,
+      navigate: skipLink || '/',
+    };
+
     return (
       <React.Fragment>
         <section className="section__header">
@@ -45,7 +51,7 @@ class UserVerify extends React.PureComponent<Props> {
               to be validated.
             </I18nMessage>{' '}
             <Button onClick={() => fetchUser()} button="link" label={__('Refresh')} /> {'or'}{' '}
-            <Button navigate={skipLink || '/'} button="link" label={__('Skip')} />.
+            <Button {...skipButtonProps} button="link" label={__('Skip')} />.
           </p>
           <p>{__('This step is not required to use LBRY, and not all users or regions may qualify.')}</p>
         </section>
@@ -132,7 +138,7 @@ class UserVerify extends React.PureComponent<Props> {
             subtitle={__('Rewards validation is optional.')}
             actions={
               <Fragment>
-                <Button navigate={skipLink || '/'} button="primary" label={__('Continue Without Rewards')} />
+                <Button {...skipButtonProps} button="primary" label={__('Continue Without Rewards')} />
               </Fragment>
             }
           />
