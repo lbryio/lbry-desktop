@@ -2,7 +2,7 @@
 import * as ICONS from 'constants/icons';
 import * as PAGES from 'constants/pages';
 import React, { useEffect, Fragment } from 'react';
-import { regexInvalidURI } from 'lbry-redux';
+import { regexInvalidURI, parseURI } from 'lbry-redux';
 import ClaimPreview from 'component/claimPreview';
 import ClaimList from 'component/claimList';
 import Page from 'component/page';
@@ -35,10 +35,21 @@ export default function SearchPage(props: Props) {
   }
 
   const INVALID_URI_CHARS = new RegExp(regexInvalidURI, 'gu');
-  const modifiedUrlQuery = urlQuery
-    .trim()
-    .replace(/\s+/g, '-')
-    .replace(INVALID_URI_CHARS, '');
+  let isValid = false;
+  let path;
+  try {
+    ({ path } = parseURI(urlQuery.replace(/ /g, '-').replace(/:/g, '#')));
+    isValid = true;
+  } catch (e) {
+    isValid = false;
+  }
+
+  const modifiedUrlQuery = isValid
+    ? path
+    : urlQuery
+        .trim()
+        .replace(/\s+/g, '-')
+        .replace(INVALID_URI_CHARS, '');
   const uriFromQuery = `lbry://${modifiedUrlQuery}`;
 
   useEffect(() => {
