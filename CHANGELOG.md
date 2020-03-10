@@ -4,13 +4,16 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
-## [0.4x.x] - [Unreleased]
-
-### Added
+## [0.43.4] - [Unreleased]
 
 ### Changed
 
+- Temporarily disabled lbry-format apps over security concerns ([#3824](https://github.com/lbryio/lbry-desktop/pull/3824))
+
 ### Fixed
+
+- Links to list view weren't working on the homepage and channel discovery page ([#3810](https://github.com/lbryio/lbry-desktop/pull/3810))
+- Valid URL handling in search bar ([#3819](https://github.com/lbryio/lbry-desktop/pull/3819))
 
 ## [0.43.3] - [2020-03-06]
 
