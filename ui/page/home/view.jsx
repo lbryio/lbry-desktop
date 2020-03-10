@@ -33,6 +33,9 @@ function HomePage(props: Props) {
   if (!showAuthenticatedRows) {
     rowData.push({
       title: 'Top Channels On LBRY',
+      link: `/$/${PAGES.DISCOVER}?claim_type=channel&${CS.ORDER_BY_KEY}=${CS.ORDER_BY_TOP}&${CS.FRESH_KEY}=${
+        CS.FRESH_ALL
+      }`,
       options: {
         orderBy: ['effective_amount'],
         claimType: ['channel'],
