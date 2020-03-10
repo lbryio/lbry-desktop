@@ -62,6 +62,7 @@ function UserSignIn(props: Props) {
   const shouldRedirectImmediately = urlParams.get('immediate');
   const [initialSignInStep, setInitialSignInStep] = React.useState();
   const [hasSeenFollowList, setHasSeenFollowList] = usePersistedState('channel-follow-intro', false);
+  const [hasSkippedRewards, setHasSkippedRewards] = usePersistedState('skip-rewards-intro', false);
   const hasVerifiedEmail = user && user.has_verified_email;
   const rewardsApproved = user && user.is_reward_approved;
   const isIdentityVerified = user && user.is_identity_verified;
@@ -81,7 +82,7 @@ function UserSignIn(props: Props) {
   // The possible screens for the sign in flow
   const showEmail = !emailToVerify && !hasVerifiedEmail;
   const showEmailVerification = emailToVerify && !hasVerifiedEmail;
-  const showUserVerification = hasVerifiedEmail && !rewardsApproved && !isIdentityVerified;
+  const showUserVerification = hasVerifiedEmail && !rewardsApproved && !isIdentityVerified && !hasSkippedRewards;
   const showSyncPassword = syncEnabled && getSyncError;
   const showChannelCreation =
     hasVerifiedEmail &&
@@ -119,7 +120,7 @@ function UserSignIn(props: Props) {
   const SIGN_IN_FLOW = [
     showEmail && <UserEmailNew />,
     showEmailVerification && <UserEmailVerify />,
-    showUserVerification && <UserVerify skipLink={redirect} />,
+    showUserVerification && <UserVerify skipLink={redirect} onSkip={() => setHasSkippedRewards(true)} />,
     showChannelCreation && <UserFirstChannel />,
     showFollowIntro && (
       <UserChannelFollowIntro
