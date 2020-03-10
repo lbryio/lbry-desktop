@@ -174,8 +174,6 @@ export default function TagsSearch(props: Props) {
                 onClick={() => handleTagClick(tag)}
               />
             ))}
-
-            {!suggestedTags.length && <p className="empty tags__empty-message">{__('No matching tags')}</p>}
           </ul>
         </section>
       </Form>
