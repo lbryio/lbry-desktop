@@ -1026,5 +1026,6 @@
   "For video content, use MP4s in H264/AAC format and a friendly bitrate (720p) for more reliable streaming.": "For video content, use MP4s in H264/AAC format and a friendly bitrate (720p) for more reliable streaming.",
   "Your video may not be the best format. Use MP4s in H264/AAC format and a friendly bitrate (720p) for more reliable streaming.": "Your video may not be the best format. Use MP4s in H264/AAC format and a friendly bitrate (720p) for more reliable streaming.",
   "Your video has a bitrate over 6 mbps. We suggest transcoding to provide viewers the best experience.": "Your video has a bitrate over 6 mbps. We suggest transcoding to provide viewers the best experience.",
-  "Your video has a bitrate over 5 mbps. We suggest transcoding to provide viewers the best experience.": "Your video has a bitrate over 5 mbps. We suggest transcoding to provide viewers the best experience."
+  "Your video has a bitrate over 5 mbps. We suggest transcoding to provide viewers the best experience.": "Your video has a bitrate over 5 mbps. We suggest transcoding to provide viewers the best experience.",
+  "Almost there": "Almost there"
 }
