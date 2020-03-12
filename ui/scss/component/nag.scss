@@ -1,5 +1,9 @@
+$nag-z-index: 9999;
+$nag-helpful-z-index: 10000;
+$nag-error-z-index: 100001;
+
 .nag {
-  z-index: 9999;
+  z-index: $nag-z-index;
   position: fixed;
   left: 0;
   bottom: 0;
@@ -21,7 +25,13 @@
 .nag--helpful {
   background-color: var(--color-secondary);
   color: var(--color-white);
-  z-index: 10000; // Ensure helpful nags are on top of regular nags
+  z-index: $nag-helpful-z-index;
+}
+
+.nag--error {
+  background-color: var(--color-error);
+  color: var(--color-text-error);
+  z-index: $nag-error-z-index;
 }
 
 .nag__button {
@@ -43,6 +53,16 @@
   &:hover {
     background-color: var(--color-secondary-alt);
     color: var(--color-secondary);
+  }
+}
+
+.nag__button--error {
+  color: var(--color-text-error);
+  border-color: var(--color-text-error);
+
+  &:hover {
+    background-color: var(--color-text-error);
+    color: var(--color-white);
   }
 }
 
