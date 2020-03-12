@@ -16,22 +16,15 @@ import { Provider } from 'react-redux';
 import { doDaemonReady, doAutoUpdate, doOpenModal, doHideModal, doToggle3PAnalytics } from 'redux/actions/app';
 import { Lbry, doToast, isURIValid, setSearchApi, apiCall } from 'lbry-redux';
 import { doSetLanguage, doUpdateIsNightAsync } from 'redux/actions/settings';
-import {
-  doAuthenticate,
-  Lbryio,
-  rewards,
-  doBlackListedOutpointsSubscribe,
-  doFilteredOutpointsSubscribe,
-} from 'lbryinc';
+import { Lbryio, rewards, doBlackListedOutpointsSubscribe, doFilteredOutpointsSubscribe } from 'lbryinc';
 import { store, persistor, history } from 'store';
-import pjson from 'package.json';
 import app from './app';
 import doLogWarningConsoleMessage from './logWarningConsoleMessage';
 import { ConnectedRouter, push } from 'connected-react-router';
 import { formatLbryUrlForWeb, formatInAppUrl } from 'util/url';
 import { PersistGate } from 'redux-persist/integration/react';
 import analytics from 'analytics';
-import { getAuthToken, setAuthToken } from 'util/saved-passwords';
+import { getAuthToken, setAuthToken, doCookieCleanup } from 'util/saved-passwords';
 import { X_LBRY_AUTH_TOKEN } from 'constants/token';
 
 // Import our app styles
@@ -93,6 +86,11 @@ if (process.env.LBRY_API_URL) {
 if (process.env.SEARCH_API_URL) {
   setSearchApi(process.env.SEARCH_API_URL);
 }
+
+// Fix to make sure old users' cookies are set to the correct domain
+// This can be removed after March 11th, 2021
+// https://github.com/lbryio/lbry-desktop/pull/3830
+doCookieCleanup();
 
 // We need to override Lbryio for getting/setting the authToken
 // We interact with ipcRenderer to get the auth key from a users keyring

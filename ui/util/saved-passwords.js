@@ -1,7 +1,11 @@
 // @flow
 import { ipcRenderer } from 'electron';
-import { DOMAIN } from 'config';
 
+const AUTH_TOKEN = 'auth_token';
+const SAVED_PASSWORD = 'saved_password';
+const DEPRECATED_SAVED_PASSWORD = 'saved-password';
+
+const domain = window.location.hostname;
 const isProduction = process.env.NODE_ENV === 'production';
 const maxExpiration = 2147483647;
 let sessionPassword;
@@ -17,7 +21,7 @@ function setCookie(name: string, value: string, expirationDaysOnWeb: number) {
 
   let cookie = `${name}=${value || ''}; ${expires} path=/; SameSite=Lax;`;
   if (isProduction) {
-    cookie += ` domain=.${DOMAIN}; Secure;`;
+    cookie += ` domain=${domain}; Secure;`;
   }
 
   document.cookie = cookie;
@@ -41,12 +45,13 @@ function getCookie(name: string) {
 }
 
 function deleteCookie(name: string) {
-  document.cookie = name + `=; Max-Age=-99999999; domain=.${DOMAIN}; path=/;`;
+  document.cookie = name + `=; Max-Age=-99999999; domain=${domain}; path=/;`;
 
   // Legacy
-  // Adding this here to delete any old cookies before we switched to . + DOMAIN
-  // Remove this if you see it after July 1st, 2020
-  document.cookie = name + `=; Max-Age=-99999999; domain=${DOMAIN}; path=/;`;
+  // Adding this here to delete any old cookies before we removed the "." in front of the domain
+  // Remove this if you see it after March 11th, 2021
+  // https://github.com/lbryio/lbry-desktop/pull/3830
+  document.cookie = name + `=; Max-Age=-99999999; domain=.${domain}; path=/;`;
 }
 
 export const setSavedPassword = (value?: string, saveToDisk: boolean) => {
@@ -56,7 +61,7 @@ export const setSavedPassword = (value?: string, saveToDisk: boolean) => {
 
     if (saveToDisk) {
       if (password) {
-        setCookie('saved-password', password, 14);
+        setCookie(SAVED_PASSWORD, password, 14);
       } else {
         deleteSavedPassword();
       }
@@ -80,12 +85,12 @@ export const getKeychainPassword = () => {
     // @if TARGET='web'
     // In the future, this will be the only code in this function
     // Handling keytar stuff separately so we can easily rip it out later
-    password = getCookie('saved-password');
+    password = getCookie(SAVED_PASSWORD);
     resolve(password);
     // @endif
 
     // @if TARGET='app'
-    password = getCookie('saved-password');
+    password = getCookie(SAVED_PASSWORD);
 
     if (password) {
       resolve(password);
@@ -108,30 +113,30 @@ export const getKeychainPassword = () => {
 
 export const deleteSavedPassword = () => {
   return new Promise<*>(resolve => {
-    deleteCookie('saved-password');
+    deleteCookie(SAVED_PASSWORD);
     resolve();
   });
 };
 
 export const getAuthToken = () => {
-  return getCookie('auth_token');
+  return getCookie(AUTH_TOKEN);
 };
 
 export const setAuthToken = (value: string) => {
-  return setCookie('auth_token', value, 365);
+  return setCookie(AUTH_TOKEN, value, 365);
 };
 
 export const deleteAuthToken = () => {
   return new Promise<*>(resolve => {
-    deleteCookie('auth_token');
+    deleteCookie(AUTH_TOKEN);
     resolve();
   });
 };
 
 export const doSignOutCleanup = () => {
   return new Promise<*>(resolve => {
-    deleteCookie('auth_token');
-    deleteCookie('saved-password');
+    deleteAuthToken();
+    deleteSavedPassword();
     resolve();
 
     // @if TARGET='app'
@@ -141,6 +146,16 @@ export const doSignOutCleanup = () => {
   });
 };
 
-export const testKeychain = () => {
-  // we should make sure it works on startup
+export const doCookieCleanup = () => {
+  const authToken = getAuthToken();
+  if (authToken) {
+    deleteAuthToken();
+    setAuthToken(authToken);
+  }
+
+  const savedPassword = getCookie(DEPRECATED_SAVED_PASSWORD);
+  if (savedPassword) {
+    deleteCookie(DEPRECATED_SAVED_PASSWORD);
+    setSavedPassword(savedPassword, true);
+  }
 };
