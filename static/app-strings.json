@@ -1033,5 +1033,13 @@
   "Commenting is in alpha. During the alpha, all comments are sent to a LBRY, Inc. server, not the LBRY network itself.": "Commenting is in alpha. During the alpha, all comments are sent to a LBRY, Inc. server, not the LBRY network itself.",
   "Deleting or editing comments is not currently possible. Please be mindful of this when posting.": "Deleting or editing comments is not currently possible. Please be mindful of this when posting.",
   "When the alpha ends, we will attempt to transition comments, but do not promise to do so.": "When the alpha ends, we will attempt to transition comments, but do not promise to do so.",
-  "More Channels": "More Channels"
+  "More Channels": "More Channels",
+  "You aren’t blocking any channels": "You aren’t blocking any channels",
+  "When you block a channel, all content from that channel will be hidden.": "When you block a channel, all content from that channel will be hidden.",
+  "View top claims for %normalized_uri%": "View top claims for %normalized_uri%",
+  "Staked LBC": "Staked LBC",
+  "view all claims": "view all claims",
+  "Top claims at lbry://%name%": "Top claims at lbry://%name%",
+  "Last Updated": "Last Updated",
+  "Total Publishes": "Total Publishes"
 }
