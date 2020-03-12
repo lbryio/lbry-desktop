@@ -6,7 +6,6 @@ import ClaimPreviewTile from 'component/claimPreviewTile';
 type Props = {
   uris: Array<string>,
   doClaimSearch: ({}) => void,
-  loading: boolean,
   showNsfw: boolean,
   showReposts: boolean,
   history: { action: string, push: string => void, replace: string => void },
@@ -29,9 +28,8 @@ function ClaimTilesDiscover(props: Props) {
   const {
     doClaimSearch,
     claimSearchByQuery,
-    loading,
     showNsfw,
-    showReposts,
+    // showReposts,
     hiddenUris,
     // Below are options to pass that are forwarded to claim_search
     tags,
@@ -95,7 +93,7 @@ function ClaimTilesDiscover(props: Props) {
 
   const claimSearchCacheQuery = createNormalizedClaimSearchKey(options);
   const uris = claimSearchByQuery[claimSearchCacheQuery] || [];
-  const shouldPerformSearch = !hasSearched || uris.length === 0 || (!loading && uris.length < pageSize);
+  const shouldPerformSearch = !hasSearched || uris.length === 0;
   // Don't use the query from createNormalizedClaimSearchKey for the effect since that doesn't include page & release_time
   const optionsStringForEffect = JSON.stringify(options);
 

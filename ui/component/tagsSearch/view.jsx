@@ -18,7 +18,8 @@ type Props = {
   placeholder?: string,
   label?: string,
   disabled?: boolean,
-  limit?: number,
+  limitSelect?: number,
+  limitShow?: number,
 };
 
 /*
@@ -42,7 +43,8 @@ export default function TagsSearch(props: Props) {
     placeholder,
     label,
     disabled,
-    limit,
+    limitSelect,
+    limitShow = 5,
   } = props;
   const [newTag, setNewTag] = useState('');
   const doesTagMatch = name => {
@@ -60,10 +62,10 @@ export default function TagsSearch(props: Props) {
   const suggestedTagsSet = setUnion(remainingFollowedTagsSet, unfollowedTagsSet);
 
   const countWithoutMature = selectedTagsSet.has('mature') ? selectedTagsSet.size - 1 : selectedTagsSet.size;
-  const maxed = Boolean(limit && countWithoutMature >= limit);
+  const maxed = Boolean(limitSelect && countWithoutMature >= limitSelect);
   const suggestedTags = Array.from(suggestedTagsSet)
     .filter(doesTagMatch)
-    .slice(0, 5);
+    .slice(0, limitShow);
 
   // tack 'mature' onto the end if it's not already in the list
   if (!newTag && suggestMature && !suggestedTags.some(tag => tag === 'mature')) {
@@ -116,7 +118,7 @@ export default function TagsSearch(props: Props) {
     <React.Fragment>
       <Form className="tags__input-wrapper" onSubmit={handleSubmit}>
         <label>
-          {limit ? (
+          {limitSelect ? (
             <I18nMessage
               tokens={{
                 number: 5 - countWithoutMature,

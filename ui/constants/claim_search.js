@@ -6,6 +6,9 @@ export const DURATION_KEY = 'duration';
 export const TAGS_KEY = 't';
 export const CONTENT_KEY = 'content';
 
+export const TAGS_ALL = 'tags_any';
+export const TAGS_FOLLOWED = 'tags_followed';
+
 export const FRESH_DAY = 'day';
 export const FRESH_WEEK = 'week';
 export const FRESH_MONTH = 'month';

@@ -68,6 +68,7 @@ type Props = {
   rewards: Array<Reward>,
   setReferrer: (string, boolean) => void,
   analyticsTagSync: () => void,
+  isAuthenticated: boolean,
 };
 
 function App(props: Props) {
@@ -93,6 +94,7 @@ function App(props: Props) {
     rewards,
     setReferrer,
     analyticsTagSync,
+    isAuthenticated,
   } = props;
 
   const appRef = useRef();
@@ -242,11 +244,11 @@ function App(props: Props) {
   }, [hasVerifiedEmail, syncEnabled, checkSync]);
 
   useEffect(() => {
-    if (syncError) {
+    if (syncError && isAuthenticated) {
       history.push(`/$/${PAGES.AUTH}?redirect=${pathname}`);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [syncError, pathname]);
+  }, [syncError, pathname, isAuthenticated]);
 
   // @if TARGET='web'
   useEffect(() => {

@@ -9,6 +9,7 @@ import {
   selectUploadCount,
   selectUnclaimedRewards,
   doUserSetReferrer,
+  selectUserVerifiedEmail,
 } from 'lbryinc';
 import { doFetchTransactions, doFetchChannelListMine } from 'lbry-redux';
 import { makeSelectClientSetting, selectLoadedLanguages, selectThemePath } from 'redux/selectors/settings';
@@ -35,6 +36,7 @@ const select = state => ({
   syncError: selectGetSyncErrorMessage(state),
   uploadCount: selectUploadCount(state),
   rewards: selectUnclaimedRewards(state),
+  isAuthenticated: selectUserVerifiedEmail(state),
 });
 
 const perform = dispatch => ({
@@ -50,9 +52,4 @@ const perform = dispatch => ({
   setReferrer: (referrer, doClaim) => dispatch(doUserSetReferrer(referrer, doClaim)),
 });
 
-export default hot(
-  connect(
-    select,
-    perform
-  )(App)
-);
+export default hot(connect(select, perform)(App));

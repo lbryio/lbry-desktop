@@ -8,6 +8,7 @@ import useHover from 'effects/use-hover';
 import analytics from 'analytics';
 import HiddenNsfw from 'component/common/hidden-nsfw';
 import Icon from 'component/common/icon';
+import * as CS from 'constants/claim_search';
 
 type Props = {
   location: { search: string },
@@ -26,11 +27,11 @@ function TagsPage(props: Props) {
 
   const urlParams = new URLSearchParams(search);
   const claimType = urlParams.get('claim_type');
-  const tagsQuery = urlParams.get('t') || '';
-  const tags = tagsQuery.split(',');
+  const tagsQuery = urlParams.get('t') || null;
+  const tags = tagsQuery ? tagsQuery.split(',') : null;
   // Eventually allow more than one tag on this page
   // Restricting to one to make follow/unfollow simpler
-  const tag = tags[0];
+  const tag = (tags && tags[0]) || null;
 
   const isFollowing = followedTags.map(({ name }) => name).includes(tag);
   let label = isFollowing ? __('Following') : __('Follow');
@@ -39,10 +40,12 @@ function TagsPage(props: Props) {
   }
 
   function handleFollowClick() {
-    doToggleTagFollowDesktop(tag);
+    if (tag) {
+      doToggleTagFollowDesktop(tag);
 
-    const nowFollowing = !isFollowing;
-    analytics.tagFollowEvent(tag, nowFollowing, 'tag-page');
+      const nowFollowing = !isFollowing;
+      analytics.tagFollowEvent(tag, nowFollowing, 'tag-page');
+    }
   }
 
   return (
@@ -53,7 +56,9 @@ function TagsPage(props: Props) {
           tag ? (
             <span>
               <Icon icon={ICONS.TAG} size={10} />
-              {tag}
+              {(tag === CS.TAGS_ALL && __('All Content')) ||
+                (tag === CS.TAGS_FOLLOWED && __('Followed Tags')) ||
+                __(tag)}
             </span>
           ) : (
             <span>
@@ -62,7 +67,7 @@ function TagsPage(props: Props) {
             </span>
           )
         }
-        tags={tags}
+        defaultTags={CS.TAGS_ALL}
         hiddenNsfwMessage={<HiddenNsfw type="page" />}
         meta={
           tag && (

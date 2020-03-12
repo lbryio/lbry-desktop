@@ -153,7 +153,7 @@ function PublishForm(props: Props) {
           hideHeader
           label={__('Selected Tags')}
           empty={__('No tags added')}
-          limit={TAGS_LIMIT}
+          limitSelect={TAGS_LIMIT}
           help={__(
             'Add tags that are relevant to your content. If mature content, ensure it is tagged mature. Tag abuse and missing mature tags will not be tolerated.'
           )}
