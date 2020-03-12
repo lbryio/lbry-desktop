@@ -329,7 +329,19 @@ export function doDaemonReady() {
     // TODO: call doFetchDaemonSettings, then get usage data, and call doAuthenticate once they are loaded into the store
     const shareUsageData = window.localStorage.getItem(SHARE_INTERNAL) === 'true' || IS_WEB;
 
-    dispatch(doAuthenticate(appVersion, undefined, undefined, shareUsageData));
+    dispatch(
+      doAuthenticate(appVersion, undefined, undefined, shareUsageData, status => {
+        const trendingAlgorithm =
+          status &&
+          status.wallet &&
+          status.wallet.connected_features &&
+          status.wallet.connected_features.trending_algorithm;
+
+        if (trendingAlgorithm) {
+          analytics.trendingAlgorithmEvent(trendingAlgorithm);
+        }
+      })
+    );
     dispatch({ type: ACTIONS.DAEMON_READY });
 
     // @if TARGET='app'

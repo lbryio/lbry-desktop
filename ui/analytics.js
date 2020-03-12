@@ -202,6 +202,9 @@ const analytics: Analytics = {
   openUrlEvent: (url: string) => {
     sendGaEvent('Engagement', 'Open-Url', url);
   },
+  trendingAlgorithmEvent: (trendingAlgorithm: string) => {
+    sendGaEvent('Engagement', 'Trending-Algorithm', trendingAlgorithm);
+  },
   startupEvent: () => {
     sendGaEvent('Startup', 'Startup');
   },
