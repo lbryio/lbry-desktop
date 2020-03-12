@@ -19,6 +19,7 @@ import {
   doSignIn,
   doSyncWithPreferences,
   doGetAndPopulatePreferences,
+  doAnalyticsTagSync,
 } from 'redux/actions/app';
 import App from './view';
 
@@ -37,6 +38,7 @@ const select = state => ({
 });
 
 const perform = dispatch => ({
+  analyticsTagSync: () => dispatch(doAnalyticsTagSync()),
   fetchTransactions: (page, pageSize) => dispatch(doFetchTransactions(page, pageSize)),
   fetchAccessToken: () => dispatch(doFetchAccessToken()),
   fetchChannelListMine: () => dispatch(doFetchChannelListMine()),

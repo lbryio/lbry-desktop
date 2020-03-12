@@ -20,7 +20,7 @@ type Props = {
   doClaimSearch: ({}) => void,
   loading: boolean,
   personalView: boolean,
-  doToggleTagFollow: string => void,
+  doToggleTagFollowDesktop: string => void,
   meta?: Node,
   showNsfw: boolean,
   showReposts: boolean,
@@ -101,12 +101,12 @@ function ClaimListDiscover(props: Props) {
   const durationParam = urlParams.get(CS.DURATION_KEY) || null;
 
   const showDuration = !(claimType && claimType === CS.CLAIM_CHANNEL);
-  const showContentType = !(claimType || streamType);
   const isFiltered = () =>
     Boolean(urlParams.get(CS.FRESH_KEY) || urlParams.get(CS.CONTENT_KEY) || urlParams.get(CS.DURATION_KEY));
 
   useEffect(() => {
     if (isFiltered()) setExpanded(true);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const options: {

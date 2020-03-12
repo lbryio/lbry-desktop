@@ -3,10 +3,10 @@ import {
   doClaimSearch,
   selectClaimSearchByQuery,
   selectFetchingClaimSearch,
-  doToggleTagFollow,
   selectBlockedChannels,
   SETTINGS,
 } from 'lbry-redux';
+import { doToggleTagFollowDesktop } from 'redux/actions/tags';
 import { makeSelectClientSetting } from 'redux/selectors/settings';
 import ClaimListDiscover from './view';
 
@@ -20,7 +20,7 @@ const select = state => ({
 
 const perform = {
   doClaimSearch,
-  doToggleTagFollow,
+  doToggleTagFollowDesktop,
 };
 
 export default connect(

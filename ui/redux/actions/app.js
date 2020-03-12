@@ -19,6 +19,7 @@ import {
   doPreferenceGet,
   doToast,
   doClearSupport,
+  selectFollowedTagsList,
   // SHARED_PREFERENCES,
 } from 'lbry-redux';
 import Native from 'native';
@@ -432,6 +433,15 @@ export function doAnalyticsView(uri, timeToStart) {
     }
 
     return analytics.apiLogView(uri, outpoint, claimId, timeToStart);
+  };
+}
+
+export function doAnalyticsTagSync() {
+  return (dispatch, getState) => {
+    const state = getState();
+    const tags = selectFollowedTagsList(state);
+    const stringOfTags = tags.join(',');
+    analytics.apiSyncTags({ content_tags: stringOfTags });
   };
 }
 

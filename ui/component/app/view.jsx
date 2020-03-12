@@ -66,6 +66,7 @@ type Props = {
   syncError: ?string,
   rewards: Array<Reward>,
   setReferrer: (string, boolean) => void,
+  analyticsTagSync: () => void,
 };
 
 function App(props: Props) {
@@ -90,6 +91,7 @@ function App(props: Props) {
     updatePreferences,
     rewards,
     setReferrer,
+    analyticsTagSync,
   } = props;
 
   const appRef = useRef();
@@ -159,6 +161,7 @@ function App(props: Props) {
     } else if (referredRewardAvailable && sanitizedReferrerParam) {
       setReferrer(sanitizedReferrerParam, false);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [sanitizedReferrerParam, isRewardApproved, referredRewardAvailable]);
 
   useEffect(() => {
@@ -182,6 +185,7 @@ function App(props: Props) {
     if (!languages.includes(language)) {
       setLanguage(language);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [language, languages]);
 
   useEffect(() => {
@@ -216,13 +220,14 @@ function App(props: Props) {
   // @if TARGET='app'
   useEffect(() => {
     updatePreferences();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   // @endif
 
   useEffect(() => {
     if (hasVerifiedEmail && syncEnabled) {
       checkSync();
-
+      analyticsTagSync();
       let syncInterval = setInterval(() => {
         checkSync();
       }, SYNC_INTERVAL);
@@ -231,12 +236,14 @@ function App(props: Props) {
         clearInterval(syncInterval);
       };
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [hasVerifiedEmail, syncEnabled, checkSync]);
 
   useEffect(() => {
     if (syncError) {
       history.push(`/$/${PAGES.AUTH}?redirect=${pathname}`);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [syncError, pathname]);
 
   // @if TARGET='web'
