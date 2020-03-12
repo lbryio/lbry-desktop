@@ -1,7 +1,17 @@
+const { Lbryio } = require('lbryinc');
 const { URL, LBRY_TV_STREAMING_API } = require('../../config');
 
-function generateStreamUrl(claimName, claimId, apiUrl) {
-  const prefix = LBRY_TV_STREAMING_API || apiUrl;
+async function generateStreamUrl(claimName, claimId, apiUrl) {
+  let prefix = LBRY_TV_STREAMING_API || apiUrl;
+  try {
+    let localeResponse = await Lbryio.call('locale', 'get', {}, 'post');
+    if (prefix.split('//').length > 1) {
+      prefix = prefix.replace('//', '//' + localeResponse.continent + '.');
+    }
+  } catch (err) {
+    console.error(err.stack || err);
+  }
+  console.log(`${prefix}/content/claims/${claimName}/${claimId}/stream`);
   return `${prefix}/content/claims/${claimName}/${claimId}/stream`;
 }
 
