@@ -146,13 +146,15 @@ export const doSignOutCleanup = () => {
   });
 };
 
-export const doCookieCleanup = () => {
+export const doAuthTokenRefresh = () => {
   const authToken = getAuthToken();
   if (authToken) {
     deleteAuthToken();
     setAuthToken(authToken);
   }
+};
 
+export const doDeprecatedPasswordMigrationMarch2020 = () => {
   const savedPassword = getCookie(DEPRECATED_SAVED_PASSWORD);
   if (savedPassword) {
     deleteCookie(DEPRECATED_SAVED_PASSWORD);
