@@ -20,12 +20,27 @@ export default function Nag(props: Props) {
   const buttonProps = onClick ? { onClick } : { href };
 
   return (
-    <div className={classnames('nag', { 'nag--helpful': type === 'helpful' })}>
+    <div className={classnames('nag', { 'nag--helpful': type === 'helpful', 'nag--error': type === 'error' })}>
       {message}
-      <Button className={classnames('nag__button', { 'nag__button--helpful': type === 'helpful' })} {...buttonProps}>
+      <Button
+        className={classnames('nag__button', {
+          'nag__button--helpful': type === 'helpful',
+          'nag__button--error': type === 'error',
+        })}
+        {...buttonProps}
+      >
         {actionText}
       </Button>
-      {onClose && <Button className="nag__button nag__close" icon={ICONS.REMOVE} onClick={onClose} />}
+      {onClose && (
+        <Button
+          className={classnames('nag__button nag__close', {
+            'nag__button--helpful': type === 'helpful',
+            'nag__button--error': type === 'error',
+          })}
+          icon={ICONS.REMOVE}
+          onClick={onClose}
+        />
+      )}
     </div>
   );
 }

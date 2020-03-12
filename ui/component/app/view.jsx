@@ -1,5 +1,6 @@
 // @flow
 import * as PAGES from 'constants/pages';
+import { LBRY_TV_API } from 'config';
 import React, { useEffect, useRef, useState } from 'react';
 import classnames from 'classnames';
 import analytics from 'analytics';
@@ -97,6 +98,7 @@ function App(props: Props) {
   const appRef = useRef();
   const isEnhancedLayout = useKonamiListener();
   const [hasSignedIn, setHasSignedIn] = useState(false);
+  const [currentlyDegradedPerformance, setCurrentlyDegradedPerformance] = useState(false);
   const userId = user && user.id;
   const hasVerifiedEmail = user && user.has_verified_email;
   const isRewardApproved = user && user.is_reward_approved;
@@ -247,6 +249,21 @@ function App(props: Props) {
   }, [syncError, pathname]);
 
   // @if TARGET='web'
+  useEffect(() => {
+    fetch(`${LBRY_TV_API}/internal/status`)
+      .then(response => response.json())
+      .then(status => {
+        if (status.general_state !== 'ok') {
+          throw Error();
+        }
+      })
+      .catch(err => {
+        setCurrentlyDegradedPerformance(true);
+      });
+  }, []);
+  // @endif
+
+  // @if TARGET='web'
   // Require an internal-api user on lbry.tv
   // This also prevents the site from loading in the un-authed state while we wait for internal-apis to return for the first time
   // It's not needed on desktop since there is no un-authed state
@@ -280,7 +297,24 @@ function App(props: Props) {
       )}
       {/* @endif */}
       {/* @if TARGET='web' */}
-      {showAnalyticsNag && !noNagOnPage && (
+      {currentlyDegradedPerformance && (
+        <Nag
+          type="error"
+          message={
+            <I18nMessage
+              tokens={{
+                more_information: <Button button="link" label={__('more')} href="https://status.lbry.com/" />,
+              }}
+            >
+              lbry.tv is currently experiencing issues. Try refreshing to fix it.
+            </I18nMessage>
+          }
+          actionText={__('Refresh')}
+          onClick={() => window.location.reload()}
+          onClose={() => setCurrentlyDegradedPerformance(false)}
+        />
+      )}
+      {!currentlyDegradedPerformance && showAnalyticsNag && !noNagOnPage && (
         <React.Fragment>
           {isMobile ? (
             <Nag
