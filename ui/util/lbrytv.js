@@ -12,12 +12,22 @@ function generateStreamUrl(claimName, claimId, apiUrl) {
     prefix = prefix.replace('//', '//' + continent + '.');
   } else {
     Lbryio.call('locale', 'get', {}, 'post').then(result => {
-      const userContinent = result.continent;
+      const userContinent = getSupportedCDN(result.continent);
       setCookie(CONTINENT_COOKIE, userContinent, 1);
     });
   }
 
   return `${prefix}/content/claims/${claimName}/${claimId}/stream`;
+}
+
+function getSupportedCDN(continent) {
+  switch (continent) {
+    case 'NA':
+    case 'EU':
+      return continent;
+    default:
+      return 'NA';
+  }
 }
 
 function generateEmbedUrl(claimName, claimId) {
