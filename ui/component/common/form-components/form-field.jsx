@@ -101,7 +101,9 @@ export class FormField extends React.PureComponent<Props> {
       } else if (type === 'select') {
         input = (
           <fieldset-section>
-            {label && <label htmlFor={name}>{label}</label>}
+            {(label || errorMessage) && (
+              <label htmlFor={name}>{errorMessage ? <span className="error-text">{errorMessage}</span> : label}</label>
+            )}
             <select id={name} {...inputProps}>
               {children}
             </select>
