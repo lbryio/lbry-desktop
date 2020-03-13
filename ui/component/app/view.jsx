@@ -306,7 +306,8 @@ function App(props: Props) {
                 more_information: <Button button="link" label={__('more')} href="https://status.lbry.com/" />,
               }}
             >
-              lbry.tv is currently experiencing issues. Try refreshing to fix it.
+              lbry.tv performance may be degraded. You can try to use it, or wait 5 minutes and refresh. Please no crush
+              us.
             </I18nMessage>
           }
           actionText={__('Refresh')}
