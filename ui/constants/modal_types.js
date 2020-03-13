@@ -36,3 +36,4 @@ export const YOUTUBE_WELCOME = 'youtube_welcome';
 export const MOBILE_NAVIGATION = 'mobile_navigation';
 export const SET_REFERRER = 'set_referrer';
 export const REPOST = 'repost';
+export const SIGN_OUT = 'sign_out';
