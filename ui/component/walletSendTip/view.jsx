@@ -3,6 +3,9 @@ import React from 'react';
 import Button from 'component/button';
 import { FormField, Form } from 'component/common/form';
 import { MINIMUM_PUBLISH_BID } from 'constants/claim';
+import useIsMobile from 'effects/use-is-mobile';
+import CreditAmount from 'component/common/credit-amount';
+import I18nMessage from 'component/i18nMessage';
 
 type Props = {
   uri: string,
@@ -17,27 +20,14 @@ type Props = {
   isSupport: boolean,
 };
 
-type State = {
-  tipAmount: number,
-  tipError: string,
-};
+function WalletSendTip(props: Props) {
+  const { title, isPending, onCancel, claimIsMine, isSupport, balance, claim, sendTipCallback, sendSupport } = props;
+  const [tipAmount, setTipAmount] = React.useState(0);
+  const [tipError, setTipError] = React.useState();
+  const { claim_id: claimId } = claim;
+  const isMobile = useIsMobile();
 
-class WalletSendTip extends React.PureComponent<Props, State> {
-  constructor(props: Props) {
-    super(props);
-
-    this.state = {
-      tipAmount: 0,
-      tipError: '',
-    };
-    (this: any).handleSendButtonClicked = this.handleSendButtonClicked.bind(this);
-  }
-
-  handleSendButtonClicked() {
-    const { claim, sendSupport, isSupport, sendTipCallback } = this.props;
-    const { claim_id: claimId } = claim;
-    const { tipAmount } = this.state;
-
+  function handleSendButtonClicked() {
     sendSupport(tipAmount, claimId, isSupport);
 
     // ex: close modal
@@ -46,8 +36,7 @@ class WalletSendTip extends React.PureComponent<Props, State> {
     }
   }
 
-  handleSupportPriceChange(event: SyntheticInputEvent<*>) {
-    const { balance } = this.props;
+  function handleSupportPriceChange(event: SyntheticInputEvent<*>) {
     const regexp = RegExp(/^(\d*([.]\d{0,8})?)$/);
     const validTipInput = regexp.test(event.target.value);
     const tipAmount = parseFloat(event.target.value);
@@ -67,66 +56,64 @@ class WalletSendTip extends React.PureComponent<Props, State> {
       tipError = __('Not enough credits');
     }
 
-    this.setState({
-      tipAmount,
-      tipError,
-    });
+    setTipAmount(tipAmount);
+    setTipError(tipError);
   }
 
-  render() {
-    const { title, isPending, onCancel, claimIsMine, isSupport } = this.props;
-    const { tipAmount, tipError } = this.state;
+  const label =
+    tipAmount && tipAmount !== 0
+      ? __(isSupport ? 'Support %amount% LBC' : 'Tip %amount% LBC', {
+          amount: tipAmount.toFixed(8).replace(/\.?0+$/, ''),
+        })
+      : __('Amount');
 
-    return (
-      <React.Fragment>
-        <Form>
-          <FormField
-            autoFocus
-            name="tip-input"
-            label={
-              tipAmount && tipAmount !== 0
-                ? __(isSupport ? 'Support %amount% LBC' : 'Tip %amount% LBC', {
-                    amount: tipAmount.toFixed(8).replace(/\.?0+$/, ''),
-                  })
-                : __('Amount')
-            }
-            className="form-field--price-amount"
-            error={tipError}
-            min="0"
-            step="any"
-            type="number"
-            placeholder="1.23"
-            onChange={event => this.handleSupportPriceChange(event)}
-            inputButton={
-              <Button
-                button="primary"
-                label={__('Send')}
-                disabled={isPending || tipError || !tipAmount}
-                onClick={this.handleSendButtonClicked}
-              />
-            }
-            helper={
-              <React.Fragment>
-                {claimIsMine || isSupport
-                  ? __(
-                      'This will increase the overall bid amount for %title%, which will boost its ability to be discovered while active.',
-                      { title }
-                    )
-                  : __(
-                      'This will appear as a tip for %title%, which will boost its ability to be discovered while active.',
-                      { title }
-                    )}{' '}
-                <Button label={__('Learn more')} button="link" href="https://lbry.com/faq/tipping" />.
-              </React.Fragment>
-            }
-          />
-        </Form>
-        <div className="card__actions">
-          <Button button="link" label={__('Cancel')} onClick={onCancel} />
-        </div>
-      </React.Fragment>
-    );
-  }
+  return (
+    <React.Fragment>
+      <Form onSubmit={handleSendButtonClicked}>
+        <FormField
+          autoFocus
+          name="tip-input"
+          label={
+            <React.Fragment>
+              {label}{' '}
+              {isMobile && (
+                <I18nMessage tokens={{ lbc_balance: <CreditAmount badge={false} amount={balance} /> }}>
+                  (%lbc_balance% available)
+                </I18nMessage>
+              )}
+            </React.Fragment>
+          }
+          className="form-field--price-amount"
+          error={tipError}
+          min="0"
+          step="any"
+          type="number"
+          placeholder="1.23"
+          onChange={event => handleSupportPriceChange(event)}
+          inputButton={
+            <Button button="primary" type="submit" label={__('Send')} disabled={isPending || tipError || !tipAmount} />
+          }
+          helper={
+            <React.Fragment>
+              {claimIsMine || isSupport
+                ? __(
+                    'This will increase the overall bid amount for %title%, which will boost its ability to be discovered while active.',
+                    { title }
+                  )
+                : __(
+                    'This will appear as a tip for %title%, which will boost its ability to be discovered while active.',
+                    { title }
+                  )}{' '}
+              <Button label={__('Learn more')} button="link" href="https://lbry.com/faq/tipping" />.
+            </React.Fragment>
+          }
+        />
+      </Form>
+      <div className="card__actions">
+        <Button button="link" label={__('Cancel')} onClick={onCancel} />
+      </div>
+    </React.Fragment>
+  );
 }
 
 export default WalletSendTip;
