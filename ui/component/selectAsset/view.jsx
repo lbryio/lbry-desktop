@@ -26,10 +26,11 @@ function SelectAsset(props: Props) {
   const [pathSelected, setPathSelected] = useState('');
   const [fileSelected, setFileSelected] = useState<any>(null);
   const [uploadStatus, setUploadStatus] = useState(SPEECH_READY);
+  const [error, setError] = useState();
 
   function doUploadAsset(file) {
     const uploadError = (error = '') => {
-      console.log('error', error);
+      setError(error);
     };
 
     const setUrl = path => {
@@ -53,6 +54,7 @@ function SelectAsset(props: Props) {
       .then(json => (json.success ? setUrl(`${json.data.serveUrl}`) : uploadError(json.message)))
       .catch(err => uploadError(err.message));
   }
+
   return (
     <fieldset-section>
       <fieldset-group className="fieldset-group--smushed">
@@ -71,7 +73,8 @@ function SelectAsset(props: Props) {
           </option>
         </FormField>
         {assetSource === SOURCE_UPLOAD && (
-          <>
+          <div>
+            {error && <div className="error-text">{error}</div>}
             {!pathSelected && (
               <FileSelector
                 label={'File to upload'}
@@ -96,13 +99,14 @@ function SelectAsset(props: Props) {
                   onClick={() => {
                     setPathSelected('');
                     setFileSelected(null);
+                    setError(null);
                   }}
                 >
                   Clear
                 </Button>
               </div>
             )}
-          </>
+          </div>
         )}
         {assetSource === SOURCE_URL && (
           <FormField
