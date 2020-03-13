@@ -30,7 +30,4 @@ const perform = dispatch => ({
   updateChannel: params => dispatch(doUpdateChannel(params)),
 });
 
-export default connect(
-  select,
-  perform
-)(ChannelPage);
+export default connect(select, perform)(ChannelPage);
