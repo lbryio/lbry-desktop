@@ -12,7 +12,7 @@ import { doUpdateUploadProgress } from 'lbryinc';
 // to perform calling methods at arbitrary urls
 // and pass form file fields
 export default function apiPublishCallViaWeb(
-  apiCall: (any) => void,
+  apiCall: any => void,
   connectionString: string,
   token: string,
   method: string,
@@ -72,11 +72,11 @@ export default function apiPublishCallViaWeb(
   return makeRequest(connectionString, 'POST', token, body, params)
     .then(xhr => {
       let error;
-      if (xhr) {
-        if (xhr.response && xhr.status >= 200 && xhr.status < 300) {
+      if (xhr && xhr.response) {
+        if (xhr.status >= 200 && xhr.status < 300 && !xhr.response.error) {
           return resolve(xhr.response.result);
-        } else if (xhr.statusText) {
-          error = new Error(xhr.statusText);
+        } else if (xhr.response.error) {
+          error = new Error(xhr.response.error.message);
         } else {
           error = new Error(__('Upload likely timed out. Try a smaller file while we work on this.'));
         }
