@@ -3,7 +3,7 @@
 // The actual viewer for a file exists in TextViewer and FloatingViewer
 // They can't exist in one component because we need to handle/listen for the start of a new file view
 // while a file is currently being viewed
-import React, { useEffect, useCallback } from 'react';
+import React, { useEffect, useCallback, useState } from 'react';
 import classnames from 'classnames';
 import Button from 'component/button';
 import isUserTyping from 'util/detect-typing';
@@ -52,6 +52,7 @@ export default function FileViewerInitiator(props: Props) {
     isAutoPlayable,
     claim,
   } = props;
+  const [hasPlayed, setHasPlayed] = useState(false);
   const cost = costInfo && costInfo.cost;
   const forceVideo = ['application/x-ext-mkv', 'video/x-matroska'].includes(contentType);
   const isPlayable = ['audio', 'video'].includes(mediaType) || forceVideo;
@@ -85,6 +86,7 @@ export default function FileViewerInitiator(props: Props) {
       }
 
       play(uri);
+      setHasPlayed(true);
     },
     [play, uri]
   );
@@ -148,7 +150,7 @@ export default function FileViewerInitiator(props: Props) {
         />
       )}
 
-      {!isPlaying && supported && (
+      {!isPlaying && !hasPlayed && supported && (
         <Button
           onClick={viewFile}
           iconSize={30}
