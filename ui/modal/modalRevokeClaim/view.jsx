@@ -1,6 +1,7 @@
 // @flow
-import React from 'react';
+import React, { useState } from 'react';
 import { Modal } from 'modal/modal';
+import { FormField } from 'component/common/form';
 import * as txnTypes from 'constants/transaction_types';
 
 type Props = {
@@ -11,14 +12,12 @@ type Props = {
   transactionItems: Array<Transaction>,
 };
 
-class ModalRevokeClaim extends React.PureComponent<Props> {
-  constructor() {
-    super();
+export default function ModalRevokeClaim(props: Props) {
+  const { transactionItems, txid, nout, closeModal } = props;
+  const { type, claim_name: name } = transactionItems.find(claim => claim.txid === txid && claim.nout === nout) || {};
+  const [channelName, setChannelName] = useState('');
 
-    (this: any).revokeClaim = this.revokeClaim.bind(this);
-  }
-
-  getButtonLabel(type: string) {
+  function getButtonLabel(type: string) {
     if (type === txnTypes.TIP) {
       return 'Confirm Tip Unlock';
     } else if (type === txnTypes.SUPPORT) {
@@ -27,7 +26,7 @@ class ModalRevokeClaim extends React.PureComponent<Props> {
     return 'Confirm Claim Revoke';
   }
 
-  getMsgBody(type: string) {
+  function getMsgBody(type: string, name: string) {
     if (type === txnTypes.TIP) {
       return (
         <React.Fragment>
@@ -50,7 +49,20 @@ class ModalRevokeClaim extends React.PureComponent<Props> {
           </p>
         </React.Fragment>
       );
+    } else if (type === txnTypes.CHANNEL) {
+      return (
+        <React.Fragment>
+          <p>
+            {__(
+              "You're about to permanently delete a channel. Content published under this channel will be orphaned and their signing channel invalid. Content sync programs using this channel will fail."
+            )}
+          </p>
+          <p>{__('Are you sure? Type %name% to confirm that you wish to delete the channel.', { name })}</p>
+          <FormField type={'text'} onChange={e => setChannelName(e.target.value)} />
+        </React.Fragment>
+      );
     }
+
     return (
       <React.Fragment>
         <p>{__('Are you sure want to revoke this claim?')}</p>
@@ -64,31 +76,25 @@ class ModalRevokeClaim extends React.PureComponent<Props> {
     );
   }
 
-  revokeClaim() {
-    const { txid, nout } = this.props;
+  function revokeClaim() {
+    const { txid, nout } = props;
 
-    this.props.closeModal();
-    this.props.abandonClaim(txid, nout);
+    props.closeModal();
+    props.abandonClaim(txid, nout);
   }
 
-  render() {
-    const { transactionItems, txid, nout, closeModal } = this.props;
-    const { type } = transactionItems.find(claim => claim.txid === txid && claim.nout === nout) || {};
-
-    return (
-      <Modal
-        isOpen
-        title={this.getButtonLabel(type)}
-        contentLabel={this.getButtonLabel(type)}
-        type="confirm"
-        confirmButtonLabel={this.getButtonLabel(type)}
-        onConfirmed={this.revokeClaim}
-        onAborted={closeModal}
-      >
-        <section>{this.getMsgBody(type)}</section>
-      </Modal>
-    );
-  }
+  return (
+    <Modal
+      isOpen
+      title={getButtonLabel(type)}
+      contentLabel={getButtonLabel(type)}
+      type="confirm"
+      confirmButtonLabel={getButtonLabel(type)}
+      onConfirmed={revokeClaim}
+      onAborted={closeModal}
+      confirmButtonDisabled={type === txnTypes.CHANNEL && name !== channelName}
+    >
+      <section>{getMsgBody(type, name)}</section>
+    </Modal>
+  );
 }
-
-export default ModalRevokeClaim;
