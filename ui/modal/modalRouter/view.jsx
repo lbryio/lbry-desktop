@@ -35,6 +35,7 @@ import ModalCreateChannel from 'modal/modalChannelCreate';
 import ModalMobileNavigation from 'modal/modalMobileNavigation';
 import ModalSetReferrer from 'modal/modalSetReferrer';
 import ModalRepost from 'modal/modalRepost';
+import ModalSignOut from 'modal/modalSignOut';
 
 type Props = {
   modal: { id: string, modalProps: {} },
@@ -128,6 +129,8 @@ function ModalRouter(props: Props) {
       return <ModalSetReferrer {...modalProps} />;
     case MODALS.REPOST:
       return <ModalRepost {...modalProps} />;
+    case MODALS.SIGN_OUT:
+      return <ModalSignOut {...modalProps} />;
     default:
       return null;
   }

@@ -39,6 +39,7 @@ type Props = {
   signOut: () => void,
   openMobileNavigation: () => void,
   openChannelCreate: () => void,
+  openSignOutModal: () => void,
 };
 
 const Header = (props: Props) => {
@@ -56,6 +57,7 @@ const Header = (props: Props) => {
     syncError,
     openMobileNavigation,
     openChannelCreate,
+    openSignOutModal,
   } = props;
 
   // on the verify page don't let anyone escape other than by closing the tab to keep session data consistent
@@ -175,7 +177,7 @@ const Header = (props: Props) => {
                     </MenuItem>
 
                     {authenticated ? (
-                      <MenuItem onSelect={signOut}>
+                      <MenuItem onSelect={IS_WEB ? signOut : openSignOutModal}>
                         <div className="menu__link">
                           <Icon aria-hidden icon={ICONS.SIGN_OUT} />
                           {__('Sign Out')}

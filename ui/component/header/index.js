@@ -25,9 +25,7 @@ const perform = dispatch => ({
   signOut: () => dispatch(doSignOut()),
   openMobileNavigation: () => dispatch(doOpenModal(MODALS.MOBILE_NAVIGATION)),
   openChannelCreate: () => dispatch(doOpenModal(MODALS.CREATE_CHANNEL)),
+  openSignOutModal: () => dispatch(doOpenModal(MODALS.SIGN_OUT)),
 });
 
-export default connect(
-  select,
-  perform
-)(Header);
+export default connect(select, perform)(Header);
