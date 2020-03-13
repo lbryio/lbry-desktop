@@ -103,6 +103,7 @@ function ChannelForm(props: Props) {
     updateChannel(params);
     setEditing(false);
   };
+
   // TODO clear and bail after submit
   return (
     <section className={'card--section'}>
@@ -176,7 +177,7 @@ function ChannelForm(props: Props) {
 
       <TagsSearch
         suggestMature
-        disabledAutoFocus
+        disableAutoFocus
         tagsPassedIn={params.tags || []}
         label={__('Tags Selected')}
         onRemove={clickedTag => {
