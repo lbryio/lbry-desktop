@@ -1041,5 +1041,9 @@
   "view all claims": "view all claims",
   "Top claims at lbry://%name%": "Top claims at lbry://%name%",
   "Last Updated": "Last Updated",
-  "Total Publishes": "Total Publishes"
+  "Total Publishes": "Total Publishes",
+  "Almost there": "Almost there",
+  "Are you sure you want to delete this channel?": "Are you sure you want to delete this channel?",
+  "Are you sure? Type %name% to confirm that you wish to delete the channel.": "Are you sure? Type %name% to confirm that you wish to delete the channel.",
+  "You're about to permanently delete a channel. Content published under this channel will be orphaned and their signing channel invalid. Content sync programs using this channel will fail.": "You're about to permanently delete a channel. Content published under this channel will be orphaned and their signing channel invalid. Content sync programs using this channel will fail."
 }
