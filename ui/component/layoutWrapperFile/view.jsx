@@ -2,16 +2,15 @@
 import * as React from 'react';
 import { normalizeURI } from 'lbry-redux';
 import FileViewerInitiator from 'component/fileViewerInitiator';
+import FileSubtitle from 'component/fileSubtitle';
 import FilePrice from 'component/filePrice';
 import FileDetails from 'component/fileDetails';
 import FileAuthor from 'component/fileAuthor';
 import FileActions from 'component/fileActions';
-import DateTime from 'component/dateTime';
 import RecommendedContent from 'component/recommendedContent';
 import CommentsList from 'component/commentsList';
 import CommentCreate from 'component/commentCreate';
 import ClaimUri from 'component/claimUri';
-import FileViewCount from 'component/fileViewCount';
 
 export const FILE_WRAPPER_CLASS = 'grid-area--content';
 
@@ -49,11 +48,7 @@ function LayoutWrapperFile(props: Props) {
 
       <div className="columns">
         <div className="grid-area--info">
-          <div className="media__subtitle--between">
-            <DateTime uri={uri} show={DateTime.SHOW_DATE} />
-            <FileViewCount uri={uri} />
-          </div>
-
+          <FileSubtitle uri={uri} />
           <FileActions uri={uri} />
 
           <div className="section__divider">

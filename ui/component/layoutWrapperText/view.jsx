@@ -2,13 +2,12 @@
 import * as React from 'react';
 import { normalizeURI } from 'lbry-redux';
 import classNames from 'classnames';
+import FileSubtitle from 'component/fileSubtitle';
 import FilePrice from 'component/filePrice';
 import FileAuthor from 'component/fileAuthor';
-import FileViewCount from 'component/fileViewCount';
 import FileActions from 'component/fileActions';
 import FileDetails from 'component/fileDetails';
 import TextViewer from 'component/textViewer';
-import DateTime from 'component/dateTime';
 import RecommendedContent from 'component/recommendedContent';
 import CommentsList from 'component/commentsList';
 import CommentCreate from 'component/commentCreate';
@@ -46,10 +45,8 @@ function LayoutWrapperText(props: Props) {
           <h1 className="media__title-text">{title}</h1>
         </div>
 
-        <div className="media__subtitle--between">
-          <DateTime uri={uri} show={DateTime.SHOW_DATE} />
-          <FileViewCount uri={uri} />
-        </div>
+        <FileSubtitle uri={uri} />
+
         <div className="section">
           <FileAuthor uri={uri} />
         </div>
