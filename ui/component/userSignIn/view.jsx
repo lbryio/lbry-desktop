@@ -64,7 +64,6 @@ function UserSignIn(props: Props) {
   const [hasSeenFollowList, setHasSeenFollowList] = usePersistedState('channel-follow-intro', false);
   const hasVerifiedEmail = user && user.has_verified_email;
   const rewardsApproved = user && user.is_reward_approved;
-  const isIdentityVerified = user && user.is_identity_verified;
   const hasFetchedReward = useFetched(claimingReward);
   const channelCount = channels ? channels.length : 0;
   const hasClaimedEmailAward = claimedRewards.some(reward => reward.reward_type === REWARDS.TYPE_CONFIRM_EMAIL);
@@ -81,7 +80,7 @@ function UserSignIn(props: Props) {
   // The possible screens for the sign in flow
   const showEmail = !emailToVerify && !hasVerifiedEmail;
   const showEmailVerification = emailToVerify && !hasVerifiedEmail;
-  const showUserVerification = hasVerifiedEmail && !rewardsApproved && !isIdentityVerified;
+  const showUserVerification = hasVerifiedEmail && !rewardsApproved;
   const showSyncPassword = syncEnabled && getSyncError;
   const showChannelCreation =
     hasVerifiedEmail &&
