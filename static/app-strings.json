@@ -1056,5 +1056,10 @@
   "Rewards validation is optional.": "Rewards validation is optional.",
   "Continue Without Rewards": "Continue Without Rewards",
   "If you'd like to participate our %rewards_program% to earn credits, please complete one of the steps below to be validated.": "If you'd like to participate our %rewards_program% to earn credits, please complete one of the steps below to be validated.",
-  "verify your email": "verify your email"
+  "verify your email": "verify your email",
+  "rename your existing wallet in the lbry/wallets directory": "rename your existing wallet in the lbry/wallets directory",
+  "Your wallet data will remain intact. If you sign in with a different account, the wallets will be merged. To prevent this, you need to %rename_wallet_instructions%": "Your wallet data will remain intact. If you sign in with a different account, the wallets will be merged. To prevent this, you need to %rename_wallet_instructions%",
+  "rename your existing wallet": "rename your existing wallet",
+  "Your wallet data will remain intact. If you sign in with a different account, the wallets will be merged. To prevent this, you need to %rename_wallet_instructions% in the lbry/wallets directory": "Your wallet data will remain intact. If you sign in with a different account, the wallets will be merged. To prevent this, you need to %rename_wallet_instructions% in the lbry/wallets directory",
+  "Your wallet data will remain intact. If you sign in with a different account, the wallets will be merged. To prevent this, you need to %rename_wallet_instructions% in the lbry/wallets directory.": "Your wallet data will remain intact. If you sign in with a different account, the wallets will be merged. To prevent this, you need to %rename_wallet_instructions% in the lbry/wallets directory."
 }
