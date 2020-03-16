@@ -7,18 +7,18 @@ import TagsSelect from 'component/tagsSelect';
 import Page from 'component/page';
 import Button from 'component/button';
 import Icon from 'component/common/icon';
+import * as CS from 'constants/claim_search';
 
 type Props = {
-  followedTags: Array<Tag>,
   email: string,
 };
 
 function DiscoverPage(props: Props) {
-  const { followedTags, email } = props;
+  const { email } = props;
 
   return (
     <Page>
-      {(email || !IS_WEB) && <TagsSelect showClose title={__('Find New Tags To Follow')} />}
+      {(email || !IS_WEB) && <TagsSelect showClose limitShow={300} title={__('Find New Tags To Follow')} />}
       <ClaimListDiscover
         headerLabel={
           <span>
@@ -28,7 +28,7 @@ function DiscoverPage(props: Props) {
         }
         hideCustomization={IS_WEB && !email}
         personalView
-        tags={followedTags.map(tag => tag.name)}
+        defaultTags={CS.TAGS_FOLLOWED}
         meta={
           <Button
             button="link"

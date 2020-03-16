@@ -6,6 +6,7 @@ import UserEmailNew from 'component/userEmailNew';
 import UserEmailVerify from 'component/userEmailVerify';
 import UserFirstChannel from 'component/userFirstChannel';
 import UserChannelFollowIntro from 'component/userChannelFollowIntro';
+import UserTagFollowIntro from 'component/userTagFollowIntro';
 import { DEFAULT_BID_FOR_FIRST_CHANNEL } from 'component/userFirstChannel/view';
 import { rewards as REWARDS, YOUTUBE_STATUSES } from 'lbryinc';
 import UserVerify from 'component/userVerify';
@@ -59,10 +60,12 @@ function UserSignIn(props: Props) {
   const { search } = location;
   const urlParams = new URLSearchParams(search);
   const redirect = urlParams.get('redirect');
+  const step = urlParams.get('step');
   const shouldRedirectImmediately = urlParams.get('immediate');
   const [initialSignInStep, setInitialSignInStep] = React.useState();
   const [hasSeenFollowList, setHasSeenFollowList] = usePersistedState('channel-follow-intro', false);
   const [hasSkippedRewards, setHasSkippedRewards] = usePersistedState('skip-rewards-intro', false);
+  const [hasSeenTagsList, setHasSeenTagsList] = usePersistedState('channel-follow-intro', false);
   const hasVerifiedEmail = user && user.has_verified_email;
   const rewardsApproved = user && user.is_reward_approved;
   const isIdentityVerified = user && user.is_identity_verified;
@@ -92,7 +95,8 @@ function UserSignIn(props: Props) {
     channelCount === 0 &&
     !hasYoutubeChannels;
   const showYoutubeTransfer = hasVerifiedEmail && hasYoutubeChannels && !isYoutubeTransferComplete;
-  const showFollowIntro = hasVerifiedEmail && !hasSeenFollowList;
+  const showFollowIntro = step === 'channels' || (hasVerifiedEmail && !hasSeenFollowList);
+  const showTagsIntro = step === 'tags' || (hasVerifiedEmail && !hasSeenTagsList);
   const canHijackSignInFlowWithSpinner = hasVerifiedEmail && !getSyncError && !showFollowIntro;
   const isCurrentlyFetchingSomething = fetchingChannels || claimingReward || syncingWallet || creatingChannel;
   const isWaitingForSomethingToFinish =
@@ -135,6 +139,34 @@ function UserSignIn(props: Props) {
 
           history.replace(url);
           setHasSeenFollowList(true);
+        }}
+        onBack={() => {
+          let url = `/$/${PAGES.AUTH}?reset_scroll=1&step=tags`;
+          if (redirect) {
+            url += `&redirect=${redirect}`;
+          }
+          if (shouldRedirectImmediately) {
+            url += `&immediate=true`;
+          }
+
+          history.replace(url);
+          setHasSeenFollowList(false);
+        }}
+      />
+    ),
+    showTagsIntro && (
+      <UserTagFollowIntro
+        onContinue={() => {
+          let url = `/$/${PAGES.AUTH}?reset_scroll=1&step=channels`;
+          if (redirect) {
+            url += `&redirect=${redirect}`;
+          }
+          if (shouldRedirectImmediately) {
+            url += `&immediate=true`;
+          }
+
+          history.replace(url);
+          setHasSeenTagsList(true);
         }}
       />
     ),

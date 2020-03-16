@@ -32,7 +32,8 @@ type Props = {
   hiddenUris: Array<string>,
   hiddenNsfwMessage?: Node,
   channelIds?: Array<string>,
-  tags: Array<string>,
+  tags: string, // these are just going to be string. pass a CSV if you want multi
+  defaultTags: string,
   orderBy?: Array<string>,
   defaultOrderBy?: string,
   freshness?: string,
@@ -49,6 +50,7 @@ type Props = {
   renderProperties?: Claim => Node,
   includeSupportAction?: boolean,
   pageSize?: number,
+  followedTags?: Array<Tag>,
 };
 
 function ClaimListDiscover(props: Props) {
@@ -56,11 +58,12 @@ function ClaimListDiscover(props: Props) {
     doClaimSearch,
     claimSearchByQuery,
     tags,
+    defaultTags,
     loading,
     meta,
     channelIds,
     showNsfw,
-    showReposts,
+    // showReposts,
     history,
     location,
     hiddenUris,
@@ -81,6 +84,7 @@ function ClaimListDiscover(props: Props) {
     renderProperties,
     includeSupportAction,
     hideFilter,
+    followedTags,
   } = props;
   const didNavigateForward = history.action === 'PUSH';
   const { search } = location;
@@ -88,9 +92,12 @@ function ClaimListDiscover(props: Props) {
   const [page, setPage] = useState(1);
   const [forceRefresh, setForceRefresh] = useState();
   const [expanded, setExpanded] = useState(false);
-
+  const followed = (followedTags && followedTags.map(t => t.name)) || [];
   const urlParams = new URLSearchParams(search);
-  const tagsParam = tags || urlParams.get(CS.TAGS_KEY) || null;
+  const tagsParam = // can be 'x,y,z' or 'x' or ['x','y'] or CS.CONSTANT
+    (tags && getParamFromTags(tags)) ||
+    (urlParams.get(CS.TAGS_KEY) !== null && urlParams.get(CS.TAGS_KEY)) ||
+    (defaultTags && getParamFromTags(defaultTags));
   const orderParam = orderBy || urlParams.get(CS.ORDER_BY_KEY) || defaultOrderBy || CS.ORDER_BY_TRENDING;
   const freshnessParam = freshness || urlParams.get(CS.FRESH_KEY) || defaultFreshness;
   const contentTypeParam = urlParams.get(CS.CONTENT_KEY);
@@ -102,7 +109,12 @@ function ClaimListDiscover(props: Props) {
 
   const showDuration = !(claimType && claimType === CS.CLAIM_CHANNEL);
   const isFiltered = () =>
-    Boolean(urlParams.get(CS.FRESH_KEY) || urlParams.get(CS.CONTENT_KEY) || urlParams.get(CS.DURATION_KEY));
+    Boolean(
+      urlParams.get(CS.FRESH_KEY) ||
+        urlParams.get(CS.CONTENT_KEY) ||
+        urlParams.get(CS.DURATION_KEY) ||
+        urlParams.get(CS.TAGS_KEY)
+    );
 
   useEffect(() => {
     if (isFiltered()) setExpanded(true);
@@ -113,7 +125,7 @@ function ClaimListDiscover(props: Props) {
     page_size: number,
     page: number,
     no_totals: boolean,
-    any_tags: Array<string>,
+    any_tags?: Array<string>,
     not_tags: Array<string>,
     channel_ids: Array<string>,
     not_channel_ids: Array<string>,
@@ -131,7 +143,6 @@ function ClaimListDiscover(props: Props) {
     // no_totals makes it so the sdk doesn't have to calculate total number pages for pagination
     // it's faster, but we will need to remove it if we start using total_pages
     no_totals: true,
-    any_tags: tagsParam || [],
     channel_ids: channelIds || [],
     not_channel_ids:
       // If channelIds were passed in, we don't need not_channel_ids
@@ -211,6 +222,17 @@ function ClaimListDiscover(props: Props) {
     }
   }
 
+  if (tagsParam) {
+    if (tagsParam !== CS.TAGS_ALL && tagsParam !== '') {
+      if (tagsParam === CS.TAGS_FOLLOWED) {
+        options.any_tags = followed;
+      } else if (Array.isArray(tagsParam)) {
+        options.any_tags = tagsParam;
+      } else {
+        options.any_tags = tagsParam.split(',');
+      }
+    }
+  }
   // https://github.com/lbryio/lbry-desktop/issues/3774
   // if (!showReposts) {
   //   if (Array.isArray(options.claim_type)) {
@@ -220,7 +242,7 @@ function ClaimListDiscover(props: Props) {
   //   }
   // }
 
-  const hasMatureTags = tags && tags.some(t => MATURE_TAGS.includes(t));
+  const hasMatureTags = tagsParam && tagsParam.split(',').some(t => MATURE_TAGS.includes(t));
   const claimSearchCacheQuery = createNormalizedClaimSearchKey(options);
   const uris = claimSearchByQuery[claimSearchCacheQuery] || [];
   const shouldPerformSearch =
@@ -265,6 +287,14 @@ function ClaimListDiscover(props: Props) {
     history.push(url);
   }
 
+  function getParamFromTags(t) {
+    if (t === CS.TAGS_ALL || t === CS.TAGS_FOLLOWED) {
+      return t;
+    } else if (Array.isArray(t)) {
+      return t.join(',');
+    }
+  }
+
   function buildUrl(delta) {
     const newUrlParams = new URLSearchParams();
     CS.KEYS.forEach(k => {
@@ -298,6 +328,23 @@ function ClaimListDiscover(props: Props) {
           newUrlParams.delete(CS.DURATION_KEY);
         } else {
           newUrlParams.set(CS.DURATION_KEY, delta.value);
+        }
+        break;
+      case CS.TAGS_KEY:
+        if (delta.value === CS.TAGS_ALL) {
+          if (defaultTags === CS.TAGS_ALL) {
+            newUrlParams.delete(CS.TAGS_KEY);
+          } else {
+            newUrlParams.set(CS.TAGS_KEY, delta.value);
+          }
+        } else if (delta.value === CS.TAGS_FOLLOWED) {
+          if (defaultTags === CS.TAGS_FOLLOWED) {
+            newUrlParams.delete(CS.TAGS_KEY);
+          } else {
+            newUrlParams.set(CS.TAGS_KEY, delta.value); // redundant but special
+          }
+        } else {
+          newUrlParams.set(CS.TAGS_KEY, delta.value);
         }
         break;
     }
@@ -393,46 +440,48 @@ function ClaimListDiscover(props: Props) {
               )}
 
               {/* CONTENT_TYPES FIELD */}
-              <div
-                className={classnames('claim-search__input-container', {
-                  'claim-search__input-container--selected': contentTypeParam,
-                })}
-              >
-                <FormField
-                  className={classnames('claim-search__dropdown', {
-                    'claim-search__dropdown--selected': contentTypeParam,
+              {!claimType && (
+                <div
+                  className={classnames('claim-search__input-container', {
+                    'claim-search__input-container--selected': contentTypeParam,
                   })}
-                  type="select"
-                  name="claimType"
-                  label={__('Content Type')}
-                  value={contentTypeParam || CS.CONTENT_ALL}
-                  onChange={e =>
-                    handleChange({
-                      key: CS.CONTENT_KEY,
-                      value: e.target.value,
-                    })
-                  }
                 >
-                  {CS.CONTENT_TYPES.map(type => {
-                    if (type !== CS.CLAIM_CHANNEL || (type === CS.CLAIM_CHANNEL && !channelIds)) {
-                      return (
-                        <option key={type} value={type}>
-                          {/* i18fixme */}
-                          {type === CS.CLAIM_CHANNEL && __('Channel')}
-                          {type === CS.CLAIM_REPOST && __('Repost')}
-                          {type === CS.FILE_VIDEO && __('Video')}
-                          {type === CS.FILE_AUDIO && __('Audio')}
-                          {type === CS.FILE_IMAGE && __('Image')}
-                          {type === CS.FILE_MODEL && __('Model')}
-                          {type === CS.FILE_BINARY && __('Other')}
-                          {type === CS.FILE_DOCUMENT && __('Document')}
-                          {type === CS.CONTENT_ALL && __('Any')}
-                        </option>
-                      );
+                  <FormField
+                    className={classnames('claim-search__dropdown', {
+                      'claim-search__dropdown--selected': contentTypeParam,
+                    })}
+                    type="select"
+                    name="claimType"
+                    label={__('Content Type')}
+                    value={contentTypeParam || CS.CONTENT_ALL}
+                    onChange={e =>
+                      handleChange({
+                        key: CS.CONTENT_KEY,
+                        value: e.target.value,
+                      })
                     }
-                  })}
-                </FormField>
-              </div>
+                  >
+                    {CS.CONTENT_TYPES.map(type => {
+                      if (type !== CS.CLAIM_CHANNEL || (type === CS.CLAIM_CHANNEL && !channelIds)) {
+                        return (
+                          <option key={type} value={type}>
+                            {/* i18fixme */}
+                            {type === CS.CLAIM_CHANNEL && __('Channel')}
+                            {type === CS.CLAIM_REPOST && __('Repost')}
+                            {type === CS.FILE_VIDEO && __('Video')}
+                            {type === CS.FILE_AUDIO && __('Audio')}
+                            {type === CS.FILE_IMAGE && __('Image')}
+                            {type === CS.FILE_MODEL && __('Model')}
+                            {type === CS.FILE_BINARY && __('Other')}
+                            {type === CS.FILE_DOCUMENT && __('Document')}
+                            {type === CS.CONTENT_ALL && __('Any')}
+                          </option>
+                        );
+                      }
+                    })}
+                  </FormField>
+                </div>
+              )}
               {/* DURATIONS FIELD */}
               {showDuration && (
                 <div className={'claim-search__input-container'}>
@@ -464,6 +513,50 @@ function ClaimListDiscover(props: Props) {
                         {dur === CS.DURATION_SHORT && __('Short')}
                         {dur === CS.DURATION_LONG && __('Long')}
                         {dur === CS.DURATION_ALL && __('Any')}
+                      </option>
+                    ))}
+                  </FormField>
+                </div>
+              )}
+              {/* TAGS FIELD */}
+              {!tags && (
+                <div className={'claim-search__input-container'}>
+                  <FormField
+                    className={classnames('claim-search__dropdown', {
+                      'claim-search__dropdown--selected':
+                        ((!defaultTags || defaultTags === CS.TAGS_ALL) && tagsParam && tagsParam !== CS.TAGS_ALL) ||
+                        (defaultTags === CS.TAGS_FOLLOWED && tagsParam !== CS.TAGS_FOLLOWED),
+                    })}
+                    label={__('Tags')}
+                    type="select"
+                    name="tags"
+                    value={tagsParam || CS.TAGS_ALL}
+                    onChange={e =>
+                      handleChange({
+                        key: CS.TAGS_KEY,
+                        value: e.target.value,
+                      })
+                    }
+                  >
+                    {[
+                      CS.TAGS_ALL,
+                      CS.TAGS_FOLLOWED,
+                      ...followed,
+                      ...(followed.includes(tagsParam) || tagsParam === CS.TAGS_ALL || tagsParam === CS.TAGS_FOLLOWED
+                        ? []
+                        : [tagsParam]), // if they unfollow while filtered, add Other
+                    ].map(tag => (
+                      <option
+                        key={tag}
+                        value={tag}
+                        className={classnames({
+                          'claim-search__input-special': !followed.includes(tag),
+                        })}
+                      >
+                        {followed.includes(tag) && typeof tag === 'string' && toCapitalCase(__(tag))}
+                        {tag === CS.TAGS_ALL && __('Any')}
+                        {tag === CS.TAGS_FOLLOWED && __('Following')}
+                        {!followed.includes(tag) && tag !== CS.TAGS_ALL && tag !== CS.TAGS_FOLLOWED && __('Other')}
                       </option>
                     ))}
                   </FormField>

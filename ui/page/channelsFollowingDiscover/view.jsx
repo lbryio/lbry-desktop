@@ -119,12 +119,7 @@ function ChannelsFollowingDiscover(props: Props) {
         </div>
       ))}
       <h1 className="claim-grid__title">{__('More Channels')}</h1>
-      <ClaimListDiscover
-        defaultOrderBy={CS.ORDER_BY_TOP}
-        defaultFreshness={CS.FRESH_ALL}
-        claimType="channel"
-        hideFilter
-      />
+      <ClaimListDiscover defaultOrderBy={CS.ORDER_BY_TOP} defaultFreshness={CS.FRESH_ALL} claimType="channel" />
     </Page>
   );
 }
