@@ -23,6 +23,7 @@ import useIsMobile from 'effects/use-is-mobile';
 // @if TARGET='web'
 import OpenInAppLink from 'component/openInAppLink';
 import YoutubeWelcome from 'component/youtubeWelcome';
+import fetchWithTimeout from 'util/fetch';
 // @endif
 
 export const MAIN_WRAPPER_CLASS = 'main-wrapper';
@@ -251,8 +252,9 @@ function App(props: Props) {
   }, [syncError, pathname, isAuthenticated]);
 
   // @if TARGET='web'
+  // This should all be moved into lbrytv/component/...
   useEffect(() => {
-    fetch(`${LBRY_TV_API}/internal/status`)
+    fetchWithTimeout(10000, fetch(`${LBRY_TV_API}/internal/status`))
       .then(response => response.json())
       .then(status => {
         if (status.general_state !== 'ok') {
@@ -260,6 +262,7 @@ function App(props: Props) {
         }
       })
       .catch(err => {
+        console.log('err', err);
         setCurrentlyDegradedPerformance(true);
       });
   }, []);
