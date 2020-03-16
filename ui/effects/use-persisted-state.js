@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 
 export default function usePersistedState(key, firstTimeDefault) {
   // If no key is passed in, act as a normal `useState`
@@ -32,11 +32,13 @@ export default function usePersistedState(key, firstTimeDefault) {
 
   const [value, setValue] = useState(defaultValue);
 
-  useEffect(() => {
-    if (key && localStorageAvailable) {
-      localStorage.setItem(key, typeof value === 'object' ? JSON.stringify(value) : value);
+  function setValueAndLocalStorage(newValue) {
+    if (key && localStorageAvailable && value !== newValue) {
+      localStorage.setItem(key, typeof newValue === 'object' ? JSON.stringify(newValue) : newValue);
     }
-  }, [key, value]);
 
-  return [value, setValue];
+    setValue(newValue);
+  }
+
+  return [value, setValueAndLocalStorage];
 }
