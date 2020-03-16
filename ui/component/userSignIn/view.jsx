@@ -120,7 +120,7 @@ function UserSignIn(props: Props) {
   const SIGN_IN_FLOW = [
     showEmail && <UserEmailNew />,
     showEmailVerification && <UserEmailVerify />,
-    showUserVerification && <UserVerify skipLink={redirect} onSkip={() => setHasSkippedRewards(true)} />,
+    showUserVerification && <UserVerify onSkip={() => setHasSkippedRewards(true)} />,
     showChannelCreation && <UserFirstChannel />,
     showFollowIntro && (
       <UserChannelFollowIntro

@@ -1044,5 +1044,17 @@
   "Total Publishes": "Total Publishes",
   "Are you sure you want to delete this channel?": "Are you sure you want to delete this channel?",
   "Are you sure? Type %name% to confirm that you wish to delete the channel.": "Are you sure? Type %name% to confirm that you wish to delete the channel.",
-  "You're about to permanently delete a channel. Content published under this channel will be orphaned and their signing channel invalid. Content sync programs using this channel will fail.": "You're about to permanently delete a channel. Content published under this channel will be orphaned and their signing channel invalid. Content sync programs using this channel will fail."
+  "You're about to permanently delete a channel. Content published under this channel will be orphaned and their signing channel invalid. Content sync programs using this channel will fail.": "You're about to permanently delete a channel. Content published under this channel will be orphaned and their signing channel invalid. Content sync programs using this channel will fail.",
+  "You are signed into lbry.tv which automatically shares data with LBRY inc. %signout_button%.": "You are signed into lbry.tv which automatically shares data with LBRY inc. %signout_button%.",
+  "LBRY works better if you find and follow at least 5 creators you like. You can also block channels you never want to see.": "LBRY works better if you find and follow at least 5 creators you like. You can also block channels you never want to see.",
+  "Nice! You are currently following %followingCount% creator": "Nice! You are currently following %followingCount% creator",
+  "You will receive notifications related to new content.": "You will receive notifications related to new content.",
+  "Rewards Validation": "Rewards Validation",
+  "Rewards Program": "Rewards Program",
+  "This step is not required to use LBRY, and not all users or regions may qualify.": "This step is not required to use LBRY, and not all users or regions may qualify.",
+  "A moderator capable of approving you is typically available in the discord server. See the #rewards-approval instructions carefully and do not message any moderators directly. This process will likely involve providing proof of a stable and established online or real-life identity.": "A moderator capable of approving you is typically available in the discord server. See the #rewards-approval instructions carefully and do not message any moderators directly. This process will likely involve providing proof of a stable and established online or real-life identity.",
+  "Rewards validation is optional.": "Rewards validation is optional.",
+  "Continue Without Rewards": "Continue Without Rewards",
+  "If you'd like to participate our %rewards_program% to earn credits, please complete one of the steps below to be validated.": "If you'd like to participate our %rewards_program% to earn credits, please complete one of the steps below to be validated.",
+  "verify your email": "verify your email"
 }

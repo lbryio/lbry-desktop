@@ -29,10 +29,9 @@ class UserVerify extends React.PureComponent<Props> {
   }
 
   render() {
-    const { errorMessage, isPending, verifyPhone, fetchUser, skipLink, onSkip } = this.props;
+    const { errorMessage, isPending, verifyPhone, fetchUser, onSkip } = this.props;
     const skipButtonProps = {
       onClick: onSkip,
-      navigate: skipLink || '/',
     };
 
     return (
