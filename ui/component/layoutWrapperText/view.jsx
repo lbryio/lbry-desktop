@@ -46,16 +46,8 @@ function LayoutWrapperText(props: Props) {
           <h1 className="media__title-text">{title}</h1>
         </div>
 
-        <div className="media__subtitle--between">
-          <DateTime uri={uri} show={DateTime.SHOW_DATE} />
-          <FileViewCount uri={uri} />
-        </div>
         <div className="section">
           <FileAuthor uri={uri} />
-        </div>
-
-        <div className="section__divider">
-          <hr />
         </div>
 
         {/* Render the initiator to trigger the view of the file */}
@@ -65,6 +57,11 @@ function LayoutWrapperText(props: Props) {
 
       <div className="columns">
         <div>
+          <div className="media__subtitle--between">
+            <DateTime uri={uri} show={DateTime.SHOW_DATE} />
+            <FileViewCount uri={uri} />
+          </div>
+
           <FileActions uri={uri} />
 
           <div className="section__divider">
