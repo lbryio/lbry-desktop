@@ -109,7 +109,7 @@ function ModalRepost(props: Props) {
       }).then((repostClaim: StreamClaim) => {
         analytics.apiLogPublish(repostClaim);
         doHideModal();
-        doToast({ message: __('Woohoo! Sucessfully reposted this claim.') });
+        doToast({ message: __('Woohoo! Successfully reposted this claim.') });
       });
     }
   }
