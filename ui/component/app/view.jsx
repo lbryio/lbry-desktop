@@ -279,7 +279,7 @@ function App(props: Props) {
         <Yrbl
           className="main--empty"
           title={__('lbry.tv is currently down')}
-          subtitle={__('Something about fixing the squeeky wheel or something')}
+          subtitle={__('My wheel broke, but the good news is that someone from LBRY is working on it.')}
         />
       ) : (
         <React.Fragment>
