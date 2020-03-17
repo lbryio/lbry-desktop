@@ -1,6 +1,5 @@
 // @flow
 import * as PAGES from 'constants/pages';
-import { LBRY_TV_API } from 'config';
 import React, { useEffect, useRef, useState } from 'react';
 import classnames from 'classnames';
 import analytics from 'analytics';
@@ -15,17 +14,20 @@ import FloatingViewer from 'component/floatingViewer';
 import { withRouter } from 'react-router';
 import usePrevious from 'effects/use-previous';
 import Nag from 'component/common/nag';
-import Button from 'component/button';
-import I18nMessage from 'component/i18nMessage';
 import { rewards as REWARDS } from 'lbryinc';
 import usePersistedState from 'effects/use-persisted-state';
-import useIsMobile from 'effects/use-is-mobile';
 // @if TARGET='web'
 import OpenInAppLink from 'component/openInAppLink';
 import YoutubeWelcome from 'component/youtubeWelcome';
-import fetchWithTimeout from 'util/fetch';
+import NagDegradedPerformance from 'lbrytv/component/nag-degraded-performance';
+import NagDataCollection from 'lbrytv/component/nag-data-collection';
 // @endif
-
+import {
+  useDegradedPerformance,
+  STATUS_OK,
+  STATUS_DEGRADED,
+  STATUS_DOWN,
+} from 'lbrytv/effects/use-degraded-performance';
 export const MAIN_WRAPPER_CLASS = 'main-wrapper';
 // @if TARGET='app'
 export const IS_MAC = process.platform === 'darwin';
@@ -101,17 +103,16 @@ function App(props: Props) {
   const appRef = useRef();
   const isEnhancedLayout = useKonamiListener();
   const [hasSignedIn, setHasSignedIn] = useState(false);
-  const [currentlyDegradedPerformance, setCurrentlyDegradedPerformance] = useState(false);
   const userId = user && user.id;
   const hasVerifiedEmail = user && user.has_verified_email;
   const isRewardApproved = user && user.is_reward_approved;
   const previousUserId = usePrevious(userId);
   const previousHasVerifiedEmail = usePrevious(hasVerifiedEmail);
   const previousRewardApproved = usePrevious(isRewardApproved);
-  const isMobile = useIsMobile();
   // @if TARGET='web'
   const [showAnalyticsNag, setShowAnalyticsNag] = usePersistedState('analytics-nag', true);
   // @endif
+  const [lbryTvApiStatus, setLbryTvApiStatus] = useState(STATUS_OK);
   const { pathname, hash, search } = props.location;
   const showUpgradeButton = autoUpdateDownloaded || (process.platform === 'linux' && isUpgradeAvailable);
   // referral claiming
@@ -120,6 +121,7 @@ function App(props: Props) {
   const rawReferrerParam = urlParams.get('r');
   const sanitizedReferrerParam = rawReferrerParam && rawReferrerParam.replace(':', '#');
   const wrapperElement = appRef.current;
+  const shouldHideNag = pathname.startsWith(`/$/${PAGES.EMBED}`) || pathname.startsWith(`/$/${PAGES.AUTH_VERIFY}`);
 
   let uri;
   try {
@@ -127,7 +129,6 @@ function App(props: Props) {
     uri = newpath + hash;
   } catch (e) {}
 
-  const noNagOnPage = pathname.startsWith(`/$/${PAGES.EMBED}`) || pathname.startsWith(`/$/${PAGES.AUTH_VERIFY}`);
   // @if TARGET='web'
   function handleAnalyticsDismiss() {
     setShowAnalyticsNag(false);
@@ -252,20 +253,7 @@ function App(props: Props) {
   }, [syncError, pathname, isAuthenticated]);
 
   // @if TARGET='web'
-  // This should all be moved into lbrytv/component/...
-  useEffect(() => {
-    fetchWithTimeout(10000, fetch(`${LBRY_TV_API}/internal/status`))
-      .then(response => response.json())
-      .then(status => {
-        if (status.general_state !== 'ok') {
-          throw Error();
-        }
-      })
-      .catch(err => {
-        console.log('err', err);
-        setCurrentlyDegradedPerformance(true);
-      });
-  }, []);
+  useDegradedPerformance(setLbryTvApiStatus);
   // @endif
 
   // @if TARGET='web'
@@ -287,80 +275,41 @@ function App(props: Props) {
       ref={appRef}
       onContextMenu={IS_WEB ? undefined : e => openContextMenu(e)}
     >
-      <Router />
-      <ModalRouter />
-      <FloatingViewer pageUri={uri} />
-
-      {/* @if TARGET='web' */}
-      <YoutubeWelcome />
-      <OpenInAppLink uri={uri} />
-      {/* @endif */}
-
-      {/* @if TARGET='app' */}
-      {showUpgradeButton && (
-        <Nag message={__('An upgrade is available.')} actionText={__('Install Now')} onClick={requestDownloadUpgrade} />
-      )}
-      {/* @endif */}
-      {/* @if TARGET='web' */}
-      {currentlyDegradedPerformance && (
-        <Nag
-          type="error"
-          message={
-            <I18nMessage
-              tokens={{
-                more_information: <Button button="link" label={__('more')} href="https://status.lbry.com/" />,
-              }}
-            >
-              lbry.tv performance may be degraded. You can try to use it, or wait 5 minutes and refresh. Please no crush
-              us.
-            </I18nMessage>
-          }
-          actionText={__('Refresh')}
-          onClick={() => window.location.reload()}
-          onClose={() => setCurrentlyDegradedPerformance(false)}
+      {IS_WEB && lbryTvApiStatus === STATUS_DOWN ? (
+        <Yrbl
+          className="main--empty"
+          title={__('lbry.tv is currently down')}
+          subtitle={__('Something about fixing the squeeky wheel or something')}
         />
-      )}
-      {!currentlyDegradedPerformance && showAnalyticsNag && !noNagOnPage && (
+      ) : (
         <React.Fragment>
-          {isMobile ? (
+          <Router />
+          <ModalRouter />
+          <FloatingViewer pageUri={uri} />
+          {isEnhancedLayout && <Yrbl className="yrbl--enhanced" />}
+
+          {/* @if TARGET='app' */}
+          {showUpgradeButton && (
             <Nag
-              message={
-                <I18nMessage
-                  tokens={{
-                    more_information: (
-                      <Button button="link" label={__('more')} href="https://lbry.com/faq/privacy-and-data" />
-                    ),
-                  }}
-                >
-                  lbry.tv collects usage information for itself and third parties (%more_information%).
-                </I18nMessage>
-              }
-              actionText={__('OK')}
-              onClick={handleAnalyticsDismiss}
-            />
-          ) : (
-            <Nag
-              message={
-                <I18nMessage
-                  tokens={{
-                    more_information: (
-                      <Button button="link" label={__('more')} href="https://lbry.com/faq/privacy-and-data" />
-                    ),
-                  }}
-                >
-                  lbry.tv collects usage information for itself and third parties (%more_information%). Want control
-                  over this and more?
-                </I18nMessage>
-              }
-              actionText={__('Get The App')}
-              href="https://lbry.com/get"
-              onClose={handleAnalyticsDismiss}
+              message={__('An upgrade is available.')}
+              actionText={__('Install Now')}
+              onClick={requestDownloadUpgrade}
             />
           )}
+          {/* @endif */}
+
+          {/* @if TARGET='web' */}
+          <YoutubeWelcome />
+          <OpenInAppLink uri={uri} />
+          {lbryTvApiStatus === STATUS_DEGRADED && (
+            <NagDegradedPerformance onClose={() => setLbryTvApiStatus(STATUS_OK)} />
+          )}
+          {lbryTvApiStatus === STATUS_OK && showAnalyticsNag && !shouldHideNag && (
+            <NagDataCollection onClose={handleAnalyticsDismiss} />
+          )}
+          {/* @endif */}
         </React.Fragment>
       )}
-      {/* @endif */}
-      {isEnhancedLayout && <Yrbl className="yrbl--enhanced" />}
     </div>
   );
 }
