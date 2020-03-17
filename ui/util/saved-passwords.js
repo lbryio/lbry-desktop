@@ -1,16 +1,13 @@
-// @flow
-import { ipcRenderer } from 'electron';
-
+const { DOMAIN } = require('../../config.js');
 const AUTH_TOKEN = 'auth_token';
 const SAVED_PASSWORD = 'saved_password';
 const DEPRECATED_SAVED_PASSWORD = 'saved-password';
-
-const domain = window.location.hostname;
+const domain = typeof window === 'object' ? window.location.hostname : DOMAIN;
 const isProduction = process.env.NODE_ENV === 'production';
 const maxExpiration = 2147483647;
 let sessionPassword;
 
-function setCookie(name: string, value: string, expirationDaysOnWeb: number) {
+function setCookie(name, value, expirationDaysOnWeb) {
   let expires = '';
   if (expirationDaysOnWeb) {
     let date = new Date();
@@ -27,7 +24,7 @@ function setCookie(name: string, value: string, expirationDaysOnWeb: number) {
   document.cookie = cookie;
 }
 
-function getCookie(name: string) {
+function getCookie(name) {
   const nameEQ = name + '=';
   const cookies = document.cookie.split(';');
 
@@ -44,7 +41,7 @@ function getCookie(name: string) {
   return null;
 }
 
-function deleteCookie(name: string) {
+function deleteCookie(name) {
   document.cookie = name + `=; Max-Age=-99999999; domain=${domain}; path=/;`;
 
   // Legacy
@@ -54,8 +51,8 @@ function deleteCookie(name: string) {
   document.cookie = name + `=; Max-Age=-99999999; domain=.${domain}; path=/;`;
 }
 
-export const setSavedPassword = (value?: string, saveToDisk: boolean) => {
-  return new Promise<*>(resolve => {
+function setSavedPassword(value, saveToDisk) {
+  return new Promise(resolve => {
     const password = value === undefined || value === null ? '' : value;
     sessionPassword = password;
 
@@ -67,97 +64,84 @@ export const setSavedPassword = (value?: string, saveToDisk: boolean) => {
       }
     }
   });
-};
+}
 
-export const getSavedPassword = () => {
-  return new Promise<*>(resolve => {
+function getSavedPassword() {
+  return new Promise(resolve => {
     if (sessionPassword) {
       resolve(sessionPassword);
     }
 
-    return getKeychainPassword().then(p => resolve(p));
+    return getPasswordFromCookie().then(p => resolve(p));
   });
-};
+}
 
-export const getKeychainPassword = () => {
-  return new Promise<*>(resolve => {
+function getPasswordFromCookie() {
+  return new Promise(resolve => {
     let password;
-    // @if TARGET='web'
-    // In the future, this will be the only code in this function
-    // Handling keytar stuff separately so we can easily rip it out later
     password = getCookie(SAVED_PASSWORD);
     resolve(password);
-    // @endif
-
-    // @if TARGET='app'
-    password = getCookie(SAVED_PASSWORD);
-
-    if (password) {
-      resolve(password);
-    } else {
-      // No password saved in a cookie, get it from the keychain, then delete the value in the keychain
-      ipcRenderer.once('get-password-response', (event, keychainPassword) => {
-        resolve(keychainPassword);
-
-        if (keychainPassword) {
-          setSavedPassword(keychainPassword, true);
-          ipcRenderer.send('delete-password');
-        }
-      });
-
-      ipcRenderer.send('get-password');
-    }
-    // @endif
   });
-};
+}
 
-export const deleteSavedPassword = () => {
-  return new Promise<*>(resolve => {
+function deleteSavedPassword() {
+  return new Promise(resolve => {
     deleteCookie(SAVED_PASSWORD);
     resolve();
   });
-};
+}
 
-export const getAuthToken = () => {
+function getAuthToken() {
   return getCookie(AUTH_TOKEN);
-};
+}
 
-export const setAuthToken = (value: string) => {
+function setAuthToken(value) {
   return setCookie(AUTH_TOKEN, value, 365);
-};
+}
 
-export const deleteAuthToken = () => {
-  return new Promise<*>(resolve => {
+function deleteAuthToken() {
+  return new Promise(resolve => {
     deleteCookie(AUTH_TOKEN);
     resolve();
   });
-};
+}
 
-export const doSignOutCleanup = () => {
-  return new Promise<*>(resolve => {
+function doSignOutCleanup() {
+  return new Promise(resolve => {
     deleteAuthToken();
     deleteSavedPassword();
     resolve();
-
-    // @if TARGET='app'
-    ipcRenderer.send('delete-auth-token');
-    ipcRenderer.send('delete-password');
-    // @endif;
   });
-};
+}
 
-export const doAuthTokenRefresh = () => {
+function doAuthTokenRefresh() {
   const authToken = getAuthToken();
   if (authToken) {
     deleteAuthToken();
     setAuthToken(authToken);
   }
-};
+}
 
-export const doDeprecatedPasswordMigrationMarch2020 = () => {
+function doDeprecatedPasswordMigrationMarch2020() {
   const savedPassword = getCookie(DEPRECATED_SAVED_PASSWORD);
   if (savedPassword) {
     deleteCookie(DEPRECATED_SAVED_PASSWORD);
     setSavedPassword(savedPassword, true);
   }
+}
+
+module.exports = {
+  setCookie,
+  getCookie,
+  deleteCookie,
+  setSavedPassword,
+  getSavedPassword,
+  getPasswordFromCookie,
+  deleteSavedPassword,
+  getAuthToken,
+  setAuthToken,
+  deleteAuthToken,
+  doSignOutCleanup,
+  doAuthTokenRefresh,
+  doDeprecatedPasswordMigrationMarch2020,
 };
