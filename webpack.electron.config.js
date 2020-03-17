@@ -64,7 +64,6 @@ if (process.env.NODE_ENV === 'production') {
   // Apply prod overrides
   mainConfig = merge(mainConfig, {
     externals: {
-      keytar: 'require("keytar")',
       electron: 'require("electron")',
       express: 'require("express")',
       'electron-updater': 'require("electron-updater")',
@@ -75,7 +74,6 @@ if (process.env.NODE_ENV === 'production') {
   // Apply dev overrides
   mainConfig = merge(mainConfig, {
     externals: {
-      keytar: 'require("keytar")',
       electron: 'require("electron")',
       express: 'require("express")',
       'electron-updater': 'require("electron-updater")',
