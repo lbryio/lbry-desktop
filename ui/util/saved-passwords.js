@@ -10,7 +10,7 @@ const isProduction = process.env.NODE_ENV === 'production';
 const maxExpiration = 2147483647;
 let sessionPassword;
 
-function setCookie(name: string, value: string, expirationDaysOnWeb: number) {
+export function setCookie(name: string, value: string, expirationDaysOnWeb: number) {
   let expires = '';
   if (expirationDaysOnWeb) {
     let date = new Date();
@@ -27,7 +27,7 @@ function setCookie(name: string, value: string, expirationDaysOnWeb: number) {
   document.cookie = cookie;
 }
 
-function getCookie(name: string) {
+export function getCookie(name: string) {
   const nameEQ = name + '=';
   const cookies = document.cookie.split(';');
 
