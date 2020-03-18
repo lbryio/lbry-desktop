@@ -13,7 +13,7 @@ type Props = {
   fetchChannelListMine: () => void,
   fetchingChannels: boolean,
   hideAnon: boolean,
-  includeNew?: boolean,
+  hideNew: boolean,
   label?: string,
   injected?: Array<string>,
   emailVerified: boolean,
@@ -71,7 +71,7 @@ class ChannelSection extends React.PureComponent<Props, State> {
 
   render() {
     const channel = this.state.addingChannel ? 'new' : this.props.channel;
-    const { fetchingChannels, channels = [], hideAnon, label, injected = [] } = this.props;
+    const { fetchingChannels, channels = [], hideAnon, hideNew, label, injected = [] } = this.props;
     const { addingChannel } = this.state;
 
     return (
@@ -96,7 +96,7 @@ class ChannelSection extends React.PureComponent<Props, State> {
                 {item}
               </option>
             ))}
-          {!fetchingChannels && <option value={CHANNEL_NEW}>{__('New channel...')}</option>}
+          {!fetchingChannels && !hideNew && <option value={CHANNEL_NEW}>{__('New channel...')}</option>}
         </FormField>
 
         {addingChannel && <ChannelCreate onSuccess={this.handleChangeToNewChannel} />}

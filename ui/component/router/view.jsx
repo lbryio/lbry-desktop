@@ -32,9 +32,10 @@ import SignInVerifyPage from 'page/signInVerify';
 import ChannelsPage from 'page/channels';
 import EmbedWrapperPage from 'page/embedWrapper';
 import TopPage from 'page/top';
+import Welcome from 'page/welcome';
+import CreatorDashboard from 'page/creatorDashboard';
 import { parseURI } from 'lbry-redux';
 import { SITE_TITLE, WELCOME_VERSION } from 'config';
-import Welcome from 'page/welcome';
 
 // Tell the browser we are handling scroll restoration
 if ('scrollRestoration' in history) {
@@ -149,7 +150,7 @@ function AppRouter(props: Props) {
       <Redirect from={`/$/${PAGES.DEPRECATED__TAGS_FOLLOWING}`} to={`/$/${PAGES.TAGS_FOLLOWING}`} />
       <Redirect from={`/$/${PAGES.DEPRECATED__TAGS_FOLLOWING_MANAGE}`} to={`/$/${PAGES.TAGS_FOLLOWING_MANAGE}`} />
 
-      <Route path={`/`} exact component={HomePage} />
+      <Route path={`/`} exact component={CreatorDashboard || HomePage} />
       <Route path={`/$/${PAGES.DISCOVER}`} exact component={DiscoverPage} />
       <Route path={`/$/${PAGES.AUTH}`} exact component={SignInPage} />
       <Route path={`/$/${PAGES.AUTH}/*`} exact component={SignInPage} />
@@ -174,6 +175,7 @@ function AppRouter(props: Props) {
       <PrivateRoute {...props} path={`/$/${PAGES.INVITE}`} component={InvitePage} />
       <PrivateRoute {...props} path={`/$/${PAGES.DOWNLOADED}`} component={FileListDownloaded} />
       <PrivateRoute {...props} path={`/$/${PAGES.PUBLISHED}`} component={FileListPublished} />
+      <PrivateRoute {...props} path={`/$/${PAGES.CREATOR_DASHBOARD}`} component={CreatorDashboard} />
       <PrivateRoute {...props} path={`/$/${PAGES.PUBLISH}`} component={PublishPage} />
       <PrivateRoute {...props} path={`/$/${PAGES.REPORT}`} component={ReportPage} />
       <PrivateRoute {...props} path={`/$/${PAGES.REWARDS}`} component={RewardsPage} />
