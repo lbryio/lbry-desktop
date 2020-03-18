@@ -74,7 +74,7 @@ class IconComponent extends React.PureComponent<Props> {
       <Icon size={sectionIcon ? 20 : iconSize} className={classnames(`icon icon--${icon}`, className)} color={color} />
     );
 
-    const inner = sectionIcon ? <span className="icon__wrapper">{component}</span> : component;
+    const inner = sectionIcon ? <span className={`icon__wrapper icon__wrapper--${icon}`}>{component}</span> : component;
 
     return tooltipText ? <Tooltip label={tooltipText}>{inner}</Tooltip> : inner;
   }

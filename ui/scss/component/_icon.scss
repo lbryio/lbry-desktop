@@ -17,6 +17,22 @@
   }
 }
 
+.icon__wrapper--Heart {
+  background-color: var(--color-follow-bg);
+
+  .icon {
+    stroke: var(--color-follow-icon);
+  }
+}
+
+.icon__wrapper--Eye {
+  background-color: var(--color-view-bg);
+
+  .icon {
+    stroke: var(--color-view-icon);
+  }
+}
+
 .icon--help {
   color: var(--color-subtitle);
   margin-left: var(--spacing-xsmall);

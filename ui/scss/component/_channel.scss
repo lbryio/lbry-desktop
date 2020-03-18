@@ -157,3 +157,31 @@ $metadata-z-index: 1;
 .channel-name--inline {
   margin-left: var(--spacing-xsmall);
 }
+
+.channel__list-item {
+  display: flex;
+  background-color: var(--color-card-background);
+  padding: var(--spacing-small);
+  align-items: center;
+
+  border-bottom: 1px solid var(--color-border);
+
+  .channel-thumbnail {
+    height: 2rem;
+    width: 2rem;
+  }
+
+  .icon {
+    margin-left: var(--spacing-large);
+    margin-right: var(--spacing-small);
+  }
+
+  &:hover {
+    background-color: var(--color-card-background-highlighted);
+  }
+}
+
+.channel__list-item--selected {
+  border-radius: var(--border-radius);
+  border: 1px solid var(--color-border);
+}

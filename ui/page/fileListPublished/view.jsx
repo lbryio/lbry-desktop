@@ -1,4 +1,5 @@
 // @flow
+import * as PAGES from 'constants/pages';
 import React, { useEffect } from 'react';
 import Button from 'component/button';
 import ClaimList from 'component/claimList';
@@ -28,6 +29,7 @@ function FileListPublished(props: Props) {
 
   return (
     <Page>
+      <Button button="link" label={'Creator Dashboard'} navigate={`/$/${PAGES.CREATOR_DASHBOARD}`} />
       <WebUploadList />
       {urls && Boolean(urls.length) && (
         <React.Fragment>
