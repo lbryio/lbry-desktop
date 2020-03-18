@@ -9,7 +9,7 @@
 
 .yrbl {
   height: 20rem;
-  margin-right: var(--spacing-large);
+  margin-right: calc(var(--spacing-xlarge) * 2);
 
   @media (max-width: $breakpoint-small) {
     height: 10rem;
