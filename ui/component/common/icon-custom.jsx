@@ -425,7 +425,7 @@ export const icons = {
       <line x1="17" y1="16" x2="23" y2="16" />
     </g>
   ),
-  [ICONS.SCIENCE]: buildIcon(
+  [ICONS.ANALYTICS]: buildIcon(
     <g>
       <path d="M 8.4312337,1.6285136 V 9.4232264 L 2.2367584,22.725564 H 22.030217 L 15.773797,9.2902071 V 1.6285136 Z" />
       <path d="M 4.2426407,18.166369 H 12.197591" />

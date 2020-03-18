@@ -168,11 +168,11 @@ function SideNavigation(props: Props) {
             ].map(
               linkProps =>
                 Object.keys(linkProps).length > 0 &&
-                (linkProps && (
+                linkProps && (
                   <li key={linkProps.navigate}>
                     <Button {...linkProps} className="navigation-link" activeClass="navigation-link--active" />
                   </li>
-                ))
+                )
             )}
         </ul>
 

@@ -1,4 +1,4 @@
-// Extends reach-ui menu button base stylesheet
+Pmenu// Extends reach-ui menu button base stylesheet
 /* Used to detect in JavaScript if apps have loaded styles or not. */
 :root {
   --reach-menu-button: 1;
@@ -50,13 +50,17 @@
   }
 }
 
-.menu__list--header {
-  margin-top: 19px;
+.menu__list {
   margin-left: calc(var(--spacing-medium) * -1);
   box-shadow: var(--card-box-shadow);
   animation: menu-animate-in var(--animation-duration) var(--animation-style);
   border-bottom-left-radius: var(--border-radius);
   border-bottom-right-radius: var(--border-radius);
+}
+
+.menu__list--header {
+  @extend .menu__list;
+  margin-top: 19px;
 }
 
 .menu__link {
@@ -68,6 +72,11 @@
   .icon {
     stroke: var(--color-menu-icon);
     margin-right: var(--spacing-small);
+  }
+
+  .badge {
+    margin-left: var(--spacing-small);
+    margin-bottom: 5px;
   }
 }
 
