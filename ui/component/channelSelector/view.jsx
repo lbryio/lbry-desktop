@@ -4,7 +4,7 @@ import classnames from 'classnames';
 import React from 'react';
 import ChannelThumbnail from 'component/channelThumbnail';
 import { Menu, MenuList, MenuButton, MenuItem } from '@reach/menu-button';
-import ClaimPreviewTitle from 'component/claimPreviewTitle';
+import ChannelTitle from 'component/channelTitle';
 import Icon from 'component/common/icon';
 
 type Props = {
@@ -14,17 +14,17 @@ type Props = {
 };
 
 type ListItemProps = {
-  url: string,
+  uri: string,
   isSelected?: boolean,
 };
 
 function ChannelListItem(props: ListItemProps) {
-  const { url, isSelected = false } = props;
+  const { uri, isSelected = false } = props;
 
   return (
     <div className={classnames('channel__list-item', { 'channel__list-item--selected': isSelected })}>
-      <ChannelThumbnail uri={url} />
-      <ClaimPreviewTitle uri={url} />
+      <ChannelThumbnail uri={uri} />
+      <ChannelTitle uri={uri} />
       {isSelected && <Icon icon={ICONS.DOWN} />}
     </div>
   );
@@ -33,7 +33,7 @@ function ChannelListItem(props: ListItemProps) {
 function ChannelSelector(props: Props) {
   const { channels, selectedChannelUrl, onChannelSelect } = props;
 
-  if (!selectedChannelUrl) {
+  if (!channels || !selectedChannelUrl) {
     return null;
   }
 
@@ -41,13 +41,13 @@ function ChannelSelector(props: Props) {
     <div>
       <Menu>
         <MenuButton className="">
-          <ChannelListItem url={selectedChannelUrl} isSelected />
+          <ChannelListItem uri={selectedChannelUrl} isSelected />
         </MenuButton>
         <MenuList className="menu__list">
           {channels &&
             channels.map(channel => (
               <MenuItem key={channel.canonical_url} onSelect={() => onChannelSelect(channel.canonical_url)}>
-                <ChannelListItem url={channel.canonical_url} />
+                <ChannelListItem uri={channel.canonical_url} />
               </MenuItem>
             ))}
         </MenuList>
