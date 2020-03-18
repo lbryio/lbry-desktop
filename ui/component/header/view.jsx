@@ -167,6 +167,13 @@ const Header = (props: Props) => {
                       <Icon aria-hidden icon={ICONS.CHANNEL} />
                       {__('Channels')}
                     </MenuItem>
+                    <MenuItem className="menu__link" onSelect={() => history.push(`/$/${PAGES.CREATOR_DASHBOARD}`)}>
+                      <Icon aria-hidden icon={ICONS.ANALYTICS} />
+                      {__('Creator Analytics')}
+                      <span>
+                        <span className="badge badge--alert">New!</span>
+                      </span>
+                    </MenuItem>
                     <MenuItem className="menu__link" onSelect={() => history.push(`/$/${PAGES.REWARDS}`)}>
                       <Icon aria-hidden icon={ICONS.FEATURED} />
                       {__('Rewards')}
