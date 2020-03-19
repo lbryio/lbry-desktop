@@ -12,6 +12,7 @@ import usePersistedState from 'effects/use-persisted-state';
 import Button from 'component/button';
 import Yrbl from 'component/yrbl';
 import { useHistory } from 'react-router-dom';
+import analytics from 'analytics';
 
 type Props = {
   channels: Array<ChannelClaim>,
@@ -45,8 +46,9 @@ export default function CreatorAnalytics(props: Props) {
     }
   }, [selectedChannelUrl, firstChannelUrl, channelFoundForSelectedChannelUrl]);
 
+  const channelForEffect = JSON.stringify(selectedChannelClaim);
   React.useEffect(() => {
-    if (selectedChannelClaimId) {
+    if (selectedChannelClaimId && channelForEffect) {
       setFetchingStats(true);
       Lbryio.call('reports', 'content', { claim_id: selectedChannelClaimId })
         .then(res => {
@@ -54,10 +56,12 @@ export default function CreatorAnalytics(props: Props) {
           setStats(res);
         })
         .catch(() => {
+          const channelToSend = JSON.parse(channelForEffect);
+          analytics.apiLogPublish(channelToSend);
           setFetchingStats(false);
         });
     }
-  }, [selectedChannelClaimId, setFetchingStats, setStats]);
+  }, [selectedChannelClaimId, channelForEffect, setFetchingStats, setStats]);
 
   return (
     <React.Fragment>
