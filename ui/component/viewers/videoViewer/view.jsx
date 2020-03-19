@@ -67,6 +67,7 @@ function VideoViewer(props: Props) {
     volume,
     muted,
     thumbnail,
+    position,
     claim,
     autoplayParam,
   } = props;
@@ -74,6 +75,7 @@ function VideoViewer(props: Props) {
   const videoRef = useRef();
   const isAudio = contentType.includes('audio');
   const embedded = useContext(EmbedContext);
+
   if (embedded && !autoplayParam) {
     VIDEO_JS_OPTIONS.autoplay = false;
   }
@@ -248,6 +250,12 @@ function VideoViewer(props: Props) {
       }
     };
   }, [player]);
+
+  useEffect(() => {
+    if (player && position) {
+      player.currentTime(position);
+    }
+  }, [player, position]);
 
   return (
     <div className="file-render__viewer" onContextMenu={stopContextMenu}>

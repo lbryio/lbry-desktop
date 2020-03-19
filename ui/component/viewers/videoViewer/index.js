@@ -3,7 +3,6 @@ import { makeSelectClaimForUri, makeSelectFileInfoForUri, makeSelectThumbnailFor
 import { doChangeVolume, doChangeMute } from 'redux/actions/app';
 import { selectVolume, selectMute } from 'redux/selectors/app';
 import { savePosition, doSetPlayingUri } from 'redux/actions/content';
-import { makeSelectContentPositionForUri } from 'redux/selectors/content';
 import VideoViewer from './view';
 import { withRouter } from 'react-router';
 
@@ -11,11 +10,13 @@ const select = (state, props) => {
   const { search } = props.location;
   const urlParams = new URLSearchParams(search);
   const autoplay = urlParams.get('autoplay');
+  const position = urlParams.get('t');
+
   return {
     autoplayParam: autoplay,
     volume: selectVolume(state),
-    position: makeSelectContentPositionForUri(props.uri)(state),
     muted: selectMute(state),
+    position: position,
     hasFileInfo: Boolean(makeSelectFileInfoForUri(props.uri)(state)),
     thumbnail: makeSelectThumbnailForUri(props.uri)(state),
     claim: makeSelectClaimForUri(props.uri)(state),
@@ -29,9 +30,4 @@ const perform = dispatch => ({
   setPlayingUri: uri => dispatch(doSetPlayingUri(uri)),
 });
 
-export default withRouter(
-  connect(
-    select,
-    perform
-  )(VideoViewer)
-);
+export default withRouter(connect(select, perform)(VideoViewer));
