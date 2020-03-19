@@ -103,25 +103,27 @@ export default function ClaimList(props: Props) {
       {header !== false && (
         <React.Fragment>
           {headerLabel && <label className="claim-list__header-label">{headerLabel}</label>}
-          <div className={classnames('claim-list__header', { 'section__title--small': type === 'small' })}>
-            {header}
-            {loading && <Spinner type="small" />}
-            <div className="claim-list__alt-controls">
-              {headerAltControls}
-              {defaultSort && (
-                <FormField
-                  className="claim-list__dropdown"
-                  type="select"
-                  name="file_sort"
-                  value={currentSort}
-                  onChange={handleSortChange}
-                >
-                  <option value={SORT_NEW}>{__('Newest First')}</option>
-                  <option value={SORT_OLD}>{__('Oldest First')}</option>
-                </FormField>
-              )}
+          {header && (
+            <div className={classnames('claim-list__header', { 'section__title--small': type === 'small' })}>
+              {header}
+              {loading && <Spinner type="small" />}
+              <div className="claim-list__alt-controls">
+                {headerAltControls}
+                {defaultSort && (
+                  <FormField
+                    className="claim-list__dropdown"
+                    type="select"
+                    name="file_sort"
+                    value={currentSort}
+                    onChange={handleSortChange}
+                  >
+                    <option value={SORT_NEW}>{__('Newest First')}</option>
+                    <option value={SORT_OLD}>{__('Oldest First')}</option>
+                  </FormField>
+                )}
+              </div>
             </div>
-          </div>
+          )}
         </React.Fragment>
       )}
 

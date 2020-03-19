@@ -23,7 +23,7 @@ type Props = {
   doToggleTagFollowDesktop: string => void,
   meta?: Node,
   showNsfw: boolean,
-  showReposts: boolean,
+  // showReposts: boolean,
   history: { action: string, push: string => void, replace: string => void },
   location: { search: string, pathname: string },
   claimSearchByQuery: {
@@ -49,6 +49,7 @@ type Props = {
   defaultStreamType?: string | Array<string>,
   renderProperties?: Claim => Node,
   includeSupportAction?: boolean,
+  repostedClaimId?: string,
   pageSize?: number,
   followedTags?: Array<Tag>,
 };
@@ -83,6 +84,7 @@ function ClaimListDiscover(props: Props) {
     defaultFreshness = CS.FRESH_WEEK,
     renderProperties,
     includeSupportAction,
+    repostedClaimId,
     hideFilter,
     followedTags,
   } = props;
@@ -121,7 +123,7 @@ function ClaimListDiscover(props: Props) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const options: {
+  let options: {
     page_size: number,
     page: number,
     no_totals: boolean,
@@ -134,6 +136,7 @@ function ClaimListDiscover(props: Props) {
     claim_type?: Array<string>,
     name?: string,
     duration?: string,
+    reposted_claim_id: string,
     stream_types?: any,
   } = {
     page_size: pageSize || CS.PAGE_SIZE,
@@ -155,6 +158,12 @@ function ClaimListDiscover(props: Props) {
         ? CS.ORDER_BY_NEW_VALUE
         : CS.ORDER_BY_TOP_VALUE, // Sort by top
   };
+
+  if (repostedClaimId) {
+    // SDK chokes on reposted_claim_id of null or false, needs to not be present if no value
+    options.reposted_claim_id = repostedClaimId;
+  }
+
   if (orderParam === CS.ORDER_BY_TOP && freshnessParam !== CS.FRESH_ALL) {
     options.release_time = `>${Math.floor(
       moment()
@@ -364,7 +373,7 @@ function ClaimListDiscover(props: Props) {
     }
   }, [doClaimSearch, shouldPerformSearch, optionsStringForEffect, forceRefresh]);
 
-  const defaultHeader = (
+  const defaultHeader = repostedClaimId ? null : (
     <Fragment>
       <div className={'claim-search__wrapper'}>
         <div className={'claim-search__top'}>
