@@ -13,6 +13,8 @@ import * as CS from 'constants/claim_search';
 type Props = {
   location: { search: string },
   followedTags: Array<Tag>,
+  repostedUri: string,
+  repostedClaim: ?GenericClaim,
   doToggleTagFollowDesktop: string => void,
 };
 
@@ -20,6 +22,8 @@ function TagsPage(props: Props) {
   const {
     location: { search },
     followedTags,
+    repostedClaim,
+    repostedUri,
     doToggleTagFollowDesktop,
   } = props;
   const buttonRef = useRef();
@@ -29,6 +33,7 @@ function TagsPage(props: Props) {
   const claimType = urlParams.get('claim_type');
   const tagsQuery = urlParams.get('t') || null;
   const tags = tagsQuery ? tagsQuery.split(',') : null;
+
   // Eventually allow more than one tag on this page
   // Restricting to one to make follow/unfollow simpler
   const tag = (tags && tags[0]) || null;
@@ -48,27 +53,33 @@ function TagsPage(props: Props) {
     }
   }
 
+  let headerLabel;
+  if (repostedClaim) {
+    headerLabel = __('Reposts of %uri%', { uri: repostedUri });
+  } else if (tag) {
+    headerLabel = (
+      <span>
+        <Icon icon={ICONS.TAG} size={10} />
+        {tag}
+      </span>
+    );
+  } else {
+    headerLabel = (
+      <span>
+        <Icon icon={ICONS.DISCOVER} size={10} />
+        {__('All Content')}
+      </span>
+    );
+  }
+
   return (
     <Page>
       <ClaimListDiscover
         claimType={claimType ? [claimType] : undefined}
-        headerLabel={
-          tag ? (
-            <span>
-              <Icon icon={ICONS.TAG} size={10} />
-              {(tag === CS.TAGS_ALL && __('All Content')) ||
-                (tag === CS.TAGS_FOLLOWED && __('Followed Tags')) ||
-                __(tag)}
-            </span>
-          ) : (
-            <span>
-              <Icon icon={ICONS.DISCOVER} size={10} />
-              {__('All Content')}
-            </span>
-          )
-        }
-        defaultTags={CS.TAGS_ALL}
+        headerLabel={headerLabel}
+        tags={tags}
         hiddenNsfwMessage={<HiddenNsfw type="page" />}
+        repostedClaimId={repostedClaim ? repostedClaim.claim_id : null}
         meta={
           tag && (
             <Button
