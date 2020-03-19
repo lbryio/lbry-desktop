@@ -160,10 +160,9 @@ $metadata-z-index: 1;
 
 .channel__list-item {
   display: flex;
+  align-items: center;
   background-color: var(--color-card-background);
   padding: var(--spacing-small);
-  align-items: center;
-
   border-bottom: 1px solid var(--color-border);
 
   .channel-thumbnail {

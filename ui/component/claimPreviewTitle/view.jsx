@@ -10,6 +10,7 @@ type Props = {
 
 function ClaimPreviewTitle(props: Props) {
   const { title, claim } = props;
+
   return (
     <div className="claim-preview__title">
       {claim ? <TruncatedText text={title || claim.name} lines={2} /> : <span>{__('Nothing here')}</span>}

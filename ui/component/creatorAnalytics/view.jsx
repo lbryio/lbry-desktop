@@ -19,7 +19,7 @@ type Props = {
   prepareEdit: string => void,
 };
 
-export default function CreatorDashboardPage(props: Props) {
+export default function CreatorAnalytics(props: Props) {
   const { channels, prepareEdit } = props;
   const history = useHistory();
   const [stats, setStats] = React.useState();
@@ -104,7 +104,10 @@ export default function CreatorDashboardPage(props: Props) {
               subtitle={
                 <div className="card__data-subtitle">
                   <span>
-                    {stats.ChannelSubChange > 0 ? '+' : '-'} {stats.ChannelSubChange || 0} this week
+                    {stats.ChannelSubChange > 0 ? '+' : '-'}{' '}
+                    {__('%follower_count_weekly_change% this week', {
+                      follower_count_weekly_change: stats.ChannelSubChange || 0,
+                    })}
                   </span>
                   {stats.ChannelSubChange > 0 && <Icon icon={ICONS.SUPPORT} iconColor="green" size={18} />}
                 </div>
@@ -112,33 +115,36 @@ export default function CreatorDashboardPage(props: Props) {
             />
             <Card
               icon={ICONS.EYE}
-              title={<span>{stats.AllContentViews} views</span>}
-              subtitle={<span>{stats.AllContentViewsChange || 0} this week</span>}
+              title={<span>{__('%all_content_views% views', { all_content_views: stats.AllContentViews })}</span>}
+              subtitle={
+                <span>
+                  {__('%all_content_views_weekly_change% this week', {
+                    all_content_views_weekly_change: stats.AllContentViewsChange || 0,
+                  })}
+                </span>
+              }
             />
           </div>
 
           <Card
             title={
               <div className="card__data-subtitle">
-                <span>Most Viewed Claim</span>
+                <span>{__('Most Viewed Claim')}</span>
               </div>
             }
             body={
               <React.Fragment>
                 <div className="card--inline">
-                  <ClaimPreview
-                    uri={stats.VideoURITopAllTime}
-                    properties={
-                      <div className="section__subtitle card__data-subtitle">
-                        <span>
-                          {stats.VideoViewsTopAllTime} views - {stats.VideoViewChangeTopAllTime} this week
-                        </span>
-                        {stats.VideoViewChangeTopAllTime > 0 && (
-                          <Icon icon={ICONS.SUPPORT} iconColor="green" size={18} />
-                        )}
-                      </div>
-                    }
-                  />
+                  <ClaimPreview uri={stats.VideoURITopAllTime} />
+                </div>
+                <div className="section__subtitle card__data-subtitle">
+                  <span>
+                    {__('%all_time_top_views% views - %all_time_views_weekly_change% this week', {
+                      all_time_top_views: stats.VideoViewsTopAllTime,
+                      all_time_views_weekly_change: stats.VideoViewChangeTopAllTime,
+                    })}
+                  </span>
+                  {stats.VideoViewChangeTopAllTime > 0 && <Icon icon={ICONS.SUPPORT} iconColor="green" size={18} />}
                 </div>
               </React.Fragment>
             }
