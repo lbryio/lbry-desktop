@@ -4,7 +4,25 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
-## [0.43.4] - [Unreleased]
+## [0.44.0] - [Unreleased]
+
+### Added
+
+- Display repost count on file pages with link to all reposts of that claim ([#3862](https://github.com/lbryio/lbry-desktop/pull/3862))
+- New creator analytics dashboard ([#3857](https://github.com/lbryio/lbry-desktop/pull/3857))
+- Better confirmation before deleting channels ([#3835](https://github.com/lbryio/lbry-desktop/pull/3835))
+- More claim information on file and channel pages ([#3831](https://github.com/lbryio/lbry-desktop/pull/3831))
+
+### Changed
+
+- Add sign out confirmation modal on desktop to explain potential issues with signing into a new account ([#3837](https://github.com/lbryio/lbry-desktop/pull/3837))
+
+### Fixed
+
+- Show proper error message when thumbnail upload fails ([#3837](https://github.com/lbryio/lbry-desktop/pull/3837))
+- Don't show reward verification screen again if you click "skip" when viewing it ([#3809](https://github.com/lbryio/lbry-desktop/pull/3809))
+
+## [0.43.4] - [2020-03-10]
 
 ### Changed
 
