@@ -108,7 +108,7 @@ export default function CreatorAnalytics(props: Props) {
               subtitle={
                 <div className="card__data-subtitle">
                   <span>
-                    {stats.ChannelSubChange > 0 ? '+' : '-'}{' '}
+                    {0 > -1 && '+'}{' '}
                     {__('%follower_count_weekly_change% this week', {
                       follower_count_weekly_change: stats.ChannelSubChange || 0,
                     })}
@@ -121,11 +121,14 @@ export default function CreatorAnalytics(props: Props) {
               icon={ICONS.EYE}
               title={<span>{__('%all_content_views% views', { all_content_views: stats.AllContentViews })}</span>}
               subtitle={
-                <span>
-                  {__('%all_content_views_weekly_change% this week', {
-                    all_content_views_weekly_change: stats.AllContentViewsChange || 0,
-                  })}
-                </span>
+                <div className="card__data-subtitle">
+                  <span>
+                    {__('+ %all_content_views_weekly_change% this week', {
+                      all_content_views_weekly_change: stats.AllContentViewChange || 0,
+                    })}
+                  </span>
+                  {stats.AllContentViewChange > 0 && <Icon icon={ICONS.SUPPORT} iconColor="green" size={18} />}
+                </div>
               }
             />
           </div>
