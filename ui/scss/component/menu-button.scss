@@ -1,4 +1,4 @@
-Pmenu// Extends reach-ui menu button base stylesheet
+// Extends reach-ui menu button base stylesheet
 /* Used to detect in JavaScript if apps have loaded styles or not. */
 :root {
   --reach-menu-button: 1;
@@ -76,7 +76,6 @@ Pmenu// Extends reach-ui menu button base stylesheet
 
   .badge {
     margin-left: var(--spacing-small);
-    margin-bottom: 5px;
   }
 }
 
