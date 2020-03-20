@@ -105,6 +105,7 @@ export function CommentCreate(props: Props) {
         value={commentValue}
         charCount={charCount}
         onChange={handleCommentChange}
+        autoFocus={isReply}
       />
       <div className="section__actions">
         <Button
