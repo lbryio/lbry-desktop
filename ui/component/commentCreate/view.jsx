@@ -99,7 +99,7 @@ export function CommentCreate(props: Props) {
         disabled={channel === CHANNEL_NEW}
         type="textarea"
         name="content_description"
-        label={__('Comment')}
+        label={isReply ? __('Replying as %reply_channel%', { reply_channel: channel }) : __('Comment')}
         onFocus={onTextareaFocus}
         placeholder={__('Say something about this...')}
         value={commentValue}

@@ -119,6 +119,11 @@ a {
   -webkit-user-drag: none;
 }
 
+img {
+  // Hide alt text when an image fails to load
+  text-indent: -9999px;
+}
+
 .columns {
   display: flex;
   justify-content: space-between;
