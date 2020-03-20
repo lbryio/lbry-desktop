@@ -136,7 +136,7 @@ export default function CreatorAnalytics(props: Props) {
           <Card
             title={
               <div className="card__data-subtitle">
-                <span>{__('Most Viewed Claim')}</span>
+                <span>{__('Most Viewed Content')}</span>
               </div>
             }
             body={
