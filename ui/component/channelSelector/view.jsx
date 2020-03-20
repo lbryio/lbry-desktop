@@ -46,7 +46,14 @@ function ChannelSelector(props: Props) {
         <MenuList className="menu__list">
           {channels &&
             channels.map(channel => (
-              <MenuItem key={channel.canonical_url} onSelect={() => onChannelSelect(channel.canonical_url)}>
+              <MenuItem
+                key={channel.canonical_url}
+                onSelect={() => {
+                  if (selectedChannelUrl !== channel.canonical_url) {
+                    onChannelSelect(channel.canonical_url);
+                  }
+                }}
+              >
                 <ChannelListItem uri={channel.canonical_url} />
               </MenuItem>
             ))}
