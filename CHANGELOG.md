@@ -8,6 +8,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ### Added
 
+- Comment replies ([#3864](https://github.com/lbryio/lbry-desktop/pull/3864))
 - Display repost count on file pages with link to all reposts of that claim ([#3862](https://github.com/lbryio/lbry-desktop/pull/3862))
 - New creator analytics dashboard ([#3857](https://github.com/lbryio/lbry-desktop/pull/3857))
 - Better confirmation before deleting channels ([#3835](https://github.com/lbryio/lbry-desktop/pull/3835))
