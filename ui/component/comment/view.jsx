@@ -212,7 +212,13 @@ function Comment(props: Props) {
           )}
         </div>
         {!parentId && (
-          <Button button="link" className="comment__reply-button" onClick={handleReply} label={__('Reply')} />
+          <Button
+            button="link"
+            requiresAuth={IS_WEB}
+            className="comment__reply-button"
+            onClick={handleReply}
+            label={__('Reply')}
+          />
         )}
         <div>
           {isReplying ? (
