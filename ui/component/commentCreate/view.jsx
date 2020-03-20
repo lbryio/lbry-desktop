@@ -1,6 +1,7 @@
 // @flow
 import { CHANNEL_NEW } from 'constants/claim';
 import React, { useEffect, useState } from 'react';
+import classnames from 'classnames';
 import { FormField, Form } from 'component/common/form';
 import Button from 'component/button';
 import ChannelSection from 'component/selectChannel';
@@ -13,14 +14,27 @@ type Props = {
   uri: string,
   claim: StreamClaim,
   openModal: (id: string, { onCommentAcknowledge: () => void }) => void,
-  createComment: (string, string, string) => void,
+  createComment: (string, string, string, ?string) => void,
   channels: ?Array<ChannelClaim>,
+  parentId?: string,
+  onDoneReplying?: () => void,
+  onCancelReplying?: () => void,
 };
 
 export function CommentCreate(props: Props) {
-  const { commentingEnabled, createComment, claim, openModal, channels } = props;
+  const {
+    commentingEnabled,
+    createComment,
+    claim,
+    openModal,
+    channels,
+    parentId,
+    onDoneReplying,
+    onCancelReplying,
+  } = props;
   const { claim_id: claimId } = claim;
-  const [commentValue, setCommentValue] = usePersistedState(`comment-${claimId}`, '');
+  const isReply = !!parentId;
+  const [commentValue, setCommentValue] = React.useState('');
   const [commentAck, setCommentAck] = usePersistedState('comment-acknowledge', false);
   const [channel, setChannel] = usePersistedState('comment-channel', '');
   const [charCount, setCharCount] = useState(commentValue.length);
@@ -59,8 +73,13 @@ export function CommentCreate(props: Props) {
   }
 
   function handleSubmit() {
-    if (channel !== CHANNEL_NEW && commentValue.length) createComment(commentValue, claimId, channel);
+    if (channel !== CHANNEL_NEW && commentValue.length) {
+      createComment(commentValue, claimId, channel, parentId);
+    }
     setCommentValue('');
+    if (onDoneReplying) {
+      onDoneReplying();
+    }
   }
 
   useEffect(() => setCharCount(commentValue.length), [commentValue]);
@@ -74,8 +93,8 @@ export function CommentCreate(props: Props) {
   }
 
   return (
-    <Form onSubmit={handleSubmit}>
-      <ChannelSection channel={channel} hideAnon onChannelChange={handleChannelChange} />
+    <Form onSubmit={handleSubmit} className={classnames('comment__create', { 'comment__create--reply': isReply })}>
+      {!isReply && <ChannelSection channel={channel} hideAnon onChannelChange={handleChannelChange} />}
       <FormField
         disabled={channel === CHANNEL_NEW}
         type="textarea"
@@ -92,9 +111,20 @@ export function CommentCreate(props: Props) {
           button="primary"
           disabled={channel === CHANNEL_NEW || !commentValue.length}
           type="submit"
-          label={__('Post')}
+          label={isReply ? __('Reply') : __('Post')}
           requiresAuth={IS_WEB}
         />
+        {isReply && (
+          <Button
+            button="link"
+            label={__('Cancel')}
+            onClick={() => {
+              if (onCancelReplying) {
+                onCancelReplying();
+              }
+            }}
+          />
+        )}
       </div>
     </Form>
   );
