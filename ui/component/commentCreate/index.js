@@ -11,11 +11,9 @@ const select = (state, props) => ({
 });
 
 const perform = dispatch => ({
-  createComment: (comment, claimId, channel) => dispatch(doCommentCreate(comment, claimId, channel)),
+  createComment: (comment, claimId, channel, parentId) =>
+    dispatch(doCommentCreate(comment, claimId, channel, parentId)),
   openModal: (modal, props) => dispatch(doOpenModal(modal, props)),
 });
 
-export default connect(
-  select,
-  perform
-)(CommentCreate);
+export default connect(select, perform)(CommentCreate);

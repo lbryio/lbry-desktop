@@ -10,7 +10,7 @@ import { Menu, MenuList, MenuButton, MenuItem } from '@reach/menu-button';
 import Icon from 'component/common/icon';
 import * as ICONS from 'constants/icons';
 import { FormField, Form } from 'component/common/form';
-import CommentReply from '../commentReply/index';
+import CommentCreate from 'component/commentCreate';
 import classnames from 'classnames';
 
 type Props = {
@@ -161,16 +161,15 @@ function Comment(props: Props) {
                   />
                 </MenuButton>
                 <MenuList className="comment__menu-list">
-                  <MenuItem className="comment__menu-option" onSelect={handleSetEditing}>
-                    {__('Edit')}
-                  </MenuItem>
-                  <MenuItem className="comment__menu-option" onSelect={handleDeleteComment}>
-                    {__('Delete')}
-                  </MenuItem>
-                  {parentId === null ? (
-                    <MenuItem className="comment__menu-option" onSelect={handleReply}>
-                      {__('Reply')}
-                    </MenuItem>
+                  {commentIsMine ? (
+                    <React.Fragment>
+                      <MenuItem className="comment__menu-option" onSelect={handleSetEditing}>
+                        {__('Edit')}
+                      </MenuItem>
+                      <MenuItem className="comment__menu-option" onSelect={handleDeleteComment}>
+                        {__('Delete')}
+                      </MenuItem>
+                    </React.Fragment>
                   ) : (
                     ''
                   )}
@@ -212,7 +211,21 @@ function Comment(props: Props) {
             </div>
           )}
         </div>
-        <div>{isReplying ? <CommentReply uri={uri} parentId={commentId} setReplying={setReplying} /> : ''}</div>
+        {!parentId && (
+          <Button button="link" className="comment__reply-button" onClick={handleReply} label={__('Reply')} />
+        )}
+        <div>
+          {isReplying ? (
+            <CommentCreate
+              uri={uri}
+              parentId={commentId}
+              onDoneReplying={() => setReplying(false)}
+              onCancelReplying={() => setReplying(false)}
+            />
+          ) : (
+            ''
+          )}
+        </div>
       </div>
     </li>
   );
