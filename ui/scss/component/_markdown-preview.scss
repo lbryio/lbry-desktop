@@ -50,6 +50,16 @@
     }
   }
 
+  p,
+  blockquote,
+  dl,
+  ul,
+  ol,
+  pre,
+  table {
+    margin-top: var(--spacing-medium);
+  }
+
   // Tables
   table {
     margin-bottom: 1.2rem;
