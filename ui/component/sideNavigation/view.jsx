@@ -142,6 +142,9 @@ function SideNavigation(props: Props) {
                 ),
               },
               {
+                ...buildLink(PAGES.CREATOR_DASHBOARD, __('Creator Analytics'), ICONS.ANALYTICS),
+              },
+              {
                 ...buildLink(PAGES.WALLET, __('Wallet'), ICONS.WALLET),
               },
               {

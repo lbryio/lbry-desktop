@@ -12,7 +12,7 @@
   margin-right: calc(var(--spacing-xlarge) * 2);
 
   @media (max-width: $breakpoint-small) {
-    height: 10rem;
+    display: none;
   }
 }
 
