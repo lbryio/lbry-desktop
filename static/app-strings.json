@@ -1065,5 +1065,6 @@
   "Creator Analytics": "Creator Analytics",
   "Channel profile picture": "Channel profile picture",
   "(%count%)": "(%count%)",
-  "Reposts of %uri%": "Reposts of %uri%"
+  "Reposts of %uri%": "Reposts of %uri%",
+  "A backup of your wallet is synced with lbry.tv.": "A backup of your wallet is synced with lbry.tv."
 }

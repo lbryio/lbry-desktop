@@ -4,6 +4,7 @@ import * as icons from 'constants/icons';
 import * as React from 'react';
 // @if TARGET='app'
 import { shell } from 'electron';
+import WalletBackup from 'component/walletBackup';
 // @endif
 import { Lbry } from 'lbry-redux';
 import Native from 'native';
@@ -198,6 +199,7 @@ class HelpPage extends React.PureComponent<Props, State> {
           }
         />
 
+        <WalletBackup />
         {/* @endif */}
 
         <section className="card">
