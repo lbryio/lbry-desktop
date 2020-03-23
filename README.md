@@ -4,7 +4,6 @@
 
 <h1 align=center>LBRY App - https://lbry.tv/</h1>
 
-
 <h2 align=center>
   <a href="https://github.com/lbryio/lbry-desktop/blob/master/LICENSE" title="MIT licensed">
     <img alt="npm" src="https://img.shields.io/dub/l/vibe-d.svg?style=flat">
@@ -65,10 +64,10 @@ To install from source or make changes to the application, continue to the next 
 **Community maintained** builds for Arch Linux and Flatpak are available, see below. These installs will need to be updated manually as the in-app update process only supports Debian installs at this time.
 _Note: If coming from a deb install, the directory structure is different and you'll need to [migrate data](https://lbry.com/faq/backup-data)._
 
-|                | Flatpak                                                                   | Arch                                                                                      | Raspberry Pi                                |
-| -------------- | ------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------- | ------------------------------------------- |
-| Latest Release | [FlatHub Page](https://flathub.org/apps/details/io.lbry.lbry-app)         | [AUR Package](https://aur.archlinux.org/packages/lbry-app-bin/)                           | [Pi Installer](https://lbrypi.com)          |
-| Maintainers    | [@kcSeb](https://keybase.io/kcseb) | [@kcSeb](https://keybase.io/kcseb)/[@TimurKiyivinski](https://github.com/TimurKiyivinski) | [@Madiator2011](https://github.com/kodxana) |
+|                | Flatpak                                                           | Arch                                                                                      | Raspberry Pi                                |
+| -------------- | ----------------------------------------------------------------- | ----------------------------------------------------------------------------------------- | ------------------------------------------- |
+| Latest Release | [FlatHub Page](https://flathub.org/apps/details/io.lbry.lbry-app) | [AUR Package](https://aur.archlinux.org/packages/lbry-app-bin/)                           | [Pi Installer](https://lbrypi.com)          |
+| Maintainers    | [@kcSeb](https://keybase.io/kcseb)                                | [@kcSeb](https://keybase.io/kcseb)/[@TimurKiyivinski](https://github.com/TimurKiyivinski) | [@Madiator2011](https://github.com/kodxana) |
 
 ## Usage
 
@@ -90,12 +89,14 @@ You can run the web version (lbry.tv), the electron app, or both at the same tim
 
 #### Run the electron app
 
+`yarn compile:electron` (this is only needed the first time you run the app)
 `yarn dev`
 
 - If you want to build and launch the production app you can run `yarn build`. This will give you an executable inside the `/dist` folder. We use [electron-builder](https://github.com/electron-userland/electron-builder) to create distributable packages.
 
 #### Run the web app
 
+`yarn compile:web` (this is only needed the first time you run the app)
 `yarn dev:web`
 
 - This uses webpack-dev-server and includes hot-reloading. If you want to debug the [web server we use in production](https://github.com/lbryio/lbry-desktop/blob/master/src/platforms/web/server.js) you can run `yarn dev:web-server`. This starts a server at `localhost:1337` and does not include hot reloading.
