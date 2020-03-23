@@ -54,9 +54,6 @@ function SideNavigation(props: Props) {
       case `/$/${PAGES.TAGS_FOLLOWING}`:
         return SHOW_TAGS;
 
-      case `/$/${PAGES.DISCOVER}`:
-        return null;
-
       default:
         return sideInformation;
     }
