@@ -132,7 +132,9 @@
 
 .vjs-paused .vjs-big-play-button,
 .vjs-paused.vjs-has-started .vjs-big-play-button {
-  display: block;
+  @media (max-width: $breakpoint-small) {
+    display: block;
+  }
 }
 
 .file-render {
