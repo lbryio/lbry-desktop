@@ -90,6 +90,7 @@ You can run the web version (lbry.tv), the electron app, or both at the same tim
 #### Run the electron app
 
 `yarn compile:electron` (this is only needed the first time you run the app)
+
 `yarn dev`
 
 - If you want to build and launch the production app you can run `yarn build`. This will give you an executable inside the `/dist` folder. We use [electron-builder](https://github.com/electron-userland/electron-builder) to create distributable packages.
@@ -97,6 +98,7 @@ You can run the web version (lbry.tv), the electron app, or both at the same tim
 #### Run the web app
 
 `yarn compile:web` (this is only needed the first time you run the app)
+
 `yarn dev:web`
 
 - This uses webpack-dev-server and includes hot-reloading. If you want to debug the [web server we use in production](https://github.com/lbryio/lbry-desktop/blob/master/src/platforms/web/server.js) you can run `yarn dev:web-server`. This starts a server at `localhost:1337` and does not include hot reloading.
