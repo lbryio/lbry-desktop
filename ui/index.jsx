@@ -53,7 +53,8 @@ if (process.env.NODE_ENV === 'production') {
 }
 
 const PROXY_PATH = 'api/v1/proxy';
-export const SDK_API_URL = `${process.env.SDK_API_URL}/${PROXY_PATH}` || `https://api.lbry.tv/${PROXY_PATH}`;
+export const SDK_HOST = `${process.env.SDK_API_URL}` || `https://api.lbry.tv`;
+export const SDK_API_URL = `${SDK_HOST}/${PROXY_PATH}`;
 
 Lbry.setDaemonConnectionString(SDK_API_URL);
 
