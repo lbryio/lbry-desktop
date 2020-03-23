@@ -3,6 +3,7 @@ import { Lbryio } from 'lbryinc';
 import ReactGA from 'react-ga';
 import * as Sentry from '@sentry/browser';
 import { history } from './store';
+import { SDK_HOST } from './index';
 // @if TARGET='app'
 import Native from 'native';
 import ElectronCookies from '@exponent/electron-cookies';
@@ -180,9 +181,11 @@ const analytics: Analytics = {
   },
   videoStartEvent: (claimId, duration) => {
     sendGaTimingEvent('Media', 'TimeToStart', Number((duration * 1000).toFixed(0)), claimId);
+    sendPromMetric('time_to_start', duration);
   },
   videoBufferEvent: (claimId, currentTime) => {
     sendGaTimingEvent('Media', 'BufferTimestamp', currentTime * 1000, claimId);
+    sendPromMetric('buffer');
   },
   tagFollowEvent: (tag, following, location) => {
     sendGaEvent(following ? 'Tag-Follow' : 'Tag-Unfollow', tag);
@@ -239,6 +242,15 @@ function sendGaTimingEvent(category: string, action: string, timeInMs: number, l
       },
       [SECOND_TRACKER_NAME]
     );
+  }
+}
+
+function sendPromMetric(name: string, value?: number) {
+  if (IS_WEB) {
+    let url = new URL(SDK_HOST + '/internal/ui_metric');
+    const params = { name: name, value: value ? value.toString() : '' };
+    url.search = new URLSearchParams(params).toString();
+    return fetch(url);
   }
 }
 
