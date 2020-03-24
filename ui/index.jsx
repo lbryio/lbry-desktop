@@ -52,15 +52,11 @@ if (process.env.NODE_ENV === 'production') {
   });
 }
 
-if (process.env.SDK_API_URL) {
-  console.warn('SDK_API_URL env var is deprecated. Use sdkAPIHost instead');
-}
+const PROXY_PATH = 'api/v1/proxy';
+export const SDK_HOST = `${process.env.SDK_API_URL}` || `https://api.lbry.tv`;
+export const SDK_API_URL = `${SDK_HOST}/${PROXY_PATH}`;
 
-const sdkAPIHost = `${process.env.SDK_API_HOST}` || `${process.env.SDK_API_URL}` || `https://api.lbry.tv`;
-export const SDK_API_PATH = `${sdkAPIHost}/api/v1`;
-const proxyURL = `${SDK_API_PATH}/proxy`;
-
-Lbry.setDaemonConnectionString(proxyURL);
+Lbry.setDaemonConnectionString(SDK_API_URL);
 
 Lbry.setOverride(
   'publish',
@@ -68,7 +64,7 @@ Lbry.setOverride(
     new Promise((resolve, reject) => {
       apiPublishCallViaWeb(
         apiCall,
-        proxyURL,
+        SDK_API_URL,
         Lbry.getApiRequestHeaders() && Object.keys(Lbry.getApiRequestHeaders()).includes(X_LBRY_AUTH_TOKEN)
           ? Lbry.getApiRequestHeaders()[X_LBRY_AUTH_TOKEN]
           : '',
