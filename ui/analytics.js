@@ -3,7 +3,7 @@ import { Lbryio } from 'lbryinc';
 import ReactGA from 'react-ga';
 import * as Sentry from '@sentry/browser';
 import { history } from './store';
-import { SDK_HOST } from './index';
+import { SDK_API_PATH } from './index';
 // @if TARGET='app'
 import Native from 'native';
 import ElectronCookies from '@exponent/electron-cookies';
@@ -247,7 +247,7 @@ function sendGaTimingEvent(category: string, action: string, timeInMs: number, l
 
 function sendPromMetric(name: string, value?: number) {
   if (IS_WEB) {
-    let url = new URL(SDK_HOST + '/internal/ui_metric');
+    let url = new URL(SDK_API_PATH + '/metric/ui');
     const params = { name: name, value: value ? value.toString() : '' };
     url.search = new URLSearchParams(params).toString();
     return fetch(url);
