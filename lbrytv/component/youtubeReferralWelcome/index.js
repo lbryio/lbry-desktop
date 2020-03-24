@@ -7,9 +7,6 @@ const select = state => ({
   user: selectUser(state),
 });
 
-export default connect(
-  select,
-  {
-    doOpenModal,
-  }
-)(YoutubeWelcome);
+export default connect(select, {
+  doOpenModal,
+})(YoutubeWelcome);

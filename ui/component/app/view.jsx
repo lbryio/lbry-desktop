@@ -17,8 +17,8 @@ import Nag from 'component/common/nag';
 import { rewards as REWARDS } from 'lbryinc';
 import usePersistedState from 'effects/use-persisted-state';
 // @if TARGET='web'
-import OpenInAppLink from 'component/openInAppLink';
-import YoutubeWelcome from 'component/youtubeWelcome';
+import OpenInAppLink from 'lbrytv/component/openInAppLink';
+import YoutubeWelcome from 'lbrytv/component/youtubeReferralWelcome';
 import NagDegradedPerformance from 'lbrytv/component/nag-degraded-performance';
 import NagDataCollection from 'lbrytv/component/nag-data-collection';
 // @endif
