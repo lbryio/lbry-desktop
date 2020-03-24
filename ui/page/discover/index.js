@@ -6,7 +6,8 @@ import Tags from './view';
 
 const select = (state, props) => {
   const urlParams = new URLSearchParams(props.location.search);
-  const repostedUri = decodeURIComponent(urlParams.get(CS.REPOSTED_URI_KEY));
+  const repostedUriInUrl = urlParams.get(CS.REPOSTED_URI_KEY);
+  const repostedUri = repostedUriInUrl ? decodeURIComponent(repostedUriInUrl) : undefined;
 
   return {
     followedTags: selectFollowedTags(state),
