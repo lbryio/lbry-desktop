@@ -27,6 +27,8 @@ import {
   doFetchDaemonSettings,
   doSetAutoLaunch,
   //  doSetDaemonSetting
+  doFindFFmpeg,
+  doGetDaemonStatus,
 } from 'redux/actions/settings';
 import {
   selectIsUpgradeSkipped,
@@ -347,6 +349,8 @@ export function doDaemonReady() {
     // @if TARGET='app'
     dispatch(doBalanceSubscribe());
     dispatch(doSetAutoLaunch());
+    dispatch(doFindFFmpeg());
+    dispatch(doGetDaemonStatus());
     dispatch(doFetchDaemonSettings());
     dispatch(doFetchFileInfosAndPublishedClaims());
     if (!selectIsUpgradeSkipped(state)) {

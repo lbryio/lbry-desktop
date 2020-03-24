@@ -14,6 +14,16 @@ export const selectDaemonStatus = createSelector(
   state => state.daemonStatus
 );
 
+export const selectFfmpegStatus = createSelector(
+  selectDaemonStatus,
+  status => status.ffmpeg_status
+);
+
+export const selectFindingFFmpeg = createSelector(
+  selectState,
+  state => state.findingFFmpeg || false
+);
+
 export const selectClientSettings = createSelector(
   selectState,
   state => state.clientSettings || {}
@@ -62,8 +72,7 @@ export const makeSelectSharedPreferencesForKey = key =>
 export const selectHasWalletServerPrefs = createSelector(
   makeSelectSharedPreferencesForKey(SHARED_PREFERENCES.WALLET_SERVERS),
   servers => {
-    if (servers && servers.length) return true;
-    return false;
+    return !!(servers && servers.length);
   }
 );
 
