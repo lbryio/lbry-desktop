@@ -136,7 +136,7 @@ function ClaimListDiscover(props: Props) {
     claim_type?: Array<string>,
     name?: string,
     duration?: string,
-    reposted_claim_id: string,
+    reposted_claim_id?: string,
     stream_types?: any,
   } = {
     page_size: pageSize || CS.PAGE_SIZE,
@@ -598,9 +598,13 @@ function ClaimListDiscover(props: Props) {
         hideBlock={hideBlock}
       />
 
-      <div className="card">
-        {loading && new Array(CS.PAGE_SIZE).fill(1).map((x, i) => <ClaimPreview key={i} placeholder="loading" />)}
-      </div>
+      {loading && (
+        <div className="card">
+          {new Array(CS.PAGE_SIZE).fill(1).map((x, i) => (
+            <ClaimPreview key={i} placeholder="loading" />
+          ))}
+        </div>
+      )}
     </React.Fragment>
   );
 }
