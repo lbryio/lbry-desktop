@@ -132,39 +132,15 @@ Lbryio.setOverride(
   'getAuthToken',
   () =>
     new Promise(resolve => {
-      // @if TARGET='app'
-      const desktopAuthTokenToReturn = authToken || getAuthToken();
-
-      if (desktopAuthTokenToReturn) {
-        resolve(desktopAuthTokenToReturn);
-      }
-
-      // Old users who haven't moved to storing the auth_token in a cookie
-      // Get it => set it => delete from keychain
-      ipcRenderer.once('auth-token-response', (event, keychainToken) => {
-        if (keychainToken) {
-          Lbryio.authToken = keychainToken;
-          setAuthToken(keychainToken);
-          resolve(keychainToken);
-          ipcRenderer.send('delete-auth-token');
-        } else {
-          // No auth_token saved anywhere
-          resolve('');
-        }
-      });
-
-      ipcRenderer.send('get-auth-token');
-      // @endif
-
-      // @if TARGET='web'
       const authTokenToReturn = authToken || getAuthToken();
 
+      // @if TARGET='web'
       if (authTokenToReturn !== null) {
         Lbry.setApiHeader(X_LBRY_AUTH_TOKEN, authTokenToReturn);
       }
+      // @endif
 
       resolve(authTokenToReturn);
-      // @endif
     })
 );
 
