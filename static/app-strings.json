@@ -1066,5 +1066,10 @@
   "Channel profile picture": "Channel profile picture",
   "(%count%)": "(%count%)",
   "Reposts of %uri%": "Reposts of %uri%",
-  "A backup of your wallet is synced with lbry.tv.": "A backup of your wallet is synced with lbry.tv."
+  "A backup of your wallet is synced with lbry.tv.": "A backup of your wallet is synced with lbry.tv.",
+  "Tag Selection": "Tag Selection",
+  "Select some tags to help us show you interesting things.": "Select some tags to help us show you interesting things.",
+  "You are currently following %followingCount% tags": "You are currently following %followingCount% tags",
+  "Back": "Back",
+  "Nice! You are currently following %followingCount% creators": "Nice! You are currently following %followingCount% creators"
 }
