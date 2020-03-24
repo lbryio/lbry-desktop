@@ -16,15 +16,17 @@ type Props = {
   repostedUri: string,
   repostedClaim: ?GenericClaim,
   doToggleTagFollowDesktop: string => void,
+  doResolveUri: string => void,
 };
 
-function TagsPage(props: Props) {
+function DiscoverPage(props: Props) {
   const {
     location: { search },
     followedTags,
     repostedClaim,
     repostedUri,
     doToggleTagFollowDesktop,
+    doResolveUri,
   } = props;
   const buttonRef = useRef();
   const isHovering = useHover(buttonRef);
@@ -33,6 +35,7 @@ function TagsPage(props: Props) {
   const claimType = urlParams.get('claim_type');
   const tagsQuery = urlParams.get('t') || null;
   const tags = tagsQuery ? tagsQuery.split(',') : null;
+  const repostedClaimIsResolved = repostedUri && repostedClaim;
 
   // Eventually allow more than one tag on this page
   // Restricting to one to make follow/unfollow simpler
@@ -43,6 +46,12 @@ function TagsPage(props: Props) {
   if (isHovering && isFollowing) {
     label = __('Unfollow');
   }
+
+  React.useEffect(() => {
+    if (repostedUri && !repostedClaimIsResolved) {
+      doResolveUri(repostedUri);
+    }
+  }, [repostedUri, repostedClaimIsResolved, doResolveUri]);
 
   function handleFollowClick() {
     if (tag) {
@@ -98,4 +107,4 @@ function TagsPage(props: Props) {
   );
 }
 
-export default TagsPage;
+export default DiscoverPage;

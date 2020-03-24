@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import { makeSelectClaimForUri, selectFollowedTags } from 'lbry-redux';
+import { makeSelectClaimForUri, selectFollowedTags, doResolveUri } from 'lbry-redux';
 import { doToggleTagFollowDesktop } from 'redux/actions/tags';
 import * as CS from 'constants/claim_search';
 import Tags from './view';
@@ -17,4 +17,5 @@ const select = (state, props) => {
 
 export default connect(select, {
   doToggleTagFollowDesktop,
+  doResolveUri,
 })(Tags);
