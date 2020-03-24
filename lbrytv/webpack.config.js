@@ -93,6 +93,7 @@ const webConfig = {
     modules: [UI_ROOT, __dirname],
 
     alias: {
+      lbryinc: 'lbryinc/dist/bundle.es.js',
       electron: `${WEB_PLATFORM_ROOT}/stubs/electron.js`,
       fs: `${WEB_PLATFORM_ROOT}/stubs/fs.js`,
     },

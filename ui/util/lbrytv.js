@@ -1,4 +1,4 @@
-const { Lbryio } = require('lbryinc');
+const { Lbryio } = require('lbryinc/dist/bundle.es.js');
 const { URL, LBRY_TV_STREAMING_API } = require('../../config');
 const { getCookie, setCookie } = require('../../ui/util/saved-passwords');
 
