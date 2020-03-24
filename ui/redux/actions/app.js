@@ -554,10 +554,15 @@ export function doGetAndPopulatePreferences() {
 
 export function doSyncWithPreferences() {
   return dispatch => {
-    function handleSyncComplete() {
-      // we just got sync data, better update our channels
-      dispatch(doFetchChannelListMine());
-      dispatch(doGetAndPopulatePreferences());
+    function handleSyncComplete(error, hasNewData) {
+      if (!error) {
+        dispatch(doGetAndPopulatePreferences());
+
+        if (hasNewData) {
+          // we just got sync data, better update our channels
+          dispatch(doFetchChannelListMine());
+        }
+      }
     }
 
     return getSavedPassword().then(password => {
