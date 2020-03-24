@@ -14,11 +14,12 @@ settingLanguage.push('en');
 
 const defaultState = {
   isNight: false,
+  findingFFmpeg: false,
   loadedLanguages: [...Object.keys(window.i18n_messages), 'en'] || ['en'],
   customWalletServers: [],
   sharedPreferences: {},
   daemonSettings: {},
-  daemonStatus: {},
+  daemonStatus: { ffmpeg_status: {} },
   clientSettings: {
     // UX
     [SETTINGS.NEW_USER_ACKNOWLEDGED]: false,
@@ -58,6 +59,16 @@ const defaultState = {
     [SETTINGS.AUTO_LAUNCH]: true,
   },
 };
+
+reducers[ACTIONS.FINDING_FFMPEG_STARTED] = state =>
+  Object.assign({}, state, {
+    findingFFmpeg: true,
+  });
+
+reducers[ACTIONS.FINDING_FFMPEG_COMPLETED] = state =>
+  Object.assign({}, state, {
+    findingFFmpeg: false,
+  });
 
 reducers[LBRY_REDUX_ACTIONS.DAEMON_SETTINGS_RECEIVED] = (state, action) =>
   Object.assign({}, state, {

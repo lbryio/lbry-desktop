@@ -22,6 +22,19 @@ export function doFetchDaemonSettings() {
   };
 }
 
+export function doFindFFmpeg() {
+  return dispatch => {
+    dispatch({
+      type: LOCAL_ACTIONS.FINDING_FFMPEG_STARTED,
+    });
+    return Lbry.ffmpeg_find().then(done => {
+      dispatch({
+        type: LOCAL_ACTIONS.FINDING_FFMPEG_COMPLETED,
+      });
+    });
+  };
+}
+
 export function doGetDaemonStatus() {
   return dispatch => {
     return Lbry.status().then(status => {

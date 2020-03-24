@@ -1,7 +1,7 @@
 declare type WebFile = {
   name: string,
   title?: string,
-  path?: string,
+  path: string,
   size: string,
   type: string,
 }

@@ -204,7 +204,8 @@ img {
   display: block;
   font-size: var(--font-small);
   color: var(--color-text-help);
-  margin-top: var(--spacing-small);
+  margin-top: var(--spacing-miniscule);
+  margin-bottom: var(--spacing-small);
 }
 
 .help--warning {

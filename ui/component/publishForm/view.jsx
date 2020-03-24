@@ -143,9 +143,10 @@ function PublishForm(props: Props) {
   return (
     <Fragment>
       <PublishFile disabled={disabled || publishing} inProgress={isInProgress} />
-      <div className={classnames({ 'card--disabled': formDisabled })}>
-        <PublishText disabled={formDisabled} />
-        <Card actions={<SelectThumbnail />} />
+      {!publishing && (
+        <div className={classnames({ 'card--disabled': formDisabled })}>
+          <PublishText disabled={formDisabled} />
+          <Card actions={<SelectThumbnail />} />
 
         <TagsSelect
           suggestMature
@@ -174,40 +175,40 @@ function PublishForm(props: Props) {
           tagsChosen={tags}
         />
 
-        <Card
-          actions={
-            <React.Fragment>
-              <SelectChannel channel={channel} onChannelChange={channel => updatePublishForm({ channel })} />
-              <p className="help">
-                {__('This is a username or handle that your content can be found under.')}{' '}
-                {__('Ex. @Marvel, @TheBeatles, @BooksByJoe')}
-              </p>
-            </React.Fragment>
-          }
-        />
+          <Card
+            actions={
+              <React.Fragment>
+                <SelectChannel channel={channel} onChannelChange={channel => updatePublishForm({ channel })} />
+                <p className="help">
+                  {__('This is a username or handle that your content can be found under.')}{' '}
+                  {__('Ex. @Marvel, @TheBeatles, @BooksByJoe')}
+                </p>
+              </React.Fragment>
+            }
+          />
 
-        <PublishName disabled={formDisabled} />
-        <PublishPrice disabled={formDisabled} />
-        <PublishAdditionalOptions disabled={formDisabled} />
+          <PublishName disabled={formDisabled} />
+          <PublishPrice disabled={formDisabled} />
+          <PublishAdditionalOptions disabled={formDisabled} />
+        </div>
+      )}
+      <section>
+        {!formDisabled && !formValid && <PublishFormErrors />}
 
-        <section>
-          {!formDisabled && !formValid && <PublishFormErrors />}
-
-          <div className="card__actions">
-            <Button
-              button="primary"
-              onClick={() => publish(filePath)}
-              label={submitLabel}
-              disabled={formDisabled || !formValid || uploadThumbnailStatus === THUMBNAIL_STATUSES.IN_PROGRESS}
-            />
-            <Button button="link" onClick={clearPublish} label={__('Cancel')} />
-          </div>
-          <p className="help">
-            {__('By continuing, you accept the')}{' '}
-            <Button button="link" href="https://www.lbry.com/termsofservice" label={__('LBRY Terms of Service')} />.
-          </p>
-        </section>
-      </div>
+        <div className="card__actions">
+          <Button
+            button="primary"
+            onClick={() => publish(filePath)}
+            label={submitLabel}
+            disabled={formDisabled || !formValid || uploadThumbnailStatus === THUMBNAIL_STATUSES.IN_PROGRESS}
+          />
+          <Button button="link" onClick={clearPublish} label={__('Cancel')} />
+        </div>
+        <p className="help">
+          {__('By continuing, you accept the')}{' '}
+          <Button button="link" href="https://www.lbry.com/termsofservice" label={__('LBRY Terms of Service')} />.
+        </p>
+      </section>
     </Fragment>
   );
 }
