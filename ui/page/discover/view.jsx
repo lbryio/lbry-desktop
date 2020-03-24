@@ -1,6 +1,6 @@
 // @flow
 import * as ICONS from 'constants/icons';
-import React, { useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import Page from 'component/page';
 import ClaimListDiscover from 'component/claimListDiscover';
 import Button from 'component/button';
@@ -13,21 +13,31 @@ import * as CS from 'constants/claim_search';
 type Props = {
   location: { search: string },
   followedTags: Array<Tag>,
-  repostedUri: string,
+  isResolvingRepostedUri: boolean,
+  resolveUri: string => void,
+  repostedUri: ?string,
   repostedClaim: ?GenericClaim,
-  doToggleTagFollowDesktop: string => void,
+  toggleTagFollowDesktop: string => void,
 };
 
-function TagsPage(props: Props) {
+function DiscoverPage(props: Props) {
   const {
     location: { search },
     followedTags,
+    isResolvingRepostedUri,
     repostedClaim,
     repostedUri,
-    doToggleTagFollowDesktop,
+    resolveUri,
+    toggleTagFollowDesktop,
   } = props;
   const buttonRef = useRef();
   const isHovering = useHover(buttonRef);
+
+  useEffect(() => {
+    if (resolveUri && !isResolvingRepostedUri && repostedUri && repostedClaim === undefined) {
+      resolveUri(repostedUri);
+    }
+  }, [resolveUri, isResolvingRepostedUri, repostedUri, repostedClaim]);
 
   const urlParams = new URLSearchParams(search);
   const claimType = urlParams.get('claim_type');
@@ -46,7 +56,7 @@ function TagsPage(props: Props) {
 
   function handleFollowClick() {
     if (tag) {
-      doToggleTagFollowDesktop(tag);
+      toggleTagFollowDesktop(tag);
 
       const nowFollowing = !isFollowing;
       analytics.tagFollowEvent(tag, nowFollowing, 'tag-page');
@@ -98,4 +108,4 @@ function TagsPage(props: Props) {
   );
 }
 
-export default TagsPage;
+export default DiscoverPage;
