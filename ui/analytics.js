@@ -250,7 +250,7 @@ function sendPromMetric(name: string, value?: number) {
     let url = new URL(SDK_API_PATH + '/metric/ui');
     const params = { name: name, value: value ? value.toString() : '' };
     url.search = new URLSearchParams(params).toString();
-    return fetch(url);
+    return fetch(url, { method: 'post' });
   }
 }
 
