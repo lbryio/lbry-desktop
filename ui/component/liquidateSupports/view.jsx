@@ -106,19 +106,28 @@ const LiquidateSupports = (props: Props) => {
         <React.Fragment>
           <div className="section">
             <Form onSubmit={handleSubmit}>
+              <label htmlFor="supports_liquidate_range">{__('Amount')}</label>
               <FormField
+                name="supports_liquidate_range"
                 type={'range'}
                 min={0}
                 max={previewBalance * 100} // times 100 to so we're more granular than whole numbers.
                 value={Number(amount) * 100 || (previewBalance * 100) / 4} // by default, set it to 25% of available
                 onChange={e => handleChange(String(e.target.value / 100))}
               />
-              <FormField
-                type="text"
-                value={typeof amount === 'string' ? amount : previewBalance && previewBalance / 4}
-                helper={message}
-                onChange={e => handleChange(e.target.value)}
-              />
+              <label className="range__label">
+                <span>0</span>
+                <span>{previewBalance / 2}</span>
+                <span>{previewBalance}</span>
+              </label>
+              <div className="section">
+                <FormField
+                  type="text"
+                  value={typeof amount === 'string' ? amount : previewBalance && previewBalance / 4}
+                  helper={message}
+                  onChange={e => handleChange(e.target.value)}
+                />
+              </div>
               <div className="section__actions">
                 <Button disabled={error} button="primary" type="submit" label={__('Unlock')} />
               </div>
