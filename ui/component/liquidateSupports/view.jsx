@@ -32,9 +32,10 @@ const LiquidateSupports = (props: Props) => {
   const MESSAGE_NUMBER = __('Amount must be a number');
   const MESSAGE_BLANK = __('Amount cannot be blank');
   const MESSAGE_STAKED = __('Your content will do better with more staked on it');
-  const MESSAGE_MAX = __('Cannot set more than maximum');
+  const MESSAGE_MAX = __('Amount cannot be more than available');
   const MESSAGE_ZERO = __('Amount cannot be zero');
   const MESSAGE_DEFAULT = __('Amount to unlock');
+  const MESSAGE_CLOSE = __(`She's about to close up the library!`);
   useEffect(() => {
     if (claimId && abandonSupportForClaim) {
       abandonSupportForClaim(claimId, false, true).then(r => {
@@ -59,6 +60,10 @@ const LiquidateSupports = (props: Props) => {
       setMessage(MESSAGE_BLANK);
     } else if (Number(a) > previewBalance) {
       setMessage(MESSAGE_MAX);
+      setError(false);
+    } else if (Number(a) === Number(previewBalance)) {
+      setMessage(MESSAGE_CLOSE);
+      setAmount(a);
       setError(false);
     } else if (Number(a) > previewBalance / 2) {
       setMessage(MESSAGE_STAKED);
@@ -87,7 +92,7 @@ const LiquidateSupports = (props: Props) => {
                 <strong>
                   <CreditAmount badge={false} amount={previewBalance || '...'} precision={2} />
                 </strong>{' '}
-                {__('available to liquidate.')}
+                {__('available to unlock.')}
               </h2>
             </div>
           </div>
@@ -102,7 +107,6 @@ const LiquidateSupports = (props: Props) => {
           <div className="section">
             <Form onSubmit={handleSubmit}>
               <FormField
-                label={'Liquidate Amount'}
                 type={'range'}
                 min={0}
                 max={previewBalance * 100} // times 100 to so we're more granular than whole numbers.
@@ -116,7 +120,7 @@ const LiquidateSupports = (props: Props) => {
                 onChange={e => handleChange(e.target.value)}
               />
               <div className="section__actions">
-                <Button disabled={error} button="primary" type="submit" label={__('Liquidate')} />
+                <Button disabled={error} button="primary" type="submit" label={__('Unlock')} />
               </div>
             </Form>
           </div>
