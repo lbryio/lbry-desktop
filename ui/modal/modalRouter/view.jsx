@@ -36,6 +36,7 @@ import ModalMobileNavigation from 'modal/modalMobileNavigation';
 import ModalSetReferrer from 'modal/modalSetReferrer';
 import ModalRepost from 'modal/modalRepost';
 import ModalSignOut from 'modal/modalSignOut';
+import ModalLiquidateSupports from '../modalSupportsLiquidate';
 
 type Props = {
   modal: { id: string, modalProps: {} },
@@ -131,6 +132,8 @@ function ModalRouter(props: Props) {
       return <ModalRepost {...modalProps} />;
     case MODALS.SIGN_OUT:
       return <ModalSignOut {...modalProps} />;
+    case MODALS.LIQUIDATE_SUPPORTS:
+      return <ModalLiquidateSupports {...modalProps} />;
     default:
       return null;
   }
