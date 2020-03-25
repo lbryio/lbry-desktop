@@ -97,6 +97,7 @@ function HomePage(props: Props) {
         options: {
           pageSize: 4,
           tags: [tag.name],
+          claimType: ['stream'],
         },
       }));
       rowData.push(...followedRows);
@@ -108,6 +109,7 @@ function HomePage(props: Props) {
         link: `/$/${PAGES.TAGS_FOLLOWING}`,
         options: {
           tags: followedTags.map(tag => tag.name),
+          claimType: ['stream'],
         },
       });
     }
