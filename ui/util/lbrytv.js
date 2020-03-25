@@ -4,9 +4,9 @@ const { getCookie, setCookie } = require('../../ui/util/saved-passwords');
 
 const CONTINENT_COOKIE = 'continent';
 
-function generateStreamUrl(claimName, claimId, apiUrl) {
+function generateStreamUrl(claimName, claimId, apiUrl, streamingContinent) {
   let prefix = LBRY_TV_STREAMING_API || apiUrl;
-  const continent = getCookie(CONTINENT_COOKIE);
+  const continent = streamingContinent || getCookie(CONTINENT_COOKIE);
 
   if (continent && prefix.split('//').length > 1) {
     prefix = prefix.replace('//', '//' + continent + '.');
@@ -34,10 +34,9 @@ function generateEmbedUrl(claimName, claimId) {
   return `${URL}/$/embed/${claimName}/${claimId}`;
 }
 
-function generateDownloadUrl(claimName, claimId, apiUrl) {
-  const streamUrl = generateStreamUrl(claimName, claimId, apiUrl);
-  return `${streamUrl}?download=1`;
+function generateDownloadUrl(claimName, claimId) {
+  return `/$/download/${claimName}/${claimId}`;
 }
 
 // module.exports needed since the web server imports this function
-module.exports = { generateStreamUrl, generateEmbedUrl, generateDownloadUrl };
+module.exports = { generateStreamUrl, generateEmbedUrl, generateDownloadUrl, CONTINENT_COOKIE };

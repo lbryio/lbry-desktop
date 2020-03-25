@@ -9,6 +9,7 @@ import Button from 'component/button';
 import isUserTyping from 'util/detect-typing';
 import Yrbl from 'component/yrbl';
 import I18nMessage from 'component/i18nMessage';
+import { generateDownloadUrl } from 'util/lbrytv';
 
 const SPACE_BAR_KEYCODE = 32;
 
@@ -61,7 +62,7 @@ export default function FileViewerInitiator(props: Props) {
   const supported = IS_WEB ? (!cost && isStreamable) || webStreamOnly || forceVideo : true;
   const { name, claim_id: claimId, value } = claim;
   const fileName = value && value.source && value.source.name;
-  const downloadUrl = `/$/download/${name}/${claimId}`;
+  const downloadUrl = generateDownloadUrl(name, claimId);
 
   function getTitle() {
     let message = __('Unsupported File');
