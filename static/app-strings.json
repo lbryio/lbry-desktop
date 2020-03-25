@@ -1099,5 +1099,13 @@
   "Unlock Tips": "Unlock Tips",
   "%normalized_uri%": "%normalized_uri%",
   "Top for name": "Top for name",
-  "%name%": "%name%"
+  "%name%": "%name%",
+  "Not top for name": "Not top for name",
+  "Reply": "Reply",
+  "Amount must be a number": "Amount must be a number",
+  "Amount cannot be blank": "Amount cannot be blank",
+  "Your content will do better with more staked on it": "Your content will do better with more staked on it",
+  "Cannot set more than maximum": "Cannot set more than maximum",
+  "Amount cannot be zero": "Amount cannot be zero",
+  "Amount to unlock": "Amount to unlock"
 }

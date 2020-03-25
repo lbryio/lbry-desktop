@@ -28,6 +28,13 @@ const LiquidateSupports = (props: Props) => {
   const keep =
     Number(amount) < previewBalance ? Number.parseFloat(String(previewBalance - Number(amount))).toFixed(8) : false;
   const claimId = claim && claim.claim_id;
+
+  const MESSAGE_NUMBER = __('Amount must be a number');
+  const MESSAGE_BLANK = __('Amount cannot be blank');
+  const MESSAGE_STAKED = __('Your content will do better with more staked on it');
+  const MESSAGE_MAX = __('Cannot set more than maximum');
+  const MESSAGE_ZERO = __('Amount cannot be zero');
+  const MESSAGE_DEFAULT = __('Amount to unlock');
   useEffect(() => {
     if (claimId && abandonSupportForClaim) {
       abandonSupportForClaim(claimId, false, true).then(r => {
@@ -43,23 +50,26 @@ const LiquidateSupports = (props: Props) => {
 
   function handleChange(a) {
     if (a === undefined || isNaN(Number(a))) {
-      setMessage('Amount must be a number');
+      setMessage(MESSAGE_NUMBER);
       setError(true);
       setAmount('');
     } else if (a === '') {
       setAmount('');
       setError(true);
-      setMessage('Amount cannot be blank');
+      setMessage(MESSAGE_BLANK);
+    } else if (Number(a) > previewBalance) {
+      setMessage(MESSAGE_MAX);
+      setError(false);
     } else if (Number(a) > previewBalance / 2) {
-      setMessage('Your content will do better with more staked on it');
+      setMessage(MESSAGE_STAKED);
       setAmount(a);
       setError(false);
     } else if (a === '0') {
-      setMessage('Amount cannot be zero');
+      setMessage(MESSAGE_ZERO);
       setAmount(a);
       setError(true);
     } else {
-      setMessage('Amount to unlock');
+      setMessage(MESSAGE_DEFAULT);
       setAmount(a);
       setError(false);
     }
