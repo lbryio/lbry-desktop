@@ -32,6 +32,9 @@ type Props = {
   blockWrap: boolean,
   charCount?: number,
   textAreaMaxLength?: number,
+  range?: number,
+  min?: number,
+  max?: number,
 };
 
 export class FormField extends React.PureComponent<Props> {
@@ -95,6 +98,13 @@ export class FormField extends React.PureComponent<Props> {
         input = (
           <div className="checkbox">
             <input id={name} type="checkbox" {...inputProps} />
+            <label htmlFor={name}>{label}</label>
+          </div>
+        );
+      } else if (type === 'range') {
+        input = (
+          <div>
+            <input id={name} type="range" {...inputProps} />
             <label htmlFor={name}>{label}</label>
           </div>
         );

@@ -2,9 +2,9 @@
 import React, { Fragment, PureComponent } from 'react';
 import MarkdownPreview from 'component/common/markdown-preview';
 import Button from 'component/button';
-import Expandable from 'component/expandable';
 import path from 'path';
 import ClaimTags from 'component/claimTags';
+import ExpandingContainer from '../expandingContainer/view';
 
 type Props = {
   uri: string,
@@ -42,13 +42,7 @@ class FileDetails extends PureComponent<Props> {
 
     return (
       <Fragment>
-        <Expandable>
-          {description && (
-            <div className="media__info-text">
-              <MarkdownPreview content={description} />
-            </div>
-          )}
-          <ClaimTags uri={uri} type="large" />
+        <ExpandingContainer title={__('File Details')}>
           <table className="table table--condensed table--fixed table--file-details">
             <tbody>
               <tr>
@@ -61,18 +55,6 @@ class FileDetails extends PureComponent<Props> {
                   <td>{fileSize}</td>
                 </tr>
               )}
-              <tr>
-                <td> {__('Bid Amount')}</td>
-                <td>{claim.amount} LBC</td>
-              </tr>
-              <tr>
-                <td> {__('Effective Amount')}</td>
-                <td>{claim.meta.effective_amount} LBC</td>
-              </tr>
-              <tr>
-                <td> {__('Is Controlling')}</td>
-                <td>{claim.meta.is_controlling ? __('Yes') : __('No')}</td>
-              </tr>
               <tr>
                 <td> {__('Claim ID')}</td>
                 <td>{claim.claim_id}</td>
@@ -108,7 +90,13 @@ class FileDetails extends PureComponent<Props> {
               )}
             </tbody>
           </table>
-        </Expandable>
+        </ExpandingContainer>
+        {description && (
+          <div className="media__info-text">
+            <MarkdownPreview content={description} />
+          </div>
+        )}
+        <ClaimTags uri={uri} type="large" />
       </Fragment>
     );
   }

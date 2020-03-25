@@ -1,0 +1,19 @@
+.expanding-details__header {
+  background-color: var(--color-card-background);
+  position: relative;
+  overflow: hidden;
+  padding-left: var(--spacing-small);
+
+  @media (max-width: $breakpoint-small) {
+    margin-bottom: var(--spacing-medium);
+  }
+}
+
+.expanding-details {
+  border: 1px solid var(--color-border);
+}
+
+.expanding-details__body {
+  border-radius: var(--card-radius);
+  padding-left: var(--spacing-small);
+}

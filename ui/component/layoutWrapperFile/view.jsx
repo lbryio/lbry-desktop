@@ -5,6 +5,8 @@ import FileViewerInitiator from 'component/fileViewerInitiator';
 import FileSubtitle from 'component/fileSubtitle';
 import FilePrice from 'component/filePrice';
 import FileDetails from 'component/fileDetails';
+import FileValues from 'component/fileValues';
+
 import FileAuthor from 'component/fileAuthor';
 import FileActions from 'component/fileActions';
 import RecommendedContent from 'component/recommendedContent';
@@ -57,6 +59,9 @@ function LayoutWrapperFile(props: Props) {
 
           <FileAuthor uri={uri} />
 
+          <div className="section">
+            <FileValues uri={uri} />
+          </div>
           <div className="section">
             <FileDetails uri={uri} />
           </div>
