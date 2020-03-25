@@ -7,10 +7,11 @@ import CreditAmount from 'component/common/credit-amount';
 type Props = {
   uri: string,
   claim: StreamClaim,
+  pendingAmount: string,
 };
 
 function FileSubtitle(props: Props) {
-  const { uri, claim } = props;
+  const { uri, claim, pendingAmount } = props;
 
   return (
     <div className="media__subtitle--between">
@@ -18,7 +19,7 @@ function FileSubtitle(props: Props) {
       <span>
         <CreditAmount
           badge={false}
-          amount={parseFloat(claim.amount) + parseFloat(claim.meta.support_amount)}
+          amount={parseFloat(claim.amount) + parseFloat(pendingAmount || claim.meta.support_amount)}
           precision={2}
         />
         {' • ' /* this is bad, but it's quick! */}
