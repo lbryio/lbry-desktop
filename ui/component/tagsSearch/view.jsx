@@ -30,6 +30,7 @@ type Props = {
  */
 
 export default function TagsSearch(props: Props) {
+  const TAG_FOLLOW_MAX = 1000;
   const {
     tagsPassedIn = [],
     unfollowedTags = [],
@@ -43,7 +44,7 @@ export default function TagsSearch(props: Props) {
     placeholder,
     label,
     disabled,
-    limitSelect,
+    limitSelect = TAG_FOLLOW_MAX,
     limitShow = 5,
   } = props;
   const [newTag, setNewTag] = useState('');
@@ -86,7 +87,14 @@ export default function TagsSearch(props: Props) {
 
     setNewTag('');
 
-    const newTagsArr = Array.from(new Set(tags.split(',').map(newTag => newTag.trim().toLowerCase())));
+    const newTagsArr = Array.from(
+      new Set(
+        tags
+          .split(',')
+          .slice(0, limitSelect - countWithoutMature)
+          .map(newTag => newTag.trim().toLowerCase())
+      )
+    );
 
     // Split into individual tags, normalize the tags, and remove duplicates with a set.
     if (onSelect) {
@@ -118,10 +126,10 @@ export default function TagsSearch(props: Props) {
     <React.Fragment>
       <Form className="tags__input-wrapper" onSubmit={handleSubmit}>
         <label>
-          {limitSelect ? (
+          {limitSelect < TAG_FOLLOW_MAX ? (
             <I18nMessage
               tokens={{
-                number: 5 - countWithoutMature,
+                number: limitSelect - countWithoutMature,
                 selectTagsLabel: label,
               }}
             >
