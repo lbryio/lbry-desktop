@@ -37,6 +37,7 @@ function OpenInAppLink(props: Props) {
         isDesktopUser = true;
       }
     });
+
   const isWebUserOnly = !isAndroidUser && !isDesktopUser;
 
   let appLink = uri;
@@ -58,12 +59,12 @@ function OpenInAppLink(props: Props) {
   }, [hasSrcParam, search, pathname, replace]);
 
   React.useEffect(() => {
-    if (hasSrcParam && ((!showNag && isAndroidUser && isAndroidDevice) || (isDesktopUser && isDesktopDevice))) {
+    if ((isAndroidUser && isAndroidDevice) || (isDesktopUser && isDesktopDevice)) {
       setShowNag(true);
     }
-    // Don't pass hasSrcParam into this effect because we only want the initial value
+    // Don't pass showNag into this effect because we only want the initial value
     // If the param is removed from the url, the nag should still be shown
-  }, [showNag, setShowNag, isAndroidUser, isDesktopUser]);
+  }, [setShowNag, isAndroidUser, isDesktopUser]);
 
   if (!showNag || isWebUserOnly) {
     return null;
