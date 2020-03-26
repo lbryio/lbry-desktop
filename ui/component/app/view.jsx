@@ -26,6 +26,7 @@ import {
   useDegradedPerformance,
   STATUS_OK,
   STATUS_DEGRADED,
+  STATUS_FAILING,
   STATUS_DOWN,
 } from 'lbrytv/effects/use-degraded-performance';
 export const MAIN_WRAPPER_CLASS = 'main-wrapper';
@@ -301,7 +302,7 @@ function App(props: Props) {
           {/* @if TARGET='web' */}
           <YoutubeWelcome />
           <OpenInAppLink uri={uri} />
-          {lbryTvApiStatus === STATUS_DEGRADED && (
+          {(lbryTvApiStatus === STATUS_DEGRADED || lbryTvApiStatus === STATUS_FAILING) && (
             <NagDegradedPerformance onClose={() => setLbryTvApiStatus(STATUS_OK)} />
           )}
           {lbryTvApiStatus === STATUS_OK && showAnalyticsNag && !shouldHideNag && (
