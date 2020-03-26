@@ -9,6 +9,7 @@ import analytics from 'analytics';
 import HiddenNsfw from 'component/common/hidden-nsfw';
 import Icon from 'component/common/icon';
 import * as CS from 'constants/claim_search';
+import Ads from 'lbrytv/component/ads';
 
 type Props = {
   location: { search: string },
@@ -17,6 +18,7 @@ type Props = {
   repostedClaim: ?GenericClaim,
   doToggleTagFollowDesktop: string => void,
   doResolveUri: string => void,
+  isAuthenticated: boolean,
 };
 
 function DiscoverPage(props: Props) {
@@ -27,6 +29,7 @@ function DiscoverPage(props: Props) {
     repostedUri,
     doToggleTagFollowDesktop,
     doResolveUri,
+    isAuthenticated,
   } = props;
   const buttonRef = useRef();
   const isHovering = useHover(buttonRef);
@@ -89,6 +92,7 @@ function DiscoverPage(props: Props) {
         tags={tags}
         hiddenNsfwMessage={<HiddenNsfw type="page" />}
         repostedClaimId={repostedClaim ? repostedClaim.claim_id : null}
+        injectedItem={!isAuthenticated && IS_WEB && <Ads type="video" />}
         meta={
           tag && (
             <Button

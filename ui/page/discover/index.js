@@ -1,5 +1,6 @@
 import { connect } from 'react-redux';
 import { makeSelectClaimForUri, selectFollowedTags, doResolveUri } from 'lbry-redux';
+import { selectUserVerifiedEmail } from 'lbryinc';
 import { doToggleTagFollowDesktop } from 'redux/actions/tags';
 import * as CS from 'constants/claim_search';
 import Tags from './view';
@@ -13,6 +14,7 @@ const select = (state, props) => {
     followedTags: selectFollowedTags(state),
     repostedUri: repostedUri,
     repostedClaim: repostedUri ? makeSelectClaimForUri(repostedUri)(state) : null,
+    isAuthenticated: selectUserVerifiedEmail(state),
   };
 };
 

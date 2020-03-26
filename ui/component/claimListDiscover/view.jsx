@@ -52,6 +52,7 @@ type Props = {
   repostedClaimId?: string,
   pageSize?: number,
   followedTags?: Array<Tag>,
+  injectedItem: ?Node,
 };
 
 function ClaimListDiscover(props: Props) {
@@ -87,6 +88,7 @@ function ClaimListDiscover(props: Props) {
     repostedClaimId,
     hideFilter,
     followedTags,
+    injectedItem,
   } = props;
   const didNavigateForward = history.action === 'PUSH';
   const { search } = location;
@@ -596,6 +598,7 @@ function ClaimListDiscover(props: Props) {
         renderProperties={renderProperties}
         includeSupportAction={includeSupportAction}
         hideBlock={hideBlock}
+        injectedItem={injectedItem}
       />
 
       {loading && (

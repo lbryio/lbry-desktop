@@ -2,6 +2,7 @@ import { connect } from 'react-redux';
 import * as SETTINGS from 'constants/settings';
 import { doSearch, selectIsSearching, makeSelectSearchUris, makeSelectQueryWithOptions, doToast } from 'lbry-redux';
 import { makeSelectClientSetting } from 'redux/selectors/settings';
+import { selectUserVerifiedEmail } from 'lbryinc';
 import analytics from 'analytics';
 import SearchPage from './view';
 
@@ -17,6 +18,7 @@ const select = state => {
     isSearching: selectIsSearching(state),
     showNsfw: makeSelectClientSetting(SETTINGS.SHOW_MATURE)(state),
     uris: uris,
+    isAuthenticated: selectUserVerifiedEmail(state),
   };
 };
 
@@ -42,7 +44,4 @@ const perform = dispatch => ({
   },
 });
 
-export default connect(
-  select,
-  perform
-)(SearchPage);
+export default connect(select, perform)(SearchPage);

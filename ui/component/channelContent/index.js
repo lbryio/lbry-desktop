@@ -10,6 +10,7 @@ import {
   makeSelectClaimForUri,
 } from 'lbry-redux';
 import { withRouter } from 'react-router';
+import { selectUserVerifiedEmail } from 'lbryinc';
 import ChannelPage from './view';
 
 const select = (state, props) => {
@@ -23,6 +24,7 @@ const select = (state, props) => {
     channelIsMine: makeSelectClaimIsMine(props.uri)(state),
     channelIsBlocked: selectChannelIsBlocked(props.uri)(state),
     claim: props.uri && makeSelectClaimForUri(props.uri)(state),
+    isAuthenticated: selectUserVerifiedEmail(state),
   };
 };
 
@@ -30,9 +32,4 @@ const perform = dispatch => ({
   fetchClaims: (uri, page) => dispatch(doFetchClaimsByChannel(uri, page)),
 });
 
-export default withRouter(
-  connect(
-    select,
-    perform
-  )(ChannelPage)
-);
+export default withRouter(connect(select, perform)(ChannelPage));
