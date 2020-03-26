@@ -1,6 +1,7 @@
 // @flow
 import React from 'react';
 import ClaimList from 'component/claimList';
+import Ads from 'lbrytv/component/ads';
 
 type Options = {
   related_to: string,
@@ -15,6 +16,7 @@ type Props = {
   isSearching: boolean,
   search: (string, Options) => void,
   mature: boolean,
+  isAuthenticated: boolean,
 };
 
 export default class RecommendedContent extends React.PureComponent<Props> {
@@ -59,13 +61,14 @@ export default class RecommendedContent extends React.PureComponent<Props> {
   didSearch: ?boolean;
 
   render() {
-    const { recommendedContent, isSearching } = this.props;
+    const { recommendedContent, isSearching, isAuthenticated } = this.props;
 
     return (
       <ClaimList
         type="small"
         loading={isSearching}
         uris={recommendedContent}
+        injectedItem={!isAuthenticated && IS_WEB && <Ads type="video" small />}
         header={__('Related')}
         empty={__('No related content found')}
       />

@@ -31,6 +31,7 @@ type Props = {
   renderProperties: ?(Claim) => Node,
   includeSupportAction?: boolean,
   hideBlock: boolean,
+  injectedItem: ?Node,
 };
 
 export default function ClaimList(props: Props) {
@@ -53,6 +54,7 @@ export default function ClaimList(props: Props) {
     renderProperties,
     includeSupportAction,
     hideBlock,
+    injectedItem,
   } = props;
   const [scrollBottomCbMap, setScrollBottomCbMap] = useState({});
   const [currentSort, setCurrentSort] = usePersistedState(persistedStorageKey, SORT_NEW);
@@ -130,26 +132,28 @@ export default function ClaimList(props: Props) {
       {urisLength > 0 && (
         <ul className="card ul--no-style">
           {sortedUris.map((uri, index) => (
-            <ClaimPreview
-              key={uri}
-              uri={uri}
-              type={type}
-              includeSupportAction={includeSupportAction}
-              showUnresolvedClaim={showUnresolvedClaims}
-              properties={renderProperties || (type !== 'small' ? undefined : false)}
-              showUserBlocked={showHiddenByUser}
-              hideBlock={hideBlock}
-              customShouldHide={(claim: StreamClaim) => {
-                // Hack to hide spee.ch thumbnail publishes
-                // If it meets these requirements, it was probably uploaded here:
-                // https://github.com/lbryio/lbry-redux/blob/master/src/redux/actions/publish.js#L74-L79
-                if (claim.name.length === 24 && !claim.name.includes(' ') && claim.value.author === 'Spee.ch') {
-                  return true;
-                } else {
-                  return false;
-                }
-              }}
-            />
+            <React.Fragment key={uri}>
+              {injectedItem && index === 4 && <li>{injectedItem}</li>}
+              <ClaimPreview
+                uri={uri}
+                type={type}
+                includeSupportAction={includeSupportAction}
+                showUnresolvedClaim={showUnresolvedClaims}
+                properties={renderProperties || (type !== 'small' ? undefined : false)}
+                showUserBlocked={showHiddenByUser}
+                hideBlock={hideBlock}
+                customShouldHide={(claim: StreamClaim) => {
+                  // Hack to hide spee.ch thumbnail publishes
+                  // If it meets these requirements, it was probably uploaded here:
+                  // https://github.com/lbryio/lbry-redux/blob/master/src/redux/actions/publish.js#L74-L79
+                  if (claim.name.length === 24 && !claim.name.includes(' ') && claim.value.author === 'Spee.ch') {
+                    return true;
+                  } else {
+                    return false;
+                  }
+                }}
+              />
+            </React.Fragment>
           ))}
         </ul>
       )}
