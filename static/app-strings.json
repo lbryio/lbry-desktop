@@ -1036,7 +1036,6 @@
   "Your video has a bitrate over 5 mbps. We suggest transcoding to provide viewers the best experience.": "Your video has a bitrate over 5 mbps. We suggest transcoding to provide viewers the best experience.",
   "Almost there": "Almost there",
   "More Channels": "More Channels",
-  "Known Tags": "Known Tags",
   "You aren’t blocking any channels": "You aren’t blocking any channels",
   "When you block a channel, all content from that channel will be hidden.": "When you block a channel, all content from that channel will be hidden.",
   "View top claims for %normalized_uri%": "View top claims for %normalized_uri%",
@@ -1077,5 +1076,14 @@
   "Select some tags to help us show you interesting things.": "Select some tags to help us show you interesting things.",
   "You are currently following %followingCount% tags": "You are currently following %followingCount% tags",
   "Back": "Back",
-  "Nice! You are currently following %followingCount% creators": "Nice! You are currently following %followingCount% creators"
+  "Nice! You are currently following %followingCount% creators": "Nice! You are currently following %followingCount% creators",
+  "Experimental Transcoding": "Experimental Transcoding",
+  "A Folder containing FFmpeg": "A Folder containing FFmpeg",
+  "Check again": "Check again",
+  "FFmpeg could not be found. Navigate to it or Install, Then %check_again% or quit and restart the app. %learn_more%": "FFmpeg could not be found. Navigate to it or Install, Then %check_again% or quit and restart the app. %learn_more%",
+  "FFmpeg is correctly configured. %learn_more%": "FFmpeg is correctly configured. %learn_more%",
+  "Finnish": "Finnish",
+  "Kannada": "Kannada",
+  "Transcoding this %size%MB file should take under %processTime% %units%.": "Transcoding this %size%MB file should take under %processTime% %units%.",
+  "FFmpeg not configured. More in %settings_link%.": "FFmpeg not configured. More in %settings_link%."
 }
