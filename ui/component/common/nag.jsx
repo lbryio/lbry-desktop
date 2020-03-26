@@ -21,7 +21,7 @@ export default function Nag(props: Props) {
 
   return (
     <div className={classnames('nag', { 'nag--helpful': type === 'helpful', 'nag--error': type === 'error' })}>
-      {message}
+      <div className="nag__message">{message}</div>
       <Button
         className={classnames('nag__button', {
           'nag__button--helpful': type === 'helpful',

@@ -20,6 +20,10 @@ $nag-error-z-index: 100001;
     color: var(--color-white);
     text-decoration: underline;
   }
+
+  @media (max-width: $breakpoint-small) {
+    text-align: left;
+  }
 }
 
 .nag--helpful {
@@ -34,9 +38,21 @@ $nag-error-z-index: 100001;
   z-index: $nag-error-z-index;
 }
 
+.nag__message {
+  display: inline;
+
+  @media (max-width: $breakpoint-small) {
+    &::after {
+      content: '';
+      display: block;
+    }
+  }
+}
+
 .nag__button {
   line-height: 1;
   margin-left: var(--spacing-small);
+  margin-right: var(--spacing-small);
   border-radius: var(--border-radius);
   border: 1px solid var(--color-white);
   padding: var(--spacing-miniscule);
@@ -46,6 +62,11 @@ $nag-error-z-index: 100001;
   &:hover {
     background-color: var(--color-white);
     color: var(--color-nag);
+  }
+
+  @media (max-width: $breakpoint-small) {
+    margin-left: 0;
+    margin-top: var(--spacing-small);
   }
 }
 

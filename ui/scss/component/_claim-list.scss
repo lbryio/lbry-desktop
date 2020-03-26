@@ -417,6 +417,10 @@
   .file-properties {
     color: var(--color-white);
   }
+
+  @media (max-width: $breakpoint-small) {
+    display: none;
+  }
 }
 
 .claim-preview--tile {
