@@ -19,6 +19,7 @@ type Props = {
     created_at: string,
     reward_description: string,
     reward_type: string,
+    claim_code: string,
   },
   user: User,
 };
@@ -57,7 +58,7 @@ const RewardTile = (props: Props) => {
                 <Icon icon={ICONS.COMPLETED} /> {__('Reward claimed.')}
               </span>
             ) : (
-              <RewardLink button reward_type={reward.reward_type} />
+              <RewardLink button claim_code={reward.claim_code} />
             ))}
         </div>
       }
