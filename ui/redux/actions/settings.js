@@ -28,6 +28,7 @@ export function doFindFFmpeg() {
       type: LOCAL_ACTIONS.FINDING_FFMPEG_STARTED,
     });
     return Lbry.ffmpeg_find().then(done => {
+      dispatch(doGetDaemonStatus());
       dispatch({
         type: LOCAL_ACTIONS.FINDING_FFMPEG_COMPLETED,
       });
