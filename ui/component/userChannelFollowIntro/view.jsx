@@ -52,7 +52,6 @@ function UserChannelFollowIntro(props: Props) {
           defaultOrderBy={CS.ORDER_BY_TOP}
           defaultFreshness={CS.FRESH_ALL}
           claimType="channel"
-          hideBlock
           defaultTags={CS.TAGS_FOLLOWED}
         />
         {followingCount > 0 && (
