@@ -48,7 +48,7 @@ function FileActions(props: Props) {
   if (claim.meta.reposted > 0) {
     repostLabel = (
       <Fragment>
-        {repostLabel}{' '}
+        {repostLabel}
         <Button
           button="alt"
           label={__('(%count%)', { count: claim.meta.reposted })}
