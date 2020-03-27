@@ -1,0 +1,12 @@
+.share {
+  border-radius: 50%;
+  .icon {
+    height: 2.5rem;
+    width: 2.5rem;
+    stroke: none;
+  }
+
+  &:hover {
+    box-shadow: var(--card-box-shadow);
+  }
+}

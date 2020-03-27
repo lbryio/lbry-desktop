@@ -39,25 +39,26 @@ export default function EmbedTextArea(props: Props) {
   }
 
   return (
-    <fieldset-section>
+    <div className="section">
       <FormField
         type="textarea"
         className="form-field--copyable"
         label={label}
         value={embedText || ''}
         ref={input}
-        helper={
-          <Button
-            icon={ICONS.COPY}
-            button="link"
-            label={__('Copy')}
-            onClick={() => {
-              copyToClipboard();
-            }}
-          />
-        }
         onFocus={onFocus}
       />
-    </fieldset-section>
+
+      <div className="section__actions">
+        <Button
+          icon={ICONS.COPY}
+          button="secondary"
+          label={__('Copy')}
+          onClick={() => {
+            copyToClipboard();
+          }}
+        />
+      </div>
+    </div>
   );
 }
