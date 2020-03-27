@@ -72,7 +72,7 @@ function PublishName(props: Props) {
 
     setBidError(bidError);
     updatePublishForm({ bidError: bidError });
-  }, [bid, previousBidAmount, balance]);
+  }, [bid, previousBidAmount, balance, updatePublishForm]);
 
   return (
     <Card
