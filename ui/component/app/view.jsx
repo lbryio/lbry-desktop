@@ -121,7 +121,6 @@ function App(props: Props) {
   const urlParams = new URLSearchParams(search);
   const rawReferrerParam = urlParams.get('r');
   const sanitizedReferrerParam = rawReferrerParam && rawReferrerParam.replace(':', '#');
-  const wrapperElement = appRef.current;
   const shouldHideNag = pathname.startsWith(`/$/${PAGES.EMBED}`) || pathname.startsWith(`/$/${PAGES.AUTH_VERIFY}`);
 
   let uri;
@@ -172,6 +171,7 @@ function App(props: Props) {
   }, [sanitizedReferrerParam, isRewardApproved, referredRewardAvailable]);
 
   useEffect(() => {
+    const { current: wrapperElement } = appRef;
     if (wrapperElement) {
       ReactModal.setAppElement(wrapperElement);
     }
@@ -181,7 +181,7 @@ function App(props: Props) {
     fetchTransactions(1, TX_LIST.LATEST_PAGE_SIZE);
     fetchChannelListMine(); // This needs to be done for web too...
     // @endif
-  }, [fetchTransactions, fetchAccessToken, fetchChannelListMine, wrapperElement]);
+  }, [appRef, fetchAccessToken, fetchChannelListMine, fetchTransactions]);
 
   useEffect(() => {
     // $FlowFixMe

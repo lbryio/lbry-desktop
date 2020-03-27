@@ -10,6 +10,7 @@ import isUserTyping from 'util/detect-typing';
 import Yrbl from 'component/yrbl';
 import I18nMessage from 'component/i18nMessage';
 import { generateDownloadUrl } from 'util/lbrytv';
+import { FORCE_CONTENT_TYPE_PLAYER } from 'constants/claim';
 
 const SPACE_BAR_KEYCODE = 32;
 
@@ -54,7 +55,7 @@ export default function FileViewerInitiator(props: Props) {
     claim,
   } = props;
   const cost = costInfo && costInfo.cost;
-  const forceVideo = ['application/x-ext-mkv', 'video/x-matroska'].includes(contentType);
+  const forceVideo = FORCE_CONTENT_TYPE_PLAYER.includes(contentType);
   const isPlayable = ['audio', 'video'].includes(mediaType) || forceVideo;
   const isImage = mediaType === 'image';
   const fileStatus = fileInfo && fileInfo.status;
@@ -114,7 +115,7 @@ export default function FileViewerInitiator(props: Props) {
     if (((autoplay && !videoOnPage && isAutoPlayable) || isText || isImage) && hasCostInfo && cost === 0) {
       viewFile();
     }
-  }, [autoplay, viewFile, isAutoPlayable, hasCostInfo, cost, isText]);
+  }, [autoplay, viewFile, isAutoPlayable, hasCostInfo, cost, isText, isImage]);
 
   return (
     <div

@@ -7,6 +7,7 @@ import eventTracking from 'videojs-event-tracking';
 import isUserTyping from 'util/detect-typing';
 import analytics from 'analytics';
 import { EmbedContext } from 'page/embedWrapper/view';
+import { FORCE_CONTENT_TYPE_PLAYER } from 'constants/claim';
 
 const F11_KEYCODE = 122;
 const SPACE_BAR_KEYCODE = 32;
@@ -36,7 +37,7 @@ const VIDEO_JS_OPTIONS: VideoJSOptions = {
   controls: true,
   autoplay: true,
   preload: 'auto',
-  playbackRates: [0.25, 0.5, 0.75, 1, 1.1, 1.25, 1.5, 2],
+  playbackRates: [0.25, 0.5, 0.75, 1, 1.1, 1.25, 1.5, 1.75, 2],
   responsive: true,
 };
 
@@ -84,17 +85,7 @@ function VideoViewer(props: Props) {
     VIDEO_JS_OPTIONS.muted = true;
   }
 
-  let forceTypes = [
-    'video/quicktime',
-    'application/x-ext-mkv',
-    'video/x-matroska',
-    'application/octet-stream',
-    'video/x-ms-wmv',
-    'video/x-msvideo',
-    'video/mpeg',
-    'video/m4v',
-  ];
-  const forceMp4 = forceTypes.includes(contentType);
+  const forcePlayer = FORCE_CONTENT_TYPE_PLAYER.includes(contentType);
   const [requireRedraw, setRequireRedraw] = useState(false);
   let player;
 
@@ -133,16 +124,16 @@ function VideoViewer(props: Props) {
         currentVideo.removeEventListener('volumechange', doVolume);
       }
     };
-  }, []);
+  }, [changeMute, changeVolume, onEndedCB]);
 
   useEffect(() => {
-    const videoNode = videoRef.current;
+    const { current: videoNode } = videoRef;
     const videoJsOptions = {
       ...VIDEO_JS_OPTIONS,
       sources: [
         {
           src: source,
-          type: forceMp4 ? 'video/mp4' : contentType,
+          type: forcePlayer ? 'video/mp4' : contentType,
         },
       ],
       plugins: { eventTracking: true },
@@ -182,7 +173,7 @@ function VideoViewer(props: Props) {
 
   useEffect(() => {
     function handleKeyDown(e: KeyboardEvent) {
-      const videoNode = videoRef.current;
+      const { current: videoNode } = videoRef;
 
       if (!videoNode || isUserTyping()) {
         return;
@@ -225,7 +216,7 @@ function VideoViewer(props: Props) {
     };
 
     // include requireRedraw here so the event listener is re-added when we need to manually remove/add the video player
-  }, [videoRef, requireRedraw]);
+  }, [videoRef, requireRedraw, player]);
 
   // player analytics
   useEffect(() => {
@@ -249,7 +240,7 @@ function VideoViewer(props: Props) {
         player.off();
       }
     };
-  }, [player]);
+  }, [claimId, player]);
 
   useEffect(() => {
     if (player && position) {

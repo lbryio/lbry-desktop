@@ -367,8 +367,9 @@ export function doClearCache() {
     // Leaving for now
     // const reducersToClear = whiteListedReducers.filter(reducerKey => reducerKey !== 'tags');
     // window.cacheStore.purge(reducersToClear);
-    window.localStorage.clear();
+    window.sessionStorage.clear();
     dispatch(doClearSupport());
+    window.location.reload();
     return dispatch(doClearPublish());
   };
 }
