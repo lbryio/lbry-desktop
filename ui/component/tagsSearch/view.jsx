@@ -60,7 +60,8 @@ export default function TagsSearch(props: Props) {
   const selectedTagsSet = new Set(tagsPassedIn.map(tag => tag.name));
   const unfollowedTagsSet = new Set(unfollowedTags.map(tag => tag.name));
   const remainingFollowedTagsSet = setDifference(followedTagsSet, selectedTagsSet);
-  const suggestedTagsSet = setUnion(remainingFollowedTagsSet, unfollowedTagsSet);
+  const remainingUnfollowedTagsSet = setDifference(unfollowedTagsSet, selectedTagsSet);
+  const suggestedTagsSet = setUnion(remainingFollowedTagsSet, remainingUnfollowedTagsSet);
 
   const countWithoutMature = selectedTagsSet.has('mature') ? selectedTagsSet.size - 1 : selectedTagsSet.size;
   const maxed = Boolean(limitSelect && countWithoutMature >= limitSelect);
