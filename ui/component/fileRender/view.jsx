@@ -1,4 +1,5 @@
 // @flow
+import { URL } from 'config';
 import { remote } from 'electron';
 import React, { Suspense, Fragment } from 'react';
 import classnames from 'classnames';
@@ -9,6 +10,7 @@ import AppViewer from 'component/viewers/appViewer';
 import Button from 'component/button';
 import { withRouter } from 'react-router-dom';
 import AutoplayCountdown from 'component/autoplayCountdown';
+import { formatLbryUrlForWeb } from 'util/url';
 // @if TARGET='web'
 import { generateStreamUrl } from 'util/lbrytv';
 // @endif
@@ -220,6 +222,7 @@ class FileRender extends React.PureComponent<Props, State> {
   render() {
     const { isText, uri, currentlyFloating, embedded } = this.props;
     const { showAutoplayCountdown, showEmbededMessage } = this.state;
+    const lbrytvLink = `${URL}${formatLbryUrlForWeb(uri)}?src=embed`;
 
     return (
       <div
@@ -231,11 +234,11 @@ class FileRender extends React.PureComponent<Props, State> {
       >
         {embedded && showEmbededMessage && (
           <div className="video-overlay__wrapper">
-            <div className="video-overlay__title">{__('View More on lbry.tv')}</div>
+            <div className="video-overlay__title">{__('See more on lbry.tv')}</div>
 
             <div className="video-overlay__actions">
               <div className="section__actions--centered">
-                <Button label={__('Explore')} button="primary" href="https://lbry.tv?src=embed" />
+                <Button label={__('Explore')} button="primary" href={lbrytvLink} />
               </div>
             </div>
           </div>
