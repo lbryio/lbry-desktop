@@ -170,7 +170,6 @@
     .vjs-big-play-button {
       @extend .button--icon;
       @extend .button--play;
-      display: block;
       background-color: rgba(0, 0, 0, 0.6);
       border: none;
       position: static;
@@ -178,6 +177,12 @@
 
       .vjs-icon-placeholder {
         display: none;
+      }
+    }
+
+    &.vjs-paused {
+      .vjs-big-play-button {
+        display: block;
       }
     }
   }
