@@ -4,7 +4,7 @@ import React from 'react';
 import Button from 'component/button';
 import CopyableText from 'component/copyableText';
 import EmbedTextArea from 'component/embedTextArea';
-import { generateDirectUrl } from 'util/lbrytv';
+import { generateDownloadUrl } from 'util/lbrytv';
 
 const IOS = !!navigator.platform && /iPad|iPhone|iPod/.test(navigator.platform);
 
@@ -49,7 +49,7 @@ class SocialShare extends React.PureComponent<Props, State> {
     const encodedLbryURL: string = `${OPEN_URL}${encodeURIComponent(lbryWebUrl)}`;
     const referralParam: string = referralCode && rewardsApproved ? `?r=${referralCode}` : '';
     const lbryURL: string = `${OPEN_URL}${lbryWebUrl}${referralParam}`;
-    const directUrl = generateDirectUrl(name, claimId);
+    const downloadUrl = `${OPEN_URL}${generateDownloadUrl(name, claimId)}`;
 
     return (
       <React.Fragment>
@@ -114,7 +114,8 @@ class SocialShare extends React.PureComponent<Props, State> {
         {showEmbed && <EmbedTextArea label={__('Embedded')} claim={claim} />}
         {showExtra && (
           <div className="section">
-            <CopyableText label={__('Direct Link')} copyable={directUrl} />
+            <CopyableText label={__('LBRY URL')} copyable={lbryUrl} />
+            <CopyableText label={__('Download')} copyable={downloadUrl} />
           </div>
         )}
       </React.Fragment>
