@@ -8,7 +8,8 @@ const select = (state, props) => ({
 });
 
 const perform = dispatch => ({
-  claimReward: reward => dispatch(doClaimRewardType(reward.reward_type, { notifyError: true })),
+  claimReward: reward =>
+    dispatch(doClaimRewardType(reward.reward_type, { notifyError: true, params: { claim_code: reward.claim_code } })),
 });
 
 export default connect(select, perform)(RewardLink);
