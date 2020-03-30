@@ -131,9 +131,9 @@ function AppRouter(props: Props) {
   // react-router doesn't decode pathanmes before doing the route matching check
   // We have to redirect here because if we redirect on the server, it might get encoded again
   // in the browser causing a redirect loop
-  const decodedPathname = decodeURIComponent(pathname);
-  if (decodedPathname !== pathname) {
-    return <Redirect to={decodedPathname} />;
+  const decodedUrl = decodeURIComponent(pathname + search);
+  if (decodedUrl !== pathname + search) {
+    return <Redirect to={decodedUrl} />;
   }
 
   return (
