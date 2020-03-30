@@ -48,12 +48,12 @@ class SocialShare extends React.PureComponent<Props, State> {
     const lbryWebUrl = lbryUrl.replace(/#/g, ':');
     const encodedLbryURL: string = `${OPEN_URL}${encodeURIComponent(lbryWebUrl)}`;
     const referralParam: string = referralCode && rewardsApproved ? `?r=${referralCode}` : '';
-    const lbryURL: string = `${OPEN_URL}${lbryWebUrl}${referralParam}`;
-    const downloadUrl = `${OPEN_URL}${generateDownloadUrl(name, claimId)}`;
+    const openDotLbryDotComUrl: string = `${OPEN_URL}${lbryWebUrl}${referralParam}`;
+    const downloadUrl = `${generateDownloadUrl(name, claimId)}`;
 
     return (
       <React.Fragment>
-        <CopyableText label={__('LBRY Link')} copyable={lbryURL} />
+        <CopyableText label={__('LBRY Link')} copyable={openDotLbryDotComUrl} />
         <div className="section__actions">
           <Button
             className="share"
@@ -114,8 +114,8 @@ class SocialShare extends React.PureComponent<Props, State> {
         {showEmbed && <EmbedTextArea label={__('Embedded')} claim={claim} />}
         {showExtra && (
           <div className="section">
-            <CopyableText label={__('LBRY URL')} copyable={lbryUrl} />
-            <CopyableText label={__('Download')} copyable={downloadUrl} />
+            <CopyableText label={__('LBRY URL')} copyable={`lbry://${lbryUrl}`} />
+            <CopyableText label={__('Download Link')} copyable={downloadUrl} />
           </div>
         )}
       </React.Fragment>
