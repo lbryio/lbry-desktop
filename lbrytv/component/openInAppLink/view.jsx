@@ -3,10 +3,14 @@ import React from 'react';
 import { withRouter } from 'react-router';
 import { formatWebUrlIntoLbryUrl } from 'util/url';
 import Nag from 'component/common/nag';
+import usePersistedState from 'effects/use-persisted-state';
 
 const userAgent = navigator.userAgent.toLowerCase();
 const isAndroidDevice = userAgent.includes('android');
 const isDesktopDevice = typeof window.orientation === 'undefined';
+const addDaysToMs = (initialNumberInMs: number, daysToAdd: number) => {
+  return initialNumberInMs + daysToAdd * 1000 * 60 * 60 * 24;
+};
 
 type Props = {
   history: { replace: string => void, push: string => void },
@@ -23,6 +27,8 @@ function OpenInAppLink(props: Props) {
     user,
   } = props;
   const [showNag, setShowNag] = React.useState(false);
+  const [closeNagClicksCount, setCloseNagClicksCount] = usePersistedState('open-in-app-close-count', 0);
+  const [closeNagLastDate, setCloseNagLastDate] = usePersistedState('open-in-app-close-date', 0);
   const { pathname, search } = location;
   let params = new URLSearchParams(search);
   const hasSrcParam = params.get('src');
@@ -47,6 +53,8 @@ function OpenInAppLink(props: Props) {
 
   function handleClose() {
     setShowNag(false);
+    setCloseNagClicksCount(closeNagClicksCount + 1);
+    setCloseNagLastDate(Date.now());
   }
 
   React.useEffect(() => {
@@ -59,12 +67,18 @@ function OpenInAppLink(props: Props) {
   }, [hasSrcParam, search, pathname, replace]);
 
   React.useEffect(() => {
-    if ((isAndroidUser && isAndroidDevice) || (isDesktopUser && isDesktopDevice)) {
+    const isOnDeviceToPrompt = (isAndroidUser && isAndroidDevice) || (isDesktopUser && isDesktopDevice);
+    const dateRightNow = Date.now();
+    const daysToAddToDate = Math.min(30, Math.pow(2, closeNagClicksCount));
+    const startDateForAnotherOpenNag = closeNagLastDate + addDaysToMs(closeNagLastDate, daysToAddToDate);
+    const hasWaitedEnoughTime = dateRightNow > startDateForAnotherOpenNag;
+
+    if (isOnDeviceToPrompt && hasWaitedEnoughTime) {
       setShowNag(true);
     }
     // Don't pass showNag into this effect because we only want the initial value
     // If the param is removed from the url, the nag should still be shown
-  }, [setShowNag, isAndroidUser, isDesktopUser]);
+  }, [setShowNag, isAndroidUser, isDesktopUser, closeNagLastDate, closeNagClicksCount]);
 
   if (!showNag || isWebUserOnly) {
     return null;
