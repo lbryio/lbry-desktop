@@ -35,7 +35,7 @@ function Ads(props: Props) {
         js.className = n;
         js.src = 'https://stream.playbuzz.com/player/62d1eb10-e362-4873-99ed-c64a4052b43b';
         // $FlowFixMe
-        fjs.parentNode.inmodifiedUrlQuerysertBefore(js, fjs);
+        fjs.parentNode.insertBefore(js, fjs);
       } catch (e) {}
     }
   }, [type]);
