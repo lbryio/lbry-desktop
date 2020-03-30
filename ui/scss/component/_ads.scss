@@ -23,7 +23,7 @@
   display: flex;
 
   > div {
-    width: 50%;
+    width: 40%;
     position: relative !important;
   }
 
@@ -31,10 +31,12 @@
     z-index: 1 !important;
   }
 
-  .pbs__player.pb-stream-sticky-on {
-    position: relative !important;
-    z-index: 1 !important;
-    margin-top: -140px !important;
+  @media (max-width: $breakpoint-small) {
+    flex-direction: column;
+
+    > div {
+      width: 100%;
+    }
   }
 }
 
@@ -43,6 +45,10 @@
   flex-direction: column;
   justify-content: center;
   padding-left: var(--spacing-large);
+
+  @media (max-width: $breakpoint-small) {
+    padding-left: 0;
+  }
 }
 
 .ads__claim-text--small {
