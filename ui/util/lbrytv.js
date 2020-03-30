@@ -35,7 +35,7 @@ function generateEmbedUrl(claimName, claimId) {
 }
 
 function generateDownloadUrl(claimName, claimId) {
-  return `/$/download/${claimName}/${claimId}`;
+  return `${URL}/$/download/${claimName}/${claimId}`;
 }
 
 function generateDirectUrl(claimName, claimId) {
