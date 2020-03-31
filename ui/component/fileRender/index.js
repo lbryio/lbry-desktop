@@ -3,7 +3,6 @@ import {
   makeSelectClaimForUri,
   makeSelectThumbnailForUri,
   makeSelectContentTypeForUri,
-  makeSelectMediaTypeForUri,
   makeSelectDownloadPathForUri,
 } from 'lbry-redux';
 import * as SETTINGS from 'constants/settings';
@@ -21,7 +20,6 @@ const select = (state, props) => {
   return {
     currentTheme: makeSelectClientSetting(SETTINGS.THEME)(state),
     claim: makeSelectClaimForUri(props.uri)(state),
-    mediaType: makeSelectMediaTypeForUri(props.uri)(state),
     thumbnail: makeSelectThumbnailForUri(props.uri)(state),
     contentType: makeSelectContentTypeForUri(props.uri)(state),
     downloadPath: makeSelectDownloadPathForUri(props.uri)(state),

@@ -7,6 +7,7 @@ import FileDownloadLink from 'component/fileDownloadLink';
 import { buildURI } from 'lbry-redux';
 import * as PAGES from '../../constants/pages';
 import * as CS from '../../constants/claim_search';
+import * as RENDER_MODES from 'constants/file_render_modes';
 
 type Props = {
   uri: string,
@@ -16,14 +17,13 @@ type Props = {
   claimIsMine: boolean,
   fileInfo: FileListItem,
   costInfo: ?{ cost: number },
-  contentType: string,
+  renderMode: string,
   supportOption: boolean,
 };
 
 function FileActions(props: Props) {
-  const { fileInfo, uri, openModal, claimIsMine, claim, costInfo, contentType, supportOption, prepareEdit } = props;
-  const webShareable =
-    costInfo && costInfo.cost === 0 && contentType && ['video', 'image', 'audio'].includes(contentType.split('/')[0]);
+  const { fileInfo, uri, openModal, claimIsMine, claim, costInfo, renderMode, supportOption, prepareEdit } = props;
+  const webShareable = costInfo && costInfo.cost === 0 && RENDER_MODES.WEB_SHAREABLE_MODES.includes(renderMode);
   const showDelete = claimIsMine || (fileInfo && (fileInfo.written_bytes > 0 || fileInfo.blobs_completed > 0));
   const claimId = claim && claim.claim_id;
   const { signing_channel: signingChannel } = claim;

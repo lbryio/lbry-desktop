@@ -26,7 +26,6 @@ import ThreeViewer from 'component/viewers/threeViewer';
 
 type Props = {
   uri: string,
-  mediaType: string,
   streamingUrl: string,
   embedded?: boolean,
   contentType: string,

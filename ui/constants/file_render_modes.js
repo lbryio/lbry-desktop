@@ -17,6 +17,7 @@ export const CAD = 'cad';
 export const COMIC = 'comic';
 
 export const AUTO_RENDER_MODES = [IMAGE].concat(TEXT_MODES); // these types will render (and thus download) automatically (if free)
+export const WEB_SHAREABLE_MODES = AUTO_RENDER_MODES.concat(PLAYABLE_MODES);
 
 export const DOWNLOAD = 'download';
 export const APPLICATION = 'application';

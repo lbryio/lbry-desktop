@@ -5,8 +5,6 @@ import usePrevious from 'effects/use-previous';
 import LoadingScreen from 'component/common/loading-screen';
 
 type Props = {
-  mediaType: string,
-  contentType: string,
   isPlaying: boolean,
   fileInfo: FileListItem,
   uri: string,
