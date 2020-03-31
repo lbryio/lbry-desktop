@@ -33,33 +33,6 @@
   }
 }
 
-.main--file-page {
-  position: relative;
-
-  .grid-area--content {
-    max-height: var(--inline-player-max-height);
-  }
-
-  .grid-area--info {
-    margin-right: var(--spacing-large);
-    width: 52.5%;
-  }
-
-  .grid-area--related {
-    width: calc(47.5% - var(--spacing-large));
-  }
-
-  @media (max-width: $breakpoint-small) {
-    overflow-x: hidden;
-
-    .grid-area--related,
-    .grid-area--info {
-      margin-right: 0;
-      width: 100%;
-    }
-  }
-}
-
 .main--auth-page {
   max-width: 60rem;
   margin-top: var(--spacing-main-padding);
@@ -75,6 +48,9 @@
   margin-top: 100px;
   margin-bottom: 100px;
   text-align: center;
+  > .card {
+    width: 100%;
+  }
 }
 
 .main--launching {
@@ -99,27 +75,4 @@
 
 .main--full-width {
   width: 100%;
-}
-
-.main__document-wrapper {
-  max-width: 100%;
-  min-width: 40em;
-  width: fit-content;
-  margin: auto;
-  margin-bottom: var(--spacing-xlarge);
-
-  @media (max-width: $breakpoint-small) {
-    width: 100%;
-  }
-}
-
-.main__document-wrapper--markdown {
-  @extend .main__document-wrapper;
-  width: 40em;
-  max-width: unset;
-  min-width: unset;
-
-  @media (max-width: $breakpoint-small) {
-    width: 100%;
-  }
 }

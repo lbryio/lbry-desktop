@@ -22,18 +22,8 @@
 .section__flex {
   display: flex;
   align-items: flex-start;
-
-  & > :first-child {
+  > .icon__wrapper:first-child {
     margin-right: var(--spacing-large);
-  }
-}
-
-.section__flex-wrap {
-  @extend .section__flex;
-  flex-wrap: wrap;
-  margin-bottom: var(--spacing-large);
-  & > * {
-    margin-bottom: var(--spacing-large);
   }
 }
 
@@ -99,6 +89,10 @@
   @media (max-width: $breakpoint-small) {
     justify-content: flex-start;
   }
+}
+
+.section__actions--no-margin {
+  margin-top: 0;
 }
 
 @media (max-width: $breakpoint-small) {

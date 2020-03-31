@@ -1,17 +1,15 @@
 .comment {
-  padding: var(--spacing-small) 0;
   display: flex;
   flex-direction: row;
   font-size: var(--font-body);
-  padding: var(--spacing-medium) 0;
   margin: 0;
-
-  &:first-of-type {
-    border-top: 1px solid var(--color-border);
-  }
 
   &:not(:last-of-type) {
     border-bottom: 1px solid var(--color-border);
+    padding: var(--spacing-medium) 0;
+  }
+  &:last-of-type {
+    padding-top: var(--spacing-medium);
   }
 }
 

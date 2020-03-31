@@ -1,5 +1,6 @@
 // @flow
 import * as ICONS from 'constants/icons';
+import * as RENDER_MODES from 'constants/file_render_modes';
 import React, { useState, useEffect } from 'react';
 import Button from 'component/button';
 import classnames from 'classnames';
@@ -8,24 +9,17 @@ import FileRender from 'component/fileRender';
 import UriIndicator from 'component/uriIndicator';
 import usePersistedState from 'effects/use-persisted-state';
 import usePrevious from 'effects/use-previous';
-import { FILE_WRAPPER_CLASS } from 'component/layoutWrapperFile/view';
+import { FILE_WRAPPER_CLASS } from 'page/file/view';
 import Draggable from 'react-draggable';
 import Tooltip from 'component/common/tooltip';
 import { onFullscreenChange } from 'util/full-screen';
 import useIsMobile from 'effects/use-is-mobile';
 
 type Props = {
-  mediaType: string,
-  contentType: string,
-  isText: boolean,
   isLoading: boolean,
   isPlaying: boolean,
   fileInfo: FileListItem,
   uri: string,
-  obscurePreview: boolean,
-  insufficientCredits: boolean,
-  isStreamable: boolean,
-  thumbnail?: string,
   streamingUrl?: string,
   floatingPlayer: boolean,
   pageUri: ?string,
@@ -33,25 +27,23 @@ type Props = {
   floatingPlayerEnabled: boolean,
   clearPlayingUri: () => void,
   triggerAnalyticsView: (string, number) => Promise<any>,
+  renderMode: string,
   claimRewards: () => void,
 };
 
-export default function FileViewer(props: Props) {
+export default function FloatingViewer(props: Props) {
   const {
     isPlaying,
     fileInfo,
     uri,
     streamingUrl,
-    isStreamable,
     pageUri,
     title,
     clearPlayingUri,
     floatingPlayerEnabled,
     triggerAnalyticsView,
     claimRewards,
-    mediaType,
-    contentType,
-    isText,
+    renderMode,
   } = props;
   const isMobile = useIsMobile();
   const [playTime, setPlayTime] = useState();
@@ -60,39 +52,16 @@ export default function FileViewer(props: Props) {
     x: -25,
     y: window.innerHeight - 400,
   });
-
   const inline = pageUri === uri;
-  const forceVideo = ['application/x-ext-mkv', 'video/x-matroska'].includes(contentType);
-  const webStreamOnly = contentType === 'application/pdf' || mediaType === 'text';
-  const isReadyToPlay =
-    (IS_WEB && (isStreamable || webStreamOnly || forceVideo)) ||
-    ((isStreamable || forceVideo) && streamingUrl) ||
-    (fileInfo && fileInfo.completed);
+  const isPlayable = RENDER_MODES.PLAYABLE_MODES.includes(renderMode);
+  const isReadyToPlay = isPlayable && (streamingUrl || (fileInfo && fileInfo.completed));
   const loadingMessage =
-    !isStreamable && fileInfo && fileInfo.blobs_completed >= 1 && (!fileInfo.download_path || !fileInfo.written_bytes)
+    fileInfo && fileInfo.blobs_completed >= 1 && (!fileInfo.download_path || !fileInfo.written_bytes)
       ? __("It looks like you deleted or moved this file. We're rebuilding it now. It will only take a few seconds.")
       : __('Loading');
-
   const previousUri = usePrevious(uri);
   const isNewView = uri && previousUri !== uri && isPlaying;
   const [hasRecordedView, setHasRecordedView] = useState(false);
-
-  useEffect(() => {
-    if (isNewView) {
-      setPlayTime(Date.now());
-    }
-  }, [isNewView, uri]);
-
-  useEffect(() => {
-    if (playTime && isReadyToPlay && !hasRecordedView) {
-      const timeToStart = Date.now() - playTime;
-      triggerAnalyticsView(uri, timeToStart).then(() => {
-        claimRewards();
-        setHasRecordedView(false); // This is a terrible variable name, rename this
-        setPlayTime(null);
-      });
-    }
-  }, [setPlayTime, triggerAnalyticsView, isReadyToPlay, hasRecordedView, playTime, uri, claimRewards]);
 
   useEffect(() => {
     function handleResize() {
@@ -115,6 +84,27 @@ export default function FileViewer(props: Props) {
     };
   }, [setFileViewerRect, inline]);
 
+  useEffect(() => {
+    if (isNewView) {
+      setPlayTime(Date.now());
+    }
+  }, [isNewView, uri]);
+
+  useEffect(() => {
+    if (playTime && isReadyToPlay && !hasRecordedView) {
+      const timeToStart = Date.now() - playTime;
+      triggerAnalyticsView(uri, timeToStart).then(() => {
+        claimRewards();
+        setHasRecordedView(false); // This is a terrible variable name, rename this
+        setPlayTime(null);
+      });
+    }
+  }, [setPlayTime, triggerAnalyticsView, isReadyToPlay, hasRecordedView, playTime, uri, claimRewards]);
+
+  if (!isPlayable || !isPlaying || !uri || (!inline && (isMobile || !floatingPlayerEnabled))) {
+    return null;
+  }
+
   function handleDrag(e, ui) {
     const { x, y } = position;
     const newX = x + ui.deltaX;
@@ -123,16 +113,6 @@ export default function FileViewer(props: Props) {
       x: newX,
       y: newY,
     });
-  }
-
-  const hidePlayer =
-    isText ||
-    !isPlaying ||
-    !uri ||
-    (!inline && (isMobile || !floatingPlayerEnabled || !['audio', 'video'].includes(mediaType)));
-
-  if (hidePlayer) {
-    return null;
   }
 
   return (

@@ -5,76 +5,64 @@ import {
   selectClaimsByUri,
   makeSelectClaimsInChannelForCurrentPageState,
   makeSelectClaimIsNsfw,
+  makeSelectClaimIsMine,
   makeSelectRecommendedContentForUri,
+  makeSelectStreamingUrlForUri,
   makeSelectMediaTypeForUri,
+  selectBalance,
   selectBlockedChannels,
   parseURI,
+  makeSelectContentTypeForUri,
+  makeSelectUriIsStreamable,
+  makeSelectFileNameForUri,
 } from 'lbry-redux';
-import { selectAllCostInfoByUri } from 'lbryinc';
+import { selectAllCostInfoByUri, makeSelectCostInfoForUri } from 'lbryinc';
 import { selectShowMatureContent } from 'redux/selectors/settings';
+import * as RENDER_MODES from 'constants/file_render_modes';
+import path from 'path';
+import React from 'react';
+import { FORCE_CONTENT_TYPE_PLAYER } from 'constants/claim';
+// @if TARGET='web'
+import { generateStreamUrl } from 'util/lbrytv';
+// @endif
 
 const RECENT_HISTORY_AMOUNT = 10;
 const HISTORY_ITEMS_PER_PAGE = 50;
 
 export const selectState = (state: any) => state.content || {};
 
-export const selectPlayingUri = createSelector(
-  selectState,
-  state => state.playingUri
-);
+export const selectPlayingUri = createSelector(selectState, state => state.playingUri);
 
-export const makeSelectIsPlaying = (uri: string) =>
-  createSelector(
-    selectPlayingUri,
-    playingUri => playingUri === uri
-  );
+export const makeSelectIsPlaying = (uri: string) => createSelector(selectPlayingUri, playingUri => playingUri === uri);
 
 export const makeSelectContentPositionForUri = (uri: string) =>
-  createSelector(
-    selectState,
-    makeSelectClaimForUri(uri),
-    (state, claim) => {
-      if (!claim) {
-        return null;
-      }
-      const outpoint = `${claim.txid}:${claim.nout}`;
-      const id = claim.claim_id;
-      return state.positions[id] ? state.positions[id][outpoint] : null;
+  createSelector(selectState, makeSelectClaimForUri(uri), (state, claim) => {
+    if (!claim) {
+      return null;
     }
-  );
+    const outpoint = `${claim.txid}:${claim.nout}`;
+    const id = claim.claim_id;
+    return state.positions[id] ? state.positions[id][outpoint] : null;
+  });
 
-export const selectHistory = createSelector(
-  selectState,
-  state => state.history || []
-);
+export const selectHistory = createSelector(selectState, state => state.history || []);
 
-export const selectHistoryPageCount = createSelector(
-  selectHistory,
-  history => Math.ceil(history.length / HISTORY_ITEMS_PER_PAGE)
+export const selectHistoryPageCount = createSelector(selectHistory, history =>
+  Math.ceil(history.length / HISTORY_ITEMS_PER_PAGE)
 );
 
 export const makeSelectHistoryForPage = (page: number) =>
-  createSelector(
-    selectHistory,
-    selectClaimsByUri,
-    (history, claimsByUri) => {
-      const left = page * HISTORY_ITEMS_PER_PAGE;
-      const historyItemsForPage = history.slice(left, left + HISTORY_ITEMS_PER_PAGE);
-      return historyItemsForPage;
-    }
-  );
+  createSelector(selectHistory, selectClaimsByUri, (history, claimsByUri) => {
+    const left = page * HISTORY_ITEMS_PER_PAGE;
+    const historyItemsForPage = history.slice(left, left + HISTORY_ITEMS_PER_PAGE);
+    return historyItemsForPage;
+  });
 
 export const makeSelectHistoryForUri = (uri: string) =>
-  createSelector(
-    selectHistory,
-    history => history.find(i => i.uri === uri)
-  );
+  createSelector(selectHistory, history => history.find(i => i.uri === uri));
 
 export const makeSelectHasVisitedUri = (uri: string) =>
-  createSelector(
-    makeSelectHistoryForUri(uri),
-    history => Boolean(history)
-  );
+  createSelector(makeSelectHistoryForUri(uri), history => Boolean(history));
 
 export const makeSelectNextUnplayedRecommended = (uri: string) =>
   createSelector(
@@ -132,51 +120,104 @@ export const makeSelectNextUnplayedRecommended = (uri: string) =>
     }
   );
 
-export const selectRecentHistory = createSelector(
-  selectHistory,
-  history => {
-    return history.slice(0, RECENT_HISTORY_AMOUNT);
-  }
-);
+export const selectRecentHistory = createSelector(selectHistory, history => {
+  return history.slice(0, RECENT_HISTORY_AMOUNT);
+});
 
 export const makeSelectCategoryListUris = (uris: ?Array<string>, channel: string) =>
-  createSelector(
-    makeSelectClaimsInChannelForCurrentPageState(channel),
-    channelClaims => {
-      if (uris) return uris;
+  createSelector(makeSelectClaimsInChannelForCurrentPageState(channel), channelClaims => {
+    if (uris) return uris;
 
-      if (channelClaims) {
-        const CATEGORY_LIST_SIZE = 10;
-        return channelClaims.slice(0, CATEGORY_LIST_SIZE).map(({ name, claim_id: claimId }) => `${name}#${claimId}`);
-      }
-
-      return null;
+    if (channelClaims) {
+      const CATEGORY_LIST_SIZE = 10;
+      return channelClaims.slice(0, CATEGORY_LIST_SIZE).map(({ name, claim_id: claimId }) => `${name}#${claimId}`);
     }
-  );
+
+    return null;
+  });
 
 export const makeSelectShouldObscurePreview = (uri: string) =>
+  createSelector(selectShowMatureContent, makeSelectClaimIsNsfw(uri), (showMatureContent, isClaimMature) => {
+    return isClaimMature && !showMatureContent;
+  });
+
+// should probably be in lbry-redux, yarn link was fighting me
+export const makeSelectFileExtensionForUri = (uri: string) =>
+  createSelector(makeSelectFileNameForUri(uri), fileName => {
+    return fileName && path.extname(fileName).substring(1);
+  });
+
+// @if TARGET='web'
+export const makeSelectStreamingUrlForUriWebProxy = (uri: string) =>
+  createSelector(makeSelectClaimForUri(uri), claim => (claim ? generateStreamUrl(claim.name, claim.claim_id) : null));
+// @endif
+// @if TARGET='app'
+export const makeSelectStreamingUrlForUriWebProxy = (uri: string) =>
+  createSelector(makeSelectStreamingUrlForUri, url => url);
+// @endif
+
+export const makeSelectFileRenderModeForUri = (uri: string) =>
   createSelector(
-    selectShowMatureContent,
-    makeSelectClaimIsNsfw(uri),
-    (showMatureContent, isClaimMature) => {
-      return isClaimMature && !showMatureContent;
+    makeSelectContentTypeForUri(uri),
+    makeSelectMediaTypeForUri(uri),
+    makeSelectFileExtensionForUri(uri),
+    (contentType, mediaType, extension) => {
+      if (mediaType === 'video' || FORCE_CONTENT_TYPE_PLAYER.includes(contentType)) {
+        return RENDER_MODES.VIDEO;
+      }
+      if (mediaType === 'image') {
+        return RENDER_MODES.IMAGE;
+      }
+      if (['md', 'markdown'].includes(extension) || ['text/md', 'text/markdown'].includes(contentType)) {
+        return RENDER_MODES.MARKDOWN;
+      }
+      if (contentType === 'application/pdf') {
+        return RENDER_MODES.PDF;
+      }
+      if (['text/htm', 'text/html'].includes(contentType)) {
+        return RENDER_MODES.HTML;
+      }
+      if (['text', 'document', 'script'].includes(mediaType)) {
+        return RENDER_MODES.DOCUMENT;
+      }
+      if (extension === 'docx') {
+        return RENDER_MODES.DOCX;
+      }
+
+      // when writing this my local copy of Lbry.getMediaType had '3D-file', but I was receiving model...'
+      if (['3D-file', 'model'].includes(mediaType)) {
+        return RENDER_MODES.CAD;
+      }
+      if (mediaType === 'comic-book') {
+        return RENDER_MODES.COMIC;
+      }
+      if (
+        [
+          'application/zip',
+          'application/x-gzip',
+          'application/x-gtar',
+          'application/x-tgz',
+          'application/vnd.rar',
+          'application/x-7z-compressed',
+        ].includes(contentType)
+      ) {
+        return RENDER_MODES.DOWNLOAD;
+      }
+
+      if (mediaType === 'application') {
+        return RENDER_MODES.APPLICATION;
+      }
+
+      return RENDER_MODES.UNSUPPORTED;
     }
   );
 
-export const makeSelectCanAutoplay = (uri: string) =>
+export const makeSelectInsufficientCreditsForUri = (uri: string) =>
   createSelector(
-    makeSelectMediaTypeForUri(uri),
-    mediaType => {
-      const canAutoPlay = ['audio', 'video', 'image', 'text', 'document'].includes(mediaType);
-      return canAutoPlay;
-    }
-  );
-
-export const makeSelectIsText = (uri: string) =>
-  createSelector(
-    makeSelectMediaTypeForUri(uri),
-    mediaType => {
-      const isText = ['text', 'document', 'script'].includes(mediaType);
-      return isText;
+    makeSelectClaimIsMine(uri),
+    makeSelectCostInfoForUri(uri),
+    selectBalance,
+    (isMine, costInfo, balance) => {
+      return !isMine && costInfo && costInfo.cost > 0 && costInfo.cost > balance;
     }
   );

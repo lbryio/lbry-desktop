@@ -11,7 +11,6 @@ type Options = {
 type Props = {
   uri: string,
   claim: ?StreamClaim,
-  claimId: string,
   recommendedContent: Array<string>,
   isSearching: boolean,
   search: (string, Options) => void,
@@ -43,10 +42,10 @@ export default class RecommendedContent extends React.PureComponent<Props> {
   }
 
   getRecommendedContent() {
-    const { claim, search, mature, claimId } = this.props;
+    const { claim, search, mature } = this.props;
 
-    if (claim && claim.value && claim.value) {
-      const options: Options = { size: 20, related_to: claimId, isBackgroundSearch: true };
+    if (claim && claim.value && claim.claim_id) {
+      const options: Options = { size: 20, related_to: claim.claim_id, isBackgroundSearch: true };
       if (claim && !mature) {
         options['nsfw'] = false;
       }

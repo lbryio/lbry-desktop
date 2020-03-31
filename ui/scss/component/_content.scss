@@ -89,6 +89,8 @@
   position: relative;
   display: flex;
   align-items: center;
+  border-radius: var(--card-radius);
+  border: 1px solid var(--color-border);
   justify-content: center;
   background-position: 50% 50%;
   background-repeat: no-repeat;
@@ -110,7 +112,7 @@
   }
 }
 
-.content__cover--disabled {
+.content__cover--none {
   @include thumbnail;
   cursor: default;
   position: relative;
@@ -128,8 +130,21 @@
   }
 }
 
-.content__cover--hidden-for-text {
-  display: none;
+.content__cover--disabled {
+  pointer-events: none;
+  .nag {
+    /* boo fire Jeremy */
+    pointer-events: auto;
+  }
+  &:after {
+    content: '';
+    background: rgba(255, 255, 255, 0.5);
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    position: absolute;
+  }
 }
 
 .content__loading {

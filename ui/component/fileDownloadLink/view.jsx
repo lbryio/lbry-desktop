@@ -11,13 +11,14 @@ type Props = {
   claimIsMine: boolean,
   downloading: boolean,
   loading: boolean,
-  isStreamable: boolean,
   fileInfo: ?FileListItem,
   openModal: (id: string, { path: string }) => void,
   pause: () => void,
   download: string => void,
   triggerViewEvent: string => void,
   costInfo: ?{ cost: string },
+  buttonType: ?string,
+  showLabel: ?boolean,
   hideOpenButton: boolean,
   hideDownloadStatus: boolean,
 };
@@ -35,6 +36,8 @@ function FileDownloadLink(props: Props) {
     claim,
     triggerViewEvent,
     costInfo,
+    buttonType = 'alt',
+    showLabel = false,
     hideOpenButton = false,
     hideDownloadStatus = false,
   } = props;
@@ -73,10 +76,12 @@ function FileDownloadLink(props: Props) {
   }
 
   if (fileInfo && fileInfo.download_path && fileInfo.completed) {
+    const openLabel = __('Open file');
     return hideOpenButton ? null : (
       <Button
-        button="alt"
-        title={__('Open file')}
+        button={buttonType}
+        title={openLabel}
+        label={showLabel ? openLabel : null}
         icon={ICONS.EXTERNAL}
         onClick={() => {
           pause();
@@ -86,11 +91,14 @@ function FileDownloadLink(props: Props) {
     );
   }
 
+  const label = IS_WEB ? __('Download') : __('Download to your Library');
+
   return (
     <Button
-      button="alt"
-      title={IS_WEB ? __('Download') : __('Add to your library')}
+      button={buttonType}
+      title={label}
       icon={ICONS.DOWNLOAD}
+      label={showLabel ? label : null}
       onClick={handleDownload}
       // @if TARGET='web'
       download={fileName}

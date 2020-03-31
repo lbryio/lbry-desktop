@@ -1,8 +1,8 @@
 // @flow
 import React, { useState, useEffect } from 'react';
-import classnames from 'classnames';
 import FileRender from 'component/fileRender';
 import usePrevious from 'effects/use-previous';
+import LoadingScreen from 'component/common/loading-screen';
 
 type Props = {
   mediaType: string,
@@ -10,30 +10,20 @@ type Props = {
   isPlaying: boolean,
   fileInfo: FileListItem,
   uri: string,
-  isStreamable: boolean,
+  renderMode: string,
   streamingUrl?: string,
   triggerAnalyticsView: (string, number) => Promise<any>,
   claimRewards: () => void,
 };
 
-export default function TextViewer(props: Props) {
-  const {
-    isPlaying,
-    fileInfo,
-    uri,
-    streamingUrl,
-    isStreamable,
-    triggerAnalyticsView,
-    claimRewards,
-    mediaType,
-    contentType,
-  } = props;
+export default function FileRenderInline(props: Props) {
+  const { isPlaying, fileInfo, uri, streamingUrl, triggerAnalyticsView, claimRewards } = props;
+
   const [playTime, setPlayTime] = useState();
-  const webStreamOnly = contentType === 'application/pdf' || mediaType === 'text';
   const previousUri = usePrevious(uri);
   const isNewView = uri && previousUri !== uri && isPlaying;
   const [hasRecordedView, setHasRecordedView] = useState(false);
-  const isReadyToPlay = (IS_WEB && (isStreamable || streamingUrl || webStreamOnly)) || (fileInfo && fileInfo.completed);
+  const isReadyToPlay = streamingUrl || (fileInfo && fileInfo.completed);
 
   useEffect(() => {
     if (isNewView) {
@@ -52,9 +42,9 @@ export default function TextViewer(props: Props) {
     }
   }, [setPlayTime, triggerAnalyticsView, isReadyToPlay, hasRecordedView, playTime, uri, claimRewards]);
 
-  return (
-    <div className={classnames('content__viewersss')}>
-      {isReadyToPlay ? <FileRender uri={uri} /> : <div className="placeholder--text-document" />}
-    </div>
-  );
+  if (!isPlaying) {
+    return null;
+  }
+
+  return isReadyToPlay ? <FileRender uri={uri} /> : <LoadingScreen status={__('Preparing your content')} />;
 }

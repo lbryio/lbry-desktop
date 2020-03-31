@@ -5,78 +5,52 @@
 // while a file is currently being viewed
 import React, { useEffect, useCallback } from 'react';
 import classnames from 'classnames';
+import * as PAGES from 'constants/pages';
+import * as RENDER_MODES from 'constants/file_render_modes';
 import Button from 'component/button';
 import isUserTyping from 'util/detect-typing';
-import Yrbl from 'component/yrbl';
-import I18nMessage from 'component/i18nMessage';
-import { generateDownloadUrl } from 'util/lbrytv';
-import { FORCE_CONTENT_TYPE_PLAYER } from 'constants/claim';
+import Nag from 'component/common/nag';
 
 const SPACE_BAR_KEYCODE = 32;
 
 type Props = {
   play: string => void,
-  mediaType: string,
-  isText: boolean,
-  contentType: string,
   isLoading: boolean,
   isPlaying: boolean,
   fileInfo: FileListItem,
   uri: string,
+  history: { push: string => void },
   obscurePreview: boolean,
   insufficientCredits: boolean,
-  isStreamable: boolean,
   thumbnail?: string,
   autoplay: boolean,
   hasCostInfo: boolean,
   costInfo: any,
-  isAutoPlayable: boolean,
   inline: boolean,
+  renderMode: string,
   claim: StreamClaim,
 };
 
-export default function FileViewerInitiator(props: Props) {
+export default function FileRenderInitiator(props: Props) {
   const {
     play,
-    mediaType,
-    isText,
-    contentType,
     isPlaying,
     fileInfo,
     uri,
     obscurePreview,
     insufficientCredits,
+    history,
     thumbnail,
     autoplay,
-    isStreamable,
+    renderMode,
     hasCostInfo,
     costInfo,
-    isAutoPlayable,
-    claim,
   } = props;
+
   const cost = costInfo && costInfo.cost;
-  const forceVideo = FORCE_CONTENT_TYPE_PLAYER.includes(contentType);
-  const isPlayable = ['audio', 'video'].includes(mediaType) || forceVideo;
-  const isImage = mediaType === 'image';
+  const isFree = hasCostInfo && cost === 0;
   const fileStatus = fileInfo && fileInfo.status;
-  const webStreamOnly = contentType === 'application/pdf' || mediaType === 'text';
-  const supported = IS_WEB ? (!cost && isStreamable) || webStreamOnly || forceVideo : true;
-  const { name, claim_id: claimId, value } = claim;
-  const fileName = value && value.source && value.source.name;
-  const downloadUrl = generateDownloadUrl(name, claimId);
-
-  function getTitle() {
-    let message = __('Unsupported File');
-    // @if TARGET='web'
-    if (cost) {
-      message = __('Paid Content Not Supported on lbry.tv');
-    } else {
-      message = __("We're not quite ready to display this file on lbry.tv yet");
-    }
-    // @endif
-
-    return message;
-  }
+  const isPlayable = RENDER_MODES.PLAYABLE_MODES.includes(renderMode);
 
   // Wrap this in useCallback because we need to use it to the keyboard effect
   // If we don't a new instance will be created for every render and react will think the dependencies have changed, which will add/remove the listener for every render
@@ -112,45 +86,55 @@ export default function FileViewerInitiator(props: Props) {
 
   useEffect(() => {
     const videoOnPage = document.querySelector('video');
-    if (((autoplay && !videoOnPage && isAutoPlayable) || isText || isImage) && hasCostInfo && cost === 0) {
+    if (
+      isFree &&
+      ((autoplay && !videoOnPage && RENDER_MODES.PLAYABLE_MODES.includes(renderMode)) ||
+        RENDER_MODES.AUTO_RENDER_MODES.includes(renderMode))
+    ) {
       viewFile();
     }
-  }, [autoplay, viewFile, isAutoPlayable, hasCostInfo, cost, isText, isImage]);
+  }, [autoplay, viewFile, isFree, renderMode]);
+
+  /*
+  once content is playing, let the appropriate <FileRender> take care of it...
+  but for playables, always render so area can be used to fill with floating player
+   */
+  if (isPlaying && !isPlayable) {
+    return null;
+  }
+
+  const showAppNag = IS_WEB && (!isFree || RENDER_MODES.UNSUPPORTED_ON_WEB.includes(renderMode));
+
+  const disabled = showAppNag || (!fileInfo && insufficientCredits);
 
   return (
     <div
-      disabled={!hasCostInfo}
-      style={!obscurePreview && supported && thumbnail && !isPlaying ? { backgroundImage: `url("${thumbnail}")` } : {}}
-      onClick={supported ? viewFile : undefined}
-      className={classnames({
-        content__cover: supported,
-        'content__cover--disabled': !supported,
-        'content__cover--hidden-for-text': isText,
+      onClick={disabled ? undefined : viewFile}
+      style={thumbnail && !obscurePreview ? { backgroundImage: `url("${thumbnail}")` } : {}}
+      className={classnames('content__cover', {
+        'content__cover--disabled': disabled,
         'card__media--nsfw': obscurePreview,
-        'card__media--disabled': supported && !fileInfo && insufficientCredits,
       })}
     >
-      {!supported && (
-        <Yrbl
-          type="happy"
-          title={getTitle()}
-          subtitle={
-            <I18nMessage
-              tokens={{
-                download_the_app: <Button button="link" label={__('download the app')} href="https://lbry.com/get" />,
-                download_this_file: (
-                  <Button button="link" label={__('download this file')} download={fileName} href={downloadUrl} />
-                ),
-              }}
-            >
-              Good news, though! You can %download_the_app% and gain access to everything, or %download_this_file% and
-              view it on your device.
-            </I18nMessage>
-          }
+      {showAppNag && (
+        <Nag
+          type="helpful"
+          inline
+          message={__('This content requires LBRY Desktop to display.')}
+          actionText={__('Get the App')}
+          href="https://lbry.com/get"
         />
       )}
-
-      {!isPlaying && supported && (
+      {insufficientCredits && !showAppNag && (
+        <Nag
+          type="helpful"
+          inline
+          message={__('You need more credits to purchase this.')}
+          actionText={__('Open Rewards')}
+          onClick={() => history.push(`/$/${PAGES.REWARDS}`)}
+        />
+      )}
+      {!disabled && (
         <Button
           onClick={viewFile}
           iconSize={30}

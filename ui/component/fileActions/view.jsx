@@ -60,7 +60,7 @@ function FileActions(props: Props) {
 
   return (
     <div className="media__actions">
-      <div className="section__actions">
+      <div className="section__actions section__actions--no-margin">
         <Button
           button="alt"
           icon={ICONS.SHARE}
@@ -97,7 +97,7 @@ function FileActions(props: Props) {
         )}
       </div>
 
-      <div className="section__actions">
+      <div className="section__actions  section__actions--no-margin">
         <FileDownloadLink uri={uri} />
 
         {claimIsMine && (

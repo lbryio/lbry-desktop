@@ -1,6 +1,5 @@
 .card {
   background-color: var(--color-card-background);
-  margin-bottom: var(--spacing-large);
   position: relative;
   border-radius: var(--card-radius);
   overflow: hidden;
@@ -79,6 +78,12 @@
   justify-content: center;
 }
 
+.card-stack {
+  .card:not(:last-of-type) {
+    margin-bottom: var(--spacing-large);
+  }
+}
+
 .card__list {
   column-count: 2;
   column-gap: var(--spacing-large);
@@ -86,7 +91,7 @@
 
   .card {
     display: inline-block;
-    margin: 0 0 var(--spacing-large);
+    margin-bottom: var(--spacing-large);
   }
 
   @media (max-width: $breakpoint-small) {
@@ -139,22 +144,48 @@
   background-color: black;
 }
 
-.card__media--disabled {
-  opacity: 0.5;
-  pointer-events: none;
-}
-
 .card__header {
   margin: var(--spacing-medium) var(--spacing-large);
+  display: flex;
+  align-items: flex-start;
 
-  .section__subtitle {
-    margin-bottom: 0;
+  > * {
+    flex-grow: 1;
   }
+
+  .icon__wrapper {
+    margin-right: var(--spacing-large);
+  }
+}
+
+.card__title {
+  font-size: var(--font-title);
+  font-weight: var(--font-weight-light);
+  display: block;
+
+  /* .badge rule inherited from file page prices, should be refactored */
+  .badge {
+    float: right;
+    margin-left: var(--spacing-small);
+    margin-top: 8px; // should be flex'd, but don't blame me! I just moved it down 3px
+  }
+}
+
+.card__subtitle {
+  color: var(--color-text-subtitle);
+  margin: var(--spacing-small) 0;
+  font-size: var(--font-body);
 }
 
 .card__body {
   padding: var(--spacing-large);
-  padding-top: 0;
+  &:not(.card__body--no-title) {
+    padding-top: 0;
+  }
+  &.card__body--table {
+    padding: 0;
+    border-top: 1px solid var(--color-border);
+  }
 }
 
 .card__main-actions {

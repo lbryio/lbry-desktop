@@ -23,7 +23,7 @@ const WalletBalance = (props: Props) => {
 
   return (
     <React.Fragment>
-      <section className="section__flex-wrap">
+      <section className="columns">
         <div>
           <h2 className="section__title">{__('Available Balance')}</h2>
           <span className="section__title--large">

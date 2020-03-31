@@ -10,7 +10,7 @@ import ReactModal from 'react-modal';
 import { openContextMenu } from 'util/context-menu';
 import useKonamiListener from 'util/enhanced-layout';
 import Yrbl from 'component/yrbl';
-import FloatingViewer from 'component/floatingViewer';
+import FileRenderFloating from 'component/fileRenderFloating';
 import { withRouter } from 'react-router';
 import usePrevious from 'effects/use-previous';
 import Nag from 'component/common/nag';
@@ -286,7 +286,7 @@ function App(props: Props) {
         <React.Fragment>
           <Router />
           <ModalRouter />
-          <FloatingViewer pageUri={uri} />
+          <FileRenderFloating pageUri={uri} />
           {isEnhancedLayout && <Yrbl className="yrbl--enhanced" />}
 
           {/* @if TARGET='app' */}

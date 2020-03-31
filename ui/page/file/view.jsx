@@ -1,41 +1,44 @@
 // @flow
 import * as React from 'react';
-import Button from 'component/button';
 import Page from 'component/page';
-import I18nMessage from 'component/i18nMessage/view';
-import LayoutWrapperFile from 'component/layoutWrapperFile';
-import LayoutWrapperText from 'component/layoutWrapperText';
+import * as RENDER_MODES from 'constants/file_render_modes';
+import ClaimUri from 'component/claimUri';
+import FileTitle from 'component/fileTitle';
+import FileRenderInitiator from 'component/fileRenderInitiator';
+import FileRenderInline from 'component/fileRenderInline';
+import FileRenderDownload from 'component/fileRenderDownload';
+import Card from 'component/common/card';
+import FileDetails from 'component/fileDetails';
+import RecommendedContent from 'component/recommendedContent';
+import CommentsList from 'component/commentsList';
+import CommentCreate from 'component/commentCreate';
+
+export const FILE_WRAPPER_CLASS = 'grid-area--content';
 
 type Props = {
   claim: StreamClaim,
+  costInfo: ?{ includesData: boolean, cost: number },
   fileInfo: FileListItem,
   uri: string,
-  claimIsMine: boolean,
-  costInfo: ?{ cost: number },
   fetchFileInfo: string => void,
   fetchCostInfo: string => void,
   setViewed: string => void,
-  isSubscribed: ?string,
   isSubscribed: boolean,
   channelUri: string,
-  viewCount: number,
+  renderMode: string,
   markSubscriptionRead: (string, string) => void,
-  fetchViewCount: string => void,
-  balance: number,
-  isText: boolean,
 };
 
 class FilePage extends React.Component<Props> {
   componentDidMount() {
-    const { uri, claim, fetchFileInfo, fetchCostInfo, setViewed, isSubscribed, fetchViewCount } = this.props;
+    const { uri, fetchFileInfo, fetchCostInfo, setViewed, isSubscribed } = this.props;
 
     if (isSubscribed) {
       this.removeFromSubscriptionNotifications();
     }
 
-    fetchViewCount(claim.claim_id);
-
     // always refresh file info when entering file page to see if we have the file
+    // this could probably be refactored into more direct components now
     // @if TARGET='app'
     fetchFileInfo(uri);
     // @endif
@@ -46,14 +49,10 @@ class FilePage extends React.Component<Props> {
   }
 
   componentDidUpdate(prevProps: Props) {
-    const { isSubscribed, claim, uri, fileInfo, setViewed, fetchViewCount, fetchFileInfo } = this.props;
+    const { isSubscribed, uri, fileInfo, setViewed, fetchFileInfo } = this.props;
 
     if (!prevProps.isSubscribed && isSubscribed) {
       this.removeFromSubscriptionNotifications();
-    }
-
-    if (prevProps.uri !== uri) {
-      fetchViewCount(claim.claim_id);
     }
 
     if (prevProps.uri !== uri) {
@@ -74,26 +73,67 @@ class FilePage extends React.Component<Props> {
     markSubscriptionRead(channelUri, uri);
   }
 
-  render() {
-    const { uri, claimIsMine, costInfo, fileInfo, balance, isText } = this.props;
-    const insufficientCredits = !claimIsMine && costInfo && costInfo.cost > balance;
+  renderFilePageLayout(uri, mode, cost) {
+    if (RENDER_MODES.PLAYABLE_MODES.includes(mode)) {
+      return (
+        <React.Fragment>
+          <ClaimUri uri={uri} />
+          <div className={FILE_WRAPPER_CLASS}>
+            <FileRenderInitiator uri={uri} />
+          </div>
+          {/* playables will be rendered and injected by <FileRenderFloating> */}
+          <FileTitle uri={uri} />
+        </React.Fragment>
+      );
+    }
+
+    if (RENDER_MODES.UNRENDERABLE_MODES.includes(mode)) {
+      return (
+        <React.Fragment>
+          <ClaimUri uri={uri} />
+          <FileTitle uri={uri} />
+          <FileRenderDownload uri={uri} isFree={cost === 0} />
+        </React.Fragment>
+      );
+    }
+
+    if (RENDER_MODES.TEXT_MODES.includes(mode)) {
+      return (
+        <React.Fragment>
+          <ClaimUri uri={uri} />
+          <FileTitle uri={uri} />
+          <FileRenderInitiator uri={uri} />
+          <FileRenderInline uri={uri} />
+        </React.Fragment>
+      );
+    }
 
     return (
-      <Page className="main--file-page">
-        {!fileInfo && insufficientCredits && (
-          <div className="media__insufficient-credits help--warning">
-            <I18nMessage
-              tokens={{
-                reward_link: <Button button="link" navigate="/$/rewards" label={__('Rewards')} />,
-              }}
-            >
-              The publisher has chosen to charge LBC to view this content. Your balance is currently too low to view it.
-              Check out %reward_link% for free LBC or send more LBC to your wallet.
-            </I18nMessage>
-          </div>
-        )}
+      <React.Fragment>
+        <ClaimUri uri={uri} />
+        <FileRenderInitiator uri={uri} />
+        <FileRenderInline uri={uri} />
+        <FileTitle uri={uri} />
+      </React.Fragment>
+    );
+  }
 
-        {isText ? <LayoutWrapperText uri={uri} /> : <LayoutWrapperFile uri={uri} />}
+  render() {
+    const { uri, renderMode, costInfo } = this.props;
+
+    return (
+      <Page className="file-page">
+        <div className="section card-stack">
+          {this.renderFilePageLayout(uri, renderMode, costInfo ? costInfo.cost : null)}
+        </div>
+        <div className="section columns">
+          <div className="card-stack">
+            <FileDetails uri={uri} />
+            <Card title={__('Leave a Comment')} actions={<CommentCreate uri={uri} />} />
+            <Card title={__('Comments')} body={<CommentsList uri={uri} />} />
+          </div>
+          <RecommendedContent uri={uri} />
+        </div>
       </Page>
     );
   }

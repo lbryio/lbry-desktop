@@ -1,9 +1,9 @@
 // @flow
 import { URL } from 'config';
 import { remote } from 'electron';
-import React, { Suspense, Fragment } from 'react';
+import React, { Suspense } from 'react';
 import classnames from 'classnames';
-import LoadingScreen from 'component/common/loading-screen';
+import * as RENDER_MODES from 'constants/file_render_modes';
 import VideoViewer from 'component/viewers/videoViewer';
 import ImageViewer from 'component/viewers/imageViewer';
 import AppViewer from 'component/viewers/appViewer';
@@ -11,18 +11,14 @@ import Button from 'component/button';
 import { withRouter } from 'react-router-dom';
 import AutoplayCountdown from 'component/autoplayCountdown';
 import { formatLbryUrlForWeb } from 'util/url';
-// @if TARGET='web'
-import { generateStreamUrl } from 'util/lbrytv';
-// @endif
-
-import path from 'path';
 import fs from 'fs';
-import Yrbl from 'component/yrbl';
 
 import DocumentViewer from 'component/viewers/documentViewer';
 import PdfViewer from 'component/viewers/pdfViewer';
 import HtmlViewer from 'component/viewers/htmlViewer';
+
 // @if TARGET='app'
+// should match
 import DocxViewer from 'component/viewers/docxViewer';
 import ComicBookViewer from 'component/viewers/comicBookViewer';
 import ThreeViewer from 'component/viewers/threeViewer';
@@ -31,17 +27,17 @@ import ThreeViewer from 'component/viewers/threeViewer';
 type Props = {
   uri: string,
   mediaType: string,
-  isText: true,
   streamingUrl: string,
   embedded?: boolean,
   contentType: string,
   claim: StreamClaim,
   currentTheme: string,
   downloadPath: string,
-  fileName: string,
+  fileExtension: string,
   autoplay: boolean,
   setPlayingUri: (string | null) => void,
   currentlyFloating: boolean,
+  renderMode: string,
   thumbnail: string,
 };
 
@@ -113,114 +109,50 @@ class FileRender extends React.PureComponent<Props, State> {
   }
 
   renderViewer() {
-    const { mediaType, currentTheme, claim, contentType, downloadPath, fileName, streamingUrl, uri } = this.props;
-    const fileType = fileName && path.extname(fileName).substring(1);
+    const { currentTheme, contentType, downloadPath, fileExtension, streamingUrl, uri, renderMode } = this.props;
+    const source = streamingUrl;
 
-    // Ideally the lbrytv api server would just replace the streaming_url returned by the sdk so we don't need this check
-    // https://github.com/lbryio/lbrytv/issues/51
-    const source = IS_WEB ? generateStreamUrl(claim.name, claim.claim_id) : streamingUrl;
-
-    // Human-readable files (scripts and plain-text files)
-    const readableFiles = ['text', 'document', 'script'];
-
-    // Supported mediaTypes
-    const mediaTypes = {
-      // @if TARGET='app'
-      '3D-file': <ThreeViewer source={{ fileType, downloadPath }} theme={currentTheme} />,
-      'comic-book': <ComicBookViewer source={{ fileType, downloadPath }} theme={currentTheme} />,
-      application: <AppViewer uri={uri} />,
-      // @endif
-
-      video: <VideoViewer uri={uri} source={source} contentType={contentType} onEndedCB={this.getOnEndedCb()} />,
-      audio: <VideoViewer uri={uri} source={source} contentType={contentType} onEndedCB={this.getOnEndedCb()} />,
-      image: <ImageViewer uri={uri} source={source} />,
-      // Add routes to viewer...
-    };
-
-    // Supported contentTypes
-    const contentTypes = {
-      'application/x-ext-mkv': (
-        <VideoViewer uri={uri} source={source} contentType={contentType} onEndedCB={this.getOnEndedCb()} />
-      ),
-      'video/x-matroska': (
-        <VideoViewer uri={uri} source={source} contentType={contentType} onEndedCB={this.getOnEndedCb()} />
-      ),
-      'application/pdf': <PdfViewer source={downloadPath || source} />,
-      'text/html': <HtmlViewer source={downloadPath || source} />,
-      'text/htm': <HtmlViewer source={downloadPath || source} />,
-    };
-
-    // Supported fileType
-    const fileTypes = {
-      // @if TARGET='app'
-      docx: <DocxViewer source={downloadPath} />,
-      // @endif
-      // Add routes to viewer...
-    };
-
-    // Check for a valid fileType, mediaType, or contentType
-    let viewer = (fileType && fileTypes[fileType]) || mediaTypes[mediaType] || contentTypes[contentType];
-
-    // Check for Human-readable files
-    if (!viewer && readableFiles.includes(mediaType)) {
-      viewer = (
-        <DocumentViewer
-          source={{
-            // @if TARGET='app'
-            file: options => fs.createReadStream(downloadPath, options),
-            // @endif
-            stream: source,
-            fileType,
-            contentType,
-          }}
-          theme={currentTheme}
-        />
-      );
+    switch (renderMode) {
+      case RENDER_MODES.AUDIO:
+      case RENDER_MODES.VIDEO:
+        return <VideoViewer uri={uri} source={source} contentType={contentType} onEndedCB={this.getOnEndedCb()} />;
+      case RENDER_MODES.IMAGE:
+        return <ImageViewer uri={uri} source={source} />;
+      case RENDER_MODES.HTML:
+        return <HtmlViewer source={downloadPath || source} />;
+      case RENDER_MODES.DOCUMENT:
+      case RENDER_MODES.MARKDOWN:
+        return (
+          <DocumentViewer
+            source={{
+              // @if TARGET='app'
+              file: options => fs.createReadStream(downloadPath, options),
+              // @endif
+              stream: source,
+              fileExtension,
+              contentType,
+            }}
+            renderMode={renderMode}
+            theme={currentTheme}
+          />
+        );
+      case RENDER_MODES.DOCX:
+        return <DocxViewer source={downloadPath} />;
+      case RENDER_MODES.PDF:
+        return <PdfViewer source={downloadPath || source} />;
+      case RENDER_MODES.CAD:
+        return <ThreeViewer source={{ fileExtension, downloadPath }} theme={currentTheme} />;
+      case RENDER_MODES.COMIC:
+        return <ComicBookViewer source={{ fileExtension, downloadPath }} theme={currentTheme} />;
+      case RENDER_MODES.APPLICATION:
+        return <AppViewer uri={uri} />;
     }
 
-    // @if TARGET='web'
-    // temp workaround to disabled paid content on web
-    if (claim && claim.value.fee && Number(claim.value.fee.amount) > 0) {
-      const paidMessage = __(
-        'Currently, only free content is available on lbry.tv. Try viewing it in the desktop app.'
-      );
-      const paid = <LoadingScreen status={paidMessage} spinner={false} />;
-      return paid;
-    }
-    // @endif
-
-    const unsupported = IS_WEB ? (
-      <div className={'content__cover--disabled'}>
-        <Yrbl
-          className={'content__cover--disabled'}
-          title={'Not available on lbry.tv'}
-          subtitle={
-            <Fragment>
-              <p>
-                {__('Good news, though! You can')}{' '}
-                <Button button="link" label={__('Download the desktop app')} href="https://lbry.com/get" />{' '}
-                {'and have access to all file types.'}
-              </p>
-            </Fragment>
-          }
-          uri={uri}
-        />
-      </div>
-    ) : (
-      <div className={'content__cover--disabled'}>
-        <Yrbl
-          title={'Content Downloaded'}
-          subtitle={'This file is unsupported here, but you can view the content in an application of your choice'}
-          uri={uri}
-        />
-      </div>
-    );
-
-    // Return viewer
-    return viewer || unsupported;
+    return null;
   }
+
   render() {
-    const { isText, uri, currentlyFloating, embedded } = this.props;
+    const { uri, currentlyFloating, embedded, renderMode } = this.props;
     const { showAutoplayCountdown, showEmbededMessage } = this.state;
     const lbrytvLink = `${URL}${formatLbryUrlForWeb(uri)}?src=embed`;
 
@@ -228,7 +160,7 @@ class FileRender extends React.PureComponent<Props, State> {
       <div
         className={classnames({
           'file-render': !embedded,
-          'file-render--document': isText && !embedded,
+          'file-render--document': RENDER_MODES.TEXT_MODES.includes(renderMode) && !embedded,
           'file-render__embed': embedded,
         })}
       >
