@@ -5,7 +5,7 @@ export const ORDER_BY_KEY = 'order';
 export const DURATION_KEY = 'duration';
 export const TAGS_KEY = 't';
 export const CONTENT_KEY = 'content';
-export const REPOSTED_URI_KEY = 'reposted_uri';
+export const REPOSTED_CLAIM_ID_KEY = 'reposted_claim_id';
 
 export const TAGS_ALL = 'tags_any';
 export const TAGS_FOLLOWED = 'tags_followed';
