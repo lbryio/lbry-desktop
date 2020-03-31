@@ -16,7 +16,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ### Changed
 
-- Updated lbry-sdk to [0.67.0](https://github.com/lbryio/lbry-sdk/releases/tag/v0.67.0)
+- Updated lbry-sdk to [0.67.1](https://github.com/lbryio/lbry-sdk/releases/tag/v0.67.1)
 - Add sign out confirmation modal on desktop to explain potential issues with signing into a new account ([#3837](https://github.com/lbryio/lbry-desktop/pull/3837))
 
 ### Fixed
