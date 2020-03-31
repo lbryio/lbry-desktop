@@ -13,8 +13,9 @@ import I18nMessage from 'component/i18nMessage';
 import 'css-doodle';
 
 const FORTY_FIVE_SECONDS = 45 * 1000;
-const UPDATE_INTERVAL = 500; // .5 seconds
-const MAX_WALLET_WAIT = 20; // 10 seconds for wallet to be started, but servers to be unavailable
+const UPDATE_INTERVAL = 1000; // 1 second
+const MAX_WALLET_WAIT = 20; // 20 seconds for wallet to be started, but servers to be unavailable
+const MAX_SYNC_WAIT = 45; // 45 seconds to sync wallet, show message if taking long
 
 type Props = {
   checkDaemonVersion: () => Promise<any>,
@@ -39,6 +40,7 @@ type State = {
   isRunning: boolean,
   launchWithIncompatibleDaemon: boolean,
   waitingForWallet: number,
+  waitingForSync: number,
 };
 
 export default class SplashScreen extends React.PureComponent<Props, State> {
@@ -53,6 +55,7 @@ export default class SplashScreen extends React.PureComponent<Props, State> {
       launchWithIncompatibleDaemon: !process.env.NODE_ENV === 'production',
       isRunning: false,
       waitingForWallet: 0,
+      waitingForSync: 0,
     };
 
     (this: any).renderModals = this.renderModals.bind(this);
@@ -106,39 +109,46 @@ export default class SplashScreen extends React.PureComponent<Props, State> {
     const { launchedModal } = this.state;
 
     Lbry.status().then(status => {
+      const sdkStatus = status;
       const { wallet } = status;
-      if (status.is_running && wallet && wallet.available_servers) {
-        Lbry.wallet_status().then(walletStatus => {
-          if (walletStatus.is_locked) {
+      Lbry.wallet_status().then(status => {
+        if (sdkStatus.is_running && wallet && wallet.available_servers) {
+          if (status.is_locked) {
             // Clear the error timeout, it might sit on this step for a while until someone enters their password
             if (this.timeout) {
               clearTimeout(this.timeout);
             }
             // Make sure there isn't another active modal (like INCOMPATIBLE_DAEMON)
-            this.updateStatusCallback(status, true);
+            this.updateStatusCallback(sdkStatus, status, true);
             if (launchedModal === false && !modal) {
               this.setState({ launchedModal: true }, () => notifyUnlockWallet());
             }
           } else {
-            this.updateStatusCallback(status);
+            this.updateStatusCallback(sdkStatus, status);
           }
-        });
-      } else if (this.state.waitingForWallet > MAX_WALLET_WAIT && launchedModal === false && !modal) {
-        clearWalletServers();
-        doShowSnackBar(
-          __(
-            'The wallet server took a bit too long. Resetting defaults just in case. Shutdown (Cmd/Ctrl+Q) LBRY and restart if this continues.'
-          )
-        );
-        this.setState({ waitingForWallet: 0 });
-        this.updateStatusCallback(status);
-      } else {
-        this.updateStatusCallback(status);
-      }
+        } else if (!sdkStatus.is_running && status.is_syncing) {
+          // Clear the timeout if wallet is still syncing
+          if (this.timeout) {
+            clearTimeout(this.timeout);
+          }
+          this.updateStatusCallback(sdkStatus, status);
+        } else if (this.state.waitingForWallet > MAX_WALLET_WAIT && launchedModal === false && !modal) {
+          clearWalletServers();
+          doShowSnackBar(
+            __(
+              'The wallet server took a bit too long. Resetting defaults just in case. Shutdown (Cmd/Ctrl+Q) LBRY and restart if this continues.'
+            )
+          );
+          this.setState({ waitingForWallet: 0 });
+          this.updateStatusCallback(sdkStatus, status);
+        } else {
+          this.updateStatusCallback(sdkStatus, status);
+        }
+      });
     });
   }
 
-  updateStatusCallback(status: StatusResponse, waitingForUnlock: boolean = false) {
+  updateStatusCallback(status: StatusResponse, walletStatus: WalletStatusResponse, waitingForUnlock: boolean = false) {
     if (status.connection_status.code !== 'connected') {
       this.setState({ error: true });
       return;
@@ -155,12 +165,25 @@ export default class SplashScreen extends React.PureComponent<Props, State> {
       });
 
       return;
-    } else if (wallet && wallet.blocks_behind > 0) {
-      this.setState({
-        message: __('Blockchain Sync'),
-        details: `${__('Catching up...')} (${wallet.headers_synchronization_progress}%)`,
-      });
-    } else if (wallet && wallet.blocks_behind === 0 && !status.is_running && startupStatus.database) {
+    } else if (wallet && !status.is_running && walletStatus.is_syncing) {
+      this.setState({ waitingForSync: this.state.waitingForSync + UPDATE_INTERVAL / 1000 });
+      if (this.state.waitingForSync < MAX_SYNC_WAIT) {
+        this.setState({
+          message: 'Loading Wallet',
+          details: 'Updating wallet data...',
+        });
+      } else {
+        this.setState({
+          message: 'Loading Wallet',
+          details: (
+            <React.Fragment>
+              <div>Large account history</div>
+              <div>Please wait...</div>
+            </React.Fragment>
+          ),
+        });
+      }
+    } else if (wallet && !status.is_running && startupStatus.database) {
       this.setState({
         message: 'Finalizing',
         details: 'Almost ready...',
