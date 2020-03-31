@@ -999,7 +999,7 @@
   "Short": "Short",
   "How Fresh": "How Fresh",
   "This Default": "This Default",
-  "Sorry, your request returned no results or timed out. Modify your options or %again%": "Sorry, your request returned no results or timed out. Modify your options or %again%",
+  "Sorry, your request timed out. Modify your options or %again%": "Sorry, your request timed out. Modify your options or %again%",
   "Image": "Image",
   "Model": "Model",
   "Binary": "Binary",
@@ -1085,5 +1085,6 @@
   "Finnish": "Finnish",
   "Kannada": "Kannada",
   "Transcoding this %size%MB file should take under %processTime% %units%.": "Transcoding this %size%MB file should take under %processTime% %units%.",
-  "FFmpeg not configured. More in %settings_link%.": "FFmpeg not configured. More in %settings_link%."
+  "FFmpeg not configured. More in %settings_link%.": "FFmpeg not configured. More in %settings_link%.",
+  "smallresult": "smallresult"
 }

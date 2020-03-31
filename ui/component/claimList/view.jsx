@@ -32,6 +32,7 @@ type Props = {
   includeSupportAction?: boolean,
   hideBlock: boolean,
   injectedItem: ?Node,
+  timedOutMessage?: Node,
 };
 
 export default function ClaimList(props: Props) {
@@ -55,9 +56,11 @@ export default function ClaimList(props: Props) {
     includeSupportAction,
     hideBlock,
     injectedItem,
+    timedOutMessage,
   } = props;
   const [scrollBottomCbMap, setScrollBottomCbMap] = useState({});
   const [currentSort, setCurrentSort] = usePersistedState(persistedStorageKey, SORT_NEW);
+  const timedOut = uris === null;
   const urisLength = (uris && uris.length) || 0;
   const sortedUris = (urisLength > 0 && (currentSort === SORT_NEW ? uris : uris.slice().reverse())) || [];
 
@@ -157,9 +160,10 @@ export default function ClaimList(props: Props) {
           ))}
         </ul>
       )}
-      {urisLength === 0 && !loading && (
+      {!timedOut && urisLength === 0 && !loading && (
         <div className="card--section main--empty empty">{empty || __('No results')}</div>
       )}
+      {timedOut && timedOutMessage && <div className="card--section main--empty empty">{timedOutMessage}</div>}
     </section>
   );
 }
