@@ -53,7 +53,7 @@ export default function FloatingViewer(props: Props) {
     y: window.innerHeight - 400,
   });
   const inline = pageUri === uri;
-  const isPlayable = RENDER_MODES.PLAYABLE_MODES.includes(renderMode);
+  const isPlayable = RENDER_MODES.FLOATING_MODES.includes(renderMode);
   const isReadyToPlay = isPlayable && (streamingUrl || (fileInfo && fileInfo.completed));
   const loadingMessage =
     fileInfo && fileInfo.blobs_completed >= 1 && (!fileInfo.download_path || !fileInfo.written_bytes)
@@ -91,6 +91,7 @@ export default function FloatingViewer(props: Props) {
   }, [isNewView, uri]);
 
   useEffect(() => {
+    console.log('effect');
     if (playTime && isReadyToPlay && !hasRecordedView) {
       const timeToStart = Date.now() - playTime;
       triggerAnalyticsView(uri, timeToStart).then(() => {

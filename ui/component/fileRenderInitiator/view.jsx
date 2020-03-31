@@ -50,7 +50,7 @@ export default function FileRenderInitiator(props: Props) {
   const cost = costInfo && costInfo.cost;
   const isFree = hasCostInfo && cost === 0;
   const fileStatus = fileInfo && fileInfo.status;
-  const isPlayable = RENDER_MODES.PLAYABLE_MODES.includes(renderMode);
+  const isPlayable = RENDER_MODES.FLOATING_MODES.includes(renderMode);
 
   // Wrap this in useCallback because we need to use it to the keyboard effect
   // If we don't a new instance will be created for every render and react will think the dependencies have changed, which will add/remove the listener for every render
@@ -86,11 +86,7 @@ export default function FileRenderInitiator(props: Props) {
 
   useEffect(() => {
     const videoOnPage = document.querySelector('video');
-    if (
-      isFree &&
-      ((autoplay && !videoOnPage && RENDER_MODES.PLAYABLE_MODES.includes(renderMode)) ||
-        RENDER_MODES.AUTO_RENDER_MODES.includes(renderMode))
-    ) {
+    if (isFree && ((autoplay && !videoOnPage && isPlayable) || RENDER_MODES.AUTO_RENDER_MODES.includes(renderMode))) {
       viewFile();
     }
   }, [autoplay, viewFile, isFree, renderMode]);
@@ -103,7 +99,7 @@ export default function FileRenderInitiator(props: Props) {
     return null;
   }
 
-  const showAppNag = IS_WEB && (!isFree || RENDER_MODES.UNSUPPORTED_ON_WEB.includes(renderMode));
+  const showAppNag = IS_WEB && (!isFree || RENDER_MODES.UNSUPPORTED_IN_THIS_APP.includes(renderMode));
 
   const disabled = showAppNag || (!fileInfo && insufficientCredits);
 
