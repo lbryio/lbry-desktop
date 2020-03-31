@@ -14,10 +14,8 @@ import Ads from 'lbrytv/component/ads';
 type Props = {
   location: { search: string },
   followedTags: Array<Tag>,
-  repostedUri: string,
-  repostedClaim: ?GenericClaim,
+  repostedClaimId: string,
   doToggleTagFollowDesktop: string => void,
-  doResolveUri: string => void,
   isAuthenticated: boolean,
 };
 
@@ -25,10 +23,8 @@ function DiscoverPage(props: Props) {
   const {
     location: { search },
     followedTags,
-    repostedClaim,
-    repostedUri,
+    repostedClaimId,
     doToggleTagFollowDesktop,
-    doResolveUri,
     isAuthenticated,
   } = props;
   const buttonRef = useRef();
@@ -38,7 +34,6 @@ function DiscoverPage(props: Props) {
   const claimType = urlParams.get('claim_type');
   const tagsQuery = urlParams.get('t') || null;
   const tags = tagsQuery ? tagsQuery.split(',') : null;
-  const repostedClaimIsResolved = repostedUri && repostedClaim;
 
   // Eventually allow more than one tag on this page
   // Restricting to one to make follow/unfollow simpler
@@ -50,12 +45,6 @@ function DiscoverPage(props: Props) {
     label = __('Unfollow');
   }
 
-  React.useEffect(() => {
-    if (repostedUri && !repostedClaimIsResolved) {
-      doResolveUri(repostedUri);
-    }
-  }, [repostedUri, repostedClaimIsResolved, doResolveUri]);
-
   function handleFollowClick() {
     if (tag) {
       doToggleTagFollowDesktop(tag);
@@ -66,8 +55,8 @@ function DiscoverPage(props: Props) {
   }
 
   let headerLabel;
-  if (repostedClaim) {
-    headerLabel = __('Reposts of %uri%', { uri: repostedUri });
+  if (repostedClaimId) {
+    headerLabel = __('Reposts');
   } else if (tag) {
     headerLabel = (
       <span>
@@ -91,7 +80,7 @@ function DiscoverPage(props: Props) {
         headerLabel={headerLabel}
         tags={tags}
         hiddenNsfwMessage={<HiddenNsfw type="page" />}
-        repostedClaimId={repostedClaim ? repostedClaim.claim_id : null}
+        repostedClaimId={repostedClaimId}
         injectedItem={!isAuthenticated && IS_WEB && <Ads type="video" />}
         meta={
           tag && (
