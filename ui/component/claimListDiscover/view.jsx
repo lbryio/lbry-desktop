@@ -255,15 +255,20 @@ function ClaimListDiscover(props: Props) {
 
   const hasMatureTags = tagsParam && tagsParam.split(',').some(t => MATURE_TAGS.includes(t));
   const claimSearchCacheQuery = createNormalizedClaimSearchKey(options);
-  const uris = claimSearchByQuery[claimSearchCacheQuery] || [];
+  const claimSearchResult = claimSearchByQuery[claimSearchCacheQuery];
+
   const shouldPerformSearch =
-    uris.length === 0 ||
+    claimSearchResult === undefined ||
     didNavigateForward ||
-    (!loading && uris.length < CS.PAGE_SIZE * page && uris.length % CS.PAGE_SIZE === 0);
+    (!loading &&
+      claimSearchResult &&
+      claimSearchResult.length < CS.PAGE_SIZE * page &&
+      claimSearchResult.length % CS.PAGE_SIZE === 0);
+
   // Don't use the query from createNormalizedClaimSearchKey for the effect since that doesn't include page & release_time
   const optionsStringForEffect = JSON.stringify(options);
 
-  const noResults = (
+  const timedOutMessage = (
     <div>
       <p>
         <I18nMessage
@@ -277,7 +282,7 @@ function ClaimListDiscover(props: Props) {
             ),
           }}
         >
-          Sorry, your request returned no results or timed out. Modify your options or %again%
+          Sorry, your request timed out. Modify your options or %again%
         </I18nMessage>
       </p>
       <p>
@@ -587,14 +592,14 @@ function ClaimListDiscover(props: Props) {
       <ClaimList
         id={claimSearchCacheQuery}
         loading={loading}
-        uris={uris}
+        uris={claimSearchResult}
         header={header || defaultHeader}
         headerLabel={headerLabel}
         headerAltControls={meta}
         onScrollBottom={handleScrollBottom}
         page={page}
         pageSize={CS.PAGE_SIZE}
-        empty={noResults}
+        timedOutMessage={timedOutMessage}
         renderProperties={renderProperties}
         includeSupportAction={includeSupportAction}
         hideBlock={hideBlock}
