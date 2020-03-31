@@ -130,7 +130,7 @@
     "imagesloaded": "^4.1.4",
     "json-loader": "^0.5.4",
     "lbry-format": "https://github.com/lbryio/lbry-format.git",
-    "lbry-redux": "lbryio/lbry-redux#b7ae238606587696f92718120a646a5965ee8ae9",
+    "lbry-redux": "lbryio/lbry-redux#625a624b9c2d5839e25c1a592d69b9f312944fe0",
     "lbryinc": "lbryio/lbryinc#19260fac560daaa4be2d4af372f28109ea96ebf9",
     "lint-staged": "^7.0.2",
     "localforage": "^1.7.1",
@@ -209,7 +209,7 @@
     "yarn": "^1.3"
   },
   "lbrySettings": {
-    "lbrynetDaemonVersion": "0.67.0",
+    "lbrynetDaemonVersion": "0.66.0",
     "lbrynetDaemonUrlTemplate": "https://github.com/lbryio/lbry/releases/download/vDAEMONVER/lbrynet-OSNAME.zip",
     "lbrynetDaemonDir": "static/daemon",
     "lbrynetDaemonFileName": "lbrynet"
