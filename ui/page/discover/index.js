@@ -1,21 +1,24 @@
 import { connect } from 'react-redux';
-import { selectFollowedTags } from 'lbry-redux';
+import { makeSelectClaimForUri, selectFollowedTags, doResolveUri } from 'lbry-redux';
 import { selectUserVerifiedEmail } from 'lbryinc';
 import { doToggleTagFollowDesktop } from 'redux/actions/tags';
 import * as CS from 'constants/claim_search';
-import Discover from './view';
+import Tags from './view';
 
 const select = (state, props) => {
   const urlParams = new URLSearchParams(props.location.search);
-  const repostedClaimId = urlParams.get(CS.REPOSTED_CLAIM_ID_KEY);
+  const repostedUriInUrl = urlParams.get(CS.REPOSTED_URI_KEY);
+  const repostedUri = repostedUriInUrl ? decodeURIComponent(repostedUriInUrl) : undefined;
 
   return {
     followedTags: selectFollowedTags(state),
-    repostedClaimId: repostedClaimId,
+    repostedUri: repostedUri,
+    repostedClaim: repostedUri ? makeSelectClaimForUri(repostedUri)(state) : null,
     isAuthenticated: selectUserVerifiedEmail(state),
   };
 };
 
 export default connect(select, {
   doToggleTagFollowDesktop,
-})(Discover);
+  doResolveUri,
+})(Tags);

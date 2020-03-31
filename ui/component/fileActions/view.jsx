@@ -52,7 +52,7 @@ function FileActions(props: Props) {
         <Button
           button="alt"
           label={__('(%count%)', { count: claim.meta.reposted })}
-          navigate={`/$/${PAGES.DISCOVER}?${CS.REPOSTED_CLAIM_ID_KEY}=${claim.claim_id}`}
+          navigate={`/$/${PAGES.DISCOVER}?${CS.REPOSTED_URI_KEY}=${encodeURIComponent(uri)}`}
         />
       </Fragment>
     );
