@@ -84,8 +84,6 @@ function OpenInAppLink(props: Props) {
     return null;
   }
 
-  return null;
-
   return (
     <Nag
       type="helpful"

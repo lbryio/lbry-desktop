@@ -11,8 +11,6 @@ type Props = {
 export default function NagDegradedPerformance(props: Props) {
   const { onClose } = props;
 
-  return null;
-
   return (
     <Nag
       type="error"

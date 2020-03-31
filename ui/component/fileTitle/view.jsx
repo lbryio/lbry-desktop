@@ -33,9 +33,7 @@ function FileTitle(props: Props) {
       }
       body={
         <React.Fragment>
-          {/* @if TARGET='app' */}
           <ClaimInsufficientCredits uri={uri} />
-          {/* @endif */}
           <FileSubtitle uri={uri} />
           <FileAuthor uri={uri} />
         </React.Fragment>
