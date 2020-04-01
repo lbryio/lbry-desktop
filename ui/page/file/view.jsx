@@ -74,7 +74,7 @@ class FilePage extends React.Component<Props> {
     markSubscriptionRead(channelUri, uri);
   }
 
-  renderFilePageLayout(uri, mode, cost) {
+  renderFilePageLayout(uri: string, mode: string, cost: ?number) {
     if (RENDER_MODES.FLOATING_MODES.includes(mode)) {
       return (
         <React.Fragment>

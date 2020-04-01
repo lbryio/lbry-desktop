@@ -13,14 +13,12 @@ import {
   selectBlockedChannels,
   parseURI,
   makeSelectContentTypeForUri,
-  makeSelectUriIsStreamable,
   makeSelectFileNameForUri,
 } from 'lbry-redux';
 import { selectAllCostInfoByUri, makeSelectCostInfoForUri } from 'lbryinc';
 import { selectShowMatureContent } from 'redux/selectors/settings';
 import * as RENDER_MODES from 'constants/file_render_modes';
 import path from 'path';
-import React from 'react';
 import { FORCE_CONTENT_TYPE_PLAYER } from 'constants/claim';
 // @if TARGET='web'
 import { generateStreamUrl } from 'util/lbrytv';
@@ -147,14 +145,15 @@ export const makeSelectFileExtensionForUri = (uri: string) =>
     return fileName && path.extname(fileName).substring(1);
   });
 
+let makeSelectStreamingUrlForUriWebProxy;
 // @if TARGET='web'
-export const makeSelectStreamingUrlForUriWebProxy = (uri: string) =>
+makeSelectStreamingUrlForUriWebProxy = (uri: string) =>
   createSelector(makeSelectClaimForUri(uri), claim => (claim ? generateStreamUrl(claim.name, claim.claim_id) : null));
 // @endif
 // @if TARGET='app'
-export const makeSelectStreamingUrlForUriWebProxy = (uri: string) =>
-  createSelector(makeSelectStreamingUrlForUri, url => url);
+makeSelectStreamingUrlForUriWebProxy = (uri: string) => createSelector(makeSelectStreamingUrlForUri(uri), url => url);
 // @endif
+export { makeSelectStreamingUrlForUriWebProxy };
 
 export const makeSelectFileRenderModeForUri = (uri: string) =>
   createSelector(

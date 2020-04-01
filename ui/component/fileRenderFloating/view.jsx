@@ -91,7 +91,6 @@ export default function FloatingViewer(props: Props) {
   }, [isNewView, uri]);
 
   useEffect(() => {
-    console.log('effect');
     if (playTime && isReadyToPlay && !hasRecordedView) {
       const timeToStart = Date.now() - playTime;
       triggerAnalyticsView(uri, timeToStart).then(() => {
