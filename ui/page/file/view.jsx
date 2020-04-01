@@ -3,7 +3,7 @@ import * as React from 'react';
 import classnames from 'classnames';
 import Page from 'component/page';
 import * as RENDER_MODES from 'constants/file_render_modes';
-import FileRenderHeader from 'component/fileRenderHeader';
+import ClaimUri from 'component/claimUri';
 import FileTitle from 'component/fileTitle';
 import FileRenderInitiator from 'component/fileRenderInitiator';
 import FileRenderInline from 'component/fileRenderInline';
@@ -78,7 +78,7 @@ class FilePage extends React.Component<Props> {
     if (RENDER_MODES.FLOATING_MODES.includes(mode)) {
       return (
         <React.Fragment>
-          <FileRenderHeader uri={uri} />
+          <ClaimUri uri={uri} />
           <div className={FILE_WRAPPER_CLASS}>
             <FileRenderInitiator uri={uri} />
           </div>
@@ -91,7 +91,7 @@ class FilePage extends React.Component<Props> {
     if (RENDER_MODES.UNRENDERABLE_MODES.includes(mode)) {
       return (
         <React.Fragment>
-          <FileRenderHeader uri={uri} />
+          <ClaimUri uri={uri} />
           <FileTitle uri={uri} />
           <FileRenderDownload uri={uri} isFree={cost === 0} />
         </React.Fragment>
@@ -101,7 +101,7 @@ class FilePage extends React.Component<Props> {
     if (RENDER_MODES.TEXT_MODES.includes(mode)) {
       return (
         <React.Fragment>
-          <FileRenderHeader uri={uri} />
+          <ClaimUri uri={uri} />
           <FileTitle uri={uri} />
           <FileRenderInitiator uri={uri} />
           <FileRenderInline uri={uri} />
@@ -111,7 +111,7 @@ class FilePage extends React.Component<Props> {
 
     return (
       <React.Fragment>
-        <FileRenderHeader uri={uri} />
+        <ClaimUri uri={uri} />
         <FileRenderInitiator uri={uri} />
         <FileRenderInline uri={uri} />
         <FileTitle uri={uri} />

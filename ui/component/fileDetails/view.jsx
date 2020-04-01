@@ -1,4 +1,6 @@
 // @flow
+import * as PAGES from 'constants/pages';
+import * as CS from 'constants/claim_search';
 import React, { Fragment, PureComponent } from 'react';
 import MarkdownPreview from 'component/common/markdown-preview';
 import Button from 'component/button';
@@ -56,9 +58,21 @@ class FileDetails extends PureComponent<Props> {
               <table className="table table--condensed table--fixed table--file-details">
                 <tbody>
                   <tr>
-                    <td> {__('Content Type')}</td>
+                    <td>{__('Content Type')}</td>
                     <td>{mediaType}</td>
                   </tr>
+                  {claim && claim.meta.reposted > 0 && (
+                    <tr>
+                      <td>{__('Reposts')}</td>
+                      <td>
+                        <Button
+                          button="link"
+                          label={__('View %count% reposts', { count: claim.meta.reposted })}
+                          navigate={`/$/${PAGES.DISCOVER}?${CS.REPOSTED_URI_KEY}=${encodeURIComponent(uri)}`}
+                        />
+                      </td>
+                    </tr>
+                  )}
                   {fileSize && (
                     <tr>
                       <td> {__('File Size')}</td>
