@@ -63,6 +63,7 @@
   @extend .media__subtitle;
   display: flex;
   justify-content: space-between;
+  align-items: center;
   margin-bottom: var(--spacing-small);
 }
 
@@ -83,4 +84,14 @@
   flex-wrap: wrap;
   justify-content: space-between;
   margin-top: 0;
+
+  @media (max-width: $breakpoint-small) {
+    justify-content: flex-start;
+    padding-top: var(--spacing-small);
+
+    > * {
+      margin-right: var(--spacing-small);
+      margin-bottom: var(--spacing-small);
+    }
+  }
 }

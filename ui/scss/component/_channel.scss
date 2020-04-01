@@ -9,8 +9,8 @@ $metadata-z-index: 1;
   box-sizing: content-box;
   color: #fff;
 
-  .button {
-    color: #fff;
+  .button--alt {
+    padding: 0 var(--spacing-small);
   }
 }
 

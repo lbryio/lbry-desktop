@@ -1,8 +1,9 @@
 // @flow
 import * as React from 'react';
+import classnames from 'classnames';
 import Page from 'component/page';
 import * as RENDER_MODES from 'constants/file_render_modes';
-import ClaimUri from 'component/claimUri';
+import FileRenderHeader from 'component/fileRenderHeader';
 import FileTitle from 'component/fileTitle';
 import FileRenderInitiator from 'component/fileRenderInitiator';
 import FileRenderInline from 'component/fileRenderInline';
@@ -77,7 +78,7 @@ class FilePage extends React.Component<Props> {
     if (RENDER_MODES.FLOATING_MODES.includes(mode)) {
       return (
         <React.Fragment>
-          <ClaimUri uri={uri} />
+          <FileRenderHeader uri={uri} />
           <div className={FILE_WRAPPER_CLASS}>
             <FileRenderInitiator uri={uri} />
           </div>
@@ -90,7 +91,7 @@ class FilePage extends React.Component<Props> {
     if (RENDER_MODES.UNRENDERABLE_MODES.includes(mode)) {
       return (
         <React.Fragment>
-          <ClaimUri uri={uri} />
+          <FileRenderHeader uri={uri} />
           <FileTitle uri={uri} />
           <FileRenderDownload uri={uri} isFree={cost === 0} />
         </React.Fragment>
@@ -100,7 +101,7 @@ class FilePage extends React.Component<Props> {
     if (RENDER_MODES.TEXT_MODES.includes(mode)) {
       return (
         <React.Fragment>
-          <ClaimUri uri={uri} />
+          <FileRenderHeader uri={uri} />
           <FileTitle uri={uri} />
           <FileRenderInitiator uri={uri} />
           <FileRenderInline uri={uri} />
@@ -110,7 +111,7 @@ class FilePage extends React.Component<Props> {
 
     return (
       <React.Fragment>
-        <ClaimUri uri={uri} />
+        <FileRenderHeader uri={uri} />
         <FileRenderInitiator uri={uri} />
         <FileRenderInline uri={uri} />
         <FileTitle uri={uri} />
@@ -123,14 +124,21 @@ class FilePage extends React.Component<Props> {
 
     return (
       <Page className="file-page">
-        <div className="section card-stack">
+        <div className={classnames('section card-stack', `file-page__${renderMode}`)}>
           {this.renderFilePageLayout(uri, renderMode, costInfo ? costInfo.cost : null)}
         </div>
         <div className="section columns">
           <div className="card-stack">
             <FileDetails uri={uri} />
-            <Card title={__('Leave a Comment')} actions={<CommentCreate uri={uri} />} />
-            <Card title={__('Comments')} body={<CommentsList uri={uri} />} />
+            <Card
+              title={__('Leave a Comment')}
+              actions={
+                <div>
+                  <CommentCreate uri={uri} />
+                  <CommentsList uri={uri} />
+                </div>
+              }
+            />
           </div>
           <RecommendedContent uri={uri} />
         </div>

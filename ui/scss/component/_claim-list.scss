@@ -67,10 +67,6 @@
   list-style: none;
 }
 
-.claim-preview__wrapper--channel {
-  background-color: var(--color-card-background-highlighted);
-}
-
 .claim-preview__wrapper--notice {
   background-color: var(--color-notice);
 }
@@ -208,6 +204,10 @@
   display: flex;
   flex-direction: column;
   flex: 1;
+
+  @media (max-width: $breakpoint-small) {
+    margin-bottom: var(--spacing-small);
+  }
 }
 
 .claim-preview-info {

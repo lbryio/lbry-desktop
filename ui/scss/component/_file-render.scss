@@ -11,6 +11,25 @@
   .card + .file-render {
     margin-top: var(--spacing-large);
   }
+
+  .file-page__md {
+    .card {
+      border-bottom-left-radius: 0;
+      border-bottom-right-radius: 0;
+    }
+
+    .card + .file-render {
+      margin-top: 0;
+
+      .card {
+        border-top-left-radius: 0;
+        border-top-right-radius: 0;
+        border-bottom-left-radius: var(--border-radius);
+        border-bottom-right-radius: var(--border-radius);
+        border-top: none;
+      }
+    }
+  }
 }
 
 .file-render {
