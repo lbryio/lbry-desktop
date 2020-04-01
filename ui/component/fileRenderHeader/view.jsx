@@ -14,14 +14,14 @@ function FileRenderHeader(props: Props) {
   const { uri, claim } = props;
 
   return (
-    <div>
+    <div className="file-render__header">
       <ClaimUri uri={uri} />
 
-      {claim.meta.reposted > 0 && (
+      {claim && claim.meta.reposted > 0 && (
         <Button
           button="link"
           className="media__uri--right"
-          label={__('View %count% reposts', { count: claim.meta.reposted })}
+          label={__('View reposts')}
           navigate={`/$/${PAGES.DISCOVER}?${CS.REPOSTED_URI_KEY}=${encodeURIComponent(uri)}`}
         />
       )}

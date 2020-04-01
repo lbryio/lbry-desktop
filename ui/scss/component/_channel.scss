@@ -8,10 +8,6 @@ $metadata-z-index: 1;
   align-items: flex-end;
   box-sizing: content-box;
   color: #fff;
-
-  .button--alt {
-    padding: 0 var(--spacing-small);
-  }
 }
 
 .channel-cover__custom {
@@ -152,6 +148,13 @@ $metadata-z-index: 1;
   margin-top: var(--spacing-medium);
   z-index: $metadata-z-index;
   flex-wrap: wrap;
+
+  @media (max-width: $breakpoint-small) {
+    > * {
+      margin-bottom: var(--spacing-xsmall);
+      padding: 0 var(--spacing-xsmall);
+    }
+  }
 }
 
 .channel-name--inline {
