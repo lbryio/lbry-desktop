@@ -3,48 +3,45 @@ import React from 'react';
 
 type Props = {
   tokens: Object,
-  children: string, // e.g. "Read %faq_link% for more detail"
+  children: String, // e.g. "Read %faq_link% for more detail"
 };
 
+function replaceAll(withSpaces, withoutSpaces, stringToclean) {
+  return stringToclean.split(withSpaces).join(withoutSpaces);
+}
+
 function spacesCleaner(message) {
-  const regExp = new RegExp('/%w+%/', 'm');
-  const arrayMach = message.match(regExp);
+  const regExp = /%\w+\s\w+%|%\s\w+%|%\w+\s%/g; // are there spaces in tokens ?
+  let arrayMach = message.match(regExp); // e.g. "Read %fa q_link% for more detail", "% faq_link%", "%faq_link %"
 
   if (!arrayMach) {
-    console.log('>> ' + message);
-    console.log('>>>> No correspondances, nothing to clean.');
     return message;
   }
 
-  console.log('Found ' + arrayMach.length + ' correspondance(s) to clean');
-  console.log(arrayMach);
+  var arrayWithSpaces = arrayMach.slice(0, arrayMach.length);
 
   for (let index = 0; index < arrayMach.length; index++) {
     arrayMach[index] = arrayMach[index].replace(' ', '');
   }
 
-  message = arrayMach.join(' | ');
-
-  console.log('>> ' + message);
-
+  for (let index = 0; index < arrayMach.length; index++) {
+    message = replaceAll(arrayWithSpaces[index], arrayMach[index], message);
+  }
   return message;
 }
 
 export default function I18nMessage(props: Props) {
-  const message = __(props.children),
-    regexp = /%\w+%/g,
-    matchingGroups = message.match(regexp);
+  const msg = __(props.children);
+  var message = spacesCleaner(msg);
 
-  // TEST
-  console.log(spacesCleaner(__(props.children)));
-  console.log(__(props.children));
-  // ----
+  const regexp = /%\w+%/g,
+    matchingGroups = message.match(regexp);
 
   if (!matchingGroups) {
     return message;
   }
 
-  const messageSubstrings = props.children.split(regexp),
+  const messageSubstrings = message.split(regexp),
     tokens = props.tokens;
 
   return (
