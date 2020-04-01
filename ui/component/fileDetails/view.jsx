@@ -1,11 +1,8 @@
 // @flow
 import React, { Fragment, PureComponent } from 'react';
-import MarkdownPreview from 'component/common/markdown-preview';
 import Button from 'component/button';
 import path from 'path';
-import ClaimTags from 'component/claimTags';
 import ExpandingContainer from 'component/expandingContainer/view';
-import Card from 'component/common/card';
 
 type Props = {
   uri: string,
@@ -19,13 +16,13 @@ type Props = {
 
 class FileDetails extends PureComponent<Props> {
   render() {
-    const { uri, claim, contentType, fileInfo, metadata, openFolder } = this.props;
+    const { claim, contentType, fileInfo, metadata, openFolder } = this.props;
 
     if (!claim || !metadata) {
       return <span className="empty">{__('Empty claim or metadata info.')}</span>;
     }
 
-    const { description, languages, license } = metadata;
+    const { languages, license } = metadata;
 
     const mediaType = contentType || 'unknown';
     const fileSize =
@@ -92,12 +89,6 @@ class FileDetails extends PureComponent<Props> {
             </tbody>
           </table>
         </ExpandingContainer>
-        {description && (
-          <div className="media__info-text">
-            <MarkdownPreview content={description} />
-          </div>
-        )}
-        <ClaimTags uri={uri} type="large" />
       </Fragment>
     );
   }

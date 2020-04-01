@@ -1,0 +1,41 @@
+// @flow
+import React, { Fragment, PureComponent } from 'react';
+import MarkdownPreview from 'component/common/markdown-preview';
+import ClaimTags from 'component/claimTags';
+import ExpandingContainer from 'component/expandingContainer/view';
+
+type Props = {
+  uri: string,
+  claim: StreamClaim,
+  metadata: StreamMetadata,
+  user: ?any,
+};
+
+class FileDescription extends PureComponent<Props> {
+  render() {
+    const { uri, claim, metadata } = this.props;
+
+    if (!claim || !metadata) {
+      return <span className="empty">{__('Empty claim or metadata info.')}</span>;
+    }
+
+    const { description } = metadata;
+
+    return (
+      <Fragment>
+        <ExpandingContainer title={__('File Description')}>
+          <>
+            {description && (
+              <div className="media__info-text">
+                <MarkdownPreview content={description} />
+              </div>
+            )}
+            <ClaimTags uri={uri} type="large" />
+          </>
+        </ExpandingContainer>
+      </Fragment>
+    );
+  }
+}
+
+export default FileDescription;

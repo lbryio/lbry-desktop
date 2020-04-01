@@ -11,6 +11,8 @@ import FileRenderDownload from 'component/fileRenderDownload';
 import Card from 'component/common/card';
 import FileDetails from 'component/fileDetails';
 import FileValues from 'component/fileValues';
+import FileDescription from 'component/fileDescription';
+
 import RecommendedContent from 'component/recommendedContent';
 import CommentsList from 'component/commentsList';
 import CommentCreate from 'component/commentCreate';
@@ -130,10 +132,12 @@ class FilePage extends React.Component<Props> {
         </div>
         <div className="section columns">
           <div className="card-stack">
-            <div className="section">
-              <FileValues uri={uri} />
-            </div>
+            <FileDescription uri={uri} />
+
+            <FileValues uri={uri} />
+
             <FileDetails uri={uri} />
+
             <Card
               title={__('Leave a Comment')}
               actions={
