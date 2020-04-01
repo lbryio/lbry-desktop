@@ -79,8 +79,8 @@ export default function SearchPage(props: Props) {
               <div className="claim-preview__actions--header">
                 <ClaimUri uri={uriFromQuery} noShortUrl />
                 <Button
+                  button="link"
                   className="media__uri--right"
-                  button="alt"
                   label={__('View top claims for %normalized_uri%', {
                     normalized_uri: uriFromQuery,
                   })}

@@ -3,11 +3,14 @@
 import React from 'react';
 import LoadingScreen from 'component/common/loading-screen';
 import MarkdownPreview from 'component/common/markdown-preview';
+import Card from 'component/common/card';
 import CodeViewer from 'component/viewers/codeViewer';
+import * as RENDER_MODES from 'constants/file_render_modes';
 import * as https from 'https';
 
 type Props = {
   theme: string,
+  renderMode: string,
   source: {
     file: (?string) => any,
     stream: string,
@@ -79,20 +82,15 @@ class DocumentViewer extends React.PureComponent<Props, State> {
   }
 
   renderDocument() {
-    let viewer = null;
     const { content } = this.state;
-    const { source, theme } = this.props;
-    const { fileType, contentType } = source;
-    const markdownType = ['md', 'markdown'];
-    if (markdownType.includes(fileType) || contentType === 'text/markdown' || contentType === 'text/md') {
-      // Render markdown
-      viewer = <MarkdownPreview content={content} />;
-    } else {
-      // Render plain text
-      viewer = <CodeViewer value={content} contentType={contentType} theme={theme} />;
-    }
+    const { source, theme, renderMode } = this.props;
+    const { contentType } = source;
 
-    return viewer;
+    return renderMode === RENDER_MODES.MARKDOWN ? (
+      <Card body={<MarkdownPreview content={content} />} />
+    ) : (
+      <CodeViewer value={content} contentType={contentType} theme={theme} />
+    );
   }
 
   render() {
@@ -101,7 +99,7 @@ class DocumentViewer extends React.PureComponent<Props, State> {
     const errorMessage = __("Sorry, looks like we can't load the document.");
 
     return (
-      <div className="file-render__viewer--document">
+      <div className="file-render__viewer file-render__viewer--document">
         {loading && !error && <div className="placeholder--text-document" />}
         {error && <LoadingScreen status={errorMessage} spinner={!error} />}
         {isReady && this.renderDocument()}

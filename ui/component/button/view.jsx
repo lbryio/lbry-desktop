@@ -86,13 +86,14 @@ const Button = forwardRef<any, {}>((props: Props, ref: any) => {
 
   const innerRef = useRef(null);
   const combinedRef = useCombinedRefs(ref, innerRef, myref);
+  const size = iconSize || (!label && !children) ? 18 : undefined; // Fall back to default
 
   const content = (
     <span className="button__content">
-      {icon && <Icon icon={icon} iconColor={iconColor} size={iconSize} />}
+      {icon && <Icon icon={icon} iconColor={iconColor} size={size} />}
       {label && <span className="button__label">{label}</span>}
       {children && children}
-      {iconRight && <Icon icon={iconRight} iconColor={iconColor} size={iconSize} />}
+      {iconRight && <Icon icon={iconRight} iconColor={iconColor} size={size} />}
     </span>
   );
 

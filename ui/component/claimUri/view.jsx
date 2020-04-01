@@ -17,8 +17,8 @@ function ClaimUri(props: Props) {
 
   return (
     <Button
+      button="link"
       className={classnames('media__uri', { 'media__uri--inline': inline })}
-      button="alt"
       label={noShortUrl ? uri : shortUrl || uri}
       onClick={() => {
         clipboard.writeText(shortUrl || uri);

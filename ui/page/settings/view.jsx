@@ -258,7 +258,7 @@ class SettingsPage extends React.PureComponent<Props, State> {
     const endHours = ['5', '6', '7', '8'];
 
     return (
-      <Page>
+      <Page className="card-stack">
         {!IS_WEB && noDaemonSettings ? (
           <section className="card card--section">
             <div className="card__title card__title--deprecated">{__('Failed to load settings.')}</div>

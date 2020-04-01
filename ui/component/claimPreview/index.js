@@ -11,11 +11,10 @@ import {
   selectBlockedChannels,
   selectChannelIsBlocked,
   doFileGet,
-  makeSelectStreamingUrlForUri,
 } from 'lbry-redux';
 import { selectBlackListedOutpoints, selectFilteredOutpoints } from 'lbryinc';
 import { selectShowMatureContent } from 'redux/selectors/settings';
-import { makeSelectHasVisitedUri } from 'redux/selectors/content';
+import { makeSelectHasVisitedUri, makeSelectStreamingUrlForUriWebProxy } from 'redux/selectors/content';
 import { makeSelectIsSubscribed } from 'redux/selectors/subscriptions';
 import ClaimPreview from './view';
 
@@ -34,7 +33,7 @@ const select = (state, props) => ({
   hasVisitedUri: props.uri && makeSelectHasVisitedUri(props.uri)(state),
   channelIsBlocked: props.uri && selectChannelIsBlocked(props.uri)(state),
   isSubscribed: props.uri && makeSelectIsSubscribed(props.uri, true)(state),
-  streamingUrl: props.uri && makeSelectStreamingUrlForUri(props.uri)(state),
+  streamingUrl: props.uri && makeSelectStreamingUrlForUriWebProxy(props.uri)(state),
 });
 
 const perform = dispatch => ({
@@ -42,7 +41,4 @@ const perform = dispatch => ({
   getFile: uri => dispatch(doFileGet(uri, false)),
 });
 
-export default connect(
-  select,
-  perform
-)(ClaimPreview);
+export default connect(select, perform)(ClaimPreview);

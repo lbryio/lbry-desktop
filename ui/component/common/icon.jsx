@@ -63,7 +63,7 @@ class IconComponent extends React.PureComponent<Props> {
       color = this.getIconColor(iconColor);
     }
 
-    const iconSize = size || 14;
+    const iconSize = size || 16;
 
     let tooltipText;
     if (tooltip) {
