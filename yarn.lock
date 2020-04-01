@@ -6138,9 +6138,9 @@ lazy-val@^1.0.4:
     yargs "^13.2.2"
     zstd-codec "^0.1.1"
 
-lbry-redux@lbryio/lbry-redux#aa6830d9f34db295ae4f3dbc56f616584f155778:
+lbry-redux@lbryio/lbry-redux#90ba18d0602956016ded63e816734713cfd2023a:
   version "0.0.1"
-  resolved "https://codeload.github.com/lbryio/lbry-redux/tar.gz/aa6830d9f34db295ae4f3dbc56f616584f155778"
+  resolved "https://codeload.github.com/lbryio/lbry-redux/tar.gz/90ba18d0602956016ded63e816734713cfd2023a"
   dependencies:
     proxy-polyfill "0.1.6"
     reselect "^3.0.0"
