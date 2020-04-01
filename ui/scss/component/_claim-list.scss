@@ -125,6 +125,10 @@
 
   .media__thumb {
     width: 14rem;
+
+    @media (max-width: $breakpoint-small) {
+      width: 5rem;
+    }
   }
 
   .channel-thumbnail {
