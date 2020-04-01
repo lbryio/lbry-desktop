@@ -3,7 +3,7 @@ import React from 'react';
 
 type Props = {
   tokens: Object,
-  children: string, // e.g. "Read %faq_link% for more detail"
+  children: String, // e.g. "Read %faq_link% for more detail"
 };
 
 function replaceAll(withSpaces, withoutSpaces, stringToclean) {
