@@ -28,12 +28,7 @@ class FileValues extends PureComponent<Props> {
     if (!claim || !metadata) {
       return <span className="empty">{__('Empty claim or metadata info.')}</span>;
     }
-    const supportsAmount =
-      claim &&
-      claim.meta &&
-      claim.amount &&
-      claim.meta.effective_amount &&
-      Number(claim.meta.effective_amount) - Number(claim.amount);
+    const supportsAmount = claim && claim.meta && claim.meta.support_amount && Number(claim.meta.support_amount);
     return (
       <Fragment>
         <Card
