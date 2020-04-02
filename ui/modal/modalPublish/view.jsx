@@ -50,7 +50,7 @@ class ModalPublishSuccess extends React.PureComponent<Props> {
             </React.Fragment>
           }
           actions={
-            <React.Fragment>
+            <div className="card__actions">
               <Button
                 button="primary"
                 label={__('View My Publishes')}
@@ -61,7 +61,7 @@ class ModalPublishSuccess extends React.PureComponent<Props> {
                 }}
               />
               <Button button="link" label={__('Close')} onClick={handleClose} />
-            </React.Fragment>
+            </div>
           }
         />
       </Modal>
