@@ -1,7 +1,6 @@
 // @flow
 import React from 'react';
 import RewardLink from 'component/rewardLink';
-import { rewards } from 'lbryinc';
 import Icon from 'component/common/icon';
 import * as ICONS from 'constants/icons';
 
@@ -48,7 +47,7 @@ class InviteList extends React.PureComponent<Props> {
               <RewardLink
                 button
                 label={__(`Claim Your ${rewardAmount} LBC Invite Reward`)}
-                reward_type={rewards.TYPE_REFERRAL}
+                claim_code={referralReward.claim_code}
               />
             )}
           </div>
