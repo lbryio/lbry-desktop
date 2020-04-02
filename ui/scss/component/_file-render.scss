@@ -1,17 +1,48 @@
+.file-page {
+  .grid-area--content + .card,
+  .file-render + .card,
+  .content__cover + .card,
+  .card + .file-render,
+  .card + .grid-area--content,
+  .card + .content__cover {
+    margin-top: var(--spacing-large);
+  }
+
+  .card + .file-render {
+    margin-top: var(--spacing-large);
+  }
+
+  .file-page__md {
+    .card {
+      border-bottom-left-radius: 0;
+      border-bottom-right-radius: 0;
+    }
+
+    .card + .file-render {
+      margin-top: 0;
+
+      .card {
+        border-top-left-radius: 0;
+        border-top-right-radius: 0;
+        border-bottom-left-radius: var(--border-radius);
+        border-bottom-right-radius: var(--border-radius);
+        border-top: none;
+      }
+    }
+  }
+}
+
 .file-render {
   width: 100%;
   height: 100%;
   z-index: 1;
   overflow: hidden;
   max-height: var(--inline-player-max-height);
-
-  @media (max-width: $breakpoint-small) {
-    // margin-top: 10px;
-  }
 }
 
 .file-render--document {
   max-height: none;
+  overflow: auto;
 
   .content__loading {
     background-color: transparent;
@@ -22,6 +53,27 @@
       color: var(--color-text);
     }
   }
+
+  .markdown-preview {
+    height: 100%;
+    overflow: auto;
+    width: 40em;
+    margin-left: auto;
+    margin-right: auto;
+    max-width: unset;
+    min-width: unset;
+
+    @media (max-width: $breakpoint-small) {
+      width: 100%;
+      padding: var(--spacing-small);
+    }
+  }
+}
+
+.file-render__header {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
 }
 
 .file-render__viewer {
@@ -45,26 +97,15 @@
   }
 }
 
-.file-render__viewer--document {
-  @extend .file-render__viewer;
-  overflow: auto;
-
-  .markdown-preview {
-    height: 100%;
-    overflow: auto;
-
-    @media (max-width: $breakpoint-small) {
-      padding: var(--spacing-small);
-    }
+.file-render__viewer--iframe {
+  display: flex; /*this eliminates extra height from whitespace, if someone edits this with a better technique, tell Jeremy*/
+  /*
+  ideally iframes would dynamiclly grow, see <IframeReact> for a start at this
+  for now, since we don't know size, let's make as large as we can without being larger than available area
+  */
+  iframe {
+    height: calc(100vh - var(--header-height) - var(--spacing-medium) * 2);
   }
-}
-
-.file-render__viewer--pdf {
-  @extend .file-render__viewer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.5em;
 }
 
 .file-render__content {
@@ -138,6 +179,8 @@
 }
 
 .file-render {
+  border-radius: var(--card-radius);
+
   .video-js {
     display: flex;
     align-items: center;

@@ -22,6 +22,9 @@ type Props = {
   clearPublish: () => void,
   ffmpegStatus: any,
   optimize: boolean,
+  size: number,
+  duration: number,
+  isVid: boolean,
 };
 
 function PublishFile(props: Props) {
@@ -37,13 +40,13 @@ function PublishFile(props: Props) {
     clearPublish,
     optimize,
     ffmpegStatus = {},
+    size,
+    duration,
+    isVid,
   } = props;
 
   const { available } = ffmpegStatus;
-  const [duration, setDuration] = useState(0);
-  const [size, setSize] = useState(0);
   const [oversized, setOversized] = useState(false);
-  const [isVid, setIsVid] = useState(false);
   const RECOMMENDED_BITRATE = 6000000;
   const TV_PUBLISH_SIZE_LIMIT: number = 1073741824;
   const UPLOAD_SIZE_MESSAGE = 'Lbrytv uploads are limited to 1 GB. Download the app for unrestricted publishing.';
@@ -56,10 +59,8 @@ function PublishFile(props: Props) {
 
   // clear warnings
   useEffect(() => {
-    if (!filePath || filePath === '' || filePath.name === '') {
-      setDuration(0);
-      setSize(0);
-      setIsVid(false);
+    if (!filePath || filePath === '') {
+      updateOptimizeState(0, 0, false);
       setOversized(false);
     }
   }, [filePath]);
@@ -71,6 +72,10 @@ function PublishFile(props: Props) {
     } else {
       currentFile = filePath.name;
     }
+  }
+
+  function updateOptimizeState(duration, size, isvid) {
+    updatePublishForm({ fileDur: duration, fileSize: size, fileVid: isvid });
   }
 
   function getBitrate(size, duration) {
@@ -177,8 +182,6 @@ function PublishFile(props: Props) {
     // if electron, we'll set filePath to the path string because SDK is handling publishing.
     // if web, we set the filePath (dumb name) to the File() object
     // File.path will be undefined from web due to browser security, so it will default to the File Object.
-    setSize(file ? file.size : 0);
-    setDuration(0);
     setOversized(false);
 
     // select file, start to select a new one, then cancel
@@ -195,21 +198,15 @@ function PublishFile(props: Props) {
         const video = document.createElement('video');
         video.preload = 'metadata';
         video.onloadedmetadata = function() {
-          setDuration(video.duration);
-          setSize(file.size);
-          setIsVid(isVideo);
+          updateOptimizeState(video.duration, file.size, isVideo);
           window.URL.revokeObjectURL(video.src);
         };
         video.onerror = function() {
-          setDuration(0);
-          setSize(file.size);
-          setIsVid(isVideo);
+          updateOptimizeState(0, file.size, isVideo);
         };
         video.src = window.URL.createObjectURL(file);
       } else {
-        setSize(file.size);
-        setDuration(0);
-        setIsVid(isVideo);
+        updateOptimizeState(0, file.size, isVideo);
       }
     }
 
@@ -252,7 +249,6 @@ function PublishFile(props: Props) {
 
   return (
     <Card
-      actionIconPadding={false}
       icon={ICONS.PUBLISH}
       disabled={disabled || balance === 0}
       title={

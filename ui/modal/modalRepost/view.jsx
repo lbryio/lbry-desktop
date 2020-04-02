@@ -122,7 +122,6 @@ function ModalRepost(props: Props) {
   return (
     <Modal isOpen type="card" onAborted={handleCloseModal} onConfirmed={handleCloseModal}>
       <Card
-        actionIconPadding={false}
         icon={ICONS.REPOST}
         title={
           <span>

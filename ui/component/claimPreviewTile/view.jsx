@@ -187,7 +187,7 @@ function ClaimPreviewTile(props: Props) {
         <div className="claim-tile__info">
           {isChannel ? (
             <div className="claim-tile__about--channel">
-              <SubscribeButton uri={uri} />
+              <SubscribeButton uri={uri} shrinkOnMobile />
               <span className="claim-tile__publishes">
                 {claimsInChannel === 1
                   ? __('%claimsInChannel% publish', { claimsInChannel })

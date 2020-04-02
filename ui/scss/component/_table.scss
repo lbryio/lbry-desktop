@@ -75,16 +75,27 @@
   }
 }
 
-.table--file-details {
-  margin-top: var(--spacing-large);
+.table--details {
   font-size: var(--font-small);
+}
+.table--file-details {
+  @extend .table--details;
 
   td:nth-of-type(1) {
-    width: 30%;
+    width: 25%;
   }
 
   td:nth-of-type(2) {
-    width: 70%;
+    width: 75%;
+    text-align: right;
+  }
+}
+
+.table--lbc-details {
+  @extend .table--details;
+
+  td:nth-of-type(2) {
+    text-align: right;
   }
 }
 

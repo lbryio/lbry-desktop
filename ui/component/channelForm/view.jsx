@@ -47,7 +47,6 @@ function ChannelForm(props: Props) {
   return (
     <Fragment>
       <Card
-        actionIconPadding={false}
         icon={ICONS.CHANNEL}
         title="Create a New Channel"
         subtitle="This is a username or handle that your content can be found under."

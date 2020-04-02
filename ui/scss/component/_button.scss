@@ -1,6 +1,9 @@
-.button {
-  display: inline-block;
-  font-weight: var(--font-weight-base);
+.button--primary,
+.button--secondary,
+.button--alt {
+  @media (max-width: $breakpoint-small) {
+    font-size: var(--font-small);
+  }
 }
 
 .button--uri-indicator {

@@ -1,0 +1,167 @@
+// @flow
+import * as ICONS from 'constants/icons';
+import React, { useEffect, useState } from 'react';
+import CreditAmount from 'component/common/credit-amount';
+import Button from 'component/button';
+import { Form, FormField } from 'component/common/form';
+import Card from 'component/common/card';
+import I18nMessage from 'component/i18nMessage';
+
+type Props = {
+  balance: number,
+  totalBalance: number,
+  claimsBalance: number,
+  supportsBalance: number,
+  tipsBalance: number,
+  claim: any,
+  metaData: any,
+  handleClose: () => void,
+  abandonSupportForClaim: (string, string, boolean | string, boolean) => any,
+  abandonClaimError: ?string,
+};
+
+const SupportsLiquidate = (props: Props) => {
+  const { claim, abandonSupportForClaim, handleClose, abandonClaimError } = props;
+  const [previewBalance, setPreviewBalance] = useState(undefined);
+  const [amount, setAmount] = useState(0);
+  const [error, setError] = useState(false);
+  const initialMessage = '';
+  const [message, setMessage] = useState(initialMessage);
+  const keep =
+    previewBalance && amount && Number(amount) < previewBalance
+      ? Number.parseFloat(String(previewBalance - Number(amount))).toFixed(8)
+      : false;
+  const claimId = claim && claim.claim_id;
+  const type = claim.value_type;
+
+  useEffect(() => {
+    if (claimId && abandonSupportForClaim) {
+      abandonSupportForClaim(claimId, type, false, true).then(r => {
+        setPreviewBalance(r.total_input);
+      });
+    }
+  }, [abandonSupportForClaim, claimId, type, setPreviewBalance]);
+
+  function handleSubmit() {
+    abandonSupportForClaim(claimId, type, keep, false).then(r => {
+      if (r) {
+        handleClose();
+      }
+    });
+  }
+
+  function handleChange(a) {
+    if (a === undefined || isNaN(Number(a))) {
+      setMessage(__('Amount must be a number'));
+      setError(true);
+      setAmount('');
+    } else if (a === '') {
+      setAmount('');
+      setError(true);
+      setMessage(__('Amount cannot be blank'));
+    } else if (Number(a) > Number(previewBalance)) {
+      setMessage(__('Amount cannot be more than available'));
+      setError(false);
+    } else if (Number(a) === Number(previewBalance)) {
+      setMessage(__(`She's about to close up the library!`));
+      setAmount(a);
+      setError(false);
+    } else if (Number(a) > Number(previewBalance) / 2) {
+      setMessage(__('Your content will do better with more staked on it'));
+      setAmount(a);
+      setError(false);
+    } else if (a === '0') {
+      setMessage(__('Amount cannot be zero'));
+      setAmount(a);
+      setError(true);
+    } else {
+      setMessage(initialMessage);
+      setAmount(a);
+      setError(false);
+    }
+  }
+
+  return (
+    <Card
+      icon={ICONS.UNLOCK}
+      title={__('Unlock Tips')}
+      subtitle={
+        <>
+          <p>
+            {__('You can unlock all or some of this LBC at any time.')}{' '}
+            {__('Keeping it locked improves the trust and discoverability of your content.')}
+          </p>
+          <p>
+            <I18nMessage
+              tokens={{
+                learn_more: <Button button="link" label={__('Learn More')} href="https://lbry.com/faq/tipping" />,
+              }}
+            >
+              It's usually only worth unlocking what you intend to use immediately. %learn_more%
+            </I18nMessage>
+          </p>
+        </>
+      }
+      body={
+        <>
+          <div className="section">
+            <I18nMessage
+              tokens={{
+                amount: (
+                  <strong>
+                    <CreditAmount badge={false} amount={Number(previewBalance)} precision={8} />
+                  </strong>
+                ),
+              }}
+            >
+              %amount% available to unlock
+            </I18nMessage>
+          </div>
+          <div className="section">
+            {previewBalance === 0 && <p>{__('No unlockable tips available')}</p>}
+            {previewBalance === undefined && <p>{__('Loading...')}</p>}
+            {previewBalance && (
+              <Form onSubmit={handleSubmit}>
+                <label htmlFor="supports_liquidate_range">{__('Amount to unlock')}</label>
+                <FormField
+                  name="supports_liquidate_range"
+                  type={'range'}
+                  min={0}
+                  step={0.01}
+                  max={previewBalance} // times 100 to so we're more granular than whole numbers.
+                  value={Number(amount) || previewBalance / 4} // by default, set it to 25% of available
+                  onChange={e => handleChange(e.target.value)}
+                />
+                <label className="range__label">
+                  <span>0</span>
+                  <span>{previewBalance / 2}</span>
+                  <span>{previewBalance}</span>
+                </label>
+                <FormField
+                  type="text"
+                  value={amount || (previewBalance && previewBalance / 4)}
+                  helper={message}
+                  onChange={e => handleChange(e.target.value)}
+                />
+              </Form>
+            )}
+          </div>
+        </>
+      }
+      actions={
+        <React.Fragment>
+          {abandonClaimError ? (
+            <>
+              <div className="error-text">{__('%message%', { message: abandonClaimError })}</div>
+              <Button disabled={error} button="primary" onClick={handleClose} label={__('Done')} />
+            </>
+          ) : (
+            <Button disabled={error} button="primary" onClick={handleSubmit} label={__('Unlock')} />
+          )}
+        </React.Fragment>
+      }
+    />
+  );
+};
+
+export default SupportsLiquidate;

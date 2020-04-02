@@ -6,6 +6,7 @@ import {
   makeSelectRecommendedContentForUri,
   selectIsSearching,
 } from 'lbry-redux';
+import { selectUserVerifiedEmail } from 'lbryinc';
 import RecommendedVideos from './view';
 
 const select = (state, props) => ({
@@ -13,13 +14,11 @@ const select = (state, props) => ({
   mature: makeSelectClaimIsNsfw(props.uri)(state),
   recommendedContent: makeSelectRecommendedContentForUri(props.uri)(state),
   isSearching: selectIsSearching(state),
+  isAuthenticated: selectUserVerifiedEmail(state),
 });
 
 const perform = dispatch => ({
   search: (query, options) => dispatch(doSearch(query, options)),
 });
 
-export default connect(
-  select,
-  perform
-)(RecommendedVideos);
+export default connect(select, perform)(RecommendedVideos);

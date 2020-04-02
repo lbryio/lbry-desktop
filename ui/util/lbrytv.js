@@ -35,8 +35,12 @@ function generateEmbedUrl(claimName, claimId) {
 }
 
 function generateDownloadUrl(claimName, claimId) {
-  return `/$/download/${claimName}/${claimId}`;
+  return `${URL}/$/download/${claimName}/${claimId}`;
+}
+
+function generateDirectUrl(claimName, claimId) {
+  return `${URL}/$/stream/${claimName}/${claimId}`;
 }
 
 // module.exports needed since the web server imports this function
-module.exports = { generateStreamUrl, generateEmbedUrl, generateDownloadUrl, CONTINENT_COOKIE };
+module.exports = { generateStreamUrl, generateEmbedUrl, generateDownloadUrl, generateDirectUrl, CONTINENT_COOKIE };

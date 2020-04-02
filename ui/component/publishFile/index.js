@@ -18,6 +18,9 @@ const select = state => ({
   balance: selectBalance(state),
   publishing: makeSelectPublishFormValue('publishing')(state),
   ffmpegStatus: selectFfmpegStatus(state),
+  size: makeSelectPublishFormValue('fileSize')(state),
+  duration: makeSelectPublishFormValue('fileDur')(state),
+  isVid: makeSelectPublishFormValue('fileVid')(state),
 });
 
 const perform = dispatch => ({
@@ -26,7 +29,4 @@ const perform = dispatch => ({
   showToast: message => dispatch(doToast({ message, isError: true })),
 });
 
-export default connect(
-  select,
-  perform
-)(PublishPage);
+export default connect(select, perform)(PublishPage);

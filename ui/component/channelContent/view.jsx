@@ -5,6 +5,7 @@ import { withRouter } from 'react-router-dom';
 import Button from 'component/button';
 import ClaimListDiscover from 'component/claimListDiscover';
 import * as CS from 'constants/claim_search';
+import Ads from 'lbrytv/component/ads';
 
 type Props = {
   uri: string,
@@ -17,10 +18,11 @@ type Props = {
   fetchClaims: (string, number) => void,
   channelIsBlackListed: boolean,
   claim: ?Claim,
+  isAuthenticated: boolean,
 };
 
 function ChannelContent(props: Props) {
-  const { uri, fetching, channelIsMine, channelIsBlocked, channelIsBlackListed, claim } = props;
+  const { uri, fetching, channelIsMine, channelIsBlocked, channelIsBlackListed, claim, isAuthenticated } = props;
   const claimsInChannel = (claim && claim.meta.claims_in_channel) || 0;
 
   return (
@@ -51,7 +53,11 @@ function ChannelContent(props: Props) {
       {!channelIsMine && claimsInChannel > 0 && <HiddenNsfwClaims uri={uri} />}
 
       {claim && claimsInChannel > 0 ? (
-        <ClaimListDiscover channelIds={[claim.claim_id]} defaultOrderBy={CS.ORDER_BY_NEW} />
+        <ClaimListDiscover
+          channelIds={[claim.claim_id]}
+          defaultOrderBy={CS.ORDER_BY_NEW}
+          injectedItem={!isAuthenticated && IS_WEB && <Ads type="video" />}
+        />
       ) : (
         <section className="main--empty">This channel hasn't published anything yet</section>
       )}

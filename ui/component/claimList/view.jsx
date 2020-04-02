@@ -6,6 +6,7 @@ import classnames from 'classnames';
 import ClaimPreview from 'component/claimPreview';
 import Spinner from 'component/spinner';
 import { FormField } from 'component/common/form';
+import Card from 'component/common/card';
 import usePersistedState from 'effects/use-persisted-state';
 
 const SORT_NEW = 'new';
@@ -31,6 +32,8 @@ type Props = {
   renderProperties: ?(Claim) => Node,
   includeSupportAction?: boolean,
   hideBlock: boolean,
+  injectedItem: ?Node,
+  timedOutMessage?: Node,
 };
 
 export default function ClaimList(props: Props) {
@@ -53,9 +56,12 @@ export default function ClaimList(props: Props) {
     renderProperties,
     includeSupportAction,
     hideBlock,
+    injectedItem,
+    timedOutMessage,
   } = props;
   const [scrollBottomCbMap, setScrollBottomCbMap] = useState({});
   const [currentSort, setCurrentSort] = usePersistedState(persistedStorageKey, SORT_NEW);
+  const timedOut = uris === null;
   const urisLength = (uris && uris.length) || 0;
   const sortedUris = (urisLength > 0 && (currentSort === SORT_NEW ? uris : uris.slice().reverse())) || [];
 
@@ -130,32 +136,35 @@ export default function ClaimList(props: Props) {
       {urisLength > 0 && (
         <ul className="card ul--no-style">
           {sortedUris.map((uri, index) => (
-            <ClaimPreview
-              key={uri}
-              uri={uri}
-              type={type}
-              includeSupportAction={includeSupportAction}
-              showUnresolvedClaim={showUnresolvedClaims}
-              properties={renderProperties || (type !== 'small' ? undefined : false)}
-              showUserBlocked={showHiddenByUser}
-              hideBlock={hideBlock}
-              customShouldHide={(claim: StreamClaim) => {
-                // Hack to hide spee.ch thumbnail publishes
-                // If it meets these requirements, it was probably uploaded here:
-                // https://github.com/lbryio/lbry-redux/blob/master/src/redux/actions/publish.js#L74-L79
-                if (claim.name.length === 24 && !claim.name.includes(' ') && claim.value.author === 'Spee.ch') {
-                  return true;
-                } else {
-                  return false;
-                }
-              }}
-            />
+            <React.Fragment key={uri}>
+              {injectedItem && index === 4 && <li>{injectedItem}</li>}
+              <ClaimPreview
+                uri={uri}
+                type={type}
+                includeSupportAction={includeSupportAction}
+                showUnresolvedClaim={showUnresolvedClaims}
+                properties={renderProperties || (type !== 'small' ? undefined : false)}
+                showUserBlocked={showHiddenByUser}
+                hideBlock={hideBlock}
+                customShouldHide={(claim: StreamClaim) => {
+                  // Hack to hide spee.ch thumbnail publishes
+                  // If it meets these requirements, it was probably uploaded here:
+                  // https://github.com/lbryio/lbry-redux/blob/master/src/redux/actions/publish.js#L74-L79
+                  if (claim.name.length === 24 && !claim.name.includes(' ') && claim.value.author === 'Spee.ch') {
+                    return true;
+                  } else {
+                    return false;
+                  }
+                }}
+              />
+            </React.Fragment>
           ))}
         </ul>
       )}
-      {urisLength === 0 && !loading && (
-        <div className="card--section main--empty empty">{empty || __('No results')}</div>
+      {!timedOut && urisLength === 0 && !loading && (
+        <div className="empty empty--centered">{empty || __('No results')}</div>
       )}
+      {timedOut && timedOutMessage && <div className="empty empty--centered">{timedOutMessage}</div>}
     </section>
   );
 }

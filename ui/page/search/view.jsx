@@ -9,6 +9,7 @@ import Page from 'component/page';
 import SearchOptions from 'component/searchOptions';
 import Button from 'component/button';
 import ClaimUri from 'component/claimUri';
+import Ads from 'lbrytv/component/ads';
 
 type AdditionalOptions = {
   isBackgroundSearch: boolean,
@@ -23,10 +24,20 @@ type Props = {
   onFeedbackNegative: string => void,
   onFeedbackPositive: string => void,
   showNsfw: boolean,
+  isAuthenticated: boolean,
 };
 
 export default function SearchPage(props: Props) {
-  const { search, uris, onFeedbackPositive, onFeedbackNegative, location, isSearching, showNsfw } = props;
+  const {
+    search,
+    uris,
+    onFeedbackPositive,
+    onFeedbackNegative,
+    location,
+    isSearching,
+    showNsfw,
+    isAuthenticated,
+  } = props;
   const urlParams = new URLSearchParams(location.search);
   const urlQuery = urlParams.get('q') || '';
   const additionalOptions: AdditionalOptions = { isBackgroundSearch: false };
@@ -44,12 +55,13 @@ export default function SearchPage(props: Props) {
     isValid = false;
   }
 
-  const modifiedUrlQuery = isValid
-    ? path
-    : urlQuery
-        .trim()
-        .replace(/\s+/g, '-')
-        .replace(INVALID_URI_CHARS, '');
+  const modifiedUrlQuery =
+    isValid && path
+      ? path
+      : urlQuery
+          .trim()
+          .replace(/\s+/g, '-')
+          .replace(INVALID_URI_CHARS, '');
   const uriFromQuery = `lbry://${modifiedUrlQuery}`;
 
   useEffect(() => {
@@ -67,8 +79,8 @@ export default function SearchPage(props: Props) {
               <div className="claim-preview__actions--header">
                 <ClaimUri uri={uriFromQuery} noShortUrl />
                 <Button
+                  button="link"
                   className="media__uri--right"
-                  button="alt"
                   label={__('View top claims for %normalized_uri%', {
                     normalized_uri: uriFromQuery,
                   })}
@@ -85,6 +97,7 @@ export default function SearchPage(props: Props) {
               uris={uris}
               loading={isSearching}
               header={<SearchOptions additionalOptions={additionalOptions} />}
+              injectedItem={!isAuthenticated && IS_WEB && <Ads type="video" />}
               headerAltControls={
                 <Fragment>
                   <span>{__('Find what you were looking for?')}</span>

@@ -1,6 +1,14 @@
 .markdown-preview {
+  > :first-child {
+    margin-top: 0;
+  }
+
   > *:last-child {
     margin-bottom: 0;
+  }
+
+  @media (max-width: $breakpoint-small) {
+    font-size: var(--font-base);
   }
 
   // Headers

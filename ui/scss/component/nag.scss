@@ -13,7 +13,6 @@ $nag-error-z-index: 100001;
   color: var(--color-white);
   font-weight: var(--font-weight-bold);
   text-align: center;
-  z-index: 2;
 
   .button--link {
     font-weight: var(--font-weight-bold);
@@ -24,6 +23,13 @@ $nag-error-z-index: 100001;
   @media (max-width: $breakpoint-small) {
     text-align: left;
   }
+}
+
+.nag--inline {
+  position: absolute;
+  top: 0;
+  bottom: auto;
+  z-index: 1 !important; /* booooooo */
 }
 
 .nag--helpful {

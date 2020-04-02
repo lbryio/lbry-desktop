@@ -5,6 +5,7 @@ import React, { useRef } from 'react';
 import { parseURI } from 'lbry-redux';
 import Button from 'component/button';
 import useHover from 'effects/use-hover';
+import useIsMobile from 'effects/use-is-mobile';
 
 type SubscriptionArgs = {
   channelName: string,
@@ -20,6 +21,7 @@ type Props = {
   doOpenModal: (id: string) => void,
   showSnackBarOnSubscribe: boolean,
   doToast: ({ message: string }) => void,
+  shrinkOnMobile: boolean,
 };
 
 export default function SubscribeButton(props: Props) {
@@ -32,14 +34,17 @@ export default function SubscribeButton(props: Props) {
     isSubscribed,
     showSnackBarOnSubscribe,
     doToast,
+    shrinkOnMobile = false,
   } = props;
   const buttonRef = useRef();
   const isHovering = useHover(buttonRef);
+  const isMobile = useIsMobile();
   const { channelName } = parseURI(permanentUrl);
   const claimName = '@' + channelName;
   const subscriptionHandler = isSubscribed ? doChannelUnsubscribe : doChannelSubscribe;
   const subscriptionLabel = isSubscribed ? __('Following') : __('Follow');
   const unfollowOverride = isSubscribed && isHovering && __('Unfollow');
+  const label = isMobile && shrinkOnMobile ? '' : unfollowOverride || subscriptionLabel;
 
   return permanentUrl ? (
     <Button
@@ -48,7 +53,7 @@ export default function SubscribeButton(props: Props) {
       icon={unfollowOverride ? ICONS.UNSUBSCRIBE : ICONS.SUBSCRIBE}
       button={'alt'}
       requiresAuth={IS_WEB}
-      label={unfollowOverride || subscriptionLabel}
+      label={label}
       onClick={e => {
         e.stopPropagation();
 

@@ -7,7 +7,7 @@
   On web, the Lbry publish method call is overridden in platform/web/api-setup, using a function in platform/web/publish.
   File upload is carried out in the background by that function.
  */
-import React, { useEffect, Fragment } from 'react';
+import React, { useEffect } from 'react';
 import { CHANNEL_NEW, CHANNEL_ANONYMOUS } from 'constants/claim';
 import { buildURI, isURIValid, isNameValid, THUMBNAIL_STATUSES } from 'lbry-redux';
 import Button from 'component/button';
@@ -141,39 +141,39 @@ function PublishForm(props: Props) {
   }, [name, channel, resolveUri, updatePublishForm]);
 
   return (
-    <Fragment>
+    <div className="card-stack">
       <PublishFile disabled={disabled || publishing} inProgress={isInProgress} />
       {!publishing && (
         <div className={classnames({ 'card--disabled': formDisabled })}>
           <PublishText disabled={formDisabled} />
           <Card actions={<SelectThumbnail />} />
 
-        <TagsSelect
-          suggestMature
-          disableAutoFocus
-          hideHeader
-          label={__('Selected Tags')}
-          empty={__('No tags added')}
-          limitSelect={TAGS_LIMIT}
-          help={__(
-            'Add tags that are relevant to your content. If mature content, ensure it is tagged mature. Tag abuse and missing mature tags will not be tolerated.'
-          )}
-          placeholder={__('gaming, crypto')}
-          onSelect={newTags => {
-            const validatedTags = [];
-            newTags.forEach(newTag => {
-              if (!tags.some(tag => tag.name === newTag.name)) {
-                validatedTags.push(newTag);
-              }
-            });
-            updatePublishForm({ tags: [...tags, ...validatedTags] });
-          }}
-          onRemove={clickedTag => {
-            const newTags = tags.slice().filter(tag => tag.name !== clickedTag.name);
-            updatePublishForm({ tags: newTags });
-          }}
-          tagsChosen={tags}
-        />
+          <TagsSelect
+            suggestMature
+            disableAutoFocus
+            hideHeader
+            label={__('Selected Tags')}
+            empty={__('No tags added')}
+            limitSelect={TAGS_LIMIT}
+            help={__(
+              'Add tags that are relevant to your content. If mature content, ensure it is tagged mature. Tag abuse and missing mature tags will not be tolerated.'
+            )}
+            placeholder={__('gaming, crypto')}
+            onSelect={newTags => {
+              const validatedTags = [];
+              newTags.forEach(newTag => {
+                if (!tags.some(tag => tag.name === newTag.name)) {
+                  validatedTags.push(newTag);
+                }
+              });
+              updatePublishForm({ tags: [...tags, ...validatedTags] });
+            }}
+            onRemove={clickedTag => {
+              const newTags = tags.slice().filter(tag => tag.name !== clickedTag.name);
+              updatePublishForm({ tags: newTags });
+            }}
+            tagsChosen={tags}
+          />
 
           <Card
             actions={
@@ -209,7 +209,7 @@ function PublishForm(props: Props) {
           <Button button="link" href="https://www.lbry.com/termsofservice" label={__('LBRY Terms of Service')} />.
         </p>
       </section>
-    </Fragment>
+    </div>
   );
 }
 

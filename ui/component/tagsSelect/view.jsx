@@ -79,7 +79,6 @@ export default function TagsSelect(props: Props) {
   return (
     ((showClose && !hasClosed) || !showClose) && (
       <Card
-        actionIconPadding={false}
         icon={ICONS.TAG}
         title={
           hideHeader ? null : (

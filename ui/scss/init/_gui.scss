@@ -23,10 +23,6 @@ html {
 
 body {
   font-size: 1em;
-
-  @media (max-width: $breakpoint-small) {
-    font-size: 1.3em;
-  }
 }
 
 h1,
@@ -146,6 +142,7 @@ img {
 
     & > * {
       margin: 0;
+      margin-bottom: var(--spacing-medium);
       width: 100%;
       flex-basis: auto;
 
@@ -216,11 +213,15 @@ img {
 .help--inline {
   @extend .help;
   margin-top: 0;
+  margin-bottom: 0;
 }
 
 .empty {
   color: var(--color-text-empty);
   font-style: italic;
+}
+.empty--centered {
+  text-align: center;
 }
 
 .qr-code {

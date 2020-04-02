@@ -1,6 +1,5 @@
 .card {
   background-color: var(--color-card-background);
-  margin-bottom: var(--spacing-large);
   position: relative;
   border-radius: var(--card-radius);
   overflow: hidden;
@@ -64,6 +63,11 @@
   }
 }
 
+.card__section--flex {
+  @extend .section__flex;
+  padding: var(--spacing-medium) var(--spacing-large);
+}
+
 .card__actions--inline {
   @extend .card__actions;
   margin-top: 0;
@@ -79,6 +83,12 @@
   justify-content: center;
 }
 
+.card-stack {
+  .card:not(:last-of-type) {
+    margin-bottom: var(--spacing-large);
+  }
+}
+
 .card__list {
   column-count: 2;
   column-gap: var(--spacing-large);
@@ -86,7 +96,7 @@
 
   .card {
     display: inline-block;
-    margin: 0 0 var(--spacing-large);
+    margin-bottom: var(--spacing-large);
   }
 
   @media (max-width: $breakpoint-small) {
@@ -133,28 +143,63 @@
 .card__title--between {
   @extend .card__title;
   justify-content: space-between;
+  width: 100%;
+  & > *:not(:last-child) {
+    margin-right: 0;
+  }
 }
 
 .card__media--nsfw {
   background-color: black;
 }
 
-.card__media--disabled {
-  opacity: 0.5;
-  pointer-events: none;
+.card__header {
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+
+  .icon__wrapper {
+    margin-right: var(--spacing-large);
+  }
 }
 
-.card__header {
-  margin: var(--spacing-medium) var(--spacing-large);
+.card__header--between {
+  @extend .card__header;
+  justify-content: space-between;
+}
 
-  .section__subtitle {
-    margin-bottom: 0;
+.card__title {
+  font-size: var(--font-title);
+  font-weight: var(--font-weight-light);
+  display: block;
+
+  /* .badge rule inherited from file page prices, should be refactored */
+  .badge {
+    float: right;
+    margin-left: var(--spacing-small);
+    margin-top: 8px; // should be flex'd, but don't blame me! I just moved it down 3px
   }
+}
+
+.card__subtitle {
+  color: var(--color-text-subtitle);
+  margin: var(--spacing-small) 0;
+  font-size: var(--font-body);
 }
 
 .card__body {
   padding: var(--spacing-large);
-  padding-top: 0;
+  &:not(.card__body--no-title) {
+    padding-top: 0;
+  }
+  &.card__body--table {
+    padding: 0;
+    border-top: 1px solid var(--color-border);
+  }
+
+  @media (max-width: $breakpoint-small) {
+    padding: var(--spacing-large);
+  }
 }
 
 .card__main-actions {
@@ -175,5 +220,16 @@
 
   :not(:first-child) {
     margin-left: var(--spacing-small);
+  }
+}
+
+.card__header,
+.card__body,
+.card__main-actions {
+  @media (max-width: $breakpoint-small) {
+    padding: var(--spacing-small);
+    padding-bottom: 0;
+    margin: 0;
+    margin-bottom: var(--spacing-small);
   }
 }

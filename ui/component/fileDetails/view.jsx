@@ -1,10 +1,10 @@
 // @flow
+import * as PAGES from 'constants/pages';
+import * as CS from 'constants/claim_search';
 import React, { Fragment, PureComponent } from 'react';
-import MarkdownPreview from 'component/common/markdown-preview';
 import Button from 'component/button';
-import Expandable from 'component/expandable';
 import path from 'path';
-import ClaimTags from 'component/claimTags';
+import Card from 'component/common/card';
 
 type Props = {
   uri: string,
@@ -18,13 +18,13 @@ type Props = {
 
 class FileDetails extends PureComponent<Props> {
   render() {
-    const { uri, claim, contentType, fileInfo, metadata, openFolder } = this.props;
+    const { claim, contentType, fileInfo, metadata, openFolder } = this.props;
 
     if (!claim || !metadata) {
       return <span className="empty">{__('Empty claim or metadata info.')}</span>;
     }
 
-    const { description, languages, license } = metadata;
+    const { languages, license } = metadata;
 
     const mediaType = contentType || 'unknown';
     const fileSize =
@@ -42,73 +42,59 @@ class FileDetails extends PureComponent<Props> {
 
     return (
       <Fragment>
-        <Expandable>
-          {description && (
-            <div className="media__info-text">
-              <MarkdownPreview content={description} />
-            </div>
-          )}
-          <ClaimTags uri={uri} type="large" />
-          <table className="table table--condensed table--fixed table--file-details">
-            <tbody>
-              <tr>
-                <td> {__('Content Type')}</td>
-                <td>{mediaType}</td>
-              </tr>
-              {fileSize && (
+        <Card
+          title={__('File Details')}
+          defaultExpand={false}
+          actions={
+            <table className="table table--condensed table--fixed table--file-details">
+              <tbody>
                 <tr>
-                  <td> {__('File Size')}</td>
-                  <td>{fileSize}</td>
+                  <td> {__('Content Type')}</td>
+                  <td>{mediaType}</td>
                 </tr>
-              )}
-              <tr>
-                <td> {__('Bid Amount')}</td>
-                <td>{claim.amount} LBC</td>
-              </tr>
-              <tr>
-                <td> {__('Effective Amount')}</td>
-                <td>{claim.meta.effective_amount} LBC</td>
-              </tr>
-              <tr>
-                <td> {__('Is Controlling')}</td>
-                <td>{claim.meta.is_controlling ? __('Yes') : __('No')}</td>
-              </tr>
-              <tr>
-                <td> {__('Claim ID')}</td>
-                <td>{claim.claim_id}</td>
-              </tr>
+                {fileSize && (
+                  <tr>
+                    <td> {__('File Size')}</td>
+                    <td>{fileSize}</td>
+                  </tr>
+                )}
+                <tr>
+                  <td> {__('Claim ID')}</td>
+                  <td>{claim.claim_id}</td>
+                </tr>
 
-              {languages && (
+                {languages && (
+                  <tr>
+                    <td>{__('Languages')}</td>
+                    <td>{languages.join(' ')}</td>
+                  </tr>
+                )}
                 <tr>
-                  <td>{__('Languages')}</td>
-                  <td>{languages.join(' ')}</td>
+                  <td>{__('License')}</td>
+                  <td>{license}</td>
                 </tr>
-              )}
-              <tr>
-                <td>{__('License')}</td>
-                <td>{license}</td>
-              </tr>
-              {downloadPath && (
-                <tr>
-                  <td>{__('Downloaded to')}</td>
-                  <td>
-                    {/* {downloadPath.replace(/(.{10})/g, '$1\u200b')} */}
-                    <Button
-                      button="link"
-                      className="button--download-link"
-                      onClick={() => {
-                        if (downloadPath) {
-                          openFolder(downloadPath);
-                        }
-                      }}
-                      label={downloadNote || downloadPath.replace(/(.{10})/g, '$1\u200b')}
-                    />
-                  </td>
-                </tr>
-              )}
-            </tbody>
-          </table>
-        </Expandable>
+                {downloadPath && (
+                  <tr>
+                    <td>{__('Downloaded to')}</td>
+                    <td>
+                      {/* {downloadPath.replace(/(.{10})/g, '$1\u200b')} */}
+                      <Button
+                        button="link"
+                        className="button--download-link"
+                        onClick={() => {
+                          if (downloadPath) {
+                            openFolder(downloadPath);
+                          }
+                        }}
+                        label={downloadNote || downloadPath.replace(/(.{10})/g, '$1\u200b')}
+                      />
+                    </td>
+                  </tr>
+                )}
+              </tbody>
+            </table>
+          }
+        />
       </Fragment>
     );
   }

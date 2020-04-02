@@ -39,7 +39,7 @@ function AppViewer(props: Props) {
   // }, [outpoint, contentType, setAppUrl, setLoading]);
 
   return (
-    <div className="content__cover--disabled">
+    <div className="content__cover--none">
       <Yrbl
         title={__('Sorry')}
         subtitle={__('Games and apps are currently disabled due to potential security concerns.')}

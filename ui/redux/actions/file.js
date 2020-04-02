@@ -46,13 +46,14 @@ export function doDeleteFile(outpoint, deleteFromComputer, abandonClaim) {
 
       dispatch(doAbandonClaim(txid, Number(nout)));
     }
-
+    // @if TARGET='app'
     dispatch({
       type: ACTIONS.FILE_DELETE,
       data: {
         outpoint,
       },
     });
+    // @endif
   };
 }
 

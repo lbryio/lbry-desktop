@@ -14,3 +14,43 @@
     color: var(--color-ads-link);
   }
 }
+
+// Inline Video Ads
+.ads__claim-item {
+  border-bottom: 1px solid var(--color-border);
+  padding: var(--spacing-medium);
+  background-color: var(--color-ads-background);
+  display: flex;
+
+  > div {
+    width: 40%;
+    position: relative !important;
+  }
+
+  .avp-p-gui {
+    z-index: 1 !important;
+  }
+
+  @media (max-width: $breakpoint-small) {
+    flex-direction: column;
+
+    > div {
+      width: 100%;
+    }
+  }
+}
+
+.ads__claim-text {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding-left: var(--spacing-large);
+
+  @media (max-width: $breakpoint-small) {
+    padding-left: 0;
+  }
+}
+
+.ads__claim-text--small {
+  font-size: var(--font-small);
+}

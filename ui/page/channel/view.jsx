@@ -198,7 +198,7 @@ function ChannelPage(props: Props) {
       )}
       <header className="channel-cover">
         <div className="channel__quick-actions">
-          {!channelIsBlocked && !channelIsBlackListed && <ShareButton uri={uri} isChannel />}
+          {!channelIsBlocked && !channelIsBlackListed && <ShareButton uri={uri} />}
           {!channelIsMine && (
             <Button
               button="alt"

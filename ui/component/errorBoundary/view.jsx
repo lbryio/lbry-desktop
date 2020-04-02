@@ -73,7 +73,7 @@ class ErrorBoundary extends React.Component<Props, State> {
 
     if (hasError) {
       return (
-        <div className="main main--empty">
+        <div className="main main--full-width main--empty">
           <Yrbl
             type="sad"
             title={__('Aw shucks!')}

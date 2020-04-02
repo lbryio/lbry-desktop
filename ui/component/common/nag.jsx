@@ -10,17 +10,24 @@ type Props = {
   actionText: string,
   href?: string,
   type?: string,
+  inline?: boolean,
   onClick?: () => void,
   onClose?: () => void,
 };
 
 export default function Nag(props: Props) {
-  const { message, actionText, href, onClick, onClose, type } = props;
+  const { message, actionText, href, onClick, onClose, type, inline } = props;
 
   const buttonProps = onClick ? { onClick } : { href };
 
   return (
-    <div className={classnames('nag', { 'nag--helpful': type === 'helpful', 'nag--error': type === 'error' })}>
+    <div
+      className={classnames('nag', {
+        'nag--helpful': type === 'helpful',
+        'nag--error': type === 'error',
+        'nag--inline': inline,
+      })}
+    >
       <div className="nag__message">{message}</div>
       <Button
         className={classnames('nag__button', {
