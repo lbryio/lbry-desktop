@@ -1085,7 +1085,6 @@
   "Kannada": "Kannada",
   "Transcoding this %size%MB file should take under %processTime% %units%.": "Transcoding this %size%MB file should take under %processTime% %units%.",
   "FFmpeg not configured. More in %settings_link%.": "FFmpeg not configured. More in %settings_link%.",
-  "File Details": "File Details",
   "LBC Details": "LBC Details",
   "Publish Amount": "Publish Amount",
   "Supports and Tips": "Supports and Tips",
