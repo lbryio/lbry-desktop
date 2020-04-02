@@ -27,71 +27,62 @@ type RowDataItem = {
 
 function HomePage(props: Props) {
   const { followedTags, subscribedChannels, authenticated } = props;
-  const showAuthenticatedRows = authenticated || !IS_WEB;
+  const showPersonalizedChannels = (authenticated || !IS_WEB) && subscribedChannels && subscribedChannels.length > 0;
+  const showPersonalizedTags = (authenticated || !IS_WEB) && followedTags && followedTags.length > 0;
+  const showIndividualTags = showPersonalizedTags && followedTags.length < 5;
   let rowData: Array<RowDataItem> = [];
 
-  if (!showAuthenticatedRows) {
+  // if you are following channels, always show that first
+  if (showPersonalizedChannels) {
+    let releaseTime = `>${Math.floor(
+      moment()
+        .subtract(1, 'year')
+        .startOf('week')
+        .unix()
+    )}`;
+
+    // Warning - hack below
+    // If users are following more than 20 channels or tags, limit results to stuff less than 6 months old
+    // This helps with timeout issues for users that are following a ton of stuff
+    // https://github.com/lbryio/lbry-sdk/issues/2420
+    if (subscribedChannels.length > 20) {
+      releaseTime = `>${Math.floor(
+        moment()
+          .subtract(6, 'months')
+          .startOf('week')
+          .unix()
+      )}`;
+    }
+
     rowData.push({
-      title: 'Top Channels On LBRY',
-      link: `/$/${PAGES.DISCOVER}?claim_type=channel&${CS.ORDER_BY_KEY}=${CS.ORDER_BY_TOP}&${CS.FRESH_KEY}=${
-        CS.FRESH_ALL
-      }`,
+      title: 'Recent From Following',
+      link: `/$/${PAGES.CHANNELS_FOLLOWING}`,
       options: {
-        orderBy: ['effective_amount'],
-        claimType: ['channel'],
+        orderBy: ['release_time'],
+        releaseTime: releaseTime,
+        pageSize: subscribedChannels.length > 3 ? 8 : 4,
+        channelIds: subscribedChannels.map(subscription => {
+          const { channelClaimId } = parseURI(subscription.uri);
+          return channelClaimId;
+        }),
       },
     });
   }
 
-  if (showAuthenticatedRows) {
-    if (subscribedChannels && subscribedChannels.length > 0) {
-      let releaseTime = `>${Math.floor(
-        moment()
-          .subtract(1, 'year')
-          .startOf('week')
-          .unix()
-      )}`;
+  if (showPersonalizedTags && !showIndividualTags) {
+    rowData.push({
+      title: 'Trending For Your Tags',
+      link: `/$/${PAGES.TAGS_FOLLOWING}`,
+      options: {
+        tags: followedTags.map(tag => tag.name),
+        claimType: ['stream'],
+      },
+    });
+  }
 
-      // Warning - hack below
-      // If users are following more than 20 channels or tags, limit results to stuff less than 6 months old
-      // This helps with timeout issues for users that are following a ton of stuff
-      // https://github.com/lbryio/lbry-sdk/issues/2420
-      if (subscribedChannels.length > 20) {
-        releaseTime = `>${Math.floor(
-          moment()
-            .subtract(6, 'months')
-            .startOf('week')
-            .unix()
-        )}`;
-      }
-
+  if (showPersonalizedTags && showIndividualTags) {
+    followedTags.forEach((tag: Tag) => {
       rowData.push({
-        title: 'Recent From Following',
-        link: `/$/${PAGES.CHANNELS_FOLLOWING}`,
-        options: {
-          orderBy: ['release_time'],
-          releaseTime: releaseTime,
-          pageSize: subscribedChannels.length > 3 ? 8 : 4,
-          channelIds: subscribedChannels.map(subscription => {
-            const { channelClaimId } = parseURI(subscription.uri);
-            return channelClaimId;
-          }),
-        },
-      });
-    }
-
-    if (followedTags.length === 0) {
-      rowData.push({
-        title: 'Trending On LBRY',
-        link: `/$/${PAGES.DISCOVER}`,
-        options: {
-          pageSize: subscribedChannels.length > 0 ? 4 : 8,
-        },
-      });
-    }
-
-    if (followedTags.length > 0 && followedTags.length < 5) {
-      const followedRows = followedTags.map((tag: Tag) => ({
         title: `Trending for #${toCapitalCase(tag.name)}`,
         link: `/$/${PAGES.DISCOVER}?t=${tag.name}`,
         options: {
@@ -99,86 +90,89 @@ function HomePage(props: Props) {
           tags: [tag.name],
           claimType: ['stream'],
         },
-      }));
-      rowData.push(...followedRows);
-    }
-
-    if (followedTags.length > 4) {
-      rowData.push({
-        title: 'Trending For Your Tags',
-        link: `/$/${PAGES.TAGS_FOLLOWING}`,
-        options: {
-          tags: followedTags.map(tag => tag.name),
-          claimType: ['stream'],
-        },
       });
-    }
+    });
   }
 
-  // Everyone
+  rowData.push({
+    title: 'Top Content from Today',
+    link: `/$/${PAGES.DISCOVER}?${CS.ORDER_BY_KEY}=${CS.ORDER_BY_TOP}&${CS.FRESH_KEY}=${CS.FRESH_DAY}`,
+    options: {
+      pageSize: showPersonalizedChannels || showPersonalizedTags ? 4 : 8,
+      orderBy: ['effective_amount'],
+      claimType: ['stream'],
+      releaseTime: `>${Math.floor(
+        moment()
+          .subtract(1, 'day')
+          .startOf('day')
+          .unix()
+      )}`,
+    },
+  });
+
+  rowData.push({
+    title: 'Trending On LBRY',
+    link: `/$/${PAGES.DISCOVER}`,
+    options: {
+      pageSize: showPersonalizedChannels || showPersonalizedTags ? 4 : 8,
+    },
+  });
+
+  if (!showPersonalizedChannels) {
+    rowData.push({
+      title: 'Top Channels On LBRY',
+      link: `/$/${PAGES.DISCOVER}?claim_type=channel&${CS.ORDER_BY_KEY}=${CS.ORDER_BY_TOP}&${CS.FRESH_KEY}=${CS.FRESH_ALL}`,
+      options: {
+        orderBy: ['effective_amount'],
+        claimType: ['channel'],
+      },
+    });
+  }
+
   rowData.push(
     {
-      title: 'Top Content Last Week',
-      link: `/$/${PAGES.DISCOVER}?${CS.ORDER_BY_KEY}=${CS.ORDER_BY_TOP}&${CS.FRESH_KEY}=${CS.FRESH_WEEK}`,
+      title: 'Trending Classics',
+      link: `/$/${PAGES.DISCOVER}?${CS.ORDER_BY_KEY}=${CS.ORDER_BY_TRENDING}&${CS.FRESH_KEY}=${CS.FRESH_WEEK}`,
       options: {
-        orderBy: ['effective_amount'],
         pageSize: 4,
         claimType: ['stream'],
-        releaseTime: `>${Math.floor(
+        releaseTime: `<${Math.floor(
           moment()
-            .subtract(1, 'week')
-            .startOf('day')
-            .unix()
-        )}`,
-      },
-    },
-    {
-      title: '#HomePageCageMatch',
-      link: `/$/${PAGES.DISCOVER}?t=homepagecagematch&${CS.ORDER_BY_KEY}=${CS.ORDER_BY_TOP}&${CS.FRESH_KEY}=${
-        CS.FRESH_ALL
-      }`,
-      help: (
-        <div className="claim-grid__help">
-          <Icon
-            icon={ICONS.HELP}
-            tooltip
-            customTooltipText={__(
-              'This is an experiment, and may be removed in the future. Publish something with the #homepagecagematch tag to battle for the top spot on the home page!'
-            )}
-          />
-        </div>
-      ),
-      options: {
-        tags: ['homepagecagematch'],
-        orderBy: ['effective_amount'],
-        timestamp: `>${Math.floor(
-          moment()
-            .subtract(1, 'week')
+            .subtract(6, 'month')
             .startOf('day')
             .unix()
         )}`,
       },
     }
+    /* the cagematch will return in some form! - Jeremy
+  {
+    title: '#HomePageCageMatch',
+    link: `/$/${PAGES.DISCOVER}?t=homepagecagematch&${CS.ORDER_BY_KEY}=${CS.ORDER_BY_TOP}&${CS.FRESH_KEY}=${
+      CS.FRESH_ALL
+    }`,
+    help: (
+      <div className="claim-grid__help">
+        <Icon
+          icon={ICONS.HELP}
+          tooltip
+          customTooltipText={__(
+            'This is an experiment, and may be removed in the future. Publish something with the #homepagecagematch tag to battle for the top spot on the home page!'
+          )}
+        />
+      </div>
+    ),
+    options: {
+      tags: ['homepagecagematch'],
+      orderBy: ['effective_amount'],
+      timestamp: `>${Math.floor(
+        moment()
+          .subtract(1, 'week')
+          .startOf('day')
+          .unix()
+      )}`,
+    },
+    } */
   );
-
-  if (!showAuthenticatedRows) {
-    rowData.push({
-      title: '#lbry',
-      link: `/$/${PAGES.DISCOVER}?t=lbry&${CS.ORDER_BY_KEY}=${CS.ORDER_BY_TOP}&${CS.FRESH_KEY}=${CS.FRESH_ALL}`,
-      options: {
-        tags: ['lbry'],
-        orderBy: ['effective_amount'],
-        pageSize: 4,
-      },
-    });
-  }
-
-  if (showAuthenticatedRows) {
-    rowData.push({
-      title: 'Trending On LBRY',
-      link: `/$/${PAGES.DISCOVER}`,
-    });
-  }
 
   rowData.push({
     title: 'Latest From @lbrycast',
