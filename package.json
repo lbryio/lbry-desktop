@@ -46,6 +46,7 @@
   },
   "dependencies": {
     "auto-launch": "^5.0.5",
+    "babel-plugin-syntax-dynamic-import": "^6.18.0",
     "electron-dl": "^1.11.0",
     "electron-log": "^2.2.12",
     "electron-notarize": "^0.1.1",
