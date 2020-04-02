@@ -19,7 +19,6 @@ type Props = {
   subscriptions: Array<Subscription>,
   followedTags: Array<Tag>,
   email: ?string,
-  obscureSideNavigation: boolean,
   uploadCount: number,
   sticky: boolean,
   expanded: boolean,
@@ -31,7 +30,6 @@ function SideNavigation(props: Props) {
   const {
     subscriptions,
     followedTags,
-    obscureSideNavigation,
     uploadCount,
     doSignOut,
     email,
@@ -45,6 +43,9 @@ function SideNavigation(props: Props) {
     'side-navigation:information',
     getSideInformation(pathname)
   );
+
+  const isPersonalized = !IS_WEB || isAuthenticated;
+  const requireAuthOnPersonalizedActions = IS_WEB;
 
   function getSideInformation(path) {
     switch (path) {
@@ -64,12 +65,13 @@ function SideNavigation(props: Props) {
     setSideInformation(sideInfo);
   }, [pathname, setSideInformation]);
 
-  function buildLink(path, label, icon, onClick) {
+  function buildLink(path, label, icon, onClick, requiresAuth = false) {
     return {
       navigate: path ? `$/${path}` : '/',
       label,
       icon,
       onClick,
+      requiresAuth,
     };
   }
 
@@ -81,12 +83,6 @@ function SideNavigation(props: Props) {
     ) : (
       <div>{children}</div>
     );
-
-  // @if TARGET='web'
-  if (obscureSideNavigation) {
-    return <Ads />;
-  }
-  // @endif
 
   return (
     <Wrapper>
@@ -100,10 +96,16 @@ function SideNavigation(props: Props) {
               ...buildLink(null, __('Home'), ICONS.HOME),
             },
             {
-              ...buildLink(PAGES.CHANNELS_FOLLOWING, __('Following'), ICONS.SUBSCRIBE),
+              ...buildLink(
+                PAGES.CHANNELS_FOLLOWING,
+                __('Following'),
+                ICONS.SUBSCRIBE,
+                null,
+                requireAuthOnPersonalizedActions
+              ),
             },
             {
-              ...buildLink(PAGES.TAGS_FOLLOWING, __('Your Tags'), ICONS.TAG),
+              ...buildLink(PAGES.TAGS_FOLLOWING, __('Your Tags'), ICONS.TAG, null, requireAuthOnPersonalizedActions),
             },
             {
               ...buildLink(PAGES.DISCOVER, __('All Content'), ICONS.DISCOVER),
@@ -123,6 +125,7 @@ function SideNavigation(props: Props) {
           )}
 
           {expanded &&
+            isPersonalized &&
             [
               {
                 ...buildLink(PAGES.CHANNELS, __('Channels'), ICONS.CHANNEL),
@@ -176,7 +179,7 @@ function SideNavigation(props: Props) {
             )}
         </ul>
 
-        {sideInformation === SHOW_TAGS && (
+        {sideInformation === SHOW_TAGS && !expanded && isPersonalized && (
           <ul className="navigation__secondary navigation-links--small tags--vertical">
             {followedTags.map(({ name }, key) => (
               <li className="navigation-link__wrapper" key={name}>
@@ -186,7 +189,7 @@ function SideNavigation(props: Props) {
           </ul>
         )}
 
-        {sideInformation === SHOW_CHANNELS && (
+        {sideInformation === SHOW_CHANNELS && !expanded && isPersonalized && (
           <ul className="navigation__secondary navigation-links--small">
             {subscriptions.map(({ uri, channelName }, index) => (
               <li key={uri} className="navigation-link__wrapper">
@@ -201,6 +204,9 @@ function SideNavigation(props: Props) {
           </ul>
         )}
       </nav>
+      // @if TARGET='web'
+      {!isAuthenticated && !expanded && <Ads />}
+      // @endif
     </Wrapper>
   );
 }

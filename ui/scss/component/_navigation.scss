@@ -9,6 +9,10 @@
   }
 }
 
+.navigation + .ads-wrapper {
+  margin-top: var(--spacing-large);
+}
+
 .navigation__secondary {
   margin-top: var(--spacing-large);
 }
