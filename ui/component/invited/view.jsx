@@ -49,7 +49,7 @@ function Invited(props: Props) {
   const rewardsApproved = user && user.is_reward_approved;
   const hasVerifiedEmail = user && user.has_verified_email;
   const referredRewardAvailable = rewards && rewards.some(reward => reward.reward_type === REWARDS.TYPE_REFEREE);
-  const redirect = channelUri || `/$/${PAGES.HOME}`;
+  const redirect = channelUri || `/`;
 
   // always follow if it's a channel
   useEffect(() => {
