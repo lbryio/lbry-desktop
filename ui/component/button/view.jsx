@@ -14,6 +14,7 @@ type Props = {
   href: ?string,
   title: ?string,
   label: ?string,
+  largestLabel: ?string,
   icon: ?string,
   iconRight: ?string,
   disabled: ?boolean,
@@ -47,6 +48,7 @@ const Button = forwardRef<any, {}>((props: Props, ref: any) => {
     href,
     title,
     label,
+    largestLabel,
     icon,
     // This should rarely be used. Regular buttons should just use `icon`
     // `iconRight` is used for the header (home) button with the LBRY icon and external links that are displayed inline
@@ -90,8 +92,17 @@ const Button = forwardRef<any, {}>((props: Props, ref: any) => {
 
   const content = (
     <span className="button__content">
-      {icon && <Icon icon={icon} iconColor={iconColor} size={size} />}
-      {label && <span className="button__label">{label}</span>}
+      {icon && <Icon icon={icon} iconColor={iconColor} size={iconSize} />}
+      {
+        <p style={{ visibility: 'hidden' }}>
+          {largestLabel}
+          {label && (
+            <span className="button__label" style={{ visibility: 'visible' }}>
+              {label}
+            </span>
+          )}
+        </p>
+      }
       {children && children}
       {iconRight && <Icon icon={iconRight} iconColor={iconColor} size={size} />}
     </span>
@@ -127,7 +138,7 @@ const Button = forwardRef<any, {}>((props: Props, ref: any) => {
     return (
       <NavLink
         exact
-        onClick={e => {
+        onClick={(e) => {
           e.stopPropagation();
         }}
         to={`/$/${PAGES.AUTH}?redirect=${pathname}`}
@@ -147,7 +158,7 @@ const Button = forwardRef<any, {}>((props: Props, ref: any) => {
       to={path}
       title={title}
       disabled={disabled}
-      onClick={e => {
+      onClick={(e) => {
         e.stopPropagation();
         if (onClick) {
           onClick();
@@ -165,7 +176,7 @@ const Button = forwardRef<any, {}>((props: Props, ref: any) => {
       title={title}
       aria-label={description || label || title}
       className={combinedClassName}
-      onClick={e => {
+      onClick={(e) => {
         if (onClick) {
           e.stopPropagation();
           onClick(e);
