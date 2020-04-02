@@ -209,6 +209,11 @@ export const icons = {
       <line x1="5" y1="12" x2="19" y2="12" />
     </g>
   ),
+  [ICONS.SUBTRACT]: buildIcon(
+    <g>
+      <line x1="5" y1="12" x2="19" y2="12" />
+    </g>
+  ),
   [ICONS.CHAT]: buildIcon(
     <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z" />
   ),
@@ -218,7 +223,7 @@ export const icons = {
   [ICONS.NO]: buildIcon(
     <path d="M10 15v4a3 3 0 0 0 3 3l4-9V2H5.72a2 2 0 0 0-2 1.7l-1.38 9a2 2 0 0 0 2 2.3zm7-13h2.67A2.31 2.31 0 0 1 22 4v7a2.31 2.31 0 0 1-2.33 2H17" />
   ),
-  [ICONS.UP]: buildIcon(<polyline transform="translate(-5.000) scale(1.1, 1.1)" points="18 15 12 9 6 15" />),
+  [ICONS.UP]: buildIcon(<polyline transform="matrix(1,0,0,-1,0,24.707107)" points="6 9 12 15 18 9" />),
   [ICONS.DOWN]: buildIcon(<polyline points="6 9 12 15 18 9" />),
   [ICONS.FULLSCREEN]: buildIcon(
     <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3" />

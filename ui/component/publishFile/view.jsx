@@ -249,7 +249,6 @@ function PublishFile(props: Props) {
 
   return (
     <Card
-      actionIconPadding={false}
       icon={ICONS.PUBLISH}
       disabled={disabled || balance === 0}
       title={
