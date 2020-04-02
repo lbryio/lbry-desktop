@@ -23,9 +23,9 @@ type Props = {
 const SupportsLiquidate = (props: Props) => {
   const { claim, abandonSupportForClaim, handleClose, abandonClaimError } = props;
   const [previewBalance, setPreviewBalance] = useState(undefined);
-  const [amount, setAmount] = useState(0);
+  const [amount, setAmount] = useState(-1);
   const [error, setError] = useState(false);
-  const initialMessage = '';
+  const initialMessage = __('How much would you like to unlock?');
   const [message, setMessage] = useState(initialMessage);
   const keep =
     previewBalance && amount && Number(amount) < previewBalance
@@ -54,9 +54,9 @@ const SupportsLiquidate = (props: Props) => {
     if (a === undefined || isNaN(Number(a))) {
       setMessage(__('Amount must be a number'));
       setError(true);
-      setAmount('');
+      setAmount(0);
     } else if (a === '') {
-      setAmount('');
+      setAmount(0);
       setError(true);
       setMessage(__('Amount cannot be blank'));
     } else if (Number(a) > Number(previewBalance)) {
@@ -70,10 +70,14 @@ const SupportsLiquidate = (props: Props) => {
       setMessage(__('Your content will do better with more staked on it'));
       setAmount(a);
       setError(false);
-    } else if (a === '0') {
+    } else if (Number(a) === 0) {
       setMessage(__('Amount cannot be zero'));
-      setAmount(a);
+      setAmount(0);
       setError(true);
+    } else if (Number(a) <= Number(previewBalance) / 2) {
+      setMessage(__('A prudent choice'));
+      setAmount(Number(a));
+      setError(false);
     } else {
       setMessage(initialMessage);
       setAmount(a);
@@ -128,8 +132,8 @@ const SupportsLiquidate = (props: Props) => {
                   type={'range'}
                   min={0}
                   step={0.01}
-                  max={previewBalance} // times 100 to so we're more granular than whole numbers.
-                  value={Number(amount) || previewBalance / 4} // by default, set it to 25% of available
+                  max={previewBalance}
+                  value={Number(amount) >= 0 ? amount : previewBalance / 4} // by default, set it to 25% of available
                   onChange={e => handleChange(e.target.value)}
                 />
                 <label className="range__label">
@@ -139,7 +143,7 @@ const SupportsLiquidate = (props: Props) => {
                 </label>
                 <FormField
                   type="text"
-                  value={amount || (previewBalance && previewBalance / 4)}
+                  value={amount >= 0 ? amount || '' : previewBalance && previewBalance / 4}
                   helper={message}
                   onChange={e => handleChange(e.target.value)}
                 />
