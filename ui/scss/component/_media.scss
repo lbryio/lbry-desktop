@@ -24,6 +24,7 @@
   @media (max-width: $breakpoint-small) {
     position: static;
     transform: none;
+    margin-bottom: var(--spacing-xsmall);
   }
 
   // This is terrible and should not be removed

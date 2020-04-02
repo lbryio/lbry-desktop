@@ -31,12 +31,6 @@
     width: 40%;
     height: 2rem;
   }
-
-  @media (max-width: $breakpoint-small) {
-    &.media__thumb {
-      display: none;
-    }
-  }
 }
 
 .placeholder--text-document {

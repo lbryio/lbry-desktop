@@ -8,10 +8,6 @@ $metadata-z-index: 1;
   align-items: flex-end;
   box-sizing: content-box;
   color: #fff;
-
-  .button--alt {
-    padding: 0 var(--spacing-small);
-  }
 }
 
 .channel-cover__custom {
@@ -144,7 +140,7 @@ $metadata-z-index: 1;
 }
 
 .channel__quick-actions {
-  @extend .card__actions;
+  @extend .section__actions;
   margin-left: var(--spacing-medium);
   position: absolute;
   top: 0;
@@ -152,6 +148,17 @@ $metadata-z-index: 1;
   margin-top: var(--spacing-medium);
   z-index: $metadata-z-index;
   flex-wrap: wrap;
+  font-size: var(--font-base);
+
+  > * {
+    padding: 0 var(--spacing-xsmall);
+  }
+
+  @media (max-width: $breakpoint-small) {
+    > * {
+      margin-bottom: var(--spacing-xsmall);
+    }
+  }
 }
 
 .channel-name--inline {

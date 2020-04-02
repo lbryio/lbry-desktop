@@ -1,3 +1,11 @@
+.button--primary,
+.button--secondary,
+.button--alt {
+  @media (max-width: $breakpoint-small) {
+    font-size: var(--font-small);
+  }
+}
+
 .button--uri-indicator {
   @extend .button--link;
   color: var(--color-text-subtitle);

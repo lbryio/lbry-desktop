@@ -1,4 +1,6 @@
 // @flow
+import * as PAGES from 'constants/pages';
+import * as CS from 'constants/claim_search';
 import React, { Fragment, PureComponent } from 'react';
 import Button from 'component/button';
 import path from 'path';
