@@ -1086,6 +1086,7 @@
   "Kannada": "Kannada",
   "Transcoding this %size%MB file should take under %processTime% %units%.": "Transcoding this %size%MB file should take under %processTime% %units%.",
   "FFmpeg not configured. More in %settings_link%.": "FFmpeg not configured. More in %settings_link%.",
+  "view other claims at lbry://%name%": "view other claims at lbry://%name%",
   "Downloading Update": "Downloading Update",
   "complete": "complete",
   "Click \"Begin Upgrade\" to start the upgrade process.": "Click \"Begin Upgrade\" to start the upgrade process.",
