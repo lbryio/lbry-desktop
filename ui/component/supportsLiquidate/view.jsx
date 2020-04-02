@@ -107,60 +107,68 @@ const SupportsLiquidate = (props: Props) => {
         </>
       }
       body={
-        <>
-          <div className="section">
-            <I18nMessage
-              tokens={{
-                amount: (
-                  <strong>
-                    <CreditAmount badge={false} amount={Number(previewBalance)} precision={8} />
-                  </strong>
-                ),
-              }}
-            >
-              %amount% available to unlock
-            </I18nMessage>
-          </div>
-          <div className="section">
-            {previewBalance === 0 && <p>{__('No unlockable tips available')}</p>}
-            {previewBalance === undefined && <p>{__('Loading...')}</p>}
-            {previewBalance && (
-              <Form onSubmit={handleSubmit}>
-                <label htmlFor="supports_liquidate_range">{__('Amount to unlock')}</label>
-                <FormField
-                  name="supports_liquidate_range"
-                  type={'range'}
-                  min={0}
-                  step={0.01}
-                  max={previewBalance}
-                  value={Number(amount) >= 0 ? amount : previewBalance / 4} // by default, set it to 25% of available
-                  onChange={e => handleChange(e.target.value)}
-                />
-                <label className="range__label">
-                  <span>0</span>
-                  <span>{previewBalance / 2}</span>
-                  <span>{previewBalance}</span>
-                </label>
-                <FormField
-                  type="text"
-                  value={amount >= 0 ? amount || '' : previewBalance && previewBalance / 4}
-                  helper={message}
-                  onChange={e => handleChange(e.target.value)}
-                />
-              </Form>
-            )}
-          </div>
-        </>
+        !abandonClaimError && (
+          <>
+            <div className="section">
+              <I18nMessage
+                tokens={{
+                  amount: (
+                    <strong>
+                      <CreditAmount badge={false} amount={Number(previewBalance)} precision={8} />
+                    </strong>
+                  ),
+                }}
+              >
+                %amount% available to unlock
+              </I18nMessage>
+            </div>
+            <div className="section">
+              {previewBalance === 0 && <p>{__('No unlockable tips available')}</p>}
+              {previewBalance === undefined && <p>{__('Loading...')}</p>}
+              {previewBalance && (
+                <Form onSubmit={handleSubmit}>
+                  <label htmlFor="supports_liquidate_range">{__('Amount to unlock')}</label>
+                  <FormField
+                    name="supports_liquidate_range"
+                    type={'range'}
+                    min={0}
+                    step={0.01}
+                    max={previewBalance}
+                    value={Number(amount) >= 0 ? amount : previewBalance / 4} // by default, set it to 25% of available
+                    onChange={e => handleChange(e.target.value)}
+                  />
+                  <label className="range__label">
+                    <span>0</span>
+                    <span>{previewBalance / 2}</span>
+                    <span>{previewBalance}</span>
+                  </label>
+                  <FormField
+                    type="text"
+                    value={amount >= 0 ? amount || '' : previewBalance && previewBalance / 4}
+                    helper={message}
+                    onChange={e => handleChange(e.target.value)}
+                  />
+                </Form>
+              )}
+            </div>
+          </>
+        )
       }
       actions={
         <React.Fragment>
           {abandonClaimError ? (
             <>
-              <div className="error__text">{__('%message%', { message: abandonClaimError })}</div>
-              <Button disabled={error} button="primary" onClick={handleClose} label={__('Done')} />
+              <div className="error__wrapper--no-overflow">
+                <div className="error__text">{__('%message%', { message: abandonClaimError })}</div>
+              </div>
+              <div className="section__actions">
+                <Button disabled={error} button="primary" onClick={handleClose} label={__('Done')} />
+              </div>
             </>
           ) : (
-            <Button disabled={error} button="primary" onClick={handleSubmit} label={__('Unlock')} />
+            <div className="section__actions">
+              <Button disabled={error} button="primary" onClick={handleSubmit} label={__('Unlock')} />
+            </div>
           )}
         </React.Fragment>
       }
