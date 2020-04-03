@@ -46,11 +46,19 @@ export default function SubscribeButton(props: Props) {
   const unfollowOverride = isSubscribed && isHovering && __('Unfollow');
   const label = isMobile && shrinkOnMobile ? '' : unfollowOverride || subscriptionLabel;
 
+  let longestStr = __('Following');
+
+  if (__('Following').length < __('Unfollow').length) {
+    longestStr = __('Unfollow');
+  }
+
+  longestStr = longestStr + '-';
+
   return permanentUrl ? (
     <Button
       ref={buttonRef}
       iconColor="red"
-      largestLabel="TEST LABEL"
+      largestLabel={longestStr}
       icon={unfollowOverride ? ICONS.UNSUBSCRIBE : ICONS.SUBSCRIBE}
       button={'alt'}
       requiresAuth={IS_WEB}
