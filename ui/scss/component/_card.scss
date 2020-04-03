@@ -66,6 +66,10 @@
 .card__section--flex {
   @extend .section__flex;
   padding: var(--spacing-medium) var(--spacing-large);
+
+  @media (max-width: $breakpoint-small) {
+    padding: 0;
+  }
 }
 
 .card__actions--inline {
