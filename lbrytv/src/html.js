@@ -63,11 +63,10 @@ function buildClaimOgMetadata(uri, claim, overrideOptions = {}) {
       ? escapeHtmlProperty(truncateDescription(claim.description))
       : `View ${claimTitle} on lbry.tv`;
   const claimLanguage = escapeHtmlProperty(claim.language) || 'en_US';
-  const isImage = claim && claim.value && claim.value.stream_type === 'image';
-  const isFree = claim && claim.value && (!claim.value.fee || Number(claim.value.fee.amount) <= 0);
+
   let imageThumbnail;
 
-  if (claim && isImage && isFree) {
+  if (Number(claim.fee) <= 0 && claim.source_media_type.startsWith('image/')) {
     imageThumbnail = generateStreamUrl(claimName, claim.claim_id);
   }
   const claimThumbnail = escapeHtmlProperty(claim.thumbnail_url) || imageThumbnail || `${URL}/v1-og.png`;
