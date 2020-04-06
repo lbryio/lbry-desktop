@@ -245,3 +245,8 @@
     margin-bottom: var(--spacing-small);
   }
 }
+
+.card__bottom-gutter {
+  @extend .help;
+  margin-top: var(--spacing-medium);
+}

@@ -55,7 +55,7 @@ function ModalRemoveFile(props: Props) {
                   onChange={() => setAbandonChecked(!abandonChecked)}
                 />
                 {abandonChecked === true && (
-                  <p className="help error-text">This action is permanent and cannot be undone.</p>
+                  <p className="help error__text">This action is permanent and cannot be undone.</p>
                 )}
 
                 {/* @if TARGET='app' */}

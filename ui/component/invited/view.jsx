@@ -111,7 +111,7 @@ function Invited(props: Props) {
         )}
         actions={
           <>
-            <p className="error-text">{__('Not a valid invite')}</p>
+            <p className="error__text">{__('Not a valid invite')}</p>
             <div className="card__actions">
               <Button
                 button="primary"

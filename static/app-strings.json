@@ -1116,5 +1116,10 @@
   "Repost %count%": "Repost %count%",
   "File Description": "File Description",
   "View %count% reposts": "View %count% reposts",
-  "Preparing your content": "Preparing your content"
+  "Preparing your content": "Preparing your content",
+  "Sign Up with lbry.tv": "Sign Up with lbry.tv",
+  "Already have an account? %sign_in%": "Already have an account? %sign_in%",
+  "Sign in with a password (optional)": "Sign in with a password (optional)",
+  "Sign Up": "Sign Up",
+  "Don't have an account? %sign_up%": "Don't have an account? %sign_up%"
 }

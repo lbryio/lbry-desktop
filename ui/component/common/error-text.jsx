@@ -8,5 +8,5 @@ type Props = {
 export default function ErrorText(props: Props) {
   const { children } = props;
 
-  return <span className="error-text">{children}</span>;
+  return <span className="error__text">{children}</span>;
 }

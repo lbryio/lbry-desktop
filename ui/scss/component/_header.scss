@@ -181,3 +181,12 @@
   margin-top: 0;
   margin-left: var(--spacing-small);
 }
+
+.header__auth-buttons {
+  display: flex;
+  align-items: center;
+
+  & > *:not(:last-child) {
+    margin-right: var(--spacing-small);
+  }
+}

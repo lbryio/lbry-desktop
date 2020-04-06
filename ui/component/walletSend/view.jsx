@@ -90,7 +90,7 @@ class WalletSend extends React.PureComponent<Props> {
                     }
                   />
                   {!!Object.keys(errors).length || (
-                    <span className="error-text">
+                    <span className="error__text">
                       {(!!values.address && touched.address && errors.address) ||
                         (!!values.amount && touched.amount && errors.amount) ||
                         (parseFloat(values.amount) === balance &&

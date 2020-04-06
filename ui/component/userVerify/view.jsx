@@ -92,7 +92,7 @@ class UserVerify extends React.PureComponent<Props> {
             )}
             actions={
               <Fragment>
-                {errorMessage && <p className="error-text">{errorMessage}</p>}
+                {errorMessage && <p className="error__text">{errorMessage}</p>}
                 <CardVerify
                   label={__('Verify Card')}
                   disabled={isPending}

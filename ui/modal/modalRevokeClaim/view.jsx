@@ -71,7 +71,7 @@ export default function ModalRevokeClaim(props: Props) {
             'This will prevent others from resolving and accessing the content you published. It will return the LBC to your spendable balance, less a small transaction fee.'
           )}
         </p>
-        <p className="help error-text"> {__('FINAL WARNING: This action is permanent and cannot be undone.')}</p>
+        <p className="help error__text"> {__('FINAL WARNING: This action is permanent and cannot be undone.')}</p>
       </React.Fragment>
     );
   }

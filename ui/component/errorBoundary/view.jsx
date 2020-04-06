@@ -96,20 +96,20 @@ class ErrorBoundary extends React.Component<Props, State> {
             }
           />
           {!errorWasReported && (
-            <div className="error-wrapper">
-              <span className="error-text">
+            <div className="error__wrapper">
+              <span className="error__text">
                 {__('You are not currently sharing diagnostic data so this error was not reported.')}
               </span>
             </div>
           )}
 
           {errorWasReported && (
-            <div className="error-wrapper">
+            <div className="error__wrapper">
               {/* @if TARGET='web' */}
-              <span className="error-text">{__('Error ID: %sentryEventId%', { sentryEventId })}</span>
+              <span className="error__text">{__('Error ID: %sentryEventId%', { sentryEventId })}</span>
               {/* @endif */}
               {/* @if TARGET='app' */}
-              <span className="error-text">{__('This error was reported and will be fixed.')}</span>
+              <span className="error__text">{__('This error was reported and will be fixed.')}</span>
               {/* @endif */}
             </div>
           )}

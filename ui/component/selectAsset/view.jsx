@@ -74,7 +74,7 @@ function SelectAsset(props: Props) {
         </FormField>
         {assetSource === SOURCE_UPLOAD && (
           <div>
-            {error && <div className="error-text">{error}</div>}
+            {error && <div className="error__text">{error}</div>}
             {!pathSelected && (
               <FileSelector
                 label={'File to upload'}

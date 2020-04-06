@@ -34,7 +34,7 @@
 }
 
 .main--auth-page {
-  max-width: 60rem;
+  max-width: 70rem;
   margin-top: var(--spacing-main-padding);
   margin-left: auto;
   margin-right: auto;
@@ -61,11 +61,10 @@
 
 .main--contained {
   margin: auto;
-  margin-top: 2rem;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  max-width: 40rem;
+  max-width: 50rem;
   text-align: left;
 
   & > * {
@@ -75,4 +74,22 @@
 
 .main--full-width {
   width: 100%;
+}
+
+.main__sign-in {
+  max-width: 27rem;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.main__sign-up {
+  margin-left: auto;
+  margin-right: auto;
+  max-width: 35rem;
+}
+
+.main__channel-creation {
+  margin-left: auto;
+  margin-right: auto;
+  max-width: 32rem;
 }

@@ -192,10 +192,16 @@ const Header = (props: Props) => {
                         <span className="menu__link-help">{email}</span>
                       </MenuItem>
                     ) : (
-                      <MenuItem className="menu__link" onSelect={() => history.push(`/$/${PAGES.AUTH}`)}>
-                        <Icon aria-hidden icon={ICONS.SIGN_IN} />
-                        {__('Sign In')}
-                      </MenuItem>
+                      <React.Fragment>
+                        <MenuItem className="menu__link" onSelect={() => history.push(`/$/${PAGES.AUTH}`)}>
+                          <Icon aria-hidden icon={ICONS.SIGN_UP} />
+                          {__('Sign Up')}
+                        </MenuItem>
+                        <MenuItem className="menu__link" onSelect={() => history.push(`/$/${PAGES.AUTH_SIGNIN}`)}>
+                          <Icon aria-hidden icon={ICONS.SIGN_IN} />
+                          {__('Sign In')}
+                        </MenuItem>
+                      </React.Fragment>
                     )}
                   </MenuList>
                 </Menu>
@@ -223,7 +229,10 @@ const Header = (props: Props) => {
               </MenuList>
             </Menu>
             {IS_WEB && !authenticated && (
-              <Button navigate={`/$/${PAGES.AUTH}`} button="primary" label={__('Sign In')} />
+              <div className="header__auth-buttons">
+                <Button navigate={`/$/${PAGES.AUTH_SIGNIN}`} button="link" label={__('Sign In')} />
+                <Button navigate={`/$/${PAGES.AUTH}`} button="primary" label={__('Sign Up')} />
+              </div>
             )}
           </div>
         ) : (

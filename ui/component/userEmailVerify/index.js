@@ -23,7 +23,4 @@ const perform = dispatch => ({
   toast: message => dispatch(doToast({ message })),
 });
 
-export default connect(
-  select,
-  perform
-)(UserEmailVerify);
+export default connect(select, perform)(UserEmailVerify);

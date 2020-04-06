@@ -125,7 +125,7 @@ class ChannelCreate extends React.PureComponent<Props, State> {
 
     return (
       <Form onSubmit={this.handleCreateChannel}>
-        {createChannelError && <div className="error-text">{createChannelError}</div>}
+        {createChannelError && <div className="error__text">{createChannelError}</div>}
         <div>
           <FormField
             label={__('Name')}

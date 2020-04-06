@@ -94,7 +94,7 @@ class RewardsPage extends PureComponent<Props> {
       return (
         <section className="card card--section">
           <h2 className="card__title card__title--deprecated">{__('Rewards Disabled')}</h2>
-          <p className="error-text">
+          <p className="error__text">
             <I18nMessage tokens={{ settings: <Button button="link" navigate="/$/settings" label="Settings" /> }}>
               Rewards are currently disabled for your account. Turn on diagnostic data sharing, in %settings%, to
               re-enable them.
