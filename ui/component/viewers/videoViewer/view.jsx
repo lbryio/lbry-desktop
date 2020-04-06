@@ -53,16 +53,18 @@ type Props = {
   contentType: string,
   thumbnail: string,
   hasFileInfo: boolean,
-  onEndedCB: any,
   claim: Claim,
   autoplayParam: ?boolean,
+  onStartedCb: () => void,
+  onEndedCb: () => void,
 };
 
 function VideoViewer(props: Props) {
   const {
     contentType,
     source,
-    onEndedCB,
+    onEndedCb,
+    onStartedCb,
     changeVolume,
     changeMute,
     volume,
@@ -97,7 +99,11 @@ function VideoViewer(props: Props) {
     }
 
     function doEnded() {
-      onEndedCB();
+      onEndedCb();
+    }
+
+    function doStarted() {
+      onStartedCb();
     }
 
     function doPause(e: Event) {
@@ -112,6 +118,7 @@ function VideoViewer(props: Props) {
     }
 
     if (currentVideo) {
+      currentVideo.addEventListener('play', doStarted);
       currentVideo.addEventListener('ended', doEnded);
       currentVideo.addEventListener('pause', doPause);
       currentVideo.addEventListener('volumechange', doVolume);
@@ -119,12 +126,13 @@ function VideoViewer(props: Props) {
     // cleanup function:
     return () => {
       if (currentVideo) {
+        currentVideo.removeEventListener('play', doStarted);
         currentVideo.removeEventListener('ended', doEnded);
         currentVideo.removeEventListener('pause', doPause);
         currentVideo.removeEventListener('volumechange', doVolume);
       }
     };
-  }, [changeMute, changeVolume, onEndedCB]);
+  }, [changeMute, changeVolume, onStartedCb, onEndedCb]);
 
   useEffect(() => {
     const { current: videoNode } = videoRef;

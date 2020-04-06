@@ -14,7 +14,6 @@ type Props = {
   source: {
     file: (?string) => any,
     stream: string,
-    fileType: string,
     contentType: string,
   },
 };

@@ -14,13 +14,13 @@ const EmbedWrapperPage = (props: Props) => {
   const { resolveUri, claim, uri, triggerAnalyticsView } = props;
   const [hasRecordedView, setHasRecordedView] = useState(false);
 
-  useEffect(() => {
+  function onStartedCallback() {
     if (!hasRecordedView && uri && claim) {
       triggerAnalyticsView(uri).then(() => {
-        setHasRecordedView(false);
+        setHasRecordedView(true);
       });
     }
-  }, [triggerAnalyticsView, setHasRecordedView, hasRecordedView, uri, claim]);
+  }
 
   useEffect(() => {
     if (resolveUri && uri) {
@@ -32,7 +32,7 @@ const EmbedWrapperPage = (props: Props) => {
     <div className={'embed__wrapper'}>
       {claim && (
         <EmbedContext.Provider value>
-          <FileRender uri={uri} embedded />
+          <FileRender uri={uri} embedded onStartedCallback={onStartedCallback} />
         </EmbedContext.Provider>
       )}
     </div>

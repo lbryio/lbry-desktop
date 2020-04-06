@@ -38,6 +38,7 @@ type Props = {
   currentlyFloating: boolean,
   renderMode: string,
   thumbnail: string,
+  onStartedCallback: () => void,
 };
 
 type State = {
@@ -58,6 +59,7 @@ class FileRender extends React.PureComponent<Props, State> {
     (this: any).onEndedAutoplay = this.onEndedAutoplay.bind(this);
     (this: any).onEndedEmbedded = this.onEndedEmbedded.bind(this);
     (this: any).getOnEndedCb = this.getOnEndedCb.bind(this);
+    (this: any).onStartedCb = this.onStartedCb.bind(this);
   }
 
   componentDidMount() {
@@ -80,6 +82,14 @@ class FileRender extends React.PureComponent<Props, State> {
 
   exitFullscreen() {
     remote.getCurrentWindow().setFullScreen(false);
+  }
+
+  onStartedCb() {
+    const { onStartedCallback } = this.props;
+
+    if (onStartedCallback) {
+      onStartedCallback();
+    }
   }
 
   getOnEndedCb() {
@@ -114,7 +124,15 @@ class FileRender extends React.PureComponent<Props, State> {
     switch (renderMode) {
       case RENDER_MODES.AUDIO:
       case RENDER_MODES.VIDEO:
-        return <VideoViewer uri={uri} source={source} contentType={contentType} onEndedCB={this.getOnEndedCb()} />;
+        return (
+          <VideoViewer
+            uri={uri}
+            source={source}
+            contentType={contentType}
+            onEndedCb={this.getOnEndedCb()}
+            onStartedCb={this.onStartedCb}
+          />
+        );
       case RENDER_MODES.IMAGE:
         return <ImageViewer uri={uri} source={source} />;
       case RENDER_MODES.HTML:
@@ -140,7 +158,17 @@ class FileRender extends React.PureComponent<Props, State> {
       case RENDER_MODES.PDF:
         return <PdfViewer source={downloadPath || source} />;
       case RENDER_MODES.CAD:
-        return <ThreeViewer source={{ fileExtension, downloadPath }} theme={currentTheme} />;
+        return (
+          <ThreeViewer
+            source={{
+              fileExtension,
+              downloadPath,
+              // ThreeViewer stopped working here https://github.com/lbryio/lbry-desktop/pull/3918/files#diff-440a978a7dea2b088abd77a26fdae9b8L129
+              // It requires `fileType`
+            }}
+            theme={currentTheme}
+          />
+        );
       case RENDER_MODES.COMIC:
         return <ComicBookViewer source={{ fileExtension, downloadPath }} theme={currentTheme} />;
       case RENDER_MODES.APPLICATION:
