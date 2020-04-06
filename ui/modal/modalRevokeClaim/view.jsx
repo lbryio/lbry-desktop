@@ -49,7 +49,7 @@ export default function ModalRevokeClaim(props: Props) {
           </p>
         </React.Fragment>
       );
-    } else if (type === txnTypes.CHANNEL) {
+    } else if (type === txnTypes.CHANNEL || (type === txnTypes.UPDATE && name.startsWith('@'))) {
       return (
         <React.Fragment>
           <p>
