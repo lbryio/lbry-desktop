@@ -25,11 +25,14 @@ type Props = {
 function UserEmailNew(props: Props) {
   const { errorMessage, isPending, doSignUp, setSync, daemonSettings, setShareDiagnosticData, clearEmailError } = props;
   const { share_usage_data: shareUsageData } = daemonSettings;
-  const [email, setEmail] = useState('');
+  const { push, location } = useHistory();
+  const urlParams = new URLSearchParams(location.search);
+  const emailFromUrl = urlParams.get('email');
+  const defaultEmail = emailFromUrl ? decodeURIComponent(emailFromUrl) : '';
+  const [email, setEmail] = useState(defaultEmail);
   const [password, setPassword] = useState('');
   const [localShareUsageData, setLocalShareUsageData] = React.useState(false);
   const [formSyncEnabled, setFormSyncEnabled] = useState(true);
-  const { push, location } = useHistory();
   const valid = email.match(EMAIL_REGEX);
 
   function handleUsageDataChange() {
@@ -47,7 +50,13 @@ function UserEmailNew(props: Props) {
 
   function handleChangeToSignIn() {
     clearEmailError();
-    push(`/$/${PAGES.AUTH_SIGNIN}${location.search}`); // TODO: Don't lose redirect url right here
+    let url = `/$/${PAGES.AUTH_SIGNIN}`;
+    const urlParams = new URLSearchParams(location.search);
+    if (email) {
+      urlParams.set('email', encodeURIComponent(email));
+    }
+
+    push(`${url}?${urlParams.toString()}`);
   }
 
   return (
@@ -61,7 +70,7 @@ function UserEmailNew(props: Props) {
           <div>
             <Form onSubmit={handleSubmit} className="section">
               <FormField
-                autoFocus
+                autoFocus={!defaultEmail}
                 placeholder={__('hotstuff_96@hotmail.com')}
                 type="email"
                 name="sign_up_email"
@@ -70,6 +79,7 @@ function UserEmailNew(props: Props) {
                 onChange={e => setEmail(e.target.value)}
               />
               <FormField
+                autoFocus={defaultEmail}
                 type="password"
                 name="sign_in_password"
                 label={__('Password')}
@@ -111,7 +121,7 @@ function UserEmailNew(props: Props) {
                 <Button
                   button="primary"
                   type="submit"
-                  label={__('Continue')}
+                  label={__('Sign Up')}
                   disabled={!email || !valid || (!IS_WEB && !localShareUsageData && !shareUsageData) || isPending}
                 />
 

@@ -108,6 +108,11 @@
       margin-bottom: var(--spacing-small);
     }
   }
+
+  .button--primary ~ .button--link {
+    font-weight: var(--font-weight-bold);
+    margin-left: var(--spacing-small);
+  }
 }
 
 .section__actions--centered {

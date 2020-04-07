@@ -1,6 +1,8 @@
 exports.AUTH = 'signup';
 exports.AUTH_SIGNIN = 'signin';
 exports.AUTH_VERIFY = 'verify';
+exports.AUTH_PASSWORD_RESET = 'password-reset';
+exports.AUTH_PASSWORD_SET = 'reset'; // Change this in internal-apis
 exports.BACKUP = 'backup';
 exports.CHANNEL = 'channel';
 exports.DISCOVER = 'discover';

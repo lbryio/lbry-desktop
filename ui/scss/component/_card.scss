@@ -138,6 +138,13 @@
   & > *:not(:last-child) {
     margin-right: var(--spacing-medium);
   }
+
+  /* .badge rule inherited from file page prices, should be refactored */
+  .badge {
+    float: right;
+    margin-left: var(--spacing-small);
+    margin-top: 8px; // should be flex'd, but don't blame me! I just moved it down 3px
+  }
 }
 
 .card__title.card__title--deprecated {
@@ -170,19 +177,6 @@
 .card__header--between {
   @extend .card__header;
   justify-content: space-between;
-}
-
-.card__title {
-  font-size: var(--font-title);
-  font-weight: var(--font-weight-light);
-  display: block;
-
-  /* .badge rule inherited from file page prices, should be refactored */
-  .badge {
-    float: right;
-    margin-left: var(--spacing-small);
-    margin-top: 8px; // should be flex'd, but don't blame me! I just moved it down 3px
-  }
 }
 
 .card__subtitle {

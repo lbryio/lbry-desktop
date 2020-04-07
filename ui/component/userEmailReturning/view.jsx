@@ -21,10 +21,14 @@ type Props = {
 
 function UserEmailReturning(props: Props) {
   const { errorMessage, doUserSignIn, emailToVerify, doClearEmailError } = props;
-  const [email, setEmail] = useState('');
-  const [showPassword, setShowPassword] = usePersistedState('sign-in-show-password', false);
-  const [password, setPassword] = useState('');
   const { push, location } = useHistory();
+  const urlParams = new URLSearchParams(location.search);
+  const emailFromUrl = urlParams.get('email');
+  const defaultEmail = emailFromUrl ? decodeURIComponent(emailFromUrl) : '';
+  const [email, setEmail] = useState(defaultEmail);
+  const [preloadedEmail] = useState(!!defaultEmail);
+  const [showPassword, setShowPassword] = usePersistedState('sign-in-show-password', !!defaultEmail);
+  const [password, setPassword] = useState('');
 
   const valid = email.match(EMAIL_REGEX);
   const showEmailVerification = emailToVerify;
@@ -51,7 +55,7 @@ function UserEmailReturning(props: Props) {
               <div>
                 <Form onSubmit={handleSubmit} className="section">
                   <FormField
-                    autoFocus
+                    autoFocus={!preloadedEmail}
                     placeholder={__('hotstuff_96@hotmail.com')}
                     type="email"
                     name="sign_in_email"
@@ -61,6 +65,7 @@ function UserEmailReturning(props: Props) {
                   />
                   {showPassword && (
                     <FormField
+                      autoFocus={preloadedEmail}
                       type="password"
                       name="sign_in_password"
                       label={__('Password')}
@@ -83,6 +88,7 @@ function UserEmailReturning(props: Props) {
 
                   <div className="section__actions">
                     <Button button="primary" type="submit" label={__('Continue')} disabled={!email || !valid} />
+                    <Button button="link" onClick={handleChangeToSignIn} label={__('Sign Up')} />
                   </div>
                 </Form>
                 {errorMessage && (
@@ -94,13 +100,7 @@ function UserEmailReturning(props: Props) {
             }
           />
           <p className="card__bottom-gutter">
-            <I18nMessage
-              tokens={{
-                sign_up: <Button button="link" onClick={handleChangeToSignIn} label={__('Sign Up')} />,
-              }}
-            >
-              Don't have an account? %sign_up%
-            </I18nMessage>
+            <Button button="link" label={__('Forgot Password?')} navigate={`/$/${PAGES.AUTH_PASSWORD_RESET}`} />
           </p>
         </div>
       )}

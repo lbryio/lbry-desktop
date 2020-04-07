@@ -1,6 +1,12 @@
 import * as SETTINGS from 'constants/settings';
 import { connect } from 'react-redux';
-import { selectEmailNewIsPending, selectEmailNewErrorMessage, doUserSignUp, doClearEmailError } from 'lbryinc';
+import {
+  selectEmailNewIsPending,
+  selectEmailNewErrorMessage,
+  selectEmailAlreadyExists,
+  doUserSignUp,
+  doClearEmailError,
+} from 'lbryinc';
 import { DAEMON_SETTINGS } from 'lbry-redux';
 import { doSetClientSetting, doSetDaemonSetting } from 'redux/actions/settings';
 import { makeSelectClientSetting, selectDaemonSettings } from 'redux/selectors/settings';
@@ -11,6 +17,7 @@ const select = state => ({
   errorMessage: selectEmailNewErrorMessage(state),
   syncEnabled: makeSelectClientSetting(SETTINGS.ENABLE_SYNC)(state),
   daemonSettings: selectDaemonSettings(state),
+  emailExists: selectEmailAlreadyExists(state),
 });
 
 const perform = dispatch => ({

@@ -185,8 +185,9 @@
 .header__auth-buttons {
   display: flex;
   align-items: center;
+  font-weight: var(--font-weight-bold);
 
   & > *:not(:last-child) {
-    margin-right: var(--spacing-small);
+    margin: 0 var(--spacing-medium);
   }
 }
