@@ -3341,6 +3341,12 @@ lbry-redux@lbryio/lbry-redux#87ae7faf1c1d5ffa86feb578899596f6ea2a5fd9:
     reselect "^3.0.0"
     uuid "^3.3.2"
 
+lbryinc@lbryio/lbryinc#546ecd1f775925d771c4f86fe0e260ba38c25a02:
+  version "0.0.1"
+  resolved "https://codeload.github.com/lbryio/lbryinc/tar.gz/546ecd1f775925d771c4f86fe0e260ba38c25a02"
+  dependencies:
+    reselect "^3.0.0"
+
 lcid@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/lcid/-/lcid-2.0.0.tgz#6ef5d2df60e52f82eb228a4c373e8d1f397253cf"
@@ -3745,6 +3751,11 @@ nice-try@^1.0.4:
   version "1.0.5"
   resolved "https://registry.yarnpkg.com/nice-try/-/nice-try-1.0.5.tgz#a3378a7696ce7d223e88fc9b764bd7ef1089e366"
   integrity sha512-1nh45deeb5olNY7eX82BkPO7SSxR5SSYJiPTrTdFUVYwAl8CKMA5N9PjTYkHiRjisVcxcQ1HXdLhx2qxxJzLNQ==
+
+node-fetch@^2.6.0:
+  version "2.6.0"
+  resolved "https://registry.yarnpkg.com/node-fetch/-/node-fetch-2.6.0.tgz#e633456386d4aa55863f676a7ab0daa8fdecb0fd"
+  integrity sha512-8dG4H5ujfvFiqDmVu9fQ5bOHUC15JMjMY/Zumv26oOvvVJjM67KF8koCWIabKQ1GJIa9r2mMZscBq/TbdOcmNA==
 
 node-forge@0.9.0:
   version "0.9.0"
