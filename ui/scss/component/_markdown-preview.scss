@@ -102,6 +102,7 @@
   pre {
     white-space: normal;
     background: transparent;
+    word-break: break-all;
 
     code {
       margin-bottom: var(--spacing-medium);
