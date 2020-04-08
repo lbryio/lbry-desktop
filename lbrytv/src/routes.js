@@ -23,6 +23,7 @@ function getStreamUrl(ctx) {
 function getSupportedCDN(continent) {
   switch (continent) {
     case 'NA':
+    case 'AS':
     case 'EU':
       return continent;
     default:
