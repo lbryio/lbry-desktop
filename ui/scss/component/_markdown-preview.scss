@@ -90,11 +90,10 @@
   img {
     margin-bottom: var(--spacing-medium);
     padding-top: var(--spacing-medium);
-    max-height: 40vh;
+    max-height: var(--inline-player-max-height);
     object-position: left;
 
     @media (max-width: $breakpoint-small) {
-      max-height: 30vh;
       font-size: 0.8em;
     }
   }
