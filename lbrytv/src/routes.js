@@ -31,8 +31,8 @@ function getSupportedCDN(continent) {
   }
 }
 
-async function fetchContinentCookie() {
-  return Lbryio.call('locale', 'get', {}, 'post').then(result => {
+async function fetchContinentCookie(ip) {
+  return Lbryio.call('locale', 'get', { ip }, 'post').then(result => {
     const userContinent = getSupportedCDN(result.continent);
     return userContinent;
   });
@@ -51,9 +51,13 @@ router.get(`/$/stream/:claimName/:claimId`, async ctx => {
 
 router.get('*', async ctx => {
   const hasContinentCookie = ctx.cookies.get(CONTINENT_COOKIE);
+  const ip = ctx.ip;
+
   if (!hasContinentCookie) {
-    const continentValue = await fetchContinentCookie();
-    ctx.cookies.set(CONTINENT_COOKIE, continentValue, { httpOnly: false });
+    try {
+      const continentValue = await fetchContinentCookie(ip);
+      ctx.cookies.set(CONTINENT_COOKIE, continentValue, { httpOnly: false });
+    } catch (e) {}
   }
   const html = await getHtml(ctx);
   ctx.body = html;

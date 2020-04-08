@@ -10,6 +10,8 @@ const cacheControlMiddleware = require('./middleware/cache-control');
 const app = new Koa();
 const DIST_ROOT = path.resolve(__dirname, 'dist');
 
+app.proxy = true;
+
 app.use(async (ctx, next) => {
   try {
     await next();
