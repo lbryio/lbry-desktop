@@ -1,5 +1,5 @@
 const { URL } = require('../../config.js');
-const { generateEmbedUrl, generateStreamUrl } = require('../../ui/util/lbrytv');
+const { generateEmbedUrl } = require('../../ui/util/lbrytv');
 const PAGES = require('../../ui/constants/pages');
 const { getClaim } = require('./chainquery');
 const { parseURI } = require('lbry-redux');
@@ -61,16 +61,9 @@ function buildClaimOgMetadata(uri, claim, overrideOptions = {}) {
   const claimDescription =
     claim.description && claim.description.length > 0
       ? escapeHtmlProperty(truncateDescription(claim.description))
-      : `View ${claimTitle} on lbry.tv`;
+      : `Watch ${claimTitle} on LBRY.tv`;
   const claimLanguage = escapeHtmlProperty(claim.language) || 'en_US';
-  const isImage = claim && claim.value && claim.value.stream_type === 'image';
-  const isFree = claim && claim.value && (!claim.value.fee || Number(claim.value.fee.amount) <= 0);
-  let imageThumbnail;
-
-  if (claim && isImage && isFree) {
-    imageThumbnail = generateStreamUrl(claimName, claim.claim_id);
-  }
-  const claimThumbnail = escapeHtmlProperty(claim.thumbnail_url) || imageThumbnail || `${URL}/v1-og.png`;
+  const claimThumbnail = escapeHtmlProperty(claim.thumbnail_url) || `${URL}/v1-og.png`;
 
   // Allow for ovverriding default claim based og metadata
   const title = overrideOptions.title || claimTitle;
@@ -89,7 +82,7 @@ function buildClaimOgMetadata(uri, claim, overrideOptions = {}) {
   head += `<meta property="og:description" content="${description}"/>`;
   head += `<meta property="og:image" content="${claimThumbnail}"/>`;
   head += `<meta property="og:locale" content="${claimLanguage}"/>`;
-  head += `<meta property="og:site_name" content="lbry.tv"/>`;
+  head += `<meta property="og:site_name" content="LBRY.tv"/>`;
   head += `<meta property="og:type" content="website"/>`;
   head += `<meta property="og:title" content="${title}"/>`;
   // below should be canonical_url, but not provided by chainquery yet
