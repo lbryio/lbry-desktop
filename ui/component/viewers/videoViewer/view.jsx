@@ -33,6 +33,7 @@ type VideoJSOptions = {
   muted?: boolean,
   poseter?: string,
 };
+
 const VIDEO_JS_OPTIONS: VideoJSOptions = {
   controls: true,
   autoplay: true,
@@ -40,6 +41,10 @@ const VIDEO_JS_OPTIONS: VideoJSOptions = {
   playbackRates: [0.25, 0.5, 0.75, 1, 1.1, 1.25, 1.5, 1.75, 2],
   responsive: true,
 };
+
+if (!Object.keys(videojs.getPlugins()).includes('eventTracking')) {
+  videojs.registerPlugin('eventTracking', eventTracking);
+}
 
 type Props = {
   volume: number,
@@ -90,49 +95,6 @@ function VideoViewer(props: Props) {
   const forcePlayer = FORCE_CONTENT_TYPE_PLAYER.includes(contentType);
   const [requireRedraw, setRequireRedraw] = useState(false);
   let player;
-
-  useEffect(() => {
-    const currentVideo: HTMLVideoElement | null = document.querySelector('video');
-
-    if (!Object.keys(videojs.getPlugins()).includes('eventTracking')) {
-      videojs.registerPlugin('eventTracking', eventTracking);
-    }
-
-    function doEnded() {
-      onEndedCb();
-    }
-
-    function doStarted() {
-      onStartedCb();
-    }
-
-    function doPause(e: Event) {
-      // store position e.target.currentTime
-    }
-
-    function doVolume(e: Event) {
-      // $FlowFixMe volume is missing in EventTarget
-      changeVolume(e.target.volume);
-      // $FlowFixMe muted is missing in EventTarget
-      changeMute(e.target.muted);
-    }
-
-    if (currentVideo) {
-      currentVideo.addEventListener('play', doStarted);
-      currentVideo.addEventListener('ended', doEnded);
-      currentVideo.addEventListener('pause', doPause);
-      currentVideo.addEventListener('volumechange', doVolume);
-    }
-    // cleanup function:
-    return () => {
-      if (currentVideo) {
-        currentVideo.removeEventListener('play', doStarted);
-        currentVideo.removeEventListener('ended', doEnded);
-        currentVideo.removeEventListener('pause', doPause);
-        currentVideo.removeEventListener('volumechange', doVolume);
-      }
-    };
-  }, [changeMute, changeVolume, onStartedCb, onEndedCb]);
 
   useEffect(() => {
     const { current: videoNode } = videoRef;
@@ -233,22 +195,38 @@ function VideoViewer(props: Props) {
     }
     function doTrackingFirstPlay(e: Event, data: any) {
       analytics.videoStartEvent(claimId, data.secondsToLoad);
+      onStartedCb();
     }
+
+    function doEnded() {
+      onEndedCb();
+    }
+
+    function doVolume(e: Event) {
+      const isMuted = player.muted();
+      const volume = player.volume();
+      changeVolume(volume);
+      changeMute(isMuted);
+    }
+
     if (player) {
-      player.on('tracking:buffered', (e, d) => doTrackingBuffered(e, d));
-      player.on('tracking:firstplay', (e, d) => doTrackingFirstPlay(e, d));
+      player.on('tracking:buffered', doTrackingBuffered);
+      player.on('tracking:firstplay', doTrackingFirstPlay);
+      player.on('ended', doEnded);
+      player.on('volumechange', doVolume);
 
       // fixes #3498 (https://github.com/lbryio/lbry-desktop/issues/3498)
       // summary: on firefox the focus would stick to the fullscreen button which caused buggy behavior with spacebar
       // $FlowFixMe
       player.on('fullscreenchange', () => document.activeElement && document.activeElement.blur());
     }
+
     return () => {
       if (player) {
         player.off();
       }
     };
-  }, [claimId, player]);
+  }, [claimId, player, changeVolume, changeMute, onEndedCb, onStartedCb]);
 
   useEffect(() => {
     if (player && position) {
