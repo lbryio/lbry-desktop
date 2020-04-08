@@ -4,9 +4,9 @@ const { getCookie, setCookie } = require('../../ui/util/saved-passwords');
 
 const CONTINENT_COOKIE = 'continent';
 
-function generateStreamUrl(claimName, claimId, apiUrl, streamingContinent) {
+function generateStreamUrl(claimName, claimId, apiUrl, streamingContinent, useDefaultServer) {
   let prefix = LBRY_TV_STREAMING_API || apiUrl;
-  const continent = streamingContinent || getCookie(CONTINENT_COOKIE);
+  const continent = useDefaultServer ? undefined : streamingContinent || getCookie(CONTINENT_COOKIE);
 
   if (continent && prefix.split('//').length > 1) {
     prefix = prefix.replace('//', '//' + continent + '.');
