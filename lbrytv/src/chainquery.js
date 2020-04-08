@@ -24,7 +24,7 @@ module.exports.getClaim = async function getClaim(claimName, claimId, channelNam
   let params = [claimName];
 
   let sql =
-    'SELECT channel_claim.name as channel, claim.claim_id, claim.name, claim.description, claim.language, claim.thumbnail_url, claim.title, claim.source_media_type, claim.frame_width, claim.frame_height ' +
+    'SELECT channel_claim.name as channel, claim.claim_id, claim.name, claim.description, claim.language, claim.thumbnail_url, claim.title, claim.source_media_type, claim.frame_width, claim.frame_height, claim.fee ' +
     'FROM claim ' +
     'LEFT JOIN claim channel_claim on claim.publisher_id = channel_claim.claim_id ' +
     'WHERE claim.name = ?';
