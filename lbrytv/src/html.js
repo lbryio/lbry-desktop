@@ -67,7 +67,7 @@ function buildClaimOgMetadata(uri, claim, overrideOptions = {}) {
   let imageThumbnail;
 
   if (Number(claim.fee) <= 0 && claim.source_media_type.startsWith('image/')) {
-    imageThumbnail = generateStreamUrl(claim.name, claim.claim_id, undefined, undefined, true);
+    imageThumbnail = generateStreamUrl(claimName, claim.claim_id);
   }
   const claimThumbnail = escapeHtmlProperty(claim.thumbnail_url) || imageThumbnail || `${URL}/v1-og.png`;
 
