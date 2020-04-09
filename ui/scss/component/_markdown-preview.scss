@@ -81,7 +81,22 @@
       th:first-of-type,
       td:last-of-type,
       th:last-of-type {
-        padding: var(--spacing-medium);
+        padding: var(--spacing-small) var(--spacing-medium);
+      }
+    }
+
+    th {
+      border-bottom: 2px solid var(--color-border);
+      letter-spacing: 0.1rem;
+      text-align: left;
+      text-transform: uppercase;
+    }
+
+    tr {
+      &:not(:last-of-type) {
+        td {
+          border-bottom: 1px solid var(--color-border);
+        }
       }
     }
   }
