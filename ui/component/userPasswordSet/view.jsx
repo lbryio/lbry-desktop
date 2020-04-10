@@ -22,18 +22,27 @@ function UserPasswordReset(props: Props) {
   const urlParams = new URLSearchParams(location.search);
   const email = urlParams.get('email');
   const authToken = urlParams.get('auth_token');
+  const verificationToken = urlParams.get('verification_token');
   const [password, setPassword] = React.useState('');
 
   function handleSubmit() {
-    Lbryio.call(
-      'user_password',
-      'set',
-      {
-        auth_token: authToken,
-        new_password: password,
-      },
-      'post'
-    )
+    Lbryio.call('user_email', 'confirm', {
+      auth_token: authToken,
+      email: email,
+      verification_token: verificationToken,
+    })
+      .then(() => {
+        return Lbryio.call(
+          'user_password',
+          'set',
+          {
+            auth_token: authToken,
+            new_password: password,
+          },
+          'post'
+        );
+      })
+
       .then(res => {
         debugger;
       })
