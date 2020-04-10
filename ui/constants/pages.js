@@ -21,7 +21,6 @@ exports.SETTINGS = 'settings';
 exports.SHOW = 'show';
 exports.ACCOUNT = 'account';
 exports.SEARCH = 'search';
-exports.TRANSACTIONS = 'transactions';
 exports.TAGS_FOLLOWING = 'tags';
 exports.DEPRECATED__TAGS_FOLLOWING = 'following/tags';
 exports.TAGS_FOLLOWING_MANAGE = 'tags/manage';

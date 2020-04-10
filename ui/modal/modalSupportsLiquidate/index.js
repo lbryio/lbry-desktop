@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import { doHideModal } from 'redux/actions/app';
-import { doAbandonClaim, selectTransactionItems } from 'lbry-redux';
+import { selectTransactionItems } from 'lbry-redux';
 import ModalSupportsLiquidate from './view';
 
 const select = state => ({
@@ -9,7 +9,6 @@ const select = state => ({
 
 const perform = dispatch => ({
   closeModal: () => dispatch(doHideModal()),
-  abandonClaim: (txid, nout) => dispatch(doAbandonClaim(txid, nout)),
 });
 
 export default connect(select, perform)(ModalSupportsLiquidate);

@@ -61,6 +61,14 @@
   > *:not(:last-child) {
     margin-right: var(--spacing-medium);
   }
+
+  @media (max-width: $breakpoint-small) {
+    > * {
+      padding-bottom: var(--spacing-medium);
+    }
+    flex-flow: wrap;
+    justify-content: space-between;
+  }
 }
 
 .card__section--flex {
@@ -129,21 +137,26 @@
 }
 
 .card__title {
-  display: flex;
-  flex-wrap: wrap;
+  display: block;
   align-items: center;
   font-size: var(--font-title);
   font-weight: var(--font-weight-light);
-
   & > *:not(:last-child) {
     margin-right: var(--spacing-medium);
   }
-
   /* .badge rule inherited from file page prices, should be refactored */
   .badge {
     float: right;
     margin-left: var(--spacing-small);
     margin-top: 8px; // should be flex'd, but don't blame me! I just moved it down 3px
+  }
+}
+
+.card__title-actions {
+  padding: var(--spacing-medium);
+
+  @media (max-width: $breakpoint-small) {
+    padding: 0;
   }
 }
 
@@ -187,6 +200,7 @@
 
 .card__body {
   padding: var(--spacing-large);
+  border-top: 1px solid var(--color-border);
   &:not(.card__body--no-title) {
     padding-top: 0;
   }
@@ -205,6 +219,19 @@
   padding-bottom: 0;
   margin-bottom: var(--spacing-large);
   border-top: 1px solid var(--color-border);
+}
+
+.card__body-actions {
+  padding: var(--spacing-large);
+  @media (max-width: $breakpoint-small) {
+    padding: var(--spacing-small);
+  }
+}
+
+.card__header-actions {
+  border-top: 1px solid var(--color-border);
+  padding: var(--spacing-large);
+  width: 100%;
 }
 
 .card__body--with-icon,

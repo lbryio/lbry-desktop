@@ -11,7 +11,7 @@ import {
   doUserSetReferrer,
   selectUserVerifiedEmail,
 } from 'lbryinc';
-import { doFetchTransactions, doFetchChannelListMine } from 'lbry-redux';
+import { doFetchChannelListMine } from 'lbry-redux';
 import { makeSelectClientSetting, selectLoadedLanguages, selectThemePath } from 'redux/selectors/settings';
 import { selectIsUpgradeAvailable, selectAutoUpdateDownloaded } from 'redux/selectors/app';
 import { doSetLanguage } from 'redux/actions/settings';
@@ -41,7 +41,6 @@ const select = state => ({
 
 const perform = dispatch => ({
   analyticsTagSync: () => dispatch(doAnalyticsTagSync()),
-  fetchTransactions: (page, pageSize) => dispatch(doFetchTransactions(page, pageSize)),
   fetchAccessToken: () => dispatch(doFetchAccessToken()),
   fetchChannelListMine: () => dispatch(doFetchChannelListMine()),
   setLanguage: language => dispatch(doSetLanguage(language)),
