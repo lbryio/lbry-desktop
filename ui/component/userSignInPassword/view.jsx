@@ -40,6 +40,7 @@ export default function UserSignInPassword(props: Props) {
             <Form onSubmit={handleSubmit} className="section">
               <FormField
                 autoFocus
+                autoComplete
                 type="password"
                 name="sign_in_password"
                 label={__('Password')}
@@ -60,7 +61,7 @@ export default function UserSignInPassword(props: Props) {
         <Button
           button="link"
           label={__('Forgot Password?')}
-          navigate={`/$/${PAGES.AUTH_PASSWORD_RESET}?email=${encodeURIComponent(emailToVerify)}`}
+          navigate={`/$/${PAGES.AUTH_PASSWORD_RESET}?email=${encodeURIComponent(emailToVerify || '')}`}
         />
         <Button button="link" onClick={doClearEmailEntry} label={__('Cancel')} />
       </p>
