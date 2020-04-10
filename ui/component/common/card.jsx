@@ -47,7 +47,7 @@ export default function Card(props: Props) {
             </div>
           </div>
           {expandable && (
-            <div className="section--padded">
+            <div className="card__expand-btn">
               <Button
                 button={'alt'}
                 aria-label={__('More')}

@@ -227,6 +227,14 @@
   }
 }
 
+.card__expand-btn {
+  padding: var(--spacing-medium);
+
+  @media (max-width: $breakpoint-small) {
+    padding: 0;
+  }
+}
+
 .card__header,
 .card__body,
 .card__main-actions {
