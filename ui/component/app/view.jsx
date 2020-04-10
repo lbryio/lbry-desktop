@@ -3,7 +3,7 @@ import * as PAGES from 'constants/pages';
 import React, { useEffect, useRef, useState } from 'react';
 import classnames from 'classnames';
 import analytics from 'analytics';
-import { buildURI, parseURI, TX_LIST } from 'lbry-redux';
+import { buildURI, parseURI } from 'lbry-redux';
 import Router from 'component/router/index';
 import ModalRouter from 'modal/modalRouter';
 import ReactModal from 'react-modal';
@@ -54,7 +54,6 @@ type Props = {
     length: number,
     push: string => void,
   },
-  fetchTransactions: (number, number) => void,
   fetchAccessToken: () => void,
   fetchChannelListMine: () => void,
   signIn: () => void,
@@ -78,7 +77,6 @@ type Props = {
 function App(props: Props) {
   const {
     theme,
-    fetchTransactions,
     user,
     fetchAccessToken,
     fetchChannelListMine,
@@ -178,10 +176,9 @@ function App(props: Props) {
     fetchAccessToken();
 
     // @if TARGET='app'
-    fetchTransactions(1, TX_LIST.LATEST_PAGE_SIZE);
     fetchChannelListMine(); // This needs to be done for web too...
     // @endif
-  }, [appRef, fetchAccessToken, fetchChannelListMine, fetchTransactions]);
+  }, [appRef, fetchAccessToken, fetchChannelListMine]);
 
   useEffect(() => {
     // $FlowFixMe

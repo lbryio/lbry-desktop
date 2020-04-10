@@ -10,6 +10,7 @@ import * as ICONS from 'constants/icons';
 type Props = {
   title?: string | Node,
   subtitle?: string | Node,
+  titleActions?: string | Node,
   body?: string | Node,
   actions?: string | Node,
   icon?: string,
@@ -24,6 +25,7 @@ export default function Card(props: Props) {
   const {
     title,
     subtitle,
+    titleActions,
     body,
     actions,
     icon,
@@ -48,16 +50,19 @@ export default function Card(props: Props) {
               {subtitle && <div className="card__subtitle">{subtitle}</div>}
             </div>
           </div>
-          {expandable && (
-            <div className="card__expand-btn">
-              <Button
-                button={'alt'}
-                aria-label={__('More')}
-                icon={expanded ? toCapitalCase(ICONS.SUBTRACT) : toCapitalCase(ICONS.ADD)}
-                onClick={() => setExpanded(!expanded)}
-              />
-            </div>
-          )}
+          <div>
+            {titleActions && <div className="card__title-actions">{titleActions}</div>}
+            {expandable && (
+              <div className="card__title-actions">
+                <Button
+                  button={'alt'}
+                  aria-label={__('More')}
+                  icon={expanded ? toCapitalCase(ICONS.SUBTRACT) : toCapitalCase(ICONS.ADD)}
+                  onClick={() => setExpanded(!expanded)}
+                />
+              </div>
+            )}
+          </div>
         </div>
       )}
       {(!expandable || (expandable && expanded)) && (
