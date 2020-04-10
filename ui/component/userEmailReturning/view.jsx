@@ -77,7 +77,7 @@ function UserEmailReturning(props: Props) {
                     label={__('Sign In')}
                     disabled={!email || !valid}
                   />
-                  <Button button="link" onClick={handleChangeToSignIn} label={__('Sign Up')} />
+                  <Button button="link" onClick={handleChangeToSignIn} label={__('Join')} />
                 </div>
               </Form>
             </div>

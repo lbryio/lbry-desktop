@@ -192,7 +192,7 @@ const Header = (props: Props) => {
                       <React.Fragment>
                         <MenuItem className="menu__link" onSelect={() => history.push(`/$/${PAGES.AUTH}`)}>
                           <Icon aria-hidden icon={ICONS.SIGN_UP} />
-                          {__('Sign Up')}
+                          {__('Join')}
                         </MenuItem>
                         <MenuItem className="menu__link" onSelect={() => history.push(`/$/${PAGES.AUTH_SIGNIN}`)}>
                           <Icon aria-hidden icon={ICONS.SIGN_IN} />
@@ -228,7 +228,7 @@ const Header = (props: Props) => {
             {IS_WEB && !authenticated && (
               <div className="header__auth-buttons">
                 <Button navigate={`/$/${PAGES.AUTH_SIGNIN}`} button="link" label={__('Sign In')} />
-                <Button navigate={`/$/${PAGES.AUTH}`} button="primary" label={__('Sign Up')} />
+                <Button navigate={`/$/${PAGES.AUTH}`} button="primary" label={__('Join')} />
               </div>
             )}
           </div>

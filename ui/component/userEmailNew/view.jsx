@@ -86,7 +86,7 @@ function UserEmailNew(props: Props) {
   return (
     <div className="main__sign-up">
       <Card
-        title={__('Sign Up with lbry.tv')}
+        title={__('Join lbry.tv')}
         // @if TARGET='app'
         subtitle={__('An account with lbry.tv allows you to earn rewards and backup your data.')}
         // @endif
@@ -144,7 +144,7 @@ function UserEmailNew(props: Props) {
                 <Button
                   button="primary"
                   type="submit"
-                  label={__('Sign Up')}
+                  label={__('Join')}
                   disabled={
                     !email || !password || !valid || (!IS_WEB && !localShareUsageData && !shareUsageData) || isPending
                   }
