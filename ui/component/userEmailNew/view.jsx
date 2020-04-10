@@ -12,6 +12,7 @@ import ErrorText from 'component/common/error-text';
 
 type Props = {
   errorMessage: ?string,
+  emailExists: boolean,
   isPending: boolean,
   syncEnabled: boolean,
   setSync: boolean => void,
@@ -19,11 +20,20 @@ type Props = {
   daemonSettings: { share_usage_data: boolean },
   setShareDiagnosticData: boolean => void,
   doSignUp: (string, ?string) => void,
-  clearEmailError: () => void,
+  clearEmailEntry: () => void,
 };
 
 function UserEmailNew(props: Props) {
-  const { errorMessage, isPending, doSignUp, setSync, daemonSettings, setShareDiagnosticData, clearEmailError } = props;
+  const {
+    errorMessage,
+    isPending,
+    doSignUp,
+    setSync,
+    daemonSettings,
+    setShareDiagnosticData,
+    clearEmailEntry,
+    emailExists,
+  } = props;
   const { share_usage_data: shareUsageData } = daemonSettings;
   const { push, location } = useHistory();
   const urlParams = new URLSearchParams(location.search);
@@ -48,16 +58,30 @@ function UserEmailNew(props: Props) {
     analytics.emailProvidedEvent();
   }
 
-  function handleChangeToSignIn() {
-    clearEmailError();
+  function handleChangeToSignIn(additionalParams) {
+    clearEmailEntry();
+
     let url = `/$/${PAGES.AUTH_SIGNIN}`;
     const urlParams = new URLSearchParams(location.search);
+
+    urlParams.delete('email');
     if (email) {
       urlParams.set('email', encodeURIComponent(email));
     }
 
+    urlParams.delete('email_exists');
+    if (emailExists) {
+      urlParams.set('email_exists', '1');
+    }
+
     push(`${url}?${urlParams.toString()}`);
   }
+
+  React.useEffect(() => {
+    if (emailExists) {
+      handleChangeToSignIn();
+    }
+  }, [emailExists]);
 
   return (
     <div className="main__sign-up">
@@ -70,7 +94,7 @@ function UserEmailNew(props: Props) {
           <div>
             <Form onSubmit={handleSubmit} className="section">
               <FormField
-                autoFocus={!defaultEmail}
+                autoFocus
                 placeholder={__('hotstuff_96@hotmail.com')}
                 type="email"
                 name="sign_up_email"
@@ -79,7 +103,6 @@ function UserEmailNew(props: Props) {
                 onChange={e => setEmail(e.target.value)}
               />
               <FormField
-                autoFocus={defaultEmail}
                 type="password"
                 name="sign_in_password"
                 label={__('Password')}
@@ -122,24 +145,11 @@ function UserEmailNew(props: Props) {
                   button="primary"
                   type="submit"
                   label={__('Sign Up')}
-                  disabled={!email || !valid || (!IS_WEB && !localShareUsageData && !shareUsageData) || isPending}
+                  disabled={
+                    !email || !password || !valid || (!IS_WEB && !localShareUsageData && !shareUsageData) || isPending
+                  }
                 />
-
-                <p className="help">
-                  <I18nMessage
-                    tokens={{
-                      terms: (
-                        <Button
-                          button="link"
-                          href="https://www.lbry.com/termsofservice"
-                          label={__('Terms of Service')}
-                        />
-                      ),
-                    }}
-                  >
-                    By continuing, I agree to the %terms% and confirm I am over the age of 13.
-                  </I18nMessage>
-                </p>
+                <Button button="link" onClick={handleChangeToSignIn} label={__('Sign In')} />
               </div>
             </Form>
             {errorMessage && (
@@ -151,13 +161,15 @@ function UserEmailNew(props: Props) {
         }
       />
       <p className="card__bottom-gutter">
-        <I18nMessage
-          tokens={{
-            sign_in: <Button button="link" onClick={handleChangeToSignIn} label={__('Sign In')} />,
-          }}
-        >
-          Already have an account? %sign_in%
-        </I18nMessage>
+        <span>
+          <I18nMessage
+            tokens={{
+              terms: <Button button="link" href="https://www.lbry.com/termsofservice" label={__('Terms of Service')} />,
+            }}
+          >
+            By continuing, I agree to the %terms% and confirm I am over the age of 13.
+          </I18nMessage>
+        </span>
       </p>
     </div>
   );

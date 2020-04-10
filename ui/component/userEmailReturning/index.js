@@ -1,13 +1,22 @@
 import { connect } from 'react-redux';
-import { selectEmailNewErrorMessage, selectEmailToVerify, doUserSignIn, doClearEmailError } from 'lbryinc';
+import {
+  selectEmailNewErrorMessage,
+  selectEmailToVerify,
+  doUserCheckIfEmailExists,
+  doClearEmailEntry,
+  selectEmailDoesNotExist,
+  selectEmailAlreadyExists,
+} from 'lbryinc';
 import UserEmailReturning from './view';
 
 const select = state => ({
   errorMessage: selectEmailNewErrorMessage(state),
   emailToVerify: selectEmailToVerify(state),
+  emailDoesNotExist: selectEmailDoesNotExist(state),
+  emailExists: selectEmailAlreadyExists(state),
 });
 
 export default connect(select, {
-  doUserSignIn,
-  doClearEmailError,
+  doUserCheckIfEmailExists,
+  doClearEmailEntry,
 })(UserEmailReturning);

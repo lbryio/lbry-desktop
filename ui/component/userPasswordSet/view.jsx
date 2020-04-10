@@ -13,7 +13,7 @@ type Props = {
   history: { push: string => void },
   location: { search: string },
   passwordSetPending: boolean,
-  passwordSetError: boolean,
+  passwordSetError: ?string,
 };
 
 function UserPasswordReset(props: Props) {
@@ -30,7 +30,7 @@ function UserPasswordReset(props: Props) {
       'set',
       {
         auth_token: authToken,
-        password,
+        new_password: password,
       },
       'post'
     )
@@ -56,7 +56,7 @@ function UserPasswordReset(props: Props) {
                 name="password_set"
                 label={__('New Password')}
                 value={password}
-                onChange={e => setPassword(e.target.value)}
+                onChange={e => console.log('e', e.target.value) || setPassword(e.target.value)}
               />
 
               <div className="section__actions">
@@ -77,7 +77,7 @@ function UserPasswordReset(props: Props) {
         }
       />
       <div className="card__bottom-gutter">
-        <Button button="link" label={__('Sign Up')} navigate={`/$/${PAGES.AUTH}`} /> or{' '}
+        <Button button="link" label={__('Sign Up')} navigate={`/$/${PAGES.AUTH}`} />
         <Button button="link" label={__('Sign In')} navigate={`/$/${PAGES.AUTH_SIGNIN}`} />
       </div>
     </section>

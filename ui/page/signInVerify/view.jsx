@@ -1,4 +1,5 @@
 // @flow
+import * as PAGES from 'constants/pages';
 import React, { useState } from 'react';
 import { withRouter } from 'react-router';
 import Page from 'component/page';
@@ -6,7 +7,7 @@ import ReCAPTCHA from 'react-google-recaptcha';
 import Button from 'component/button';
 import { Lbryio } from 'lbryinc';
 import I18nMessage from 'component/i18nMessage';
-import * as PAGES from 'constants/pages';
+import Card from 'component/common/card';
 
 type Props = {
   history: { push: string => void, location: { search: string } },
@@ -88,40 +89,49 @@ function SignInVerifyPage(props: Props) {
 
   return (
     <Page authPage className="main--auth-page">
-      <section className="main--contained">
-        <h1 className="section__title--large">
-          {isAuthenticationSuccess ? __('Sign In Success!') : __('Sign In to lbry.tv')}
-        </h1>
-        <p className="section__subtitle">
-          {isAuthenticationSuccess
-            ? __('You can now close this tab.')
-            : needsRecaptcha
-            ? __('Click below to sign in to lbry.tv')
-            : __('Welcome back! You are automatically being signed in.')}
-        </p>
-        <p className="section__subtitle">
-          {showCaptchaMessage && !isAuthenticationSuccess && (
-            <I18nMessage
-              tokens={{
-                refresh: <Button button="link" label={__('refreshing')} onClick={() => window.location.reload()} />,
-              }}
-            >
-              Not seeing a captcha? Check your ad blocker or try %refresh%.
-            </I18nMessage>
-          )}
-        </p>
-        {!isAuthenticationSuccess && needsRecaptcha && (
-          <div className="section__actions">
-            <ReCAPTCHA
-              sitekey="6LePsJgUAAAAAFTuWOKRLnyoNKhm0HA4C3elrFMG"
-              onChange={onCaptchaChange}
-              asyncScriptOnLoad={onCaptchaReady}
-              onExpired={onAuthError}
-              onErrored={onAuthError}
-            />
-          </div>
-        )}
-      </section>
+      <div className="main__sign-up">
+        <Card
+          title={isAuthenticationSuccess ? __('Sign In Success!') : __('Sign In to lbry.tv')}
+          subtitle={
+            <React.Fragment>
+              <p>
+                {isAuthenticationSuccess
+                  ? __('You can now close this tab.')
+                  : needsRecaptcha
+                  ? __('Click below to sign in to lbry.tv')
+                  : __('Welcome back! You are automatically being signed in.')}
+              </p>
+              {showCaptchaMessage && !isAuthenticationSuccess && (
+                <p>
+                  <I18nMessage
+                    tokens={{
+                      refresh: (
+                        <Button button="link" label={__('refreshing')} onClick={() => window.location.reload()} />
+                      ),
+                    }}
+                  >
+                    Not seeing a captcha? Check your ad blocker or try %refresh%.
+                  </I18nMessage>
+                </p>
+              )}
+            </React.Fragment>
+          }
+          actions={
+            !isAuthenticationSuccess &&
+            needsRecaptcha && (
+              <div className="section__actions">
+                <ReCAPTCHA
+                  sitekey="6LePsJgUAAAAAFTuWOKRLnyoNKhm0HA4C3elrFMG"
+                  onChange={onCaptchaChange}
+                  asyncScriptOnLoad={onCaptchaReady}
+                  onExpired={onAuthError}
+                  onErrored={onAuthError}
+                />
+              </div>
+            )
+          }
+        />
+      </div>
     </Page>
   );
 }

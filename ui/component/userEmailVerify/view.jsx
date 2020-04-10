@@ -61,7 +61,7 @@ class UserEmailVerify extends React.PureComponent<Props> {
     const { email, isReturningUser, resendingEmail } = this.props;
 
     return (
-      <React.Fragment>
+      <div className="main__sign-up">
         <Card
           title={isReturningUser ? __('Check Your Email') : __('Confirm Your Email')}
           subtitle={
@@ -88,16 +88,18 @@ class UserEmailVerify extends React.PureComponent<Props> {
           }
         />
         <p className="card__bottom-gutter">
-          <I18nMessage
-            tokens={{
-              help_link: <Button button="link" href="mailto:help@lbry.com" label="help@lbry.com" />,
-              chat_link: <Button button="link" href="https://chat.lbry.com" label="chat" />,
-            }}
-          >
-            Email %help_link% or join our %chat_link% if you encounter any trouble verifying.
-          </I18nMessage>
+          <span>
+            <I18nMessage
+              tokens={{
+                help_link: <Button button="link" href="mailto:help@lbry.com" label="help@lbry.com" />,
+                chat_link: <Button button="link" href="https://chat.lbry.com" label="chat" />,
+              }}
+            >
+              Email %help_link% or join our %chat_link% if you encounter any trouble verifying.
+            </I18nMessage>
+          </span>
         </p>
-      </React.Fragment>
+      </div>
     );
   }
 }

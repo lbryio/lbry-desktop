@@ -2,6 +2,7 @@
 import React from 'react';
 import { withRouter } from 'react-router';
 import UserEmailReturning from 'component/userEmailReturning';
+import UserSignInPassword from 'component/userSignInPassword';
 import Spinner from 'component/spinner';
 
 type Props = {
@@ -9,28 +10,45 @@ type Props = {
   history: { push: string => void },
   location: { search: string },
   userFetchPending: boolean,
+  doUserSignIn: string => void,
+  emailToVerify: ?string,
+  passwordExists: boolean,
 };
 
 function UserSignIn(props: Props) {
-  const { user, location, history, userFetchPending } = props;
+  const { user, location, history, doUserSignIn, userFetchPending, emailToVerify, passwordExists } = props;
   const { search } = location;
   const urlParams = new URLSearchParams(search);
+  const [emailOnlyLogin, setEmailOnlyLogin] = React.useState(false);
+  const hasVerifiedEmail = user && user.has_verified_email;
   const redirect = urlParams.get('redirect');
-  const showUserEmail = user && !user.password_set && !user.has_verified_email;
   const showLoading = userFetchPending;
+  const showEmail = !passwordExists || emailOnlyLogin;
+  const showPassword = !showEmail && emailToVerify && passwordExists;
 
   React.useEffect(() => {
-    if (!showUserEmail) {
+    if (hasVerifiedEmail || (!showEmail && !showPassword && !showLoading)) {
       history.push(redirect || '/');
     }
-  }, [showUserEmail]);
+  }, [showEmail, showPassword, showLoading, hasVerifiedEmail]);
+
+  React.useEffect(() => {
+    if (emailToVerify && emailOnlyLogin) {
+      doUserSignIn(emailToVerify);
+    }
+  }, [emailToVerify, emailOnlyLogin, doUserSignIn]);
 
   return (
-    <section className="main--contained">
-      {!showLoading && <div>{showUserEmail && <UserEmailReturning />}</div>}
+    <section>
+      {!showLoading && (
+        <div>
+          {showEmail && <UserEmailReturning />}
+          {showPassword && <UserSignInPassword onHandleEmailOnly={() => setEmailOnlyLogin(true)} />}
+        </div>
+      )}
       {showLoading && (
         <div className="main--empty">
-          <Spinner />
+          <Spinner delayed />
         </div>
       )}
     </section>

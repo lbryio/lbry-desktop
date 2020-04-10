@@ -17,6 +17,7 @@ type Props = {
   isPageTitle?: boolean,
   isBodyTable?: boolean,
   defaultExpand?: boolean,
+  nag?: Node,
 };
 
 export default function Card(props: Props) {
@@ -30,6 +31,7 @@ export default function Card(props: Props) {
     isPageTitle = false,
     isBodyTable = false,
     defaultExpand,
+    nag,
   } = props;
   const [expanded, setExpanded] = useState(defaultExpand);
   const expandable = defaultExpand !== undefined;
@@ -73,6 +75,8 @@ export default function Card(props: Props) {
           {actions && <div className="card__main-actions">{actions}</div>}
         </>
       )}
+
+      {nag}
     </section>
   );
 }

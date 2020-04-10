@@ -8,30 +8,36 @@ import { Form, FormField } from 'component/common/form';
 import { EMAIL_REGEX } from 'constants/email';
 import ErrorText from 'component/common/error-text';
 import Button from 'component/button';
+import Nag from 'component/common/nag';
 
 type Props = {
   user: ?User,
-  history: { push: string => void },
-  location: { search: string },
+  doToast: ({ message: string }) => void,
+  doUserPasswordReset: string => void,
   passwordResetPending: boolean,
+  passwordResetSuccess: boolean,
+  passwordResetError: ?string,
 };
 
 function UserPasswordReset(props: Props) {
-  const {
-    doUserPasswordReset,
-    location,
-    history,
-    passwordResetPending,
-    passwordResetError,
-    passwordResetSuccess,
-  } = props;
+  const { doUserPasswordReset, passwordResetPending, passwordResetError, passwordResetSuccess, doToast } = props;
   const { search } = location;
-  const [email, setEmail] = React.useState('');
+  const urlParams = new URLSearchParams(search);
+  const defaultEmail = urlParams.get('email');
+  const [email, setEmail] = React.useState(defaultEmail);
   const valid = email.match(EMAIL_REGEX);
 
   function handleSubmit() {
     doUserPasswordReset(email);
   }
+
+  React.useEffect(() => {
+    if (passwordResetSuccess) {
+      doToast({
+        message: __('Email sent!'),
+      });
+    }
+  }, [passwordResetSuccess]);
 
   return (
     <section className="main__sign-in">
@@ -45,7 +51,7 @@ function UserPasswordReset(props: Props) {
                 placeholder={__('hotstuff_96@hotmail.com')}
                 type="email"
                 name="sign_in_email"
-                label={__('Email Used To Sign Up')}
+                label={__('Email')}
                 value={email}
                 onChange={e => setEmail(e.target.value)}
               />
@@ -58,7 +64,6 @@ function UserPasswordReset(props: Props) {
                   disabled={!email || !valid || passwordResetPending}
                 />
                 {passwordResetPending && <Spinner type="small" />}
-                {passwordResetSuccess && <span className="help">Email sent!</span>}
               </div>
             </Form>
             {passwordResetError && (
@@ -68,9 +73,14 @@ function UserPasswordReset(props: Props) {
             )}
           </div>
         }
+        nag={
+          passwordResetSuccess && (
+            <Nag type="helpful" relative message={__('Check your email for a link to reset your password.')} />
+          )
+        }
       />
       <div className="card__bottom-gutter">
-        <Button button="link" label={__('Sign Up')} navigate={`/$/${PAGES.AUTH}`} /> or{' '}
+        <Button button="link" label={__('Sign Up')} navigate={`/$/${PAGES.AUTH}`} />
         <Button button="link" label={__('Sign In')} navigate={`/$/${PAGES.AUTH_SIGNIN}`} />
       </div>
     </section>

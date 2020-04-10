@@ -5,7 +5,7 @@ import {
   selectEmailNewErrorMessage,
   selectEmailAlreadyExists,
   doUserSignUp,
-  doClearEmailError,
+  doClearEmailEntry,
 } from 'lbryinc';
 import { DAEMON_SETTINGS } from 'lbry-redux';
 import { doSetClientSetting, doSetDaemonSetting } from 'redux/actions/settings';
@@ -25,7 +25,7 @@ const perform = dispatch => ({
   setShareDiagnosticData: shouldShareData =>
     dispatch(doSetDaemonSetting(DAEMON_SETTINGS.SHARE_USAGE_DATA, shouldShareData)),
   doSignUp: (email, password) => dispatch(doUserSignUp(email, password)),
-  clearEmailError: () => dispatch(doClearEmailError()),
+  clearEmailEntry: () => dispatch(doClearEmailEntry()),
 });
 
 export default connect(select, perform)(UserEmailNew);

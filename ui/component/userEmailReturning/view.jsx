@@ -4,43 +4,49 @@ import React, { useState } from 'react';
 import { FormField, Form } from 'component/common/form';
 import Button from 'component/button';
 import { EMAIL_REGEX } from 'constants/email';
-import I18nMessage from 'component/i18nMessage';
 import { useHistory } from 'react-router-dom';
-import usePersistedState from 'effects/use-persisted-state';
 import UserEmailVerify from 'component/userEmailVerify';
-import ErrorText from 'component/common/error-text';
 import Card from 'component/common/card';
+import Nag from 'component/common/nag';
 import analytics from 'analytics';
 
 type Props = {
   errorMessage: ?string,
   emailToVerify: ?string,
-  doClearEmailError: () => void,
+  emailDoesNotExist: boolean,
+  doClearEmailEntry: () => void,
   doUserSignIn: (string, ?string) => void,
+  doUserCheckIfEmailExists: string => void,
 };
 
 function UserEmailReturning(props: Props) {
-  const { errorMessage, doUserSignIn, emailToVerify, doClearEmailError } = props;
+  const { errorMessage, doUserCheckIfEmailExists, emailToVerify, doClearEmailEntry, emailDoesNotExist } = props;
   const { push, location } = useHistory();
   const urlParams = new URLSearchParams(location.search);
   const emailFromUrl = urlParams.get('email');
+  const emailExistsFromUrl = urlParams.get('email_exists');
   const defaultEmail = emailFromUrl ? decodeURIComponent(emailFromUrl) : '';
   const [email, setEmail] = useState(defaultEmail);
-  const [preloadedEmail] = useState(!!defaultEmail);
-  const [showPassword, setShowPassword] = usePersistedState('sign-in-show-password', !!defaultEmail);
-  const [password, setPassword] = useState('');
-
   const valid = email.match(EMAIL_REGEX);
   const showEmailVerification = emailToVerify;
 
   function handleSubmit() {
-    doUserSignIn(email, password === '' ? undefined : password);
+    doUserCheckIfEmailExists(email);
     analytics.emailProvidedEvent();
   }
 
   function handleChangeToSignIn() {
-    doClearEmailError();
-    push(`/$/${PAGES.AUTH}${location.search}`); // TODO: Don't lose redirect url right here
+    doClearEmailEntry();
+    let url = `/$/${PAGES.AUTH}`;
+    const urlParams = new URLSearchParams(location.search);
+
+    urlParams.delete('email_exists');
+    urlParams.delete('email');
+    if (email) {
+      urlParams.set('email', encodeURIComponent(email));
+    }
+
+    push(`${url}?${urlParams.toString()}`);
   }
 
   return (
@@ -48,61 +54,53 @@ function UserEmailReturning(props: Props) {
       {showEmailVerification ? (
         <UserEmailVerify />
       ) : (
-        <div>
-          <Card
-            title={__('Sign In to lbry.tv')}
-            actions={
-              <div>
-                <Form onSubmit={handleSubmit} className="section">
-                  <FormField
-                    autoFocus={!preloadedEmail}
-                    placeholder={__('hotstuff_96@hotmail.com')}
-                    type="email"
-                    name="sign_in_email"
-                    label={__('Email')}
-                    value={email}
-                    onChange={e => setEmail(e.target.value)}
-                  />
-                  {showPassword && (
-                    <FormField
-                      autoFocus={preloadedEmail}
-                      type="password"
-                      name="sign_in_password"
-                      label={__('Password')}
-                      value={password}
-                      onChange={e => setPassword(e.target.value)}
-                    />
-                  )}
-                  {!showPassword && (
-                    <fieldset-section>
-                      <FormField
-                        type="checkbox"
-                        placeholder={__('hotstuff_96@hotmail.com')}
-                        name="sign_in_toggle_password"
-                        label={__('Sign in with a password (optional)')}
-                        checked={showPassword}
-                        onChange={() => setShowPassword(!showPassword)}
-                      />
-                    </fieldset-section>
-                  )}
+        <Card
+          title={__('Sign In to lbry.tv')}
+          actions={
+            <div>
+              <Form onSubmit={handleSubmit} className="section">
+                <FormField
+                  autoFocus={!emailExistsFromUrl}
+                  placeholder={__('hotstuff_96@hotmail.com')}
+                  type="email"
+                  name="sign_in_email"
+                  label={__('Email')}
+                  value={email}
+                  onChange={e => setEmail(e.target.value)}
+                />
 
-                  <div className="section__actions">
-                    <Button button="primary" type="submit" label={__('Continue')} disabled={!email || !valid} />
-                    <Button button="link" onClick={handleChangeToSignIn} label={__('Sign Up')} />
-                  </div>
-                </Form>
-                {errorMessage && (
-                  <div className="section">
-                    <ErrorText>{errorMessage}</ErrorText>
-                  </div>
-                )}
-              </div>
-            }
-          />
-          <p className="card__bottom-gutter">
-            <Button button="link" label={__('Forgot Password?')} navigate={`/$/${PAGES.AUTH_PASSWORD_RESET}`} />
-          </p>
-        </div>
+                <div className="section__actions">
+                  <Button
+                    autoFocus={emailExistsFromUrl}
+                    button="primary"
+                    type="submit"
+                    label={__('Sign In')}
+                    disabled={!email || !valid}
+                  />
+                  <Button button="link" onClick={handleChangeToSignIn} label={__('Sign Up')} />
+                </div>
+              </Form>
+            </div>
+          }
+          nag={
+            <React.Fragment>
+              {!emailDoesNotExist && emailExistsFromUrl && (
+                <Nag type="helpful" relative message={__('That email is already in use. Did you mean to sign in?')} />
+              )}
+              {emailDoesNotExist && (
+                <Nag
+                  type="helpful"
+                  relative
+                  message={__("We can't find that email. Did you mean to sign up?")}
+                  actionText={__('Sign Up')}
+                />
+              )}
+              {!emailExistsFromUrl && !emailDoesNotExist && errorMessage && (
+                <Nag type="error" relative message={errorMessage} />
+              )}
+            </React.Fragment>
+          }
+        />
       )}
     </div>
   );
