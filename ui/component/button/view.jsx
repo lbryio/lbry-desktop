@@ -91,34 +91,43 @@ const Button = forwardRef<any, {}>((props: Props, ref: any) => {
   const size = iconSize || (!label && !children) ? 18 : undefined; // Fall back to default
 
   const content = (
-    <div className="button__content" style={{ border: `1px solid white` }}>
-      {/* style={{ border: `1px solid white` }} */}
-      <div style={{ border: `1px solid green` }}>
-        {icon && <Icon icon={icon} iconColor={iconColor} size={iconSize} />}
-      </div>
-      {
-        <div style={{ border: `1px solid blue` }}>
-          <span style={{ visibility: 'hidden' }}>
-            {largestLabel || label}
-            {label && (
-              //   <div style={{ position: 'absolute', left: 0, right: 0, bottom: 0, top: 0, margin: 'auto' }}>
+    <span className="button__content" style={{ border: `1px solid green` }}>
+      {icon && <Icon icon={icon} iconColor={iconColor} size={size} />}
+
+      {label && (
+        <div style={{ position: 'relative', border: `1px solid red`, padding: 0, margin: 0, float: 'left' }}>
+          <div
+            style={{
+              position: 'relative',
+              left: '50%',
+              top: '50%',
+              transform: `translate(-50%, 0%)`,
+              border: `1px solid white`,
+              padding: 0,
+              margin: 0,
+            }}
+          >
+            <span style={{ visibility: 'hidden' }}>
+              {largestLabel || label}
               <div
                 style={{
-                  position: 'relative',
+                  position: 'absolute',
                   left: '50%',
-                  right: '50%',
+                  top: '50%',
                   transform: `translate(-50%, -50%)`,
-                  border: `1px solid red`,
+                  visibility: 'visible',
+                  border: `1px solid blue`,
                 }}
               >
                 <span className="button__label" style={{ visibility: 'visible' }}>
                   {label}
                 </span>
               </div>
-            )}
-          </span>
+            </span>
+          </div>
         </div>
-      }
+      )}
+
       {children && children}
       {iconRight && <Icon icon={iconRight} iconColor={iconColor} size={size} />}
     </span>
