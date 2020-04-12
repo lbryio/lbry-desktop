@@ -52,8 +52,6 @@ export default function SubscribeButton(props: Props) {
     longestStr = __('Unfollow');
   }
 
-  longestStr = longestStr + '-';
-
   return permanentUrl ? (
     <Button
       ref={buttonRef}

@@ -95,7 +95,7 @@ const Button = forwardRef<any, {}>((props: Props, ref: any) => {
       {icon && <Icon icon={icon} iconColor={iconColor} size={iconSize} />}
 
       {label && (
-        <div style={{ position: 'relative' }}>
+        <div className="button__label" style={{ position: 'relative' }}>
           <div
             style={{
               position: 'relative',
@@ -114,9 +114,7 @@ const Button = forwardRef<any, {}>((props: Props, ref: any) => {
                   transform: `translate(-50%, -50%)`,
                 }}
               >
-                <span className="button__label" style={{ visibility: 'visible' }}>
-                  {label}
-                </span>
+                <span style={{ visibility: 'visible' }}>{label}</span>
               </div>
             </span>
           </div>
