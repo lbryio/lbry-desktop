@@ -27,7 +27,6 @@ function UserPasswordReset(props: Props) {
 
   function handleSubmit() {
     Lbryio.call('user_email', 'confirm', {
-      auth_token: authToken,
       email: email,
       verification_token: verificationToken,
     })
