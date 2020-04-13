@@ -19,6 +19,7 @@ type Props = {
   passwordResetPending: boolean,
   passwordResetSuccess: boolean,
   passwordResetError: ?string,
+  emailToVerify: ?string,
 };
 
 function UserPasswordReset(props: Props) {
@@ -30,12 +31,10 @@ function UserPasswordReset(props: Props) {
     doToast,
     doClearPasswordEntry,
     doClearEmailEntry,
+    emailToVerify,
   } = props;
-  const { location, push } = useHistory();
-  const { search } = location;
-  const urlParams = new URLSearchParams(search);
-  const defaultEmail = urlParams.get('email');
-  const [email, setEmail] = React.useState(defaultEmail || '');
+  const { push } = useHistory();
+  const [email, setEmail] = React.useState(emailToVerify || '');
   const valid = email.match(EMAIL_REGEX);
 
   function handleSubmit() {
