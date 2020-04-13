@@ -25,7 +25,7 @@ function AutoplayCountdown(props: Props) {
   const nextTitle = nextRecommendedClaim && nextRecommendedClaim.value && nextRecommendedClaim.value.title;
 
   /* this value is coupled with CSS timing variables on .autoplay-countdown__timer */
-  const countdownTime = 1000;
+  const countdownTime = 5;
 
   const [timer, setTimer] = React.useState(countdownTime);
   const [timerCanceled, setTimerCanceled] = React.useState(false);
