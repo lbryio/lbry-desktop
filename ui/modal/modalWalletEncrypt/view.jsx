@@ -168,7 +168,7 @@ class ModalWalletEncrypt extends React.PureComponent<Props, State> {
             name="wallet-understand"
             onChange={event => this.onChangeUnderstandConfirm(event)}
           />
-          {failMessage && <div className="error-text">{__(failMessage)}</div>}
+          {failMessage && <div className="error__text">{__(failMessage)}</div>}
         </Form>
         <div className="card__actions">
           <Button button="link" label={__('Cancel')} onClick={closeModal} />

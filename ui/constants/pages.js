@@ -1,5 +1,7 @@
-exports.AUTH = 'signin';
+exports.AUTH = 'signup';
+exports.AUTH_SIGNIN = 'signin';
 exports.AUTH_VERIFY = 'verify';
+exports.AUTH_PASSWORD_SET = 'reset';
 exports.BACKUP = 'backup';
 exports.CHANNEL = 'channel';
 exports.DISCOVER = 'discover';

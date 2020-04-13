@@ -36,10 +36,13 @@ type Props = {
   authenticated: boolean,
   authHeader: boolean,
   syncError: ?string,
+  emailToVerify?: string,
   signOut: () => void,
   openMobileNavigation: () => void,
   openChannelCreate: () => void,
   openSignOutModal: () => void,
+  clearEmailEntry: () => void,
+  clearPasswordEntry: () => void,
 };
 
 const Header = (props: Props) => {
@@ -58,15 +61,37 @@ const Header = (props: Props) => {
     openMobileNavigation,
     openChannelCreate,
     openSignOutModal,
+    clearEmailEntry,
+    clearPasswordEntry,
+    emailToVerify,
   } = props;
 
   // on the verify page don't let anyone escape other than by closing the tab to keep session data consistent
   const isVerifyPage = history.location.pathname.includes(PAGES.AUTH_VERIFY);
+  const isSignUpPage = history.location.pathname.includes(PAGES.AUTH);
+  const isSignInPage = history.location.pathname.includes(PAGES.AUTH_SIGNIN);
 
   // Sign out if they click the "x" when they are on the password prompt
   const authHeaderAction = syncError ? { onClick: signOut } : { navigate: '/' };
   const homeButtonNavigationProps = isVerifyPage ? {} : authHeader ? authHeaderAction : { navigate: '/' };
-  const closeButtonNavigationProps = authHeader ? authHeaderAction : { onClick: () => history.goBack() };
+  const closeButtonNavigationProps = {
+    onClick: () => {
+      clearEmailEntry();
+      clearPasswordEntry();
+
+      if (isSignInPage && !emailToVerify) {
+        history.goBack();
+      }
+
+      if (isSignUpPage) {
+        history.goBack();
+      }
+
+      if (syncError) {
+        signOut();
+      }
+    },
+  };
 
   function handleThemeToggle() {
     if (automaticDarkModeEnabled) {
@@ -170,9 +195,6 @@ const Header = (props: Props) => {
                     <MenuItem className="menu__link" onSelect={() => history.push(`/$/${PAGES.CREATOR_DASHBOARD}`)}>
                       <Icon aria-hidden icon={ICONS.ANALYTICS} />
                       {__('Creator Analytics')}
-                      <span>
-                        <span className="badge badge--alert">New!</span>
-                      </span>
                     </MenuItem>
                     <MenuItem className="menu__link" onSelect={() => history.push(`/$/${PAGES.REWARDS}`)}>
                       <Icon aria-hidden icon={ICONS.FEATURED} />
@@ -192,10 +214,16 @@ const Header = (props: Props) => {
                         <span className="menu__link-help">{email}</span>
                       </MenuItem>
                     ) : (
-                      <MenuItem className="menu__link" onSelect={() => history.push(`/$/${PAGES.AUTH}`)}>
-                        <Icon aria-hidden icon={ICONS.SIGN_IN} />
-                        {__('Sign In')}
-                      </MenuItem>
+                      <React.Fragment>
+                        <MenuItem className="menu__link" onSelect={() => history.push(`/$/${PAGES.AUTH}`)}>
+                          <Icon aria-hidden icon={ICONS.SIGN_UP} />
+                          {__('Join')}
+                        </MenuItem>
+                        <MenuItem className="menu__link" onSelect={() => history.push(`/$/${PAGES.AUTH_SIGNIN}`)}>
+                          <Icon aria-hidden icon={ICONS.SIGN_IN} />
+                          {__('Sign In')}
+                        </MenuItem>
+                      </React.Fragment>
                     )}
                   </MenuList>
                 </Menu>
@@ -223,7 +251,10 @@ const Header = (props: Props) => {
               </MenuList>
             </Menu>
             {IS_WEB && !authenticated && (
-              <Button navigate={`/$/${PAGES.AUTH}`} button="primary" label={__('Sign In')} />
+              <div className="header__auth-buttons">
+                <Button navigate={`/$/${PAGES.AUTH_SIGNIN}`} button="link" label={__('Sign In')} />
+                <Button navigate={`/$/${PAGES.AUTH}`} button="primary" label={__('Join')} />
+              </div>
             )}
           </div>
         ) : (
@@ -233,7 +264,12 @@ const Header = (props: Props) => {
               {/* This pushes the close button to the right side */}
               <span />
               <Tooltip label={__('Go Back')}>
-                <Button button="link" icon={ICONS.REMOVE} {...closeButtonNavigationProps} />
+                <Button
+                  button="alt"
+                  // className="button--header-close"
+                  icon={ICONS.REMOVE}
+                  {...closeButtonNavigationProps}
+                />
               </Tooltip>
             </div>
           )

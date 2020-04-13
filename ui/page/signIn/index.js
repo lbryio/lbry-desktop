@@ -1,10 +1,3 @@
-import { connect } from 'react-redux';
-import SignUpPage from './view';
+import SignInPage from './view';
 
-const select = () => ({});
-const perform = () => ({});
-
-export default connect(
-  select,
-  perform
-)(SignUpPage);
+export default SignInPage;

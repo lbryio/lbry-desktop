@@ -4,6 +4,7 @@ import { isNameValid } from 'lbry-redux';
 import Button from 'component/button';
 import { Form, FormField } from 'component/common/form';
 import { INVALID_NAME_ERROR } from 'constants/claim';
+import Card from 'component/common/card';
 export const DEFAULT_BID_FOR_FIRST_CHANNEL = 0.01;
 
 type Props = {
@@ -36,45 +37,51 @@ function UserFirstChannel(props: Props) {
   }
 
   return (
-    <Form onSubmit={handleCreateChannel}>
-      <h1 className="section__title--large">{__('Create A Channel')}</h1>
-      <div className="section__subtitle">
-        <p>{__('A channel is your identity on the LBRY network.')}</p>
-        <p>{__('You can have more than one or remove this later.')}</p>
-      </div>
-      <section className="section__body">
-        <fieldset-group class="fieldset-group--smushed fieldset-group--disabled-prefix">
-          <fieldset-section>
-            <label htmlFor="auth_first_channel">
-              {createChannelError || nameError ? (
-                <span className="error-text">{createChannelError || nameError}</span>
-              ) : (
-                __('Your Channel')
-              )}
-            </label>
-            <div className="form-field__prefix">@</div>
-          </fieldset-section>
+    <div className="main__channel-creation">
+      <Card
+        title={__('Create A Channel')}
+        subtitle={
+          <React.Fragment>
+            <p>{__('A channel is your identity on the LBRY network.')}</p>
+            <p>{__('You can have more than one or remove this later.')}</p>
+          </React.Fragment>
+        }
+        actions={
+          <Form onSubmit={handleCreateChannel}>
+            <fieldset-group class="fieldset-group--smushed fieldset-group--disabled-prefix">
+              <fieldset-section>
+                <label htmlFor="auth_first_channel">
+                  {createChannelError || nameError ? (
+                    <span className="error__text">{createChannelError || nameError}</span>
+                  ) : (
+                    __('Your Channel')
+                  )}
+                </label>
+                <div className="form-field__prefix">@</div>
+              </fieldset-section>
 
-          <FormField
-            autoFocus
-            placeholder={__('channel')}
-            type="text"
-            name="auth_first_channel"
-            className="form-field--short"
-            value={channel}
-            onChange={handleChannelChange}
-          />
-        </fieldset-group>
-        <div className="section__actions">
-          <Button
-            button="primary"
-            type="submit"
-            disabled={nameError || !channel || creatingChannel || claimingReward}
-            label={creatingChannel || claimingReward ? __('Creating') : __('Create')}
-          />
-        </div>
-      </section>
-    </Form>
+              <FormField
+                autoFocus
+                placeholder={__('channel')}
+                type="text"
+                name="auth_first_channel"
+                className="form-field--short"
+                value={channel}
+                onChange={handleChannelChange}
+              />
+            </fieldset-group>
+            <div className="section__actions">
+              <Button
+                button="primary"
+                type="submit"
+                disabled={nameError || !channel || creatingChannel || claimingReward}
+                label={creatingChannel || claimingReward ? __('Creating') : __('Create')}
+              />
+            </div>
+          </Form>
+        }
+      />
+    </div>
   );
 }
 

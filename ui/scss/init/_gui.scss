@@ -201,7 +201,7 @@ img {
   display: block;
   font-size: var(--font-small);
   color: var(--color-text-help);
-  margin-top: var(--spacing-miniscule);
+  margin-top: var(--spacing-small);
   margin-bottom: var(--spacing-small);
 }
 
@@ -238,13 +238,13 @@ img {
   }
 }
 
-.error-wrapper {
+.error__wrapper {
   background-color: var(--color-error);
   padding: var(--spacing-small);
   border-radius: var(--border-radius);
 }
 
-.error-text {
+.error__text {
   color: var(--color-text-error);
 }
 

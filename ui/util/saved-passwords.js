@@ -2,7 +2,8 @@ const { DOMAIN } = require('../../config.js');
 const AUTH_TOKEN = 'auth_token';
 const SAVED_PASSWORD = 'saved_password';
 const DEPRECATED_SAVED_PASSWORD = 'saved-password';
-const domain = typeof window === 'object' ? window.location.hostname : DOMAIN;
+const domain =
+  typeof window === 'object' && window.location.hostname.includes('localhost') ? window.location.hostname : DOMAIN;
 const isProduction = process.env.NODE_ENV === 'production';
 const maxExpiration = 2147483647;
 let sessionPassword;

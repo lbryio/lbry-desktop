@@ -95,6 +95,11 @@
     margin-right: var(--spacing-medium);
   }
 
+  .channel-thumbnail {
+    width: 6rem;
+    height: 6rem;
+  }
+
   &:hover {
     .claim-preview__hover-actions {
       display: block;

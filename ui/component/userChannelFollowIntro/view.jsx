@@ -5,7 +5,7 @@ import * as CS from 'constants/claim_search';
 import Nag from 'component/common/nag';
 import { parseURI } from 'lbry-redux';
 import Button from 'component/button';
-import { Form } from 'component/common/form-components/form';
+import Card from 'component/common/card';
 
 type Props = {
   subscribedChannels: Array<Subscription>,
@@ -28,46 +28,46 @@ function UserChannelFollowIntro(props: Props) {
   }, []);
 
   return (
-    <React.Fragment>
-      <h1 className="section__title--large">{__('Find Channels to Follow')}</h1>
-      <p className="section__subtitle">
-        {__(
-          'LBRY works better if you find and follow at least 5 creators you like. You can also block channels you never want to see.'
-        )}
-      </p>
-      <Form onSubmit={onContinue} className="section__body">
-        <div className="card__actions">
-          <Button button="secondary" onClick={onBack} label={__('Back')} />
-          <Button
-            button="primary"
-            type="Submit"
-            onClick={onContinue}
-            label={__('Continue')}
-            disabled={subscribedChannels.length < 2}
-          />
-        </div>
-      </Form>
-      <div className="section__body">
-        <ClaimListDiscover
-          defaultOrderBy={CS.ORDER_BY_TOP}
-          defaultFreshness={CS.FRESH_ALL}
-          claimType="channel"
-          defaultTags={CS.TAGS_FOLLOWED}
-        />
-        {followingCount > 0 && (
-          <Nag
-            type="helpful"
-            message={
-              followingCount === 1
-                ? __('Nice! You are currently following %followingCount% creator', { followingCount })
-                : __('Nice! You are currently following %followingCount% creators', { followingCount })
-            }
-            actionText={__('Continue')}
-            onClick={onContinue}
-          />
-        )}
-      </div>
-    </React.Fragment>
+    <Card
+      title={__('Find Channels to Follow')}
+      subtitle={__(
+        'LBRY works better if you find and follow at least 5 creators you like. You can also block channels you never want to see.'
+      )}
+      actions={
+        <React.Fragment>
+          <div className="section__actions">
+            <Button button="secondary" onClick={onBack} label={__('Back')} />
+            <Button
+              button="primary"
+              type="Submit"
+              onClick={onContinue}
+              label={__('Continue')}
+              disabled={subscribedChannels.length < 2}
+            />
+          </div>
+          <div className="section__body">
+            <ClaimListDiscover
+              defaultOrderBy={CS.ORDER_BY_TOP}
+              defaultFreshness={CS.FRESH_ALL}
+              claimType="channel"
+              defaultTags={CS.TAGS_FOLLOWED}
+            />
+            {followingCount > 0 && (
+              <Nag
+                type="helpful"
+                message={
+                  followingCount === 1
+                    ? __('Nice! You are currently following %followingCount% creator', { followingCount })
+                    : __('Nice! You are currently following %followingCount% creators', { followingCount })
+                }
+                actionText={__('Continue')}
+                onClick={onContinue}
+              />
+            )}
+          </div>
+        </React.Fragment>
+      }
+    />
   );
 }
 

@@ -156,7 +156,7 @@ const SupportsLiquidate = (props: Props) => {
         <React.Fragment>
           {abandonClaimError ? (
             <>
-              <div className="error-text">{__('%message%', { message: abandonClaimError })}</div>
+              <div className="error__text">{__('%message%', { message: abandonClaimError })}</div>
               <Button disabled={error} button="primary" onClick={handleClose} label={__('Done')} />
             </>
           ) : (

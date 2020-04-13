@@ -32,6 +32,10 @@ $nag-error-z-index: 100001;
   z-index: 1 !important; /* booooooo */
 }
 
+.nag--relative {
+  position: relative;
+}
+
 .nag--helpful {
   background-color: var(--color-secondary);
   color: var(--color-white);

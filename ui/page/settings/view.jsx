@@ -18,6 +18,7 @@ import { SETTINGS } from 'lbry-redux';
 import Card from 'component/common/card';
 import { getPasswordFromCookie } from 'util/saved-passwords';
 import Spinner from 'component/spinner';
+import SettingAccountPassword from 'component/settingAccountPassword';
 
 // @if TARGET='app'
 export const IS_MAC = process.platform === 'darwin';
@@ -261,11 +262,12 @@ class SettingsPage extends React.PureComponent<Props, State> {
       <Page className="card-stack">
         {!IS_WEB && noDaemonSettings ? (
           <section className="card card--section">
-            <div className="card__title card__title--deprecated">{__('Failed to load settings.')}</div>
+            <div className="card__title card__t itle--deprecated">{__('Failed to load settings.')}</div>
           </section>
         ) : (
           <div>
             <Card title={__('Language')} actions={<SettingLanguage />} />
+            {isAuthenticated && <SettingAccountPassword />}
             {/* @if TARGET='app' */}
             <Card
               title={__('Sync')}

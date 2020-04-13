@@ -1,4 +1,5 @@
 // @flow
+import type { Node } from 'react';
 import * as MODALS from 'constants/modal_types';
 import * as SETTINGS from 'constants/settings';
 import React from 'react';
@@ -33,7 +34,7 @@ type Props = {
 };
 
 type State = {
-  details: string,
+  details: string | Node,
   message: string,
   launchedModal: boolean,
   error: boolean,

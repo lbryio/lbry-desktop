@@ -165,7 +165,7 @@ class CardVerify extends React.Component {
     return (
       <div>
         {scriptFailedToLoad && (
-          <div className="error-text">There was an error connecting to Stripe. Please try again later.</div>
+          <div className="error__text">There was an error connecting to Stripe. Please try again later.</div>
         )}
 
         <Button

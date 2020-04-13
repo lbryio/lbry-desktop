@@ -181,3 +181,13 @@
   margin-top: 0;
   margin-left: var(--spacing-small);
 }
+
+.header__auth-buttons {
+  display: flex;
+  align-items: center;
+  font-weight: var(--font-weight-bold);
+
+  & > *:not(:last-child) {
+    margin: 0 var(--spacing-medium);
+  }
+}

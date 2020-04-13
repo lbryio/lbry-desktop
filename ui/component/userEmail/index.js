@@ -21,7 +21,4 @@ const perform = dispatch => ({
   fetchAccessToken: () => dispatch(doFetchAccessToken()),
 });
 
-export default connect(
-  select,
-  perform
-)(UserEmailVerify);
+export default connect(select, perform)(UserEmailVerify);
