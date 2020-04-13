@@ -6,6 +6,7 @@ import Button from 'component/button';
 import { Form, FormField } from 'component/common/form';
 import Card from 'component/common/card';
 import I18nMessage from 'component/i18nMessage';
+import ErrorText from 'component/common/error-text';
 
 type Props = {
   balance: number,
@@ -107,7 +108,11 @@ const SupportsLiquidate = (props: Props) => {
         </>
       }
       body={
-        !abandonClaimError && (
+        abandonClaimError ? (
+          <div className="error__wrapper--no-overflow">
+            <ErrorText>{__('%message%', { message: abandonClaimError })}</ErrorText>
+          </div>
+        ) : (
           <>
             <div className="section">
               <I18nMessage
@@ -156,20 +161,14 @@ const SupportsLiquidate = (props: Props) => {
       }
       actions={
         <React.Fragment>
-          {abandonClaimError ? (
-            <>
-              <div className="error__wrapper--no-overflow">
-                <div className="error__text">{__('%message%', { message: abandonClaimError })}</div>
-              </div>
-              <div className="section__actions">
-                <Button disabled={error} button="primary" onClick={handleClose} label={__('Done')} />
-              </div>
-            </>
-          ) : (
-            <div className="section__actions">
-              <Button disabled={error} button="primary" onClick={handleSubmit} label={__('Unlock')} />
-            </div>
-          )}
+          <div className="section__actions">
+            <Button
+              disabled={error}
+              button="primary"
+              onClick={abandonClaimError ? handleClose : handleSubmit}
+              label={abandonClaimError ? __('Done') : __('Unlock')}
+            />
+          </div>
         </React.Fragment>
       }
     />

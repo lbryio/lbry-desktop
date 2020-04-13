@@ -1126,5 +1126,7 @@
   "It's usually only worth unlocking what you intend to use immediately. %learn_more%": "It's usually only worth unlocking what you intend to use immediately. %learn_more%",
   "%amount% available to unlock": "%amount% available to unlock",
   "%message% hihi": "%message% hihi",
-  "Comrade Yrbl, we have a problem": "Comrade Yrbl, we have a problem"
+  "How much would you like to unlock?": "How much would you like to unlock?",
+  "A prudent choice": "A prudent choice",
+  "Join": "Join"
 }

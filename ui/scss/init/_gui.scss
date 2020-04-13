@@ -245,7 +245,7 @@ img {
 }
 
 .error__wrapper--no-overflow {
-  @extend .error-wrapper;
+  @extend .error__wrapper;
   max-height: 10rem;
   overflow: hidden;
 }
