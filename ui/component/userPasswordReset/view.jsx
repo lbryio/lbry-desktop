@@ -69,6 +69,8 @@ function UserPasswordReset(props: Props) {
                 placeholder={__('hotstuff_96@hotmail.com')}
                 type="email"
                 name="sign_in_email"
+                id="username"
+                autoComplete="on"
                 label={__('Email')}
                 value={email}
                 onChange={e => setEmail(e.target.value)}

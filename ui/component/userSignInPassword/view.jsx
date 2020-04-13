@@ -40,9 +40,10 @@ export default function UserSignInPassword(props: Props) {
             <Form onSubmit={handleSubmit} className="section">
               <FormField
                 autoFocus
-                autoComplete="on"
                 type="password"
                 name="sign_in_password"
+                id="password"
+                autoComplete="on"
                 label={__('Password')}
                 value={password}
                 onChange={e => setPassword(e.target.value)}
