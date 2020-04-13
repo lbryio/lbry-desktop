@@ -1,7 +1,6 @@
 import { connect } from 'react-redux';
 import {
   selectUser,
-  selectPasswordSetIsPending,
   selectPasswordSetSuccess,
   selectPasswordSetError,
   doUserPasswordSet,
@@ -12,7 +11,6 @@ import UserSignIn from './view';
 
 const select = state => ({
   user: selectUser(state),
-  passwordSetPending: selectPasswordSetIsPending(state),
   passwordSetSuccess: selectPasswordSetSuccess(state),
   passwordSetError: selectPasswordSetError(state),
 });

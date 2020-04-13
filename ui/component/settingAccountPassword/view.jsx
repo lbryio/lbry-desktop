@@ -10,21 +10,12 @@ type Props = {
   doToast: ({ message: string }) => void,
   doUserPasswordSet: (string, ?string) => void,
   doClearPasswordEntry: () => void,
-  passwordSetPending: boolean,
   passwordSetSuccess: boolean,
   passwordSetError: ?string,
 };
 
 export default function SettingAccountPassword(props: Props) {
-  const {
-    user,
-    doToast,
-    doUserPasswordSet,
-    //  passwordSetPending,
-    passwordSetSuccess,
-    passwordSetError,
-    doClearPasswordEntry,
-  } = props;
+  const { user, doToast, doUserPasswordSet, passwordSetSuccess, passwordSetError, doClearPasswordEntry } = props;
   const [oldPassword, setOldPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [isAddingPassword, setIsAddingPassword] = useState(false);
