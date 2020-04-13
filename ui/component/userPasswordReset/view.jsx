@@ -1,7 +1,7 @@
 // @flow
 import * as PAGES from 'constants/pages';
 import React from 'react';
-import { withRouter } from 'react-router';
+import { useHistory } from 'react-router-dom';
 import Card from 'component/common/card';
 import Spinner from 'component/spinner';
 import { Form, FormField } from 'component/common/form';
@@ -14,21 +14,38 @@ type Props = {
   user: ?User,
   doToast: ({ message: string }) => void,
   doUserPasswordReset: string => void,
+  doClearPasswordEntries: () => void,
   passwordResetPending: boolean,
   passwordResetSuccess: boolean,
   passwordResetError: ?string,
 };
 
 function UserPasswordReset(props: Props) {
-  const { doUserPasswordReset, passwordResetPending, passwordResetError, passwordResetSuccess, doToast } = props;
+  const {
+    doUserPasswordReset,
+    passwordResetPending,
+    passwordResetError,
+    passwordResetSuccess,
+    doToast,
+    doClearPasswordEntries,
+  } = props;
+  const { location, replace } = useHistory();
   const { search } = location;
   const urlParams = new URLSearchParams(search);
   const defaultEmail = urlParams.get('email');
-  const [email, setEmail] = React.useState(defaultEmail);
+  const [email, setEmail] = React.useState(defaultEmail || '');
   const valid = email.match(EMAIL_REGEX);
 
   function handleSubmit() {
-    doUserPasswordReset(email);
+    if (email) {
+      doUserPasswordReset(email);
+    }
+  }
+
+  function handleRestart() {
+    setEmail('');
+    doClearPasswordEntries();
+    replace();
   }
 
   React.useEffect(() => {
@@ -37,7 +54,7 @@ function UserPasswordReset(props: Props) {
         message: __('Email sent!'),
       });
     }
-  }, [passwordResetSuccess]);
+  }, [passwordResetSuccess, doToast]);
 
   return (
     <section className="main__sign-in">
@@ -48,6 +65,7 @@ function UserPasswordReset(props: Props) {
             <Form onSubmit={handleSubmit} className="section">
               <FormField
                 autoFocus
+                disabled={passwordResetSuccess}
                 placeholder={__('hotstuff_96@hotmail.com')}
                 type="email"
                 name="sign_in_email"
@@ -61,8 +79,9 @@ function UserPasswordReset(props: Props) {
                   button="primary"
                   type="submit"
                   label={passwordResetPending ? __('Resetting') : __('Reset Password')}
-                  disabled={!email || !valid || passwordResetPending}
+                  disabled={!email || !valid || passwordResetPending || passwordResetSuccess}
                 />
+                {passwordResetSuccess && <Button button="link" label={__('Restart')} onClick={handleRestart} />}
                 {passwordResetPending && <Spinner type="small" />}
               </div>
             </Form>
@@ -87,4 +106,4 @@ function UserPasswordReset(props: Props) {
   );
 }
 
-export default withRouter(UserPasswordReset);
+export default UserPasswordReset;

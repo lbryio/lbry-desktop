@@ -7,9 +7,14 @@ import Card from 'component/common/card';
 import { Form, FormField } from 'component/common/form';
 import ErrorText from 'component/common/error-text';
 import Button from 'component/button';
+import Nag from 'component/common/nag';
+import Spinner from 'component/spinner';
 
 type Props = {
   user: ?User,
+  doClearEmailEntry: () => void,
+  doUserFetch: () => void,
+  doToast: ({ message: string }) => void,
   history: { push: string => void },
   location: { search: string },
   passwordSetPending: boolean,
@@ -17,21 +22,25 @@ type Props = {
 };
 
 function UserPasswordReset(props: Props) {
-  const { passwordSetPending, passwordSetError } = props;
-  const { location } = useHistory();
+  const { doClearEmailEntry, doToast, doUserFetch } = props;
+  const { location, push } = useHistory();
   const urlParams = new URLSearchParams(location.search);
   const email = urlParams.get('email');
   const authToken = urlParams.get('auth_token');
   const verificationToken = urlParams.get('verification_token');
   const [password, setPassword] = React.useState('');
+  const [error, setError] = React.useState();
+  const [loading, setLoading] = React.useState(false);
 
   function handleSubmit() {
+    setLoading(true);
+
     Lbryio.call('user_email', 'confirm', {
       email: email,
       verification_token: verificationToken,
     })
-      .then(() => {
-        return Lbryio.call(
+      .then(() =>
+        Lbryio.call(
           'user_password',
           'set',
           {
@@ -39,15 +48,25 @@ function UserPasswordReset(props: Props) {
             new_password: password,
           },
           'post'
-        );
-      })
-
-      .then(res => {
-        debugger;
+        )
+      )
+      .then(doUserFetch)
+      .then(() => {
+        setLoading(false);
+        doToast({
+          message: __('Password successfully changed!'),
+        });
+        push(`/`);
       })
       .catch(error => {
-        debugger;
+        setLoading(false);
+        setError(error.message);
       });
+  }
+
+  function handleRestart() {
+    doClearEmailEntry();
+    push(`/$/${PAGES.AUTH_SIGNIN}`);
   }
 
   return (
@@ -64,25 +83,23 @@ function UserPasswordReset(props: Props) {
                 name="password_set"
                 label={__('New Password')}
                 value={password}
-                onChange={e => console.log('e', e.target.value) || setPassword(e.target.value)}
+                onChange={e => setPassword(e.target.value)}
               />
 
               <div className="section__actions">
                 <Button
                   button="primary"
                   type="submit"
-                  label={passwordSetPending ? __('Updating') : __('Update Password')}
-                  disabled={!password || passwordSetPending}
+                  label={loading ? __('Update Password') : __('Updating Password')}
+                  disabled={!password || loading}
                 />
+                {error && <Button button="link" label={__('Restart')} onClick={handleRestart} />}
+                {loading && <Spinner type="small" />}
               </div>
             </Form>
-            {passwordSetError && (
-              <div className="section">
-                <ErrorText>{passwordSetError}</ErrorText>
-              </div>
-            )}
           </div>
         }
+        nag={error && <Nag type="error" relative message={<ErrorText>{error}</ErrorText>} />}
       />
       <div className="card__bottom-gutter">
         <Button button="link" label={__('Sign Up')} navigate={`/$/${PAGES.AUTH}`} />
