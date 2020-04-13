@@ -15,6 +15,7 @@ exports.PUBLISHED = 'published';
 exports.GET_CREDITS = 'getcredits';
 exports.REPORT = 'report';
 exports.REWARDS = 'rewards';
+exports.REWARDS_VERIFY = 'rewards/verify';
 exports.SEND = 'send';
 exports.SETTINGS = 'settings';
 exports.SHOW = 'show';
