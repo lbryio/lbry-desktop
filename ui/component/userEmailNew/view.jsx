@@ -9,6 +9,7 @@ import I18nMessage from 'component/i18nMessage';
 import { useHistory } from 'react-router-dom';
 import Card from 'component/common/card';
 import ErrorText from 'component/common/error-text';
+import Nag from 'component/common/nag';
 
 type Props = {
   errorMessage: ?string,
@@ -95,7 +96,6 @@ function UserEmailNew(props: Props) {
             <Form onSubmit={handleSubmit} className="section">
               <FormField
                 autoFocus
-                autoComplete
                 placeholder={__('hotstuff_96@hotmail.com')}
                 type="email"
                 name="sign_up_email"
@@ -152,26 +152,22 @@ function UserEmailNew(props: Props) {
                 />
                 <Button button="link" onClick={handleChangeToSignIn} label={__('Sign In')} />
               </div>
+              <p className="help">
+                <I18nMessage
+                  tokens={{
+                    terms: (
+                      <Button button="link" href="https://www.lbry.com/termsofservice" label={__('Terms of Service')} />
+                    ),
+                  }}
+                >
+                  By continuing, I agree to the %terms% and confirm I am over the age of 13.
+                </I18nMessage>
+              </p>
             </Form>
-            {errorMessage && (
-              <div className="section">
-                <ErrorText>{errorMessage}</ErrorText>
-              </div>
-            )}
           </div>
         }
+        nag={errorMessage && <Nag type="error" relative message={<ErrorText>{errorMessage}</ErrorText>} />}
       />
-      <p className="card__bottom-gutter">
-        <span>
-          <I18nMessage
-            tokens={{
-              terms: <Button button="link" href="https://www.lbry.com/termsofservice" label={__('Terms of Service')} />,
-            }}
-          >
-            By continuing, I agree to the %terms% and confirm I am over the age of 13.
-          </I18nMessage>
-        </span>
-      </p>
     </div>
   );
 }

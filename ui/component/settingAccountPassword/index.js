@@ -5,7 +5,7 @@ import {
   selectPasswordSetSuccess,
   selectPasswordSetError,
   doUserPasswordSet,
-  doClearPasswordEntries,
+  doClearPasswordEntry,
 } from 'lbryinc';
 import { doToast } from 'lbry-redux';
 import UserSignIn from './view';
@@ -20,5 +20,5 @@ const select = state => ({
 export default connect(select, {
   doUserPasswordSet,
   doToast,
-  doClearPasswordEntries,
+  doClearPasswordEntry,
 })(UserSignIn);

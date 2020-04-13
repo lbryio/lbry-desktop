@@ -46,6 +46,11 @@
   }
 }
 
+.button--header-close {
+  background-color: var(--color-primary-alt);
+  padding: var(--spacing-small);
+}
+
 .button--download-link {
   .button__label {
     white-space: normal;

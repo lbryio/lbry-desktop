@@ -40,13 +40,13 @@ function UserSignIn(props: Props) {
 
   return (
     <section>
-      {!showLoading && (
+      {(showEmail || showPassword) && (
         <div>
           {showEmail && <UserEmailReturning />}
           {showPassword && <UserSignInPassword onHandleEmailOnly={() => setEmailOnlyLogin(true)} />}
         </div>
       )}
-      {showLoading && (
+      {!showEmail && !showPassword && showLoading && (
         <div className="main--empty">
           <Spinner delayed />
         </div>

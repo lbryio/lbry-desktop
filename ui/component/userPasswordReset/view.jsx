@@ -14,7 +14,8 @@ type Props = {
   user: ?User,
   doToast: ({ message: string }) => void,
   doUserPasswordReset: string => void,
-  doClearPasswordEntries: () => void,
+  doClearPasswordEntry: () => void,
+  doClearEmailEntry: () => void,
   passwordResetPending: boolean,
   passwordResetSuccess: boolean,
   passwordResetError: ?string,
@@ -27,9 +28,10 @@ function UserPasswordReset(props: Props) {
     passwordResetError,
     passwordResetSuccess,
     doToast,
-    doClearPasswordEntries,
+    doClearPasswordEntry,
+    doClearEmailEntry,
   } = props;
-  const { location, replace } = useHistory();
+  const { location, push } = useHistory();
   const { search } = location;
   const urlParams = new URLSearchParams(search);
   const defaultEmail = urlParams.get('email');
@@ -44,8 +46,9 @@ function UserPasswordReset(props: Props) {
 
   function handleRestart() {
     setEmail('');
-    doClearPasswordEntries();
-    replace();
+    doClearPasswordEntry();
+    doClearEmailEntry();
+    push(`/$/${PAGES.AUTH_SIGNIN}`);
   }
 
   React.useEffect(() => {
@@ -83,27 +86,21 @@ function UserPasswordReset(props: Props) {
                   label={passwordResetPending ? __('Resetting') : __('Reset Password')}
                   disabled={!email || !valid || passwordResetPending || passwordResetSuccess}
                 />
-                {passwordResetSuccess && <Button button="link" label={__('Restart')} onClick={handleRestart} />}
+                <Button button="link" label={__('Cancel')} onClick={handleRestart} />
                 {passwordResetPending && <Spinner type="small" />}
               </div>
             </Form>
-            {passwordResetError && (
-              <div className="section">
-                <ErrorText>{passwordResetError}</ErrorText>
-              </div>
-            )}
           </div>
         }
         nag={
-          passwordResetSuccess && (
-            <Nag type="helpful" relative message={__('Check your email for a link to reset your password.')} />
-          )
+          <React.Fragment>
+            {passwordResetError && <Nag type="error" relative message={<ErrorText>{passwordResetError}</ErrorText>} />}
+            {passwordResetSuccess && (
+              <Nag type="helpful" relative message={__('Check your email for a link to reset your password.')} />
+            )}
+          </React.Fragment>
         }
       />
-      <div className="card__bottom-gutter">
-        <Button button="link" label={__('Sign Up')} navigate={`/$/${PAGES.AUTH}`} />
-        <Button button="link" label={__('Sign In')} navigate={`/$/${PAGES.AUTH_SIGNIN}`} />
-      </div>
     </section>
   );
 }

@@ -40,6 +40,8 @@ type Props = {
   openMobileNavigation: () => void,
   openChannelCreate: () => void,
   openSignOutModal: () => void,
+  clearEmailEntry: () => void,
+  clearPasswordEntry: () => void,
 };
 
 const Header = (props: Props) => {
@@ -58,6 +60,8 @@ const Header = (props: Props) => {
     openMobileNavigation,
     openChannelCreate,
     openSignOutModal,
+    clearEmailEntry,
+    clearPasswordEntry,
   } = props;
 
   // on the verify page don't let anyone escape other than by closing the tab to keep session data consistent
@@ -66,7 +70,16 @@ const Header = (props: Props) => {
   // Sign out if they click the "x" when they are on the password prompt
   const authHeaderAction = syncError ? { onClick: signOut } : { navigate: '/' };
   const homeButtonNavigationProps = isVerifyPage ? {} : authHeader ? authHeaderAction : { navigate: '/' };
-  const closeButtonNavigationProps = authHeader ? authHeaderAction : { onClick: () => history.goBack() };
+  const closeButtonNavigationProps = {
+    onClick: () => {
+      clearEmailEntry();
+      clearPasswordEntry();
+
+      if (syncError) {
+        signOut();
+      }
+    },
+  };
 
   function handleThemeToggle() {
     if (automaticDarkModeEnabled) {
@@ -239,7 +252,12 @@ const Header = (props: Props) => {
               {/* This pushes the close button to the right side */}
               <span />
               <Tooltip label={__('Go Back')}>
-                <Button button="link" icon={ICONS.REMOVE} {...closeButtonNavigationProps} />
+                <Button
+                  button="link"
+                  className="button--header-close"
+                  icon={ICONS.REMOVE}
+                  {...closeButtonNavigationProps}
+                />
               </Tooltip>
             </div>
           )

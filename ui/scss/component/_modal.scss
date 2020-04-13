@@ -1,7 +1,9 @@
 .ReactModal__Body--open {
   #app {
-    height: 100vh;
-    overflow-y: hidden;
+    @media (max-width: $breakpoint-small) {
+      height: 100vh;
+      overflow-y: hidden;
+    }
   }
 }
 

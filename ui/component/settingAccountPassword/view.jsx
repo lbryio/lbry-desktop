@@ -9,7 +9,7 @@ type Props = {
   user: ?User,
   doToast: ({ message: string }) => void,
   doUserPasswordSet: (string, ?string) => void,
-  doClearPasswordEntries: () => void,
+  doClearPasswordEntry: () => void,
   passwordSetPending: boolean,
   passwordSetSuccess: boolean,
   passwordSetError: ?string,
@@ -23,7 +23,7 @@ export default function SettingAccountPassword(props: Props) {
     //  passwordSetPending,
     passwordSetSuccess,
     passwordSetError,
-    doClearPasswordEntries,
+    doClearPasswordEntry,
   } = props;
   const [oldPassword, setOldPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
@@ -40,11 +40,11 @@ export default function SettingAccountPassword(props: Props) {
       doToast({
         message: __('Password updated successfully.'),
       });
-      doClearPasswordEntries();
+      doClearPasswordEntry();
       setOldPassword('');
       setNewPassword('');
     }
-  }, [passwordSetSuccess, setOldPassword, setNewPassword, doClearPasswordEntries, doToast]);
+  }, [passwordSetSuccess, setOldPassword, setNewPassword, doClearPasswordEntry, doToast]);
 
   return (
     <Card

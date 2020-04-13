@@ -1,14 +1,12 @@
 import { connect } from 'react-redux';
 import { doSignOut } from 'redux/actions/app';
+import { doClearEmailEntry, doClearPasswordEntry } from 'lbryinc';
 import UserSignOutButton from './view';
 
 const select = state => ({});
 
-const perform = dispatch => ({
-  signOut: () => dispatch(doSignOut()),
-});
-
-export default connect(
-  select,
-  perform
-)(UserSignOutButton);
+export default connect(select, {
+  doSignOut,
+  doClearEmailEntry,
+  doClearPasswordEntry,
+})(UserSignOutButton);

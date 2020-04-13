@@ -5,13 +5,25 @@ import Button from 'component/button';
 type Props = {
   button: string,
   label?: string,
-  signOut: () => void,
+  doSignOut: () => void,
+  doClearEmailEntry: () => void,
+  doClearPasswordEntry: () => void,
 };
 
 function UserSignOutButton(props: Props) {
-  const { button = 'link', signOut, label } = props;
+  const { button = 'link', doSignOut, doClearEmailEntry, doClearPasswordEntry, label } = props;
 
-  return <Button button={button} label={label || __('Sign Out')} onClick={signOut} />;
+  return (
+    <Button
+      button={button}
+      label={label || __('Sign Out')}
+      onClick={() => {
+        doClearPasswordEntry();
+        doClearEmailEntry();
+        doSignOut();
+      }}
+    />
+  );
 }
 
 export default UserSignOutButton;

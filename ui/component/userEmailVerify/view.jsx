@@ -76,29 +76,29 @@ class UserEmailVerify extends React.PureComponent<Props> {
             </p>
           }
           actions={
-            <div className="section__actions">
-              <Button
-                button="primary"
-                label={__('Resend Email')}
-                onClick={this.handleResendVerificationEmail}
-                disabled={resendingEmail}
-              />
-              <UserSignOutButton label={__('Start Over')} />
-            </div>
+            <React.Fragment>
+              <div className="section__actions">
+                <Button
+                  button="primary"
+                  label={__('Resend Email')}
+                  onClick={this.handleResendVerificationEmail}
+                  disabled={resendingEmail}
+                />
+                <UserSignOutButton label={__('Start Over')} />
+              </div>
+              <p className="help">
+                <I18nMessage
+                  tokens={{
+                    help_link: <Button button="link" href="mailto:help@lbry.com" label="help@lbry.com" />,
+                    chat_link: <Button button="link" href="https://chat.lbry.com" label="chat" />,
+                  }}
+                >
+                  Email %help_link% or join our %chat_link% if you encounter any trouble verifying.
+                </I18nMessage>
+              </p>
+            </React.Fragment>
           }
         />
-        <p className="card__bottom-gutter">
-          <span>
-            <I18nMessage
-              tokens={{
-                help_link: <Button button="link" href="mailto:help@lbry.com" label="help@lbry.com" />,
-                chat_link: <Button button="link" href="https://chat.lbry.com" label="chat" />,
-              }}
-            >
-              Email %help_link% or join our %chat_link% if you encounter any trouble verifying.
-            </I18nMessage>
-          </span>
-        </p>
       </div>
     );
   }

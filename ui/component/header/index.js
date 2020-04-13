@@ -2,7 +2,13 @@ import * as SETTINGS from 'constants/settings';
 import * as MODALS from 'constants/modal_types';
 import { connect } from 'react-redux';
 import { selectBalance, formatCredits } from 'lbry-redux';
-import { selectUserVerifiedEmail, selectGetSyncErrorMessage, selectUserEmail } from 'lbryinc';
+import {
+  selectUserVerifiedEmail,
+  selectGetSyncErrorMessage,
+  selectUserEmail,
+  doClearEmailEntry,
+  doClearPasswordEntry,
+} from 'lbryinc';
 import { doSetClientSetting } from 'redux/actions/settings';
 import { doSignOut, doOpenModal } from 'redux/actions/app';
 import { makeSelectClientSetting } from 'redux/selectors/settings';
@@ -26,6 +32,8 @@ const perform = dispatch => ({
   openMobileNavigation: () => dispatch(doOpenModal(MODALS.MOBILE_NAVIGATION)),
   openChannelCreate: () => dispatch(doOpenModal(MODALS.CREATE_CHANNEL)),
   openSignOutModal: () => dispatch(doOpenModal(MODALS.SIGN_OUT)),
+  clearEmailEntry: () => dispatch(doClearEmailEntry()),
+  clearPasswordEntry: () => dispatch(doClearPasswordEntry()),
 });
 
 export default connect(select, perform)(Header);

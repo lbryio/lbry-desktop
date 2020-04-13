@@ -1,11 +1,11 @@
 // @flow
-import * as PAGES from 'constants/pages';
 import React, { useState } from 'react';
 import { FormField, Form } from 'component/common/form';
 import Button from 'component/button';
 import Card from 'component/common/card';
 import analytics from 'analytics';
 import Nag from 'component/common/nag';
+import UserPasswordReset from 'component/userPasswordReset';
 
 type Props = {
   errorMessage: ?string,
@@ -16,8 +16,9 @@ type Props = {
 };
 
 export default function UserSignInPassword(props: Props) {
-  const { errorMessage, doUserSignIn, emailToVerify, doClearEmailEntry, onHandleEmailOnly } = props;
+  const { errorMessage, doUserSignIn, emailToVerify, onHandleEmailOnly } = props;
   const [password, setPassword] = useState('');
+  const [forgotPassword, setForgotPassword] = React.useState(false);
 
   function handleSubmit() {
     if (emailToVerify) {
@@ -32,11 +33,13 @@ export default function UserSignInPassword(props: Props) {
 
   return (
     <div className="main__sign-in">
-      <Card
-        title={__('Enter Your lbry.tv Password')}
-        subtitle={__('Signing in with %email%', { email: emailToVerify })}
-        actions={
-          <div>
+      {forgotPassword ? (
+        <UserPasswordReset />
+      ) : (
+        <Card
+          title={__('Enter Your lbry.tv Password')}
+          subtitle={__('Signing in as %email%', { email: emailToVerify })}
+          actions={
             <Form onSubmit={handleSubmit} className="section">
               <FormField
                 autoFocus
@@ -47,6 +50,7 @@ export default function UserSignInPassword(props: Props) {
                 label={__('Password')}
                 value={password}
                 onChange={e => setPassword(e.target.value)}
+                helper={<Button button="link" label={__('Forgot Password?')} onClick={() => setForgotPassword(true)} />}
               />
 
               <div className="section__actions">
@@ -54,18 +58,10 @@ export default function UserSignInPassword(props: Props) {
                 <Button button="link" onClick={handleChangeToSignIn} label={__('Use Magic Link')} />
               </div>
             </Form>
-          </div>
-        }
-        nag={errorMessage && <Nag type="error" relative message={errorMessage} />}
-      />
-      <p className="card__bottom-gutter">
-        <Button
-          button="link"
-          label={__('Forgot Password?')}
-          navigate={`/$/${PAGES.AUTH_PASSWORD_RESET}?email=${encodeURIComponent(emailToVerify || '')}`}
+          }
+          nag={errorMessage && <Nag type="error" relative message={errorMessage} />}
         />
-        <Button button="link" onClick={doClearEmailEntry} label={__('Cancel')} />
-      </p>
+      )}
     </div>
   );
 }

@@ -93,7 +93,7 @@ function UserPasswordReset(props: Props) {
                   label={loading ? __('Update Password') : __('Updating Password')}
                   disabled={!password || loading}
                 />
-                {error && <Button button="link" label={__('Restart')} onClick={handleRestart} />}
+                <Button button="link" label={__('Cancel')} onClick={handleRestart} />
                 {loading && <Spinner type="small" />}
               </div>
             </Form>
@@ -101,10 +101,6 @@ function UserPasswordReset(props: Props) {
         }
         nag={error && <Nag type="error" relative message={<ErrorText>{error}</ErrorText>} />}
       />
-      <div className="card__bottom-gutter">
-        <Button button="link" label={__('Sign Up')} navigate={`/$/${PAGES.AUTH}`} />
-        <Button button="link" label={__('Sign In')} navigate={`/$/${PAGES.AUTH_SIGNIN}`} />
-      </div>
     </section>
   );
 }
