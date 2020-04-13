@@ -35,6 +35,9 @@ export default function FileRenderInline(props: Props) {
   }, [isPlaying, setPlayTime, uri]);
 
   useEffect(() => {
+    /*
+    note: code can currently double fire with videoViewer logic if a video is rendered by FileRenderInline (currently this never happens)
+     */
     if (playTime && isReadyToPlay) {
       const timeToStart = Date.now() - playTime;
 

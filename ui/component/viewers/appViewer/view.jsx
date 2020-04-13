@@ -48,7 +48,7 @@ function AppViewer(props: Props) {
   );
 
   // return (
-  //   <div className="file-render__viewer">
+  //   <div className="file-viewer">
   //     {!appUrl && (
   //       <LoadingScreen
   //         status={loading ? __('Almost there') : __('Unable to view this file in the app')}

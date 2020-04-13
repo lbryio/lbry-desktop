@@ -1,10 +1,13 @@
 import { connect } from 'react-redux';
 import { makeSelectClaimForUri, makeSelectFileInfoForUri, makeSelectThumbnailForUri } from 'lbry-redux';
-import { doChangeVolume, doChangeMute } from 'redux/actions/app';
+import { doChangeVolume, doChangeMute, doAnalyticsView } from 'redux/actions/app';
 import { selectVolume, selectMute } from 'redux/selectors/app';
 import { savePosition, doSetPlayingUri } from 'redux/actions/content';
 import VideoViewer from './view';
 import { withRouter } from 'react-router';
+import { doClaimEligiblePurchaseRewards } from 'lbryinc';
+import { makeSelectClientSetting } from 'redux/selectors/settings';
+import * as SETTINGS from 'constants/settings';
 
 const select = (state, props) => {
   const { search } = props.location;
@@ -13,7 +16,8 @@ const select = (state, props) => {
   const position = urlParams.get('t');
 
   return {
-    autoplayParam: autoplay,
+    autoplayIfEmbedded: Boolean(autoplay),
+    autoplaySetting: Boolean(makeSelectClientSetting(SETTINGS.AUTOPLAY)(state)),
     volume: selectVolume(state),
     muted: selectMute(state),
     position: position,
@@ -28,6 +32,8 @@ const perform = dispatch => ({
   savePosition: (uri, position) => dispatch(savePosition(uri, position)),
   changeMute: muted => dispatch(doChangeMute(muted)),
   setPlayingUri: uri => dispatch(doSetPlayingUri(uri)),
+  doAnalyticsView: (uri, timeToStart) => dispatch(doAnalyticsView(uri, timeToStart)),
+  claimRewards: () => dispatch(doClaimEligiblePurchaseRewards()),
 });
 
 export default withRouter(connect(select, perform)(VideoViewer));

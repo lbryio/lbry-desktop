@@ -1,9 +1,9 @@
 .file-page {
-  .grid-area--content + .card,
+  .file-page__video-container + .card,
   .file-render + .card,
   .content__cover + .card,
   .card + .file-render,
-  .card + .grid-area--content,
+  .card + .file-page__video-container,
   .card + .content__cover {
     margin-top: var(--spacing-large);
   }
@@ -38,6 +38,13 @@
   z-index: 1;
   overflow: hidden;
   max-height: var(--inline-player-max-height);
+  border-radius: var(--card-radius);
+}
+
+.file-render--embed {
+  border-radius: 0;
+  position: fixed;
+  max-height: none;
 }
 
 .file-render--document {
@@ -76,7 +83,7 @@
   flex-wrap: wrap;
 }
 
-.file-render__viewer {
+.file-viewer {
   width: 100%;
   height: 100%;
 
@@ -108,7 +115,7 @@
   }
 }
 
-.file-render__viewer--iframe {
+.file-viewer--iframe {
   display: flex; /*this eliminates extra height from whitespace, if someone edits this with a better technique, tell Jeremy*/
   /*
   ideally iframes would dynamiclly grow, see <IframeReact> for a start at this
@@ -127,6 +134,116 @@
     height: calc(100vh - var(--header-height) - var(--spacing-medium) * 2);
     max-height: var(--inline-player-max-height);
   }
+}
+
+.file-viewer__overlay {
+  position: absolute;
+  left: auto;
+  right: auto;
+  height: 100%;
+  width: 100%;
+  z-index: 2;
+  color: var(--color-white);
+  font-size: var(--font-body); /* put back font size from videojs change*/
+
+  background-color: rgba(0, 0, 0, 0.9);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: var(--spacing-large);
+
+  @media (max-width: $breakpoint-small) {
+    font-size: var(--font-small);
+  }
+
+  .button--uri-indicator,
+  .button--link {
+    color: var(--color-white);
+  }
+}
+
+.content__viewer--floating {
+  .file-viewer__overlay {
+    padding: var(--spacing-medium);
+  }
+
+  .file-viewer__overlay-title,
+  .file-viewer__overlay-secondary {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    max-width: 100%;
+  }
+}
+@media (max-width: $breakpoint-small) {
+  .file-viewer__overlay {
+    padding: var(--spacing-medium);
+  }
+
+  .file-viewer__overlay-title,
+  .file-viewer__overlay-secondary {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    max-width: 100%;
+  }
+}
+
+.file-viewer__overlay-title {
+  text-align: center;
+  font-size: var(--font-large);
+  margin-bottom: var(--spacing-medium);
+}
+.file-viewer__overlay-secondary {
+  color: var(--color-text-subtitle);
+  margin-bottom: var(--spacing-medium);
+}
+.file-viewer__overlay-actions {
+  .button + .button {
+    margin-left: var(--spacing-medium);
+  }
+}
+
+.file-viewer__overlay-logo {
+  color: var(--color-white);
+  font-weight: bold;
+
+  .icon {
+    height: 30px;
+    stroke-width: 5px;
+  }
+}
+
+.file-viewer--is-playing:not(:hover) .file-viewer__embedded-title {
+  display: none;
+}
+
+.file-viewer__embedded-title {
+  position: absolute;
+  width: 100%;
+  left: auto;
+  top: 0;
+  line-height: 1.5;
+  z-index: 2;
+  color: var(--color-white);
+  font-size: var(--font-large);
+  overflow-x: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 100%;
+  padding: var(--spacing-small);
+  background-repeat: repeat-x;
+  background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAADGCAYAAAAT+OqFAAAAdklEQVQoz42QQQ7AIAgEF/T/D+kbq/RWAlnQyyazA4aoAB4FsBSA/bFjuF1EOL7VbrIrBuusmrt4ZZORfb6ehbWdnRHEIiITaEUKa5EJqUakRSaEYBJSCY2dEstQY7AuxahwXFrvZmWl2rh4JZ07z9dLtesfNj5q0FU3A5ObbwAAAABJRU5ErkJggg==);
+  -moz-transition: opacity 0.25s cubic-bezier(0, 0, 0.2, 1);
+  -webkit-transition: opacity 0.25s cubic-bezier(0, 0, 0.2, 1);
+  transition: opacity 0.25s cubic-bezier(0, 0, 0.2, 1);
+  .button {
+    color: var(--color-white);
+  }
+}
+.file-viewer__embedded-title-logo {
+  float: right;
 }
 
 .file-render__content {
@@ -212,49 +329,30 @@
 }
 
 .file-render {
-  border-radius: var(--card-radius);
-
   .video-js {
     display: flex;
     align-items: center;
     justify-content: center;
+  }
 
-    .vjs-big-play-button {
-      @extend .button--icon;
-      @extend .button--play;
-      border: none;
-      position: static;
-      z-index: 2;
+  .vjs-big-play-button {
+    @extend .button--icon;
+    @extend .button--play;
+    border: none;
+    position: static;
+    z-index: 2;
 
-      .vjs-icon-placeholder {
-        display: none;
-      }
+    .vjs-icon-placeholder {
+      display: none;
     }
   }
 }
 
-.file-render__embed {
-  height: 100%;
-  width: 100%;
-  position: fixed;
+.file-render--embed {
+  /* on embeds, do not inject our colors until interaction*/
 
-  .video-js {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    .vjs-big-play-button {
-      @extend .button--icon;
-      @extend .button--play;
-      background-color: rgba(0, 0, 0, 0.6);
-      border: none;
-      position: static;
-      z-index: 2;
-
-      .vjs-icon-placeholder {
-        display: none;
-      }
-    }
+  .vjs-big-play-button {
+    background-color: rgba(0, 0, 0, 0.6);
 
     &.vjs-paused {
       .vjs-big-play-button {
@@ -270,67 +368,55 @@
   }
 }
 
-.video-overlay__wrapper {
-  position: absolute;
-  left: auto;
-  right: auto;
-  height: 100%;
-  width: 100%;
-  background-color: rgba(0, 0, 0, 0.9);
-  z-index: 999;
-  color: var(--color-white);
+.autoplay-countdown {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: var(--spacing-large);
+  width: 100%;
+}
 
-  .button--uri-indicator {
-    color: var(--color-gray-3);
-  }
+.autoplay-countdown__timer {
+  width: 100%;
+  text-align: center;
+  font-size: var(--font-small);
+}
+.autoplay-countdown__counter {
+  margin-top: var(--spacing-medium);
+}
 
-  @media (max-width: $breakpoint-small) {
-    align-items: flex-start;
-    padding: var(--spacing-small);
-
-    .button,
-    .video-overlay__subtitle,
-    .video-overlay__actions {
-      font-size: var(--font-small);
+.autoplay-countdown__button {
+  /* Border size and color */
+  border: 3px solid transparent;
+  /* Creates a circle */
+  border-radius: 50%;
+  /* Circle size */
+  display: inline-block;
+  height: 86px;
+  width: 86px;
+  /* Use transform to rotate to adjust where opening appears */
+  transition: border 1s;
+  transform: rotate(45deg);
+  .button {
+    background-color: transparent;
+    transform: rotate(-45deg);
+    &:hover {
+      background-color: var(--color-primary);
     }
   }
 }
-
-.video-overlay__title {
-  font-size: var(--font-title);
-  font-weight: var(--font-weight-light);
-  margin-top: var(--spacing-medium);
-  margin-bottom: var(--spacing-small);
-
-  @media (max-width: $breakpoint-small) {
-    margin: 0;
-    font-size: var(--font-medium);
-  }
+.autoplay-countdown__button--4 {
+  border-top-color: #fff;
 }
-
-.video-overlay__subtitle {
-  color: var(--color-gray-3);
-  margin: var(--spacing-medium) 0;
-  line-height: 1;
-
-  @media (max-width: $breakpoint-small) {
-    margin: 0;
-  }
+.autoplay-countdown__button--3 {
+  border-top-color: #fff;
+  border-right-color: #fff;
 }
-
-.video-overlay__actions {
-  margin-top: var(--spacing-large);
-
-  .button--link {
-    color: var(--color-white);
-  }
-
-  @media (max-width: $breakpoint-small) {
-    margin-top: var(--spacing-small);
-  }
+.autoplay-countdown__button--2 {
+  border-top-color: #fff;
+  border-right-color: #fff;
+  border-bottom-color: #fff;
+}
+.autoplay-countdown__button--1 {
+  border-color: #fff;
 }
