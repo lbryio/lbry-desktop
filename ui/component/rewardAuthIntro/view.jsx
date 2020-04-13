@@ -32,7 +32,7 @@ function RewardAuthIntro(props: Props) {
       actions={
         <Button
           button="primary"
-          navigate={`/$/${PAGES.AUTH}?redirect=/$/${PAGES.REWARDS}`}
+          navigate={`/$/${PAGES.REWARDS_VERIFY}?redirect=/$/${PAGES.REWARDS}`}
           label={__('Unlock Rewards')}
         />
       }
