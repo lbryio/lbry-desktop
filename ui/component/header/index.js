@@ -8,6 +8,7 @@ import {
   selectUserEmail,
   doClearEmailEntry,
   doClearPasswordEntry,
+  selectEmailToVerify,
 } from 'lbryinc';
 import { doSetClientSetting } from 'redux/actions/settings';
 import { doSignOut, doOpenModal } from 'redux/actions/app';
@@ -24,6 +25,7 @@ const select = state => ({
   authenticated: selectUserVerifiedEmail(state),
   email: selectUserEmail(state),
   syncError: selectGetSyncErrorMessage(state),
+  emailToVerify: selectEmailToVerify(state),
 });
 
 const perform = dispatch => ({

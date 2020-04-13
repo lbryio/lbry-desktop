@@ -36,6 +36,7 @@ type Props = {
   authenticated: boolean,
   authHeader: boolean,
   syncError: ?string,
+  emailToVerify?: string,
   signOut: () => void,
   openMobileNavigation: () => void,
   openChannelCreate: () => void,
@@ -62,11 +63,13 @@ const Header = (props: Props) => {
     openSignOutModal,
     clearEmailEntry,
     clearPasswordEntry,
+    emailToVerify,
   } = props;
 
   // on the verify page don't let anyone escape other than by closing the tab to keep session data consistent
   const isVerifyPage = history.location.pathname.includes(PAGES.AUTH_VERIFY);
   const isSignUpPage = history.location.pathname.includes(PAGES.AUTH);
+  const isSignInPage = history.location.pathname.includes(PAGES.AUTH_SIGNIN);
 
   // Sign out if they click the "x" when they are on the password prompt
   const authHeaderAction = syncError ? { onClick: signOut } : { navigate: '/' };
@@ -75,6 +78,10 @@ const Header = (props: Props) => {
     onClick: () => {
       clearEmailEntry();
       clearPasswordEntry();
+
+      if (isSignInPage && !emailToVerify) {
+        history.goBack();
+      }
 
       if (isSignUpPage) {
         history.goBack();
@@ -258,8 +265,8 @@ const Header = (props: Props) => {
               <span />
               <Tooltip label={__('Go Back')}>
                 <Button
-                  button="link"
-                  className="button--header-close"
+                  button="alt"
+                  // className="button--header-close"
                   icon={ICONS.REMOVE}
                   {...closeButtonNavigationProps}
                 />

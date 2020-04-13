@@ -93,8 +93,8 @@ function UserEmailReturning(props: Props) {
                 <Nag
                   type="helpful"
                   relative
-                  message={__("We can't find that email. Did you mean to sign up?")}
-                  actionText={__('Sign Up')}
+                  message={__("We can't find that email. Did you mean to join?")}
+                  actionText={__('Join')}
                 />
               )}
               {!emailExistsFromUrl && !emailDoesNotExist && errorMessage && (
