@@ -140,7 +140,9 @@ $metadata-z-index: 1;
 }
 
 .channel__quick-actions {
-  @extend .section__actions;
+  display: flex;
+  flex-direction: row;
+  margin-top: var(--spacing-small);
   margin-left: var(--spacing-medium);
   position: absolute;
   top: 0;
@@ -152,6 +154,10 @@ $metadata-z-index: 1;
 
   > * {
     padding: 0 var(--spacing-xsmall);
+
+    &:not(:last-child) {
+      margin-right: var(--spacing-medium);
+    }
   }
 
   @media (max-width: $breakpoint-small) {
