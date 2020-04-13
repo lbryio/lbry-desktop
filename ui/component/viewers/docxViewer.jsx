@@ -58,7 +58,7 @@ class DocxViewer extends React.PureComponent<Props, State> {
     const errorMessage = __("Sorry, looks like we can't load the document.");
 
     return (
-      <div className="file-render__viewer file-render__viewer--document">
+      <div className="file-viewer file-viewer--document">
         {loading && <LoadingScreen status={loadingMessage} spinner />}
         {error && <LoadingScreen status={errorMessage} spinner={false} />}
         {content && <div className="file-render__content" dangerouslySetInnerHTML={{ __html: content }} />}

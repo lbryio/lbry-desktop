@@ -1,5 +1,4 @@
 // @flow
-import { URL } from 'config';
 import { remote } from 'electron';
 import React, { Suspense } from 'react';
 import classnames from 'classnames';
@@ -7,10 +6,7 @@ import * as RENDER_MODES from 'constants/file_render_modes';
 import VideoViewer from 'component/viewers/videoViewer';
 import ImageViewer from 'component/viewers/imageViewer';
 import AppViewer from 'component/viewers/appViewer';
-import Button from 'component/button';
 import { withRouter } from 'react-router-dom';
-import AutoplayCountdown from 'component/autoplayCountdown';
-import { formatLbryUrlForWeb } from 'util/url';
 import fs from 'fs';
 
 import DocumentViewer from 'component/viewers/documentViewer';
@@ -34,32 +30,15 @@ type Props = {
   downloadPath: string,
   fileExtension: string,
   autoplay: boolean,
-  setPlayingUri: (string | null) => void,
-  currentlyFloating: boolean,
   renderMode: string,
   thumbnail: string,
-  onStartedCallback: () => void,
-};
-
-type State = {
-  showAutoplayCountdown: boolean,
-  showEmbededMessage: boolean,
 };
 
 class FileRender extends React.PureComponent<Props, State> {
   constructor(props: Props) {
     super(props);
 
-    this.state = {
-      showAutoplayCountdown: false,
-      showEmbededMessage: false,
-    };
-
     (this: any).escapeListener = this.escapeListener.bind(this);
-    (this: any).onEndedAutoplay = this.onEndedAutoplay.bind(this);
-    (this: any).onEndedEmbedded = this.onEndedEmbedded.bind(this);
-    (this: any).getOnEndedCb = this.getOnEndedCb.bind(this);
-    (this: any).onStartedCb = this.onStartedCb.bind(this);
   }
 
   componentDidMount() {
@@ -84,39 +63,6 @@ class FileRender extends React.PureComponent<Props, State> {
     remote.getCurrentWindow().setFullScreen(false);
   }
 
-  onStartedCb() {
-    const { onStartedCallback } = this.props;
-
-    if (onStartedCallback) {
-      onStartedCallback();
-    }
-  }
-
-  getOnEndedCb() {
-    const { setPlayingUri, currentlyFloating, embedded } = this.props;
-
-    if (embedded) {
-      return this.onEndedEmbedded;
-    }
-
-    if (!currentlyFloating) {
-      return this.onEndedAutoplay;
-    }
-
-    return () => setPlayingUri(null);
-  }
-
-  onEndedAutoplay() {
-    const { autoplay } = this.props;
-    if (autoplay) {
-      this.setState({ showAutoplayCountdown: true });
-    }
-  }
-
-  onEndedEmbedded() {
-    this.setState({ showEmbededMessage: true });
-  }
-
   renderViewer() {
     const { currentTheme, contentType, downloadPath, fileExtension, streamingUrl, uri, renderMode } = this.props;
     const source = streamingUrl;
@@ -124,15 +70,7 @@ class FileRender extends React.PureComponent<Props, State> {
     switch (renderMode) {
       case RENDER_MODES.AUDIO:
       case RENDER_MODES.VIDEO:
-        return (
-          <VideoViewer
-            uri={uri}
-            source={source}
-            contentType={contentType}
-            onEndedCb={this.getOnEndedCb()}
-            onStartedCb={this.onStartedCb}
-          />
-        );
+        return <VideoViewer uri={uri} source={source} contentType={contentType} />;
       case RENDER_MODES.IMAGE:
         return <ImageViewer uri={uri} source={source} />;
       case RENDER_MODES.HTML:
@@ -177,30 +115,15 @@ class FileRender extends React.PureComponent<Props, State> {
   }
 
   render() {
-    const { uri, currentlyFloating, embedded, renderMode } = this.props;
-    const { showAutoplayCountdown, showEmbededMessage } = this.state;
-    const lbrytvLink = `${URL}${formatLbryUrlForWeb(uri)}?src=embed`;
+    const { embedded, renderMode } = this.props;
 
     return (
       <div
-        className={classnames({
-          'file-render': !embedded,
+        className={classnames('file-render', {
           'file-render--document': RENDER_MODES.TEXT_MODES.includes(renderMode) && !embedded,
-          'file-render__embed': embedded,
+          'file-render--embed': embedded,
         })}
       >
-        {embedded && showEmbededMessage && (
-          <div className="video-overlay__wrapper">
-            <div className="video-overlay__title">{__('See more on lbry.tv')}</div>
-
-            <div className="video-overlay__actions">
-              <div className="section__actions--centered">
-                <Button label={__('Explore')} button="primary" href={lbrytvLink} />
-              </div>
-            </div>
-          </div>
-        )}
-        {!currentlyFloating && showAutoplayCountdown && <AutoplayCountdown uri={uri} />}
         <Suspense fallback={<div />}>{this.renderViewer()}</Suspense>
       </div>
     );

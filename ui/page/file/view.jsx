@@ -17,7 +17,7 @@ import RecommendedContent from 'component/recommendedContent';
 import CommentsList from 'component/commentsList';
 import CommentCreate from 'component/commentCreate';
 
-export const FILE_WRAPPER_CLASS = 'grid-area--content';
+export const FILE_WRAPPER_CLASS = 'file-page__video-container';
 
 type Props = {
   claim: StreamClaim,

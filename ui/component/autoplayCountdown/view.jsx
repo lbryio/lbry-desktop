@@ -10,6 +10,7 @@ type Props = {
   history: { push: string => void },
   nextRecommendedClaim: ?StreamClaim,
   nextRecommendedUri: string,
+  isFloating: boolean,
   setPlayingUri: (string | null) => void,
 };
 
@@ -18,15 +19,31 @@ function AutoplayCountdown(props: Props) {
     nextRecommendedUri,
     nextRecommendedClaim,
     setPlayingUri,
+    isFloating,
     history: { push },
   } = props;
   const nextTitle = nextRecommendedClaim && nextRecommendedClaim.value && nextRecommendedClaim.value.title;
-  const [timer, setTimer] = React.useState(5);
+
+  /* this value is coupled with CSS timing variables on .autoplay-countdown__timer */
+  const countdownTime = 1000;
+
+  const [timer, setTimer] = React.useState(countdownTime);
   const [timerCanceled, setTimerCanceled] = React.useState(false);
 
   let navigateUrl;
   if (nextTitle) {
     navigateUrl = formatLbryUrlForWeb(nextRecommendedUri);
+  }
+
+  function doNavigate() {
+    // FIXME: make autoplay continue in floating player
+    if (!isFloating) {
+      // if not floating
+      setPlayingUri(null);
+      push(navigateUrl);
+    } else {
+      setPlayingUri(nextRecommendedUri);
+    }
   }
 
   React.useEffect(() => {
@@ -35,9 +52,7 @@ function AutoplayCountdown(props: Props) {
       interval = setInterval(() => {
         const newTime = timer - 1;
         if (newTime === 0) {
-          // Set the playingUri to null so the app doesn't try to make a floating window with the video that just finished
-          setPlayingUri(null);
-          push(navigateUrl);
+          doNavigate();
         } else {
           setTimer(timer - 1);
         }
@@ -46,28 +61,31 @@ function AutoplayCountdown(props: Props) {
     return () => {
       clearInterval(interval);
     };
-  }, [timer, navigateUrl, push, timerCanceled, setPlayingUri, nextRecommendedUri]);
+  }, [timer, doNavigate, navigateUrl, push, timerCanceled, setPlayingUri, nextRecommendedUri]);
 
-  if (timerCanceled) {
+  if (timerCanceled || !nextRecommendedUri) {
     return null;
   }
 
   return (
-    <div className="video-overlay__wrapper">
-      <div className="video-overlay__subtitle">
-        <I18nMessage tokens={{ channel: <UriIndicator link uri={nextRecommendedUri} /> }}>
-          Up Next by %channel%
-        </I18nMessage>
-      </div>
-      <div className="video-overlay__title">{nextTitle}</div>
+    <div className="file-viewer__overlay">
+      <div className="autoplay-countdown">
+        <div className="file-viewer__overlay-secondary">
+          <I18nMessage tokens={{ channel: <UriIndicator link uri={nextRecommendedUri} /> }}>
+            Up Next by %channel%
+          </I18nMessage>
+        </div>
 
-      <div className="video-overlay__actions">
-        <div className="video-overlay__subtitle">
-          {__('Playing in %seconds_left% seconds', { seconds_left: timer })}
+        <div className="file-viewer__overlay-title">{nextTitle}</div>
+        <div className="autoplay-countdown__timer">
+          <div className={'autoplay-countdown__button autoplay-countdown__button--' + (timer % 5)}>
+            <Button onClick={doNavigate} iconSize={30} title={__('Play')} className="button--icon button--play" />
+          </div>
+          <div className="file-viewer__overlay-secondary autoplay-countdown__counter">
+            {__('Playing in %seconds_left% seconds', { seconds_left: timer })}
+          </div>
         </div>
-        <div className="section__actions--centered">
-          <Button label={__('Cancel')} button="link" onClick={() => setTimerCanceled(true)} />
-        </div>
+        <Button label={__('Cancel')} button="link" onClick={() => setTimerCanceled(true)} />
       </div>
     </div>
   );

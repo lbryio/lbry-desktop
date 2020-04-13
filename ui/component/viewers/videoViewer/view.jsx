@@ -7,7 +7,12 @@ import eventTracking from 'videojs-event-tracking';
 import isUserTyping from 'util/detect-typing';
 import analytics from 'analytics';
 import { EmbedContext } from 'page/embedWrapper/view';
+import classnames from 'classnames';
 import { FORCE_CONTENT_TYPE_PLAYER } from 'constants/claim';
+import AutoplayCountdown from 'component/autoplayCountdown';
+import usePrevious from 'effects/use-previous';
+import FileViewerEmbeddedEnded from 'lbrytv/component/fileViewerEmbeddedEnded';
+import FileViewerEmbeddedTitle from 'lbrytv/component/fileViewerEmbeddedTitle';
 
 const F11_KEYCODE = 122;
 const SPACE_BAR_KEYCODE = 32;
@@ -59,17 +64,17 @@ type Props = {
   thumbnail: string,
   hasFileInfo: boolean,
   claim: Claim,
-  autoplayParam: ?boolean,
-  onStartedCb: () => void,
-  onEndedCb: () => void,
+  uri: string,
+  autoplaySetting: boolean,
+  autoplayIfEmbedded: boolean,
+  doAnalyticsView: (string, number) => Promise<any>,
+  claimRewards: () => void,
 };
 
 function VideoViewer(props: Props) {
   const {
     contentType,
     source,
-    onEndedCb,
-    onStartedCb,
     changeVolume,
     changeMute,
     volume,
@@ -77,23 +82,31 @@ function VideoViewer(props: Props) {
     thumbnail,
     position,
     claim,
-    autoplayParam,
+    uri,
+    autoplaySetting,
+    autoplayIfEmbedded,
+    doAnalyticsView,
+    claimRewards,
   } = props;
   const claimId = claim && claim.claim_id;
   const videoRef = useRef();
   const isAudio = contentType.includes('audio');
   const embedded = useContext(EmbedContext);
 
-  if (embedded && !autoplayParam) {
-    VIDEO_JS_OPTIONS.autoplay = false;
-  }
-
-  if (autoplayParam) {
-    VIDEO_JS_OPTIONS.muted = true;
+  if (embedded) {
+    VIDEO_JS_OPTIONS.autoplay = autoplayIfEmbedded;
+    VIDEO_JS_OPTIONS.muted = autoplayIfEmbedded;
+  } else if (autoplaySetting) {
+    VIDEO_JS_OPTIONS.autoplay = autoplaySetting;
   }
 
   const forcePlayer = FORCE_CONTENT_TYPE_PLAYER.includes(contentType);
   const [requireRedraw, setRequireRedraw] = useState(false);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [showAutoplayCountdown, setShowAutoplayCountdown] = useState(false);
+  const [isEndededEmbed, setIsEndededEmbed] = useState(false);
+  const previousUri = usePrevious(uri);
+
   let player;
 
   useEffect(() => {
@@ -110,14 +123,14 @@ function VideoViewer(props: Props) {
     };
 
     // thumb looks bad in app, and if autoplay, flashing poster is annoying
-    if (isAudio || (embedded && !autoplayParam)) {
+    if (isAudio || (embedded && !autoplayIfEmbedded)) {
       videoJsOptions.poster = thumbnail;
     }
 
     if (!requireRedraw) {
       player = videojs(videoNode, videoJsOptions, function() {
-        if (!autoplayParam) player.volume(volume);
-        player.muted(autoplayParam || muted);
+        if (!autoplayIfEmbedded) player.volume(volume);
+        player.muted(autoplayIfEmbedded || muted);
       });
     }
 
@@ -193,13 +206,21 @@ function VideoViewer(props: Props) {
     function doTrackingBuffered(e: Event, data: any) {
       analytics.videoBufferEvent(claimId, data.currentTime);
     }
+
     function doTrackingFirstPlay(e: Event, data: any) {
       analytics.videoStartEvent(claimId, data.secondsToLoad);
-      onStartedCb();
+
+      doAnalyticsView(uri, data.secondsToLoad).then(() => {
+        claimRewards();
+      });
     }
 
     function doEnded() {
-      onEndedCb();
+      if (embedded) {
+        setIsEndededEmbed(true);
+      } else if (autoplaySetting) {
+        setShowAutoplayCountdown(true);
+      }
     }
 
     function doVolume(e: Event) {
@@ -209,11 +230,25 @@ function VideoViewer(props: Props) {
       changeMute(isMuted);
     }
 
+    function doPlay() {
+      setIsPlaying(true);
+      setShowAutoplayCountdown(false);
+      setIsEndededEmbed(false);
+    }
+
     if (player) {
       player.on('tracking:buffered', doTrackingBuffered);
+
       player.on('tracking:firstplay', doTrackingFirstPlay);
+      // FIXME: above is not firing on subsequent renders (though the effect fires), maybe below check can reset?
+      if (uri && previousUri !== uri) {
+        // do reset?
+      }
+
       player.on('ended', doEnded);
       player.on('volumechange', doVolume);
+      player.on('play', doPlay);
+      player.on('pause', () => setIsPlaying(false));
 
       // fixes #3498 (https://github.com/lbryio/lbry-desktop/issues/3498)
       // summary: on firefox the focus would stick to the fullscreen button which caused buggy behavior with spacebar
@@ -226,7 +261,7 @@ function VideoViewer(props: Props) {
         player.off();
       }
     };
-  }, [claimId, player, changeVolume, changeMute, onEndedCb, onStartedCb]);
+  }, [claimId, player, changeVolume, changeMute]); // FIXME: more dependencies?
 
   useEffect(() => {
     if (player && position) {
@@ -235,7 +270,15 @@ function VideoViewer(props: Props) {
   }, [player, position]);
 
   return (
-    <div className="file-render__viewer" onContextMenu={stopContextMenu}>
+    <div
+      className={classnames('file-viewer', {
+        'file-viewer--is-playing': isPlaying,
+      })}
+      onContextMenu={stopContextMenu}
+    >
+      {showAutoplayCountdown && <AutoplayCountdown uri={uri} />}
+      {isEndededEmbed && <FileViewerEmbeddedEnded uri={uri} />}
+      {embedded && !isEndededEmbed && <FileViewerEmbeddedTitle uri={uri} />}
       {!requireRedraw && (
         <div data-vjs-player>
           {isAudio ? <audio ref={videoRef} className="video-js" /> : <video ref={videoRef} className="video-js" />}

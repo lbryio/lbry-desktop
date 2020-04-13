@@ -14,6 +14,7 @@ import {
   parseURI,
   makeSelectContentTypeForUri,
   makeSelectFileNameForUri,
+  buildURI,
 } from 'lbry-redux';
 import { selectAllCostInfoByUri, makeSelectCostInfoForUri } from 'lbryinc';
 import { selectShowMatureContent } from 'redux/selectors/settings';
@@ -32,6 +33,17 @@ export const selectState = (state: any) => state.content || {};
 export const selectPlayingUri = createSelector(selectState, state => state.playingUri);
 
 export const makeSelectIsPlaying = (uri: string) => createSelector(selectPlayingUri, playingUri => playingUri === uri);
+
+// below is dumb, some context: https://stackoverflow.com/questions/39622864/access-react-router-state-in-selector
+export const makeSelectIsPlayerFloating = location =>
+  createSelector(selectPlayingUri, playingUri => {
+    try {
+      const { pathname, hash } = location;
+      const newpath = buildURI(parseURI(pathname.slice(1).replace(/:/g, '#')));
+      return playingUri && playingUri !== newpath + hash;
+    } catch (e) {}
+    return !!playingUri;
+  });
 
 export const makeSelectContentPositionForUri = (uri: string) =>
   createSelector(selectState, makeSelectClaimForUri(uri), (state, claim) => {

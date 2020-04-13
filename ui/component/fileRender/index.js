@@ -12,7 +12,6 @@ import {
   makeSelectFileExtensionForUri,
   makeSelectStreamingUrlForUriWebProxy,
 } from 'redux/selectors/content';
-import { doSetPlayingUri } from 'redux/actions/content';
 import FileRender from './view';
 
 const select = (state, props) => {
@@ -30,8 +29,4 @@ const select = (state, props) => {
   };
 };
 
-const perform = dispatch => ({
-  setPlayingUri: uri => dispatch(doSetPlayingUri(uri)),
-});
-
-export default connect(select, perform)(FileRender);
+export default connect(select)(FileRender);

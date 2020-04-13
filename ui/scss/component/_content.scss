@@ -71,7 +71,7 @@
 
 .content__actions,
 .content__floating-header {
-  z-index: 1;
+  z-index: 3; /*must be one higher than .file-viewer__overlay */
 }
 
 .content__info {

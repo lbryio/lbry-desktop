@@ -1,6 +1,6 @@
 // @flow
 // This component is entirely for triggering the start of a file view
-// The actual viewer for a file exists in TextViewer and FloatingViewer
+// The actual viewer for a file exists in TextViewer and FileRenderFloating
 // They can't exist in one component because we need to handle/listen for the start of a new file view
 // while a file is currently being viewed
 import React, { useEffect, useCallback } from 'react';
@@ -89,7 +89,7 @@ export default function FileRenderInitiator(props: Props) {
     if (isFree && ((autoplay && !videoOnPage && isPlayable) || RENDER_MODES.AUTO_RENDER_MODES.includes(renderMode))) {
       viewFile();
     }
-  }, [autoplay, viewFile, isFree, renderMode]);
+  }, [autoplay, viewFile, isFree, renderMode, isPlayable]);
 
   /*
   once content is playing, let the appropriate <FileRender> take care of it...

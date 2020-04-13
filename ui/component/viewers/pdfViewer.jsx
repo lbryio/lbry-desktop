@@ -12,8 +12,8 @@ class PdfViewer extends React.PureComponent<Props> {
     const { source } = this.props;
     const src = IS_WEB ? source : `file://${source}`;
     return (
-      <div className="file-render__viewer file-render__viewer--document" onContextMenu={stopContextMenu}>
-        <div className="file-render__viewer file-render__viewer--iframe">
+      <div className="file-viewer file-viewer--document" onContextMenu={stopContextMenu}>
+        <div className="file-viewer file-viewer--iframe">
           <IframeReact title={__('File preview')} src={src} />
         </div>
       </div>

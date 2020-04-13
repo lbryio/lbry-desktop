@@ -20,7 +20,7 @@ function ImageViewer(props: Props) {
         />
       )}
       {!loadingError && (
-        <div className="file-render__viewer">
+        <div className="file-viewer">
           <img src={source} onError={() => setLoadingError(true)} />
         </div>
       )}
