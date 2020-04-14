@@ -6,7 +6,7 @@ import Spinner from 'component/spinner';
 type Props = {
   emptyMessage: ?string,
   loading: boolean,
-  openModal: (id: string, { tx: Txo }) => void,
+  openModal: (id: string, { tx: Txo, cb: string => void }) => void,
   rewards: {},
   txos: Array<Txo>,
 };
@@ -14,7 +14,7 @@ type Props = {
 function TransactionListTable(props: Props) {
   const { emptyMessage, rewards, loading, txos } = props;
   const REVOCABLE_TYPES = ['channel', 'stream', 'repost', 'support', 'claim'];
-  function revokeClaim(tx: any, cb: () => void) {
+  function revokeClaim(tx: any, cb: string => void) {
     props.openModal(MODALS.CONFIRM_CLAIM_REVOKE, { tx, cb });
   }
 
