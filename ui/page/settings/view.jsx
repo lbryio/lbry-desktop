@@ -471,8 +471,11 @@ class SettingsPage extends React.PureComponent<Props, State> {
                 title={__('Blocked Channels')}
                 actions={
                   <p>
-                    {__('Blocked Channels')}: {userBlockedChannelsCount} {' '}
-                    <Button button="link" label={__('Manage')} navigate={`/$/${PAGES.BLOCKED}`} />.
+                    {__('You have %count% blocked %channels%.', {
+                      count: userBlockedChannelsCount,
+                      channels: userBlockedChannelsCount === 1 ? __('channel') : __('channels'),
+                    })}{' '}
+                    <Button button="link" label={__('Manage')} navigate={`/$/${PAGES.BLOCKED}`} />
                   </p>
                 }
               />
