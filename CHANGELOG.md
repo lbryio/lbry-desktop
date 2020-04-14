@@ -4,7 +4,25 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
-## [0.44.0] - [Unreleased]
+## [0.45.0] - [Unreleased]
+
+### Added
+
+- Password login with lbry.tv - [Blog post](https://open.lbry.com/@lbry:3f/passwords-on-lbrytv:2) ([#3960](https://github.com/lbryio/lbry-desktop/pull/3960))
+- Double confirmation to prevent accidentally deleting a channel ([#3958](https://github.com/lbryio/lbry-desktop/pull/3958))
+- Button to unlock all tips for a claim ([#3933](https://github.com/lbryio/lbry-desktop/pull/3933))
+
+### Changed
+
+- Improved file page layout/styling ([#3918](https://github.com/lbryio/lbry-desktop/pull/3918))
+- Now using Github for auto-update downloads ([#3992](https://github.com/lbryio/lbry-desktop/pull/3992))
+
+### Fixed
+
+- Images were sometimes cut off depending on screen size _community pr!_ ([#3991](https://github.com/lbryio/lbry-desktop/pull/3991))
+- Error styling on repost modal ([#3943](https://github.com/lbryio/lbry-desktop/pull/3943))
+
+## [0.44.0] - [2020-04-01]
 
 ### Added
 
