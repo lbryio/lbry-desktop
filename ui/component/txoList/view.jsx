@@ -28,7 +28,6 @@ type Delta = {
 function TxoList(props: Props) {
   const { search, txoPage, txoItemCount, fetchTxoPage, updateTxoPageParams, history } = props;
 
-  console.log('txoPage', txoPage);
   // parse urlParams
   const urlParams = new URLSearchParams(search);
   const page = urlParams.get(TXO.PAGE) || String(1);

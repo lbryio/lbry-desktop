@@ -5,11 +5,12 @@ import ButtonTransaction from 'component/common/transaction-link';
 import CreditAmount from 'component/common/credit-amount';
 import DateTime from 'component/dateTime';
 import Button from 'component/button';
-import { buildURI, parseURI, TXO_LIST as TXO } from 'lbry-redux';
+import Spinner from 'component/spinner';
+import { buildURI, parseURI, TXO_LIST as TXO, TXO_ABANDON_STATES as TXO_STATES } from 'lbry-redux';
 
 type Props = {
   txo: Txo,
-  revokeClaim: (Txo, () => void) => void,
+  revokeClaim: (Txo, (string) => void) => void,
   isRevokeable: boolean,
   reward: ?{
     reward_title: string,
@@ -17,22 +18,26 @@ type Props = {
 };
 
 type State = {
-  disabled: boolean,
+  abandonState: string,
 };
 
 class TxoListItem extends React.PureComponent<Props, State> {
   constructor() {
     super();
-    this.state = { disabled: false };
+    this.state = { abandonState: TXO_STATES.READY };
     (this: any).abandonClaim = this.abandonClaim.bind(this);
     (this: any).getLink = this.getLink.bind(this);
   }
 
   getLink(type: string) {
+    const { abandonState } = this.state;
+    if (this.state.abandonState === TXO_STATES.PENDING) {
+      return <Spinner type={'small'} />;
+    }
     if (type === TXO.SUPPORT) {
       return (
         <Button
-          disabled={this.state.disabled}
+          disabled={abandonState === TXO_STATES.DONE || abandonState === TXO_STATES.ERROR}
           button="secondary"
           icon={ICONS.UNLOCK}
           onClick={this.abandonClaim}
@@ -43,7 +48,7 @@ class TxoListItem extends React.PureComponent<Props, State> {
     const abandonTitle = type === TXO.SUPPORT ? 'Abandon Support' : 'Abandon Claim';
     return (
       <Button
-        disabled={this.state.disabled}
+        disabled={abandonState === TXO_STATES.DONE || abandonState === TXO_STATES.ERROR}
         button="secondary"
         icon={ICONS.DELETE}
         onClick={this.abandonClaim}
@@ -53,7 +58,7 @@ class TxoListItem extends React.PureComponent<Props, State> {
   }
 
   abandonClaim() {
-    this.props.revokeClaim(this.props.txo, () => this.setState({ disabled: true }));
+    this.props.revokeClaim(this.props.txo, st => this.setState({ abandonState: st }));
     // this.setState({ disabled: true }); // just flag the item disabled
   }
 
