@@ -23,8 +23,11 @@
 
 .comment__reply {
   border-left: 5px solid var(--color-primary-alt);
-  padding-left: var(--spacing-medium);
   margin-left: var(--spacing-medium);
+
+  .comment__author-thumbnail {
+    margin-left: var(--spacing-medium);
+  }
 }
 
 .comment__reply-button {
