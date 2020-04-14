@@ -145,7 +145,7 @@ function UserEmailNew(props: Props) {
                 <Button
                   button="primary"
                   type="submit"
-                  label={__('Join')}
+                  label={__('Register')}
                   disabled={
                     !email || !password || !valid || (!IS_WEB && !localShareUsageData && !shareUsageData) || isPending
                   }
