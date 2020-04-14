@@ -92,6 +92,10 @@
   align-items: center;
   margin-top: var(--spacing-large);
 
+  ~ .section {
+    margin-top: var(--spacing-large);
+  }
+
   &:only-child,
   &:first-child {
     margin-top: 0;
