@@ -33,12 +33,8 @@
   ],
   "publish": [
     {
-      "provider": "s3",
-      "bucket": "build.lbry.io",
-      "path": "app/release",
-      "region": "us-east-1"
-    },
-    "github"
+      "provider": "github"
+    }
   ],
   "mac": {
     "category": "public.app-category.entertainment"
