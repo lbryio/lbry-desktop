@@ -23,35 +23,40 @@ function PublishPage(props: Props) {
 
   return (
     <Page>
-      {balance === 0 && (
+      {balance === 0 ? (
         <Fragment>
-          <Yrbl
-            title={__("You can't publish things quite yet")}
-            subtitle={
-              <Fragment>
-                <p>
-                  {__(
-                    'LBRY uses a blockchain, which is a fancy way of saying that users (you) are in control of your data.'
-                  )}
-                </p>
-                <p>
-                  {__('Because of the blockchain, some actions require LBRY credits')} (
-                  <LbcSymbol />
-                  ).
-                </p>
-                <p>
-                  <LbcSymbol />{' '}
-                  {__(
-                    'allows you to do some neat things, like paying your favorite creators for their content. And no company can stop you.'
-                  )}
-                </p>
-              </Fragment>
-            }
-          />
-          <RewardAuthIntro />
+          <div className="section">
+            <Yrbl
+              title={__("You can't publish things quite yet")}
+              subtitle={
+                <Fragment>
+                  <p>
+                    {__(
+                      'LBRY uses a blockchain, which is a fancy way of saying that users (you) are in control of your data.'
+                    )}
+                  </p>
+                  <p>
+                    {__('Because of the blockchain, some actions require LBRY credits')} (
+                    <LbcSymbol />
+                    ).
+                  </p>
+                  <p>
+                    <LbcSymbol />{' '}
+                    {__(
+                      'allows you to do some neat things, like paying your favorite creators for their content. And no company can stop you.'
+                    )}
+                  </p>
+                </Fragment>
+              }
+            />
+          </div>
+          <div className="section">
+            <RewardAuthIntro />
+          </div>
         </Fragment>
+      ) : (
+        <PublishForm scrollToTop={scrollToTop} disabled={balance === 0} />
       )}
-      <PublishForm scrollToTop={scrollToTop} disabled={balance === 0} />
     </Page>
   );
 }
