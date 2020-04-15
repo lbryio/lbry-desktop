@@ -28,7 +28,6 @@ type Delta = {
 function TxoList(props: Props) {
   const { search, txoPage, txoItemCount, fetchTxoPage, updateTxoPageParams, history } = props;
 
-  // parse urlParams
   const urlParams = new URLSearchParams(search);
   const page = urlParams.get(TXO.PAGE) || String(1);
   const pageSize = urlParams.get(TXO.PAGE_SIZE) || String(TXO.PAGE_SIZE_DEFAULT);
@@ -44,7 +43,6 @@ function TxoList(props: Props) {
     subtype,
   };
 
-  // build new json params
   const params = {};
   if (currentUrlParams.type) {
     if (currentUrlParams.type === TXO.SENT) {
@@ -174,7 +172,6 @@ function TxoList(props: Props) {
         <div>
           <div className="card__body-actions">
             <div className="card__actions">
-              {/* show the main drop down */}
               <div>
                 <FormField
                   type="select"
@@ -193,7 +190,6 @@ function TxoList(props: Props) {
                   })}
                 </FormField>
               </div>
-              {/* show the subtypes drop down */}
               {(type === TXO.SENT || type === TXO.RECEIVED) && (
                 <div>
                   <FormField
@@ -224,7 +220,7 @@ function TxoList(props: Props) {
                       className={classnames(`button-toggle`, {
                         'button-toggle--active': active === TXO.ACTIVE,
                       })}
-                      label={__(toCapitalCase('active'))}
+                      label={__('Active')}
                     />
                     <Button
                       button="alt"
@@ -232,7 +228,7 @@ function TxoList(props: Props) {
                       className={classnames(`button-toggle`, {
                         'button-toggle--active': active === 'spent',
                       })}
-                      label={__(toCapitalCase('historical'))}
+                      label={__('Historical')}
                     />
                     <Button
                       button="alt"
@@ -240,13 +236,12 @@ function TxoList(props: Props) {
                       className={classnames(`button-toggle`, {
                         'button-toggle--active': active === 'all',
                       })}
-                      label={__(toCapitalCase('all'))}
+                      label={__('All')}
                     />
                   </div>
                 </fieldset-section>
               </div>
             </div>
-            {/* show active/spent */}
           </div>
           <TransactionListTable txos={txoPage} />
           <Paginate totalPages={Math.ceil(txoItemCount / Number(pageSize))} />

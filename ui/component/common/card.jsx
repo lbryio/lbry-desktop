@@ -4,7 +4,6 @@ import React, { useState } from 'react';
 import classnames from 'classnames';
 import Icon from 'component/common/icon';
 import Button from 'component/button';
-import { toCapitalCase } from 'util/string';
 import * as ICONS from 'constants/icons';
 
 type Props = {
@@ -57,7 +56,7 @@ export default function Card(props: Props) {
                 <Button
                   button={'alt'}
                   aria-label={__('More')}
-                  icon={expanded ? toCapitalCase(ICONS.SUBTRACT) : toCapitalCase(ICONS.ADD)}
+                  icon={expanded ? ICONS.SUBTRACT : ICONS.ADD}
                   onClick={() => setExpanded(!expanded)}
                 />
               </div>

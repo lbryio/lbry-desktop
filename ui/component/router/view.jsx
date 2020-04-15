@@ -182,7 +182,6 @@ function AppRouter(props: Props) {
       <PrivateRoute {...props} path={`/$/${PAGES.CREATOR_DASHBOARD}`} component={CreatorDashboard} />
       <PrivateRoute {...props} path={`/$/${PAGES.PUBLISH}`} component={PublishPage} />
       <PrivateRoute {...props} path={`/$/${PAGES.REPORT}`} component={ReportPage} />
-      <PrivateRoute {...props} path={`/$/${PAGES.REWARDS}`} component={RewardsPage} />
       <PrivateRoute {...props} path={`/$/${PAGES.REWARDS}`} exact component={RewardsPage} />
       <PrivateRoute {...props} path={`/$/${PAGES.REWARDS_VERIFY}`} component={RewardsVerifyPage} />
       <PrivateRoute {...props} path={`/$/${PAGES.LIBRARY}`} component={LibraryPage} />

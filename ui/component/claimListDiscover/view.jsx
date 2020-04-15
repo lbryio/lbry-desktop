@@ -412,7 +412,7 @@ function ClaimListDiscover(props: Props) {
                 className={classnames(`button-toggle button-toggle--top button-toggle--more`, {
                   'button-toggle--custom': isFiltered(),
                 })}
-                icon={toCapitalCase(ICONS.SLIDERS)}
+                icon={ICONS.SLIDERS}
                 onClick={() => setExpanded(!expanded)}
               />
             )}
