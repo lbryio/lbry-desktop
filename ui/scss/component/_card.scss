@@ -200,7 +200,10 @@
 
 .card__body {
   padding: var(--spacing-large);
-  border-top: 1px solid var(--color-border);
+
+  &:not(.card__body--no-title) {
+    padding-top: 0;
+  }
 
   &.card__body--table {
     padding: 0;

@@ -1156,5 +1156,6 @@
   "lbry": "lbry",
   "Default": "Default",
   "Amount (LBC)": "Amount (LBC)",
-  "Successfully unlocked your tip!": "Successfully unlocked your tip!"
+  "Successfully unlocked your tip!": "Successfully unlocked your tip!",
+  "Successfully abandoned your claim.": "Successfully abandoned your claim."
 }
