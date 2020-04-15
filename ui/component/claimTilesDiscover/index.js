@@ -14,7 +14,7 @@ const select = state => ({
   claimSearchByQuery: selectClaimSearchByQuery(state),
   loading: selectFetchingClaimSearch(state),
   showNsfw: makeSelectClientSetting(SETTINGS.SHOW_MATURE)(state),
-  showReposts: makeSelectClientSetting(SETTINGS.SHOW_REPOSTS)(state),
+  hideReposts: makeSelectClientSetting(SETTINGS.HIDE_REPOSTS)(state),
   hiddenUris: selectBlockedChannels(state),
 });
 
@@ -23,7 +23,4 @@ const perform = {
   doToggleTagFollowDesktop,
 };
 
-export default connect(
-  select,
-  perform
-)(ClaimListDiscover);
+export default connect(select, perform)(ClaimListDiscover);

@@ -1161,7 +1161,6 @@
   "You have %count% blocked %channels%.": "You have %count% blocked %channels%.",
   "Account Password": "Account Password",
   "You do not currently have a password set.": "You do not currently have a password set.",
-  "Add A Password": "Add A Password",
   "Register with lbry.tv": "Register with lbry.tv",
   "Enter Your lbry.tv Password": "Enter Your lbry.tv Password",
   "Signing in as %email%": "Signing in as %email%",
@@ -1191,6 +1190,9 @@
   "There are no stats for this channel. Make sure you are signed in with the correct email and have data sharing turned on.": "There are no stats for this channel. Make sure you are signed in with the correct email and have data sharing turned on.",
   "%follower_count% followers": "%follower_count% followers",
   "%lbc_received% LBC Earned": "%lbc_received% LBC Earned",
+  "Sign Up": "Sign Up",
   "Earnings may also include any LBC you've sent yourself or added as support. We are working on making this more accurate. Check your wallet page for the correct total balance.": "Earnings may also include any LBC you've sent yourself or added as support. We are working on making this more accurate. Check your wallet page for the correct total balance.",
-  "Sign Up": "Sign Up"
+  "Add A Password": "Add A Password",
+  "Hide reposts": "Hide reposts",
+  "You will not see reposts by people you follow or receive email notifying about them.": "You will not see reposts by people you follow or receive email notifying about them."
 }
