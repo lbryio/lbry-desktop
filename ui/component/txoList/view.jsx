@@ -31,9 +31,9 @@ function TxoList(props: Props) {
   const urlParams = new URLSearchParams(search);
   const page = urlParams.get(TXO.PAGE) || String(1);
   const pageSize = urlParams.get(TXO.PAGE_SIZE) || String(TXO.PAGE_SIZE_DEFAULT);
-  const type = urlParams.get(TXO.TYPE);
+  const type = urlParams.get(TXO.TYPE) || TXO.ALL;
   const subtype = urlParams.get(TXO.SUB_TYPE);
-  const active = urlParams.get(TXO.ACTIVE) || TXO.ACTIVE;
+  const active = urlParams.get(TXO.ACTIVE) || TXO.ALL;
 
   const currentUrlParams = {
     page,
@@ -45,7 +45,9 @@ function TxoList(props: Props) {
 
   const params = {};
   if (currentUrlParams.type) {
-    if (currentUrlParams.type === TXO.SENT) {
+    if (currentUrlParams.type === TXO.ALL) {
+      params[TXO.EXCLUDE_INTERNAL_TRANSFERS] = true;
+    } else if (currentUrlParams.type === TXO.SENT) {
       params[TXO.IS_MY_INPUT] = true;
       params[TXO.IS_NOT_MY_OUTPUT] = true;
       if (currentUrlParams.subtype === TXO.TIP) {
@@ -64,8 +66,9 @@ function TxoList(props: Props) {
         params[TXO.TX_TYPE] = TXO.SUPPORT;
       } else if (currentUrlParams.subtype === TXO.PURCHASE) {
         params[TXO.TX_TYPE] = TXO.PURCHASE;
-      } else if (currentUrlParams.subtype === TXO.PURCHASE) {
+      } else if (currentUrlParams.subtype === TXO.PAYMENT) {
         params[TXO.TX_TYPE] = TXO.OTHER;
+        params[TXO.EXCLUDE_INTERNAL_TRANSFERS] = true;
       } else {
         params[TXO.TX_TYPE] = [TXO.OTHER, TXO.PURCHASE, TXO.SUPPORT];
       }
