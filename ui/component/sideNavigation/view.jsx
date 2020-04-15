@@ -9,7 +9,7 @@ import StickyBox from 'react-sticky-box/dist/esnext';
 import Spinner from 'component/spinner';
 import usePersistedState from 'effects/use-persisted-state';
 // @if TARGET='web'
-import Ads from 'lbrytv/component/ads';
+// import Ads from 'lbrytv/component/ads';
 // @endif
 
 const SHOW_CHANNELS = 'SHOW_CHANNELS';
@@ -210,7 +210,7 @@ function SideNavigation(props: Props) {
         )}
       </nav>
       // @if TARGET='web'
-      {!isAuthenticated && !expanded && <Ads />}
+      {/* {!isAuthenticated && !expanded && <Ads />} commenting out sidebar ads for test */}
       // @endif
     </Wrapper>
   );
