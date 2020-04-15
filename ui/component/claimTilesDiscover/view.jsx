@@ -8,7 +8,7 @@ type Props = {
   uris: Array<string>,
   doClaimSearch: ({}) => void,
   showNsfw: boolean,
-  showReposts: boolean,
+  hideReposts: boolean,
   history: { action: string, push: string => void, replace: string => void },
   claimSearchByQuery: {
     [string]: Array<string>,
@@ -30,7 +30,7 @@ function ClaimTilesDiscover(props: Props) {
     doClaimSearch,
     claimSearchByQuery,
     showNsfw,
-    // showReposts,
+    hideReposts,
     hiddenUris,
     // Below are options to pass that are forwarded to claim_search
     tags,
@@ -77,13 +77,13 @@ function ClaimTilesDiscover(props: Props) {
   }
 
   // https://github.com/lbryio/lbry-desktop/issues/3774
-  // if (!showReposts) {
-  //   if (Array.isArray(options.claim_type)) {
-  //     options.claim_type = options.claim_type.filter(claimType => claimType !== 'repost');
-  //   } else {
-  //     options.claim_type = ['stream', 'channel'];
-  //   }
-  // }
+  if (hideReposts) {
+    if (Array.isArray(options.claim_type)) {
+      options.claim_type = options.claim_type.filter(claimType => claimType !== 'repost');
+    } else {
+      options.claim_type = ['stream', 'channel'];
+    }
+  }
 
   if (claimType) {
     options.claim_type = claimType;

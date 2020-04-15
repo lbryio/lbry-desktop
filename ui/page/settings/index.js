@@ -44,7 +44,7 @@ const select = state => ({
   userBlockedChannelsCount: selectBlockedChannelsCount(state),
   hideBalance: makeSelectClientSetting(SETTINGS.HIDE_BALANCE)(state),
   floatingPlayer: makeSelectClientSetting(SETTINGS.FLOATING_PLAYER)(state),
-  showReposts: makeSelectClientSetting(SETTINGS.SHOW_REPOSTS)(state),
+  hideReposts: makeSelectClientSetting(SETTINGS.HIDE_REPOSTS)(state),
   darkModeTimes: makeSelectClientSetting(SETTINGS.DARK_MODE_TIMES)(state),
   ffmpegStatus: selectFfmpegStatus(state),
   findingFFmpeg: selectFindingFFmpeg(state),
@@ -65,7 +65,4 @@ const perform = dispatch => ({
   findFFmpeg: () => dispatch(doFindFFmpeg()),
 });
 
-export default connect(
-  select,
-  perform
-)(SettingsPage);
+export default connect(select, perform)(SettingsPage);

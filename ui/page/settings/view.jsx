@@ -19,6 +19,7 @@ import Card from 'component/common/card';
 import { getPasswordFromCookie } from 'util/saved-passwords';
 import Spinner from 'component/spinner';
 import SettingAccountPassword from 'component/settingAccountPassword';
+import { Lbryio } from 'lbryinc';
 
 // @if TARGET='app'
 export const IS_MAC = process.platform === 'darwin';
@@ -78,7 +79,7 @@ type Props = {
   hideBalance: boolean,
   confirmForgetPassword: ({}) => void,
   floatingPlayer: boolean,
-  // showReposts: boolean,
+  hideReposts: boolean,
   clearPlayingUri: () => void,
   darkModeTimes: DarkModeTimes,
   setDarkTime: (string, {}) => void,
@@ -240,7 +241,7 @@ class SettingsPage extends React.PureComponent<Props, State> {
       hideBalance,
       userBlockedChannelsCount,
       floatingPlayer,
-      // showReposts,
+      hideReposts,
       clearPlayingUri,
       darkModeTimes,
       clearCache,
@@ -434,16 +435,21 @@ class SettingsPage extends React.PureComponent<Props, State> {
                   />
 
                   {/* https://github.com/lbryio/lbry-desktop/issues/3774 */}
-                  {/* <FormField
+                  <FormField
                     type="checkbox"
-                    name="show_reposts"
-                    onChange={() => {
-                      setClientSetting(SETTINGS.SHOW_REPOSTS, !showReposts);
+                    name="hide_reposts"
+                    onChange={e => {
+                      if (isAuthenticated) {
+                        let param = e.target.checked ? { add: 'noreposts' } : { remove: 'noreposts' };
+                        Lbryio.call('user_tag', 'edit', param);
+                      }
+                      // $FlowFixMe could be undefined due to rehydrate
+                      setClientSetting(SETTINGS.HIDE_REPOSTS, !Boolean(hideReposts));
                     }}
-                    checked={showReposts}
-                    label={__('Show reposts')}
-                    helper={__('Show reposts from the creators you follow.')}
-                  /> */}
+                    checked={hideReposts}
+                    label={__('Hide reposts')}
+                    helper={__('You will not see reposts by people you follow or receive email notifying about them.')}
+                  />
 
                   {/* <FormField
                     type="checkbox"

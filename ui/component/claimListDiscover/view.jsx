@@ -23,7 +23,7 @@ type Props = {
   doToggleTagFollowDesktop: string => void,
   meta?: Node,
   showNsfw: boolean,
-  // showReposts: boolean,
+  hideReposts: boolean,
   history: { action: string, push: string => void, replace: string => void },
   location: { search: string, pathname: string },
   claimSearchByQuery: {
@@ -66,7 +66,7 @@ function ClaimListDiscover(props: Props) {
     meta,
     channelIds,
     showNsfw,
-    // showReposts,
+    hideReposts,
     history,
     location,
     hiddenUris,
@@ -247,13 +247,16 @@ function ClaimListDiscover(props: Props) {
     }
   }
   // https://github.com/lbryio/lbry-desktop/issues/3774
-  // if (!showReposts) {
-  //   if (Array.isArray(options.claim_type)) {
-  //     options.claim_type = options.claim_type.filter(claimType => claimType !== 'repost');
-  //   } else {
-  //     options.claim_type = ['stream', 'channel'];
-  //   }
-  // }
+  if (hideReposts && !options.reposted_claim_id) {
+    // and not claimrepostid
+    if (Array.isArray(options.claim_type)) {
+      if (options.claim_type.length > 1) {
+        options.claim_type = options.claim_type.filter(claimType => claimType !== 'repost');
+      }
+    } else {
+      options.claim_type = ['stream', 'channel'];
+    }
+  }
 
   const hasMatureTags = tagsParam && tagsParam.split(',').some(t => MATURE_TAGS.includes(t));
   const claimSearchCacheQuery = createNormalizedClaimSearchKey(options);
