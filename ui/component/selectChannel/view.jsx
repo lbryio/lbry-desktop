@@ -23,7 +23,7 @@ type State = {
   addingChannel: boolean,
 };
 
-class ChannelSection extends React.PureComponent<Props, State> {
+class ChannelSelection extends React.PureComponent<Props, State> {
   constructor(props: Props) {
     super(props);
 
@@ -43,6 +43,13 @@ class ChannelSection extends React.PureComponent<Props, State> {
 
     if ((!channels || !channels.length) && !fetchingChannels) {
       fetchChannelListMine();
+    }
+  }
+
+  componentDidUpdate() {
+    const { channels } = this.props;
+    if (!channels) {
+      this.setState({ addingChannel: true });
     }
   }
 
@@ -105,4 +112,4 @@ class ChannelSection extends React.PureComponent<Props, State> {
   }
 }
 
-export default ChannelSection;
+export default ChannelSelection;
