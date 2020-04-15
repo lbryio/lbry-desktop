@@ -20,7 +20,7 @@ type Props = {
   balance: number,
   daemonSettings: { share_usage_data: boolean },
   setShareDiagnosticData: boolean => void,
-  doSignUp: (string, ?string) => void,
+  doSignUp: (string, ?string) => Promise<any>,
   clearEmailEntry: () => void,
 };
 
@@ -52,11 +52,12 @@ function UserEmailNew(props: Props) {
 
   function handleSubmit() {
     setSync(formSyncEnabled);
-    doSignUp(email, password === '' ? undefined : password);
     // @if TARGET='app'
     setShareDiagnosticData(true);
     // @endif
-    analytics.emailProvidedEvent();
+    doSignUp(email, password === '' ? undefined : password).then(() => {
+      analytics.emailProvidedEvent();
+    });
   }
 
   function handleChangeToSignIn(additionalParams) {
@@ -87,7 +88,7 @@ function UserEmailNew(props: Props) {
   return (
     <div className="main__sign-up">
       <Card
-        title={__('Join lbry.tv')}
+        title={__('Register with lbry.tv')}
         // @if TARGET='app'
         subtitle={__('An account with lbry.tv allows you to earn rewards and backup your data.')}
         // @endif
