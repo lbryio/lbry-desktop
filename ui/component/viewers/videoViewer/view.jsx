@@ -1,9 +1,8 @@
 // @flow
-import React, { useRef, useEffect, useState, useContext } from 'react';
+import React, { useRef, useEffect, useState, useContext, useCallback } from 'react';
 import { stopContextMenu } from 'util/context-menu';
-import videojs from 'video.js/dist/alt/video.core.novtt.min.js';
-import 'video.js/dist/alt/video-js-cdn.min.css';
-import eventTracking from 'videojs-event-tracking';
+import VideoJs from './internal/videojs';
+
 import isUserTyping from 'util/detect-typing';
 import analytics from 'analytics';
 import { EmbedContext } from 'page/embedWrapper/view';
@@ -14,47 +13,11 @@ import usePrevious from 'effects/use-previous';
 import FileViewerEmbeddedEnded from 'lbrytv/component/fileViewerEmbeddedEnded';
 import FileViewerEmbeddedTitle from 'lbrytv/component/fileViewerEmbeddedTitle';
 
-const F11_KEYCODE = 122;
-const SPACE_BAR_KEYCODE = 32;
-const SMALL_F_KEYCODE = 70;
-const SMALL_M_KEYCODE = 77;
-const ARROW_LEFT_KEYCODE = 37;
-const ARROW_RIGHT_KEYCODE = 39;
 
-const FULLSCREEN_KEYCODE = SMALL_F_KEYCODE;
-const MUTE_KEYCODE = SMALL_M_KEYCODE;
 
-const SEEK_FORWARD_KEYCODE = ARROW_RIGHT_KEYCODE;
-const SEEK_BACKWARD_KEYCODE = ARROW_LEFT_KEYCODE;
-
-const SEEK_STEP = 10; // time to seek in seconds
-type VideoJSOptions = {
-  controls: boolean,
-  autoplay: boolean,
-  preload: string,
-  playbackRates: Array<number>,
-  responsive: boolean,
-  poster?: string,
-  muted?: boolean,
-  poseter?: string,
-};
-
-const VIDEO_JS_OPTIONS: VideoJSOptions = {
-  controls: true,
-  autoplay: true,
-  preload: 'auto',
-  playbackRates: [0.25, 0.5, 0.75, 1, 1.1, 1.25, 1.5, 1.75, 2],
-  responsive: true,
-};
-
-if (!Object.keys(videojs.getPlugins()).includes('eventTracking')) {
-  videojs.registerPlugin('eventTracking', eventTracking);
-}
 
 type Props = {
-  volume: number,
   position: number,
-  muted: boolean,
   hasFileInfo: boolean,
   changeVolume: number => void,
   savePosition: (string, number) => void,
@@ -71,14 +34,17 @@ type Props = {
   claimRewards: () => void,
 };
 
+/*
+codesandbox of idealized/clean videojs and react 16+
+https://codesandbox.io/s/71z2lm4ko6
+ */
+
 function VideoViewer(props: Props) {
   const {
     contentType,
     source,
     changeVolume,
     changeMute,
-    volume,
-    muted,
     thumbnail,
     position,
     claim,
@@ -89,185 +55,79 @@ function VideoViewer(props: Props) {
     claimRewards,
   } = props;
   const claimId = claim && claim.claim_id;
-  const videoRef = useRef();
   const isAudio = contentType.includes('audio');
-  const embedded = useContext(EmbedContext);
-
-  if (embedded) {
-    VIDEO_JS_OPTIONS.autoplay = autoplayIfEmbedded;
-    VIDEO_JS_OPTIONS.muted = autoplayIfEmbedded;
-  } else if (autoplaySetting) {
-    VIDEO_JS_OPTIONS.autoplay = autoplaySetting;
-  }
 
   const forcePlayer = FORCE_CONTENT_TYPE_PLAYER.includes(contentType);
-  const [requireRedraw, setRequireRedraw] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
   const [showAutoplayCountdown, setShowAutoplayCountdown] = useState(false);
   const [isEndededEmbed, setIsEndededEmbed] = useState(false);
+  const [player, setPlayer] = useState(null);
+
   const previousUri = usePrevious(uri);
+  const embedded = useContext(EmbedContext);
 
-  let player;
+  function doTrackingBuffered(e: Event, data: any) {
+    analytics.videoBufferEvent(claimId, data.currentTime);
+  }
 
-  useEffect(() => {
-    const { current: videoNode } = videoRef;
-    const videoJsOptions = {
-      ...VIDEO_JS_OPTIONS,
-      sources: [
-        {
-          src: source,
-          type: forcePlayer ? 'video/mp4' : contentType,
-        },
-      ],
-      plugins: { eventTracking: true },
-    };
+  function doTrackingFirstPlay(e: Event, data: any) {
+    console.log('doTrackingFirstPlay: ' + data.secondsToLoad);
 
-    // thumb looks bad in app, and if autoplay, flashing poster is annoying
-    if (isAudio || (embedded && !autoplayIfEmbedded)) {
-      videoJsOptions.poster = thumbnail;
+    analytics.videoStartEvent(claimId, data.secondsToLoad);
+
+    doAnalyticsView(uri, data.secondsToLoad).then(() => {
+      claimRewards();
+    });
+  }
+
+  function onEnded() {
+    if (embedded) {
+      setIsEndededEmbed(true);
+    } else if (autoplaySetting) {
+      setShowAutoplayCountdown(true);
     }
+  }
 
-    if (!requireRedraw) {
-      player = videojs(videoNode, videoJsOptions, function() {
-        if (!autoplayIfEmbedded) player.volume(volume);
-        player.muted(autoplayIfEmbedded || muted);
-      });
-    }
+  function onVolumeChange(e: Event) {
+    const isMuted = player.muted();
+    const volume = player.volume();
+    changeVolume(volume);
+    changeMute(isMuted);
+  }
 
-    return () => {
-      if (!player) {
-        return;
-      }
+  function onPlay() {
+    setIsPlaying(true);
+    setShowAutoplayCountdown(false);
+    setIsEndededEmbed(false);
+  }
 
-      // Video.js has a player.dispose() function that is meant to cleanup a previous video
-      // We can't use this because it does some weird stuff to remove the video element from the page
-      // This makes it really hard to use because the ref we keep still thinks it's on the page
-      // requireRedraw just makes it so the video component is removed from the page _by react_
-      // Then it's set to false immediately after so we can re-mount a new player
-      setRequireRedraw(true);
-    };
-  }, [videoRef, source, contentType, setRequireRedraw, requireRedraw]);
+  function onPause() {
+    setIsPlaying(false);
+  }
 
-  useEffect(() => {
-    if (requireRedraw) {
-      setRequireRedraw(false);
-    }
-  }, [requireRedraw]);
-
-  useEffect(() => {
-    function handleKeyDown(e: KeyboardEvent) {
-      const { current: videoNode } = videoRef;
-
-      if (!videoNode || isUserTyping()) {
-        return;
-      }
-
-      if (e.keyCode === SPACE_BAR_KEYCODE) {
-        videoNode.paused ? videoNode.play() : videoNode.pause();
-      }
-
-      // Fullscreen toggle shortcuts
-      if (e.keyCode === FULLSCREEN_KEYCODE || e.keyCode === F11_KEYCODE) {
-        if (!player.isFullscreen()) {
-          player.requestFullscreen();
-        } else {
-          player.exitFullscreen();
-        }
-      }
-
-      // Mute/Unmute Shortcuts
-      if (e.keyCode === MUTE_KEYCODE) {
-        videoNode.muted = !videoNode.muted;
-      }
-
-      // Seeking Shortcuts
-      const duration = videoNode.duration;
-      const currentTime = videoNode.currentTime;
-      if (e.keyCode === SEEK_FORWARD_KEYCODE) {
-        const newDuration = currentTime + SEEK_STEP;
-        videoNode.currentTime = newDuration > duration ? duration : newDuration;
-      }
-      if (e.keyCode === SEEK_BACKWARD_KEYCODE) {
-        const newDuration = currentTime - SEEK_STEP;
-        videoNode.currentTime = newDuration < 0 ? 0 : newDuration;
-      }
-    }
-
-    window.addEventListener('keydown', handleKeyDown);
-    return () => {
-      window.removeEventListener('keydown', handleKeyDown);
-    };
-
-    // include requireRedraw here so the event listener is re-added when we need to manually remove/add the video player
-  }, [videoRef, requireRedraw, player]);
-
-  // player analytics
-  useEffect(() => {
-    function doTrackingBuffered(e: Event, data: any) {
-      analytics.videoBufferEvent(claimId, data.currentTime);
-    }
-
-    function doTrackingFirstPlay(e: Event, data: any) {
-      analytics.videoStartEvent(claimId, data.secondsToLoad);
-
-      doAnalyticsView(uri, data.secondsToLoad).then(() => {
-        claimRewards();
-      });
-    }
-
-    function doEnded() {
-      if (embedded) {
-        setIsEndededEmbed(true);
-      } else if (autoplaySetting) {
-        setShowAutoplayCountdown(true);
-      }
-    }
-
-    function doVolume(e: Event) {
-      const isMuted = player.muted();
-      const volume = player.volume();
-      changeVolume(volume);
-      changeMute(isMuted);
-    }
-
-    function doPlay() {
-      setIsPlaying(true);
-      setShowAutoplayCountdown(false);
-      setIsEndededEmbed(false);
-    }
-
-    if (player) {
+  const onPlayerReady = useCallback(
+    (player) => {
+      console.log('videoViewer.onPlayerReady attach effects');
       player.on('tracking:buffered', doTrackingBuffered);
 
       player.on('tracking:firstplay', doTrackingFirstPlay);
-      // FIXME: above is not firing on subsequent renders (though the effect fires), maybe below check can reset?
-      if (uri && previousUri !== uri) {
-        // do reset?
-      }
 
-      player.on('ended', doEnded);
-      player.on('volumechange', doVolume);
-      player.on('play', doPlay);
-      player.on('pause', () => setIsPlaying(false));
+      player.on('ended', onEnded);
+      player.on('volumechange', onVolumeChange);
+      player.on('play', onPlay);
+      player.on('pause', onPause);
 
       // fixes #3498 (https://github.com/lbryio/lbry-desktop/issues/3498)
       // summary: on firefox the focus would stick to the fullscreen button which caused buggy behavior with spacebar
       // $FlowFixMe
       player.on('fullscreenchange', () => document.activeElement && document.activeElement.blur());
-    }
 
-    return () => {
-      if (player) {
-        player.off();
+      if (position) {
+        player.currentTime(position);
       }
-    };
-  }, [claimId, player, changeVolume, changeMute]); // FIXME: more dependencies?
+    });
 
-  useEffect(() => {
-    if (player && position) {
-      player.currentTime(position);
-    }
-  }, [player, position]);
+  console.log('VideoViewer render');
 
   return (
     <div
@@ -279,11 +139,14 @@ function VideoViewer(props: Props) {
       {showAutoplayCountdown && <AutoplayCountdown uri={uri} />}
       {isEndededEmbed && <FileViewerEmbeddedEnded uri={uri} />}
       {embedded && !isEndededEmbed && <FileViewerEmbeddedTitle uri={uri} />}
-      {!requireRedraw && (
-        <div data-vjs-player>
-          {isAudio ? <audio ref={videoRef} className="video-js" /> : <video ref={videoRef} className="video-js" />}
-        </div>
-      )}
+      <VideoJs
+        source={source}
+        isAudio={isAudio}
+        poster={isAudio || (embedded && !autoplayIfEmbedded) ? thumbnail : null}
+        sourceType={forcePlayer ? 'video/mp4' : contentType}
+        autoplay={embedded ? autoplayIfEmbedded : true}
+        onPlayerReady={() => {}}
+      />
     </div>
   );
 }
