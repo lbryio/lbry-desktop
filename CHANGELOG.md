@@ -14,6 +14,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ### Changed
 
+- Updated lbry-sdk to [0.69.0](https://github.com/lbryio/lbry-sdk/releases/tag/v0.69.0)
 - Improved file page layout/styling ([#3918](https://github.com/lbryio/lbry-desktop/pull/3918))
 - Now using Github for auto-update downloads ([#3992](https://github.com/lbryio/lbry-desktop/pull/3992))
 
