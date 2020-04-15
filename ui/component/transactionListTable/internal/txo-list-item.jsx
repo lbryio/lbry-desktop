@@ -6,6 +6,7 @@ import CreditAmount from 'component/common/credit-amount';
 import DateTime from 'component/dateTime';
 import Button from 'component/button';
 import Spinner from 'component/spinner';
+import { toCapitalCase } from 'util/string';
 import { buildURI, parseURI, TXO_LIST as TXO, TXO_ABANDON_STATES as TXO_STATES } from 'lbry-redux';
 
 type Props = {
@@ -58,11 +59,8 @@ class TxoListItem extends React.PureComponent<Props, State> {
   }
 
   abandonClaim() {
-    this.props.revokeClaim(this.props.txo, st => this.setState({ abandonState: st }));
-    // this.setState({ disabled: true }); // just flag the item disabled
+    this.props.revokeClaim(this.props.txo, abandonState => this.setState({ abandonState }));
   }
-
-  capitalize = (string: string) => string && string.charAt(0).toUpperCase() + string.slice(1);
 
   render() {
     const { reward, txo, isRevokeable } = this.props;
@@ -75,7 +73,7 @@ class TxoListItem extends React.PureComponent<Props, State> {
       txid,
       type,
       value_type: valueType,
-      is_my_input: isMyInput, // no transaction
+      is_my_input: isMyInput,
       is_my_output: isMyOutput,
     } = txo;
 
@@ -121,9 +119,9 @@ class TxoListItem extends React.PureComponent<Props, State> {
         </td>
         <td className="table__item--actionable">
           <span>
-            {(isTip && __(this.capitalize('tip'))) ||
-              (valueType && __(this.capitalize(valueType))) ||
-              (type && __(this.capitalize(type)))}
+            {(isTip && __(toCapitalCase('tip'))) ||
+              (valueType && __(toCapitalCase(valueType))) ||
+              (type && __(toCapitalCase(type)))}
           </span>{' '}
           {isRevokeable && this.getLink(type)}
         </td>
