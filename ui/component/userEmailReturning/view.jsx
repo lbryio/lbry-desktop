@@ -8,7 +8,6 @@ import { useHistory } from 'react-router-dom';
 import UserEmailVerify from 'component/userEmailVerify';
 import Card from 'component/common/card';
 import Nag from 'component/common/nag';
-import analytics from 'analytics';
 
 type Props = {
   errorMessage: ?string,
@@ -32,7 +31,6 @@ function UserEmailReturning(props: Props) {
 
   function handleSubmit() {
     doUserCheckIfEmailExists(email);
-    analytics.emailProvidedEvent();
   }
 
   function handleChangeToSignIn() {
