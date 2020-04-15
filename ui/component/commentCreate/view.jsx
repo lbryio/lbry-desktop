@@ -4,10 +4,10 @@ import React, { useEffect, useState } from 'react';
 import classnames from 'classnames';
 import { FormField, Form } from 'component/common/form';
 import Button from 'component/button';
-import ChannelSection from 'component/selectChannel';
+import ChannelSelection from 'component/selectChannel';
 import usePersistedState from 'effects/use-persisted-state';
 import * as MODALS from 'constants/modal_types';
-import I18nMessage from '../i18nMessage/view';
+import I18nMessage from 'component/i18nMessage';
 
 type Props = {
   commentingEnabled: boolean,
@@ -94,7 +94,7 @@ export function CommentCreate(props: Props) {
 
   return (
     <Form onSubmit={handleSubmit} className={classnames('comment__create', { 'comment__create--reply': isReply })}>
-      {!isReply && <ChannelSection channel={channel} hideAnon onChannelChange={handleChannelChange} />}
+      {!isReply && <ChannelSelection channel={channel} hideAnon onChannelChange={handleChannelChange} />}
       <FormField
         disabled={channel === CHANNEL_NEW}
         type="textarea"
