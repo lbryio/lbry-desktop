@@ -43,6 +43,11 @@ function TxoList(props: Props) {
     subtype,
   };
 
+  const hideStatus =
+    type === TXO.SENT ||
+    (currentUrlParams.type === TXO.RECEIVED &&
+      (currentUrlParams.subtype === TXO.PAYMENT || currentUrlParams.subtype === TXO.PURCHASE));
+
   const params = {};
   if (currentUrlParams.type) {
     if (currentUrlParams.type === TXO.ALL) {
@@ -54,7 +59,7 @@ function TxoList(props: Props) {
         params[TXO.TX_TYPE] = TXO.SUPPORT;
       } else if (currentUrlParams.subtype === TXO.PURCHASE) {
         params[TXO.TX_TYPE] = TXO.PURCHASE;
-      } else if (currentUrlParams.subtype === TXO.PURCHASE) {
+      } else if (currentUrlParams.subtype === TXO.PAYMENT) {
         params[TXO.TX_TYPE] = TXO.OTHER;
       } else {
         params[TXO.TX_TYPE] = [TXO.OTHER, TXO.PURCHASE, TXO.SUPPORT];
@@ -89,6 +94,7 @@ function TxoList(props: Props) {
       params[TXO.IS_NOT_SPENT] = true;
     }
   }
+
   if (currentUrlParams.page) params[TXO.PAGE] = Number(page);
   if (currentUrlParams.pageSize) params[TXO.PAGE_SIZE] = Number(pageSize);
 
@@ -115,6 +121,7 @@ function TxoList(props: Props) {
       case TXO.TYPE:
         newUrlParams.set(TXO.TYPE, delta.value);
         if (delta.value === TXO.SENT || delta.value === TXO.RECEIVED) {
+          newUrlParams.set(TXO.ACTIVE, 'all');
           if (currentUrlParams.subtype) {
             newUrlParams.set(TXO.SUB_TYPE, currentUrlParams.subtype);
           } else {
@@ -213,37 +220,39 @@ function TxoList(props: Props) {
                   </FormField>
                 </div>
               )}
-              <div>
-                <fieldset-section>
-                  <label>Status</label>
-                  <div className={'txo__radios'}>
-                    <Button
-                      button="alt"
-                      onClick={e => handleChange({ dkey: TXO.ACTIVE, value: 'active' })}
-                      className={classnames(`button-toggle`, {
-                        'button-toggle--active': active === TXO.ACTIVE,
-                      })}
-                      label={__('Active')}
-                    />
-                    <Button
-                      button="alt"
-                      onClick={e => handleChange({ dkey: TXO.ACTIVE, value: 'spent' })}
-                      className={classnames(`button-toggle`, {
-                        'button-toggle--active': active === 'spent',
-                      })}
-                      label={__('Historical')}
-                    />
-                    <Button
-                      button="alt"
-                      onClick={e => handleChange({ dkey: TXO.ACTIVE, value: 'all' })}
-                      className={classnames(`button-toggle`, {
-                        'button-toggle--active': active === 'all',
-                      })}
-                      label={__('All')}
-                    />
-                  </div>
-                </fieldset-section>
-              </div>
+              {!hideStatus && (
+                <div>
+                  <fieldset-section>
+                    <label>Status</label>
+                    <div className={'txo__radios'}>
+                      <Button
+                        button="alt"
+                        onClick={e => handleChange({ dkey: TXO.ACTIVE, value: 'active' })}
+                        className={classnames(`button-toggle`, {
+                          'button-toggle--active': active === TXO.ACTIVE,
+                        })}
+                        label={__('Active')}
+                      />
+                      <Button
+                        button="alt"
+                        onClick={e => handleChange({ dkey: TXO.ACTIVE, value: 'spent' })}
+                        className={classnames(`button-toggle`, {
+                          'button-toggle--active': active === 'spent',
+                        })}
+                        label={__('Historical')}
+                      />
+                      <Button
+                        button="alt"
+                        onClick={e => handleChange({ dkey: TXO.ACTIVE, value: 'all' })}
+                        className={classnames(`button-toggle`, {
+                          'button-toggle--active': active === 'all',
+                        })}
+                        label={__('All')}
+                      />
+                    </div>
+                  </fieldset-section>
+                </div>
+              )}
             </div>
           </div>
           <TransactionListTable txos={txoPage} />
