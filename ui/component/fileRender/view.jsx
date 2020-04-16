@@ -161,10 +161,8 @@ class FileRender extends React.PureComponent<Props, State> {
         return (
           <ThreeViewer
             source={{
-              fileExtension,
+              fileType: fileExtension,
               downloadPath,
-              // ThreeViewer stopped working here https://github.com/lbryio/lbry-desktop/pull/3918/files#diff-440a978a7dea2b088abd77a26fdae9b8L129
-              // It requires `fileType`
             }}
             theme={currentTheme}
           />
