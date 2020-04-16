@@ -120,7 +120,7 @@ class TxoListItem extends React.PureComponent<Props, State> {
         <td className="table__item--actionable">
           <span>
             {(isTip && __(toCapitalCase('tip'))) ||
-              (valueType && __(toCapitalCase(valueType))) ||
+              (valueType && ((valueType === 'stream' && __('Publish')) || __(toCapitalCase(valueType)))) ||
               (type && __(toCapitalCase(type)))}
           </span>{' '}
           {isRevokeable && this.getLink(type)}
