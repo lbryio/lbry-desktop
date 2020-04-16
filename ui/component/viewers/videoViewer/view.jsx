@@ -13,9 +13,6 @@ import usePrevious from 'effects/use-previous';
 import FileViewerEmbeddedEnded from 'lbrytv/component/fileViewerEmbeddedEnded';
 import FileViewerEmbeddedTitle from 'lbrytv/component/fileViewerEmbeddedTitle';
 
-
-
-
 type Props = {
   position: number,
   hasFileInfo: boolean,
@@ -105,27 +102,26 @@ function VideoViewer(props: Props) {
     setIsPlaying(false);
   }
 
-  const onPlayerReady = useCallback(
-    (player) => {
-      console.log('videoViewer.onPlayerReady attach effects');
-      player.on('tracking:buffered', doTrackingBuffered);
+  const onPlayerReady = useCallback(player => {
+    console.log('videoViewer.onPlayerReady attach effects');
+    player.on('tracking:buffered', doTrackingBuffered);
 
-      player.on('tracking:firstplay', doTrackingFirstPlay);
+    player.on('tracking:firstplay', doTrackingFirstPlay);
 
-      player.on('ended', onEnded);
-      player.on('volumechange', onVolumeChange);
-      player.on('play', onPlay);
-      player.on('pause', onPause);
+    player.on('ended', onEnded);
+    player.on('volumechange', onVolumeChange);
+    player.on('play', onPlay);
+    player.on('pause', onPause);
 
-      // fixes #3498 (https://github.com/lbryio/lbry-desktop/issues/3498)
-      // summary: on firefox the focus would stick to the fullscreen button which caused buggy behavior with spacebar
-      // $FlowFixMe
-      player.on('fullscreenchange', () => document.activeElement && document.activeElement.blur());
+    // fixes #3498 (https://github.com/lbryio/lbry-desktop/issues/3498)
+    // summary: on firefox the focus would stick to the fullscreen button which caused buggy behavior with spacebar
+    // $FlowFixMe
+    player.on('fullscreenchange', () => document.activeElement && document.activeElement.blur());
 
-      if (position) {
-        player.currentTime(position);
-      }
-    });
+    if (position) {
+      player.currentTime(position);
+    }
+  }, []);
 
   console.log('VideoViewer render');
 
@@ -145,7 +141,7 @@ function VideoViewer(props: Props) {
         poster={isAudio || (embedded && !autoplayIfEmbedded) ? thumbnail : null}
         sourceType={forcePlayer ? 'video/mp4' : contentType}
         autoplay={embedded ? autoplayIfEmbedded : true}
-        onPlayerReady={() => {}}
+        onPlayerReady={onPlayerReady}
       />
     </div>
   );
