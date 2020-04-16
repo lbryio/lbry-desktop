@@ -1,9 +1,10 @@
+// @flow
 import React, { useContext, useEffect, useRef } from 'react';
 import videojs from 'video.js/dist/alt/video.core.novtt.min.js';
 import 'video.js/dist/alt/video-js-cdn.min.css';
 import eventTracking from 'videojs-event-tracking';
-import { EmbedContext } from '../../../../page/embedWrapper/view';
-import isUserTyping from '../../../../util/detect-typing';
+import { EmbedContext } from 'page/embedWrapper/view';
+import isUserTyping from 'util/detect-typing';
 
 type Props = {
   source: string,
@@ -11,15 +12,8 @@ type Props = {
   poster: boolean,
   autoplay: boolean,
   onPlayerReady: () => null,
+  onVolumeChange: () => null,
   isAudio: boolean,
-};
-
-const VIDEO_JS_OPTIONS: VideoJSOptions = {
-  controls: true,
-  autoplay: true,
-  preload: 'auto',
-  playbackRates: [0.25, 0.5, 0.75, 1, 1.1, 1.25, 1.5, 1.75, 2],
-  responsive: true,
 };
 
 type VideoJSOptions = {
@@ -31,6 +25,14 @@ type VideoJSOptions = {
   poster?: string,
   muted?: boolean,
   poster?: string,
+};
+
+const VIDEO_JS_OPTIONS: VideoJSOptions = {
+  controls: true,
+  autoplay: true,
+  preload: 'auto',
+  playbackRates: [0.25, 0.5, 0.75, 1, 1.1, 1.25, 1.5, 1.75, 2],
+  responsive: true,
 };
 
 const F11_KEYCODE = 122;
@@ -57,7 +59,7 @@ properties for this component should be kept to ONLY those that if changed shoul
  */
 export default React.memo(function VideoJs(props: Props) {
   const { autoplay, source, sourceType, poster, isAudio, onPlayerReady } = props;
-  const videoRef = useRef();
+  const containerRef = useRef();
   const embedded = useContext(EmbedContext);
   const videoJsOptions = {
     ...VIDEO_JS_OPTIONS,
@@ -75,7 +77,7 @@ export default React.memo(function VideoJs(props: Props) {
   videoJsOptions.muted = autoplay && embedded;
 
   function handleKeyDown(e: KeyboardEvent) {
-    const { current: videoNode } = videoRef;
+    const videoNode = containerRef.current && containerRef.current.querySelector('video, audio');
 
     if (!videoNode || isUserTyping()) {
       return;
@@ -113,27 +115,33 @@ export default React.memo(function VideoJs(props: Props) {
   }
 
   let player;
-  useEffect(() => {
-    if (videoRef.current) {
-      console.log('videojs effect to instatiate player');
-      const { current: videoNode } = videoRef;
 
-      player = videojs(videoNode, videoJsOptions);
+  // Create the video element. Note that a new videojs instantiation will happen on *every* render, so do not add props to this component!
+  useEffect(() => {
+    if (containerRef.current) {
+      const wrapper = document.createElement('div');
+      wrapper.setAttribute('data-vjs-player', true);
+      const el = document.createElement(isAudio ? 'audio' : 'video');
+      el.className = 'video-js';
+      wrapper.appendChild(el);
+      containerRef.current.appendChild(wrapper);
+
+      player = videojs(el, videoJsOptions);
       onPlayerReady(player);
+
+      // fixes #3498 (https://github.com/lbryio/lbry-desktop/issues/3498)
+      // summary: on firefox the focus would stick to the fullscreen button which caused buggy behavior with spacebar
+      // $FlowFixMe
+      player.on('fullscreenchange', () => document.activeElement && document.activeElement.blur());
 
       window.addEventListener('keydown', handleKeyDown);
 
       return () => {
-        console.log('videojs effect cleanup to dispose player');
         window.removeEventListener('keydown', handleKeyDown);
         player.dispose();
       };
     }
   });
 
-  return (
-    <div data-vjs-player>
-      {isAudio ? <audio ref={videoRef} className="video-js" /> : <video ref={videoRef} className="video-js" />}
-    </div>
-  );
+  return <div className="video-js-parent" ref={containerRef} />;
 });

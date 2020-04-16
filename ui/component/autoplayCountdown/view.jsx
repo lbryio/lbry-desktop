@@ -1,5 +1,5 @@
 // @flow
-import React from 'react';
+import React, { useCallback } from 'react';
 import Button from 'component/button';
 import UriIndicator from 'component/uriIndicator';
 import I18nMessage from 'component/i18nMessage';
@@ -35,20 +35,22 @@ function AutoplayCountdown(props: Props) {
     navigateUrl = formatLbryUrlForWeb(nextRecommendedUri);
   }
 
-  function doNavigate() {
-    // FIXME: make autoplay continue in floating player
+  const doNavigate = useCallback(() => {
     if (!isFloating) {
-      // if not floating
-      setPlayingUri(null);
-      push(navigateUrl);
+      if (navigateUrl) {
+        push(navigateUrl);
+        setPlayingUri(null);
+      }
     } else {
-      setPlayingUri(nextRecommendedUri);
+      if (nextRecommendedUri) {
+        setPlayingUri(nextRecommendedUri);
+      }
     }
-  }
+  }, [navigateUrl, nextRecommendedUri, isFloating, setPlayingUri]);
 
   React.useEffect(() => {
     let interval;
-    if (!timerCanceled) {
+    if (!timerCanceled && nextRecommendedUri) {
       interval = setInterval(() => {
         const newTime = timer - 1;
         if (newTime === 0) {
@@ -82,10 +84,10 @@ function AutoplayCountdown(props: Props) {
             <Button onClick={doNavigate} iconSize={30} title={__('Play')} className="button--icon button--play" />
           </div>
           <div className="file-viewer__overlay-secondary autoplay-countdown__counter">
-            {__('Playing in %seconds_left% seconds', { seconds_left: timer })}
+            {__('Playing in %seconds_left% seconds...', { seconds_left: timer })}{' '}
+            <Button label={__('Cancel')} button="link" onClick={() => setTimerCanceled(true)} />
           </div>
         </div>
-        <Button label={__('Cancel')} button="link" onClick={() => setTimerCanceled(true)} />
       </div>
     </div>
   );
