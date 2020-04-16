@@ -55,7 +55,7 @@ if (!Object.keys(videojs.getPlugins()).includes('eventTracking')) {
 /*
 properties for this component should be kept to ONLY those that if changed should REQUIRE an entirely new videojs element
  */
-export default function VideoJs(props: Props) {
+export default React.memo(function VideoJs(props: Props) {
   const { autoplay, source, sourceType, poster, isAudio, onPlayerReady } = props;
   const videoRef = useRef();
   const embedded = useContext(EmbedContext);
@@ -73,7 +73,6 @@ export default function VideoJs(props: Props) {
 
   videoJsOptions.autoplay = autoplay;
   videoJsOptions.muted = autoplay && embedded;
-
 
   function handleKeyDown(e: KeyboardEvent) {
     const { current: videoNode } = videoRef;
@@ -116,7 +115,7 @@ export default function VideoJs(props: Props) {
   let player;
   useEffect(() => {
     if (videoRef.current) {
-      console.log('videojs effect to instatiate player')
+      console.log('videojs effect to instatiate player');
       const { current: videoNode } = videoRef;
 
       player = videojs(videoNode, videoJsOptions);
@@ -132,7 +131,9 @@ export default function VideoJs(props: Props) {
     }
   });
 
-  return <div data-vjs-player>
-    {isAudio ? <audio ref={videoRef} className="video-js" /> : <video ref={videoRef} className="video-js" />}
-  </div>
-}
+  return (
+    <div data-vjs-player>
+      {isAudio ? <audio ref={videoRef} className="video-js" /> : <video ref={videoRef} className="video-js" />}
+    </div>
+  );
+});
