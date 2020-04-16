@@ -31,7 +31,7 @@ class ComicBookViewer extends React.PureComponent<Props> {
       allowGlobalShortcuts: true,
     };
 
-    return <Villain file={file} style={{ width: '100%', height: '100%' }} options={opts} workerUrl={workerUrl} />;
+    return <Villain source={file} style={{ width: '100%', height: '100%' }} options={opts} workerUrl={workerUrl} />;
   }
 }
 
