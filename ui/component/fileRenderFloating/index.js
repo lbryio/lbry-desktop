@@ -2,7 +2,6 @@ import * as SETTINGS from 'constants/settings';
 import { connect } from 'react-redux';
 import { makeSelectFileInfoForUri, makeSelectTitleForUri } from 'lbry-redux';
 import {
-  makeSelectIsPlaying,
   makeSelectIsPlayerFloating,
   selectPlayingUri,
   makeSelectFileRenderModeForUri,
@@ -19,7 +18,6 @@ const select = (state, props) => {
     uri,
     title: makeSelectTitleForUri(uri)(state),
     fileInfo: makeSelectFileInfoForUri(uri)(state),
-    isPlaying: makeSelectIsPlaying(uri)(state),
     isFloating: makeSelectIsPlayerFloating(props.location)(state),
     streamingUrl: makeSelectStreamingUrlForUriWebProxy(uri)(state),
     floatingPlayerEnabled: makeSelectClientSetting(SETTINGS.FLOATING_PLAYER)(state),

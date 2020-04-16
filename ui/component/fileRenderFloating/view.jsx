@@ -15,8 +15,6 @@ import { onFullscreenChange } from 'util/full-screen';
 import useIsMobile from 'effects/use-is-mobile';
 
 type Props = {
-  isLoading: boolean,
-  isPlaying: boolean,
   isFloating: boolean,
   fileInfo: FileListItem,
   uri: string,
@@ -28,17 +26,7 @@ type Props = {
 };
 
 export default function FileRenderFloating(props: Props) {
-  const {
-    isPlaying,
-    fileInfo,
-    uri,
-    streamingUrl,
-    title,
-    isFloating,
-    clearPlayingUri,
-    floatingPlayerEnabled,
-    renderMode,
-  } = props;
+  const { fileInfo, uri, streamingUrl, title, isFloating, clearPlayingUri, floatingPlayerEnabled, renderMode } = props;
 
   const isMobile = useIsMobile();
   const [fileViewerRect, setFileViewerRect] = usePersistedState('inline-file-viewer:rect');
@@ -75,7 +63,7 @@ export default function FileRenderFloating(props: Props) {
     };
   }, [setFileViewerRect, isFloating]);
 
-  if (!isPlayable || !isPlaying || !uri || (isFloating && (isMobile || !floatingPlayerEnabled))) {
+  if (!isPlayable || !uri || (isFloating && (isMobile || !floatingPlayerEnabled))) {
     return null;
   }
 

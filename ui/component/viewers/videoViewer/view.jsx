@@ -1,9 +1,8 @@
 // @flow
-import React, { useRef, useEffect, useState, useContext, useCallback } from 'react';
+import React, { useEffect, useState, useContext, useCallback } from 'react';
 import { stopContextMenu } from 'util/context-menu';
 import VideoJs from './internal/videojs';
 
-import isUserTyping from 'util/detect-typing';
 import analytics from 'analytics';
 import { EmbedContext } from 'page/embedWrapper/view';
 import classnames from 'classnames';
@@ -12,18 +11,18 @@ import AutoplayCountdown from 'component/autoplayCountdown';
 import usePrevious from 'effects/use-previous';
 import FileViewerEmbeddedEnded from 'lbrytv/component/fileViewerEmbeddedEnded';
 import FileViewerEmbeddedTitle from 'lbrytv/component/fileViewerEmbeddedTitle';
+import LoadingScreen from 'component/common/loading-screen';
 
 type Props = {
   position: number,
-  hasFileInfo: boolean,
   changeVolume: number => void,
-  savePosition: (string, number) => void,
   changeMute: boolean => void,
   source: string,
   contentType: string,
   thumbnail: string,
-  hasFileInfo: boolean,
   claim: Claim,
+  muted: boolean,
+  volume: number,
   uri: string,
   autoplaySetting: boolean,
   autoplayIfEmbedded: boolean,
@@ -46,6 +45,8 @@ function VideoViewer(props: Props) {
     position,
     claim,
     uri,
+    muted,
+    volume,
     autoplaySetting,
     autoplayIfEmbedded,
     doAnalyticsView,
@@ -58,18 +59,25 @@ function VideoViewer(props: Props) {
   const [isPlaying, setIsPlaying] = useState(false);
   const [showAutoplayCountdown, setShowAutoplayCountdown] = useState(false);
   const [isEndededEmbed, setIsEndededEmbed] = useState(false);
-  const [player, setPlayer] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   const previousUri = usePrevious(uri);
   const embedded = useContext(EmbedContext);
+
+  // force everything to recent when URI changes, can cause weird corner cases otherwise (e.g. navigate while autoplay is true)
+  useEffect(() => {
+    if (uri && previousUri && uri !== previousUri) {
+      setShowAutoplayCountdown(false);
+      setIsEndededEmbed(false);
+      setIsLoading(false);
+    }
+  }, [uri, previousUri]);
 
   function doTrackingBuffered(e: Event, data: any) {
     analytics.videoBufferEvent(claimId, data.currentTime);
   }
 
   function doTrackingFirstPlay(e: Event, data: any) {
-    console.log('doTrackingFirstPlay: ' + data.secondsToLoad);
-
     analytics.videoStartEvent(claimId, data.secondsToLoad);
 
     doAnalyticsView(uri, data.secondsToLoad).then(() => {
@@ -85,14 +93,8 @@ function VideoViewer(props: Props) {
     }
   }
 
-  function onVolumeChange(e: Event) {
-    const isMuted = player.muted();
-    const volume = player.volume();
-    changeVolume(volume);
-    changeMute(isMuted);
-  }
-
   function onPlay() {
+    setIsLoading(false);
     setIsPlaying(true);
     setShowAutoplayCountdown(false);
     setIsEndededEmbed(false);
@@ -103,38 +105,50 @@ function VideoViewer(props: Props) {
   }
 
   const onPlayerReady = useCallback(player => {
-    console.log('videoViewer.onPlayerReady attach effects');
+    setIsLoading(!embedded); // if we are here outside of an embed, we're playing
+
     player.on('tracking:buffered', doTrackingBuffered);
-
     player.on('tracking:firstplay', doTrackingFirstPlay);
-
     player.on('ended', onEnded);
-    player.on('volumechange', onVolumeChange);
     player.on('play', onPlay);
     player.on('pause', onPause);
-
-    // fixes #3498 (https://github.com/lbryio/lbry-desktop/issues/3498)
-    // summary: on firefox the focus would stick to the fullscreen button which caused buggy behavior with spacebar
-    // $FlowFixMe
-    player.on('fullscreenchange', () => document.activeElement && document.activeElement.blur());
+    player.on('volumechange', () => {
+      if (player && player.volume() !== volume) {
+        changeVolume(player.volume());
+      }
+      if (player && player.muted() !== muted) {
+        changeMute(player.muted());
+      }
+    });
 
     if (position) {
       player.currentTime(position);
     }
-  }, []);
 
-  console.log('VideoViewer render');
+    // FIXME: below breaks rendering?!
+    /* if (!embedded) {
+      if (muted) {
+        player.muted(muted);
+      }
+      if (volume) {
+        player.volume(volume);
+      }
+    } */
+  }, []);
 
   return (
     <div
       className={classnames('file-viewer', {
         'file-viewer--is-playing': isPlaying,
+        'file-viewer--ended-embed': isEndededEmbed,
       })}
       onContextMenu={stopContextMenu}
     >
       {showAutoplayCountdown && <AutoplayCountdown uri={uri} />}
       {isEndededEmbed && <FileViewerEmbeddedEnded uri={uri} />}
       {embedded && !isEndededEmbed && <FileViewerEmbeddedTitle uri={uri} />}
+      {/* change message at any time */}
+      {isLoading && <LoadingScreen status={__('Loading')} />}
       <VideoJs
         source={source}
         isAudio={isAudio}
