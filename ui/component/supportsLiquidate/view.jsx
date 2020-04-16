@@ -29,9 +29,9 @@ const SupportsLiquidate = (props: Props) => {
   const initialMessage = __('How much would you like to unlock?');
   const [message, setMessage] = useState(initialMessage);
   const keep =
-    previewBalance && amount && Number(amount) < previewBalance
-      ? Number.parseFloat(String(previewBalance - Number(amount))).toFixed(8)
-      : false;
+    amount >= 0
+      ? Boolean(previewBalance) && Number.parseFloat(String(Number(previewBalance) - Number(amount))).toFixed(8)
+      : Boolean(previewBalance) && Number.parseFloat(String((Number(previewBalance) / 4) * 3)).toFixed(8); // default unlock 25%
   const claimId = claim && claim.claim_id;
   const type = claim.value_type;
 
