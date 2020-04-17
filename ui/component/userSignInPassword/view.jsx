@@ -3,7 +3,6 @@ import React, { useState } from 'react';
 import { FormField, Form } from 'component/common/form';
 import Button from 'component/button';
 import Card from 'component/common/card';
-import analytics from 'analytics';
 import Nag from 'component/common/nag';
 import UserPasswordReset from 'component/userPasswordReset';
 
@@ -23,7 +22,6 @@ export default function UserSignInPassword(props: Props) {
   function handleSubmit() {
     if (emailToVerify) {
       doUserSignIn(emailToVerify, password);
-      analytics.emailProvidedEvent();
     }
   }
 
