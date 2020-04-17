@@ -94,7 +94,10 @@ const Button = forwardRef<any, {}>((props: Props, ref: any) => {
     <span className="button__content">
       {icon && <Icon icon={icon} iconColor={iconColor} size={iconSize} />}
 
-      {label && (
+      {!largestLabel && label && <span className="button__label">{label}</span>}
+
+      {/* largestLabel is used when a single button has two different labels based on hover state */}
+      {largestLabel && (
         <div className="button__label" style={{ position: 'relative' }}>
           <div
             style={{
@@ -156,7 +159,7 @@ const Button = forwardRef<any, {}>((props: Props, ref: any) => {
     return (
       <NavLink
         exact
-        onClick={(e) => {
+        onClick={e => {
           e.stopPropagation();
         }}
         to={`/$/${PAGES.AUTH}?redirect=${pathname}`}
@@ -176,7 +179,7 @@ const Button = forwardRef<any, {}>((props: Props, ref: any) => {
       to={path}
       title={title}
       disabled={disabled}
-      onClick={(e) => {
+      onClick={e => {
         e.stopPropagation();
         if (onClick) {
           onClick();
@@ -194,7 +197,7 @@ const Button = forwardRef<any, {}>((props: Props, ref: any) => {
       title={title}
       aria-label={description || label || title}
       className={combinedClassName}
-      onClick={(e) => {
+      onClick={e => {
         if (onClick) {
           e.stopPropagation();
           onClick(e);
