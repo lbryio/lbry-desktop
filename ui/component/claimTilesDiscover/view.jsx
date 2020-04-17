@@ -4,6 +4,7 @@ import { createNormalizedClaimSearchKey, MATURE_TAGS } from 'lbry-redux';
 import ClaimPreviewTile from 'component/claimPreviewTile';
 
 type Props = {
+  prefixUris?: Array<string>,
   uris: Array<string>,
   doClaimSearch: ({}) => void,
   showNsfw: boolean,
@@ -39,6 +40,7 @@ function ClaimTilesDiscover(props: Props) {
     pageSize = 8,
     releaseTime,
     claimType,
+    prefixUris,
     timestamp,
   } = props;
   const [hasSearched, setHasSearched] = React.useState(false);
@@ -92,7 +94,7 @@ function ClaimTilesDiscover(props: Props) {
   }
 
   const claimSearchCacheQuery = createNormalizedClaimSearchKey(options);
-  const uris = claimSearchByQuery[claimSearchCacheQuery] || [];
+  const uris = (prefixUris || []).concat(claimSearchByQuery[claimSearchCacheQuery] || []);
   const shouldPerformSearch = !hasSearched || uris.length === 0;
   // Don't use the query from createNormalizedClaimSearchKey for the effect since that doesn't include page & release_time
   const optionsStringForEffect = JSON.stringify(options);

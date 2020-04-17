@@ -7,7 +7,6 @@ import moment from 'moment';
 import Page from 'component/page';
 import Button from 'component/button';
 import ClaimTilesDiscover from 'component/claimTilesDiscover';
-import Icon from 'component/common/icon';
 import I18nMessage from 'component/i18nMessage';
 import { parseURI } from 'lbry-redux';
 import { toCapitalCase } from 'util/string';
@@ -118,6 +117,17 @@ function HomePage(props: Props) {
     },
   });
 
+  rowData.push({
+    title: '#covidcuts',
+    link: `/$/${PAGES.DISCOVER}?t=covidcuts&${CS.ORDER_BY_KEY}=${CS.ORDER_BY_NEW}`,
+    options: {
+      tags: ['covidcuts'],
+      orderBy: ['release_time'],
+      pageSize: 3,
+      prefixUris: ['lbry://@lbry#3f/covidcuts'],
+    },
+  });
+
   if (!showPersonalizedChannels) {
     rowData.push({
       title: 'Top Channels On LBRY',
@@ -129,50 +139,20 @@ function HomePage(props: Props) {
     });
   }
 
-  rowData.push(
-    {
-      title: 'Trending Classics',
-      link: `/$/${PAGES.DISCOVER}?${CS.ORDER_BY_KEY}=${CS.ORDER_BY_TRENDING}&${CS.FRESH_KEY}=${CS.FRESH_WEEK}`,
-      options: {
-        pageSize: 4,
-        claimType: ['stream'],
-        releaseTime: `<${Math.floor(
-          moment()
-            .subtract(6, 'month')
-            .startOf('day')
-            .unix()
-        )}`,
-      },
-    }
-    /* the cagematch will return in some form! - Jeremy
-  {
-    title: '#HomePageCageMatch',
-    link: `/$/${PAGES.DISCOVER}?t=homepagecagematch&${CS.ORDER_BY_KEY}=${CS.ORDER_BY_TOP}&${CS.FRESH_KEY}=${
-      CS.FRESH_ALL
-    }`,
-    help: (
-      <div className="claim-grid__help">
-        <Icon
-          icon={ICONS.HELP}
-          tooltip
-          customTooltipText={__(
-            'This is an experiment, and may be removed in the future. Publish something with the #homepagecagematch tag to battle for the top spot on the home page!'
-          )}
-        />
-      </div>
-    ),
+  rowData.push({
+    title: 'Trending Classics',
+    link: `/$/${PAGES.DISCOVER}?${CS.ORDER_BY_KEY}=${CS.ORDER_BY_TRENDING}&${CS.FRESH_KEY}=${CS.FRESH_WEEK}`,
     options: {
-      tags: ['homepagecagematch'],
-      orderBy: ['effective_amount'],
-      timestamp: `>${Math.floor(
+      pageSize: 4,
+      claimType: ['stream'],
+      releaseTime: `<${Math.floor(
         moment()
-          .subtract(1, 'week')
+          .subtract(6, 'month')
           .startOf('day')
           .unix()
       )}`,
     },
-    } */
-  );
+  });
 
   rowData.push({
     title: 'Latest From @lbrycast',
