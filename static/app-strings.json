@@ -1157,5 +1157,9 @@
   "Default": "Default",
   "Amount (LBC)": "Amount (LBC)",
   "Successfully unlocked your tip!": "Successfully unlocked your tip!",
-  "Successfully abandoned your claim.": "Successfully abandoned your claim."
+  "Successfully abandoned your claim.": "Successfully abandoned your claim.",
+  "You have %count% blocked %channels%.": "You have %count% blocked %channels%.",
+  "Account Password": "Account Password",
+  "You do not currently have a password set.": "You do not currently have a password set.",
+  "Add A Password": "Add A Password"
 }
