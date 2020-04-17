@@ -52,6 +52,7 @@ function TxoList(props: Props) {
   if (currentUrlParams.type) {
     if (currentUrlParams.type === TXO.ALL) {
       params[TXO.EXCLUDE_INTERNAL_TRANSFERS] = true;
+      params[TXO.IS_MY_INPUT_OR_OUTPUT] = true;
     } else if (currentUrlParams.type === TXO.SENT) {
       params[TXO.IS_MY_INPUT] = true;
       params[TXO.IS_NOT_MY_OUTPUT] = true;
