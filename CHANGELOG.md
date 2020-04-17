@@ -14,7 +14,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ### Changed
 
-- Updated lbry-sdk to [0.69.0](https://github.com/lbryio/lbry-sdk/releases/tag/v0.69.0)
+- Updated lbry-sdk to [0.69.1](https://github.com/lbryio/lbry-sdk/releases/tag/v0.69.1)
 - Improved file page layout/styling ([#3918](https://github.com/lbryio/lbry-desktop/pull/3918))
 - Now using Github for auto-update downloads ([#3992](https://github.com/lbryio/lbry-desktop/pull/3992))
 - Now paginating wallet history using txo_list ([#3979](https://github.com/lbryio/lbry-desktop/pull/3979))
@@ -23,6 +23,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 - Images were sometimes cut off depending on screen size _community pr!_ ([#3991](https://github.com/lbryio/lbry-desktop/pull/3991))
 - Error styling on repost modal ([#3943](https://github.com/lbryio/lbry-desktop/pull/3943))
+- Fix glitchy "follow" button _community pr!_ ([#3963](https://github.com/lbryio/lbry-desktop/pull/3963))
 
 ## [0.44.0] - [2020-04-01]
 
