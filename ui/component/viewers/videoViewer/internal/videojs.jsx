@@ -126,8 +126,9 @@ export default React.memo(function VideoJs(props: Props) {
       wrapper.appendChild(el);
       containerRef.current.appendChild(wrapper);
 
-      player = videojs(el, videoJsOptions);
-      onPlayerReady(player);
+      player = videojs(el, videoJsOptions, () => {
+        onPlayerReady(player);
+      });
 
       // fixes #3498 (https://github.com/lbryio/lbry-desktop/issues/3498)
       // summary: on firefox the focus would stick to the fullscreen button which caused buggy behavior with spacebar
