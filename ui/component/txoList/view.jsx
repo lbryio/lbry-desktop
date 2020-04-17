@@ -129,7 +129,7 @@ function TxoList(props: Props) {
             newUrlParams.set(TXO.SUB_TYPE, 'all');
           }
         }
-        if (currentUrlParams.active) {
+        if (currentUrlParams.active && !hideStatus) {
           newUrlParams.set(TXO.ACTIVE, currentUrlParams.active);
         } else {
           newUrlParams.set(TXO.ACTIVE, 'all');
@@ -158,6 +158,7 @@ function TxoList(props: Props) {
         newUrlParams.set(TXO.PAGE_SIZE, currentUrlParams.pageSize);
         break;
     }
+
     return `?${newUrlParams.toString()}`;
   }
 
