@@ -44,9 +44,7 @@ function TxoList(props: Props) {
   };
 
   const hideStatus =
-    type === TXO.SENT ||
-    (currentUrlParams.type === TXO.RECEIVED &&
-      (currentUrlParams.subtype === TXO.PAYMENT || currentUrlParams.subtype === TXO.PURCHASE));
+    type === TXO.SENT || (currentUrlParams.type === TXO.RECEIVED && currentUrlParams.subtype !== TXO.TIP);
 
   const params = {};
   if (currentUrlParams.type) {
