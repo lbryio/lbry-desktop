@@ -78,6 +78,15 @@ function VideoViewer(props: Props) {
   }
 
   function doTrackingFirstPlay(e: Event, data: any) {
+    if (!embedded) {
+      if (muted) {
+        this.muted(muted);
+      }
+      if (volume) {
+        this.volume(volume);
+      }
+    }
+
     analytics.videoStartEvent(claimId, data.secondsToLoad);
 
     doAnalyticsView(uri, data.secondsToLoad).then(() => {
@@ -108,7 +117,7 @@ function VideoViewer(props: Props) {
     setIsLoading(!embedded); // if we are here outside of an embed, we're playing
 
     player.on('tracking:buffered', doTrackingBuffered);
-    player.on('tracking:firstplay', doTrackingFirstPlay);
+    player.on('tracking:firstplay', doTrackingFirstPlay.bind(player));
     player.on('ended', onEnded);
     player.on('play', onPlay);
     player.on('pause', onPause);
@@ -124,16 +133,6 @@ function VideoViewer(props: Props) {
     if (position) {
       player.currentTime(position);
     }
-
-    // FIXME: below breaks rendering?!
-    /* if (!embedded) {
-      if (muted) {
-        player.muted(muted);
-      }
-      if (volume) {
-        player.volume(volume);
-      }
-    } */
   }, []);
 
   return (
