@@ -16,7 +16,6 @@ function ImageViewer(props: Props) {
       {loadingError && (
         <Card
           title={__('Error Displaying Image')}
-          defaultExpand
           actions={<ErrorText>There was an error displaying the image. You may still download it.</ErrorText>}
         />
       )}
