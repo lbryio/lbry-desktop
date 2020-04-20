@@ -69,6 +69,7 @@ function UserSignIn(props: Props) {
   const hasVerifiedEmail = user && user.has_verified_email;
   const rewardsApproved = user && user.is_reward_approved;
   const isIdentityVerified = user && user.is_identity_verified;
+  const passwordSet = user && user.password_set;
   const hasFetchedReward = useFetched(claimingReward);
   const channelCount = channels ? channels.length : 0;
   const hasClaimedEmailAward = claimedRewards.some(reward => reward.reward_type === REWARDS.TYPE_CONFIRM_EMAIL);
@@ -84,7 +85,7 @@ function UserSignIn(props: Props) {
   // reward claiming, channel creation, account syncing, and youtube transfer
   // The possible screens for the sign in flow
   const showEmail = !hasVerifiedEmail;
-  const showEmailVerification = emailToVerify && !hasVerifiedEmail;
+  const showEmailVerification = (emailToVerify && !hasVerifiedEmail) || (!hasVerifiedEmail && passwordSet);
   const showUserVerification = hasVerifiedEmail && !rewardsApproved && !isIdentityVerified && !hasSkippedRewards;
   const showSyncPassword = syncEnabled && getSyncError;
   const showChannelCreation =

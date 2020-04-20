@@ -18,7 +18,7 @@ type Props = {
 function UserFirstChannel(props: Props) {
   const { createChannel, creatingChannel, claimingReward, user, createChannelError } = props;
   const { primary_email: primaryEmail } = user;
-  const initialChannel = primaryEmail.split('@')[0];
+  const initialChannel = primaryEmail ? primaryEmail.split('@')[0] : '';
   const [channel, setChannel] = useState(initialChannel);
   const [nameError, setNameError] = useState(undefined);
 
