@@ -11,6 +11,7 @@ import Card from 'component/common/card';
 import Nag from 'component/common/nag';
 
 type Props = {
+  user: ?User,
   errorMessage: ?string,
   emailToVerify: ?string,
   emailDoesNotExist: boolean,
@@ -22,6 +23,7 @@ type Props = {
 
 function UserEmailReturning(props: Props) {
   const {
+    user,
     errorMessage,
     doUserCheckIfEmailExists,
     emailToVerify,
@@ -34,11 +36,13 @@ function UserEmailReturning(props: Props) {
   const emailFromUrl = urlParams.get('email');
   const emailExistsFromUrl = urlParams.get('email_exists');
   const defaultEmail = emailFromUrl ? decodeURIComponent(emailFromUrl) : '';
+  const hasPasswordSet = user && user.password_set;
+
   const [email, setEmail] = useState(defaultEmail);
   const [syncEnabled, setSyncEnabled] = useState(true);
 
   const valid = email.match(EMAIL_REGEX);
-  const showEmailVerification = emailToVerify;
+  const showEmailVerification = emailToVerify || hasPasswordSet;
 
   function handleSubmit() {
     // @if TARGET='app'

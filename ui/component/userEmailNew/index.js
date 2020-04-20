@@ -6,6 +6,7 @@ import {
   selectEmailAlreadyExists,
   doUserSignUp,
   doClearEmailEntry,
+  selectUser,
 } from 'lbryinc';
 import { DAEMON_SETTINGS } from 'lbry-redux';
 import { doSetClientSetting, doSetDaemonSetting } from 'redux/actions/settings';
@@ -18,6 +19,7 @@ const select = state => ({
   syncEnabled: makeSelectClientSetting(SETTINGS.ENABLE_SYNC)(state),
   daemonSettings: selectDaemonSettings(state),
   emailExists: selectEmailAlreadyExists(state),
+  user: selectUser(state),
 });
 
 const perform = dispatch => ({
