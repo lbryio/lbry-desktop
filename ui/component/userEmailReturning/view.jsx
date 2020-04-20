@@ -1,4 +1,5 @@
 // @flow
+import * as SETTINGS from 'constants/settings';
 import * as PAGES from 'constants/pages';
 import React, { useState } from 'react';
 import { FormField, Form } from 'component/common/form';
@@ -16,20 +17,33 @@ type Props = {
   doClearEmailEntry: () => void,
   doUserSignIn: (string, ?string) => void,
   doUserCheckIfEmailExists: string => void,
+  doSetClientSetting: (string, boolean) => void,
 };
 
 function UserEmailReturning(props: Props) {
-  const { errorMessage, doUserCheckIfEmailExists, emailToVerify, doClearEmailEntry, emailDoesNotExist } = props;
+  const {
+    errorMessage,
+    doUserCheckIfEmailExists,
+    emailToVerify,
+    doClearEmailEntry,
+    emailDoesNotExist,
+    doSetClientSetting,
+  } = props;
   const { push, location } = useHistory();
   const urlParams = new URLSearchParams(location.search);
   const emailFromUrl = urlParams.get('email');
   const emailExistsFromUrl = urlParams.get('email_exists');
   const defaultEmail = emailFromUrl ? decodeURIComponent(emailFromUrl) : '';
   const [email, setEmail] = useState(defaultEmail);
+  const [syncEnabled, setSyncEnabled] = useState(true);
+
   const valid = email.match(EMAIL_REGEX);
   const showEmailVerification = emailToVerify;
 
   function handleSubmit() {
+    // @if TARGET='app'
+    doSetClientSetting(SETTINGS.ENABLE_SYNC, syncEnabled);
+    // @endif
     doUserCheckIfEmailExists(email);
   }
 
@@ -68,6 +82,21 @@ function UserEmailReturning(props: Props) {
                   value={email}
                   onChange={e => setEmail(e.target.value)}
                 />
+
+                {/* @if TARGET='app' */}
+                <FormField
+                  type="checkbox"
+                  name="sync_checkbox"
+                  label={
+                    <React.Fragment>
+                      {__('Backup your account and wallet data.')}{' '}
+                      <Button button="link" href="https://lbry.com/faq/account-sync" label={__('Learn More')} />
+                    </React.Fragment>
+                  }
+                  checked={syncEnabled}
+                  onChange={() => setSyncEnabled(!syncEnabled)}
+                />
+                {/* @endif */}
 
                 <div className="section__actions">
                   <Button

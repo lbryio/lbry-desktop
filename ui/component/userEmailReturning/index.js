@@ -7,6 +7,7 @@ import {
   selectEmailDoesNotExist,
   selectEmailAlreadyExists,
 } from 'lbryinc';
+import { doSetClientSetting } from 'redux/actions/settings';
 import UserEmailReturning from './view';
 
 const select = state => ({
@@ -19,4 +20,5 @@ const select = state => ({
 export default connect(select, {
   doUserCheckIfEmailExists,
   doClearEmailEntry,
+  doSetClientSetting,
 })(UserEmailReturning);
