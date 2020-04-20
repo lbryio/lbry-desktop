@@ -79,12 +79,8 @@ function VideoViewer(props: Props) {
 
   function doTrackingFirstPlay(e: Event, data: any) {
     if (!embedded) {
-      if (muted) {
-        this.muted(muted);
-      }
-      if (volume) {
-        this.volume(volume);
-      }
+      this.muted(muted);
+      this.volume(volume);
     }
 
     analytics.videoStartEvent(claimId, data.secondsToLoad);
@@ -115,7 +111,6 @@ function VideoViewer(props: Props) {
 
   const onPlayerReady = useCallback(player => {
     setIsLoading(!embedded); // if we are here outside of an embed, we're playing
-
     player.on('tracking:buffered', doTrackingBuffered);
     player.on('tracking:firstplay', doTrackingFirstPlay.bind(player));
     player.on('ended', onEnded);
