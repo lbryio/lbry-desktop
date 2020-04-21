@@ -49,11 +49,10 @@
     // We still want to show the entire message if a TX includes one
     a,
     button {
-      @include constrict(10rem);
+      @include constrict(22rem);
       vertical-align: bottom;
       display: inline-block;
     }
-    width: 35%;
   }
   td:nth-of-type(4) {
     width: 15%;
