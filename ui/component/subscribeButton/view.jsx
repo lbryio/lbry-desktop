@@ -56,7 +56,7 @@ export default function SubscribeButton(props: Props) {
     <Button
       ref={buttonRef}
       iconColor="red"
-      largestLabel={longestStr}
+      largestLabel={isSubscribed ? longestStr : undefined}
       icon={unfollowOverride ? ICONS.UNSUBSCRIBE : ICONS.SUBSCRIBE}
       button={'alt'}
       requiresAuth={IS_WEB}
