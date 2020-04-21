@@ -133,7 +133,9 @@ const Header = (props: Props) => {
             className="header__navigation-item header__navigation-item--lbry header__navigation-item--button-mobile"
             label={__('LBRY')}
             icon={ICONS.LBRY}
-            onClick={() => window.scrollTo(0, 0)}
+            onClick={() => {
+              if (history.location.pathname === '/') window.location.reload();
+            }}
             {...homeButtonNavigationProps}
           />
 
