@@ -4,7 +4,18 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
-## [0.45.0] - [Unreleased]
+## [0.45.1] - [Unreleased]
+
+### Added
+
+### Changed
+
+### Fixed
+
+- Add fallback when images fail to load _community pr!_ ([#4019](https://github.com/lbryio/lbry-desktop/pull/4019))
+- Fetch new content when clicking LBRY logo while on homepage _community pr!_ ([#4031](https://github.com/lbryio/lbry-desktop/pull/4031))
+
+## [0.45.0] - [2020-04-21]
 
 ### Added
 
