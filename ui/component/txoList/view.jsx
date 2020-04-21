@@ -9,6 +9,7 @@ import Button from 'component/button';
 import Card from 'component/common/card';
 import { toCapitalCase } from 'util/string';
 import classnames from 'classnames';
+import HelpLink from 'component/common/help-link';
 
 type Props = {
   search: string,
@@ -186,7 +187,12 @@ function TxoList(props: Props) {
                 <FormField
                   type="select"
                   name="type"
-                  label={__('Type')}
+                  label={
+                    <>
+                      {__('Type')}
+                      <HelpLink href="https://lbry.com/faq/transaction-types" />
+                    </>
+                  }
                   value={type || 'all'}
                   onChange={e => handleChange({ dkey: TXO.TYPE, value: e.target.value })}
                 >
