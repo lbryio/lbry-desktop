@@ -1,18 +1,16 @@
 // @flow
 import * as SETTINGS from 'constants/settings';
 import * as NOTIFICATION_TYPES from 'constants/subscriptions';
-import { PAGE_SIZE } from 'constants/claim';
 import * as MODALS from 'constants/modal_types';
 // @if TARGET='app'
 import { ipcRenderer } from 'electron';
 // @endif
 import { doOpenModal } from 'redux/actions/app';
 import { push } from 'connected-react-router';
-import { setSubscriptionLatest, doUpdateUnreadSubscriptions } from 'redux/actions/subscriptions';
+import { doUpdateUnreadSubscriptions } from 'redux/actions/subscriptions';
 import { makeSelectUnreadByChannel } from 'redux/selectors/subscriptions';
 import {
   ACTIONS,
-  MATURE_TAGS,
   Lbry,
   Lbryapi,
   makeSelectFileInfoForUri,
@@ -133,57 +131,6 @@ export function doSetPlayingUri(uri: ?string) {
     dispatch({
       type: ACTIONS.SET_PLAYING_URI,
       data: { uri },
-    });
-  };
-}
-
-export function doFetchClaimsByChannel(uri: string, page: number = 1, pageSize: number = PAGE_SIZE) {
-  return (dispatch: Dispatch, getState: GetState) => {
-    const state = getState();
-    const showMature = makeSelectClientSetting(SETTINGS.SHOW_MATURE)(state);
-    const params = {};
-    params.channel = uri;
-    params.page = page;
-    params.page_size = pageSize;
-    params.valid_channel_signature = true;
-    params.order_by = ['release_time'];
-
-    if (!showMature) {
-      params.not_tags = MATURE_TAGS;
-    }
-
-    dispatch({
-      type: ACTIONS.FETCH_CHANNEL_CLAIMS_STARTED,
-      data: { uri, page },
-    });
-
-    Lbry.claim_search(params).then(result => {
-      const { items: claims, page: returnedPage, total_items: claimsInChannel, total_pages: pageTotal } = result;
-      if (claims && claims.length) {
-        if (page === 1) {
-          const latest = claims[0];
-          dispatch(
-            setSubscriptionLatest(
-              {
-                channelName: latest.signing_channel.name,
-                uri: latest.signing_channel.permanent_url,
-              },
-              latest.permanent_url
-            )
-          );
-        }
-      }
-
-      dispatch({
-        type: ACTIONS.FETCH_CHANNEL_CLAIMS_COMPLETED,
-        data: {
-          uri,
-          claimsInChannel,
-          claims: claims || [],
-          page: returnedPage || undefined,
-          totalPages: pageTotal,
-        },
-      });
     });
   };
 }

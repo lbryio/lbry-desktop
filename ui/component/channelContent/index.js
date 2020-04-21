@@ -1,5 +1,4 @@
 import { connect } from 'react-redux';
-import { doFetchClaimsByChannel } from 'redux/actions/content';
 import { PAGE_SIZE } from 'constants/claim';
 import {
   makeSelectClaimsInChannelForPage,
@@ -28,8 +27,4 @@ const select = (state, props) => {
   };
 };
 
-const perform = dispatch => ({
-  fetchClaims: (uri, page) => dispatch(doFetchClaimsByChannel(uri, page)),
-});
-
-export default withRouter(connect(select, perform)(ChannelPage));
+export default withRouter(connect(select)(ChannelPage));
