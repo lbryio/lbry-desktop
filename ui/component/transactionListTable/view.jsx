@@ -3,7 +3,6 @@ import * as MODALS from 'constants/modal_types';
 import React from 'react';
 import TxoListItem from './internal/txo-list-item';
 import Spinner from 'component/spinner';
-import HelpLink from 'component/common/help-link';
 
 type Props = {
   emptyMessage: ?string,
@@ -34,14 +33,7 @@ function TransactionListTable(props: Props) {
             <thead>
               <tr>
                 <th>{__('Date')}</th>
-                <th>
-                  {
-                    <>
-                      {__('Type')}
-                      <HelpLink href="https://lbry.com/faq/transaction-types" />
-                    </>
-                  }
-                </th>
+                <th>{<>{__('Type')}</>}</th>
                 <th>{__('Details')} </th>
                 <th>{__('Transaction')}</th>
                 <th className="table__item--align-right">{__('Amount (LBC)')}</th>
