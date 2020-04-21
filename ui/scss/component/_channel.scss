@@ -38,6 +38,8 @@ $metadata-z-index: 1;
   width: 5rem;
   background-size: cover;
   margin-right: var(--spacing-medium);
+  margin-top: var(--spacing-large);
+  box-shadow: var(--card-box-shadow);
 }
 
 .channel-thumbnail--small {
@@ -103,11 +105,13 @@ $metadata-z-index: 1;
   padding-left: calc(var(--channel-thumbnail-width) + var(--spacing-large));
   padding-right: var(--spacing-medium);
   padding-bottom: var(--spacing-medium);
+  margin-top: var(--spacing-xlarge);
   min-width: 0;
   width: 100%;
 
   @media (max-width: $breakpoint-small) {
     padding-left: var(--spacing-medium);
+    margin-top: 0;
   }
 }
 
