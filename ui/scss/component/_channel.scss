@@ -38,8 +38,6 @@ $metadata-z-index: 1;
   width: 5rem;
   background-size: cover;
   margin-right: var(--spacing-medium);
-  margin-top: var(--spacing-large);
-  box-shadow: var(--card-box-shadow);
 }
 
 .channel-thumbnail--small {
@@ -53,6 +51,8 @@ $metadata-z-index: 1;
   width: var(--channel-thumbnail-width);
   left: var(--spacing-medium);
   top: 4rem;
+  margin-top: var(--spacing-large);
+  box-shadow: var(--card-box-shadow);
 
   @media (max-width: $breakpoint-small) {
     display: none;
