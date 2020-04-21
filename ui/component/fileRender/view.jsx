@@ -168,7 +168,7 @@ class FileRender extends React.PureComponent<Props, State> {
           />
         );
       case RENDER_MODES.COMIC:
-        return <ComicBookViewer source={{ fileExtension, downloadPath }} theme={currentTheme} />;
+        return <ComicBookViewer source={downloadPath} theme={currentTheme} />;
       case RENDER_MODES.APPLICATION:
         return <AppViewer uri={uri} />;
     }

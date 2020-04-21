@@ -5,10 +5,7 @@ import 'villain-react/dist/style.css';
 
 type Props = {
   theme: string,
-  source: {
-    fileType: string,
-    downloadPath: string,
-  },
+  source: string,
 };
 
 let workerUrl = 'webworkers/worker-bundle.js';
@@ -20,9 +17,9 @@ if (process.env.NODE_ENV !== 'production') {
 
 class ComicBookViewer extends React.PureComponent<Props> {
   render() {
-    const { downloadPath } = this.props.source || {};
+    const { source } = this.props || {};
     // Archive source
-    const file = `file://${downloadPath}`;
+    const file = `file://${source}`;
     // Villain options
     const opts = {
       theme: this.props.theme === 'dark' ? 'Dark' : 'Light',
