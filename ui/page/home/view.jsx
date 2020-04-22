@@ -119,10 +119,10 @@ function HomePage(props: Props) {
 
   rowData.push({
     title: '#whothinks',
-    link: `/$/${PAGES.DISCOVER}?t=whothinks&${CS.ORDER_BY_KEY}=${CS.ORDER_BY_NEW}`,
+    link: `/$/${PAGES.DISCOVER}?t=whothinks&${CS.ORDER_BY_KEY}=${CS.ORDER_BY_NEW}&claim_type=stream`,
     options: {
       tags: ['whothinks'],
-      claimType: ['stream', 'channel'],
+      claimType: ['stream'],
       orderBy: ['release_time'],
       pageSize: 3,
       prefixUris: ['lbry://@lbry#3f/whothinks'],
