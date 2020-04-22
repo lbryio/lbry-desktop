@@ -132,12 +132,21 @@ function Invited(props: Props) {
       <Card
         title={__(`You're invited!`)}
         subtitle={
-          referrerIsChannel
-            ? __(
-                `Content freedom and a present from %channel_name% are waiting for you. Create an account to claim it.`,
-                { channel_name: referrerChannelName }
-              )
-            : __(`Content freedom and a present are waiting for you. Create an account to claim it.`)
+          <div>
+            <p>
+              {referrerIsChannel
+                ? __(`Content freedom and a present from %channel_name% are waiting for you. `, {
+                    channel_name: referrerChannelName,
+                  })
+                : __(`Content freedom and a present are waiting for you. `)}
+              <Button
+                button="link"
+                label={hasVerifiedEmail ? __(`Finish verification `) : __(`Create an account `)}
+                navigate={`/$/${PAGES.AUTH}?redirect=/$/${PAGES.INVITE}/${referrer}`}
+              />{' '}
+              to claim it.
+            </p>
+          </div>
         }
         body={
           referrerIsChannel && (
@@ -149,11 +158,6 @@ function Invited(props: Props) {
         }
         actions={
           <div className="card__actions">
-            <Button
-              button="primary"
-              label={hasVerifiedEmail ? __('Finish Account') : __('Create Account')}
-              navigate={`/$/${PAGES.AUTH}?redirect=/$/${PAGES.INVITE}/${referrer}`}
-            />
             <Button button="link" label={__('Skip')} onClick={handleDone} />
           </div>
         }
