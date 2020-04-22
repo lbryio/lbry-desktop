@@ -1,10 +1,9 @@
 import { connect } from 'react-redux';
-import { selectMyChannelClaims, selectFetchingMyChannels, doPrepareEdit } from 'lbry-redux';
+import { makeSelectClaimForUri, doPrepareEdit } from 'lbry-redux';
 import CreatorAnalytics from './view';
 
-const select = state => ({
-  channels: selectMyChannelClaims(state),
-  fetchingChannels: selectFetchingMyChannels(state),
+const select = (state, props) => ({
+  claim: makeSelectClaimForUri(props.uri)(state),
 });
 
 const perform = dispatch => ({

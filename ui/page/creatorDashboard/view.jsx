@@ -4,6 +4,8 @@ import Page from 'component/page';
 import Spinner from 'component/spinner';
 import Button from 'component/button';
 import CreatorAnalytics from 'component/creatorAnalytics';
+import ChannelSelector from 'component/channelSelector';
+import usePersistedState from 'effects/use-persisted-state';
 
 type Props = {
   channels: Array<ChannelClaim>,
@@ -13,6 +15,22 @@ type Props = {
 
 export default function CreatorDashboardPage(props: Props) {
   const { channels, fetchingChannels, openChannelCreateModal } = props;
+  const [selectedChannelUrl, setSelectedChannelUrl] = usePersistedState('analytics-selected-channel');
+  const hasChannels = channels && channels.length > 0;
+  const firstChannel = hasChannels && channels[0];
+  const firstChannelUrl = firstChannel && (firstChannel.canonical_url || firstChannel.permanent_url); // permanent_url is needed for pending publishes
+  const channelFoundForSelectedChannelUrl =
+    channels &&
+    channels.find(channel => {
+      return selectedChannelUrl === channel.canonical_url || selectedChannelUrl === channel.permanent_url;
+    });
+
+  React.useEffect(() => {
+    // set default channel
+    if ((!selectedChannelUrl || !channelFoundForSelectedChannelUrl) && firstChannelUrl) {
+      setSelectedChannelUrl(firstChannelUrl);
+    }
+  }, [setSelectedChannelUrl, selectedChannelUrl, firstChannelUrl, channelFoundForSelectedChannelUrl]);
 
   return (
     <Page>
@@ -33,7 +51,19 @@ export default function CreatorDashboardPage(props: Props) {
         </section>
       )}
 
-      {!fetchingChannels && channels && channels.length && <CreatorAnalytics />}
+      {!fetchingChannels && channels && channels.length && (
+        <React.Fragment>
+          <div className="section">
+            <ChannelSelector
+              selectedChannelUrl={selectedChannelUrl}
+              onChannelSelect={newChannelUrl => {
+                setSelectedChannelUrl(newChannelUrl);
+              }}
+            />
+          </div>
+          <CreatorAnalytics uri={selectedChannelUrl} />
+        </React.Fragment>
+      )}
     </Page>
   );
 }

@@ -17,7 +17,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Fixed
 
 - Fixed the title of the subscribe button getting out of sync on fast hover movements _community pr!_ ([#4054](https://github.com/lbryio/lbry-desktop/pull/4054))
-
+- Handle errors better on the creator analytics page and add a new card for stats on users most recent content ([#4043](https://github.com/lbryio/lbry-desktop/pull/4043))
 - Add fallback when images fail to load _community pr!_ ([#4019](https://github.com/lbryio/lbry-desktop/pull/4019))
 - Fetch new content when clicking LBRY logo while on homepage _community pr!_ ([#4031](https://github.com/lbryio/lbry-desktop/pull/4031))
 - Aligns text across browsers and desktop _community pr!_ ([#4050](https://github.com/lbryio/lbry-desktop/pull/4050))
