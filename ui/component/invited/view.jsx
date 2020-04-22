@@ -7,6 +7,7 @@ import Card from 'component/common/card';
 import { buildURI, parseURI } from 'lbry-redux';
 import { rewards as REWARDS, ERRORS } from 'lbryinc';
 import { formatLbryUrlForWeb } from 'util/url';
+import ChannelContent from 'component/channelContent';
 
 type Props = {
   user: any,
@@ -142,6 +143,7 @@ function Invited(props: Props) {
           referrerIsChannel && (
             <div className="claim-preview--channel">
               <ClaimPreview key={refUri} uri={refUri} actions={''} type={'small'} />
+              <ChannelContent uri={fullUri} defaultPageSize={5} defaultInfiniteScroll={false} />
             </div>
           )
         }

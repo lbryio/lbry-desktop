@@ -17,12 +17,24 @@ type Props = {
   channelIsMine: boolean,
   fetchClaims: (string, number) => void,
   channelIsBlackListed: boolean,
+  defaultPageSize?: number,
+  defaultInfiniteScroll?: Boolean,
   claim: ?Claim,
   isAuthenticated: boolean,
 };
 
 function ChannelContent(props: Props) {
-  const { uri, fetching, channelIsMine, channelIsBlocked, channelIsBlackListed, claim, isAuthenticated } = props;
+  const {
+    uri,
+    fetching,
+    channelIsMine,
+    channelIsBlocked,
+    channelIsBlackListed,
+    claim,
+    isAuthenticated,
+    defaultPageSize = CS.PAGE_SIZE,
+    defaultInfiniteScroll = true,
+  } = props;
   const claimsInChannel = (claim && claim.meta.claims_in_channel) || 0;
 
   return (
@@ -56,6 +68,8 @@ function ChannelContent(props: Props) {
         <ClaimListDiscover
           channelIds={[claim.claim_id]}
           defaultOrderBy={CS.ORDER_BY_NEW}
+          pageSize={defaultPageSize}
+          infiniteScroll={defaultInfiniteScroll}
           injectedItem={!isAuthenticated && IS_WEB && <Ads type="video" />}
         />
       ) : (
