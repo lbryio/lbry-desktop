@@ -122,6 +122,7 @@ function HomePage(props: Props) {
     link: `/$/${PAGES.DISCOVER}?t=whothinks&${CS.ORDER_BY_KEY}=${CS.ORDER_BY_NEW}`,
     options: {
       tags: ['whothinks'],
+      claimType: ['stream', 'channel'],
       orderBy: ['release_time'],
       pageSize: 3,
       prefixUris: ['lbry://@lbry#3f/whothinks'],
