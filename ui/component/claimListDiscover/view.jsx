@@ -610,7 +610,7 @@ function ClaimListDiscover(props: Props) {
 
       {loading && (
         <div className="card">
-          {new Array(CS.PAGE_SIZE).fill(1).map((x, i) => (
+          {new Array(pageSize || CS.PAGE_SIZE).fill(1).map((x, i) => (
             <ClaimPreview key={i} placeholder="loading" />
           ))}
         </div>

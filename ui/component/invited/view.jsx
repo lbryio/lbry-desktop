@@ -8,6 +8,7 @@ import { buildURI, parseURI } from 'lbry-redux';
 import { rewards as REWARDS, ERRORS } from 'lbryinc';
 import { formatLbryUrlForWeb } from 'util/url';
 import ChannelContent from 'component/channelContent';
+import I18nMessage from 'component/i18nMessage';
 
 type Props = {
   user: any,
@@ -128,40 +129,57 @@ function Invited(props: Props) {
   }
 
   if (!rewardsApproved) {
+    const signUpButton = (
+      <Button
+        button="link"
+        label={hasVerifiedEmail ? __(`Finish verification `) : __(`Create an account `)}
+        navigate={`/$/${PAGES.AUTH}?redirect=/$/${PAGES.INVITE}/${referrer}`}
+      />
+    );
+
     return (
       <Card
         title={__(`You're invited!`)}
         subtitle={
-          <div>
-            <p>
-              {referrerIsChannel
-                ? __(`Content freedom and a present from %channel_name% are waiting for you. `, {
-                    channel_name: referrerChannelName,
-                  })
-                : __(`Content freedom and a present are waiting for you. `)}
-              <Button
-                button="link"
-                label={hasVerifiedEmail ? __(`Finish verification `) : __(`Create an account `)}
-                navigate={`/$/${PAGES.AUTH}?redirect=/$/${PAGES.INVITE}/${referrer}`}
-              />{' '}
-              to claim it.
-            </p>
-          </div>
+          <p>
+            {referrerIsChannel ? (
+              <I18nMessage
+                tokens={{
+                  channel_name: referrerChannelName,
+                  signup_link: signUpButton,
+                }}
+              >
+                Content freedom and a present from %channel_name% are waiting for you. %signup_link% to claim it.
+              </I18nMessage>
+            ) : (
+              <I18nMessage
+                tokens={{
+                  signup_link: signUpButton,
+                }}
+              >
+                Content freedom and a present are waiting for you. %signup_link% to claim it.
+              </I18nMessage>
+            )}
+          </p>
         }
         body={
           referrerIsChannel && (
             <div className="claim-preview--channel">
-              <ClaimPreview key={refUri} uri={refUri} actions={''} type={'small'} />
-              <ChannelContent uri={fullUri} defaultPageSize={3} defaultInfiniteScroll={false} />
+              <div className="section">
+                <ClaimPreview key={refUri} uri={refUri} actions={''} type={'small'} />
+              </div>
+              <div className="section">
+                <ChannelContent uri={fullUri} defaultPageSize={3} defaultInfiniteScroll={false} />
+              </div>
             </div>
           )
         }
         actions={
-          <div className="card__actions">
+          <div className="section__actions">
             <Button
-	      button="primary"
+              button="primary"
               label={hasVerifiedEmail ? __('Finish Account') : __('Create Account')}
-	      navigate={`/$/${PAGES.AUTH}?redirect=/$/${PAGES.INVITE}/${referrer}`}
+              navigate={`/$/${PAGES.AUTH}?redirect=/$/${PAGES.INVITE}/${referrer}`}
             />
             <Button button="link" label={__('Skip')} onClick={handleDone} />
           </div>
@@ -182,7 +200,7 @@ function Invited(props: Props) {
         )
       }
       actions={
-        <div className="card__actions">
+        <div className="section__actions">
           <Button button="primary" label={__('Done')} onClick={handleDone} />
         </div>
       }
