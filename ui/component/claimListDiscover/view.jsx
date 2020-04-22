@@ -53,6 +53,7 @@ type Props = {
   pageSize?: number,
   followedTags?: Array<Tag>,
   injectedItem: ?Node,
+  infiniteScroll?: Boolean,
 };
 
 function ClaimListDiscover(props: Props) {
@@ -87,6 +88,7 @@ function ClaimListDiscover(props: Props) {
     includeSupportAction,
     repostedClaimId,
     hideFilter,
+    infiniteScroll = true,
     followedTags,
     injectedItem,
   } = props;
@@ -368,7 +370,7 @@ function ClaimListDiscover(props: Props) {
   }
 
   function handleScrollBottom() {
-    if (!loading) {
+    if (!loading && infiniteScroll) {
       setPage(page + 1);
     }
   }
