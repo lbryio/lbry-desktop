@@ -152,7 +152,7 @@ function Invited(props: Props) {
           referrerIsChannel && (
             <div className="claim-preview--channel">
               <ClaimPreview key={refUri} uri={refUri} actions={''} type={'small'} />
-              <ChannelContent uri={fullUri} defaultPageSize={5} defaultInfiniteScroll={false} />
+              <ChannelContent uri={fullUri} defaultPageSize={3} defaultInfiniteScroll={false} />
             </div>
           )
         }
