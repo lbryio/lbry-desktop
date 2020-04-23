@@ -146,7 +146,7 @@ export default function CreatorAnalytics(props: Props) {
             iconColor
             className="section"
             title={<span>{__('%lbc_received% LBC Earned', { lbc_received: stats.AllLBCReceived })}</span>}
-            icon={ICONS.SUBSCRIBE}
+            icon={ICONS.REWARDS}
             subtitle={
               <React.Fragment>
                 <div className="card__data-subtitle">

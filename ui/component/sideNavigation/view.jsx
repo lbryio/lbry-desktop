@@ -156,7 +156,7 @@ function SideNavigation(props: Props) {
                 ...buildLink(PAGES.WALLET, __('Wallet'), ICONS.WALLET),
               },
               {
-                ...buildLink(PAGES.REWARDS, __('Rewards'), ICONS.FEATURED),
+                ...buildLink(PAGES.REWARDS, __('Rewards'), ICONS.REWARDS),
               },
               {
                 ...buildLink(PAGES.INVITE, __('Invites'), ICONS.INVITE),

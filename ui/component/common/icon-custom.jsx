@@ -41,7 +41,7 @@ export const icons = {
       <path d="M294.3,150.9l2-12.6l-12.2-2.1l0.8-4.9l17.1,2.9l-2.8,17.5L294.3,150.9L294.3,150.9z" />
     </svg>
   ),
-  [ICONS.FEATURED]: buildIcon(
+  [ICONS.REWARDS]: buildIcon(
     <g fill="none" fillRule="evenodd" strokeLinecap="round">
       <circle cx="12" cy="8" r="7" />
       <polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88" />

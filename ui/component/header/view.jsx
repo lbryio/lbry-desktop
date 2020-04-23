@@ -199,7 +199,7 @@ const Header = (props: Props) => {
                       {__('Creator Analytics')}
                     </MenuItem>
                     <MenuItem className="menu__link" onSelect={() => history.push(`/$/${PAGES.REWARDS}`)}>
-                      <Icon aria-hidden icon={ICONS.FEATURED} />
+                      <Icon aria-hidden icon={ICONS.REWARDS} />
                       {__('Rewards')}
                     </MenuItem>
                     <MenuItem className="menu__link" onSelect={() => history.push(`/$/${PAGES.INVITE}`)}>
