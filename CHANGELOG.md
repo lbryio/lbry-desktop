@@ -16,6 +16,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 - Add fallback when images fail to load _community pr!_ ([#4019](https://github.com/lbryio/lbry-desktop/pull/4019))
 - Fetch new content when clicking LBRY logo while on homepage _community pr!_ ([#4031](https://github.com/lbryio/lbry-desktop/pull/4031))
+- Aligns text across browsers and desktop _community pr!_ ([#4050](https://github.com/lbryio/lbry-desktop/pull/4050))
 
 ## [0.45.0] - [2020-04-21]
 
