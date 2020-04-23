@@ -11,15 +11,15 @@ type Props = {
   balance: number,
   createChannel: (string, number) => Promise<any>,
   onSuccess?: ({}) => void,
+  creatingChannel: boolean,
+  createChannelError: ?string,
 };
 
 type State = {
   newChannelName: string,
   newChannelBid: number,
-  creatingChannel: boolean,
   newChannelNameError: string,
   newChannelBidError: string,
-  createChannelError: ?string,
 };
 
 class ChannelCreate extends React.PureComponent<Props, State> {
@@ -29,10 +29,8 @@ class ChannelCreate extends React.PureComponent<Props, State> {
     this.state = {
       newChannelName: '',
       newChannelBid: 0.01,
-      creatingChannel: false,
       newChannelNameError: '',
       newChannelBidError: '',
-      createChannelError: undefined,
     };
 
     (this: any).handleNewChannelNameChange = this.handleNewChannelNameChange.bind(this);
@@ -78,24 +76,12 @@ class ChannelCreate extends React.PureComponent<Props, State> {
   }
 
   handleCreateChannel() {
-    const { balance, createChannel, onSuccess } = this.props;
+    const { createChannel, onSuccess } = this.props;
     const { newChannelBid, newChannelName } = this.state;
 
     const channelName = `@${newChannelName.trim()}`;
 
-    if (newChannelBid > balance) {
-      return;
-    }
-
-    this.setState({
-      creatingChannel: true,
-      createChannelError: undefined,
-    });
-
     const success = channelClaim => {
-      this.setState({
-        creatingChannel: false,
-      });
       analytics.apiLogPublish(channelClaim);
 
       if (onSuccess !== undefined) {
@@ -103,25 +89,12 @@ class ChannelCreate extends React.PureComponent<Props, State> {
       }
     };
 
-    const failure = () => {
-      this.setState({
-        creatingChannel: false,
-        createChannelError: __('Unable to create channel due to an internal error.'),
-      });
-    };
-
-    createChannel(channelName, newChannelBid).then(success, failure);
+    createChannel(channelName, newChannelBid).then(success);
   }
 
   render() {
-    const {
-      newChannelName,
-      newChannelNameError,
-      newChannelBid,
-      newChannelBidError,
-      creatingChannel,
-      createChannelError,
-    } = this.state;
+    const { newChannelName, newChannelNameError, newChannelBid, newChannelBidError } = this.state;
+    const { creatingChannel, createChannelError } = this.props;
 
     return (
       <Form onSubmit={this.handleCreateChannel}>
