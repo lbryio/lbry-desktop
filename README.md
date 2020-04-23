@@ -132,7 +132,7 @@ This project is MIT licensed. For the full license, see [LICENSE](LICENSE).
 
 ## Security
 
-We take security seriously. Please contact security@lbry.com regarding any security issues. Our PGP key is [here](https://keybase.io/lbry/key.asc) if you need it.
+We take security seriously. Please contact security@lbry.com regarding any security issues. Our PGP key is [here](https://keybase.io/lbry/key.asc) if you need it. All releases are signed by [Sean Yesmunt](https://keybase.io/seanyesmunt/key.asc).
 
 ## Contact
 
