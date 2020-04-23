@@ -170,6 +170,18 @@
     // Make sure no videojs message interferes with overlaying buttons
     pointer-events: none;
   }
+
+  .vjs-control-bar {
+    .vjs-remaining-time {
+      display: none;
+    }
+
+    .vjs-current-time,
+    .vjs-time-divider,
+    .vjs-duration {
+      display: flex;
+    }
+  }
 }
 
 .vjs-paused .vjs-big-play-button,
