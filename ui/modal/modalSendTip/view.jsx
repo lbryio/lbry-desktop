@@ -33,15 +33,7 @@ class ModalSendTip extends React.PureComponent<Props> {
               </I18nMessage>
             )
           }
-          actions={
-            <SendTip
-              uri={uri}
-              claimIsMine={claimIsMine}
-              isSupport={isSupport}
-              onCancel={closeModal}
-              sendTipCallback={closeModal}
-            />
-          }
+          actions={<SendTip uri={uri} claimIsMine={claimIsMine} isSupport={isSupport} onCancel={closeModal} />}
         />
       </Modal>
     );

@@ -30,10 +30,15 @@ function WalletSendTip(props: Props) {
   const isMobile = useIsMobile();
 
   function handleSubmit() {
-    const { openModal } = props;
+    const { openModal, sendSupport } = props;
+
     if (tipAmount && claimId) {
-      const modalProps = { tipAmount, claimId, title, isSupport };
-      openModal(MODALS.CONFIRM_SEND_TIP, modalProps);
+      if (isSupport) {
+        sendSupport(tipAmount, claimId, isSupport);
+      } else {
+        const modalProps = { tipAmount, claimId, title, isSupport };
+        openModal(MODALS.CONFIRM_SEND_TIP, modalProps);
+      }
     }
   }
 
