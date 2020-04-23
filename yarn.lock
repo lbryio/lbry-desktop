@@ -6147,9 +6147,9 @@ lbry-redux@lbryio/lbry-redux#4b4c7f97103d51dc195ddd496be57b29aea5ca54:
     reselect "^3.0.0"
     uuid "^3.3.2"
 
-lbryinc@lbryio/lbryinc#edd43c8dff63bccd86400719679c6fa864a9a342:
+lbryinc@lbryio/lbryinc#cc62a4eec10845cc0b31da7d0f27287cfa7c4866:
   version "0.0.1"
-  resolved "https://codeload.github.com/lbryio/lbryinc/tar.gz/edd43c8dff63bccd86400719679c6fa864a9a342"
+  resolved "https://codeload.github.com/lbryio/lbryinc/tar.gz/cc62a4eec10845cc0b31da7d0f27287cfa7c4866"
   dependencies:
     reselect "^3.0.0"
 
