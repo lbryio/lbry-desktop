@@ -13,6 +13,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Changed
 
 ### Fixed
+- Fixed the title of the subscribe button getting out of sync on fast hover movements _community pr!_ ([#4054](https://github.com/lbryio/lbry-desktop/pull/4054))
 
 - Add fallback when images fail to load _community pr!_ ([#4019](https://github.com/lbryio/lbry-desktop/pull/4019))
 - Fetch new content when clicking LBRY logo while on homepage _community pr!_ ([#4031](https://github.com/lbryio/lbry-desktop/pull/4031))
