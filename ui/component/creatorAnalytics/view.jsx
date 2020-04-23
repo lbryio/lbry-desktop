@@ -142,7 +142,7 @@ export default function CreatorAnalytics(props: Props) {
             />
           </div>
 
-          <Card
+          {/* <Card
             iconColor
             className="section"
             title={<span>{__('%lbc_received% LBC Earned', { lbc_received: stats.AllLBCReceived })}</span>}
@@ -165,7 +165,7 @@ export default function CreatorAnalytics(props: Props) {
                 </p>
               </React.Fragment>
             }
-          />
+          /> */}
 
           {stats.VideoURITopNew ? (
             <Card
