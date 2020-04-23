@@ -6,6 +6,7 @@ import { MINIMUM_PUBLISH_BID } from 'constants/claim';
 import useIsMobile from 'effects/use-is-mobile';
 import CreditAmount from 'component/common/credit-amount';
 import I18nMessage from 'component/i18nMessage';
+import * as MODALS from 'constants/modal_types';
 
 type Props = {
   uri: string,
@@ -18,21 +19,21 @@ type Props = {
   sendTipCallback?: () => void,
   balance: number,
   isSupport: boolean,
+  openModal: (id: string, { tipAmount: number, claimId: string, isSupport: boolean }) => void,
 };
 
 function WalletSendTip(props: Props) {
-  const { title, isPending, onCancel, claimIsMine, isSupport, balance, claim, sendTipCallback, sendSupport } = props;
+  const { title, isPending, onCancel, claimIsMine, isSupport, balance, claim } = props;
   const [tipAmount, setTipAmount] = React.useState(0);
   const [tipError, setTipError] = React.useState();
   const { claim_id: claimId } = claim;
   const isMobile = useIsMobile();
 
-  function handleSendButtonClicked() {
-    sendSupport(tipAmount, claimId, isSupport);
-
-    // ex: close modal
-    if (sendTipCallback) {
-      sendTipCallback();
+  function handleSubmit() {
+    const { openModal } = props;
+    if (tipAmount && claimId) {
+      const modalProps = { tipAmount, claimId, title, isSupport };
+      openModal(MODALS.CONFIRM_SEND_TIP, modalProps);
     }
   }
 
@@ -69,7 +70,7 @@ function WalletSendTip(props: Props) {
 
   return (
     <React.Fragment>
-      <Form onSubmit={handleSendButtonClicked}>
+      <Form onSubmit={handleSubmit}>
         <FormField
           autoFocus
           name="tip-input"

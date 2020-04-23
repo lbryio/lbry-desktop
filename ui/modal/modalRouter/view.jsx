@@ -19,6 +19,7 @@ import ModalFirstSubscription from 'modal/modalFirstSubscription';
 import ModalConfirmTransaction from 'modal/modalConfirmTransaction';
 import ModalSocialShare from 'modal/modalSocialShare';
 import ModalSendTip from 'modal/modalSendTip';
+import ModalConfirmSendTip from 'modal/modalConfirmSendTip';
 import ModalPublish from 'modal/modalPublish';
 import ModalOpenExternalResource from 'modal/modalOpenExternalResource';
 import ModalConfirmThumbnailUpload from 'modal/modalConfirmThumbnailUpload';
@@ -94,6 +95,8 @@ function ModalRouter(props: Props) {
       return <ModalFirstSubscription {...modalProps} />;
     case MODALS.SEND_TIP:
       return <ModalSendTip {...modalProps} />;
+    case MODALS.CONFIRM_SEND_TIP:
+      return <ModalConfirmSendTip {...modalProps} />;
     case MODALS.SOCIAL_SHARE:
       return <ModalSocialShare {...modalProps} />;
     case MODALS.PUBLISH:
