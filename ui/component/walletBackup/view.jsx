@@ -92,12 +92,12 @@ class WalletBackup extends React.PureComponent<Props, State> {
 
     return (
       <Card
-        title={__('Backup Your LBRY Credits')}
+        title={__('Backup Your LBRY Wallet')}
         subtitle={
           <ul>
             <li>
               {__(
-                'Your LBRY credits are controllable by you and only you, via a wallet file stored locally on your computer.'
+                'Your LBRY credits, channels, and publishes are controllable by you and only you, via wallet file(s) stored locally on your computer.'
               )}
             </li>
             <li>
@@ -127,7 +127,7 @@ class WalletBackup extends React.PureComponent<Props, State> {
                   ),
                 }}
               >
-                Access to these files are equivalent to having access to your credits. Keep any copies you make of your
+                Access to these files are equivalent to having access to your credits, channels, and publishes. Keep any copies you make of your
                 wallet in a secure place. For more details on backing up and best practices %helpLink%.
               </I18nMessage>
             </p>
