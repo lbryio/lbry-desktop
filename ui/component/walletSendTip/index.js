@@ -1,12 +1,8 @@
 import { connect } from 'react-redux';
-import {
-  doSendTip,
-  makeSelectTitleForUri,
-  makeSelectClaimForUri,
-  selectIsSendingSupport,
-  selectBalance,
-} from 'lbry-redux';
+import { makeSelectTitleForUri, makeSelectClaimForUri, selectIsSendingSupport, selectBalance } from 'lbry-redux';
 import WalletSendTip from './view';
+import { doOpenModal } from 'redux/actions/app';
+import { withRouter } from 'react-router';
 
 const select = (state, props) => ({
   isPending: selectIsSendingSupport(state),
@@ -16,10 +12,7 @@ const select = (state, props) => ({
 });
 
 const perform = dispatch => ({
-  sendSupport: (amount, claimId, isSupport) => dispatch(doSendTip(amount, claimId, isSupport)),
+  openModal: (modal, props) => dispatch(doOpenModal(modal, props)),
 });
 
-export default connect(
-  select,
-  perform
-)(WalletSendTip);
+export default withRouter(connect(select, perform)(WalletSendTip));
