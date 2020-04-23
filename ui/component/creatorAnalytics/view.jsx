@@ -36,7 +36,7 @@ export default function CreatorAnalytics(props: Props) {
 
   const channelForEffect = JSON.stringify(claim);
   React.useEffect(() => {
-    if (claimId && channelForEffect) {
+    if (claimId && channelForEffect && channelHasClaims) {
       setFetchingStats(true);
       Lbryio.call('reports', 'content', { claim_id: claimId })
         .then(res => {
@@ -55,7 +55,7 @@ export default function CreatorAnalytics(props: Props) {
           setFetchingStats(false);
         });
     }
-  }, [claimId, channelForEffect, setFetchingStats, setStats]);
+  }, [claimId, channelForEffect, channelHasClaims, setFetchingStats, setStats]);
 
   return (
     <React.Fragment>
@@ -174,7 +174,7 @@ export default function CreatorAnalytics(props: Props) {
               body={
                 <React.Fragment>
                   <div className="card--inline">
-                    <ClaimPreview uri={stats.VideoViewsTopNew} />
+                    <ClaimPreview uri={stats.VideoURITopNew} />
                   </div>
                   <div className="section__subtitle card__data-subtitle">
                     <span>
