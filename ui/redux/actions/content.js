@@ -197,13 +197,17 @@ export function doPlayUri(
       return;
     }
 
-    if (instantPurchaseEnabled || instantPurchaseMax.currency === 'LBC') {
-      attemptPlay(instantPurchaseMax.amount);
+    if (instantPurchaseEnabled) {
+      if (instantPurchaseMax.currency === 'LBC') {
+        attemptPlay(instantPurchaseMax.amount);
+      } else {
+        // Need to convert currency of instant purchase maximum before trying to play
+        Lbryio.getExchangeRates().then(({ LBC_USD }) => {
+          attemptPlay(instantPurchaseMax.amount / LBC_USD);
+        });
+      }
     } else {
-      // Need to convert currency of instant purchase maximum before trying to play
-      Lbryio.getExchangeRates().then(({ LBC_USD }) => {
-        attemptPlay(instantPurchaseMax.amount / LBC_USD);
-      });
+      attemptPlay();
     }
   };
 }
