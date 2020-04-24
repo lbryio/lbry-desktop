@@ -101,6 +101,7 @@ function VideoViewer(props: Props) {
   }
 
   function onPlay() {
+    console.log('on play!!!');
     setIsLoading(false);
     setIsPlaying(true);
     setShowAutoplayCountdown(false);
@@ -112,6 +113,7 @@ function VideoViewer(props: Props) {
   }
 
   const onPlayerReady = useCallback(player => {
+    console.log('on player ready!!!');
     // https://blog.videojs.com/autoplay-best-practices-with-video-js/#Programmatic-Autoplay-and-Success-Failure-Detection
     if (autoplaySetting || autoplayIfEmbedded) {
       const promise = player.play();
