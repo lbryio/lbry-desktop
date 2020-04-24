@@ -12,7 +12,6 @@ import { makeSelectUnreadByChannel } from 'redux/selectors/subscriptions';
 import {
   ACTIONS,
   Lbry,
-  Lbryapi,
   makeSelectFileInfoForUri,
   selectFileInfosByOutpoint,
   makeSelectChannelForClaimUri,
@@ -22,7 +21,7 @@ import {
   selectDownloadingByOutpoint,
   makeSelectClaimForUri,
 } from 'lbry-redux';
-import { makeSelectCostInfoForUri } from 'lbryinc';
+import { makeSelectCostInfoForUri, Lbryio } from 'lbryinc';
 import { makeSelectClientSetting, selectosNotificationsEnabled, selectDaemonSettings } from 'redux/selectors/settings';
 import { formatLbryUrlForWeb } from 'util/url';
 
@@ -202,7 +201,7 @@ export function doPlayUri(
       attemptPlay(instantPurchaseMax.amount);
     } else {
       // Need to convert currency of instant purchase maximum before trying to play
-      Lbryapi.getExchangeRates().then(({ LBC_USD }) => {
+      Lbryio.getExchangeRates().then(({ LBC_USD }) => {
         attemptPlay(instantPurchaseMax.amount / LBC_USD);
       });
     }
