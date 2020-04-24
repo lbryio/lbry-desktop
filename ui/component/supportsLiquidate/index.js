@@ -8,7 +8,6 @@ import {
   makeSelectMetadataForUri,
   makeSelectClaimForUri,
   doSupportAbandonForClaim,
-  doFetchClaimListMine,
   selectAbandonClaimSupportError,
 } from 'lbry-redux';
 import SupportsLiquidate from './view';
@@ -27,7 +26,6 @@ const select = (state, props) => ({
 const perform = dispatch => ({
   abandonSupportForClaim: (claimId, type, keep, preview) =>
     dispatch(doSupportAbandonForClaim(claimId, type, keep, preview)),
-  fetchClaimListMine: () => dispatch(doFetchClaimListMine()),
 });
 
 export default connect(select, perform)(SupportsLiquidate);

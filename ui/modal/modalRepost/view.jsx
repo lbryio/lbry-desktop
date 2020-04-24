@@ -22,8 +22,7 @@ type Props = {
   claim: ?StreamClaim,
   balance: number,
   channels: ?Array<ChannelClaim>,
-  myClaims: ?Array<StreamClaim>,
-  doFetchClaimListMine: () => void,
+  doCheckPublishNameAvailability: string => Promise<*>,
   error: ?string,
   reposting: boolean,
 };
@@ -40,8 +39,7 @@ function ModalRepost(props: Props) {
     channels,
     error,
     reposting,
-    myClaims,
-    doFetchClaimListMine,
+    doCheckPublishNameAvailability,
   } = props;
   const defaultName = claim && claim.name;
   const contentClaimId = claim && claim.claim_id;
@@ -49,6 +47,7 @@ function ModalRepost(props: Props) {
   const [repostBid, setRepostBid] = React.useState(0.01);
   const [showAdvanced, setShowAdvanced] = React.useState();
   const [repostName, setRepostName] = React.useState(defaultName);
+  const [available, setAvailable] = React.useState(true);
 
   let repostBidError;
   if (repostBid === 0) {
@@ -66,12 +65,7 @@ function ModalRepost(props: Props) {
     repostNameError = __('A name is required');
   } else if (!isNameValid(repostName, false)) {
     repostNameError = INVALID_NAME_ERROR;
-  } else if (
-    channels &&
-    channels.find(claim => claim.name === repostChannel) &&
-    myClaims &&
-    myClaims.find(claim => claim.name === repostName)
-  ) {
+  } else if (!available) {
     repostNameError = __('You already have a claim with this name.');
   }
 
@@ -91,12 +85,11 @@ function ModalRepost(props: Props) {
     }
   }, [channelStrings]);
 
-  const myClaimsString = myClaims && myClaims.map(channel => channel.permanent_url).join(',');
   React.useEffect(() => {
-    if (myClaimsString === '') {
-      doFetchClaimListMine();
+    if (repostName && isNameValid(repostName, false)) {
+      doCheckPublishNameAvailability(repostName).then(r => setAvailable(r));
     }
-  }, [myClaimsString, doFetchClaimListMine]);
+  }, [repostName, doCheckPublishNameAvailability]);
 
   function handleSubmit() {
     const channelToRepostTo = channels && channels.find(channel => channel.name === repostChannel);

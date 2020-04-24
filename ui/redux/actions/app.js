@@ -9,7 +9,7 @@ import * as MODALS from 'constants/modal_types';
 import {
   Lbry,
   doBalanceSubscribe,
-  doFetchFileInfosAndPublishedClaims,
+  doFetchFileInfos,
   doError,
   makeSelectClaimForUri,
   makeSelectClaimIsMine,
@@ -352,7 +352,7 @@ export function doDaemonReady() {
     dispatch(doFindFFmpeg());
     dispatch(doGetDaemonStatus());
     dispatch(doFetchDaemonSettings());
-    dispatch(doFetchFileInfosAndPublishedClaims());
+    dispatch(doFetchFileInfos());
     if (!selectIsUpgradeSkipped(state)) {
       dispatch(doCheckUpgradeAvailable());
     }

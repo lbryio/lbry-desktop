@@ -7,13 +7,15 @@ import * as txnTypes from 'constants/transaction_types';
 type Props = {
   closeModal: () => void,
   abandonTxo: (Txo, () => void) => void,
+  abandonClaim: (string, number, ?() => void) => void,
   tx: Txo,
+  claim: GenericClaim,
   cb: () => void,
 };
 
 export default function ModalRevokeClaim(props: Props) {
-  const { tx, closeModal, abandonTxo, cb } = props;
-  const { value_type: valueType, type, normalized_name: name } = tx;
+  const { tx, claim, closeModal, abandonTxo, abandonClaim, cb } = props;
+  const { value_type: valueType, type, normalized_name: name } = tx || claim;
   const [channelName, setChannelName] = useState('');
 
   function getButtonLabel(type: string) {
@@ -80,7 +82,7 @@ export default function ModalRevokeClaim(props: Props) {
   }
 
   function revokeClaim() {
-    abandonTxo(tx, cb);
+    tx ? abandonTxo(tx, cb) : abandonClaim(claim.txid, claim.nout, cb);
     closeModal();
   }
 

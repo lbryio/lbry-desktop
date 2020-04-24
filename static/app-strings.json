@@ -1194,5 +1194,9 @@
   "Earnings may also include any LBC you've sent yourself or added as support. We are working on making this more accurate. Check your wallet page for the correct total balance.": "Earnings may also include any LBC you've sent yourself or added as support. We are working on making this more accurate. Check your wallet page for the correct total balance.",
   "Add A Password": "Add A Password",
   "Hide reposts": "Hide reposts",
-  "You will not see reposts by people you follow or receive email notifying about them.": "You will not see reposts by people you follow or receive email notifying about them."
+  "You will not see reposts by people you follow or receive email notifying about them.": "You will not see reposts by people you follow or receive email notifying about them.",
+  "Sorry, your request timed out. Modify your options or %again%": "Sorry, your request timed out. Modify your options or %again%",
+  "Pause at any time to select a thumbnail from your video": "Pause at any time to select a thumbnail from your video",
+  "For video content, use MP4s in H264/AAC format and a friendly bitrate (under 5 mbps) and resolution (720p) for more reliable streaming.": "For video content, use MP4s in H264/AAC format and a friendly bitrate (under 5 mbps) and resolution (720p) for more reliable streaming.",
+  "this channel": "this channel"
 }
