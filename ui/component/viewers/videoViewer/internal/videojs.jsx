@@ -1,9 +1,8 @@
 // @flow
-import React, { useContext, useEffect, useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import videojs from 'video.js/dist/alt/video.core.novtt.min.js';
 import 'video.js/dist/alt/video-js-cdn.min.css';
 import eventTracking from 'videojs-event-tracking';
-import { EmbedContext } from 'page/embedWrapper/view';
 import isUserTyping from 'util/detect-typing';
 
 type Props = {
@@ -14,11 +13,11 @@ type Props = {
   onPlayerReady: () => null,
   onVolumeChange: () => null,
   isAudio: boolean,
+  startMuted: boolean,
 };
 
 type VideoJSOptions = {
   controls: boolean,
-  autoplay: boolean,
   preload: string,
   playbackRates: Array<number>,
   responsive: boolean,
@@ -29,7 +28,6 @@ type VideoJSOptions = {
 
 const VIDEO_JS_OPTIONS: VideoJSOptions = {
   controls: true,
-  autoplay: true,
   preload: 'auto',
   playbackRates: [0.25, 0.5, 0.75, 1, 1.1, 1.25, 1.5, 1.75, 2],
   responsive: true,
@@ -58,9 +56,8 @@ if (!Object.keys(videojs.getPlugins()).includes('eventTracking')) {
 properties for this component should be kept to ONLY those that if changed should REQUIRE an entirely new videojs element
  */
 export default React.memo(function VideoJs(props: Props) {
-  const { autoplay, source, sourceType, poster, isAudio, onPlayerReady } = props;
+  const { startMuted, source, sourceType, poster, isAudio, onPlayerReady } = props;
   const containerRef = useRef();
-  const embedded = useContext(EmbedContext);
   const videoJsOptions = {
     ...VIDEO_JS_OPTIONS,
     sources: [
@@ -73,8 +70,7 @@ export default React.memo(function VideoJs(props: Props) {
     plugins: { eventTracking: true },
   };
 
-  videoJsOptions.autoplay = autoplay;
-  videoJsOptions.muted = autoplay && embedded;
+  videoJsOptions.muted = startMuted;
 
   function handleKeyDown(e: KeyboardEvent) {
     const videoNode = containerRef.current && containerRef.current.querySelector('video, audio');
