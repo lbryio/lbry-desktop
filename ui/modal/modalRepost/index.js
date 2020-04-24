@@ -11,7 +11,7 @@ import {
   doClearRepostError,
   doToast,
   selectMyClaimsWithoutChannels,
-  doFetchClaimListMine,
+  doCheckPublishNameAvailability,
 } from 'lbry-redux';
 import ModalRepost from './view';
 
@@ -25,13 +25,10 @@ const select = (state, props) => ({
   myClaims: selectMyClaimsWithoutChannels(state),
 });
 
-export default connect(
-  select,
-  {
-    doHideModal,
-    doRepost,
-    doClearRepostError,
-    doToast,
-    doFetchClaimListMine,
-  }
-)(ModalRepost);
+export default connect(select, {
+  doHideModal,
+  doRepost,
+  doClearRepostError,
+  doToast,
+  doCheckPublishNameAvailability,
+})(ModalRepost);

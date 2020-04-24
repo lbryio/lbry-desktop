@@ -68,10 +68,10 @@ class SelectThumbnail extends React.PureComponent<Props, State> {
 
     const actualFilePath = filePath || downloadPath;
     let isSupportedVideo = false;
-    if (typeof filePath === 'string') {
+    if (typeof actualFilePath === 'string') {
       isSupportedVideo = Lbry.getMediaType(null, actualFilePath) === 'video';
-    } else if (filePath && filePath.type) {
-      isSupportedVideo = filePath.type.split('/')[0] === 'video';
+    } else if (actualFilePath && actualFilePath.type) {
+      isSupportedVideo = actualFilePath.type.split('/')[0] === 'video';
     }
 
     let thumbnailSrc;
