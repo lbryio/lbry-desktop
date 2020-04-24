@@ -28,6 +28,7 @@ type Props = {
   autoplayIfEmbedded: boolean,
   doAnalyticsView: (string, number) => Promise<any>,
   claimRewards: () => void,
+  setPlayingUri: (?string) => void,
 };
 
 /*
@@ -51,6 +52,7 @@ function VideoViewer(props: Props) {
     autoplayIfEmbedded,
     doAnalyticsView,
     claimRewards,
+    setPlayingUri,
   } = props;
   const claimId = claim && claim.claim_id;
   const isAudio = contentType.includes('audio');
@@ -110,6 +112,21 @@ function VideoViewer(props: Props) {
   }
 
   const onPlayerReady = useCallback(player => {
+    // https://blog.videojs.com/autoplay-best-practices-with-video-js/#Programmatic-Autoplay-and-Success-Failure-Detection
+    if (autoplaySetting || autoplayIfEmbedded) {
+      const promise = player.play();
+      if (promise !== undefined) {
+        promise
+          .then(function() {
+            // Autoplay started
+          })
+          .catch(function(error) {
+            setIsPlaying(false);
+            setPlayingUri(null);
+          });
+      }
+    }
+
     setIsLoading(!embedded); // if we are here outside of an embed, we're playing
     player.on('tracking:buffered', doTrackingBuffered);
     player.on('tracking:firstplay', doTrackingFirstPlay.bind(player));
@@ -148,8 +165,8 @@ function VideoViewer(props: Props) {
         isAudio={isAudio}
         poster={isAudio || (embedded && !autoplayIfEmbedded) ? thumbnail : null}
         sourceType={forcePlayer ? 'video/mp4' : contentType}
-        autoplay={embedded ? autoplayIfEmbedded : true}
         onPlayerReady={onPlayerReady}
+        startMuted={autoplayIfEmbedded}
       />
     </div>
   );
