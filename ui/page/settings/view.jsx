@@ -366,15 +366,16 @@ class SettingsPage extends React.PureComponent<Props, State> {
               }
             />
 
+            {/* @endif */}
             <Card
-              title={__('Purchase Confirmations')}
+              title={__('Purchase and Tip Confirmations')}
               actions={
                 <React.Fragment>
                   <FormField
                     type="radio"
                     name="confirm_all_purchases"
                     checked={!instantPurchaseEnabled}
-                    label={__('Always confirm before purchasing content')}
+                    label={__('Always confirm before purchasing content or tipping')}
                     onChange={() => {
                       this.onInstantPurchaseEnabledChange(false);
                     }}
@@ -383,7 +384,7 @@ class SettingsPage extends React.PureComponent<Props, State> {
                     type="radio"
                     name="instant_purchases"
                     checked={instantPurchaseEnabled}
-                    label={__('Only confirm purchases over a certain price')}
+                    label={__('Only confirm purchases or tips over a certain amount')}
                     onChange={() => {
                       this.onInstantPurchaseEnabledChange(true);
                     }}
@@ -399,13 +400,14 @@ class SettingsPage extends React.PureComponent<Props, State> {
                   )}
 
                   <p className="help">
-                    {__("When this option is chosen, LBRY won't ask you to confirm downloads below your chosen price.")}
+                    {__(
+                      "When this option is chosen, LBRY won't ask you to confirm downloads or tips below your chosen amount."
+                    )}
                   </p>
                 </React.Fragment>
               }
             />
 
-            {/* @endif */}
             <Card
               title={__('Content Settings')}
               actions={

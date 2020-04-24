@@ -7,6 +7,7 @@ import useIsMobile from 'effects/use-is-mobile';
 import CreditAmount from 'component/common/credit-amount';
 import I18nMessage from 'component/i18nMessage';
 import * as MODALS from 'constants/modal_types';
+import { Lbryio } from 'lbryinc';
 
 type Props = {
   uri: string,
@@ -20,24 +21,51 @@ type Props = {
   balance: number,
   isSupport: boolean,
   openModal: (id: string, { tipAmount: number, claimId: string, isSupport: boolean }) => void,
+  instantTipEnabled: boolean,
+  instantTipMax: { amount: number, currency: string },
 };
 
 function WalletSendTip(props: Props) {
-  const { title, isPending, onCancel, claimIsMine, isSupport, balance, claim } = props;
+  const {
+    title,
+    isPending,
+    onCancel,
+    claimIsMine,
+    isSupport,
+    balance,
+    claim,
+    instantTipEnabled,
+    instantTipMax,
+    openModal,
+    sendSupport,
+  } = props;
   const [tipAmount, setTipAmount] = React.useState(0);
   const [tipError, setTipError] = React.useState();
   const { claim_id: claimId } = claim;
   const isMobile = useIsMobile();
 
-  function handleSubmit() {
-    const { openModal, sendSupport } = props;
+  function sendSupportOrConfirm(instantTipMaxAmount = null) {
+    if (!isSupport && (!instantTipMaxAmount || !instantTipEnabled || tipAmount > instantTipMaxAmount)) {
+      const modalProps = { tipAmount, claimId, title, isSupport };
+      openModal(MODALS.CONFIRM_SEND_TIP, modalProps);
+    } else {
+      sendSupport(tipAmount, claimId, isSupport);
+    }
+  }
 
+  function handleSubmit() {
     if (tipAmount && claimId) {
-      if (isSupport) {
-        sendSupport(tipAmount, claimId, isSupport);
+      if (instantTipEnabled) {
+        if (instantTipMax.currency === 'LBC') {
+          sendSupportOrConfirm(instantTipMax.amount);
+        } else {
+          // Need to convert currency of instant purchase maximum before trying to send support
+          Lbryio.getExchangeRates().then(({ LBC_USD }) => {
+            sendSupportOrConfirm(instantTipMax.amount / LBC_USD);
+          });
+        }
       } else {
-        const modalProps = { tipAmount, claimId, title, isSupport };
-        openModal(MODALS.CONFIRM_SEND_TIP, modalProps);
+        sendSupportOrConfirm();
       }
     }
   }
