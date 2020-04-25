@@ -119,6 +119,15 @@
   }
 }
 
+.file-render__viewer--three {
+  position: relative;
+  overflow: hidden;
+
+  .three-viewer {
+    height: calc(100vh - var(--header-height) - var(--spacing-medium) * 2);
+  }
+}
+
 .file-render__content {
   width: 100%;
   height: 100%;

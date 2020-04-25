@@ -1,7 +1,6 @@
 // @flow
 import * as React from 'react';
 import * as dat from 'dat.gui';
-import classNames from 'classnames';
 import LoadingScreen from 'component/common/loading-screen';
 
 // ThreeJS
@@ -52,14 +51,13 @@ const ThreeLoader = ({ fileType = null, downloadPath = null }, renderModel, mana
 };
 
 type viewerTheme = {
-  gridColor: string,
-  groundColor: string,
-  backgroundColor: string,
-  centerLineColor: string,
+  showFog: boolean,
+  gridColor: number,
+  backgroundColor: number,
+  centerLineColor: number,
 };
 
 type Props = {
-  theme: string,
   source: {
     fileType: string,
     downloadPath: string,
@@ -131,26 +129,15 @@ class ThreeViewer extends React.PureComponent<Props, State> {
 
   constructor(props: Props) {
     super(props);
-    const { theme } = this.props;
     // Object defualt color
-    this.materialColor = '#44b098';
-    // Viewer themes
-    this.themes = {
-      dark: {
-        gridColor: '#414e5c',
-        groundColor: '#13233C',
-        backgroundColor: '#13233C',
-        centerLineColor: '#7f8c8d',
-      },
-      light: {
-        gridColor: '#7f8c8d',
-        groundColor: '#DDD',
-        backgroundColor: '#EEE',
-        centerLineColor: '#2F2F2F',
-      },
+    this.materialColor = 0xffffff;
+    // Default viewer Theme
+    this.theme = {
+      showFog: true,
+      gridColor: 0x414e5c,
+      centerLineColor: 0x7f8c8d,
+      backgroundColor: 0x0b0c0d,
     };
-    // Select current theme
-    this.theme = this.themes[theme] || this.themes.light;
     // State
     this.state = {
       error: null,
@@ -212,29 +199,27 @@ class ThreeViewer extends React.PureComponent<Props, State> {
       });
       // Clean up controls
       if (this.controls) this.controls.dispose();
-      // It's unclear if we need this:
+      // Clean up scene
+      if (this.scene) this.scene.dispose();
+
       if (this.renderer) {
+        this.renderer.context = null;
+        this.renderer.domElement = null;
         this.renderer.renderLists.dispose();
+        this.renderer.forceContextLoss();
         this.renderer.dispose();
+        this.renderer = null;
       }
       // Stop animation
       cancelAnimationFrame(this.frameID);
       // Destroy GUI Controls
       if (this.gui) this.gui.destroy();
-      // Empty objects
-      this.grid = null;
-      this.mesh = null;
-      this.renderer = null;
-      this.material = null;
-      this.geometry = null;
-      this.bufferGeometry = null;
     }
   }
 
   // Define component types
   theme: viewerTheme;
-  themes: { dark: viewerTheme, light: viewerTheme };
-  materialColor: string;
+  materialColor: number;
   // Refs
   viewer: ?HTMLElement;
   guiContainer: ?HTMLElement;
@@ -265,10 +250,10 @@ class ThreeViewer extends React.PureComponent<Props, State> {
 
   transformGroup(group: any) {
     ThreeViewer.fitMeshToCamera(group);
-
     if (!this.targetCenter) {
       const box = new Box3();
-      this.targetCenter = box.setFromObject(this.mesh).getCenter();
+      const center = new Vector3();
+      this.targetCenter = box.setFromObject(this.mesh).getCenter(center);
     }
     this.updateControlsTarget(this.targetCenter);
   }
@@ -452,10 +437,7 @@ class ThreeViewer extends React.PureComponent<Props, State> {
       gammaCorrection: true,
     });
 
-    this.scene = ThreeScene({
-      showFog: true,
-      ...this.theme,
-    });
+    this.scene = ThreeScene(this.theme);
 
     const canvas = this.renderer.domElement;
     const { offsetWidth: width, offsetHeight: height } = this.viewer || {};
@@ -473,7 +455,7 @@ class ThreeViewer extends React.PureComponent<Props, State> {
     // Set viewer size
     this.renderer.setSize(width, height);
 
-    // Create model material
+    // Create material
     this.material = new MeshPhongMaterial({
       depthWrite: true,
       flatShading: true,
@@ -501,26 +483,21 @@ class ThreeViewer extends React.PureComponent<Props, State> {
   }
 
   render() {
-    const { theme } = this.props;
     const { error, isReady, isLoading } = this.state;
     const loadingMessage = __('Loading 3D model.');
-    const showViewer = isReady && !error;
-    const showLoading = isLoading && !error;
-
-    // Adaptive theme for gui controls
-    const containerClass = classNames('gui-container', { light: theme === 'light' });
+    const showLoading = isLoading && !error && !isReady;
+    const containerClass = 'gui-container';
 
     return (
-      <React.Fragment>
-        {error && <LoadingScreen status={error} spinner={false} />}
-        {showLoading && <LoadingScreen status={loadingMessage} spinner />}
-        <div ref={element => (this.guiContainer = element)} className={containerClass} />
-        <div
-          style={{ opacity: showViewer ? 1 : 0 }}
-          className="three-viewer file-render__viewer"
-          ref={viewer => (this.viewer = viewer)}
-        />
-      </React.Fragment>
+      <>
+        <div className="file-render__viewer file-render__viewer--three">
+          <div ref={element => (this.guiContainer = element)} className={containerClass} />
+          <div className="three-viewer" ref={viewer => (this.viewer = viewer)}>
+            {error && <LoadingScreen status={error} spinner={false} />}
+            {showLoading && <LoadingScreen status={loadingMessage} spinner />}
+          </div>
+        </div>
+      </>
     );
   }
 }
