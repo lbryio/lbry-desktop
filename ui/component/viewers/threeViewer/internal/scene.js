@@ -21,17 +21,18 @@ const addLights = (scene, color, groundColor) => {
   scene.add(shadowLight);
 };
 
-const ViewerScene = ({ backgroundColor, groundColor, showFog }) => {
-  // Convert color
-  const bgColor = new Color(backgroundColor);
+const ViewerScene = ({ backgroundColor, showFog }) => {
   // New scene
+  const bg = new Color(backgroundColor);
   const scene = new Scene();
-  // Background color
-  scene.background = bgColor;
-  // Fog effect
-  scene.fog = showFog === true ? new Fog(bgColor, 1, 95) : null;
+  // Transparent background
+  scene.background = bg;
+  // Add fog
+  if (showFog) {
+    scene.fog = new Fog(bg, 1, 54);
+  }
   // Add basic lights
-  addLights(scene, '#FFFFFF', groundColor);
+  addLights(scene, 0xffffff, bg);
   // Return new three scene
   return scene;
 };
