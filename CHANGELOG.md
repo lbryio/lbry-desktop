@@ -12,7 +12,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ### Changed
 
-- Show 'elapsed/total' isntead of countdown timer on video player _community pr!_ ([#4049](https://github.com/lbryio/lbry-desktop/pull/4049))
+- Show 'elapsed/total' instead of countdown timer on video player _community pr!_ ([#4049](https://github.com/lbryio/lbry-desktop/pull/4049))
+- Modified app strings about wallet backup, to emphasize that the wallet also controls claims _community pr!_ ([#4056](https://github.com/lbryio/lbry-desktop/pull/4056))
 
 ### Fixed
 
