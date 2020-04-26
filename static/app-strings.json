@@ -1191,5 +1191,6 @@
   "There are no stats for this channel. Make sure you are signed in with the correct email and have data sharing turned on.": "There are no stats for this channel. Make sure you are signed in with the correct email and have data sharing turned on.",
   "%follower_count% followers": "%follower_count% followers",
   "%lbc_received% LBC Earned": "%lbc_received% LBC Earned",
-  "Earnings may also include any LBC you've sent yourself or added as support. We are working on making this more accurate. Check your wallet page for the correct total balance.": "Earnings may also include any LBC you've sent yourself or added as support. We are working on making this more accurate. Check your wallet page for the correct total balance."
+  "Earnings may also include any LBC you've sent yourself or added as support. We are working on making this more accurate. Check your wallet page for the correct total balance.": "Earnings may also include any LBC you've sent yourself or added as support. We are working on making this more accurate. Check your wallet page for the correct total balance.",
+  "Sign Up": "Sign Up"
 }
