@@ -98,6 +98,16 @@
   }
 }
 
+.file-render__viewer--comic {
+  position: relative;
+  overflow: hidden;
+  .comic-viewer {
+    width: 100%;
+    height: calc(100vh - var(--header-height) - var(--spacing-medium) * 2);
+    max-height: var(--inline-player-max-height);
+  }
+}
+
 .file-render__viewer--iframe {
   display: flex; /*this eliminates extra height from whitespace, if someone edits this with a better technique, tell Jeremy*/
   /*
