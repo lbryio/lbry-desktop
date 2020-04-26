@@ -66,6 +66,7 @@ export default React.memo(function VideoJs(props: Props) {
         type: sourceType,
       },
     ],
+    autoplay: false,
     poster: poster, // thumb looks bad in app, and if autoplay, flashing poster is annoying
     plugins: { eventTracking: true },
   };
