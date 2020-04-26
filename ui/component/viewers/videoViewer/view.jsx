@@ -61,6 +61,9 @@ function VideoViewer(props: Props) {
   const [isPlaying, setIsPlaying] = useState(false);
   const [showAutoplayCountdown, setShowAutoplayCountdown] = useState(false);
   const [isEndededEmbed, setIsEndededEmbed] = useState(false);
+
+  /* isLoading was designed to show loading screen on first play press, rather than completely black screen, but
+  breaks because some browsers (e.g. Firefox) block autoplay but leave the player.play Promise pending */
   const [isLoading, setIsLoading] = useState(false);
 
   const previousUri = usePrevious(uri);
@@ -101,7 +104,6 @@ function VideoViewer(props: Props) {
   }
 
   function onPlay() {
-    console.log('on play!!!');
     setIsLoading(false);
     setIsPlaying(true);
     setShowAutoplayCountdown(false);
@@ -113,9 +115,9 @@ function VideoViewer(props: Props) {
   }
 
   const onPlayerReady = useCallback(player => {
-    console.log('on player ready!!!');
+    const shouldPlay = !embedded || autoplayIfEmbedded;
     // https://blog.videojs.com/autoplay-best-practices-with-video-js/#Programmatic-Autoplay-and-Success-Failure-Detection
-    if (autoplaySetting || autoplayIfEmbedded) {
+    if (shouldPlay) {
       const promise = player.play();
       if (promise !== undefined) {
         promise
@@ -123,13 +125,14 @@ function VideoViewer(props: Props) {
             // Autoplay started
           })
           .catch(function(error) {
+            setIsLoading(false);
             setIsPlaying(false);
             setPlayingUri(null);
           });
       }
     }
 
-    setIsLoading(!embedded); // if we are here outside of an embed, we're playing
+    setIsLoading(shouldPlay); // if we are here outside of an embed, we're playing
     player.on('tracking:buffered', doTrackingBuffered);
     player.on('tracking:firstplay', doTrackingFirstPlay.bind(player));
     player.on('ended', onEnded);
@@ -160,8 +163,8 @@ function VideoViewer(props: Props) {
       {showAutoplayCountdown && <AutoplayCountdown uri={uri} />}
       {isEndededEmbed && <FileViewerEmbeddedEnded uri={uri} />}
       {embedded && !isEndededEmbed && <FileViewerEmbeddedTitle uri={uri} />}
-      {/* change message at any time */}
-      {isLoading && <LoadingScreen status={__('Loading')} />}
+      {/* disable this loading behavior because it breaks when player.play() promise hangs */}
+      {false && isLoading && <LoadingScreen status={__('Loading')} />}
       <VideoJs
         source={source}
         isAudio={isAudio}
