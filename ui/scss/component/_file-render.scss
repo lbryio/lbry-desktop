@@ -125,6 +125,7 @@
 
   .three-viewer {
     height: calc(100vh - var(--header-height) - var(--spacing-medium) * 2);
+    max-height: var(--inline-player-max-height);
   }
 }
 
