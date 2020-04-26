@@ -190,7 +190,7 @@
     "unist-util-visit": "^1.4.1",
     "video.js": "^7.2.2",
     "videojs-event-tracking": "^1.0.1",
-    "villain-react": "^1.0.6",
+    "villain-react": "^1.0.9",
     "wavesurfer.js": "^2.2.1",
     "webpack": "^4.28.4",
     "webpack-bundle-analyzer": "^3.1.0",
