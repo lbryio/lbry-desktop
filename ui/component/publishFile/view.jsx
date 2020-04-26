@@ -135,7 +135,7 @@ function PublishFile(props: Props) {
       return (
         <p className="help--warning">
           {__(
-            'Your video may not be the best format. Use MP4s in H264/AAC format and a friendly bitrate (720p) for more reliable streaming.'
+            'Your video may not be the best format. Use MP4s in H264/AAC format and a friendly bitrate (under 5 mbps) and resolution (720p) for more reliable streaming.'
           )}{' '}
           <Button button="link" label={__('Publishing Guide')} href="https://lbry.com/faq/video-publishing-guide" />
         </p>
@@ -154,7 +154,7 @@ function PublishFile(props: Props) {
       return (
         <p className="help">
           {__(
-            'For video content, use MP4s in H264/AAC format and a friendly bitrate (720p) for more reliable streaming. Lbrytv uploads are restricted to 1GB.'
+            'For video content, use MP4s in H264/AAC format and a friendly bitrate (under 5 mbps) and resolution (720p) for more reliable streaming. Lbrytv uploads are restricted to 1GB.'
           )}{' '}
           <Button button="link" label={__('Publishing Guide')} href="https://lbry.com/faq/video-publishing-guide" />
         </p>
@@ -167,7 +167,7 @@ function PublishFile(props: Props) {
       return (
         <p className="help">
           {__(
-            'For video content, use MP4s in H264/AAC format and a friendly bitrate (720p) for more reliable streaming.'
+            'For video content, use MP4s in H264/AAC format and a friendly bitrate (under 5 mbps) and resolution (720p) for more reliable streaming.'
           )}{' '}
           <Button button="link" label={__('Publishing Guide')} href="https://lbry.com/faq/video-publishing-guide" />
         </p>
