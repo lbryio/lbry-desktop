@@ -1,5 +1,5 @@
 ---
-name: ":raising_hand: First Timers Only"
+name: "🙋First Timers Only"
 about: "Welcome New Contributors! \U0001F915"
 title: ''
 labels: 'first-timers-only'
