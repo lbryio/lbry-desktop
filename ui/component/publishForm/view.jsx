@@ -103,7 +103,7 @@ function PublishForm(props: Props) {
 
   let submitLabel;
   if (isStillEditing) {
-    submitLabel = !publishing ? __('Edit') : __('Editing...');
+    submitLabel = !publishing ? __('Saving') : __('Saving...');
   } else {
     submitLabel = !publishing ? __('Publish') : __('Publishing...');
   }
