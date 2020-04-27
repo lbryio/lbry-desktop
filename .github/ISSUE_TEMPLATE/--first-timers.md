@@ -1,6 +1,6 @@
 ---
 name: "🙋First Timers Only"
-about: "Welcome New Contributors! \U0001F915"
+about: "Welcome New Contributors!"
 title: ''
 labels: 'first-timers-only'
 assignees: ''
