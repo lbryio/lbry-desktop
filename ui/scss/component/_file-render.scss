@@ -321,6 +321,12 @@
   display: none;
 }
 
+.video-js:hover {
+  .vjs-big-play-button {
+    background-color: var(--color-primary);
+  }
+}
+
 .file-render {
   .video-js {
     display: flex;
@@ -331,6 +337,7 @@
   .vjs-big-play-button {
     @extend .button--icon;
     @extend .button--play;
+    background-color: rgba(0, 0, 0, 0.6);
     border: none;
     position: static;
     z-index: 2;
@@ -343,20 +350,9 @@
 
 .file-render--embed {
   /* on embeds, do not inject our colors until interaction*/
-
-  .vjs-big-play-button {
-    background-color: rgba(0, 0, 0, 0.6);
-
-    &.vjs-paused {
-      .vjs-big-play-button {
-        display: block;
-      }
-    }
-  }
-
-  .video-js:hover {
+  .video-js.vjs-paused {
     .vjs-big-play-button {
-      background-color: var(--color-primary);
+      display: block;
     }
   }
 }
