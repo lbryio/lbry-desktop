@@ -34,11 +34,6 @@ export function doDeleteFile(outpoint, deleteFromComputer, abandonClaim) {
   return (dispatch, getState) => {
     const state = getState();
 
-    Lbry.file_delete({
-      outpoint,
-      delete_from_download_dir: deleteFromComputer,
-    });
-
     // If the file is for a claim we published then also abandon the claim
     const myClaimsOutpoints = selectMyClaimsOutpoints(state);
     if (abandonClaim && myClaimsOutpoints.includes(outpoint)) {
@@ -47,6 +42,11 @@ export function doDeleteFile(outpoint, deleteFromComputer, abandonClaim) {
       dispatch(doAbandonClaim(txid, Number(nout)));
     }
     // @if TARGET='app'
+    Lbry.file_delete({
+      outpoint,
+      delete_from_download_dir: deleteFromComputer,
+    });
+    
     dispatch({
       type: ACTIONS.FILE_DELETE,
       data: {
