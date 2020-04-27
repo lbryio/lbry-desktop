@@ -83,11 +83,6 @@ function VideoViewer(props: Props) {
   }
 
   function doTrackingFirstPlay(e: Event, data: any) {
-    if (!embedded) {
-      this.muted(muted);
-      this.volume(volume);
-    }
-
     analytics.videoStartEvent(claimId, data.secondsToLoad);
 
     doAnalyticsView(uri, data.secondsToLoad).then(() => {
@@ -115,6 +110,11 @@ function VideoViewer(props: Props) {
   }
 
   const onPlayerReady = useCallback(player => {
+    if (!embedded) {
+      player.muted(muted);
+      player.volume(volume);
+    }
+
     const shouldPlay = !embedded || autoplayIfEmbedded;
     // https://blog.videojs.com/autoplay-best-practices-with-video-js/#Programmatic-Autoplay-and-Success-Failure-Detection
     if (shouldPlay) {
@@ -134,7 +134,7 @@ function VideoViewer(props: Props) {
 
     setIsLoading(shouldPlay); // if we are here outside of an embed, we're playing
     player.on('tracking:buffered', doTrackingBuffered);
-    player.on('tracking:firstplay', doTrackingFirstPlay.bind(player));
+    player.on('tracking:firstplay', doTrackingFirstPlay);
     player.on('ended', onEnded);
     player.on('play', onPlay);
     player.on('pause', onPause);
