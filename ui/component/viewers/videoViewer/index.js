@@ -2,7 +2,7 @@ import { connect } from 'react-redux';
 import { makeSelectClaimForUri, makeSelectFileInfoForUri, makeSelectThumbnailForUri } from 'lbry-redux';
 import { doChangeVolume, doChangeMute, doAnalyticsView } from 'redux/actions/app';
 import { selectVolume, selectMute } from 'redux/selectors/app';
-import { savePosition, doSetPlayingUri } from 'redux/actions/content';
+import { savePosition } from 'redux/actions/content';
 import VideoViewer from './view';
 import { withRouter } from 'react-router';
 import { doClaimEligiblePurchaseRewards } from 'lbryinc';
@@ -31,7 +31,6 @@ const perform = dispatch => ({
   changeVolume: volume => dispatch(doChangeVolume(volume)),
   savePosition: (uri, position) => dispatch(savePosition(uri, position)),
   changeMute: muted => dispatch(doChangeMute(muted)),
-  setPlayingUri: uri => dispatch(doSetPlayingUri(uri)),
   doAnalyticsView: (uri, timeToStart) => dispatch(doAnalyticsView(uri, timeToStart)),
   claimRewards: () => dispatch(doClaimEligiblePurchaseRewards()),
 });

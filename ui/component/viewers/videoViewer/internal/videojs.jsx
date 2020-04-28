@@ -1,17 +1,28 @@
 // @flow
 import React, { useEffect, useRef } from 'react';
+import classnames from 'classnames';
 import videojs from 'video.js/dist/alt/video.core.novtt.min.js';
 import 'video.js/dist/alt/video-js-cdn.min.css';
 import eventTracking from 'videojs-event-tracking';
 import isUserTyping from 'util/detect-typing';
 
+export type Player = {
+  on: (string, (any) => void) => void,
+  isFullscreen: () => boolean,
+  exitFullscreen: () => boolean,
+  requestFullscreen: () => boolean,
+  play: () => Promise<any>,
+  volume: (?number) => number,
+  muted: (?boolean) => boolean,
+  dispose: () => void,
+  currentTime: number => void,
+};
+
 type Props = {
   source: string,
   sourceType: string,
-  poster: boolean,
-  autoplay: boolean,
-  onPlayerReady: () => null,
-  onVolumeChange: () => null,
+  poster: ?string,
+  onPlayerReady: Player => void,
   isAudio: boolean,
   startMuted: boolean,
 };
@@ -27,11 +38,16 @@ type VideoJSOptions = {
 };
 
 const VIDEO_JS_OPTIONS: VideoJSOptions = {
-  controls: true,
   preload: 'auto',
   playbackRates: [0.25, 0.5, 0.75, 1, 1.1, 1.25, 1.5, 1.75, 2],
   responsive: true,
+  controls: true,
 };
+
+const IS_IOS =
+  (/iPad|iPhone|iPod/.test(navigator.platform) ||
+    (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1)) &&
+  !window.MSStream;
 
 const F11_KEYCODE = 122;
 const SPACE_BAR_KEYCODE = 32;
@@ -55,8 +71,9 @@ if (!Object.keys(videojs.getPlugins()).includes('eventTracking')) {
 /*
 properties for this component should be kept to ONLY those that if changed should REQUIRE an entirely new videojs element
  */
-export default React.memo(function VideoJs(props: Props) {
+export default React.memo<Props>(function VideoJs(props: Props) {
   const { startMuted, source, sourceType, poster, isAudio, onPlayerReady } = props;
+  let player: ?Player;
   const containerRef = useRef();
   const videoJsOptions = {
     ...VIDEO_JS_OPTIONS,
@@ -74,7 +91,7 @@ export default React.memo(function VideoJs(props: Props) {
   videoJsOptions.muted = startMuted;
 
   function handleKeyDown(e: KeyboardEvent) {
-    const videoNode = containerRef.current && containerRef.current.querySelector('video, audio');
+    const videoNode: ?HTMLVideoElement = containerRef.current && containerRef.current.querySelector('video, audio');
 
     if (!videoNode || isUserTyping()) {
       return;
@@ -85,8 +102,8 @@ export default React.memo(function VideoJs(props: Props) {
     }
 
     // Fullscreen toggle shortcuts
-    if (e.keyCode === FULLSCREEN_KEYCODE || e.keyCode === F11_KEYCODE) {
-      if (player && !player.isFullscreen()) {
+    if (player && (e.keyCode === FULLSCREEN_KEYCODE || e.keyCode === F11_KEYCODE)) {
+      if (!player.isFullscreen()) {
         player.requestFullscreen();
       } else {
         player.exitFullscreen();
@@ -111,21 +128,22 @@ export default React.memo(function VideoJs(props: Props) {
     }
   }
 
-  let player;
-
   // Create the video element. Note that a new videojs instantiation will happen on *every* render, so do not add props to this component!
   useEffect(() => {
     if (containerRef.current) {
       const wrapper = document.createElement('div');
-      wrapper.setAttribute('data-vjs-player', true);
+      wrapper.setAttribute('data-vjs-player', 'true');
       const el = document.createElement(isAudio ? 'audio' : 'video');
       el.className = 'video-js';
-      el.playsinline = true;
       wrapper.appendChild(el);
+
+      // $FlowFixMe
       containerRef.current.appendChild(wrapper);
 
       player = videojs(el, videoJsOptions, () => {
-        onPlayerReady(player);
+        if (player) {
+          onPlayerReady(player);
+        }
       });
 
       // fixes #3498 (https://github.com/lbryio/lbry-desktop/issues/3498)
@@ -137,10 +155,14 @@ export default React.memo(function VideoJs(props: Props) {
 
       return () => {
         window.removeEventListener('keydown', handleKeyDown);
-        player.dispose();
+
+        if (player) {
+          player.dispose();
+        }
       };
     }
   });
 
-  return <div className="video-js-parent" ref={containerRef} />;
+  // $FlowFixMe
+  return <div className={classnames('video-js-parent', { 'video-js-parent--ios': IS_IOS })} ref={containerRef} />;
 });
