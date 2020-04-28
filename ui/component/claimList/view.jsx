@@ -6,7 +6,6 @@ import classnames from 'classnames';
 import ClaimPreview from 'component/claimPreview';
 import Spinner from 'component/spinner';
 import { FormField } from 'component/common/form';
-import Card from 'component/common/card';
 import usePersistedState from 'effects/use-persisted-state';
 
 const SORT_NEW = 'new';
@@ -20,7 +19,7 @@ type Props = {
   type: string,
   empty?: string,
   defaultSort?: boolean,
-  onScrollBottom?: any => void,
+  onLoadNewContent?: any => void,
   page?: number,
   pageSize?: number,
   id?: string,
@@ -46,7 +45,7 @@ export default function ClaimList(props: Props) {
     defaultSort,
     type,
     header,
-    onScrollBottom,
+    onLoadNewContent,
     pageSize,
     page,
     id,
@@ -60,10 +59,37 @@ export default function ClaimList(props: Props) {
     timedOutMessage,
   } = props;
   const [scrollBottomCbMap, setScrollBottomCbMap] = useState({});
+  const [shownClaims, setShownClaims] = useState(pageSize);
   const [currentSort, setCurrentSort] = usePersistedState(persistedStorageKey, SORT_NEW);
   const timedOut = uris === null;
   const urisLength = (uris && uris.length) || 0;
   const sortedUris = (urisLength > 0 && (currentSort === SORT_NEW ? uris : uris.slice().reverse())) || [];
+
+  const claimElems = sortedUris.map((uri, index: number) => (
+    <React.Fragment key={index}>
+      {injectedItem && index === 4 && <li>{injectedItem}</li>}
+      <ClaimPreview
+        hidden={index >= Number(shownClaims)}
+        uri={uri}
+        type={type}
+        includeSupportAction={includeSupportAction}
+        showUnresolvedClaim={showUnresolvedClaims}
+        properties={renderProperties || (type !== 'small' ? undefined : false)}
+        showUserBlocked={showHiddenByUser}
+        hideBlock={hideBlock}
+        customShouldHide={(claim: StreamClaim) => {
+          // Hack to hide spee.ch thumbnail publishes
+          // If it meets these requirements, it was probably uploaded here:
+          // https://github.com/lbryio/lbry-redux/blob/master/src/redux/actions/publish.js#L74-L79
+          if (claim.name.length === 24 && !claim.name.includes(' ') && claim.value.author === 'Spee.ch') {
+            return true;
+          } else {
+            return false;
+          }
+        }}
+      />
+    </React.Fragment>
+  ));
 
   function handleSortChange() {
     setCurrentSort(currentSort === SORT_NEW ? SORT_OLD : SORT_NEW);
@@ -74,15 +100,17 @@ export default function ClaimList(props: Props) {
   }, [id, setScrollBottomCbMap]);
 
   useEffect(() => {
-    function handleScroll(e) {
-      if (page && pageSize && onScrollBottom && !scrollBottomCbMap[page]) {
+    function handleScroll() {
+      if (page && pageSize && onLoadNewContent && !scrollBottomCbMap[page]) {
         const mainElWrapper = document.querySelector(`.${MAIN_WRAPPER_CLASS}`);
 
         if (mainElWrapper && !loading && urisLength >= pageSize) {
-          const contentWrapperAtBottomOfPage = window.scrollY + window.innerHeight >= mainElWrapper.offsetHeight;
+          const loadNewContent = page * pageSize - Number(shownClaims) <= pageSize;
 
-          if (contentWrapperAtBottomOfPage) {
-            onScrollBottom();
+          if (window.scrollY + window.innerHeight + 50 >= mainElWrapper.offsetHeight) setShownClaims(shownClaims + 1);
+
+          if (loadNewContent) {
+            onLoadNewContent();
 
             // Save that we've fetched this page to avoid weird stuff happening with fast scrolling
             setScrollBottomCbMap({ ...scrollBottomCbMap, [page]: true });
@@ -91,14 +119,14 @@ export default function ClaimList(props: Props) {
       }
     }
 
-    if (onScrollBottom) {
+    if (onLoadNewContent) {
       window.addEventListener('scroll', handleScroll);
 
       return () => {
         window.removeEventListener('scroll', handleScroll);
       };
     }
-  }, [loading, onScrollBottom, urisLength, pageSize, page, setScrollBottomCbMap]);
+  }, [loading, onLoadNewContent, urisLength, pageSize, page, setScrollBottomCbMap, shownClaims, setShownClaims]);
 
   return (
     <section
@@ -133,34 +161,7 @@ export default function ClaimList(props: Props) {
         </React.Fragment>
       )}
 
-      {urisLength > 0 && (
-        <ul className="card ul--no-style">
-          {sortedUris.map((uri, index) => (
-            <React.Fragment key={uri}>
-              {injectedItem && index === 4 && <li>{injectedItem}</li>}
-              <ClaimPreview
-                uri={uri}
-                type={type}
-                includeSupportAction={includeSupportAction}
-                showUnresolvedClaim={showUnresolvedClaims}
-                properties={renderProperties || (type !== 'small' ? undefined : false)}
-                showUserBlocked={showHiddenByUser}
-                hideBlock={hideBlock}
-                customShouldHide={(claim: StreamClaim) => {
-                  // Hack to hide spee.ch thumbnail publishes
-                  // If it meets these requirements, it was probably uploaded here:
-                  // https://github.com/lbryio/lbry-redux/blob/master/src/redux/actions/publish.js#L74-L79
-                  if (claim.name.length === 24 && !claim.name.includes(' ') && claim.value.author === 'Spee.ch') {
-                    return true;
-                  } else {
-                    return false;
-                  }
-                }}
-              />
-            </React.Fragment>
-          ))}
-        </ul>
-      )}
+      {urisLength > 0 && <ul className="card ul--no-style">{claimElems}</ul>}
       {!timedOut && urisLength === 0 && !loading && (
         <div className="empty empty--centered">{empty || __('No results')}</div>
       )}

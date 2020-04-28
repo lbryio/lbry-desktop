@@ -77,7 +77,7 @@ function ClaimListDiscover(props: Props) {
     header,
     name,
     claimType,
-    pageSize,
+    pageSize = CS.PAGE_SIZE,
     hideBlock,
     defaultClaimType,
     streamType,
@@ -143,7 +143,7 @@ function ClaimListDiscover(props: Props) {
     reposted_claim_id?: string,
     stream_types?: any,
   } = {
-    page_size: pageSize || CS.PAGE_SIZE,
+    page_size: pageSize,
     page,
     name,
     claim_type: claimType || undefined,
@@ -267,8 +267,8 @@ function ClaimListDiscover(props: Props) {
     didNavigateForward ||
     (!loading &&
       claimSearchResult &&
-      claimSearchResult.length < CS.PAGE_SIZE * page &&
-      claimSearchResult.length % CS.PAGE_SIZE === 0);
+      claimSearchResult.length < pageSize * page &&
+      claimSearchResult.length % pageSize === 0);
 
   // Don't use the query from createNormalizedClaimSearchKey for the effect since that doesn't include page & release_time
   const optionsStringForEffect = JSON.stringify(options);
@@ -372,7 +372,7 @@ function ClaimListDiscover(props: Props) {
     return `?${newUrlParams.toString()}`;
   }
 
-  function handleScrollBottom() {
+  function handleLoadNewContent() {
     if (!loading && infiniteScroll) {
       setPage(page + 1);
     }
@@ -601,9 +601,9 @@ function ClaimListDiscover(props: Props) {
         header={header || defaultHeader}
         headerLabel={headerLabel}
         headerAltControls={meta}
-        onScrollBottom={handleScrollBottom}
+        onLoadNewContent={handleLoadNewContent}
         page={page}
-        pageSize={CS.PAGE_SIZE}
+        pageSize={pageSize}
         timedOutMessage={timedOutMessage}
         renderProperties={renderProperties}
         includeSupportAction={includeSupportAction}
@@ -613,7 +613,7 @@ function ClaimListDiscover(props: Props) {
 
       {loading && (
         <div className="card">
-          {new Array(pageSize || CS.PAGE_SIZE).fill(1).map((x, i) => (
+          {new Array(pageSize).fill(1).map((x, i) => (
             <ClaimPreview key={i} placeholder="loading" />
           ))}
         </div>
