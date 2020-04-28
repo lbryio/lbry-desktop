@@ -1,6 +1,7 @@
 // @flow
 import React from 'react';
 import Button from 'component/button';
+import { parseURI } from 'lbry-redux';
 import { FormField, Form } from 'component/common/form';
 import { MINIMUM_PUBLISH_BID } from 'constants/claim';
 import useIsMobile from 'effects/use-is-mobile';
@@ -21,11 +22,23 @@ type Props = {
 };
 
 function WalletSendTip(props: Props) {
-  const { title, isPending, onCancel, claimIsMine, isSupport, balance, claim, sendTipCallback, sendSupport } = props;
+  const {
+    uri,
+    title,
+    isPending,
+    onCancel,
+    claimIsMine,
+    isSupport,
+    balance,
+    claim,
+    sendTipCallback,
+    sendSupport,
+  } = props;
   const [tipAmount, setTipAmount] = React.useState(0);
   const [tipError, setTipError] = React.useState();
   const { claim_id: claimId } = claim;
   const isMobile = useIsMobile();
+  const { channelName } = parseURI(uri);
 
   function handleSendButtonClicked() {
     sendSupport(tipAmount, claimId, isSupport);
@@ -92,17 +105,19 @@ function WalletSendTip(props: Props) {
           onChange={event => handleSupportPriceChange(event)}
           inputButton={
             <Button button="primary" type="submit" label={__('Send')} disabled={isPending || tipError || !tipAmount} />
-          }
+          } // data = 'This will increase the overall bid amount for {}, which will boost its ability to be discovered while active.'
           helper={
             <React.Fragment>
               {claimIsMine || isSupport
                 ? __(
-                    'This will increase the overall bid amount for %title%, which will boost its ability to be discovered while active.',
-                    { title }
+                    'This will increase the overall bid amount for ' +
+                      (title || '@' + channelName) +
+                      ', which will boost its ability to be discovered while active.'
                   )
                 : __(
-                    'This will appear as a tip for %title%, which will boost its ability to be discovered while active.',
-                    { title }
+                    'This will appear as a tip for ' +
+                      (title || '@' + channelName) +
+                      ', which will boost its ability to be discovered while active.'
                   )}{' '}
               <Button label={__('Learn more')} button="link" href="https://lbry.com/faq/tipping" />.
             </React.Fragment>
