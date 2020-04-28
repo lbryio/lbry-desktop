@@ -58,6 +58,7 @@ type Props = {
   customShouldHide?: Claim => boolean,
   showUnresolvedClaim?: boolean,
   includeSupportAction?: boolean,
+  hidden?: boolean,
 };
 
 const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
@@ -90,6 +91,7 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
     customShouldHide,
     showUnresolvedClaim,
     includeSupportAction,
+    hidden = false,
   } = props;
   const shouldFetch =
     claim === undefined || (claim !== null && claim.value_type === 'channel' && isEmpty(claim.meta) && !pending);
@@ -218,6 +220,7 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
   return (
     <li
       ref={ref}
+      style={hidden ? { display: 'none' } : {}}
       role="link"
       onClick={pending || type === 'inline' ? undefined : handleOnClick}
       onContextMenu={handleContextMenu}
