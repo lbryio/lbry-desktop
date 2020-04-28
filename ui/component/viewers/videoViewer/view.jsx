@@ -1,6 +1,7 @@
 // @flow
 import React, { useEffect, useState, useContext, useCallback } from 'react';
 import { stopContextMenu } from 'util/context-menu';
+import type { Player } from './internal/videojs';
 import VideoJs from './internal/videojs';
 
 import analytics from 'analytics';
@@ -12,6 +13,8 @@ import usePrevious from 'effects/use-previous';
 import FileViewerEmbeddedEnded from 'lbrytv/component/fileViewerEmbeddedEnded';
 import FileViewerEmbeddedTitle from 'lbrytv/component/fileViewerEmbeddedTitle';
 import LoadingScreen from 'component/common/loading-screen';
+
+const PLAY_TIMEOUT_ERROR = 'play_timeout_error';
 
 type Props = {
   position: number,
@@ -28,7 +31,6 @@ type Props = {
   autoplayIfEmbedded: boolean,
   doAnalyticsView: (string, number) => Promise<any>,
   claimRewards: () => void,
-  setPlayingUri: (?string) => void,
 };
 
 /*
@@ -52,7 +54,6 @@ function VideoViewer(props: Props) {
     autoplayIfEmbedded,
     doAnalyticsView,
     claimRewards,
-    setPlayingUri,
   } = props;
   const claimId = claim && claim.claim_id;
   const isAudio = contentType.includes('audio');
@@ -109,7 +110,7 @@ function VideoViewer(props: Props) {
     setIsPlaying(false);
   }
 
-  const onPlayerReady = useCallback(player => {
+  const onPlayerReady = useCallback((player: Player) => {
     if (!embedded) {
       player.muted(muted);
       player.volume(volume);
@@ -120,22 +121,21 @@ function VideoViewer(props: Props) {
     if (shouldPlay) {
       const playPromise = player.play();
       const timeoutPromise = new Promise((resolve, reject) => {
-        setTimeout(() => reject('test'), 1000);
+        setTimeout(() => reject(PLAY_TIMEOUT_ERROR), 1000);
       });
 
       Promise.race([playPromise, timeoutPromise]).catch(error => {
-        if (error === 'test') {
+        if (error === PLAY_TIMEOUT_ERROR) {
           // The player promise hung
           // This is probably in firefox
-          // Try playing again, it works?
+          // The second attempt usually works
           player.play();
         } else {
-          // Autoplay was actually blocked by the browser.
+          // Autoplay was actually blocked by the browser
           // Reset everything so the user sees the thumbnail/play button and can start it on their own
           setIsLoading(false);
           setIsPlaying(false);
         }
-        console.log('error', error);
       });
     }
 
