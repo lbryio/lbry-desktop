@@ -17,6 +17,7 @@ export default function ShareButton(props: Props) {
       button="alt"
       icon={ICONS.SHARE}
       label={__('Share')}
+      title={__('Share this channel')}
       onClick={() => doOpenModal(MODALS.SOCIAL_SHARE, { uri, webShareable: true })}
     />
   );
