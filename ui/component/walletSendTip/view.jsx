@@ -6,7 +6,7 @@ import { MINIMUM_PUBLISH_BID } from 'constants/claim';
 import useIsMobile from 'effects/use-is-mobile';
 import CreditAmount from 'component/common/credit-amount';
 import I18nMessage from 'component/i18nMessage';
-import WalletBalance from 'component/walletBalance';
+import CreditAmount from 'component/common/credit-amount';
 
 type Props = {
   uri: string,
@@ -96,7 +96,7 @@ function WalletSendTip(props: Props) {
           }
           helper={
             <React.Fragment>
-               <WalletBalance />
+               <CreditAmount />
               {claimIsMine || isSupport
                 ? __(
                     'This will increase the overall bid amount for %title%, which will boost its ability to be discovered while active.',
