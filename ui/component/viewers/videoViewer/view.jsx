@@ -118,18 +118,25 @@ function VideoViewer(props: Props) {
     const shouldPlay = !embedded || autoplayIfEmbedded;
     // https://blog.videojs.com/autoplay-best-practices-with-video-js/#Programmatic-Autoplay-and-Success-Failure-Detection
     if (shouldPlay) {
-      const promise = player.play();
-      if (promise !== undefined) {
-        promise
-          .then(function() {
-            // Autoplay started
-          })
-          .catch(function(error) {
-            setIsLoading(false);
-            setIsPlaying(false);
-            setPlayingUri(null);
-          });
-      }
+      const playPromise = player.play();
+      const timeoutPromise = new Promise((resolve, reject) => {
+        setTimeout(() => reject('test'), 1000);
+      });
+
+      Promise.race([playPromise, timeoutPromise]).catch(error => {
+        if (error === 'test') {
+          // The player promise hung
+          // This is probably in firefox
+          // Try playing again, it works?
+          player.play();
+        } else {
+          // Autoplay was actually blocked by the browser.
+          // Reset everything so the user sees the thumbnail/play button and can start it on their own
+          setIsLoading(false);
+          setIsPlaying(false);
+        }
+        console.log('error', error);
+      });
     }
 
     setIsLoading(shouldPlay); // if we are here outside of an embed, we're playing
@@ -164,7 +171,7 @@ function VideoViewer(props: Props) {
       {isEndededEmbed && <FileViewerEmbeddedEnded uri={uri} />}
       {embedded && !isEndededEmbed && <FileViewerEmbeddedTitle uri={uri} />}
       {/* disable this loading behavior because it breaks when player.play() promise hangs */}
-      {false && isLoading && <LoadingScreen status={__('Loading')} />}
+      {isLoading && <LoadingScreen status={__('Loading')} />}
       <VideoJs
         source={source}
         isAudio={isAudio}
