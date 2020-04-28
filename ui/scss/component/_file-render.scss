@@ -315,6 +315,12 @@
       display: flex;
     }
   }
+
+  // Hide video controls on safari to prevent displaying two sets of controls
+  // Apple has their own controls for all devices
+  video::-webkit-media-controls-panel-container {
+    display: none !important;
+  }
 }
 
 .file-viewer--ended-embed .vjs-big-play-button {
