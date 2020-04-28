@@ -21,6 +21,7 @@ export default function BlockButton(props: Props) {
   const blockRef = useRef();
   const isHovering = useHover(blockRef);
   const blockLabel = channelIsBlocked ? __('Blocked') : __('Block');
+  const blockTitlePrefix = channelIsBlocked ? __('Unblock') : __('Block');
   const blockedOverride = channelIsBlocked && isHovering && __('Unblock');
 
   return permanentUrl && !claimIsMine ? (
@@ -29,6 +30,7 @@ export default function BlockButton(props: Props) {
       icon={ICONS.BLOCK}
       button={'alt'}
       label={blockedOverride || blockLabel}
+      title={`${blockTitlePrefix} ${__('this channel')}`}
       requiresAuth={IS_WEB}
       onClick={e => {
         e.stopPropagation();
