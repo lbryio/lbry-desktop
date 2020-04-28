@@ -105,7 +105,7 @@ function WalletSendTip(props: Props) {
           onChange={event => handleSupportPriceChange(event)}
           inputButton={
             <Button button="primary" type="submit" label={__('Send')} disabled={isPending || tipError || !tipAmount} />
-          } // data = 'This will increase the overall bid amount for {}, which will boost its ability to be discovered while active.'
+          }
           helper={
             <React.Fragment>
               {claimIsMine || isSupport
