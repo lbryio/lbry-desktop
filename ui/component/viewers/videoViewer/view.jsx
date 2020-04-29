@@ -8,6 +8,7 @@ import isUserTyping from 'util/detect-typing';
 import analytics from 'analytics';
 import { EmbedContext } from 'page/embedWrapper/view';
 import { FORCE_CONTENT_TYPE_PLAYER } from 'constants/claim';
+import usePersistedState from 'effects/use-persisted-state';
 
 const F11_KEYCODE = 122;
 const SPACE_BAR_KEYCODE = 32;
@@ -48,11 +49,10 @@ if (!Object.keys(videojs.getPlugins()).includes('eventTracking')) {
 
 type Props = {
   volume: number,
-  position: number,
+  positionParam: number,
   muted: boolean,
   hasFileInfo: boolean,
   changeVolume: number => void,
-  savePosition: (string, number) => void,
   changeMute: boolean => void,
   source: string,
   contentType: string,
@@ -75,7 +75,7 @@ function VideoViewer(props: Props) {
     volume,
     muted,
     thumbnail,
-    position,
+    positionParam,
     claim,
     autoplayParam,
   } = props;
@@ -83,6 +83,7 @@ function VideoViewer(props: Props) {
   const videoRef = useRef();
   const isAudio = contentType.includes('audio');
   const embedded = useContext(EmbedContext);
+  const [position, setPosition] = usePersistedState('player-position-for-claim:' + claimId, positionParam || 0);
 
   if (embedded && !autoplayParam) {
     VIDEO_JS_OPTIONS.autoplay = false;
@@ -199,6 +200,10 @@ function VideoViewer(props: Props) {
     }
 
     function doEnded() {
+      if (player) {
+        setPosition(0);
+      }
+
       onEndedCb();
     }
 
@@ -209,11 +214,18 @@ function VideoViewer(props: Props) {
       changeMute(isMuted);
     }
 
+    function doTimeUpdate() {
+      if (player) {
+        setPosition(player.currentTime());
+      }
+    }
+
     if (player) {
       player.on('tracking:buffered', doTrackingBuffered);
       player.on('tracking:firstplay', doTrackingFirstPlay);
       player.on('ended', doEnded);
       player.on('volumechange', doVolume);
+      player.on('timeupdate', doTimeUpdate);
 
       // fixes #3498 (https://github.com/lbryio/lbry-desktop/issues/3498)
       // summary: on firefox the focus would stick to the fullscreen button which caused buggy behavior with spacebar

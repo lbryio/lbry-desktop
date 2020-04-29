@@ -16,7 +16,7 @@ const select = (state, props) => {
     autoplayParam: autoplay,
     volume: selectVolume(state),
     muted: selectMute(state),
-    position: position,
+    positionParam: position,
     hasFileInfo: Boolean(makeSelectFileInfoForUri(props.uri)(state)),
     thumbnail: makeSelectThumbnailForUri(props.uri)(state),
     claim: makeSelectClaimForUri(props.uri)(state),
