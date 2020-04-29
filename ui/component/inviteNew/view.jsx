@@ -20,7 +20,7 @@ type Props = {
 
 function InviteNew(props: Props) {
   const { inviteNew, errorMessage, isPending, referralCode = '', channels } = props;
-  const rewardAmount = 20;
+  const rewardAmount = 15;
 
   // Email
   const [email, setEmail] = useState('');
