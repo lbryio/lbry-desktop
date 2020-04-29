@@ -17,7 +17,7 @@ type Props = {
   isPending: boolean,
   sendSupport: (number, string, boolean) => void,
   onCancel: () => void,
-  sendTipCallback?: () => void,
+  closeModal: () => void,
   balance: number,
   isSupport: boolean,
   openModal: (id: string, { tipAmount: number, claimId: string, isSupport: boolean }) => void,
@@ -38,6 +38,7 @@ function WalletSendTip(props: Props) {
     instantTipMax,
     openModal,
     sendSupport,
+    closeModal,
   } = props;
   const [tipAmount, setTipAmount] = React.useState(0);
   const [tipError, setTipError] = React.useState();
@@ -50,6 +51,7 @@ function WalletSendTip(props: Props) {
       openModal(MODALS.CONFIRM_SEND_TIP, modalProps);
     } else {
       sendSupport(tipAmount, claimId, isSupport);
+      closeModal();
     }
   }
 

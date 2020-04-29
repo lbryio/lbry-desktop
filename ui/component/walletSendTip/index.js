@@ -8,7 +8,7 @@ import {
   SETTINGS,
 } from 'lbry-redux';
 import WalletSendTip from './view';
-import { doOpenModal } from 'redux/actions/app';
+import { doOpenModal, doHideModal } from 'redux/actions/app';
 import { withRouter } from 'react-router';
 import { makeSelectClientSetting } from 'redux/selectors/settings';
 
@@ -23,6 +23,7 @@ const select = (state, props) => ({
 
 const perform = dispatch => ({
   openModal: (modal, props) => dispatch(doOpenModal(modal, props)),
+  closeModal: () => dispatch(doHideModal()),
   sendSupport: (amount, claimId, isSupport) => dispatch(doSendTip(amount, claimId, isSupport)),
 });
 
