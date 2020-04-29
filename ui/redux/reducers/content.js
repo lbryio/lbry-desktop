@@ -3,6 +3,7 @@ import * as ACTIONS from 'constants/action_types';
 const reducers = {};
 const defaultState = {
   playingUri: null,
+  floatingUri: null,
   channelClaimCounts: {},
   positions: {},
   history: [],
@@ -11,6 +12,11 @@ const defaultState = {
 reducers[ACTIONS.SET_PLAYING_URI] = (state, action) =>
   Object.assign({}, state, {
     playingUri: action.data.uri,
+  });
+
+reducers[ACTIONS.SET_FLOATING_URI] = (state, action) =>
+  Object.assign({}, state, {
+    floatingUri: action.data.uri,
   });
 
 reducers[ACTIONS.SET_CONTENT_POSITION] = (state, action) => {

@@ -11,7 +11,7 @@ import { FORCE_CONTENT_TYPE_PLAYER } from 'constants/claim';
 import AutoplayCountdown from 'component/autoplayCountdown';
 import usePrevious from 'effects/use-previous';
 import FileViewerEmbeddedEnded from 'lbrytv/component/fileViewerEmbeddedEnded';
-import FileViewerEmbeddedTitle from 'lbrytv/component/fileViewerEmbeddedTitle';
+import FileViewerEmbeddedTitle from 'component/fileViewerEmbeddedTitle';
 import LoadingScreen from 'component/common/loading-screen';
 
 const PLAY_TIMEOUT_ERROR = 'play_timeout_error';

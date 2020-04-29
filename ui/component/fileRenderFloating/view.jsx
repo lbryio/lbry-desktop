@@ -21,13 +21,21 @@ type Props = {
   streamingUrl?: string,
   title: ?string,
   floatingPlayerEnabled: boolean,
-  clearPlayingUri: () => void,
+  closeFloatingPlayer: () => void,
   renderMode: string,
 };
 
 export default function FileRenderFloating(props: Props) {
-  const { fileInfo, uri, streamingUrl, title, isFloating, clearPlayingUri, floatingPlayerEnabled, renderMode } = props;
-
+  const {
+    fileInfo,
+    uri,
+    streamingUrl,
+    title,
+    isFloating,
+    closeFloatingPlayer,
+    floatingPlayerEnabled,
+    renderMode,
+  } = props;
   const isMobile = useIsMobile();
   const [fileViewerRect, setFileViewerRect] = usePersistedState('inline-file-viewer:rect');
   const [position, setPosition] = usePersistedState('floating-file-viewer:position', {
@@ -111,7 +119,7 @@ export default function FileRenderFloating(props: Props) {
                   <Button navigate={uri} icon={ICONS.VIEW} button="primary" />
                 </Tooltip>
                 <Tooltip label={__('Close')}>
-                  <Button onClick={clearPlayingUri} icon={ICONS.REMOVE} button="primary" />
+                  <Button onClick={closeFloatingPlayer} icon={ICONS.REMOVE} button="primary" />
                 </Tooltip>
               </div>
             </div>

@@ -8,3 +8,20 @@
   align-items: center;
   background-color: var(--color-black);
 }
+
+.embed__inline-button {
+  @include thumbnail;
+  position: relative;
+  background-position: 50% 50%;
+  background-repeat: no-repeat;
+  background-size: 100%;
+  height: 300px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  @media (max-width: $breakpoint-small) {
+    height: 200px;
+  }
+}
