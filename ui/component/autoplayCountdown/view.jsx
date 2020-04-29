@@ -39,7 +39,7 @@ function AutoplayCountdown(props: Props) {
     if (!isFloating) {
       if (navigateUrl) {
         push(navigateUrl);
-        setPlayingUri(null);
+        setPlayingUri(nextRecommendedUri);
       }
     } else {
       if (nextRecommendedUri) {
