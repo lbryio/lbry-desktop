@@ -57,7 +57,6 @@ function VideoViewer(props: Props) {
   } = props;
   const claimId = claim && claim.claim_id;
   const isAudio = contentType.includes('audio');
-
   const forcePlayer = FORCE_CONTENT_TYPE_PLAYER.includes(contentType);
   const [isPlaying, setIsPlaying] = useState(false);
   const [showAutoplayCountdown, setShowAutoplayCountdown] = useState(false);
@@ -85,7 +84,6 @@ function VideoViewer(props: Props) {
 
   function doTrackingFirstPlay(e: Event, data: any) {
     analytics.videoStartEvent(claimId, data.secondsToLoad);
-
     doAnalyticsView(uri, data.secondsToLoad).then(() => {
       claimRewards();
     });
@@ -110,54 +108,48 @@ function VideoViewer(props: Props) {
     setIsPlaying(false);
   }
 
-  const onPlayerReady = useCallback((player: Player) => {
-    if (!embedded) {
-      player.muted(muted);
-      player.volume(volume);
-    }
+  const onPlayerReady = useCallback(
+    (player: Player) => {
+      if (!embedded) {
+        player.muted(muted);
+        player.volume(volume);
+      }
 
-    const shouldPlay = !embedded || autoplayIfEmbedded;
-    // https://blog.videojs.com/autoplay-best-practices-with-video-js/#Programmatic-Autoplay-and-Success-Failure-Detection
-    if (shouldPlay) {
-      const playPromise = player.play();
-      const timeoutPromise = new Promise((resolve, reject) => {
-        setTimeout(() => reject(PLAY_TIMEOUT_ERROR), 1000);
-      });
+      const shouldPlay = !embedded || autoplayIfEmbedded;
+      // https://blog.videojs.com/autoplay-best-practices-with-video-js/#Programmatic-Autoplay-and-Success-Failure-Detection
+      if (shouldPlay) {
+        const playPromise = player.play();
+        const timeoutPromise = new Promise((resolve, reject) => {
+          setTimeout(() => reject(PLAY_TIMEOUT_ERROR), 1000);
+        });
 
-      Promise.race([playPromise, timeoutPromise]).catch(error => {
-        if (error === PLAY_TIMEOUT_ERROR) {
-          // The player promise hung
-          // This is probably in firefox
-          // The second attempt usually works
-          player.play();
-        } else {
-          // Autoplay was actually blocked by the browser
-          // Reset everything so the user sees the thumbnail/play button and can start it on their own
+        Promise.race([playPromise, timeoutPromise]).catch(error => {
           setIsLoading(false);
           setIsPlaying(false);
+        });
+      }
+
+      setIsLoading(shouldPlay); // if we are here outside of an embed, we're playing
+      player.on('tracking:buffered', doTrackingBuffered);
+      player.on('tracking:firstplay', doTrackingFirstPlay);
+      player.on('ended', onEnded);
+      player.on('play', onPlay);
+      player.on('pause', onPause);
+      player.on('volumechange', () => {
+        if (player && player.volume() !== volume) {
+          changeVolume(player.volume());
+        }
+        if (player && player.muted() !== muted) {
+          changeMute(player.muted());
         }
       });
-    }
 
-    setIsLoading(shouldPlay); // if we are here outside of an embed, we're playing
-    player.on('tracking:buffered', doTrackingBuffered);
-    player.on('tracking:firstplay', doTrackingFirstPlay);
-    player.on('ended', onEnded);
-    player.on('play', onPlay);
-    player.on('pause', onPause);
-    player.on('volumechange', () => {
-      if (player && player.volume() !== volume) {
-        changeVolume(player.volume());
+      if (position) {
+        player.currentTime(position);
       }
-      if (player && player.muted() !== muted) {
-        changeMute(player.muted());
-      }
-    });
-
-    if (position) {
-      player.currentTime(position);
-    }
-  }, []);
+    },
+    [uri]
+  );
 
   return (
     <div
