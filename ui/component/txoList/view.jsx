@@ -178,7 +178,7 @@ function TxoList(props: Props) {
           <Button button="secondary" label={__('Refresh')} onClick={() => fetchTxoPage()} />
         </div>
       }
-      isBodyTable
+      isBodyList
       body={
         <div>
           <div className="card__body-actions">

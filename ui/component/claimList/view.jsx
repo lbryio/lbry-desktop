@@ -6,7 +6,6 @@ import classnames from 'classnames';
 import ClaimPreview from 'component/claimPreview';
 import Spinner from 'component/spinner';
 import { FormField } from 'component/common/form';
-import Card from 'component/common/card';
 import usePersistedState from 'effects/use-persisted-state';
 
 const SORT_NEW = 'new';
@@ -34,6 +33,7 @@ type Props = {
   hideBlock: boolean,
   injectedItem: ?Node,
   timedOutMessage?: Node,
+  isCardBody?: boolean,
 };
 
 export default function ClaimList(props: Props) {
@@ -58,6 +58,7 @@ export default function ClaimList(props: Props) {
     hideBlock,
     injectedItem,
     timedOutMessage,
+    isCardBody = false,
   } = props;
   const [scrollBottomCbMap, setScrollBottomCbMap] = useState({});
   const [currentSort, setCurrentSort] = usePersistedState(persistedStorageKey, SORT_NEW);
@@ -104,6 +105,7 @@ export default function ClaimList(props: Props) {
     <section
       className={classnames('claim-list', {
         'claim-list--small': type === 'small',
+        'claim-list--card-body': isCardBody,
       })}
     >
       {header !== false && (
@@ -134,7 +136,11 @@ export default function ClaimList(props: Props) {
       )}
 
       {urisLength > 0 && (
-        <ul className="card ul--no-style">
+        <ul
+          className={classnames('ul--no-style', {
+            card: !isCardBody,
+          })}
+        >
           {sortedUris.map((uri, index) => (
             <React.Fragment key={uri}>
               {injectedItem && index === 4 && <li>{injectedItem}</li>}

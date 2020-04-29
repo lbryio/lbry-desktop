@@ -34,7 +34,7 @@ type Props = {
   thumbnail: string,
 };
 
-class FileRender extends React.PureComponent<Props, State> {
+class FileRender extends React.PureComponent<Props> {
   constructor(props: Props) {
     super(props);
 

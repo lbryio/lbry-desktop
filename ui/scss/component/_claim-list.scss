@@ -4,6 +4,17 @@
   }
 }
 
+.claim-list--card-body {
+  .claim-preview {
+    padding: 0 var(--spacing-medium);
+    padding-right: 0;
+
+    @media (max-width: $breakpoint-small) {
+      padding: 0;
+    }
+  }
+}
+
 .claim-list__header {
   display: flex;
   flex-wrap: wrap;
@@ -110,8 +121,8 @@
     font-size: 14px;
 
     .media__thumb {
-      width: 5rem;
-      height: 3rem;
+      width: 8rem;
+      height: auto;
     }
 
     .channel-thumbnail {
@@ -145,6 +156,7 @@
 .claim-preview--small {
   .media__thumb {
     width: 8rem;
+    height: auto;
   }
 
   .channel-thumbnail {

@@ -2,6 +2,7 @@
 import React from 'react';
 import ClaimList from 'component/claimList';
 import Ads from 'lbrytv/component/ads';
+import Card from 'component/common/card';
 
 type Options = {
   related_to: string,
@@ -63,13 +64,19 @@ export default class RecommendedContent extends React.PureComponent<Props> {
     const { recommendedContent, isSearching, isAuthenticated } = this.props;
 
     return (
-      <ClaimList
-        type="small"
-        loading={isSearching}
-        uris={recommendedContent}
-        injectedItem={!isAuthenticated && IS_WEB && <Ads type="video" small />}
-        header={__('Related')}
-        empty={__('No related content found')}
+      <Card
+        isBodyList
+        title={__('Related')}
+        body={
+          <ClaimList
+            isCardBody
+            type="small"
+            loading={isSearching}
+            uris={recommendedContent}
+            injectedItem={!isAuthenticated && IS_WEB && <Ads type="video" small />}
+            empty={__('No related content found')}
+          />
+        }
       />
     );
   }
