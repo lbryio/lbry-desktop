@@ -1198,5 +1198,6 @@
   "Sorry, your request timed out. Modify your options or %again%": "Sorry, your request timed out. Modify your options or %again%",
   "Pause at any time to select a thumbnail from your video": "Pause at any time to select a thumbnail from your video",
   "For video content, use MP4s in H264/AAC format and a friendly bitrate (under 5 mbps) and resolution (720p) for more reliable streaming.": "For video content, use MP4s in H264/AAC format and a friendly bitrate (under 5 mbps) and resolution (720p) for more reliable streaming.",
-  "this channel": "this channel"
+  "this channel": "this channel",
+  "Share this channel": "Share this channel"
 }

@@ -146,12 +146,38 @@ $metadata-z-index: 1;
 .channel__quick-actions {
   display: flex;
   flex-direction: row;
-  margin-top: var(--spacing-small);
   margin-left: var(--spacing-medium);
   position: absolute;
   top: 0;
   right: var(--spacing-medium);
   margin-top: var(--spacing-medium);
+  z-index: $metadata-z-index;
+  flex-wrap: wrap;
+  font-size: var(--font-base);
+
+  > * {
+    padding: 0 var(--spacing-xsmall);
+
+    &:not(:last-child) {
+      margin-right: var(--spacing-medium);
+    }
+  }
+
+  @media (max-width: $breakpoint-small) {
+    > * {
+      margin-bottom: var(--spacing-xsmall);
+    }
+  }
+}
+
+.channel__owner-actions {
+  display: flex;
+  flex-direction: row;
+  margin-left: var(--spacing-medium);
+  position: absolute;
+  bottom: 0;
+  right: var(--spacing-medium);
+  margin-bottom: var(--spacing-medium);
   z-index: $metadata-z-index;
   flex-wrap: wrap;
   font-size: var(--font-base);

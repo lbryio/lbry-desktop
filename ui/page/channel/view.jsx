@@ -25,6 +25,7 @@ import HelpLink from 'component/common/help-link';
 import { DEBOUNCE_WAIT_DURATION_MS } from 'constants/search';
 import ClaimList from 'component/claimList';
 import relativeDate from 'tiny-relative-date';
+import ClaimAbandonButton from 'component/claimAbandonButton';
 
 const PAGE_VIEW_QUERY = `view`;
 const ABOUT_PAGE = `about`;
@@ -41,7 +42,7 @@ type Props = {
   thumbnail: ?string,
   page: number,
   location: { search: string },
-  history: { push: string => void },
+  history: { push: string => void, goBack: void => void },
   match: { params: { attribute: ?string } },
   channelIsMine: boolean,
   isSubscribed: boolean,
@@ -236,20 +237,18 @@ function ChannelPage(props: Props) {
             <ChannelThumbnail className="channel__thumbnail--channel-page" uri={uri} thumbnailPreview={thumbPreview} />
           )}
           <h1 className="channel__title">{title || '@' + channelName}</h1>
-          {channelIsMine && !editing && (
-            <Button
-              button="alt"
-              title={__('Edit')}
-              onClick={() => setEditing(!editing)}
-              icon={ICONS.EDIT}
-              iconSize={28}
-            />
-          )}
+
           <div className="channel__meta">
             <span>
               {subCount} {subCount !== 1 ? __('Followers') : __('Follower')}
               <HelpLink href="https://lbry.com/faq/views" />
             </span>
+            {channelIsMine && !editing && (
+              <div className="channel__owner-actions">
+                <Button button="alt" title={__('Edit')} onClick={() => setEditing(!editing)} icon={ICONS.EDIT} />
+                <ClaimAbandonButton button={'alt'} uri={uri} abandonActionCallback={() => history.goBack()} />
+              </div>
+            )}
           </div>
         </div>
       </header>
