@@ -212,7 +212,7 @@ class HelpPage extends React.PureComponent<Props, State> {
               </span>
             ) : null
           }
-          isBodyTable
+          isBodyList
           body={
             <div className="table__wrapper">
               <table className="table table--stretch">

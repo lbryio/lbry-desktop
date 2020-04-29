@@ -15,7 +15,7 @@ type Props = {
   icon?: string,
   className?: string,
   isPageTitle?: boolean,
-  isBodyTable?: boolean,
+  isBodyList?: boolean,
   defaultExpand?: boolean,
   nag?: Node,
 };
@@ -30,7 +30,7 @@ export default function Card(props: Props) {
     icon,
     className,
     isPageTitle = false,
-    isBodyTable = false,
+    isBodyList = false,
     defaultExpand,
     nag,
   } = props;
@@ -70,7 +70,7 @@ export default function Card(props: Props) {
             <div
               className={classnames('card__body', {
                 'card__body--no-title': !title && !subtitle,
-                'card__body--table': isBodyTable,
+                'card__body--list': isBodyList,
               })}
             >
               {body}
