@@ -120,7 +120,7 @@ function VideoViewer(props: Props) {
       if (shouldPlay) {
         const playPromise = player.play();
         const timeoutPromise = new Promise((resolve, reject) => {
-          setTimeout(() => reject(PLAY_TIMEOUT_ERROR), 1000);
+          setTimeout(() => reject(PLAY_TIMEOUT_ERROR), 2500);
         });
 
         Promise.race([playPromise, timeoutPromise]).catch(error => {
