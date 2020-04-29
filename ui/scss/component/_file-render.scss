@@ -229,6 +229,10 @@
   .button {
     color: var(--color-white);
 
+    &:hover {
+      color: var(--color-white);
+    }
+
     &:first-of-type {
       max-width: 90%;
     }

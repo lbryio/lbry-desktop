@@ -3,7 +3,7 @@ import type { ElementRef, Node } from 'react';
 import React from 'react';
 import ReactDOMServer from 'react-dom/server';
 import SimpleMDE from 'react-simplemde-editor';
-import MarkdownPreview from 'component/common/markdown-preview-internal';
+import MarkdownPreview from 'component/common/markdown-preview';
 import { openEditorMenu, stopContextMenu } from 'util/context-menu';
 import { MAX_CHARACTERS_IN_COMMENT as defaultTextAreaLimit } from 'constants/comments';
 import 'easymde/dist/easymde.min.css';

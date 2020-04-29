@@ -1,4 +1,5 @@
 // @flow
+import * as ACTIONS from 'constants/action_types';
 import * as SETTINGS from 'constants/settings';
 import * as NOTIFICATION_TYPES from 'constants/subscriptions';
 import * as MODALS from 'constants/modal_types';
@@ -10,7 +11,6 @@ import { push } from 'connected-react-router';
 import { doUpdateUnreadSubscriptions } from 'redux/actions/subscriptions';
 import { makeSelectUnreadByChannel } from 'redux/selectors/subscriptions';
 import {
-  ACTIONS,
   Lbry,
   makeSelectFileInfoForUri,
   selectFileInfosByOutpoint,
@@ -24,6 +24,7 @@ import {
 import { makeSelectCostInfoForUri, Lbryio } from 'lbryinc';
 import { makeSelectClientSetting, selectosNotificationsEnabled, selectDaemonSettings } from 'redux/selectors/settings';
 import { formatLbryUrlForWeb } from 'util/url';
+import { selectFloatingUri } from 'redux/selectors/content';
 
 const DOWNLOAD_POLL_INTERVAL = 250;
 
@@ -131,6 +132,28 @@ export function doSetPlayingUri(uri: ?string) {
       type: ACTIONS.SET_PLAYING_URI,
       data: { uri },
     });
+  };
+}
+
+export function doSetFloatingUri(uri: ?string) {
+  return (dispatch: Dispatch) => {
+    dispatch({
+      type: ACTIONS.SET_FLOATING_URI,
+      data: { uri },
+    });
+  };
+}
+
+export function doCloseFloatingPlayer() {
+  return (dispatch: Dispatch, getState: GetState) => {
+    const state = getState();
+    const floatingUri = selectFloatingUri(state);
+
+    if (floatingUri) {
+      dispatch(doSetFloatingUri(null));
+    } else {
+      dispatch(doSetPlayingUri(null));
+    }
   };
 }
 
@@ -247,14 +270,5 @@ export function doClearContentHistoryUri(uri: string) {
 export function doClearContentHistoryAll() {
   return (dispatch: Dispatch) => {
     dispatch({ type: ACTIONS.CLEAR_CONTENT_HISTORY_ALL });
-  };
-}
-
-export function doSetHistoryPage(page: string) {
-  return (dispatch: Dispatch) => {
-    dispatch({
-      type: ACTIONS.SET_CONTENT_HISTORY_PAGE,
-      data: { page },
-    });
   };
 }
