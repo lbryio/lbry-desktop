@@ -343,7 +343,6 @@
   .vjs-big-play-button {
     @extend .button--icon;
     @extend .button--play;
-    background-color: rgba(0, 0, 0, 0.6);
     border: none;
     position: static;
     z-index: 2;
@@ -359,6 +358,13 @@
   .video-js.vjs-paused {
     .vjs-big-play-button {
       display: block;
+      background-color: rgba(0, 0, 0, 0.6);
+    }
+  }
+
+  .video-js:hover {
+    .vjs-big-play-button {
+      background-color: var(--color-primary);
     }
   }
 }

@@ -120,6 +120,9 @@ function SideNavigation(props: Props) {
               ...buildLink(PAGES.LIBRARY, __('Library'), ICONS.LIBRARY),
             },
             // @endif
+            {
+              ...(expanded ? { ...buildLink(PAGES.SETTINGS, __('Settings'), ICONS.SETTINGS) } : {}),
+            },
           ].map(
             linkProps =>
               linkProps.navigate && (
@@ -163,9 +166,6 @@ function SideNavigation(props: Props) {
               },
               {
                 ...buildLink(PAGES.PUBLISH, __('Publish'), ICONS.PUBLISH),
-              },
-              {
-                ...buildLink(PAGES.SETTINGS, __('Settings'), ICONS.SETTINGS),
               },
               {
                 ...buildLink(PAGES.HELP, __('Help'), ICONS.HELP),
