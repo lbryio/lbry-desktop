@@ -267,6 +267,7 @@ function ClaimListDiscover(props: Props) {
     didNavigateForward ||
     (!loading &&
       claimSearchResult &&
+      claimSearchResult.length &&
       claimSearchResult.length < CS.PAGE_SIZE * page &&
       claimSearchResult.length % CS.PAGE_SIZE === 0);
 
@@ -574,7 +575,7 @@ function ClaimListDiscover(props: Props) {
                           'claim-search__input-special': !followed.includes(tag),
                         })}
                       >
-                        {followed.includes(tag) && typeof tag === 'string' && toCapitalCase(__(tag))}
+                        {followed.includes(tag) && typeof tag === 'string' && toCapitalCase(tag)}
                         {tag === CS.TAGS_ALL && __('Any')}
                         {tag === CS.TAGS_FOLLOWED && __('Following')}
                         {!followed.includes(tag) && tag !== CS.TAGS_ALL && tag !== CS.TAGS_FOLLOWED && __('Other')}

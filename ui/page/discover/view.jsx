@@ -72,7 +72,7 @@ function DiscoverPage(props: Props) {
     headerLabel = (
       <span>
         <Icon icon={ICONS.TAG} size={10} />
-        {(tag === CS.TAGS_ALL && __('All Content')) || (tag === CS.TAGS_FOLLOWED && __('Followed Tags')) || __(tag)}
+        {(tag === CS.TAGS_ALL && __('All Content')) || (tag === CS.TAGS_FOLLOWED && __('Followed Tags')) || tag}
       </span>
     );
   } else {
