@@ -213,29 +213,24 @@
 
 .file-viewer__embedded-title {
   position: absolute;
+  display: flex;
+  justify-content: space-between;
   width: 100%;
-  left: auto;
   top: 0;
-  line-height: 1.5;
   z-index: 2;
-  color: var(--color-white);
   font-size: var(--font-large);
   overflow-x: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  max-width: 100%;
   padding: var(--spacing-small);
-  background-repeat: repeat-x;
-  background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAADGCAYAAAAT+OqFAAAAdklEQVQoz42QQQ7AIAgEF/T/D+kbq/RWAlnQyyazA4aoAB4FsBSA/bFjuF1EOL7VbrIrBuusmrt4ZZORfb6ehbWdnRHEIiITaEUKa5EJqUakRSaEYBJSCY2dEstQY7AuxahwXFrvZmWl2rh4JZ07z9dLtesfNj5q0FU3A5ObbwAAAABJRU5ErkJggg==);
-  -moz-transition: opacity 0.25s cubic-bezier(0, 0, 0.2, 1);
-  -webkit-transition: opacity 0.25s cubic-bezier(0, 0, 0.2, 1);
-  transition: opacity 0.25s cubic-bezier(0, 0, 0.2, 1);
+
   .button {
     color: var(--color-white);
+
+    &:first-of-type {
+      max-width: 90%;
+    }
   }
-}
-.file-viewer__embedded-title-logo {
-  float: right;
 }
 
 .file-render__content {

@@ -18,8 +18,8 @@ function fileViewerEmbeddedTitle(props: Props) {
 
   return (
     <div className="file-viewer__embedded-title">
-      <Button className="file-viewer__overlay-logo file-viewer__embedded-title-logo" icon={ICONS.LBRY} href={URL} />
       <Button label={title} button="link" href={lbrytvLink} />
+      <Button className="file-viewer__overlay-logo file-viewer__embedded-title-logo" icon={ICONS.LBRY} href={URL} />
     </div>
   );
 }

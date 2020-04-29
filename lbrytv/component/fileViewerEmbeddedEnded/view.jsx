@@ -11,7 +11,7 @@ type Props = {
   isAuthenticated: boolean,
 };
 
-function fileViewerEmbeddedEnded(props: Props) {
+function FileViewerEmbeddedEnded(props: Props) {
   const { uri, isAuthenticated } = props;
 
   const prompts = isAuthenticated
@@ -52,4 +52,4 @@ function fileViewerEmbeddedEnded(props: Props) {
   );
 }
 
-export default withRouter(fileViewerEmbeddedEnded);
+export default withRouter(FileViewerEmbeddedEnded);
