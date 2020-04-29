@@ -50,7 +50,7 @@ class ModalPublishSuccess extends React.PureComponent<Props> {
             </React.Fragment>
           }
           actions={
-            <div className="card__actions">
+            <div className="section__actions">
               <Button
                 button="primary"
                 label={__('View My Publishes')}

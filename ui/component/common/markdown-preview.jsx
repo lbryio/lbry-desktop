@@ -80,13 +80,26 @@ const schema = { ...defaultSchema };
 schema.protocols.href.push('lbry');
 schema.attributes.a.push('embed');
 
-const REPLACE_REGEX = /(<iframe src=")(.*?(?=))("><\/iframe>)/g;
+const REPLACE_REGEX = /(<iframe\s+src=["'])(.*?(?=))(["']\s*><\/iframe>)/g;
 
 const MarkdownPreview = (props: MarkdownProps) => {
   const { content, strip, promptLinks } = props;
   const strippedContent = content
-    ? content.replace(REPLACE_REGEX, (x, y, iframeSrc) => {
-        return `${iframeSrc}?embed=true`;
+    ? content.replace(REPLACE_REGEX, (iframeHtml, y, iframeSrc) => {
+        // Let the browser try to create an iframe to see if the markup is valid
+        const outer = document.createElement('div');
+        outer.innerHTML = iframeHtml;
+        const iframe = ((outer.querySelector('iframe'): any): ?HTMLIFrameElement);
+
+        if (iframe) {
+          const src = iframe.src;
+
+          if (src && src.startsWith('lbry://')) {
+            return `${src}?embed=true`;
+          }
+        }
+
+        return iframeHtml;
       })
     : '';
 
