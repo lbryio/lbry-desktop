@@ -155,6 +155,15 @@
   justify-content: center;
   padding: 0 var(--spacing-large);
   background-color: #000;
+
+  &.content__loading--document {
+    background-color: var(--color-card-background);
+    padding: calc(var(--spacing-xlarge) * 3) 0;
+
+    .content__loading-text {
+      color: var(--color-text);
+    }
+  }
 }
 
 .content__loading-text {

@@ -51,16 +51,6 @@
   max-height: none;
   overflow: auto;
 
-  .content__loading {
-    background-color: transparent;
-    padding: 0;
-    margin: var(--spacing-xlarge) 0;
-
-    .content__loading-text {
-      color: var(--color-text);
-    }
-  }
-
   .markdown-preview {
     height: 100%;
     overflow: auto;

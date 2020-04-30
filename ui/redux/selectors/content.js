@@ -37,20 +37,18 @@ export const makeSelectIsPlaying = (uri: string) => createSelector(selectPlaying
 
 // below is dumb, some context: https://stackoverflow.com/questions/39622864/access-react-router-state-in-selector
 export const makeSelectIsPlayerFloating = (location: UrlLocation) =>
-  createSelector(selectFloatingUri, selectPlayingUri, (floatingUri, playingUri) => {
-    if (floatingUri) {
-      if (!playingUri) {
-        return true;
-      } else {
-        return floatingUri !== playingUri;
-      }
+  createSelector(selectFloatingUri, selectPlayingUri, selectClaimsByUri, (floatingUri, playingUri, claimsByUri) => {
+    if (playingUri && floatingUri && playingUri !== floatingUri) {
+      return true;
     }
 
     // If there is no floatingPlayer explicitly set, see if the playingUri can float
     try {
-      const { pathname, hash } = location;
-      const newpath = buildURI(parseURI(pathname.slice(1).replace(/:/g, '#')));
-      return playingUri && playingUri !== newpath + hash;
+      const { pathname } = location;
+      const pageUrl = buildURI(parseURI(pathname.slice(1).replace(/:/g, '#')));
+      const claimFromUrl = claimsByUri[pageUrl];
+      const playingClaim = claimsByUri[playingUri];
+      return (claimFromUrl && claimFromUrl.claim_id) !== (playingClaim && playingClaim.claim_id);
     } catch (e) {}
 
     return !!playingUri;
