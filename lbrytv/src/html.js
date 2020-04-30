@@ -42,9 +42,9 @@ function buildOgMetadata(overrideOptions = {}) {
     '<meta property="og:site_name" content="lbry.tv | Content Freedom"/>\n' +
     `<meta property="og:description" content="${description ||
       'Meet LBRY, an open, free, and community-controlled content wonderland.'}" />\n` +
-    `<meta property="og:image" content="${URL}/v1-og.png" />\n` +
+    `<meta property="og:image" content="${URL}/v2-og.png" />\n` +
     '<meta name="twitter:card" content="summary_large_image"/>\n' +
-    `<meta name="twitter:image" content="${URL}/v1-og.png"/>\n` +
+    `<meta name="twitter:image" content="${URL}/v2-og.png"/>\n` +
     '<meta property="fb:app_id" content="1673146449633983" />';
 
   return head;
@@ -69,7 +69,7 @@ function buildClaimOgMetadata(uri, claim, overrideOptions = {}) {
   if (Number(claim.fee) <= 0 && claim.source_media_type && claim.source_media_type.startsWith('image/')) {
     imageThumbnail = generateStreamUrl(claim.name, claim.claim_id, undefined, undefined, true);
   }
-  const claimThumbnail = escapeHtmlProperty(claim.thumbnail_url) || imageThumbnail || `${URL}/v1-og.png`;
+  const claimThumbnail = escapeHtmlProperty(claim.thumbnail_url) || imageThumbnail || `${URL}/v2-og.png`;
 
   // Allow for ovverriding default claim based og metadata
   const title = overrideOptions.title || claimTitle;
