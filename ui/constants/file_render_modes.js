@@ -17,7 +17,7 @@ export const CAD = 'cad';
 export const COMIC = 'comic';
 
 // These types can only be render if download completed
-export const NON_STREAM_MODES = [CAD, COMIC];
+export const NON_STREAM_MODES = IS_WEB ? [CAD, COMIC] : [CAD, COMIC, ...TEXT_MODES];
 
 export const AUTO_RENDER_MODES = [IMAGE].concat(TEXT_MODES);
 export const WEB_SHAREABLE_MODES = AUTO_RENDER_MODES.concat(FLOATING_MODES);

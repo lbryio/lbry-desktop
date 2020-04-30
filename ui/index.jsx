@@ -236,7 +236,7 @@ document.addEventListener('click', event => {
 
 function AppWrapper() {
   // Splash screen and sdk setup not needed on web
-  const [readyToLaunch, setReadyToLaunch] = useState(IS_WEB);
+  const [readyToLaunch, setReadyToLaunch] = useState(IS_WEB || sessionStorage.getItem('startup'));
   const [persistDone, setPersistDone] = useState(false);
 
   useEffect(() => {
@@ -270,6 +270,7 @@ function AppWrapper() {
 
   useEffect(() => {
     if (readyToLaunch && persistDone) {
+      sessionStorage.setItem('startup', true);
       app.store.dispatch(doUpdateIsNightAsync());
       app.store.dispatch(doDaemonReady());
       app.store.dispatch(doBlackListedOutpointsSubscribe());
