@@ -162,10 +162,11 @@ const Header = (props: Props) => {
                   label={getWalletTitle()}
                 />
                 <Menu>
-                  <MenuButton className="header__navigation-item menu__title header__navigation-item--icon">
-                    <span aria-label={__('Publish a file, or create a channel')}>
-                      <Icon size={18} icon={ICONS.PUBLISH} />
-                    </span>
+                  <MenuButton
+                    aria-label={__('Publish a file, or create a channel')}
+                    className="header__navigation-item menu__title header__navigation-item--icon"
+                  >
+                    <Icon size={18} icon={ICONS.PUBLISH} aria-hidden />
                   </MenuButton>
                   <MenuList className="menu__list--header">
                     <MenuItem className="menu__link" onSelect={() => history.push(`/$/${PAGES.PUBLISH}`)}>
@@ -180,10 +181,11 @@ const Header = (props: Props) => {
                 </Menu>
 
                 <Menu>
-                  <MenuButton className="header__navigation-item menu__title header__navigation-item--icon">
-                    <span aria-label={__('Your account')}>
-                      <Icon size={18} icon={ICONS.ACCOUNT} />
-                    </span>
+                  <MenuButton
+                    aria-label={__('Your account')}
+                    className="header__navigation-item menu__title header__navigation-item--icon"
+                  >
+                    <Icon size={18} icon={ICONS.ACCOUNT} aria-hidden />
                   </MenuButton>
                   <MenuList className="menu__list--header">
                     <MenuItem className="menu__link" onSelect={() => history.push(`/$/${PAGES.PUBLISHED}`)}>
@@ -232,10 +234,11 @@ const Header = (props: Props) => {
               </Fragment>
             )}
             <Menu>
-              <MenuButton className="header__navigation-item menu__title header__navigation-item--icon">
-                <span aria-label={__('Settings')}>
-                  <Icon size={18} icon={ICONS.SETTINGS} />
-                </span>
+              <MenuButton
+                aria-label={__('Settings')}
+                className="header__navigation-item menu__title header__navigation-item--icon"
+              >
+                <Icon size={18} icon={ICONS.SETTINGS} aria-hidden />
               </MenuButton>
               <MenuList className="menu__list--header">
                 <MenuItem className="menu__link" onSelect={() => history.push(`/$/${PAGES.SETTINGS}`)}>
