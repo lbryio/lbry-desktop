@@ -3,6 +3,7 @@ import { makeSelectClaimForUri, makeSelectFileInfoForUri, makeSelectThumbnailFor
 import { doChangeVolume, doChangeMute, doAnalyticsView } from 'redux/actions/app';
 import { selectVolume, selectMute } from 'redux/selectors/app';
 import { savePosition } from 'redux/actions/content';
+import { makeSelectContentPositionForUri } from 'redux/selectors/content';
 import VideoViewer from './view';
 import { withRouter } from 'react-router';
 import { doClaimEligiblePurchaseRewards } from 'lbryinc';
@@ -13,7 +14,7 @@ const select = (state, props) => {
   const { search } = props.location;
   const urlParams = new URLSearchParams(search);
   const autoplay = urlParams.get('autoplay');
-  const position = urlParams.get('t');
+  const position = urlParams.get('t') !== null ? urlParams.get('t') : makeSelectContentPositionForUri(props.uri)(state);
 
   return {
     autoplayIfEmbedded: Boolean(autoplay),
