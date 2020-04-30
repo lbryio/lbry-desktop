@@ -222,12 +222,16 @@
   overflow-x: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  padding: var(--spacing-small);
   background-repeat: repeat-x;
   background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAADGCAYAAAAT+OqFAAAAdklEQVQoz42QQQ7AIAgEF/T/D+kbq/RWAlnQyyazA4aoAB4FsBSA/bFjuF1EOL7VbrIrBuusmrt4ZZORfb6ehbWdnRHEIiITaEUKa5EJqUakRSaEYBJSCY2dEstQY7AuxahwXFrvZmWl2rh4JZ07z9dLtesfNj5q0FU3A5ObbwAAAABJRU5ErkJggg==);
 
   .button {
+    padding: var(--spacing-small);
     color: var(--color-white);
+
+    .button__label {
+      white-space: nowrap;
+    }
 
     &:hover {
       color: var(--color-white);
@@ -235,6 +239,10 @@
 
     &:first-of-type {
       max-width: 90%;
+
+      @media (max-width: $breakpoint-small) {
+        max-width: 80%;
+      }
     }
   }
 }
@@ -351,17 +359,23 @@
 }
 
 .file-render--embed {
-  /* on embeds, do not inject our colors until interaction*/
-  .video-js.vjs-paused {
+  // on embeds, do not inject our colors until interaction
+  .video-js:hover {
+    .vjs-big-play-button {
+      background-color: var(--color-primary);
+    }
+  }
+
+  .vjs-paused {
     .vjs-big-play-button {
       display: block;
       background-color: rgba(0, 0, 0, 0.6);
     }
   }
 
-  .video-js:hover {
+  .vjs-ended {
     .vjs-big-play-button {
-      background-color: var(--color-primary);
+      display: none;
     }
   }
 }

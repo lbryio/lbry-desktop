@@ -1,5 +1,5 @@
 .header {
-  z-index: 2; // Main content uses z-index: 1, this ensures it always scrolls under the header
+  z-index: 3; // Main content uses z-index: 1, other content uses z-index: 2, this ensures it always scrolls under the header
   position: fixed;
   top: 0;
   width: 100%;
