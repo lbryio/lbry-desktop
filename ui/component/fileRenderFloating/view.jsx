@@ -23,6 +23,7 @@ type Props = {
   floatingPlayerEnabled: boolean,
   closeFloatingPlayer: () => void,
   renderMode: string,
+  setPlayingUri: string => void,
 };
 
 export default function FileRenderFloating(props: Props) {
@@ -35,6 +36,7 @@ export default function FileRenderFloating(props: Props) {
     closeFloatingPlayer,
     floatingPlayerEnabled,
     renderMode,
+    setPlayingUri,
   } = props;
   const isMobile = useIsMobile();
   const [fileViewerRect, setFileViewerRect] = usePersistedState('inline-file-viewer:rect');
@@ -116,7 +118,7 @@ export default function FileRenderFloating(props: Props) {
               <span className="media__uri--inline">{uri}</span>
               <div className="content__actions">
                 <Tooltip label={__('View File')}>
-                  <Button navigate={uri} icon={ICONS.VIEW} button="primary" />
+                  <Button navigate={uri} onClick={() => setPlayingUri(uri)} icon={ICONS.VIEW} button="primary" />
                 </Tooltip>
                 <Tooltip label={__('Close')}>
                   <Button onClick={closeFloatingPlayer} icon={ICONS.REMOVE} button="primary" />

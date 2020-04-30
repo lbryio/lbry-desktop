@@ -9,7 +9,7 @@ import {
   makeSelectStreamingUrlForUriWebProxy,
 } from 'redux/selectors/content';
 import { makeSelectClientSetting } from 'redux/selectors/settings';
-import { doCloseFloatingPlayer } from 'redux/actions/content';
+import { doCloseFloatingPlayer, doSetPlayingUri } from 'redux/actions/content';
 import { withRouter } from 'react-router';
 import FileRenderFloating from './view';
 
@@ -30,6 +30,7 @@ const select = (state, props) => {
 
 const perform = dispatch => ({
   closeFloatingPlayer: () => dispatch(doCloseFloatingPlayer(null)),
+  setPlayingUri: uri => dispatch(doSetPlayingUri(uri)),
 });
 
 export default withRouter(connect(select, perform)(FileRenderFloating));
