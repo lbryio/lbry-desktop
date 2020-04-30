@@ -14,6 +14,7 @@ type Props = {
   doFetchCostInfoForUri: string => void,
   doSetFloatingUri: string => void,
   floatingPlayerEnabled: boolean,
+  doPlayUri: string => void,
 };
 
 export default function FileRenderFloating(props: Props) {
@@ -25,6 +26,7 @@ export default function FileRenderFloating(props: Props) {
     doFetchCostInfoForUri,
     doSetFloatingUri,
     floatingPlayerEnabled,
+    doPlayUri,
   } = props;
   const { push } = useHistory();
   const isMobile = useIsMobile();
@@ -43,6 +45,9 @@ export default function FileRenderFloating(props: Props) {
       push(formattedUrl);
     } else {
       doSetFloatingUri(uri);
+      // @if TARGET='app'
+      doPlayUri(uri);
+      // @endif
     }
   }
 
