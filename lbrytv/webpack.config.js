@@ -24,8 +24,8 @@ let plugins = [
       to: `${DIST_ROOT}/public/favicon.png`,
     },
     {
-      from: `${STATIC_ROOT}/img/v1-og.png`,
-      to: `${DIST_ROOT}/public/v1-og.png`,
+      from: `${STATIC_ROOT}/img/v2-og.png`,
+      to: `${DIST_ROOT}/public/v2-og.png`,
     },
     {
       from: `${STATIC_ROOT}/font/`,
