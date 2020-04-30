@@ -31,6 +31,7 @@ type Props = {
   autoplayIfEmbedded: boolean,
   doAnalyticsView: (string, number) => Promise<any>,
   claimRewards: () => void,
+  savePosition: (string, number) => void,
 };
 
 /*
@@ -54,6 +55,7 @@ function VideoViewer(props: Props) {
     autoplayIfEmbedded,
     doAnalyticsView,
     claimRewards,
+    savePosition,
   } = props;
   const claimId = claim && claim.claim_id;
   const isAudio = contentType.includes('audio');
@@ -155,6 +157,7 @@ function VideoViewer(props: Props) {
       if (position) {
         player.currentTime(position);
       }
+      player.on('timeupdate', () => savePosition(uri, player.currentTime()));
     },
     [uri]
   );

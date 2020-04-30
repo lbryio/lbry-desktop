@@ -15,7 +15,7 @@ export type Player = {
   volume: (?number) => number,
   muted: (?boolean) => boolean,
   dispose: () => void,
-  currentTime: number => void,
+  currentTime: (?number) => number,
 };
 
 type Props = {
