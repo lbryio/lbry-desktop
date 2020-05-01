@@ -18,6 +18,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Show 'elapsed/total' instead of countdown timer on video player _community pr!_ ([#4049](https://github.com/lbryio/lbry-desktop/pull/4049))
 - Modified app strings about wallet backup, to emphasize that the wallet also controls claims _community pr!_ ([#4056](https://github.com/lbryio/lbry-desktop/pull/4056))
 - Add confirmation when sending tip respecting "Purchase and Tip Confirmation" (formerly "Purchase Confirmation") setting, now visible in lbry.tv _community pr!_ ([#4051](https://github.com/lbryio/lbry-desktop/pull/4051))
+- Hyperlinks in markdown now open in new tab _community pr!_ ([#4111](https://github.com/lbryio/lbry-desktop/pull/4111))
 
 ### Fixed
 
