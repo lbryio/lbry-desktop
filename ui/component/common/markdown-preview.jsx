@@ -42,7 +42,7 @@ const SimpleLink = (props: SimpleLinkProps) => {
 
   if (!href.startsWith('lbry://')) {
     return (
-      <a href={href} title={title}>
+      <a href={href} title={title} target={'_blank'} rel={'noreferrer noopener'}>
         {children}
       </a>
     );
