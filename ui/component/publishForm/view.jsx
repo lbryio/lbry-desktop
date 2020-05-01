@@ -64,6 +64,7 @@ type Props = {
   amountNeededForTakeover: ?number,
   // Add back type
   updatePublishForm: any => void,
+  checkAvailability: string => void,
 };
 
 function PublishForm(props: Props) {
@@ -86,6 +87,7 @@ function PublishForm(props: Props) {
     tags,
     publish,
     disabled = false,
+    checkAvailability,
   } = props;
   const TAGS_LIMIT = 5;
   const formDisabled = (!filePath && !editingURI) || publishing;
@@ -134,11 +136,12 @@ function PublishForm(props: Props) {
     }
 
     const isValid = isURIValid(uri);
-    if (uri && isValid) {
+    if (uri && isValid && checkAvailability && name) {
       resolveUri(uri);
+      checkAvailability(name);
       updatePublishForm({ uri });
     }
-  }, [name, channel, resolveUri, updatePublishForm]);
+  }, [name, channel, resolveUri, updatePublishForm, checkAvailability]);
 
   return (
     <div className="card-stack">

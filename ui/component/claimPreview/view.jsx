@@ -15,6 +15,7 @@ import SubscribeButton from 'component/subscribeButton';
 import ChannelThumbnail from 'component/channelThumbnail';
 import BlockButton from 'component/blockButton';
 import ClaimSupportButton from 'component/claimSupportButton';
+import ClaimAbandonButton from 'component/claimAbandonButton';
 import useGetThumbnail from 'effects/use-get-thumbnail';
 import ClaimPreviewTitle from 'component/claimPreviewTitle';
 import ClaimPreviewSubtitle from 'component/claimPreviewSubtitle';
@@ -58,6 +59,8 @@ type Props = {
   customShouldHide?: Claim => boolean,
   showUnresolvedClaim?: boolean,
   includeSupportAction?: boolean,
+  includeOwnerActions?: boolean,
+  abandonActionCallback?: any => void,
 };
 
 const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
@@ -90,6 +93,8 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
     customShouldHide,
     showUnresolvedClaim,
     includeSupportAction,
+    includeOwnerActions,
+    abandonActionCallback,
   } = props;
   const shouldFetch =
     claim === undefined || (claim !== null && claim.value_type === 'channel' && isEmpty(claim.meta) && !pending);
@@ -283,6 +288,9 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
                         <BlockButton uri={uri.startsWith('lbry://') ? uri : `lbry://${uri}`} />
                       )}
                       {includeSupportAction && <ClaimSupportButton uri={uri} />}
+                      {includeOwnerActions && (
+                        <ClaimAbandonButton uri={uri} abandonActionCallback={abandonActionCallback} />
+                      )}
                     </div>
                   )}
                 </React.Fragment>

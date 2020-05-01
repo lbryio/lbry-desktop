@@ -2,7 +2,14 @@
 import * as MODALS from 'constants/modal_types';
 import * as ACTIONS from 'constants/action_types';
 import * as PAGES from 'constants/pages';
-import { batchActions, doError, selectMyClaims, doPublish, doCheckPendingPublishes } from 'lbry-redux';
+import {
+  batchActions,
+  doError,
+  selectMyClaims,
+  doPublish,
+  doCheckPendingPublishes,
+  ACTIONS as LBRY_REDUX_ACTIONS,
+} from 'lbry-redux';
 import { selectosNotificationsEnabled } from 'redux/selectors/settings';
 import { push } from 'connected-react-router';
 import analytics from 'analytics';
@@ -31,23 +38,21 @@ export const doPublishDesktop = (filePath: string) => (dispatch: Dispatch, getSt
     const isMatch = claim => claim.claim_id === pendingClaim.claim_id;
     const isEdit = myClaims.some(isMatch);
 
-    const myNewClaims = isEdit
-      ? myClaims.map(claim => (isMatch(claim) ? pendingClaim : claim))
-      : myClaims.concat(pendingClaim);
-    actions.push(
+    actions.push({
+      type: LBRY_REDUX_ACTIONS.UPDATE_PENDING_CLAIMS,
+      data: {
+        claims: [pendingClaim],
+      },
+    });
+
+    dispatch(batchActions(...actions));
+    dispatch(
       doOpenModal(MODALS.PUBLISH, {
         uri: url,
         isEdit,
         filePath,
       })
     );
-    actions.push({
-      type: ACTIONS.FETCH_CLAIM_LIST_MINE_COMPLETED,
-      data: {
-        claims: myNewClaims,
-      },
-    });
-    dispatch(batchActions(...actions));
   };
 
   const publishFail = error => {

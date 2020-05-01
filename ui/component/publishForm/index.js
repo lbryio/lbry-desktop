@@ -10,6 +10,7 @@ import {
   doClearPublish,
   doUpdatePublishForm,
   doPrepareEdit,
+  doCheckPublishNameAvailability,
 } from 'lbry-redux';
 import { doPublishDesktop } from 'redux/actions/publish';
 import { selectUnclaimedRewardValue } from 'lbryinc';
@@ -35,9 +36,7 @@ const perform = dispatch => ({
   publish: filePath => dispatch(doPublishDesktop(filePath)),
   prepareEdit: (claim, uri) => dispatch(doPrepareEdit(claim, uri)),
   resetThumbnailStatus: () => dispatch(doResetThumbnailStatus()),
+  checkAvailability: name => dispatch(doCheckPublishNameAvailability(name)),
 });
 
-export default connect(
-  select,
-  perform
-)(PublishPage);
+export default connect(select, perform)(PublishPage);
