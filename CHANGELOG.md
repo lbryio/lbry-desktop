@@ -21,6 +21,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ### Fixed
 
+- Better deleted text file handling - will now redownload the file ([#4109](https://github.com/lbryio/lbry-desktop/pull/4109))
 - Fixed the title of the subscribe button getting out of sync on fast hover movements _community pr!_ ([#4054](https://github.com/lbryio/lbry-desktop/pull/4054))
 - Handle errors better on the creator analytics page and add a new card for stats on users most recent content ([#4043](https://github.com/lbryio/lbry-desktop/pull/4043))
 - Add fallback when images fail to load _community pr!_ ([#4019](https://github.com/lbryio/lbry-desktop/pull/4019))
