@@ -50,7 +50,7 @@ function ChannelContent(props: Props) {
               'In response to a complaint we received under the US Digital Millennium Copyright Act, we have blocked access to this channel from our applications.'
             )}
           </p>
-          <div className="card__actions">
+          <div className="section__actions">
             <Button button="link" href="https://lbry.com/faq/dmca" label={__('Read More')} />
           </div>
         </section>

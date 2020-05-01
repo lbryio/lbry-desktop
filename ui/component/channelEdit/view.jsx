@@ -195,7 +195,7 @@ function ChannelForm(props: Props) {
           });
         }}
       />
-      <div className={'card__actions'}>
+      <div className={'section__actions'}>
         <Button button="primary" label={__('Submit')} onClick={handleSubmit} />
         <Button button="link" label={__('Cancel')} navigate={`$/${PAGES.CHANNELS}`} />
       </div>
