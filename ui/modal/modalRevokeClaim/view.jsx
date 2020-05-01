@@ -3,6 +3,8 @@ import React, { useState } from 'react';
 import { Modal } from 'modal/modal';
 import { FormField } from 'component/common/form';
 import * as txnTypes from 'constants/transaction_types';
+import Card from 'component/common/card';
+import Button from 'component/button';
 
 type Props = {
   closeModal: () => void,
@@ -86,18 +88,28 @@ export default function ModalRevokeClaim(props: Props) {
     closeModal();
   }
 
+  const label = getButtonLabel(type);
+
   return (
     <Modal
       isOpen
-      title={getButtonLabel(type)}
-      contentLabel={getButtonLabel(type)}
-      type="confirm"
-      confirmButtonLabel={getButtonLabel(type)}
+      contentLabel={label}
+      type="card"
+      confirmButtonLabel={label}
       onConfirmed={revokeClaim}
       onAborted={closeModal}
       confirmButtonDisabled={valueType === txnTypes.CHANNEL && name !== channelName}
     >
-      <section>{getMsgBody(type, name)}</section>
+      <Card
+        title={label}
+        body={getMsgBody(type, name)}
+        actions={
+          <div className="section__actions">
+            <Button button="primary" label={label} onClick={revokeClaim} />
+            <Button button="link" label={__('Cancel')} onClick={closeModal} />
+          </div>
+        }
+      />
     </Modal>
   );
 }

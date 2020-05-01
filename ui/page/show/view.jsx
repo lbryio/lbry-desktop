@@ -87,7 +87,7 @@ function ShowPage(props: Props) {
               'In response to a complaint we received under the US Digital Millennium Copyright Act, we have blocked access to this content from our applications.'
             )}
             actions={
-              <div className="card__actions">
+              <div className="section__actions">
                 <Button button="link" href="https://lbry.com/faq/dmca" label={__('Read More')} />
               </div>
             }

@@ -145,7 +145,7 @@ function WalletSendTip(props: Props) {
           }
         />
       </Form>
-      <div className="card__actions">
+      <div className="section__actions">
         <Button button="link" label={__('Cancel')} onClick={onCancel} />
       </div>
     </React.Fragment>

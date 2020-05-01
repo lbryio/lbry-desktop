@@ -122,7 +122,7 @@ class ChannelCreate extends React.PureComponent<Props, State> {
             onChange={event => this.handleNewChannelBidChange(parseFloat(event.target.value))}
             onWheel={e => e.stopPropagation()}
           />
-          <div className="card__actions">
+          <div className="section__actions">
             <Button
               type="submit"
               button="primary"
