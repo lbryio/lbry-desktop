@@ -106,10 +106,6 @@ function VideoViewer(props: Props) {
     setIsEndededEmbed(false);
   }
 
-  function onPause() {
-    setIsPlaying(false);
-  }
-
   const onPlayerReady = useCallback(
     (player: Player) => {
       if (!embedded) {
@@ -144,7 +140,10 @@ function VideoViewer(props: Props) {
       player.on('tracking:firstplay', doTrackingFirstPlay);
       player.on('ended', onEnded);
       player.on('play', onPlay);
-      player.on('pause', onPause);
+      player.on('pause', () => {
+        setIsPlaying(false);
+        savePosition(uri, player.currentTime());
+      });
       player.on('volumechange', () => {
         if (player && player.volume() !== volume) {
           changeVolume(player.volume());
@@ -157,7 +156,7 @@ function VideoViewer(props: Props) {
       if (position) {
         player.currentTime(position);
       }
-      player.on('timeupdate', () => savePosition(uri, player.currentTime()));
+      player.on('dispose', () => savePosition(uri, player.currentTime()));
     },
     [uri]
   );
