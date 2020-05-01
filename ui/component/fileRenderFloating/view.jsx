@@ -1,7 +1,7 @@
 // @flow
 import * as ICONS from 'constants/icons';
 import * as RENDER_MODES from 'constants/file_render_modes';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import Button from 'component/button';
 import classnames from 'classnames';
 import LoadingScreen from 'component/common/loading-screen';
@@ -39,7 +39,7 @@ export default function FileRenderFloating(props: Props) {
     setPlayingUri,
   } = props;
   const isMobile = useIsMobile();
-  const [fileViewerRect, setFileViewerRect] = usePersistedState('inline-file-viewer:rect');
+  const [fileViewerRect, setFileViewerRect] = useState();
   const [position, setPosition] = usePersistedState('floating-file-viewer:position', {
     x: -25,
     y: window.innerHeight - 400,
@@ -60,7 +60,7 @@ export default function FileRenderFloating(props: Props) {
       }
 
       const rect = element.getBoundingClientRect();
-      // @FlowFixMe
+      // $FlowFixMe
       setFileViewerRect(rect);
     }
 
