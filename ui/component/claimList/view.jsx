@@ -30,8 +30,6 @@ type Props = {
   showUnresolvedClaims?: boolean,
   renderProperties: ?(Claim) => Node,
   includeSupportAction?: boolean,
-  includeOwnerActions?: boolean,
-  abandonActionCallback?: any => void,
   hideBlock: boolean,
   injectedItem: ?Node,
   timedOutMessage?: Node,
@@ -57,8 +55,6 @@ export default function ClaimList(props: Props) {
     showUnresolvedClaims,
     renderProperties,
     includeSupportAction,
-    includeOwnerActions,
-    abandonActionCallback,
     hideBlock,
     injectedItem,
     timedOutMessage,
@@ -152,8 +148,6 @@ export default function ClaimList(props: Props) {
                 uri={uri}
                 type={type}
                 includeSupportAction={includeSupportAction}
-                includeOwnerActions={includeOwnerActions}
-                abandonActionCallback={abandonActionCallback}
                 showUnresolvedClaim={showUnresolvedClaims}
                 properties={renderProperties || (type !== 'small' ? undefined : false)}
                 showUserBlocked={showHiddenByUser}

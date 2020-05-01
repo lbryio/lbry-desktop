@@ -31,6 +31,7 @@ function ShowPage(props: Props) {
   const canonicalUrl = claim && claim.canonical_url;
   const claimExists = claim !== null && claim !== undefined;
   const haventFetchedYet = claim === undefined;
+  const isMine = claim && claim.is_my_output;
 
   useEffect(() => {
     // @if TARGET='web'
@@ -42,10 +43,13 @@ function ShowPage(props: Props) {
     }
     // @endif
 
-    if ((resolveUri && !isResolvingUri && uri && haventFetchedYet) || (claimExists && !canonicalUrl)) {
+    if (
+      (resolveUri && !isResolvingUri && uri && haventFetchedYet) ||
+      (claimExists && (!canonicalUrl || isMine === undefined))
+    ) {
       resolveUri(uri);
     }
-  }, [resolveUri, isResolvingUri, canonicalUrl, uri, claimExists, haventFetchedYet, history]);
+  }, [resolveUri, isResolvingUri, canonicalUrl, uri, claimExists, haventFetchedYet, history, isMine]);
 
   // Don't navigate directly to repost urls
   // Always redirect to the actual content

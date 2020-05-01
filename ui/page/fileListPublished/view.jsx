@@ -72,14 +72,7 @@ function FileListPublished(props: Props) {
         isBodyList
         body={
           <div>
-            <ClaimList
-              isCardBody
-              loading={fetching}
-              persistedStorageKey="claim-list-published"
-              uris={urls}
-              includeOwnerActions
-              abandonActionCallback={() => fetchClaimListMine(params.page, params.page_size)}
-            />
+            <ClaimList isCardBody loading={fetching} persistedStorageKey="claim-list-published" uris={urls} />
             <Paginate totalPages={urlTotal > 0 ? Math.ceil(urlTotal / Number(pageSize)) : 1} />
           </div>
         }
