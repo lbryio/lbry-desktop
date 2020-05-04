@@ -36,3 +36,4 @@ exports.EMBED = 'embed';
 exports.TOP = 'top';
 exports.WELCOME = 'welcome';
 exports.CREATOR_DASHBOARD = 'dashboard';
+exports.CHECKOUT = 'checkout';
