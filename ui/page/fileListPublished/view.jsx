@@ -60,13 +60,12 @@ function FileListPublished(props: Props) {
         title={__('Publishes')}
         titleActions={
           <div className="card__actions--inline">
-            <Button button="alt" label={__('New Publish')} navigate="/$/publish" onClick={() => clearPublish()} />
-
             <Button
-              button="secondary"
+              button="alt"
               label={__('Refresh')}
               onClick={() => fetchClaimListMine(params.page, params.page_size)}
             />
+            <Button button="secondary" label={__('New Publish')} navigate="/$/publish" onClick={() => clearPublish()} />
           </div>
         }
         isBodyList
