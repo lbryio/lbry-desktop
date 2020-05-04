@@ -38,6 +38,10 @@
   }
 }
 
+.card--highlighted {
+  background-color: var(--color-card-background-highlighted);
+}
+
 .card--claim-preview-wrap {
   @extend .card;
   margin: var(--spacing-xlarge) 0;
