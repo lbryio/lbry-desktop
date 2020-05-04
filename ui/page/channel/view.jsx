@@ -236,20 +236,20 @@ function ChannelPage(props: Props) {
             <ChannelThumbnail className="channel__thumbnail--channel-page" uri={uri} thumbnailPreview={thumbPreview} />
           )}
           <h1 className="channel__title">{title || '@' + channelName}</h1>
-          {channelIsMine && !editing && (
-            <Button
-              button="alt"
-              title={__('Edit')}
-              onClick={() => setEditing(!editing)}
-              icon={ICONS.EDIT}
-              iconSize={28}
-            />
-          )}
           <div className="channel__meta">
             <span>
               {subCount} {subCount !== 1 ? __('Followers') : __('Follower')}
               <HelpLink href="https://lbry.com/faq/views" />
             </span>
+            {channelIsMine && !editing && (
+              <Button
+                button="alt"
+                title={__('Edit')}
+                onClick={() => setEditing(!editing)}
+                icon={ICONS.EDIT}
+                iconSize={18}
+              />
+            )}
           </div>
         </div>
       </header>

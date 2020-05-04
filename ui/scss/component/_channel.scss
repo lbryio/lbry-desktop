@@ -137,6 +137,11 @@ $metadata-z-index: 1;
 .channel__meta {
   display: flex;
   justify-content: space-between;
+  align-items: flex-end;
+
+  .button {
+    height: auto;
+  }
 }
 
 .channel__image--blurred {
