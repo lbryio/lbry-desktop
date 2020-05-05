@@ -20,7 +20,6 @@ type Props = {
 
 function InviteNew(props: Props) {
   const { inviteNew, errorMessage, isPending, referralCode = '', channels } = props;
-  const rewardAmount = 15;
 
   // Email
   const [email, setEmail] = useState('');
@@ -74,9 +73,7 @@ function InviteNew(props: Props) {
     <div className={'columns'}>
       <Card
         title={__('Invite Link')}
-        subtitle={__('Share this link with friends (or enemies) and get %reward_amount% LBC when they join lbry.tv', {
-          reward_amount: rewardAmount,
-        })}
+        subtitle={__('Share this link with friends (or enemies) and get LBC when they join lbry.tv')}
         actions={
           <React.Fragment>
             <CopyableText label={__('Your invite link')} copyable={referral} />
@@ -104,9 +101,7 @@ function InviteNew(props: Props) {
 
       <Card
         title={__('Invite by Email')}
-        subtitle={__('Invite someone you know by email and earn %reward_amount% LBC when they join lbry.tv.', {
-          reward_amount: rewardAmount,
-        })}
+        subtitle={__('Invite someone you know by email and earn LBC when they join lbry.tv.')}
         actions={
           <React.Fragment>
             <Form onSubmit={handleSubmit}>
