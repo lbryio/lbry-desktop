@@ -31,6 +31,7 @@ function RewardAuthIntro(props: Props) {
       }
       actions={
         <Button
+          requiresAuth
           button="primary"
           navigate={`/$/${PAGES.REWARDS_VERIFY}?redirect=/$/${PAGES.REWARDS}`}
           label={__('Unlock Rewards')}

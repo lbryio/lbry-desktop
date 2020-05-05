@@ -40,6 +40,7 @@ export default function FileRenderFloating(props: Props) {
   } = props;
   const isMobile = useIsMobile();
   const [fileViewerRect, setFileViewerRect] = useState();
+  const [desktopPlayStartTime, setDesktopPlayStartTime] = useState();
   const [position, setPosition] = usePersistedState('floating-file-viewer:position', {
     x: -25,
     y: window.innerHeight - 400,
@@ -72,6 +73,12 @@ export default function FileRenderFloating(props: Props) {
       onFullscreenChange(window, 'remove', handleResize);
     };
   }, [setFileViewerRect, isFloating]);
+
+  useEffect(() => {
+    // @if TARGET='app'
+    setDesktopPlayStartTime(Date.now());
+    // @endif
+  }, [uri]);
 
   if (!isPlayable || !uri || (isFloating && (isMobile || !floatingPlayerEnabled))) {
     return null;
@@ -134,7 +141,16 @@ export default function FileRenderFloating(props: Props) {
             </div>
           )}
 
-          {isReadyToPlay ? <FileRender uri={uri} /> : <LoadingScreen status={loadingMessage} />}
+          {isReadyToPlay ? (
+            <FileRender
+              uri={uri}
+              // @if TARGET='app'
+              desktopPlayStartTime={desktopPlayStartTime}
+              // @endif
+            />
+          ) : (
+            <LoadingScreen status={loadingMessage} />
+          )}
           {isFloating && (
             <div className="draggable content__info">
               <div className="claim-preview__title" title={title || uri}>

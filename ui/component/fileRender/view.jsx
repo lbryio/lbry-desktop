@@ -32,6 +32,7 @@ type Props = {
   autoplay: boolean,
   renderMode: string,
   thumbnail: string,
+  desktopPlayStartTime?: number,
 };
 
 class FileRender extends React.PureComponent<Props> {
@@ -64,13 +65,29 @@ class FileRender extends React.PureComponent<Props> {
   }
 
   renderViewer() {
-    const { currentTheme, contentType, downloadPath, fileExtension, streamingUrl, uri, renderMode } = this.props;
+    const {
+      currentTheme,
+      contentType,
+      downloadPath,
+      fileExtension,
+      streamingUrl,
+      uri,
+      renderMode,
+      desktopPlayStartTime,
+    } = this.props;
     const source = streamingUrl;
 
     switch (renderMode) {
       case RENDER_MODES.AUDIO:
       case RENDER_MODES.VIDEO:
-        return <VideoViewer uri={uri} source={source} contentType={contentType} />;
+        return (
+          <VideoViewer
+            uri={uri}
+            source={source}
+            contentType={contentType}
+            desktopPlayStartTime={desktopPlayStartTime}
+          />
+        );
       case RENDER_MODES.IMAGE:
         return <ImageViewer uri={uri} source={source} />;
       case RENDER_MODES.HTML:
