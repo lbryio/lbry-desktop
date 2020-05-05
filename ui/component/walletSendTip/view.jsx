@@ -127,7 +127,12 @@ function WalletSendTip(props: Props) {
           placeholder="1.23"
           onChange={event => handleSupportPriceChange(event)}
           inputButton={
-            <Button button="primary" type="submit" label={__('Send')} disabled={isPending || tipError || !tipAmount} />
+            <Button
+              button="primary"
+              type="submit"
+              label={__('Confirm')}
+              disabled={isPending || tipError || !tipAmount}
+            />
           }
           helper={
             <React.Fragment>
