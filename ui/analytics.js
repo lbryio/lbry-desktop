@@ -180,7 +180,7 @@ const analytics: Analytics = {
     }
   },
   videoStartEvent: (claimId, duration) => {
-    sendGaTimingEvent('Media', 'TimeToStart', Number((duration * 1000).toFixed(0)), claimId);
+    sendGaTimingEvent('Media', 'TimeToStart', duration, claimId);
     sendPromMetric('time_to_start', duration);
   },
   videoBufferEvent: (claimId, currentTime) => {

@@ -85,8 +85,9 @@ function VideoViewer(props: Props) {
   }
 
   function doTrackingFirstPlay(e: Event, data: any) {
-    analytics.videoStartEvent(claimId, data.secondsToLoad);
-    doAnalyticsView(uri, data.secondsToLoad).then(() => {
+    const timeToStartInMs = data.secondsToLoad * 1000;
+    analytics.videoStartEvent(claimId, timeToStartInMs);
+    doAnalyticsView(uri, timeToStartInMs).then(() => {
       claimRewards();
     });
   }
