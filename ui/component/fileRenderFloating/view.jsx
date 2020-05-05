@@ -78,6 +78,12 @@ export default function FileRenderFloating(props: Props) {
     // @if TARGET='app'
     setDesktopPlayStartTime(Date.now());
     // @endif
+
+    return () => {
+      // @if TARGET='app'
+      setDesktopPlayStartTime(undefined);
+      // @endif
+    };
   }, [uri]);
 
   if (!isPlayable || !uri || (isFloating && (isMobile || !floatingPlayerEnabled))) {

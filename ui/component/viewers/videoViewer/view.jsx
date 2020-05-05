@@ -88,6 +88,7 @@ function VideoViewer(props: Props) {
 
   function doTrackingFirstPlay(e: Event, data: any) {
     let timeToStartInMs = data.secondsToLoad * 1000;
+
     if (desktopPlayStartTime !== undefined) {
       const differenceToAdd = Date.now() - desktopPlayStartTime;
       timeToStartInMs += differenceToAdd;
@@ -166,7 +167,7 @@ function VideoViewer(props: Props) {
       }
       player.on('dispose', () => savePosition(uri, player.currentTime()));
     },
-    [uri]
+    IS_WEB ? [uri] : [uri, desktopPlayStartTime]
   );
 
   return (
