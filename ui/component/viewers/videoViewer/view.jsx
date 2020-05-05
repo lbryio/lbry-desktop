@@ -29,6 +29,7 @@ type Props = {
   uri: string,
   autoplaySetting: boolean,
   autoplayIfEmbedded: boolean,
+  desktopPlayStartTime?: number,
   doAnalyticsView: (string, number) => Promise<any>,
   claimRewards: () => void,
   savePosition: (string, number) => void,
@@ -56,6 +57,7 @@ function VideoViewer(props: Props) {
     doAnalyticsView,
     claimRewards,
     savePosition,
+    desktopPlayStartTime,
   } = props;
   const claimId = claim && claim.claim_id;
   const isAudio = contentType.includes('audio');
@@ -85,7 +87,12 @@ function VideoViewer(props: Props) {
   }
 
   function doTrackingFirstPlay(e: Event, data: any) {
-    const timeToStartInMs = data.secondsToLoad * 1000;
+    let timeToStartInMs = data.secondsToLoad * 1000;
+    if (desktopPlayStartTime !== undefined) {
+      const differenceToAdd = Date.now() - desktopPlayStartTime;
+      timeToStartInMs += differenceToAdd;
+    }
+
     analytics.videoStartEvent(claimId, timeToStartInMs);
     doAnalyticsView(uri, timeToStartInMs).then(() => {
       claimRewards();

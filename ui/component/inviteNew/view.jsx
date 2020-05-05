@@ -73,7 +73,7 @@ function InviteNew(props: Props) {
     <div className={'columns'}>
       <Card
         title={__('Invite Link')}
-        subtitle={__('Share this link with friends (or enemies) and get LBC when they join lbry.tv')}
+        subtitle={__('Share this link with friends (or enemies) and earn LBC when they join lbry.tv')}
         actions={
           <React.Fragment>
             <CopyableText label={__('Your invite link')} copyable={referral} />
