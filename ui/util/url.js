@@ -70,3 +70,41 @@ exports.generateInitialUrl = hash => {
   }
   return url;
 };
+
+exports.generateLbryUrl = (canonicalUrl, permanentUrl) => {
+  return canonicalUrl ? canonicalUrl.split('lbry://')[1] : permanentUrl.split('lbry://')[1];
+};
+
+exports.generateLbryWebUrl = lbryUrl => {
+  return lbryUrl.replace(/#/g, ':');
+};
+
+exports.generateEncodedLbryURL = (openUrl, lbryWebUrl, includeStartTime, startTime) => {
+  const queryParam = includeStartTime ? `?t=${startTime}` : '';
+  const encodedPart = encodeURIComponent(`${lbryWebUrl}${queryParam}`);
+  return `${openUrl}${encodedPart}`;
+};
+
+exports.generateOpenDotLbryDotComUrl = (
+  openUrl,
+  lbryWebUrl,
+  canonicalUrl,
+  permanentUrl,
+  referralCode,
+  rewardsApproved,
+  includeStartTime,
+  startTime
+) => {
+  let urlParams = new URLSearchParams();
+  if (referralCode && rewardsApproved) {
+    urlParams.append('r', referralCode);
+  }
+
+  if (includeStartTime) {
+    urlParams.append('t', startTime.toString());
+  }
+
+  const urlParamsString = urlParams.toString();
+  const url = `${openUrl}${lbryWebUrl}` + (urlParamsString === '' ? '' : `?${urlParamsString}`);
+  return url;
+};
