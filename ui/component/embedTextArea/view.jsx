@@ -11,14 +11,16 @@ type Props = {
   doToast: ({ message: string }) => void,
   label?: string,
   claim: Claim,
+  includeStartTime: boolean,
+  startTime: number,
 };
 
 export default function EmbedTextArea(props: Props) {
-  const { doToast, snackMessage, label, claim } = props;
+  const { doToast, snackMessage, label, claim, includeStartTime, startTime } = props;
   const { claim_id: claimId, name } = claim;
   const input = useRef();
 
-  const streamUrl = generateEmbedUrl(name, claimId);
+  const streamUrl = generateEmbedUrl(name, claimId, includeStartTime, startTime);
   let embedText = `<iframe width="560" height="315" src="${streamUrl}" allowfullscreen></iframe>`;
 
   function copyToClipboard() {
@@ -47,6 +49,7 @@ export default function EmbedTextArea(props: Props) {
         value={embedText || ''}
         ref={input}
         onFocus={onFocus}
+        readOnly
       />
 
       <div className="section__actions">

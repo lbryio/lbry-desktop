@@ -6,8 +6,9 @@ function generateStreamUrl(claimName, claimId) {
   return `${LBRY_TV_STREAMING_API}/content/claims/${claimName}/${claimId}/stream`;
 }
 
-function generateEmbedUrl(claimName, claimId) {
-  return `${URL}/$/embed/${claimName}/${claimId}`;
+function generateEmbedUrl(claimName, claimId, includeStartTime, startTime) {
+  const queryParam = includeStartTime ? `?t=${startTime}` : '';
+  return `${URL}/$/embed/${claimName}/${claimId}${queryParam}`;
 }
 
 function generateDownloadUrl(claimName, claimId) {

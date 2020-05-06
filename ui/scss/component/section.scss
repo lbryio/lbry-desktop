@@ -138,3 +138,15 @@
 .section__actions--no-margin {
   margin-top: 0;
 }
+
+.section__start-at {
+  display: flex;
+  margin-top: var(--spacing-large);
+  fieldset-section {
+    width: 6em;
+    margin-top: 0;
+  }
+  .checkbox {
+    margin-right: 10px;
+  }
+}
