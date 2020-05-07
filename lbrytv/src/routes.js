@@ -1,6 +1,5 @@
 const { getHtml } = require('./html');
-const { Lbryio } = require('lbryinc/dist/bundle.es.js');
-const { generateStreamUrl, CONTINENT_COOKIE } = require('../../ui/util/lbrytv');
+const { generateStreamUrl } = require('../../ui/util/lbrytv');
 const fetch = require('node-fetch');
 const Router = require('@koa/router');
 
@@ -12,30 +11,8 @@ const router = new Router();
 function getStreamUrl(ctx) {
   const { claimName, claimId } = ctx.params;
 
-  // hack to get around how we managing the continent cookie
-  // defaulting to "NA" becasue saved-passwords.js assumes it's in the browser and won't work properly
-  // changes need to be made to that to better work with the server
-  const streamingContinentCookie = ctx.cookies.get(CONTINENT_COOKIE) || 'NA';
-  const streamUrl = generateStreamUrl(claimName, claimId, undefined, streamingContinentCookie);
+  const streamUrl = generateStreamUrl(claimName, claimId);
   return streamUrl;
-}
-
-function getSupportedCDN(continent) {
-  switch (continent) {
-    case 'NA':
-    case 'AS':
-    case 'EU':
-      return continent;
-    default:
-      return 'NA';
-  }
-}
-
-async function fetchContinentCookie(ip) {
-  return Lbryio.call('locale', 'get', { ip }, 'post').then(result => {
-    const userContinent = getSupportedCDN(result.continent);
-    return userContinent;
-  });
 }
 
 router.get(`/$/download/:claimName/:claimId`, async ctx => {
@@ -50,15 +27,6 @@ router.get(`/$/stream/:claimName/:claimId`, async ctx => {
 });
 
 router.get('*', async ctx => {
-  const hasContinentCookie = ctx.cookies.get(CONTINENT_COOKIE);
-  const ip = ctx.ip;
-
-  if (!hasContinentCookie) {
-    try {
-      const continentValue = await fetchContinentCookie(ip);
-      ctx.cookies.set(CONTINENT_COOKIE, continentValue, { httpOnly: false });
-    } catch (e) {}
-  }
   const html = await getHtml(ctx);
   ctx.body = html;
 });

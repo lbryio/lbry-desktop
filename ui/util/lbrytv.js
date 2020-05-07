@@ -1,17 +1,9 @@
 const { URL, LBRY_TV_STREAMING_API } = require('../../config');
-const { getCookie } = require('../../ui/util/saved-passwords');
 
 const CONTINENT_COOKIE = 'continent';
 
-function generateStreamUrl(claimName, claimId, apiUrl, streamingContinent, useDefaultServer) {
-  let prefix = LBRY_TV_STREAMING_API || apiUrl;
-  const continent = useDefaultServer ? undefined : streamingContinent || getCookie(CONTINENT_COOKIE);
-
-  if (continent && prefix.split('//').length > 1) {
-    prefix = prefix.replace('//', '//' + continent + '.');
-  }
-
-  return `${prefix}/content/claims/${claimName}/${claimId}/stream`;
+function generateStreamUrl(claimName, claimId) {
+  return `${LBRY_TV_STREAMING_API}/content/claims/${claimName}/${claimId}/stream`;
 }
 
 function generateEmbedUrl(claimName, claimId) {
