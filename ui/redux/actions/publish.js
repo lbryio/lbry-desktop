@@ -8,6 +8,7 @@ import {
   selectMyClaims,
   doPublish,
   doCheckPendingPublishes,
+  doCheckReflectingFiles,
   ACTIONS as LBRY_REDUX_ACTIONS,
 } from 'lbry-redux';
 import { selectosNotificationsEnabled } from 'redux/selectors/settings';
@@ -44,6 +45,12 @@ export const doPublishDesktop = (filePath: string) => (dispatch: Dispatch, getSt
         claims: [pendingClaim],
       },
     });
+    // @if TARGET='app'
+    actions.push({
+      type: LBRY_REDUX_ACTIONS.ADD_FILES_REFLECTING,
+      data: pendingClaim,
+    });
+    // @endif
 
     dispatch(batchActions(...actions));
     dispatch(
@@ -53,6 +60,10 @@ export const doPublishDesktop = (filePath: string) => (dispatch: Dispatch, getSt
         filePath,
       })
     );
+    dispatch(doCheckPendingPublishesApp());
+    // @if TARGET='app'
+    dispatch(doCheckReflectingFiles());
+    // @endif
   };
 
   const publishFail = error => {

@@ -24,7 +24,6 @@ import {
   lbrytvReducer,
 } from 'lbryinc';
 import appReducer from 'redux/reducers/app';
-import availabilityReducer from 'redux/reducers/availability';
 import contentReducer from 'redux/reducers/content';
 import settingsReducer from 'redux/reducers/settings';
 import subscriptionsReducer from 'redux/reducers/subscriptions';
@@ -33,7 +32,6 @@ export default history =>
   combineReducers({
     router: connectRouter(history),
     app: appReducer,
-    availability: availabilityReducer,
     blacklist: blacklistReducer,
     filtered: filteredReducer,
     claims: claimsReducer,

@@ -21,6 +21,7 @@ import ClaimPreviewSubtitle from 'component/claimPreviewSubtitle';
 import ClaimRepostAuthor from 'component/claimRepostAuthor';
 import FileDownloadLink from 'component/fileDownloadLink';
 import AbandonedChannelPreview from 'component/abandonedChannelPreview';
+import PublishPending from 'component/publishPending';
 
 type Props = {
   uri: string,
@@ -29,6 +30,7 @@ type Props = {
   showUserBlocked: boolean,
   claimIsMine: boolean,
   pending?: boolean,
+  reflectingInfo?: any, // fxme
   resolveUri: string => void,
   isResolvingUri: boolean,
   history: { push: string => void },
@@ -65,6 +67,7 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
     obscureNsfw,
     claimIsMine,
     pending,
+    reflectingInfo,
     history,
     uri,
     isResolvingUri,
@@ -97,7 +100,6 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
   const showPublishLink = abandoned && !showUnresolvedClaim && placeholder === 'publish';
   const hideActions = type === 'small' || type === 'tooltip';
   const canonicalUrl = claim && claim.canonical_url;
-
   let isValid = false;
   if (uri) {
     try {
@@ -245,28 +247,40 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
             <ChannelThumbnail uri={uri} obscure={channelIsBlocked} />
           </UriIndicator>
         ) : (
-          <NavLink {...navLinkProps}>
-            <FileThumbnail thumbnail={thumbnailUrl}>
-              {/* @if TARGET='app' */}
-              {claim && (
-                <div className="claim-preview__hover-actions">
-                  <FileDownloadLink uri={canonicalUrl} hideOpenButton hideDownloadStatus />
-                </div>
-              )}
-              {/* @endif */}
-            </FileThumbnail>
-          </NavLink>
+          <>
+            {!pending ? (
+              <NavLink {...navLinkProps}>
+                <FileThumbnail thumbnail={thumbnailUrl}>
+                  {/* @if TARGET='app' */}
+                  {claim && (
+                    <div className="claim-preview__hover-actions">
+                      <FileDownloadLink uri={canonicalUrl} hideOpenButton hideDownloadStatus />
+                    </div>
+                  )}
+                  {/* @endif */}
+                </FileThumbnail>
+              </NavLink>
+            ) : (
+              <FileThumbnail thumbnail={thumbnailUrl} />
+            )}
+          </>
         )}
 
         <div className="claim-preview__text">
           <div className="claim-preview-metadata">
             <div className="claim-preview-info">
-              <NavLink {...navLinkProps}>
+              {pending ? (
                 <ClaimPreviewTitle uri={uri} />
-              </NavLink>
+              ) : (
+                <NavLink {...navLinkProps}>
+                  <ClaimPreviewTitle uri={uri} />
+                </NavLink>
+              )}
+
               {!isChannel && <FileProperties uri={uri} />}
             </div>
             <ClaimPreviewSubtitle uri={uri} type={type} />
+            {(pending || !!reflectingInfo) && <PublishPending uri={uri} />}
           </div>
           {type !== 'small' && (
             <div className="claim-preview__actions">
