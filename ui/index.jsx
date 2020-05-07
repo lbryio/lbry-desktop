@@ -15,7 +15,7 @@ import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import { doDaemonReady, doAutoUpdate, doOpenModal, doHideModal, doToggle3PAnalytics } from 'redux/actions/app';
 import { Lbry, doToast, isURIValid, setSearchApi, apiCall } from 'lbry-redux';
-import { doSetLanguage, doUpdateIsNightAsync } from 'redux/actions/settings';
+import { doSetLanguage, doFetchLanguage, doUpdateIsNightAsync } from 'redux/actions/settings';
 import { Lbryio, rewards, doBlackListedOutpointsSubscribe, doFilteredOutpointsSubscribe } from 'lbryinc';
 import { store, persistor, history } from 'store';
 import app from './app';
@@ -38,8 +38,9 @@ import { X_LBRY_AUTH_TOKEN } from 'constants/token';
 import 'scss/all.scss';
 
 // @if TARGET='web'
-// These overrides can't live in lbrytv/ because they need to use the same instance of `Lbry`
-import apiPublishCallViaWeb from 'lbrytv/setup/publish';
+// These overrides can't live in web/ because they need to use the same instance of `Lbry`
+import apiPublishCallViaWeb from 'web/setup/publish';
+const { DEFAULT_LANGUAGE } = require('../config.js');
 
 // Sentry error logging setup
 // Will only work if you have a SENTRY_AUTH_TOKEN env
@@ -108,6 +109,7 @@ doAuthTokenRefresh();
 // We keep a local variable for authToken because `ipcRenderer.send` does not
 // contain a response, so there is no way to know when it's been set
 let authToken;
+// here call user new with config language and domain?
 Lbryio.setOverride(
   'setAuthToken',
   status =>
@@ -117,7 +119,7 @@ Lbryio.setOverride(
         'new',
         {
           auth_token: '',
-          language: 'en',
+          language: DEFAULT_LANGUAGE,
           app_id: status.installation_id,
         },
         'post'
@@ -271,6 +273,9 @@ function AppWrapper() {
   useEffect(() => {
     if (readyToLaunch && persistDone) {
       sessionStorage.setItem('startup', true);
+      if (process.env.DEFAULT_LANGUAGE) {
+        app.store.dispatch(doFetchLanguage(process.env.DEFAULT_LANGUAGE));
+      }
       app.store.dispatch(doUpdateIsNightAsync());
       app.store.dispatch(doDaemonReady());
       app.store.dispatch(doBlackListedOutpointsSubscribe());

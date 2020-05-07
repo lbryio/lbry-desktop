@@ -10,7 +10,7 @@ import classnames from 'classnames';
 import { FORCE_CONTENT_TYPE_PLAYER } from 'constants/claim';
 import AutoplayCountdown from 'component/autoplayCountdown';
 import usePrevious from 'effects/use-previous';
-import FileViewerEmbeddedEnded from 'lbrytv/component/fileViewerEmbeddedEnded';
+import FileViewerEmbeddedEnded from 'web/component/fileViewerEmbeddedEnded';
 import FileViewerEmbeddedTitle from 'component/fileViewerEmbeddedTitle';
 import LoadingScreen from 'component/common/loading-screen';
 

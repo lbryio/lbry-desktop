@@ -27,7 +27,7 @@ module.name_mapper='^analytics\(.*\)$' -> '<PROJECT_ROOT>/ui/analytics\1'
 module.name_mapper='^i18n\(.*\)$' -> '<PROJECT_ROOT>/ui/i18n\1'
 module.name_mapper='^effects\(.*\)$' -> '<PROJECT_ROOT>/ui/effects\1'
 module.name_mapper='^config\(.*\)$' -> '<PROJECT_ROOT>/config\1'
-module.name_mapper='^lbrytv\/component\(.*\)$' -> '<PROJECT_ROOT>/lbrytv/component\1'
-module.name_mapper='^lbrytv\/effects\(.*\)$' -> '<PROJECT_ROOT>/lbrytv/effects\1'
+module.name_mapper='^web\/component\(.*\)$' -> '<PROJECT_ROOT>/web/component\1'
+module.name_mapper='^web\/effects\(.*\)$' -> '<PROJECT_ROOT>/web/effects\1'
 
 [strict]

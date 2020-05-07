@@ -1,8 +1,8 @@
 const path = require('path');
 const webpack = require('webpack');
-const merge = require('webpack-merge');
-const { DefinePlugin, ProvidePlugin } = require('webpack');
-const { getIfUtils, removeEmpty } = require('webpack-config-utils');
+const Dotenv = require('dotenv-webpack');
+const { DefinePlugin } = require('webpack');
+const { getIfUtils } = require('webpack-config-utils');
 const TerserPlugin = require('terser-webpack-plugin');
 
 const NODE_ENV = process.env.NODE_ENV || 'development';
@@ -63,7 +63,8 @@ let baseConfig = {
     modules: [UI_ROOT, 'node_modules', __dirname],
     extensions: ['.js', '.jsx', '.json', '.scss'],
     alias: {
-      config: path.resolve(__dirname, './config.js'),
+      config: path.resolve(__dirname, 'config.js'),
+      getHomepage: process.env.CUSTOM_HOMEPAGE === 'true' ? path.resolve(__dirname, 'custom/homepage.js') : ('util/homepage.js'),
       lbryinc: 'lbryinc/dist/bundle.es.js',
       // Build optimizations for 'redux-persist-transform-filter'
       'redux-persist-transform-filter': 'redux-persist-transform-filter/index.js',
@@ -88,7 +89,12 @@ let baseConfig = {
       'process.env.LBRY_API_URL': JSON.stringify(process.env.LBRY_API_URL),
       'process.env.SENTRY_AUTH_TOKEN': JSON.stringify(process.env.SENTRY_AUTH_TOKEN),
     }),
+    new Dotenv({
+      allowEmptyValues: true, // allow empty variables (e.g. `FOO=`) (treat it as empty string, rather than missing)
+      systemvars: true, // load all the predefined 'process.env' variables which will trump anything local per dotenv specs.
+      silent: false, // hide any errors
+      defaults: true, // load '.env.defaults' as the default values if empty.
+    }),
   ],
 };
-
 module.exports = baseConfig;

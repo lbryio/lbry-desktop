@@ -1,7 +1,5 @@
 const config = require('../../config');
-const PAGES = require('../../ui/constants/pages');
 const { formatInAppUrl } = require('../../ui/util/url');
-const { parseURI } = require('lbry-redux');
 
 async function redirectMiddleware(ctx, next) {
   const requestHost = ctx.host;

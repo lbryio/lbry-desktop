@@ -4,7 +4,7 @@ import React from 'react';
 import Button from 'component/button';
 import CopyableText from 'component/copyableText';
 import EmbedTextArea from 'component/embedTextArea';
-import { generateDownloadUrl } from 'util/lbrytv';
+import { generateDownloadUrl } from 'util/web';
 import useIsMobile from 'effects/use-is-mobile';
 import { FormField } from 'component/common/form';
 import { hmsToSeconds, secondsToHms } from 'util/time';
