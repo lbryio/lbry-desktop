@@ -38,8 +38,8 @@ import { X_LBRY_AUTH_TOKEN } from 'constants/token';
 import 'scss/all.scss';
 
 // @if TARGET='web'
-// These overrides can't live in lbrytv/ because they need to use the same instance of `Lbry`
-import apiPublishCallViaWeb from 'lbrytv/setup/publish';
+// These overrides can't live in web/ because they need to use the same instance of `Lbry`
+import apiPublishCallViaWeb from 'web/setup/publish';
 
 // Sentry error logging setup
 // Will only work if you have a SENTRY_AUTH_TOKEN env

@@ -3,7 +3,7 @@ import * as ICONS from 'constants/icons';
 import * as MODALS from 'constants/modal_types';
 import React, { useState } from 'react';
 import Button from 'component/button';
-import { generateDownloadUrl } from 'util/lbrytv';
+import { generateDownloadUrl } from 'util/web';
 
 type Props = {
   uri: string,

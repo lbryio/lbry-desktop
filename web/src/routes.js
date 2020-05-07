@@ -1,5 +1,5 @@
 const { getHtml } = require('./html');
-const { generateStreamUrl } = require('../../ui/util/lbrytv');
+const { generateStreamUrl } = require('../../ui/util/web');
 const fetch = require('node-fetch');
 const Router = require('@koa/router');
 

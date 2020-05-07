@@ -17,10 +17,10 @@ import Nag from 'component/common/nag';
 import { rewards as REWARDS } from 'lbryinc';
 import usePersistedState from 'effects/use-persisted-state';
 // @if TARGET='web'
-import OpenInAppLink from 'lbrytv/component/openInAppLink';
-import YoutubeWelcome from 'lbrytv/component/youtubeReferralWelcome';
-import NagDegradedPerformance from 'lbrytv/component/nag-degraded-performance';
-import NagDataCollection from 'lbrytv/component/nag-data-collection';
+import OpenInAppLink from 'web/component/openInAppLink';
+import YoutubeWelcome from 'web/component/youtubeReferralWelcome';
+import NagDegradedPerformance from 'web/component/nag-degraded-performance';
+import NagDataCollection from 'web/component/nag-data-collection';
 
 import {
   useDegradedPerformance,
@@ -28,7 +28,7 @@ import {
   STATUS_DEGRADED,
   STATUS_FAILING,
   STATUS_DOWN,
-} from 'lbrytv/effects/use-degraded-performance';
+} from 'web/effects/use-degraded-performance';
 // @endif
 export const MAIN_WRAPPER_CLASS = 'main-wrapper';
 // @if TARGET='app'

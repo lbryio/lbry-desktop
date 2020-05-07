@@ -22,7 +22,7 @@ import * as RENDER_MODES from 'constants/file_render_modes';
 import path from 'path';
 import { FORCE_CONTENT_TYPE_PLAYER } from 'constants/claim';
 // @if TARGET='web'
-import { generateStreamUrl } from 'util/lbrytv';
+import { generateStreamUrl } from 'util/web';
 // @endif
 
 const RECENT_HISTORY_AMOUNT = 10;

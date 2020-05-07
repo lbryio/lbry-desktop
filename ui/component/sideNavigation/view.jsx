@@ -9,7 +9,7 @@ import StickyBox from 'react-sticky-box/dist/esnext';
 import Spinner from 'component/spinner';
 import usePersistedState from 'effects/use-persisted-state';
 // @if TARGET='web'
-// import Ads from 'lbrytv/component/ads';
+// import Ads from 'web/component/ads';
 // @endif
 
 const SHOW_CHANNELS = 'SHOW_CHANNELS';

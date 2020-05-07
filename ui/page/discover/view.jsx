@@ -9,7 +9,7 @@ import analytics from 'analytics';
 import HiddenNsfw from 'component/common/hidden-nsfw';
 import Icon from 'component/common/icon';
 import * as CS from 'constants/claim_search';
-import Ads from 'lbrytv/component/ads';
+import Ads from 'web/component/ads';
 
 type Props = {
   location: { search: string },
