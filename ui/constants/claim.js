@@ -14,7 +14,6 @@ export const FORCE_CONTENT_TYPE_PLAYER = [
   'video/quicktime',
   'application/x-ext-mkv',
   'video/x-matroska',
-  'application/octet-stream',
   'video/x-ms-wmv',
   'video/x-msvideo',
   'video/mpeg',
