@@ -8,7 +8,12 @@ import { generateDownloadUrl } from 'util/lbrytv';
 import useIsMobile from 'effects/use-is-mobile';
 import { FormField } from 'component/common/form';
 import { hmsToSeconds, secondsToHms } from 'util/time';
-import { generateLbryUrl, generateLbryWebUrl, generateEncodedLbryURL, generateOpenDotLbryDotComUrl } from 'util/url';
+import {
+  generateLbryContentUrl,
+  generateLbryWebUrl,
+  generateEncodedLbryURL,
+  generateOpenDotLbryDotComUrl,
+} from 'util/url';
 
 const IOS = !!navigator.platform && /iPad|iPhone|iPod/.test(navigator.platform);
 const SUPPORTS_SHARE_API = typeof navigator.share !== 'undefined';
@@ -28,46 +33,31 @@ function SocialShare(props: Props) {
   const [showExtra, setShowExtra] = React.useState(false);
   const [includeStartTime, setincludeStartTime]: [boolean, any] = React.useState(false);
   const [startTime, setStartTime]: [string, any] = React.useState(secondsToHms(position));
-  const [startTimeSeconds, setStartTimeSeconds]: [number, any] = React.useState(Math.floor(position));
+  const startTimeSeconds: number = hmsToSeconds(startTime);
   const isMobile = useIsMobile();
-
-  let canonicalUrl = 'lbry://';
-  let permanentUrl = 'lbry://';
-  let name = '';
-  let claimId = '';
-
-  if (claim) {
-    canonicalUrl = claim.canonical_url;
-    permanentUrl = claim.permanent_url;
-    name = claim.name;
-    claimId = claim.claim_id;
-  }
-
-  const isChannel = claim.value_type === 'channel';
-  const rewardsApproved = user && user.is_reward_approved;
-  const OPEN_URL = 'https://open.lbry.com/';
-  const lbryUrl: string = generateLbryUrl(canonicalUrl, permanentUrl);
-  const lbryWebUrl: string = generateLbryWebUrl(lbryUrl);
-  const [encodedLbryURL, setEncodedLbryURL]: [string, any] = React.useState(
-    generateEncodedLbryURL(OPEN_URL, lbryWebUrl, includeStartTime, startTime)
-  );
-  const [openDotLbryDotComUrl, setOpenDotLbryDotComUrl]: [string, any] = React.useState(
-    generateOpenDotLbryDotComUrl(
-      OPEN_URL,
-      lbryWebUrl,
-      canonicalUrl,
-      permanentUrl,
-      referralCode,
-      rewardsApproved,
-      includeStartTime,
-      startTime
-    )
-  );
-  const downloadUrl = `${generateDownloadUrl(name, claimId)}`;
 
   if (!claim) {
     return null;
   }
+
+  const { canonical_url: canonicalUrl, permanent_url: permanentUrl, name, claim_id: claimId } = claim;
+  const isChannel = claim.value_type === 'channel';
+  const rewardsApproved = user && user.is_reward_approved;
+  const OPEN_URL = 'https://open.lbry.com/';
+  const lbryUrl: string = generateLbryContentUrl(canonicalUrl, permanentUrl);
+  const lbryWebUrl: string = generateLbryWebUrl(lbryUrl);
+  const encodedLbryURL: string = generateEncodedLbryURL(OPEN_URL, lbryWebUrl, includeStartTime, startTimeSeconds);
+  const openDotLbryDotComUrl: string = generateOpenDotLbryDotComUrl(
+    OPEN_URL,
+    lbryWebUrl,
+    canonicalUrl,
+    permanentUrl,
+    referralCode,
+    rewardsApproved,
+    includeStartTime,
+    startTimeSeconds
+  );
+  const downloadUrl = `${generateDownloadUrl(name, claimId)}`;
 
   function handleWebShareClick() {
     if (navigator.share) {
@@ -78,35 +68,6 @@ function SocialShare(props: Props) {
     }
   }
 
-  function handleTimeCheckboxChange(checked) {
-    setincludeStartTime(checked);
-    updateUrls(checked, startTimeSeconds);
-  }
-
-  function handleTimeChange(value) {
-    setStartTime(value);
-    const startSeconds = hmsToSeconds(value);
-    setStartTimeSeconds(startSeconds);
-    updateUrls(true, startSeconds);
-  }
-
-  function updateUrls(includeStartTime, startTime) {
-    setOpenDotLbryDotComUrl(
-      generateOpenDotLbryDotComUrl(
-        OPEN_URL,
-        lbryWebUrl,
-        canonicalUrl,
-        permanentUrl,
-        referralCode,
-        rewardsApproved,
-        includeStartTime,
-        startTime
-      )
-    );
-
-    setEncodedLbryURL(generateEncodedLbryURL(OPEN_URL, lbryWebUrl, includeStartTime, startTime));
-  }
-
   return (
     <React.Fragment>
       <CopyableText label={__('LBRY Link')} copyable={openDotLbryDotComUrl} />
@@ -114,7 +75,7 @@ function SocialShare(props: Props) {
         <FormField
           type="checkbox"
           name="share_start_at_checkbox"
-          onChange={() => handleTimeCheckboxChange(!includeStartTime)}
+          onChange={() => setincludeStartTime(!includeStartTime)}
           checked={includeStartTime}
           label={__('Start at')}
         />
@@ -123,7 +84,7 @@ function SocialShare(props: Props) {
           name="share_start_at"
           value={startTime}
           disabled={!includeStartTime}
-          onChange={event => handleTimeChange(event.target.value)}
+          onChange={event => setStartTime(event.target.value)}
         />
       </div>
       <div className="section__actions">

@@ -71,7 +71,7 @@ exports.generateInitialUrl = hash => {
   return url;
 };
 
-exports.generateLbryUrl = (canonicalUrl, permanentUrl) => {
+exports.generateLbryContentUrl = (canonicalUrl, permanentUrl) => {
   return canonicalUrl ? canonicalUrl.split('lbry://')[1] : permanentUrl.split('lbry://')[1];
 };
 
