@@ -9,8 +9,9 @@ import StickyBox from 'react-sticky-box/dist/esnext';
 import Spinner from 'component/spinner';
 import usePersistedState from 'effects/use-persisted-state';
 import classnames from 'classnames';
+import { PINNED_LABEL_1, PINNED_URI_1, PINNED_URI_2, PINNED_LABEL_2 } from 'config';
 // @if TARGET='web'
-// import Ads from 'lbrytv/component/ads';
+// import Ads from 'web/component/ads';
 // @endif
 
 const SHOW_CHANNELS = 'SHOW_CHANNELS';
@@ -84,9 +85,9 @@ function SideNavigation(props: Props) {
     }
   }, [setPulseLibrary, purchaseSuccess, doClearPurchasedUriSuccess]);
 
-  function buildLink(path, label, icon, onClick, requiresAuth = false) {
+  function buildLink(path, label, icon, onClick, requiresAuth = false,  isLiteral = false) {
     return {
-      navigate: path ? `$/${path}` : '/',
+      navigate: !isLiteral ? `$/${path}` : `${path}`,
       label,
       icon,
       onClick,
@@ -117,7 +118,7 @@ function SideNavigation(props: Props) {
                 : {}),
             },
             {
-              ...buildLink(null, __('Home'), ICONS.HOME),
+              ...buildLink('/', __('Home'), ICONS.HOME, null, null, true),
             },
             {
               ...buildLink(
@@ -137,6 +138,18 @@ function SideNavigation(props: Props) {
             {
               ...buildLink(PAGES.LIBRARY, __('Library'), ICONS.LIBRARY),
             },
+            // @if TARGET='web'
+            {
+              ...(PINNED_URI_1
+                ? { ...buildLink(`${PINNED_URI_1}`, `${PINNED_LABEL_1}`, ICONS.PINNED, null, null, true) }
+                : {}),
+            },
+            {
+              ...(PINNED_URI_2
+                ? { ...buildLink(`${PINNED_URI_2}`, `${PINNED_LABEL_2}`, ICONS.PINNED, null, null, true) }
+                : {}),
+            },
+            // @endif
             {
               ...(expanded ? { ...buildLink(PAGES.SETTINGS, __('Settings'), ICONS.SETTINGS) } : {}),
             },

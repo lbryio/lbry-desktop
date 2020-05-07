@@ -15,7 +15,7 @@ import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import { doDaemonReady, doAutoUpdate, doOpenModal, doHideModal, doToggle3PAnalytics } from 'redux/actions/app';
 import { Lbry, doToast, isURIValid, setSearchApi, apiCall } from 'lbry-redux';
-import { doSetLanguage, doUpdateIsNightAsync } from 'redux/actions/settings';
+import { doSetLanguage, doFetchLanguage, doUpdateIsNightAsync } from 'redux/actions/settings';
 import { Lbryio, rewards, doBlackListedOutpointsSubscribe, doFilteredOutpointsSubscribe } from 'lbryinc';
 import { store, persistor, history } from 'store';
 import app from './app';
@@ -31,7 +31,7 @@ import {
   doAuthTokenRefresh,
 } from 'util/saved-passwords';
 import { X_LBRY_AUTH_TOKEN } from 'constants/token';
-import { LBRY_TV_API } from 'config';
+import { LBRY_WEB_API } from 'config';
 
 // Import our app styles
 // If a style is not necessary for the initial page load, it should be removed from `all.scss`
@@ -39,8 +39,9 @@ import { LBRY_TV_API } from 'config';
 import 'scss/all.scss';
 
 // @if TARGET='web'
-// These overrides can't live in lbrytv/ because they need to use the same instance of `Lbry`
-import apiPublishCallViaWeb from 'lbrytv/setup/publish';
+// These overrides can't live in web/ because they need to use the same instance of `Lbry`
+import apiPublishCallViaWeb from 'web/setup/publish';
+const { DEFAULT_LANGUAGE } = require('../config.js');
 
 // Sentry error logging setup
 // Will only work if you have a SENTRY_AUTH_TOKEN env
@@ -59,7 +60,7 @@ if (process.env.SDK_API_URL) {
 
 let sdkAPIHost = process.env.SDK_API_HOST || process.env.SDK_API_URL;
 // @if TARGET='web'
-sdkAPIHost = LBRY_TV_API;
+sdkAPIHost = LBRY_WEB_API;
 // @endif
 
 export const SDK_API_PATH = `${sdkAPIHost}/api/v1`;
@@ -122,7 +123,7 @@ Lbryio.setOverride(
         'new',
         {
           auth_token: '',
-          language: 'en',
+          language: DEFAULT_LANGUAGE,
           app_id: status.installation_id,
         },
         'post'
@@ -278,6 +279,9 @@ function AppWrapper() {
       // @if TARGET='app'
       sessionStorage.setItem('startup', true);
       // @endif
+      if (process.env.DEFAULT_LANGUAGE) {
+        app.store.dispatch(doFetchLanguage(process.env.DEFAULT_LANGUAGE));
+      }
       app.store.dispatch(doUpdateIsNightAsync());
       app.store.dispatch(doDaemonReady());
       app.store.dispatch(doBlackListedOutpointsSubscribe());

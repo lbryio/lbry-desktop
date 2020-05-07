@@ -4,7 +4,7 @@ import React, { Fragment } from 'react';
 import classnames from 'classnames';
 import SideNavigation from 'component/sideNavigation';
 import Header from 'component/header';
-import Footer from 'lbrytv/component/footer';
+import Footer from 'web/component/footer';
 
 export const MAIN_CLASS = 'main';
 type Props = {
