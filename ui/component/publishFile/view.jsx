@@ -49,7 +49,7 @@ function PublishFile(props: Props) {
   const [oversized, setOversized] = useState(false);
   const RECOMMENDED_BITRATE = 6000000;
   const TV_PUBLISH_SIZE_LIMIT: number = 1073741824;
-  const UPLOAD_SIZE_MESSAGE = 'Lbrytv uploads are limited to 1 GB. Download the app for unrestricted publishing.';
+  const UPLOAD_SIZE_MESSAGE = 'Web uploads are limited to 1 GB. Download the app for unrestricted publishing.';
   const PROCESSING_MB_PER_SECOND = 0.5;
   const MINUTES_THRESHOLD = 30;
   const HOURS_THRESHOLD = MINUTES_THRESHOLD * 60;
@@ -154,7 +154,7 @@ function PublishFile(props: Props) {
       return (
         <p className="help">
           {__(
-            'For video content, use MP4s in H264/AAC format and a friendly bitrate (under 5 mbps) and resolution (720p) for more reliable streaming. Lbrytv uploads are restricted to 1GB.'
+            'For video content, use MP4s in H264/AAC format and a friendly bitrate (under 5 mbps) and resolution (720p) for more reliable streaming. Web uploads are restricted to 1GB.'
           )}{' '}
           <Button button="link" label={__('Publishing Guide')} href="https://lbry.com/faq/video-publishing-guide" />
         </p>

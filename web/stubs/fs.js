@@ -1,5 +1,5 @@
 function logWarning(method) {
-  if (NODE_ENV !== 'production') {
+  if (process.env.NODE_ENV !== 'production') {
     console.error(`Called fs.${method} on lbry.tv. This should be removed.`);
   }
 }
