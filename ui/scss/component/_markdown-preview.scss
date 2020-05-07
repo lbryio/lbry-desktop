@@ -55,6 +55,14 @@
   table {
     margin-top: var(--spacing-medium);
   }
+  
+  blockquote {
+    white-space: normal;
+    
+    p:first-child {
+      margin-top: 0;
+    }
+  }
 
   // Tables
   table {
