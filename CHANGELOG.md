@@ -9,7 +9,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Added
 
 - Allow video sharing with start timestamp _community pr!_ ([#4142](https://github.com/lbryio/lbry-desktop/pull/4142))
-
+- Expose reflector status for publishes ([#4148](https://github.com/lbryio/lbry-desktop/pull/4148))
 ### Changed
 
 ### Fixed
