@@ -6,8 +6,14 @@
   padding: var(--spacing-xlarge);
   font-size: var(--font-small);
 
-  > * {
-    margin-right: calc(var(--spacing-xlarge) * 1.5);
+  @media (max-width: $breakpoint-small) {
+    max-width: 100%;
+    padding: var(--spacing-medium);
+
+    flex-direction: column;
+    > * {
+      margin-bottom: var(--spacing-large);
+    }
   }
 }
 
