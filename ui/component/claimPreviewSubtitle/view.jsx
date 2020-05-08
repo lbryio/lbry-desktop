@@ -28,14 +28,9 @@ function ClaimPreviewSubtitle(props: Props) {
       {claim ? (
         <React.Fragment>
           <UriIndicator uri={uri} link />{' '}
-          {pending
-            ? __('Pending...')
-            : claim &&
-              (isChannel ? (
-                type !== 'inline' && `${claimsInChannel} ${__('publishes')}`
-              ) : (
-                <DateTime timeAgo uri={uri} />
-              ))}
+          {!pending &&
+            claim &&
+            (isChannel ? type !== 'inline' && `${claimsInChannel} ${__('publishes')}` : <DateTime timeAgo uri={uri} />)}
         </React.Fragment>
       ) : (
         <React.Fragment>

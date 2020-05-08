@@ -1200,5 +1200,7 @@
   "this channel": "this channel",
   "Share this channel": "Share this channel",
   "File preview": "File preview",
-  "Go Home": "Go Home"
+  "Go Home": "Go Home",
+  "Uploading (%progress%%) ": "Uploading (%progress%%) ",
+  "Confirming": "Confirming"
 }

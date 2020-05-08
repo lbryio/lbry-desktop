@@ -11,6 +11,7 @@ import {
   selectBlockedChannels,
   selectChannelIsBlocked,
   doFileGet,
+  makeSelectReflectingClaimForUri,
 } from 'lbry-redux';
 import { selectBlackListedOutpoints, selectFilteredOutpoints } from 'lbryinc';
 import { selectShowMatureContent } from 'redux/selectors/settings';
@@ -21,6 +22,7 @@ import ClaimPreview from './view';
 const select = (state, props) => ({
   pending: props.uri && makeSelectClaimIsPending(props.uri)(state),
   claim: props.uri && makeSelectClaimForUri(props.uri)(state),
+  reflectingInfo: props.uri && makeSelectReflectingClaimForUri(props.uri)(state),
   obscureNsfw: !selectShowMatureContent(state),
   claimIsMine: props.uri && makeSelectClaimIsMine(props.uri)(state),
   isResolvingUri: props.uri && makeSelectIsUriResolving(props.uri)(state),
