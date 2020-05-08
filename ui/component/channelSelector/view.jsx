@@ -43,7 +43,7 @@ function ChannelSelector(props: Props) {
         <MenuButton className="">
           <ChannelListItem uri={selectedChannelUrl} isSelected />
         </MenuButton>
-        <MenuList className="menu__list">
+        <MenuList className="menu__list channel__list">
           {channels &&
             channels.map(channel => (
               <MenuItem

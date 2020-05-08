@@ -180,6 +180,43 @@ $metadata-z-index: 1;
   margin-left: var(--spacing-xsmall);
 }
 
+.menu__list.channel__list {
+  margin-top: var(--spacing-small);
+  margin-left: 0;
+  border-radius: var(--border-radius);
+  background: transparent;
+
+  [role='menuitem'] {
+    &[data-selected] {
+      background: transparent;
+      .channel__list-item {
+        background-color: var(--color-card-background-highlighted);
+      }
+    }
+
+    &:first-child {
+      .channel__list-item {
+        border-top: 1px solid var(--color-border);
+        border-top-left-radius: var(--border-radius);
+        border-top-right-radius: var(--border-radius);
+      }
+    }
+
+    &:last-child {
+      .channel__list-item {
+        border-bottom-left-radius: var(--border-radius);
+        border-bottom-right-radius: var(--border-radius);
+      }
+    }
+
+    .channel__list-item {
+      padding-right: calc(var(--spacing-xlarge) + var(--spacing-small) * 2);
+      border-left: 1px solid var(--color-border);
+      border-right: 1px solid var(--color-border);
+    }
+  }
+}
+
 .channel__list-item {
   display: flex;
   align-items: center;
