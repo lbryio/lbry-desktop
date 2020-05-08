@@ -85,7 +85,7 @@ function DiscoverPage(props: Props) {
   }
 
   return (
-    <Page>
+    <Page noFooter>
       <ClaimListDiscover
         claimType={claimType ? [claimType] : undefined}
         headerLabel={headerLabel}

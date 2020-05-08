@@ -4,6 +4,7 @@ import React, { Fragment } from 'react';
 import classnames from 'classnames';
 import SideNavigation from 'component/sideNavigation';
 import Header from 'component/header';
+import Footer from 'lbrytv/component/footer';
 
 export const MAIN_CLASS = 'main';
 type Props = {
@@ -13,10 +14,11 @@ type Props = {
   isUpgradeAvailable: boolean,
   authPage: boolean,
   noHeader: boolean,
+  noFooter: boolean,
 };
 
 function Page(props: Props) {
-  const { children, className, authPage = false, noHeader } = props;
+  const { children, className, authPage = false, noHeader, noFooter } = props;
 
   return (
     <Fragment>
@@ -25,6 +27,9 @@ function Page(props: Props) {
         <main className={classnames(MAIN_CLASS, className, { 'main--full-width': authPage })}>{children}</main>
         {!authPage && !noHeader && <SideNavigation />}
       </div>
+      {/* @if TARGET='web' */}
+      {!noFooter && <Footer />}
+      {/* @endif */}
     </Fragment>
   );
 }

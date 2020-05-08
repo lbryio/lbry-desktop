@@ -10,7 +10,7 @@ import * as CS from 'constants/claim_search';
 
 function DiscoverPage() {
   return (
-    <Page>
+    <Page noFooter>
       <ClaimListDiscover
         headerLabel={
           <span>
