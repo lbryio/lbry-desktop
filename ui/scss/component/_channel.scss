@@ -230,6 +230,7 @@ $metadata-z-index: 1;
   }
 
   .icon {
+    color: var(--color-menu-icon);
     margin-left: var(--spacing-large);
     margin-right: var(--spacing-small);
   }
@@ -240,6 +241,7 @@ $metadata-z-index: 1;
 }
 
 .channel__list-item--selected {
-  border-radius: var(--border-radius);
   border: 1px solid var(--color-border);
+  border-radius: var(--border-radius);
+  background-color: var(--color-card-background-highlighted);
 }
