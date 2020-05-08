@@ -1,8 +1,17 @@
 // @flow
 import * as React from 'react';
 import Villain from 'villain-react';
-import useFileStream from 'effects/use-stream-file'
 import LoadingScreen from 'component/common/loading-screen';
+
+// @if TARGET='web'
+import useStream from 'effects/use-stream'
+// @endif
+
+// @if TARGET='app'
+import useFileStream from 'effects/use-stream-file'
+// @endif
+
+// Import default styles for Villain
 import 'villain-react/dist/style.css';
 
 type Props = {
@@ -12,7 +21,6 @@ type Props = {
   },
   theme: string,
 };
-
 
 let workerUrl = 'webworkers/worker-bundle.js';
 
@@ -25,9 +33,17 @@ const ComicBookViewer = ( props: Props) => {
     const { source, theme } = props
     const { stream, file } =  source
 
+    // @if TARGET='web'
+    const finalSource = useStream(stream)
+    // @endif
+
     // @if TARGET='app'
     const finalSource = useFileStream(file)
     // @endif
+
+    const { error, loading, content } = finalSource
+    
+    const ready = content !== null && !loading
 
     // Villain options
     const opts = {
