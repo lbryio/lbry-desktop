@@ -1,0 +1,23 @@
+.footer {
+  display: flex;
+  justify-content: center;
+  max-width: 80%;
+  margin: auto;
+  padding: var(--spacing-xlarge);
+  font-size: var(--font-small);
+
+  > * {
+    margin-right: calc(var(--spacing-xlarge) * 1.5);
+  }
+}
+
+.footer__section-title {
+  @extend .help;
+  font-weight: 300;
+  margin-bottom: var(--spacing-medium);
+}
+
+.footer__link {
+  @extend .button--link;
+  @extend .help;
+}
