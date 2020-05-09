@@ -50,12 +50,12 @@ const ComicBookViewer = (props: Props) => {
   };
 
   const { error, loading, content } = finalSource;
-  const ready = content !== null && !loading;
+  const ready = content !== null && !loading && !error;
   const errorMessage = __("Sorry, looks like we can't load the archive.");
 
   return (
     <div className="file-render__viewer  file-render__viewer--comic">
-      {loading && <LoadingScreen status={__('Loading')} />}
+      {loading && <LoadingScreen status={__('Loading')} isDocument />}
       {ready && (
         <Villain source={finalSource.content} className={'comic-viewer'} options={opts} workerUrl={workerUrl} />
       )}
