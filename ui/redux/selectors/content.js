@@ -20,7 +20,7 @@ import { selectAllCostInfoByUri, makeSelectCostInfoForUri } from 'lbryinc';
 import { selectShowMatureContent } from 'redux/selectors/settings';
 import * as RENDER_MODES from 'constants/file_render_modes';
 import path from 'path';
-import { FORCE_CONTENT_TYPE_PLAYER } from 'constants/claim';
+import { FORCE_CONTENT_TYPE_PLAYER, FORCE_CONTENT_TYPE_COMIC } from 'constants/claim';
 // @if TARGET='web'
 import { generateStreamUrl } from 'util/lbrytv';
 // @endif
@@ -212,7 +212,8 @@ export const makeSelectFileRenderModeForUri = (uri: string) =>
       if (['3D-file', 'model'].includes(mediaType)) {
         return RENDER_MODES.CAD;
       }
-      if (mediaType === 'comic-book') {
+      // Force content type for fallback support of older claims
+      if (mediaType === 'comic-book' || FORCE_CONTENT_TYPE_COMIC.includes(contentType)) {
         return RENDER_MODES.COMIC;
       }
       if (

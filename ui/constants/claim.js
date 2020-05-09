@@ -22,3 +22,12 @@ export const FORCE_CONTENT_TYPE_PLAYER = [
   'application/x-ext-ogg',
   'application/x-ext-m4a',
 ];
+
+export const FORCE_CONTENT_TYPE_COMIC = [
+  'application/vnd.comicbook+zip',
+  'application/vnd.comicbook-rar',
+  'application/x-cbr',
+  'application/x-cbt',
+  'application/x-cbz',
+  'application/x-cb7',
+];
