@@ -1,36 +1,46 @@
-// @flow
 import React from 'react';
+import useIsMounted from 'effects/use-is-mounted';
 
 // Returns a blob from the download path
-export default function useFileStream(fileStream: (?string) => any) {
+export default function useFileStream(fileStream) {
+  const isMounted = useIsMounted();
 
   const [state, setState] = React.useState({
     error: false,
-    content: null,
     loading: true,
+    content: null,
   });
 
   React.useEffect(() => {
-    if (fileStream) {
-      let chunks = []
+    if (fileStream && isMounted.current) {
+      let chunks = [];
       const stream = fileStream();
-
+      // Handle steam chunk recived
       stream.on('data', chunk => {
-        chunks.push(chunk)
+        if (isMounted.current) {
+          chunks.push(chunk);
+        } else {
+          // Cancel stream if component is not mounted:
+          // The user has left the viewer page
+          stream.destroy();
+        }
       });
-
+      // Handle stream ended
       stream.on('end', () => {
-        const buffer = Buffer.concat(chunks)
-        const blob = new Blob([buffer])
-        setState({ content: blob, loading: false });
+        if (isMounted.current) {
+          const buffer = Buffer.concat(chunks);
+          const blob = new Blob([buffer]);
+          setState({ content: blob, loading: false });
+        }
       });
-
+      // Handle stream error
       stream.on('error', () => {
-        setState({ error: true, loading: false });
-
+        if (isMounted.current) {
+          setState({ error: true, loading: false });
+        }
       });
     }
-  }, []);
+  }, [fileStream, isMounted]);
 
   return state;
 }

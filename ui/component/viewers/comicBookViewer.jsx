@@ -4,11 +4,11 @@ import Villain from 'villain-react';
 import LoadingScreen from 'component/common/loading-screen';
 
 // @if TARGET='web'
-import useStream from 'effects/use-stream'
+import useStream from 'effects/use-stream';
 // @endif
 
 // @if TARGET='app'
-import useFileStream from 'effects/use-stream-file'
+import useFileStream from 'effects/use-stream-file';
 // @endif
 
 // Import default styles for Villain
@@ -29,39 +29,39 @@ if (process.env.NODE_ENV !== 'production') {
   workerUrl = `/${workerUrl}`;
 }
 
-const ComicBookViewer = ( props: Props) => {
-    const { source, theme } = props
-    const { stream, file } =  source
+const ComicBookViewer = (props: Props) => {
+  const { source, theme } = props;
+  let finalSource;
 
-    // @if TARGET='web'
-    const finalSource = useStream(stream)
-    // @endif
+  // @if TARGET='web'
+  finalSource = useStream(source.stream);
+  // @endif
 
-    // @if TARGET='app'
-    const finalSource = useFileStream(file)
-    // @endif
+  // @if TARGET='app'
+  finalSource = useFileStream(source.file);
+  // @endif
 
-    const { error, loading, content } = finalSource
-    
-    const ready = content !== null && !loading
+  // Villain options
+  const opts = {
+    theme: theme === 'dark' ? 'Dark' : 'Light',
+    allowFullScreen: true,
+    autoHideControls: false,
+    allowGlobalShortcuts: true,
+  };
 
-    // Villain options
-    const opts = {
-      theme: theme === 'dark' ? 'Dark' : 'Light',
-      allowFullScreen: true,
-      autoHideControls: false,
-      allowGlobalShortcuts: true,
-    };
+  const { error, loading, content } = finalSource;
+  const ready = content !== null && !loading;
+  const errorMessage = __("Sorry, looks like we can't load the archive.");
 
-    const errorMessage = __("Sorry, looks like we can't load the archive.");
-
-    return (
-      <div className="file-render__viewer  file-render__viewer--comic">
-        { loading && <LoadingScreen status={__('Loading')} />}
-        { ready && <Villain source={finalSource.content} className={'comic-viewer'} options={opts} workerUrl={workerUrl} /> }
-        { error && <LoadingScreen status={errorMessage} spinner={false} /> }
-      </div>
-    );
-  }
+  return (
+    <div className="file-render__viewer  file-render__viewer--comic">
+      {loading && <LoadingScreen status={__('Loading')} />}
+      {ready && (
+        <Villain source={finalSource.content} className={'comic-viewer'} options={opts} workerUrl={workerUrl} />
+      )}
+      {error && <LoadingScreen status={errorMessage} spinner={false} />}
+    </div>
+  );
+};
 
 export default ComicBookViewer;
