@@ -4,6 +4,7 @@ import remark from 'remark';
 import remarkAttr from 'remark-attr';
 import remarkStrip from 'strip-markdown';
 import remarkEmoji from 'remark-emoji';
+import remarkBreaks from 'remark-breaks';
 import reactRenderer from 'remark-react';
 import ExternalLink from 'component/externalLink';
 import defaultSchema from 'hast-util-sanitize/lib/github.json';
@@ -147,6 +148,8 @@ const MarkdownPreview = (props: MarkdownProps) => {
           .use(inlineLinks)
           // Emojis
           .use(remarkEmoji)
+          // Render new lines without needing spaces.
+          .use(remarkBreaks)
           .use(reactRenderer, remarkOptions)
           .processSync(strippedContent).contents
       }
