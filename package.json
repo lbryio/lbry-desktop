@@ -52,6 +52,7 @@
     "electron-updater": "^4.2.4",
     "express": "^4.17.1",
     "if-env": "^1.0.4",
+    "remark-breaks": "^1.0.5",
     "videojs-logo": "^2.0.0"
   },
   "devDependencies": {
