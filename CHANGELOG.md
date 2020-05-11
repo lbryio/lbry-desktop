@@ -15,7 +15,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Fixed
 
 - Channel selector alignment on creator analytics page _community pr!_ ([#4157](https://github.com/lbryio/lbry-desktop/pull/4157))
-
+- Fix inconsistent relative-date string for claims, comments, etc. ([#4172](https://github.com/lbryio/lbry-desktop/pull/4172))
 ## [0.45.1] - [2020-05-06]
 
 ### Added
