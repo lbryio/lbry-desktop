@@ -70,7 +70,7 @@
     "@babel/register": "^7.0.0",
     "@exponent/electron-cookies": "^2.0.0",
     "@hot-loader/react-dom": "^16.8",
-    "@lbry/components": "^4.1.4",
+    "@lbry/components": "^4.1.5",
     "@reach/menu-button": "0.7.4",
     "@reach/rect": "^0.2.1",
     "@reach/tabs": "^0.1.5",
