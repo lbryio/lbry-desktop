@@ -110,14 +110,16 @@ function WalletSendTip(props: Props) {
             <React.Fragment>
               {claimIsMine || isSupport
                 ? __(
-                    'This will increase the overall bid amount for ' +
-                      (title || '@' + channelName) +
-                      ', which will boost its ability to be discovered while active.'
+                    'This will increase the overall bid amount for %title%, which will boost its ability to be discovered while active.',
+                    {
+                      title: title || '@' + channelName,
+                    }
                   )
                 : __(
-                    'This will appear as a tip for ' +
-                      (title || '@' + channelName) +
-                      ', which will boost its ability to be discovered while active.'
+                    'This will appear as a tip for %title%, which will boost its ability to be discovered while active.',
+                    {
+                      title: title || '@' + channelName,
+                    }
                   )}{' '}
               <Button label={__('Learn more')} button="link" href="https://lbry.com/faq/tipping" />.
             </React.Fragment>
