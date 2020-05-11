@@ -1,7 +1,7 @@
 // @flow
 import React, { useEffect, useState } from 'react';
 import { isEmpty } from 'util/object';
-import relativeDate from 'tiny-relative-date';
+import DateTime from 'component/dateTime';
 import Button from 'component/button';
 import Expandable from 'component/expandable';
 import MarkdownPreview from 'component/common/markdown-preview';
@@ -147,7 +147,7 @@ function Comment(props: Props) {
               />
             )}
             <time className="comment__time" dateTime={timePosted}>
-              {relativeDate(timePosted)}
+              {DateTime.getTimeAgoStr(timePosted)}
             </time>
           </div>
           <div className="comment__menu">
