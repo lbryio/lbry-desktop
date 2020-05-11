@@ -29,6 +29,10 @@
   & > *:not(:last-child) {
     margin-right: var(--spacing-miniscule);
   }
+
+  @media (max-width: $breakpoint-xsmall) {
+    display: none;
+  }
 }
 
 .file-properties__purchased {

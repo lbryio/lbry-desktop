@@ -83,6 +83,14 @@
 .card__actions--inline {
   @extend .card__actions;
   margin-top: 0;
+
+  @media (max-width: $breakpoint-small) {
+    .button__content {
+      svg + .button__label {
+        display: none;
+      }
+    }
+  }
 }
 
 .card__actions--between {

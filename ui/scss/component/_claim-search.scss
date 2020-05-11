@@ -62,6 +62,9 @@
 }
 
 .claim-search__top-row {
+  display: flex;
+  flex-wrap: nowrap;
+
   @media (max-width: $breakpoint-small) {
     margin-bottom: var(--spacing-small);
   }
