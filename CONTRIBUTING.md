@@ -68,7 +68,7 @@ Although all contributions should have good UX, the [UX label, when applied in c
 
 ## Code Overview
 
-The entry point for this application is [`src/platforms/electron/index.js`](https://github.com/lbryio/lbry-desktop/blob/master/electron/index.js).
+The entry point for this application is [`electron/index.js`](https://github.com/lbryio/lbry-desktop/blob/master/electron/index.js).
 
 This application is primarily written in JavaScript and is built on [Electron](https://electronjs.org)
 while utilizing [React](https://reactjs.org) and [Redux](https://redux.js.org) for UI and
