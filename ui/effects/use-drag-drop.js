@@ -25,7 +25,7 @@ const DRAG_STATE = {
 // Returns simple detection for global drag-drop
 export default function useFetched() {
   const [drag, setDrag] = React.useState(false);
-  const [drop, setDrop] = React.useState(null);
+  const [dropData, setDropData] = React.useState(null);
 
   React.useEffect(() => {
     let dragCount = 0;
@@ -39,9 +39,9 @@ export default function useFetched() {
         event.preventDefault();
         // Get files
         const files = event.dataTransfer.files;
-        // Store files in state
-        if (files.length && files.length > 0) {
-          setDrop(files);
+        // Check for files
+        if (files.length > 0) {
+          setDropData(event.dataTransfer);
         }
       }
       // Reset state ( hide drop zone )
@@ -93,5 +93,5 @@ export default function useFetched() {
     };
   }, []);
 
-  return { drag, drop };
+  return { drag, dropData };
 }

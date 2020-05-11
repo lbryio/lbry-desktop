@@ -16,6 +16,7 @@ import usePrevious from 'effects/use-previous';
 import Nag from 'component/common/nag';
 import { rewards as REWARDS } from 'lbryinc';
 import usePersistedState from 'effects/use-persisted-state';
+import FileDrop from 'component/fileDrop';
 // @if TARGET='web'
 import OpenInAppLink from 'lbrytv/component/openInAppLink';
 import YoutubeWelcome from 'lbrytv/component/youtubeReferralWelcome';
@@ -284,6 +285,7 @@ function App(props: Props) {
         <React.Fragment>
           <Router />
           <ModalRouter />
+          <FileDrop />
           <FileRenderFloating />
           {isEnhancedLayout && <Yrbl className="yrbl--enhanced" />}
 
