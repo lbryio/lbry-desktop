@@ -10,12 +10,16 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 - Allow video sharing with start timestamp _community pr!_ ([#4142](https://github.com/lbryio/lbry-desktop/pull/4142))
 - Expose reflector status for publishes ([#4148](https://github.com/lbryio/lbry-desktop/pull/4148))
+
 ### Changed
 
 ### Fixed
 
 - Channel selector alignment on creator analytics page _community pr!_ ([#4157](https://github.com/lbryio/lbry-desktop/pull/4157))
 - Fix inconsistent relative-date string for claims, comments, etc. ([#4172](https://github.com/lbryio/lbry-desktop/pull/4172))
+- Error opening certain files with special characters in name #2777 _community pr!_ ([#4161](https://github.com/lbryio/lbry-desktop/pull/4161))
+- Comic-book file page shows download button first, and then viewer after download _community pr!_ ([#4161](https://github.com/lbryio/lbry-desktop/pull/4161))
+
 ## [0.45.1] - [2020-05-06]
 
 ### Added
