@@ -29,6 +29,7 @@
 .claim-search__dropdown--selected {
   background-color: var(--color-primary-alt);
 }
+
 .claim-search__input-container {
   &:not(:first-of-type) {
     padding-left: var(--spacing-medium);
@@ -47,6 +48,7 @@
 .claim-search__input-special {
   font-weight: var(--font-weight-bold);
 }
+
 .claim-search__extra {
   display: flex;
   flex-direction: row;
@@ -57,4 +59,10 @@
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
+}
+
+.claim-search__top-row {
+  @media (max-width: $breakpoint-small) {
+    margin-bottom: var(--spacing-small);
+  }
 }

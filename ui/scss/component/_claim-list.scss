@@ -251,6 +251,7 @@
 
 .claim-preview__actions--header {
   @extend .claim-preview__actions;
+  flex-wrap: wrap;
 }
 
 .claim-preview__button {

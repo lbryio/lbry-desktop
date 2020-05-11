@@ -248,7 +248,7 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
           </UriIndicator>
         ) : (
           <>
-            {!pending ? (
+            {showPublishLink ? null : !pending ? (
               <NavLink {...navLinkProps}>
                 <FileThumbnail thumbnail={thumbnailUrl}>
                   {/* @if TARGET='app' */}

@@ -25,6 +25,8 @@
     position: static;
     transform: none;
     margin-bottom: var(--spacing-xsmall);
+    max-width: 100%;
+    white-space: nowrap;
   }
 
   // This is terrible and should not be removed
