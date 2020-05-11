@@ -24,7 +24,7 @@ import Icon from 'component/common/icon';
 import HelpLink from 'component/common/help-link';
 import { DEBOUNCE_WAIT_DURATION_MS } from 'constants/search';
 import ClaimList from 'component/claimList';
-import relativeDate from 'tiny-relative-date';
+import DateTime from 'component/dateTime';
 
 const PAGE_VIEW_QUERY = `view`;
 const ABOUT_PAGE = `about`;
@@ -193,7 +193,9 @@ function ChannelPage(props: Props) {
       {lastYtSyncDate && (
         <div className="media__uri--right">
           <Icon icon={ICONS.VALIDATED} size={12} />
-          {__('Official YouTube Creator - Last updated %time_ago%', { time_ago: relativeDate(lastYtSyncDate) })}
+          {__('Official YouTube Creator - Last updated %time_ago%', {
+            time_ago: DateTime.getTimeAgoStr(lastYtSyncDate),
+          })}
         </div>
       )}
       <header className="channel-cover">
