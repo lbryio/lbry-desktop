@@ -26,7 +26,6 @@ type Props = {
   // If using the default header, this is a unique ID needed to persist the state of the filter setting
   persistedStorageKey?: string,
   showHiddenByUser: boolean,
-  headerLabel?: string | Node,
   showUnresolvedClaims?: boolean,
   renderProperties: ?(Claim) => Node,
   includeSupportAction?: boolean,
@@ -51,7 +50,6 @@ export default function ClaimList(props: Props) {
     page,
     id,
     showHiddenByUser,
-    headerLabel,
     showUnresolvedClaims,
     renderProperties,
     includeSupportAction,
@@ -105,12 +103,10 @@ export default function ClaimList(props: Props) {
     <section
       className={classnames('claim-list', {
         'claim-list--small': type === 'small',
-        'claim-list--card-body': isCardBody,
       })}
     >
       {header !== false && (
         <React.Fragment>
-          {headerLabel && <label className="claim-list__header-label">{headerLabel}</label>}
           {header && (
             <div className={classnames('claim-list__header', { 'section__title--small': type === 'small' })}>
               {header}
@@ -139,6 +135,7 @@ export default function ClaimList(props: Props) {
         <ul
           className={classnames('ul--no-style', {
             card: !isCardBody,
+            'claim-list--card-body': isCardBody,
           })}
         >
           {sortedUris.map((uri, index) => (

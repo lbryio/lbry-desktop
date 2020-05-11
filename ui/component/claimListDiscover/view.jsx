@@ -13,6 +13,7 @@ import ClaimPreview from 'component/claimPreview';
 import { toCapitalCase } from 'util/string';
 import I18nMessage from 'component/i18nMessage';
 import * as ICONS from 'constants/icons';
+import Card from 'component/common/card';
 
 type Props = {
   uris: Array<string>,
@@ -595,30 +596,32 @@ function ClaimListDiscover(props: Props) {
 
   return (
     <React.Fragment>
-      <ClaimList
-        id={claimSearchCacheQuery}
-        loading={loading}
-        uris={claimSearchResult}
-        header={header || defaultHeader}
-        headerLabel={headerLabel}
-        headerAltControls={meta}
-        onScrollBottom={handleScrollBottom}
-        page={page}
-        pageSize={CS.PAGE_SIZE}
-        timedOutMessage={timedOutMessage}
-        renderProperties={renderProperties}
-        includeSupportAction={includeSupportAction}
-        hideBlock={hideBlock}
-        injectedItem={injectedItem}
+      {headerLabel && <label className="claim-list__header-label">{headerLabel}</label>}
+      <Card
+        title={header || defaultHeader}
+        titleActions={meta && <div className="card__actions--inline">{meta}</div>}
+        isBodyList
+        body={
+          <>
+            <ClaimList
+              isCardBody
+              id={claimSearchCacheQuery}
+              loading={loading}
+              uris={claimSearchResult}
+              onScrollBottom={handleScrollBottom}
+              page={page}
+              pageSize={CS.PAGE_SIZE}
+              timedOutMessage={timedOutMessage}
+              renderProperties={renderProperties}
+              includeSupportAction={includeSupportAction}
+              hideBlock={hideBlock}
+              injectedItem={injectedItem}
+            />
+            {loading &&
+              new Array(pageSize || CS.PAGE_SIZE).fill(1).map((x, i) => <ClaimPreview key={i} placeholder="loading" />)}
+          </>
+        }
       />
-
-      {loading && (
-        <div className="card">
-          {new Array(pageSize || CS.PAGE_SIZE).fill(1).map((x, i) => (
-            <ClaimPreview key={i} placeholder="loading" />
-          ))}
-        </div>
-      )}
     </React.Fragment>
   );
 }

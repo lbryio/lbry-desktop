@@ -14,7 +14,6 @@ import DiscoverPage from 'page/discover';
 import HomePage from 'page/home';
 import InvitedPage from 'page/invited';
 import RewardsPage from 'page/rewards';
-import FileListDownloaded from 'page/fileListDownloaded';
 import FileListPublished from 'page/fileListPublished';
 import InvitePage from 'page/invite';
 import SearchPage from 'page/search';
@@ -177,7 +176,6 @@ function AppRouter(props: Props) {
       <Route path={`/$/${PAGES.INVITE}/:referrer`} exact component={InvitedPage} />
 
       <PrivateRoute {...props} path={`/$/${PAGES.INVITE}`} component={InvitePage} />
-      <PrivateRoute {...props} path={`/$/${PAGES.DOWNLOADED}`} component={FileListDownloaded} />
       <PrivateRoute {...props} path={`/$/${PAGES.PUBLISHED}`} component={FileListPublished} />
       <PrivateRoute {...props} path={`/$/${PAGES.CREATOR_DASHBOARD}`} component={CreatorDashboard} />
       <PrivateRoute {...props} path={`/$/${PAGES.PUBLISH}`} component={PublishPage} />

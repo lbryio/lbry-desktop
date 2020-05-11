@@ -71,3 +71,9 @@
 .pagination__item--selected {
   background-color: var(--color-button-secondary-bg);
 }
+
+.paginate-channel {
+  width: 5rem;
+  border-top-left-radius: var(--border-radius);
+  border-bottom-left-radius: var(--border-radius);
+}

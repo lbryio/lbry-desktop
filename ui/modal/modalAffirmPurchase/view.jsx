@@ -2,6 +2,9 @@
 import React from 'react';
 import FilePrice from 'component/filePrice';
 import { Modal } from 'modal/modal';
+import Card from 'component/common/card';
+import I18nMessage from 'component/i18nMessage';
+import Button from 'component/button';
 
 type Props = {
   closeModal: () => void,
@@ -30,22 +33,29 @@ class ModalAffirmPurchase extends React.PureComponent<Props> {
       uri,
     } = this.props;
 
+    const modalTitle = __('Confirm Purchase');
+
     return (
-      <Modal
-        type="confirm"
-        isOpen
-        title={__('Confirm Purchase')}
-        contentLabel={__('Confirm Purchase')}
-        onConfirmed={this.onAffirmPurchase}
-        onAborted={cancelPurchase}
-      >
-        <p className="section__subtitle">
-          {__('This will purchase')} <strong>{title ? `"${title}"` : uri}</strong> {__('for')}{' '}
-          <strong>
-            <FilePrice uri={uri} showFullPrice inheritStyle showLBC={false} />
-          </strong>{' '}
-          {__('credits')}.
-        </p>
+      <Modal type="card" isOpen contentLabel={modalTitle} onAborted={cancelPurchase}>
+        <Card
+          title={modalTitle}
+          subtitle={
+            <I18nMessage
+              tokens={{
+                claim_title: <strong>{title ? `"${title}"` : uri}</strong>,
+                amount: <FilePrice uri={uri} showFullPrice inheritStyle />,
+              }}
+            >
+              This will purchase %claim_title% for %amount%.
+            </I18nMessage>
+          }
+          actions={
+            <div className="section__actions">
+              <Button button="primary" label={__('Confirm')} onClick={this.onAffirmPurchase} />
+              <Button button="link" label={__('Cancel')} onClick={cancelPurchase} />
+            </div>
+          }
+        />
       </Modal>
     );
   }
