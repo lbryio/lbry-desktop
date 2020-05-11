@@ -115,8 +115,10 @@
 
   .button--primary,
   .button ~ .button--link {
-    &:focus {
-      @include focus;
+    @media (min-width: $breakpoint-small) {
+      &:focus {
+        @include focus;
+      }
     }
   }
 
