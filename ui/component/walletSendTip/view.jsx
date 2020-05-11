@@ -1,6 +1,7 @@
 // @flow
 import React from 'react';
 import Button from 'component/button';
+import { parseURI } from 'lbry-redux';
 import { FormField, Form } from 'component/common/form';
 import { MINIMUM_PUBLISH_BID } from 'constants/claim';
 import useIsMobile from 'effects/use-is-mobile';
@@ -27,6 +28,7 @@ type Props = {
 
 function WalletSendTip(props: Props) {
   const {
+    uri,
     title,
     isPending,
     onCancel,
@@ -44,6 +46,7 @@ function WalletSendTip(props: Props) {
   const [tipError, setTipError] = React.useState();
   const { claim_id: claimId } = claim;
   const isMobile = useIsMobile();
+  const { channelName } = parseURI(uri);
 
   function sendSupportOrConfirm(instantTipMaxAmount = null) {
     if (!isSupport && (!instantTipMaxAmount || !instantTipEnabled || tipAmount > instantTipMaxAmount)) {
@@ -139,11 +142,15 @@ function WalletSendTip(props: Props) {
               {claimIsMine || isSupport
                 ? __(
                     'This will increase the overall bid amount for %title%, which will boost its ability to be discovered while active.',
-                    { title }
+                    {
+                      title: title || '@' + channelName,
+                    }
                   )
                 : __(
                     'This will appear as a tip for %title%, which will boost its ability to be discovered while active.',
-                    { title }
+                    {
+                      title: title || '@' + channelName,
+                    }
                   )}{' '}
               <Button label={__('Learn more')} button="link" href="https://lbry.com/faq/tipping" />.
             </React.Fragment>
