@@ -6,7 +6,6 @@ exports.BACKUP = 'backup';
 exports.CHANNEL = 'channel';
 exports.DISCOVER = 'discover';
 exports.HOME = 'home';
-exports.DOWNLOADED = 'downloaded';
 exports.HELP = 'help';
 exports.LIBRARY = 'library';
 exports.INVITE = 'invite';

@@ -4,12 +4,15 @@
   @media (max-width: $breakpoint-small) {
     font-size: var(--font-small);
   }
+}
 
-  @media (min-width: $breakpoint-small) {
-    &:focus {
-      @include focus;
-      z-index: 2;
-    }
+.button--primary,
+.button--secondary,
+.button--alt,
+.button--link {
+  &:focus {
+    @include focus;
+    z-index: 2; // Ensure focus box-shadow is always visible on every button side
   }
 }
 
@@ -46,6 +49,10 @@
   &:hover {
     color: var(--color-button-primary-text);
     background-color: var(--color-button-primary-bg);
+  }
+
+  &:focus {
+    @include focus;
   }
 
   @media (max-width: $breakpoint-small) {
@@ -124,6 +131,7 @@ svg + .button__label,
   &:hover {
     cursor: default;
     text-decoration: none;
+    background-color: var(--color-primary-alt);
   }
 }
 

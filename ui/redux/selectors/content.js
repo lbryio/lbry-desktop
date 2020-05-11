@@ -45,7 +45,8 @@ export const makeSelectIsPlayerFloating = (location: UrlLocation) =>
     // If there is no floatingPlayer explicitly set, see if the playingUri can float
     try {
       const { pathname } = location;
-      const pageUrl = buildURI(parseURI(pathname.slice(1).replace(/:/g, '#')));
+      const { streamName, streamClaimId, channelName, channelClaimId } = parseURI(pathname.slice(1).replace(/:/g, '#'));
+      const pageUrl = buildURI({ streamName, streamClaimId, channelName, channelClaimId });
       const claimFromUrl = claimsByUri[pageUrl];
       const playingClaim = claimsByUri[playingUri];
       return (claimFromUrl && claimFromUrl.claim_id) !== (playingClaim && playingClaim.claim_id);

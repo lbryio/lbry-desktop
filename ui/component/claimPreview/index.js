@@ -12,6 +12,7 @@ import {
   selectChannelIsBlocked,
   doFileGet,
   makeSelectReflectingClaimForUri,
+  makeSelectClaimWasPurchased,
 } from 'lbry-redux';
 import { selectBlackListedOutpoints, selectFilteredOutpoints } from 'lbryinc';
 import { selectShowMatureContent } from 'redux/selectors/settings';
@@ -36,6 +37,7 @@ const select = (state, props) => ({
   channelIsBlocked: props.uri && selectChannelIsBlocked(props.uri)(state),
   isSubscribed: props.uri && makeSelectIsSubscribed(props.uri, true)(state),
   streamingUrl: props.uri && makeSelectStreamingUrlForUriWebProxy(props.uri)(state),
+  wasPurchased: props.uri && makeSelectClaimWasPurchased(props.uri)(state),
 });
 
 const perform = dispatch => ({

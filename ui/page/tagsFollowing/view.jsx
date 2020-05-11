@@ -22,7 +22,7 @@ function DiscoverPage() {
         defaultTags={CS.TAGS_FOLLOWED}
         meta={
           <Button
-            button="link"
+            button="alt"
             icon={ICONS.EDIT}
             label={__('Manage')}
             requiresAuth={IS_WEB}

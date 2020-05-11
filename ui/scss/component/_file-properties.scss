@@ -4,7 +4,7 @@
   align-items: center;
   font-size: var(--font-small);
   color: var(--color-text-help);
-  margin-left: var(--spacing-small);
+  margin-left: var(--spacing-medium);
   white-space: nowrap;
 
   & > *:not(:last-child) {
@@ -20,9 +20,65 @@
   font-size: var(--font-xsmall);
   line-height: 1.2;
   margin-left: 0;
+  position: relative;
+
+  .tag {
+    font-size: var(--font-xsmall);
+  }
 
   & > *:not(:last-child) {
     margin-right: var(--spacing-miniscule);
+  }
+}
+
+.file-properties__purchased {
+  position: relative;
+  display: flex;
+  align-items: center;
+  margin-left: var(--spacing-xsmall);
+  color: var(--color-gray-5);
+
+  span,
+  svg {
+    position: relative;
+    fill: white;
+  }
+
+  .icon {
+    margin-left: 0.5rem;
+  }
+
+  &::before {
+    position: absolute;
+    content: '';
+    left: -0.4rem;
+    right: -5rem;
+    height: 1.75rem;
+    transform: skew(20deg);
+    background-color: var(--color-purchased);
+  }
+}
+
+.file-properties__not-purchased {
+  position: relative;
+  display: flex;
+  align-items: center;
+  color: var(--color-purchased-text);
+
+  span {
+    position: relative;
+    margin-left: 0.75rem;
+  }
+
+  &::before {
+    position: absolute;
+    content: '';
+    left: 0;
+    right: -5rem;
+    height: 1.75rem;
+    background-color: var(--color-purchased-alt);
+    border: 2px solid var(--color-purchased);
+    transform: skew(20deg);
   }
 }
 

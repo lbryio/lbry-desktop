@@ -1,4 +1,5 @@
 // @flow
+import * as ICONS from 'constants/icons';
 import React, { useState } from 'react';
 import Button from 'component/button';
 import ClaimList from 'component/claimList';
@@ -6,24 +7,41 @@ import Paginate from 'component/common/paginate';
 import { PAGE_SIZE } from 'constants/claim';
 import { Form } from 'component/common/form-components/form';
 import Icon from 'component/common/icon';
-import * as ICONS from '../../constants/icons';
-import { FormField } from '../../component/common/form-components/form-field';
+import { FormField } from 'component/common/form-components/form-field';
 import { withRouter } from 'react-router';
+import Card from 'component/common/card';
+import classnames from 'classnames';
 
 type Props = {
-  fetching: boolean,
-  allDownloadedUrlsCount: number,
+  fetchingFileList: boolean,
   downloadedUrls: Array<string>,
   downloadedUrlsCount: ?number,
   history: { replace: string => void },
-  page: number,
   query: string,
+  doPurchaseList: () => void,
+  myDownloads: Array<string>,
+  myPurchases: Array<string>,
+  myPurchasesCount: ?number,
+  fetchingMyPurchases: boolean,
 };
 
-function FileListDownloaded(props: Props) {
-  const { fetching, history, query, allDownloadedUrlsCount, downloadedUrls, downloadedUrlsCount } = props;
-  const hasDownloads = allDownloadedUrlsCount > 0;
+const VIEW_DOWNLOADS = 'view_download';
+const VIEW_PURCHASES = 'view_purchases';
 
+function FileListDownloaded(props: Props) {
+  const {
+    history,
+    query,
+    downloadedUrlsCount,
+    myPurchasesCount,
+    myPurchases,
+    myDownloads,
+    fetchingFileList,
+    fetchingMyPurchases,
+    doPurchaseList,
+  } = props;
+  const loading = fetchingFileList || fetchingMyPurchases;
+  const [viewMode, setViewMode] = React.useState(VIEW_PURCHASES);
   const [searchQuery, setSearchQuery] = useState('');
 
   function handleInputChange(e) {
@@ -34,45 +52,76 @@ function FileListDownloaded(props: Props) {
     }
   }
 
+  React.useEffect(() => {
+    doPurchaseList();
+  }, [doPurchaseList]);
+
   return (
-    <React.Fragment>
-      {hasDownloads ? (
-        <React.Fragment>
-          <ClaimList
-            header={__('Your Library')}
-            headerAltControls={
-              <Form onSubmit={() => {}} className="wunderbar--inline">
-                <Icon icon={ICONS.SEARCH} />
-                <FormField
-                  className="wunderbar__input"
-                  onChange={handleInputChange}
-                  value={query}
-                  type="text"
-                  name="query"
-                  placeholder={__('Search')}
-                />
-              </Form>
-            }
-            persistedStorageKey="claim-list-downloaded"
-            empty={__('No results for %query%', { query })}
-            uris={downloadedUrls}
-            loading={fetching}
+    <Card
+      title={
+        <div>
+          <Button
+            icon={ICONS.LIBRARY}
+            button="alt"
+            label={__('All Downloads')}
+            className={classnames(`button-toggle`, {
+              'button-toggle--active': viewMode === VIEW_DOWNLOADS,
+            })}
+            onClick={() => setViewMode(VIEW_DOWNLOADS)}
           />
-          <Paginate totalPages={Math.ceil(Number(downloadedUrlsCount) / Number(PAGE_SIZE))} loading={fetching} />
-        </React.Fragment>
-      ) : (
-        <div className="main--empty">
-          <section className="card card--section">
-            <h2 className="card__title card__title--deprecated">
-              {__("You haven't downloaded anything from LBRY yet.")}
-            </h2>
-            <div className="card__actions card__actions--center">
-              <Button button="primary" navigate="/" label={__('Explore new content')} />
-            </div>
-          </section>
+          <Button
+            icon={ICONS.PURCHASED}
+            button="alt"
+            label={__('Your Purchases')}
+            className={classnames(`button-toggle`, {
+              'button-toggle--active': viewMode === VIEW_PURCHASES,
+            })}
+            onClick={() => setViewMode(VIEW_PURCHASES)}
+          />
         </div>
-      )}
-    </React.Fragment>
+      }
+      titleActions={
+        <div className="card__actions--inline">
+          <Form onSubmit={() => {}} className="wunderbar--inline">
+            <Icon icon={ICONS.SEARCH} />
+            <FormField
+              className="wunderbar__input"
+              onChange={handleInputChange}
+              value={query}
+              type="text"
+              name="query"
+              placeholder={__('Search')}
+            />
+          </Form>
+        </div>
+      }
+      isBodyList
+      body={
+        <div>
+          <ClaimList
+            isCardBody
+            renderProperties={() => null}
+            empty={
+              viewMode === VIEW_PURCHASES && !query ? (
+                <div>{__("You haven't purchased anything yet silly goose.")}</div>
+              ) : (
+                __('No results for %query%', { query })
+              )
+            }
+            uris={viewMode === VIEW_PURCHASES ? myPurchases : myDownloads}
+            loading={loading}
+          />
+          {!query && (
+            <Paginate
+              loading={loading}
+              totalPages={Math.ceil(
+                Number(viewMode === VIEW_PURCHASES ? myPurchasesCount : downloadedUrlsCount) / Number(PAGE_SIZE)
+              )}
+            />
+          )}
+        </div>
+      }
+    />
   );
 }
 

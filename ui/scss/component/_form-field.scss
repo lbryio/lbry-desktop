@@ -5,6 +5,10 @@
 
 input-submit {
   align-items: center;
+
+  input {
+    z-index: 2;
+  }
 }
 
 input[type='number'] {

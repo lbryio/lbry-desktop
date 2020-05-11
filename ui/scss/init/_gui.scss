@@ -42,7 +42,6 @@ p {
 
 ul,
 ol {
-
   li {
     list-style-position: outside;
     margin: var(--spacing-xsmall) var(--spacing-medium);
@@ -218,8 +217,10 @@ img {
   color: var(--color-text-empty);
   font-style: italic;
 }
+
 .empty--centered {
   text-align: center;
+  padding: calc(var(--spacing-large) * 3) 0;
 }
 
 .qr-code {
