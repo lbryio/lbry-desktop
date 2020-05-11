@@ -5,8 +5,10 @@
     font-size: var(--font-small);
   }
 
-  &:focus {
-    @include focus;
+  @media (min-width: $breakpoint-small) {
+    &:focus {
+      @include focus;
+    }
   }
 }
 
