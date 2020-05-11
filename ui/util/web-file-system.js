@@ -1,5 +1,5 @@
 // Some functions to work with the new html5 file system API:
-// - Used for the fileDrop component
+import path from 'path';
 
 // Wrapper for webkitGetAsEntry
 // Note: webkitGetAsEntry might be renamed to GetAsEntry
@@ -66,18 +66,17 @@ export const getTree = async dataTransfer => {
   if (dataTransfer) {
     const { items, files } = dataTransfer;
     // Handle single item drop
-    if (items.length === 1) {
-      const { path } = files[0];
+    if (files.length === 1) {
       const entry = getAsEntry(items[0]);
       // Handle entry
       if (entry) {
-        const root = { entry, path };
+        const root = { entry, path: files[0].path };
         // Handle directory
         if (root.entry.isDirectory) {
           const directoryEntries = await readDirectory(root.entry);
           directoryEntries.forEach(item => {
             if (item.isFile) {
-              tree.push({ entry: item, path: `root.path/${item.name}` });
+              tree.push({ entry: item, path: path.join(root.path, item.name) });
             }
           });
         }
@@ -88,7 +87,7 @@ export const getTree = async dataTransfer => {
       }
     }
     // Handle multiple items drop
-    if (items.length > 1) {
+    if (files.length > 1) {
       tree = tree.concat(getFiles(dataTransfer));
     }
   }
