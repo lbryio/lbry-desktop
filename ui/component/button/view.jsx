@@ -37,6 +37,7 @@ type Props = {
   requiresAuth: ?boolean,
   myref: any,
   dispatch: any,
+  'aria-label'?: string,
 };
 
 // use forwardRef to allow consumers to pass refs to the button content if they want to
@@ -155,6 +156,17 @@ const Button = forwardRef<any, {}>((props: Props, ref: any) => {
     }
   }
 
+  // Try to generate a tooltip using available text and display it through
+  // the 'title' mechanism, but only if it isn't being used.
+  let defaultTooltip;
+  if (!title) {
+    if (props['aria-label']) {
+      defaultTooltip = props['aria-label'];
+    } else if (description) {
+      defaultTooltip = description;
+    }
+  }
+
   if (requiresAuth && !emailVerified) {
     return (
       <NavLink
@@ -163,7 +175,7 @@ const Button = forwardRef<any, {}>((props: Props, ref: any) => {
           e.stopPropagation();
         }}
         to={`/$/${PAGES.AUTH}?redirect=${pathname}`}
-        title={title}
+        title={title || defaultTooltip}
         disabled={disabled}
         className={combinedClassName}
         activeClassName={activeClass}
@@ -177,7 +189,7 @@ const Button = forwardRef<any, {}>((props: Props, ref: any) => {
     <NavLink
       exact
       to={path}
-      title={title}
+      title={title || defaultTooltip}
       disabled={disabled}
       onClick={e => {
         e.stopPropagation();
@@ -194,7 +206,7 @@ const Button = forwardRef<any, {}>((props: Props, ref: any) => {
   ) : (
     <button
       ref={combinedRef}
-      title={title}
+      title={title || defaultTooltip}
       aria-label={description || label || title}
       className={combinedClassName}
       onClick={e => {
