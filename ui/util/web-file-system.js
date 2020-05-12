@@ -1,5 +1,4 @@
 // Some functions to work with the new html5 file system API:
-import path from 'path';
 
 // Wrapper for webkitGetAsEntry
 // Note: webkitGetAsEntry might be renamed to GetAsEntry
@@ -28,31 +27,14 @@ const readDirectory = directory => {
   });
 };
 
-// Some files hide more that one dataTransferItem:
-// This is a safe way to get the absolute path on electron
-const getFilePath = (name, files) => {
-  let filePath = null;
-  for (let file of files) {
-    if (file.name === name) {
-      filePath = file.path;
-      break;
-    }
-  }
-  return filePath;
-};
-
-// Get only files from the dataTransfer items list
+// Get file system entries from the dataTransfer items list:
 export const getFiles = dataTransfer => {
   let entries = [];
-  const { items, files } = dataTransfer;
+  const { items } = dataTransfer;
   for (let i = 0; i < items.length; i++) {
     const entry = getAsEntry(items[i]);
     if (entry !== null && entry.isFile) {
-      // Has valid path
-      const filePath = getFilePath(entry.name, files);
-      if (filePath) {
-        entries.push({ entry, filePath });
-      }
+      entries.push({ entry });
     }
   }
   return entries;
@@ -70,18 +52,18 @@ export const getTree = async dataTransfer => {
       const entry = getAsEntry(items[0]);
       // Handle entry
       if (entry) {
-        const root = { entry, path: files[0].path };
+        const root = { entry };
         // Handle directory
-        if (root.entry.isDirectory) {
-          const directoryEntries = await readDirectory(root.entry);
+        if (entry.isDirectory) {
+          const directoryEntries = await readDirectory(entry);
           directoryEntries.forEach(item => {
             if (item.isFile) {
-              tree.push({ entry: item, path: path.join(root.path, item.name) });
+              tree.push({ entry: item, rootPath: root.path });
             }
           });
         }
         // Hanlde file
-        if (root.entry.isFile) {
+        if (entry.isFile) {
           tree.push(root);
         }
       }

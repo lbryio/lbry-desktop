@@ -1,5 +1,6 @@
 // @flow
 import * as ICONS from 'constants/icons';
+import * as PUBLISH_TYPES from 'constants/publish_types';
 import React, { useState, useEffect } from 'react';
 import { regexInvalidURI } from 'lbry-redux';
 import FileSelector from 'component/common/file-selector';
@@ -11,7 +12,9 @@ import I18nMessage from '../i18nMessage';
 
 type Props = {
   name: ?string,
-  filePath: string | WebFile,
+  // Lazy fix for flow errors:
+  // Todo ->  add types back
+  filePath: ?any, // string || WebFile
   isStillEditing: boolean,
   balance: number,
   updatePublishForm: ({}) => void,
@@ -47,6 +50,7 @@ function PublishFile(props: Props) {
 
   const { available } = ffmpegStatus;
   const [oversized, setOversized] = useState(false);
+  const [selectedFile, setSelectedFile] = useState(null);
   const RECOMMENDED_BITRATE = 6000000;
   const TV_PUBLISH_SIZE_LIMIT: number = 1073741824;
   const UPLOAD_SIZE_MESSAGE = 'Lbry.tv uploads are limited to 1 GB. Download the app for unrestricted publishing.';
@@ -63,13 +67,36 @@ function PublishFile(props: Props) {
       updateOptimizeState(0, 0, false);
       setOversized(false);
     }
+
+    // Process dropped file
+    if (filePath && filePath.publish === PUBLISH_TYPES.DROP && filePath.webFile !== undefined) {
+      setSelectedFile(filePath.webFile);
+    }
+
+    /*
+    // Process a post:
+    // See: https://github.com/lbryio/lbry-desktop/issues/4105
+
+    if(filePath && filePath.publish === PUBLISH_TYPES.POST) {
+        console.info("Writing a post...")
+    }
+    */
   }, [filePath]);
+
+  // File selected by user
+  useEffect(() => {
+    if (selectedFile !== undefined || selectedFile !== null) {
+      handleFileChange(selectedFile);
+    }
+  }, [selectedFile]);
 
   let currentFile = '';
   if (filePath) {
+    // Desktiop publish
     if (typeof filePath === 'string') {
       currentFile = filePath;
-    } else {
+    } else if (filePath.webFile === undefined && typeof filePath.name === 'string') {
+      // Web publish
       currentFile = filePath.name;
     }
   }
@@ -176,7 +203,9 @@ function PublishFile(props: Props) {
     // @endif
   }
 
-  function handleFileChange(file: WebFile) {
+  // Lazy fix for flow errors:
+  // Todo ->  add types back: ( file: WebFile )
+  function handleFileChange(file) {
     const { showToast } = props;
     window.URL = window.URL || window.webkitURL;
     // if electron, we'll set filePath to the path string because SDK is handling publishing.

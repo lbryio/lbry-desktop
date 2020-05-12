@@ -1,18 +1,19 @@
 .file-drop {
-  height: 0;
-  width: 0;
   top: 0;
   left: 0;
   position: fixed;
-  z-index: 5;
   background: var(--color-background-overlay);
   opacity: 0;
+  height: 100%;
+  width: 100%;
   overflow: hidden;
+  pointer-events: none;
+  z-index: 5;
   transition: opacity 0.3s ease;
 
   &.file-drop--show {
-    height: 100%;
-    width: 100%;
     opacity: 1;
+    pointer-events: all;
+    transition: opacity 0.3s ease;
   }
 }
