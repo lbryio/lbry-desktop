@@ -77,7 +77,7 @@ export default function Footer() {
     <footer className="footer">
       {sections.map(({ name, links }) => {
         return (
-          <div key={name}>
+          <div key={name} className="footer__section">
             <div className="footer__section-title">{name}</div>
             <ul className="ul--no-style">
               {links.map(({ label, link }) => (
