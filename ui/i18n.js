@@ -1,6 +1,7 @@
 // @if TARGET='app'
 let fs = require('fs');
 // @endif
+const { DEFAULT_LANGUAGE } = require('../config.js');
 
 const isProduction = process.env.NODE_ENV === 'production';
 let knownMessages = null;
@@ -51,8 +52,8 @@ function saveMessage(message) {
 
 export function __(message, tokens) {
   const language = localStorageAvailable
-    ? window.localStorage.getItem('language') || 'en'
-    : window.navigator.language.slice(0, 2) || 'en';
+    ? window.localStorage.getItem('language') || DEFAULT_LANGUAGE
+    : window.navigator.language.slice(0, 2) || DEFAULT_LANGUAGE;
 
   if (!isProduction) {
     saveMessage(message);
