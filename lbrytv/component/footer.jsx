@@ -4,7 +4,7 @@ import Button from 'component/button';
 
 const sections = [
   {
-    name: 'Talk To Us',
+    name: 'Community',
     links: [
       {
         label: 'Twitter',
@@ -15,8 +15,8 @@ const sections = [
         link: 'https://reddit.com/lbry',
       },
       {
-        label: 'Discord',
-        link: 'https://chat.lbry.com/',
+        label: 'Chat (Discord)',
+        link: 'https://chat.lbry.org/',
       },
       {
         label: 'Telegram',
@@ -29,36 +29,44 @@ const sections = [
     ],
   },
   {
-    name: 'Learn More',
+    name: 'Resources',
     links: [
       {
         label: 'FAQ',
         link: 'https://lbry.com/faq',
       },
       {
+        label: 'Support',
+        link: 'https://lbry.com/faq/support',
+      },
+      {
+        label: 'YouTube Partner Program',
+        link: 'https://lbry.com/youtube',
+      },
+      {
+        label: 'lbry.com',
+        link: 'https://lbry.com',
+      },
+      {
         label: 'lbry.tech',
         link: 'https://lbry.tech',
       },
       {
-        label: 'Github',
-        link: 'https://github.com/lbryio/lbry-desktop',
+        label: 'GitHub',
+        link: 'https://github.com/lbryio',
       },
     ],
   },
   {
-    name: 'Other',
+    name: 'Policies',
     links: [
-      {
-        label: 'Support',
-        link: 'https://lbry.com/faq/support',
-      },
       {
         label: 'Terms of Service',
         link: 'https://www.lbry.com/termsofservice',
       },
       {
-        label: '2257',
-        link: '',
+        label: 'Privacy Policy',
+        link: 'https://lbry.com/privacypolicy',
       },
     ],
   },
