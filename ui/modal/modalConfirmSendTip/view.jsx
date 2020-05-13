@@ -1,11 +1,13 @@
 // @flow
 import React from 'react';
+import { parseURI } from 'lbry-redux';
 import Button from 'component/button';
 import { Form } from 'component/common/form';
 import { Modal } from 'modal/modal';
 import Card from 'component/common/card';
 
 type Props = {
+  uri: string,
   claimId: string,
   title: string,
   tipAmount: number,
@@ -22,8 +24,9 @@ class ModalConfirmSendTip extends React.PureComponent<Props> {
   }
 
   render() {
-    const { tipAmount = 5.5, title = 'This is a random title name', isSupport, closeModal } = this.props;
+    const { tipAmount = 5.5, title, isSupport, closeModal, uri } = this.props;
     const cardTitle = __(isSupport ? 'Confirm Support' : 'Confirm Tip');
+    const { channelName } = parseURI(uri);
 
     return (
       <Modal isOpen type="card" onAborted={closeModal} contentLabel={cardTitle}>
@@ -38,7 +41,7 @@ class ModalConfirmSendTip extends React.PureComponent<Props> {
                 </div>
                 <div className="section">
                   <label>{__('To: ')}</label>
-                  <blockquote>{title}</blockquote>
+                  <blockquote>{title || channelName}</blockquote>
                 </div>
               </>
             }

@@ -50,7 +50,7 @@ function WalletSendTip(props: Props) {
 
   function sendSupportOrConfirm(instantTipMaxAmount = null) {
     if (!isSupport && (!instantTipMaxAmount || !instantTipEnabled || tipAmount > instantTipMaxAmount)) {
-      const modalProps = { tipAmount, claimId, title, isSupport };
+      const modalProps = { uri, tipAmount, claimId, title, isSupport };
       openModal(MODALS.CONFIRM_SEND_TIP, modalProps);
     } else {
       sendSupport(tipAmount, claimId, isSupport);
