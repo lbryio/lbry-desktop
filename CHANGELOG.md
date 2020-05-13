@@ -4,7 +4,13 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
-## [0.45.1] - [Unreleased]
+## [0.45.2] - [2020-05-13]
+
+### Changed
+
+- Updated lbry-sdk to [0.73.1](https://github.com/lbryio/lbry-sdk/releases/tag/v0.73.1)
+
+## [0.45.1] - [2020-05-06]
 
 ### Added
 
