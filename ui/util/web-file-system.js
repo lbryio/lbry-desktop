@@ -6,72 +6,64 @@ const getAsEntry = item => {
   if (item.kind === 'file' && item.webkitGetAsEntry) {
     return item.webkitGetAsEntry();
   }
-  return null;
 };
+
+// Get file object from fileEntry
+const getFile = fileEntry => new Promise((resolve, reject) => fileEntry.file(resolve, reject));
 
 // Read entries from directory
 const readDirectory = directory => {
-  let dirReader = directory.createReader();
-
-  return new Promise((resolve, reject) => {
-    dirReader.readEntries(
-      results => {
-        if (results.length) {
-          resolve(results);
-        } else {
-          reject();
-        }
-      },
-      error => reject(error)
-    );
-  });
+  // Some browsers don't support this
+  if (directory.createReader !== undefined) {
+    let dirReader = directory.createReader();
+    return new Promise((resolve, reject) => dirReader.readEntries(resolve, reject));
+  }
 };
 
 // Get file system entries from the dataTransfer items list:
-export const getFiles = dataTransfer => {
+
+const getFiles = (items, directoryEntries) => {
   let entries = [];
-  const { items } = dataTransfer;
-  for (let i = 0; i < items.length; i++) {
-    const entry = getAsEntry(items[i]);
-    if (entry !== null && entry.isFile) {
-      entries.push({ entry });
+
+  for (let item of items) {
+    const entry = directoryEntries ? item : getAsEntry(item);
+    if (entry && entry.isFile) {
+      const file = getFile(entry);
+      entries.push(file);
     }
   }
-  return entries;
+
+  return Promise.all(entries);
 };
 
 // Generate a valid file tree from dataTransfer:
 // - Ignores directory entries
 // - Ignores recursive search
 export const getTree = async dataTransfer => {
-  let tree = [];
   if (dataTransfer) {
     const { items, files } = dataTransfer;
     // Handle single item drop
     if (files.length === 1) {
-      const entry = getAsEntry(items[0]);
+      const root = getAsEntry(items[0]);
       // Handle entry
-      if (entry) {
-        const root = { entry };
+      if (root) {
         // Handle directory
-        if (entry.isDirectory) {
-          const directoryEntries = await readDirectory(entry);
-          directoryEntries.forEach(item => {
-            if (item.isFile) {
-              tree.push({ entry: item, rootPath: root.path });
-            }
-          });
+        if (root.isDirectory) {
+          const directoryEntries = await readDirectory(root);
+          // Get each file from the list
+          return getFiles(directoryEntries, true);
         }
         // Hanlde file
-        if (entry.isFile) {
-          tree.push(root);
+        if (root.isFile) {
+          const file = await getFile(root);
+          return [file];
         }
       }
     }
     // Handle multiple items drop
     if (files.length > 1) {
-      tree = tree.concat(getFiles(dataTransfer));
+      // Convert items to fileEntry and get each file
+      return getFiles(items);
     }
   }
-  return tree;
 };
