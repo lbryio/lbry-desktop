@@ -9,11 +9,15 @@
   @media (max-width: $breakpoint-small) {
     max-width: 100%;
     padding: var(--spacing-medium);
-
     flex-direction: column;
-    > * {
-      margin-bottom: var(--spacing-large);
-    }
+  }
+}
+
+.footer__section {
+  margin-left: var(--spacing-xlarge);
+
+  @media (max-width: $breakpoint-small) {
+    margin-left: var(--spacing-large);
   }
 }
 
