@@ -24,7 +24,7 @@ class ModalConfirmSendTip extends React.PureComponent<Props> {
   }
 
   render() {
-    const { tipAmount = 5.5, title, isSupport, closeModal, uri } = this.props;
+    const { tipAmount, title, isSupport, closeModal, uri } = this.props;
     const cardTitle = __(isSupport ? 'Confirm Support' : 'Confirm Tip');
     const { channelName } = parseURI(uri);
 
