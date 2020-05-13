@@ -4,6 +4,7 @@ import analytics from 'analytics';
 import SUPPORTED_LANGUAGES from 'constants/supported_languages';
 import { launcher } from 'util/autoLaunch';
 import { makeSelectClientSetting } from 'redux/selectors/settings';
+const { DEFAULT_LANGUAGE } = require('config');
 
 export const IS_MAC = process.platform === 'darwin';
 const UPDATE_IS_NIGHT_INTERVAL = 5 * 60 * 1000;
@@ -186,8 +187,8 @@ export function doSetLanguage(language) {
           dispatch(doSetClientSetting(SETTINGS.LANGUAGE, language));
         })
         .catch(e => {
-          window.localStorage.setItem(SETTINGS.LANGUAGE, 'en');
-          dispatch(doSetClientSetting(SETTINGS.LANGUAGE, 'en'));
+          window.localStorage.setItem(SETTINGS.LANGUAGE, DEFAULT_LANGUAGE);
+          dispatch(doSetClientSetting(SETTINGS.LANGUAGE, DEFAULT_LANGUAGE));
           const languageName = SUPPORTED_LANGUAGES[language] ? SUPPORTED_LANGUAGES[language] : language;
           dispatch(
             doToast({

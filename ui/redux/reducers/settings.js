@@ -3,6 +3,7 @@ import * as APP_SETTINGS from 'constants/settings';
 import moment from 'moment';
 import SUPPORTED_LANGUAGES from 'constants/supported_languages';
 import { ACTIONS as LBRY_REDUX_ACTIONS, SETTINGS } from 'lbry-redux';
+const { DEFAULT_LANGUAGE } = require('../../../config.js');
 const reducers = {};
 let settingLanguage = [];
 try {
@@ -15,7 +16,7 @@ settingLanguage.push('en');
 const defaultState = {
   isNight: false,
   findingFFmpeg: false,
-  loadedLanguages: [...Object.keys(window.i18n_messages), 'en'] || ['en'],
+  loadedLanguages: [...Object.keys(window.i18n_messages), DEFAULT_LANGUAGE] || [DEFAULT_LANGUAGE],
   customWalletServers: [],
   sharedPreferences: {},
   daemonSettings: {},

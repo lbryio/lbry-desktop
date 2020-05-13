@@ -5,9 +5,10 @@ const config = {
   DOMAIN: 'lbry.tv',
   URL: 'https://lbry.tv',
   SITE_TITLE: 'lbry.tv',
-  LBRY_TV_API: 'https://api.lbry.tv',
-  LBRY_TV_STREAMING_API: 'https://cdn.lbryplayer.xyz',
+  LBRY_WEB_API: 'https://api.lbry.tv',
+  LBRY_WEB_STREAMING_API: 'https://cdn.lbryplayer.xyz',
   WELCOME_VERSION: 1.0,
+  DEFAULT_LANGUAGE: 'es',
 };
 
 config.URL_LOCAL = `http://localhost:${config.WEB_SERVER_PORT}`;
