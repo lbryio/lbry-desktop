@@ -2,7 +2,6 @@
 import React from 'react';
 import * as ICONS from 'constants/icons';
 import * as PAGES from 'constants/pages';
-import * as PUBLISH_TYPES from 'constants/publish_types';
 import Icon from 'component/common/icon';
 import classnames from 'classnames';
 import useDragDrop from 'effects/use-drag-drop';
@@ -11,9 +10,7 @@ import { withRouter } from 'react-router';
 import { useRadioState, Radio, RadioGroup } from 'reakit/Radio';
 
 type Props = {
-  // Lazy fix for flow errors:
-  // Todo -> add appropiate types
-  filePath: ?any,
+  filePath: string | WebFile,
   clearPublish: () => void,
   updatePublishForm: ({}) => void,
   // React router
@@ -122,7 +119,7 @@ function FileDrop(props: Props) {
       if (files.length === 1) {
         // Handle single file publish
         setSelectedFile(files[0]);
-        updatePublishForm({ filePath: { publish: PUBLISH_TYPES.DROP, webFile: files[0] } });
+        updatePublishForm({ filePath: files[0] });
       }
     }
     // Handle files
@@ -130,16 +127,18 @@ function FileDrop(props: Props) {
 
   // Wait for publish state update:
   React.useEffect(() => {
+    /*
     // Publish form has a file
-    if (selectedFile && filePath && filePath.webFile !== undefined) {
+    if (selectedFile && filePath) {
       // Update completed
-      if (selectedFile.path === filePath.webFile.path) {
+      if (selectedFile.path === filePath.path) {
         // Done! close the drop area:
         setFiles([]);
         // Go to publish area
         navigateToPublish();
       }
     }
+    */
   }, [filePath, selectedFile, navigateToPublish, setFiles]);
 
   const multipleFiles = files.length > 1;
