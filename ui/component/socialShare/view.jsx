@@ -42,6 +42,10 @@ function SocialShare(props: Props) {
 
   const { canonical_url: canonicalUrl, permanent_url: permanentUrl, name, claim_id: claimId } = claim;
   const isChannel = claim.value_type === 'channel';
+  const isStream = claim.value_type === 'stream';
+  const isVideo = isStream && claim.value.stream_type === 'video';
+  const isAudio = isStream && claim.value.stream_type === 'audio';
+  const showStartAt = isVideo || isAudio;
   const rewardsApproved = user && user.is_reward_approved;
   const OPEN_URL = 'https://open.lbry.com/';
   const lbryUrl: string = generateLbryContentUrl(canonicalUrl, permanentUrl);
@@ -71,22 +75,24 @@ function SocialShare(props: Props) {
   return (
     <React.Fragment>
       <CopyableText label={__('LBRY Link')} copyable={openDotLbryDotComUrl} />
-      <div className="section__start-at">
-        <FormField
-          type="checkbox"
-          name="share_start_at_checkbox"
-          onChange={() => setincludeStartTime(!includeStartTime)}
-          checked={includeStartTime}
-          label={__('Start at')}
-        />
-        <FormField
-          type="text"
-          name="share_start_at"
-          value={startTime}
-          disabled={!includeStartTime}
-          onChange={event => setStartTime(event.target.value)}
-        />
-      </div>
+      {showStartAt && (
+        <div className="section__start-at">
+          <FormField
+            type="checkbox"
+            name="share_start_at_checkbox"
+            onChange={() => setincludeStartTime(!includeStartTime)}
+            checked={includeStartTime}
+            label={__('Start at')}
+          />
+          <FormField
+            type="text"
+            name="share_start_at"
+            value={startTime}
+            disabled={!includeStartTime}
+            onChange={event => setStartTime(event.target.value)}
+          />
+        </div>
+      )}
       <div className="section__actions">
         <Button
           className="share"
