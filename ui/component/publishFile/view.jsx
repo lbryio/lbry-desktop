@@ -175,7 +175,6 @@ function PublishFile(props: Props) {
     // @endif
   }
 
-  // Lazy fix for flow errors:
   function handleFileChange(file: WebFile) {
     const { showToast } = props;
     window.URL = window.URL || window.webkitURL;
