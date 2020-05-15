@@ -2,7 +2,7 @@ import { connect } from 'react-redux';
 import { makeSelectClaimForUri, makeSelectFileInfoForUri, makeSelectThumbnailForUri } from 'lbry-redux';
 import { doChangeVolume, doChangeMute, doAnalyticsView } from 'redux/actions/app';
 import { selectVolume, selectMute } from 'redux/selectors/app';
-import { savePosition } from 'redux/actions/content';
+import { savePosition, clearPosition } from 'redux/actions/content';
 import { makeSelectContentPositionForUri } from 'redux/selectors/content';
 import VideoViewer from './view';
 import { withRouter } from 'react-router';
@@ -31,6 +31,7 @@ const select = (state, props) => {
 const perform = dispatch => ({
   changeVolume: volume => dispatch(doChangeVolume(volume)),
   savePosition: (uri, position) => dispatch(savePosition(uri, position)),
+  clearPosition: uri => dispatch(clearPosition(uri)),
   changeMute: muted => dispatch(doChangeMute(muted)),
   doAnalyticsView: (uri, timeToStart) => dispatch(doAnalyticsView(uri, timeToStart)),
   claimRewards: () => dispatch(doClaimEligiblePurchaseRewards()),

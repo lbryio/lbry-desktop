@@ -33,6 +33,36 @@ reducers[ACTIONS.SET_CONTENT_POSITION] = (state, action) => {
   };
 };
 
+reducers[ACTIONS.CLEAR_CONTENT_POSITION] = (state, action) => {
+  const { claimId, outpoint } = action.data;
+
+  if (state.positions[claimId]) {
+    const numOutpoints = Object.keys(state.positions[claimId]).length;
+    if (numOutpoints <= 1) {
+      let positions = { ...state.positions };
+      delete positions[claimId];
+
+      return {
+        ...state,
+        positions: positions,
+      };
+    } else {
+      let outpoints = { ...state.positions[claimId] };
+      delete outpoints[outpoint];
+
+      return {
+        ...state,
+        positions: {
+          ...state.positions,
+          [claimId]: outpoints,
+        },
+      };
+    }
+  } else {
+    return state;
+  }
+};
+
 reducers[ACTIONS.SET_CONTENT_LAST_VIEWED] = (state, action) => {
   const { uri, lastViewed } = action.data;
   const { history } = state;

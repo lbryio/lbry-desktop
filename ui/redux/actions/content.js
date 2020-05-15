@@ -249,6 +249,20 @@ export function savePosition(uri: string, position: number) {
   };
 }
 
+export function clearPosition(uri: string) {
+  return (dispatch: Dispatch, getState: () => any) => {
+    const state = getState();
+    const claim = makeSelectClaimForUri(uri)(state);
+    const { claim_id: claimId, txid, nout } = claim;
+    const outpoint = `${txid}:${nout}`;
+
+    dispatch({
+      type: ACTIONS.CLEAR_CONTENT_POSITION,
+      data: { claimId, outpoint },
+    });
+  };
+}
+
 export function doSetContentHistoryItem(uri: string) {
   return (dispatch: Dispatch) => {
     dispatch({

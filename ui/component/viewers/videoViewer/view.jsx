@@ -33,6 +33,7 @@ type Props = {
   doAnalyticsView: (string, number) => Promise<any>,
   claimRewards: () => void,
   savePosition: (string, number) => void,
+  clearPosition: string => void,
 };
 
 /*
@@ -57,6 +58,7 @@ function VideoViewer(props: Props) {
     doAnalyticsView,
     claimRewards,
     savePosition,
+    clearPosition,
     desktopPlayStartTime,
   } = props;
   const claimId = claim && claim.claim_id;
@@ -115,6 +117,14 @@ function VideoViewer(props: Props) {
     setIsEndededEmbed(false);
   }
 
+  function handlePosition(player) {
+    if (player.ended()) {
+      clearPosition(uri);
+    } else {
+      savePosition(uri, player.currentTime());
+    }
+  }
+
   const onPlayerReady = useCallback(
     (player: Player) => {
       if (!embedded) {
@@ -151,7 +161,7 @@ function VideoViewer(props: Props) {
       player.on('play', onPlay);
       player.on('pause', () => {
         setIsPlaying(false);
-        savePosition(uri, player.currentTime());
+        handlePosition(player);
       });
       player.on('volumechange', () => {
         if (player && player.volume() !== volume) {
@@ -165,7 +175,9 @@ function VideoViewer(props: Props) {
       if (position) {
         player.currentTime(position);
       }
-      player.on('dispose', () => savePosition(uri, player.currentTime()));
+      player.on('dispose', () => {
+        handlePosition(player);
+      });
     },
     IS_WEB ? [uri] : [uri, desktopPlayStartTime]
   );
