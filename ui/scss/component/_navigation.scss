@@ -64,3 +64,19 @@
     box-shadow: none;
   }
 }
+
+.navigation-link--pulse {
+  border-radius: var(--border-radius);
+  animation: shadow-pulse 2s infinite;
+}
+
+@keyframes shadow-pulse {
+  0% {
+    background-color: rgba(37, 119, 97, 0.2);
+    box-shadow: 0 0 0 0px rgba(37, 119, 97, 0.2);
+  }
+  100% {
+    background-color: rgba(37, 119, 97, 0);
+    box-shadow: 0 0 0 35px rgba(37, 119, 97, 0);
+  }
+}

@@ -8,6 +8,7 @@ import Tag from 'component/tag';
 import StickyBox from 'react-sticky-box/dist/esnext';
 import Spinner from 'component/spinner';
 import usePersistedState from 'effects/use-persisted-state';
+import classnames from 'classnames';
 // @if TARGET='web'
 // import Ads from 'lbrytv/component/ads';
 // @endif
@@ -39,6 +40,7 @@ function SideNavigation(props: Props) {
   } = props;
   const { pathname } = location;
   const isAuthenticated = Boolean(email);
+  const [pulseLibrary, setPulseLibrary] = React.useState(false);
   const [sideInformation, setSideInformation] = usePersistedState(
     'side-navigation:information',
     getSideInformation(pathname)
@@ -64,6 +66,19 @@ function SideNavigation(props: Props) {
     const sideInfo = getSideInformation(pathname);
     setSideInformation(sideInfo);
   }, [pathname, setSideInformation]);
+
+  React.useEffect(() => {
+    // if (justPurchased) ...
+    if (false) {
+      setPulseLibrary(true);
+
+      let timeout = setTimeout(() => {
+        setPulseLibrary(false);
+      }, 2000);
+
+      return () => clearTimeout(timeout);
+    }
+  }, [setPulseLibrary]);
 
   function buildLink(path, label, icon, onClick, requiresAuth = false) {
     return {
@@ -125,7 +140,14 @@ function SideNavigation(props: Props) {
             linkProps =>
               linkProps.navigate && (
                 <li key={linkProps.navigate}>
-                  <Button {...linkProps} className="navigation-link" activeClass="navigation-link--active" />
+                  <Button
+                    {...linkProps}
+                    icon={pulseLibrary ? ICONS.PURCHASED : linkProps.icon}
+                    className={classnames('navigation-link', {
+                      'navigation-link--pulse': pulseLibrary,
+                    })}
+                    activeClass="navigation-link--active"
+                  />
                 </li>
               )
           )}
