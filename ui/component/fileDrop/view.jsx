@@ -29,7 +29,7 @@ type Props = {
 };
 
 const HIDE_TIME_OUT = 600;
-const NAVIGATE_TIME_OUT = 300;
+const NAVIGATE_TIME_OUT = 200;
 const PUBLISH_URL = `/$/${PAGES.PUBLISH}`;
 
 function FileDrop(props: Props) {
@@ -37,6 +37,8 @@ function FileDrop(props: Props) {
   const { drag, dropData } = useDragDrop();
   const [files, setFiles] = React.useState([]);
   const [error, setError] = React.useState(false);
+  const hideTimer = React.useRef(null);
+  const navigationTimer = React.useRef(null);
 
   const navigateToPublish = React.useCallback(() => {
     // Navigate only if location is not publish area:
@@ -48,9 +50,12 @@ function FileDrop(props: Props) {
 
   // Delay hide and navigation for a smooth transition
   const hideDropArea = () => {
-    setTimeout(() => {
+    hideTimer.current = setTimeout(() => {
       setFiles([]);
-      setTimeout(() => navigateToPublish(), NAVIGATE_TIME_OUT);
+      // Navigate to publish area
+      navigationTimer.current = setTimeout(() => {
+        navigateToPublish();
+      }, NAVIGATE_TIME_OUT);
     }, HIDE_TIME_OUT);
   };
 
@@ -65,6 +70,20 @@ function FileDrop(props: Props) {
       handleFileSelected(file);
     }
   };
+
+  // Clear timers
+  React.useEffect(() => {
+    return () => {
+      // Clear hide timer
+      if (hideTimer.current) {
+        clearTimeout(hideTimer.current);
+      }
+      // Clear navigation timer
+      if (navigationTimer.current) {
+        clearTimeout(navigationTimer.current);
+      }
+    };
+  }, []);
 
   React.useEffect(() => {
     // Handle drop...
@@ -90,7 +109,7 @@ function FileDrop(props: Props) {
         setFiles([]);
       }
     }
-  }, [drag, files, error]);
+  }, [drag, files, error, openModal]);
 
   const show = files.length === 1 || (drag && (!modal || modal.id !== MODALS.FILE_SELECTION));
 
