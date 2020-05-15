@@ -1,21 +1,12 @@
 // @flow
 import * as ICONS from 'constants/icons';
 import * as PAGES from 'constants/pages';
-import * as CS from 'constants/claim_search';
 import React from 'react';
-import moment from 'moment';
 import Page from 'component/page';
 import Button from 'component/button';
 import ClaimTilesDiscover from 'component/claimTilesDiscover';
 import I18nMessage from 'component/i18nMessage';
-import { parseURI } from 'lbry-redux';
-import { toCapitalCase } from 'util/string';
-
-type Props = {
-  authenticated: boolean,
-  followedTags: Array<Tag>,
-  subscribedChannels: Array<Subscription>,
-};
+let getHomepage = require('getHomepage').default;
 
 type RowDataItem = {
   title: string,
@@ -24,144 +15,25 @@ type RowDataItem = {
   options?: {},
 };
 
+type Props = {
+  authenticated: boolean,
+  followedTags: Array<Tag>,
+  subscribedChannels: Array<Subscription>,
+};
+
 function HomePage(props: Props) {
   const { followedTags, subscribedChannels, authenticated } = props;
   const showPersonalizedChannels = (authenticated || !IS_WEB) && subscribedChannels && subscribedChannels.length > 0;
   const showPersonalizedTags = (authenticated || !IS_WEB) && followedTags && followedTags.length > 0;
   const showIndividualTags = showPersonalizedTags && followedTags.length < 5;
-  let rowData: Array<RowDataItem> = [];
 
-  // if you are following channels, always show that first
-  if (showPersonalizedChannels) {
-    let releaseTime = `>${Math.floor(
-      moment()
-        .subtract(1, 'year')
-        .startOf('week')
-        .unix()
-    )}`;
-
-    // Warning - hack below
-    // If users are following more than 20 channels or tags, limit results to stuff less than 6 months old
-    // This helps with timeout issues for users that are following a ton of stuff
-    // https://github.com/lbryio/lbry-sdk/issues/2420
-    if (subscribedChannels.length > 20) {
-      releaseTime = `>${Math.floor(
-        moment()
-          .subtract(6, 'months')
-          .startOf('week')
-          .unix()
-      )}`;
-    }
-
-    rowData.push({
-      title: 'Recent From Following',
-      link: `/$/${PAGES.CHANNELS_FOLLOWING}`,
-      options: {
-        orderBy: ['release_time'],
-        releaseTime: releaseTime,
-        pageSize: subscribedChannels.length > 3 ? 8 : 4,
-        channelIds: subscribedChannels.map(subscription => {
-          const { channelClaimId } = parseURI(subscription.uri);
-          return channelClaimId;
-        }),
-      },
-    });
-  }
-
-  if (showPersonalizedTags && !showIndividualTags) {
-    rowData.push({
-      title: 'Trending For Your Tags',
-      link: `/$/${PAGES.TAGS_FOLLOWING}`,
-      options: {
-        tags: followedTags.map(tag => tag.name),
-        claimType: ['stream'],
-      },
-    });
-  }
-
-  if (showPersonalizedTags && showIndividualTags) {
-    followedTags.forEach((tag: Tag) => {
-      rowData.push({
-        title: `Trending for #${toCapitalCase(tag.name)}`,
-        link: `/$/${PAGES.DISCOVER}?t=${tag.name}`,
-        options: {
-          pageSize: 4,
-          tags: [tag.name],
-          claimType: ['stream'],
-        },
-      });
-    });
-  }
-
-  rowData.push({
-    title: 'Top Content from Today',
-    link: `/$/${PAGES.DISCOVER}?${CS.ORDER_BY_KEY}=${CS.ORDER_BY_TOP}&${CS.FRESH_KEY}=${CS.FRESH_DAY}`,
-    options: {
-      pageSize: showPersonalizedChannels || showPersonalizedTags ? 4 : 8,
-      orderBy: ['effective_amount'],
-      claimType: ['stream'],
-      releaseTime: `>${Math.floor(
-        moment()
-          .subtract(1, 'day')
-          .startOf('day')
-          .unix()
-      )}`,
-    },
-  });
-
-  rowData.push({
-    title: 'Trending On LBRY',
-    link: `/$/${PAGES.DISCOVER}`,
-    options: {
-      pageSize: showPersonalizedChannels || showPersonalizedTags ? 4 : 8,
-    },
-  });
-
-  if (!showPersonalizedChannels) {
-    rowData.push({
-      title: 'Top Channels On LBRY',
-      link: `/$/${PAGES.DISCOVER}?claim_type=channel&${CS.ORDER_BY_KEY}=${CS.ORDER_BY_TOP}&${CS.FRESH_KEY}=${CS.FRESH_ALL}`,
-      options: {
-        orderBy: ['effective_amount'],
-        claimType: ['channel'],
-      },
-    });
-  }
-
-  rowData.push({
-    title: 'Trending Classics',
-    link: `/$/${PAGES.DISCOVER}?${CS.ORDER_BY_KEY}=${CS.ORDER_BY_TRENDING}&${CS.FRESH_KEY}=${CS.FRESH_WEEK}`,
-    options: {
-      pageSize: 4,
-      claimType: ['stream'],
-      releaseTime: `<${Math.floor(
-        moment()
-          .subtract(6, 'month')
-          .startOf('day')
-          .unix()
-      )}`,
-    },
-  });
-
-  rowData.push({
-    title: 'Latest From @lbrycast',
-    link: `/@lbrycast:4`,
-    options: {
-      orderBy: ['release_time'],
-      pageSize: 4,
-      channelIds: ['4c29f8b013adea4d5cca1861fb2161d5089613ea'],
-    },
-  });
-
-  rowData.push({
-    title: 'Latest From @lbry',
-    link: `/@lbry:3f`,
-    options: {
-      orderBy: ['release_time'],
-      pageSize: 4,
-      channelIds: ['3fda836a92faaceedfe398225fb9b2ee2ed1f01a'],
-    },
-  });
+  const rowData: Array<RowDataItem> = getHomepage(
+    showPersonalizedChannels,
+    showPersonalizedTags,
+    subscribedChannels,
+    followedTags,
+    showIndividualTags
+  );
 
   return (
     <Page>

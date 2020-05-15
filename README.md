@@ -92,13 +92,36 @@ You can run the web version (lbry.tv), the electron app, or both at the same tim
 
 - If you want to build and launch the production app you can run `yarn build`. This will give you an executable inside the `/dist` folder. We use [electron-builder](https://github.com/electron-userland/electron-builder) to create distributable packages.
 
-#### Run the web app
+#### Run the web app for development
 
 `yarn compile:web` (this is only needed the first time you run the app)
 
 `yarn dev:web`
 
 - This uses webpack-dev-server and includes hot-reloading. If you want to debug the [web server we use in production](https://github.com/lbryio/lbry-desktop/blob/master/src/platforms/web/server.js) you can run `yarn dev:web-server`. This starts a server at `localhost:1337` and does not include hot reloading.
+
+
+#### Customize the web app
+
+- Enter web directory, copy .env.defaults to .env and make changes
+```
+cd web
+cp .env.defaults .env
+nano .env
+```
+- If you want to customize the homepage content 
+1. add `CUSTOM_HOMEPAGE=true` to the 'web/.env' file
+2. copy `/custom/homepage.example.js` to `/custom/homepage.js` and make desired changes to `homepage.js`
+
+#### Deploy the web app (*experimental*)
+
+1. Create a server with a domain name and a reverse proxy https to port 1337.
+2. Install pm2, node v10, yarn
+3. Clone this repo 
+4. Make any customizations as above
+5. Run 'yarn' to install
+6. Run yarn compile:web to build
+7. Set up pm2 to start ./web/index.js
 
 #### Run both at the same time
 

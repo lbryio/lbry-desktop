@@ -15,3 +15,7 @@ package-lock.json
 /build/daemon*
 /web/dist/*
 /web/node_modules/*
+/web/.env
+/custom/*
+!/custom/homepage.example.js
+.env

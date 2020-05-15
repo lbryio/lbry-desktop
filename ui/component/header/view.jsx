@@ -12,6 +12,7 @@ import Icon from 'component/common/icon';
 import { Menu, MenuList, MenuButton, MenuItem } from '@reach/menu-button';
 import Tooltip from 'component/common/tooltip';
 import NavigationButton from 'component/navigationButton';
+import { LOGO_TITLE } from 'config';
 // @if TARGET='app'
 import { IS_MAC } from 'component/app/view';
 // @endif
@@ -131,7 +132,7 @@ const Header = (props: Props) => {
         <div className="header__navigation">
           <Button
             className="header__navigation-item header__navigation-item--lbry header__navigation-item--button-mobile"
-            label={__('LBRY')}
+            label={__(LOGO_TITLE)}
             icon={ICONS.LBRY}
             onClick={() => {
               if (history.location.pathname === '/') window.location.reload();
