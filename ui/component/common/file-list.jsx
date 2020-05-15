@@ -28,12 +28,23 @@ function FileList(props: Props) {
         const first = radio.stops[0].ref.current;
         // First auto-selection
         if (first && first.id === radio.currentId && !radio.state) {
+          const file = getFile(first.value);
+          // Update state and select new file
+          onChange(file);
           radio.setState(first.value);
         }
 
-        if (onChange && radio.state && radio.state !== '') {
-          const file = getFile(radio.state);
-          onChange(file);
+        if (radio.state) {
+          // Find selected element
+          const stop = radio.stops.find(item => item.id === radio.currentId);
+          const element = stop && stop.ref.current;
+          // Only update state if new item is selected
+          if (element && element.value !== radio.state) {
+            const file = getFile(element.value);
+            // Sselect new file and update state
+            onChange(file);
+            radio.setState(element.value);
+          }
         }
       }
     }
