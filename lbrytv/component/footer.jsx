@@ -12,7 +12,7 @@ const sections = [
       },
       {
         label: 'Reddit',
-        link: 'https://reddit.com/lbry',
+        link: 'https://reddit.com/r/lbry',
       },
       {
         label: 'Chat (Discord)',
