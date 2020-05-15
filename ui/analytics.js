@@ -30,7 +30,7 @@ if (isProduction) {
 
 type Analytics = {
   error: string => Promise<any>,
-  sentryError: ({}, {}) => Promise<any>,
+  sentryError: ({} | string, {}) => Promise<any>,
   pageView: string => void,
   setUser: Object => void,
   toggleInternal: (boolean, ?boolean) => void,

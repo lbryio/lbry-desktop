@@ -115,11 +115,9 @@ function SideNavigation(props: Props) {
             {
               ...buildLink(PAGES.DISCOVER, __('All Content'), ICONS.DISCOVER),
             },
-            // @if TARGET='app'
             {
               ...buildLink(PAGES.LIBRARY, __('Library'), ICONS.LIBRARY),
             },
-            // @endif
             {
               ...(expanded ? { ...buildLink(PAGES.SETTINGS, __('Settings'), ICONS.SETTINGS) } : {}),
             },

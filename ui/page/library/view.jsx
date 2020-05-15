@@ -11,12 +11,17 @@ type Props = {
   myPurchases: Array<string>,
   fetchingMyPurchases: boolean,
   fetchingFileList: boolean,
+  doPurchaseList: () => void,
 };
 
 function LibraryPage(props: Props) {
-  const { allDownloadedUrlsCount, myPurchases, fetchingMyPurchases, fetchingFileList } = props;
+  const { allDownloadedUrlsCount, myPurchases, fetchingMyPurchases, fetchingFileList, doPurchaseList } = props;
   const hasDownloads = allDownloadedUrlsCount > 0 || (myPurchases && myPurchases.length);
   const loading = fetchingFileList || fetchingMyPurchases;
+
+  React.useEffect(() => {
+    doPurchaseList();
+  }, [doPurchaseList]);
 
   return (
     <Page>

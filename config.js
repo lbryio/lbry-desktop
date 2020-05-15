@@ -5,7 +5,7 @@ const config = {
   DOMAIN: 'lbry.tv',
   URL: 'https://lbry.tv',
   SITE_TITLE: 'lbry.tv',
-  LBRY_TV_API: 'https://api.lbry.tv',
+  LBRY_TV_API: 'https://api.ops.lbry.tv',
   LBRY_TV_STREAMING_API: 'https://cdn.lbryplayer.xyz',
   WELCOME_VERSION: 1.0,
 };

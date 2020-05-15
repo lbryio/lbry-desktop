@@ -99,7 +99,7 @@ export default function FileRenderInitiator(props: Props) {
     return null;
   }
 
-  const showAppNag = IS_WEB && (!isFree || RENDER_MODES.UNSUPPORTED_IN_THIS_APP.includes(renderMode));
+  const showAppNag = IS_WEB && RENDER_MODES.UNSUPPORTED_IN_THIS_APP.includes(renderMode);
 
   const disabled = showAppNag || (!fileInfo && insufficientCredits);
 

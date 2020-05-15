@@ -17,6 +17,7 @@ export type Player = {
   dispose: () => void,
   currentTime: (?number) => number,
   ended: () => boolean,
+  error: () => any,
 };
 
 type Props = {

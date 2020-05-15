@@ -23,7 +23,6 @@ function FileTitle(props: Props) {
       title={
         <React.Fragment>
           {title}
-          <FilePrice badge uri={normalizeURI(uri)} />
           {nsfw && (
             <span className="media__title-badge">
               <span className="badge badge--tag-mature">{__('Mature')}</span>
@@ -31,6 +30,7 @@ function FileTitle(props: Props) {
           )}
         </React.Fragment>
       }
+      titleActions={<FilePrice uri={normalizeURI(uri)} type="large" />}
       body={
         <React.Fragment>
           <ClaimInsufficientCredits uri={uri} />

@@ -15,9 +15,6 @@ const select = state => ({
   email: selectUserVerifiedEmail(state),
 });
 
-export default connect(
-  select,
-  {
-    doSignOut,
-  }
-)(SideNavigation);
+export default connect(select, {
+  doSignOut,
+})(SideNavigation);

@@ -31,6 +31,7 @@ import {
   doAuthTokenRefresh,
 } from 'util/saved-passwords';
 import { X_LBRY_AUTH_TOKEN } from 'constants/token';
+import { LBRY_TV_API } from 'config';
 
 // Import our app styles
 // If a style is not necessary for the initial page load, it should be removed from `all.scss`
@@ -56,7 +57,11 @@ if (process.env.SDK_API_URL) {
   console.warn('SDK_API_URL env var is deprecated. Use SDK_API_HOST instead');
 }
 
-const sdkAPIHost = process.env.SDK_API_HOST || process.env.SDK_API_URL || `https://api.lbry.tv`;
+let sdkAPIHost = process.env.SDK_API_HOST || process.env.SDK_API_URL;
+// @if TARGET='web'
+sdkAPIHost = LBRY_TV_API;
+// @endif
+
 export const SDK_API_PATH = `${sdkAPIHost}/api/v1`;
 const proxyURL = `${SDK_API_PATH}/proxy`;
 

@@ -3,7 +3,6 @@ import {
   makeSelectSearchDownloadUrlsForPage,
   selectDownloadUrlsCount,
   selectIsFetchingFileList,
-  doPurchaseList,
   makeSelectMyPurchasesForPage,
   selectIsFetchingMyPurchases,
   selectMyPurchasesCount,
@@ -30,8 +29,4 @@ const select = (state, props) => {
   };
 };
 
-export default withRouter(
-  connect(select, {
-    doPurchaseList,
-  })(FileListDownloaded)
-);
+export default withRouter(connect(select)(FileListDownloaded));

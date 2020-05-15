@@ -38,7 +38,6 @@ function FileListDownloaded(props: Props) {
     myDownloads,
     fetchingFileList,
     fetchingMyPurchases,
-    doPurchaseList,
   } = props;
   const loading = fetchingFileList || fetchingMyPurchases;
   const [viewMode, setViewMode] = React.useState(VIEW_PURCHASES);
@@ -51,10 +50,6 @@ function FileListDownloaded(props: Props) {
       history.replace(`?query=${value}&page=1`);
     }
   }
-
-  React.useEffect(() => {
-    doPurchaseList();
-  }, [doPurchaseList]);
 
   return (
     <Card

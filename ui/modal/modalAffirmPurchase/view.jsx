@@ -1,64 +1,102 @@
 // @flow
 import React from 'react';
+import classnames from 'classnames';
 import FilePrice from 'component/filePrice';
 import { Modal } from 'modal/modal';
 import Card from 'component/common/card';
 import I18nMessage from 'component/i18nMessage';
 import Button from 'component/button';
 
+// This number is tied to transitions in scss/file-properties.scss
+const ANIMATION_LENGTH = 2500;
+
 type Props = {
   closeModal: () => void,
-  loadVideo: string => void,
+  loadVideo: (string, () => void) => void,
   uri: string,
   cancelPurchase: () => void,
   metadata: StreamMetadata,
 };
 
-class ModalAffirmPurchase extends React.PureComponent<Props> {
-  constructor() {
-    super();
+function ModalAffirmPurchase(props: Props) {
+  const {
+    cancelPurchase,
+    closeModal,
+    loadVideo,
+    metadata: { title },
+    uri,
+  } = props;
+  const [success, setSuccess] = React.useState(false);
+  const [purchasing, setPurchasing] = React.useState(false);
 
-    (this: any).onAffirmPurchase = this.onAffirmPurchase.bind(this);
+  const modalTitle = __('Confirm Purchase');
+
+  function onAffirmPurchase() {
+    setPurchasing(true);
+    loadVideo(uri, () => {
+      setPurchasing(false);
+      setSuccess(true);
+    });
   }
 
-  onAffirmPurchase() {
-    this.props.closeModal();
-    this.props.loadVideo(this.props.uri);
-  }
+  React.useEffect(() => {
+    let timeout;
+    if (success) {
+      timeout = setTimeout(() => {
+        closeModal();
+        setSuccess(false);
+      }, ANIMATION_LENGTH);
+    }
 
-  render() {
-    const {
-      cancelPurchase,
-      metadata: { title },
-      uri,
-    } = this.props;
+    return () => {
+      if (timeout) {
+        clearTimeout(timeout);
+      }
+    };
+  }, [success, uri]);
 
-    const modalTitle = __('Confirm Purchase');
-
-    return (
-      <Modal type="card" isOpen contentLabel={modalTitle} onAborted={cancelPurchase}>
-        <Card
-          title={modalTitle}
-          subtitle={
-            <I18nMessage
-              tokens={{
-                claim_title: <strong>{title ? `"${title}"` : uri}</strong>,
-                amount: <FilePrice uri={uri} showFullPrice inheritStyle />,
-              }}
-            >
-              This will purchase %claim_title% for %amount%.
-            </I18nMessage>
-          }
-          actions={
-            <div className="section__actions">
-              <Button button="primary" label={__('Confirm')} onClick={this.onAffirmPurchase} />
-              <Button button="link" label={__('Cancel')} onClick={cancelPurchase} />
+  return (
+    <Modal type="card" isOpen contentLabel={modalTitle} onAborted={cancelPurchase}>
+      <Card
+        title={modalTitle}
+        subtitle={
+          <div className={classnames('purchase-stuff', { 'purchase-stuff--purchased': success })}>
+            <div>
+              {success && (
+                <div className="purchase-stuff__text--purchased">
+                  {__('Purchased!')}
+                  <div className="purchase_stuff__subtext--purchased">
+                    {__('This content will now be in your Library.')}
+                  </div>
+                </div>
+              )}
+              {/* Keep this message rendered but hidden so the width doesn't change */}
+              <I18nMessage
+                tokens={{
+                  claim_title: <strong>{title ? `"${title}"` : uri}</strong>,
+                }}
+              >
+                Are you sure you want to purchase %claim_title%?
+              </I18nMessage>
             </div>
-          }
-        />
-      </Modal>
-    );
-  }
+            <div>
+              <FilePrice uri={uri} showFullPrice type="modal" overrided={success} />
+            </div>
+          </div>
+        }
+        actions={
+          <div className="section__actions" style={success ? { visibility: 'hidden' } : undefined}>
+            <Button
+              button="primary"
+              label={purchasing ? __('Purchasing') : __('Purchase')}
+              onClick={onAffirmPurchase}
+            />
+            <Button button="link" label={__('Cancel')} onClick={cancelPurchase} />
+          </div>
+        }
+      />
+    </Modal>
+  );
 }
 
 export default ModalAffirmPurchase;
