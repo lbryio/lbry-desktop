@@ -9,5 +9,7 @@ export const doToggleTagFollowDesktop = (name: string) => (dispatch: Dispatch, g
   const state = getState();
   const tags = selectFollowedTagsList(state);
   const stringOfTags = tags.join(',');
-  analytics.apiSyncTags({ content_tags: stringOfTags });
+  if (stringOfTags) {
+    analytics.apiSyncTags({ content_tags: stringOfTags });
+  }
 };
