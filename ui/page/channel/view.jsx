@@ -187,7 +187,7 @@ function ChannelPage(props: Props) {
   }, [channelIsMine, editing]);
 
   return (
-    <Page>
+    <Page noFooter>
       <ClaimUri uri={uri} />
 
       {lastYtSyncDate && (
