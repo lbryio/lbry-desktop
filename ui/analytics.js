@@ -21,9 +21,11 @@ export const SHARE_INTERNAL = 'shareInternal';
 const SHARE_THIRD_PARTY = 'shareThirdParty';
 
 // @if TARGET='app'
-ElectronCookies.enable({
-  origin: 'https://lbry.tv',
-});
+if (isProduction) {
+  ElectronCookies.enable({
+    origin: 'https://lbry.tv',
+  });
+}
 // @endif
 
 type Analytics = {
