@@ -23,52 +23,15 @@
 
   .file-drop__area {
     display: flex;
+    min-width: 400px;
     align-items: center;
     flex-direction: column;
     padding: var(--spacing-large);
-    min-width: 400px;
-
-    .file-drop__list {
-      max-height: 200px;
-      overflow: auto;
-      width: 100%;
-
-      fieldset {
-        display: flex;
-        align-items: center;
-        flex-direction: column;
-        background: var(--color-menu-background);
-
-        label {
-          margin: 0;
-          display: flex;
-          align-items: center;
-          padding: var(--spacing-miniscule) var(--spacing-small);
-
-          &.selected {
-            background: rgba(0, 0, 0, 0.2);
-            box-shadow: inset 0 0 0 3px var(--color-focus);
-          }
-
-          .icon {
-            margin-right: var(--spacing-small);
-            opacity: 0.64;
-          }
-        }
-
-        input {
-          width: 0;
-          height: 0;
-          margin: 0;
-          padding: 0;
-          opacity: 0;
-        }
-      }
-    }
 
     .main-icon {
       margin: var(--spacing-small);
     }
+
     p {
       margin-bottom: var(--spacing-large);
     }

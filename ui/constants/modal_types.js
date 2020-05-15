@@ -3,6 +3,7 @@ export const CONFIRM_EXTERNAL_RESOURCE = 'confirm_external_resource';
 export const COMMENT_ACKNOWEDGEMENT = 'comment_acknowlegement';
 export const INCOMPATIBLE_DAEMON = 'incompatible_daemon';
 export const FILE_TIMEOUT = 'file_timeout';
+export const FILE_SELECTION = 'file_selection';
 export const DOWNLOADING = 'downloading';
 export const AUTO_GENERATE_THUMBNAIL = 'auto_generate_thumbnail';
 export const AUTO_UPDATE_DOWNLOADED = 'auto_update_downloaded';
