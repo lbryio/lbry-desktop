@@ -1119,5 +1119,21 @@
   "You don't have blocked channels.": "You don't have blocked channels.",
   "You have one blocked channel.": "You have one blocked channel.",
   "You have %channels% blocked channels.": "You have %channels% blocked channels.",
-  "Drop here to publish!": "Drop here to publish!"
+  "%duration% second ago": "%duration% second ago",
+  "": "",
+  "Update Your Password": "Update Your Password",
+  "Confirm": "Confirm",
+  "(%lbc_balance% available)": "(%lbc_balance% available)",
+  "Welcome to LBRY": "Welcome to LBRY",
+  "Using LBRY is like dating a centaur. Totally normal up top, and": "Using LBRY is like dating a centaur. Totally normal up top, and",
+  "way different": "way different",
+  "underneath.": "underneath.",
+  "Up top, LBRY is similar to popular media sites.": "Up top, LBRY is similar to popular media sites.",
+  "Below, LBRY is controlled by users -- you -- via blockchain and decentralization.": "Below, LBRY is controlled by users -- you -- via blockchain and decentralization.",
+  "I'm In": "I'm In",
+  "You're Free!": "You're Free!",
+  "You've escaped the land of spying, censorship, and exploitation.": "You've escaped the land of spying, censorship, and exploitation.",
+  "Welcome to the land of content freedom.": "Welcome to the land of content freedom.",
+  "Create an Account": "Create an Account",
+  "Not Yet": "Not Yet"
 }
