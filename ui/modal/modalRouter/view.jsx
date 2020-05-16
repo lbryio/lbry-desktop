@@ -35,6 +35,7 @@ import ModalYoutubeWelcome from 'modal/modalYoutubeWelcome';
 import ModalCreateChannel from 'modal/modalChannelCreate';
 import ModalMobileNavigation from 'modal/modalMobileNavigation';
 import ModalSetReferrer from 'modal/modalSetReferrer';
+import ModalReport from 'modal/modalReport';
 import ModalRepost from 'modal/modalRepost';
 import ModalSignOut from 'modal/modalSignOut';
 import ModalLiquidateSupports from 'modal/modalSupportsLiquidate';
@@ -133,6 +134,8 @@ function ModalRouter(props: Props) {
       return <ModalMobileNavigation {...modalProps} />;
     case MODALS.SET_REFERRER:
       return <ModalSetReferrer {...modalProps} />;
+    case MODALS.REPORT:
+      return <ModalReport {...modalProps} />;
     case MODALS.REPOST:
       return <ModalRepost {...modalProps} />;
     case MODALS.SIGN_OUT:

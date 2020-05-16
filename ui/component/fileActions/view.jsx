@@ -120,7 +120,8 @@ function FileActions(props: Props) {
             title={__('Report content')}
             button="alt"
             icon={ICONS.REPORT}
-            href={`https://lbry.com/dmca/${claimId}`}
+            description={__('Report')}
+            onClick={() => openModal(MODALS.REPORT, { uri, claimId })}
           />
         )}
       </ActionWrapper>
