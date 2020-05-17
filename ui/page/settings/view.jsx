@@ -480,13 +480,15 @@ class SettingsPage extends React.PureComponent<Props, State> {
               <Card
                 title={__('Blocked Channels')}
                 actions={
-                  <p>
-                    {__('You have %count% blocked %channels%.', {
-                      count: userBlockedChannelsCount,
-                      channels: userBlockedChannelsCount === 1 ? __('channel') : __('channels'),
-                    })}{' '}
-                    <Button button="link" label={__('Manage')} navigate={`/$/${PAGES.BLOCKED}`} />
-                  </p>
+                    <p>
+                    <React.Fragment>
+                        {__( '%count% %channels%. ', {
+                          count: userBlockedChannelsCount === 0 ? __("You don't have") : __('You have') + ' ' + userBlockedChannelsCount + ' ',
+                          channels: userBlockedChannelsCount === 1 ? __('blocked channel') : __('blocked channels'),
+                        })}
+                        {<Button button="link" label={userBlockedChannelsCount === 0 ? null : __('Manage')} navigate={`/$/${PAGES.BLOCKED}`} />}
+                    </React.Fragment>
+                   </p>
                 }
               />
             )}
