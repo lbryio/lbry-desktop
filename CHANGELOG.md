@@ -27,10 +27,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Fix inconsistent relative-date string for claims, comments, etc. ([#4172](https://github.com/lbryio/lbry-desktop/pull/4172))
 - Error opening certain files with special characters in name #2777 _community pr!_ ([#4161](https://github.com/lbryio/lbry-desktop/pull/4161))
 - Comic-book file page shows download button first, and then viewer after download _community pr!_ ([#4161](https://github.com/lbryio/lbry-desktop/pull/4161))
+<<<<<<< 3e4debf403c7e6707f8513bafe003a3ec42f0899
 - Only show "start at" on share modal for video/audio _community pr!_ ([#4194](https://github.com/lbryio/lbry-desktop/pull/4194))
 - Clear media position after video has played to the end _community pr!_ ([#4193](https://github.com/lbryio/lbry-desktop/pull/4193))
 - Text casing on publish page _community pr!_ ([#4186](https://github.com/lbryio/lbry-desktop/pull/4186))
 - Some strings not translating properly _community pr!_ ([#4238](https://github.com/lbryio/lbry-desktop/pull/4238))
+=======
+- Prevents page from scrolling while pressing the spacebar when the miniplayer is out of focus _community pr!_ ([#4204](https://github.com/lbryio/lbry-desktop/pull/4204))
+>>>>>>> updates  changelog with description and PR link
 
 ## [0.45.1] - [2020-05-06]
 
