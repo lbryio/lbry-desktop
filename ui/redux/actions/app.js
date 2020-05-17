@@ -329,7 +329,7 @@ export function doDaemonReady() {
     const state = getState();
 
     // TODO: call doFetchDaemonSettings, then get usage data, and call doAuthenticate once they are loaded into the store
-    const shareUsageData = window.localStorage.getItem(SHARE_INTERNAL) === 'true' || IS_WEB;
+    const shareUsageData = IS_WEB || window.localStorage.getItem(SHARE_INTERNAL) === 'true';
 
     dispatch(
       doAuthenticate(appVersion, undefined, undefined, shareUsageData, status => {
