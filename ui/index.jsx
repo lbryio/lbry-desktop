@@ -275,7 +275,9 @@ function AppWrapper() {
 
   useEffect(() => {
     if (readyToLaunch && persistDone) {
+      // @if TARGET='app'
       sessionStorage.setItem('startup', true);
+      // @endif
       app.store.dispatch(doUpdateIsNightAsync());
       app.store.dispatch(doDaemonReady());
       app.store.dispatch(doBlackListedOutpointsSubscribe());
