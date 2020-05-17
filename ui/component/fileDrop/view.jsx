@@ -117,7 +117,7 @@ function FileDrop(props: Props) {
     <div className={classnames('file-drop', show && 'file-drop--show')}>
       <div className={classnames('card', 'file-drop__area')}>
         <Icon size={64} icon={ICONS.PUBLISH} className={'main-icon'} />
-        <p>{`Drop here to publish!`} </p>
+        <p>{__(`Drop here to publish!`)} </p>
         {files && files.length === 1 && <FileList files={files} onChange={handleFileChange} />}
       </div>
     </div>

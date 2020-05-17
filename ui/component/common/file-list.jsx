@@ -1,14 +1,24 @@
 // @flow
 import React from 'react';
-import * as ICONS from 'constants/icons';
-import Icon from 'component/common/icon';
-import classnames from 'classnames';
 import { useRadioState, Radio, RadioGroup } from 'reakit/Radio';
 
 type Props = {
   files: Array<WebFile>,
   onChange: (WebFile | void) => void,
 };
+
+type RadioProps = {
+  id: string,
+  label: string,
+};
+
+// Same as FormField type="radio" but it works with reakit:
+const ForwardedRadio = React.forwardRef((props: RadioProps, ref) => (
+  <span className="radio">
+    <input {...props} type="radio" ref={ref} />
+    <label htmlFor={props.id}>{props.label}</label>
+  </span>
+));
 
 function FileList(props: Props) {
   const { files, onChange } = props;
@@ -53,17 +63,8 @@ function FileList(props: Props) {
   return (
     <div className={'file-list'}>
       <RadioGroup {...radio} aria-label="files">
-        {files.map((entry, index) => {
-          const item = radio.stops[index];
-          const selected = item && item.id === radio.currentId;
-
-          return (
-            <label key={entry.name} className={classnames(selected && 'selected')}>
-              <Radio {...radio} value={entry.name} />
-              <Icon size={18} selected={selected} icon={selected ? ICONS.COMPLETED : ICONS.CIRCLE} />
-              <span>{entry.name}</span>
-            </label>
-          );
+        {files.map(({ name }) => {
+          return <Radio key={name} {...radio} value={name} label={name} as={ForwardedRadio} />;
         })}
       </RadioGroup>
     </div>
