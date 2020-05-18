@@ -15,7 +15,7 @@ import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import { doDaemonReady, doAutoUpdate, doOpenModal, doHideModal, doToggle3PAnalytics } from 'redux/actions/app';
 import { Lbry, doToast, isURIValid, setSearchApi, apiCall } from 'lbry-redux';
-import { doSetLanguage, doUpdateIsNightAsync } from 'redux/actions/settings';
+import { doSetLanguage, doFetchLanguage, doUpdateIsNightAsync } from 'redux/actions/settings';
 import { Lbryio, rewards, doBlackListedOutpointsSubscribe, doFilteredOutpointsSubscribe } from 'lbryinc';
 import { store, persistor, history } from 'store';
 import app from './app';
@@ -273,6 +273,9 @@ function AppWrapper() {
   useEffect(() => {
     if (readyToLaunch && persistDone) {
       sessionStorage.setItem('startup', true);
+      if (process.env.DEFAULT_LANGUAGE) {
+        app.store.dispatch(doFetchLanguage(process.env.DEFAULT_LANGUAGE));
+      }
       app.store.dispatch(doUpdateIsNightAsync());
       app.store.dispatch(doDaemonReady());
       app.store.dispatch(doBlackListedOutpointsSubscribe());

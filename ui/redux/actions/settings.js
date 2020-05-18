@@ -165,6 +165,27 @@ export function doSetDarkTime(value, options) {
   };
 }
 
+export function doFetchLanguage(language) {
+  return (dispatch, getState) => {
+    const { settings } = getState();
+
+    if (settings.language !== language || (settings.loadedLanguages && !settings.loadedLanguages.includes(language))) {
+      // this should match the behavior/logic in index-web.html
+      fetch('https://lbry.com/i18n/get/lbry-desktop/app-strings/' + language + '.json')
+        .then(r => r.json())
+        .then(j => {
+          window.i18n_messages[language] = j;
+          dispatch({
+            type: LOCAL_ACTIONS.DOWNLOAD_LANGUAGE_SUCCESS,
+            data: {
+              language,
+            },
+          });
+        });
+    }
+  };
+}
+
 export function doSetLanguage(language) {
   return (dispatch, getState) => {
     const { settings } = getState();

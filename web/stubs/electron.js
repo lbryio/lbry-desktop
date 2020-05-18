@@ -10,7 +10,6 @@ export const remote = {
   app: {
     getAppPath: callable,
     getLocale: () => {
-      console.log('electron stub language');
       return DEFAULT_LANGUAGE;
     },
   },

@@ -187,7 +187,7 @@ function App(props: Props) {
   }, [theme]);
 
   useEffect(() => {
-    if (!languages.includes(language) || language !== 'en') {
+    if (!languages.includes(language)) {
       setLanguage(language);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps

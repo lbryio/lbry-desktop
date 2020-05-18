@@ -1,3 +1,5 @@
+// On Web, this will find .env.defaults and optional .env in web/
+// On Desktop App, this will find .env.defaults and optional .env in root dir
 require('dotenv-defaults').config({silent: false});
 const config = {
   WEBPACK_WEB_PORT: process.env.WEBPACK_WEB_PORT,
