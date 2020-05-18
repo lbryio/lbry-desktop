@@ -67,7 +67,13 @@ const NavigationButton = (props: Props) => {
   );
   const slicedEntries = sliceEntries(currentIndex, entries, historyLength, isBackward, MAX_HISTORY_SIZE);
   return (
-    <div>
+    <div
+      // @if TARGET='app'
+      onDoubleClick={e => {
+        e.stopPropagation();
+      }}
+      // @endif
+    >
       <Button
         className={`header__navigation-item header__navigation-item--${isBackward ? 'back' : 'forward'}`}
         description={isBackward ? __('Navigate back') : __('Navigate forward')}
