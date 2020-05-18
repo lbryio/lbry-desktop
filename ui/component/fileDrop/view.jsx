@@ -8,7 +8,6 @@ import useDragDrop from 'effects/use-drag-drop';
 import { getTree } from 'util/web-file-system';
 import { withRouter } from 'react-router';
 import Icon from 'component/common/icon';
-import FileList from 'component/common/file-list';
 
 type Props = {
   modal: { id: string, modalProps: {} },
@@ -29,7 +28,8 @@ type Props = {
 };
 
 const HIDE_TIME_OUT = 600;
-const NAVIGATE_TIME_OUT = 200;
+const CLEAR_TIME_OUT = 300;
+const NAVIGATE_TIME_OUT = 400;
 const PUBLISH_URL = `/$/${PAGES.PUBLISH}`;
 
 function FileDrop(props: Props) {
@@ -37,7 +37,9 @@ function FileDrop(props: Props) {
   const { drag, dropData } = useDragDrop();
   const [files, setFiles] = React.useState([]);
   const [error, setError] = React.useState(false);
+  const [target, updateTarget] = React.useState(false);
   const hideTimer = React.useRef(null);
+  const clearDataTimer = React.useRef(null);
   const navigationTimer = React.useRef(null);
 
   const navigateToPublish = React.useCallback(() => {
@@ -64,11 +66,24 @@ function FileDrop(props: Props) {
     hideDropArea();
   };
 
-  // Firt file will be selected by default:
-  const handleFileChange = (file?: WebFile) => {
-    if (files && files.length && file) {
-      handleFileSelected(file);
+  const getFileIcon = type => {
+    // Not all files have a type
+    if (!type) {
+      return ICONS.FILE;
     }
+    // Detect common types
+    const contentType = type.split('/')[0];
+    if (contentType === 'text') {
+      return ICONS.TEXT;
+    } else if (contentType === 'image') {
+      return ICONS.IMAGE;
+    } else if (contentType === 'video') {
+      return ICONS.VIDEO;
+    } else if (contentType === 'audio') {
+      return ICONS.AUDIO;
+    }
+    // Binary file
+    return ICONS.FILE;
   };
 
   // Clear timers
@@ -82,8 +97,19 @@ function FileDrop(props: Props) {
       if (navigationTimer.current) {
         clearTimeout(navigationTimer.current);
       }
+      // Clear clearData timer
+      if (navigationTimer.current) {
+        clearTimeout(clearDataTimer.current);
+      }
     };
   }, []);
+
+  React.useEffect(() => {
+    // Clear selected file after modal closed
+    if ((target && !files) || !files.length) {
+      clearDataTimer.current = setTimeout(() => updateTarget(null), CLEAR_TIME_OUT);
+    }
+  }, [files, target]);
 
   React.useEffect(() => {
     // Handle drop...
@@ -107,18 +133,24 @@ function FileDrop(props: Props) {
       if (files.length > 1) {
         openModal(MODALS.FILE_SELECTION, { files: files });
         setFiles([]);
+      } else if (files.length === 1) {
+        // Handle single file selection
+        updateTarget(files[0]);
+        handleFileSelected(files[0]);
       }
     }
   }, [drag, files, error, openModal]);
 
-  const show = files.length === 1 || (drag && (!modal || modal.id !== MODALS.FILE_SELECTION));
+  // Show icon based on file type
+  const icon = target ? getFileIcon(target.type) : ICONS.PUBLISH;
+  // Show drop area when files are dragged over or processing dropped file
+  const show = files.length === 1 || (!target && drag && (!modal || modal.id !== MODALS.FILE_SELECTION));
 
   return (
     <div className={classnames('file-drop', show && 'file-drop--show')}>
       <div className={classnames('card', 'file-drop__area')}>
-        <Icon size={64} icon={ICONS.PUBLISH} className={'main-icon'} />
-        <p>{__(`Drop here to publish!`)} </p>
-        {files && files.length === 1 && <FileList files={files} onChange={handleFileChange} />}
+        <Icon size={64} icon={icon} className={'main-icon'} />
+        <p>{target ? target.name : __(`Drop here to publish!`)} </p>
       </div>
     </div>
   );
