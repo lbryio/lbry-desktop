@@ -21,11 +21,12 @@ function FileViewerEmbeddedTitle(props: Props) {
     contentLink = `${contentLink}?src=embed`;
   }
 
+  const contentLinkProps = isInApp ? { navigate: contentLink } : { href: contentLink };
   const lbryLinkProps = isInApp ? { navigate: '/' } : { href: URL };
 
   return (
     <div className="file-viewer__embedded-title">
-      <Button label={title} button="link" navigate={contentLink} />
+      <Button label={title} button="link" {...contentLinkProps} />
       <Button
         className="file-viewer__overlay-logo file-viewer__embedded-title-logo"
         icon={ICONS.LBRY}
