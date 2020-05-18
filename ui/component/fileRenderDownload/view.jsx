@@ -29,10 +29,10 @@ export default function FileRenderDownload(props: Props) {
           </p>
         }
         actions={
-          <>
+          <div className="section__actions">
             {isFree && <FileDownloadLink uri={uri} buttonType="primary" showLabel />}
             <Button button={!isFree ? 'primary' : 'link'} label={__('Get the App')} href="https://lbry.com/get" />
-          </>
+          </div>
         }
       />
     );
