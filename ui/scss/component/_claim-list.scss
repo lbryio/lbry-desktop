@@ -422,11 +422,15 @@
   bottom: var(--spacing-miniscule);
   right: var(--spacing-miniscule);
   background-color: var(--color-black);
-  padding: 0.2rem;
+  padding: 0.3rem;
   border-radius: var(--border-radius);
 
   .file-properties {
     color: var(--color-white);
+  }
+
+  .file-price {
+    padding: 0.1rem;
   }
 
   @media (max-width: $breakpoint-small) {

@@ -92,7 +92,7 @@ function HomePage(props: Props) {
       fee_currency: 'LBC',
       fee_amount: '>0',
       tags: ['lbrytvpaidbeta'],
-      pageSize: 12,
+      pageSize: 8,
       channelIds: PAID_BETA_CHANNEL_IDS,
     },
   };
