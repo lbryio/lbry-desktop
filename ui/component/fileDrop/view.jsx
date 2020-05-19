@@ -28,7 +28,7 @@ type Props = {
 };
 
 const HIDE_TIME_OUT = 600;
-const CLEAR_TIME_OUT = 300;
+const TARGET_TIME_OUT = 300;
 const NAVIGATE_TIME_OUT = 400;
 const PUBLISH_URL = `/$/${PAGES.PUBLISH}`;
 
@@ -37,9 +37,9 @@ function FileDrop(props: Props) {
   const { drag, dropData } = useDragDrop();
   const [files, setFiles] = React.useState([]);
   const [error, setError] = React.useState(false);
-  const [target, updateTarget] = React.useState(false);
+  const [target, setTarget] = React.useState(false);
   const hideTimer = React.useRef(null);
-  const clearDataTimer = React.useRef(null);
+  const targetTimer = React.useRef(null);
   const navigationTimer = React.useRef(null);
 
   const navigateToPublish = React.useCallback(() => {
@@ -93,13 +93,13 @@ function FileDrop(props: Props) {
       if (hideTimer.current) {
         clearTimeout(hideTimer.current);
       }
+      // Clear target timer
+      if (targetTimer.current) {
+        clearTimeout(targetTimer.current);
+      }
       // Clear navigation timer
       if (navigationTimer.current) {
         clearTimeout(navigationTimer.current);
-      }
-      // Clear clearData timer
-      if (navigationTimer.current) {
-        clearTimeout(clearDataTimer.current);
       }
     };
   }, []);
@@ -107,7 +107,10 @@ function FileDrop(props: Props) {
   React.useEffect(() => {
     // Clear selected file after modal closed
     if ((target && !files) || !files.length) {
-      clearDataTimer.current = setTimeout(() => updateTarget(null), CLEAR_TIME_OUT);
+      // Small delay for a better transition
+      targetTimer.current = setTimeout(() => {
+        setTarget(null);
+      }, TARGET_TIME_OUT);
     }
   }, [files, target]);
 
@@ -135,7 +138,7 @@ function FileDrop(props: Props) {
         setFiles([]);
       } else if (files.length === 1) {
         // Handle single file selection
-        updateTarget(files[0]);
+        setTarget(files[0]);
         handleFileSelected(files[0]);
       }
     }

@@ -22,7 +22,7 @@ const readDirectory = directory => {
 
 // Get file system entries from the dataTransfer items list:
 
-const getFiles = (items, directoryEntries) => {
+const getFiles = (items, directoryEntries = false) => {
   let entries = [];
 
   for (let item of items) {
@@ -58,11 +58,15 @@ export const getTree = async dataTransfer => {
           const file = await getFile(root);
           return [file];
         }
+      } else {
+        // Some files have hidden dataTransfer items:
+        // Use the default file object instead
+        return files;
       }
     }
     // Handle multiple items drop
     if (files.length > 1) {
-      // Convert items to fileEntry and get each file
+      // Convert items to fileEntry and filter files
       return getFiles(items);
     }
   }
