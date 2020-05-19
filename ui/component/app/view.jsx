@@ -170,7 +170,7 @@ function App(props: Props) {
     };
     window.addEventListener('keydown', handleKeyPress);
     return () => window.removeEventListener('keydown', handleKeyPress);
-  });
+  }, []);
 
   useEffect(() => {
     if (referredRewardAvailable && sanitizedReferrerParam && isRewardApproved) {
