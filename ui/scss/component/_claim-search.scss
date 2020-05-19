@@ -33,14 +33,28 @@
 }
 
 .claim-search__input-container {
+  display: flex;
+  flex-direction: column;
+  font-size: var(--font-body);
+
+  .button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0;
+  }
+
   &:not(:first-of-type) {
     padding-left: var(--spacing-medium);
   }
+
   @media (max-width: $breakpoint-small) {
+    padding-left: 0px;
+
     &:not(:first-of-type) {
       margin-top: var(--spacing-small);
     }
-    padding-left: 0px;
+
     &:not(:first-of-type) {
       padding-left: 0;
     }

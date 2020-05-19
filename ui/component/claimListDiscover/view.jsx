@@ -318,6 +318,15 @@ function ClaimListDiscover(props: Props) {
     history.push(url);
   }
 
+  function handleAdvancedReset() {
+    const newUrlParams = new URLSearchParams(search);
+    newUrlParams.delete('claim_type');
+    newUrlParams.delete('channel_ids');
+    const newSearch = `?${newUrlParams.toString()}`;
+
+    history.push(newSearch);
+  }
+
   function getParamFromTags(t) {
     if (t === CS.TAGS_ALL || t === CS.TAGS_FOLLOWED) {
       return t;
@@ -513,6 +522,7 @@ function ClaimListDiscover(props: Props) {
                   </FormField>
                 </div>
               )}
+
               {/* DURATIONS FIELD */}
               {showDuration && (
                 <div className={'claim-search__input-container'}>
@@ -549,6 +559,7 @@ function ClaimListDiscover(props: Props) {
                   </FormField>
                 </div>
               )}
+
               {/* TAGS FIELD */}
               {!tags && (
                 <div className={'claim-search__input-container'}>
@@ -591,6 +602,13 @@ function ClaimListDiscover(props: Props) {
                       </option>
                     ))}
                   </FormField>
+                </div>
+              )}
+
+              {(claimType || channelIdsInUrl) && (
+                <div className={'claim-search__input-container'}>
+                  <label>{__('Advanced Filters from URL')}</label>
+                  <Button button="alt" label={__('Clear')} onClick={handleAdvancedReset} />
                 </div>
               )}
             </div>
