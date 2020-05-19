@@ -20,6 +20,7 @@ type Props = {
   fileInfo: FileListItem,
   uri: string,
   history: { push: string => void },
+  location: { search: ?string, pathname: string },
   obscurePreview: boolean,
   insufficientCredits: boolean,
   thumbnail?: string,
@@ -30,6 +31,7 @@ type Props = {
   renderMode: string,
   claim: StreamClaim,
   claimWasPurchased: boolean,
+  authenticated: boolean,
 };
 
 export default function FileRenderInitiator(props: Props) {
@@ -41,18 +43,24 @@ export default function FileRenderInitiator(props: Props) {
     obscurePreview,
     insufficientCredits,
     history,
+    location,
     thumbnail,
     autoplay,
     renderMode,
     hasCostInfo,
     costInfo,
     claimWasPurchased,
+    authenticated,
   } = props;
 
   const cost = costInfo && costInfo.cost;
   const isFree = hasCostInfo && cost === 0;
   const fileStatus = fileInfo && fileInfo.status;
   const isPlayable = RENDER_MODES.FLOATING_MODES.includes(renderMode);
+
+  function doAuthRedirect() {
+    history.push(`/$/${PAGES.AUTH}?redirect=${encodeURIComponent(location.pathname)}`);
+  }
 
   // Wrap this in useCallback because we need to use it to the keyboard effect
   // If we don't a new instance will be created for every render and react will think the dependencies have changed, which will add/remove the listener for every render
@@ -102,12 +110,12 @@ export default function FileRenderInitiator(props: Props) {
   }
 
   const showAppNag = IS_WEB && RENDER_MODES.UNSUPPORTED_IN_THIS_APP.includes(renderMode);
-
   const disabled = showAppNag || (!fileInfo && insufficientCredits);
-
+  const shouldRedirect = IS_WEB && !authenticated && !isFree;
+  console.log('authe', authenticated);
   return (
     <div
-      onClick={disabled ? undefined : viewFile}
+      onClick={disabled ? undefined : shouldRedirect ? doAuthRedirect : viewFile}
       style={thumbnail && !obscurePreview ? { backgroundImage: `url("${thumbnail}")` } : {}}
       className={classnames('content__cover', {
         'content__cover--disabled': disabled,
@@ -134,6 +142,7 @@ export default function FileRenderInitiator(props: Props) {
       )}
       {!disabled && (
         <Button
+          requiresAuth={IS_WEB}
           onClick={viewFile}
           iconSize={30}
           title={isPlayable ? __('Play') : __('View')}

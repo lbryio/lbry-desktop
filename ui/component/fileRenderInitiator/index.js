@@ -8,7 +8,7 @@ import {
   makeSelectStreamingUrlForUri,
   makeSelectClaimWasPurchased,
 } from 'lbry-redux';
-import { makeSelectCostInfoForUri } from 'lbryinc';
+import { makeSelectCostInfoForUri, selectUserVerifiedEmail } from 'lbryinc';
 import { makeSelectClientSetting } from 'redux/selectors/settings';
 import { withRouter } from 'react-router';
 import {
@@ -34,6 +34,7 @@ const select = (state, props) => ({
   renderMode: makeSelectFileRenderModeForUri(props.uri)(state),
   claim: makeSelectClaimForUri(props.uri)(state),
   claimWasPurchased: makeSelectClaimWasPurchased(props.uri)(state),
+  authenticated: selectUserVerifiedEmail(state),
 });
 
 const perform = dispatch => ({
