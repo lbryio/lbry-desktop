@@ -12,13 +12,13 @@ type Props = {
   uri: string,
   fetching: boolean,
   claim: ?{},
+  claimWasPurchased: boolean,
+  claimIsMine: boolean,
+  type?: string,
   // below props are just passed to <CreditAmount />
   inheritStyle?: boolean,
   showLBC?: boolean,
   hideFree?: boolean, // hide the file price if it's free
-  claimWasPurchased: boolean,
-  claimIsMine: boolean,
-  type?: string,
 };
 
 class FilePrice extends React.PureComponent<Props> {

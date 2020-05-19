@@ -55,6 +55,7 @@ type Props = {
   followedTags?: Array<Tag>,
   injectedItem: ?Node,
   infiniteScroll?: Boolean,
+  feeAmount?: string,
 };
 
 function ClaimListDiscover(props: Props) {
@@ -92,6 +93,7 @@ function ClaimListDiscover(props: Props) {
     infiniteScroll = true,
     followedTags,
     injectedItem,
+    feeAmount,
   } = props;
   const didNavigateForward = history.action === 'PUSH';
   const { search } = location;
@@ -113,7 +115,8 @@ function ClaimListDiscover(props: Props) {
   const streamTypeParam =
     streamType || (CS.FILE_TYPES.includes(contentTypeParam) && contentTypeParam) || defaultStreamType || null;
   const durationParam = urlParams.get(CS.DURATION_KEY) || null;
-
+  const channelIdsInUrl = urlParams.get(CS.CHANNEL_IDS);
+  const channelIdsParam = channelIdsInUrl ? channelIdsInUrl.split(',') : channelIds;
   const showDuration = !(claimType && claimType === CS.CLAIM_CHANNEL);
   const isFiltered = () =>
     Boolean(
@@ -143,6 +146,7 @@ function ClaimListDiscover(props: Props) {
     duration?: string,
     reposted_claim_id?: string,
     stream_types?: any,
+    fee_amount?: string,
   } = {
     page_size: pageSize || CS.PAGE_SIZE,
     page,
@@ -151,10 +155,10 @@ function ClaimListDiscover(props: Props) {
     // no_totals makes it so the sdk doesn't have to calculate total number pages for pagination
     // it's faster, but we will need to remove it if we start using total_pages
     no_totals: true,
-    channel_ids: channelIds || [],
+    channel_ids: channelIdsParam || [],
     not_channel_ids:
-      // If channelIds were passed in, we don't need not_channel_ids
-      !channelIds && hiddenUris && hiddenUris.length ? hiddenUris.map(hiddenUri => hiddenUri.split('#')[1]) : [],
+      // If channelIdsParam were passed in, we don't need not_channel_ids
+      !channelIdsParam && hiddenUris && hiddenUris.length ? hiddenUris.map(hiddenUri => hiddenUri.split('#')[1]) : [],
     not_tags: !showNsfw ? MATURE_TAGS : [],
     order_by:
       orderParam === CS.ORDER_BY_TRENDING
@@ -210,6 +214,10 @@ function ClaimListDiscover(props: Props) {
           .unix()
       )}`;
     }
+  }
+
+  if (feeAmount) {
+    options.fee_amount = feeAmount;
   }
 
   if (durationParam) {
@@ -485,7 +493,7 @@ function ClaimListDiscover(props: Props) {
                     }
                   >
                     {CS.CONTENT_TYPES.map(type => {
-                      if (type !== CS.CLAIM_CHANNEL || (type === CS.CLAIM_CHANNEL && !channelIds)) {
+                      if (type !== CS.CLAIM_CHANNEL || (type === CS.CLAIM_CHANNEL && !channelIdsParam)) {
                         return (
                           <option key={type} value={type}>
                             {/* i18fixme */}

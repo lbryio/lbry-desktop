@@ -23,6 +23,7 @@ type Props = {
   releaseTime?: string,
   claimType?: Array<string>,
   timestamp?: string,
+  feeAmount?: string,
 };
 
 function ClaimTilesDiscover(props: Props) {
@@ -42,6 +43,7 @@ function ClaimTilesDiscover(props: Props) {
     claimType,
     prefixUris,
     timestamp,
+    feeAmount,
   } = props;
   const [hasSearched, setHasSearched] = React.useState(false);
   const options: {
@@ -56,6 +58,7 @@ function ClaimTilesDiscover(props: Props) {
     release_time?: string,
     claim_type?: Array<string>,
     timestamp?: string,
+    fee_amount?: string,
   } = {
     page_size: pageSize,
     claim_type: claimType || undefined,
@@ -74,6 +77,10 @@ function ClaimTilesDiscover(props: Props) {
 
   if (releaseTime) {
     options.release_time = releaseTime;
+  }
+
+  if (feeAmount) {
+    options.fee_amount = feeAmount;
   }
 
   // https://github.com/lbryio/lbry-desktop/issues/3774

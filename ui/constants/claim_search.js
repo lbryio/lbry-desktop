@@ -6,6 +6,7 @@ export const DURATION_KEY = 'duration';
 export const TAGS_KEY = 't';
 export const CONTENT_KEY = 'content';
 export const REPOSTED_URI_KEY = 'reposted_uri';
+export const CHANNEL_IDS = 'channel_ids';
 
 export const TAGS_ALL = 'tags_any';
 export const TAGS_FOLLOWED = 'tags_followed';
@@ -39,6 +40,7 @@ export const FILE_IMAGE = 'image';
 export const FILE_MODEL = 'model';
 export const FILE_TYPES = [FILE_VIDEO, FILE_AUDIO, FILE_DOCUMENT, FILE_IMAGE, FILE_MODEL, FILE_BINARY];
 
+export const CLAIM_TYPE = 'claim_type';
 export const CLAIM_CHANNEL = 'channel';
 export const CLAIM_STREAM = 'stream';
 export const CLAIM_REPOST = 'repost';
