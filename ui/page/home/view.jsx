@@ -82,6 +82,21 @@ function HomePage(props: Props) {
   const showIndividualTags = showPersonalizedTags && followedTags.length < 5;
   let rowData: Array<RowDataItem> = [];
 
+  const lbrytvPaidBetaRow = {
+    title: '#lbrytvpaidbeta',
+    link: `/$/${PAGES.DISCOVER}?${CS.TAGS_KEY}=lbrytvpaidbeta&${CS.CLAIM_TYPE}=${CS.CLAIM_STREAM}&${
+      CS.CHANNEL_IDS
+    }=${PAID_BETA_CHANNEL_IDS.join(',')}`,
+    options: {
+      claimType: ['stream'],
+      fee_currency: 'LBC',
+      fee_amount: '>0',
+      tags: ['lbrytvpaidbeta'],
+      pageSize: 12,
+      channelIds: PAID_BETA_CHANNEL_IDS,
+    },
+  };
+
   // if you are following channels, always show that first
   if (showPersonalizedChannels) {
     let releaseTime = `>${Math.floor(
@@ -144,20 +159,9 @@ function HomePage(props: Props) {
     });
   }
 
-  rowData.push({
-    title: '#lbrytvpaidbeta',
-    link: `/$/${PAGES.DISCOVER}?${CS.TAGS_KEY}=lbrytvpaidbeta&${CS.CLAIM_TYPE}=${CS.CLAIM_STREAM}&${
-      CS.CHANNEL_IDS
-    }=${PAID_BETA_CHANNEL_IDS.join(',')}`,
-    options: {
-      claimType: ['stream'],
-      fee_currency: 'LBC',
-      fee_amount: '>0',
-      tags: ['lbrytvpaidbeta'],
-      pageSize: 12,
-      channelIds: PAID_BETA_CHANNEL_IDS,
-    },
-  });
+  if (authenticated) {
+    rowData.push(lbrytvPaidBetaRow);
+  }
 
   rowData.push({
     title: 'Top Content from Today',
@@ -192,6 +196,10 @@ function HomePage(props: Props) {
         claimType: ['channel'],
       },
     });
+  }
+
+  if (!authenticated) {
+    rowData.push(lbrytvPaidBetaRow);
   }
 
   rowData.push({

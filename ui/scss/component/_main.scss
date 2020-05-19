@@ -51,6 +51,10 @@
   > .card {
     width: 100%;
   }
+
+  @media (max-width: $breakpoint-small) {
+    padding: 0 var(--spacing-medium);
+  }
 }
 
 .main--launching {

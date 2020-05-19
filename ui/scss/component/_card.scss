@@ -86,6 +86,10 @@
 
 .card__title-section--body-list {
   padding: var(--spacing-medium);
+
+  @media (max-width: $breakpoint-small) {
+    padding: 0;
+  }
 }
 
 .card__actions--inline {
@@ -207,6 +211,7 @@
 .card__header--between {
   @extend .card__header;
   justify-content: space-between;
+  flex-wrap: wrap;
 }
 
 .card__subtitle {

@@ -39,7 +39,7 @@ function LibraryPage(props: Props) {
             }
             subtitle={
               <div className="section__actions">
-                <Button button="primary" navigate="/" label={__('Explore new content')} />
+                <Button button="primary" navigate="/" label={__('Explore New Content')} />
               </div>
             }
           />

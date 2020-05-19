@@ -59,7 +59,7 @@ function FileListDownloaded(props: Props) {
           <Button
             icon={ICONS.LIBRARY}
             button="alt"
-            label={__('All Downloads')}
+            label={__('Downloads')}
             className={classnames(`button-toggle`, {
               'button-toggle--active': viewMode === VIEW_DOWNLOADS,
             })}
@@ -68,7 +68,7 @@ function FileListDownloaded(props: Props) {
           <Button
             icon={ICONS.PURCHASED}
             button="alt"
-            label={__('Your Purchases')}
+            label={__('Purchases')}
             className={classnames(`button-toggle`, {
               'button-toggle--active': viewMode === VIEW_PURCHASES,
             })}
