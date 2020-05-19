@@ -2,6 +2,7 @@
 import React from 'react';
 import { createNormalizedClaimSearchKey, MATURE_TAGS } from 'lbry-redux';
 import ClaimPreviewTile from 'component/claimPreviewTile';
+import { useHistory } from 'react-router';
 
 type Props = {
   prefixUris?: Array<string>,
@@ -45,6 +46,10 @@ function ClaimTilesDiscover(props: Props) {
     timestamp,
     feeAmount,
   } = props;
+  const { location } = useHistory();
+  const urlParams = new URLSearchParams(location.search);
+  const feeAmountInUrl = urlParams.get('fee_amount');
+  const feeAmountParam = feeAmountInUrl || feeAmount;
   const [hasSearched, setHasSearched] = React.useState(false);
   const options: {
     page_size: number,
@@ -79,8 +84,8 @@ function ClaimTilesDiscover(props: Props) {
     options.release_time = releaseTime;
   }
 
-  if (feeAmount) {
-    options.fee_amount = feeAmount;
+  if (feeAmountParam) {
+    options.fee_amount = feeAmountParam;
   }
 
   // https://github.com/lbryio/lbry-desktop/issues/3774

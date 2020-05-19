@@ -29,6 +29,7 @@ type Props = {
   inline: boolean,
   renderMode: string,
   claim: StreamClaim,
+  claimWasPurchased: boolean,
 };
 
 export default function FileRenderInitiator(props: Props) {
@@ -45,6 +46,7 @@ export default function FileRenderInitiator(props: Props) {
     renderMode,
     hasCostInfo,
     costInfo,
+    claimWasPurchased,
   } = props;
 
   const cost = costInfo && costInfo.cost;
@@ -121,7 +123,7 @@ export default function FileRenderInitiator(props: Props) {
           href="https://lbry.com/get"
         />
       )}
-      {insufficientCredits && !showAppNag && (
+      {!claimWasPurchased && insufficientCredits && !showAppNag && (
         <Nag
           type="helpful"
           inline

@@ -117,6 +117,7 @@ function ClaimListDiscover(props: Props) {
   const durationParam = urlParams.get(CS.DURATION_KEY) || null;
   const channelIdsInUrl = urlParams.get(CS.CHANNEL_IDS);
   const channelIdsParam = channelIdsInUrl ? channelIdsInUrl.split(',') : channelIds;
+  const feeAmountParam = urlParams.get('fee_amount') || feeAmount;
   const showDuration = !(claimType && claimType === CS.CLAIM_CHANNEL);
   const isFiltered = () =>
     Boolean(
@@ -216,8 +217,8 @@ function ClaimListDiscover(props: Props) {
     }
   }
 
-  if (feeAmount) {
-    options.fee_amount = feeAmount;
+  if (feeAmountParam) {
+    options.fee_amount = feeAmountParam;
   }
 
   if (durationParam) {

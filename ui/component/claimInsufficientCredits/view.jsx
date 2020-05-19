@@ -7,12 +7,13 @@ type Props = {
   uri: string,
   fileInfo: FileListItem,
   isInsufficientCredits: boolean,
+  claimWasPurchased: boolea,
 };
 
 function ClaimInsufficientCredits(props: Props) {
-  const { isInsufficientCredits, fileInfo } = props;
+  const { isInsufficientCredits, fileInfo, claimWasPurchased } = props;
 
-  if (fileInfo || !isInsufficientCredits) {
+  if (fileInfo || !isInsufficientCredits || claimWasPurchased) {
     return null;
   }
 

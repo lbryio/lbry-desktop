@@ -46,7 +46,7 @@ function FileDownloadLink(props: Props) {
 
   const cost = costInfo ? Number(costInfo.cost) : 0;
   const isPaidContent = cost > 0;
-  if (!claim || (IS_WEB && isPaidContent)) {
+  if (!claim) {
     return null;
   }
 

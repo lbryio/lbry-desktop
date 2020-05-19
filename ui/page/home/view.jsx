@@ -84,13 +84,12 @@ function HomePage(props: Props) {
 
   const lbrytvPaidBetaRow = {
     title: '#lbrytvpaidbeta',
-    link: `/$/${PAGES.DISCOVER}?${CS.TAGS_KEY}=lbrytvpaidbeta&${CS.CLAIM_TYPE}=${CS.CLAIM_STREAM}&${
+    link: `/$/${PAGES.DISCOVER}?${CS.TAGS_KEY}=lbrytvpaidbeta&fee_amount=>0&${CS.CLAIM_TYPE}=${CS.CLAIM_STREAM}&${
       CS.CHANNEL_IDS
     }=${PAID_BETA_CHANNEL_IDS.join(',')}`,
     options: {
+      feeAmount: '>0',
       claimType: ['stream'],
-      fee_currency: 'LBC',
-      fee_amount: '>0',
       tags: ['lbrytvpaidbeta'],
       pageSize: 8,
       channelIds: PAID_BETA_CHANNEL_IDS,

@@ -6,6 +6,7 @@ import {
   makeSelectThumbnailForUri,
   makeSelectClaimForUri,
   makeSelectStreamingUrlForUri,
+  makeSelectClaimWasPurchased,
 } from 'lbry-redux';
 import { makeSelectCostInfoForUri } from 'lbryinc';
 import { makeSelectClientSetting } from 'redux/selectors/settings';
@@ -32,6 +33,7 @@ const select = (state, props) => ({
   costInfo: makeSelectCostInfoForUri(props.uri)(state),
   renderMode: makeSelectFileRenderModeForUri(props.uri)(state),
   claim: makeSelectClaimForUri(props.uri)(state),
+  claimWasPurchased: makeSelectClaimWasPurchased(props.uri)(state),
 });
 
 const perform = dispatch => ({
