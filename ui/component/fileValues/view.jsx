@@ -29,6 +29,8 @@ class FileValues extends PureComponent<Props> {
       return <span className="empty">{__('Empty claim or metadata info.')}</span>;
     }
     const supportsAmount = claim && claim.meta && claim.meta.support_amount && Number(claim.meta.support_amount);
+    const purchaseReceipt = claim && claim.purchase_receipt;
+    console.log('purchase', purchaseReceipt);
     return (
       <Fragment>
         <Card
@@ -37,6 +39,14 @@ class FileValues extends PureComponent<Props> {
           actions={
             <table className="table table--condensed table--fixed table--lbc-details">
               <tbody>
+                {purchaseReceipt && (
+                  <tr>
+                    <td> {__('Purchase Amount')}</td>
+                    <td>
+                      <CreditAmount badge={false} amount={Number(purchaseReceipt.amount)} precision={2} />
+                    </td>
+                  </tr>
+                )}
                 <tr>
                   <td> {__('Original Publish Amount')}</td>
                   <td>
@@ -49,7 +59,6 @@ class FileValues extends PureComponent<Props> {
                 </tr>
                 <tr>
                   <td>
-                    {' '}
                     {__('Supports and Tips')}
                     <HelpLink href="https://lbry.com/faq/tipping" />
                   </td>

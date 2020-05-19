@@ -28,7 +28,6 @@ const perform = dispatch => ({
   openModal: (modal, props) => dispatch(doOpenModal(modal, props)),
   pause: () => dispatch(doSetPlayingUri(null)),
   download: uri => dispatch(doPlayUri(uri, false, true, () => dispatch(doAnalyticsView(uri)))),
-  triggerViewEvent: uri => dispatch(doAnalyticsView(uri)),
 });
 
 export default connect(select, perform)(FileDownloadLink);
