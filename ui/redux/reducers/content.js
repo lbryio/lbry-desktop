@@ -1,4 +1,5 @@
 import * as ACTIONS from 'constants/action_types';
+import { ACTIONS as LBRY_REDUX_ACTIONS } from 'lbry-redux';
 
 const reducers = {};
 const defaultState = {
@@ -88,6 +89,13 @@ reducers[ACTIONS.CLEAR_CONTENT_HISTORY_URI] = (state, action) => {
 };
 
 reducers[ACTIONS.CLEAR_CONTENT_HISTORY_ALL] = state => ({ ...state, history: [] });
+
+reducers[LBRY_REDUX_ACTIONS.PURCHASE_URI_FAILED] = (state, action) => {
+  return {
+    ...state,
+    playingUri: null,
+  };
+};
 
 export default function reducer(state = defaultState, action) {
   const handler = reducers[action.type];
