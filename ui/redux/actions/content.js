@@ -20,8 +20,8 @@ import {
   makeSelectUriIsStreamable,
   selectDownloadingByOutpoint,
   makeSelectClaimForUri,
-  doResolveUri,
   makeSelectClaimIsMine,
+  makeSelectClaimWasPurchased,
 } from 'lbry-redux';
 import { makeSelectCostInfoForUri, Lbryio } from 'lbryinc';
 import { makeSelectClientSetting, selectosNotificationsEnabled, selectDaemonSettings } from 'redux/selectors/settings';
@@ -162,8 +162,6 @@ export function doCloseFloatingPlayer() {
 export function doPurchaseUriWrapper(uri: string, cost: number, saveFile: boolean, cb: ?() => void) {
   return (dispatch: Dispatch, getState: () => any) => {
     function onSuccess(fileInfo) {
-      dispatch(doResolveUri(uri));
-
       if (saveFile) {
         dispatch(doUpdateLoadStatus(uri, fileInfo.outpoint));
       }
@@ -189,6 +187,7 @@ export function doPlayUri(
     const fileInfo = makeSelectFileInfoForUri(uri)(state);
     const uriIsStreamable = makeSelectUriIsStreamable(uri)(state);
     const downloadingByOutpoint = selectDownloadingByOutpoint(state);
+    const claimWasPurchased = makeSelectClaimWasPurchased(uri)(state);
     const alreadyDownloaded = fileInfo && (fileInfo.completed || (fileInfo.blobs_remaining === 0 && uriIsStreamable));
     const alreadyDownloading = fileInfo && !!downloadingByOutpoint[fileInfo.outpoint];
 
@@ -209,7 +208,12 @@ export function doPlayUri(
 
     function attemptPlay(instantPurchaseMax = null) {
       // If you have a file_list entry, you have already purchased the file
-      if (!isMine && !fileInfo && (!instantPurchaseMax || !instantPurchaseEnabled || cost > instantPurchaseMax)) {
+      if (
+        !isMine &&
+        !fileInfo &&
+        !claimWasPurchased &&
+        (!instantPurchaseMax || !instantPurchaseEnabled || cost > instantPurchaseMax)
+      ) {
         dispatch(doOpenModal(MODALS.AFFIRM_PURCHASE, { uri }));
       } else {
         beginGetFile();

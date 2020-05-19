@@ -16,7 +16,7 @@ type Props = {
 
 function LibraryPage(props: Props) {
   const { allDownloadedUrlsCount, myPurchases, fetchingMyPurchases, fetchingFileList, doPurchaseList } = props;
-  const hasDownloads = allDownloadedUrlsCount > 0 || (myPurchases && myPurchases.length);
+  const hasDownloads = allDownloadedUrlsCount > 0 || (myPurchases && myPurchases.length > 0);
   const loading = fetchingFileList || fetchingMyPurchases;
 
   React.useEffect(() => {
@@ -34,7 +34,9 @@ function LibraryPage(props: Props) {
       {!loading && !hasDownloads && (
         <div className="main--empty">
           <Yrbl
-            title={__("You haven't downloaded anything from LBRY yet")}
+            title={
+              IS_WEB ? __("You haven't purchased anything yet") : __("You haven't downloaded anything from LBRY yet")
+            }
             subtitle={
               <div className="section__actions">
                 <Button button="primary" navigate="/" label={__('Explore new content')} />

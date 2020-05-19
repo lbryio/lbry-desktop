@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import { makeSelectClaimForUri, makeSelectClaimWasPurchased } from 'lbry-redux';
+import { makeSelectClaimForUri, makeSelectClaimWasPurchased, makeSelectClaimIsMine } from 'lbry-redux';
 import { makeSelectCostInfoForUri, doFetchCostInfoForUri, makeSelectFetchingCostInfoForUri } from 'lbryinc';
 import FilePrice from './view';
 
@@ -8,6 +8,7 @@ const select = (state, props) => ({
   fetching: makeSelectFetchingCostInfoForUri(props.uri)(state),
   claim: makeSelectClaimForUri(props.uri)(state),
   claimWasPurchased: makeSelectClaimWasPurchased(props.uri)(state),
+  claimIsMine: makeSelectClaimIsMine(props.uri)(state),
 });
 
 const perform = dispatch => ({

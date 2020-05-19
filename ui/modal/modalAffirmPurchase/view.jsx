@@ -39,6 +39,16 @@ function ModalAffirmPurchase(props: Props) {
     });
   }
 
+  // React.useEffect(() => {
+  //   setSuccess(true);
+
+  //   let id = setInterval(() => {
+  //     setSuccess(true);
+  //   });
+
+  //   return () => clearInterval(id);
+  // }, [5000]);
+
   React.useEffect(() => {
     let timeout;
     if (success) {

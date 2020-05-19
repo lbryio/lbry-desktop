@@ -10,7 +10,6 @@ import {
   commentReducer,
   blockedReducer,
   publishReducer,
-  fileReducer,
 } from 'lbry-redux';
 import {
   userReducer,
@@ -39,7 +38,6 @@ export default history =>
     content: contentReducer,
     costInfo: costInfoReducer,
     fileInfo: fileInfoReducer,
-    file: fileReducer,
     homepage: homepageReducer,
     notifications: notificationsReducer,
     publish: publishReducer,

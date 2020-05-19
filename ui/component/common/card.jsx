@@ -41,7 +41,7 @@ export default function Card(props: Props) {
     <section className={classnames(className, 'card')}>
       {(title || subtitle) && (
         <div className="card__header--between">
-          <div className="card__section--flex">
+          <div className={classnames('card__title-section', { 'card__title-section--body-list': isBodyList })}>
             {icon && <Icon sectionIcon icon={icon} />}
             <div>
               {isPageTitle && <h1 className="card__title">{title}</h1>}

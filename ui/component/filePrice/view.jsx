@@ -17,6 +17,7 @@ type Props = {
   showLBC?: boolean,
   hideFree?: boolean, // hide the file price if it's free
   claimWasPurchased: boolean,
+  claimIsMine: boolean,
   type?: string,
 };
 
@@ -42,9 +43,9 @@ class FilePrice extends React.PureComponent<Props> {
   };
 
   render() {
-    const { costInfo, showFullPrice, showLBC, hideFree, claimWasPurchased, type } = this.props;
+    const { costInfo, showFullPrice, showLBC, hideFree, claimWasPurchased, type, claimIsMine } = this.props;
 
-    if (!costInfo || !costInfo.cost || (!costInfo.cost && hideFree)) {
+    if (claimIsMine || !costInfo || !costInfo.cost || (!costInfo.cost && hideFree)) {
       return null;
     }
 

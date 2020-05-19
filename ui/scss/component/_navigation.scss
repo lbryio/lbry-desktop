@@ -67,7 +67,12 @@
 
 .navigation-link--pulse {
   border-radius: var(--border-radius);
-  animation: shadow-pulse 2s infinite;
+  overflow: visible;
+
+  .icon {
+    border-radius: 50%;
+    animation: shadow-pulse 2s infinite;
+  }
 }
 
 @keyframes shadow-pulse {

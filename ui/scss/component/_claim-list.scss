@@ -4,17 +4,6 @@
   }
 }
 
-.claim-list--card-body {
-  .claim-preview {
-    padding: 0 var(--spacing-medium);
-    padding-right: 0;
-
-    @media (max-width: $breakpoint-small) {
-      padding: 0;
-    }
-  }
-}
-
 .claim-list__header {
   display: flex;
   flex-wrap: wrap;

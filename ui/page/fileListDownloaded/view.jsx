@@ -11,6 +11,7 @@ import { FormField } from 'component/common/form-components/form-field';
 import { withRouter } from 'react-router';
 import Card from 'component/common/card';
 import classnames from 'classnames';
+import Yrbl from 'component/yrbl';
 
 type Props = {
   fetchingFileList: boolean,
@@ -92,29 +93,47 @@ function FileListDownloaded(props: Props) {
       }
       isBodyList
       body={
-        <div>
-          <ClaimList
-            isCardBody
-            renderProperties={() => null}
-            empty={
-              viewMode === VIEW_PURCHASES && !query ? (
-                <div>{__("You haven't purchased anything yet silly goose.")}</div>
-              ) : (
-                __('No results for %query%', { query })
-              )
-            }
-            uris={viewMode === VIEW_PURCHASES ? myPurchases : myDownloads}
-            loading={loading}
-          />
-          {!query && (
-            <Paginate
-              loading={loading}
-              totalPages={Math.ceil(
-                Number(viewMode === VIEW_PURCHASES ? myPurchasesCount : downloadedUrlsCount) / Number(PAGE_SIZE)
-              )}
+        IS_WEB && viewMode === VIEW_DOWNLOADS ? (
+          <div className="main--empty">
+            <Yrbl
+              title={__('Try Out the App!')}
+              subtitle={
+                <>
+                  <p className="section__subtitle">
+                    {__("Download the app to track files you've viewed and downloaded.")}
+                  </p>
+                  <div className="section__actions">
+                    <Button button="primary" label={__('Get The App')} href="https://lbry.com/get" />
+                  </div>
+                </>
+              }
             />
-          )}
-        </div>
+          </div>
+        ) : (
+          <div>
+            <ClaimList
+              isCardBody
+              renderProperties={() => null}
+              empty={
+                viewMode === VIEW_PURCHASES && !query ? (
+                  <div>{__("You haven't purchased anything yet silly goose.")}</div>
+                ) : (
+                  __('No results for %query%', { query })
+                )
+              }
+              uris={viewMode === VIEW_PURCHASES ? myPurchases : myDownloads}
+              loading={loading}
+            />
+            {!query && (
+              <Paginate
+                loading={loading}
+                totalPages={Math.ceil(
+                  Number(viewMode === VIEW_PURCHASES ? myPurchasesCount : downloadedUrlsCount) / Number(PAGE_SIZE)
+                )}
+              />
+            )}
+          </div>
+        )
       }
     />
   );

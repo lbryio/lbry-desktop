@@ -25,6 +25,8 @@ type Props = {
   expanded: boolean,
   doSignOut: () => void,
   location: { pathname: string },
+  purchaseSuccess: boolean,
+  doClearPurchasedUriSuccess: () => void,
 };
 
 function SideNavigation(props: Props) {
@@ -37,6 +39,8 @@ function SideNavigation(props: Props) {
     sticky = true,
     expanded = false,
     location,
+    purchaseSuccess,
+    doClearPurchasedUriSuccess,
   } = props;
   const { pathname } = location;
   const isAuthenticated = Boolean(email);
@@ -68,17 +72,17 @@ function SideNavigation(props: Props) {
   }, [pathname, setSideInformation]);
 
   React.useEffect(() => {
-    // if (justPurchased) ...
-    if (false) {
+    if (purchaseSuccess) {
       setPulseLibrary(true);
 
       let timeout = setTimeout(() => {
         setPulseLibrary(false);
-      }, 2000);
+        doClearPurchasedUriSuccess();
+      }, 1500);
 
       return () => clearTimeout(timeout);
     }
-  }, [setPulseLibrary]);
+  }, [setPulseLibrary, purchaseSuccess, doClearPurchasedUriSuccess]);
 
   function buildLink(path, label, icon, onClick, requiresAuth = false) {
     return {
@@ -142,9 +146,9 @@ function SideNavigation(props: Props) {
                 <li key={linkProps.navigate}>
                   <Button
                     {...linkProps}
-                    icon={pulseLibrary ? ICONS.PURCHASED : linkProps.icon}
+                    icon={pulseLibrary && linkProps.icon === ICONS.LIBRARY ? ICONS.PURCHASED : linkProps.icon}
                     className={classnames('navigation-link', {
-                      'navigation-link--pulse': pulseLibrary,
+                      'navigation-link--pulse': linkProps.icon === ICONS.LIBRARY && pulseLibrary,
                     })}
                     activeClass="navigation-link--active"
                   />

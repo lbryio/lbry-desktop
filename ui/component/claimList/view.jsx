@@ -135,7 +135,6 @@ export default function ClaimList(props: Props) {
         <ul
           className={classnames('ul--no-style', {
             card: !isCardBody,
-            'claim-list--card-body': isCardBody,
           })}
         >
           {sortedUris.map((uri, index) => (
