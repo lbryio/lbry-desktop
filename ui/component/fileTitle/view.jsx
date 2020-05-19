@@ -36,10 +36,18 @@ function FileTitle(props: Props) {
         <React.Fragment>
           <ClaimInsufficientCredits uri={uri} />
           <FileSubtitle uri={uri} />
-          <FileAuthor uri={uri} />
         </React.Fragment>
       }
-      actions={<FileActions uri={uri} />}
+      actions={
+        <div>
+          <div className="section">
+            <FileActions uri={uri} />
+          </div>
+          <div className="section">
+            <FileAuthor uri={uri} />
+          </div>
+        </div>
+      }
     />
   );
 }

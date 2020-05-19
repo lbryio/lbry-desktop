@@ -115,9 +115,9 @@ function ClaimListDiscover(props: Props) {
   const streamTypeParam =
     streamType || (CS.FILE_TYPES.includes(contentTypeParam) && contentTypeParam) || defaultStreamType || null;
   const durationParam = urlParams.get(CS.DURATION_KEY) || null;
-  const channelIdsInUrl = urlParams.get(CS.CHANNEL_IDS);
+  const channelIdsInUrl = urlParams.get(CS.CHANNEL_IDS_KEY);
   const channelIdsParam = channelIdsInUrl ? channelIdsInUrl.split(',') : channelIds;
-  const feeAmountParam = urlParams.get('fee_amount') || feeAmount;
+  const feeAmountParam = urlParams.get('fee_amount') || feeAmount || CS.FEE_AMOUNT_ANY;
   const showDuration = !(claimType && claimType === CS.CLAIM_CHANNEL);
   const isFiltered = () =>
     Boolean(
@@ -337,7 +337,7 @@ function ClaimListDiscover(props: Props) {
   }
 
   function buildUrl(delta) {
-    const newUrlParams = new URLSearchParams();
+    const newUrlParams = new URLSearchParams(location.search);
     CS.KEYS.forEach(k => {
       // $FlowFixMe append() can't take null as second arg, but get() can return null
       if (urlParams.get(k) !== null) newUrlParams.append(k, urlParams.get(k));
@@ -386,6 +386,13 @@ function ClaimListDiscover(props: Props) {
           }
         } else {
           newUrlParams.set(CS.TAGS_KEY, delta.value);
+        }
+        break;
+      case CS.FEE_AMOUNT_KEY:
+        if (delta.value === CS.FEE_AMOUNT_ANY) {
+          newUrlParams.delete(CS.FEE_AMOUNT_KEY);
+        } else {
+          newUrlParams.set(CS.FEE_AMOUNT_KEY, delta.value);
         }
         break;
     }
@@ -606,7 +613,32 @@ function ClaimListDiscover(props: Props) {
                 </div>
               )}
 
-              {(claimType || channelIdsInUrl) && (
+              {/* PAID FIELD */}
+              <div className={'claim-search__input-container'}>
+                <FormField
+                  className={classnames('claim-search__dropdown', {
+                    'claim-search__dropdown--selected':
+                      feeAmountParam === CS.FEE_AMOUNT_ONLY_FREE || feeAmountParam === CS.FEE_AMOUNT_ONLY_PAID,
+                  })}
+                  label={__('Price')}
+                  type="select"
+                  name="paidcontent"
+                  value={feeAmountParam}
+                  onChange={e =>
+                    handleChange({
+                      key: CS.FEE_AMOUNT_KEY,
+                      value: e.target.value,
+                    })
+                  }
+                >
+                  <option value={CS.FEE_AMOUNT_ANY}>Anything</option>
+                  <option value={CS.FEE_AMOUNT_ONLY_FREE}>Free</option>
+                  <option value={CS.FEE_AMOUNT_ONLY_PAID}>Paid</option>
+                  ))}
+                </FormField>
+              </div>
+
+              {channelIdsInUrl && (
                 <div className={'claim-search__input-container'}>
                   <label>{__('Advanced Filters from URL')}</label>
                   <Button button="alt" label={__('Clear')} onClick={handleAdvancedReset} />

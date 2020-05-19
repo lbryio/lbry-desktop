@@ -6,10 +6,14 @@ export const DURATION_KEY = 'duration';
 export const TAGS_KEY = 't';
 export const CONTENT_KEY = 'content';
 export const REPOSTED_URI_KEY = 'reposted_uri';
-export const CHANNEL_IDS = 'channel_ids';
-
+export const CHANNEL_IDS_KEY = 'channel_ids';
 export const TAGS_ALL = 'tags_any';
 export const TAGS_FOLLOWED = 'tags_followed';
+
+export const FEE_AMOUNT_KEY = 'fee_amount';
+export const FEE_AMOUNT_ANY = '>=0';
+export const FEE_AMOUNT_ONLY_PAID = '>0';
+export const FEE_AMOUNT_ONLY_FREE = '0';
 
 export const FRESH_DAY = 'day';
 export const FRESH_WEEK = 'week';

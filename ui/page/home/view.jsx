@@ -11,7 +11,7 @@ import I18nMessage from 'component/i18nMessage';
 import { parseURI } from 'lbry-redux';
 import { toCapitalCase } from 'util/string';
 
-const PAID_BETA_CHANNEL_IDS = [
+const PAID_BETA_CHANNEL_IDS_KEY = [
   '5af39f818f668d8c00943c9326c5201c4fe3c423',
   'cda9c4e92f19d6fe0764524a2012056e06ca2055',
   '760da3ba3dd85830a843beaaed543a89b7a367e7',
@@ -85,14 +85,14 @@ function HomePage(props: Props) {
   const lbrytvPaidBetaRow = {
     title: '#lbrytvpaidbeta',
     link: `/$/${PAGES.DISCOVER}?${CS.TAGS_KEY}=lbrytvpaidbeta&fee_amount=>0&${CS.CLAIM_TYPE}=${CS.CLAIM_STREAM}&${
-      CS.CHANNEL_IDS
-    }=${PAID_BETA_CHANNEL_IDS.join(',')}`,
+      CS.CHANNEL_IDS_KEY
+    }=${PAID_BETA_CHANNEL_IDS_KEY.join(',')}`,
     options: {
       feeAmount: '>0',
       claimType: ['stream'],
       tags: ['lbrytvpaidbeta'],
       pageSize: 8,
-      channelIds: PAID_BETA_CHANNEL_IDS,
+      channelIds: PAID_BETA_CHANNEL_IDS_KEY,
     },
   };
 

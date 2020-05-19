@@ -3,6 +3,10 @@
 
   ~ .section {
     margin-top: var(--spacing-large);
+
+    @media (max-width: $breakpoint-small) {
+      margin-top: var(--spacing-medium);
+    }
   }
 }
 

@@ -41,8 +41,7 @@ function FileDownloadLink(props: Props) {
   } = props;
 
   const [didClickDownloadButton, setDidClickDownloadButton] = useState(false);
-  const { value } = claim;
-  const fileName = value && value.source && value.source.name;
+  const fileName = claim && claim.value && claim.value.source && claim.value.source.name;
 
   React.useEffect(() => {
     if (didClickDownloadButton && streamingUrl) {

@@ -30,7 +30,7 @@ class FileValues extends PureComponent<Props> {
     }
     const supportsAmount = claim && claim.meta && claim.meta.support_amount && Number(claim.meta.support_amount);
     const purchaseReceipt = claim && claim.purchase_receipt;
-    console.log('purchase', purchaseReceipt);
+
     return (
       <Fragment>
         <Card
