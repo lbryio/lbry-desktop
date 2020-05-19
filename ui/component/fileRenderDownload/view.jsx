@@ -7,14 +7,11 @@ import Button from 'component/button';
 
 type Props = {
   uri: string,
-  isFree: boolean,
   renderMode: string,
-  doPlayUri: string => void,
-  claimWasPurchased: boolean,
 };
 
 export default function FileRenderDownload(props: Props) {
-  const { uri, renderMode, isFree, doPlayUri, claimWasPurchased } = props;
+  const { uri, renderMode } = props;
 
   // @if TARGET='web'
   if (RENDER_MODES.UNSUPPORTED_IN_THIS_APP.includes(renderMode)) {
@@ -30,12 +27,7 @@ export default function FileRenderDownload(props: Props) {
         }
         actions={
           <div className="section__actions">
-            {isFree || claimWasPurchased ? (
-              <FileDownloadLink uri={uri} buttonType="primary" showLabel />
-            ) : (
-              <Button button="primary" label={__('Purchase')} onClick={() => doPlayUri(uri)} />
-            )}
-
+            <FileDownloadLink uri={uri} buttonType="primary" showLabel />
             <Button button={'link'} label={__('Get the App')} href="https://lbry.com/get" />
           </div>
         }

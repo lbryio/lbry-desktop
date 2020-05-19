@@ -191,7 +191,7 @@ export function doPlayUri(
     const alreadyDownloaded = fileInfo && (fileInfo.completed || (fileInfo.blobs_remaining === 0 && uriIsStreamable));
     const alreadyDownloading = fileInfo && !!downloadingByOutpoint[fileInfo.outpoint];
 
-    if (alreadyDownloading || alreadyDownloaded) {
+    if (!IS_WEB && (alreadyDownloading || alreadyDownloaded)) {
       return;
     }
 

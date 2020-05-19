@@ -20,6 +20,7 @@ function FileTitle(props: Props) {
   return (
     <Card
       isPageTitle
+      noTitleWrap
       title={
         <React.Fragment>
           {title}

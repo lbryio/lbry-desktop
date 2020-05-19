@@ -41,6 +41,7 @@
 .file-price--filepage {
   font-size: var(--font-body);
   top: calc(var(--spacing-miniscule) * -1);
+  margin-left: var(--spacing-medium);
 
   .credit-amount {
     margin: 0 var(--spacing-medium);

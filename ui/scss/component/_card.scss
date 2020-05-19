@@ -214,6 +214,11 @@
   flex-wrap: wrap;
 }
 
+.card__header--nowrap {
+  @extend .card__header--between;
+  flex-wrap: nowrap;
+}
+
 .card__subtitle {
   color: var(--color-text-subtitle);
   margin: var(--spacing-small) 0;
