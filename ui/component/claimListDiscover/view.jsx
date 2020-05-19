@@ -124,7 +124,8 @@ function ClaimListDiscover(props: Props) {
       urlParams.get(CS.FRESH_KEY) ||
         urlParams.get(CS.CONTENT_KEY) ||
         urlParams.get(CS.DURATION_KEY) ||
-        urlParams.get(CS.TAGS_KEY)
+        urlParams.get(CS.TAGS_KEY) ||
+        urlParams.get(CS.FEE_AMOUNT_KEY)
     );
 
   useEffect(() => {
