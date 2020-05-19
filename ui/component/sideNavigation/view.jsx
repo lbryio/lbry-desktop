@@ -78,7 +78,7 @@ function SideNavigation(props: Props) {
       let timeout = setTimeout(() => {
         setPulseLibrary(false);
         doClearPurchasedUriSuccess();
-      }, 1500);
+      }, 2500);
 
       return () => clearTimeout(timeout);
     }

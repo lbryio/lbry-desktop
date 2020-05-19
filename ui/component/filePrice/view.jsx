@@ -51,18 +51,18 @@ class FilePrice extends React.PureComponent<Props> {
 
     return claimWasPurchased ? (
       <span
-        className={classnames('file-properties__purchased', {
-          'file-properties__purchased--large': type === 'large',
-          'file-properties__purchased--modal': type === 'modal',
+        className={classnames('file-price__key', {
+          'file-price__key--filepage': type === 'filepage',
+          'file-price__key--modal': type === 'modal',
         })}
       >
-        <Icon icon={ICONS.PURCHASED} size={type === 'large' ? 22 : undefined} />
+        <Icon icon={ICONS.PURCHASED} size={type === 'filepage' ? 22 : undefined} />
       </span>
     ) : (
       <CreditAmount
-        className={classnames('file-properties__not-purchased', {
-          'file-properties__not-purchased--large': type === 'large',
-          'file-properties__not-purchased--modal': type === 'modal',
+        className={classnames('file-price', {
+          'file-price--filepage': type === 'filepage',
+          'file-price--modal': type === 'modal',
         })}
         showFree
         badge={false}

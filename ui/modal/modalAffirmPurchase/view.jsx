@@ -7,7 +7,7 @@ import Card from 'component/common/card';
 import I18nMessage from 'component/i18nMessage';
 import Button from 'component/button';
 
-// This number is tied to transitions in scss/file-properties.scss
+// This number is tied to transitions in scss/purchase.scss
 const ANIMATION_LENGTH = 2500;
 
 type Props = {
@@ -38,16 +38,6 @@ function ModalAffirmPurchase(props: Props) {
       setSuccess(true);
     });
   }
-
-  // React.useEffect(() => {
-  //   setSuccess(true);
-
-  //   let id = setInterval(() => {
-  //     setSuccess(true);
-  //   });
-
-  //   return () => clearInterval(id);
-  // }, [5000]);
 
   React.useEffect(() => {
     let timeout;
@@ -90,7 +80,7 @@ function ModalAffirmPurchase(props: Props) {
               </I18nMessage>
             </div>
             <div>
-              <FilePrice uri={uri} showFullPrice type="modal" overrided={success} />
+              <FilePrice uri={uri} showFullPrice type="modal" />
             </div>
           </div>
         }

@@ -82,7 +82,7 @@ class CreditAmount extends React.PureComponent<Props> {
           'badge--free': badge && isFree,
         })}
       >
-        <span>{amountText}</span>
+        <span className="credit-amount">{amountText}</span>
 
         {isEstimate ? (
           <span className="credit-amount__estimate" title={__('This is an estimate and does not include data fees')}>

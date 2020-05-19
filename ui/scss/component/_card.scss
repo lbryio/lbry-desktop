@@ -169,6 +169,7 @@
 }
 
 .card__title-actions {
+  align-self: flex-start;
   padding: var(--spacing-medium);
 
   @media (max-width: $breakpoint-small) {
