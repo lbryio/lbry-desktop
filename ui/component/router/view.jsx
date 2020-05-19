@@ -35,6 +35,7 @@ import TopPage from 'page/top';
 import Welcome from 'page/welcome';
 import CreatorDashboard from 'page/creatorDashboard';
 import RewardsVerifyPage from 'page/rewardsVerify';
+import CheckoutPage from 'page/checkoutPage';
 import { parseURI } from 'lbry-redux';
 import { SITE_TITLE, WELCOME_VERSION } from 'config';
 
@@ -174,6 +175,7 @@ function AppRouter(props: Props) {
       <Route path={`/$/${PAGES.TOP}`} exact component={TopPage} />
       <Route path={`/$/${PAGES.SETTINGS}`} exact component={SettingsPage} />
       <Route path={`/$/${PAGES.INVITE}/:referrer`} exact component={InvitedPage} />
+      <Route path={`/$/${PAGES.CHECKOUT}`} exact component={CheckoutPage} />
 
       <PrivateRoute {...props} path={`/$/${PAGES.INVITE}`} component={InvitePage} />
       <PrivateRoute {...props} path={`/$/${PAGES.PUBLISHED}`} component={FileListPublished} />
