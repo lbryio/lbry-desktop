@@ -128,7 +128,9 @@ function FileActions(props: Props) {
             </MenuButton>
 
             <MenuList className="menu__list">
-              <MenuItem className="menu__link">{__('DMCA')}</MenuItem>
+              <MenuItem className="menu__link" onSelect={() => openModal(MODALS.DMCA, { uri, claim, claimId })}>
+                {__('DMCA')}
+              </MenuItem>
 
               <MenuItem className="menu__link" onSelect={() => openModal(MODALS.REPORT, { uri, claim, claimId })}>
                 {__('Other')}

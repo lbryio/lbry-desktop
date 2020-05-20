@@ -36,6 +36,7 @@ import ModalCreateChannel from 'modal/modalChannelCreate';
 import ModalMobileNavigation from 'modal/modalMobileNavigation';
 import ModalSetReferrer from 'modal/modalSetReferrer';
 import ModalReport from 'modal/modalReport';
+import ModalDmca from 'modal/modalDmca';
 import ModalRepost from 'modal/modalRepost';
 import ModalSignOut from 'modal/modalSignOut';
 import ModalLiquidateSupports from '../modalSupportsLiquidate';
@@ -134,6 +135,8 @@ function ModalRouter(props: Props) {
       return <ModalSetReferrer {...modalProps} />;
     case MODALS.REPORT:
       return <ModalReport {...modalProps} />;
+    case MODALS.DMCA:
+      return <ModalDmca {...modalProps} />;
     case MODALS.REPOST:
       return <ModalRepost {...modalProps} />;
     case MODALS.SIGN_OUT:
