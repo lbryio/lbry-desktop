@@ -3333,17 +3333,17 @@ latest-version@^3.0.0:
   dependencies:
     package-json "^4.0.0"
 
-lbry-redux@lbryio/lbry-redux#87ae7faf1c1d5ffa86feb578899596f6ea2a5fd9:
+lbry-redux@lbryio/lbry-redux#f6e5b69e5aa337d50503a2f5ebb5efe4eda4ac57:
   version "0.0.1"
-  resolved "https://codeload.github.com/lbryio/lbry-redux/tar.gz/87ae7faf1c1d5ffa86feb578899596f6ea2a5fd9"
+  resolved "https://codeload.github.com/lbryio/lbry-redux/tar.gz/f6e5b69e5aa337d50503a2f5ebb5efe4eda4ac57"
   dependencies:
     proxy-polyfill "0.1.6"
     reselect "^3.0.0"
     uuid "^3.3.2"
 
-lbryinc@lbryio/lbryinc#0addc624db54000b0447f4539f91f5758d26eef3:
+lbryinc@lbryio/lbryinc#6a52f8026cdc7cd56d200fb5c46f852e0139bbeb:
   version "0.0.1"
-  resolved "https://codeload.github.com/lbryio/lbryinc/tar.gz/0addc624db54000b0447f4539f91f5758d26eef3"
+  resolved "https://codeload.github.com/lbryio/lbryinc/tar.gz/6a52f8026cdc7cd56d200fb5c46f852e0139bbeb"
   dependencies:
     reselect "^3.0.0"
 

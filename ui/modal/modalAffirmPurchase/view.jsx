@@ -6,6 +6,7 @@ import { Modal } from 'modal/modal';
 import Card from 'component/common/card';
 import I18nMessage from 'component/i18nMessage';
 import Button from 'component/button';
+import analytics from 'analytics';
 
 // This number is tied to transitions in scss/purchase.scss
 const ANIMATION_LENGTH = 2500;
@@ -38,6 +39,12 @@ function ModalAffirmPurchase(props: Props) {
     loadVideo(uri, fileInfo => {
       setPurchasing(false);
       setSuccess(true);
+
+      let purchasePrice = fileInfo.purchase_receipt && fileInfo.purchase_receipt.amount;
+      if (purchasePrice) {
+        const purchaseInt = Number(Number(purchasePrice).toFixed(0));
+        analytics.purchaseEvent(purchaseInt);
+      }
 
       setTimeout(() => {
         const contentFeeTxid = fileInfo.content_fee && fileInfo.content_fee.txid;
