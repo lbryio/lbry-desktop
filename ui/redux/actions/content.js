@@ -159,7 +159,7 @@ export function doCloseFloatingPlayer() {
   };
 }
 
-export function doPurchaseUriWrapper(uri: string, cost: number, saveFile: boolean, cb: ?() => void) {
+export function doPurchaseUriWrapper(uri: string, cost: number, saveFile: boolean, cb: ?(GetResponse) => void) {
   return (dispatch: Dispatch, getState: () => any) => {
     function onSuccess(fileInfo) {
       if (saveFile) {
@@ -167,7 +167,7 @@ export function doPurchaseUriWrapper(uri: string, cost: number, saveFile: boolea
       }
 
       if (cb) {
-        cb();
+        cb(fileInfo);
       }
     }
 

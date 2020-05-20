@@ -12,10 +12,11 @@ const ANIMATION_LENGTH = 2500;
 
 type Props = {
   closeModal: () => void,
-  loadVideo: (string, () => void) => void,
+  loadVideo: (string, (GetResponse) => void) => void,
   uri: string,
   cancelPurchase: () => void,
   metadata: StreamMetadata,
+  claimReward: string => void,
 };
 
 function ModalAffirmPurchase(props: Props) {
@@ -25,6 +26,7 @@ function ModalAffirmPurchase(props: Props) {
     loadVideo,
     metadata: { title },
     uri,
+    claimReward,
   } = props;
   const [success, setSuccess] = React.useState(false);
   const [purchasing, setPurchasing] = React.useState(false);
@@ -33,9 +35,20 @@ function ModalAffirmPurchase(props: Props) {
 
   function onAffirmPurchase() {
     setPurchasing(true);
-    loadVideo(uri, () => {
+    loadVideo(uri, fileInfo => {
       setPurchasing(false);
       setSuccess(true);
+
+      setTimeout(() => {
+        const contentFeeTxid = fileInfo.content_fee && fileInfo.content_fee.txid;
+        const purchaseReceiptTxid = fileInfo.purchase_receipt && fileInfo.purchase_receipt.txid;
+        // These aren't guaranteed to exist
+        const txid = contentFeeTxid || purchaseReceiptTxid;
+
+        if (txid) {
+          claimReward(txid);
+        }
+      }, 2000);
     });
   }
 

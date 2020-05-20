@@ -112,7 +112,7 @@ export default function FileRenderInitiator(props: Props) {
   const showAppNag = IS_WEB && RENDER_MODES.UNSUPPORTED_IN_THIS_APP.includes(renderMode);
   const disabled = showAppNag || (!fileInfo && insufficientCredits);
   const shouldRedirect = IS_WEB && !authenticated && !isFree;
-  console.log('authe', authenticated);
+
   return (
     <div
       onClick={disabled ? undefined : shouldRedirect ? doAuthRedirect : viewFile}

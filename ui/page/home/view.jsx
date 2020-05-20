@@ -12,6 +12,7 @@ import { parseURI } from 'lbry-redux';
 import { toCapitalCase } from 'util/string';
 
 const PAID_BETA_CHANNEL_IDS_KEY = [
+  '4ee7cfaf1fc50a6df858ed0b99c278d633bccca9',
   '5af39f818f668d8c00943c9326c5201c4fe3c423',
   'cda9c4e92f19d6fe0764524a2012056e06ca2055',
   '760da3ba3dd85830a843beaaed543a89b7a367e7',
@@ -53,13 +54,17 @@ const PAID_BETA_CHANNEL_IDS_KEY = [
   '2a6194792beac5130641e932b5ac6e5a99b5ca4f',
   '185ba2bd547a5e4a77d29fe6c1484f47db5e058f',
   '29cc7f6081268eaa5b3f2946e0cd0b952a94812c',
-  '49389450b1241f5d8f4c8c4271a3eb56bba33965',
   'ffdc62ac2f7549398d3aca9d2119e83d80d588d5',
   'd7a4d2808074b0c55d6b239f69d90e7a4930f943',
   'd58aa4a0b2f6c2504c3abce8de3f1afb71800acc',
   '77ae23dc7eb8a75609881d4548a79e4935a89d37',
   'f79bce8a60fbece671f6265adc39f6469f3b9b8c',
   '051995fdf0af634e4911704057a551e9392e62b1',
+  'b0e489f986c345aef23c4a48d91cbcf5a6fdb9ac',
+  '825aa21c8c0bda4ded3e69a69238763c8cfcc13b',
+  '49389450b1241f5d8f4c8c4271a3eb56bba33965',
+  'f3b9973e1725ecb50da3e6fa4d47343c98ef0382',
+  '20d694ada07e740c6fa43a8c324cb7d6e362b5ee',
 ];
 
 type Props = {
