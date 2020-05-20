@@ -129,11 +129,11 @@ function FileActions(props: Props) {
 
             <MenuList className="menu__list">
               <MenuItem className="menu__link" onSelect={() => openModal(MODALS.DMCA, { uri, claim, claimId })}>
-                {__('DMCA')}
+                {__('Copyright Infringement')}
               </MenuItem>
 
               <MenuItem className="menu__link" onSelect={() => openModal(MODALS.REPORT, { uri, claim, claimId })}>
-                {__('Other')}
+                {__('Other Violations')}
               </MenuItem>
             </MenuList>
           </Menu>
