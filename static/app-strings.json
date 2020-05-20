@@ -1167,5 +1167,19 @@
   "Welcome to the land of content freedom.": "Welcome to the land of content freedom.",
   "Create an Account": "Create an Account",
   "Not Yet": "Not Yet",
-  "Report": "Report"
+  "Report": "Report",
+  "Playing in %seconds_left% seconds...": "Playing in %seconds_left% seconds...",
+  "Report Content": "Report Content",
+  "Fill up and the choose the following options relevantly": "Fill up and the choose the following options relevantly",
+  "Choose the options according to the content violation": "Choose the options according to the content violation",
+  "Mistagged Content": "Mistagged Content",
+  "Spam": "Spam",
+  "Illegal Promotion": "Illegal Promotion",
+  "You don't have": "You don't have",
+  "blocked channels": "blocked channels",
+  "%count% %channels%. ": "%count% %channels%. ",
+  "Violent or repulsive": "Violent or repulsive",
+  "Child abuse": "Child abuse",
+  "Promotes Terrorism": "Promotes Terrorism",
+  "Choose an option according to the violation": "Choose an option according to the violation"
 }
