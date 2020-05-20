@@ -8,6 +8,7 @@ import FileDownloadLink from 'component/fileDownloadLink';
 import { buildURI } from 'lbry-redux';
 import * as RENDER_MODES from 'constants/file_render_modes';
 import useIsMobile from 'effects/use-is-mobile';
+import { Menu, MenuList, MenuButton, MenuItem } from '@reach/menu-button';
 
 type Props = {
   uri: string,
@@ -116,13 +117,24 @@ function FileActions(props: Props) {
           />
         )}
         {!claimIsMine && (
-          <Button
-            title={__('Report content')}
-            button="alt"
-            icon={ICONS.REPORT}
-            description={__('Report')}
-            onClick={() => openModal(MODALS.REPORT, { uri, claimId })}
-          />
+          <Menu>
+            <MenuButton>
+              <Button
+                title={__('Remove Content')}
+                button="alt"
+                icon={ICONS.REPORT}
+                description={__('Report Content')}
+              />
+            </MenuButton>
+
+            <MenuList className="menu__list">
+              <MenuItem className="menu__link">{__('DMCA')}</MenuItem>
+
+              <MenuItem className="menu__link" onSelect={() => openModal(MODALS.REPORT, { uri, claim, claimId })}>
+                {__('Other')}
+              </MenuItem>
+            </MenuList>
+          </Menu>
         )}
       </ActionWrapper>
     </div>
