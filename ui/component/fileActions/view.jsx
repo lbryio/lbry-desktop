@@ -120,7 +120,7 @@ function FileActions(props: Props) {
           <Menu>
             <MenuButton>
               <Button
-                title={__('Remove Content')}
+                title={__('Report Content')}
                 button="alt"
                 icon={ICONS.REPORT}
                 description={__('Report Content')}
