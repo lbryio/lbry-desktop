@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { Modal } from 'modal/modal';
 import Button from 'component/button';
 import { FormField } from 'component/common/form';
+import * as ICONS from 'constants/icons';
 
 type Props = {
   closeModal: () => void,
@@ -32,42 +33,72 @@ const ModalReport = (props: Props) => {
           type="radio"
           onClick={() => setSelectedBtn(0)}
           name="Mistagged content"
-          label={__('Mistagged Content')}
+          label={
+            <div>
+              {__('Mistagged Content')}
+              <Button className="icon--help" title={__('Tooltip')} icon={ICONS.HELP} description={__('Help')} />
+            </div>
+          }
         />
         <FormField
           checked={selectedBtn === 1}
           type="radio"
           onClick={() => setSelectedBtn(1)}
           name="Spam"
-          label={__('Spam')}
+          label={
+            <div>
+              {__('Spam')}
+              <Button className="icon--help" title={__('Tooltip')} icon={ICONS.HELP} description={__('Help')} />
+            </div>
+          }
         />
         <FormField
           checked={selectedBtn === 2}
           type="radio"
           onClick={() => setSelectedBtn(2)}
           name="Illegal Promotions"
-          label={__('Illegal Promotion')}
+          label={
+            <div>
+              {__('Illegal Promotion')}
+              <Button className="icon--help" title={__('Tooltip')} icon={ICONS.HELP} description={__('Help')} />
+            </div>
+          }
         />
         <FormField
           checked={selectedBtn === 3}
           type="radio"
           onClick={() => setSelectedBtn(3)}
           name="Violent Or Repulsive"
-          label={__('Violent Or Repulsive')}
+          label={
+            <div>
+              {__('Violent Or Repulsive')}
+              <Button className="icon--help" title={__('Tooltip')} icon={ICONS.HELP} description={__('Help')} />
+            </div>
+          }
         />
         <FormField
           checked={selectedBtn === 4}
           type="radio"
           onClick={() => setSelectedBtn(4)}
           name="Child Abuse"
-          label={__('Child Abuse')}
+          label={
+            <div>
+              {__('Child Abuse')}
+              <Button className="icon--help" title={__('Tooltip')} icon={ICONS.HELP} description={__('Help')} />
+            </div>
+          }
         />
         <FormField
           checked={selectedBtn === 5}
           type="radio"
           onClick={() => setSelectedBtn(5)}
           name="Promotes Terrorism"
-          label={__('Promotes Terrorism')}
+          label={
+            <div>
+              {__('Promotes Terrorism')}
+              <Button className="icon--help" title={__('Tooltip')} icon={ICONS.HELP} description={__('Help')} />
+            </div>
+          }
         />
       </React.Fragment>
       <div className="card__actions">
