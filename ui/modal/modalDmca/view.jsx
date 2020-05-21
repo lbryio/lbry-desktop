@@ -33,6 +33,12 @@ const ModalDmca = (props: Props) => {
         <FormField type="text" name="Your Email" label={__('Your Email')} />
         <FormField type="text" name="Anything more we should know?" label={__('Anything more we should know?')} />
       </React.Fragment>
+      <br />
+      <hr />
+      <br />
+      <div>
+        Read more in our <a href={'https://lbry.com/faq/dmca'}>FAQ</a>
+      </div>
       <div className="card__actions">
         <Button button="primary" onClick={confirmReport} label={__('Report')} />
         <Button button="alt" onClick={closeModal} label={__('Close')} />
