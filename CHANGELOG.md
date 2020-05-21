@@ -26,6 +26,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Only show "start at" on share modal for video/audio _community pr!_ ([#4194](https://github.com/lbryio/lbry-desktop/pull/4194))
 - Clear media position after video has played to the end _community pr!_ ([#4193](https://github.com/lbryio/lbry-desktop/pull/4193))
 - Text casing on publish page _community pr!_ ([#4186](https://github.com/lbryio/lbry-desktop/pull/4186))
+- Enable videos to play on iPad _community pr!_ ([#4223](https://github.com/lbryio/lbry-desktop/pull/4223))
 
 ## [0.45.1] - [2020-05-06]
 
