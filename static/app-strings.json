@@ -1189,5 +1189,14 @@
   "Child Abuse": "Child Abuse",
   "Tooltip": "Tooltip",
   "Copyright Infringement": "Copyright Infringement",
-  "Other Violations": "Other Violations"
+  "Other Violations": "Other Violations",
+  "excessively posted,untargeted,misleading,malformed or manipulated content,Contains malware.": "excessively posted,untargeted,misleading,malformed or manipulated content,Contains malware.",
+  "Excessively Posted,Untargeted,Misleading,Malformed/Manipulated Content or Contains Malware.": "Excessively Posted,Untargeted,Misleading,Malformed/Manipulated Content or Contains Malware.",
+  "Wrong tags, Mature content not tagged \"Mature\", Tag abuse, Tag filter bypass attempt": "Wrong tags, Mature content not tagged \"Mature\", Tag abuse, Tag filter bypass attempt",
+  "Selling/Promoting drugs,guns or other illegal material or potentially prohibited by law": "Selling/Promoting drugs,guns or other illegal material or potentially prohibited by law",
+  "Violent or Repulsive": "Violent or Repulsive",
+  "Inciting for violent acts, Physical or Sexual assaults, Media containing severed limbs or such procedures": "Inciting for violent acts, Physical or Sexual assaults, Media containing severed limbs or such procedures",
+  "Physical or Sexual assault or Mental/Enotional maltreatment which involves \"Child\"": "Physical or Sexual assault or Mental/Enotional maltreatment which involves \"Child\"",
+  "Physical or Sexual assault or Mental/Emotional maltreatment which involves \"Child\"": "Physical or Sexual assault or Mental/Emotional maltreatment which involves \"Child\"",
+  "Medias inciting terrorism or extremism or refers to such organization": "Medias inciting terrorism or extremism or refers to such organization"
 }
