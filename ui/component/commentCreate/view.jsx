@@ -38,6 +38,7 @@ export function CommentCreate(props: Props) {
   const [commentAck, setCommentAck] = usePersistedState('comment-acknowledge', false);
   const [channel, setChannel] = usePersistedState('comment-channel', '');
   const [charCount, setCharCount] = useState(commentValue.length);
+  const [advancedEditor, setAdvancedEditor] = usePersistedState('comment-editor-mode', false);
 
   const topChannel =
     channels &&
@@ -55,7 +56,7 @@ export function CommentCreate(props: Props) {
   }, [channel, topChannel]);
 
   function handleCommentChange(event) {
-    setCommentValue(event.target.value);
+    setCommentValue(advancedEditor ? event : event.target.value);
   }
 
   function handleChannelChange(channel) {
@@ -82,6 +83,10 @@ export function CommentCreate(props: Props) {
     }
   }
 
+  function toggleEditorMode() {
+    setAdvancedEditor(!advancedEditor);
+  }
+
   useEffect(() => setCharCount(commentValue.length), [commentValue]);
 
   if (!commentingEnabled) {
@@ -97,9 +102,11 @@ export function CommentCreate(props: Props) {
       {!isReply && <ChannelSelection channel={channel} hideAnon onChannelChange={handleChannelChange} />}
       <FormField
         disabled={channel === CHANNEL_NEW}
-        type="textarea"
+        type={advancedEditor ? 'markdown' : 'textarea'}
         name="content_description"
         label={isReply ? __('Replying as %reply_channel%', { reply_channel: channel }) : __('Comment')}
+        quickActionLabel={advancedEditor ? __('Simple Editor') : __('Advanced Editor')}
+        quickActionHandler={toggleEditorMode}
         onFocus={onTextareaFocus}
         placeholder={__('Say something about this...')}
         value={commentValue}
