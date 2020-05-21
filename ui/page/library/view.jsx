@@ -7,6 +7,7 @@ import DownloadList from 'page/fileListDownloaded';
 import Yrbl from 'component/yrbl';
 import { useHistory } from 'react-router';
 
+// https://github.com/lbryio/lbry-sdk/issues/2964
 export const PURCHASES_PAGE_SIZE = 10;
 
 type Props = {
