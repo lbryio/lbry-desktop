@@ -45,9 +45,7 @@ export default function FileRenderFloating(props: Props) {
       push(formattedUrl);
     } else {
       doSetFloatingUri(uri);
-      // @if TARGET='app'
       doPlayUri(uri);
-      // @endif
     }
   }
 
