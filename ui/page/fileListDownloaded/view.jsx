@@ -126,7 +126,6 @@ function FileListDownloaded(props: Props) {
             />
             {!query && (
               <Paginate
-                loading={loading}
                 totalPages={Math.ceil(
                   Number(viewMode === VIEW_PURCHASES ? myPurchasesCount : downloadedUrlsCount) / Number(PAGE_SIZE)
                 )}
