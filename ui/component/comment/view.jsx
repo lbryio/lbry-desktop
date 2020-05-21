@@ -12,6 +12,7 @@ import * as ICONS from 'constants/icons';
 import { FormField, Form } from 'component/common/form';
 import CommentCreate from 'component/commentCreate';
 import classnames from 'classnames';
+import usePersistedState from 'effects/use-persisted-state';
 
 type Props = {
   uri: string,
@@ -64,6 +65,8 @@ function Comment(props: Props) {
   // used for controlling visibility of reply comment component
   const [isReplying, setReplying] = useState(false);
 
+  const [advancedEditor, setAdvancedEditor] = usePersistedState('comment-editor-mode', false);
+
   // to debounce subsequent requests
   const shouldFetch =
     channel === undefined ||
@@ -99,7 +102,7 @@ function Comment(props: Props) {
   }
 
   function handleEditMessageChanged(event) {
-    setCommentValue(event.target.value);
+    setCommentValue(advancedEditor ? event : event.target.value);
   }
 
   function handleSubmit() {
@@ -122,6 +125,10 @@ function Comment(props: Props) {
 
   function handleMouseOut() {
     setMouseHover(false);
+  }
+
+  function toggleEditorMode() {
+    setAdvancedEditor(!advancedEditor);
   }
 
   return (
@@ -182,11 +189,13 @@ function Comment(props: Props) {
           {isEditing ? (
             <Form onSubmit={handleSubmit}>
               <FormField
-                type="textarea"
+                type={advancedEditor ? 'markdown' : 'textarea'}
                 name="editing_comment"
                 value={editedMessage}
                 charCount={charCount}
                 onChange={handleEditMessageChanged}
+                quickActionLabel={advancedEditor ? __('Simple Editor') : __('Advanced Editor')}
+                quickActionHandler={toggleEditorMode}
               />
               <div className="section__actions">
                 <Button
