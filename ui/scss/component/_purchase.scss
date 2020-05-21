@@ -76,6 +76,18 @@
   .icon {
     margin: 0 var(--spacing-medium);
   }
+
+  @media (max-width: $breakpoint-small) {
+    &::before {
+      top: calc(-1 * var(--spacing-small));
+      height: 110%;
+    }
+
+    .icon {
+      top: calc(-1 * var(--spacing-small));
+      margin: 0 var(--spacing-xsmall);
+    }
+  }
 }
 
 .file-price--modal {

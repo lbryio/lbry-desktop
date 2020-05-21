@@ -19,6 +19,7 @@ import {
   makeSelectFileRenderModeForUri,
 } from 'redux/selectors/content';
 import FileRenderInitiator from './view';
+import { doAnaltyicsPurchaseEvent } from 'redux/actions/app';
 
 const select = (state, props) => ({
   thumbnail: makeSelectThumbnailForUri(props.uri)(state),
@@ -40,7 +41,7 @@ const select = (state, props) => ({
 const perform = dispatch => ({
   play: uri => {
     dispatch(doSetPlayingUri(uri));
-    dispatch(doPlayUri(uri));
+    dispatch(doPlayUri(uri, undefined, undefined, fileInfo => dispatch(doAnaltyicsPurchaseEvent(fileInfo))));
   },
 });
 

@@ -6,7 +6,6 @@ import { Modal } from 'modal/modal';
 import Card from 'component/common/card';
 import I18nMessage from 'component/i18nMessage';
 import Button from 'component/button';
-import analytics from 'analytics';
 
 // This number is tied to transitions in scss/purchase.scss
 const ANIMATION_LENGTH = 2500;
@@ -17,7 +16,7 @@ type Props = {
   uri: string,
   cancelPurchase: () => void,
   metadata: StreamMetadata,
-  claimReward: string => void,
+  analyticsPurchaseEvent: GetResponse => void,
 };
 
 function ModalAffirmPurchase(props: Props) {
@@ -27,7 +26,7 @@ function ModalAffirmPurchase(props: Props) {
     loadVideo,
     metadata: { title },
     uri,
-    claimReward,
+    analyticsPurchaseEvent,
   } = props;
   const [success, setSuccess] = React.useState(false);
   const [purchasing, setPurchasing] = React.useState(false);
@@ -39,23 +38,7 @@ function ModalAffirmPurchase(props: Props) {
     loadVideo(uri, fileInfo => {
       setPurchasing(false);
       setSuccess(true);
-
-      let purchasePrice = fileInfo.purchase_receipt && fileInfo.purchase_receipt.amount;
-      if (purchasePrice) {
-        const purchaseInt = Number(Number(purchasePrice).toFixed(0));
-        analytics.purchaseEvent(purchaseInt);
-      }
-
-      setTimeout(() => {
-        const contentFeeTxid = fileInfo.content_fee && fileInfo.content_fee.txid;
-        const purchaseReceiptTxid = fileInfo.purchase_receipt && fileInfo.purchase_receipt.txid;
-        // These aren't guaranteed to exist
-        const txid = contentFeeTxid || purchaseReceiptTxid;
-
-        if (txid) {
-          claimReward(txid);
-        }
-      }, 2000);
+      analyticsPurchaseEvent(fileInfo);
     });
   }
 
