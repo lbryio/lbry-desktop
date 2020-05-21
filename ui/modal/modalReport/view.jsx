@@ -36,7 +36,12 @@ const ModalReport = (props: Props) => {
           label={
             <div>
               {__('Mistagged Content')}
-              <Button className="icon--help" title={__('Tooltip')} icon={ICONS.HELP} description={__('Help')} />
+              <Button
+                className="icon--help"
+                title={__('Wrong tags, Mature content not tagged "Mature", Tag abuse, Tag filter bypass attempt')}
+                icon={ICONS.HELP}
+                description={__('Help')}
+              />
             </div>
           }
         />
@@ -48,7 +53,14 @@ const ModalReport = (props: Props) => {
           label={
             <div>
               {__('Spam')}
-              <Button className="icon--help" title={__('Tooltip')} icon={ICONS.HELP} description={__('Help')} />
+              <Button
+                className="icon--help"
+                title={__(
+                  'Excessively Posted,Untargeted,Misleading,Malformed/Manipulated Content or Contains Malware.'
+                )}
+                icon={ICONS.HELP}
+                description={__('Help')}
+              />
             </div>
           }
         />
@@ -60,7 +72,12 @@ const ModalReport = (props: Props) => {
           label={
             <div>
               {__('Illegal Promotion')}
-              <Button className="icon--help" title={__('Tooltip')} icon={ICONS.HELP} description={__('Help')} />
+              <Button
+                className="icon--help"
+                title={__('Selling/Promoting drugs,guns or other illegal material or potentially prohibited by law')}
+                icon={ICONS.HELP}
+                description={__('Help')}
+              />
             </div>
           }
         />
@@ -68,11 +85,18 @@ const ModalReport = (props: Props) => {
           checked={selectedBtn === 3}
           type="radio"
           onClick={() => setSelectedBtn(3)}
-          name="Violent Or Repulsive"
+          name="Violent or Repulsive"
           label={
             <div>
-              {__('Violent Or Repulsive')}
-              <Button className="icon--help" title={__('Tooltip')} icon={ICONS.HELP} description={__('Help')} />
+              {__('Violent or Repulsive')}
+              <Button
+                className="icon--help"
+                title={__(
+                  'Inciting for violent acts, Physical or Sexual assaults, Media containing severed limbs or such procedures'
+                )}
+                icon={ICONS.HELP}
+                description={__('Help')}
+              />
             </div>
           }
         />
@@ -84,7 +108,12 @@ const ModalReport = (props: Props) => {
           label={
             <div>
               {__('Child Abuse')}
-              <Button className="icon--help" title={__('Tooltip')} icon={ICONS.HELP} description={__('Help')} />
+              <Button
+                className="icon--help"
+                title={__('Physical or Sexual assault or Mental/Emotional maltreatment which involves "Child"')}
+                icon={ICONS.HELP}
+                description={__('Help')}
+              />
             </div>
           }
         />
@@ -96,7 +125,12 @@ const ModalReport = (props: Props) => {
           label={
             <div>
               {__('Promotes Terrorism')}
-              <Button className="icon--help" title={__('Tooltip')} icon={ICONS.HELP} description={__('Help')} />
+              <Button
+                className="icon--help"
+                title={__('Medias inciting terrorism or extremism or refers to such organization')}
+                icon={ICONS.HELP}
+                description={__('Help')}
+              />
             </div>
           }
         />
