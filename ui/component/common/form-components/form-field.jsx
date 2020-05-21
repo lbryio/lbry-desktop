@@ -7,6 +7,7 @@ import MarkdownPreview from 'component/common/markdown-preview';
 import { openEditorMenu, stopContextMenu } from 'util/context-menu';
 import { MAX_CHARACTERS_IN_COMMENT as defaultTextAreaLimit } from 'constants/comments';
 import 'easymde/dist/easymde.min.css';
+import Button from 'component/button';
 
 type Props = {
   name: string,
@@ -35,6 +36,8 @@ type Props = {
   range?: number,
   min?: number,
   max?: number,
+  quickActionLabel?: string,
+  quickActionHandler?: any => any,
 };
 
 export class FormField extends React.PureComponent<Props> {
@@ -78,12 +81,21 @@ export class FormField extends React.PureComponent<Props> {
       blockWrap,
       charCount,
       textAreaMaxLength = defaultTextAreaLimit,
+      quickActionLabel,
+      quickActionHandler,
       ...inputProps
     } = this.props;
     const errorMessage = typeof error === 'object' ? error.message : error;
     const Wrapper = blockWrap
       ? ({ children: innerChildren }) => <fieldset-section class="radio">{innerChildren}</fieldset-section>
       : ({ children: innerChildren }) => <span className="radio">{innerChildren}</span>;
+
+    const quickAction =
+      quickActionLabel && quickActionHandler ? (
+        <div className="form-field__quick-action">
+          <Button button="link" onClick={quickActionHandler} label={quickActionLabel} />
+        </div>
+      ) : null;
 
     let input;
     if (type) {
@@ -127,7 +139,12 @@ export class FormField extends React.PureComponent<Props> {
         input = (
           <div className="form-field--SimpleMDE" onContextMenu={stopContextMenu}>
             <fieldset-section>
-              <label htmlFor={name}>{label}</label>
+              <div className="form-field__two-column">
+                <div>
+                  <label htmlFor={name}>{label}</label>
+                </div>
+                {quickAction}
+              </div>
               <SimpleMDE
                 {...inputProps}
                 id={name}
@@ -152,7 +169,12 @@ export class FormField extends React.PureComponent<Props> {
         );
         input = (
           <fieldset-section>
-            <label htmlFor={name}>{label}</label>
+            <div className="form-field__two-column">
+              <div>
+                <label htmlFor={name}>{label}</label>
+              </div>
+              {quickAction}
+            </div>
             <textarea type={type} id={name} maxLength={textAreaMaxLength} ref={this.input} {...inputProps} />
             {countInfo}
           </fieldset-section>

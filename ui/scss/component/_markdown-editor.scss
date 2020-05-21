@@ -54,12 +54,12 @@
 
 .form-field--SimpleMDE {
   margin-top: var(--spacing-large);
-  
+
   // Override hyperlink styles
   .cm-s-easymde .cm-link {
     color: inherit;
   }
-    
+
   // Overriding the lbry/components form styling
   .editor-toolbar {
     button:not(.button) {

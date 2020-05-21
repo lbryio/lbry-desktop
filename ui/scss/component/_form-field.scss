@@ -135,6 +135,16 @@ fieldset-group {
   padding-top: 1rem;
 }
 
+.form-field__two-column {
+  column-count: 2;
+}
+
+.form-field__quick-action {
+  float: right;
+  font-size: var(--font-xsmall);
+  margin-top: 2.5%;
+}
+
 fieldset-section {
   .form-field__internal-option {
     margin-top: var(--spacing-small);
