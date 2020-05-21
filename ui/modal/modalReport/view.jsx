@@ -134,6 +134,18 @@ const ModalReport = (props: Props) => {
             </div>
           }
         />
+
+        <br />
+        <hr />
+        <br />
+
+        <div>
+          <FormField
+            type="text"
+            name="Why do you think this violates our policy?"
+            label={__('Why do you think this violates our policy?')}
+          />
+        </div>
       </React.Fragment>
       <div className="card__actions">
         <Button button="primary" onClick={confirmReport} label={__('Report')} />
