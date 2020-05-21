@@ -43,7 +43,11 @@ class FileValues extends PureComponent<Props> {
                   <tr>
                     <td> {__('Purchase Amount')}</td>
                     <td>
-                      <CreditAmount badge={false} amount={Number(purchaseReceipt.amount)} precision={2} />
+                      <Button
+                        button="link"
+                        href={`https://explorer.lbry.com/tx/${purchaseReceipt.txid}`}
+                        label={<CreditAmount badge={false} amount={Number(purchaseReceipt.amount)} precision={2} />}
+                      />
                     </td>
                   </tr>
                 )}
