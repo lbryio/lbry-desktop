@@ -17,7 +17,12 @@ const ModalDmca = (props: Props) => {
   };
 
   return (
-    <Modal type="custom" isOpen contentLabel="DMCA Report" title={__('DMCA Report')}>
+    <Modal
+      type="custom"
+      isOpen
+      contentLabel="Copyright Infringement Report"
+      title={__('Copyright Infringement Report')}
+    >
       <div className="card__actions">
         <Button button="primary" onClick={confirmReport} label={__('Report')} />
         <Button button="alt" onClick={closeModal} label={__('Close')} />
