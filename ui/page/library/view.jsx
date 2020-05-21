@@ -5,18 +5,27 @@ import Page from 'component/page';
 import Spinner from 'component/spinner';
 import DownloadList from 'page/fileListDownloaded';
 import Yrbl from 'component/yrbl';
+import { useHistory } from 'react-router';
 
 type Props = {
   allDownloadedUrlsCount: number,
   myPurchases: Array<string>,
   fetchingMyPurchases: boolean,
   fetchingFileList: boolean,
+  doPurchaseList: number => void,
 };
 
 function LibraryPage(props: Props) {
-  const { allDownloadedUrlsCount, myPurchases, fetchingMyPurchases, fetchingFileList } = props;
-  const hasDownloads = allDownloadedUrlsCount > 0 || (myPurchases && myPurchases.length);
+  const { allDownloadedUrlsCount, myPurchases, fetchingMyPurchases, fetchingFileList, doPurchaseList } = props;
+  const { location } = useHistory();
+  const urlParams = new URLSearchParams(location.search);
+  const page = Number(urlParams.get('page')) || 1;
+  const hasDownloads = allDownloadedUrlsCount > 0 || (myPurchases && myPurchases.length > 0);
   const loading = fetchingFileList || fetchingMyPurchases;
+
+  React.useEffect(() => {
+    doPurchaseList(page);
+  }, [doPurchaseList, page]);
 
   return (
     <Page>
@@ -29,10 +38,12 @@ function LibraryPage(props: Props) {
       {!loading && !hasDownloads && (
         <div className="main--empty">
           <Yrbl
-            title={__("You haven't downloaded anything from LBRY yet")}
+            title={
+              IS_WEB ? __("You haven't purchased anything yet") : __("You haven't downloaded anything from LBRY yet")
+            }
             subtitle={
               <div className="section__actions">
-                <Button button="primary" navigate="/" label={__('Explore new content')} />
+                <Button button="primary" navigate="/" label={__('Explore New Content')} />
               </div>
             }
           />

@@ -43,7 +43,7 @@ import {
   selectAllowAnalytics,
 } from 'redux/selectors/app';
 // import { selectDaemonSettings } from 'redux/selectors/settings';
-import { doAuthenticate, doGetSync } from 'lbryinc';
+import { doAuthenticate, doGetSync, doClaimRewardType, rewards as REWARDS } from 'lbryinc';
 import { lbrySettings as config, version as appVersion } from 'package.json';
 import analytics, { SHARE_INTERNAL } from 'analytics';
 import { doSignOutCleanup, deleteSavedPassword, getSavedPassword } from 'util/saved-passwords';
@@ -461,6 +461,33 @@ export function doAnalyticsTagSync() {
     if (stringOfTags) {
       analytics.apiSyncTags({ content_tags: stringOfTags });
     }
+  };
+}
+
+export function doAnaltyicsPurchaseEvent(fileInfo) {
+  return dispatch => {
+    let purchasePrice = fileInfo.purchase_receipt && fileInfo.purchase_receipt.amount;
+    if (purchasePrice) {
+      const purchaseInt = Number(Number(purchasePrice).toFixed(0));
+      analytics.purchaseEvent(purchaseInt);
+    }
+
+    setTimeout(() => {
+      const contentFeeTxid = fileInfo.content_fee && fileInfo.content_fee.txid;
+      const purchaseReceiptTxid = fileInfo.purchase_receipt && fileInfo.purchase_receipt.txid;
+      // These aren't guaranteed to exist
+      const txid = contentFeeTxid || purchaseReceiptTxid;
+
+      if (txid) {
+        dispatch(
+          doClaimRewardType(REWARDS.TYPE_PAID_CONTENT, {
+            failSilently: true,
+            params: { transaction_id: txid },
+          })
+        );
+      }
+      // Give it some time to get into the mempool
+    }, 3000);
   };
 }
 

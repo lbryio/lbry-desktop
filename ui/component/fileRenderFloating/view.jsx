@@ -38,6 +38,7 @@ export default function FileRenderFloating(props: Props) {
     renderMode,
     setPlayingUri,
   } = props;
+
   const isMobile = useIsMobile();
   const [fileViewerRect, setFileViewerRect] = useState();
   const [desktopPlayStartTime, setDesktopPlayStartTime] = useState();

@@ -163,6 +163,13 @@ function VideoViewer(props: Props) {
         setIsPlaying(false);
         handlePosition(player);
       });
+      player.on('error', function() {
+        const error = player.error();
+
+        if (error) {
+          analytics.sentryError('Video.js error', error);
+        }
+      });
       player.on('volumechange', () => {
         if (player && player.volume() !== volume) {
           changeVolume(player.volume());

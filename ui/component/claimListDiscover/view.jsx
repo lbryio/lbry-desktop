@@ -55,6 +55,7 @@ type Props = {
   followedTags?: Array<Tag>,
   injectedItem: ?Node,
   infiniteScroll?: Boolean,
+  feeAmount?: string,
 };
 
 function ClaimListDiscover(props: Props) {
@@ -92,6 +93,7 @@ function ClaimListDiscover(props: Props) {
     infiniteScroll = true,
     followedTags,
     injectedItem,
+    feeAmount,
   } = props;
   const didNavigateForward = history.action === 'PUSH';
   const { search } = location;
@@ -113,14 +115,17 @@ function ClaimListDiscover(props: Props) {
   const streamTypeParam =
     streamType || (CS.FILE_TYPES.includes(contentTypeParam) && contentTypeParam) || defaultStreamType || null;
   const durationParam = urlParams.get(CS.DURATION_KEY) || null;
-
+  const channelIdsInUrl = urlParams.get(CS.CHANNEL_IDS_KEY);
+  const channelIdsParam = channelIdsInUrl ? channelIdsInUrl.split(',') : channelIds;
+  const feeAmountParam = urlParams.get('fee_amount') || feeAmount || CS.FEE_AMOUNT_ANY;
   const showDuration = !(claimType && claimType === CS.CLAIM_CHANNEL);
   const isFiltered = () =>
     Boolean(
       urlParams.get(CS.FRESH_KEY) ||
         urlParams.get(CS.CONTENT_KEY) ||
         urlParams.get(CS.DURATION_KEY) ||
-        urlParams.get(CS.TAGS_KEY)
+        urlParams.get(CS.TAGS_KEY) ||
+        urlParams.get(CS.FEE_AMOUNT_KEY)
     );
 
   useEffect(() => {
@@ -143,6 +148,7 @@ function ClaimListDiscover(props: Props) {
     duration?: string,
     reposted_claim_id?: string,
     stream_types?: any,
+    fee_amount?: string,
   } = {
     page_size: pageSize || CS.PAGE_SIZE,
     page,
@@ -151,10 +157,10 @@ function ClaimListDiscover(props: Props) {
     // no_totals makes it so the sdk doesn't have to calculate total number pages for pagination
     // it's faster, but we will need to remove it if we start using total_pages
     no_totals: true,
-    channel_ids: channelIds || [],
+    channel_ids: channelIdsParam || [],
     not_channel_ids:
-      // If channelIds were passed in, we don't need not_channel_ids
-      !channelIds && hiddenUris && hiddenUris.length ? hiddenUris.map(hiddenUri => hiddenUri.split('#')[1]) : [],
+      // If channelIdsParam were passed in, we don't need not_channel_ids
+      !channelIdsParam && hiddenUris && hiddenUris.length ? hiddenUris.map(hiddenUri => hiddenUri.split('#')[1]) : [],
     not_tags: !showNsfw ? MATURE_TAGS : [],
     order_by:
       orderParam === CS.ORDER_BY_TRENDING
@@ -210,6 +216,10 @@ function ClaimListDiscover(props: Props) {
           .unix()
       )}`;
     }
+  }
+
+  if (feeAmountParam) {
+    options.fee_amount = feeAmountParam;
   }
 
   if (durationParam) {
@@ -310,6 +320,15 @@ function ClaimListDiscover(props: Props) {
     history.push(url);
   }
 
+  function handleAdvancedReset() {
+    const newUrlParams = new URLSearchParams(search);
+    newUrlParams.delete('claim_type');
+    newUrlParams.delete('channel_ids');
+    const newSearch = `?${newUrlParams.toString()}`;
+
+    history.push(newSearch);
+  }
+
   function getParamFromTags(t) {
     if (t === CS.TAGS_ALL || t === CS.TAGS_FOLLOWED) {
       return t;
@@ -319,7 +338,7 @@ function ClaimListDiscover(props: Props) {
   }
 
   function buildUrl(delta) {
-    const newUrlParams = new URLSearchParams();
+    const newUrlParams = new URLSearchParams(location.search);
     CS.KEYS.forEach(k => {
       // $FlowFixMe append() can't take null as second arg, but get() can return null
       if (urlParams.get(k) !== null) newUrlParams.append(k, urlParams.get(k));
@@ -368,6 +387,13 @@ function ClaimListDiscover(props: Props) {
           }
         } else {
           newUrlParams.set(CS.TAGS_KEY, delta.value);
+        }
+        break;
+      case CS.FEE_AMOUNT_KEY:
+        if (delta.value === CS.FEE_AMOUNT_ANY) {
+          newUrlParams.delete(CS.FEE_AMOUNT_KEY);
+        } else {
+          newUrlParams.set(CS.FEE_AMOUNT_KEY, delta.value);
         }
         break;
     }
@@ -485,7 +511,7 @@ function ClaimListDiscover(props: Props) {
                     }
                   >
                     {CS.CONTENT_TYPES.map(type => {
-                      if (type !== CS.CLAIM_CHANNEL || (type === CS.CLAIM_CHANNEL && !channelIds)) {
+                      if (type !== CS.CLAIM_CHANNEL || (type === CS.CLAIM_CHANNEL && !channelIdsParam)) {
                         return (
                           <option key={type} value={type}>
                             {/* i18fixme */}
@@ -505,6 +531,7 @@ function ClaimListDiscover(props: Props) {
                   </FormField>
                 </div>
               )}
+
               {/* DURATIONS FIELD */}
               {showDuration && (
                 <div className={'claim-search__input-container'}>
@@ -541,6 +568,7 @@ function ClaimListDiscover(props: Props) {
                   </FormField>
                 </div>
               )}
+
               {/* TAGS FIELD */}
               {!tags && (
                 <div className={'claim-search__input-container'}>
@@ -583,6 +611,38 @@ function ClaimListDiscover(props: Props) {
                       </option>
                     ))}
                   </FormField>
+                </div>
+              )}
+
+              {/* PAID FIELD */}
+              <div className={'claim-search__input-container'}>
+                <FormField
+                  className={classnames('claim-search__dropdown', {
+                    'claim-search__dropdown--selected':
+                      feeAmountParam === CS.FEE_AMOUNT_ONLY_FREE || feeAmountParam === CS.FEE_AMOUNT_ONLY_PAID,
+                  })}
+                  label={__('Price')}
+                  type="select"
+                  name="paidcontent"
+                  value={feeAmountParam}
+                  onChange={e =>
+                    handleChange({
+                      key: CS.FEE_AMOUNT_KEY,
+                      value: e.target.value,
+                    })
+                  }
+                >
+                  <option value={CS.FEE_AMOUNT_ANY}>Anything</option>
+                  <option value={CS.FEE_AMOUNT_ONLY_FREE}>Free</option>
+                  <option value={CS.FEE_AMOUNT_ONLY_PAID}>Paid</option>
+                  ))}
+                </FormField>
+              </div>
+
+              {channelIdsInUrl && (
+                <div className={'claim-search__input-container'}>
+                  <label>{__('Advanced Filters from URL')}</label>
+                  <Button button="alt" label={__('Clear')} onClick={handleAdvancedReset} />
                 </div>
               )}
             </div>

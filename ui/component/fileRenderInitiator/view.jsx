@@ -20,6 +20,7 @@ type Props = {
   fileInfo: FileListItem,
   uri: string,
   history: { push: string => void },
+  location: { search: ?string, pathname: string },
   obscurePreview: boolean,
   insufficientCredits: boolean,
   thumbnail?: string,
@@ -29,6 +30,8 @@ type Props = {
   inline: boolean,
   renderMode: string,
   claim: StreamClaim,
+  claimWasPurchased: boolean,
+  authenticated: boolean,
 };
 
 export default function FileRenderInitiator(props: Props) {
@@ -40,17 +43,24 @@ export default function FileRenderInitiator(props: Props) {
     obscurePreview,
     insufficientCredits,
     history,
+    location,
     thumbnail,
     autoplay,
     renderMode,
     hasCostInfo,
     costInfo,
+    claimWasPurchased,
+    authenticated,
   } = props;
 
   const cost = costInfo && costInfo.cost;
   const isFree = hasCostInfo && cost === 0;
   const fileStatus = fileInfo && fileInfo.status;
   const isPlayable = RENDER_MODES.FLOATING_MODES.includes(renderMode);
+
+  function doAuthRedirect() {
+    history.push(`/$/${PAGES.AUTH}?redirect=${encodeURIComponent(location.pathname)}`);
+  }
 
   // Wrap this in useCallback because we need to use it to the keyboard effect
   // If we don't a new instance will be created for every render and react will think the dependencies have changed, which will add/remove the listener for every render
@@ -99,13 +109,13 @@ export default function FileRenderInitiator(props: Props) {
     return null;
   }
 
-  const showAppNag = IS_WEB && (!isFree || RENDER_MODES.UNSUPPORTED_IN_THIS_APP.includes(renderMode));
-
-  const disabled = showAppNag || (!fileInfo && insufficientCredits);
+  const showAppNag = IS_WEB && RENDER_MODES.UNSUPPORTED_IN_THIS_APP.includes(renderMode);
+  const disabled = showAppNag || (!fileInfo && insufficientCredits && !claimWasPurchased);
+  const shouldRedirect = IS_WEB && !authenticated && !isFree;
 
   return (
     <div
-      onClick={disabled ? undefined : viewFile}
+      onClick={disabled ? undefined : shouldRedirect ? doAuthRedirect : viewFile}
       style={thumbnail && !obscurePreview ? { backgroundImage: `url("${thumbnail}")` } : {}}
       className={classnames('content__cover', {
         'content__cover--disabled': disabled,
@@ -121,7 +131,7 @@ export default function FileRenderInitiator(props: Props) {
           href="https://lbry.com/get"
         />
       )}
-      {insufficientCredits && !showAppNag && (
+      {!claimWasPurchased && insufficientCredits && !showAppNag && (
         <Nag
           type="helpful"
           inline
@@ -132,6 +142,7 @@ export default function FileRenderInitiator(props: Props) {
       )}
       {!disabled && (
         <Button
+          requiresAuth={IS_WEB}
           onClick={viewFile}
           iconSize={30}
           title={isPlayable ? __('Play') : __('View')}

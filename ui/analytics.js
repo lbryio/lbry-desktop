@@ -30,7 +30,7 @@ if (isProduction) {
 
 type Analytics = {
   error: string => Promise<any>,
-  sentryError: ({}, {}) => Promise<any>,
+  sentryError: ({} | string, {}) => Promise<any>,
   pageView: string => void,
   setUser: Object => void,
   toggleInternal: (boolean, ?boolean) => void,
@@ -45,6 +45,7 @@ type Analytics = {
   emailVerifiedEvent: () => void,
   rewardEligibleEvent: () => void,
   startupEvent: () => void,
+  purchaseEvent: number => void,
   readyEvent: number => void,
   openUrlEvent: string => void,
 };
@@ -216,6 +217,9 @@ const analytics: Analytics = {
   readyEvent: (timeToReady: number) => {
     sendGaEvent('Startup', 'App-Ready');
     sendGaTimingEvent('Startup', 'App-Ready', timeToReady);
+  },
+  purchaseEvent: (purchaseInt: number) => {
+    sendGaEvent('Purchase', 'Purchase-Complete', undefined, purchaseInt);
   },
 };
 

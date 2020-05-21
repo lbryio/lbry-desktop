@@ -1,11 +1,13 @@
 // @flow
+import * as MODALS from 'constants/modal_types';
+import * as ICONS from 'constants/icons';
 import React, { useEffect } from 'react';
 import ClaimList from 'component/claimList';
 import Page from 'component/page';
 import Button from 'component/button';
 import YoutubeTransferStatus from 'component/youtubeTransferStatus';
 import Spinner from 'component/spinner';
-import * as MODALS from 'constants/modal_types';
+import Card from 'component/common/card';
 
 type Props = {
   channels: Array<ChannelClaim>,
@@ -40,12 +42,19 @@ export default function ChannelsPage(props: Props) {
       {hasYoutubeChannels && <YoutubeTransferStatus hideChannelLink />}
 
       {channels && Boolean(channels.length) && (
-        <ClaimList
-          header={__('Your Channels')}
-          loading={fetchingChannels}
-          uris={channels.map(channel => channel.permanent_url)}
-          headerAltControls={
-            <Button button="link" label={__('New Channel')} onClick={() => openModal(MODALS.CREATE_CHANNEL)} />
+        <Card
+          title={__('Your Channels')}
+          titleActions={
+            <Button
+              button="secondary"
+              icon={ICONS.CHANNEL}
+              label={__('New Channel')}
+              onClick={() => openModal(MODALS.CREATE_CHANNEL)}
+            />
+          }
+          isBodyList
+          body={
+            <ClaimList isCardBody loading={fetchingChannels} uris={channels.map(channel => channel.permanent_url)} />
           }
         />
       )}

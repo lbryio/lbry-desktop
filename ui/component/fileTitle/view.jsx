@@ -20,10 +20,10 @@ function FileTitle(props: Props) {
   return (
     <Card
       isPageTitle
+      noTitleWrap
       title={
         <React.Fragment>
           {title}
-          <FilePrice badge uri={normalizeURI(uri)} />
           {nsfw && (
             <span className="media__title-badge">
               <span className="badge badge--tag-mature">{__('Mature')}</span>
@@ -31,14 +31,23 @@ function FileTitle(props: Props) {
           )}
         </React.Fragment>
       }
+      titleActions={<FilePrice uri={normalizeURI(uri)} type="filepage" />}
       body={
         <React.Fragment>
           <ClaimInsufficientCredits uri={uri} />
           <FileSubtitle uri={uri} />
-          <FileAuthor uri={uri} />
         </React.Fragment>
       }
-      actions={<FileActions uri={uri} />}
+      actions={
+        <div>
+          <div className="section">
+            <FileActions uri={uri} />
+          </div>
+          <div className="section">
+            <FileAuthor uri={uri} />
+          </div>
+        </div>
+      }
     />
   );
 }

@@ -33,7 +33,7 @@ function ChannelsFollowingPage(props: Props) {
         meta={
           <Button
             icon={ICONS.SEARCH}
-            button="alt"
+            button="secondary"
             label={__('Discover Channels')}
             navigate={`/$/${PAGES.CHANNELS_FOLLOWING_DISCOVER}`}
           />

@@ -8,7 +8,6 @@ import useIsMobile from 'effects/use-is-mobile';
 const PAGINATE_PARAM = 'page';
 
 type Props = {
-  loading: boolean,
   totalPages: number,
   location: { search: string },
   history: { push: string => void },
@@ -16,7 +15,7 @@ type Props = {
 };
 
 function Paginate(props: Props) {
-  const { totalPages = 1, loading, location, history, onPageChange } = props;
+  const { totalPages = 1, location, history, onPageChange } = props;
   const { search } = location;
   const [textValue, setTextValue] = React.useState('');
   const urlParams = new URLSearchParams(search);
@@ -45,7 +44,7 @@ function Paginate(props: Props) {
   return (
     // Hide the paginate controls if we are loading or there is only one page
     // It should still be rendered to trigger the onPageChange callback
-    <Form style={totalPages <= 1 || loading ? { display: 'none' } : null} onSubmit={handlePaginateKeyUp}>
+    <Form style={totalPages <= 1 ? { display: 'none' } : null} onSubmit={handlePaginateKeyUp}>
       <fieldset-group class="fieldset-group--smushed fieldgroup--paginate">
         <fieldset-section>
           <ReactPaginate

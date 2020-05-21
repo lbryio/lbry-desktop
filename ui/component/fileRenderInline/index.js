@@ -1,11 +1,7 @@
 import { connect } from 'react-redux';
-import { makeSelectFileInfoForUri } from 'lbry-redux';
+import { makeSelectFileInfoForUri, makeSelectStreamingUrlForUri } from 'lbry-redux';
 import { doClaimEligiblePurchaseRewards } from 'lbryinc';
-import {
-  makeSelectFileRenderModeForUri,
-  makeSelectIsPlaying,
-  makeSelectStreamingUrlForUriWebProxy,
-} from 'redux/selectors/content';
+import { makeSelectFileRenderModeForUri, makeSelectIsPlaying } from 'redux/selectors/content';
 import { withRouter } from 'react-router';
 import { doAnalyticsView } from 'redux/actions/app';
 import FileRenderInline from './view';
@@ -13,7 +9,7 @@ import FileRenderInline from './view';
 const select = (state, props) => ({
   fileInfo: makeSelectFileInfoForUri(props.uri)(state),
   isPlaying: makeSelectIsPlaying(props.uri)(state),
-  streamingUrl: makeSelectStreamingUrlForUriWebProxy(props.uri)(state),
+  streamingUrl: makeSelectStreamingUrlForUri(props.uri)(state),
   renderMode: makeSelectFileRenderModeForUri(props.uri)(state),
 });
 

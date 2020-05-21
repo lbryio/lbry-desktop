@@ -7,7 +7,6 @@ import {
   makeSelectClaimIsNsfw,
   makeSelectClaimIsMine,
   makeSelectRecommendedContentForUri,
-  makeSelectStreamingUrlForUri,
   makeSelectMediaTypeForUri,
   selectBalance,
   selectBlockedChannels,
@@ -21,9 +20,6 @@ import { selectShowMatureContent } from 'redux/selectors/settings';
 import * as RENDER_MODES from 'constants/file_render_modes';
 import path from 'path';
 import { FORCE_CONTENT_TYPE_PLAYER, FORCE_CONTENT_TYPE_COMIC } from 'constants/claim';
-// @if TARGET='web'
-import { generateStreamUrl } from 'util/lbrytv';
-// @endif
 
 const RECENT_HISTORY_AMOUNT = 10;
 const HISTORY_ITEMS_PER_PAGE = 50;
@@ -166,16 +162,6 @@ export const makeSelectFileExtensionForUri = (uri: string) =>
   createSelector(makeSelectFileNameForUri(uri), fileName => {
     return fileName && path.extname(fileName).substring(1);
   });
-
-let makeSelectStreamingUrlForUriWebProxy;
-// @if TARGET='web'
-makeSelectStreamingUrlForUriWebProxy = (uri: string) =>
-  createSelector(makeSelectClaimForUri(uri), claim => (claim ? generateStreamUrl(claim.name, claim.claim_id) : null));
-// @endif
-// @if TARGET='app'
-makeSelectStreamingUrlForUriWebProxy = (uri: string) => createSelector(makeSelectStreamingUrlForUri(uri), url => url);
-// @endif
-export { makeSelectStreamingUrlForUriWebProxy };
 
 export const makeSelectFileRenderModeForUri = (uri: string) =>
   createSelector(
