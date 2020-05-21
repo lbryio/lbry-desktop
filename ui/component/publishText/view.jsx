@@ -1,7 +1,6 @@
 // @flow
 import React from 'react';
 import { FormField } from 'component/common/form';
-import Button from 'component/button';
 import usePersistedState from 'effects/use-persisted-state';
 import Card from 'component/common/card';
 
@@ -41,14 +40,9 @@ function PublishText(props: Props) {
             value={description}
             disabled={disabled}
             onChange={value => updatePublishForm({ description: advancedEditor ? value : value.target.value })}
+            quickActionLabel={advancedEditor ? __('Simple Editor') : __('Advanced Editor')}
+            quickActionHandler={toggleMarkdown}
           />
-          <div className="card__actions">
-            <Button
-              button="link"
-              onClick={toggleMarkdown}
-              label={advancedEditor ? __('Simple Editor') : __('Advanced Editor')}
-            />
-          </div>
         </React.Fragment>
       }
     />
