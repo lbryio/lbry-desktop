@@ -6,17 +6,22 @@ type Props = {
   uri: string,
   resolveUri: string => void,
   claim: Claim,
+  doPlayUri: string => void,
 };
 // $FlowFixMe apparently flow thinks this is wrong.
 export const EmbedContext = React.createContext();
 const EmbedWrapperPage = (props: Props) => {
-  const { resolveUri, claim, uri } = props;
+  const { resolveUri, claim, uri, doPlayUri } = props;
+  const haveClaim = Boolean(claim);
 
   useEffect(() => {
-    if (resolveUri && uri) {
+    if (resolveUri && uri && !haveClaim) {
       resolveUri(uri);
     }
-  }, [resolveUri, uri]);
+    if (uri && haveClaim) {
+      doPlayUri(uri);
+    }
+  }, [resolveUri, uri, doPlayUri, haveClaim]);
 
   return (
     <div className={'embed__wrapper'}>
