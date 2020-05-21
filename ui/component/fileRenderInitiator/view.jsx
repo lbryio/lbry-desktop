@@ -142,7 +142,7 @@ export default function FileRenderInitiator(props: Props) {
       )}
       {!disabled && (
         <Button
-          requiresAuth={IS_WEB}
+          requiresAuth={shouldRedirect}
           onClick={viewFile}
           iconSize={30}
           title={isPlayable ? __('Play') : __('View')}
