@@ -5,23 +5,27 @@ import Page from 'component/page';
 import Spinner from 'component/spinner';
 import DownloadList from 'page/fileListDownloaded';
 import Yrbl from 'component/yrbl';
+import { useHistory } from 'react-router';
 
 type Props = {
   allDownloadedUrlsCount: number,
   myPurchases: Array<string>,
   fetchingMyPurchases: boolean,
   fetchingFileList: boolean,
-  doPurchaseList: () => void,
+  doPurchaseList: number => void,
 };
 
 function LibraryPage(props: Props) {
   const { allDownloadedUrlsCount, myPurchases, fetchingMyPurchases, fetchingFileList, doPurchaseList } = props;
+  const { location } = useHistory();
+  const urlParams = new URLSearchParams(location.search);
+  const page = Number(urlParams.get('page')) || 1;
   const hasDownloads = allDownloadedUrlsCount > 0 || (myPurchases && myPurchases.length > 0);
   const loading = fetchingFileList || fetchingMyPurchases;
 
   React.useEffect(() => {
-    doPurchaseList();
-  }, [doPurchaseList]);
+    doPurchaseList(page);
+  }, [doPurchaseList, page]);
 
   return (
     <Page>

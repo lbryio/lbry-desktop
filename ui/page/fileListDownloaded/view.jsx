@@ -116,7 +116,7 @@ function FileListDownloaded(props: Props) {
               renderProperties={() => null}
               empty={
                 viewMode === VIEW_PURCHASES && !query ? (
-                  <div>{__("You haven't purchased anything yet silly goose.")}</div>
+                  <div>{__('No purchases found.')}</div>
                 ) : (
                   __('No results for %query%', { query })
                 )
