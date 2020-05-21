@@ -7,12 +7,14 @@ import DownloadList from 'page/fileListDownloaded';
 import Yrbl from 'component/yrbl';
 import { useHistory } from 'react-router';
 
+export const PURCHASES_PAGE_SIZE = 10;
+
 type Props = {
   allDownloadedUrlsCount: number,
   myPurchases: Array<string>,
   fetchingMyPurchases: boolean,
   fetchingFileList: boolean,
-  doPurchaseList: number => void,
+  doPurchaseList: (number, number) => void,
 };
 
 function LibraryPage(props: Props) {
@@ -24,7 +26,7 @@ function LibraryPage(props: Props) {
   const loading = fetchingFileList || fetchingMyPurchases;
 
   React.useEffect(() => {
-    doPurchaseList(page);
+    doPurchaseList(page, PURCHASES_PAGE_SIZE);
   }, [doPurchaseList, page]);
 
   return (

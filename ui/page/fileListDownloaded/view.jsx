@@ -12,6 +12,8 @@ import { withRouter } from 'react-router';
 import Card from 'component/common/card';
 import classnames from 'classnames';
 import Yrbl from 'component/yrbl';
+import { PURCHASES_PAGE_SIZE } from 'page/library/view';
+import Spinner from 'component/spinner';
 
 type Props = {
   fetchingFileList: boolean,
@@ -74,6 +76,7 @@ function FileListDownloaded(props: Props) {
             })}
             onClick={() => setViewMode(VIEW_PURCHASES)}
           />
+          {loading && <Spinner type="small" />}
         </div>
       }
       titleActions={
@@ -127,7 +130,8 @@ function FileListDownloaded(props: Props) {
             {!query && (
               <Paginate
                 totalPages={Math.ceil(
-                  Number(viewMode === VIEW_PURCHASES ? myPurchasesCount : downloadedUrlsCount) / Number(PAGE_SIZE)
+                  Number(viewMode === VIEW_PURCHASES ? myPurchasesCount : downloadedUrlsCount) /
+                    Number(viewMode === VIEW_PURCHASES ? PURCHASES_PAGE_SIZE : PAGE_SIZE)
                 )}
               />
             )}
