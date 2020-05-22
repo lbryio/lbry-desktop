@@ -3,6 +3,7 @@
 /* eslint react/jsx-no-comment-textnodes:0 */
 
 import * as PAGES from 'constants/pages';
+import * as MODALS from 'constants/modal_types';
 import * as React from 'react';
 
 import { FormField, FormFieldPrice } from 'component/common/form';
@@ -79,13 +80,14 @@ type Props = {
   hideBalance: boolean,
   confirmForgetPassword: ({}) => void,
   floatingPlayer: boolean,
-  hideReposts: boolean,
+  hideReposts: ?boolean,
   clearPlayingUri: () => void,
   darkModeTimes: DarkModeTimes,
   setDarkTime: (string, {}) => void,
   ffmpegStatus: { available: boolean, which: string },
   findingFFmpeg: boolean,
   findFFmpeg: () => void,
+  openModal: string => void,
 };
 
 type State = {
@@ -246,6 +248,7 @@ class SettingsPage extends React.PureComponent<Props, State> {
       darkModeTimes,
       clearCache,
       findingFFmpeg,
+      openModal,
     } = this.props;
     const { storedPassword } = this.state;
     const noDaemonSettings = !daemonSettings || Object.keys(daemonSettings).length === 0;
@@ -436,7 +439,6 @@ class SettingsPage extends React.PureComponent<Props, State> {
                     )}
                   />
 
-                  {/* https://github.com/lbryio/lbry-desktop/issues/3774 */}
                   <FormField
                     type="checkbox"
                     name="hide_reposts"
@@ -445,8 +447,8 @@ class SettingsPage extends React.PureComponent<Props, State> {
                         let param = e.target.checked ? { add: 'noreposts' } : { remove: 'noreposts' };
                         Lbryio.call('user_tag', 'edit', param);
                       }
-                      // $FlowFixMe could be undefined due to rehydrate
-                      setClientSetting(SETTINGS.HIDE_REPOSTS, !Boolean(hideReposts));
+
+                      setClientSetting(SETTINGS.HIDE_REPOSTS, !hideReposts);
                     }}
                     checked={hideReposts}
                     label={__('Hide reposts')}
@@ -465,7 +467,11 @@ class SettingsPage extends React.PureComponent<Props, State> {
                   <FormField
                     type="checkbox"
                     name="show_nsfw"
-                    onChange={() => setClientSetting(SETTINGS.SHOW_MATURE, !showNsfw)}
+                    onChange={() =>
+                      !IS_WEB || showNsfw
+                        ? setClientSetting(SETTINGS.SHOW_MATURE, !showNsfw)
+                        : openModal(MODALS.CONFIRM_AGE)
+                    }
                     checked={showNsfw}
                     label={__('Show mature content')}
                     helper={__(
@@ -480,15 +486,24 @@ class SettingsPage extends React.PureComponent<Props, State> {
               <Card
                 title={__('Blocked Channels')}
                 actions={
-                <p>
-                  <React.Fragment>
-                    {__('%count% %channels%. ', {
-                      count: userBlockedChannelsCount === 0 ? __("You don't have") : __('You have') + ' ' + userBlockedChannelsCount + ' ',
-                      channels: userBlockedChannelsCount === 1 ? __('blocked channel') : __('blocked channels'),
-                    })}
-				            {<Button button="link" label={userBlockedChannelsCount === 0 ? null : __('Manage')} navigate={`/$/${PAGES.BLOCKED}`} /> }
-					       </React.Fragment>
-				        </p>
+                  <p>
+                    <React.Fragment>
+                      {__('%count% %channels%. ', {
+                        count:
+                          userBlockedChannelsCount === 0
+                            ? __("You don't have")
+                            : __('You have') + ' ' + (userBlockedChannelsCount || 0) + ' ',
+                        channels: userBlockedChannelsCount === 1 ? __('blocked channel') : __('blocked channels'),
+                      })}
+                      {
+                        <Button
+                          button="link"
+                          label={userBlockedChannelsCount === 0 ? null : __('Manage')}
+                          navigate={`/$/${PAGES.BLOCKED}`}
+                        />
+                      }
+                    </React.Fragment>
+                  </p>
                 }
               />
             )}
