@@ -1,5 +1,6 @@
 // @flow
 import * as ICONS from 'constants/icons';
+import Icon from 'component/common/icon';
 import * as PAGES from 'constants/pages';
 import * as CS from 'constants/claim_search';
 import React from 'react';
@@ -67,6 +68,7 @@ const PAID_BETA_CHANNEL_IDS_KEY = [
   '8972a1bd06de5186e5e89292b05aac8aaa817791',
   '5da63df97c8255ae94a88940695b8471657dd5a1',
   'f3da2196b5151570d980b34d311ee0973225a68e',
+  '7644fdb8342624f6c647c79de25610801573fa68',
 ];
 
 type Props = {
@@ -94,10 +96,21 @@ function HomePage(props: Props) {
     link: `/$/${PAGES.DISCOVER}?${CS.TAGS_KEY}=lbrytvpaidbeta&fee_amount=>0&${CS.CLAIM_TYPE}=${CS.CLAIM_STREAM}&${
       CS.CHANNEL_IDS_KEY
     }=${PAID_BETA_CHANNEL_IDS_KEY.join(',')}`,
+    help: (
+      <div className="claim-grid__help">
+        <Icon
+          icon={ICONS.HELP}
+          tooltip
+          customTooltipText={__(
+            'Check your rewards page to see if you qualify for paid content reimbursement. Only content in this section qualifies.'
+          )}
+        />
+      </div>
+    ),
     options: {
       feeAmount: '>0',
       claimType: ['stream'],
-      tags: ['lbrytvpaidbeta'],
+      tags: ['lbrytvpaidbeta', 'lbry tvpaidbeta'],
       pageSize: 8,
       channelIds: PAID_BETA_CHANNEL_IDS_KEY,
     },

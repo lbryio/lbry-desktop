@@ -17,26 +17,26 @@ type Props = {
 
 export default function ModalRevokeClaim(props: Props) {
   const { tx, claim, closeModal, abandonTxo, abandonClaim, cb } = props;
-  const { value_type: valueType, type, normalized_name: name } = tx || claim;
+  const { value_type: valueType, type, normalized_name: name, is_my_input: isSupport } = tx || claim;
   const [channelName, setChannelName] = useState('');
 
-  function getButtonLabel(type: string) {
-    if (type === txnTypes.TIP) {
-      return 'Confirm Tip Unlock';
-    } else if (type === txnTypes.SUPPORT) {
+  function getButtonLabel(type: string, isSupport: boolean) {
+    if (isSupport && type === txnTypes.SUPPORT) {
       return 'Confirm Support Revoke';
+    } else if (type === txnTypes.SUPPORT) {
+      return 'Confirm Tip Unlock';
     }
     return 'Confirm Claim Revoke';
   }
 
-  function getMsgBody(type: string, name: string) {
-    if (type === txnTypes.TIP) {
+  function getMsgBody(type: string, isSupport: boolean, name: string) {
+    if (isSupport && type === txnTypes.SUPPORT) {
       return (
         <React.Fragment>
-          <p>{__('Are you sure you want to unlock these credits?')}</p>
+          <p>{__('Are you sure you want to remove this support?')}</p>
           <p>
             {__(
-              'These credits are permanently yours and can be unlocked at any time. Unlocking them allows you to spend them, but can hurt the performance of your content in lookups and search results. It is recommended you leave tips locked until you need or want to spend them.'
+              "These credits are permanently yours and can be removed at any time. Removing this support will reduce the claim's discoverability and return the LBC to your spendable balance."
             )}
           </p>
         </React.Fragment>
@@ -44,10 +44,10 @@ export default function ModalRevokeClaim(props: Props) {
     } else if (type === txnTypes.SUPPORT) {
       return (
         <React.Fragment>
-          <p>{__('Are you sure you want to remove this support?')}</p>
+          <p>{__('Are you sure you want to unlock these credits?')}</p>
           <p>
             {__(
-              "These credits are permanently yours and can be removed at any time. Removing this support will reduce the claim's discoverability and return the LBC to your spendable balance."
+              'These credits are permanently yours and can be unlocked at any time. Unlocking them allows you to spend them, but can hurt the performance of your content in lookups and search results. It is recommended you leave tips locked until you need or want to spend them.'
             )}
           </p>
         </React.Fragment>
@@ -88,7 +88,7 @@ export default function ModalRevokeClaim(props: Props) {
     closeModal();
   }
 
-  const label = getButtonLabel(type);
+  const label = getButtonLabel(type, isSupport);
 
   return (
     <Modal
@@ -102,7 +102,7 @@ export default function ModalRevokeClaim(props: Props) {
     >
       <Card
         title={label}
-        body={getMsgBody(type, name)}
+        body={getMsgBody(type, isSupport, name)}
         actions={
           <div className="section__actions">
             <Button button="primary" label={label} onClick={revokeClaim} />

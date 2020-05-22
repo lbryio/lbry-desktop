@@ -30,12 +30,12 @@ class TxoListItem extends React.PureComponent<Props, State> {
     (this: any).getLink = this.getLink.bind(this);
   }
 
-  getLink(type: string) {
+  getLink(type: string, tip: boolean) {
     const { abandonState } = this.state;
     if (this.state.abandonState === ABANDON_STATES.PENDING) {
       return <Spinner type={'small'} />;
     }
-    if (type === TXO.SUPPORT) {
+    if (tip && type === TXO.SUPPORT) {
       return (
         <Button
           disabled={abandonState === ABANDON_STATES.DONE || abandonState === ABANDON_STATES.ERROR}
@@ -123,7 +123,7 @@ class TxoListItem extends React.PureComponent<Props, State> {
               (valueType && ((valueType === 'stream' && __('Publish')) || __(toCapitalCase(valueType)))) ||
               (type && __(toCapitalCase(type)))}
           </span>{' '}
-          {isRevokeable && this.getLink(type)}
+          {isRevokeable && this.getLink(type, isTip)}
         </td>
         <td>
           {forClaim && <Button button="link" navigate={uri} label={claimName} disabled={!date} />}

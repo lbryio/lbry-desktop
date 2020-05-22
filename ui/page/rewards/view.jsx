@@ -49,15 +49,27 @@ class RewardsPage extends PureComponent<Props> {
           body={
             <React.Fragment>
               <p>
-                {__('This account must undergo review before you can participate in the rewards program.')}{' '}
-                {__('This can take anywhere from several minutes to several days.')}
+                {__(
+                  'This account must undergo review before you can participate in the rewards program. Not all users and regions may qualify.'
+                )}{' '}
+                {__('This can take anywhere from a few hours to several days. Please be patient.')}
               </p>
 
-              <p>{__('We apologize for this inconvenience, but have added this additional step to prevent fraud.')}</p>
               <p>
-                {`${__('If you continue to see this message, send us an email to help@lbry.com.')} ${__(
-                  'Please enjoy free content in the meantime!'
-                )}`}
+                {__(
+                  'We apologize for this inconvenience, but have added this additional step to prevent abuse. Users on VPN or shared connections will continue to see this message and are not not eligible for Rewards.'
+                )}
+              </p>
+              <p>
+                <I18nMessage
+                  tokens={{
+                    rewards_faq: <Button button="link" label={__('Rewards FAQ')} href="https://lbry.com/faq/support" />,
+                  }}
+                >
+                  Please review the %rewards_faq% for eligibility, and send us an email to help@lbry.com if you continue
+                  to see this message. You can continue to use LBRY without this feature.
+                </I18nMessage>
+                {`${__('Enjoy all the awesome free content in the meantime!')}`}
               </p>
             </React.Fragment>
           }

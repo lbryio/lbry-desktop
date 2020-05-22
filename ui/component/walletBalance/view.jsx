@@ -75,6 +75,7 @@ const WalletBalance = (props: Props) => {
                   <CreditAmount badge={false} amount={tipsBalance} precision={8} />
                 </strong>{' '}
                 {__('earned and bound in tips')}
+                <HelpLink href="https://lbry.com/faq/tipping" />
               </h2>
             </div>
           </div>

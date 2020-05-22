@@ -72,7 +72,7 @@ export default function CreatorAnalytics(props: Props) {
                   subtitle={
                     error === GENERIC_ERROR
                       ? __(
-                          'There are no stats for this channel. Make sure you are signed in with the correct email and have data sharing turned on.'
+                          'There are no stats for this channel yet, it will take a few views. Make sure you are signed in with the correct email and have data sharing turned on.'
                         )
                       : __(
                           "You are not able to see this channel's stats. Make sure you are signed in with the correct email and have data sharing turned on."
@@ -170,7 +170,7 @@ export default function CreatorAnalytics(props: Props) {
           {stats.VideoURITopNew ? (
             <Card
               className="section"
-              title={__('Your Recent Content')}
+              title={__('Most Viewed Recent Content')}
               body={
                 <React.Fragment>
                   <div className="card--inline">
@@ -217,7 +217,7 @@ export default function CreatorAnalytics(props: Props) {
 
           <Card
             className="section"
-            title={__('Most Viewed Content')}
+            title={__('Most Viewed Content All Time')}
             body={
               <React.Fragment>
                 <div className="card--inline">
