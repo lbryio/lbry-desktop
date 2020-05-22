@@ -52,6 +52,7 @@
   padding-right: var(--spacing-small);
   padding-left: 2.5rem;
   transition: all 0.2s;
+  -webkit-app-region: no-drag;
 
   &:focus {
     border-radius: var(--border-radius);

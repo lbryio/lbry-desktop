@@ -14,11 +14,10 @@ type Props = {
   isSubscribed: boolean,
   isNew: boolean,
   small: boolean,
-  claimWasPurchased: boolean,
 };
 
 export default function FileProperties(props: Props) {
-  const { uri, downloaded, claimIsMine, claimWasPurchased, isSubscribed, small = false } = props;
+  const { uri, downloaded, claimIsMine, isSubscribed, small = false } = props;
   return (
     <div
       className={classnames('file-properties', {
@@ -29,13 +28,8 @@ export default function FileProperties(props: Props) {
       <FileType uri={uri} />
       {isSubscribed && <Icon tooltip icon={ICONS.SUBSCRIBE} />}
       {!claimIsMine && downloaded && <Icon tooltip icon={ICONS.LIBRARY} />}
-      {claimWasPurchased ? (
-        <span className="file-properties__purchased">
-          <Icon icon={ICONS.PURCHASED} />
-        </span>
-      ) : (
-        <FilePrice hideFree uri={uri} badge={false} className="file-properties__not-purchased" />
-      )}
+
+      <FilePrice hideFree uri={uri} />
     </div>
   );
 }

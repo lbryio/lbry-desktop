@@ -4,6 +4,7 @@ import {
   selectIsFetchingFileList,
   selectMyPurchases,
   selectIsFetchingMyPurchases,
+  doPurchaseList,
 } from 'lbry-redux';
 import LibraryPage from './view';
 
@@ -14,4 +15,6 @@ const select = state => ({
   fetchingMyPurchases: selectIsFetchingMyPurchases(state),
 });
 
-export default connect(select)(LibraryPage);
+export default connect(select, {
+  doPurchaseList,
+})(LibraryPage);

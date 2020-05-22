@@ -285,6 +285,14 @@ reducers[LBRY_REDUX_ACTIONS.USER_STATE_POPULATE] = (state, action) => {
   };
 };
 
+reducers[LBRY_REDUX_ACTIONS.PURCHASE_URI_FAILED] = (state, action) => {
+  return {
+    ...state,
+    modal: null,
+    modalProps: null,
+  };
+};
+
 export default function reducer(state: AppState = defaultState, action: any) {
   const handler = reducers[action.type];
   if (handler) return handler(state, action);

@@ -20,6 +20,8 @@ import {
   makeSelectUriIsStreamable,
   selectDownloadingByOutpoint,
   makeSelectClaimForUri,
+  makeSelectClaimIsMine,
+  makeSelectClaimWasPurchased,
 } from 'lbry-redux';
 import { makeSelectCostInfoForUri, Lbryio } from 'lbryinc';
 import { makeSelectClientSetting, selectosNotificationsEnabled, selectDaemonSettings } from 'redux/selectors/settings';
@@ -157,7 +159,7 @@ export function doCloseFloatingPlayer() {
   };
 }
 
-export function doPurchaseUriWrapper(uri: string, cost: number, saveFile: boolean, cb: ?() => void) {
+export function doPurchaseUriWrapper(uri: string, cost: number, saveFile: boolean, cb: ?(GetResponse) => void) {
   return (dispatch: Dispatch, getState: () => any) => {
     function onSuccess(fileInfo) {
       if (saveFile) {
@@ -165,7 +167,7 @@ export function doPurchaseUriWrapper(uri: string, cost: number, saveFile: boolea
       }
 
       if (cb) {
-        cb();
+        cb(fileInfo);
       }
     }
 
@@ -181,19 +183,22 @@ export function doPlayUri(
 ) {
   return (dispatch: Dispatch, getState: () => any) => {
     const state = getState();
+    const isMine = makeSelectClaimIsMine(uri)(state);
     const fileInfo = makeSelectFileInfoForUri(uri)(state);
     const uriIsStreamable = makeSelectUriIsStreamable(uri)(state);
     const downloadingByOutpoint = selectDownloadingByOutpoint(state);
+    const claimWasPurchased = makeSelectClaimWasPurchased(uri)(state);
     const alreadyDownloaded = fileInfo && (fileInfo.completed || (fileInfo.blobs_remaining === 0 && uriIsStreamable));
     const alreadyDownloading = fileInfo && !!downloadingByOutpoint[fileInfo.outpoint];
-    if (alreadyDownloading || alreadyDownloaded) {
+
+    if (!IS_WEB && (alreadyDownloading || alreadyDownloaded)) {
       return;
     }
 
     const daemonSettings = selectDaemonSettings(state);
     const costInfo = makeSelectCostInfoForUri(uri)(state);
     const cost = (costInfo && Number(costInfo.cost)) || 0;
-    const saveFile = !uriIsStreamable ? true : daemonSettings.save_files || saveFileOverride || cost > 0;
+    const saveFile = !IS_WEB && (!uriIsStreamable ? true : daemonSettings.save_files || saveFileOverride || cost > 0);
     const instantPurchaseEnabled = makeSelectClientSetting(SETTINGS.INSTANT_PURCHASE_ENABLED)(state);
     const instantPurchaseMax = makeSelectClientSetting(SETTINGS.INSTANT_PURCHASE_MAX)(state);
 
@@ -203,7 +208,12 @@ export function doPlayUri(
 
     function attemptPlay(instantPurchaseMax = null) {
       // If you have a file_list entry, you have already purchased the file
-      if (!fileInfo && (!instantPurchaseMax || !instantPurchaseEnabled || cost > instantPurchaseMax)) {
+      if (
+        !isMine &&
+        !fileInfo &&
+        !claimWasPurchased &&
+        (!instantPurchaseMax || !instantPurchaseEnabled || cost > instantPurchaseMax)
+      ) {
         dispatch(doOpenModal(MODALS.AFFIRM_PURCHASE, { uri }));
       } else {
         beginGetFile();

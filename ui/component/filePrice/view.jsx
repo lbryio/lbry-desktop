@@ -1,6 +1,9 @@
 // @flow
+import * as ICONS from 'constants/icons';
 import React from 'react';
+import classnames from 'classnames';
 import CreditAmount from 'component/common/credit-amount';
+import Icon from 'component/common/icon';
 
 type Props = {
   showFullPrice: boolean,
@@ -9,12 +12,13 @@ type Props = {
   uri: string,
   fetching: boolean,
   claim: ?{},
+  claimWasPurchased: boolean,
+  claimIsMine: boolean,
+  type?: string,
   // below props are just passed to <CreditAmount />
-  badge?: boolean,
   inheritStyle?: boolean,
   showLBC?: boolean,
   hideFree?: boolean, // hide the file price if it's free
-  className?: string,
 };
 
 class FilePrice extends React.PureComponent<Props> {
@@ -39,23 +43,35 @@ class FilePrice extends React.PureComponent<Props> {
   };
 
   render() {
-    const { costInfo, showFullPrice, badge, inheritStyle, showLBC, hideFree, className } = this.props;
-    if (costInfo && (!costInfo.cost || (!costInfo.cost && hideFree))) {
+    const { costInfo, showFullPrice, showLBC, hideFree, claimWasPurchased, type, claimIsMine } = this.props;
+
+    if (claimIsMine || !costInfo || !costInfo.cost || (!costInfo.cost && hideFree)) {
       return null;
     }
 
-    return costInfo ? (
+    return claimWasPurchased ? (
+      <span
+        className={classnames('file-price__key', {
+          'file-price__key--filepage': type === 'filepage',
+          'file-price__key--modal': type === 'modal',
+        })}
+      >
+        <Icon icon={ICONS.PURCHASED} size={type === 'filepage' ? 22 : undefined} />
+      </span>
+    ) : (
       <CreditAmount
+        className={classnames('file-price', {
+          'file-price--filepage': type === 'filepage',
+          'file-price--modal': type === 'modal',
+        })}
         showFree
-        badge={badge}
-        inheritStyle={inheritStyle}
+        badge={false}
         showLBC={showLBC}
         amount={costInfo.cost}
         isEstimate={!costInfo.includesData}
         showFullPrice={showFullPrice}
-        className={className}
       />
-    ) : null;
+    );
   }
 }
 

@@ -8,6 +8,7 @@ import Tag from 'component/tag';
 import StickyBox from 'react-sticky-box/dist/esnext';
 import Spinner from 'component/spinner';
 import usePersistedState from 'effects/use-persisted-state';
+import classnames from 'classnames';
 // @if TARGET='web'
 // import Ads from 'lbrytv/component/ads';
 // @endif
@@ -24,6 +25,8 @@ type Props = {
   expanded: boolean,
   doSignOut: () => void,
   location: { pathname: string },
+  purchaseSuccess: boolean,
+  doClearPurchasedUriSuccess: () => void,
 };
 
 function SideNavigation(props: Props) {
@@ -36,9 +39,12 @@ function SideNavigation(props: Props) {
     sticky = true,
     expanded = false,
     location,
+    purchaseSuccess,
+    doClearPurchasedUriSuccess,
   } = props;
   const { pathname } = location;
   const isAuthenticated = Boolean(email);
+  const [pulseLibrary, setPulseLibrary] = React.useState(false);
   const [sideInformation, setSideInformation] = usePersistedState(
     'side-navigation:information',
     getSideInformation(pathname)
@@ -64,6 +70,19 @@ function SideNavigation(props: Props) {
     const sideInfo = getSideInformation(pathname);
     setSideInformation(sideInfo);
   }, [pathname, setSideInformation]);
+
+  React.useEffect(() => {
+    if (purchaseSuccess) {
+      setPulseLibrary(true);
+
+      let timeout = setTimeout(() => {
+        setPulseLibrary(false);
+        doClearPurchasedUriSuccess();
+      }, 2500);
+
+      return () => clearTimeout(timeout);
+    }
+  }, [setPulseLibrary, purchaseSuccess, doClearPurchasedUriSuccess]);
 
   function buildLink(path, label, icon, onClick, requiresAuth = false) {
     return {
@@ -115,11 +134,9 @@ function SideNavigation(props: Props) {
             {
               ...buildLink(PAGES.DISCOVER, __('All Content'), ICONS.DISCOVER),
             },
-            // @if TARGET='app'
             {
               ...buildLink(PAGES.LIBRARY, __('Library'), ICONS.LIBRARY),
             },
-            // @endif
             {
               ...(expanded ? { ...buildLink(PAGES.SETTINGS, __('Settings'), ICONS.SETTINGS) } : {}),
             },
@@ -127,7 +144,14 @@ function SideNavigation(props: Props) {
             linkProps =>
               linkProps.navigate && (
                 <li key={linkProps.navigate}>
-                  <Button {...linkProps} className="navigation-link" activeClass="navigation-link--active" />
+                  <Button
+                    {...linkProps}
+                    icon={pulseLibrary && linkProps.icon === ICONS.LIBRARY ? ICONS.PURCHASED : linkProps.icon}
+                    className={classnames('navigation-link', {
+                      'navigation-link--pulse': linkProps.icon === ICONS.LIBRARY && pulseLibrary,
+                    })}
+                    activeClass="navigation-link--active"
+                  />
                 </li>
               )
           )}

@@ -1,6 +1,14 @@
 import { connect } from 'react-redux';
 import EmbedWrapperPage from './view';
-import { doResolveUri, makeSelectClaimForUri, buildURI } from 'lbry-redux';
+import {
+  doResolveUri,
+  makeSelectClaimForUri,
+  buildURI,
+  makeSelectStreamingUrlForUri,
+  makeSelectIsUriResolving,
+} from 'lbry-redux';
+import { doPlayUri } from 'redux/actions/content';
+import { makeSelectCostInfoForUri, doFetchCostInfoForUri } from 'lbryinc';
 
 const select = (state, props) => {
   const { match } = props;
@@ -10,12 +18,17 @@ const select = (state, props) => {
   return {
     uri,
     claim: makeSelectClaimForUri(uri)(state),
+    costInfo: makeSelectCostInfoForUri(uri)(state),
+    streamingUrl: makeSelectStreamingUrlForUri(uri)(state),
+    isResolvingUri: makeSelectIsUriResolving(uri)(state),
   };
 };
 
 const perform = dispatch => {
   return {
     resolveUri: uri => dispatch(doResolveUri(uri)),
+    doPlayUri: uri => dispatch(doPlayUri(uri)),
+    doFetchCostInfoForUri: uri => dispatch(doFetchCostInfoForUri(uri)),
   };
 };
 

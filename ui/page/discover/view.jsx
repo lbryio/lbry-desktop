@@ -5,6 +5,7 @@ import Page from 'component/page';
 import ClaimListDiscover from 'component/claimListDiscover';
 import Button from 'component/button';
 import useHover from 'effects/use-hover';
+import useIsMobile from 'effects/use-is-mobile';
 import analytics from 'analytics';
 import HiddenNsfw from 'component/common/hidden-nsfw';
 import Icon from 'component/common/icon';
@@ -33,6 +34,7 @@ function DiscoverPage(props: Props) {
   } = props;
   const buttonRef = useRef();
   const isHovering = useHover(buttonRef);
+  const isMobile = useIsMobile();
 
   const urlParams = new URLSearchParams(search);
   const claimType = urlParams.get('claim_type');
@@ -94,7 +96,8 @@ function DiscoverPage(props: Props) {
         repostedClaimId={repostedClaim ? repostedClaim.claim_id : null}
         injectedItem={!isAuthenticated && IS_WEB && <Ads type="video" />}
         meta={
-          tag && (
+          tag &&
+          !isMobile && (
             <Button
               ref={buttonRef}
               button="alt"

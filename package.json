@@ -70,7 +70,7 @@
     "@babel/register": "^7.0.0",
     "@exponent/electron-cookies": "^2.0.0",
     "@hot-loader/react-dom": "^16.8",
-    "@lbry/components": "^4.1.5",
+    "@lbry/components": "^4.2.2",
     "@reach/menu-button": "0.7.4",
     "@reach/rect": "^0.2.1",
     "@reach/tabs": "^0.1.5",
@@ -132,8 +132,8 @@
     "imagesloaded": "^4.1.4",
     "json-loader": "^0.5.4",
     "lbry-format": "https://github.com/lbryio/lbry-format.git",
-    "lbry-redux": "lbryio/lbry-redux#cd9c15567f2934ddc82de364d88b378ff04d5571",
-    "lbryinc": "lbryio/lbryinc#cc62a4eec10845cc0b31da7d0f27287cfa7c4866",
+    "lbry-redux": "lbryio/lbry-redux#aa2cfa789670e899824d3d3ac1ae677172a7ad4e",
+    "lbryinc": "lbryio/lbryinc#6a52f8026cdc7cd56d200fb5c46f852e0139bbeb",
     "lint-staged": "^7.0.2",
     "localforage": "^1.7.1",
     "lodash-es": "^4.17.14",
@@ -211,7 +211,7 @@
     "yarn": "^1.3"
   },
   "lbrySettings": {
-    "lbrynetDaemonVersion": "0.72.0",
+    "lbrynetDaemonVersion": "0.74.0",
     "lbrynetDaemonUrlTemplate": "https://github.com/lbryio/lbry/releases/download/vDAEMONVER/lbrynet-OSNAME.zip",
     "lbrynetDaemonDir": "static/daemon",
     "lbrynetDaemonFileName": "lbrynet"
