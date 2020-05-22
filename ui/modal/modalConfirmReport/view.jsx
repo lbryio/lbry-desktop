@@ -20,7 +20,9 @@ const ModalConfirmReport = (props: Props) => {
   return (
     <Modal type="custom" isOpen contentLabel="Confirm Report" title={__('Confirm Report')}>
       <p>
-        <b>DISCLAIMER</b>: THE LBC YOU SEND IS A DEPOSIT AND WILL BE RETURNED TO YOU IF AND ONLY IF THE REPORT IS VALID.
+        <b>DISCLAIMER</b>: YOU WILL HAVE TO SEND LBRY INC. A CERTAIN AMOUNT OF LBC AS A DEPOSIT AND WILL BE RETURNED TO
+        YOU IF AND ONLY IF THE REPORT IS VALID. WE USE THIS MEASURE TO PREVENT BOTS AND PEOPLE FROM ABUSING REPORT
+        FORMS.
       </p>
 
       <div className="card__actions">
