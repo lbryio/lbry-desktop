@@ -4,23 +4,74 @@ import { Modal } from 'modal/modal';
 import Button from 'component/button';
 import { FormField } from 'component/common/form';
 import * as ICONS from 'constants/icons';
+import * as MODALS from 'constants/modal_types';
 
 type Props = {
   closeModal: () => void,
+  openModal: (
+    id: string,
+    {
+      reportFields: { reportType: string, claimId: string, uri: string, extraFields?: Object },
+    }
+  ) => void,
+  claimId: string,
+  uri: string,
 };
 
 const ModalReport = (props: Props) => {
-  const { closeModal } = props;
+  const { closeModal, openModal, claimId, uri } = props;
   const [selectedBtn, setSelectedBtn] = useState(0);
+  const [why, setWhy] = useState('');
+  const [error, setError] = useState('');
 
   const confirmReport = e => {
     e.preventDefault();
 
-    closeModal();
+    if (why !== '') {
+      let reportType = '';
+
+      switch (selectedBtn) {
+        case 0:
+          reportType = 'Mistag';
+          break;
+        case 1:
+          reportType = 'Spam';
+          break;
+        case 2:
+          reportType = 'Illegal Promotion';
+          break;
+        case 3:
+          reportType = 'Violence';
+          break;
+        case 4:
+          reportType = 'Child Abuse';
+          break;
+        case 5:
+          reportType = 'Promotes Terrorism';
+          break;
+      }
+
+      setError('');
+      openModal(MODALS.CONFIRM_REPORT, {
+        reportFields: {
+          reportType,
+          claimId,
+          uri,
+          extraFields: {
+            why,
+          },
+        },
+      });
+    } else setError('All Fields Required');
   };
 
   return (
     <Modal type="custom" isOpen contentLabel="Report Content" title={__('Report Content')}>
+      <blockquote>
+        <b>claimId</b>: {claimId}
+      </blockquote>
+      <br />
+
       <p>{__('Choose an option according to the violation')}</p>
 
       <br />
@@ -142,6 +193,9 @@ const ModalReport = (props: Props) => {
         <div>
           <FormField
             type="text"
+            value={why}
+            error={error}
+            onChange={e => setWhy(e.target.value)}
             name="Why do you think this violates our policy?"
             label={__('Why do you think this violates our policy?')}
           />
