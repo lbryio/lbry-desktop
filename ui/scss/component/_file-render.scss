@@ -197,11 +197,11 @@
   }
 }
 
-.file-viewer--is-playing:not(:hover) .file-viewer__embedded-title {
+.file-viewer--is-playing:not(:hover) .file-viewer__embedded-header {
   display: none;
 }
 
-.file-viewer__embedded-title {
+.file-viewer__embedded-header {
   position: absolute;
   display: flex;
   justify-content: space-between;
@@ -226,14 +226,32 @@
     &:hover {
       color: var(--color-white);
     }
+  }
 
-    &:first-of-type {
-      max-width: 90%;
+  .credit-amount,
+  .icon--Key {
+    margin-right: var(--spacing-medium);
+  }
+}
 
-      @media (max-width: $breakpoint-small) {
-        max-width: 80%;
-      }
-    }
+.file-viewer__embedded-title {
+  max-width: 75%;
+
+  @media (max-width: $breakpoint-small) {
+    max-width: 50%;
+    font-size: var(--font-small);
+  }
+}
+
+.file-viewer__embedded-info {
+  display: flex;
+  align-items: center;
+  font-size: var(--font-small);
+  margin-left: var(--spacing-medium);
+  white-space: nowrap;
+
+  & > *:not(:last-child) {
+    margin-right: var(--spacing-small);
   }
 }
 
