@@ -1203,5 +1203,11 @@
   "Why do you think this violates our policy?": "Why do you think this violates our policy?",
   "Name of the Original Author": "Name of the Original Author",
   "Link to the original Content": "Link to the original Content",
-  "Anything more we should know?": "Anything more we should know?"
+  "Anything more we should know?": "Anything more we should know?",
+  "Confirm Transaction": "Confirm Transaction",
+  "Sending: ": "Sending: ",
+  "To address: ": "To address: ",
+  "Once the transaction is sent, it cannot be reversed.": "Once the transaction is sent, it cannot be reversed.",
+  "Confirm Report": "Confirm Report",
+  "Your wallet is not currently synced with lbry.tv. You are in control of backing up your wallet.": "Your wallet is not currently synced with lbry.tv. You are in control of backing up your wallet."
 }
