@@ -16,13 +16,23 @@ type Props = {
   ) => void,
   claimId: string,
   uri: string,
+  checkAddressIsMine: string => void,
+  receiveAddress: string,
+  getNewAddress: () => void,
+  gettingNewAddress: boolean,
 };
 
 const ModalReport = (props: Props) => {
-  const { closeModal, openModal, claimId, uri } = props;
+  const { closeModal, openModal, claimId, uri, checkAddressIsMine, receiveAddress, getNewAddress } = props;
   const [selectedBtn, setSelectedBtn] = useState(0);
   const [why, setWhy] = useState('');
   const [error, setError] = useState('');
+
+  if (!receiveAddress) {
+    getNewAddress();
+  } else {
+    checkAddressIsMine(receiveAddress);
+  }
 
   const confirmReport = e => {
     e.preventDefault();
@@ -57,6 +67,7 @@ const ModalReport = (props: Props) => {
           reportType,
           claimId,
           uri,
+          walletAddress: receiveAddress,
           extraFields: {
             why,
           },
