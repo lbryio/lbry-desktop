@@ -201,6 +201,11 @@ const ModalReport = (props: Props) => {
           />
         </div>
       </React.Fragment>
+      <br />
+      <p>
+        Please <b>Double Check</b> All Fields, Invalid Reports Will Be Rejected
+      </p>
+      <hr />
       <div className="card__actions">
         <Button button="primary" onClick={confirmReport} label={__('Report')} />
         <Button button="alt" onClick={closeModal} label={__('Close')} />
