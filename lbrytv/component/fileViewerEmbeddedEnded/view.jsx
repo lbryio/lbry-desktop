@@ -36,12 +36,7 @@ function FileViewerEmbeddedEnded(props: Props) {
   return (
     <div className="file-viewer__overlay">
       <div className="file-viewer__overlay-secondary">
-        <Button
-          className="file-viewer__overlay-logo file-viewer__embedded-title-logo"
-          label="LBRY"
-          icon={ICONS.LBRY}
-          href={URL}
-        />
+        <Button className="file-viewer__overlay-logo" label="LBRY" icon={ICONS.LBRY} href={URL} />
       </div>
       <div className="file-viewer__overlay-title">{prompt}</div>
       <div className="file-viewer__overlay-actions">

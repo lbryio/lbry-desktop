@@ -1,6 +1,7 @@
 // @flow
 import React from 'react';
 import Button from 'component/button';
+import FilePrice from 'component/filePrice';
 import { formatLbryUrlForWeb } from 'util/url';
 import { withRouter } from 'react-router';
 import { URL } from 'config';
@@ -25,13 +26,12 @@ function FileViewerEmbeddedTitle(props: Props) {
   const lbryLinkProps = isInApp ? { navigate: '/' } : { href: URL };
 
   return (
-    <div className="file-viewer__embedded-title">
-      <Button label={title} button="link" {...contentLinkProps} />
-      <Button
-        className="file-viewer__overlay-logo file-viewer__embedded-title-logo"
-        icon={ICONS.LBRY}
-        {...lbryLinkProps}
-      />
+    <div className="file-viewer__embedded-header">
+      <Button label={title} button="link" className="file-viewer__embedded-title" {...contentLinkProps} />
+      <div className="file-viewer__embedded-info">
+        <Button className="file-viewer__overlay-logo" icon={ICONS.LBRY} {...lbryLinkProps} />
+        <FilePrice uri={uri} />
+      </div>
     </div>
   );
 }
