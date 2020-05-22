@@ -1273,5 +1273,9 @@
   "To address: ": "To address: ",
   "Once the transaction is sent, it cannot be reversed.": "Once the transaction is sent, it cannot be reversed.",
   "Confirm Report": "Confirm Report",
-  "Your wallet is not currently synced with lbry.tv. You are in control of backing up your wallet.": "Your wallet is not currently synced with lbry.tv. You are in control of backing up your wallet."
+  "Your wallet is not currently synced with lbry.tv. You are in control of backing up your wallet.": "Your wallet is not currently synced with lbry.tv. You are in control of backing up your wallet.",
+  "Your Email for Further Contact": "Your Email for Further Contact",
+  "Your Email for Further Contact(Invalid Emails will be rejected)": "Your Email for Further Contact(Invalid Emails will be rejected)",
+  "Your Email for Further Contact(invalid emails will be rejected)": "Your Email for Further Contact(invalid emails will be rejected)",
+  "Your Email for Further Contact (invalid emails will be rejected)": "Your Email for Further Contact (invalid emails will be rejected)"
 }
