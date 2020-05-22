@@ -10,12 +10,14 @@ type Props = {
   amount: number,
   closeModal: () => void,
   sendToAddress: (string, number) => void,
+  confirmedCallback?: () => void,
 };
 
 class ModalConfirmTransaction extends React.PureComponent<Props> {
   onConfirmed() {
-    const { closeModal, sendToAddress, amount, address } = this.props;
+    const { closeModal, sendToAddress, amount, address, confirmedCallback } = this.props;
     sendToAddress(address, amount);
+    if (confirmedCallback) confirmedCallback();
     closeModal();
   }
 
