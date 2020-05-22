@@ -37,7 +37,8 @@ import ModalMobileNavigation from 'modal/modalMobileNavigation';
 import ModalSetReferrer from 'modal/modalSetReferrer';
 import ModalRepost from 'modal/modalRepost';
 import ModalSignOut from 'modal/modalSignOut';
-import ModalLiquidateSupports from '../modalSupportsLiquidate';
+import ModalLiquidateSupports from 'modal/modalSupportsLiquidate';
+import ModalConfirmAge from 'modal/modalConfirmAge';
 
 type Props = {
   modal: { id: string, modalProps: {} },
@@ -137,6 +138,8 @@ function ModalRouter(props: Props) {
       return <ModalSignOut {...modalProps} />;
     case MODALS.LIQUIDATE_SUPPORTS:
       return <ModalLiquidateSupports {...modalProps} />;
+    case MODALS.CONFIRM_AGE:
+      return <ModalConfirmAge {...modalProps} />;
     default:
       return null;
   }

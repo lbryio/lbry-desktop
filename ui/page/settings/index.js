@@ -5,6 +5,7 @@ import {
   doNotifyDecryptWallet,
   doNotifyForgetPassword,
   doToggle3PAnalytics,
+  doOpenModal,
 } from 'redux/actions/app';
 import { selectAllowAnalytics } from 'redux/selectors/app';
 import {
@@ -63,6 +64,7 @@ const perform = dispatch => ({
   clearPlayingUri: () => dispatch(doSetPlayingUri(null)),
   setDarkTime: (time, options) => dispatch(doSetDarkTime(time, options)),
   findFFmpeg: () => dispatch(doFindFFmpeg()),
+  openModal: (id, params) => dispatch(doOpenModal(id, params)),
 });
 
 export default connect(select, perform)(SettingsPage);
