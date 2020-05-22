@@ -17,16 +17,19 @@ type Props = {
   cancelPurchase: () => void,
   metadata: StreamMetadata,
   analyticsPurchaseEvent: GetResponse => void,
+  playingUri: ?string,
+  setPlayingUri: (?string) => void,
 };
 
 function ModalAffirmPurchase(props: Props) {
   const {
-    cancelPurchase,
     closeModal,
     loadVideo,
     metadata: { title },
     uri,
     analyticsPurchaseEvent,
+    playingUri,
+    setPlayingUri,
   } = props;
   const [success, setSuccess] = React.useState(false);
   const [purchasing, setPurchasing] = React.useState(false);
@@ -40,6 +43,14 @@ function ModalAffirmPurchase(props: Props) {
       setSuccess(true);
       analyticsPurchaseEvent(fileInfo);
     });
+  }
+
+  function cancelPurchase() {
+    if (uri === playingUri) {
+      setPlayingUri(null);
+    }
+
+    closeModal();
   }
 
   React.useEffect(() => {
