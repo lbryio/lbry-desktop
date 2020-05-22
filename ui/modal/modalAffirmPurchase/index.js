@@ -1,20 +1,18 @@
 import { connect } from 'react-redux';
-import { doPlayUri } from 'redux/actions/content';
+import { doPlayUri, doSetPlayingUri } from 'redux/actions/content';
+import { selectPlayingUri } from 'redux/selectors/content';
 import { doHideModal, doAnaltyicsPurchaseEvent } from 'redux/actions/app';
 import { makeSelectMetadataForUri } from 'lbry-redux';
 import ModalAffirmPurchase from './view';
 
 const select = (state, props) => ({
   metadata: makeSelectMetadataForUri(props.uri)(state),
+  playingUri: selectPlayingUri(state),
 });
 
 const perform = dispatch => ({
   analyticsPurchaseEvent: fileInfo => dispatch(doAnaltyicsPurchaseEvent(fileInfo)),
-  cancelPurchase: () => {
-    // TODO: Find a way to add this back without messing up embeds
-    // dispatch(doSetPlayingUri(null));
-    dispatch(doHideModal());
-  },
+  setPlayingUri: uri => dispatch(doSetPlayingUri(uri)),
   closeModal: () => dispatch(doHideModal()),
   loadVideo: (uri, onSuccess) => dispatch(doPlayUri(uri, true, undefined, onSuccess)),
 });
