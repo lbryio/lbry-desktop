@@ -93,7 +93,7 @@ const ModalReport = (props: Props) => {
         <FormField
           checked={selectedBtn === 0}
           type="radio"
-          onClick={() => setSelectedBtn(0)}
+          onChange={() => setSelectedBtn(0)}
           name="Mistagged content"
           label={
             <div>
@@ -110,7 +110,7 @@ const ModalReport = (props: Props) => {
         <FormField
           checked={selectedBtn === 1}
           type="radio"
-          onClick={() => setSelectedBtn(1)}
+          onChange={() => setSelectedBtn(1)}
           name="Spam"
           label={
             <div>
@@ -129,7 +129,7 @@ const ModalReport = (props: Props) => {
         <FormField
           checked={selectedBtn === 2}
           type="radio"
-          onClick={() => setSelectedBtn(2)}
+          onChange={() => setSelectedBtn(2)}
           name="Illegal Promotions"
           label={
             <div>
@@ -146,7 +146,7 @@ const ModalReport = (props: Props) => {
         <FormField
           checked={selectedBtn === 3}
           type="radio"
-          onClick={() => setSelectedBtn(3)}
+          onChange={() => setSelectedBtn(3)}
           name="Violent or Repulsive"
           label={
             <div>
@@ -165,7 +165,7 @@ const ModalReport = (props: Props) => {
         <FormField
           checked={selectedBtn === 4}
           type="radio"
-          onClick={() => setSelectedBtn(4)}
+          onChange={() => setSelectedBtn(4)}
           name="Child Abuse"
           label={
             <div>
@@ -182,7 +182,7 @@ const ModalReport = (props: Props) => {
         <FormField
           checked={selectedBtn === 5}
           type="radio"
-          onClick={() => setSelectedBtn(5)}
+          onChange={() => setSelectedBtn(5)}
           name="Promotes Terrorism"
           label={
             <div>
