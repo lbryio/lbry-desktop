@@ -69,7 +69,6 @@ const ModalDmca = (props: Props) => {
       <blockquote>
         <b>claimId</b>: {claimId}
       </blockquote>
-      sup
       <br />
       <hr />
       <br />
