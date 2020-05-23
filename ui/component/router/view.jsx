@@ -7,6 +7,9 @@ import HelpPage from 'page/help';
 //  @if TARGET='app'
 import BackupPage from 'page/backup';
 // @endif
+//  @if TARGET='web'
+import Code2257Page from 'lbrytv/page/code2257';
+// @endif
 import ReportPage from 'page/report';
 import ShowPage from 'page/show';
 import PublishPage from 'page/publish';
@@ -36,6 +39,7 @@ import Welcome from 'page/welcome';
 import CreatorDashboard from 'page/creatorDashboard';
 import RewardsVerifyPage from 'page/rewardsVerify';
 import CheckoutPage from 'page/checkoutPage';
+
 import { parseURI } from 'lbry-redux';
 import { SITE_TITLE, WELCOME_VERSION } from 'config';
 
@@ -169,6 +173,9 @@ function AppRouter(props: Props) {
       <Route path={`/$/${PAGES.HELP}`} exact component={HelpPage} />
       {/* @if TARGET='app' */}
       <Route path={`/$/${PAGES.BACKUP}`} exact component={BackupPage} />
+      {/* @endif */}
+      {/* @if TARGET='web' */}
+      <Route path={`/$/${PAGES.CODE_2257}`} exact component={Code2257Page} />
       {/* @endif */}
       <Route path={`/$/${PAGES.AUTH_VERIFY}`} exact component={SignInVerifyPage} />
       <Route path={`/$/${PAGES.SEARCH}`} exact component={SearchPage} />
