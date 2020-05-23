@@ -23,10 +23,16 @@ const ModalConfirmReport = (props: Props) => {
   return (
     <Modal type="custom" isOpen contentLabel="Confirm Report" title={__('Confirm Report')}>
       <p>
-        <b>DISCLAIMER</b>: YOU WILL HAVE TO SEND LBRY INC. A CERTAIN AMOUNT OF LBC AS A DEPOSIT AND WILL BE REFUNDED TO
-        YOU IF AND ONLY IF THE REPORT IS VALID. WE USE THIS MEASURE TO PREVENT BOTS AND PEOPLE FROM ABUSING REPORT
-        FORMS.
+        <b>DISCLAIMER</b>:{' '}
       </p>
+      <br />
+      <hr />
+      <p>
+        {' '}
+        A minimal amount of LBC will be sent to LBRY Inc as a deposit. If your report is valid, You will get a{' '}
+        <b>FULL RETURN</b>. This validation is necessary for preventing Bots and Report Abuse.
+      </p>
+
       <p>The refund will be received on the following wallet address:</p>
       <blockquote>{reportFields.walletAddress}</blockquote>
 
