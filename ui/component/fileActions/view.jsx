@@ -122,13 +122,6 @@ function FileActions(props: Props) {
             <MenuButton className="button button--alt" title={__('Report Content')}>
               <Icon size={18} icon={ICONS.REPORT} aria-hidden />
             </MenuButton>
-            {/* <Button
-                title={__('Report Content')}
-                button="alt"
-                icon={ICONS.REPORT}
-                description={__('Report Content')}
-              /> */}
-            {/* </MenuButton> */}
 
             <MenuList className="menu__list">
               <MenuItem className="menu__link" onSelect={() => openModal(MODALS.DMCA, { uri, claim, claimId })}>
