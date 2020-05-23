@@ -29,5 +29,6 @@ module.name_mapper='^effects\(.*\)$' -> '<PROJECT_ROOT>/ui/effects\1'
 module.name_mapper='^config\(.*\)$' -> '<PROJECT_ROOT>/config\1'
 module.name_mapper='^lbrytv\/component\(.*\)$' -> '<PROJECT_ROOT>/lbrytv/component\1'
 module.name_mapper='^lbrytv\/effects\(.*\)$' -> '<PROJECT_ROOT>/lbrytv/effects\1'
+module.name_mapper='^lbrytv\/page\(.*\)$' -> '<PROJECT_ROOT>/lbrytv/page\1'
 
 [strict]

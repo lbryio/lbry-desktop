@@ -1,4 +1,5 @@
 // @flow
+import * as PAGES from 'constants/pages';
 import React from 'react';
 import Button from 'component/button';
 
@@ -68,6 +69,10 @@ const sections = [
         label: 'Privacy Policy',
         link: 'https://lbry.com/privacypolicy',
       },
+      {
+        label: '2257',
+        navigate: `/$/${PAGES.CODE_2257}`,
+      },
     ],
   },
 ];
@@ -80,11 +85,13 @@ export default function Footer() {
           <div key={name} className="footer__section">
             <div className="footer__section-title">{name}</div>
             <ul className="ul--no-style">
-              {links.map(({ label, link }) => (
-                <li key={label}>
-                  <Button className="footer__link" href={link} label={label} />
-                </li>
-              ))}
+              {links.map(({ label, link, navigate }) => {
+                return (
+                  <li key={label}>
+                    <Button className="footer__link" href={link} navigate={navigate} label={label} />
+                  </li>
+                );
+              })}
             </ul>
           </div>
         );
