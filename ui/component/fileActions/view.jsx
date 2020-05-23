@@ -9,6 +9,7 @@ import { buildURI } from 'lbry-redux';
 import * as RENDER_MODES from 'constants/file_render_modes';
 import useIsMobile from 'effects/use-is-mobile';
 import { Menu, MenuList, MenuButton, MenuItem } from '@reach/menu-button';
+import Icon from 'component/common/icon';
 
 type Props = {
   uri: string,
@@ -118,14 +119,16 @@ function FileActions(props: Props) {
         )}
         {!claimIsMine && (
           <Menu>
-            <MenuButton>
-              <Button
+            <MenuButton className="button button--alt" title={__('Report Content')}>
+              <Icon size={18} icon={ICONS.REPORT} aria-hidden />
+            </MenuButton>
+            {/* <Button
                 title={__('Report Content')}
                 button="alt"
                 icon={ICONS.REPORT}
                 description={__('Report Content')}
-              />
-            </MenuButton>
+              /> */}
+            {/* </MenuButton> */}
 
             <MenuList className="menu__list">
               <MenuItem className="menu__link" onSelect={() => openModal(MODALS.DMCA, { uri, claim, claimId })}>
