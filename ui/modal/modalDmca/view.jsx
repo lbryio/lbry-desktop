@@ -15,6 +15,10 @@ type Props = {
   ) => void,
   claimId: string,
   uri: string,
+  checkAddressIsMine: string => void,
+  receiveAddress: string,
+  getNewAddress: () => void,
+  gettingNewAddress: boolean,
 };
 
 const ModalDmca = (props: Props) => {
@@ -62,6 +66,10 @@ const ModalDmca = (props: Props) => {
       contentLabel="Copyright Infringement Report"
       title={__('Copyright Infringement Report')}
     >
+      <blockquote>
+        <b>claimId</b>: {claimId}
+      </blockquote>
+      sup
       <br />
       <hr />
       <br />
