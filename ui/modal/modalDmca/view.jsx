@@ -22,7 +22,7 @@ type Props = {
 };
 
 const ModalDmca = (props: Props) => {
-  const { closeModal, openModal, claimId, uri } = props;
+  const { closeModal, openModal, claimId, uri, checkAddressIsMine, receiveAddress, getNewAddress } = props;
   const [authorName, setAuthorName] = useState(''),
     [originalLink, setOriginalLink] = useState(''),
     [email, setEmail] = useState(''),
@@ -31,6 +31,12 @@ const ModalDmca = (props: Props) => {
   const [nameError, setNameError] = useState(''),
     [linkError, setLinkError] = useState(''),
     [emailError, setEmailError] = useState('');
+
+  if (!receiveAddress) {
+    getNewAddress();
+  } else {
+    checkAddressIsMine(receiveAddress);
+  }
 
   const confirmReport = e => {
     e.preventDefault();
@@ -49,6 +55,7 @@ const ModalDmca = (props: Props) => {
         reportType: 'Copyright Infringement',
         claimId,
         uri,
+        walletAddress: receiveAddress,
         extraFields: {
           originalAuthor: authorName,
           originalLink,
