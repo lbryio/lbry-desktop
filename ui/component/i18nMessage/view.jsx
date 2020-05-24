@@ -15,7 +15,7 @@ export default function I18nMessage(props: Props) {
     return message;
   }
 
-  const messageSubstrings = props.children.split(regexp),
+  const messageSubstrings = message.split(regexp),
     tokens = props.tokens;
 
   return (
