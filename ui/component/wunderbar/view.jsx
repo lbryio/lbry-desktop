@@ -169,7 +169,15 @@ class WunderBar extends React.PureComponent<Props, State> {
     const { suggestions, doFocus, doBlur, searchQuery } = this.props;
 
     return (
-      <div className="wunderbar">
+      <div
+        // @if TARGET='app'
+        onDoubleClick={e => {
+          e.stopPropagation();
+        }}
+        // @endif
+
+        className="wunderbar"
+      >
         <Icon icon={ICONS.SEARCH} />
         <Autocomplete
           autoHighlight

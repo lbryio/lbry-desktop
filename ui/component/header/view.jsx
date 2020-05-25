@@ -13,6 +13,7 @@ import { Menu, MenuList, MenuButton, MenuItem } from '@reach/menu-button';
 import Tooltip from 'component/common/tooltip';
 import NavigationButton from 'component/navigationButton';
 // @if TARGET='app'
+import { remote } from 'electron';
 import { IS_MAC } from 'component/app/view';
 // @endif
 
@@ -126,6 +127,11 @@ const Header = (props: Props) => {
         'header--mac': IS_MAC,
         // @endif
       })}
+      // @if TARGET='app'
+      onDoubleClick={e => {
+        remote.getCurrentWindow().maximize();
+      }}
+      // @endif
     >
       <div className="header__contents">
         <div className="header__navigation">
@@ -136,6 +142,11 @@ const Header = (props: Props) => {
             onClick={() => {
               if (history.location.pathname === '/') window.location.reload();
             }}
+            // @if TARGET='app'
+            onDoubleClick={e => {
+              e.stopPropagation();
+            }}
+            // @endif
             {...homeButtonNavigationProps}
           />
 
@@ -160,12 +171,22 @@ const Header = (props: Props) => {
                   navigate={`/$/${PAGES.WALLET}`}
                   className="header__navigation-item menu__title header__navigation-item--balance"
                   label={getWalletTitle()}
+                  // @if TARGET='app'
+                  onDoubleClick={e => {
+                    e.stopPropagation();
+                  }}
+                  // @endif
                 />
                 <Menu>
                   <MenuButton
                     aria-label={__('Publish a file, or create a channel')}
                     title={__('Publish a file, or create a channel')}
                     className="header__navigation-item menu__title header__navigation-item--icon"
+                    // @if TARGET='app'
+                    onDoubleClick={e => {
+                      e.stopPropagation();
+                    }}
+                    // @endif
                   >
                     <Icon size={18} icon={ICONS.PUBLISH} aria-hidden />
                   </MenuButton>
@@ -186,6 +207,11 @@ const Header = (props: Props) => {
                     aria-label={__('Your account')}
                     title={__('Your account')}
                     className="header__navigation-item menu__title header__navigation-item--icon"
+                    // @if TARGET='app'
+                    onDoubleClick={e => {
+                      e.stopPropagation();
+                    }}
+                    // @endif
                   >
                     <Icon size={18} icon={ICONS.ACCOUNT} aria-hidden />
                   </MenuButton>
@@ -240,6 +266,11 @@ const Header = (props: Props) => {
                 aria-label={__('Settings')}
                 title={__('Settings')}
                 className="header__navigation-item menu__title header__navigation-item--icon"
+                // @if TARGET='app'
+                onDoubleClick={e => {
+                  e.stopPropagation();
+                }}
+                // @endif
               >
                 <Icon size={18} icon={ICONS.SETTINGS} aria-hidden />
               </MenuButton>
@@ -277,12 +308,27 @@ const Header = (props: Props) => {
                   // className="button--header-close"
                   icon={ICONS.REMOVE}
                   {...closeButtonNavigationProps}
+                  // @if TARGET='app'
+                  onDoubleClick={e => {
+                    e.stopPropagation();
+                  }}
+                  // @endif
                 />
               </Tooltip>
             </div>
           )
         )}
-        <Button onClick={openMobileNavigation} icon={ICONS.MENU} iconSize={24} className="header__menu--mobile" />
+        <Button
+          onClick={openMobileNavigation}
+          icon={ICONS.MENU}
+          iconSize={24}
+          className="header__menu--mobile"
+          // @if TARGET='app'
+          onDoubleClick={e => {
+            e.stopPropagation();
+          }}
+          // @endif
+        />
       </div>
     </header>
   );
