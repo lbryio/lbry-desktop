@@ -101,3 +101,4 @@ export const SCIENCE = 'Science';
 export const ANALYTICS = 'BarChart2';
 export const PURCHASED = 'Key';
 export const CIRCLE = 'Circle';
+export const PINNED = 'Pinned';

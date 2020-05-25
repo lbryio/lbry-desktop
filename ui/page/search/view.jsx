@@ -9,7 +9,7 @@ import Page from 'component/page';
 import SearchOptions from 'component/searchOptions';
 import Button from 'component/button';
 import ClaimUri from 'component/claimUri';
-import Ads from 'lbrytv/component/ads';
+import Ads from 'web/component/ads';
 
 type AdditionalOptions = {
   isBackgroundSearch: boolean,

@@ -20,7 +20,7 @@ import {
   homepageReducer,
   statsReducer,
   syncReducer,
-  lbrytvReducer,
+  webReducer,
 } from 'lbryinc';
 import appReducer from 'redux/reducers/app';
 import contentReducer from 'redux/reducers/content';
@@ -51,5 +51,5 @@ export default history =>
     user: userReducer,
     wallet: walletReducer,
     sync: syncReducer,
-    lbrytv: lbrytvReducer,
+    web: webReducer,
   });

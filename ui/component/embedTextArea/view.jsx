@@ -3,7 +3,7 @@ import * as ICONS from 'constants/icons';
 import { FormField } from 'component/common/form';
 import Button from 'component/button';
 import React, { useRef } from 'react';
-import { generateEmbedUrl } from 'util/lbrytv';
+import { generateEmbedUrl } from 'util/web';
 
 type Props = {
   copyable: string,
