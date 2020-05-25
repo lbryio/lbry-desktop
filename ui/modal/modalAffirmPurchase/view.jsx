@@ -19,6 +19,7 @@ type Props = {
   analyticsPurchaseEvent: GetResponse => void,
   playingUri: ?string,
   setPlayingUri: (?string) => void,
+  setFloatingUri: (?string) => void,
 };
 
 function ModalAffirmPurchase(props: Props) {
@@ -30,6 +31,7 @@ function ModalAffirmPurchase(props: Props) {
     analyticsPurchaseEvent,
     playingUri,
     setPlayingUri,
+    setFloatingUri,
   } = props;
   const [success, setSuccess] = React.useState(false);
   const [purchasing, setPurchasing] = React.useState(false);
@@ -42,6 +44,10 @@ function ModalAffirmPurchase(props: Props) {
       setPurchasing(false);
       setSuccess(true);
       analyticsPurchaseEvent(fileInfo);
+
+      if (playingUri !== uri) {
+        setFloatingUri(uri);
+      }
     });
   }
 
