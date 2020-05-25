@@ -13,12 +13,13 @@ type Props = {
   doResolveUri: string => void,
   doFetchCostInfoForUri: string => void,
   doSetFloatingUri: string => void,
+  costInfo: ?{ cost: number },
   floatingPlayerEnabled: boolean,
   doPlayUri: (string, ?boolean, ?boolean, (GetResponse) => void) => void,
   doAnaltyicsPurchaseEvent: GetResponse => void,
 };
 
-export default function FileRenderFloating(props: Props) {
+export default function EmbedPlayButton(props: Props) {
   const {
     uri,
     thumbnail = '',
@@ -29,10 +30,12 @@ export default function FileRenderFloating(props: Props) {
     floatingPlayerEnabled,
     doPlayUri,
     doAnaltyicsPurchaseEvent,
+    costInfo,
   } = props;
   const { push } = useHistory();
   const isMobile = useIsMobile();
   const hasResolvedUri = claim !== undefined;
+  const disabled = !hasResolvedUri || !costInfo;
 
   useEffect(() => {
     doResolveUri(uri);
@@ -40,7 +43,7 @@ export default function FileRenderFloating(props: Props) {
   }, [uri, doResolveUri, doFetchCostInfoForUri]);
 
   function handleClick() {
-    if (!hasResolvedUri) {
+    if (disabled) {
       return;
     }
 
@@ -57,7 +60,7 @@ export default function FileRenderFloating(props: Props) {
 
   return (
     <div
-      disabled={!hasResolvedUri}
+      disabled={disabled}
       role="button"
       className="embed__inline-button"
       onClick={handleClick}
