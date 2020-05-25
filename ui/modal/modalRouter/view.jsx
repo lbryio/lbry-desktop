@@ -39,6 +39,7 @@ import ModalRepost from 'modal/modalRepost';
 import ModalSignOut from 'modal/modalSignOut';
 import ModalLiquidateSupports from 'modal/modalSupportsLiquidate';
 import ModalConfirmAge from 'modal/modalConfirmAge';
+import ModalFileSelection from 'modal/modalFileSelection';
 
 type Props = {
   modal: { id: string, modalProps: {} },
@@ -140,6 +141,8 @@ function ModalRouter(props: Props) {
       return <ModalLiquidateSupports {...modalProps} />;
     case MODALS.CONFIRM_AGE:
       return <ModalConfirmAge {...modalProps} />;
+    case MODALS.FILE_SELECTION:
+      return <ModalFileSelection {...modalProps} />;
     default:
       return null;
   }

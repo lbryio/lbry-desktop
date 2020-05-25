@@ -12,6 +12,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Expose reflector status for publishes ([#4148](https://github.com/lbryio/lbry-desktop/pull/4148))
 - More tooltip help texts _community pr!_ ([#4185](https://github.com/lbryio/lbry-desktop/pull/4185))
 - Add footer on web ([#4159](https://github.com/lbryio/lbry-desktop/pull/4159))
+- Support drag-and-drop file publishing _community pr!_ ([#4170](https://github.com/lbryio/lbry-desktop/pull/4170))
 
 ### Changed
 

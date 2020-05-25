@@ -47,6 +47,8 @@ function PublishFile(props: Props) {
 
   const { available } = ffmpegStatus;
   const [oversized, setOversized] = useState(false);
+  const [currentFile, setCurrentFile] = useState(null);
+
   const RECOMMENDED_BITRATE = 6000000;
   const TV_PUBLISH_SIZE_LIMIT: number = 1073741824;
   const UPLOAD_SIZE_MESSAGE = 'Lbry.tv uploads are limited to 1 GB. Download the app for unrestricted publishing.';
@@ -60,19 +62,16 @@ function PublishFile(props: Props) {
   // clear warnings
   useEffect(() => {
     if (!filePath || filePath === '') {
-      updateOptimizeState(0, 0, false);
+      setCurrentFile('');
       setOversized(false);
+      updateOptimizeState(0, 0, false);
+    } else if (typeof filePath !== 'string') {
+      // Update currentFile file
+      if (filePath.name !== currentFile && filePath.path !== currentFile) {
+        handleFileChange(filePath);
+      }
     }
-  }, [filePath]);
-
-  let currentFile = '';
-  if (filePath) {
-    if (typeof filePath === 'string') {
-      currentFile = filePath;
-    } else {
-      currentFile = filePath.name;
-    }
-  }
+  }, [filePath, currentFile, handleFileChange, updateOptimizeState]);
 
   function updateOptimizeState(duration, size, isvid) {
     updatePublishForm({ fileDur: duration, fileSize: size, fileVid: isvid });
@@ -179,9 +178,6 @@ function PublishFile(props: Props) {
   function handleFileChange(file: WebFile) {
     const { showToast } = props;
     window.URL = window.URL || window.webkitURL;
-    // if electron, we'll set filePath to the path string because SDK is handling publishing.
-    // if web, we set the filePath (dumb name) to the File() object
-    // File.path will be undefined from web due to browser security, so it will default to the File Object.
     setOversized(false);
 
     // select file, start to select a new one, then cancel
@@ -189,7 +185,8 @@ function PublishFile(props: Props) {
       updatePublishForm({ filePath: '', name: '' });
       return;
     }
-    // if video, extract duration so we can warn about bitrate
+
+    // if video, extract duration so we can warn about bitrateif (typeof file !== 'string') {
     const contentType = file.type.split('/');
     const isVideo = contentType[0] === 'video';
     const isMp4 = contentType[1] === 'mp4';
@@ -212,17 +209,17 @@ function PublishFile(props: Props) {
 
     // @if TARGET='web'
     // we only need to enforce file sizes on 'web'
-    if (typeof file !== 'string') {
-      if (file && file.size && Number(file.size) > TV_PUBLISH_SIZE_LIMIT) {
-        setOversized(true);
-        showToast(__(UPLOAD_SIZE_MESSAGE));
-        updatePublishForm({ filePath: '', name: '' });
-        return;
-      }
+    if (file.size && Number(file.size) > TV_PUBLISH_SIZE_LIMIT) {
+      setOversized(true);
+      showToast(__(UPLOAD_SIZE_MESSAGE));
+      updatePublishForm({ filePath: '', name: '' });
+      return;
     }
     // @endif
 
     const publishFormParams: { filePath: string | WebFile, name?: string, optimize?: boolean } = {
+      // if electron, we'll set filePath to the path string because SDK is handling publishing.
+      // File.path will be undefined from web due to browser security, so it will default to the File Object.
       filePath: file.path || file,
     };
     // Strip off extention and replace invalid characters
@@ -232,6 +229,8 @@ function PublishFile(props: Props) {
     if (!isStillEditing) {
       publishFormParams.name = parsedFileName;
     }
+    // File path is not supported on web for security reasons so we use the name instead.
+    setCurrentFile(file.path || file.name);
     updatePublishForm(publishFormParams);
   }
 
