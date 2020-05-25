@@ -488,13 +488,11 @@ class SettingsPage extends React.PureComponent<Props, State> {
                 actions={
                   <p>
                     <React.Fragment>
-                      {__('%count% %channels%. ', {
-                        count:
-                          userBlockedChannelsCount === 0
-                            ? __("You don't have")
-                            : __('You have') + ' ' + (userBlockedChannelsCount || 0) + ' ',
-                        channels: userBlockedChannelsCount === 1 ? __('blocked channel') : __('blocked channels'),
-                      })}
+				              {
+                        userBlockedChannelsCount === 0 ? __("You don't have blocked channels.")
+				                : userBlockedChannelsCount === 1 ? __('You have one blocked channel.') +' '
+				                : __('You have %channels% blocked channels.', {channels: userBlockedChannelsCount})+' '
+                      }
                       {
                         <Button
                           button="link"
