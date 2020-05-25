@@ -39,17 +39,18 @@ type VideoJSOptions = {
   poster?: string,
 };
 
+const IS_IOS =
+  (/iPad|iPhone|iPod/.test(navigator.platform) ||
+    (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1)) &&
+  !window.MSStream;
+
 const VIDEO_JS_OPTIONS: VideoJSOptions = {
   preload: 'auto',
   playbackRates: [0.25, 0.5, 0.75, 1, 1.1, 1.25, 1.5, 1.75, 2],
   responsive: true,
   controls: true,
+  html5: { nativeControlsForTouch: IS_IOS },
 };
-
-const IS_IOS =
-  (/iPad|iPhone|iPod/.test(navigator.platform) ||
-    (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1)) &&
-  !window.MSStream;
 
 const F11_KEYCODE = 122;
 const SPACE_BAR_KEYCODE = 32;
