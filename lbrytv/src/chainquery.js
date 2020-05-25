@@ -12,7 +12,8 @@ function queryPool(sql, params) {
   return new Promise(resolve => {
     pool.query(sql, params, (error, rows) => {
       if (error) {
-        throw Error(error);
+        resolve();
+        return;
       }
 
       resolve(rows);
