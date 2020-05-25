@@ -90,6 +90,7 @@ function ChannelPage(props: Props) {
   const [searchResults, setSearchResults] = useState(undefined);
   const [lastYtSyncDate, setLastYtSyncDate] = useState();
   const claimId = claim.claim_id;
+  const formattedSubCount = Number(subCount).toLocaleString();
 
   // If a user changes tabs, update the url so it stays on the same page if they refresh.
   // We don't want to use links here because we can't animate the tab change and using links
@@ -240,7 +241,7 @@ function ChannelPage(props: Props) {
           <h1 className="channel__title">{title || '@' + channelName}</h1>
           <div className="channel__meta">
             <span>
-              {subCount} {subCount !== 1 ? __('Followers') : __('Follower')}
+              {formattedSubCount} {subCount !== 1 ? __('Followers') : __('Follower')}
               <HelpLink href="https://lbry.com/faq/views" />
             </span>
             {channelIsMine && !editing && (

@@ -18,9 +18,11 @@ function FileViewCount(props: Props) {
     }
   }, [fetchViewCount, uri, claim]);
 
+  const formattedViewCount = Number(viewCount).toLocaleString();
+
   return (
     <span>
-      {viewCount !== 1 ? __('%view_count% Views', { view_count: viewCount }) : __('1 View')}
+      {viewCount !== 1 ? __('%view_count% Views', { view_count: formattedViewCount }) : __('1 View')}
       <HelpLink href="https://lbry.com/faq/views" />
     </span>
   );
