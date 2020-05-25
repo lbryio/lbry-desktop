@@ -1,6 +1,7 @@
 // @flow
 import React, { useEffect } from 'react';
 import Comment from 'component/comment';
+import Spinner from 'component/spinner';
 
 type Props = {
   comments: Array<any>,
@@ -8,10 +9,11 @@ type Props = {
   uri: string,
   claimIsMine: boolean,
   myChannels: ?Array<ChannelClaim>,
+  isFetchingComments: boolean,
 };
 
 function CommentList(props: Props) {
-  const { fetchComments, uri, comments, claimIsMine, myChannels } = props;
+  const { fetchComments, uri, comments, claimIsMine, myChannels, isFetchingComments } = props;
 
   // todo: implement comment_list --mine in SDK so redux can grab with selectCommentIsMine
   const isMyComment = (channelId: string) => {
@@ -49,7 +51,13 @@ function CommentList(props: Props) {
 
   return (
     <ul className="comments">
-      {comments &&
+      {isFetchingComments && (
+        <div className="main--empty">
+          <Spinner />
+        </div>
+      )}
+      {!isFetchingComments &&
+        comments &&
         sortByParent(comments).map(comment => {
           return (
             <Comment
