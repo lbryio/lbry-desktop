@@ -13,10 +13,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - More tooltip help texts _community pr!_ ([#4185](https://github.com/lbryio/lbry-desktop/pull/4185))
 - Add footer on web ([#4159](https://github.com/lbryio/lbry-desktop/pull/4159))
 - Support drag-and-drop file publishing _community pr!_ ([#4170](https://github.com/lbryio/lbry-desktop/pull/4170))
+- Add advanced editor for comments _community pr!_ ([#4224](https://github.com/lbryio/lbry-desktop/pull/4224))
+- Paid content improvements ([#4234](https://github.com/lbryio/lbry-desktop/pull/4234))
 
 ### Changed
 
 - Use "grab" cursor on floating player to make it easier to tell you can drag it _community pr!_ ([#4201](https://github.com/lbryio/lbry-desktop/pull/4201))
+- Confirm age before viewing mature content on web ([#4233](https://github.com/lbryio/lbry-desktop/pull/4233))
 
 ### Fixed
 
@@ -27,6 +30,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Only show "start at" on share modal for video/audio _community pr!_ ([#4194](https://github.com/lbryio/lbry-desktop/pull/4194))
 - Clear media position after video has played to the end _community pr!_ ([#4193](https://github.com/lbryio/lbry-desktop/pull/4193))
 - Text casing on publish page _community pr!_ ([#4186](https://github.com/lbryio/lbry-desktop/pull/4186))
+- Some strings not translating properly _community pr!_ ([#4238](https://github.com/lbryio/lbry-desktop/pull/4238))
 
 ## [0.45.1] - [2020-05-06]
 
