@@ -1216,6 +1216,7 @@
   "%duration% seconds ago": "%duration% seconds ago",
   "%duration% second ago": "%duration% second ago",
   "Check your rewards page to see if you qualify for paid content reimbursement. Only content in this section qualifies.": "Check your rewards page to see if you qualify for paid content reimbursement. Only content in this section qualifies.",
-  "blocked channels": "blocked channels",
-  "%count% %channels%. ": "%count% %channels%. "
+  "You don't have blocked channels.": "You don't have blocked channels.",
+  "You have one blocked channel.": "You have one blocked channel.",
+  "You have %channels% blocked channels.": "You have %channels% blocked channels."
 }
