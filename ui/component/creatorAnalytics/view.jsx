@@ -178,10 +178,9 @@ export default function CreatorAnalytics(props: Props) {
                   </div>
                   <div className="section__subtitle card__data-subtitle">
                     <span>
-                      {__('%view_count% %views%', {
-                        view_count: stats.VideoViewsTopNew,
-                        views: stats.VideoViewsTopNew === 1 ? 'view' : 'views',
-                      })}
+                      {stats.VideoViewsTopNew === 1
+                        ? __('%view_count% view', { view_count: stats.VideoViewsTopNew })
+                        : __('%view_count% views', { view_count: stats.VideoViewsTopNew })}
                     </span>
                     {stats.VideoViewsTopNew > 0 && <Icon icon={ICONS.SUPPORT} iconColor="green" size={18} />}
                   </div>
