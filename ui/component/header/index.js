@@ -18,7 +18,7 @@ import Header from './view';
 const select = state => ({
   balance: selectBalance(state),
   language: makeSelectClientSetting(SETTINGS.LANGUAGE)(state), // trigger redraw on language change
-  roundedBalance: formatCredits(selectBalance(state) || 0, 2, true),
+  roundedBalance: formatCredits(selectBalance(state), 2, true),
   currentTheme: makeSelectClientSetting(SETTINGS.THEME)(state),
   automaticDarkModeEnabled: makeSelectClientSetting(SETTINGS.AUTOMATIC_DARK_MODE_ENABLED)(state),
   hideBalance: makeSelectClientSetting(SETTINGS.HIDE_BALANCE)(state),
