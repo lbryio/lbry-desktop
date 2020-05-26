@@ -22,6 +22,7 @@ import PublishAdditionalOptions from 'component/publishAdditionalOptions';
 import PublishFormErrors from 'component/publishFormErrors';
 import SelectThumbnail from 'component/selectThumbnail';
 import Card from 'component/common/card';
+import I18nMessage from 'component/i18nMessage';
 
 type Props = {
   disabled: boolean,
@@ -208,8 +209,15 @@ function PublishForm(props: Props) {
           <Button button="link" onClick={clearPublish} label={__('Cancel')} />
         </div>
         <p className="help">
-          {__('By continuing, you accept the')}{' '}
-          <Button button="link" href="https://www.lbry.com/termsofservice" label={__('LBRY Terms of Service')} />.
+          <I18nMessage
+            tokens={{
+              lbry_terms_of_service: (
+                <Button button="link" href="https://www.lbry.com/termsofservice" label={__('LBRY Terms of Service')} />
+              ),
+            }}
+          >
+            By continuing, you accept the %lbry_terms_of_service%.
+          </I18nMessage>
         </p>
       </section>
     </div>
