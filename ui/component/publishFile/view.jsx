@@ -181,7 +181,7 @@ function PublishFile(props: Props) {
     setOversized(false);
 
     // select file, start to select a new one, then cancel
-    if (!file) {
+    if (!file || !file.type) {
       updatePublishForm({ filePath: '', name: '' });
       return;
     }
