@@ -1,5 +1,5 @@
 .comments {
-  padding-top: var(--spacing-large);
+  padding-top: var(--spacing-l);
 }
 
 .comment {
@@ -10,32 +10,32 @@
 
   &:not(:last-of-type) {
     border-bottom: 1px solid var(--color-border);
-    padding: var(--spacing-medium) 0;
+    padding: var(--spacing-m) 0;
   }
   &:last-of-type {
-    padding-top: var(--spacing-medium);
+    padding-top: var(--spacing-m);
   }
 }
 
 .comment__create--reply {
-  margin-top: var(--spacing-small);
+  margin-top: var(--spacing-s);
 }
 
 .comment__reply {
   border-left: 5px solid var(--color-primary-alt);
-  margin-left: var(--spacing-medium);
+  margin-left: var(--spacing-m);
 
   .comment__author-thumbnail {
-    margin-left: var(--spacing-medium);
+    margin-left: var(--spacing-m);
   }
 }
 
 .comment__reply-button {
-  margin-top: var(--spacing-small);
+  margin-top: var(--spacing-s);
 }
 
 .comment__body_container {
-  padding-right: var(--spacing-small);
+  padding-right: var(--spacing-s);
   flex: 1;
 }
 
@@ -43,7 +43,7 @@
   display: flex;
   justify-content: space-between;
   text-overflow: ellipsis;
-  margin-bottom: var(--spacing-small);
+  margin-bottom: var(--spacing-s);
 }
 
 .comment__meta-information {
@@ -53,12 +53,12 @@
 
 .comment__message {
   white-space: pre-line;
-  margin-top: var(--spacing-small);
+  margin-top: var(--spacing-s);
 }
 
 .comment__author {
   text-overflow: ellipsis;
-  padding-right: var(--spacing-xsmall);
+  padding-right: var(--spacing-xs);
 }
 
 .comment__time {
@@ -78,7 +78,7 @@
 .comment__menu-option {
   display: flex;
   align-items: center;
-  padding: var(--spacing-small);
+  padding: var(--spacing-s);
   font-size: var(--font-small);
 }
 

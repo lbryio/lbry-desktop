@@ -27,7 +27,7 @@
   min-width: 500px;
   max-width: var(--modal-width);
   overflow: auto;
-  padding: var(--spacing-large);
+  padding: var(--spacing-l);
   word-break: break-word;
 
   &:focus {
@@ -50,13 +50,13 @@
     .navigation {
       width: 100%;
       display: block;
-      padding: var(--spacing-large);
+      padding: var(--spacing-l);
 
       .navigation-links:not(.navigation-links--small) {
         .navigation-link {
           font-size: var(--font-large);
           border-bottom: 1px solid var(--color-gray-3);
-          padding: var(--spacing-medium) 0;
+          padding: var(--spacing-m) 0;
         }
       }
     }
@@ -75,7 +75,7 @@
 
 .error-modal__content {
   display: flex;
-  padding: 0 var(--spacing-medium) var(--spacing-medium) var(--spacing-medium);
+  padding: 0 var(--spacing-m) var(--spacing-m) var(--spacing-m);
 }
 
 .error-modal {
@@ -87,8 +87,8 @@
 .error-modal__error-list {
   max-width: var(--modal-width);
   max-height: 400px;
-  margin-top: var(--spacing-small);
-  padding: var(--spacing-small);
+  margin-top: var(--spacing-s);
+  padding: var(--spacing-s);
 
   background-color: var(--color-error);
   border-left: 2px solid var(--color-text-error);

@@ -24,14 +24,14 @@
   @media (max-width: $breakpoint-small) {
     position: static;
     transform: none;
-    margin-bottom: var(--spacing-xsmall);
+    margin-bottom: var(--spacing-xs);
     max-width: 100%;
     white-space: nowrap;
   }
 
   // This is terrible and should not be removed
   .icon {
-    margin-right: var(--spacing-xsmall) / 2;
+    margin-right: var(--spacing-xs) / 2;
     margin-bottom: -0.08rem;
   }
 }
@@ -67,13 +67,14 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  margin-bottom: var(--spacing-s);
 }
 
 .media__info-text {
   word-break: break-word;
 
   &:not(:last-of-type) {
-    margin-bottom: var(--spacing-medium);
+    margin-bottom: var(--spacing-m);
   }
 
   &.media__info-text--constrained {
@@ -89,11 +90,11 @@
 
   @media (max-width: $breakpoint-small) {
     justify-content: flex-start;
-    padding-top: var(--spacing-small);
+    padding-top: var(--spacing-s);
 
     > * {
-      margin-right: var(--spacing-small);
-      margin-bottom: var(--spacing-small);
+      margin-right: var(--spacing-s);
+      margin-bottom: var(--spacing-s);
     }
   }
 }

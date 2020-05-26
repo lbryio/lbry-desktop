@@ -4,21 +4,32 @@
   }
 }
 
+.claim-list--card-body {
+  .claim-preview {
+    padding: 0 var(--spacing-m);
+    padding-right: 0;
+
+    @media (max-width: $breakpoint-small) {
+      padding: 0;
+    }
+  }
+}
+
 .claim-list__header {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  margin: var(--spacing-medium) 0;
+  margin: var(--spacing-m) 0;
   margin-top: 0;
   font-size: var(--font-body);
 
   .spinner {
-    margin-left: var(--spacing-medium);
+    margin-left: var(--spacing-m);
   }
 }
 
 .claim-list__dropdown {
-  padding: 0 var(--spacing-medium);
+  padding: 0 var(--spacing-m);
 
   @media (max-width: $breakpoint-small) {
     margin-left: 0;
@@ -32,7 +43,7 @@
   color: var(--color-text-subtitle);
 
   .icon {
-    margin-right: var(--spacing-xsmall);
+    margin-right: var(--spacing-xs);
   }
 
   @media (max-width: $breakpoint-small) {
@@ -51,10 +62,10 @@
   display: flex;
   align-items: center;
   margin-left: auto;
-  padding-top: var(--spacing-medium);
+  padding-top: var(--spacing-m);
 
   & > * {
-    margin-left: var(--spacing-small);
+    margin-left: var(--spacing-s);
   }
 
   @media (max-width: $breakpoint-small) {
@@ -63,7 +74,7 @@
 }
 
 .claim-preview__wrapper {
-  padding: var(--spacing-medium);
+  padding: var(--spacing-m);
   list-style: none;
 }
 
@@ -76,7 +87,7 @@
 }
 
 .claim-preview__wrapper--small {
-  padding: var(--spacing-small);
+  padding: var(--spacing-s);
 }
 
 .claim-preview {
@@ -92,7 +103,7 @@
   .media__thumb {
     width: var(--file-list-thumbnail-width);
     flex-shrink: 0;
-    margin-right: var(--spacing-medium);
+    margin-right: var(--spacing-m);
   }
 
   .channel-thumbnail {
@@ -159,7 +170,7 @@
 }
 
 .claim-preview--padded {
-  padding: var(--spacing-small);
+  padding: var(--spacing-s);
 }
 
 .claim-preview--inline {
@@ -216,7 +227,7 @@
   flex: 1;
 
   @media (max-width: $breakpoint-small) {
-    margin-bottom: var(--spacing-small);
+    margin-bottom: var(--spacing-s);
   }
 }
 
@@ -259,12 +270,12 @@
   display: flex;
   position: relative;
   overflow: visible;
-  padding: var(--spacing-medium);
+  padding: var(--spacing-m);
 
   .media__thumb {
     width: var(--file-list-thumbnail-width);
     flex-shrink: 0;
-    margin-right: var(--spacing-medium);
+    margin-right: var(--spacing-m);
   }
 }
 
@@ -274,7 +285,7 @@
 
 .claim-upload__progress--inner {
   background: var(--color-primary-alt);
-  padding: var(--spacing-miniscule);
+  padding: var(--spacing-xxs);
 }
 
 //
@@ -291,21 +302,21 @@
 
 .claim-grid__wrapper {
   &:not(:first-of-type) {
-    margin-top: var(--spacing-large);
+    margin-top: var(--spacing-l);
   }
 
   @media (max-width: $breakpoint-small) {
     &:not(:first-of-type) {
-      margin-top: var(--spacing-medium);
+      margin-top: var(--spacing-m);
     }
   }
 }
 
 .claim-grid__title {
-  margin-bottom: var(--spacing-medium);
+  margin-bottom: var(--spacing-m);
 
   &:not(:first-of-type) {
-    margin-top: var(--spacing-xlarge);
+    margin-top: var(--spacing-xl);
   }
 }
 
@@ -318,11 +329,11 @@
 }
 
 .claim-preview--tile {
-  width: calc((100% - var(--spacing-medium) * 3) / 4);
-  margin-bottom: var(--spacing-large);
+  width: calc((100% - var(--spacing-m) * 3) / 4);
+  margin-bottom: var(--spacing-l);
   margin-right: 0;
   margin-top: 0;
-  margin-left: var(--spacing-medium);
+  margin-left: var(--spacing-m);
   justify-content: flex-start;
 
   @media (min-width: $breakpoint-medium) {
@@ -342,7 +353,7 @@
   }
 
   @media (max-width: $breakpoint-medium) and (min-width: $breakpoint-small) {
-    width: calc((100% - var(--spacing-medium) * 2) / 3);
+    width: calc((100% - var(--spacing-m) * 2) / 3);
 
     &:first-child,
     &:nth-child(3n + 1) {
@@ -355,8 +366,8 @@
   }
 
   @media (max-width: $breakpoint-small) {
-    width: calc((100% - var(--spacing-medium) * 1) / 2);
-    margin-bottom: var(--spacing-large);
+    width: calc((100% - var(--spacing-m) * 1) / 2);
+    margin-bottom: var(--spacing-l);
 
     &:first-child,
     &:nth-child(2n + 1) {
@@ -371,7 +382,7 @@
 
 .claim-tile__title {
   margin-bottom: 0;
-  margin: var(--spacing-small);
+  margin: var(--spacing-s);
   font-weight: 600;
   font-size: var(--font-small);
   color: var(--color-text);
@@ -384,15 +395,15 @@
 
 .claim-tile__info {
   display: flex;
-  margin-top: var(--spacing-small);
-  padding: var(--spacing-small);
+  margin-top: var(--spacing-s);
+  padding: var(--spacing-s);
   border-top: 1px solid var(--color-border);
   color: var(--color-subtitle);
 
   .channel-thumbnail {
     width: 2.1rem;
     height: 2.1rem;
-    margin-right: var(--spacing-small);
+    margin-right: var(--spacing-s);
   }
 }
 
@@ -419,8 +430,8 @@
 
 .claim-tile__file-properties {
   position: absolute;
-  bottom: var(--spacing-miniscule);
-  right: var(--spacing-miniscule);
+  bottom: var(--spacing-xxs);
+  right: var(--spacing-xxs);
   background-color: var(--color-black);
   padding: 0.3rem;
   border-radius: var(--border-radius);
@@ -447,31 +458,31 @@
 }
 
 .claim-preview__repost-author {
-  transform: translateY(calc(var(--spacing-xsmall) * -1));
+  transform: translateY(calc(var(--spacing-xs) * -1));
   font-size: var(--font-xsmall);
   color: var(--color-text-subtitle);
 
   .icon {
-    margin-right: var(--spacing-miniscule);
+    margin-right: var(--spacing-xxs);
     margin-bottom: -1px; // Offset it slightly because it doesn't look aligned next to all lowercase text + the @ from a channel
   }
 }
 
 .claim-tile__repost-author {
-  margin: var(--spacing-small);
+  margin: var(--spacing-s);
   margin-bottom: 0;
 }
 
 .claim-preview__hover-actions {
   display: none;
   position: absolute;
-  top: var(--spacing-miniscule);
-  right: var(--spacing-miniscule);
+  top: var(--spacing-xxs);
+  right: var(--spacing-xxs);
 
   & > * {
     color: var(--color-black);
     background-color: var(--color-white);
-    padding: var(--spacing-xsmall);
+    padding: var(--spacing-xs);
     border-radius: var(--border-radius);
   }
 }

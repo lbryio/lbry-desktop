@@ -6,18 +6,18 @@
 
   .tag {
     margin-left: 0;
-    margin-bottom: var(--spacing-small);
-    margin-right: var(--spacing-small);
+    margin-bottom: var(--spacing-s);
+    margin-right: var(--spacing-s);
   }
 }
 
 .tags--remove {
   @extend .tags;
-  margin-bottom: var(--spacing-medium);
+  margin-bottom: var(--spacing-m);
 
   .tag {
     margin-top: 0;
-    margin-bottom: var(--spacing-small);
+    margin-bottom: var(--spacing-s);
   }
 }
 
@@ -33,7 +33,7 @@
 
 .tags--selected {
   @extend .tags;
-  margin: var(--spacing-large) 0;
+  margin: var(--spacing-l) 0;
 }
 
 .tags__input-wrapper {
@@ -41,9 +41,9 @@
   .tag__input {
     @extend .tag--remove;
     height: var(--tag-height);
-    padding: calc(var(--spacing-miniscule) + 1px) var(--spacing-small);
+    padding: calc(var(--spacing-xxs) + 1px) var(--spacing-s);
     background-color: var(--color-input-bg);
-    margin-bottom: var(--spacing-medium);
+    margin-bottom: var(--spacing-m);
   }
 }
 

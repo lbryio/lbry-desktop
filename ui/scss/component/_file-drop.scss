@@ -26,14 +26,14 @@
     min-width: 400px;
     align-items: center;
     flex-direction: column;
-    padding: var(--spacing-large);
+    padding: var(--spacing-l);
 
     .main-icon {
-      margin: var(--spacing-small);
+      margin: var(--spacing-s);
     }
 
     p {
-      margin-bottom: var(--spacing-large);
+      margin-bottom: var(--spacing-l);
     }
   }
 }

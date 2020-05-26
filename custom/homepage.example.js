@@ -71,7 +71,7 @@ type RowDataItem = {
 };
 
 export default function getHomePageRowData(
-  authenticated,
+  authenticated: boolean,
   showPersonalizedChannels: boolean,
   showPersonalizedTags: boolean,
   subscribedChannels: Array<Subscription>,
@@ -143,7 +143,7 @@ export default function getHomePageRowData(
     title: '#lbrytvpaidbeta',
     link: `/$/${PAGES.DISCOVER}?${CS.TAGS_KEY}=lbrytvpaidbeta&fee_amount=>0&${CS.CLAIM_TYPE}=${CS.CLAIM_STREAM}&${
       CS.CHANNEL_IDS_KEY
-      }=${PAID_BETA_CHANNEL_IDS_KEY.join(',')}`,
+    }=${PAID_BETA_CHANNEL_IDS_KEY.join(',')}`,
     help: (
       <div className="claim-grid__help">
         <Icon
@@ -186,17 +186,17 @@ export default function getHomePageRowData(
       releaseTime:
         subscribedChannels.length > 20
           ? `>${Math.floor(
-          moment()
-            .subtract(6, 'months')
-            .startOf('week')
-            .unix()
-          )}`
+              moment()
+                .subtract(6, 'months')
+                .startOf('week')
+                .unix()
+            )}`
           : `>${Math.floor(
-          moment()
-            .subtract(1, 'year')
-            .startOf('week')
-            .unix()
-          )}`,
+              moment()
+                .subtract(1, 'year')
+                .startOf('week')
+                .unix()
+            )}`,
       pageSize: subscribedChannels.length > 3 ? 8 : 4,
       channelIds: subscribedChannels.map((subscription: Subscription) => {
         const { channelClaimId } = parseURI(subscription.uri);

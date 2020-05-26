@@ -14,7 +14,7 @@
 
 .table__header-text {
   width: 100%;
-  margin: var(--spacing-medium) var(--spacing-large);
+  margin: var(--spacing-m) var(--spacing-l);
 }
 
 .table__header-text--between {
@@ -83,7 +83,7 @@
 .table--invites {
   svg {
     margin-bottom: -2px;
-    margin-left: var(--spacing-small);
+    margin-left: var(--spacing-s);
   }
 }
 
