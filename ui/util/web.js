@@ -1,9 +1,9 @@
-const { URL, LBRY_TV_STREAMING_API } = require('../../config');
+const { URL, LBRY_WEB_STREAMING_API } = require('../../config');
 
 const CONTINENT_COOKIE = 'continent';
 
 function generateStreamUrl(claimName, claimId) {
-  return `${LBRY_TV_STREAMING_API}/content/claims/${claimName}/${claimId}/stream`;
+  return `${LBRY_WEB_STREAMING_API}/content/claims/${claimName}/${claimId}/stream`;
 }
 
 function generateEmbedUrl(claimName, claimId, includeStartTime, startTime) {

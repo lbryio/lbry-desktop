@@ -1,7 +1,7 @@
 const callable = () => {
   throw new Error('Need to fix this stub');
 };
-
+const { DEFAULT_LANGUAGE } = require('../../config.js');
 export const remote = {
   dialog: {
     showOpenDialog: callable,
@@ -9,7 +9,9 @@ export const remote = {
   getCurrentWindow: callable,
   app: {
     getAppPath: callable,
-    getLocale: () => 'en',
+    getLocale: () => {
+      return DEFAULT_LANGUAGE;
+    },
   },
   BrowserWindow: {
     getFocusedWindow: callable,

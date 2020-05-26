@@ -1,5 +1,5 @@
 const { URL } = require('../../config.js');
-const { generateEmbedUrl, generateStreamUrl } = require('../../ui/util/lbrytv');
+const { generateEmbedUrl, generateStreamUrl } = require('../../ui/util/web');
 const PAGES = require('../../ui/constants/pages');
 const { getClaim } = require('./chainquery');
 const { parseURI } = require('lbry-redux');

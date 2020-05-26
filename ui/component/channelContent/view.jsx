@@ -5,7 +5,7 @@ import { withRouter } from 'react-router-dom';
 import Button from 'component/button';
 import ClaimListDiscover from 'component/claimListDiscover';
 import * as CS from 'constants/claim_search';
-import Ads from 'lbrytv/component/ads';
+import Ads from 'web/component/ads';
 
 type Props = {
   uri: string,

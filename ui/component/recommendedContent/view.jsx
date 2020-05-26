@@ -1,7 +1,7 @@
 // @flow
 import React from 'react';
 import ClaimList from 'component/claimList';
-import Ads from 'lbrytv/component/ads';
+import Ads from 'web/component/ads';
 import Card from 'component/common/card';
 
 type Options = {

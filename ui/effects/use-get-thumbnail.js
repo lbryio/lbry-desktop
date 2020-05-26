@@ -1,6 +1,6 @@
 // @flow
 import React from 'react';
-import { generateStreamUrl } from 'util/lbrytv';
+import { generateStreamUrl } from 'util/web';
 
 export default function useGetThumbnail(
   uri: string,
