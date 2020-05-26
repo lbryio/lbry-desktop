@@ -14,7 +14,9 @@ type Props = {
   channelSubscribe: (sub: Subscription) => void,
 };
 
-const LBRYURI = 'lbry://@lbry#3fda836a92faaceedfe398225fb9b2ee2ed1f01a';
+const LBRY_URI = 'lbry://@lbry#3fda836a92faaceedfe398225fb9b2ee2ed1f01a';
+const LBRYCAST_URI = 'lbry://@lbrycast#4c29f8b013adea4d5cca1861fb2161d5089613ea';
+
 function UserChannelFollowIntro(props: Props) {
   const { subscribedChannels, channelSubscribe, onContinue, onBack } = props;
   const followingCount = (subscribedChannels && subscribedChannels.length) || 0;
@@ -22,8 +24,13 @@ function UserChannelFollowIntro(props: Props) {
   // subscribe to lbry
   useEffect(() => {
     channelSubscribe({
-      channelName: parseURI(LBRYURI).claimName,
-      uri: LBRYURI,
+      channelName: parseURI(LBRY_URI).claimName,
+      uri: LBRY_URI,
+    });
+
+    channelSubscribe({
+      channelName: parseURI(LBRYCAST_URI).claimName,
+      uri: LBRYCAST_URI,
     });
   }, []);
 
