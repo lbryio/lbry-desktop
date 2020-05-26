@@ -885,6 +885,8 @@
   "A lbry.tv account allows you to earn more than %credit_amount% in rewards, backup your data, and get content and security updates.": "A lbry.tv account allows you to earn more than %credit_amount% in rewards, backup your data, and get content and security updates.",
   "Deposit cannot be higher than your balance": "Deposit cannot be higher than your balance",
   "%view_count% Views": "%view_count% Views",
+  "%view_count% views": "%view_count% views",
+  "%view_count% view": "%view_count% view",
   "1 View": "1 View",
   "There was an error. It's been reported and will be fixed. Try %refreshing_the_app_link% to fix it. If that doesn't work, try pressing Ctrl+R/Cmd+R.": "There was an error. It's been reported and will be fixed. Try %refreshing_the_app_link% to fix it. If that doesn't work, try pressing Ctrl+R/Cmd+R.",
   "Upload your thumbnail to %speech_link%. Recommended size is 16:9.": "Upload your thumbnail to %speech_link%. Recommended size is 16:9.",
