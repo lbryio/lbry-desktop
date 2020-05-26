@@ -4,7 +4,7 @@ import { makeSelectClaimForUri } from 'lbry-redux';
 import { withRouter } from 'react-router';
 import { makeSelectIsPlayerFloating, makeSelectNextUnplayedRecommended } from 'redux/selectors/content';
 import { makeSelectClientSetting } from 'redux/selectors/settings';
-import { doSetPlayingUri } from 'redux/actions/content';
+import { doSetPlayingUri, doPlayUri } from 'redux/actions/content';
 import AutoplayCountdown from './view';
 
 /*
@@ -20,8 +20,9 @@ const select = (state, props) => {
   };
 };
 
-const perform = dispatch => ({
-  setPlayingUri: uri => dispatch(doSetPlayingUri(uri)),
-});
-
-export default withRouter(connect(select, perform)(AutoplayCountdown));
+export default withRouter(
+  connect(select, {
+    doSetPlayingUri,
+    doPlayUri,
+  })(AutoplayCountdown)
+);

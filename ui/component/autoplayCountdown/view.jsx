@@ -11,14 +11,16 @@ type Props = {
   nextRecommendedClaim: ?StreamClaim,
   nextRecommendedUri: string,
   isFloating: boolean,
-  setPlayingUri: (string | null) => void,
+  doSetPlayingUri: (string | null) => void,
+  doPlayUri: string => void,
 };
 
 function AutoplayCountdown(props: Props) {
   const {
     nextRecommendedUri,
     nextRecommendedClaim,
-    setPlayingUri,
+    doSetPlayingUri,
+    doPlayUri,
     isFloating,
     history: { push },
   } = props;
@@ -39,14 +41,16 @@ function AutoplayCountdown(props: Props) {
     if (!isFloating) {
       if (navigateUrl) {
         push(navigateUrl);
-        setPlayingUri(nextRecommendedUri);
+        doSetPlayingUri(nextRecommendedUri);
+        doPlayUri(nextRecommendedUri);
       }
     } else {
       if (nextRecommendedUri) {
-        setPlayingUri(nextRecommendedUri);
+        doSetPlayingUri(nextRecommendedUri);
+        doPlayUri(nextRecommendedUri);
       }
     }
-  }, [navigateUrl, nextRecommendedUri, isFloating, setPlayingUri]);
+  }, [navigateUrl, nextRecommendedUri, isFloating, doSetPlayingUri, doPlayUri]);
 
   React.useEffect(() => {
     let interval;
@@ -63,7 +67,7 @@ function AutoplayCountdown(props: Props) {
     return () => {
       clearInterval(interval);
     };
-  }, [timer, doNavigate, navigateUrl, push, timerCanceled, setPlayingUri, nextRecommendedUri]);
+  }, [timer, doNavigate, navigateUrl, push, timerCanceled, nextRecommendedUri]);
 
   if (timerCanceled || !nextRecommendedUri) {
     return null;
