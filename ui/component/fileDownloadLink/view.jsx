@@ -71,11 +71,16 @@ function FileDownloadLink(props: Props) {
 
   // @if TARGET='app'
   if (downloading || loading) {
-    const progress = fileInfo && fileInfo.written_bytes > 0 ? (fileInfo.written_bytes / fileInfo.total_bytes) * 100 : 0;
-    const label =
-      fileInfo && fileInfo.written_bytes > 0 ? progress.toFixed(0) + __('% downloaded') : __('Connecting...');
+    if (hideDownloadStatus) {
+      return null;
+    }
 
-    return hideDownloadStatus ? null : <span className="download-text">{label}</span>;
+    if (fileInfo && fileInfo.written_bytes > 0) {
+      const progress = (fileInfo.written_bytes / fileInfo.total_bytes) * 100;
+      return <span className="download-text">{__('%percent%% downloaded', { percent: progress.toFixed(0) })}</span>;
+    } else {
+      return <span className="download-text">{__('Connecting...')}</span>;
+    }
   }
   // @endif
 
