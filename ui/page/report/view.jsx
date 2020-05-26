@@ -5,6 +5,7 @@ import { doToast } from 'lbry-redux';
 import { Lbryio } from 'lbryinc';
 import Page from 'component/page';
 import Card from 'component/common/card';
+import I18nMessage from 'component/i18nMessage';
 
 class ReportPage extends React.Component {
   constructor(props) {
@@ -95,11 +96,26 @@ class ReportPage extends React.Component {
                     .
                   </li>
                   <li>
-                    {__('Explore our')}{' '}
-                    <Button button="link" href="https://lbry.tech" label={__('technical resources')} />.
+                    <I18nMessage
+                      tokens={{
+                        technical_resources: (
+                          <Button button="link" href="https://lbry.tech" label={__('technical resources')} />
+                        ),
+                      }}
+                    >
+                      Explore our %technical_resources%
+                    </I18nMessage>
+                    .
                   </li>
                   <li>
-                    {__('Join our')} <Button button="link" href="https://forum.lbry.tech" label={__('tech forum')} />.
+                    <I18nMessage
+                      tokens={{
+                        tech_forum: <Button button="link" href="https://forum.lbry.tech" label={__('tech forum')} />,
+                      }}
+                    >
+                      Join our %tech_forum%
+                    </I18nMessage>
+                    .
                   </li>
                 </ul>
               </div>
