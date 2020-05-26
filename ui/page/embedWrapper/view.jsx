@@ -1,6 +1,8 @@
 // @flow
 import React, { useEffect } from 'react';
 import FileRender from 'component/fileRender';
+import FileViewerEmbeddedTitle from 'component/fileViewerEmbeddedTitle';
+import Spinner from 'component/spinner';
 
 type Props = {
   uri: string,
@@ -17,6 +19,10 @@ export const EmbedContext = React.createContext();
 const EmbedWrapperPage = (props: Props) => {
   const { resolveUri, claim, uri, doPlayUri, costInfo, streamingUrl, doFetchCostInfoForUri, isResolvingUri } = props;
   const haveClaim = Boolean(claim);
+  const readyToDisplay = claim && streamingUrl;
+  const loading = !claim && isResolvingUri;
+  const noContentFound = !claim && !isResolvingUri;
+  const isPaidContent = costInfo && costInfo.cost > 0;
 
   useEffect(() => {
     if (resolveUri && uri && !haveClaim) {
@@ -34,12 +40,21 @@ const EmbedWrapperPage = (props: Props) => {
   }, [uri, haveClaim, doFetchCostInfoForUri]);
 
   return (
-    <div className={'embed__wrapper'}>
+    <div className="embed__wrapper">
       <EmbedContext.Provider value>
-        {claim && streamingUrl && <FileRender uri={uri} embedded />}
-        {!claim && isResolvingUri && <h1>Loading...</h1>}
-        {!claim && !isResolvingUri && <h1>No content at this link.</h1>}
-        {claim && costInfo && costInfo.cost > 0 && <h1>Paid content cannot be embedded.</h1>}
+        {readyToDisplay ? (
+          <FileRender uri={uri} embedded />
+        ) : (
+          <div className="embed__loading">
+            <FileViewerEmbeddedTitle uri={uri} />
+
+            <div className="embed__loading-text">
+              {loading && <Spinner delayed />}
+              {noContentFound && <h1>No content at this link.</h1>}
+              {isPaidContent && <h1>Paid content cannot be embedded.</h1>}
+            </div>
+          </div>
+        )}
       </EmbedContext.Provider>
     </div>
   );
