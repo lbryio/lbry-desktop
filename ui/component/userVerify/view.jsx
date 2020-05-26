@@ -44,13 +44,13 @@ class UserVerify extends React.PureComponent<Props> {
                 rewards_program: (
                   <Button button="link" label={__('Rewards Program')} href="https://lbry.com/faq/rewards" />
                 ),
+                Refresh: <Button onClick={() => fetchUser()} button="link" label={__('Refresh')} />,
+                Skip: <Button {...skipButtonProps} button="link" label={__('Skip')} />,
               }}
             >
               If you'd like to participate our %rewards_program% to earn credits, please complete one of the steps below
-              to be validated.
-            </I18nMessage>{' '}
-            <Button onClick={() => fetchUser()} button="link" label={__('Refresh')} /> {'or'}{' '}
-            <Button {...skipButtonProps} button="link" label={__('Skip')} />.
+              to be validated. %Refresh% or %Skip%.
+            </I18nMessage>
           </p>
           <p>{__('This step is not required to use LBRY, and not all users or regions may qualify.')}</p>
         </section>
