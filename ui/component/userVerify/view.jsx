@@ -73,7 +73,7 @@ class UserVerify extends React.PureComponent<Props> {
                 />
                 <p className="help">
                   {__('Standard messaging rates apply. LBRY will not text or call you otherwise. Having trouble?')}{' '}
-                  <Button button="link" href="https://lbry.com/faq/phone" label={__('Read more.')} />
+                  <Button button="link" href="https://lbry.com/faq/phone" label={__('Read more')} />.
                 </p>
               </Fragment>
             }
