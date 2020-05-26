@@ -117,6 +117,10 @@ img {
   text-indent: -9999px;
 }
 
+textarea {
+  min-height: calc(var(--height-input) * 2);
+}
+
 .columns {
   display: flex;
   justify-content: space-between;
