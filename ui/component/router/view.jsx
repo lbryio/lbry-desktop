@@ -8,7 +8,7 @@ import HelpPage from 'page/help';
 import BackupPage from 'page/backup';
 // @endif
 //  @if TARGET='web'
-import Code2257Page from 'lbrytv/page/code2257';
+import Code2257Page from 'web/page/code2257';
 // @endif
 import ReportPage from 'page/report';
 import ShowPage from 'page/show';
