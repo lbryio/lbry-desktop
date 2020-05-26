@@ -32,6 +32,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Text casing on publish page _community pr!_ ([#4186](https://github.com/lbryio/lbry-desktop/pull/4186))
 - Some strings not translating properly _community pr!_ ([#4238](https://github.com/lbryio/lbry-desktop/pull/4238))
 - Prevents page from scrolling while pressing the spacebar when the miniplayer is out of focus _community pr!_ ([#4204](https://github.com/lbryio/lbry-desktop/pull/4204))
+- Fixed some string translations _community pr!_ ([#4238](https://github.com/lbryio/lbry-desktop/pull/4238))
 
 ## [0.45.1] - [2020-05-06]
 
