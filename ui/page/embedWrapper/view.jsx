@@ -3,6 +3,8 @@ import React, { useEffect } from 'react';
 import FileRender from 'component/fileRender';
 import FileViewerEmbeddedTitle from 'component/fileViewerEmbeddedTitle';
 import Spinner from 'component/spinner';
+import Button from 'component/button';
+import { formatLbryUrlForWeb } from 'util/url';
 
 type Props = {
   uri: string,
@@ -23,6 +25,7 @@ const EmbedWrapperPage = (props: Props) => {
   const loading = !claim && isResolvingUri;
   const noContentFound = !claim && !isResolvingUri;
   const isPaidContent = costInfo && costInfo.cost > 0;
+  const contentLink = formatLbryUrlForWeb(uri);
 
   useEffect(() => {
     if (resolveUri && uri && !haveClaim) {
@@ -51,7 +54,14 @@ const EmbedWrapperPage = (props: Props) => {
             <div className="embed__loading-text">
               {loading && <Spinner delayed light />}
               {noContentFound && <h1>{__('No content found.')}</h1>}
-              {isPaidContent && <h1>{__('Paid content cannot be embedded.')}</h1>}
+              {isPaidContent && (
+                <div>
+                  <h1>{__('Paid content cannot be embedded.')}</h1>
+                  <div className="section__actions--centered">
+                    <Button label={__('View on lbry.tv')} button="primary" href={contentLink} />
+                  </div>
+                </div>
+              )}
             </div>
           </div>
         )}
