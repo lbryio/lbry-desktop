@@ -113,14 +113,25 @@ nano .env
 1. add `CUSTOM_HOMEPAGE=true` to the 'web/.env' file
 2. copy `/custom/homepage.example.js` to `/custom/homepage.js` and make desired changes to `homepage.js`
 
+- If you want up to two custom sidebar links
+```
+PINNED_URI_1=@someurl#2/someclaim#4
+PINNED_LABEL_1=Linktext
+
+PINNED_URI_2=$/discover?t=tag&[queryparams]
+PINNED_LABEL_2=OtherLinkText
+```
+
+- Finally `NODE_ENV=production yarn compile:web` to rebuild
+
 #### Deploy the web app (*experimental*)
 
 1. Create a server with a domain name and a reverse proxy https to port 1337.
 2. Install pm2, node v10, yarn
 3. Clone this repo 
 4. Make any customizations as above
-5. Run 'yarn' to install
-6. Run yarn compile:web to build
+5. Run `yarn` to install
+6. Run `NODE_ENV=production yarn compile:web` to build
 7. Set up pm2 to start ./web/index.js
 
 #### Run both at the same time
