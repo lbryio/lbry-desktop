@@ -50,7 +50,7 @@ export default function SubscribeButton(props: Props) {
   const unfollowOverride = isSubscribed && isHovering && __('Unfollow');
 
   const label = isMobile && shrinkOnMobile ? '' : unfollowOverride || subscriptionLabel;
-  const titlePrefix = isSubscribed ? __('Unfollow') : __('Follow');
+  const titlePrefix = isSubscribed ? __('Unfollow this channel') : __('Follow this channel');
 
   return permanentUrl ? (
     <Button
@@ -61,7 +61,7 @@ export default function SubscribeButton(props: Props) {
       button={'alt'}
       requiresAuth={IS_WEB}
       label={label}
-      title={`${titlePrefix} ${__('this channel')}`}
+      title={titlePrefix}
       onClick={e => {
         e.stopPropagation();
 
