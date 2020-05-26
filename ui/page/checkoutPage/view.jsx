@@ -21,8 +21,9 @@ export default function CheckoutPage() {
           <div className="section__actions">
             <Button button="primary" label={__('Checkout')} />
             <div>
-              <img src={CreditCards} style={{ height: '2rem' }} />
+              <img src={CreditCards} style={{ height: '1.5rem' }} />
             </div>
+            <div className="help">We will refund no questions asked within 30 days.</div>
           </div>
         }
       />
