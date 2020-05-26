@@ -30,7 +30,7 @@ function FileViewerEmbeddedTitle(props: Props) {
       <Button label={title} button="link" className="file-viewer__embedded-title" {...contentLinkProps} />
       <div className="file-viewer__embedded-info">
         <Button className="file-viewer__overlay-logo" icon={ICONS.LBRY} {...lbryLinkProps} />
-        <FilePrice uri={uri} />
+        {isInApp && <FilePrice uri={uri} />}
       </div>
     </div>
   );

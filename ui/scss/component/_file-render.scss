@@ -238,7 +238,6 @@
   max-width: 75%;
 
   @media (max-width: $breakpoint-small) {
-    max-width: 50%;
     font-size: var(--font-small);
   }
 }
