@@ -142,7 +142,7 @@ export default function getHomePageRowData(
                 .startOf('week')
                 .unix()
             )}`,
-      pageSize: subscribedChannels.length > 3 ? 8 : 4,
+      pageSize: subscribedChannels.length > 3 ? (subscribedChannels.length > 6 ? 16 : 8) : 4,
       channelIds: subscribedChannels.map((subscription: Subscription) => {
         const { channelClaimId } = parseURI(subscription.uri);
         return channelClaimId;
