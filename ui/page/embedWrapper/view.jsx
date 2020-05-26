@@ -49,9 +49,9 @@ const EmbedWrapperPage = (props: Props) => {
             <FileViewerEmbeddedTitle uri={uri} />
 
             <div className="embed__loading-text">
-              {loading && <Spinner delayed />}
-              {noContentFound && <h1>No content at this link.</h1>}
-              {isPaidContent && <h1>Paid content cannot be embedded.</h1>}
+              {loading && <Spinner delayed light />}
+              {noContentFound && <h1>{__('No content found.')}</h1>}
+              {isPaidContent && <h1>{__('Paid content cannot be embedded.')}</h1>}
             </div>
           </div>
         )}
