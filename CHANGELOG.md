@@ -20,6 +20,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 - Use "grab" cursor on floating player to make it easier to tell you can drag it _community pr!_ ([#4201](https://github.com/lbryio/lbry-desktop/pull/4201))
 - Confirm age before viewing mature content on web ([#4233](https://github.com/lbryio/lbry-desktop/pull/4233))
+- Pause thumbnail gifs until hover ([#4256](https://github.com/lbryio/lbry-desktop/pull/4256))
 
 ### Fixed
 
