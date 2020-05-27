@@ -1,7 +1,7 @@
 // @flow
 import type { Node } from 'react';
 import React from 'react';
-// import FreezeframeWrapper from './FreezeframeWrapper';
+import FreezeframeWrapper from './FreezeframeWrapper';
 import Placeholder from './placeholder.png';
 
 type Props = {
@@ -11,14 +11,14 @@ type Props = {
 
 const className = 'media__thumb';
 
-class CardMedia extends React.PureComponent<Props> {
+class FileThumbnail extends React.PureComponent<Props> {
   render() {
     const { thumbnail, children } = this.props;
 
-    // Disabling temporarily to see if people complain
-    // if (thumbnail && thumbnail.endsWith('gif')) {
-    //   return <FreezeframeWrapper src={thumbnail} className={className} />;
-    // }
+    if (thumbnail && thumbnail.endsWith('gif')) {
+      return <FreezeframeWrapper src={thumbnail} className={className} />;
+    }
+
     let url;
     // @if TARGET='web'
     // Pass image urls through a compression proxy
@@ -41,4 +41,4 @@ class CardMedia extends React.PureComponent<Props> {
   }
 }
 
-export default CardMedia;
+export default FileThumbnail;
