@@ -108,7 +108,8 @@ function ModalAffirmPurchase(props: Props) {
           <div className="section__actions" style={success ? { visibility: 'hidden' } : undefined}>
             <Button
               button="primary"
-              label={purchasing ? __('Purchasing') : __('Purchase')}
+              disabled={purchasing}
+              label={purchasing ? __('Purchasing...') : __('Purchase')}
               onClick={onAffirmPurchase}
             />
             <Button button="link" label={__('Cancel')} onClick={cancelPurchase} />
