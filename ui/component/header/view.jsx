@@ -108,7 +108,6 @@ const Header = (props: Props) => {
   }
 
   function getWalletTitle() {
-    console.log('rounded', roundedBalance);
     return hideBalance || Number(roundedBalance) === 0 ? (
       __('Your Wallet')
     ) : (
