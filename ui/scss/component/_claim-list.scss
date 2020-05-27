@@ -90,14 +90,16 @@
   }
 
   .media__thumb {
-    width: var(--file-list-thumbnail-width);
+    $width: var(--file-list-thumbnail-width);
+    width: $width;
+    @include handleClaimListGifThumbnail($width);
+
     flex-shrink: 0;
     margin-right: var(--spacing-medium);
   }
 
   .channel-thumbnail {
-    width: 6rem;
-    height: 6rem;
+    @include handleChannelGif(6rem);
   }
 
   &:hover {
@@ -115,8 +117,7 @@
     }
 
     .channel-thumbnail {
-      width: 5rem;
-      height: 5rem;
+      @include handleChannelGif(5rem);
     }
   }
 }
@@ -137,8 +138,7 @@
   }
 
   .channel-thumbnail {
-    width: 7.5rem;
-    height: 7.5rem;
+    @include handleChannelGif(7.5rem);
   }
 }
 
@@ -149,8 +149,7 @@
   }
 
   .channel-thumbnail {
-    width: 4rem;
-    height: 4rem;
+    @include handleChannelGif(4rem);
   }
 }
 
@@ -318,7 +317,10 @@
 }
 
 .claim-preview--tile {
-  width: calc((100% - var(--spacing-medium) * 3) / 4);
+  $width: calc((100vw - var(--side-nav-width) - (var(--spacing-large) * 4) - var(--spacing-medium) * 3) / 4);
+  width: $width;
+  @include handleClaimListGifThumbnail($width);
+
   margin-bottom: var(--spacing-large);
   margin-right: 0;
   margin-top: 0;
@@ -342,7 +344,9 @@
   }
 
   @media (max-width: $breakpoint-medium) and (min-width: $breakpoint-small) {
-    width: calc((100% - var(--spacing-medium) * 2) / 3);
+    $width: calc((100vw - var(--side-nav-width) - (var(--spacing-large) * 4) - var(--spacing-medium) * 2) / 3);
+    width: $width;
+    @include handleClaimListGifThumbnail($width);
 
     &:first-child,
     &:nth-child(3n + 1) {
@@ -355,7 +359,9 @@
   }
 
   @media (max-width: $breakpoint-small) {
-    width: calc((100% - var(--spacing-medium) * 1) / 2);
+    $width: calc((100vw / 2) - var(--spacing-medium) * 2);
+    width: $width;
+    @include handleClaimListGifThumbnail($width);
     margin-bottom: var(--spacing-large);
 
     &:first-child,
@@ -390,8 +396,7 @@
   color: var(--color-subtitle);
 
   .channel-thumbnail {
-    width: 2.1rem;
-    height: 2.1rem;
+    @include handleChannelGif(2.1rem);
     margin-right: var(--spacing-small);
   }
 }

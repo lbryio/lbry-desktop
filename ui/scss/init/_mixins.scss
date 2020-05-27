@@ -17,3 +17,25 @@
     }
   }
 }
+
+@mixin handleClaimListGifThumbnail($width) {
+  .ff-container {
+    .ff-canvas.ff-canvas-ready,
+    img {
+      height: calc(#{$width} * (9 / 16));
+    }
+  }
+}
+
+@mixin handleChannelGif($size) {
+  height: $size;
+  width: $size;
+
+  .ff-container {
+    .ff-canvas.ff-canvas-ready,
+    img {
+      height: $size;
+      width: $size;
+    }
+  }
+}

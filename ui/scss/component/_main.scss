@@ -15,7 +15,7 @@
   margin-left: auto;
   margin-right: auto;
   margin-top: var(--header-height);
-  padding: var(--spacing-large);
+  padding: var(--spacing-large); // Unfortunately this is coupled with .claim-preview--tile width calculation
 
   @media (max-width: $breakpoint-small) {
     padding: var(--spacing-small);

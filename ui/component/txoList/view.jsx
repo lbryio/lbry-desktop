@@ -175,7 +175,7 @@ function TxoList(props: Props) {
       title={__(`Transactions`)}
       titleActions={
         <div className="card__actions--inline">
-          <Button button="secondary" label={__('Refresh')} onClick={() => fetchTxoPage()} />
+          <Button button="alt" label={__('Refresh')} onClick={() => fetchTxoPage()} />
         </div>
       }
       isBodyList
