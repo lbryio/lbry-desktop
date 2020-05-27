@@ -223,7 +223,7 @@ export default function getHomePageRowData(
     options: {
       orderBy: ['release_time'],
       pageSize: 4,
-      channelIds: ['3fda836a92faaceedfe398225fb9b2ee2ed1f01a'],
+      channelIds: ['4c29f8b013adea4d5cca1861fb2161d5089613ea'],
     },
   };
 
