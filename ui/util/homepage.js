@@ -82,6 +82,7 @@ export default function getHomePageRowData(
     '5da63df97c8255ae94a88940695b8471657dd5a1',
     'f3da2196b5151570d980b34d311ee0973225a68e',
     '7644fdb8342624f6c647c79de25610801573fa68',
+    'da5534547c15856646c1bd281313ddd55cbec407',
   ];
 
   const TV_PAID_BETA_ROW = {
