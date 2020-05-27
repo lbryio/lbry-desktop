@@ -108,8 +108,9 @@ const Header = (props: Props) => {
   }
 
   function getWalletTitle() {
-    return hideBalance ? (
-      __('Wallet')
+    console.log('rounded', roundedBalance);
+    return hideBalance || Number(roundedBalance) === 0 ? (
+      __('Your Wallet')
     ) : (
       <React.Fragment>
         {roundedBalance} <LbcSymbol />
