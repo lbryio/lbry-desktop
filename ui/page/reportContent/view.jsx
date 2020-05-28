@@ -1,38 +1,19 @@
 // @flow
 import React, { useState } from 'react';
-import { Modal } from 'modal/modal';
 import Button from 'component/button';
 import { FormField } from 'component/common/form';
 import * as ICONS from 'constants/icons';
-import * as MODALS from 'constants/modal_types';
+import Page from 'component/page';
 
 type Props = {
-  closeModal: () => void,
-  openModal: (
-    id: string,
-    {
-      reportFields: { reportType: string, claimId: string, uri: string, extraFields?: Object },
-    }
-  ) => void,
   claimId: string,
-  uri: string,
-  checkAddressIsMine: string => void,
-  receiveAddress: string,
-  getNewAddress: () => void,
-  gettingNewAddress: boolean,
 };
 
-const ModalReport = (props: Props) => {
-  const { closeModal, openModal, claimId, uri, checkAddressIsMine, receiveAddress, getNewAddress } = props;
+const ReportContentPage = (props: Props) => {
+  const { claimId } = props;
   const [selectedBtn, setSelectedBtn] = useState(0);
   const [why, setWhy] = useState('');
   const [error, setError] = useState('');
-
-  if (!receiveAddress) {
-    getNewAddress();
-  } else {
-    checkAddressIsMine(receiveAddress);
-  }
 
   const confirmReport = e => {
     e.preventDefault();
@@ -62,22 +43,12 @@ const ModalReport = (props: Props) => {
       }
 
       setError('');
-      openModal(MODALS.CONFIRM_REPORT, {
-        reportFields: {
-          reportType,
-          claimId,
-          uri,
-          walletAddress: receiveAddress,
-          extraFields: {
-            why,
-          },
-        },
-      });
+      console.log(reportType);
     } else setError('All Fields Required');
   };
 
   return (
-    <Modal type="custom" isOpen contentLabel="Report Content" title={__('Report Content')}>
+    <Page>
       <blockquote>
         <b>claimId</b>: {claimId}
       </blockquote>
@@ -219,10 +190,9 @@ const ModalReport = (props: Props) => {
       <hr />
       <div className="card__actions">
         <Button button="primary" onClick={confirmReport} label={__('Report')} />
-        <Button button="alt" onClick={closeModal} label={__('Close')} />
       </div>
-    </Modal>
+    </Page>
   );
 };
 
-export default ModalReport;
+export default ReportContentPage;

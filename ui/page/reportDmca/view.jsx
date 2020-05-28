@@ -1,28 +1,15 @@
 // @flow
 import React, { useState } from 'react';
-import { Modal } from 'modal/modal';
 import Button from 'component/button';
 import { FormField } from 'component/common/form';
-import * as MODALS from 'constants/modal_types';
+import Page from 'component/page';
 
 type Props = {
-  closeModal: () => void,
-  openModal: (
-    id: string,
-    {
-      reportFields: { reportType: string, claimId: string, uri: string, extraFields?: Object },
-    }
-  ) => void,
   claimId: string,
-  uri: string,
-  checkAddressIsMine: string => void,
-  receiveAddress: string,
-  getNewAddress: () => void,
-  gettingNewAddress: boolean,
 };
 
 const ModalDmca = (props: Props) => {
-  const { closeModal, openModal, claimId, uri, checkAddressIsMine, receiveAddress, getNewAddress } = props;
+  const { claimId } = props;
   const [authorName, setAuthorName] = useState(''),
     [originalLink, setOriginalLink] = useState(''),
     [email, setEmail] = useState(''),
@@ -31,12 +18,6 @@ const ModalDmca = (props: Props) => {
   const [nameError, setNameError] = useState(''),
     [linkError, setLinkError] = useState(''),
     [emailError, setEmailError] = useState('');
-
-  if (!receiveAddress) {
-    getNewAddress();
-  } else {
-    checkAddressIsMine(receiveAddress);
-  }
 
   const confirmReport = e => {
     e.preventDefault();
@@ -50,29 +31,11 @@ const ModalDmca = (props: Props) => {
     if (email === '') return setEmailError('This field is required');
     else setEmailError('');
 
-    openModal(MODALS.CONFIRM_REPORT, {
-      reportFields: {
-        reportType: 'Copyright Infringement',
-        claimId,
-        uri,
-        walletAddress: receiveAddress,
-        extraFields: {
-          originalAuthor: authorName,
-          originalLink,
-          email,
-          extraInfo: anythingElse,
-        },
-      },
-    });
+    console.log(anythingElse);
   };
 
   return (
-    <Modal
-      type="custom"
-      isOpen
-      contentLabel="Copyright Infringement Report"
-      title={__('Copyright Infringement Report')}
-    >
+    <Page>
       <blockquote>
         <b>claimId</b>: {claimId}
       </blockquote>
@@ -119,9 +82,8 @@ const ModalDmca = (props: Props) => {
       </div>
       <div className="card__actions">
         <Button button="primary" onClick={confirmReport} label={__('Report')} />
-        <Button button="alt" onClick={closeModal} label={__('Close')} />
       </div>
-    </Modal>
+    </Page>
   );
 };
 
