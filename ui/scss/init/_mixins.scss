@@ -23,6 +23,16 @@
   .freezeframe-img {
     height: calc(#{$width} * (9 / 16)) !important;
     width: $width;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+  }
+}
+
+@mixin handleClaimListGifThumbnail($width) {
+  .ff-canvas,
+  .freezeframe-img {
+    height: calc(#{$width} * (9 / 16)) !important;
+    width: $width;
   }
 }
 

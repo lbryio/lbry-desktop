@@ -92,7 +92,7 @@
   .media__thumb {
     $width: var(--file-list-thumbnail-width);
     width: $width;
-    @include handleClaimTileGifThumbnail($width);
+    @include handleClaimListGifThumbnail($width);
 
     flex-shrink: 0;
     margin-right: var(--spacing-medium);
