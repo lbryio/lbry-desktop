@@ -170,24 +170,24 @@ export default class SplashScreen extends React.PureComponent<Props, State> {
       this.setState({ waitingForSync: this.state.waitingForSync + UPDATE_INTERVAL / 1000 });
       if (this.state.waitingForSync < MAX_SYNC_WAIT) {
         this.setState({
-          message: 'Loading Wallet',
-          details: 'Updating wallet data...',
+          message: __('Loading Wallet'),
+          details: __('Updating wallet data...'),
         });
       } else {
         this.setState({
-          message: 'Loading Wallet',
+          message: __('Loading Wallet'),
           details: (
             <React.Fragment>
-              <div>Large account history</div>
-              <div>Please wait...</div>
+              <div>__('Large account history')</div>
+              <div>__('Please wait...')</div>
             </React.Fragment>
           ),
         });
       }
     } else if (wallet && !status.is_running && startupStatus.database) {
       this.setState({
-        message: 'Finalizing',
-        details: 'Almost ready...',
+        message: __('Finalizing'),
+        details: __('Almost ready...'),
       });
     }
 
@@ -307,7 +307,7 @@ export default class SplashScreen extends React.PureComponent<Props, State> {
                   <I18nMessage
                     tokens={{
                       help_link: (
-                        <Button button="link" href="https://lbry.com/faq/startup-troubleshooting" label="this link" />
+                        <Button button="link" href="https://lbry.com/faq/startup-troubleshooting" label={__("this link")} />
                       ),
                     }}
                   >
