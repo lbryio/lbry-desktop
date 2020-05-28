@@ -312,7 +312,10 @@
 }
 
 .claim-preview--tile {
-  $width: calc((100vw - var(--side-nav-width) - (var(--spacing-large) * 4) - var(--spacing-medium) * 3) / 4);
+  $width: calc(
+    (min(var(--page-max-width), 100vw) - var(--side-nav-width) - (var(--spacing-large) * 4) - var(--spacing-medium) * 3) /
+      4
+  );
   width: $width;
   @include handleClaimTileGifThumbnail($width);
 
