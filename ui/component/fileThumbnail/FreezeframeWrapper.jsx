@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import classnames from 'classnames';
 import PropTypes from 'prop-types';
 import Freezeframe from './FreezeframeLite';
 
@@ -13,8 +14,8 @@ const FreezeframeWrapper = props => {
   }, []);
 
   return (
-    <div className={className}>
-      <img ref={imgRef} src={src} />
+    <div className={classnames(className, 'freezeframe-wrapper')}>
+      <img ref={imgRef} src={src} className="freezeframe-img" />
     </div>
   );
 };
