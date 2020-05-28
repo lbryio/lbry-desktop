@@ -111,11 +111,6 @@
   @media (max-width: $breakpoint-small) {
     font-size: 14px;
 
-    .media__thumb {
-      width: 8rem;
-      height: auto;
-    }
-
     .channel-thumbnail {
       @include handleChannelGif(5rem);
     }
