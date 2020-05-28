@@ -152,8 +152,7 @@ class HelpPage extends React.PureComponent<Props, State> {
           title={__('Find Assistance')}
           subtitle={
             <I18nMessage tokens={{ channel: <strong>#help</strong> }}>
-              Live help is available most hours in the %channel% channel of our Discord chat room. Or you can always
-              email us at help@lbry.com.
+              Live help is available most hours in the %channel% channel of our Discord chat room. Or you can always email us at help@lbry.com.
             </I18nMessage>
           }
           actions={
