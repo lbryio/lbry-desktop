@@ -51,7 +51,7 @@ function ChannelContent(props: Props) {
             )}
           </p>
           <div className="section__actions">
-            <Button button="link" href="https://lbry.com/faq/dmca" label={__('Read More')} />
+            <Button button="link" href="https://lbry.com/faq/dmca" label={__('Read more.')} />
           </div>
         </section>
       )}
@@ -73,7 +73,7 @@ function ChannelContent(props: Props) {
           injectedItem={!isAuthenticated && IS_WEB && <Ads type="video" />}
         />
       ) : (
-        <section className="main--empty">This channel hasn't published anything yet</section>
+        <section className="main--empty">__("This channel hasn't published anything yet.")</section>
       )}
     </Fragment>
   );
