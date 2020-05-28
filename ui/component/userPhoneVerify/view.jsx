@@ -49,7 +49,7 @@ class UserPhoneVerify extends React.PureComponent<Props, State> {
         <p>
           {' '}
           {__(`Please enter the verification code sent to +${countryCode}${phone}. Didn't receive it? `)}
-          <Button button="link" onClick={this.reset.bind(this)} label="Go back." />
+          <Button button="link" onClick={this.reset.bind(this)} label={__("Go back.")} />
         </p>
         <Form onSubmit={this.handleSubmit.bind(this)}>
           <FormField
@@ -72,7 +72,7 @@ class UserPhoneVerify extends React.PureComponent<Props, State> {
           <I18nMessage
             tokens={{
               help_link: <Button button="link" href="mailto:help@lbry.com" label="help@lbry.com" />,
-              chat_link: <Button button="link" href="https://chat.lbry.com" label="chat" />,
+              chat_link: <Button button="link" href="https://chat.lbry.com" label={__("chat")} />,
             }}
           >
             Email %help_link% or join our %chat_link% if you encounter any trouble with your code.
