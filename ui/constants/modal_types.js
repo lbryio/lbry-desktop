@@ -36,7 +36,6 @@ export const CREATE_CHANNEL = 'create_channel';
 export const YOUTUBE_WELCOME = 'youtube_welcome';
 export const MOBILE_NAVIGATION = 'mobile_navigation';
 export const SET_REFERRER = 'set_referrer';
-export const CONFIRM_REPORT = 'confirm_report';
 export const REPOST = 'repost';
 export const SIGN_OUT = 'sign_out';
 export const LIQUIDATE_SUPPORTS = 'liquidate_supports';
