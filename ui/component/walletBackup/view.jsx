@@ -127,8 +127,7 @@ class WalletBackup extends React.PureComponent<Props, State> {
                   ),
                 }}
               >
-                Access to these files are equivalent to having access to your credits, channels, and publishes. Keep any copies you make of your
-                wallet in a secure place. For more details on backing up and best practices %helpLink%.
+                Access to these files are equivalent to having access to your credits, channels, and publishes. Keep any copies you make of your wallet in a secure place. For more details on backing up and best practices %helpLink%.
               </I18nMessage>
             </p>
             <p className={'card__message card__message--error' + (this.state.errorMessage ? '' : ' hidden')}>
