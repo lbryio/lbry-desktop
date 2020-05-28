@@ -29,8 +29,7 @@ function ModalRepost(props: Props) {
               ),
             }}
           >
-            Your wallet data will remain intact. If you sign in with a different account, the wallets will be merged. To
-            prevent this, you need to %rename_wallet_instructions% in the lbry/wallets directory.
+            Your wallet data will remain intact. If you sign in with a different account, the wallets will be merged. To prevent this, you need to %rename_wallet_instructions% in the lbry/wallets directory.
           </I18nMessage>
         }
         actions={
