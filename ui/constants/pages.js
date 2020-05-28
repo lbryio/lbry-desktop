@@ -37,3 +37,5 @@ exports.WELCOME = 'welcome';
 exports.CREATOR_DASHBOARD = 'dashboard';
 exports.CHECKOUT = 'checkout';
 exports.CODE_2257 = '2257';
+exports.REPORTCONTENT = 'reportContent';
+exports.REPORTDMCA = 'reportDmca';
