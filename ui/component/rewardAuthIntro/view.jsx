@@ -25,8 +25,7 @@ function RewardAuthIntro(props: Props) {
             credit_amount: <CreditAmount inheritStyle amount={totalRewardRounded} />,
           }}
         >
-          A lbry.tv account allows you to earn more than %credit_amount% in rewards, backup your data, and get content
-          and security updates.
+          A lbry.tv account allows you to earn more than %credit_amount% in rewards, backup your data, and get content and security updates.
         </I18nMessage>
       }
       actions={
