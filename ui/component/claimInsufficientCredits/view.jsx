@@ -7,7 +7,7 @@ type Props = {
   uri: string,
   fileInfo: FileListItem,
   isInsufficientCredits: boolean,
-  claimWasPurchased: boolea,
+  claimWasPurchased: boolean,
 };
 
 function ClaimInsufficientCredits(props: Props) {
@@ -24,8 +24,7 @@ function ClaimInsufficientCredits(props: Props) {
           reward_link: <Button button="link" navigate="/$/rewards" label={__('Rewards')} />,
         }}
       >
-        The publisher has chosen to charge LBC to view this content. Your balance is currently too low to view it. Check
-        out %reward_link% for free LBC or send more LBC to your wallet.
+        The publisher has chosen to charge LBC to view this content. Your balance is currently too low to view it. Check out %reward_link% for free LBC or send more LBC to your wallet.
       </I18nMessage>
     </div>
   );
