@@ -164,5 +164,17 @@ export default appState => {
     shell.openExternal(url);
   });
 
+  window.webContents.on('update-target-url', (event, url) => {
+    // Change internal links to the lbry protocol. External (https) links should remain unchanged.
+    let dispUrl = url.replace(`http://localhost:${WEBPACK_ELECTRON_PORT}/`, lbryProto);
+    // Non-claims don't need the lbry protocol:
+    if (dispUrl === lbryProto)  {
+      dispUrl = 'Home';
+    } else if (dispUrl.startsWith(lbryProto + '$/')) {
+      dispUrl = dispUrl.replace(lbryProto, '/');
+    }
+    window.webContents.send('update-target-url', dispUrl);
+  });
+
   return window;
 };
