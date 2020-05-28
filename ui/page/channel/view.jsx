@@ -233,20 +233,10 @@ function ChannelPage(props: Props) {
         {/* component that offers select/upload */}
         <div className="channel__primary-info">
           {!editing && (
-            <ChannelThumbnail
-              className="channel__thumbnail--channel-page"
-              uri={uri}
-              obscure={channelIsBlocked}
-              allowGifs
-            />
+            <ChannelThumbnail className="channel__thumbnail--channel-page" uri={uri} obscure={channelIsBlocked} />
           )}
           {editing && (
-            <ChannelThumbnail
-              className="channel__thumbnail--channel-page"
-              uri={uri}
-              thumbnailPreview={thumbPreview}
-              allowGifs
-            />
+            <ChannelThumbnail className="channel__thumbnail--channel-page" uri={uri} thumbnailPreview={thumbPreview} />
           )}
           <h1 className="channel__title">{title || '@' + channelName}</h1>
           <div className="channel__meta">
