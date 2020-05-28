@@ -647,8 +647,7 @@ class SettingsPage extends React.PureComponent<Props, State> {
                               ),
                             }}
                           >
-                            Wallet encryption is currently unavailable until it's supported for synced accounts. It will
-                            be added back soon. %learn_more%.
+                            Wallet encryption is currently unavailable until it's supported for synced accounts. It will be added back soon. %learn_more%.
                           </I18nMessage>
                           {/* {__('Secure your local wallet data with a custom password.')}{' '}
                         <strong>{__('Lost passwords cannot be recovered.')} </strong>
@@ -734,8 +733,7 @@ class SettingsPage extends React.PureComponent<Props, State> {
                           ),
                         }}
                       >
-                        FFmpeg could not be found. Navigate to it or Install, Then %check_again% or quit and restart the
-                        app. %learn_more%
+                        FFmpeg could not be found. Navigate to it or Install, Then %check_again% or quit and restart the app. %learn_more%
                       </I18nMessage>
                     )}
                   </p>
@@ -765,9 +763,7 @@ class SettingsPage extends React.PureComponent<Props, State> {
                             ),
                           }}
                         >
-                          This will add a Support button along side tipping. Similar to tips, supports help
-                          %discovery_link% but the LBC is returned to your wallet if revoked. Both also help secure your
-                          %vanity_names_link%.
+                          This will add a Support button along side tipping. Similar to tips, supports help %discovery_link% but the LBC is returned to your wallet if revoked. Both also help secure your %vanity_names_link%.
                         </I18nMessage>
                       }
                     />
