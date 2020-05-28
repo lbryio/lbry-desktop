@@ -23,7 +23,7 @@ export default function CheckoutPage() {
             <div>
               <img src={CreditCards} style={{ height: '1.5rem' }} />
             </div>
-            <div className="help">We will refund no questions asked within 30 days.</div>
+            <div className="help">{__('We will refund no questions asked within 30 days.')}</div>
           </div>
         }
       />
