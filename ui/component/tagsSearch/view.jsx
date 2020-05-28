@@ -162,7 +162,7 @@ export default function TagsSearch(props: Props) {
           type="text"
           value={newTag}
           disabled={disabled}
-          label={'Add Tags'}
+          label={__('Add Tags')}
         />
         <section>
           <label>{newTag.length ? __('Matching') : __('Known Tags')}</label>
