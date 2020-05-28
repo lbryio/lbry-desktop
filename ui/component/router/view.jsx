@@ -36,6 +36,8 @@ import Welcome from 'page/welcome';
 import CreatorDashboard from 'page/creatorDashboard';
 import RewardsVerifyPage from 'page/rewardsVerify';
 import CheckoutPage from 'page/checkoutPage';
+import ReportContentPage from 'page/reportContent';
+import ReportDmcaPage from 'page/reportDmca';
 import { parseURI } from 'lbry-redux';
 import { SITE_TITLE, WELCOME_VERSION } from 'config';
 
@@ -192,6 +194,9 @@ function AppRouter(props: Props) {
 
       <Route path={`/$/${PAGES.EMBED}/:claimName`} exact component={EmbedWrapperPage} />
       <Route path={`/$/${PAGES.EMBED}/:claimName/:claimId`} exact component={EmbedWrapperPage} />
+
+      <Route path={`/$/${PAGES.REPORTCONTENT}/:claimId`} exact component={ReportContentPage} />
+      <Route path={`/$/${PAGES.REPORTDMCA}/:claimId`} exact component={ReportDmcaPage} />
 
       {/* Below need to go at the end to make sure we don't match any of our pages first */}
       <Route path="/:claimName" exact component={ShowPage} />

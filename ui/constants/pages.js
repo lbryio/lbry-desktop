@@ -36,3 +36,5 @@ exports.TOP = 'top';
 exports.WELCOME = 'welcome';
 exports.CREATOR_DASHBOARD = 'dashboard';
 exports.CHECKOUT = 'checkout';
+exports.REPORTCONTENT = 'reportContent';
+exports.REPORTDMCA = 'reportDmca';
