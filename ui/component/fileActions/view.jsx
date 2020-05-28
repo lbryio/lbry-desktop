@@ -2,16 +2,23 @@
 import type { Node } from 'react';
 import * as MODALS from 'constants/modal_types';
 import * as ICONS from 'constants/icons';
+import * as PAGES from 'constants/pages';
 import React from 'react';
 import Button from 'component/button';
 import FileDownloadLink from 'component/fileDownloadLink';
 import { buildURI } from 'lbry-redux';
+import { withRouter } from 'react-router';
 import * as RENDER_MODES from 'constants/file_render_modes';
 import useIsMobile from 'effects/use-is-mobile';
+import { Menu, MenuList, MenuButton, MenuItem } from '@reach/menu-button';
+import Icon from 'component/common/icon';
 
 type Props = {
   uri: string,
   claim: StreamClaim,
+  history: {
+    push: string => void,
+  },
   openModal: (id: string, { uri: string, claimIsMine?: boolean, isSupport?: boolean }) => void,
   prepareEdit: ({}, string, {}) => void,
   claimIsMine: boolean,
@@ -22,7 +29,18 @@ type Props = {
 };
 
 function FileActions(props: Props) {
-  const { fileInfo, uri, openModal, claimIsMine, claim, costInfo, renderMode, supportOption, prepareEdit } = props;
+  const {
+    fileInfo,
+    uri,
+    openModal,
+    claimIsMine,
+    claim,
+    costInfo,
+    renderMode,
+    supportOption,
+    prepareEdit,
+    history,
+  } = props;
   const isMobile = useIsMobile();
   const webShareable = costInfo && costInfo.cost === 0 && RENDER_MODES.WEB_SHAREABLE_MODES.includes(renderMode);
   const showDelete = claimIsMine || (fileInfo && (fileInfo.written_bytes > 0 || fileInfo.blobs_completed > 0));
@@ -116,16 +134,25 @@ function FileActions(props: Props) {
           />
         )}
         {!claimIsMine && (
-          <Button
-            title={__('Report content')}
-            button="alt"
-            icon={ICONS.REPORT}
-            href={`https://lbry.com/dmca/${claimId}`}
-          />
+          <Menu>
+            <MenuButton className="button button--alt" title={__('Report Content')}>
+              <Icon size={18} icon={ICONS.REPORT} aria-hidden />
+            </MenuButton>
+
+            <MenuList className="menu__list">
+              <MenuItem className="menu__link" onSelect={() => history.push(`/$/${PAGES.REPORTDMCA}/${claimId}`)}>
+                {__('Copyright Infringement')}
+              </MenuItem>
+
+              <MenuItem className="menu__link" onSelect={() => history.push(`/$/${PAGES.REPORTCONTENT}/${claimId}`)}>
+                {__('Other Violations')}
+              </MenuItem>
+            </MenuList>
+          </Menu>
         )}
       </ActionWrapper>
     </div>
   );
 }
 
-export default FileActions;
+export default withRouter(FileActions);
