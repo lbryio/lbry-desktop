@@ -90,8 +90,7 @@ class ErrorBoundary extends React.Component<Props, State> {
                   ),
                 }}
               >
-                There was an error. Try %refreshing_the_app_link% to fix it. If that doesn't work, try pressing
-                Ctrl+R/Cmd+R.
+                There was an error. Try %refreshing_the_app_link% to fix it. If that doesn't work, try pressing Ctrl+R/Cmd+R.
               </I18nMessage>
             }
           />
