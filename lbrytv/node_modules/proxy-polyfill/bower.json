@@ -1,0 +1,32 @@
+{
+  "name": "proxy-polyfill",
+  "homepage": "https://github.com/GoogleChrome/proxy-polyfill",
+  "authors": [
+    "The Chromium Authors"
+  ],
+  "description": "Polyfill for the Proxy object",
+  "main": "proxy.min.js",
+  "moduleType": [
+    "amd",
+    "globals",
+    "node"
+  ],
+  "keywords": [
+    "polyfill",
+    "html5",
+    "proxy",
+    "es6"
+  ],
+  "license": "Apache-2.0",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "devDependencies": {
+    "mocha": "",
+    "chai": ""
+  }
+}

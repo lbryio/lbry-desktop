@@ -1,0 +1,24 @@
+{
+  "name": "pstree.remy",
+  "version": "1.1.7",
+  "main": "lib/index.js",
+  "scripts": {
+    "test": "tap tests/*.test.js",
+    "_prepublish": "npm test"
+  },
+  "keywords": [
+    "ps",
+    "pstree",
+    "ps tree"
+  ],
+  "author": "Remy Sharp",
+  "license": "MIT",
+  "devDependencies": {
+    "tap": "^11.0.0"
+  },
+  "directories": {
+    "test": "tests"
+  },
+  "dependencies": {},
+  "description": "Collects the full tree of processes from /proc"
+}
