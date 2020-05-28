@@ -99,14 +99,14 @@ function PublishFile(props: Props) {
 
   function getUnitsForMB(s) {
     if (s < MINUTES_THRESHOLD) {
-      if (secondsToProcess > 1) return 'seconds';
-      return 'second';
+      if (secondsToProcess > 1) return __('seconds');
+	return __('second');
     } else if (s >= MINUTES_THRESHOLD && s < HOURS_THRESHOLD) {
-      if (Math.floor(secondsToProcess / 60) > 1) return 'minutes';
-      return 'minute';
+      if (Math.floor(secondsToProcess / 60) > 1) return __('minutes');
+      return __('minute');
     } else {
-      if (Math.floor(secondsToProcess / 3600) > 1) return 'hours';
-      return 'hour';
+      if (Math.floor(secondsToProcess / 3600) > 1) return __('hours');
+      return __('hour');
     }
   }
 
