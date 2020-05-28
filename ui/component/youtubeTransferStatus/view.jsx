@@ -117,8 +117,7 @@ export default function YoutubeTransferStatus(props: Props) {
                               channelName,
                             }}
                           >
-                            %channelName% is not yet ready to be transferred. Please allow up to one week, though it is
-                            frequently faster.
+                            %channelName% is not yet ready to be transferred. Please allow up to one week, though it is frequently faster.
                           </I18nMessage>
                         </p>
                         <p className="help">
