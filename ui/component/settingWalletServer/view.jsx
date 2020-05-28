@@ -145,8 +145,7 @@ function SettingWalletServer(props: Props) {
               learn_more: <Button button="link" href="http://lbry.com/faq/wallet-servers" label={__('Learn More')} />,
             }}
           >
-            Wallet servers are used to relay data to and from the LBRY blockchain. They also determine what content
-            shows in trending or is blocked. %learn_more%.
+            Wallet servers are used to relay data to and from the LBRY blockchain. They also determine what content shows in trending or is blocked. %learn_more%.
           </I18nMessage>
         </p>
 
@@ -168,7 +167,7 @@ function SettingWalletServer(props: Props) {
                       {host}:{port}
                     </h3>
                     <span className="help">
-                      {available ? 'Connected' : walletReconnecting ? 'Connecting...' : 'Not connected'}
+                      {available ? __('Connected') : walletReconnecting ? __('Connecting...') : __('Not connected')}
                     </span>
                     <Button
                       button="close"
