@@ -1,0 +1,23 @@
+{
+  "name": "humanize-number",
+  "description": "Humanize a number (1000000 -> 1,000,000)",
+  "version": "0.0.2",
+  "keywords": [],
+  "dependencies": {},
+  "devDependencies": {
+    "mocha": "*",
+    "should": "*"
+  },
+  "scripts": [
+    "index.js"
+  ],
+  "component": {
+    "scripts": {
+      "humanize-number/index.js": "index.js"
+    }
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/component/humanize-number.git"
+  }
+}
