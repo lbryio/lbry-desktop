@@ -55,27 +55,34 @@ function FileListPublished(props: Props) {
 
   return (
     <Page>
-      <WebUploadList />
-      <Card
-        title={__('Publishes')}
-        titleActions={
-          <div className="card__actions--inline">
-            <Button
-              button="alt"
-              label={__('Refresh')}
-              onClick={() => fetchClaimListMine(params.page, params.page_size)}
-            />
-            <Button button="secondary" label={__('New Publish')} navigate="/$/publish" onClick={() => clearPublish()} />
-          </div>
-        }
-        isBodyList
-        body={
-          <div>
-            <ClaimList isCardBody loading={fetching} persistedStorageKey="claim-list-published" uris={urls} />
-            <Paginate totalPages={urlTotal > 0 ? Math.ceil(urlTotal / Number(pageSize)) : 1} />
-          </div>
-        }
-      />
+      <div className="card-stack">
+        <WebUploadList />
+        <Card
+          title={__('Publishes')}
+          titleActions={
+            <div className="card__actions--inline">
+              <Button
+                button="alt"
+                label={__('Refresh')}
+                onClick={() => fetchClaimListMine(params.page, params.page_size)}
+              />
+              <Button
+                button="secondary"
+                label={__('New Publish')}
+                navigate="/$/publish"
+                onClick={() => clearPublish()}
+              />
+            </div>
+          }
+          isBodyList
+          body={
+            <div>
+              <ClaimList isCardBody loading={fetching} persistedStorageKey="claim-list-published" uris={urls} />
+              <Paginate totalPages={urlTotal > 0 ? Math.ceil(urlTotal / Number(pageSize)) : 1} />
+            </div>
+          }
+        />
+      </div>
       {!(urls && urls.length) && (
         <React.Fragment>
           {!fetching ? (

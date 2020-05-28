@@ -181,15 +181,15 @@ function PublishFile(props: Props) {
     setOversized(false);
 
     // select file, start to select a new one, then cancel
-    if (!file || !file.type) {
+    if (!file) {
       updatePublishForm({ filePath: '', name: '' });
       return;
     }
 
     // if video, extract duration so we can warn about bitrateif (typeof file !== 'string') {
-    const contentType = file.type.split('/');
-    const isVideo = contentType[0] === 'video';
-    const isMp4 = contentType[1] === 'mp4';
+    const contentType = file.type && file.type.split('/');
+    const isVideo = contentType && contentType[0] === 'video';
+    const isMp4 = contentType && contentType[1] === 'mp4';
     if (isVideo) {
       if (isMp4) {
         const video = document.createElement('video');
