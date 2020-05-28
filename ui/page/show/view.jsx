@@ -92,7 +92,7 @@ function ShowPage(props: Props) {
             )}
             actions={
               <div className="section__actions">
-                <Button button="link" href="https://lbry.com/faq/dmca" label={__('Read More')} />
+                <Button button="link" href="https://lbry.com/faq/dmca" label={__('Read more.')} />
               </div>
             }
           />
