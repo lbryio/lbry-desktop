@@ -113,7 +113,7 @@ export default function getHomePageRowData(
   if (followedTags.length) {
     followedTags.forEach((tag: Tag) => {
       individualTagDataItems.push({
-        title: `Trending for #${toCapitalCase(tag.name)}`,
+        title: __(`Trending for `)+`#${toCapitalCase(tag.name)}`,
         link: `/$/${PAGES.DISCOVER}?t=${tag.name}`,
         options: {
           pageSize: 4,
@@ -125,7 +125,7 @@ export default function getHomePageRowData(
   }
 
   const RECENT_FROM_FOLLOWING = {
-    title: 'Recent From Following',
+    title: __('Recent From Following'),
     link: `/$/${PAGES.CHANNELS_FOLLOWING}`,
     options: {
       orderBy: ['release_time'],
@@ -152,7 +152,7 @@ export default function getHomePageRowData(
   };
 
   const TOP_CONTENT_TODAY = {
-    title: 'Top Content from Today',
+    title: __('Top Content from Today'),
     link: `/$/${PAGES.DISCOVER}?${CS.ORDER_BY_KEY}=${CS.ORDER_BY_TOP}&${CS.FRESH_KEY}=${CS.FRESH_DAY}`,
     options: {
       pageSize: showPersonalizedChannels || showPersonalizedTags ? 4 : 8,
@@ -168,7 +168,7 @@ export default function getHomePageRowData(
   };
 
   const TOP_CHANNELS = {
-    title: 'Top Channels On LBRY',
+    title: __('Top Channels On LBRY'),
     link: `/$/${PAGES.DISCOVER}?claim_type=channel&${CS.ORDER_BY_KEY}=${CS.ORDER_BY_TOP}&${CS.FRESH_KEY}=${CS.FRESH_ALL}`,
     options: {
       orderBy: ['effective_amount'],
@@ -177,7 +177,7 @@ export default function getHomePageRowData(
   };
 
   const TRENDING_CLASSICS = {
-    title: 'Trending Classics',
+    title: __('Trending Classics'),
     link: `/$/${PAGES.DISCOVER}?${CS.ORDER_BY_KEY}=${CS.ORDER_BY_TRENDING}&${CS.FRESH_KEY}=${CS.FRESH_WEEK}`,
     options: {
       pageSize: 4,
@@ -192,7 +192,7 @@ export default function getHomePageRowData(
   };
 
   const TRENDING_ON_LBRY = {
-    title: 'Trending On LBRY',
+    title: __('Trending On LBRY'),
     link: `/$/${PAGES.DISCOVER}`,
     options: {
       pageSize: showPersonalizedChannels || showPersonalizedTags ? 4 : 8,
@@ -200,7 +200,7 @@ export default function getHomePageRowData(
   };
 
   const TRENDING_FOR_TAGS = {
-    title: 'Trending For Your Tags',
+    title: __('Trending For Your Tags'),
     link: `/$/${PAGES.TAGS_FOLLOWING}`,
     options: {
       tags: followedTags.map(tag => tag.name),
@@ -209,7 +209,7 @@ export default function getHomePageRowData(
   };
 
   const LATEST_FROM_LBRY = {
-    title: 'Latest From @lbry',
+    title: __('Latest From @lbry'),
     link: `/@lbry:3f`,
     options: {
       orderBy: ['release_time'],
@@ -219,7 +219,7 @@ export default function getHomePageRowData(
   };
 
   const LATEST_FROM_LBRYCAST = {
-    title: 'Latest From @lbrycast',
+    title: __('Latest From @lbrycast'),
     link: `/@lbrycast:4`,
     options: {
       orderBy: ['release_time'],
