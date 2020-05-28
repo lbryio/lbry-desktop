@@ -19,24 +19,22 @@ export default function WebUploadList(props: Props) {
 
   return (
     !!uploadCount && (
-      <div>
-        <Card
-          title={__('Currently Uploading')}
-          subtitle={
-            uploadCount > 1
-              ? __('You files are currently uploading. This will update automatically.')
-              : __('Your file is currently uploading. This will update automatically.')
-          }
-          body={
-            <section>
-              {/* $FlowFixMe */}
-              {Object.values(currentUploads).map(({ progress, params, xhr }) => (
-                <WebUploadItem key={`upload${params.name}`} progress={progress} params={params} xhr={xhr} />
-              ))}
-            </section>
-          }
-        />
-      </div>
+      <Card
+        title={__('Currently Uploading')}
+        subtitle={
+          uploadCount > 1
+            ? __('You files are currently uploading. This will update automatically.')
+            : __('Your file is currently uploading. This will update automatically.')
+        }
+        body={
+          <section>
+            {/* $FlowFixMe */}
+            {Object.values(currentUploads).map(({ progress, params, xhr }) => (
+              <WebUploadItem key={`upload${params.name}`} progress={progress} params={params} xhr={xhr} />
+            ))}
+          </section>
+        }
+      />
     )
   );
 }
