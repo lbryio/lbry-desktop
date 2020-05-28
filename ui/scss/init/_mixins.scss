@@ -17,3 +17,23 @@
     }
   }
 }
+
+@mixin handleClaimTileGifThumbnail($width) {
+  .ff-canvas,
+  .freezeframe-img {
+    height: calc(#{$width} * (9 / 16)) !important;
+    width: $width;
+  }
+}
+
+@mixin handleChannelGif($size) {
+  height: $size;
+  width: $size;
+
+  .ff-canvas,
+  .freezeframe-img {
+    border-radius: var(--border-radius);
+    height: $size !important;
+    width: $size !important;
+  }
+}

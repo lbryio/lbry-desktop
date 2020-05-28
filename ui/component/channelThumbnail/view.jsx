@@ -3,6 +3,7 @@ import React from 'react';
 import { parseURI } from 'lbry-redux';
 import classnames from 'classnames';
 import Gerbil from './gerbil.png';
+import FreezeframeWrapper from 'component/fileThumbnail/FreezeframeWrapper';
 
 type Props = {
   thumbnail: ?string,
@@ -11,10 +12,17 @@ type Props = {
   thumbnailPreview: ?string,
   obscure?: boolean,
   small?: boolean,
+  allowGifs?: boolean,
 };
 
 function ChannelThumbnail(props: Props) {
-  const { thumbnail, uri, className, thumbnailPreview, obscure, small = false } = props;
+  const { thumbnail, uri, className, thumbnailPreview, obscure, small = false, allowGifs = false } = props;
+  const channelThumbnail = thumbnail || thumbnailPreview;
+
+  if (channelThumbnail && channelThumbnail.endsWith('gif') && !allowGifs) {
+    return <FreezeframeWrapper src={channelThumbnail} className="channel-thumbnail" />;
+  }
+
   const showThumb = (!obscure && !!thumbnail) || thumbnailPreview;
 
   // Generate a random color class based on the first letter of the channel name
