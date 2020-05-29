@@ -12,6 +12,8 @@ const config = {
   LBRY_WEB_STREAMING_API: process.env.LBRY_WEB_STREAMING_API, //cdn.lbryplayer.xyz',
   WELCOME_VERSION: process.env.WELCOME_VERSION,
   DEFAULT_LANGUAGE: process.env.DEFAULT_LANGUAGE,
+  MATOMO_URL: process.env.MATOMO_URL,
+  MATOMO_ID: process.env.MATOMO_ID,
   LOGO_TITLE: process.env.LOGO_TITLE,
   PINNED_URI_1: process.env.PINNED_URI_1,
   PINNED_LABEL_1: process.env.PINNED_LABEL_1,
