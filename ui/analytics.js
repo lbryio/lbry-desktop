@@ -2,6 +2,7 @@
 import { Lbryio } from 'lbryinc';
 import ReactGA from 'react-ga';
 import * as Sentry from '@sentry/browser';
+import MatomoTracker from '@datapunt/matomo-tracker-js';
 import { history } from './store';
 import { SDK_API_PATH } from './index';
 // @if TARGET='app'
@@ -9,6 +10,7 @@ import Native from 'native';
 import ElectronCookies from '@exponent/electron-cookies';
 import { generateInitialUrl } from 'util/url';
 // @endif
+import { MATOMO_ID, MATOMO_URL } from 'config';
 
 const isProduction = process.env.NODE_ENV === 'production';
 const devInternalApis = process.env.LBRY_API_URL;
@@ -38,7 +40,7 @@ type Analytics = {
   apiLogView: (string, string, string, ?number, ?() => void) => Promise<any>,
   apiLogPublish: (ChannelClaim | StreamClaim) => void,
   apiSyncTags: ({}) => void,
-  tagFollowEvent: (string, boolean, string) => void,
+  tagFollowEvent: (string, boolean, ?string) => void,
   videoStartEvent: (string, number) => void,
   videoBufferEvent: (string, number) => void,
   emailProvidedEvent: () => void,
@@ -92,6 +94,11 @@ const analytics: Analytics = {
   pageView: path => {
     if (thirdPartyAnalyticsEnabled) {
       ReactGA.pageview(path, [SECOND_TRACKER_NAME]);
+    }
+    if (internalAnalyticsEnabled) {
+      MatomoInstance.trackPageView({
+        href: `${path}`,
+      });
     }
   },
   setUser: userId => {
@@ -185,41 +192,52 @@ const analytics: Analytics = {
   videoStartEvent: (claimId, duration) => {
     sendGaTimingEvent('Media', 'TimeToStart', duration, claimId);
     sendPromMetric('time_to_start', duration);
+    sendMatomoEvent('Media', 'TimeToStart', claimId, duration);
   },
   videoBufferEvent: (claimId, currentTime) => {
     sendGaTimingEvent('Media', 'BufferTimestamp', currentTime * 1000, claimId);
     sendPromMetric('buffer');
+    sendMatomoEvent('Media', 'BufferTimestamp', claimId, currentTime * 1000);
   },
-  tagFollowEvent: (tag, following, location) => {
+  tagFollowEvent: (tag, following) => {
     sendGaEvent(following ? 'Tag-Follow' : 'Tag-Unfollow', tag);
+    sendMatomoEvent('Tag', following ? 'Tag-Follow' : 'Tag-Unfollow', tag);
   },
   channelBlockEvent: (uri, blocked, location) => {
     sendGaEvent(blocked ? 'Channel-Hidden' : 'Channel-Unhidden', uri);
+    sendMatomoEvent(blocked ? 'Channel-Hidden' : 'Channel-Unhidden', uri);
   },
   emailProvidedEvent: () => {
     sendGaEvent('Engagement', 'Email-Provided');
+    sendMatomoEvent('Engagement', 'Email-Provided');
   },
   emailVerifiedEvent: () => {
     sendGaEvent('Engagement', 'Email-Verified');
+    sendMatomoEvent('Engagement', 'Email-Verified');
   },
   rewardEligibleEvent: () => {
     sendGaEvent('Engagement', 'Reward-Eligible');
+    sendMatomoEvent('Engagement', 'Reward-Eligible');
   },
   openUrlEvent: (url: string) => {
     sendGaEvent('Engagement', 'Open-Url', url);
+    sendMatomoEvent('Engagement', 'Open-Url', url);
   },
   trendingAlgorithmEvent: (trendingAlgorithm: string) => {
     sendGaEvent('Engagement', 'Trending-Algorithm', trendingAlgorithm);
   },
   startupEvent: () => {
     sendGaEvent('Startup', 'Startup');
+    sendMatomoEvent('Startup', 'Startup');
   },
   readyEvent: (timeToReady: number) => {
     sendGaEvent('Startup', 'App-Ready');
     sendGaTimingEvent('Startup', 'App-Ready', timeToReady);
+    sendMatomoEvent('Startup', 'App-Ready', 'Time', timeToReady);
   },
   purchaseEvent: (purchaseInt: number) => {
     sendGaEvent('Purchase', 'Purchase-Complete', undefined, purchaseInt);
+    sendMatomoEvent('Purchase', 'Purchase-Complete', 'someLabel', purchaseInt);
   },
 };
 
@@ -234,6 +252,13 @@ function sendGaEvent(category, action, label, value) {
       },
       [SECOND_TRACKER_NAME]
     );
+  }
+}
+
+function sendMatomoEvent(category, action, name, value) {
+  if (internalAnalyticsEnabled) {
+    const event = { category, action, name, value };
+    MatomoInstance.trackEvent(event);
   }
 }
 
@@ -284,6 +309,16 @@ if (!IS_WEB) {
     });
   }
 }
+
+const MatomoInstance = new MatomoTracker({
+  urlBase: MATOMO_URL,
+  siteId: MATOMO_ID, // optional, default value: `1`
+  // heartBeat: { // optional, enabled by default
+  //   active: true, // optional, default value: true
+  //   seconds: 10 // optional, default value: `15
+  // },
+  // linkTracking: false // optional, default value: true
+});
 
 ReactGA.initialize(gaTrackers, {
   testMode: process.env.NODE_ENV !== 'production',

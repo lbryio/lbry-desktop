@@ -67,6 +67,7 @@
     "@babel/preset-flow": "^7.0.0",
     "@babel/preset-react": "^7.0.0",
     "@babel/register": "^7.0.0",
+    "@datapunt/matomo-tracker-js": "^0.1.4",
     "@exponent/electron-cookies": "^2.0.0",
     "@hot-loader/react-dom": "^16.8",
     "@lbry/components": "^4.2.2",

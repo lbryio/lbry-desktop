@@ -4,6 +4,7 @@ import { Form, FormField } from 'component/common/form';
 import Tag from 'component/tag';
 import { setUnion, setDifference } from 'util/set-operations';
 import I18nMessage from 'component/i18nMessage';
+import analytics from 'analytics';
 
 type Props = {
   tagsPassedIn: Array<Tag>,
@@ -120,7 +121,9 @@ export default function TagsSearch(props: Props) {
     if (onSelect) {
       onSelect([{ name: tag }]);
     } else {
+      const wasFollowing = followedTags.map(t => t.name).includes(tag);
       doToggleTagFollowDesktop(tag);
+      analytics.tagFollowEvent(tag, !wasFollowing);
     }
   }
   return (
