@@ -49,9 +49,15 @@ const ReportContentPage = (props: Props) => {
 
   return (
     <Page>
+      <h1 className="section__title">{__('General Report')}</h1>
+      <br />
+      <hr />
+      <br />
       <blockquote>
         <b>claimId</b>: {claimId}
       </blockquote>
+      <br />
+      <hr />
       <br />
 
       <p>{__('Choose an option according to the violation')}</p>
@@ -160,7 +166,7 @@ const ReportContentPage = (props: Props) => {
               {__('Promotes Terrorism')}
               <Button
                 className="icon--help"
-                title={__('Medias inciting terrorism or extremism or refers to such organization')}
+                title={__('Medias or contents inciting terrorism or extremism or refers to such organization')}
                 icon={ICONS.HELP}
                 description={__('Help')}
               />

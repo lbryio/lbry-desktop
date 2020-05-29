@@ -36,6 +36,10 @@ const ModalDmca = (props: Props) => {
 
   return (
     <Page>
+      <h1 className="section__title">{__('Copyright Infringement Report')}</h1>
+      <br />
+      <hr />
+      <br />
       <blockquote>
         <b>claimId</b>: {claimId}
       </blockquote>
