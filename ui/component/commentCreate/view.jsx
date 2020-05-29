@@ -102,11 +102,11 @@ export function CommentCreate(props: Props) {
       {!isReply && <ChannelSelection channel={channel} hideAnon onChannelChange={handleChannelChange} />}
       <FormField
         disabled={channel === CHANNEL_NEW}
-        type={advancedEditor ? 'markdown' : 'textarea'}
+        type={advancedEditor && !isReply ? 'markdown' : 'textarea'}
         name={isReply ? 'content_reply' : 'content_description'}
         label={isReply ? __('Replying as %reply_channel%', { reply_channel: channel }) : __('Comment')}
-        quickActionLabel={advancedEditor ? __('Simple Editor') : __('Advanced Editor')}
-        quickActionHandler={toggleEditorMode}
+        quickActionLabel={isReply ? undefined : advancedEditor ? __('Simple Editor') : __('Advanced Editor')}
+        quickActionHandler={isReply ? toggleEditorMode : undefined}
         onFocus={onTextareaFocus}
         placeholder={__('Say something about this...')}
         value={commentValue}
