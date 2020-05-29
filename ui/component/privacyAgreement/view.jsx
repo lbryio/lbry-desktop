@@ -70,8 +70,7 @@ function PrivacyAgreement(props: Props) {
                 {__('Yes, including with third-party analytics platforms')} <span>😄</span>
               </>
             }
-            helper={__(`Sending information to third parties (e.g. Google Analytics or Mixpanel) allows us to use detailed
-                analytical reports to improve all aspects of LBRY.`)}
+            helper={__(`Sending information to third parties (e.g. Google Analytics or Mixpanel) allows us to use detailed analytical reports to improve all aspects of LBRY.`)}
             checked={share === FREE}
             onChange={e => setShare(FREE)}
           />
@@ -85,8 +84,7 @@ function PrivacyAgreement(props: Props) {
               </>
             }
             helper={__(
-              `Sharing information with LBRY, Inc. allows us to report to publishers how their content is doing, as
-                well as track basic usage and performance. This is the minimum required to earn rewards from LBRY, Inc.`
+              `Sharing information with LBRY, Inc. allows us to report to publishers how their content is doing, as well as track basic usage and performance. This is the minimum required to earn rewards from LBRY, Inc.`
             )}
             onChange={e => setShare(LIMITED)}
           />
@@ -100,9 +98,7 @@ function PrivacyAgreement(props: Props) {
                 {__('No')} <span>😢</span>
               </>
             }
-            helper={__(`No information will be sent directly to LBRY, Inc. or third-parties about your usage. Note that as
-                peer-to-peer software, your IP address and potentially other system information can be sent to other
-                users, though this information is not stored permanently.`)}
+            helper={__(`No information will be sent directly to LBRY, Inc. or third-parties about your usage. Note that as peer-to-peer software, your IP address and potentially other system information can be sent to other users, though this information is not stored permanently.`)}
             onChange={e => setShare(NONE)}
           />
           {authenticated && (
