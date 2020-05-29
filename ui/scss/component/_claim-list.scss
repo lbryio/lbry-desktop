@@ -153,8 +153,7 @@
 
 .claim-preview--inline {
   .channel-thumbnail {
-    width: var(--channel-thumbnail-width--small);
-    height: var(--channel-thumbnail-width--small);
+    @include handleChannelGif(var(--channel-thumbnail-width--small));
   }
 
   .claim-preview__actions {
