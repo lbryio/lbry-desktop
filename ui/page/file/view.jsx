@@ -12,7 +12,7 @@ import Card from 'component/common/card';
 import FileDetails from 'component/fileDetails';
 import FileValues from 'component/fileValues';
 import FileDescription from 'component/fileDescription';
-
+import WaitUntilOnPage from 'component/common/wait-until-on-page';
 import RecommendedContent from 'component/recommendedContent';
 import CommentsList from 'component/commentsList';
 import CommentCreate from 'component/commentCreate';
@@ -143,12 +143,16 @@ class FilePage extends React.Component<Props> {
               actions={
                 <div>
                   <CommentCreate uri={uri} />
-                  <CommentsList uri={uri} />
+                  <WaitUntilOnPage>
+                    <CommentsList uri={uri} />
+                  </WaitUntilOnPage>
                 </div>
               }
             />
           </div>
-          <RecommendedContent uri={uri} />
+          <WaitUntilOnPage>
+            <RecommendedContent uri={uri} />
+          </WaitUntilOnPage>
         </div>
       </Page>
     );
