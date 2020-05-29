@@ -1,7 +1,7 @@
 import { connect } from 'react-redux';
 import { doGetSync, selectGetSyncIsPending, selectUserEmail, selectSyncApplyPasswordError } from 'lbryinc';
 import { doSetClientSetting } from 'redux/actions/settings';
-import { doSignOut } from 'redux/actions/app';
+import { doSignOut, doHandleSyncComplete } from 'redux/actions/app';
 import SyncPassword from './view';
 
 const select = state => ({
@@ -13,10 +13,8 @@ const select = state => ({
 const perform = dispatch => ({
   getSync: (password, cb) => dispatch(doGetSync(password, cb)),
   setClientSetting: (key, value) => dispatch(doSetClientSetting(key, value)),
+  handleSyncComplete: (error, hasDataChanged) => dispatch(doHandleSyncComplete(error, hasDataChanged)),
   signOut: () => dispatch(doSignOut()),
 });
 
-export default connect(
-  select,
-  perform
-)(SyncPassword);
+export default connect(select, perform)(SyncPassword);
