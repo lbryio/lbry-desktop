@@ -126,6 +126,7 @@
 
   .media__thumb {
     width: 14rem;
+    @include handleClaimListGifThumbnail(14rem);
 
     @media (max-width: $breakpoint-small) {
       width: 5rem;
@@ -306,10 +307,7 @@
 }
 
 .claim-preview--tile {
-  $width: calc(
-    (min(var(--page-max-width), 100vw) - var(--side-nav-width) - (var(--spacing-large) * 4) - var(--spacing-medium) * 3) /
-      4
-  );
+  $width: calc((100% - var(--spacing-medium) * 3) / 4);
   width: $width;
   @include handleClaimTileGifThumbnail($width);
 

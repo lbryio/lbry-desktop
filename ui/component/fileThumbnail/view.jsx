@@ -7,15 +7,16 @@ import Placeholder from './placeholder.png';
 type Props = {
   thumbnail: ?string, // externally sourced image
   children?: Node,
+  allowGifs: boolean,
 };
 
 const className = 'media__thumb';
 
 class FileThumbnail extends React.PureComponent<Props> {
   render() {
-    const { thumbnail, children } = this.props;
+    const { thumbnail, children, allowGifs = false } = this.props;
 
-    if (thumbnail && thumbnail.endsWith('gif')) {
+    if (!allowGifs && thumbnail && thumbnail.endsWith('gif')) {
       return <FreezeframeWrapper src={thumbnail} className={className} />;
     }
 
