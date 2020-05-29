@@ -8,20 +8,23 @@ import usePersistedState from 'effects/use-persisted-state';
 import I18nMessage from 'component/i18nMessage';
 
 type Props = {
-  getSync: (?string, (any) => void) => void,
+  getSync: (?string, (any, boolean) => void) => void,
   getSyncIsPending: boolean,
   email: string,
   passwordError: boolean,
   signOut: () => void,
+  handleSyncComplete: (any, boolean) => void,
 };
 
 function SyncPassword(props: Props) {
-  const { getSync, getSyncIsPending, email, signOut, passwordError } = props;
+  const { getSync, getSyncIsPending, email, signOut, passwordError, handleSyncComplete } = props;
   const [password, setPassword] = React.useState('');
   const [rememberPassword, setRememberPassword] = usePersistedState(true);
 
   function handleSubmit() {
-    getSync(password, error => {
+    getSync(password, (error, hasDataChanged) => {
+      handleSyncComplete(error, hasDataChanged);
+
       if (!error) {
         setSavedPassword(password, rememberPassword);
       }

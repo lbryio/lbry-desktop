@@ -31,7 +31,7 @@ import {
   doAuthTokenRefresh,
 } from 'util/saved-passwords';
 import { X_LBRY_AUTH_TOKEN } from 'constants/token';
-import { LBRY_WEB_API } from 'config';
+import { LBRY_WEB_API, DEFAULT_LANGUAGE } from 'config';
 
 // Import our app styles
 // If a style is not necessary for the initial page load, it should be removed from `all.scss`
@@ -41,7 +41,6 @@ import 'scss/all.scss';
 // @if TARGET='web'
 // These overrides can't live in web/ because they need to use the same instance of `Lbry`
 import apiPublishCallViaWeb from 'web/setup/publish';
-const { DEFAULT_LANGUAGE } = require('../config.js');
 
 // Sentry error logging setup
 // Will only work if you have a SENTRY_AUTH_TOKEN env
@@ -242,7 +241,7 @@ document.addEventListener('click', event => {
 
 function AppWrapper() {
   // Splash screen and sdk setup not needed on web
-  const [readyToLaunch, setReadyToLaunch] = useState(IS_WEB || sessionStorage.getItem('startup'));
+  const [readyToLaunch, setReadyToLaunch] = useState(IS_WEB);
   const [persistDone, setPersistDone] = useState(false);
 
   useEffect(() => {
@@ -276,11 +275,8 @@ function AppWrapper() {
 
   useEffect(() => {
     if (readyToLaunch && persistDone) {
-      // @if TARGET='app'
-      sessionStorage.setItem('startup', true);
-      // @endif
-      if (process.env.DEFAULT_LANGUAGE) {
-        app.store.dispatch(doFetchLanguage(process.env.DEFAULT_LANGUAGE));
+      if (DEFAULT_LANGUAGE) {
+        app.store.dispatch(doFetchLanguage(DEFAULT_LANGUAGE));
       }
       app.store.dispatch(doUpdateIsNightAsync());
       app.store.dispatch(doDaemonReady());

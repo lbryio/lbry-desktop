@@ -586,23 +586,25 @@ export function doGetAndPopulatePreferences() {
   };
 }
 
-export function doSyncWithPreferences() {
+export function doHandleSyncComplete(error, hasNewData) {
   return dispatch => {
-    function handleSyncComplete(error, hasNewData) {
-      if (!error) {
-        dispatch(doGetAndPopulatePreferences());
+    if (!error) {
+      dispatch(doGetAndPopulatePreferences());
 
-        if (hasNewData) {
-          // we just got sync data, better update our channels
-          dispatch(doFetchChannelListMine());
-        }
+      if (hasNewData) {
+        // we just got sync data, better update our channels
+        dispatch(doFetchChannelListMine());
       }
     }
+  };
+}
 
+export function doSyncWithPreferences() {
+  return dispatch => {
     return getSavedPassword().then(password => {
       const passwordArgument = password === null ? '' : password;
 
-      dispatch(doGetSync(passwordArgument, handleSyncComplete));
+      dispatch(doGetSync(passwordArgument, (error, hasNewData) => dispatch(doHandleSyncComplete(error, hasNewData))));
     });
   };
 }
