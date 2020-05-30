@@ -92,7 +92,7 @@ export default function BuyPage(props: Props) {
       ) : (
         <Card
           title={__('What Country Do You Live In?')}
-          subtitle={__('Only people from certain countries are elligible to purchase LBC.')}
+          subtitle={__('Only people from certain countries are eligible to purchase LBC.')}
           nag={country && !isValid && <Nag relative type="helpful" message={"This country isn't supported yet."} />}
           actions={
             <div>
