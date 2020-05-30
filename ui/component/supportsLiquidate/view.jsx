@@ -110,7 +110,7 @@ const SupportsLiquidate = (props: Props) => {
       body={
         abandonClaimError ? (
           <div className="error__wrapper--no-overflow">
-            <ErrorText>{__('%message%', { message: abandonClaimError })}</ErrorText>
+            <ErrorText>{abandonClaimError}</ErrorText>
           </div>
         ) : (
           <>
