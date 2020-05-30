@@ -71,7 +71,7 @@ function PrivacyAgreement(props: Props) {
               </>
             }
             helper={__(`Sending information to third parties (e.g. Google Analytics or Mixpanel) allows us to use detailed
-                analytical reports to improve all aspects of LBRY.`)}            
+                analytical reports to improve all aspects of LBRY.`)}
             checked={share === FREE}
             onChange={e => setShare(FREE)}
           />
