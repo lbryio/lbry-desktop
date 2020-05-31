@@ -201,7 +201,8 @@ export default function CreatorAnalytics(props: Props) {
                 <div className="section__actions">
                   <Button
                     button="primary"
-                    label={__('New Publish')}
+                    icon={ICONS.PUBLISH}
+                    label={__('Publish')}
                     onClick={() => {
                       if (claim) {
                         prepareEdit(claim.name);

@@ -8,6 +8,7 @@ import { PAGE_PARAM, PAGE_SIZE_PARAM } from 'constants/claim';
 import WebUploadList from 'component/webUploadList';
 import Spinner from 'component/spinner';
 import Card from 'component/common/card';
+import * as ICONS from 'constants/icons';
 
 type Props = {
   uploadCount: number,
@@ -67,8 +68,9 @@ function FileListPublished(props: Props) {
                 onClick={() => fetchClaimListMine(params.page, params.page_size)}
               />
               <Button
+                icon={ICONS.PUBLISH}
                 button="secondary"
-                label={__('New Publish')}
+                label={__('Publish')}
                 navigate="/$/publish"
                 onClick={() => clearPublish()}
               />
