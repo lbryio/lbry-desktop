@@ -113,7 +113,7 @@ export default function getHomePageRowData(
   if (followedTags.length) {
     followedTags.forEach((tag: Tag) => {
       individualTagDataItems.push({
-        title: __(`Trending for `)+`#${toCapitalCase(tag.name)}`,
+        title: __(`Trending for `) + `#${toCapitalCase(tag.name)}`,
         link: `/$/${PAGES.DISCOVER}?t=${tag.name}`,
         options: {
           pageSize: 4,
@@ -164,6 +164,16 @@ export default function getHomePageRowData(
           .startOf('day')
           .unix()
       )}`,
+    },
+  };
+
+  const PROTESTS_2020 = {
+    title: '#2020protests',
+    link: `/$/${PAGES.DISCOVER}?${CS.TAGS_KEY}=2020protests&${CS.CLAIM_TYPE}=${CS.CLAIM_STREAM}`,
+    options: {
+      claimType: ['stream'],
+      tags: ['2020protests'],
+      pageSize: 4,
     },
   };
 
@@ -239,6 +249,7 @@ export default function getHomePageRowData(
     rowData.push(TV_PAID_BETA_ROW);
   }
   rowData.push(TOP_CONTENT_TODAY);
+  rowData.push(PROTESTS_2020);
   rowData.push(TRENDING_ON_LBRY);
   if (!showPersonalizedChannels) rowData.push(TOP_CHANNELS);
   if (!authenticated) {
