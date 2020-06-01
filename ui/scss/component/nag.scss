@@ -8,7 +8,7 @@ $nag-error-z-index: 100001;
   left: 0;
   bottom: 0;
   width: 100%;
-  padding: var(--spacing-small);
+  padding: var(--spacing-s);
   background-color: var(--color-nag);
   color: var(--color-white);
   font-weight: var(--font-weight-bold);
@@ -61,11 +61,11 @@ $nag-error-z-index: 100001;
 
 .nag__button {
   line-height: 1;
-  margin-left: var(--spacing-small);
-  margin-right: var(--spacing-small);
+  margin-left: var(--spacing-s);
+  margin-right: var(--spacing-s);
   border-radius: var(--border-radius);
   border: 1px solid var(--color-white);
-  padding: var(--spacing-miniscule);
+  padding: var(--spacing-xxs);
   color: var(--color-white);
   font-weight: var(--font-weight-bold);
 
@@ -76,7 +76,7 @@ $nag-error-z-index: 100001;
 
   @media (max-width: $breakpoint-small) {
     margin-left: 0;
-    margin-top: var(--spacing-small);
+    margin-top: var(--spacing-s);
   }
 }
 
@@ -99,7 +99,7 @@ $nag-error-z-index: 100001;
 
 .nag__close {
   margin-left: auto;
-  right: var(--spacing-medium);
+  right: var(--spacing-m);
   position: absolute;
   border: none;
 

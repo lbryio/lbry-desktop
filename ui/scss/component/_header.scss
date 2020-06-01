@@ -36,10 +36,10 @@
   display: flex;
   align-items: center;
   margin: auto;
-  padding: 0 var(--spacing-large);
+  padding: 0 var(--spacing-l);
 
   @media (max-width: $breakpoint-small) {
-    padding: var(--spacing-small);
+    padding: var(--spacing-s);
   }
 }
 
@@ -70,7 +70,7 @@
 
   @media (max-width: $breakpoint-small) {
     display: block;
-    margin-left: var(--spacing-medium);
+    margin-left: var(--spacing-m);
 
     svg {
       stroke: var(--color-text);
@@ -80,14 +80,14 @@
 
 .header__menu--with-balance {
   button:first-child {
-    margin-left: var(--spacing-large);
-    margin-right: var(--spacing-medium);
+    margin-left: var(--spacing-l);
+    margin-right: var(--spacing-m);
   }
 }
 
 .header__navigation-arrows {
   display: flex;
-  margin-right: var(--spacing-small);
+  margin-right: var(--spacing-s);
 }
 
 .header__navigation-item {
@@ -117,7 +117,7 @@
   width: var(--height-button);
   background-color: var(--color-header-button);
   border-radius: 1.5rem;
-  margin-left: var(--spacing-small);
+  margin-left: var(--spacing-s);
 
   &:hover {
     background-color: var(--color-primary-alt);
@@ -138,7 +138,7 @@
 
 .header__navigation-item--lbry {
   font-weight: var(--font-weight-bold);
-  margin-right: var(--spacing-medium);
+  margin-right: var(--spacing-m);
 
   .lbry-icon {
     height: 2rem;
@@ -155,7 +155,7 @@
 }
 
 .header__navigation-item--balance {
-  margin: 0 var(--spacing-medium);
+  margin: 0 var(--spacing-m);
   font-weight: var(--font-weight-bold);
 }
 
@@ -169,7 +169,7 @@
 
 .header__navigation-button {
   margin: 0;
-  padding: var(--spacing-miniscule) var(--spacing-medium);
+  padding: var(--spacing-xxs) var(--spacing-m);
   display: flex;
   align-items: center;
 
@@ -182,7 +182,7 @@
 .header__navigation-button-help {
   @extend .help;
   margin-top: 0;
-  margin-left: var(--spacing-small);
+  margin-left: var(--spacing-s);
 }
 
 .header__auth-buttons {
@@ -191,6 +191,6 @@
   font-weight: var(--font-weight-bold);
 
   & > *:not(:last-child) {
-    margin: 0 var(--spacing-medium);
+    margin: 0 var(--spacing-m);
   }
 }

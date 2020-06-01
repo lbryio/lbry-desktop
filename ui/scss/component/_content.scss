@@ -1,14 +1,14 @@
 .content__viewer {
   @extend .card;
   position: absolute;
-  top: var(--spacing-large);
+  top: var(--spacing-l);
 }
 
 .content__viewer--inline {
   max-height: var(--inline-player-max-height);
 
   @media (max-width: $breakpoint-small) {
-    margin-top: var(--spacing-xsmall);
+    margin-top: var(--spacing-xs);
   }
 }
 
@@ -17,7 +17,7 @@
   margin-bottom: 0;
   height: calc(var(--floating-viewer-height) + var(--floating-viewer-info-height));
   overflow: hidden;
-  left: calc(var(--spacing-large) + var(--spacing-small));
+  left: calc(var(--spacing-l) + var(--spacing-s));
   z-index: 9999;
 
   &:hover {
@@ -48,7 +48,7 @@
     height: 1.5rem;
     top: 0;
     position: relative;
-    margin-left: var(--spacing-small);
+    margin-left: var(--spacing-s);
 
     svg {
       color: var(--color-white);
@@ -78,7 +78,7 @@
 .content__info {
   cursor: grab;
   height: var(--floating-viewer-info-height);
-  padding: var(--spacing-medium);
+  padding: var(--spacing-m);
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -154,12 +154,12 @@
   align-items: center;
   flex-direction: column;
   justify-content: center;
-  padding: 0 var(--spacing-large);
+  padding: 0 var(--spacing-l);
   background-color: #000;
 
   &.content__loading--document {
     background-color: var(--color-card-background);
-    padding: calc(var(--spacing-xlarge) * 3) 0;
+    padding: calc(var(--spacing-xl) * 3) 0;
 
     .content__loading-text {
       color: var(--color-text);

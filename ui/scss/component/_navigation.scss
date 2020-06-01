@@ -10,11 +10,11 @@
 }
 
 .navigation + .ads-wrapper {
-  margin-top: var(--spacing-large);
+  margin-top: var(--spacing-l);
 }
 
 .navigation__secondary {
-  margin-top: var(--spacing-large);
+  margin-top: var(--spacing-l);
 }
 
 .navigation-links {
@@ -30,11 +30,11 @@
 }
 
 .navigation-links__inline {
-  margin-left: calc(var(--spacing-medium) + var(--spacing-small));
+  margin-left: calc(var(--spacing-m) + var(--spacing-s));
 }
 
 .navigation-link__wrapper {
-  margin: var(--spacing-miniscule) 0;
+  margin: var(--spacing-xxs) 0;
 }
 
 .navigation-link {
@@ -46,7 +46,7 @@
   white-space: nowrap;
   text-overflow: ellipsis;
   color: var(--color-navigation-link);
-  margin-top: var(--spacing-small);
+  margin-top: var(--spacing-s);
 
   .icon {
     stroke: var(--color-link-icon);

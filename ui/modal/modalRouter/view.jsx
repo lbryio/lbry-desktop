@@ -37,7 +37,7 @@ import ModalMobileNavigation from 'modal/modalMobileNavigation';
 import ModalSetReferrer from 'modal/modalSetReferrer';
 import ModalRepost from 'modal/modalRepost';
 import ModalSignOut from 'modal/modalSignOut';
-import ModalLiquidateSupports from 'modal/modalSupportsLiquidate';
+import ModalSupportsLiquidate from 'modal/modalSupportsLiquidate';
 import ModalConfirmAge from 'modal/modalConfirmAge';
 import ModalFileSelection from 'modal/modalFileSelection';
 
@@ -137,12 +137,12 @@ function ModalRouter(props: Props) {
       return <ModalRepost {...modalProps} />;
     case MODALS.SIGN_OUT:
       return <ModalSignOut {...modalProps} />;
-    case MODALS.LIQUIDATE_SUPPORTS:
-      return <ModalLiquidateSupports {...modalProps} />;
     case MODALS.CONFIRM_AGE:
       return <ModalConfirmAge {...modalProps} />;
     case MODALS.FILE_SELECTION:
       return <ModalFileSelection {...modalProps} />;
+    case MODALS.LIQUIDATE_SUPPORTS:
+      return <ModalSupportsLiquidate {...modalProps} />;
     default:
       return null;
   }

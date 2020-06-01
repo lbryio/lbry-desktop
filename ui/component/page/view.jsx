@@ -15,17 +15,18 @@ type Props = {
   authPage: boolean,
   noHeader: boolean,
   noFooter: boolean,
+  noSideNavigation: boolean,
 };
 
 function Page(props: Props) {
-  const { children, className, authPage = false, noHeader, noFooter } = props;
+  const { children, className, authPage = false, noHeader = false, noFooter = false, noSideNavigation = false } = props;
 
   return (
     <Fragment>
       {!noHeader && <Header authHeader={authPage} />}
       <div className={classnames('main-wrapper__inner')}>
         <main className={classnames(MAIN_CLASS, className, { 'main--full-width': authPage })}>{children}</main>
-        {!authPage && !noHeader && <SideNavigation />}
+        {!authPage && !noSideNavigation && <SideNavigation />}
       </div>
       {/* @if TARGET='web' */}
       {!noFooter && <Footer />}
