@@ -1,4 +1,4 @@
-export const MINIMUM_PUBLISH_BID = 0.00001;
+export const MINIMUM_PUBLISH_BID = 0.0001;
 
 export const CHANNEL_ANONYMOUS = 'anonymous';
 export const CHANNEL_NEW = 'new';
