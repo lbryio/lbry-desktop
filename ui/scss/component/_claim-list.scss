@@ -363,7 +363,7 @@
     $width: calc((100vw / 2) - var(--spacing-s) * 2);
     width: $width;
     @include handleClaimTileGifThumbnail($width);
-    margin-bottom: var(--spacing-large);
+    margin-bottom: var(--spacing-l);
 
     &:first-child,
     &:nth-child(2n + 1) {
