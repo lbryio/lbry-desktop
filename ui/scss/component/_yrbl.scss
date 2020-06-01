@@ -8,7 +8,7 @@
 
 .yrbl {
   height: 20rem;
-  margin-right: calc(var(--spacing-xlarge) * 2);
+  margin-right: calc(var(--spacing-xl) * 2);
 
   @media (max-width: $breakpoint-small) {
     display: none;
@@ -23,7 +23,7 @@
   align-self: center;
   height: 250px;
   width: auto;
-  margin: 0 var(--spacing-large);
+  margin: 0 var(--spacing-l);
 }
 
 .yrbl--search {

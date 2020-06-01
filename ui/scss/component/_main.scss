@@ -15,16 +15,16 @@
   margin-left: auto;
   margin-right: auto;
   margin-top: var(--header-height);
-  padding: var(--spacing-large); // Unfortunately this is coupled with .claim-preview--tile width calculation
+  padding: var(--spacing-l); // Unfortunately this is coupled with .claim-preview--tile width calculation
 
   @media (max-width: $breakpoint-small) {
-    padding: var(--spacing-small);
+    padding: var(--spacing-s);
   }
 }
 
 .main {
   position: relative;
-  width: calc(100% - var(--side-nav-width) - var(--spacing-large));
+  width: calc(100% - var(--side-nav-width) - var(--spacing-l));
 
   @media (max-width: $breakpoint-small) {
     width: 100%;
@@ -40,6 +40,29 @@
   margin-right: auto;
 }
 
+.main--buy {
+  @extend .main--auth-page;
+  max-width: 30rem;
+  min-height: 400px;
+
+  .card {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+  }
+
+  iframe {
+    min-height: 420px;
+    background-color: var(--color-card-background);
+    margin: -0.8rem;
+    margin-bottom: 2rem;
+  }
+
+  .sm:bg-grey-lighter {
+    background-color: var(--color-card-background);
+  }
+}
+
 .main--empty {
   align-self: center;
   display: flex;
@@ -53,7 +76,7 @@
   }
 
   @media (max-width: $breakpoint-small) {
-    padding: 0 var(--spacing-medium);
+    padding: 0 var(--spacing-m);
   }
 }
 

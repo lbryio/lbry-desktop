@@ -2,16 +2,12 @@
   position: relative;
 
   ~ .section {
-    margin-top: var(--spacing-large);
-
-    @media (max-width: $breakpoint-small) {
-      margin-top: var(--spacing-medium);
-    }
+    margin-top: var(--spacing-l);
   }
 }
 
 .section--padded {
-  padding: var(--spacing-medium);
+  padding: var(--spacing-m);
 }
 
 .section--small {
@@ -19,14 +15,14 @@
 }
 
 .section__header {
-  margin-bottom: var(--spacing-large);
+  margin-bottom: var(--spacing-l);
 }
 
 .section__flex {
   display: flex;
   align-items: flex-start;
   > .icon__wrapper:first-child {
-    margin-right: var(--spacing-large);
+    margin-right: var(--spacing-l);
   }
 }
 
@@ -39,13 +35,13 @@
 .section__title--small {
   @extend .section__title;
   font-size: var(--font-body);
-  margin-top: var(--spacing-medium);
+  margin-top: var(--spacing-m);
 }
 
 .section__title--large {
   @extend .section__title;
-  margin-right: var(--spacing-medium);
   display: inline-block;
+  margin-right: var(--spacing-m);
   font-weight: var(--font-weight-bold);
   font-size: var(--font-heading);
 
@@ -56,13 +52,13 @@
 
 .section__subtitle {
   color: var(--color-text-subtitle);
-  margin: var(--spacing-small) 0;
+  margin: var(--spacing-s) 0;
   font-size: var(--font-body);
 }
 
 .section__subtitle--status {
   @extend .section__subtitle;
-  padding: var(--spacing-small);
+  padding: var(--spacing-s);
   background-color: var(--color-text-warning);
 }
 
@@ -71,7 +67,7 @@
   flex-direction: column;
 
   hr {
-    margin: var(--spacing-large) 0;
+    margin: var(--spacing-l) 0;
   }
 
   p {
@@ -81,23 +77,23 @@
     font-weight: var(--font-weight-base);
     background-color: var(--color-background);
     transform: translateY(-150%);
-    padding: 0 var(--spacing-large);
+    padding: 0 var(--spacing-l);
     display: inline-block;
     margin: auto;
   }
 }
 
 .section__body {
-  margin-top: var(--spacing-medium);
+  margin-top: var(--spacing-m);
 }
 
 .section__actions {
   display: flex;
   align-items: center;
-  margin-top: var(--spacing-large);
+  margin-top: var(--spacing-l);
 
   ~ .section {
-    margin-top: var(--spacing-large);
+    margin-top: var(--spacing-l);
   }
 
   &:only-child,
@@ -106,14 +102,14 @@
   }
 
   > *:not(:last-child) {
-    margin-right: var(--spacing-medium);
+    margin-right: var(--spacing-m);
   }
 
   @media (max-width: $breakpoint-small) {
     flex-wrap: wrap;
 
     > * {
-      margin-bottom: var(--spacing-small);
+      margin-bottom: var(--spacing-s);
     }
   }
 
@@ -127,8 +123,8 @@
   }
 
   .button--primary ~ .button--link {
-    margin-left: var(--spacing-small);
-    padding: var(--spacing-xsmall);
+    margin-left: var(--spacing-s);
+    padding: var(--spacing-xs);
   }
 }
 
@@ -148,7 +144,7 @@
 .section__start-at {
   display: flex;
   align-items: center;
-  margin-top: var(--spacing-large);
+  margin-top: var(--spacing-l);
   fieldset-section {
     width: 6em;
     margin-top: 0;

@@ -3,28 +3,28 @@
   justify-content: center;
   max-width: 80%;
   margin: auto;
-  padding: var(--spacing-xlarge);
+  padding: var(--spacing-xl);
   font-size: var(--font-small);
 
   @media (max-width: $breakpoint-small) {
     max-width: 100%;
-    padding: var(--spacing-medium);
+    padding: var(--spacing-m);
     flex-direction: column;
   }
 }
 
 .footer__section {
-  margin-left: var(--spacing-xlarge);
+  margin-left: var(--spacing-xl);
 
   @media (max-width: $breakpoint-small) {
-    margin-left: var(--spacing-large);
+    margin-left: var(--spacing-l);
   }
 }
 
 .footer__section-title {
   @extend .help;
   font-weight: 300;
-  margin-bottom: var(--spacing-medium);
+  margin-bottom: var(--spacing-m);
 }
 
 .footer__link {

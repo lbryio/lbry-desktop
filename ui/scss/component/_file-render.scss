@@ -5,11 +5,11 @@
   .card + .file-render,
   .card + .file-page__video-container,
   .card + .content__cover {
-    margin-top: var(--spacing-large);
+    margin-top: var(--spacing-l);
   }
 
   .card + .file-render {
-    margin-top: var(--spacing-large);
+    margin-top: var(--spacing-l);
   }
 
   .file-page__md {
@@ -62,7 +62,7 @@
 
     @media (max-width: $breakpoint-small) {
       width: 100%;
-      padding: var(--spacing-small);
+      padding: var(--spacing-s);
     }
   }
 }
@@ -100,7 +100,7 @@
   overflow: hidden;
   .comic-viewer {
     width: 100%;
-    height: calc(100vh - var(--header-height) - var(--spacing-medium) * 2);
+    height: calc(100vh - var(--header-height) - var(--spacing-m) * 2);
     max-height: var(--inline-player-max-height);
   }
 }
@@ -112,7 +112,7 @@
   for now, since we don't know size, let's make as large as we can without being larger than available area
   */
   iframe {
-    height: calc(100vh - var(--header-height) - var(--spacing-medium) * 2);
+    height: calc(100vh - var(--header-height) - var(--spacing-m) * 2);
   }
 }
 
@@ -121,7 +121,7 @@
   overflow: hidden;
 
   .three-viewer {
-    height: calc(100vh - var(--header-height) - var(--spacing-medium) * 2);
+    height: calc(100vh - var(--header-height) - var(--spacing-m) * 2);
     max-height: var(--inline-player-max-height);
   }
 }
@@ -141,7 +141,7 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: var(--spacing-large);
+  padding: var(--spacing-l);
 
   @media (max-width: $breakpoint-small) {
     font-size: var(--font-small);
@@ -175,15 +175,15 @@
 .file-viewer__overlay-title {
   text-align: center;
   font-size: var(--font-large);
-  margin-bottom: var(--spacing-medium);
+  margin-bottom: var(--spacing-m);
 }
 .file-viewer__overlay-secondary {
   color: var(--color-text-subtitle);
-  margin-bottom: var(--spacing-medium);
+  margin-bottom: var(--spacing-m);
 }
 .file-viewer__overlay-actions {
   .button + .button {
-    margin-left: var(--spacing-medium);
+    margin-left: var(--spacing-m);
   }
 }
 
@@ -216,7 +216,7 @@
   background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAADGCAYAAAAT+OqFAAAAdklEQVQoz42QQQ7AIAgEF/T/D+kbq/RWAlnQyyazA4aoAB4FsBSA/bFjuF1EOL7VbrIrBuusmrt4ZZORfb6ehbWdnRHEIiITaEUKa5EJqUakRSaEYBJSCY2dEstQY7AuxahwXFrvZmWl2rh4JZ07z9dLtesfNj5q0FU3A5ObbwAAAABJRU5ErkJggg==);
 
   .button {
-    padding: var(--spacing-small);
+    padding: var(--spacing-s);
     color: var(--color-white);
 
     .button__label {
@@ -230,7 +230,7 @@
 
   .credit-amount,
   .icon--Key {
-    margin-right: var(--spacing-medium);
+    margin-right: var(--spacing-m);
   }
 }
 
@@ -246,11 +246,11 @@
   display: flex;
   align-items: center;
   font-size: var(--font-small);
-  margin-left: var(--spacing-medium);
+  margin-left: var(--spacing-m);
   white-space: nowrap;
 
   & > *:not(:last-child) {
-    margin-right: var(--spacing-small);
+    margin-right: var(--spacing-s);
   }
 }
 
@@ -276,7 +276,7 @@
 
   .CodeMirror .CodeMirror-lines {
     // is there really a .CodeMirror inside a .CodeMirror?
-    padding: var(--spacing-small) 0;
+    padding: var(--spacing-s) 0;
   }
 
   .CodeMirror-code {
@@ -287,11 +287,11 @@
   .CodeMirror-gutters {
     background-color: var(--color-gray-1);
     border-right: 1px solid var(--color-gray-4);
-    padding-right: var(--spacing-medium);
+    padding-right: var(--spacing-m);
   }
 
   .CodeMirror-line {
-    padding-left: var(--spacing-medium);
+    padding-left: var(--spacing-m);
   }
 
   .CodeMirror-linenumber {
@@ -405,7 +405,7 @@
   font-size: var(--font-small);
 }
 .autoplay-countdown__counter {
-  margin-top: var(--spacing-medium);
+  margin-top: var(--spacing-m);
 }
 
 .autoplay-countdown__button {

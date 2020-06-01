@@ -4,11 +4,11 @@
   align-items: center;
   font-size: var(--font-small);
   color: var(--color-text-help);
-  margin-left: var(--spacing-medium);
+  margin-left: var(--spacing-m);
   white-space: nowrap;
 
   & > *:not(:last-child) {
-    margin-right: var(--spacing-small);
+    margin-right: var(--spacing-s);
   }
 
   @media (max-width: $breakpoint-xsmall) {
@@ -18,11 +18,11 @@
 
 .file-properties--large {
   flex-wrap: wrap;
-  margin-bottom: var(--spacing-large);
+  margin-bottom: var(--spacing-l);
   margin-left: 0;
 
   & > * {
-    margin-top: var(--spacing-small);
+    margin-top: var(--spacing-s);
   }
 }
 
@@ -37,7 +37,7 @@
   }
 
   & > *:not(:last-child) {
-    margin-right: var(--spacing-miniscule);
+    margin-right: var(--spacing-xxs);
   }
 
   @media (max-width: $breakpoint-xsmall) {

@@ -90,7 +90,7 @@ function UserPasswordReset(props: Props) {
                 <Button
                   button="primary"
                   type="submit"
-                  label={loading ? __('Update Password') : __('Updating Password')}
+                  label={loading ? __('Updating Password') : __('Update Password')}
                   disabled={!password || loading}
                 />
                 <Button button="link" label={__('Cancel')} onClick={handleRestart} />

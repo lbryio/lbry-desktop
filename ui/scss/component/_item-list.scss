@@ -1,18 +1,18 @@
 .item-list {
   background-color: black; //white;
-  margin-bottom: var(--spacing-large);
-  padding: var(--spacing-large);
+  margin-bottom: var(--spacing-l);
+  padding: var(--spacing-l);
 
   .card__actions {
-    margin-top: var(--spacing-medium);
-    margin-left: var(--spacing-small);
+    margin-top: var(--spacing-m);
+    margin-left: var(--spacing-s);
   }
 }
 
 .item-list__row {
   align-items: center;
   display: flex;
-  padding: var(--spacing-small);
+  padding: var(--spacing-s);
 
   fieldset-section {
     margin-bottom: 0;
@@ -25,7 +25,7 @@
   white-space: nowrap;
 
   &:not(:first-of-type) {
-    padding-left: var(--spacing-small);
+    padding-left: var(--spacing-s);
   }
 }
 

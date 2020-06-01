@@ -88,6 +88,7 @@ let baseConfig = {
       'process.env.NODE_ENV': JSON.stringify(NODE_ENV),
       'process.env.LBRY_API_URL': JSON.stringify(process.env.LBRY_API_URL),
       'process.env.SENTRY_AUTH_TOKEN': JSON.stringify(process.env.SENTRY_AUTH_TOKEN),
+      'process.env.MOONPAY_SECRET_KEY': JSON.stringify(process.env.MOONPAY_SECRET_KEY),
     }),
     new Dotenv({
       allowEmptyValues: true, // allow empty variables (e.g. `FOO=`) (treat it as empty string, rather than missing)

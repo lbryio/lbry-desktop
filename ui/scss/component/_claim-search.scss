@@ -5,9 +5,9 @@
   flex-wrap: wrap;
   justify-content: flex-start;
   align-items: center;
-  padding: var(--spacing-medium);
-  padding-bottom: var(--spacing-small);
-  margin-top: var(--spacing-medium);
+  padding: var(--spacing-m);
+  padding-bottom: var(--spacing-s);
+  margin-top: var(--spacing-m);
   color: var(--color-text-subtitle);
 
   @media (max-width: $breakpoint-small) {
@@ -17,7 +17,7 @@
 }
 
 .claim-search__dropdown {
-  padding: 0 var(--spacing-medium);
+  padding: 0 var(--spacing-m);
   max-width: 400px;
   font-size: var(--font-body);
   background-color: var(--color-card-background);
@@ -45,14 +45,14 @@
   }
 
   &:not(:first-of-type) {
-    padding-left: var(--spacing-medium);
+    padding-left: var(--spacing-m);
   }
 
   @media (max-width: $breakpoint-small) {
     padding-left: 0px;
 
     &:not(:first-of-type) {
-      margin-top: var(--spacing-small);
+      margin-top: var(--spacing-s);
     }
 
     &:not(:first-of-type) {
@@ -80,6 +80,6 @@
   flex-wrap: nowrap;
 
   @media (max-width: $breakpoint-small) {
-    margin-bottom: var(--spacing-small);
+    margin-bottom: var(--spacing-s);
   }
 }

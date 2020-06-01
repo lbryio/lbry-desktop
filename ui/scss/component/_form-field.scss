@@ -17,7 +17,7 @@ input[type='number'] {
 
 fieldset-group {
   + fieldset-group {
-    margin-top: var(--spacing-small);
+    margin-top: var(--spacing-s);
   }
 
   &.fieldset-group--smushed {
@@ -46,8 +46,8 @@ fieldset-group {
     }
 
     &.fieldgroup--paginate {
-      padding-bottom: var(--spacing-large);
-      margin-top: var(--spacing-large);
+      padding-bottom: var(--spacing-l);
+      margin-top: var(--spacing-l);
       align-items: flex-end;
       justify-content: center;
     }
@@ -74,7 +74,7 @@ fieldset-group {
       .form-field__prefix {
         white-space: nowrap;
         padding: 0.5rem;
-        padding-right: var(--spacing-small);
+        padding-right: var(--spacing-s);
         height: var(--height-input);
         border: 1px solid;
         border-top-left-radius: var(--border-radius);
@@ -95,7 +95,7 @@ fieldset-group {
         border-top-left-radius: 0;
         border-bottom-left-radius: 0;
         border-color: var(--color-input-border);
-        padding-left: var(--spacing-xsmall);
+        padding-left: var(--spacing-xs);
       }
     }
   }
@@ -122,13 +122,13 @@ fieldset-group {
 
 .form-field__help {
   @extend .help;
-  margin-top: var(--spacing-miniscule);
-  margin-bottom: var(--spacing-small);
+  margin-top: var(--spacing-xxs);
+  margin-bottom: var(--spacing-s);
 }
 
 .form-field__help + .checkbox,
 .form-field__help + .radio {
-  margin-top: var(--spacing-large);
+  margin-top: var(--spacing-l);
 }
 
 .form-field__conjuction {
@@ -147,11 +147,11 @@ fieldset-group {
 
 fieldset-section {
   .form-field__internal-option {
-    margin-top: var(--spacing-small);
+    margin-top: var(--spacing-s);
     margin-left: 2.2rem;
 
     &:first-of-type {
-      margin-top: var(--spacing-small); // Extra specificity needed here since _section.scss is applied after this file
+      margin-top: var(--spacing-s); // Extra specificity needed here since _section.scss is applied after this file
     }
   }
 }

@@ -51,7 +51,7 @@
 }
 
 .menu__list {
-  margin-left: calc(var(--spacing-medium) * -1);
+  margin-left: calc(var(--spacing-m) * -1);
   box-shadow: var(--card-box-shadow);
   animation: menu-animate-in var(--animation-duration) var(--animation-style);
   border-bottom-left-radius: var(--border-radius);
@@ -66,16 +66,16 @@
 .menu__link {
   display: flex;
   align-items: center;
-  padding: var(--spacing-medium);
-  padding-right: var(--spacing-large);
+  padding: var(--spacing-m);
+  padding-right: var(--spacing-l);
 
   .icon {
     stroke: var(--color-menu-icon);
-    margin-right: var(--spacing-small);
+    margin-right: var(--spacing-s);
   }
 
   .badge {
-    margin-left: var(--spacing-small);
+    margin-left: var(--spacing-s);
   }
 }
 
