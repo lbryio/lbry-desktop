@@ -40,17 +40,29 @@ const WalletPage = (props: Props) => {
                 subtitle={
                   <div>
                     <p>
-                      There are a lot of ways to get LBC! You can have your friend send you a few, earn rewards, or
-                      purchase your own.
+                      {__(
+                        'There are a lot of ways to get LBC! You can purchase your own, earn rewards, or have your friend send you a few.'
+                      )}
                     </p>
                     <div className="section__actions">
-                      <Button button="primary" label={__('Earn Rewards')} navigate={`/$/${PAGES.REWARDS}`} />
+                      <Button
+                        button="primary"
+                        icon={ICONS.BUY}
+                        label={__('Buy Credits')}
+                        navigate={`/$/${PAGES.BUY}`}
+                      />
                       <Button
                         button="secondary"
-                        label={__('Send To Your Address')}
+                        icon={ICONS.REWARDS}
+                        label={__('Earn Rewards')}
+                        navigate={`/$/${PAGES.REWARDS}`}
+                      />
+                      <Button
+                        icon={ICONS.RECEIVE}
+                        button="secondary"
+                        label={__('Your Address')}
                         onClick={() => doOpenModal(MODALS.WALLET_RECEIVE)}
                       />
-                      <Button button="alt" icon={ICONS.SEND} label={__('Buy Credits')} navigate={`/$/${PAGES.BUY}`} />
                     </div>
                   </div>
                 }
