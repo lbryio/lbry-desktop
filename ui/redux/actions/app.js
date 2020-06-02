@@ -46,7 +46,8 @@ import {
 import { doAuthenticate, doGetSync, doClaimRewardType, rewards as REWARDS } from 'lbryinc';
 import { lbrySettings as config, version as appVersion } from 'package.json';
 import analytics, { SHARE_INTERNAL } from 'analytics';
-import { doSignOutCleanup, deleteSavedPassword, getSavedPassword } from 'util/saved-passwords';
+import { doSignOutCleanup, deleteSavedPassword, getSavedPassword, getAuthToken } from 'util/saved-passwords';
+import { X_LBRY_AUTH_TOKEN } from 'constants/token';
 
 // @if TARGET='app'
 const { autoUpdater } = remote.require('electron-updater');
@@ -494,6 +495,8 @@ export function doAnaltyicsPurchaseEvent(fileInfo) {
 export function doSignIn() {
   return (dispatch, getState) => {
     // @if TARGET='web'
+    const authToken = getAuthToken();
+    Lbry.setApiHeader(X_LBRY_AUTH_TOKEN, authToken);
     dispatch(doBalanceSubscribe());
     dispatch(doFetchChannelListMine());
     // @endif
