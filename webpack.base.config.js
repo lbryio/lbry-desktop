@@ -66,6 +66,7 @@ let baseConfig = {
       config: path.resolve(__dirname, 'config.js'),
       homepage: process.env.CUSTOM_HOMEPAGE === 'true' ? path.resolve(__dirname, 'custom/homepage.js') : ('util/homepage.js'),
       lbryinc: 'lbryinc/dist/bundle.es.js',
+      dgram: 'dgram-browserify',
       // Build optimizations for 'redux-persist-transform-filter'
       'redux-persist-transform-filter': 'redux-persist-transform-filter/index.js',
       'lodash.get': 'lodash-es/get',

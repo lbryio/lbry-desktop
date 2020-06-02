@@ -5,6 +5,10 @@ import videojs from 'video.js/dist/alt/video.core.novtt.min.js';
 import 'video.js/dist/alt/video-js-cdn.min.css';
 import eventTracking from 'videojs-event-tracking';
 import isUserTyping from 'util/detect-typing';
+import 'videojs-google-chromecast/dist/css/plugin.css';
+import 'videojs-google-chromecast/dist/libs/sender_base';
+import 'videojs-google-chromecast/dist/libs/sender';
+import chromecast from 'videojs-google-chromecast';
 
 export type Player = {
   on: (string, (any) => void) => void,
@@ -36,7 +40,6 @@ type VideoJSOptions = {
   responsive: boolean,
   poster?: string,
   muted?: boolean,
-  poster?: string,
 };
 
 const IS_IOS =
@@ -71,6 +74,10 @@ if (!Object.keys(videojs.getPlugins()).includes('eventTracking')) {
   videojs.registerPlugin('eventTracking', eventTracking);
 }
 
+if (!Object.keys(videojs.getPlugins()).includes('chromecast')) {
+  videojs.registerPlugin('chromecast', chromecast);
+}
+
 /*
 properties for this component should be kept to ONLY those that if changed should REQUIRE an entirely new videojs element
  */
@@ -88,7 +95,17 @@ export default React.memo<Props>(function VideoJs(props: Props) {
     ],
     autoplay: false,
     poster: poster, // thumb looks bad in app, and if autoplay, flashing poster is annoying
-    plugins: { eventTracking: true },
+    plugins: {
+      eventTracking: true,
+      chromecast: {
+        videojs: videojs,
+        mdns: true,
+        metadata: {
+          title: '',
+          subtitle: '',
+        },
+      },
+    },
   };
 
   videoJsOptions.muted = startMuted;
@@ -164,7 +181,7 @@ export default React.memo<Props>(function VideoJs(props: Props) {
         }
       };
     }
-  });
+  }, []); // Parameters are needed to avoid videojs to be loaded more than once (empty is allowed)
 
   // $FlowFixMe
   return <div className={classnames('video-js-parent', { 'video-js-parent--ios': IS_IOS })} ref={containerRef} />;

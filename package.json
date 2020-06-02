@@ -52,6 +52,7 @@
     "express": "^4.17.1",
     "if-env": "^1.0.4",
     "remark-breaks": "^1.0.5",
+    "videojs-google-chromecast": "^0.1.5",
     "videojs-logo": "^2.0.0"
   },
   "devDependencies": {
@@ -211,6 +212,9 @@
   "engines": {
     "node": ">=7",
     "yarn": "^1.3"
+  },
+  "browser": {
+    "child_process": false
   },
   "lbrySettings": {
     "lbrynetDaemonVersion": "0.74.0",
