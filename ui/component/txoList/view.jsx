@@ -1,4 +1,5 @@
 // @flow
+import * as ICONS from 'constants/icons';
 import React, { useEffect } from 'react';
 import { withRouter } from 'react-router';
 import { TXO_LIST as TXO } from 'lbry-redux';
@@ -175,7 +176,7 @@ function TxoList(props: Props) {
       title={__(`Transactions`)}
       titleActions={
         <div className="card__actions--inline">
-          <Button button="alt" label={__('Refresh')} onClick={() => fetchTxoPage()} />
+          <Button button="alt" icon={ICONS.REFRESH} label={__('Refresh')} onClick={() => fetchTxoPage()} />
         </div>
       }
       isBodyList
