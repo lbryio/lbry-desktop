@@ -1197,5 +1197,15 @@
   "lbry.tv Premium - 1 month": "lbry.tv Premium - 1 month",
   "We will refund no questions asked within 30 days.": "We will refund no questions asked within 30 days.",
   "Your Wallet": "Your Wallet",
-  "This file may have been streamed, moved or deleted": "This file may have been streamed, moved or deleted"
+  "This file may have been streamed, moved or deleted": "This file may have been streamed, moved or deleted",
+  "0 Bytes": "0 Bytes",
+  "Bytes": "Bytes",
+  "KB": "KB",
+  "MB": "MB",
+  "GB": "GB",
+  "TB": "TB",
+  "PB": "PB",
+  "EB": "EB",
+  "ZB": "ZB",
+  "YB": "YB"
 }
