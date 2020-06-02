@@ -123,14 +123,14 @@ function SideNavigation(props: Props) {
             {
               ...buildLink(
                 PAGES.CHANNELS_FOLLOWING,
-                __('Following'),
+                __('Subscriptions'),
                 ICONS.SUBSCRIBE,
                 null,
                 requireAuthOnPersonalizedActions
               ),
             },
             {
-              ...buildLink(PAGES.TAGS_FOLLOWING, __('Your Tags'), ICONS.TAG, null, requireAuthOnPersonalizedActions),
+              ...buildLink(PAGES.TAGS_FOLLOWING, __('Followed Tags'), ICONS.TAG, null, requireAuthOnPersonalizedActions),
             },
             {
               ...buildLink(PAGES.DISCOVER, __('All Content'), ICONS.DISCOVER),
