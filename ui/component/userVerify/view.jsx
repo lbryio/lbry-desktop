@@ -44,7 +44,9 @@ class UserVerify extends React.PureComponent<Props> {
                 rewards_program: (
                   <Button button="link" label={__('Rewards Program')} href="https://lbry.com/faq/rewards" />
                 ),
-                Refresh: <Button onClick={() => fetchUser()} button="link" label={__('Refresh')} />,
+                Refresh: (
+                  <Button icon={ICONS.REFRESH} onClick={() => fetchUser()} button="link" label={__('Refresh')} />
+                ),
                 Skip: <Button {...skipButtonProps} button="link" label={__('Skip')} />,
               }}
             >

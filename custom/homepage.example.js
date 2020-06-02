@@ -71,7 +71,7 @@ type RowDataItem = {
 };
 
 export default function getHomePageRowData(
-  authenticated,
+  authenticated: boolean,
   showPersonalizedChannels: boolean,
   showPersonalizedTags: boolean,
   subscribedChannels: Array<Subscription>,
