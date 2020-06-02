@@ -140,7 +140,7 @@ export default function TagsSearch(props: Props) {
               %selectTagsLabel% (%number% left)
             </I18nMessage>
           ) : (
-            label || __('Following')
+            label || __('Followed Tags')
           )}
         </label>
         <ul className="tags--remove">
