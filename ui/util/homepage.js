@@ -125,7 +125,7 @@ export default function getHomePageRowData(
   }
 
   const RECENT_FROM_FOLLOWING = {
-    title: __('Recent From Following'),
+    title: __('Recent From Subscriptions'),
     link: `/$/${PAGES.CHANNELS_FOLLOWING}`,
     options: {
       orderBy: ['release_time'],
@@ -152,7 +152,7 @@ export default function getHomePageRowData(
   };
 
   const TOP_CONTENT_TODAY = {
-    title: __('Top Content from Today'),
+    title: __('Top Content From Today'),
     link: `/$/${PAGES.DISCOVER}?${CS.ORDER_BY_KEY}=${CS.ORDER_BY_TOP}&${CS.FRESH_KEY}=${CS.FRESH_DAY}`,
     options: {
       pageSize: showPersonalizedChannels || showPersonalizedTags ? 4 : 8,
