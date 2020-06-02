@@ -7,7 +7,7 @@ type Props = {
   uri: string,
   fileInfo: FileListItem,
   isInsufficientCredits: boolean,
-  claimWasPurchased: boolea,
+  claimWasPurchased: boolean,
 };
 
 function ClaimInsufficientCredits(props: Props) {
