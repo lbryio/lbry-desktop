@@ -18,7 +18,10 @@ export default function useGetThumbnail(
   let thumbnailToUse;
 
   // @if TARGET='web'
-  if (claim && isImage && isFree) {
+  const thumbnailInClaim = claim && claim.value && claim.value.thumbnail && claim.value.thumbnail.url;
+  if (thumbnailInClaim) {
+    thumbnailToUse = thumbnailInClaim;
+  } else if (claim && isImage && isFree) {
     thumbnailToUse = generateStreamUrl(claim.name, claim.claim_id);
   }
   // @endif

@@ -34,7 +34,6 @@ type Props = {
   resolveUri: string => void,
   isResolvingUri: boolean,
   history: { push: string => void },
-  thumbnail: string,
   title: string,
   nsfw: boolean,
   placeholder: string,
@@ -71,7 +70,6 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
     history,
     uri,
     isResolvingUri,
-    thumbnail,
     nsfw,
     resolveUri,
     claim,
@@ -159,7 +157,7 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
 
   // Weird placement warning
   // Make sure this happens after we figure out if this claim needs to be hidden
-  const thumbnailUrl = useGetThumbnail(uri, claim, streamingUrl, getFile, shouldHide) || thumbnail;
+  const thumbnailUrl = useGetThumbnail(uri, claim, streamingUrl, getFile, shouldHide);
 
   function handleContextMenu(e) {
     // @if TARGET='app'
