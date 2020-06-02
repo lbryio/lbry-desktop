@@ -25,7 +25,7 @@ function ChannelsFollowingPage(props: Props) {
         headerLabel={
           <span>
             <Icon icon={ICONS.SUBSCRIBE} size={10} />
-            {__('Following')}
+            {__('Subscriptions')}
           </span>
         }
         defaultOrderBy={ORDER_BY_NEW}
