@@ -349,7 +349,7 @@
   }
 
   @media (max-width: $breakpoint-small) {
-    $width: calc((100vw / 2) - var(--spacing-medium) * 2);
+    $width: calc((100vw / 2) - var(--spacing-small) * 2);
     width: $width;
     @include handleClaimTileGifThumbnail($width);
     margin-bottom: var(--spacing-large);
