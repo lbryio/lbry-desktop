@@ -2,7 +2,7 @@
   background-color: var(--color-card-background);
   position: relative;
   overflow: hidden;
-  padding-left: var(--spacing-s);
+  padding-left: var(--spacing-small);
 }
 
 .expanding-details {
@@ -11,5 +11,5 @@
 
 .expanding-details__body {
   border-radius: var(--card-radius);
-  padding: 0 var(--spacing-s);
+  padding: 0 var(--spacing-small);
 }

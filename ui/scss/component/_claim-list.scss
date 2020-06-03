@@ -4,32 +4,21 @@
   }
 }
 
-.claim-list--card-body {
-  .claim-preview {
-    padding: 0 var(--spacing-m);
-    padding-right: 0;
-
-    @media (max-width: $breakpoint-small) {
-      padding: 0;
-    }
-  }
-}
-
 .claim-list__header {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  margin: var(--spacing-m) 0;
+  margin: var(--spacing-medium) 0;
   margin-top: 0;
   font-size: var(--font-body);
 
   .spinner {
-    margin-left: var(--spacing-m);
+    margin-left: var(--spacing-medium);
   }
 }
 
 .claim-list__dropdown {
-  padding: 0 var(--spacing-m);
+  padding: 0 var(--spacing-medium);
 
   @media (max-width: $breakpoint-small) {
     margin-left: 0;
@@ -43,7 +32,7 @@
   color: var(--color-text-subtitle);
 
   .icon {
-    margin-right: var(--spacing-xs);
+    margin-right: var(--spacing-xsmall);
   }
 
   @media (max-width: $breakpoint-small) {
@@ -62,10 +51,10 @@
   display: flex;
   align-items: center;
   margin-left: auto;
-  padding-top: var(--spacing-m);
+  padding-top: var(--spacing-medium);
 
   & > * {
-    margin-left: var(--spacing-s);
+    margin-left: var(--spacing-small);
   }
 
   @media (max-width: $breakpoint-small) {
@@ -74,7 +63,7 @@
 }
 
 .claim-preview__wrapper {
-  padding: var(--spacing-m);
+  padding: var(--spacing-medium);
   list-style: none;
 }
 
@@ -87,7 +76,7 @@
 }
 
 .claim-preview__wrapper--small {
-  padding: var(--spacing-s);
+  padding: var(--spacing-small);
 }
 
 .claim-preview {
@@ -106,7 +95,7 @@
     @include handleClaimListGifThumbnail($width);
 
     flex-shrink: 0;
-    margin-right: var(--spacing-m);
+    margin-right: var(--spacing-medium);
   }
 
   .channel-thumbnail {
@@ -160,7 +149,7 @@
 }
 
 .claim-preview--padded {
-  padding: var(--spacing-s);
+  padding: var(--spacing-small);
 }
 
 .claim-preview--inline {
@@ -216,7 +205,7 @@
   flex: 1;
 
   @media (max-width: $breakpoint-small) {
-    margin-bottom: var(--spacing-s);
+    margin-bottom: var(--spacing-small);
   }
 }
 
@@ -259,12 +248,12 @@
   display: flex;
   position: relative;
   overflow: visible;
-  padding: var(--spacing-m);
+  padding: var(--spacing-medium);
 
   .media__thumb {
     width: var(--file-list-thumbnail-width);
     flex-shrink: 0;
-    margin-right: var(--spacing-m);
+    margin-right: var(--spacing-medium);
   }
 }
 
@@ -274,7 +263,7 @@
 
 .claim-upload__progress--inner {
   background: var(--color-primary-alt);
-  padding: var(--spacing-xxs);
+  padding: var(--spacing-miniscule);
 }
 
 //
@@ -291,21 +280,21 @@
 
 .claim-grid__wrapper {
   &:not(:first-of-type) {
-    margin-top: var(--spacing-l);
+    margin-top: var(--spacing-large);
   }
 
   @media (max-width: $breakpoint-small) {
     &:not(:first-of-type) {
-      margin-top: var(--spacing-m);
+      margin-top: var(--spacing-medium);
     }
   }
 }
 
 .claim-grid__title {
-  margin-bottom: var(--spacing-m);
+  margin-bottom: var(--spacing-medium);
 
   &:not(:first-of-type) {
-    margin-top: var(--spacing-xl);
+    margin-top: var(--spacing-xlarge);
   }
 }
 
@@ -318,14 +307,14 @@
 }
 
 .claim-preview--tile {
-  $width: calc((100% - var(--spacing-m) * 3) / 4);
+  $width: calc((100% - var(--spacing-medium) * 3) / 4);
   width: $width;
   @include handleClaimTileGifThumbnail($width);
 
-  margin-bottom: var(--spacing-l);
+  margin-bottom: var(--spacing-large);
   margin-right: 0;
   margin-top: 0;
-  margin-left: var(--spacing-m);
+  margin-left: var(--spacing-medium);
   justify-content: flex-start;
 
   @media (min-width: $breakpoint-medium) {
@@ -345,7 +334,7 @@
   }
 
   @media (max-width: $breakpoint-medium) and (min-width: $breakpoint-small) {
-    $width: calc((100vw - var(--side-nav-width) - (var(--spacing-l) * 4) - var(--spacing-m) * 2) / 3);
+    $width: calc((100vw - var(--side-nav-width) - (var(--spacing-large) * 4) - var(--spacing-medium) * 2) / 3);
     width: $width;
     @include handleClaimTileGifThumbnail($width);
 
@@ -360,7 +349,7 @@
   }
 
   @media (max-width: $breakpoint-small) {
-    $width: calc((100vw / 2) - var(--spacing-s) * 2);
+    $width: calc((100vw / 2) - var(--spacing-small) * 2);
     width: $width;
     @include handleClaimTileGifThumbnail($width);
     margin-bottom: var(--spacing-large);
@@ -378,7 +367,7 @@
 
 .claim-tile__title {
   margin-bottom: 0;
-  margin: var(--spacing-s);
+  margin: var(--spacing-small);
   font-weight: 600;
   font-size: var(--font-small);
   color: var(--color-text);
@@ -391,14 +380,14 @@
 
 .claim-tile__info {
   display: flex;
-  margin-top: var(--spacing-s);
-  padding: var(--spacing-s);
+  margin-top: var(--spacing-small);
+  padding: var(--spacing-small);
   border-top: 1px solid var(--color-border);
   color: var(--color-subtitle);
 
   .channel-thumbnail {
     @include handleChannelGif(2.1rem);
-    margin-right: var(--spacing-s);
+    margin-right: var(--spacing-small);
   }
 }
 
@@ -425,8 +414,8 @@
 
 .claim-tile__file-properties {
   position: absolute;
-  bottom: var(--spacing-xxs);
-  right: var(--spacing-xxs);
+  bottom: var(--spacing-miniscule);
+  right: var(--spacing-miniscule);
   background-color: var(--color-black);
   padding: 0.3rem;
   border-radius: var(--border-radius);
@@ -453,31 +442,31 @@
 }
 
 .claim-preview__repost-author {
-  transform: translateY(calc(var(--spacing-xs) * -1));
+  transform: translateY(calc(var(--spacing-xsmall) * -1));
   font-size: var(--font-xsmall);
   color: var(--color-text-subtitle);
 
   .icon {
-    margin-right: var(--spacing-xxs);
+    margin-right: var(--spacing-miniscule);
     margin-bottom: -1px; // Offset it slightly because it doesn't look aligned next to all lowercase text + the @ from a channel
   }
 }
 
 .claim-tile__repost-author {
-  margin: var(--spacing-s);
+  margin: var(--spacing-small);
   margin-bottom: 0;
 }
 
 .claim-preview__hover-actions {
   display: none;
   position: absolute;
-  top: var(--spacing-xxs);
-  right: var(--spacing-xxs);
+  top: var(--spacing-miniscule);
+  right: var(--spacing-miniscule);
 
   & > * {
     color: var(--color-black);
     background-color: var(--color-white);
-    padding: var(--spacing-xs);
+    padding: var(--spacing-xsmall);
     border-radius: var(--border-radius);
   }
 }

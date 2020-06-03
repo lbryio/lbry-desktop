@@ -20,10 +20,10 @@
   h6 {
     font-size: inherit;
     font-weight: var(--font-weight-bold);
-    margin-bottom: var(--spacing-m);
+    margin-bottom: var(--spacing-medium);
 
     &:not(:first-child) {
-      margin-top: var(--spacing-l);
+      margin-top: var(--spacing-large);
     }
   }
 
@@ -53,12 +53,12 @@
   ol,
   pre,
   table {
-    margin-top: var(--spacing-m);
+    margin-top: var(--spacing-medium);
   }
-
+  
   blockquote {
     white-space: normal;
-
+    
     p:first-child {
       margin-top: 0;
     }
@@ -67,7 +67,7 @@
   // Tables
   table {
     margin-bottom: 1.2rem;
-    padding: var(--spacing-m);
+    padding: var(--spacing-medium);
     word-break: normal;
 
     tr {
@@ -77,7 +77,7 @@
       th:first-of-type,
       td:last-of-type,
       th:last-of-type {
-        padding: var(--spacing-s) var(--spacing-m);
+        padding: var(--spacing-small) var(--spacing-medium);
       }
     }
 
@@ -99,8 +99,8 @@
 
   // Image
   img {
-    margin-bottom: var(--spacing-m);
-    padding-top: var(--spacing-m);
+    margin-bottom: var(--spacing-medium);
+    padding-top: var(--spacing-medium);
     max-height: var(--inline-player-max-height);
     object-position: left;
 
@@ -123,8 +123,8 @@
     word-break: break-all;
 
     code {
-      margin-bottom: var(--spacing-m);
-      padding: var(--spacing-m);
+      margin-bottom: var(--spacing-medium);
+      padding: var(--spacing-medium);
       display: block;
       white-space: pre-wrap;
     }
@@ -134,10 +134,10 @@
   code {
     background-color: var(--color-blockquote);
     display: inline-block;
-    margin: var(--spacing-xxs);
+    margin: var(--spacing-miniscule);
     border-radius: 0.2rem;
     font-size: var(--font-small);
-    padding: calc(var(--spacing-xxs) - 4px) var(--spacing-xxs);
+    padding: calc(var(--spacing-miniscule) - 4px) var(--spacing-miniscule);
   }
 
   a {
@@ -183,7 +183,7 @@
   }
 
   .preview-link__description {
-    margin-top: var(--spacing-s);
+    margin-top: var(--spacing-small);
   }
 }
 

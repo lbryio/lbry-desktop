@@ -1,5 +1,5 @@
 .search__header {
-  margin-bottom: var(--spacing-l);
+  margin-bottom: var(--spacing-large);
 
   .placeholder {
     background-color: var(--color-placeholder-background);
@@ -7,17 +7,17 @@
 }
 
 .search__options {
-  margin-top: var(--spacing-l);
+  margin-top: var(--spacing-large);
 
   .search__legend {
     background-color: var(--color-secondary-alt);
     color: var(--color-secondary);
-    margin-bottom: var(--spacing-s);
-    padding: var(--spacing-xxs);
+    margin-bottom: var(--spacing-small);
+    padding: var(--spacing-miniscule);
   }
 
   fieldset:not(:first-child) {
-    margin-top: var(--spacing-l);
+    margin-top: var(--spacing-large);
   }
 
   .radio,
@@ -25,7 +25,7 @@
     display: inline-block;
 
     &:not(:first-of-type) {
-      margin-left: var(--spacing-m);
+      margin-left: var(--spacing-medium);
     }
   }
 }

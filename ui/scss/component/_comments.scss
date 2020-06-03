@@ -1,5 +1,5 @@
 .comments {
-  padding-top: var(--spacing-l);
+  padding-top: var(--spacing-large);
 }
 
 .comment {
@@ -10,10 +10,10 @@
 
   &:not(:last-of-type) {
     border-bottom: 1px solid var(--color-border);
-    padding: var(--spacing-m) 0;
+    padding: var(--spacing-medium) 0;
   }
   &:last-of-type {
-    padding-top: var(--spacing-m);
+    padding-top: var(--spacing-medium);
   }
 
   .channel-thumbnail {
@@ -22,24 +22,24 @@
 }
 
 .comment__create--reply {
-  margin-top: var(--spacing-s);
+  margin-top: var(--spacing-small);
 }
 
 .comment__reply {
   border-left: 5px solid var(--color-primary-alt);
-  margin-left: var(--spacing-m);
+  margin-left: var(--spacing-medium);
 
   .comment__author-thumbnail {
-    margin-left: var(--spacing-m);
+    margin-left: var(--spacing-medium);
   }
 }
 
 .comment__reply-button {
-  margin-top: var(--spacing-s);
+  margin-top: var(--spacing-small);
 }
 
 .comment__body_container {
-  padding-right: var(--spacing-s);
+  padding-right: var(--spacing-small);
   flex: 1;
 }
 
@@ -47,7 +47,7 @@
   display: flex;
   justify-content: space-between;
   text-overflow: ellipsis;
-  margin-bottom: var(--spacing-s);
+  margin-bottom: var(--spacing-small);
 }
 
 .comment__meta-information {
@@ -57,12 +57,12 @@
 
 .comment__message {
   white-space: pre-line;
-  margin-top: var(--spacing-s);
+  margin-top: var(--spacing-small);
 }
 
 .comment__author {
   text-overflow: ellipsis;
-  padding-right: var(--spacing-xs);
+  padding-right: var(--spacing-xsmall);
 }
 
 .comment__time {
@@ -82,7 +82,7 @@
 .comment__menu-option {
   display: flex;
   align-items: center;
-  padding: var(--spacing-s);
+  padding: var(--spacing-small);
   font-size: var(--font-small);
 }
 

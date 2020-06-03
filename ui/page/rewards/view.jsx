@@ -40,16 +40,11 @@ class RewardsPage extends PureComponent<Props> {
 
     if (user && !user.is_reward_approved && rewardsEnabled) {
       if (!user.primary_email || !user.has_verified_email || !user.is_identity_verified) {
-        return (
-          <div className="section">
-            <RewardAuthIntro />
-          </div>
-        );
+        return <RewardAuthIntro />;
       }
 
       return (
         <Card
-          className="section"
           title={__('Reward Validation Pending')}
           body={
             <React.Fragment>
@@ -161,7 +156,7 @@ class RewardsPage extends PureComponent<Props> {
     return (
       <Page>
         {this.renderPageHeader()}
-        <div className="section">{this.renderUnclaimedRewards()}</div>
+        {this.renderUnclaimedRewards()}
         {<RewardListClaimed />}
       </Page>
     );
