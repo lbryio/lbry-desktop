@@ -9,16 +9,15 @@ export default function useGetThumbnail(
   getFile: string => void,
   shouldHide: boolean
 ) {
-  // const hasClaim = claim !== undefined;
+  let thumbnailToUse;
 
   // $FlowFixMe
   const isImage = claim && claim.value && claim.value.stream_type === 'image';
   // $FlowFixMe
   const isFree = claim && claim.value && (!claim.value.fee || Number(claim.value.fee.amount) <= 0);
-  let thumbnailToUse;
+  const thumbnailInClaim = claim && claim.value && claim.value.thumbnail && claim.value.thumbnail.url;
 
   // @if TARGET='web'
-  const thumbnailInClaim = claim && claim.value && claim.value.thumbnail && claim.value.thumbnail.url;
   if (thumbnailInClaim) {
     thumbnailToUse = thumbnailInClaim;
   } else if (claim && isImage && isFree) {
@@ -26,12 +25,9 @@ export default function useGetThumbnail(
   }
   // @endif
 
-  const [thumbnail, setThumbnail] = React.useState(thumbnailToUse);
-  React.useEffect(() => {
-    setThumbnail(thumbnailToUse);
-  }, [thumbnailToUse]);
-
   // @if TARGET='app'
+  thumbnailToUse = thumbnailInClaim;
+
   //
   // Temporarily disabled until we can call get with "save_blobs: off"
   //
@@ -45,6 +41,11 @@ export default function useGetThumbnail(
   //   }
   // }, [hasClaim, isFree, isImage, streamingUrl, uri, shouldHide]);
   // @endif
+
+  const [thumbnail, setThumbnail] = React.useState(thumbnailToUse);
+  React.useEffect(() => {
+    setThumbnail(thumbnailToUse);
+  }, [thumbnailToUse]);
 
   return thumbnail;
 }
