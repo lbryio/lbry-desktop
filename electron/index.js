@@ -153,6 +153,14 @@ if (!gotSingleInstanceLock) {
         callback({ cancel: false });
       }
     });
+
+    // If an "Origin" header is passed, the SDK will check that it is set to allow that origin in the daemon_settings.yml
+    // By default, electron sends http://localhost:{port} as the origin for POST requests
+    // https://github.com/electron/electron/issues/7931#issuecomment-361759277
+    session.defaultSession.webRequest.onBeforeSendHeaders((details, callback) => {
+      delete details.requestHeaders['Origin'];
+      callback({ cancel: false, requestHeaders: details.requestHeaders });
+    });
   });
 }
 

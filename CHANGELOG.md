@@ -8,6 +8,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ### Added
 
+- Can now purchase LBC inside of the app ([#4294](https://github.com/lbryio/lbry-desktop/pull/4294))
 - Allow video sharing with start timestamp _community pr!_ ([#4142](https://github.com/lbryio/lbry-desktop/pull/4142))
 - Expose reflector status for publishes ([#4148](https://github.com/lbryio/lbry-desktop/pull/4148))
 - More tooltip help texts _community pr!_ ([#4185](https://github.com/lbryio/lbry-desktop/pull/4185))
@@ -18,6 +19,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ### Changed
 
+- Updated lbry-sdk to [0.75.0](https://github.com/lbryio/lbry-sdk/releases/tag/v0.75.0)
 - Use "grab" cursor on floating player to make it easier to tell you can drag it _community pr!_ ([#4201](https://github.com/lbryio/lbry-desktop/pull/4201))
 - Confirm age before viewing mature content on web ([#4233](https://github.com/lbryio/lbry-desktop/pull/4233))
 - Pause thumbnail gifs until hover ([#4256](https://github.com/lbryio/lbry-desktop/pull/4256))
