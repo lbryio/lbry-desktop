@@ -15,6 +15,10 @@
   &:last-of-type {
     padding-top: var(--spacing-medium);
   }
+
+  .channel-thumbnail {
+    @include handleChannelGif(3rem);
+  }
 }
 
 .comment__create--reply {
