@@ -56,7 +56,14 @@ export function CommentCreate(props: Props) {
   }, [channel, topChannel]);
 
   function handleCommentChange(event) {
-    setCommentValue(advancedEditor ? event : event.target.value);
+    let commentValue;
+    if (isReply) {
+      commentValue = event.target.value;
+    } else {
+      commentValue = advancedEditor ? event : event.target.value;
+    }
+
+    setCommentValue(commentValue);
   }
 
   function handleChannelChange(channel) {
@@ -106,7 +113,7 @@ export function CommentCreate(props: Props) {
         name={isReply ? 'content_reply' : 'content_description'}
         label={isReply ? __('Replying as %reply_channel%', { reply_channel: channel }) : __('Comment')}
         quickActionLabel={isReply ? undefined : advancedEditor ? __('Simple Editor') : __('Advanced Editor')}
-        quickActionHandler={isReply ? toggleEditorMode : undefined}
+        quickActionHandler={isReply ? undefined : toggleEditorMode}
         onFocus={onTextareaFocus}
         placeholder={__('Say something about this...')}
         value={commentValue}
