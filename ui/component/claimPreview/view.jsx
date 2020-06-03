@@ -164,7 +164,8 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
     e.preventDefault();
     e.stopPropagation();
     if (claim) {
-      openCopyLinkMenu(convertToShareLink(claim.canonical_url || claim.permanent_url), e);
+      const shareLink = convertToShareLink(claim.canonical_url || claim.permanent_url);
+      openCopyLinkMenu(shareLink.replace('#', ':'), e);
     }
     // @endif
   }
