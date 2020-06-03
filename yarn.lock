@@ -8693,10 +8693,6 @@ react-draggable@^3.3.0:
     classnames "^2.2.5"
     prop-types "^15.6.0"
 
-react-ga@^2.5.7:
-  version "2.7.0"
-  resolved "https://registry.yarnpkg.com/react-ga/-/react-ga-2.7.0.tgz#24328f157f31e8cffbf4de74a3396536679d8d7c"
-
 react-google-recaptcha@^2.0.1:
   version "2.0.1"
   resolved "https://registry.yarnpkg.com/react-google-recaptcha/-/react-google-recaptcha-2.0.1.tgz#3276b29659493f7ca2a5b7739f6c239293cdf1d8"
