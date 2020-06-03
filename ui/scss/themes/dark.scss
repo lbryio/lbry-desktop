@@ -98,6 +98,22 @@
   // Snack
   --color-snack-bg: var(--color-secondary);
 
+  // Editor
+  --color-editor-cursor: var(--color-text);
+  --color-editor-quote: #d3d3d3;
+  --color-editor-tag: #efbe5d;
+  --color-editor-attr: #68ccf9;
+  --color-editor-string: #ff8b6b;
+  --color-editor-inline-code-fg: #ce9178;
+  --color-editor-inline-code-fg-preview: #eeeeee;
+  --color-editor-inline-code-bg: rgba(20, 68, 102, 0.3);
+  --color-editor-inline-code-bg-preview: #8f9499;
+  --color-editor-selected: #264f78;
+  --color-editor-link: var(--color-link);
+  --color-editor-url: var(--color-editor-string);
+  --color-editor-hr: var(--color-editor-tag);
+  --color-editor-hr-preview: #a0a0a0;
+
   // Ads
   --color-ads-background: #475057;
   --color-ads-text: #111;

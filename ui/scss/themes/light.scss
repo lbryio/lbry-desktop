@@ -67,6 +67,22 @@
   --color-snack-bg-error: var(--color-danger);
   --color-snack-upgrade: var(--color-tertiary);
 
+  // Editor
+  --color-editor-cursor: var(--color-text);
+  --color-editor-quote: #707070;
+  --color-editor-tag: #ea9400;
+  --color-editor-attr: #04b0f4;
+  --color-editor-string: #ff7451;
+  --color-editor-inline-code-fg: var(--color-text);
+  --color-editor-inline-code-fg-preview: #eeeeee;
+  --color-editor-inline-code-bg: rgba(157, 161, 165, 0.3);
+  --color-editor-inline-code-bg-preview: #8f9499;
+  --color-editor-selected: #add6ff;
+  --color-editor-link: var(--color-link);
+  --color-editor-url: var(--color-editor-string);
+  --color-editor-hr: var(--color-editor-tag);
+  --color-editor-hr-preview: #cccccc;
+
   // Ads
   --color-ads-background: #fae5ff;
   --color-ads-link: var(--color-link);
