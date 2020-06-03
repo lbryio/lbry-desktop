@@ -11,7 +11,6 @@ import { SUPPORTED_MOONPAY_COUNTRIES } from 'constants/moonpay';
 import { useHistory } from 'react-router';
 import Button from 'component/button';
 import Nag from 'component/common/nag';
-import I18nMessage from 'component/i18nMessage';
 
 const MOONPAY_KEY = process.env.MOONPAY_SECRET_KEY;
 const COUNTRIES = Array.from(
@@ -43,10 +42,10 @@ type Props = {
 
 export default function BuyPage(props: Props) {
   const { receiveAddress, gettingNewAddress, doGetNewAddress, email, user, doUserSetCountry } = props;
-  const initialCountry = (user && user.country) || '';
+  const initialCountry = user && user.country;
   const [url, setUrl] = React.useState();
   const [country, setCountry] = React.useState(initialCountry);
-  const [showPurchaseScreen, setShowPurchaseScreen] = React.useState(false);
+  const [ShowPurchaseScreen, setShowPurchaseScreen] = React.useState(false);
   const isValid = SUPPORTED_MOONPAY_COUNTRIES.includes(country);
   const { goBack } = useHistory();
 
@@ -54,6 +53,11 @@ export default function BuyPage(props: Props) {
     if (country) {
       doUserSetCountry(country);
     }
+
+    // uncomment to auto show the purchase screen based on their chosen country
+    // if (isValid) {
+    //   setShowPurchaseScreen(true);
+    // }
   }, [country, doUserSetCountry, isValid, setShowPurchaseScreen]);
 
   React.useEffect(() => {
@@ -76,17 +80,6 @@ export default function BuyPage(props: Props) {
     }
   }, [url, setUrl, receiveAddress, email]);
 
-  const title = __('Buy LBRY Credits');
-  const subtitle = (
-    <I18nMessage
-      tokens={{
-        learn_more: <Button button="link" label={__('Learn more')} href="https://lbry.com/faq/buy-lbc" />,
-      }}
-    >
-      LBRY, Inc. partners with Moonpay to provide the option to purchase LBC. %learn_more%.
-    </I18nMessage>
-  );
-
   return (
     <Page noSideNavigation className="main--buy">
       {!user && (
@@ -97,10 +90,10 @@ export default function BuyPage(props: Props) {
 
       {user && (
         <>
-          {showPurchaseScreen ? (
+          {ShowPurchaseScreen ? (
             <Card
-              title={title}
-              subtitle={subtitle}
+              title={__('Purchase LBC')}
+              subtitle={__('You can purchase LBC now.')}
               actions={
                 url ? (
                   <iframe
@@ -120,8 +113,8 @@ export default function BuyPage(props: Props) {
             />
           ) : (
             <Card
-              title={title}
-              subtitle={subtitle}
+              title={__('What Country Do You Live In?')}
+              subtitle={__('Only people from certain countries are elligible to purchase LBC.')}
               nag={country && !isValid && <Nag relative type="helpful" message={"This country isn't supported yet."} />}
               actions={
                 <div>
@@ -130,9 +123,6 @@ export default function BuyPage(props: Props) {
                       label={__('Country')}
                       type="select"
                       name="country-codes"
-                      helper={__(
-                        'Only some countries are eligible at this time. We are working to make this available to everyone.'
-                      )}
                       value={country}
                       onChange={e => setCountry(e.target.value)}
                     >
@@ -154,7 +144,7 @@ export default function BuyPage(props: Props) {
                         </div>
                       ) : (
                         <div className="section__actions">
-                          <Button button="alt" label={__('Go Back')} onClick={() => goBack()} />
+                          <Button button="primary" label={__('Go Back')} onClick={() => goBack()} />
                           <Button button="link" label={__('Try Anyway')} onClick={() => setShowPurchaseScreen(true)} />
                         </div>
                       )}
