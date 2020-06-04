@@ -6,6 +6,7 @@ import { ipcRenderer, remote } from 'electron';
 import path from 'path';
 import * as ACTIONS from 'constants/action_types';
 import * as MODALS from 'constants/modal_types';
+import { DOMAIN } from 'config';
 import {
   Lbry,
   doBalanceSubscribe,
@@ -333,17 +334,25 @@ export function doDaemonReady() {
     const shareUsageData = IS_WEB || window.localStorage.getItem(SHARE_INTERNAL) === 'true';
 
     dispatch(
-      doAuthenticate(appVersion, undefined, undefined, shareUsageData, status => {
-        const trendingAlgorithm =
-          status &&
-          status.wallet &&
-          status.wallet.connected_features &&
-          status.wallet.connected_features.trending_algorithm;
+      doAuthenticate(
+        appVersion,
+        undefined,
+        undefined,
+        shareUsageData,
+        status => {
+          const trendingAlgorithm =
+            status &&
+            status.wallet &&
+            status.wallet.connected_features &&
+            status.wallet.connected_features.trending_algorithm;
 
-        if (trendingAlgorithm) {
-          analytics.trendingAlgorithmEvent(trendingAlgorithm);
-        }
-      })
+          if (trendingAlgorithm) {
+            analytics.trendingAlgorithmEvent(trendingAlgorithm);
+          }
+        },
+        null,
+        DOMAIN
+      )
     );
     dispatch({ type: ACTIONS.DAEMON_READY });
 
