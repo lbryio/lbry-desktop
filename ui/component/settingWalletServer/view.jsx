@@ -168,7 +168,7 @@ function SettingWalletServer(props: Props) {
                       {host}:{port}
                     </h3>
                     <span className="help">
-                      {available ? 'Connected' : walletReconnecting ? 'Connecting...' : 'Not connected'}
+                      {available ? __('Connected') : walletReconnecting ? __('Connecting...') : __('Not connected')}
                     </span>
                     <Button
                       button="close"
