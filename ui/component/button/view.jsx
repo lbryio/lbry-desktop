@@ -128,10 +128,11 @@ const Button = forwardRef<any, {}>((props: Props, ref: any) => {
       {iconRight && <Icon icon={iconRight} iconColor={iconColor} size={size} />}
     </span>
   );
+
   // TODO: replace the below with an outbound link tracker for matomo
   if (href) {
     return (
-      <a href={href} className={combinedClassName}>
+      <a target="_blank" rel="noopener noreferrer" href={href} className={combinedClassName} onClick={onClick}>
         {content}
       </a>
     );
