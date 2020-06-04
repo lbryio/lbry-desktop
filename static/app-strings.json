@@ -1211,5 +1211,15 @@
   "Select your country": "Select your country",
   "LBRY, Inc. partners with Moonpay to provide the option to purchase LBC. %learn_more%.": "LBRY, Inc. partners with Moonpay to provide the option to purchase LBC. %learn_more%.",
   "Your browser does not support iframes.": "Your browser does not support iframes.",
-  "Change Inviter": "Change Inviter"
+  "Change Inviter": "Change Inviter",
+  "0 Bytes": "0 Bytes",
+  "Bytes": "Bytes",
+  "KB": "KB",
+  "MB": "MB",
+  "GB": "GB",
+  "TB": "TB",
+  "PB": "PB",
+  "EB": "EB",
+  "ZB": "ZB",
+  "YB": "YB"
 }

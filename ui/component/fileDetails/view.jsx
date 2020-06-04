@@ -37,7 +37,7 @@ class FileDetails extends PureComponent<Props> {
     // Create path from name so the folder opens on click.
     if (fileInfo && fileInfo.blobs_completed >= 1 && fileInfo.download_path === null) {
       downloadPath = `${fileInfo.download_directory}/${fileInfo.file_name}`;
-      downloadNote = 'This file may have been streamed, moved or deleted';
+      downloadNote = __('This file may have been streamed, moved or deleted');
     }
 
     return (
@@ -113,11 +113,11 @@ class FileDetails extends PureComponent<Props> {
 }
 // move this with other helper functions when we re-use it
 function formatBytes(bytes, decimals = 2) {
-  if (bytes === 0) return '0 Bytes';
+  if (bytes === 0) return __('0 Bytes');
 
   const k = 1024;
   const dm = decimals < 0 ? 0 : decimals;
-  const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
+  const sizes = [__('Bytes'), __('KB'), __('MB'), __('GB'), __('TB'), __('PB'), __('EB'), __('ZB'), __('YB')];
 
   const i = Math.floor(Math.log(bytes) / Math.log(k));
 
