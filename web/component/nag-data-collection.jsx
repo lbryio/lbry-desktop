@@ -25,7 +25,7 @@ export default function NagDegradedPerformance(props: Props) {
                 ),
               }}
             >
-              lbry.tv collects usage information for itself and third parties (%more_information%).
+              lbry.tv collects usage information for itself only (%more_information%).
             </I18nMessage>
           }
           actionText={__('OK')}
