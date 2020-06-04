@@ -49,7 +49,7 @@ function PrivacyAgreement(props: Props) {
           <h1 className="section__title--large">{__('Welcome')}</h1>
           <h3 className="section__subtitle">
             {__(
-              `LBRY takes privacy and choice seriously. Just a few questions before you enter the land of content freedom. `
+              `LBRY takes privacy and choice seriously. Just a few questions before you enter the land of content freedom.`
             )}
           </h3>
         </div>
