@@ -778,7 +778,7 @@
   "Deposit cannot be higher than your balance": "Deposit cannot be higher than your balance",
   "Your deposit must be higher": "Your deposit must be higher",
   "%view_count% views": "%view_count% views",
-  "%view_count% view": "%view_count% view",
+  "1 view": "1 view",
   "Upload your thumbnail to %speech_link%. Recommended size is 16:9.": "Upload your thumbnail to %speech_link%. Recommended size is 16:9.",
   "Get %amount% LBC": "Get %amount% LBC",
   "Get %range% LBC": "Get %range% LBC",
