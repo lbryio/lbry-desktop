@@ -17,6 +17,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Add advanced editor for comments _community pr!_ ([#4224](https://github.com/lbryio/lbry-desktop/pull/4224))
 - Paid content improvements ([#4234](https://github.com/lbryio/lbry-desktop/pull/4234))
 - Add status-bar to display a link's destination _community pr!_ ([#4259](https://github.com/lbryio/lbry-desktop/pull/4259))
+- Add Catalan language support ([#4313](https://github.com/lbryio/lbry-desktop/pull/4313))
 
 ### Changed
 
