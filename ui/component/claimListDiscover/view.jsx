@@ -606,7 +606,7 @@ function ClaimListDiscover(props: Props) {
                       >
                         {followed.includes(tag) && typeof tag === 'string' && toCapitalCase(tag)}
                         {tag === CS.TAGS_ALL && __('Any')}
-                        {tag === CS.TAGS_FOLLOWED && __('Following')}
+                        {tag === CS.TAGS_FOLLOWED && __('Followed')}
                         {!followed.includes(tag) && tag !== CS.TAGS_ALL && tag !== CS.TAGS_FOLLOWED && __('Other')}
                       </option>
                     ))}
