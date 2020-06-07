@@ -91,21 +91,13 @@ export default function ModalRevokeClaim(props: Props) {
   const label = getButtonLabel(type, isSupport);
 
   return (
-    <Modal
-      isOpen
-      contentLabel={label}
-      type="card"
-      confirmButtonLabel={label}
-      onConfirmed={revokeClaim}
-      onAborted={closeModal}
-      confirmButtonDisabled={valueType === txnTypes.CHANNEL && name !== channelName}
-    >
+    <Modal isOpen contentLabel={label} type="card" onAborted={closeModal}>
       <Card
         title={label}
         body={getMsgBody(type, isSupport, name)}
         actions={
           <div className="section__actions">
-            <Button button="primary" label={label} onClick={revokeClaim} />
+            <Button disabled={name !== channelName} button="primary" label={label} onClick={revokeClaim} />
             <Button button="link" label={__('Cancel')} onClick={closeModal} />
           </div>
         }
