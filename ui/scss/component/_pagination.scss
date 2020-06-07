@@ -4,7 +4,7 @@
   align-items: center;
 
   + .form-field {
-    margin-left: var(--spacing-medium);
+    margin-left: var(--spacing-m);
   }
 
   @media (max-width: $breakpoint-small) {
@@ -65,7 +65,7 @@
 .pagination__item--next {
   line-height: 1.5;
   position: relative;
-  padding-top: var(--spacing-small);
+  padding-top: var(--spacing-s);
 }
 
 .pagination__item--selected {

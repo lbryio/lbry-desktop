@@ -1,6 +1,5 @@
 // @flow
 import { Lbryio } from 'lbryinc';
-import ReactGA from 'react-ga';
 import * as Sentry from '@sentry/browser';
 import MatomoTracker from '@datapunt/matomo-tracker-js';
 import { history } from './store';
@@ -14,10 +13,6 @@ import { MATOMO_ID, MATOMO_URL } from 'config';
 
 const isProduction = process.env.NODE_ENV === 'production';
 const devInternalApis = process.env.LBRY_API_URL;
-const LBRY_TV_MINUS_PIRATE_BAY_UA_ID = 'UA-60403362-16';
-const LBRY_TV_UA_ID = 'UA-60403362-12';
-const DESKTOP_UA_ID = 'UA-60403362-13';
-const SECOND_TRACKER_NAME = 'tracker2';
 
 export const SHARE_INTERNAL = 'shareInternal';
 const SHARE_THIRD_PARTY = 'shareThirdParty';
@@ -36,7 +31,6 @@ type Analytics = {
   pageView: string => void,
   setUser: Object => void,
   toggleInternal: (boolean, ?boolean) => void,
-  toggleThirdParty: (boolean, ?boolean) => void,
   apiLogView: (string, string, string, ?number, ?() => void) => Promise<any>,
   apiLogPublish: (ChannelClaim | StreamClaim) => void,
   apiSyncTags: ({}) => void,
@@ -60,10 +54,10 @@ type LogPublishParams = {
 };
 
 let internalAnalyticsEnabled: boolean = IS_WEB || false;
-let thirdPartyAnalyticsEnabled: boolean = IS_WEB || false;
+// let thirdPartyAnalyticsEnabled: boolean = IS_WEB || false;
 // @if TARGET='app'
 if (window.localStorage.getItem(SHARE_INTERNAL) === 'true') internalAnalyticsEnabled = true;
-if (window.localStorage.getItem(SHARE_THIRD_PARTY) === 'true') thirdPartyAnalyticsEnabled = true;
+// if (window.localStorage.getItem(SHARE_THIRD_PARTY) === 'true') thirdPartyAnalyticsEnabled = true;
 // @endif
 
 const analytics: Analytics = {
@@ -92,9 +86,6 @@ const analytics: Analytics = {
     });
   },
   pageView: path => {
-    if (thirdPartyAnalyticsEnabled) {
-      ReactGA.pageview(path, [SECOND_TRACKER_NAME]);
-    }
     if (internalAnalyticsEnabled) {
       MatomoInstance.trackPageView({
         href: `${path}`,
@@ -102,14 +93,11 @@ const analytics: Analytics = {
     }
   },
   setUser: userId => {
-    if (thirdPartyAnalyticsEnabled && userId) {
-      ReactGA.set({
-        userId,
-      });
-
+    // SEND USERID TO MATOMO?
+    if (internalAnalyticsEnabled && userId) {
       // @if TARGET='app'
       Native.getAppVersionInfo().then(({ localVersion }) => {
-        sendGaEvent('Desktop-Version', localVersion);
+        sendMatomoEvent('Version', 'Desktop-Version', localVersion);
       });
       // @endif
     }
@@ -125,7 +113,7 @@ const analytics: Analytics = {
   toggleThirdParty: (enabled: boolean): void => {
     // Always collect analytics on lbry.tv
     // @if TARGET='app'
-    thirdPartyAnalyticsEnabled = enabled;
+    // thirdPartyAnalyticsEnabled = enabled;
     window.localStorage.setItem(SHARE_THIRD_PARTY, enabled);
     // @endif
   },
@@ -190,89 +178,49 @@ const analytics: Analytics = {
     }
   },
   videoStartEvent: (claimId, duration) => {
-    sendGaTimingEvent('Media', 'TimeToStart', duration, claimId);
     sendPromMetric('time_to_start', duration);
     sendMatomoEvent('Media', 'TimeToStart', claimId, duration);
   },
   videoBufferEvent: (claimId, currentTime) => {
-    sendGaTimingEvent('Media', 'BufferTimestamp', currentTime * 1000, claimId);
     sendPromMetric('buffer');
     sendMatomoEvent('Media', 'BufferTimestamp', claimId, currentTime * 1000);
   },
   tagFollowEvent: (tag, following) => {
-    sendGaEvent(following ? 'Tag-Follow' : 'Tag-Unfollow', tag);
     sendMatomoEvent('Tag', following ? 'Tag-Follow' : 'Tag-Unfollow', tag);
   },
   channelBlockEvent: (uri, blocked, location) => {
-    sendGaEvent(blocked ? 'Channel-Hidden' : 'Channel-Unhidden', uri);
     sendMatomoEvent(blocked ? 'Channel-Hidden' : 'Channel-Unhidden', uri);
   },
   emailProvidedEvent: () => {
-    sendGaEvent('Engagement', 'Email-Provided');
     sendMatomoEvent('Engagement', 'Email-Provided');
   },
   emailVerifiedEvent: () => {
-    sendGaEvent('Engagement', 'Email-Verified');
     sendMatomoEvent('Engagement', 'Email-Verified');
   },
   rewardEligibleEvent: () => {
-    sendGaEvent('Engagement', 'Reward-Eligible');
     sendMatomoEvent('Engagement', 'Reward-Eligible');
   },
   openUrlEvent: (url: string) => {
-    sendGaEvent('Engagement', 'Open-Url', url);
     sendMatomoEvent('Engagement', 'Open-Url', url);
   },
   trendingAlgorithmEvent: (trendingAlgorithm: string) => {
-    sendGaEvent('Engagement', 'Trending-Algorithm', trendingAlgorithm);
+    sendMatomoEvent('Engagement', 'Trending-Algorithm', trendingAlgorithm);
   },
   startupEvent: () => {
-    sendGaEvent('Startup', 'Startup');
     sendMatomoEvent('Startup', 'Startup');
   },
   readyEvent: (timeToReady: number) => {
-    sendGaEvent('Startup', 'App-Ready');
-    sendGaTimingEvent('Startup', 'App-Ready', timeToReady);
     sendMatomoEvent('Startup', 'App-Ready', 'Time', timeToReady);
   },
   purchaseEvent: (purchaseInt: number) => {
-    sendGaEvent('Purchase', 'Purchase-Complete', undefined, purchaseInt);
     sendMatomoEvent('Purchase', 'Purchase-Complete', 'someLabel', purchaseInt);
   },
 };
-
-function sendGaEvent(category, action, label, value) {
-  if (thirdPartyAnalyticsEnabled && isProduction) {
-    ReactGA.event(
-      {
-        category,
-        action,
-        ...(label ? { label } : {}),
-        ...(value ? { value } : {}),
-      },
-      [SECOND_TRACKER_NAME]
-    );
-  }
-}
 
 function sendMatomoEvent(category, action, name, value) {
   if (internalAnalyticsEnabled) {
     const event = { category, action, name, value };
     MatomoInstance.trackEvent(event);
-  }
-}
-
-function sendGaTimingEvent(category: string, action: string, timeInMs: number, label?: string) {
-  if (thirdPartyAnalyticsEnabled && isProduction) {
-    ReactGA.timing(
-      {
-        category,
-        variable: action,
-        value: timeInMs,
-        ...(label ? { label } : {}),
-      },
-      [SECOND_TRACKER_NAME]
-    );
   }
 }
 
@@ -282,31 +230,6 @@ function sendPromMetric(name: string, value?: number) {
     const params = { name: name, value: value ? value.toString() : '' };
     url.search = new URLSearchParams(params).toString();
     return fetch(url, { method: 'post' });
-  }
-}
-
-let gaTrackers = [];
-
-if (!IS_WEB) {
-  gaTrackers.push({
-    trackingId: DESKTOP_UA_ID,
-  });
-} else {
-  gaTrackers.push({
-    trackingId: LBRY_TV_UA_ID,
-  });
-
-  const { search } = window.location;
-  const urlParams = new URLSearchParams(search);
-  const isPirateBayUser = urlParams.get('utm_source') === 'PB';
-
-  if (!isPirateBayUser) {
-    gaTrackers.push({
-      trackingId: LBRY_TV_MINUS_PIRATE_BAY_UA_ID,
-      gaOptions: {
-        name: SECOND_TRACKER_NAME,
-      },
-    });
   }
 }
 
@@ -320,14 +243,6 @@ const MatomoInstance = new MatomoTracker({
   // linkTracking: false // optional, default value: true
 });
 
-ReactGA.initialize(gaTrackers, {
-  testMode: process.env.NODE_ENV !== 'production',
-  cookieDomain: 'auto',
-  siteSpeedSampleRate: 100,
-  // un-comment to see events as they are sent to google
-  // debug: true,
-});
-
 // Manually call the first page view
 // React Router doesn't include this on `history.listen`
 // @if TARGET='web'
@@ -335,8 +250,6 @@ analytics.pageView(window.location.pathname + window.location.search);
 // @endif
 
 // @if TARGET='app'
-ReactGA.set({ checkProtocolTask: null });
-ReactGA.set({ location: 'https://lbry.tv' });
 analytics.pageView(
   window.location.pathname.split('.html')[1] + window.location.search || generateInitialUrl(window.location.hash)
 );

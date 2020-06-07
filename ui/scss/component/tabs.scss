@@ -6,7 +6,7 @@
   display: flex;
   align-items: center;
   background-color: var(--color-tabs-background);
-  padding: var(--spacing-medium) var(--spacing-main-padding);
+  padding: var(--spacing-m) var(--spacing-main-padding);
 
   & > *:not(.tab) {
     // If there is anything after the tabs, render it on the opposite side of the page
@@ -15,21 +15,21 @@
 }
 
 .tabs__list--channel-page {
-  padding-left: calc(var(--channel-thumbnail-width) + var(--spacing-large));
-  padding-right: var(--spacing-medium);
-  margin-bottom: var(--spacing-large);
+  padding-left: calc(var(--channel-thumbnail-width) + var(--spacing-l));
+  padding-right: var(--spacing-m);
+  margin-bottom: var(--spacing-l);
   height: 4rem;
   border-bottom-left-radius: var(--card-radius);
   border-bottom-right-radius: var(--card-radius);
 
   @media (max-width: $breakpoint-small) {
-    padding-left: var(--spacing-medium);
+    padding-left: var(--spacing-m);
   }
 }
 
 .tab {
   @extend .button--link;
-  margin-right: var(--spacing-large);
+  margin-right: var(--spacing-l);
   padding: 5px 0;
   color: var(--color-tab-text);
   position: relative;
@@ -50,7 +50,7 @@
 
 .tab__divider {
   position: absolute;
-  margin-top: calc(var(--tab-indicator-size) * -1 - var(--spacing-large));
+  margin-top: calc(var(--tab-indicator-size) * -1 - var(--spacing-l));
 }
 
 .tab::after,

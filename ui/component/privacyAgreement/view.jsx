@@ -7,13 +7,14 @@ import { Form } from 'component/common/form-components/form';
 import { withRouter } from 'react-router-dom';
 // $FlowFixMe cannot resolve ...
 import image from 'static/img/unlocklbry.svg';
+import { WELCOME_VERSION } from 'config';
 
 const FREE = 'free';
 const LIMITED = 'limited';
 const NONE = 'none';
 
 type Props = {
-  setWelcomeVersion: () => void,
+  setWelcomeVersion: number => void,
   signOut: () => void,
   setShareDataInternal: boolean => void,
   setShareDataThirdParty: boolean => void,
@@ -37,7 +38,7 @@ function PrivacyAgreement(props: Props) {
       setShareDataInternal(false);
       setShareDataThirdParty(false);
     }
-    setWelcomeVersion();
+    setWelcomeVersion(WELCOME_VERSION);
     history.replace(`/`);
   }
 

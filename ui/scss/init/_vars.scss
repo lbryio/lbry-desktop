@@ -12,13 +12,8 @@ $breakpoint-medium: 1150px;
   --mac-titlebar-height: 1.5rem;
   --mobile: 600px;
   --side-nav-width: 170px;
-  --spacing-miniscule: calc(2rem / 5);
-  --spacing-xsmall: calc(2rem / 4);
-  --spacing-small: calc(2rem / 3);
-  --spacing-medium: calc(2rem / 2);
-  --spacing-large: 2rem;
-  --spacing-xlarge: 3rem;
-  --spacing-main-padding: var(--spacing-xlarge);
+
+  --spacing-main-padding: var(--spacing-xl);
   --floating-viewer-width: 32rem;
   --floating-viewer-height: 18rem; // 32 * 9/16
   --floating-viewer-info-height: 5rem;
@@ -36,7 +31,7 @@ $breakpoint-medium: 1150px;
   --header-height: 5rem;
 
   // Inline Player
-  --inline-player-max-height: calc(100vh - var(--header-height) - var(--spacing-large) * 2);
+  --inline-player-max-height: calc(100vh - var(--header-height) - var(--spacing-l) * 2);
 
   // Card
   --card-radius: var(--border-radius);

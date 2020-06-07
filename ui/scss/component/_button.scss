@@ -33,8 +33,8 @@
 .button--close {
   z-index: 1;
   position: absolute;
-  top: var(--spacing-miniscule);
-  right: var(--spacing-miniscule);
+  top: var(--spacing-xxs);
+  right: var(--spacing-xxs);
   padding: 0.3rem;
   transition: all var(--transition-duration) var(--transition-style);
   border-radius: var(--card-radius);
@@ -56,13 +56,13 @@
   }
 
   @media (max-width: $breakpoint-small) {
-    padding: var(--spacing-medium) var(--spacing-small);
+    padding: var(--spacing-m) var(--spacing-s);
   }
 }
 
 .button--header-close {
   background-color: var(--color-primary-alt);
-  padding: var(--spacing-small);
+  padding: var(--spacing-s);
 }
 
 .button--download-link {
@@ -88,11 +88,11 @@
 // Handle icons on the left or right side of the button label
 svg + .button__label,
 .button__label + svg {
-  margin-left: var(--spacing-small);
+  margin-left: var(--spacing-s);
 }
 
 .button-toggle {
-  padding: 0 var(--spacing-medium);
+  padding: 0 var(--spacing-m);
   height: var(--height-button);
   font-size: var(--font-base);
   border: 1px solid var(--color-border);
@@ -101,7 +101,7 @@ svg + .button__label,
   margin: 0;
   background-color: var(--color-card-background);
   @media (max-width: $breakpoint-small) {
-    padding: var(--spacing-medium) var(--spacing-small);
+    padding: var(--spacing-m) var(--spacing-s);
   }
   svg {
     opacity: 0.5;
@@ -116,7 +116,7 @@ svg + .button__label,
   &:last-of-type {
     border-top-right-radius: var(--border-radius);
     border-bottom-right-radius: var(--border-radius);
-    margin-right: var(--spacing-small);
+    margin-right: var(--spacing-s);
   }
 }
 

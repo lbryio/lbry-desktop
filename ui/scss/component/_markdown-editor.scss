@@ -53,11 +53,49 @@
 }
 
 .form-field--SimpleMDE {
-  margin-top: var(--spacing-large);
+  margin-top: var(--spacing-l);
 
-  // Override hyperlink styles
+  .cm-s-easymde .CodeMirror-cursor {
+    border-left: 1px solid var(--color-editor-cursor);
+  }
+
+  .cm-s-easymde .CodeMirror-selected {
+    background: var(--color-editor-selected);
+  }
+
+  .cm-s-easymde .cm-hr {
+    color: var(--color-editor-tag);
+  }
+
+  .cm-s-easymde .cm-tag {
+    color: var(--color-editor-tag);
+  }
+
+  .cm-s-easymde .cm-attribute {
+    color: var(--color-editor-attr);
+  }
+
+  .cm-s-easymde .cm-string {
+    color: var(--color-editor-string);
+  }
+
+  .cm-s-easymde .cm-comment {
+    background: var(--color-editor-inline-code-bg);
+    padding: 3px 0px; // @todo: should fill up line-spacing instead of harcoded.
+  }
+
   .cm-s-easymde .cm-link {
-    color: inherit;
+    color: var(--color-editor-link);
+  }
+
+  .cm-s-easymde .cm-url {
+    color: var(--color-editor-url);
+    font-style: italic;
+  }
+
+  .cm-s-easymde .cm-quote {
+    color: var(--color-editor-quote);
+    font-style: italic;
   }
 
   // Overriding the lbry/components form styling

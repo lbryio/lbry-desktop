@@ -36,7 +36,7 @@ h6 {
 
 p {
   & + p {
-    margin-top: var(--spacing-small);
+    margin-top: var(--spacing-s);
   }
 }
 
@@ -44,7 +44,7 @@ ul,
 ol {
   li {
     list-style-position: outside;
-    margin: var(--spacing-xsmall) var(--spacing-medium);
+    margin: var(--spacing-xs) var(--spacing-m);
     margin-bottom: 0;
   }
 }
@@ -63,17 +63,17 @@ dl {
   flex-direction: row;
   flex-wrap: wrap;
   overflow-x: visible;
-  margin-top: var(--spacing-medium);
+  margin-top: var(--spacing-m);
 }
 
 dt {
-  flex-basis: 40%;
+  flex-basis: 45%;
   text-align: left;
   font-weight: bold;
 }
 
 dd {
-  flex-basis: 55%;
+  flex-basis: 50%;
   flex-grow: 1;
   margin: 0;
   text-align: right;
@@ -81,7 +81,7 @@ dd {
 
 dt,
 dd {
-  padding: var(--spacing-medium) var(--spacing-small);
+  padding: var(--spacing-m) var(--spacing-s);
 
   border-top: 1px solid var(--color-border);
 
@@ -125,15 +125,15 @@ textarea {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  flex-wrap: wrap;
 
   > * {
     flex-grow: 1;
     flex-basis: 0;
     min-width: 15rem;
-    margin-bottom: var(--spacing-large);
+    margin-bottom: var(--spacing-l);
 
     &:first-child {
+      flex-basis: 1;
       margin-right: 1.5rem;
     }
   }
@@ -143,7 +143,7 @@ textarea {
 
     & > * {
       margin: 0;
-      margin-bottom: var(--spacing-medium);
+      margin-bottom: var(--spacing-m);
       width: 100%;
       flex-basis: auto;
 
@@ -202,8 +202,8 @@ textarea {
   display: block;
   font-size: var(--font-small);
   color: var(--color-text-help);
-  margin-top: var(--spacing-small);
-  margin-bottom: var(--spacing-small);
+  margin-top: var(--spacing-s);
+  margin-bottom: var(--spacing-s);
 }
 
 .help--warning {
@@ -224,7 +224,7 @@ textarea {
 
 .empty--centered {
   text-align: center;
-  padding: calc(var(--spacing-large) * 3) 0;
+  padding: calc(var(--spacing-l) * 3) 0;
 }
 
 .qr-code {
@@ -243,7 +243,7 @@ textarea {
 
 .error__wrapper {
   background-color: var(--color-error);
-  padding: var(--spacing-small);
+  padding: var(--spacing-s);
   border-radius: var(--border-radius);
 }
 
@@ -281,7 +281,7 @@ textarea {
 
 .notice-message {
   border-radius: var(--border-radius);
-  padding: var(--spacing-large);
+  padding: var(--spacing-l);
   background-color: var(--color-primary-alt);
 }
 

@@ -6,7 +6,7 @@
   border: 1px solid var(--color-border);
 
   @media (max-width: $breakpoint-small) {
-    margin-bottom: var(--spacing-medium);
+    margin-bottom: var(--spacing-m);
   }
 }
 
@@ -17,7 +17,7 @@
 
 .card--section {
   position: relative;
-  padding: var(--spacing-large);
+  padding: var(--spacing-l);
 }
 
 .card--reward-total {
@@ -31,7 +31,7 @@
 .card--inline {
   border: 1px solid var(--color-border);
   border-radius: var(--card-radius);
-  margin-bottom: var(--spacing-medium);
+  margin-bottom: var(--spacing-m);
 
   &:last-of-type {
     margin-bottom: 0;
@@ -44,7 +44,7 @@
 
 .card--claim-preview-wrap {
   @extend .card;
-  margin: var(--spacing-xlarge) 0;
+  margin: var(--spacing-xl) 0;
   min-width: 35rem;
 }
 
@@ -56,19 +56,19 @@
 .card__actions {
   display: flex;
   align-items: center;
-  margin-top: var(--spacing-large);
+  margin-top: var(--spacing-l);
 
   &:only-child {
     margin-top: 0;
   }
 
   > *:not(:last-child) {
-    margin-right: var(--spacing-medium);
+    margin-right: var(--spacing-m);
   }
 
   @media (max-width: $breakpoint-small) {
     > * {
-      padding-bottom: var(--spacing-medium);
+      padding-bottom: var(--spacing-m);
     }
     flex-flow: wrap;
     justify-content: space-between;
@@ -77,7 +77,7 @@
 
 .card__title-section {
   @extend .section__flex;
-  padding: var(--spacing-medium) var(--spacing-large);
+  padding: var(--spacing-m) var(--spacing-l);
 
   @media (max-width: $breakpoint-small) {
     padding: 0;
@@ -85,7 +85,7 @@
 }
 
 .card__title-section--body-list {
-  padding: var(--spacing-medium);
+  padding: var(--spacing-m);
 
   @media (max-width: $breakpoint-small) {
     padding: 0;
@@ -117,18 +117,18 @@
 
 .card-stack {
   .card:not(:last-of-type) {
-    margin-bottom: var(--spacing-large);
+    margin-bottom: var(--spacing-l);
   }
 }
 
 .card__list {
   column-count: 2;
-  column-gap: var(--spacing-large);
+  column-gap: var(--spacing-l);
   display: block;
 
   .card {
     display: inline-block;
-    margin-bottom: var(--spacing-large);
+    margin-bottom: var(--spacing-l);
   }
 
   @media (max-width: $breakpoint-small) {
@@ -141,7 +141,7 @@
 
 .card__message {
   border-left: 0.5rem solid;
-  padding: var(--spacing-medium) var(--spacing-medium) var(--spacing-medium) var(--spacing-large);
+  padding: var(--spacing-m) var(--spacing-m) var(--spacing-m) var(--spacing-l);
   background-color: var(--color-primary-alt);
   border-color: var(--color-primary);
 }
@@ -162,19 +162,19 @@
   font-size: var(--font-title);
   font-weight: var(--font-weight-light);
   & > *:not(:last-child) {
-    margin-right: var(--spacing-medium);
+    margin-right: var(--spacing-m);
   }
   /* .badge rule inherited from file page prices, should be refactored */
   .badge {
     float: right;
-    margin-left: var(--spacing-small);
+    margin-left: var(--spacing-s);
     margin-top: 8px; // should be flex'd, but don't blame me! I just moved it down 3px
   }
 }
 
 .card__title-actions {
   align-self: flex-start;
-  padding: var(--spacing-medium);
+  padding: var(--spacing-m);
 
   @media (max-width: $breakpoint-small) {
     padding: 0;
@@ -182,7 +182,7 @@
 }
 
 .card__title.card__title--deprecated {
-  margin-bottom: var(--spacing-small);
+  margin-bottom: var(--spacing-s);
 }
 
 .card__title--between {
@@ -204,7 +204,7 @@
   align-items: flex-start;
 
   .icon__wrapper {
-    margin-right: var(--spacing-large);
+    margin-right: var(--spacing-l);
   }
 }
 
@@ -221,12 +221,12 @@
 
 .card__subtitle {
   color: var(--color-text-subtitle);
-  margin: var(--spacing-small) 0;
+  margin: var(--spacing-s) 0;
   font-size: var(--font-body);
 }
 
 .card__body {
-  padding: var(--spacing-large);
+  padding: var(--spacing-l);
 
   &:not(.card__body--no-title) {
     padding-top: 0;
@@ -238,14 +238,14 @@
   }
 
   @media (max-width: $breakpoint-small) {
-    padding: var(--spacing-large);
+    padding: var(--spacing-l);
   }
 }
 
 .card__main-actions {
-  padding: var(--spacing-large);
+  padding: var(--spacing-l);
   padding-bottom: 0;
-  margin-bottom: var(--spacing-large);
+  margin-bottom: var(--spacing-l);
   border-top: 1px solid var(--color-border);
 
   &:only-child {
@@ -254,15 +254,15 @@
 }
 
 .card__body-actions {
-  padding: var(--spacing-large);
+  padding: var(--spacing-l);
   @media (max-width: $breakpoint-small) {
-    padding: var(--spacing-small);
+    padding: var(--spacing-s);
   }
 }
 
 .card__header-actions {
   border-top: 1px solid var(--color-border);
-  padding: var(--spacing-large);
+  padding: var(--spacing-l);
   width: 100%;
 }
 
@@ -276,12 +276,12 @@
   align-items: center;
 
   :not(:first-child) {
-    margin-left: var(--spacing-small);
+    margin-left: var(--spacing-s);
   }
 }
 
 .card__expand-btn {
-  padding: var(--spacing-medium);
+  padding: var(--spacing-m);
 
   @media (max-width: $breakpoint-small) {
     padding: 0;
@@ -292,10 +292,10 @@
 .card__body,
 .card__main-actions {
   @media (max-width: $breakpoint-small) {
-    padding: var(--spacing-small);
+    padding: var(--spacing-s);
     padding-bottom: 0;
     margin: 0;
-    margin-bottom: var(--spacing-small);
+    margin-bottom: var(--spacing-s);
   }
 }
 
@@ -303,7 +303,7 @@
   @extend .help;
   display: flex;
   align-items: center;
-  margin-top: var(--spacing-medium);
+  margin-top: var(--spacing-m);
 
   &:only-child,
   &:first-child {
@@ -311,6 +311,6 @@
   }
 
   > *:not(:last-child) {
-    margin-right: var(--spacing-medium);
+    margin-right: var(--spacing-m);
   }
 }

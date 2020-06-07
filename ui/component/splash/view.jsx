@@ -2,6 +2,7 @@
 import type { Node } from 'react';
 import * as MODALS from 'constants/modal_types';
 import * as SETTINGS from 'constants/settings';
+import * as ICONS from 'constants/icons';
 import React from 'react';
 import { Lbry } from 'lbry-redux';
 import Button from 'component/button';
@@ -307,7 +308,11 @@ export default class SplashScreen extends React.PureComponent<Props, State> {
                   <I18nMessage
                     tokens={{
                       help_link: (
-                        <Button button="link" href="https://lbry.com/faq/startup-troubleshooting" label={__("this link")} />
+                        <Button
+                          button="link"
+                          href="https://lbry.com/faq/startup-troubleshooting"
+                          label={__('this link')}
+                        />
                       ),
                     }}
                   >
@@ -316,7 +321,14 @@ export default class SplashScreen extends React.PureComponent<Props, State> {
                 </p>
               </React.Fragment>
             }
-            actions={<Button button="primary" label={__('Refresh')} onClick={() => window.location.reload()} />}
+            actions={
+              <Button
+                button="primary"
+                icon={ICONS.REFRESH}
+                label={__('Refresh')}
+                onClick={() => window.location.reload()}
+              />
+            }
           />
         )}
         {/* Temp hack: don't show any modals on splash screen daemon is running;

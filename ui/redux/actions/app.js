@@ -6,6 +6,7 @@ import { ipcRenderer, remote } from 'electron';
 import path from 'path';
 import * as ACTIONS from 'constants/action_types';
 import * as MODALS from 'constants/modal_types';
+import { DOMAIN } from 'config';
 import {
   Lbry,
   doBalanceSubscribe,
@@ -46,7 +47,8 @@ import {
 import { doAuthenticate, doGetSync, doClaimRewardType, rewards as REWARDS } from 'lbryinc';
 import { lbrySettings as config, version as appVersion } from 'package.json';
 import analytics, { SHARE_INTERNAL } from 'analytics';
-import { doSignOutCleanup, deleteSavedPassword, getSavedPassword } from 'util/saved-passwords';
+import { doSignOutCleanup, deleteSavedPassword, getSavedPassword, getAuthToken } from 'util/saved-passwords';
+import { X_LBRY_AUTH_TOKEN } from 'constants/token';
 
 // @if TARGET='app'
 const { autoUpdater } = remote.require('electron-updater');
@@ -332,17 +334,25 @@ export function doDaemonReady() {
     const shareUsageData = IS_WEB || window.localStorage.getItem(SHARE_INTERNAL) === 'true';
 
     dispatch(
-      doAuthenticate(appVersion, undefined, undefined, shareUsageData, status => {
-        const trendingAlgorithm =
-          status &&
-          status.wallet &&
-          status.wallet.connected_features &&
-          status.wallet.connected_features.trending_algorithm;
+      doAuthenticate(
+        appVersion,
+        undefined,
+        undefined,
+        shareUsageData,
+        status => {
+          const trendingAlgorithm =
+            status &&
+            status.wallet &&
+            status.wallet.connected_features &&
+            status.wallet.connected_features.trending_algorithm;
 
-        if (trendingAlgorithm) {
-          analytics.trendingAlgorithmEvent(trendingAlgorithm);
-        }
-      })
+          if (trendingAlgorithm) {
+            analytics.trendingAlgorithmEvent(trendingAlgorithm);
+          }
+        },
+        null,
+        DOMAIN
+      )
     );
     dispatch({ type: ACTIONS.DAEMON_READY });
 
@@ -494,6 +504,8 @@ export function doAnaltyicsPurchaseEvent(fileInfo) {
 export function doSignIn() {
   return (dispatch, getState) => {
     // @if TARGET='web'
+    const authToken = getAuthToken();
+    Lbry.setApiHeader(X_LBRY_AUTH_TOKEN, authToken);
     dispatch(doBalanceSubscribe());
     dispatch(doFetchChannelListMine());
     // @endif

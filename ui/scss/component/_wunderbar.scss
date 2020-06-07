@@ -10,7 +10,7 @@
 
   > .icon {
     top: 0;
-    left: var(--spacing-small);
+    left: var(--spacing-s);
     height: 100%;
     position: absolute;
     z-index: 1;
@@ -49,7 +49,7 @@
   background-color: var(--color-input-bg);
   color: var(--color-input);
   border: none;
-  padding-right: var(--spacing-small);
+  padding-right: var(--spacing-s);
   padding-left: 2.5rem;
   transition: all 0.2s;
   -webkit-app-region: no-drag;
@@ -72,7 +72,7 @@
   display: flex;
   flex-direction: row;
   justify-items: flex-start;
-  padding: var(--spacing-small) var(--spacing-small);
+  padding: var(--spacing-s) var(--spacing-s);
 
   &:not(:first-of-type) {
     border-top: 1px solid transparent;
@@ -85,13 +85,13 @@
 
 .wunderbar__suggestion-label {
   overflow: hidden;
-  padding-left: var(--spacing-small);
+  padding-left: var(--spacing-s);
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
 .wunderbar__suggestion-label--action {
-  margin-left: var(--spacing-medium);
+  margin-left: var(--spacing-m);
   opacity: 0.6;
   white-space: nowrap;
 }

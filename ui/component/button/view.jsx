@@ -5,7 +5,6 @@ import Icon from 'component/common/icon';
 import classnames from 'classnames';
 import { NavLink } from 'react-router-dom';
 import { formatLbryUrlForWeb } from 'util/url';
-import { OutboundLink } from 'react-ga';
 import * as PAGES from 'constants/pages';
 import useCombinedRefs from 'effects/use-combined-refs';
 
@@ -130,18 +129,12 @@ const Button = forwardRef<any, {}>((props: Props, ref: any) => {
     </span>
   );
 
+  // TODO: replace the below with an outbound link tracker for matomo
   if (href) {
     return (
-      <OutboundLink
-        eventLabel="outboundClick"
-        to={href}
-        target="_blank"
-        className={combinedClassName}
-        onClick={onClick}
-        {...otherProps}
-      >
+      <a target="_blank" rel="noopener noreferrer" href={href} className={combinedClassName} onClick={onClick}>
         {content}
-      </OutboundLink>
+      </a>
     );
   }
 

@@ -143,13 +143,6 @@ Lbryio.setOverride(
   () =>
     new Promise(resolve => {
       const authTokenToReturn = authToken || getAuthToken();
-
-      // @if TARGET='web'
-      if (authTokenToReturn !== null) {
-        Lbry.setApiHeader(X_LBRY_AUTH_TOKEN, authTokenToReturn);
-      }
-      // @endif
-
       resolve(authTokenToReturn);
     })
 );

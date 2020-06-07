@@ -8,6 +8,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ### Added
 
+- Can now purchase LBC inside of the app ([#4294](https://github.com/lbryio/lbry-desktop/pull/4294))
 - Allow video sharing with start timestamp _community pr!_ ([#4142](https://github.com/lbryio/lbry-desktop/pull/4142))
 - Expose reflector status for publishes ([#4148](https://github.com/lbryio/lbry-desktop/pull/4148))
 - More tooltip help texts _community pr!_ ([#4185](https://github.com/lbryio/lbry-desktop/pull/4185))
@@ -15,9 +16,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Support drag-and-drop file publishing _community pr!_ ([#4170](https://github.com/lbryio/lbry-desktop/pull/4170))
 - Add advanced editor for comments _community pr!_ ([#4224](https://github.com/lbryio/lbry-desktop/pull/4224))
 - Paid content improvements ([#4234](https://github.com/lbryio/lbry-desktop/pull/4234))
+- Add status-bar to display a link's destination _community pr!_ ([#4259](https://github.com/lbryio/lbry-desktop/pull/4259))
+- Add Catalan language support ([#4313](https://github.com/lbryio/lbry-desktop/pull/4313))
 
 ### Changed
 
+- Updated lbry-sdk to [0.75.0](https://github.com/lbryio/lbry-sdk/releases/tag/v0.75.0)
 - Use "grab" cursor on floating player to make it easier to tell you can drag it _community pr!_ ([#4201](https://github.com/lbryio/lbry-desktop/pull/4201))
 - Confirm age before viewing mature content on web ([#4233](https://github.com/lbryio/lbry-desktop/pull/4233))
 - Pause thumbnail gifs until hover ([#4256](https://github.com/lbryio/lbry-desktop/pull/4256))
@@ -25,7 +29,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Fixed
 
 - Channel selector alignment on creator analytics page _community pr!_ ([#4157](https://github.com/lbryio/lbry-desktop/pull/4157))
-- Fix inconsistent relative-date string for claims, comments, etc. ([#4172](https://github.com/lbryio/lbry-desktop/pull/4172))
+- Fix inconsistent relative-date string for claims, comments, etc. _community pr!_ ([#4172](https://github.com/lbryio/lbry-desktop/pull/4172))
 - Error opening certain files with special characters in name #2777 _community pr!_ ([#4161](https://github.com/lbryio/lbry-desktop/pull/4161))
 - Comic-book file page shows download button first, and then viewer after download _community pr!_ ([#4161](https://github.com/lbryio/lbry-desktop/pull/4161))
 - Only show "start at" on share modal for video/audio _community pr!_ ([#4194](https://github.com/lbryio/lbry-desktop/pull/4194))

@@ -39,6 +39,7 @@ import Welcome from 'page/welcome';
 import CreatorDashboard from 'page/creatorDashboard';
 import RewardsVerifyPage from 'page/rewardsVerify';
 import CheckoutPage from 'page/checkoutPage';
+import BuyPage from 'page/buy';
 
 import { parseURI } from 'lbry-redux';
 import { SITE_TITLE, WELCOME_VERSION } from 'config';
@@ -196,6 +197,7 @@ function AppRouter(props: Props) {
       <PrivateRoute {...props} path={`/$/${PAGES.BLOCKED}`} component={ListBlockedPage} />
       <PrivateRoute {...props} path={`/$/${PAGES.WALLET}`} exact component={WalletPage} />
       <PrivateRoute {...props} path={`/$/${PAGES.CHANNELS}`} component={ChannelsPage} />
+      <PrivateRoute {...props} path={`/$/${PAGES.BUY}`} component={BuyPage} />
 
       <Route path={`/$/${PAGES.EMBED}/:claimName`} exact component={EmbedWrapperPage} />
       <Route path={`/$/${PAGES.EMBED}/:claimName/:claimId`} exact component={EmbedWrapperPage} />
