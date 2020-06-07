@@ -1202,5 +1202,7 @@
   "Sending information to third parties (e.g. Google Analytics or Mixpanel) allows us to use detailed\n                analytical reports to improve all aspects of LBRY.": "Sending information to third parties (e.g. Google Analytics or Mixpanel) allows us to use detailed\n                analytical reports to improve all aspects of LBRY.",
   "Sharing information with LBRY, Inc. allows us to report to publishers how their content is doing, as\n                well as track basic usage and performance. This is the minimum required to earn rewards from LBRY, Inc.": "Sharing information with LBRY, Inc. allows us to report to publishers how their content is doing, as\n                well as track basic usage and performance. This is the minimum required to earn rewards from LBRY, Inc.",
   "No information will be sent directly to LBRY, Inc. or third-parties about your usage. Note that as\n                peer-to-peer software, your IP address and potentially other system information can be sent to other\n                users, though this information is not stored permanently.": "No information will be sent directly to LBRY, Inc. or third-parties about your usage. Note that as\n                peer-to-peer software, your IP address and potentially other system information can be sent to other\n                users, though this information is not stored permanently.",
-  "%view_count% Views": "%view_count% Views"
+  "%view_count% Views": "%view_count% Views",
+  "This channel hasn't published anything yet": "This channel hasn't published anything yet",
+  "Buy": "Buy"
 }
