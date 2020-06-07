@@ -181,7 +181,7 @@ export default React.memo<Props>(function VideoJs(props: Props) {
         }
       };
     }
-  }, []); // Parameters are needed to avoid videojs to be loaded more than once (empty is allowed)
+  });
 
   // $FlowFixMe
   return <div className={classnames('video-js-parent', { 'video-js-parent--ios': IS_IOS })} ref={containerRef} />;
