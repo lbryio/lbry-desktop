@@ -227,7 +227,6 @@ function App(props: Props) {
 
   // Keep this at the end to ensure initial setup effects are run first
   useEffect(() => {
-    // Wait for balance to be populated on desktop so we know when we can begin syncing
     if (!hasSignedIn && hasVerifiedEmail) {
       signIn();
       setHasSignedIn(true);
