@@ -4,7 +4,14 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
-## [0.46.0] - [Unreleased]
+## [0.46.1] - [2020-06-08]
+
+### Fixed
+
+- Fix download button not working on claim previews ([1dcf16b](https://github.com/lbryio/lbry-desktop/commit/1dcf16b0b4dffff6335e8fdf988d38673243e014))
+- Fix app version tracking ([f11d068](https://github.com/lbryio/lbry-desktop/commit/f11d06817f0dd75a9c33a7a60150d25d56b66ba0))
+
+## [0.46.0] - [2020-06-08]
 
 ### Added
 
