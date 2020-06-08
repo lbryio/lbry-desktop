@@ -1,5 +1,5 @@
 // @flow
-import React from 'react';
+import React, { useState } from 'react';
 import { parseURI } from 'lbry-redux';
 import classnames from 'classnames';
 import Gerbil from './gerbil.png';
@@ -16,9 +16,20 @@ type Props = {
 };
 
 function ChannelThumbnail(props: Props) {
-  const { thumbnail, uri, className, thumbnailPreview, obscure, small = false, allowGifs = false } = props;
+  const {
+    thumbnail: rawThumbnail,
+    uri,
+    className,
+    thumbnailPreview: rawThumbnailPreview,
+    obscure,
+    small = false,
+    allowGifs = false,
+  } = props;
+  const thumbnail = rawThumbnail && rawThumbnail.trim().replace(/^http:\/\//i, 'https://');
+  const thumbnailPreview = rawThumbnailPreview && rawThumbnailPreview.trim().replace(/^http:\/\//i, 'https://');
   const channelThumbnail = thumbnail || thumbnailPreview;
 
+  const [thumbError, setThumbError] = useState(false);
   if (channelThumbnail && channelThumbnail.endsWith('gif') && !allowGifs) {
     return <FreezeframeWrapper src={channelThumbnail} className="channel-thumbnail" />;
   }
@@ -54,7 +65,8 @@ function ChannelThumbnail(props: Props) {
         <img
           alt={__('Channel profile picture')}
           className="channel-thumbnail__custom"
-          src={thumbnailPreview || thumbnail}
+          src={!thumbError ? thumbnailPreview || thumbnail : Gerbil}
+          onError={() => setThumbError(true)} // if thumb fails (including due to https replace, show gerbil.
         />
       )}
     </div>

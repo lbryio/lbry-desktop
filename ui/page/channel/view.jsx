@@ -82,6 +82,7 @@ function ChannelPage(props: Props) {
   const { search } = location;
   const urlParams = new URLSearchParams(search);
   const currentView = urlParams.get(PAGE_VIEW_QUERY) || undefined;
+  const [coverError, setCoverError] = useState(false);
   const { permanent_url: permanentUrl } = claim;
   const [editing, setEditing] = useState(false);
   const [thumbPreview, setThumbPreview] = useState(thumbnail);
@@ -223,10 +224,11 @@ function ChannelPage(props: Props) {
           {!channelIsBlocked && (!channelIsBlackListed || isSubscribed) && <SubscribeButton uri={permanentUrl} />}
           {!isSubscribed && <BlockButton uri={permanentUrl} />}
         </div>
-        {!editing && cover && (
+        {!editing && cover && !coverError && (
           <img
             className={classnames('channel-cover__custom', { 'channel__image--blurred': channelIsBlocked })}
             src={cover}
+            onError={() => setCoverError(true)}
           />
         )}
         {editing && <img className="channel-cover__custom" src={coverPreview} />}
