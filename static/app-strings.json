@@ -1228,14 +1228,6 @@
   "No information will be sent directly to LBRY, Inc. or third-parties about your usage. Note that as\n                peer-to-peer software, your IP address and potentially other system information can be sent to other\n                users, though this information is not stored permanently.": "No information will be sent directly to LBRY, Inc. or third-parties about your usage. Note that as\n                peer-to-peer software, your IP address and potentially other system information can be sent to other\n                users, though this information is not stored permanently.",
   "%view_count% Views": "%view_count% Views",
   "This channel hasn't published anything yet": "This channel hasn't published anything yet",
-  "Buy": "Buy",
-  "Buy LBRY Credits": "Buy LBRY Credits",
-  "Country": "Country",
-  "Only some countries are eligible at this time. We are working to make this available to everyone.": "Only some countries are eligible at this time. We are working to make this available to everyone.",
-  "Select your country": "Select your country",
-  "LBRY, Inc. partners with Moonpay to provide the option to purchase LBC. %learn_more%.": "LBRY, Inc. partners with Moonpay to provide the option to purchase LBC. %learn_more%.",
-  "Your browser does not support iframes.": "Your browser does not support iframes.",
-  "Change Inviter": "Change Inviter",
   "0 Bytes": "0 Bytes",
   "Bytes": "Bytes",
   "KB": "KB",
@@ -1245,5 +1237,6 @@
   "PB": "PB",
   "EB": "EB",
   "ZB": "ZB",
-  "YB": "YB"
+  "YB": "YB",
+  "Changelog": "Changelog"
 }
