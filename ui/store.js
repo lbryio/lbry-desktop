@@ -167,7 +167,7 @@ const populateAuthTokenHeader = () => {
       Lbry.setApiHeader(X_LBRY_AUTH_TOKEN, authToken);
     }
 
-    next(action);
+    return next(action);
   };
 };
 
