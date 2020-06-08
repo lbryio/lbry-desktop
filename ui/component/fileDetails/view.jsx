@@ -1,13 +1,10 @@
 // @flow
-import * as PAGES from 'constants/pages';
-import * as CS from 'constants/claim_search';
 import React, { Fragment, PureComponent } from 'react';
 import Button from 'component/button';
 import path from 'path';
 import Card from 'component/common/card';
 
 type Props = {
-  uri: string,
   claim: StreamClaim,
   fileInfo: FileListItem,
   metadata: StreamMetadata,
@@ -18,7 +15,7 @@ type Props = {
 
 class FileDetails extends PureComponent<Props> {
   render() {
-    const { uri, claim, contentType, fileInfo, metadata, openFolder } = this.props;
+    const { claim, contentType, fileInfo, metadata, openFolder } = this.props;
 
     if (!claim || !metadata) {
       return <span className="empty">{__('Empty claim or metadata info.')}</span>;
@@ -52,18 +49,6 @@ class FileDetails extends PureComponent<Props> {
                   <td> {__('Content Type')}</td>
                   <td>{mediaType}</td>
                 </tr>
-                {claim && claim.meta.reposted > 0 && (
-                  <tr>
-                    <td>{__('Reposts')}</td>
-                    <td>
-                      <Button
-                        button="link"
-                        label={__('View %count% reposts', { count: claim.meta.reposted })}
-                        navigate={`/$/${PAGES.DISCOVER}?${CS.REPOSTED_URI_KEY}=${encodeURIComponent(uri)}`}
-                      />
-                    </td>
-                  </tr>
-                )}
                 {fileSize && (
                   <tr>
                     <td> {__('File Size')}</td>

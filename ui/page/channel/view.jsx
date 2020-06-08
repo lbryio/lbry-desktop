@@ -1,6 +1,5 @@
 // @flow
 import * as ICONS from 'constants/icons';
-import * as MODALS from 'constants/modal_types';
 import React, { useState, useEffect } from 'react';
 import { parseURI } from 'lbry-redux';
 import { Lbryio } from 'lbryinc';
@@ -25,6 +24,7 @@ import HelpLink from 'component/common/help-link';
 import { DEBOUNCE_WAIT_DURATION_MS } from 'constants/search';
 import ClaimList from 'component/claimList';
 import DateTime from 'component/dateTime';
+import ClaimSupportButton from 'component/claimSupportButton';
 
 const PAGE_VIEW_QUERY = `view`;
 const ABOUT_PAGE = `about`;
@@ -50,8 +50,6 @@ type Props = {
     txid: string,
     nout: number,
   }>,
-  openModal: (id: string, { uri: string, claimIsMine?: boolean, isSupport?: boolean }) => void,
-  supportOption: boolean,
   fetchSubCount: string => void,
   subCount: number,
   showMature: boolean,
@@ -71,8 +69,6 @@ function ChannelPage(props: Props) {
     isSubscribed,
     channelIsBlocked,
     blackListedOutpoints,
-    openModal,
-    supportOption,
     showMature,
     fetchSubCount,
     subCount,
@@ -203,24 +199,7 @@ function ChannelPage(props: Props) {
       <header className="channel-cover">
         <div className="channel__quick-actions">
           {!channelIsBlocked && !channelIsBlackListed && <ShareButton uri={uri} />}
-          {!channelIsMine && (
-            <Button
-              button="alt"
-              icon={ICONS.TIP}
-              label={__('Tip')}
-              title={__('Send a tip to this creator')}
-              onClick={() => openModal(MODALS.SEND_TIP, { uri, channelIsMine, isSupport: false })}
-            />
-          )}
-          {(channelIsMine || (!channelIsMine && supportOption)) && (
-            <Button
-              button="alt"
-              icon={ICONS.SUPPORT}
-              label={__('Support')}
-              title={__('Support this creator')}
-              onClick={() => openModal(MODALS.SEND_TIP, { uri, channelIsMine, isSupport: true })}
-            />
-          )}
+          {!channelIsBlocked && <ClaimSupportButton uri={uri} />}
           {!channelIsBlocked && (!channelIsBlackListed || isSubscribed) && <SubscribeButton uri={permanentUrl} />}
           {!isSubscribed && <BlockButton uri={permanentUrl} />}
         </div>

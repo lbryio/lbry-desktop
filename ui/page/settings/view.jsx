@@ -75,7 +75,6 @@ type Props = {
   updateWalletStatus: () => void,
   walletEncrypted: boolean,
   osNotificationsEnabled: boolean,
-  supportOption: boolean,
   userBlockedChannelsCount?: number,
   hideBalance: boolean,
   confirmForgetPassword: ({}) => void,
@@ -239,7 +238,6 @@ class SettingsPage extends React.PureComponent<Props, State> {
       setDaemonSetting,
       setClientSetting,
       toggle3PAnalytics,
-      supportOption,
       hideBalance,
       userBlockedChannelsCount,
       floatingPlayer,
@@ -488,11 +486,11 @@ class SettingsPage extends React.PureComponent<Props, State> {
                 actions={
                   <p>
                     <React.Fragment>
-				              {
-                        userBlockedChannelsCount === 0 ? __("You don't have blocked channels.")
-				                : userBlockedChannelsCount === 1 ? __('You have one blocked channel.') +' '
-				                : __('You have %channels% blocked channels.', {channels: userBlockedChannelsCount})+' '
-                      }
+                      {userBlockedChannelsCount === 0
+                        ? __("You don't have blocked channels.")
+                        : userBlockedChannelsCount === 1
+                        ? __('You have one blocked channel.') + ' '
+                        : __('You have %channels% blocked channels.', { channels: userBlockedChannelsCount }) + ' '}
                       {
                         <Button
                           button="link"
@@ -743,35 +741,11 @@ class SettingsPage extends React.PureComponent<Props, State> {
               }
             />
             {/* @endif */}
-            {(!IS_WEB || isAuthenticated) && (
+            {!IS_WEB && (
               <Card
                 title={__('Experimental Settings')}
                 actions={
                   <React.Fragment>
-                    <FormField
-                      type="checkbox"
-                      name="support_option"
-                      onChange={() => setClientSetting(SETTINGS.SUPPORT_OPTION, !supportOption)}
-                      checked={supportOption}
-                      label={__('Enable claim support')}
-                      helper={
-                        <I18nMessage
-                          tokens={{
-                            discovery_link: (
-                              <Button button="link" label={__('discovery')} href="https://lbry.com/faq/trending" />
-                            ),
-                            vanity_names_link: (
-                              <Button button="link" label={__('vanity names')} href="https://lbry.com/faq/naming" />
-                            ),
-                          }}
-                        >
-                          This will add a Support button along side tipping. Similar to tips, supports help
-                          %discovery_link% but the LBC is returned to your wallet if revoked. Both also help secure your
-                          %vanity_names_link%.
-                        </I18nMessage>
-                      }
-                    />
-
                     {/* @if TARGET='app' */}
                     {/*
                   Disabling below until we get downloads to work with shared subscriptions code

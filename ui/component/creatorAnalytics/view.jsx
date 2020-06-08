@@ -122,7 +122,7 @@ export default function CreatorAnalytics(props: Props) {
                       follower_count_weekly_change: stats.ChannelSubChange || 0,
                     })}
                   </span>
-                  {stats.ChannelSubChange > 0 && <Icon icon={ICONS.SUPPORT} iconColor="green" size={18} />}
+                  {stats.ChannelSubChange > 0 && <Icon icon={ICONS.TRENDING} iconColor="green" size={18} />}
                 </div>
               }
             />
@@ -136,7 +136,7 @@ export default function CreatorAnalytics(props: Props) {
                       all_content_views_weekly_change: stats.AllContentViewChange || 0,
                     })}
                   </span>
-                  {stats.AllContentViewChange > 0 && <Icon icon={ICONS.SUPPORT} iconColor="green" size={18} />}
+                  {stats.AllContentViewChange > 0 && <Icon icon={ICONS.TRENDING} iconColor="green" size={18} />}
                 </div>
               }
             />
@@ -156,7 +156,7 @@ export default function CreatorAnalytics(props: Props) {
                       lbc_received_changed: stats.LBCReceivedChange || 0,
                     })}
                   </span>
-                  {stats.LBCReceivedChange > 0 && <Icon icon={ICONS.SUPPORT} iconColor="green" size={18} />}
+                  {stats.LBCReceivedChange > 0 && <Icon icon={ICONS.TRENDING} iconColor="green" size={18} />}
                 </div>
                 <p className="help">
                   {__(
@@ -182,7 +182,7 @@ export default function CreatorAnalytics(props: Props) {
                         ? __('1 view', { view_count: stats.VideoViewsTopNew })
                         : __('%view_count% views', { view_count: stats.VideoViewsTopNew })}
                     </span>
-                    {stats.VideoViewsTopNew > 0 && <Icon icon={ICONS.SUPPORT} iconColor="green" size={18} />}
+                    {stats.VideoViewsTopNew > 0 && <Icon icon={ICONS.TRENDING} iconColor="green" size={18} />}
                   </div>
                 </React.Fragment>
               }
@@ -230,7 +230,7 @@ export default function CreatorAnalytics(props: Props) {
                       all_time_views_weekly_change: stats.VideoViewChangeTopAllTime,
                     })}
                   </span>
-                  {stats.VideoViewChangeTopAllTime > 0 && <Icon icon={ICONS.SUPPORT} iconColor="green" size={18} />}
+                  {stats.VideoViewChangeTopAllTime > 0 && <Icon icon={ICONS.TRENDING} iconColor="green" size={18} />}
                 </div>
               </React.Fragment>
             }

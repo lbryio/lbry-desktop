@@ -1,5 +1,7 @@
 // @flow
 import type { Node } from 'react';
+import * as PAGES from 'constants/pages';
+import * as CS from 'constants/claim_search';
 import * as MODALS from 'constants/modal_types';
 import * as ICONS from 'constants/icons';
 import React from 'react';
@@ -8,6 +10,7 @@ import FileDownloadLink from 'component/fileDownloadLink';
 import { buildURI } from 'lbry-redux';
 import * as RENDER_MODES from 'constants/file_render_modes';
 import useIsMobile from 'effects/use-is-mobile';
+import ClaimSupportButton from 'component/claimSupportButton';
 
 type Props = {
   uri: string,
@@ -18,11 +21,10 @@ type Props = {
   fileInfo: FileListItem,
   costInfo: ?{ cost: number },
   renderMode: string,
-  supportOption: boolean,
 };
 
 function FileActions(props: Props) {
-  const { fileInfo, uri, openModal, claimIsMine, claim, costInfo, renderMode, supportOption, prepareEdit } = props;
+  const { fileInfo, uri, openModal, claimIsMine, claim, costInfo, renderMode, prepareEdit } = props;
   const isMobile = useIsMobile();
   const webShareable = costInfo && costInfo.cost === 0 && RENDER_MODES.WEB_SHAREABLE_MODES.includes(renderMode);
   const showDelete = claimIsMine || (fileInfo && (fileInfo.written_bytes > 0 || fileInfo.blobs_completed > 0));
@@ -61,34 +63,25 @@ function FileActions(props: Props) {
           label={__('Share')}
           onClick={() => openModal(MODALS.SOCIAL_SHARE, { uri, webShareable })}
         />
-        <Button
-          button="alt"
-          icon={ICONS.REPOST}
-          label={__('Repost %count%', { count: claim.meta.reposted > 0 ? `(${claim.meta.reposted})` : '' })}
-          requiresAuth={IS_WEB}
-          onClick={() => openModal(MODALS.REPOST, { uri })}
-        />
 
-        {!claimIsMine && (
+        <div className="button-group">
           <Button
             button="alt"
-            icon={ICONS.TIP}
-            label={__('Tip')}
+            icon={ICONS.REPOST}
+            label={__('Repost')}
             requiresAuth={IS_WEB}
-            title={__('Send a tip to this creator')}
-            onClick={() => openModal(MODALS.SEND_TIP, { uri, claimIsMine, isSupport: false })}
+            onClick={() => openModal(MODALS.REPOST, { uri })}
           />
-        )}
-        {(claimIsMine || (!claimIsMine && supportOption)) && (
-          <Button
-            button="alt"
-            icon={ICONS.SUPPORT}
-            label={__('Support')}
-            requiresAuth={IS_WEB}
-            title={__('Support this claim')}
-            onClick={() => openModal(MODALS.SEND_TIP, { uri, claimIsMine, isSupport: true })}
-          />
-        )}
+          {claim.meta.reposted > 0 && (
+            <Button
+              button="alt"
+              label={claim.meta.reposted}
+              requiresAuth={IS_WEB}
+              navigate={`/$/${PAGES.DISCOVER}?${CS.REPOSTED_URI_KEY}=${encodeURIComponent(uri)}`}
+            />
+          )}
+        </div>
+        <ClaimSupportButton uri={uri} />
       </ActionWrapper>
 
       <ActionWrapper>

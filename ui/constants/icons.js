@@ -36,7 +36,6 @@ export const LOCK = 'Lock';
 export const WEB = 'Globe';
 export const SHARE = 'Share2';
 export const EXTERNAL = 'ExternalLink';
-export const TIP = 'Gift';
 export const PLAY = 'Play';
 export const FACEBOOK = 'Facebook';
 export const TWITTER = 'Twitter';

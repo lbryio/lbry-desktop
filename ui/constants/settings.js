@@ -17,7 +17,6 @@ export const AUTOPLAY = 'autoplay';
 export const OS_NOTIFICATIONS_ENABLED = 'os_notifications_enabled';
 export const AUTO_DOWNLOAD = 'auto_download';
 export const AUTO_LAUNCH = 'auto_launch';
-export const SUPPORT_OPTION = 'support_option';
 export const HIDE_BALANCE = 'hide_balance';
 export const HIDE_SPLASH_ANIMATION = 'hide_splash_animation';
 export const FLOATING_PLAYER = 'floating_player';
