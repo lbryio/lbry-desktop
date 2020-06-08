@@ -71,8 +71,12 @@ fieldset-group {
     }
 
     fieldset-section:first-child {
+      max-width: 40%;
+
       .form-field__prefix {
         white-space: nowrap;
+        text-overflow: ellipsis;
+        overflow: hidden;
         padding: 0.5rem;
         padding-right: var(--spacing-s);
         height: var(--height-input);
