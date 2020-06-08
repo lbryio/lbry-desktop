@@ -158,7 +158,9 @@ if (!gotSingleInstanceLock) {
     // By default, electron sends http://localhost:{port} as the origin for POST requests
     // https://github.com/electron/electron/issues/7931#issuecomment-361759277
     session.defaultSession.webRequest.onBeforeSendHeaders((details, callback) => {
-      delete details.requestHeaders['Origin'];
+      if (details.method === 'POST' && details.requestHeaders['Content-Type'] === 'application/json-rpc') {
+        delete details.requestHeaders['Origin'];
+      }
       callback({ cancel: false, requestHeaders: details.requestHeaders });
     });
   });
