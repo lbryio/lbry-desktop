@@ -43,6 +43,7 @@ function FileDownloadLink(props: Props) {
   const [didClickDownloadButton, setDidClickDownloadButton] = useState(false);
   const fileName = claim && claim.value && claim.value.source && claim.value.source.name;
 
+  // @if TARGET='web'
   React.useEffect(() => {
     if (didClickDownloadButton && streamingUrl) {
       let element = document.createElement('a');
@@ -58,6 +59,7 @@ function FileDownloadLink(props: Props) {
       setDidClickDownloadButton(false);
     }
   }, [streamingUrl, didClickDownloadButton]);
+  // @endif
 
   function handleDownload(e) {
     setDidClickDownloadButton(true);
