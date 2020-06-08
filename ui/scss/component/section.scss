@@ -122,9 +122,11 @@
     }
   }
 
-  .button--primary ~ .button--link {
+  .button--primary ~ .button--link,
+  .button--secondary ~ .button--link {
     margin-left: var(--spacing-s);
-    padding: var(--spacing-xs);
+    padding: var(--spacing-s) var(--spacing-m);
+    height: var(--button-height);
   }
 }
 

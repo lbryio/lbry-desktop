@@ -141,3 +141,18 @@ svg + .button__label,
     opacity: 1;
   }
 }
+
+.button-group {
+  display: flex;
+
+  .button:first-child {
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    border-right: 1px solid var(--color-button-border);
+  }
+
+  .button:nth-child(2) {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+  }
+}

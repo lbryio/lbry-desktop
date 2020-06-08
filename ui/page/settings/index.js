@@ -41,7 +41,6 @@ const select = state => ({
   walletEncrypted: selectWalletIsEncrypted(state),
   osNotificationsEnabled: selectosNotificationsEnabled(state),
   autoDownload: makeSelectClientSetting(SETTINGS.AUTO_DOWNLOAD)(state),
-  supportOption: makeSelectClientSetting(SETTINGS.SUPPORT_OPTION)(state),
   userBlockedChannelsCount: selectBlockedChannelsCount(state),
   hideBalance: makeSelectClientSetting(SETTINGS.HIDE_BALANCE)(state),
   floatingPlayer: makeSelectClientSetting(SETTINGS.FLOATING_PLAYER)(state),

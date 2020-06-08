@@ -83,7 +83,7 @@ const WalletBalance = (props: Props) => {
 
             <div className="section">
               <div className="section__flex">
-                <Icon sectionIcon icon={ICONS.TIP} />
+                <Icon sectionIcon icon={ICONS.SUPPORT} />
                 <h2 className="section__title--small">
                   <strong>
                     <CreditAmount badge={false} amount={tipsBalance} precision={8} />

@@ -1,8 +1,6 @@
 import { connect } from 'react-redux';
-import * as SETTINGS from 'constants/settings';
 import { makeSelectClaimIsMine, makeSelectFileInfoForUri, makeSelectClaimForUri, doPrepareEdit } from 'lbry-redux';
 import { makeSelectCostInfoForUri } from 'lbryinc';
-import { makeSelectClientSetting } from 'redux/selectors/settings';
 import { doOpenModal } from 'redux/actions/app';
 import fs from 'fs';
 import FileActions from './view';
@@ -14,7 +12,6 @@ const select = (state, props) => ({
   fileInfo: makeSelectFileInfoForUri(props.uri)(state),
   renderMode: makeSelectFileRenderModeForUri(props.uri)(state),
   costInfo: makeSelectCostInfoForUri(props.uri)(state),
-  supportOption: makeSelectClientSetting(SETTINGS.SUPPORT_OPTION)(state),
 });
 
 const perform = dispatch => ({
