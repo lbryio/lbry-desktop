@@ -349,7 +349,7 @@ export function doDaemonReady() {
             analytics.trendingAlgorithmEvent(trendingAlgorithm);
           }
         },
-        null,
+        undefined,
         DOMAIN
       )
     );
