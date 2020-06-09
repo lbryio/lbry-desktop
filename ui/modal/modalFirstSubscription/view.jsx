@@ -3,6 +3,7 @@ import React from 'react';
 import { Modal } from 'modal/modal';
 import Button from 'component/button';
 import * as PAGES from 'constants/pages';
+import Card from 'component/common/card';
 
 type Props = {
   closeModal: () => void,
@@ -22,42 +23,48 @@ const ModalFirstSubscription = (props: Props) => {
     location: { pathname },
   } = props;
 
+  const title = __('You Followed Your First Channel!');
+
   return (
-    <Modal type="custom" isOpen contentLabel="Subscriptions 101" title={__('Subscriptions 101')}>
-      <div className="section__subtitle">
-        <p>{__('Awesome! You just subscribed to your first channel.')}{' '}
-          { user && user.primary_email ? (
+    <Modal type="card" isOpen contentLabel={title}>
+      <Card
+        title={title}
+        subtitle={
+          <>
+            {__('Awesome! You just followed your first first channel.')}{' '}
+            {user && user.primary_email
+              ? __('You will receive notifications related to new content.')
+              : __('Sign in with lbry.tv to receive notifications about new content.')}
+          </>
+        }
+        actions={
+          <div className="section__actions">
+            <Button button="primary" onClick={closeModal} label={__('Got it')} />
             <React.Fragment>
-              {__('You will receive notifications related to new content.')}
+              {user && user.primary_email ? (
+                <React.Fragment>
+                  <Button
+                    button="link"
+                    href={`https://lbry.com/list/edit/${accessToken}`}
+                    label={__('Update email preferences')}
+                  />
+                </React.Fragment>
+              ) : (
+                <React.Fragment>
+                  <Button
+                    button="link"
+                    onClick={() => {
+                      closeModal();
+                      history.push(`/$/${PAGES.AUTH}?redirect=${pathname}`);
+                    }}
+                    label={__('Sign in')}
+                  />
+                </React.Fragment>
+              )}
             </React.Fragment>
-            ) : (
-            <React.Fragment>
-              { __('Sign in with lbry.tv to receive notifications about new content.')}
-            </React.Fragment>
-          )}
-        </p>
-      </div>
-      <div className="section__actions">
-        <Button button="primary" onClick={closeModal} label={__('Got it')} />
-        <React.Fragment>
-          {user && user.primary_email ? (
-            <React.Fragment>
-              <Button
-                button="link"
-                href={`https://lbry.com/list/edit/${accessToken}`}
-                label={__('Update email preferences')}
-              />
-            </React.Fragment>
-          ) : (
-            <React.Fragment>
-              <Button button="link" onClick={() => {
-                closeModal()
-                history.push(`/$/${PAGES.AUTH}?redirect=${pathname}`);
-              }} label={__('Sign in')} />
-            </React.Fragment>
-          )}
-        </React.Fragment>
-      </div>
+          </div>
+        }
+      />
     </Modal>
   );
 };

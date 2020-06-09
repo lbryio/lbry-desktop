@@ -6,6 +6,8 @@ import {
   selectIsSendingSupport,
   selectBalance,
   SETTINGS,
+  selectMyChannelClaims,
+  makeSelectClaimIsMine,
 } from 'lbry-redux';
 import WalletSendTip from './view';
 import { doOpenModal, doHideModal } from 'redux/actions/app';
@@ -19,6 +21,8 @@ const select = (state, props) => ({
   balance: selectBalance(state),
   instantTipEnabled: makeSelectClientSetting(SETTINGS.INSTANT_PURCHASE_ENABLED)(state),
   instantTipMax: makeSelectClientSetting(SETTINGS.INSTANT_PURCHASE_MAX)(state),
+  channels: selectMyChannelClaims(state),
+  claimIsMine: makeSelectClaimIsMine(props.uri)(state),
 });
 
 const perform = dispatch => ({

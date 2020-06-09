@@ -142,10 +142,16 @@ svg + .button__label,
   }
 }
 
+.button-toggle__label {
+  @extend label;
+  display: inline-block;
+  margin-top: -4px;
+}
+
 .button-group {
   display: flex;
 
-  .button:first-child {
+  .button:first-child:not(:only-child) {
     border-top-right-radius: 0;
     border-bottom-right-radius: 0;
     border-right: 1px solid var(--color-button-border);
