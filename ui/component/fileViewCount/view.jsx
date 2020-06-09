@@ -22,7 +22,7 @@ function FileViewCount(props: Props) {
 
   return (
     <span>
-      {viewCount !== 1 ? __('%view_count% Views', { view_count: formattedViewCount }) : __('1 View')}
+      {viewCount !== 1 ? __('%view_count% views', { view_count: formattedViewCount }) : __('1 view')}
       <HelpLink href="https://lbry.com/faq/views" />
     </span>
   );

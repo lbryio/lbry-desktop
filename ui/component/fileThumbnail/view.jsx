@@ -14,7 +14,8 @@ const className = 'media__thumb';
 
 class FileThumbnail extends React.PureComponent<Props> {
   render() {
-    const { thumbnail, children, allowGifs = false } = this.props;
+    const { thumbnail: rawThumbnail, children, allowGifs = false } = this.props;
+    const thumbnail = rawThumbnail && rawThumbnail.trim().replace(/^http:\/\//i, 'https://');
 
     if (!allowGifs && thumbnail && thumbnail.endsWith('gif')) {
       return <FreezeframeWrapper src={thumbnail} className={className} />;

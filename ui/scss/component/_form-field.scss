@@ -71,8 +71,12 @@ fieldset-group {
     }
 
     fieldset-section:first-child {
+      max-width: 40%;
+
       .form-field__prefix {
         white-space: nowrap;
+        text-overflow: ellipsis;
+        overflow: hidden;
         padding: 0.5rem;
         padding-right: var(--spacing-s);
         height: var(--height-input);
@@ -89,6 +93,13 @@ fieldset-group {
 
     fieldset-section:last-child {
       width: 100%;
+
+      label {
+        // Overwrite the input's label to wrap instead. This is usually
+        // an error message, which could be long in other languages.
+        width: 100%;
+        white-space: normal;
+      }
 
       input {
         border-left: 0;

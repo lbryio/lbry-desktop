@@ -1,10 +1,17 @@
-# Change Log
+# Changelog
 
 All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
-## [0.46.0] - [Unreleased]
+## [0.46.1] - [2020-06-08]
+
+### Fixed
+
+- Fix download button not working on claim previews ([1dcf16b](https://github.com/lbryio/lbry-desktop/commit/1dcf16b0b4dffff6335e8fdf988d38673243e014))
+- Fix app version tracking ([f11d068](https://github.com/lbryio/lbry-desktop/commit/f11d06817f0dd75a9c33a7a60150d25d56b66ba0))
+
+## [0.46.0] - [2020-06-08]
 
 ### Added
 
@@ -17,6 +24,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Add advanced editor for comments _community pr!_ ([#4224](https://github.com/lbryio/lbry-desktop/pull/4224))
 - Paid content improvements ([#4234](https://github.com/lbryio/lbry-desktop/pull/4234))
 - Add status-bar to display a link's destination _community pr!_ ([#4259](https://github.com/lbryio/lbry-desktop/pull/4259))
+- Add Catalan language support ([#4313](https://github.com/lbryio/lbry-desktop/pull/4313))
 
 ### Changed
 
@@ -962,7 +970,7 @@ This release includes a breaking change that will reset many of your settings. T
 
 ### Changed
 
-- Update LBRY Protocol to 0.19.3 - faster blockchain header download for new and existing users (See full change log for [0.19.2](https://github.com/lbryio/lbry/releases/tag/v0.19.2) and [0.19.3](https://github.com/lbryio/lbry/releases/tag/v0.19.3))
+- Update LBRY Protocol to 0.19.3 - faster blockchain header download for new and existing users (See full changelog for [0.19.2](https://github.com/lbryio/lbry/releases/tag/v0.19.2) and [0.19.3](https://github.com/lbryio/lbry/releases/tag/v0.19.3))
 
 ### Fixed
 
@@ -990,7 +998,7 @@ This release includes a breaking change that will reset many of your settings. T
 
 ### Changed
 
-- Update LBRY Protocol to 0.19.1 (See change log for [0.19.0](https://github.com/lbryio/lbry/releases/tag/v0.19.0) and [0.19.1](https://github.com/lbryio/lbry/releases/tag/v0.19.1))
+- Update LBRY Protocol to 0.19.1 (See changelog for [0.19.0](https://github.com/lbryio/lbry/releases/tag/v0.19.0) and [0.19.1](https://github.com/lbryio/lbry/releases/tag/v0.19.1))
 - Improved privacy by allowing users to turn off the file view counter and better understand privacy settings ([#1074](https://github.com/lbryio/lbry-desktop/pull/1074) / [#1116](https://github.com/lbryio/lbry-desktop/pull/1116))
 - Disabled auto dark mode if dark mode is selected ([#1006](https://github.com/lbryio/lbry-desktop/pull/1006))
 - Refactor Electron's main process ([#951](https://github.com/lbryio/lbry-desktop/pull/951))

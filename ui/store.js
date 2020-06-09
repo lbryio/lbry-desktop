@@ -9,11 +9,12 @@ import thunk from 'redux-thunk';
 import { createMemoryHistory, createBrowserHistory } from 'history';
 import { routerMiddleware } from 'connected-react-router';
 import createRootReducer from './reducers';
-import { buildSharedStateMiddleware, ACTIONS as LBRY_REDUX_ACTIONS, SETTINGS } from 'lbry-redux';
-import { doGetSync, selectUserVerifiedEmail } from 'lbryinc';
-import { getSavedPassword } from 'util/saved-passwords';
+import { Lbry, buildSharedStateMiddleware, ACTIONS as LBRY_REDUX_ACTIONS, SETTINGS } from 'lbry-redux';
+import { LBRYINC_ACTIONS, doGetSync, selectUserVerifiedEmail } from 'lbryinc';
+import { getSavedPassword, getAuthToken } from 'util/saved-passwords';
 import { makeSelectClientSetting } from 'redux/selectors/settings';
 import { generateInitialUrl } from 'util/url';
+import { X_LBRY_AUTH_TOKEN } from 'constants/token';
 
 function isFunction(object) {
   return typeof object === 'function';
@@ -159,11 +160,33 @@ const sharedStateCb = ({ dispatch, getState }) => {
   }
 };
 
+const populateAuthTokenHeader = () => {
+  return next => action => {
+    if (
+      (action.type === LBRYINC_ACTIONS.USER_FETCH_SUCCESS || action.type === LBRYINC_ACTIONS.AUTHENTICATION_SUCCESS) &&
+      action.data.user.has_verified_email === true
+    ) {
+      const authToken = getAuthToken();
+      Lbry.setApiHeader(X_LBRY_AUTH_TOKEN, authToken);
+    }
+
+    return next(action);
+  };
+};
+
 const sharedStateMiddleware = buildSharedStateMiddleware(triggerSharedStateActions, sharedStateFilters, sharedStateCb);
 const rootReducer = createRootReducer(history);
 const persistedReducer = persistReducer(persistOptions, rootReducer);
 const bulkThunk = createBulkThunkMiddleware();
-const middleware = [sharedStateMiddleware, routerMiddleware(history), thunk, bulkThunk];
+const middleware = [
+  sharedStateMiddleware,
+  // @if TARGET='web'
+  populateAuthTokenHeader,
+  // @endif
+  routerMiddleware(history),
+  thunk,
+  bulkThunk,
+];
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 const store = createStore(
   enableBatching(persistedReducer),

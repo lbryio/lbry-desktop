@@ -41,6 +41,7 @@
 .comment__body_container {
   padding-right: var(--spacing-s);
   flex: 1;
+  width: 80%;
 }
 
 .comment__meta {
@@ -57,6 +58,7 @@
 
 .comment__message {
   white-space: pre-line;
+  word-break: break-word;
   margin-top: var(--spacing-s);
 }
 
