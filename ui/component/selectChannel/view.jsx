@@ -47,8 +47,8 @@ class ChannelSelection extends React.PureComponent<Props, State> {
   }
 
   componentDidUpdate() {
-    const { channels, fetchingChannels } = this.props;
-    if (!fetchingChannels && !channels) {
+    const { channels, fetchingChannels, hideAnon } = this.props;
+    if (!fetchingChannels && !channels && hideAnon) {
       this.setState({ addingChannel: true });
     }
   }

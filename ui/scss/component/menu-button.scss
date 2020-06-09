@@ -8,7 +8,7 @@
   font-family: sans-serif;
   display: block;
   position: absolute;
-  z-index: 2;
+  z-index: 10000;
   font-size: var(--font-body);
 }
 
@@ -22,7 +22,7 @@
 
 [data-reach-menu-item] {
   display: block;
-  z-index: 2;
+  z-index: 10000;
 
   &:focus {
     box-shadow: none;
