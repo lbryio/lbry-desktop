@@ -166,7 +166,24 @@ export default appState => {
 
   window.webContents.on('update-target-url', (event, url) => {
     // Change internal links to the lbry protocol. External (https) links should remain unchanged.
-    let dispUrl = url.replace(`http://localhost:${WEBPACK_ELECTRON_PORT}/`, lbryProto);
+    let hoverUrlBase = `http://localhost:${WEBPACK_ELECTRON_PORT}/`;
+    if (!isDev) {
+      // Return format of 'update-target-url':
+      //   Linux:   file:///@claim
+      //   Windows: file:///C:/@claim
+      // Use '__dirname' in case installation is not in C:
+      const path = require('path');
+      const exeRoot = path.parse(__dirname).root;
+
+      if (process.platform === 'win32') {
+        // Add extra "/" prefix. Convert "C:\" to "C:/"
+        hoverUrlBase = `file:///` + exeRoot.replace(/\\/g, '/');
+      } else {
+        hoverUrlBase = `file://` + exeRoot;
+      }
+    }
+
+    let dispUrl = url.replace(hoverUrlBase, lbryProto);
     // Non-claims don't need the lbry protocol:
     if (dispUrl === lbryProto)  {
       dispUrl = 'Home';
