@@ -162,7 +162,10 @@ const sharedStateCb = ({ dispatch, getState }) => {
 
 const populateAuthTokenHeader = () => {
   return next => action => {
-    if (action.type === LBRYINC_ACTIONS.USER_FETCH_SUCCESS && action.data.user.has_verified_email === true) {
+    if (
+      (action.type === LBRYINC_ACTIONS.USER_FETCH_SUCCESS || action.type === LBRYINC_ACTIONS.AUTHENTICATION_SUCCESS) &&
+      action.data.user.has_verified_email === true
+    ) {
       const authToken = getAuthToken();
       Lbry.setApiHeader(X_LBRY_AUTH_TOKEN, authToken);
     }
