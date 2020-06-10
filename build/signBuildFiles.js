@@ -46,6 +46,8 @@ if (!fs.existsSync(downloadPath)) {
 function cleanUpAfterSigning() {
   fs.unlinkSync(fileToSign);
   deleteFolderRecursive(downloadPath);
+  console.log('Good to go captain');
+  process.exit(0);
 }
 
 function signFile() {
