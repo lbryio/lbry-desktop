@@ -4,6 +4,22 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [0.46.2] - [2020-06-10]
+
+### Added
+
+- Make library view mode (Downloads|Purchases) persistent _community pr!_ ([#4363](https://github.com/lbryio/lbry-desktop/pull/4363))
+
+### Changed
+
+- Updated lbry-sdk to [0.76.0](https://github.com/lbryio/lbry-sdk/releases/tag/v0.76.0)
+
+### Fixed
+
+- Overflow issue when editing replies _community pr!_ ([#4356](https://github.com/lbryio/lbry-desktop/pull/4356))
+- Comments wrapping in the middle of a word _community pr!_ ([#4354](https://github.com/lbryio/lbry-desktop/pull/4354))
+- Translation improvements _community pr!_ ([multiple PR's](https://github.com/lbryio/lbry-desktop/pulls?q=is%3Apr+author%3ATigerxWood+sort%3Aupdated-desc+is%3Amerged))
+
 ## [0.46.1] - [2020-06-08]
 
 ### Fixed
