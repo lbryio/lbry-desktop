@@ -1,13 +1,17 @@
 // @flow
 import React, { useEffect, useRef } from 'react';
+import Button from 'component/button';
+import * as ICONS from 'constants/icons';
 import classnames from 'classnames';
 import videojs from 'video.js/dist/alt/video.core.novtt.min.js';
 import 'video.js/dist/alt/video-js-cdn.min.css';
 import eventTracking from 'videojs-event-tracking';
 import isUserTyping from 'util/detect-typing';
+import isDev from 'electron-is-dev';
 
 export type Player = {
   on: (string, (any) => void) => void,
+  one: (string, (any) => void) => void,
   isFullscreen: () => boolean,
   exitFullscreen: () => boolean,
   requestFullscreen: () => boolean,
@@ -93,6 +97,50 @@ export default React.memo<Props>(function VideoJs(props: Props) {
 
   videoJsOptions.muted = startMuted;
 
+  const tapToUnmuteRef = useRef();
+
+  function showTapToUnmute(newState: boolean) {
+    // Use the DOM to control the state of the button to prevent re-renders.
+    // The button only needs to appear once per session.
+    if (tapToUnmuteRef.current) {
+      const curState = tapToUnmuteRef.current.style.visibility === 'visible';
+      if (newState !== curState) {
+        tapToUnmuteRef.current.style.visibility = newState ? 'visible' : 'hidden';
+      }
+    } else if (isDev) {
+      throw new Error('[videojs.jsx] Empty video ref should not happen');
+    }
+  }
+
+  function unmuteAndHideHint() {
+    if (player) {
+      player.muted(false);
+    }
+    showTapToUnmute(false);
+  }
+
+  function onInitialPlay() {
+    if (player && player.muted()) {
+      // The css starts as "hidden". We make it visible here without
+      // re-rendering the whole thing.
+      showTapToUnmute(true);
+    }
+  }
+
+  function onVolumeChange() {
+    if (player && !player.muted()) {
+      showTapToUnmute(false);
+    }
+  }
+
+  function onError() {
+    showTapToUnmute(false);
+  }
+
+  function onEnded() {
+    showTapToUnmute(false);
+  }
+
   function handleKeyDown(e: KeyboardEvent) {
     const videoNode: ?HTMLVideoElement = containerRef.current && containerRef.current.querySelector('video, audio');
 
@@ -145,6 +193,11 @@ export default React.memo<Props>(function VideoJs(props: Props) {
 
       player = videojs(el, videoJsOptions, () => {
         if (player) {
+          player.one('play', onInitialPlay);
+          player.on('volumechange', onVolumeChange);
+          player.on('error', onError);
+          player.on('ended', onEnded);
+
           onPlayerReady(player);
         }
       });
@@ -166,6 +219,19 @@ export default React.memo<Props>(function VideoJs(props: Props) {
     }
   });
 
-  // $FlowFixMe
-  return <div className={classnames('video-js-parent', { 'video-js-parent--ios': IS_IOS })} ref={containerRef} />;
+  return (
+    // $FlowFixMe
+    <div className={classnames('video-js-parent', { 'video-js-parent--ios': IS_IOS })} ref={containerRef}>
+      {
+        <Button
+          label={__('Tap to unmute')}
+          button="link"
+          icon={ICONS.VOLUME_MUTED}
+          className="video-js--tap-to-unmute"
+          onClick={unmuteAndHideHint}
+          ref={tapToUnmuteRef}
+        />
+      }
+    </div>
+  );
 });

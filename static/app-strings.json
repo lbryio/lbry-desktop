@@ -1228,6 +1228,7 @@
   "Sharing information with LBRY, Inc. allows us to report to publishers how their content is doing, as\n                well as track basic usage and performance. This is the minimum required to earn rewards from LBRY, Inc.": "Sharing information with LBRY, Inc. allows us to report to publishers how their content is doing, as\n                well as track basic usage and performance. This is the minimum required to earn rewards from LBRY, Inc.",
   "No information will be sent directly to LBRY, Inc. or third-parties about your usage. Note that as\n                peer-to-peer software, your IP address and potentially other system information can be sent to other\n                users, though this information is not stored permanently.": "No information will be sent directly to LBRY, Inc. or third-parties about your usage. Note that as\n                peer-to-peer software, your IP address and potentially other system information can be sent to other\n                users, though this information is not stored permanently.",
   "%view_count% Views": "%view_count% Views",
+  "Tap to unmute": "Tap to unmute",
   "0 Bytes": "0 Bytes",
   "Bytes": "Bytes",
   "KB": "KB",
