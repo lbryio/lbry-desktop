@@ -370,6 +370,13 @@ export const icons = {
       <path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z" />
     </g>
   ),
+  [ICONS.VOLUME_MUTED]: buildIcon(
+    <g>
+      <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" />
+      <line x1="23" y1="9" x2="17" y2="15" />
+      <line x1="17" y1="9" x2="23" y2="15" />
+    </g>
+  ),
   [ICONS.IMAGE]: buildIcon(
     <g>
       <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
