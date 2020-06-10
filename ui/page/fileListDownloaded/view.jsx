@@ -1,6 +1,7 @@
 // @flow
 import * as ICONS from 'constants/icons';
 import React, { useState } from 'react';
+import usePersistedState from 'effects/use-persisted-state';
 import Button from 'component/button';
 import ClaimList from 'component/claimList';
 import Paginate from 'component/common/paginate';
@@ -43,7 +44,7 @@ function FileListDownloaded(props: Props) {
     fetchingMyPurchases,
   } = props;
   const loading = fetchingFileList || fetchingMyPurchases;
-  const [viewMode, setViewMode] = React.useState(VIEW_PURCHASES);
+  const [viewMode, setViewMode] = usePersistedState('library-view-mode', VIEW_PURCHASES);
   const [searchQuery, setSearchQuery] = useState('');
 
   function handleInputChange(e) {
