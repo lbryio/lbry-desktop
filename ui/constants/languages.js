@@ -181,6 +181,8 @@ const LANGUAGES = {
   yo: ['Yoruba', 'Yorùbá'],
   za: ['Zhuang', 'Cuengh / Tôô / 壮语'],
   zh: ['Chinese', '中文'],
+  'zh-CN': ['Chinese (Simplified)', '中文 (简体)'],
+  'zh-TW': ['Chinese (Traditional)', '中文 (繁體)'],
   zu: ['Zulu', 'isiZulu'],
 };
 
