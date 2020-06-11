@@ -207,7 +207,7 @@ class HelpPage extends React.PureComponent<Props, State> {
           subtitle={
             this.state.upgradeAvailable !== null && this.state.upgradeAvailable ? (
               <span>
-                {__('A newer version of LBRY is available.')}
+                {__('A newer version of LBRY is available.')}{' '}
                 <Button button="link" href={newVerLink} label={__('Download now!')} />
               </span>
             ) : null
