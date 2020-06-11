@@ -7,7 +7,6 @@ import videojs from 'video.js/dist/alt/video.core.novtt.min.js';
 import 'video.js/dist/alt/video-js-cdn.min.css';
 import eventTracking from 'videojs-event-tracking';
 import isUserTyping from 'util/detect-typing';
-import isDev from 'electron-is-dev';
 
 export type Player = {
   on: (string, (any) => void) => void,
@@ -107,7 +106,7 @@ export default React.memo<Props>(function VideoJs(props: Props) {
       if (newState !== curState) {
         tapToUnmuteRef.current.style.visibility = newState ? 'visible' : 'hidden';
       }
-    } else if (isDev) {
+    } else if (process.env.NODE_ENV === 'development') {
       throw new Error('[videojs.jsx] Empty video ref should not happen');
     }
   }
