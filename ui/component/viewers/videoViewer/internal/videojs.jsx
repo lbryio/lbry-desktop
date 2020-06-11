@@ -114,12 +114,15 @@ export default React.memo<Props>(function VideoJs(props: Props) {
   function unmuteAndHideHint() {
     if (player) {
       player.muted(false);
+      if (player.volume() === 0) {
+        player.volume(1.0);
+      }
     }
     showTapToUnmute(false);
   }
 
   function onInitialPlay() {
-    if (player && player.muted()) {
+    if (player && (player.muted() || player.volume() === 0)) {
       // The css starts as "hidden". We make it visible here without
       // re-rendering the whole thing.
       showTapToUnmute(true);
