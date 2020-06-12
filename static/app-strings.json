@@ -1204,5 +1204,6 @@
   "No information will be sent directly to LBRY, Inc. or third-parties about your usage. Note that as\n                peer-to-peer software, your IP address and potentially other system information can be sent to other\n                users, though this information is not stored permanently.": "No information will be sent directly to LBRY, Inc. or third-parties about your usage. Note that as\n                peer-to-peer software, your IP address and potentially other system information can be sent to other\n                users, though this information is not stored permanently.",
   "%view_count% Views": "%view_count% Views",
   "This channel hasn't published anything yet": "This channel hasn't published anything yet",
-  "Buy": "Buy"
+  "Buy": "Buy",
+  "1 View": "1 View"
 }

@@ -100,6 +100,7 @@ export default React.memo<Props>(function VideoJs(props: Props) {
       chromecast: {
         videojs: videojs,
         mdns: true,
+        url: '',
         metadata: {
           title: '',
           subtitle: '',
