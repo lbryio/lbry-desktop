@@ -17,8 +17,10 @@ type Props = {
 class ModalPublishSuccess extends React.PureComponent<Props> {
   render() {
     const { closeModal, clearPublish, navigate, uri, isEdit, filePath } = this.props;
-    const contentLabel = isEdit ? 'Update published' : 'File published';
-    const publishMessage = isEdit ? 'update is now' : 'file is now';
+    const contentLabel = isEdit ? __('Update published') : __('File published');
+    const publishMessage = isEdit
+      ? __('Your update is now pending on LBRY. It will take a few minutes to appear for other users.')
+      : __('Your file is now pending on LBRY. It will take a few minutes to appear for other users.');
 
     function handleClose() {
       clearPublish();
@@ -29,9 +31,7 @@ class ModalPublishSuccess extends React.PureComponent<Props> {
       <Modal isOpen type="card" contentLabel={__(contentLabel)} onAborted={handleClose}>
         <Card
           title={__('Success')}
-          subtitle={__(`Your %publishMessage% pending on LBRY. It will take a few minutes to appear for other users.`, {
-            publishMessage,
-          })}
+          subtitle={publishMessage}
           body={
             <React.Fragment>
               <div className="card--inline">
