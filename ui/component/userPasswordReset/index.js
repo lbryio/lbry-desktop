@@ -8,7 +8,7 @@ import {
   doClearEmailEntry,
   selectEmailToVerify,
 } from 'lbryinc';
-import { doToast } from 'lbry-redux';
+import { doToast } from 'redux/actions/notifications';
 import UserSignIn from './view';
 
 const select = state => ({

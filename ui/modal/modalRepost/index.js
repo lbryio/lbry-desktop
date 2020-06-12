@@ -9,10 +9,10 @@ import {
   selectRepostError,
   selectRepostLoading,
   doClearRepostError,
-  doToast,
   selectMyClaimsWithoutChannels,
   doCheckPublishNameAvailability,
 } from 'lbry-redux';
+import { doToast } from 'redux/actions/notifications';
 import ModalRepost from './view';
 
 const select = (state, props) => ({

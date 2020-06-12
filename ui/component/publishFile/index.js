@@ -4,9 +4,9 @@ import {
   selectIsStillEditing,
   makeSelectPublishFormValue,
   doUpdatePublishForm,
-  doToast,
   doClearPublish,
 } from 'lbry-redux';
+import { doToast } from 'redux/actions/notifications';
 import { selectFfmpegStatus } from 'redux/selectors/settings';
 import PublishPage from './view';
 

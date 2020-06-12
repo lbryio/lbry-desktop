@@ -3,11 +3,11 @@ import {
   doFocusSearchInput,
   doBlurSearchInput,
   doUpdateSearchQuery,
-  doToast,
   selectSearchValue,
   selectSearchSuggestions,
   selectSearchBarFocused,
 } from 'lbry-redux';
+import { doToast } from 'redux/actions/notifications';
 import analytics from 'analytics';
 import Wunderbar from './view';
 import { withRouter } from 'react-router-dom';
@@ -36,9 +36,4 @@ const perform = (dispatch, ownProps) => ({
   doBlur: () => dispatch(doBlurSearchInput()),
 });
 
-export default withRouter(
-  connect(
-    select,
-    perform
-  )(Wunderbar)
-);
+export default withRouter(connect(select, perform)(Wunderbar));

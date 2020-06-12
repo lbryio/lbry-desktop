@@ -1,4 +1,5 @@
-import { Lbry, ACTIONS, doToast, SHARED_PREFERENCES, doWalletReconnect, SETTINGS } from 'lbry-redux';
+import { Lbry, ACTIONS, SHARED_PREFERENCES, doWalletReconnect, SETTINGS } from 'lbry-redux';
+import { doToast } from 'redux/actions/notifications';
 import * as LOCAL_ACTIONS from 'constants/action_types';
 import analytics from 'analytics';
 import SUPPORTED_LANGUAGES from 'constants/supported_languages';

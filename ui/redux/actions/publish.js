@@ -4,13 +4,13 @@ import * as ACTIONS from 'constants/action_types';
 import * as PAGES from 'constants/pages';
 import {
   batchActions,
-  doError,
   selectMyClaims,
   doPublish,
   doCheckPendingPublishes,
   doCheckReflectingFiles,
   ACTIONS as LBRY_REDUX_ACTIONS,
 } from 'lbry-redux';
+import { doError } from 'redux/actions/notifications';
 import { selectosNotificationsEnabled } from 'redux/selectors/settings';
 import { push } from 'connected-react-router';
 import analytics from 'analytics';

@@ -2,11 +2,11 @@ import { connect } from 'react-redux';
 import {
   selectChannelIsBlocked,
   doToggleBlockChannel,
-  doToast,
   makeSelectClaimIsMine,
   makeSelectShortUrlForUri,
   makeSelectPermanentUrlForUri,
 } from 'lbry-redux';
+import { doToast } from 'redux/actions/notifications';
 import BlockButton from './view';
 
 const select = (state, props) => ({
@@ -16,10 +16,7 @@ const select = (state, props) => ({
   permanentUrl: makeSelectPermanentUrlForUri(props.uri)(state),
 });
 
-export default connect(
-  select,
-  {
-    toggleBlockChannel: doToggleBlockChannel,
-    doToast,
-  }
-)(BlockButton);
+export default connect(select, {
+  toggleBlockChannel: doToggleBlockChannel,
+  doToast,
+})(BlockButton);
