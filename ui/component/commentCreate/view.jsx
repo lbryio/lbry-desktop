@@ -8,6 +8,7 @@ import ChannelSelection from 'component/selectChannel';
 import usePersistedState from 'effects/use-persisted-state';
 import * as MODALS from 'constants/modal_types';
 import I18nMessage from 'component/i18nMessage';
+import { FF_MAX_CHARS_IN_COMMENT } from 'constants/form-field';
 
 type Props = {
   commentingEnabled: boolean,
@@ -120,6 +121,7 @@ export function CommentCreate(props: Props) {
         charCount={charCount}
         onChange={handleCommentChange}
         autoFocus={isReply}
+        textAreaMaxLength={FF_MAX_CHARS_IN_COMMENT}
       />
       <div className="section__actions">
         <Button

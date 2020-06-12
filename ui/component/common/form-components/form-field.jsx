@@ -5,7 +5,7 @@ import ReactDOMServer from 'react-dom/server';
 import SimpleMDE from 'react-simplemde-editor';
 import MarkdownPreview from 'component/common/markdown-preview';
 import { openEditorMenu, stopContextMenu } from 'util/context-menu';
-import { MAX_CHARACTERS_IN_COMMENT as defaultTextAreaLimit } from 'constants/form-field';
+import { FF_MAX_CHARS_DEFAULT } from 'constants/form-field';
 import 'easymde/dist/easymde.min.css';
 import Button from 'component/button';
 
@@ -80,7 +80,7 @@ export class FormField extends React.PureComponent<Props> {
       labelOnLeft,
       blockWrap,
       charCount,
-      textAreaMaxLength = defaultTextAreaLimit,
+      textAreaMaxLength = FF_MAX_CHARS_DEFAULT,
       quickActionLabel,
       quickActionHandler,
       ...inputProps

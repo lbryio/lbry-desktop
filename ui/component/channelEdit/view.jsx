@@ -6,6 +6,7 @@ import SelectAsset from 'component/selectAsset';
 import * as PAGES from 'constants/pages';
 import { MINIMUM_PUBLISH_BID } from 'constants/claim';
 import TagsSearch from 'component/tagsSearch';
+import { FF_MAX_CHARS_IN_DESCRIPTION } from 'constants/form-field';
 
 type Props = {
   claim: ChannelClaim,
@@ -173,6 +174,7 @@ function ChannelForm(props: Props) {
         value={params.description}
         disabled={false}
         onChange={text => setParams({ ...params, description: text })}
+        textAreaMaxLength={FF_MAX_CHARS_IN_DESCRIPTION}
       />
 
       <TagsSearch
