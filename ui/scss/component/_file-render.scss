@@ -385,6 +385,14 @@
       display: none;
     }
   }
+
+  .file-viewer {
+    iframe,
+    webview,
+    img {
+      max-height: none;
+    }
+  }
 }
 
 .file-viewer--ended-embed .vjs-big-play-button {
