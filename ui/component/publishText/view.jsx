@@ -3,6 +3,7 @@ import React from 'react';
 import { FormField } from 'component/common/form';
 import usePersistedState from 'effects/use-persisted-state';
 import Card from 'component/common/card';
+import { FF_MAX_CHARS_IN_DESCRIPTION } from 'constants/form-field';
 
 type Props = {
   title: ?string,
@@ -42,6 +43,7 @@ function PublishText(props: Props) {
             onChange={value => updatePublishForm({ description: advancedEditor ? value : value.target.value })}
             quickActionLabel={advancedEditor ? __('Simple Editor') : __('Advanced Editor')}
             quickActionHandler={toggleMarkdown}
+            textAreaMaxLength={FF_MAX_CHARS_IN_DESCRIPTION}
           />
         </React.Fragment>
       }

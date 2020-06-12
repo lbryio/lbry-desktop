@@ -1,1 +1,3 @@
-export const MAX_CHARACTERS_IN_COMMENT = 2000;
+export const FF_MAX_CHARS_DEFAULT = 2000;
+export const FF_MAX_CHARS_IN_COMMENT = 2000;
+export const FF_MAX_CHARS_IN_DESCRIPTION = 5000;

@@ -13,6 +13,7 @@ import { FormField, Form } from 'component/common/form';
 import CommentCreate from 'component/commentCreate';
 import classnames from 'classnames';
 import usePersistedState from 'effects/use-persisted-state';
+import { FF_MAX_CHARS_IN_COMMENT } from 'constants/form-field';
 
 type Props = {
   uri: string,
@@ -196,6 +197,7 @@ function Comment(props: Props) {
                 onChange={handleEditMessageChanged}
                 quickActionLabel={advancedEditor ? __('Simple Editor') : __('Advanced Editor')}
                 quickActionHandler={toggleEditorMode}
+                textAreaMaxLength={FF_MAX_CHARS_IN_COMMENT}
               />
               <div className="section__actions">
                 <Button
