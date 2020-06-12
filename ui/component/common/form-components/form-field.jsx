@@ -136,6 +136,24 @@ export class FormField extends React.PureComponent<Props> {
           contextmenu: openEditorMenu,
         };
 
+        const getInstance = editor => {
+          // SimpleMDE max char check
+          editor.codemirror.on('beforeChange', (instance, changes) => {
+            if (textAreaMaxLength && changes.update) {
+              var str = changes.text.join('\n');
+              var delta = str.length - (instance.indexFromPos(changes.to) - instance.indexFromPos(changes.from));
+              if (delta <= 0) {
+                return;
+              }
+              delta = instance.getValue().length + delta - textAreaMaxLength;
+              if (delta > 0) {
+                str = str.substr(0, str.length - delta);
+                changes.update(changes.from, changes.to, str.split('\n'));
+              }
+            }
+          });
+        };
+
         input = (
           <div className="form-field--SimpleMDE" onContextMenu={stopContextMenu}>
             <fieldset-section>
@@ -150,6 +168,7 @@ export class FormField extends React.PureComponent<Props> {
                 id={name}
                 type="textarea"
                 events={handleEvents}
+                getMdeInstance={getInstance}
                 options={{
                   spellChecker: true,
                   hideIcons: ['heading', 'image', 'fullscreen', 'side-by-side'],
