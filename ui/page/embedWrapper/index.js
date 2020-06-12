@@ -14,7 +14,7 @@ const select = (state, props) => {
   const { match } = props;
   const { params } = match;
   const { claimName, claimId } = params;
-  const uri = claimName && claimId ? buildURI({ claimName, claimId }) : '';
+  const uri = claimName ? buildURI({ claimName, claimId }) : '';
   return {
     uri,
     claim: makeSelectClaimForUri(uri)(state),
