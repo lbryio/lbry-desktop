@@ -2,7 +2,7 @@ import { connect } from 'react-redux';
 import * as SETTINGS from 'constants/settings';
 import { doSetAutoLaunch } from 'redux/actions/settings';
 import { makeSelectClientSetting } from 'redux/selectors/settings';
-import { doToast } from 'lbry-redux';
+import { doToast } from 'redux/actions/notifications';
 import SettingAutoLaunch from './view';
 
 const select = state => ({
@@ -14,7 +14,4 @@ const perform = dispatch => ({
   setAutoLaunch: value => dispatch(doSetAutoLaunch(value)),
 });
 
-export default connect(
-  select,
-  perform
-)(SettingAutoLaunch);
+export default connect(select, perform)(SettingAutoLaunch);

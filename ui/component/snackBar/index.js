@@ -1,5 +1,6 @@
 import { connect } from 'react-redux';
-import { selectToast, doDismissToast } from 'lbry-redux';
+import { doDismissToast } from 'redux/actions/notifications';
+import { selectToast } from 'redux/selectors/notifications';
 import SnackBar from './view';
 
 const perform = dispatch => ({
@@ -10,7 +11,4 @@ const select = state => ({
   snack: selectToast(state),
 });
 
-export default connect(
-  select,
-  perform
-)(SnackBar);
+export default connect(select, perform)(SnackBar);

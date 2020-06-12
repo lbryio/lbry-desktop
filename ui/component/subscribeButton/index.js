@@ -2,7 +2,8 @@ import { connect } from 'react-redux';
 import { doChannelSubscribe, doChannelUnsubscribe } from 'redux/actions/subscriptions';
 import { doOpenModal } from 'redux/actions/app';
 import { selectSubscriptions, makeSelectIsSubscribed, selectFirstRunCompleted } from 'redux/selectors/subscriptions';
-import { doToast, makeSelectPermanentUrlForUri } from 'lbry-redux';
+import { makeSelectPermanentUrlForUri } from 'lbry-redux';
+import { doToast } from 'redux/actions/notifications';
 import SubscribeButton from './view';
 
 const select = (state, props) => ({
@@ -12,12 +13,9 @@ const select = (state, props) => ({
   permanentUrl: makeSelectPermanentUrlForUri(props.uri)(state),
 });
 
-export default connect(
-  select,
-  {
-    doChannelSubscribe,
-    doChannelUnsubscribe,
-    doOpenModal,
-    doToast,
-  }
-)(SubscribeButton);
+export default connect(select, {
+  doChannelSubscribe,
+  doChannelUnsubscribe,
+  doOpenModal,
+  doToast,
+})(SubscribeButton);

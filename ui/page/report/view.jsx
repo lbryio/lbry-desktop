@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react';
 import Button from 'component/button';
 import { FormField } from 'component/common/form';
-import { doToast } from 'lbry-redux';
+import { doToast } from 'redux/actions/notifications';
 import { Lbryio } from 'lbryinc';
 import Page from 'component/page';
 import Card from 'component/common/card';

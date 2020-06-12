@@ -1,6 +1,7 @@
 import { connect } from 'react-redux';
 import { doHideModal } from 'redux/actions/app';
-import { doToast, doUploadThumbnail } from 'lbry-redux';
+import { doUploadThumbnail } from 'lbry-redux';
+import { doToast } from 'redux/actions/notifications';
 import ModalAutoGenerateThumbnail from './view';
 
 const perform = dispatch => ({
@@ -9,7 +10,4 @@ const perform = dispatch => ({
   showToast: options => dispatch(doToast(options)),
 });
 
-export default connect(
-  null,
-  perform
-)(ModalAutoGenerateThumbnail);
+export default connect(null, perform)(ModalAutoGenerateThumbnail);

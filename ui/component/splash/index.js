@@ -4,7 +4,8 @@ import { selectDaemonVersionMatched, selectModal } from 'redux/selectors/app';
 import { doCheckDaemonVersion, doOpenModal, doHideModal } from 'redux/actions/app';
 import { doSetClientSetting, doClearDaemonSetting } from 'redux/actions/settings';
 import * as settings from 'constants/settings';
-import { doToast, DAEMON_SETTINGS } from 'lbry-redux';
+import { DAEMON_SETTINGS } from 'lbry-redux';
+import { doToast } from 'redux/actions/notifications';
 import SplashScreen from './view';
 
 import { makeSelectClientSetting } from 'redux/selectors/settings';
@@ -25,7 +26,4 @@ const perform = dispatch => ({
   doShowSnackBar: message => dispatch(doToast({ isError: true, message })),
 });
 
-export default connect(
-  select,
-  perform
-)(SplashScreen);
+export default connect(select, perform)(SplashScreen);

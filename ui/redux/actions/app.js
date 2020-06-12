@@ -11,18 +11,17 @@ import {
   Lbry,
   doBalanceSubscribe,
   doFetchFileInfos,
-  doError,
   makeSelectClaimForUri,
   makeSelectClaimIsMine,
   doPopulateSharedUserState,
   doFetchChannelListMine,
   doClearPublish,
   doPreferenceGet,
-  doToast,
   doClearSupport,
   selectFollowedTagsList,
   // SHARED_PREFERENCES,
 } from 'lbry-redux';
+import { doToast, doError } from 'redux/actions/notifications';
 import Native from 'native';
 import {
   doFetchDaemonSettings,

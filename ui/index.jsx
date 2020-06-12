@@ -14,7 +14,7 @@ import React, { Fragment, useState, useEffect } from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import { doDaemonReady, doAutoUpdate, doOpenModal, doHideModal, doToggle3PAnalytics } from 'redux/actions/app';
-import { Lbry, doToast, isURIValid, setSearchApi, apiCall } from 'lbry-redux';
+import { Lbry, isURIValid, setSearchApi, apiCall } from 'lbry-redux';
 import { doSetLanguage, doFetchLanguage, doUpdateIsNightAsync } from 'redux/actions/settings';
 import { Lbryio, rewards, doBlackListedOutpointsSubscribe, doFilteredOutpointsSubscribe } from 'lbryinc';
 import { store, persistor, history } from 'store';
@@ -24,6 +24,7 @@ import { ConnectedRouter, push } from 'connected-react-router';
 import { formatLbryUrlForWeb, formatInAppUrl } from 'util/url';
 import { PersistGate } from 'redux-persist/integration/react';
 import analytics from 'analytics';
+import { doToast } from 'redux/actions/notifications';
 import {
   getAuthToken,
   setAuthToken,

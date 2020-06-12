@@ -7,7 +7,7 @@ import {
   selectUser,
   selectResendingVerificationEmail,
 } from 'lbryinc';
-import { doToast } from 'lbry-redux';
+import { doToast } from 'redux/actions/notifications';
 import UserEmailVerify from './view';
 
 const select = state => ({
