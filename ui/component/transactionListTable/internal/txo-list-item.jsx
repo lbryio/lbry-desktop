@@ -38,7 +38,7 @@ class TxoListItem extends React.PureComponent<Props, State> {
     if (tip && type === TXO.SUPPORT) {
       return (
         <Button
-          disabled={abandonState === ABANDON_STATES.DONE || abandonState === ABANDON_STATES.ERROR}
+          disabled={abandonState === ABANDON_STATES.DONE}
           button="secondary"
           icon={ICONS.UNLOCK}
           onClick={this.abandonClaim}
@@ -49,7 +49,7 @@ class TxoListItem extends React.PureComponent<Props, State> {
     const abandonTitle = type === TXO.SUPPORT ? 'Abandon Support' : 'Abandon Claim';
     return (
       <Button
-        disabled={abandonState === ABANDON_STATES.DONE || abandonState === ABANDON_STATES.ERROR}
+        disabled={abandonState === ABANDON_STATES.DONE}
         button="secondary"
         icon={ICONS.DELETE}
         onClick={this.abandonClaim}
