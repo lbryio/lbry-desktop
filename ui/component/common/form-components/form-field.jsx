@@ -154,6 +154,15 @@ export class FormField extends React.PureComponent<Props> {
           });
         };
 
+        // Ideally, the character count should (and can) be appended to the
+        // SimpleMDE's "options::status" bar. However, I couldn't figure out how
+        // to pass the current value to it's callback, nor query the current
+        // text length from the callback. So, we'll use our own widget.
+        const hasCharCount = charCount !== undefined && charCount >= 0;
+        const countInfo = hasCharCount && (
+          <span className="comment__char-count-mde">{`${charCount || '0'}/${textAreaMaxLength}`}</span>
+        );
+
         input = (
           <div className="form-field--SimpleMDE" onContextMenu={stopContextMenu}>
             <fieldset-section>
@@ -178,6 +187,7 @@ export class FormField extends React.PureComponent<Props> {
                   },
                 }}
               />
+              {countInfo}
             </fieldset-section>
           </div>
         );

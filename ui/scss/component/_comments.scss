@@ -78,7 +78,15 @@
 
 .comment__char-count {
   align-self: flex-end;
-  font-size: var(--font-small);
+  font-size: var(--font-xsmall);
+  padding-top: var(--spacing-xs);
+}
+
+.comment__char-count-mde {
+  align-self: flex-end;
+  font-size: var(--font-xsmall);
+  padding-right: var(--spacing-xs); // Align with SimpleMDE's status bar
+  padding-bottom: 0;
 }
 
 .comment__menu-option {
