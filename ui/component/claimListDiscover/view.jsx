@@ -2,6 +2,7 @@
 import type { Node } from 'react';
 import classnames from 'classnames';
 import React, { Fragment, useEffect, useState } from 'react';
+import usePersistedState from 'effects/use-persisted-state';
 import { withRouter } from 'react-router';
 import * as CS from 'constants/claim_search';
 import { createNormalizedClaimSearchKey, MATURE_TAGS } from 'lbry-redux';
@@ -101,13 +102,14 @@ function ClaimListDiscover(props: Props) {
   const [page, setPage] = useState(1);
   const [forceRefresh, setForceRefresh] = useState();
   const [expanded, setExpanded] = useState(false);
+  const [orderParamEntry, setOrderParamEntry] = useState(CS.ORDER_BY_TRENDING);
+  const [orderParamUser, setOrderParamUser] = usePersistedState(`orderUser-${location.pathname}`, CS.ORDER_BY_TRENDING);
   const followed = (followedTags && followedTags.map(t => t.name)) || [];
   const urlParams = new URLSearchParams(search);
   const tagsParam = // can be 'x,y,z' or 'x' or ['x','y'] or CS.CONSTANT
     (tags && getParamFromTags(tags)) ||
     (urlParams.get(CS.TAGS_KEY) !== null && urlParams.get(CS.TAGS_KEY)) ||
     (defaultTags && getParamFromTags(defaultTags));
-  const orderParam = orderBy || urlParams.get(CS.ORDER_BY_KEY) || defaultOrderBy || CS.ORDER_BY_TRENDING;
   const freshnessParam = freshness || urlParams.get(CS.FRESH_KEY) || defaultFreshness;
   const contentTypeParam = urlParams.get(CS.CONTENT_KEY);
   const claimTypeParam =
@@ -131,6 +133,26 @@ function ClaimListDiscover(props: Props) {
   useEffect(() => {
     if (isFiltered()) setExpanded(true);
     // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  let orderParam = orderBy || urlParams.get(CS.ORDER_BY_KEY) || defaultOrderBy;
+  if (!orderParam) {
+    if (history.action === 'POP') {
+      // Reaching here means user have popped back to the page's entry point (e.g. '/$/tags' without any '?order=').
+      orderParam = orderParamEntry;
+    } else {
+      // This is the direct entry into the page, so we load the user's previous value.
+      orderParam = orderParamUser;
+    }
+  }
+
+  useEffect(() => {
+    setOrderParamUser(orderParam);
+  }, [orderParam]);
+
+  useEffect(() => {
+    // One-time update to stash the finalized 'orderParam' at entry.
+    setOrderParamEntry(orderParam);
   }, []);
 
   let options: {
