@@ -2577,7 +2577,6 @@ caseless@~0.12.0:
 
 "castv2-client@github:mikadoplus/node-castv2-client":
   version "1.2.0"
-  uid b87a3ca8c8860503ba772544a69f44b3e843e047
   resolved "https://codeload.github.com/mikadoplus/node-castv2-client/tar.gz/b87a3ca8c8860503ba772544a69f44b3e843e047"
   dependencies:
     castv2 "github:mikadoplus/node-castv2"
@@ -11859,10 +11858,10 @@ videojs-font@3.2.0:
   resolved "https://registry.yarnpkg.com/videojs-font/-/videojs-font-3.2.0.tgz#212c9d3f4e4ec3fa7345167d64316add35e92232"
   integrity sha512-g8vHMKK2/JGorSfqAZQUmYYNnXmfec4MLhwtEFS+mMs2IDY398GLysy6BH6K+aS1KMNu/xWZ8Sue/X/mdQPliA==
 
-videojs-google-chromecast@^0.1.5:
-  version "0.1.5"
-  resolved "https://registry.yarnpkg.com/videojs-google-chromecast/-/videojs-google-chromecast-0.1.5.tgz#f7b2b1e5789d91423d9efab7fa5b78c83ae730f2"
-  integrity sha512-ekUYfsmfo7UCN0SK+3TuMqOM4FB88LRj+ghY3O4uVi3q2j564LzjphNXe/xm9o95q7n/6rpS5+k8uy/SQBxlfQ==
+videojs-google-chromecast@^0.1.8:
+  version "0.1.8"
+  resolved "https://registry.yarnpkg.com/videojs-google-chromecast/-/videojs-google-chromecast-0.1.8.tgz#acb5dc2f16b98c515b7cf0c1eec9b229fd549ea1"
+  integrity sha512-pzx9wuHaxRiuPUADu6YwK2Okl25+AdcsB3elwTVofLsSzjfiIxYzOjJ0LEt3btaisr5sGHEwCMDNreoseY8zbQ==
   dependencies:
     castv2 "github:mikadoplus/node-castv2"
     castv2-client "github:mikadoplus/node-castV2-client"
