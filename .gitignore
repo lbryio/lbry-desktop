@@ -3,8 +3,8 @@
 .DS_Store
 .AppleDouble
 .LSOverride
-/node_modules
-/dist
+node_modules
+dist
 /static/lbrynet*
 /static/daemon
 /static/locales
