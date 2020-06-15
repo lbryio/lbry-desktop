@@ -2,12 +2,11 @@ import { connect } from 'react-redux';
 import {
   selectEmailNewErrorMessage,
   selectEmailToVerify,
-  doUserCheckIfEmailExists,
-  doClearEmailEntry,
   selectEmailDoesNotExist,
   selectEmailAlreadyExists,
   selectUser,
-} from 'lbryinc';
+} from 'redux/selectors/user';
+import { doUserCheckIfEmailExists, doClearEmailEntry } from 'redux/actions/user';
 import { doSetClientSetting } from 'redux/actions/settings';
 import UserEmailReturning from './view';
 

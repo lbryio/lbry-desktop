@@ -10,7 +10,8 @@ import { createMemoryHistory, createBrowserHistory } from 'history';
 import { routerMiddleware } from 'connected-react-router';
 import createRootReducer from './reducers';
 import { Lbry, buildSharedStateMiddleware, ACTIONS as LBRY_REDUX_ACTIONS, SETTINGS } from 'lbry-redux';
-import { LBRYINC_ACTIONS, doGetSync, selectUserVerifiedEmail } from 'lbryinc';
+import { doGetSync } from 'lbryinc';
+import { selectUserVerifiedEmail } from 'redux/selectors/user';
 import { getSavedPassword, getAuthToken } from 'util/saved-passwords';
 import { makeSelectClientSetting } from 'redux/selectors/settings';
 import { generateInitialUrl } from 'util/url';
@@ -163,7 +164,7 @@ const sharedStateCb = ({ dispatch, getState }) => {
 const populateAuthTokenHeader = () => {
   return next => action => {
     if (
-      (action.type === LBRYINC_ACTIONS.USER_FETCH_SUCCESS || action.type === LBRYINC_ACTIONS.AUTHENTICATION_SUCCESS) &&
+      (action.type === ACTIONS.USER_FETCH_SUCCESS || action.type === ACTIONS.AUTHENTICATION_SUCCESS) &&
       action.data.user.has_verified_email === true
     ) {
       const authToken = getAuthToken();

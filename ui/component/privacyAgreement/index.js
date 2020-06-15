@@ -3,7 +3,7 @@ import { doSetDaemonSetting } from 'redux/actions/settings';
 import { doSetWelcomeVersion, doToggle3PAnalytics, doSignOut } from 'redux/actions/app';
 import { DAEMON_SETTINGS } from 'lbry-redux';
 import { WELCOME_VERSION } from 'config.js';
-import { selectUserVerifiedEmail } from 'lbryinc';
+import { selectUserVerifiedEmail } from 'redux/selectors/user';
 import PrivacyAgreement from './view';
 
 const select = state => ({
@@ -17,7 +17,4 @@ const perform = dispatch => ({
   signOut: () => dispatch(doSignOut()),
 });
 
-export default connect(
-  select,
-  perform
-)(PrivacyAgreement);
+export default connect(select, perform)(PrivacyAgreement);

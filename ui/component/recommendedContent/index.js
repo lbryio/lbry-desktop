@@ -6,7 +6,7 @@ import {
   makeSelectRecommendedContentForUri,
   selectIsSearching,
 } from 'lbry-redux';
-import { selectUserVerifiedEmail } from 'lbryinc';
+import { selectUserVerifiedEmail } from 'redux/selectors/user';
 import RecommendedVideos from './view';
 
 const select = (state, props) => ({

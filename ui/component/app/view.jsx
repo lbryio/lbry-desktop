@@ -14,7 +14,7 @@ import FileRenderFloating from 'component/fileRenderFloating';
 import { withRouter } from 'react-router';
 import usePrevious from 'effects/use-previous';
 import Nag from 'component/common/nag';
-import { rewards as REWARDS } from 'lbryinc';
+import REWARDS from 'rewards';
 import usePersistedState from 'effects/use-persisted-state';
 import FileDrop from 'component/fileDrop';
 // @if TARGET='web'

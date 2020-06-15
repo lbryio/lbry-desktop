@@ -1,12 +1,6 @@
 import { connect } from 'react-redux';
-import {
-  selectUser,
-  selectUserIsPending,
-  selectEmailToVerify,
-  selectEmailNewErrorMessage,
-  doUserSignIn,
-  doClearEmailEntry,
-} from 'lbryinc';
+import { selectUser, selectUserIsPending, selectEmailToVerify, selectEmailNewErrorMessage } from 'redux/selectors/user';
+import { doUserSignIn, doClearEmailEntry } from 'redux/actions/user';
 import UserSignIn from './view';
 
 const select = state => ({

@@ -1,4 +1,5 @@
-import { rewards, makeSelectRewardByType } from 'lbryinc';
+import { makeSelectRewardByType } from 'redux/selectors/rewards';
+import rewards from 'rewards';
 import { connect } from 'react-redux';
 import { doHideModal } from 'redux/actions/app';
 import ModalFirstReward from './view';
@@ -15,7 +16,4 @@ const perform = dispatch => ({
   closeModal: () => dispatch(doHideModal()),
 });
 
-export default connect(
-  select,
-  perform
-)(ModalFirstReward);
+export default connect(select, perform)(ModalFirstReward);

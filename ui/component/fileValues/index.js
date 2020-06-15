@@ -7,7 +7,7 @@ import {
   makeSelectPendingAmountByUri,
   makeSelectClaimIsMine,
 } from 'lbry-redux';
-import { selectUser } from 'lbryinc';
+import { selectUser } from 'redux/selectors/user';
 import { doOpenModal } from 'redux/actions/app';
 
 import FileValues from './view';

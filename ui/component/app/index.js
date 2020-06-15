@@ -1,16 +1,10 @@
 import * as SETTINGS from 'constants/settings';
 import { hot } from 'react-hot-loader/root';
 import { connect } from 'react-redux';
-import {
-  selectUser,
-  selectAccessToken,
-  doFetchAccessToken,
-  selectGetSyncErrorMessage,
-  selectUploadCount,
-  selectUnclaimedRewards,
-  doUserSetReferrer,
-  selectUserVerifiedEmail,
-} from 'lbryinc';
+import { selectGetSyncErrorMessage, selectUploadCount } from 'lbryinc';
+import { doFetchAccessToken, doUserSetReferrer } from 'redux/actions/user';
+import { selectUser, selectAccessToken, selectUserVerifiedEmail } from 'redux/selectors/user';
+import { selectUnclaimedRewards } from 'redux/selectors/rewards';
 import { doFetchChannelListMine } from 'lbry-redux';
 import { makeSelectClientSetting, selectLoadedLanguages, selectThemePath } from 'redux/selectors/settings';
 import { selectIsUpgradeAvailable, selectAutoUpdateDownloaded } from 'redux/selectors/app';

@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import { selectUserVerifiedEmail } from 'lbryinc';
+import { selectUserVerifiedEmail } from 'redux/selectors/user';
 import { selectScrollStartingPosition, selectWelcomeVersion } from 'redux/selectors/app';
 import Router from './view';
 import { normalizeURI, makeSelectTitleForUri } from 'lbry-redux';

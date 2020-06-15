@@ -1,12 +1,6 @@
 import { connect } from 'react-redux';
-import {
-  selectEmailToVerify,
-  doUserResendVerificationEmail,
-  doUserCheckEmailVerified,
-  selectUser,
-  doFetchAccessToken,
-  selectAccessToken,
-} from 'lbryinc';
+import { doUserResendVerificationEmail, doUserCheckEmailVerified, doFetchAccessToken } from 'redux/actions/user';
+import { selectEmailToVerify, selectUser, selectAccessToken } from 'redux/selectors/user';
 import UserEmailVerify from './view';
 
 const select = state => ({

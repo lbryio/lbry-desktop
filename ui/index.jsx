@@ -16,7 +16,8 @@ import { Provider } from 'react-redux';
 import { doDaemonReady, doAutoUpdate, doOpenModal, doHideModal, doToggle3PAnalytics } from 'redux/actions/app';
 import { Lbry, isURIValid, setSearchApi, apiCall } from 'lbry-redux';
 import { doSetLanguage, doFetchLanguage, doUpdateIsNightAsync } from 'redux/actions/settings';
-import { Lbryio, rewards, doBlackListedOutpointsSubscribe, doFilteredOutpointsSubscribe } from 'lbryinc';
+import { Lbryio, doBlackListedOutpointsSubscribe, doFilteredOutpointsSubscribe } from 'lbryinc';
+import rewards from 'rewards';
 import { store, persistor, history } from 'store';
 import app from './app';
 import doLogWarningConsoleMessage from './logWarningConsoleMessage';
@@ -55,7 +56,7 @@ if (process.env.NODE_ENV === 'production') {
 }
 
 if (process.env.SDK_API_URL) {
-  console.warn('SDK_API_URL env var is deprecated. Use SDK_API_HOST instead');
+  console.warn('SDK_API_URL env var is deprecated. Use SDK_API_HOST instead'); // @eslint-disable-line
 }
 
 let sdkAPIHost = process.env.SDK_API_HOST || process.env.SDK_API_URL;

@@ -1,13 +1,11 @@
 import { connect } from 'react-redux';
+import { doClaimYoutubeChannels, doUserFetch, doCheckYoutubeTransfer } from 'redux/actions/user';
 import {
   selectYoutubeChannels,
+  selectYouTubeImportVideosComplete,
   selectYouTubeImportPending,
   selectUserIsPending,
-  doClaimYoutubeChannels,
-  doUserFetch,
-  selectYouTubeImportVideosComplete,
-  doCheckYoutubeTransfer,
-} from 'lbryinc';
+} from 'redux/selectors/user';
 import YoutubeChannelList from './view';
 
 const select = state => ({
@@ -23,7 +21,4 @@ const perform = dispatch => ({
   checkYoutubeTransfer: () => dispatch(doCheckYoutubeTransfer()),
 });
 
-export default connect(
-  select,
-  perform
-)(YoutubeChannelList);
+export default connect(select, perform)(YoutubeChannelList);

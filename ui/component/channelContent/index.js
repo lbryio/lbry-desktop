@@ -9,7 +9,7 @@ import {
   makeSelectClaimForUri,
 } from 'lbry-redux';
 import { withRouter } from 'react-router';
-import { selectUserVerifiedEmail } from 'lbryinc';
+import { selectUserVerifiedEmail } from 'redux/selectors/user';
 import ChannelPage from './view';
 
 const select = (state, props) => {

@@ -1,5 +1,6 @@
 import { connect } from 'react-redux';
-import { selectReferralReward, selectUserInvitees, selectUserInviteStatusIsPending } from 'lbryinc';
+import { selectReferralReward } from 'redux/selectors/rewards';
+import { selectUserInvitees, selectUserInviteStatusIsPending } from 'redux/selectors/user';
 import InviteList from './view';
 
 const select = state => ({
@@ -10,7 +11,4 @@ const select = state => ({
 
 const perform = () => ({});
 
-export default connect(
-  select,
-  perform
-)(InviteList);
+export default connect(select, perform)(InviteList);

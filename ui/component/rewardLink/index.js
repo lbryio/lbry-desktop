@@ -1,5 +1,7 @@
 import { connect } from 'react-redux';
-import { makeSelectRewardByClaimCode, makeSelectIsRewardClaimPending, doClaimRewardType } from 'lbryinc';
+import { makeSelectRewardByClaimCode, makeSelectIsRewardClaimPending } from 'redux/selectors/rewards';
+import { doClaimRewardType } from 'redux/actions/rewards';
+
 import RewardLink from './view';
 
 const select = (state, props) => ({

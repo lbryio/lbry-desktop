@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import { makeSelectClaimForUri, makeSelectMetadataForUri, makeSelectTagsForUri } from 'lbry-redux';
-import { selectUser } from 'lbryinc';
+import { selectUser } from 'redux/selectors/user';
 import FileDescription from './view';
 
 const select = (state, props) => ({

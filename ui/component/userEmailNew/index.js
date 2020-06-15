@@ -1,13 +1,12 @@
 import * as SETTINGS from 'constants/settings';
 import { connect } from 'react-redux';
+import { doClearEmailEntry, doUserSignUp } from 'redux/actions/user';
 import {
   selectEmailNewIsPending,
   selectEmailNewErrorMessage,
   selectEmailAlreadyExists,
-  doUserSignUp,
-  doClearEmailEntry,
   selectUser,
-} from 'lbryinc';
+} from 'redux/selectors/user';
 import { DAEMON_SETTINGS } from 'lbry-redux';
 import { doSetClientSetting, doSetDaemonSetting } from 'redux/actions/settings';
 import { makeSelectClientSetting, selectDaemonSettings } from 'redux/selectors/settings';

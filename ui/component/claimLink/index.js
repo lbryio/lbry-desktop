@@ -1,9 +1,6 @@
 import { connect } from 'react-redux';
-
 import { doResolveUri, makeSelectTitleForUri, makeSelectClaimForUri, makeSelectIsUriResolving } from 'lbry-redux';
-
 import { selectBlackListedOutpoints } from 'lbryinc';
-
 import ClaimLink from './view';
 
 const select = (state, props) => {
@@ -20,7 +17,4 @@ const perform = dispatch => ({
   resolveUri: uri => dispatch(doResolveUri(uri)),
 });
 
-export default connect(
-  select,
-  perform
-)(ClaimLink);
+export default connect(select, perform)(ClaimLink);

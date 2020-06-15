@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import { makeSelectFileInfoForUri, makeSelectStreamingUrlForUri } from 'lbry-redux';
-import { doClaimEligiblePurchaseRewards } from 'lbryinc';
+import { doClaimEligiblePurchaseRewards } from 'redux/actions/rewards';
 import { makeSelectFileRenderModeForUri, makeSelectIsPlaying } from 'redux/selectors/content';
 import { withRouter } from 'react-router';
 import { doAnalyticsView } from 'redux/actions/app';

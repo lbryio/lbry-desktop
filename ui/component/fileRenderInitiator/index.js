@@ -8,7 +8,8 @@ import {
   makeSelectStreamingUrlForUri,
   makeSelectClaimWasPurchased,
 } from 'lbry-redux';
-import { makeSelectCostInfoForUri, selectUserVerifiedEmail } from 'lbryinc';
+import { makeSelectCostInfoForUri } from 'lbryinc';
+import { selectUserVerifiedEmail } from 'redux/selectors/user';
 import { makeSelectClientSetting } from 'redux/selectors/settings';
 import { withRouter } from 'react-router';
 import {

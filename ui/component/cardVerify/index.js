@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import { selectUserEmail } from 'lbryinc';
+import { selectUserEmail } from 'redux/selectors/user';
 import CardVerify from './view';
 
 const select = state => ({
@@ -8,7 +8,4 @@ const select = state => ({
 
 const perform = () => ({});
 
-export default connect(
-  select,
-  perform
-)(CardVerify);
+export default connect(select, perform)(CardVerify);

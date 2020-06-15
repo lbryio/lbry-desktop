@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import { doHideModal } from 'redux/actions/app';
-import { selectPhoneToVerify, selectUser } from 'lbryinc';
+import { selectPhoneToVerify, selectUser } from 'redux/selectors/user';
 import ModalPhoneCollection from './view';
 
 const select = state => ({
@@ -12,7 +12,4 @@ const perform = dispatch => () => ({
   closeModal: () => dispatch(doHideModal()),
 });
 
-export default connect(
-  select,
-  perform
-)(ModalPhoneCollection);
+export default connect(select, perform)(ModalPhoneCollection);

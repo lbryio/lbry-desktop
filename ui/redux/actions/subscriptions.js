@@ -1,6 +1,8 @@
 // @flow
 import * as ACTIONS from 'constants/action_types';
-import { Lbryio, rewards, doClaimRewardType } from 'lbryinc';
+import REWARDS from 'rewards';
+import { Lbryio } from 'lbryinc';
+import { doClaimRewardType } from 'redux/actions/rewards';
 import { selectUnreadByChannel } from 'redux/selectors/subscriptions';
 import { parseURI } from 'lbry-redux';
 
@@ -144,7 +146,7 @@ export const doChannelSubscribe = (subscription: Subscription) => (dispatch: Dis
       claim_id: channelClaimId,
     });
 
-    dispatch(doClaimRewardType(rewards.TYPE_SUBSCRIPTION, { failSilently: true }));
+    dispatch(doClaimRewardType(REWARDS.TYPE_SUBSCRIPTION, { failSilently: true }));
   }
 };
 

@@ -5,8 +5,8 @@ import {
   selectUserInviteNewErrorMessage,
   selectUserInviteReferralLink,
   selectUserInviteReferralCode,
-  doUserInviteNew,
-} from 'lbryinc';
+} from 'redux/selectors/user';
+import { doUserInviteNew } from 'redux/actions/user';
 import { selectMyChannelClaims, selectFetchingMyChannels, doFetchChannelListMine } from 'lbry-redux';
 import InviteNew from './view';
 
@@ -25,7 +25,4 @@ const perform = dispatch => ({
   fetchChannelListMine: () => dispatch(doFetchChannelListMine()),
 });
 
-export default connect(
-  select,
-  perform
-)(InviteNew);
+export default connect(select, perform)(InviteNew);

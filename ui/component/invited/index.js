@@ -1,17 +1,13 @@
 import { connect } from 'react-redux';
-import {
-  selectUser,
-  doClaimRewardType,
-  doUserSetReferrer,
-  selectSetReferrerPending,
-  selectSetReferrerError,
-  rewards as REWARDS,
-  selectUnclaimedRewards,
-} from 'lbryinc';
+import { withRouter } from 'react-router';
+import REWARDS from 'rewards';
+import { selectUser, selectSetReferrerPending, selectSetReferrerError } from 'redux/selectors/user';
+import { doClaimRewardType } from 'redux/actions/rewards';
+import { selectUnclaimedRewards } from 'redux/selectors/rewards';
+import { doUserSetReferrer } from 'redux/actions/user';
 import { makeSelectIsSubscribed } from 'redux/selectors/subscriptions';
 import { doChannelSubscribe } from 'redux/actions/subscriptions';
 import Invited from './view';
-import { withRouter } from 'react-router';
 
 const select = (state, props) => {
   return {
@@ -31,9 +27,4 @@ const perform = dispatch => ({
   channelSubscribe: uri => dispatch(doChannelSubscribe(uri)),
 });
 
-export default withRouter(
-  connect(
-    select,
-    perform
-  )(Invited)
-);
+export default withRouter(connect(select, perform)(Invited));

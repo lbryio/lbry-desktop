@@ -6,7 +6,7 @@ import { savePosition, clearPosition } from 'redux/actions/content';
 import { makeSelectContentPositionForUri } from 'redux/selectors/content';
 import VideoViewer from './view';
 import { withRouter } from 'react-router';
-import { doClaimEligiblePurchaseRewards } from 'lbryinc';
+import { doClaimEligiblePurchaseRewards } from 'redux/actions/rewards';
 import { makeSelectClientSetting } from 'redux/selectors/settings';
 import * as SETTINGS from 'constants/settings';
 

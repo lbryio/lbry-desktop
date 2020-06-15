@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import { selectFollowedTags } from 'lbry-redux';
-import { selectUserVerifiedEmail } from 'lbryinc';
+import { selectUserVerifiedEmail } from 'redux/selectors/user';
 import { selectSubscriptions } from 'redux/selectors/subscriptions';
 import DiscoverPage from './view';
 
@@ -12,7 +12,4 @@ const select = state => ({
 
 const perform = {};
 
-export default connect(
-  select,
-  perform
-)(DiscoverPage);
+export default connect(select, perform)(DiscoverPage);

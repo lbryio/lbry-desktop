@@ -1,5 +1,6 @@
 import { connect } from 'react-redux';
-import { doGetSync, selectGetSyncIsPending, selectUserEmail, selectSyncApplyPasswordError } from 'lbryinc';
+import { doGetSync, selectGetSyncIsPending, selectSyncApplyPasswordError } from 'lbryinc';
+import { selectUserEmail } from 'redux/selectors/user';
 import { doSetClientSetting } from 'redux/actions/settings';
 import { doSignOut, doHandleSyncComplete } from 'redux/actions/app';
 import SyncPassword from './view';

@@ -7,7 +7,7 @@ import {
   doFetchChannelListMine,
   doCreateChannel,
 } from 'lbry-redux';
-import { selectUserVerifiedEmail } from 'lbryinc';
+import { selectUserVerifiedEmail } from 'redux/selectors/user';
 
 const select = state => ({
   channels: selectMyChannelClaims(state),
@@ -21,7 +21,4 @@ const perform = dispatch => ({
   fetchChannelListMine: () => dispatch(doFetchChannelListMine()),
 });
 
-export default connect(
-  select,
-  perform
-)(SelectChannel);
+export default connect(select, perform)(SelectChannel);
