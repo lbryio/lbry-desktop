@@ -4,6 +4,18 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [Unreleased]
+
+### Added
+
+### Changed
+
+- Merged Tip and Support Buttons into one UI on file page ([#4382](https://github.com/lbryio/lbry-desktop/pull/4382))
+
+### Fixed
+
+- Fix report page layout ([#4384](https://github.com/lbryio/lbry-desktop/pull/4384))
+
 ## [0.46.2] - [2020-06-10]
 
 ### Added
