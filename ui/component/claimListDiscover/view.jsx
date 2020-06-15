@@ -402,7 +402,12 @@ function ClaimListDiscover(props: Props) {
 
   function handleScrollBottom() {
     if (!loading && infiniteScroll) {
-      setPage(page + 1);
+      if (claimSearchResult && claimSearchResult.length % CS.PAGE_SIZE === 0) {
+        // Only increment the page if the current page is full. A partially-filled page probably
+        // indicates "no more search results" (at least based on my testing). Gating this prevents
+        // incrementing the page when scrolling upwards.
+        setPage(page + 1);
+      }
     }
   }
 
