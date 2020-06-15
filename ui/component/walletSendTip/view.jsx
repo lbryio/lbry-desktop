@@ -1,11 +1,10 @@
 // @flow
-import * as MODALS from 'constants/modal_types';
 import * as ICONS from 'constants/icons';
 import * as PAGES from 'constants/pages';
 import React from 'react';
 import Button from 'component/button';
 import { FormField, Form } from 'component/common/form';
-import { MINIMUM_PUBLISH_BID } from 'constants/claim';
+import { MINIMUM_PUBLISH_BID, CHANNEL_ANONYMOUS } from 'constants/claim';
 import useIsMobile from 'effects/use-is-mobile';
 import CreditAmount from 'component/common/credit-amount';
 import I18nMessage from 'component/i18nMessage';
@@ -18,17 +17,19 @@ import usePersistedState from 'effects/use-persisted-state';
 
 const DEFAULT_TIP_AMOUNTS = [5, 25, 100, 1000];
 
+type SupportParams = { amount: number, claim_id: string, channel_id?: string };
+
 type Props = {
   uri: string,
   claimIsMine: boolean,
   title: string,
   claim: StreamClaim,
   isPending: boolean,
-  sendSupport: (number, string, boolean) => void,
+  sendSupport: (SupportParams, boolean) => void,
   closeModal: () => void,
   balance: number,
   isSupport: boolean,
-  openModal: (id: string, { tipAmount: number, claimId: string, isSupport: boolean }) => void,
+  fetchingChannels: boolean,
   instantTipEnabled: boolean,
   instantTipMax: { amount: number, currency: string },
   channels: ?Array<ChannelClaim>,
@@ -44,19 +45,21 @@ function WalletSendTip(props: Props) {
     claim = {},
     instantTipEnabled,
     instantTipMax,
-    openModal,
     sendSupport,
     closeModal,
     channels,
+    fetchingChannels,
   } = props;
   const [tipAmount, setTipAmount] = React.useState(DEFAULT_TIP_AMOUNTS[0]);
   const [tipError, setTipError] = React.useState();
   const [isSupport, setIsSupport] = React.useState(claimIsMine);
   const [showMore, setShowMore] = React.useState(false);
+  const [isConfirming, setIsConfirming] = React.useState(false);
   const isMobile = useIsMobile();
   const [selectedChannel, setSelectedChannel] = usePersistedState('comment-support:channel');
-
   const { claim_id: claimId } = claim;
+  const { channelName } = parseURI(uri);
+
   const channelStrings = channels && channels.map(channel => channel.permanent_url).join(',');
   React.useEffect(() => {
     if (!selectedChannel && channelStrings) {
@@ -89,11 +92,27 @@ function WalletSendTip(props: Props) {
   }, [tipAmount, balance, setTipError]);
 
   function sendSupportOrConfirm(instantTipMaxAmount = null) {
-    if (!isSupport && (!instantTipMaxAmount || !instantTipEnabled || tipAmount > instantTipMaxAmount)) {
-      const modalProps = { uri, tipAmount, claimId, title, isSupport };
-      openModal(MODALS.CONFIRM_SEND_TIP, modalProps);
+    let selectedChannelId;
+    if (selectedChannel !== CHANNEL_ANONYMOUS) {
+      const selectedChannelClaim = channels && channels.find(channelClaim => channelClaim.name === selectedChannel);
+
+      if (selectedChannelClaim) {
+        selectedChannelId = selectedChannelClaim.claim_id;
+      }
+    }
+
+    if (
+      !isSupport &&
+      !isConfirming &&
+      (!instantTipMaxAmount || !instantTipEnabled || tipAmount > instantTipMaxAmount)
+    ) {
+      setIsConfirming(true);
     } else {
-      sendSupport(tipAmount, claimId, isSupport);
+      const supportParams: SupportParams = { amount: tipAmount, claim_id: claimId };
+      if (selectedChannelId) {
+        supportParams.channel_id = selectedChannelId;
+      }
+      sendSupport(supportParams, isSupport);
       closeModal();
     }
   }
@@ -147,94 +166,114 @@ function WalletSendTip(props: Props) {
             </React.Fragment>
           }
           actions={
-            <>
-              <div className="section">
-                <SelectChannel
-                  label="Channel to show support as"
-                  channel={selectedChannel}
-                  onChannelChange={newChannel => setSelectedChannel(newChannel)}
-                />
-              </div>
+            isConfirming ? (
+              <>
+                <div className="section section--padded card--inline confirm__wrapper">
+                  <div className="section">
+                    <div className="confirm__label">{__('To')}</div>
+                    <div className="confirm__value">{channelName || title}</div>
+                    <div className="confirm__label">{__('From')}</div>
+                    <div className="confirm__value">{selectedChannel}</div>
+                    <div className="confirm__label">{__(isSupport ? 'Supporting' : 'Tipping')}</div>
+                    <div className="confirm__value">{tipAmount} LBC</div>
+                  </div>
+                </div>
+                <div className="section__actions">
+                  <Button autoFocus button="primary" disabled={isPending} label={__('Confirm')} />
+                  <Button button="link" label={__('Cancel')} onClick={() => setIsConfirming(false)} />
+                </div>
+              </>
+            ) : (
+              <>
+                <div className="section">
+                  <SelectChannel
+                    label="Channel to show support as"
+                    channel={selectedChannel}
+                    onChannelChange={newChannel => setSelectedChannel(newChannel)}
+                  />
+                </div>
 
-              <div className="section">
-                {DEFAULT_TIP_AMOUNTS.map(amount => (
+                <div className="section">
+                  {DEFAULT_TIP_AMOUNTS.map(amount => (
+                    <Button
+                      key={amount}
+                      disabled={amount > balance}
+                      button="alt"
+                      className={classnames('button-toggle', {
+                        'button-toggle--active': tipAmount === amount,
+                        'button-toggle--disabled': amount > balance,
+                      })}
+                      label={`${amount} LBC`}
+                      onClick={() => setTipAmount(amount)}
+                    />
+                  ))}
                   <Button
-                    key={amount}
-                    disabled={amount > balance}
                     button="alt"
                     className={classnames('button-toggle', {
-                      'button-toggle--active': tipAmount === amount,
-                      'button-toggle--disabled': amount > balance,
+                      'button-toggle--active': !DEFAULT_TIP_AMOUNTS.includes(tipAmount),
                     })}
-                    label={`${amount} LBC`}
-                    onClick={() => setTipAmount(amount)}
-                  />
-                ))}
-                <Button
-                  button="alt"
-                  className={classnames('button-toggle', {
-                    'button-toggle--active': !DEFAULT_TIP_AMOUNTS.includes(tipAmount),
-                  })}
-                  label={__('Custom')}
-                  onClick={() => setShowMore(true)}
-                />
-              </div>
-
-              {showMore && (
-                <div className="section">
-                  <FormField
-                    autoFocus
-                    name="tip-input"
-                    label={
-                      <React.Fragment>
-                        {'Custom support amount'}{' '}
-                        {isMobile && (
-                          <I18nMessage tokens={{ lbc_balance: <CreditAmount badge={false} amount={balance} /> }}>
-                            (%lbc_balance% available)
-                          </I18nMessage>
-                        )}
-                      </React.Fragment>
-                    }
-                    className="form-field--price-amount"
-                    error={tipError}
-                    min="0"
-                    step="any"
-                    type="number"
-                    placeholder="1.23"
-                    onChange={event => handleSupportPriceChange(event)}
+                    label={__('Custom')}
+                    onClick={() => setShowMore(true)}
                   />
                 </div>
-              )}
 
-              <div className="section__actions">
-                <Button
-                  autoFocus
-                  icon={isSupport ? undefined : ICONS.SUPPORT}
-                  button="primary"
-                  type="submit"
-                  disabled={isPending || tipError || !tipAmount}
-                  label={
-                    isSupport
-                      ? __('Send Revokable Support')
-                      : __('Send a %amount% Tip', { amount: tipAmount ? `${tipAmount} LBC` : '' })
-                  }
-                />
-                {!claimIsMine && (
-                  <FormField
-                    name="toggle-is-support"
-                    type="checkbox"
-                    label={__('Make this support permanent')}
-                    checked={!isSupport}
-                    onChange={() => setIsSupport(!isSupport)}
-                  />
+                {showMore && (
+                  <div className="section">
+                    <FormField
+                      autoFocus
+                      name="tip-input"
+                      label={
+                        <React.Fragment>
+                          {'Custom support amount'}{' '}
+                          {isMobile && (
+                            <I18nMessage tokens={{ lbc_balance: <CreditAmount badge={false} amount={balance} /> }}>
+                              (%lbc_balance% available)
+                            </I18nMessage>
+                          )}
+                        </React.Fragment>
+                      }
+                      className="form-field--price-amount"
+                      error={tipError}
+                      min="0"
+                      step="any"
+                      type="number"
+                      placeholder="1.23"
+                      onChange={event => handleSupportPriceChange(event)}
+                    />
+                  </div>
                 )}
-              </div>
-              {DEFAULT_TIP_AMOUNTS.some(val => val > balance) && (
-                <div className="section">
-                  <Button button="link" label={__('Buy More LBC')} />
+
+                <div className="section__actions">
+                  <Button
+                    autoFocus
+                    icon={isSupport ? undefined : ICONS.SUPPORT}
+                    button="primary"
+                    type="submit"
+                    disabled={fetchingChannels || isPending || tipError || !tipAmount}
+                    label={
+                      isSupport
+                        ? __('Send Revokable Support')
+                        : __('Send a %amount% Tip', { amount: tipAmount ? `${tipAmount} LBC` : '' })
+                    }
+                  />
+                  {fetchingChannels && <span className="help">{__('Loading your channels...')}</span>}
+                  {!claimIsMine && !fetchingChannels && (
+                    <FormField
+                      name="toggle-is-support"
+                      type="checkbox"
+                      label={__('Make this support permanent')}
+                      checked={!isSupport}
+                      onChange={() => setIsSupport(!isSupport)}
+                    />
+                  )}
                 </div>
-              )}
-            </>
+                {DEFAULT_TIP_AMOUNTS.some(val => val > balance) && (
+                  <div className="section">
+                    <Button button="link" label={__('Buy More LBC')} />
+                  </div>
+                )}
+              </>
+            )
           }
         />
       )}

@@ -8,6 +8,7 @@ import {
   SETTINGS,
   selectMyChannelClaims,
   makeSelectClaimIsMine,
+  selectFetchingMyChannels,
 } from 'lbry-redux';
 import WalletSendTip from './view';
 import { doOpenModal, doHideModal } from 'redux/actions/app';
@@ -23,12 +24,13 @@ const select = (state, props) => ({
   instantTipMax: makeSelectClientSetting(SETTINGS.INSTANT_PURCHASE_MAX)(state),
   channels: selectMyChannelClaims(state),
   claimIsMine: makeSelectClaimIsMine(props.uri)(state),
+  fetchingChannels: selectFetchingMyChannels(state),
 });
 
 const perform = dispatch => ({
   openModal: (modal, props) => dispatch(doOpenModal(modal, props)),
   closeModal: () => dispatch(doHideModal()),
-  sendSupport: (amount, claimId, isSupport) => dispatch(doSendTip(amount, claimId, isSupport)),
+  sendSupport: (params, isSupport) => dispatch(doSendTip(params, isSupport)),
 });
 
 export default withRouter(connect(select, perform)(WalletSendTip));

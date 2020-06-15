@@ -288,3 +288,16 @@ textarea {
 .privacy-img {
   height: 10rem;
 }
+
+.confirm__label {
+  @extend label;
+}
+
+.confirm__value {
+  margin-bottom: var(--spacing-m);
+  font-size: var(--font-large);
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
