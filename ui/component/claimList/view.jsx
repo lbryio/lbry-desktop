@@ -73,27 +73,34 @@ export default function ClaimList(props: Props) {
   }, [id, setScrollBottomCbMap]);
 
   useEffect(() => {
+    let timeout;
+
     function handleScroll(e) {
-      if (page && pageSize && onScrollBottom && !scrollBottomCbMap[page]) {
-        const mainElWrapper = document.querySelector(`.${MAIN_WRAPPER_CLASS}`);
+      timeout = setTimeout(() => {
+        if (page && pageSize && onScrollBottom && !scrollBottomCbMap[page]) {
+          const mainElWrapper = document.querySelector(`.${MAIN_WRAPPER_CLASS}`);
 
-        if (mainElWrapper && !loading && urisLength >= pageSize) {
-          const contentWrapperAtBottomOfPage = window.scrollY + window.innerHeight >= mainElWrapper.offsetHeight;
+          if (mainElWrapper && !loading && urisLength >= pageSize) {
+            const contentWrapperAtBottomOfPage = window.scrollY + window.innerHeight >= mainElWrapper.offsetHeight;
 
-          if (contentWrapperAtBottomOfPage) {
-            onScrollBottom();
+            if (contentWrapperAtBottomOfPage) {
+              onScrollBottom();
 
-            // Save that we've fetched this page to avoid weird stuff happening with fast scrolling
-            setScrollBottomCbMap({ ...scrollBottomCbMap, [page]: true });
+              // Save that we've fetched this page to avoid weird stuff happening with fast scrolling
+              setScrollBottomCbMap({ ...scrollBottomCbMap, [page]: true });
+            }
           }
         }
-      }
+      }, 150);
     }
 
     if (onScrollBottom) {
       window.addEventListener('scroll', handleScroll);
 
       return () => {
+        if (timeout) {
+          clearTimeout(timeout);
+        }
         window.removeEventListener('scroll', handleScroll);
       };
     }
