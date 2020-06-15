@@ -205,7 +205,7 @@ function WalletSendTip(props: Props) {
                       key={amount}
                       disabled={amount > balance}
                       button="alt"
-                      className={classnames('button-toggle', {
+                      className={classnames('button-toggle button-toggle--expandformobile', {
                         'button-toggle--active': tipAmount === amount,
                         'button-toggle--disabled': amount > balance,
                       })}
@@ -215,7 +215,7 @@ function WalletSendTip(props: Props) {
                   ))}
                   <Button
                     button="alt"
-                    className={classnames('button-toggle', {
+                    className={classnames('button-toggle button-toggle--expandformobile', {
                       'button-toggle--active': !DEFAULT_TIP_AMOUNTS.includes(tipAmount),
                     })}
                     label={__('Custom')}

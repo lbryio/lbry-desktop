@@ -120,6 +120,20 @@ svg + .button__label,
   }
 }
 
+.button-toggle--expandformobile {
+  @media (max-width: $breakpoint-small) {
+    display: block;
+    width: 100%;
+    text-align: center;
+    border-radius: var(--border-radius);
+    border: 1px solid var(--color-border);
+
+    &:not(:first-of-type) {
+      margin-top: var(--spacing-s);
+    }
+  }
+}
+
 .button-toggle--active {
   color: var(--color-primary);
   background-color: var(--color-primary-alt);
