@@ -1,4 +1,5 @@
 const SIX_MONTHS_IN_SECONDS = 15552000;
+const TEN_MINUTES_IN_SECONDS = 600;
 
 const STATIC_ASSET_PATHS = [
   '/public/font/font-v1.css',
@@ -18,6 +19,8 @@ const STATIC_ASSET_PATHS = [
   '/public/img/total-background.png',
 ];
 
+const PUBLIC_ASSET_PATHS = ['/public/ui.js'];
+
 async function redirectMiddleware(ctx, next) {
   const {
     request: { url },
@@ -25,6 +28,8 @@ async function redirectMiddleware(ctx, next) {
 
   if (STATIC_ASSET_PATHS.includes(url)) {
     ctx.set('Cache-Control', `public, max-age=${SIX_MONTHS_IN_SECONDS}`);
+  } else if (PUBLIC_ASSET_PATHS.includes(url)) {
+    ctx.set('Cache-Control', `public, max-age=${TEN_MINUTES_IN_SECONDS}`);
   }
 
   return next();
