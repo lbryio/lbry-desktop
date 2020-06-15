@@ -275,7 +275,7 @@ function WalletSendTip(props: Props) {
                 </div>
                 {DEFAULT_TIP_AMOUNTS.some(val => val > balance) && (
                   <div className="section">
-                    <Button button="link" label={__('Buy More LBC')} />
+                    <Button button="link" label={__('Buy More LBC')} navigate={`/$/${PAGES.BUY}`} />
                   </div>
                 )}
               </>
