@@ -800,7 +800,7 @@
   "Update published": "Update published",
   "Delete this file from my computer": "Delete this file from my computer",
   "Are you sure you'd like to remove %title% from LBRY?": "Are you sure you'd like to remove %title% from LBRY?",
-  "This will increase the overall bid amount for %title%, which will boost its ability to be discovered while active.": "This will increase the overall bid amount for %title%, which will boost its ability to be discovered while active.",
+  "This will increase the overall bid amount for this content, which will boost its ability to be discovered while active.": "This will increase the overall bid amount for this content, which will boost its ability to be discovered while active.",
   "Support %amount% LBC": "Support %amount% LBC",
   "You deposited %amount% LBC as a support!": "You deposited %amount% LBC as a support!",
   "LBRY Link": "LBRY Link",
@@ -1242,5 +1242,13 @@
   "Saving...": "Saving...",
   "Thanks for the feedback! You help make the app better for everyone.": "Thanks for the feedback! You help make the app better for everyone.",
   "Thanks for the feedback. Mark has been notified and is currently walking over to his computer to work on this.": "Thanks for the feedback. Mark has been notified and is currently walking over to his computer to work on this.",
-  "Changelog": "Changelog"
+  "Changelog": "Changelog",
+  "Send Revokable Support": "Send Revokable Support",
+  "Send a %amount% Tip": "Send a %amount% Tip",
+  "Channel to show support as": "Channel to show support as",
+  "Buy More LBC": "Buy More LBC",
+  "Support This Content": "Support This Content",
+  "Make this support permanent": "Make this support permanent",
+  "Custom support amount": "Custom support amount",
+  "Loading your channels...":"Loading your channels..."
 }
