@@ -179,7 +179,13 @@ function WalletSendTip(props: Props) {
                   </div>
                 </div>
                 <div className="section__actions">
-                  <Button autoFocus button="primary" disabled={isPending} label={__('Confirm')} />
+                  <Button
+                    autoFocus
+                    onClick={handleSubmit}
+                    button="primary"
+                    disabled={isPending}
+                    label={__('Confirm')}
+                  />
                   <Button button="link" label={__('Cancel')} onClick={() => setIsConfirming(false)} />
                 </div>
               </>
