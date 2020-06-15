@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import { selectClaimedRewardsByTransactionId } from 'lbryinc';
+import { selectClaimedRewardsByTransactionId } from 'redux/selectors/rewards';
 import { doOpenModal } from 'redux/actions/app';
 import { selectIsFetchingTxos } from 'lbry-redux';
 import TransactionListTable from './view';

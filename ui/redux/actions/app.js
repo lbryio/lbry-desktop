@@ -43,7 +43,10 @@ import {
   selectAllowAnalytics,
 } from 'redux/selectors/app';
 // import { selectDaemonSettings } from 'redux/selectors/settings';
-import { doAuthenticate, doGetSync, doClaimRewardType, rewards as REWARDS } from 'lbryinc';
+import { doGetSync } from 'lbryinc';
+import { doClaimRewardType } from 'redux/actions/rewards';
+import REWARDS from 'rewards';
+import { doAuthenticate } from 'redux/actions/user';
 import { lbrySettings as config, version as appVersion } from 'package.json';
 import analytics, { SHARE_INTERNAL } from 'analytics';
 import { doSignOutCleanup, deleteSavedPassword, getSavedPassword } from 'util/saved-passwords';

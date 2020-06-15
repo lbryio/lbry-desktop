@@ -25,7 +25,7 @@ import {
 } from 'redux/selectors/settings';
 import { doWalletStatus, selectWalletIsEncrypted, selectBlockedChannelsCount, SETTINGS } from 'lbry-redux';
 import SettingsPage from './view';
-import { selectUserVerifiedEmail } from 'lbryinc';
+import { selectUserVerifiedEmail } from 'redux/selectors/user';
 
 const select = state => ({
   daemonSettings: selectDaemonSettings(state),

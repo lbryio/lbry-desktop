@@ -1,5 +1,4 @@
 import { connect } from 'react-redux';
-
 import {
   doResolveUri,
   makeSelectClaimIsMine,
@@ -9,9 +8,7 @@ import {
   makeSelectIsUriResolving,
   makeSelectMetadataItemForUri,
 } from 'lbry-redux';
-
 import { selectBlackListedOutpoints } from 'lbryinc';
-
 import PreviewLink from './view';
 
 const select = (state, props) => {
@@ -31,7 +28,4 @@ const perform = dispatch => ({
   resolveUri: uri => dispatch(doResolveUri(uri)),
 });
 
-export default connect(
-  select,
-  perform
-)(PreviewLink);
+export default connect(select, perform)(PreviewLink);

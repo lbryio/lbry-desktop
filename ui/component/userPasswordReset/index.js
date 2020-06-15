@@ -1,13 +1,11 @@
 import { connect } from 'react-redux';
 import {
-  doUserPasswordReset,
   selectPasswordResetSuccess,
   selectPasswordResetIsPending,
   selectPasswordResetError,
-  doClearPasswordEntry,
-  doClearEmailEntry,
   selectEmailToVerify,
-} from 'lbryinc';
+} from 'redux/selectors/user';
+import { doUserPasswordReset, doClearPasswordEntry, doClearEmailEntry } from 'redux/actions/user';
 import { doToast } from 'redux/actions/notifications';
 import UserSignIn from './view';
 

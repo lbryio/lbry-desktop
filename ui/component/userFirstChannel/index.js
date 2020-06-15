@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import { selectUser, selectEmailToVerify } from 'lbryinc';
+import { selectUser, selectEmailToVerify } from 'redux/selectors/user';
 import { doCreateChannel, selectCreatingChannel, selectMyChannelClaims, selectCreateChannelError } from 'lbry-redux';
 import UserFirstChannel from './view';
 
@@ -15,7 +15,4 @@ const perform = dispatch => ({
   createChannel: (name, amount) => dispatch(doCreateChannel(name, amount)),
 });
 
-export default connect(
-  select,
-  perform
-)(UserFirstChannel);
+export default connect(select, perform)(UserFirstChannel);

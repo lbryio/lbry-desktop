@@ -1,6 +1,7 @@
 import * as PAGES from 'constants/pages';
 import { connect } from 'react-redux';
-import { doFetchAccessToken, selectAccessToken, selectUser } from 'lbryinc';
+import { doFetchAccessToken } from 'redux/actions/user';
+import { selectAccessToken, selectUser } from 'redux/selectors/user';
 import { selectDaemonSettings } from 'redux/selectors/settings';
 import HelpPage from './view';
 
@@ -15,7 +16,4 @@ const perform = (dispatch, ownProps) => ({
   fetchAccessToken: () => dispatch(doFetchAccessToken()),
 });
 
-export default connect(
-  select,
-  perform
-)(HelpPage);
+export default connect(select, perform)(HelpPage);

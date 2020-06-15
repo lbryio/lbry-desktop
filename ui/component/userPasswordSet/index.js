@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import { doClearEmailEntry, doUserFetch } from 'lbryinc';
+import { doClearEmailEntry, doUserFetch } from 'redux/actions/user';
 import { doToast } from 'redux/actions/notifications';
 import UserSignIn from './view';
 

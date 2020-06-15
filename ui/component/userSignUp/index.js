@@ -1,20 +1,17 @@
 import * as SETTINGS from 'constants/settings';
+import REWARD_TYPES from 'rewards';
 import { connect } from 'react-redux';
+import { selectGetSyncIsPending, selectGetSyncErrorMessage, selectSyncHash } from 'lbryinc';
+import { doClaimRewardType } from 'redux/actions/rewards';
+import { selectClaimedRewards, makeSelectIsRewardClaimPending } from 'redux/selectors/rewards';
+import { doUserFetch } from 'redux/actions/user';
 import {
+  selectUserIsPending,
+  selectYoutubeChannels,
   selectEmailToVerify,
   selectUser,
   selectAccessToken,
-  makeSelectIsRewardClaimPending,
-  selectClaimedRewards,
-  rewards as REWARD_TYPES,
-  doClaimRewardType,
-  doUserFetch,
-  selectUserIsPending,
-  selectYoutubeChannels,
-  selectGetSyncIsPending,
-  selectGetSyncErrorMessage,
-  selectSyncHash,
-} from 'lbryinc';
+} from 'redux/selectors/user';
 import { selectMyChannelClaims, selectBalance, selectFetchingMyChannels, selectCreatingChannel } from 'lbry-redux';
 import { makeSelectClientSetting } from 'redux/selectors/settings';
 import UserSignIn from './view';

@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import { selectUser } from 'lbryinc';
+import { selectUser } from 'redux/selectors/user';
 import OpenInAppLink from './view';
 
 const select = state => ({

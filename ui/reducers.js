@@ -5,15 +5,12 @@ import {
   fileInfoReducer,
   searchReducer,
   walletReducer,
-  notificationsReducer,
   tagsReducer,
   commentReducer,
   blockedReducer,
   publishReducer,
 } from 'lbry-redux';
 import {
-  userReducer,
-  rewardsReducer,
   costInfoReducer,
   blacklistReducer,
   filteredReducer,
@@ -26,6 +23,9 @@ import appReducer from 'redux/reducers/app';
 import contentReducer from 'redux/reducers/content';
 import settingsReducer from 'redux/reducers/settings';
 import subscriptionsReducer from 'redux/reducers/subscriptions';
+import notificationsReducer from 'redux/reducers/notifications';
+import rewardsReducer from 'redux/reducers/rewards';
+import userReducer from 'redux/reducers/user';
 
 export default history =>
   combineReducers({

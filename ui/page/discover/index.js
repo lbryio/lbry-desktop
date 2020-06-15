@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import { makeSelectClaimForUri, selectFollowedTags, doResolveUri } from 'lbry-redux';
-import { selectUserVerifiedEmail } from 'lbryinc';
+import { selectUserVerifiedEmail } from 'redux/selectors/user';
 import { doToggleTagFollowDesktop } from 'redux/actions/tags';
 import * as CS from 'constants/claim_search';
 import Tags from './view';

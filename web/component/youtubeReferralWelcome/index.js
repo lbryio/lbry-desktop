@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import { doOpenModal } from 'redux/actions/app';
-import { selectUser } from 'lbryinc';
+import { selectUser } from 'redux/selectors/user';
 import YoutubeWelcome from './view';
 
 const select = state => ({

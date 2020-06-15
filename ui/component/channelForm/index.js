@@ -12,7 +12,7 @@ import {
   doPrepareEdit,
 } from 'lbry-redux';
 import { doPublishDesktop } from 'redux/actions/publish';
-import { selectUnclaimedRewardValue } from 'lbryinc';
+import { selectUnclaimedRewardValue } from 'redux/selectors/rewards';
 import ChannelForm from './view';
 
 const select = state => ({

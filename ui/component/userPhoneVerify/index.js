@@ -1,11 +1,6 @@
 import { connect } from 'react-redux';
-import {
-  doUserPhoneVerify,
-  doUserPhoneReset,
-  selectPhoneToVerify,
-  selectPhoneVerifyErrorMessage,
-  selectUserCountryCode,
-} from 'lbryinc';
+import { doUserPhoneVerify, doUserPhoneReset } from 'redux/actions/user';
+import { selectPhoneToVerify, selectPhoneVerifyErrorMessage, selectUserCountryCode } from 'redux/selectors/user';
 import UserPhoneVerify from './view';
 
 const select = state => ({
@@ -19,7 +14,4 @@ const perform = dispatch => ({
   verifyUserPhone: code => dispatch(doUserPhoneVerify(code)),
 });
 
-export default connect(
-  select,
-  perform
-)(UserPhoneVerify);
+export default connect(select, perform)(UserPhoneVerify);

@@ -1,7 +1,8 @@
 import { connect } from 'react-redux';
 import { selectBalance, selectClaimsBalance, selectSupportsBalance, selectTipsBalance } from 'lbry-redux';
 import { doOpenModal } from 'redux/actions/app';
-import { selectClaimedRewards, selectSyncHash } from 'lbryinc';
+import { selectSyncHash } from 'lbryinc';
+import { selectClaimedRewards } from 'redux/selectors/rewards';
 import WalletBalance from './view';
 
 const select = state => ({

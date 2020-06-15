@@ -1,6 +1,7 @@
 import * as SETTINGS from 'constants/settings';
 import { connect } from 'react-redux';
-import { selectUserVerifiedEmail, selectGetSyncErrorMessage } from 'lbryinc';
+import { selectUserVerifiedEmail } from 'redux/selectors/user';
+import { selectGetSyncErrorMessage } from 'lbryinc';
 import { makeSelectClientSetting } from 'redux/selectors/settings';
 import { doSetClientSetting } from 'redux/actions/settings';
 import SyncToggle from './view';
@@ -15,7 +16,4 @@ const perform = dispatch => ({
   setSyncEnabled: value => dispatch(doSetClientSetting(SETTINGS.ENABLE_SYNC, value)),
 });
 
-export default connect(
-  select,
-  perform
-)(SyncToggle);
+export default connect(select, perform)(SyncToggle);

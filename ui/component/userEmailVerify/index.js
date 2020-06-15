@@ -1,12 +1,11 @@
 import { connect } from 'react-redux';
+import { doUserResendVerificationEmail, doUserCheckEmailVerified } from 'redux/actions/user';
 import {
-  selectEmailAlreadyExists,
   selectEmailToVerify,
-  doUserResendVerificationEmail,
-  doUserCheckEmailVerified,
+  selectEmailAlreadyExists,
   selectUser,
   selectResendingVerificationEmail,
-} from 'lbryinc';
+} from 'redux/selectors/user';
 import { doToast } from 'redux/actions/notifications';
 import UserEmailVerify from './view';
 

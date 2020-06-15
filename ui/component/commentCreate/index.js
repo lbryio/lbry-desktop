@@ -2,7 +2,7 @@ import { connect } from 'react-redux';
 import { doCommentCreate, makeSelectClaimForUri, selectMyChannelClaims } from 'lbry-redux';
 import { doOpenModal } from 'redux/actions/app';
 import { CommentCreate } from './view';
-import { selectUserVerifiedEmail } from 'lbryinc';
+import { selectUserVerifiedEmail } from 'redux/selectors/user';
 
 const select = (state, props) => ({
   commentingEnabled: IS_WEB ? Boolean(selectUserVerifiedEmail(state)) : true,

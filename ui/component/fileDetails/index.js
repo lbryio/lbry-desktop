@@ -5,7 +5,7 @@ import {
   makeSelectMetadataForUri,
   makeSelectFileInfoForUri,
 } from 'lbry-redux';
-import { selectUser } from 'lbryinc';
+import { selectUser } from 'redux/selectors/user';
 import { doOpenFileInFolder } from 'redux/actions/file';
 import FileDetails from './view';
 
@@ -21,7 +21,4 @@ const perform = dispatch => ({
   openFolder: path => dispatch(doOpenFileInFolder(path)),
 });
 
-export default connect(
-  select,
-  perform
-)(FileDetails);
+export default connect(select, perform)(FileDetails);

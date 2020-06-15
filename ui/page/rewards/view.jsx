@@ -7,7 +7,7 @@ import RewardTile from 'component/rewardTile';
 import Button from 'component/button';
 import Page from 'component/page';
 import classnames from 'classnames';
-import { rewards as REWARD_TYPES } from 'lbryinc';
+import REWARD_TYPES from 'rewards';
 import RewardAuthIntro from 'component/rewardAuthIntro';
 import Card from 'component/common/card';
 import I18nMessage from 'component/i18nMessage';

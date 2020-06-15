@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import { selectBalance } from 'lbry-redux';
-import { selectUnclaimedRewardValue } from 'lbryinc';
+import { selectUnclaimedRewardValue } from 'redux/selectors/rewards';
 import PublishPage from './view';
 
 const select = state => ({
@@ -8,7 +8,4 @@ const select = state => ({
   totalRewardValue: selectUnclaimedRewardValue(state),
 });
 
-export default connect(
-  select,
-  null
-)(PublishPage);
+export default connect(select, null)(PublishPage);

@@ -8,7 +8,7 @@ const defaultState: NotificationState = {
   errors: [],
 };
 
-const notificationsReducer = handleActions(
+export default handleActions(
   {
     // Toasts
     [ACTIONS.CREATE_TOAST]: (state: NotificationState, action: DoToast) => {
@@ -90,5 +90,3 @@ const notificationsReducer = handleActions(
   },
   defaultState
 );
-
-export { notificationsReducer };

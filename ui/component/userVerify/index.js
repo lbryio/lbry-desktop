@@ -1,14 +1,10 @@
 import * as MODALS from 'constants/modal_types';
 import { connect } from 'react-redux';
 import { doOpenModal } from 'redux/actions/app';
-import {
-  doUserIdentityVerify,
-  doUserFetch,
-  rewards,
-  makeSelectRewardByType,
-  selectIdentityVerifyIsPending,
-  selectIdentityVerifyErrorMessage,
-} from 'lbryinc';
+import { doUserIdentityVerify, doUserFetch } from 'redux/actions/user';
+import { makeSelectRewardByType } from 'redux/selectors/rewards';
+import rewards from 'rewards';
+import { selectIdentityVerifyIsPending, selectIdentityVerifyErrorMessage } from 'redux/selectors/user';
 import UserVerify from './view';
 
 const select = state => {
@@ -27,7 +23,4 @@ const perform = dispatch => ({
   fetchUser: () => dispatch(doUserFetch()),
 });
 
-export default connect(
-  select,
-  perform
-)(UserVerify);
+export default connect(select, perform)(UserVerify);

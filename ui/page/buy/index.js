@@ -1,6 +1,7 @@
 import { connect } from 'react-redux';
 import { selectGettingNewAddress, selectReceiveAddress, doGetNewAddress } from 'lbry-redux';
-import { selectUserEmail, selectUser, doUserSetCountry } from 'lbryinc';
+import { selectUserEmail, selectUser } from 'redux/selectors/user';
+import { doUserSetCountry } from 'redux/actions/user';
 import BuyPage from './view';
 
 const select = state => ({

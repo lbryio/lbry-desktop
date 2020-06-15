@@ -5,7 +5,7 @@ import Icon from 'component/common/icon';
 import RewardLink from 'component/rewardLink';
 import Button from 'component/button';
 import Card from 'component/common/card';
-import { rewards } from 'lbryinc';
+import rewards from 'rewards';
 
 type Props = {
   openRewardCodeModal: () => void,
