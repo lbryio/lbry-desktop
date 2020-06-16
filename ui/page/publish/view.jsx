@@ -5,6 +5,7 @@ import Page from 'component/page';
 import Yrbl from 'component/yrbl';
 import LbcSymbol from 'component/common/lbc-symbol';
 import RewardAuthIntro from 'component/rewardAuthIntro';
+import usePersistedState from 'effects/use-persisted-state';
 
 type Props = {
   balance: number,
@@ -14,11 +15,17 @@ type Props = {
 function PublishPage(props: Props) {
   const { balance } = props;
 
+  const [channel, setChannel] = usePersistedState('publish-channel', '');
+
   function scrollToTop() {
     const mainContent = document.querySelector('main');
     if (mainContent) {
       mainContent.scrollTop = 0; // It would be nice to animate this
     }
+  }
+
+  function handleChannelChange(channel) {
+    setChannel(channel);
   }
 
   return (
@@ -55,7 +62,12 @@ function PublishPage(props: Props) {
           </div>
         </Fragment>
       ) : (
-        <PublishForm scrollToTop={scrollToTop} disabled={balance === 0} />
+        <PublishForm
+          scrollToTop={scrollToTop}
+          disabled={balance === 0}
+          channel={channel}
+          onChannelChange={handleChannelChange}
+        />
       )}
     </Page>
   );

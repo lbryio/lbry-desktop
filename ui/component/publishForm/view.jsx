@@ -66,6 +66,7 @@ type Props = {
   // Add back type
   updatePublishForm: any => void,
   checkAvailability: string => void,
+  onChannelChange: string => void,
 };
 
 function PublishForm(props: Props) {
@@ -89,6 +90,7 @@ function PublishForm(props: Props) {
     publish,
     disabled = false,
     checkAvailability,
+    onChannelChange,
   } = props;
   const TAGS_LIMIT = 5;
   const formDisabled = (!filePath && !editingURI) || publishing;
@@ -144,6 +146,11 @@ function PublishForm(props: Props) {
     }
   }, [name, channel, resolveUri, updatePublishForm, checkAvailability]);
 
+  function handleChannelNameChange(channel) {
+    onChannelChange(channel);
+    updatePublishForm({ channel });
+  }
+
   return (
     <div className="card-stack">
       <PublishFile disabled={disabled || publishing} inProgress={isInProgress} />
@@ -182,7 +189,7 @@ function PublishForm(props: Props) {
           <Card
             actions={
               <React.Fragment>
-                <SelectChannel channel={channel} onChannelChange={channel => updatePublishForm({ channel })} />
+                <SelectChannel channel={channel} onChannelChange={handleChannelNameChange} />
                 <p className="help">
                   {__('This is a username or handle that your content can be found under.')}{' '}
                   {__('Ex. @Marvel, @TheBeatles, @BooksByJoe')}
