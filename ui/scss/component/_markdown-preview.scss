@@ -19,7 +19,6 @@
   h5,
   h6 {
     font-size: inherit;
-    font-weight: var(--font-weight-bold);
     margin-bottom: var(--spacing-m);
 
     &:not(:first-child) {
@@ -28,22 +27,22 @@
   }
 
   h1 {
-    font-size: 2.5em;
+    font-size: 2.2em;
   }
   h2 {
-    font-size: 2em;
+    font-size: 1.6em;
   }
   h3 {
-    font-size: 1.5em;
+    font-size: 1.3em;
   }
   h4 {
-    font-size: 1.25em;
+    font-size: 1.2em;
   }
   h5 {
-    font-size: 1em;
+    font-size: 1.1em;
   }
   h6 {
-    font-size: 0.875em;
+    font-size: 1em;
   }
 
   p,
