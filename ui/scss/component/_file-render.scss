@@ -349,8 +349,8 @@
   visibility: hidden; // Start off as hidden.
   z-index: 2;
   position: absolute;
-  top: 5%;
-  left: 5%;
+  top: var(--spacing-xs);
+  left: var(--spacing-xs);
   padding: var(--spacing-xs) var(--spacing-m); // Make it comfy for touch.
   color: var(--color-gray-1);
   background: black;
