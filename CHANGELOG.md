@@ -8,6 +8,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ### Added
 
+- Add "tap to unmute" button for videos that start with audio muted _community pr!_ ([#4365](https://github.com/lbryio/lbry-desktop/pull/4365))
+
 ### Changed
 
 - Merged Tip and Support Buttons into one UI on file page ([#4382](https://github.com/lbryio/lbry-desktop/pull/4382))
