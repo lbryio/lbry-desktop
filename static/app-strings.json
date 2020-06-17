@@ -842,6 +842,7 @@
   "Invite someone you know by email and earn %reward_amount% LBC when they join lbry.tv.": "Invite someone you know by email and earn %reward_amount% LBC when they join lbry.tv.",
   "This content requires LBRY Desktop to display.": "This content requires LBRY Desktop to display.",
   "Get the App": "Get the App",
+  "Get The App": "Get The App",
   "You need more credits to purchase this.": "You need more credits to purchase this.",
   "Open Rewards": "Open Rewards",
   "Earn %rewards_link% for inviting your friends. Read our %referral_faq_link% to learn more.": "Earn %rewards_link% for inviting your friends. Read our %referral_faq_link% to learn more.",
@@ -1251,5 +1252,8 @@
   "Support This Content": "Support This Content",
   "Make this support permanent": "Make this support permanent",
   "Custom support amount": "Custom support amount",
-  "Loading your channels...":"Loading your channels..."
+  "Loading your channels...": "Loading your channels...",
+  "Try Out the App!": "Try Out the App!",
+  "Download the app to track files you've viewed and downloaded.": "Download the app to track files you've viewed and downloaded.",
+  "Create a New Channel": "Create a New Channel"
 }
