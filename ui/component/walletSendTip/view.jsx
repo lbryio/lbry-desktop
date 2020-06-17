@@ -50,10 +50,11 @@ function WalletSendTip(props: Props) {
     channels,
     fetchingChannels,
   } = props;
-  const [tipAmount, setTipAmount] = React.useState(DEFAULT_TIP_AMOUNTS[0]);
+  const [presetTipAmount, setPresetTipAmount] = usePersistedState('comment-support:presetTip', DEFAULT_TIP_AMOUNTS[0]);
+  const [customTipAmount, setCustomTipAmount] = usePersistedState('comment-support:customTip', 1.0);
+  const [useCustomTip, setUseCustomTip] = usePersistedState('comment-support:useCustomTip', false);
   const [tipError, setTipError] = React.useState();
-  const [isSupport, setIsSupport] = React.useState(claimIsMine);
-  const [showMore, setShowMore] = React.useState(false);
+  const [sendAsTip, setSendAsTip] = usePersistedState('comment-support:sendAsTip', true);
   const [isConfirming, setIsConfirming] = React.useState(false);
   const isMobile = useIsMobile();
   const [selectedChannel, setSelectedChannel] = usePersistedState('comment-support:channel');
@@ -69,6 +70,9 @@ function WalletSendTip(props: Props) {
       setSelectedChannel(claimName);
     }
   }, [channelStrings]);
+
+  const tipAmount = useCustomTip ? customTipAmount : presetTipAmount;
+  const isSupport = claimIsMine ? true : !sendAsTip;
 
   React.useEffect(() => {
     const regexp = RegExp(/^(\d*([.]\d{0,8})?)$/);
@@ -134,9 +138,9 @@ function WalletSendTip(props: Props) {
     }
   }
 
-  function handleSupportPriceChange(event: SyntheticInputEvent<*>) {
+  function handleCustomPriceChange(event: SyntheticInputEvent<*>) {
     const tipAmount = parseFloat(event.target.value);
-    setTipAmount(tipAmount);
+    setCustomTipAmount(tipAmount);
   }
 
   return (
@@ -193,7 +197,7 @@ function WalletSendTip(props: Props) {
               <>
                 <div className="section">
                   <SelectChannel
-                    label="Channel to show support as"
+                    label={__('Channel to show support as')}
                     channel={selectedChannel}
                     onChannelChange={newChannel => setSelectedChannel(newChannel)}
                   />
@@ -210,7 +214,10 @@ function WalletSendTip(props: Props) {
                         'button-toggle--disabled': amount > balance,
                       })}
                       label={`${amount} LBC`}
-                      onClick={() => setTipAmount(amount)}
+                      onClick={() => {
+                        setPresetTipAmount(amount);
+                        setUseCustomTip(false);
+                      }}
                     />
                   ))}
                   <Button
@@ -219,18 +226,18 @@ function WalletSendTip(props: Props) {
                       'button-toggle--active': !DEFAULT_TIP_AMOUNTS.includes(tipAmount),
                     })}
                     label={__('Custom')}
-                    onClick={() => setShowMore(true)}
+                    onClick={() => setUseCustomTip(true)}
                   />
                 </div>
 
-                {showMore && (
+                {useCustomTip && (
                   <div className="section">
                     <FormField
                       autoFocus
                       name="tip-input"
                       label={
                         <React.Fragment>
-                          {'Custom support amount'}{' '}
+                          {__('Custom support amount')}{' '}
                           {isMobile && (
                             <I18nMessage tokens={{ lbc_balance: <CreditAmount badge={false} amount={balance} /> }}>
                               (%lbc_balance% available)
@@ -244,7 +251,8 @@ function WalletSendTip(props: Props) {
                       step="any"
                       type="number"
                       placeholder="1.23"
-                      onChange={event => handleSupportPriceChange(event)}
+                      value={customTipAmount}
+                      onChange={event => handleCustomPriceChange(event)}
                     />
                   </div>
                 )}
@@ -268,8 +276,8 @@ function WalletSendTip(props: Props) {
                       name="toggle-is-support"
                       type="checkbox"
                       label={__('Make this support permanent')}
-                      checked={!isSupport}
-                      onChange={() => setIsSupport(!isSupport)}
+                      checked={sendAsTip}
+                      onChange={() => setSendAsTip(!sendAsTip)}
                     />
                   )}
                 </div>
