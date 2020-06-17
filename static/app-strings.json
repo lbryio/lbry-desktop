@@ -1210,6 +1210,8 @@
   "Your browser does not support iframes.": "Your browser does not support iframes.",
   "Not a valid LBRY address": "Not a valid LBRY address",
   "Confirm Tip": "Confirm Tip",
+  "Supporting": "Supporting",
+  "Tipping": "Tipping",
   "Tipping: ": "Tipping: ",
   "Sending: ": "Sending: ",
   "To: ": "To: ",
@@ -1244,6 +1246,9 @@
   "Thanks for the feedback! You help make the app better for everyone.": "Thanks for the feedback! You help make the app better for everyone.",
   "Thanks for the feedback. Mark has been notified and is currently walking over to his computer to work on this.": "Thanks for the feedback. Mark has been notified and is currently walking over to his computer to work on this.",
   "Changelog": "Changelog",
+  "Supporting Content Requires LBC": "Supporting Content Requires LBC",
+  "With LBC, you can send tips to your favorite creators, or help boost their content for more people to see.": "With LBC, you can send tips to your favorite creators, or help boost their content for more people to see.",
+  "Boost Your Content": "Boost Your Content",
   "Send Revokable Support": "Send Revokable Support",
   "Send a %amount% Tip": "Send a %amount% Tip",
   "Channel to show support as": "Channel to show support as",
@@ -1251,5 +1256,6 @@
   "Support This Content": "Support This Content",
   "Make this support permanent": "Make this support permanent",
   "Custom support amount": "Custom support amount",
-  "Loading your channels...":"Loading your channels..."
+  "(%lbc_balance% available)": "(%lbc_balance% available)",
+  "Loading your channels...": "Loading your channels..."
 }
