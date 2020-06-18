@@ -115,7 +115,6 @@ function ModalRepost(props: Props) {
   return (
     <Modal isOpen type="card" onAborted={handleCloseModal} onConfirmed={handleCloseModal}>
       <Card
-        icon={ICONS.REPOST}
         title={
           <span>
             Repost <em>{title}</em>
@@ -194,6 +193,7 @@ function ModalRepost(props: Props) {
 
             <div className="section__actions">
               <Button
+                icon={ICONS.REPOST}
                 disabled={reposting || repostBidError || repostNameError}
                 button="primary"
                 label={reposting ? __('Reposting') : __('Repost')}
