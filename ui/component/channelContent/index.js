@@ -1,3 +1,4 @@
+import * as SETTINGS from 'constants/settings';
 import { connect } from 'react-redux';
 import { PAGE_SIZE } from 'constants/claim';
 import {
@@ -10,6 +11,8 @@ import {
 } from 'lbry-redux';
 import { withRouter } from 'react-router';
 import { selectUserVerifiedEmail } from 'redux/selectors/user';
+import { makeSelectClientSetting } from 'redux/selectors/settings';
+
 import ChannelPage from './view';
 
 const select = (state, props) => {
@@ -24,6 +27,7 @@ const select = (state, props) => {
     channelIsBlocked: selectChannelIsBlocked(props.uri)(state),
     claim: props.uri && makeSelectClaimForUri(props.uri)(state),
     isAuthenticated: selectUserVerifiedEmail(state),
+    showMature: makeSelectClientSetting(SETTINGS.SHOW_MATURE)(state),
   };
 };
 

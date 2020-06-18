@@ -95,6 +95,7 @@ function ClaimListDiscover(props: Props) {
     followedTags,
     injectedItem,
     feeAmount,
+    uris,
   } = props;
   const didNavigateForward = history.action === 'PUSH';
   const { search } = location;
@@ -694,7 +695,7 @@ function ClaimListDiscover(props: Props) {
               isCardBody
               id={claimSearchCacheQuery}
               loading={loading}
-              uris={claimSearchResult}
+              uris={uris || claimSearchResult}
               onScrollBottom={handleScrollBottom}
               page={page}
               pageSize={CS.PAGE_SIZE}
