@@ -295,13 +295,32 @@ function ClaimListDiscover(props: Props) {
   const claimSearchCacheQuery = createNormalizedClaimSearchKey(options);
   const claimSearchResult = claimSearchByQuery[claimSearchCacheQuery];
 
+  const [prevOptions, setPrevOptions] = useState(options);
+
+  if (!isJustScrollingToNewPage(prevOptions, options)) {
+    setPrevOptions(options);
+
+    if (didNavigateForward) {
+      // --- Reset to top.
+      window.scrollTo(0, 0); // Prevents onScrollBottom() from re-hitting while waiting for doClaimQuery():
+      options.page = 1;
+      setPage(options.page);
+    } else {
+      // --- Update 'page' based on retrieved 'claimSearchResult'.
+      options.page = Math.ceil(claimSearchResult.length / CS.PAGE_SIZE);
+      if (options.page !== page) {
+        setPage(options.page);
+      }
+    }
+  }
+
   const shouldPerformSearch =
     claimSearchResult === undefined ||
     didNavigateForward ||
     (!loading &&
       claimSearchResult &&
       claimSearchResult.length &&
-      claimSearchResult.length < CS.PAGE_SIZE * page &&
+      claimSearchResult.length < CS.PAGE_SIZE * options.page &&
       claimSearchResult.length % CS.PAGE_SIZE === 0);
 
   // Don't use the query from createNormalizedClaimSearchKey for the effect since that doesn't include page & release_time
@@ -335,6 +354,22 @@ function ClaimListDiscover(props: Props) {
       </p>
     </div>
   );
+
+  // Returns true if the change in 'options' indicate that we are simply scrolling
+  // down to a new page; false otherwise.
+  function isJustScrollingToNewPage(prevOptions, options) {
+    // Compare every field except for 'page' and 'release_time'.
+    // There might be better ways to achieve this.
+    let tmpPrevOptions = { ...prevOptions };
+    tmpPrevOptions.page = -1;
+    tmpPrevOptions.release_time = '';
+
+    let tmpOptions = { ...options };
+    tmpOptions.page = -1;
+    tmpOptions.release_time = '';
+
+    return JSON.stringify(tmpOptions) === JSON.stringify(tmpPrevOptions);
+  }
 
   function handleChange(change) {
     const url = buildUrl(change);
