@@ -182,6 +182,11 @@ export function doFetchLanguage(language) {
               language,
             },
           });
+        })
+        .catch(e => {
+          dispatch({
+            type: LOCAL_ACTIONS.DOWNLOAD_LANGUAGE_FAILURE,
+          });
         });
     }
   };
