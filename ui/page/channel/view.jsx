@@ -186,6 +186,7 @@ function ChannelPage(props: Props) {
             )}
           </div>
         </div>
+        <div className="channel-cover__gradient" />
       </header>
       <Tabs onChange={onTabChange} index={tabIndex}>
         <TabList className="tabs__list--channel-page">
