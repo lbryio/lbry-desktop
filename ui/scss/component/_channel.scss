@@ -15,7 +15,6 @@ $metadata-z-index: 1;
   align-self: flex-start;
   position: absolute;
   object-fit: cover;
-  filter: brightness(60%);
 }
 
 .channel-cover,
@@ -29,6 +28,24 @@ $metadata-z-index: 1;
     // Yikes
     // I, Sean Yesmunt, take full responsibility for this monster
     min-height: calc(var(--cover-photo-height) + 2 * var(--spacing-xl) + var(--spacing-m));
+  }
+}
+
+.channel-cover__gradient {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+
+  &:after {
+    position: absolute;
+    bottom: 0;
+    opacity: 1;
+    content: '';
+    height: 100%;
+    left: 0;
+    right: 0;
+    width: 100%;
+    background: linear-gradient(0deg, #0d0d0d 0, transparent 65%);
   }
 }
 
