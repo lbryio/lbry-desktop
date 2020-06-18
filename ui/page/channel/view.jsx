@@ -18,20 +18,14 @@ import ChannelThumbnail from 'component/channelThumbnail';
 import ChannelEdit from 'component/channelEdit';
 import ClaimUri from 'component/claimUri';
 import classnames from 'classnames';
-import { Form, FormField } from 'component/common/form';
 import Icon from 'component/common/icon';
 import HelpLink from 'component/common/help-link';
-import { DEBOUNCE_WAIT_DURATION_MS } from 'constants/search';
-import ClaimList from 'component/claimList';
 import DateTime from 'component/dateTime';
 import ClaimSupportButton from 'component/claimSupportButton';
 
 const PAGE_VIEW_QUERY = `view`;
 const ABOUT_PAGE = `about`;
 const DISCUSSION_PAGE = `discussion`;
-const LIGHTHOUSE_URL = 'https://lighthouse.lbry.com/search';
-const ARROW_LEFT_KEYCODE = 37;
-const ARROW_RIGHT_KEYCODE = 39;
 
 type Props = {
   uri: string,
@@ -52,7 +46,6 @@ type Props = {
   }>,
   fetchSubCount: string => void,
   subCount: number,
-  showMature: boolean,
 };
 
 function ChannelPage(props: Props) {
@@ -69,7 +62,6 @@ function ChannelPage(props: Props) {
     isSubscribed,
     channelIsBlocked,
     blackListedOutpoints,
-    showMature,
     fetchSubCount,
     subCount,
   } = props;
@@ -83,8 +75,6 @@ function ChannelPage(props: Props) {
   const [editing, setEditing] = useState(false);
   const [thumbPreview, setThumbPreview] = useState(thumbnail);
   const [coverPreview, setCoverPreview] = useState(cover);
-  const [searchQuery, setSearchQuery] = useState('');
-  const [searchResults, setSearchResults] = useState(undefined);
   const [lastYtSyncDate, setLastYtSyncDate] = useState();
   const claimId = claim.claim_id;
   const formattedSubCount = Number(subCount).toLocaleString();
@@ -99,7 +89,6 @@ function ChannelPage(props: Props) {
     let search = '?';
 
     if (newTabIndex === 0) {
-      setSearchResults(null);
       search += `page=${page}`;
     } else if (newTabIndex === 1) {
       search += `${PAGE_VIEW_QUERY}=${ABOUT_PAGE}`;
@@ -109,36 +98,6 @@ function ChannelPage(props: Props) {
     history.push(`${url}${search}`);
   }
 
-  function getResults(fetchUrl) {
-    fetch(fetchUrl)
-      .then(res => res.json())
-      .then(results => {
-        const urls = results.map(({ name, claimId }) => {
-          return `lbry://${name}#${claimId}`;
-        });
-        setSearchResults(urls);
-      })
-      .catch(() => {
-        setSearchResults(null);
-      });
-  }
-
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      if (searchQuery === '') {
-        // In order to display original search results, search results must be set to null. A query of '' should display original results.
-        return setSearchResults(null);
-      } else {
-        getResults(
-          `${LIGHTHOUSE_URL}?s=${encodeURIComponent(searchQuery)}&channel_id=${encodeURIComponent(claimId)}${
-            !showMature ? '&nsfw=false' : ''
-          }`
-        );
-      }
-    }, DEBOUNCE_WAIT_DURATION_MS);
-    return () => clearTimeout(timer);
-  }, [claimId, searchQuery]);
-
   useEffect(() => {
     Lbryio.call('yt', 'get_youtuber', { channel_claim_id: claimId }).then(response => {
       if (response.is_verified_youtuber) {
@@ -146,22 +105,6 @@ function ChannelPage(props: Props) {
       }
     });
   }, [claimId]);
-
-  function handleInputChange(e) {
-    const { value } = e.target;
-    setSearchQuery(value);
-  }
-
-  /*
-    Since the search is inside of TabList, the left and right arrow keys change the tabIndex.
-    This results in the user not being able to navigate the search string by using arrow keys.
-    This function allows the event to change cursor position and then stops propagation to prevent tab changing.
-  */
-  function handleSearchArrowKeys(e) {
-    if (e.keyCode === ARROW_LEFT_KEYCODE || e.keyCode === ARROW_RIGHT_KEYCODE) {
-      e.stopPropagation();
-    }
-  }
 
   let channelIsBlackListed = false;
 
@@ -172,9 +115,6 @@ function ChannelPage(props: Props) {
   }
 
   React.useEffect(() => {
-    setSearchResults(null);
-    setSearchQuery('');
-
     fetchSubCount(claimId);
   }, [uri, fetchSubCount, claimId]);
 
@@ -252,38 +192,11 @@ function ChannelPage(props: Props) {
           <Tab disabled={editing}>{__('Content')}</Tab>
           <Tab>{editing ? __('Editing Your Channel') : __('About')}</Tab>
           <Tab disabled={editing}>{__('Comments')}</Tab>
-          {/* only render searchbar on content page (tab index 0 === content page) */}
-          {tabIndex === 0 ? (
-            <Form onSubmit={() => {}} className="wunderbar--inline">
-              <Icon icon={ICONS.SEARCH} />
-              <FormField
-                className="wunderbar__input"
-                value={searchQuery}
-                onChange={handleInputChange}
-                onKeyDown={handleSearchArrowKeys}
-                type="text"
-                placeholder={__('Search')}
-              />
-            </Form>
-          ) : (
-            <div />
-          )}
         </TabList>
 
         <TabPanels>
           <TabPanel>
-            {searchResults ? (
-              <ClaimList
-                header={false}
-                headerAltControls={null}
-                id={`search-results-for-${claimId}`}
-                loading={false}
-                showHiddenByUser={false}
-                uris={searchResults}
-              />
-            ) : (
-              <ChannelContent uri={uri} channelIsBlackListed={channelIsBlackListed} />
-            )}
+            <ChannelContent uri={uri} channelIsBlackListed={channelIsBlackListed} />
           </TabPanel>
           <TabPanel>
             {editing ? (
