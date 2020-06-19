@@ -1255,10 +1255,11 @@
   "Make this support permanent": "Make this support permanent",
   "Custom support amount": "Custom support amount",
   "(%lbc_balance% available)": "(%lbc_balance% available)",
-  "Loading your channels...":"Loading your channels...",
+  "Loading your channels...": "Loading your channels...",
   "Changelog": "Changelog",
   "Thumbnail source": "Thumbnail source",
   "Cover source": "Cover source",
   "Save": "Save",
-  "Saving...": "Saving..."
+  "Saving...": "Saving...",
+  "Your changes will be live in a few minutes": "Your changes will be live in a few minutes"
 }
