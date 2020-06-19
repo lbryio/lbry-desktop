@@ -46,7 +46,6 @@ type Props = {
   }>,
   fetchSubCount: string => void,
   subCount: number,
-  pending: boolean,
 };
 
 function ChannelPage(props: Props) {
@@ -65,7 +64,6 @@ function ChannelPage(props: Props) {
     blackListedOutpoints,
     fetchSubCount,
     subCount,
-    pending,
   } = props;
 
   const { channelName } = parseURI(uri);
@@ -98,12 +96,6 @@ function ChannelPage(props: Props) {
       search += `${PAGE_VIEW_QUERY}=${DISCUSSION_PAGE}`;
     }
     history.push(`${url}${search}`);
-  }
-
-  function doneEditing() {
-    setEditing(false);
-    setThumbPreview(thumbnail);
-    setCoverPreview(cover);
   }
 
   useEffect(() => {
@@ -184,27 +176,11 @@ function ChannelPage(props: Props) {
               <HelpLink href="https://lbry.com/faq/views" />
             </span>
             {channelIsMine && !editing && (
-              <>
-                {pending ? (
-                  <span>{__('Your changes will be live in a few minutes')}</span>
-                ) : (
-                  <Button
-                    button="alt"
-                    title={__('Edit')}
-                    onClick={() => setEditing(!editing)}
-                    icon={ICONS.EDIT}
-                    iconSize={18}
-                    disabled={pending}
-                  />
-                )}
-              </>
-            )}
-            {channelIsMine && editing && (
               <Button
                 button="alt"
-                title={__('Cancel')}
-                onClick={() => doneEditing()}
-                icon={ICONS.REMOVE}
+                title={__('Edit')}
+                onClick={() => setEditing(!editing)}
+                icon={ICONS.EDIT}
                 iconSize={18}
               />
             )}
@@ -227,7 +203,7 @@ function ChannelPage(props: Props) {
             {editing ? (
               <ChannelEdit
                 uri={uri}
-                doneEditing={doneEditing}
+                setEditing={setEditing}
                 updateThumb={v => setThumbPreview(v)}
                 updateCover={v => setCoverPreview(v)}
               />

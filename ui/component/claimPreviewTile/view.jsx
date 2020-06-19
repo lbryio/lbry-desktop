@@ -61,7 +61,7 @@ function ClaimPreviewTile(props: Props) {
   const isRepost = claim && claim.repost_channel_url;
   const shouldFetch = claim === undefined;
   const thumbnailUrl = useGetThumbnail(uri, claim, streamingUrl, getFile, placeholder) || thumbnail;
-  const claimsInChannel = (claim && claim.meta && claim.meta.claims_in_channel) || 0;
+  const claimsInChannel = (claim && claim.meta.claims_in_channel) || 0;
   const canonicalUrl = claim && claim.canonical_url;
   const navigateUrl = formatLbryUrlForWeb(canonicalUrl || uri || '/');
 

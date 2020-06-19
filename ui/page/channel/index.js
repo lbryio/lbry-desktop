@@ -7,7 +7,6 @@ import {
   selectCurrentChannelPage,
   makeSelectClaimForUri,
   selectChannelIsBlocked,
-  makeSelectClaimIsPending,
 } from 'lbry-redux';
 import { selectBlackListedOutpoints, doFetchSubCount, makeSelectSubCountForUri } from 'lbryinc';
 import { makeSelectIsSubscribed } from 'redux/selectors/subscriptions';
@@ -24,7 +23,6 @@ const select = (state, props) => ({
   channelIsBlocked: selectChannelIsBlocked(props.uri)(state),
   blackListedOutpoints: selectBlackListedOutpoints(state),
   subCount: makeSelectSubCountForUri(props.uri)(state),
-  pending: makeSelectClaimIsPending(props.uri)(state),
 });
 
 const perform = dispatch => ({

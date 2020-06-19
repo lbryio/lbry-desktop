@@ -8,7 +8,6 @@ import {
   doUpdateChannel,
   makeSelectAmountForUri,
   makeSelectClaimForUri,
-  selectUpdateChannelError,
 } from 'lbry-redux';
 import ChannelPage from './view';
 
@@ -25,7 +24,6 @@ const select = (state, props) => ({
   languages: makeSelectMetadataItemForUri(props.uri, 'languages')(state),
   amount: makeSelectAmountForUri(props.uri)(state),
   claim: makeSelectClaimForUri(props.uri)(state),
-  updateError: selectUpdateChannelError(state),
 });
 
 const perform = dispatch => ({
