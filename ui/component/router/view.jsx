@@ -3,6 +3,7 @@ import * as PAGES from 'constants/pages';
 import React, { useEffect } from 'react';
 import { Route, Redirect, Switch, withRouter } from 'react-router-dom';
 import SettingsPage from 'page/settings';
+import SettingsNotificationsPage from 'page/settingsNotifications';
 import HelpPage from 'page/help';
 //  @if TARGET='app'
 import BackupPage from 'page/backup';
@@ -182,6 +183,7 @@ function AppRouter(props: Props) {
       <Route path={`/$/${PAGES.SEARCH}`} exact component={SearchPage} />
       <Route path={`/$/${PAGES.TOP}`} exact component={TopPage} />
       <Route path={`/$/${PAGES.SETTINGS}`} exact component={SettingsPage} />
+      <Route path={`/$/${PAGES.SETTINGS_NOTIFICATIONS}`} exact component={SettingsNotificationsPage} />
       <Route path={`/$/${PAGES.INVITE}/:referrer`} exact component={InvitedPage} />
       <Route path={`/$/${PAGES.CHECKOUT}`} exact component={CheckoutPage} />
 

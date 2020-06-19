@@ -4,6 +4,7 @@
 
 import * as PAGES from 'constants/pages';
 import * as MODALS from 'constants/modal_types';
+import * as ICONS from 'constants/icons';
 import * as React from 'react';
 
 import { FormField, FormFieldPrice } from 'component/common/form';
@@ -74,7 +75,6 @@ type Props = {
   decryptWallet: () => void,
   updateWalletStatus: () => void,
   walletEncrypted: boolean,
-  osNotificationsEnabled: boolean,
   userBlockedChannelsCount?: number,
   hideBalance: boolean,
   confirmForgetPassword: ({}) => void,
@@ -233,7 +233,6 @@ class SettingsPage extends React.PureComponent<Props, State> {
       automaticDarkModeEnabled,
       autoplay,
       walletEncrypted,
-      osNotificationsEnabled,
       // autoDownload,
       setDaemonSetting,
       setClientSetting,
@@ -481,43 +480,47 @@ class SettingsPage extends React.PureComponent<Props, State> {
             />
 
             {(isAuthenticated || !IS_WEB) && (
-              <Card
-                title={__('Blocked Channels')}
-                actions={
-                  <p>
-                    <React.Fragment>
-                      {userBlockedChannelsCount === 0
-                        ? __("You don't have blocked channels.")
-                        : userBlockedChannelsCount === 1
-                        ? __('You have one blocked channel.') + ' '
-                        : __('You have %channels% blocked channels.', { channels: userBlockedChannelsCount }) + ' '}
-                      {
-                        <Button
-                          button="link"
-                          label={userBlockedChannelsCount === 0 ? null : __('Manage')}
-                          navigate={`/$/${PAGES.BLOCKED}`}
-                        />
-                      }
-                    </React.Fragment>
-                  </p>
-                }
-              />
+              <>
+                <Card
+                  title={__('Notifications')}
+                  actions={
+                    <div className="section__actions">
+                      <Button
+                        button="secondary"
+                        label={__('Manage')}
+                        icon={ICONS.SETTINGS}
+                        disabled={userBlockedChannelsCount === 0}
+                        navigate={`/$/${PAGES.SETTINGS_NOTIFICATIONS}`}
+                      />
+                    </div>
+                  }
+                />
+
+                <Card
+                  title={__('Blocked Channels')}
+                  subtitle={
+                    userBlockedChannelsCount === 0
+                      ? __("You don't have blocked channels.")
+                      : userBlockedChannelsCount === 1
+                      ? __('You have one blocked channel.')
+                      : __('You have %channels% blocked channels.', { channels: userBlockedChannelsCount })
+                  }
+                  actions={
+                    <div className="section__actions">
+                      <Button
+                        button="secondary"
+                        label={__('Manage')}
+                        icon={ICONS.SETTINGS}
+                        disabled={userBlockedChannelsCount === 0}
+                        navigate={`/$/${PAGES.BLOCKED}`}
+                      />
+                    </div>
+                  }
+                />
+              </>
             )}
 
             {/* @if TARGET='app' */}
-            <Card
-              title={__('Notifications')}
-              actions={
-                <FormField
-                  type="checkbox"
-                  name="desktopNotification"
-                  onChange={() => setClientSetting(SETTINGS.OS_NOTIFICATIONS_ENABLED, !osNotificationsEnabled)}
-                  checked={osNotificationsEnabled}
-                  label={__('Show Desktop Notifications')}
-                  helper={__('Get notified when a publish is confirmed, or when new content is available to watch.')}
-                />
-              }
-            />
             <Card
               title={__('Share Usage and Diagnostic Data')}
               subtitle={

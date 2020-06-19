@@ -20,7 +20,6 @@ import {
   makeSelectClientSetting,
   selectDaemonSettings,
   selectFfmpegStatus,
-  selectosNotificationsEnabled,
   selectFindingFFmpeg,
 } from 'redux/selectors/settings';
 import { doWalletStatus, selectWalletIsEncrypted, selectBlockedChannelsCount, SETTINGS } from 'lbry-redux';
@@ -39,7 +38,6 @@ const select = state => ({
   automaticDarkModeEnabled: makeSelectClientSetting(SETTINGS.AUTOMATIC_DARK_MODE_ENABLED)(state),
   autoplay: makeSelectClientSetting(SETTINGS.AUTOPLAY)(state),
   walletEncrypted: selectWalletIsEncrypted(state),
-  osNotificationsEnabled: selectosNotificationsEnabled(state),
   autoDownload: makeSelectClientSetting(SETTINGS.AUTO_DOWNLOAD)(state),
   userBlockedChannelsCount: selectBlockedChannelsCount(state),
   hideBalance: makeSelectClientSetting(SETTINGS.HIDE_BALANCE)(state),
