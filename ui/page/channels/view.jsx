@@ -11,7 +11,6 @@ import Card from 'component/common/card';
 
 type Props = {
   channels: Array<ChannelClaim>,
-  channelUrls: Array<string>,
   fetchChannelListMine: () => void,
   fetchingChannels: boolean,
   youtubeChannels: ?Array<any>,
@@ -19,19 +18,30 @@ type Props = {
 };
 
 export default function ChannelsPage(props: Props) {
-  const { channels, channelUrls, fetchChannelListMine, fetchingChannels, youtubeChannels, openModal } = props;
+  const { channels, fetchChannelListMine, fetchingChannels, youtubeChannels, openModal } = props;
   const hasYoutubeChannels = youtubeChannels && Boolean(youtubeChannels.length);
   const hasPendingChannels = channels && channels.some(channel => channel.confirmations < 0);
 
   useEffect(() => {
     fetchChannelListMine();
+
+    let interval;
+    if (hasPendingChannels) {
+      interval = setInterval(() => {
+        fetchChannelListMine();
+      }, 5000);
+    }
+
+    return () => {
+      clearInterval(interval);
+    };
   }, [fetchChannelListMine, hasPendingChannels]);
 
   return (
     <Page>
       {hasYoutubeChannels && <YoutubeTransferStatus hideChannelLink />}
 
-      {channelUrls && Boolean(channelUrls.length) && (
+      {channels && Boolean(channels.length) && (
         <Card
           title={__('Your Channels')}
           titleActions={
@@ -43,10 +53,12 @@ export default function ChannelsPage(props: Props) {
             />
           }
           isBodyList
-          body={<ClaimList isCardBody loading={fetchingChannels} uris={channelUrls} />}
+          body={
+            <ClaimList isCardBody loading={fetchingChannels} uris={channels.map(channel => channel.permanent_url)} />
+          }
         />
       )}
-      {!(channelUrls && channelUrls.length) && (
+      {!(channels && channels.length) && (
         <React.Fragment>
           {!fetchingChannels ? (
             <section className="main--empty">
