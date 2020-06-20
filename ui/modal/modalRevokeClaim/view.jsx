@@ -25,11 +25,11 @@ export default function ModalRevokeClaim(props: Props) {
 
   function getButtonLabel(type: string, isSupport: boolean) {
     if (isSupport && type === txnTypes.SUPPORT) {
-      return 'Confirm Support Revoke';
+      return __('Confirm Support Revoke');
     } else if (type === txnTypes.SUPPORT) {
-      return 'Confirm Tip Unlock';
+      return __('Confirm Tip Unlock');
     }
-    return 'Confirm Claim Revoke';
+    return __('Confirm Claim Revoke');
   }
 
   function getMsgBody(type: string, isSupport: boolean, name: string) {
