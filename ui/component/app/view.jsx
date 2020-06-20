@@ -115,7 +115,9 @@ function App(props: Props) {
   const [lbryTvApiStatus, setLbryTvApiStatus] = useState(STATUS_OK);
   // @endif
   const { pathname, hash, search } = props.location;
-  const showUpgradeButton = autoUpdateDownloaded || (process.platform === 'linux' && isUpgradeAvailable);
+  const [upgradeNagClosed, setUpgradeNagClosed] = useState(false);
+  const showUpgradeButton =
+    (autoUpdateDownloaded || (process.platform === 'linux' && isUpgradeAvailable)) && !upgradeNagClosed;
   // referral claiming
   const referredRewardAvailable = rewards && rewards.some(reward => reward.reward_type === REWARDS.TYPE_REFEREE);
   const urlParams = new URLSearchParams(search);
@@ -305,6 +307,7 @@ function App(props: Props) {
               message={__('An upgrade is available.')}
               actionText={__('Install Now')}
               onClick={requestDownloadUpgrade}
+              onClose={() => setUpgradeNagClosed(true)}
             />
           )}
           {/* @endif */}
