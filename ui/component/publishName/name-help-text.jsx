@@ -2,6 +2,7 @@
 import * as React from 'react';
 import Button from 'component/button';
 import { buildURI } from 'lbry-redux';
+import I18nMessage from 'component/i18nMessage';
 
 type Props = {
   uri: ?string,
@@ -25,11 +26,24 @@ function NameHelpText(props: Props) {
 
     nameHelpText = (
       <React.Fragment>
-        {__('You already have a claim at')}
-        {` ${uri} `}
-        <Button button="link" label="Edit it" onClick={() => onEditMyClaim(myClaimForUri, editUri)} />
-        <br />
-        {__('Publishing will update your existing claim.')}
+        <div className="error__text">
+          <I18nMessage
+            tokens={{
+              existing_uri: (
+                <u>
+                  <em>{uri}</em>
+                </u>
+              ),
+            }}
+          >
+            You already have a claim at %existing_uri%. Publishing will update (overwrite) your existing claim.
+          </I18nMessage>
+        </div>
+        <Button
+          button="link"
+          label={__('Edit existing claim instead')}
+          onClick={() => onEditMyClaim(myClaimForUri, editUri)}
+        />
       </React.Fragment>
     );
   }

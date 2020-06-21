@@ -75,6 +75,7 @@ function PublishForm(props: Props) {
     name,
     channel,
     editingURI,
+    myClaimForUri,
     resolveUri,
     title,
     bid,
@@ -104,7 +105,12 @@ function PublishForm(props: Props) {
     bid &&
     !bidError &&
     !(uploadThumbnailStatus === THUMBNAIL_STATUSES.IN_PROGRESS);
-  const formValid = editingURI && !filePath ? isStillEditing && formValidLessFile : formValidLessFile;
+  const isOverwritingExistingClaim = !editingURI && myClaimForUri;
+  const formValid = isOverwritingExistingClaim
+    ? false
+    : editingURI && !filePath
+    ? isStillEditing && formValidLessFile
+    : formValidLessFile;
 
   let submitLabel;
   if (isStillEditing) {
