@@ -6,7 +6,7 @@ import {
   batchActions,
   selectMyClaims,
   doPublish,
-  doCheckPendingPublishes,
+  doCheckPendingClaims,
   doCheckReflectingFiles,
   ACTIONS as LBRY_REDUX_ACTIONS,
 } from 'lbry-redux';
@@ -101,5 +101,5 @@ export const doCheckPendingPublishesApp = () => (dispatch: Dispatch, getState: G
       };
     }
   };
-  return dispatch(doCheckPendingPublishes(onConfirmed));
+  return dispatch(doCheckPendingClaims(onConfirmed));
 };
