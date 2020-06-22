@@ -4,11 +4,13 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
-## [Unreleased]
+## [Unreleased on desktop]
 
 ### Added
 
 - Add "tap to unmute" button for videos that start with audio muted _community pr!_ ([#4365](https://github.com/lbryio/lbry-desktop/pull/4365))
+- Allow upgrade bar to be dismissed per session _community pr!_ ([#4413](https://github.com/lbryio/lbry-desktop/pull/4413))
+- Email notification management page ([#4409](https://github.com/lbryio/lbry-desktop/pull/4409))
 
 ### Changed
 
