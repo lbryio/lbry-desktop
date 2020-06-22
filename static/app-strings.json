@@ -1198,6 +1198,8 @@
   "No information will be sent directly to LBRY, Inc. or third-parties about your usage. Note that as\n                peer-to-peer software, your IP address and potentially other system information can be sent to other\n                users, though this information is not stored permanently.": "No information will be sent directly to LBRY, Inc. or third-parties about your usage. Note that as\n                peer-to-peer software, your IP address and potentially other system information can be sent to other\n                users, though this information is not stored permanently.",
   "%view_count% Views": "%view_count% Views",
   "Tap to unmute": "Tap to unmute",
+  "Playing in %seconds_left% seconds...": "Playing in %seconds_left% seconds...",
+  "Autoplay timer paused.": "Autoplay timer paused.", 
   "0 Bytes": "0 Bytes",
   "Bytes": "Bytes",
   "KB": "KB",

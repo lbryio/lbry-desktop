@@ -31,6 +31,7 @@ function AutoplayCountdown(props: Props) {
 
   const [timer, setTimer] = React.useState(countdownTime);
   const [timerCanceled, setTimerCanceled] = React.useState(false);
+  const [timerPaused, setTimerPaused] = React.useState(false);
 
   let navigateUrl;
   if (nextTitle) {
@@ -52,22 +53,53 @@ function AutoplayCountdown(props: Props) {
     }
   }, [navigateUrl, nextRecommendedUri, isFloating, doSetPlayingUri, doPlayUri]);
 
+  function debounce(fn, time) {
+    let timeoutId;
+    return wrapper;
+    function wrapper(...args) {
+      if (timeoutId) {
+        clearTimeout(timeoutId);
+      }
+      timeoutId = setTimeout(() => {
+        timeoutId = null;
+        fn(...args);
+      }, time);
+    }
+  }
+
+  React.useEffect(() => {
+    const handleScroll = debounce(e => {
+      const elm = document.querySelector('.autoplay-countdown');
+      if (elm) {
+        setTimerPaused(elm.getBoundingClientRect().top < 0);
+      }
+    }, 150);
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
   React.useEffect(() => {
     let interval;
     if (!timerCanceled && nextRecommendedUri) {
-      interval = setInterval(() => {
-        const newTime = timer - 1;
-        if (newTime === 0) {
-          doNavigate();
-        } else {
-          setTimer(timer - 1);
-        }
-      }, 1000);
+      if (timerPaused) {
+        clearInterval(interval);
+        setTimer(countdownTime);
+      } else {
+        interval = setInterval(() => {
+          const newTime = timer - 1;
+          if (newTime === 0) {
+            doNavigate();
+          } else {
+            setTimer(timer - 1);
+          }
+        }, 1000);
+      }
     }
     return () => {
       clearInterval(interval);
     };
-  }, [timer, doNavigate, navigateUrl, push, timerCanceled, nextRecommendedUri]);
+  }, [timer, doNavigate, navigateUrl, push, timerCanceled, timerPaused, nextRecommendedUri]);
 
   if (timerCanceled || !nextRecommendedUri) {
     return null;
@@ -87,10 +119,17 @@ function AutoplayCountdown(props: Props) {
           <div className={'autoplay-countdown__button autoplay-countdown__button--' + (timer % 5)}>
             <Button onClick={doNavigate} iconSize={30} title={__('Play')} className="button--icon button--play" />
           </div>
-          <div className="file-viewer__overlay-secondary autoplay-countdown__counter">
-            {__('Playing in %seconds_left% seconds...', { seconds_left: timer })}{' '}
-            <Button label={__('Cancel')} button="link" onClick={() => setTimerCanceled(true)} />
-          </div>
+          {timerPaused && (
+            <div className="file-viewer__overlay-secondary autoplay-countdown__counter">
+              {__('Autoplay timer paused.')}{' '}
+            </div>
+          )}
+          {!timerPaused && (
+            <div className="file-viewer__overlay-secondary autoplay-countdown__counter">
+              {__('Playing in %seconds_left% seconds...', { seconds_left: timer })}{' '}
+              <Button label={__('Cancel')} button="link" onClick={() => setTimerCanceled(true)} />
+            </div>
+          )}
         </div>
       </div>
     </div>
