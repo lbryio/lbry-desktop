@@ -5,6 +5,10 @@ import UriIndicator from 'component/uriIndicator';
 import I18nMessage from 'component/i18nMessage';
 import { formatLbryUrlForWeb } from 'util/url';
 import { withRouter } from 'react-router';
+import debounce from 'util/debounce';
+
+const DEBOUNCE_SCROLL_HANDLER_MS = 150;
+const CLASSNAME_AUTOPLAY_COUNTDOWN = 'autoplay-countdown';
 
 type Props = {
   history: { push: string => void },
@@ -57,27 +61,13 @@ function AutoplayCountdown(props: Props) {
     }
   }, [navigateUrl, nextRecommendedUri, isFloating, doSetPlayingUri, doPlayUri]);
 
-  function debounce(fn, time) {
-    let timeoutId;
-    return wrapper;
-    function wrapper(...args) {
-      if (timeoutId) {
-        clearTimeout(timeoutId);
-      }
-      timeoutId = setTimeout(() => {
-        timeoutId = null;
-        fn(...args);
-      }, time);
-    }
-  }
-
   React.useEffect(() => {
     const handleScroll = debounce(e => {
-      const elm = document.querySelector('.autoplay-countdown');
+      const elm = document.querySelector(`.${CLASSNAME_AUTOPLAY_COUNTDOWN}`);
       if (elm) {
         setTimerPaused(elm.getBoundingClientRect().top < 0);
       }
-    }, 150);
+    }, DEBOUNCE_SCROLL_HANDLER_MS);
 
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
@@ -111,7 +101,7 @@ function AutoplayCountdown(props: Props) {
 
   return (
     <div className="file-viewer__overlay">
-      <div className="autoplay-countdown">
+      <div className={CLASSNAME_AUTOPLAY_COUNTDOWN}>
         <div className="file-viewer__overlay-secondary">
           <I18nMessage tokens={{ channel: <UriIndicator link uri={nextRecommendedUri} /> }}>
             Up Next by %channel%

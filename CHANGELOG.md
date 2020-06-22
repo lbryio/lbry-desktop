@@ -10,6 +10,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 - Add "tap to unmute" button for videos that start with audio muted _community pr!_ ([#4365](https://github.com/lbryio/lbry-desktop/pull/4365))
 - Allow upgrade bar to be dismissed per session _community pr!_ ([#4413](https://github.com/lbryio/lbry-desktop/pull/4413))
+- Pause the "autoplay next" timer when performing long operations such as Tipping, Supporting or commenting _community pr!_ ([4419](https://github.com/lbryio/lbry-desktop/pull/4419))  
 - Email notification management page ([#4409](https://github.com/lbryio/lbry-desktop/pull/4409))
 - Publish Page improvements to prevent accidental overwrites of existing claims _community pr!_ ([#4461](https://github.com/lbryio/lbry-desktop/pull/4416))
 
