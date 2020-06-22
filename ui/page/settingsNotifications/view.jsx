@@ -117,22 +117,26 @@ export default function NotificationSettingsPage(props: Props) {
       ) : (
         <div className="card-stack">
           {/* @if TARGET='app' */}
-          <label className="section help">{__('App Notifications')}</label>
-          <div className="section">
-            <FormField
-              type="checkbox"
-              name="desktopNotification"
-              onChange={() => setClientSetting(SETTINGS.OS_NOTIFICATIONS_ENABLED, !osNotificationsEnabled)}
-              checked={osNotificationsEnabled}
-              label={__('Show Desktop Notifications')}
-              helper={__('Get notified when a publish or channel is confirmed.')}
-            />
-          </div>
+          <Card
+            title={__('App Notifications')}
+            subtitle={__('Notification settings for the desktop app.')}
+            actions={
+              <FormField
+                type="checkbox"
+                name="desktopNotification"
+                onChange={() => setClientSetting(SETTINGS.OS_NOTIFICATIONS_ENABLED, !osNotificationsEnabled)}
+                checked={osNotificationsEnabled}
+                label={__('Show Desktop Notifications')}
+                helper={__('Get notified when a publish or channel is confirmed.')}
+              />
+            }
+          />
+
           {/* @endif */}
 
           {enabledEmails && enabledEmails.length > 0 && (
             <Card
-              title={__('Receiving Addresses')}
+              title={enabledEmails.length === 1 ? __('Your Email') : __('Receiving Addresses')}
               subtitle={__('Uncheck your email below if you want to stop receiving messages.')}
               actions={
                 <>
