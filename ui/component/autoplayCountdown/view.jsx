@@ -13,6 +13,7 @@ type Props = {
   isFloating: boolean,
   doSetPlayingUri: (string | null) => void,
   doPlayUri: string => void,
+  modal: { id: string, modalProps: {} },
 };
 
 function AutoplayCountdown(props: Props) {
@@ -23,6 +24,7 @@ function AutoplayCountdown(props: Props) {
     doPlayUri,
     isFloating,
     history: { push },
+    modal,
   } = props;
   const nextTitle = nextRecommendedClaim && nextRecommendedClaim.value && nextRecommendedClaim.value.title;
 
@@ -32,6 +34,8 @@ function AutoplayCountdown(props: Props) {
   const [timer, setTimer] = React.useState(countdownTime);
   const [timerCanceled, setTimerCanceled] = React.useState(false);
   const [timerPaused, setTimerPaused] = React.useState(false);
+  const anyModalPresent = modal !== undefined && modal !== null;
+  const isTimerPaused = timerPaused || anyModalPresent;
 
   let navigateUrl;
   if (nextTitle) {
@@ -82,7 +86,7 @@ function AutoplayCountdown(props: Props) {
   React.useEffect(() => {
     let interval;
     if (!timerCanceled && nextRecommendedUri) {
-      if (timerPaused) {
+      if (isTimerPaused) {
         clearInterval(interval);
         setTimer(countdownTime);
       } else {
@@ -99,7 +103,7 @@ function AutoplayCountdown(props: Props) {
     return () => {
       clearInterval(interval);
     };
-  }, [timer, doNavigate, navigateUrl, push, timerCanceled, timerPaused, nextRecommendedUri]);
+  }, [timer, doNavigate, navigateUrl, push, timerCanceled, isTimerPaused, nextRecommendedUri]);
 
   if (timerCanceled || !nextRecommendedUri) {
     return null;
@@ -119,12 +123,12 @@ function AutoplayCountdown(props: Props) {
           <div className={'autoplay-countdown__button autoplay-countdown__button--' + (timer % 5)}>
             <Button onClick={doNavigate} iconSize={30} title={__('Play')} className="button--icon button--play" />
           </div>
-          {timerPaused && (
+          {isTimerPaused && (
             <div className="file-viewer__overlay-secondary autoplay-countdown__counter">
               {__('Autoplay timer paused.')}{' '}
             </div>
           )}
-          {!timerPaused && (
+          {!isTimerPaused && (
             <div className="file-viewer__overlay-secondary autoplay-countdown__counter">
               {__('Playing in %seconds_left% seconds...', { seconds_left: timer })}{' '}
               <Button label={__('Cancel')} button="link" onClick={() => setTimerCanceled(true)} />
