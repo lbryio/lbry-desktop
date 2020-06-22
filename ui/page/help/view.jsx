@@ -174,7 +174,7 @@ class HelpPage extends React.PureComponent<Props, State> {
           }
           actions={
             <div className="section__actions">
-              <Button navigate="/$/report" label={__('Submit Feedback')} icon={icons.FEEDBACK} button="secondary" />
+              <Button navigate="/$/report" label={__('Submit Feedback')} icon={ICONS.FEEDBACK} button="secondary" />
             </div>
           }
         />
@@ -193,8 +193,18 @@ class HelpPage extends React.PureComponent<Props, State> {
           }
           actions={
             <div className="section__actions">
-              <Button button="secondary" label={__('Open Log')} icon={icons.OPEN_LOG} onClick={() => this.openLogFile(dataDirectory)} />
-              <Button button="secondary" label={__('Open Log Folder')} icon={icons.OPEN_LOG_FOLDER} onClick={() => shell.openItem(dataDirectory)} />
+              <Button
+                button="secondary"
+                label={__('Open Log')}
+                icon={ICONS.OPEN_LOG}
+                onClick={() => this.openLogFile(dataDirectory)}
+              />
+              <Button
+                button="secondary"
+                label={__('Open Log Folder')}
+                icon={ICONS.OPEN_LOG_FOLDER}
+                onClick={() => shell.openItem(dataDirectory)}
+              />
             </div>
           }
         />
