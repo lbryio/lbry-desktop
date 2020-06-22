@@ -1239,5 +1239,8 @@
   "Create a New Channel": "Create a New Channel",
   "Thumbnail source": "Thumbnail source",
   "Cover source": "Cover source",
-  "Your changes will be live in a few minutes": "Your changes will be live in a few minutes"
+  "Your changes will be live in a few minutes": "Your changes will be live in a few minutes",
+  "Submitting": "Submitting",
+  "Thumbnail Recommended ratio is 1:1": "Thumbnail Recommended ratio is 1:1",
+  "Cover Recommended ratio is 6.25:1": "Cover Recommended ratio is 6.25:1"
 }

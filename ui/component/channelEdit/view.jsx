@@ -27,6 +27,7 @@ type Props = {
   updateCover: string => void,
   doneEditing: () => void,
   updateError: string,
+  updatingChannel: boolean,
 };
 
 function ChannelForm(props: Props) {
@@ -47,6 +48,7 @@ function ChannelForm(props: Props) {
     updateThumb,
     updateCover,
     updateError,
+    updatingChannel,
   } = props;
   const { claim_id: claimId } = claim;
 
@@ -204,7 +206,11 @@ function ChannelForm(props: Props) {
           }}
         />
         <div className={'section__actions'}>
-          <Button button="primary" label={__('Submit')} onClick={handleSubmit} />
+          <Button
+            button="primary"
+            label={updatingChannel ? __('Submitting...') : __('Submit')}
+            onClick={handleSubmit}
+          />
           <Button button="link" label={__('Cancel')} onClick={doneEditing} />
         </div>
         {updateError && updateError.length ? (
