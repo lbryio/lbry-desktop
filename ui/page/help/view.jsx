@@ -1,6 +1,6 @@
-// @TODO: Customize advice based on OS
 // @flow
-import * as icons from 'constants/icons';
+import * as ICONS from 'constants/icons';
+import * as PAGES from 'constants/pages';
 import * as React from 'react';
 // @if TARGET='app'
 import { shell } from 'electron';
@@ -135,13 +135,13 @@ class HelpPage extends React.PureComponent<Props, State> {
               <Button
                 href="https://lbry.com/faq/lbry-basics"
                 label={__('Read the App Basics FAQ')}
-                icon={icons.HELP}
+                icon={ICONS.HELP}
                 button="secondary"
               />
               <Button
                 href="https://lbry.com/faq"
                 label={__('View all LBRY FAQs')}
-                icon={icons.HELP}
+                icon={ICONS.HELP}
                 button="secondary"
               />
             </div>
@@ -158,8 +158,8 @@ class HelpPage extends React.PureComponent<Props, State> {
           }
           actions={
             <div className="section__actions">
-              <Button button="secondary" label={__('Join Our Chat')} icon={icons.CHAT} href="https://chat.lbry.com" />
-              <Button button="secondary" label={__('Email Us')} icon={icons.WEB} href="mailto:help@lbry.com" />
+              <Button button="secondary" label={__('Join Our Chat')} icon={ICONS.CHAT} href="https://chat.lbry.com" />
+              <Button button="secondary" label={__('Email Us')} icon={ICONS.WEB} href="mailto:help@lbry.com" />
             </div>
           }
         />
@@ -240,7 +240,7 @@ class HelpPage extends React.PureComponent<Props, State> {
                           {user.primary_email}{' '}
                           <Button
                             button="link"
-                            href={`https://lbry.com/list/edit/${accessToken}`}
+                            navigate={`/$/${PAGES.SETTINGS_NOTIFICATIONS}`}
                             label={__('Update mailing preferences')}
                           />
                         </React.Fragment>
