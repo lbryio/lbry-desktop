@@ -1,6 +1,10 @@
 import { connect } from 'react-redux';
-import { makeSelectClaimIsMine, makeSelectShortUrlForUri, makeSelectPermanentUrlForUri } from 'lbry-redux';
-import { selectChannelIsBlocked } from 'redux/selectors/blocked';
+import {
+  selectChannelIsBlocked,
+  makeSelectClaimIsMine,
+  makeSelectShortUrlForUri,
+  makeSelectPermanentUrlForUri,
+} from 'lbry-redux';
 import { doToggleBlockChannel } from 'redux/actions/blocked';
 import { doToast } from 'redux/actions/notifications';
 import BlockButton from './view';
