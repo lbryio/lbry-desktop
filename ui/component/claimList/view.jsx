@@ -7,7 +7,9 @@ import ClaimPreview from 'component/claimPreview';
 import Spinner from 'component/spinner';
 import { FormField } from 'component/common/form';
 import usePersistedState from 'effects/use-persisted-state';
+import debounce from 'util/debounce';
 
+const DEBOUNCE_SCROLL_HANDLER_MS = 150;
 const SORT_NEW = 'new';
 const SORT_OLD = 'old';
 
@@ -73,37 +75,26 @@ export default function ClaimList(props: Props) {
   }, [id, setScrollBottomCbMap]);
 
   useEffect(() => {
-    let timeout;
+    const handleScroll = debounce(e => {
+      if (page && pageSize && onScrollBottom && !scrollBottomCbMap[page]) {
+        const mainElWrapper = document.querySelector(`.${MAIN_WRAPPER_CLASS}`);
 
-    function handleScroll(e) {
-      timeout = setTimeout(() => {
-        if (page && pageSize && onScrollBottom && !scrollBottomCbMap[page]) {
-          const mainElWrapper = document.querySelector(`.${MAIN_WRAPPER_CLASS}`);
+        if (mainElWrapper && !loading && urisLength >= pageSize) {
+          const contentWrapperAtBottomOfPage = mainElWrapper.getBoundingClientRect().bottom - 0.5 <= window.innerHeight;
 
-          if (mainElWrapper && !loading && urisLength >= pageSize) {
-            const contentWrapperAtBottomOfPage =
-              mainElWrapper.getBoundingClientRect().bottom - 0.5 <= window.innerHeight;
+          if (contentWrapperAtBottomOfPage) {
+            onScrollBottom();
 
-            if (contentWrapperAtBottomOfPage) {
-              onScrollBottom();
-
-              // Save that we've fetched this page to avoid weird stuff happening with fast scrolling
-              setScrollBottomCbMap({ ...scrollBottomCbMap, [page]: true });
-            }
+            // Save that we've fetched this page to avoid weird stuff happening with fast scrolling
+            setScrollBottomCbMap({ ...scrollBottomCbMap, [page]: true });
           }
         }
-      }, 150);
-    }
+      }
+    }, DEBOUNCE_SCROLL_HANDLER_MS);
 
     if (onScrollBottom) {
       window.addEventListener('scroll', handleScroll);
-
-      return () => {
-        if (timeout) {
-          clearTimeout(timeout);
-        }
-        window.removeEventListener('scroll', handleScroll);
-      };
+      return () => window.removeEventListener('scroll', handleScroll);
     }
   }, [loading, onScrollBottom, urisLength, pageSize, page, setScrollBottomCbMap]);
 
