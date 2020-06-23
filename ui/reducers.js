@@ -6,7 +6,6 @@ import {
   searchReducer,
   walletReducer,
   tagsReducer,
-  commentReducer,
   blockedReducer,
   publishReducer,
 } from 'lbry-redux';
@@ -26,6 +25,7 @@ import subscriptionsReducer from 'redux/reducers/subscriptions';
 import notificationsReducer from 'redux/reducers/notifications';
 import rewardsReducer from 'redux/reducers/rewards';
 import userReducer from 'redux/reducers/user';
+import commentsReducer from 'redux/reducers/comments';
 
 export default history =>
   combineReducers({
@@ -34,7 +34,7 @@ export default history =>
     blacklist: blacklistReducer,
     filtered: filteredReducer,
     claims: claimsReducer,
-    comments: commentReducer,
+    comments: commentsReducer,
     content: contentReducer,
     costInfo: costInfoReducer,
     fileInfo: fileInfoReducer,
