@@ -1,7 +1,7 @@
 // @flow
 import { MAIN_WRAPPER_CLASS } from 'component/app/view';
 import type { Node } from 'react';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import classnames from 'classnames';
 import ClaimPreview from 'component/claimPreview';
 import Spinner from 'component/spinner';
@@ -50,7 +50,6 @@ export default function ClaimList(props: Props) {
     onScrollBottom,
     pageSize,
     page,
-    id,
     showHiddenByUser,
     showUnresolvedClaims,
     renderProperties,
@@ -60,7 +59,6 @@ export default function ClaimList(props: Props) {
     timedOutMessage,
     isCardBody = false,
   } = props;
-  const [scrollBottomCbMap, setScrollBottomCbMap] = useState({});
   const [currentSort, setCurrentSort] = usePersistedState(persistedStorageKey, SORT_NEW);
   const timedOut = uris === null;
   const urisLength = (uris && uris.length) || 0;
@@ -71,12 +69,8 @@ export default function ClaimList(props: Props) {
   }
 
   useEffect(() => {
-    setScrollBottomCbMap({});
-  }, [id, setScrollBottomCbMap]);
-
-  useEffect(() => {
     const handleScroll = debounce(e => {
-      if (page && pageSize && onScrollBottom && !scrollBottomCbMap[page]) {
+      if (page && pageSize && onScrollBottom) {
         const mainElWrapper = document.querySelector(`.${MAIN_WRAPPER_CLASS}`);
 
         if (mainElWrapper && !loading && urisLength >= pageSize) {
@@ -84,9 +78,6 @@ export default function ClaimList(props: Props) {
 
           if (contentWrapperAtBottomOfPage) {
             onScrollBottom();
-
-            // Save that we've fetched this page to avoid weird stuff happening with fast scrolling
-            setScrollBottomCbMap({ ...scrollBottomCbMap, [page]: true });
           }
         }
       }
@@ -96,7 +87,7 @@ export default function ClaimList(props: Props) {
       window.addEventListener('scroll', handleScroll);
       return () => window.removeEventListener('scroll', handleScroll);
     }
-  }, [loading, onScrollBottom, urisLength, pageSize, page, setScrollBottomCbMap]);
+  }, [loading, onScrollBottom, urisLength, pageSize, page]);
 
   return (
     <section
