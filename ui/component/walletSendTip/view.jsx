@@ -275,7 +275,7 @@ function WalletSendTip(props: Props) {
                     <FormField
                       name="toggle-is-support"
                       type="checkbox"
-                      label={__('Make this support permanent')}
+                      label={__('Make this a tip')}
                       checked={sendAsTip}
                       onChange={() => setSendAsTip(!sendAsTip)}
                     />
