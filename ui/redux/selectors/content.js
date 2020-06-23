@@ -9,12 +9,12 @@ import {
   makeSelectRecommendedContentForUri,
   makeSelectMediaTypeForUri,
   selectBalance,
+  selectBlockedChannels,
   parseURI,
   buildURI,
   makeSelectContentTypeForUri,
   makeSelectFileNameForUri,
 } from 'lbry-redux';
-import { selectBlockedChannels } from 'redux/selectors/blocked';
 import { selectAllCostInfoByUri, makeSelectCostInfoForUri } from 'lbryinc';
 import { selectShowMatureContent } from 'redux/selectors/settings';
 import * as RENDER_MODES from 'constants/file_render_modes';
