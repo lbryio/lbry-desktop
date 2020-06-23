@@ -22,7 +22,9 @@ import {
   selectFfmpegStatus,
   selectFindingFFmpeg,
 } from 'redux/selectors/settings';
-import { doWalletStatus, selectWalletIsEncrypted, selectBlockedChannelsCount, SETTINGS } from 'lbry-redux';
+import { doWalletStatus, selectWalletIsEncrypted, SETTINGS } from 'lbry-redux';
+import { selectBlockedChannelsCount } from 'redux/selectors/blocked';
+
 import SettingsPage from './view';
 import { selectUserVerifiedEmail } from 'redux/selectors/user';
 
