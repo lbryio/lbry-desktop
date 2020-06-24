@@ -1233,7 +1233,7 @@
   "Channel to show support as": "Channel to show support as",
   "Buy More LBC": "Buy More LBC",
   "Support This Content": "Support This Content",
-  "Make this support permanent": "Make this support permanent",
+  "Make this a tip": "Make this a tip",
   "Custom support amount": "Custom support amount",
   "(%lbc_balance% available)": "(%lbc_balance% available)",
   "Loading your channels...": "Loading your channels...",
@@ -1245,5 +1245,14 @@
   "Your changes will be live in a few minutes": "Your changes will be live in a few minutes",
   "Submitting": "Submitting",
   "Thumbnail Recommended ratio is 1:1": "Thumbnail Recommended ratio is 1:1",
-  "Cover Recommended ratio is 6.25:1": "Cover Recommended ratio is 6.25:1"
+  "Cover Recommended ratio is 6.25:1": "Cover Recommended ratio is 6.25:1",
+  "Old Password": "Old Password",
+  "New Password": "New Password",
+  "Set Password": "Set Password",
+  "App Notifications": "App Notifications",
+  "Notification settings for the desktop app.": "Notification settings for the desktop app.",
+  "Get notified when a publish or channel is confirmed.": "Get notified when a publish or channel is confirmed.",
+  "Email Preferences": "Email Preferences",
+  "Opt out of any topics you don't want to receive email about.": "Opt out of any topics you don't want to receive email about.",
+  "Uncheck your email below if you want to stop receiving messages.": "Uncheck your email below if you want to stop receiving messages."
 }
