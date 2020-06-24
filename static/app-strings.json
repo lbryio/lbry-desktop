@@ -1201,7 +1201,7 @@
   "%view_count% Views": "%view_count% Views",
   "Tap to unmute": "Tap to unmute",
   "Playing in %seconds_left% seconds...": "Playing in %seconds_left% seconds...",
-  "Autoplay timer paused.": "Autoplay timer paused.", 
+  "Autoplay timer paused.": "Autoplay timer paused.",
   "0 Bytes": "0 Bytes",
   "Bytes": "Bytes",
   "KB": "KB",
@@ -1257,5 +1257,7 @@
   "Get notified when a publish or channel is confirmed.": "Get notified when a publish or channel is confirmed.",
   "Email Preferences": "Email Preferences",
   "Opt out of any topics you don't want to receive email about.": "Opt out of any topics you don't want to receive email about.",
-  "Uncheck your email below if you want to stop receiving messages.": "Uncheck your email below if you want to stop receiving messages."
+  "Uncheck your email below if you want to stop receiving messages.": "Uncheck your email below if you want to stop receiving messages.",
+  "Remove from Blocked List": "Remove from Blocked List",
+  "Are you sure you want to remove this from the list?": "Are you sure you want to remove this from the list?"
 }
