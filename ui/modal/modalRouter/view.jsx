@@ -17,6 +17,7 @@ import ModalRevokeClaim from 'modal/modalRevokeClaim';
 import ModalPhoneCollection from 'modal/modalPhoneCollection';
 import ModalFirstSubscription from 'modal/modalFirstSubscription';
 import ModalConfirmTransaction from 'modal/modalConfirmTransaction';
+import ModalRemoveBlocked from 'modal/modalRemoveBlocked';
 import ModalSocialShare from 'modal/modalSocialShare';
 import ModalSendTip from 'modal/modalSendTip';
 import ModalPublish from 'modal/modalPublish';
@@ -140,6 +141,8 @@ function ModalRouter(props: Props) {
       return <ModalFileSelection {...modalProps} />;
     case MODALS.LIQUIDATE_SUPPORTS:
       return <ModalSupportsLiquidate {...modalProps} />;
+    case MODALS.REMOVE_BLOCKED:
+      return <ModalRemoveBlocked {...modalProps} />;
     default:
       return null;
   }
