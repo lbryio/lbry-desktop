@@ -22,7 +22,7 @@ function ClaimInsufficientCredits(props: Props) {
       <I18nMessage
         tokens={{
           reward_link: <Button button="link" navigate="/$/rewards" label={__('Rewards')} />,
-          buy_link: <Button button="link" navigate="/$/rewards" label={__('buy')} />,
+          buy_link: <Button button="link" navigate="/$/buy" label={__('buy')} />,
         }}
       >
         The publisher has chosen to charge LBC to view this content. Your balance is currently too low to view it. Check
