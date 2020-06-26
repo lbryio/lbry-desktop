@@ -23,6 +23,9 @@ import PublishFormErrors from 'component/publishFormErrors';
 import SelectThumbnail from 'component/selectThumbnail';
 import Card from 'component/common/card';
 import I18nMessage from 'component/i18nMessage';
+import * as PUBLISH_MODES from 'constants/publish_types';
+
+const MODES = Object.values(PUBLISH_MODES);
 
 type Props = {
   disabled: boolean,
@@ -70,6 +73,8 @@ type Props = {
 };
 
 function PublishForm(props: Props) {
+  const [mode, setMode] = React.useState(PUBLISH_MODES.FILE);
+
   const {
     thumbnail,
     name,
@@ -159,6 +164,19 @@ function PublishForm(props: Props) {
 
   return (
     <div className="card-stack">
+      <div className="button-group">
+        {MODES.map((name, index) => (
+          <Button
+            key={index}
+            label={name}
+            button="alt"
+            onClick={() => {
+              setMode(name);
+            }}
+            className={classnames('button-toggle', { 'button-toggle--active': mode === name })}
+          />
+        ))}
+      </div>
       <PublishFile disabled={disabled || publishing} inProgress={isInProgress} />
       {!publishing && (
         <div className={classnames({ 'card--disabled': formDisabled })}>

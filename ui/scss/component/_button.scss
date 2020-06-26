@@ -164,6 +164,7 @@ svg + .button__label,
 
 .button-group {
   display: flex;
+  margin-bottom: var(--spacing-l);
 
   .button:first-child:not(:only-child) {
     border-top-right-radius: 0;

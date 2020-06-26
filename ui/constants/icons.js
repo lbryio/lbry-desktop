@@ -107,3 +107,4 @@ export const SEND = 'Send';
 export const RECEIVE = 'Receive';
 export const OPEN_LOG = 'FilePlus';
 export const OPEN_LOG_FOLDER = 'Folder';
+export const STORY = 'Story';

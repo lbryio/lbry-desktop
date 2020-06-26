@@ -1200,7 +1200,7 @@
   "%view_count% Views": "%view_count% Views",
   "Tap to unmute": "Tap to unmute",
   "Playing in %seconds_left% seconds...": "Playing in %seconds_left% seconds...",
-  "Autoplay timer paused.": "Autoplay timer paused.", 
+  "Autoplay timer paused.": "Autoplay timer paused.",
   "0 Bytes": "0 Bytes",
   "Bytes": "Bytes",
   "KB": "KB",
@@ -1247,5 +1247,7 @@
   "Your changes will be live in a few minutes": "Your changes will be live in a few minutes",
   "Submitting": "Submitting",
   "Thumbnail Recommended ratio is 1:1": "Thumbnail Recommended ratio is 1:1",
-  "Cover Recommended ratio is 6.25:1": "Cover Recommended ratio is 6.25:1"
+  "Cover Recommended ratio is 6.25:1": "Cover Recommended ratio is 6.25:1",
+  "Write": "Write",
+  "Sorry, looks like we can't load the archive.": "Sorry, looks like we can't load the archive."
 }
