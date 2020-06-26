@@ -168,6 +168,7 @@ function PublishForm(props: Props) {
         {MODES.map((name, index) => (
           <Button
             key={index}
+            icon={name}
             label={name}
             button="alt"
             onClick={() => {
