@@ -4,7 +4,7 @@ import React from 'react';
 import { regexInvalidURI } from 'lbry-redux';
 import Button from 'component/button';
 import Card from 'component/common/card';
-import Spinner from 'component/common/spinner';
+import Spinner from 'component/spinner';
 import { FormField } from 'component/common/form';
 import { FF_MAX_CHARS_IN_DESCRIPTION } from 'constants/form-field';
 
