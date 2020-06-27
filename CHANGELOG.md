@@ -21,6 +21,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Fixed
 
 - Fix report page layout ([#4384](https://github.com/lbryio/lbry-desktop/pull/4384))
+- Fix language-change not applied to components immediately _community pr!_ ([#4437](https://github.com/lbryio/lbry-desktop/pull/4437))
 
 ## [0.46.2] - [2020-06-10]
 

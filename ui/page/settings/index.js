@@ -46,6 +46,7 @@ const select = state => ({
   darkModeTimes: makeSelectClientSetting(SETTINGS.DARK_MODE_TIMES)(state),
   ffmpegStatus: selectFfmpegStatus(state),
   findingFFmpeg: selectFindingFFmpeg(state),
+  language: makeSelectClientSetting(SETTINGS.LANGUAGE)(state),
 });
 
 const perform = dispatch => ({
