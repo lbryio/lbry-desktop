@@ -1,6 +1,7 @@
 // @flow
 import * as ICONS from 'constants/icons';
-import React from 'react';
+import fs from 'fs';
+import React, { useEffect } from 'react';
 import { regexInvalidURI } from 'lbry-redux';
 import Button from 'component/button';
 import Card from 'component/common/card';
@@ -55,6 +56,31 @@ function PublishFile(props: Props) {
   function toggleMarkdown() {
     setAdvancedEditor(!advancedEditor);
   }
+
+  function saveFileChanges() {
+    // Desktop implementation
+    // Todo: Lbry.tv ( web ) implementation
+    if (typeof filePath === 'string') {
+      fs.writeFile(filePath, content, 'utf8', (err, data) => {
+        // Handle error, cant save changes or create file
+        if (err) {
+          return console.log(err);
+        }
+        // Handle success:
+        // Notify user about file updated ?
+        console.log(data);
+      });
+    }
+  }
+
+  useEffect(() => {
+    // Save file changes on navigation or app quit, etc...
+    function onComponentUnmount() {
+      saveFileChanges();
+    }
+    // Test for file changes
+    return onComponentUnmount;
+  }, []);
 
   let cardTitle;
   if (publishing) {
