@@ -17,6 +17,7 @@ import TagsSelect from 'component/tagsSelect';
 import PublishText from 'component/publishText';
 import PublishPrice from 'component/publishPrice';
 import PublishFile from 'component/publishFile';
+import PublishStory from 'component/publishStory';
 import PublishName from 'component/publishName';
 import PublishAdditionalOptions from 'component/publishAdditionalOptions';
 import PublishFormErrors from 'component/publishFormErrors';
@@ -75,6 +76,10 @@ type Props = {
 function PublishForm(props: Props) {
   const [mode, setMode] = React.useState(PUBLISH_MODES.FILE);
 
+  // Temmp value, we should use redux instead
+  // Todo: get value from publish state
+  const [fileText, setFileText] = React.useState('');
+
   const {
     thumbnail,
     name,
@@ -123,6 +128,12 @@ function PublishForm(props: Props) {
   } else {
     submitLabel = !publishing ? __('Publish') : __('Publishing...');
   }
+
+  useEffect(() => {
+    if (filePath && filePath !== null) {
+      // console.info("SHOW EDITOR")
+    }
+  }, [filePath]);
 
   useEffect(() => {
     if (!thumbnail) {
@@ -178,10 +189,21 @@ function PublishForm(props: Props) {
           />
         ))}
       </div>
-      <PublishFile disabled={disabled || publishing} inProgress={isInProgress} />
+      {mode === PUBLISH_MODES.FILE && (
+        <PublishFile
+          disabled={disabled || publishing}
+          inProgress={isInProgress}
+          setFileText={setFileText}
+          setPublishMode={setMode}
+        />
+      )}
+      {mode === PUBLISH_MODES.STORY && (
+        <PublishStory content={fileText} disabled={disabled} setContent={setFileText} inProgress={isInProgress} />
+      )}
+
       {!publishing && (
         <div className={classnames({ 'card--disabled': formDisabled })}>
-          <PublishText disabled={formDisabled} />
+          {mode === PUBLISH_MODES.FILE && <PublishText disabled={formDisabled} />}
           <Card actions={<SelectThumbnail />} />
 
           <TagsSelect

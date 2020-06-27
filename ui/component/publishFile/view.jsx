@@ -8,6 +8,7 @@ import Card from 'component/common/card';
 import { FormField } from 'component/common/form';
 import Spinner from 'component/spinner';
 import I18nMessage from '../i18nMessage';
+import * as PUBLISH_MODES from 'constants/publish_types';
 
 type Props = {
   name: ?string,
@@ -25,6 +26,8 @@ type Props = {
   size: number,
   duration: number,
   isVid: boolean,
+  setFileText: string => void,
+  setPublishMode: string => void,
 };
 
 function PublishFile(props: Props) {
@@ -43,6 +46,8 @@ function PublishFile(props: Props) {
     size,
     duration,
     isVid,
+    setFileText,
+    setPublishMode,
   } = props;
 
   const { available } = ffmpegStatus;
@@ -100,7 +105,7 @@ function PublishFile(props: Props) {
   function getUnitsForMB(s) {
     if (s < MINUTES_THRESHOLD) {
       if (secondsToProcess > 1) return __('seconds');
-	return __('second');
+      return __('second');
     } else if (s >= MINUTES_THRESHOLD && s < HOURS_THRESHOLD) {
       if (Math.floor(secondsToProcess / 60) > 1) return __('minutes');
       return __('minute');
@@ -188,8 +193,10 @@ function PublishFile(props: Props) {
 
     // if video, extract duration so we can warn about bitrateif (typeof file !== 'string') {
     const contentType = file.type && file.type.split('/');
-    const isVideo = contentType && contentType[0] === 'video';
     const isMp4 = contentType && contentType[1] === 'mp4';
+    const isText = contentType && contentType[0] === 'text';
+    const isVideo = contentType && contentType[0] === 'video';
+
     if (isVideo) {
       if (isMp4) {
         const video = document.createElement('video');
@@ -205,6 +212,19 @@ function PublishFile(props: Props) {
       } else {
         updateOptimizeState(0, file.size, isVideo);
       }
+    }
+
+    if (isText) {
+      // Create reader
+      const reader = new FileReader();
+      // Handler for file reader
+      reader.addEventListener('load', event => {
+        const text = event.target.result;
+        setFileText(text);
+        setPublishMode(PUBLISH_MODES.STORY);
+      });
+      // Read file contents
+      reader.readAsText(file);
     }
 
     // @if TARGET='web'
