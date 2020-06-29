@@ -47,8 +47,8 @@ export default function getHomePageRowData(
     '87b13b074936b1f42a7c6758c7c2995f58c602e7',
     '25f384bd95e218f6ac37fcaca99ed40f36760d8c',
     '02c020b2fab7dd1fbd175c3b22947688c0a219e5',
-    '57dbc8fdc4d062e2824d8550861b380203539099',
-    '4e17d248adc0128afe969c2e1327e10afd9cb921',
+    // '57dbc8fdc4d062e2824d8550861b380203539099',
+    // '4e17d248adc0128afe969c2e1327e10afd9cb921',
     // '760da3ba3dd85830a843beaaed543a89b7a367e7',
     // '5a1b164d0a2e7adf1db08d7363ea1cb06c30cd74',
     // 'c9da929d12afe6066acc89eb044b552f0d63782a',
@@ -107,13 +107,13 @@ export default function getHomePageRowData(
   ];
 
   const YOUTUBE_CREATOR_ROW = {
-    title: 'Official YouTube Creators',
+    title: __('Top Tube Refugees'),
     link: `/$/${PAGES.DISCOVER}?${CS.CLAIM_TYPE}=${CS.CLAIM_STREAM}&${CS.CHANNEL_IDS_KEY}=${YOUTUBER_CHANNEL_IDS.join(
       ','
     )}`,
     options: {
       claimType: ['stream'],
-      pageSize: 8,
+      pageSize: 12,
       channelIds: YOUTUBER_CHANNEL_IDS,
     },
   };
@@ -159,21 +159,21 @@ export default function getHomePageRowData(
     },
   };
 
-  //   const TOP_CONTENT_TODAY = {
-  //     title: __('Top Content from Today'),
-  //     link: `/$/${PAGES.DISCOVER}?${CS.ORDER_BY_KEY}=${CS.ORDER_BY_TOP}&${CS.FRESH_KEY}=${CS.FRESH_DAY}`,
-  //     options: {
-  //       pageSize: showPersonalizedChannels || showPersonalizedTags ? 4 : 8,
-  //       orderBy: ['effective_amount'],
-  //       claimType: ['stream'],
-  //       releaseTime: `>${Math.floor(
-  //         moment()
-  //           .subtract(1, 'day')
-  //           .startOf('day')
-  //           .unix()
-  //       )}`,
-  //     },
-  //   };
+  const TOP_CONTENT_TODAY = {
+    title: __('Top Content from Today'),
+    link: `/$/${PAGES.DISCOVER}?${CS.ORDER_BY_KEY}=${CS.ORDER_BY_TOP}&${CS.FRESH_KEY}=${CS.FRESH_DAY}`,
+    options: {
+      pageSize: showPersonalizedChannels || showPersonalizedTags ? 4 : 8,
+      orderBy: ['effective_amount'],
+      claimType: ['stream'],
+      releaseTime: `>${Math.floor(
+        moment()
+          .subtract(1, 'day')
+          .startOf('day')
+          .unix()
+      )}`,
+    },
+  };
 
   const PROTESTS_2020 = {
     title: '#2020protests',
@@ -253,19 +253,20 @@ export default function getHomePageRowData(
       rowData.push(item);
     });
   }
-  if (authenticated) {
-    rowData.push(YOUTUBE_CREATOR_ROW);
-  }
-  //   rowData.push(TOP_CONTENT_TODAY);
-  rowData.push(PROTESTS_2020);
-  //   rowData.push(TRENDING_ON_LBRY);
+
   if (!authenticated) {
     rowData.push(YOUTUBE_CREATOR_ROW);
   }
 
   rowData.push(TRENDING_CLASSICS);
+  rowData.push(TOP_CONTENT_TODAY);
+  rowData.push(PROTESTS_2020);
+
+  //   rowData.push(TRENDING_ON_LBRY);
+
   rowData.push(LATEST_FROM_LBRY);
   rowData.push(LATEST_FROM_LBRYCAST);
+
   if (!showPersonalizedChannels) rowData.push(TOP_CHANNELS);
 
   return rowData;
