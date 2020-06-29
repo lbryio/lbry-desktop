@@ -1,6 +1,7 @@
 <img width="40%" src="https://miro.medium.com/max/5198/1*bTVuL2THG_0mpwmE-n7Ezg.png" />
 
 # LBRY App - https://lbry.tv
+
 This repo contains the UI code that powers the official LBRY desktop app, as well as lbry.tv. The LBRY app is a graphical browser for the decentralized content marketplace provided by the
 [LBRY](https://lbry.com) protocol. It is essentially the
 [lbry daemon](https://github.com/lbryio/lbry) bundled with a UI using
@@ -23,9 +24,10 @@ This repo contains the UI code that powers the official LBRY desktop app, as wel
   <a href="https://forthebadge.com" title="forthebadge">
     <img alt="forthebadge" src="https://forthebadge.com/images/badges/60-percent-of-the-time-works-every-time.svg">
   </a>
+  <a href="https://forthebadge.com" title="forthebadge">
+    <img alt="forthebadge" src="https://forthebadge.com/images/badges/approved-by-veridian-dynamics.svg">
+  </a>
 </h2>
-
-
 
 ![App GIF](https://spee.ch/@lbrynews:0/lbry-joule.gif)
 
@@ -100,20 +102,23 @@ You can run the web version (lbry.tv), the electron app, or both at the same tim
 
 - This uses webpack-dev-server and includes hot-reloading. If you want to debug the [web server we use in production](https://github.com/lbryio/lbry-desktop/blob/master/src/platforms/web/server.js) you can run `yarn dev:web-server`. This starts a server at `localhost:1337` and does not include hot reloading.
 
-
 #### Customize the web app
 
 - Enter web directory, copy .env.defaults to .env and make changes
+
 ```
 cd web
 cp .env.defaults .env
 nano .env
 ```
-- If you want to customize the homepage content 
+
+- If you want to customize the homepage content
+
 1. add `CUSTOM_HOMEPAGE=true` to the 'web/.env' file
 2. copy `/custom/homepage.example.js` to `/custom/homepage.js` and make desired changes to `homepage.js`
 
 - If you want up to two custom sidebar links
+
 ```
 PINNED_URI_1=@someurl#2/someclaim#4
 PINNED_LABEL_1=Linktext
@@ -124,11 +129,11 @@ PINNED_LABEL_2=OtherLinkText
 
 - Finally `NODE_ENV=production yarn compile:web` to rebuild
 
-#### Deploy the web app (*experimental*)
+#### Deploy the web app (_experimental_)
 
 1. Create a server with a domain name and a reverse proxy https to port 1337.
 2. Install pm2, node v10, yarn
-3. Clone this repo 
+3. Clone this repo
 4. Make any customizations as above
 5. Run `yarn` to install
 6. Run `NODE_ENV=production yarn compile:web` to build
