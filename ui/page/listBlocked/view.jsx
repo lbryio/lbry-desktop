@@ -18,6 +18,7 @@ function ListBlocked(props: Props) {
           persistedStorageKey="block-list-published"
           uris={uris}
           defaultSort
+          showUnresolvedClaims
           showHiddenByUser
         />
       ) : (
