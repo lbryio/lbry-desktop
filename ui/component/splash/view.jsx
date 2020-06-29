@@ -179,8 +179,8 @@ export default class SplashScreen extends React.PureComponent<Props, State> {
           message: __('Loading Wallet'),
           details: (
             <React.Fragment>
-              <div>__('Large account history')</div>
-              <div>__('Please wait...')</div>
+              <div>{__('Large account history')}</div>
+              <div>{__('Please wait...')}</div>
             </React.Fragment>
           ),
         });
