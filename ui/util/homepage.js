@@ -113,6 +113,7 @@ export default function getHomePageRowData(
     )}`,
     options: {
       claimType: ['stream'],
+      orderBy: ['release_time'],
       pageSize: 12,
       channelIds: YOUTUBER_CHANNEL_IDS,
     },
