@@ -31,11 +31,13 @@ function ChannelAbout(props: Props) {
     <div className="card">
       <section className="section card--section">
         <Fragment>
-          <label>{__('Description')}</label>
           {description && (
-            <div className="media__info-text media__info-text--constrained">
-              <MarkdownPreview content={description} />
-            </div>
+            <>
+              <label>{__('Description')}</label>
+              <div className="media__info-text media__info-text--constrained">
+                <MarkdownPreview content={description} />
+              </div>
+            </>
           )}
           {email && (
             <Fragment>

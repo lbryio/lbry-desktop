@@ -52,14 +52,13 @@ type Props = {
 function ChannelPage(props: Props) {
   const {
     uri,
+    claim,
     title,
     cover,
     history,
     location,
     page,
     channelIsMine,
-    thumbnail,
-    claim,
     isSubscribed,
     channelIsBlocked,
     blackListedOutpoints,
@@ -72,11 +71,8 @@ function ChannelPage(props: Props) {
   const { search } = location;
   const urlParams = new URLSearchParams(search);
   const currentView = urlParams.get(PAGE_VIEW_QUERY) || undefined;
-  const [coverError, setCoverError] = useState(false);
   const { permanent_url: permanentUrl } = claim;
   const [editing, setEditing] = useState(false);
-  const [thumbPreview, setThumbPreview] = useState(thumbnail);
-  const [coverPreview, setCoverPreview] = useState(cover);
   const [lastYtSyncDate, setLastYtSyncDate] = useState();
   const claimId = claim.claim_id;
   const formattedSubCount = Number(subCount).toLocaleString();
@@ -100,18 +96,14 @@ function ChannelPage(props: Props) {
     history.push(`${url}${search}`);
   }
 
-  function doneEditing() {
+  function onDone() {
     setEditing(false);
-    setThumbPreview(thumbnail);
-    setCoverPreview(cover);
   }
 
   useEffect(() => {
     Lbryio.call('yt', 'get_youtuber', { channel_claim_id: claimId }).then(response => {
       if (response.is_verified_youtuber) {
         setLastYtSyncDate(response.last_synced);
-      } else {
-        setLastYtSyncDate(undefined);
       }
     });
   }, [claimId]);
@@ -134,6 +126,19 @@ function ChannelPage(props: Props) {
     }
   }, [channelIsMine, editing]);
 
+  if (editing) {
+    return (
+      <Page
+        noFooter
+        noSideNavigation={editing}
+        title={__('Edit Channel')}
+        backout={{ backFunction: onDone, backTitle: __('Edit Channel') }}
+      >
+        <ChannelEdit uri={uri} onDone={onDone} />
+      </Page>
+    );
+  }
+
   return (
     <Page noFooter>
       <ClaimUri uri={uri} />
@@ -153,39 +158,26 @@ function ChannelPage(props: Props) {
           {!channelIsBlocked && (!channelIsBlackListed || isSubscribed) && <SubscribeButton uri={permanentUrl} />}
           {!isSubscribed && <BlockButton uri={permanentUrl} />}
         </div>
-        {!editing && cover && !coverError && (
+        {cover && (
           <img
             className={classnames('channel-cover__custom', { 'channel__image--blurred': channelIsBlocked })}
             src={cover}
-            onError={() => setCoverError(true)}
           />
         )}
-        {editing && <img className="channel-cover__custom" src={coverPreview} />}
-        {/* component that offers select/upload */}
         <div className="channel__primary-info">
-          {!editing && (
-            <ChannelThumbnail
-              className="channel__thumbnail--channel-page"
-              uri={uri}
-              obscure={channelIsBlocked}
-              allowGifs
-            />
-          )}
-          {editing && (
-            <ChannelThumbnail
-              className="channel__thumbnail--channel-page"
-              uri={uri}
-              thumbnailPreview={thumbPreview}
-              allowGifs
-            />
-          )}
+          <ChannelThumbnail
+            className="channel__thumbnail--channel-page"
+            uri={uri}
+            obscure={channelIsBlocked}
+            allowGifs
+          />
           <h1 className="channel__title">{title || '@' + channelName}</h1>
           <div className="channel__meta">
             <span>
               {formattedSubCount} {subCount !== 1 ? __('Followers') : __('Follower')}
               <HelpLink href="https://lbry.com/faq/views" />
             </span>
-            {channelIsMine && !editing && (
+            {channelIsMine && (
               <>
                 {pending ? (
                   <span>{__('Your changes will be live in a few minutes')}</span>
@@ -201,15 +193,6 @@ function ChannelPage(props: Props) {
                 )}
               </>
             )}
-            {channelIsMine && editing && (
-              <Button
-                button="alt"
-                title={__('Cancel')}
-                onClick={() => doneEditing()}
-                icon={ICONS.REMOVE}
-                iconSize={18}
-              />
-            )}
           </div>
         </div>
         <div className="channel-cover__gradient" />
@@ -220,22 +203,12 @@ function ChannelPage(props: Props) {
           <Tab>{editing ? __('Editing Your Channel') : __('About')}</Tab>
           <Tab disabled={editing}>{__('Comments')}</Tab>
         </TabList>
-
         <TabPanels>
           <TabPanel>
             <ChannelContent uri={uri} channelIsBlackListed={channelIsBlackListed} />
           </TabPanel>
           <TabPanel>
-            {editing ? (
-              <ChannelEdit
-                uri={uri}
-                doneEditing={doneEditing}
-                updateThumb={v => setThumbPreview(v)}
-                updateCover={v => setCoverPreview(v)}
-              />
-            ) : (
-              <ChannelAbout uri={uri} />
-            )}
+            <ChannelAbout uri={uri} />
           </TabPanel>
           <TabPanel>
             <ChannelDiscussion uri={uri} />

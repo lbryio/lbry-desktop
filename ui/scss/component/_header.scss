@@ -43,6 +43,12 @@
   }
 }
 
+.header__contents--between {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+}
+
 .header__navigation {
   flex: 1;
   display: flex;

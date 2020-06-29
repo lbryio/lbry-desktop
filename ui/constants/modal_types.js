@@ -42,3 +42,4 @@ export const SIGN_OUT = 'sign_out';
 export const LIQUIDATE_SUPPORTS = 'liquidate_supports';
 export const CONFIRM_AGE = 'confirm_age';
 export const REMOVE_BLOCKED = 'remove_blocked';
+export const IMAGE_UPLOAD = 'image_upload';

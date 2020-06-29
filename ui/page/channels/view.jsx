@@ -8,6 +8,7 @@ import Button from 'component/button';
 import YoutubeTransferStatus from 'component/youtubeTransferStatus';
 import Spinner from 'component/spinner';
 import Card from 'component/common/card';
+import * as PAGES from 'constants/pages';
 
 type Props = {
   channels: Array<ChannelClaim>,
@@ -35,12 +36,14 @@ export default function ChannelsPage(props: Props) {
         <Card
           title={__('Your Channels')}
           titleActions={
-            <Button
-              button="secondary"
-              icon={ICONS.CHANNEL}
-              label={__('New Channel')}
-              onClick={() => openModal(MODALS.CREATE_CHANNEL)}
-            />
+            <>
+              <Button
+                button="secondary"
+                icon={ICONS.CHANNEL}
+                label={__('New Channel')}
+                navigate={`/$/${PAGES.CHANNEL_NEW}`}
+              />
+            </>
           }
           isBodyList
           body={<ClaimList isCardBody loading={fetchingChannels} uris={channelUrls} />}
