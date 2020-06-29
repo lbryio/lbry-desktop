@@ -227,6 +227,11 @@
   width: 100%;
 }
 
+.claim-preview__primary-actions {
+  @extend .section__actions;
+  margin-top: 0;
+}
+
 .claim-preview__actions--header {
   @extend .claim-preview__actions;
   flex-wrap: wrap;

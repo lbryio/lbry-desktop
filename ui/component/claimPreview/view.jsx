@@ -284,11 +284,11 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
           {type !== 'small' && (
             <div className="claim-preview__actions">
               {!pending && (
-                <React.Fragment>
+                <>
                   {hideActions ? null : actions !== undefined ? (
                     actions
                   ) : (
-                    <div className="card__actions--inline">
+                    <div className="claim-preview__primary-actions">
                       {isChannel && !channelIsBlocked && !claimIsMine && (
                         <SubscribeButton uri={uri.startsWith('lbry://') ? uri : `lbry://${uri}`} />
                       )}
@@ -298,7 +298,7 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
                       {includeSupportAction && <ClaimSupportButton uri={uri} />}
                     </div>
                   )}
-                </React.Fragment>
+                </>
               )}
               {claim && (
                 <React.Fragment>
