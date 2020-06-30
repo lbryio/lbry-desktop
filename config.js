@@ -8,6 +8,8 @@ const config = {
   DOMAIN: process.env.DOMAIN,
   URL: process.env.URL, //lbry.tv',
   SITE_TITLE: process.env.SITE_TITLE,
+  SITE_MOTTO: process.env.SITE_MOTTO,
+  SITE_DESCRIPTION: process.env.SITE_DESCRIPTION,
   LBRY_WEB_API: process.env.LBRY_WEB_API, //api.lbry.tv',
   LBRY_WEB_STREAMING_API: process.env.LBRY_WEB_STREAMING_API, //cdn.lbryplayer.xyz',
   WELCOME_VERSION: process.env.WELCOME_VERSION,

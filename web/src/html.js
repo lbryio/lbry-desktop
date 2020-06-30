@@ -1,4 +1,4 @@
-const { URL } = require('../../config.js');
+const { URL, SITE_TITLE, SITE_DESCRIPTION, SITE_MOTTO } = require('../../config.js');
 const { generateEmbedUrl, generateStreamUrl } = require('../../ui/util/web');
 const PAGES = require('../../ui/constants/pages');
 const { getClaim } = require('./chainquery');
@@ -8,6 +8,7 @@ const path = require('path');
 
 let html = fs.readFileSync(path.join(__dirname, '/../dist/index.html'), 'utf8');
 
+module.exports = { insertToHead, buildBasicOgMetadata, getHtml };
 function insertToHead(fullHtml, htmlToInsert) {
   return fullHtml.replace(
     /<!-- VARIABLE_HEAD_BEGIN -->.*<!-- VARIABLE_HEAD_END -->/s,
@@ -38,15 +39,35 @@ function buildOgMetadata(overrideOptions = {}) {
   const head =
     '<title>lbry.tv</title>\n' +
     `<meta property="og:url" content="${URL}" />\n` +
-    `<meta property="og:title" content="${title || 'lbry.tv'}" />\n` +
-    '<meta property="og:site_name" content="lbry.tv | Content Freedom"/>\n' +
-    `<meta property="og:description" content="${description ||
-      'Meet LBRY, an open, free, and community-controlled content wonderland.'}" />\n` +
-    `<meta property="og:image" content="${URL}/v2-og.png" />\n` +
+    `<meta property="og:title" content="${title || SITE_TITLE}" />\n` +
+    `<meta property="og:site_name" content="${SITE_TITLE} | ${SITE_MOTTO}"/>\n` +
+    `<meta property="og:description" content="${description || SITE_DESCRIPTION}" />\n` +
+    `<meta property="og:image" content="${URL}/public/v2-og.png" />\n` +
     '<meta name="twitter:card" content="summary_large_image"/>\n' +
-    `<meta name="twitter:image" content="${URL}/v2-og.png"/>\n` +
+    `<meta name="twitter:title" content="${title || SITE_TITLE}" />\n` +
+    `<meta name="twitter:description" content="${description || SITE_DESCRIPTION}" />\n` +
+    `<meta name="twitter:image" content="${URL}/public/v2-og.png"/>\n` +
+    `<meta name="twitter:url" content="${URL}" />\n` +
     '<meta property="fb:app_id" content="1673146449633983" />';
+  return head;
+}
 
+function buildBasicOgMetadata() {
+  const head =
+    '    <!-- VARIABLE_HEAD_BEGIN -->' +
+    '<title>lbry.tv</title>\n' +
+    `<meta property="og:url" content="${URL}" />\n` +
+    `<meta property="og:title" content="${SITE_TITLE}" />\n` +
+    `<meta property="og:site_name" content="${SITE_TITLE} | ${SITE_MOTTO}"/>\n` +
+    `<meta property="og:description" content="${SITE_DESCRIPTION}" />\n` +
+    `<meta property="og:image" content="${URL}/public/v2-og.png" />\n` +
+    '<meta name="twitter:card" content="summary_large_image"/>\n' +
+    `<meta name="twitter:title" content="${SITE_TITLE}" />\n` +
+    `<meta name="twitter:description" content="${SITE_DESCRIPTION}" />\n` +
+    `<meta name="twitter:image" content="${URL}/public/v2-og.png"/>\n` +
+    `<meta name="twitter:url" content="${URL}" />\n` +
+    '<meta property="fb:app_id" content="1673146449633983" />' +
+    '    <!-- VARIABLE_HEAD_END -->';
   return head;
 }
 
@@ -69,7 +90,7 @@ function buildClaimOgMetadata(uri, claim, overrideOptions = {}) {
   if (Number(claim.fee) <= 0 && claim.source_media_type && claim.source_media_type.startsWith('image/')) {
     imageThumbnail = generateStreamUrl(claim.name, claim.claim_id);
   }
-  const claimThumbnail = escapeHtmlProperty(claim.thumbnail_url) || imageThumbnail || `${URL}/v2-og.png`;
+  const claimThumbnail = escapeHtmlProperty(claim.thumbnail_url) || imageThumbnail || `${URL}/public/v2-og.png`;
 
   // Allow for ovverriding default claim based og metadata
   const title = overrideOptions.title || claimTitle;
@@ -91,8 +112,10 @@ function buildClaimOgMetadata(uri, claim, overrideOptions = {}) {
   head += `<meta property="og:site_name" content="lbry.tv"/>`;
   head += `<meta property="og:type" content="website"/>`;
   head += `<meta property="og:title" content="${title}"/>`;
+  head += `<meta name="twitter:title" content="${title}"/>`;
   // below should be canonical_url, but not provided by chainquery yet
   head += `<meta property="og:url" content="${URL}/${claim.name}:${claim.claim_id}"/>`;
+  head += `<meta name="twitter:url" content="${URL}/${claim.name}:${claim.claim_id}"/>`;
 
   if (
     claim.source_media_type &&
@@ -131,11 +154,11 @@ async function getClaimFromChainquery(url) {
   return undefined;
 }
 
-module.exports.getHtml = async function getHtml(ctx) {
+async function getHtml(ctx) {
   const path = decodeURIComponent(ctx.path);
-
   if (path.length === 0) {
-    return insertToHead(html);
+    const ogMetadata = buildBasicOgMetadata();
+    return insertToHead(html, ogMetadata);
   }
 
   const invitePath = `/$/${PAGES.INVITE}/`;
@@ -187,5 +210,6 @@ module.exports.getHtml = async function getHtml(ctx) {
     }
   }
 
-  return insertToHead(html);
-};
+  const ogMetadata = buildBasicOgMetadata();
+  return insertToHead(html, ogMetadata);
+}
