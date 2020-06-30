@@ -492,7 +492,6 @@ class SettingsPage extends React.PureComponent<Props, State> {
                         button="secondary"
                         label={__('Manage')}
                         icon={ICONS.SETTINGS}
-                        disabled={userBlockedChannelsCount === 0}
                         navigate={`/$/${PAGES.SETTINGS_NOTIFICATIONS}`}
                       />
                     </div>
