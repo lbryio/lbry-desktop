@@ -63,12 +63,15 @@ function FileListPublished(props: Props) {
             title={__('Publishes')}
             titleActions={
               <div className="card__actions--inline">
-                <Button
-                  button="alt"
-                  label={__('Refresh')}
-                  icon={ICONS.REFRESH}
-                  onClick={() => fetchClaimListMine(params.page, params.page_size)}
-                />
+                {fetching && <Spinner type="small" />}
+                {!fetching && (
+                  <Button
+                    button="alt"
+                    label={__('Refresh')}
+                    icon={ICONS.REFRESH}
+                    onClick={() => fetchClaimListMine(params.page, params.page_size)}
+                  />
+                )}
                 <Button
                   icon={ICONS.PUBLISH}
                   button="secondary"
