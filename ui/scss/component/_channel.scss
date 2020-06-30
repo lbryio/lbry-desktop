@@ -10,11 +10,6 @@ $metadata-z-index: 1;
   color: #fff;
 }
 
-.channel-cover--edit {
-  @extend .channel-cover;
-  padding-top: 4rem;
-}
-
 .channel-cover__custom {
   z-index: $cover-z-index;
   align-self: flex-start;
@@ -25,9 +20,12 @@ $metadata-z-index: 1;
 .channel-cover,
 .channel-cover__custom {
   min-height: var(--cover-photo-height);
+  height: 100%;
   width: 100%;
   border-top-left-radius: var(--card-radius);
   border-top-right-radius: var(--card-radius);
+  border: 1px sold var(--color-border);
+  border-bottom: none;
 
   @media (max-width: $breakpoint-small) {
     // Yikes
@@ -77,7 +75,8 @@ $metadata-z-index: 1;
   box-shadow: var(--card-box-shadow);
 
   @media (max-width: $breakpoint-small) {
-    display: none;
+    top: 0;
+    margin-top: var(--spacing-m);
   }
 }
 
@@ -124,7 +123,7 @@ $metadata-z-index: 1;
   z-index: $metadata-z-index;
   // Jump over the thumbnail photo because it is absolutely positioned
   // Then add normal page spacing, _then_ add the actual padding
-  padding-left: calc(var(--channel-thumbnail-width) + var(--spacing-l));
+  padding-left: calc(var(--channel-thumbnail-width) + var(--spacing-xl));
   padding-right: var(--spacing-m);
   padding-bottom: var(--spacing-m);
   margin-top: var(--spacing-xl);
@@ -133,7 +132,7 @@ $metadata-z-index: 1;
 
   @media (max-width: $breakpoint-small) {
     padding-left: var(--spacing-m);
-    margin-top: 0;
+    margin-top: calc(var(--channel-thumbnail-width) + var(--spacing-l));
   }
 }
 
@@ -191,22 +190,27 @@ $metadata-z-index: 1;
   }
 
   @media (max-width: $breakpoint-small) {
+    flex-direction: column;
+
     > * {
+      margin-right: 0;
       margin-bottom: var(--spacing-xs);
+      margin-left: auto;
+
+      // Needed for specificity above
+      &:not(:last-child) {
+        margin-right: 0;
+      }
     }
   }
 }
 
 .channel__edit-thumb {
-  display: flex;
-  flex-direction: row;
   position: absolute;
   top: 0;
   left: var(--spacing-l);
   margin-top: calc(var(--spacing-m) * 7);
   z-index: $metadata-z-index;
-  flex-wrap: wrap;
-  font-size: var(--font-base);
 
   > * {
     padding: 0 var(--spacing-xs);
@@ -217,45 +221,12 @@ $metadata-z-index: 1;
   }
 
   @media (max-width: $breakpoint-small) {
-    > * {
-      margin-bottom: var(--spacing-xs);
+    margin-top: 0;
+
+    .button {
+      margin-top: var(--spacing-l);
     }
   }
-}
-
-.channel__edit-cover {
-  display: flex;
-  flex-direction: row;
-  position: absolute;
-  top: 0;
-  left: var(--spacing-m);
-  margin-top: var(--spacing-m);
-  z-index: $metadata-z-index;
-  flex-wrap: wrap;
-  font-size: var(--font-base);
-
-  > * {
-    padding: 0 var(--spacing-xs);
-
-    &:not(:last-child) {
-      margin-right: var(--spacing-m);
-    }
-  }
-
-  @media (max-width: $breakpoint-small) {
-    > * {
-      margin-bottom: var(--spacing-xs);
-    }
-  }
-}
-
-.channel__uri-preview {
-  position: absolute;
-  top: -2rem;
-  left: 0;
-  z-index: $metadata-z-index;
-  font-size: var(--font-base);
-  color: var(--color-text-subtitle);
 }
 
 .channel-name--inline {

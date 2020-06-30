@@ -15,9 +15,14 @@ type Props = {
   accept?: string,
   error?: string,
   disabled?: boolean,
+  autoFocus?: boolean,
 };
 
 class FileSelector extends React.PureComponent<Props> {
+  static defaultProps = {
+    autoFocus: false,
+  };
+
   componentDidUpdate(prevProps: Props) {
     // If the form has just been cleared,
     // clear the file input
@@ -58,7 +63,18 @@ class FileSelector extends React.PureComponent<Props> {
   input: ?HTMLInputElement;
 
   render() {
-    const { type, currentPath, label, fileLabel, directoryLabel, placeholder, accept, error, disabled } = this.props;
+    const {
+      type,
+      currentPath,
+      label,
+      fileLabel,
+      directoryLabel,
+      placeholder,
+      accept,
+      error,
+      disabled,
+      autoFocus = false,
+    } = this.props;
     const buttonLabel = type === 'file' ? fileLabel || __('Choose File') : directoryLabel || __('Choose Directory');
     const placeHolder = currentPath || placeholder;
 
@@ -74,7 +90,13 @@ class FileSelector extends React.PureComponent<Props> {
           readOnly="readonly"
           value={placeHolder || __('Choose a file')}
           inputButton={
-            <Button button="secondary" disabled={disabled} onClick={this.fileInputButton} label={buttonLabel} />
+            <Button
+              autoFocus={autoFocus}
+              button="secondary"
+              disabled={disabled}
+              onClick={this.fileInputButton}
+              label={buttonLabel}
+            />
           }
         />
         <input

@@ -1,5 +1,7 @@
 .main-wrapper {
   position: relative;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .main-wrapper--mac {
@@ -25,6 +27,8 @@
 .main {
   position: relative;
   width: calc(100% - var(--side-nav-width) - var(--spacing-l));
+  margin-right: auto;
+  margin-left: auto;
 
   @media (max-width: $breakpoint-small) {
     width: 100%;

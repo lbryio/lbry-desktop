@@ -1,6 +1,6 @@
 // @flow
 import * as ICONS from 'constants/icons';
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { parseURI } from 'lbry-redux';
 import { Lbryio } from 'lbryinc';
 import Page from 'component/page';
@@ -8,7 +8,7 @@ import SubscribeButton from 'component/subscribeButton';
 import BlockButton from 'component/blockButton';
 import ShareButton from 'component/shareButton';
 import { Tabs, TabList, Tab, TabPanels, TabPanel } from 'component/common/tabs';
-import { withRouter } from 'react-router';
+import { useHistory } from 'react-router';
 import Button from 'component/button';
 import { formatLbryUrlForWeb } from 'util/url';
 import ChannelContent from 'component/channelContent';
@@ -26,6 +26,7 @@ import ClaimSupportButton from 'component/claimSupportButton';
 const PAGE_VIEW_QUERY = `view`;
 const ABOUT_PAGE = `about`;
 const DISCUSSION_PAGE = `discussion`;
+const EDIT_PAGE = 'edit';
 
 type Props = {
   uri: string,
@@ -34,8 +35,6 @@ type Props = {
   cover: ?string,
   thumbnail: ?string,
   page: number,
-  location: { search: string },
-  history: { push: string => void },
   match: { params: { attribute: ?string } },
   channelIsMine: boolean,
   isSubscribed: boolean,
@@ -55,8 +54,6 @@ function ChannelPage(props: Props) {
     claim,
     title,
     cover,
-    history,
-    location,
     page,
     channelIsMine,
     isSubscribed,
@@ -66,16 +63,27 @@ function ChannelPage(props: Props) {
     subCount,
     pending,
   } = props;
-
-  const { channelName } = parseURI(uri);
-  const { search } = location;
+  const {
+    push,
+    goBack,
+    location: { search },
+  } = useHistory();
   const urlParams = new URLSearchParams(search);
   const currentView = urlParams.get(PAGE_VIEW_QUERY) || undefined;
+  const editInUrl = urlParams.get(PAGE_VIEW_QUERY) === EDIT_PAGE;
+  const [editing, setEditing] = React.useState(editInUrl);
+  const [lastYtSyncDate, setLastYtSyncDate] = React.useState();
+  const { channelName } = parseURI(uri);
   const { permanent_url: permanentUrl } = claim;
-  const [editing, setEditing] = useState(false);
-  const [lastYtSyncDate, setLastYtSyncDate] = useState();
   const claimId = claim.claim_id;
   const formattedSubCount = Number(subCount).toLocaleString();
+  let channelIsBlackListed = false;
+
+  if (claim && blackListedOutpoints) {
+    channelIsBlackListed = blackListedOutpoints.some(
+      outpoint => outpoint.txid === claim.txid && outpoint.nout === claim.nout
+    );
+  }
 
   // If a user changes tabs, update the url so it stays on the same page if they refresh.
   // We don't want to use links here because we can't animate the tab change and using links
@@ -93,14 +101,34 @@ function ChannelPage(props: Props) {
     } else {
       search += `${PAGE_VIEW_QUERY}=${DISCUSSION_PAGE}`;
     }
-    history.push(`${url}${search}`);
+
+    push(`${url}${search}`);
   }
 
   function onDone() {
     setEditing(false);
+    goBack();
   }
 
-  useEffect(() => {
+  React.useEffect(() => {
+    if (!channelIsMine && editing) {
+      setEditing(false);
+    }
+
+    if (channelIsMine && editing) {
+      push(`?${PAGE_VIEW_QUERY}=${EDIT_PAGE}`);
+    }
+  }, [channelIsMine, editing, push]);
+
+  React.useEffect(() => {
+    if (currentView === EDIT_PAGE) {
+      setEditing(true);
+    } else {
+      setEditing(false);
+    }
+  }, [currentView, setEditing]);
+
+  React.useEffect(() => {
     Lbryio.call('yt', 'get_youtuber', { channel_claim_id: claimId }).then(response => {
       if (response.is_verified_youtuber) {
         setLastYtSyncDate(response.last_synced);
@@ -108,31 +136,20 @@ function ChannelPage(props: Props) {
     });
   }, [claimId]);
 
-  let channelIsBlackListed = false;
-
-  if (claim && blackListedOutpoints) {
-    channelIsBlackListed = blackListedOutpoints.some(
-      outpoint => outpoint.txid === claim.txid && outpoint.nout === claim.nout
-    );
-  }
-
   React.useEffect(() => {
     fetchSubCount(claimId);
   }, [uri, fetchSubCount, claimId]);
-
-  React.useEffect(() => {
-    if (!channelIsMine && editing) {
-      setEditing(false);
-    }
-  }, [channelIsMine, editing]);
 
   if (editing) {
     return (
       <Page
         noFooter
         noSideNavigation={editing}
-        title={__('Edit Channel')}
-        backout={{ backFunction: onDone, backTitle: __('Edit Channel') }}
+        backout={{
+          backFunction: onDone,
+          title: __('Editing @%channel%', { channel: channelName }),
+          simpleTitle: __('Editing'),
+        }}
       >
         <ChannelEdit uri={uri} onDone={onDone} />
       </Page>
@@ -219,4 +236,4 @@ function ChannelPage(props: Props) {
   );
 }
 
-export default withRouter(ChannelPage);
+export default ChannelPage;

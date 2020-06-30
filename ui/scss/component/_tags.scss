@@ -47,12 +47,6 @@
   }
 }
 
-.tags__border {
-  border-radius: var(--border-radius);
-  border: 1px solid var(--color-input-border);
-  padding: 1rem;
-}
-
 .tag {
   @extend .badge;
   @extend .badge--tag;

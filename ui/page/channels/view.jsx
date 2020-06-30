@@ -30,25 +30,28 @@ export default function ChannelsPage(props: Props) {
 
   return (
     <Page>
-      {hasYoutubeChannels && <YoutubeTransferStatus hideChannelLink />}
+      <div className="card-stack">
+        {hasYoutubeChannels && <YoutubeTransferStatus hideChannelLink />}
 
-      {channelUrls && Boolean(channelUrls.length) && (
-        <Card
-          title={__('Your Channels')}
-          titleActions={
-            <>
-              <Button
-                button="secondary"
-                icon={ICONS.CHANNEL}
-                label={__('New Channel')}
-                navigate={`/$/${PAGES.CHANNEL_NEW}`}
-              />
-            </>
-          }
-          isBodyList
-          body={<ClaimList isCardBody loading={fetchingChannels} uris={channelUrls} />}
-        />
-      )}
+        {channelUrls && Boolean(channelUrls.length) && (
+          <Card
+            title={__('Your Channels')}
+            titleActions={
+              <>
+                <Button
+                  button="secondary"
+                  icon={ICONS.CHANNEL}
+                  label={__('New Channel')}
+                  navigate={`/$/${PAGES.CHANNEL_NEW}`}
+                />
+              </>
+            }
+            isBodyList
+            body={<ClaimList isCardBody loading={fetchingChannels} uris={channelUrls} />}
+          />
+        )}
+      </div>
+
       {!(channelUrls && channelUrls.length) && (
         <React.Fragment>
           {!fetchingChannels ? (

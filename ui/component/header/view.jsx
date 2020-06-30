@@ -13,6 +13,7 @@ import { Menu, MenuList, MenuButton, MenuItem } from '@reach/menu-button';
 import Tooltip from 'component/common/tooltip';
 import NavigationButton from 'component/navigationButton';
 import { LOGO_TITLE } from 'config';
+import useIsMobile from 'effects/use-is-mobile';
 // @if TARGET='app'
 import { remote } from 'electron';
 import { IS_MAC } from 'component/app/view';
@@ -37,7 +38,11 @@ type Props = {
   email: ?string,
   authenticated: boolean,
   authHeader: boolean,
-  backout: { backFunction: () => void, backTitle: string },
+  backout: {
+    backFunction: () => void,
+    title: string,
+    simpleTitle: string, // Just use the same value as `title` if `title` is already short (~< 10 chars), unless you have a better idea for title overlfow on mobile
+  },
   syncError: ?string,
   emailToVerify?: string,
   signOut: () => void,
@@ -69,7 +74,7 @@ const Header = (props: Props) => {
     emailToVerify,
     backout,
   } = props;
-
+  const isMobile = useIsMobile();
   // on the verify page don't let anyone escape other than by closing the tab to keep session data consistent
   const isVerifyPage = history.location.pathname.includes(PAGES.AUTH_VERIFY);
   const isSignUpPage = history.location.pathname.includes(PAGES.AUTH);
@@ -138,9 +143,9 @@ const Header = (props: Props) => {
     >
       <div className="header__contents">
         {!authHeader && backout ? (
-          <div className="header__contents--between">
-            <Button onClick={backout.backFunction} button="link" label={__('Back')} />
-            {backout.backTitle && <h1 className={'card__title'}>{backout.backTitle}</h1>}
+          <div className="card__actions--between">
+            <Button onClick={backout.backFunction} button="link" label={__('Cancel')} icon={ICONS.ARROW_LEFT} />
+            {backout.title && <h1 className={'card__title'}>{isMobile ? backout.simpleTitle : backout.title}</h1>}
             <Button
               aria-label={__('Your wallet')}
               navigate={`/$/${PAGES.WALLET}`}

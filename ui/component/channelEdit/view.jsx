@@ -1,16 +1,18 @@
 // @flow
-import React, { useState, useEffect } from 'react';
+import * as MODALS from 'constants/modal_types';
+import * as ICONS from 'constants/icons';
+import React from 'react';
 import { FormField } from 'component/common/form';
 import Button from 'component/button';
 import TagsSearch from 'component/tagsSearch';
 import { FF_MAX_CHARS_IN_DESCRIPTION } from 'constants/form-field';
 import ErrorText from 'component/common/error-text';
-import * as MODALS from 'constants/modal_types';
-import * as ICONS from 'constants/icons';
 import ChannelThumbnail from 'component/channelThumbnail';
 import { isNameValid, parseURI } from 'lbry-redux';
 import ClaimAbandonButton from 'component/claimAbandonButton';
 import { MINIMUM_PUBLISH_BID, INVALID_NAME_ERROR, ESTIMATED_FEE } from 'constants/claim';
+import { Tabs, TabList, Tab, TabPanels, TabPanel } from 'component/common/tabs';
+import Card from 'component/common/card';
 
 type Props = {
   claim: ChannelClaim,
@@ -33,7 +35,10 @@ type Props = {
   createError: string,
   creatingChannel: boolean,
   onDone: () => void,
-  openModal: (id: string, { onUpdate: string => void, label: string, helptext: string, currentValue: string }) => void,
+  openModal: (
+    id: string,
+    { onUpdate: string => void, assetName: string, helpText: string, currentValue: string, title: string }
+  ) => void,
   uri: string,
 };
 
@@ -59,51 +64,53 @@ function ChannelForm(props: Props) {
     createError,
     openModal,
   } = props;
+  const [params, setParams]: [any, (any) => void] = React.useState(getChannelParams());
+  const [nameError, setNameError] = React.useState(undefined);
+  const [bidError, setBidError] = React.useState('');
   const { claim_id: claimId } = claim || {};
-  // fill this in with sdk data
-  const channelParams = {
-    website,
-    email,
-    cover,
-    thumbnail,
-    description,
-    title,
-    amount: 0.001,
-    languages: languages || [],
-    locations: locations || [],
-    tags: tags
-      ? tags.map(tag => {
-          return { name: tag };
-        })
-      : [],
-  };
-
-  if (claimId) {
-    channelParams['claim_id'] = claimId;
-  }
-
   const { channelName } = parseURI(uri);
-  const [params, setParams]: [any, (any) => void] = useState(channelParams);
-  const [nameError, setNameError] = useState(undefined);
-  const [bidError, setBidError] = useState('');
-
   const name = params.name;
+  const isNewChannel = !uri;
 
-  useEffect(() => {
-    let nameError;
-    if (!name && name !== undefined) {
-      nameError = __('A name is required for your url');
-    } else if (!isNameValid(name, false)) {
-      nameError = INVALID_NAME_ERROR;
+  function getChannelParams() {
+    // fill this in with sdk data
+    const channelParams: {
+      website: string,
+      email: string,
+      cover: string,
+      thumbnail: string,
+      description: string,
+      title: string,
+      amount: number,
+      languages: ?Array<string>,
+      locations: ?Array<string>,
+      tags: ?Array<{ name: string }>,
+      claim_id?: string,
+    } = {
+      website,
+      email,
+      cover,
+      thumbnail,
+      description,
+      title,
+      amount: 0.001,
+      languages: languages || [],
+      locations: locations || [],
+      tags: tags
+        ? tags.map(tag => {
+            return { name: tag };
+          })
+        : [],
+    };
+
+    if (claimId) {
+      channelParams['claim_id'] = claimId;
     }
 
-    setNameError(nameError);
-  }, [name]);
-  // If a user changes tabs, update the url so it stays on the same page if they refresh.
-  // We don't want to use links here because we can't animate the tab change and using links
-  // would alter the Tab label's role attribute, which should stay role="tab" to work with keyboards/screen readers.
+    return channelParams;
+  }
 
-  const handleBidChange = (bid: number) => {
+  function handleBidChange(bid: number) {
     const { balance, amount } = props;
     const totalAvailableBidAmount = parseFloat(amount) || 0.0 + parseFloat(balance) || 0.0;
     setParams({ ...params, amount: bid });
@@ -119,17 +126,17 @@ function ChannelForm(props: Props) {
     } else {
       setBidError('');
     }
-  };
+  }
 
-  const handleThumbnailChange = (thumbnailUrl: string) => {
+  function handleThumbnailChange(thumbnailUrl: string) {
     setParams({ ...params, thumbnail: thumbnailUrl });
-  };
+  }
 
-  const handleCoverChange = (coverUrl: string) => {
+  function handleCoverChange(coverUrl: string) {
     setParams({ ...params, cover: coverUrl });
-  };
+  }
 
-  const handleSubmit = () => {
+  function handleSubmit() {
     if (uri) {
       updateChannel(params).then(success => {
         if (success) {
@@ -143,28 +150,34 @@ function ChannelForm(props: Props) {
         }
       });
     }
-  };
+  }
+
+  React.useEffect(() => {
+    let nameError;
+    if (!name && name !== undefined) {
+      nameError = __('A name is required for your url');
+    } else if (!isNameValid(name, false)) {
+      nameError = INVALID_NAME_ERROR;
+    }
+
+    setNameError(nameError);
+  }, [name]);
 
   // TODO clear and bail after submit
   return (
     <>
       <div className="main--contained">
-        <header className="channel-cover--edit">
-          <span className={'channel__uri-preview'}>{uri || `lbry://@${params.name || '...'}`}</span>
-          {uri && (
-            <div className="channel__quick-actions">
-              <ClaimAbandonButton uri={uri} />
-            </div>
-          )}
-          <div className="channel__edit-cover">
+        <header className="channel-cover">
+          <div className="channel__quick-actions">
             <Button
               button="alt"
               title={__('Cover')}
               onClick={() =>
                 openModal(MODALS.IMAGE_UPLOAD, {
-                  onUpdate: v => handleCoverChange(v),
-                  label: 'Cover',
-                  helptext: 'This shoul de such a size',
+                  onUpdate: coverUrl => handleCoverChange(coverUrl),
+                  title: __('Edit Cover Image'),
+                  helpText: __('(Y x Z)'),
+                  assetName: __('Cover Image'),
                   currentValue: params.cover,
                 })
               }
@@ -181,8 +194,9 @@ function ChannelForm(props: Props) {
                 onClick={() =>
                   openModal(MODALS.IMAGE_UPLOAD, {
                     onUpdate: v => handleThumbnailChange(v),
-                    label: 'Thumbnail',
-                    helptext: 'This shoul de such a size',
+                    title: __('Edit Thumbnail Image'),
+                    helpText: __('(Y x Z)'),
+                    assetName: __('Thumbnail'),
                     currentValue: params.thumbnail,
                   })
                 }
@@ -202,115 +216,164 @@ function ChannelForm(props: Props) {
           </div>
           <div className="channel-cover__gradient" />
         </header>
-        <div className="card">
-          <section className={'section card--section'}>
-            {!uri && (
-              <FormField
-                type="text"
-                name="channel_name"
-                label={__('Name')}
-                placeholder={__('required')}
-                disabled={false}
-                value={params.name}
-                error={nameError}
-                onChange={e => setParams({ ...params, name: e.target.value })}
+
+        <Tabs>
+          <TabList className="tabs__list--channel-page">
+            <Tab>{__('General')}</Tab>
+            <Tab>{__('LBC Details')}</Tab>
+            <Tab>{__('Tags')}</Tab>
+            <Tab>{__('Other')}</Tab>
+          </TabList>
+          <TabPanels>
+            <TabPanel>
+              <Card
+                body={
+                  <>
+                    <fieldset-group class="fieldset-group--smushed fieldset-group--disabled-prefix">
+                      <fieldset-section>
+                        <label htmlFor="channel_name">{__('Name')}</label>
+                        <div className="form-field__prefix">@</div>
+                      </fieldset-section>
+
+                      <FormField
+                        autoFocus={isNewChannel}
+                        type="text"
+                        name="channel_name"
+                        placeholder={__('MyAwesomeChannel')}
+                        value={params.name || channelName}
+                        error={nameError}
+                        disabled={!isNewChannel}
+                        onChange={e => setParams({ ...params, name: e.target.value })}
+                      />
+                    </fieldset-group>
+                    {!isNewChannel && <span className="form-field__help">{__('This field cannot be changed.')}</span>}
+
+                    <FormField
+                      type="text"
+                      name="channel_title2"
+                      label={__('Title')}
+                      placeholder={__('My Awesome Channel')}
+                      value={params.title}
+                      onChange={e => setParams({ ...params, title: e.target.value })}
+                    />
+                    <FormField
+                      type="markdown"
+                      name="content_description2"
+                      label={__('Description')}
+                      placeholder={__('Description of your content')}
+                      value={params.description}
+                      onChange={text => setParams({ ...params, description: text })}
+                      textAreaMaxLength={FF_MAX_CHARS_IN_DESCRIPTION}
+                    />
+                  </>
+                }
               />
-            )}
-
-            <FormField
-              className="form-field--price-amount"
-              type="number"
-              name="content_bid2"
-              step="any"
-              label={__('Deposit (LBC)')}
-              postfix="LBC"
-              value={params.amount}
-              error={bidError}
-              min="0.0"
-              disabled={false}
-              onChange={event => handleBidChange(parseFloat(event.target.value))}
-              placeholder={0.1}
-            />
-            <FormField
-              type="text"
-              name="channel_title2"
-              label={__('Title')}
-              placeholder={__('Titular Title')}
-              disabled={false}
-              value={params.title}
-              onChange={e => setParams({ ...params, title: e.target.value })}
-            />
-
-            <FormField
-              type="text"
-              name="channel_website2"
-              label={__('Website')}
-              placeholder={__('aprettygoodsite.com')}
-              disabled={false}
-              value={params.website}
-              onChange={e => setParams({ ...params, website: e.target.value })}
-            />
-
-            <FormField
-              type="text"
-              name="content_email2"
-              label={__('Email')}
-              placeholder={__('yourstruly@example.com')}
-              disabled={false}
-              value={params.email}
-              onChange={e => setParams({ ...params, email: e.target.value })}
-            />
-
-            <FormField
-              type="markdown"
-              name="content_description2"
-              label={__('Description')}
-              placeholder={__('Description of your content')}
-              value={params.description}
-              disabled={false}
-              onChange={text => setParams({ ...params, description: text })}
-              textAreaMaxLength={FF_MAX_CHARS_IN_DESCRIPTION}
-            />
-            <label>{__('Tags')}</label>
-            <div className="tags__border">
-              <TagsSearch
-                suggestMature
-                disableAutoFocus
-                tagsPassedIn={params.tags || []}
-                label={__('Selected Tags')}
-                onRemove={clickedTag => {
-                  const newTags = params.tags.slice().filter(tag => tag.name !== clickedTag.name);
-                  setParams({ ...params, tags: newTags });
-                }}
-                onSelect={newTags => {
-                  newTags.forEach(newTag => {
-                    if (!params.tags.map(savedTag => savedTag.name).includes(newTag.name)) {
-                      setParams({ ...params, tags: [...params.tags, newTag] });
-                    } else {
-                      // If it already exists and the user types it in, remove it
-                      setParams({ ...params, tags: params.tags.filter(tag => tag.name !== newTag.name) });
-                    }
-                  });
-                }}
+            </TabPanel>
+            <TabPanel>
+              <Card
+                body={
+                  <FormField
+                    className="form-field--price-amount"
+                    type="number"
+                    name="content_bid2"
+                    step="any"
+                    label={__('Deposit (LBC)')}
+                    postfix="LBC"
+                    value={params.amount}
+                    error={bidError}
+                    min="0.0"
+                    disabled={false}
+                    onChange={event => handleBidChange(parseFloat(event.target.value))}
+                    placeholder={0.1}
+                    helper={__('Increasing your deposit can help your channel be discovered more easily.')}
+                  />
+                }
               />
-            </div>
-            <div className={'section__actions'}>
-              <Button
-                button="primary"
-                label={creatingChannel || updatingChannel ? __('Submitting') : __('Submit')}
-                onClick={handleSubmit}
+            </TabPanel>
+            <TabPanel>
+              <Card
+                body={
+                  <TagsSearch
+                    suggestMature
+                    disableAutoFocus
+                    tagsPassedIn={params.tags || []}
+                    label={__('Selected Tags')}
+                    onRemove={clickedTag => {
+                      const newTags = params.tags.slice().filter(tag => tag.name !== clickedTag.name);
+                      setParams({ ...params, tags: newTags });
+                    }}
+                    onSelect={newTags => {
+                      newTags.forEach(newTag => {
+                        if (!params.tags.map(savedTag => savedTag.name).includes(newTag.name)) {
+                          setParams({ ...params, tags: [...params.tags, newTag] });
+                        } else {
+                          // If it already exists and the user types it in, remove it
+                          setParams({ ...params, tags: params.tags.filter(tag => tag.name !== newTag.name) });
+                        }
+                      });
+                    }}
+                  />
+                }
               />
-              <Button button="link" label={__('Cancel')} onClick={onDone} />
-            </div>
-            {updateError || createError ? (
-              <ErrorText>{updateError || createError}</ErrorText>
-            ) : (
-              <p className="help">
-                {__('After submitting, you will not see the changes immediately. Please check back in a few minutes.')}
-              </p>
-            )}
-          </section>
-        </div>
+            </TabPanel>
+            <TabPanel>
+              <Card
+                body={
+                  <>
+                    <FormField
+                      type="text"
+                      name="channel_website2"
+                      label={__('Website')}
+                      placeholder={__('aprettygoodsite.com')}
+                      disabled={false}
+                      value={params.website}
+                      onChange={e => setParams({ ...params, website: e.target.value })}
+                    />
+                    <FormField
+                      type="text"
+                      name="content_email2"
+                      label={__('Email')}
+                      placeholder={__('yourstruly@example.com')}
+                      disabled={false}
+                      value={params.email}
+                      onChange={e => setParams({ ...params, email: e.target.value })}
+                    />
+                  </>
+                }
+              />
+            </TabPanel>
+          </TabPanels>
+        </Tabs>
+
+        <Card
+          className="card--after-tabs"
+          actions={
+            <>
+              <div className="section__actions">
+                <Button
+                  button="primary"
+                  label={creatingChannel || updatingChannel ? __('Submitting') : __('Submit')}
+                  onClick={handleSubmit}
+                />
+                <Button button="link" label={__('Cancel')} onClick={onDone} />
+              </div>
+              {updateError || createError ? (
+                <ErrorText>{updateError || createError}</ErrorText>
+              ) : (
+                <p className="help">
+                  {__(
+                    'After submitting, you will not see the changes immediately. Please check back in a few minutes.'
+                  )}
+                </p>
+              )}
+              {!isNewChannel && (
+                <div className="section__actions">
+                  <ClaimAbandonButton uri={uri} />
+                </div>
+              )}
+            </>
+          }
+        />
       </div>
     </>
   );
