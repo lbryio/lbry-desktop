@@ -102,7 +102,7 @@ function ClaimListDiscover(props: Props) {
 
   const [page, setPage] = useState(1);
   const [forceRefresh, setForceRefresh] = useState();
-  const [expanded, setExpanded] = useState(false);
+  const [expanded, setExpanded] = usePersistedState(`expanded-${location.pathname}`, false);
   const [orderParamEntry, setOrderParamEntry] = useState(CS.ORDER_BY_TRENDING);
   const [orderParamUser, setOrderParamUser] = usePersistedState(`orderUser-${location.pathname}`, CS.ORDER_BY_TRENDING);
   const followed = (followedTags && followedTags.map(t => t.name)) || [];
@@ -132,7 +132,9 @@ function ClaimListDiscover(props: Props) {
     );
 
   useEffect(() => {
-    if (isFiltered()) setExpanded(true);
+    if (history.action !== 'POP' && isFiltered()) {
+      setExpanded(true);
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
