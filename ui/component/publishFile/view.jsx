@@ -45,7 +45,7 @@ function PublishFile(props: Props) {
     isVid,
   } = props;
 
-  const { available } = ffmpegStatus;
+  const ffmpegAvail = ffmpegStatus.available;
   const [oversized, setOversized] = useState(false);
   const [currentFile, setCurrentFile] = useState(null);
 
@@ -64,16 +64,16 @@ function PublishFile(props: Props) {
     if (!filePath || filePath === '') {
       setCurrentFile('');
       setOversized(false);
-      updateOptimizeState(0, 0, false);
+      updateFileInfo(0, 0, false);
     } else if (typeof filePath !== 'string') {
       // Update currentFile file
       if (filePath.name !== currentFile && filePath.path !== currentFile) {
         handleFileChange(filePath);
       }
     }
-  }, [filePath, currentFile, handleFileChange, updateOptimizeState]);
+  }, [filePath, currentFile, handleFileChange, updateFileInfo]);
 
-  function updateOptimizeState(duration, size, isvid) {
+  function updateFileInfo(duration, size, isvid) {
     updatePublishForm({ fileDur: duration, fileSize: size, fileVid: isvid });
   }
 
@@ -100,7 +100,7 @@ function PublishFile(props: Props) {
   function getUnitsForMB(s) {
     if (s < MINUTES_THRESHOLD) {
       if (secondsToProcess > 1) return __('seconds');
-	return __('second');
+      return __('second');
     } else if (s >= MINUTES_THRESHOLD && s < HOURS_THRESHOLD) {
       if (Math.floor(secondsToProcess / 60) > 1) return __('minutes');
       return __('minute');
@@ -195,15 +195,15 @@ function PublishFile(props: Props) {
         const video = document.createElement('video');
         video.preload = 'metadata';
         video.onloadedmetadata = function() {
-          updateOptimizeState(video.duration, file.size, isVideo);
+          updateFileInfo(video.duration, file.size, isVideo);
           window.URL.revokeObjectURL(video.src);
         };
         video.onerror = function() {
-          updateOptimizeState(0, file.size, isVideo);
+          updateFileInfo(0, file.size, isVideo);
         };
         video.src = window.URL.createObjectURL(file);
       } else {
-        updateOptimizeState(0, file.size, isVideo);
+        updateFileInfo(0, file.size, isVideo);
       }
     }
 
@@ -266,13 +266,13 @@ function PublishFile(props: Props) {
           {/* @if TARGET='app' */}
           <FormField
             type="checkbox"
-            checked={isVid && available && optimize}
-            disabled={!isVid || !available}
+            checked={isVid && ffmpegAvail && optimize}
+            disabled={!isVid || !ffmpegAvail}
             onChange={e => updatePublishForm({ optimize: e.target.checked })}
             label={__('Optimize and transcode video')}
             name="optimize"
           />
-          {!available && (
+          {!ffmpegAvail && (
             <p className="help">
               <I18nMessage
                 tokens={{
@@ -283,7 +283,7 @@ function PublishFile(props: Props) {
               </I18nMessage>
             </p>
           )}
-          {Boolean(size) && available && optimize && isVid && (
+          {Boolean(size) && ffmpegAvail && optimize && isVid && (
             <p className="help">
               <I18nMessage
                 tokens={{
