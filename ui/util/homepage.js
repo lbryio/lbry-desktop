@@ -107,7 +107,7 @@ export default function getHomePageRowData(
   ];
 
   const YOUTUBE_CREATOR_ROW = {
-    title: __('Top CableTube Refugees'),
+    title: __('CableTube Escape Artists'),
     link: `/$/${PAGES.DISCOVER}?${CS.CLAIM_TYPE}=${CS.CLAIM_STREAM}&${CS.CHANNEL_IDS_KEY}=${YOUTUBER_CHANNEL_IDS.join(
       ','
     )}`,
