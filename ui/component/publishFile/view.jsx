@@ -7,7 +7,8 @@ import Button from 'component/button';
 import Card from 'component/common/card';
 import { FormField } from 'component/common/form';
 import Spinner from 'component/spinner';
-import I18nMessage from '../i18nMessage';
+import I18nMessage from 'component/i18nMessage';
+import usePersistedState from 'effects/use-persisted-state';
 
 type Props = {
   name: ?string,
@@ -48,6 +49,8 @@ function PublishFile(props: Props) {
   const ffmpegAvail = ffmpegStatus.available;
   const [oversized, setOversized] = useState(false);
   const [currentFile, setCurrentFile] = useState(null);
+  const [optimizeAvail, setOptimizeAvail] = useState(false);
+  const [userOptimize, setUserOptimize] = usePersistedState('publish-file-user-optimize', false);
 
   const RECOMMENDED_BITRATE = 6000000;
   const TV_PUBLISH_SIZE_LIMIT: number = 1073741824;
@@ -72,6 +75,14 @@ function PublishFile(props: Props) {
       }
     }
   }, [filePath, currentFile, handleFileChange, updateFileInfo]);
+
+  useEffect(() => {
+    const isOptimizeAvail = currentFile && currentFile !== '' && isVid && ffmpegAvail;
+    const finalOptimizeState = isOptimizeAvail && userOptimize;
+
+    setOptimizeAvail(isOptimizeAvail);
+    updatePublishForm({ optimize: finalOptimizeState });
+  }, [filePath, isVid, ffmpegAvail, userOptimize]);
 
   function updateFileInfo(duration, size, isvid) {
     updatePublishForm({ fileDur: duration, fileSize: size, fileVid: isvid });
@@ -266,9 +277,9 @@ function PublishFile(props: Props) {
           {/* @if TARGET='app' */}
           <FormField
             type="checkbox"
-            checked={isVid && ffmpegAvail && optimize}
-            disabled={!isVid || !ffmpegAvail}
-            onChange={e => updatePublishForm({ optimize: e.target.checked })}
+            checked={userOptimize}
+            disabled={!optimizeAvail}
+            onChange={() => setUserOptimize(!userOptimize)}
             label={__('Optimize and transcode video')}
             name="optimize"
           />
