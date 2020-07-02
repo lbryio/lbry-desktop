@@ -703,9 +703,9 @@ function ClaimListDiscover(props: Props) {
                     })
                   }
                 >
-                  <option value={CS.FEE_AMOUNT_ANY}>Anything</option>
-                  <option value={CS.FEE_AMOUNT_ONLY_FREE}>Free</option>
-                  <option value={CS.FEE_AMOUNT_ONLY_PAID}>Paid</option>
+                  <option value={CS.FEE_AMOUNT_ANY}>{__('Anything')}</option>
+                  <option value={CS.FEE_AMOUNT_ONLY_FREE}>{__('Free')}</option>
+                  <option value={CS.FEE_AMOUNT_ONLY_PAID}>{__('Paid')}</option>
                   ))}
                 </FormField>
               </div>
