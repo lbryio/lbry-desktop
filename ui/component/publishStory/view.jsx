@@ -13,7 +13,7 @@ import usePersistedState from 'effects/use-persisted-state';
 
 type Props = {
   title: ?string,
-  content: ?string,
+  fileText: ?string,
   description: ?string,
   name: ?string,
   filePath: string | WebFile,
@@ -30,7 +30,6 @@ type Props = {
   size: number,
   duration: number,
   isVid: boolean,
-  setContent: string => void,
 };
 
 function PublishFile(props: Props) {
@@ -47,8 +46,7 @@ function PublishFile(props: Props) {
     inProgress,
     clearPublish,
     size,
-    content,
-    setContent,
+    fileText,
   } = props;
 
   const [advancedEditor, setAdvancedEditor] = usePersistedState('publish-form-description-mode', false);
@@ -61,7 +59,7 @@ function PublishFile(props: Props) {
     // Desktop implementation
     // Todo: Lbry.tv ( web ) implementation
     if (typeof filePath === 'string') {
-      fs.writeFile(filePath, content, 'utf8', (err, data) => {
+      fs.writeFile(filePath, fileText, 'utf8', (err, data) => {
         // Handle error, cant save changes or create file
         if (err) {
           return console.log(err);
@@ -123,10 +121,10 @@ function PublishFile(props: Props) {
             name="content_description"
             label={__('Description')}
             placeholder={__('My description for this and that')}
-            value={content}
+            value={fileText}
             disabled={disabled}
             onChange={value => {
-              setContent(advancedEditor ? value : value.target.value);
+              updatePublishForm({ fileText: advancedEditor ? value : value.target.value });
             }}
             quickActionLabel={advancedEditor ? __('Simple Editor') : __('Advanced Editor')}
             quickActionHandler={toggleMarkdown}

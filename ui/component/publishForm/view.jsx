@@ -76,10 +76,6 @@ type Props = {
 function PublishForm(props: Props) {
   const [mode, setMode] = React.useState(PUBLISH_MODES.FILE);
 
-  // Temmp value, we should use redux instead
-  // Todo: get value from publish state
-  const [fileText, setFileText] = React.useState('');
-
   const {
     thumbnail,
     name,
@@ -190,16 +186,9 @@ function PublishForm(props: Props) {
         ))}
       </div>
       {mode === PUBLISH_MODES.FILE && (
-        <PublishFile
-          disabled={disabled || publishing}
-          inProgress={isInProgress}
-          setFileText={setFileText}
-          setPublishMode={setMode}
-        />
+        <PublishFile disabled={disabled || publishing} inProgress={isInProgress} setPublishMode={setMode} />
       )}
-      {mode === PUBLISH_MODES.STORY && (
-        <PublishStory content={fileText} disabled={disabled} setContent={setFileText} inProgress={isInProgress} />
-      )}
+      {mode === PUBLISH_MODES.STORY && <PublishStory disabled={disabled} inProgress={isInProgress} />}
 
       {!publishing && (
         <div className={classnames({ 'card--disabled': formDisabled })}>

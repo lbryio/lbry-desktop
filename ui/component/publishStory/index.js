@@ -13,6 +13,7 @@ const select = state => ({
   title: makeSelectPublishFormValue('title')(state),
   description: makeSelectPublishFormValue('description')(state),
   name: makeSelectPublishFormValue('name')(state),
+  fileText: makeSelectPublishFormValue('fileText')(state),
   filePath: makeSelectPublishFormValue('filePath')(state),
   isStillEditing: selectIsStillEditing(state),
   balance: selectBalance(state),

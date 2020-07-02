@@ -26,7 +26,6 @@ type Props = {
   size: number,
   duration: number,
   isVid: boolean,
-  setFileText: string => void,
   setPublishMode: string => void,
 };
 
@@ -46,7 +45,6 @@ function PublishFile(props: Props) {
     size,
     duration,
     isVid,
-    setFileText,
     setPublishMode,
   } = props;
 
@@ -220,7 +218,7 @@ function PublishFile(props: Props) {
       // Handler for file reader
       reader.addEventListener('load', event => {
         const text = event.target.result;
-        setFileText(text);
+        updatePublishForm({ fileText: text });
         setPublishMode(PUBLISH_MODES.STORY);
       });
       // Read file contents
