@@ -10,9 +10,11 @@ import ErrorText from 'component/common/error-text';
 import ChannelThumbnail from 'component/channelThumbnail';
 import { isNameValid, parseURI } from 'lbry-redux';
 import ClaimAbandonButton from 'component/claimAbandonButton';
+import { useHistory } from 'react-router-dom';
 import { MINIMUM_PUBLISH_BID, INVALID_NAME_ERROR, ESTIMATED_FEE } from 'constants/claim';
 import { Tabs, TabList, Tab, TabPanels, TabPanel } from 'component/common/tabs';
 import Card from 'component/common/card';
+import * as PAGES from 'constants/pages';
 const MAX_TAG_SELECT = 5;
 
 type Props = {
@@ -72,6 +74,7 @@ function ChannelForm(props: Props) {
   const { channelName } = parseURI(uri);
   const name = params.name;
   const isNewChannel = !uri;
+  const { replace } = useHistory();
 
   function getChannelParams() {
     // fill this in with sdk data
@@ -370,7 +373,7 @@ function ChannelForm(props: Props) {
               )}
               {!isNewChannel && (
                 <div className="section__actions">
-                  <ClaimAbandonButton uri={uri} />
+                  <ClaimAbandonButton uri={uri} abandonActionCallback={() => replace(`/$/${PAGES.CHANNELS}`)} />
                 </div>
               )}
             </>
