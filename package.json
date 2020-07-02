@@ -41,7 +41,7 @@
     "precommit": "lint-staged",
     "preinstall": "yarn cache clean lbry-redux && yarn cache clean lbryinc",
     "postinstall": "cd web && yarn && cd .. && if-env NODE_ENV=production && yarn postinstall:warning || if-env APP_ENV=web && echo 'Done installing deps' || yarn postinstall:electron",
-    "postinstall:electron": "electron-builder install-app-deps && node ./build/downloadDaemon.js",
+    "postinstall:electron": "electron-builder install-app-deps && node ./build/downloadDaemon.js && node ./build/downloadLBRYFirst.js",
     "postinstall:warning": "echo '\n\nWARNING\n\nNot all node modules were installed because NODE_ENV is set to \"production\".\nThis should only be set after installing dependencies with \"yarn\". The app will not work.\n\n'"
   },
   "dependencies": {
@@ -136,8 +136,8 @@
     "imagesloaded": "^4.1.4",
     "json-loader": "^0.5.4",
     "lbry-format": "https://github.com/lbryio/lbry-format.git",
-    "lbry-redux": "lbryio/lbry-redux#906199d866a187015668a27363f010828c15979a",
-    "lbryinc": "lbryio/lbryinc#72eee35f5181940eb4a468a27ddb2a2a4e362fb0",
+    "lbry-redux": "lbryio/lbry-redux#67d8540ccc0fbedf018ae0bdfe3cae17660a5a6c",
+    "lbryinc": "lbryio/lbryinc#0f6fd2c33812fb1c1e393dd35b1a7560d3ba3fe2",
     "lint-staged": "^7.0.2",
     "localforage": "^1.7.1",
     "lodash-es": "^4.17.14",
@@ -217,6 +217,10 @@
     "lbrynetDaemonVersion": "0.77.0",
     "lbrynetDaemonUrlTemplate": "https://github.com/lbryio/lbry/releases/download/vDAEMONVER/lbrynet-OSNAME.zip",
     "lbrynetDaemonDir": "static/daemon",
-    "lbrynetDaemonFileName": "lbrynet"
+    "lbrynetDaemonFileName": "lbrynet",
+    "LBRYFirstVersion": "0.0.19",
+    "LBRYFirstUrlTemplate": "https://github.com/lbryio/lbry-first/releases/download/vLBRYFIRSTVER/lbry-first_OSNAME_amd64.zip",
+    "LBRYFirstDir": "static/lbry-first",
+    "LBRYFirstFileName": "lbry-first"
   }
 }
