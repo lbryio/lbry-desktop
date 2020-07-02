@@ -68,7 +68,7 @@ function UserPasswordReset(props: Props) {
               <FormField
                 autoFocus
                 disabled={passwordResetSuccess}
-                placeholder={__('hotstuff_96@hotmail.com')}
+                placeholder={__('yourstruly@example.com')}
                 type="email"
                 name="sign_in_email"
                 id="username"
