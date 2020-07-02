@@ -13,7 +13,7 @@ function ChannelNew(props: Props) {
   return (
     <Page
       noSideNavigation
-      backout={{ backFunction: () => history.goBack(), backTitle: __('Create Channel') }}
+      backout={{ backFunction: () => history.goBack(), title: __('Create Channel') }}
       className="main--auth-page"
     >
       <ChannelEdit onDone={history.goBack} />

@@ -67,7 +67,6 @@ const Header = (props: Props) => {
     signOut,
     syncError,
     openMobileNavigation,
-    openChannelCreate,
     openSignOutModal,
     clearEmailEntry,
     clearPasswordEntry,
@@ -221,7 +220,7 @@ const Header = (props: Props) => {
                           <Icon aria-hidden icon={ICONS.PUBLISH} />
                           {__('Publish')}
                         </MenuItem>
-                        <MenuItem className="menu__link" onSelect={openChannelCreate}>
+                        <MenuItem className="menu__link" onSelect={() => history.push(`/$/${PAGES.CHANNEL_NEW}`)}>
                           <Icon aria-hidden icon={ICONS.CHANNEL} />
                           {__('New Channel')}
                         </MenuItem>

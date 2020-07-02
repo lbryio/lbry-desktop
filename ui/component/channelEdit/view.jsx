@@ -13,6 +13,7 @@ import ClaimAbandonButton from 'component/claimAbandonButton';
 import { MINIMUM_PUBLISH_BID, INVALID_NAME_ERROR, ESTIMATED_FEE } from 'constants/claim';
 import { Tabs, TabList, Tab, TabPanels, TabPanel } from 'component/common/tabs';
 import Card from 'component/common/card';
+const MAX_TAG_SELECT = 5;
 
 type Props = {
   claim: ChannelClaim,
@@ -64,10 +65,10 @@ function ChannelForm(props: Props) {
     createError,
     openModal,
   } = props;
-  const [params, setParams]: [any, (any) => void] = React.useState(getChannelParams());
   const [nameError, setNameError] = React.useState(undefined);
   const [bidError, setBidError] = React.useState('');
   const { claim_id: claimId } = claim || {};
+  const [params, setParams]: [any, (any) => void] = React.useState(getChannelParams());
   const { channelName } = parseURI(uri);
   const name = params.name;
   const isNewChannel = !uri;
@@ -296,6 +297,7 @@ function ChannelForm(props: Props) {
                   <TagsSearch
                     suggestMature
                     disableAutoFocus
+                    limitSelect={MAX_TAG_SELECT}
                     tagsPassedIn={params.tags || []}
                     label={__('Selected Tags')}
                     onRemove={clickedTag => {

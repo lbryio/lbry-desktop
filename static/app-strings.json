@@ -1260,7 +1260,6 @@
   "Uncheck your email below if you want to stop receiving messages.": "Uncheck your email below if you want to stop receiving messages.",
   "Remove from Blocked List": "Remove from Blocked List",
   "Are you sure you want to remove this from the list?": "Are you sure you want to remove this from the list?",
-  "Uncheck your email below if you want to stop receiving messages.": "Uncheck your email below if you want to stop receiving messages.",
   "Cover": "Cover",
   "Url": "Url",
   "New Channel Advanced": "New Channel Advanced",
@@ -1271,5 +1270,13 @@
   "Create Channel": "Create Channel",
   "This shoul de such a size": "This shoul de such a size",
   "Thumbnail This shoul de such a size": "Thumbnail This shoul de such a size",
-  "Cover This shoul de such a size": "Cover This shoul de such a size"
+  "Cover This shoul de such a size": "Cover This shoul de such a size",
+  "CableTube Escape Artists": "CableTube Escape Artists",
+  "General": "General",
+  "MyAwesomeChannel": "MyAwesomeChannel",
+  "My Awesome Channel": "My Awesome Channel",
+  "Increasing your deposit can help your channel be discovered more easily.": "Increasing your deposit can help your channel be discovered more easily.",
+  "Editing @%channel%": "Editing @%channel%",
+  "This field cannot be changed.": "This field cannot be changed.",
+  "Delete Channel": "Delete Channel"
 }
