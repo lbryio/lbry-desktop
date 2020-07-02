@@ -1,4 +1,4 @@
-const { URL, SITE_TITLE, SITE_DESCRIPTION, SITE_MOTTO } = require('../../config.js');
+const { URL, SITE_TITLE, SITE_DESCRIPTION, SITE_NAME } = require('../../config.js');
 const { generateEmbedUrl, generateStreamUrl } = require('../../ui/util/web');
 const PAGES = require('../../ui/constants/pages');
 const { getClaim } = require('./chainquery');
@@ -8,7 +8,6 @@ const path = require('path');
 
 let html = fs.readFileSync(path.join(__dirname, '/../dist/index.html'), 'utf8');
 
-module.exports = { insertToHead, buildBasicOgMetadata, getHtml };
 function insertToHead(fullHtml, htmlToInsert) {
   return fullHtml.replace(
     /<!-- VARIABLE_HEAD_BEGIN -->.*<!-- VARIABLE_HEAD_END -->/s,
@@ -40,7 +39,7 @@ function buildOgMetadata(overrideOptions = {}) {
     '<title>lbry.tv</title>\n' +
     `<meta property="og:url" content="${URL}" />\n` +
     `<meta property="og:title" content="${title || SITE_TITLE}" />\n` +
-    `<meta property="og:site_name" content="${SITE_TITLE} | ${SITE_MOTTO}"/>\n` +
+    `<meta property="og:site_name" content="${SITE_NAME || SITE_TITLE}"/>\n` +
     `<meta property="og:description" content="${description || SITE_DESCRIPTION}" />\n` +
     `<meta property="og:image" content="${URL}/public/v2-og.png" />\n` +
     '<meta name="twitter:card" content="summary_large_image"/>\n' +
@@ -48,26 +47,12 @@ function buildOgMetadata(overrideOptions = {}) {
     `<meta name="twitter:description" content="${description || SITE_DESCRIPTION}" />\n` +
     `<meta name="twitter:image" content="${URL}/public/v2-og.png"/>\n` +
     `<meta name="twitter:url" content="${URL}" />\n` +
-    '<meta property="fb:app_id" content="1673146449633983" />';
+    '<meta property="fb:app_id" content="1673146449633983" />\n';
   return head;
 }
 
 function buildBasicOgMetadata() {
-  const head =
-    '    <!-- VARIABLE_HEAD_BEGIN -->' +
-    '<title>lbry.tv</title>\n' +
-    `<meta property="og:url" content="${URL}" />\n` +
-    `<meta property="og:title" content="${SITE_TITLE}" />\n` +
-    `<meta property="og:site_name" content="${SITE_TITLE} | ${SITE_MOTTO}"/>\n` +
-    `<meta property="og:description" content="${SITE_DESCRIPTION}" />\n` +
-    `<meta property="og:image" content="${URL}/public/v2-og.png" />\n` +
-    '<meta name="twitter:card" content="summary_large_image"/>\n' +
-    `<meta name="twitter:title" content="${SITE_TITLE}" />\n` +
-    `<meta name="twitter:description" content="${SITE_DESCRIPTION}" />\n` +
-    `<meta name="twitter:image" content="${URL}/public/v2-og.png"/>\n` +
-    `<meta name="twitter:url" content="${URL}" />\n` +
-    '<meta property="fb:app_id" content="1673146449633983" />' +
-    '    <!-- VARIABLE_HEAD_END -->';
+  const head = '<!-- VARIABLE_HEAD_BEGIN -->' + buildOgMetadata() + '<!-- VARIABLE_HEAD_END -->';
   return head;
 }
 
@@ -213,3 +198,5 @@ async function getHtml(ctx) {
   const ogMetadata = buildBasicOgMetadata();
   return insertToHead(html, ogMetadata);
 }
+
+module.exports = { insertToHead, buildBasicOgMetadata, getHtml };
