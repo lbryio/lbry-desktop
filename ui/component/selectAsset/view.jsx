@@ -66,10 +66,10 @@ function SelectAsset(props: Props) {
           label={__(assetName + ' source')}
         >
           <option key={'lmmnop'} value={'url'}>
-            URL
+            {__('URL')}
           </option>
           <option key={'lmmnopq'} value={'upload'}>
-            UPLOAD
+          {__('UPLOAD')}
           </option>
         </FormField>
         {assetSource === SOURCE_UPLOAD && (
