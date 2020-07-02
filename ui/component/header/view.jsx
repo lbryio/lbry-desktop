@@ -144,7 +144,9 @@ const Header = (props: Props) => {
         {!authHeader && backout ? (
           <div className="card__actions--between">
             <Button onClick={backout.backFunction} button="link" label={__('Cancel')} icon={ICONS.ARROW_LEFT} />
-            {backout.title && <h1 className={'card__title'}>{isMobile ? backout.simpleTitle : backout.title}</h1>}
+            {backout.title && (
+              <h1 className={'card__title'}>{isMobile ? backout.simpleTitle || backout.title : backout.title}</h1>
+            )}
             <Button
               aria-label={__('Your wallet')}
               navigate={`/$/${PAGES.WALLET}`}

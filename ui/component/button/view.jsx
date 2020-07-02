@@ -77,7 +77,6 @@ const Button = forwardRef<any, {}>((props: Props, ref: any) => {
           'button--primary': button === 'primary',
           'button--secondary': button === 'secondary',
           'button--alt': button === 'alt',
-          'button--danger': button === 'danger',
           'button--inverse': button === 'inverse',
           'button--close': button === 'close',
           'button--disabled': disabled,

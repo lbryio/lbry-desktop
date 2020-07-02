@@ -29,19 +29,6 @@
   }
 }
 
-.tabs__list--select-asset {
-  margin-bottom: var(--spacing-l);
-  padding: var(--spacing-m) 0;
-
-  height: 4rem;
-  border-bottom-left-radius: var(--card-radius);
-  border-bottom-right-radius: var(--card-radius);
-
-  @media (max-width: $breakpoint-small) {
-    padding-left: var(--spacing-m);
-  }
-}
-
 .tab {
   @extend .button--link;
   margin-right: var(--spacing-l);
