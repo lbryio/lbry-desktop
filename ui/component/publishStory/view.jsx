@@ -14,7 +14,6 @@ import usePersistedState from 'effects/use-persisted-state';
 type Props = {
   title: ?string,
   fileText: ?string,
-  description: ?string,
   name: ?string,
   filePath: string | WebFile,
   isStillEditing: boolean,
@@ -35,10 +34,10 @@ type Props = {
 function PublishFile(props: Props) {
   const {
     title,
-    description,
     name,
     balance,
     filePath,
+    fileText,
     isStillEditing,
     updatePublishForm,
     disabled,
@@ -46,10 +45,9 @@ function PublishFile(props: Props) {
     inProgress,
     clearPublish,
     size,
-    fileText,
   } = props;
 
-  const [advancedEditor, setAdvancedEditor] = usePersistedState('publish-form-description-mode', false);
+  const [advancedEditor, setAdvancedEditor] = usePersistedState('publish-form-story-mode', false);
 
   function toggleMarkdown() {
     setAdvancedEditor(!advancedEditor);
@@ -118,14 +116,12 @@ function PublishFile(props: Props) {
           />
           <FormField
             type={advancedEditor ? 'markdown' : 'textarea'}
-            name="content_description"
-            label={__('Description')}
+            name="content_story"
+            label={__('Story content')}
             placeholder={__('My description for this and that')}
             value={fileText}
             disabled={disabled}
-            onChange={value => {
-              updatePublishForm({ fileText: advancedEditor ? value : value.target.value });
-            }}
+            onChange={value => updatePublishForm({ fileText: advancedEditor ? value : value.target.value })}
             quickActionLabel={advancedEditor ? __('Simple Editor') : __('Advanced Editor')}
             quickActionHandler={toggleMarkdown}
             textAreaMaxLength={FF_MAX_CHARS_IN_DESCRIPTION}

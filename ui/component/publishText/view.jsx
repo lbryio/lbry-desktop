@@ -15,6 +15,7 @@ type Props = {
 function PublishText(props: Props) {
   const { title, description, updatePublishForm, disabled } = props;
   const [advancedEditor, setAdvancedEditor] = usePersistedState('publish-form-description-mode', false);
+
   function toggleMarkdown() {
     setAdvancedEditor(!advancedEditor);
   }
