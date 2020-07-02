@@ -21,8 +21,8 @@ import ChannelPage from './view';
 const select = (state, props) => ({
   claim: makeSelectClaimForUri(props.uri)(state),
   title: makeSelectTitleForUri(props.uri)(state),
-  thumbnail: makeSelectThumbnailForUri(props.uri)(state),
-  cover: makeSelectCoverForUri(props.uri)(state),
+  thumbnailUrl: makeSelectThumbnailForUri(props.uri)(state),
+  coverUrl: makeSelectCoverForUri(props.uri)(state),
   description: makeSelectMetadataItemForUri(props.uri, 'description')(state),
   website: makeSelectMetadataItemForUri(props.uri, 'website_url')(state),
   email: makeSelectMetadataItemForUri(props.uri, 'email')(state),

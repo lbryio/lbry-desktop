@@ -90,6 +90,7 @@ function SelectAsset(props: Props) {
             />
           ) : (
             <FileSelector
+              autoFocus
               disabled={uploadStatus === SPEECH_UPLOADING}
               label={uploadStatus === SPEECH_UPLOADING ? __('Uploading...') : __('File to upload')}
               name="assetSelector"
@@ -112,7 +113,7 @@ function SelectAsset(props: Props) {
             <FormField
               name="toggle-upload"
               type="checkbox"
-              label={__('Use a URL instead')}
+              label={__('Use a URL')}
               checked={useUrl}
               onChange={() => setUseUrl(!useUrl)}
             />

@@ -21,8 +21,8 @@ type Props = {
   claim: ChannelClaim,
   title: string,
   amount: string,
-  cover: string,
-  thumbnail: string,
+  coverUrl: string,
+  thumbnailUrl: string,
   location: { search: string },
   description: string,
   website: string,
@@ -53,8 +53,8 @@ function ChannelForm(props: Props) {
     description,
     website,
     email,
-    thumbnail,
-    cover,
+    thumbnailUrl,
+    coverUrl,
     tags,
     locations,
     languages,
@@ -81,8 +81,8 @@ function ChannelForm(props: Props) {
     const channelParams: {
       website: string,
       email: string,
-      cover: string,
-      thumbnail: string,
+      coverUrl: string,
+      thumbnailUrl: string,
       description: string,
       title: string,
       amount: number,
@@ -93,8 +93,8 @@ function ChannelForm(props: Props) {
     } = {
       website,
       email,
-      cover,
-      thumbnail,
+      coverUrl,
+      thumbnailUrl,
       description,
       title,
       amount: 0.001,
@@ -133,11 +133,11 @@ function ChannelForm(props: Props) {
   }
 
   function handleThumbnailChange(thumbnailUrl: string) {
-    setParams({ ...params, thumbnail: thumbnailUrl });
+    setParams({ ...params, thumbnailUrl });
   }
 
   function handleCoverChange(coverUrl: string) {
-    setParams({ ...params, cover: coverUrl });
+    setParams({ ...params, coverUrl });
   }
 
   function handleSubmit() {
@@ -180,16 +180,16 @@ function ChannelForm(props: Props) {
                 openModal(MODALS.IMAGE_UPLOAD, {
                   onUpdate: coverUrl => handleCoverChange(coverUrl),
                   title: __('Edit Cover Image'),
-                  helpText: __('(Y x Z)'),
+                  helpText: __('(6.25:1)'),
                   assetName: __('Cover Image'),
-                  currentValue: params.cover,
+                  currentValue: params.coverUrl,
                 })
               }
               icon={ICONS.CAMERA}
               iconSize={18}
             />
           </div>
-          {params.cover && <img className="channel-cover__custom" src={params.cover} />}
+          {params.coverUrl && <img className="channel-cover__custom" src={params.coverUrl} />}
           <div className="channel__primary-info">
             <div className="channel__edit-thumb">
               <Button
@@ -199,9 +199,9 @@ function ChannelForm(props: Props) {
                   openModal(MODALS.IMAGE_UPLOAD, {
                     onUpdate: v => handleThumbnailChange(v),
                     title: __('Edit Thumbnail Image'),
-                    helpText: __('(Y x Z)'),
+                    helpText: __('(1:1)'),
                     assetName: __('Thumbnail'),
-                    currentValue: params.thumbnail,
+                    currentValue: params.thumbnailUrl,
                   })
                 }
                 icon={ICONS.CAMERA}
@@ -211,7 +211,7 @@ function ChannelForm(props: Props) {
             <ChannelThumbnail
               className="channel__thumbnail--channel-page"
               uri={uri}
-              thumbnailPreview={params.thumbnail}
+              thumbnailPreview={params.thumbnailUrl}
               allowGifs
             />
             <h1 className="channel__title">
@@ -357,6 +357,7 @@ function ChannelForm(props: Props) {
               <div className="section__actions">
                 <Button
                   button="primary"
+                  disabled={creatingChannel || updatingChannel}
                   label={creatingChannel || updatingChannel ? __('Submitting') : __('Submit')}
                   onClick={handleSubmit}
                 />
