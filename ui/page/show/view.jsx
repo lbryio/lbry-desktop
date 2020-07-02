@@ -22,11 +22,22 @@ type Props = {
     nout: number,
   }>,
   title: string,
-  claimIsMine: Boolean,
+  claimIsMine: boolean,
+  claimIsPending: boolean,
 };
 
 function ShowPage(props: Props) {
-  const { isResolvingUri, resolveUri, uri, claim, blackListedOutpoints, location, claimIsMine, isSubscribed } = props;
+  const {
+    isResolvingUri,
+    resolveUri,
+    uri,
+    claim,
+    blackListedOutpoints,
+    location,
+    claimIsMine,
+    isSubscribed,
+    claimIsPending,
+  } = props;
   const signingChannel = claim && claim.signing_channel;
   const canonicalUrl = claim && claim.canonical_url;
   const claimExists = claim !== null && claim !== undefined;
@@ -45,11 +56,11 @@ function ShowPage(props: Props) {
 
     if (
       (resolveUri && !isResolvingUri && uri && haventFetchedYet) ||
-      (claimExists && (!canonicalUrl || isMine === undefined))
+      (claimExists && !claimIsPending && (!canonicalUrl || isMine === undefined))
     ) {
       resolveUri(uri);
     }
-  }, [resolveUri, isResolvingUri, canonicalUrl, uri, claimExists, haventFetchedYet, history, isMine]);
+  }, [resolveUri, isResolvingUri, canonicalUrl, uri, claimExists, haventFetchedYet, history, isMine, claimIsPending]);
 
   // Don't navigate directly to repost urls
   // Always redirect to the actual content
