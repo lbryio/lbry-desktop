@@ -102,7 +102,7 @@ function ClaimListDiscover(props: Props) {
 
   const [page, setPage] = useState(1);
   const [forceRefresh, setForceRefresh] = useState();
-  const [expanded, setExpanded] = useState(false);
+  const [expanded, setExpanded] = usePersistedState(`expanded-${location.pathname}`, false);
   const [orderParamEntry, setOrderParamEntry] = useState(CS.ORDER_BY_TRENDING);
   const [orderParamUser, setOrderParamUser] = usePersistedState(`orderUser-${location.pathname}`, CS.ORDER_BY_TRENDING);
   const followed = (followedTags && followedTags.map(t => t.name)) || [];
@@ -132,7 +132,9 @@ function ClaimListDiscover(props: Props) {
     );
 
   useEffect(() => {
-    if (isFiltered()) setExpanded(true);
+    if (history.action !== 'POP' && isFiltered()) {
+      setExpanded(true);
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -296,9 +298,10 @@ function ClaimListDiscover(props: Props) {
   const claimSearchCacheQuery = createNormalizedClaimSearchKey(options);
   const claimSearchResult = claimSearchByQuery[claimSearchCacheQuery];
 
-  const [prevOptions, setPrevOptions] = useState(options);
+  const [prevOptions, setPrevOptions] = useState(null);
 
   if (!isJustScrollingToNewPage(prevOptions, options)) {
+    // --- New search, or search options changed.
     setPrevOptions(options);
 
     if (didNavigateForward) {
@@ -306,7 +309,7 @@ function ClaimListDiscover(props: Props) {
       window.scrollTo(0, 0); // Prevents onScrollBottom() from re-hitting while waiting for doClaimQuery():
       options.page = 1;
       setPage(options.page);
-    } else {
+    } else if (claimSearchResult) {
       // --- Update 'page' based on retrieved 'claimSearchResult'.
       options.page = Math.ceil(claimSearchResult.length / CS.PAGE_SIZE);
       if (options.page !== page) {
@@ -359,6 +362,11 @@ function ClaimListDiscover(props: Props) {
   // Returns true if the change in 'options' indicate that we are simply scrolling
   // down to a new page; false otherwise.
   function isJustScrollingToNewPage(prevOptions, options) {
+    if (!prevOptions) {
+      // It's a new search, or we just popped back from a different view.
+      return false;
+    }
+
     // Compare every field except for 'page' and 'release_time'.
     // There might be better ways to achieve this.
     let tmpPrevOptions = { ...prevOptions };

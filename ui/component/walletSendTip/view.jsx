@@ -238,11 +238,9 @@ function WalletSendTip(props: Props) {
                       label={
                         <React.Fragment>
                           {__('Custom support amount')}{' '}
-                          {isMobile && (
-                            <I18nMessage tokens={{ lbc_balance: <CreditAmount badge={false} amount={balance} /> }}>
+                            <I18nMessage tokens={{ lbc_balance: <CreditAmount badge={false} precision={4} amount={balance} /> }}>
                               (%lbc_balance% available)
                             </I18nMessage>
-                          )}
                         </React.Fragment>
                       }
                       className="form-field--price-amount"

@@ -6,7 +6,9 @@ import {
   selectSearchValue,
   selectSearchSuggestions,
   selectSearchBarFocused,
+  SETTINGS,
 } from 'lbry-redux';
+import { makeSelectClientSetting } from 'redux/selectors/settings';
 import { doToast } from 'redux/actions/notifications';
 import analytics from 'analytics';
 import Wunderbar from './view';
@@ -17,6 +19,7 @@ const select = state => ({
   suggestions: selectSearchSuggestions(state),
   searchQuery: selectSearchValue(state),
   isFocused: selectSearchBarFocused(state),
+  language: makeSelectClientSetting(SETTINGS.LANGUAGE)(state),
 });
 
 const perform = (dispatch, ownProps) => ({

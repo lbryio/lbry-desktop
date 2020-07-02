@@ -339,6 +339,24 @@
   }
 }
 
+.video-js:not(.vjs-fullscreen).vjs-layout-small {
+  .vjs-current-time {
+    display: flex;
+    padding-left: 0.5em;
+    padding-right: 0;
+  }
+
+  .vjs-time-divider {
+    display: flex;
+  }
+
+  .vjs-duration {
+    display: flex;
+    padding-left: 0;
+    padding-right: 0.5em;
+  }
+}
+
 .video-js:hover {
   .vjs-big-play-button {
     background-color: var(--color-primary);

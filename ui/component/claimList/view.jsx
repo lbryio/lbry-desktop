@@ -1,13 +1,15 @@
 // @flow
-import { MAIN_WRAPPER_CLASS } from 'component/app/view';
+import { MAIN_CLASS } from 'component/page/view';
 import type { Node } from 'react';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import classnames from 'classnames';
 import ClaimPreview from 'component/claimPreview';
 import Spinner from 'component/spinner';
 import { FormField } from 'component/common/form';
 import usePersistedState from 'effects/use-persisted-state';
+import debounce from 'util/debounce';
 
+const DEBOUNCE_SCROLL_HANDLER_MS = 150;
 const SORT_NEW = 'new';
 const SORT_OLD = 'old';
 
@@ -48,7 +50,6 @@ export default function ClaimList(props: Props) {
     onScrollBottom,
     pageSize,
     page,
-    id,
     showHiddenByUser,
     showUnresolvedClaims,
     renderProperties,
@@ -58,7 +59,6 @@ export default function ClaimList(props: Props) {
     timedOutMessage,
     isCardBody = false,
   } = props;
-  const [scrollBottomCbMap, setScrollBottomCbMap] = useState({});
   const [currentSort, setCurrentSort] = usePersistedState(persistedStorageKey, SORT_NEW);
   const timedOut = uris === null;
   const urisLength = (uris && uris.length) || 0;
@@ -69,43 +69,25 @@ export default function ClaimList(props: Props) {
   }
 
   useEffect(() => {
-    setScrollBottomCbMap({});
-  }, [id, setScrollBottomCbMap]);
+    const handleScroll = debounce(e => {
+      if (page && pageSize && onScrollBottom) {
+        const mainEl = document.querySelector(`.${MAIN_CLASS}`);
 
-  useEffect(() => {
-    let timeout;
+        if (mainEl && !loading && urisLength >= pageSize) {
+          const contentWrapperAtBottomOfPage = mainEl.getBoundingClientRect().bottom - 0.5 <= window.innerHeight;
 
-    function handleScroll(e) {
-      timeout = setTimeout(() => {
-        if (page && pageSize && onScrollBottom && !scrollBottomCbMap[page]) {
-          const mainElWrapper = document.querySelector(`.${MAIN_WRAPPER_CLASS}`);
-
-          if (mainElWrapper && !loading && urisLength >= pageSize) {
-            const contentWrapperAtBottomOfPage =
-              mainElWrapper.getBoundingClientRect().bottom - 0.5 <= window.innerHeight;
-
-            if (contentWrapperAtBottomOfPage) {
-              onScrollBottom();
-
-              // Save that we've fetched this page to avoid weird stuff happening with fast scrolling
-              setScrollBottomCbMap({ ...scrollBottomCbMap, [page]: true });
-            }
+          if (contentWrapperAtBottomOfPage) {
+            onScrollBottom();
           }
         }
-      }, 150);
-    }
+      }
+    }, DEBOUNCE_SCROLL_HANDLER_MS);
 
     if (onScrollBottom) {
       window.addEventListener('scroll', handleScroll);
-
-      return () => {
-        if (timeout) {
-          clearTimeout(timeout);
-        }
-        window.removeEventListener('scroll', handleScroll);
-      };
+      return () => window.removeEventListener('scroll', handleScroll);
     }
-  }, [loading, onScrollBottom, urisLength, pageSize, page, setScrollBottomCbMap]);
+  }, [loading, onScrollBottom, urisLength, pageSize, page]);
 
   return (
     <section

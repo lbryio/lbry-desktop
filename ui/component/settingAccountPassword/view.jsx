@@ -40,7 +40,7 @@ export default function SettingAccountPassword(props: Props) {
   return (
     <Card
       title={__('Account Password')}
-      subtitle={hasPassword ? __('') : __('You do not currently have a password set.')}
+      subtitle={hasPassword ? '' : __('You do not currently have a password set.')}
       actions={
         isAddingPassword ? (
           <div>

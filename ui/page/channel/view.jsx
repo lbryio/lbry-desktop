@@ -110,6 +110,8 @@ function ChannelPage(props: Props) {
     Lbryio.call('yt', 'get_youtuber', { channel_claim_id: claimId }).then(response => {
       if (response.is_verified_youtuber) {
         setLastYtSyncDate(response.last_synced);
+      } else {
+        setLastYtSyncDate(undefined);
       }
     });
   }, [claimId]);

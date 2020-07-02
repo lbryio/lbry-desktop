@@ -87,6 +87,7 @@ type Props = {
   findingFFmpeg: boolean,
   findFFmpeg: () => void,
   openModal: string => void,
+  language?: string,
 };
 
 type State = {
@@ -246,6 +247,7 @@ class SettingsPage extends React.PureComponent<Props, State> {
       clearCache,
       findingFFmpeg,
       openModal,
+      language,
     } = this.props;
     const { storedPassword } = this.state;
     const noDaemonSettings = !daemonSettings || Object.keys(daemonSettings).length === 0;
@@ -277,7 +279,7 @@ class SettingsPage extends React.PureComponent<Props, State> {
                   ? __("To enable this feature, check 'Save Password' the next time you start the app.")
                   : null
               }
-              actions={<SyncToggle disabled={walletEncrypted && !storedPassword} />}
+              actions={<SyncToggle language={language} disabled={walletEncrypted && !storedPassword} />}
             />
             <Card
               title={__('Download Directory')}
@@ -353,6 +355,7 @@ class SettingsPage extends React.PureComponent<Props, State> {
 
                   {!disableMaxKeyFee && (
                     <FormFieldPrice
+                      language={language}
                       name="max_key_fee"
                       min={0}
                       onChange={this.onKeyFeeChange}
@@ -489,7 +492,6 @@ class SettingsPage extends React.PureComponent<Props, State> {
                         button="secondary"
                         label={__('Manage')}
                         icon={ICONS.SETTINGS}
-                        disabled={userBlockedChannelsCount === 0}
                         navigate={`/$/${PAGES.SETTINGS_NOTIFICATIONS}`}
                       />
                     </div>
@@ -511,7 +513,6 @@ class SettingsPage extends React.PureComponent<Props, State> {
                         button="secondary"
                         label={__('Manage')}
                         icon={ICONS.SETTINGS}
-                        disabled={userBlockedChannelsCount === 0}
                         navigate={`/$/${PAGES.BLOCKED}`}
                       />
                     </div>
@@ -791,7 +792,7 @@ class SettingsPage extends React.PureComponent<Props, State> {
 
             {/* @if TARGET='app' */}
             {/* Auto launch in a hidden state doesn't work on mac https://github.com/Teamwork/node-auto-launch/issues/81 */}
-            {!IS_MAC && <Card title={__('Startup Preferences')} actions={<SettingAutoLaunch />} />}
+            {!IS_MAC && <Card title={__('Startup Preferences')} actions={<SettingAutoLaunch language={language} />} />}
             {/* @endif */}
 
             <Card
