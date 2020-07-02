@@ -112,7 +112,7 @@ export function CommentCreate(props: Props) {
         disabled={channel === CHANNEL_NEW}
         type={advancedEditor && !isReply ? 'markdown' : 'textarea'}
         name={isReply ? 'content_reply' : 'content_description'}
-        label={isReply ? __('Replying as %reply_channel%'), { reply_channel: channel }) : __('Comment')}
+        label={isReply ? __('Replying as %reply_channel%', { reply_channel: channel }) : __('Comment')}
         quickActionLabel={isReply ? undefined : advancedEditor ? __('Simple Editor') : __('Advanced Editor')}
         quickActionHandler={isReply ? undefined : toggleEditorMode}
         onFocus={onTextareaFocus}
