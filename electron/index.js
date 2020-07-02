@@ -6,7 +6,8 @@ import SemVer from 'semver';
 import https from 'https';
 import { app, dialog, ipcMain, session, shell } from 'electron';
 import { autoUpdater } from 'electron-updater';
-import { Lbry } from 'lbry-redux';
+import { Lbry, LbryFirst } from 'lbry-redux';
+import LbryFirstInstance from './LbryFirstInstance';
 import Daemon from './Daemon';
 import isDev from 'electron-is-dev';
 import createTray from './createTray';
@@ -41,6 +42,7 @@ let rendererWindow;
 
 let tray; // eslint-disable-line
 let daemon;
+let lbryFirst;
 
 const appState = {};
 
@@ -87,6 +89,41 @@ const startDaemon = async () => {
   }
 };
 
+const startLbryFirst = async () => {
+  let isLbryFirstRunning = false;
+  console.log(`LbryFirst: Start LBRY First App`);
+  try {
+    await LbryFirst.status();
+    isLbryFirstRunning = true;
+  } catch (e) {
+    console.log('status fails', e);
+    console.log('Starting LbryFirst');
+  }
+
+  if (!isLbryFirstRunning) {
+    console.log('start process...');
+    lbryFirst = new LbryFirstInstance();
+    lbryFirst.on('exit', () => {
+      if (!isDev) {
+        lbryFirst = null;
+        if (!appState.isQuitting) {
+          dialog.showErrorBox(
+            'LbryFirst has Exited',
+            'The lbryFirst may have encountered an unexpected error, or another lbryFirst instance is already running. \n\n'
+          );
+        }
+        app.quit();
+      }
+    });
+
+    try {
+      await lbryFirst.launch();
+    } catch (e) {
+      console.log('e', e);
+    }
+  }
+};
+
 // When we are starting the app, ensure there are no other apps already running
 const gotSingleInstanceLock = app.requestSingleInstanceLock();
 
@@ -123,6 +160,7 @@ if (!gotSingleInstanceLock) {
 
   app.on('ready', async () => {
     await startDaemon();
+    await startLbryFirst();
     startSandbox();
 
     if (isDev) {
@@ -203,6 +241,10 @@ app.on('will-quit', event => {
   appState.isQuitting = true;
   if (daemon) {
     daemon.quit();
+    event.preventDefault();
+  }
+  if (lbryFirst) {
+    lbryFirst.quit();
     event.preventDefault();
   }
 

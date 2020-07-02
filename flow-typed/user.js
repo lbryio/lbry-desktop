@@ -26,4 +26,5 @@ declare type User = {
   updated_at: string,
   youtube_channels: ?Array<string>,
   device_types: Array<DeviceType>,
+  lbry_first_approved: boolean,
 };

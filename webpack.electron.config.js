@@ -46,7 +46,7 @@ let mainConfig = {
       {
         from: `${STATIC_ROOT}/`,
         to: `${DIST_ROOT}/electron/static/`,
-        ignore: ['index-web.html', 'index-electron.html', 'daemon/**/*'],
+        ignore: ['index-web.html', 'index-electron.html', 'daemon/**/*', 'lbry-first/**/*'],
       },
       {
         from: `${STATIC_ROOT}/index-electron.html`,
@@ -55,6 +55,10 @@ let mainConfig = {
       {
         from: `${STATIC_ROOT}/daemon`,
         to: `${DIST_ROOT}/electron/daemon`,
+      },
+      {
+        from: `${STATIC_ROOT}/lbry-first`,
+        to: `${DIST_ROOT}/electron/lbry-first`,
       },
     ]),
   ],
