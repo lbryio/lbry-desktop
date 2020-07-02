@@ -13,6 +13,7 @@ import {
   selectCreateChannelError,
   selectCreatingChannel,
   selectBalance,
+  doClearChannelErrors,
 } from 'lbry-redux';
 import { doOpenModal } from 'redux/actions/app';
 
@@ -44,6 +45,7 @@ const perform = dispatch => ({
     const { name, amount, ...optionalParams } = params;
     return dispatch(doCreateChannel('@' + name, amount, optionalParams));
   },
+  clearChannelErrors: () => dispatch(doClearChannelErrors()),
 });
 
 export default connect(select, perform)(ChannelPage);

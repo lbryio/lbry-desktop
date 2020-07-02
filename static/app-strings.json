@@ -1278,5 +1278,14 @@
   "Increasing your deposit can help your channel be discovered more easily.": "Increasing your deposit can help your channel be discovered more easily.",
   "Editing @%channel%": "Editing @%channel%",
   "This field cannot be changed.": "This field cannot be changed.",
-  "Delete Channel": "Delete Channel"
+  "Delete Channel": "Delete Channel",
+  "Edit Thumbnail Image": "Edit Thumbnail Image",
+  "(Y x Z)": "(Y x Z)",
+  "Choose Image": "Choose Image",
+  "File to upload": "File to upload",
+  "Use a URL instead": "Use a URL instead",
+  "Edit Cover Image": "Edit Cover Image",
+  "Cover Image": "Cover Image",
+  "You Followed Your First Channel!": "You Followed Your First Channel!",
+  "Awesome! You just followed your first first channel.": "Awesome! You just followed your first first channel."
 }

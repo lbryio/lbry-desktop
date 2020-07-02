@@ -3,9 +3,10 @@ import React from 'react';
 import ChannelEdit from 'component/channelEdit';
 import Page from 'component/page';
 import { withRouter } from 'react-router';
+import * as PAGES from 'constants/pages';
 
 type Props = {
-  history: { goBack: () => void },
+  history: { push: string => void, goBack: () => void },
 };
 
 function ChannelNew(props: Props) {
@@ -16,7 +17,7 @@ function ChannelNew(props: Props) {
       backout={{ backFunction: () => history.goBack(), title: __('Create Channel') }}
       className="main--auth-page"
     >
-      <ChannelEdit onDone={history.goBack} />
+      <ChannelEdit onDone={() => history.push(`/$/${PAGES.CHANNELS}`)} />
     </Page>
   );
 }

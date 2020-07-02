@@ -15,6 +15,7 @@ import { MINIMUM_PUBLISH_BID, INVALID_NAME_ERROR, ESTIMATED_FEE } from 'constant
 import { Tabs, TabList, Tab, TabPanels, TabPanel } from 'component/common/tabs';
 import Card from 'component/common/card';
 import * as PAGES from 'constants/pages';
+import analytics from 'analytics';
 const MAX_TAG_SELECT = 5;
 
 type Props = {
@@ -37,6 +38,7 @@ type Props = {
   createChannel: any => Promise<any>,
   createError: string,
   creatingChannel: boolean,
+  clearChannelErrors: () => void,
   onDone: () => void,
   openModal: (
     id: string,
@@ -65,6 +67,7 @@ function ChannelForm(props: Props) {
     createChannel,
     creatingChannel,
     createError,
+    clearChannelErrors,
     openModal,
   } = props;
   const [nameError, setNameError] = React.useState(undefined);
@@ -121,10 +124,10 @@ function ChannelForm(props: Props) {
 
     if (bid <= 0.0 || isNaN(bid)) {
       setBidError(__('Deposit cannot be 0'));
-    } else if (totalAvailableBidAmount - bid < ESTIMATED_FEE) {
-      setBidError(__('Please decrease your deposit to account for transaction fees'));
     } else if (totalAvailableBidAmount < bid) {
       setBidError(__('Deposit cannot be higher than your balance'));
+    } else if (totalAvailableBidAmount - bid < ESTIMATED_FEE) {
+      setBidError(__('Please decrease your deposit to account for transaction fees'));
     } else if (bid < MINIMUM_PUBLISH_BID) {
       setBidError(__('Your deposit must be higher'));
     } else {
@@ -150,6 +153,7 @@ function ChannelForm(props: Props) {
     } else {
       createChannel(params).then(success => {
         if (success) {
+          analytics.apiLogPublish(success);
           onDone();
         }
       });
@@ -166,6 +170,10 @@ function ChannelForm(props: Props) {
 
     setNameError(nameError);
   }, [name]);
+
+  React.useEffect(() => {
+    clearChannelErrors();
+  }, [clearChannelErrors]);
 
   // TODO clear and bail after submit
   return (
@@ -357,7 +365,9 @@ function ChannelForm(props: Props) {
               <div className="section__actions">
                 <Button
                   button="primary"
-                  disabled={creatingChannel || updatingChannel}
+                  disabled={
+                    creatingChannel || updatingChannel || nameError || bidError || (isNewChannel && !params.name)
+                  }
                   label={creatingChannel || updatingChannel ? __('Submitting') : __('Submit')}
                   onClick={handleSubmit}
                 />
