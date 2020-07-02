@@ -77,7 +77,7 @@ function UserEmailReturning(props: Props) {
               <Form onSubmit={handleSubmit} className="section">
                 <FormField
                   autoFocus={!emailExistsFromUrl}
-                  placeholder={__('hotstuff_96@hotmail.com')}
+                  placeholder={__('yourstruly@example.com')}
                   type="email"
                   id="username"
                   autoComplete="on"

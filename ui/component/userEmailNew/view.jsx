@@ -97,7 +97,7 @@ function UserEmailNew(props: Props) {
             <Form onSubmit={handleSubmit} className="section">
               <FormField
                 autoFocus
-                placeholder={__('hotstuff_96@hotmail.com')}
+                placeholder={__('yourstruly@example.com')}
                 type="email"
                 name="sign_up_email"
                 label={__('Email')}
