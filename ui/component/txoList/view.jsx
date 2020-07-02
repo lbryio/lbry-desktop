@@ -230,7 +230,7 @@ function TxoList(props: Props) {
               {!hideStatus && (
                 <div>
                   <fieldset-section>
-                    label={__('Status')}
+                    <label>{__('Status')}</label>
                     <div className={'txo__radios'}>
                       <Button
                         button="alt"
