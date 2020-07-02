@@ -1,5 +1,5 @@
 // @flow
-import { MAIN_WRAPPER_CLASS } from 'component/app/view';
+import { MAIN_CLASS } from 'component/page/view';
 import type { Node } from 'react';
 import React, { useEffect } from 'react';
 import classnames from 'classnames';
@@ -71,10 +71,10 @@ export default function ClaimList(props: Props) {
   useEffect(() => {
     const handleScroll = debounce(e => {
       if (page && pageSize && onScrollBottom) {
-        const mainElWrapper = document.querySelector(`.${MAIN_WRAPPER_CLASS}`);
+        const mainEl = document.querySelector(`.${MAIN_CLASS}`);
 
-        if (mainElWrapper && !loading && urisLength >= pageSize) {
-          const contentWrapperAtBottomOfPage = mainElWrapper.getBoundingClientRect().bottom - 0.5 <= window.innerHeight;
+        if (mainEl && !loading && urisLength >= pageSize) {
+          const contentWrapperAtBottomOfPage = mainEl.getBoundingClientRect().bottom - 0.5 <= window.innerHeight;
 
           if (contentWrapperAtBottomOfPage) {
             onScrollBottom();
