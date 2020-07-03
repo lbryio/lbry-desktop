@@ -7,6 +7,8 @@
   On web, the Lbry publish method call is overridden in platform/web/api-setup, using a function in platform/web/publish.
   File upload is carried out in the background by that function.
  */
+
+import fs from 'fs';
 import React, { useEffect } from 'react';
 import { CHANNEL_NEW, CHANNEL_ANONYMOUS } from 'constants/claim';
 import { buildURI, isURIValid, isNameValid, THUMBNAIL_STATUSES } from 'lbry-redux';
@@ -32,6 +34,7 @@ type Props = {
   disabled: boolean,
   tags: Array<Tag>,
   publish: (?string) => void,
+  fileText: ?string,
   filePath: ?string,
   bid: ?number,
   bidError: ?string,
@@ -89,6 +92,7 @@ function PublishForm(props: Props) {
     uploadThumbnailStatus,
     resetThumbnailStatus,
     updatePublishForm,
+    fileText,
     filePath,
     publishing,
     clearPublish,
@@ -169,6 +173,33 @@ function PublishForm(props: Props) {
     updatePublishForm({ channel });
   }
 
+  function saveFileChanges() {
+    if (typeof filePath === 'string') {
+      return new Promise((resolve, reject) => {
+        fs.writeFile(filePath, fileText, 'utf8', (error, data) => {
+          // Handle error, cant save changes or create file
+          error ? reject(error) : resolve(data);
+        });
+      });
+    }
+  }
+
+  async function handlePublish() {
+    // Publish story
+    if (mode === PUBLISH_MODES.STORY) {
+      // Save new content befor publishing
+      const savedText = await saveFileChanges();
+      // New content stored locally and is not empty
+      if (savedText && savedText.length > 0) {
+        publish(filePath);
+      }
+    }
+    // Publish file
+    else if (mode === PUBLISH_MODES.FILE) {
+      publish(filePath);
+    }
+  }
+
   return (
     <div className="card-stack">
       <div className="button-group">
@@ -245,7 +276,7 @@ function PublishForm(props: Props) {
         <div className="card__actions">
           <Button
             button="primary"
-            onClick={() => publish(filePath)}
+            onClick={handlePublish}
             label={submitLabel}
             disabled={formDisabled || !formValid || uploadThumbnailStatus === THUMBNAIL_STATUSES.IN_PROGRESS}
           />

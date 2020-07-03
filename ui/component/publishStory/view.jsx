@@ -1,6 +1,5 @@
 // @flow
 import * as ICONS from 'constants/icons';
-import fs from 'fs';
 import React, { useEffect } from 'react';
 import { regexInvalidURI } from 'lbry-redux';
 import Button from 'component/button';
@@ -53,26 +52,10 @@ function PublishFile(props: Props) {
     setAdvancedEditor(!advancedEditor);
   }
 
-  function saveFileChanges() {
-    // Desktop implementation
-    // Todo: Lbry.tv ( web ) implementation
-    if (typeof filePath === 'string') {
-      fs.writeFile(filePath, fileText, 'utf8', (err, data) => {
-        // Handle error, cant save changes or create file
-        if (err) {
-          return console.log(err);
-        }
-        // Handle success:
-        // Notify user about file updated ?
-        console.log(data);
-      });
-    }
-  }
-
   useEffect(() => {
     // Save file changes on navigation or app quit, etc...
     function onComponentUnmount() {
-      saveFileChanges();
+      // saveFileChanges();
     }
     // Test for file changes
     return onComponentUnmount;
