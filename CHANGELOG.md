@@ -15,6 +15,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Publish Page improvements to prevent accidental overwrites of existing claims _community pr!_ ([#4416](https://github.com/lbryio/lbry-desktop/pull/4416))
 - Option to remove abandoned claims from Blocked Channels page _community pr!_ ([#4433](https://github.com/lbryio/lbry-desktop/pull/4433))
 - New channel create/edit page ([#4445](https://github.com/lbryio/lbry-desktop/pull/4445))
+- Add dialog to copy various types of links for a claim _community pr!_ ([#4474](https://github.com/lbryio/lbry-desktop/pull/4474))
 
 ### Changed
 
