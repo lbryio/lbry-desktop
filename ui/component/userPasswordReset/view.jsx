@@ -20,6 +20,7 @@ type Props = {
   passwordResetSuccess: boolean,
   passwordResetError: ?string,
   emailToVerify: ?string,
+  onCancel?: () => void,
 };
 
 function UserPasswordReset(props: Props) {
@@ -32,6 +33,7 @@ function UserPasswordReset(props: Props) {
     doClearPasswordEntry,
     doClearEmailEntry,
     emailToVerify,
+    onCancel,
   } = props;
   const { push } = useHistory();
   const [email, setEmail] = React.useState(emailToVerify || '');
@@ -47,7 +49,12 @@ function UserPasswordReset(props: Props) {
     setEmail('');
     doClearPasswordEntry();
     doClearEmailEntry();
-    push(`/$/${PAGES.AUTH_SIGNIN}`);
+
+    if (onCancel) {
+      onCancel();
+    } else {
+      push(`/$/${PAGES.AUTH_SIGNIN}`);
+    }
   }
 
   React.useEffect(() => {
