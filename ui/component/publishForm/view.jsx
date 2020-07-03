@@ -9,6 +9,7 @@
  */
 
 import fs from 'fs';
+import { remote } from 'electron';
 import React, { useEffect } from 'react';
 import { CHANNEL_NEW, CHANNEL_ANONYMOUS } from 'constants/claim';
 import { buildURI, isURIValid, isNameValid, THUMBNAIL_STATUSES } from 'lbry-redux';
@@ -28,6 +29,8 @@ import Card from 'component/common/card';
 import I18nMessage from 'component/i18nMessage';
 import * as PUBLISH_MODES from 'constants/publish_types';
 
+const { dialog } = remote;
+const currentWindow = remote.getCurrentWindow();
 const MODES = Object.values(PUBLISH_MODES);
 
 type Props = {
@@ -103,8 +106,9 @@ function PublishForm(props: Props) {
     checkAvailability,
     onChannelChange,
   } = props;
+
   const TAGS_LIMIT = 5;
-  const formDisabled = (!filePath && !editingURI) || publishing;
+  const formDisabled = (!filePath && mode === PUBLISH_MODES.FILE && !editingURI) || publishing;
   const isInProgress = filePath || editingURI || name || title;
 
   // If they are editing, they don't need a new file chosen
@@ -173,12 +177,27 @@ function PublishForm(props: Props) {
     updatePublishForm({ channel });
   }
 
-  function saveFileChanges() {
-    if (typeof filePath === 'string') {
+  function showSaveDialog() {
+    return dialog.showSaveDialog(currentWindow, {
+      filters: [{ name: 'Text', extensions: ['md', 'markdown', 'txt'] }],
+    });
+  }
+
+  async function saveFileChanges() {
+    let output = filePath;
+    // If there is no filePath defined yet ask user
+    if (!filePath || filePath === '') {
+      output = await showSaveDialog();
+    }
+    // User saved the file on a custom location
+    if (typeof output === 'string') {
+      // Update filePath
+      updatePublishForm({ filePath: output });
+      // Save file changes
       return new Promise((resolve, reject) => {
-        fs.writeFile(filePath, fileText, 'utf8', (error, data) => {
+        fs.writeFile(output, fileText, 'utf8', (error, data) => {
           // Handle error, cant save changes or create file
-          error ? reject(error) : resolve(data);
+          error ? reject(error) : resolve(output);
         });
       });
     }
@@ -187,15 +206,14 @@ function PublishForm(props: Props) {
   async function handlePublish() {
     // Publish story
     if (mode === PUBLISH_MODES.STORY) {
-      // Save new content befor publishing
-      const savedText = await saveFileChanges();
+      const outputFilePath = await saveFileChanges();
       // New content stored locally and is not empty
-      if (savedText && savedText.length > 0) {
-        publish(filePath);
+      if (outputFilePath) {
+        publish(outputFilePath);
       }
     }
     // Publish file
-    else if (mode === PUBLISH_MODES.FILE) {
+    if (mode === PUBLISH_MODES.FILE) {
       publish(filePath);
     }
   }
