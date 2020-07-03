@@ -51,6 +51,7 @@ function ChannelForm(props: Props) {
   const {
     uri,
     claim,
+    amount,
     title,
     description,
     website,
@@ -100,7 +101,7 @@ function ChannelForm(props: Props) {
       thumbnailUrl,
       description,
       title,
-      amount: 0.001,
+      amount: Number(amount) || 0.001,
       languages: languages || [],
       locations: locations || [],
       tags: tags
