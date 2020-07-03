@@ -119,7 +119,8 @@ function ChannelForm(props: Props) {
 
   function handleBidChange(bid: number) {
     const { balance, amount } = props;
-    const totalAvailableBidAmount = parseFloat(amount) || 0.0 + parseFloat(balance) || 0.0;
+    const totalAvailableBidAmount = (parseFloat(amount) || 0.0) + (parseFloat(balance) || 0.0);
+
     setParams({ ...params, amount: bid });
 
     if (bid <= 0.0 || isNaN(bid)) {
