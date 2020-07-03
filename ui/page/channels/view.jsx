@@ -1,5 +1,4 @@
 // @flow
-import * as MODALS from 'constants/modal_types';
 import * as ICONS from 'constants/icons';
 import React, { useEffect } from 'react';
 import ClaimList from 'component/claimList';
@@ -16,11 +15,10 @@ type Props = {
   fetchChannelListMine: () => void,
   fetchingChannels: boolean,
   youtubeChannels: ?Array<any>,
-  openModal: string => void,
 };
 
 export default function ChannelsPage(props: Props) {
-  const { channels, channelUrls, fetchChannelListMine, fetchingChannels, youtubeChannels, openModal } = props;
+  const { channels, channelUrls, fetchChannelListMine, fetchingChannels, youtubeChannels } = props;
   const hasYoutubeChannels = youtubeChannels && Boolean(youtubeChannels.length);
   const hasPendingChannels = channels && channels.some(channel => channel.confirmations < 0);
 
@@ -60,7 +58,7 @@ export default function ChannelsPage(props: Props) {
                 <h2 className="section__title--large">{__('No Channels Created Yet')}</h2>
 
                 <div className="section__actions">
-                  <Button button="primary" label={__('New Channel')} onClick={() => openModal(MODALS.CREATE_CHANNEL)} />
+                  <Button button="primary" label={__('New Channel')} navigate={`/$/${PAGES.CHANNEL_NEW}`} />
                 </div>
               </div>
             </section>

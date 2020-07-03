@@ -378,9 +378,7 @@ function ChannelForm(props: Props) {
                 <ErrorText>{updateError || createError}</ErrorText>
               ) : (
                 <p className="help">
-                  {__(
-                    'After submitting, you will not see the changes immediately. Please check back in a few minutes.'
-                  )}
+                  {__('After submitting, it will take a few minutes for your changes to be live for everyone.')}
                 </p>
               )}
               {!isNewChannel && (
