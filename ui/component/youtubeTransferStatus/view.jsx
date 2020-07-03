@@ -80,88 +80,82 @@ export default function YoutubeTransferStatus(props: Props) {
   return (
     hasChannels &&
     !isYoutubeTransferComplete && (
-      <div>
-        <Card
-          title={youtubeChannels.length > 1 ? __('Your YouTube Channels') : __('Your YouTube Channel')}
-          subtitle={
-            <span>
-              {hasPendingTransfers &&
-                __('Your videos are currently being transferred. There is nothing else for you to do.')}
-              {transferEnabled && !hasPendingTransfers && __('Your videos are ready to be transferred.')}
-              {!transferEnabled && !hasPendingTransfers && __('Please check back later.')}
-            </span>
-          }
-          body={
-            <section>
-              {youtubeChannels.map((channel, index) => {
-                const {
-                  lbry_channel_name: channelName,
-                  channel_claim_id: claimId,
-                  status_token: statusToken,
-                } = channel;
-                const url = buildURI({ channelName, channelClaimId: claimId });
-                const transferState = getMessage(channel);
-                return (
-                  <div key={url} className="card--inline">
-                    {claimId ? (
-                      <ClaimPreview
-                        uri={url}
-                        actions={<span className="help">{transferState}</span>}
-                        properties={false}
-                      />
-                    ) : (
-                      <div className="section--padded">
-                        <p>
-                          <I18nMessage
-                            tokens={{
-                              channelName,
-                            }}
-                          >
-                            %channelName% is not yet ready to be transferred. Please allow up to one week, though it is
-                            frequently faster.
-                          </I18nMessage>
-                        </p>
-                        <p className="help">
-                          <I18nMessage
-                            tokens={{
-                              statusLink: <Button button="link" href={STATUS_URL + statusToken} label={__('here')} />,
-                              faqLink: <Button button="link" label={__('FAQ')} href="https://lbry.com/faq/youtube" />,
-                            }}
-                          >
-                            You can check your status %statusLink%. This %faqLink% explains the program in more detail.
-                          </I18nMessage>
-                        </p>
-                      </div>
-                    )}
-                  </div>
-                );
-              })}
-              {videosImported && (
-                <div className="section help">{__('%complete% / %total% videos transferred', { complete, total })}</div>
-              )}
-            </section>
-          }
-          actions={
-            transferEnabled ? (
-              <div className="card__actions">
-                <Button
-                  button="primary"
-                  disabled={youtubeImportPending}
-                  onClick={claimChannels}
-                  label={youtubeChannels.length > 1 ? __('Claim Channels') : __('Claim Channel')}
-                />
-                <Button button="link" label={__('Learn more')} href="https://lbry.com/faq/youtube#transfer" />
-              </div>
-            ) : !hideChannelLink ? (
-              <div className="card__actions">
-                <Button button="primary" navigate={`/$/${PAGES.CHANNELS}`} label={__('View Your Channels')} />
-              </div>
-            ) : (
-              false
-            )
-          }
-        />
-      </div>
+      <Card
+        title={youtubeChannels.length > 1 ? __('Your YouTube Channels') : __('Your YouTube Channel')}
+        subtitle={
+          <span>
+            {hasPendingTransfers &&
+              __('Your videos are currently being transferred. There is nothing else for you to do.')}
+            {transferEnabled && !hasPendingTransfers && __('Your videos are ready to be transferred.')}
+            {!transferEnabled && !hasPendingTransfers && __('Please check back later.')}
+          </span>
+        }
+        body={
+          <section>
+            {youtubeChannels.map((channel, index) => {
+              const { lbry_channel_name: channelName, channel_claim_id: claimId, status_token: statusToken } = channel;
+              const url = buildURI({ channelName, channelClaimId: claimId });
+              const transferState = getMessage(channel);
+              return (
+                <div key={url} className="card--inline">
+                  {claimId ? (
+                    <ClaimPreview
+                      uri={url}
+                      actions={<span className="help">{transferState}</span>}
+                      properties={false}
+                    />
+                  ) : (
+                    <div className="section--padded">
+                      <p>
+                        <I18nMessage
+                          tokens={{
+                            channelName,
+                          }}
+                        >
+                          %channelName% is not yet ready to be transferred. Please allow up to one week, though it is
+                          frequently faster.
+                        </I18nMessage>
+                      </p>
+                      <p className="help">
+                        <I18nMessage
+                          tokens={{
+                            statusLink: <Button button="link" href={STATUS_URL + statusToken} label={__('here')} />,
+                            faqLink: <Button button="link" label={__('FAQ')} href="https://lbry.com/faq/youtube" />,
+                          }}
+                        >
+                          You can check your status %statusLink%. This %faqLink% explains the program in more detail.
+                        </I18nMessage>
+                      </p>
+                    </div>
+                  )}
+                </div>
+              );
+            })}
+            {videosImported && (
+              <div className="section help">{__('%complete% / %total% videos transferred', { complete, total })}</div>
+            )}
+          </section>
+        }
+        actions={
+          transferEnabled ? (
+            <div className="card__actions">
+              <Button
+                button="primary"
+                disabled={youtubeImportPending}
+                onClick={claimChannels}
+                label={youtubeChannels.length > 1 ? __('Claim Channels') : __('Claim Channel')}
+              />
+              <Button button="link" label={__('Learn more')} href="https://lbry.com/faq/youtube#transfer" />
+            </div>
+          ) : !hideChannelLink ? (
+            <div className="card__actions">
+              <Button button="primary" navigate={`/$/${PAGES.CHANNELS}`} label={__('View Your Channels')} />
+            </div>
+          ) : (
+            false
+          )
+        }
+      />
     )
   );
 }

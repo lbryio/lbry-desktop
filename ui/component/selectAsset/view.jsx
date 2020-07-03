@@ -1,128 +1,126 @@
 // @flow
 
-import React, { useState } from 'react';
-import { FormField } from 'component/common/form';
+import React from 'react';
 import FileSelector from 'component/common/file-selector';
-import Button from 'component/button';
 import { SPEECH_URLS } from 'lbry-redux';
-import uuid from 'uuid/v4';
+import { FormField, Form } from 'component/common/form';
+import Button from 'component/button';
+import Card from 'component/common/card';
+import { generateThumbnailName } from 'util/generate-thumbnail-name';
+import usePersistedState from 'effects/use-persisted-state';
 
 const accept = '.png, .jpg, .jpeg, .gif';
-
-const SOURCE_URL = 'url';
-const SOURCE_UPLOAD = 'upload';
 const SPEECH_READY = 'READY';
 const SPEECH_UPLOADING = 'UPLOADING';
+
 type Props = {
   assetName: string,
   currentValue: ?string,
   onUpdate: string => void,
   recommended: string,
+  title: string,
+  onDone?: () => void,
 };
 
 function SelectAsset(props: Props) {
-  const { onUpdate, assetName, currentValue, recommended } = props;
-  const [assetSource, setAssetSource] = useState(SOURCE_URL);
-  const [pathSelected, setPathSelected] = useState('');
-  const [fileSelected, setFileSelected] = useState<any>(null);
-  const [uploadStatus, setUploadStatus] = useState(SPEECH_READY);
-  const [error, setError] = useState();
+  const { onUpdate, onDone, assetName, recommended, title } = props;
+  const [pathSelected, setPathSelected] = React.useState('');
+  const [fileSelected, setFileSelected] = React.useState<any>(null);
+  const [uploadStatus, setUploadStatus] = React.useState(SPEECH_READY);
+  const [useUrl, setUseUrl] = usePersistedState('thumbnail-upload:mode', false);
+  const [url, setUrl] = React.useState('');
+  const [error, setError] = React.useState();
 
-  function doUploadAsset(file) {
+  React.useEffect(() => {
+    if (pathSelected && fileSelected) {
+      doUploadAsset();
+    }
+  }, [pathSelected, fileSelected]);
+
+  function doUploadAsset() {
     const uploadError = (error = '') => {
       setError(error);
     };
 
-    const setUrl = path => {
+    const onSuccess = thumbnailUrl => {
       setUploadStatus(SPEECH_READY);
-      onUpdate(path);
-      setAssetSource(SOURCE_URL);
+      onUpdate(thumbnailUrl);
+
+      if (onDone) {
+        onDone();
+      }
     };
 
     setUploadStatus(SPEECH_UPLOADING);
 
     const data = new FormData();
-    const name = uuid();
+    const name = generateThumbnailName();
     data.append('name', name);
-    data.append('file', file);
+    data.append('file', fileSelected);
 
     return fetch(SPEECH_URLS.SPEECH_PUBLISH, {
       method: 'POST',
       body: data,
     })
       .then(response => response.json())
-      .then(json => (json.success ? setUrl(`${json.data.serveUrl}`) : uploadError(json.message)))
-      .catch(err => uploadError(err.message));
+      .then(json => (json.success ? onSuccess(`${json.data.serveUrl}`) : uploadError(json.message)))
+      .catch(err => {
+        uploadError(err.message);
+      });
   }
 
   return (
-    <fieldset-section>
-      <fieldset-group className="fieldset-group--smushed">
-        <FormField
-          type="select"
-          name={assetName}
-          value={assetSource}
-          onChange={e => setAssetSource(e.target.value)}
-          label={__(assetName + ' source')}
-        >
-          <option key={'lmmnop'} value={'url'}>
-            URL
-          </option>
-          <option key={'lmmnopq'} value={'upload'}>
-            UPLOAD
-          </option>
-        </FormField>
-        {assetSource === SOURCE_UPLOAD && (
-          <div>
-            {error && <div className="error__text">{error}</div>}
-            {!pathSelected && (
-              <FileSelector
-                label={'File to upload'}
-                name={'assetSelector'}
-                onFileChosen={file => {
-                  if (file.name) {
-                    setPathSelected(file.path || file.name);
-                    setFileSelected(file);
-                  }
-                }}
-                accept={accept}
-              />
+    <Card
+      title={title || __('Choose Image')}
+      actions={
+        <Form onSubmit={onDone}>
+          {error && <div className="error__text">{error}</div>}
+          {useUrl ? (
+            <FormField
+              autoFocus
+              type={'text'}
+              name={'thumbnail'}
+              label={`${assetName}  ${recommended}`}
+              placeholder={'https://example.com/image.png'}
+              value={url}
+              onChange={e => {
+                setUrl(e.target.value);
+                onUpdate(e.target.value);
+              }}
+            />
+          ) : (
+            <FileSelector
+              autoFocus
+              disabled={uploadStatus === SPEECH_UPLOADING}
+              label={uploadStatus === SPEECH_UPLOADING ? __('Uploading...') : __('File to upload')}
+              name="assetSelector"
+              currentPath={pathSelected}
+              onFileChosen={file => {
+                if (file.name) {
+                  setFileSelected(file);
+                  // file.path is undefined in web but available in electron
+                  setPathSelected(file.name || file.path);
+                }
+              }}
+              accept={accept}
+            />
+          )}
+
+          <div className="section__actions">
+            {onDone && (
+              <Button button="primary" type="submit" label={__('Done')} disabled={uploadStatus === SPEECH_UPLOADING} />
             )}
-            {pathSelected && (
-              <div>
-                {`...${pathSelected.slice(-18)}`} {uploadStatus}{' '}
-                <Button button={'primary'} onClick={() => doUploadAsset(fileSelected)}>
-                  Upload
-                </Button>{' '}
-                <Button
-                  button={'secondary'}
-                  onClick={() => {
-                    setPathSelected('');
-                    setFileSelected(null);
-                    setError(null);
-                  }}
-                >
-                  Clear
-                </Button>
-              </div>
-            )}
+            <FormField
+              name="toggle-upload"
+              type="checkbox"
+              label={__('Use a URL')}
+              checked={useUrl}
+              onChange={() => setUseUrl(!useUrl)}
+            />
           </div>
-        )}
-        {assetSource === SOURCE_URL && (
-          <FormField
-            type={'text'}
-            name={'thumbnail'}
-            label={__(assetName + ' ' + recommended)}
-            placeholder={'https://example.com/image.png'}
-            disabled={false}
-            value={currentValue}
-            onChange={e => {
-              onUpdate(e.target.value);
-            }}
-          />
-        )}
-      </fieldset-group>
-    </fieldset-section>
+        </Form>
+      }
+    />
   );
 }
 

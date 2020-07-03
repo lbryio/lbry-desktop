@@ -19,14 +19,23 @@ type Props = {
   noHeader: boolean,
   noFooter: boolean,
   noSideNavigation: boolean,
+  backout: { backFunction: () => void, backTitle: string },
 };
 
 function Page(props: Props) {
-  const { children, className, authPage = false, noHeader = false, noFooter = false, noSideNavigation = false } = props;
+  const {
+    children,
+    className,
+    authPage = false,
+    noHeader = false,
+    noFooter = false,
+    noSideNavigation = false,
+    backout,
+  } = props;
 
   return (
     <Fragment>
-      {!noHeader && <Header authHeader={authPage} />}
+      {!noHeader && <Header authHeader={authPage} backout={backout} />}
       <div className={classnames('main-wrapper__inner')}>
         <main className={classnames(MAIN_CLASS, className, { 'main--full-width': authPage })}>{children}</main>
         {!authPage && !noSideNavigation && <SideNavigation />}

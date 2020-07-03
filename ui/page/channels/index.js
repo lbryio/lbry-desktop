@@ -6,7 +6,6 @@ import {
   selectFetchingMyChannels,
 } from 'lbry-redux';
 import { selectYoutubeChannels } from 'redux/selectors/user';
-import { doOpenModal } from 'redux/actions/app';
 import ChannelsPage from './view';
 
 const select = state => ({
@@ -17,7 +16,6 @@ const select = state => ({
 });
 
 const perform = dispatch => ({
-  openModal: id => dispatch(doOpenModal(id)),
   fetchChannelListMine: () => dispatch(doFetchChannelListMine()),
 });
 

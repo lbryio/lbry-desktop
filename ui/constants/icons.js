@@ -105,5 +105,6 @@ export const PINNED = 'Pinned';
 export const BUY = 'Buy';
 export const SEND = 'Send';
 export const RECEIVE = 'Receive';
+export const CAMERA = 'Camera';
 export const OPEN_LOG = 'FilePlus';
 export const OPEN_LOG_FOLDER = 'Folder';

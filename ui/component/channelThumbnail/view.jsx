@@ -1,5 +1,5 @@
 // @flow
-import React, { useState } from 'react';
+import React from 'react';
 import { parseURI } from 'lbry-redux';
 import classnames from 'classnames';
 import Gerbil from './gerbil.png';
@@ -25,20 +25,13 @@ function ChannelThumbnail(props: Props) {
     small = false,
     allowGifs = false,
   } = props;
+  const [thumbError, setThumbError] = React.useState(false);
   const thumbnail = rawThumbnail && rawThumbnail.trim().replace(/^http:\/\//i, 'https://');
   const thumbnailPreview = rawThumbnailPreview && rawThumbnailPreview.trim().replace(/^http:\/\//i, 'https://');
   const channelThumbnail = thumbnail || thumbnailPreview;
-
-  const [thumbError, setThumbError] = useState(false);
-  if (channelThumbnail && channelThumbnail.endsWith('gif') && !allowGifs) {
-    return <FreezeframeWrapper src={channelThumbnail} className="channel-thumbnail" />;
-  }
-
   const showThumb = (!obscure && !!thumbnail) || thumbnailPreview;
-
   // Generate a random color class based on the first letter of the channel name
   const { channelName } = parseURI(uri);
-
   let initializer;
   let colorClassName;
   if (channelName) {
@@ -47,6 +40,11 @@ function ChannelThumbnail(props: Props) {
   } else {
     colorClassName = `channel-thumbnail__default--4`;
   }
+
+  if (channelThumbnail && channelThumbnail.endsWith('gif') && !allowGifs) {
+    return <FreezeframeWrapper src={channelThumbnail} className="channel-thumbnail" />;
+  }
+
   return (
     <div
       className={classnames('channel-thumbnail', className, {

@@ -87,7 +87,7 @@ fieldset-group {
         border-color: var(--color-input-border);
         color: var(--color-text-help);
         background-color: var(--color-input-bg);
-        border-right: 1px solid var(--color-text-help);
+        border-right: 1px solid var(--border-color);
       }
     }
 
@@ -133,8 +133,6 @@ fieldset-group {
 
 .form-field__help {
   @extend .help;
-  margin-top: var(--spacing-xxs);
-  margin-bottom: var(--spacing-s);
 }
 
 .form-field__help + .checkbox,

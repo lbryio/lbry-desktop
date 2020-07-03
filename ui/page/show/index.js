@@ -8,6 +8,7 @@ import {
   makeSelectTitleForUri,
   normalizeURI,
   makeSelectClaimIsMine,
+  makeSelectClaimIsPending,
 } from 'lbry-redux';
 import { makeSelectChannelInSubscriptions } from 'redux/selectors/subscriptions';
 import { selectBlackListedOutpoints } from 'lbryinc';
@@ -42,6 +43,7 @@ const select = (state, props) => {
     uri,
     title: makeSelectTitleForUri(uri)(state),
     claimIsMine: makeSelectClaimIsMine(uri)(state),
+    claimIsPending: makeSelectClaimIsPending(uri)(state),
   };
 };
 
