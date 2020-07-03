@@ -1,4 +1,9 @@
 import { connect } from 'react-redux';
-import AuthPage from './view';
+import { selectUser } from 'redux/selectors/user';
+import RewardsVerifyPage from './view';
 
-export default connect(null, null)(AuthPage);
+const select = state => ({
+  user: selectUser(state),
+});
+
+export default connect(select, null)(RewardsVerifyPage);
