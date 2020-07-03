@@ -21,7 +21,7 @@ const MAX_TAG_SELECT = 5;
 type Props = {
   claim: ChannelClaim,
   title: string,
-  amount: string,
+  amount: number,
   coverUrl: string,
   thumbnailUrl: string,
   location: { search: string },
@@ -101,7 +101,7 @@ function ChannelForm(props: Props) {
       thumbnailUrl,
       description,
       title,
-      amount: Number(amount) || 0.001,
+      amount: amount || 0.001,
       languages: languages || [],
       locations: locations || [],
       tags: tags
