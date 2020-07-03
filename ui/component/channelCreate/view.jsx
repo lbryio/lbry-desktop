@@ -28,7 +28,7 @@ class ChannelCreate extends React.PureComponent<Props, State> {
 
     this.state = {
       newChannelName: '',
-      newChannelBid: 0.01,
+      newChannelBid: 0.001,
       newChannelNameError: '',
       newChannelBidError: '',
     };
