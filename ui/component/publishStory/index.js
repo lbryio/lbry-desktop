@@ -5,16 +5,18 @@ import {
   makeSelectPublishFormValue,
   doUpdatePublishForm,
   doClearPublish,
+  makeSelectFileInfoForUri,
 } from 'lbry-redux';
 import { doToast } from 'redux/actions/notifications';
 import PublishPage from './view';
 
-const select = state => ({
+const select = (state, props) => ({
   title: makeSelectPublishFormValue('title')(state),
   description: makeSelectPublishFormValue('description')(state),
   name: makeSelectPublishFormValue('name')(state),
-  fileText: makeSelectPublishFormValue('fileText')(state),
+  fileInfo: makeSelectFileInfoForUri(props.uri)(state),
   filePath: makeSelectPublishFormValue('filePath')(state),
+  fileText: makeSelectPublishFormValue('fileText')(state),
   isStillEditing: selectIsStillEditing(state),
   balance: selectBalance(state),
   publishing: makeSelectPublishFormValue('publishing')(state),

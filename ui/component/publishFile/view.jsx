@@ -58,6 +58,7 @@ function PublishFile(props: Props) {
   const PROCESSING_MB_PER_SECOND = 0.5;
   const MINUTES_THRESHOLD = 30;
   const HOURS_THRESHOLD = MINUTES_THRESHOLD * 60;
+  const MARKDOWN_FILE_EXTENSIONS = ['txt', 'md', 'markdown'];
 
   const sizeInMB = Number(size) / 1000000;
   const secondsToProcess = sizeInMB / PROCESSING_MB_PER_SECOND;
@@ -192,8 +193,18 @@ function PublishFile(props: Props) {
     // if video, extract duration so we can warn about bitrateif (typeof file !== 'string') {
     const contentType = file.type && file.type.split('/');
     const isMp4 = contentType && contentType[1] === 'mp4';
-    const isText = contentType && contentType[0] === 'text';
     const isVideo = contentType && contentType[0] === 'video';
+
+    let isMarkdownText = false;
+
+    if (contentType) {
+      isMarkdownText = contentType[0] === 'text';
+    } else {
+      // If user's machine is missign a valid content type registration
+      // for markdown content: text/markdown, file extension will be used instead
+      const extension = file.name.split('.').pop();
+      isMarkdownText = MARKDOWN_FILE_EXTENSIONS.includes(extension);
+    }
 
     if (isVideo) {
       if (isMp4) {
@@ -212,7 +223,7 @@ function PublishFile(props: Props) {
       }
     }
 
-    if (isText) {
+    if (isMarkdownText) {
       // Create reader
       const reader = new FileReader();
       // Handler for file reader

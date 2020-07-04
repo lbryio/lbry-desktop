@@ -1,20 +1,21 @@
 // @flow
-import * as ICONS from 'constants/icons';
+import fs from 'fs';
 import React, { useEffect } from 'react';
-import { regexInvalidURI } from 'lbry-redux';
 import Button from 'component/button';
 import Card from 'component/common/card';
 import Spinner from 'component/spinner';
 import { FormField } from 'component/common/form';
 import { FF_MAX_CHARS_IN_DESCRIPTION } from 'constants/form-field';
-
 import usePersistedState from 'effects/use-persisted-state';
+import * as ICONS from 'constants/icons';
 
 type Props = {
+  uri: ?string,
   title: ?string,
+  fileInfo: FileListItem,
+  filePath: string | WebFile,
   fileText: ?string,
   name: ?string,
-  filePath: string | WebFile,
   isStillEditing: boolean,
   balance: number,
   updatePublishForm: ({}) => void,
@@ -30,11 +31,13 @@ type Props = {
   isVid: boolean,
 };
 
-function PublishFile(props: Props) {
+function PublishStory(props: Props) {
   const {
-    title,
+    uri,
     name,
+    title,
     balance,
+    fileInfo,
     filePath,
     fileText,
     isStillEditing,
@@ -53,13 +56,36 @@ function PublishFile(props: Props) {
   }
 
   useEffect(() => {
-    // Save file changes on navigation or app quit, etc...
-    function onComponentUnmount() {
-      // saveFileChanges();
+    // @if TARGET='app'
+    function readFile(path) {
+      return new Promise((resolve, reject) => {
+        fs.readFile(path, 'utf8', (error, data) => {
+          error ? reject(error) : resolve(data);
+        });
+      });
     }
-    // Test for file changes
-    return onComponentUnmount;
-  }, []);
+
+    async function updateEditorText(path) {
+      const text = await readFile(path);
+      if (text) {
+        updatePublishForm({ fileText: text });
+      }
+    }
+
+    const isEditingFile = isStillEditing && uri && fileInfo;
+
+    if (isEditingFile) {
+      const { mime_type: mimeType, download_path: downloadPath } = fileInfo;
+
+      // Editing same file (previously published)
+      // User can use a different file to replace the content
+      if (!filePath && mimeType === 'text/markdown') {
+        updateEditorText(downloadPath);
+      }
+    }
+
+    // @endif
+  }, [uri, isStillEditing, filePath, fileInfo, updatePublishForm]);
 
   let cardTitle;
   if (publishing) {
@@ -115,4 +141,4 @@ function PublishFile(props: Props) {
   );
 }
 
-export default PublishFile;
+export default PublishStory;

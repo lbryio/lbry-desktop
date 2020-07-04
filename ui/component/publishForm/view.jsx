@@ -37,8 +37,8 @@ type Props = {
   disabled: boolean,
   tags: Array<Tag>,
   publish: (?string) => void,
-  fileText: ?string,
   filePath: ?string,
+  fileText: ?string,
   bid: ?number,
   bidError: ?string,
   editingURI: ?string,
@@ -95,8 +95,8 @@ function PublishForm(props: Props) {
     uploadThumbnailStatus,
     resetThumbnailStatus,
     updatePublishForm,
-    fileText,
     filePath,
+    fileText,
     publishing,
     clearPublish,
     isStillEditing,
@@ -132,12 +132,6 @@ function PublishForm(props: Props) {
   } else {
     submitLabel = !publishing ? __('Publish') : __('Publishing...');
   }
-
-  useEffect(() => {
-    if (filePath && filePath !== null) {
-      // console.info("SHOW EDITOR")
-    }
-  }, [filePath]);
 
   useEffect(() => {
     if (!thumbnail) {
@@ -183,16 +177,18 @@ function PublishForm(props: Props) {
     });
   }
 
+  function createWebFile() {
+    const fileName = `${name}.md`;
+    return new File([fileText], fileName, { type: 'text/markdown' });
+  }
+
   async function saveFileChanges() {
     let output = filePath;
-    // If there is no filePath defined yet ask user
-    if (!filePath || filePath === '') {
+    if (!output || output === '') {
       output = await showSaveDialog();
     }
     // User saved the file on a custom location
     if (typeof output === 'string') {
-      // Update filePath
-      updatePublishForm({ filePath: output });
       // Save file changes
       return new Promise((resolve, reject) => {
         fs.writeFile(output, fileText, 'utf8', (error, data) => {
@@ -204,12 +200,24 @@ function PublishForm(props: Props) {
   }
 
   async function handlePublish() {
-    // Publish story
+    // Publish story:
+    // If here is no file selected yet on desktop, show file dialog
+    // and let the user choose a file path. On web a new File is created
     if (mode === PUBLISH_MODES.STORY) {
-      const outputFilePath = await saveFileChanges();
+      let outputFile;
+
+      // @if TARGET='app'
+      outputFile = await saveFileChanges();
+      // @endif
+
+      // @if TARGET='web'
+      outputFile = createWebFile();
+      // @endif
+
       // New content stored locally and is not empty
-      if (outputFilePath) {
-        publish(outputFilePath);
+      if (outputFile) {
+        updatePublishForm({ filePath: outputFile });
+        publish(outputFile);
       }
     }
     // Publish file
@@ -217,6 +225,9 @@ function PublishForm(props: Props) {
       publish(filePath);
     }
   }
+
+  // Editing claim uri
+  const uri = myClaimForUri ? myClaimForUri.permanent_url : undefined;
 
   return (
     <div className="card-stack">
@@ -237,7 +248,7 @@ function PublishForm(props: Props) {
       {mode === PUBLISH_MODES.FILE && (
         <PublishFile disabled={disabled || publishing} inProgress={isInProgress} setPublishMode={setMode} />
       )}
-      {mode === PUBLISH_MODES.STORY && <PublishStory disabled={disabled} inProgress={isInProgress} />}
+      {mode === PUBLISH_MODES.STORY && <PublishStory disabled={disabled} inProgress={isInProgress} uri={uri} />}
 
       {!publishing && (
         <div className={classnames({ 'card--disabled': formDisabled })}>
