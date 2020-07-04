@@ -109,7 +109,9 @@
     flex-wrap: wrap;
 
     > * {
-      margin-bottom: var(--spacing-s);
+      &:not(:only-of-type) {
+        margin-bottom: var(--spacing-s);
+      }
     }
   }
 

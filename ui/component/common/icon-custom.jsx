@@ -680,4 +680,10 @@ export const icons = {
       <line x1="17.5" y1="15" x2="9" y2="15" />
     </g>
   ),
+  [ICONS.CAMERA]: buildIcon(
+    <g>
+      <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z" />
+      <circle cx="12" cy="13" r="4" />
+    </g>
+  ),
 };

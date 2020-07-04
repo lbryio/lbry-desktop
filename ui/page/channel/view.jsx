@@ -1,6 +1,6 @@
 // @flow
 import * as ICONS from 'constants/icons';
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { parseURI } from 'lbry-redux';
 import { Lbryio } from 'lbryinc';
 import Page from 'component/page';
@@ -8,7 +8,7 @@ import SubscribeButton from 'component/subscribeButton';
 import BlockButton from 'component/blockButton';
 import ShareButton from 'component/shareButton';
 import { Tabs, TabList, Tab, TabPanels, TabPanel } from 'component/common/tabs';
-import { withRouter } from 'react-router';
+import { useHistory } from 'react-router';
 import Button from 'component/button';
 import { formatLbryUrlForWeb } from 'util/url';
 import ChannelContent from 'component/channelContent';
@@ -26,6 +26,7 @@ import ClaimSupportButton from 'component/claimSupportButton';
 const PAGE_VIEW_QUERY = `view`;
 const ABOUT_PAGE = `about`;
 const DISCUSSION_PAGE = `discussion`;
+const EDIT_PAGE = 'edit';
 
 type Props = {
   uri: string,
@@ -34,8 +35,6 @@ type Props = {
   cover: ?string,
   thumbnail: ?string,
   page: number,
-  location: { search: string },
-  history: { push: string => void },
   match: { params: { attribute: ?string } },
   channelIsMine: boolean,
   isSubscribed: boolean,
@@ -52,14 +51,11 @@ type Props = {
 function ChannelPage(props: Props) {
   const {
     uri,
+    claim,
     title,
     cover,
-    history,
-    location,
     page,
     channelIsMine,
-    thumbnail,
-    claim,
     isSubscribed,
     channelIsBlocked,
     blackListedOutpoints,
@@ -67,19 +63,27 @@ function ChannelPage(props: Props) {
     subCount,
     pending,
   } = props;
-
-  const { channelName } = parseURI(uri);
-  const { search } = location;
+  const {
+    push,
+    goBack,
+    location: { search },
+  } = useHistory();
   const urlParams = new URLSearchParams(search);
   const currentView = urlParams.get(PAGE_VIEW_QUERY) || undefined;
-  const [coverError, setCoverError] = useState(false);
+  const editInUrl = urlParams.get(PAGE_VIEW_QUERY) === EDIT_PAGE;
+  const [editing, setEditing] = React.useState(editInUrl);
+  const [lastYtSyncDate, setLastYtSyncDate] = React.useState();
+  const { channelName } = parseURI(uri);
   const { permanent_url: permanentUrl } = claim;
-  const [editing, setEditing] = useState(false);
-  const [thumbPreview, setThumbPreview] = useState(thumbnail);
-  const [coverPreview, setCoverPreview] = useState(cover);
-  const [lastYtSyncDate, setLastYtSyncDate] = useState();
   const claimId = claim.claim_id;
   const formattedSubCount = Number(subCount).toLocaleString();
+  let channelIsBlackListed = false;
+
+  if (claim && blackListedOutpoints) {
+    channelIsBlackListed = blackListedOutpoints.some(
+      outpoint => outpoint.txid === claim.txid && outpoint.nout === claim.nout
+    );
+  }
 
   // If a user changes tabs, update the url so it stays on the same page if they refresh.
   // We don't want to use links here because we can't animate the tab change and using links
@@ -97,42 +101,60 @@ function ChannelPage(props: Props) {
     } else {
       search += `${PAGE_VIEW_QUERY}=${DISCUSSION_PAGE}`;
     }
-    history.push(`${url}${search}`);
+
+    push(`${url}${search}`);
   }
 
-  function doneEditing() {
+  function onDone() {
     setEditing(false);
-    setThumbPreview(thumbnail);
-    setCoverPreview(cover);
+    goBack();
   }
-
-  useEffect(() => {
-    Lbryio.call('yt', 'get_youtuber', { channel_claim_id: claimId }).then(response => {
-      if (response.is_verified_youtuber) {
-        setLastYtSyncDate(response.last_synced);
-      } else {
-        setLastYtSyncDate(undefined);
-      }
-    });
-  }, [claimId]);
-
-  let channelIsBlackListed = false;
-
-  if (claim && blackListedOutpoints) {
-    channelIsBlackListed = blackListedOutpoints.some(
-      outpoint => outpoint.txid === claim.txid && outpoint.nout === claim.nout
-    );
-  }
-
-  React.useEffect(() => {
-    fetchSubCount(claimId);
-  }, [uri, fetchSubCount, claimId]);
 
   React.useEffect(() => {
     if (!channelIsMine && editing) {
       setEditing(false);
     }
-  }, [channelIsMine, editing]);
+
+    if (channelIsMine && editing) {
+      push(`?${PAGE_VIEW_QUERY}=${EDIT_PAGE}`);
+    }
+  }, [channelIsMine, editing, push]);
+
+  React.useEffect(() => {
+    if (currentView === EDIT_PAGE) {
+      setEditing(true);
+    } else {
+      setEditing(false);
+    }
+  }, [currentView, setEditing]);
+
+  React.useEffect(() => {
+    Lbryio.call('yt', 'get_youtuber', { channel_claim_id: claimId }).then(response => {
+      if (response.is_verified_youtuber) {
+        setLastYtSyncDate(response.last_synced);
+      }
+    });
+  }, [claimId]);
+
+  React.useEffect(() => {
+    fetchSubCount(claimId);
+  }, [uri, fetchSubCount, claimId]);
+
+  if (editing) {
+    return (
+      <Page
+        noFooter
+        noSideNavigation={editing}
+        backout={{
+          backFunction: onDone,
+          title: __('Editing @%channel%', { channel: channelName }),
+          simpleTitle: __('Editing'),
+        }}
+      >
+        <ChannelEdit uri={uri} onDone={onDone} />
+      </Page>
+    );
+  }
 
   return (
     <Page noFooter>
@@ -153,39 +175,26 @@ function ChannelPage(props: Props) {
           {!channelIsBlocked && (!channelIsBlackListed || isSubscribed) && <SubscribeButton uri={permanentUrl} />}
           {!isSubscribed && <BlockButton uri={permanentUrl} />}
         </div>
-        {!editing && cover && !coverError && (
+        {cover && (
           <img
             className={classnames('channel-cover__custom', { 'channel__image--blurred': channelIsBlocked })}
             src={cover}
-            onError={() => setCoverError(true)}
           />
         )}
-        {editing && <img className="channel-cover__custom" src={coverPreview} />}
-        {/* component that offers select/upload */}
         <div className="channel__primary-info">
-          {!editing && (
-            <ChannelThumbnail
-              className="channel__thumbnail--channel-page"
-              uri={uri}
-              obscure={channelIsBlocked}
-              allowGifs
-            />
-          )}
-          {editing && (
-            <ChannelThumbnail
-              className="channel__thumbnail--channel-page"
-              uri={uri}
-              thumbnailPreview={thumbPreview}
-              allowGifs
-            />
-          )}
+          <ChannelThumbnail
+            className="channel__thumbnail--channel-page"
+            uri={uri}
+            obscure={channelIsBlocked}
+            allowGifs
+          />
           <h1 className="channel__title">{title || '@' + channelName}</h1>
           <div className="channel__meta">
             <span>
               {formattedSubCount} {subCount !== 1 ? __('Followers') : __('Follower')}
               <HelpLink href="https://lbry.com/faq/views" />
             </span>
-            {channelIsMine && !editing && (
+            {channelIsMine && (
               <>
                 {pending ? (
                   <span>{__('Your changes will be live in a few minutes')}</span>
@@ -201,15 +210,6 @@ function ChannelPage(props: Props) {
                 )}
               </>
             )}
-            {channelIsMine && editing && (
-              <Button
-                button="alt"
-                title={__('Cancel')}
-                onClick={() => doneEditing()}
-                icon={ICONS.REMOVE}
-                iconSize={18}
-              />
-            )}
           </div>
         </div>
         <div className="channel-cover__gradient" />
@@ -220,22 +220,12 @@ function ChannelPage(props: Props) {
           <Tab>{editing ? __('Editing Your Channel') : __('About')}</Tab>
           <Tab disabled={editing}>{__('Comments')}</Tab>
         </TabList>
-
         <TabPanels>
           <TabPanel>
             <ChannelContent uri={uri} channelIsBlackListed={channelIsBlackListed} />
           </TabPanel>
           <TabPanel>
-            {editing ? (
-              <ChannelEdit
-                uri={uri}
-                doneEditing={doneEditing}
-                updateThumb={v => setThumbPreview(v)}
-                updateCover={v => setCoverPreview(v)}
-              />
-            ) : (
-              <ChannelAbout uri={uri} />
-            )}
+            <ChannelAbout uri={uri} />
           </TabPanel>
           <TabPanel>
             <ChannelDiscussion uri={uri} />
@@ -246,4 +236,4 @@ function ChannelPage(props: Props) {
   );
 }
 
-export default withRouter(ChannelPage);
+export default ChannelPage;

@@ -39,3 +39,4 @@ exports.CREATOR_DASHBOARD = 'dashboard';
 exports.CHECKOUT = 'checkout';
 exports.CODE_2257 = '2257';
 exports.BUY = 'buy';
+exports.CHANNEL_NEW = 'channelnew';

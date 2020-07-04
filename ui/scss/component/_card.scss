@@ -53,6 +53,11 @@
   align-items: center;
 }
 
+.card--after-tabs {
+  @extend .card;
+  margin-top: var(--spacing-l);
+}
+
 .card__actions {
   display: flex;
   align-items: center;
@@ -107,6 +112,8 @@
 
 .card__actions--between {
   @include between;
+  align-items: center;
+  width: 100%;
 }
 
 .card__actions--center {
@@ -161,14 +168,20 @@
   align-items: center;
   font-size: var(--font-title);
   font-weight: var(--font-weight-light);
+
   & > *:not(:last-child) {
     margin-right: var(--spacing-m);
   }
+
   /* .badge rule inherited from file page prices, should be refactored */
   .badge {
     float: right;
     margin-left: var(--spacing-s);
     margin-top: 8px; // should be flex'd, but don't blame me! I just moved it down 3px
+  }
+
+  @media (max-width: $breakpoint-small) {
+    font-size: var(--font-body);
   }
 }
 

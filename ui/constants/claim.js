@@ -1,4 +1,5 @@
 export const MINIMUM_PUBLISH_BID = 0.0001;
+export const ESTIMATED_FEE = 0.048; // .001 + .001 | .048 + .048 = .1
 
 export const CHANNEL_ANONYMOUS = 'anonymous';
 export const CHANNEL_NEW = 'new';

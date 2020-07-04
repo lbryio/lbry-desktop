@@ -32,8 +32,15 @@ type Props = {
 
 class RewardsPage extends PureComponent<Props> {
   componentDidMount() {
-    this.props.fetchRewards();
+    const { user, fetchUser, fetchRewards } = this.props;
+    const rewardsApproved = user && user.is_reward_approved;
+
+    fetchRewards();
+    if (!rewardsApproved) {
+      fetchUser();
+    }
   }
+
   renderPageHeader() {
     const { user, daemonSettings, fetchUser } = this.props;
     const rewardsEnabled = IS_WEB || (daemonSettings && daemonSettings.share_usage_data);

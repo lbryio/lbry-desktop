@@ -40,6 +40,7 @@ import Welcome from 'page/welcome';
 import CreatorDashboard from 'page/creatorDashboard';
 import RewardsVerifyPage from 'page/rewardsVerify';
 import CheckoutPage from 'page/checkoutPage';
+import ChannelNew from 'page/channelNew';
 import BuyPage from 'page/buy';
 
 import { parseURI } from 'lbry-redux';
@@ -188,6 +189,7 @@ function AppRouter(props: Props) {
       <Route path={`/$/${PAGES.CHECKOUT}`} exact component={CheckoutPage} />
 
       <PrivateRoute {...props} path={`/$/${PAGES.INVITE}`} component={InvitePage} />
+      <PrivateRoute {...props} path={`/$/${PAGES.CHANNEL_NEW}`} component={ChannelNew} />
       <PrivateRoute {...props} path={`/$/${PAGES.PUBLISHED}`} component={FileListPublished} />
       <PrivateRoute {...props} path={`/$/${PAGES.CREATOR_DASHBOARD}`} component={CreatorDashboard} />
       <PrivateRoute {...props} path={`/$/${PAGES.PUBLISH}`} component={PublishPage} />
