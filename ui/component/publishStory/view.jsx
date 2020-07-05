@@ -22,6 +22,7 @@ type Props = {
   disabled: boolean,
   publishing: boolean,
   showToast: string => void,
+  setPrevFileText: string => void,
   inProgress: boolean,
   clearPublish: () => void,
   ffmpegStatus: any,
@@ -47,6 +48,7 @@ function PublishStory(props: Props) {
     inProgress,
     clearPublish,
     size,
+    setPrevFileText,
   } = props;
 
   const [advancedEditor, setAdvancedEditor] = usePersistedState('publish-form-story-mode', false);
@@ -68,6 +70,9 @@ function PublishStory(props: Props) {
     async function updateEditorText(path) {
       const text = await readFile(path);
       if (text) {
+        // Store original content
+        setPrevFileText(text);
+        // Update text editor form
         updatePublishForm({ fileText: text });
       }
     }
@@ -85,7 +90,7 @@ function PublishStory(props: Props) {
     }
 
     // @endif
-  }, [uri, isStillEditing, filePath, fileInfo, updatePublishForm]);
+  }, [uri, isStillEditing, filePath, fileInfo, setPrevFileText, updatePublishForm]);
 
   let cardTitle;
   if (publishing) {

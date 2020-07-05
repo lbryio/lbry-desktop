@@ -81,6 +81,9 @@ type Props = {
 
 function PublishForm(props: Props) {
   const [mode, setMode] = React.useState(PUBLISH_MODES.FILE);
+  // Used to checl if the file has been modified by user
+  const [fileEdited, setFileEdited] = React.useState(false);
+  const [prevFileText, setPrevFileText] = React.useState('');
 
   const {
     thumbnail,
@@ -138,6 +141,15 @@ function PublishForm(props: Props) {
       resetThumbnailStatus();
     }
   }, [thumbnail, resetThumbnailStatus]);
+
+  // Check for content changes on the text editor
+  useEffect(() => {
+    if (!fileEdited && fileText !== prevFileText && fileText !== '') {
+      setFileEdited(true);
+    } else if (fileEdited && fileText === prevFileText) {
+      setFileEdited(false);
+    }
+  }, [fileText, prevFileText, fileEdited]);
 
   // Every time the channel or name changes, resolve the uris to find winning bid amounts
   useEffect(() => {
@@ -199,24 +211,41 @@ function PublishForm(props: Props) {
     }
   }
 
+  function verifyStoryContent() {
+    const isEmpty = !fileText || fileText.length === 0 || fileText === '';
+    // TODO: Verify file size limit, and character size as well ?
+    return !isEmpty;
+  }
+
   async function handlePublish() {
     // Publish story:
-    // If here is no file selected yet on desktop, show file dialog
-    // and let the user choose a file path. On web a new File is created
+    // If here is no file selected yet on desktop, show file dialog and let the
+    // user choose a file path. On web a new File is created
     if (mode === PUBLISH_MODES.STORY) {
-      let outputFile;
+      let outputFile = filePath;
 
-      // @if TARGET='app'
-      outputFile = await saveFileChanges();
-      // @endif
+      // If user modified content on the text editor:
+      // Save changes and updat file path
+      if (fileEdited) {
+        // @if TARGET='app'
+        outputFile = await saveFileChanges();
+        // @endif
 
-      // @if TARGET='web'
-      outputFile = createWebFile();
-      // @endif
+        // @if TARGET='web'
+        outputFile = createWebFile();
+        // @endif
 
-      // New content stored locally and is not empty
-      if (outputFile) {
-        updatePublishForm({ filePath: outputFile });
+        // New content stored locally and is not empty
+        if (outputFile) {
+          updatePublishForm({ filePath: outputFile });
+        }
+      }
+
+      // Verify if story has a valid content and is not emoty
+      // On web file size limit will be verified as well
+      const verified = verifyStoryContent();
+
+      if (verified) {
         publish(outputFile);
       }
     }
@@ -248,7 +277,9 @@ function PublishForm(props: Props) {
       {mode === PUBLISH_MODES.FILE && (
         <PublishFile disabled={disabled || publishing} inProgress={isInProgress} setPublishMode={setMode} />
       )}
-      {mode === PUBLISH_MODES.STORY && <PublishStory disabled={disabled} inProgress={isInProgress} uri={uri} />}
+      {mode === PUBLISH_MODES.STORY && (
+        <PublishStory disabled={disabled} inProgress={isInProgress} uri={uri} setPrevFileText={setPrevFileText} />
+      )}
 
       {!publishing && (
         <div className={classnames({ 'card--disabled': formDisabled })}>
