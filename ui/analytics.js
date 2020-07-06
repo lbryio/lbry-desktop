@@ -93,8 +93,8 @@ const analytics: Analytics = {
     }
   },
   setUser: userId => {
-    // SEND USERID TO MATOMO?
     if (internalAnalyticsEnabled && userId) {
+      window._paq.push(['setUserId', String(userId)]);
       // @if TARGET='app'
       Native.getAppVersionInfo().then(({ localVersion }) => {
         sendMatomoEvent('Version', 'Desktop-Version', localVersion);
