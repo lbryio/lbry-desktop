@@ -32,6 +32,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Fix video duration not appearing on Mobile with enough width _community pr!_ ([#4452](https://github.com/lbryio/lbry-desktop/pull/4452))
 - Fix video transcode setting not reflected correctly (MP3 incorrectly transcoded to MP4) _community pr!_ ([#4458](https://github.com/lbryio/lbry-desktop/pull/4458))
 - Fix search results not appearing when scrolling due to long Tags or Following list in the navigation bar _community pr!_ ([#4465](https://github.com/lbryio/lbry-desktop/pull/4465))
+- Fix unmuted state lost or reverted when playing a new video _community pr!_ ([#4483](https://github.com/lbryio/lbry-desktop/pull/4483))
 
 ## [0.46.2] - [2020-06-10]
 
