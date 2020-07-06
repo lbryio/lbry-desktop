@@ -41,7 +41,6 @@ import ModalSupportsLiquidate from 'modal/modalSupportsLiquidate';
 import ModalConfirmAge from 'modal/modalConfirmAge';
 import ModalFileSelection from 'modal/modalFileSelection';
 import ModalImageUpload from 'modal/modalImageUpload';
-import ModalCopyLinks from 'modal/modalCopyLinks';
 
 type Props = {
   modal: { id: string, modalProps: {} },
@@ -147,8 +146,6 @@ function ModalRouter(props: Props) {
       return <ModalRemoveBlocked {...modalProps} />;
     case MODALS.IMAGE_UPLOAD:
       return <ModalImageUpload {...modalProps} />;
-    case MODALS.COPY_LINKS:
-      return <ModalCopyLinks {...modalProps} />;
     default:
       return null;
   }

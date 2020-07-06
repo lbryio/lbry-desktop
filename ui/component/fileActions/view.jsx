@@ -108,12 +108,6 @@ function FileActions(props: Props) {
             onClick={() => openModal(MODALS.CONFIRM_FILE_REMOVE, { uri })}
           />
         )}
-        <Button
-          button="alt"
-          icon={ICONS.COPY}
-          title={__('Links')}
-          onClick={() => openModal(MODALS.COPY_LINKS, { uri })}
-        />
         {!claimIsMine && (
           <Button
             title={__('Report content')}
