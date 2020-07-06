@@ -45,6 +45,7 @@ export const REDDIT = 'Reddit';
 export const LINKEDIN = 'LinkedIn';
 export const EMBED = 'Embed';
 export const MORE = 'More';
+export const SHARE_LINK = 'ShareLink';
 export const ACCOUNT = 'User';
 export const SETTINGS = 'Settings';
 export const INVITE = 'Users';
