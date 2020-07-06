@@ -1,4 +1,13 @@
-const { URL, SITE_TITLE, SITE_DESCRIPTION, SITE_NAME } = require('../../config.js');
+const {
+  URL,
+  SITE_TITLE,
+  SITE_CANONICAL_URL,
+  OG_HOMEPAGE_TITLE,
+  OG_TITLE_SUFFIX,
+  OG_IMAGE_URL,
+  SITE_DESCRIPTION,
+  SITE_NAME,
+} = require('../../config.js');
 const { generateEmbedUrl, generateStreamUrl } = require('../../ui/util/web');
 const PAGES = require('../../ui/constants/pages');
 const { getClaim } = require('./chainquery');
@@ -36,18 +45,23 @@ function escapeHtmlProperty(property) {
 function buildOgMetadata(overrideOptions = {}) {
   const { title, description } = overrideOptions;
   const head =
-    '<title>lbry.tv</title>\n' +
+    `<title>${SITE_TITLE}</title>\n` +
     `<meta property="og:url" content="${URL}" />\n` +
-    `<meta property="og:title" content="${title || SITE_TITLE}" />\n` +
+    `<meta property="og:title" content="${(title && title + OG_TITLE_SUFFIX) ||
+      OG_HOMEPAGE_TITLE ||
+      SITE_TITLE}" />\n` +
     `<meta property="og:site_name" content="${SITE_NAME || SITE_TITLE}"/>\n` +
     `<meta property="og:description" content="${description || SITE_DESCRIPTION}" />\n` +
-    `<meta property="og:image" content="${URL}/public/v2-og.png" />\n` +
+    `<meta property="og:image" content="${OG_IMAGE_URL || `${URL}/public/v2-og.png`}" />\n` +
     '<meta name="twitter:card" content="summary_large_image"/>\n' +
-    `<meta name="twitter:title" content="${title || SITE_TITLE}" />\n` +
+    `<meta name="twitter:title" content="${(title && title + OG_TITLE_SUFFIX) ||
+      OG_HOMEPAGE_TITLE ||
+      SITE_TITLE}" />\n` +
     `<meta name="twitter:description" content="${description || SITE_DESCRIPTION}" />\n` +
-    `<meta name="twitter:image" content="${URL}/public/v2-og.png"/>\n` +
+    `<meta name="twitter:image" content="${OG_IMAGE_URL || `${URL}/public/v2-og.png`}"/>\n` +
     `<meta name="twitter:url" content="${URL}" />\n` +
-    '<meta property="fb:app_id" content="1673146449633983" />\n';
+    '<meta property="fb:app_id" content="1673146449633983" />\n' +
+    `<link rel="canonical" content="${SITE_CANONICAL_URL || URL}"/>`;
   return head;
 }
 
@@ -67,7 +81,7 @@ function buildClaimOgMetadata(uri, claim, overrideOptions = {}) {
   const claimDescription =
     claim.description && claim.description.length > 0
       ? escapeHtmlProperty(truncateDescription(claim.description))
-      : `View ${claimTitle} on lbry.tv`;
+      : `View ${claimTitle} on ${SITE_NAME}`;
   const claimLanguage = escapeHtmlProperty(claim.language) || 'en_US';
 
   let imageThumbnail;
@@ -94,13 +108,14 @@ function buildClaimOgMetadata(uri, claim, overrideOptions = {}) {
   head += `<meta property="og:description" content="${description}"/>`;
   head += `<meta property="og:image" content="${claimThumbnail}"/>`;
   head += `<meta property="og:locale" content="${claimLanguage}"/>`;
-  head += `<meta property="og:site_name" content="lbry.tv"/>`;
+  head += `<meta property="og:site_name" content="${SITE_NAME}"/>`;
   head += `<meta property="og:type" content="website"/>`;
   head += `<meta property="og:title" content="${title}"/>`;
   head += `<meta name="twitter:title" content="${title}"/>`;
   // below should be canonical_url, but not provided by chainquery yet
   head += `<meta property="og:url" content="${URL}/${claim.name}:${claim.claim_id}"/>`;
   head += `<meta name="twitter:url" content="${URL}/${claim.name}:${claim.claim_id}"/>`;
+  head += `<link rel="canonical" content="${SITE_CANONICAL_URL || URL}/${claim.name}:${claim.claim_id}"/>`;
 
   if (
     claim.source_media_type &&

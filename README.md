@@ -110,6 +110,8 @@ You can run the web version (lbry.tv), the electron app, or both at the same tim
 cp .env.defaults .env
 nano .env
 ```
+- To specify your own OG-IMAGE
+You can either place a png named v2-og.png in the /custom folder or specify the OG_IMAGE_URL in .env
 
 - If you want to customize the homepage content
 
