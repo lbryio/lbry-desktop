@@ -10,6 +10,7 @@ const select = state => ({
   syncEnabled: makeSelectClientSetting(SETTINGS.ENABLE_SYNC)(state),
   verifiedEmail: selectUserVerifiedEmail(state),
   getSyncError: selectGetSyncErrorMessage(state),
+  language: makeSelectClientSetting(SETTINGS.LANGUAGE)(state),
 });
 
 const perform = dispatch => ({

@@ -7,6 +7,7 @@ import SettingAutoLaunch from './view';
 
 const select = state => ({
   autoLaunch: makeSelectClientSetting(SETTINGS.AUTO_LAUNCH)(state),
+  language: makeSelectClientSetting(SETTINGS.LANGUAGE)(state),
 });
 
 const perform = dispatch => ({
