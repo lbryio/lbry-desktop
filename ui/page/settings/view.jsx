@@ -279,7 +279,7 @@ class SettingsPage extends React.PureComponent<Props, State> {
                   ? __("To enable this feature, check 'Save Password' the next time you start the app.")
                   : null
               }
-              actions={<SyncToggle language={language} disabled={walletEncrypted && !storedPassword} />}
+              actions={<SyncToggle disabled={walletEncrypted && !storedPassword} />}
             />
             <Card
               title={__('Download Directory')}
@@ -792,7 +792,7 @@ class SettingsPage extends React.PureComponent<Props, State> {
 
             {/* @if TARGET='app' */}
             {/* Auto launch in a hidden state doesn't work on mac https://github.com/Teamwork/node-auto-launch/issues/81 */}
-            {!IS_MAC && <Card title={__('Startup Preferences')} actions={<SettingAutoLaunch language={language} />} />}
+            {!IS_MAC && <Card title={__('Startup Preferences')} actions={<SettingAutoLaunch />} />}
             {/* @endif */}
 
             <Card
