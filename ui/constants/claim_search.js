@@ -13,7 +13,7 @@ export const TAGS_FOLLOWED = 'tags_followed';
 export const FEE_AMOUNT_KEY = 'fee_amount';
 export const FEE_AMOUNT_ANY = '>=0';
 export const FEE_AMOUNT_ONLY_PAID = '>0';
-export const FEE_AMOUNT_ONLY_FREE = '0';
+export const FEE_AMOUNT_ONLY_FREE = '<=0';
 
 export const FRESH_DAY = 'day';
 export const FRESH_WEEK = 'week';
