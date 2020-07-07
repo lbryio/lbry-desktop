@@ -213,8 +213,6 @@ function PublishForm(props: Props) {
         </div>
       )}
       <section>
-        {!formDisabled && !formValid && <PublishFormErrors />}
-
         <div className="card__actions">
           <Button
             button="primary"
@@ -227,15 +225,23 @@ function PublishForm(props: Props) {
           <Button button="link" onClick={clearPublish} label={__('Cancel')} />
         </div>
         <p className="help">
-          <I18nMessage
-            tokens={{
-              lbry_terms_of_service: (
-                <Button button="link" href="https://www.lbry.com/termsofservice" label={__('LBRY Terms of Service')} />
-              ),
-            }}
-          >
-            By continuing, you accept the %lbry_terms_of_service%.
-          </I18nMessage>
+          {!formDisabled && !formValid ? (
+            <PublishFormErrors />
+          ) : (
+            <I18nMessage
+              tokens={{
+                lbry_terms_of_service: (
+                  <Button
+                    button="link"
+                    href="https://www.lbry.com/termsofservice"
+                    label={__('LBRY Terms of Service')}
+                  />
+                ),
+              }}
+            >
+              By continuing, you accept the %lbry_terms_of_service%.
+            </I18nMessage>
+          )}
         </p>
       </section>
     </div>

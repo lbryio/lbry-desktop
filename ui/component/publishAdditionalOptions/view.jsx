@@ -7,7 +7,6 @@ import Button from 'component/button';
 import { LbryFirst } from 'lbry-redux';
 import LicenseType from './license-type';
 import Card from 'component/common/card';
-import { getAuthToken } from 'util/saved-passwords';
 import ErrorText from 'component/common/error-text';
 // @if TARGET='app'
 import { ipcRenderer } from 'electron';
@@ -39,18 +38,20 @@ function PublishAdditionalOptions(props: Props) {
     updatePublishForm,
     useLBRYUploader,
     needsYTAuth,
+    accessToken,
+    fetchAccessToken,
   } = props;
   const [hideSection, setHideSection] = usePersistedState('publish-advanced-options', true);
   const [hasLaunchedLbryFirst, setHasLaunchedLbryFirst] = React.useState(false);
-  const [ytError, setYtError] = React.useState(true);
+  const [ytError, setYtError] = React.useState(false);
   const isLBRYFirstUser = user && user.lbry_first_approved;
   const showLbryFirstCheckbox = !IS_WEB && isLBRYFirstUser && hasLaunchedLbryFirst;
-  const authToken = getAuthToken();
 
   function toggleHideSection() {
     setHideSection(!hideSection);
   }
 
+  //   @if TARGET='app'
   function signup() {
     updatePublishForm({ ytSignupPending: true });
     LbryFirst.ytSignup()
@@ -65,6 +66,8 @@ function PublishAdditionalOptions(props: Props) {
   }
 
   function unlink() {
+    setYtError(false);
+
     LbryFirst.remove()
       .then(response => {
         updatePublishForm({ needsYTAuth: true });
@@ -76,17 +79,23 @@ function PublishAdditionalOptions(props: Props) {
   }
 
   React.useEffect(() => {
-    if (isLBRYFirstUser) {
+    if (!accessToken) {
+      fetchAccessToken();
+    }
+  }, [accessToken, fetchAccessToken]);
+
+  React.useEffect(() => {
+    if (isLBRYFirstUser && !hasLaunchedLbryFirst) {
       ipcRenderer.send('launch-lbry-first');
       ipcRenderer.on('lbry-first-launched', () => {
         setHasLaunchedLbryFirst(true);
       });
     }
-  }, [isLBRYFirstUser, setHasLaunchedLbryFirst]);
+  }, [isLBRYFirstUser, hasLaunchedLbryFirst, setHasLaunchedLbryFirst]);
 
   React.useEffect(() => {
-    if (useLBRYUploader) {
-      LbryFirst.hasYTAuth(authToken)
+    if (useLBRYUploader && isLBRYFirstUser && hasLaunchedLbryFirst && accessToken) {
+      LbryFirst.hasYTAuth(accessToken)
         .then(response => {
           updatePublishForm({ needsYTAuth: !response.HasAuth });
         })
@@ -95,7 +104,8 @@ function PublishAdditionalOptions(props: Props) {
           console.error(error); // eslint-disable-line
         });
     }
-  }, [authToken, updatePublishForm, useLBRYUploader]);
+  }, [updatePublishForm, useLBRYUploader, isLBRYFirstUser, hasLaunchedLbryFirst, accessToken]);
+  // @endif
 
   return (
     <Card
@@ -103,8 +113,9 @@ function PublishAdditionalOptions(props: Props) {
         <React.Fragment>
           {!hideSection && (
             <div className={classnames({ 'card--disabled': !name })}>
-              <div className="section">
-                {showLbryFirstCheckbox && (
+              {/* @if TARGET='app' */}
+              {showLbryFirstCheckbox && (
+                <div className="section">
                   <>
                     <FormField
                       checked={useLBRYUploader}
@@ -134,8 +145,9 @@ function PublishAdditionalOptions(props: Props) {
                       </div>
                     )}
                   </>
-                )}
-              </div>
+                </div>
+              )}
+              {/* @endif */}
               <div className="section">
                 <FormField
                   label={__('Language')}
