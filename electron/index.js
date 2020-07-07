@@ -4,7 +4,7 @@
 import '@babel/polyfill';
 import SemVer from 'semver';
 import https from 'https';
-import { app, dialog, ipcMain, session, shell } from 'electron';
+import { app, dialog, ipcMain, session, shell, ipcRenderer } from 'electron';
 import { autoUpdater } from 'electron-updater';
 import { Lbry, LbryFirst } from 'lbry-redux';
 import LbryFirstInstance from './LbryFirstInstance';
@@ -95,6 +95,8 @@ const startLbryFirst = async () => {
   try {
     await LbryFirst.status();
     isLbryFirstRunning = true;
+    console.log('LbryFirst: Already running');
+    handleLbryFirstLaunched();
   } catch (e) {
     console.log('status fails', e);
     console.log('Starting LbryFirst');
@@ -118,10 +120,15 @@ const startLbryFirst = async () => {
 
     try {
       await lbryFirst.launch();
+      handleLbryFirstLaunched();
     } catch (e) {
       console.log('e', e);
     }
   }
+};
+
+const handleLbryFirstLaunched = () => {
+  rendererWindow.webContents.send('lbry-first-launched');
 };
 
 // When we are starting the app, ensure there are no other apps already running
@@ -160,7 +167,6 @@ if (!gotSingleInstanceLock) {
 
   app.on('ready', async () => {
     await startDaemon();
-    await startLbryFirst();
     startSandbox();
 
     if (isDev) {
@@ -368,6 +374,15 @@ ipcMain.on('version-info-requested', () => {
   }
 
   requestLatestRelease();
+});
+
+ipcMain.on('launch-lbry-first', async () => {
+  try {
+    await startLbryFirst();
+  } catch (e) {
+    console.log('Failed to start LbryFirst');
+    console.log(e);
+  }
 });
 
 process.on('uncaughtException', error => {
