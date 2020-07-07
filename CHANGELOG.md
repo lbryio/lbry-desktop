@@ -19,6 +19,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ### Changed
 
+- Updated lbry-sdk to [0.77.0](https://github.com/lbryio/lbry-sdk/releases/tag/v0.77.0)
 - Merged Tip and Support Buttons into one UI on file page ([#4382](https://github.com/lbryio/lbry-desktop/pull/4382))
 
 ### Fixed
