@@ -33,6 +33,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Fix markdown editor "preview" not working when `<iframe>`s are present _community pr!_([#4767](https://github.com/lbryio/lbry-desktop/pull/4767))
 - First comment on claim not showing up immeditately ([#4747](https://github.com/lbryio/lbry-desktop/pull/4747))
 - Fix "Password updated successfully" kept showing up _community pr!_([#4766](https://github.com/lbryio/lbry-desktop/pull/4766))
+- Fix "Price=free" giving 0 results in Following query _community pr!_ ([#4489](https://github.com/lbryio/lbry-desktop/pull/4489))
 
 ## [0.47.1] - [2020-07-23]
 
