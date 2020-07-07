@@ -1,3 +1,3 @@
-import PasswordResetPage from './view';
+import PasswordSetPage from './view';
 
-export default PasswordResetPage;
+export default PasswordSetPage;
