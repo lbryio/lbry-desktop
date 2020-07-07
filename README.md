@@ -104,17 +104,18 @@ You can run the web version (lbry.tv), the electron app, or both at the same tim
 
 #### Customize the web app
 
-- Enter web directory, copy .env.defaults to .env and make changes
+- In root directory, copy .env.defaults to .env and make changes
 
 ```
-cd web
 cp .env.defaults .env
 nano .env
 ```
+- To specify your own OG-IMAGE
+You can either place a png named v2-og.png in the /custom folder or specify the OG_IMAGE_URL in .env
 
 - If you want to customize the homepage content
 
-1. add `CUSTOM_HOMEPAGE=true` to the 'web/.env' file
+1. add `CUSTOM_HOMEPAGE=true` to the '.env' file
 2. copy `/custom/homepage.example.js` to `/custom/homepage.js` and make desired changes to `homepage.js`
 
 - If you want up to two custom sidebar links
@@ -128,6 +129,7 @@ PINNED_LABEL_2=OtherLinkText
 ```
 
 - Finally `NODE_ENV=production yarn compile:web` to rebuild
+_Note: You don't need to edit the .env file in the /web folder - that is copied during compile._
 
 #### Deploy the web app (_experimental_)
 

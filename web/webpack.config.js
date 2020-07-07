@@ -5,7 +5,9 @@ const baseConfig = require('../webpack.base.config.js');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const { DefinePlugin, ProvidePlugin } = require('webpack');
 const SentryWebpackPlugin = require('@sentry/webpack-plugin');
+const { insertToHead, buildBasicOgMetadata } = require('./src/html');
 
+const CUSTOM_ROOT = path.resolve(__dirname, '../custom');
 const STATIC_ROOT = path.resolve(__dirname, '../static/');
 const UI_ROOT = path.resolve(__dirname, '../ui/');
 const DIST_ROOT = path.resolve(__dirname, 'dist/');
@@ -18,6 +20,9 @@ let plugins = [
     {
       from: `${STATIC_ROOT}/index-web.html`,
       to: `${DIST_ROOT}/index.html`,
+      transform(content, path) {
+        return insertToHead(content.toString(), buildBasicOgMetadata());
+      },
     },
     {
       from: `${STATIC_ROOT}/img/favicon.png`,
@@ -26,6 +31,12 @@ let plugins = [
     {
       from: `${STATIC_ROOT}/img/v2-og.png`,
       to: `${DIST_ROOT}/public/v2-og.png`,
+    },
+    {
+      from: `${CUSTOM_ROOT}/v2-og.png`,
+      to: `${DIST_ROOT}/public/v2-og.png`,
+      force: true,
+      noErrorOnMissing: true,
     },
     {
       from: `${STATIC_ROOT}/font/`,
