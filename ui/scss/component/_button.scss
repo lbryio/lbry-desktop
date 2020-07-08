@@ -176,3 +176,12 @@ svg + .button__label,
     border-bottom-left-radius: 0;
   }
 }
+
+.button-toggle-group-action {
+  position: absolute; // Centers the button along toggle buttons
+
+  @media (max-width: $breakpoint-small) {
+    position: relative;
+    top: var(--spacing-s);
+  }
+}
