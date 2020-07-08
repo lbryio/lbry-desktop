@@ -15,8 +15,6 @@ const { parseURI } = require('lbry-redux');
 const fs = require('fs');
 const path = require('path');
 
-let html = fs.readFileSync(path.join(__dirname, '/../dist/index.html'), 'utf8');
-
 function insertToHead(fullHtml, htmlToInsert) {
   return fullHtml.replace(
     /<!-- VARIABLE_HEAD_BEGIN -->.*<!-- VARIABLE_HEAD_END -->/s,
@@ -155,8 +153,10 @@ async function getClaimFromChainquery(url) {
 }
 
 async function getHtml(ctx) {
-  const path = decodeURIComponent(ctx.path);
-  if (path.length === 0) {
+  const html = fs.readFileSync(path.join(__dirname, '/../dist/index.html'), 'utf8');
+  const requestPath = decodeURIComponent(ctx.path);
+
+  if (requestPath.length === 0) {
     const ogMetadata = buildBasicOgMetadata();
     return insertToHead(html, ogMetadata);
   }
@@ -164,7 +164,7 @@ async function getHtml(ctx) {
   const invitePath = `/$/${PAGES.INVITE}/`;
   const embedPath = `/$/${PAGES.EMBED}/`;
 
-  if (path.includes(invitePath)) {
+  if (requestPath.includes(invitePath)) {
     const inviteChannel = path.slice(invitePath.length).replace(/:/g, '#');
     const inviteChannelUrl = `lbry://${inviteChannel}`;
 
@@ -188,8 +188,8 @@ async function getHtml(ctx) {
     }
   }
 
-  if (path.includes(embedPath)) {
-    const claimUri = path.replace(embedPath, '').replace(/:/g, '#');
+  if (requestPath.includes(embedPath)) {
+    const claimUri = requestPath.replace(embedPath, '').replace(/:/g, '#');
     const claim = await getClaimFromChainquery(claimUri);
 
     if (claim) {
@@ -200,8 +200,8 @@ async function getHtml(ctx) {
     return insertToHead(html);
   }
 
-  if (!path.includes('$')) {
-    const claimUri = path.slice(1).replace(/:/g, '#');
+  if (!requestPath.includes('$')) {
+    const claimUri = requestPath.slice(1).replace(/:/g, '#');
     const claim = await getClaimFromChainquery(claimUri);
 
     if (claim) {
