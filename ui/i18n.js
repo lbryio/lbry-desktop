@@ -26,8 +26,12 @@ function saveMessage(message) {
   }
 
   if (!knownMessages[message]) {
+    const END = '--end--';
+    delete knownMessages[END];
     knownMessages[message] = message;
-    fs.writeFile(messagesFilePath, JSON.stringify(knownMessages, null, 2), 'utf-8', err => {
+    knownMessages[END] = END;
+
+    fs.writeFile(messagesFilePath, JSON.stringify(knownMessages, null, 2) + '\n', 'utf-8', err => {
       if (err) {
         throw err;
       }
