@@ -165,7 +165,7 @@ function WalletSendTip(props: Props) {
                 ? __(
                     'This will increase the overall bid amount for this content, which will boost its ability to be discovered while active.'
                   )
-                : __('Send a chunk of change to this creator to let them know you appreciate their content!')}{' '}
+                : __('Send a chunk of change to this creator to let them know you appreciate their content.')}{' '}
               <Button label={__('Learn more')} button="link" href="https://lbry.com/faq/tipping" />.
             </React.Fragment>
           }
