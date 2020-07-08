@@ -169,7 +169,12 @@ const Header = (props: Props) => {
             <div className="header__navigation">
               <Button
                 className="header__navigation-item header__navigation-item--lbry header__navigation-item--button-mobile"
-                label={LOGO_TITLE}
+                // @if TARGET='app'
+                label={'LBRY'}
+                // @endif
+                // @if TARGET='web'
+                label={LOGO_TITLE} // eslint-disable-line
+                // @endif
                 icon={ICONS.LBRY}
                 onClick={() => {
                   if (history.location.pathname === '/') window.location.reload();
