@@ -23,6 +23,8 @@ type Props = {
   limitShow?: number,
 };
 
+const UNALLOWED_TAGS = ['lbry-first'];
+
 /*
  We display tagsPassedIn
  onClick gets the tag when a tag is clicked
@@ -100,6 +102,7 @@ export default function TagsSearch(props: Props) {
           .split(',')
           .slice(0, limitSelect - countWithoutSpecialTags)
           .map(newTag => newTag.trim().toLowerCase())
+          .filter(newTag => !UNALLOWED_TAGS.includes(newTag))
       )
     );
 
