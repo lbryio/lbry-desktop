@@ -152,10 +152,13 @@ async function getClaimFromChainquery(url) {
   return undefined;
 }
 
+let html;
 async function getHtml(ctx) {
-  const html = fs.readFileSync(path.join(__dirname, '/../dist/index.html'), 'utf8');
-  const requestPath = decodeURIComponent(ctx.path);
+  if (!html) {
+    html = fs.readFileSync(path.join(__dirname, '/../dist/index.html'), 'utf8');
+  }
 
+  const requestPath = decodeURIComponent(ctx.path);
   if (requestPath.length === 0) {
     const ogMetadata = buildBasicOgMetadata();
     return insertToHead(html, ogMetadata);
