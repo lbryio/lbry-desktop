@@ -168,7 +168,7 @@ async function getHtml(ctx) {
   const embedPath = `/$/${PAGES.EMBED}/`;
 
   if (requestPath.includes(invitePath)) {
-    const inviteChannel = path.slice(invitePath.length).replace(/:/g, '#');
+    const inviteChannel = requestPath.slice(invitePath.length).replace(/:/g, '#');
     const inviteChannelUrl = `lbry://${inviteChannel}`;
 
     try {
