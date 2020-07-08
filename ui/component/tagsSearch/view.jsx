@@ -64,8 +64,13 @@ export default function TagsSearch(props: Props) {
   const remainingUnfollowedTagsSet = setDifference(unfollowedTagsSet, selectedTagsSet);
   const suggestedTagsSet = setUnion(remainingFollowedTagsSet, remainingUnfollowedTagsSet);
 
-  const countWithoutMature = selectedTagsSet.has('mature') ? selectedTagsSet.size - 1 : selectedTagsSet.size;
-  const maxed = Boolean(limitSelect && countWithoutMature >= limitSelect);
+  let countWithoutSpecialTags = selectedTagsSet.has('mature') ? selectedTagsSet.size - 1 : selectedTagsSet.size;
+  if (selectedTagsSet.has('lbry-first')) {
+    countWithoutSpecialTags = countWithoutSpecialTags - 1;
+  }
+
+  // const countWithoutLbryFirst = selectedTagsSet.has('lbry-first') ? selectedTagsSet.size - 1 : selectedTagsSet.size;
+  const maxed = Boolean(limitSelect && countWithoutSpecialTags >= limitSelect);
   const suggestedTags = Array.from(suggestedTagsSet)
     .filter(doesTagMatch)
     .slice(0, limitShow);
@@ -93,7 +98,7 @@ export default function TagsSearch(props: Props) {
       new Set(
         tags
           .split(',')
-          .slice(0, limitSelect - countWithoutMature)
+          .slice(0, limitSelect - countWithoutSpecialTags)
           .map(newTag => newTag.trim().toLowerCase())
       )
     );
@@ -133,7 +138,7 @@ export default function TagsSearch(props: Props) {
           {limitSelect < TAG_FOLLOW_MAX ? (
             <I18nMessage
               tokens={{
-                number: limitSelect - countWithoutMature,
+                number: limitSelect - countWithoutSpecialTags,
                 selectTagsLabel: label,
               }}
             >
