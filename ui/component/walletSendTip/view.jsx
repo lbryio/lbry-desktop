@@ -228,6 +228,15 @@ function WalletSendTip(props: Props) {
                     label={__('Custom')}
                     onClick={() => setUseCustomTip(true)}
                   />
+                  {DEFAULT_TIP_AMOUNTS.some(val => val > balance) && (
+                    <Button
+                      button="secondary"
+                      className="button-toggle-group-action"
+                      icon={ICONS.BUY}
+                      title={__('Buy More LBC')}
+                      navigate={`/$/${PAGES.BUY}`}
+                    />
+                  )}
                 </div>
 
                 {useCustomTip && (
@@ -281,11 +290,6 @@ function WalletSendTip(props: Props) {
                     />
                   )}
                 </div>
-                {DEFAULT_TIP_AMOUNTS.some(val => val > balance) && (
-                  <div className="section">
-                    <Button button="link" label={__('Buy More LBC')} navigate={`/$/${PAGES.BUY}`} />
-                  </div>
-                )}
               </>
             )
           }
