@@ -5,6 +5,7 @@ import {
   selectEmailDoesNotExist,
   selectEmailAlreadyExists,
   selectUser,
+  selectEmailNewIsPending,
 } from 'redux/selectors/user';
 import { doUserCheckIfEmailExists, doClearEmailEntry } from 'redux/actions/user';
 import { doSetClientSetting } from 'redux/actions/settings';
@@ -15,6 +16,7 @@ const select = state => ({
   emailToVerify: selectEmailToVerify(state),
   emailDoesNotExist: selectEmailDoesNotExist(state),
   emailExists: selectEmailAlreadyExists(state),
+  isPending: selectEmailNewIsPending(state),
   user: selectUser(state),
 });
 
