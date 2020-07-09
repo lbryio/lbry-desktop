@@ -13,6 +13,7 @@ import * as PUBLISH_MODES from 'constants/publish_types';
 
 type Props = {
   name: ?string,
+  title: ?string,
   filePath: string | WebFile,
   isStillEditing: boolean,
   balance: number,
@@ -33,6 +34,7 @@ type Props = {
 function PublishFile(props: Props) {
   const {
     name,
+    title,
     balance,
     filePath,
     isStillEditing,
@@ -210,7 +212,7 @@ function PublishFile(props: Props) {
 
     if (contentType) {
       isMarkdownText = contentType[0] === 'text';
-    } else {
+    } else if (file.name) {
       // If user's machine is missign a valid content type registration
       // for markdown content: text/markdown, file extension will be used instead
       const extension = file.name.split('.').pop();
@@ -274,16 +276,16 @@ function PublishFile(props: Props) {
     updatePublishForm(publishFormParams);
   }
 
-  let title;
+  let cardTitle;
   if (publishing) {
-    title = (
+    cardTitle = (
       <span>
         {__('Publishing')}
         <Spinner type={'small'} />
       </span>
     );
   } else {
-    title = isStillEditing ? __('Edit') : __('Publish');
+    cardTitle = isStillEditing ? __('Edit') : __('Publish');
   }
 
   return (
@@ -292,7 +294,7 @@ function PublishFile(props: Props) {
       disabled={disabled || balance === 0}
       title={
         <React.Fragment>
-          {title}{' '}
+          {cardTitle}{' '}
           {inProgress && <Button button="close" label={__('Cancel')} icon={ICONS.REMOVE} onClick={clearPublish} />}
         </React.Fragment>
       }
@@ -301,6 +303,15 @@ function PublishFile(props: Props) {
       }
       actions={
         <React.Fragment>
+          <FormField
+            type="text"
+            name="content_title"
+            label={__('Title')}
+            placeholder={__('Titular Title')}
+            disabled={disabled}
+            value={title}
+            onChange={e => updatePublishForm({ title: e.target.value })}
+          />
           <FileSelector disabled={disabled} currentPath={currentFile} onFileChosen={handleFileChange} />
           {getMessage()}
           {/* @if TARGET='app' */}
