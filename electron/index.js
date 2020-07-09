@@ -89,45 +89,48 @@ const startDaemon = async () => {
   }
 };
 
+let isLbryFirstRunning = false;
 const startLbryFirst = async () => {
-  let isLbryFirstRunning = false;
-  console.log(`LbryFirst: Start LBRY First App`);
-  try {
-    await LbryFirst.status();
-    isLbryFirstRunning = true;
-    console.log('LbryFirst: Already running');
-    handleLbryFirstLaunched();
-  } catch (e) {
-    console.log('status fails', e);
-    console.log('Starting LbryFirst');
+  if (isLbryFirstRunning) {
+    console.log('LbryFirst already running');
+    return;
   }
 
-  if (!isLbryFirstRunning) {
-    console.log('start process...');
+  console.log('LbryFirst: Starting...');
+
+  try {
     lbryFirst = new LbryFirstInstance();
-    lbryFirst.on('exit', () => {
+    lbryFirst.on('exit', e => {
       if (!isDev) {
         lbryFirst = null;
+        isLbryFirstRunning = false;
         if (!appState.isQuitting) {
           dialog.showErrorBox(
             'LbryFirst has Exited',
-            'The lbryFirst may have encountered an unexpected error, or another lbryFirst instance is already running. \n\n'
+            'The lbryFirst may have encountered an unexpected error, or another lbryFirst instance is already running. \n\n',
+            e
           );
         }
         app.quit();
       }
     });
+  } catch (e) {
+    console.log('LbryFirst: Failed to create new instance\n\n', e);
+  }
 
-    try {
-      await lbryFirst.launch();
-      handleLbryFirstLaunched();
-    } catch (e) {
-      console.log('e', e);
-    }
+  console.log('LbryFirst: Running...');
+
+  try {
+    await lbryFirst.launch();
+    handleLbryFirstLaunched();
+  } catch (e) {
+    isLbryFirstRunning = false;
+    console.log('LbryFirst: Failed to start\n', e);
   }
 };
 
 const handleLbryFirstLaunched = () => {
+  isLbryFirstRunning = true;
   rendererWindow.webContents.send('lbry-first-launched');
 };
 
