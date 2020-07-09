@@ -18,7 +18,7 @@ import { formatLbryUrlForWeb } from 'util/url';
 import { doOpenModal } from './app';
 
 export const doPublishDesktop = (filePath: string) => (dispatch: Dispatch, getState: () => {}) => {
-  const publishSuccess = successResponse => {
+  const publishSuccess = (successResponse, lbryFirstError) => {
     const state = getState();
     const myClaims = selectMyClaims(state);
     const pendingClaim = successResponse.outputs[0];
@@ -58,6 +58,7 @@ export const doPublishDesktop = (filePath: string) => (dispatch: Dispatch, getSt
         uri: url,
         isEdit,
         filePath,
+        lbryFirstError,
       })
     );
     dispatch(doCheckPendingPublishesApp());
