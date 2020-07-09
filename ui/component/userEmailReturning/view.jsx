@@ -19,6 +19,7 @@ type Props = {
   doUserSignIn: (string, ?string) => void,
   doUserCheckIfEmailExists: string => void,
   doSetClientSetting: (string, boolean) => void,
+  isPending: boolean,
 };
 
 function UserEmailReturning(props: Props) {
@@ -30,6 +31,7 @@ function UserEmailReturning(props: Props) {
     doClearEmailEntry,
     emailDoesNotExist,
     doSetClientSetting,
+    isPending,
   } = props;
   const { push, location } = useHistory();
   const urlParams = new URLSearchParams(location.search);
@@ -108,7 +110,7 @@ function UserEmailReturning(props: Props) {
                     button="primary"
                     type="submit"
                     label={__('Sign In')}
-                    disabled={!email || !valid}
+                    disabled={!email || !valid || isPending}
                   />
                   <Button button="link" onClick={handleChangeToSignIn} label={__('Register')} />
                 </div>

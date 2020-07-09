@@ -12,10 +12,11 @@ type Props = {
   doClearEmailEntry: () => void,
   doUserSignIn: (string, ?string) => void,
   onHandleEmailOnly: () => void,
+  isPending: boolean,
 };
 
 export default function UserSignInPassword(props: Props) {
-  const { errorMessage, doUserSignIn, emailToVerify, onHandleEmailOnly } = props;
+  const { errorMessage, doUserSignIn, emailToVerify, onHandleEmailOnly, isPending } = props;
   const [password, setPassword] = useState('');
   const [forgotPassword, setForgotPassword] = React.useState(false);
 
@@ -52,7 +53,7 @@ export default function UserSignInPassword(props: Props) {
               />
 
               <div className="section__actions">
-                <Button button="primary" type="submit" label={__('Continue')} disabled={!password} />
+                <Button button="primary" type="submit" label={__('Continue')} disabled={!password || isPending} />
                 <Button button="link" onClick={handleChangeToSignIn} label={__('Use Magic Link')} />
               </div>
             </Form>
