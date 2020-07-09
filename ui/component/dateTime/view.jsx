@@ -12,7 +12,6 @@ type Props = {
 class DateTime extends React.PureComponent<Props> {
   static SHOW_DATE = 'date';
   static SHOW_TIME = 'time';
-  static SHOW_BOTH = 'both';
 
   static getTimeAgoStr(date: any) {
     const suffixList = ['years', 'months', 'days', 'hours', 'minutes', 'seconds', ''];
@@ -41,8 +40,7 @@ class DateTime extends React.PureComponent<Props> {
   }
 
   render() {
-    const { date, timeAgo } = this.props;
-    const show = this.props.show || DateTime.SHOW_BOTH;
+    const { date, timeAgo, show } = this.props;
 
     if (timeAgo) {
       if (!date) {
@@ -54,9 +52,8 @@ class DateTime extends React.PureComponent<Props> {
 
     return (
       <span>
-        {date && (show === DateTime.SHOW_BOTH || show === DateTime.SHOW_DATE) && moment(date).format('MMMM Do, YYYY')}
-        {show === DateTime.SHOW_BOTH && ' '}
-        {date && (show === DateTime.SHOW_BOTH || show === DateTime.SHOW_TIME) && date.toLocaleTimeString()}
+        {date && show === DateTime.SHOW_DATE && moment(date).format('MMMM Do, YYYY')}
+        {date && show === DateTime.SHOW_TIME && moment(date).format('hh:mm A')}
         {!date && '...'}
       </span>
     );
