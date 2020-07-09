@@ -93,6 +93,7 @@ let isLbryFirstRunning = false;
 const startLbryFirst = async () => {
   if (isLbryFirstRunning) {
     console.log('LbryFirst already running');
+    handleLbryFirstLaunched();
     return;
   }
 
