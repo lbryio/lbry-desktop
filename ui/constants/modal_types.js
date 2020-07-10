@@ -9,7 +9,6 @@ export const AUTO_GENERATE_THUMBNAIL = 'auto_generate_thumbnail';
 export const AUTO_UPDATE_DOWNLOADED = 'auto_update_downloaded';
 export const ERROR = 'error';
 export const UPGRADE = 'upgrade';
-export const WELCOME = 'welcome';
 export const EMAIL_COLLECTION = 'email_collection';
 export const PHONE_COLLECTION = 'phone_collection';
 export const FIRST_REWARD = 'first_reward';

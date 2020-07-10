@@ -1,8 +1,9 @@
 import { connect } from 'react-redux';
 import { selectUserVerifiedEmail } from 'redux/selectors/user';
-import { selectScrollStartingPosition, selectWelcomeVersion } from 'redux/selectors/app';
+import { selectHasNavigated, selectScrollStartingPosition, selectWelcomeVersion } from 'redux/selectors/app';
 import Router from './view';
 import { normalizeURI, makeSelectTitleForUri } from 'lbry-redux';
+import { doSetHasNavigated } from 'redux/actions/app';
 
 const select = state => {
   const { pathname, hash } = state.router.location;
@@ -27,7 +28,12 @@ const select = state => {
     currentScroll: selectScrollStartingPosition(state),
     isAuthenticated: selectUserVerifiedEmail(state),
     welcomeVersion: selectWelcomeVersion(state),
+    hasNavigated: selectHasNavigated(state),
   };
 };
 
-export default connect(select)(Router);
+const perform = dispatch => ({
+  setHasNavigated: () => dispatch(doSetHasNavigated()),
+});
+
+export default connect(select, perform)(Router);

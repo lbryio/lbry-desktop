@@ -5,8 +5,8 @@ import {
   makeSelectContentTypeForUri,
   makeSelectDownloadPathForUri,
   makeSelectStreamingUrlForUri,
+  SETTINGS,
 } from 'lbry-redux';
-import * as SETTINGS from 'constants/settings';
 import { makeSelectClientSetting } from 'redux/selectors/settings';
 import { makeSelectFileRenderModeForUri, makeSelectFileExtensionForUri } from 'redux/selectors/content';
 import FileRender from './view';

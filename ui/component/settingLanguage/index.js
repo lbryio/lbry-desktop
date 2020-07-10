@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import * as SETTINGS from 'constants/settings';
+import { SETTINGS } from 'lbry-redux';
 import { doSetLanguage } from 'redux/actions/settings';
 import { makeSelectClientSetting } from 'redux/selectors/settings';
 import SettingLanguage from './view';
@@ -12,7 +12,4 @@ const perform = dispatch => ({
   setLanguage: value => dispatch(doSetLanguage(value)),
 });
 
-export default connect(
-  select,
-  perform
-)(SettingLanguage);
+export default connect(select, perform)(SettingLanguage);

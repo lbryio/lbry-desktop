@@ -69,8 +69,8 @@ function ChannelPage(props: Props) {
   const urlParams = new URLSearchParams(search);
   const currentView = urlParams.get(PAGE_VIEW_QUERY) || undefined;
   const editInUrl = urlParams.get(PAGE_VIEW_QUERY) === EDIT_PAGE;
-  const [editing, setEditing] = React.useState(editInUrl);
   const [discussionWasMounted, setDiscussionWasMounted] = React.useState(false);
+  const editing = urlParams.get(PAGE_VIEW_QUERY) === EDIT_PAGE;
   const { channelName } = parseURI(uri);
   const { permanent_url: permanentUrl } = claim;
   const claimId = claim.claim_id;
@@ -103,34 +103,11 @@ function ChannelPage(props: Props) {
     push(`${url}${search}`);
   }
 
-  function onDone() {
-    setEditing(false);
-    goBack();
-  }
-
   React.useEffect(() => {
     if (currentView === DISCUSSION_PAGE) {
       setDiscussionWasMounted(true);
     }
   }, [currentView]);
-
-  React.useEffect(() => {
-    if (!channelIsMine && editing) {
-      setEditing(false);
-    }
-
-    if (channelIsMine && editing) {
-      push(`?${PAGE_VIEW_QUERY}=${EDIT_PAGE}`);
-    }
-  }, [channelIsMine, editing, push]);
-
-  React.useEffect(() => {
-    if (currentView === EDIT_PAGE) {
-      setEditing(true);
-    } else {
-      setEditing(false);
-    }
-  }, [currentView, setEditing]);
 
   React.useEffect(() => {
     fetchSubCount(claimId);
@@ -142,12 +119,11 @@ function ChannelPage(props: Props) {
         noFooter
         noSideNavigation={editing}
         backout={{
-          backFunction: onDone,
           title: __('Editing @%channel%', { channel: channelName }),
           simpleTitle: __('Editing'),
         }}
       >
-        <ChannelEdit uri={uri} onDone={onDone} />
+        <ChannelEdit uri={uri} onDone={() => goBack()} />
       </Page>
     );
   }
@@ -190,7 +166,7 @@ function ChannelPage(props: Props) {
                   <Button
                     button="alt"
                     title={__('Edit')}
-                    onClick={() => setEditing(!editing)}
+                    onClick={() => push(`?${PAGE_VIEW_QUERY}=${EDIT_PAGE}`)}
                     icon={ICONS.EDIT}
                     iconSize={18}
                     disabled={pending}

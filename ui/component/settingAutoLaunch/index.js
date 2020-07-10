@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import * as SETTINGS from 'constants/settings';
+import { SETTINGS } from 'lbry-redux';
 import { doSetAutoLaunch } from 'redux/actions/settings';
 import { makeSelectClientSetting } from 'redux/selectors/settings';
 import { doToast } from 'redux/actions/notifications';

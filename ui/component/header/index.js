@@ -1,7 +1,6 @@
-import * as SETTINGS from 'constants/settings';
 import * as MODALS from 'constants/modal_types';
 import { connect } from 'react-redux';
-import { selectBalance, formatCredits } from 'lbry-redux';
+import { selectBalance, formatCredits, SETTINGS } from 'lbry-redux';
 import { selectGetSyncErrorMessage } from 'lbryinc';
 import { selectUserVerifiedEmail, selectUserEmail, selectEmailToVerify } from 'redux/selectors/user';
 import { doClearEmailEntry, doClearPasswordEntry } from 'redux/actions/user';
@@ -9,6 +8,7 @@ import { doSetClientSetting } from 'redux/actions/settings';
 import { doSignOut, doOpenModal } from 'redux/actions/app';
 import { makeSelectClientSetting } from 'redux/selectors/settings';
 import Header from './view';
+import { selectHasNavigated } from 'redux/selectors/app';
 
 const select = state => ({
   balance: selectBalance(state),
@@ -21,6 +21,7 @@ const select = state => ({
   email: selectUserEmail(state),
   syncError: selectGetSyncErrorMessage(state),
   emailToVerify: selectEmailToVerify(state),
+  hasNavigated: selectHasNavigated(state),
 });
 
 const perform = dispatch => ({

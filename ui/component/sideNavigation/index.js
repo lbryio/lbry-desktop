@@ -1,7 +1,6 @@
-import * as SETTINGS from 'constants/settings';
 import { connect } from 'react-redux';
 import { selectSubscriptions } from 'redux/selectors/subscriptions';
-import { selectFollowedTags, selectPurchaseUriSuccess, doClearPurchasedUriSuccess } from 'lbry-redux';
+import { selectFollowedTags, selectPurchaseUriSuccess, doClearPurchasedUriSuccess, SETTINGS } from 'lbry-redux';
 import { selectUploadCount } from 'lbryinc';
 import { selectUserVerifiedEmail } from 'redux/selectors/user';
 import { makeSelectClientSetting } from 'redux/selectors/settings';

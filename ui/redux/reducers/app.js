@@ -41,6 +41,7 @@ export type AppState = {
   isPasswordSaved: boolean,
   welcomeVersion: number,
   allowAnalytics: boolean,
+  hasNavigated: boolean,
 };
 
 const defaultState: AppState = {
@@ -74,6 +75,7 @@ const defaultState: AppState = {
   isPasswordSaved: false,
   welcomeVersion: 0.0,
   allowAnalytics: false,
+  hasNavigated: false,
 };
 
 // @@router comes from react-router
@@ -86,7 +88,6 @@ reducers['@@router/LOCATION_CHANGE'] = (state, action) => {
   const { currentScroll } = state;
   const scrollHistory = (state.scrollHistory && state.scrollHistory.slice()) || [];
   const { action: name } = action.payload;
-
   let newCurrentScroll = currentScroll;
   if (name === 'PUSH') {
     scrollHistory.push(window.scrollY);
@@ -263,6 +264,11 @@ reducers[ACTIONS.SET_WELCOME_VERSION] = (state, action) =>
 reducers[ACTIONS.SET_ALLOW_ANALYTICS] = (state, action) =>
   Object.assign({}, state, {
     allowAnalytics: action.data,
+  });
+
+reducers[ACTIONS.SET_HAS_NAVIGATED] = (state, action) =>
+  Object.assign({}, state, {
+    hasNavigated: action.data,
   });
 
 reducers[ACTIONS.HIDE_MODAL] = state =>
