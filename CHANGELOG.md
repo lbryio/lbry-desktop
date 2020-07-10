@@ -26,6 +26,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - New channel create/edit page ([#4445](https://github.com/lbryio/lbry-desktop/pull/4445))
 - Add dialog to copy various types of links for a claim _community pr!_ ([#4474](https://github.com/lbryio/lbry-desktop/pull/4474))
 - Add password reset link to settings page for logged in users _community pr!_ ([#4473](https://github.com/lbryio/lbry-desktop/pull/4473))
+- Allow zooming on Desktop _community pr!_ ([#4513](https://github.com/lbryio/lbry-desktop/pull/4513))
 
 ### Changed
 
