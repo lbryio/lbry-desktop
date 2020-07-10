@@ -130,7 +130,7 @@ function ModalRepost(props: Props) {
         actions={
           <div>
             <SelectChannel
-              label="Channel to repost on"
+              label={__('Channel to repost on')}
               hideAnon
               channel={repostChannel}
               onChannelChange={newChannel => setRepostChannel(newChannel)}
