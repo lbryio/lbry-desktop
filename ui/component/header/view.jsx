@@ -1,6 +1,6 @@
 // @flow
 import * as ICONS from 'constants/icons';
-import * as SETTINGS from 'constants/settings';
+import { SETTINGS } from 'lbry-redux';
 import * as PAGES from 'constants/pages';
 import React, { Fragment } from 'react';
 import { withRouter } from 'react-router';
@@ -31,6 +31,7 @@ type Props = {
     length: number,
     location: { pathname: string },
     push: string => void,
+    replace: string => void,
   },
   currentTheme: string,
   automaticDarkModeEnabled: boolean,
@@ -40,7 +41,9 @@ type Props = {
   authenticated: boolean,
   authHeader: boolean,
   backout: {
-    backFunction: () => void,
+    backLabel?: string,
+    backCB?: () => void,
+    backNavDefault?: string,
     title: string,
     simpleTitle: string, // Just use the same value as `title` if `title` is already short (~< 10 chars), unless you have a better idea for title overlfow on mobile
   },
@@ -52,6 +55,7 @@ type Props = {
   openSignOutModal: () => void,
   clearEmailEntry: () => void,
   clearPasswordEntry: () => void,
+  hasNavigated: boolean,
 };
 
 const Header = (props: Props) => {
@@ -80,6 +84,8 @@ const Header = (props: Props) => {
   const isSignUpPage = history.location.pathname.includes(PAGES.AUTH);
   const isSignInPage = history.location.pathname.includes(PAGES.AUTH_SIGNIN);
   const isPwdResetPage = history.location.pathname.includes(PAGES.AUTH_PASSWORD_RESET);
+  const hasBackout = Boolean(backout);
+  const { backLabel, backCB, backNavDefault, title: backTitle, simpleTitle: simpleBackTitle } = backout || {};
 
   // Sign out if they click the "x" when they are on the password prompt
   const authHeaderAction = syncError ? { onClick: signOut } : { navigate: '/' };
@@ -106,6 +112,32 @@ const Header = (props: Props) => {
       }
     },
   };
+
+  React.useEffect(() => {
+    if (hasBackout) {
+      window.addEventListener('popstate', onBackout);
+      return () => window.removeEvenListener('popstate', onBackout);
+    }
+  }, [hasBackout]);
+
+  function onBackout(e) {
+    const { history, hasNavigated } = props;
+    const { goBack, replace } = history;
+
+    window.removeEventListener('popstate', onBackout);
+
+    if (backCB) {
+      backCB();
+    }
+    if (e.type !== 'popstate') {
+      // if not initiated by pop (back button)
+      if (hasNavigated && !backNavDefault) {
+        goBack();
+      } else {
+        replace(backNavDefault || `/`);
+      }
+    }
+  }
 
   function handleThemeToggle() {
     if (automaticDarkModeEnabled) {
@@ -149,15 +181,19 @@ const Header = (props: Props) => {
       <div className="header__contents">
         {!authHeader && backout ? (
           <div className="card__actions--between">
-            <Button onClick={backout.backFunction} button="link" label={__('Cancel')} icon={ICONS.ARROW_LEFT} />
-            {backout.title && (
-              <h1 className={'card__title'}>{isMobile ? backout.simpleTitle || backout.title : backout.title}</h1>
-            )}
+            <Button
+              onClick={onBackout}
+              button="link"
+              label={(backLabel && backLabel) || __('Cancel')}
+              icon={ICONS.ARROW_LEFT}
+            />
+            {backTitle && <h1 className={'card__title'}>{isMobile ? simpleBackTitle || backTitle : backTitle}</h1>}
             <Button
               aria-label={__('Your wallet')}
               navigate={`/$/${PAGES.WALLET}`}
               className="header__navigation-item menu__title header__navigation-item--balance"
               label={getWalletTitle()}
+              disabled
               // @if TARGET='app'
               onDoubleClick={e => {
                 e.stopPropagation();

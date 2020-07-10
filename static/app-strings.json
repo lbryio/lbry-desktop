@@ -1254,9 +1254,12 @@
   "Mature content blocked.": "Mature content blocked.",
   "Change this in your %content_settings%.": "Change this in your %content_settings%.",
   "content settings": "content settings",
+  "Autoplay next in list": "Autoplay next in list",
+  "Autoplay the next media file in the related list.": "Autoplay the next media file in the related list.",
   "There was an error with LBRY first publishing.": "There was an error with LBRY first publishing.",
   "Automagically upload to your youtube channel.": "Automagically upload to your youtube channel.",
   "Your file was published to LBRY, but the YouTube upload failed.": "Your file was published to LBRY, but the YouTube upload failed.",
+  "Your servers were not available. Check your url and port, or switch back to defaults.": "Your servers were not available. Check your url and port, or switch back to defaults.",
   "LBRY Status": "LBRY Status",
   "Check the status of various LBRY services.": "Check the status of various LBRY services.",
   "Check Status": "Check Status",
@@ -1265,5 +1268,6 @@
   "View thumbnail": "View thumbnail",
   "These changes will appear shortly.": "These changes will appear shortly.",
   "Block Channel": "Block Channel",
+  "Manage Notifications": "Manage Notifications",
   "--end--": "--end--"
 }

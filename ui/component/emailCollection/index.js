@@ -1,9 +1,9 @@
-import * as SETTINGS from 'constants/settings';
 import { connect } from 'react-redux';
 import { doSetClientSetting } from 'redux/actions/settings';
 import { makeSelectClientSetting } from 'redux/selectors/settings';
 import { selectEmailToVerify, selectUser } from 'redux/selectors/user';
 import FirstRunEmailCollection from './view';
+import { SETTINGS } from 'lbry-redux';
 
 const select = state => ({
   emailCollectionAcknowledged: makeSelectClientSetting(SETTINGS.EMAIL_COLLECTION_ACKNOWLEDGED)(state),

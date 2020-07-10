@@ -6,6 +6,7 @@ import Button from 'component/button';
 import I18nMessage from 'component/i18nMessage';
 import * as ICONS from 'constants/icons';
 import ServerInputRow from './internal/inputRow';
+import { stringifyServerParam } from 'util/sync-settings';
 
 type StatusOfServer = {
   host: string,
@@ -84,13 +85,6 @@ function SettingWalletServer(props: Props) {
     return () => clearInterval(interval);
   }, []);
 
-  function makeServerParam(configList) {
-    return configList.reduce((acc, cur) => {
-      acc.push(`${cur[0]}:${cur[1]}`);
-      return acc;
-    }, []);
-  }
-
   function doClear() {
     setAdvancedMode(false);
     clearWalletServers();
@@ -110,7 +104,7 @@ function SettingWalletServer(props: Props) {
 
   function updateServers(newConfig) {
     saveServerConfig(newConfig);
-    setCustomWalletServers(makeServerParam(newConfig));
+    setCustomWalletServers(stringifyServerParam(newConfig));
   }
 
   return (
@@ -134,7 +128,7 @@ function SettingWalletServer(props: Props) {
           onChange={e => {
             setAdvancedMode(e.target.checked);
             if (e.target.checked && customWalletServers.length) {
-              setCustomWalletServers(makeServerParam(customWalletServers));
+              setCustomWalletServers(stringifyServerParam(customWalletServers));
             }
           }}
           label={__('Use custom wallet servers')}

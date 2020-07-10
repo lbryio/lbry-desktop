@@ -1,6 +1,5 @@
-import * as SETTINGS from 'constants/settings';
 import { connect } from 'react-redux';
-import { makeSelectFileInfoForUri, makeSelectTitleForUri, makeSelectStreamingUrlForUri } from 'lbry-redux';
+import { makeSelectFileInfoForUri, makeSelectTitleForUri, makeSelectStreamingUrlForUri, SETTINGS } from 'lbry-redux';
 import {
   makeSelectIsPlayerFloating,
   selectFloatingUri,

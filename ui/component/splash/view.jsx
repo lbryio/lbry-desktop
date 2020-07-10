@@ -1,10 +1,9 @@
 // @flow
 import type { Node } from 'react';
 import * as MODALS from 'constants/modal_types';
-import * as SETTINGS from 'constants/settings';
 import * as ICONS from 'constants/icons';
 import React from 'react';
-import { Lbry } from 'lbry-redux';
+import { Lbry, SETTINGS } from 'lbry-redux';
 import Button from 'component/button';
 import ModalWalletUnlock from 'modal/modalWalletUnlock';
 import ModalIncompatibleDaemon from 'modal/modalIncompatibleDaemon';

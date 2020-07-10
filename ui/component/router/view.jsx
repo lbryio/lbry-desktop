@@ -89,10 +89,13 @@ type Props = {
     push: string => void,
     state: {},
     replaceState: ({}, string, string) => void,
+    listen: any => () => void,
   },
   uri: string,
   title: string,
   welcomeVersion: number,
+  hasNavigated: boolean,
+  setHasNavigated: () => void,
 };
 
 function AppRouter(props: Props) {
@@ -104,11 +107,23 @@ function AppRouter(props: Props) {
     uri,
     title,
     welcomeVersion,
+    hasNavigated,
+    setHasNavigated,
   } = props;
   const { entries } = history;
   const entryIndex = history.index;
   const urlParams = new URLSearchParams(search);
   const resetScroll = urlParams.get('reset_scroll');
+
+  // for people arriving at settings page from deeplinks, know whether they can "go back"
+  useEffect(() => {
+    const unlisten = history.listen((location, action) => {
+      if (action === 'PUSH') {
+        if (!hasNavigated && setHasNavigated) setHasNavigated();
+      }
+    });
+    return unlisten;
+  }, [hasNavigated, setHasNavigated]);
 
   useEffect(() => {
     if (uri) {

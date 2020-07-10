@@ -1,4 +1,3 @@
-import * as SETTINGS from 'constants/settings';
 import REWARD_TYPES from 'rewards';
 import { connect } from 'react-redux';
 import { selectGetSyncIsPending, selectGetSyncErrorMessage, selectSyncHash } from 'lbryinc';
@@ -12,7 +11,13 @@ import {
   selectUser,
   selectAccessToken,
 } from 'redux/selectors/user';
-import { selectMyChannelClaims, selectBalance, selectFetchingMyChannels, selectCreatingChannel } from 'lbry-redux';
+import {
+  selectMyChannelClaims,
+  selectBalance,
+  selectFetchingMyChannels,
+  selectCreatingChannel,
+  SETTINGS,
+} from 'lbry-redux';
 import { makeSelectClientSetting } from 'redux/selectors/settings';
 import UserSignIn from './view';
 
