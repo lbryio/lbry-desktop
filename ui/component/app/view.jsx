@@ -17,6 +17,9 @@ import Nag from 'component/common/nag';
 import REWARDS from 'rewards';
 import usePersistedState from 'effects/use-persisted-state';
 import FileDrop from 'component/fileDrop';
+// @if TARGET='app'
+import { changeZoomFactor, ZOOM } from 'util/zoomWindow';
+// @endif
 // @if TARGET='web'
 import OpenInAppLink from 'web/component/openInAppLink';
 import YoutubeWelcome from 'web/component/youtubeReferralWelcome';
@@ -171,6 +174,52 @@ function App(props: Props) {
     window.addEventListener('keydown', handleKeyPress);
     return () => window.removeEventListener('keydown', handleKeyPress);
   }, []);
+
+  // Enable ctrl +/- zooming on Desktop.
+  // @if TARGET='app'
+  useEffect(() => {
+    const handleKeyPress = e => {
+      if (e.ctrlKey && !e.shiftKey) {
+        switch (e.code) {
+          case 'NumpadAdd':
+          case 'Equal':
+            e.preventDefault();
+            changeZoomFactor(ZOOM.INCREMENT);
+            break;
+          case 'NumpadSubtract':
+          case 'Minus':
+            e.preventDefault();
+            changeZoomFactor(ZOOM.DECREMENT);
+            break;
+          case 'Numpad0':
+          case 'Digit0':
+            e.preventDefault();
+            changeZoomFactor(ZOOM.RESET);
+            break;
+          default:
+            // Do nothing
+            break;
+        }
+      }
+    };
+    window.addEventListener('keydown', handleKeyPress);
+    return () => window.removeEventListener('keydown', handleKeyPress);
+  }, []);
+
+  useEffect(() => {
+    const handleWheel = e => {
+      if (e.ctrlKey && !e.shiftKey) {
+        if (e.deltaY < 0) {
+          changeZoomFactor(ZOOM.INCREMENT);
+        } else {
+          changeZoomFactor(ZOOM.DECREMENT);
+        }
+      }
+    };
+    window.addEventListener('wheel', handleWheel);
+    return () => window.removeEventListener('wheel', handleWheel);
+  }, []);
+  // @endif
 
   useEffect(() => {
     if (referredRewardAvailable && sanitizedReferrerParam && isRewardApproved) {
