@@ -104,10 +104,8 @@ function App(props: Props) {
   const appRef = useRef();
   const isEnhancedLayout = useKonamiListener();
   const [hasSignedIn, setHasSignedIn] = useState(false);
-  const userId = user && user.id;
   const hasVerifiedEmail = user && user.has_verified_email;
   const isRewardApproved = user && user.is_reward_approved;
-  const previousUserId = usePrevious(userId);
   const previousHasVerifiedEmail = usePrevious(hasVerifiedEmail);
   const previousRewardApproved = usePrevious(isRewardApproved);
   // @if TARGET='web'
@@ -206,12 +204,6 @@ function App(props: Props) {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [language, languages]);
-
-  useEffect(() => {
-    if (previousUserId === undefined && userId) {
-      analytics.setUser(userId);
-    }
-  }, [previousUserId, userId]);
 
   useEffect(() => {
     // Check that previousHasVerifiedEmail was not undefined instead of just not truthy

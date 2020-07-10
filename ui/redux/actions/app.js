@@ -42,6 +42,7 @@ import {
   selectModal,
   selectAllowAnalytics,
 } from 'redux/selectors/app';
+import { selectUser } from 'redux/selectors/user';
 // import { selectDaemonSettings } from 'redux/selectors/settings';
 import { doGetSync } from 'lbryinc';
 import { doClaimRewardType } from 'redux/actions/rewards';
@@ -504,9 +505,16 @@ export function doAnaltyicsPurchaseEvent(fileInfo) {
 
 export function doSignIn() {
   return (dispatch, getState) => {
+    const state = getState();
+    const user = selectUser(state);
+    const userId = user.id;
+
+    analytics.setUser(userId);
+
     // @if TARGET='web'
     dispatch(doBalanceSubscribe());
     dispatch(doFetchChannelListMine());
+
     // @endif
   };
 }
