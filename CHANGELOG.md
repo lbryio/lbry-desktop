@@ -9,6 +9,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Added
 
 - Upload your files published via the desktop app to youtube ([#4491](https://github.com/lbryio/lbry-desktop/pull/4491))
+- Add ability to sign supports ([#4382](https://github.com/lbryio/lbry-desktop/pull/4382))
 - Add "tap to unmute" button for videos that start with audio muted _community pr!_ ([#4365](https://github.com/lbryio/lbry-desktop/pull/4365))
 - Allow upgrade bar to be dismissed per session _community pr!_ ([#4413](https://github.com/lbryio/lbry-desktop/pull/4413))
 - Pause the "autoplay next" timer when performing long operations such as Tipping, Supporting or commenting _community pr!_ ([4419](https://github.com/lbryio/lbry-desktop/pull/4419))
