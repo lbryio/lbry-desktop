@@ -218,7 +218,7 @@
     "lbrynetDaemonUrlTemplate": "https://github.com/lbryio/lbry/releases/download/vDAEMONVER/lbrynet-OSNAME.zip",
     "lbrynetDaemonDir": "static/daemon",
     "lbrynetDaemonFileName": "lbrynet",
-    "LBRYFirstVersion": "0.0.19",
+    "LBRYFirstVersion": "0.0.20",
     "LBRYFirstUrlTemplate": "https://github.com/lbryio/lbry-first/releases/download/vLBRYFIRSTVER/lbry-first_OSNAME_amd64.zip",
     "LBRYFirstDir": "static/lbry-first",
     "LBRYFirstFileName": "lbry-first"
