@@ -1,8 +1,8 @@
 exports.AUTH = 'signup';
 exports.AUTH_SIGNIN = 'signin';
 exports.AUTH_VERIFY = 'verify';
-exports.AUTH_PASSWORD_RESET = 'reset';
-exports.AUTH_PASSWORD_SET = 'set';
+exports.AUTH_PASSWORD_RESET = 'resetpassword';
+exports.AUTH_PASSWORD_SET = 'reset'; // This is tied to a link in internal-apis - don't change this
 exports.BACKUP = 'backup';
 exports.CHANNEL = 'channel';
 exports.DISCOVER = 'discover';
