@@ -4,7 +4,7 @@ import { makeSelectClientSetting } from 'redux/selectors/settings';
 import { doUserPasswordSet, doClearPasswordEntry } from 'redux/actions/user';
 import { doToast } from 'redux/actions/notifications';
 import UserSignIn from './view';
-import * as SETTINGS from 'constants/settings';
+import { SETTINGS } from 'lbry-redux';
 
 const select = state => ({
   user: selectUser(state),

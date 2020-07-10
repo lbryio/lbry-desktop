@@ -7,7 +7,6 @@ import ModalDownloading from 'modal/modalDownloading';
 import ModalAutoGenerateThumbnail from 'modal/modalAutoGenerateThumbnail';
 import ModalAutoUpdateDownloaded from 'modal/modalAutoUpdateDownloaded';
 import ModalUpgrade from 'modal/modalUpgrade';
-import ModalWelcome from 'modal/modalWelcome';
 import ModalFirstReward from 'modal/modalFirstReward';
 import ModalRemoveFile from 'modal/modalRemoveFile';
 import ModalTransactionFailed from 'modal/modalTransactionFailed';
@@ -80,8 +79,6 @@ function ModalRouter(props: Props) {
       return <ModalError {...modalProps} />;
     case MODALS.FILE_TIMEOUT:
       return <ModalFileTimeout {...modalProps} />;
-    case MODALS.WELCOME:
-      return <ModalWelcome {...modalProps} />;
     case MODALS.FIRST_REWARD:
       return <ModalFirstReward {...modalProps} />;
     case MODALS.TRANSACTION_FAILED:

@@ -1,4 +1,3 @@
-import * as SETTINGS from 'constants/settings';
 import { connect } from 'react-redux';
 import { doPlayUri, doSetPlayingUri } from 'redux/actions/content';
 import {
@@ -7,6 +6,7 @@ import {
   makeSelectClaimForUri,
   makeSelectStreamingUrlForUri,
   makeSelectClaimWasPurchased,
+  SETTINGS,
 } from 'lbry-redux';
 import { makeSelectCostInfoForUri } from 'lbryinc';
 import { selectUserVerifiedEmail } from 'redux/selectors/user';

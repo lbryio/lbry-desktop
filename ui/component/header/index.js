@@ -1,7 +1,6 @@
-import * as SETTINGS from 'constants/settings';
 import * as MODALS from 'constants/modal_types';
 import { connect } from 'react-redux';
-import { selectBalance, formatCredits } from 'lbry-redux';
+import { selectBalance, formatCredits, SETTINGS } from 'lbry-redux';
 import { selectGetSyncErrorMessage } from 'lbryinc';
 import { selectUserVerifiedEmail, selectUserEmail, selectEmailToVerify } from 'redux/selectors/user';
 import { doClearEmailEntry, doClearPasswordEntry } from 'redux/actions/user';

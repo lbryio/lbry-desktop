@@ -1,5 +1,5 @@
 // @flow
-import * as SETTINGS from 'constants/settings';
+import { SETTINGS } from 'lbry-redux';
 import * as PAGES from 'constants/pages';
 import React, { useState } from 'react';
 import { FormField, Form } from 'component/common/form';

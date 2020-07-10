@@ -1,6 +1,5 @@
 // @flow
 import * as ACTIONS from 'constants/action_types';
-import * as SETTINGS from 'constants/settings';
 import * as NOTIFICATION_TYPES from 'constants/subscriptions';
 import * as MODALS from 'constants/modal_types';
 // @if TARGET='app'
@@ -12,6 +11,7 @@ import { doUpdateUnreadSubscriptions } from 'redux/actions/subscriptions';
 import { makeSelectUnreadByChannel } from 'redux/selectors/subscriptions';
 import {
   Lbry,
+  SETTINGS,
   makeSelectFileInfoForUri,
   selectFileInfosByOutpoint,
   makeSelectChannelForClaimUri,

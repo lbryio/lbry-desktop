@@ -1,6 +1,5 @@
-import * as SETTINGS from 'constants/settings';
 import { connect } from 'react-redux';
-import { makeSelectClaimForUri } from 'lbry-redux';
+import { makeSelectClaimForUri, SETTINGS } from 'lbry-redux';
 import { withRouter } from 'react-router';
 import { makeSelectIsPlayerFloating, makeSelectNextUnplayedRecommended } from 'redux/selectors/content';
 import { makeSelectClientSetting } from 'redux/selectors/settings';

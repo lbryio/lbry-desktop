@@ -1,4 +1,4 @@
-import * as SETTINGS from 'constants/settings';
+import { SETTINGS } from 'lbry-redux';
 import { connect } from 'react-redux';
 import {
   selectUserInviteStatusFailed,

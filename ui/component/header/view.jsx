@@ -1,6 +1,6 @@
 // @flow
 import * as ICONS from 'constants/icons';
-import * as SETTINGS from 'constants/settings';
+import { SETTINGS } from 'lbry-redux';
 import * as PAGES from 'constants/pages';
 import React, { Fragment } from 'react';
 import { withRouter } from 'react-router';

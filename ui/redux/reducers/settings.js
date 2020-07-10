@@ -1,5 +1,4 @@
 import * as ACTIONS from 'constants/action_types';
-import * as APP_SETTINGS from 'constants/settings';
 import moment from 'moment';
 import SUPPORTED_LANGUAGES from 'constants/supported_languages';
 import { ACTIONS as LBRY_REDUX_ACTIONS, SETTINGS } from 'lbry-redux';
@@ -35,7 +34,7 @@ const defaultState = {
     [SETTINGS.OS_NOTIFICATIONS_ENABLED]: true,
     [SETTINGS.AUTOMATIC_DARK_MODE_ENABLED]: false,
 
-    [APP_SETTINGS.DARK_MODE_TIMES]: {
+    [SETTINGS.DARK_MODE_TIMES]: {
       from: { hour: '21', min: '00', formattedTime: '21:00' },
       to: { hour: '8', min: '00', formattedTime: '8:00' },
     },
@@ -50,6 +49,7 @@ const defaultState = {
     // Content
     [SETTINGS.SHOW_MATURE]: false,
     [SETTINGS.AUTOPLAY]: true,
+    [SETTINGS.AUTOPLAY_NEXT]: true,
     [SETTINGS.FLOATING_PLAYER]: true,
     [SETTINGS.AUTO_DOWNLOAD]: true,
     [SETTINGS.HIDE_REPOSTS]: false,
@@ -91,7 +91,7 @@ reducers[ACTIONS.CLIENT_SETTING_CHANGED] = (state, action) => {
 };
 
 reducers[ACTIONS.UPDATE_IS_NIGHT] = state => {
-  const { from, to } = state.clientSettings[APP_SETTINGS.DARK_MODE_TIMES];
+  const { from, to } = state.clientSettings[SETTINGS.DARK_MODE_TIMES];
   const momentNow = moment();
   const startNightMoment = moment(from.formattedTime, 'HH:mm');
   const endNightMoment = moment(to.formattedTime, 'HH:mm');
