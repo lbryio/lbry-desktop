@@ -1266,5 +1266,9 @@
   "There was an error with LBRY first publishing.": "There was an error with LBRY first publishing.",
   "Automagically upload to your youtube channel.": "Automagically upload to your youtube channel.",
   "Your file was published to LBRY, but the YouTube upload failed.": "Your file was published to LBRY, but the YouTube upload failed.",
+  "LBRY Status": "LBRY Status",
+  "Check the status of various LBRY services.": "Check the status of various LBRY services.",
+  "Check Status": "Check Status",
+  "Monitor Explanation FAQ": "Monitor Explanation FAQ",
   "--end--": "--end--"
 }
