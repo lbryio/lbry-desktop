@@ -103,7 +103,7 @@ function ClaimListDiscover(props: Props) {
   const [page, setPage] = useState(1);
   const [forceRefresh, setForceRefresh] = useState();
   const [expanded, setExpanded] = usePersistedState(`expanded-${location.pathname}`, false);
-  const [orderParamEntry, setOrderParamEntry] = useState(CS.ORDER_BY_TRENDING);
+  const [orderParamEntry, setOrderParamEntry] = usePersistedState(`entry-${location.pathname}`, CS.ORDER_BY_TRENDING);
   const [orderParamUser, setOrderParamUser] = usePersistedState(`orderUser-${location.pathname}`, CS.ORDER_BY_TRENDING);
   const followed = (followedTags && followedTags.map(t => t.name)) || [];
   const urlParams = new URLSearchParams(search);
@@ -155,7 +155,9 @@ function ClaimListDiscover(props: Props) {
 
   useEffect(() => {
     // One-time update to stash the finalized 'orderParam' at entry.
-    setOrderParamEntry(orderParam);
+    if (history.action !== 'POP') {
+      setOrderParamEntry(orderParam);
+    }
   }, []);
 
   let options: {
