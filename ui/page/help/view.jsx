@@ -149,6 +149,26 @@ class HelpPage extends React.PureComponent<Props, State> {
         />
 
         <Card
+          title={__('LBRY Status')}
+          subtitle={__('Check the status of various LBRY services.')}
+          actions={
+            <div className="section__actions">
+              <Button
+                href="https://status.lbry.com/"
+                label={__('Check Status')}
+                icon={ICONS.LBRY_STATUS}
+                button="secondary"
+              />
+              <Button
+                href="https://lbry.com/faq/services-monitor"
+                label={__('Monitor Explanation FAQ')}
+                icon={ICONS.HELP}
+                button="secondary"
+            </div>
+          }
+        />
+
+        <Card
           title={__('Find Assistance')}
           subtitle={
             <I18nMessage tokens={{ channel: <strong>#help</strong> }}>
