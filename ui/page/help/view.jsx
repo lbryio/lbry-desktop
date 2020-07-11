@@ -164,6 +164,7 @@ class HelpPage extends React.PureComponent<Props, State> {
                 label={__('Monitor Explanation FAQ')}
                 icon={ICONS.HELP}
                 button="secondary"
+              />       
             </div>
           }
         />
