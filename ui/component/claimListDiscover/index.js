@@ -2,6 +2,7 @@ import { connect } from 'react-redux';
 import {
   doClaimSearch,
   selectClaimSearchByQuery,
+  selectClaimSearchByQueryLastPageReached,
   selectFetchingClaimSearch,
   selectBlockedChannels,
   SETTINGS,
@@ -14,6 +15,7 @@ import ClaimListDiscover from './view';
 const select = state => ({
   followedTags: selectFollowedTags(state),
   claimSearchByQuery: selectClaimSearchByQuery(state),
+  claimSearchByQueryLastPageReached: selectClaimSearchByQueryLastPageReached(state),
   loading: selectFetchingClaimSearch(state),
   showNsfw: makeSelectClientSetting(SETTINGS.SHOW_MATURE)(state),
   hideReposts: makeSelectClientSetting(SETTINGS.HIDE_REPOSTS)(state),
