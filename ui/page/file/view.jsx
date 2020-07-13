@@ -16,6 +16,7 @@ import WaitUntilOnPage from 'component/common/wait-until-on-page';
 import RecommendedContent from 'component/recommendedContent';
 import CommentsList from 'component/commentsList';
 import CommentCreate from 'component/commentCreate';
+import YoutubeBadge from 'component/youtubeBadge';
 
 export const FILE_WRAPPER_CLASS = 'file-page__video-container';
 
@@ -78,10 +79,14 @@ class FilePage extends React.Component<Props> {
   }
 
   renderFilePageLayout(uri: string, mode: string, cost: ?number) {
+    const { claim } = this.props;
+    const channelClaimId = claim.signing_channel ? claim.signing_channel.claim_id : null;
+
     if (RENDER_MODES.FLOATING_MODES.includes(mode)) {
       return (
         <React.Fragment>
           <ClaimUri uri={uri} />
+          <YoutubeBadge channelClaimId={channelClaimId} includeSyncDate={false} />
           <div className={FILE_WRAPPER_CLASS}>
             <FileRenderInitiator uri={uri} />
           </div>
@@ -95,6 +100,7 @@ class FilePage extends React.Component<Props> {
       return (
         <React.Fragment>
           <ClaimUri uri={uri} />
+          <YoutubeBadge channelClaimId={channelClaimId} includeSyncDate={false} />
           <FileTitle uri={uri} />
           <FileRenderDownload uri={uri} isFree={cost === 0} />
         </React.Fragment>
@@ -105,6 +111,7 @@ class FilePage extends React.Component<Props> {
       return (
         <React.Fragment>
           <ClaimUri uri={uri} />
+          <YoutubeBadge channelClaimId={channelClaimId} includeSyncDate={false} />
           <FileTitle uri={uri} />
           <FileRenderInitiator uri={uri} />
           <FileRenderInline uri={uri} />
@@ -115,6 +122,7 @@ class FilePage extends React.Component<Props> {
     return (
       <React.Fragment>
         <ClaimUri uri={uri} />
+        <YoutubeBadge channelClaimId={channelClaimId} includeSyncDate={false} />
         <FileRenderInitiator uri={uri} />
         <FileRenderInline uri={uri} />
         <FileTitle uri={uri} />

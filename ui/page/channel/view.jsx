@@ -2,7 +2,6 @@
 import * as ICONS from 'constants/icons';
 import React from 'react';
 import { parseURI } from 'lbry-redux';
-import { Lbryio } from 'lbryinc';
 import Page from 'component/page';
 import SubscribeButton from 'component/subscribeButton';
 import BlockButton from 'component/blockButton';
@@ -18,10 +17,9 @@ import ChannelThumbnail from 'component/channelThumbnail';
 import ChannelEdit from 'component/channelEdit';
 import ClaimUri from 'component/claimUri';
 import classnames from 'classnames';
-import Icon from 'component/common/icon';
 import HelpLink from 'component/common/help-link';
-import DateTime from 'component/dateTime';
 import ClaimSupportButton from 'component/claimSupportButton';
+import YoutubeBadge from 'component/youtubeBadge';
 
 const PAGE_VIEW_QUERY = `view`;
 const ABOUT_PAGE = `about`;
@@ -72,7 +70,6 @@ function ChannelPage(props: Props) {
   const currentView = urlParams.get(PAGE_VIEW_QUERY) || undefined;
   const editInUrl = urlParams.get(PAGE_VIEW_QUERY) === EDIT_PAGE;
   const [editing, setEditing] = React.useState(editInUrl);
-  const [lastYtSyncDate, setLastYtSyncDate] = React.useState();
   const { channelName } = parseURI(uri);
   const { permanent_url: permanentUrl } = claim;
   const claimId = claim.claim_id;
@@ -129,14 +126,6 @@ function ChannelPage(props: Props) {
   }, [currentView, setEditing]);
 
   React.useEffect(() => {
-    Lbryio.call('yt', 'get_youtuber', { channel_claim_id: claimId }).then(response => {
-      if (response.is_verified_youtuber) {
-        setLastYtSyncDate(response.last_synced);
-      }
-    });
-  }, [claimId]);
-
-  React.useEffect(() => {
     fetchSubCount(claimId);
   }, [uri, fetchSubCount, claimId]);
 
@@ -159,15 +148,7 @@ function ChannelPage(props: Props) {
   return (
     <Page noFooter>
       <ClaimUri uri={uri} />
-
-      {lastYtSyncDate && (
-        <div className="media__uri--right">
-          <Icon icon={ICONS.VALIDATED} size={12} />
-          {__('Official YouTube Creator - Last updated %time_ago%', {
-            time_ago: DateTime.getTimeAgoStr(lastYtSyncDate),
-          })}
-        </div>
-      )}
+      <YoutubeBadge channelClaimId={claimId} />
       <header className="channel-cover">
         <div className="channel__quick-actions">
           {!channelIsBlocked && !channelIsBlackListed && <ShareButton uri={uri} />}
