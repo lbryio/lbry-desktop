@@ -159,12 +159,6 @@ class HelpPage extends React.PureComponent<Props, State> {
                 icon={ICONS.LBRY_STATUS}
                 button="secondary"
               />
-              <Button
-                href="https://lbry.com/faq/services-monitor"
-                label={__('Monitor Explanation FAQ')}
-                icon={ICONS.HELP}
-                button="secondary"
-              />       
             </div>
           }
         />
