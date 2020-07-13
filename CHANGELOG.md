@@ -9,6 +9,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Added
 
 - Allow zooming on Desktop _community pr!_ ([#4513](https://github.com/lbryio/lbry-desktop/pull/4513))
+- Show "YT Creator" label in File Page as well _community pr!_ ([#4523](https://github.com/lbryio/lbry-desktop/pull/4523)) 
 
 ### Changed
 
