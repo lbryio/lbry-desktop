@@ -8,6 +8,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ### Added
 
+### Changed
+
+### Fixed
+
+## [0.47.0] - [2020-07-13]
+
+### Added
+
 - Add ability to sign supports ([#4382](https://github.com/lbryio/lbry-desktop/pull/4382))
 - Add "tap to unmute" button for videos that start with audio muted _community pr!_ ([#4365](https://github.com/lbryio/lbry-desktop/pull/4365))
 - Allow upgrade bar to be dismissed per session _community pr!_ ([#4413](https://github.com/lbryio/lbry-desktop/pull/4413))
