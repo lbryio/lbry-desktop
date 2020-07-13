@@ -39,6 +39,7 @@ type Props = {
   authenticated: boolean,
   authHeader: boolean,
   backout: {
+    backLabel?: string,
     backFunction: () => void,
     title: string,
     simpleTitle: string, // Just use the same value as `title` if `title` is already short (~< 10 chars), unless you have a better idea for title overlfow on mobile
@@ -148,7 +149,12 @@ const Header = (props: Props) => {
       <div className="header__contents">
         {!authHeader && backout ? (
           <div className="card__actions--between">
-            <Button onClick={backout.backFunction} button="link" label={__('Cancel')} icon={ICONS.ARROW_LEFT} />
+            <Button
+              onClick={backout.backFunction}
+              button="link"
+              label={(backout.backLabel && __(backout.backLabel)) || __('Cancel')}
+              icon={ICONS.ARROW_LEFT}
+            />
             {backout.title && (
               <h1 className={'card__title'}>{isMobile ? backout.simpleTitle || backout.title : backout.title}</h1>
             )}

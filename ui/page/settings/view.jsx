@@ -22,6 +22,7 @@ import { getPasswordFromCookie } from 'util/saved-passwords';
 import Spinner from 'component/spinner';
 import SettingAccountPassword from 'component/settingAccountPassword';
 import { Lbryio } from 'lbryinc';
+import { withRouter } from 'react-router-dom';
 
 // @if TARGET='app'
 export const IS_MAC = process.platform === 'darwin';
@@ -88,6 +89,9 @@ type Props = {
   findFFmpeg: () => void,
   openModal: string => void,
   language?: string,
+  history: { goBack: () => void },
+  syncEnabled: boolean,
+  syncSettings: () => void,
 };
 
 type State = {
@@ -112,6 +116,7 @@ class SettingsPage extends React.PureComponent<Props, State> {
     (this: any).onAutomaticDarkModeChange = this.onAutomaticDarkModeChange.bind(this);
     (this: any).onChangeTime = this.onChangeTime.bind(this);
     (this: any).onConfirmForgetPassword = this.onConfirmForgetPassword.bind(this);
+    (this: any).onDone = this.onDone.bind(this);
   }
 
   componentDidMount() {
@@ -194,6 +199,16 @@ class SettingsPage extends React.PureComponent<Props, State> {
     });
   }
 
+  onDone() {
+    const { history, syncSettings } = this.props;
+    const { goBack } = history;
+    // if sync, dispatch sync, then goback
+    if (this.props.syncEnabled) {
+      syncSettings();
+    }
+    goBack();
+  }
+
   onChangeTime(event: SyntheticInputEvent<*>, options: OptionTimes) {
     const { value } = event.target;
 
@@ -262,7 +277,17 @@ class SettingsPage extends React.PureComponent<Props, State> {
     const endHours = ['5', '6', '7', '8'];
 
     return (
-      <Page className="card-stack">
+      <Page
+        noFooter
+        noSideNavigation
+        backout={{
+          backFunction: () => this.onDone(),
+          title: __('Settings'),
+          simpleTitle: __('Editing'),
+          backLabel: __('Done'),
+        }}
+        className="card-stack"
+      >
         {!IS_WEB && noDaemonSettings ? (
           <section className="card card--section">
             <div className="card__title card__title--deprecated">{__('Failed to load settings.')}</div>
@@ -820,4 +845,4 @@ class SettingsPage extends React.PureComponent<Props, State> {
   }
 }
 
-export default SettingsPage;
+export default withRouter(SettingsPage);

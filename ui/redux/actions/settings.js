@@ -59,7 +59,7 @@ export function doClearDaemonSetting(key) {
       key,
     };
     Lbry.settings_clear(clearKey).then(defaultSettings => {
-      if (Object.values(SDK_SYNC_KEYS).includes(key)) {
+      if (SDK_SYNC_KEYS.includes(key)) {
         dispatch({
           type: ACTIONS.SHARED_PREFERENCE_SET,
           data: { key: key, value: null },
@@ -88,7 +88,7 @@ export function doSetDaemonSetting(key, value, doNotDispatch = false) {
       value: !value && value !== false ? null : value,
     };
     Lbry.settings_set(newSettings).then(newSetting => {
-      if (Object.values(SDK_SYNC_KEYS).includes(key) && !doNotDispatch) {
+      if (SDK_SYNC_KEYS.includes(key) && !doNotDispatch) {
         dispatch({
           type: ACTIONS.SHARED_PREFERENCE_SET,
           data: { key: key, value: newSetting[key] },
@@ -164,6 +164,12 @@ export function doSetDarkTime(value, options) {
 
     dispatch(doSetClientSetting(SETTINGS.DARK_MODE_TIMES, mergedTimes));
     dispatch(doUpdateIsNight());
+  };
+}
+
+export function doSyncClientSettings() {
+  return {
+    type: LOCAL_ACTIONS.SYNC_CLIENT_SETTINGS,
   };
 }
 
