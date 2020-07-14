@@ -113,6 +113,9 @@ nano .env
 - To specify your own OG-IMAGE
 You can either place a png named v2-og.png in the /custom folder or specify the OG_IMAGE_URL in .env
 
+- To specify your own channels to be followed on first run
+`AUTO_FOLLOW_URLS=lbry://@chan#123...a lbry://@chan2#456...a`
+
 - If you want to customize the homepage content
 
 1. add `CUSTOM_HOMEPAGE=true` to the '.env' file
