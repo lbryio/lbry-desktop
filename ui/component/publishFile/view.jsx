@@ -82,7 +82,7 @@ function PublishFile(props: Props) {
 
     setOptimizeAvail(isOptimizeAvail);
     updatePublishForm({ optimize: finalOptimizeState });
-  }, [filePath, isVid, ffmpegAvail, userOptimize]);
+  }, [currentFile, filePath, isVid, ffmpegAvail, userOptimize]);
 
   function updateFileInfo(duration, size, isvid) {
     updatePublishForm({ fileDur: duration, fileSize: size, fileVid: isvid });
@@ -216,6 +216,8 @@ function PublishFile(props: Props) {
       } else {
         updateFileInfo(0, file.size, isVideo);
       }
+    } else {
+      updateFileInfo(0, file.size, isVideo);
     }
 
     // @if TARGET='web'
