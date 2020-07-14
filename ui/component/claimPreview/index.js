@@ -7,12 +7,13 @@ import {
   makeSelectClaimIsPending,
   makeSelectCoverForUri,
   makeSelectClaimIsNsfw,
+  selectBlockedChannels,
+  selectChannelIsBlocked,
   doFileGet,
   makeSelectReflectingClaimForUri,
   makeSelectClaimWasPurchased,
   makeSelectStreamingUrlForUri,
 } from 'lbry-redux';
-import { selectBlockedChannels, selectChannelIsBlocked } from 'redux/selectors/blocked';
 import { selectBlackListedOutpoints, selectFilteredOutpoints } from 'lbryinc';
 import { selectShowMatureContent } from 'redux/selectors/settings';
 import { makeSelectHasVisitedUri } from 'redux/selectors/content';
