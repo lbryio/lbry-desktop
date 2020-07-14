@@ -5,6 +5,7 @@ import { withRouter } from 'react-router';
 import I18nMessage from 'component/i18nMessage';
 import Button from 'component/button';
 import classnames from 'classnames';
+import { DOMAIN } from 'config';
 
 const ADS_URL = '//assets.revcontent.com/master/delivery.js';
 const IS_MOBILE = typeof window.orientation !== 'undefined';
@@ -64,7 +65,11 @@ function Ads(props: Props) {
     <I18nMessage
       tokens={{
         sign_in_to_lbrytv: (
-          <Button button="link" label={__('Sign in to lbry.tv')} navigate={`/$/${PAGES.AUTH}?redirect=${pathname}`} />
+          <Button
+            button="link"
+            label={__('Sign in to') + ' ' + DOMAIN}
+            navigate={`/$/${PAGES.AUTH}?redirect=${pathname}`}
+          />
         ),
         download_the_app: <Button button="link" label={__('download the app')} href="https://lbry.com/get" />,
       }}
