@@ -6,6 +6,7 @@ import Nag from 'component/common/nag';
 import { parseURI } from 'lbry-redux';
 import Button from 'component/button';
 import Card from 'component/common/card';
+import { AUTO_FOLLOW_CHANNELS } from 'config';
 
 type Props = {
   subscribedChannels: Array<Subscription>,
@@ -14,8 +15,7 @@ type Props = {
   channelSubscribe: (sub: Subscription) => void,
 };
 
-const LBRY_URI = 'lbry://@lbry#3fda836a92faaceedfe398225fb9b2ee2ed1f01a';
-const LBRYCAST_URI = 'lbry://@lbrycast#4c29f8b013adea4d5cca1861fb2161d5089613ea';
+const channelsToSubscribe = AUTO_FOLLOW_CHANNELS.trim().split(' ');
 
 function UserChannelFollowIntro(props: Props) {
   const { subscribedChannels, channelSubscribe, onContinue, onBack } = props;
@@ -23,15 +23,12 @@ function UserChannelFollowIntro(props: Props) {
 
   // subscribe to lbry
   useEffect(() => {
-    channelSubscribe({
-      channelName: parseURI(LBRY_URI).claimName,
-      uri: LBRY_URI,
-    });
-
-    channelSubscribe({
-      channelName: parseURI(LBRYCAST_URI).claimName,
-      uri: LBRYCAST_URI,
-    });
+    channelsToSubscribe.forEach(c =>
+      channelSubscribe({
+        channelName: parseURI(c).claimName,
+        uri: c,
+      })
+    );
   }, []);
 
   return (
