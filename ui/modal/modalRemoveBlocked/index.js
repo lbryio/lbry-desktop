@@ -1,7 +1,8 @@
 import { connect } from 'react-redux';
 import { doHideModal } from 'redux/actions/app';
+import { doToggleBlockChannel } from 'redux/actions/blocked';
+import { selectBlockedChannels } from 'redux/selectors/blocked';
 import ModalRemoveBlocked from './view';
-import { doToggleBlockChannel, selectBlockedChannels } from 'lbry-redux';
 
 const select = (state, props) => ({
   blockedChannels: selectBlockedChannels(state),

@@ -2,6 +2,7 @@
 import React from 'react';
 import ClaimList from 'component/claimList';
 import Page from 'component/page';
+import Card from 'component/common/card';
 
 type Props = {
   uris: Array<string>,
@@ -13,13 +14,10 @@ function ListBlocked(props: Props) {
   return (
     <Page>
       {uris && uris.length ? (
-        <ClaimList
-          header={<h1>{__('Your Blocked Channels')}</h1>}
-          persistedStorageKey="block-list-published"
-          uris={uris}
-          defaultSort
-          showUnresolvedClaims
-          showHiddenByUser
+        <Card
+          isBodyList
+          title={__('Your Blocked Channels')}
+          body={<ClaimList isCardBody uris={uris} showUnresolvedClaims showHiddenByUser />}
         />
       ) : (
         <div className="main--empty">

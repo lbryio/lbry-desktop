@@ -6,9 +6,9 @@ import {
   makeSelectCoverForUri,
   selectCurrentChannelPage,
   makeSelectClaimForUri,
-  selectChannelIsBlocked,
   makeSelectClaimIsPending,
 } from 'lbry-redux';
+import { selectChannelIsBlocked } from 'redux/selectors/blocked';
 import { selectBlackListedOutpoints, doFetchSubCount, makeSelectSubCountForUri } from 'lbryinc';
 import { makeSelectIsSubscribed } from 'redux/selectors/subscriptions';
 import { doOpenModal } from 'redux/actions/app';
