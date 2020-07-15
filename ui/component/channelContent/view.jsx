@@ -131,7 +131,7 @@ function ChannelContent(props: Props) {
             <Form onSubmit={() => {}} className="wunderbar--inline">
               <Icon icon={ICONS.SEARCH} />
               <FormField
-                className="wunderbar__input"
+                className="wunderbar__input--inline"
                 value={searchQuery}
                 onChange={handleInputChange}
                 type="text"
