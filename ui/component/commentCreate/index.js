@@ -1,6 +1,7 @@
 import { connect } from 'react-redux';
-import { doCommentCreate, makeSelectClaimForUri, selectMyChannelClaims } from 'lbry-redux';
+import { makeSelectClaimForUri, selectMyChannelClaims } from 'lbry-redux';
 import { doOpenModal } from 'redux/actions/app';
+import { doCommentCreate } from 'redux/actions/comments';
 import { CommentCreate } from './view';
 import { selectUserVerifiedEmail } from 'redux/selectors/user';
 
