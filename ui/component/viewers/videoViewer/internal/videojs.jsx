@@ -39,7 +39,6 @@ type VideoJSOptions = {
   responsive: boolean,
   poster?: string,
   muted?: boolean,
-  poster?: string,
 };
 
 const IS_IOS =
