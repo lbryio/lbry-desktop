@@ -1,5 +1,5 @@
 // @flow
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import Button from 'component/button';
 import * as ICONS from 'constants/icons';
 import classnames from 'classnames';
@@ -7,6 +7,7 @@ import videojs from 'video.js/dist/alt/video.core.novtt.min.js';
 import 'video.js/dist/alt/video-js-cdn.min.css';
 import eventTracking from 'videojs-event-tracking';
 import isUserTyping from 'util/detect-typing';
+const isDev = process.env.NODE_ENV !== 'production';
 
 export type Player = {
   on: (string, (any) => void) => void,
@@ -79,6 +80,7 @@ properties for this component should be kept to ONLY those that if changed shoul
  */
 export default React.memo<Props>(function VideoJs(props: Props) {
   const { startMuted, source, sourceType, poster, isAudio, onPlayerReady } = props;
+  const [reload, setReload] = useState('initial');
   let player: ?Player;
   const containerRef = useRef();
   const videoJsOptions = {
@@ -97,17 +99,33 @@ export default React.memo<Props>(function VideoJs(props: Props) {
   videoJsOptions.muted = startMuted;
 
   const tapToUnmuteRef = useRef();
+  const tapToRetryRef = useRef();
 
-  function showTapToUnmute(newState: boolean) {
+  const TAP = {
+    UNMUTE: 'UNMUTE',
+    RETRY: 'RETRY',
+  };
+
+  function showTapButton(tapButton, newState) {
+    let theRef;
+    switch (tapButton) {
+      case TAP.UNMUTE:
+        theRef = tapToUnmuteRef;
+        break;
+      case TAP.RETRY:
+        theRef = tapToRetryRef;
+        break;
+      default:
+        if (isDev) throw new Error('showTapButton: unexpected ref');
+        return;
+    }
+
     // Use the DOM to control the state of the button to prevent re-renders.
-    // The button only needs to appear once per session.
-    if (tapToUnmuteRef.current) {
-      const curState = tapToUnmuteRef.current.style.visibility === 'visible';
+    if (theRef.current) {
+      const curState = theRef.current.style.visibility === 'visible';
       if (newState !== curState) {
-        tapToUnmuteRef.current.style.visibility = newState ? 'visible' : 'hidden';
+        theRef.current.style.visibility = newState ? 'visible' : 'hidden';
       }
-    } else if (process.env.NODE_ENV === 'development') {
-      throw new Error('[videojs.jsx] Empty video ref should not happen');
     }
   }
 
@@ -118,32 +136,44 @@ export default React.memo<Props>(function VideoJs(props: Props) {
         player.volume(1.0);
       }
     }
-    showTapToUnmute(false);
+    showTapButton(TAP.UNMUTE, false);
+  }
+
+  function retryVideoAfterFailure() {
+    if (player) {
+      setReload(Date.now());
+      showTapButton(TAP.RETRY, false);
+    }
   }
 
   function onInitialPlay() {
     if (player && (player.muted() || player.volume() === 0)) {
       // The css starts as "hidden". We make it visible here without
       // re-rendering the whole thing.
-      showTapToUnmute(true);
+      showTapButton(TAP.UNMUTE, true);
     }
+
+    showTapButton(TAP.RETRY, false);
   }
 
   function onVolumeChange() {
     if (player && !player.muted()) {
-      showTapToUnmute(false);
+      showTapButton(TAP.UNMUTE, false);
     }
   }
 
   function onError() {
-    showTapToUnmute(false);
+    showTapButton(TAP.UNMUTE, false);
+    showTapButton(TAP.RETRY, true);
+
     if (player && player.loadingSpinner) {
       player.loadingSpinner.hide();
     }
   }
 
   function onEnded() {
-    showTapToUnmute(false);
+    showTapButton(TAP.UNMUTE, false);
+    showTapButton(TAP.RETRY, false);
   }
 
   function handleKeyDown(e: KeyboardEvent) {
@@ -225,9 +255,9 @@ export default React.memo<Props>(function VideoJs(props: Props) {
   });
 
   return (
-    // $FlowFixMe
-    <div className={classnames('video-js-parent', { 'video-js-parent--ios': IS_IOS })} ref={containerRef}>
-      {
+    reload && (
+      // $FlowFixMe
+      <div className={classnames('video-js-parent', { 'video-js-parent--ios': IS_IOS })} ref={containerRef}>
         <Button
           label={__('Tap to unmute')}
           button="link"
@@ -236,7 +266,15 @@ export default React.memo<Props>(function VideoJs(props: Props) {
           onClick={unmuteAndHideHint}
           ref={tapToUnmuteRef}
         />
-      }
-    </div>
+        <Button
+          label={__('Retry')}
+          button="link"
+          icon={ICONS.REFRESH}
+          className="video-js--tap-to-unmute"
+          onClick={retryVideoAfterFailure}
+          ref={tapToRetryRef}
+        />
+      </div>
+    )
   );
 });
