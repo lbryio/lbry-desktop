@@ -21,6 +21,7 @@ export type Player = {
   currentTime: (?number) => number,
   ended: () => boolean,
   error: () => any,
+  loadingSpinner: any,
 };
 
 type Props = {
@@ -136,6 +137,9 @@ export default React.memo<Props>(function VideoJs(props: Props) {
 
   function onError() {
     showTapToUnmute(false);
+    if (player && player.loadingSpinner) {
+      player.loadingSpinner.hide();
+    }
   }
 
   function onEnded() {
