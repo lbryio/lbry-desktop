@@ -102,30 +102,38 @@ export default React.memo<Props>(function VideoJs(props: Props) {
   const tapToRetryRef = useRef();
 
   const TAP = {
+    NONE: 'NONE',
     UNMUTE: 'UNMUTE',
     RETRY: 'RETRY',
   };
 
-  function showTapButton(tapButton, newState) {
-    let theRef;
+  function showTapButton(tapButton) {
+    const setButtonVisibility = (theRef, newState) => {
+      // Use the DOM to control the state of the button to prevent re-renders.
+      if (theRef.current) {
+        const curState = theRef.current.style.visibility === 'visible';
+        if (newState !== curState) {
+          theRef.current.style.visibility = newState ? 'visible' : 'hidden';
+        }
+      }
+    };
+
     switch (tapButton) {
+      case TAP.NONE:
+        setButtonVisibility(tapToUnmuteRef, false);
+        setButtonVisibility(tapToRetryRef, false);
+        break;
       case TAP.UNMUTE:
-        theRef = tapToUnmuteRef;
+        setButtonVisibility(tapToUnmuteRef, true);
+        setButtonVisibility(tapToRetryRef, false);
         break;
       case TAP.RETRY:
-        theRef = tapToRetryRef;
+        setButtonVisibility(tapToUnmuteRef, false);
+        setButtonVisibility(tapToRetryRef, true);
         break;
       default:
         if (isDev) throw new Error('showTapButton: unexpected ref');
-        return;
-    }
-
-    // Use the DOM to control the state of the button to prevent re-renders.
-    if (theRef.current) {
-      const curState = theRef.current.style.visibility === 'visible';
-      if (newState !== curState) {
-        theRef.current.style.visibility = newState ? 'visible' : 'hidden';
-      }
+        break;
     }
   }
 
@@ -136,13 +144,13 @@ export default React.memo<Props>(function VideoJs(props: Props) {
         player.volume(1.0);
       }
     }
-    showTapButton(TAP.UNMUTE, false);
+    showTapButton(TAP.NONE);
   }
 
   function retryVideoAfterFailure() {
     if (player) {
       setReload(Date.now());
-      showTapButton(TAP.RETRY, false);
+      showTapButton(TAP.NONE);
     }
   }
 
@@ -150,21 +158,18 @@ export default React.memo<Props>(function VideoJs(props: Props) {
     if (player && (player.muted() || player.volume() === 0)) {
       // The css starts as "hidden". We make it visible here without
       // re-rendering the whole thing.
-      showTapButton(TAP.UNMUTE, true);
+      showTapButton(TAP.UNMUTE);
     }
-
-    showTapButton(TAP.RETRY, false);
   }
 
   function onVolumeChange() {
     if (player && !player.muted()) {
-      showTapButton(TAP.UNMUTE, false);
+      showTapButton(TAP.NONE);
     }
   }
 
   function onError() {
-    showTapButton(TAP.UNMUTE, false);
-    showTapButton(TAP.RETRY, true);
+    showTapButton(TAP.RETRY);
 
     if (player && player.loadingSpinner) {
       player.loadingSpinner.hide();
@@ -172,8 +177,7 @@ export default React.memo<Props>(function VideoJs(props: Props) {
   }
 
   function onEnded() {
-    showTapButton(TAP.UNMUTE, false);
-    showTapButton(TAP.RETRY, false);
+    showTapButton(TAP.NONE);
   }
 
   function handleKeyDown(e: KeyboardEvent) {
