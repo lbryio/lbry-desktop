@@ -7,9 +7,9 @@ import {
   makeSelectTitleForUri,
   doFileGet,
   makeSelectChannelForClaimUri,
-  selectBlockedChannels,
   makeSelectClaimIsNsfw,
 } from 'lbry-redux';
+import { selectBlockedChannels } from 'redux/selectors/blocked';
 import { selectBlackListedOutpoints, selectFilteredOutpoints } from 'lbryinc';
 import { selectShowMatureContent } from 'redux/selectors/settings';
 import ClaimPreviewTile from './view';
@@ -32,7 +32,4 @@ const perform = dispatch => ({
   getFile: uri => dispatch(doFileGet(uri, false)),
 });
 
-export default connect(
-  select,
-  perform
-)(ClaimPreviewTile);
+export default connect(select, perform)(ClaimPreviewTile);
