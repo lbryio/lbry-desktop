@@ -63,6 +63,12 @@
   margin-top: 19px;
 }
 
+.menu__list--comments {
+  @extend .menu__list;
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius);
+}
+
 .menu__link {
   display: flex;
   align-items: center;
