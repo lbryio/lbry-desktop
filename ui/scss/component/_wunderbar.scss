@@ -29,7 +29,7 @@
   }
 
   @media (max-width: $breakpoint-small) {
-    display: none;
+    margin: var(--spacing-xxs) 0;
   }
 }
 
@@ -57,6 +57,14 @@
 
   &:focus {
     border-radius: var(--border-radius);
+  }
+}
+
+.wunderbar__input--inline {
+  @extend .wunderbar__input;
+  @media (max-width: $breakpoint-small) {
+    position: absolute;
+    top: 0;
   }
 }
 

@@ -85,7 +85,7 @@ function FileListDownloaded(props: Props) {
           <Form onSubmit={() => {}} className="wunderbar--inline">
             <Icon icon={ICONS.SEARCH} />
             <FormField
-              className="wunderbar__input"
+              className="wunderbar__input--inline"
               onChange={handleInputChange}
               value={query}
               type="text"
