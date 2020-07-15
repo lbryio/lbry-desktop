@@ -32,6 +32,7 @@ type Props = {
   commentIsMine: boolean, // if this comment was signed by an owned channel
   updateComment: (string, string) => void,
   deleteComment: string => void,
+  blockChannel: string => void,
 };
 
 const LENGTH_TO_COLLAPSE = 300;
@@ -54,6 +55,7 @@ function Comment(props: Props) {
     parentId,
     updateComment,
     deleteComment,
+    blockChannel,
   } = props;
 
   const [isEditing, setEditing] = useState(false);
@@ -98,10 +100,6 @@ function Comment(props: Props) {
     }
   }, [isResolvingUri, shouldFetch, author, authorUri, resolveUri, editedMessage, isEditing, setEditing]);
 
-  function handleSetEditing() {
-    setEditing(true);
-  }
-
   function handleEditMessageChanged(event) {
     setCommentValue(advancedEditor ? event : event.target.value);
   }
@@ -112,31 +110,11 @@ function Comment(props: Props) {
     setReplying(false);
   }
 
-  function handleDeleteComment() {
-    deleteComment(commentId);
-  }
-
-  function handleReply() {
-    setReplying(true);
-  }
-
-  function handleMouseOver() {
-    setMouseHover(true);
-  }
-
-  function handleMouseOut() {
-    setMouseHover(false);
-  }
-
-  function toggleEditorMode() {
-    setAdvancedEditor(!advancedEditor);
-  }
-
   return (
     <li
       className={classnames('comment', { comment__reply: parentId !== null })}
-      onMouseOver={handleMouseOver}
-      onMouseOut={handleMouseOut}
+      onMouseOver={() => setMouseHover(true)}
+      onMouseOut={() => setMouseHover(false)}
     >
       <div className="comment__author-thumbnail">
         {authorUri ? <ChannelThumbnail uri={authorUri} obscure={channelIsBlocked} small /> : <ChannelThumbnail small />}
@@ -159,31 +137,31 @@ function Comment(props: Props) {
             </time>
           </div>
           <div className="comment__menu">
-            {commentIsMine && (
-              <Menu>
-                <MenuButton>
-                  <Icon
-                    size={18}
-                    className={mouseIsHovering ? 'comment__menu-icon--hovering' : 'comment__menu-icon'}
-                    icon={ICONS.MORE_VERTICAL}
-                  />
-                </MenuButton>
-                <MenuList className="comment__menu-list">
-                  {commentIsMine ? (
-                    <React.Fragment>
-                      <MenuItem className="comment__menu-option" onSelect={handleSetEditing}>
-                        {__('Edit')}
-                      </MenuItem>
-                      <MenuItem className="comment__menu-option" onSelect={handleDeleteComment}>
-                        {__('Delete')}
-                      </MenuItem>
-                    </React.Fragment>
-                  ) : (
-                    ''
-                  )}
-                </MenuList>
-              </Menu>
-            )}
+            <Menu>
+              <MenuButton>
+                <Icon
+                  size={18}
+                  className={mouseIsHovering ? 'comment__menu-icon--hovering' : 'comment__menu-icon'}
+                  icon={ICONS.MORE_VERTICAL}
+                />
+              </MenuButton>
+              <MenuList className="menu__list--comments">
+                {commentIsMine ? (
+                  <>
+                    <MenuItem className="comment__menu-option" onSelect={() => setEditing(true)}>
+                      {__('Edit')}
+                    </MenuItem>
+                    <MenuItem className="comment__menu-option" onSelect={() => deleteComment(commentId)}>
+                      {__('Delete')}
+                    </MenuItem>
+                  </>
+                ) : (
+                  <MenuItem className="comment__menu-option" onSelect={() => blockChannel(authorUri)}>
+                    {__('Block Channel')}
+                  </MenuItem>
+                )}
+              </MenuList>
+            </Menu>
           </div>
         </div>
         <div>
@@ -196,7 +174,7 @@ function Comment(props: Props) {
                 charCount={charCount}
                 onChange={handleEditMessageChanged}
                 quickActionLabel={advancedEditor ? __('Simple Editor') : __('Advanced Editor')}
-                quickActionHandler={toggleEditorMode}
+                quickActionHandler={() => setAdvancedEditor(!advancedEditor)}
                 textAreaMaxLength={FF_MAX_CHARS_IN_COMMENT}
               />
               <div className="section__actions">
@@ -227,7 +205,7 @@ function Comment(props: Props) {
             button="link"
             requiresAuth={IS_WEB}
             className="comment__reply-button"
-            onClick={handleReply}
+            onClick={() => setReplying(true)}
             label={__('Reply')}
           />
         )}
