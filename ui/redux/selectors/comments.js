@@ -1,5 +1,6 @@
 // @flow
 import { createSelector } from 'reselect';
+import { selectBlockedChannels } from 'redux/selectors/blocked';
 
 const selectState = state => state.comments || {};
 
@@ -45,10 +46,16 @@ export const selectCommentsByUri = createSelector(selectState, state => {
 });
 
 export const makeSelectCommentsForUri = (uri: string) =>
-  createSelector(selectCommentsByClaimId, selectCommentsByUri, (byClaimId, byUri) => {
-    const claimId = byUri[uri];
-    return byClaimId && byClaimId[claimId];
-  });
+  createSelector(
+    selectCommentsByClaimId,
+    selectCommentsByUri,
+    selectBlockedChannels,
+    (byClaimId, byUri, blockedChannels) => {
+      const claimId = byUri[uri];
+      const comments = byClaimId && byClaimId[claimId];
+      return comments ? comments.filter(comment => !blockedChannels.includes(comment.channel_url)) : [];
+    }
+  );
 
 // todo: allow SDK to retrieve user comments through comment_list
 // todo: implement selectors for selecting comments owned by user
