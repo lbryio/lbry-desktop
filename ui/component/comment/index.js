@@ -5,10 +5,10 @@ import {
   makeSelectClaimForUri,
   makeSelectThumbnailForUri,
   makeSelectIsUriResolving,
-  selectChannelIsBlocked,
   doCommentUpdate, // doEditComment would be a more fitting name
   doCommentAbandon,
 } from 'lbry-redux';
+import { selectChannelIsBlocked } from 'redux/selectors/blocked';
 import Comment from './view';
 
 const select = (state, props) => ({
