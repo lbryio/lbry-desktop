@@ -36,7 +36,7 @@ export default function YoutubeBadge(props: Props) {
   if (isVerified) {
     const str =
       includeSyncDate && lastYtSyncDate
-        ? __('Official YouTube Creator - Last updated %time_ago%', { time_ago: DateTime.getTimeAgoStr(lastYtSyncDate) })
+        ? __('Official YouTube Creator - Last checked %time_ago%', { time_ago: DateTime.getTimeAgoStr(lastYtSyncDate) })
         : __('Official YouTube Creator');
     return (
       <div className="media__uri--right">
