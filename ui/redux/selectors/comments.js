@@ -1,6 +1,8 @@
 // @flow
 import { createSelector } from 'reselect';
 import { selectBlockedChannels } from 'redux/selectors/blocked';
+import { selectBlackListedOutpoints } from 'lbryinc';
+import { selectClaimsById } from 'lbry-redux';
 
 const selectState = state => state.comments || {};
 
@@ -49,13 +51,37 @@ export const makeSelectCommentsForUri = (uri: string) =>
   createSelector(
     selectCommentsByClaimId,
     selectCommentsByUri,
+    selectClaimsById,
     selectBlockedChannels,
-    (byClaimId, byUri, blockedChannels) => {
+    selectBlackListedOutpoints,
+    (byClaimId, byUri, claimsById, blockedChannels, blacklistedOutpoints) => {
       const claimId = byUri[uri];
       const comments = byClaimId && byClaimId[claimId];
-      return comments ? comments.filter(comment => !blockedChannels.includes(comment.channel_url)) : [];
+      const outpointMap = blacklistedOutpoints
+        ? blacklistedOutpoints.reduce((acc, val) => {
+            const outpoint = `${val.txid}:${val.nout}`;
+            return {
+              ...acc,
+              [outpoint]: 1,
+            };
+          }, {})
+        : {};
+
+      return comments
+        ? comments.filter(comment => {
+            const channelClaim = claimsById[comment.channel_id];
+
+            // Return comment if `channelClaim` doesn't exist so the component knows to resolve the author
+            if (channelClaim) {
+              const outpoint = `${channelClaim.txid}:${channelClaim.nout}`;
+              if (outpointMap[outpoint]) {
+                return false;
+              }
+            }
+
+            console.log('?');
+            return !blockedChannels.includes(comment.channel_url);
+          })
+        : [];
     }
   );
-
-// todo: allow SDK to retrieve user comments through comment_list
-// todo: implement selectors for selecting comments owned by user
