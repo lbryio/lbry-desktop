@@ -21,7 +21,7 @@ export default function EmbedTextArea(props: Props) {
   const input = useRef();
 
   const streamUrl = generateEmbedUrl(name, claimId, includeStartTime, startTime);
-  let embedText = `<iframe width="560" height="315" src="${streamUrl}" allowfullscreen></iframe>`;
+  let embedText = `<iframe id="lbry-iframe" width="560" height="315" src="${streamUrl}" allowfullscreen></iframe>`;
 
   function copyToClipboard() {
     const topRef = input.current;
