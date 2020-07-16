@@ -49,6 +49,13 @@
   right: 0;
 }
 
+.media__uri--right--yt-badge {
+  @extend .media__uri--right;
+  @media (max-width: $breakpoint-small) {
+    display: none;
+  }
+}
+
 //  M E D I A
 //  S U B T I T L E
 
