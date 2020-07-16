@@ -5,9 +5,8 @@ import {
   makeSelectClaimForUri,
   makeSelectThumbnailForUri,
   makeSelectIsUriResolving,
-  doCommentUpdate, // doEditComment would be a more fitting name
-  doCommentAbandon,
 } from 'lbry-redux';
+import { doCommentAbandon, doCommentUpdate } from 'redux/actions/comments';
 import { selectChannelIsBlocked } from 'redux/selectors/blocked';
 import Comment from './view';
 
