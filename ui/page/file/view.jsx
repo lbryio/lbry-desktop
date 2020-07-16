@@ -140,13 +140,8 @@ class FilePage extends React.Component<Props> {
         </div>
         <div className="section columns">
           <div className="card-stack">
-            <FileDescription uri={uri} />
-
-            <FileValues uri={uri} />
-
-            <FileDetails uri={uri} />
-
             <Card
+              defaultExpand
               title={__('Leave a Comment')}
               actions={
                 <div>
@@ -157,6 +152,11 @@ class FilePage extends React.Component<Props> {
                 </div>
               }
             />
+            <FileDescription uri={uri} />
+
+            <FileValues uri={uri} />
+
+            <FileDetails uri={uri} />
           </div>
           <WaitUntilOnPage>
             <RecommendedContent uri={uri} />

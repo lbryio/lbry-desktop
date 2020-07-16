@@ -28,8 +28,11 @@ const defaultState = {
 
     // UI
     [SETTINGS.LANGUAGE]: settingLanguage.find(language => SUPPORTED_LANGUAGES[language]),
-    [SETTINGS.THEME]: __('light'),
-    [SETTINGS.THEMES]: [__('light'), __('dark')],
+    [SETTINGS.THEME]: __('odysee'),
+    [SETTINGS.THEMES]: [
+      __('odysee'),
+      //  __('light'), __('dark')
+    ],
     [SETTINGS.HIDE_SPLASH_ANIMATION]: false,
     [SETTINGS.HIDE_BALANCE]: false,
     [SETTINGS.OS_NOTIFICATIONS_ENABLED]: true,

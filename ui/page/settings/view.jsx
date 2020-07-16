@@ -559,69 +559,70 @@ class SettingsPage extends React.PureComponent<Props, State> {
               }
             />
             {/* @endif */}
-
-            <Card
-              title={__('Appearance')}
-              actions={
-                <React.Fragment>
-                  <fieldset-section>
-                    <FormField
-                      name="theme_select"
-                      type="select"
-                      label={__('Theme')}
-                      onChange={this.onThemeChange}
-                      value={currentTheme}
-                      disabled={automaticDarkModeEnabled}
-                    >
-                      {themes.map(theme => (
-                        <option key={theme} value={theme}>
-                          {theme === 'light' ? __('Light') : __('Dark')}
-                        </option>
-                      ))}
-                    </FormField>
-                  </fieldset-section>
-                  <fieldset-section>
-                    <FormField
-                      type="checkbox"
-                      name="automatic_dark_mode"
-                      onChange={() => this.onAutomaticDarkModeChange(!automaticDarkModeEnabled)}
-                      checked={automaticDarkModeEnabled}
-                      label={__('Automatic dark mode')}
-                    />
-                    {automaticDarkModeEnabled && (
-                      <fieldset-group class="fieldset-group--smushed">
-                        <FormField
-                          type="select"
-                          name="automatic_dark_mode_range"
-                          onChange={value => this.onChangeTime(value, { fromTo: 'from', time: 'hour' })}
-                          value={darkModeTimes.from.hour}
-                          label={__('From')}
-                        >
-                          {startHours.map(time => (
-                            <option key={time} value={time}>
-                              {this.to12Hour(time)}
-                            </option>
-                          ))}
-                        </FormField>
-                        <FormField
-                          type="select"
-                          name="automatic_dark_mode_range"
-                          label={__('To')}
-                          onChange={value => this.onChangeTime(value, { fromTo: 'to', time: 'hour' })}
-                          value={darkModeTimes.to.hour}
-                        >
-                          {endHours.map(time => (
-                            <option key={time} value={time}>
-                              {this.to12Hour(time)}
-                            </option>
-                          ))}
-                        </FormField>
-                      </fieldset-group>
-                    )}
-                  </fieldset-section>
-                </React.Fragment>
-              }
-            />
+            {false && (
+              <Card
+                title={__('Appearance')}
+                actions={
+                  <React.Fragment>
+                    <fieldset-section>
+                      <FormField
+                        name="theme_select"
+                        type="select"
+                        label={__('Theme')}
+                        onChange={this.onThemeChange}
+                        value={currentTheme}
+                        disabled={automaticDarkModeEnabled}
+                      >
+                        {themes.map(theme => (
+                          <option key={theme} value={theme}>
+                            {theme === 'light' ? __('Light') : __('Dark')}
+                          </option>
+                        ))}
+                      </FormField>
+                    </fieldset-section>
+                    <fieldset-section>
+                      <FormField
+                        type="checkbox"
+                        name="automatic_dark_mode"
+                        onChange={() => this.onAutomaticDarkModeChange(!automaticDarkModeEnabled)}
+                        checked={automaticDarkModeEnabled}
+                        label={__('Automatic dark mode')}
+                      />
+                      {automaticDarkModeEnabled && (
+                        <fieldset-group class="fieldset-group--smushed">
+                          <FormField
+                            type="select"
+                            name="automatic_dark_mode_range"
+                            onChange={value => this.onChangeTime(value, { fromTo: 'from', time: 'hour' })}
+                            value={darkModeTimes.from.hour}
+                            label={__('From')}
+                          >
+                            {startHours.map(time => (
+                              <option key={time} value={time}>
+                                {this.to12Hour(time)}
+                              </option>
+                            ))}
+                          </FormField>
+                          <FormField
+                            type="select"
+                            name="automatic_dark_mode_range"
+                            label={__('To')}
+                            onChange={value => this.onChangeTime(value, { fromTo: 'to', time: 'hour' })}
+                            value={darkModeTimes.to.hour}
+                          >
+                            {endHours.map(time => (
+                              <option key={time} value={time}>
+                                {this.to12Hour(time)}
+                              </option>
+                            ))}
+                          </FormField>
+                        </fieldset-group>
+                      )}
+                    </fieldset-section>
+                  </React.Fragment>
+                }
+              />
+            )}
 
             {(isAuthenticated || !IS_WEB) && (
               <Card

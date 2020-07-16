@@ -7,7 +7,6 @@ const CopyWebpackPlugin = require('copy-webpack-plugin');
 const { DefinePlugin, ProvidePlugin } = require('webpack');
 const SentryWebpackPlugin = require('@sentry/webpack-plugin');
 const { insertToHead, buildBasicOgMetadata } = require('./src/html');
-
 const CUSTOM_ROOT = path.resolve(__dirname, '../custom/');
 const STATIC_ROOT = path.resolve(__dirname, '../static/');
 const UI_ROOT = path.resolve(__dirname, '../ui/');

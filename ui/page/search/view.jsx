@@ -73,7 +73,7 @@ export default function SearchPage(props: Props) {
   return (
     <Page>
       <section className="search">
-        {urlQuery && (
+        {urlQuery && false && (
           <Fragment>
             <header className="search__header">
               <div className="claim-preview__actions--header">

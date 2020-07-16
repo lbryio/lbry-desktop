@@ -58,7 +58,7 @@ function HomePage(props: Props) {
           </p>
         </div>
       )}
-      {rowData.map(({ title, link, help, options = {} }) => (
+      {rowData.map(({ title, link, help, options = {}, hideRepostLabel }) => (
         <div key={title} className="claim-grid__wrapper">
           <h1 className="section__actions">
             {link ? (
@@ -75,7 +75,7 @@ function HomePage(props: Props) {
             {help}
           </h1>
 
-          <ClaimTilesDiscover {...options} />
+          <ClaimTilesDiscover {...options} hideRepostLabel={hideRepostLabel} />
         </div>
       ))}
     </Page>

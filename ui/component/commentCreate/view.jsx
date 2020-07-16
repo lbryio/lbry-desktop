@@ -39,7 +39,7 @@ export function CommentCreate(props: Props) {
   const [commentAck, setCommentAck] = usePersistedState('comment-acknowledge', false);
   const [channel, setChannel] = usePersistedState('comment-channel', '');
   const [charCount, setCharCount] = useState(commentValue.length);
-  const [advancedEditor, setAdvancedEditor] = usePersistedState('comment-editor-mode', false);
+  //   const [advancedEditor, setAdvancedEditor] = usePersistedState('comment-editor-mode', false);
 
   const topChannel =
     channels &&
@@ -58,11 +58,12 @@ export function CommentCreate(props: Props) {
 
   function handleCommentChange(event) {
     let commentValue;
-    if (isReply) {
-      commentValue = event.target.value;
-    } else {
-      commentValue = advancedEditor ? event : event.target.value;
-    }
+    commentValue = event.target.value;
+    // if (isReply) {
+    //   commentValue = event.target.value;
+    // } else {
+    //   commentValue = advancedEditor ? event : event.target.value;
+    // }
 
     setCommentValue(commentValue);
   }
@@ -91,9 +92,9 @@ export function CommentCreate(props: Props) {
     }
   }
 
-  function toggleEditorMode() {
-    setAdvancedEditor(!advancedEditor);
-  }
+  //   function toggleEditorMode() {
+  //     setAdvancedEditor(!advancedEditor);
+  //   }
 
   useEffect(() => setCharCount(commentValue.length), [commentValue]);
 
@@ -110,11 +111,12 @@ export function CommentCreate(props: Props) {
       {!isReply && <ChannelSelection channel={channel} hideAnon onChannelChange={handleChannelChange} />}
       <FormField
         disabled={channel === CHANNEL_NEW}
-        type={advancedEditor && !isReply ? 'markdown' : 'textarea'}
+        // type={advancedEditor && !isReply ? 'markdown' : 'textarea'}
+        type="textarea"
         name={isReply ? 'content_reply' : 'content_description'}
         label={isReply ? __('Replying as %reply_channel%', { reply_channel: channel }) : __('Comment')}
-        quickActionLabel={isReply ? undefined : advancedEditor ? __('Simple Editor') : __('Advanced Editor')}
-        quickActionHandler={isReply ? undefined : toggleEditorMode}
+        // quickActionLabel={isReply ? undefined : advancedEditor ? __('Simple Editor') : __('Advanced Editor')}
+        // quickActionHandler={isReply ? undefined : toggleEditorMode}
         onFocus={onTextareaFocus}
         placeholder={__('Say something about this...')}
         value={commentValue}

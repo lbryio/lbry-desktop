@@ -135,8 +135,8 @@ svg + .button__label,
 }
 
 .button-toggle--active {
-  color: var(--color-primary);
-  background-color: var(--color-primary-alt);
+  color: var(--color-button-toggle-text);
+  background-color: var(--color-button-toggle-bg);
 
   svg {
     opacity: 1;
@@ -145,7 +145,7 @@ svg + .button__label,
   &:hover {
     cursor: default;
     text-decoration: none;
-    background-color: var(--color-primary-alt);
+    background-color: var(--color-button-toggle-bg-hover);
   }
 }
 

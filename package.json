@@ -26,7 +26,7 @@
     "copyenv": "cp ./.env* web/",
     "dev": "yarn dev:electron",
     "dev:electron": "cross-env NODE_ENV=development node ./electron/devServer.js",
-    "dev:web": "cd web && yarn dev",
+    "dev:web": "yarn copyenv &&  cd web && yarn dev",
     "dev:web-server": "cross-env NODE_ENV=development yarn compile:web && concurrently \"cross-env NODE_ENV=development yarn compile:web --watch\" \"cd web && yarn dev:server\"",
     "dev:internal-apis": "LBRY_API_URL='http://localhost:8080' yarn dev:electron",
     "dev:iatv": "LBRY_API_URL='http://localhost:15400' SDK_API_URL='http://localhost:15100' yarn dev:web",

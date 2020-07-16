@@ -138,11 +138,16 @@
 
 .header__navigation-item--lbry {
   font-weight: var(--font-weight-bold);
-  margin-right: var(--spacing-m);
+  margin-right: calc(var(--spacing-xl) * 2);
 
   .lbry-icon {
     height: 2rem;
     width: 2rem;
+    stroke: transparent;
+  }
+
+  @media (max-width: $breakpoint-small) {
+    margin-right: var(--spacing-m);
   }
 }
 

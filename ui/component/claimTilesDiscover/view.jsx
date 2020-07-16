@@ -25,6 +25,7 @@ type Props = {
   claimType?: Array<string>,
   timestamp?: string,
   feeAmount?: string,
+  hideRepostLabel: boolean,
 };
 
 function ClaimTilesDiscover(props: Props) {
@@ -45,6 +46,7 @@ function ClaimTilesDiscover(props: Props) {
     prefixUris,
     timestamp,
     feeAmount,
+    hideRepostLabel = false,
   } = props;
   const { location } = useHistory();
   const urlParams = new URLSearchParams(location.search);
@@ -122,7 +124,7 @@ function ClaimTilesDiscover(props: Props) {
   return (
     <ul className="claim-grid">
       {uris && uris.length
-        ? uris.map(uri => <ClaimPreviewTile key={uri} uri={uri} />)
+        ? uris.map(uri => <ClaimPreviewTile key={uri} uri={uri} hideRepostLabel={hideRepostLabel} />)
         : new Array(pageSize).fill(1).map((x, i) => <ClaimPreviewTile key={i} placeholder />)}
     </ul>
   );

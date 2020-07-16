@@ -85,7 +85,7 @@ function SideNavigation(props: Props) {
     }
   }, [setPulseLibrary, purchaseSuccess, doClearPurchasedUriSuccess]);
 
-  function buildLink(path, label, icon, onClick, requiresAuth = false,  isLiteral = false) {
+  function buildLink(path, label, icon, onClick, requiresAuth = false, isLiteral = false) {
     return {
       navigate: !isLiteral ? `$/${path}` : `${path}`,
       label,
@@ -163,7 +163,7 @@ function SideNavigation(props: Props) {
                     className={classnames('navigation-link', {
                       'navigation-link--pulse': linkProps.icon === ICONS.LIBRARY && pulseLibrary,
                     })}
-                    activeClass="navigation-link--active"
+                    activeClass={window.location.pathname.includes(linkProps.navigate) ? 'navigation-link--active' : ''}
                   />
                 </li>
               )
