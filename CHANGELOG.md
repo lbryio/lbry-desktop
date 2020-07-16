@@ -18,6 +18,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 - Fix 'transcoding' checkbox state when switching file types _community pr!_ ([#4529](https://github.com/lbryio/lbry-desktop/pull/4529))
 - Fix channel file-search not available in mobile _community pr!_ ([#4527](https://github.com/lbryio/lbry-desktop/pull/4527))
+- New Channel: Fix incorrect GUI configuration at entry _community pr!_ ([#4545](https://github.com/lbryio/lbry-desktop/pull/4545))
 
 ## [0.47.0] - [2020-07-13]
 

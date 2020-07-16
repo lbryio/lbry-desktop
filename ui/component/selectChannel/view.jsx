@@ -28,7 +28,7 @@ class ChannelSelection extends React.PureComponent<Props, State> {
     super(props);
 
     this.state = {
-      addingChannel: false,
+      addingChannel: props.channel === CHANNEL_NEW,
     };
 
     (this: any).handleChannelChange = this.handleChannelChange.bind(this);
@@ -77,7 +77,7 @@ class ChannelSelection extends React.PureComponent<Props, State> {
   }
 
   render() {
-    const channel = this.state.addingChannel ? 'new' : this.props.channel;
+    const channel = this.state.addingChannel ? CHANNEL_NEW : this.props.channel;
     const { fetchingChannels, channels = [], hideAnon, hideNew, label, injected = [] } = this.props;
     const { addingChannel } = this.state;
 
