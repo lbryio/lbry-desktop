@@ -3,7 +3,7 @@ import * as SETTINGS from 'constants/settings';
 import { createSelector } from 'reselect';
 import { selectBlockedChannels } from 'redux/selectors/blocked';
 import { makeSelectClientSetting } from 'redux/selectors/settings';
-import { selectBlackListedOutpoints } from 'lbryinc';
+import { selectBlackListedOutpoints, selectFilteredOutpoints } from 'lbryinc';
 import { selectClaimsById, isClaimNsfw, selectMyActiveClaims } from 'lbry-redux';
 
 const selectState = state => state.comments || {};
@@ -57,12 +57,31 @@ export const makeSelectCommentsForUri = (uri: string) =>
     selectMyActiveClaims,
     selectBlockedChannels,
     selectBlackListedOutpoints,
+    selectFilteredOutpoints,
     makeSelectClientSetting(SETTINGS.SHOW_MATURE),
-    (byClaimId, byUri, claimsById, myClaims, blockedChannels, blacklistedOutpoints, showMatureContent) => {
+    (
+      byClaimId,
+      byUri,
+      claimsById,
+      myClaims,
+      blockedChannels,
+      blacklistedOutpoints,
+      filteredOutpoints,
+      showMatureContent
+    ) => {
       const claimId = byUri[uri];
       const comments = byClaimId && byClaimId[claimId];
-      const outpointMap = blacklistedOutpoints
+      const blacklistedMap = blacklistedOutpoints
         ? blacklistedOutpoints.reduce((acc, val) => {
+            const outpoint = `${val.txid}:${val.nout}`;
+            return {
+              ...acc,
+              [outpoint]: 1,
+            };
+          }, {})
+        : {};
+      const filteredMap = filteredOutpoints
+        ? filteredOutpoints.reduce((acc, val) => {
             const outpoint = `${val.txid}:${val.nout}`;
             return {
               ...acc,
@@ -77,7 +96,7 @@ export const makeSelectCommentsForUri = (uri: string) =>
 
             // Return comment if `channelClaim` doesn't exist so the component knows to resolve the author
             if (channelClaim) {
-              if (myClaims && myClaims.length) {
+              if (myClaims && myClaims.size > 0) {
                 const claimIsMine = channelClaim.is_my_output || myClaims.has(channelClaim.claim_id);
                 if (claimIsMine) {
                   return true;
@@ -85,7 +104,7 @@ export const makeSelectCommentsForUri = (uri: string) =>
               }
 
               const outpoint = `${channelClaim.txid}:${channelClaim.nout}`;
-              if (outpointMap[outpoint]) {
+              if (blacklistedMap[outpoint] || filteredMap[outpoint]) {
                 return false;
               }
 
