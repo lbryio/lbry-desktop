@@ -32,6 +32,8 @@ type Props = {
   channelUri: string,
   renderMode: string,
   markSubscriptionRead: (string, string) => void,
+  obscureNsfw: boolean,
+  isMature: boolean,
 };
 
 class FilePage extends React.Component<Props> {
@@ -130,8 +132,22 @@ class FilePage extends React.Component<Props> {
     );
   }
 
+  renderBlockedPage() {
+    const { uri } = this.props;
+    return (
+      <Page>
+        <ClaimUri uri={uri} />
+        <FileTitle uri={uri} isNsfwBlocked />
+      </Page>
+    );
+  }
+
   render() {
-    const { uri, renderMode, costInfo } = this.props;
+    const { uri, renderMode, costInfo, obscureNsfw, isMature } = this.props;
+
+    if (obscureNsfw && isMature) {
+      return this.renderBlockedPage();
+    }
 
     return (
       <Page className="file-page">
@@ -141,11 +157,8 @@ class FilePage extends React.Component<Props> {
         <div className="section columns">
           <div className="card-stack">
             <FileDescription uri={uri} />
-
             <FileValues uri={uri} />
-
             <FileDetails uri={uri} />
-
             <Card
               title={__('Leave a Comment')}
               actions={

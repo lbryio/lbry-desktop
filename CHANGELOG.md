@@ -12,6 +12,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Show "YT Creator" label in File Page as well _community pr!_ ([#4523](https://github.com/lbryio/lbry-desktop/pull/4523))
 - Add option to retry video stream on failure _community pr!_ ([#4541](https://github.com/lbryio/lbry-desktop/pull/4541))
 - Allow blocking channels from comments ([#4557](https://github.com/lbryio/lbry-desktop/pull/4557))
+- Block mature content when accessed directly from URL _community pr!_ ([#4560](https://github.com/lbryio/lbry-desktop/pull/4560))
 
 ### Changed
 
