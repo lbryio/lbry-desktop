@@ -141,6 +141,14 @@ class SettingsPage extends React.PureComponent<Props, State> {
     }
   }
 
+  onDone() {
+    const { syncSettings } = this.props;
+
+    if (this.props.syncEnabled) {
+      syncSettings();
+    }
+  }
+
   onFFmpegFolder(path: string) {
     this.setDaemonSetting('ffmpeg_path', path);
     this.findFFmpeg();
@@ -197,16 +205,6 @@ class SettingsPage extends React.PureComponent<Props, State> {
         this.setState({ storedPassword: false });
       },
     });
-  }
-
-  onDone() {
-    const { history, syncSettings } = this.props;
-    const { goBack } = history;
-    // if sync, dispatch sync, then goback
-    if (this.props.syncEnabled) {
-      syncSettings();
-    }
-    goBack();
   }
 
   onChangeTime(event: SyntheticInputEvent<*>, options: OptionTimes) {

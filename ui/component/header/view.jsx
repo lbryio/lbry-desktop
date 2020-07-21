@@ -30,6 +30,7 @@ type Props = {
     length: number,
     location: { pathname: string },
     push: string => void,
+    replace: string => void,
   },
   currentTheme: string,
   automaticDarkModeEnabled: boolean,
@@ -52,6 +53,7 @@ type Props = {
   openSignOutModal: () => void,
   clearEmailEntry: () => void,
   clearPasswordEntry: () => void,
+  hasNavigated: boolean,
 };
 
 const Header = (props: Props) => {
@@ -73,6 +75,7 @@ const Header = (props: Props) => {
     clearPasswordEntry,
     emailToVerify,
     backout,
+    hasNavigated,
   } = props;
   const isMobile = useIsMobile();
   // on the verify page don't let anyone escape other than by closing the tab to keep session data consistent
@@ -80,6 +83,8 @@ const Header = (props: Props) => {
   const isSignUpPage = history.location.pathname.includes(PAGES.AUTH);
   const isSignInPage = history.location.pathname.includes(PAGES.AUTH_SIGNIN);
   const isPwdResetPage = history.location.pathname.includes(PAGES.AUTH_PASSWORD_RESET);
+  const hasBackout = Boolean(backout);
+  const { backLabel, backFunction, title: backTitle, simpleTitle: simpleBackTitle } = backout || {};
 
   // Sign out if they click the "x" when they are on the password prompt
   const authHeaderAction = syncError ? { onClick: signOut } : { navigate: '/' };
@@ -106,6 +111,35 @@ const Header = (props: Props) => {
       }
     },
   };
+
+  React.useEffect(() => {
+    if (hasBackout) window.addEventListener('popstate', onBackout);
+
+    return () => {
+      if (!hasBackout) {
+        window.removeEventListener('popstate', onBackout);
+      }
+    };
+  }, [hasBackout]);
+
+  function onBackout(e) {
+    const { history } = props;
+    const { goBack, replace } = history;
+
+    window.removeEventListener('popstate', onBackout);
+
+    if (backFunction) {
+      backFunction();
+    }
+    if (e.type !== 'popstate') {
+      // if not initiated by pop
+      if (hasNavigated) {
+        goBack();
+      } else {
+        replace(`/`);
+      }
+    }
+  }
 
   function handleThemeToggle() {
     if (automaticDarkModeEnabled) {
@@ -150,19 +184,18 @@ const Header = (props: Props) => {
         {!authHeader && backout ? (
           <div className="card__actions--between">
             <Button
-              onClick={backout.backFunction}
+              onClick={onBackout}
               button="link"
-              label={(backout.backLabel && __(backout.backLabel)) || __('Cancel')}
+              label={(backLabel && __(backLabel)) || __('Cancel')}
               icon={ICONS.ARROW_LEFT}
             />
-            {backout.title && (
-              <h1 className={'card__title'}>{isMobile ? backout.simpleTitle || backout.title : backout.title}</h1>
-            )}
+            {backTitle && <h1 className={'card__title'}>{isMobile ? simpleBackTitle || backTitle : backTitle}</h1>}
             <Button
               aria-label={__('Your wallet')}
               navigate={`/$/${PAGES.WALLET}`}
               className="header__navigation-item menu__title header__navigation-item--balance"
               label={getWalletTitle()}
+              disabled
               // @if TARGET='app'
               onDoubleClick={e => {
                 e.stopPropagation();

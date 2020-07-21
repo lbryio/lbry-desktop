@@ -8,6 +8,7 @@ import { doSetClientSetting } from 'redux/actions/settings';
 import { doSignOut, doOpenModal } from 'redux/actions/app';
 import { makeSelectClientSetting } from 'redux/selectors/settings';
 import Header from './view';
+import { selectHasNavigated } from 'redux/selectors/app';
 
 const select = state => ({
   balance: selectBalance(state),
@@ -20,6 +21,7 @@ const select = state => ({
   email: selectUserEmail(state),
   syncError: selectGetSyncErrorMessage(state),
   emailToVerify: selectEmailToVerify(state),
+  hasNavigated: selectHasNavigated(state),
 });
 
 const perform = dispatch => ({

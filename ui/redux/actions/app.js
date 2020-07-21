@@ -506,6 +506,24 @@ export function doAnaltyicsPurchaseEvent(fileInfo) {
   };
 }
 
+// TODO: offer users chance to merge anon follows
+// export function doCheckAnonPrefs() {
+//   return (dispatch, getState) => {
+//     function successCb(savedPreferences) {
+//       if (savedPreferences !== null) {
+//         const { subscriptions } = (savedPreferences.value && savedPreferences.value.subscriptions) || {};
+//         console.log('subs', subscriptions);
+//         // dispatch snackbar about anon settings
+//       }
+//     }
+//
+//     function failCb() {
+//     }
+//
+//     doPreferenceGet('anon', successCb, failCb);
+//   };
+// }
+
 export function doSignIn() {
   return (dispatch, getState) => {
     const state = getState();
@@ -513,6 +531,9 @@ export function doSignIn() {
     const userId = user.id;
 
     analytics.setUser(userId);
+    // @if TARGET='app'
+    // dispatch(doCheckAnonPrefs());
+    // @endif
 
     // @if TARGET='web'
     dispatch(doBalanceSubscribe());
@@ -546,6 +567,13 @@ export function doSetWelcomeVersion(version) {
   };
 }
 
+export function doSetHasNavigated() {
+  return {
+    type: ACTIONS.SET_HAS_NAVIGATED,
+    data: true,
+  };
+}
+
 export function doToggle3PAnalytics(allowParam, doNotDispatch) {
   return (dispatch, getState) => {
     const state = getState();
@@ -565,9 +593,17 @@ export function doGetAndPopulatePreferences() {
   const { SDK_SYNC_KEYS } = SHARED_PREFERENCES;
 
   return (dispatch, getState) => {
+    const state = getState();
+    // @if TARGET='app'
+    const preferenceKey = state.user && state.user.user && state.user.user.has_verified_email ? 'shared' : 'anon';
+    // @endif
+    // @if TARGET='web'
+    const preferenceKey = 'shared';
+    // @endif
+
     function successCb(savedPreferences) {
-      const state = getState();
-      const daemonSettings = selectDaemonSettings(state);
+      const successState = getState();
+      const daemonSettings = selectDaemonSettings(successState);
 
       if (savedPreferences !== null) {
         dispatch(doPopulateSharedUserState(savedPreferences));
@@ -601,7 +637,7 @@ export function doGetAndPopulatePreferences() {
       });
     }
 
-    doPreferenceGet('shared', successCb, failCb);
+    doPreferenceGet(preferenceKey, successCb, failCb);
   };
 }
 

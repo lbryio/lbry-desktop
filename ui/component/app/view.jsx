@@ -58,6 +58,7 @@ type Props = {
     index: number,
     length: number,
     push: string => void,
+    listen: any => () => void,
   },
   fetchAccessToken: () => void,
   fetchChannelListMine: () => void,
@@ -77,6 +78,8 @@ type Props = {
   setReferrer: (string, boolean) => void,
   analyticsTagSync: () => void,
   isAuthenticated: boolean,
+  hasNavigated: boolean,
+  setHasNavigated: () => void,
 };
 
 function App(props: Props) {
@@ -102,6 +105,8 @@ function App(props: Props) {
     setReferrer,
     analyticsTagSync,
     isAuthenticated,
+    hasNavigated,
+    setHasNavigated,
   } = props;
 
   const appRef = useRef();
@@ -125,6 +130,22 @@ function App(props: Props) {
   const rawReferrerParam = urlParams.get('r');
   const sanitizedReferrerParam = rawReferrerParam && rawReferrerParam.replace(':', '#');
   const shouldHideNag = pathname.startsWith(`/$/${PAGES.EMBED}`) || pathname.startsWith(`/$/${PAGES.AUTH_VERIFY}`);
+
+  // const unlisten = history.listen((location, action) => {
+  //   console.log(action, location.pathname, location.state);
+  //   if (action === 'PUSH' && !hasNavigated) {
+  //     setHasNavigated();
+  //   }
+  // });
+
+  useEffect(() => {
+    const unlisten = history.listen((location, action) => {
+      if (action === 'PUSH' && !hasNavigated) {
+        setHasNavigated();
+      }
+    });
+    return unlisten();
+  }, []);
 
   let uri;
   try {

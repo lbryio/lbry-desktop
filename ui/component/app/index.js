@@ -6,7 +6,7 @@ import { selectUser, selectAccessToken, selectUserVerifiedEmail } from 'redux/se
 import { selectUnclaimedRewards } from 'redux/selectors/rewards';
 import { doFetchChannelListMine, SETTINGS } from 'lbry-redux';
 import { makeSelectClientSetting, selectLoadedLanguages, selectThemePath } from 'redux/selectors/settings';
-import { selectIsUpgradeAvailable, selectAutoUpdateDownloaded } from 'redux/selectors/app';
+import { selectIsUpgradeAvailable, selectAutoUpdateDownloaded, selectHasNavigated } from 'redux/selectors/app';
 import { doSetLanguage } from 'redux/actions/settings';
 import {
   doDownloadUpgradeRequested,
@@ -14,6 +14,7 @@ import {
   doSyncWithPreferences,
   doGetAndPopulatePreferences,
   doAnalyticsTagSync,
+  doSetHasNavigated,
 } from 'redux/actions/app';
 import App from './view';
 
@@ -30,6 +31,7 @@ const select = state => ({
   uploadCount: selectUploadCount(state),
   rewards: selectUnclaimedRewards(state),
   isAuthenticated: selectUserVerifiedEmail(state),
+  hasNavigated: selectHasNavigated(state),
 });
 
 const perform = dispatch => ({
@@ -42,6 +44,7 @@ const perform = dispatch => ({
   checkSync: () => dispatch(doSyncWithPreferences()),
   updatePreferences: () => dispatch(doGetAndPopulatePreferences()),
   setReferrer: (referrer, doClaim) => dispatch(doUserSetReferrer(referrer, doClaim)),
+  setHasNavigated: () => dispatch(doSetHasNavigated()),
 });
 
 export default hot(connect(select, perform)(App));
