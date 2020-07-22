@@ -2,7 +2,14 @@ import * as ACTIONS from 'constants/action_types';
 // @if TARGET='app'
 import { shell } from 'electron';
 // @endif
-import { Lbry, batchActions, doAbandonClaim, makeSelectFileInfoForUri, makeSelectClaimForUri } from 'lbry-redux';
+import {
+  Lbry,
+  batchActions,
+  doAbandonClaim,
+  makeSelectFileInfoForUri,
+  makeSelectClaimForUri,
+  ABANDON_STATES,
+} from 'lbry-redux';
 import { doHideModal } from 'redux/actions/app';
 import { goBack } from 'connected-react-router';
 import { doSetPlayingUri } from 'redux/actions/content';
@@ -23,11 +30,11 @@ export function doOpenFileInShell(path) {
   };
 }
 
-export function doDeleteFile(outpoint, deleteFromComputer, abandonClaim) {
+export function doDeleteFile(outpoint, deleteFromComputer, abandonClaim, cb) {
   return dispatch => {
     if (abandonClaim) {
       const [txid, nout] = outpoint.split(':');
-      dispatch(doAbandonClaim(txid, Number(nout)));
+      dispatch(doAbandonClaim(txid, Number(nout), cb));
     }
 
     // @if TARGET='app'
@@ -54,8 +61,21 @@ export function doDeleteFileAndMaybeGoBack(uri, deleteFromComputer, abandonClaim
     const { nout, txid } = makeSelectClaimForUri(uri)(state);
     const claimOutpoint = `${txid}:${nout}`;
     const actions = [];
-    actions.push(doHideModal());
-    actions.push(doDeleteFile(outpoint || claimOutpoint, deleteFromComputer, abandonClaim));
+
+    if (!abandonClaim) {
+      actions.push(doHideModal());
+    }
+
+    actions.push(
+      doDeleteFile(outpoint || claimOutpoint, deleteFromComputer, abandonClaim, abandonState => {
+        if (abandonState === ABANDON_STATES.DONE) {
+          if (abandonClaim) {
+            dispatch(goBack());
+            dispatch(doHideModal());
+          }
+        }
+      })
+    );
 
     if (playingUri === uri) {
       actions.push(doSetPlayingUri(null));
@@ -64,8 +84,5 @@ export function doDeleteFileAndMaybeGoBack(uri, deleteFromComputer, abandonClaim
     // we need to alter autoplay to not start downloading again after you delete it
 
     dispatch(batchActions(...actions));
-    if (abandonClaim) {
-      dispatch(goBack());
-    }
   };
 }
