@@ -23,7 +23,6 @@ type Props = {
   floatingPlayerEnabled: boolean,
   closeFloatingPlayer: () => void,
   renderMode: string,
-  setPlayingUri: string => void,
 };
 
 export default function FileRenderFloating(props: Props) {
@@ -36,7 +35,6 @@ export default function FileRenderFloating(props: Props) {
     closeFloatingPlayer,
     floatingPlayerEnabled,
     renderMode,
-    setPlayingUri,
   } = props;
 
   const isMobile = useIsMobile();
@@ -128,28 +126,19 @@ export default function FileRenderFloating(props: Props) {
           })}
         >
           {isFloating && (
-            <div className="draggable content__floating-header">
-              <span className="media__uri--inline">{uri}</span>
-              <div className="content__actions">
-                <Tooltip label={__('View File')}>
-                  <Button
-                    navigate={uri}
-                    onClick={() => {
-                      setPlayingUri(uri);
-                    }}
-                    icon={ICONS.VIEW}
-                    button="primary"
-                  />
-                </Tooltip>
-                <Tooltip label={__('Close')}>
-                  <Button onClick={closeFloatingPlayer} icon={ICONS.REMOVE} button="primary" />
-                </Tooltip>
-              </div>
-            </div>
+            <Tooltip label={__('Close')}>
+              <Button
+                onClick={closeFloatingPlayer}
+                icon={ICONS.REMOVE}
+                button="primary"
+                className="content__floating-close"
+              />
+            </Tooltip>
           )}
 
           {isReadyToPlay ? (
             <FileRender
+              className="draggable"
               uri={uri}
               // @if TARGET='app'
               desktopPlayStartTime={desktopPlayStartTime}
@@ -161,7 +150,7 @@ export default function FileRenderFloating(props: Props) {
           {isFloating && (
             <div className="draggable content__info">
               <div className="claim-preview__title" title={title || uri}>
-                {title || uri}
+                <Button label={title || uri} navigate={uri} button="link" className="content__floating-link" />
               </div>
               <UriIndicator link addTooltip={false} uri={uri} />
             </div>
