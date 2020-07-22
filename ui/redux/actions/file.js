@@ -2,14 +2,7 @@ import * as ACTIONS from 'constants/action_types';
 // @if TARGET='app'
 import { shell } from 'electron';
 // @endif
-import {
-  Lbry,
-  batchActions,
-  doAbandonClaim,
-  selectMyClaimsOutpoints,
-  makeSelectFileInfoForUri,
-  makeSelectClaimForUri,
-} from 'lbry-redux';
+import { Lbry, batchActions, doAbandonClaim, makeSelectFileInfoForUri, makeSelectClaimForUri } from 'lbry-redux';
 import { doHideModal } from 'redux/actions/app';
 import { goBack } from 'connected-react-router';
 import { doSetPlayingUri } from 'redux/actions/content';
@@ -31,22 +24,18 @@ export function doOpenFileInShell(path) {
 }
 
 export function doDeleteFile(outpoint, deleteFromComputer, abandonClaim) {
-  return (dispatch, getState) => {
-    const state = getState();
-
-    // If the file is for a claim we published then also abandon the claim
-    const myClaimsOutpoints = selectMyClaimsOutpoints(state);
-    if (abandonClaim && myClaimsOutpoints.includes(outpoint)) {
+  return dispatch => {
+    if (abandonClaim) {
       const [txid, nout] = outpoint.split(':');
-
       dispatch(doAbandonClaim(txid, Number(nout)));
     }
+
     // @if TARGET='app'
     Lbry.file_delete({
       outpoint,
       delete_from_download_dir: deleteFromComputer,
     });
-    
+
     dispatch({
       type: ACTIONS.FILE_DELETE,
       data: {
