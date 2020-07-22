@@ -11,6 +11,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Allow zooming on Desktop _community pr!_ ([#4513](https://github.com/lbryio/lbry-desktop/pull/4513))
 - Show "YT Creator" label in File Page as well _community pr!_ ([#4523](https://github.com/lbryio/lbry-desktop/pull/4523))
 - Add option to retry video stream on failure _community pr!_ ([#4541](https://github.com/lbryio/lbry-desktop/pull/4541))
+- Allow blocking channels from comments ([#4557](https://github.com/lbryio/lbry-desktop/pull/4557))
 
 ### Changed
 
@@ -21,6 +22,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Fix 'transcoding' checkbox state when switching file types _community pr!_ ([#4529](https://github.com/lbryio/lbry-desktop/pull/4529))
 - Fix channel file-search not available in mobile _community pr!_ ([#4527](https://github.com/lbryio/lbry-desktop/pull/4527))
 - New Channel: Fix incorrect GUI configuration at entry _community pr!_ ([#4545](https://github.com/lbryio/lbry-desktop/pull/4545))
+- Hide blocked channels in comments ([#4557](https://github.com/lbryio/lbry-desktop/pull/4557))
 
 ## [0.47.0] - [2020-07-13]
 
