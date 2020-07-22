@@ -42,8 +42,7 @@ export function doClaimRewardType(rewardType, options = {}) {
       rewardType !== rewards.TYPE_REWARD_CODE &&
       rewardType !== rewards.TYPE_CONFIRM_EMAIL &&
       rewardType !== rewards.TYPE_DAILY_VIEW &&
-      rewardType !== rewards.TYPE_NEW_ANDROID &&
-      rewardType !== rewards.TYPE_PAID_CONTENT
+      rewardType !== rewards.TYPE_NEW_ANDROID
     ) {
       if (!reward || reward.transaction_id) {
         // already claimed or doesn't exist, do nothing
