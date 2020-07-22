@@ -284,6 +284,8 @@
 }
 
 .claim-grid__wrapper {
+  display: flex;
+  flex-direction: column;
   &:not(:first-of-type) {
     margin-top: var(--spacing-l);
   }
@@ -301,6 +303,11 @@
   &:not(:first-of-type) {
     margin-top: var(--spacing-xl);
   }
+}
+
+.claim-grid__title--secondary {
+  margin-left: auto;
+  margin-top: calc(var(--spacing-m) * -1);
 }
 
 .claim-grid__help {

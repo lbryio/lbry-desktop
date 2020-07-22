@@ -61,21 +61,20 @@ function HomePage(props: Props) {
       {rowData.map(({ title, link, help, options = {} }) => (
         <div key={title} className="claim-grid__wrapper">
           <h1 className="section__actions">
-            {link ? (
-              <Button
-                className="claim-grid__title"
-                button="link"
-                navigate={link}
-                iconRight={ICONS.ARROW_RIGHT}
-                label={title}
-              />
-            ) : (
-              <span className="claim-grid__title">{title}</span>
-            )}
+            <span className="claim-grid__title">{title}</span>
             {help}
           </h1>
 
           <ClaimTilesDiscover {...options} />
+          {link && (
+            <Button
+              className="claim-grid__title--secondary"
+              button="link"
+              navigate={link}
+              iconRight={ICONS.ARROW_RIGHT}
+              label={title}
+            />
+          )}
         </div>
       ))}
     </Page>
