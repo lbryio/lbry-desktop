@@ -21,8 +21,7 @@
   z-index: 9999;
 
   &:hover {
-    .content__actions,
-    .content__floating-header {
+    .content__floating-close {
       visibility: visible;
     }
   }
@@ -56,22 +55,20 @@
   }
 }
 
-.content__floating-header {
-  cursor: grab;
+.content__floating-close {
   visibility: hidden;
   position: absolute;
-  top: 0;
-  width: 100%;
-  height: 2rem;
-  display: flex;
-  justify-content: space-between;
-  line-height: 1.5rem;
-  padding: 0.25rem;
-  background-color: var(--color-background);
+  top: var(--spacing-s);
+  right: var(--spacing-s);
+  width: 3rem;
+  height: 3rem;
 }
 
-.content__actions,
-.content__floating-header {
+.content__floating-link {
+  color: var(--color-text);
+}
+
+.content__floating-close {
   z-index: 3; /*must be one higher than .file-viewer__overlay */
 }
 
