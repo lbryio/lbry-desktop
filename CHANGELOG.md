@@ -14,6 +14,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ### Changed
 
+- Updated lbry-sdk to [0.79.1](https://github.com/lbryio/lbry-sdk/releases/tag/v0.79.1)
+
 ### Fixed
 
 - Fix 'transcoding' checkbox state when switching file types _community pr!_ ([#4529](https://github.com/lbryio/lbry-desktop/pull/4529))

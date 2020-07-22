@@ -45,8 +45,6 @@ import {
 import { selectUser } from 'redux/selectors/user';
 // import { selectDaemonSettings } from 'redux/selectors/settings';
 import { doGetSync } from 'lbryinc';
-import { doClaimRewardType } from 'redux/actions/rewards';
-import REWARDS from 'rewards';
 import { doAuthenticate } from 'redux/actions/user';
 import { lbrySettings as config, version as appVersion } from 'package.json';
 import analytics, { SHARE_INTERNAL } from 'analytics';
@@ -483,23 +481,6 @@ export function doAnaltyicsPurchaseEvent(fileInfo) {
       const purchaseInt = Number(Number(purchasePrice).toFixed(0));
       analytics.purchaseEvent(purchaseInt);
     }
-
-    setTimeout(() => {
-      const contentFeeTxid = fileInfo.content_fee && fileInfo.content_fee.txid;
-      const purchaseReceiptTxid = fileInfo.purchase_receipt && fileInfo.purchase_receipt.txid;
-      // These aren't guaranteed to exist
-      const txid = contentFeeTxid || purchaseReceiptTxid;
-
-      if (txid) {
-        dispatch(
-          doClaimRewardType(REWARDS.TYPE_PAID_CONTENT, {
-            failSilently: true,
-            params: { transaction_id: txid },
-          })
-        );
-      }
-      // Give it some time to get into the mempool
-    }, 3000);
   };
 }
 
