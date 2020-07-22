@@ -1,6 +1,7 @@
 // @flow
 import React from 'react';
 import { Modal } from 'modal/modal';
+import { DOMAIN } from 'config';
 
 type Props = {
   upload: WebFile => void,
@@ -30,7 +31,7 @@ class ModalConfirmThumbnailUpload extends React.PureComponent<Props> {
         onConfirmed={() => this.upload()}
         onAborted={closeModal}
       >
-        <p>{__('Are you sure you want to upload this thumbnail to spee.ch')}?</p>
+        <label>{__('Are you sure you want to upload this thumbnail to %domain%', { domain: DOMAIN })}?</label>
 
         <blockquote>{file.path || file.name}</blockquote>
       </Modal>

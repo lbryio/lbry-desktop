@@ -66,6 +66,7 @@ function SelectAsset(props: Props) {
       .then(json => (json.success ? onSuccess(`${json.data.serveUrl}`) : uploadError(json.message)))
       .catch(err => {
         uploadError(err.message);
+        setUploadStatus(SPEECH_READY);
       });
   }
 
