@@ -1,4 +1,5 @@
 // @flow
+import * as PAGES from 'constants/pages';
 import React from 'react';
 import { Modal } from 'modal/modal';
 import ClaimPreview from 'component/claimPreview';
@@ -58,7 +59,7 @@ class ModalPublishSuccess extends React.PureComponent<Props> {
                 label={__('View My Publishes')}
                 onClick={() => {
                   clearPublish();
-                  navigate('/$/published');
+                  navigate(`/$/${PAGES.UPLOADS}`);
                   closeModal();
                 }}
               />

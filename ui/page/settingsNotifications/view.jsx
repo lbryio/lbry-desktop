@@ -127,7 +127,7 @@ export default function NotificationSettingsPage(props: Props) {
                 onChange={() => setClientSetting(SETTINGS.OS_NOTIFICATIONS_ENABLED, !osNotificationsEnabled)}
                 checked={osNotificationsEnabled}
                 label={__('Show Desktop Notifications')}
-                helper={__('Get notified when a publish or channel is confirmed.')}
+                helper={__('Get notified when an upload or channel is confirmed.')}
               />
             }
           />

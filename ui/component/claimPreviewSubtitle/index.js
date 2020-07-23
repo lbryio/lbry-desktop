@@ -13,11 +13,8 @@ const perform = dispatch => ({
   beginPublish: name => {
     dispatch(doClearPublish());
     dispatch(doPrepareEdit({ name }));
-    dispatch(push(`/$/${PAGES.PUBLISH}`));
+    dispatch(push(`/$/${PAGES.UPLOAD}`));
   },
 });
 
-export default connect(
-  select,
-  perform
-)(ClaimPreviewSubtitle);
+export default connect(select, perform)(ClaimPreviewSubtitle);

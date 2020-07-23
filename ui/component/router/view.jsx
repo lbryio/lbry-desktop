@@ -152,7 +152,6 @@ function AppRouter(props: Props) {
       {/* @if TARGET='app' */}
       {welcomeVersion < WELCOME_VERSION && <Route path="/*" component={Welcome} />}
       {/* @endif */}
-
       <Redirect
         from={`/$/${PAGES.DEPRECATED__CHANNELS_FOLLOWING_MANAGE}`}
         to={`/$/${PAGES.CHANNELS_FOLLOWING_DISCOVER}`}
@@ -160,6 +159,8 @@ function AppRouter(props: Props) {
       <Redirect from={`/$/${PAGES.DEPRECATED__CHANNELS_FOLLOWING}`} to={`/$/${PAGES.CHANNELS_FOLLOWING}`} />
       <Redirect from={`/$/${PAGES.DEPRECATED__TAGS_FOLLOWING}`} to={`/$/${PAGES.TAGS_FOLLOWING}`} />
       <Redirect from={`/$/${PAGES.DEPRECATED__TAGS_FOLLOWING_MANAGE}`} to={`/$/${PAGES.TAGS_FOLLOWING_MANAGE}`} />
+      <Redirect from={`/$/${PAGES.DEPRECATED__PUBLISH}`} to={`/$/${PAGES.UPLOAD}`} />
+      <Redirect from={`/$/${PAGES.DEPRECATED__PUBLISHED}`} to={`/$/${PAGES.UPLOADS}`} />
 
       <Route path={`/`} exact component={HomePage} />
       <Route path={`/$/${PAGES.DISCOVER}`} exact component={DiscoverPage} />
@@ -199,9 +200,9 @@ function AppRouter(props: Props) {
       />
       <PrivateRoute {...props} path={`/$/${PAGES.INVITE}`} component={InvitePage} />
       <PrivateRoute {...props} path={`/$/${PAGES.CHANNEL_NEW}`} component={ChannelNew} />
-      <PrivateRoute {...props} path={`/$/${PAGES.PUBLISHED}`} component={FileListPublished} />
+      <PrivateRoute {...props} path={`/$/${PAGES.UPLOADS}`} component={FileListPublished} />
       <PrivateRoute {...props} path={`/$/${PAGES.CREATOR_DASHBOARD}`} component={CreatorDashboard} />
-      <PrivateRoute {...props} path={`/$/${PAGES.PUBLISH}`} component={PublishPage} />
+      <PrivateRoute {...props} path={`/$/${PAGES.UPLOAD}`} component={PublishPage} />
       <PrivateRoute {...props} path={`/$/${PAGES.REPORT}`} component={ReportPage} />
       <PrivateRoute {...props} path={`/$/${PAGES.REWARDS}`} exact component={RewardsPage} />
       <PrivateRoute {...props} path={`/$/${PAGES.REWARDS_VERIFY}`} component={RewardsVerifyPage} />
@@ -215,7 +216,6 @@ function AppRouter(props: Props) {
 
       <Route path={`/$/${PAGES.EMBED}/:claimName`} exact component={EmbedWrapperPage} />
       <Route path={`/$/${PAGES.EMBED}/:claimName/:claimId`} exact component={EmbedWrapperPage} />
-
       {/* Below need to go at the end to make sure we don't match any of our pages first */}
       <Route path="/:claimName" exact component={ShowPage} />
       <Route path="/:claimName/:streamName" exact component={ShowPage} />

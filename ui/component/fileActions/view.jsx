@@ -92,7 +92,7 @@ function FileActions(props: Props) {
             button="alt"
             icon={ICONS.EDIT}
             label={__('Edit')}
-            navigate="/$/publish"
+            navigate="/$/upload"
             onClick={() => {
               prepareEdit(claim, editUri, fileInfo);
             }}

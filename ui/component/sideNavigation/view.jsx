@@ -177,7 +177,7 @@ function SideNavigation(props: Props) {
               },
               {
                 ...buildLink(
-                  PAGES.PUBLISHED,
+                  PAGES.UPLOADS,
                   uploadCount ? (
                     <span>
                       {__('Publishes')}
@@ -202,7 +202,7 @@ function SideNavigation(props: Props) {
                 ...buildLink(PAGES.INVITE, __('Invites'), ICONS.INVITE),
               },
               {
-                ...buildLink(PAGES.PUBLISH, __('Publish'), ICONS.PUBLISH),
+                ...buildLink(PAGES.UPLOAD, __('Upload'), ICONS.PUBLISH),
               },
               {
                 ...buildLink(PAGES.HELP, __('Help'), ICONS.HELP),

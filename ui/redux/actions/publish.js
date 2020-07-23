@@ -25,7 +25,7 @@ export const doPublishDesktop = (filePath: string) => (dispatch: Dispatch, getSt
     const actions = [];
 
     // @if TARGET='app'
-    actions.push(push(`/$/${PAGES.PUBLISHED}`));
+    actions.push(push(`/$/${PAGES.UPLOADS}`));
     // @endif
 
     actions.push({
@@ -78,7 +78,7 @@ export const doPublishDesktop = (filePath: string) => (dispatch: Dispatch, getSt
   // on the publishes page. This doesn't exist on desktop so wait until we get a response
   // from the SDK
   // @if TARGET='web'
-  dispatch(push(`/$/${PAGES.PUBLISHED}`));
+  dispatch(push(`/$/${PAGES.UPLOADS}`));
   // @endif
 
   dispatch(doPublish(publishSuccess, publishFail));

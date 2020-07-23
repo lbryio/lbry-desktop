@@ -95,9 +95,9 @@ rewards.claimReward = (type, rewardParams) => {
                 reject(
                   claims.length
                     ? new Error(
-                        __('Please publish something and wait for confirmation by the network to claim this reward.')
+                        __('Please upload something and wait for confirmation by the network to claim this reward.')
                       )
-                    : new Error(__('Please publish something to claim this reward.'))
+                    : new Error(__('Please upload something to claim this reward.'))
                 );
               }
             })
