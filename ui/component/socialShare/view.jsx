@@ -74,7 +74,7 @@ function SocialShare(props: Props) {
 
   return (
     <React.Fragment>
-      <CopyableText label={__('LBRY Link')} copyable={openDotLbryDotComUrl} />
+      <CopyableText copyable={openDotLbryDotComUrl} />
       {showStartAt && (
         <div className="section__start-at">
           <FormField
