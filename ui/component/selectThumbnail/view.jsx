@@ -140,10 +140,8 @@ class SelectThumbnail extends React.PureComponent<Props, State> {
               <div className="column column--space-between">
                 <div className="column__item thumbnail-preview" style={{ backgroundImage: `url(${thumbnail})` }} />
                 <div className="column__item">
-                  <p>
-                    Upload complete. <Button button="link" href={thumbnail} label={__('View thumbnail')} />.
-                  </p>
-                  <div className="card__actions">
+                  <p>{__('Upload complete.')}</p>
+                  <div className="section__actions">
                     <Button button="link" label={__('New thumbnail')} onClick={resetThumbnailStatus} />
                   </div>
                 </div>
@@ -152,7 +150,7 @@ class SelectThumbnail extends React.PureComponent<Props, State> {
           </React.Fragment>
         )}
         {status === THUMBNAIL_STATUSES.READY && (
-          <div className="card__actions">
+          <div className="section__actions">
             <Button
               button="link"
               label={__('Enter a thumbnail URL')}
@@ -169,11 +167,13 @@ class SelectThumbnail extends React.PureComponent<Props, State> {
         )}
 
         {status === THUMBNAIL_STATUSES.IN_PROGRESS && <p>{__('Uploading thumbnail')}...</p>}
-        <p className="help">
-          {status === THUMBNAIL_STATUSES.API_DOWN
-            ? __('Enter a URL for your thumbnail.')
-            : __('Upload your thumbnail to %domain%. Recommended size is 16:9.', { domain: DOMAIN })}
-        </p>
+        {status !== THUMBNAIL_STATUSES.COMPLETE && (
+          <p className="help">
+            {status === THUMBNAIL_STATUSES.API_DOWN
+              ? __('Enter a URL for your thumbnail.')
+              : __('Upload your thumbnail to %domain%. Recommended size is 16:9.', { domain: DOMAIN })}
+          </p>
+        )}
       </div>
     );
   }

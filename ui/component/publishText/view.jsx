@@ -27,7 +27,7 @@ function PublishText(props: Props) {
             type="text"
             name="content_title"
             label={__('Title')}
-            placeholder={__('Titular Title')}
+            placeholder={__('Descriptive titles work best')}
             disabled={disabled}
             value={title}
             onChange={e => updatePublishForm({ title: e.target.value })}
@@ -37,7 +37,9 @@ function PublishText(props: Props) {
             type={advancedEditor ? 'markdown' : 'textarea'}
             name="content_description"
             label={__('Description')}
-            placeholder={__('My description for this and that')}
+            placeholder={__(
+              'What is your content about? Use this space to include any other relevant details you may like to share about your content and channel.'
+            )}
             value={description}
             disabled={disabled}
             onChange={value => updatePublishForm({ description: advancedEditor ? value : value.target.value })}

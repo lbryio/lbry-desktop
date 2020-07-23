@@ -61,7 +61,7 @@ function FileListPublished(props: Props) {
         <WebUploadList />
         {!!(urls && urls.length) && (
           <Card
-            title={__('Publishes')}
+            title={__('Uploads')}
             titleActions={
               <div className="card__actions--inline">
                 {fetching && <Spinner type="small" />}
