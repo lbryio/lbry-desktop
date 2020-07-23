@@ -6,8 +6,8 @@ import Page from 'component/page';
 import Button from 'component/button';
 import ClaimTilesDiscover from 'component/claimTilesDiscover';
 import I18nMessage from 'component/i18nMessage';
-
 import getHomepage from 'homepage';
+
 type Props = {
   authenticated: boolean,
   followedTags: Array<Tag>,

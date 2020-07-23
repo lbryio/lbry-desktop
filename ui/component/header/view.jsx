@@ -12,6 +12,7 @@ import Icon from 'component/common/icon';
 import { Menu, MenuList, MenuButton, MenuItem } from '@reach/menu-button';
 import Tooltip from 'component/common/tooltip';
 import NavigationButton from 'component/navigationButton';
+import NotificationHeaderButton from 'component/notificationHeaderButton';
 import { LOGO_TITLE } from 'config';
 import useIsMobile from 'effects/use-is-mobile';
 // @if TARGET='app'
@@ -239,6 +240,8 @@ const Header = (props: Props) => {
                       </MenuList>
                     </Menu>
 
+                    <NotificationHeaderButton />
+
                     <Menu>
                       <MenuButton
                         aria-label={__('Your account')}
@@ -298,6 +301,7 @@ const Header = (props: Props) => {
                     </Menu>
                   </Fragment>
                 )}
+
                 <Menu>
                   <MenuButton
                     aria-label={__('Settings')}

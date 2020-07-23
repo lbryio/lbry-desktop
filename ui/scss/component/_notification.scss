@@ -1,0 +1,37 @@
+.notifications__empty {
+  background-color: var(--color-card-background);
+  padding: var(--spacing-l);
+}
+
+.notification_list {
+  > * {
+    border-bottom: 1px solid var(--color-border);
+
+    &:last-of-type {
+      border-bottom: none;
+    }
+  }
+}
+
+.notification__wrapper {
+  width: 100%;
+  display: flex;
+}
+
+.notification__content {
+  margin-left: var(--spacing-m);
+}
+
+.notification__title {
+  font-size: var(--font-large);
+}
+
+.notification__text {
+  font-size: var(--font-body);
+  margin-top: var(--spacing-s);
+}
+
+.notification__time {
+  @extend .help;
+  margin-top: 0;
+}

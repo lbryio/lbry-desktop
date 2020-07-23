@@ -1,6 +1,7 @@
 .snack-bar {
   bottom: 2rem;
-  left: 2rem;
+  right: 2rem;
+  max-width: 20rem;
   background-color: var(--color-snack-bg);
   color: var(--color-snack);
   border-radius: 0.5rem;
@@ -23,6 +24,12 @@
 
 .snack-bar--error {
   background-color: var(--color-snack-bg-error);
+}
+
+.snack-bar--notification {
+  @extend .card;
+  background-color: var(--color-card-background);
+  color: var(--color-text);
 }
 
 .snack-bar__action {

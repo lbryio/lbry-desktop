@@ -13,6 +13,8 @@ type Props = {
   obscure?: boolean,
   small?: boolean,
   allowGifs?: boolean,
+  claim: ?ChannelClaim,
+  doResolveUri: string => void,
 };
 
 function ChannelThumbnail(props: Props) {
@@ -24,8 +26,11 @@ function ChannelThumbnail(props: Props) {
     obscure,
     small = false,
     allowGifs = false,
+    claim,
+    doResolveUri,
   } = props;
   const [thumbError, setThumbError] = React.useState(false);
+  const shouldResolve = claim === undefined;
   const thumbnail = rawThumbnail && rawThumbnail.trim().replace(/^http:\/\//i, 'https://');
   const thumbnailPreview = rawThumbnailPreview && rawThumbnailPreview.trim().replace(/^http:\/\//i, 'https://');
   const channelThumbnail = thumbnail || thumbnailPreview;
@@ -40,6 +45,12 @@ function ChannelThumbnail(props: Props) {
   } else {
     colorClassName = `channel-thumbnail__default--4`;
   }
+
+  React.useEffect(() => {
+    if (shouldResolve && uri) {
+      doResolveUri(uri);
+    }
+  }, [doResolveUri, shouldResolve, uri]);
 
   if (channelThumbnail && channelThumbnail.endsWith('gif') && !allowGifs) {
     return <FreezeframeWrapper src={channelThumbnail} className="channel-thumbnail" />;

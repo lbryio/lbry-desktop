@@ -110,3 +110,4 @@ export const CAMERA = 'Camera';
 export const OPEN_LOG = 'FilePlus';
 export const OPEN_LOG_FOLDER = 'Folder';
 export const LBRY_STATUS = 'BarChart';
+export const NOTIFICATION = 'Bell';
