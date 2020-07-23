@@ -47,17 +47,19 @@ function FileTitle(props: Props) {
       actions={
         isNsfwBlocked ? (
           <div className="main--empty">
-            <h2 className="card__title card__title">
+            <h2>
               <Icon className="icon--hidden" icon={ICONS.EYE_OFF} />
-              {__('Mature content blocked')}
+              {__('Mature content blocked.')}
             </h2>
             <div>
               <I18nMessage
                 tokens={{
-                  settings: <Button button="link" label={__('Content Settings')} navigate={`/$/${PAGES.SETTINGS}`} />,
+                  content_settings: (
+                    <Button button="link" label={__('content settings')} navigate={`/$/${PAGES.SETTINGS}`} />
+                  ),
                 }}
               >
-                Change %settings%
+                Change this in your %content_settings%.
               </I18nMessage>
             </div>
           </div>
