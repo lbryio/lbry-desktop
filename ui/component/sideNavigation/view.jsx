@@ -180,11 +180,11 @@ function SideNavigation(props: Props) {
                   PAGES.UPLOADS,
                   uploadCount ? (
                     <span>
-                      {__('Publishes')}
+                      {__('Uploads')}
                       <Spinner type="small" />
                     </span>
                   ) : (
-                    __('Publishes')
+                    __('Uploads')
                   ),
                   ICONS.PUBLISH
                 ),

@@ -56,7 +56,7 @@ class ModalPublishSuccess extends React.PureComponent<Props> {
             <div className="section__actions">
               <Button
                 button="primary"
-                label={__('View My Publishes')}
+                label={__('View My Uploads')}
                 onClick={() => {
                   clearPublish();
                   navigate(`/$/${PAGES.UPLOADS}`);
