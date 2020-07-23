@@ -27,4 +27,5 @@ declare type User = {
   youtube_channels: ?Array<string>,
   device_types: Array<DeviceType>,
   lbry_first_approved: boolean,
+  experimental_ui: boolean,
 };

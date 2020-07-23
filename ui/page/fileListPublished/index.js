@@ -6,9 +6,9 @@ import {
   selectFetchingMyClaimsPageError,
   doClearPublish,
   doFetchClaimListMine,
+  doCheckPendingClaims,
 } from 'lbry-redux';
 import { selectUploadCount } from 'lbryinc';
-import { doCheckPendingPublishesApp } from 'redux/actions/publish';
 import FileListPublished from './view';
 import { withRouter } from 'react-router';
 import { MY_CLAIMS_PAGE_SIZE, PAGE_PARAM, PAGE_SIZE_PARAM } from 'constants/claim';
@@ -31,7 +31,7 @@ const select = (state, props) => {
 };
 
 const perform = dispatch => ({
-  checkPendingPublishes: () => dispatch(doCheckPendingPublishesApp()),
+  checkPendingPublishes: () => dispatch(doCheckPendingClaims()),
   fetchClaimListMine: (page, pageSize) => dispatch(doFetchClaimListMine(page, pageSize)),
   clearPublish: () => dispatch(doClearPublish()),
 });

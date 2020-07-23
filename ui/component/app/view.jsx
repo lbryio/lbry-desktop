@@ -77,6 +77,7 @@ type Props = {
   setReferrer: (string, boolean) => void,
   analyticsTagSync: () => void,
   isAuthenticated: boolean,
+  socketConnect: () => void,
 };
 
 function App(props: Props) {
@@ -194,10 +195,11 @@ function App(props: Props) {
     if (wrapperElement) {
       ReactModal.setAppElement(wrapperElement);
     }
+
     fetchAccessToken();
 
     // @if TARGET='app'
-    fetchChannelListMine(); // This needs to be done for web too...
+    fetchChannelListMine(); // This is fetched after a user is signed in on web
     // @endif
   }, [appRef, fetchAccessToken, fetchChannelListMine]);
 

@@ -301,3 +301,17 @@ textarea {
     margin-bottom: 0;
   }
 }
+
+.notification__bubble {
+  height: 1.5rem;
+  width: 1.5rem;
+  border-radius: 50%;
+  background-color: #f02849;
+  position: absolute;
+  top: -0.5rem;
+  right: -0.5rem;
+  color: white;
+  font-size: var(--font-small);
+  font-weight: bold;
+  line-height: 1;
+}

@@ -103,3 +103,9 @@
 .comment__menu-icon {
   stroke: var(--color-comment-menu);
 }
+
+.comment__menu-list {
+  box-shadow: var(--card-box-shadow);
+  border-radius: var(--card-radius);
+  padding: var(--spacing-s);
+}

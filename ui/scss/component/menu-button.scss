@@ -8,7 +8,7 @@
   font-family: sans-serif;
   display: block;
   position: absolute;
-  z-index: 10000;
+  z-index: 2;
   font-size: var(--font-body);
 }
 
@@ -17,12 +17,13 @@
   white-space: nowrap;
   outline: none;
   background-color: var(--color-menu-background);
+  border: 1px solid var(--border-color);
   border-top: none;
 }
 
 [data-reach-menu-item] {
   display: block;
-  z-index: 10000;
+  z-index: 2;
 
   &:focus {
     box-shadow: none;
@@ -35,23 +36,21 @@
   color: inherit;
   font: inherit;
   text-decoration: initial;
-
-  .icon {
-    stroke: var(--color-menu-icon);
-  }
+  border-radius: var(--border-radius);
 }
 
 [data-reach-menu-item][data-selected] {
   background-color: var(--color-menu-background--active);
   box-shadow: none;
+}
 
-  .icon {
-    stroke: var(--color-menu-icon-active);
+.menu__title {
+  &[aria-expanded='true'] {
+    background-color: var(--color-primary-alt);
   }
 }
 
 .menu__list {
-  margin-left: calc(var(--spacing-m) * -1);
   box-shadow: var(--card-box-shadow);
   animation: menu-animate-in var(--animation-duration) var(--animation-style);
   border-bottom-left-radius: var(--border-radius);
@@ -60,6 +59,7 @@
 
 .menu__list--header {
   @extend .menu__list;
+  padding: var(--spacing-xs);
   margin-top: 19px;
 }
 
@@ -72,8 +72,9 @@
 .menu__link {
   display: flex;
   align-items: center;
-  padding: var(--spacing-m);
+  padding: var(--spacing-s);
   padding-right: var(--spacing-l);
+  height: var(--button-height);
 
   .icon {
     stroke: var(--color-menu-icon);
@@ -90,4 +91,28 @@
   color: var(--color-text-help);
   font-size: var(--font-small);
   padding-top: 0;
+}
+
+.menu__link--notification {
+  display: flex;
+  align-items: flex-start;
+  padding: var(--spacing-s);
+
+  .icon__wrapper {
+    height: 2.5rem;
+    width: 2.5rem;
+  }
+
+  &:hover {
+    cursor: pointer;
+  }
+}
+
+.menu__link--all-notifications {
+  @extend .button--alt;
+  width: auto;
+  align-self: flex-start;
+  margin-right: auto;
+  font-weight: var(--font-weight-bold);
+  margin-top: var(--spacing-m);
 }
