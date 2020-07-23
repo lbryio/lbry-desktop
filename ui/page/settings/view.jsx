@@ -279,7 +279,7 @@ class SettingsPage extends React.PureComponent<Props, State> {
         noFooter
         noSideNavigation
         backout={{
-          backFunction: () => this.onDone(),
+          backCB: () => this.onDone(),
           title: __('Settings'),
           simpleTitle: __('Editing'),
           backLabel: __('Done'),

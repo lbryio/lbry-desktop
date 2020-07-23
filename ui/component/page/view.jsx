@@ -19,7 +19,13 @@ type Props = {
   noHeader: boolean,
   noFooter: boolean,
   noSideNavigation: boolean,
-  backout: { backFunction: () => void, backTitle: string },
+  backout: {
+    backLabel?: string,
+    backCB?: () => void,
+    backNavDefault?: string,
+    title: string,
+    simpleTitle: string, // Just use the same value as `title` if `title` is already short (~< 10 chars), unless you have a better idea for title overlfow on mobile
+  },
 };
 
 function Page(props: Props) {

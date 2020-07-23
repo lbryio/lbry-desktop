@@ -131,21 +131,15 @@ function App(props: Props) {
   const sanitizedReferrerParam = rawReferrerParam && rawReferrerParam.replace(':', '#');
   const shouldHideNag = pathname.startsWith(`/$/${PAGES.EMBED}`) || pathname.startsWith(`/$/${PAGES.AUTH_VERIFY}`);
 
-  // const unlisten = history.listen((location, action) => {
-  //   console.log(action, location.pathname, location.state);
-  //   if (action === 'PUSH' && !hasNavigated) {
-  //     setHasNavigated();
-  //   }
-  // });
-
+  // for people arriving at settings page from deeplinks, know whether they can "go back"
   useEffect(() => {
     const unlisten = history.listen((location, action) => {
-      if (action === 'PUSH' && !hasNavigated) {
-        setHasNavigated();
+      if (action === 'PUSH') {
+        if (!hasNavigated && setHasNavigated) setHasNavigated();
       }
     });
-    return unlisten();
-  }, []);
+    return unlisten;
+  }, [hasNavigated, setHasNavigated]);
 
   let uri;
   try {
