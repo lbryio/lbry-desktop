@@ -1267,5 +1267,10 @@
   "LBRY Status": "LBRY Status",
   "Check the status of various LBRY services.": "Check the status of various LBRY services.",
   "Check Status": "Check Status",
+  "Upload your thumbnail to %domain%. Recommended size is 16:9.": "Upload your thumbnail to %domain%. Recommended size is 16:9.",
+  "Are you sure you want to upload this thumbnail to %domain%": "Are you sure you want to upload this thumbnail to %domain%",
+  "View thumbnail": "View thumbnail",
+  "These changes will appear shortly.": "These changes will appear shortly.",
+  "Block Channel": "Block Channel",
   "--end--": "--end--"
 }
