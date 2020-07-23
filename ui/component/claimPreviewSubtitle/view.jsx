@@ -34,7 +34,7 @@ function ClaimPreviewSubtitle(props: Props) {
         </React.Fragment>
       ) : (
         <React.Fragment>
-          <div>{__('Publish something and claim this spot!')}</div>
+          <div>{__('Upload something and claim this spot!')}</div>
           <div className="card__actions">
             <Button onClick={() => beginPublish(name)} button="primary" label={__('Publish to %uri%', { uri })} />
           </div>

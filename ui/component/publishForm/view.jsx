@@ -119,7 +119,7 @@ function PublishForm(props: Props) {
   if (isStillEditing) {
     submitLabel = !publishing ? __('Save') : __('Saving...');
   } else {
-    submitLabel = !publishing ? __('Publish') : __('Publishing...');
+    submitLabel = !publishing ? __('Upload') : __('Uploading...');
   }
 
   useEffect(() => {

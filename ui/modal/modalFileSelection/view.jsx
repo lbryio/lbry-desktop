@@ -18,7 +18,7 @@ type Props = {
   },
 };
 
-const PUBLISH_URL = `/$/${PAGES.PUBLISH}`;
+const PUBLISH_URL = `/$/${PAGES.UPLOAD}`;
 
 const ModalFileSelection = (props: Props) => {
   const { history, files, hideModal, updatePublishForm } = props;

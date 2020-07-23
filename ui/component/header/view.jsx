@@ -229,9 +229,9 @@ const Header = (props: Props) => {
                         <Icon size={18} icon={ICONS.PUBLISH} aria-hidden />
                       </MenuButton>
                       <MenuList className="menu__list--header">
-                        <MenuItem className="menu__link" onSelect={() => history.push(`/$/${PAGES.PUBLISH}`)}>
+                        <MenuItem className="menu__link" onSelect={() => history.push(`/$/${PAGES.UPLOAD}`)}>
                           <Icon aria-hidden icon={ICONS.PUBLISH} />
-                          {__('Publish')}
+                          {__('Upload')}
                         </MenuItem>
                         <MenuItem className="menu__link" onSelect={() => history.push(`/$/${PAGES.CHANNEL_NEW}`)}>
                           <Icon aria-hidden icon={ICONS.CHANNEL} />
@@ -256,9 +256,9 @@ const Header = (props: Props) => {
                         <Icon size={18} icon={ICONS.ACCOUNT} aria-hidden />
                       </MenuButton>
                       <MenuList className="menu__list--header">
-                        <MenuItem className="menu__link" onSelect={() => history.push(`/$/${PAGES.PUBLISHED}`)}>
+                        <MenuItem className="menu__link" onSelect={() => history.push(`/$/${PAGES.UPLOADS}`)}>
                           <Icon aria-hidden icon={ICONS.PUBLISH} />
-                          {__('Publishes')}
+                          {__('Uploads')}
                         </MenuItem>
                         <MenuItem className="menu__link" onSelect={() => history.push(`/$/${PAGES.CHANNELS}`)}>
                           <Icon aria-hidden icon={ICONS.CHANNEL} />

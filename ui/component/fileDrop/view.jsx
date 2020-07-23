@@ -30,7 +30,7 @@ type Props = {
 const HIDE_TIME_OUT = 600;
 const TARGET_TIME_OUT = 300;
 const NAVIGATE_TIME_OUT = 400;
-const PUBLISH_URL = `/$/${PAGES.PUBLISH}`;
+const PUBLISH_URL = `/$/${PAGES.UPLOAD}`;
 
 function FileDrop(props: Props) {
   const { modal, history, openModal, updatePublishForm } = props;
