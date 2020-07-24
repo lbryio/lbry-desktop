@@ -7,6 +7,42 @@ $breakpoint-small: 900px;
 $breakpoint-medium: 1150px;
 
 :root {
+  --border-radius: 5px;
+  --height-input: 2.5rem;
+  --height-button: 2.5rem;
+  --height-checkbox: 24px;
+  --height-radio: 24px;
+  --height-badge: 24px;
+
+  // Spacing
+  --spacing-xxs: calc(2rem / 5);
+  --spacing-xs: calc(2rem / 4);
+  --spacing-s: calc(2rem / 3);
+  --spacing-m: calc(2rem / 2);
+  --spacing-l: 2rem;
+  --spacing-xl: 3rem;
+
+  // Aspect ratio
+  --aspect-ratio-bluray: 41.6666666667%; // 12:5
+  --aspect-ratio-panavision: 36.3636363636%; // 11:4
+  --aspect-ratio-sd: 75%; // 4:3
+  --aspect-ratio-standard: 56.25%; // 16:9
+
+  // Type
+  --font-mono: 'Fira Code';
+  --font-sans: Inter;
+  --font-serif: Georgia;
+  --font-weight-base: 400;
+  --font-weight-light: 300;
+  --font-weight-bold: 700;
+  --font-base: 14px;
+  --font-body: 1rem;
+  --font-xsmall: 0.7344rem;
+  --font-small: 0.8571rem;
+  --font-large: 1.3rem;
+  --font-title: 1.71rem;
+  --font-heading: 2.94rem;
+
   // Width & spacing
   --page-max-width: 1420px;
   --mac-titlebar-height: 1.5rem;
