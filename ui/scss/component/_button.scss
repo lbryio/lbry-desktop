@@ -1,19 +1,104 @@
-.button--primary,
-.button--secondary,
-.button--alt {
-  @media (max-width: $breakpoint-small) {
-    font-size: var(--font-small);
-  }
+.button {
+  display: inline-block;
+  position: relative;
+  white-space: nowrap;
+  text-decoration: none;
+  cursor: pointer;
 }
 
 .button--primary,
 .button--secondary,
 .button--alt,
 .button--link {
+  border-radius: var(--border-radius);
+
   &:focus {
     @include focus;
     z-index: 2; // Ensure focus box-shadow is always visible on every button side
   }
+}
+
+.button--primary,
+.button--secondary,
+.button--alt {
+  height: var(--height-button);
+  border-radius: var(--border-radius);
+  padding: var(--spacing-s) var(--spacing-m);
+  line-height: 1.2;
+  font-weight: var(--font-weight-bold);
+
+  @media (max-width: $breakpoint-small) {
+    font-size: var(--font-small);
+  }
+}
+
+.button--primary {
+  background-color: var(--color-button-primary-bg);
+  color: var(--color-button-primary-text);
+
+  &:hover {
+    color: var(--color-button-primary-hover-text);
+    background-color: var(--color-button-primary-bg-hover);
+  }
+}
+
+.button--secondary {
+  background-color: var(--color-button-secondary-bg);
+  color: var(--color-button-secondary-text);
+
+  &:hover {
+    background-color: var(--color-button-secondary-bg-hover);
+  }
+}
+
+.button--alt {
+  background-color: var(--color-button-alt-bg);
+  color: var(--color-button-alt-text);
+
+  &:hover {
+    background-color: var(--color-button-alt-bg-hover);
+  }
+}
+
+.button--icon {
+  width: 5rem;
+  height: 5rem;
+  background-repeat: no-repeat;
+  background-size: 50%;
+  border-radius: 50%;
+  transition: background-color 0.2s;
+  background-color: var(--color-primary);
+
+  &:hover {
+    background-color: var(--color-button-primary-bg-hover);
+  }
+
+  &.button--play {
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E %3Cg stroke='white' stroke-width='2' fill='white' fill-rule='evenodd' stroke-linejoin='round'%3E %3Cpolygon points='5 21 5 3 21 12'/%3E %3C/g%3E %3C/svg%3E");
+    background-position: calc(50% + 0.1rem) center;
+  }
+
+  &.button--view {
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E %3Cg stroke='white' stroke-width='2' fill='none' fill-rule='evenodd'%3E %3Cpath d='M2, 12 C2, 12 5, 5 12, 5 C19, 5 22, 12 22, 12 C22, 12 19, 19 12, 19 C5, 19 2, 12 2, 12 Z' stroke-linejoin='round'/%3E %3Ccircle cx='12' cy='12' r='3'/%3E %3Cpath d='M12, 5 L12, 3' stroke-linecap='round'/%3E %3Cpath d='M18, 6.5 L19, 5' stroke-linecap='round'/%3E %3Cpath d='M21, 10 L22.5, 9' stroke-linecap='round'/%3E %3Cpath d='M1.5, 10 L3, 9' stroke-linecap='round' transform='translate(2.250000, 9.500000) scale(1, -1) translate(-2.250000, -9.500000)'/%3E %3Cpath d='M5, 6.5 L6, 5' stroke-linecap='round' transform='translate(5.500000, 5.750000) scale(-1, 1) translate(-5.500000, -5.750000)'/%3E %3C/g%3E %3C/svg%3E");
+    background-position: center calc(50% + 0.1rem);
+  }
+}
+
+.button--link {
+  color: var(--color-link);
+  transition: color 0.2s;
+  word-break: break-all;
+  font-weight: var(--font-weight-bold);
+
+  &:hover {
+    text-decoration: underline;
+    color: var(--color-link-hover);
+  }
+}
+
+.button--danger {
+  @extend .button--link;
+  color: var(--color-error);
 }
 
 .button--uri-indicator {
@@ -70,6 +155,10 @@
     white-space: normal;
     text-align: left;
   }
+}
+
+.button--disabled {
+  opacity: 0.5;
 }
 
 .button__content {

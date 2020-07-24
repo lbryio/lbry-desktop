@@ -71,7 +71,6 @@
     "@datapunt/matomo-tracker-js": "^0.1.4",
     "@exponent/electron-cookies": "^2.0.0",
     "@hot-loader/react-dom": "^16.8",
-    "@lbry/components": "^4.2.5",
     "@reach/menu-button": "0.7.4",
     "@reach/rect": "^0.2.1",
     "@reach/tabs": "^0.1.5",
