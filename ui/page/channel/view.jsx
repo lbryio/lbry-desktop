@@ -70,6 +70,7 @@ function ChannelPage(props: Props) {
   const currentView = urlParams.get(PAGE_VIEW_QUERY) || undefined;
   const editInUrl = urlParams.get(PAGE_VIEW_QUERY) === EDIT_PAGE;
   const [editing, setEditing] = React.useState(editInUrl);
+  const [discussionWasMounted, setDiscussionWasMounted] = React.useState(false);
   const { channelName } = parseURI(uri);
   const { permanent_url: permanentUrl } = claim;
   const claimId = claim.claim_id;
@@ -106,6 +107,12 @@ function ChannelPage(props: Props) {
     setEditing(false);
     goBack();
   }
+
+  React.useEffect(() => {
+    if (currentView === DISCUSSION_PAGE) {
+      setDiscussionWasMounted(true);
+    }
+  }, [currentView]);
 
   React.useEffect(() => {
     if (!channelIsMine && editing) {
@@ -209,7 +216,7 @@ function ChannelPage(props: Props) {
             <ChannelAbout uri={uri} />
           </TabPanel>
           <TabPanel>
-            <ChannelDiscussion uri={uri} />
+            {(discussionWasMounted || currentView === DISCUSSION_PAGE) && <ChannelDiscussion uri={uri} />}
           </TabPanel>
         </TabPanels>
       </Tabs>
