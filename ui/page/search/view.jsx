@@ -1,4 +1,5 @@
 // @flow
+import { SIMPLE_SITE } from 'config';
 import * as ICONS from 'constants/icons';
 import * as PAGES from 'constants/pages';
 import React, { useEffect, Fragment } from 'react';
@@ -75,23 +76,25 @@ export default function SearchPage(props: Props) {
       <section className="search">
         {urlQuery && (
           <Fragment>
-            <header className="search__header">
-              <div className="claim-preview__actions--header">
-                <ClaimUri uri={uriFromQuery} noShortUrl />
-                <Button
-                  button="link"
-                  className="media__uri--right"
-                  label={__('View top claims for %normalized_uri%', {
-                    normalized_uri: uriFromQuery,
-                  })}
-                  navigate={`/$/${PAGES.TOP}?name=${modifiedUrlQuery}`}
-                  icon={ICONS.TOP}
-                />
-              </div>
-              <div className="card">
-                <ClaimPreview uri={uriFromQuery} type="large" placeholder="publish" />
-              </div>
-            </header>
+            {!SIMPLE_SITE && (
+              <header className="search__header">
+                <div className="claim-preview__actions--header">
+                  <ClaimUri uri={uriFromQuery} noShortUrl />
+                  <Button
+                    button="link"
+                    className="media__uri--right"
+                    label={__('View top claims for %normalized_uri%', {
+                      normalized_uri: uriFromQuery,
+                    })}
+                    navigate={`/$/${PAGES.TOP}?name=${modifiedUrlQuery}`}
+                    icon={ICONS.TOP}
+                  />
+                </div>
+                <div className="card">
+                  <ClaimPreview uri={uriFromQuery} type="large" placeholder="publish" />
+                </div>
+              </header>
+            )}
 
             <ClaimList
               uris={uris}
