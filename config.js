@@ -22,7 +22,7 @@ const config = {
   SITE_CANONICAL_URL: process.env.SITE_CANONICAL_URL,
   DEFAULT_LANGUAGE: process.env.DEFAULT_LANGUAGE,
   AUTO_FOLLOW_CHANNELS: process.env.AUTO_FOLLOW_CHANNELS,
-  SIMPLE_SITE: process.env.SIMPLE_SITE === 'false',
+  SIMPLE_SITE: process.env.SIMPLE_SITE === 'true',
   PINNED_URI_1: process.env.PINNED_URI_1,
   PINNED_LABEL_1: process.env.PINNED_LABEL_1,
   PINNED_URI_2: process.env.PINNED_URI_2,
