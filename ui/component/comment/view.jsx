@@ -1,4 +1,7 @@
 // @flow
+import * as ICONS from 'constants/icons';
+import { FF_MAX_CHARS_IN_COMMENT } from 'constants/form-field';
+import { SIMPLE_SITE } from 'config';
 import React, { useEffect, useState } from 'react';
 import { isEmpty } from 'util/object';
 import DateTime from 'component/dateTime';
@@ -8,12 +11,10 @@ import MarkdownPreview from 'component/common/markdown-preview';
 import ChannelThumbnail from 'component/channelThumbnail';
 import { Menu, MenuList, MenuButton, MenuItem } from '@reach/menu-button';
 import Icon from 'component/common/icon';
-import * as ICONS from 'constants/icons';
 import { FormField, Form } from 'component/common/form';
 import CommentCreate from 'component/commentCreate';
 import classnames from 'classnames';
 import usePersistedState from 'effects/use-persisted-state';
-import { FF_MAX_CHARS_IN_COMMENT } from 'constants/form-field';
 
 type Props = {
   uri: string,
@@ -101,7 +102,7 @@ function Comment(props: Props) {
   }, [isResolvingUri, shouldFetch, author, authorUri, resolveUri, editedMessage, isEditing, setEditing]);
 
   function handleEditMessageChanged(event) {
-    setCommentValue(advancedEditor ? event : event.target.value);
+    setCommentValue(!SIMPLE_SITE && advancedEditor ? event : event.target.value);
   }
 
   function handleSubmit() {
@@ -168,12 +169,12 @@ function Comment(props: Props) {
           {isEditing ? (
             <Form onSubmit={handleSubmit}>
               <FormField
-                type={advancedEditor ? 'markdown' : 'textarea'}
+                type={!SIMPLE_SITE && advancedEditor ? 'markdown' : 'textarea'}
                 name="editing_comment"
                 value={editedMessage}
                 charCount={charCount}
                 onChange={handleEditMessageChanged}
-                quickActionLabel={advancedEditor ? __('Simple Editor') : __('Advanced Editor')}
+                quickActionLabel={!SIMPLE_SITE && (advancedEditor ? __('Simple Editor') : __('Advanced Editor'))}
                 quickActionHandler={() => setAdvancedEditor(!advancedEditor)}
                 textAreaMaxLength={FF_MAX_CHARS_IN_COMMENT}
               />
@@ -200,7 +201,7 @@ function Comment(props: Props) {
             </div>
           )}
         </div>
-        {!parentId && (
+        {!parentId && !isEditing && (
           <Button
             button="link"
             requiresAuth={IS_WEB}

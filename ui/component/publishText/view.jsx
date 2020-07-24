@@ -1,9 +1,10 @@
 // @flow
+import { SIMPLE_SITE } from 'config';
+import { FF_MAX_CHARS_IN_DESCRIPTION } from 'constants/form-field';
 import React from 'react';
 import { FormField } from 'component/common/form';
 import usePersistedState from 'effects/use-persisted-state';
 import Card from 'component/common/card';
-import { FF_MAX_CHARS_IN_DESCRIPTION } from 'constants/form-field';
 
 type Props = {
   title: ?string,
@@ -34,7 +35,7 @@ function PublishText(props: Props) {
           />
 
           <FormField
-            type={advancedEditor ? 'markdown' : 'textarea'}
+            type={!SIMPLE_SITE && advancedEditor ? 'markdown' : 'textarea'}
             name="content_description"
             label={__('Description')}
             placeholder={__(
@@ -42,8 +43,10 @@ function PublishText(props: Props) {
             )}
             value={description}
             disabled={disabled}
-            onChange={value => updatePublishForm({ description: advancedEditor ? value : value.target.value })}
-            quickActionLabel={advancedEditor ? __('Simple Editor') : __('Advanced Editor')}
+            onChange={value =>
+              updatePublishForm({ description: !SIMPLE_SITE && advancedEditor ? value : value.target.value })
+            }
+            quickActionLabel={!SIMPLE_SITE && (advancedEditor ? __('Simple Editor') : __('Advanced Editor'))}
             quickActionHandler={toggleMarkdown}
             textAreaMaxLength={FF_MAX_CHARS_IN_DESCRIPTION}
           />
