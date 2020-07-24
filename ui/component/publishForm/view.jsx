@@ -7,8 +7,9 @@
   On web, the Lbry publish method call is overridden in platform/web/api-setup, using a function in platform/web/publish.
   File upload is carried out in the background by that function.
  */
-import React, { useEffect } from 'react';
+import { SITE_NAME } from 'config';
 import { CHANNEL_NEW, CHANNEL_ANONYMOUS } from 'constants/claim';
+import React, { useEffect } from 'react';
 import { buildURI, isURIValid, isNameValid, THUMBNAIL_STATUSES } from 'lbry-redux';
 import Button from 'component/button';
 import SelectChannel from 'component/selectChannel';
@@ -234,7 +235,7 @@ function PublishForm(props: Props) {
                   <Button
                     button="link"
                     href="https://www.lbry.com/termsofservice"
-                    label={__('LBRY Terms of Service')}
+                    label={__('%site_name% Terms of Service', { site_name: SITE_NAME })}
                   />
                 ),
               }}
