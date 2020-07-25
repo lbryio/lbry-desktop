@@ -25,6 +25,7 @@ export default class RecommendedContent extends React.PureComponent<Props> {
     super();
 
     this.didSearch = undefined;
+    this.lastReset = undefined;
   }
 
   componentDidMount() {
@@ -36,6 +37,7 @@ export default class RecommendedContent extends React.PureComponent<Props> {
 
     if (uri !== prevProps.uri) {
       this.didSearch = false;
+      this.lastReset = Date.now();
     }
 
     if (claim && !this.didSearch) {
@@ -60,6 +62,7 @@ export default class RecommendedContent extends React.PureComponent<Props> {
   }
 
   didSearch: ?boolean;
+  lastReset: ?any;
 
   render() {
     const { recommendedContent, isSearching, isAuthenticated } = this.props;
@@ -69,7 +72,7 @@ export default class RecommendedContent extends React.PureComponent<Props> {
         isBodyList
         title={__('Related')}
         body={
-          <WaitUntilOnPage>
+          <WaitUntilOnPage lastUpdateDate={this.lastReset}>
             <ClaimList
               isCardBody
               type="small"

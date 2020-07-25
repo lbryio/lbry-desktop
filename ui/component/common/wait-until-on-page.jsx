@@ -6,11 +6,16 @@ const DEBOUNCE_SCROLL_HANDLER_MS = 300;
 
 type Props = {
   children: any,
+  lastUpdateDate?: any,
 };
 
 export default function WaitUntilOnPage(props: Props) {
   const ref = React.useRef();
   const [shouldRender, setShouldRender] = React.useState(false);
+
+  React.useEffect(() => {
+    setShouldRender(false);
+  }, [props.lastUpdateDate]);
 
   React.useEffect(() => {
     const handleDisplayingRef = debounce(e => {
