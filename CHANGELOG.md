@@ -7,12 +7,21 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ## [Unreleased on desktop]
 
 ### Added
+- Block mature content when accessed directly from URL _community pr!_ ([#4560](https://github.com/lbryio/lbry-desktop/pull/4560))
+
+### Changed
+
+### Fixed
+- Fix sluggish Back button when navigation back to channels with lots of comments _community pr!_ ([#4576](https://github.com/lbryio/lbry-desktop/pull/4576))
+
+## [0.47.1] - [2020-07-23]
+
+### Added
 
 - Allow zooming on Desktop _community pr!_ ([#4513](https://github.com/lbryio/lbry-desktop/pull/4513))
 - Show "YT Creator" label in File Page as well _community pr!_ ([#4523](https://github.com/lbryio/lbry-desktop/pull/4523))
 - Add option to retry video stream on failure _community pr!_ ([#4541](https://github.com/lbryio/lbry-desktop/pull/4541))
 - Allow blocking channels from comments ([#4557](https://github.com/lbryio/lbry-desktop/pull/4557))
-- Block mature content when accessed directly from URL _community pr!_ ([#4560](https://github.com/lbryio/lbry-desktop/pull/4560))
 
 ### Changed
 
@@ -24,7 +33,6 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Fix channel file-search not available in mobile _community pr!_ ([#4527](https://github.com/lbryio/lbry-desktop/pull/4527))
 - New Channel: Fix incorrect GUI configuration at entry _community pr!_ ([#4545](https://github.com/lbryio/lbry-desktop/pull/4545))
 - Hide blocked channels in comments ([#4557](https://github.com/lbryio/lbry-desktop/pull/4557))
-- Fix sluggish Back button when navigation back to channels with lots of comments _community pr!_ ([#4576](https://github.com/lbryio/lbry-desktop/pull/4576))
 
 ## [0.47.0] - [2020-07-13]
 
