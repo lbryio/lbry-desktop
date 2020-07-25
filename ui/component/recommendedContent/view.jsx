@@ -3,6 +3,7 @@ import React from 'react';
 import ClaimList from 'component/claimList';
 import Ads from 'web/component/ads';
 import Card from 'component/common/card';
+import WaitUntilOnPage from 'component/common/wait-until-on-page';
 
 type Options = {
   related_to: string,
@@ -68,14 +69,16 @@ export default class RecommendedContent extends React.PureComponent<Props> {
         isBodyList
         title={__('Related')}
         body={
-          <ClaimList
-            isCardBody
-            type="small"
-            loading={isSearching}
-            uris={recommendedContent}
-            injectedItem={!isAuthenticated && IS_WEB && <Ads type="video" small />}
-            empty={__('No related content found')}
-          />
+          <WaitUntilOnPage>
+            <ClaimList
+              isCardBody
+              type="small"
+              loading={isSearching}
+              uris={recommendedContent}
+              injectedItem={!isAuthenticated && IS_WEB && <Ads type="video" small />}
+              empty={__('No related content found')}
+            />
+          </WaitUntilOnPage>
         }
       />
     );

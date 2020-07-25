@@ -165,9 +165,7 @@ class FilePage extends React.Component<Props> {
               }
             />
           </div>
-          <WaitUntilOnPage>
-            <RecommendedContent uri={uri} />
-          </WaitUntilOnPage>
+          <RecommendedContent uri={uri} />
         </div>
       </Page>
     );
