@@ -12,6 +12,7 @@ import PublishPage from './view';
 
 const select = state => ({
   name: makeSelectPublishFormValue('name')(state),
+  title: makeSelectPublishFormValue('title')(state),
   filePath: makeSelectPublishFormValue('filePath')(state),
   optimize: makeSelectPublishFormValue('optimize')(state),
   isStillEditing: selectIsStillEditing(state),
