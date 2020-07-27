@@ -21,6 +21,7 @@ exports.REWARDS_VERIFY = 'rewards/verify';
 exports.SEND = 'send';
 exports.SETTINGS = 'settings';
 exports.SETTINGS_NOTIFICATIONS = 'settings/notifications';
+exports.SETTINGS_ADVANCED = 'settings/advanced';
 exports.SHOW = 'show';
 exports.ACCOUNT = 'account';
 exports.SEARCH = 'search';
