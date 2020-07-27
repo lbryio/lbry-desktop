@@ -1,6 +1,6 @@
 // @flow
 import * as ICONS from 'constants/icons';
-import * as SETTINGS from 'constants/settings';
+import { SETTINGS } from 'lbry-redux';
 import * as PAGES from 'constants/pages';
 import React, { Fragment } from 'react';
 import { withRouter } from 'react-router';
@@ -12,6 +12,7 @@ import Icon from 'component/common/icon';
 import { Menu, MenuList, MenuButton, MenuItem } from '@reach/menu-button';
 import Tooltip from 'component/common/tooltip';
 import NavigationButton from 'component/navigationButton';
+import NotificationHeaderButton from 'component/notificationHeaderButton';
 import { LOGO_TITLE } from 'config';
 import useIsMobile from 'effects/use-is-mobile';
 // @if TARGET='app'
@@ -30,6 +31,7 @@ type Props = {
     length: number,
     location: { pathname: string },
     push: string => void,
+    replace: string => void,
   },
   currentTheme: string,
   automaticDarkModeEnabled: boolean,
@@ -39,7 +41,9 @@ type Props = {
   authenticated: boolean,
   authHeader: boolean,
   backout: {
-    backFunction: () => void,
+    backLabel?: string,
+    backCB?: () => void,
+    backNavDefault?: string,
     title: string,
     simpleTitle: string, // Just use the same value as `title` if `title` is already short (~< 10 chars), unless you have a better idea for title overlfow on mobile
   },
@@ -51,6 +55,7 @@ type Props = {
   openSignOutModal: () => void,
   clearEmailEntry: () => void,
   clearPasswordEntry: () => void,
+  hasNavigated: boolean,
 };
 
 const Header = (props: Props) => {
@@ -78,6 +83,9 @@ const Header = (props: Props) => {
   const isVerifyPage = history.location.pathname.includes(PAGES.AUTH_VERIFY);
   const isSignUpPage = history.location.pathname.includes(PAGES.AUTH);
   const isSignInPage = history.location.pathname.includes(PAGES.AUTH_SIGNIN);
+  const isPwdResetPage = history.location.pathname.includes(PAGES.AUTH_PASSWORD_RESET);
+  const hasBackout = Boolean(backout);
+  const { backLabel, backCB, backNavDefault, title: backTitle, simpleTitle: simpleBackTitle } = backout || {};
 
   // Sign out if they click the "x" when they are on the password prompt
   const authHeaderAction = syncError ? { onClick: signOut } : { navigate: '/' };
@@ -95,11 +103,41 @@ const Header = (props: Props) => {
         history.goBack();
       }
 
+      if (isPwdResetPage) {
+        history.goBack();
+      }
+
       if (syncError) {
         signOut();
       }
     },
   };
+
+  function onBackout(e) {
+    const { history, hasNavigated } = props;
+    const { goBack, replace } = history;
+
+    window.removeEventListener('popstate', onBackout);
+
+    if (backCB) {
+      backCB();
+    }
+    if (e.type !== 'popstate') {
+      // if not initiated by pop (back button)
+      if (hasNavigated && !backNavDefault) {
+        goBack();
+      } else {
+        replace(backNavDefault || `/`);
+      }
+    }
+  }
+
+  React.useEffect(() => {
+    if (hasBackout) {
+      window.addEventListener('popstate', onBackout);
+      return () => window.removeEventListener('popstate', onBackout);
+    }
+  }, [hasBackout]);
 
   function handleThemeToggle() {
     if (automaticDarkModeEnabled) {
@@ -143,15 +181,19 @@ const Header = (props: Props) => {
       <div className="header__contents">
         {!authHeader && backout ? (
           <div className="card__actions--between">
-            <Button onClick={backout.backFunction} button="link" label={__('Cancel')} icon={ICONS.ARROW_LEFT} />
-            {backout.title && (
-              <h1 className={'card__title'}>{isMobile ? backout.simpleTitle || backout.title : backout.title}</h1>
-            )}
+            <Button
+              onClick={onBackout}
+              button="link"
+              label={(backLabel && backLabel) || __('Cancel')}
+              icon={ICONS.ARROW_LEFT}
+            />
+            {backTitle && <h1 className={'card__title'}>{isMobile ? simpleBackTitle || backTitle : backTitle}</h1>}
             <Button
               aria-label={__('Your wallet')}
               navigate={`/$/${PAGES.WALLET}`}
               className="header__navigation-item menu__title header__navigation-item--balance"
               label={getWalletTitle()}
+              disabled
               // @if TARGET='app'
               onDoubleClick={e => {
                 e.stopPropagation();
@@ -164,7 +206,12 @@ const Header = (props: Props) => {
             <div className="header__navigation">
               <Button
                 className="header__navigation-item header__navigation-item--lbry header__navigation-item--button-mobile"
-                label={LOGO_TITLE}
+                // @if TARGET='app'
+                label={'LBRY'}
+                // @endif
+                // @if TARGET='web'
+                label={LOGO_TITLE} // eslint-disable-line
+                // @endif
                 icon={ICONS.LBRY}
                 onClick={() => {
                   if (history.location.pathname === '/') window.location.reload();
@@ -218,9 +265,9 @@ const Header = (props: Props) => {
                         <Icon size={18} icon={ICONS.PUBLISH} aria-hidden />
                       </MenuButton>
                       <MenuList className="menu__list--header">
-                        <MenuItem className="menu__link" onSelect={() => history.push(`/$/${PAGES.PUBLISH}`)}>
+                        <MenuItem className="menu__link" onSelect={() => history.push(`/$/${PAGES.UPLOAD}`)}>
                           <Icon aria-hidden icon={ICONS.PUBLISH} />
-                          {__('Publish')}
+                          {__('Upload')}
                         </MenuItem>
                         <MenuItem className="menu__link" onSelect={() => history.push(`/$/${PAGES.CHANNEL_NEW}`)}>
                           <Icon aria-hidden icon={ICONS.CHANNEL} />
@@ -228,6 +275,8 @@ const Header = (props: Props) => {
                         </MenuItem>
                       </MenuList>
                     </Menu>
+
+                    <NotificationHeaderButton />
 
                     <Menu>
                       <MenuButton
@@ -243,9 +292,9 @@ const Header = (props: Props) => {
                         <Icon size={18} icon={ICONS.ACCOUNT} aria-hidden />
                       </MenuButton>
                       <MenuList className="menu__list--header">
-                        <MenuItem className="menu__link" onSelect={() => history.push(`/$/${PAGES.PUBLISHED}`)}>
+                        <MenuItem className="menu__link" onSelect={() => history.push(`/$/${PAGES.UPLOADS}`)}>
                           <Icon aria-hidden icon={ICONS.PUBLISH} />
-                          {__('Publishes')}
+                          {__('Uploads')}
                         </MenuItem>
                         <MenuItem className="menu__link" onSelect={() => history.push(`/$/${PAGES.CHANNELS}`)}>
                           <Icon aria-hidden icon={ICONS.CHANNEL} />
@@ -288,6 +337,7 @@ const Header = (props: Props) => {
                     </Menu>
                   </Fragment>
                 )}
+
                 <Menu>
                   <MenuButton
                     aria-label={__('Settings')}

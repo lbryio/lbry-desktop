@@ -3,7 +3,8 @@ import LANGUAGES from './languages';
 const SUPPORTED_LANGUAGES = {
   en: LANGUAGES.en[1],
   da: LANGUAGES.da[1],
-  zh: LANGUAGES.zh[1],
+  'zh-CN': LANGUAGES['zh-CN'][1],
+  'zh-TW': LANGUAGES['zh-TW'][1],
   hr: LANGUAGES.hr[1],
   nl: LANGUAGES.nl[1],
   fr: LANGUAGES.fr[1],
@@ -33,4 +34,6 @@ const SUPPORTED_LANGUAGES = {
   uk: LANGUAGES.uk[1],
 };
 
+// Properties: language code (e.g. 'ja')
+// Values: name of the language in native form (e.g. '日本語')
 export default SUPPORTED_LANGUAGES;

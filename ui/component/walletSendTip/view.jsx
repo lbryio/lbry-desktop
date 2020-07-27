@@ -5,7 +5,6 @@ import React from 'react';
 import Button from 'component/button';
 import { FormField, Form } from 'component/common/form';
 import { MINIMUM_PUBLISH_BID, CHANNEL_ANONYMOUS } from 'constants/claim';
-import useIsMobile from 'effects/use-is-mobile';
 import CreditAmount from 'component/common/credit-amount';
 import I18nMessage from 'component/i18nMessage';
 import { Lbryio } from 'lbryinc';
@@ -56,7 +55,6 @@ function WalletSendTip(props: Props) {
   const [tipError, setTipError] = React.useState();
   const [sendAsTip, setSendAsTip] = usePersistedState('comment-support:sendAsTip', true);
   const [isConfirming, setIsConfirming] = React.useState(false);
-  const isMobile = useIsMobile();
   const [selectedChannel, setSelectedChannel] = usePersistedState('comment-support:channel');
   const { claim_id: claimId } = claim;
   const { channelName } = parseURI(uri);
@@ -160,12 +158,14 @@ function WalletSendTip(props: Props) {
         />
       ) : (
         <Card
-          title={claimIsMine ? __('Boost Your Content') : __('Support This Content')}
+          title={claimIsMine ? __('Boost Your Content') : isSupport ? __('Support This Content') : __('Send A Tip')}
           subtitle={
             <React.Fragment>
-              {__(
-                'This will increase the overall bid amount for this content, which will boost its ability to be discovered while active.'
-              )}{' '}
+              {isSupport
+                ? __(
+                    'This will increase the overall bid amount for this content, which will boost its ability to be discovered while active.'
+                  )
+                : __('Send a chunk of change to this creator to let them know you appreciate their content.')}{' '}
               <Button label={__('Learn more')} button="link" href="https://lbry.com/faq/tipping" />.
             </React.Fragment>
           }
@@ -228,6 +228,15 @@ function WalletSendTip(props: Props) {
                     label={__('Custom')}
                     onClick={() => setUseCustomTip(true)}
                   />
+                  {DEFAULT_TIP_AMOUNTS.some(val => val > balance) && (
+                    <Button
+                      button="secondary"
+                      className="button-toggle-group-action"
+                      icon={ICONS.BUY}
+                      title={__('Buy More LBC')}
+                      navigate={`/$/${PAGES.BUY}`}
+                    />
+                  )}
                 </div>
 
                 {useCustomTip && (
@@ -238,9 +247,11 @@ function WalletSendTip(props: Props) {
                       label={
                         <React.Fragment>
                           {__('Custom support amount')}{' '}
-                            <I18nMessage tokens={{ lbc_balance: <CreditAmount badge={false} precision={4} amount={balance} /> }}>
-                              (%lbc_balance% available)
-                            </I18nMessage>
+                          <I18nMessage
+                            tokens={{ lbc_balance: <CreditAmount badge={false} precision={4} amount={balance} /> }}
+                          >
+                            (%lbc_balance% available)
+                          </I18nMessage>
                         </React.Fragment>
                       }
                       className="form-field--price-amount"
@@ -279,11 +290,6 @@ function WalletSendTip(props: Props) {
                     />
                   )}
                 </div>
-                {DEFAULT_TIP_AMOUNTS.some(val => val > balance) && (
-                  <div className="section">
-                    <Button button="link" label={__('Buy More LBC')} navigate={`/$/${PAGES.BUY}`} />
-                  </div>
-                )}
               </>
             )
           }

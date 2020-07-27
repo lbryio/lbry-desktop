@@ -85,17 +85,17 @@ export default function CreatorAnalytics(props: Props) {
                 <Yrbl
                   title={
                     channelHasClaims
-                      ? __('No recent publishes')
-                      : __("You haven't published anything with this channel yet!")
+                      ? __('No recent uploads')
+                      : __("You haven't uploaded anything with this channel yet!")
                   }
                   subtitle={
                     <Button
                       button="primary"
-                      label={__('Publish Something')}
+                      label={__('Upload Something')}
                       onClick={() => {
                         if (claim) {
                           prepareEdit(claim.name);
-                          history.push(`/$/${PAGES.PUBLISH}`);
+                          history.push(`/$/${PAGES.UPLOAD}`);
                         }
                       }}
                     />
@@ -193,20 +193,18 @@ export default function CreatorAnalytics(props: Props) {
               title={__('Your Recent Content')}
               subtitle={
                 !stats.VideoURITopNew &&
-                __(
-                  "No recent publishes found for this channel. Publish something new and track how it's performing here."
-                )
+                __("No recent uploads found for this channel. Upload something new and track how it's performing here.")
               }
               actions={
                 <div className="section__actions">
                   <Button
                     button="primary"
                     icon={ICONS.PUBLISH}
-                    label={__('Publish')}
+                    label={__('Upload')}
                     onClick={() => {
                       if (claim) {
                         prepareEdit(claim.name);
-                        history.push(`/$/${PAGES.PUBLISH}`);
+                        history.push(`/$/${PAGES.UPLOAD}`);
                       }
                     }}
                   />

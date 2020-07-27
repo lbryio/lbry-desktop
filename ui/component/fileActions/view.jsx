@@ -1,5 +1,6 @@
 // @flow
 import type { Node } from 'react';
+import { SIMPLE_SITE } from 'config';
 import * as PAGES from 'constants/pages';
 import * as CS from 'constants/claim_search';
 import * as MODALS from 'constants/modal_types';
@@ -64,35 +65,37 @@ function FileActions(props: Props) {
           onClick={() => openModal(MODALS.SOCIAL_SHARE, { uri, webShareable })}
         />
 
-        <div className="button-group">
-          <Button
-            button="alt"
-            icon={ICONS.REPOST}
-            label={__('Repost')}
-            requiresAuth={IS_WEB}
-            onClick={() => openModal(MODALS.REPOST, { uri })}
-          />
-          {claim.meta.reposted > 0 && (
+        {!SIMPLE_SITE && (
+          <div className="button-group">
             <Button
               button="alt"
-              label={claim.meta.reposted}
+              icon={ICONS.REPOST}
+              label={__('Repost')}
               requiresAuth={IS_WEB}
-              navigate={`/$/${PAGES.DISCOVER}?${CS.REPOSTED_URI_KEY}=${encodeURIComponent(uri)}`}
+              onClick={() => openModal(MODALS.REPOST, { uri })}
             />
-          )}
-        </div>
+            {claim.meta.reposted > 0 && (
+              <Button
+                button="alt"
+                label={claim.meta.reposted}
+                requiresAuth={IS_WEB}
+                navigate={`/$/${PAGES.DISCOVER}?${CS.REPOSTED_URI_KEY}=${encodeURIComponent(uri)}`}
+              />
+            )}
+          </div>
+        )}
         <ClaimSupportButton uri={uri} />
       </ActionWrapper>
 
       <ActionWrapper>
-        <FileDownloadLink uri={uri} />
+        {!SIMPLE_SITE && <FileDownloadLink uri={uri} />}
 
         {claimIsMine && (
           <Button
             button="alt"
             icon={ICONS.EDIT}
             label={__('Edit')}
-            navigate="/$/publish"
+            navigate="/$/upload"
             onClick={() => {
               prepareEdit(claim, editUri, fileInfo);
             }}
@@ -108,7 +111,7 @@ function FileActions(props: Props) {
             onClick={() => openModal(MODALS.CONFIRM_FILE_REMOVE, { uri })}
           />
         )}
-        {!claimIsMine && (
+        {!claimIsMine && !SIMPLE_SITE && (
           <Button
             title={__('Report content')}
             button="alt"

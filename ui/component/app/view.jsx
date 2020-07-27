@@ -17,6 +17,9 @@ import Nag from 'component/common/nag';
 import REWARDS from 'rewards';
 import usePersistedState from 'effects/use-persisted-state';
 import FileDrop from 'component/fileDrop';
+// @if TARGET='app'
+import useZoom from 'effects/use-zoom';
+// @endif
 // @if TARGET='web'
 import OpenInAppLink from 'web/component/openInAppLink';
 import YoutubeWelcome from 'web/component/youtubeReferralWelcome';
@@ -74,6 +77,7 @@ type Props = {
   setReferrer: (string, boolean) => void,
   analyticsTagSync: () => void,
   isAuthenticated: boolean,
+  socketConnect: () => void,
 };
 
 function App(props: Props) {
@@ -104,10 +108,8 @@ function App(props: Props) {
   const appRef = useRef();
   const isEnhancedLayout = useKonamiListener();
   const [hasSignedIn, setHasSignedIn] = useState(false);
-  const userId = user && user.id;
   const hasVerifiedEmail = user && user.has_verified_email;
   const isRewardApproved = user && user.is_reward_approved;
-  const previousUserId = usePrevious(userId);
   const previousHasVerifiedEmail = usePrevious(hasVerifiedEmail);
   const previousRewardApproved = usePrevious(isRewardApproved);
   // @if TARGET='web'
@@ -174,6 +176,11 @@ function App(props: Props) {
     return () => window.removeEventListener('keydown', handleKeyPress);
   }, []);
 
+  // Enable ctrl +/- zooming on Desktop.
+  // @if TARGET='app'
+  useZoom();
+  // @endif
+
   useEffect(() => {
     if (referredRewardAvailable && sanitizedReferrerParam && isRewardApproved) {
       setReferrer(sanitizedReferrerParam, true);
@@ -188,10 +195,11 @@ function App(props: Props) {
     if (wrapperElement) {
       ReactModal.setAppElement(wrapperElement);
     }
+
     fetchAccessToken();
 
     // @if TARGET='app'
-    fetchChannelListMine(); // This needs to be done for web too...
+    fetchChannelListMine(); // This is fetched after a user is signed in on web
     // @endif
   }, [appRef, fetchAccessToken, fetchChannelListMine]);
 
@@ -206,12 +214,6 @@ function App(props: Props) {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [language, languages]);
-
-  useEffect(() => {
-    if (previousUserId === undefined && userId) {
-      analytics.setUser(userId);
-    }
-  }, [previousUserId, userId]);
 
   useEffect(() => {
     // Check that previousHasVerifiedEmail was not undefined instead of just not truthy

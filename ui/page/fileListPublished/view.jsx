@@ -1,4 +1,6 @@
 // @flow
+import * as PAGES from 'constants/pages';
+import * as ICONS from 'constants/icons';
 import React, { useEffect } from 'react';
 import Button from 'component/button';
 import ClaimList from 'component/claimList';
@@ -8,7 +10,6 @@ import { PAGE_PARAM, PAGE_SIZE_PARAM } from 'constants/claim';
 import WebUploadList from 'component/webUploadList';
 import Spinner from 'component/spinner';
 import Card from 'component/common/card';
-import * as ICONS from 'constants/icons';
 
 type Props = {
   uploadCount: number,
@@ -60,7 +61,7 @@ function FileListPublished(props: Props) {
         <WebUploadList />
         {!!(urls && urls.length) && (
           <Card
-            title={__('Publishes')}
+            title={__('Uploads')}
             titleActions={
               <div className="card__actions--inline">
                 {fetching && <Spinner type="small" />}
@@ -75,8 +76,8 @@ function FileListPublished(props: Props) {
                 <Button
                   icon={ICONS.PUBLISH}
                   button="secondary"
-                  label={__('Publish')}
-                  navigate="/$/publish"
+                  label={__('Upload')}
+                  navigate={`/$/${PAGES.UPLOAD}`}
                   onClick={() => clearPublish()}
                 />
               </div>
@@ -96,12 +97,12 @@ function FileListPublished(props: Props) {
           {!fetching ? (
             <section className="main--empty">
               <div className=" section--small">
-                <h2 className="section__title--large">{__('Nothing published to LBRY yet.')}</h2>
+                <h2 className="section__title--large">{__('Nothing uploaded to LBRY yet.')}</h2>
                 <div className="section__actions">
                   <Button
                     button="primary"
-                    navigate="/$/publish"
-                    label={__('Publish something new')}
+                    navigate={`/$/${PAGES.UPLOAD}`}
+                    label={__('Upload something new')}
                     onClick={() => clearPublish()}
                   />
                 </div>

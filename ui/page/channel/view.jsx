@@ -2,7 +2,6 @@
 import * as ICONS from 'constants/icons';
 import React from 'react';
 import { parseURI } from 'lbry-redux';
-import { Lbryio } from 'lbryinc';
 import Page from 'component/page';
 import SubscribeButton from 'component/subscribeButton';
 import BlockButton from 'component/blockButton';
@@ -18,10 +17,9 @@ import ChannelThumbnail from 'component/channelThumbnail';
 import ChannelEdit from 'component/channelEdit';
 import ClaimUri from 'component/claimUri';
 import classnames from 'classnames';
-import Icon from 'component/common/icon';
 import HelpLink from 'component/common/help-link';
-import DateTime from 'component/dateTime';
 import ClaimSupportButton from 'component/claimSupportButton';
+import YoutubeBadge from 'component/youtubeBadge';
 
 const PAGE_VIEW_QUERY = `view`;
 const ABOUT_PAGE = `about`;
@@ -71,8 +69,8 @@ function ChannelPage(props: Props) {
   const urlParams = new URLSearchParams(search);
   const currentView = urlParams.get(PAGE_VIEW_QUERY) || undefined;
   const editInUrl = urlParams.get(PAGE_VIEW_QUERY) === EDIT_PAGE;
-  const [editing, setEditing] = React.useState(editInUrl);
-  const [lastYtSyncDate, setLastYtSyncDate] = React.useState();
+  const [discussionWasMounted, setDiscussionWasMounted] = React.useState(false);
+  const editing = urlParams.get(PAGE_VIEW_QUERY) === EDIT_PAGE;
   const { channelName } = parseURI(uri);
   const { permanent_url: permanentUrl } = claim;
   const claimId = claim.claim_id;
@@ -105,36 +103,11 @@ function ChannelPage(props: Props) {
     push(`${url}${search}`);
   }
 
-  function onDone() {
-    setEditing(false);
-    goBack();
-  }
-
   React.useEffect(() => {
-    if (!channelIsMine && editing) {
-      setEditing(false);
+    if (currentView === DISCUSSION_PAGE) {
+      setDiscussionWasMounted(true);
     }
-
-    if (channelIsMine && editing) {
-      push(`?${PAGE_VIEW_QUERY}=${EDIT_PAGE}`);
-    }
-  }, [channelIsMine, editing, push]);
-
-  React.useEffect(() => {
-    if (currentView === EDIT_PAGE) {
-      setEditing(true);
-    } else {
-      setEditing(false);
-    }
-  }, [currentView, setEditing]);
-
-  React.useEffect(() => {
-    Lbryio.call('yt', 'get_youtuber', { channel_claim_id: claimId }).then(response => {
-      if (response.is_verified_youtuber) {
-        setLastYtSyncDate(response.last_synced);
-      }
-    });
-  }, [claimId]);
+  }, [currentView]);
 
   React.useEffect(() => {
     fetchSubCount(claimId);
@@ -146,12 +119,11 @@ function ChannelPage(props: Props) {
         noFooter
         noSideNavigation={editing}
         backout={{
-          backFunction: onDone,
           title: __('Editing @%channel%', { channel: channelName }),
           simpleTitle: __('Editing'),
         }}
       >
-        <ChannelEdit uri={uri} onDone={onDone} />
+        <ChannelEdit uri={uri} onDone={() => goBack()} />
       </Page>
     );
   }
@@ -159,15 +131,7 @@ function ChannelPage(props: Props) {
   return (
     <Page noFooter>
       <ClaimUri uri={uri} />
-
-      {lastYtSyncDate && (
-        <div className="media__uri--right">
-          <Icon icon={ICONS.VALIDATED} size={12} />
-          {__('Official YouTube Creator - Last updated %time_ago%', {
-            time_ago: DateTime.getTimeAgoStr(lastYtSyncDate),
-          })}
-        </div>
-      )}
+      <YoutubeBadge channelClaimId={claimId} />
       <header className="channel-cover">
         <div className="channel__quick-actions">
           {!channelIsBlocked && !channelIsBlackListed && <ShareButton uri={uri} />}
@@ -202,7 +166,7 @@ function ChannelPage(props: Props) {
                   <Button
                     button="alt"
                     title={__('Edit')}
-                    onClick={() => setEditing(!editing)}
+                    onClick={() => push(`?${PAGE_VIEW_QUERY}=${EDIT_PAGE}`)}
                     icon={ICONS.EDIT}
                     iconSize={18}
                     disabled={pending}
@@ -228,7 +192,7 @@ function ChannelPage(props: Props) {
             <ChannelAbout uri={uri} />
           </TabPanel>
           <TabPanel>
-            <ChannelDiscussion uri={uri} />
+            {(discussionWasMounted || currentView === DISCUSSION_PAGE) && <ChannelDiscussion uri={uri} />}
           </TabPanel>
         </TabPanels>
       </Tabs>

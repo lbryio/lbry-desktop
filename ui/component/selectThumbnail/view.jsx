@@ -1,13 +1,13 @@
 // @flow
 import * as MODALS from 'constants/modal_types';
 import { Lbry, THUMBNAIL_STATUSES } from 'lbry-redux';
+import { DOMAIN } from 'config';
 import * as React from 'react';
 import { FormField } from 'component/common/form';
 import FileSelector from 'component/common/file-selector';
 import Button from 'component/button';
 import ThumbnailMissingImage from './thumbnail-missing.png';
 import ThumbnailBrokenImage from './thumbnail-broken.png';
-import I18nMessage from 'component/i18nMessage';
 
 type Props = {
   filePath: ?string,
@@ -111,7 +111,7 @@ class SelectThumbnail extends React.PureComponent<Props, State> {
                 type="text"
                 name="content_thumbnail"
                 label="URL"
-                placeholder="https://spee.ch/mylogo"
+                placeholder="https://images.fbi.gov/alien"
                 value={thumbnail}
                 disabled={formDisabled}
                 onChange={this.handleThumbnailChange}
@@ -140,10 +140,8 @@ class SelectThumbnail extends React.PureComponent<Props, State> {
               <div className="column column--space-between">
                 <div className="column__item thumbnail-preview" style={{ backgroundImage: `url(${thumbnail})` }} />
                 <div className="column__item">
-                  <p>
-                    Upload complete. <Button button="link" href={thumbnail} label={__('View it on spee.ch')} />.
-                  </p>
-                  <div className="card__actions">
+                  <p>{__('Upload complete.')}</p>
+                  <div className="section__actions">
                     <Button button="link" label={__('New thumbnail')} onClick={resetThumbnailStatus} />
                   </div>
                 </div>
@@ -152,7 +150,7 @@ class SelectThumbnail extends React.PureComponent<Props, State> {
           </React.Fragment>
         )}
         {status === THUMBNAIL_STATUSES.READY && (
-          <div className="card__actions">
+          <div className="section__actions">
             <Button
               button="link"
               label={__('Enter a thumbnail URL')}
@@ -169,19 +167,13 @@ class SelectThumbnail extends React.PureComponent<Props, State> {
         )}
 
         {status === THUMBNAIL_STATUSES.IN_PROGRESS && <p>{__('Uploading thumbnail')}...</p>}
-        <p className="help">
-          {status === THUMBNAIL_STATUSES.API_DOWN ? (
-            __('Enter a URL for your thumbnail.')
-          ) : (
-            <I18nMessage
-              tokens={{
-                speech_link: <Button button="link" label="spee.ch" href="https://spee.ch/about" />,
-              }}
-            >
-              Upload your thumbnail to %speech_link%. Recommended size is 16:9.
-            </I18nMessage>
-          )}
-        </p>
+        {status !== THUMBNAIL_STATUSES.COMPLETE && (
+          <p className="help">
+            {status === THUMBNAIL_STATUSES.API_DOWN
+              ? __('Enter a URL for your thumbnail.')
+              : __('Upload your thumbnail to %domain%. Recommended size is 16:9.', { domain: DOMAIN })}
+          </p>
+        )}
       </div>
     );
   }

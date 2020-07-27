@@ -121,7 +121,7 @@ class TxoListItem extends React.PureComponent<Props, State> {
           <span>
             {(isTip && __('Tip')) ||
               (type === 'support' && !isTip && __('Support')) ||
-              (valueType && ((valueType === 'stream' && __('Publish')) || __(toCapitalCase(valueType)))) ||
+              (valueType && ((valueType === 'stream' && __('Upload')) || __(toCapitalCase(valueType)))) ||
               (type && __(toCapitalCase(type)))}
           </span>{' '}
           {isRevokeable && this.getLink(type, isTip)}

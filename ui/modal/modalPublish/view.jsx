@@ -1,9 +1,11 @@
 // @flow
+import * as PAGES from 'constants/pages';
 import React from 'react';
 import { Modal } from 'modal/modal';
 import ClaimPreview from 'component/claimPreview';
 import Button from 'component/button';
 import Card from 'component/common/card';
+import Nag from 'component/common/nag';
 
 type Props = {
   closeModal: () => void,
@@ -12,11 +14,12 @@ type Props = {
   uri: string,
   isEdit: boolean,
   filePath: ?string,
+  lbryFirstError: ?string,
 };
 
 class ModalPublishSuccess extends React.PureComponent<Props> {
   render() {
-    const { closeModal, clearPublish, navigate, uri, isEdit, filePath } = this.props;
+    const { closeModal, clearPublish, navigate, uri, isEdit, filePath, lbryFirstError } = this.props;
     const contentLabel = isEdit ? __('Update published') : __('File published');
     const publishMessage = isEdit
       ? __('Your update is now pending on LBRY. It will take a few minutes to appear for other users.')
@@ -53,15 +56,30 @@ class ModalPublishSuccess extends React.PureComponent<Props> {
             <div className="section__actions">
               <Button
                 button="primary"
-                label={__('View My Publishes')}
+                label={__('View My Uploads')}
                 onClick={() => {
                   clearPublish();
-                  navigate('/$/published');
+                  navigate(`/$/${PAGES.UPLOADS}`);
                   closeModal();
                 }}
               />
               <Button button="link" label={__('Close')} onClick={handleClose} />
             </div>
+          }
+          nag={
+            lbryFirstError && (
+              <Nag
+                relative
+                type="error"
+                message={
+                  <span>
+                    {__('Your file was published to LBRY, but the YouTube upload failed.')}
+                    <br />
+                    {lbryFirstError}
+                  </span>
+                }
+              />
+            )
           }
         />
       </Modal>

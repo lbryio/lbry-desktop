@@ -1,5 +1,10 @@
 // @flow
+import * as SETTINGS from 'constants/settings';
 import { createSelector } from 'reselect';
+import { selectBlockedChannels } from 'redux/selectors/blocked';
+import { makeSelectClientSetting } from 'redux/selectors/settings';
+import { selectBlackListedOutpoints, selectFilteredOutpoints } from 'lbryinc';
+import { selectClaimsById, isClaimNsfw, selectMyActiveClaims } from 'lbry-redux';
 
 const selectState = state => state.comments || {};
 
@@ -45,10 +50,74 @@ export const selectCommentsByUri = createSelector(selectState, state => {
 });
 
 export const makeSelectCommentsForUri = (uri: string) =>
-  createSelector(selectCommentsByClaimId, selectCommentsByUri, (byClaimId, byUri) => {
-    const claimId = byUri[uri];
-    return byClaimId && byClaimId[claimId];
-  });
+  createSelector(
+    selectCommentsByClaimId,
+    selectCommentsByUri,
+    selectClaimsById,
+    selectMyActiveClaims,
+    selectBlockedChannels,
+    selectBlackListedOutpoints,
+    selectFilteredOutpoints,
+    makeSelectClientSetting(SETTINGS.SHOW_MATURE),
+    (
+      byClaimId,
+      byUri,
+      claimsById,
+      myClaims,
+      blockedChannels,
+      blacklistedOutpoints,
+      filteredOutpoints,
+      showMatureContent
+    ) => {
+      const claimId = byUri[uri];
+      const comments = byClaimId && byClaimId[claimId];
+      const blacklistedMap = blacklistedOutpoints
+        ? blacklistedOutpoints.reduce((acc, val) => {
+            const outpoint = `${val.txid}:${val.nout}`;
+            return {
+              ...acc,
+              [outpoint]: 1,
+            };
+          }, {})
+        : {};
+      const filteredMap = filteredOutpoints
+        ? filteredOutpoints.reduce((acc, val) => {
+            const outpoint = `${val.txid}:${val.nout}`;
+            return {
+              ...acc,
+              [outpoint]: 1,
+            };
+          }, {})
+        : {};
 
-// todo: allow SDK to retrieve user comments through comment_list
-// todo: implement selectors for selecting comments owned by user
+      return comments
+        ? comments.filter(comment => {
+            const channelClaim = claimsById[comment.channel_id];
+
+            // Return comment if `channelClaim` doesn't exist so the component knows to resolve the author
+            if (channelClaim) {
+              if (myClaims && myClaims.size > 0) {
+                const claimIsMine = channelClaim.is_my_output || myClaims.has(channelClaim.claim_id);
+                if (claimIsMine) {
+                  return true;
+                }
+              }
+
+              const outpoint = `${channelClaim.txid}:${channelClaim.nout}`;
+              if (blacklistedMap[outpoint] || filteredMap[outpoint]) {
+                return false;
+              }
+
+              if (!showMatureContent) {
+                const claimIsMature = isClaimNsfw(channelClaim);
+                if (claimIsMature) {
+                  return false;
+                }
+              }
+            }
+
+            return !blockedChannels.includes(comment.channel_url);
+          })
+        : [];
+    }
+  );

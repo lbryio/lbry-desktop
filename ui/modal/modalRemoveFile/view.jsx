@@ -64,7 +64,7 @@ function ModalRemoveFile(props: Props) {
                 )}
                 {!deleteChecked && (
                   <p className="help">
-				  {__('This file will be removed from your Library but will remain in your Downloads folder.')}
+                    {__('This file will be removed from your Library but will remain in your Downloads folder.')}
                   </p>
                 )}
                 {/* @endif */}
@@ -73,14 +73,17 @@ function ModalRemoveFile(props: Props) {
           </React.Fragment>
         }
         actions={
-          <div className="card__actions">
-            <Button
-              button="primary"
-              label={__('OK')}
-              onClick={() => deleteFile(uri, deleteChecked, claimIsMine ? abandonChecked : false)}
-            />
-            <Button button="link" label={__('Cancel')} onClick={closeModal} />
-          </div>
+          <>
+            <div className="section__actions">
+              <Button
+                button="primary"
+                label={__('OK')}
+                onClick={() => deleteFile(uri, deleteChecked, claimIsMine ? abandonChecked : false)}
+              />
+              <Button button="link" label={__('Cancel')} onClick={closeModal} />
+            </div>
+            <p className="help">{__('These changes will appear shortly.')}</p>
+          </>
         }
       />
     </Modal>

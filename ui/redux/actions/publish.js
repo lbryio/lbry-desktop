@@ -11,14 +11,12 @@ import {
   ACTIONS as LBRY_REDUX_ACTIONS,
 } from 'lbry-redux';
 import { doError } from 'redux/actions/notifications';
-import { selectosNotificationsEnabled } from 'redux/selectors/settings';
 import { push } from 'connected-react-router';
 import analytics from 'analytics';
-import { formatLbryUrlForWeb } from 'util/url';
 import { doOpenModal } from './app';
 
 export const doPublishDesktop = (filePath: string) => (dispatch: Dispatch, getState: () => {}) => {
-  const publishSuccess = successResponse => {
+  const publishSuccess = (successResponse, lbryFirstError) => {
     const state = getState();
     const myClaims = selectMyClaims(state);
     const pendingClaim = successResponse.outputs[0];
@@ -27,7 +25,7 @@ export const doPublishDesktop = (filePath: string) => (dispatch: Dispatch, getSt
     const actions = [];
 
     // @if TARGET='app'
-    actions.push(push(`/$/${PAGES.PUBLISHED}`));
+    actions.push(push(`/$/${PAGES.UPLOADS}`));
     // @endif
 
     actions.push({
@@ -58,9 +56,10 @@ export const doPublishDesktop = (filePath: string) => (dispatch: Dispatch, getSt
         uri: url,
         isEdit,
         filePath,
+        lbryFirstError,
       })
     );
-    dispatch(doCheckPendingPublishesApp());
+    dispatch(doCheckPendingClaims());
     // @if TARGET='app'
     dispatch(doCheckReflectingFiles());
     // @endif
@@ -79,27 +78,8 @@ export const doPublishDesktop = (filePath: string) => (dispatch: Dispatch, getSt
   // on the publishes page. This doesn't exist on desktop so wait until we get a response
   // from the SDK
   // @if TARGET='web'
-  dispatch(push(`/$/${PAGES.PUBLISHED}`));
+  dispatch(push(`/$/${PAGES.UPLOADS}`));
   // @endif
 
   dispatch(doPublish(publishSuccess, publishFail));
-};
-
-// Calls claim_list_mine until any pending publishes are confirmed
-export const doCheckPendingPublishesApp = () => (dispatch: Dispatch, getState: GetState) => {
-  const onConfirmed = claim => {
-    if (selectosNotificationsEnabled(getState())) {
-      const notif = new window.Notification('LBRY Publish Complete', {
-        body: __('%nameOrTitle% has been published to lbry://%name%. Click here to view it.', {
-          nameOrTitle: claim.value_type === 'channel' ? `@${claim.name}` : claim.value.title,
-          name: claim.name,
-        }),
-        silent: false,
-      });
-      notif.onclick = () => {
-        dispatch(push(formatLbryUrlForWeb(claim.permanent_url)));
-      };
-    }
-  };
-  return dispatch(doCheckPendingClaims(onConfirmed));
 };

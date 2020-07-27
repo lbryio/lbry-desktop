@@ -31,6 +31,7 @@ type Props = {
   claimSearchByQuery: {
     [string]: Array<string>,
   },
+  claimSearchByQueryLastPageReached: { [string]: boolean },
   hiddenUris: Array<string>,
   hiddenNsfwMessage?: Node,
   channelIds?: Array<string>,
@@ -63,6 +64,7 @@ function ClaimListDiscover(props: Props) {
   const {
     doClaimSearch,
     claimSearchByQuery,
+    claimSearchByQueryLastPageReached,
     tags,
     defaultTags,
     loading,
@@ -103,7 +105,7 @@ function ClaimListDiscover(props: Props) {
   const [page, setPage] = useState(1);
   const [forceRefresh, setForceRefresh] = useState();
   const [expanded, setExpanded] = usePersistedState(`expanded-${location.pathname}`, false);
-  const [orderParamEntry, setOrderParamEntry] = useState(CS.ORDER_BY_TRENDING);
+  const [orderParamEntry, setOrderParamEntry] = usePersistedState(`entry-${location.pathname}`, CS.ORDER_BY_TRENDING);
   const [orderParamUser, setOrderParamUser] = usePersistedState(`orderUser-${location.pathname}`, CS.ORDER_BY_TRENDING);
   const followed = (followedTags && followedTags.map(t => t.name)) || [];
   const urlParams = new URLSearchParams(search);
@@ -155,7 +157,9 @@ function ClaimListDiscover(props: Props) {
 
   useEffect(() => {
     // One-time update to stash the finalized 'orderParam' at entry.
-    setOrderParamEntry(orderParam);
+    if (history.action !== 'POP') {
+      setOrderParamEntry(orderParam);
+    }
   }, []);
 
   let options: {
@@ -297,6 +301,7 @@ function ClaimListDiscover(props: Props) {
   const hasMatureTags = tagsParam && tagsParam.split(',').some(t => MATURE_TAGS.includes(t));
   const claimSearchCacheQuery = createNormalizedClaimSearchKey(options);
   const claimSearchResult = claimSearchByQuery[claimSearchCacheQuery];
+  const claimSearchResultLastPageReached = claimSearchByQueryLastPageReached[claimSearchCacheQuery];
 
   const [prevOptions, setPrevOptions] = useState(null);
 
@@ -468,10 +473,7 @@ function ClaimListDiscover(props: Props) {
 
   function handleScrollBottom() {
     if (!loading && infiniteScroll) {
-      if (claimSearchResult && claimSearchResult.length % CS.PAGE_SIZE === 0) {
-        // Only increment the page if the current page is full. A partially-filled page probably
-        // indicates "no more search results" (at least based on my testing). Gating this prevents
-        // incrementing the page when scrolling upwards.
+      if (claimSearchResult && !claimSearchResultLastPageReached) {
         setPage(page + 1);
       }
     }

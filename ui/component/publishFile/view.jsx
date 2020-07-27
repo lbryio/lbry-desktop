@@ -105,7 +105,7 @@ function PublishFile(props: Props) {
 
     setOptimizeAvail(isOptimizeAvail);
     updatePublishForm({ optimize: finalOptimizeState });
-  }, [filePath, isVid, ffmpegAvail, userOptimize]);
+  }, [currentFile, filePath, isVid, ffmpegAvail, userOptimize]);
 
   function updateFileInfo(duration, size, isvid) {
     updatePublishForm({ fileDur: duration, fileSize: size, fileVid: isvid });
@@ -150,7 +150,7 @@ function PublishFile(props: Props) {
       return (
         <p className="help--error">
           {__(UPLOAD_SIZE_MESSAGE)}{' '}
-          <Button button="link" label={__('Publishing Guide')} href="https://lbry.com/faq/video-publishing-guide" />
+          <Button button="link" label={__('Upload Guide')} href="https://lbry.com/faq/video-publishing-guide" />
         </p>
       );
     }
@@ -159,7 +159,7 @@ function PublishFile(props: Props) {
       return (
         <p className="help--warning">
           {__('Your video has a bitrate over 5 Mbps. We suggest transcoding to provide viewers the best experience.')}{' '}
-          <Button button="link" label={__('Publishing Guide')} href="https://lbry.com/faq/video-publishing-guide" />
+          <Button button="link" label={__('Upload Guide')} href="https://lbry.com/faq/video-publishing-guide" />
         </p>
       );
     }
@@ -170,7 +170,7 @@ function PublishFile(props: Props) {
           {__(
             'Your video may not be the best format. Use MP4s in H264/AAC format and a friendly bitrate (under 5 Mbps) and resolution (720p) for more reliable streaming.'
           )}{' '}
-          <Button button="link" label={__('Publishing Guide')} href="https://lbry.com/faq/video-publishing-guide" />
+          <Button button="link" label={__('Upload Guide')} href="https://lbry.com/faq/video-publishing-guide" />
         </p>
       );
     }
@@ -189,7 +189,7 @@ function PublishFile(props: Props) {
           {__(
             'For video content, use MP4s in H264/AAC format and a friendly bitrate (under 5 Mbps) and resolution (720p) for more reliable streaming. Lbry.tv uploads are restricted to 1 GB.'
           )}{' '}
-          <Button button="link" label={__('Publishing Guide')} href="https://lbry.com/faq/video-publishing-guide" />
+          <Button button="link" label={__('Upload Guide')} href="https://lbry.com/faq/video-publishing-guide" />
         </p>
       );
     }
@@ -202,7 +202,7 @@ function PublishFile(props: Props) {
           {__(
             'For video content, use MP4s in H264/AAC format and a friendly bitrate (under 5 Mbps) and resolution (720p) for more reliable streaming.'
           )}{' '}
-          <Button button="link" label={__('Publishing Guide')} href="https://lbry.com/faq/video-publishing-guide" />
+          <Button button="link" label={__('Upload Guide')} href="https://lbry.com/faq/video-publishing-guide" />
         </p>
       );
     }
@@ -252,6 +252,8 @@ function PublishFile(props: Props) {
       } else {
         updateFileInfo(0, file.size, isVideo);
       }
+    } else {
+      updateFileInfo(0, file.size, isVideo);
     }
 
     if (isMarkdownText) {
@@ -301,12 +303,12 @@ function PublishFile(props: Props) {
   if (publishing) {
     cardTitle = (
       <span>
-        {__('Publishing')}
+        {__('Uploading')}
         <Spinner type={'small'} />
       </span>
     );
   } else {
-    cardTitle = isStillEditing ? __('Edit') : __('Publish');
+     cardTitle =  isStillEditing ? __('Edit') : __('Upload');
   }
 
   return (
@@ -319,16 +321,14 @@ function PublishFile(props: Props) {
           {inProgress && <Button button="close" label={__('Cancel')} icon={ICONS.REMOVE} onClick={clearPublish} />}
         </React.Fragment>
       }
-      subtitle={
-        isStillEditing ? __('You are currently editing a claim.') : __('Publish something totally wacky and wild.')
-      }
+      subtitle={isStillEditing && __('You are currently editing your upload.')}
       actions={
         <React.Fragment>
           <FormField
             type="text"
             name="content_title"
             label={__('Title')}
-            placeholder={__('Titular Title')}
+            placeholder={__('Descriptive titles work best')}
             disabled={disabled}
             value={title}
             onChange={e => updatePublishForm({ title: e.target.value })}

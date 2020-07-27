@@ -7,6 +7,7 @@ import {
   makeSelectClaimForUri,
   makeSelectMetadataForUri,
   makeSelectChannelForClaimUri,
+  makeSelectClaimIsNsfw,
 } from 'lbry-redux';
 import { makeSelectCostInfoForUri, doFetchCostInfoForUri } from 'lbryinc';
 import { selectShowMatureContent } from 'redux/selectors/settings';
@@ -19,6 +20,7 @@ const select = (state, props) => ({
   costInfo: makeSelectCostInfoForUri(props.uri)(state),
   metadata: makeSelectMetadataForUri(props.uri)(state),
   obscureNsfw: !selectShowMatureContent(state),
+  isMature: makeSelectClaimIsNsfw(props.uri)(state),
   fileInfo: makeSelectFileInfoForUri(props.uri)(state),
   isSubscribed: makeSelectIsSubscribed(props.uri)(state),
   channelUri: makeSelectChannelForClaimUri(props.uri, true)(state),

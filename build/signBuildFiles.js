@@ -126,16 +126,17 @@ function downloadAssets() {
     .then(({ data }) => {
       const release_id = data.id;
 
-      return octokit.repos.listAssetsForRelease({
+      return octokit.repos.listReleases({
         owner: 'lbryio',
         repo: 'lbry-desktop',
         release_id,
       });
     })
     .then(({ data }) => {
-      fileCountToDownload = data.length;
-
-      data
+      const releaseToDownload = data.filter(releaseData => releaseData.tag_name === versionToSign)[0];
+      const assets = releaseToDownload.assets;
+      fileCountToDownload = assets.length;
+      assets
         .map(({ browser_download_url, name }) => ({ download_url: browser_download_url, name }))
         .forEach(({ name, download_url }) => {
           const fileName = path.resolve(__dirname, `../dist/releaseDownloads/${name}`);

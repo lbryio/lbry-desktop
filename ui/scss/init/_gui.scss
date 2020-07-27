@@ -23,6 +23,16 @@ html {
 
 body {
   font-size: 1em;
+  cursor: default;
+  line-height: 1.5;
+  font-weight: 400;
+  font-family: Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif,
+    'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
+}
+
+hr {
+  height: 1px;
+  background-color: var(--color-gray-2);
 }
 
 h1,
@@ -300,4 +310,18 @@ textarea {
   &:last-child {
     margin-bottom: 0;
   }
+}
+
+.notification__bubble {
+  height: 1.5rem;
+  width: 1.5rem;
+  border-radius: 50%;
+  background-color: #f02849;
+  position: absolute;
+  top: -0.5rem;
+  right: -0.5rem;
+  color: white;
+  font-size: var(--font-small);
+  font-weight: bold;
+  line-height: 1;
 }

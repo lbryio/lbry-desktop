@@ -4,6 +4,7 @@ import React, { useEffect } from 'react';
 import { Route, Redirect, Switch, withRouter } from 'react-router-dom';
 import SettingsPage from 'page/settings';
 import SettingsNotificationsPage from 'page/settingsNotifications';
+import SettingsAdvancedPage from 'page/settingsAdvanced';
 import HelpPage from 'page/help';
 //  @if TARGET='app'
 import BackupPage from 'page/backup';
@@ -31,6 +32,7 @@ import ListBlockedPage from 'page/listBlocked';
 import FourOhFourPage from 'page/fourOhFour';
 import SignInPage from 'page/signIn';
 import SignUpPage from 'page/signUp';
+import PasswordResetPage from 'page/passwordReset';
 import PasswordSetPage from 'page/passwordSet';
 import SignInVerifyPage from 'page/signInVerify';
 import ChannelsPage from 'page/channels';
@@ -42,6 +44,7 @@ import RewardsVerifyPage from 'page/rewardsVerify';
 import CheckoutPage from 'page/checkoutPage';
 import ChannelNew from 'page/channelNew';
 import BuyPage from 'page/buy';
+import NotificationsPage from 'page/notifications';
 
 import { parseURI } from 'lbry-redux';
 import { SITE_TITLE, WELCOME_VERSION } from 'config';
@@ -87,10 +90,13 @@ type Props = {
     push: string => void,
     state: {},
     replaceState: ({}, string, string) => void,
+    listen: any => () => void,
   },
   uri: string,
   title: string,
   welcomeVersion: number,
+  hasNavigated: boolean,
+  setHasNavigated: () => void,
 };
 
 function AppRouter(props: Props) {
@@ -102,11 +108,23 @@ function AppRouter(props: Props) {
     uri,
     title,
     welcomeVersion,
+    hasNavigated,
+    setHasNavigated,
   } = props;
   const { entries } = history;
   const entryIndex = history.index;
   const urlParams = new URLSearchParams(search);
   const resetScroll = urlParams.get('reset_scroll');
+
+  // for people arriving at settings page from deeplinks, know whether they can "go back"
+  useEffect(() => {
+    const unlisten = history.listen((location, action) => {
+      if (action === 'PUSH') {
+        if (!hasNavigated && setHasNavigated) setHasNavigated();
+      }
+    });
+    return unlisten;
+  }, [hasNavigated, setHasNavigated]);
 
   useEffect(() => {
     if (uri) {
@@ -150,7 +168,6 @@ function AppRouter(props: Props) {
       {/* @if TARGET='app' */}
       {welcomeVersion < WELCOME_VERSION && <Route path="/*" component={Welcome} />}
       {/* @endif */}
-
       <Redirect
         from={`/$/${PAGES.DEPRECATED__CHANNELS_FOLLOWING_MANAGE}`}
         to={`/$/${PAGES.CHANNELS_FOLLOWING_DISCOVER}`}
@@ -158,10 +175,13 @@ function AppRouter(props: Props) {
       <Redirect from={`/$/${PAGES.DEPRECATED__CHANNELS_FOLLOWING}`} to={`/$/${PAGES.CHANNELS_FOLLOWING}`} />
       <Redirect from={`/$/${PAGES.DEPRECATED__TAGS_FOLLOWING}`} to={`/$/${PAGES.TAGS_FOLLOWING}`} />
       <Redirect from={`/$/${PAGES.DEPRECATED__TAGS_FOLLOWING_MANAGE}`} to={`/$/${PAGES.TAGS_FOLLOWING_MANAGE}`} />
+      <Redirect from={`/$/${PAGES.DEPRECATED__PUBLISH}`} to={`/$/${PAGES.UPLOAD}`} />
+      <Redirect from={`/$/${PAGES.DEPRECATED__PUBLISHED}`} to={`/$/${PAGES.UPLOADS}`} />
 
       <Route path={`/`} exact component={HomePage} />
       <Route path={`/$/${PAGES.DISCOVER}`} exact component={DiscoverPage} />
       <Route path={`/$/${PAGES.AUTH_SIGNIN}`} exact component={SignInPage} />
+      <Route path={`/$/${PAGES.AUTH_PASSWORD_RESET}`} exact component={PasswordResetPage} />
       <Route path={`/$/${PAGES.AUTH_PASSWORD_SET}`} exact component={PasswordSetPage} />
       <Route path={`/$/${PAGES.AUTH}`} exact component={SignUpPage} />
       <Route path={`/$/${PAGES.AUTH}/*`} exact component={SignUpPage} />
@@ -185,14 +205,21 @@ function AppRouter(props: Props) {
       <Route path={`/$/${PAGES.TOP}`} exact component={TopPage} />
       <Route path={`/$/${PAGES.SETTINGS}`} exact component={SettingsPage} />
       <Route path={`/$/${PAGES.SETTINGS_NOTIFICATIONS}`} exact component={SettingsNotificationsPage} />
+      <Route path={`/$/${PAGES.SETTINGS_ADVANCED}`} exact component={SettingsAdvancedPage} />
       <Route path={`/$/${PAGES.INVITE}/:referrer`} exact component={InvitedPage} />
       <Route path={`/$/${PAGES.CHECKOUT}`} exact component={CheckoutPage} />
 
+      <PrivateRoute
+        {...props}
+        path={`/$/${PAGES.SETTINGS_NOTIFICATIONS}`}
+        exact
+        component={SettingsNotificationsPage}
+      />
       <PrivateRoute {...props} path={`/$/${PAGES.INVITE}`} component={InvitePage} />
       <PrivateRoute {...props} path={`/$/${PAGES.CHANNEL_NEW}`} component={ChannelNew} />
-      <PrivateRoute {...props} path={`/$/${PAGES.PUBLISHED}`} component={FileListPublished} />
+      <PrivateRoute {...props} path={`/$/${PAGES.UPLOADS}`} component={FileListPublished} />
       <PrivateRoute {...props} path={`/$/${PAGES.CREATOR_DASHBOARD}`} component={CreatorDashboard} />
-      <PrivateRoute {...props} path={`/$/${PAGES.PUBLISH}`} component={PublishPage} />
+      <PrivateRoute {...props} path={`/$/${PAGES.UPLOAD}`} component={PublishPage} />
       <PrivateRoute {...props} path={`/$/${PAGES.REPORT}`} component={ReportPage} />
       <PrivateRoute {...props} path={`/$/${PAGES.REWARDS}`} exact component={RewardsPage} />
       <PrivateRoute {...props} path={`/$/${PAGES.REWARDS_VERIFY}`} component={RewardsVerifyPage} />
@@ -202,10 +229,10 @@ function AppRouter(props: Props) {
       <PrivateRoute {...props} path={`/$/${PAGES.WALLET}`} exact component={WalletPage} />
       <PrivateRoute {...props} path={`/$/${PAGES.CHANNELS}`} component={ChannelsPage} />
       <PrivateRoute {...props} path={`/$/${PAGES.BUY}`} component={BuyPage} />
+      <PrivateRoute {...props} path={`/$/${PAGES.NOTIFICATIONS}`} component={NotificationsPage} />
 
       <Route path={`/$/${PAGES.EMBED}/:claimName`} exact component={EmbedWrapperPage} />
       <Route path={`/$/${PAGES.EMBED}/:claimName/:claimId`} exact component={EmbedWrapperPage} />
-
       {/* Below need to go at the end to make sure we don't match any of our pages first */}
       <Route path="/:claimName" exact component={ShowPage} />
       <Route path="/:claimName/:streamName" exact component={ShowPage} />

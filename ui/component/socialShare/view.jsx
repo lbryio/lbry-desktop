@@ -30,7 +30,7 @@ type Props = {
 function SocialShare(props: Props) {
   const { claim, title, referralCode, user, webShareable, position } = props;
   const [showEmbed, setShowEmbed] = React.useState(false);
-  const [showExtra, setShowExtra] = React.useState(false);
+  const [showClaimLinks, setShowClaimLinks] = React.useState(false);
   const [includeStartTime, setincludeStartTime]: [boolean, any] = React.useState(false);
   const [startTime, setStartTime]: [string, any] = React.useState(secondsToHms(position));
   const startTimeSeconds: number = hmsToSeconds(startTime);
@@ -74,7 +74,7 @@ function SocialShare(props: Props) {
 
   return (
     <React.Fragment>
-      <CopyableText label={__('LBRY Link')} copyable={openDotLbryDotComUrl} />
+      <CopyableText copyable={openDotLbryDotComUrl} />
       {showStartAt && (
         <div className="section__start-at">
           <FormField
@@ -140,16 +140,16 @@ function SocialShare(props: Props) {
               title={__('Embed this content')}
               onClick={() => {
                 setShowEmbed(!showEmbed);
-                setShowExtra(false);
+                setShowClaimLinks(false);
               }}
             />
             <Button
               className="share"
               iconSize={24}
-              icon={ICONS.MORE}
-              title={__('More actions')}
+              icon={ICONS.SHARE_LINK}
+              title={__('Links')}
               onClick={() => {
-                setShowExtra(!showExtra);
+                setShowClaimLinks(!showClaimLinks);
                 setShowEmbed(false);
               }}
             />
@@ -170,7 +170,7 @@ function SocialShare(props: Props) {
           startTime={startTimeSeconds}
         />
       )}
-      {showExtra && (
+      {showClaimLinks && (
         <div className="section">
           <CopyableText label={__('LBRY URL')} copyable={`lbry://${lbryUrl}`} />
           <CopyableText label={__('Download Link')} copyable={downloadUrl} />

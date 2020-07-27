@@ -7,11 +7,11 @@
   On web, the Lbry publish method call is overridden in platform/web/api-setup, using a function in platform/web/publish.
   File upload is carried out in the background by that function.
  */
-
 import fs from 'fs';
 import { remote } from 'electron';
-import React, { useEffect } from 'react';
+import { SITE_NAME } from 'config';
 import { CHANNEL_NEW, CHANNEL_ANONYMOUS } from 'constants/claim';
+import React, { useEffect } from 'react';
 import { buildURI, isURIValid, isNameValid, THUMBNAIL_STATUSES } from 'lbry-redux';
 import Button from 'component/button';
 import SelectChannel from 'component/selectChannel';
@@ -63,6 +63,7 @@ type Props = {
   otherLicenseDescription: ?string,
   licenseUrl: ?string,
   uri: ?string,
+  useLBRYUploader: ?boolean,
   publishing: boolean,
   balance: number,
   isStillEditing: boolean,
@@ -76,6 +77,7 @@ type Props = {
   updatePublishForm: any => void,
   checkAvailability: string => void,
   onChannelChange: string => void,
+  ytSignupPending: boolean,
 };
 
 function PublishForm(props: Props) {
@@ -107,6 +109,7 @@ function PublishForm(props: Props) {
     disabled = false,
     checkAvailability,
     onChannelChange,
+    ytSignupPending,
   } = props;
 
   const TAGS_LIMIT = 5;
@@ -132,7 +135,7 @@ function PublishForm(props: Props) {
   if (isStillEditing) {
     submitLabel = !publishing ? __('Save') : __('Saving...');
   } else {
-    submitLabel = !publishing ? __('Publish') : __('Publishing...');
+    submitLabel = !publishing ? __('Upload') : __('Uploading...');
   }
 
   useEffect(() => {
@@ -295,7 +298,7 @@ function PublishForm(props: Props) {
             empty={__('No tags added')}
             limitSelect={TAGS_LIMIT}
             help={__(
-              'Add tags that are relevant to your content. If mature content, ensure it is tagged mature. Tag abuse and missing mature tags will not be tolerated.'
+              "Add tags that are relevant to your content so those who're looking for it can find it more easily. If mature content, ensure it is tagged mature. Tag abuse and missing mature tags will not be tolerated."
             )}
             placeholder={__('gaming, crypto')}
             onSelect={newTags => {
@@ -332,27 +335,35 @@ function PublishForm(props: Props) {
         </div>
       )}
       <section>
-        {!formDisabled && !formValid && <PublishFormErrors />}
-
         <div className="card__actions">
           <Button
             button="primary"
             onClick={handlePublish}
             label={submitLabel}
-            disabled={formDisabled || !formValid || uploadThumbnailStatus === THUMBNAIL_STATUSES.IN_PROGRESS}
+            disabled={
+              formDisabled || !formValid || uploadThumbnailStatus === THUMBNAIL_STATUSES.IN_PROGRESS || ytSignupPending
+            }
           />
           <Button button="link" onClick={clearPublish} label={__('Cancel')} />
         </div>
         <p className="help">
-          <I18nMessage
-            tokens={{
-              lbry_terms_of_service: (
-                <Button button="link" href="https://www.lbry.com/termsofservice" label={__('LBRY Terms of Service')} />
-              ),
-            }}
-          >
-            By continuing, you accept the %lbry_terms_of_service%.
-          </I18nMessage>
+          {!formDisabled && !formValid ? (
+            <PublishFormErrors />
+          ) : (
+            <I18nMessage
+              tokens={{
+                lbry_terms_of_service: (
+                  <Button
+                    button="link"
+                    href="https://www.lbry.com/termsofservice"
+                    label={__('%site_name% Terms of Service', { site_name: SITE_NAME })}
+                  />
+                ),
+              }}
+            >
+              By continuing, you accept the %lbry_terms_of_service%.
+            </I18nMessage>
+          )}
         </p>
       </section>
     </div>

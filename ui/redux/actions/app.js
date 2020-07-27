@@ -19,14 +19,15 @@ import {
   doPreferenceGet,
   doClearSupport,
   selectFollowedTagsList,
-  // SHARED_PREFERENCES,
+  SHARED_PREFERENCES,
+  DAEMON_SETTINGS,
 } from 'lbry-redux';
-import { doToast, doError } from 'redux/actions/notifications';
+import { doToast, doError, doNotificationList } from 'redux/actions/notifications';
 import Native from 'native';
 import {
   doFetchDaemonSettings,
   doSetAutoLaunch,
-  //  doSetDaemonSetting
+  doSetDaemonSetting,
   doFindFFmpeg,
   doGetDaemonStatus,
 } from 'redux/actions/settings';
@@ -42,14 +43,16 @@ import {
   selectModal,
   selectAllowAnalytics,
 } from 'redux/selectors/app';
+import { selectDaemonSettings } from 'redux/selectors/settings';
+import { selectUser } from 'redux/selectors/user';
 // import { selectDaemonSettings } from 'redux/selectors/settings';
 import { doGetSync } from 'lbryinc';
-import { doClaimRewardType } from 'redux/actions/rewards';
-import REWARDS from 'rewards';
 import { doAuthenticate } from 'redux/actions/user';
 import { lbrySettings as config, version as appVersion } from 'package.json';
 import analytics, { SHARE_INTERNAL } from 'analytics';
 import { doSignOutCleanup, deleteSavedPassword, getSavedPassword } from 'util/saved-passwords';
+import { doSocketConnect } from 'redux/actions/websocket';
+import { stringifyServerParam, shouldSetSetting } from 'util/sync-settings';
 
 // @if TARGET='app'
 const { autoUpdater } = remote.require('electron-updater');
@@ -482,28 +485,23 @@ export function doAnaltyicsPurchaseEvent(fileInfo) {
       const purchaseInt = Number(Number(purchasePrice).toFixed(0));
       analytics.purchaseEvent(purchaseInt);
     }
-
-    setTimeout(() => {
-      const contentFeeTxid = fileInfo.content_fee && fileInfo.content_fee.txid;
-      const purchaseReceiptTxid = fileInfo.purchase_receipt && fileInfo.purchase_receipt.txid;
-      // These aren't guaranteed to exist
-      const txid = contentFeeTxid || purchaseReceiptTxid;
-
-      if (txid) {
-        dispatch(
-          doClaimRewardType(REWARDS.TYPE_PAID_CONTENT, {
-            failSilently: true,
-            params: { transaction_id: txid },
-          })
-        );
-      }
-      // Give it some time to get into the mempool
-    }, 3000);
   };
 }
 
 export function doSignIn() {
   return (dispatch, getState) => {
+    const state = getState();
+    const user = selectUser(state);
+    const userId = user.id;
+    const notificationsEnabled = user.experimental_ui;
+
+    analytics.setUser(userId);
+
+    if (notificationsEnabled) {
+      dispatch(doSocketConnect());
+      dispatch(doNotificationList());
+    }
+
     // @if TARGET='web'
     dispatch(doBalanceSubscribe());
     dispatch(doFetchChannelListMine());
@@ -535,6 +533,13 @@ export function doSetWelcomeVersion(version) {
   };
 }
 
+export function doSetHasNavigated() {
+  return {
+    type: ACTIONS.SET_HAS_NAVIGATED,
+    data: true,
+  };
+}
+
 export function doToggle3PAnalytics(allowParam, doNotDispatch) {
   return (dispatch, getState) => {
     const state = getState();
@@ -551,33 +556,38 @@ export function doToggle3PAnalytics(allowParam, doNotDispatch) {
 }
 
 export function doGetAndPopulatePreferences() {
+  const { SDK_SYNC_KEYS } = SHARED_PREFERENCES;
+
   return (dispatch, getState) => {
+    const state = getState();
+    // @if TARGET='app'
+    const preferenceKey = state.user && state.user.user && state.user.user.has_verified_email ? 'shared' : 'anon';
+    // @endif
+    // @if TARGET='web'
+    const preferenceKey = 'shared';
+    // @endif
+
     function successCb(savedPreferences) {
-      // const state = getState();
-      // const daemonSettings = selectDaemonSettings(state);
+      const successState = getState();
+      const daemonSettings = selectDaemonSettings(successState);
 
       if (savedPreferences !== null) {
         dispatch(doPopulateSharedUserState(savedPreferences));
         // @if TARGET='app'
-        // const { settings, sharing_3P: sharing3P } = savedPreferences.value;
-        // // apply daemonSettings (todo: separate function)
-        // Object.entries(settings).forEach(([key, val]) => {
-        //   if (val !== null && daemonSettings[key] !== val) {
-        //     if (key === SHARED_PREFERENCES.WALLET_SERVERS) {
-        //       const hasSavedServers = Array.isArray(val) && val.length > 0;
-        //       if (hasSavedServers) {
-        //         // Ignore this key if there are no actual saved servers in the list
-        //         const servers = val.map(item => `${item[0]}:${item[1]}`);
-        //         dispatch(doSetDaemonSetting(key, servers, true));
-        //       }
-        //     } else {
-        //       dispatch(doSetDaemonSetting(key, val, true));
-        //     }
-        //   }
-        // });
-        // if (sharing3P !== undefined) {
-        //   doToggle3PAnalytics(sharing3P, true);
-        // }
+
+        const { settings } = savedPreferences.value;
+        Object.entries(settings).forEach(([key, val]) => {
+          if (SDK_SYNC_KEYS.includes(key)) {
+            if (shouldSetSetting(key, val, daemonSettings[key])) {
+              if (key === DAEMON_SETTINGS.LBRYUM_SERVERS) {
+                const servers = stringifyServerParam(val);
+                dispatch(doSetDaemonSetting(key, servers, true));
+              } else {
+                dispatch(doSetDaemonSetting(key, val, true));
+              }
+            }
+          }
+        });
         // @endif
       }
     }
@@ -593,7 +603,7 @@ export function doGetAndPopulatePreferences() {
       });
     }
 
-    doPreferenceGet('shared', successCb, failCb);
+    doPreferenceGet(preferenceKey, successCb, failCb);
   };
 }
 

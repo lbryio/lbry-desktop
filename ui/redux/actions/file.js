@@ -6,9 +6,9 @@ import {
   Lbry,
   batchActions,
   doAbandonClaim,
-  selectMyClaimsOutpoints,
   makeSelectFileInfoForUri,
   makeSelectClaimForUri,
+  ABANDON_STATES,
 } from 'lbry-redux';
 import { doHideModal } from 'redux/actions/app';
 import { goBack } from 'connected-react-router';
@@ -30,23 +30,19 @@ export function doOpenFileInShell(path) {
   };
 }
 
-export function doDeleteFile(outpoint, deleteFromComputer, abandonClaim) {
-  return (dispatch, getState) => {
-    const state = getState();
-
-    // If the file is for a claim we published then also abandon the claim
-    const myClaimsOutpoints = selectMyClaimsOutpoints(state);
-    if (abandonClaim && myClaimsOutpoints.includes(outpoint)) {
+export function doDeleteFile(outpoint, deleteFromComputer, abandonClaim, cb) {
+  return dispatch => {
+    if (abandonClaim) {
       const [txid, nout] = outpoint.split(':');
-
-      dispatch(doAbandonClaim(txid, Number(nout)));
+      dispatch(doAbandonClaim(txid, Number(nout), cb));
     }
+
     // @if TARGET='app'
     Lbry.file_delete({
       outpoint,
       delete_from_download_dir: deleteFromComputer,
     });
-    
+
     dispatch({
       type: ACTIONS.FILE_DELETE,
       data: {
@@ -65,8 +61,21 @@ export function doDeleteFileAndMaybeGoBack(uri, deleteFromComputer, abandonClaim
     const { nout, txid } = makeSelectClaimForUri(uri)(state);
     const claimOutpoint = `${txid}:${nout}`;
     const actions = [];
-    actions.push(doHideModal());
-    actions.push(doDeleteFile(outpoint || claimOutpoint, deleteFromComputer, abandonClaim));
+
+    if (!abandonClaim) {
+      actions.push(doHideModal());
+    }
+
+    actions.push(
+      doDeleteFile(outpoint || claimOutpoint, deleteFromComputer, abandonClaim, abandonState => {
+        if (abandonState === ABANDON_STATES.DONE) {
+          if (abandonClaim) {
+            dispatch(goBack());
+            dispatch(doHideModal());
+          }
+        }
+      })
+    );
 
     if (playingUri === uri) {
       actions.push(doSetPlayingUri(null));
@@ -75,8 +84,5 @@ export function doDeleteFileAndMaybeGoBack(uri, deleteFromComputer, abandonClaim
     // we need to alter autoplay to not start downloading again after you delete it
 
     dispatch(batchActions(...actions));
-    if (abandonClaim) {
-      dispatch(goBack());
-    }
   };
 }

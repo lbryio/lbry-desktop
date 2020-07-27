@@ -54,7 +54,7 @@
   // Menu
   --color-menu-background: var(--color-header-background);
   --color-menu-background--selected: var(--color-secondary-alt);
-  --color-menu-background--active: var(--color-secondary-alt);
+  --color-menu-background--active: #f0f7ff;
   --color-menu-icon: var(--color-navigation-link);
   --color-menu-icon-active: var(--color-navigation-link);
 
@@ -75,9 +75,9 @@
   --color-editor-attr: #04b0f4;
   --color-editor-string: #ff7451;
   --color-editor-inline-code-fg: var(--color-text);
-  --color-editor-inline-code-fg-preview: #eeeeee;
+  --color-editor-inline-code-fg-preview: #2e3439;
   --color-editor-inline-code-bg: rgba(157, 161, 165, 0.3);
-  --color-editor-inline-code-bg-preview: #8f9499;
+  --color-editor-inline-code-bg-preview: #d0e8ff;
   --color-editor-selected: #add6ff;
   --color-editor-link: var(--color-link);
   --color-editor-url: var(--color-editor-string);

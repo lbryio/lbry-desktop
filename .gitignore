@@ -13,9 +13,14 @@ package-lock.json
 .transifexrc
 .idea/
 /build/daemon*
+/lbrytv/dist/
+/lbrytv/node_modules
+/static/lbry-first/
+/build/lbryFirst*
 /web/dist/*
 /web/node_modules/*
 /web/.env
+/web/.env.defaults
 /custom/*
 !/custom/homepage.example.js
 .env

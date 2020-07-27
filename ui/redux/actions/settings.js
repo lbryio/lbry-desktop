@@ -1,4 +1,4 @@
-import { Lbry, ACTIONS, SHARED_PREFERENCES, doWalletReconnect, SETTINGS } from 'lbry-redux';
+import { Lbry, ACTIONS, SHARED_PREFERENCES, doWalletReconnect, SETTINGS, DAEMON_SETTINGS } from 'lbry-redux';
 import { doToast } from 'redux/actions/notifications';
 import * as LOCAL_ACTIONS from 'constants/action_types';
 import analytics from 'analytics';
@@ -6,6 +6,7 @@ import SUPPORTED_LANGUAGES from 'constants/supported_languages';
 import { launcher } from 'util/autoLaunch';
 import { makeSelectClientSetting } from 'redux/selectors/settings';
 const { DEFAULT_LANGUAGE } = require('config');
+const { SDK_SYNC_KEYS } = SHARED_PREFERENCES;
 
 export const IS_MAC = process.platform === 'darwin';
 const UPDATE_IS_NIGHT_INTERVAL = 5 * 60 * 1000;
@@ -58,13 +59,13 @@ export function doClearDaemonSetting(key) {
       key,
     };
     Lbry.settings_clear(clearKey).then(defaultSettings => {
-      if (Object.values(SHARED_PREFERENCES).includes(key)) {
+      if (SDK_SYNC_KEYS.includes(key)) {
         dispatch({
           type: ACTIONS.SHARED_PREFERENCE_SET,
           data: { key: key, value: null },
         });
       }
-      if (key === SHARED_PREFERENCES.WALLET_SERVERS) {
+      if (key === DAEMON_SETTINGS.LBRYUM_SERVERS) {
         dispatch(doWalletReconnect());
       }
     });
@@ -87,14 +88,14 @@ export function doSetDaemonSetting(key, value, doNotDispatch = false) {
       value: !value && value !== false ? null : value,
     };
     Lbry.settings_set(newSettings).then(newSetting => {
-      if (Object.values(SHARED_PREFERENCES).includes(key) && !doNotDispatch) {
+      if (SDK_SYNC_KEYS.includes(key) && !doNotDispatch) {
         dispatch({
           type: ACTIONS.SHARED_PREFERENCE_SET,
           data: { key: key, value: newSetting[key] },
         });
       }
       // hardcoding this in lieu of a better solution
-      if (key === SHARED_PREFERENCES.WALLET_SERVERS) {
+      if (key === DAEMON_SETTINGS.LBRYUM_SERVERS) {
         dispatch(doWalletReconnect());
         // todo: add sdk reloadsettings() (or it happens automagically?)
       }
@@ -163,6 +164,12 @@ export function doSetDarkTime(value, options) {
 
     dispatch(doSetClientSetting(SETTINGS.DARK_MODE_TIMES, mergedTimes));
     dispatch(doUpdateIsNight());
+  };
+}
+
+export function doSyncClientSettings() {
+  return {
+    type: LOCAL_ACTIONS.SYNC_CLIENT_SETTINGS,
   };
 }
 

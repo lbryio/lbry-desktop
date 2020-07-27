@@ -7,16 +7,51 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ## [Unreleased on desktop]
 
 ### Added
-
-- Add "tap to unmute" button for videos that start with audio muted _community pr!_ ([#4365](https://github.com/lbryio/lbry-desktop/pull/4365))
-- Allow upgrade bar to be dismissed per session _community pr!_ ([#4413](https://github.com/lbryio/lbry-desktop/pull/4413))
-- Pause the "autoplay next" timer when performing long operations such as Tipping, Supporting or commenting _community pr!_ ([4419](https://github.com/lbryio/lbry-desktop/pull/4419))  
-- Email notification management page ([#4409](https://github.com/lbryio/lbry-desktop/pull/4409))
-- Publish Page improvements to prevent accidental overwrites of existing claims _community pr!_ ([#4416](https://github.com/lbryio/lbry-desktop/pull/4416))
-- Option to remove abandoned claims from Blocked Channels page _community pr!_ ([#4433](https://github.com/lbryio/lbry-desktop/pull/4433))
+- Block mature content when accessed directly from URL _community pr!_ ([#4560](https://github.com/lbryio/lbry-desktop/pull/4560))
 
 ### Changed
 
+### Fixed
+- Fix sluggish Back button when navigation back to channels with lots of comments _community pr!_ ([#4576](https://github.com/lbryio/lbry-desktop/pull/4576))
+
+## [0.47.1] - [2020-07-23]
+
+### Added
+
+- Allow zooming on Desktop _community pr!_ ([#4513](https://github.com/lbryio/lbry-desktop/pull/4513))
+- Show "YT Creator" label in File Page as well _community pr!_ ([#4523](https://github.com/lbryio/lbry-desktop/pull/4523))
+- Add option to retry video stream on failure _community pr!_ ([#4541](https://github.com/lbryio/lbry-desktop/pull/4541))
+- Allow blocking channels from comments ([#4557](https://github.com/lbryio/lbry-desktop/pull/4557))
+
+### Changed
+
+- Updated lbry-sdk to [0.79.1](https://github.com/lbryio/lbry-sdk/releases/tag/v0.79.1)
+
+### Fixed
+
+- Fix 'transcoding' checkbox state when switching file types _community pr!_ ([#4529](https://github.com/lbryio/lbry-desktop/pull/4529))
+- Fix channel file-search not available in mobile _community pr!_ ([#4527](https://github.com/lbryio/lbry-desktop/pull/4527))
+- New Channel: Fix incorrect GUI configuration at entry _community pr!_ ([#4545](https://github.com/lbryio/lbry-desktop/pull/4545))
+- Hide blocked channels in comments ([#4557](https://github.com/lbryio/lbry-desktop/pull/4557))
+
+## [0.47.0] - [2020-07-13]
+
+### Added
+
+- Add ability to sign supports ([#4382](https://github.com/lbryio/lbry-desktop/pull/4382))
+- Add "tap to unmute" button for videos that start with audio muted _community pr!_ ([#4365](https://github.com/lbryio/lbry-desktop/pull/4365))
+- Allow upgrade bar to be dismissed per session _community pr!_ ([#4413](https://github.com/lbryio/lbry-desktop/pull/4413))
+- Pause the "autoplay next" timer when performing long operations such as Tipping, Supporting or commenting _community pr!_ ([4419](https://github.com/lbryio/lbry-desktop/pull/4419))
+- Email notification management page ([#4409](https://github.com/lbryio/lbry-desktop/pull/4409))
+- Publish Page improvements to prevent accidental overwrites of existing claims _community pr!_ ([#4416](https://github.com/lbryio/lbry-desktop/pull/4416))
+- Option to remove abandoned claims from Blocked Channels page _community pr!_ ([#4433](https://github.com/lbryio/lbry-desktop/pull/4433))
+- New channel create/edit page ([#4445](https://github.com/lbryio/lbry-desktop/pull/4445))
+- Add dialog to copy various types of links for a claim _community pr!_ ([#4474](https://github.com/lbryio/lbry-desktop/pull/4474))
+- Add password reset link to settings page for logged in users _community pr!_ ([#4473](https://github.com/lbryio/lbry-desktop/pull/4473))
+
+### Changed
+
+- Updated lbry-sdk to [0.77.0](https://github.com/lbryio/lbry-sdk/releases/tag/v0.77.0)
 - Merged Tip and Support Buttons into one UI on file page ([#4382](https://github.com/lbryio/lbry-desktop/pull/4382))
 
 ### Fixed
@@ -30,7 +65,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Fix "Refresh" on Publish page not showing the loading indicator when pressed _community pr!_ ([#4451](https://github.com/lbryio/lbry-desktop/pull/4451))
 - Fix video duration not appearing on Mobile with enough width _community pr!_ ([#4452](https://github.com/lbryio/lbry-desktop/pull/4452))
 - Fix video transcode setting not reflected correctly (MP3 incorrectly transcoded to MP4) _community pr!_ ([#4458](https://github.com/lbryio/lbry-desktop/pull/4458))
-- Fix search results not appearing when scrolling due to long Tags or Following list in the navigation bar _community pr!_  ([#4465](https://github.com/lbryio/lbry-desktop/pull/4465))
+- Fix scrolling glitch when results are exactly the page size _community pr!_ ([#4521](https://github.com/lbryio/lbry-desktop/pull/4521))
+- Fix search results not appearing when scrolling due to long Tags or Following list in the navigation bar _community pr!_ ([#4465](https://github.com/lbryio/lbry-desktop/pull/4465))
+- Fix unmuted state lost or reverted when playing a new video _community pr!_ ([#4483](https://github.com/lbryio/lbry-desktop/pull/4483))
 
 ## [0.46.2] - [2020-06-10]
 

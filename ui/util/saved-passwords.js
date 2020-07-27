@@ -17,7 +17,13 @@ function setCookie(name, value, expirationDaysOnWeb) {
     expires = `expires=${IS_WEB ? date.toUTCString() : maxExpiration};`;
   }
 
-  let cookie = `${name}=${value || ''}; ${expires} path=/; SameSite=None;`;
+  let cookie = `${name}=${value || ''}; ${expires} path=/;`;
+  if (isProduction) {
+    cookie += ` SameSite=None;`;
+  }
+  if (!isProduction) {
+    cookie += ` SameSite=Lax;`;
+  }
   if (isProduction) {
     cookie += ` domain=${domain}; Secure;`;
   }

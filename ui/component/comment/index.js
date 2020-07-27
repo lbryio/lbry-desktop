@@ -5,10 +5,10 @@ import {
   makeSelectClaimForUri,
   makeSelectThumbnailForUri,
   makeSelectIsUriResolving,
-  selectChannelIsBlocked,
-  doCommentUpdate, // doEditComment would be a more fitting name
-  doCommentAbandon,
 } from 'lbry-redux';
+import { doCommentAbandon, doCommentUpdate } from 'redux/actions/comments';
+import { doToggleBlockChannel } from 'redux/actions/blocked';
+import { selectChannelIsBlocked } from 'redux/selectors/blocked';
 import Comment from './view';
 
 const select = (state, props) => ({
@@ -23,6 +23,7 @@ const perform = dispatch => ({
   resolveUri: uri => dispatch(doResolveUri(uri)),
   updateComment: (commentId, comment) => dispatch(doCommentUpdate(commentId, comment)),
   deleteComment: commentId => dispatch(doCommentAbandon(commentId)),
+  blockChannel: channelUri => dispatch(doToggleBlockChannel(channelUri)),
 });
 
 export default connect(select, perform)(Comment);

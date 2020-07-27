@@ -33,9 +33,10 @@ function UserPasswordReset(props: Props) {
     doClearEmailEntry,
     emailToVerify,
   } = props;
-  const { push } = useHistory();
+  const { location, push, goBack } = useHistory();
   const [email, setEmail] = React.useState(emailToVerify || '');
   const valid = email.match(EMAIL_REGEX);
+  const restartAtSignInPage = location.pathname === `/$/${PAGES.AUTH_SIGNIN}`;
 
   function handleSubmit() {
     if (email) {
@@ -47,7 +48,11 @@ function UserPasswordReset(props: Props) {
     setEmail('');
     doClearPasswordEntry();
     doClearEmailEntry();
-    push(`/$/${PAGES.AUTH_SIGNIN}`);
+    if (restartAtSignInPage) {
+      push(`/$/${PAGES.AUTH_SIGNIN}`);
+    } else {
+      goBack();
+    }
   }
 
   React.useEffect(() => {
@@ -68,7 +73,7 @@ function UserPasswordReset(props: Props) {
               <FormField
                 autoFocus
                 disabled={passwordResetSuccess}
-                placeholder={__('hotstuff_96@hotmail.com')}
+                placeholder={__('yourstruly@example.com')}
                 type="email"
                 name="sign_in_email"
                 id="username"

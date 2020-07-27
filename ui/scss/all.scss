@@ -1,13 +1,15 @@
 @charset "utf-8";
 
-@import '@lbry/components/sass/index.scss';
-@import 'themes/light.scss';
-@import 'themes/dark.scss';
+@import 'init/reset';
 @import 'init/vars';
 @import 'init/mixins';
 @import 'init/gui';
+@import 'init/color';
+@import 'themes/light.scss';
+@import 'themes/dark.scss';
 @import 'component/ads';
 @import 'component/animation';
+@import 'component/badge';
 @import 'component/button';
 @import 'component/card';
 @import 'component/channel';
@@ -34,6 +36,7 @@
 @import 'component/modal';
 @import 'component/nag';
 @import 'component/navigation';
+@import 'component/notification';
 @import 'component/pagination';
 @import 'component/purchase';
 @import 'component/placeholder';

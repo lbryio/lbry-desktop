@@ -16,6 +16,7 @@ import WaitUntilOnPage from 'component/common/wait-until-on-page';
 import RecommendedContent from 'component/recommendedContent';
 import CommentsList from 'component/commentsList';
 import CommentCreate from 'component/commentCreate';
+import YoutubeBadge from 'component/youtubeBadge';
 
 export const FILE_WRAPPER_CLASS = 'file-page__video-container';
 
@@ -31,6 +32,8 @@ type Props = {
   channelUri: string,
   renderMode: string,
   markSubscriptionRead: (string, string) => void,
+  obscureNsfw: boolean,
+  isMature: boolean,
 };
 
 class FilePage extends React.Component<Props> {
@@ -78,10 +81,14 @@ class FilePage extends React.Component<Props> {
   }
 
   renderFilePageLayout(uri: string, mode: string, cost: ?number) {
+    const { claim } = this.props;
+    const channelClaimId = claim.signing_channel ? claim.signing_channel.claim_id : null;
+
     if (RENDER_MODES.FLOATING_MODES.includes(mode)) {
       return (
         <React.Fragment>
           <ClaimUri uri={uri} />
+          <YoutubeBadge channelClaimId={channelClaimId} includeSyncDate={false} />
           <div className={FILE_WRAPPER_CLASS}>
             <FileRenderInitiator uri={uri} />
           </div>
@@ -95,6 +102,7 @@ class FilePage extends React.Component<Props> {
       return (
         <React.Fragment>
           <ClaimUri uri={uri} />
+          <YoutubeBadge channelClaimId={channelClaimId} includeSyncDate={false} />
           <FileTitle uri={uri} />
           <FileRenderDownload uri={uri} isFree={cost === 0} />
         </React.Fragment>
@@ -105,6 +113,7 @@ class FilePage extends React.Component<Props> {
       return (
         <React.Fragment>
           <ClaimUri uri={uri} />
+          <YoutubeBadge channelClaimId={channelClaimId} includeSyncDate={false} />
           <FileTitle uri={uri} />
           <FileRenderInitiator uri={uri} />
           <FileRenderInline uri={uri} />
@@ -115,6 +124,7 @@ class FilePage extends React.Component<Props> {
     return (
       <React.Fragment>
         <ClaimUri uri={uri} />
+        <YoutubeBadge channelClaimId={channelClaimId} includeSyncDate={false} />
         <FileRenderInitiator uri={uri} />
         <FileRenderInline uri={uri} />
         <FileTitle uri={uri} />
@@ -122,8 +132,22 @@ class FilePage extends React.Component<Props> {
     );
   }
 
+  renderBlockedPage() {
+    const { uri } = this.props;
+    return (
+      <Page>
+        <ClaimUri uri={uri} />
+        <FileTitle uri={uri} isNsfwBlocked />
+      </Page>
+    );
+  }
+
   render() {
-    const { uri, renderMode, costInfo } = this.props;
+    const { uri, renderMode, costInfo, obscureNsfw, isMature } = this.props;
+
+    if (obscureNsfw && isMature) {
+      return this.renderBlockedPage();
+    }
 
     return (
       <Page className="file-page">
@@ -133,11 +157,8 @@ class FilePage extends React.Component<Props> {
         <div className="section columns">
           <div className="card-stack">
             <FileDescription uri={uri} />
-
             <FileValues uri={uri} />
-
             <FileDetails uri={uri} />
-
             <Card
               title={__('Leave a Comment')}
               actions={

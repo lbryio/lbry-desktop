@@ -2,7 +2,13 @@
 const PAGES = require('../constants/pages');
 
 exports.formatLbryUrlForWeb = uri => {
-  return uri.replace('lbry://', '/').replace(/#/g, ':');
+  let newUrl = uri.replace('lbry://', '/').replace(/#/g, ':');
+  if (newUrl.startsWith('/?')) {
+    // This is a lbry link to an internal page ex: lbry://?rewards
+    newUrl = newUrl.replace('/?', '/$/');
+  }
+
+  return newUrl;
 };
 
 exports.formatFileSystemPath = path => {

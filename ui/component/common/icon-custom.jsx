@@ -620,6 +620,21 @@ export const icons = {
       viewBox: '0 0 60 60',
     }
   ),
+  [ICONS.SHARE_LINK]: buildIcon(
+    <g>
+      <path
+        fillRule="evenodd"
+        clipRule="evenodd"
+        d="M0 30C0 13.4315 13.4315 0 30 0C46.5685 0 60 13.4315 60 30C60 46.5685 46.5685 60 30 60C13.4315 60 0 46.5685 0 30Z"
+        fill="#eee"
+      />
+      <path d="M28 30a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" stroke="black" />
+      <path d="M32 27a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" stroke="black" />
+    </g>,
+    {
+      viewBox: '0 0 60 60',
+    }
+  ),
   [ICONS.PURCHASED]: buildIcon(
     <g>
       <path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4" />
@@ -684,6 +699,19 @@ export const icons = {
     <g>
       <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z" />
       <circle cx="12" cy="13" r="4" />
+    </g>
+  ),
+  [ICONS.LBRY_STATUS]: buildIcon(
+    <g>
+      <line x1="18" y1="20" x2="18" y2="10" />
+      <line x1="12" y1="20" x2="12" y2="4" />
+      <line x1="6" y1="20" x2="6" y2="14" />
+    </g>
+  ),
+  [ICONS.NOTIFICATION]: buildIcon(
+    <g>
+      <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
+      <path d="M13.73 21a2 2 0 0 1-3.46 0" />
     </g>
   ),
 };

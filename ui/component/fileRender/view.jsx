@@ -33,6 +33,7 @@ type Props = {
   renderMode: string,
   thumbnail: string,
   desktopPlayStartTime?: number,
+  className?: string,
 };
 
 class FileRender extends React.PureComponent<Props> {
@@ -129,10 +130,10 @@ class FileRender extends React.PureComponent<Props> {
               // @if TARGET='app'
               file: options => fs.createReadStream(downloadPath, options),
               // @endif
-              stream: source
+              stream: source,
             }}
             theme={currentTheme}
-            />
+          />
         );
       case RENDER_MODES.APPLICATION:
         return <AppViewer uri={uri} />;
@@ -142,11 +143,11 @@ class FileRender extends React.PureComponent<Props> {
   }
 
   render() {
-    const { embedded, renderMode } = this.props;
+    const { embedded, renderMode, className } = this.props;
 
     return (
       <div
-        className={classnames('file-render', {
+        className={classnames('file-render', className, {
           'file-render--document': RENDER_MODES.TEXT_MODES.includes(renderMode) && !embedded,
           'file-render--embed': embedded,
         })}

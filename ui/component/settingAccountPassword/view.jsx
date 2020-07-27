@@ -4,6 +4,7 @@ import { FormField, Form } from 'component/common/form';
 import Button from 'component/button';
 import ErrorText from 'component/common/error-text';
 import Card from 'component/common/card';
+import * as PAGES from 'constants/pages';
 
 type Props = {
   user: ?User,
@@ -64,7 +65,9 @@ export default function SettingAccountPassword(props: Props) {
 
               <div className="section__actions">
                 <Button button="primary" type="submit" label={__('Set Password')} disabled={!newPassword} />
-                {!hasPassword && (
+                {hasPassword ? (
+                  <Button button="link" label={__('Forgot Password?')} navigate={`/$/${PAGES.AUTH_PASSWORD_RESET}`} />
+                ) : (
                   <Button button="link" label={__('Cancel')} onClick={() => setIsAddingPassword(false)} />
                 )}
               </div>

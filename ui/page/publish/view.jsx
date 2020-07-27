@@ -34,7 +34,7 @@ function PublishPage(props: Props) {
         <Fragment>
           <div className="section">
             <Yrbl
-              title={__("You can't publish things quite yet")}
+              title={__("You can't upload things quite yet")}
               subtitle={
                 <Fragment>
                   <p>

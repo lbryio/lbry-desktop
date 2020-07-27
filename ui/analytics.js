@@ -93,8 +93,8 @@ const analytics: Analytics = {
     }
   },
   setUser: userId => {
-    // SEND USERID TO MATOMO?
     if (internalAnalyticsEnabled && userId) {
+      window._paq.push(['setUserId', String(userId)]);
       // @if TARGET='app'
       Native.getAppVersionInfo().then(({ localVersion }) => {
         sendMatomoEvent('Version', 'Desktop-Version', localVersion);
@@ -149,7 +149,8 @@ const analytics: Analytics = {
     }
   },
   apiLogPublish: (claimResult: ChannelClaim | StreamClaim) => {
-    if (internalAnalyticsEnabled && isProduction) {
+    // Don't check if this is production so channels created on localhost are still linked to user
+    if (internalAnalyticsEnabled) {
       const { permanent_url: uri, claim_id: claimId, txid, nout, signing_channel: signingChannel } = claimResult;
       let channelClaimId;
       if (signingChannel) {

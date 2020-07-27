@@ -1,11 +1,6 @@
 import { connect } from 'react-redux';
-import {
-  doClaimSearch,
-  selectClaimSearchByQuery,
-  selectFetchingClaimSearch,
-  selectBlockedChannels,
-  SETTINGS,
-} from 'lbry-redux';
+import { doClaimSearch, selectClaimSearchByQuery, selectFetchingClaimSearch, SETTINGS } from 'lbry-redux';
+import { selectBlockedChannels } from 'redux/selectors/blocked';
 import { doToggleTagFollowDesktop } from 'redux/actions/tags';
 import { makeSelectClientSetting } from 'redux/selectors/settings';
 import ClaimListDiscover from './view';

@@ -85,7 +85,7 @@ function SideNavigation(props: Props) {
     }
   }, [setPulseLibrary, purchaseSuccess, doClearPurchasedUriSuccess]);
 
-  function buildLink(path, label, icon, onClick, requiresAuth = false,  isLiteral = false) {
+  function buildLink(path, label, icon, onClick, requiresAuth = false, isLiteral = false) {
     return {
       navigate: !isLiteral ? `$/${path}` : `${path}`,
       label,
@@ -136,7 +136,7 @@ function SideNavigation(props: Props) {
               ...buildLink(PAGES.DISCOVER, __('All Content'), ICONS.DISCOVER),
             },
             {
-              ...buildLink(PAGES.LIBRARY, __('Library'), ICONS.LIBRARY),
+              ...buildLink(PAGES.LIBRARY, IS_WEB ? __('Purchased') : __('Library'), ICONS.LIBRARY),
             },
             // @if TARGET='web'
             {
@@ -177,14 +177,14 @@ function SideNavigation(props: Props) {
               },
               {
                 ...buildLink(
-                  PAGES.PUBLISHED,
+                  PAGES.UPLOADS,
                   uploadCount ? (
                     <span>
-                      {__('Publishes')}
+                      {__('Uploads')}
                       <Spinner type="small" />
                     </span>
                   ) : (
-                    __('Publishes')
+                    __('Uploads')
                   ),
                   ICONS.PUBLISH
                 ),
@@ -202,7 +202,7 @@ function SideNavigation(props: Props) {
                 ...buildLink(PAGES.INVITE, __('Invites'), ICONS.INVITE),
               },
               {
-                ...buildLink(PAGES.PUBLISH, __('Publish'), ICONS.PUBLISH),
+                ...buildLink(PAGES.UPLOAD, __('Upload'), ICONS.PUBLISH),
               },
               {
                 ...buildLink(PAGES.HELP, __('Help'), ICONS.HELP),

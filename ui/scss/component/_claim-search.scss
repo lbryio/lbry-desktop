@@ -75,11 +75,13 @@
   flex-wrap: wrap;
 }
 
+.claim-search__top > div {
+  @media (max-width: $breakpoint-small) {
+    margin: var(--spacing-xxs) 0;
+  }
+}
+
 .claim-search__top-row {
   display: flex;
   flex-wrap: nowrap;
-
-  @media (max-width: $breakpoint-small) {
-    margin-bottom: var(--spacing-s);
-  }
 }

@@ -61,7 +61,7 @@ function ChannelAbout(props: Props) {
             <ClaimTags uri={uri} type="large" />
           </div>
 
-          <label>{__('Total Publishes')}</label>
+          <label>{__('Total Uploads')}</label>
           <div className="media__info-text">{claim.meta.claims_in_channel}</div>
 
           <label>{__('Last Updated')}</label>

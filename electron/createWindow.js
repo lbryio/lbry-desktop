@@ -3,9 +3,22 @@ import { app, BrowserWindow, dialog, shell, screen } from 'electron';
 import isDev from 'electron-is-dev';
 import windowStateKeeper from 'electron-window-state';
 import SUPPORTED_LANGUAGES from 'constants/supported_languages';
+import { SUPPORTED_SUB_LANGUAGE_CODES, SUB_LANG_CODE_LEN } from 'constants/supported_sub_languages';
 
 import setupBarMenu from './menu/setupBarMenu';
 import * as PAGES from 'constants/pages';
+
+function GetAppLangCode() {
+  // 1. Gets the user locale.
+  // 2. Converts unsupported sub-languages to its primary (e.g. "en-GB" -> "en").
+  //    Note that the primary itself may or may not be a supported language
+  //    (up to clients to verify against SUPPORTED_LANGUAGES).
+  const langCode = app.getLocale();
+  if (langCode.length === SUB_LANG_CODE_LEN && !SUPPORTED_SUB_LANGUAGE_CODES.includes(langCode)) {
+    return langCode.slice(0, 2);
+  }
+  return langCode;
+}
 
 export default appState => {
   // Get primary display dimensions from Electron.
@@ -144,7 +157,7 @@ export default appState => {
       const language =
         storedLanguage && storedLanguage !== 'undefined' && storedLanguage !== 'null'
           ? storedLanguage
-          : app.getLocale().slice(0, 2);
+          : GetAppLangCode();
       if (language !== 'en' && SUPPORTED_LANGUAGES[language]) {
         window.webContents.send('language-set', language);
       }
@@ -185,7 +198,7 @@ export default appState => {
 
     let dispUrl = url.replace(hoverUrlBase, lbryProto);
     // Non-claims don't need the lbry protocol:
-    if (dispUrl === lbryProto)  {
+    if (dispUrl === lbryProto) {
       dispUrl = 'Home';
     } else if (dispUrl.startsWith(lbryProto + '$/')) {
       dispUrl = dispUrl.replace(lbryProto, '/');

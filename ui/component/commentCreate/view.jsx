@@ -1,5 +1,6 @@
 // @flow
 import { CHANNEL_NEW } from 'constants/claim';
+import { SIMPLE_SITE } from 'config';
 import React, { useEffect, useState } from 'react';
 import classnames from 'classnames';
 import { FormField, Form } from 'component/common/form';
@@ -61,7 +62,7 @@ export function CommentCreate(props: Props) {
     if (isReply) {
       commentValue = event.target.value;
     } else {
-      commentValue = advancedEditor ? event : event.target.value;
+      commentValue = !SIMPLE_SITE && advancedEditor ? event : event.target.value;
     }
 
     setCommentValue(commentValue);
@@ -110,11 +111,13 @@ export function CommentCreate(props: Props) {
       {!isReply && <ChannelSelection channel={channel} hideAnon onChannelChange={handleChannelChange} />}
       <FormField
         disabled={channel === CHANNEL_NEW}
-        type={advancedEditor && !isReply ? 'markdown' : 'textarea'}
+        type={SIMPLE_SITE ? 'textarea' : advancedEditor && !isReply ? 'markdown' : 'textarea'}
         name={isReply ? 'content_reply' : 'content_description'}
         label={isReply ? __('Replying as %reply_channel%', { reply_channel: channel }) : __('Comment')}
-        quickActionLabel={isReply ? undefined : advancedEditor ? __('Simple Editor') : __('Advanced Editor')}
-        quickActionHandler={isReply ? undefined : toggleEditorMode}
+        quickActionLabel={
+          !SIMPLE_SITE && (isReply ? undefined : advancedEditor ? __('Simple Editor') : __('Advanced Editor'))
+        }
+        quickActionHandler={!SIMPLE_SITE && (isReply ? undefined : toggleEditorMode)}
         onFocus={onTextareaFocus}
         placeholder={__('Say something about this...')}
         value={commentValue}

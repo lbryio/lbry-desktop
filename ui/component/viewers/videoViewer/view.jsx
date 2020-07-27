@@ -171,10 +171,8 @@ function VideoViewer(props: Props) {
         }
       });
       player.on('volumechange', () => {
-        if (player && player.volume() !== volume) {
+        if (player) {
           changeVolume(player.volume());
-        }
-        if (player && player.muted() !== muted) {
           changeMute(player.muted());
         }
       });
