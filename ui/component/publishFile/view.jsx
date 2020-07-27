@@ -2,6 +2,7 @@
 import * as ICONS from 'constants/icons';
 import React, { useState, useEffect } from 'react';
 import { regexInvalidURI } from 'lbry-redux';
+import StoryEditor from 'component/storyEditor';
 import FileSelector from 'component/common/file-selector';
 import Button from 'component/button';
 import Card from 'component/common/card';
@@ -12,6 +13,8 @@ import usePersistedState from 'effects/use-persisted-state';
 import * as PUBLISH_MODES from 'constants/publish_types';
 
 type Props = {
+  uri: ?string,
+  mode: ?string,
   name: ?string,
   title: ?string,
   filePath: string | WebFile,
@@ -29,10 +32,13 @@ type Props = {
   duration: number,
   isVid: boolean,
   setPublishMode: string => void,
+  setPrevFileText: string => void,
 };
 
 function PublishFile(props: Props) {
   const {
+    uri,
+    mode,
     name,
     title,
     balance,
@@ -49,11 +55,13 @@ function PublishFile(props: Props) {
     duration,
     isVid,
     setPublishMode,
+    setPrevFileText,
   } = props;
 
   const ffmpegAvail = ffmpegStatus.available;
   const [oversized, setOversized] = useState(false);
   const [currentFile, setCurrentFile] = useState(null);
+  const [currentFileType, setCurrentFileType] = useState(null);
   const [optimizeAvail, setOptimizeAvail] = useState(false);
   const [userOptimize, setUserOptimize] = usePersistedState('publish-file-user-optimize', false);
 
@@ -68,7 +76,15 @@ function PublishFile(props: Props) {
   const sizeInMB = Number(size) / 1000000;
   const secondsToProcess = sizeInMB / PROCESSING_MB_PER_SECOND;
 
-  // clear warnings
+  // Reset filePath if publish mode changed
+  useEffect(() => {
+    if (mode === PUBLISH_MODES.STORY) {
+      if (currentFileType !== 'text/markdown') {
+        updatePublishForm({ filePath: '', name: '' });
+      }
+    }
+  }, [currentFileType, mode, updatePublishForm]);
+
   useEffect(() => {
     if (!filePath || filePath === '') {
       setCurrentFile('');
@@ -82,6 +98,7 @@ function PublishFile(props: Props) {
     }
   }, [filePath, currentFile, handleFileChange, updateFileInfo]);
 
+  // clear warnings
   useEffect(() => {
     const isOptimizeAvail = currentFile && currentFile !== '' && isVid && ffmpegAvail;
     const finalOptimizeState = isOptimizeAvail && userOptimize;
@@ -212,6 +229,7 @@ function PublishFile(props: Props) {
 
     if (contentType) {
       isMarkdownText = contentType[0] === 'text';
+      setCurrentFileType(contentType);
     } else if (file.name) {
       // If user's machine is missign a valid content type registration
       // for markdown content: text/markdown, file extension will be used instead
@@ -247,6 +265,9 @@ function PublishFile(props: Props) {
       });
       // Read file contents
       reader.readAsText(file);
+      setCurrentFileType('text/markdown');
+    } else {
+      setPublishMode(PUBLISH_MODES.FILE);
     }
 
     // @if TARGET='web'
@@ -312,18 +333,30 @@ function PublishFile(props: Props) {
             value={title}
             onChange={e => updatePublishForm({ title: e.target.value })}
           />
-          <FileSelector disabled={disabled} currentPath={currentFile} onFileChosen={handleFileChange} />
-          {getMessage()}
+          {mode === PUBLISH_MODES.FILE && (
+            <FileSelector
+              label={__('File')}
+              disabled={disabled}
+              currentPath={currentFile}
+              onFileChosen={handleFileChange}
+            />
+          )}
+          {mode === PUBLISH_MODES.STORY && (
+            <StoryEditor label={__('Story content')} uri={uri} disabled={disabled} setPrevFileText={setPrevFileText} />
+          )}
+          {mode === PUBLISH_MODES.FILE && getMessage()}
           {/* @if TARGET='app' */}
-          <FormField
-            type="checkbox"
-            checked={userOptimize}
-            disabled={!optimizeAvail}
-            onChange={() => setUserOptimize(!userOptimize)}
-            label={__('Optimize and transcode video')}
-            name="optimize"
-          />
-          {!ffmpegAvail && (
+          {mode === PUBLISH_MODES.FILE && (
+            <FormField
+              type="checkbox"
+              checked={userOptimize}
+              disabled={!optimizeAvail}
+              onChange={() => setUserOptimize(!userOptimize)}
+              label={__('Optimize and transcode video')}
+              name="optimize"
+            />
+          )}
+          {mode === PUBLISH_MODES.FILE && !ffmpegAvail && (
             <p className="help">
               <I18nMessage
                 tokens={{
@@ -334,7 +367,7 @@ function PublishFile(props: Props) {
               </I18nMessage>
             </p>
           )}
-          {Boolean(size) && ffmpegAvail && optimize && isVid && (
+          {mode === PUBLISH_MODES.FILE && Boolean(size) && ffmpegAvail && optimize && isVid && (
             <p className="help">
               <I18nMessage
                 tokens={{

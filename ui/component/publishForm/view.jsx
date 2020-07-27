@@ -20,7 +20,6 @@ import TagsSelect from 'component/tagsSelect';
 import PublishText from 'component/publishText';
 import PublishPrice from 'component/publishPrice';
 import PublishFile from 'component/publishFile';
-import PublishStory from 'component/publishStory';
 import PublishName from 'component/publishName';
 import PublishAdditionalOptions from 'component/publishAdditionalOptions';
 import PublishFormErrors from 'component/publishFormErrors';
@@ -190,8 +189,10 @@ function PublishForm(props: Props) {
   }
 
   function createWebFile() {
-    const fileName = `${name}.md`;
-    return new File([fileText], fileName, { type: 'text/markdown' });
+    if (fileText) {
+      const fileName = name || title || 'story';
+      return new File([fileText], `${fileName}.md`, { type: 'text/markdown' });
+    }
   }
 
   async function saveFileChanges() {
@@ -203,7 +204,7 @@ function PublishForm(props: Props) {
     if (typeof output === 'string') {
       // Save file changes
       return new Promise((resolve, reject) => {
-        fs.writeFile(output, fileText, 'utf8', (error, data) => {
+        fs.writeFile(output, fileText, (error, data) => {
           // Handle error, cant save changes or create file
           error ? reject(error) : resolve(output);
         });
@@ -223,7 +224,6 @@ function PublishForm(props: Props) {
     // user choose a file path. On web a new File is created
     if (mode === PUBLISH_MODES.STORY) {
       let outputFile = filePath;
-
       // If user modified content on the text editor:
       // Save changes and updat file path
       if (fileEdited) {
@@ -274,13 +274,14 @@ function PublishForm(props: Props) {
           />
         ))}
       </div>
-      {mode === PUBLISH_MODES.FILE && (
-        <PublishFile disabled={disabled || publishing} inProgress={isInProgress} setPublishMode={setMode} />
-      )}
-      {mode === PUBLISH_MODES.STORY && (
-        <PublishStory disabled={disabled} inProgress={isInProgress} uri={uri} setPrevFileText={setPrevFileText} />
-      )}
-
+      <PublishFile
+        uri={uri}
+        mode={mode}
+        disabled={disabled || publishing}
+        inProgress={isInProgress}
+        setPublishMode={setMode}
+        setPrevFileText={setPrevFileText}
+      />
       {!publishing && (
         <div className={classnames({ 'card--disabled': formDisabled })}>
           {mode === PUBLISH_MODES.FILE && <PublishText disabled={formDisabled} />}
