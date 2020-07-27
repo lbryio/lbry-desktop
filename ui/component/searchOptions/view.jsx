@@ -1,7 +1,7 @@
 // @flow
+import { SEARCH_OPTIONS } from 'constants/search';
 import * as ICONS from 'constants/icons';
 import React from 'react';
-import { SEARCH_OPTIONS } from 'lbry-redux';
 import { Form, FormField } from 'component/common/form';
 import Button from 'component/button';
 

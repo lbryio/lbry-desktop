@@ -6,7 +6,6 @@ import {
   makeSelectClaimsInChannelForCurrentPageState,
   makeSelectClaimIsNsfw,
   makeSelectClaimIsMine,
-  makeSelectRecommendedContentForUri,
   makeSelectMediaTypeForUri,
   selectBalance,
   parseURI,
@@ -14,6 +13,7 @@ import {
   makeSelectContentTypeForUri,
   makeSelectFileNameForUri,
 } from 'lbry-redux';
+import { makeSelectRecommendedContentForUri } from 'redux/selectors/search';
 import { selectBlockedChannels } from 'redux/selectors/blocked';
 import { selectAllCostInfoByUri, makeSelectCostInfoForUri } from 'lbryinc';
 import { selectShowMatureContent } from 'redux/selectors/settings';
