@@ -1,10 +1,11 @@
 // @flow
 import { URL, URL_LOCAL, URL_DEV } from 'config';
+import { SEARCH_TYPES } from 'constants/search';
 import * as PAGES from 'constants/pages';
 import * as ICONS from 'constants/icons';
 import React from 'react';
 import classnames from 'classnames';
-import { normalizeURI, SEARCH_TYPES, isURIValid } from 'lbry-redux';
+import { normalizeURI, isURIValid } from 'lbry-redux';
 import { withRouter } from 'react-router';
 import Icon from 'component/common/icon';
 import Autocomplete from './internal/autocomplete';

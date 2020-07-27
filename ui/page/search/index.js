@@ -1,12 +1,7 @@
 import { connect } from 'react-redux';
-import {
-  doSearch,
-  selectIsSearching,
-  makeSelectSearchUris,
-  makeSelectQueryWithOptions,
-  doToast,
-  SETTINGS,
-} from 'lbry-redux';
+import { doToast, SETTINGS } from 'lbry-redux';
+import { doSearch } from 'redux/actions/search';
+import { selectIsSearching, makeSelectSearchUris, makeSelectQueryWithOptions } from 'redux/selectors/search';
 import { makeSelectClientSetting } from 'redux/selectors/settings';
 import { selectUserVerifiedEmail } from 'redux/selectors/user';
 import analytics from 'analytics';

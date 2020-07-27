@@ -1,13 +1,7 @@
 import { connect } from 'react-redux';
-import {
-  doFocusSearchInput,
-  doBlurSearchInput,
-  doUpdateSearchQuery,
-  selectSearchValue,
-  selectSearchSuggestions,
-  selectSearchBarFocused,
-  SETTINGS,
-} from 'lbry-redux';
+import { SETTINGS } from 'lbry-redux';
+import { doFocusSearchInput, doBlurSearchInput, doUpdateSearchQuery } from 'redux/actions/search';
+import { selectSearchValue, selectSearchSuggestions, selectSearchBarFocused } from 'redux/selectors/search';
 import { makeSelectClientSetting } from 'redux/selectors/settings';
 import { doToast } from 'redux/actions/notifications';
 import analytics from 'analytics';
