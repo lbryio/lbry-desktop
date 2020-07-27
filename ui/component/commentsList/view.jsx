@@ -40,6 +40,7 @@ function CommentList(props: Props) {
       sortedArray.push(parentComment);
 
       childComments
+        .reverse()
         .filter(childComment => childComment.parent_id === parentComment.comment_id)
         .forEach(childComment => {
           sortedArray.push(childComment);
