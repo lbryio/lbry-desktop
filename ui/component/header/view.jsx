@@ -113,13 +113,6 @@ const Header = (props: Props) => {
     },
   };
 
-  React.useEffect(() => {
-    if (hasBackout) {
-      window.addEventListener('popstate', onBackout);
-      return () => window.removeEvenListener('popstate', onBackout);
-    }
-  }, [hasBackout]);
-
   function onBackout(e) {
     const { history, hasNavigated } = props;
     const { goBack, replace } = history;
@@ -138,6 +131,13 @@ const Header = (props: Props) => {
       }
     }
   }
+
+  React.useEffect(() => {
+    if (hasBackout) {
+      window.addEventListener('popstate', onBackout);
+      return () => window.removeEventListener('popstate', onBackout);
+    }
+  }, [hasBackout]);
 
   function handleThemeToggle() {
     if (automaticDarkModeEnabled) {
