@@ -1273,5 +1273,15 @@
   "Advanced Settings": "Advanced Settings",
   "Browse": "Browse",
   "Automatic Transcoding": "Automatic Transcoding",
+  "Nothing uploaded to LBRY yet.": "Nothing uploaded to LBRY yet.",
+  "Add tags that are relevant to your content so those who're looking for it can find it more easily. If mature content, ensure it is tagged mature. Tag abuse and missing mature tags will not be tolerated.": "Add tags that are relevant to your content so those who're looking for it can find it more easily. If mature content, ensure it is tagged mature. Tag abuse and missing mature tags will not be tolerated.",
+  "%site_name% Terms of Service": "%site_name% Terms of Service",
+  "You are currently editing your upload.": "You are currently editing your upload.",
+  "Descriptive titles work best": "Descriptive titles work best",
+  "What is your content about? Use this space to include any other relevant details you may like to share about your content and channel.": "What is your content about? Use this space to include any other relevant details you may like to share about your content and channel.",
+  "Story content": "Story content",
+  "My content for this story...": "My content for this story...",
+  "No recent uploads": "No recent uploads",
+  "Total Uploads": "Total Uploads",
   "--end--": "--end--"
 }

@@ -7,6 +7,8 @@
   On web, the Lbry publish method call is overridden in platform/web/api-setup, using a function in platform/web/publish.
   File upload is carried out in the background by that function.
  */
+import fs from 'fs';
+import { remote } from 'electron';
 import { SITE_NAME } from 'config';
 import { CHANNEL_NEW, CHANNEL_ANONYMOUS } from 'constants/claim';
 import React, { useEffect } from 'react';
@@ -15,7 +17,7 @@ import Button from 'component/button';
 import SelectChannel from 'component/selectChannel';
 import classnames from 'classnames';
 import TagsSelect from 'component/tagsSelect';
-import PublishText from 'component/publishText';
+import PublishDescription from 'component/publishDescription';
 import PublishPrice from 'component/publishPrice';
 import PublishFile from 'component/publishFile';
 import PublishName from 'component/publishName';
@@ -24,12 +26,18 @@ import PublishFormErrors from 'component/publishFormErrors';
 import SelectThumbnail from 'component/selectThumbnail';
 import Card from 'component/common/card';
 import I18nMessage from 'component/i18nMessage';
+import * as PUBLISH_MODES from 'constants/publish_types';
+
+const { dialog } = remote;
+const currentWindow = remote.getCurrentWindow();
+const MODES = Object.values(PUBLISH_MODES);
 
 type Props = {
   disabled: boolean,
   tags: Array<Tag>,
   publish: (?string) => void,
   filePath: ?string,
+  fileText: ?string,
   bid: ?number,
   bidError: ?string,
   editingURI: ?string,
@@ -73,6 +81,13 @@ type Props = {
 };
 
 function PublishForm(props: Props) {
+  const [mode, setMode] = React.useState(PUBLISH_MODES.FILE);
+  const [autoSwitchMode, setAutoSwitchMode] = React.useState(true);
+
+  // Used to checl if the file has been modified by user
+  const [fileEdited, setFileEdited] = React.useState(false);
+  const [prevFileText, setPrevFileText] = React.useState('');
+
   const {
     thumbnail,
     name,
@@ -87,6 +102,7 @@ function PublishForm(props: Props) {
     resetThumbnailStatus,
     updatePublishForm,
     filePath,
+    fileText,
     publishing,
     clearPublish,
     isStillEditing,
@@ -97,6 +113,7 @@ function PublishForm(props: Props) {
     onChannelChange,
     ytSignupPending,
   } = props;
+
   const TAGS_LIMIT = 5;
   const formDisabled = (!filePath && !editingURI) || publishing;
   const isInProgress = filePath || editingURI || name || title;
@@ -128,6 +145,15 @@ function PublishForm(props: Props) {
       resetThumbnailStatus();
     }
   }, [thumbnail, resetThumbnailStatus]);
+
+  // Check for content changes on the text editor
+  useEffect(() => {
+    if (!fileEdited && fileText !== prevFileText && fileText !== '') {
+      setFileEdited(true);
+    } else if (fileEdited && fileText === prevFileText) {
+      setFileEdited(false);
+    }
+  }, [fileText, prevFileText, fileEdited]);
 
   // Every time the channel or name changes, resolve the uris to find winning bid amounts
   useEffect(() => {
@@ -161,14 +187,127 @@ function PublishForm(props: Props) {
     updatePublishForm({ channel });
   }
 
+  function showSaveDialog() {
+    return dialog.showSaveDialog(currentWindow, {
+      filters: [{ name: 'Text', extensions: ['md', 'markdown', 'txt'] }],
+    });
+  }
+
+  function createWebFile() {
+    if (fileText) {
+      const fileName = name || title || 'story';
+      return new File([fileText], `${fileName}.md`, { type: 'text/markdown' });
+    }
+  }
+
+  async function saveFileChanges() {
+    let output = filePath;
+    if (!output || output === '') {
+      output = await showSaveDialog();
+    }
+    // User saved the file on a custom location
+    if (typeof output === 'string') {
+      // Save file changes
+      return new Promise((resolve, reject) => {
+        fs.writeFile(output, fileText, (error, data) => {
+          // Handle error, cant save changes or create file
+          error ? reject(error) : resolve(output);
+        });
+      });
+    }
+  }
+
+  function verifyStoryContent() {
+    const isEmpty = !fileText || fileText.length === 0 || fileText === '';
+    // TODO: Verify file size limit, and character size as well ?
+    return !isEmpty;
+  }
+
+  async function handlePublish() {
+    // Publish story:
+    // If here is no file selected yet on desktop, show file dialog and let the
+    // user choose a file path. On web a new File is created
+    if (mode === PUBLISH_MODES.STORY) {
+      let outputFile = filePath;
+      // If user modified content on the text editor:
+      // Save changes and updat file path
+      if (fileEdited) {
+        // @if TARGET='app'
+        outputFile = await saveFileChanges();
+        // @endif
+
+        // @if TARGET='web'
+        outputFile = createWebFile();
+        // @endif
+
+        // New content stored locally and is not empty
+        if (outputFile) {
+          updatePublishForm({ filePath: outputFile });
+        }
+      }
+
+      // Verify if story has a valid content and is not emoty
+      // On web file size limit will be verified as well
+      const verified = verifyStoryContent();
+
+      if (verified) {
+        publish(outputFile);
+      }
+    }
+    // Publish file
+    if (mode === PUBLISH_MODES.FILE) {
+      publish(filePath);
+    }
+  }
+
+  function changePublishMode(name) {
+    setMode(name);
+  }
+
+  // Update mode on editing
+  useEffect(() => {
+    if (autoSwitchMode && editingURI && myClaimForUri) {
+      const { media_type: mediaType } = myClaimForUri.value.source;
+      // Change publish mode to "story" if editing content type is markdown
+      if (mediaType === 'text/markdown' && mode !== PUBLISH_MODES.STORY) {
+        setMode(PUBLISH_MODES.STORY);
+        // Prevent forced mode
+        setAutoSwitchMode(false);
+      }
+    }
+  }, [autoSwitchMode, editingURI, myClaimForUri, mode, setMode, setAutoSwitchMode]);
+
+  // Editing claim uri
+  const uri = myClaimForUri ? myClaimForUri.permanent_url : undefined;
+
   return (
     <div className="card-stack">
-      <PublishFile disabled={disabled || publishing} inProgress={isInProgress} />
+      <div className="button-tab-group">
+        {MODES.map((name, index) => (
+          <Button
+            key={index}
+            icon={name}
+            label={name}
+            button="alt"
+            onClick={() => {
+              changePublishMode(name);
+            }}
+            className={classnames('button-toggle', { 'button-toggle--active': mode === name })}
+          />
+        ))}
+      </div>
+      <PublishFile
+        uri={uri}
+        mode={mode}
+        disabled={disabled || publishing}
+        inProgress={isInProgress}
+        setPublishMode={setMode}
+        setPrevFileText={setPrevFileText}
+      />
       {!publishing && (
         <div className={classnames({ 'card--disabled': formDisabled })}>
-          <PublishText disabled={formDisabled} />
+          {mode === PUBLISH_MODES.FILE && <PublishDescription disabled={formDisabled} />}
           <Card actions={<SelectThumbnail />} />
-
           <TagsSelect
             suggestMature
             disableAutoFocus
@@ -217,7 +356,7 @@ function PublishForm(props: Props) {
         <div className="card__actions">
           <Button
             button="primary"
-            onClick={() => publish(filePath)}
+            onClick={handlePublish}
             label={submitLabel}
             disabled={
               formDisabled || !formValid || uploadThumbnailStatus === THUMBNAIL_STATUSES.IN_PROGRESS || ytSignupPending

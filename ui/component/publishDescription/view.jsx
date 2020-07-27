@@ -7,14 +7,13 @@ import usePersistedState from 'effects/use-persisted-state';
 import Card from 'component/common/card';
 
 type Props = {
-  title: ?string,
   description: ?string,
   disabled: boolean,
   updatePublishForm: ({}) => void,
 };
 
 function PublishText(props: Props) {
-  const { title, description, updatePublishForm, disabled } = props;
+  const { description, updatePublishForm, disabled } = props;
   const [advancedEditor, setAdvancedEditor] = usePersistedState('publish-form-description-mode', false);
   function toggleMarkdown() {
     setAdvancedEditor(!advancedEditor);
@@ -24,16 +23,6 @@ function PublishText(props: Props) {
     <Card
       actions={
         <React.Fragment>
-          <FormField
-            type="text"
-            name="content_title"
-            label={__('Title')}
-            placeholder={__('Descriptive titles work best')}
-            disabled={disabled}
-            value={title}
-            onChange={e => updatePublishForm({ title: e.target.value })}
-          />
-
           <FormField
             type={!SIMPLE_SITE && advancedEditor ? 'markdown' : 'textarea'}
             name="content_description"

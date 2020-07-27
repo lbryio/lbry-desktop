@@ -251,7 +251,12 @@ svg + .button__label,
   margin-top: -4px;
 }
 
-.button-group {
+.button-tab-group {
+  margin-bottom: var(--spacing-l);
+}
+
+.button-group,
+.button-tab-group {
   display: flex;
 
   .button:first-child:not(:only-child) {

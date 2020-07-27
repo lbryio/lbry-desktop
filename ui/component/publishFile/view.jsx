@@ -2,6 +2,7 @@
 import * as ICONS from 'constants/icons';
 import React, { useState, useEffect } from 'react';
 import { regexInvalidURI } from 'lbry-redux';
+import StoryEditor from 'component/storyEditor';
 import FileSelector from 'component/common/file-selector';
 import Button from 'component/button';
 import Card from 'component/common/card';
@@ -9,9 +10,13 @@ import { FormField } from 'component/common/form';
 import Spinner from 'component/spinner';
 import I18nMessage from 'component/i18nMessage';
 import usePersistedState from 'effects/use-persisted-state';
+import * as PUBLISH_MODES from 'constants/publish_types';
 
 type Props = {
+  uri: ?string,
+  mode: ?string,
   name: ?string,
+  title: ?string,
   filePath: string | WebFile,
   isStillEditing: boolean,
   balance: number,
@@ -26,11 +31,16 @@ type Props = {
   size: number,
   duration: number,
   isVid: boolean,
+  setPublishMode: string => void,
+  setPrevFileText: string => void,
 };
 
 function PublishFile(props: Props) {
   const {
+    uri,
+    mode,
     name,
+    title,
     balance,
     filePath,
     isStillEditing,
@@ -44,11 +54,14 @@ function PublishFile(props: Props) {
     size,
     duration,
     isVid,
+    setPublishMode,
+    setPrevFileText,
   } = props;
 
   const ffmpegAvail = ffmpegStatus.available;
   const [oversized, setOversized] = useState(false);
   const [currentFile, setCurrentFile] = useState(null);
+  const [currentFileType, setCurrentFileType] = useState(null);
   const [optimizeAvail, setOptimizeAvail] = useState(false);
   const [userOptimize, setUserOptimize] = usePersistedState('publish-file-user-optimize', false);
 
@@ -58,11 +71,20 @@ function PublishFile(props: Props) {
   const PROCESSING_MB_PER_SECOND = 0.5;
   const MINUTES_THRESHOLD = 30;
   const HOURS_THRESHOLD = MINUTES_THRESHOLD * 60;
+  const MARKDOWN_FILE_EXTENSIONS = ['txt', 'md', 'markdown'];
 
   const sizeInMB = Number(size) / 1000000;
   const secondsToProcess = sizeInMB / PROCESSING_MB_PER_SECOND;
 
-  // clear warnings
+  // Reset filePath if publish mode changed
+  useEffect(() => {
+    if (mode === PUBLISH_MODES.STORY) {
+      if (currentFileType !== 'text/markdown') {
+        updatePublishForm({ filePath: '', name: '' });
+      }
+    }
+  }, [currentFileType, mode, updatePublishForm]);
+
   useEffect(() => {
     if (!filePath || filePath === '') {
       setCurrentFile('');
@@ -82,7 +104,7 @@ function PublishFile(props: Props) {
 
     setOptimizeAvail(isOptimizeAvail);
     updatePublishForm({ optimize: finalOptimizeState });
-  }, [currentFile, filePath, isVid, ffmpegAvail, userOptimize]);
+  }, [currentFile, filePath, isVid, ffmpegAvail, userOptimize, updatePublishForm]);
 
   function updateFileInfo(duration, size, isvid) {
     updatePublishForm({ fileDur: duration, fileSize: size, fileVid: isvid });
@@ -201,6 +223,19 @@ function PublishFile(props: Props) {
     const contentType = file.type && file.type.split('/');
     const isVideo = contentType && contentType[0] === 'video';
     const isMp4 = contentType && contentType[1] === 'mp4';
+
+    let isMarkdownText = false;
+
+    if (contentType) {
+      isMarkdownText = contentType[0] === 'text';
+      setCurrentFileType(contentType);
+    } else if (file.name) {
+      // If user's machine is missign a valid content type registration
+      // for markdown content: text/markdown, file extension will be used instead
+      const extension = file.name.split('.').pop();
+      isMarkdownText = MARKDOWN_FILE_EXTENSIONS.includes(extension);
+    }
+
     if (isVideo) {
       if (isMp4) {
         const video = document.createElement('video');
@@ -218,6 +253,22 @@ function PublishFile(props: Props) {
       }
     } else {
       updateFileInfo(0, file.size, isVideo);
+    }
+
+    if (isMarkdownText) {
+      // Create reader
+      const reader = new FileReader();
+      // Handler for file reader
+      reader.addEventListener('load', event => {
+        const text = event.target.result;
+        updatePublishForm({ fileText: text });
+        setPublishMode(PUBLISH_MODES.STORY);
+      });
+      // Read file contents
+      reader.readAsText(file);
+      setCurrentFileType('text/markdown');
+    } else {
+      setPublishMode(PUBLISH_MODES.FILE);
     }
 
     // @if TARGET='web'
@@ -247,17 +298,20 @@ function PublishFile(props: Props) {
     updatePublishForm(publishFormParams);
   }
 
-  let title;
+  let cardTitle;
   if (publishing) {
-    title = (
+    cardTitle = (
       <span>
         {__('Uploading')}
         <Spinner type={'small'} />
       </span>
     );
   } else {
-    title = isStillEditing ? __('Edit') : __('Upload');
+    cardTitle = isStillEditing ? __('Edit') : __('Upload');
   }
+
+  const isPublishFile = mode === PUBLISH_MODES.FILE;
+  const isPublishStory = mode === PUBLISH_MODES.STORY;
 
   return (
     <Card
@@ -265,25 +319,41 @@ function PublishFile(props: Props) {
       disabled={disabled || balance === 0}
       title={
         <React.Fragment>
-          {title}{' '}
+          {cardTitle}{' '}
           {inProgress && <Button button="close" label={__('Cancel')} icon={ICONS.REMOVE} onClick={clearPublish} />}
         </React.Fragment>
       }
       subtitle={isStillEditing && __('You are currently editing your upload.')}
       actions={
         <React.Fragment>
-          <FileSelector disabled={disabled} currentPath={currentFile} onFileChosen={handleFileChange} />
-          {getMessage()}
-          {/* @if TARGET='app' */}
           <FormField
-            type="checkbox"
-            checked={userOptimize}
-            disabled={!optimizeAvail}
-            onChange={() => setUserOptimize(!userOptimize)}
-            label={__('Optimize and transcode video')}
-            name="optimize"
+            type="text"
+            name="content_title"
+            label={__('Title')}
+            placeholder={__('Descriptive titles work best')}
+            disabled={disabled}
+            value={title}
+            onChange={e => updatePublishForm({ title: e.target.value })}
           />
-          {!ffmpegAvail && (
+          {isPublishFile && (
+            <FileSelector disabled={disabled} currentPath={currentFile} onFileChosen={handleFileChange} />
+          )}
+          {isPublishStory && (
+            <StoryEditor label={__('Story content')} uri={uri} disabled={disabled} setPrevFileText={setPrevFileText} />
+          )}
+          {isPublishFile && getMessage()}
+          {/* @if TARGET='app' */}
+          {isPublishFile && (
+            <FormField
+              type="checkbox"
+              checked={userOptimize}
+              disabled={!optimizeAvail}
+              onChange={() => setUserOptimize(!userOptimize)}
+              label={__('Optimize and transcode video')}
+              name="optimize"
+            />
+          )}
+          {isPublishFile && !ffmpegAvail && (
             <p className="help">
               <I18nMessage
                 tokens={{
@@ -294,7 +364,7 @@ function PublishFile(props: Props) {
               </I18nMessage>
             </p>
           )}
-          {Boolean(size) && ffmpegAvail && optimize && isVid && (
+          {isPublishFile && Boolean(size) && ffmpegAvail && optimize && isVid && (
             <p className="help">
               <I18nMessage
                 tokens={{
