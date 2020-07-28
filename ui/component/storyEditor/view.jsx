@@ -73,12 +73,22 @@ function StoryEditor(props: Props) {
       const { mime_type: mimeType } = fileInfo;
       // Editing same file (previously published)
       // User can use a different file to replace the content
-      if (!filePath && streamingUrl && mimeType === 'text/markdown') {
+      if (!filePath && !fileText && streamingUrl && mimeType === 'text/markdown') {
         setCurrentFileType(mimeType);
         updateEditorText(streamingUrl);
       }
     }
-  }, [uri, isStillEditing, filePath, fileInfo, setPrevFileText, updatePublishForm, streamingUrl, setCurrentFileType]);
+  }, [
+    uri,
+    fileText,
+    filePath,
+    fileInfo,
+    streamingUrl,
+    isStillEditing,
+    setPrevFileText,
+    updatePublishForm,
+    setCurrentFileType,
+  ]);
 
   return (
     <FormField
