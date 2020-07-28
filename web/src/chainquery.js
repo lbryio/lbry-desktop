@@ -38,9 +38,9 @@ module.exports.getClaim = async function getClaim(claimName, claimId, channelNam
   if (claimId) {
     sql += ' AND claim.claim_id LIKE ?';
     params.push(claimId + '%');
-  } else {
-    sql += ' AND claim.bid_state = "controlling"';
   }
+
+  sql += ' AND claim.bid_state in ("controlling", "active")';
 
   if (claimName[0] !== '@' && channelName) {
     sql += ' AND channel_claim.name = ?';
