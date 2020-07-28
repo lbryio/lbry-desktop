@@ -37,6 +37,11 @@ type Props = {
 };
 
 class FilePage extends React.Component<Props> {
+  constructor() {
+    super();
+    this.lastReset = undefined;
+  }
+
   componentDidMount() {
     const { uri, fetchFileInfo, fetchCostInfo, setViewed, isSubscribed } = this.props;
 
@@ -64,6 +69,7 @@ class FilePage extends React.Component<Props> {
 
     if (prevProps.uri !== uri) {
       setViewed(uri);
+      this.lastReset = Date.now();
     }
 
     // @if TARGET='app'
@@ -142,6 +148,8 @@ class FilePage extends React.Component<Props> {
     );
   }
 
+  lastReset: ?any;
+
   render() {
     const { uri, renderMode, costInfo, obscureNsfw, isMature } = this.props;
 
@@ -164,7 +172,7 @@ class FilePage extends React.Component<Props> {
               actions={
                 <div>
                   <CommentCreate uri={uri} />
-                  <WaitUntilOnPage>
+                  <WaitUntilOnPage lastUpdateDate={this.lastReset}>
                     <CommentsList uri={uri} />
                   </WaitUntilOnPage>
                 </div>
