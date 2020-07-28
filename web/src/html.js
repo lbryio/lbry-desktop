@@ -138,7 +138,7 @@ function buildClaimOgMetadata(uri, claim, overrideOptions = {}) {
   return head;
 }
 
-async function getClaimFromChainquery(url) {
+async function getClaimFromChainqueryOrRedirect(url, ctx) {
   const { isChannel, streamName, channelName, channelClaimId, streamClaimId } = parseURI(url);
   const claimName = isChannel ? '@' + channelName : streamName;
   const claimId = isChannel ? channelClaimId : streamClaimId;
@@ -146,6 +146,12 @@ async function getClaimFromChainquery(url) {
   const rows = await getClaim(claimName, claimId, channelName, channelClaimId);
   if (rows && rows.length) {
     const claim = rows[0];
+
+    if (claim.reposted_name && claim.reposted_claim_id) {
+      ctx.redirect(`/${claim.reposted_name}:${claim.reposted_claim_id}`);
+      return;
+    }
+
     return claim;
   }
 
@@ -173,7 +179,7 @@ async function getHtml(ctx) {
 
     try {
       parseURI(inviteChannelUrl);
-      const claim = await getClaimFromChainquery(inviteChannelUrl);
+      const claim = await getClaimFromChainqueryOrRedirect(inviteChannelUrl, ctx);
       const invitePageMetadata = buildClaimOgMetadata(inviteChannelUrl, claim, {
         title: `Join ${claim.name} on LBRY`,
         description: `Join ${claim.name} on LBRY, a content wonderland owned by everyone (and no one).`,
@@ -193,7 +199,7 @@ async function getHtml(ctx) {
 
   if (requestPath.includes(embedPath)) {
     const claimUri = requestPath.replace(embedPath, '').replace(/:/g, '#');
-    const claim = await getClaimFromChainquery(claimUri);
+    const claim = await getClaimFromChainqueryOrRedirect(claimUri, ctx);
 
     if (claim) {
       const ogMetadata = buildClaimOgMetadata(claimUri, claim);
@@ -205,8 +211,8 @@ async function getHtml(ctx) {
 
   if (!requestPath.includes('$')) {
     const claimUri = requestPath.slice(1).replace(/:/g, '#');
-    const claim = await getClaimFromChainquery(claimUri);
-
+    const claim = await getClaimFromChainqueryOrRedirect(claimUri, ctx);
+    console.log('claim', claim);
     if (claim) {
       const ogMetadata = buildClaimOgMetadata(claimUri, claim);
       return insertToHead(html, ogMetadata);
