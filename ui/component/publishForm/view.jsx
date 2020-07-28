@@ -191,6 +191,7 @@ function PublishForm(props: Props) {
     updatePublishForm({ channel });
   }
 
+  // Prompt a file dialog to save a backup file of the story to publish.
   function showSaveDialog() {
     return dialog.showSaveDialog(currentWindow, {
       filters: [{ name: 'Text', extensions: ['md', 'markdown', 'txt'] }],
