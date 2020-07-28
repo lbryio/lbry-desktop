@@ -7,8 +7,7 @@
   On web, the Lbry publish method call is overridden in platform/web/api-setup, using a function in platform/web/publish.
   File upload is carried out in the background by that function.
  */
-import fs from 'fs';
-import { remote } from 'electron';
+
 import { SITE_NAME } from 'config';
 import { CHANNEL_NEW, CHANNEL_ANONYMOUS } from 'constants/claim';
 import React, { useEffect } from 'react';
@@ -28,8 +27,13 @@ import Card from 'component/common/card';
 import I18nMessage from 'component/i18nMessage';
 import * as PUBLISH_MODES from 'constants/publish_types';
 
+// @if TARGET='app'
+import fs from 'fs';
+import { remote } from 'electron';
 const { dialog } = remote;
 const currentWindow = remote.getCurrentWindow();
+// @endif
+
 const MODES = Object.values(PUBLISH_MODES);
 
 type Props = {
@@ -191,20 +195,23 @@ function PublishForm(props: Props) {
     updatePublishForm({ channel });
   }
 
-  // Prompt a file dialog to save a backup file of the story to publish.
-  function showSaveDialog() {
-    return dialog.showSaveDialog(currentWindow, {
-      filters: [{ name: 'Text', extensions: ['md', 'markdown', 'txt'] }],
-    });
-  }
-
+  // @if TARGET='web'
   function createWebFile() {
     if (fileText) {
       const fileName = name || title || 'story';
       return new File([fileText], `${fileName}.md`, { type: 'text/markdown' });
     }
   }
+  // @endif
 
+  // @if TARGET='app'
+  // Prompt a file dialog to save a backup file of the story to publish.
+  function showSaveDialog() {
+    return dialog.showSaveDialog(currentWindow, {
+      filters: [{ name: 'Text', extensions: ['md', 'markdown', 'txt'] }],
+    });
+  }
+  // Save file changes locally ( desktop )
   async function saveFileChanges() {
     let output = filePath;
     if (!output || output === '') {
@@ -221,9 +228,10 @@ function PublishForm(props: Props) {
       });
     }
   }
+  // @endif
 
   function verifyStoryContent() {
-    const isEmpty = !fileText || fileText.length === 0 || fileText === '';
+    const isEmpty = !fileText || fileText.length === 0 || fileText.trim() === '';
     // TODO: Verify file size limit, and character size as well ?
     return !isEmpty;
   }
