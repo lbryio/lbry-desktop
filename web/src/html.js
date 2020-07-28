@@ -123,8 +123,20 @@ function buildClaimOgMetadata(uri, claim, overrideOptions = {}) {
     head += `<meta property="og:video" content="${videoUrl}" />`;
     head += `<meta property="og:video:secure_url" content="${videoUrl}" />`;
     head += `<meta property="og:video:type" content="${claim.source_media_type}" />`;
+    if (claim.channel) {
+      head += `<meta name="og:video:series" content="${claim.channel}"/>`;
+    }
     head += `<meta name="twitter:card" content="player"/>`;
     head += `<meta name="twitter:player" content="${videoUrl}" />`;
+    if (claim.release_time) {
+      var release = new Date(claim.release_time * 1000).toISOString();
+      head += `<meta property="og:video:release_date" content="${release}"/>`;
+    }
+    if (claim.duration) {
+      head += `<meta property="og:video:duration" content="${claim.duration}"/>`;
+    } else if (claim.audio_duration) {
+      head += `<meta property="og:video:duration" content="${claim.audio_duration}"/>`;
+    }
     if (claim.frame_width && claim.frame_height) {
       head += `<meta property="og:video:width" content="${claim.frame_width}"/>`;
       head += `<meta property="og:video:height" content="${claim.frame_height}"/>`;

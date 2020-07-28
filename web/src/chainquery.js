@@ -26,7 +26,7 @@ module.exports.getClaim = async function getClaim(claimName, claimId, channelNam
   let params = [claimName];
 
   let sql =
-    'SELECT channel_claim.name as channel, claim.claim_id, claim.name, claim.description, claim.language, claim.thumbnail_url, claim.title, claim.source_media_type, claim.frame_width, claim.frame_height, claim.fee, ' +
+    'SELECT channel_claim.name as channel, claim.claim_id, claim.name, claim.description, claim.language, claim.thumbnail_url, claim.title, claim.source_media_type, claim.frame_width, claim.frame_height, claim.fee, claim.release_time, claim.duration, claim.audio_duration, ' +
     'repost_channel.name as repost_channel, reposted_claim.claim_id as reposted_claim_id, reposted_claim.name as reposted_name, reposted_claim.description as reposted_description, reposted_claim.language as reposted_language, reposted_claim.thumbnail_url as reposted_thumbnail_url, reposted_claim.title as reposted_title, reposted_claim.source_media_type as reposted_source_media_type, reposted_claim.frame_width as reposted_frame_width, reposted_claim.frame_height as reposted_frame_height, reposted_claim.fee as reposted_fee ' +
     'FROM claim ' +
     'LEFT JOIN claim channel_claim on claim.publisher_id = channel_claim.claim_id ' +
