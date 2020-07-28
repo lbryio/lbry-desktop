@@ -115,7 +115,9 @@ function PublishForm(props: Props) {
   } = props;
 
   const TAGS_LIMIT = 5;
-  const formDisabled = (!filePath && !editingURI) || publishing;
+  const fileFormDisabled = mode === PUBLISH_MODES.FILE && !filePath;
+  const storyFormDisabled = mode === PUBLISH_MODES.STORY && (!fileText || fileText === '');
+  const formDisabled = ((fileFormDisabled || storyFormDisabled) && !editingURI) || publishing;
   const isInProgress = filePath || editingURI || name || title;
 
   // If they are editing, they don't need a new file chosen
@@ -126,7 +128,9 @@ function PublishForm(props: Props) {
     bid &&
     !bidError &&
     !(uploadThumbnailStatus === THUMBNAIL_STATUSES.IN_PROGRESS);
+
   const isOverwritingExistingClaim = !editingURI && myClaimForUri;
+
   const formValid = isOverwritingExistingClaim
     ? false
     : editingURI && !filePath
@@ -260,8 +264,8 @@ function PublishForm(props: Props) {
     }
   }
 
-  function changePublishMode(name) {
-    setMode(name);
+  function changePublishMode(modeName) {
+    setMode(modeName);
   }
 
   // Update mode on editing
@@ -283,16 +287,16 @@ function PublishForm(props: Props) {
   return (
     <div className="card-stack">
       <div className="button-tab-group">
-        {MODES.map((name, index) => (
+        {MODES.map((modeName, index) => (
           <Button
             key={index}
-            icon={name}
-            label={name}
+            icon={modeName}
+            label={modeName}
             button="alt"
             onClick={() => {
-              changePublishMode(name);
+              changePublishMode(modeName);
             }}
-            className={classnames('button-toggle', { 'button-toggle--active': mode === name })}
+            className={classnames('button-toggle', { 'button-toggle--active': mode === modeName })}
           />
         ))}
       </div>
@@ -366,7 +370,7 @@ function PublishForm(props: Props) {
         </div>
         <p className="help">
           {!formDisabled && !formValid ? (
-            <PublishFormErrors />
+            <PublishFormErrors mode={mode} />
           ) : (
             <I18nMessage
               tokens={{
