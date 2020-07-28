@@ -79,11 +79,11 @@ function PublishFile(props: Props) {
   // Reset filePath if publish mode changed
   useEffect(() => {
     if (mode === PUBLISH_MODES.STORY) {
-      if (currentFileType !== 'text/markdown') {
+      if (currentFileType !== 'text/markdown' && !isStillEditing) {
         updatePublishForm({ filePath: '', name: '' });
       }
     }
-  }, [currentFileType, mode, updatePublishForm]);
+  }, [currentFileType, mode, isStillEditing, updatePublishForm]);
 
   useEffect(() => {
     if (!filePath || filePath === '') {
@@ -339,7 +339,13 @@ function PublishFile(props: Props) {
             <FileSelector disabled={disabled} currentPath={currentFile} onFileChosen={handleFileChange} />
           )}
           {isPublishStory && (
-            <StoryEditor label={__('Story content')} uri={uri} disabled={disabled} setPrevFileText={setPrevFileText} />
+            <StoryEditor
+              label={__('Story content')}
+              uri={uri}
+              disabled={disabled}
+              setPrevFileText={setPrevFileText}
+              setCurrentFileType={setCurrentFileType}
+            />
           )}
           {isPublishFile && getMessage()}
           {/* @if TARGET='app' */}

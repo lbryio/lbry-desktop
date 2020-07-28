@@ -1283,5 +1283,9 @@
   "My content for this story...": "My content for this story...",
   "No recent uploads": "No recent uploads",
   "Total Uploads": "Total Uploads",
+  "Loadign...": "Loadign...",
+  "Uploading": "Uploading",
+  "View My Uploads": "View My Uploads",
+  "Can't publish an empty story": "Can't publish an empty story",
   "--end--": "--end--"
 }
