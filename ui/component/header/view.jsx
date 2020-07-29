@@ -56,6 +56,7 @@ type Props = {
   clearEmailEntry: () => void,
   clearPasswordEntry: () => void,
   hasNavigated: boolean,
+  syncSettings: () => void,
 };
 
 const Header = (props: Props) => {
@@ -77,6 +78,7 @@ const Header = (props: Props) => {
     clearPasswordEntry,
     emailToVerify,
     backout,
+    syncSettings,
   } = props;
   const isMobile = useIsMobile();
   // on the verify page don't let anyone escape other than by closing the tab to keep session data consistent
@@ -149,6 +151,7 @@ const Header = (props: Props) => {
     } else {
       setClientSetting(SETTINGS.THEME, 'dark');
     }
+    syncSettings();
   }
 
   function getWalletTitle() {
