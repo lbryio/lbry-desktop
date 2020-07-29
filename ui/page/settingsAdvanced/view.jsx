@@ -223,6 +223,7 @@ class SettingsPage extends React.PureComponent<Props, State> {
           </section>
         ) : (
           <div>
+            {/* @if TARGET='app' */}
             <Card
               title={__('Network and Data Settings')}
               actions={
@@ -255,7 +256,6 @@ class SettingsPage extends React.PureComponent<Props, State> {
               }
             />
 
-            {/* @if TARGET='app' */}
             <Card
               title={__('Max Purchase Price')}
               actions={
