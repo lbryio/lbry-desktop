@@ -29,9 +29,7 @@ import * as PUBLISH_MODES from 'constants/publish_types';
 
 // @if TARGET='app'
 import fs from 'fs';
-import { remote } from 'electron';
-const { dialog } = remote;
-const currentWindow = remote.getCurrentWindow();
+import tempy from 'tempy';
 // @endif
 
 const MODES = Object.values(PUBLISH_MODES);
@@ -209,19 +207,14 @@ function PublishForm(props: Props) {
   // @endif
 
   // @if TARGET='app'
-  // Prompt a file dialog to save a backup file of the story to publish.
-  function showSaveDialog() {
-    return dialog.showSaveDialog(currentWindow, {
-      filters: [{ name: 'Text', extensions: ['md', 'markdown', 'txt'] }],
-    });
-  }
   // Save file changes locally ( desktop )
-  async function saveFileChanges() {
+  function saveFileChanges() {
     let output = filePath;
     if (!output || output === '') {
-      output = await showSaveDialog();
+      // Generate a temporary file:
+      output = tempy.file({ name: 'story.md' });
     }
-    // User saved the file on a custom location
+    // Create a temporary file and save file changes
     if (typeof output === 'string') {
       // Save file changes
       return new Promise((resolve, reject) => {
@@ -244,6 +237,8 @@ function PublishForm(props: Props) {
     // Publish story:
     // If here is no file selected yet on desktop, show file dialog and let the
     // user choose a file path. On web a new File is created
+    const validStory = verifyStoryContent();
+
     if (mode === PUBLISH_MODES.STORY) {
       let outputFile = filePath;
       // If user modified content on the text editor:
@@ -258,16 +253,11 @@ function PublishForm(props: Props) {
         // @endif
 
         // New content stored locally and is not empty
-        if (outputFile) {
+        if (outputFile && validStory) {
           updatePublishForm({ filePath: outputFile });
+          publish(outputFile);
         }
-      }
-
-      // Verify if story has a valid content and is not emoty
-      // On web file size limit will be verified as well
-      const verified = verifyStoryContent();
-
-      if (verified) {
+      } else if (validStory && outputFile) {
         publish(outputFile);
       }
     }
