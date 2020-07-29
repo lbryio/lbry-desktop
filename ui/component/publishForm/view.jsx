@@ -10,7 +10,7 @@
 
 import { SITE_NAME } from 'config';
 import { CHANNEL_NEW, CHANNEL_ANONYMOUS } from 'constants/claim';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { buildURI, isURIValid, isNameValid, THUMBNAIL_STATUSES } from 'lbry-redux';
 import Button from 'component/button';
 import SelectChannel from 'component/selectChannel';
@@ -115,6 +115,9 @@ function PublishForm(props: Props) {
     onChannelChange,
     ytSignupPending,
   } = props;
+
+  // Used to check if name should be auto-populated from title
+  const [autoPopulateNameFromTitle, setAutoPopulateNameFromTitle] = useState(!isStillEditing);
 
   const TAGS_LIMIT = 5;
   const fileFormDisabled = mode === PUBLISH_MODES.FILE && !filePath;
@@ -302,6 +305,7 @@ function PublishForm(props: Props) {
         inProgress={isInProgress}
         setPublishMode={setMode}
         setPrevFileText={setPrevFileText}
+        autoPopulateName={autoPopulateNameFromTitle}
       />
       {!publishing && (
         <div className={classnames({ 'card--disabled': formDisabled })}>
@@ -346,7 +350,11 @@ function PublishForm(props: Props) {
             }
           />
 
-          <PublishName disabled={formDisabled} />
+          <PublishName
+            disabled={formDisabled}
+            autoPopulateName={autoPopulateNameFromTitle}
+            setAutoPopulateName={setAutoPopulateNameFromTitle}
+          />
           <PublishPrice disabled={formDisabled} />
           <PublishAdditionalOptions disabled={formDisabled} />
         </div>
