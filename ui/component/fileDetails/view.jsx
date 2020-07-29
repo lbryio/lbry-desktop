@@ -55,6 +55,12 @@ class FileDetails extends PureComponent<Props> {
                     <td>{fileSize}</td>
                   </tr>
                 )}
+
+                <tr>
+                  <td> {__('URL')}</td>
+                  <td>{claim.canonical_url}</td>
+                </tr>
+
                 <tr>
                   <td> {__('Claim ID')}</td>
                   <td>{claim.claim_id}</td>
