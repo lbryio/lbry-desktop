@@ -1,2 +1,2 @@
 export const FILE = 'File';
-export const STORY = 'Story';
+export const POST = 'Post';

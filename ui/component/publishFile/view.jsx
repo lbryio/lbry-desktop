@@ -2,7 +2,7 @@
 import * as ICONS from 'constants/icons';
 import React, { useState, useEffect } from 'react';
 import { regexInvalidURI } from 'lbry-redux';
-import StoryEditor from 'component/storyEditor';
+import PostEditor from 'component/postEditor';
 import FileSelector from 'component/common/file-selector';
 import Button from 'component/button';
 import Card from 'component/common/card';
@@ -80,7 +80,7 @@ function PublishFile(props: Props) {
 
   // Reset filePath if publish mode changed
   useEffect(() => {
-    if (mode === PUBLISH_MODES.STORY) {
+    if (mode === PUBLISH_MODES.POST) {
       if (currentFileType !== 'text/markdown' && !isStillEditing) {
         updatePublishForm({ filePath: '', name: '' });
       }
@@ -264,7 +264,7 @@ function PublishFile(props: Props) {
       reader.addEventListener('load', event => {
         const text = event.target.result;
         updatePublishForm({ fileText: text });
-        setPublishMode(PUBLISH_MODES.STORY);
+        setPublishMode(PUBLISH_MODES.POST);
       });
       // Read file contents
       reader.readAsText(file);
@@ -313,7 +313,7 @@ function PublishFile(props: Props) {
   }
 
   const isPublishFile = mode === PUBLISH_MODES.FILE;
-  const isPublishStory = mode === PUBLISH_MODES.STORY;
+  const isPublishPost = mode === PUBLISH_MODES.POST;
 
   return (
     <Card
@@ -340,9 +340,9 @@ function PublishFile(props: Props) {
           {isPublishFile && (
             <FileSelector disabled={disabled} currentPath={currentFile} onFileChosen={handleFileChange} />
           )}
-          {isPublishStory && (
-            <StoryEditor
-              label={__('Story content')}
+          {isPublishPost && (
+            <PostEditor
+              label={__('Post')}
               uri={uri}
               disabled={disabled}
               fileMimeType={fileMimeType}

@@ -19,7 +19,7 @@ type Props = {
   setCurrentFileType: string => void,
 };
 
-function StoryEditor(props: Props) {
+function PostEditor(props: Props) {
   const {
     uri,
     label,
@@ -37,7 +37,7 @@ function StoryEditor(props: Props) {
 
   const [ready, setReady] = React.useState(!editing);
   const [loading, setLoading] = React.useState(false);
-  const [advancedEditor, setAdvancedEditor] = usePersistedState('publish-form-story-mode', false);
+  const [advancedEditor, setAdvancedEditor] = usePersistedState('publish-form-post-mode', false);
   const { streamingUrl } = useFetchStreamingUrl(uri);
 
   function toggleMarkdown() {
@@ -101,9 +101,9 @@ function StoryEditor(props: Props) {
   return (
     <FormField
       type={!SIMPLE_SITE && advancedEditor ? 'markdown' : 'textarea'}
-      name="content_story"
+      name="content_post"
       label={label}
-      placeholder={__('My content for this story...')}
+      placeholder={__('My content for this post...')}
       value={ready ? fileText : __('Loading...')}
       disabled={!ready || disabled}
       onChange={value => updatePublishForm({ fileText: advancedEditor ? value : value.target.value })}
@@ -114,4 +114,4 @@ function StoryEditor(props: Props) {
   );
 }
 
-export default StoryEditor;
+export default PostEditor;

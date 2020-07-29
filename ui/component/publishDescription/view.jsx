@@ -12,7 +12,7 @@ type Props = {
   updatePublishForm: ({}) => void,
 };
 
-function PublishText(props: Props) {
+function PublishDescription(props: Props) {
   const { description, updatePublishForm, disabled } = props;
   const [advancedEditor, setAdvancedEditor] = usePersistedState('publish-form-description-mode', false);
   function toggleMarkdown() {
@@ -45,4 +45,4 @@ function PublishText(props: Props) {
   );
 }
 
-export default PublishText;
+export default PublishDescription;
