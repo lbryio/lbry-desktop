@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import { selectIsStillEditing, makeSelectPublishFormValue, doUpdatePublishForm } from 'lbry-redux';
-import StoryEditor from './view';
+import PostEditor from './view';
 
 const select = (state, props) => ({
   filePath: makeSelectPublishFormValue('filePath')(state),
@@ -12,4 +12,4 @@ const perform = dispatch => ({
   updatePublishForm: value => dispatch(doUpdatePublishForm(value)),
 });
 
-export default connect(select, perform)(StoryEditor);
+export default connect(select, perform)(PostEditor);

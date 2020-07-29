@@ -118,8 +118,8 @@ function PublishForm(props: Props) {
 
   const TAGS_LIMIT = 5;
   const fileFormDisabled = mode === PUBLISH_MODES.FILE && !filePath;
-  const emptyStoryError = mode === PUBLISH_MODES.STORY && (!fileText || fileText.trim() === '');
-  const formDisabled = (fileFormDisabled && !editingURI) || emptyStoryError || publishing;
+  const emptyPostError = mode === PUBLISH_MODES.POST && (!fileText || fileText.trim() === '');
+  const formDisabled = (fileFormDisabled && !editingURI) || emptyPostError || publishing;
   const isInProgress = filePath || editingURI || name || title;
   // Editing content info
   const uri = myClaimForUri ? myClaimForUri.permanent_url : undefined;
@@ -132,7 +132,7 @@ function PublishForm(props: Props) {
     title &&
     bid &&
     !bidError &&
-    !emptyStoryError &&
+    !emptyPostError &&
     !(uploadThumbnailStatus === THUMBNAIL_STATUSES.IN_PROGRESS);
 
   const isOverwritingExistingClaim = !editingURI && myClaimForUri;
@@ -200,7 +200,7 @@ function PublishForm(props: Props) {
   // @if TARGET='web'
   function createWebFile() {
     if (fileText) {
-      const fileName = name || title || 'story';
+      const fileName = name || title;
       return new File([fileText], `${fileName}.md`, { type: 'text/markdown' });
     }
   }
@@ -212,7 +212,7 @@ function PublishForm(props: Props) {
     let output = filePath;
     if (!output || output === '') {
       // Generate a temporary file:
-      output = tempy.file({ name: 'story.md' });
+      output = tempy.file({ name: 'post.md' });
     }
     // Create a temporary file and save file changes
     if (typeof output === 'string') {
@@ -227,19 +227,13 @@ function PublishForm(props: Props) {
   }
   // @endif
 
-  function verifyStoryContent() {
-    const isEmpty = !fileText || fileText.length === 0 || fileText.trim() === '';
-    // TODO: Verify file size limit, and character size as well ?
-    return !isEmpty;
-  }
-
   async function handlePublish() {
-    // Publish story:
+    // Publish post:
     // If here is no file selected yet on desktop, show file dialog and let the
     // user choose a file path. On web a new File is created
-    const validStory = verifyStoryContent();
+    const validPost = !emptyPostError;
 
-    if (mode === PUBLISH_MODES.STORY) {
+    if (mode === PUBLISH_MODES.POST) {
       let outputFile = filePath;
       // If user modified content on the text editor:
       // Save changes and updat file path
@@ -253,11 +247,11 @@ function PublishForm(props: Props) {
         // @endif
 
         // New content stored locally and is not empty
-        if (outputFile && validStory) {
+        if (outputFile && validPost) {
           updatePublishForm({ filePath: outputFile });
           publish(outputFile);
         }
-      } else if (validStory && outputFile) {
+      } else if (validPost && outputFile) {
         publish(outputFile);
       }
     }
@@ -274,9 +268,9 @@ function PublishForm(props: Props) {
   // Update mode on editing
   useEffect(() => {
     if (autoSwitchMode && editingURI && myClaimForUri) {
-      // Change publish mode to "story" if editing content type is markdown
-      if (fileMimeType === 'text/markdown' && mode !== PUBLISH_MODES.STORY) {
-        setMode(PUBLISH_MODES.STORY);
+      // Change publish mode to "post" if editing content type is markdown
+      if (fileMimeType === 'text/markdown' && mode !== PUBLISH_MODES.POST) {
+        setMode(PUBLISH_MODES.POST);
         // Prevent forced mode
         setAutoSwitchMode(false);
       }
