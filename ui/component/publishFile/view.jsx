@@ -32,6 +32,7 @@ type Props = {
   size: number,
   duration: number,
   isVid: boolean,
+  autoPopulateName: boolean,
   setPublishMode: string => void,
   setPrevFileText: string => void,
 };
@@ -58,6 +59,7 @@ function PublishFile(props: Props) {
     isVid,
     setPublishMode,
     setPrevFileText,
+    autoPopulateName,
   } = props;
 
   const ffmpegAvail = ffmpegStatus.available;
@@ -82,7 +84,7 @@ function PublishFile(props: Props) {
   useEffect(() => {
     if (mode === PUBLISH_MODES.POST) {
       if (currentFileType !== 'text/markdown' && !isStillEditing) {
-        updatePublishForm({ filePath: '', name: '' });
+        updatePublishForm({ filePath: '' });
       }
     }
   }, [currentFileType, mode, isStillEditing, updatePublishForm]);
@@ -210,6 +212,23 @@ function PublishFile(props: Props) {
     // @endif
   }
 
+  function parseName(newName) {
+    let INVALID_URI_CHARS = new RegExp(regexInvalidURI, 'gu');
+    return newName.replace(INVALID_URI_CHARS, '-');
+  }
+
+  function handleTitleChange(e) {
+    const newTitle = e.target.value;
+    const noName = !name || name.trim() === '';
+    const hasTitle = newTitle && newTitle.trim() !== '';
+    // Update title
+    updatePublishForm({ title: newTitle });
+    // Auto-populate name from title
+    if (hasTitle && (noName || autoPopulateName)) {
+      updatePublishForm({ name: parseName(newTitle) });
+    }
+  }
+
   function handleFileChange(file: WebFile) {
     const { showToast } = props;
     window.URL = window.URL || window.webkitURL;
@@ -290,10 +309,9 @@ function PublishFile(props: Props) {
     };
     // Strip off extention and replace invalid characters
     let fileName = name || file.name.substr(0, file.name.lastIndexOf('.')) || file.name;
-    let INVALID_URI_CHARS = new RegExp(regexInvalidURI, 'gu');
-    let parsedFileName = fileName.replace(INVALID_URI_CHARS, '-');
+
     if (!isStillEditing) {
-      publishFormParams.name = parsedFileName;
+      publishFormParams.name = parseName(fileName);
     }
     // File path is not supported on web for security reasons so we use the name instead.
     setCurrentFile(file.path || file.name);
@@ -335,7 +353,7 @@ function PublishFile(props: Props) {
             placeholder={__('Descriptive titles work best')}
             disabled={disabled}
             value={title}
-            onChange={e => updatePublishForm({ title: e.target.value })}
+            onChange={handleTitleChange}
           />
           {isPublishFile && (
             <FileSelector disabled={disabled} currentPath={currentFile} onFileChosen={handleFileChange} />

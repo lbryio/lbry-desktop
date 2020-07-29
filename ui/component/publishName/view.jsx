@@ -1,6 +1,6 @@
 // @flow
 import { CHANNEL_NEW, CHANNEL_ANONYMOUS, MINIMUM_PUBLISH_BID, INVALID_NAME_ERROR } from 'constants/claim';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { isNameValid } from 'lbry-redux';
 import { FormField } from 'component/common/form';
 import NameHelpText from './name-help-text';
@@ -19,6 +19,8 @@ type Props = {
   amountNeededForTakeover: number,
   prepareEdit: ({}, string) => void,
   updatePublishForm: ({}) => void,
+  autoPopulateName: boolean,
+  setAutoPopulateName: boolean => void,
 };
 
 function PublishName(props: Props) {
@@ -34,6 +36,8 @@ function PublishName(props: Props) {
     prepareEdit,
     updatePublishForm,
     balance,
+    autoPopulateName,
+    setAutoPopulateName,
   } = props;
   const [nameError, setNameError] = useState(undefined);
   const [bidError, setBidError] = useState(undefined);
@@ -44,6 +48,23 @@ function PublishName(props: Props) {
       prepareEdit(myClaimForUri, uri);
     }
   }
+  const handleNameChange = useCallback(
+    event => {
+      const newName = event.target.value;
+      const hasName = newName && newName.trim() !== '';
+      updatePublishForm({ name: newName });
+
+      // Don't autoPopulate name from title if user sets a custom name
+      if (hasName && autoPopulateName) {
+        setAutoPopulateName(false);
+      }
+      // Enable name autopopulation from title
+      if (!hasName && !autoPopulateName) {
+        setAutoPopulateName(true);
+      }
+    },
+    [autoPopulateName, setAutoPopulateName]
+  );
 
   useEffect(() => {
     let nameError;
@@ -85,13 +106,7 @@ function PublishName(props: Props) {
                 !channel || channel === CHANNEL_ANONYMOUS || channel === CHANNEL_NEW ? '' : `${channel}/`
               }`}</div>
             </fieldset-section>
-            <FormField
-              type="text"
-              name="content_name"
-              value={name}
-              error={nameError}
-              onChange={event => updatePublishForm({ name: event.target.value })}
-            />
+            <FormField type="text" name="content_name" value={name} error={nameError} onChange={handleNameChange} />
           </fieldset-group>
           <div className="form-field__help">
             <NameHelpText
