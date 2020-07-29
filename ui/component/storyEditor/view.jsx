@@ -4,15 +4,15 @@ import { SIMPLE_SITE } from 'config';
 import { FF_MAX_CHARS_IN_DESCRIPTION } from 'constants/form-field';
 import { FormField } from 'component/common/form';
 import usePersistedState from 'effects/use-persisted-state';
+import useFetchStreamingUrl from 'effects/use-fetch-streaming-url';
 
 type Props = {
   uri: ?string,
   label: ?string,
   disabled: ?boolean,
-  fileInfo: FileListItem,
   filePath: string | WebFile,
   fileText: ?string,
-  streamingUrl: ?string,
+  fileMimeType: ?string,
   isStillEditing: boolean,
   setPrevFileText: string => void,
   updatePublishForm: ({}) => void,
@@ -24,32 +24,43 @@ function StoryEditor(props: Props) {
     uri,
     label,
     disabled,
-    fileInfo,
     filePath,
     fileText,
-    streamingUrl,
+    fileMimeType,
     isStillEditing,
     setPrevFileText,
     updatePublishForm,
     setCurrentFileType,
   } = props;
 
-  const [isLoadign, setIsLoadign] = React.useState(false);
+  const editing = isStillEditing && uri;
+
+  const [ready, setReady] = React.useState(!editing);
+  const [loading, setLoading] = React.useState(false);
   const [advancedEditor, setAdvancedEditor] = usePersistedState('publish-form-story-mode', false);
+  const { streamingUrl } = useFetchStreamingUrl(uri);
 
   function toggleMarkdown() {
     setAdvancedEditor(!advancedEditor);
   }
 
+  // Ready to edit content
   useEffect(() => {
-    if (fileText && isLoadign) {
-      setIsLoadign(false);
+    if (!ready && !loading && fileText && streamingUrl) {
+      setReady(true);
     }
-  }, [fileText, isLoadign, setIsLoadign]);
+  }, [ready, loading, fileText, streamingUrl]);
+
+  useEffect(() => {
+    if (fileText && loading) {
+      setLoading(false);
+    } else if (!fileText && loading) {
+      setLoading(true);
+    }
+  }, [fileText, loading, setLoading]);
 
   useEffect(() => {
     function readFileStream(url) {
-      setIsLoadign(true);
       return fetch(url).then(res => res.text());
     }
 
@@ -67,24 +78,21 @@ function StoryEditor(props: Props) {
       }
     }
 
-    const isEditingFile = isStillEditing && uri && fileInfo;
-
-    if (isEditingFile) {
-      const { mime_type: mimeType } = fileInfo;
+    if (editing) {
       // Editing same file (previously published)
       // User can use a different file to replace the content
-      if (!filePath && !fileText && streamingUrl && mimeType === 'text/markdown') {
-        setCurrentFileType(mimeType);
+      if (!ready && !filePath && !fileText && streamingUrl && fileMimeType === 'text/markdown') {
+        setCurrentFileType(fileMimeType);
         updateEditorText(streamingUrl);
       }
     }
   }, [
-    uri,
+    ready,
+    editing,
     fileText,
     filePath,
-    fileInfo,
+    fileMimeType,
     streamingUrl,
-    isStillEditing,
     setPrevFileText,
     updatePublishForm,
     setCurrentFileType,
@@ -95,9 +103,9 @@ function StoryEditor(props: Props) {
       type={!SIMPLE_SITE && advancedEditor ? 'markdown' : 'textarea'}
       name="content_story"
       label={label}
-      placeholder={isLoadign ? __('Loadign...') : __('My content for this story...')}
-      value={fileText}
-      disabled={isLoadign || disabled}
+      placeholder={__('My content for this story...')}
+      value={ready ? fileText : __('Loading...')}
+      disabled={!ready || disabled}
       onChange={value => updatePublishForm({ fileText: advancedEditor ? value : value.target.value })}
       quickActionLabel={!SIMPLE_SITE && (advancedEditor ? __('Simple Editor') : __('Advanced Editor'))}
       quickActionHandler={toggleMarkdown}

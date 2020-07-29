@@ -18,6 +18,7 @@ type Props = {
   name: ?string,
   title: ?string,
   filePath: string | WebFile,
+  fileMimeType: ?string,
   isStillEditing: boolean,
   balance: number,
   updatePublishForm: ({}) => void,
@@ -43,6 +44,7 @@ function PublishFile(props: Props) {
     title,
     balance,
     filePath,
+    fileMimeType,
     isStillEditing,
     updatePublishForm,
     disabled,
@@ -343,6 +345,7 @@ function PublishFile(props: Props) {
               label={__('Story content')}
               uri={uri}
               disabled={disabled}
+              fileMimeType={fileMimeType}
               setPrevFileText={setPrevFileText}
               setCurrentFileType={setCurrentFileType}
             />
