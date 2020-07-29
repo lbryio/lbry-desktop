@@ -120,9 +120,12 @@ function PublishForm(props: Props) {
 
   const TAGS_LIMIT = 5;
   const fileFormDisabled = mode === PUBLISH_MODES.FILE && !filePath;
-  const storyFormDisabled = mode === PUBLISH_MODES.STORY && (!fileText || fileText === '');
-  const formDisabled = ((fileFormDisabled || storyFormDisabled) && !editingURI) || publishing;
+  const emptyStoryError = mode === PUBLISH_MODES.STORY && (!fileText || fileText.trim() === '');
+  const formDisabled = (fileFormDisabled && !editingURI) || emptyStoryError || publishing;
   const isInProgress = filePath || editingURI || name || title;
+  // Editing content info
+  const uri = myClaimForUri ? myClaimForUri.permanent_url : undefined;
+  const fileMimeType = myClaimForUri ? myClaimForUri.value.source.media_type : undefined;
 
   // If they are editing, they don't need a new file chosen
   const formValidLessFile =
@@ -131,6 +134,7 @@ function PublishForm(props: Props) {
     title &&
     bid &&
     !bidError &&
+    !emptyStoryError &&
     !(uploadThumbnailStatus === THUMBNAIL_STATUSES.IN_PROGRESS);
 
   const isOverwritingExistingClaim = !editingURI && myClaimForUri;
@@ -280,19 +284,16 @@ function PublishForm(props: Props) {
   // Update mode on editing
   useEffect(() => {
     if (autoSwitchMode && editingURI && myClaimForUri) {
-      const { media_type: mediaType } = myClaimForUri.value.source;
       // Change publish mode to "story" if editing content type is markdown
-      if (mediaType === 'text/markdown' && mode !== PUBLISH_MODES.STORY) {
+      if (fileMimeType === 'text/markdown' && mode !== PUBLISH_MODES.STORY) {
         setMode(PUBLISH_MODES.STORY);
         // Prevent forced mode
         setAutoSwitchMode(false);
       }
     }
-  }, [autoSwitchMode, editingURI, myClaimForUri, mode, setMode, setAutoSwitchMode]);
+  }, [autoSwitchMode, editingURI, fileMimeType, myClaimForUri, mode, setMode, setAutoSwitchMode]);
 
   // Editing claim uri
-  const uri = myClaimForUri ? myClaimForUri.permanent_url : undefined;
-
   return (
     <div className="card-stack">
       <div className="button-tab-group">
@@ -312,6 +313,7 @@ function PublishForm(props: Props) {
       <PublishFile
         uri={uri}
         mode={mode}
+        fileMimeType={fileMimeType}
         disabled={disabled || publishing}
         inProgress={isInProgress}
         setPublishMode={setMode}

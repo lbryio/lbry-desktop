@@ -6,7 +6,6 @@ const select = state => ({
   bid: makeSelectPublishFormValue('bid')(state),
   name: makeSelectPublishFormValue('name')(state),
   title: makeSelectPublishFormValue('title')(state),
-  fileText: makeSelectPublishFormValue('fileText')(state),
   bidError: makeSelectPublishFormValue('bidError')(state),
   editingUri: makeSelectPublishFormValue('editingUri')(state),
   uploadThumbnailStatus: makeSelectPublishFormValue('uploadThumbnailStatus')(state),
