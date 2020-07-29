@@ -95,6 +95,7 @@ export const VIDEO = 'Video';
 export const VOLUME_MUTED = 'VolumeX';
 export const TEXT = 'FileText';
 export const DOWNLOADABLE = 'Downloadable';
+export const POST = 'Post';
 export const REPOST = 'Repeat';
 export const VALIDATED = 'Check';
 export const SLIDERS = 'Sliders';
