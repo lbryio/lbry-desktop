@@ -168,8 +168,14 @@ export function doSetDarkTime(value, options) {
 }
 
 export function doSyncClientSettings() {
-  return {
-    type: LOCAL_ACTIONS.SYNC_CLIENT_SETTINGS,
+  return (dispatch, getState) => {
+    const state = getState();
+    const syncEnabled = makeSelectClientSetting(SETTINGS.ENABLE_SYNC)(state);
+    if (syncEnabled) {
+      dispatch({
+        type: LOCAL_ACTIONS.SYNC_CLIENT_SETTINGS,
+      });
+    }
   };
 }
 
