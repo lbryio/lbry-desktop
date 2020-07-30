@@ -21,6 +21,8 @@ declare type WebNotification = {
     },
     dynamic: {
       comment_author: string,
+      hash: string,
+      claim_title: string,
     },
     email: {},
   },
@@ -28,4 +30,5 @@ declare type WebNotification = {
   type: string,
   updated_at: string,
   user_id: number,
+  group_count?: number,
 };

@@ -13,25 +13,41 @@
   }
 }
 
+.notification__icon {
+  .icon__wrapper {
+    margin-right: var(--spacing-m);
+  }
+}
+
 .notification__wrapper {
   width: 100%;
   display: flex;
+
+  .channel-thumbnail {
+    @include handleChannelGif(3rem);
+  }
 }
 
 .notification__content {
-  margin-left: var(--spacing-m);
+  display: flex;
+  flex: 1;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .notification__title {
-  font-size: var(--font-large);
+  font-size: var(--font-small);
+  font-weight: bold;
+  color: var(--color-text);
+  margin-bottom: var(--spacing-s);
 }
 
 .notification__text {
   font-size: var(--font-body);
-  margin-top: var(--spacing-s);
 }
 
 .notification__time {
   @extend .help;
+  margin-bottom: 0;
   margin-top: 0;
 }
