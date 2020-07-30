@@ -13,6 +13,7 @@ type Props = {
   uri: string,
   bid: number,
   balance: number,
+  disabled: boolean,
   isStillEditing: boolean,
   myClaimForUri: ?StreamClaim,
   isResolvingUri: boolean,
@@ -28,6 +29,7 @@ function PublishName(props: Props) {
     name,
     channel,
     uri,
+    disabled,
     isStillEditing,
     myClaimForUri,
     bid,
@@ -105,7 +107,14 @@ function PublishName(props: Props) {
                 !channel || channel === CHANNEL_ANONYMOUS || channel === CHANNEL_NEW ? '' : `${channel}/`
               }`}</div>
             </fieldset-section>
-            <FormField type="text" name="content_name" value={name} error={nameError} onChange={handleNameChange} />
+            <FormField
+              type="text"
+              name="content_name"
+              value={name}
+              disabled={disabled}
+              error={nameError}
+              onChange={handleNameChange}
+            />
           </fieldset-group>
           <div className="form-field__help">
             <NameHelpText

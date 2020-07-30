@@ -74,7 +74,7 @@ function PostEditor(props: Props) {
           updatePublishForm({ fileText: text });
         }
       } catch (error) {
-        // Handle error..
+        console.error(error);
       }
     }
 
@@ -100,7 +100,7 @@ function PostEditor(props: Props) {
 
   return (
     <FormField
-      type={!SIMPLE_SITE && advancedEditor ? 'markdown' : 'textarea'}
+      type={'markdown'}
       name="content_post"
       label={label}
       placeholder={__('My content for this post...')}
