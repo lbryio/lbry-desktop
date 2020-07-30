@@ -6,10 +6,6 @@
 
 .content__viewer--inline {
   max-height: var(--inline-player-max-height);
-
-  @media (max-width: $breakpoint-small) {
-    margin-top: var(--spacing-xs);
-  }
 }
 
 .content__viewer--floating {
