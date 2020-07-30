@@ -1,6 +1,6 @@
 // @flow
 import { CHANNEL_NEW, CHANNEL_ANONYMOUS, MINIMUM_PUBLISH_BID, INVALID_NAME_ERROR } from 'constants/claim';
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect } from 'react';
 import { isNameValid } from 'lbry-redux';
 import { FormField } from 'component/common/form';
 import NameHelpText from './name-help-text';
@@ -48,23 +48,22 @@ function PublishName(props: Props) {
       prepareEdit(myClaimForUri, uri);
     }
   }
-  const handleNameChange = useCallback(
-    event => {
-      const newName = event.target.value;
-      const hasName = newName && newName.trim() !== '';
-      updatePublishForm({ name: newName });
 
-      // Don't autoPopulate name from title if user sets a custom name
-      if (hasName && autoPopulateName) {
-        setAutoPopulateName(false);
-      }
-      // Enable name autopopulation from title
-      if (!hasName && !autoPopulateName) {
-        setAutoPopulateName(true);
-      }
-    },
-    [autoPopulateName, setAutoPopulateName]
-  );
+  function handleNameChange(event) {
+    updatePublishForm({ name: event.target.value });
+
+    if (autoPopulateName) {
+      setAutoPopulateName(false);
+    }
+  }
+
+  useEffect(() => {
+    const hasName = name && name.trim() !== '';
+    // Enable name autopopulation from title
+    if (!hasName && !autoPopulateName) {
+      setAutoPopulateName(true);
+    }
+  }, [name, autoPopulateName, setAutoPopulateName]);
 
   useEffect(() => {
     let nameError;

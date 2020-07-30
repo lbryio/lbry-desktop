@@ -64,7 +64,6 @@ type Props = {
   licenseType: string,
   otherLicenseDescription: ?string,
   licenseUrl: ?string,
-  uri: ?string,
   useLBRYUploader: ?boolean,
   publishing: boolean,
   balance: number,
@@ -86,6 +85,9 @@ function PublishForm(props: Props) {
   const [mode, setMode] = React.useState(PUBLISH_MODES.FILE);
   const [autoSwitchMode, setAutoSwitchMode] = React.useState(true);
 
+  // Used to checl if the url name has changed:
+  // A new file needs to be provided
+  const [prevName, setPrevName] = React.useState(false);
   // Used to checl if the file has been modified by user
   const [fileEdited, setFileEdited] = React.useState(false);
   const [prevFileText, setPrevFileText] = React.useState('');
@@ -124,9 +126,11 @@ function PublishForm(props: Props) {
   const emptyPostError = mode === PUBLISH_MODES.POST && (!fileText || fileText.trim() === '');
   const formDisabled = (fileFormDisabled && !editingURI) || emptyPostError || publishing;
   const isInProgress = filePath || editingURI || name || title;
+
   // Editing content info
   const uri = myClaimForUri ? myClaimForUri.permanent_url : undefined;
   const fileMimeType = myClaimForUri ? myClaimForUri.value.source.media_type : undefined;
+  const nameEdited = isStillEditing && name !== prevName;
 
   // If they are editing, they don't need a new file chosen
   const formValidLessFile =
@@ -158,6 +162,15 @@ function PublishForm(props: Props) {
       resetThumbnailStatus();
     }
   }, [thumbnail, resetThumbnailStatus]);
+
+  // Save current name of the editing claim
+  useEffect(() => {
+    if (isStillEditing && (!prevName || !prevName.trim() === '')) {
+      if (name !== prevName) {
+        setPrevName(name);
+      }
+    }
+  }, [name, prevName, setPrevName, isStillEditing]);
 
   // Check for content changes on the text editor
   useEffect(() => {
@@ -238,9 +251,9 @@ function PublishForm(props: Props) {
 
     if (mode === PUBLISH_MODES.POST) {
       let outputFile = filePath;
-      // If user modified content on the text editor:
+      // If user modified content on the text editor or editing name has changed:
       // Save changes and updat file path
-      if (fileEdited) {
+      if (fileEdited || nameEdited) {
         // @if TARGET='app'
         outputFile = await saveFileChanges();
         // @endif
@@ -306,6 +319,7 @@ function PublishForm(props: Props) {
         setPublishMode={setMode}
         setPrevFileText={setPrevFileText}
         autoPopulateName={autoPopulateNameFromTitle}
+        setAutoPopulateName={setAutoPopulateNameFromTitle}
       />
       {!publishing && (
         <div className={classnames({ 'card--disabled': formDisabled })}>
