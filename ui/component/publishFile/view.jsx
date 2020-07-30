@@ -35,6 +35,7 @@ type Props = {
   autoPopulateName: boolean,
   setPublishMode: string => void,
   setPrevFileText: string => void,
+  setAutoPopulateName: boolean => void,
 };
 
 function PublishFile(props: Props) {
@@ -60,6 +61,7 @@ function PublishFile(props: Props) {
     setPublishMode,
     setPrevFileText,
     autoPopulateName,
+    setAutoPopulateName,
   } = props;
 
   const ffmpegAvail = ffmpegStatus.available;
@@ -217,15 +219,13 @@ function PublishFile(props: Props) {
     return newName.replace(INVALID_URI_CHARS, '-');
   }
 
-  function handleTitleChange(e) {
-    const newTitle = e.target.value;
-    const noName = !name || name.trim() === '';
-    const hasTitle = newTitle && newTitle.trim() !== '';
+  function handleTitleChange(event) {
+    const title = event.target.value;
     // Update title
-    updatePublishForm({ title: newTitle });
-    // Auto-populate name from title
-    if (hasTitle && (noName || autoPopulateName)) {
-      updatePublishForm({ name: parseName(newTitle) });
+    updatePublishForm({ title });
+    // Auto populate name from title
+    if (autoPopulateName) {
+      updatePublishForm({ name: parseName(title) });
     }
   }
 
@@ -313,6 +313,12 @@ function PublishFile(props: Props) {
     if (!isStillEditing) {
       publishFormParams.name = parseName(fileName);
     }
+
+    // Prevent name autopopulation from title
+    if (autoPopulateName) {
+      setAutoPopulateName(false);
+    }
+
     // File path is not supported on web for security reasons so we use the name instead.
     setCurrentFile(file.path || file.name);
     updatePublishForm(publishFormParams);
