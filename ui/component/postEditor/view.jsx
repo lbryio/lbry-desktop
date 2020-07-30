@@ -4,7 +4,6 @@ import { SIMPLE_SITE } from 'config';
 import { FF_MAX_CHARS_IN_DESCRIPTION } from 'constants/form-field';
 import { FormField } from 'component/common/form';
 import usePersistedState from 'effects/use-persisted-state';
-import useFetchStreamingUrl from 'effects/use-fetch-streaming-url';
 
 type Props = {
   uri: ?string,
@@ -13,7 +12,9 @@ type Props = {
   filePath: string | WebFile,
   fileText: ?string,
   fileMimeType: ?string,
+  streamingUrl: ?string,
   isStillEditing: boolean,
+  fetchStreamingUrl: string => void,
   setPrevFileText: string => void,
   updatePublishForm: ({}) => void,
   setCurrentFileType: string => void,
@@ -26,9 +27,11 @@ function PostEditor(props: Props) {
     disabled,
     filePath,
     fileText,
+    streamingUrl,
     fileMimeType,
     isStillEditing,
     setPrevFileText,
+    fetchStreamingUrl,
     updatePublishForm,
     setCurrentFileType,
   } = props;
@@ -38,11 +41,16 @@ function PostEditor(props: Props) {
   const [ready, setReady] = React.useState(!editing);
   const [loading, setLoading] = React.useState(false);
   const [advancedEditor, setAdvancedEditor] = usePersistedState('publish-form-post-mode', false);
-  const { streamingUrl } = useFetchStreamingUrl(uri);
 
   function toggleMarkdown() {
     setAdvancedEditor(!advancedEditor);
   }
+
+  useEffect(() => {
+    if (editing) {
+      fetchStreamingUrl(uri);
+    }
+  }, [uri, editing]);
 
   // Ready to edit content
   useEffect(() => {
