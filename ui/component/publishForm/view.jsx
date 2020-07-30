@@ -252,7 +252,7 @@ function PublishForm(props: Props) {
     if (mode === PUBLISH_MODES.POST) {
       let outputFile = filePath;
       // If user modified content on the text editor or editing name has changed:
-      // Save changes and updat file path
+      // Save changes and update file path
       if (fileEdited || nameEdited) {
         // @if TARGET='app'
         outputFile = await saveFileChanges();
