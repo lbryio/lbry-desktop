@@ -17,7 +17,7 @@ function NameHelpText(props: Props) {
   let nameHelpText;
 
   if (isStillEditing) {
-    nameHelpText = __('You are currently editing this claim. If you change the URL, you will need to reselect a file.');
+    nameHelpText = __('You are currently editing this claim.');
   } else if (uri && myClaimForUri) {
     const editUri = buildURI({
       streamName: myClaimForUri.name,

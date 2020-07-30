@@ -1289,5 +1289,7 @@
   "Can't publish an empty story": "Can't publish an empty story",
   "My content for this post...": "My content for this post...",
   "Please reselect a file after changing the LBRY URL": "Please reselect a file after changing the LBRY URL",
+  "You are currently editing this claim": "You are currently editing this claim",
+  "You are currently editing this claim.": "You are currently editing this claim.",
   "--end--": "--end--"
 }

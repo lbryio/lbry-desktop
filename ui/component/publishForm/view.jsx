@@ -277,10 +277,6 @@ function PublishForm(props: Props) {
     }
   }
 
-  function changePublishMode(modeName) {
-    setMode(modeName);
-  }
-
   // Update mode on editing
   useEffect(() => {
     if (autoSwitchMode && editingURI && myClaimForUri) {
@@ -304,7 +300,7 @@ function PublishForm(props: Props) {
             label={modeName}
             button="alt"
             onClick={() => {
-              changePublishMode(modeName);
+              setPublishMode(modeName);
             }}
             className={classnames('button-toggle', { 'button-toggle--active': mode === modeName })}
           />
@@ -363,9 +359,8 @@ function PublishForm(props: Props) {
               </React.Fragment>
             }
           />
-
           <PublishName
-            disabled={formDisabled}
+            disabled={isStillEditing || formDisabled}
             autoPopulateName={autoPopulateNameFromTitle}
             setAutoPopulateName={setAutoPopulateNameFromTitle}
           />
