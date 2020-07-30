@@ -54,7 +54,9 @@ const SimpleLink = (props: SimpleLinkProps) => {
   const embed = urlParams.get('embed');
 
   if (embed) {
-    return <EmbedPlayButton uri={uri} />;
+    // Decode this since users might just copy it from the url bar
+    const decodedUri = decodeURI(uri);
+    return <EmbedPlayButton uri={decodedUri} />;
   }
 
   const webLink = formatLbryUrlForWeb(uri);
