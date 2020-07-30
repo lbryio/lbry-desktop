@@ -28,7 +28,7 @@ function PublishFormErrors(props: Props) {
       {uploadThumbnailStatus === THUMBNAIL_STATUSES.IN_PROGRESS && (
         <div>{__('Please wait for thumbnail to finish uploading')}</div>
       )}
-      {!!editingURI && !isStillEditing && !filePath && (
+      {editingURI && !isStillEditing && !filePath && (
         <div>{__('Please reselect a file after changing the LBRY URL')}</div>
       )}
     </div>
