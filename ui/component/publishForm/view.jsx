@@ -300,7 +300,7 @@ function PublishForm(props: Props) {
             label={modeName}
             button="alt"
             onClick={() => {
-              setPublishMode(modeName);
+              setMode(modeName);
             }}
             className={classnames('button-toggle', { 'button-toggle--active': mode === modeName })}
           />
