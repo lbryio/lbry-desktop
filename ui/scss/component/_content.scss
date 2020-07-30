@@ -2,6 +2,10 @@
   @extend .card;
   position: absolute;
   top: var(--spacing-l);
+
+  @media (max-width: $breakpoint-small) {
+    top: var(--spacing-s);
+  }
 }
 
 .content__viewer--inline {
