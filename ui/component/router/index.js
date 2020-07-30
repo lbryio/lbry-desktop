@@ -4,7 +4,7 @@ import { selectHasNavigated, selectScrollStartingPosition, selectWelcomeVersion 
 import Router from './view';
 import { normalizeURI, makeSelectTitleForUri } from 'lbry-redux';
 import { doSetHasNavigated } from 'redux/actions/app';
-
+import { doSyncClientSettings } from 'redux/actions/settings';
 const select = state => {
   const { pathname, hash } = state.router.location;
   const urlPath = pathname + hash;
@@ -34,6 +34,7 @@ const select = state => {
 
 const perform = dispatch => ({
   setHasNavigated: () => dispatch(doSetHasNavigated()),
+  syncSettings: () => dispatch(doSyncClientSettings()),
 });
 
 export default connect(select, perform)(Router);
