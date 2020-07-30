@@ -78,7 +78,7 @@ function ModalRemoveFile(props: Props) {
             <div className="section__actions">
               <Button
                 button="primary"
-                label={__('OK')}
+                label={isAbandoning ? __('Removing...') : __('OK')}
                 disabled={isAbandoning}
                 onClick={() => deleteFile(uri, deleteChecked, claimIsMine ? abandonChecked : false)}
               />
