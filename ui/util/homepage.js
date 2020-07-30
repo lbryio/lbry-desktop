@@ -253,6 +253,18 @@ export default function getHomePageRowData(
     },
   };
 
+  const IM_HERE_LBRY = {
+    title: '#imherelbry',
+    link: `/$/${PAGES.DISCOVER}?${CS.TAGS_KEY}=imherelbry&${CS.CLAIM_TYPE}=${CS.CLAIM_STREAM}`,
+    options: {
+      claimType: ['stream'],
+      tags: ['imherelbry'],
+      pageSize: 4,
+    },
+  };
+
+  rowData.push(IM_HERE_LBRY);
+
   if (showPersonalizedChannels) rowData.push(RECENT_FROM_FOLLOWING);
   if (showPersonalizedTags && !showIndividualTags) rowData.push(TRENDING_FOR_TAGS);
   if (showPersonalizedTags && showIndividualTags) {
