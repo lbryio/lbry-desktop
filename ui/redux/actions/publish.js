@@ -15,7 +15,15 @@ import { push } from 'connected-react-router';
 import analytics from 'analytics';
 import { doOpenModal } from './app';
 
-export const doPublishDesktop = (filePath: string) => (dispatch: Dispatch, getState: () => {}) => {
+export const doPublishDesktop = (filePath: string, preview?: boolean) => (dispatch: Dispatch, getState: () => {}) => {
+  const publishPreview = previewResponse => {
+    dispatch(
+      doOpenModal(MODALS.PUBLISH_PREVIEW, {
+        previewResponse,
+      })
+    );
+  };
+
   const publishSuccess = (successResponse, lbryFirstError) => {
     const state = getState();
     const myClaims = selectMyClaims(state);
@@ -73,6 +81,11 @@ export const doPublishDesktop = (filePath: string) => (dispatch: Dispatch, getSt
     actions.push(doError(error.message));
     dispatch(batchActions(...actions));
   };
+
+  if (preview) {
+    dispatch(doPublish(publishSuccess, publishFail, publishPreview));
+    return;
+  }
 
   // Redirect on web immediately because we have a file upload progress componenet
   // on the publishes page. This doesn't exist on desktop so wait until we get a response
