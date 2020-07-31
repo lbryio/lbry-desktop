@@ -25,6 +25,11 @@ export default function Tag(props: Props) {
     title = type === 'add' ? __('Add tag') : __('Remove tag');
   }
 
+  let iconRight = type !== 'link' && type !== 'large' && (type === 'remove' ? ICONS.REMOVE : ICONS.ADD);
+  if (type === 'flow') {
+    iconRight = null;
+  }
+
   return (
     <Button
       {...clickProps}
@@ -37,10 +42,11 @@ export default function Tag(props: Props) {
         // tag--add only adjusts the color, which causes issues with mature tag color clashing
         'tag--add': !isMature && type === 'add',
         'tag--mature': isMature,
+        'tag--flow': type === 'flow',
       })}
       label={name}
       iconSize={12}
-      iconRight={type !== 'link' && type !== 'large' && (type === 'remove' ? ICONS.REMOVE : ICONS.ADD)}
+      iconRight={iconRight}
     />
   );
 }
