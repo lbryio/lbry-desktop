@@ -3,7 +3,12 @@ import moment from 'moment';
 import SUPPORTED_LANGUAGES from 'constants/supported_languages';
 import { ACTIONS as LBRY_REDUX_ACTIONS, SETTINGS, SHARED_PREFERENCES } from 'lbry-redux';
 import { getSubsetFromKeysArray } from 'util/sync-settings';
+import { UNSYNCED_SETTINGS } from 'config';
 const { CLIENT_SYNC_KEYS } = SHARED_PREFERENCES;
+const settingsToIgnore = (UNSYNCED_SETTINGS && UNSYNCED_SETTINGS.trim().split(' ')) || [];
+const clientSyncKeys = settingsToIgnore.length
+  ? CLIENT_SYNC_KEYS.filter(k => !settingsToIgnore.includes(k))
+  : CLIENT_SYNC_KEYS;
 
 const reducers = {};
 let settingLanguage = [];
@@ -70,14 +75,6 @@ reducers[ACTIONS.REHYDRATE] = (state, action) => {
     return Object.assign({}, state, { ...persistedSettings, clientSettings: newClientSettings });
   }
   return Object.assign({}, state, { clientSettings });
-};
-
-reducers[ACTIONS.SYNC_CLIENT_SETTINGS] = state => {
-  const { clientSettings } = state;
-  const sharedPreferences = Object.assign({}, state.sharedPreferences);
-  const selectedClientSettings = getSubsetFromKeysArray(clientSettings, CLIENT_SYNC_KEYS);
-  const newSharedPreferences = { ...sharedPreferences, ...selectedClientSettings };
-  return Object.assign({}, state, { sharedPreferences: newSharedPreferences });
 };
 
 reducers[ACTIONS.FINDING_FFMPEG_STARTED] = state =>
@@ -157,11 +154,20 @@ reducers[ACTIONS.CLIENT_SETTING_CHANGED] = (state, action) => {
   });
 };
 
+reducers[ACTIONS.SYNC_CLIENT_SETTINGS] = state => {
+  const { clientSettings } = state;
+  const sharedPreferences = Object.assign({}, state.sharedPreferences);
+  const selectedClientSettings = getSubsetFromKeysArray(clientSettings, clientSyncKeys);
+  const newSharedPreferences = { ...sharedPreferences, ...selectedClientSettings };
+  return Object.assign({}, state, { sharedPreferences: newSharedPreferences });
+};
+
 reducers[LBRY_REDUX_ACTIONS.USER_STATE_POPULATE] = (state, action) => {
   const { clientSettings: currentClientSettings } = state;
   const { settings: sharedPreferences } = action.data;
+
   if (currentClientSettings[SETTINGS.ENABLE_SYNC]) {
-    const selectedSettings = getSubsetFromKeysArray(sharedPreferences, CLIENT_SYNC_KEYS);
+    const selectedSettings = getSubsetFromKeysArray(sharedPreferences, clientSyncKeys);
     const mergedClientSettings = { ...currentClientSettings, ...selectedSettings };
     return Object.assign({}, state, { sharedPreferences, clientSettings: mergedClientSettings });
   }
