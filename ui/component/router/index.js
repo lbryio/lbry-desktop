@@ -3,7 +3,7 @@ import { selectUserVerifiedEmail } from 'redux/selectors/user';
 import { selectHasNavigated, selectScrollStartingPosition, selectWelcomeVersion } from 'redux/selectors/app';
 import Router from './view';
 import { normalizeURI, makeSelectTitleForUri } from 'lbry-redux';
-import { doSetHasNavigated } from 'redux/actions/app';
+import { doSetHasNavigated, doSyncWithPreferences } from 'redux/actions/app';
 import { doSyncClientSettings } from 'redux/actions/settings';
 const select = state => {
   const { pathname, hash } = state.router.location;
@@ -35,6 +35,7 @@ const select = state => {
 const perform = dispatch => ({
   setHasNavigated: () => dispatch(doSetHasNavigated()),
   syncSettings: () => dispatch(doSyncClientSettings()),
+  checkSync: () => dispatch(doSyncWithPreferences()),
 });
 
 export default connect(select, perform)(Router);
