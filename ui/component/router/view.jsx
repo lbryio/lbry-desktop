@@ -98,6 +98,7 @@ type Props = {
   hasNavigated: boolean,
   setHasNavigated: () => void,
   syncSettings: () => void,
+  checkSync: () => void,
 };
 
 function AppRouter(props: Props) {
@@ -112,6 +113,7 @@ function AppRouter(props: Props) {
     hasNavigated,
     setHasNavigated,
     syncSettings,
+    checkSync,
   } = props;
   const { entries } = history;
   const entryIndex = history.index;
@@ -135,11 +137,11 @@ function AppRouter(props: Props) {
       if (!location.pathname.includes(PAGES.SETTINGS) && prevPath.includes(PAGES.SETTINGS)) {
         syncSettings();
       } else if (location.pathname.includes(PAGES.SETTINGS) && !prevPath.includes(PAGES.SETTINGS)) {
-        syncSettings();
+        checkSync();
       }
     });
     return unlisten;
-  }, [prevPath, syncSettings]);
+  }, [prevPath, syncSettings, checkSync]);
 
   useEffect(() => {
     const unlisten = history.listen(location => {
