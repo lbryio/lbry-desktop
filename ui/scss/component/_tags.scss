@@ -68,3 +68,8 @@
 .tag--mature {
   @extend .badge--tag-mature;
 }
+
+.tag--flow {
+  margin: calc(2rem / 10) calc(2rem / 10);
+  max-width: 20rem;
+}
