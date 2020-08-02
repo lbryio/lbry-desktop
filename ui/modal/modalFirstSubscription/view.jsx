@@ -31,7 +31,7 @@ const ModalFirstSubscription = (props: Props) => {
         title={title}
         subtitle={
           <>
-            {__('Awesome! You just followed your first first channel.')}{' '}
+            {__('Awesome! You just followed your first channel.')}{' '}
             {user && user.primary_email
               ? __('You will receive notifications related to new content.')
               : __('Sign in with lbry.tv to receive notifications about new content.')}
