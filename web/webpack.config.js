@@ -43,6 +43,7 @@ if (fs.existsSync(CUSTOM_OG_PATH)) {
   copyWebpackCommands.push({
     from: CUSTOM_OG_PATH,
     to: `${DIST_ROOT}/public/v2-og.png`,
+    force: true,
   });
 }
 
