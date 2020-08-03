@@ -14,6 +14,7 @@ import {
 } from 'lbry-redux';
 import { doPublishDesktop } from 'redux/actions/publish';
 import { selectUnclaimedRewardValue } from 'redux/selectors/rewards';
+import { selectModal } from 'redux/selectors/app';
 import PublishPage from './view';
 
 const select = state => ({
@@ -27,6 +28,7 @@ const select = state => ({
   isStillEditing: selectIsStillEditing(state),
   isResolvingUri: selectIsResolvingPublishUris(state),
   totalRewardValue: selectUnclaimedRewardValue(state),
+  modal: selectModal(state),
 });
 
 const perform = dispatch => ({
