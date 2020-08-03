@@ -1,5 +1,5 @@
 // @flow
-import { SIMPLE_SITE } from 'config';
+import { SIMPLE_SITE, SHOW_ADS } from 'config';
 import * as ICONS from 'constants/icons';
 import * as PAGES from 'constants/pages';
 import React, { useEffect, Fragment } from 'react';
@@ -118,7 +118,7 @@ export default function SearchPage(props: Props) {
               uris={uris}
               loading={isSearching}
               header={<SearchOptions additionalOptions={additionalOptions} />}
-              injectedItem={!isAuthenticated && IS_WEB && <Ads type="video" />}
+              injectedItem={SHOW_ADS && !isAuthenticated && IS_WEB && <Ads type="video" />}
               headerAltControls={
                 <Fragment>
                   <span>{__('Find what you were looking for?')}</span>

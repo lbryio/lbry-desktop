@@ -1,4 +1,5 @@
 // @flow
+import { SHOW_ADS } from 'config';
 import * as CS from 'constants/claim_search';
 import * as ICONS from 'constants/icons';
 import React, { Fragment } from 'react';
@@ -126,7 +127,7 @@ function ChannelContent(props: Props) {
           defaultOrderBy={CS.ORDER_BY_NEW}
           pageSize={defaultPageSize}
           infiniteScroll={defaultInfiniteScroll}
-          injectedItem={!isAuthenticated && IS_WEB && <Ads type="video" />}
+          injectedItem={SHOW_ADS && !isAuthenticated && IS_WEB && <Ads type="video" />}
           meta={
             <Form onSubmit={() => {}} className="wunderbar--inline">
               <Icon icon={ICONS.SEARCH} />

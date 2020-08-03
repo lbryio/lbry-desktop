@@ -23,6 +23,7 @@ const config = {
   DEFAULT_LANGUAGE: process.env.DEFAULT_LANGUAGE,
   AUTO_FOLLOW_CHANNELS: process.env.AUTO_FOLLOW_CHANNELS,
   SIMPLE_SITE: process.env.SIMPLE_SITE === 'true',
+  SHOW_ADS: process.env.SHOW_ADS === 'true',
   PINNED_URI_1: process.env.PINNED_URI_1,
   PINNED_LABEL_1: process.env.PINNED_LABEL_1,
   PINNED_URI_2: process.env.PINNED_URI_2,
