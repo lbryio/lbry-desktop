@@ -1,4 +1,5 @@
 // @flow
+import { SHOW_ADS } from 'config';
 import React from 'react';
 import ClaimList from 'component/claimList';
 import Ads from 'web/component/ads';
@@ -78,7 +79,7 @@ export default class RecommendedContent extends React.PureComponent<Props> {
               type="small"
               loading={isSearching}
               uris={recommendedContent}
-              injectedItem={!isAuthenticated && IS_WEB && <Ads type="video" small />}
+              injectedItem={SHOW_ADS && !isAuthenticated && IS_WEB && <Ads type="video" small />}
               empty={__('No related content found')}
             />
           </WaitUntilOnPage>

@@ -1,4 +1,5 @@
 // @flow
+import { SHOW_ADS } from 'config';
 import * as ICONS from 'constants/icons';
 import React, { useRef } from 'react';
 import Page from 'component/page';
@@ -94,7 +95,7 @@ function DiscoverPage(props: Props) {
         tags={tags}
         hiddenNsfwMessage={<HiddenNsfw type="page" />}
         repostedClaimId={repostedClaim ? repostedClaim.claim_id : null}
-        injectedItem={!isAuthenticated && IS_WEB && <Ads type="video" />}
+        injectedItem={SHOW_ADS && !isAuthenticated && IS_WEB && <Ads type="video" />}
         meta={
           tag &&
           !isMobile && (
