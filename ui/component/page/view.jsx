@@ -21,7 +21,6 @@ type Props = {
   noSideNavigation: boolean,
   backout: {
     backLabel?: string,
-    backCB?: () => void,
     backNavDefault?: string,
     title: string,
     simpleTitle: string, // Just use the same value as `title` if `title` is already short (~< 10 chars), unless you have a better idea for title overlfow on mobile

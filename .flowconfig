@@ -1,5 +1,6 @@
 [ignore]
 .*\.typeface\.json
+.*/node_modules/findup/.*
 
 [include]
 

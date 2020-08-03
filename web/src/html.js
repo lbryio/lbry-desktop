@@ -123,8 +123,20 @@ function buildClaimOgMetadata(uri, claim, overrideOptions = {}) {
     head += `<meta property="og:video" content="${videoUrl}" />`;
     head += `<meta property="og:video:secure_url" content="${videoUrl}" />`;
     head += `<meta property="og:video:type" content="${claim.source_media_type}" />`;
+    if (claim.channel) {
+      head += `<meta name="og:video:series" content="${claim.channel}"/>`;
+    }
     head += `<meta name="twitter:card" content="player"/>`;
     head += `<meta name="twitter:player" content="${videoUrl}" />`;
+    if (claim.release_time) {
+      var release = new Date(claim.release_time * 1000).toISOString();
+      head += `<meta property="og:video:release_date" content="${release}"/>`;
+    }
+    if (claim.duration) {
+      head += `<meta property="og:video:duration" content="${claim.duration}"/>`;
+    } else if (claim.audio_duration) {
+      head += `<meta property="og:video:duration" content="${claim.audio_duration}"/>`;
+    }
     if (claim.frame_width && claim.frame_height) {
       head += `<meta property="og:video:width" content="${claim.frame_width}"/>`;
       head += `<meta property="og:video:height" content="${claim.frame_height}"/>`;
@@ -138,7 +150,7 @@ function buildClaimOgMetadata(uri, claim, overrideOptions = {}) {
   return head;
 }
 
-async function getClaimFromChainquery(url) {
+async function getClaimFromChainqueryOrRedirect(ctx, url) {
   const { isChannel, streamName, channelName, channelClaimId, streamClaimId } = parseURI(url);
   const claimName = isChannel ? '@' + channelName : streamName;
   const claimId = isChannel ? channelClaimId : streamClaimId;
@@ -146,6 +158,12 @@ async function getClaimFromChainquery(url) {
   const rows = await getClaim(claimName, claimId, channelName, channelClaimId);
   if (rows && rows.length) {
     const claim = rows[0];
+
+    if (claim.reposted_name && claim.reposted_claim_id) {
+      ctx.redirect(`/${claim.reposted_name}:${claim.reposted_claim_id}`);
+      return;
+    }
+
     return claim;
   }
 
@@ -173,7 +191,7 @@ async function getHtml(ctx) {
 
     try {
       parseURI(inviteChannelUrl);
-      const claim = await getClaimFromChainquery(inviteChannelUrl);
+      const claim = await getClaimFromChainqueryOrRedirect(ctx, inviteChannelUrl);
       const invitePageMetadata = buildClaimOgMetadata(inviteChannelUrl, claim, {
         title: `Join ${claim.name} on LBRY`,
         description: `Join ${claim.name} on LBRY, a content wonderland owned by everyone (and no one).`,
@@ -193,7 +211,7 @@ async function getHtml(ctx) {
 
   if (requestPath.includes(embedPath)) {
     const claimUri = requestPath.replace(embedPath, '').replace(/:/g, '#');
-    const claim = await getClaimFromChainquery(claimUri);
+    const claim = await getClaimFromChainqueryOrRedirect(ctx, claimUri);
 
     if (claim) {
       const ogMetadata = buildClaimOgMetadata(claimUri, claim);
@@ -205,7 +223,7 @@ async function getHtml(ctx) {
 
   if (!requestPath.includes('$')) {
     const claimUri = requestPath.slice(1).replace(/:/g, '#');
-    const claim = await getClaimFromChainquery(claimUri);
+    const claim = await getClaimFromChainqueryOrRedirect(ctx, claimUri);
 
     if (claim) {
       const ogMetadata = buildClaimOgMetadata(claimUri, claim);

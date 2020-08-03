@@ -69,6 +69,11 @@ function ChannelAbout(props: Props) {
             <DateTime timeAgo uri={uri} />
           </div>
 
+          <label>{__('URL')}</label>
+          <div className="media__info-text">
+            <div className="media__info-text media__info-text--constrained">{claim.canonical_url}</div>
+          </div>
+
           <label>{__('Claim ID')}</label>
           <div className="media__info-text">
             <div className="media__info-text media__info-text--constrained">{claim.claim_id}</div>

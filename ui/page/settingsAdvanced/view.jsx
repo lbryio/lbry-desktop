@@ -77,7 +77,6 @@ class SettingsPage extends React.PureComponent<Props, State> {
     (this: any).onThemeChange = this.onThemeChange.bind(this);
     (this: any).onAutomaticDarkModeChange = this.onAutomaticDarkModeChange.bind(this);
     (this: any).onConfirmForgetPassword = this.onConfirmForgetPassword.bind(this);
-    (this: any).onDone = this.onDone.bind(this);
   }
 
   componentDidMount() {
@@ -101,14 +100,6 @@ class SettingsPage extends React.PureComponent<Props, State> {
           this.setState({ storedPassword: true });
         }
       });
-    }
-  }
-
-  onDone() {
-    const { syncSettings } = this.props;
-
-    if (this.props.syncEnabled) {
-      syncSettings();
     }
   }
 
@@ -211,7 +202,6 @@ class SettingsPage extends React.PureComponent<Props, State> {
         noFooter
         noSideNavigation
         backout={{
-          backCB: () => this.onDone(),
           title: __('Advanced Settings'),
           backLabel: __('Done'),
         }}
@@ -223,6 +213,7 @@ class SettingsPage extends React.PureComponent<Props, State> {
           </section>
         ) : (
           <div>
+            {/* @if TARGET='app' */}
             <Card
               title={__('Network and Data Settings')}
               actions={
@@ -255,7 +246,6 @@ class SettingsPage extends React.PureComponent<Props, State> {
               }
             />
 
-            {/* @if TARGET='app' */}
             <Card
               title={__('Max Purchase Price')}
               actions={

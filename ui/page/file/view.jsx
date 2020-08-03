@@ -3,7 +3,6 @@ import * as React from 'react';
 import classnames from 'classnames';
 import Page from 'component/page';
 import * as RENDER_MODES from 'constants/file_render_modes';
-import ClaimUri from 'component/claimUri';
 import FileTitle from 'component/fileTitle';
 import FileRenderInitiator from 'component/fileRenderInitiator';
 import FileRenderInline from 'component/fileRenderInline';
@@ -37,6 +36,11 @@ type Props = {
 };
 
 class FilePage extends React.Component<Props> {
+  constructor() {
+    super();
+    this.lastReset = undefined;
+  }
+
   componentDidMount() {
     const { uri, fetchFileInfo, fetchCostInfo, setViewed, isSubscribed } = this.props;
 
@@ -64,6 +68,7 @@ class FilePage extends React.Component<Props> {
 
     if (prevProps.uri !== uri) {
       setViewed(uri);
+      this.lastReset = Date.now();
     }
 
     // @if TARGET='app'
@@ -87,7 +92,6 @@ class FilePage extends React.Component<Props> {
     if (RENDER_MODES.FLOATING_MODES.includes(mode)) {
       return (
         <React.Fragment>
-          <ClaimUri uri={uri} />
           <YoutubeBadge channelClaimId={channelClaimId} includeSyncDate={false} />
           <div className={FILE_WRAPPER_CLASS}>
             <FileRenderInitiator uri={uri} />
@@ -101,7 +105,6 @@ class FilePage extends React.Component<Props> {
     if (RENDER_MODES.UNRENDERABLE_MODES.includes(mode)) {
       return (
         <React.Fragment>
-          <ClaimUri uri={uri} />
           <YoutubeBadge channelClaimId={channelClaimId} includeSyncDate={false} />
           <FileTitle uri={uri} />
           <FileRenderDownload uri={uri} isFree={cost === 0} />
@@ -112,7 +115,6 @@ class FilePage extends React.Component<Props> {
     if (RENDER_MODES.TEXT_MODES.includes(mode)) {
       return (
         <React.Fragment>
-          <ClaimUri uri={uri} />
           <YoutubeBadge channelClaimId={channelClaimId} includeSyncDate={false} />
           <FileTitle uri={uri} />
           <FileRenderInitiator uri={uri} />
@@ -123,7 +125,6 @@ class FilePage extends React.Component<Props> {
 
     return (
       <React.Fragment>
-        <ClaimUri uri={uri} />
         <YoutubeBadge channelClaimId={channelClaimId} includeSyncDate={false} />
         <FileRenderInitiator uri={uri} />
         <FileRenderInline uri={uri} />
@@ -136,11 +137,12 @@ class FilePage extends React.Component<Props> {
     const { uri } = this.props;
     return (
       <Page>
-        <ClaimUri uri={uri} />
         <FileTitle uri={uri} isNsfwBlocked />
       </Page>
     );
   }
+
+  lastReset: ?any;
 
   render() {
     const { uri, renderMode, costInfo, obscureNsfw, isMature } = this.props;
@@ -164,16 +166,14 @@ class FilePage extends React.Component<Props> {
               actions={
                 <div>
                   <CommentCreate uri={uri} />
-                  <WaitUntilOnPage>
+                  <WaitUntilOnPage lastUpdateDate={this.lastReset}>
                     <CommentsList uri={uri} />
                   </WaitUntilOnPage>
                 </div>
               }
             />
           </div>
-          <WaitUntilOnPage>
-            <RecommendedContent uri={uri} />
-          </WaitUntilOnPage>
+          <RecommendedContent uri={uri} />
         </div>
       </Page>
     );

@@ -42,7 +42,6 @@ type Props = {
   authHeader: boolean,
   backout: {
     backLabel?: string,
-    backCB?: () => void,
     backNavDefault?: string,
     title: string,
     simpleTitle: string, // Just use the same value as `title` if `title` is already short (~< 10 chars), unless you have a better idea for title overlfow on mobile
@@ -56,6 +55,7 @@ type Props = {
   clearEmailEntry: () => void,
   clearPasswordEntry: () => void,
   hasNavigated: boolean,
+  syncSettings: () => void,
 };
 
 const Header = (props: Props) => {
@@ -77,6 +77,7 @@ const Header = (props: Props) => {
     clearPasswordEntry,
     emailToVerify,
     backout,
+    syncSettings,
   } = props;
   const isMobile = useIsMobile();
   // on the verify page don't let anyone escape other than by closing the tab to keep session data consistent
@@ -85,7 +86,7 @@ const Header = (props: Props) => {
   const isSignInPage = history.location.pathname.includes(PAGES.AUTH_SIGNIN);
   const isPwdResetPage = history.location.pathname.includes(PAGES.AUTH_PASSWORD_RESET);
   const hasBackout = Boolean(backout);
-  const { backLabel, backCB, backNavDefault, title: backTitle, simpleTitle: simpleBackTitle } = backout || {};
+  const { backLabel, backNavDefault, title: backTitle, simpleTitle: simpleBackTitle } = backout || {};
 
   // Sign out if they click the "x" when they are on the password prompt
   const authHeaderAction = syncError ? { onClick: signOut } : { navigate: '/' };
@@ -119,9 +120,6 @@ const Header = (props: Props) => {
 
     window.removeEventListener('popstate', onBackout);
 
-    if (backCB) {
-      backCB();
-    }
     if (e.type !== 'popstate') {
       // if not initiated by pop (back button)
       if (hasNavigated && !backNavDefault) {
@@ -149,6 +147,7 @@ const Header = (props: Props) => {
     } else {
       setClientSetting(SETTINGS.THEME, 'dark');
     }
+    syncSettings();
   }
 
   function getWalletTitle() {

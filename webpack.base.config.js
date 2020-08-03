@@ -38,7 +38,18 @@ let baseConfig = {
       },
       {
         test: /\.s?css$/,
-        use: ['style-loader', 'css-loader', 'postcss-loader', 'sass-loader'],
+        use: [
+		{ loader: 'style-loader' },
+		{ loader: 'css-loader' },
+		{ loader: 'postcss-loader',
+		  options: {
+		    plugins: function () {
+		      return [ require( 'postcss-rtl' )() ]
+		    }
+		  }
+		},
+		{ loader: 'sass-loader'},
+	      ],
       },
       {
         test: /\.(png|svg|gif)$/,

@@ -3,6 +3,7 @@ import React from 'react';
 import ClaimList from 'component/claimList';
 import Ads from 'web/component/ads';
 import Card from 'component/common/card';
+import WaitUntilOnPage from 'component/common/wait-until-on-page';
 
 type Options = {
   related_to: string,
@@ -24,6 +25,7 @@ export default class RecommendedContent extends React.PureComponent<Props> {
     super();
 
     this.didSearch = undefined;
+    this.lastReset = undefined;
   }
 
   componentDidMount() {
@@ -35,6 +37,7 @@ export default class RecommendedContent extends React.PureComponent<Props> {
 
     if (uri !== prevProps.uri) {
       this.didSearch = false;
+      this.lastReset = Date.now();
     }
 
     if (claim && !this.didSearch) {
@@ -59,6 +62,7 @@ export default class RecommendedContent extends React.PureComponent<Props> {
   }
 
   didSearch: ?boolean;
+  lastReset: ?any;
 
   render() {
     const { recommendedContent, isSearching, isAuthenticated } = this.props;
@@ -68,14 +72,16 @@ export default class RecommendedContent extends React.PureComponent<Props> {
         isBodyList
         title={__('Related')}
         body={
-          <ClaimList
-            isCardBody
-            type="small"
-            loading={isSearching}
-            uris={recommendedContent}
-            injectedItem={!isAuthenticated && IS_WEB && <Ads type="video" small />}
-            empty={__('No related content found')}
-          />
+          <WaitUntilOnPage lastUpdateDate={this.lastReset}>
+            <ClaimList
+              isCardBody
+              type="small"
+              loading={isSearching}
+              uris={recommendedContent}
+              injectedItem={!isAuthenticated && IS_WEB && <Ads type="video" small />}
+              empty={__('No related content found')}
+            />
+          </WaitUntilOnPage>
         }
       />
     );

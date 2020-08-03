@@ -15,7 +15,6 @@ import ChannelAbout from 'component/channelAbout';
 import ChannelDiscussion from 'component/channelDiscussion';
 import ChannelThumbnail from 'component/channelThumbnail';
 import ChannelEdit from 'component/channelEdit';
-import ClaimUri from 'component/claimUri';
 import classnames from 'classnames';
 import HelpLink from 'component/common/help-link';
 import ClaimSupportButton from 'component/claimSupportButton';
@@ -130,7 +129,6 @@ function ChannelPage(props: Props) {
 
   return (
     <Page noFooter>
-      <ClaimUri uri={uri} />
       <YoutubeBadge channelClaimId={claimId} />
       <header className="channel-cover">
         <div className="channel__quick-actions">

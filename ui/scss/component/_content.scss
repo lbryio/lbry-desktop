@@ -2,14 +2,14 @@
   @extend .card;
   position: absolute;
   top: var(--spacing-l);
+
+  @media (max-width: $breakpoint-small) {
+    top: var(--spacing-s);
+  }
 }
 
 .content__viewer--inline {
   max-height: var(--inline-player-max-height);
-
-  @media (max-width: $breakpoint-small) {
-    margin-top: var(--spacing-xs);
-  }
 }
 
 .content__viewer--floating {

@@ -17,10 +17,11 @@ type Props = {
   fileInfo?: {
     outpoint: ?string,
   },
+  isAbandoning: boolean,
 };
 
 function ModalRemoveFile(props: Props) {
-  const { uri, claimIsMine, closeModal, deleteFile, title, claim } = props;
+  const { uri, claimIsMine, closeModal, deleteFile, title, claim, isAbandoning } = props;
   const [deleteChecked, setDeleteChecked] = usePersistedState('modal-remove-file:delete', true);
   const [abandonChecked, setAbandonChecked] = usePersistedState('modal-remove-file:abandon', true);
 
@@ -77,7 +78,8 @@ function ModalRemoveFile(props: Props) {
             <div className="section__actions">
               <Button
                 button="primary"
-                label={__('OK')}
+                label={isAbandoning ? __('Removing...') : __('OK')}
+                disabled={isAbandoning}
                 onClick={() => deleteFile(uri, deleteChecked, claimIsMine ? abandonChecked : false)}
               />
               <Button button="link" label={__('Cancel')} onClick={closeModal} />

@@ -1,8 +1,12 @@
 // @flow
 import React from 'react';
+import debounce from 'util/debounce';
+
+const DEBOUNCE_SCROLL_HANDLER_MS = 300;
 
 type Props = {
   children: any,
+  lastUpdateDate?: any,
 };
 
 export default function WaitUntilOnPage(props: Props) {
@@ -10,7 +14,11 @@ export default function WaitUntilOnPage(props: Props) {
   const [shouldRender, setShouldRender] = React.useState(false);
 
   React.useEffect(() => {
-    function handleDisplayingRef() {
+    setShouldRender(false);
+  }, [props.lastUpdateDate]);
+
+  React.useEffect(() => {
+    const handleDisplayingRef = debounce(e => {
       const element = ref && ref.current;
       if (element) {
         const bounding = element.getBoundingClientRect();
@@ -28,12 +36,9 @@ export default function WaitUntilOnPage(props: Props) {
 
       if (element && !shouldRender) {
         window.addEventListener('scroll', handleDisplayingRef);
-
-        return () => {
-          window.removeEventListener('scroll', handleDisplayingRef);
-        };
+        return () => window.removeEventListener('scroll', handleDisplayingRef);
       }
-    }
+    }, DEBOUNCE_SCROLL_HANDLER_MS);
 
     if (ref) {
       handleDisplayingRef();

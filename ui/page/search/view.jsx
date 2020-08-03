@@ -3,7 +3,7 @@ import { SIMPLE_SITE } from 'config';
 import * as ICONS from 'constants/icons';
 import * as PAGES from 'constants/pages';
 import React, { useEffect, Fragment } from 'react';
-import { regexInvalidURI, parseURI } from 'lbry-redux';
+import { Lbry, regexInvalidURI, parseURI } from 'lbry-redux';
 import ClaimPreview from 'component/claimPreview';
 import ClaimList from 'component/claimList';
 import Page from 'component/page';
@@ -11,6 +11,8 @@ import SearchOptions from 'component/searchOptions';
 import Button from 'component/button';
 import ClaimUri from 'component/claimUri';
 import Ads from 'web/component/ads';
+import { formatLbryUrlForWeb } from 'util/url';
+import { useHistory } from 'react-router';
 
 type AdditionalOptions = {
   isBackgroundSearch: boolean,
@@ -39,6 +41,7 @@ export default function SearchPage(props: Props) {
     showNsfw,
     isAuthenticated,
   } = props;
+  const { push } = useHistory();
   const urlParams = new URLSearchParams(location.search);
   const urlQuery = urlParams.get('q') || '';
   const additionalOptions: AdditionalOptions = { isBackgroundSearch: false };
@@ -54,6 +57,21 @@ export default function SearchPage(props: Props) {
     isValid = true;
   } catch (e) {
     isValid = false;
+  }
+
+  let claimId;
+  if (!/\s/.test(urlQuery) && urlQuery.length === 40) {
+    try {
+      const dummyUrlForClaimId = `x#${urlQuery}`;
+      ({ claimId } = parseURI(dummyUrlForClaimId));
+      Lbry.claim_search({ claim_id: claimId }).then(res => {
+        if (res.items && res.items.length) {
+          const claim = res.items[0];
+          const url = formatLbryUrlForWeb(claim.canonical_url);
+          push(url);
+        }
+      });
+    } catch (e) {}
   }
 
   const modifiedUrlQuery =
