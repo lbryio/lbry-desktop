@@ -90,6 +90,7 @@
   }
 
   .media__thumb {
+    overflow: hidden;
     $width: var(--file-list-thumbnail-width);
     width: $width;
     @include handleClaimListGifThumbnail($width);
@@ -105,6 +106,9 @@
   &:hover {
     .claim-preview__hover-actions {
       display: block;
+    }
+    .claim-preview__file-property-overlay {
+      opacity: 1;
     }
   }
 
@@ -361,7 +365,7 @@
   }
 
   @media (max-width: $breakpoint-small) {
-    $width: calc((100vw / 2) - var(--spacing-s) * 2);
+    $width: calc((100vw / 2) - var(--spacing-s) * 2 - var(--spacing-m) / 2);
     width: $width;
     @include handleClaimTileGifThumbnail($width);
     margin-bottom: var(--spacing-l);
@@ -424,13 +428,15 @@
   font-size: var(--font-body);
 }
 
-.claim-tile__file-properties {
+.claim-preview__file-property-overlay {
   position: absolute;
   bottom: var(--spacing-xxs);
   right: var(--spacing-xxs);
   background-color: var(--color-black);
   padding: 0.3rem;
   border-radius: var(--border-radius);
+  opacity: 0.7;
+  z-index: 2;
 
   .file-properties {
     color: var(--color-white);
@@ -439,16 +445,15 @@
   .file-price {
     padding: 0.1rem;
   }
-
-  @media (max-width: $breakpoint-small) {
-    display: none;
-  }
 }
 
 .claim-preview--tile {
   &:hover {
     .claim-preview__hover-actions {
       display: block;
+    }
+    .claim-preview__file-property-overlay {
+      opacity: 1;
     }
   }
 }

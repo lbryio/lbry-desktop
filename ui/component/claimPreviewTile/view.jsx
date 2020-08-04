@@ -170,7 +170,7 @@ function ClaimPreviewTile(props: Props) {
                 <FileDownloadLink uri={canonicalUrl} hideOpenButton />
               </div>
               {/* @endif */}
-              <div className="claim-tile__file-properties">
+              <div className="claim-preview__file-property-overlay">
                 <FileProperties uri={uri} small />
               </div>
             </React.Fragment>

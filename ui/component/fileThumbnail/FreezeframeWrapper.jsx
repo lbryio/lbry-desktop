@@ -6,8 +6,8 @@ import Freezeframe from './FreezeframeLite';
 const FreezeframeWrapper = props => {
   const imgRef = React.useRef();
   const freezeframe = React.useRef();
-
-  const { src, className } = props;
+  // eslint-disable-next-line
+  const { src, className, children } = props;
 
   useEffect(() => {
     freezeframe.current = new Freezeframe(imgRef.current);
@@ -15,7 +15,10 @@ const FreezeframeWrapper = props => {
 
   return (
     <div className={classnames(className, 'freezeframe-wrapper')}>
-      <img ref={imgRef} src={src} className="freezeframe-img" />
+      <>
+        <img ref={imgRef} src={src} className="freezeframe-img" />
+        {children}
+      </>
     </div>
   );
 };

@@ -10,10 +10,6 @@
   & > *:not(:last-child) {
     margin-right: var(--spacing-s);
   }
-
-  @media (max-width: $breakpoint-xsmall) {
-    display: none;
-  }
 }
 
 .file-properties--large {
@@ -33,14 +29,13 @@
   position: relative;
 
   .tag {
+    @media (max-width: $breakpoint-xsmall) {
+      display: none;
+    }
     font-size: var(--font-xsmall);
   }
 
   & > *:not(:last-child) {
     margin-right: var(--spacing-xxs);
-  }
-
-  @media (max-width: $breakpoint-xsmall) {
-    display: none;
   }
 }

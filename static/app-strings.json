@@ -1267,12 +1267,13 @@
   "Uploading": "Uploading",
   "View My Uploads": "View My Uploads",
   "No recent uploads": "No recent uploads",
-  "Total Uploads": "Total Uploads",
-  "URL": "URL",
   "Removing...": "Removing...",
   "License description": "License description",
   "The 'cool' license - TM": "The 'cool' license - TM",
   "License URL": "License URL",
   "mywebsite.com/license": "mywebsite.com/license",
+  "URL": "URL",
+  "Total Uploads": "Total Uploads",
+  "Are you sure you want to purchase %claim_title%?": "Are you sure you want to purchase %claim_title%?",
   "--end--": "--end--"
 }
