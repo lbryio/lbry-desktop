@@ -1,9 +1,7 @@
 // @flow
 import React, { useEffect } from 'react';
-import { SIMPLE_SITE } from 'config';
 import { FF_MAX_CHARS_IN_DESCRIPTION } from 'constants/form-field';
 import { FormField } from 'component/common/form';
-import usePersistedState from 'effects/use-persisted-state';
 
 type Props = {
   uri: ?string,
@@ -40,14 +38,9 @@ function PostEditor(props: Props) {
 
   const [ready, setReady] = React.useState(!editing);
   const [loading, setLoading] = React.useState(false);
-  const [advancedEditor, setAdvancedEditor] = usePersistedState('publish-form-post-mode', false);
-
-  function toggleMarkdown() {
-    setAdvancedEditor(!advancedEditor);
-  }
 
   useEffect(() => {
-    if (editing) {
+    if (editing && uri) {
       fetchStreamingUrl(uri);
     }
   }, [uri, editing]);
@@ -114,9 +107,7 @@ function PostEditor(props: Props) {
       placeholder={__('My content for this post...')}
       value={ready ? fileText : __('Loading...')}
       disabled={!ready || disabled}
-      onChange={value => updatePublishForm({ fileText: advancedEditor ? value : value.target.value })}
-      quickActionLabel={!SIMPLE_SITE && (advancedEditor ? __('Simple Editor') : __('Advanced Editor'))}
-      quickActionHandler={toggleMarkdown}
+      onChange={value => updatePublishForm({ fileText: value })}
       textAreaMaxLength={FF_MAX_CHARS_IN_DESCRIPTION}
     />
   );
