@@ -23,6 +23,8 @@ type State = {
   addingChannel: boolean,
 };
 
+const ID_FF_SELECT_CHANNEL = 'ID_FF_SELECT_CHANNEL';
+
 class ChannelSelection extends React.PureComponent<Props, State> {
   constructor(props: Props) {
     super(props);
@@ -36,13 +38,22 @@ class ChannelSelection extends React.PureComponent<Props, State> {
   }
 
   componentDidMount() {
-    const { channels, fetchChannelListMine, fetchingChannels, emailVerified } = this.props;
+    const { channel, channels, fetchChannelListMine, fetchingChannels, emailVerified, onChannelChange } = this.props;
     if (IS_WEB && !emailVerified) {
       return;
     }
 
     if ((!channels || !channels.length) && !fetchingChannels) {
       fetchChannelListMine();
+    }
+
+    const elem = document.getElementById(ID_FF_SELECT_CHANNEL);
+    // $FlowFixMe
+    if (elem && elem.value && elem.value !== channel) {
+      setTimeout(() => {
+        // $FlowFixMe
+        onChannelChange(elem.value);
+      }, 250);
     }
   }
 
@@ -84,6 +95,7 @@ class ChannelSelection extends React.PureComponent<Props, State> {
     return (
       <Fragment>
         <FormField
+          id={ID_FF_SELECT_CHANNEL}
           name="channel"
           label={label || __('Channel')}
           type="select"

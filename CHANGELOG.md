@@ -14,6 +14,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Fixed
 - Fix sluggish Back button when navigation back to channels with lots of comments _community pr!_ ([#4576](https://github.com/lbryio/lbry-desktop/pull/4576))
 - Fix 'Related' and 'Comments' section lazy-load not working in some scenarios _community pr!_ ([#4586](https://github.com/lbryio/lbry-desktop/pull/4586))
+- Fix comment-creation failure if you have recently deleted a channel _community pr!_ ([#4630](https://github.com/lbryio/lbry-desktop/pull/4630))
 
 ## [0.47.1] - [2020-07-23]
 
