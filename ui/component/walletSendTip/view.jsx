@@ -4,7 +4,7 @@ import * as PAGES from 'constants/pages';
 import React from 'react';
 import Button from 'component/button';
 import { FormField, Form } from 'component/common/form';
-import { MINIMUM_PUBLISH_BID, CHANNEL_ANONYMOUS } from 'constants/claim';
+import { MINIMUM_PUBLISH_BID, CHANNEL_ANONYMOUS, CHANNEL_NEW } from 'constants/claim';
 import CreditAmount from 'component/common/credit-amount';
 import I18nMessage from 'component/i18nMessage';
 import { Lbryio } from 'lbryinc';
@@ -120,6 +120,12 @@ function WalletSendTip(props: Props) {
   }
 
   function handleSubmit() {
+    if (selectedChannel === CHANNEL_NEW) {
+      // This is the submission to create a new channel, and would
+      // be handled by <ChannelSelection>, so do nothing here.
+      return;
+    }
+
     if (tipAmount && claimId) {
       if (instantTipEnabled) {
         if (instantTipMax.currency === 'LBC') {
