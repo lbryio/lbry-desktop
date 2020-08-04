@@ -18,7 +18,11 @@ class FileThumbnail extends React.PureComponent<Props> {
     const thumbnail = rawThumbnail && rawThumbnail.trim().replace(/^http:\/\//i, 'https://');
 
     if (!allowGifs && thumbnail && thumbnail.endsWith('gif')) {
-      return <FreezeframeWrapper src={thumbnail} className={className} />;
+      return (
+        <FreezeframeWrapper src={thumbnail} className={className}>
+          {children}
+        </FreezeframeWrapper>
+      );
     }
 
     let url;

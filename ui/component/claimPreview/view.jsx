@@ -257,6 +257,9 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
                     </div>
                   )}
                   {/* @endif */}
+                  <div className="claim-preview__file-property-overlay">
+                    <FileProperties uri={uri} small />
+                  </div>
                 </FileThumbnail>
               </NavLink>
             ) : (
@@ -275,8 +278,6 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
                   <ClaimPreviewTitle uri={uri} />
                 </NavLink>
               )}
-
-              {!isChannel && <FileProperties uri={uri} />}
             </div>
             <ClaimPreviewSubtitle uri={uri} type={type} />
             {(pending || !!reflectingInfo) && <PublishPending uri={uri} />}
