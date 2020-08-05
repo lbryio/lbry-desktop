@@ -291,20 +291,6 @@ function PublishForm(props: Props) {
   // Editing claim uri
   return (
     <div className="card-stack">
-      <div className="button-tab-group">
-        {MODES.map((modeName, index) => (
-          <Button
-            key={index}
-            icon={modeName}
-            label={modeName}
-            button="alt"
-            onClick={() => {
-              setMode(modeName);
-            }}
-            className={classnames('button-toggle', { 'button-toggle--active': mode === modeName })}
-          />
-        ))}
-      </div>
       <PublishFile
         uri={uri}
         mode={mode}
@@ -315,6 +301,22 @@ function PublishForm(props: Props) {
         setPrevFileText={setPrevFileText}
         autoPopulateName={autoPopulateNameFromTitle}
         setAutoPopulateName={setAutoPopulateNameFromTitle}
+        header={
+          <div>
+            {MODES.map((modeName, index) => (
+              <Button
+                key={index}
+                icon={modeName}
+                label={modeName}
+                button="alt"
+                onClick={() => {
+                  setMode(modeName);
+                }}
+                className={classnames('button-toggle', { 'button-toggle--active': mode === modeName })}
+              />
+            ))}
+          </div>
+        }
       />
       {!publishing && (
         <div className={classnames({ 'card--disabled': formDisabled })}>

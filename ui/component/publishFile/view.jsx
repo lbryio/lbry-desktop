@@ -36,6 +36,7 @@ type Props = {
   setPublishMode: string => void,
   setPrevFileText: string => void,
   setAutoPopulateName: boolean => void,
+  header: any,
 };
 
 function PublishFile(props: Props) {
@@ -62,6 +63,7 @@ function PublishFile(props: Props) {
     setPrevFileText,
     autoPopulateName,
     setAutoPopulateName,
+    header,
   } = props;
 
   const ffmpegAvail = ffmpegStatus.available;
@@ -324,28 +326,17 @@ function PublishFile(props: Props) {
     updatePublishForm(publishFormParams);
   }
 
-  let cardTitle;
-  if (publishing) {
-    cardTitle = (
-      <span>
-        {__('Uploading')}
-        <Spinner type={'small'} />
-      </span>
-    );
-  } else {
-    cardTitle = isStillEditing ? __('Edit') : __('Upload');
-  }
-
   const isPublishFile = mode === PUBLISH_MODES.FILE;
   const isPublishPost = mode === PUBLISH_MODES.POST;
 
   return (
     <Card
-      icon={ICONS.PUBLISH}
+      //   icon={ICONS.PUBLISH}
       disabled={disabled || balance === 0}
       title={
         <React.Fragment>
-          {cardTitle}{' '}
+          {header}
+          {publishing && <Spinner type={'small'} />}
           {inProgress && <Button button="close" label={__('Cancel')} icon={ICONS.REMOVE} onClick={clearPublish} />}
         </React.Fragment>
       }
