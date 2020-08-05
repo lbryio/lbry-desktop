@@ -1,4 +1,5 @@
 // @flow
+import type { Node } from 'react';
 import * as ICONS from 'constants/icons';
 import React, { useState, useEffect } from 'react';
 import { regexInvalidURI } from 'lbry-redux';
@@ -36,7 +37,7 @@ type Props = {
   setPublishMode: string => void,
   setPrevFileText: string => void,
   setAutoPopulateName: boolean => void,
-  header: any,
+  header: Node,
 };
 
 function PublishFile(props: Props) {
@@ -331,14 +332,17 @@ function PublishFile(props: Props) {
 
   return (
     <Card
-      //   icon={ICONS.PUBLISH}
       disabled={disabled || balance === 0}
       title={
-        <React.Fragment>
+        <div>
           {header}
           {publishing && <Spinner type={'small'} />}
-          {inProgress && <Button button="close" label={__('Cancel')} icon={ICONS.REMOVE} onClick={clearPublish} />}
-        </React.Fragment>
+          {inProgress && (
+            <div>
+              <Button button="close" label={__('Cancel')} icon={ICONS.REMOVE} onClick={clearPublish} />
+            </div>
+          )}
+        </div>
       }
       subtitle={isStillEditing && __('You are currently editing your upload.')}
       actions={
