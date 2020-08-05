@@ -303,7 +303,7 @@ function PublishForm(props: Props) {
         autoPopulateName={autoPopulateNameFromTitle}
         setAutoPopulateName={setAutoPopulateNameFromTitle}
         header={
-          <div>
+          <>
             {MODES.map((modeName, index) => (
               <Button
                 key={index}
@@ -316,7 +316,7 @@ function PublishForm(props: Props) {
                 className={classnames('button-toggle', { 'button-toggle--active': mode === modeName })}
               />
             ))}
-          </div>
+          </>
         }
       />
       {!publishing && (
