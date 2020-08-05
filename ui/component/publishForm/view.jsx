@@ -247,9 +247,7 @@ function PublishForm(props: Props) {
     // Publish post:
     // If here is no file selected yet on desktop, show file dialog and let the
     // user choose a file path. On web a new File is created
-    const validPost = !emptyPostError;
-
-    if (mode === PUBLISH_MODES.POST) {
+    if (mode === PUBLISH_MODES.POST && !emptyPostError) {
       let outputFile = filePath;
       // If user modified content on the text editor or editing name has changed:
       // Save changes and update file path
@@ -263,11 +261,12 @@ function PublishForm(props: Props) {
         // @endif
 
         // New content stored locally and is not empty
-        if (outputFile && validPost) {
+        if (outputFile) {
           updatePublishForm({ filePath: outputFile });
           publish(outputFile);
         }
-      } else if (validPost && outputFile) {
+      } else {
+        // Only metadata has changed.
         publish(outputFile);
       }
     }
