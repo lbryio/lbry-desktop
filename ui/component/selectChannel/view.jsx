@@ -47,13 +47,15 @@ class ChannelSelection extends React.PureComponent<Props, State> {
       fetchChannelListMine();
     }
 
-    const elem = document.getElementById(ID_FF_SELECT_CHANNEL);
-    // $FlowFixMe
-    if (elem && elem.value && elem.value !== channel) {
-      setTimeout(() => {
-        // $FlowFixMe
-        onChannelChange(elem.value);
-      }, 250);
+    if (channels && channels.length && !channels.find(chan => chan.name === channel)) {
+      const elem = document.getElementById(ID_FF_SELECT_CHANNEL);
+      // $FlowFixMe
+      if (elem && elem.value && elem.value !== channel) {
+        setTimeout(() => {
+          // $FlowFixMe
+          onChannelChange(elem.value);
+        }, 250);
+      }
     }
   }
 
