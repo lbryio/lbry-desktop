@@ -1,6 +1,6 @@
 // @flow
 import React, { useEffect } from 'react';
-import { FF_MAX_CHARS_IN_DESCRIPTION } from 'constants/form-field';
+import { FF_MAX_CHARS_IN_POST } from 'constants/form-field';
 import { FormField } from 'component/common/form';
 
 type Props = {
@@ -108,7 +108,7 @@ function PostEditor(props: Props) {
       value={ready ? fileText : __('Loading...')}
       disabled={!ready || disabled}
       onChange={value => updatePublishForm({ fileText: value })}
-      textAreaMaxLength={FF_MAX_CHARS_IN_DESCRIPTION}
+      textAreaMaxLength={FF_MAX_CHARS_IN_POST}
     />
   );
 }
