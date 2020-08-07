@@ -7,6 +7,7 @@ const CopyWebpackPlugin = require('copy-webpack-plugin');
 const { DefinePlugin, ProvidePlugin } = require('webpack');
 const SentryWebpackPlugin = require('@sentry/webpack-plugin');
 const { insertToHead, buildBasicOgMetadata } = require('./src/html');
+const { insertVariableXml, getOpenSearchXml } = require('./src/xml');
 
 const CUSTOM_ROOT = path.resolve(__dirname, '../custom/');
 const STATIC_ROOT = path.resolve(__dirname, '../static/');
@@ -22,6 +23,13 @@ const copyWebpackCommands = [
     to: `${DIST_ROOT}/index.html`,
     transform(content, path) {
       return insertToHead(content.toString(), buildBasicOgMetadata());
+    },
+  },
+  {
+    from: `${STATIC_ROOT}/opensearch.xml`,
+    to: `${DIST_ROOT}/opensearch.xml`,
+    transform(content, path) {
+      return insertVariableXml(content.toString(), getOpenSearchXml());
     },
   },
   {
