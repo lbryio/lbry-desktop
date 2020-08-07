@@ -3,6 +3,7 @@ import React, { Fragment, PureComponent } from 'react';
 import Button from 'component/button';
 import path from 'path';
 import Card from 'component/common/card';
+import { formatBytes } from 'util/format-bytes';
 
 type Props = {
   claim: StreamClaim,
@@ -101,18 +102,6 @@ class FileDetails extends PureComponent<Props> {
       </Fragment>
     );
   }
-}
-// move this with other helper functions when we re-use it
-function formatBytes(bytes, decimals = 2) {
-  if (bytes === 0) return __('0 Bytes');
-
-  const k = 1024;
-  const dm = decimals < 0 ? 0 : decimals;
-  const sizes = [__('Bytes'), __('KB'), __('MB'), __('GB'), __('TB'), __('PB'), __('EB'), __('ZB'), __('YB')];
-
-  const i = Math.floor(Math.log(bytes) / Math.log(k));
-
-  return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
 }
 
 export default FileDetails;
