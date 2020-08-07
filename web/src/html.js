@@ -59,7 +59,9 @@ function buildOgMetadata(overrideOptions = {}) {
     `<meta name="twitter:image" content="${OG_IMAGE_URL || `${URL}/public/v2-og.png`}"/>\n` +
     `<meta name="twitter:url" content="${URL}" />\n` +
     '<meta property="fb:app_id" content="1673146449633983" />\n' +
-    `<link rel="canonical" content="${SITE_CANONICAL_URL || URL}"/>`;
+    `<link rel="canonical" content="${SITE_CANONICAL_URL || URL}"/>` +
+    `<link rel="search" type="application/opensearchdescription+xml" title="${SITE_NAME ||
+      SITE_TITLE}" href="${URL}/opensearch.xml">`;
   return head;
 }
 

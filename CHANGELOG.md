@@ -9,6 +9,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Added
 
 - Block mature content when accessed directly from URL _community pr!_ ([#4560](https://github.com/lbryio/lbry-desktop/pull/4560))
+- You can now add LBRY as a search engine in your browser (via OpenSearch) _community pr!_ ([#4640](https://github.com/lbryio/lbry-desktop/pull/4640))
 
 ### Changed
 
