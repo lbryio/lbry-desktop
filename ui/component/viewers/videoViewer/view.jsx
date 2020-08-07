@@ -23,7 +23,7 @@ type Props = {
   source: string,
   contentType: string,
   thumbnail: string,
-  claim: Claim,
+  claim: StreamClaim,
   muted: boolean,
   volume: number,
   uri: string,
@@ -31,6 +31,7 @@ type Props = {
   autoplayIfEmbedded: boolean,
   desktopPlayStartTime?: number,
   doAnalyticsView: (string, number) => Promise<any>,
+  doAnalyticsBuffer: (string, any) => void,
   claimRewards: () => void,
   savePosition: (string, number) => void,
   clearPosition: string => void,
@@ -56,6 +57,7 @@ function VideoViewer(props: Props) {
     autoplaySetting,
     autoplayIfEmbedded,
     doAnalyticsView,
+    doAnalyticsBuffer,
     claimRewards,
     savePosition,
     clearPosition,
@@ -85,7 +87,7 @@ function VideoViewer(props: Props) {
   }, [uri, previousUri]);
 
   function doTrackingBuffered(e: Event, data: any) {
-    analytics.videoBufferEvent(claimId, data.currentTime);
+    doAnalyticsBuffer(uri, data);
   }
 
   function doTrackingFirstPlay(e: Event, data: any) {

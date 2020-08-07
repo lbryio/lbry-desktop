@@ -53,6 +53,8 @@ import analytics, { SHARE_INTERNAL } from 'analytics';
 import { doSignOutCleanup, deleteSavedPassword, getSavedPassword } from 'util/saved-passwords';
 import { doSocketConnect } from 'redux/actions/websocket';
 import { stringifyServerParam, shouldSetSetting } from 'util/sync-settings';
+import sha256 from 'crypto-js/sha256';
+import Base64 from 'crypto-js/enc-base64';
 
 // @if TARGET='app'
 const { autoUpdater } = remote.require('electron-updater');
@@ -467,6 +469,32 @@ export function doAnalyticsView(uri, timeToStart) {
   };
 }
 
+export function doAnalyticsBuffer(uri, bufferData) {
+  return (dispatch, getState) => {
+    const state = getState();
+    const claim = makeSelectClaimForUri(uri)(state);
+    const user = selectUser(state);
+    const {
+      value: { video, audio, source },
+    } = claim;
+    const timeAtBuffer = bufferData.currentTime * 1000;
+    const bufferDuration = bufferData.secondsToLoad * 1000;
+    const fileDurationInSeconds = (video && video.duration) || (audio && audio.duration);
+    const fileSize = source.size; // size in bytes
+    const fileSizeInBits = fileSize * 8;
+    const bitRate = parseInt(fileSizeInBits / fileDurationInSeconds);
+    const userIdHash = Base64.stringify(sha256(user.id));
+
+    analytics.videoBufferEvent(claim, {
+      timeAtBuffer,
+      bufferDuration,
+      bitRate,
+      userIdHash,
+      duration: fileDurationInSeconds,
+    });
+  };
+}
+
 export function doAnalyticsTagSync() {
   return (dispatch, getState) => {
     const state = getState();
@@ -560,11 +588,12 @@ export function doGetAndPopulatePreferences() {
 
   return (dispatch, getState) => {
     const state = getState();
+    let preferenceKey;
     // @if TARGET='app'
-    const preferenceKey = state.user && state.user.user && state.user.user.has_verified_email ? 'shared' : 'anon';
+    preferenceKey = state.user && state.user.user && state.user.user.has_verified_email ? 'shared' : 'anon';
     // @endif
     // @if TARGET='web'
-    const preferenceKey = 'shared';
+    preferenceKey = 'shared';
     // @endif
 
     function successCb(savedPreferences) {

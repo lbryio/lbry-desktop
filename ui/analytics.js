@@ -9,7 +9,7 @@ import Native from 'native';
 import ElectronCookies from '@exponent/electron-cookies';
 import { generateInitialUrl } from 'util/url';
 // @endif
-import { MATOMO_ID, MATOMO_URL } from 'config';
+import { MATOMO_ID, MATOMO_URL, LBRY_WEB_BUFFER_API } from 'config';
 
 const isProduction = process.env.NODE_ENV === 'production';
 const devInternalApis = process.env.LBRY_API_URL;
@@ -36,7 +36,10 @@ type Analytics = {
   apiSyncTags: ({}) => void,
   tagFollowEvent: (string, boolean, ?string) => void,
   videoStartEvent: (string, number) => void,
-  videoBufferEvent: (string, number) => void,
+  videoBufferEvent: (
+    StreamClaim,
+    { timeAtBuffer: number, bufferDuration: number, bitRate: number, duration: number, userIdHash: string }
+  ) => void,
   emailProvidedEvent: () => void,
   emailVerifiedEvent: () => void,
   rewardEligibleEvent: () => void,
@@ -182,9 +185,32 @@ const analytics: Analytics = {
     sendPromMetric('time_to_start', duration);
     sendMatomoEvent('Media', 'TimeToStart', claimId, duration);
   },
-  videoBufferEvent: (claimId, currentTime) => {
+  videoBufferEvent: (claim, data) => {
+    // @if TARGET='web'
     sendPromMetric('buffer');
-    sendMatomoEvent('Media', 'BufferTimestamp', claimId, currentTime * 1000);
+    // @endif
+
+    sendMatomoEvent('Media', 'BufferTimestamp', claim.claim_id, data.timeAtBuffer);
+
+    fetch(LBRY_WEB_BUFFER_API, {
+      method: 'post',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        device: 'web',
+        type: 'buffering',
+        client: data.userIdHash,
+        data: {
+          url: claim.canonical_url,
+          position: data.timeAtBuffer,
+          duration: data.bufferDuration,
+          stream_duration: data.duration,
+          stream_bitrate: data.bitRate,
+        },
+      }),
+    });
   },
   tagFollowEvent: (tag, following) => {
     sendMatomoEvent('Tag', following ? 'Tag-Follow' : 'Tag-Unfollow', tag);

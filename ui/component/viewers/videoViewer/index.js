@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import { makeSelectClaimForUri, makeSelectFileInfoForUri, makeSelectThumbnailForUri, SETTINGS } from 'lbry-redux';
-import { doChangeVolume, doChangeMute, doAnalyticsView } from 'redux/actions/app';
+import { doChangeVolume, doChangeMute, doAnalyticsView, doAnalyticsBuffer } from 'redux/actions/app';
 import { selectVolume, selectMute } from 'redux/selectors/app';
 import { savePosition, clearPosition } from 'redux/actions/content';
 import { makeSelectContentPositionForUri } from 'redux/selectors/content';
@@ -33,6 +33,7 @@ const perform = dispatch => ({
   clearPosition: uri => dispatch(clearPosition(uri)),
   changeMute: muted => dispatch(doChangeMute(muted)),
   doAnalyticsView: (uri, timeToStart) => dispatch(doAnalyticsView(uri, timeToStart)),
+  doAnalyticsBuffer: (uri, bufferData) => dispatch(doAnalyticsBuffer(uri, bufferData)),
   claimRewards: () => dispatch(doClaimEligiblePurchaseRewards()),
 });
 

@@ -9,6 +9,7 @@ const config = {
   WEB_SERVER_PORT: process.env.WEB_SERVER_PORT,
   LBRY_WEB_API: process.env.LBRY_WEB_API, //api.lbry.tv',
   LBRY_WEB_STREAMING_API: process.env.LBRY_WEB_STREAMING_API, //cdn.lbryplayer.xyz',
+  LBRY_WEB_BUFFER_API: process.env.LBRY_WEB_BUFFER_API,
   WELCOME_VERSION: process.env.WELCOME_VERSION,
   DOMAIN: process.env.DOMAIN,
   URL: process.env.URL,
