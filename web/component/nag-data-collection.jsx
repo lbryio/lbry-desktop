@@ -3,7 +3,7 @@ import React from 'react';
 import Nag from 'component/common/nag';
 import I18nMessage from 'component/i18nMessage';
 import Button from 'component/button';
-import useIsMobile from 'effects/use-is-mobile';
+import { useIsMobile } from 'effects/use-screensize';
 
 type Props = {
   onClose: () => void,
@@ -41,8 +41,7 @@ export default function NagDegradedPerformance(props: Props) {
                 ),
               }}
             >
-              lbry.tv collects usage information for itself only (%more_information%). Want control over
-              this and more?
+              lbry.tv collects usage information for itself only (%more_information%). Want control over this and more?
             </I18nMessage>
           }
           actionText={__('Get The App')}

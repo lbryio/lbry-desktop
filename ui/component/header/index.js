@@ -28,7 +28,6 @@ const perform = dispatch => ({
   setClientSetting: (key, value) => dispatch(doSetClientSetting(key, value)),
   syncSettings: () => dispatch(doSyncClientSettings()),
   signOut: () => dispatch(doSignOut()),
-  openMobileNavigation: () => dispatch(doOpenModal(MODALS.MOBILE_NAVIGATION)),
   openChannelCreate: () => dispatch(doOpenModal(MODALS.CREATE_CHANNEL)),
   openSignOutModal: () => dispatch(doOpenModal(MODALS.SIGN_OUT)),
   clearEmailEntry: () => dispatch(doClearEmailEntry()),

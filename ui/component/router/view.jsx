@@ -212,13 +212,7 @@ function AppRouter(props: Props) {
       <Route path={`/$/${PAGES.AUTH}`} exact component={SignUpPage} />
       <Route path={`/$/${PAGES.AUTH}/*`} exact component={SignUpPage} />
       <Route path={`/$/${PAGES.WELCOME}`} exact component={Welcome} />
-      <Route path={`/$/${PAGES.TAGS_FOLLOWING}`} exact component={TagsFollowingPage} />
-      <Route
-        path={`/$/${PAGES.CHANNELS_FOLLOWING}`}
-        exact
-        component={isAuthenticated || !IS_WEB ? ChannelsFollowingPage : DiscoverPage}
-      />
-      <Route path={`/$/${PAGES.CHANNELS_FOLLOWING_DISCOVER}`} exact component={ChannelsFollowingDiscoverPage} />
+
       <Route path={`/$/${PAGES.HELP}`} exact component={HelpPage} />
       {/* @if TARGET='app' */}
       <Route path={`/$/${PAGES.BACKUP}`} exact component={BackupPage} />
@@ -235,11 +229,17 @@ function AppRouter(props: Props) {
       <Route path={`/$/${PAGES.INVITE}/:referrer`} exact component={InvitedPage} />
       <Route path={`/$/${PAGES.CHECKOUT}`} exact component={CheckoutPage} />
 
+      <PrivateRoute {...props} path={`/$/${PAGES.TAGS_FOLLOWING}`} component={TagsFollowingPage} />
       <PrivateRoute
         {...props}
-        path={`/$/${PAGES.SETTINGS_NOTIFICATIONS}`}
-        exact
-        component={SettingsNotificationsPage}
+        path={`/$/${PAGES.CHANNELS_FOLLOWING}`}
+        component={isAuthenticated || !IS_WEB ? ChannelsFollowingPage : DiscoverPage}
+      />
+      <PrivateRoute {...props} path={`/$/${PAGES.SETTINGS_NOTIFICATIONS}`} component={SettingsNotificationsPage} />
+      <PrivateRoute
+        {...props}
+        path={`/$/${PAGES.CHANNELS_FOLLOWING_DISCOVER}`}
+        component={ChannelsFollowingDiscoverPage}
       />
       <PrivateRoute {...props} path={`/$/${PAGES.INVITE}`} component={InvitePage} />
       <PrivateRoute {...props} path={`/$/${PAGES.CHANNEL_NEW}`} component={ChannelNew} />

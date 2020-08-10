@@ -3,7 +3,7 @@ import React, { useEffect } from 'react';
 import Button from 'component/button';
 import FileViewerEmbeddedTitle from 'component/fileViewerEmbeddedTitle';
 import { useHistory } from 'react-router-dom';
-import useIsMobile from 'effects/use-is-mobile';
+import { useIsMobile } from 'effects/use-screensize';
 import { formatLbryUrlForWeb } from 'util/url';
 
 type Props = {

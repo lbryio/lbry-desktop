@@ -71,6 +71,8 @@ export default class RecommendedContent extends React.PureComponent<Props> {
     return (
       <Card
         isBodyList
+        smallTitle
+        className="file-page__recommended"
         title={__('Related')}
         body={
           <WaitUntilOnPage lastUpdateDate={this.lastReset}>

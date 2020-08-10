@@ -97,6 +97,10 @@
   }
 }
 
+.card__title-section--small {
+  padding: var(--spacing-s) var(--spacing-m);
+}
+
 .card__actions--inline {
   @extend .card__actions;
   margin-top: 0;
@@ -181,8 +185,12 @@
   }
 
   @media (max-width: $breakpoint-small) {
-    font-size: var(--font-body);
+    font-size: var(--font-large);
   }
+}
+
+.card__title--small {
+  font-size: var(--font-body);
 }
 
 .card__title-actions {

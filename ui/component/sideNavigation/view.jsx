@@ -1,31 +1,129 @@
 // @flow
+import type { Node } from 'react';
 import * as PAGES from 'constants/pages';
 import * as ICONS from 'constants/icons';
 import React from 'react';
-import { withRouter } from 'react-router';
 import Button from 'component/button';
-import Tag from 'component/tag';
 import StickyBox from 'react-sticky-box/dist/esnext';
-import Spinner from 'component/spinner';
-import usePersistedState from 'effects/use-persisted-state';
 import classnames from 'classnames';
-import { PINNED_LABEL_1, PINNED_URI_1, PINNED_URI_2, PINNED_LABEL_2 } from 'config';
-// @if TARGET='web'
-// import Ads from 'web/component/ads';
-// @endif
+import NotificationBubble from 'component/notificationBubble';
 
-const SHOW_CHANNELS = 'SHOW_CHANNELS';
-const SHOW_TAGS = 'SHOW_TAGS';
+const ESCAPE_KEY_CODE = 27;
+const BACKSLASH_KEY_CODE = 220;
+const TOP_LEVEL_LINKS: Array<{
+  label: string,
+  navigate: string,
+  icon: string,
+  extra?: Node,
+  hideForUnauth?: boolean,
+}> = [
+  {
+    label: __('Home'),
+    navigate: `/`,
+    icon: ICONS.HOME,
+  },
+  {
+    label: __('Following'),
+    navigate: `/$/${PAGES.CHANNELS_FOLLOWING}`,
+    icon: ICONS.SUBSCRIBE,
+  },
+  {
+    label: __('Your Tags'),
+    navigate: `/$/${PAGES.TAGS_FOLLOWING}`,
+    icon: ICONS.TAG,
+    hideForUnauth: true,
+  },
+  {
+    label: __('Discover'),
+    navigate: `/$/${PAGES.DISCOVER}`,
+    icon: ICONS.DISCOVER,
+  },
+  {
+    label: __('Purchased'),
+    navigate: `/$/${PAGES.LIBRARY}`,
+    icon: ICONS.PURCHASED,
+    hideForUnauth: true,
+  },
+];
+
+const ABSOLUTE_LINKS: Array<{
+  label: string,
+  navigate: string,
+  icon: string,
+  extra?: Node,
+  hideForUnauth?: boolean,
+}> = [
+  {
+    label: __('Upload'),
+    navigate: `/$/${PAGES.UPLOAD}`,
+    icon: ICONS.PUBLISH,
+  },
+  {
+    label: __('New Channel'),
+    navigate: `/$/${PAGES.CHANNEL_NEW}`,
+    icon: ICONS.CHANNEL,
+  },
+  {
+    label: __('Uploads'),
+    navigate: `/$/${PAGES.UPLOADS}`,
+    icon: ICONS.PUBLISH,
+    hideForUnauth: true,
+  },
+
+  {
+    label: __('Channels'),
+    navigate: `/$/${PAGES.CHANNELS}`,
+    icon: ICONS.CHANNEL,
+    hideForUnauth: true,
+  },
+  {
+    label: __('Creator Analytics'),
+    navigate: `/$/${PAGES.CREATOR_ANALYTICS}`,
+    icon: ICONS.ANALYTICS,
+  },
+  {
+    label: __('Notifications'),
+    navigate: `/$/${PAGES.NOTIFICATIONS}`,
+    icon: ICONS.NOTIFICATION,
+    extra: <NotificationBubble />,
+    hideForUnauth: true,
+  },
+  {
+    label: __('Rewards'),
+    navigate: `/$/${PAGES.REWARDS}`,
+    icon: ICONS.REWARDS,
+    hideForUnauth: true,
+  },
+  {
+    label: __('Invites'),
+    navigate: `/$/${PAGES.INVITES}`,
+    icon: ICONS.INVITE,
+    hideForUnauth: true,
+  },
+  {
+    label: __('Settings'),
+    navigate: `/$/${PAGES.SETTINGS}`,
+    icon: ICONS.SETTINGS,
+    hideForUnauth: true,
+  },
+  {
+    label: __('Help'),
+    navigate: `/$/${PAGES.HELP}`,
+    icon: ICONS.HELP,
+    hideForUnauth: true,
+  },
+];
 
 type Props = {
   subscriptions: Array<Subscription>,
-  followedTags: Array<Tag>,
   email: ?string,
   uploadCount: number,
-  sticky: boolean,
-  expanded: boolean,
   doSignOut: () => void,
-  location: { pathname: string },
+  sidebarOpen: boolean,
+  setSidebarOpen: boolean => void,
+  isMediumScreen: boolean,
+  isOnFilePage: boolean,
+  unreadCount: number,
   purchaseSuccess: boolean,
   doClearPurchasedUriSuccess: () => void,
 };
@@ -33,44 +131,20 @@ type Props = {
 function SideNavigation(props: Props) {
   const {
     subscriptions,
-    followedTags,
-    uploadCount,
-    doSignOut,
+    // doSignOut,
     email,
-    sticky = true,
-    expanded = false,
-    location,
     purchaseSuccess,
     doClearPurchasedUriSuccess,
+    sidebarOpen,
+    setSidebarOpen,
+    isMediumScreen,
+    isOnFilePage,
+    unreadCount,
   } = props;
-  const { pathname } = location;
   const isAuthenticated = Boolean(email);
   const [pulseLibrary, setPulseLibrary] = React.useState(false);
-  const [sideInformation, setSideInformation] = usePersistedState(
-    'side-navigation:information',
-    getSideInformation(pathname)
-  );
-
   const isPersonalized = !IS_WEB || isAuthenticated;
-  const requireAuthOnPersonalizedActions = IS_WEB;
-
-  function getSideInformation(path) {
-    switch (path) {
-      case `/$/${PAGES.CHANNELS_FOLLOWING}`:
-        return SHOW_CHANNELS;
-
-      case `/$/${PAGES.TAGS_FOLLOWING}`:
-        return SHOW_TAGS;
-
-      default:
-        return sideInformation;
-    }
-  }
-
-  React.useEffect(() => {
-    const sideInfo = getSideInformation(pathname);
-    setSideInformation(sideInfo);
-  }, [pathname, setSideInformation]);
+  const isAbsolute = isOnFilePage || isMediumScreen;
 
   React.useEffect(() => {
     if (purchaseSuccess) {
@@ -85,172 +159,119 @@ function SideNavigation(props: Props) {
     }
   }, [setPulseLibrary, purchaseSuccess, doClearPurchasedUriSuccess]);
 
-  function buildLink(path, label, icon, onClick, requiresAuth = false, isLiteral = false) {
-    return {
-      navigate: !isLiteral ? `$/${path}` : `${path}`,
-      label,
-      icon,
-      onClick,
-      requiresAuth,
-    };
-  }
+  React.useEffect(() => {
+    function handleKeydown(e: SyntheticKeyboardEvent<*>) {
+      if (e.keyCode === ESCAPE_KEY_CODE && isAbsolute) {
+        setSidebarOpen(false);
+      } else if (e.keyCode === BACKSLASH_KEY_CODE) {
+        const hasActiveInput = document.querySelector('input:focus');
+        if (!hasActiveInput) {
+          setSidebarOpen(!sidebarOpen);
+        }
+      }
+    }
+
+    window.addEventListener('keydown', handleKeydown);
+
+    return () => window.removeEventListener('keydown', handleKeydown);
+  }, [sidebarOpen, setSidebarOpen, isAbsolute]);
 
   const Wrapper = ({ children }: any) =>
-    sticky ? (
+    !isOnFilePage && !isMediumScreen ? (
       <StickyBox offsetTop={100} offsetBottom={20}>
         {children}
       </StickyBox>
     ) : (
-      <div>{children}</div>
+      children
     );
 
   return (
     <Wrapper>
-      <nav className="navigation">
-        <ul className="navigation-links">
-          {[
-            {
-              ...(expanded && !isAuthenticated ? { ...buildLink(PAGES.AUTH, __('Sign Up'), ICONS.SIGN_UP) } : {}),
-            },
-            {
-              ...(expanded && !isAuthenticated
-                ? { ...buildLink(PAGES.AUTH_SIGNIN, __('Sign In'), ICONS.SIGN_IN) }
-                : {}),
-            },
-            {
-              ...buildLink('/', __('Home'), ICONS.HOME, null, null, true),
-            },
-            {
-              ...buildLink(
-                PAGES.CHANNELS_FOLLOWING,
-                __('Following'),
-                ICONS.SUBSCRIBE,
-                null,
-                requireAuthOnPersonalizedActions
-              ),
-            },
-            {
-              ...buildLink(PAGES.TAGS_FOLLOWING, __('Your Tags'), ICONS.TAG, null, requireAuthOnPersonalizedActions),
-            },
-            {
-              ...buildLink(PAGES.DISCOVER, __('All Content'), ICONS.DISCOVER),
-            },
-            {
-              ...buildLink(PAGES.LIBRARY, IS_WEB ? __('Purchased') : __('Library'), ICONS.LIBRARY),
-            },
-            // @if TARGET='web'
-            {
-              ...(PINNED_URI_1
-                ? { ...buildLink(`${PINNED_URI_1}`, `${PINNED_LABEL_1}`, ICONS.PINNED, null, null, true) }
-                : {}),
-            },
-            {
-              ...(PINNED_URI_2
-                ? { ...buildLink(`${PINNED_URI_2}`, `${PINNED_LABEL_2}`, ICONS.PINNED, null, null, true) }
-                : {}),
-            },
-            // @endif
-            {
-              ...(expanded ? { ...buildLink(PAGES.SETTINGS, __('Settings'), ICONS.SETTINGS) } : {}),
-            },
-          ].map(
-            linkProps =>
-              linkProps.navigate && (
+      {!isOnFilePage && (
+        <nav className={classnames('navigation', { 'navigation--micro': !sidebarOpen || isMediumScreen })}>
+          <ul className={classnames('navigation-links--relative', { 'navigation-links--micro': !sidebarOpen })}>
+            {TOP_LEVEL_LINKS.map(linkProps =>
+              !email && linkProps.hideForUnauth && IS_WEB ? null : (
                 <li key={linkProps.navigate}>
                   <Button
                     {...linkProps}
                     icon={pulseLibrary && linkProps.icon === ICONS.LIBRARY ? ICONS.PURCHASED : linkProps.icon}
                     className={classnames('navigation-link', {
                       'navigation-link--pulse': linkProps.icon === ICONS.LIBRARY && pulseLibrary,
+                      'navigation-link--extra': linkProps.icon === ICONS.NOTIFICATION && unreadCount > 0,
                     })}
                     activeClass="navigation-link--active"
                   />
+                  {linkProps.extra}
                 </li>
               )
-          )}
-
-          {expanded &&
-            isPersonalized &&
-            [
-              {
-                ...buildLink(PAGES.CHANNELS, __('Channels'), ICONS.CHANNEL),
-              },
-              {
-                ...buildLink(
-                  PAGES.UPLOADS,
-                  uploadCount ? (
-                    <span>
-                      {__('Uploads')}
-                      <Spinner type="small" />
-                    </span>
-                  ) : (
-                    __('Uploads')
-                  ),
-                  ICONS.PUBLISH
-                ),
-              },
-              {
-                ...buildLink(PAGES.CREATOR_DASHBOARD, __('Creator Analytics'), ICONS.ANALYTICS),
-              },
-              {
-                ...buildLink(PAGES.WALLET, __('Wallet'), ICONS.WALLET),
-              },
-              {
-                ...buildLink(PAGES.REWARDS, __('Rewards'), ICONS.REWARDS),
-              },
-              {
-                ...buildLink(PAGES.INVITE, __('Invites'), ICONS.INVITE),
-              },
-              {
-                ...buildLink(PAGES.UPLOAD, __('Upload'), ICONS.PUBLISH),
-              },
-              {
-                ...buildLink(PAGES.HELP, __('Help'), ICONS.HELP),
-              },
-              {
-                ...(isAuthenticated ? { ...buildLink(PAGES.AUTH, __('Sign Out'), ICONS.SIGN_OUT, doSignOut) } : {}),
-              },
-            ].map(
-              linkProps =>
-                Object.keys(linkProps).length > 0 &&
-                linkProps && (
-                  <li key={linkProps.navigate}>
-                    <Button {...linkProps} className="navigation-link" activeClass="navigation-link--active" />
-                  </li>
-                )
             )}
-        </ul>
-
-        {sideInformation === SHOW_TAGS && !expanded && isPersonalized && (
-          <ul className="navigation__secondary navigation-links--small tags--vertical">
-            {followedTags.map(({ name }, key) => (
-              <li className="navigation-link__wrapper" key={name}>
-                <Tag navigate={`/$/tags?t${name}`} name={name} />
-              </li>
-            ))}
           </ul>
-        )}
 
-        {sideInformation === SHOW_CHANNELS && !expanded && isPersonalized && (
-          <ul className="navigation__secondary navigation-links--small">
-            {subscriptions.map(({ uri, channelName }, index) => (
-              <li key={uri} className="navigation-link__wrapper">
-                <Button
-                  navigate={uri}
-                  label={channelName}
-                  className="navigation-link"
-                  activeClass="navigation-link--active"
-                />
-              </li>
-            ))}
-          </ul>
-        )}
-      </nav>
-      // @if TARGET='web'
-      {/* {!isAuthenticated && !expanded && <Ads />} commenting out sidebar ads for test */}
-      // @endif
+          {sidebarOpen && isPersonalized && subscriptions && subscriptions.length > 0 && (
+            <ul className="navigation__secondary navigation-links--relative navigation-links--small">
+              {subscriptions.map(({ uri, channelName }, index) => (
+                <li key={uri} className="navigation-link__wrapper">
+                  <Button
+                    navigate={uri}
+                    label={channelName}
+                    className="navigation-link"
+                    activeClass="navigation-link--active"
+                  />
+                </li>
+              ))}
+            </ul>
+          )}
+        </nav>
+      )}
+
+      {(isOnFilePage || isMediumScreen) && sidebarOpen && (
+        <>
+          <nav className={classnames('navigation--filepage')}>
+            <ul className="navigation-links--absolute">
+              {TOP_LEVEL_LINKS.map(linkProps => (
+                <li key={linkProps.navigate}>
+                  <Button
+                    {...linkProps}
+                    icon={pulseLibrary && linkProps.icon === ICONS.LIBRARY ? ICONS.PURCHASED : linkProps.icon}
+                    className={classnames('navigation-link', {
+                      'navigation-link--pulse': linkProps.icon === ICONS.LIBRARY && pulseLibrary,
+                      'navigation-link--extra': linkProps.icon === ICONS.NOTIFICATION && unreadCount > 0,
+                    })}
+                    activeClass="navigation-link--active"
+                  />
+                  {linkProps.extra}
+                </li>
+              ))}
+            </ul>
+            <ul className="navigation-links--absolute">
+              {ABSOLUTE_LINKS.map(linkProps => (
+                <li key={linkProps.navigate}>
+                  <Button {...linkProps} className="navigation-link" activeClass="navigation-link--active" />
+                  {linkProps.extra}
+                </li>
+              ))}
+            </ul>
+            {isPersonalized && subscriptions && subscriptions.length > 0 && (
+              <ul className="navigation__secondary navigation-links--small">
+                {subscriptions.map(({ uri, channelName }, index) => (
+                  <li key={uri} className="navigation-link__wrapper">
+                    <Button
+                      navigate={uri}
+                      label={channelName}
+                      className="navigation-link"
+                      activeClass="navigation-link--active"
+                    />
+                  </li>
+                ))}
+              </ul>
+            )}
+          </nav>
+          <div className="navigation__overlay" onClick={() => setSidebarOpen(false)} />
+        </>
+      )}
     </Wrapper>
   );
 }
 
-export default withRouter(SideNavigation);
+export default SideNavigation;

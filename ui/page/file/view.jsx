@@ -15,12 +15,10 @@ import WaitUntilOnPage from 'component/common/wait-until-on-page';
 import RecommendedContent from 'component/recommendedContent';
 import CommentsList from 'component/commentsList';
 import CommentCreate from 'component/commentCreate';
-import YoutubeBadge from 'component/youtubeBadge';
 
 export const FILE_WRAPPER_CLASS = 'file-page__video-container';
 
 type Props = {
-  claim: StreamClaim,
   costInfo: ?{ includesData: boolean, cost: number },
   fileInfo: FileListItem,
   uri: string,
@@ -86,13 +84,9 @@ class FilePage extends React.Component<Props> {
   }
 
   renderFilePageLayout(uri: string, mode: string, cost: ?number) {
-    const { claim } = this.props;
-    const channelClaimId = claim.signing_channel ? claim.signing_channel.claim_id : null;
-
     if (RENDER_MODES.FLOATING_MODES.includes(mode)) {
       return (
         <React.Fragment>
-          <YoutubeBadge channelClaimId={channelClaimId} includeSyncDate={false} />
           <div className={FILE_WRAPPER_CLASS}>
             <FileRenderInitiator uri={uri} />
           </div>
@@ -105,7 +99,6 @@ class FilePage extends React.Component<Props> {
     if (RENDER_MODES.UNRENDERABLE_MODES.includes(mode)) {
       return (
         <React.Fragment>
-          <YoutubeBadge channelClaimId={channelClaimId} includeSyncDate={false} />
           <FileTitle uri={uri} />
           <FileRenderDownload uri={uri} isFree={cost === 0} />
         </React.Fragment>
@@ -115,7 +108,6 @@ class FilePage extends React.Component<Props> {
     if (RENDER_MODES.TEXT_MODES.includes(mode)) {
       return (
         <React.Fragment>
-          <YoutubeBadge channelClaimId={channelClaimId} includeSyncDate={false} />
           <FileTitle uri={uri} />
           <FileRenderInitiator uri={uri} />
           <FileRenderInline uri={uri} />
@@ -125,7 +117,6 @@ class FilePage extends React.Component<Props> {
 
     return (
       <React.Fragment>
-        <YoutubeBadge channelClaimId={channelClaimId} includeSyncDate={false} />
         <FileRenderInitiator uri={uri} />
         <FileRenderInline uri={uri} />
         <FileTitle uri={uri} />
@@ -152,29 +143,26 @@ class FilePage extends React.Component<Props> {
     }
 
     return (
-      <Page className="file-page">
+      <Page className="file-page" filePage>
         <div className={classnames('section card-stack', `file-page__${renderMode}`)}>
           {this.renderFilePageLayout(uri, renderMode, costInfo ? costInfo.cost : null)}
+          <FileDescription uri={uri} />
+          <FileValues uri={uri} />
+          <FileDetails uri={uri} />
+          <Card
+            title={__('Leave a Comment')}
+            actions={
+              <div>
+                <CommentCreate uri={uri} />
+                <WaitUntilOnPage lastUpdateDate={this.lastReset}>
+                  <CommentsList uri={uri} />
+                </WaitUntilOnPage>
+              </div>
+            }
+          />
         </div>
-        <div className="section columns">
-          <div className="card-stack">
-            <FileDescription uri={uri} />
-            <FileValues uri={uri} />
-            <FileDetails uri={uri} />
-            <Card
-              title={__('Leave a Comment')}
-              actions={
-                <div>
-                  <CommentCreate uri={uri} />
-                  <WaitUntilOnPage lastUpdateDate={this.lastReset}>
-                    <CommentsList uri={uri} />
-                  </WaitUntilOnPage>
-                </div>
-              }
-            />
-          </div>
-          <RecommendedContent uri={uri} />
-        </div>
+
+        <RecommendedContent uri={uri} />
       </Page>
     );
   }
