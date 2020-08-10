@@ -7,10 +7,13 @@
   z-index: 1;
   font-size: var(--font-small);
   height: var(--height-input);
-  max-width: 20rem;
+  max-width: 30rem;
+  margin-left: var(--spacing-s);
+  margin-right: var(--spacing-s);
 
   @media (max-width: $breakpoint-small) {
     max-width: none;
+    margin: 0;
   }
 
   > .icon {

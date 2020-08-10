@@ -12,7 +12,7 @@ import { FILE_WRAPPER_CLASS } from 'page/file/view';
 import Draggable from 'react-draggable';
 import Tooltip from 'component/common/tooltip';
 import { onFullscreenChange } from 'util/full-screen';
-import useIsMobile from 'effects/use-is-mobile';
+import { useIsMobile } from 'effects/use-screensize';
 
 type Props = {
   isFloating: boolean,

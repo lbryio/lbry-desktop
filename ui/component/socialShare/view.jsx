@@ -5,7 +5,7 @@ import Button from 'component/button';
 import CopyableText from 'component/copyableText';
 import EmbedTextArea from 'component/embedTextArea';
 import { generateDownloadUrl } from 'util/web';
-import useIsMobile from 'effects/use-is-mobile';
+import { useIsMobile } from 'effects/use-screensize';
 import { FormField } from 'component/common/form';
 import { hmsToSeconds, secondsToHms } from 'util/time';
 import {

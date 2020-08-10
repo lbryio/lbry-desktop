@@ -10,7 +10,7 @@ import Button from 'component/button';
 import FileDownloadLink from 'component/fileDownloadLink';
 import { buildURI } from 'lbry-redux';
 import * as RENDER_MODES from 'constants/file_render_modes';
-import useIsMobile from 'effects/use-is-mobile';
+import { useIsMobile } from 'effects/use-screensize';
 import ClaimSupportButton from 'component/claimSupportButton';
 
 type Props = {

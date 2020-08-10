@@ -12,6 +12,7 @@
   --color-warning: #fff58c;
   --color-cost: #ffd580;
   --color-focus: #93cff2;
+  --color-notification: #f02849;
 
   --color-black: #111;
   --color-white: #fdfdfd;
@@ -47,7 +48,7 @@
   --color-input-color: #111111;
   --color-input-label: var(--color-gray-5);
   --color-input-placeholder: #212529;
-  --color-input-bg: #f2f2f2;
+  --color-input-bg: var(--color-gray-1);
   --color-input-bg-copyable: #434b53;
   --color-input-border: var(--color-border);
   --color-input-border-active: var(--color-secondary);

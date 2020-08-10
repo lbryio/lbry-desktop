@@ -19,6 +19,7 @@ type Props = {
   isBodyList?: boolean,
   defaultExpand?: boolean,
   nag?: Node,
+  smallTitle?: boolean,
 };
 
 export default function Card(props: Props) {
@@ -33,6 +34,7 @@ export default function Card(props: Props) {
     isPageTitle = false,
     isBodyList = false,
     noTitleWrap = false,
+    smallTitle = false,
     defaultExpand,
     nag,
   } = props;
@@ -47,11 +49,18 @@ export default function Card(props: Props) {
             'card__header--nowrap': noTitleWrap,
           })}
         >
-          <div className={classnames('card__title-section', { 'card__title-section--body-list': isBodyList })}>
+          <div
+            className={classnames('card__title-section', {
+              'card__title-section--body-list': isBodyList,
+              'card__title-section--small': smallTitle,
+            })}
+          >
             {icon && <Icon sectionIcon icon={icon} />}
             <div>
               {isPageTitle && <h1 className="card__title">{title}</h1>}
-              {!isPageTitle && <h2 className="card__title">{title}</h2>}
+              {!isPageTitle && (
+                <h2 className={classnames('card__title', { 'card__title--small': smallTitle })}>{title}</h2>
+              )}
               {subtitle && <div className="card__subtitle">{subtitle}</div>}
             </div>
           </div>

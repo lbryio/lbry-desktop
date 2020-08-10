@@ -4,7 +4,6 @@ import { doSetContentHistoryItem } from 'redux/actions/content';
 import {
   doFetchFileInfo,
   makeSelectFileInfoForUri,
-  makeSelectClaimForUri,
   makeSelectMetadataForUri,
   makeSelectChannelForClaimUri,
   makeSelectClaimIsNsfw,
@@ -16,7 +15,6 @@ import { makeSelectFileRenderModeForUri } from 'redux/selectors/content';
 import FilePage from './view';
 
 const select = (state, props) => ({
-  claim: makeSelectClaimForUri(props.uri)(state),
   costInfo: makeSelectCostInfoForUri(props.uri)(state),
   metadata: makeSelectMetadataForUri(props.uri)(state),
   obscureNsfw: !selectShowMatureContent(state),

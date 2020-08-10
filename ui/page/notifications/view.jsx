@@ -9,10 +9,12 @@ import Notification from 'component/notification';
 type Props = {
   notifications: ?Array<Notification>,
   fetching: boolean,
+  unreadCount: number,
+  doReadNotifications: () => void,
 };
 
 export default function NotificationsPage(props: Props) {
-  const { notifications, fetching } = props;
+  const { notifications, fetching, unreadCount, doReadNotifications } = props;
 
   // Group sequential comment notifications if they are by the same author
   let groupedCount = 1;
@@ -58,6 +60,12 @@ export default function NotificationsPage(props: Props) {
         return [...list, notification];
       }
     }, []);
+
+  React.useEffect(() => {
+    if (unreadCount > 0) {
+      doReadNotifications();
+    }
+  }, [unreadCount, doReadNotifications]);
 
   return (
     <Page>

@@ -12,9 +12,11 @@ import Icon from 'component/common/icon';
 import { Menu, MenuList, MenuButton, MenuItem } from '@reach/menu-button';
 import Tooltip from 'component/common/tooltip';
 import NavigationButton from 'component/navigationButton';
-import NotificationHeaderButton from 'component/notificationHeaderButton';
 import { LOGO_TITLE } from 'config';
-import useIsMobile from 'effects/use-is-mobile';
+import { useIsMobile } from 'effects/use-screensize';
+import NotificationBubble from 'component/notificationBubble';
+import NotificationHeaderButton from 'component/notificationHeaderButton';
+
 // @if TARGET='app'
 import { remote } from 'electron';
 import { IS_MAC } from 'component/app/view';
@@ -49,13 +51,15 @@ type Props = {
   syncError: ?string,
   emailToVerify?: string,
   signOut: () => void,
-  openMobileNavigation: () => void,
   openChannelCreate: () => void,
   openSignOutModal: () => void,
   clearEmailEntry: () => void,
   clearPasswordEntry: () => void,
   hasNavigated: boolean,
   syncSettings: () => void,
+  sidebarOpen: boolean,
+  setSidebarOpen: boolean => void,
+  isAbsoluteSideNavHidden: boolean,
 };
 
 const Header = (props: Props) => {
@@ -71,13 +75,15 @@ const Header = (props: Props) => {
     authHeader,
     signOut,
     syncError,
-    openMobileNavigation,
     openSignOutModal,
     clearEmailEntry,
     clearPasswordEntry,
     emailToVerify,
     backout,
     syncSettings,
+    sidebarOpen,
+    setSidebarOpen,
+    isAbsoluteSideNavHidden,
   } = props;
   const isMobile = useIsMobile();
   // on the verify page don't let anyone escape other than by closing the tab to keep session data consistent
@@ -164,9 +170,6 @@ const Header = (props: Props) => {
     <header
       className={classnames('header', {
         'header--minimal': authHeader,
-        // @if TARGET='web'
-        'header--noauth-web': !authenticated,
-        // @endif
         // @if TARGET='app'
         'header--mac': IS_MAC,
         // @endif
@@ -203,6 +206,14 @@ const Header = (props: Props) => {
         ) : (
           <>
             <div className="header__navigation">
+              <span style={{ position: 'relative' }}>
+                <Button
+                  className="header__navigation-item menu__title header__navigation-item--icon"
+                  icon={ICONS.MENU}
+                  onClick={() => setSidebarOpen(!sidebarOpen)}
+                />
+                {isAbsoluteSideNavHidden && <NotificationBubble />}
+              </span>
               <Button
                 className="header__navigation-item header__navigation-item--lbry header__navigation-item--button-mobile"
                 // @if TARGET='app'
@@ -223,33 +234,20 @@ const Header = (props: Props) => {
                 {...homeButtonNavigationProps}
               />
 
-              {/* @if TARGET='app' */}
               {!authHeader && (
-                <div className="header__navigation-arrows">
-                  <NavigationButton isBackward history={history} />
-                  <NavigationButton isBackward={false} history={history} />
-                </div>
-              )}
-              {/* @endif */}
+                <div className="header__center">
+                  {/* @if TARGET='app' */}
+                  {!authHeader && (
+                    <div className="header__buttons">
+                      <NavigationButton isBackward history={history} />
+                      <NavigationButton isBackward={false} history={history} />
+                    </div>
+                  )}
+                  {/* @endif */}
 
-              {!authHeader && <WunderBar />}
-            </div>
+                  {!authHeader && <WunderBar />}
 
-            {!authHeader ? (
-              <div className={classnames('header__menu', { 'header__menu--with-balance': !IS_WEB || authenticated })}>
-                {(!IS_WEB || authenticated) && (
-                  <Fragment>
-                    <Button
-                      aria-label={__('Your wallet')}
-                      navigate={`/$/${PAGES.WALLET}`}
-                      className="header__navigation-item menu__title header__navigation-item--balance"
-                      label={getWalletTitle()}
-                      // @if TARGET='app'
-                      onDoubleClick={e => {
-                        e.stopPropagation();
-                      }}
-                      // @endif
-                    />
+                  <div className="header__buttons mobile-hidden">
                     <Menu>
                       <MenuButton
                         aria-label={__('Publish a file, or create a channel')}
@@ -263,6 +261,7 @@ const Header = (props: Props) => {
                       >
                         <Icon size={18} icon={ICONS.PUBLISH} aria-hidden />
                       </MenuButton>
+                      <NotificationHeaderButton />
                       <MenuList className="menu__list--header">
                         <MenuItem className="menu__link" onSelect={() => history.push(`/$/${PAGES.UPLOAD}`)}>
                           <Icon aria-hidden icon={ICONS.PUBLISH} />
@@ -274,8 +273,6 @@ const Header = (props: Props) => {
                         </MenuItem>
                       </MenuList>
                     </Menu>
-
-                    <NotificationHeaderButton />
 
                     <Menu>
                       <MenuButton
@@ -334,37 +331,57 @@ const Header = (props: Props) => {
                         )}
                       </MenuList>
                     </Menu>
+                    <Menu>
+                      <MenuButton
+                        aria-label={__('Settings')}
+                        title={__('Settings')}
+                        className="header__navigation-item menu__title header__navigation-item--icon"
+                        // @if TARGET='app'
+                        onDoubleClick={e => {
+                          e.stopPropagation();
+                        }}
+                        // @endif
+                      >
+                        <Icon size={18} icon={ICONS.SETTINGS} aria-hidden />
+                      </MenuButton>
+                      <MenuList className="menu__list--header">
+                        <MenuItem className="menu__link" onSelect={() => history.push(`/$/${PAGES.SETTINGS}`)}>
+                          <Icon aria-hidden tootlip icon={ICONS.SETTINGS} />
+                          {__('Settings')}
+                        </MenuItem>
+                        <MenuItem className="menu__link" onSelect={() => history.push(`/$/${PAGES.HELP}`)}>
+                          <Icon aria-hidden icon={ICONS.HELP} />
+                          {__('Help')}
+                        </MenuItem>
+                        <MenuItem className="menu__link" onSelect={handleThemeToggle}>
+                          <Icon icon={currentTheme === 'light' ? ICONS.DARK : ICONS.LIGHT} />
+                          {currentTheme === 'light' ? __('Dark') : __('Light')}
+                        </MenuItem>
+                      </MenuList>
+                    </Menu>
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {!authHeader ? (
+              <div className={classnames('header__menu', { 'header__menu--with-balance': !IS_WEB || authenticated })}>
+                {(!IS_WEB || authenticated) && (
+                  <Fragment>
+                    <Button
+                      aria-label={__('Your wallet')}
+                      navigate={`/$/${PAGES.WALLET}`}
+                      className="header__navigation-item menu__title header__navigation-item--balance"
+                      label={getWalletTitle()}
+                      // @if TARGET='app'
+                      onDoubleClick={e => {
+                        e.stopPropagation();
+                      }}
+                      // @endif
+                    />
                   </Fragment>
                 )}
 
-                <Menu>
-                  <MenuButton
-                    aria-label={__('Settings')}
-                    title={__('Settings')}
-                    className="header__navigation-item menu__title header__navigation-item--icon"
-                    // @if TARGET='app'
-                    onDoubleClick={e => {
-                      e.stopPropagation();
-                    }}
-                    // @endif
-                  >
-                    <Icon size={18} icon={ICONS.SETTINGS} aria-hidden />
-                  </MenuButton>
-                  <MenuList className="menu__list--header">
-                    <MenuItem className="menu__link" onSelect={() => history.push(`/$/${PAGES.SETTINGS}`)}>
-                      <Icon aria-hidden tootlip icon={ICONS.SETTINGS} />
-                      {__('Settings')}
-                    </MenuItem>
-                    <MenuItem className="menu__link" onSelect={() => history.push(`/$/${PAGES.HELP}`)}>
-                      <Icon aria-hidden icon={ICONS.HELP} />
-                      {__('Help')}
-                    </MenuItem>
-                    <MenuItem className="menu__link" onSelect={handleThemeToggle}>
-                      <Icon icon={currentTheme === 'light' ? ICONS.DARK : ICONS.LIGHT} />
-                      {currentTheme === 'light' ? __('Dark') : __('Light')}
-                    </MenuItem>
-                  </MenuList>
-                </Menu>
                 {IS_WEB && !authenticated && (
                   <div className="header__auth-buttons">
                     <Button navigate={`/$/${PAGES.AUTH_SIGNIN}`} button="link" label={__('Sign In')} />
@@ -394,17 +411,6 @@ const Header = (props: Props) => {
                 </div>
               )
             )}
-            <Button
-              onClick={openMobileNavigation}
-              icon={ICONS.MENU}
-              iconSize={24}
-              className="header__menu--mobile"
-              // @if TARGET='app'
-              onDoubleClick={e => {
-                e.stopPropagation();
-              }}
-              // @endif
-            />
           </>
         )}
       </div>

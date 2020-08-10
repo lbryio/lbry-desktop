@@ -3,7 +3,7 @@ import React from 'react';
 import { withRouter } from 'react-router';
 import { Form, FormField } from 'component/common/form';
 import ReactPaginate from 'react-paginate';
-import useIsMobile from 'effects/use-is-mobile';
+import { useIsMobile } from 'effects/use-screensize';
 
 const PAGINATE_PARAM = 'page';
 

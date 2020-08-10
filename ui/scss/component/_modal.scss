@@ -46,20 +46,6 @@
       box-shadow: none;
       border: none;
     }
-
-    .navigation {
-      width: 100%;
-      display: block;
-      padding: var(--spacing-l);
-
-      .navigation-links:not(.navigation-links--small) {
-        .navigation-link {
-          font-size: var(--font-large);
-          border-bottom: 1px solid var(--color-gray-3);
-          padding: var(--spacing-m) 0;
-        }
-      }
-    }
   }
 }
 

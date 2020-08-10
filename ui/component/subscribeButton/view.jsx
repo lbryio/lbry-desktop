@@ -5,7 +5,7 @@ import React, { useRef } from 'react';
 import { parseURI } from 'lbry-redux';
 import Button from 'component/button';
 import useHover from 'effects/use-hover';
-import useIsMobile from 'effects/use-is-mobile';
+import { useIsMobile } from 'effects/use-screensize';
 
 type SubscriptionArgs = {
   channelName: string,

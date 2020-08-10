@@ -1,5 +1,5 @@
 // @flow
-import React, { Fragment, PureComponent } from 'react';
+import React, { PureComponent } from 'react';
 import MarkdownPreview from 'component/common/markdown-preview';
 import ClaimTags from 'component/claimTags';
 import Card from 'component/common/card';
@@ -23,23 +23,22 @@ class FileDescription extends PureComponent<Props> {
     const { description } = metadata;
 
     if (!description && !(tags && tags.length)) return null;
+
     return (
-      <Fragment>
-        <Card
-          title={__('Description')}
-          defaultExpand
-          actions={
-            <>
-              {description && (
-                <div className="media__info-text">
-                  <MarkdownPreview content={description} />
-                </div>
-              )}
-              <ClaimTags uri={uri} type="large" />
-            </>
-          }
-        />
-      </Fragment>
+      <Card
+        title={__('Description')}
+        defaultExpand
+        actions={
+          <>
+            {description && (
+              <div className="media__info-text">
+                <MarkdownPreview content={description} />
+              </div>
+            )}
+            <ClaimTags uri={uri} type="large" />
+          </>
+        }
+      />
     );
   }
 }

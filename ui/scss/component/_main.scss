@@ -13,27 +13,68 @@
   align-items: flex-start;
   justify-content: space-between;
   min-height: calc(100vh - var(--header-height));
-  max-width: var(--page-max-width);
   margin-left: auto;
   margin-right: auto;
   margin-top: var(--header-height);
   padding: var(--spacing-l); // Unfortunately this is coupled with .claim-preview--tile width calculation
+  padding-left: 0;
+  padding-right: 0;
 
   @media (max-width: $breakpoint-small) {
-    padding: var(--spacing-s);
+    padding: var(--spacing-xs);
+    padding-top: var(--spacing-m);
   }
+
+  @media (min-width: $breakpoint-large) {
+    width: 100%;
+  }
+}
+
+.main-wrapper__inner--filepage {
+  padding: 0;
+  padding-top: var(--spacing-s);
 }
 
 .main {
   position: relative;
   width: calc(100% - var(--side-nav-width) - var(--spacing-l));
+  max-width: var(--page-max-width);
+  z-index: 0;
   margin-right: auto;
   margin-left: auto;
 
-  @media (max-width: $breakpoint-small) {
+  @media (max-width: $breakpoint-medium) {
     width: 100%;
-    margin-right: 0;
-    margin-left: 0;
+    margin-right: var(--spacing-s);
+    margin-left: var(--spacing-s);
+  }
+}
+
+.main--file-page {
+  width: 100%;
+  max-width: var(--page-max-width--filepage);
+  margin-left: auto;
+  margin-right: auto;
+  display: flex;
+  padding-left: var(--spacing-m);
+  padding-right: var(--spacing-m);
+
+  > :first-child {
+    flex: 1;
+    margin-right: var(--spacing-m);
+  }
+
+  .file-page__recommended {
+    width: 25rem;
+    height: 0%;
+  }
+
+  @media (max-width: $breakpoint-medium) {
+    flex-direction: column;
+
+    > :first-child {
+      margin-right: 0;
+    }
   }
 }
 

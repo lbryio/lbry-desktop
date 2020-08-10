@@ -5,7 +5,7 @@ import * as React from 'react';
 import ReactModal from 'react-modal';
 import Button from 'component/button';
 import classnames from 'classnames';
-import useIsMobile from 'effects/use-is-mobile';
+import { useIsMobile } from 'effects/use-screensize';
 
 type ModalProps = {
   type?: string,

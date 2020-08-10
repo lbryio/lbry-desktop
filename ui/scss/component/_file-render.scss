@@ -30,6 +30,10 @@
       }
     }
   }
+
+  @media (max-width: $breakpoint-medium) {
+    flex-direction: column;
+  }
 }
 
 .file-render {
