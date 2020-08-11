@@ -232,6 +232,15 @@ function PublishFile(props: Props) {
     }
   }
 
+  function handleFileReaderLoaded(event: ProgressEvent) {
+    // See: https://github.com/facebook/flow/issues/3470
+    if (event.target instanceof FileReader) {
+      const text = event.target.result;
+      updatePublishForm({ fileText: text });
+      setPublishMode(PUBLISH_MODES.POST);
+    }
+  }
+
   function handleFileChange(file: WebFile) {
     const { showToast } = props;
     window.URL = window.URL || window.webkitURL;
@@ -283,11 +292,7 @@ function PublishFile(props: Props) {
       // Create reader
       const reader = new FileReader();
       // Handler for file reader
-      reader.addEventListener('load', event => {
-        const text = event.target.result;
-        updatePublishForm({ fileText: text });
-        setPublishMode(PUBLISH_MODES.POST);
-      });
+      reader.addEventListener('load', handleFileReaderLoaded);
       // Read file contents
       reader.readAsText(file);
       setCurrentFileType('text/markdown');

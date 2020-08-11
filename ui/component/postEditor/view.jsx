@@ -47,6 +47,7 @@ function PostEditor(props: Props) {
 
   // Ready to edit content
   useEffect(() => {
+    // flow error
     if (!ready && !loading && fileText && streamingUrl) {
       setReady(true);
     }
