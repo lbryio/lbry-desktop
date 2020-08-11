@@ -16,6 +16,8 @@ export function doCommentList(uri: string, page: number = 1, pageSize: number = 
       claim_id: claimId,
       page,
       page_size: pageSize,
+      include_replies: true,
+      skip_validation: true,
     })
       .then((result: CommentListResponse) => {
         const { items: comments } = result;
