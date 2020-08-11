@@ -1,7 +1,7 @@
 // @flow
 import React from 'react';
 import Button from 'component/button';
-import { Form } from 'component/common/form';
+import { Form, FormField } from 'component/common/form';
 import { Modal } from 'modal/modal';
 import Card from 'component/common/card';
 import Tag from 'component/tag';
@@ -31,6 +31,8 @@ type Props = {
   previewResponse: PublishResponse,
   publish: (?string, ?boolean) => void,
   closeModal: () => void,
+  enablePublishPreview: boolean,
+  setEnablePublishPreview: boolean => void,
 };
 
 class ModalPublishPreview extends React.PureComponent<Props> {
@@ -58,6 +60,11 @@ class ModalPublishPreview extends React.PureComponent<Props> {
     );
   }
 
+  togglePreviewEnabled() {
+    const { enablePublishPreview, setEnablePublishPreview } = this.props;
+    setEnablePublishPreview(!enablePublishPreview);
+  }
+
   render() {
     const {
       filePath,
@@ -78,6 +85,8 @@ class ModalPublishPreview extends React.PureComponent<Props> {
       ffmpegStatus = {},
       previewResponse,
       closeModal,
+      enablePublishPreview,
+      setEnablePublishPreview,
     } = this.props;
 
     const modalTitle = __('Confirm Publish');
@@ -145,6 +154,13 @@ class ModalPublishPreview extends React.PureComponent<Props> {
                   <Button button="link" label={__('Cancel')} onClick={closeModal} />
                 </div>
                 <p className="help">{__('Once the transaction is sent, it cannot be reversed.')}</p>
+                <FormField
+                  type="checkbox"
+                  name="sync_toggle"
+                  label={__('Skip preview and confirmation')}
+                  checked={!enablePublishPreview}
+                  onChange={() => setEnablePublishPreview(!enablePublishPreview)}
+                />
               </>
             }
           />
