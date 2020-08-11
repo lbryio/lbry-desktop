@@ -1,7 +1,7 @@
 import { connect } from 'react-redux';
 import { selectSubscriptions } from 'redux/selectors/subscriptions';
 import { selectPurchaseUriSuccess, doClearPurchasedUriSuccess, SETTINGS } from 'lbry-redux';
-import { selectUserVerifiedEmail } from 'redux/selectors/user';
+import { selectUserVerifiedEmail, selectUser } from 'redux/selectors/user';
 import { makeSelectClientSetting } from 'redux/selectors/settings';
 import { doSignOut } from 'redux/actions/app';
 import { selectUnreadNotificationCount } from 'redux/selectors/notifications';
@@ -14,6 +14,7 @@ const select = state => ({
   email: selectUserVerifiedEmail(state),
   purchaseSuccess: selectPurchaseUriSuccess(state),
   unreadCount: selectUnreadNotificationCount(state),
+  user: selectUser(state),
 });
 
 export default connect(select, {

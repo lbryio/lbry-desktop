@@ -1,10 +1,13 @@
 // @flow
+import * as ICONS from 'constants/icons';
 import { NOTIFICATION_COMMENT } from 'constants/notifications';
 import React from 'react';
 import Page from 'component/page';
 import Card from 'component/common/card';
 import Spinner from 'component/spinner';
 import Notification from 'component/notification';
+import Yrbl from 'component/yrbl';
+import Button from 'component/button';
 
 type Props = {
   notifications: ?Array<Notification>,
@@ -91,7 +94,19 @@ export default function NotificationsPage(props: Props) {
           }
         />
       ) : (
-        <div>{__('No notifications')}</div>
+        <div className="main--empty">
+          <Yrbl
+            title={__('No Notifications')}
+            subtitle={
+              <div>
+                <p>{__("You don't have any notifications yet, but they will be here when you do!")}</p>
+                <div className="section__actions">
+                  <Button button="primary" icon={ICONS.HOME} label={__('Go Home')} navigate="/" />
+                </div>
+              </div>
+            }
+          />
+        </div>
       )}
     </Page>
   );

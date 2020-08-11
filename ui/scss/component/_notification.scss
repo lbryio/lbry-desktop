@@ -68,3 +68,9 @@
   align-items: center;
   justify-content: center;
 }
+
+.notification__bubble--inline {
+  @extend .notification__bubble;
+  top: 0.75rem;
+  right: 1rem;
+}

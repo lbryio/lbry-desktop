@@ -20,6 +20,10 @@
   padding-left: 0;
   padding-right: 0;
 
+  > :first-child {
+    flex-shrink: 0;
+  }
+
   @media (max-width: $breakpoint-small) {
     padding: var(--spacing-xs);
     padding-top: var(--spacing-m);
@@ -43,10 +47,12 @@
   margin-right: auto;
   margin-left: auto;
 
+  @media (max-width: $breakpoint-medium) and (min-width: $breakpoint-small) {
+    margin: 0 var(--spacing-l);
+  }
+
   @media (max-width: $breakpoint-medium) {
     width: 100%;
-    margin-right: var(--spacing-s);
-    margin-left: var(--spacing-s);
   }
 }
 
@@ -67,6 +73,11 @@
   .file-page__recommended {
     width: 25rem;
     height: 0%;
+
+    @media (max-width: $breakpoint-medium) {
+      width: auto;
+      margin-top: var(--spacing-l);
+    }
   }
 
   @media (max-width: $breakpoint-medium) {

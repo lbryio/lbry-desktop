@@ -2,7 +2,7 @@
 import * as ICONS from 'constants/icons';
 import { SETTINGS } from 'lbry-redux';
 import * as PAGES from 'constants/pages';
-import React, { Fragment } from 'react';
+import React from 'react';
 import { withRouter } from 'react-router';
 import classnames from 'classnames';
 import Button from 'component/button';
@@ -206,14 +206,17 @@ const Header = (props: Props) => {
         ) : (
           <>
             <div className="header__navigation">
-              <span style={{ position: 'relative' }}>
-                <Button
-                  className="header__navigation-item menu__title header__navigation-item--icon"
-                  icon={ICONS.MENU}
-                  onClick={() => setSidebarOpen(!sidebarOpen)}
-                />
-                {isAbsoluteSideNavHidden && <NotificationBubble />}
-              </span>
+              {!authHeader && (
+                <span style={{ position: 'relative' }}>
+                  <Button
+                    className="header__navigation-item menu__title header__navigation-item--icon"
+                    icon={ICONS.MENU}
+                    onClick={() => setSidebarOpen(!sidebarOpen)}
+                  >
+                    {isAbsoluteSideNavHidden && <NotificationBubble />}
+                  </Button>
+                </span>
+              )}
               <Button
                 className="header__navigation-item header__navigation-item--lbry header__navigation-item--button-mobile"
                 // @if TARGET='app'
@@ -317,18 +320,7 @@ const Header = (props: Props) => {
                             </div>
                             <span className="menu__link-help">{email}</span>
                           </MenuItem>
-                        ) : (
-                          <React.Fragment>
-                            <MenuItem className="menu__link" onSelect={() => history.push(`/$/${PAGES.AUTH}`)}>
-                              <Icon aria-hidden icon={ICONS.SIGN_UP} />
-                              {__('Register')}
-                            </MenuItem>
-                            <MenuItem className="menu__link" onSelect={() => history.push(`/$/${PAGES.AUTH_SIGNIN}`)}>
-                              <Icon aria-hidden icon={ICONS.SIGN_IN} />
-                              {__('Sign In')}
-                            </MenuItem>
-                          </React.Fragment>
-                        )}
+                        ) : null}
                       </MenuList>
                     </Menu>
                     <Menu>
@@ -364,22 +356,20 @@ const Header = (props: Props) => {
               )}
             </div>
 
-            {!authHeader ? (
+            {!authHeader && !backout ? (
               <div className={classnames('header__menu', { 'header__menu--with-balance': !IS_WEB || authenticated })}>
                 {(!IS_WEB || authenticated) && (
-                  <Fragment>
-                    <Button
-                      aria-label={__('Your wallet')}
-                      navigate={`/$/${PAGES.WALLET}`}
-                      className="header__navigation-item menu__title header__navigation-item--balance"
-                      label={getWalletTitle()}
-                      // @if TARGET='app'
-                      onDoubleClick={e => {
-                        e.stopPropagation();
-                      }}
-                      // @endif
-                    />
-                  </Fragment>
+                  <Button
+                    aria-label={__('Your wallet')}
+                    navigate={`/$/${PAGES.WALLET}`}
+                    className="header__navigation-item menu__title header__navigation-item--balance"
+                    label={getWalletTitle()}
+                    // @if TARGET='app'
+                    onDoubleClick={e => {
+                      e.stopPropagation();
+                    }}
+                    // @endif
+                  />
                 )}
 
                 {IS_WEB && !authenticated && (

@@ -4,6 +4,7 @@ import * as ICONS from 'constants/icons';
 import React from 'react';
 import Icon from 'component/common/icon';
 import Notification from 'component/notification';
+import NotificationBubble from 'component/notificationBubble';
 import Button from 'component/button';
 import { useHistory } from 'react-router';
 // import { Menu, MenuList, MenuButton, MenuPopover, MenuItems, MenuItem } from '@reach/menu-button';
@@ -48,7 +49,7 @@ export default function NotificationHeaderButton(props: Props) {
       className="header__navigation-item menu__title header__navigation-item--icon"
     >
       <Icon size={18} icon={ICONS.NOTIFICATION} aria-hidden />
-      {unreadCount > 0 && <span className="notification__bubble">{unreadCount}</span>}
+      <NotificationBubble />
     </Button>
   );
 
