@@ -37,9 +37,9 @@ const MODES = Object.values(PUBLISH_MODES);
 type Props = {
   disabled: boolean,
   tags: Array<Tag>,
-  publish: (?string) => void,
-  filePath: ?string,
-  fileText: ?string,
+  publish: (source?: string | File) => void,
+  filePath: string | File,
+  fileText: string,
   bid: ?number,
   bidError: ?string,
   editingURI: ?string,
@@ -217,7 +217,9 @@ function PublishForm(props: Props) {
   function createWebFile() {
     if (fileText) {
       const fileName = name || title;
-      return new File([fileText], `${fileName}.md`, { type: 'text/markdown' });
+      if (fileName) {
+        return new File([fileText], `${fileName}.md`, { type: 'text/markdown' });
+      }
     }
   }
   // @endif
@@ -225,13 +227,16 @@ function PublishForm(props: Props) {
   // @if TARGET='app'
   // Save file changes locally ( desktop )
   function saveFileChanges() {
-    let output = filePath;
+    let output;
     if (!output || output === '') {
       // Generate a temporary file:
       output = tempy.file({ name: 'post.md' });
+    } else if (typeof filePath === 'string') {
+      // Use current file
+      output = filePath;
     }
     // Create a temporary file and save file changes
-    if (typeof output === 'string') {
+    if (output && output !== '') {
       // Save file changes
       return new Promise((resolve, reject) => {
         fs.writeFile(output, fileText, (error, data) => {
