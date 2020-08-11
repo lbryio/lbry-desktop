@@ -13,6 +13,7 @@ import { SETTINGS } from 'lbry-redux';
 import Card from 'component/common/card';
 import { getPasswordFromCookie } from 'util/saved-passwords';
 import Spinner from 'component/spinner';
+import PublishSettings from 'component/publishSettings';
 
 // @if TARGET='app'
 const IS_MAC = process.platform === 'darwin';
@@ -505,6 +506,8 @@ class SettingsPage extends React.PureComponent<Props, State> {
                 }
               />
             )}
+
+            <Card title={__('Publish Settings')} actions={<PublishSettings />} />
 
             {/* @if TARGET='app' */}
             {/* Auto launch in a hidden state doesn't work on mac https://github.com/Teamwork/node-auto-launch/issues/81 */}

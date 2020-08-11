@@ -33,6 +33,7 @@ const defaultState = {
     [SETTINGS.FOLLOWING_ACKNOWLEDGED]: false,
     [SETTINGS.TAGS_ACKNOWLEDGED]: false,
     [SETTINGS.ENABLE_SYNC]: IS_WEB,
+    [SETTINGS.ENABLE_PUBLISH_PREVIEW]: true,
 
     // UI
     [SETTINGS.LANGUAGE]: settingLanguage.find(language => SUPPORTED_LANGUAGES[language]),

@@ -11,10 +11,12 @@ import {
   doUpdatePublishForm,
   doPrepareEdit,
   doCheckPublishNameAvailability,
+  SETTINGS,
 } from 'lbry-redux';
 import { doPublishDesktop } from 'redux/actions/publish';
 import { selectUnclaimedRewardValue } from 'redux/selectors/rewards';
 import { selectModal } from 'redux/selectors/app';
+import { makeSelectClientSetting } from 'redux/selectors/settings';
 import PublishPage from './view';
 
 const select = state => ({
@@ -29,6 +31,7 @@ const select = state => ({
   isResolvingUri: selectIsResolvingPublishUris(state),
   totalRewardValue: selectUnclaimedRewardValue(state),
   modal: selectModal(state),
+  enablePublishPreview: makeSelectClientSetting(SETTINGS.ENABLE_PUBLISH_PREVIEW)(state),
 });
 
 const perform = dispatch => ({
