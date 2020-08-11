@@ -1,8 +1,13 @@
 :root {
   // Button
-  --color-link-icon: var(--color-gray-4);
+  --color-navigation-icon: var(--color-gray-5);
   --color-link-active: var(--color-primary);
   --color-navigation-link: var(--color-gray-5);
+  --color-navigation-active: var(--color-primary-alt);
+  --color-navigation-active-text: var(--color-primary);
+  --color-navigation-hover: var(--color-gray-1);
+  --color-navigation-hover-text: #3f3f3f;
+
   --color-header-button: var(--color-button-alt-bg);
   --color-button-border: var(--color-gray-3);
 

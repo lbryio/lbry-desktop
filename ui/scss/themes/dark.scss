@@ -12,8 +12,14 @@
   --color-link: var(--color-primary);
   --color-link-hover: #60e1ba;
   --color-link-active: #60e1ba;
-  --color-link-icon: #6a7580;
-  --color-navigation-link: #b3bcc6;
+
+  --color-navigation-icon: #76808a;
+  --color-navigation-link: #b9c3ce;
+  --color-navigation-active: #333a41;
+  --color-navigation-active-text: #bac5d0;
+  --color-navigation-hover: #272c32;
+  --color-navigation-hover-text: #bac5d0;
+
   --color-button-primary-bg: var(--color-primary-alt);
   --color-button-primary-bg-hover: #44796c;
   --color-button-primary-text: var(--color-primary);
@@ -24,18 +30,18 @@
   --color-button-alt-bg: #4d5660;
   --color-button-alt-bg-hover: #3e464d;
   --color-button-alt-text: #e2e9f0;
-  --color-header-button: var(--color-link-icon);
+  --color-header-button: #434b54;
   --color-button-border: var(--color-gray-5);
 
   // Color
   --color-focus: #2d69a5;
   --color-background-overlay: #212529d7;
-  --color-background: #212529;
+  --color-background: #1c1f22;
   --color-background-overlay: #21252980;
-  --color-border: #4f5b64;
-  --color-card-background: #2c3237;
+  --color-border: #343c43;
+  --color-card-background: #23292e;
   --color-card-background-highlighted: #384046;
-  --color-header-background: #434b53;
+  --color-header-background: #2c3137;
   --color-tab-text: var(--color-white);
   --color-tabs-background: #434b53;
   --color-tab-divider: var(--color-white);
@@ -64,8 +70,8 @@
   --color-input: #f4f4f5;
   --color-input-label: #d4d4d4;
   --color-input-placeholder: #f4f4f5;
-  --color-input-bg: #5d6772;
-  --color-input-bg-copyable: #434b53;
+  --color-input-bg: #4f5861;
+  --color-input-bg-copyable: #4f5861;
   --color-input-border: var(--color-border);
   --color-input-border-active: var(--color-secondary);
   --color-input-toggle: var(--color-primary);
@@ -74,8 +80,8 @@
 
   // Menu
   --color-menu-background: var(--color-header-background);
-  --color-menu-background--selected: #89939e;
-  --color-menu-background--active: #89939e;
+  --color-menu-background--selected: #5d646c;
+  --color-menu-background--active: #3a3f44;
   --color-menu-icon: #a7a7a7;
   --color-menu-icon-active: #d6d6d6;
 
@@ -83,8 +89,8 @@
   --color-table-highlight: #3a444e;
 
   // Search
-  --color-search-suggestion: #212529;
-  --color-search-suggestion-background: #cce6fb;
+  --color-search-suggestion: var(--color-text);
+  --color-search-suggestion-background: #313d46;
   --color-placeholder-background: #4e5862;
   --color-spinner-light: #5a6570;
   --color-spinner-dark: #212529;

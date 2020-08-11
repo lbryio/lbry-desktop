@@ -229,15 +229,17 @@ function AppRouter(props: Props) {
       <Route path={`/$/${PAGES.INVITE}/:referrer`} exact component={InvitedPage} />
       <Route path={`/$/${PAGES.CHECKOUT}`} exact component={CheckoutPage} />
 
-      <PrivateRoute {...props} path={`/$/${PAGES.TAGS_FOLLOWING}`} component={TagsFollowingPage} />
+      <PrivateRoute {...props} exact path={`/$/${PAGES.TAGS_FOLLOWING}`} component={TagsFollowingPage} />
       <PrivateRoute
         {...props}
+        exact
         path={`/$/${PAGES.CHANNELS_FOLLOWING}`}
         component={isAuthenticated || !IS_WEB ? ChannelsFollowingPage : DiscoverPage}
       />
       <PrivateRoute {...props} path={`/$/${PAGES.SETTINGS_NOTIFICATIONS}`} component={SettingsNotificationsPage} />
       <PrivateRoute
         {...props}
+        exact
         path={`/$/${PAGES.CHANNELS_FOLLOWING_DISCOVER}`}
         component={ChannelsFollowingDiscoverPage}
       />

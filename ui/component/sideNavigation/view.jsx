@@ -4,7 +4,6 @@ import * as PAGES from 'constants/pages';
 import * as ICONS from 'constants/icons';
 import React from 'react';
 import Button from 'component/button';
-import StickyBox from 'react-sticky-box/dist/esnext';
 import classnames from 'classnames';
 import NotificationBubble from 'component/notificationBubble';
 
@@ -62,6 +61,7 @@ const ABSOLUTE_LINKS: Array<{
     label: __('New Channel'),
     navigate: `/$/${PAGES.CHANNEL_NEW}`,
     icon: ICONS.CHANNEL,
+    hideForUnauth: true,
   },
   {
     label: __('Uploads'),
@@ -78,14 +78,21 @@ const ABSOLUTE_LINKS: Array<{
   },
   {
     label: __('Creator Analytics'),
-    navigate: `/$/${PAGES.CREATOR_ANALYTICS}`,
+    navigate: `/$/${PAGES.CREATOR_DASHBOARD}`,
     icon: ICONS.ANALYTICS,
+    hideForUnauth: true,
+  },
+  {
+    label: __('Wallet'),
+    navigate: `/$/${PAGES.WALLET}`,
+    icon: ICONS.WALLET,
+    hideForUnauth: true,
   },
   {
     label: __('Notifications'),
     navigate: `/$/${PAGES.NOTIFICATIONS}`,
     icon: ICONS.NOTIFICATION,
-    extra: <NotificationBubble />,
+    extra: <NotificationBubble inline />,
     hideForUnauth: true,
   },
   {
@@ -96,7 +103,7 @@ const ABSOLUTE_LINKS: Array<{
   },
   {
     label: __('Invites'),
-    navigate: `/$/${PAGES.INVITES}`,
+    navigate: `/$/${PAGES.INVITE}`,
     icon: ICONS.INVITE,
     hideForUnauth: true,
   },
@@ -114,6 +121,35 @@ const ABSOLUTE_LINKS: Array<{
   },
 ];
 
+const UNAUTH_LINKS: Array<{
+  label: string,
+  navigate: string,
+  icon: string,
+  extra?: Node,
+  hideForUnauth?: boolean,
+}> = [
+  {
+    label: __('Sign In'),
+    navigate: `/$/${PAGES.AUTH_SIGNIN}`,
+    icon: ICONS.SIGN_IN,
+  },
+  {
+    label: __('Register'),
+    navigate: `/$/${PAGES.AUTH}`,
+    icon: ICONS.SIGN_UP,
+  },
+  {
+    label: __('Settings'),
+    navigate: `/$/${PAGES.SETTINGS}`,
+    icon: ICONS.SETTINGS,
+  },
+  {
+    label: __('Help'),
+    navigate: `/$/${PAGES.HELP}`,
+    icon: ICONS.HELP,
+  },
+];
+
 type Props = {
   subscriptions: Array<Subscription>,
   email: ?string,
@@ -126,6 +162,7 @@ type Props = {
   unreadCount: number,
   purchaseSuccess: boolean,
   doClearPurchasedUriSuccess: () => void,
+  user: ?User,
 };
 
 function SideNavigation(props: Props) {
@@ -140,11 +177,23 @@ function SideNavigation(props: Props) {
     isMediumScreen,
     isOnFilePage,
     unreadCount,
+    user,
   } = props;
+  const notificationsEnabled = user && user.experimental_ui;
   const isAuthenticated = Boolean(email);
   const [pulseLibrary, setPulseLibrary] = React.useState(false);
   const isPersonalized = !IS_WEB || isAuthenticated;
   const isAbsolute = isOnFilePage || isMediumScreen;
+  const microNavigation = !sidebarOpen || isMediumScreen;
+  const subLinks = email
+    ? ABSOLUTE_LINKS.filter(link => {
+        if (!notificationsEnabled && link.icon === ICONS.NOTIFICATION) {
+          return false;
+        }
+
+        return true;
+      })
+    : UNAUTH_LINKS;
 
   React.useEffect(() => {
     if (purchaseSuccess) {
@@ -176,20 +225,16 @@ function SideNavigation(props: Props) {
     return () => window.removeEventListener('keydown', handleKeydown);
   }, [sidebarOpen, setSidebarOpen, isAbsolute]);
 
-  const Wrapper = ({ children }: any) =>
-    !isOnFilePage && !isMediumScreen ? (
-      <StickyBox offsetTop={100} offsetBottom={20}>
-        {children}
-      </StickyBox>
-    ) : (
-      children
-    );
-
   return (
-    <Wrapper>
+    <div
+      className={classnames('navigation__wrapper', {
+        'navigation__wrapper--micro': microNavigation && !isOnFilePage,
+        'navigation__wrapper--absolute': isAbsolute,
+      })}
+    >
       {!isOnFilePage && (
-        <nav className={classnames('navigation', { 'navigation--micro': !sidebarOpen || isMediumScreen })}>
-          <ul className={classnames('navigation-links--relative', { 'navigation-links--micro': !sidebarOpen })}>
+        <nav className={classnames('navigation', { 'navigation--micro': microNavigation })}>
+          <ul className={classnames('navigation-links', { 'navigation-links--micro': !sidebarOpen })}>
             {TOP_LEVEL_LINKS.map(linkProps =>
               !email && linkProps.hideForUnauth && IS_WEB ? null : (
                 <li key={linkProps.navigate}>
@@ -198,7 +243,7 @@ function SideNavigation(props: Props) {
                     icon={pulseLibrary && linkProps.icon === ICONS.LIBRARY ? ICONS.PURCHASED : linkProps.icon}
                     className={classnames('navigation-link', {
                       'navigation-link--pulse': linkProps.icon === ICONS.LIBRARY && pulseLibrary,
-                      'navigation-link--extra': linkProps.icon === ICONS.NOTIFICATION && unreadCount > 0,
+                      'navigation-link--highlighted': linkProps.icon === ICONS.NOTIFICATION && unreadCount > 0,
                     })}
                     activeClass="navigation-link--active"
                   />
@@ -209,7 +254,7 @@ function SideNavigation(props: Props) {
           </ul>
 
           {sidebarOpen && isPersonalized && subscriptions && subscriptions.length > 0 && (
-            <ul className="navigation__secondary navigation-links--relative navigation-links--small">
+            <ul className="navigation__secondary navigation-links navigation-links--small">
               {subscriptions.map(({ uri, channelName }, index) => (
                 <li key={uri} className="navigation-link__wrapper">
                   <Button
@@ -229,28 +274,32 @@ function SideNavigation(props: Props) {
         <>
           <nav className={classnames('navigation--filepage')}>
             <ul className="navigation-links--absolute">
-              {TOP_LEVEL_LINKS.map(linkProps => (
-                <li key={linkProps.navigate}>
-                  <Button
-                    {...linkProps}
-                    icon={pulseLibrary && linkProps.icon === ICONS.LIBRARY ? ICONS.PURCHASED : linkProps.icon}
-                    className={classnames('navigation-link', {
-                      'navigation-link--pulse': linkProps.icon === ICONS.LIBRARY && pulseLibrary,
-                      'navigation-link--extra': linkProps.icon === ICONS.NOTIFICATION && unreadCount > 0,
-                    })}
-                    activeClass="navigation-link--active"
-                  />
-                  {linkProps.extra}
-                </li>
-              ))}
+              {TOP_LEVEL_LINKS.map(linkProps =>
+                !email && linkProps.hideForUnauth && IS_WEB ? null : (
+                  <li key={linkProps.navigate}>
+                    <Button
+                      {...linkProps}
+                      icon={pulseLibrary && linkProps.icon === ICONS.LIBRARY ? ICONS.PURCHASED : linkProps.icon}
+                      className={classnames('navigation-link', {
+                        'navigation-link--pulse': linkProps.icon === ICONS.LIBRARY && pulseLibrary,
+                        'navigation-link--highlighted': linkProps.icon === ICONS.NOTIFICATION && unreadCount > 0,
+                      })}
+                      activeClass="navigation-link--active"
+                    />
+                    {linkProps.extra}
+                  </li>
+                )
+              )}
             </ul>
             <ul className="navigation-links--absolute">
-              {ABSOLUTE_LINKS.map(linkProps => (
-                <li key={linkProps.navigate}>
-                  <Button {...linkProps} className="navigation-link" activeClass="navigation-link--active" />
-                  {linkProps.extra}
-                </li>
-              ))}
+              {subLinks.map(linkProps =>
+                !email && linkProps.hideForUnauth && IS_WEB ? null : (
+                  <li key={linkProps.navigate} className="mobile-only">
+                    <Button {...linkProps} className="navigation-link" activeClass="navigation-link--active" />
+                    {linkProps.extra}
+                  </li>
+                )
+              )}
             </ul>
             {isPersonalized && subscriptions && subscriptions.length > 0 && (
               <ul className="navigation__secondary navigation-links--small">
@@ -270,7 +319,7 @@ function SideNavigation(props: Props) {
           <div className="navigation__overlay" onClick={() => setSidebarOpen(false)} />
         </>
       )}
-    </Wrapper>
+    </div>
   );
 }
 
