@@ -261,11 +261,13 @@ function PublishForm(props: Props) {
   // @endif
 
   async function handlePublish() {
+    let outputFile = filePath;
+    let runPublish = false;
+
     // Publish post:
     // If here is no file selected yet on desktop, show file dialog and let the
     // user choose a file path. On web a new File is created
     if (mode === PUBLISH_MODES.POST && !emptyPostError) {
-      let outputFile = filePath;
       // If user modified content on the text editor or editing name has changed:
       // Save changes and update file path
       if (fileEdited || nameEdited) {
@@ -280,20 +282,24 @@ function PublishForm(props: Props) {
         // New content stored locally and is not empty
         if (outputFile) {
           updatePublishForm({ filePath: outputFile });
-          publish(outputFile);
+          runPublish = true;
         }
       } else {
         // Only metadata has changed.
-        publish(outputFile);
+        runPublish = true;
       }
     }
     // Publish file
     if (mode === PUBLISH_MODES.FILE) {
+      runPublish = true;
+    }
+
+    if (runPublish) {
       if (enablePublishPreview) {
         setPreviewing(true);
-        publish(filePath, true);
+        publish(outputFile, true);
       } else {
-        publish(filePath, false);
+        publish(outputFile, false);
       }
     }
   }
