@@ -1,7 +1,6 @@
-declare type WebFile = {
-  name: string,
+// @flow
+
+declare type WebFile = File & {
+  path?: string,
   title?: string,
-  path: string,
-  size: string,
-  type: string,
 }
