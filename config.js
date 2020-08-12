@@ -30,6 +30,7 @@ const config = {
   PINNED_LABEL_1: process.env.PINNED_LABEL_1,
   PINNED_URI_2: process.env.PINNED_URI_2,
   PINNED_LABEL_2: process.env.PINNED_LABEL_2,
+  THUMBNAIL_FALLBACK: process.env.THUMBNAIL_FALLBACK,
 };
 
 config.URL_LOCAL = `http://localhost:${config.WEB_SERVER_PORT}`;

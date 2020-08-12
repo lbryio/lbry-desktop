@@ -1,6 +1,7 @@
 // @flow
 import type { Node } from 'react';
 import React from 'react';
+import { THUMBNAIL_FALLBACK } from 'config';
 import FreezeframeWrapper from './FreezeframeWrapper';
 import Placeholder from './placeholder.png';
 
@@ -8,13 +9,14 @@ type Props = {
   thumbnail: ?string, // externally sourced image
   children?: Node,
   allowGifs: boolean,
+  fallbackThumbnail?: string,
 };
 
 const className = 'media__thumb';
 
 class FileThumbnail extends React.PureComponent<Props> {
   render() {
-    const { thumbnail: rawThumbnail, children, allowGifs = false } = this.props;
+    const { thumbnail: rawThumbnail, children, allowGifs = false, fallbackThumbnail = THUMBNAIL_FALLBACK } = this.props;
     const thumbnail = rawThumbnail && rawThumbnail.trim().replace(/^http:\/\//i, 'https://');
 
     if (!allowGifs && thumbnail && thumbnail.endsWith('gif')) {
@@ -39,8 +41,10 @@ class FileThumbnail extends React.PureComponent<Props> {
     url = thumbnail || Placeholder;
     // @endif
 
+    const cleanUrl = url.replace(/'/g, "\\'");
+
     return (
-      <div style={{ backgroundImage: `url('${url.replace(/'/g, "\\'")}')` }} className={className}>
+      <div style={{ backgroundImage: `url('${cleanUrl}'), url('${fallbackThumbnail}')` }} className={className}>
         {children}
       </div>
     );
