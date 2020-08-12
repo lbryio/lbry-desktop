@@ -56,24 +56,7 @@ type LogPublishParams = {
   channel_claim_id?: string,
 };
 
-const checkmatomo = (url, timeout = 2000) => {
-  return Promise.race([
-    fetch(url),
-    new Promise((resolve, reject) => setTimeout(() => reject(new Error('timeout')), timeout)),
-  ]);
-};
-
 let internalAnalyticsEnabled: boolean = IS_WEB || false;
-let matomoOnline = true;
-if (internalAnalyticsEnabled) {
-  checkmatomo(MATOMO_URL)
-    .then()
-    .catch(() => {
-      matomoOnline = false;
-      console.log('matomo offline');
-    });
-}
-
 // let thirdPartyAnalyticsEnabled: boolean = IS_WEB || false;
 // @if TARGET='app'
 if (window.localStorage.getItem(SHARE_INTERNAL) === 'true') internalAnalyticsEnabled = true;
@@ -106,7 +89,7 @@ const analytics: Analytics = {
     });
   },
   pageView: path => {
-    if (internalAnalyticsEnabled && matomoOnline) {
+    if (internalAnalyticsEnabled) {
       MatomoInstance.trackPageView({
         href: `${path}`,
       });
@@ -262,7 +245,7 @@ const analytics: Analytics = {
 };
 
 function sendMatomoEvent(category, action, name, value) {
-  if (internalAnalyticsEnabled && matomoOnline) {
+  if (internalAnalyticsEnabled) {
     const event = { category, action, name, value };
     MatomoInstance.trackEvent(event);
   }
