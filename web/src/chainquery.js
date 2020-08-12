@@ -40,7 +40,7 @@ module.exports.getClaim = async function getClaim(claimName, claimId, channelNam
     params.push(claimId + '%');
   }
 
-  sql += ' AND claim.bid_state in ("controlling", "active", "accepted") ORDER BY claim.bid_state desc';
+  sql += ' AND claim.bid_state in ("controlling", "active", "accepted")';
 
   if (claimName[0] !== '@' && channelName) {
     sql += ' AND channel_claim.name = ?';
@@ -49,11 +49,11 @@ module.exports.getClaim = async function getClaim(claimName, claimId, channelNam
       sql += ' AND channel_claim.claim_id LIKE ?';
       params.push(channelClaimId + '%');
     } else {
-      sql += ' AND channel_claim.bid_state in ("controlling", "active", "accepted") ORDER BY channel_claim.bid_state desc';
+      sql += ' AND channel_claim.bid_state in ("controlling", "active", "accepted")';
     }
   }
 
-  sql += ' LIMIT 1';
+  sql += ' ORDER BY claim.bid_state DESC LIMIT 1';
 
   return queryPool(sql, params);
 };
