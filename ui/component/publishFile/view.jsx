@@ -241,7 +241,6 @@ function PublishFile(props: Props) {
     }
   }
 
-  // Flow error [+]
   function handleFileChange(file: WebFile) {
     const { showToast } = props;
     window.URL = window.URL || window.webkitURL;
