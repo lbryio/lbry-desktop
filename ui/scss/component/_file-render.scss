@@ -52,8 +52,10 @@
 }
 
 .file-render--document {
+  height: auto;
   max-height: none;
   overflow: auto;
+  margin-bottom: var(--spacing-l);
 
   .markdown-preview {
     height: 100%;

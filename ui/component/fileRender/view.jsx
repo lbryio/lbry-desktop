@@ -1,6 +1,6 @@
 // @flow
 import { remote } from 'electron';
-import React, { Suspense } from 'react';
+import React from 'react';
 import classnames from 'classnames';
 import * as RENDER_MODES from 'constants/file_render_modes';
 import VideoViewer from 'component/viewers/videoViewer';
@@ -152,7 +152,7 @@ class FileRender extends React.PureComponent<Props> {
           'file-render--embed': embedded,
         })}
       >
-        <Suspense fallback={<div />}>{this.renderViewer()}</Suspense>
+        {this.renderViewer()}
       </div>
     );
   }
