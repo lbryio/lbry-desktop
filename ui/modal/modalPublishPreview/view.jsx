@@ -33,6 +33,7 @@ type Props = {
   closeModal: () => void,
   enablePublishPreview: boolean,
   setEnablePublishPreview: boolean => void,
+  isStillEditing: boolean,
 };
 
 class ModalPublishPreview extends React.PureComponent<Props> {
@@ -44,6 +45,10 @@ class ModalPublishPreview extends React.PureComponent<Props> {
   }
 
   resolveFilePathName(filePath: string | WebFile) {
+    if (!filePath) {
+      return '---';
+    }
+
     if (typeof filePath === 'string') {
       return filePath;
     } else {
@@ -87,9 +92,11 @@ class ModalPublishPreview extends React.PureComponent<Props> {
       closeModal,
       enablePublishPreview,
       setEnablePublishPreview,
+      isStillEditing,
     } = this.props;
 
-    const modalTitle = __('Confirm Publish');
+    const modalTitle = isStillEditing ? __('Confirm Edit') : __('Confirm Publish');
+    const confirmBtnText = isStillEditing ? __('Save') : __('Publish');
     const txFee = previewResponse ? previewResponse['total_fee'] : null;
     const isOptimizeAvail = filePath && filePath !== '' && isVid && ffmpegStatus.available;
 
@@ -150,7 +157,7 @@ class ModalPublishPreview extends React.PureComponent<Props> {
             actions={
               <>
                 <div className="section__actions">
-                  <Button autoFocus button="primary" label={__('Publish')} onClick={() => this.onConfirmed()} />
+                  <Button autoFocus button="primary" label={confirmBtnText} onClick={() => this.onConfirmed()} />
                   <Button button="link" label={__('Cancel')} onClick={closeModal} />
                 </div>
                 <p className="help">{__('Once the transaction is sent, it cannot be reversed.')}</p>
