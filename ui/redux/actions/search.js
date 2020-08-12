@@ -1,6 +1,6 @@
 // @flow
 import * as ACTIONS from 'constants/action_types';
-import { buildURI, doResolveUri, batchActions } from 'lbry-redux';
+import { buildURI, doResolveUris, batchActions } from 'lbry-redux';
 import {
   makeSelectSearchUris,
   selectSuggestions,
@@ -20,7 +20,6 @@ type SearchOptions = {
   related_to?: string,
   nsfw?: boolean,
   isBackgroundSearch?: boolean,
-  resolveResults?: boolean,
 };
 
 // We can't use env's because they aren't passed into node_modules
@@ -84,7 +83,6 @@ export const doSearch = (rawQuery: string, searchOptions: SearchOptions) => (
   getState: GetState
 ) => {
   const query = rawQuery.replace(/^lbry:\/\//i, '').replace(/\//, ' ');
-  const resolveResults = searchOptions && searchOptions.resolveResults;
   const isBackgroundSearch = (searchOptions && searchOptions.isBackgroundSearch) || false;
 
   if (!query) {
@@ -136,12 +134,11 @@ export const doSearch = (rawQuery: string, searchOptions: SearchOptions) => (
           }
 
           const url = buildURI(urlObj);
-          if (resolveResults) {
-            actions.push(doResolveUri(url));
-          }
           uris.push(url);
         }
       });
+
+      actions.push(doResolveUris(uris));
 
       actions.push({
         type: ACTIONS.SEARCH_SUCCESS,
