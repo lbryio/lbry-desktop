@@ -289,11 +289,11 @@ function PublishForm(props: Props) {
     }
     // Publish file
     if (mode === PUBLISH_MODES.FILE) {
-      if (isStillEditing || !enablePublishPreview) {
-        publish(filePath, false);
-      } else {
+      if (enablePublishPreview) {
         setPreviewing(true);
         publish(filePath, true);
+      } else {
+        publish(filePath, false);
       }
     }
   }
