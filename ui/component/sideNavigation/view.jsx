@@ -17,28 +17,28 @@ const TOP_LEVEL_LINKS: Array<{
   hideForUnauth?: boolean,
 }> = [
   {
-    label: __('Home'),
+    label: 'Home',
     navigate: `/`,
     icon: ICONS.HOME,
   },
   {
-    label: __('Following'),
+    label: 'Following',
     navigate: `/$/${PAGES.CHANNELS_FOLLOWING}`,
     icon: ICONS.SUBSCRIBE,
   },
   {
-    label: __('Your Tags'),
+    label: 'Your Tags',
     navigate: `/$/${PAGES.TAGS_FOLLOWING}`,
     icon: ICONS.TAG,
     hideForUnauth: true,
   },
   {
-    label: __('Discover'),
+    label: 'Discover',
     navigate: `/$/${PAGES.DISCOVER}`,
     icon: ICONS.DISCOVER,
   },
   {
-    label: __('Purchased'),
+    label: 'Purchased',
     navigate: `/$/${PAGES.LIBRARY}`,
     icon: ICONS.PURCHASED,
     hideForUnauth: true,
@@ -53,68 +53,68 @@ const ABSOLUTE_LINKS: Array<{
   hideForUnauth?: boolean,
 }> = [
   {
-    label: __('Upload'),
+    label: 'Upload',
     navigate: `/$/${PAGES.UPLOAD}`,
     icon: ICONS.PUBLISH,
   },
   {
-    label: __('New Channel'),
+    label: 'New Channel',
     navigate: `/$/${PAGES.CHANNEL_NEW}`,
     icon: ICONS.CHANNEL,
     hideForUnauth: true,
   },
   {
-    label: __('Uploads'),
+    label: 'Uploads',
     navigate: `/$/${PAGES.UPLOADS}`,
     icon: ICONS.PUBLISH,
     hideForUnauth: true,
   },
 
   {
-    label: __('Channels'),
+    label: 'Channels',
     navigate: `/$/${PAGES.CHANNELS}`,
     icon: ICONS.CHANNEL,
     hideForUnauth: true,
   },
   {
-    label: __('Creator Analytics'),
+    label: 'Creator Analytics',
     navigate: `/$/${PAGES.CREATOR_DASHBOARD}`,
     icon: ICONS.ANALYTICS,
     hideForUnauth: true,
   },
   {
-    label: __('Wallet'),
+    label: 'Wallet',
     navigate: `/$/${PAGES.WALLET}`,
     icon: ICONS.WALLET,
     hideForUnauth: true,
   },
   {
-    label: __('Notifications'),
+    label: 'Notifications',
     navigate: `/$/${PAGES.NOTIFICATIONS}`,
     icon: ICONS.NOTIFICATION,
     extra: <NotificationBubble inline />,
     hideForUnauth: true,
   },
   {
-    label: __('Rewards'),
+    label: 'Rewards',
     navigate: `/$/${PAGES.REWARDS}`,
     icon: ICONS.REWARDS,
     hideForUnauth: true,
   },
   {
-    label: __('Invites'),
+    label: 'Invites',
     navigate: `/$/${PAGES.INVITE}`,
     icon: ICONS.INVITE,
     hideForUnauth: true,
   },
   {
-    label: __('Settings'),
+    label: 'Settings',
     navigate: `/$/${PAGES.SETTINGS}`,
     icon: ICONS.SETTINGS,
     hideForUnauth: true,
   },
   {
-    label: __('Help'),
+    label: 'Help',
     navigate: `/$/${PAGES.HELP}`,
     icon: ICONS.HELP,
     hideForUnauth: true,
@@ -129,22 +129,22 @@ const UNAUTH_LINKS: Array<{
   hideForUnauth?: boolean,
 }> = [
   {
-    label: __('Sign In'),
+    label: 'Sign In',
     navigate: `/$/${PAGES.AUTH_SIGNIN}`,
     icon: ICONS.SIGN_IN,
   },
   {
-    label: __('Register'),
+    label: 'Register',
     navigate: `/$/${PAGES.AUTH}`,
     icon: ICONS.SIGN_UP,
   },
   {
-    label: __('Settings'),
+    label: 'Settings',
     navigate: `/$/${PAGES.SETTINGS}`,
     icon: ICONS.SETTINGS,
   },
   {
-    label: __('Help'),
+    label: 'Help',
     navigate: `/$/${PAGES.HELP}`,
     icon: ICONS.HELP,
   },
@@ -240,6 +240,7 @@ function SideNavigation(props: Props) {
                 <li key={linkProps.navigate}>
                   <Button
                     {...linkProps}
+                    label={__(linkProps.label)}
                     icon={pulseLibrary && linkProps.icon === ICONS.LIBRARY ? ICONS.PURCHASED : linkProps.icon}
                     className={classnames('navigation-link', {
                       'navigation-link--pulse': linkProps.icon === ICONS.LIBRARY && pulseLibrary,
@@ -279,6 +280,7 @@ function SideNavigation(props: Props) {
                   <li key={linkProps.navigate}>
                     <Button
                       {...linkProps}
+                      label={__(linkProps.label)}
                       icon={pulseLibrary && linkProps.icon === ICONS.LIBRARY ? ICONS.PURCHASED : linkProps.icon}
                       className={classnames('navigation-link', {
                         'navigation-link--pulse': linkProps.icon === ICONS.LIBRARY && pulseLibrary,
@@ -295,7 +297,12 @@ function SideNavigation(props: Props) {
               {subLinks.map(linkProps =>
                 !email && linkProps.hideForUnauth && IS_WEB ? null : (
                   <li key={linkProps.navigate} className="mobile-only">
-                    <Button {...linkProps} className="navigation-link" activeClass="navigation-link--active" />
+                    <Button
+                      {...linkProps}
+                      label={__(linkProps.label)}
+                      className="navigation-link"
+                      activeClass="navigation-link--active"
+                    />
                     {linkProps.extra}
                   </li>
                 )
