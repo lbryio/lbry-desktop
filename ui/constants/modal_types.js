@@ -22,6 +22,7 @@ export const SEND_TIP = 'send_tip';
 export const CONFIRM_SEND_TIP = 'confirm_send_tip';
 export const SOCIAL_SHARE = 'social_share';
 export const PUBLISH = 'publish';
+export const PUBLISH_PREVIEW = 'publish_preview';
 export const SEARCH = 'search';
 export const CONFIRM_TRANSACTION = 'confirm_transaction';
 export const CONFIRM_THUMBNAIL_UPLOAD = 'confirm_thumbnail_upload';

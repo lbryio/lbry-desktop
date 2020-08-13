@@ -119,6 +119,14 @@
   margin-top: var(--spacing-s);
 }
 
+.media__info-text-preview {
+  @extend .media__info-text;
+
+  max-height: 5rem;
+  overflow: auto;
+  padding: var(--spacing-xxs) 0; // for scrollbar to auto-hide
+}
+
 .media__actions {
   display: flex;
   flex-wrap: wrap;
