@@ -63,6 +63,7 @@ const defaultState = {
 
     // OS
     [SETTINGS.AUTO_LAUNCH]: true,
+    [SETTINGS.TO_TRAY_WHEN_CLOSED]: true,
   },
 };
 

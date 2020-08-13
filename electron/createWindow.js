@@ -4,6 +4,7 @@ import isDev from 'electron-is-dev';
 import windowStateKeeper from 'electron-window-state';
 import SUPPORTED_LANGUAGES from 'constants/supported_languages';
 import { SUPPORTED_SUB_LANGUAGE_CODES, SUB_LANG_CODE_LEN } from 'constants/supported_sub_languages';
+import { TO_TRAY_WHEN_CLOSED } from 'constants/settings';
 
 import setupBarMenu from './menu/setupBarMenu';
 import * as PAGES from 'constants/pages';
@@ -106,7 +107,11 @@ export default appState => {
   window.loadURL(rendererURL + deepLinkingURI);
 
   window.on('close', event => {
-    if (!appState.isQuitting && !appState.autoUpdateAccepted) {
+    if (appState.isQuitting) {
+      return;
+    }
+
+    if (!appState.autoUpdateAccepted) {
       event.preventDefault();
       if (window.isFullScreen()) {
         window.once('leave-full-screen', () => {
@@ -117,6 +122,16 @@ export default appState => {
         window.hide();
       }
     }
+
+    const getToTrayWhenClosedSetting = window.webContents.executeJavaScript(`localStorage.getItem('${TO_TRAY_WHEN_CLOSED}')`);
+
+    getToTrayWhenClosedSetting.then(toTrayWhenClosedSetting => {
+      const closeApp = toTrayWhenClosedSetting === 'false';
+
+      if (closeApp) {
+        app.quit();
+      }
+    });
   });
 
   window.on('focus', () => {

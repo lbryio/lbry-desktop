@@ -249,6 +249,7 @@ app.on('will-quit', event => {
   }
 
   appState.isQuitting = true;
+
   if (daemon) {
     daemon.quit();
     event.preventDefault();
@@ -259,6 +260,7 @@ app.on('will-quit', event => {
   }
 
   if (rendererWindow) {
+    tray.destroy();
     rendererWindow = null;
   }
 });

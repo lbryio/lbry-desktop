@@ -290,3 +290,10 @@ export function doSetAutoLaunch(value) {
     }
   };
 }
+
+export function doSetAppToTrayWhenClosed(value) {
+  return dispatch => {
+    window.localStorage.setItem(SETTINGS.TO_TRAY_WHEN_CLOSED, value);
+    dispatch(doSetClientSetting(SETTINGS.TO_TRAY_WHEN_CLOSED, value));
+  };
+}
