@@ -7,6 +7,7 @@ import I18nMessage from 'component/i18nMessage';
 import Page from 'component/page';
 import SettingWalletServer from 'component/settingWalletServer';
 import SettingAutoLaunch from 'component/settingAutoLaunch';
+import SettingClosingBehavior from 'component/settingClosingBehavior';
 import FileSelector from 'component/common/file-selector';
 import { SETTINGS } from 'lbry-redux';
 import Card from 'component/common/card';
@@ -500,6 +501,7 @@ class SettingsPage extends React.PureComponent<Props, State> {
             {/* @if TARGET='app' */}
             {/* Auto launch in a hidden state doesn't work on mac https://github.com/Teamwork/node-auto-launch/issues/81 */}
             {!IS_MAC && <Card title={__('Startup Preferences')} actions={<SettingAutoLaunch />} />}
+            <Card title={__('Closing Preferences')} actions={<SettingClosingBehavior />} />
             {/* @endif */}
           </div>
         )}
