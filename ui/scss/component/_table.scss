@@ -209,3 +209,29 @@ th {
     margin-left: var(--spacing-m);
   }
 }
+
+.table--publish-preview {
+  line-height: 1.1;
+  table-layout: fixed;
+
+  th,
+  td {
+    padding: 0.4rem 1rem;
+  }
+
+  // Column-1: "Label"
+  td:nth-of-type(1) {
+    font-weight: bold;
+    // The "value" is more important on smaller screens, so we truncate the "label".
+    width: 30%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  // Column-2: "Value"
+  td:nth-of-type(2) {
+    white-space: normal;
+    max-width: 70%;
+  }
+}
