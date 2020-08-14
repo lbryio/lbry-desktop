@@ -37,7 +37,7 @@ function HomePage(props: Props) {
   );
 
   return (
-    <Page>
+    <Page homePage>
       {(authenticated || !IS_WEB) && !subscribedChannels.length && (
         <div className="notice-message">
           <h1 className="section__title">{__('LBRY Works Better If You Are Following Channels')}</h1>
