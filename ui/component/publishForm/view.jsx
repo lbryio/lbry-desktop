@@ -77,7 +77,6 @@ type Props = {
   // Add back type
   updatePublishForm: any => void,
   checkAvailability: string => void,
-  onChannelChange: string => void,
   ytSignupPending: boolean,
 };
 
@@ -114,7 +113,6 @@ function PublishForm(props: Props) {
     publish,
     disabled = false,
     checkAvailability,
-    onChannelChange,
     ytSignupPending,
   } = props;
 
@@ -209,7 +207,6 @@ function PublishForm(props: Props) {
   }, [name, channel, resolveUri, updatePublishForm, checkAvailability]);
 
   function handleChannelNameChange(channel) {
-    onChannelChange(channel);
     updatePublishForm({ channel });
   }
 
