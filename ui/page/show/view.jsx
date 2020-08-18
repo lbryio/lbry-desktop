@@ -1,4 +1,5 @@
 // @flow
+import { DOMAIN } from 'config';
 import React, { useEffect } from 'react';
 import { Redirect } from 'react-router-dom';
 import BusyIndicator from 'component/common/busy-indicator';
@@ -48,7 +49,9 @@ function ShowPage(props: Props) {
     // @if TARGET='web'
     if (canonicalUrl) {
       const canonicalUrlPath = '/' + canonicalUrl.replace(/^lbry:\/\//, '').replace(/#/g, ':');
-      if (canonicalUrlPath !== window.location.pathname) {
+      // Only redirect if we are in lbry.tv land
+      // replaceState will fail if on a different domain (like webcache.googleusercontent.com)
+      if (canonicalUrlPath !== window.location.pathname && DOMAIN === window.location.hostname) {
         history.replaceState(history.state, '', canonicalUrlPath);
       }
     }
