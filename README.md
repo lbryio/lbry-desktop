@@ -63,9 +63,9 @@ To install from source or make changes to the application, continue to the next 
 **Community maintained** builds for Arch Linux and Flatpak are available, see below. These installs will need to be updated manually as the in-app update process only supports Debian installs at this time.
 _Note: If coming from a deb install, the directory structure is different and you'll need to [migrate data](https://lbry.com/faq/backup-data)._
 
-|                | Flatpak                                                           | Arch                                                                                      | Raspberry Pi                                |
+|                | Flatpak                                                           | Arch                                                                                      | ARM/ARM64                                |
 | -------------- | ----------------------------------------------------------------- | ----------------------------------------------------------------------------------------- | ------------------------------------------- |
-| Latest Release | [FlatHub Page](https://flathub.org/apps/details/io.lbry.lbry-app) | [AUR Package](https://aur.archlinux.org/packages/lbry-app-bin/)                           | [Pi Installer](https://lbrypi.com)          |
+| Latest Release | [FlatHub Page](https://flathub.org/apps/details/io.lbry.lbry-app) | [AUR Package](https://aur.archlinux.org/packages/lbry-app-bin/)                           | [Build Guide](https://lbry.tv/@LBRYarm:5)          |
 | Maintainers    | [@kcSeb](https://keybase.io/kcseb)                                | [@kcSeb](https://keybase.io/kcseb)/[@TimurKiyivinski](https://github.com/TimurKiyivinski) | [@Madiator2011](https://github.com/kodxana) |
 
 ## Usage
