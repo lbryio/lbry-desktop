@@ -70,7 +70,7 @@ type RowDataItem = {
   options?: {},
 };
 
-export default function GetHomePageRowData(
+export default function getHomePageRowData(
   authenticated: boolean,
   showPersonalizedChannels: boolean,
   showPersonalizedTags: boolean,
