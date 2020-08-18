@@ -4,7 +4,6 @@ import * as CS from 'constants/claim_search';
 import { parseURI } from 'lbry-redux';
 import moment from 'moment';
 import { toCapitalCase } from 'util/string';
-import { useIsLargeScreen } from 'effects/use-screensize';
 
 type RowDataItem = {
   title: string,
@@ -13,7 +12,7 @@ type RowDataItem = {
   options?: {},
 };
 
-export default function GetHomePageRowData(
+export default function getHomePageRowData(
   authenticated: boolean,
   showPersonalizedChannels: boolean,
   showPersonalizedTags: boolean,
@@ -21,12 +20,6 @@ export default function GetHomePageRowData(
   followedTags: Array<Tag>,
   showIndividualTags: boolean
 ) {
-  const isLargeScreen = useIsLargeScreen();
-
-  function getPageSize(originalSize) {
-    return isLargeScreen ? originalSize * (3 / 2) : originalSize;
-  }
-
   let rowData: Array<RowDataItem> = [];
   const individualTagDataItems: Array<RowDataItem> = [];
   const YOUTUBER_CHANNEL_IDS = [
@@ -121,7 +114,7 @@ export default function GetHomePageRowData(
     options: {
       claimType: ['stream'],
       orderBy: ['release_time'],
-      pageSize: getPageSize(12),
+      pageSize: 12,
       channelIds: YOUTUBER_CHANNEL_IDS,
       releaseTime: `>${Math.floor(
         moment()
@@ -165,7 +158,7 @@ export default function GetHomePageRowData(
                 .startOf('week')
                 .unix()
             )}`,
-      pageSize: getPageSize(subscribedChannels.length > 3 ? (subscribedChannels.length > 6 ? 16 : 8) : 4),
+      pageSize: subscribedChannels.length > 3 ? (subscribedChannels.length > 6 ? 16 : 8) : 4,
       channelIds: subscribedChannels.map((subscription: Subscription) => {
         const { channelClaimId } = parseURI(subscription.uri);
         return channelClaimId;
@@ -177,7 +170,7 @@ export default function GetHomePageRowData(
     title: __('Top Content from Today'),
     link: `/$/${PAGES.DISCOVER}?${CS.ORDER_BY_KEY}=${CS.ORDER_BY_TOP}&${CS.FRESH_KEY}=${CS.FRESH_DAY}`,
     options: {
-      pageSize: getPageSize(showPersonalizedChannels || showPersonalizedTags ? 4 : 8),
+      pageSize: showPersonalizedChannels || showPersonalizedTags ? 4 : 8,
       orderBy: ['effective_amount'],
       claimType: ['stream'],
       releaseTime: `>${Math.floor(
@@ -195,7 +188,7 @@ export default function GetHomePageRowData(
     options: {
       claimType: ['stream'],
       tags: ['2020protests'],
-      pageSize: getPageSize(4),
+      pageSize: 4,
     },
   };
 
@@ -212,7 +205,7 @@ export default function GetHomePageRowData(
     title: __('Trending Classics'),
     link: `/$/${PAGES.DISCOVER}?${CS.ORDER_BY_KEY}=${CS.ORDER_BY_TRENDING}&${CS.FRESH_KEY}=${CS.FRESH_WEEK}`,
     options: {
-      pageSize: getPageSize(4),
+      pageSize: 4,
       claimType: ['stream'],
       releaseTime: `<${Math.floor(
         moment()
@@ -235,7 +228,6 @@ export default function GetHomePageRowData(
     title: __('Trending For Your Tags'),
     link: `/$/${PAGES.TAGS_FOLLOWING}`,
     options: {
-      pageSize: getPageSize(4),
       tags: followedTags.map(tag => tag.name),
       claimType: ['stream'],
     },
@@ -246,7 +238,7 @@ export default function GetHomePageRowData(
     link: `/@lbry:3f`,
     options: {
       orderBy: ['release_time'],
-      pageSize: getPageSize(4),
+      pageSize: 4,
       channelIds: ['3fda836a92faaceedfe398225fb9b2ee2ed1f01a'],
     },
   };
@@ -256,7 +248,7 @@ export default function GetHomePageRowData(
     link: `/@lbrycast:4`,
     options: {
       orderBy: ['release_time'],
-      pageSize: getPageSize(4),
+      pageSize: 4,
       channelIds: ['4c29f8b013adea4d5cca1861fb2161d5089613ea'],
     },
   };
