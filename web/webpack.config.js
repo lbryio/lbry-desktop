@@ -4,8 +4,10 @@ const fs = require('fs');
 const merge = require('webpack-merge');
 const baseConfig = require('../webpack.base.config.js');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
+const WriteFilePlugin = require('write-file-webpack-plugin');
 const { DefinePlugin, ProvidePlugin } = require('webpack');
 const SentryWebpackPlugin = require('@sentry/webpack-plugin');
+const { getJsBundleId } = require('./bundle-id.js');
 const { insertToHead, buildBasicOgMetadata } = require('./src/html');
 const { insertVariableXml, getOpenSearchXml } = require('./src/xml');
 
@@ -16,6 +18,7 @@ const DIST_ROOT = path.resolve(__dirname, 'dist/');
 const WEB_PLATFORM_ROOT = __dirname;
 const isProduction = process.env.NODE_ENV === 'production';
 const hasSentryToken = process.env.SENTRY_AUTH_TOKEN !== undefined;
+const jsBundleId = getJsBundleId();
 
 const copyWebpackCommands = [
   {
@@ -24,6 +27,7 @@ const copyWebpackCommands = [
     transform(content, path) {
       return insertToHead(content.toString(), buildBasicOgMetadata());
     },
+    force: true,
   },
   {
     from: `${STATIC_ROOT}/opensearch.xml`,
@@ -31,10 +35,12 @@ const copyWebpackCommands = [
     transform(content, path) {
       return insertVariableXml(content.toString(), getOpenSearchXml());
     },
+    force: true,
   },
   {
     from: `${STATIC_ROOT}/img/favicon.png`,
     to: `${DIST_ROOT}/public/favicon.png`,
+    force: true,
   },
   {
     from: `${STATIC_ROOT}/img/v2-og.png`,
@@ -56,6 +62,7 @@ if (fs.existsSync(CUSTOM_OG_PATH)) {
 }
 
 let plugins = [
+  new WriteFilePlugin(),
   new CopyWebpackPlugin(copyWebpackCommands),
   new DefinePlugin({
     IS_WEB: JSON.stringify(true),
@@ -80,7 +87,7 @@ if (isProduction && hasSentryToken) {
 const webConfig = {
   target: 'web',
   entry: {
-    ui: '../ui/index.jsx',
+    [`ui-${jsBundleId}`]: '../ui/index.jsx',
   },
   output: {
     filename: '[name].js',
