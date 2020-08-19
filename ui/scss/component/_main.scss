@@ -91,6 +91,7 @@
 
   @media (max-width: $breakpoint-small) {
     padding: var(--spacing-xs);
+    padding-top: 0;
   }
 }
 
