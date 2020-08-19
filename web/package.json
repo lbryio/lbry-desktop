@@ -34,7 +34,8 @@
     "lbry-redux": "lbryio/lbry-redux#c107d9cc4c4b2cc31f182f196ab6a033aefe976e",
     "lbryinc": "lbryio/lbryinc#6a52f8026cdc7cd56d200fb5c46f852e0139bbeb",
     "mysql": "^2.17.1",
-    "node-fetch": "^2.6.0"
+    "node-fetch": "^2.6.0",
+    "uuid": "^8.3.0"
   },
   "devDependencies": {
     "@babel/core": "^7.0.0",
