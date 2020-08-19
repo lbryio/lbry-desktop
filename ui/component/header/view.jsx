@@ -213,7 +213,7 @@ const Header = (props: Props) => {
                     icon={ICONS.MENU}
                     onClick={() => setSidebarOpen(!sidebarOpen)}
                   >
-                    {isAbsoluteSideNavHidden && <NotificationBubble />}
+                    {isAbsoluteSideNavHidden && isMobile && <NotificationBubble />}
                   </Button>
                 </span>
               )}
