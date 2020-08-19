@@ -1,3 +1,4 @@
+import { DOMAIN } from 'config';
 import { connect } from 'react-redux';
 import { PAGE_SIZE } from 'constants/claim';
 import {
@@ -15,10 +16,25 @@ import { selectBlackListedOutpoints } from 'lbryinc';
 import ShowPage from './view';
 
 const select = (state, props) => {
-  const { pathname, hash } = props.location;
+  const { pathname, hash, search } = props.location;
   const urlPath = pathname + hash;
   // Remove the leading "/" added by the browser
-  const path = urlPath.slice(1).replace(/:/g, '#');
+  let path = urlPath.slice(1).replace(/:/g, '#');
+
+  // Google cache url
+  // ex: webcache.googleusercontent.com/search?q=cache:MLwN3a8fCbYJ:https://lbry.tv/%40Bombards_Body_Language:f+&cd=12&hl=en&ct=clnk&gl=us
+  // Extract the lbry url and use that instead
+  // Without this it will try to render lbry://search
+  if (search && search.startsWith('?q=cache:')) {
+    const googleCacheRegex = new RegExp(`(https://${DOMAIN}/)([^+]*)`);
+    const [x, y, googleCachedUrl] = search.match(googleCacheRegex); // eslint-disable-line
+    if (googleCachedUrl) {
+      const actualUrl = decodeURIComponent(googleCachedUrl);
+      if (actualUrl) {
+        path = actualUrl;
+      }
+    }
+  }
 
   let uri;
   try {
