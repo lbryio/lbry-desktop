@@ -31,7 +31,7 @@ const select = (state, props) => {
     if (googleCachedUrl) {
       const actualUrl = decodeURIComponent(googleCachedUrl);
       if (actualUrl) {
-        path = actualUrl;
+        path = actualUrl.replace(/:/g, '#');
       }
     }
   }
