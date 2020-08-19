@@ -14,11 +14,16 @@ const { getClaim } = require('./chainquery');
 const { parseURI } = require('lbry-redux');
 const fs = require('fs');
 const path = require('path');
+const { getJsBundleId } = require('../bundle-id.js');
+const jsBundleId = getJsBundleId();
 
 function insertToHead(fullHtml, htmlToInsert) {
   return fullHtml.replace(
     /<!-- VARIABLE_HEAD_BEGIN -->.*<!-- VARIABLE_HEAD_END -->/s,
-    htmlToInsert || buildOgMetadata()
+    `
+      ${htmlToInsert || buildOgMetadata()}
+      <script src="/public/ui-${jsBundleId}.js" async></script>
+    `
   );
 }
 

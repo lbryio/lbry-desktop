@@ -6,6 +6,7 @@ const baseConfig = require('../webpack.base.config.js');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const { DefinePlugin, ProvidePlugin } = require('webpack');
 const SentryWebpackPlugin = require('@sentry/webpack-plugin');
+const { getJsBundleId } = require('./bundle-id.js');
 const { insertToHead, buildBasicOgMetadata } = require('./src/html');
 const { insertVariableXml, getOpenSearchXml } = require('./src/xml');
 
@@ -16,6 +17,7 @@ const DIST_ROOT = path.resolve(__dirname, 'dist/');
 const WEB_PLATFORM_ROOT = __dirname;
 const isProduction = process.env.NODE_ENV === 'production';
 const hasSentryToken = process.env.SENTRY_AUTH_TOKEN !== undefined;
+const jsBundleId = getJsBundleId();
 
 const copyWebpackCommands = [
   {
@@ -80,7 +82,7 @@ if (isProduction && hasSentryToken) {
 const webConfig = {
   target: 'web',
   entry: {
-    ui: '../ui/index.jsx',
+    [`ui-${jsBundleId}`]: '../ui/index.jsx',
   },
   output: {
     filename: '[name].js',
