@@ -25,6 +25,7 @@ type Props = {
   claimType?: Array<string>,
   timestamp?: string,
   feeAmount?: string,
+  limitClaimsPerChannel?: number,
 };
 
 function ClaimTilesDiscover(props: Props) {
@@ -45,6 +46,7 @@ function ClaimTilesDiscover(props: Props) {
     prefixUris,
     timestamp,
     feeAmount,
+    limitClaimsPerChannel,
   } = props;
   const { location } = useHistory();
   const urlParams = new URLSearchParams(location.search);
@@ -64,6 +66,7 @@ function ClaimTilesDiscover(props: Props) {
     claim_type?: Array<string>,
     timestamp?: string,
     fee_amount?: string,
+    limit_claims_per_channel?: number,
   } = {
     page_size: pageSize,
     claim_type: claimType || undefined,
@@ -86,6 +89,10 @@ function ClaimTilesDiscover(props: Props) {
 
   if (feeAmountParam) {
     options.fee_amount = feeAmountParam;
+  }
+
+  if (limitClaimsPerChannel) {
+    options.limit_claims_per_channel = limitClaimsPerChannel;
   }
 
   // https://github.com/lbryio/lbry-desktop/issues/3774

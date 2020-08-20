@@ -116,6 +116,7 @@ export default function getHomePageRowData(
       orderBy: ['release_time'],
       pageSize: 12,
       channelIds: YOUTUBER_CHANNEL_IDS,
+      limitClaimsPerChannel: 1,
       releaseTime: `>${Math.floor(
         moment()
           .subtract(1, 'months')
@@ -173,6 +174,7 @@ export default function getHomePageRowData(
       pageSize: showPersonalizedChannels || showPersonalizedTags ? 4 : 8,
       orderBy: ['effective_amount'],
       claimType: ['stream'],
+      limitClaimsPerChannel: 2,
       releaseTime: `>${Math.floor(
         moment()
           .subtract(1, 'day')
@@ -189,6 +191,7 @@ export default function getHomePageRowData(
       claimType: ['stream'],
       tags: ['2020protests'],
       pageSize: 4,
+      limitClaimsPerChannel: 1,
     },
   };
 
@@ -207,6 +210,7 @@ export default function getHomePageRowData(
     options: {
       pageSize: 4,
       claimType: ['stream'],
+      limitClaimsPerChannel: 1,
       releaseTime: `<${Math.floor(
         moment()
           .subtract(6, 'month')
@@ -230,6 +234,7 @@ export default function getHomePageRowData(
     options: {
       tags: followedTags.map(tag => tag.name),
       claimType: ['stream'],
+      limitClaimsPerChannel: 2,
     },
   };
 
