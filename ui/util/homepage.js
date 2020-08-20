@@ -184,17 +184,6 @@ export default function getHomePageRowData(
     },
   };
 
-  const PROTESTS_2020 = {
-    title: '#2020protests',
-    link: `/$/${PAGES.DISCOVER}?${CS.TAGS_KEY}=2020protests&${CS.CLAIM_TYPE}=${CS.CLAIM_STREAM}`,
-    options: {
-      claimType: ['stream'],
-      tags: ['2020protests'],
-      pageSize: 4,
-      limitClaimsPerChannel: 1,
-    },
-  };
-
   const TOP_CHANNELS = {
     title: __('Top Channels On LBRY'),
     link: `/$/${PAGES.DISCOVER}?claim_type=channel&${CS.ORDER_BY_KEY}=${CS.ORDER_BY_TOP}&${CS.FRESH_KEY}=${CS.FRESH_ALL}`,
@@ -272,7 +261,6 @@ export default function getHomePageRowData(
 
   rowData.push(TRENDING_CLASSICS);
   rowData.push(TOP_CONTENT_TODAY);
-  rowData.push(PROTESTS_2020);
 
   //   rowData.push(TRENDING_ON_LBRY);
 
