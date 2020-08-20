@@ -1,19 +1,18 @@
 .comments {
-  padding-top: var(--spacing-l);
 }
 
 .comment {
   display: flex;
   flex-direction: row;
-  font-size: var(--font-body);
+  font-size: var(--font-small);
   margin: 0;
 
   &:not(:last-of-type) {
     border-bottom: 1px solid var(--color-border);
-    padding: var(--spacing-m) 0;
+    padding: var(--spacing-m) var(--spacing-m);
   }
   &:last-of-type {
-    padding-top: var(--spacing-m);
+    padding: var(--spacing-m) var(--spacing-m) 0 var(--spacing-m);
   }
 
   .channel-thumbnail {
@@ -25,21 +24,58 @@
   margin-top: var(--spacing-s);
 }
 
+.comment__create {
+  padding-bottom: var(--spacing-l);
+  width: 100%;
+}
+
 .comment__reply {
   border-left: 5px solid var(--color-primary-alt);
-  margin-left: var(--spacing-m);
+  margin-left: 0;
+  padding-left: 0;
 
   .comment__author-thumbnail {
-    margin-left: var(--spacing-m);
+    margin-left: 0;
   }
 }
 
+.comment-new__label-wrapper {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: baseline;
+  flex-wrap: wrap;
+  fieldset-section {
+    padding-left: var(--spacing-s);
+    max-width: 10rem;
+  }
+}
+
+.comment-new__label {
+  white-space: nowrap;
+}
+.comment__main {
+}
+
+.comment__highlighted {
+  border-left: 5px solid var(--color-purchased);
+  position: relative;
+  box-sizing: border-box;
+}
+
+.comment__highlighted-title {
+  display: flex;
+  flex-direction: row;
+  position: absolute;
+  top: 0;
+  left: 0;
+  margin-left: 1rem;
+}
 .comment__reply-button {
   margin-top: var(--spacing-s);
 }
 
 .comment__body_container {
-  padding-right: var(--spacing-s);
   flex: 1;
   width: 80%;
 }
@@ -54,10 +90,12 @@
 .comment__meta-information {
   justify-content: flex-start;
   display: flex;
+  height: 100%;
 }
 
 .comment__message {
-  white-space: pre-line;
+  br: {
+  }
   word-break: break-word;
   margin-top: var(--spacing-s);
 }
@@ -65,11 +103,13 @@
 .comment__author {
   text-overflow: ellipsis;
   padding-right: var(--spacing-xs);
+  height: 100%;
 }
 
 .comment__time {
   opacity: 0.3;
   white-space: nowrap;
+  height: 100%;
 }
 
 .comment__menu {
@@ -108,4 +148,20 @@
   box-shadow: var(--card-box-shadow);
   border-radius: var(--card-radius);
   padding: var(--spacing-s);
+}
+
+.comment__actions {
+  display: flex;
+  > *:not(:last-child) {
+    margin-right: var(--spacing-m);
+  }
+  margin-top: var(--spacing-s);
+  margin-bottom: var(--spacing-s);
+}
+
+.comment__replies-container {
+}
+
+.comment-reply__actions {
+  //@extend
 }

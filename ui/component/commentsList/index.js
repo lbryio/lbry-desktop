@@ -1,12 +1,12 @@
 import { connect } from 'react-redux';
 import { makeSelectClaimIsMine, selectMyChannelClaims } from 'lbry-redux';
-import { makeSelectCommentsForUri, selectIsFetchingComments } from 'redux/selectors/comments';
+import { makeSelectTopLevelCommentsForUri, selectIsFetchingComments } from 'redux/selectors/comments';
 import { doCommentList } from 'redux/actions/comments';
 import CommentsList from './view';
 
 const select = (state, props) => ({
   myChannels: selectMyChannelClaims(state),
-  comments: makeSelectCommentsForUri(props.uri)(state),
+  comments: makeSelectTopLevelCommentsForUri(props.uri)(state),
   claimIsMine: makeSelectClaimIsMine(props.uri)(state),
   isFetchingComments: selectIsFetchingComments(state),
 });

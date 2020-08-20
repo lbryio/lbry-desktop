@@ -431,4 +431,10 @@ fieldset-section {
       margin-top: var(--spacing-s); // Extra specificity needed here since _section.scss is applied after this file
     }
   }
+
+  .select--slim {
+    select {
+      max-height: 1.5rem !important;
+    }
+  }
 }
