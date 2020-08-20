@@ -278,10 +278,6 @@
   "You aren't following any tags, try searching for one.": "You aren't following any tags, try searching for one.",
   "Success": "Success",
   "File published": "File published",
-  "You are currently editing a claim.": "You are currently editing a claim.",
-  "You are currently editing this claim. If you change the URL, you will need to reselect a file.": "You are currently editing this claim. If you change the URL, you will need to reselect a file.",
-  "However, you can get a longer version of this URL for any bid": "However, you can get a longer version of this URL for any bid",
-  "It looks like you haven't published anything to LBRY yet.": "It looks like you haven't published anything to LBRY yet.",
   "Upload something new": "Upload something new",
   "New thumbnail": "New thumbnail",
   "Follow": "Follow",
@@ -1276,5 +1272,11 @@
   "Total Uploads": "Total Uploads",
   "Are you sure you want to purchase %claim_title%?": "Are you sure you want to purchase %claim_title%?",
   "Discover": "Discover",
+  "Thumbnail upload service may be down, try again later.": "Thumbnail upload service may be down, try again later.",
+  "You are currently editing your upload.": "You are currently editing your upload.",
+  "You are currently editing this claim.": "You are currently editing this claim.",
+  "My content for this post...": "My content for this post...",
+  "Closing Preferences": "Closing Preferences",
+  "Leave app running in notification area when the window is closed": "Leave app running in notification area when the window is closed",
   "--end--": "--end--"
 }
