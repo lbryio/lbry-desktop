@@ -94,11 +94,11 @@ const Button = forwardRef<any, {}>((props: Props, ref: any) => {
     <span className="button__content">
       {icon && <Icon icon={icon} iconColor={iconColor} size={iconSize} />}
 
-      {!largestLabel && label && <span className="button__label">{label}</span>}
+      {!largestLabel && label && <span dir="auto" className="button__label">{label}</span>}
 
       {/* largestLabel is used when a single button has two different labels based on hover state */}
       {largestLabel && (
-        <div className="button__label" style={{ position: 'relative' }}>
+        <div dir="auto" className="button__label" style={{ position: 'relative' }}>
           <div
             style={{
               position: 'relative',

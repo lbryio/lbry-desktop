@@ -57,7 +57,7 @@ class UriIndicator extends React.PureComponent<Props> {
         return null;
       }
 
-      return <span className={classnames('channel-name', { 'channel-name--inline': inline })}>Anonymous</span>;
+      return <span dir="auto" className={classnames('channel-name', { 'channel-name--inline': inline })}>Anonymous</span>;
     }
 
     const channelClaim = isChannelClaim ? claim : claim.signing_channel;
@@ -66,7 +66,7 @@ class UriIndicator extends React.PureComponent<Props> {
       const { name } = channelClaim;
       const channelLink = link ? channelClaim.canonical_url || channelClaim.permanent_url : false;
 
-      const inner = <span className={classnames('channel-name', { 'channel-name--inline': inline })}>{name}</span>;
+      const inner = <span dir="auto" className={classnames('channel-name', { 'channel-name--inline': inline })}>{name}</span>;
 
       if (!channelLink) {
         return inner;
