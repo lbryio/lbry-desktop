@@ -30,7 +30,7 @@ const defaultState = {
   clientSettings: {
     // UX
     [SETTINGS.EMAIL_COLLECTION_ACKNOWLEDGED]: false,
-    [SETTINGS.ENABLE_SYNC]: true,
+    [SETTINGS.ENABLE_SYNC]: IS_WEB,
 
     // UI
     [SETTINGS.LANGUAGE]: settingLanguage.find(language => SUPPORTED_LANGUAGES[language]),
