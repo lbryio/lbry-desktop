@@ -320,6 +320,11 @@ const Header = (props: Props) => {
                             </div>
                             <span className="menu__link-help">{email}</span>
                           </MenuItem>
+                        ) : !IS_WEB ? (
+                          <MenuItem className="menu__link" onSelect={() => history.push(`/$/${PAGES.AUTH}`)}>
+                            <Icon aria-hidden icon={ICONS.INVITE} />
+                            {__('Sign In')}
+                          </MenuItem>
                         ) : null}
                       </MenuList>
                     </Menu>
