@@ -87,7 +87,7 @@ class ReportPage extends React.Component {
             title={__('Developer?')}
             actions={
               <Fragment>
-                <div className="markdown-preview">
+                <div dir="auto" className="markdown-preview">
                   <p>{__('You can also:')}</p>
                   <ul>
                     <li>

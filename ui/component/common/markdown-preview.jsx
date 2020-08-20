@@ -128,7 +128,7 @@ const MarkdownPreview = (props: MarkdownProps) => {
     // Remove new lines and extra space
     remarkOptions.remarkReactComponents.p = SimpleText;
     return (
-      <span className="markdown-preview">
+      <span dir="auto" className="markdown-preview">
         {
           remark()
             .use(remarkStrip)
@@ -140,7 +140,7 @@ const MarkdownPreview = (props: MarkdownProps) => {
   }
 
   return (
-    <div className="markdown-preview">
+    <div dir="auto" className="markdown-preview">
       {
         remark()
           .use(remarkAttr, remarkAttrOpts)
