@@ -9,146 +9,6 @@ import NotificationBubble from 'component/notificationBubble';
 
 const ESCAPE_KEY_CODE = 27;
 const BACKSLASH_KEY_CODE = 220;
-const TOP_LEVEL_LINKS: Array<{
-  label: string,
-  navigate: string,
-  icon: string,
-  extra?: Node,
-  hideForUnauth?: boolean,
-}> = [
-  {
-    label: 'Home',
-    navigate: `/`,
-    icon: ICONS.HOME,
-  },
-  {
-    label: 'Following',
-    navigate: `/$/${PAGES.CHANNELS_FOLLOWING}`,
-    icon: ICONS.SUBSCRIBE,
-  },
-  {
-    label: 'Your Tags',
-    navigate: `/$/${PAGES.TAGS_FOLLOWING}`,
-    icon: ICONS.TAG,
-    hideForUnauth: true,
-  },
-  {
-    label: 'Discover',
-    navigate: `/$/${PAGES.DISCOVER}`,
-    icon: ICONS.DISCOVER,
-  },
-  {
-    label: 'Purchased',
-    navigate: `/$/${PAGES.LIBRARY}`,
-    icon: ICONS.PURCHASED,
-    hideForUnauth: true,
-  },
-];
-
-const ABSOLUTE_LINKS: Array<{
-  label: string,
-  navigate: string,
-  icon: string,
-  extra?: Node,
-  hideForUnauth?: boolean,
-}> = [
-  {
-    label: 'Upload',
-    navigate: `/$/${PAGES.UPLOAD}`,
-    icon: ICONS.PUBLISH,
-  },
-  {
-    label: 'New Channel',
-    navigate: `/$/${PAGES.CHANNEL_NEW}`,
-    icon: ICONS.CHANNEL,
-    hideForUnauth: true,
-  },
-  {
-    label: 'Uploads',
-    navigate: `/$/${PAGES.UPLOADS}`,
-    icon: ICONS.PUBLISH,
-    hideForUnauth: true,
-  },
-
-  {
-    label: 'Channels',
-    navigate: `/$/${PAGES.CHANNELS}`,
-    icon: ICONS.CHANNEL,
-    hideForUnauth: true,
-  },
-  {
-    label: 'Creator Analytics',
-    navigate: `/$/${PAGES.CREATOR_DASHBOARD}`,
-    icon: ICONS.ANALYTICS,
-    hideForUnauth: true,
-  },
-  {
-    label: 'Wallet',
-    navigate: `/$/${PAGES.WALLET}`,
-    icon: ICONS.WALLET,
-    hideForUnauth: true,
-  },
-  {
-    label: 'Notifications',
-    navigate: `/$/${PAGES.NOTIFICATIONS}`,
-    icon: ICONS.NOTIFICATION,
-    extra: <NotificationBubble inline />,
-    hideForUnauth: true,
-  },
-  {
-    label: 'Rewards',
-    navigate: `/$/${PAGES.REWARDS}`,
-    icon: ICONS.REWARDS,
-    hideForUnauth: true,
-  },
-  {
-    label: 'Invites',
-    navigate: `/$/${PAGES.INVITE}`,
-    icon: ICONS.INVITE,
-    hideForUnauth: true,
-  },
-  {
-    label: 'Settings',
-    navigate: `/$/${PAGES.SETTINGS}`,
-    icon: ICONS.SETTINGS,
-    hideForUnauth: true,
-  },
-  {
-    label: 'Help',
-    navigate: `/$/${PAGES.HELP}`,
-    icon: ICONS.HELP,
-    hideForUnauth: true,
-  },
-];
-
-const UNAUTH_LINKS: Array<{
-  label: string,
-  navigate: string,
-  icon: string,
-  extra?: Node,
-  hideForUnauth?: boolean,
-}> = [
-  {
-    label: 'Sign In',
-    navigate: `/$/${PAGES.AUTH_SIGNIN}`,
-    icon: ICONS.SIGN_IN,
-  },
-  {
-    label: 'Register',
-    navigate: `/$/${PAGES.AUTH}`,
-    icon: ICONS.SIGN_UP,
-  },
-  {
-    label: 'Settings',
-    navigate: `/$/${PAGES.SETTINGS}`,
-    icon: ICONS.SETTINGS,
-  },
-  {
-    label: 'Help',
-    navigate: `/$/${PAGES.HELP}`,
-    icon: ICONS.HELP,
-  },
-];
 
 type Props = {
   subscriptions: Array<Subscription>,
@@ -168,7 +28,7 @@ type Props = {
 function SideNavigation(props: Props) {
   const {
     subscriptions,
-    // doSignOut,
+    doSignOut,
     email,
     purchaseSuccess,
     doClearPurchasedUriSuccess,
@@ -179,6 +39,154 @@ function SideNavigation(props: Props) {
     unreadCount,
     user,
   } = props;
+
+  const TOP_LEVEL_LINKS: Array<{
+    label: string,
+    navigate: string,
+    icon: string,
+    extra?: Node,
+    hideForUnauth?: boolean,
+  }> = [
+    {
+      label: 'Home',
+      navigate: `/`,
+      icon: ICONS.HOME,
+    },
+    {
+      label: 'Following',
+      navigate: `/$/${PAGES.CHANNELS_FOLLOWING}`,
+      icon: ICONS.SUBSCRIBE,
+    },
+    {
+      label: 'Your Tags',
+      navigate: `/$/${PAGES.TAGS_FOLLOWING}`,
+      icon: ICONS.TAG,
+      hideForUnauth: true,
+    },
+    {
+      label: 'Discover',
+      navigate: `/$/${PAGES.DISCOVER}`,
+      icon: ICONS.DISCOVER,
+    },
+    {
+      label: 'Purchased',
+      navigate: `/$/${PAGES.LIBRARY}`,
+      icon: ICONS.PURCHASED,
+      hideForUnauth: true,
+    },
+  ];
+
+  const ABSOLUTE_LINKS: Array<{
+    label: string,
+    navigate?: string,
+    onClick?: () => any,
+    icon: string,
+    extra?: Node,
+    hideForUnauth?: boolean,
+  }> = [
+    {
+      label: 'Upload',
+      navigate: `/$/${PAGES.UPLOAD}`,
+      icon: ICONS.PUBLISH,
+    },
+    {
+      label: 'New Channel',
+      navigate: `/$/${PAGES.CHANNEL_NEW}`,
+      icon: ICONS.CHANNEL,
+      hideForUnauth: true,
+    },
+    {
+      label: 'Uploads',
+      navigate: `/$/${PAGES.UPLOADS}`,
+      icon: ICONS.PUBLISH,
+      hideForUnauth: true,
+    },
+
+    {
+      label: 'Channels',
+      navigate: `/$/${PAGES.CHANNELS}`,
+      icon: ICONS.CHANNEL,
+      hideForUnauth: true,
+    },
+    {
+      label: 'Creator Analytics',
+      navigate: `/$/${PAGES.CREATOR_DASHBOARD}`,
+      icon: ICONS.ANALYTICS,
+      hideForUnauth: true,
+    },
+    {
+      label: 'Wallet',
+      navigate: `/$/${PAGES.WALLET}`,
+      icon: ICONS.WALLET,
+      hideForUnauth: true,
+    },
+    {
+      label: 'Notifications',
+      navigate: `/$/${PAGES.NOTIFICATIONS}`,
+      icon: ICONS.NOTIFICATION,
+      extra: <NotificationBubble inline />,
+      hideForUnauth: true,
+    },
+    {
+      label: 'Rewards',
+      navigate: `/$/${PAGES.REWARDS}`,
+      icon: ICONS.REWARDS,
+      hideForUnauth: true,
+    },
+    {
+      label: 'Invites',
+      navigate: `/$/${PAGES.INVITE}`,
+      icon: ICONS.INVITE,
+      hideForUnauth: true,
+    },
+    {
+      label: 'Settings',
+      navigate: `/$/${PAGES.SETTINGS}`,
+      icon: ICONS.SETTINGS,
+      hideForUnauth: true,
+    },
+    {
+      label: 'Help',
+      navigate: `/$/${PAGES.HELP}`,
+      icon: ICONS.HELP,
+      hideForUnauth: true,
+    },
+    {
+      label: 'Sign Out',
+      onClick: doSignOut,
+      icon: ICONS.SIGN_OUT,
+      hideForUnauth: true,
+    },
+  ];
+
+  const UNAUTH_LINKS: Array<{
+    label: string,
+    navigate: string,
+    icon: string,
+    extra?: Node,
+  }> = [
+    {
+      label: 'Sign In',
+      navigate: `/$/${PAGES.AUTH_SIGNIN}`,
+      icon: ICONS.SIGN_IN,
+    },
+    {
+      label: 'Register',
+      navigate: `/$/${PAGES.AUTH}`,
+      icon: ICONS.SIGN_UP,
+    },
+    {
+      label: 'Settings',
+      navigate: `/$/${PAGES.SETTINGS}`,
+      icon: ICONS.SETTINGS,
+    },
+    {
+      label: 'Help',
+      navigate: `/$/${PAGES.HELP}`,
+      icon: ICONS.HELP,
+    },
+  ];
+
   const notificationsEnabled = user && user.experimental_ui;
   const isAuthenticated = Boolean(email);
   const [pulseLibrary, setPulseLibrary] = React.useState(false);
