@@ -8,10 +8,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ### Added
 
+- New File Page layout + make sidebar collapsable ([#4648](https://github.com/lbryio/lbry-desktop/pull/4648))
 - Block mature content when accessed directly from URL _community pr!_ ([#4560](https://github.com/lbryio/lbry-desktop/pull/4560))
 - You can now add LBRY as a search engine in your browser (via OpenSearch) _community pr!_ ([#4640](https://github.com/lbryio/lbry-desktop/pull/4640))
 
 ### Changed
+
+- Move file properties over thumbnails for more s ([#4640](https://github.com/lbryio/lbry-desktop/pull/4640))
 
 ### Fixed
 
@@ -19,6 +22,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Fix 'Related' and 'Comments' section lazy-load not working in some scenarios _community pr!_ ([#4586](https://github.com/lbryio/lbry-desktop/pull/4586))
 - Fix comment-creation failure if you have recently deleted a channel _community pr!_ ([#4630](https://github.com/lbryio/lbry-desktop/pull/4630))
 - Tip Modal: Don't do final submit when the intention is to create New Channel _community pr!_ ([#4629](https://github.com/lbryio/lbry-desktop/pull/4629))
+- Fix related + search results loading slowly ([#4657](https://github.com/lbryio/lbry-desktop/pull/4657)
 
 ## [0.47.1] - [2020-07-23]
 
