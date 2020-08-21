@@ -6,7 +6,9 @@ import React from 'react';
 import Button from 'component/button';
 import classnames from 'classnames';
 import NotificationBubble from 'component/notificationBubble';
+// @if TARGET='app'
 import { IS_MAC } from 'component/app/view';
+// @endif
 
 const ESCAPE_KEY_CODE = 27;
 const BACKSLASH_KEY_CODE = 220;
@@ -242,7 +244,14 @@ function SideNavigation(props: Props) {
       })}
     >
       {!isOnFilePage && (
-        <nav className={classnames('navigation', { 'navigation--micro': microNavigation, 'navigation--mac': IS_MAC })}>
+        <nav
+          className={classnames('navigation', {
+            'navigation--micro': microNavigation,
+            // @if TARGET='app'
+            'navigation--mac': IS_MAC,
+            // @endif
+          })}
+        >
           <ul className={classnames('navigation-links', { 'navigation-links--micro': !sidebarOpen })}>
             {TOP_LEVEL_LINKS.map(linkProps =>
               !email && linkProps.hideForUnauth && IS_WEB ? null : (
@@ -284,7 +293,9 @@ function SideNavigation(props: Props) {
         <>
           <nav
             className={classnames('navigation--absolute', {
+              // @if TARGET='app'
               'navigation--mac': IS_MAC,
+              // @endif
             })}
           >
             <ul className="navigation-links--absolute">
@@ -338,7 +349,9 @@ function SideNavigation(props: Props) {
           </nav>
           <div
             className={classnames('navigation__overlay', {
+              // @if TARGET='app'
               'navigation__overlay--mac': IS_MAC,
+              // @endif
             })}
             onClick={() => setSidebarOpen(false)}
           />
