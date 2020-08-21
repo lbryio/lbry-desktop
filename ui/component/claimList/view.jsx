@@ -8,6 +8,7 @@ import Spinner from 'component/spinner';
 import { FormField } from 'component/common/form';
 import usePersistedState from 'effects/use-persisted-state';
 import debounce from 'util/debounce';
+import ClaimPreviewTile from 'component/claimPreviewTile';
 
 const DEBOUNCE_SCROLL_HANDLER_MS = 150;
 const SORT_NEW = 'new';
@@ -34,7 +35,7 @@ type Props = {
   hideBlock: boolean,
   injectedItem: ?Node,
   timedOutMessage?: Node,
-  isCardBody?: boolean,
+  tileLayout?: boolean,
 };
 
 export default function ClaimList(props: Props) {
@@ -57,8 +58,9 @@ export default function ClaimList(props: Props) {
     hideBlock,
     injectedItem,
     timedOutMessage,
-    isCardBody = false,
+    tileLayout = false,
   } = props;
+
   const [currentSort, setCurrentSort] = usePersistedState(persistedStorageKey, SORT_NEW);
   const timedOut = uris === null;
   const urisLength = (uris && uris.length) || 0;
@@ -89,7 +91,11 @@ export default function ClaimList(props: Props) {
     }
   }, [loading, onScrollBottom, urisLength, pageSize, page]);
 
-  return (
+  return tileLayout && !header ? (
+    <section className="claim-grid">
+      {urisLength > 0 && uris.map(uri => <ClaimPreviewTile key={uri} uri={uri} />)}
+    </section>
+  ) : (
     <section
       className={classnames('claim-list', {
         'claim-list--small': type === 'small',
@@ -124,8 +130,8 @@ export default function ClaimList(props: Props) {
       {urisLength > 0 && (
         <ul
           className={classnames('ul--no-style', {
-            card: !isCardBody,
-            'claim-list--card-body': isCardBody,
+            card: !tileLayout,
+            'claim-list--card-body': tileLayout,
           })}
         >
           {sortedUris.map((uri, index) => (
@@ -154,6 +160,7 @@ export default function ClaimList(props: Props) {
           ))}
         </ul>
       )}
+
       {!timedOut && urisLength === 0 && !loading && (
         <div className="empty empty--centered">{empty || __('No results')}</div>
       )}

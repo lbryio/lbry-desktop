@@ -77,7 +77,7 @@
 
 .claim-search__top > div {
   @media (max-width: $breakpoint-small) {
-    margin: var(--spacing-xxs) 0;
+    margin-bottom: var(--spacing-xxs);
   }
 }
 

@@ -7,7 +7,7 @@ import CreditCards from './credit-card-logos.png';
 
 export default function CheckoutPage() {
   return (
-    <Page authPage className="main--auth-page">
+    <Page authPage>
       <Card
         title={__('Checkout')}
         subtitle={__('Your cart contains 1 item.')}
