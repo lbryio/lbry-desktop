@@ -70,7 +70,7 @@ function SideNavigation(props: Props) {
       icon: ICONS.DISCOVER,
     },
     {
-      label: 'Purchased',
+      label: IS_WEB ? 'Purchased' : 'Library',
       navigate: `/$/${PAGES.LIBRARY}`,
       icon: ICONS.PURCHASED,
       hideForUnauth: true,
