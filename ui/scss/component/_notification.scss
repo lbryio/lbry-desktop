@@ -26,6 +26,26 @@
   .channel-thumbnail {
     @include handleChannelGif(3rem);
   }
+
+  @media (max-width: $breakpoint-small) {
+    .channel-thumbnail {
+      @include handleChannelGif(2rem);
+    }
+  }
+}
+
+.notification__wrapper--unseen {
+  padding: var(--spacing-m);
+  border-radius: var(--border-radius);
+  background-color: var(--color-card-background-highlighted);
+
+  &:hover {
+    background-color: var(--color-button-secondary-bg);
+  }
+
+  @media (max-width: $breakpoint-small) {
+    padding: var(--spacing-s);
+  }
 }
 
 .notification__content {
@@ -33,23 +53,36 @@
   flex: 1;
   justify-content: space-between;
   align-items: center;
+
+  @media (max-width: $breakpoint-small) {
+    align-items: flex-start;
+  }
 }
 
 .notification__title {
   font-size: var(--font-small);
-  font-weight: bold;
   color: var(--color-text);
   margin-bottom: var(--spacing-s);
+
+  @media (max-width: $breakpoint-small) {
+    margin-bottom: 0;
+  }
 }
 
 .notification__text {
   font-size: var(--font-body);
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
 .notification__time {
   @extend .help;
   margin-bottom: 0;
   margin-top: 0;
+  margin-left: var(--spacing-s);
+  flex-shrink: 0;
 }
 
 .notification__bubble {

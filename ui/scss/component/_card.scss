@@ -213,6 +213,10 @@
   & > *:not(:last-child) {
     margin-right: 0;
   }
+
+  @media (max-width: $breakpoint-small) {
+    align-items: center;
+  }
 }
 
 .card__media--nsfw {

@@ -66,6 +66,22 @@ export default handleActions(
         ...state,
       };
     },
+    [ACTIONS.NOTIFICATION_SEEN_COMPLETED]: (state, action) => {
+      const { notifications } = state;
+      const { notificationIds } = action.data;
+      const newNotifications = notifications.map(notification => {
+        if (notificationIds.includes(notification.id)) {
+          return { ...notification, is_seen: true };
+        }
+
+        return notification;
+      });
+
+      return {
+        ...state,
+        notifications: newNotifications,
+      };
+    },
 
     // Errors
     [ACTIONS.CREATE_ERROR]: (state: NotificationState, action: DoError) => {

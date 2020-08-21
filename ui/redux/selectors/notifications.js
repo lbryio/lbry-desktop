@@ -10,6 +10,10 @@ export const selectUnreadNotificationCount = createSelector(selectNotifications,
   return notifications ? notifications.filter(notification => !notification.is_read).length : 0;
 });
 
+export const selectUnseenNotificationCount = createSelector(selectNotifications, notifications => {
+  return notifications ? notifications.filter(notification => !notification.is_seen).length : 0;
+});
+
 export const selectToast = createSelector(selectState, state => {
   if (state.toasts.length) {
     const { id, params } = state.toasts[0];
