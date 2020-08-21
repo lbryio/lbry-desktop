@@ -132,29 +132,27 @@ function SocialShare(props: Props) {
           href={`https://facebook.com/sharer/sharer.php?u=${encodedLbryURL}`}
         />
         {webShareable && !isChannel && (
-          <React.Fragment>
-            <Button
-              className="share"
-              iconSize={24}
-              icon={ICONS.EMBED}
-              title={__('Embed this content')}
-              onClick={() => {
-                setShowEmbed(!showEmbed);
-                setShowClaimLinks(false);
-              }}
-            />
-            <Button
-              className="share"
-              iconSize={24}
-              icon={ICONS.SHARE_LINK}
-              title={__('Links')}
-              onClick={() => {
-                setShowClaimLinks(!showClaimLinks);
-                setShowEmbed(false);
-              }}
-            />
-          </React.Fragment>
+          <Button
+            className="share"
+            iconSize={24}
+            icon={ICONS.EMBED}
+            title={__('Embed this content')}
+            onClick={() => {
+              setShowEmbed(!showEmbed);
+              setShowClaimLinks(false);
+            }}
+          />
         )}
+        <Button
+          className="share"
+          iconSize={24}
+          icon={ICONS.SHARE_LINK}
+          title={__('Links')}
+          onClick={() => {
+            setShowClaimLinks(!showClaimLinks);
+            setShowEmbed(false);
+          }}
+        />
       </div>
 
       {SUPPORTS_SHARE_API && isMobile && (
@@ -173,7 +171,7 @@ function SocialShare(props: Props) {
       {showClaimLinks && (
         <div className="section">
           <CopyableText label={__('LBRY URL')} copyable={`lbry://${lbryUrl}`} />
-          <CopyableText label={__('Download Link')} copyable={downloadUrl} />
+          {!isChannel && <CopyableText label={__('Download Link')} copyable={downloadUrl} />}
         </div>
       )}
     </React.Fragment>

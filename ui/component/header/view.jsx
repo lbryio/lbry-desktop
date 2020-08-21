@@ -195,7 +195,6 @@ const Header = (props: Props) => {
               navigate={`/$/${PAGES.WALLET}`}
               className="header__navigation-item menu__title header__navigation-item--balance"
               label={getWalletTitle()}
-              disabled
               // @if TARGET='app'
               onDoubleClick={e => {
                 e.stopPropagation();
