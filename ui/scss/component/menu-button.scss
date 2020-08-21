@@ -108,6 +108,14 @@
   }
 }
 
+.menu__link--notification-nolink {
+  @extend .menu__link--notification;
+
+  &:hover {
+    cursor: default;
+  }
+}
+
 .menu__link--all-notifications {
   @extend .button--alt;
   width: auto;

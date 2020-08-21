@@ -7,6 +7,7 @@ declare type WebNotification = {
   is_device_notified: boolean,
   is_emailed: boolean,
   is_read: boolean,
+  is_seen: boolean,
   notification_parameters: {
     device: {
       analytics_label: string,
@@ -23,6 +24,7 @@ declare type WebNotification = {
       comment_author: string,
       hash: string,
       claim_title: string,
+      comment?: string,
     },
     email: {},
   },
