@@ -12,7 +12,7 @@ type Props = {
 function ChannelNew(props: Props) {
   const { history } = props;
   return (
-    <Page noSideNavigation backout={{ title: __('Create Channel') }} className="main--auth-page">
+    <Page noSideNavigation authPage backout={{ title: __('Create Channel') }}>
       <ChannelEdit onDone={() => history.push(`/$/${PAGES.CHANNELS}`)} />
     </Page>
   );

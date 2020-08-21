@@ -18,6 +18,13 @@
   margin-bottom: var(--spacing-l);
 }
 
+.section__header--actions {
+  margin-bottom: var(--spacing-m);
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
 .section__flex {
   display: flex;
   align-items: flex-start;

@@ -88,7 +88,7 @@ function SignInVerifyPage(props: Props) {
   }
 
   return (
-    <Page authPage className="main--auth-page">
+    <Page authPage>
       <div className="main__sign-up">
         <Card
           title={isAuthenticationSuccess ? __('Sign In Success!') : __('Sign In to lbry.tv')}
