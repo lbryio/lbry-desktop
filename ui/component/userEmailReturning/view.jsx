@@ -112,7 +112,7 @@ function UserEmailReturning(props: Props) {
                     label={__('Sign In')}
                     disabled={!email || !valid || isPending}
                   />
-                  <Button button="link" onClick={handleChangeToSignIn} label={__('Register')} />
+                  <Button button="link" onClick={handleChangeToSignIn} label={__('Sign Up')} />
                 </div>
               </Form>
             </div>
@@ -126,8 +126,8 @@ function UserEmailReturning(props: Props) {
                 <Nag
                   type="helpful"
                   relative
-                  message={__("We can't find that email. Did you mean to register?")}
-                  actionText={__('Register')}
+                  message={__("We can't find that email. Did you mean to sign up?")}
+                  actionText={__('Sign Up')}
                 />
               )}
               {!emailExistsFromUrl && !emailDoesNotExist && errorMessage && (
