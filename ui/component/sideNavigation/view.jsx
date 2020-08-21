@@ -13,6 +13,18 @@ import { IS_MAC } from 'component/app/view';
 const ESCAPE_KEY_CODE = 27;
 const BACKSLASH_KEY_CODE = 220;
 
+const HOME = {
+  label: 'Home',
+  navigate: `/`,
+  icon: ICONS.HOME,
+};
+
+const RECENT_FROM_FOLLOWING = {
+  label: 'Following',
+  navigate: `/$/${PAGES.CHANNELS_FOLLOWING}`,
+  icon: ICONS.SUBSCRIBE,
+};
+
 type Props = {
   subscriptions: Array<Subscription>,
   email: ?string,
@@ -50,16 +62,8 @@ function SideNavigation(props: Props) {
     extra?: Node,
     hideForUnauth?: boolean,
   }> = [
-    {
-      label: 'Home',
-      navigate: `/`,
-      icon: ICONS.HOME,
-    },
-    {
-      label: 'Following',
-      navigate: `/$/${PAGES.CHANNELS_FOLLOWING}`,
-      icon: ICONS.SUBSCRIBE,
-    },
+    HOME,
+    RECENT_FROM_FOLLOWING,
     {
       label: 'Your Tags',
       navigate: `/$/${PAGES.TAGS_FOLLOWING}`,

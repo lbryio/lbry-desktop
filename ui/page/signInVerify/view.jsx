@@ -98,7 +98,7 @@ function SignInVerifyPage(props: Props) {
                 {isAuthenticationSuccess
                   ? __('You can now close this tab.')
                   : needsRecaptcha
-                  ? __('Click below to sign in to lbry.tv')
+                  ? null
                   : __('Welcome back! You are automatically being signed in.')}
               </p>
               {showCaptchaMessage && !isAuthenticationSuccess && (

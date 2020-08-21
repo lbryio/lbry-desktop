@@ -228,6 +228,11 @@ textarea {
   margin-bottom: 0;
 }
 
+.help--card-actions {
+  @extend .help;
+  margin-top: var(--spacing-l);
+}
+
 .empty {
   color: var(--color-text-empty);
   font-style: italic;

@@ -1,6 +1,6 @@
 // @flow
 import * as PAGES from 'constants/pages';
-import { DOMAIN } from 'config';
+import { SITE_NAME } from 'config';
 import React, { useState } from 'react';
 import { FormField, Form } from 'component/common/form';
 import Button from 'component/button';
@@ -89,7 +89,7 @@ function UserEmailNew(props: Props) {
   return (
     <div className="main__sign-up">
       <Card
-        title={__('Sign Up with lbry.tv', { DOMAIN })}
+        title={__('Join %SITE_NAME%', { SITE_NAME })}
         // @if TARGET='app'
         subtitle={__('An account with lbry.tv allows you to earn rewards and backup your data.')}
         // @endif
@@ -154,15 +154,13 @@ function UserEmailNew(props: Props) {
                 />
                 <Button button="link" onClick={handleChangeToSignIn} label={__('Sign In')} />
               </div>
-              <p className="help">
+              <p className="help--card-actions">
                 <I18nMessage
                   tokens={{
-                    terms: (
-                      <Button button="link" href="https://www.lbry.com/termsofservice" label={__('Terms of Service')} />
-                    ),
+                    terms: <Button button="link" href="https://www.lbry.com/termsofservice" label={__('terms')} />,
                   }}
                 >
-                  By continuing, I agree to the %terms% and confirm I am over the age of 13.
+                  By creating an account, you agree to our %terms% and confirm you're over the age of 13.
                 </I18nMessage>
               </p>
             </Form>

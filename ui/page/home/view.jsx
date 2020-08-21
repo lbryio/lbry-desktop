@@ -1,11 +1,11 @@
 // @flow
 import * as ICONS from 'constants/icons';
 import * as PAGES from 'constants/pages';
+import { SITE_NAME } from 'config';
 import React from 'react';
 import Page from 'component/page';
 import Button from 'component/button';
 import ClaimTilesDiscover from 'component/claimTilesDiscover';
-import I18nMessage from 'component/i18nMessage';
 import getHomepage from 'homepage';
 
 type Props = {
@@ -40,21 +40,15 @@ function HomePage(props: Props) {
     <Page>
       {(authenticated || !IS_WEB) && !subscribedChannels.length && (
         <div className="notice-message">
-          <h1 className="section__title">{__('LBRY Works Better If You Are Following Channels')}</h1>
-          <p className="section__subtitle">
-            <I18nMessage
-              tokens={{
-                discover_channels_link: (
-                  <Button
-                    button="link"
-                    navigate={`/$/${PAGES.CHANNELS_FOLLOWING_DISCOVER}`}
-                    label={__('Find new channels to follow')}
-                  />
-                ),
-              }}
-            >
-              You aren't currently following any channels. %discover_channels_link%.
-            </I18nMessage>
+          <h1 className="section__title">
+            {__("%SITE_NAME% is more fun if you're following channels", { SITE_NAME })}
+          </h1>
+          <p className="section__actions">
+            <Button
+              button="primary"
+              navigate={`/$/${PAGES.CHANNELS_FOLLOWING_DISCOVER}`}
+              label={__('Find new channels to follow')}
+            />
           </p>
         </div>
       )}
