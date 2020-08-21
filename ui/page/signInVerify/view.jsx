@@ -96,7 +96,7 @@ function SignInVerifyPage(props: Props) {
   }
 
   return (
-    <Page authPage className="main--auth-page">
+    <Page authPage>
       <div className="main__sign-up">
         <Card
           title={__('Sign In to %SITE_NAME%', { SITE_NAME })}

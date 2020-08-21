@@ -217,6 +217,18 @@ remote.getCurrentWindow().on('leave-full-screen', event => {
   document.webkitExitFullscreen();
 });
 
+document.addEventListener('click', event => {
+  let { target } = event;
+
+  while (target && target !== document) {
+    if (target.matches('a[href^="http"]') || target.matches('a[href^="mailto"]')) {
+      event.preventDefault();
+      shell.openExternal(target.href);
+      return;
+    }
+    target = target.parentNode;
+  }
+});
 // @endif
 
 document.addEventListener('dragover', event => {
@@ -224,20 +236,6 @@ document.addEventListener('dragover', event => {
 });
 document.addEventListener('drop', event => {
   event.preventDefault();
-});
-document.addEventListener('click', event => {
-  let { target } = event;
-
-  while (target && target !== document) {
-    if (target.matches('a[href^="http"]') || target.matches('a[href^="mailto"]')) {
-      // @if TARGET='app'
-      event.preventDefault();
-      shell.openExternal(target.href);
-      return;
-      // @endif
-    }
-    target = target.parentNode;
-  }
 });
 
 function AppWrapper() {
