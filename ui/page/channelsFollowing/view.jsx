@@ -11,17 +11,19 @@ import Icon from 'component/common/icon';
 
 type Props = {
   subscribedChannels: Array<Subscription>,
+  tileLayout: boolean,
 };
 
 function ChannelsFollowingPage(props: Props) {
-  const { subscribedChannels } = props;
+  const { subscribedChannels, tileLayout } = props;
   const hasSubsribedChannels = subscribedChannels.length > 0;
 
   return !hasSubsribedChannels ? (
     <ChannelsFollowingDiscoverPage />
   ) : (
-    <Page noFooter>
+    <Page noFooter fullWidthPage={tileLayout}>
       <ClaimListDiscover
+        tileLayout={tileLayout}
         headerLabel={
           <span>
             <Icon icon={ICONS.SUBSCRIBE} size={10} />

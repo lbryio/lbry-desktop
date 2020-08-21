@@ -5,7 +5,7 @@ import Page from 'component/page';
 
 export default function PasswordSetPage() {
   return (
-    <Page authPage className="main--auth-page">
+    <Page authPage>
       <UserPasswordSet />
     </Page>
   );

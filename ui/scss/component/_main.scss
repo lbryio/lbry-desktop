@@ -95,7 +95,18 @@
   }
 }
 
+.main--full-width {
+  @extend .main;
+
+  @media (min-width: $breakpoint-large) {
+    max-width: none;
+    width: 100%;
+    padding: 0 var(--spacing-l);
+  }
+}
+
 .main--auth-page {
+  width: 100%;
   max-width: 70rem;
   margin-top: var(--spacing-main-padding);
   margin-left: auto;
@@ -158,10 +169,6 @@
   & > * {
     width: 100%;
   }
-}
-
-.main--full-width {
-  width: 100%;
 }
 
 .main__sign-in,

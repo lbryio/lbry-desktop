@@ -1,8 +1,9 @@
+import * as CS from 'constants/claim_search';
 import { connect } from 'react-redux';
-import { makeSelectClaimForUri, selectFollowedTags, doResolveUri } from 'lbry-redux';
+import { makeSelectClaimForUri, selectFollowedTags, doResolveUri, SETTINGS } from 'lbry-redux';
 import { selectUserVerifiedEmail } from 'redux/selectors/user';
 import { doToggleTagFollowDesktop } from 'redux/actions/tags';
-import * as CS from 'constants/claim_search';
+import { makeSelectClientSetting } from 'redux/selectors/settings';
 import Tags from './view';
 
 const select = (state, props) => {
@@ -15,6 +16,7 @@ const select = (state, props) => {
     repostedUri: repostedUri,
     repostedClaim: repostedUri ? makeSelectClaimForUri(repostedUri)(state) : null,
     isAuthenticated: selectUserVerifiedEmail(state),
+    tileLayout: makeSelectClientSetting(SETTINGS.TILE_LAYOUT)(state),
   };
 };
 
