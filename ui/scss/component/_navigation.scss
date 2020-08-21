@@ -29,7 +29,11 @@
   padding-bottom: var(--spacing-l);
 }
 
-.navigation--filepage {
+.navigation--mac {
+  top: calc(var(--header-height) + var(--mac-titlebar-height));
+}
+
+.navigation--absolute {
   @extend .navigation;
   z-index: 4;
   width: var(--side-nav-width--large);
@@ -214,4 +218,8 @@
   z-index: 3;
   left: 0;
   top: var(--header-height);
+
+  &.navigation__overlay--mac {
+    top: calc(var(--header-height) + var(--mac-titlebar-height));
+  }
 }
