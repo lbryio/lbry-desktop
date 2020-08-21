@@ -21,10 +21,11 @@ type Props = {
   isUpgradeAvailable: boolean,
   authPage: boolean,
   filePage: boolean,
+  homePage: boolean,
   noHeader: boolean,
   noFooter: boolean,
   noSideNavigation: boolean,
-  fullWidth: boolean,
+  fullWidthPage: boolean,
   backout: {
     backLabel?: string,
     backNavDefault?: string,
@@ -37,12 +38,12 @@ function Page(props: Props) {
   const {
     children,
     className,
-    authPage = false,
     filePage = false,
+    authPage = false,
+    fullWidthPage = false,
     noHeader = false,
     noFooter = false,
     noSideNavigation = false,
-
     backout,
   } = props;
   const {
@@ -51,6 +52,7 @@ function Page(props: Props) {
   const [sidebarOpen, setSidebarOpen] = usePersistedState('sidebar', true);
   const isMediumScreen = useIsMediumScreen();
   const isMobile = useIsMobile();
+
   let isOnFilePage = false;
   try {
     const url = pathname.slice(1).replace(/:/g, '#');
@@ -89,7 +91,11 @@ function Page(props: Props) {
           />
         )}
         <main
-          className={classnames(MAIN_CLASS, className, { 'main--full-width': authPage, 'main--file-page': filePage })}
+          className={classnames(MAIN_CLASS, className, {
+            'main--full-width': fullWidthPage,
+            'main--auth-page': authPage,
+            'main--file-page': filePage,
+          })}
         >
           {children}
         </main>

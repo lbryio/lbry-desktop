@@ -8,9 +8,9 @@ import Button from 'component/button';
 import Icon from 'component/common/icon';
 import * as CS from 'constants/claim_search';
 
-function DiscoverPage() {
+function TagsFollowingPage() {
   return (
-    <Page noFooter>
+    <Page noFooter fullWidthPage>
       <ClaimListDiscover
         headerLabel={
           <span>
@@ -34,4 +34,4 @@ function DiscoverPage() {
   );
 }
 
-export default DiscoverPage;
+export default TagsFollowingPage;

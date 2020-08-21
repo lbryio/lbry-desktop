@@ -14,7 +14,13 @@ type Props = {
 };
 
 export default function NotificationHeaderButton(props: Props) {
-  const { unreadCount, doReadNotifications, user } = props;
+  const {
+    unreadCount,
+    // notifications,
+    // fetching,
+    doReadNotifications,
+    user,
+  } = props;
   const notificationsEnabled = user && user.experimental_ui;
   const { push } = useHistory();
 
