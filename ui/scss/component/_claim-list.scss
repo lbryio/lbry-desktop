@@ -323,34 +323,45 @@
 }
 
 .claim-preview--tile {
-  $width: calc((100% - var(--spacing-m) * 3) / 4);
-  width: $width;
-  @include handleClaimTileGifThumbnail($width);
-
   margin-bottom: var(--spacing-l);
   margin-right: 0;
   margin-top: 0;
   margin-left: var(--spacing-m);
   justify-content: flex-start;
 
-  @media (min-width: $breakpoint-medium) {
-    &:first-child,
-    &:nth-child(4n + 1) {
-      margin-left: 0;
-    }
+  .media__thumb {
+    border-bottom-right-radius: 0;
+    border-bottom-left-radius: 0;
   }
 
   &:hover {
     cursor: pointer;
   }
 
-  .media__thumb {
-    border-bottom-right-radius: 0;
-    border-bottom-left-radius: 0;
+  @media (min-width: $breakpoint-large) {
+    $width: calc((100% - var(--spacing-m) * 5) / 6);
+    width: $width;
+    @include handleClaimTileGifThumbnail($width);
+
+    &:first-child,
+    &:nth-child(6n + 1) {
+      margin-left: 0;
+    }
+  }
+
+  @media (max-width: $breakpoint-large) and (min-width: $breakpoint-medium) {
+    $width: calc((100% - var(--spacing-m) * 3) / 4);
+    width: $width;
+    @include handleClaimTileGifThumbnail($width);
+
+    &:first-child,
+    &:nth-child(4n + 1) {
+      margin-left: 0;
+    }
   }
 
   @media (max-width: $breakpoint-medium) and (min-width: $breakpoint-small) {
-    $width: calc((100vw - var(--side-nav-width--micro) - (var(--spacing-l) * 3)) / 3);
+    $width: calc((100vw - var(--side-nav-width--micro) - var(--spacing-l) * 3) / 3);
     width: $width;
     @include handleClaimTileGifThumbnail($width);
 

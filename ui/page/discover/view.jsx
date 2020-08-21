@@ -21,6 +21,7 @@ type Props = {
   doToggleTagFollowDesktop: string => void,
   doResolveUri: string => void,
   isAuthenticated: boolean,
+  tileLayout: boolean,
 };
 
 function DiscoverPage(props: Props) {
@@ -32,6 +33,7 @@ function DiscoverPage(props: Props) {
     doToggleTagFollowDesktop,
     doResolveUri,
     isAuthenticated,
+    tileLayout,
   } = props;
   const buttonRef = useRef();
   const isHovering = useHover(buttonRef);
@@ -88,8 +90,9 @@ function DiscoverPage(props: Props) {
   }
 
   return (
-    <Page noFooter>
+    <Page noFooter fullWidthPage={tileLayout}>
       <ClaimListDiscover
+        tileLayout={tileLayout}
         claimType={claimType ? [claimType] : undefined}
         headerLabel={headerLabel}
         tags={tags}

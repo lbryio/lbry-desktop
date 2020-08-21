@@ -11,7 +11,7 @@ export default function ReferredPage(props: Props) {
   const { fullUri, referrer } = props;
 
   return (
-    <Page authPage className="main--auth-page">
+    <Page authPage>
       <Invited fullUri={fullUri} referrer={referrer} />
     </Page>
   );

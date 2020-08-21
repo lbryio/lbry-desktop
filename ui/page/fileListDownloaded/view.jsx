@@ -116,7 +116,6 @@ function FileListDownloaded(props: Props) {
         ) : (
           <div>
             <ClaimList
-              isCardBody
               renderProperties={() => null}
               empty={
                 viewMode === VIEW_PURCHASES && !query ? (

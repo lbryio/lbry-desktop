@@ -45,7 +45,7 @@ export default function ChannelsPage(props: Props) {
               </>
             }
             isBodyList
-            body={<ClaimList isCardBody loading={fetchingChannels} uris={channelUrls} />}
+            body={<ClaimList loading={fetchingChannels} uris={channelUrls} />}
           />
         )}
       </div>
