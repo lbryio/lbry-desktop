@@ -174,7 +174,7 @@ function SideNavigation(props: Props) {
       icon: ICONS.SIGN_IN,
     },
     {
-      label: 'Register',
+      label: 'Sign Up',
       navigate: `/$/${PAGES.AUTH}`,
       icon: ICONS.SIGN_UP,
     },
