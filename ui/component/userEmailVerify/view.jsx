@@ -63,16 +63,13 @@ class UserEmailVerify extends React.PureComponent<Props> {
     return (
       <div className="main__sign-up">
         <Card
-          title={isReturningUser ? __('Check Your Email') : __('Confirm Your Email')}
+          title={isReturningUser ? __('Check Your Email') : __('Confirm your account')}
           subtitle={
             <p>
-              {__(
-                'An email was sent to %email%. Follow the link to %verify_text%. After, this page will update automatically.',
-                {
-                  email,
-                  verify_text: isReturningUser ? __('sign in') : __('verify your email'),
-                }
-              )}
+              {__('We just sent an email to %email% with a link for you to %verify_text%.', {
+                email,
+                verify_text: isReturningUser ? __('sign in') : __('verify your account'),
+              })}
             </p>
           }
           actions={
@@ -80,17 +77,17 @@ class UserEmailVerify extends React.PureComponent<Props> {
               <div className="section__actions">
                 <Button
                   button="primary"
-                  label={__('Resend Email')}
+                  label={__('Resend link')}
                   onClick={this.handleResendVerificationEmail}
                   disabled={resendingEmail}
                 />
                 <UserSignOutButton label={__('Start Over')} />
               </div>
-              <p className="help">
+              <p className="help--card-actions">
                 <I18nMessage
                   tokens={{
                     help_link: <Button button="link" href="mailto:help@lbry.com" label="help@lbry.com" />,
-                    chat_link: <Button button="link" href="https://chat.lbry.com" label={__("chat")} />,
+                    chat_link: <Button button="link" href="https://chat.lbry.com" label={__('chat')} />,
                   }}
                 >
                   Email %help_link% or join our %chat_link% if you encounter any trouble verifying.
