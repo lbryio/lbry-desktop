@@ -30,6 +30,8 @@ const defaultState = {
   clientSettings: {
     // UX
     [SETTINGS.EMAIL_COLLECTION_ACKNOWLEDGED]: false,
+    [SETTINGS.FOLLOWING_ACKNOWLEDGED]: false,
+    [SETTINGS.TAGS_ACKNOWLEDGED]: false,
     [SETTINGS.ENABLE_SYNC]: IS_WEB,
 
     // UI
