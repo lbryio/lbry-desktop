@@ -1,75 +1,145 @@
+$thumbnailWidth: 3rem;
+$thumbnailWidthSmall: 2rem;
+
 .comments {
-  padding-top: var(--spacing-l);
+  list-style-type: none;
+  font-size: var(--font-small);
+}
+
+.comments--replies {
+  margin-left: var(--spacing-m);
+  flex: 1;
+}
+
+.comment__create {
+  padding-bottom: var(--spacing-l);
+  font-size: var(--font-small);
+}
+
+.comment__create--reply {
+  margin-top: var(--spacing-m);
+  margin-left: calc(#{$thumbnailWidth} + var(--spacing-m));
+  position: relative;
 }
 
 .comment {
   display: flex;
   flex-direction: row;
-  font-size: var(--font-body);
+  font-size: var(--font-small);
   margin: 0;
 
-  &:not(:last-of-type) {
-    border-bottom: 1px solid var(--color-border);
-    padding: var(--spacing-m) 0;
-  }
-  &:last-of-type {
-    padding-top: var(--spacing-m);
+  &:not(:first-child) {
+    margin-top: var(--spacing-l);
   }
 
   .channel-thumbnail {
-    @include handleChannelGif(3rem);
+    @include handleChannelGif($thumbnailWidthSmall);
+    margin-right: 0;
+
+    @media (min-width: $breakpoint-small) {
+      @include handleChannelGif($thumbnailWidth);
+    }
   }
 }
 
-.comment__create--reply {
-  margin-top: var(--spacing-s);
+.comment__replies-container {
+  margin: 0;
+}
+
+.comment__replies {
+  display: flex;
+  margin-top: var(--spacing-m);
+  margin-left: calc(#{$thumbnailWidthSmall} + var(--spacing-xs));
+
+  @media (min-width: $breakpoint-small) {
+    margin-left: calc(#{$thumbnailWidth} + var(--spacing-m));
+  }
 }
 
 .comment__reply {
-  border-left: 5px solid var(--color-primary-alt);
-  margin-left: var(--spacing-m);
+  margin: 0;
 
-  .comment__author-thumbnail {
-    margin-left: var(--spacing-m);
+  &:not(:first-child) {
+    margin-top: var(--spacing-m);
   }
 }
 
-.comment__reply-button {
-  margin-top: var(--spacing-s);
+.comment__threadline {
+  @extend .button--alt;
+  height: auto;
+  align-self: stretch;
+  padding: 2px;
+  border-radius: 3px;
+  background-color: var(--color-comment-threadline);
+
+  &:hover {
+    box-shadow: 0 0 0 1px var(--color-comment-threadline-hover);
+    background-color: var(--color-comment-threadline-hover);
+    border-color: var(--color-comment-threadline-hover);
+  }
+}
+
+.comment-new__label-wrapper {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: baseline;
+  flex-wrap: wrap;
+  width: 100%;
+
+  @media (min-width: $breakpoint-small) {
+    fieldset-section {
+      max-width: 10rem;
+    }
+  }
+}
+
+.comment-new__label {
+  white-space: nowrap;
+  margin-right: var(--spacing-xs);
+}
+
+.comment__highlighted {
+  background: var(--color-comment-highlighted);
+  box-shadow: 0 0 0 var(--spacing-xs) var(--color-comment-highlighted);
+  border-radius: 4px;
 }
 
 .comment__body_container {
-  padding-right: var(--spacing-s);
   flex: 1;
-  width: 80%;
+  margin-left: var(--spacing-xs);
+
+  @media (min-width: $breakpoint-small) {
+    margin-left: var(--spacing-m);
+  }
 }
 
 .comment__meta {
   display: flex;
   justify-content: space-between;
   text-overflow: ellipsis;
-  margin-bottom: var(--spacing-s);
 }
 
 .comment__meta-information {
   justify-content: flex-start;
   display: flex;
+  height: 100%;
 }
 
 .comment__message {
-  white-space: pre-line;
   word-break: break-word;
-  margin-top: var(--spacing-s);
 }
 
 .comment__author {
   text-overflow: ellipsis;
   padding-right: var(--spacing-xs);
+  height: 100%;
 }
 
 .comment__time {
   opacity: 0.3;
   white-space: nowrap;
+  height: 100%;
 }
 
 .comment__menu {
@@ -108,4 +178,50 @@
   box-shadow: var(--card-box-shadow);
   border-radius: var(--card-radius);
   padding: var(--spacing-s);
+}
+
+.comment__actions {
+  display: flex;
+  margin-top: var(--spacing-s);
+  margin-left: calc(#{$thumbnailWidthSmall} + var(--spacing-xs));
+
+  > *:not(:last-child) {
+    margin-right: var(--spacing-xs);
+  }
+
+  .icon {
+    margin-right: var(--spacing-xxs);
+  }
+
+  .button__label {
+    margin-left: 0;
+  }
+
+  @media (min-width: $breakpoint-small) {
+    margin-left: calc(#{$thumbnailWidth} + var(--spacing-m));
+  }
+}
+
+.comment__action {
+  @extend .button--uri-indicator;
+  height: auto;
+  font-size: var(--font-xsmall);
+}
+
+.comment__action--nested {
+  @extend .comment__action;
+}
+
+.comment__action--nested,
+.comment__create--nested-reply {
+  margin-top: var(--spacing-s);
+  margin-left: calc((#{$thumbnailWidthSmall} + var(--spacing-xs)) * 2 + var(--spacing-m) + 4px);
+
+  @media (min-width: $breakpoint-small) {
+    margin-left: calc((#{$thumbnailWidth} + var(--spacing-m)) * 2 + var(--spacing-m) + 4px);
+  }
+}
+
+.comment__more-below {
+  margin-top: var(--spacing-l);
 }
