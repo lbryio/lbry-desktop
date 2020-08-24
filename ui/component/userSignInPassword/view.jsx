@@ -37,7 +37,7 @@ export default function UserSignInPassword(props: Props) {
       ) : (
         <Card
           title={__('Enter Your lbry.tv Password')}
-          subtitle={__('Signing in as %email%', { email: emailToVerify })}
+          subtitle={__('Logging in in as %email%', { email: emailToVerify })}
           actions={
             <Form onSubmit={handleSubmit} className="section">
               <FormField

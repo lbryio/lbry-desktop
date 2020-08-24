@@ -1,4 +1,5 @@
 // @flow
+import { SITE_NAME } from 'config';
 import React from 'react';
 import { Modal } from 'modal/modal';
 import Button from 'component/button';
@@ -34,7 +35,7 @@ const ModalFirstSubscription = (props: Props) => {
             {__('Awesome! You just followed your first channel.')}{' '}
             {user && user.primary_email
               ? __('You will receive notifications related to new content.')
-              : __('Sign in with lbry.tv to receive notifications about new content.')}
+              : __('Log in with %SITE_NAME% to receive notifications about new content.', { SITE_NAME })}
           </>
         }
         actions={
@@ -57,7 +58,7 @@ const ModalFirstSubscription = (props: Props) => {
                       closeModal();
                       history.push(`/$/${PAGES.AUTH}?redirect=${pathname}`);
                     }}
-                    label={__('Sign in')}
+                    label={__('Log in')}
                   />
                 </React.Fragment>
               )}

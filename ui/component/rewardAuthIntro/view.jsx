@@ -1,4 +1,5 @@
 // @flow
+import { SITE_NAME } from 'config';
 import * as PAGES from 'constants/pages';
 import React from 'react';
 import CreditAmount from 'component/common/credit-amount';
@@ -18,15 +19,16 @@ function RewardAuthIntro(props: Props) {
 
   return (
     <Card
-      title={title || __('Sign In to lbry.tv to Earn Rewards')}
+      title={title || __('Log in to %SITE_NAME% to Earn Rewards', { SITE_NAME })}
       subtitle={
         <I18nMessage
           tokens={{
             credit_amount: <CreditAmount inheritStyle amount={totalRewardRounded} />,
+            site_name: SITE_NAME,
           }}
         >
-          A lbry.tv account allows you to earn more than %credit_amount% in rewards, backup your data, and get content
-          and security updates.
+          A %site_name% account allows you to earn more than %credit_amount% in rewards, backup your data, and get
+          content and security updates.
         </I18nMessage>
       }
       actions={
