@@ -152,7 +152,7 @@ function UserEmailNew(props: Props) {
                     !email || !password || !valid || (!IS_WEB && !localShareUsageData && !shareUsageData) || isPending
                   }
                 />
-                <Button button="link" onClick={handleChangeToSignIn} label={__('Sign In')} />
+                <Button button="link" onClick={handleChangeToSignIn} label={__('Log In')} />
               </div>
               <p className="help--card-actions">
                 <I18nMessage

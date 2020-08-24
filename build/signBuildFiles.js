@@ -51,7 +51,7 @@ function cleanUpAfterSigning() {
 }
 
 function signFile() {
-  console.log('Signing file with hashes using keybase...');
+  console.log('Logging in file with hashes using keybase...');
   // All files are hashed and added to hashes.txt
   // Sign it with keybase
   const fileName = `LBRY_${versionToSign}_sigs.asc`;

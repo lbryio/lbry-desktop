@@ -176,7 +176,7 @@ function SideNavigation(props: Props) {
     hideForUnauth?: boolean,
   }> = [
     {
-      label: 'Sign In',
+      label: 'Log In',
       navigate: `/$/${PAGES.AUTH_SIGNIN}`,
       icon: ICONS.SIGN_IN,
     },
