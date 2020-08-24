@@ -2,6 +2,7 @@ import REWARD_TYPES from 'rewards';
 import { connect } from 'react-redux';
 import { selectGetSyncIsPending, selectSyncHash } from 'lbryinc';
 import { doClaimRewardType } from 'redux/actions/rewards';
+import { doSyncClientSettings, doSetClientSetting } from 'redux/actions/settings';
 import { selectClaimedRewards, makeSelectIsRewardClaimPending } from 'redux/selectors/rewards';
 import { doUserFetch } from 'redux/actions/user';
 import {
@@ -35,6 +36,9 @@ const select = state => ({
   youtubeChannels: selectYoutubeChannels(state),
   userFetchPending: selectUserIsPending(state),
   syncEnabled: makeSelectClientSetting(SETTINGS.ENABLE_SYNC)(state),
+  followingAcknowledged: makeSelectClientSetting(SETTINGS.FOLLOWING_ACKNOWLEDGED)(state),
+  tagsAcknowledged: makeSelectClientSetting(SETTINGS.TAGS_ACKNOWLEDGED)(state),
+  rewardsAcknowledged: makeSelectClientSetting(SETTINGS.REWARDS_ACKNOWLEDGED)(state),
   syncingWallet: selectGetSyncIsPending(state),
   hasSynced: Boolean(selectSyncHash(state)),
   creatingChannel: selectCreatingChannel(state),
@@ -48,6 +52,8 @@ const perform = dispatch => ({
         notifyError: false,
       })
     ),
+  syncSettings: () => dispatch(doSyncClientSettings()),
+  setClientSetting: (setting, value) => dispatch(doSetClientSetting(setting, value)),
 });
 
 export default connect(select, perform)(UserSignIn);
