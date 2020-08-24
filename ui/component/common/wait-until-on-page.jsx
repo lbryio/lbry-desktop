@@ -7,6 +7,7 @@ const DEBOUNCE_SCROLL_HANDLER_MS = 300;
 type Props = {
   children: any,
   lastUpdateDate?: any,
+  skipWait?: boolean,
 };
 
 export default function WaitUntilOnPage(props: Props) {
@@ -45,5 +46,5 @@ export default function WaitUntilOnPage(props: Props) {
     }
   }, [ref, setShouldRender, shouldRender]);
 
-  return <div ref={ref}>{shouldRender && props.children}</div>;
+  return <div ref={ref}>{(props.skipWait || shouldRender) && props.children}</div>;
 }

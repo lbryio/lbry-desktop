@@ -21,6 +21,7 @@ type Props = {
   parentId?: string,
   onDoneReplying?: () => void,
   onCancelReplying?: () => void,
+  isNested: boolean,
 };
 
 export function CommentCreate(props: Props) {
@@ -33,6 +34,7 @@ export function CommentCreate(props: Props) {
     parentId,
     onDoneReplying,
     onCancelReplying,
+    isNested,
   } = props;
   const { claim_id: claimId } = claim;
   const isReply = !!parentId;
@@ -53,9 +55,9 @@ export function CommentCreate(props: Props) {
   useEffect(() => {
     // set default channel
     if ((channel === '' || channel === 'anonymous') && topChannel) {
-      handleChannelChange(topChannel.name);
+      setChannel(topChannel.name);
     }
-  }, [channel, topChannel]);
+  }, [channel, topChannel, setChannel]);
 
   function handleCommentChange(event) {
     let commentValue;
@@ -66,10 +68,6 @@ export function CommentCreate(props: Props) {
     }
 
     setCommentValue(commentValue);
-  }
-
-  function handleChannelChange(channel) {
-    setChannel(channel);
   }
 
   function handleCommentAck() {
@@ -107,17 +105,27 @@ export function CommentCreate(props: Props) {
   }
 
   return (
-    <Form onSubmit={handleSubmit} className={classnames('comment__create', { 'comment__create--reply': isReply })}>
-      {!isReply && <ChannelSelection channel={channel} hideAnon onChannelChange={handleChannelChange} />}
+    <Form
+      onSubmit={handleSubmit}
+      className={classnames('comment__create', {
+        'comment__create--reply': isReply,
+        'comment__create--nested-reply': isNested,
+      })}
+    >
       <FormField
         disabled={channel === CHANNEL_NEW}
         type={SIMPLE_SITE ? 'textarea' : advancedEditor && !isReply ? 'markdown' : 'textarea'}
         name={isReply ? 'content_reply' : 'content_description'}
-        label={isReply ? __('Replying as %reply_channel%', { reply_channel: channel }) : __('Comment')}
+        label={
+          <span className="comment-new__label-wrapper">
+            <div className="comment-new__label">{isReply ? __('Replying as') + ' ' : __('Comment as') + ' '}</div>
+            <ChannelSelection channel={channel} hideAnon tiny hideNew onChannelChange={setChannel} />
+          </span>
+        }
         quickActionLabel={
           !SIMPLE_SITE && (isReply ? undefined : advancedEditor ? __('Simple Editor') : __('Advanced Editor'))
         }
-        quickActionHandler={!SIMPLE_SITE && (isReply ? undefined : toggleEditorMode)}
+        quickActionHandler={!SIMPLE_SITE && toggleEditorMode}
         onFocus={onTextareaFocus}
         placeholder={__('Say something about this...')}
         value={commentValue}
@@ -126,7 +134,7 @@ export function CommentCreate(props: Props) {
         autoFocus={isReply}
         textAreaMaxLength={FF_MAX_CHARS_IN_COMMENT}
       />
-      <div className="section__actions">
+      <div className="section__actions section__actions--no-margin">
         <Button
           button="primary"
           disabled={channel === CHANNEL_NEW || !commentValue.length}

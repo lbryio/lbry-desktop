@@ -10,6 +10,8 @@ import { doCommentAbandon, doCommentUpdate } from 'redux/actions/comments';
 import { doToggleBlockChannel } from 'redux/actions/blocked';
 import { selectChannelIsBlocked } from 'redux/selectors/blocked';
 import Comment from './view';
+import { selectUserVerifiedEmail } from 'redux/selectors/user';
+import { selectIsFetchingComments } from 'redux/selectors/comments';
 
 const select = (state, props) => ({
   pending: props.authorUri && makeSelectClaimIsPending(props.authorUri)(state),
@@ -17,6 +19,8 @@ const select = (state, props) => ({
   isResolvingUri: props.authorUri && makeSelectIsUriResolving(props.authorUri)(state),
   thumbnail: props.authorUri && makeSelectThumbnailForUri(props.authorUri)(state),
   channelIsBlocked: props.authorUri && selectChannelIsBlocked(props.authorUri)(state),
+  commentingEnabled: IS_WEB ? Boolean(selectUserVerifiedEmail(state)) : true,
+  isFetchingComments: selectIsFetchingComments(state),
 });
 
 const perform = dispatch => ({
