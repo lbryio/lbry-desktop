@@ -35,7 +35,7 @@ class UserVerify extends React.PureComponent<Props> {
     };
 
     return (
-      <React.Fragment>
+      <div className="main__auth-content">
         <section className="section__header">
           <h1 className="section__title--large">{__('Get Validated')}</h1>
           <p>
@@ -141,7 +141,7 @@ class UserVerify extends React.PureComponent<Props> {
             }
           />
         </div>
-      </React.Fragment>
+      </div>
     );
   }
 }
