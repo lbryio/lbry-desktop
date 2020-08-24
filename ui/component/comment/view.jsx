@@ -6,13 +6,12 @@ import React, { useEffect, useState } from 'react';
 import { isEmpty } from 'util/object';
 import DateTime from 'component/dateTime';
 import Button from 'component/button';
-import Expandable from 'component/expandable';
+// import Expandable from 'component/expandable';
 import MarkdownPreview from 'component/common/markdown-preview';
 import ChannelThumbnail from 'component/channelThumbnail';
 import { Menu, MenuList, MenuButton, MenuItem } from '@reach/menu-button';
 import Icon from 'component/common/icon';
 import { FormField, Form } from 'component/common/form';
-import CommentCreate from 'component/commentCreate';
 import classnames from 'classnames';
 import usePersistedState from 'effects/use-persisted-state';
 
@@ -34,6 +33,7 @@ type Props = {
   updateComment: (string, string) => void,
   deleteComment: string => void,
   blockChannel: string => void,
+  linkedComment?: any,
 };
 
 const LENGTH_TO_COLLAPSE = 300;
@@ -57,6 +57,7 @@ function Comment(props: Props) {
     updateComment,
     deleteComment,
     blockChannel,
+    linkedComment,
   } = props;
 
   const [isEditing, setEditing] = useState(false);
@@ -65,11 +66,7 @@ function Comment(props: Props) {
 
   // used for controlling the visibility of the menu icon
   const [mouseIsHovering, setMouseHover] = useState(false);
-
-  // used for controlling visibility of reply comment component
-  const [isReplying, setReplying] = useState(false);
-
-  const [advancedEditor, setAdvancedEditor] = usePersistedState('comment-editor-mode', false);
+  const [advancedEditor] = usePersistedState('comment-editor-mode', false);
 
   // to debounce subsequent requests
   const shouldFetch =
@@ -108,12 +105,15 @@ function Comment(props: Props) {
   function handleSubmit() {
     updateComment(commentId, editedMessage);
     setEditing(false);
-    setReplying(false);
   }
 
   return (
     <li
-      className={classnames('comment', { comment__reply: parentId !== null })}
+      className={classnames('comment', {
+        comment__reply: parentId !== null,
+        comment__highlighted: linkedComment && linkedComment.comment_id === commentId,
+      })}
+      id={commentId}
       onMouseOver={() => setMouseHover(true)}
       onMouseOut={() => setMouseHover(false)}
     >
@@ -133,9 +133,16 @@ function Comment(props: Props) {
                 label={author}
               />
             )}
-            <time className="comment__time" dateTime={timePosted}>
-              {DateTime.getTimeAgoStr(timePosted)}
-            </time>
+            {/* // link here */}
+            <Button
+              navigate={`${uri}?lc=${commentId}`}
+              label={
+                <time className="comment__time" dateTime={timePosted}>
+                  {DateTime.getTimeAgoStr(timePosted)}
+                </time>
+              }
+              className="button--uri-indicator"
+            />
           </div>
           <div className="comment__menu">
             <Menu>
@@ -174,8 +181,6 @@ function Comment(props: Props) {
                 value={editedMessage}
                 charCount={charCount}
                 onChange={handleEditMessageChanged}
-                quickActionLabel={!SIMPLE_SITE && (advancedEditor ? __('Simple Editor') : __('Advanced Editor'))}
-                quickActionHandler={() => setAdvancedEditor(!advancedEditor)}
                 textAreaMaxLength={FF_MAX_CHARS_IN_COMMENT}
               />
               <div className="section__actions">
@@ -191,35 +196,14 @@ function Comment(props: Props) {
             </Form>
           ) : editedMessage.length >= LENGTH_TO_COLLAPSE ? (
             <div className="comment__message">
-              <Expandable>
-                <MarkdownPreview content={message} />
-              </Expandable>
+              {/* <Expandable> */}
+              <MarkdownPreview content={message} />
+              {/* </Expandable> */}
             </div>
           ) : (
             <div className="comment__message">
               <MarkdownPreview content={message} />
             </div>
-          )}
-        </div>
-        {!parentId && !isEditing && (
-          <Button
-            button="link"
-            requiresAuth={IS_WEB}
-            className="comment__reply-button"
-            onClick={() => setReplying(true)}
-            label={__('Reply')}
-          />
-        )}
-        <div>
-          {isReplying ? (
-            <CommentCreate
-              uri={uri}
-              parentId={commentId}
-              onDoneReplying={() => setReplying(false)}
-              onCancelReplying={() => setReplying(false)}
-            />
-          ) : (
-            ''
           )}
         </div>
       </div>
