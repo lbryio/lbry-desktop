@@ -113,3 +113,4 @@ export const OPEN_LOG_FOLDER = 'Folder';
 export const LBRY_STATUS = 'BarChart';
 export const NOTIFICATION = 'Bell';
 export const LAYOUT = 'Layout';
+export const REPLY = 'Reply';
