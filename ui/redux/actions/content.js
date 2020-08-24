@@ -28,7 +28,7 @@ import { makeSelectClientSetting, selectosNotificationsEnabled, selectDaemonSett
 import { formatLbryUrlForWeb } from 'util/url';
 import { selectFloatingUri } from 'redux/selectors/content';
 
-const DOWNLOAD_POLL_INTERVAL = 250;
+const DOWNLOAD_POLL_INTERVAL = 1000;
 
 export function doUpdateLoadStatus(uri: string, outpoint: string) {
   // Updates the loading status for a uri as it's downloading
