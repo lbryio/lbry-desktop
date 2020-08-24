@@ -14,7 +14,6 @@ import Icon from 'component/common/icon';
 import { FormField, Form } from 'component/common/form';
 import classnames from 'classnames';
 import usePersistedState from 'effects/use-persisted-state';
-import CommentsReplies from 'component/commentsReplies';
 
 type Props = {
   uri: string,
@@ -74,8 +73,6 @@ function Comment(props: Props) {
   const [isReplying, setReplying] = useState(false);
 
   const [advancedEditor, setAdvancedEditor] = usePersistedState('comment-editor-mode', false);
-
-  const [expanded, setExpanded] = React.useState(false);
 
   // to debounce subsequent requests
   const shouldFetch =
@@ -218,43 +215,6 @@ function Comment(props: Props) {
             </div>
           )}
         </div>
-        {!isReplying && !parentId && (
-          <div className="comment__actions">
-            {!isEditing && (
-              <Button
-                button="link"
-                requiresAuth={IS_WEB}
-                label={commentingEnabled ? __('Reply') : __('Sign in to reply')}
-                className="comment__action  button--uri-indicator"
-                onClick={() => setReplying(true)}
-                icon={ICONS.REPLY}
-              />
-            )}
-          </div>
-        )}
-        <CommentsReplies
-          uri={uri}
-          parentId={commentId}
-          linkedComment={linkedComment}
-          isReplying={isReplying}
-          setReplying={setReplying}
-          isExpanded={expanded}
-          setExpanded={setExpanded}
-        />
-        {!isReplying && !parentId && expanded && (
-          <div className="comment__actions">
-            {!isEditing && (
-              <Button
-                button="link"
-                requiresAuth={IS_WEB}
-                label={commentingEnabled ? __('Reply') : __('Sign in to reply')}
-                className="comment__action button--uri-indicator"
-                onClick={() => setReplying(true)}
-                icon={ICONS.REPLY}
-              />
-            )}
-          </div>
-        )}
       </div>
     </li>
   );

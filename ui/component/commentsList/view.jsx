@@ -5,6 +5,8 @@ import Spinner from 'component/spinner';
 import Button from 'component/button';
 import Card from 'component/common/card';
 import CommentCreate from 'component/commentCreate';
+import CommentsReplies from '../commentsReplies';
+import * as ICONS from '../../constants/icons';
 
 type Props = {
   comments: Array<any>,
@@ -14,10 +16,20 @@ type Props = {
   myChannels: ?Array<ChannelClaim>,
   isFetchingComments: boolean,
   linkedComment: any,
+  commentingEnabled: boolean,
 };
 
 function CommentList(props: Props) {
-  const { fetchComments, uri, comments, claimIsMine, myChannels, isFetchingComments, linkedComment } = props;
+  const {
+    fetchComments,
+    uri,
+    comments,
+    claimIsMine,
+    myChannels,
+    isFetchingComments,
+    linkedComment,
+    commentingEnabled,
+  } = props;
 
   const linkedCommentId = linkedComment && linkedComment.comment_id;
   const [start, setStart] = React.useState(0);
@@ -25,7 +37,7 @@ function CommentList(props: Props) {
   const totalComments = comments && comments.length;
 
   const moreBelow = totalComments - end > 0;
-  const moreAbove = start;
+  const shownComments = comments.length - (comments.length - end + start);
   // todo: implement comment_list --mine in SDK so redux can grab with selectCommentIsMine
   const isMyComment = (channelId: string) => {
     if (myChannels != null && channelId != null) {
@@ -36,12 +48,6 @@ function CommentList(props: Props) {
       }
     }
     return false;
-  };
-
-  const handleMoreAbove = () => {
-    if (moreAbove) {
-      setStart(start > 10 ? start - 10 : 0);
-    }
   };
 
   const handleMoreBelow = () => {
@@ -88,10 +94,7 @@ function CommentList(props: Props) {
       title={<span>{__('Comments')}</span>}
       body={
         <>
-          <div className={'comment'}>
-            <CommentCreate uri={uri} />
-          </div>
-          {Boolean(moreAbove) && <Button button={'link'} onClick={handleMoreAbove} label={'More above'} />}
+          {commentingEnabled && <CommentCreate uri={uri} />}
           <ul className="comments" ref={commentRef}>
             {isFetchingComments && (
               <div className="main--empty">
@@ -103,24 +106,41 @@ function CommentList(props: Props) {
               displayedComments &&
               displayedComments.map(comment => {
                 return (
-                  <Comment
-                    uri={uri}
-                    authorUri={comment.channel_url}
-                    author={comment.channel_name}
-                    claimId={comment.claim_id}
-                    commentId={comment.comment_id}
-                    key={comment.comment_id}
-                    message={comment.comment}
-                    parentId={comment.parent_id || null}
-                    timePosted={comment.timestamp * 1000}
-                    claimIsMine={claimIsMine}
-                    commentIsMine={comment.channel_id && isMyComment(comment.channel_id)}
-                    linkedComment={linkedComment}
-                  />
+                  <>
+                    <Comment
+                      uri={uri}
+                      authorUri={comment.channel_url}
+                      author={comment.channel_name}
+                      claimId={comment.claim_id}
+                      commentId={comment.comment_id}
+                      key={comment.comment_id}
+                      message={comment.comment}
+                      parentId={comment.parent_id || null}
+                      timePosted={comment.timestamp * 1000}
+                      claimIsMine={claimIsMine}
+                      commentIsMine={comment.channel_id && isMyComment(comment.channel_id)}
+                      linkedComment={linkedComment}
+                    />
+                    <CommentsReplies
+                      uri={uri}
+                      parentId={comment.comment_id}
+                      linkedComment={linkedComment}
+                      key={comment.comment_id + 'replies'}
+                    />
+                  </>
                 );
               })}
           </ul>
-          {moreBelow && <Button button={'link'} onClick={handleMoreBelow} label={'More below'} />}
+          {moreBelow && (
+            <div className={'comment__actions'}>
+              <Button
+                button={'link'}
+                onClick={handleMoreBelow}
+                label={__('Show More', { remaining: totalComments - end })}
+              />
+              <span>{__(`%shown% of %total%`, { shown: shownComments, total: totalComments })}</span>
+            </div>
+          )}
         </>
       }
     />

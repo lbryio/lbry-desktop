@@ -12,30 +12,25 @@ type Props = {
   myChannels: ?Array<ChannelClaim>,
   linkedComment?: Comment,
   parentId: string,
-  isReplying: boolean,
-  setReplying: boolean => void,
-  isExpanded: boolean,
-  setExpanded: boolean => void,
+  commentingEnabled: boolean,
 };
 
 function CommentsReplies(props: Props) {
-  const {
-    uri,
-    comments,
-    claimIsMine,
-    myChannels,
-    linkedComment,
-    parentId,
-    isReplying,
-    setReplying,
-    isExpanded,
-    setExpanded,
-  } = props;
-
+  const { uri, comments, claimIsMine, myChannels, linkedComment, parentId, commentingEnabled } = props;
+  const [isReplying, setReplying] = React.useState(false);
+  const [isExpanded, setExpanded] = React.useState(false);
   const [start, setStart] = React.useState(0);
-  const [end, setEnd] = React.useState(3);
+  const [end, setEnd] = React.useState(9);
   const sortedComments = comments ? [...comments].reverse() : [];
   const numberOfComments = comments ? comments.length : 0;
+
+  const showMore = () => {
+    if (start > 0) {
+      setStart(0);
+    } else {
+      setEnd(numberOfComments);
+    }
+  };
 
   const linkedCommentId = linkedComment ? linkedComment.comment_id : '';
 
@@ -77,13 +72,19 @@ function CommentsReplies(props: Props) {
     }
   }, [setStart, setEnd, setExpanded, linkedCommentId, commentsIndexOfLInked]);
 
-  if (!comments && !isReplying) return null;
-
   const displayedComments = sortedComments.slice(start, end);
 
   return (
-    <div className={'comment__replies-container'}>
+    <li className={'comment__replies-container'}>
       <div className="comment__actions">
+        <Button
+          button="link"
+          requiresAuth={IS_WEB}
+          label={commentingEnabled ? __('Reply') : __('Sign in to reply')}
+          className="comment__action  button--uri-indicator"
+          onClick={() => setReplying(!isReplying)}
+          icon={ICONS.REPLY}
+        />
         {!isExpanded && Boolean(numberOfComments) && (
           <Button
             button={'link'}
@@ -91,14 +92,6 @@ function CommentsReplies(props: Props) {
             label={__('Show %number% Replies', { number: numberOfComments })}
             onClick={() => setExpanded(true)}
             icon={ICONS.DOWN}
-          />
-        )}
-        {isExpanded && start > 0 && (
-          <Button
-            button={'link'}
-            label={__('Show %number% older', { number: start })}
-            onClick={() => setStart(0)}
-            className={'button--uri-indicator'}
           />
         )}
         {isExpanded && (
@@ -132,18 +125,20 @@ function CommentsReplies(props: Props) {
           })}
         </ul>
       )}
-      {isExpanded && comments && end < numberOfComments && (
+      {isExpanded && comments && (end < numberOfComments || start > 0) && (
         <div className="comment__actions">
           <Button
             button={'link'}
-            label={__('Show %number% newer', { number: numberOfComments - end })}
-            onClick={() => setEnd(end + 10)}
+            label={__('Show more', { number: numberOfComments - end })}
+            onClick={showMore}
             className={'button--uri-indicator'}
           />
         </div>
       )}
+
       {isReplying ? (
         <CommentCreate
+          key={parentId}
           uri={uri}
           parentId={parentId}
           onDoneReplying={() => handleCommentDone()}
@@ -152,7 +147,7 @@ function CommentsReplies(props: Props) {
       ) : (
         ''
       )}
-    </div>
+    </li>
   );
 }
 

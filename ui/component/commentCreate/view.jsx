@@ -107,7 +107,7 @@ export function CommentCreate(props: Props) {
       {/* {!isReply && <ChannelSelection channel={channel} hideAnon onChannelChange={handleChannelChange} />} */}
       <FormField
         disabled={channel === CHANNEL_NEW}
-        type={SIMPLE_SITE ? 'textarea' : advancedEditor ? 'markdown' : 'textarea'}
+        type={SIMPLE_SITE ? 'textarea' : advancedEditor && !isReply ? 'markdown' : 'textarea'}
         name={isReply ? 'content_reply' : 'content_description'}
         label={
           <span className={'comment-new__label-wrapper'}>
@@ -115,7 +115,9 @@ export function CommentCreate(props: Props) {
             <ChannelSelection channel={channel} hideAnon tiny hideNew onChannelChange={setChannel} />
           </span>
         }
-        quickActionLabel={!SIMPLE_SITE && advancedEditor ? __('Simple Editor') : __('Advanced Editor')}
+        quickActionLabel={
+          !SIMPLE_SITE && (isReply ? undefined : advancedEditor ? __('Simple Editor') : __('Advanced Editor'))
+        }
         quickActionHandler={!SIMPLE_SITE && toggleEditorMode}
         onFocus={onTextareaFocus}
         placeholder={__('Say something about this...')}
