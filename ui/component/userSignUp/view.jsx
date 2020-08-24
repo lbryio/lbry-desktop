@@ -9,13 +9,13 @@ import UserChannelFollowIntro from 'component/userChannelFollowIntro';
 import UserTagFollowIntro from 'component/userTagFollowIntro';
 import { DEFAULT_BID_FOR_FIRST_CHANNEL } from 'component/userFirstChannel/view';
 import { YOUTUBE_STATUSES } from 'lbryinc';
+import { SETTINGS } from 'lbry-redux';
 import REWARDS from 'rewards';
 import UserVerify from 'component/userVerify';
 import Spinner from 'component/spinner';
 import YoutubeTransferStatus from 'component/youtubeTransferStatus';
 import SyncPassword from 'component/syncPassword';
 import useFetched from 'effects/use-fetched';
-import usePersistedState from 'effects/use-persisted-state';
 import Confetti from 'react-confetti';
 
 type Props = {
@@ -36,6 +36,11 @@ type Props = {
   syncingWallet: boolean,
   getSyncError: ?string,
   creatingChannel: boolean,
+  syncSettings: () => void,
+  setClientSetting: (string, boolean) => void,
+  followingAcknowledged: boolean,
+  tagsAcknowledged: boolean,
+  rewardsAcknowledged: boolean,
 };
 
 function UserSignIn(props: Props) {
@@ -57,6 +62,11 @@ function UserSignIn(props: Props) {
     hasSynced,
     fetchingChannels,
     creatingChannel,
+    followingAcknowledged,
+    tagsAcknowledged,
+    rewardsAcknowledged,
+    syncSettings,
+    setClientSetting,
   } = props;
   const { search } = location;
   const urlParams = new URLSearchParams(search);
@@ -64,9 +74,6 @@ function UserSignIn(props: Props) {
   const step = urlParams.get('step');
   const shouldRedirectImmediately = urlParams.get('immediate');
   const [initialSignInStep, setInitialSignInStep] = React.useState();
-  const [hasSeenFollowList, setHasSeenFollowList] = usePersistedState('channel-follow-intro', false);
-  const [hasSkippedRewards, setHasSkippedRewards] = usePersistedState('skip-rewards-intro', false);
-  const [hasSeenTagsList, setHasSeenTagsList] = usePersistedState('channel-follow-intro', false);
   const hasVerifiedEmail = user && user.has_verified_email;
   const rewardsApproved = user && user.is_reward_approved;
   const isIdentityVerified = user && user.is_identity_verified;
@@ -87,7 +94,7 @@ function UserSignIn(props: Props) {
   // The possible screens for the sign in flow
   const showEmail = !hasVerifiedEmail;
   const showEmailVerification = (emailToVerify && !hasVerifiedEmail) || (!hasVerifiedEmail && passwordSet);
-  const showUserVerification = hasVerifiedEmail && !rewardsApproved && !isIdentityVerified && !hasSkippedRewards;
+  const showUserVerification = hasVerifiedEmail && !rewardsApproved && !isIdentityVerified && !rewardsAcknowledged;
   const showSyncPassword = syncEnabled && getSyncError;
   const showChannelCreation =
     hasVerifiedEmail &&
@@ -97,8 +104,8 @@ function UserSignIn(props: Props) {
     channelCount === 0 &&
     !hasYoutubeChannels;
   const showYoutubeTransfer = hasVerifiedEmail && hasYoutubeChannels && !isYoutubeTransferComplete;
-  const showFollowIntro = step === 'channels' || (hasVerifiedEmail && !hasSeenFollowList);
-  const showTagsIntro = step === 'tags' || (hasVerifiedEmail && !hasSeenTagsList);
+  const showFollowIntro = step === 'channels' || (hasVerifiedEmail && !followingAcknowledged);
+  const showTagsIntro = step === 'tags' || (hasVerifiedEmail && !tagsAcknowledged);
   const canHijackSignInFlowWithSpinner = hasVerifiedEmail && !getSyncError && !showFollowIntro;
   const isCurrentlyFetchingSomething = fetchingChannels || claimingReward || syncingWallet || creatingChannel;
   const isWaitingForSomethingToFinish =
@@ -106,6 +113,11 @@ function UserSignIn(props: Props) {
     (!hasFetchedReward && !hasClaimedEmailAward) || (syncEnabled && !hasSynced);
   const showLoadingSpinner =
     canHijackSignInFlowWithSpinner && (isCurrentlyFetchingSomething || isWaitingForSomethingToFinish);
+
+  function setSettingAndSync(setting, value) {
+    setClientSetting(setting, value);
+    syncSettings();
+  }
 
   React.useEffect(() => {
     fetchUser();
@@ -126,7 +138,13 @@ function UserSignIn(props: Props) {
   const SIGN_IN_FLOW = [
     showEmail && <UserEmailNew />,
     showEmailVerification && <UserEmailVerify />,
-    showUserVerification && <UserVerify onSkip={() => setHasSkippedRewards(true)} />,
+    showUserVerification && (
+      <UserVerify
+        onSkip={() => {
+          setSettingAndSync(SETTINGS.REWARDS_ACKNOWLEDGED, true);
+        }}
+      />
+    ),
     showChannelCreation && <UserFirstChannel />,
     showFollowIntro && (
       <UserChannelFollowIntro
@@ -140,7 +158,7 @@ function UserSignIn(props: Props) {
           }
 
           history.replace(url);
-          setHasSeenFollowList(true);
+          setSettingAndSync(SETTINGS.FOLLOWING_ACKNOWLEDGED, true);
         }}
         onBack={() => {
           let url = `/$/${PAGES.AUTH}?reset_scroll=1&step=tags`;
@@ -152,7 +170,7 @@ function UserSignIn(props: Props) {
           }
 
           history.replace(url);
-          setHasSeenFollowList(false);
+          setSettingAndSync(SETTINGS.FOLLOWING_ACKNOWLEDGED, false);
         }}
       />
     ),
@@ -168,7 +186,7 @@ function UserSignIn(props: Props) {
           }
 
           history.replace(url);
-          setHasSeenTagsList(true);
+          setSettingAndSync(SETTINGS.TAGS_ACKNOWLEDGED, true);
         }}
       />
     ),

@@ -12,7 +12,7 @@ type Props = {
   followedTags: Array<Tag>,
 };
 
-function UserChannelFollowIntro(props: Props) {
+function UserTagFollowIntro(props: Props) {
   const { onContinue, followedTags } = props;
   const followingCount = (followedTags && followedTags.length) || 0;
 
@@ -23,7 +23,8 @@ function UserChannelFollowIntro(props: Props) {
       actions={
         <React.Fragment>
           <Form onSubmit={onContinue}>
-            <div className="section__actions">
+            <div className="section__actions--between">
+              <span />
               <Button
                 button="primary"
                 type="Submit"
@@ -54,4 +55,4 @@ function UserChannelFollowIntro(props: Props) {
   );
 }
 
-export default UserChannelFollowIntro;
+export default UserTagFollowIntro;
