@@ -10,7 +10,6 @@ import { Form } from 'component/common/form-components/form';
 import Icon from 'component/common/icon';
 import { FormField } from 'component/common/form-components/form-field';
 import { withRouter } from 'react-router';
-import Card from 'component/common/card';
 import classnames from 'classnames';
 import Yrbl from 'component/yrbl';
 import { PURCHASES_PAGE_SIZE } from 'page/library/view';
@@ -56,9 +55,9 @@ function FileListDownloaded(props: Props) {
   }
 
   return (
-    <Card
-      title={
-        <div>
+    <>
+      <div className="section__header--actions">
+        <div className="section__actions--inline">
           <Button
             icon={ICONS.LIBRARY}
             button="alt"
@@ -79,66 +78,60 @@ function FileListDownloaded(props: Props) {
           />
           {loading && <Spinner type="small" />}
         </div>
-      }
-      titleActions={
-        <div className="card__actions--inline">
-          <Form onSubmit={() => {}} className="wunderbar--inline">
-            <Icon icon={ICONS.SEARCH} />
-            <FormField
-              className="wunderbar__input--inline"
-              onChange={handleInputChange}
-              value={query}
-              type="text"
-              name="query"
-              placeholder={__('Search')}
-            />
-          </Form>
+
+        <Form onSubmit={() => {}} className="wunderbar--inline">
+          <Icon icon={ICONS.SEARCH} />
+          <FormField
+            className="wunderbar__input--inline"
+            onChange={handleInputChange}
+            value={query}
+            type="text"
+            name="query"
+            placeholder={__('Search')}
+          />
+        </Form>
+      </div>
+      {IS_WEB && viewMode === VIEW_DOWNLOADS ? (
+        <div className="main--empty">
+          <Yrbl
+            title={__('Try Out the App!')}
+            subtitle={
+              <>
+                <p className="section__subtitle">
+                  {__("Download the app to track files you've viewed and downloaded.")}
+                </p>
+                <div className="section__actions">
+                  <Button button="primary" label={__('Get The App')} href="https://lbry.com/get" />
+                </div>
+              </>
+            }
+          />
         </div>
-      }
-      isBodyList
-      body={
-        IS_WEB && viewMode === VIEW_DOWNLOADS ? (
-          <div className="main--empty">
-            <Yrbl
-              title={__('Try Out the App!')}
-              subtitle={
-                <>
-                  <p className="section__subtitle">
-                    {__("Download the app to track files you've viewed and downloaded.")}
-                  </p>
-                  <div className="section__actions">
-                    <Button button="primary" label={__('Get The App')} href="https://lbry.com/get" />
-                  </div>
-                </>
-              }
+      ) : (
+        <div>
+          <ClaimList
+            renderProperties={() => null}
+            empty={
+              viewMode === VIEW_PURCHASES && !query ? (
+                <div>{__('No purchases found.')}</div>
+              ) : (
+                __('No results for %query%', { query })
+              )
+            }
+            uris={viewMode === VIEW_PURCHASES ? myPurchases : myDownloads}
+            loading={loading}
+          />
+          {!query && (
+            <Paginate
+              totalPages={Math.ceil(
+                Number(viewMode === VIEW_PURCHASES ? myPurchasesCount : downloadedUrlsCount) /
+                  Number(viewMode === VIEW_PURCHASES ? PURCHASES_PAGE_SIZE : PAGE_SIZE)
+              )}
             />
-          </div>
-        ) : (
-          <div>
-            <ClaimList
-              renderProperties={() => null}
-              empty={
-                viewMode === VIEW_PURCHASES && !query ? (
-                  <div>{__('No purchases found.')}</div>
-                ) : (
-                  __('No results for %query%', { query })
-                )
-              }
-              uris={viewMode === VIEW_PURCHASES ? myPurchases : myDownloads}
-              loading={loading}
-            />
-            {!query && (
-              <Paginate
-                totalPages={Math.ceil(
-                  Number(viewMode === VIEW_PURCHASES ? myPurchasesCount : downloadedUrlsCount) /
-                    Number(viewMode === VIEW_PURCHASES ? PURCHASES_PAGE_SIZE : PAGE_SIZE)
-                )}
-              />
-            )}
-          </div>
-        )
-      }
-    />
+          )}
+        </div>
+      )}
+    </>
   );
 }
 
