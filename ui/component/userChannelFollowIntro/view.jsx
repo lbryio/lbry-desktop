@@ -39,7 +39,7 @@ function UserChannelFollowIntro(props: Props) {
       )}
       actions={
         <React.Fragment>
-          <div className="section__actions">
+          <div className="section__actions--between">
             <Button button="secondary" onClick={onBack} label={__('Back')} />
             <Button
               button="primary"
