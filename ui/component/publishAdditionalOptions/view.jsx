@@ -135,7 +135,7 @@ function PublishAdditionalOptions(props: Props) {
                           <Button
                             button="primary"
                             onClick={signup}
-                            label={__('Sign In With YouTube')}
+                            label={__('Log In With YouTube')}
                             disabled={false}
                           />
                         ) : (

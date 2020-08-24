@@ -63,7 +63,7 @@ function UserEmail(props: Props) {
             value={email || ''}
           />
         ) : (
-          <Button button="primary" label={__('Sign In')} navigate={`/$/${PAGES.AUTH}`} />
+          <Button button="primary" label={__('Log In')} navigate={`/$/${PAGES.AUTH}`} />
         )
       }
     />

@@ -98,7 +98,7 @@ export function CommentCreate(props: Props) {
 
   if (!commentingEnabled) {
     return (
-      <I18nMessage tokens={{ sign_in_link: <Button button="link" requiresAuth label={__('sign in')} /> }}>
+      <I18nMessage tokens={{ sign_in_link: <Button button="link" requiresAuth label={__('log in')} /> }}>
         Please %sign_in_link% to comment.
       </I18nMessage>
     );
