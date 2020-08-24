@@ -21,6 +21,7 @@ type Props = {
   parentId?: string,
   onDoneReplying?: () => void,
   onCancelReplying?: () => void,
+  isNested: boolean,
 };
 
 export function CommentCreate(props: Props) {
@@ -33,6 +34,7 @@ export function CommentCreate(props: Props) {
     parentId,
     onDoneReplying,
     onCancelReplying,
+    isNested,
   } = props;
   const { claim_id: claimId } = claim;
   const isReply = !!parentId;
@@ -103,15 +105,20 @@ export function CommentCreate(props: Props) {
   }
 
   return (
-    <Form onSubmit={handleSubmit} className={classnames('comment__create', { 'comment__create--reply': isReply })}>
-      {/* {!isReply && <ChannelSelection channel={channel} hideAnon onChannelChange={handleChannelChange} />} */}
+    <Form
+      onSubmit={handleSubmit}
+      className={classnames('comment__create', {
+        'comment__create--reply': isReply,
+        'comment__create--nested-reply': isNested,
+      })}
+    >
       <FormField
         disabled={channel === CHANNEL_NEW}
         type={SIMPLE_SITE ? 'textarea' : advancedEditor && !isReply ? 'markdown' : 'textarea'}
         name={isReply ? 'content_reply' : 'content_description'}
         label={
-          <span className={'comment-new__label-wrapper'}>
-            <div className={'comment-new__label'}>{isReply ? __('Replying as') + ' ' : __('Comment as') + ' '}</div>
+          <span className="comment-new__label-wrapper">
+            <div className="comment-new__label">{isReply ? __('Replying as') + ' ' : __('Comment as') + ' '}</div>
             <ChannelSelection channel={channel} hideAnon tiny hideNew onChannelChange={setChannel} />
           </span>
         }

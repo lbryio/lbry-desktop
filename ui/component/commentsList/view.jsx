@@ -5,8 +5,7 @@ import Spinner from 'component/spinner';
 import Button from 'component/button';
 import Card from 'component/common/card';
 import CommentCreate from 'component/commentCreate';
-import CommentsReplies from '../commentsReplies';
-import * as ICONS from '../../constants/icons';
+import CommentsReplies from 'component/commentsReplies';
 
 type Props = {
   comments: Array<any>,
@@ -32,12 +31,11 @@ function CommentList(props: Props) {
   } = props;
 
   const linkedCommentId = linkedComment && linkedComment.comment_id;
-  const [start, setStart] = React.useState(0);
+  const [start] = React.useState(0);
   const [end, setEnd] = React.useState(9);
   const totalComments = comments && comments.length;
 
   const moreBelow = totalComments - end > 0;
-  const shownComments = comments.length - (comments.length - end + start);
   // todo: implement comment_list --mine in SDK so redux can grab with selectCommentIsMine
   const isMyComment = (channelId: string) => {
     if (myChannels != null && channelId != null) {
@@ -63,7 +61,7 @@ function CommentList(props: Props) {
   }, [fetchComments, uri]);
 
   useEffect(() => {
-    if (linkedCommentId) {
+    if (linkedCommentId && commentRef && commentRef.current) {
       commentRef.current.scrollIntoView({ block: 'start' });
       window.scrollBy(0, -100);
     }
@@ -92,7 +90,7 @@ function CommentList(props: Props) {
   return (
     <Card
       title={<span>{__('Comments')}</span>}
-      body={
+      actions={
         <>
           {commentingEnabled && <CommentCreate uri={uri} />}
           <ul className="comments" ref={commentRef}>
@@ -132,13 +130,8 @@ function CommentList(props: Props) {
               })}
           </ul>
           {moreBelow && (
-            <div className={'comment__actions'}>
-              <Button
-                button={'link'}
-                onClick={handleMoreBelow}
-                label={__('Show More', { remaining: totalComments - end })}
-              />
-              <span>{__(`%shown% of %total%`, { shown: shownComments, total: totalComments })}</span>
+            <div className="comment__actions">
+              <Button button="link" className="comment__more-below" onClick={handleMoreBelow} label={__('Show More')} />
             </div>
           )}
         </>

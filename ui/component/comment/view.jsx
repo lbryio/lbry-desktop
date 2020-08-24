@@ -34,7 +34,6 @@ type Props = {
   deleteComment: string => void,
   blockChannel: string => void,
   linkedComment?: any,
-  commentingEnabled: boolean,
 };
 
 const LENGTH_TO_COLLAPSE = 300;
@@ -59,7 +58,6 @@ function Comment(props: Props) {
     deleteComment,
     blockChannel,
     linkedComment,
-    commentingEnabled,
   } = props;
 
   const [isEditing, setEditing] = useState(false);
@@ -68,11 +66,7 @@ function Comment(props: Props) {
 
   // used for controlling the visibility of the menu icon
   const [mouseIsHovering, setMouseHover] = useState(false);
-
-  // used for controlling visibility of reply comment component
-  const [isReplying, setReplying] = useState(false);
-
-  const [advancedEditor, setAdvancedEditor] = usePersistedState('comment-editor-mode', false);
+  const [advancedEditor] = usePersistedState('comment-editor-mode', false);
 
   // to debounce subsequent requests
   const shouldFetch =
@@ -111,7 +105,6 @@ function Comment(props: Props) {
   function handleSubmit() {
     updateComment(commentId, editedMessage);
     setEditing(false);
-    setReplying(false);
   }
 
   return (
@@ -188,8 +181,6 @@ function Comment(props: Props) {
                 value={editedMessage}
                 charCount={charCount}
                 onChange={handleEditMessageChanged}
-                quickActionLabel={!SIMPLE_SITE && (advancedEditor ? __('Simple Editor') : __('Advanced Editor'))}
-                quickActionHandler={() => setAdvancedEditor(!advancedEditor)}
                 textAreaMaxLength={FF_MAX_CHARS_IN_COMMENT}
               />
               <div className="section__actions">

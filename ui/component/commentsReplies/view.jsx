@@ -78,66 +78,67 @@ function CommentsReplies(props: Props) {
     <li className={'comment__replies-container'}>
       <div className="comment__actions">
         <Button
-          button="link"
           requiresAuth={IS_WEB}
           label={commentingEnabled ? __('Reply') : __('Sign in to reply')}
-          className="comment__action  button--uri-indicator"
+          className="comment__action"
           onClick={() => setReplying(!isReplying)}
           icon={ICONS.REPLY}
         />
         {!isExpanded && Boolean(numberOfComments) && (
           <Button
-            button={'link'}
-            className={'button--uri-indicator'}
+            className="comment__action"
             label={__('Show %number% Replies', { number: numberOfComments })}
             onClick={() => setExpanded(true)}
             icon={ICONS.DOWN}
           />
         )}
-        {isExpanded && (
-          <Button
-            button={'link'}
-            label={'Hide Replies'}
-            onClick={() => setExpanded(false)}
-            className={'button--uri-indicator'}
-          />
-        )}
       </div>
       {comments && displayedComments && isExpanded && (
-        <ul className="comments">
-          {displayedComments.map(comment => {
-            return (
-              <Comment
-                uri={uri}
-                authorUri={comment.channel_url}
-                author={comment.channel_name}
-                claimId={comment.claim_id}
-                commentId={comment.comment_id}
-                key={comment.comment_id}
-                message={comment.comment}
-                parentId={comment.parent_id || null}
-                timePosted={comment.timestamp * 1000}
-                claimIsMine={claimIsMine}
-                commentIsMine={comment.channel_id && isMyComment(comment.channel_id)}
-                linkedComment={linkedComment}
-              />
-            );
-          })}
-        </ul>
+        <div>
+          <div className="comment__replies">
+            <Button className="comment__threadline" aria-label="Hide Replies" onClick={() => setExpanded(false)} />
+
+            <ul className="comments--replies">
+              {displayedComments.map(comment => {
+                return (
+                  <Comment
+                    uri={uri}
+                    authorUri={comment.channel_url}
+                    author={comment.channel_name}
+                    claimId={comment.claim_id}
+                    commentId={comment.comment_id}
+                    key={comment.comment_id}
+                    message={comment.comment}
+                    parentId={comment.parent_id || null}
+                    timePosted={comment.timestamp * 1000}
+                    claimIsMine={claimIsMine}
+                    commentIsMine={comment.channel_id && isMyComment(comment.channel_id)}
+                    linkedComment={linkedComment}
+                  />
+                );
+              })}
+            </ul>
+          </div>
+          {!isReplying && (
+            <Button
+              requiresAuth={IS_WEB}
+              label={commentingEnabled ? __('Reply') : __('Sign in to reply')}
+              className="comment__action--nested"
+              onClick={() => setReplying(!isReplying)}
+              icon={ICONS.REPLY}
+            />
+          )}
+        </div>
       )}
       {isExpanded && comments && (end < numberOfComments || start > 0) && (
         <div className="comment__actions">
-          <Button
-            button={'link'}
-            label={__('Show more', { number: numberOfComments - end })}
-            onClick={showMore}
-            className={'button--uri-indicator'}
-          />
+          <Button button="link" label={__('Show more')} onClick={showMore} className="button--uri-indicator" />
         </div>
       )}
 
       {isReplying ? (
         <CommentCreate
+          isNested={isExpanded}
           key={parentId}
           uri={uri}
           parentId={parentId}

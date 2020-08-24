@@ -413,7 +413,9 @@ fieldset-group {
 }
 
 .form-field__two-column {
-  column-count: 2;
+  @media (min-width: $breakpoint-small) {
+    column-count: 2;
+  }
 }
 
 .form-field__quick-action {
@@ -435,6 +437,7 @@ fieldset-section {
   .select--slim {
     select {
       max-height: 1.5rem !important;
+      padding: 0 var(--spacing-xs);
     }
   }
 }
