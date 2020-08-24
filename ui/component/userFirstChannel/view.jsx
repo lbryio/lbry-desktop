@@ -39,11 +39,11 @@ function UserFirstChannel(props: Props) {
   return (
     <div className="main__channel-creation">
       <Card
-        title={__('Create A Channel')}
+        title={__('Create a Channel')}
         subtitle={
           <React.Fragment>
-            <p>{__('A channel is your identity on the LBRY network.')}</p>
-            <p>{__('You can have more than one or remove this later.')}</p>
+            <p>{__('Your channel will be used for publishing and commenting.')}</p>
+            <p>{__('You can have more than one or remove it later.')}</p>
           </React.Fragment>
         }
         actions={
