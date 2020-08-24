@@ -15,6 +15,7 @@ type Props = {
   allowGifs?: boolean,
   claim: ?ChannelClaim,
   doResolveUri: string => void,
+  isResolving: boolean,
 };
 
 function ChannelThumbnail(props: Props) {
@@ -28,6 +29,7 @@ function ChannelThumbnail(props: Props) {
     allowGifs = false,
     claim,
     doResolveUri,
+    isResolving,
   } = props;
   const [thumbError, setThumbError] = React.useState(false);
   const shouldResolve = claim === undefined;
@@ -61,6 +63,7 @@ function ChannelThumbnail(props: Props) {
       className={classnames('channel-thumbnail', className, {
         [colorClassName]: !showThumb,
         'channel-thumbnail--small': small,
+        'channel-thumbnail--resolving': isResolving,
       })}
     >
       {!showThumb && (
