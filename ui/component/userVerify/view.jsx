@@ -37,19 +37,18 @@ class UserVerify extends React.PureComponent<Props> {
     return (
       <React.Fragment>
         <section className="section__header">
-          <h1 className="section__title--large">{__('Rewards Validation')}</h1>
+          <h1 className="section__title--large">{__('Get Validated')}</h1>
           <p>
             <I18nMessage
               tokens={{
                 rewards_program: (
-                  <Button button="link" label={__('Rewards Program')} href="https://lbry.com/faq/rewards" />
+                  <Button button="link" label={__('other rewards')} href="https://lbry.com/faq/rewards" />
                 ),
                 Refresh: <Button onClick={() => fetchUser()} button="link" label={__('Refresh')} />,
                 Skip: <Button {...skipButtonProps} button="link" label={__('Skip')} />,
               }}
             >
-              If you'd like to participate our %rewards_program% to earn credits, please complete one of the steps below
-              to be validated. %Refresh% or %Skip%.
+              Validated accounts can earn for views and are eligible for %rewards_program%. Please complete one of the steps below. %Refresh% or %Skip%.
             </I18nMessage>
           </p>
           <p>{__('This step is not required to use LBRY, and not all users or regions may qualify.')}</p>
