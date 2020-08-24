@@ -131,6 +131,17 @@ export class FormField extends React.PureComponent<Props> {
             </select>
           </fieldset-section>
         );
+      } else if (type === 'select-tiny') {
+        input = (
+          <fieldset-section class="select--slim">
+            {(label || errorMessage) && (
+              <label htmlFor={name}>{errorMessage ? <span className="error__text">{errorMessage}</span> : label}</label>
+            )}
+            <select id={name} {...inputProps}>
+              {children}
+            </select>
+          </fieldset-section>
+        );
       } else if (type === 'markdown') {
         const handleEvents = {
           contextmenu: openEditorMenu,

@@ -17,6 +17,7 @@ type Props = {
   label?: string,
   injected?: Array<string>,
   emailVerified: boolean,
+  tiny: boolean,
 };
 
 type State = {
@@ -91,7 +92,7 @@ class ChannelSelection extends React.PureComponent<Props, State> {
 
   render() {
     const channel = this.state.addingChannel ? CHANNEL_NEW : this.props.channel;
-    const { fetchingChannels, channels = [], hideAnon, hideNew, label, injected = [] } = this.props;
+    const { fetchingChannels, channels = [], hideAnon, hideNew, label, injected = [], tiny } = this.props;
     const { addingChannel } = this.state;
 
     return (
@@ -99,8 +100,9 @@ class ChannelSelection extends React.PureComponent<Props, State> {
         <FormField
           id={ID_FF_SELECT_CHANNEL}
           name="channel"
-          label={label || __('Channel')}
-          type="select"
+          label={!tiny && (label || __('Channel'))}
+          labelOnLeft={tiny}
+          type={tiny ? 'select-tiny' : 'select'}
           onChange={this.handleChannelChange}
           value={channel}
         >
