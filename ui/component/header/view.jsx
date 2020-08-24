@@ -322,7 +322,7 @@ const Header = (props: Props) => {
                         ) : !IS_WEB ? (
                           <MenuItem className="menu__link" onSelect={() => history.push(`/$/${PAGES.AUTH}`)}>
                             <Icon aria-hidden icon={ICONS.INVITE} />
-                            {__('Sign In')}
+                            {__('Log In')}
                           </MenuItem>
                         ) : null}
                       </MenuList>
@@ -378,7 +378,7 @@ const Header = (props: Props) => {
 
                 {IS_WEB && !authenticated && (
                   <div className="header__auth-buttons">
-                    <Button navigate={`/$/${PAGES.AUTH_SIGNIN}`} button="link" label={__('Sign In')} />
+                    <Button navigate={`/$/${PAGES.AUTH_SIGNIN}`} button="link" label={__('Log In')} />
                     <Button navigate={`/$/${PAGES.AUTH}`} button="primary" label={__('Sign Up')} />
                   </div>
                 )}

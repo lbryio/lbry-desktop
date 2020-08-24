@@ -1,4 +1,5 @@
 // @flow
+import { SITE_NAME } from 'config';
 import React from 'react';
 import BusyIndicator from 'component/common/busy-indicator';
 import InviteNew from 'component/inviteNew';
@@ -31,7 +32,9 @@ class InvitePage extends React.PureComponent<Props> {
     return (
       <Page>
         {!authenticated ? (
-          <RewardAuthIntro title={__('Sign In to lbry.tv to Earn Rewards From Inviting Your Friends')} />
+          <RewardAuthIntro
+            title={__('Log In to %SITE_NAME% to Earn Rewards From Inviting Your Friends', { SITE_NAME })}
+          />
         ) : (
           <React.Fragment>
             {isPending && <BusyIndicator message={__('Checking your invite status')} />}
