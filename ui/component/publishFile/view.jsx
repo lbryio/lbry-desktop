@@ -257,16 +257,16 @@ function PublishFile(props: Props) {
     const isVideo = contentType && contentType[0] === 'video';
     const isMp4 = contentType && contentType[1] === 'mp4';
 
-    let isMarkdownText = false;
+    let isTextPost = false;
 
-    if (contentType) {
-      isMarkdownText = contentType[0] === 'text';
+    if (contentType && contentType[0] === 'text') {
+      isTextPost = contentType[1] === 'plain' || contentType[1] === 'markdown';
       setCurrentFileType(contentType);
     } else if (file.name) {
       // If user's machine is missign a valid content type registration
       // for markdown content: text/markdown, file extension will be used instead
       const extension = file.name.split('.').pop();
-      isMarkdownText = MARKDOWN_FILE_EXTENSIONS.includes(extension);
+      isTextPost = MARKDOWN_FILE_EXTENSIONS.includes(extension);
     }
 
     if (isVideo) {
@@ -288,7 +288,7 @@ function PublishFile(props: Props) {
       updateFileInfo(0, file.size, isVideo);
     }
 
-    if (isMarkdownText) {
+    if (isTextPost) {
       // Create reader
       const reader = new FileReader();
       // Handler for file reader
