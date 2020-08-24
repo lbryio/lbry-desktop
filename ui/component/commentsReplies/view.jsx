@@ -79,7 +79,7 @@ function CommentsReplies(props: Props) {
       <div className="comment__actions">
         <Button
           requiresAuth={IS_WEB}
-          label={commentingEnabled ? __('Reply') : __('Sign in to reply')}
+          label={commentingEnabled ? __('Reply') : __('Log in to reply')}
           className="comment__action"
           onClick={() => setReplying(!isReplying)}
           icon={ICONS.REPLY}
@@ -122,7 +122,7 @@ function CommentsReplies(props: Props) {
           {!isReplying && (
             <Button
               requiresAuth={IS_WEB}
-              label={commentingEnabled ? __('Reply') : __('Sign in to reply')}
+              label={commentingEnabled ? __('Reply') : __('Log in to reply')}
               className="comment__action--nested"
               onClick={() => setReplying(!isReplying)}
               icon={ICONS.REPLY}

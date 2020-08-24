@@ -67,7 +67,7 @@ function Ads(props: Props) {
         sign_in_to_lbrytv: (
           <Button
             button="link"
-            label={__('Sign in to') + ' ' + DOMAIN}
+            label={__('Log in to') + ' ' + DOMAIN}
             navigate={`/$/${PAGES.AUTH}?redirect=${pathname}`}
           />
         ),

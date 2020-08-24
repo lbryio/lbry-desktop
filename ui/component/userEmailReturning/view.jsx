@@ -1,4 +1,5 @@
 // @flow
+import { SITE_NAME } from 'config';
 import * as PAGES from 'constants/pages';
 import React, { useState } from 'react';
 import { FormField, Form } from 'component/common/form';
@@ -73,7 +74,7 @@ function UserEmailReturning(props: Props) {
         <UserEmailVerify />
       ) : (
         <Card
-          title={__('Sign In to lbry.tv')}
+          title={__('Log in to %SITE_NAME%', { SITE_NAME })}
           actions={
             <div>
               <Form onSubmit={handleSubmit} className="section">
@@ -109,7 +110,7 @@ function UserEmailReturning(props: Props) {
                     autoFocus={emailExistsFromUrl}
                     button="primary"
                     type="submit"
-                    label={__('Sign In')}
+                    label={__('Log In')}
                     disabled={!email || !valid || isPending}
                   />
                   <Button button="link" onClick={handleChangeToSignIn} label={__('Sign Up')} />
@@ -120,7 +121,7 @@ function UserEmailReturning(props: Props) {
           nag={
             <React.Fragment>
               {!emailDoesNotExist && emailExistsFromUrl && (
-                <Nag type="helpful" relative message={__('That email is already in use. Did you mean to sign in?')} />
+                <Nag type="helpful" relative message={__('That email is already in use. Did you mean to log in?')} />
               )}
               {emailDoesNotExist && (
                 <Nag

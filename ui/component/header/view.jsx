@@ -381,7 +381,7 @@ const Header = (props: Props) => {
 
                 {IS_WEB && !authenticated && (
                   <div className="header__auth-buttons">
-                    <Button navigate={`/$/${PAGES.AUTH_SIGNIN}`} button="link" label={__('Sign In')} />
+                    <Button navigate={`/$/${PAGES.AUTH_SIGNIN}`} button="link" label={__('Log In')} />
                     <Button navigate={`/$/${PAGES.AUTH}`} button="primary" label={__('Sign Up')} />
                   </div>
                 )}
