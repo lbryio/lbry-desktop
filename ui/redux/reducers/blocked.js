@@ -29,9 +29,10 @@ export default handleActions(
       action: { data: { blocked: ?Array<string> } }
     ) => {
       const { blocked } = action.data;
+      const sanitizedBlocked = blocked && blocked.filter(e => typeof e === 'string');
       return {
         ...state,
-        blockedChannels: blocked && blocked.length ? blocked : state.blockedChannels,
+        blockedChannels: sanitizedBlocked && sanitizedBlocked.length ? sanitizedBlocked : state.blockedChannels,
       };
     },
   },
