@@ -60,6 +60,10 @@ $metadata-z-index: 1;
   margin-right: var(--spacing-m);
 }
 
+.channel-thumbnail--resolving {
+  background-color: var(--color-gray-3);
+}
+
 .channel-thumbnail--small {
   height: 3rem;
   width: 3rem;
@@ -83,6 +87,7 @@ $metadata-z-index: 1;
 .channel-thumbnail__custom {
   width: 100%;
   object-fit: cover;
+  background-color: var(--color-thumbnail-background);
 }
 
 .channel-thumbnail__default {
