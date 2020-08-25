@@ -81,7 +81,7 @@ class UserEmailVerify extends React.PureComponent<Props> {
                   onClick={this.handleResendVerificationEmail}
                   disabled={resendingEmail}
                 />
-                <UserSignOutButton label={__('Start Over')} />
+                <UserSignOutButton label={__('Start over')} />
               </div>
               <p className="help--card-actions">
                 <I18nMessage

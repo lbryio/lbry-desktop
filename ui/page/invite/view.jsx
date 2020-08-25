@@ -33,7 +33,7 @@ class InvitePage extends React.PureComponent<Props> {
       <Page>
         {!authenticated ? (
           <RewardAuthIntro
-            title={__('Log In to %SITE_NAME% to Earn Rewards From Inviting Your Friends', { SITE_NAME })}
+            title={__('Log in to %SITE_NAME% to Earn Rewards From Inviting Your Friends', { SITE_NAME })}
           />
         ) : (
           <React.Fragment>
@@ -41,7 +41,6 @@ class InvitePage extends React.PureComponent<Props> {
             {!isPending && isFailed && <span className="empty">{__('Failed to retrieve invite status.')}</span>}
             {!isPending && !isFailed && (
               <React.Fragment>
-                {' '}
                 <InviteNew />
                 <InviteList />
               </React.Fragment>

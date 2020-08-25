@@ -1,10 +1,10 @@
 // @flow
+import { URL, SITE_NAME } from 'config';
 import React, { useEffect, useState } from 'react';
 import Button from 'component/button';
 import { Form, FormField } from 'component/common/form';
 import CopyableText from 'component/copyableText';
 import Card from 'component/common/card';
-import { URL } from 'config';
 import SelectChannel from 'component/selectChannel';
 import analytics from 'analytics';
 import I18nMessage from 'component/i18nMessage';
@@ -72,7 +72,7 @@ function InviteNew(props: Props) {
   return (
     <div className={'columns'}>
       <Card
-        title={__('Invite Link')}
+        title={__('Invites')}
         subtitle={__('Share this link with friends (or enemies) and earn LBC when they join lbry.tv')}
         actions={
           <React.Fragment>
@@ -92,7 +92,7 @@ function InviteNew(props: Props) {
                   referral_faq_link: <Button button="link" label={__('FAQ')} href="https://lbry.com/faq/referrals" />,
                 }}
               >
-                Earn %rewards_link% for inviting your friends. Read our %referral_faq_link% to learn more.
+                Read our %referral_faq_link% to learn more about rewards.
               </I18nMessage>
             </p>
           </React.Fragment>
@@ -100,8 +100,8 @@ function InviteNew(props: Props) {
       />
 
       <Card
-        title={__('Invite by Email')}
-        subtitle={__('Invite someone you know by email and earn LBC when they join lbry.tv.')}
+        title={__('Invite by email')}
+        subtitle={__('Invite someone you know by email and earn LBC when they join %SITE_NAME%.', { SITE_NAME })}
         actions={
           <React.Fragment>
             <Form onSubmit={handleSubmit}>
@@ -126,7 +126,7 @@ function InviteNew(props: Props) {
                     referral_faq_link: <Button button="link" label={__('FAQ')} href="https://lbry.com/faq/referrals" />,
                   }}
                 >
-                  Earn %rewards_link% for inviting your friends. Read our %referral_faq_link% to learn more.
+                  Read our %referral_faq_link% to learn more about rewards.
                 </I18nMessage>
               </p>
             </Form>
