@@ -9,7 +9,7 @@ const sections = [
     links: [
       {
         label: 'Twitter',
-        link: 'https://twitter.com/lbryio',
+        link: 'https://twitter.com/lbrycom',
       },
       {
         label: 'Reddit',
