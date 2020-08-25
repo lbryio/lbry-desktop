@@ -45,7 +45,7 @@ import CheckoutPage from 'page/checkoutPage';
 import ChannelNew from 'page/channelNew';
 import BuyPage from 'page/buy';
 import NotificationsPage from 'page/notifications';
-
+import { LINKED_COMMENT_QUERY_PARAM } from 'constants/comment';
 import { parseURI } from 'lbry-redux';
 import { SITE_TITLE, WELCOME_VERSION } from 'config';
 
@@ -115,6 +115,7 @@ function AppRouter(props: Props) {
   const entryIndex = history.index;
   const urlParams = new URLSearchParams(search);
   const resetScroll = urlParams.get('reset_scroll');
+  const hasLinkedCommentInUrl = urlParams.get(LINKED_COMMENT_QUERY_PARAM);
 
   // For people arriving at settings page from deeplinks, know whether they can "go back"
   useEffect(() => {
@@ -152,8 +153,10 @@ function AppRouter(props: Props) {
   }, [entries, entryIndex, title, uri]);
 
   useEffect(() => {
-    window.scrollTo(0, currentScroll);
-  }, [currentScroll, pathname, resetScroll]);
+    if (!hasLinkedCommentInUrl) {
+      window.scrollTo(0, currentScroll);
+    }
+  }, [currentScroll, pathname, resetScroll, hasLinkedCommentInUrl]);
 
   // react-router doesn't decode pathanmes before doing the route matching check
   // We have to redirect here because if we redirect on the server, it might get encoded again
