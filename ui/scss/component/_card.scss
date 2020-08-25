@@ -140,6 +140,7 @@
   .card {
     display: inline-block;
     margin-bottom: var(--spacing-l);
+    width: 100%;
   }
 
   @media (max-width: $breakpoint-small) {
