@@ -492,7 +492,7 @@ export function doUserResendVerificationEmail(email) {
       });
     };
 
-    Lbryio.call('user_email', 'resend_token', { email }, 'post')
+    Lbryio.call('user_email', 'resend_token', { email, only_if_expired: true }, 'post')
       .catch(error => {
         if (error.response && error.response.status === 409) {
           throw error;
