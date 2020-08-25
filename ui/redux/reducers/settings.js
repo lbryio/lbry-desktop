@@ -6,6 +6,7 @@ import { getSubsetFromKeysArray } from 'util/sync-settings';
 import { UNSYNCED_SETTINGS } from 'config';
 const { CLIENT_SYNC_KEYS } = SHARED_PREFERENCES;
 const settingsToIgnore = (UNSYNCED_SETTINGS && UNSYNCED_SETTINGS.trim().split(' ')) || [];
+if (IS_WEB) settingsToIgnore.push(SETTINGS.ENABLE_SYNC);
 const clientSyncKeys = settingsToIgnore.length
   ? CLIENT_SYNC_KEYS.filter(k => !settingsToIgnore.includes(k))
   : CLIENT_SYNC_KEYS;
