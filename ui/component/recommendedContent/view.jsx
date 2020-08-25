@@ -4,6 +4,7 @@ import React from 'react';
 import ClaimList from 'component/claimList';
 import Ads from 'web/component/ads';
 import Card from 'component/common/card';
+import { useIsMobile, useIsMediumScreen } from 'effects/use-screensize';
 
 type Options = {
   related_to: string,
@@ -20,32 +21,12 @@ type Props = {
   isAuthenticated: boolean,
 };
 
-export default class RecommendedContent extends React.PureComponent<Props> {
-  constructor() {
-    super();
+export default function RecommendedContent(props: Props) {
+  const { uri, claim, search, mature, recommendedContent, isSearching, isAuthenticated } = props;
+  const isMobile = useIsMobile();
+  const isMedium = useIsMediumScreen();
 
-    this.didSearch = undefined;
-  }
-
-  componentDidMount() {
-    this.getRecommendedContent();
-  }
-
-  componentDidUpdate(prevProps: Props) {
-    const { claim, uri } = this.props;
-
-    if (uri !== prevProps.uri) {
-      this.didSearch = false;
-    }
-
-    if (claim && !this.didSearch) {
-      this.getRecommendedContent();
-    }
-  }
-
-  getRecommendedContent() {
-    const { claim, search, mature } = this.props;
-
+  function getRecommendedContent() {
     if (claim && claim.value && claim.claim_id) {
       const options: Options = { size: 20, related_to: claim.claim_id, isBackgroundSearch: true };
       if (claim && !mature) {
@@ -54,33 +35,30 @@ export default class RecommendedContent extends React.PureComponent<Props> {
       const { title } = claim.value;
       if (title && options) {
         search(title, options);
-        this.didSearch = true;
       }
     }
   }
 
-  didSearch: ?boolean;
+  React.useEffect(() => {
+    getRecommendedContent();
+  }, [uri]);
 
-  render() {
-    const { recommendedContent, isSearching, isAuthenticated } = this.props;
-
-    return (
-      <Card
-        isBodyList
-        smallTitle
-        className="file-page__recommended"
-        title={__('Related')}
-        body={
-          <ClaimList
-            isCardBody
-            type="small"
-            loading={isSearching}
-            uris={recommendedContent}
-            injectedItem={SHOW_ADS && !isAuthenticated && IS_WEB && <Ads type="video" small />}
-            empty={__('No related content found')}
-          />
-        }
-      />
-    );
-  }
+  return (
+    <Card
+      isBodyList
+      smallTitle={!isMobile && !isMedium}
+      className="file-page__recommended"
+      title={__('Related')}
+      body={
+        <ClaimList
+          isCardBody
+          type="small"
+          loading={isSearching}
+          uris={recommendedContent}
+          injectedItem={SHOW_ADS && !isAuthenticated && IS_WEB && <Ads type="video" small />}
+          empty={__('No related content found')}
+        />
+      }
+    />
+  );
 }
