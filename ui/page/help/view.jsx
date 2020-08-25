@@ -149,22 +149,7 @@ class HelpPage extends React.PureComponent<Props, State> {
         />
 
         <Card
-          title={__('LBRY Status')}
-          subtitle={__('Check the status of various LBRY services.')}
-          actions={
-            <div className="section__actions">
-              <Button
-                href="https://status.lbry.com/"
-                label={__('Check Status')}
-                icon={ICONS.LBRY_STATUS}
-                button="secondary"
-              />
-            </div>
-          }
-        />
-
-        <Card
-          title={__('Find Assistance')}
+          title={__('Find assistance')}
           subtitle={
             <I18nMessage tokens={{ channel: <strong>#help</strong> }}>
               Live help is available most hours in the %channel% channel of our Discord chat room. Or you can always
@@ -180,11 +165,10 @@ class HelpPage extends React.PureComponent<Props, State> {
         />
 
         <Card
-          title={__('Report a Bug or Suggest a New Feature')}
+          title={__('Report a bug or suggest something')}
           subtitle={
             <React.Fragment>
-              {__('Did you find something wrong? Think LBRY could add something useful and cool?')}{' '}
-              <Button button="link" label={__('Learn more')} href="https://lbry.com/faq/support" />.
+              {__('Did you find something wrong? Think LBRY could add something useful and cool?')}
             </React.Fragment>
           }
           actions={
