@@ -112,7 +112,7 @@ function FileListPublished(props: Props) {
             <section className="main--empty">
               <div className=" section--small">
                 <h2 className="section__title--small">
-                  {__('Checking your publishes')}
+                  {__('Checking your uploads')}
                   <Spinner type="small" />
                 </h2>
               </div>
