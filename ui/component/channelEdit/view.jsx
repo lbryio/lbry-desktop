@@ -2,6 +2,7 @@
 import * as MODALS from 'constants/modal_types';
 import * as ICONS from 'constants/icons';
 import React from 'react';
+import classnames from 'classnames';
 import { FormField } from 'component/common/form';
 import Button from 'component/button';
 import TagsSearch from 'component/tagsSearch';
@@ -70,6 +71,7 @@ function ChannelForm(props: Props) {
     createError,
     clearChannelErrors,
     openModal,
+    disabled,
   } = props;
   const [nameError, setNameError] = React.useState(undefined);
   const [bidError, setBidError] = React.useState('');
@@ -180,7 +182,7 @@ function ChannelForm(props: Props) {
   // TODO clear and bail after submit
   return (
     <>
-      <div className="main--contained">
+      <div className={classnames('main--contained', { 'card--disabled': disabled })}>
         <header className="channel-cover">
           <div className="channel__quick-actions">
             <Button

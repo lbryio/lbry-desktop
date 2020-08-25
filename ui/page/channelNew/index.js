@@ -1,7 +1,9 @@
 import { connect } from 'react-redux';
+import { selectBalance } from 'lbry-redux';
 import ChannelNew from './view';
 
-const select = () => ({});
-const perform = () => ({});
+const select = state => ({
+  balance: selectBalance(state),
+});
 
-export default connect(select, perform)(ChannelNew);
+export default connect(select)(ChannelNew);
