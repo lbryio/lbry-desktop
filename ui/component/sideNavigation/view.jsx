@@ -171,6 +171,7 @@ function SideNavigation(props: Props) {
     navigate: string,
     icon: string,
     extra?: Node,
+    hideForUnauth?: boolean,
   }> = [
     {
       label: 'Sign In',
@@ -257,11 +258,12 @@ function SideNavigation(props: Props) {
           })}
         >
           <ul className={classnames('navigation-links', { 'navigation-links--micro': !sidebarOpen })}>
-            {TOP_LEVEL_LINKS.map(linkProps =>
-              !email && linkProps.hideForUnauth && IS_WEB ? null : (
+            {TOP_LEVEL_LINKS.map(linkProps => {
+              const { hideForUnauth, ...passedProps } = linkProps;
+              return !email && linkProps.hideForUnauth && IS_WEB ? null : (
                 <li key={linkProps.navigate}>
                   <Button
-                    {...linkProps}
+                    {...passedProps}
                     label={__(linkProps.label)}
                     icon={pulseLibrary && linkProps.icon === ICONS.LIBRARY ? ICONS.PURCHASED : linkProps.icon}
                     className={classnames('navigation-link', {
@@ -272,8 +274,8 @@ function SideNavigation(props: Props) {
                   />
                   {linkProps.extra}
                 </li>
-              )
-            )}
+              );
+            })}
           </ul>
 
           {sidebarOpen && isPersonalized && subscriptions && subscriptions.length > 0 && (
@@ -303,11 +305,13 @@ function SideNavigation(props: Props) {
             })}
           >
             <ul className="navigation-links--absolute">
-              {TOP_LEVEL_LINKS.map(linkProps =>
-                !email && linkProps.hideForUnauth && IS_WEB ? null : (
+              {TOP_LEVEL_LINKS.map(linkProps => {
+                const { hideForUnauth, ...passedProps } = linkProps;
+
+                return !email && hideForUnauth && IS_WEB ? null : (
                   <li key={linkProps.navigate}>
                     <Button
-                      {...linkProps}
+                      {...passedProps}
                       label={__(linkProps.label)}
                       icon={pulseLibrary && linkProps.icon === ICONS.LIBRARY ? ICONS.PURCHASED : linkProps.icon}
                       className={classnames('navigation-link', {
@@ -318,23 +322,25 @@ function SideNavigation(props: Props) {
                     />
                     {linkProps.extra}
                   </li>
-                )
-              )}
+                );
+              })}
             </ul>
             <ul className="navigation-links--absolute">
-              {subLinks.map(linkProps =>
-                !email && linkProps.hideForUnauth && IS_WEB ? null : (
+              {subLinks.map(linkProps => {
+                const { hideForUnauth, ...passedProps } = linkProps;
+
+                return !email && hideForUnauth && IS_WEB ? null : (
                   <li key={linkProps.navigate} className="mobile-only">
                     <Button
-                      {...linkProps}
+                      {...passedProps}
                       label={__(linkProps.label)}
                       className="navigation-link"
                       activeClass="navigation-link--active"
                     />
                     {linkProps.extra}
                   </li>
-                )
-              )}
+                );
+              })}
             </ul>
             {isPersonalized && subscriptions && subscriptions.length > 0 && (
               <ul className="navigation__secondary navigation-links--small">
