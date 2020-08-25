@@ -22,6 +22,7 @@
 .notification__wrapper {
   width: 100%;
   display: flex;
+  padding: var(--spacing-m);
 
   .channel-thumbnail {
     @include handleChannelGif(3rem);
@@ -35,8 +36,6 @@
 }
 
 .notification__wrapper--unseen {
-  padding: var(--spacing-m);
-  border-radius: var(--border-radius);
   background-color: var(--color-card-background-highlighted);
 
   &:hover {
