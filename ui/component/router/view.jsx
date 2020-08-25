@@ -79,6 +79,7 @@ function PrivateRoute(props: PrivateRouteProps) {
 type Props = {
   currentScroll: number,
   isAuthenticated: boolean,
+  user: ?{ id: string, has_verified_email: boolean, is_reward_approved: boolean },
   location: { pathname: string, search: string },
   history: {
     entries: { title: string }[],
@@ -99,6 +100,8 @@ type Props = {
   setHasNavigated: () => void,
   syncSettings: () => void,
   checkSync: () => void,
+  syncEnabled: boolean,
+  updatePreferences: () => void,
 };
 
 function AppRouter(props: Props) {
@@ -113,13 +116,17 @@ function AppRouter(props: Props) {
     hasNavigated,
     setHasNavigated,
     syncSettings,
+    syncEnabled,
+    updatePreferences,
     checkSync,
+    user,
   } = props;
   const { entries } = history;
   const entryIndex = history.index;
   const urlParams = new URLSearchParams(search);
   const resetScroll = urlParams.get('reset_scroll');
   const [prevPath, setPrevPath] = React.useState(pathname);
+  const hasVerifiedEmail = user && user.has_verified_email;
 
   // For people arriving at settings page from deeplinks, know whether they can "go back"
   useEffect(() => {
@@ -137,11 +144,15 @@ function AppRouter(props: Props) {
       if (!location.pathname.includes(PAGES.SETTINGS) && prevPath.includes(PAGES.SETTINGS)) {
         syncSettings();
       } else if (location.pathname.includes(PAGES.SETTINGS) && !prevPath.includes(PAGES.SETTINGS)) {
-        checkSync();
+        if (syncEnabled && hasVerifiedEmail) {
+          checkSync();
+        } else {
+          updatePreferences();
+        }
       }
     });
     return unlisten;
-  }, [prevPath, syncSettings, checkSync]);
+  }, [prevPath, syncSettings, checkSync, hasVerifiedEmail, syncEnabled, updatePreferences]);
 
   useEffect(() => {
     const unlisten = history.listen(location => {
