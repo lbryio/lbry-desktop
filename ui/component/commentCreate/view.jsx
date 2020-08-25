@@ -1,13 +1,14 @@
 // @flow
+import { SIMPLE_SITE, SITE_NAME } from 'config';
+import * as MODALS from 'constants/modal_types';
+import * as PAGES from 'constants/pages';
 import { CHANNEL_NEW } from 'constants/claim';
-import { SIMPLE_SITE } from 'config';
 import React, { useEffect, useState } from 'react';
 import classnames from 'classnames';
 import { FormField, Form } from 'component/common/form';
 import Button from 'component/button';
 import ChannelSelection from 'component/selectChannel';
 import usePersistedState from 'effects/use-persisted-state';
-import * as MODALS from 'constants/modal_types';
 import I18nMessage from 'component/i18nMessage';
 import { FF_MAX_CHARS_IN_COMMENT } from 'constants/form-field';
 
@@ -43,6 +44,7 @@ export function CommentCreate(props: Props) {
   const [channel, setChannel] = usePersistedState('comment-channel', '');
   const [charCount, setCharCount] = useState(commentValue.length);
   const [advancedEditor, setAdvancedEditor] = usePersistedState('comment-editor-mode', false);
+  const hasChannels = channels && channels.length;
 
   const topChannel =
     channels &&
@@ -101,6 +103,18 @@ export function CommentCreate(props: Props) {
       <I18nMessage tokens={{ sign_in_link: <Button button="link" requiresAuth label={__('log in')} /> }}>
         Please %sign_in_link% to comment.
       </I18nMessage>
+    );
+  }
+
+  if (!hasChannels) {
+    return (
+      <div className="notice-message">
+        <h3 className="section__title">{__('Join the discussion')}</h3>
+        <p className="section__subtitle">{__('A channel is required to comment on %SITE_NAME%.', { SITE_NAME })}</p>
+        <div className="section__actions">
+          <Button button="primary" label={__('Create a channel')} navigate={`/$/${PAGES.CHANNEL_NEW}`} />
+        </div>
+      </div>
     );
   }
 
