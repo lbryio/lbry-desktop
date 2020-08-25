@@ -20,6 +20,7 @@ type Props = {
 
 function InviteNew(props: Props) {
   const { inviteNew, errorMessage, isPending, referralCode = '', channels } = props;
+  const noChannels = !channels || !(channels.length > 0);
 
   // Email
   const [email, setEmail] = useState('');
@@ -77,13 +78,15 @@ function InviteNew(props: Props) {
         actions={
           <React.Fragment>
             <CopyableText label={__('Your invite link')} copyable={referral} />
-            <SelectChannel
-              channel={referralSource}
-              onChannelChange={channel => handleReferralChange(channel)}
-              label={__('Customize link')}
-              hideAnon
-              injected={[referralCode]}
-            />
+            {!noChannels && (
+              <SelectChannel
+                channel={referralSource}
+                onChannelChange={channel => handleReferralChange(channel)}
+                label={__('Customize link')}
+                hideAnon
+                injected={[referralCode]}
+              />
+            )}
 
             <p className="help">
               <I18nMessage
