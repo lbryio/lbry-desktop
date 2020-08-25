@@ -35,7 +35,7 @@ import {
   doAuthTokenRefresh,
 } from 'util/saved-passwords';
 import { X_LBRY_AUTH_TOKEN } from 'constants/token';
-import { LBRY_WEB_API, DEFAULT_LANGUAGE } from 'config';
+import { LBRY_WEB_API, DEFAULT_LANGUAGE, LBRY_API_URL } from 'config';
 
 // Import our app styles
 // If a style is not necessary for the initial page load, it should be removed from `all.scss`
@@ -98,8 +98,8 @@ const { autoUpdater } = remote.require('electron-updater');
 autoUpdater.logger = remote.require('electron-log');
 // @endif
 
-if (process.env.LBRY_API_URL) {
-  Lbryio.setLocalApi(process.env.LBRY_API_URL);
+if (LBRY_API_URL) {
+  Lbryio.setLocalApi(LBRY_API_URL);
 }
 
 if (process.env.SEARCH_API_URL) {
