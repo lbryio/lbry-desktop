@@ -119,7 +119,7 @@ export function doSaveCustomWalletServers(servers) {
   };
 }
 
-export function doSetClientSetting(key, value) {
+export function doSetClientSetting(key, value, pushPrefs) {
   return dispatch => {
     dispatch({
       type: ACTIONS.CLIENT_SETTING_CHANGED,
@@ -127,6 +127,26 @@ export function doSetClientSetting(key, value) {
         key,
         value,
       },
+    });
+
+    if (pushPrefs) {
+      dispatch(doPushSettingsToPrefs());
+    }
+  };
+}
+export function doUpdateSyncPref() {
+  return (dispatch, getState) => {
+    const { settings } = getState();
+    const { syncEnabledPref } = settings || {};
+    dispatch(doSetClientSetting(SETTINGS.ENABLE_SYNC, syncEnabledPref));
+  };
+}
+
+export function doSetSyncPref(isEnabled) {
+  return dispatch => {
+    dispatch({
+      type: LOCAL_ACTIONS.SYNC_PREFERENCE_CHANGED,
+      data: isEnabled,
     });
   };
 }
@@ -167,15 +187,11 @@ export function doSetDarkTime(value, options) {
   };
 }
 
-export function doSyncClientSettings() {
-  return (dispatch, getState) => {
-    const state = getState();
-    const syncEnabled = makeSelectClientSetting(SETTINGS.ENABLE_SYNC)(state);
-    if (syncEnabled) {
-      dispatch({
-        type: LOCAL_ACTIONS.SYNC_CLIENT_SETTINGS,
-      });
-    }
+export function doPushSettingsToPrefs() {
+  return dispatch => {
+    dispatch({
+      type: LOCAL_ACTIONS.SYNC_CLIENT_SETTINGS,
+    });
   };
 }
 

@@ -6,6 +6,7 @@ import { getSubsetFromKeysArray } from 'util/sync-settings';
 import { UNSYNCED_SETTINGS } from 'config';
 const { CLIENT_SYNC_KEYS } = SHARED_PREFERENCES;
 const settingsToIgnore = (UNSYNCED_SETTINGS && UNSYNCED_SETTINGS.trim().split(' ')) || [];
+// if (IS_WEB) settingsToIgnore.push(SETTINGS.ENABLE_SYNC);
 const clientSyncKeys = settingsToIgnore.length
   ? CLIENT_SYNC_KEYS.filter(k => !settingsToIgnore.includes(k))
   : CLIENT_SYNC_KEYS;
@@ -24,6 +25,7 @@ const defaultState = {
   findingFFmpeg: false,
   loadedLanguages: [...Object.keys(window.i18n_messages), 'en'] || ['en'],
   customWalletServers: [],
+  syncEnabledPref: IS_WEB, // set this during sign in, copy it to clientSettings immediately after prefGet after signedin but before sync
   sharedPreferences: {},
   daemonSettings: {},
   daemonStatus: { ffmpeg_status: {} },
@@ -144,17 +146,6 @@ reducers[LBRY_REDUX_ACTIONS.SHARED_PREFERENCE_SET] = (state, action) => {
   });
 };
 
-reducers[ACTIONS.CLIENT_SETTING_CHANGED] = (state, action) => {
-  const { key, value } = action.data;
-  const clientSettings = Object.assign({}, state.clientSettings);
-
-  clientSettings[key] = value;
-
-  return Object.assign({}, state, {
-    clientSettings,
-  });
-};
-
 reducers[ACTIONS.SYNC_CLIENT_SETTINGS] = state => {
   const { clientSettings } = state;
   const sharedPreferences = Object.assign({}, state.sharedPreferences);
@@ -163,16 +154,19 @@ reducers[ACTIONS.SYNC_CLIENT_SETTINGS] = state => {
   return Object.assign({}, state, { sharedPreferences: newSharedPreferences });
 };
 
+reducers[ACTIONS.SYNC_PREFERENCE_CHANGED] = (state, action) => {
+  return Object.assign({}, state, {
+    syncEnabledPref: action.data,
+  });
+};
+
 reducers[LBRY_REDUX_ACTIONS.USER_STATE_POPULATE] = (state, action) => {
   const { clientSettings: currentClientSettings } = state;
   const { settings: sharedPreferences } = action.data;
 
-  if (currentClientSettings[SETTINGS.ENABLE_SYNC]) {
-    const selectedSettings = getSubsetFromKeysArray(sharedPreferences, clientSyncKeys);
-    const mergedClientSettings = { ...currentClientSettings, ...selectedSettings };
-    return Object.assign({}, state, { sharedPreferences, clientSettings: mergedClientSettings });
-  }
-  return Object.assign({}, state, { sharedPreferences, clientSettings: currentClientSettings });
+  const selectedSettings = getSubsetFromKeysArray(sharedPreferences, clientSyncKeys);
+  const mergedClientSettings = { ...currentClientSettings, ...selectedSettings };
+  return Object.assign({}, state, { sharedPreferences, clientSettings: mergedClientSettings });
 };
 
 reducers[LBRY_REDUX_ACTIONS.SAVE_CUSTOM_WALLET_SERVERS] = (state, action) => {

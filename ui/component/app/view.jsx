@@ -68,7 +68,8 @@ type Props = {
   isUpgradeAvailable: boolean,
   autoUpdateDownloaded: boolean,
   checkSync: () => void,
-  updatePreferences: () => void,
+  updatePreferences: () => Promise<any>,
+  updateSyncPref: () => void,
   syncEnabled: boolean,
   uploadCount: number,
   balance: ?number,
@@ -90,8 +91,8 @@ function App(props: Props) {
     autoUpdateDownloaded,
     isUpgradeAvailable,
     requestDownloadUpgrade,
-    syncEnabled,
     checkSync,
+    syncEnabled,
     uploadCount,
     history,
     syncError,
@@ -99,6 +100,7 @@ function App(props: Props) {
     languages,
     setLanguage,
     updatePreferences,
+    updateSyncPref,
     rewards,
     setReferrer,
     analyticsTagSync,
@@ -108,6 +110,7 @@ function App(props: Props) {
   const appRef = useRef();
   const isEnhancedLayout = useKonamiListener();
   const [hasSignedIn, setHasSignedIn] = useState(false);
+  const [readyForSync, setReadyForSync] = useState(false);
   const hasVerifiedEmail = user && user.has_verified_email;
   const isRewardApproved = user && user.is_reward_approved;
   const previousHasVerifiedEmail = usePrevious(hasVerifiedEmail);
@@ -229,23 +232,19 @@ function App(props: Props) {
     }
   }, [previousRewardApproved, isRewardApproved]);
 
-  // Keep this at the end to ensure initial setup effects are run first
-  useEffect(() => {
-    if (!hasSignedIn && hasVerifiedEmail) {
-      signIn();
-      setHasSignedIn(true);
-    }
-  }, [hasVerifiedEmail, signIn, hasSignedIn]);
-
   // @if TARGET='app'
   useEffect(() => {
-    updatePreferences();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+    if (updatePreferences) {
+      updatePreferences().then(() => {
+        updateSyncPref(); // copy
+        setReadyForSync(true);
+      });
+    }
+  }, [hasSignedIn, updatePreferences, updateSyncPref, setReadyForSync, readyForSync]);
   // @endif
 
   useEffect(() => {
-    if (hasVerifiedEmail && syncEnabled) {
+    if (readyForSync && syncEnabled) {
       checkSync();
       analyticsTagSync();
       let syncInterval = setInterval(() => {
@@ -257,7 +256,7 @@ function App(props: Props) {
       };
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [hasVerifiedEmail, syncEnabled, checkSync]);
+  }, [checkSync, readyForSync, setReadyForSync, syncEnabled]);
 
   useEffect(() => {
     if (syncError && isAuthenticated) {
@@ -265,6 +264,15 @@ function App(props: Props) {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [syncError, pathname, isAuthenticated]);
+
+  // Keep this at the end to ensure initial setup effects are run first
+  useEffect(() => {
+    if (!hasSignedIn && hasVerifiedEmail) {
+      signIn();
+      setHasSignedIn(true);
+      if (IS_WEB) setReadyForSync(true);
+    }
+  }, [hasVerifiedEmail, signIn, hasSignedIn]);
 
   // @if TARGET='web'
   useDegradedPerformance(setLbryTvApiStatus);

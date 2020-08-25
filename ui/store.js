@@ -10,7 +10,7 @@ import { createMemoryHistory, createBrowserHistory } from 'history';
 import { routerMiddleware } from 'connected-react-router';
 import createRootReducer from './reducers';
 import { Lbry, buildSharedStateMiddleware, ACTIONS as LBRY_REDUX_ACTIONS, SETTINGS } from 'lbry-redux';
-import { doGetSync } from 'lbryinc';
+import { doGetSyncDesktop } from 'redux/actions/syncwrapper';
 import { selectUserVerifiedEmail } from 'redux/selectors/user';
 import { getSavedPassword, getAuthToken } from 'util/saved-passwords';
 import { makeSelectClientSetting } from 'redux/selectors/settings';
@@ -157,7 +157,7 @@ const sharedStateCb = ({ dispatch, getState }) => {
   const emailVerified = selectUserVerifiedEmail(state);
   if (syncEnabled && emailVerified) {
     getSavedPassword().then(savedPassword => {
-      dispatch(doGetSync(savedPassword));
+      dispatch(doGetSyncDesktop(savedPassword));
     });
   }
 };
