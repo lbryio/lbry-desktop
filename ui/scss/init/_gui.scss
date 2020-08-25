@@ -44,6 +44,12 @@ h6 {
   font-size: 1rem;
 }
 
+p {
+  & + p {
+    margin-top: var(--spacing-s);
+  }
+}
+
 ul,
 ol {
   li {

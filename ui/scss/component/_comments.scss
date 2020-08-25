@@ -129,6 +129,12 @@ $thumbnailWidthSmall: 2rem;
 .comment__message {
   word-break: break-word;
   max-width: 35rem;
+
+  p {
+    & + p {
+      margin-top: var(--spacing-xxs);
+    }
+  }
 }
 
 .comment__author {
