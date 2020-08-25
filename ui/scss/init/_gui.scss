@@ -301,6 +301,11 @@ textarea {
   background-color: var(--color-primary-alt);
 }
 
+.notice-message--above-content {
+  @extend .notice-message;
+  margin-bottom: var(--spacing-l);
+}
+
 .privacy-img {
   height: 10rem;
 }

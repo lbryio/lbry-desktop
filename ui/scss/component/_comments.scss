@@ -4,6 +4,7 @@ $thumbnailWidthSmall: 2rem;
 .comments {
   list-style-type: none;
   font-size: var(--font-small);
+  margin-top: var(--spacing-l);
 }
 
 .comments--replies {
