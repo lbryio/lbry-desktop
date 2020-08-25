@@ -145,17 +145,6 @@ reducers[LBRY_REDUX_ACTIONS.SHARED_PREFERENCE_SET] = (state, action) => {
   });
 };
 
-reducers[ACTIONS.CLIENT_SETTING_CHANGED] = (state, action) => {
-  const { key, value } = action.data;
-  const clientSettings = Object.assign({}, state.clientSettings);
-
-  clientSettings[key] = value;
-
-  return Object.assign({}, state, {
-    clientSettings,
-  });
-};
-
 reducers[ACTIONS.SYNC_CLIENT_SETTINGS] = state => {
   const { clientSettings } = state;
   const sharedPreferences = Object.assign({}, state.sharedPreferences);

@@ -245,7 +245,7 @@ function App(props: Props) {
   // @endif
 
   useEffect(() => {
-    if (hasVerifiedEmail && syncEnabled) {
+    if (hasVerifiedEmail && syncEnabled && !pathname.includes(`/$/${PAGES.SETTINGS}`)) {
       checkSync();
       analyticsTagSync();
       let syncInterval = setInterval(() => {
@@ -257,7 +257,7 @@ function App(props: Props) {
       };
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [hasVerifiedEmail, syncEnabled, checkSync]);
+  }, [hasVerifiedEmail, syncEnabled, checkSync, pathname]);
 
   useEffect(() => {
     if (syncError && isAuthenticated) {
