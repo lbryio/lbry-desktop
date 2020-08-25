@@ -1,6 +1,5 @@
 // @flow
 import * as PAGES from 'constants/pages';
-import { SITE_NAME } from 'config';
 import React, { useState } from 'react';
 import { withRouter } from 'react-router';
 import Page from 'component/page';
@@ -11,13 +10,13 @@ import I18nMessage from 'component/i18nMessage';
 import Card from 'component/common/card';
 
 type Props = {
-  history: { push: string => void, replace: string => void, location: { search: string } },
+  history: { push: string => void, location: { search: string } },
   doToast: ({}) => void,
 };
 
 function SignInVerifyPage(props: Props) {
   const {
-    history: { push, replace, location },
+    history: { push, location },
     doToast,
   } = props;
   const [isAuthenticationSuccess, setIsAuthenticationSuccess] = useState(false);
@@ -65,13 +64,6 @@ function SignInVerifyPage(props: Props) {
     };
   }, [needsRecaptcha, captchaLoaded]);
 
-  React.useEffect(() => {
-    if (isAuthenticationSuccess) {
-      doToast({ message: __('You are now signed in.') });
-      replace('/');
-    }
-  }, [isAuthenticationSuccess, replace, doToast]);
-
   function onCaptchaChange(value) {
     verifyUser(value);
   }
@@ -99,10 +91,16 @@ function SignInVerifyPage(props: Props) {
     <Page authPage className="main--auth-page">
       <div className="main__sign-up">
         <Card
-          title={__('Sign In to %SITE_NAME%', { SITE_NAME })}
+          title={isAuthenticationSuccess ? __('Sign In Success!') : __('Sign In to lbry.tv')}
           subtitle={
             <React.Fragment>
-              <p>{needsRecaptcha ? null : __('Welcome back! You are automatically being signed in.')}</p>
+              <p>
+                {isAuthenticationSuccess
+                  ? __('You can now close this tab.')
+                  : needsRecaptcha
+                  ? null
+                  : __('Welcome back! You are automatically being signed in.')}
+              </p>
               {showCaptchaMessage && !isAuthenticationSuccess && (
                 <p>
                   <I18nMessage
