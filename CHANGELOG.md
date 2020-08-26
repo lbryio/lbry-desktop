@@ -58,7 +58,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Pause the "autoplay next" timer when performing long operations such as Tipping, Supporting or commenting _community pr!_ ([4419](https://github.com/lbryio/lbry-desktop/pull/4419))
 - Email notification management page ([#4409](https://github.com/lbryio/lbry-desktop/pull/4409))
 - Publish Page improvements to prevent accidental overwrites of existing claims _community pr!_ ([#4416](https://github.com/lbryio/lbry-desktop/pull/4416))
-- Option to remove abandoned claims from Blocked Channels page _community pr!_ ([#4433](https://github.com/lbryio/lbry-desktop/pull/4433))
+- Option to remove abandoned claims from Blocked channels page _community pr!_ ([#4433](https://github.com/lbryio/lbry-desktop/pull/4433))
 - New channel create/edit page ([#4445](https://github.com/lbryio/lbry-desktop/pull/4445))
 - Add dialog to copy various types of links for a claim _community pr!_ ([#4474](https://github.com/lbryio/lbry-desktop/pull/4474))
 - Add password reset link to settings page for logged in users _community pr!_ ([#4473](https://github.com/lbryio/lbry-desktop/pull/4473))
@@ -1384,7 +1384,7 @@ This release includes a breaking change that will reset many of your settings. T
 
 ### Removed
 
-- Removed the label "Max Purchase Price" from settings page. It was redundant.
+- Removed the label "Max purchase price" from settings page. It was redundant.
 - Unused old files from previous commit(9c3d633)
 
 ### Fixed

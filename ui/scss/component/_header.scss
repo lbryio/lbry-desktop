@@ -108,6 +108,10 @@
   }
 }
 
+.header__navigation-item--balance {
+  @extend .button--link;
+}
+
 .header__navigation-item--forward {
   margin-right: 0;
 }

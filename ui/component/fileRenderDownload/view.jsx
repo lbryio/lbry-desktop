@@ -17,7 +17,7 @@ export default function FileRenderDownload(props: Props) {
   if (RENDER_MODES.UNSUPPORTED_IN_THIS_APP.includes(renderMode)) {
     return (
       <Card
-        title={__('Download or Get the App')}
+        title={__('Download or get the app')}
         subtitle={
           <p>
             {__(

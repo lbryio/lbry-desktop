@@ -60,8 +60,8 @@ class ModalWalletUnlock extends React.PureComponent<Props, State> {
     return (
       <Modal
         isOpen
-        title={__('Unlock Wallet')}
-        contentLabel={__('Unlock Wallet')}
+        title={__('Unlock wallet')}
+        contentLabel={__('Unlock wallet')}
         type="confirm"
         shouldCloseOnOverlayClick={false}
         confirmButtonLabel={__('Unlock')}

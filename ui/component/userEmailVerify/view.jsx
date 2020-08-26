@@ -63,7 +63,7 @@ class UserEmailVerify extends React.PureComponent<Props> {
     return (
       <div className="main__sign-up">
         <Card
-          title={isReturningUser ? __('Check Your Email') : __('Confirm your account')}
+          title={isReturningUser ? __('Check Your email') : __('Confirm your account')}
           subtitle={
             <p>
               {__('We just sent an email to %email% with a link for you to %verify_text%.', {

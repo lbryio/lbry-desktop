@@ -51,7 +51,7 @@ function UserEmail(props: Props) {
             readOnly
             label={
               <React.Fragment>
-                {__('Your Email')}{' '}
+                {__('Your email')}{' '}
                 <Button
                   button="link"
                   label={__('Update mailing preferences')}

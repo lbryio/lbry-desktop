@@ -117,6 +117,8 @@ const Header = (props: Props) => {
       if (syncError) {
         signOut();
       }
+
+      history.push('/');
     },
   };
 

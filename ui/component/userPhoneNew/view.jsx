@@ -1,6 +1,7 @@
 // @flow
 import * as React from 'react';
 import { Form, FormField, Submit } from 'component/common/form';
+import Card from 'component/common/card';
 
 const os = require('os').type();
 const countryCodes = require('country-data')
@@ -82,40 +83,40 @@ class UserPhoneNew extends React.PureComponent<Props, State> {
     const { cancelButton, phoneErrorMessage, isPending } = this.props;
 
     return (
-      <React.Fragment>
-        <p className="section__subtitle">
-          {__(
-            'Enter your phone number and we will send you a verification code. We will not share your phone number with third parties.'
-          )}
-        </p>
-
-        <Form onSubmit={this.handleSubmit}>
-          <fieldset-group class="fieldset-group--smushed">
-            <FormField label={__('Country')} type="select" name="country-codes" onChange={this.handleSelect}>
-              {countryCodes.map((country, index) => (
-                <option key={index} value={country.countryCallingCode}>
-                  {os === 'Darwin' ? country.emoji : `(${country.alpha2})`} {country.countryCallingCode}
-                </option>
-              ))}
-            </FormField>
-            <FormField
-              type="text"
-              label={__('Number')}
-              placeholder={this.state.countryCode === '+1' ? '(555) 555-5555' : '5555555555'}
-              name="phone"
-              value={this.state.phone}
-              error={phoneErrorMessage}
-              onChange={event => {
-                this.handleChanged(event);
-              }}
-            />
-          </fieldset-group>
-          <div className="card__actions">
-            <Submit label="Submit" disabled={isPending} />
-            {cancelButton}
-          </div>
-        </Form>
-      </React.Fragment>
+      <Card
+        title={__('Enter your phone number')}
+        subtitle={__(
+          'Enter your phone number and we will send you a verification code. We will not share your phone number with third parties.'
+        )}
+        actions={
+          <Form onSubmit={this.handleSubmit}>
+            <fieldset-group class="fieldset-group--smushed">
+              <FormField label={__('Country')} type="select" name="country-codes" onChange={this.handleSelect}>
+                {countryCodes.map((country, index) => (
+                  <option key={index} value={country.countryCallingCode}>
+                    {os === 'Darwin' ? country.emoji : `(${country.alpha2})`} {country.countryCallingCode}
+                  </option>
+                ))}
+              </FormField>
+              <FormField
+                type="text"
+                label={__('Number')}
+                placeholder={this.state.countryCode === '+1' ? '(555) 555-5555' : '5555555555'}
+                name="phone"
+                value={this.state.phone}
+                error={phoneErrorMessage}
+                onChange={event => {
+                  this.handleChanged(event);
+                }}
+              />
+            </fieldset-group>
+            <div className="card__actions">
+              <Submit label="Submit" disabled={isPending} />
+              {cancelButton}
+            </div>
+          </Form>
+        }
+      />
     );
   }
 }

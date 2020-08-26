@@ -16,7 +16,7 @@ function ModalRepost(props: Props) {
   return (
     <Modal isOpen type="card">
       <Card
-        title={__('Sign Out')}
+        title={__('Sign out')}
         subtitle={
           <I18nMessage
             tokens={{

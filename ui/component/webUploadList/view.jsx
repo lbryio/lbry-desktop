@@ -20,7 +20,7 @@ export default function WebUploadList(props: Props) {
   return (
     !!uploadCount && (
       <Card
-        title={__('Currently Uploading')}
+        title={__('Currently uploading')}
         subtitle={uploadCount > 1 ? __('You files are currently uploading.') : __('Your file is currently uploading.')}
         body={
           <section>

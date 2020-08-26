@@ -34,7 +34,7 @@ function SyncPassword(props: Props) {
   return (
     <Form onSubmit={handleSubmit}>
       <Card
-        title={__('Enter Your Wallet Password')}
+        title={__('Enter your wallet password')}
         subtitle={__(
           'You set your wallet password when you previously installed LBRY. This may have been on different device.'
         )}

@@ -41,10 +41,10 @@ class ModalWalletDecrypt extends React.PureComponent<Props, State> {
     return (
       <Modal
         isOpen
-        title={__('Decrypt Wallet')}
-        contentLabel={__('Decrypt Wallet')}
+        title={__('Decrypt wallet')}
+        contentLabel={__('Decrypt wallet')}
         type="confirm"
-        confirmButtonLabel={__('Decrypt Wallet')}
+        confirmButtonLabel={__('Decrypt wallet')}
         abortButtonLabel={__('Cancel')}
         onConfirmed={() => this.submitDecryptForm()}
         onAborted={closeModal}

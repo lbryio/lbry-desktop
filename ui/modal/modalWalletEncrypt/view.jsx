@@ -106,8 +106,8 @@ class ModalWalletEncrypt extends React.PureComponent<Props, State> {
     return (
       <Modal
         isOpen
-        title={__('Encrypt Wallet')}
-        contentLabel={__('Encrypt Wallet')}
+        title={__('Encrypt wallet')}
+        contentLabel={__('Encrypt wallet')}
         type="custom"
         onConfirmed={() => this.submitEncryptForm()}
         onAborted={closeModal}
@@ -156,7 +156,7 @@ class ModalWalletEncrypt extends React.PureComponent<Props, State> {
             )}
           </div>
           <FormField
-            inputButton={<Submit label={failMessage ? __('Encrypting Wallet') : __('Encrypt Wallet')} />}
+            inputButton={<Submit label={failMessage ? __('Encrypting Wallet') : __('Encrypt wallet')} />}
             error={
               understandError === true
                 ? __('You must enter "%acknowledgement_text%"', { acknowledgement_text: acknowledgementText })

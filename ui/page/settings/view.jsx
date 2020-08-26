@@ -194,7 +194,7 @@ class SettingsPage extends React.PureComponent<Props, State> {
             {isAuthenticated && <SettingAccountPassword />}
             {/* @if TARGET='app' */}
             <Card
-              title={__('Download Directory')}
+              title={__('Download directory')}
               actions={
                 <React.Fragment>
                   <FileSelector
@@ -220,7 +220,7 @@ class SettingsPage extends React.PureComponent<Props, State> {
             {/* @endif */}
 
             <Card
-              title={__('Content Settings')}
+              title={__('Content settings')}
               actions={
                 <React.Fragment>
                   <FormField
@@ -354,7 +354,7 @@ class SettingsPage extends React.PureComponent<Props, State> {
 
             {/* @if TARGET='app' */}
             <Card
-              title={__('Share Usage and Diagnostic Data')}
+              title={__('Share usage and diagnostic data')}
               subtitle={
                 <React.Fragment>
                   {__(
@@ -408,7 +408,7 @@ class SettingsPage extends React.PureComponent<Props, State> {
                 />
 
                 <Card
-                  title={__('Blocked Channels')}
+                  title={__('Blocked channels')}
                   subtitle={
                     userBlockedChannelsCount === 0
                       ? __("You don't have blocked channels.")
@@ -429,7 +429,7 @@ class SettingsPage extends React.PureComponent<Props, State> {
                 />
 
                 <Card
-                  title={__('Advanced Settings')}
+                  title={__('Advanced settings')}
                   actions={
                     <div className="section__actions">
                       <Button
@@ -445,7 +445,7 @@ class SettingsPage extends React.PureComponent<Props, State> {
             )}
 
             <Card
-              title={__('Application Cache')}
+              title={__('Application cache')}
               subtitle={
                 <p className="section__subtitle">
                   {__(

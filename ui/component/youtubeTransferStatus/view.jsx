@@ -149,7 +149,7 @@ export default function YoutubeTransferStatus(props: Props) {
             </div>
           ) : !hideChannelLink ? (
             <div className="card__actions">
-              <Button button="primary" navigate={`/$/${PAGES.CHANNELS}`} label={__('View Your Channels')} />
+              <Button button="primary" navigate={`/$/${PAGES.CHANNELS}`} label={__('View your channels')} />
             </div>
           ) : (
             false

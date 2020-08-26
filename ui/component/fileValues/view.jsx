@@ -34,7 +34,7 @@ class FileValues extends PureComponent<Props> {
     return (
       <Fragment>
         <Card
-          title={__('LBC Details')}
+          title={__('LBC details')}
           defaultExpand={false}
           actions={
             <table className="table table--condensed table--fixed table--lbc-details">
