@@ -1,4 +1,5 @@
 // @flow
+import { SITE_NAME } from 'config';
 import * as ICONS from 'constants/icons';
 import React, { Fragment } from 'react';
 import Button from 'component/button';
@@ -37,7 +38,7 @@ class UserVerify extends React.PureComponent<Props> {
     return (
       <div className="main__auth-content">
         <section className="section__header">
-          <h1 className="section__title--large">{__('Get Validated')}</h1>
+          <h1 className="section__title--large">{__('Verify to earn LBC')}</h1>
           <p>
             <I18nMessage
               tokens={{
@@ -46,20 +47,24 @@ class UserVerify extends React.PureComponent<Props> {
                 ),
                 Refresh: <Button onClick={() => fetchUser()} button="link" label={__('Refresh')} />,
                 Skip: <Button {...skipButtonProps} button="link" label={__('Skip')} />,
+                SITE_NAME,
               }}
             >
-              Validated accounts can earn for views and are eligible for %rewards_program%. Please complete one of the steps below. %Refresh% or %Skip%.
+              Verified accounts are eligible to earn LBC for views, watching and reposting content, sharing invite links
+              etc. Verifying also helps us keep the %SITE_NAME% community safe too! %Refresh% or %Skip%.
             </I18nMessage>
           </p>
-          <p>{__('This step is not required to use LBRY, and not all users or regions may qualify.')}</p>
+          <p className="help">
+            {__('This step is not mandatory and not required in order for you to use %SITE_NAME%.', { SITE_NAME })}
+          </p>
         </section>
 
         <div className="section">
           <Card
             icon={ICONS.PHONE}
-            title={__('Proof via Text')}
+            title={__('Verify phone number')}
             subtitle={__(
-              'You will receive an SMS text message confirming that your phone number is correct. Does not work for Canada and possibly other regions'
+              'You will receive an SMS text message confirming your phone number is valid. Does not work for Canada and possibly other regions.'
             )}
             actions={
               <Fragment>
@@ -68,10 +73,10 @@ class UserVerify extends React.PureComponent<Props> {
                     verifyPhone();
                   }}
                   button="primary"
-                  label={__('Verify Phone Number')}
+                  label={__('Verify Via Text')}
                 />
                 <p className="help">
-                  {__('Standard messaging rates apply. LBRY will not text or call you otherwise. Having trouble?')}{' '}
+                  {__('Standard messaging rates apply. Having trouble?')}{' '}
                   <Button button="link" href="https://lbry.com/faq/phone" label={__('Read more')} />.
                 </p>
               </Fragment>
@@ -85,7 +90,7 @@ class UserVerify extends React.PureComponent<Props> {
 
           <Card
             icon={ICONS.WALLET}
-            title={__('Proof via Credit')}
+            title={__('Verify via credit card')}
             subtitle={__(
               'If you have a valid credit or debit card, you can use it to instantly prove your humanity. LBRY does not store your credit card information. There is no charge at all for this, now or in the future.'
             )}
@@ -113,16 +118,18 @@ class UserVerify extends React.PureComponent<Props> {
 
           <Card
             icon={ICONS.CHAT}
-            title={__('Proof via Chat')}
-            subtitle={__(
-              'A moderator capable of approving you is typically available in the discord server. See the #rewards-approval instructions carefully and do not message any moderators directly. This process will likely involve providing proof of a stable and established online or real-life identity.'
-            )}
-            actions={
-              <Fragment>
-                <Button href="https://chat.lbry.com" button="primary" label={__('Join LBRY Chat')} />
-                <p className="help">{__("We're friendly. We promise.")}</p>
-              </Fragment>
+            title={__('Verify via chat')}
+            subtitle={
+              <>
+                <p>
+                  {__(
+                    'A moderator can approve you within our discord server. Please review the instructions within #rewards-approval carefully.'
+                  )}
+                </p>
+                <p>{__('You will be asked to provide proof of identity.')}</p>
+              </>
             }
+            actions={<Button href="https://chat.lbry.com" button="primary" label={__('Join LBRY Chat')} />}
           />
 
           <div className="section__divider">
@@ -133,10 +140,10 @@ class UserVerify extends React.PureComponent<Props> {
           <Card
             icon={ICONS.REMOVE}
             title={__('Skip')}
-            subtitle={__('Rewards validation is optional.')}
+            subtitle={__("Verifying is optional. If you skip this, it just means you can't earn LBC.")}
             actions={
               <Fragment>
-                <Button {...skipButtonProps} button="primary" label={__('Continue Without Rewards')} />
+                <Button {...skipButtonProps} button="primary" label={__('Continue Without Verifying')} />
               </Fragment>
             }
           />

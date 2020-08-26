@@ -1,6 +1,7 @@
 // @flow
 import * as PAGES from 'constants/pages';
 import React from 'react';
+import classnames from 'classnames';
 import { withRouter } from 'react-router';
 import UserEmailNew from 'component/userEmailNew';
 import UserEmailVerify from 'component/userEmailVerify';
@@ -106,7 +107,8 @@ function UserSignIn(props: Props) {
   const showYoutubeTransfer = hasVerifiedEmail && hasYoutubeChannels && !isYoutubeTransferComplete;
   const showFollowIntro = step === 'channels' || (hasVerifiedEmail && !followingAcknowledged);
   const showTagsIntro = step === 'tags' || (hasVerifiedEmail && !tagsAcknowledged);
-  const canHijackSignInFlowWithSpinner = hasVerifiedEmail && !getSyncError && !showFollowIntro;
+  const canHijackSignInFlowWithSpinner =
+    hasVerifiedEmail && !getSyncError && !showFollowIntro && !showTagsIntro && !rewardsAcknowledged;
   const isCurrentlyFetchingSomething = fetchingChannels || claimingReward || syncingWallet || creatingChannel;
   const isWaitingForSomethingToFinish =
     // If the user has claimed the email award, we need to wait until the balance updates sometime in the future
@@ -203,6 +205,7 @@ function UserSignIn(props: Props) {
     ),
   ];
 
+  //   $FlowFixMe
   function getSignInStep() {
     for (var i = SIGN_IN_FLOW.length - 1; i > -1; i--) {
       const Component = SIGN_IN_FLOW[i];
@@ -218,18 +221,22 @@ function UserSignIn(props: Props) {
           }
         }
 
-        return Component;
+        const scrollableSteps = [2, 4, 5];
+        const isScrollable = scrollableSteps.includes(i);
+        return [Component, isScrollable];
       }
     }
   }
 
-  const componentToRender = getSignInStep();
+  const [componentToRender, isScrollable] = getSignInStep();
 
   if (!componentToRender) {
     history.replace(redirect || '/');
   }
 
-  return <section className="main--contained">{componentToRender}</section>;
+  return (
+    <section className={classnames('main--contained', { 'main--hoisted': isScrollable })}>{componentToRender}</section>
+  );
 }
 
 export default withRouter(UserSignIn);

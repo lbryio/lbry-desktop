@@ -33,7 +33,7 @@ function UserChannelFollowIntro(props: Props) {
 
   return (
     <Card
-      title={__('Find Channels to Follow')}
+      title={__('Find channels to follow')}
       subtitle={__(
         'LBRY works better if you find and follow at least 5 creators you like. You can also block channels you never want to see.'
       )}

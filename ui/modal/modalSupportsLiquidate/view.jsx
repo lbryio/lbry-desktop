@@ -12,7 +12,7 @@ export default function ModalSupportsLiquidate(props: Props) {
   const { closeModal, uri } = props;
 
   return (
-    <Modal isOpen contentLabel={'Unlock Tips'} type="card" confirmButtonLabel="done" onAborted={closeModal}>
+    <Modal isOpen contentLabel={'Unlock tips'} type="card" confirmButtonLabel="done" onAborted={closeModal}>
       <SupportsLiquidate uri={uri} handleClose={closeModal} />
     </Modal>
   );

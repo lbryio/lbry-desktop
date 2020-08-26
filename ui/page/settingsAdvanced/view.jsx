@@ -203,7 +203,7 @@ class SettingsPage extends React.PureComponent<Props, State> {
         noFooter
         noSideNavigation
         backout={{
-          title: __('Advanced Settings'),
+          title: __('Advanced settings'),
           backLabel: __('Done'),
         }}
         className="card-stack"
@@ -216,7 +216,7 @@ class SettingsPage extends React.PureComponent<Props, State> {
           <div>
             {/* @if TARGET='app' */}
             <Card
-              title={__('Network and Data Settings')}
+              title={__('Neetwork and data settings')}
               actions={
                 <React.Fragment>
                   <FormField
@@ -248,7 +248,7 @@ class SettingsPage extends React.PureComponent<Props, State> {
             />
 
             <Card
-              title={__('Max Purchase Price')}
+              title={__('Max purchase price')}
               actions={
                 <React.Fragment>
                   <FormField
@@ -290,7 +290,7 @@ class SettingsPage extends React.PureComponent<Props, State> {
             {/* @endif */}
 
             <Card
-              title={__('Purchase and Tip Confirmations')}
+              title={__('Purchase and tip confirmations')}
               actions={
                 <React.Fragment>
                   <FormField
@@ -332,7 +332,7 @@ class SettingsPage extends React.PureComponent<Props, State> {
 
             {(isAuthenticated || !IS_WEB) && (
               <Card
-                title={__('Wallet Security')}
+                title={__('Wallet security')}
                 actions={
                   <React.Fragment>
                     {/* @if TARGET='app' */}
@@ -394,7 +394,7 @@ class SettingsPage extends React.PureComponent<Props, State> {
             <Card
               title={
                 <span>
-                  {__('Automatic Transcoding')}
+                  {__('Automatic transcoding')}
                   {findingFFmpeg && <Spinner type="small" />}
                 </span>
               }
@@ -455,7 +455,7 @@ class SettingsPage extends React.PureComponent<Props, State> {
             {/* @endif */}
             {!IS_WEB && (
               <Card
-                title={__('Experimental Settings')}
+                title={__('Experimental settings')}
                 actions={
                   <React.Fragment>
                     {/* @if TARGET='app' */}
@@ -500,8 +500,8 @@ class SettingsPage extends React.PureComponent<Props, State> {
 
             {/* @if TARGET='app' */}
             {/* Auto launch in a hidden state doesn't work on mac https://github.com/Teamwork/node-auto-launch/issues/81 */}
-            {!IS_MAC && <Card title={__('Startup Preferences')} actions={<SettingAutoLaunch />} />}
-            <Card title={__('Closing Preferences')} actions={<SettingClosingBehavior />} />
+            {!IS_MAC && <Card title={__('Startup preferences')} actions={<SettingAutoLaunch />} />}
+            <Card title={__('Closing preferences')} actions={<SettingClosingBehavior />} />
             {/* @endif */}
           </div>
         )}

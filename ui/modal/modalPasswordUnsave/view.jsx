@@ -14,7 +14,7 @@ class ModalPasswordUnsave extends React.PureComponent<Props> {
       <Modal
         isOpen
         contentLabel={__('Unsave Password')}
-        title={__('Clear Saved Password')}
+        title={__('Clear saved password')}
         type="confirm"
         confirmButtonLabel={__('Forget')}
         abortButtonLabel={__('Nevermind')}

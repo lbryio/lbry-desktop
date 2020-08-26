@@ -94,7 +94,7 @@ function FileListDownloaded(props: Props) {
       {IS_WEB && viewMode === VIEW_DOWNLOADS ? (
         <div className="main--empty">
           <Yrbl
-            title={__('Try Out the App!')}
+            title={__('Try out the app!')}
             subtitle={
               <>
                 <p className="section__subtitle">
