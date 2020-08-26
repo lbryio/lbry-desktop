@@ -44,6 +44,7 @@
 
 .button--secondary {
   background-color: var(--color-button-secondary-bg);
+  border: 1px solid var(--color-button-secondary-border);
   color: var(--color-button-secondary-text);
 
   &:hover {
