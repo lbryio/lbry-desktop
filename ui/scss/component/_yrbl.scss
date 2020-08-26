@@ -1,17 +1,31 @@
 .yrbl__wrap {
-  align-items: center;
   display: flex;
+  align-items: center;
+  flex-direction: column-reverse;
+  flex-wrap: wrap;
   justify-content: center;
-  vertical-align: middle;
   text-align: left;
+
+  .section__actions {
+    flex-wrap: wrap;
+
+    > * {
+      margin-bottom: var(--spacing-s);
+    }
+  }
+
+  @media (min-width: $breakpoint-small) {
+    flex-direction: row;
+  }
 }
 
 .yrbl {
-  height: 20rem;
-  margin-right: calc(var(--spacing-xl) * 2);
+  display: none;
 
-  @media (max-width: $breakpoint-small) {
-    display: none;
+  @media (min-width: $breakpoint-small) {
+    display: block;
+    height: 20rem;
+    margin-right: calc(var(--spacing-xl) * 2);
   }
 }
 

@@ -337,7 +337,7 @@ function PublishFile(props: Props) {
 
   return (
     <Card
-      disabled={disabled || balance === 0}
+      className={disabled || balance === 0 ? 'card--disabled' : ''}
       title={
         <div>
           {header}
