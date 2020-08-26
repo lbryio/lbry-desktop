@@ -4,7 +4,6 @@ import * as MODALS from 'constants/modal_types';
 import * as ICONS from 'constants/icons';
 import * as React from 'react';
 import { SETTINGS } from 'lbry-redux';
-
 import { FormField } from 'component/common/form';
 import Button from 'component/button';
 import Page from 'component/page';
@@ -15,6 +14,7 @@ import Card from 'component/common/card';
 import SettingAccountPassword from 'component/settingAccountPassword';
 import { getPasswordFromCookie } from 'util/saved-passwords';
 import { Lbryio } from 'lbryinc';
+import HelpLink from 'component/common/help-link';
 
 type Price = {
   currency: string,
@@ -211,11 +211,20 @@ class SettingsPage extends React.PureComponent<Props, State> {
             <Card
               title={__('Sync')}
               subtitle={
-                walletEncrypted && !storedPassword
-                  ? __("To enable this feature, check 'Save Password' the next time you start the app.")
-                  : null
+                walletEncrypted && !storedPassword ? (
+                  storedPassword === '' ? (
+                    <>
+                      {__('Your wallet password cannot be empty string. Sync is disabled for now.')}
+                      <HelpLink href="https://lbry.com/faq/account-sync" />
+                    </>
+                  ) : (
+                    __(
+                      "Encrypted wallet: To enable Sync, close LBRY completely and check 'Remember Password' during wallet unlock."
+                    )
+                  )
+                ) : null
               }
-              actions={<SyncToggle disabled={walletEncrypted && !storedPassword} />}
+              actions={<SyncToggle disabled={walletEncrypted && (!storedPassword || storedPassword === '')} />}
             />
             {/* @endif */}
 

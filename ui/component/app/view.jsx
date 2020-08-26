@@ -237,9 +237,8 @@ function App(props: Props) {
 
   // @if TARGET='app'
   useEffect(() => {
-    updatePreferences();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+    if (updatePreferences) updatePreferences();
+  }, [hasVerifiedEmail, updatePreferences]);
   // @endif
 
   useEffect(() => {
@@ -256,7 +255,7 @@ function App(props: Props) {
       };
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [hasVerifiedEmail, checkSync]);
+  }, [hasVerifiedEmail, checkSync, hasSignedIn]);
 
   useEffect(() => {
     if (syncError && isAuthenticated) {
