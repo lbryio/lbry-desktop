@@ -88,7 +88,7 @@ export default function BuyPage(props: Props) {
   );
 
   return (
-    <Page noSideNavigation className="main--buy">
+    <Page noSideNavigation className="main--buy" backout={{ backoutLabel: __('Done'), title: __('Buy credits') }}>
       {!user && (
         <div className="main--empty">
           <Spinner delayed />
