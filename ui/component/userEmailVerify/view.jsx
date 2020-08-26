@@ -77,11 +77,11 @@ class UserEmailVerify extends React.PureComponent<Props> {
               <div className="section__actions">
                 <Button
                   button="primary"
-                  label={__('Resend link')}
+                  label={__('Resend Link')}
                   onClick={this.handleResendVerificationEmail}
                   disabled={resendingEmail}
                 />
-                <UserSignOutButton label={__('Start over')} />
+                <UserSignOutButton label={__('Start Over')} />
               </div>
               <p className="help--card-actions">
                 <I18nMessage
