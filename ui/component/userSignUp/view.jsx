@@ -222,6 +222,8 @@ function UserSignIn(props: Props) {
         return [Component, isScrollable];
       }
     }
+
+    return [undefined, false];
   }
 
   const [componentToRender, isScrollable] = getSignInStep();
