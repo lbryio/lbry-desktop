@@ -119,7 +119,7 @@ export function doSaveCustomWalletServers(servers) {
   };
 }
 
-export function doSetClientSetting(key, value) {
+export function doSetClientSetting(key, value, pushPrefs) {
   return dispatch => {
     dispatch({
       type: ACTIONS.CLIENT_SETTING_CHANGED,
@@ -128,6 +128,10 @@ export function doSetClientSetting(key, value) {
         value,
       },
     });
+
+    if (pushPrefs) {
+      dispatch(doPushSettingsToPrefs());
+    }
   };
 }
 
@@ -167,7 +171,7 @@ export function doSetDarkTime(value, options) {
   };
 }
 
-export function doSyncClientSettings() {
+export function doPushSettingsToPrefs() {
   return dispatch => {
     dispatch({
       type: LOCAL_ACTIONS.SYNC_CLIENT_SETTINGS,

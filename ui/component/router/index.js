@@ -5,7 +5,7 @@ import Router from './view';
 import { normalizeURI, makeSelectTitleForUri, SETTINGS } from 'lbry-redux';
 import { doSetHasNavigated, doSyncWithPreferences, doGetAndPopulatePreferences } from 'redux/actions/app';
 import { makeSelectClientSetting } from 'redux/selectors/settings';
-import { doSyncClientSettings } from 'redux/actions/settings';
+import { doPushSettingsToPrefs } from 'redux/actions/settings';
 const select = state => {
   const { pathname, hash } = state.router.location;
   const urlPath = pathname + hash;
@@ -37,7 +37,7 @@ const select = state => {
 
 const perform = dispatch => ({
   setHasNavigated: () => dispatch(doSetHasNavigated()),
-  syncSettings: () => dispatch(doSyncClientSettings()),
+  pushSettingsToPrefs: () => dispatch(doPushSettingsToPrefs()),
   checkSync: () => dispatch(doSyncWithPreferences()),
   updatePreferences: () => dispatch(doGetAndPopulatePreferences()),
 });

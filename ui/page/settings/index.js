@@ -6,7 +6,7 @@ import {
   doClearDaemonSetting,
   doSetClientSetting,
   doSetDarkTime,
-  doSyncClientSettings,
+  doPushSettingsToPrefs,
 } from 'redux/actions/settings';
 import { doSetPlayingUri } from 'redux/actions/content';
 import { makeSelectClientSetting, selectDaemonSettings } from 'redux/selectors/settings';
@@ -37,7 +37,7 @@ const select = state => ({
 
 const perform = dispatch => ({
   setDaemonSetting: (key, value) => dispatch(doSetDaemonSetting(key, value)),
-  syncSettings: () => dispatch(doSyncClientSettings()),
+  syncSettings: () => dispatch(doPushSettingsToPrefs()),
   clearDaemonSetting: key => dispatch(doClearDaemonSetting(key)),
   toggle3PAnalytics: allow => dispatch(doToggle3PAnalytics(allow)),
   clearCache: () => dispatch(doClearCache()),

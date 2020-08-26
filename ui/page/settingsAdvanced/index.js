@@ -6,7 +6,7 @@ import {
   doClearDaemonSetting,
   doSetClientSetting,
   doFindFFmpeg,
-  doSyncClientSettings,
+  doPushSettingsToPrefs,
 } from 'redux/actions/settings';
 import {
   makeSelectClientSetting,
@@ -34,7 +34,7 @@ const select = state => ({
 
 const perform = dispatch => ({
   setDaemonSetting: (key, value) => dispatch(doSetDaemonSetting(key, value)),
-  syncSettings: () => dispatch(doSyncClientSettings()),
+  syncSettings: () => dispatch(doPushSettingsToPrefs()),
   clearDaemonSetting: key => dispatch(doClearDaemonSetting(key)),
   clearCache: () => dispatch(doClearCache()),
   setClientSetting: (key, value) => dispatch(doSetClientSetting(key, value)),

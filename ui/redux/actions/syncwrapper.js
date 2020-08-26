@@ -2,7 +2,7 @@
 import { doGetSync, selectGetSyncIsPending, selectSetSyncIsPending } from 'lbryinc';
 import { selectWalletIsEncrypted, SETTINGS } from 'lbry-redux';
 import { makeSelectClientSetting } from 'redux/selectors/settings';
-import { doSetClientSetting, doSyncClientSettings } from 'redux/actions/settings';
+import { doSetClientSetting, doPushSettingsToPrefs } from 'redux/actions/settings';
 import { doToast } from 'redux/actions/notifications';
 
 export const doGetSyncDesktop = (pw: string, cb: () => void) => (dispatch: Dispatch, getState: () => {}) => {
@@ -15,7 +15,7 @@ export const doGetSyncDesktop = (pw: string, cb: () => void) => (dispatch: Dispa
   if (syncEnabled && !getSyncPending && !setSyncPending) {
     if (walletIsEncrypted && pw === '') {
       dispatch(doSetClientSetting(SETTINGS.ENABLE_SYNC, false));
-      dispatch(doSyncClientSettings());
+      dispatch(doPushSettingsToPrefs());
       dispatch(
         doToast({
           message: 'Something is wrong with your wallet encryption. Disabling remote sync for now.',

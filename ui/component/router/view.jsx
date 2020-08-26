@@ -98,7 +98,7 @@ type Props = {
   welcomeVersion: number,
   hasNavigated: boolean,
   setHasNavigated: () => void,
-  syncSettings: () => void,
+  pushSettingsToPrefs: () => void,
   checkSync: () => void,
   syncEnabled: boolean,
   updatePreferences: () => void,
@@ -115,7 +115,7 @@ function AppRouter(props: Props) {
     welcomeVersion,
     hasNavigated,
     setHasNavigated,
-    syncSettings,
+    pushSettingsToPrefs,
     syncEnabled,
     updatePreferences,
     checkSync,
@@ -142,7 +142,7 @@ function AppRouter(props: Props) {
   useEffect(() => {
     const unlisten = history.listen(location => {
       if (!location.pathname.includes(PAGES.SETTINGS) && prevPath.includes(PAGES.SETTINGS)) {
-        syncSettings();
+        pushSettingsToPrefs();
       } else if (location.pathname.includes(PAGES.SETTINGS) && !prevPath.includes(PAGES.SETTINGS)) {
         if (syncEnabled && hasVerifiedEmail) {
           checkSync();
@@ -152,7 +152,7 @@ function AppRouter(props: Props) {
       }
     });
     return unlisten;
-  }, [prevPath, syncSettings, checkSync, hasVerifiedEmail, syncEnabled, updatePreferences]);
+  }, [prevPath, pushSettingsToPrefs, checkSync, hasVerifiedEmail, syncEnabled, updatePreferences]);
 
   useEffect(() => {
     const unlisten = history.listen(location => {

@@ -56,7 +56,7 @@ type Props = {
   clearEmailEntry: () => void,
   clearPasswordEntry: () => void,
   hasNavigated: boolean,
-  syncSettings: () => void,
+  pushSettingsToPrefs: () => void,
   sidebarOpen: boolean,
   setSidebarOpen: boolean => void,
   isAbsoluteSideNavHidden: boolean,
@@ -80,7 +80,7 @@ const Header = (props: Props) => {
     clearPasswordEntry,
     emailToVerify,
     backout,
-    syncSettings,
+    pushSettingsToPrefs,
     sidebarOpen,
     setSidebarOpen,
     isAbsoluteSideNavHidden,
@@ -153,7 +153,7 @@ const Header = (props: Props) => {
     } else {
       setClientSetting(SETTINGS.THEME, 'dark');
     }
-    syncSettings();
+    pushSettingsToPrefs();
   }
 
   function getWalletTitle() {
