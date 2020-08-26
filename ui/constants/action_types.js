@@ -265,7 +265,7 @@ export const COMMENT_HIDE_STARTED = 'COMMENT_HIDE_STARTED';
 export const COMMENT_HIDE_COMPLETED = 'COMMENT_HIDE_COMPLETED';
 export const COMMENT_HIDE_FAILED = 'COMMENT_HIDE_FAILED';
 
-// Blocked Channels
+// Blocked channels
 export const TOGGLE_BLOCK_CHANNEL = 'TOGGLE_BLOCK_CHANNEL';
 
 // Notifications

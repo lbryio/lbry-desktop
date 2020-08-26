@@ -61,9 +61,9 @@ class ModalSetReferrer extends React.PureComponent<Props, State> {
     const { referrer } = this.state;
 
     return (
-      <Modal isOpen contentLabel={__('Enter Inviter')} type="card" onAborted={closeModal}>
+      <Modal isOpen contentLabel={__('Enter inviter')} type="card" onAborted={closeModal}>
         <Card
-          title={__('Enter Inviter')}
+          title={__('Enter inviter')}
           subtitle={
             <React.Fragment>
               {__('Did someone invite you to use lbry.tv? Tell us who and you both get a reward!')}

@@ -38,7 +38,7 @@ class WalletSend extends React.PureComponent<Props> {
 
     return (
       <Card
-        title={__('Send Credits')}
+        title={__('Send credits')}
         subtitle={__('Send LBC to your friends or favorite creators.')}
         actions={
           <Formik

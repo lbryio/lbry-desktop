@@ -39,8 +39,8 @@ class ModalRewardCode extends React.PureComponent<Props, State> {
     return (
       <Modal
         isOpen
-        title={__('Enter Reward Code')}
-        contentLabel={__('Enter Reward Code')}
+        title={__('Enter reward code')}
+        contentLabel={__('Enter reward code')}
         type="custom"
         onAborted={closeModal}
       >

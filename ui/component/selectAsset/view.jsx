@@ -72,7 +72,7 @@ function SelectAsset(props: Props) {
 
   return (
     <Card
-      title={title || __('Choose Image')}
+      title={title || __('Choose image')}
       actions={
         <Form onSubmit={onDone}>
           {error && <div className="error__text">{error}</div>}

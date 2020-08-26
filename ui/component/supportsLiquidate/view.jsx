@@ -89,7 +89,7 @@ const SupportsLiquidate = (props: Props) => {
   return (
     <Card
       icon={ICONS.UNLOCK}
-      title={__('Unlock Tips')}
+      title={__('Unlock tips')}
       subtitle={
         <>
           <p>

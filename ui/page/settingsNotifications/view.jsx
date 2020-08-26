@@ -94,11 +94,11 @@ export default function NotificationSettingsPage(props: Props) {
   }
 
   return (
-    <Page backout={{ title: __('Manage Notifications'), backLabel: __('Done') }} noFooter noSideNavigation>
+    <Page backout={{ title: __('Manage notifications'), backLabel: __('Done') }} noFooter noSideNavigation>
       {error ? (
         <Yrbl
           type="sad"
-          title={__('Uh Oh')}
+          title={__('Uh oh')}
           subtitle={
             <>
               <div>{__('There was an error displaying this page.')}</div>
@@ -118,7 +118,7 @@ export default function NotificationSettingsPage(props: Props) {
         <div className="card-stack">
           {/* @if TARGET='app' */}
           <Card
-            title={__('App Notifications')}
+            title={__('App notifications')}
             subtitle={__('Notification settings for the desktop app.')}
             actions={
               <FormField
@@ -136,7 +136,7 @@ export default function NotificationSettingsPage(props: Props) {
 
           {enabledEmails && enabledEmails.length > 0 && (
             <Card
-              title={enabledEmails.length === 1 ? __('Your Email') : __('Receiving Addresses')}
+              title={enabledEmails.length === 1 ? __('Your email') : __('Receiving addresses')}
               subtitle={__('Uncheck your email below if you want to stop receiving messages.')}
               actions={
                 <>
@@ -157,7 +157,7 @@ export default function NotificationSettingsPage(props: Props) {
 
           {tags && tags.length > 0 && (
             <Card
-              title={__('Email Preferences')}
+              title={__('Email preferences')}
               subtitle={__("Opt out of any topics you don't want to receive email about.")}
               actions={
                 <>

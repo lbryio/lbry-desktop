@@ -68,7 +68,7 @@ export default function CreatorAnalytics(props: Props) {
               {error && (
                 <Yrbl
                   type="sad"
-                  title={error === GENERIC_ERROR ? __('No Stats Found') : __('Error Fetching Stats')}
+                  title={error === GENERIC_ERROR ? __('No stats found') : __('Error fetching stats')}
                   subtitle={
                     error === GENERIC_ERROR
                       ? __(
@@ -170,7 +170,7 @@ export default function CreatorAnalytics(props: Props) {
           {stats.VideoURITopNew ? (
             <Card
               className="section"
-              title={__('Most Viewed Recent Content')}
+              title={__('Most viewed recent content')}
               body={
                 <React.Fragment>
                   <div className="card--inline">
@@ -193,7 +193,7 @@ export default function CreatorAnalytics(props: Props) {
           ) : (
             <Card
               className="section"
-              title={__('Your Recent Content')}
+              title={__('Your recent content')}
               subtitle={
                 !stats.VideoURITopNew &&
                 __("No recent uploads found for this channel. Upload something new and track how it's performing here.")
@@ -245,7 +245,7 @@ export default function CreatorAnalytics(props: Props) {
 
           <Card
             className="section"
-            title={__('Most Viewed Content All Time')}
+            title={__('Most viewed content all time')}
             body={
               <React.Fragment>
                 <div className="card--inline">
