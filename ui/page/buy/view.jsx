@@ -76,7 +76,7 @@ export default function BuyPage(props: Props) {
     }
   }, [url, setUrl, receiveAddress, email]);
 
-  const title = __('Buy LBRY Credits');
+  const title = __('Buy credits');
   const subtitle = (
     <I18nMessage
       tokens={{
