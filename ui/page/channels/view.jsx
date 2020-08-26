@@ -33,7 +33,7 @@ export default function ChannelsPage(props: Props) {
 
         {channelUrls && Boolean(channelUrls.length) && (
           <Card
-            title={__('Your Channels')}
+            title={__('Your channels')}
             titleActions={
               <>
                 <Button
@@ -55,7 +55,7 @@ export default function ChannelsPage(props: Props) {
           {!fetchingChannels ? (
             <section className="main--empty">
               <div className=" section--small">
-                <h2 className="section__title--large">{__('No Channels Created Yet')}</h2>
+                <h2 className="section__title--large">{__('No channels created yet')}</h2>
 
                 <div className="section__actions">
                   <Button button="primary" label={__('New Channel')} navigate={`/$/${PAGES.CHANNEL_NEW}`} />

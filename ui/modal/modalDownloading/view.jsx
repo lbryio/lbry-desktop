@@ -17,7 +17,7 @@ class ModalDownloading extends React.PureComponent<Props> {
     const { downloadProgress, downloadComplete, downloadItem, startUpgrade, cancelUpgrade } = this.props;
 
     return (
-      <Modal title={__('Downloading Update')} isOpen contentLabel={__('Downloading Update')} type="custom">
+      <Modal title={__('Downloading update')} isOpen contentLabel={__('Downloading update')} type="custom">
         {downloadProgress ? `${downloadProgress}% ${__('complete')}` : null}
         <Line percent={downloadProgress || 0} strokeWidth="4" />
         {downloadComplete ? (

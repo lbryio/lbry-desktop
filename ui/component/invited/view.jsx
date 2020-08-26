@@ -1,4 +1,5 @@
 // @flow
+import { SITE_NAME } from 'config';
 import * as PAGES from 'constants/pages';
 import React, { useEffect } from 'react';
 import Button from 'component/button';
@@ -140,7 +141,11 @@ function Invited(props: Props) {
 
     return (
       <Card
-        title={__(`You're invited!`)}
+        title={
+          referrerIsChannel
+            ? __('%channel_name% invites you to the party!', { channel_name: referrerChannelName })
+            : __(`You're invited!`)
+        }
         subtitle={
           <p>
             {referrerIsChannel ? (
@@ -148,9 +153,10 @@ function Invited(props: Props) {
                 tokens={{
                   channel_name: referrerChannelName,
                   signup_link: signUpButton,
+                  SITE_NAME,
                 }}
               >
-                Content freedom and a present from %channel_name% are waiting for you. %signup_link% to claim it.
+                %channel_name% is waiting for you on %SITE_NAME%. Create your account now.
               </I18nMessage>
             ) : (
               <I18nMessage

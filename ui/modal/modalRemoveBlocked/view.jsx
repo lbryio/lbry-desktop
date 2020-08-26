@@ -29,7 +29,7 @@ function ModalRemoveBlocked(props: Props) {
     <Modal
       isOpen
       type="confirm"
-      title={__('Remove from Blocked List')}
+      title={__('Remove from blocked list')}
       confirmButtonLabel={__('Remove')}
       onConfirmed={handleConfirm}
       onAborted={() => closeModal()}

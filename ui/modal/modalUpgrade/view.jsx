@@ -17,7 +17,7 @@ class ModalUpgrade extends React.PureComponent<Props> {
       <Modal
         isOpen
         contentLabel={__('Upgrade available')}
-        title={__('LBRY Leveled Up')}
+        title={__('LBRY leveled up')}
         type="confirm"
         confirmButtonLabel={__('Upgrade')}
         abortButtonLabel={__('Skip')}

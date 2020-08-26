@@ -57,7 +57,7 @@ class RewardsPage extends PureComponent<Props> {
       return (
         <Card
           className="section"
-          title={__('Reward Validation Pending')}
+          title={__('Reward validation pending')}
           body={
             <React.Fragment>
               <p>
@@ -135,7 +135,7 @@ class RewardsPage extends PureComponent<Props> {
     } else if (!rewards || rewards.length <= 0) {
       return (
         <Card
-          title={__('No Rewards Available')}
+          title={__('No rewards available')}
           subtitle={
             claimed && claimed.length
               ? __(

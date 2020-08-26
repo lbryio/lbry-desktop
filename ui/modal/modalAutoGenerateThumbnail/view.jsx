@@ -71,7 +71,7 @@ function ModalAutoGenerateThumbnail(props: Props) {
   return (
     <Modal
       isOpen
-      title={__('Upload Thumbnail')}
+      title={__('Upload thumbnail')}
       contentLabel={__('Confirm Thumbnail Upload')}
       type="confirm"
       confirmButtonLabel={__('Upload')}

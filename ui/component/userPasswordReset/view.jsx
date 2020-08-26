@@ -66,7 +66,7 @@ function UserPasswordReset(props: Props) {
   return (
     <section className="main__sign-in">
       <Card
-        title={__('Reset Your Password')}
+        title={__('Reset your password')}
         actions={
           <div>
             <Form onSubmit={handleSubmit} className="section">

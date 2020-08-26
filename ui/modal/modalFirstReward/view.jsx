@@ -13,9 +13,9 @@ class ModalFirstReward extends React.PureComponent<Props> {
     const { closeModal } = this.props;
 
     return (
-      <Modal type="card" isOpen contentLabel={__('Your First Reward')}>
+      <Modal type="card" isOpen contentLabel={__('Your first reward')}>
         <Card
-          title={__('Your First Reward')}
+          title={__('Your first reward')}
           subtitle={__('You just earned your first reward!')}
           body={
             <React.Fragment>

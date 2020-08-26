@@ -295,7 +295,7 @@ export default class SplashScreen extends React.PureComponent<Props, State> {
         )}
         {error && (
           <Card
-            title={__('Error Starting Up')}
+            title={__('Error starting up')}
             subtitle={
               <React.Fragment>
                 <p>

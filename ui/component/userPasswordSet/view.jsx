@@ -72,7 +72,7 @@ function UserPasswordReset(props: Props) {
   return (
     <section className="main__sign-in">
       <Card
-        title={__('Choose A New Password')}
+        title={__('Choose a new password')}
         subtitle={__('Setting a new password for %email%', { email })}
         actions={
           <div>
