@@ -1,8 +1,7 @@
 // @flow
 import * as React from 'react';
 import classnames from 'classnames';
-import HappyYrbl from './gerbil-happy.png';
-import SadYrbl from './gerbil-sad.png';
+import { YRBL_HAPPY_IMG_URL, YRBL_SAD_IMG_URL } from 'config';
 
 type Props = {
   title?: string,
@@ -12,8 +11,8 @@ type Props = {
 };
 
 const yrblTypes = {
-  happy: HappyYrbl,
-  sad: SadYrbl,
+  happy: YRBL_HAPPY_IMG_URL,
+  sad: YRBL_SAD_IMG_URL,
 };
 
 export default class extends React.PureComponent<Props> {
@@ -31,8 +30,8 @@ export default class extends React.PureComponent<Props> {
         <img alt="Friendly gerbil" className={classnames('yrbl', className)} src={`${image}`} />
         {title && subtitle && (
           <div className="yrbl__content">
-            <h2 className="card__title card__title--deprecated">{title}</h2>
-            <p>{subtitle}</p>
+            <h2 className="section__title">{title}</h2>
+            <p className="section__subtitle">{subtitle}</p>
           </div>
         )}
       </div>
