@@ -69,7 +69,6 @@ type Props = {
   autoUpdateDownloaded: boolean,
   checkSync: () => void,
   updatePreferences: () => void,
-  syncEnabled: boolean,
   uploadCount: number,
   balance: ?number,
   syncError: ?string,
@@ -90,7 +89,6 @@ function App(props: Props) {
     autoUpdateDownloaded,
     isUpgradeAvailable,
     requestDownloadUpgrade,
-    syncEnabled,
     checkSync,
     uploadCount,
     history,
@@ -245,7 +243,8 @@ function App(props: Props) {
   // @endif
 
   useEffect(() => {
-    if (hasVerifiedEmail && syncEnabled && !pathname.includes(`/$/${PAGES.SETTINGS}`)) {
+    // maybe just here for leaving settings page
+    if (hasVerifiedEmail) {
       checkSync();
       analyticsTagSync();
       let syncInterval = setInterval(() => {
@@ -257,7 +256,7 @@ function App(props: Props) {
       };
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [hasVerifiedEmail, syncEnabled, checkSync, pathname]);
+  }, [hasVerifiedEmail, checkSync]);
 
   useEffect(() => {
     if (syncError && isAuthenticated) {

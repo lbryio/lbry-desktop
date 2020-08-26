@@ -25,7 +25,7 @@ const select = state => ({
   languages: selectLoadedLanguages(state),
   autoUpdateDownloaded: selectAutoUpdateDownloaded(state),
   isUpgradeAvailable: selectIsUpgradeAvailable(state),
-  syncEnabled: makeSelectClientSetting(SETTINGS.ENABLE_SYNC)(state),
+  // syncEnabled: makeSelectClientSetting(SETTINGS.ENABLE_SYNC)(state),
   syncError: selectGetSyncErrorMessage(state),
   uploadCount: selectUploadCount(state),
   rewards: selectUnclaimedRewards(state),

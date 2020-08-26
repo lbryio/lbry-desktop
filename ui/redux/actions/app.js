@@ -46,7 +46,7 @@ import {
 import { selectDaemonSettings } from 'redux/selectors/settings';
 import { selectUser } from 'redux/selectors/user';
 // import { selectDaemonSettings } from 'redux/selectors/settings';
-import { doGetSync } from 'lbryinc';
+import { doGetSyncDesktop } from 'redux/actions/syncwrapper';
 import { doAuthenticate } from 'redux/actions/user';
 import { lbrySettings as config, version as appVersion } from 'package.json';
 import analytics, { SHARE_INTERNAL } from 'analytics';
@@ -654,7 +654,9 @@ export function doSyncWithPreferences() {
     return getSavedPassword().then(password => {
       const passwordArgument = password === null ? '' : password;
 
-      dispatch(doGetSync(passwordArgument, (error, hasNewData) => dispatch(doHandleSyncComplete(error, hasNewData))));
+      dispatch(
+        doGetSyncDesktop(passwordArgument, (error, hasNewData) => dispatch(doHandleSyncComplete(error, hasNewData)))
+      );
     });
   };
 }
