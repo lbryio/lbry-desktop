@@ -15,7 +15,9 @@ type Props = {
   channelSubscribe: (sub: Subscription) => void,
 };
 
-const channelsToSubscribe = AUTO_FOLLOW_CHANNELS.trim().split(' ');
+const channelsToSubscribe = AUTO_FOLLOW_CHANNELS.trim()
+  .split(' ')
+  .filter(x => x !== '');
 
 function UserChannelFollowIntro(props: Props) {
   const { subscribedChannels, channelSubscribe, onContinue, onBack } = props;
@@ -23,12 +25,14 @@ function UserChannelFollowIntro(props: Props) {
 
   // subscribe to lbry
   useEffect(() => {
-    channelsToSubscribe.forEach(c =>
-      channelSubscribe({
-        channelName: parseURI(c).claimName,
-        uri: c,
-      })
-    );
+    if (channelsToSubscribe && channelsToSubscribe.length) {
+      channelsToSubscribe.forEach(c =>
+        channelSubscribe({
+          channelName: parseURI(c).claimName,
+          uri: c,
+        })
+      );
+    }
   }, []);
 
   return (
