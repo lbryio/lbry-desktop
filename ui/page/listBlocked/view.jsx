@@ -16,7 +16,7 @@ function ListBlocked(props: Props) {
       {uris && uris.length ? (
         <Card
           isBodyList
-          title={__('Your Blocked Channels')}
+          title={__('Your blocked channels')}
           body={<ClaimList uris={uris} showUnresolvedClaims showHiddenByUser />}
         />
       ) : (

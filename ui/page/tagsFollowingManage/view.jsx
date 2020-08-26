@@ -6,7 +6,7 @@ import TagsSelect from 'component/tagsSelect';
 function FollowingPage() {
   return (
     <Page>
-      <TagsSelect limitShow={300} showClose={false} title={__('Follow New Tags')} />
+      <TagsSelect limitShow={300} showClose={false} title={__('Follow new tags')} />
     </Page>
   );
 }

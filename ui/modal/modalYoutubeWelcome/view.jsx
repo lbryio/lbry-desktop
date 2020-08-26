@@ -15,7 +15,7 @@ const YoutubeWelcome = (props: Props) => {
     <Modal isOpen type="card" onAborted={doHideModal}>
       <Confetti recycle={false} style={{ position: 'fixed' }} numberOfPieces={100} />
       <Card
-        title={__("You're Free!")}
+        title={__("You're free!")}
         subtitle={
           <React.Fragment>
             <p>

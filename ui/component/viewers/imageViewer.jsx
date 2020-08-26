@@ -15,7 +15,7 @@ function ImageViewer(props: Props) {
     <React.Fragment>
       {loadingError && (
         <Card
-          title={__('Error Displaying Image')}
+          title={__('Error displaying image')}
           actions={<ErrorText>There was an error displaying the image. You may still download it.</ErrorText>}
         />
       )}

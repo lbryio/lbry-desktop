@@ -58,6 +58,7 @@ function WalletSendTip(props: Props) {
   const [selectedChannel, setSelectedChannel] = usePersistedState('comment-support:channel');
   const { claim_id: claimId } = claim;
   const { channelName } = parseURI(uri);
+  const noBalance = balance === 0;
 
   const channelStrings = channels && channels.map(channel => channel.permanent_url).join(',');
   React.useEffect(() => {
@@ -149,22 +150,28 @@ function WalletSendTip(props: Props) {
 
   return (
     <Form onSubmit={handleSubmit}>
-      {balance === 0 ? (
+      {noBalance ? (
         <Card
-          title={__('Supporting Content Requires LBC')}
+          title={__('Supporting content requires credits')}
           subtitle={__(
             'With LBC, you can send tips to your favorite creators, or help boost their content for more people to see.'
           )}
           actions={
             <div className="section__actions">
-              <Button icon={ICONS.BUY} button="primary" label={__('Buy LBC')} navigate={`/$/${PAGES.BUY}`} />
+              <Button
+                icon={ICONS.REWARDS}
+                button="primary"
+                label={__('Earn Rewards')}
+                navigate={`/$/${PAGES.REWARDS}`}
+              />
+              <Button icon={ICONS.BUY} button="secondary" label={__('Buy Credits')} navigate={`/$/${PAGES.BUY}`} />
               <Button button="link" label={__('Nevermind')} onClick={closeModal} />
             </div>
           }
         />
       ) : (
         <Card
-          title={claimIsMine ? __('Boost Your Content') : isSupport ? __('Support This Content') : __('Send A Tip')}
+          title={claimIsMine ? __('Boost your content') : isSupport ? __('Support this content') : __('Send a tip')}
           subtitle={
             <React.Fragment>
               {isSupport
@@ -239,7 +246,7 @@ function WalletSendTip(props: Props) {
                       button="secondary"
                       className="button-toggle-group-action"
                       icon={ICONS.BUY}
-                      title={__('Buy More LBC')}
+                      title={__('Buy more LBC')}
                       navigate={`/$/${PAGES.BUY}`}
                     />
                   )}

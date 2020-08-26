@@ -42,7 +42,7 @@ class TxoListItem extends React.PureComponent<Props, State> {
           button="secondary"
           icon={ICONS.UNLOCK}
           onClick={this.abandonClaim}
-          title={__('Unlock Tip')}
+          title={__('Unlock tip')}
         />
       );
     }

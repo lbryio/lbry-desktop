@@ -214,6 +214,13 @@
   }
 }
 
+.main--hoisted {
+  margin-top: calc(var(--spacing-s) * -1);
+  @media (min-width: $breakpoint-small) {
+    margin-top: calc(var(--spacing-l) * -1);
+  }
+}
+
 .main__sign-in,
 .main__sign-up {
   max-width: 27rem;

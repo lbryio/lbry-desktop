@@ -1,5 +1,5 @@
 // @flow
-import React, { Suspense } from 'react';
+import React from 'react';
 import { Modal } from 'modal/modal';
 import Button from 'component/button';
 import UserPhoneVerify from 'component/userPhoneVerify';
@@ -16,16 +16,6 @@ type Props = {
 };
 
 class ModalPhoneCollection extends React.PureComponent<Props> {
-  getTitle() {
-    const { user, phone } = this.props;
-
-    if (!user.is_identity_verified && !phone) {
-      return __('Enter Your Phone Number');
-    }
-
-    return __('Enter The Verification Code');
-  }
-
   renderInner() {
     const { closeModal, phone, user } = this.props;
 
@@ -42,7 +32,7 @@ class ModalPhoneCollection extends React.PureComponent<Props> {
   }
 
   render() {
-    const { user } = this.props;
+    const { user, closeModal } = this.props;
 
     // this shouldn't happen
     if (!user) {
@@ -50,7 +40,7 @@ class ModalPhoneCollection extends React.PureComponent<Props> {
     }
 
     return (
-      <Modal type="custom" isOpen contentLabel="Phone" title={this.getTitle()}>
+      <Modal type="card" isOpen contentLabel="Phone" onAborted={closeModal}>
         {this.renderInner()}
       </Modal>
     );

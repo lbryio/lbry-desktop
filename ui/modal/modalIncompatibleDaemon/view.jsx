@@ -15,7 +15,7 @@ class ModalIncompatibleDaemon extends React.PureComponent<Props> {
     return (
       <Modal
         isOpen
-        title={__('Incompatible Daemon')}
+        title={__('Incompatible daemon')}
         contentLabel={__('Incompatible daemon running')}
         type="confirm"
         confirmButtonLabel={__('Close App and LBRY Processes')}

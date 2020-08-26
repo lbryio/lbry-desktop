@@ -180,7 +180,7 @@ class HelpPage extends React.PureComponent<Props, State> {
 
         {/* @if TARGET='app' */}
         <Card
-          title={__('View your Log')}
+          title={__('View your log')}
           subtitle={
             <I18nMessage
               tokens={{

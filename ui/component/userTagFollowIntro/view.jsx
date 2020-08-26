@@ -18,7 +18,7 @@ function UserTagFollowIntro(props: Props) {
 
   return (
     <Card
-      title={__('Tag Selection')}
+      title={__('Tag selection')}
       subtitle={__('Select some tags to help us show you interesting things.')}
       actions={
         <React.Fragment>
@@ -35,7 +35,7 @@ function UserTagFollowIntro(props: Props) {
             </div>
           </Form>
           <div className="section__body">
-            <TagsSelect hideHeader limitShow={300} help={false} showClose={false} title={__('Follow New Tags')} />
+            <TagsSelect hideHeader limitShow={300} help={false} showClose={false} title={__('Follow new tags')} />
             {followingCount > 0 && (
               <Nag
                 type="helpful"
