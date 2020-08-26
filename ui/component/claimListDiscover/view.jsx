@@ -9,6 +9,7 @@ import Button from 'component/button';
 import moment from 'moment';
 import ClaimList from 'component/claimList';
 import ClaimPreview from 'component/claimPreview';
+import ClaimPreviewTile from 'component/claimPreviewTile';
 import I18nMessage from 'component/i18nMessage';
 import ClaimListHeader from 'component/claimListHeader';
 
@@ -434,6 +435,13 @@ function ClaimListDiscover(props: Props) {
             hideBlock={hideBlock}
             injectedItem={injectedItem}
           />
+          {loading && (
+            <div className="claim-grid">
+              {new Array(pageSize || CS.PAGE_SIZE).fill(1).map((x, i) => (
+                <ClaimPreviewTile key={i} placeholder="loading" />
+              ))}
+            </div>
+          )}
         </div>
       ) : (
         <div>
