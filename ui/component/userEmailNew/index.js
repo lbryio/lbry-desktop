@@ -21,7 +21,7 @@ const select = state => ({
 });
 
 const perform = dispatch => ({
-  setSync: value => dispatch(doSetClientSetting(SETTINGS.ENABLE_SYNC, value)),
+  setSync: value => dispatch(doSetClientSetting(SETTINGS.ENABLE_SYNC, value, true)),
   setShareDiagnosticData: shouldShareData =>
     dispatch(doSetDaemonSetting(DAEMON_SETTINGS.SHARE_USAGE_DATA, shouldShareData)),
   doSignUp: (email, password) => dispatch(doUserSignUp(email, password)),

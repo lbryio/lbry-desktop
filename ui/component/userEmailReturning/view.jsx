@@ -18,7 +18,7 @@ type Props = {
   doClearEmailEntry: () => void,
   doUserSignIn: (string, ?string) => void,
   doUserCheckIfEmailExists: string => void,
-  doSetClientSetting: (string, boolean) => void,
+  doSetClientSetting: (string, boolean, ?boolean) => void,
   isPending: boolean,
 };
 
@@ -48,7 +48,7 @@ function UserEmailReturning(props: Props) {
 
   function handleSubmit() {
     // @if TARGET='app'
-    doSetClientSetting(SETTINGS.ENABLE_SYNC, syncEnabled);
+    doSetClientSetting(SETTINGS.ENABLE_SYNC, syncEnabled, true);
     // @endif
     doUserCheckIfEmailExists(email);
   }
