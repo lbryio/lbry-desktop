@@ -1,10 +1,11 @@
 // @flow
-import React, { Fragment } from 'react';
+import * as ICONS from 'constants/icons';
+import * as PAGES from 'constants/pages';
+import React from 'react';
 import PublishForm from 'component/publishForm';
 import Page from 'component/page';
 import Yrbl from 'component/yrbl';
-import LbcSymbol from 'component/common/lbc-symbol';
-import RewardAuthIntro from 'component/rewardAuthIntro';
+import Button from 'component/button';
 
 type Props = {
   balance: number,
@@ -23,40 +24,34 @@ function PublishPage(props: Props) {
 
   return (
     <Page>
-      {balance === 0 ? (
-        <Fragment>
-          <div className="section">
-            <Yrbl
-              title={__("You can't upload things quite yet")}
-              subtitle={
-                <Fragment>
-                  <p>
-                    {__(
-                      'LBRY uses a blockchain, which is a fancy way of saying that users (you) are in control of your data.'
-                    )}
-                  </p>
-                  <p>
-                    {__('Because of the blockchain, some actions require LBRY credits')} (
-                    <LbcSymbol />
-                    ).
-                  </p>
-                  <p>
-                    <LbcSymbol />{' '}
-                    {__(
-                      'allows you to do some neat things, like paying your favorite creators for their content. And no company can stop you.'
-                    )}
-                  </p>
-                </Fragment>
-              }
-            />
-          </div>
-          <div className="section">
-            <RewardAuthIntro />
-          </div>
-        </Fragment>
-      ) : (
-        <PublishForm scrollToTop={scrollToTop} disabled={balance === 0} />
+      {balance === 0 && (
+        <div className="main--empty">
+          <Yrbl
+            type="sad"
+            title={__('Your wallet is empty')}
+            subtitle={
+              <div>
+                <p>{__('You need LBC to create a channel and upload content.')}</p>
+                <p>
+                  {__(
+                    'Never fear though, there are tons of ways to earn LBC! You can earn or purchase LBC, or you can have your friends send you some.'
+                  )}
+                </p>
+                <div className="section__actions">
+                  <Button
+                    button="primary"
+                    icon={ICONS.REWARDS}
+                    label={__('Earn Rewards')}
+                    navigate={`/$/${PAGES.REWARDS}`}
+                  />
+                  <Button button="secondary" icon={ICONS.BUY} label={__('Buy Credits')} navigate={`/$/${PAGES.BUY}`} />
+                </div>
+              </div>
+            }
+          />
+        </div>
       )}
+      <PublishForm scrollToTop={scrollToTop} disabled={balance === 0} />
     </Page>
   );
 }

@@ -180,15 +180,18 @@
   display: flex;
   align-items: center;
   flex-direction: column;
-  margin-top: 100px;
-  margin-bottom: 100px;
   text-align: center;
+  padding: 0 var(--spacing-m);
+  margin-top: var(--spacing-l);
+  margin-bottom: var(--spacing-l);
+
   > .card {
     width: 100%;
   }
 
-  @media (max-width: $breakpoint-small) {
-    padding: 0 var(--spacing-m);
+  @media (min-width: $breakpoint-small) {
+    margin-top: 100px;
+    margin-bottom: 100px;
   }
 }
 
