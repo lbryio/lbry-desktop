@@ -25,12 +25,14 @@ function UserChannelFollowIntro(props: Props) {
 
   // subscribe to lbry
   useEffect(() => {
-    channelsToSubscribe.forEach(c =>
-      channelSubscribe({
-        channelName: parseURI(c).claimName,
-        uri: c,
-      })
-    );
+    if (channelsToSubscribe && channelsToSubscribe.length) {
+      channelsToSubscribe.forEach(c =>
+        channelSubscribe({
+          channelName: parseURI(c).claimName,
+          uri: c,
+        })
+      );
+    }
   }, []);
 
   return (
