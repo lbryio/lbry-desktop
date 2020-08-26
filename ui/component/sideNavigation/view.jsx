@@ -261,7 +261,7 @@ function SideNavigation(props: Props) {
             {TOP_LEVEL_LINKS.map(linkProps => {
               const { hideForUnauth, ...passedProps } = linkProps;
               return !email && linkProps.hideForUnauth && IS_WEB ? null : (
-                <li key={linkProps.navigate}>
+                <li key={linkProps.icon}>
                   <Button
                     {...passedProps}
                     label={__(linkProps.label)}
@@ -309,7 +309,7 @@ function SideNavigation(props: Props) {
                 const { hideForUnauth, ...passedProps } = linkProps;
 
                 return !email && hideForUnauth && IS_WEB ? null : (
-                  <li key={linkProps.navigate}>
+                  <li key={linkProps.icon}>
                     <Button
                       {...passedProps}
                       label={__(linkProps.label)}
@@ -330,7 +330,7 @@ function SideNavigation(props: Props) {
                 const { hideForUnauth, ...passedProps } = linkProps;
 
                 return !email && hideForUnauth && IS_WEB ? null : (
-                  <li key={linkProps.navigate} className="mobile-only">
+                  <li key={linkProps.icon} className="mobile-only">
                     <Button
                       {...passedProps}
                       label={__(linkProps.label)}
