@@ -7,7 +7,6 @@ import Spinner from 'component/spinner';
 import Notification from 'component/notification';
 import Button from 'component/button';
 import Yrbl from 'component/yrbl';
-import usePrevious from 'effects/use-previous';
 
 type Props = {
   notifications: Array<Notification>,
@@ -20,8 +19,6 @@ type Props = {
 
 export default function NotificationsPage(props: Props) {
   const { notifications, fetching, unreadCount, unseenCount, doSeeAllNotifications, doReadNotifications } = props;
-  const [hasFetched, setHasFetched] = React.useState(false);
-  const previousFetching = usePrevious(fetching);
   const hasNotifications = notifications.length > 0;
 
   React.useEffect(() => {
@@ -30,12 +27,6 @@ export default function NotificationsPage(props: Props) {
     }
   }, [unreadCount, doReadNotifications]);
 
-  React.useEffect(() => {
-    if ((fetching === false && previousFetching === true) || hasNotifications) {
-      setHasFetched(true);
-    }
-  }, [fetching, previousFetching, setHasFetched, hasNotifications]);
-
   return (
     <Page>
       {fetching && !hasNotifications && (
@@ -43,7 +34,7 @@ export default function NotificationsPage(props: Props) {
           <Spinner delayed />
         </div>
       )}
-      {hasFetched && (
+      {!fetching && (
         <>
           {notifications && notifications.length > 0 ? (
             <Card
