@@ -259,66 +259,11 @@ function SideNavigation(props: Props) {
             // @endif
           })}
         >
-          <ul className={classnames('navigation-links', { 'navigation-links--micro': !sidebarOpen })}>
-            {TOP_LEVEL_LINKS.map(linkProps => {
-              const { hideForUnauth, ...passedProps } = linkProps;
-              return !email && linkProps.hideForUnauth && IS_WEB ? null : (
-                <li key={linkProps.icon}>
-                  <Button
-                    {...passedProps}
-                    label={__(linkProps.label)}
-                    icon={pulseLibrary && linkProps.icon === ICONS.LIBRARY ? ICONS.PURCHASED : linkProps.icon}
-                    className={classnames('navigation-link', {
-                      'navigation-link--pulse': linkProps.icon === ICONS.LIBRARY && pulseLibrary,
-                      'navigation-link--highlighted': linkProps.icon === ICONS.NOTIFICATION && unreadCount > 0,
-                    })}
-                    activeClass="navigation-link--active"
-                  />
-                  {linkProps.extra}
-                </li>
-              );
-            })}
-          </ul>
-          {sidebarOpen && isPersonalized && subscriptions && subscriptions.length > 0 && (
-            <ul className="navigation__secondary navigation-links navigation-links--small">
-              {subscriptions.map(({ uri, channelName }, index) => (
-                <li key={uri} className="navigation-link__wrapper">
-                  <Button
-                    navigate={uri}
-                    label={channelName}
-                    className="navigation-link"
-                    activeClass="navigation-link--active"
-                  />
-                </li>
-              ))}
-            </ul>
-          )}
-          {sidebarOpen && isPersonalized && followedTags && followedTags.length > 0 && (
-            <ul className="navigation__secondary navigation-links navigation-links--small">
-              {followedTags.map(({ name }, key) => (
-                <li key={name} className="navigation-link__wrapper">
-                  <Button navigate={`/$/discover?t=${name}`} label={`#${name}`} className="navigation-link" />
-                </li>
-              ))}
-            </ul>
-          )}
-        </nav>
-      )}
-
-      {(isOnFilePage || isMediumScreen) && sidebarOpen && (
-        <>
-          <nav
-            className={classnames('navigation--absolute', {
-              // @if TARGET='app'
-              'navigation--mac': IS_MAC,
-              // @endif
-            })}
-          >
-            <ul className="navigation-links--absolute">
+          <div>
+            <ul className={classnames('navigation-links', { 'navigation-links--micro': !sidebarOpen })}>
               {TOP_LEVEL_LINKS.map(linkProps => {
                 const { hideForUnauth, ...passedProps } = linkProps;
-
-                return !email && hideForUnauth && IS_WEB ? null : (
+                return !email && linkProps.hideForUnauth && IS_WEB ? null : (
                   <li key={linkProps.icon}>
                     <Button
                       {...passedProps}
@@ -335,25 +280,9 @@ function SideNavigation(props: Props) {
                 );
               })}
             </ul>
-            <ul className="navigation-links--absolute">
-              {subLinks.map(linkProps => {
-                const { hideForUnauth, ...passedProps } = linkProps;
 
-                return !email && hideForUnauth && IS_WEB ? null : (
-                  <li key={linkProps.icon} className="mobile-only">
-                    <Button
-                      {...passedProps}
-                      label={__(linkProps.label)}
-                      className="navigation-link"
-                      activeClass="navigation-link--active"
-                    />
-                    {linkProps.extra}
-                  </li>
-                );
-              })}
-            </ul>
-            {isPersonalized && subscriptions && subscriptions.length > 0 && (
-              <ul className="navigation__secondary navigation-links--small">
+            {sidebarOpen && isPersonalized && subscriptions && subscriptions.length > 0 && (
+              <ul className="navigation__secondary navigation-links navigation-links--small">
                 {subscriptions.map(({ uri, channelName }, index) => (
                   <li key={uri} className="navigation-link__wrapper">
                     <Button
@@ -366,15 +295,73 @@ function SideNavigation(props: Props) {
                 ))}
               </ul>
             )}
-            {isPersonalized && followedTags && followedTags.length > 0 && (
-              <ul className="navigation__secondary navigation-links--small">
-                {followedTags.map(({ name }, key) => (
-                  <li key={name} className="navigation-link__wrapper">
-                    <Button navigate={`/$/discover?t=${name}`} label={`#${name}`} className="navigation-link" />
-                  </li>
-                ))}
+          </div>
+        </nav>
+      )}
+
+      {(isOnFilePage || isMediumScreen) && sidebarOpen && (
+        <>
+          <nav
+            className={classnames('navigation--absolute', {
+              // @if TARGET='app'
+              'navigation--mac': IS_MAC,
+              // @endif
+            })}
+          >
+            <div>
+              <ul className="navigation-links--absolute">
+                {TOP_LEVEL_LINKS.map(linkProps => {
+                  const { hideForUnauth, ...passedProps } = linkProps;
+
+                  return !email && hideForUnauth && IS_WEB ? null : (
+                    <li key={linkProps.icon}>
+                      <Button
+                        {...passedProps}
+                        label={__(linkProps.label)}
+                        icon={pulseLibrary && linkProps.icon === ICONS.LIBRARY ? ICONS.PURCHASED : linkProps.icon}
+                        className={classnames('navigation-link', {
+                          'navigation-link--pulse': linkProps.icon === ICONS.LIBRARY && pulseLibrary,
+                          'navigation-link--highlighted': linkProps.icon === ICONS.NOTIFICATION && unreadCount > 0,
+                        })}
+                        activeClass="navigation-link--active"
+                      />
+                      {linkProps.extra}
+                    </li>
+                  );
+                })}
               </ul>
-            )}
+              <ul className="navigation-links--absolute">
+                {subLinks.map(linkProps => {
+                  const { hideForUnauth, ...passedProps } = linkProps;
+
+                  return !email && hideForUnauth && IS_WEB ? null : (
+                    <li key={linkProps.icon} className="mobile-only">
+                      <Button
+                        {...passedProps}
+                        label={__(linkProps.label)}
+                        className="navigation-link"
+                        activeClass="navigation-link--active"
+                      />
+                      {linkProps.extra}
+                    </li>
+                  );
+                })}
+              </ul>
+              {isPersonalized && subscriptions && subscriptions.length > 0 && (
+                <ul className="navigation__secondary navigation-links--small">
+                  {subscriptions.map(({ uri, channelName }, index) => (
+                    <li key={uri} className="navigation-link__wrapper">
+                      <Button
+                        navigate={uri}
+                        label={channelName}
+                        className="navigation-link"
+                        activeClass="navigation-link--active"
+                      />
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </div>
           </nav>
           <div
             className={classnames('navigation__overlay', {
