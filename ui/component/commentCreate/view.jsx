@@ -9,12 +9,10 @@ import { FormField, Form } from 'component/common/form';
 import Button from 'component/button';
 import ChannelSelection from 'component/selectChannel';
 import usePersistedState from 'effects/use-persisted-state';
-import I18nMessage from 'component/i18nMessage';
 import { FF_MAX_CHARS_IN_COMMENT } from 'constants/form-field';
 import { useHistory } from 'react-router';
 
 type Props = {
-  commentingEnabled: boolean,
   uri: string,
   claim: StreamClaim,
   openModal: (id: string, { onCommentAcknowledge: () => void }) => void,
@@ -27,17 +25,7 @@ type Props = {
 };
 
 export function CommentCreate(props: Props) {
-  const {
-    commentingEnabled,
-    createComment,
-    claim,
-    openModal,
-    channels,
-    parentId,
-    onDoneReplying,
-    onCancelReplying,
-    isNested,
-  } = props;
+  const { createComment, claim, openModal, channels, parentId, onDoneReplying, onCancelReplying, isNested } = props;
   const { push } = useHistory();
   const { claim_id: claimId } = claim;
   const isReply = !!parentId;
@@ -99,14 +87,6 @@ export function CommentCreate(props: Props) {
   }
 
   useEffect(() => setCharCount(commentValue.length), [commentValue]);
-
-  if (!commentingEnabled) {
-    return (
-      <I18nMessage tokens={{ sign_in_link: <Button button="link" requiresAuth label={__('log in')} /> }}>
-        Please %sign_in_link% to comment.
-      </I18nMessage>
-    );
-  }
 
   if (!hasChannels) {
     return (
