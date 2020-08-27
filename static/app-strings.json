@@ -1281,5 +1281,8 @@
   "Not Now": "Not Now",
   "Enter your phone number and we will send you a verification code. We will not share your phone number with third parties.": "Enter your phone number and we will send you a verification code. We will not share your phone number with third parties.",
   "Number": "Number",
+  "%view_count% views - %view_count_change% this week": "%view_count% views - %view_count_change% this week",
+  "Most Commented Recent Content": "Most Commented Recent Content",
+  "%comment_count% comments - %comment_count_change% this week": "%comment_count% comments - %comment_count_change% this week",
   "--end--": "--end--"
 }

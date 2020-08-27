@@ -179,10 +179,13 @@ export default function CreatorAnalytics(props: Props) {
                   <div className="section__subtitle card__data-subtitle">
                     <span>
                       {stats.VideoViewsTopNew === 1
-                        ? __('1 view', { view_count: stats.VideoViewsTopNew })
-                        : __('%view_count% views', { view_count: stats.VideoViewsTopNew })}
+                        ? __('1 view')
+                        : __('%view_count% views - %view_count_change% this week', {
+                            view_count: stats.VideoViewsTopNew,
+                            view_count_change: stats.VideoViewChangeTopNew,
+                          })}
                     </span>
-                    {stats.VideoViewsTopNew > 0 && <Icon icon={ICONS.TRENDING} iconColor="green" size={18} />}
+                    {stats.VideoViewChangeTopNew > 0 && <Icon icon={ICONS.TRENDING} iconColor="green" size={18} />}
                   </div>
                 </React.Fragment>
               }
@@ -209,6 +212,33 @@ export default function CreatorAnalytics(props: Props) {
                     }}
                   />
                 </div>
+              }
+            />
+          )}
+
+          {stats.VideoURITopCommentNew && stats.VideoCommentTopCommentNew > 0 && (
+            <Card
+              className="section"
+              title={__('Most Commented Recent Content')}
+              body={
+                <React.Fragment>
+                  <div className="card--inline">
+                    <ClaimPreview uri={stats.VideoURITopCommentNew} />
+                  </div>
+                  <div className="section__subtitle card__data-subtitle">
+                    <span>
+                      {stats.VideoCommentTopCommentNew === 1
+                        ? __('1 comment')
+                        : __('%comment_count% comments - %comment_count_change% this week', {
+                            comment_count: stats.VideoCommentTopCommentNew,
+                            comment_count_change: stats.VideoCommentChangeTopCommentNew,
+                          })}
+                    </span>
+                    {stats.VideoCommentChangeTopCommentNew > 0 && (
+                      <Icon icon={ICONS.TRENDING} iconColor="green" size={18} />
+                    )}
+                  </div>
+                </React.Fragment>
               }
             />
           )}
