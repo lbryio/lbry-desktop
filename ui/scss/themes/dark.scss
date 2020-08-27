@@ -6,7 +6,7 @@
 
 [theme='dark'] {
   --color-primary-alt: #3e675d;
-  --color-primary: #74dfbf;
+  --color-primary: #2bbb90;
 
   // Button
   --color-link: var(--color-primary);
@@ -28,7 +28,7 @@
   --color-button-secondary-border: #395877;
   --color-button-secondary-bg-hover: #4b6d8f;
   --color-button-secondary-text: #a3c1e0;
-  --color-button-alt-bg: #4d5660;
+  --color-button-alt-bg: #33383d;
   --color-button-alt-bg-hover: #3e464d;
   --color-button-alt-text: #e2e9f0;
   --color-header-button: #434b54;
@@ -39,12 +39,12 @@
   --color-background-overlay: #212529d7;
   --color-background: #1c1f22;
   --color-background-overlay: #21252980;
-  --color-border: #343c43;
-  --color-card-background: #23292e;
+  --color-border: #2f3337;
+  --color-card-background: #232629;
   --color-card-background-highlighted: #384046;
-  --color-header-background: #2c3137;
+  --color-header-background: #2a2e32;
   --color-tab-text: var(--color-white);
-  --color-tabs-background: #434b53;
+  --color-tabs-background: var(--color-card-background);
   --color-tab-divider: var(--color-white);
   --color-modal-background: var(--color-header-background);
   --color-comment-menu: #6a6a6a;
@@ -58,7 +58,7 @@
   --color-thumbnail-background: var(--color-gray-5);
 
   // Text
-  --color-text: #eeeeee;
+  --color-text: #d8d8d8;
   --color-text-error: #f5748c;
   --color-text-help-warning: #f5ec74;
   --color-text-empty: #bbbbbb;
@@ -73,7 +73,7 @@
   --color-input: #f4f4f5;
   --color-input-label: #d4d4d4;
   --color-input-placeholder: #f4f4f5;
-  --color-input-bg: #4f5861;
+  --color-input-bg: #464d53;
   --color-input-bg-copyable: #4f5861;
   --color-input-border: var(--color-border);
   --color-input-border-active: var(--color-secondary);
