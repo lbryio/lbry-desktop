@@ -369,7 +369,6 @@
   "Share on Facebook": "Share on Facebook",
   "Share On Twitter": "Share On Twitter",
   "View on lbry.tv": "View on lbry.tv",
-  "Your Email - ": "Your Email - ",
   "You will receive an SMS text message confirming that your phone number is correct. Does not work for Canada and possibly other regions": "You will receive an SMS text message confirming that your phone number is correct. Does not work for Canada and possibly other regions",
   "Standard messaging rates apply. LBRY will not text or call you otherwise. Having trouble?": "Standard messaging rates apply. LBRY will not text or call you otherwise. Having trouble?",
   "You currently have the highest bid for this name.": "You currently have the highest bid for this name.",
@@ -539,7 +538,7 @@
   "You are about to delete your saved password.": "You are about to delete your saved password.",
   "Your wallet will still be encrypted, but you will have to remember and enter it manually on startup.": "Your wallet will still be encrypted, but you will have to remember and enter it manually on startup.",
   "Your channel will be used for publishing and commenting.": "Your channel will be used for publishing and commenting.",
-  "You can have more than one or change it later.": "You can have more than one or change it later.",
+  "You can have more than one or remove this later.": "You can have more than one or remove this later.",
   "Your Channel": "Your Channel",
   "channel": "channel",
   "Create": "Create",
@@ -1025,7 +1024,7 @@
   "You have one blocked channel.": "You have one blocked channel.",
   "You have %channels% blocked channels.": "You have %channels% blocked channels.",
   "Drop here to publish!": "Drop here to publish!",
-  "Trending for ": "Trending for ",
+  "Trending for %tagName%": "Trending for %tagName%",
   "Recent From Following": "Recent From Following",
   "Top Content from Today": "Top Content from Today",
   "Top Channels On LBRY": "Top Channels On LBRY",
@@ -1282,6 +1281,5 @@
   "Not Now": "Not Now",
   "Enter your phone number and we will send you a verification code. We will not share your phone number with third parties.": "Enter your phone number and we will send you a verification code. We will not share your phone number with third parties.",
   "Number": "Number",
-  "You can have more than one or remove this later.": "You can have more than one or remove this later.",
   "--end--": "--end--"
 }
