@@ -102,23 +102,19 @@ const Header = (props: Props) => {
       clearEmailEntry();
       clearPasswordEntry();
 
-      if (isSignInPage && !emailToVerify) {
-        history.goBack();
-      }
-
-      if (isSignUpPage) {
-        history.goBack();
-      }
-
-      if (isPwdResetPage) {
-        history.goBack();
-      }
-
       if (syncError) {
         signOut();
       }
 
-      history.push('/');
+      if (isSignInPage && !emailToVerify) {
+        history.goBack();
+      } else if (isSignUpPage) {
+        history.goBack();
+      } else if (isPwdResetPage) {
+        history.goBack();
+      } else {
+        history.push('/');
+      }
     },
   };
 
