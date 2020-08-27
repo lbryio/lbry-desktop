@@ -128,8 +128,9 @@ export default function getHomePageRowData(
 
   if (followedTags.length) {
     followedTags.forEach((tag: Tag) => {
+      const tagName = `#${toCapitalCase(tag.name)}`;
       individualTagDataItems.push({
-        title: __(`Trending for `) + `#${toCapitalCase(tag.name)}`,
+        title: __('Trending for %tagName%', { tagName: tagName }),
         link: `/$/${PAGES.DISCOVER}?t=${tag.name}`,
         options: {
           pageSize: 4,
