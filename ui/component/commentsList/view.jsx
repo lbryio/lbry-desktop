@@ -15,20 +15,10 @@ type Props = {
   myChannels: ?Array<ChannelClaim>,
   isFetchingComments: boolean,
   linkedComment: any,
-  commentingEnabled: boolean,
 };
 
 function CommentList(props: Props) {
-  const {
-    fetchComments,
-    uri,
-    comments,
-    claimIsMine,
-    myChannels,
-    isFetchingComments,
-    linkedComment,
-    commentingEnabled,
-  } = props;
+  const { fetchComments, uri, comments, claimIsMine, myChannels, isFetchingComments, linkedComment } = props;
 
   const linkedCommentId = linkedComment && linkedComment.comment_id;
   const [start] = React.useState(0);
@@ -93,7 +83,7 @@ function CommentList(props: Props) {
       title={<span>{__('Comments')}</span>}
       actions={
         <>
-          {commentingEnabled && <CommentCreate uri={uri} />}
+          <CommentCreate uri={uri} />
           {!isFetchingComments && hasNoComments && <div className="main--empty">{__('Be the first to comment!')}</div>}
           <ul className="comments" ref={commentRef}>
             {isFetchingComments && (
