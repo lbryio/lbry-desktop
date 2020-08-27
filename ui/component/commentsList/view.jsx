@@ -34,6 +34,7 @@ function CommentList(props: Props) {
   const [start] = React.useState(0);
   const [end, setEnd] = React.useState(9);
   const totalComments = comments && comments.length;
+  const hasNoComments = totalComments === 0;
 
   const moreBelow = totalComments - end > 0;
   // todo: implement comment_list --mine in SDK so redux can grab with selectCommentIsMine
@@ -93,6 +94,7 @@ function CommentList(props: Props) {
       actions={
         <>
           {commentingEnabled && <CommentCreate uri={uri} />}
+          {!isFetchingComments && hasNoComments && <div className="main--empty">{__('Be the first to comment!')}</div>}
           <ul className="comments" ref={commentRef}>
             {isFetchingComments && (
               <div className="main--empty">
