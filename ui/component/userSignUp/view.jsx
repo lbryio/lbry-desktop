@@ -25,7 +25,8 @@ type Props = {
   balance: ?number,
   fetchingChannels: boolean,
   claimingReward: boolean,
-  claimReward: () => void,
+  claimConfirmEmailReward: () => void,
+  claimNewUserReward: () => void,
   fetchUser: () => void,
   claimedRewards: Array<Reward>,
   history: { replace: string => void },
@@ -42,14 +43,15 @@ type Props = {
   rewardsAcknowledged: boolean,
 };
 
-function UserSignIn(props: Props) {
+function UserSignUp(props: Props) {
   const {
     emailToVerify,
     user,
     claimingReward,
     claimedRewards,
     channels,
-    claimReward,
+    claimConfirmEmailReward,
+    claimNewUserReward,
     balance,
     history,
     location,
@@ -83,7 +85,6 @@ function UserSignIn(props: Props) {
   const isYoutubeTransferComplete =
     hasYoutubeChannels &&
     youtubeChannels.every(channel => channel.transfer_state === YOUTUBE_STATUSES.COMPLETED_TRANSFER);
-
   // Complexity warning
   // We can't just check if we are currently fetching something
   // We may want to keep a component rendered while something is being fetched, instead of replacing it with the large spinner
@@ -123,14 +124,28 @@ function UserSignIn(props: Props) {
   }, [fetchUser]);
 
   React.useEffect(() => {
+    if (hasVerifiedEmail) {
+      setSettingAndSync(SETTINGS.FIRST_RUN_STARTED, true);
+    }
+  }, [hasVerifiedEmail]);
+
+  React.useEffect(() => {
     // Don't claim the reward if sync is enabled until after a sync has been completed successfully
     // If we do it before, we could end up trying to sync a wallet with a non-zero balance which will fail to sync
     const delayForSync = syncEnabled && !hasSynced;
 
     if (hasVerifiedEmail && !hasClaimedEmailAward && !hasFetchedReward && !delayForSync) {
-      claimReward();
+      claimConfirmEmailReward();
     }
-  }, [hasVerifiedEmail, claimReward, hasClaimedEmailAward, hasFetchedReward, syncEnabled, hasSynced, balance]);
+  }, [
+    hasVerifiedEmail,
+    claimConfirmEmailReward,
+    hasClaimedEmailAward,
+    hasFetchedReward,
+    syncEnabled,
+    hasSynced,
+    balance,
+  ]);
 
   // Loop through this list from the end, until it finds a matching component
   // If it never finds one, assume the user has completed every step and redirect them
@@ -228,6 +243,12 @@ function UserSignIn(props: Props) {
 
   const [componentToRender, isScrollable] = getSignInStep();
 
+  React.useEffect(() => {
+    if (!componentToRender) {
+      claimNewUserReward();
+    }
+  }, [componentToRender, claimNewUserReward]);
+
   if (!componentToRender) {
     history.replace(redirect || '/');
   }
@@ -237,4 +258,4 @@ function UserSignIn(props: Props) {
   );
 }
 
-export default withRouter(UserSignIn);
+export default withRouter(UserSignUp);

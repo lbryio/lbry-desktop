@@ -1,5 +1,4 @@
 // @flow
-import * as MODALS from 'constants/modal_types';
 import * as ICONS from 'constants/icons';
 import React, { useRef } from 'react';
 import { parseURI } from 'lbry-redux';
@@ -15,10 +14,8 @@ type SubscriptionArgs = {
 type Props = {
   permanentUrl: ?string,
   isSubscribed: boolean,
-  subscriptions: Array<string>,
   doChannelSubscribe: ({ channelName: string, uri: string }) => void,
   doChannelUnsubscribe: SubscriptionArgs => void,
-  doOpenModal: (id: string) => void,
   showSnackBarOnSubscribe: boolean,
   doToast: ({ message: string }) => void,
   shrinkOnMobile: boolean,
@@ -29,8 +26,6 @@ export default function SubscribeButton(props: Props) {
     permanentUrl,
     doChannelSubscribe,
     doChannelUnsubscribe,
-    doOpenModal,
-    subscriptions,
     isSubscribed,
     showSnackBarOnSubscribe,
     doToast,
@@ -64,10 +59,6 @@ export default function SubscribeButton(props: Props) {
       title={titlePrefix}
       onClick={e => {
         e.stopPropagation();
-
-        if (!subscriptions.length) {
-          doOpenModal(MODALS.FIRST_SUBSCRIPTION);
-        }
 
         subscriptionHandler({
           channelName: claimName,
