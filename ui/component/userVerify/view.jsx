@@ -91,9 +91,7 @@ class UserVerify extends React.PureComponent<Props> {
           <Card
             icon={ICONS.WALLET}
             title={__('Verify via credit card')}
-            subtitle={__(
-              'If you have a valid credit or debit card, you can use it to instantly prove your humanity. LBRY does not store your credit card information. There is no charge at all for this, now or in the future.'
-            )}
+            subtitle={__('Your card information will not be stored or charged, now or in the future.')}
             actions={
               <Fragment>
                 {errorMessage && <p className="error__text">{errorMessage}</p>}
