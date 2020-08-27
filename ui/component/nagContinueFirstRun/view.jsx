@@ -36,7 +36,7 @@ export default function NagContinueFirstRun(props: Props) {
   return (
     <Nag
       type="helpful"
-      message={__('Do you want to continue the setup process?')}
+      message={__('Do you still want to find creators to follow?')}
       actionText={__('Continue')}
       onClick={handleContinue}
       onClose={onClose}
