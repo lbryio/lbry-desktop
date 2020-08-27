@@ -136,7 +136,7 @@
     "imagesloaded": "^4.1.4",
     "json-loader": "^0.5.4",
     "lbry-format": "https://github.com/lbryio/lbry-format.git",
-    "lbry-redux": "lbryio/lbry-redux#903d4251886663009be8f2c2aaca554313e12b13",
+    "lbry-redux": "lbryio/lbry-redux#7d90cba8a05cc796fe5a709f5af6a7981be1bb56",
     "lbryinc": "lbryio/lbryinc#b96561477ae5cd41bd2616a7225b917c55cf7b4b",
     "lint-staged": "^7.0.2",
     "localforage": "^1.7.1",
