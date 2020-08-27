@@ -619,9 +619,10 @@ export function doGetAndPopulatePreferences() {
         });
         // @endif
       }
+      return true;
     }
 
-    function failCb() {
+    function failCb(e) {
       deleteSavedPassword().then(() => {
         dispatch(
           doToast({
@@ -630,9 +631,10 @@ export function doGetAndPopulatePreferences() {
           })
         );
       });
+      return false;
     }
 
-    doPreferenceGet(preferenceKey, successCb, failCb);
+    return doPreferenceGet(preferenceKey, successCb, failCb);
   };
 }
 

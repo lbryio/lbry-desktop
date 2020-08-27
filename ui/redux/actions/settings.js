@@ -134,6 +134,22 @@ export function doSetClientSetting(key, value, pushPrefs) {
     }
   };
 }
+export function doUpdateSyncPref() {
+  return (dispatch, getState) => {
+    const { settings } = getState();
+    const { syncEnabledPref } = settings || {};
+    dispatch(doSetClientSetting(SETTINGS.ENABLE_SYNC, syncEnabledPref));
+  };
+}
+
+export function doSetSyncPref(isEnabled) {
+  return dispatch => {
+    dispatch({
+      type: LOCAL_ACTIONS.SYNC_PREFERENCE_CHANGED,
+      data: isEnabled,
+    });
+  };
+}
 
 export function doUpdateIsNight() {
   return {

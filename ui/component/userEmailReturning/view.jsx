@@ -1,5 +1,4 @@
 // @flow
-import { SETTINGS } from 'lbry-redux';
 import * as PAGES from 'constants/pages';
 import React, { useState } from 'react';
 import { FormField, Form } from 'component/common/form';
@@ -18,6 +17,7 @@ type Props = {
   doClearEmailEntry: () => void,
   doUserSignIn: (string, ?string) => void,
   doUserCheckIfEmailExists: string => void,
+  doSetSyncPref: boolean => void,
   doSetClientSetting: (string, boolean, ?boolean) => void,
   isPending: boolean,
 };
@@ -30,7 +30,7 @@ function UserEmailReturning(props: Props) {
     emailToVerify,
     doClearEmailEntry,
     emailDoesNotExist,
-    doSetClientSetting,
+    doSetSyncPref,
     isPending,
   } = props;
   const { push, location } = useHistory();
@@ -48,7 +48,7 @@ function UserEmailReturning(props: Props) {
 
   function handleSubmit() {
     // @if TARGET='app'
-    doSetClientSetting(SETTINGS.ENABLE_SYNC, syncEnabled, true);
+    doSetSyncPref(syncEnabled);
     // @endif
     doUserCheckIfEmailExists(email);
   }

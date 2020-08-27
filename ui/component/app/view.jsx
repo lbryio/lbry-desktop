@@ -68,7 +68,8 @@ type Props = {
   isUpgradeAvailable: boolean,
   autoUpdateDownloaded: boolean,
   checkSync: () => void,
-  updatePreferences: () => void,
+  updatePreferences: () => Promise<any>,
+  updateSyncPref: () => void,
   uploadCount: number,
   balance: ?number,
   syncError: ?string,
@@ -97,6 +98,7 @@ function App(props: Props) {
     languages,
     setLanguage,
     updatePreferences,
+    updateSyncPref,
     rewards,
     setReferrer,
     analyticsTagSync,
@@ -227,23 +229,15 @@ function App(props: Props) {
     }
   }, [previousRewardApproved, isRewardApproved]);
 
-  // Keep this at the end to ensure initial setup effects are run first
-  useEffect(() => {
-    if (!hasSignedIn && hasVerifiedEmail) {
-      signIn();
-      setHasSignedIn(true);
-    }
-  }, [hasVerifiedEmail, signIn, hasSignedIn]);
-
   // @if TARGET='app'
   useEffect(() => {
-    if (updatePreferences) updatePreferences();
-  }, [hasVerifiedEmail, updatePreferences]);
+    if (updatePreferences) updatePreferences().then(updateSyncPref);
+  }, [hasVerifiedEmail, updatePreferences, updateSyncPref]);
   // @endif
 
   useEffect(() => {
     // maybe just here for leaving settings page
-    if (hasVerifiedEmail) {
+    if (hasSignedIn) {
       checkSync();
       analyticsTagSync();
       let syncInterval = setInterval(() => {
@@ -255,7 +249,7 @@ function App(props: Props) {
       };
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [hasVerifiedEmail, checkSync, hasSignedIn]);
+  }, [hasVerifiedEmail, checkSync, hasSignedIn]); // perhaps check hasUpdatedSyncPrefs
 
   useEffect(() => {
     if (syncError && isAuthenticated) {
@@ -263,6 +257,14 @@ function App(props: Props) {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [syncError, pathname, isAuthenticated]);
+
+  // Keep this at the end to ensure initial setup effects are run first
+  useEffect(() => {
+    if (!hasSignedIn && hasVerifiedEmail) {
+      signIn();
+      setHasSignedIn(true);
+    }
+  }, [hasVerifiedEmail, signIn, hasSignedIn]);
 
   // @if TARGET='web'
   useDegradedPerformance(setLbryTvApiStatus);
