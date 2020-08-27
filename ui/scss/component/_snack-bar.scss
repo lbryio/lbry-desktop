@@ -49,9 +49,7 @@
   flex-direction: row;
   font-size: var(--font-body);
 
-  div {
-    &:nth-of-type(1) {
-      margin-right: var(--spacing-m);
-    }
+  .icon {
+    margin-right: var(--spacing-m);
   }
 }
