@@ -40,6 +40,7 @@ export default function FileRenderFloating(props: Props) {
   const isMobile = useIsMobile();
   const [fileViewerRect, setFileViewerRect] = useState();
   const [desktopPlayStartTime, setDesktopPlayStartTime] = useState();
+  const [wasDragging, setWasDragging] = useState(false);
   const [position, setPosition] = usePersistedState('floating-file-viewer:position', {
     x: -25,
     y: window.innerHeight - 400,
@@ -89,7 +90,14 @@ export default function FileRenderFloating(props: Props) {
     return null;
   }
 
+  function handleStart(e, ui) {
+    // Not really necessary, but reset just in case 'handleStop' didn't fire.
+    setWasDragging(false);
+  }
+
   function handleDrag(e, ui) {
+    setWasDragging(true);
+
     const { x, y } = position;
     const newX = x + ui.deltaX;
     const newY = y + ui.deltaY;
@@ -99,9 +107,18 @@ export default function FileRenderFloating(props: Props) {
     });
   }
 
+  function handleStop(e, ui) {
+    if (wasDragging) {
+      e.stopPropagation();
+      setWasDragging(false);
+    }
+  }
+
   return (
     <Draggable
       onDrag={handleDrag}
+      onStart={handleStart}
+      onStop={handleStop}
       defaultPosition={position}
       position={isFloating ? position : { x: 0, y: 0 }}
       bounds="parent"
