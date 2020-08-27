@@ -477,8 +477,8 @@ export function doAnalyticsBuffer(uri, bufferData) {
     const {
       value: { video, audio, source },
     } = claim;
-    const timeAtBuffer = bufferData.currentTime * 1000;
-    const bufferDuration = bufferData.secondsToLoad * 1000;
+    const timeAtBuffer = parseInt(bufferData.currentTime * 1000);
+    const bufferDuration = parseInt(bufferData.secondsToLoad * 1000);
     const fileDurationInSeconds = (video && video.duration) || (audio && audio.duration);
     const fileSize = source.size; // size in bytes
     const fileSizeInBits = fileSize * 8;
