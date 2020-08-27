@@ -46,9 +46,15 @@ const select = state => ({
 
 const perform = dispatch => ({
   fetchUser: () => dispatch(doUserFetch()),
-  claimReward: () =>
+  claimConfirmEmailReward: () =>
     dispatch(
       doClaimRewardType(REWARD_TYPES.TYPE_CONFIRM_EMAIL, {
+        notifyError: false,
+      })
+    ),
+  claimNewUserReward: () =>
+    dispatch(
+      doClaimRewardType(REWARD_TYPES.NEW_USER, {
         notifyError: false,
       })
     ),

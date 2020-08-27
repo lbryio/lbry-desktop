@@ -17,6 +17,7 @@ import Nag from 'component/common/nag';
 import REWARDS from 'rewards';
 import usePersistedState from 'effects/use-persisted-state';
 import FileDrop from 'component/fileDrop';
+import NagContinueFirstRun from 'component/nagContinueFirstRun';
 // @if TARGET='app'
 import useZoom from 'effects/use-zoom';
 // @endif
@@ -330,6 +331,7 @@ function App(props: Props) {
           {/* @if TARGET='web' */}
           <YoutubeWelcome />
           {!shouldHideNag && <OpenInAppLink uri={uri} />}
+          {!shouldHideNag && <NagContinueFirstRun />}
           {(lbryTvApiStatus === STATUS_DEGRADED || lbryTvApiStatus === STATUS_FAILING) && !shouldHideNag && (
             <NagDegradedPerformance onClose={() => setLbryTvApiStatus(STATUS_OK)} />
           )}
