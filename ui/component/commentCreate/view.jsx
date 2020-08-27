@@ -1,5 +1,5 @@
 // @flow
-import { SIMPLE_SITE, SITE_NAME } from 'config';
+import { SIMPLE_SITE } from 'config';
 import * as MODALS from 'constants/modal_types';
 import * as PAGES from 'constants/pages';
 import { CHANNEL_NEW } from 'constants/claim';
@@ -11,6 +11,7 @@ import ChannelSelection from 'component/selectChannel';
 import usePersistedState from 'effects/use-persisted-state';
 import I18nMessage from 'component/i18nMessage';
 import { FF_MAX_CHARS_IN_COMMENT } from 'constants/form-field';
+import { useHistory } from 'react-router';
 
 type Props = {
   commentingEnabled: boolean,
@@ -37,6 +38,7 @@ export function CommentCreate(props: Props) {
     onCancelReplying,
     isNested,
   } = props;
+  const { push } = useHistory();
   const { claim_id: claimId } = claim;
   const isReply = !!parentId;
   const [commentValue, setCommentValue] = React.useState('');
@@ -108,12 +110,13 @@ export function CommentCreate(props: Props) {
 
   if (!hasChannels) {
     return (
-      <div className="notice-message">
-        <h3 className="section__title">{__('Join the discussion')}</h3>
-        <p className="section__subtitle">{__('A channel is required to comment on %SITE_NAME%.', { SITE_NAME })}</p>
-        <div className="section__actions">
-          <Button button="primary" label={__('Create a channel')} navigate={`/$/${PAGES.CHANNEL_NEW}`} />
-        </div>
+      <div role="button" onClick={() => push(`/$/${PAGES.CHANNEL_NEW}`)}>
+        <FormField
+          type="textarea"
+          name={'comment_signup_prompt'}
+          label={__('Add a comment')}
+          placeholder={__('Say something about this...')}
+        />
       </div>
     );
   }
