@@ -50,9 +50,8 @@ class SnackBar extends React.PureComponent<Props> {
         })}
       >
         <div className="snack-bar__message">
-          <div>
-            <Icon icon={ICONS.ALERT} size={20} />
-          </div>
+          <Icon icon={isError ? ICONS.ALERT : ICONS.COMPLETED} size={18} />
+
           <div>{message}</div>
         </div>
         {linkText && linkTarget && (
