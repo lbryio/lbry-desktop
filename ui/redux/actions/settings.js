@@ -138,7 +138,9 @@ export function doUpdateSyncPref() {
   return (dispatch, getState) => {
     const { settings } = getState();
     const { syncEnabledPref } = settings || {};
-    dispatch(doSetClientSetting(SETTINGS.ENABLE_SYNC, syncEnabledPref));
+    if (syncEnabledPref !== undefined) {
+      dispatch(doSetClientSetting(SETTINGS.ENABLE_SYNC, syncEnabledPref));
+    }
   };
 }
 

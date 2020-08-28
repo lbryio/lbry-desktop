@@ -111,7 +111,9 @@ function App(props: Props) {
   const isEnhancedLayout = useKonamiListener();
   const [hasSignedIn, setHasSignedIn] = useState(false);
   const [readyForSync, setReadyForSync] = useState(false);
+  const [readyForPrefs, setReadyForPrefs] = useState(false);
   const hasVerifiedEmail = user && user.has_verified_email;
+
   const isRewardApproved = user && user.is_reward_approved;
   const previousHasVerifiedEmail = usePrevious(hasVerifiedEmail);
   const previousRewardApproved = usePrevious(isRewardApproved);
@@ -234,13 +236,13 @@ function App(props: Props) {
 
   // @if TARGET='app'
   useEffect(() => {
-    if (updatePreferences) {
+    if (updatePreferences && readyForPrefs) {
       updatePreferences().then(() => {
         updateSyncPref(); // copy
         setReadyForSync(true);
       });
     }
-  }, [hasSignedIn, updatePreferences, updateSyncPref, setReadyForSync, readyForSync]);
+  }, [hasSignedIn, updatePreferences, updateSyncPref, setReadyForSync, readyForPrefs]);
   // @endif
 
   useEffect(() => {
@@ -256,7 +258,18 @@ function App(props: Props) {
       };
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [checkSync, readyForSync, setReadyForSync, syncEnabled]);
+  }, [checkSync, readyForSync, syncEnabled]);
+
+  // Currently we know someone is logging in or not when we get their user object {}
+  // We'll use this to determine when it's time to pull preferences
+  // This will no longer work if desktop users no longer get a user object from lbryinc
+  useEffect(() => {
+    if (user) {
+      if (typeof user === 'object' || typeof user === 'string') {
+        setReadyForPrefs(true);
+      }
+    }
+  }, [user, setReadyForPrefs, hasVerifiedEmail]);
 
   useEffect(() => {
     if (syncError && isAuthenticated) {

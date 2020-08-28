@@ -25,7 +25,7 @@ const defaultState = {
   findingFFmpeg: false,
   loadedLanguages: [...Object.keys(window.i18n_messages), 'en'] || ['en'],
   customWalletServers: [],
-  syncEnabledPref: IS_WEB, // set this during sign in, copy it to clientSettings immediately after prefGet after signedin but before sync
+  syncEnabledPref: undefined, // set this during sign in, copy it to clientSettings immediately after prefGet after signedin but before sync
   sharedPreferences: {},
   daemonSettings: {},
   daemonStatus: { ffmpeg_status: {} },
