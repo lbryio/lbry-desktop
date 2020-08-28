@@ -600,30 +600,33 @@ export function doGetAndPopulatePreferences() {
       const successState = getState();
       const daemonSettings = selectDaemonSettings(successState);
 
+      console.log('DGAP SUCCESS savedPrefs', savedPreferences);
       if (savedPreferences !== null) {
         dispatch(doPopulateSharedUserState(savedPreferences));
         // @if TARGET='app'
 
         const { settings } = savedPreferences.value;
-        Object.entries(settings).forEach(([key, val]) => {
-          if (SDK_SYNC_KEYS.includes(key)) {
-            if (shouldSetSetting(key, val, daemonSettings[key])) {
-              if (key === DAEMON_SETTINGS.LBRYUM_SERVERS) {
-                const servers = stringifyServerParam(val);
-                dispatch(doSetDaemonSetting(key, servers, true));
-              } else {
-                dispatch(doSetDaemonSetting(key, val, true));
+        if (settings) {
+          Object.entries(settings).forEach(([key, val]) => {
+            if (SDK_SYNC_KEYS.includes(key)) {
+              if (shouldSetSetting(key, val, daemonSettings[key])) {
+                if (key === DAEMON_SETTINGS.LBRYUM_SERVERS) {
+                  const servers = stringifyServerParam(val);
+                  dispatch(doSetDaemonSetting(key, servers, true));
+                } else {
+                  dispatch(doSetDaemonSetting(key, val, true));
+                }
               }
             }
-          }
-        });
+          });
+        }
         // @endif
       }
       return true;
     }
 
     function failCb(e) {
-      console.log('CANNOT LOAD', e);
+      console.log('sync fail message', e);
       deleteSavedPassword().then(() => {
         dispatch(
           doToast({

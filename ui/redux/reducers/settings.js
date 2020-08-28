@@ -164,7 +164,7 @@ reducers[LBRY_REDUX_ACTIONS.USER_STATE_POPULATE] = (state, action) => {
   const { clientSettings: currentClientSettings } = state;
   const { settings: sharedPreferences } = action.data;
 
-  const selectedSettings = getSubsetFromKeysArray(sharedPreferences, clientSyncKeys);
+  const selectedSettings = sharedPreferences ? getSubsetFromKeysArray(sharedPreferences, clientSyncKeys) : {};
   const mergedClientSettings = { ...currentClientSettings, ...selectedSettings };
   return Object.assign({}, state, { sharedPreferences, clientSettings: mergedClientSettings });
 };
