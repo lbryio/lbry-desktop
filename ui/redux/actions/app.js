@@ -623,6 +623,7 @@ export function doGetAndPopulatePreferences() {
     }
 
     function failCb(e) {
+      console.log('CANNOT LOAD', e);
       deleteSavedPassword().then(() => {
         dispatch(
           doToast({
