@@ -29,6 +29,7 @@ const select = state => ({
   uploadCount: selectUploadCount(state),
   rewards: selectUnclaimedRewards(state),
   isAuthenticated: selectUserVerifiedEmail(state),
+  syncEnabled: makeSelectClientSetting(SETTINGS.ENABLE_SYNC)(state),
 });
 
 const perform = dispatch => ({

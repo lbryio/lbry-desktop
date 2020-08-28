@@ -70,6 +70,7 @@ type Props = {
   checkSync: () => void,
   updatePreferences: () => Promise<any>,
   updateSyncPref: () => void,
+  syncEnabled: boolean,
   uploadCount: number,
   balance: ?number,
   syncError: ?string,
@@ -91,6 +92,7 @@ function App(props: Props) {
     isUpgradeAvailable,
     requestDownloadUpgrade,
     checkSync,
+    syncEnabled,
     uploadCount,
     history,
     syncError,
@@ -108,6 +110,7 @@ function App(props: Props) {
   const appRef = useRef();
   const isEnhancedLayout = useKonamiListener();
   const [hasSignedIn, setHasSignedIn] = useState(false);
+  const [readyForSync, setReadyForSync] = useState(false);
   const hasVerifiedEmail = user && user.has_verified_email;
   const isRewardApproved = user && user.is_reward_approved;
   const previousHasVerifiedEmail = usePrevious(hasVerifiedEmail);
@@ -231,13 +234,17 @@ function App(props: Props) {
 
   // @if TARGET='app'
   useEffect(() => {
-    if (updatePreferences) updatePreferences().then(updateSyncPref);
-  }, [hasVerifiedEmail, updatePreferences, updateSyncPref]);
+    if (updatePreferences) {
+      updatePreferences().then(() => {
+        updateSyncPref(); // copy
+        setReadyForSync(true);
+      });
+    }
+  }, [hasSignedIn, updatePreferences, updateSyncPref, setReadyForSync, readyForSync]);
   // @endif
 
   useEffect(() => {
-    // maybe just here for leaving settings page
-    if (hasSignedIn) {
+    if (readyForSync && syncEnabled) {
       checkSync();
       analyticsTagSync();
       let syncInterval = setInterval(() => {
@@ -249,7 +256,7 @@ function App(props: Props) {
       };
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [hasVerifiedEmail, checkSync, hasSignedIn]); // perhaps check hasUpdatedSyncPrefs
+  }, [checkSync, readyForSync, setReadyForSync, syncEnabled]);
 
   useEffect(() => {
     if (syncError && isAuthenticated) {
@@ -263,6 +270,7 @@ function App(props: Props) {
     if (!hasSignedIn && hasVerifiedEmail) {
       signIn();
       setHasSignedIn(true);
+      if (IS_WEB) setReadyForSync(true);
     }
   }, [hasVerifiedEmail, signIn, hasSignedIn]);
 

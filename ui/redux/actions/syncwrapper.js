@@ -11,6 +11,8 @@ export const doGetSyncDesktop = (pw: string, cb: () => void) => (dispatch: Dispa
   const getSyncPending = selectGetSyncIsPending(state);
   const setSyncPending = selectSetSyncIsPending(state);
   const walletIsEncrypted = selectWalletIsEncrypted(state);
+  // const { pathname } = state.router && state.router.location;
+  // const isSettingsPage = pathname.includes(PAGES.SETTINGS);
 
   if (syncEnabled && !getSyncPending && !setSyncPending) {
     if (walletIsEncrypted && pw === '') {
