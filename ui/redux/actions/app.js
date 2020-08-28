@@ -605,18 +605,20 @@ export function doGetAndPopulatePreferences() {
         // @if TARGET='app'
 
         const { settings } = savedPreferences.value;
-        Object.entries(settings).forEach(([key, val]) => {
-          if (SDK_SYNC_KEYS.includes(key)) {
-            if (shouldSetSetting(key, val, daemonSettings[key])) {
-              if (key === DAEMON_SETTINGS.LBRYUM_SERVERS) {
-                const servers = stringifyServerParam(val);
-                dispatch(doSetDaemonSetting(key, servers, true));
-              } else {
-                dispatch(doSetDaemonSetting(key, val, true));
+        if (settings) {
+          Object.entries(settings).forEach(([key, val]) => {
+            if (SDK_SYNC_KEYS.includes(key)) {
+              if (shouldSetSetting(key, val, daemonSettings[key])) {
+                if (key === DAEMON_SETTINGS.LBRYUM_SERVERS) {
+                  const servers = stringifyServerParam(val);
+                  dispatch(doSetDaemonSetting(key, servers, true));
+                } else {
+                  dispatch(doSetDaemonSetting(key, val, true));
+                }
               }
             }
-          }
-        });
+          });
+        }
         // @endif
       }
     }

@@ -167,12 +167,10 @@ reducers[LBRY_REDUX_ACTIONS.USER_STATE_POPULATE] = (state, action) => {
   const { clientSettings: currentClientSettings } = state;
   const { settings: sharedPreferences } = action.data;
 
-  if (currentClientSettings[SETTINGS.ENABLE_SYNC]) {
-    const selectedSettings = getSubsetFromKeysArray(sharedPreferences, clientSyncKeys);
-    const mergedClientSettings = { ...currentClientSettings, ...selectedSettings };
-    return Object.assign({}, state, { sharedPreferences, clientSettings: mergedClientSettings });
-  }
-  return Object.assign({}, state, { sharedPreferences, clientSettings: currentClientSettings });
+  const selectedSettings = sharedPreferences ? getSubsetFromKeysArray(sharedPreferences, clientSyncKeys) : {};
+  const mergedClientSettings = { ...currentClientSettings, ...selectedSettings };
+  const newSharedPreferences = sharedPreferences || {};
+  return Object.assign({}, state, { sharedPreferences: newSharedPreferences, clientSettings: mergedClientSettings });
 };
 
 reducers[LBRY_REDUX_ACTIONS.SAVE_CUSTOM_WALLET_SERVERS] = (state, action) => {
