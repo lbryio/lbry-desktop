@@ -52,10 +52,20 @@ export const selectSearchSuggestions: Array<SearchSuggestion> = createSelector(
     } else if (query.startsWith('lbry://')) {
       // If it starts with a prefix, don't show any autocomplete results
       // They are probably typing/pasting in a lbry uri
+      let type: string;
+      try {
+        const uri = normalizeURI(query);
+        let { isChannel } = parseURI(uri);
+        type = isChannel ? SEARCH_TYPES.CHANNEL : SEARCH_TYPES.FILE;
+      } catch (e) {
+        console.log('Query not recognized: ' + query);
+        type = SEARCH_TYPES.SEARCH;
+      }
+
       return [
         {
           value: query,
-          type: query[7] === '@' ? SEARCH_TYPES.CHANNEL : SEARCH_TYPES.FILE,
+          type: type,
         },
       ];
     }
