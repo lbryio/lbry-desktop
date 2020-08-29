@@ -8,12 +8,8 @@ import { generateDownloadUrl } from 'util/web';
 import { useIsMobile } from 'effects/use-screensize';
 import { FormField } from 'component/common/form';
 import { hmsToSeconds, secondsToHms } from 'util/time';
-import {
-  generateLbryContentUrl,
-  generateLbryWebUrl,
-  generateEncodedLbryURL,
-  generateOpenDotLbryDotComUrl,
-} from 'util/url';
+import { generateLbryContentUrl, generateLbryWebUrl, generateEncodedLbryURL, generateShareUrl } from 'util/url';
+import { SHARE_DOMAIN_URL } from 'config';
 
 const IOS = !!navigator.platform && /iPad|iPhone|iPod/.test(navigator.platform);
 const SUPPORTS_SHARE_API = typeof navigator.share !== 'undefined';
@@ -47,12 +43,16 @@ function SocialShare(props: Props) {
   const isAudio = isStream && claim.value.stream_type === 'audio';
   const showStartAt = isVideo || isAudio;
   const rewardsApproved = user && user.is_reward_approved;
-  const OPEN_URL = 'https://open.lbry.com/';
   const lbryUrl: string = generateLbryContentUrl(canonicalUrl, permanentUrl);
   const lbryWebUrl: string = generateLbryWebUrl(lbryUrl);
-  const encodedLbryURL: string = generateEncodedLbryURL(OPEN_URL, lbryWebUrl, includeStartTime, startTimeSeconds);
-  const openDotLbryDotComUrl: string = generateOpenDotLbryDotComUrl(
-    OPEN_URL,
+  const encodedLbryURL: string = generateEncodedLbryURL(
+    SHARE_DOMAIN_URL,
+    lbryWebUrl,
+    includeStartTime,
+    startTimeSeconds
+  );
+  const shareUrl: string = generateShareUrl(
+    SHARE_DOMAIN_URL,
     lbryWebUrl,
     canonicalUrl,
     permanentUrl,
@@ -74,7 +74,7 @@ function SocialShare(props: Props) {
 
   return (
     <React.Fragment>
-      <CopyableText copyable={openDotLbryDotComUrl} />
+      <CopyableText copyable={shareUrl} />
       {showStartAt && (
         <div className="section__start-at">
           <FormField

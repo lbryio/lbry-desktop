@@ -85,14 +85,14 @@ exports.generateLbryWebUrl = lbryUrl => {
   return lbryUrl.replace(/#/g, ':');
 };
 
-exports.generateEncodedLbryURL = (openUrl, lbryWebUrl, includeStartTime, startTime) => {
+exports.generateEncodedLbryURL = (domain, lbryWebUrl, includeStartTime, startTime) => {
   const queryParam = includeStartTime ? `?t=${startTime}` : '';
   const encodedPart = encodeURIComponent(`${lbryWebUrl}${queryParam}`);
-  return `${openUrl}${encodedPart}`;
+  return `${domain}/${encodedPart}`;
 };
 
-exports.generateOpenDotLbryDotComUrl = (
-  openUrl,
+exports.generateShareUrl = (
+  domain,
   lbryWebUrl,
   canonicalUrl,
   permanentUrl,
@@ -111,6 +111,6 @@ exports.generateOpenDotLbryDotComUrl = (
   }
 
   const urlParamsString = urlParams.toString();
-  const url = `${openUrl}${lbryWebUrl}` + (urlParamsString === '' ? '' : `?${urlParamsString}`);
+  const url = `${domain}/${lbryWebUrl}` + (urlParamsString === '' ? '' : `?${urlParamsString}`);
   return url;
 };

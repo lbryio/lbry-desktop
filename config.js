@@ -12,6 +12,7 @@ const config = {
   LBRY_WEB_BUFFER_API: process.env.LBRY_WEB_BUFFER_API,
   WELCOME_VERSION: process.env.WELCOME_VERSION,
   DOMAIN: process.env.DOMAIN,
+  SHARE_DOMAIN_URL: process.env.SHARE_DOMAIN_URL,
   URL: process.env.URL,
   SITE_TITLE: process.env.SITE_TITLE,
   SITE_NAME: process.env.SITE_NAME,
