@@ -1,7 +1,7 @@
 // @flow
 import { SEARCH_TYPES } from 'constants/search';
 import { getSearchQueryString } from 'util/query-params';
-import { normalizeURI, parseURI, makeSelectClaimForUri, makeSelectClaimIsNsfw, buildURI } from 'lbry-redux';
+import { parseURI, makeSelectClaimForUri, makeSelectClaimIsNsfw, buildURI } from 'lbry-redux';
 import { createSelector } from 'reselect';
 
 type State = { search: SearchState };
@@ -54,11 +54,9 @@ export const selectSearchSuggestions: Array<SearchSuggestion> = createSelector(
       // They are probably typing/pasting in a lbry uri
       let type: string;
       try {
-        const uri = normalizeURI(query);
-        let { isChannel } = parseURI(uri);
+        let { isChannel } = parseURI(query);
         type = isChannel ? SEARCH_TYPES.CHANNEL : SEARCH_TYPES.FILE;
       } catch (e) {
-        console.log('Query not recognized: ' + query);
         type = SEARCH_TYPES.SEARCH;
       }
 
@@ -71,26 +69,19 @@ export const selectSearchSuggestions: Array<SearchSuggestion> = createSelector(
     }
 
     let searchSuggestions = [];
+    searchSuggestions.push({
+      value: query,
+      type: SEARCH_TYPES.SEARCH,
+    });
+
     try {
-      const uri = normalizeURI(query);
-      const { channelName, streamName, isChannel } = parseURI(uri);
-      searchSuggestions.push(
-        {
-          value: query,
-          type: SEARCH_TYPES.SEARCH,
-        },
-        {
-          value: uri,
-          shorthand: isChannel ? channelName : streamName,
-          type: isChannel ? SEARCH_TYPES.CHANNEL : SEARCH_TYPES.FILE,
-        }
-      );
-    } catch (e) {
+      const uriObj = parseURI(query);
       searchSuggestions.push({
-        value: query,
-        type: SEARCH_TYPES.SEARCH,
+        value: buildURI(uriObj),
+        shorthand: uriObj.isChannel ? uriObj.channelName : uriObj.streamName,
+        type: uriObj.isChannel ? SEARCH_TYPES.CHANNEL : SEARCH_TYPES.FILE,
       });
-    }
+    } catch (e) {}
 
     searchSuggestions.push({
       value: query,
@@ -105,13 +96,11 @@ export const selectSearchSuggestions: Array<SearchSuggestion> = createSelector(
           .map(suggestion => {
             // determine if it's a channel
             try {
-              const uri = normalizeURI(suggestion);
-              const { channelName, streamName, isChannel } = parseURI(uri);
-
+              const uriObj = parseURI(suggestion);
               return {
-                value: uri,
-                shorthand: isChannel ? channelName : streamName,
-                type: isChannel ? SEARCH_TYPES.CHANNEL : SEARCH_TYPES.FILE,
+                value: buildURI(uriObj),
+                shorthand: uriObj.isChannel ? uriObj.channelName : uriObj.streamName,
+                type: uriObj.isChannel ? SEARCH_TYPES.CHANNEL : SEARCH_TYPES.FILE,
               };
             } catch (e) {
               // search result includes some character that isn't valid in claim names
