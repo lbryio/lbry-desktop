@@ -209,12 +209,14 @@ export class FormField extends React.PureComponent<Props> {
         );
         input = (
           <fieldset-section>
-            <div className="form-field__two-column">
-              <div>
-                <label htmlFor={name}>{label}</label>
+            {(label || quickAction) && (
+              <div className="form-field__two-column">
+                <div>
+                  <label htmlFor={name}>{label}</label>
+                </div>
+                {quickAction}
               </div>
-              {quickAction}
-            </div>
+            )}
             <textarea type={type} id={name} maxLength={textAreaMaxLength} ref={this.input} {...inputProps} />
             {countInfo}
           </fieldset-section>
