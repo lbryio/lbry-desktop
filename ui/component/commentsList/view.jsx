@@ -80,7 +80,13 @@ function CommentList(props: Props) {
 
   return (
     <Card
-      title={<span>{__('Comments')}</span>}
+      title={
+        totalComments > 0
+          ? totalComments === 1
+            ? __('1 comment')
+            : __('%total_comments% comments', { total_comments: totalComments })
+          : __('Leave a comment')
+      }
       actions={
         <>
           <CommentCreate uri={uri} />
