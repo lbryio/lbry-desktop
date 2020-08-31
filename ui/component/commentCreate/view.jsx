@@ -91,12 +91,7 @@ export function CommentCreate(props: Props) {
   if (!hasChannels) {
     return (
       <div role="button" onClick={() => push(`/$/${PAGES.CHANNEL_NEW}`)}>
-        <FormField
-          type="textarea"
-          name={'comment_signup_prompt'}
-          label={__('Add a comment')}
-          placeholder={__('Say something about this...')}
-        />
+        <FormField type="textarea" name={'comment_signup_prompt'} placeholder={__('Say something about this...')} />
       </div>
     );
   }

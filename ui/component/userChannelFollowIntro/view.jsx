@@ -39,7 +39,7 @@ function UserChannelFollowIntro(props: Props) {
     <Card
       title={__('Find channels to follow')}
       subtitle={__(
-        'LBRY works better if you find and follow at least 5 creators you like. You can also block channels you never want to see.'
+        'LBRY works better if you find and follow a couple creators you like. You can also block channels you never want to see.'
       )}
       actions={
         <React.Fragment>
