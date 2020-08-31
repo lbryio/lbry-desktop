@@ -4,13 +4,15 @@ import CommentsList from 'component/commentsList';
 
 type Props = {
   uri: string,
+  linkedComment: ?any,
 };
 
 function ChannelDiscussion(props: Props) {
-  const uri = props.uri;
+  const { uri, linkedComment } = props;
+
   return (
     <section className="section">
-      <CommentsList uri={uri} />
+      <CommentsList uri={uri} linkedComment={linkedComment} />
     </section>
   );
 }
