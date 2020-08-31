@@ -6,10 +6,13 @@ import React from 'react';
 import classnames from 'classnames';
 import Icon from 'component/common/icon';
 import DateTime from 'component/dateTime';
+import Button from 'component/button';
 import ChannelThumbnail from 'component/channelThumbnail';
 import { MenuItem } from '@reach/menu-button';
 import { formatLbryUrlForWeb } from 'util/url';
 import { useHistory } from 'react-router';
+import { parseURI } from 'lbry-redux';
+import { PAGE_VIEW_QUERY, DISCUSSION_PAGE } from 'page/channel/view';
 
 type Props = {
   notification: WebNotification,
@@ -25,9 +28,19 @@ export default function Notification(props: Props) {
   const notificationTarget = notification && notification_parameters.device.target;
   const commentText = notification_rule === NOTIFICATION_COMMENT && notification_parameters.dynamic.comment;
   let notificationLink = formatLbryUrlForWeb(notificationTarget);
+  let urlParams = new URLSearchParams();
   if (notification_rule === NOTIFICATION_COMMENT && notification_parameters.dynamic.hash) {
-    notificationLink += `?lc=${notification_parameters.dynamic.hash}`;
+    urlParams.append('lc', notification_parameters.dynamic.hash);
   }
+
+  try {
+    const { isChannel } = parseURI(notificationTarget);
+    if (isChannel) {
+      urlParams.append(PAGE_VIEW_QUERY, DISCUSSION_PAGE);
+    }
+  } catch (e) {}
+
+  notificationLink += `?${urlParams.toString()}`;
 
   let icon;
   switch (notification_rule) {
@@ -49,6 +62,11 @@ export default function Notification(props: Props) {
     if (notificationLink) {
       push(notificationLink);
     }
+  }
+
+  function handleSeeNotification(e) {
+    e.stopPropagation();
+    doSeeNotifications([id]);
   }
 
   const Wrapper = menuButton
@@ -98,8 +116,11 @@ export default function Notification(props: Props) {
             )}
           </div>
 
-          <div className="notification__time">
-            <DateTime timeAgo date={notification.created_at} />
+          <div className="notification__extra">
+            <div className="notification__time">
+              <DateTime timeAgo date={notification.created_at} />
+            </div>
+            {!is_seen && <Button className="notification__mark-seen" onClick={handleSeeNotification} />}
           </div>
         </div>
       </div>

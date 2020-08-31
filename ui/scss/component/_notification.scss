@@ -106,3 +106,16 @@
   top: 0.75rem;
   right: 1rem;
 }
+
+.notification__extra {
+  display: flex;
+  align-items: center;
+}
+
+.notification__mark-seen {
+  height: 12px;
+  width: 12px;
+  border-radius: 50%;
+  background-color: var(--color-primary);
+  margin-left: var(--spacing-s);
+}
