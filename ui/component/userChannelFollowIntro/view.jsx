@@ -50,7 +50,7 @@ function UserChannelFollowIntro(props: Props) {
               type="Submit"
               onClick={onContinue}
               label={__('Continue')}
-              disabled={subscribedChannels.length < 2}
+              disabled={subscribedChannels.length < 1}
             />
           </div>
           <div className="section__body">
