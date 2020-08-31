@@ -20,9 +20,9 @@ import HelpLink from 'component/common/help-link';
 import ClaimSupportButton from 'component/claimSupportButton';
 import YoutubeBadge from 'component/youtubeBadge';
 
-const PAGE_VIEW_QUERY = `view`;
+export const PAGE_VIEW_QUERY = `view`;
 const ABOUT_PAGE = `about`;
-const DISCUSSION_PAGE = `discussion`;
+export const DISCUSSION_PAGE = `discussion`;
 const EDIT_PAGE = 'edit';
 
 type Props = {
@@ -67,7 +67,6 @@ function ChannelPage(props: Props) {
   } = useHistory();
   const urlParams = new URLSearchParams(search);
   const currentView = urlParams.get(PAGE_VIEW_QUERY) || undefined;
-  const editInUrl = urlParams.get(PAGE_VIEW_QUERY) === EDIT_PAGE;
   const [discussionWasMounted, setDiscussionWasMounted] = React.useState(false);
   const editing = urlParams.get(PAGE_VIEW_QUERY) === EDIT_PAGE;
   const { channelName } = parseURI(uri);
