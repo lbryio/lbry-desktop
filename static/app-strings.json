@@ -828,7 +828,7 @@
   "Are you sure? Type %name% to confirm that you wish to delete the channel.": "Are you sure? Type %name% to confirm that you wish to delete the channel.",
   "You're about to permanently delete a channel. Content published under this channel will be orphaned and their signing channel invalid. Content sync programs using this channel will fail.": "You're about to permanently delete a channel. Content published under this channel will be orphaned and their signing channel invalid. Content sync programs using this channel will fail.",
   "You are signed into lbry.tv which automatically shares data with LBRY inc. %signout_button%.": "You are signed into lbry.tv which automatically shares data with LBRY inc. %signout_button%.",
-  "LBRY works better if you find and follow at least 5 creators you like. You can also block channels you never want to see.": "LBRY works better if you find and follow at least 5 creators you like. You can also block channels you never want to see.",
+  "LBRY works better if you find and follow a couple creators you like. You can also block channels you never want to see.": "LBRY works better if you find and follow a couple creators you like. You can also block channels you never want to see.",
   "Nice! You are currently following %followingCount% creator": "Nice! You are currently following %followingCount% creator",
   "Nice! You are currently following %followingCount% creators": "Nice! You are currently following %followingCount% creators",
   "You will receive notifications related to new content.": "You will receive notifications related to new content.",
