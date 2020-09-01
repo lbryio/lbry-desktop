@@ -212,7 +212,7 @@
   "Skip": "Skip",
   "An updated version of LBRY is now available.": "An updated version of LBRY is now available.",
   "Your version is out of date and may be unreliable or insecure.": "Your version is out of date and may be unreliable or insecure.",
-  "Want to know what has changed?": "Want to know what has changed?",
+  "Want to know what has changed? See the %release_notes%.": "Want to know what has changed? See the %release_notes%.",
   "release notes": "release notes",
   "Read the FAQ": "Read the FAQ",
   "Our FAQ answers many common questions.": "Our FAQ answers many common questions.",
