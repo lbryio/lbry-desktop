@@ -9,8 +9,9 @@ import { useIsMobile } from 'effects/use-screensize';
 import { FormField } from 'component/common/form';
 import { hmsToSeconds, secondsToHms } from 'util/time';
 import { generateLbryContentUrl, generateLbryWebUrl, generateEncodedLbryURL, generateShareUrl } from 'util/url';
-import { SHARE_DOMAIN_URL } from 'config';
+import { URL, SHARE_DOMAIN_URL } from 'config';
 
+const SHARE_DOMAIN = SHARE_DOMAIN_URL || URL;
 const IOS = !!navigator.platform && /iPad|iPhone|iPod/.test(navigator.platform);
 const SUPPORTS_SHARE_API = typeof navigator.share !== 'undefined';
 
@@ -45,14 +46,9 @@ function SocialShare(props: Props) {
   const rewardsApproved = user && user.is_reward_approved;
   const lbryUrl: string = generateLbryContentUrl(canonicalUrl, permanentUrl);
   const lbryWebUrl: string = generateLbryWebUrl(lbryUrl);
-  const encodedLbryURL: string = generateEncodedLbryURL(
-    SHARE_DOMAIN_URL,
-    lbryWebUrl,
-    includeStartTime,
-    startTimeSeconds
-  );
+  const encodedLbryURL: string = generateEncodedLbryURL(SHARE_DOMAIN, lbryWebUrl, includeStartTime, startTimeSeconds);
   const shareUrl: string = generateShareUrl(
-    SHARE_DOMAIN_URL,
+    SHARE_DOMAIN,
     lbryWebUrl,
     canonicalUrl,
     permanentUrl,
