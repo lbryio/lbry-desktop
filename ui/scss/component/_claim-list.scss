@@ -311,7 +311,6 @@
 
 .claim-grid__title--secondary {
   margin-left: auto;
-  margin-top: calc(var(--spacing-m) * -1);
 }
 
 .claim-grid__help {
@@ -394,15 +393,15 @@
 }
 
 .claim-tile__title {
-  margin-bottom: 0;
   margin: var(--spacing-s);
   font-weight: 600;
-  font-size: var(--font-small);
   color: var(--color-text);
-  min-height: 2.5rem;
+  font-size: var(--font-xsmall);
+  min-height: 2rem;
 
-  @media (max-width: $breakpoint-small) {
-    font-size: var(--font-xsmall);
+  @media (min-width: $breakpoint-small) {
+    min-height: 2.5rem;
+    font-size: var(--font-small);
   }
 }
 
