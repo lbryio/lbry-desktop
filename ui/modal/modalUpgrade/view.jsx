@@ -2,6 +2,7 @@
 import React from 'react';
 import { Modal } from 'modal/modal';
 import Button from 'component/button';
+import I18nMessage from 'component/i18nMessage';
 
 type Props = {
   downloadUpgrade: () => void,
@@ -28,8 +29,19 @@ class ModalUpgrade extends React.PureComponent<Props> {
           {__('Your version is out of date and may be unreliable or insecure.')}
         </p>
         <p className="help">
-          {__('Want to know what has changed?')} See the{' '}
-          <Button button="link" label={__('release notes')} href="https://github.com/lbryio/lbry-desktop/releases" />.
+          <I18nMessage
+            tokens={{
+              release_notes: (
+                <Button
+                  button="link"
+                  label={__('release notes')}
+                  href="https://github.com/lbryio/lbry-desktop/releases"
+                />
+              ),
+            }}
+          >
+            Want to know what has changed? See the %release_notes%.
+          </I18nMessage>
         </p>
       </Modal>
     );

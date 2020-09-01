@@ -24,6 +24,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Fix comment-creation failure if you have recently deleted a channel _community pr!_ ([#4630](https://github.com/lbryio/lbry-desktop/pull/4630))
 - Tip Modal: Don't do final submit when the intention is to create New Channel _community pr!_ ([#4629](https://github.com/lbryio/lbry-desktop/pull/4629))
 - Fix related + search results loading slowly ([#4657](https://github.com/lbryio/lbry-desktop/pull/4657))
+- Fix partially untranslated text in the Upgrade Modal _community pr!_ ([#4722](https://github.com/lbryio/lbry-desktop/pull/4722))
 - Fix floating player being paused after dragging _community pr!_ ([#4710](https://github.com/lbryio/lbry-desktop/pull/4710))
 
 ## [0.47.1] - [2020-07-23]

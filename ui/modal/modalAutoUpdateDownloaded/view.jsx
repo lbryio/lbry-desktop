@@ -5,6 +5,7 @@ import { ipcRenderer } from 'electron';
 // @endif
 import { Modal } from 'modal/modal';
 import Button from 'component/button';
+import I18nMessage from 'component/i18nMessage';
 
 type Props = {
   closeModal: any => any,
@@ -47,8 +48,19 @@ class ModalAutoUpdateDownloaded extends React.PureComponent<Props, State> {
       >
         <p>{__('A new version of LBRY is ready for you.')}</p>
         <p className="help">
-          {__('Want to know what has changed?')} See the{' '}
-          <Button button="link" label={__('release notes')} href="https://github.com/lbryio/lbry-desktop/releases" />.
+          <I18nMessage
+            tokens={{
+              release_notes: (
+                <Button
+                  button="link"
+                  label={__('release notes')}
+                  href="https://github.com/lbryio/lbry-desktop/releases"
+                />
+              ),
+            }}
+          >
+            Want to know what has changed? See the %release_notes%.
+          </I18nMessage>
         </p>
       </Modal>
     );
