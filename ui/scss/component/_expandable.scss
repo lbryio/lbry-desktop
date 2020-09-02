@@ -12,3 +12,14 @@
 .expandable--open {
   max-height: 100%;
 }
+
+.expandable__button-list {
+  // Center:
+  margin: auto;
+  display: block;
+
+  font-size: var(--font-small);
+  @media (max-width: $breakpoint-small) {
+    font-size: var(--font-xsmall);
+  }
+}

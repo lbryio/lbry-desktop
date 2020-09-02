@@ -6,6 +6,7 @@ import React from 'react';
 import Button from 'component/button';
 import classnames from 'classnames';
 import NotificationBubble from 'component/notificationBubble';
+import Expandable from 'component/expandable';
 // @if TARGET='app'
 import { IS_MAC } from 'component/app/view';
 // @endif
@@ -279,29 +280,33 @@ function SideNavigation(props: Props) {
               );
             })}
           </ul>
-          {sidebarOpen && isPersonalized && subscriptions && subscriptions.length > 0 && (
-            <ul className="navigation__secondary navigation-links navigation-links--small">
-              {subscriptions.map(({ uri, channelName }, index) => (
-                <li key={uri} className="navigation-link__wrapper">
-                  <Button
-                    navigate={uri}
-                    label={channelName}
-                    className="navigation-link"
-                    activeClass="navigation-link--active"
-                  />
-                </li>
-              ))}
-            </ul>
-          )}
-          {sidebarOpen && isPersonalized && followedTags && followedTags.length > 0 && (
-            <ul className="navigation__secondary navigation-links navigation-links--small">
-              {followedTags.map(({ name }, key) => (
-                <li key={name} className="navigation-link__wrapper">
-                  <Button navigate={`/$/discover?t=${name}`} label={`#${name}`} className="navigation-link" />
-                </li>
-              ))}
-            </ul>
-          )}
+          <Expandable type="list">
+            {sidebarOpen && isPersonalized && subscriptions && subscriptions.length > 0 && (
+              <ul className="navigation__secondary navigation-links navigation-links--small">
+                {subscriptions.map(({ uri, channelName }, index) => (
+                  <li key={uri} className="navigation-link__wrapper">
+                    <Button
+                      navigate={uri}
+                      label={channelName}
+                      className="navigation-link"
+                      activeClass="navigation-link--active"
+                    />
+                  </li>
+                ))}
+              </ul>
+            )}
+          </Expandable>
+          <Expandable type="list">
+            {sidebarOpen && isPersonalized && followedTags && followedTags.length > 0 && (
+              <ul className="navigation__secondary navigation-links navigation-links--small">
+                {followedTags.map(({ name }, key) => (
+                  <li key={name} className="navigation-link__wrapper">
+                    <Button navigate={`/$/discover?t=${name}`} label={`#${name}`} className="navigation-link" />
+                  </li>
+                ))}
+              </ul>
+            )}
+          </Expandable>
         </nav>
       )}
 
@@ -352,29 +357,33 @@ function SideNavigation(props: Props) {
                 );
               })}
             </ul>
-            {isPersonalized && subscriptions && subscriptions.length > 0 && (
-              <ul className="navigation__secondary navigation-links--small">
-                {subscriptions.map(({ uri, channelName }, index) => (
-                  <li key={uri} className="navigation-link__wrapper">
-                    <Button
-                      navigate={uri}
-                      label={channelName}
-                      className="navigation-link"
-                      activeClass="navigation-link--active"
-                    />
-                  </li>
-                ))}
-              </ul>
-            )}
-            {isPersonalized && followedTags && followedTags.length > 0 && (
-              <ul className="navigation__secondary navigation-links--small">
-                {followedTags.map(({ name }, key) => (
-                  <li key={name} className="navigation-link__wrapper">
-                    <Button navigate={`/$/discover?t=${name}`} label={`#${name}`} className="navigation-link" />
-                  </li>
-                ))}
-              </ul>
-            )}
+            <Expandable type="list">
+              {isPersonalized && subscriptions && subscriptions.length > 0 && (
+                <ul className="navigation__secondary navigation-links--small">
+                  {subscriptions.map(({ uri, channelName }, index) => (
+                    <li key={uri} className="navigation-link__wrapper">
+                      <Button
+                        navigate={uri}
+                        label={channelName}
+                        className="navigation-link"
+                        activeClass="navigation-link--active"
+                      />
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </Expandable>
+            <Expandable type="list">
+              {isPersonalized && followedTags && followedTags.length > 0 && (
+                <ul className="navigation__secondary navigation-links--small">
+                  {followedTags.map(({ name }, key) => (
+                    <li key={name} className="navigation-link__wrapper">
+                      <Button navigate={`/$/discover?t=${name}`} label={`#${name}`} className="navigation-link" />
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </Expandable>
           </nav>
           <div
             className={classnames('navigation__overlay', {
