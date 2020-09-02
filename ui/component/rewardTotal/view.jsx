@@ -2,6 +2,8 @@
 import React from 'react';
 import TotalBackground from './total-background.png';
 import useTween from 'effects/use-tween';
+import I18nMessage from 'component/i18nMessage';
+import LbcSymbol from 'component/common/lbc-symbol';
 
 type Props = {
   rewards: Array<Reward>,
@@ -16,7 +18,7 @@ function RewardTotal(props: Props) {
 
   return (
     <section className="card  card--section card--reward-total" style={{ backgroundImage: `url(${TotalBackground})` }}>
-      {integer} LBC {__('Earned From Rewards')}
+      <I18nMessage tokens={{ amount: integer, lbc: <LbcSymbol /> }}>%amount% %lbc% earned from rewards</I18nMessage>
     </section>
   );
 }

@@ -11,6 +11,7 @@ import { Lbryio } from 'lbryinc';
 import Card from 'component/common/card';
 import classnames from 'classnames';
 import SelectChannel from 'component/selectChannel';
+import LbcSymbol from 'component/common/lbc-symbol';
 import { parseURI } from 'lbry-redux';
 import usePersistedState from 'effects/use-persisted-state';
 
@@ -152,10 +153,13 @@ function WalletSendTip(props: Props) {
     <Form onSubmit={handleSubmit}>
       {noBalance ? (
         <Card
-          title={__('Supporting content requires credits')}
-          subtitle={__(
-            'With LBC, you can send tips to your favorite creators, or help boost their content for more people to see.'
-          )}
+          title={<I18nMessage tokens={{ lbc: <LbcSymbol size={22} /> }}>Supporting content requires %lbc%</I18nMessage>}
+          subtitle={
+            <I18nMessage tokens={{ lbc: <LbcSymbol /> }}>
+              With %lbc%, you can send tips to your favorite creators, or help boost their content for more people to
+              see.
+            </I18nMessage>
+          }
           actions={
             <div className="section__actions">
               <Button
@@ -192,7 +196,9 @@ function WalletSendTip(props: Props) {
                     <div className="confirm__label">{__('From')}</div>
                     <div className="confirm__value">{selectedChannel}</div>
                     <div className="confirm__label">{__(isSupport ? 'Supporting' : 'Tipping')}</div>
-                    <div className="confirm__value">{tipAmount} LBC</div>
+                    <div className="confirm__value">
+                      <LbcSymbol prefix={tipAmount} size={22} />
+                    </div>
                   </div>
                 </div>
                 <div className="section__actions">
@@ -226,7 +232,8 @@ function WalletSendTip(props: Props) {
                         'button-toggle--active': tipAmount === amount,
                         'button-toggle--disabled': amount > balance,
                       })}
-                      label={`${amount} LBC`}
+                      label={amount}
+                      iconRight={ICONS.LBC}
                       onClick={() => {
                         setPresetTipAmount(amount);
                         setUseCustomTip(false);
@@ -246,7 +253,7 @@ function WalletSendTip(props: Props) {
                       button="secondary"
                       className="button-toggle-group-action"
                       icon={ICONS.BUY}
-                      title={__('Buy more LBC')}
+                      title={__('Buy more LBRY Credits')}
                       navigate={`/$/${PAGES.BUY}`}
                     />
                   )}
@@ -260,9 +267,7 @@ function WalletSendTip(props: Props) {
                       label={
                         <React.Fragment>
                           {__('Custom support amount')}{' '}
-                          <I18nMessage
-                            tokens={{ lbc_balance: <CreditAmount badge={false} precision={4} amount={balance} /> }}
-                          >
+                          <I18nMessage tokens={{ lbc_balance: <CreditAmount precision={4} amount={balance} /> }}>
                             (%lbc_balance% available)
                           </I18nMessage>
                         </React.Fragment>
@@ -289,7 +294,7 @@ function WalletSendTip(props: Props) {
                     label={
                       isSupport
                         ? __('Send Revocable Support')
-                        : __('Send a %amount% Tip', { amount: tipAmount ? `${tipAmount} LBC` : '' })
+                        : __('Send a %amount% Tip', { amount: tipAmount ? `${tipAmount} Credit` : '' })
                     }
                   />
                   {fetchingChannels && <span className="help">{__('Loading your channels...')}</span>}

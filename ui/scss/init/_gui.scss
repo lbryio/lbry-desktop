@@ -214,12 +214,12 @@ textarea {
   font-size: var(--font-small);
   color: var(--color-text-help);
   margin-top: var(--spacing-s);
-  margin-bottom: var(--spacing-s);
 }
 
 .help--warning {
   @extend .help;
   color: var(--color-text-help-warning);
+  margin-bottom: var(--spacing-s);
 }
 
 .help--inline {
@@ -315,6 +315,8 @@ textarea {
 }
 
 .confirm__value {
+  display: flex;
+  align-items: center;
   margin-bottom: var(--spacing-m);
   font-size: var(--font-large);
 

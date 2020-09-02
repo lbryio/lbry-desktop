@@ -88,17 +88,19 @@ export default function CreatorAnalytics(props: Props) {
                       ? __('No recent uploads')
                       : __("You haven't uploaded anything with this channel yet!")
                   }
-                  subtitle={
-                    <Button
-                      button="primary"
-                      label={__('Upload Something')}
-                      onClick={() => {
-                        if (claim) {
-                          prepareEdit(claim.name);
-                          history.push(`/$/${PAGES.UPLOAD}`);
-                        }
-                      }}
-                    />
+                  actions={
+                    <div className="section__actions">
+                      <Button
+                        button="primary"
+                        label={__('Upload Something')}
+                        onClick={() => {
+                          if (claim) {
+                            prepareEdit(claim.name);
+                            history.push(`/$/${PAGES.UPLOAD}`);
+                          }
+                        }}
+                      />
+                    </div>
                   }
                 />
               )}
@@ -145,7 +147,7 @@ export default function CreatorAnalytics(props: Props) {
           {/* <Card
             iconColor
             className="section"
-            title={<span>{__('%lbc_received% LBC Earned', { lbc_received: stats.AllLBCReceived })}</span>}
+            title={<span>{__('%lbc_received% LBRY Credits Earned', { lbc_received: stats.AllLBCReceived })}</span>}
             icon={ICONS.REWARDS}
             subtitle={
               <React.Fragment>

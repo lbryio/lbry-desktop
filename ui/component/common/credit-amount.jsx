@@ -1,6 +1,7 @@
 // @flow
 import React from 'react';
 import classnames from 'classnames';
+import LbcSymbol from 'component/common/lbc-symbol';
 import { formatCredits, formatFullPrice } from 'lbry-redux';
 
 type Props = {
@@ -12,7 +13,6 @@ type Props = {
   isEstimate?: boolean,
   showLBC?: boolean,
   fee?: boolean,
-  badge?: boolean,
   className?: string,
 };
 
@@ -23,22 +23,10 @@ class CreditAmount extends React.PureComponent<Props> {
     showFullPrice: false,
     showPlus: false,
     showLBC: true,
-    badge: true,
   };
 
   render() {
-    const {
-      amount,
-      precision,
-      showFullPrice,
-      showFree,
-      showPlus,
-      isEstimate,
-      fee,
-      showLBC,
-      badge,
-      className,
-    } = this.props;
+    const { amount, precision, showFullPrice, showFree, showPlus, isEstimate, fee, showLBC, className } = this.props;
 
     const minimumRenderableAmount = 10 ** (-1 * precision);
     const fullPrice = formatFullPrice(amount, 2);
@@ -65,7 +53,7 @@ class CreditAmount extends React.PureComponent<Props> {
       }
 
       if (showLBC) {
-        amountText = __('%amount% LBC', { amount: amountText });
+        amountText = <LbcSymbol prefix={amountText} />;
       }
 
       if (fee) {
@@ -74,14 +62,7 @@ class CreditAmount extends React.PureComponent<Props> {
     }
 
     return (
-      <span
-        title={fullPrice}
-        className={classnames(className, {
-          badge,
-          'badge--cost': badge && amount > 0,
-          'badge--free': badge && isFree,
-        })}
-      >
+      <span title={fullPrice} className={classnames(className, {})}>
         <span className="credit-amount">{amountText}</span>
 
         {isEstimate ? (

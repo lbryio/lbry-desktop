@@ -79,6 +79,11 @@ th {
 
 .table__item--align-right {
   text-align: right;
+
+  * {
+    text-align: right;
+    justify-content: flex-end;
+  }
 }
 
 .table__wrapper {

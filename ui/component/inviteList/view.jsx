@@ -46,7 +46,7 @@ class InviteList extends React.PureComponent<Props> {
             {referralReward && showClaimable && (
               <RewardLink
                 button
-                label={__(`Claim Your ${rewardAmount} LBC Invite Reward`)}
+                label={__(`Claim Your ${rewardAmount} Credit Invite Reward`)}
                 claim_code={referralReward.claim_code}
               />
             )}

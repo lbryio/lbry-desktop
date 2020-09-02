@@ -176,9 +176,12 @@
 }
 
 // Handle icons on the left or right side of the button label
-svg + .button__label,
-.button__label + svg {
+svg + .button__label {
   margin-left: var(--spacing-s);
+}
+
+.button__label + svg {
+  margin-left: var(--spacing-xs);
 }
 
 .button-toggle {
@@ -190,11 +193,9 @@ svg + .button__label,
   border-radius: 0;
   margin: 0;
   background-color: var(--color-card-background);
+
   @media (max-width: $breakpoint-small) {
     padding: var(--spacing-m) var(--spacing-s);
-  }
-  svg {
-    opacity: 0.5;
   }
 
   &:first-of-type {

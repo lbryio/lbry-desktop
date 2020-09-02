@@ -4,6 +4,7 @@ import Button from 'component/button';
 import { Form } from 'component/common/form';
 import { Modal } from 'modal/modal';
 import Card from 'component/common/card';
+import LbcSymbol from 'component/common/lbc-symbol';
 
 type Props = {
   address: string,
@@ -28,16 +29,14 @@ class ModalConfirmTransaction extends React.PureComponent<Props> {
           <Card
             title={title}
             body={
-              <>
+              <div className="section section--padded card--inline confirm__wrapper">
                 <div className="section">
-                  <label>{__('Sending: ')}</label>
-                  <blockquote>{amount} LBC</blockquote>
+                  <div className="confirm__label">{__('Sending')}</div>
+                  <div className="confirm__value">{<LbcSymbol prefix={amount} size={22} />}</div>
+                  <div className="confirm__label">{__('To')}</div>
+                  <div className="confirm__value">{address}</div>
                 </div>
-                <div className="section">
-                  <p>{__('To address: ')}</p>
-                  <blockquote>{address}</blockquote>
-                </div>
-              </>
+              </div>
             }
             actions={
               <>

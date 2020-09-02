@@ -1,5 +1,3 @@
-import isDev from 'electron-is-dev';
-
 export default function doLogWarningConsoleMessage() {
   const style = {
     redTitle:
@@ -16,17 +14,17 @@ export default function doLogWarningConsoleMessage() {
   );
 
   console.log(
-    '%cPasting anything in here could give attackers access to your LBC credits or wallet.',
+    '%cPasting anything in here could give attackers access to your LBRY Credits or wallet.',
     style.normalText
   );
 
   console.log(
-    "%cIf you don't understand exactly what you are doing here, please close this window and keep your LBC credits/wallet safe.",
+    "%cIf you don't understand exactly what you are doing here, please close this window and keep your LBRY Credits/wallet safe.",
     style.redText
   );
 
   console.log(
-    '%cIf you do understand exactly what you are doing, joins us, earn LBC, and make LBRY better! All of LBRY is open-source and we have a sweet secret handshake. Get started at https://lbry.tech/contribute',
+    '%cIf you do understand exactly what you are doing, joins us, earn LBRY Credits, and make LBRY better! All of LBRY is open-source and we have a sweet secret handshake. Get started at https://lbry.tech/contribute',
     style.normalText
   );
 }

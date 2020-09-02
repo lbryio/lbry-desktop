@@ -6,7 +6,6 @@ import React from 'react';
 import { withRouter } from 'react-router';
 import classnames from 'classnames';
 import Button from 'component/button';
-import LbcSymbol from 'component/common/lbc-symbol';
 import WunderBar from 'component/wunderbar';
 import Icon from 'component/common/icon';
 import { Menu, MenuList, MenuButton, MenuItem } from '@reach/menu-button';
@@ -152,13 +151,7 @@ const Header = (props: Props) => {
   }
 
   function getWalletTitle() {
-    return hideBalance || Number(roundedBalance) === 0 ? (
-      __('Your Wallet')
-    ) : (
-      <React.Fragment>
-        {roundedBalance} <LbcSymbol />
-      </React.Fragment>
-    );
+    return hideBalance || Number(roundedBalance) === 0 ? __('Your Wallet') : roundedBalance;
   }
 
   return (
@@ -190,6 +183,7 @@ const Header = (props: Props) => {
               navigate={`/$/${PAGES.WALLET}`}
               className="header__navigation-item menu__title header__navigation-item--balance"
               label={getWalletTitle()}
+              iconRight={ICONS.LBC}
               // @if TARGET='app'
               onDoubleClick={e => {
                 e.stopPropagation();
@@ -369,6 +363,7 @@ const Header = (props: Props) => {
                     navigate={`/$/${PAGES.WALLET}`}
                     className="header__navigation-item menu__title header__navigation-item--balance"
                     label={getWalletTitle()}
+                    iconRight={ICONS.LBC}
                     // @if TARGET='app'
                     onDoubleClick={e => {
                       e.stopPropagation();

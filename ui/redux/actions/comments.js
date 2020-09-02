@@ -87,6 +87,7 @@ export function doCommentCreate(
         });
       })
       .catch(error => {
+        console.log('error', error);
         dispatch({
           type: ACTIONS.COMMENT_CREATE_FAILED,
           data: error,

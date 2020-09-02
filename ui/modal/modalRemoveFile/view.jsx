@@ -6,6 +6,7 @@ import Button from 'component/button';
 import usePersistedState from 'effects/use-persisted-state';
 import Card from 'component/common/card';
 import I18nMessage from 'component/i18nMessage';
+import LbcSymbol from 'component/common/lbc-symbol';
 
 type Props = {
   uri: string,
@@ -50,7 +51,13 @@ function ModalRemoveFile(props: Props) {
               <React.Fragment>
                 <FormField
                   name="claim_abandon"
-                  label={__('Abandon on blockchain (reclaim %amount% LBC)', { amount: claim.amount })}
+                  label={
+                    <I18nMessage
+                      tokens={{ lbc: <LbcSymbol prefix={__('reclaim %amount%', { amount: claim.amount })} /> }}
+                    >
+                      Abandon on blockchain (%lbc%)
+                    </I18nMessage>
+                  }
                   type="checkbox"
                   checked={abandonChecked}
                   onChange={() => setAbandonChecked(!abandonChecked)}
