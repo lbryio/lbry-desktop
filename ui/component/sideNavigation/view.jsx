@@ -27,6 +27,7 @@ const RECENT_FROM_FOLLOWING = {
 
 type Props = {
   subscriptions: Array<Subscription>,
+  followedTags: Array<Tag>,
   email: ?string,
   uploadCount: number,
   doSignOut: () => void,
@@ -43,6 +44,7 @@ type Props = {
 function SideNavigation(props: Props) {
   const {
     subscriptions,
+    followedTags,
     doSignOut,
     email,
     purchaseSuccess,
@@ -277,7 +279,6 @@ function SideNavigation(props: Props) {
               );
             })}
           </ul>
-
           {sidebarOpen && isPersonalized && subscriptions && subscriptions.length > 0 && (
             <ul className="navigation__secondary navigation-links navigation-links--small">
               {subscriptions.map(({ uri, channelName }, index) => (
@@ -288,6 +289,15 @@ function SideNavigation(props: Props) {
                     className="navigation-link"
                     activeClass="navigation-link--active"
                   />
+                </li>
+              ))}
+            </ul>
+          )}
+          {sidebarOpen && isPersonalized && followedTags && followedTags.length > 0 && (
+            <ul className="navigation__secondary navigation-links navigation-links--small">
+              {followedTags.map(({ name }, key) => (
+                <li key={name} className="navigation-link__wrapper">
+                  <Button navigate={`/$/discover?t=${name}`} label={`#${name}`} className="navigation-link" />
                 </li>
               ))}
             </ul>
@@ -352,6 +362,15 @@ function SideNavigation(props: Props) {
                       className="navigation-link"
                       activeClass="navigation-link--active"
                     />
+                  </li>
+                ))}
+              </ul>
+            )}
+            {isPersonalized && followedTags && followedTags.length > 0 && (
+              <ul className="navigation__secondary navigation-links--small">
+                {followedTags.map(({ name }, key) => (
+                  <li key={name} className="navigation-link__wrapper">
+                    <Button navigate={`/$/discover?t=${name}`} label={`#${name}`} className="navigation-link" />
                   </li>
                 ))}
               </ul>
