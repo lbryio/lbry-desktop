@@ -65,7 +65,6 @@ class FilePrice extends React.PureComponent<Props> {
           'file-price--modal': type === 'modal',
         })}
         showFree
-        badge={false}
         showLBC={showLBC}
         amount={costInfo.cost}
         isEstimate={!costInfo.includesData}

@@ -67,12 +67,10 @@ export default function NotificationsPage(props: Props) {
             <div className="main--empty">
               <Yrbl
                 title={__('No notifications')}
-                subtitle={
-                  <div>
-                    <p>{__("You don't have any notifications yet, but they will be here when you do!")}</p>
-                    <div className="section__actions">
-                      <Button button="primary" icon={ICONS.HOME} label={__('Go Home')} navigate="/" />
-                    </div>
+                subtitle={<p>{__("You don't have any notifications yet, but they will be here when you do!")}</p>}
+                actions={
+                  <div className="section__actions">
+                    <Button button="primary" icon={ICONS.HOME} label={__('Go Home')} navigate="/" />
                   </div>
                 }
               />

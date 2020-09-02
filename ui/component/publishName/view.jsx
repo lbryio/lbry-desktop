@@ -6,6 +6,7 @@ import { FormField } from 'component/common/form';
 import NameHelpText from './name-help-text';
 import BidHelpText from './bid-help-text';
 import Card from 'component/common/card';
+import LbcSymbol from 'component/common/lbc-symbol';
 
 type Props = {
   name: string,
@@ -89,7 +90,7 @@ function PublishName(props: Props) {
     } else if (totalAvailableBidAmount < bid) {
       bidError = __('Deposit cannot be higher than your balance');
     } else if (totalAvailableBidAmount <= bid + 0.05) {
-      bidError = __('Please decrease your deposit to account for transaction fees or acquire more LBC.');
+      bidError = __('Please decrease your deposit to account for transaction fees or acquire more LBRY Credits.');
     }
 
     setBidError(bidError);
@@ -131,8 +132,7 @@ function PublishName(props: Props) {
             step="any"
             placeholder="0.123"
             className="form-field--price-amount"
-            label={__('Deposit (LBC)')}
-            postfix="LBC"
+            label={<LbcSymbol prefix={__('Deposit')} size={14} />}
             value={bid}
             error={bidError}
             disabled={!name}

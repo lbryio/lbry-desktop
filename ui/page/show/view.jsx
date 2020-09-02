@@ -2,7 +2,7 @@
 import { DOMAIN } from 'config';
 import React, { useEffect } from 'react';
 import { Redirect } from 'react-router-dom';
-import BusyIndicator from 'component/common/busy-indicator';
+import Spinner from 'component/spinner';
 import ChannelPage from 'page/channel';
 import FilePage from 'page/file';
 import Page from 'component/page';
@@ -78,7 +78,11 @@ function ShowPage(props: Props) {
   if (!claim || (claim && !claim.name)) {
     innerContent = (
       <Page>
-        {(claim === undefined || isResolvingUri) && <BusyIndicator message={__('Loading decentralized data...')} />}
+        {(claim === undefined || isResolvingUri) && (
+          <div className="main--empty">
+            <Spinner />
+          </div>
+        )}
         {!isResolvingUri && !isSubscribed && (
           <span className="empty">{__("There's nothing available at this location.")}</span>
         )}

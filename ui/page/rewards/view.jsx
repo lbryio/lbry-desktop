@@ -169,7 +169,7 @@ class RewardsPage extends PureComponent<Props> {
       <Page>
         {this.renderPageHeader()}
         <div className="section">{this.renderUnclaimedRewards()}</div>
-        {<RewardListClaimed />}
+        <RewardListClaimed />
       </Page>
     );
   }

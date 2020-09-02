@@ -80,6 +80,7 @@ export function doCommentCreate(comment: string = '', claim_id: string = '', cha
         });
       })
       .catch(error => {
+        console.log('error', error);
         dispatch({
           type: ACTIONS.COMMENT_CREATE_FAILED,
           data: error,

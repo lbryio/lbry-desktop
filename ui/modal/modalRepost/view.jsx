@@ -12,6 +12,7 @@ import { parseURI, isNameValid, creditsToString } from 'lbry-redux';
 import usePersistedState from 'effects/use-persisted-state';
 import I18nMessage from 'component/i18nMessage';
 import analytics from 'analytics';
+import LbcSymbol from '../../component/common/lbc-symbol';
 
 type Props = {
   doHideModal: () => void,
@@ -180,8 +181,7 @@ function ModalRepost(props: Props) {
                   step="any"
                   placeholder="0.123"
                   className="form-field--price-amount"
-                  label={__('Deposit (LBC)')}
-                  postfix="LBC"
+                  label={<LbcSymbol prefix={__('Deposit')} size={14} />}
                   value={repostBid}
                   error={repostBidError}
                   disabled={!repostName}

@@ -21,7 +21,7 @@ function BidHelpText(props: Props) {
       );
     } else {
       bidHelpText = __(
-        'If you bid more than %amount% LBC, when someone navigates to %uri%, it will load your published content. However, you can get a longer version of this URL for any bid.',
+        'If you bid more than %amount% LBRY Credits, when someone navigates to %uri%, it will load your published content. However, you can get a longer version of this URL for any bid.',
         {
           amount: amountNeededForTakeover,
           uri: uri,
@@ -29,7 +29,7 @@ function BidHelpText(props: Props) {
       );
     }
   } else {
-    bidHelpText = __('This LBC remains yours and the deposit can be undone at any time.');
+    bidHelpText = __('These LBRY Credits remain yours and the deposit can be undone at any time.');
   }
 
   return bidHelpText;

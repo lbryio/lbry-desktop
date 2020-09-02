@@ -136,7 +136,6 @@ class TxoListItem extends React.PureComponent<Props, State> {
         </td>
         <td className="table__item--align-right">
           <CreditAmount
-            badge={false}
             showPlus={isMinus}
             amount={isMinus ? Number(0 - amount) : Number(amount)}
             precision={8}

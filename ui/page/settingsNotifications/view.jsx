@@ -99,19 +99,17 @@ export default function NotificationSettingsPage(props: Props) {
         <Yrbl
           type="sad"
           title={__('Uh oh')}
-          subtitle={
-            <>
-              <div>{__('There was an error displaying this page.')}</div>
-              <div className="section__actions">
-                <Button
-                  button="secondary"
-                  label={__('Refresh')}
-                  icon={ICONS.REFRESH}
-                  onClick={() => window.location.reload()}
-                />
-                <Button button="secondary" label={__('Go Home')} icon={ICONS.HOME} navigate={'/'} />
-              </div>
-            </>
+          subtitle={__('There was an error displaying this page.')}
+          actions={
+            <div className="section__actions">
+              <Button
+                button="secondary"
+                label={__('Refresh')}
+                icon={ICONS.REFRESH}
+                onClick={() => window.location.reload()}
+              />
+              <Button button="secondary" label={__('Go Home')} icon={ICONS.HOME} navigate={'/'} />
+            </div>
           }
         />
       ) : (

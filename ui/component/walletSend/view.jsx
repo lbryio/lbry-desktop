@@ -6,6 +6,8 @@ import { Form, FormField } from 'component/common/form';
 import { Formik } from 'formik';
 import { validateSendTx } from 'util/form-validation';
 import Card from 'component/common/card';
+import I18nMessage from 'component/i18nMessage';
+import LbcSymbol from 'component/common/lbc-symbol';
 
 type DraftTransaction = {
   address: string,
@@ -38,8 +40,12 @@ class WalletSend extends React.PureComponent<Props> {
 
     return (
       <Card
-        title={__('Send credits')}
-        subtitle={__('Send LBC to your friends or favorite creators.')}
+        title={<LbcSymbol prefix={__('Send')} isTitle />}
+        subtitle={
+          <I18nMessage tokens={{ lbc: <LbcSymbol /> }}>
+            Send LBRY Credits to your friends or favorite creators.
+          </I18nMessage>
+        }
         actions={
           <Formik
             initialValues={{
@@ -52,10 +58,10 @@ class WalletSend extends React.PureComponent<Props> {
               <Form onSubmit={handleSubmit}>
                 <fieldset-group class="fieldset-group--smushed">
                   <FormField
+                    autoFocus
                     type="number"
                     name="amount"
                     label={__('Amount')}
-                    postfix={__('LBC')}
                     className="form-field--price-amount"
                     affixClass="form-field--fix-no-height"
                     min="0"
