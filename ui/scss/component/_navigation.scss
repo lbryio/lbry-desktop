@@ -68,6 +68,11 @@
   margin-top: var(--spacing-l);
 }
 
+.navigation__secondary--tags {
+  @extend .navigation__secondary;
+  margin-left: var(--spacing-l);
+}
+
 .navigation-link {
   display: block;
   position: relative;
