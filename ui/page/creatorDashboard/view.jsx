@@ -45,11 +45,9 @@ export default function CreatorDashboardPage(props: Props) {
         <Yrbl
           type="happy"
           title={__("You haven't created a channel yet, let's fix that!")}
-          subtitle={
-            <div>
-              <div className="section__actions">
-                <Button button="primary" navigate={`/$/${PAGES.CHANNEL_NEW}`} label={__('Create A Channel')} />
-              </div>
+          actions={
+            <div className="section__actions">
+              <Button button="primary" navigate={`/$/${PAGES.CHANNEL_NEW}`} label={__('Create A Channel')} />
             </div>
           }
         />

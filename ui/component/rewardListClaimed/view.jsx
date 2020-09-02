@@ -2,6 +2,7 @@
 import React from 'react';
 import ButtonTransaction from 'component/common/transaction-link';
 import moment from 'moment';
+import LbcSymbol from 'component/common/lbc-symbol';
 
 type Reward = {
   id: string,
@@ -42,7 +43,9 @@ const RewardListClaimed = (props: Props) => {
           <thead>
             <tr>
               <th>{__('Title')}</th>
-              <th>{__('Amount')}</th>
+              <th>
+                <LbcSymbol size={20} />
+              </th>
               <th>{__('Transaction')}</th>
               <th>{__('Date')}</th>
             </tr>

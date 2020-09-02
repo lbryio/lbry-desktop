@@ -75,7 +75,7 @@ function InviteNew(props: Props) {
       <Card
         title={__('Invites')}
         subtitle={__(
-          'Earn LBC for inviting subscribers, followers, fans, friends, etc. to join and follow you on %SITE_NAME%. You can use invites just like affiliate links.',
+          'Earn LBRY Credits for inviting subscribers, followers, fans, friends, etc. to join and follow you on %SITE_NAME%. You can use invites just like affiliate links.',
           { SITE_NAME }
         )}
         actions={
@@ -107,7 +107,9 @@ function InviteNew(props: Props) {
 
       <Card
         title={__('Invite by email')}
-        subtitle={__('Invite someone you know by email and earn LBC when they join %SITE_NAME%.', { SITE_NAME })}
+        subtitle={__('Invite someone you know by email and earn LBRY Credits when they join %SITE_NAME%.', {
+          SITE_NAME,
+        })}
         actions={
           <React.Fragment>
             <Form onSubmit={handleSubmit}>

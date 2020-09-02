@@ -27,7 +27,7 @@ rewards.claimReward = (type, rewardParams) => {
     }
 
     Lbryio.call('reward', 'claim', params, 'post').then(reward => {
-      const message = reward.reward_notification || `You have claimed a ${reward.reward_amount} LBC reward.`;
+      const message = reward.reward_notification || `You have claimed a ${reward.reward_amount} LBRY Credit reward.`;
 
       // Display global notice
       const action = doToast({

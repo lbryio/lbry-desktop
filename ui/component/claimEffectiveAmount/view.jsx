@@ -1,19 +1,20 @@
 // @flow
 import React from 'react';
+import LbcSymbol from 'component/common/lbc-symbol';
 
 type Props = {
   uri: string,
   claim: ?Claim,
 };
 
-function ClaimRepostAuthor(props: Props) {
+function ClaimEffectiveAmount(props: Props) {
   const { claim } = props;
 
   if (!claim) {
     return null;
   }
 
-  return <span>{claim.meta.effective_amount} LBC</span>;
+  return <LbcSymbol prefix={claim.meta.effective_amount} />;
 }
 
-export default ClaimRepostAuthor;
+export default ClaimEffectiveAmount;

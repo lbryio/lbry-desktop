@@ -93,7 +93,7 @@ const SupportsLiquidate = (props: Props) => {
       subtitle={
         <>
           <p>
-            {__('You can unlock all or some of this LBC at any time.')}{' '}
+            {__('You can unlock all or some of these LBRY Credits at any time.')}{' '}
             {__('Keeping it locked improves the trust and discoverability of your content.')}
           </p>
           <p>
@@ -107,60 +107,58 @@ const SupportsLiquidate = (props: Props) => {
           </p>
         </>
       }
-      body={
-        abandonClaimError ? (
-          <div className="error__wrapper--no-overflow">
-            <ErrorText>{abandonClaimError}</ErrorText>
-          </div>
-        ) : (
-          <>
-            <div className="section">
-              <I18nMessage
-                tokens={{
-                  amount: (
-                    <strong>
-                      <CreditAmount badge={false} amount={Number(previewBalance)} precision={8} />
-                    </strong>
-                  ),
-                }}
-              >
-                %amount% available to unlock
-              </I18nMessage>
-            </div>
-            <div className="section">
-              {previewBalance === 0 && <p>{__('No unlockable tips available')}</p>}
-              {previewBalance === undefined && <p>{__('Loading...')}</p>}
-              {previewBalance && (
-                <Form onSubmit={handleSubmit}>
-                  <label htmlFor="supports_liquidate_range">{__('Amount to unlock')}</label>
-                  <FormField
-                    name="supports_liquidate_range"
-                    type={'range'}
-                    min={0}
-                    step={0.01}
-                    max={previewBalance}
-                    value={Number(amount) >= 0 ? amount : previewBalance / 4} // by default, set it to 25% of available
-                    onChange={e => handleChange(e.target.value)}
-                  />
-                  <label className="range__label">
-                    <span>0</span>
-                    <span>{previewBalance / 2}</span>
-                    <span>{previewBalance}</span>
-                  </label>
-                  <FormField
-                    type="text"
-                    value={amount >= 0 ? amount || '' : previewBalance && previewBalance / 4}
-                    helper={message}
-                    onChange={e => handleChange(e.target.value)}
-                  />
-                </Form>
-              )}
-            </div>
-          </>
-        )
-      }
       actions={
         <React.Fragment>
+          {abandonClaimError ? (
+            <div className="error__wrapper--no-overflow">
+              <ErrorText>{abandonClaimError}</ErrorText>
+            </div>
+          ) : (
+            <>
+              <div className="section">
+                <I18nMessage
+                  tokens={{
+                    amount: (
+                      <strong>
+                        <CreditAmount amount={Number(previewBalance)} precision={8} />
+                      </strong>
+                    ),
+                  }}
+                >
+                  %amount% available to unlock
+                </I18nMessage>
+              </div>
+              <div className="section">
+                {previewBalance === 0 && <p>{__('No unlockable tips available')}</p>}
+                {previewBalance === undefined && <p>{__('Loading...')}</p>}
+                {previewBalance && (
+                  <Form onSubmit={handleSubmit}>
+                    <label htmlFor="supports_liquidate_range">{__('Amount to unlock')}</label>
+                    <FormField
+                      name="supports_liquidate_range"
+                      type={'range'}
+                      min={0}
+                      step={0.01}
+                      max={previewBalance}
+                      value={Number(amount) >= 0 ? amount : previewBalance / 4} // by default, set it to 25% of available
+                      onChange={e => handleChange(e.target.value)}
+                    />
+                    <label className="range__label">
+                      <span>0</span>
+                      <span>{previewBalance / 2}</span>
+                      <span>{previewBalance}</span>
+                    </label>
+                    <FormField
+                      type="text"
+                      value={amount >= 0 ? amount || '' : previewBalance && previewBalance / 4}
+                      helper={message}
+                      onChange={e => handleChange(e.target.value)}
+                    />
+                  </Form>
+                )}
+              </div>
+            </>
+          )}
           <div className="section__actions">
             <Button
               disabled={error}
