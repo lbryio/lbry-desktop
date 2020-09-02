@@ -26,7 +26,7 @@ export default handleActions(
       const { comment, claimId }: { comment: Comment, claimId: string } = action.data;
       const commentById = Object.assign({}, state.commentById);
       const byId = Object.assign({}, state.byId);
-      const comments = byId[claimId];
+      const comments = byId[claimId] || [];
       const newCommentIds = comments.slice();
 
       // add the comment by its ID
