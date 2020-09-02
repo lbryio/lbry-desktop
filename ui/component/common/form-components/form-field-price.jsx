@@ -70,7 +70,7 @@ export class FormFieldPrice extends React.PureComponent<Props> {
           onChange={this.handleCurrencyChange}
           value={price.currency}
         >
-          <option value="LBC">{__('LBRY Credits (LBC)')}</option>
+          <option value="LBC">{__('LBRY Credits')}</option>
           <option value="USD">{__('US Dollars')}</option>
         </FormField>
       </fieldset-group>

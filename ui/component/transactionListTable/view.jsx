@@ -3,6 +3,7 @@ import * as MODALS from 'constants/modal_types';
 import React from 'react';
 import TxoListItem from './internal/txo-list-item';
 import Spinner from 'component/spinner';
+import LbcSymbol from 'component/common/lbc-symbol';
 
 type Props = {
   emptyMessage: ?string,
@@ -36,7 +37,9 @@ function TransactionListTable(props: Props) {
                 <th>{<>{__('Type')}</>}</th>
                 <th>{__('Details')} </th>
                 <th>{__('Transaction')}</th>
-                <th className="table__item--align-right">{__('Amount (LBC)')}</th>
+                <th className="table__item--align-right">
+                  <LbcSymbol size={18} />
+                </th>
               </tr>
             </thead>
             <tbody>

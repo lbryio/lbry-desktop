@@ -17,6 +17,7 @@ import { Tabs, TabList, Tab, TabPanels, TabPanel } from 'component/common/tabs';
 import Card from 'component/common/card';
 import * as PAGES from 'constants/pages';
 import analytics from 'analytics';
+import LbcSymbol from 'component/common/lbc-symbol';
 const MAX_TAG_SELECT = 5;
 
 type Props = {
@@ -46,6 +47,7 @@ type Props = {
     { onUpdate: string => void, assetName: string, helpText: string, currentValue: string, title: string }
   ) => void,
   uri: string,
+  disabled: boolean,
 };
 
 function ChannelForm(props: Props) {
@@ -236,7 +238,7 @@ function ChannelForm(props: Props) {
         <Tabs>
           <TabList className="tabs__list--channel-page">
             <Tab>{__('General')}</Tab>
-            <Tab>{__('LBC Details')}</Tab>
+            <Tab>{__('LBRY Credit Details')}</Tab>
             <Tab>{__('Tags')}</Tab>
             <Tab>{__('Other')}</Tab>
           </TabList>
@@ -293,8 +295,7 @@ function ChannelForm(props: Props) {
                     type="number"
                     name="content_bid2"
                     step="any"
-                    label={__('Deposit (LBC)')}
-                    postfix="LBC"
+                    label={<LbcSymbol prefix={__('Deposit')} size={14} />}
                     value={params.amount}
                     error={bidError}
                     min="0.0"

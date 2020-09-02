@@ -44,7 +44,7 @@ function LibraryPage(props: Props) {
             title={
               IS_WEB ? __("You haven't purchased anything yet") : __("You haven't downloaded anything from LBRY yet")
             }
-            subtitle={
+            actions={
               <div className="section__actions">
                 <Button button="primary" navigate="/" label={__('Explore New Content')} />
               </div>

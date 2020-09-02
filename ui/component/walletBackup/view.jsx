@@ -97,7 +97,7 @@ class WalletBackup extends React.PureComponent<Props, State> {
           <ul>
             <li>
               {__(
-                'Your LBRY credits, channels, and publishes are controllable by you and only you, via wallet file(s) stored locally on your computer.'
+                'Your LBRY Credits, channels, and publishes are controllable by you and only you, via wallet file(s) stored locally on your computer.'
               )}
             </li>
             <li>
