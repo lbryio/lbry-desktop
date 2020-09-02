@@ -5,6 +5,8 @@ import { FormField } from 'component/common/form';
 import * as txnTypes from 'constants/transaction_types';
 import Card from 'component/common/card';
 import Button from 'component/button';
+import I18nMessage from 'component/i18nMessage';
+import LbcSymbol from 'component/common/lbc-symbol';
 
 type Props = {
   closeModal: () => void,
@@ -38,9 +40,10 @@ export default function ModalRevokeClaim(props: Props) {
         <React.Fragment>
           <p>{__('Are you sure you want to remove this support?')}</p>
           <p>
-            {__(
-              "These credits are permanently yours and can be removed at any time. Removing this support will reduce the claim's discoverability and return the LBC to your spendable balance."
-            )}
+            <I18nMessage tokens={{ lbc: <LbcSymbol /> }}>
+              These credits are permanently yours and can be removed at any time. Removing this support will reduce the
+              claim's discoverability and return the %lbc% to your spendable balance.
+            </I18nMessage>
           </p>
         </React.Fragment>
       );
@@ -73,9 +76,10 @@ export default function ModalRevokeClaim(props: Props) {
       <React.Fragment>
         <p>{__('Are you sure want to revoke this claim?')}</p>
         <p>
-          {__(
-            'This will prevent others from resolving and accessing the content you published. It will return the LBC to your spendable balance, less a small transaction fee.'
-          )}
+          <I18nMessage tokens={{ lbc: <LbcSymbol /> }}>
+            This will prevent others from resolving and accessing the content you published. It will return the %lbc% to
+            your spendable balance, less a small transaction fee.
+          </I18nMessage>
         </p>
         <p className="help error__text"> {__('FINAL WARNING: This action is permanent and cannot be undone.')}</p>
       </React.Fragment>

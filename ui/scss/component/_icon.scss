@@ -43,3 +43,20 @@
 .icon--hidden {
   margin-right: var(--spacing-s);
 }
+
+.icon__lbc {
+  vertical-align: middle;
+  //   fill: none;
+
+  path {
+    // fill: none;
+  }
+}
+
+.icon__lbc--with-text {
+  margin-left: 5px;
+}
+
+.icon__lbc--title {
+  margin-bottom: 4px;
+}

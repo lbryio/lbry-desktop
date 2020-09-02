@@ -96,14 +96,12 @@ function FileListDownloaded(props: Props) {
           <Yrbl
             title={__('Try out the app!')}
             subtitle={
-              <>
-                <p className="section__subtitle">
-                  {__("Download the app to track files you've viewed and downloaded.")}
-                </p>
-                <div className="section__actions">
-                  <Button button="primary" label={__('Get The App')} href="https://lbry.com/get" />
-                </div>
-              </>
+              <p className="section__subtitle">{__("Download the app to track files you've viewed and downloaded.")}</p>
+            }
+            actions={
+              <div className="section__actions">
+                <Button button="primary" label={__('Get The App')} href="https://lbry.com/get" />
+              </div>
             }
           />
         </div>

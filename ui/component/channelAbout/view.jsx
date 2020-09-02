@@ -79,7 +79,7 @@ function ChannelAbout(props: Props) {
             <div className="media__info-text media__info-text--constrained">{claim.claim_id}</div>
           </div>
 
-          <label>{__('Staked LBC')}</label>
+          <label>{__('Staked LBRY Credits')}</label>
           <div className="media__info-text">
             <CreditAmount
               badge={false}

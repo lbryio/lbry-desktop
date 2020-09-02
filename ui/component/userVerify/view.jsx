@@ -7,6 +7,7 @@ import CardVerify from 'component/cardVerify';
 import { Lbryio } from 'lbryinc';
 import Card from 'component/common/card';
 import I18nMessage from 'component/i18nMessage';
+import LbcSymbol from 'component/common/lbc-symbol';
 
 type Props = {
   errorMessage: ?string,
@@ -38,7 +39,16 @@ class UserVerify extends React.PureComponent<Props> {
     return (
       <div className="main__auth-content">
         <section className="section__header">
-          <h1 className="section__title--large">{__('Verify to earn LBC')}</h1>
+          <h1 className="section__title--large">
+            {__('')}
+            <I18nMessage
+              tokens={{
+                lbc: <LbcSymbol size={48} />,
+              }}
+            >
+              Verify to earn %lbc%
+            </I18nMessage>
+          </h1>
           <p>
             <I18nMessage
               tokens={{
@@ -50,8 +60,8 @@ class UserVerify extends React.PureComponent<Props> {
                 SITE_NAME,
               }}
             >
-              Verified accounts are eligible to earn LBC for views, watching and reposting content, sharing invite links
-              etc. Verifying also helps us keep the %SITE_NAME% community safe too! %Refresh% or %Skip%.
+              Verified accounts are eligible to earn LBRY Credits for views, watching and reposting content, sharing
+              invite links etc. Verifying also helps us keep the %SITE_NAME% community safe too! %Refresh% or %Skip%.
             </I18nMessage>
           </p>
           <p className="help">
@@ -138,7 +148,7 @@ class UserVerify extends React.PureComponent<Props> {
           <Card
             icon={ICONS.REMOVE}
             title={__('Skip')}
-            subtitle={__("Verifying is optional. If you skip this, it just means you can't earn LBC.")}
+            subtitle={__("Verifying is optional. If you skip this, it just means you can't earn LBRY Credits.")}
             actions={
               <Fragment>
                 <Button {...skipButtonProps} button="primary" label={__('Continue Without Verifying')} />

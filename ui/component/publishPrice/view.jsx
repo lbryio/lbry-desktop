@@ -45,7 +45,7 @@ function PublishPrice(props: Props) {
           {fee && fee.currency !== 'LBC' && (
             <p className="form-field__help">
               {__(
-                'All content fees are charged in LBC. For non-LBC payment methods, the number of credits charged will be adjusted based on the value of LBRY credits at the time of purchase.'
+                'All content fees are charged in LBRY Credits. For alternative payment methods, the number of LBRY Credits charged will be adjusted based on the value of LBRY Credits at the time of purchase.'
               )}
             </p>
           )}

@@ -8,6 +8,7 @@ import Button from 'component/button';
 import Icon from 'component/common/icon';
 import HelpLink from 'component/common/help-link';
 import Card from 'component/common/card';
+import LbcSymbol from 'component/common/lbc-symbol';
 
 type Props = {
   balance: number,
@@ -26,14 +27,7 @@ const WalletBalance = (props: Props) => {
     <React.Fragment>
       <section className="columns">
         <Card
-          title={
-            <span>
-              {(balance || balance === 0) && (
-                <CreditAmount badge={false} amount={balance} precision={8} showLBC={false} />
-              )}{' '}
-              <span className="section__title--small">LBC</span>
-            </span>
-          }
+          title={<LbcSymbol prefix={balance} isTitle />}
           subtitle={__('Available Balance')}
           actions={
             <div className="section__actions">
@@ -86,7 +80,7 @@ const WalletBalance = (props: Props) => {
                 <Icon sectionIcon icon={ICONS.SUPPORT} />
                 <h2 className="section__title--small">
                   <strong>
-                    <CreditAmount badge={false} amount={tipsBalance} precision={8} />
+                    <CreditAmount amount={tipsBalance} precision={8} />
                   </strong>{' '}
                   {__('earned and bound in tips')}
                 </h2>
@@ -99,7 +93,7 @@ const WalletBalance = (props: Props) => {
                 <div>
                   <h2 className="section__title--small">
                     <strong>
-                      <CreditAmount badge={false} amount={claimsBalance + supportsBalance} precision={8} />
+                      <CreditAmount amount={claimsBalance + supportsBalance} precision={8} />
                     </strong>{' '}
                     {__('currently staked')}
                   </h2>
@@ -107,12 +101,12 @@ const WalletBalance = (props: Props) => {
                     <dl>
                       <dt>{__('... in your publishes')}</dt>
                       <dd>
-                        <CreditAmount badge={false} amount={claimsBalance} precision={8} />
+                        <CreditAmount amount={claimsBalance} precision={8} />
                       </dd>
 
                       <dt>{__('... in your supports')}</dt>
                       <dd>
-                        <CreditAmount badge={false} amount={supportsBalance} precision={8} />
+                        <CreditAmount amount={supportsBalance} precision={8} />
                       </dd>
                     </dl>
                   </div>

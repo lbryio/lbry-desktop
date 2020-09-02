@@ -15,7 +15,7 @@ export default function ClaimSupportButton(props: Props) {
   return (
     <Button
       button="alt"
-      icon={ICONS.SUPPORT}
+      icon={ICONS.LBC}
       label={__('Support')}
       requiresAuth={IS_WEB}
       title={__('Support this claim')}

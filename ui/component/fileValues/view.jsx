@@ -34,7 +34,7 @@ class FileValues extends PureComponent<Props> {
     return (
       <Fragment>
         <Card
-          title={__('LBC details')}
+          title={__('Credit details')}
           defaultExpand={false}
           actions={
             <table className="table table--condensed table--fixed table--lbc-details">
@@ -46,7 +46,7 @@ class FileValues extends PureComponent<Props> {
                       <Button
                         button="link"
                         href={`https://explorer.lbry.com/tx/${purchaseReceipt.txid}`}
-                        label={<CreditAmount badge={false} amount={Number(purchaseReceipt.amount)} precision={2} />}
+                        label={<CreditAmount amount={Number(purchaseReceipt.amount)} precision={2} />}
                       />
                     </td>
                   </tr>
@@ -54,11 +54,7 @@ class FileValues extends PureComponent<Props> {
                 <tr>
                   <td> {__('Original Publish Amount')}</td>
                   <td>
-                    {claim && claim.amount ? (
-                      <CreditAmount badge={false} amount={Number(claim.amount)} precision={2} />
-                    ) : (
-                      <p>...</p>
-                    )}
+                    {claim && claim.amount ? <CreditAmount amount={Number(claim.amount)} precision={2} /> : <p>...</p>}
                   </td>
                 </tr>
                 <tr>
@@ -73,7 +69,7 @@ class FileValues extends PureComponent<Props> {
                           button="link"
                           className="expandable__button"
                           icon={ICONS.UNLOCK}
-                          label={<CreditAmount badge={false} amount={Number(supportsAmount)} precision={2} />}
+                          label={<CreditAmount amount={Number(supportsAmount)} precision={2} />}
                           onClick={() => {
                             openModal(MODALS.LIQUIDATE_SUPPORTS, { uri });
                           }}
@@ -81,7 +77,7 @@ class FileValues extends PureComponent<Props> {
                       </>
                     )}
                     {(!claimIsMine || (claimIsMine && !pendingAmount && supportsAmount === 0)) && (
-                      <CreditAmount badge={false} amount={Number(supportsAmount)} precision={2} />
+                      <CreditAmount amount={Number(supportsAmount)} precision={2} />
                     )}
 
                     {claimIsMine && pendingAmount && <Spinner type={'small'} />}
@@ -95,7 +91,7 @@ class FileValues extends PureComponent<Props> {
                     </div>
                   </td>
                   <td>
-                    <CreditAmount badge={false} amount={Number(claim.meta.effective_amount)} precision={2} />
+                    <CreditAmount amount={Number(claim.meta.effective_amount)} precision={2} />
                   </td>
                 </tr>
                 <tr>

@@ -61,6 +61,7 @@ export const MENU = 'Menu';
 export const BACKUP = 'Database';
 export const TRANSACTIONS = 'FileText';
 export const LBRY = 'Lbry';
+export const LBC = 'LBC';
 export const DISCOVER = 'Compass';
 export const VISUALIZER_ON = 'Eye';
 export const VISUALIZER_OFF = 'EyeOff';

@@ -25,7 +25,6 @@ function FileSubtitle(props: Props) {
         {!SIMPLE_SITE && (
           <>
             <CreditAmount
-              badge={false}
               amount={parseFloat(claim.amount) + parseFloat(pendingAmount || claim.meta.support_amount)}
               precision={2}
             />

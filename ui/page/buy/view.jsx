@@ -12,6 +12,7 @@ import { useHistory } from 'react-router';
 import Button from 'component/button';
 import Nag from 'component/common/nag';
 import I18nMessage from 'component/i18nMessage';
+import LbcSymbol from 'component/common/lbc-symbol';
 
 const MOONPAY_KEY = process.env.MOONPAY_SECRET_KEY;
 const COUNTRIES = Array.from(
@@ -83,12 +84,23 @@ export default function BuyPage(props: Props) {
         learn_more: <Button button="link" label={__('Learn more')} href="https://lbry.com/faq/buy-lbc" />,
       }}
     >
-      LBRY, Inc. partners with Moonpay to provide the option to purchase LBC. %learn_more%.
+      LBRY, Inc. partners with Moonpay to provide the option to purchase LBRY Credits. %learn_more%.
     </I18nMessage>
   );
 
   return (
-    <Page noSideNavigation className="main--buy" backout={{ backoutLabel: __('Done'), title: __('Buy credits') }}>
+    <Page
+      noSideNavigation
+      className="main--buy"
+      backout={{
+        backoutLabel: __('Done'),
+        title: (
+          <>
+            <LbcSymbol prefix={__('Buy')} size={28} />
+          </>
+        ),
+      }}
+    >
       {!user && (
         <div className="main--empty">
           <Spinner delayed />
