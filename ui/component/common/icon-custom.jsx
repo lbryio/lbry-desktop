@@ -2,6 +2,7 @@
 // A housing for all of our icons. Mostly taken from https://github.com/feathericons/react-feather
 import * as ICONS from 'constants/icons';
 import React, { forwardRef } from 'react';
+import uuid from 'uuid/v4';
 
 type IconProps = {
   size: number,
@@ -41,85 +42,98 @@ export const icons = {
       <path d="M294.3,150.9l2-12.6l-12.2-2.1l0.8-4.9l17.1,2.9l-2.8,17.5L294.3,150.9L294.3,150.9z" />
     </svg>
   ),
-  [ICONS.LBC]: buildIcon(
-    <>
-      <path
-        d="M17.2106 4.45688L17.1881 4.44L15.9131 3.3825L11.8331 0L1.43811 8.89875V14.5087L6.39749 19.0406L11.8219 24L22.5619 14.9044V8.895L17.2106 4.45688Z"
-        fill="black"
-      />
-      <path
-        d="M14.6269 4.47001L11.8519 2.16751L3.0975 9.66188V13.7775L3.36938 14.0269L9.19125 9.06376L14.6269 4.47001Z"
-        fill="url(#paint0_linear)"
-      />
-      <path
-        d="M13.3444 13.1381L9.19126 9.06375L3.36938 14.0269L7.67063 17.9587L13.3444 13.1381Z"
-        fill="url(#paint1_linear)"
-      />
-      <path
-        d="M20.61 9.43125L15.9244 5.54437L11.6512 9.15562L15.8025 13.2262L20.6062 9.43312L20.61 9.43125Z"
-        fill="url(#paint2_linear)"
-      />
-      <path
-        d="M20.6062 9.43315L15.8025 13.2263L8.90436 19.0875L11.8631 21.7913L20.9025 14.1375V9.67502L20.61 9.43127L20.6062 9.43315Z"
-        fill="url(#paint3_linear)"
-      />
-      <defs>
-        <linearGradient
-          id="paint0_linear"
-          x1="3.0975"
-          y1="8.09813"
-          x2="14.6269"
-          y2="8.09813"
-          gradientUnits="userSpaceOnUse"
-        >
-          <stop offset="0.42" stopColor="#FABD09" />
-          <stop offset="0.83" stopColor="#FA6B00" />
-        </linearGradient>
-        <linearGradient
-          id="paint1_linear"
-          x1="3.09751"
-          y1="13.5112"
-          x2="14.6269"
-          y2="13.5112"
-          gradientUnits="userSpaceOnUse"
-        >
-          <stop offset="0.25" stopColor="#E700FF" />
-          <stop offset="0.32" stopColor="#E804F9" />
-          <stop offset="0.41" stopColor="#E90EE8" />
-          <stop offset="0.52" stopColor="#EC1FCC" />
-          <stop offset="0.64" stopColor="#F037A5" />
-          <stop offset="0.76" stopColor="#F45672" />
-          <stop offset="0.89" stopColor="#FA7A36" />
-          <stop offset="1" stopColor="#FF9B00" />
-        </linearGradient>
-        <linearGradient
-          id="paint2_linear"
-          x1="8.90437"
-          y1="9.38625"
-          x2="20.9025"
-          y2="9.38625"
-          gradientUnits="userSpaceOnUse"
-        >
-          <stop stopColor="#BAFF8E" />
-          <stop offset="0.63" stopColor="#008EBB" />
-        </linearGradient>
-        <linearGradient
-          id="paint3_linear"
-          x1="1220.59"
-          y1="418.3"
-          x2="608.328"
-          y2="1952.52"
-          gradientUnits="userSpaceOnUse"
-        >
-          <stop stopColor="#BAFF8E" />
-          <stop offset="0.63" stopColor="#008EBB" />
-        </linearGradient>
-      </defs>
-    </>,
-    {
-      'stroke-width': 0,
-    }
-  ),
+  [ICONS.LBC]: (props: IconProps) => {
+    const { size = 24, color = 'currentColor', ...rest } = props;
+    const randomId = uuid();
+
+    return (
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 24 24"
+        width={size}
+        height={size}
+        fill="none"
+        stroke={color}
+        strokeWidth="0"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        {...rest}
+      >
+        <path
+          d="M17.2106 4.45688L17.1881 4.44L15.9131 3.3825L11.8331 0L1.43811 8.89875V14.5087L6.39749 19.0406L11.8219 24L22.5619 14.9044V8.895L17.2106 4.45688Z"
+          fill="black"
+        />
+        <path
+          d="M14.6269 4.47001L11.8519 2.16751L3.0975 9.66188V13.7775L3.36938 14.0269L9.19125 9.06376L14.6269 4.47001Z"
+          fill={`url(#paint0_linear${randomId})`}
+        />
+        <path
+          d="M13.3444 13.1381L9.19126 9.06375L3.36938 14.0269L7.67063 17.9587L13.3444 13.1381Z"
+          fill={`url(#paint1_linear${randomId})`}
+        />
+        <path
+          d="M20.61 9.43125L15.9244 5.54437L11.6512 9.15562L15.8025 13.2262L20.6062 9.43312L20.61 9.43125Z"
+          fill={`url(#paint2_linear${randomId})`}
+        />
+        <path
+          d="M20.6062 9.43315L15.8025 13.2263L8.90436 19.0875L11.8631 21.7913L20.9025 14.1375V9.67502L20.61 9.43127L20.6062 9.43315Z"
+          fill={`url(#paint3_linear${randomId})`}
+        />
+        <defs>
+          <linearGradient
+            id={`paint0_linear${randomId}`}
+            x1="3.0975"
+            y1="8.09813"
+            x2="14.6269"
+            y2="8.09813"
+            gradientUnits="userSpaceOnUse"
+          >
+            <stop offset="0.42" stopColor="#FABD09" />
+            <stop offset="0.83" stopColor="#FA6B00" />
+          </linearGradient>
+          <linearGradient
+            id={`paint1_linear${randomId}`}
+            x1="3.09751"
+            y1="13.5112"
+            x2="14.6269"
+            y2="13.5112"
+            gradientUnits="userSpaceOnUse"
+          >
+            <stop offset="0.25" stopColor="#E700FF" />
+            <stop offset="0.32" stopColor="#E804F9" />
+            <stop offset="0.41" stopColor="#E90EE8" />
+            <stop offset="0.52" stopColor="#EC1FCC" />
+            <stop offset="0.64" stopColor="#F037A5" />
+            <stop offset="0.76" stopColor="#F45672" />
+            <stop offset="0.89" stopColor="#FA7A36" />
+            <stop offset="1" stopColor="#FF9B00" />
+          </linearGradient>
+          <linearGradient
+            id={`paint2_linear${randomId}`}
+            x1="8.90437"
+            y1="9.38625"
+            x2="20.9025"
+            y2="9.38625"
+            gradientUnits="userSpaceOnUse"
+          >
+            <stop stopColor="#BAFF8E" />
+            <stop offset="0.63" stopColor="#008EBB" />
+          </linearGradient>
+          <linearGradient
+            id={`paint3_linear${randomId}`}
+            x1="1220.59"
+            y1="418.3"
+            x2="608.328"
+            y2="1952.52"
+            gradientUnits="userSpaceOnUse"
+          >
+            <stop stopColor="#BAFF8E" />
+            <stop offset="0.63" stopColor="#008EBB" />
+          </linearGradient>
+        </defs>
+      </svg>
+    );
+  },
   [ICONS.REWARDS]: buildIcon(
     <g fill="none" fillRule="evenodd" strokeLinecap="round">
       <circle cx="12" cy="8" r="7" />
