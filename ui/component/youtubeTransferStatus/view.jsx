@@ -1,14 +1,14 @@
 // @flow
-import * as PAGES from 'constants/pages';
+import * as ICONS from 'constants/icons';
 import * as React from 'react';
+import classnames from 'classnames';
 import Button from 'component/button';
 import ClaimPreview from 'component/claimPreview';
 import Card from 'component/common/card';
 import { YOUTUBE_STATUSES } from 'lbryinc';
 import { buildURI } from 'lbry-redux';
-import I18nMessage from 'component/i18nMessage';
-
-const STATUS_URL = 'https://lbry.com/youtube/status/';
+import Spinner from 'component/spinner';
+import Icon from 'component/common/icon';
 
 type Props = {
   youtubeChannels: Array<any>,
@@ -17,7 +17,8 @@ type Props = {
   updateUser: () => void,
   checkYoutubeTransfer: () => void,
   videosImported: ?Array<number>, // [currentAmountImported, totalAmountToImport]
-  hideChannelLink: boolean,
+  alwaysShow: boolean,
+  addNewChannel?: boolean,
 };
 
 export default function YoutubeTransferStatus(props: Props) {
@@ -28,15 +29,21 @@ export default function YoutubeTransferStatus(props: Props) {
     videosImported,
     checkYoutubeTransfer,
     updateUser,
-    hideChannelLink = false,
+    alwaysShow = false,
+    addNewChannel,
   } = props;
-  const hasChannels = youtubeChannels && youtubeChannels.length;
+  const hasChannels = youtubeChannels && youtubeChannels.length > 0;
   const transferEnabled = youtubeChannels.some(status => status.transferable);
   const hasPendingTransfers = youtubeChannels.some(
-    status => status.transfer_state === YOUTUBE_STATUSES.PENDING_TRANSFER
+    status => status.transfer_state === YOUTUBE_STATUSES.YOUTUBE_SYNC_PENDING_TRANSFER
   );
   const isYoutubeTransferComplete =
-    hasChannels && youtubeChannels.every(channel => channel.transfer_state === YOUTUBE_STATUSES.COMPLETED_TRANSFER);
+    hasChannels &&
+    youtubeChannels.every(
+      channel =>
+        channel.transfer_state === YOUTUBE_STATUSES.YOUTUBE_SYNC_COMPLETED_TRANSFER ||
+        channel.sync_status === YOUTUBE_STATUSES.YOUTUBE_SYNC_ABANDONDED
+    );
 
   let total;
   let complete;
@@ -49,12 +56,14 @@ export default function YoutubeTransferStatus(props: Props) {
     const { transferable, transfer_state: transferState, sync_status: syncStatus } = channel;
     if (!transferable) {
       switch (transferState) {
-        case YOUTUBE_STATUSES.NOT_TRANSFERRED:
+        case YOUTUBE_STATUSES.YOUTUBE_SYNC_NOT_TRANSFERRED:
           return syncStatus[0].toUpperCase() + syncStatus.slice(1);
-        case YOUTUBE_STATUSES.PENDING_TRANSFER:
+        case YOUTUBE_STATUSES.YOUTUBE_SYNC_PENDING_TRANSFER:
           return __('Transfer in progress');
-        case YOUTUBE_STATUSES.COMPLETED_TRANSFER:
+        case YOUTUBE_STATUSES.YOUTUBE_SYNC_COMPLETED_TRANSFER:
           return __('Completed transfer');
+        case YOUTUBE_STATUSES.YOUTUBE_SYNC_ABANDONDED:
+          return __('This channel not eligible to by synced');
       }
     } else {
       return __('Ready to transfer');
@@ -74,28 +83,36 @@ export default function YoutubeTransferStatus(props: Props) {
       return () => {
         clearInterval(interval);
       };
+    } else {
+      updateUser();
     }
-  }, [hasPendingTransfers, checkYoutubeTransfer, updateUser]);
+  }, [hasPendingTransfers, checkYoutubeTransfer, updateUser, updateUser]);
 
   return (
-    hasChannels &&
-    !isYoutubeTransferComplete && (
+    (alwaysShow || (hasChannels && !isYoutubeTransferComplete)) && (
       <Card
-        title={youtubeChannels.length > 1 ? __('Your YouTube Channels') : __('Your YouTube Channel')}
+        title={youtubeChannels.length > 1 ? __('Your YouTube channels') : __('Your YouTube channel')}
         subtitle={
           <span>
             {hasPendingTransfers &&
               __('Your videos are currently being transferred. There is nothing else for you to do.')}
             {transferEnabled && !hasPendingTransfers && __('Your videos are ready to be transferred.')}
-            {!transferEnabled && !hasPendingTransfers && __('Please check back later.')}
+            {!transferEnabled && !hasPendingTransfers && __('Please check back later. This may take up to 1 week.')}
           </span>
         }
         body={
           <section>
             {youtubeChannels.map((channel, index) => {
-              const { lbry_channel_name: channelName, channel_claim_id: claimId, status_token: statusToken } = channel;
+              const { lbry_channel_name: channelName, channel_claim_id: claimId, sync_status: syncStatus } = channel;
               const url = buildURI({ channelName, channelClaimId: claimId });
               const transferState = getMessage(channel);
+              const isWaitingForSync =
+                syncStatus === YOUTUBE_STATUSES.YOUTUBE_SYNC_QUEUED ||
+                syncStatus === YOUTUBE_STATUSES.YOUTUBE_SYNC_PENDINGUPGRADE ||
+                syncStatus === YOUTUBE_STATUSES.YOUTUBE_SYNC_SYNCING;
+
+              const isNotEligible = syncStatus === YOUTUBE_STATUSES.YOUTUBE_SYNC_ABANDONDED;
+
               return (
                 <div key={url} className="card--inline">
                   {claimId ? (
@@ -106,26 +123,32 @@ export default function YoutubeTransferStatus(props: Props) {
                     />
                   ) : (
                     <div className="section--padded">
-                      <p>
-                        <I18nMessage
-                          tokens={{
-                            channelName,
-                          }}
-                        >
-                          %channelName% is not yet ready to be transferred. Please allow up to one week, though it is
-                          frequently faster.
-                        </I18nMessage>
-                      </p>
-                      <p className="help">
-                        <I18nMessage
-                          tokens={{
-                            statusLink: <Button button="link" href={STATUS_URL + statusToken} label={__('here')} />,
-                            faqLink: <Button button="link" label={__('FAQ')} href="https://lbry.com/faq/youtube" />,
-                          }}
-                        >
-                          You can check your status %statusLink%. This %faqLink% explains the program in more detail.
-                        </I18nMessage>
-                      </p>
+                      {isNotEligible ? (
+                        <div>{__('%channelName% is not eligible to be synced', { channelName })}</div>
+                      ) : (
+                        <div className="progress">
+                          <div className="progress__item">
+                            {__('Claim your handle %handle%', { handle: channelName })}
+                            <Icon icon={ICONS.COMPLETED} className="progress__complete-icon--completed" />
+                          </div>
+                          <div className="progress__item">
+                            {__('Agree to sync')}{' '}
+                            <Icon icon={ICONS.COMPLETED} className="progress__complete-icon--completed" />
+                          </div>
+                          <div className="progress__item">
+                            {__('Wait for your videos to be synced')}
+                            {isWaitingForSync ? (
+                              <Spinner type="small" />
+                            ) : (
+                              <Icon icon={ICONS.COMPLETED} className="progress__complete-icon--completed" />
+                            )}
+                          </div>
+                          <div className="progress__item">
+                            {__('Claim your channel')}
+                            <Icon icon={ICONS.NOT_COMPLETED} className={classnames('progress__complete-icon')} />
+                          </div>
+                        </div>
+                      )}
                     </div>
                   )}
                 </div>
@@ -137,23 +160,30 @@ export default function YoutubeTransferStatus(props: Props) {
           </section>
         }
         actions={
-          transferEnabled ? (
-            <div className="card__actions">
+          <>
+            <div className="section__actions">
               <Button
                 button="primary"
-                disabled={youtubeImportPending}
+                disabled={youtubeImportPending || !transferEnabled}
                 onClick={claimChannels}
                 label={youtubeChannels.length > 1 ? __('Claim Channels') : __('Claim Channel')}
               />
-              <Button button="link" label={__('Learn more')} href="https://lbry.com/faq/youtube#transfer" />
+              {addNewChannel ? (
+                <Button button="link" label={__('Add Another Channel')} onClick={addNewChannel} />
+              ) : (
+                <Button button="link" label={__('Learn More')} href="https://lbry.com/faq/youtube#transfer" />
+              )}
             </div>
-          ) : !hideChannelLink ? (
-            <div className="card__actions">
-              <Button button="primary" navigate={`/$/${PAGES.CHANNELS}`} label={__('View your channels')} />
-            </div>
-          ) : (
-            false
-          )
+
+            <p className="help">
+              {youtubeChannels.length > 1
+                ? __('You will be able to claim your channels once they finish syncing.')
+                : __('You will be able to claim your channel once it has finished syncing.')}{' '}
+              {addNewChannel && (
+                <Button button="link" label={__('Learn More')} href="https://lbry.com/faq/youtube#transfer" />
+              )}
+            </p>
+          </>
         }
       />
     )

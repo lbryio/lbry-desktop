@@ -388,7 +388,10 @@ fieldset-group {
 }
 
 .form-field--short {
-  width: 25em;
+  width: 100%;
+  @media (min-width: $breakpoint-small) {
+    width: 25em;
+  }
 }
 
 .form-field--price-amount {

@@ -186,3 +186,9 @@
   justify-content: center;
   width: 100%;
 }
+
+.header__auth-title {
+  @media (min-width: $breakpoint-small) {
+    font-size: var(--font-large);
+  }
+}
