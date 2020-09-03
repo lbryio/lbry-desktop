@@ -33,7 +33,7 @@ class InvitePage extends React.PureComponent<Props> {
       <Page>
         {!authenticated ? (
           <RewardAuthIntro
-            title={__('Log in to %SITE_NAME% to Earn Rewards From Inviting Your Friends', { SITE_NAME })}
+            title={__('Log in to %SITE_NAME% to earn rewards From Inviting Your Friends', { SITE_NAME })}
           />
         ) : (
           <React.Fragment>
