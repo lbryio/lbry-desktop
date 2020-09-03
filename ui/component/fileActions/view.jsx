@@ -1,5 +1,4 @@
 // @flow
-import type { Node } from 'react';
 import { SIMPLE_SITE } from 'config';
 import * as PAGES from 'constants/pages';
 import * as CS from 'constants/claim_search';
@@ -48,80 +47,89 @@ function FileActions(props: Props) {
     editUri = buildURI(uriObject);
   }
 
-  const ActionWrapper = (props: { children: Node }) =>
-    isMobile ? (
-      <React.Fragment>{props.children}</React.Fragment>
-    ) : (
-      <div className="section__actions section__actions--no-margin">{props.children}</div>
-    );
+  const lhsSection = (
+    <>
+      <Button
+        button="alt"
+        icon={ICONS.SHARE}
+        label={__('Share')}
+        onClick={() => openModal(MODALS.SOCIAL_SHARE, { uri, webShareable })}
+      />
 
-  return (
-    <div className="media__actions">
-      <ActionWrapper>
-        <Button
-          button="alt"
-          icon={ICONS.SHARE}
-          label={__('Share')}
-          onClick={() => openModal(MODALS.SOCIAL_SHARE, { uri, webShareable })}
-        />
-
-        {!SIMPLE_SITE && (
-          <div className="button-group">
+      {!SIMPLE_SITE && (
+        <div className="button-group">
+          <Button
+            button="alt"
+            icon={ICONS.REPOST}
+            label={__('Repost')}
+            requiresAuth={IS_WEB}
+            onClick={() => openModal(MODALS.REPOST, { uri })}
+          />
+          {claim.meta.reposted > 0 && (
             <Button
               button="alt"
-              icon={ICONS.REPOST}
-              label={__('Repost')}
+              label={claim.meta.reposted}
               requiresAuth={IS_WEB}
-              onClick={() => openModal(MODALS.REPOST, { uri })}
+              navigate={`/$/${PAGES.DISCOVER}?${CS.REPOSTED_URI_KEY}=${encodeURIComponent(uri)}`}
             />
-            {claim.meta.reposted > 0 && (
-              <Button
-                button="alt"
-                label={claim.meta.reposted}
-                requiresAuth={IS_WEB}
-                navigate={`/$/${PAGES.DISCOVER}?${CS.REPOSTED_URI_KEY}=${encodeURIComponent(uri)}`}
-              />
-            )}
-          </div>
-        )}
-        <ClaimSupportButton uri={uri} />
-      </ActionWrapper>
-
-      <ActionWrapper>
-        {!SIMPLE_SITE && <FileDownloadLink uri={uri} />}
-
-        {claimIsMine && (
-          <Button
-            button="alt"
-            icon={ICONS.EDIT}
-            label={__('Edit')}
-            navigate="/$/upload"
-            onClick={() => {
-              prepareEdit(claim, editUri, fileInfo);
-            }}
-          />
-        )}
-
-        {showDelete && (
-          <Button
-            title={__('Remove from your library')}
-            button="alt"
-            icon={ICONS.DELETE}
-            description={__('Delete')}
-            onClick={() => openModal(MODALS.CONFIRM_FILE_REMOVE, { uri })}
-          />
-        )}
-        {!claimIsMine && !SIMPLE_SITE && (
-          <Button
-            title={__('Report content')}
-            button="alt"
-            icon={ICONS.REPORT}
-            href={`https://lbry.com/dmca/${claimId}`}
-          />
-        )}
-      </ActionWrapper>
-    </div>
+          )}
+        </div>
+      )}
+      <ClaimSupportButton uri={uri} />
+    </>
   );
+
+  const rhsSection = (
+    <>
+      {!SIMPLE_SITE && <FileDownloadLink uri={uri} />}
+
+      {claimIsMine && (
+        <Button
+          button="alt"
+          icon={ICONS.EDIT}
+          label={__('Edit')}
+          navigate="/$/upload"
+          onClick={() => {
+            prepareEdit(claim, editUri, fileInfo);
+          }}
+        />
+      )}
+
+      {showDelete && (
+        <Button
+          title={__('Remove from your library')}
+          button="alt"
+          icon={ICONS.DELETE}
+          description={__('Delete')}
+          onClick={() => openModal(MODALS.CONFIRM_FILE_REMOVE, { uri })}
+        />
+      )}
+      {!claimIsMine && !SIMPLE_SITE && (
+        <Button
+          title={__('Report content')}
+          button="alt"
+          icon={ICONS.REPORT}
+          href={`https://lbry.com/dmca/${claimId}`}
+        />
+      )}
+    </>
+  );
+
+  if (isMobile) {
+    return (
+      <div className="media__actions">
+        {lhsSection}
+        {rhsSection}
+      </div>
+    );
+  } else {
+    return (
+      <div className="media__actions">
+        <div className="section__actions section__actions--no-margin">{lhsSection}</div>
+        <div className="section__actions section__actions--no-margin">{rhsSection}</div>
+      </div>
+    );
+  }
 }
 
 export default FileActions;

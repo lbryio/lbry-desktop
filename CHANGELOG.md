@@ -26,6 +26,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Fix related + search results loading slowly ([#4657](https://github.com/lbryio/lbry-desktop/pull/4657))
 - Fix partially untranslated text in the Upgrade Modal _community pr!_ ([#4722](https://github.com/lbryio/lbry-desktop/pull/4722))
 - Fix floating player being paused after dragging _community pr!_ ([#4710](https://github.com/lbryio/lbry-desktop/pull/4710))
+- Web: Fix 'Download' not triggering until second attempt _community pr!_ ([#4721](https://github.com/lbryio/lbry-desktop/pull/4721))
 
 ## [0.47.1] - [2020-07-23]
 
