@@ -49,23 +49,19 @@ export const icons = {
       />
       <path
         d="M14.6269 4.47001L11.8519 2.16751L3.0975 9.66188V13.7775L3.36938 14.0269L9.19125 9.06376L14.6269 4.47001Z"
-        // fill="url(#paint0_linear)"
-        fill="white"
+        fill="url(#paint0_linear)"
       />
       <path
         d="M13.3444 13.1381L9.19126 9.06375L3.36938 14.0269L7.67063 17.9587L13.3444 13.1381Z"
-        // fill="url(#paint1_linear)"
-        fill="white"
+        fill="url(#paint1_linear)"
       />
       <path
         d="M20.61 9.43125L15.9244 5.54437L11.6512 9.15562L15.8025 13.2262L20.6062 9.43312L20.61 9.43125Z"
-        //    fill="url(#paint2_linear)"
-        fill="white"
+        fill="url(#paint2_linear)"
       />
       <path
         d="M20.6062 9.43315L15.8025 13.2263L8.90436 19.0875L11.8631 21.7913L20.9025 14.1375V9.67502L20.61 9.43127L20.6062 9.43315Z"
-        //    fill="url(#paint3_linear)"
-        fill="white"
+        fill="url(#paint3_linear)"
       />
       <defs>
         <linearGradient
