@@ -46,6 +46,7 @@ import ChannelNew from 'page/channelNew';
 import BuyPage from 'page/buy';
 import NotificationsPage from 'page/notifications';
 import SignInWalletPasswordPage from 'page/signInWalletPassword';
+import YoutubeSyncPage from 'page/youtubeSync';
 import { LINKED_COMMENT_QUERY_PARAM } from 'constants/comment';
 import { parseURI } from 'lbry-redux';
 import { SITE_TITLE, WELCOME_VERSION } from 'config';
@@ -190,6 +191,7 @@ function AppRouter(props: Props) {
       <Route path={`/$/${PAGES.AUTH}`} exact component={SignUpPage} />
       <Route path={`/$/${PAGES.AUTH}/*`} exact component={SignUpPage} />
       <Route path={`/$/${PAGES.WELCOME}`} exact component={Welcome} />
+      <Route path={`/$/${PAGES.YOUTUBE_SYNC}`} exact component={YoutubeSyncPage} />
 
       <Route path={`/$/${PAGES.HELP}`} exact component={HelpPage} />
       {/* @if TARGET='app' */}

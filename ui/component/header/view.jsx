@@ -177,7 +177,7 @@ const Header = (props: Props) => {
               label={(backLabel && backLabel) || __('Cancel')}
               icon={ICONS.ARROW_LEFT}
             />
-            {backTitle && <h1 className={'card__title'}>{isMobile ? simpleBackTitle || backTitle : backTitle}</h1>}
+            {backTitle && <h1 className="header__auth-title">{isMobile ? simpleBackTitle || backTitle : backTitle}</h1>}
             <Button
               aria-label={__('Your wallet')}
               navigate={`/$/${PAGES.WALLET}`}
