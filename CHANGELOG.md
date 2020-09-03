@@ -25,6 +25,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Tip Modal: Don't do final submit when the intention is to create New Channel _community pr!_ ([#4629](https://github.com/lbryio/lbry-desktop/pull/4629))
 - Fix related + search results loading slowly ([#4657](https://github.com/lbryio/lbry-desktop/pull/4657))
 - Fix floating player being paused after dragging _community pr!_ ([#4710](https://github.com/lbryio/lbry-desktop/pull/4710))
+- Web: Fix 'Download' not triggering until second attempt _community pr!_ ([#4721](https://github.com/lbryio/lbry-desktop/pull/4721))
 
 ## [0.47.1] - [2020-07-23]
 
