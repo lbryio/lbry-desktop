@@ -1,10 +1,12 @@
 // @flow
+import * as PAGES from 'constants/pages';
 import React, { useState } from 'react';
 import { isNameValid } from 'lbry-redux';
 import Button from 'component/button';
 import { Form, FormField } from 'component/common/form';
 import { INVALID_NAME_ERROR } from 'constants/claim';
 import Card from 'component/common/card';
+import I18nMessage from 'component/i18nMessage';
 export const DEFAULT_BID_FOR_FIRST_CHANNEL = 0.01;
 
 type Props = {
@@ -77,6 +79,21 @@ function UserFirstChannel(props: Props) {
                 disabled={nameError || !channel || creatingChannel || claimingReward}
                 label={creatingChannel || claimingReward ? __('Creating') : __('Create')}
               />
+            </div>
+            <div className="help--card-actions">
+              <I18nMessage
+                tokens={{
+                  sync_channel: (
+                    <Button
+                      button="link"
+                      label={__('Sync it and skip this step')}
+                      navigate={`/$/${PAGES.YOUTUBE_SYNC}`}
+                    />
+                  ),
+                }}
+              >
+                Have a YouTube channel? %sync_channel%.
+              </I18nMessage>
             </div>
           </Form>
         }

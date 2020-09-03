@@ -19,7 +19,7 @@ function RewardAuthIntro(props: Props) {
 
   return (
     <Card
-      title={title || __('Log in to %SITE_NAME% to Earn Rewards', { SITE_NAME })}
+      title={title || __('Log in to %SITE_NAME% to earn rewards', { SITE_NAME })}
       subtitle={
         <I18nMessage
           tokens={{
