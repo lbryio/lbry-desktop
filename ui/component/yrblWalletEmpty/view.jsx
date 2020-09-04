@@ -32,7 +32,7 @@ export default function YrblHelp(props: Props) {
             </p>
             <p>
               <I18nMessage tokens={{ lbc: <LbcSymbol /> }}>
-                Never fear though, there are tons of ways to earn %lbc%! You can earn or purchase %lbc%, or you can have
+                Never fear though, there are tons of ways to earn %lbc%. You can earn or purchase %lbc%, or you can have
                 your friends send you some.
               </I18nMessage>
             </p>

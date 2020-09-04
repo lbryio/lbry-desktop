@@ -101,7 +101,7 @@ class WalletSend extends React.PureComponent<Props> {
                         (!!values.amount && touched.amount && errors.amount) ||
                         (parseFloat(values.amount) === balance &&
                           __('Decrease amount to account for transaction fee')) ||
-                        (parseFloat(values.amount) > balance && __('Not enough credits'))}
+                        (parseFloat(values.amount) > balance && __('Not enough Credits'))}
                     </span>
                   )}
                 </div>

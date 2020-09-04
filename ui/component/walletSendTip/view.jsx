@@ -90,7 +90,7 @@ function WalletSendTip(props: Props) {
     } else if (tipAmount === balance) {
       tipError = __('Please decrease the amount to account for transaction fees');
     } else if (tipAmount > balance) {
-      tipError = __('Not enough credits');
+      tipError = __('Not enough Credits');
     }
     setTipError(tipError);
   }, [tipAmount, balance, setTipError]);

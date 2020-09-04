@@ -238,7 +238,7 @@ function ChannelForm(props: Props) {
         <Tabs>
           <TabList className="tabs__list--channel-page">
             <Tab>{__('General')}</Tab>
-            <Tab>{__('LBRY Credit Details')}</Tab>
+            <Tab>{__('Credit Details')}</Tab>
             <Tab>{__('Tags')}</Tab>
             <Tab>{__('Other')}</Tab>
           </TabList>
