@@ -7,7 +7,7 @@ import {
   selectUser,
 } from 'redux/selectors/user';
 import { DAEMON_SETTINGS, SETTINGS } from 'lbry-redux';
-import { doSetClientSetting, doSetDaemonSetting } from 'redux/actions/settings';
+import { doSetSyncPref, doSetDaemonSetting } from 'redux/actions/settings';
 import { makeSelectClientSetting, selectDaemonSettings } from 'redux/selectors/settings';
 import UserEmailNew from './view';
 
@@ -21,7 +21,7 @@ const select = state => ({
 });
 
 const perform = dispatch => ({
-  setSync: value => dispatch(doSetClientSetting(SETTINGS.ENABLE_SYNC, value)),
+  setSync: value => dispatch(doSetSyncPref(value)),
   setShareDiagnosticData: shouldShareData =>
     dispatch(doSetDaemonSetting(DAEMON_SETTINGS.SHARE_USAGE_DATA, shouldShareData)),
   doSignUp: (email, password) => dispatch(doUserSignUp(email, password)),

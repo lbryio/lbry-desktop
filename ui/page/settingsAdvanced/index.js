@@ -6,7 +6,8 @@ import {
   doClearDaemonSetting,
   doSetClientSetting,
   doFindFFmpeg,
-  doSyncClientSettings,
+  doEnterSettingsPage,
+  doExitSettingsPage,
 } from 'redux/actions/settings';
 import {
   makeSelectClientSetting,
@@ -34,7 +35,6 @@ const select = state => ({
 
 const perform = dispatch => ({
   setDaemonSetting: (key, value) => dispatch(doSetDaemonSetting(key, value)),
-  syncSettings: () => dispatch(doSyncClientSettings()),
   clearDaemonSetting: key => dispatch(doClearDaemonSetting(key)),
   clearCache: () => dispatch(doClearCache()),
   setClientSetting: (key, value) => dispatch(doSetClientSetting(key, value)),
@@ -43,6 +43,8 @@ const perform = dispatch => ({
   updateWalletStatus: () => dispatch(doWalletStatus()),
   confirmForgetPassword: modalProps => dispatch(doNotifyForgetPassword(modalProps)),
   findFFmpeg: () => dispatch(doFindFFmpeg()),
+  enterSettings: () => dispatch(doEnterSettingsPage()),
+  exitSettings: () => dispatch(doExitSettingsPage()),
 });
 
 export default connect(select, perform)(SettingsPage);

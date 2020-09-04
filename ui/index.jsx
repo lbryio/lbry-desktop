@@ -117,30 +117,10 @@ doAuthTokenRefresh();
 // We keep a local variable for authToken because `ipcRenderer.send` does not
 // contain a response, so there is no way to know when it's been set
 let authToken;
-Lbryio.setOverride(
-  'setAuthToken',
-  status =>
-    new Promise(resolve => {
-      Lbryio.call(
-        'user',
-        'new',
-        {
-          auth_token: '',
-          language: DEFAULT_LANGUAGE,
-          app_id: status.installation_id,
-        },
-        'post'
-      ).then(response => {
-        if (!response.auth_token) {
-          throw new Error(__('auth_token is missing from response'));
-        }
-
-        authToken = response.auth_token;
-        setAuthToken(authToken);
-        resolve(authToken);
-      });
-    })
-);
+Lbryio.setOverride('setAuthToken', authToken => {
+  setAuthToken(authToken);
+  return authToken;
+});
 
 Lbryio.setOverride(
   'getAuthToken',

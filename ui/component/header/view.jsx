@@ -37,7 +37,7 @@ type Props = {
   },
   currentTheme: string,
   automaticDarkModeEnabled: boolean,
-  setClientSetting: (string, boolean | string) => void,
+  setClientSetting: (string, boolean | string, ?boolean) => void,
   hideBalance: boolean,
   email: ?string,
   authenticated: boolean,
@@ -56,7 +56,6 @@ type Props = {
   clearEmailEntry: () => void,
   clearPasswordEntry: () => void,
   hasNavigated: boolean,
-  syncSettings: () => void,
   sidebarOpen: boolean,
   setSidebarOpen: boolean => void,
   isAbsoluteSideNavHidden: boolean,
@@ -80,7 +79,6 @@ const Header = (props: Props) => {
     clearPasswordEntry,
     emailToVerify,
     backout,
-    syncSettings,
     sidebarOpen,
     setSidebarOpen,
     isAbsoluteSideNavHidden,
@@ -149,11 +147,10 @@ const Header = (props: Props) => {
     }
 
     if (currentTheme === 'dark') {
-      setClientSetting(SETTINGS.THEME, 'light');
+      setClientSetting(SETTINGS.THEME, 'light', true);
     } else {
-      setClientSetting(SETTINGS.THEME, 'dark');
+      setClientSetting(SETTINGS.THEME, 'dark', true);
     }
-    syncSettings();
   }
 
   function getWalletTitle() {

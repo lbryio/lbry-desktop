@@ -5,6 +5,9 @@ import analytics from 'analytics';
 import SUPPORTED_LANGUAGES from 'constants/supported_languages';
 import { launcher } from 'util/autoLaunch';
 import { makeSelectClientSetting } from 'redux/selectors/settings';
+import { doGetSyncDesktop, doSyncUnsubscribe } from 'redux/actions/syncwrapper';
+import { doGetAndPopulatePreferences, doSetSyncLock } from 'redux/actions/app';
+
 const { DEFAULT_LANGUAGE } = require('config');
 const { SDK_SYNC_KEYS } = SHARED_PREFERENCES;
 
@@ -119,7 +122,7 @@ export function doSaveCustomWalletServers(servers) {
   };
 }
 
-export function doSetClientSetting(key, value) {
+export function doSetClientSetting(key, value, pushPrefs) {
   return dispatch => {
     dispatch({
       type: ACTIONS.CLIENT_SETTING_CHANGED,
@@ -127,6 +130,30 @@ export function doSetClientSetting(key, value) {
         key,
         value,
       },
+    });
+
+    if (pushPrefs) {
+      dispatch(doPushSettingsToPrefs());
+    }
+  };
+}
+
+export function doUpdateSyncPref() {
+  return (dispatch, getState) => {
+    const { settings } = getState();
+    const { syncEnabledPref } = settings || {};
+    if (syncEnabledPref !== undefined) {
+      dispatch(doSetClientSetting(SETTINGS.ENABLE_SYNC, syncEnabledPref, true));
+      dispatch(doSetSyncPref(undefined));
+    }
+  };
+}
+
+export function doSetSyncPref(isEnabled) {
+  return dispatch => {
+    dispatch({
+      type: LOCAL_ACTIONS.SYNC_PREFERENCE_CHANGED,
+      data: isEnabled,
     });
   };
 }
@@ -167,15 +194,36 @@ export function doSetDarkTime(value, options) {
   };
 }
 
-export function doSyncClientSettings() {
-  return (dispatch, getState) => {
-    const state = getState();
-    const syncEnabled = makeSelectClientSetting(SETTINGS.ENABLE_SYNC)(state);
-    if (syncEnabled) {
+export function doPushSettingsToPrefs() {
+  return dispatch => {
+    return new Promise((resolve, reject) => {
       dispatch({
         type: LOCAL_ACTIONS.SYNC_CLIENT_SETTINGS,
       });
+      resolve();
+    });
+  };
+}
+
+export function doEnterSettingsPage() {
+  return async (dispatch, getState) => {
+    const state = getState();
+    const syncEnabled = makeSelectClientSetting(SETTINGS.ENABLE_SYNC)(state);
+    const hasVerifiedEmail = state.user && state.user.user && state.user.user.has_verified_email;
+    dispatch(doSyncUnsubscribe());
+    if (syncEnabled && hasVerifiedEmail) {
+      await dispatch(doGetSyncDesktop());
+    } else {
+      await dispatch(doGetAndPopulatePreferences());
     }
+    dispatch(doSetSyncLock(true));
+  };
+}
+
+export function doExitSettingsPage() {
+  return (dispatch, getState) => {
+    dispatch(doSetSyncLock(false));
+    dispatch(doPushSettingsToPrefs());
   };
 }
 

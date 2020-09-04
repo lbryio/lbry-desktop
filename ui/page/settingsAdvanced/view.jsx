@@ -55,6 +55,8 @@ type Props = {
   language?: string,
   syncEnabled: boolean,
   syncSettings: () => void,
+  enterSettings: () => void,
+  exitSettings: () => void,
 };
 
 type State = {
@@ -81,7 +83,7 @@ class SettingsPage extends React.PureComponent<Props, State> {
   }
 
   componentDidMount() {
-    const { isAuthenticated, ffmpegStatus, daemonSettings, findFFmpeg } = this.props;
+    const { isAuthenticated, ffmpegStatus, daemonSettings, findFFmpeg, enterSettings } = this.props;
 
     // @if TARGET='app'
     const { available } = ffmpegStatus;
@@ -102,6 +104,12 @@ class SettingsPage extends React.PureComponent<Props, State> {
         }
       });
     }
+    enterSettings();
+  }
+
+  componentWillUnmount() {
+    const { exitSettings } = this.props;
+    exitSettings();
   }
 
   onFFmpegFolder(path: string) {

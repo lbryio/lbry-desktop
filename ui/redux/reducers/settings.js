@@ -24,6 +24,7 @@ const defaultState = {
   findingFFmpeg: false,
   loadedLanguages: [...Object.keys(window.i18n_messages), 'en'] || ['en'],
   customWalletServers: [],
+  syncEnabledPref: undefined, // set this during sign in, copy it to clientSettings immediately after prefGet after signedin but before sync
   sharedPreferences: {},
   daemonSettings: {},
   daemonStatus: { ffmpeg_status: {} },
@@ -144,23 +145,18 @@ reducers[LBRY_REDUX_ACTIONS.SHARED_PREFERENCE_SET] = (state, action) => {
   });
 };
 
-reducers[ACTIONS.CLIENT_SETTING_CHANGED] = (state, action) => {
-  const { key, value } = action.data;
-  const clientSettings = Object.assign({}, state.clientSettings);
-
-  clientSettings[key] = value;
-
-  return Object.assign({}, state, {
-    clientSettings,
-  });
-};
-
 reducers[ACTIONS.SYNC_CLIENT_SETTINGS] = state => {
   const { clientSettings } = state;
   const sharedPreferences = Object.assign({}, state.sharedPreferences);
   const selectedClientSettings = getSubsetFromKeysArray(clientSettings, clientSyncKeys);
   const newSharedPreferences = { ...sharedPreferences, ...selectedClientSettings };
   return Object.assign({}, state, { sharedPreferences: newSharedPreferences });
+};
+
+reducers[ACTIONS.SYNC_PREFERENCE_CHANGED] = (state, action) => {
+  return Object.assign({}, state, {
+    syncEnabledPref: action.data,
+  });
 };
 
 reducers[LBRY_REDUX_ACTIONS.USER_STATE_POPULATE] = (state, action) => {

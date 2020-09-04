@@ -8,7 +8,7 @@ import usePersistedState from 'effects/use-persisted-state';
 import I18nMessage from 'component/i18nMessage';
 
 type Props = {
-  getSync: (?string, (any, boolean) => void) => void,
+  getSync: ((any, boolean) => void, ?string) => void,
   getSyncIsPending: boolean,
   email: string,
   passwordError: boolean,
@@ -22,13 +22,13 @@ function SyncPassword(props: Props) {
   const [rememberPassword, setRememberPassword] = usePersistedState(true);
 
   function handleSubmit() {
-    getSync(password, (error, hasDataChanged) => {
+    getSync((error, hasDataChanged) => {
       handleSyncComplete(error, hasDataChanged);
 
       if (!error) {
         setSavedPassword(password, rememberPassword);
       }
-    });
+    }, password);
   }
 
   return (

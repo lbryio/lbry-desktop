@@ -80,3 +80,5 @@ export const selectAllowAnalytics = createSelector(selectState, state => state.a
 export const selectScrollStartingPosition = createSelector(selectState, state => state.currentScroll);
 
 export const selectIsPasswordSaved = createSelector(selectState, state => state.isPasswordSaved);
+
+export const selectSyncIsLocked = createSelector(selectState, state => state.syncLocked);
