@@ -660,3 +660,9 @@ export function doSyncWithPreferences() {
     });
   };
 }
+
+export function doToggleInterestedInYoutubeSync() {
+  return {
+    type: ACTIONS.TOGGLE_YOUTUBE_SYNC_INTEREST,
+  };
+}

@@ -42,6 +42,7 @@ export type AppState = {
   welcomeVersion: number,
   allowAnalytics: boolean,
   hasNavigated: boolean,
+  interestedInYoutubeSync: boolean,
 };
 
 const defaultState: AppState = {
@@ -76,6 +77,7 @@ const defaultState: AppState = {
   welcomeVersion: 0.0,
   allowAnalytics: false,
   hasNavigated: false,
+  interestedInYoutubeSync: false,
 };
 
 // @@router comes from react-router
@@ -281,6 +283,13 @@ reducers[ACTIONS.TOGGLE_SEARCH_EXPANDED] = state =>
   Object.assign({}, state, {
     searchOptionsExpanded: !state.searchOptionsExpanded,
   });
+
+reducers[ACTIONS.TOGGLE_YOUTUBE_SYNC_INTEREST] = (state, action) => {
+  return {
+    ...state,
+    interestedInYoutubeSync: !state.interestedInYoutubeSync,
+  };
+};
 
 reducers[LBRY_REDUX_ACTIONS.USER_STATE_POPULATE] = (state, action) => {
   const { welcomeVersion, allowAnalytics } = action.data;
