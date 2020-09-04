@@ -2,12 +2,13 @@
 import * as PAGES from 'constants/pages';
 import React from 'react';
 import classnames from 'classnames';
-import { withRouter } from 'react-router';
+import { useHistory } from 'react-router';
 import UserEmailNew from 'component/userEmailNew';
 import UserEmailVerify from 'component/userEmailVerify';
 import UserFirstChannel from 'component/userFirstChannel';
 import UserChannelFollowIntro from 'component/userChannelFollowIntro';
 import UserTagFollowIntro from 'component/userTagFollowIntro';
+import YoutubeSync from 'page/youtubeSync';
 import { DEFAULT_BID_FOR_FIRST_CHANNEL } from 'component/userFirstChannel/view';
 import { YOUTUBE_STATUSES } from 'lbryinc';
 import { SETTINGS } from 'lbry-redux';
@@ -17,6 +18,10 @@ import Spinner from 'component/spinner';
 import YoutubeTransferStatus from 'component/youtubeTransferStatus';
 import useFetched from 'effects/use-fetched';
 import Confetti from 'react-confetti';
+
+const REDIRECT_PARAM = 'redirect';
+const REDIRECT_IMMEDIATELY_PARAM = 'immediate';
+const STEP_PARAM = 'step';
 
 type Props = {
   user: ?User,
@@ -29,8 +34,6 @@ type Props = {
   claimNewUserReward: () => void,
   fetchUser: () => void,
   claimedRewards: Array<Reward>,
-  history: { replace: string => void },
-  location: { search: string },
   youtubeChannels: Array<any>,
   syncEnabled: boolean,
   hasSynced: boolean,
@@ -41,6 +44,8 @@ type Props = {
   followingAcknowledged: boolean,
   tagsAcknowledged: boolean,
   rewardsAcknowledged: boolean,
+  interestedInYoutubeSync: boolean,
+  doToggleInterestedInYoutubeSync: () => void,
 };
 
 function UserSignUp(props: Props) {
@@ -53,8 +58,6 @@ function UserSignUp(props: Props) {
     claimConfirmEmailReward,
     claimNewUserReward,
     balance,
-    history,
-    location,
     fetchUser,
     youtubeChannels,
     syncEnabled,
@@ -67,12 +70,17 @@ function UserSignUp(props: Props) {
     rewardsAcknowledged,
     syncSettings,
     setClientSetting,
+    interestedInYoutubeSync,
+    doToggleInterestedInYoutubeSync,
   } = props;
-  const { search } = location;
+  const {
+    location: { search, pathname },
+    replace,
+  } = useHistory();
   const urlParams = new URLSearchParams(search);
-  const redirect = urlParams.get('redirect');
-  const step = urlParams.get('step');
-  const shouldRedirectImmediately = urlParams.get('immediate');
+  const redirect = urlParams.get(REDIRECT_PARAM);
+  const step = urlParams.get(STEP_PARAM);
+  const shouldRedirectImmediately = urlParams.get(REDIRECT_IMMEDIATELY_PARAM);
   const [initialSignInStep, setInitialSignInStep] = React.useState();
   const hasVerifiedEmail = user && user.has_verified_email;
   const rewardsApproved = user && user.is_reward_approved;
@@ -97,11 +105,12 @@ function UserSignUp(props: Props) {
   const showSyncPassword = syncEnabled && getSyncError;
   const showChannelCreation =
     hasVerifiedEmail &&
-    balance !== undefined &&
-    balance !== null &&
-    balance > DEFAULT_BID_FOR_FIRST_CHANNEL &&
-    channelCount === 0 &&
-    !hasYoutubeChannels;
+    ((balance !== undefined &&
+      balance !== null &&
+      balance > DEFAULT_BID_FOR_FIRST_CHANNEL &&
+      channelCount === 0 &&
+      !hasYoutubeChannels) ||
+      interestedInYoutubeSync);
   const showYoutubeTransfer = hasVerifiedEmail && hasYoutubeChannels && !isYoutubeTransferComplete;
   const showFollowIntro = step === 'channels' || (hasVerifiedEmail && !followingAcknowledged);
   const showTagsIntro = step === 'tags' || (hasVerifiedEmail && !tagsAcknowledged);
@@ -150,7 +159,12 @@ function UserSignUp(props: Props) {
   // Loop through this list from the end, until it finds a matching component
   // If it never finds one, assume the user has completed every step and redirect them
   const SIGN_IN_FLOW = [
-    showEmail && <UserEmailNew />,
+    showEmail && (
+      <UserEmailNew
+        interestedInYoutubSync={interestedInYoutubeSync}
+        doToggleInterestedInYoutubeSync={doToggleInterestedInYoutubeSync}
+      />
+    ),
     showEmailVerification && <UserEmailVerify />,
     showUserVerification && (
       <UserVerify
@@ -159,47 +173,48 @@ function UserSignUp(props: Props) {
         }}
       />
     ),
-    showChannelCreation && <UserFirstChannel />,
+    showChannelCreation &&
+      (interestedInYoutubeSync ? (
+        <YoutubeSync inSignUpFlow />
+      ) : (
+        <UserFirstChannel doToggleInterestedInYoutubeSync={doToggleInterestedInYoutubeSync} />
+      )),
     showFollowIntro && (
       <UserChannelFollowIntro
         onContinue={() => {
-          let url = `/$/${PAGES.AUTH}?reset_scroll=1`;
-          if (redirect) {
-            url += `&redirect=${redirect}`;
-          }
-          if (shouldRedirectImmediately) {
-            url += `&immediate=true`;
+          if (urlParams.get('reset_scroll')) {
+            urlParams.delete('reset_scroll');
+            urlParams.append('reset_scroll', '2');
           }
 
-          history.replace(url);
+          urlParams.delete(STEP_PARAM);
+
           setSettingAndSync(SETTINGS.FOLLOWING_ACKNOWLEDGED, true);
+          replace(`${pathname}?${urlParams.toString()}`);
         }}
         onBack={() => {
-          let url = `/$/${PAGES.AUTH}?reset_scroll=1&step=tags`;
-          if (redirect) {
-            url += `&redirect=${redirect}`;
-          }
-          if (shouldRedirectImmediately) {
-            url += `&immediate=true`;
+          if (urlParams.get('reset_scroll')) {
+            urlParams.delete('reset_scroll');
+            urlParams.append('reset_scroll', '3');
           }
 
-          history.replace(url);
           setSettingAndSync(SETTINGS.FOLLOWING_ACKNOWLEDGED, false);
+          replace(`${pathname}?${urlParams.toString()}`);
         }}
       />
     ),
     showTagsIntro && (
       <UserTagFollowIntro
         onContinue={() => {
-          let url = `/$/${PAGES.AUTH}?reset_scroll=1&step=channels`;
+          let url = `/$/${PAGES.AUTH}?reset_scroll=1&${STEP_PARAM}=channels`;
           if (redirect) {
-            url += `&redirect=${redirect}`;
+            url += `&${REDIRECT_PARAM}=${redirect}`;
           }
           if (shouldRedirectImmediately) {
-            url += `&immediate=true`;
+            url += `&${REDIRECT_IMMEDIATELY_PARAM}=true`;
           }
 
-          history.replace(url);
+          replace(url);
           setSettingAndSync(SETTINGS.TAGS_ACKNOWLEDGED, true);
         }}
       />
@@ -228,7 +243,7 @@ function UserSignUp(props: Props) {
           if (!initialSignInStep) {
             setInitialSignInStep(i);
           } else if (i !== initialSignInStep && i !== SIGN_IN_FLOW.length - 1) {
-            history.replace(redirect);
+            replace(redirect);
           }
         }
 
@@ -250,7 +265,7 @@ function UserSignUp(props: Props) {
   }, [componentToRender, claimNewUserReward]);
 
   if (!componentToRender) {
-    history.replace(redirect || '/');
+    replace(redirect || '/');
   }
 
   return (
@@ -258,4 +273,4 @@ function UserSignUp(props: Props) {
   );
 }
 
-export default withRouter(UserSignUp);
+export default UserSignUp;
