@@ -135,7 +135,7 @@ export default function FileRenderInitiator(props: Props) {
         <Nag
           type="helpful"
           inline
-          message={__('You need more credits to purchase this.')}
+          message={__('You need more Credits to purchase this.')}
           actionText={__('Open Rewards')}
           onClick={() => history.push(`/$/${PAGES.REWARDS}`)}
         />

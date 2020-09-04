@@ -77,7 +77,7 @@ export default function BuyPage(props: Props) {
     }
   }, [url, setUrl, receiveAddress, email]);
 
-  const title = __('Buy credits');
+  const title = __('Buy Credits');
   const subtitle = (
     <I18nMessage
       tokens={{
