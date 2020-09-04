@@ -5,25 +5,30 @@ import * as PAGES from 'constants/pages';
 import * as ICONS from 'constants/icons';
 import React from 'react';
 import classnames from 'classnames';
-import { normalizeURI, isURIValid } from 'lbry-redux';
 import { withRouter } from 'react-router';
 import Icon from 'component/common/icon';
 import Autocomplete from './internal/autocomplete';
 import Tag from 'component/tag';
-
-const L_KEY_CODE = 76;
-const ESC_KEY_CODE = 27;
+import { isURIValid, normalizeURI } from 'lbry-redux';
+import { formatLbryUrlForWeb } from '../../util/url';
 const WEB_DEV_PREFIX = `${URL_DEV}/`;
 const WEB_LOCAL_PREFIX = `${URL_LOCAL}/`;
 const WEB_PROD_PREFIX = `${URL}/`;
 const SEARCH_PREFIX = `$/${PAGES.SEARCH}q=`;
+const INVALID_URL_ERROR = "Invalid LBRY URL entered. Only A-Z, a-z, 0-9, and '-' allowed.";
+
+const L_KEY_CODE = 76;
+const ESC_KEY_CODE = 27;
 
 type Props = {
   searchQuery: ?string,
   updateSearchQuery: string => void,
   onSearch: string => void,
   onSubmit: string => void,
-  wunderbarValue: ?string,
+
+  navigateToUri: string => void,
+  doSearch: string => void,
+
   suggestions: Array<string>,
   doFocus: () => void,
   doBlur: () => void,
@@ -99,68 +104,69 @@ class WunderBar extends React.PureComponent<Props, State> {
     updateSearchQuery(value);
   }
 
-  handleSubmit(value: string, suggestion?: { value: string, type: string }) {
-    const { onSubmit, onSearch, doShowSnackBar, history } = this.props;
-    let query = value.trim();
-    this.input && this.input.blur();
-    const showSnackError = () => {
-      doShowSnackBar('Invalid LBRY URL entered. Only A-Z, a-z, 0-9, and "-" allowed.');
-    };
-
+  onSubmitWebUri(uri: string) {
     // Allow copying a lbry.tv url and pasting it into the search bar
-    const includesLbryTvProd = query.includes(WEB_PROD_PREFIX);
-    const includesLbryTvLocal = query.includes(WEB_LOCAL_PREFIX);
-    const includesLbryTvDev = query.includes(WEB_DEV_PREFIX);
-    const wasCopiedFromWeb = includesLbryTvDev || includesLbryTvLocal || includesLbryTvProd;
+    const { doSearch, navigateToUri, updateSearchQuery } = this.props;
 
-    if (wasCopiedFromWeb) {
-      if (includesLbryTvDev) {
-        query = query.slice(WEB_DEV_PREFIX.length);
-      } else if (includesLbryTvLocal) {
-        query = query.slice(WEB_LOCAL_PREFIX.length);
-      } else {
-        query = query.slice(WEB_PROD_PREFIX.length);
-      }
-
-      query = query.replace(/:/g, '#');
-
-      if (query.includes(SEARCH_PREFIX)) {
-        query = query.slice(SEARCH_PREFIX.length);
-        onSearch(query);
-        return;
-      } else {
-        query = `lbry://${query}`;
-        onSubmit(query);
-        return;
-      }
+    const slashPosition = uri.indexOf('/');
+    let query = uri.slice(slashPosition);
+    query = query.replace(/:/g, '#');
+    if (query.includes(SEARCH_PREFIX)) {
+      query = query.slice(SEARCH_PREFIX.length);
+      doSearch(query);
+    } else {
+      // TODO - double check this code path
+      let path = `lbry://${query}`;
+      const uri = formatLbryUrlForWeb(path);
+      navigateToUri(uri);
+      updateSearchQuery('');
     }
+  }
 
-    // User selected a suggestion
-    if (suggestion) {
-      if (suggestion.type === SEARCH_TYPES.SEARCH) {
-        onSearch(query);
-      } else if (suggestion.type === SEARCH_TYPES.TAG) {
-        history.push(`/$/${PAGES.DISCOVER}?t=${suggestion.value}`);
-      } else if (isURIValid(query)) {
-        const uri = normalizeURI(query);
-        onSubmit(uri);
-      } else {
-        showSnackError();
-      }
+  onClickSuggestion(query: string, suggestion: { value: string, type: string }): void {
+    const { navigateToUri, doSearch, doShowSnackBar } = this.props;
 
-      return;
+    if (suggestion.type === SEARCH_TYPES.SEARCH) {
+      doSearch(query);
+    } else if (suggestion.type === SEARCH_TYPES.TAG) {
+      const encodedSuggestion = encodeURIComponent(suggestion.value);
+      const uri = `/$/${PAGES.DISCOVER}?t=${encodedSuggestion}`;
+      navigateToUri(uri);
+    } else if (isURIValid(query)) {
+      const uri = normalizeURI(query);
+      navigateToUri(uri);
+    } else {
+      doShowSnackBar(INVALID_URL_ERROR);
     }
+  }
+
+  onSubmitRawString(st: string): void {
+    const { navigateToUri, doSearch, doShowSnackBar } = this.props;
     // Currently no suggestion is highlighted. The user may have started
     // typing, then lost focus and came back later on the same page
     try {
-      if (isURIValid(query)) {
-        const uri = normalizeURI(query);
-        onSubmit(uri);
+      if (isURIValid(st)) {
+        const uri = normalizeURI(st);
+        navigateToUri(uri);
       } else {
-        showSnackError();
+        doShowSnackBar(INVALID_URL_ERROR);
       }
     } catch (e) {
-      onSearch(query);
+      doSearch(st);
+    }
+  }
+
+  handleSubmit(value: string, suggestion?: { value: string, type: string }) {
+    let query = value.trim();
+    this.input && this.input.blur();
+
+    const wasCopiedFromWeb = [WEB_DEV_PREFIX, WEB_LOCAL_PREFIX, WEB_PROD_PREFIX].some(p => query.includes(p));
+    if (wasCopiedFromWeb) {
+      this.onSubmitWebUri(query);
+    } else if (suggestion) {
+      this.onClickSuggestion(query, suggestion);
+    } else {
+      this.onSubmitRawString(query);
     }
   }
 
