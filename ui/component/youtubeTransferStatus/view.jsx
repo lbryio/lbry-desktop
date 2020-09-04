@@ -1,4 +1,5 @@
 // @flow
+import { SITE_NAME } from 'config';
 import * as ICONS from 'constants/icons';
 import * as React from 'react';
 import classnames from 'classnames';
@@ -168,20 +169,15 @@ export default function YoutubeTransferStatus(props: Props) {
                 onClick={claimChannels}
                 label={youtubeChannels.length > 1 ? __('Claim Channels') : __('Claim Channel')}
               />
-              {addNewChannel ? (
-                <Button button="link" label={__('Add Another Channel')} onClick={addNewChannel} />
-              ) : (
-                <Button button="link" label={__('Learn More')} href="https://lbry.com/faq/youtube#transfer" />
-              )}
+              <Button button="link" label={__('Explore %SITE_NAME%', { SITE_NAME })} navigate="/" />
             </div>
 
             <p className="help">
               {youtubeChannels.length > 1
                 ? __('You will be able to claim your channels once they finish syncing.')
                 : __('You will be able to claim your channel once it has finished syncing.')}{' '}
-              {addNewChannel && (
-                <Button button="link" label={__('Learn More')} href="https://lbry.com/faq/youtube#transfer" />
-              )}
+              <Button button="link" label={__('Learn More')} href="https://lbry.com/faq/youtube#transfer" />{' '}
+              {addNewChannel && <Button button="link" label={__('Add Another Channel')} onClick={addNewChannel} />}
             </p>
           </>
         }
