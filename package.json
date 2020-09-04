@@ -100,7 +100,7 @@
     "css-loader": "^2.1.0",
     "cssnano": "^4.1.10",
     "dat.gui": "^0.7.2",
-    "decompress": "^4.2.0",
+    "decompress": "^4.2.1",
     "del": "^3.0.0",
     "devtron": "^1.4.0",
     "dom-scroll-into-view": "^1.2.1",
