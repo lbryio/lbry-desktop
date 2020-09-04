@@ -451,6 +451,7 @@
   "Blocked": "Blocked",
   "Unblock": "Unblock",
   "You have blocked this channel content.": "You have blocked this channel content.",
+  "Blocked %channelUrl%": "Blocked %channelUrl%",
   "This channel hasn't published anything yet": "This channel hasn't published anything yet",
   "Network and Data Settings": "Network and Data Settings",
   "Save all viewed content to your downloads directory": "Save all viewed content to your downloads directory",

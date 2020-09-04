@@ -35,7 +35,11 @@ export default function BlockButton(props: Props) {
       onClick={e => {
         e.stopPropagation();
         if (!channelIsBlocked) {
-          doToast({ message: `Blocked ${shortUrl}`, linkText: 'Manage', linkTarget: `/${PAGES.BLOCKED}` });
+          doToast({
+            message: __('Blocked %channelUrl%', { channelUrl: shortUrl }),
+            linkText: __('Manage'),
+            linkTarget: `/${PAGES.BLOCKED}`,
+          });
         }
 
         toggleBlockChannel(permanentUrl);
