@@ -20,6 +20,8 @@ import {
   SETTINGS,
 } from 'lbry-redux';
 import { makeSelectClientSetting } from 'redux/selectors/settings';
+import { selectInterestedInYoutubeSync } from 'redux/selectors/app';
+import { doToggleInterestedInYoutubeSync } from 'redux/actions/app';
 import UserSignIn from './view';
 
 const select = state => ({
@@ -43,6 +45,7 @@ const select = state => ({
   getSyncError: selectGetSyncErrorMessage(state),
   hasSynced: Boolean(selectSyncHash(state)),
   creatingChannel: selectCreatingChannel(state),
+  interestedInYoutubeSync: selectInterestedInYoutubeSync(state),
 });
 
 const perform = dispatch => ({
@@ -61,6 +64,7 @@ const perform = dispatch => ({
     ),
   syncSettings: () => dispatch(doSyncClientSettings()),
   setClientSetting: (setting, value) => dispatch(doSetClientSetting(setting, value)),
+  doToggleInterestedInYoutubeSync: () => dispatch(doToggleInterestedInYoutubeSync()),
 });
 
 export default connect(select, perform)(UserSignIn);
