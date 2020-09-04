@@ -310,6 +310,10 @@ fieldset-group {
           border-top-left-radius: 0;
           border-bottom-left-radius: 0;
         }
+
+        label {
+          margin-left: var(--spacing-s);
+        }
       }
     }
 

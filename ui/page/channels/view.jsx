@@ -7,6 +7,7 @@ import Button from 'component/button';
 import YoutubeTransferStatus from 'component/youtubeTransferStatus';
 import Spinner from 'component/spinner';
 import Card from 'component/common/card';
+import Yrbl from 'component/yrbl';
 import * as PAGES from 'constants/pages';
 
 type Props = {
@@ -54,22 +55,19 @@ export default function ChannelsPage(props: Props) {
         <React.Fragment>
           {!fetchingChannels ? (
             <section className="main--empty">
-              <div className=" section--small">
-                <h2 className="section__title--large">{__('No channels created yet')}</h2>
-
-                <div className="section__actions">
-                  <Button button="primary" label={__('New Channel')} navigate={`/$/${PAGES.CHANNEL_NEW}`} />
-                </div>
-              </div>
+              <Yrbl
+                title={__('No channels')}
+                subtitle={__("You haven't created a channel yet. All of your beautiful channels will be listed here!")}
+                actions={
+                  <div className="section__actions">
+                    <Button button="primary" label={__('New Channel')} navigate={`/$/${PAGES.CHANNEL_NEW}`} />
+                  </div>
+                }
+              />
             </section>
           ) : (
             <section className="main--empty">
-              <div className=" section--small">
-                <h2 className="section__title--small">
-                  {__('Checking for channels')}
-                  <Spinner type="small" />
-                </h2>
-              </div>
+              <Spinner delayed />
             </section>
           )}
         </React.Fragment>

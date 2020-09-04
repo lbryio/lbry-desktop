@@ -41,7 +41,7 @@ export default function ModalRevokeClaim(props: Props) {
           <p>{__('Are you sure you want to remove this support?')}</p>
           <p>
             <I18nMessage tokens={{ lbc: <LbcSymbol /> }}>
-              These credits are permanently yours and can be removed at any time. Removing this support will reduce the
+              These Credits are permanently yours and can be removed at any time. Removing this support will reduce the
               claim's discoverability and return the %lbc% to your spendable balance.
             </I18nMessage>
           </p>
@@ -50,10 +50,10 @@ export default function ModalRevokeClaim(props: Props) {
     } else if (type === txnTypes.SUPPORT) {
       return (
         <React.Fragment>
-          <p>{__('Are you sure you want to unlock these credits?')}</p>
+          <p>{__('Are you sure you want to unlock these Credits?')}</p>
           <p>
             {__(
-              'These credits are permanently yours and can be unlocked at any time. Unlocking them allows you to spend them, but can hurt the performance of your content in lookups and search results. It is recommended you leave tips locked until you need or want to spend them.'
+              'These Credits are permanently yours and can be unlocked at any time. Unlocking them allows you to spend them, but can hurt the performance of your content in lookups and search results. It is recommended you leave tips locked until you need or want to spend them.'
             )}
           </p>
         </React.Fragment>

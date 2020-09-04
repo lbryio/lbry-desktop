@@ -10,6 +10,7 @@ import { PAGE_PARAM, PAGE_SIZE_PARAM } from 'constants/claim';
 import WebUploadList from 'component/webUploadList';
 import Spinner from 'component/spinner';
 import Card from 'component/common/card';
+import Yrbl from 'component/yrbl';
 
 type Props = {
   uploadCount: number,
@@ -96,26 +97,24 @@ function FileListPublished(props: Props) {
         <React.Fragment>
           {!fetching ? (
             <section className="main--empty">
-              <div className=" section--small">
-                <h2 className="section__title--large">{__('Nothing uploaded to LBRY yet.')}</h2>
-                <div className="section__actions">
-                  <Button
-                    button="primary"
-                    navigate={`/$/${PAGES.UPLOAD}`}
-                    label={__('Upload something new')}
-                    onClick={() => clearPublish()}
-                  />
-                </div>
-              </div>
+              <Yrbl
+                title={__('No uploads')}
+                subtitle={__("You haven't uploaded anything yet. This is where you can find them when you do!")}
+                actions={
+                  <div className="section__actions">
+                    <Button
+                      button="primary"
+                      navigate={`/$/${PAGES.UPLOAD}`}
+                      label={__('Upload Something New')}
+                      onClick={() => clearPublish()}
+                    />
+                  </div>
+                }
+              />
             </section>
           ) : (
             <section className="main--empty">
-              <div className=" section--small">
-                <h2 className="section__title--small">
-                  {__('Checking your uploads')}
-                  <Spinner type="small" />
-                </h2>
-              </div>
+              <Spinner delayed />
             </section>
           )}
         </React.Fragment>
