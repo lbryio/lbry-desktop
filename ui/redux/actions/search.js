@@ -45,7 +45,7 @@ export const getSearchSuggestions = (value: string) => (dispatch: Dispatch, getS
     return;
   }
 
-  fetch(`${CONNECTION_STRING}autocomplete?s=${searchValue}`)
+  fetch(`${CONNECTION_STRING}autocomplete?s=${encodeURIComponent(searchValue)}`)
     .then(handleFetchResponse)
     .then(apiSuggestions => {
       dispatch({
