@@ -6,7 +6,8 @@ import {
   doClearDaemonSetting,
   doSetClientSetting,
   doSetDarkTime,
-  doSyncClientSettings,
+  doEnterSettingsPage,
+  doExitSettingsPage,
 } from 'redux/actions/settings';
 import { doSetPlayingUri } from 'redux/actions/content';
 import { makeSelectClientSetting, selectDaemonSettings } from 'redux/selectors/settings';
@@ -37,7 +38,6 @@ const select = state => ({
 
 const perform = dispatch => ({
   setDaemonSetting: (key, value) => dispatch(doSetDaemonSetting(key, value)),
-  syncSettings: () => dispatch(doSyncClientSettings()),
   clearDaemonSetting: key => dispatch(doClearDaemonSetting(key)),
   toggle3PAnalytics: allow => dispatch(doToggle3PAnalytics(allow)),
   clearCache: () => dispatch(doClearCache()),
@@ -47,6 +47,8 @@ const perform = dispatch => ({
   clearPlayingUri: () => dispatch(doSetPlayingUri(null)),
   setDarkTime: (time, options) => dispatch(doSetDarkTime(time, options)),
   openModal: (id, params) => dispatch(doOpenModal(id, params)),
+  enterSettings: () => dispatch(doEnterSettingsPage()),
+  exitSettings: () => dispatch(doExitSettingsPage()),
 });
 
 export default connect(select, perform)(SettingsPage);

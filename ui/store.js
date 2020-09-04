@@ -9,11 +9,9 @@ import thunk from 'redux-thunk';
 import { createMemoryHistory, createBrowserHistory } from 'history';
 import { routerMiddleware } from 'connected-react-router';
 import createRootReducer from './reducers';
-import { Lbry, buildSharedStateMiddleware, ACTIONS as LBRY_REDUX_ACTIONS, SETTINGS } from 'lbry-redux';
-import { doGetSync } from 'lbryinc';
-import { selectUserVerifiedEmail } from 'redux/selectors/user';
-import { getSavedPassword, getAuthToken } from 'util/saved-passwords';
-import { makeSelectClientSetting } from 'redux/selectors/settings';
+import { Lbry, buildSharedStateMiddleware, ACTIONS as LBRY_REDUX_ACTIONS } from 'lbry-redux';
+import { doSyncSubscribe } from 'redux/actions/syncwrapper';
+import { getAuthToken } from 'util/saved-passwords';
 import { generateInitialUrl } from 'util/url';
 import { X_LBRY_AUTH_TOKEN } from 'constants/token';
 
@@ -152,14 +150,7 @@ const sharedStateFilters = {
 };
 
 const sharedStateCb = ({ dispatch, getState }) => {
-  const state = getState();
-  const syncEnabled = makeSelectClientSetting(SETTINGS.ENABLE_SYNC)(state);
-  const emailVerified = selectUserVerifiedEmail(state);
-  if (syncEnabled && emailVerified) {
-    getSavedPassword().then(savedPassword => {
-      dispatch(doGetSync(savedPassword));
-    });
-  }
+  dispatch(doSyncSubscribe());
 };
 
 const populateAuthTokenHeader = () => {

@@ -1,8 +1,8 @@
 import { connect } from 'react-redux';
 import { selectPublishFormValues, doUpdatePublishForm } from 'lbry-redux';
 import PublishPage from './view';
-import { selectUser, selectAccessToken } from '../../redux/selectors/user';
-import {doFetchAccessToken} from '../../redux/actions/user';
+import { selectUser, selectAccessToken } from 'redux/selectors/user';
+import { doFetchAccessToken } from 'redux/actions/user';
 
 const select = state => ({
   ...selectPublishFormValues(state),

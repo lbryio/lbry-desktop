@@ -7,7 +7,7 @@ import Spinner from 'component/spinner';
 
 type Props = {
   user: ?User,
-  history: { push: string => void },
+  history: { push: string => void, replace: string => void },
   location: { search: string },
   userFetchPending: boolean,
   doUserSignIn: string => void,
@@ -28,7 +28,7 @@ function UserSignIn(props: Props) {
 
   React.useEffect(() => {
     if (hasVerifiedEmail || (!showEmail && !showPassword && !showLoading)) {
-      history.push(redirect || '/');
+      history.replace(redirect || '/');
     }
   }, [showEmail, showPassword, showLoading, hasVerifiedEmail]);
 
