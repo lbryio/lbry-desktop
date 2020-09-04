@@ -1,5 +1,4 @@
 // @flow
-import * as PAGES from 'constants/pages';
 import React, { useState } from 'react';
 import { isNameValid } from 'lbry-redux';
 import Button from 'component/button';
@@ -15,10 +14,18 @@ type Props = {
   createChannelError: string,
   claimingReward: boolean,
   user: User,
+  doToggleInterestedInYoutubeSync: () => void,
 };
 
 function UserFirstChannel(props: Props) {
-  const { createChannel, creatingChannel, claimingReward, user, createChannelError } = props;
+  const {
+    createChannel,
+    creatingChannel,
+    claimingReward,
+    user,
+    createChannelError,
+    doToggleInterestedInYoutubeSync,
+  } = props;
   const { primary_email: primaryEmail } = user;
   const initialChannel = primaryEmail ? primaryEmail.split('@')[0] : '';
   const [channel, setChannel] = useState(initialChannel);
@@ -87,7 +94,7 @@ function UserFirstChannel(props: Props) {
                     <Button
                       button="link"
                       label={__('Sync it and skip this step')}
-                      navigate={`/$/${PAGES.YOUTUBE_SYNC}`}
+                      onClick={() => doToggleInterestedInYoutubeSync()}
                     />
                   ),
                 }}

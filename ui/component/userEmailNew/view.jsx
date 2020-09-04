@@ -23,6 +23,8 @@ type Props = {
   setShareDiagnosticData: boolean => void,
   doSignUp: (string, ?string) => Promise<any>,
   clearEmailEntry: () => void,
+  interestedInYoutubSync: boolean,
+  doToggleInterestedInYoutubeSync: () => void,
 };
 
 function UserEmailNew(props: Props) {
@@ -35,6 +37,8 @@ function UserEmailNew(props: Props) {
     setShareDiagnosticData,
     clearEmailEntry,
     emailExists,
+    interestedInYoutubSync,
+    doToggleInterestedInYoutubeSync,
   } = props;
   const { share_usage_data: shareUsageData } = daemonSettings;
   const { push, location } = useHistory();
@@ -111,6 +115,14 @@ function UserEmailNew(props: Props) {
                 label={__('Password')}
                 value={password}
                 onChange={e => setPassword(e.target.value)}
+              />
+
+              <FormField
+                type="checkbox"
+                name="youtube_sync_checkbox"
+                label={__('Sync my YouTube channel')}
+                checked={interestedInYoutubSync}
+                onChange={() => doToggleInterestedInYoutubeSync()}
               />
 
               {!IS_WEB && (
