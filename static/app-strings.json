@@ -611,6 +611,7 @@
   "This will prevent others from resolving and accessing the content you published. It will return the LBC to your spendable balance, less a small transaction fee.": "This will prevent others from resolving and accessing the content you published. It will return the LBC to your spendable balance, less a small transaction fee.",
   "No results for %query%": "No results for %query%",
   "You haven't downloaded anything from LBRY yet": "You haven't downloaded anything from LBRY yet",
+  "You haven't purchased anything yet": "You haven't purchased anything yet",
   "Explore new content": "Explore new content",
   "Explore New Content": "Explore New Content",
   "Use this address to receive LBC.": "Use this address to receive LBC.",
@@ -1279,5 +1280,6 @@
   "%view_count% views - %view_count_change% this week": "%view_count% views - %view_count_change% this week",
   "Most Commented Recent Content": "Most Commented Recent Content",
   "%comment_count% comments - %comment_count_change% this week": "%comment_count% comments - %comment_count_change% this week",
+  "Invite": "Invite",
   "--end--": "--end--"
 }
