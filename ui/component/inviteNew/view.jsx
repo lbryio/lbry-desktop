@@ -80,7 +80,7 @@ function InviteNew(props: Props) {
             <SelectChannel
               channel={referralSource}
               onChannelChange={channel => handleReferralChange(channel)}
-              label={'Customize link'}
+              label={__('Customize link')}
               hideAnon
               injected={[referralCode]}
             />
@@ -107,12 +107,14 @@ function InviteNew(props: Props) {
             <Form onSubmit={handleSubmit}>
               <FormField
                 type="text"
-                label="Email"
+                label={__('Email')}
                 placeholder="youremail@example.org"
                 name="email"
                 value={email}
                 error={errorMessage}
-                inputButton={<Button button="secondary" type="submit" label="Invite" disabled={isPending || !email} />}
+                inputButton={
+                  <Button button="secondary" type="submit" label={__('Invite')} disabled={isPending || !email} />
+                }
                 onChange={event => {
                   handleEmailChanged(event);
                 }}
