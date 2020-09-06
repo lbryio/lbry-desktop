@@ -1310,7 +1310,6 @@
   "Discussion": "Discussion",
   "Staked LBRY Credits": "Staked LBRY Credits",
   "1 comment": "1 comment",
-  "%total_comments% comments": "%total_comments% comments",
   "Upvote": "Upvote",
   "Downvote": "Downvote",
   "Hide %number% Replies": "Hide %number% Replies",
@@ -1321,10 +1320,12 @@
   "Unable to edit this comment, please try again later.": "Unable to edit this comment, please try again later.",
   "Channel cannot be anonymous, please select a channel and try again.": "Channel cannot be anonymous, please select a channel and try again.",
   "Change to list layout": "Change to list layout",
-  "Change to tile layout": "Change to tile layout",
   "Create a channel": "Create a channel",
   "Credit Details": "Credit Details",
   "LBRY Credits": "LBRY Credits",
   "Sync my YouTube channel": "Sync my YouTube channel",
+  "Change to tile layout": "Change to tile layout",
+  "%total_comments% comments": "%total_comments% comments",
+  "Electron": "Electron",
   "--end--": "--end--"
 }

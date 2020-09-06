@@ -47,9 +47,10 @@ let lbryFirst;
 const appState = {};
 
 app.setAsDefaultProtocolClient('lbry');
-app.setName('LBRY');
+app.name = 'LBRY';
 app.setAppUserModelId('io.lbry.LBRY');
 app.commandLine.appendSwitch('force-color-profile', 'srgb');
+app.commandLine.appendSwitch('disable-features', 'OutOfBlinkCors');
 
 if (isDev) {
   // Disable security warnings in dev mode:
@@ -186,21 +187,6 @@ if (!gotSingleInstanceLock) {
         rendererWindow.webContents.send('devtools-is-opened');
       });
     }
-
-    // HACK: patch webrequest to fix devtools incompatibility with electron 2.x.
-    // See https://github.com/electron/electron/issues/13008#issuecomment-400261941
-    session.defaultSession.webRequest.onBeforeRequest({}, (details, callback) => {
-      if (details.url.includes('7accc8730b0f99b5e7c0702ea89d1fa7c17bfe33')) {
-        callback({
-          redirectURL: details.url.replace(
-            '7accc8730b0f99b5e7c0702ea89d1fa7c17bfe33',
-            '57c9d07b416b5a2ea23d28247300e4af36329bdc'
-          ),
-        });
-      } else {
-        callback({ cancel: false });
-      }
-    });
 
     // If an "Origin" header is passed, the SDK will check that it is set to allow that origin in the daemon_settings.yml
     // By default, electron sends http://localhost:{port} as the origin for POST requests

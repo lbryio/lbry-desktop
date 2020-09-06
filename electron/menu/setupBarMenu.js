@@ -105,7 +105,7 @@ export default () => {
   ];
 
   const darwinTemplateAddition = {
-    label: app.getName(),
+    label: app.name,
     submenu: [
       { role: 'about' },
       { type: 'separator' },
