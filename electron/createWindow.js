@@ -1,5 +1,5 @@
 import { WEBPACK_ELECTRON_PORT } from 'config';
-import { app, BrowserWindow, dialog, shell, screen } from 'electron';
+import { app, BrowserWindow, dialog, shell, screen, nativeImage } from 'electron';
 import isDev from 'electron-is-dev';
 import windowStateKeeper from 'electron-window-state';
 import SUPPORTED_LANGUAGES from 'constants/supported_languages';
@@ -46,11 +46,12 @@ export default appState => {
     // If state is undefined, create window as maximized.
     width: windowState.width === undefined ? width : windowState.width,
     height: windowState.height === undefined ? height : windowState.height,
-    icon: 'static/img/tray/default/tray.png',
+    icon: nativeImage.createFromPath('static/img/tray/default/tray.png'),
     webPreferences: {
       // Disable renderer process's webSecurity on development to enable CORS.
       webSecurity: !isDev,
       plugins: true,
+      nodeIntegration: true,
     },
   };
   const lbryProto = 'lbry://';

@@ -30,7 +30,7 @@ export default window => {
 
   const template = [
     {
-      label: `Open ${app.getName()}`,
+      label: `Open ${app.name}`,
       click: () => {
         window.show();
       },
