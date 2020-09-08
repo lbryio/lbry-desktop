@@ -18,7 +18,7 @@ $thumbnailWidthSmall: 2rem;
 }
 
 .comment__create--reply {
-  margin-top: var(--spacing-m);
+  margin-top: var(--spacing-l);
   margin-left: calc(#{$thumbnailWidth} + var(--spacing-m));
   position: relative;
 }
@@ -157,7 +157,7 @@ $thumbnailWidthSmall: 2rem;
 .comment__char-count {
   align-self: flex-end;
   font-size: var(--font-xsmall);
-  padding-top: var(--spacing-xs);
+  padding-top: var(--spacing-xxs);
 }
 
 .comment__char-count-mde {
