@@ -130,7 +130,7 @@ export default function ClaimList(props: Props) {
       {urisLength > 0 && (
         <ul
           className={classnames('ul--no-style', {
-            card: !tileLayout,
+            card: !(tileLayout || type === 'small'),
             'claim-list--card-body': tileLayout,
           })}
         >
