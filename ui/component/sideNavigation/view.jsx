@@ -295,6 +295,15 @@ function SideNavigation(props: Props) {
                 ))}
               </ul>
             )}
+            {sidebarOpen && isPersonalized && followedTags && followedTags.length > 0 && (
+              <ul className="navigation__secondary navigation-links navigation-links--small">
+                {followedTags.map(({ name }, key) => (
+                  <li key={name} className="navigation-link__wrapper">
+                    <Button navigate={`/$/discover?t=${name}`} label={`#${name}`} className="navigation-link" />
+                  </li>
+                ))}
+              </ul>
+            )}
           </div>
         </nav>
       )}
@@ -357,6 +366,15 @@ function SideNavigation(props: Props) {
                         className="navigation-link"
                         activeClass="navigation-link--active"
                       />
+                    </li>
+                  ))}
+                </ul>
+              )}
+              {sidebarOpen && isPersonalized && followedTags && followedTags.length > 0 && (
+                <ul className="navigation__secondary navigation-links navigation-links--small">
+                  {followedTags.map(({ name }, key) => (
+                    <li key={name} className="navigation-link__wrapper">
+                      <Button navigate={`/$/discover?t=${name}`} label={`#${name}`} className="navigation-link" />
                     </li>
                   ))}
                 </ul>
