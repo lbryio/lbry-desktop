@@ -100,11 +100,15 @@ function CommentsReplies(props: Props) {
           onClick={handleCommentReply}
           icon={ICONS.REPLY}
         />
-        {!isExpanded && Boolean(numberOfComments) && (
+        {Boolean(numberOfComments) && (
           <Button
             className="comment__action"
-            label={__('Show %number% Replies', { number: numberOfComments })}
-            onClick={() => setExpanded(true)}
+            label={
+              isExpanded
+                ? __('Hide %number% Replies', { number: numberOfComments })
+                : __('Show %number% Replies', { number: numberOfComments })
+            }
+            onClick={() => setExpanded(!isExpanded)}
             icon={ICONS.DOWN}
           />
         )}
