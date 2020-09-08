@@ -12,6 +12,7 @@ import ClaimPreview from 'component/claimPreview';
 import ClaimPreviewTile from 'component/claimPreviewTile';
 import I18nMessage from 'component/i18nMessage';
 import ClaimListHeader from 'component/claimListHeader';
+import { useIsLargeScreen } from 'effects/use-screensize';
 
 type Props = {
   uris: Array<string>,
@@ -102,6 +103,7 @@ function ClaimListDiscover(props: Props) {
   const { search } = location;
   const [page, setPage] = React.useState(1);
   const [forceRefresh, setForceRefresh] = React.useState();
+  const isLargeScreen = useIsLargeScreen();
   const [orderParamEntry, setOrderParamEntry] = usePersistedState(`entry-${location.pathname}`, CS.ORDER_BY_TRENDING);
   const [orderParamUser, setOrderParamUser] = usePersistedState(`orderUser-${location.pathname}`, CS.ORDER_BY_TRENDING);
   const followed = (followedTags && followedTags.map(t => t.name)) || [];
@@ -120,6 +122,8 @@ function ClaimListDiscover(props: Props) {
   const channelIdsInUrl = urlParams.get(CS.CHANNEL_IDS_KEY);
   const channelIdsParam = channelIdsInUrl ? channelIdsInUrl.split(',') : channelIds;
   const feeAmountParam = urlParams.get('fee_amount') || feeAmount || CS.FEE_AMOUNT_ANY;
+  const originalPageSize = pageSize || CS.PAGE_SIZE;
+  const dynamicPageSize = isLargeScreen ? originalPageSize * (3 / 2) : originalPageSize;
 
   let orderParam = orderBy || urlParams.get(CS.ORDER_BY_KEY) || defaultOrderBy;
   if (!orderParam) {
@@ -160,7 +164,7 @@ function ClaimListDiscover(props: Props) {
     stream_types?: any,
     fee_amount?: string,
   } = {
-    page_size: pageSize || CS.PAGE_SIZE,
+    page_size: dynamicPageSize,
     page,
     name,
     claim_type: claimType || undefined,
@@ -297,7 +301,7 @@ function ClaimListDiscover(props: Props) {
       setPage(options.page);
     } else if (claimSearchResult) {
       // --- Update 'page' based on retrieved 'claimSearchResult'.
-      options.page = Math.ceil(claimSearchResult.length / CS.PAGE_SIZE);
+      options.page = Math.ceil(claimSearchResult.length / dynamicPageSize);
       if (options.page !== page) {
         setPage(options.page);
       }
@@ -310,8 +314,8 @@ function ClaimListDiscover(props: Props) {
     (!loading &&
       claimSearchResult &&
       claimSearchResult.length &&
-      claimSearchResult.length < CS.PAGE_SIZE * options.page &&
-      claimSearchResult.length % CS.PAGE_SIZE === 0);
+      claimSearchResult.length < dynamicPageSize * options.page &&
+      claimSearchResult.length % dynamicPageSize === 0);
 
   // Don't use the query from createNormalizedClaimSearchKey for the effect since that doesn't include page & release_time
   const optionsStringForEffect = JSON.stringify(options);
@@ -428,7 +432,7 @@ function ClaimListDiscover(props: Props) {
             uris={uris || claimSearchResult}
             onScrollBottom={handleScrollBottom}
             page={page}
-            pageSize={CS.PAGE_SIZE}
+            pageSize={dynamicPageSize}
             timedOutMessage={timedOutMessage}
             renderProperties={renderProperties}
             includeSupportAction={includeSupportAction}
@@ -437,7 +441,7 @@ function ClaimListDiscover(props: Props) {
           />
           {loading && (
             <div className="claim-grid">
-              {new Array(pageSize || CS.PAGE_SIZE).fill(1).map((x, i) => (
+              {new Array(dynamicPageSize).fill(1).map((x, i) => (
                 <ClaimPreviewTile key={i} placeholder="loading" />
               ))}
             </div>
@@ -456,15 +460,14 @@ function ClaimListDiscover(props: Props) {
             uris={uris || claimSearchResult}
             onScrollBottom={handleScrollBottom}
             page={page}
-            pageSize={CS.PAGE_SIZE}
+            pageSize={dynamicPageSize}
             timedOutMessage={timedOutMessage}
             renderProperties={renderProperties}
             includeSupportAction={includeSupportAction}
             hideBlock={hideBlock}
             injectedItem={injectedItem}
           />
-          {loading &&
-            new Array(pageSize || CS.PAGE_SIZE).fill(1).map((x, i) => <ClaimPreview key={i} placeholder="loading" />)}
+          {loading && new Array(dynamicPageSize).fill(1).map((x, i) => <ClaimPreview key={i} placeholder="loading" />)}
         </div>
       )}
     </React.Fragment>
