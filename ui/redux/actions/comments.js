@@ -83,11 +83,11 @@ export function doCommentCreate(
             uri,
             comment: result,
             claimId: claim_id,
+            uri,
           },
         });
       })
       .catch(error => {
-        console.log('error', error);
         dispatch({
           type: ACTIONS.COMMENT_CREATE_FAILED,
           data: error,

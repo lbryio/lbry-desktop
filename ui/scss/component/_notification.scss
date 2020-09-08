@@ -77,9 +77,8 @@
 }
 
 .notification__time {
-  @extend .help;
-  margin-bottom: 0;
-  margin-top: 0;
+  font-size: var(--font-small);
+  color: var(--color-text-help);
   margin-left: var(--spacing-s);
   flex-shrink: 0;
 }
