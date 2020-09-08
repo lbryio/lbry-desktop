@@ -31,7 +31,7 @@ export default class extends React.PureComponent<Props> {
       <div className="yrbl__wrap">
         <img alt="Friendly gerbil" className={classnames('yrbl', className)} src={`${image}`} />
         <div>
-          {title && subtitle && (
+          {(title || subtitle) && (
             <div className="yrbl__content">
               <h2 className="section__title">{title}</h2>
               <p className="section__subtitle">{subtitle}</p>
