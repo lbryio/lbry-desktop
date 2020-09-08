@@ -26,11 +26,12 @@ export default handleActions(
     }),
 
     [ACTIONS.COMMENT_CREATE_COMPLETED]: (state: CommentsState, action: any): CommentsState => {
-      const { comment, claimId }: { comment: Comment, claimId: string } = action.data;
+      const { comment, claimId, uri }: { comment: Comment, claimId: string, uri: string } = action.data;
       const commentById = Object.assign({}, state.commentById);
       const byId = Object.assign({}, state.byId);
       const topLevelCommentsById = Object.assign({}, state.topLevelCommentsById); // was byId {ClaimId -> [commentIds...]}
       const repliesByParentId = Object.assign({}, state.repliesByParentId); // {ParentCommentID -> [commentIds...] } list of reply comments
+      const commentsByUri = Object.assign({}, state.commentsByUri);
       const comments = byId[claimId] || [];
       const newCommentIds = comments.slice();
 
@@ -49,6 +50,8 @@ export default handleActions(
         }
       } else {
         if (!topLevelCommentsById[claimId]) {
+          // First comment on a claim
+          commentsByUri[uri] = claimId;
           topLevelCommentsById[claimId] = [comment.comment_id];
         } else {
           topLevelCommentsById[claimId].unshift(comment.comment_id);
@@ -61,6 +64,7 @@ export default handleActions(
         repliesByParentId,
         commentById,
         byId,
+        commentsByUri,
         isCommenting: false,
       };
     },
