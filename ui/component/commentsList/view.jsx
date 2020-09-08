@@ -102,14 +102,13 @@ function CommentList(props: Props) {
               displayedComments &&
               displayedComments.map(comment => {
                 return (
-                  <>
+                  <React.Fragment key={comment.comment_id}>
                     <Comment
                       uri={uri}
                       authorUri={comment.channel_url}
                       author={comment.channel_name}
                       claimId={comment.claim_id}
                       commentId={comment.comment_id}
-                      key={comment.comment_id}
                       message={comment.comment}
                       parentId={comment.parent_id || null}
                       timePosted={comment.timestamp * 1000}
@@ -117,13 +116,8 @@ function CommentList(props: Props) {
                       commentIsMine={comment.channel_id && isMyComment(comment.channel_id)}
                       linkedComment={linkedComment}
                     />
-                    <CommentsReplies
-                      uri={uri}
-                      parentId={comment.comment_id}
-                      linkedComment={linkedComment}
-                      key={comment.comment_id + 'replies'}
-                    />
-                  </>
+                    <CommentsReplies uri={uri} parentId={comment.comment_id} linkedComment={linkedComment} />
+                  </React.Fragment>
                 );
               })}
           </ul>
