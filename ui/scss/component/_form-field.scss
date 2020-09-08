@@ -442,6 +442,10 @@ fieldset-section {
   }
 
   .select--slim {
+    @media (min-width: $breakpoint-small) {
+      max-width: none;
+    }
+
     select {
       max-height: 1.5rem !important;
       padding: 0 var(--spacing-xs);
