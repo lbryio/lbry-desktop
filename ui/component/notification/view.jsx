@@ -1,6 +1,6 @@
 // @flow
 
-import { NOTIFICATION_CREATOR_SUBSCRIBER, NOTIFICATION_COMMENT } from 'constants/notifications';
+import { NOTIFICATION_CREATOR_SUBSCRIBER, NOTIFICATION_COMMENT, NOTIFICATION_REPLY } from 'constants/notifications';
 import * as ICONS from 'constants/icons';
 import React from 'react';
 import classnames from 'classnames';
@@ -26,10 +26,11 @@ export default function Notification(props: Props) {
   const { push } = useHistory();
   const { notification_rule, notification_parameters, is_seen, id } = notification;
   const notificationTarget = notification && notification_parameters.device.target;
-  const commentText = notification_rule === NOTIFICATION_COMMENT && notification_parameters.dynamic.comment;
+  const isCommentNotification = notification_rule === NOTIFICATION_COMMENT || notification_rule === NOTIFICATION_REPLY;
+  const commentText = isCommentNotification && notification_parameters.dynamic.comment;
   let notificationLink = formatLbryUrlForWeb(notificationTarget);
   let urlParams = new URLSearchParams();
-  if (notification_rule === NOTIFICATION_COMMENT && notification_parameters.dynamic.hash) {
+  if (isCommentNotification && notification_parameters.dynamic.hash) {
     urlParams.append('lc', notification_parameters.dynamic.hash);
   }
 
@@ -49,6 +50,9 @@ export default function Notification(props: Props) {
       break;
     case NOTIFICATION_COMMENT:
       icon = <ChannelThumbnail small uri={notification_parameters.dynamic.comment_author} />;
+      break;
+    case NOTIFICATION_REPLY:
+      icon = <ChannelThumbnail small uri={notification_parameters.dynamic.reply_author} />;
       break;
     default:
       icon = <Icon icon={ICONS.NOTIFICATION} sectionIcon className="notification__icon" />;
@@ -100,11 +104,11 @@ export default function Notification(props: Props) {
         <div className="notification__icon">{icon}</div>
         <div className="notification__content">
           <div>
-            {notification_rule !== NOTIFICATION_COMMENT && (
+            {!isCommentNotification && (
               <div className="notification__title">{notification_parameters.device.title}</div>
             )}
 
-            {notification_rule === NOTIFICATION_COMMENT && commentText ? (
+            {isCommentNotification && commentText ? (
               <>
                 <div className="notification__title">{notification_parameters.device.title}</div>
                 <div className="notification__text mobile-hidden">{commentText}</div>
