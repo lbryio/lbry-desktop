@@ -22,6 +22,7 @@ declare type WebNotification = {
     },
     dynamic: {
       comment_author: string,
+      reply_author: string,
       hash: string,
       claim_title: string,
       comment?: string,
