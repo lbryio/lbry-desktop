@@ -67,7 +67,7 @@ type Props = {
   isUpgradeAvailable: boolean,
   autoUpdateDownloaded: boolean,
   updatePreferences: () => Promise<any>,
-  updateSyncPref: () => void,
+  pushPrefsIfSyncFalse: () => void,
   uploadCount: number,
   balance: ?number,
   syncError: ?string,
@@ -99,7 +99,7 @@ function App(props: Props) {
     languages,
     setLanguage,
     updatePreferences,
-    updateSyncPref,
+    pushPrefsIfSyncFalse,
     rewards,
     setReferrer,
     isAuthenticated,
@@ -237,6 +237,7 @@ function App(props: Props) {
   useEffect(() => {
     if (updatePreferences && readyForPrefs) {
       updatePreferences().then(() => {
+        // will pull and U_S_P; usp will make sure prefBox applied if false
         setReadyForSync(true);
       });
     }
@@ -245,19 +246,21 @@ function App(props: Props) {
 
   // ready for sync syncs, however after signin when hasVerifiedEmail, that syncs too.
   useEffect(() => {
-    if (readyForSync && hasVerifiedEmail) {
-      // Copy sync checkbox to settings and push to preferences
-      // before sync if false, after sync if true so as not to change timestamp.
-      if (signInSyncPref === false) {
-        updateSyncPref();
-      }
+    // signInSyncPref is cleared after sharedState loop.
+    if (readyForSync && hasVerifiedEmail && signInSyncPref === undefined) {
+      // On sign-in, we get and apply all the information on whether to sync
+      // the checkbox, previous wallet settings, store rehydrate, etc
+      // Our app is up to date with the wallet
+      // Because the checkbox is applied last, make sure the wallet remembers if false:
+      // @if TARGET='app'
+      pushPrefsIfSyncFalse();
+      // @endif
+
+      // And try this in case we are syncing.
       syncSubscribe();
-      if (signInSyncPref === true) {
-        updateSyncPref();
-      }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [readyForSync, hasVerifiedEmail, signInSyncPref, updateSyncPref, syncSubscribe]);
+  }, [readyForSync, hasVerifiedEmail, signInSyncPref, pushPrefsIfSyncFalse, syncSubscribe]);
 
   // We know someone is logging in or not when we get their user object {}
   // We'll use this to determine when it's time to pull preferences

@@ -12,7 +12,7 @@ import {
   selectThemePath,
 } from 'redux/selectors/settings';
 import { selectIsUpgradeAvailable, selectAutoUpdateDownloaded } from 'redux/selectors/app';
-import { doSetLanguage, doUpdateSyncPref } from 'redux/actions/settings';
+import { doSetLanguage, doUpdateSyncPrefIfFalse } from 'redux/actions/settings';
 import { doSyncSubscribe } from 'redux/actions/syncwrapper';
 import {
   doDownloadUpgradeRequested,
@@ -46,7 +46,7 @@ const perform = dispatch => ({
   signIn: () => dispatch(doSignIn()),
   requestDownloadUpgrade: () => dispatch(doDownloadUpgradeRequested()),
   updatePreferences: () => dispatch(doGetAndPopulatePreferences()),
-  updateSyncPref: () => dispatch(doUpdateSyncPref()),
+  pushPrefsIfSyncFalse: () => dispatch(doUpdateSyncPrefIfFalse()),
   syncSubscribe: () => dispatch(doSyncSubscribe()),
   setReferrer: (referrer, doClaim) => dispatch(doUserSetReferrer(referrer, doClaim)),
 });

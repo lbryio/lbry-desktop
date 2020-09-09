@@ -160,13 +160,22 @@ reducers[ACTIONS.SYNC_PREFERENCE_CHANGED] = (state, action) => {
 };
 
 reducers[LBRY_REDUX_ACTIONS.USER_STATE_POPULATE] = (state, action) => {
-  const { clientSettings: currentClientSettings } = state;
+  const { clientSettings: currentClientSettings, syncEnabledPref } = state;
   const { settings: sharedPreferences } = action.data;
+  // we have to update the signin sync checkbox in here
+  // where we can simulataneously set the checkbox temp value to undefined, and
+  // update the sync setting before sync happens
+  // temp box must be undefined to trigger the items in the syncSubscribe effect
+  const syncSettingOrEmpty = syncEnabledPref !== undefined ? { enable_sync: syncEnabledPref } : {};
 
   const selectedSettings = sharedPreferences ? getSubsetFromKeysArray(sharedPreferences, clientSyncKeys) : {};
-  const mergedClientSettings = { ...currentClientSettings, ...selectedSettings };
+  const mergedClientSettings = { ...currentClientSettings, ...selectedSettings, ...syncSettingOrEmpty };
   const newSharedPreferences = sharedPreferences || {};
-  return Object.assign({}, state, { sharedPreferences: newSharedPreferences, clientSettings: mergedClientSettings });
+  return Object.assign({}, state, {
+    sharedPreferences: newSharedPreferences,
+    clientSettings: mergedClientSettings,
+    syncEnabledPref: undefined,
+  });
 };
 
 reducers[LBRY_REDUX_ACTIONS.SAVE_CUSTOM_WALLET_SERVERS] = (state, action) => {
