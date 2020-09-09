@@ -90,12 +90,12 @@ export default function FileRenderFloating(props: Props) {
     return null;
   }
 
-  function handleStart(e, ui) {
+  function handleDragStart(e, ui) {
     // Not really necessary, but reset just in case 'handleStop' didn't fire.
     setWasDragging(false);
   }
 
-  function handleDrag(e, ui) {
+  function handleDragMove(e, ui) {
     setWasDragging(true);
 
     const { x, y } = position;
@@ -107,7 +107,7 @@ export default function FileRenderFloating(props: Props) {
     });
   }
 
-  function handleStop(e, ui) {
+  function handleDragStop(e, ui) {
     if (wasDragging) {
       e.stopPropagation();
       setWasDragging(false);
@@ -116,9 +116,9 @@ export default function FileRenderFloating(props: Props) {
 
   return (
     <Draggable
-      onDrag={handleDrag}
-      onStart={handleStart}
-      onStop={handleStop}
+      onDrag={handleDragMove}
+      onStart={handleDragStart}
+      onStop={handleDragStop}
       defaultPosition={position}
       position={isFloating ? position : { x: 0, y: 0 }}
       bounds="parent"
