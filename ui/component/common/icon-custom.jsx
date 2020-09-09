@@ -59,77 +59,83 @@ export const icons = {
         strokeLinejoin="round"
         {...rest}
       >
+        <path d="M1.03125 14.1562V9.84375L12 0L22.9688 9.84375V14.1562L12 24L1.03125 14.1562Z" fill="black" />
+        <path d="M8.925 10.3688L3.99375 14.8125L7.70625 18.15L12.6375 13.7063L8.925 10.3688Z" fill="black" />
         <path
-          d="M17.2106 4.45688L17.1881 4.44L15.9131 3.3825L11.8331 0L1.43811 8.89875V14.5087L6.39749 19.0406L11.8219 24L22.5619 14.9044V8.895L17.2106 4.45688Z"
+          d="M8.925 10.3688L15.1312 4.80005L12 1.98755L2.60625 10.425V13.575L3.99375 14.8125L8.925 10.3688Z"
           fill="black"
         />
         <path
-          d="M14.6269 4.47001L11.8519 2.16751L3.0975 9.66188V13.7775L3.36938 14.0269L9.19125 9.06376L14.6269 4.47001Z"
+          d="M8.925 10.3688L3.99375 14.8125L7.70625 18.15L12.6375 13.7063L8.925 10.3688Z"
           fill={`url(#paint0_linear${randomId})`}
         />
         <path
-          d="M13.3444 13.1381L9.19126 9.06375L3.36938 14.0269L7.67063 17.9587L13.3444 13.1381Z"
+          d="M8.925 10.3688L15.1312 4.80005L12 1.98755L2.60625 10.425V13.575L3.99375 14.8125L8.925 10.3688Z"
           fill={`url(#paint1_linear${randomId})`}
         />
         <path
-          d="M20.61 9.43125L15.9244 5.54437L11.6512 9.15562L15.8025 13.2262L20.6062 9.43312L20.61 9.43125Z"
+          d="M15.075 13.6313L20.0062 9.1876L16.2937 5.8501L11.3625 10.2938L15.075 13.6313Z"
           fill={`url(#paint2_linear${randomId})`}
         />
         <path
-          d="M20.6062 9.43315L15.8025 13.2263L8.90436 19.0875L11.8631 21.7913L20.9025 14.1375V9.67502L20.61 9.43127L20.6062 9.43315Z"
+          d="M15.075 13.6312L8.86875 19.2L12 22.0125L21.3937 13.575V10.425L20.0062 9.1875L15.075 13.6312Z"
           fill={`url(#paint3_linear${randomId})`}
         />
+
         <defs>
           <linearGradient
             id={`paint0_linear${randomId}`}
-            x1="3.0975"
-            y1="8.09813"
-            x2="14.6269"
-            y2="8.09813"
+            x1="3.7206"
+            y1="14.2649"
+            x2="15.1645"
+            y2="14.2649"
             gradientUnits="userSpaceOnUse"
           >
-            <stop offset="0.42" stopColor="#FABD09" />
-            <stop offset="0.83" stopColor="#FA6B00" />
-          </linearGradient>
-          <linearGradient
-            id={`paint1_linear${randomId}`}
-            x1="3.09751"
-            y1="13.5112"
-            x2="14.6269"
-            y2="13.5112"
-            gradientUnits="userSpaceOnUse"
-          >
-            <stop offset="0.25" stopColor="#E700FF" />
-            <stop offset="0.32" stopColor="#E804F9" />
-            <stop offset="0.41" stopColor="#E90EE8" />
-            <stop offset="0.52" stopColor="#EC1FCC" />
-            <stop offset="0.64" stopColor="#F037A5" />
-            <stop offset="0.76" stopColor="#F45672" />
-            <stop offset="0.89" stopColor="#FA7A36" />
+            <stop offset="0.2464" stopColor="#E700FF" />
+            <stop offset="0.3166" stopColor="#E804F9" />
+            <stop offset="0.4108" stopColor="#E90EE8" />
+            <stop offset="0.5188" stopColor="#EC1FCC" />
+            <stop offset="0.637" stopColor="#F037A5" />
+            <stop offset="0.7635" stopColor="#F45672" />
+            <stop offset="0.8949" stopColor="#FA7A36" />
             <stop offset="1" stopColor="#FF9B00" />
           </linearGradient>
           <linearGradient
+            id={`paint1_linear${randomId}`}
+            x1="2.60274"
+            y1="8.40089"
+            x2="15.14"
+            y2="8.40089"
+            gradientUnits="userSpaceOnUse"
+          >
+            <stop offset="0.4233" stopColor="#FABD09" />
+            <stop offset="0.8292" stopColor="#FA6B00" />
+          </linearGradient>
+          <linearGradient
             id={`paint2_linear${randomId}`}
-            x1="8.90437"
-            y1="9.38625"
-            x2="20.9025"
-            y2="9.38625"
+            x1="6.8682"
+            y1="14.1738"
+            x2="25.405"
+            y2="4.84055"
             gradientUnits="userSpaceOnUse"
           >
             <stop stopColor="#BAFF8E" />
-            <stop offset="0.63" stopColor="#008EBB" />
+            <stop offset="0.6287" stopColor="#008EBB" />
           </linearGradient>
           <linearGradient
             id={`paint3_linear${randomId}`}
-            x1="1220.59"
-            y1="418.3"
-            x2="608.328"
-            y2="1952.52"
+            x1="25.2522"
+            y1="6.08799"
+            x2="3.87697"
+            y2="27.836"
             gradientUnits="userSpaceOnUse"
           >
             <stop stopColor="#BAFF8E" />
-            <stop offset="0.63" stopColor="#008EBB" />
+            <stop offset="0.6287" stopColor="#008EBB" />
           </linearGradient>
+          <clipPath id="clip0">
+            <rect width="24" height="24" fill="white" />
+          </clipPath>
         </defs>
       </svg>
     );
