@@ -92,7 +92,11 @@ function UserSignUp(props: Props) {
   const hasYoutubeChannels = youtubeChannels && Boolean(youtubeChannels.length);
   const isYoutubeTransferComplete =
     hasYoutubeChannels &&
-    youtubeChannels.every(channel => channel.transfer_state === YOUTUBE_STATUSES.COMPLETED_TRANSFER);
+    youtubeChannels.every(
+      channel =>
+        channel.transfer_state === YOUTUBE_STATUSES.COMPLETED_TRANSFER ||
+        channel.sync_status === YOUTUBE_STATUSES.YOUTUBE_SYNC_ABANDONDED
+    );
   // Complexity warning
   // We can't just check if we are currently fetching something
   // We may want to keep a component rendered while something is being fetched, instead of replacing it with the large spinner
