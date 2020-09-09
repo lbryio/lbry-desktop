@@ -138,13 +138,14 @@ export function doSetClientSetting(key, value, pushPrefs) {
   };
 }
 
-export function doUpdateSyncPref() {
+export function doUpdateSyncPrefIfFalse() {
+  // This is only called after manual signin to update the wallet
+  // that the sync preference is false
   return (dispatch, getState) => {
-    const { settings } = getState();
-    const { syncEnabledPref } = settings || {};
-    if (syncEnabledPref !== undefined) {
-      dispatch(doSetClientSetting(SETTINGS.ENABLE_SYNC, syncEnabledPref, true));
-      dispatch(doSetSyncPref(undefined));
+    const state = getState();
+    const syncEnabled = makeSelectClientSetting(SETTINGS.ENABLE_SYNC)(state);
+    if (syncEnabled === false) {
+      dispatch(doPushSettingsToPrefs());
     }
   };
 }
@@ -224,6 +225,7 @@ export function doExitSettingsPage() {
   return (dispatch, getState) => {
     dispatch(doSetSyncLock(false));
     dispatch(doPushSettingsToPrefs());
+    // syncSubscribe is restarted in store.js sharedStateCB if necessary
   };
 }
 
