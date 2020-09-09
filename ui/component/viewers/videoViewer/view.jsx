@@ -87,7 +87,10 @@ function VideoViewer(props: Props) {
   }, [uri, previousUri]);
 
   function doTrackingBuffered(e: Event, data: any) {
-    doAnalyticsBuffer(uri, data);
+    fetch(source, { method: 'HEAD' }).then(response => {
+      data.playerPoweredBy = response.headers.get('x-powered-by');
+      doAnalyticsBuffer(uri, data);
+    });
   }
 
   function doTrackingFirstPlay(e: Event, data: any) {
