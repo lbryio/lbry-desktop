@@ -946,6 +946,7 @@
   "Signing in as %email%": "Signing in as %email%",
   "Forgot Password?": "Forgot Password?",
   "Use Magic Link": "Use Magic Link",
+  "Password updated successfully.": "Password updated successfully.",
   "No recent publishes": "No recent publishes",
   "Error Fetching Stats": "Error Fetching Stats",
   "%follower_count_weekly_change% this week": "%follower_count_weekly_change% this week",
@@ -1281,5 +1282,6 @@
   "Most Commented Recent Content": "Most Commented Recent Content",
   "%comment_count% comments - %comment_count_change% this week": "%comment_count% comments - %comment_count_change% this week",
   "Invite": "Invite",
+  "Remove File": "Remove File",
   "--end--": "--end--"
 }
