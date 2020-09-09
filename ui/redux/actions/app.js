@@ -491,7 +491,6 @@ export function doAnalyticsBuffer(uri, bufferData) {
       bitRate,
       userIdHash,
       duration: fileDurationInSeconds,
-      playerPoweredBy: bufferData.playerPoweredBy,
     });
   };
 }
