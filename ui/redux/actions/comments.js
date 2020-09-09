@@ -39,7 +39,13 @@ export function doCommentList(uri: string, page: number = 1, pageSize: number = 
   };
 }
 
-export function doCommentCreate(comment: string = '', claim_id: string = '', channel: string, parent_id?: string) {
+export function doCommentCreate(
+  comment: string = '',
+  claim_id: string = '',
+  channel: string,
+  parent_id?: string,
+  uri: string
+) {
   return (dispatch: Dispatch, getState: GetState) => {
     const state = getState();
     dispatch({
@@ -74,6 +80,7 @@ export function doCommentCreate(comment: string = '', claim_id: string = '', cha
         dispatch({
           type: ACTIONS.COMMENT_CREATE_COMPLETED,
           data: {
+            uri,
             comment: result,
             claimId: claim_id,
           },

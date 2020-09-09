@@ -23,11 +23,12 @@ export default handleActions(
     }),
 
     [ACTIONS.COMMENT_CREATE_COMPLETED]: (state: CommentsState, action: any): CommentsState => {
-      const { comment, claimId }: { comment: Comment, claimId: string } = action.data;
+      const { comment, claimId, uri }: { comment: Comment, claimId: string, uri: string } = action.data;
       const commentById = Object.assign({}, state.commentById);
       const byId = Object.assign({}, state.byId);
       const comments = byId[claimId] || [];
       const newCommentIds = comments.slice();
+      const commentsByUri = Object.assign({}, state.commentsByUri);
 
       // add the comment by its ID
       commentById[comment.comment_id] = comment;
@@ -36,10 +37,15 @@ export default handleActions(
       newCommentIds.unshift(comment.comment_id);
       byId[claimId] = newCommentIds;
 
+      if (!commentsByUri[uri]) {
+        commentsByUri[uri] = claimId;
+      }
+
       return {
         ...state,
         commentById,
         byId,
+        commentsByUri,
         isLoading: false,
       };
     },

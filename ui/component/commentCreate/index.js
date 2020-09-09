@@ -11,9 +11,9 @@ const select = (state, props) => ({
   channels: selectMyChannelClaims(state),
 });
 
-const perform = dispatch => ({
+const perform = (dispatch, ownProps) => ({
   createComment: (comment, claimId, channel, parentId) =>
-    dispatch(doCommentCreate(comment, claimId, channel, parentId)),
+    dispatch(doCommentCreate(comment, claimId, channel, parentId, ownProps.uri)),
   openModal: (modal, props) => dispatch(doOpenModal(modal, props)),
 });
 
