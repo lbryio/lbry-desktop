@@ -3,7 +3,7 @@ import { SIMPLE_SITE, SHOW_ADS } from 'config';
 import * as ICONS from 'constants/icons';
 import * as PAGES from 'constants/pages';
 import React, { useEffect, Fragment } from 'react';
-import { Lbry, regexInvalidURI, parseURI } from 'lbry-redux';
+import { Lbry, regexInvalidURI, parseURI, isNameValid } from 'lbry-redux';
 import ClaimPreview from 'component/claimPreview';
 import ClaimList from 'component/claimList';
 import Page from 'component/page';
@@ -50,11 +50,13 @@ export default function SearchPage(props: Props) {
   }
 
   const INVALID_URI_CHARS = new RegExp(regexInvalidURI, 'gu');
-  let isValid = false;
   let path;
+  let isValid = true;
   try {
-    ({ path } = parseURI(urlQuery.replace(/ /g, '-').replace(/:/g, '#')));
-    isValid = true;
+    let { streamName } = parseURI(urlQuery.replace(/ /g, '-').replace(/:/g, '#'));
+    if (!isNameValid(streamName)) {
+      isValid = false;
+    }
   } catch (e) {
     isValid = false;
   }
@@ -94,7 +96,7 @@ export default function SearchPage(props: Props) {
       <section className="search">
         {urlQuery && (
           <Fragment>
-            {!SIMPLE_SITE && (
+            {!SIMPLE_SITE && isValid && (
               <header className="search__header">
                 <div className="claim-preview__actions--header">
                   <ClaimUri uri={uriFromQuery} noShortUrl />
