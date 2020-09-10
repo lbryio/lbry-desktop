@@ -181,7 +181,7 @@ function ModalRepost(props: Props) {
                   step="any"
                   placeholder="0.123"
                   className="form-field--price-amount"
-                  label={<LbcSymbol prefix={__('Deposit')} size={14} />}
+                  label={<LbcSymbol postfix={__('Deposit')} size={14} />}
                   value={repostBid}
                   error={repostBidError}
                   disabled={!repostName}

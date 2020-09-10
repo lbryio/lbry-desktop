@@ -32,7 +32,7 @@ class ModalConfirmTransaction extends React.PureComponent<Props> {
               <div className="section section--padded card--inline confirm__wrapper">
                 <div className="section">
                   <div className="confirm__label">{__('Sending')}</div>
-                  <div className="confirm__value">{<LbcSymbol prefix={amount} size={22} />}</div>
+                  <div className="confirm__value">{<LbcSymbol postfix={amount} size={22} />}</div>
                   <div className="confirm__label">{__('To')}</div>
                   <div className="confirm__value">{address}</div>
                 </div>

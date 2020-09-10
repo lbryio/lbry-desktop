@@ -53,7 +53,7 @@ class CreditAmount extends React.PureComponent<Props> {
       }
 
       if (showLBC) {
-        amountText = <LbcSymbol prefix={amountText} />;
+        amountText = <LbcSymbol postfix={amountText} />;
       }
 
       if (fee) {

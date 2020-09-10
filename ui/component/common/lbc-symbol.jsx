@@ -9,18 +9,24 @@ type Props = {
   isTitle?: boolean,
   size?: number,
   prefix?: string | number,
+  postfix?: string | number,
 };
 
 const LbcSymbol = (props: Props) => {
-  const { prefix, size, isTitle = false } = props;
+  const { prefix, postfix, size, isTitle = false } = props;
   return (
     <>
       {prefix}
       <Icon
         icon={ICONS.LBC}
         size={isTitle ? 22 : size}
-        className={classnames('icon__lbc', { 'icon__lbc--with-text': prefix, 'icon__lbc--title': isTitle })}
+        className={classnames('icon__lbc', {
+          'icon__lbc--before-text': prefix,
+          'icon__lbc--after-text': postfix,
+          'icon__lbc--title': isTitle,
+        })}
       />
+      {postfix}
     </>
   );
 };

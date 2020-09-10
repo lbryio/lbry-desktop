@@ -105,6 +105,10 @@ label {
   color: var(--color-input-label);
   display: inline-block;
   margin-bottom: var(--spacing-xxs);
+
+  .icon__lbc {
+    margin-bottom: 4px;
+  }
 }
 
 input-submit {

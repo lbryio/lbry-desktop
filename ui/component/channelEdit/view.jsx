@@ -295,7 +295,7 @@ function ChannelForm(props: Props) {
                     type="number"
                     name="content_bid2"
                     step="any"
-                    label={<LbcSymbol prefix={__('Deposit')} size={14} />}
+                    label={<LbcSymbol postfix={__('Deposit')} size={14} />}
                     value={params.amount}
                     error={bidError}
                     min="0.0"
