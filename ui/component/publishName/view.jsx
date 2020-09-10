@@ -132,7 +132,7 @@ function PublishName(props: Props) {
             step="any"
             placeholder="0.123"
             className="form-field--price-amount"
-            label={<LbcSymbol prefix={__('Deposit')} size={14} />}
+            label={<LbcSymbol postfix={__('Deposit')} size={12} />}
             value={bid}
             error={bidError}
             disabled={!name}

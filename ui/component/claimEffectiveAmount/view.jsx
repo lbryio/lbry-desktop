@@ -14,7 +14,7 @@ function ClaimEffectiveAmount(props: Props) {
     return null;
   }
 
-  return <LbcSymbol prefix={claim.meta.effective_amount} />;
+  return <LbcSymbol postfix={claim.meta.effective_amount} />;
 }
 
 export default ClaimEffectiveAmount;

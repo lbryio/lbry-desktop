@@ -46,15 +46,14 @@
 
 .icon__lbc {
   vertical-align: middle;
-  //   fill: none;
-
-  path {
-    // fill: none;
-  }
 }
 
-.icon__lbc--with-text {
+.icon__lbc--before-text {
   margin-left: 5px;
+}
+
+.icon__lbc--after-text {
+  margin-right: 5px;
 }
 
 .icon__lbc--title {
