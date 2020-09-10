@@ -54,7 +54,7 @@ function WalletSendTip(props: Props) {
   const [customTipAmount, setCustomTipAmount] = usePersistedState('comment-support:customTip', 1.0);
   const [useCustomTip, setUseCustomTip] = usePersistedState('comment-support:useCustomTip', false);
   const [tipError, setTipError] = React.useState();
-  const [sendAsTip, setSendAsTip] = usePersistedState('comment-support:sendAsTip', true);
+  const [sendAsTip, setSendAsTip] = React.useState(true); // usePersistedState('comment-support:sendAsTip', true);
   const [isConfirming, setIsConfirming] = React.useState(false);
   const [selectedChannel, setSelectedChannel] = usePersistedState('comment-support:channel');
   const { claim_id: claimId } = claim;
@@ -175,14 +175,14 @@ function WalletSendTip(props: Props) {
         />
       ) : (
         <Card
-          title={claimIsMine ? __('Boost your content') : isSupport ? __('Support this content') : __('Send a tip')}
+          title={claimIsMine ? __('Boost your content') : isSupport ? __('Support this content') : __('Support')}
           subtitle={
             <React.Fragment>
               {isSupport
                 ? __(
                     'This will increase the overall bid amount for this content, which will boost its ability to be discovered while active.'
                   )
-                : __('Send a chunk of change to this creator to let them know you appreciate their content.')}{' '}
+                : __('Show this channel your appreciation by sending a donation.')}{' '}
               <Button label={__('Learn more')} button="link" href="https://lbry.com/faq/tipping" />.
             </React.Fragment>
           }
@@ -197,7 +197,7 @@ function WalletSendTip(props: Props) {
                     <div className="confirm__value">{selectedChannel}</div>
                     <div className="confirm__label">{__(isSupport ? 'Supporting' : 'Tipping')}</div>
                     <div className="confirm__value">
-                      <LbcSymbol prefix={tipAmount} size={22} />
+                      <LbcSymbol postfix={tipAmount} size={22} />
                     </div>
                   </div>
                 </div>
@@ -233,7 +233,7 @@ function WalletSendTip(props: Props) {
                         'button-toggle--disabled': amount > balance,
                       })}
                       label={amount}
-                      iconRight={ICONS.LBC}
+                      icon={ICONS.LBC}
                       onClick={() => {
                         setPresetTipAmount(amount);
                         setUseCustomTip(false);
@@ -245,6 +245,7 @@ function WalletSendTip(props: Props) {
                     className={classnames('button-toggle button-toggle--expandformobile', {
                       'button-toggle--active': !DEFAULT_TIP_AMOUNTS.includes(tipAmount),
                     })}
+                    icon={ICONS.LBC}
                     label={__('Custom')}
                     onClick={() => setUseCustomTip(true)}
                   />
@@ -267,8 +268,10 @@ function WalletSendTip(props: Props) {
                       label={
                         <React.Fragment>
                           {__('Custom support amount')}{' '}
-                          <I18nMessage tokens={{ lbc_balance: <CreditAmount precision={4} amount={balance} /> }}>
-                            (%lbc_balance% available)
+                          <I18nMessage
+                            tokens={{ lbc_balance: <CreditAmount precision={4} amount={balance} showLBC={false} /> }}
+                          >
+                            (%lbc_balance% Credits available)
                           </I18nMessage>
                         </React.Fragment>
                       }
@@ -298,7 +301,7 @@ function WalletSendTip(props: Props) {
                     }
                   />
                   {fetchingChannels && <span className="help">{__('Loading your channels...')}</span>}
-                  {!claimIsMine && !fetchingChannels && (
+                  {false && !claimIsMine && !fetchingChannels && (
                     <FormField
                       name="toggle-is-support"
                       type="checkbox"
