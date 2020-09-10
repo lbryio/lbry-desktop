@@ -112,7 +112,7 @@ class ChannelCreate extends React.PureComponent<Props, State> {
           <FormField
             className="form-field--price-amount"
             name="channel-deposit"
-            label={<LbcSymbol prefix={__('Deposit')} size={14} />}
+            label={<LbcSymbol postfix={__('Deposit')} size={14} />}
             step="any"
             min="0"
             type="number"

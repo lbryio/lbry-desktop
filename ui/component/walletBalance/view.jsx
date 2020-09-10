@@ -27,7 +27,7 @@ const WalletBalance = (props: Props) => {
     <React.Fragment>
       <section className="columns">
         <Card
-          title={<LbcSymbol prefix={balance} isTitle />}
+          title={<LbcSymbol postfix={balance} isTitle />}
           subtitle={__('Available Balance')}
           actions={
             <div className="section__actions">
