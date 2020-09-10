@@ -20,7 +20,7 @@ export const doSocketConnect = () => dispatch => {
 
     const timeToWait = retryCount ** 2 * 1000;
     setTimeout(() => {
-      const url = `ws://api.lbry.com/subscribe?auth_token=${authToken}`;
+      const url = `wss://api.lbry.com/subscribe?auth_token=${authToken}`;
       socket = new WebSocket(url);
       socket.onopen = e => {
         retryCount = 0;
