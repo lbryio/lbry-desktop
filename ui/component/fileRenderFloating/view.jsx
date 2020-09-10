@@ -13,6 +13,9 @@ import Draggable from 'react-draggable';
 import Tooltip from 'component/common/tooltip';
 import { onFullscreenChange } from 'util/full-screen';
 import { useIsMobile } from 'effects/use-screensize';
+import debounce from 'util/debounce';
+
+const DEBOUNCE_WINDOW_RESIZE_HANDLER_MS = 60;
 
 type Props = {
   isFloating: boolean,
@@ -45,6 +48,7 @@ export default function FileRenderFloating(props: Props) {
     x: -25,
     y: window.innerHeight - 400,
   });
+  const [relativePos, setRelativePos] = useState({ x: 0, y: 0 });
 
   const isPlayable = RENDER_MODES.FLOATING_MODES.includes(renderMode);
   const isReadyToPlay = isPlayable && (streamingUrl || (fileInfo && fileInfo.completed));
@@ -52,6 +56,55 @@ export default function FileRenderFloating(props: Props) {
     fileInfo && fileInfo.blobs_completed >= 1 && (!fileInfo.download_path || !fileInfo.written_bytes)
       ? __("It looks like you deleted or moved this file. We're rebuilding it now. It will only take a few seconds.")
       : __('Loading');
+
+  function getScreenWidth() {
+    if (document && document.documentElement) {
+      return document.documentElement.clientWidth;
+    } else {
+      return window.innerWidth;
+    }
+  }
+
+  function getScreenHeight() {
+    if (document && document.documentElement) {
+      return document.documentElement.clientHeight;
+    } else {
+      return window.innerHeight;
+    }
+  }
+
+  useEffect(() => {
+    setRelativePos({
+      x: position.x / getScreenWidth(),
+      y: position.y / getScreenHeight(),
+    });
+  }, []);
+
+  useEffect(() => {
+    const handleMainWindowResize = debounce(e => {
+      const GAP_PX = 10;
+      const ESTIMATED_SCROLL_BAR_PX = 50;
+      const FLOATING_PLAYER_CLASS = 'content__viewer--floating';
+      const fpPlayerElem = document.querySelector(`.${FLOATING_PLAYER_CLASS}`);
+
+      let newX = Math.round(relativePos.x * getScreenWidth());
+      let newY = Math.round(relativePos.y * getScreenHeight());
+
+      if (fpPlayerElem) {
+        if (newX + fpPlayerElem.getBoundingClientRect().width > getScreenWidth() - ESTIMATED_SCROLL_BAR_PX) {
+          newX = getScreenWidth() - fpPlayerElem.getBoundingClientRect().width - ESTIMATED_SCROLL_BAR_PX - GAP_PX;
+        }
+        if (newY + fpPlayerElem.getBoundingClientRect().height > getScreenHeight()) {
+          newY = getScreenHeight() - fpPlayerElem.getBoundingClientRect().height - GAP_PX * 2;
+        }
+      }
+
+      setPosition({ x: newX, y: newY });
+    }, DEBOUNCE_WINDOW_RESIZE_HANDLER_MS);
+
+    window.addEventListener('resize', handleMainWindowResize);
+    return () => window.removeEventListener('resize', handleMainWindowResize);
+  }, [relativePos]);
 
   useEffect(() => {
     function handleResize() {
@@ -97,7 +150,6 @@ export default function FileRenderFloating(props: Props) {
 
   function handleDragMove(e, ui) {
     setWasDragging(true);
-
     const { x, y } = position;
     const newX = x + ui.deltaX;
     const newY = y + ui.deltaY;
@@ -111,6 +163,10 @@ export default function FileRenderFloating(props: Props) {
     if (wasDragging) {
       e.stopPropagation();
       setWasDragging(false);
+      setRelativePos({
+        x: position.x / getScreenWidth(),
+        y: position.y / getScreenHeight(),
+      });
     }
   }
 
