@@ -12,6 +12,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Block mature content when accessed directly from URL _community pr!_ ([#4560](https://github.com/lbryio/lbry-desktop/pull/4560))
 - You can now add LBRY as a search engine in your browser (via OpenSearch) _community pr!_ ([#4640](https://github.com/lbryio/lbry-desktop/pull/4640))
 - In-app text and markdown publishing and editing _community pr!_ ([#4591](https://github.com/lbryio/lbry-desktop/pull/4591))
+- New comment stats on creator analytics page _jiggytom certified_ ([#4715](https://github.com/lbryio/lbry-desktop/pull/4715))
 
 ### Changed
 
@@ -28,6 +29,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Fix floating player being paused after dragging _community pr!_ ([#4710](https://github.com/lbryio/lbry-desktop/pull/4710))
 - Web: Fix 'Download' not triggering until second attempt _community pr!_ ([#4721](https://github.com/lbryio/lbry-desktop/pull/4721))
 - Floating player: Stay within screen when window is resized _community pr!_([#4750](https://github.com/lbryio/lbry-desktop/pull/4750))
+- App crash when including % sign in search _community pr!_([#4753](https://github.com/lbryio/lbry-desktop/pull/4753))
+- First comment on claim not showing up immeditately ([#4747](https://github.com/lbryio/lbry-desktop/pull/4747))
 
 ## [0.47.1] - [2020-07-23]
 
