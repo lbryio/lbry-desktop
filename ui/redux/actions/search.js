@@ -45,7 +45,7 @@ export const getSearchSuggestions = (value: string) => (dispatch: Dispatch, getS
     return;
   }
 
-  fetch(`${CONNECTION_STRING}autocomplete?s=${searchValue}`)
+  fetch(`${CONNECTION_STRING}autocomplete?s=${encodeURIComponent(searchValue)}`)
     .then(handleFetchResponse)
     .then(apiSuggestions => {
       dispatch({
@@ -71,6 +71,8 @@ export const doUpdateSearchQuery = (query: string, shouldSkipSuggestions: ?boole
     type: ACTIONS.UPDATE_SEARCH_QUERY,
     data: { query },
   });
+
+  if (!query) return;
 
   // Don't fetch new suggestions if the user just added a space
   if (!query.endsWith(' ') || !shouldSkipSuggestions) {
