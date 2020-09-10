@@ -72,8 +72,6 @@ export const doUpdateSearchQuery = (query: string, shouldSkipSuggestions: ?boole
     data: { query },
   });
 
-  if (!query) return;
-
   // Don't fetch new suggestions if the user just added a space
   if (!query.endsWith(' ') || !shouldSkipSuggestions) {
     throttledSearchSuggestions(dispatch, query);
