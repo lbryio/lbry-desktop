@@ -21,6 +21,7 @@ import {
   selectFollowedTagsList,
   SHARED_PREFERENCES,
   DAEMON_SETTINGS,
+  SETTINGS,
 } from 'lbry-redux';
 import { doToast, doError, doNotificationList } from 'redux/actions/notifications';
 import Native from 'native';
@@ -43,7 +44,7 @@ import {
   selectModal,
   selectAllowAnalytics,
 } from 'redux/selectors/app';
-import { selectDaemonSettings } from 'redux/selectors/settings';
+import { selectDaemonSettings, makeSelectClientSetting } from 'redux/selectors/settings';
 import { selectUser } from 'redux/selectors/user';
 // import { selectDaemonSettings } from 'redux/selectors/settings';
 import { doSyncSubscribe } from 'redux/actions/syncwrapper';
@@ -596,9 +597,11 @@ export function doGetAndPopulatePreferences() {
 
   return (dispatch, getState) => {
     const state = getState();
+    const syncEnabled = makeSelectClientSetting(SETTINGS.ENABLE_SYNC)(state);
+    const hasVerifiedEmail = state.user && state.user.user && state.user.user.has_verified_email;
     let preferenceKey;
     // @if TARGET='app'
-    preferenceKey = state.user && state.user.user && state.user.user.has_verified_email ? 'shared' : 'anon';
+    preferenceKey = syncEnabled && hasVerifiedEmail ? 'shared' : 'local';
     // @endif
     // @if TARGET='web'
     preferenceKey = 'shared';

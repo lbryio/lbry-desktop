@@ -53,7 +53,6 @@ type Props = {
   findingFFmpeg: boolean,
   findFFmpeg: () => void,
   language?: string,
-  syncEnabled: boolean,
   syncSettings: () => void,
   enterSettings: () => void,
   exitSettings: () => void,

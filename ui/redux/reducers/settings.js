@@ -24,7 +24,6 @@ const defaultState = {
   findingFFmpeg: false,
   loadedLanguages: [...Object.keys(window.i18n_messages), 'en'] || ['en'],
   customWalletServers: [],
-  syncEnabledPref: undefined, // set this during sign in, copy it to clientSettings immediately after prefGet after signedin but before sync
   sharedPreferences: {},
   daemonSettings: {},
   daemonStatus: { ffmpeg_status: {} },
@@ -153,28 +152,15 @@ reducers[ACTIONS.SYNC_CLIENT_SETTINGS] = state => {
   return Object.assign({}, state, { sharedPreferences: newSharedPreferences });
 };
 
-reducers[ACTIONS.SYNC_PREFERENCE_CHANGED] = (state, action) => {
-  return Object.assign({}, state, {
-    syncEnabledPref: action.data,
-  });
-};
-
 reducers[LBRY_REDUX_ACTIONS.USER_STATE_POPULATE] = (state, action) => {
-  const { clientSettings: currentClientSettings, syncEnabledPref } = state;
+  const { clientSettings: currentClientSettings } = state;
   const { settings: sharedPreferences } = action.data;
-  // we have to update the signin sync checkbox in here
-  // where we can simulataneously set the checkbox temp value to undefined, and
-  // update the sync setting before sync happens
-  // temp box must be undefined to trigger the items in the syncSubscribe effect
-  const syncSettingOrEmpty = syncEnabledPref !== undefined ? { enable_sync: syncEnabledPref } : {};
-
   const selectedSettings = sharedPreferences ? getSubsetFromKeysArray(sharedPreferences, clientSyncKeys) : {};
-  const mergedClientSettings = { ...currentClientSettings, ...selectedSettings, ...syncSettingOrEmpty };
+  const mergedClientSettings = { ...currentClientSettings, ...selectedSettings };
   const newSharedPreferences = sharedPreferences || {};
   return Object.assign({}, state, {
     sharedPreferences: newSharedPreferences,
     clientSettings: mergedClientSettings,
-    syncEnabledPref: undefined,
   });
 };
 

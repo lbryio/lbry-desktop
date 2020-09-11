@@ -8,7 +8,7 @@ import {
   selectEmailNewIsPending,
 } from 'redux/selectors/user';
 import { doUserCheckIfEmailExists, doClearEmailEntry } from 'redux/actions/user';
-import { doSetSyncPref } from 'redux/actions/settings';
+import { doSetWalletSyncPreference } from 'redux/actions/settings';
 import UserEmailReturning from './view';
 
 const select = state => ({
@@ -23,5 +23,5 @@ const select = state => ({
 export default connect(select, {
   doUserCheckIfEmailExists,
   doClearEmailEntry,
-  doSetSyncPref,
+  doSetWalletSyncPreference,
 })(UserEmailReturning);

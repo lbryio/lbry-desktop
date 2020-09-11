@@ -38,6 +38,7 @@ import ModalSignOut from 'modal/modalSignOut';
 import ModalSupportsLiquidate from 'modal/modalSupportsLiquidate';
 import ModalConfirmAge from 'modal/modalConfirmAge';
 import ModalFileSelection from 'modal/modalFileSelection';
+import ModalSyncEnable from 'modal/modalSyncEnable';
 import ModalImageUpload from 'modal/modalImageUpload';
 
 type Props = {
@@ -140,6 +141,8 @@ function ModalRouter(props: Props) {
       return <ModalRemoveBlocked {...modalProps} />;
     case MODALS.IMAGE_UPLOAD:
       return <ModalImageUpload {...modalProps} />;
+    case MODALS.SYNC_ENABLE:
+      return <ModalSyncEnable {...modalProps} />;
     default:
       return null;
   }

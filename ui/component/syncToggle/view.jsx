@@ -1,9 +1,10 @@
 // @flow
 import * as PAGES from 'constants/pages';
+import * as MODALS from 'constants/modal_types';
 import React from 'react';
 import Button from 'component/button';
-import { FormField } from 'component/common/form';
 import { withRouter } from 'react-router';
+import { FormField } from 'component/common/form';
 
 type Props = {
   setSyncEnabled: boolean => void,
@@ -13,22 +14,19 @@ type Props = {
   location: UrlLocation,
   getSyncError: ?string,
   disabled: boolean,
+  openModal: (string, any) => void,
 };
 
 function SyncToggle(props: Props) {
   const {
-    setSyncEnabled,
-    syncEnabled,
     verifiedEmail,
     getSyncError,
     history,
     location: { pathname },
-    disabled = false,
+    openModal,
+    syncEnabled,
+    disabled,
   } = props;
-
-  function handleChange() {
-    setSyncEnabled(!syncEnabled);
-  }
 
   if (getSyncError) {
     history.push(`/$/${PAGES.AUTH}?redirect=${pathname}&immediate=true`);
@@ -48,7 +46,7 @@ function SyncToggle(props: Props) {
           name="sync_toggle"
           label={__('Sync your balance and preferences across devices.')}
           checked={syncEnabled}
-          onChange={handleChange}
+          onChange={() => openModal(MODALS.SYNC_ENABLE, { mode: syncEnabled ? 'disable' : 'enable' })}
           disabled={disabled}
         />
       )}

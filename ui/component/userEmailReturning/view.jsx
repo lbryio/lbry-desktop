@@ -17,7 +17,7 @@ type Props = {
   doClearEmailEntry: () => void,
   doUserSignIn: (string, ?string) => void,
   doUserCheckIfEmailExists: string => void,
-  doSetSyncPref: boolean => void,
+  doSetWalletSyncPreference: boolean => void,
   doSetClientSetting: (string, boolean, ?boolean) => void,
   isPending: boolean,
 };
@@ -30,7 +30,7 @@ function UserEmailReturning(props: Props) {
     emailToVerify,
     doClearEmailEntry,
     emailDoesNotExist,
-    doSetSyncPref,
+    doSetWalletSyncPreference,
     isPending,
   } = props;
   const { push, location } = useHistory();
@@ -48,7 +48,7 @@ function UserEmailReturning(props: Props) {
 
   function handleSubmit() {
     // @if TARGET='app'
-    doSetSyncPref(syncEnabled);
+    doSetWalletSyncPreference(syncEnabled);
     // @endif
     doUserCheckIfEmailExists(email);
   }

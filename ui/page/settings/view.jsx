@@ -64,7 +64,6 @@ type Props = {
   setDarkTime: (string, {}) => void,
   openModal: string => void,
   language?: string,
-  syncEnabled: boolean,
   enterSettings: () => void,
   exitSettings: () => void,
 };

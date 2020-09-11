@@ -131,31 +131,9 @@ export function doSetClientSetting(key, value, pushPrefs) {
         value,
       },
     });
-
     if (pushPrefs) {
       dispatch(doPushSettingsToPrefs());
     }
-  };
-}
-
-export function doUpdateSyncPrefIfFalse() {
-  // This is only called after manual signin to update the wallet
-  // that the sync preference is false
-  return (dispatch, getState) => {
-    const state = getState();
-    const syncEnabled = makeSelectClientSetting(SETTINGS.ENABLE_SYNC)(state);
-    if (syncEnabled === false) {
-      dispatch(doPushSettingsToPrefs());
-    }
-  };
-}
-
-export function doSetSyncPref(isEnabled) {
-  return dispatch => {
-    dispatch({
-      type: LOCAL_ACTIONS.SYNC_PREFERENCE_CHANGED,
-      data: isEnabled,
-    });
   };
 }
 
@@ -195,6 +173,32 @@ export function doSetDarkTime(value, options) {
   };
 }
 
+export function doGetWalletSyncPreference() {
+  const SYNC_KEY = 'enable-sync';
+  return dispatch => {
+    return Lbry.preference_get({ key: SYNC_KEY }).then(result => {
+      const enabled = result && result[SYNC_KEY];
+      if (enabled !== null) {
+        dispatch(doSetClientSetting(SETTINGS.ENABLE_SYNC, enabled));
+      }
+      return enabled;
+    });
+  };
+}
+
+export function doSetWalletSyncPreference(pref) {
+  const SYNC_KEY = 'enable-sync';
+  return dispatch => {
+    return Lbry.preference_set({ key: SYNC_KEY, value: pref }).then(result => {
+      const enabled = result && result[SYNC_KEY];
+      if (enabled !== null) {
+        dispatch(doSetClientSetting(SETTINGS.ENABLE_SYNC, enabled));
+      }
+      return enabled;
+    });
+  };
+}
+
 export function doPushSettingsToPrefs() {
   return dispatch => {
     return new Promise((resolve, reject) => {
@@ -211,6 +215,9 @@ export function doEnterSettingsPage() {
     const state = getState();
     const syncEnabled = makeSelectClientSetting(SETTINGS.ENABLE_SYNC)(state);
     const hasVerifiedEmail = state.user && state.user.user && state.user.user.has_verified_email;
+    if (IS_WEB && !hasVerifiedEmail) {
+      return;
+    }
     dispatch(doSyncUnsubscribe());
     if (syncEnabled && hasVerifiedEmail) {
       await dispatch(doGetSyncDesktop());
@@ -223,6 +230,11 @@ export function doEnterSettingsPage() {
 
 export function doExitSettingsPage() {
   return (dispatch, getState) => {
+    const state = getState();
+    const hasVerifiedEmail = state.user && state.user.user && state.user.user.has_verified_email;
+    if (IS_WEB && !hasVerifiedEmail) {
+      return;
+    }
     dispatch(doSetSyncLock(false));
     dispatch(doPushSettingsToPrefs());
     // syncSubscribe is restarted in store.js sharedStateCB if necessary
