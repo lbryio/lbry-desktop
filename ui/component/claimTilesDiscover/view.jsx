@@ -14,6 +14,9 @@ type Props = {
   claimSearchByQuery: {
     [string]: Array<string>,
   },
+  fetchingClaimSearchByQuery: {
+    [string]: boolean,
+  },
   // claim search options are below
   tags: Array<string>,
   hiddenUris: Array<string>,
@@ -49,12 +52,12 @@ function ClaimTilesDiscover(props: Props) {
     timestamp,
     feeAmount,
     limitClaimsPerChannel,
+    fetchingClaimSearchByQuery,
   } = props;
   const { location } = useHistory();
   const urlParams = new URLSearchParams(location.search);
   const feeAmountInUrl = urlParams.get('fee_amount');
   const feeAmountParam = feeAmountInUrl || feeAmount;
-  const [hasSearched, setHasSearched] = React.useState(false);
   const options: {
     page_size: number,
     no_totals: boolean,
@@ -118,17 +121,17 @@ function ClaimTilesDiscover(props: Props) {
 
   const claimSearchCacheQuery = createNormalizedClaimSearchKey(options);
   const uris = (prefixUris || []).concat(claimSearchByQuery[claimSearchCacheQuery] || []);
-  const shouldPerformSearch = !hasSearched || uris.length === 0;
   // Don't use the query from createNormalizedClaimSearchKey for the effect since that doesn't include page & release_time
   const optionsStringForEffect = JSON.stringify(options);
+  const isLoading = fetchingClaimSearchByQuery[claimSearchCacheQuery];
+  const shouldPerformSearch = !isLoading && uris.length === 0;
 
   React.useEffect(() => {
     if (shouldPerformSearch) {
       const searchOptions = JSON.parse(optionsStringForEffect);
       doClaimSearch(searchOptions);
-      setHasSearched(true);
     }
-  }, [doClaimSearch, shouldPerformSearch, optionsStringForEffect, hasSearched]);
+  }, [doClaimSearch, shouldPerformSearch, optionsStringForEffect]);
 
   return (
     <ul className="claim-grid">
