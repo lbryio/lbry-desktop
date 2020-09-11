@@ -1,11 +1,11 @@
 // @flow
 import { doGetSync, selectGetSyncIsPending, selectSetSyncIsPending } from 'lbryinc';
-import { SETTINGS } from 'lbry-redux';
-import { makeSelectClientSetting, selectSyncSigninPref } from 'redux/selectors/settings';
+import { makeSelectClientSetting } from 'redux/selectors/settings';
 import { getSavedPassword } from 'util/saved-passwords';
 import { doAnalyticsTagSync, doHandleSyncComplete } from 'redux/actions/app';
 import { selectSyncIsLocked } from 'redux/selectors/app';
 import { selectUserVerifiedEmail } from 'redux/selectors/user';
+import { SETTINGS } from 'lbry-redux';
 
 let syncTimer = null;
 const SYNC_INTERVAL = 1000 * 60 * 5; // 5 minutes
@@ -31,10 +31,9 @@ export function doSyncSubscribe() {
     if (syncTimer) clearInterval(syncTimer);
     const state = getState();
     const hasVerifiedEmail = selectUserVerifiedEmail(state);
-    const signInSyncPref = selectSyncSigninPref(state);
     const syncEnabled = makeSelectClientSetting(SETTINGS.ENABLE_SYNC)(state);
     const syncLocked = selectSyncIsLocked(state);
-    if (hasVerifiedEmail && syncEnabled && !syncLocked && signInSyncPref !== false) {
+    if (hasVerifiedEmail && syncEnabled && !syncLocked) {
       dispatch(doGetSyncDesktop((error, hasNewData) => dispatch(doHandleSyncComplete(error, hasNewData))));
       dispatch(doAnalyticsTagSync());
       syncTimer = setInterval(() => {

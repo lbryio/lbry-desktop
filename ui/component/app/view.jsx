@@ -67,7 +67,7 @@ type Props = {
   isUpgradeAvailable: boolean,
   autoUpdateDownloaded: boolean,
   updatePreferences: () => Promise<any>,
-  pushPrefsIfSyncFalse: () => void,
+  getWalletSyncPref: () => Promise<any>,
   uploadCount: number,
   balance: ?number,
   syncError: ?string,
@@ -79,7 +79,6 @@ type Props = {
   socketConnect: () => void,
   syncSubscribe: () => void,
   syncEnabled: boolean,
-  signInSyncPref: boolean,
 };
 
 function App(props: Props) {
@@ -99,12 +98,11 @@ function App(props: Props) {
     languages,
     setLanguage,
     updatePreferences,
-    pushPrefsIfSyncFalse,
+    getWalletSyncPref,
     rewards,
     setReferrer,
     isAuthenticated,
     syncSubscribe,
-    signInSyncPref,
   } = props;
 
   const appRef = useRef();
@@ -112,7 +110,7 @@ function App(props: Props) {
   const [hasSignedIn, setHasSignedIn] = useState(false);
   const [readyForSync, setReadyForSync] = useState(false);
   const [readyForPrefs, setReadyForPrefs] = useState(false);
-  const hasVerifiedEmail = user && user.has_verified_email;
+  const hasVerifiedEmail = user && Boolean(user.has_verified_email);
   const isRewardApproved = user && user.is_reward_approved;
   const previousHasVerifiedEmail = usePrevious(hasVerifiedEmail);
   const previousRewardApproved = usePrevious(isRewardApproved);
@@ -235,34 +233,26 @@ function App(props: Props) {
 
   // @if TARGET='app'
   useEffect(() => {
-    if (updatePreferences && readyForPrefs) {
-      updatePreferences().then(() => {
-        // will pull and U_S_P; usp will make sure prefBox applied if false
-        setReadyForSync(true);
-      });
+    if (updatePreferences && getWalletSyncPref && readyForPrefs) {
+      getWalletSyncPref()
+        .then(() => updatePreferences())
+        .then(() => {
+          setReadyForSync(true);
+        });
     }
-  }, [updatePreferences, setReadyForSync, readyForPrefs, hasVerifiedEmail]);
+  }, [updatePreferences, getWalletSyncPref, setReadyForSync, readyForPrefs, hasVerifiedEmail]);
   // @endif
 
   // ready for sync syncs, however after signin when hasVerifiedEmail, that syncs too.
   useEffect(() => {
     // signInSyncPref is cleared after sharedState loop.
-    if (readyForSync && hasVerifiedEmail && signInSyncPref === undefined) {
-      // On sign-in, we get and apply all the information on whether to sync
-      // the checkbox, previous wallet settings, store rehydrate, etc
-      // Our app is up to date with the wallet
-      // Because the checkbox is applied last, make sure the wallet remembers if false:
-      // @if TARGET='app'
-      pushPrefsIfSyncFalse();
-      // @endif
-
-      // And try this in case we are syncing.
+    if (readyForSync && hasVerifiedEmail) {
+      // In case we are syncing.
       syncSubscribe();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [readyForSync, hasVerifiedEmail, signInSyncPref, pushPrefsIfSyncFalse, syncSubscribe]);
+  }, [readyForSync, hasVerifiedEmail, syncSubscribe]);
 
-  // We know someone is logging in or not when we get their user object {}
+  // We know someone is logging in or not when we get their user object
   // We'll use this to determine when it's time to pull preferences
   // This will no longer work if desktop users no longer get a user object from lbryinc
   useEffect(() => {

@@ -33,7 +33,6 @@ const select = state => ({
   hideReposts: makeSelectClientSetting(SETTINGS.HIDE_REPOSTS)(state),
   darkModeTimes: makeSelectClientSetting(SETTINGS.DARK_MODE_TIMES)(state),
   language: makeSelectClientSetting(SETTINGS.LANGUAGE)(state),
-  syncEnabled: makeSelectClientSetting(SETTINGS.ENABLE_SYNC)(state),
 });
 
 const perform = dispatch => ({
