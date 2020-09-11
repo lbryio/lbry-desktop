@@ -8,6 +8,7 @@ import Card from 'component/common/card';
 import SelectChannel from 'component/selectChannel';
 import analytics from 'analytics';
 import I18nMessage from 'component/i18nMessage';
+import LbcSymbol from 'component/common/lbc-symbol';
 
 type Props = {
   errorMessage: ?string,
@@ -74,10 +75,12 @@ function InviteNew(props: Props) {
     <div className={'columns'}>
       <Card
         title={__('Invites')}
-        subtitle={__(
-          'Earn LBRY Credits for inviting subscribers, followers, fans, friends, etc. to join and follow you on %SITE_NAME%. You can use invites just like affiliate links.',
-          { SITE_NAME }
-        )}
+        subtitle={
+          <I18nMessage tokens={{ SITE_NAME, lbc: <LbcSymbol /> }}>
+            Earn %lbc% for inviting subscribers, followers, fans, friends, etc. to join and follow you on %SITE_NAME%.
+            You can use invites just like affiliate links.
+          </I18nMessage>
+        }
         actions={
           <React.Fragment>
             <CopyableText label={__('Your invite link')} copyable={referral} />
@@ -107,9 +110,11 @@ function InviteNew(props: Props) {
 
       <Card
         title={__('Invite by email')}
-        subtitle={__('Invite someone you know by email and earn LBRY Credits when they join %SITE_NAME%.', {
-          SITE_NAME,
-        })}
+        subtitle={
+          <I18nMessage tokens={{ SITE_NAME, lbc: <LbcSymbol /> }}>
+            Invite someone you know by email and earn %lbc% when they join %SITE_NAME%.
+          </I18nMessage>
+        }
         actions={
           <React.Fragment>
             <Form onSubmit={handleSubmit}>
