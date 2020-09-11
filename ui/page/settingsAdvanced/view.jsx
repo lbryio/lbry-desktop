@@ -405,6 +405,7 @@ class SettingsPage extends React.PureComponent<Props, State> {
                     placeholder={__('A Folder containing FFmpeg')}
                     currentPath={ffmpegPath || daemonSettings.ffmpeg_path}
                     onFileChosen={(newDirectory: WebFile) => {
+                      // $FlowFixMe
                       this.onFFmpegFolder(newDirectory.path);
                     }}
                     disabled={Boolean(ffmpegPath)}

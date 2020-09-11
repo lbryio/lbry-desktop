@@ -34,7 +34,6 @@ export default handleActions(
       const commentsByUri = Object.assign({}, state.commentsByUri);
       const comments = byId[claimId] || [];
       const newCommentIds = comments.slice();
-      const commentsByUri = Object.assign({}, state.commentsByUri);
 
       // add the comment by its ID
       commentById[comment.comment_id] = comment;

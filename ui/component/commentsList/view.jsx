@@ -5,7 +5,6 @@ import Spinner from 'component/spinner';
 import Button from 'component/button';
 import Card from 'component/common/card';
 import CommentCreate from 'component/commentCreate';
-import CommentsReplies from 'component/commentsReplies';
 
 type Props = {
   comments: Array<any>,
@@ -77,7 +76,6 @@ function CommentList(props: Props) {
   }
 
   const displayedComments = prepareComments(comments, linkedComment).slice(start, end);
-
   return (
     <Card
       title={
@@ -102,22 +100,21 @@ function CommentList(props: Props) {
               displayedComments &&
               displayedComments.map(comment => {
                 return (
-                  <React.Fragment key={comment.comment_id}>
-                    <Comment
-                      uri={uri}
-                      authorUri={comment.channel_url}
-                      author={comment.channel_name}
-                      claimId={comment.claim_id}
-                      commentId={comment.comment_id}
-                      message={comment.comment}
-                      parentId={comment.parent_id || null}
-                      timePosted={comment.timestamp * 1000}
-                      claimIsMine={claimIsMine}
-                      commentIsMine={comment.channel_id && isMyComment(comment.channel_id)}
-                      linkedComment={linkedComment}
-                    />
-                    <CommentsReplies uri={uri} parentId={comment.comment_id} linkedComment={linkedComment} />
-                  </React.Fragment>
+                  <Comment
+                    isTopLevel
+                    key={comment.comment_id}
+                    uri={uri}
+                    authorUri={comment.channel_url}
+                    author={comment.channel_name}
+                    claimId={comment.claim_id}
+                    commentId={comment.comment_id}
+                    topLevelId={comment.comment_id}
+                    message={comment.comment}
+                    timePosted={comment.timestamp * 1000}
+                    claimIsMine={claimIsMine}
+                    commentIsMine={comment.channel_id && isMyComment(comment.channel_id)}
+                    linkedComment={linkedComment}
+                  />
                 );
               })}
           </ul>
