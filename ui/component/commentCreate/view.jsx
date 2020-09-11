@@ -18,17 +18,17 @@ type Props = {
   openModal: (id: string, { onCommentAcknowledge: () => void }) => void,
   createComment: (string, string, string, ?string) => void,
   channels: ?Array<ChannelClaim>,
-  parentId?: string,
+  topLevelId?: string,
   onDoneReplying?: () => void,
   onCancelReplying?: () => void,
   isNested: boolean,
 };
 
 export function CommentCreate(props: Props) {
-  const { createComment, claim, openModal, channels, parentId, onDoneReplying, onCancelReplying, isNested } = props;
+  const { createComment, claim, openModal, channels, topLevelId, onDoneReplying, onCancelReplying, isNested } = props;
   const { push } = useHistory();
   const { claim_id: claimId } = claim;
-  const isReply = !!parentId;
+  const isReply = !!topLevelId;
   const [commentValue, setCommentValue] = React.useState('');
   const [commentAck, setCommentAck] = usePersistedState('comment-acknowledge', false);
   const [channel, setChannel] = usePersistedState('comment-channel', '');
@@ -74,9 +74,11 @@ export function CommentCreate(props: Props) {
 
   function handleSubmit() {
     if (channel !== CHANNEL_NEW && commentValue.length) {
-      createComment(commentValue, claimId, channel, parentId);
+      createComment(commentValue, claimId, channel, topLevelId);
     }
+
     setCommentValue('');
+
     if (onDoneReplying) {
       onDoneReplying();
     }

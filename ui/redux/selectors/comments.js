@@ -208,6 +208,10 @@ export const makeSelectRepliesForParentId = (id: string) =>
 
       return comments
         ? comments.filter(comment => {
+            if (!comment) {
+              return false;
+            }
+
             const channelClaim = claimsById[comment.channel_id];
 
             // Return comment if `channelClaim` doesn't exist so the component knows to resolve the author

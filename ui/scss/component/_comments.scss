@@ -8,6 +8,7 @@ $thumbnailWidthSmall: 2rem;
 }
 
 .comments--replies {
+  list-style-type: none;
   margin-left: var(--spacing-m);
   flex: 1;
 }
@@ -25,7 +26,7 @@ $thumbnailWidthSmall: 2rem;
 
 .comment {
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   font-size: var(--font-small);
   margin: 0;
 
@@ -43,6 +44,11 @@ $thumbnailWidthSmall: 2rem;
   }
 }
 
+.comment__content {
+  display: flex;
+  flex-direction: row;
+}
+
 .comment__replies-container {
   margin: 0;
 }
@@ -57,7 +63,7 @@ $thumbnailWidthSmall: 2rem;
   }
 }
 
-.comment__reply {
+.comment--reply {
   margin: 0;
 
   &:not(:first-child) {
@@ -100,7 +106,7 @@ $thumbnailWidthSmall: 2rem;
   margin-right: var(--spacing-xs);
 }
 
-.comment__highlighted {
+.comment--highlighted {
   background: var(--color-comment-highlighted);
   box-shadow: 0 0 0 var(--spacing-xs) var(--color-comment-highlighted);
   border-radius: 4px;
@@ -191,7 +197,6 @@ $thumbnailWidthSmall: 2rem;
 .comment__actions {
   display: flex;
   margin-top: var(--spacing-s);
-  margin-left: calc(#{$thumbnailWidthSmall} + var(--spacing-xs));
 
   > *:not(:last-child) {
     margin-right: var(--spacing-xs);
@@ -204,16 +209,25 @@ $thumbnailWidthSmall: 2rem;
   .button__label {
     margin-left: 0;
   }
+}
 
-  @media (min-width: $breakpoint-small) {
-    margin-left: calc(#{$thumbnailWidth} + var(--spacing-m));
-  }
+.comment__actions--nested {
+  @extend .comment__actions;
+  margin-left: calc((#{$thumbnailWidthSmall} + var(--spacing-l)));
+  margin-top: var(--spacing-m);
 }
 
 .comment__action {
   @extend .button--uri-indicator;
   height: auto;
   font-size: var(--font-xsmall);
+}
+
+.comment__action--active {
+  .icon {
+    fill: var(--color-primary-alt);
+    stroke: var(--color-primary);
+  }
 }
 
 .comment__action--nested {

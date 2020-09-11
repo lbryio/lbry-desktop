@@ -148,9 +148,8 @@ class FilePage extends React.Component<Props> {
           <FileDescription uri={uri} />
           <FileValues uri={uri} />
           <FileDetails uri={uri} />
-          {/* <WaitUntilOnPage lastUpdateDate={this.lastReset} skipWait={Boolean(linkedComment)}> */}
+
           <CommentsList uri={uri} linkedComment={linkedComment} />
-          {/* </WaitUntilOnPage> */}
         </div>
 
         <RecommendedContent uri={uri} />
