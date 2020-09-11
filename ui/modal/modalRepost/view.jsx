@@ -117,7 +117,7 @@ function ModalRepost(props: Props) {
       <Card
         title={
           <span>
-            Repost <em>{title}</em>
+            <I18nMessage tokens={{ title: <em>{title}</em> }}>Repost %title%</I18nMessage>
           </span>
         }
         subtitle={
