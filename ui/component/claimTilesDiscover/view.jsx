@@ -22,6 +22,7 @@ type Props = {
   pageSize: number,
   orderBy?: Array<string>,
   releaseTime?: string,
+  languages?: Array<string>,
   claimType?: Array<string>,
   timestamp?: string,
   feeAmount?: string,
@@ -42,6 +43,7 @@ function ClaimTilesDiscover(props: Props) {
     orderBy,
     pageSize = 8,
     releaseTime,
+    languages,
     claimType,
     prefixUris,
     timestamp,
@@ -62,6 +64,7 @@ function ClaimTilesDiscover(props: Props) {
     not_channel_ids: Array<string>,
     not_tags: Array<string>,
     order_by: Array<string>,
+    languages?: Array<string>,
     release_time?: string,
     claim_type?: Array<string>,
     timestamp?: string,
@@ -75,6 +78,7 @@ function ClaimTilesDiscover(props: Props) {
     no_totals: true,
     any_tags: tags || [],
     not_tags: !showNsfw ? MATURE_TAGS : [],
+    any_languages: languages,
     channel_ids: channelIds || [],
     not_channel_ids:
       notChannelIds ||
