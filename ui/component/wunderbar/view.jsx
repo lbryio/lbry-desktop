@@ -104,12 +104,11 @@ class WunderBar extends React.PureComponent<Props, State> {
     updateSearchQuery(value);
   }
 
-  onSubmitWebUri(uri: string) {
+  onSubmitWebUri(uri: string, prefix: string) {
     // Allow copying a lbry.tv url and pasting it into the search bar
     const { doSearch, navigateToUri, updateSearchQuery } = this.props;
 
-    const slashPosition = uri.indexOf('/');
-    let query = uri.slice(slashPosition);
+    let query = uri.slice(prefix.length);
     query = query.replace(/:/g, '#');
     if (query.includes(SEARCH_PREFIX)) {
       query = query.slice(SEARCH_PREFIX.length);
@@ -161,9 +160,16 @@ class WunderBar extends React.PureComponent<Props, State> {
     let query = value.trim();
     this.input && this.input.blur();
 
-    const wasCopiedFromWeb = [WEB_DEV_PREFIX, WEB_LOCAL_PREFIX, WEB_PROD_PREFIX].some(p => query.includes(p));
+    const includesLbryTvProd = query.includes(WEB_PROD_PREFIX);
+    const includesLbryTvLocal = query.includes(WEB_LOCAL_PREFIX);
+    const includesLbryTvDev = query.includes(WEB_DEV_PREFIX);
+    const wasCopiedFromWeb = includesLbryTvDev || includesLbryTvLocal || includesLbryTvProd;
+
     if (wasCopiedFromWeb) {
-      this.onSubmitWebUri(query);
+      let prefix = WEB_PROD_PREFIX;
+      if (includesLbryTvLocal) prefix = WEB_LOCAL_PREFIX;
+      if (includesLbryTvDev) prefix = WEB_DEV_PREFIX;
+      this.onSubmitWebUri(query, prefix);
     } else if (suggestion) {
       this.onClickSuggestion(query, suggestion);
     } else {
