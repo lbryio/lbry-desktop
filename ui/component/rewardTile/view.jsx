@@ -33,7 +33,7 @@ const RewardTile = (props: Props) => {
   return (
     <Card
       title={reward.reward_title}
-      subtitle={reward.reward_description}
+      subtitle={reward.reward_description.replace('LBC', 'LBRY Credits')}
       actions={
         <div className="section__actions">
           {reward.reward_type === rewards.TYPE_GENERATED_CODE && (
