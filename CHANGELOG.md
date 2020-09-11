@@ -12,6 +12,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ### Changed
 
+- Fade out expandable areas (e.g. comments, file description) when collapsed  _community pr!_ ([#4818](https://github.com/lbryio/lbry-desktop/pull/4818))
+
 ### Fixed
 
 ## [0.48.0] - [2020-09-23]
