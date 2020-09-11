@@ -50,10 +50,10 @@ export default function SearchPage(props: Props) {
   }
 
   const INVALID_URI_CHARS = new RegExp(regexInvalidURI, 'gu');
-  let path;
+  let path, streamName;
   let isValid = true;
   try {
-    let { streamName } = parseURI(urlQuery.replace(/ /g, '-').replace(/:/g, '#'));
+    ({ path, streamName } = parseURI(urlQuery.replace(/ /g, '-').replace(/:/g, '#')));
     if (!isNameValid(streamName)) {
       isValid = false;
     }
