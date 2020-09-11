@@ -117,3 +117,5 @@ export const NOTIFICATION = 'Bell';
 export const LAYOUT = 'Layout';
 export const REPLY = 'Reply';
 export const YOUTUBE = 'Youtube';
+export const UPVOTE = 'Upvote';
+export const DOWNVOTE = 'Downvote';
