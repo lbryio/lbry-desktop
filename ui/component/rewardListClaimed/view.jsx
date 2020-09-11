@@ -3,6 +3,7 @@ import React from 'react';
 import ButtonTransaction from 'component/common/transaction-link';
 import moment from 'moment';
 import LbcSymbol from 'component/common/lbc-symbol';
+import Card from 'component/common/card';
 
 type Reward = {
   id: string,
@@ -24,45 +25,43 @@ const RewardListClaimed = (props: Props) => {
   }
 
   return (
-    <section className="card">
-      <header className="table__header">
+    <Card
+      title={<div className="table__header-text">{__('Claimed Rewards')}</div>}
+      subtitle={
         <div className="table__header-text">
-          <h2 className="card__title card__title--deprecated">{__('Claimed Rewards')}</h2>
-
-          <p className="section__subtitle">
-            {__(
-              'Reward history is tied to your email. In case of lost or multiple wallets, your balance may differ from the amounts claimed'
-            )}
-            .
-          </p>
+          {__(
+            'Reward history is tied to your email. In case of lost or multiple wallets, your balance may differ from the amounts claimed'
+          )}
         </div>
-      </header>
-
-      <div className="table__wrapper">
-        <table className="table table--rewards">
-          <thead>
-            <tr>
-              <th>{__('Title')}</th>
-              <th>
-                <LbcSymbol size={20} />
-              </th>
-              <th>{__('Transaction')}</th>
-              <th>{__('Date')}</th>
-            </tr>
-          </thead>
-          <tbody>
-            {rewards.reverse().map(reward => (
-              <tr key={reward.id}>
-                <td>{reward.reward_title}</td>
-                <td>{reward.reward_amount}</td>
-                <td>{reward.transaction_id && <ButtonTransaction id={reward.transaction_id} />}</td>
-                <td>{moment(reward.created_at).format('LLL')}</td>
+      }
+      isBodyList
+      body={
+        <div className="table__wrapper">
+          <table className="table table--rewards">
+            <thead>
+              <tr>
+                <th>{__('Title')}</th>
+                <th>
+                  <LbcSymbol size={20} />
+                </th>
+                <th>{__('Transaction')}</th>
+                <th>{__('Date')}</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-    </section>
+            </thead>
+            <tbody>
+              {rewards.reverse().map(reward => (
+                <tr key={reward.id}>
+                  <td>{reward.reward_title}</td>
+                  <td>{reward.reward_amount}</td>
+                  <td>{reward.transaction_id && <ButtonTransaction id={reward.transaction_id} />}</td>
+                  <td>{moment(reward.created_at).format('LLL')}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      }
+    />
   );
 };
 

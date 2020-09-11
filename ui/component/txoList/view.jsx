@@ -173,7 +173,7 @@ function TxoList(props: Props) {
 
   return (
     <Card
-      title={__(`Transactions`)}
+      title={<div className="table__header-text">{__(`Transactions`)}</div>}
       titleActions={
         <div className="card__actions--inline">
           <Button button="alt" icon={ICONS.REFRESH} label={__('Refresh')} onClick={() => fetchTxoPage()} />
