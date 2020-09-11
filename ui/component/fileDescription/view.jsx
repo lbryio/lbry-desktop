@@ -41,7 +41,11 @@ function FileDescription(props: Props) {
     <div>
       <div
         ref={descriptionRef}
-        className={classnames({ 'media__info-text--contracted': !expanded, 'media__info-text--expanded': expanded })}
+        className={classnames({
+          'media__info-text--contracted': !expanded,
+          'media__info-text--expanded': expanded,
+          'media__info-text--fade': hasOverflow && !expanded,
+        })}
       >
         <MarkdownPreview className="markdown-preview--description" content={description} />
         <ClaimTags uri={uri} type="large" />
