@@ -73,6 +73,23 @@ export default function FileRenderFloating(props: Props) {
     }
   }
 
+  function clampToScreen(pos) {
+    const GAP_PX = 10;
+    const ESTIMATED_SCROLL_BAR_PX = 50;
+    const FLOATING_PLAYER_CLASS = 'content__viewer--floating';
+    const fpPlayerElem = document.querySelector(`.${FLOATING_PLAYER_CLASS}`);
+
+    if (fpPlayerElem) {
+      if (pos.x + fpPlayerElem.getBoundingClientRect().width > getScreenWidth() - ESTIMATED_SCROLL_BAR_PX) {
+        pos.x = getScreenWidth() - fpPlayerElem.getBoundingClientRect().width - ESTIMATED_SCROLL_BAR_PX - GAP_PX;
+      }
+      if (pos.y + fpPlayerElem.getBoundingClientRect().height > getScreenHeight()) {
+        pos.y = getScreenHeight() - fpPlayerElem.getBoundingClientRect().height - GAP_PX * 2;
+      }
+    }
+  }
+
+  // Updated 'relativePos' based on persisted 'position':
   useEffect(() => {
     setRelativePos({
       x: position.x / getScreenWidth(),
@@ -80,32 +97,36 @@ export default function FileRenderFloating(props: Props) {
     });
   }, []);
 
+  // Ensure player is within screen when 'isFloating' changes.
+  useEffect(() => {
+    if (isFloating) {
+      let pos = { x: position.x, y: position.y };
+      clampToScreen(pos);
+      if (pos.x !== position.x || pos.y !== position.y) {
+        setPosition({ x: pos.x, y: pos.y });
+      }
+    }
+  }, [isFloating]);
+
+  // Listen to main-window resizing and adjust the fp position accordingly:
   useEffect(() => {
     const handleMainWindowResize = debounce(e => {
-      const GAP_PX = 10;
-      const ESTIMATED_SCROLL_BAR_PX = 50;
-      const FLOATING_PLAYER_CLASS = 'content__viewer--floating';
-      const fpPlayerElem = document.querySelector(`.${FLOATING_PLAYER_CLASS}`);
-
-      let newX = Math.round(relativePos.x * getScreenWidth());
-      let newY = Math.round(relativePos.y * getScreenHeight());
-
-      if (fpPlayerElem) {
-        if (newX + fpPlayerElem.getBoundingClientRect().width > getScreenWidth() - ESTIMATED_SCROLL_BAR_PX) {
-          newX = getScreenWidth() - fpPlayerElem.getBoundingClientRect().width - ESTIMATED_SCROLL_BAR_PX - GAP_PX;
-        }
-        if (newY + fpPlayerElem.getBoundingClientRect().height > getScreenHeight()) {
-          newY = getScreenHeight() - fpPlayerElem.getBoundingClientRect().height - GAP_PX * 2;
-        }
-      }
-
-      setPosition({ x: newX, y: newY });
+      let newPos = {
+        x: Math.round(relativePos.x * getScreenWidth()),
+        y: Math.round(relativePos.y * getScreenHeight()),
+      };
+      clampToScreen(newPos);
+      setPosition({ x: newPos.x, y: newPos.y });
     }, DEBOUNCE_WINDOW_RESIZE_HANDLER_MS);
 
     window.addEventListener('resize', handleMainWindowResize);
     return () => window.removeEventListener('resize', handleMainWindowResize);
+
+    // 'relativePos' is needed in the dependency list to avoid stale closure.
+    // Otherwise, this could just be changed to a one-time effect.
   }, [relativePos]);
 
+  // Update 'fileViewerRect':
   useEffect(() => {
     function handleResize() {
       const element = document.querySelector(`.${FILE_WRAPPER_CLASS}`);
