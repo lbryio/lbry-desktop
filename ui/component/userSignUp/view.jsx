@@ -104,7 +104,6 @@ function UserSignUp(props: Props) {
   const showEmail = !hasVerifiedEmail;
   const showEmailVerification = (emailToVerify && !hasVerifiedEmail) || (!hasVerifiedEmail && passwordSet);
   const showUserVerification = hasVerifiedEmail && !rewardsApproved && !isIdentityVerified && !rewardsAcknowledged;
-  const showSyncPassword = syncEnabled && getSyncError;
   const showChannelCreation =
     hasVerifiedEmail &&
     ((balance !== undefined &&
@@ -116,8 +115,7 @@ function UserSignUp(props: Props) {
   const showYoutubeTransfer = hasVerifiedEmail && hasYoutubeChannels && !isYoutubeTransferComplete;
   const showFollowIntro = step === 'channels' || (hasVerifiedEmail && !followingAcknowledged);
   const showTagsIntro = step === 'tags' || (hasVerifiedEmail && !tagsAcknowledged);
-  const canHijackSignInFlowWithSpinner =
-    hasVerifiedEmail && !getSyncError && !showFollowIntro && !showTagsIntro && !rewardsAcknowledged;
+  const canHijackSignInFlowWithSpinner = hasVerifiedEmail && !showFollowIntro && !showTagsIntro && !rewardsAcknowledged;
   const isCurrentlyFetchingSomething = fetchingChannels || claimingReward || syncingWallet || creatingChannel;
   const isWaitingForSomethingToFinish =
     // If the user has claimed the email award, we need to wait until the balance updates sometime in the future
