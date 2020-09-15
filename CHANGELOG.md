@@ -30,6 +30,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Web: Fix 'Download' not triggering until second attempt _community pr!_ ([#4721](https://github.com/lbryio/lbry-desktop/pull/4721))
 - Floating player: Stay within screen when window is resized _community pr!_([#4750](https://github.com/lbryio/lbry-desktop/pull/4750))
 - App crash when including % sign in search _community pr!_([#4753](https://github.com/lbryio/lbry-desktop/pull/4753))
+- Fix markdown editor "preview" not working when `<iframe>`s are present _community pr!_([#4767](https://github.com/lbryio/lbry-desktop/pull/4767))
 - First comment on claim not showing up immeditately ([#4747](https://github.com/lbryio/lbry-desktop/pull/4747))
 
 ## [0.47.1] - [2020-07-23]
