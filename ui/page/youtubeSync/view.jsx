@@ -22,13 +22,15 @@ type Props = {
   youtubeChannels: ?Array<{ transfer_state: string, sync_status: string }>,
   doUserFetch: () => void,
   inSignUpFlow?: boolean,
+  doToggleInterestedInYoutubeSync: () => void,
 };
 
 export default function YoutubeSync(props: Props) {
-  const { youtubeChannels, doUserFetch, inSignUpFlow = false } = props;
+  const { youtubeChannels, doUserFetch, inSignUpFlow = false, doToggleInterestedInYoutubeSync } = props;
   const {
     location: { search, pathname },
     push,
+    replace,
   } = useHistory();
   const urlParams = new URLSearchParams(search);
   const statusToken = urlParams.get(STATUS_TOKEN_PARAM);
@@ -39,6 +41,10 @@ export default function YoutubeSync(props: Props) {
   const [acknowledgedTerms, setAcknowledgedTerms] = React.useState(false);
   const [addingNewChannel, setAddingNewChannel] = React.useState(newChannelParam);
   const hasYoutubeChannels = youtubeChannels && youtubeChannels.length > 0;
+
+  React.useEffect(() => {
+    replace(`?reset_scroll=youtube`);
+  }, []);
 
   React.useEffect(() => {
     if (statusToken && !hasYoutubeChannels) {
@@ -159,6 +165,10 @@ export default function YoutubeSync(props: Props) {
                     disabled={nameError || !channel || !acknowledgedTerms}
                     label={__('Claim Now')}
                   />
+
+                  {inSignUpFlow && !errorMessage && (
+                    <Button button="link" label={__('Skip')} onClick={() => doToggleInterestedInYoutubeSync()} />
+                  )}
 
                   {errorMessage && <Button button="link" label={__('Skip')} navigate={`/$/${PAGES.REWARDS}`} />}
                 </div>
