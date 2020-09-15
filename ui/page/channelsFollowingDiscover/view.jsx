@@ -15,7 +15,7 @@ type Props = {
   blockedChannels: Array<string>,
 };
 
-type RowDataItem = {
+type ChannelsFollowingItem = {
   title: string,
   link?: string,
   help?: any,
@@ -24,7 +24,7 @@ type RowDataItem = {
 
 function ChannelsFollowingDiscover(props: Props) {
   const { followedTags, subscribedChannels, blockedChannels } = props;
-  let rowData: Array<RowDataItem> = [];
+  let rowData: Array<ChannelsFollowingItem> = [];
   const notChannels = subscribedChannels
     .map(({ uri }) => uri)
     .concat(blockedChannels)
