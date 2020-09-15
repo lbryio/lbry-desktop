@@ -1,7 +1,7 @@
 // @flow
-import * as ICONS from 'constants/icons';
 import React from 'react';
 import Button from 'component/button';
+import LbcMessage from 'component/common/lbc-message';
 
 type Reward = {
   reward_amount: number,
@@ -24,19 +24,18 @@ const RewardLink = (props: Props) => {
   } else if (label) {
     displayLabel = label;
   } else if (reward && reward.reward_range && reward.reward_range.includes('-')) {
-    displayLabel = __('Claim %range%', { range: reward.reward_range });
+    displayLabel = __('Claim %range% LBC', { range: reward.reward_range });
   } else if (reward && reward.reward_amount > 0) {
-    displayLabel = __('Claim %amount%', { amount: reward.reward_amount });
+    displayLabel = __('Claim %amount% LBC', { amount: reward.reward_amount });
   } else {
-    displayLabel = __('Claim ???');
+    displayLabel = __('Claim ??? LBC');
   }
 
   return !reward ? null : (
     <Button
       button={button ? 'primary' : 'link'}
       disabled={isPending}
-      label={displayLabel}
-      iconRight={ICONS.LBC}
+      label={<LbcMessage test>{displayLabel}</LbcMessage>}
       onClick={() => {
         claimReward(reward);
       }}

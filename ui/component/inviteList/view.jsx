@@ -4,6 +4,7 @@ import RewardLink from 'component/rewardLink';
 import Icon from 'component/common/icon';
 import * as ICONS from 'constants/icons';
 import Card from 'component/common/card';
+import LbcMessage from 'component/common/lbc-message';
 
 type Props = {
   invitees: ?Array<{
@@ -31,14 +32,18 @@ class InviteList extends React.PureComponent<Props> {
 
     if (referralReward) {
       rewardAmount = referralReward.reward_amount;
-      rewardHelp = referralReward.reward_description.replace('LBC', 'LBRY Credits');
+      rewardHelp = referralReward.reward_description;
     }
     const showClaimable = invitees.some(invite => invite.invite_reward_claimable && !invite.invite_reward_claimed);
 
     return (
       <Card
         title={<div className="table__header-text">{__('Invite History')}</div>}
-        subtitle={<div className="table__header-text">{rewardHelp}</div>}
+        subtitle={
+          <div className="table__header-text">
+            <LbcMessage>{rewardHelp}</LbcMessage>
+          </div>
+        }
         titleActions={
           referralReward &&
           showClaimable && (
