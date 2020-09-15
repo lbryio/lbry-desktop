@@ -171,6 +171,8 @@ reducers[ACTIONS.USER_PASSWORD_SET_CLEAR] = state =>
     passwordResetSuccess: false,
     passwordResetPending: false,
     passwordResetError: null,
+    passwordSetPending: false,
+    passwordSetSuccess: false,
   });
 
 reducers[ACTIONS.USER_EMAIL_VERIFY_STARTED] = state =>
