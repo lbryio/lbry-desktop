@@ -26,6 +26,12 @@
   }
 }
 
+.embed__inline-button-preview {
+  @extend .embed__inline-button;
+  background-color: var(--color-editor-inline-code-bg);
+  width: 50%;
+}
+
 .embed__loading {
   width: 100%;
   height: 100%;

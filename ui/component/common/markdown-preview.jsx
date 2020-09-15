@@ -21,12 +21,14 @@ type SimpleLinkProps = {
   href?: string,
   title?: string,
   children?: React.Node,
+  isStubEmbed?: boolean,
 };
 
 type MarkdownProps = {
   strip?: boolean,
   content: ?string,
   promptLinks?: boolean,
+  isStubEmbed?: boolean,
 };
 
 const SimpleText = (props: SimpleTextProps) => {
@@ -35,7 +37,7 @@ const SimpleText = (props: SimpleTextProps) => {
 
 const SimpleLink = (props: SimpleLinkProps) => {
   const { title, children } = props;
-  const { href } = props;
+  const { href, isStubEmbed } = props;
 
   if (!href) {
     return children || null;
@@ -56,7 +58,13 @@ const SimpleLink = (props: SimpleLinkProps) => {
   if (embed) {
     // Decode this since users might just copy it from the url bar
     const decodedUri = decodeURI(uri);
-    return <EmbedPlayButton uri={decodedUri} />;
+    return isStubEmbed ? (
+      <div className="embed__inline-button-preview">
+        <pre>{decodedUri}</pre>
+      </div>
+    ) : (
+      <EmbedPlayButton uri={decodedUri} />
+    );
   }
 
   const webLink = formatLbryUrlForWeb(uri);
@@ -86,7 +94,7 @@ schema.attributes.a.push('embed');
 const REPLACE_REGEX = /(<iframe\s+src=["'])(.*?(?=))(["']\s*><\/iframe>)/g;
 
 const MarkdownPreview = (props: MarkdownProps) => {
-  const { content, strip, promptLinks } = props;
+  const { content, strip, promptLinks, isStubEmbed } = props;
   const strippedContent = content
     ? content.replace(REPLACE_REGEX, (iframeHtml, y, iframeSrc) => {
         // Let the browser try to create an iframe to see if the markup is valid
@@ -110,7 +118,7 @@ const MarkdownPreview = (props: MarkdownProps) => {
     sanitize: schema,
     fragment: React.Fragment,
     remarkReactComponents: {
-      a: promptLinks ? ExternalLink : linkProps => <SimpleLink {...linkProps} />,
+      a: promptLinks ? ExternalLink : linkProps => <SimpleLink {...linkProps} isStubEmbed={isStubEmbed} />,
       // Workaraund of remarkOptions.Fragment
       div: React.Fragment,
     },

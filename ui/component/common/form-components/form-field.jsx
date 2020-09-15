@@ -182,7 +182,7 @@ export class FormField extends React.PureComponent<Props> {
                   spellChecker: true,
                   hideIcons: ['heading', 'image', 'fullscreen', 'side-by-side'],
                   previewRender(plainText) {
-                    const preview = <MarkdownPreview content={plainText} />;
+                    const preview = <MarkdownPreview content={plainText} isStubEmbed />;
                     return ReactDOMServer.renderToString(preview);
                   },
                 }}
