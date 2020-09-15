@@ -2,7 +2,7 @@ import REWARD_TYPES from 'rewards';
 import { connect } from 'react-redux';
 import { selectGetSyncIsPending, selectSyncHash } from 'lbryinc';
 import { doClaimRewardType } from 'redux/actions/rewards';
-import { doSyncClientSettings, doSetClientSetting } from 'redux/actions/settings';
+import { doSetClientSetting } from 'redux/actions/settings';
 import { selectClaimedRewards, makeSelectIsRewardClaimPending } from 'redux/selectors/rewards';
 import { doUserFetch } from 'redux/actions/user';
 import {
@@ -61,8 +61,7 @@ const perform = dispatch => ({
         notifyError: false,
       })
     ),
-  syncSettings: () => dispatch(doSyncClientSettings()),
-  setClientSetting: (setting, value) => dispatch(doSetClientSetting(setting, value)),
+  setClientSetting: (setting, value, pushToPrefs) => dispatch(doSetClientSetting(setting, value, pushToPrefs)),
   doToggleInterestedInYoutubeSync: () => dispatch(doToggleInterestedInYoutubeSync()),
 });
 

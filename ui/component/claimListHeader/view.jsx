@@ -29,9 +29,8 @@ type Props = {
   hiddenNsfwMessage?: Node,
   channelIds?: Array<string>,
   tileLayout: boolean,
-  doSetClientSetting: (string, boolean) => void,
+  doSetClientSetting: (string, boolean, ?boolean) => void,
   setPage: number => void,
-  doSyncClientSettings: () => void,
 };
 
 function ClaimListHeader(props: Props) {
@@ -53,7 +52,6 @@ function ClaimListHeader(props: Props) {
     channelIds,
     tileLayout,
     doSetClientSetting,
-    doSyncClientSettings,
     setPage,
   } = props;
   const { action, push, location } = useHistory();
@@ -241,8 +239,7 @@ function ClaimListHeader(props: Props) {
             {tileLayout !== undefined && (
               <Button
                 onClick={() => {
-                  doSetClientSetting(SETTINGS.TILE_LAYOUT, !tileLayout);
-                  doSyncClientSettings();
+                  doSetClientSetting(SETTINGS.TILE_LAYOUT, !tileLayout, true);
                 }}
                 button="alt"
                 className="button-toggle"
