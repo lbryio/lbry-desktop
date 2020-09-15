@@ -40,6 +40,15 @@
     color: var(--color-button-primary-hover-text);
     background-color: var(--color-button-primary-bg-hover);
   }
+
+  .credit-amount {
+    color: var(--color-button-primary-text);
+
+    .icon {
+      margin-left: 3px;
+      margin-right: 2px;
+    }
+  }
 }
 
 .button--secondary {
