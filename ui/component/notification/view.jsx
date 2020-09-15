@@ -122,7 +122,7 @@ export default function Notification(props: Props) {
 
           <div className="notification__extra">
             <div className="notification__time">
-              <DateTime timeAgo date={notification.created_at} />
+              <DateTime timeAgo date={notification.active_at} />
             </div>
             {!is_seen && <Button className="notification__mark-seen" onClick={handleSeeNotification} />}
           </div>
