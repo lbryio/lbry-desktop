@@ -1,6 +1,12 @@
 // @flow
 
-import { NOTIFICATION_CREATOR_SUBSCRIBER, NOTIFICATION_COMMENT, NOTIFICATION_REPLY } from 'constants/notifications';
+import {
+  NOTIFICATION_CREATOR_SUBSCRIBER,
+  NOTIFICATION_COMMENT,
+  NOTIFICATION_REPLY,
+  DAILY_WATCH_AVAILABLE,
+} from 'constants/notifications';
+import * as PAGES from 'constants/pages';
 import * as ICONS from 'constants/icons';
 import React from 'react';
 import classnames from 'classnames';
@@ -25,7 +31,10 @@ export default function Notification(props: Props) {
   const { notification, menuButton = false, doSeeNotifications } = props;
   const { push } = useHistory();
   const { notification_rule, notification_parameters, is_seen, id } = notification;
-  const notificationTarget = notification && notification_parameters.device.target;
+  const notificationTarget =
+    notification && notification_rule === DAILY_WATCH_AVAILABLE
+      ? `/$/${PAGES.CHANNELS_FOLLOWING}`
+      : notification_parameters.device.target;
   const isCommentNotification = notification_rule === NOTIFICATION_COMMENT || notification_rule === NOTIFICATION_REPLY;
   const commentText = isCommentNotification && notification_parameters.dynamic.comment;
   let notificationLink = formatLbryUrlForWeb(notificationTarget);
