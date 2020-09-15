@@ -39,8 +39,7 @@ type Props = {
   hasSynced: boolean,
   syncingWallet: boolean,
   creatingChannel: boolean,
-  syncSettings: () => void,
-  setClientSetting: (string, boolean) => void,
+  setClientSetting: (string, boolean, ?boolean) => void,
   followingAcknowledged: boolean,
   tagsAcknowledged: boolean,
   rewardsAcknowledged: boolean,
@@ -68,7 +67,6 @@ function UserSignUp(props: Props) {
     followingAcknowledged,
     tagsAcknowledged,
     rewardsAcknowledged,
-    syncSettings,
     setClientSetting,
     interestedInYoutubeSync,
     doToggleInterestedInYoutubeSync,
@@ -128,8 +126,7 @@ function UserSignUp(props: Props) {
     canHijackSignInFlowWithSpinner && (isCurrentlyFetchingSomething || isWaitingForSomethingToFinish);
 
   function setSettingAndSync(setting, value) {
-    setClientSetting(setting, value);
-    syncSettings();
+    setClientSetting(setting, value, true);
   }
 
   React.useEffect(() => {
