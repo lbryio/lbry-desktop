@@ -63,7 +63,7 @@ import { toCapitalCase } from 'util/string';
 import React from 'react';
 import Icon from 'component/common/icon';
 
-type RowDataItem = {
+export type RowDataItem = {
   title: string,
   link?: string,
   help?: any,

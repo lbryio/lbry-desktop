@@ -15,7 +15,7 @@ type Props = {
   blockedChannels: Array<string>,
 };
 
-type RowDataItem = {
+type ChannelsFollowingItem = {
   title: string,
   link?: string,
   help?: any,
@@ -24,7 +24,7 @@ type RowDataItem = {
 
 function ChannelsFollowingDiscover(props: Props) {
   const { followedTags, subscribedChannels, blockedChannels } = props;
-  let rowData: Array<RowDataItem> = [];
+  let rowData: Array<ChannelsFollowingItem> = [];
   const notChannels = subscribedChannels
     .map(({ uri }) => uri)
     .concat(blockedChannels)
@@ -32,9 +32,7 @@ function ChannelsFollowingDiscover(props: Props) {
 
   rowData.push({
     title: 'Top Channels Of All Time',
-    link: `/$/${PAGES.DISCOVER}?claim_type=channel&${CS.ORDER_BY_KEY}=${CS.ORDER_BY_TOP}&${CS.FRESH_KEY}=${
-      CS.FRESH_ALL
-    }`,
+    link: `/$/${PAGES.DISCOVER}?claim_type=channel&${CS.ORDER_BY_KEY}=${CS.ORDER_BY_TOP}&${CS.FRESH_KEY}=${CS.FRESH_ALL}`,
     options: {
       pageSize: 12,
       claimType: 'channel',
