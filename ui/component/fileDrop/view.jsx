@@ -138,6 +138,7 @@ function FileDrop(props: Props) {
         setFiles([]);
       } else if (files.length === 1) {
         // Handle single file selection
+        // $FlowFixMe
         setTarget(files[0]);
         handleFileSelected(files[0]);
       }

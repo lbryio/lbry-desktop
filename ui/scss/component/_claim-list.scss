@@ -301,11 +301,23 @@
   }
 }
 
-.claim-grid__title {
+.claim-grid__header {
+  @extend .section__actions;
   margin-bottom: var(--spacing-m);
 
+  .icon__wrapper {
+    height: 2rem;
+    width: 2rem;
+  }
+}
+
+.claim-grid__title {
+  margin-bottom: var(--spacing-m);
+  font-weight: 300;
+  font-size: var(--font-large);
+
   &:not(:first-of-type) {
-    margin-top: var(--spacing-xl);
+    margin-top: var(--spacing-m);
   }
 }
 

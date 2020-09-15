@@ -1,4 +1,5 @@
 // @flow
+import type { RowDataItem } from 'homepage';
 import * as ICONS from 'constants/icons';
 import * as PAGES from 'constants/pages';
 import { SITE_NAME } from 'config';
@@ -12,13 +13,6 @@ type Props = {
   authenticated: boolean,
   followedTags: Array<Tag>,
   subscribedChannels: Array<Subscription>,
-};
-
-type RowDataItem = {
-  title: string,
-  link?: string,
-  help?: any,
-  options?: {},
 };
 
 function HomePage(props: Props) {
@@ -52,9 +46,10 @@ function HomePage(props: Props) {
           </p>
         </div>
       )}
-      {rowData.map(({ title, link, help, options = {} }) => (
+      {rowData.map(({ title, link, icon, help, options = {} }) => (
         <div key={title} className="claim-grid__wrapper">
-          <h1 className="section__actions">
+          <h1 className="claim-grid__header">
+            {icon}
             <span className="claim-grid__title">{title}</span>
             {help}
           </h1>
