@@ -94,6 +94,10 @@ export default function ClaimList(props: Props) {
   return tileLayout && !header ? (
     <section className="claim-grid">
       {urisLength > 0 && uris.map(uri => <ClaimPreviewTile key={uri} uri={uri} />)}
+      {!timedOut && urisLength === 0 && !loading && (
+        <div className="empty main--empty">{empty || __('No results')}</div>
+      )}
+      {timedOut && timedOutMessage && <div className="empty main--empty">{timedOutMessage}</div>}
     </section>
   ) : (
     <section
