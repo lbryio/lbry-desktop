@@ -179,7 +179,7 @@ function UserSignUp(props: Props) {
     ),
     showChannelCreation &&
       (interestedInYoutubeSync ? (
-        <YoutubeSync inSignUpFlow />
+        <YoutubeSync inSignUpFlow doToggleInterestedInYoutubeSync={doToggleInterestedInYoutubeSync} />
       ) : (
         <UserFirstChannel doToggleInterestedInYoutubeSync={doToggleInterestedInYoutubeSync} />
       )),
