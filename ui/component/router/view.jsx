@@ -46,6 +46,7 @@ import ChannelNew from 'page/channelNew';
 import BuyPage from 'page/buy';
 import NotificationsPage from 'page/notifications';
 import YoutubeSyncPage from 'page/youtubeSync';
+import SignInWalletPasswordPage from 'page/signInWalletPassword';
 import { LINKED_COMMENT_QUERY_PARAM } from 'constants/comment';
 import { parseURI } from 'lbry-redux';
 import { SITE_TITLE, WELCOME_VERSION } from 'config';
@@ -237,6 +238,7 @@ function AppRouter(props: Props) {
       <PrivateRoute {...props} path={`/$/${PAGES.CHANNELS}`} component={ChannelsPage} />
       <PrivateRoute {...props} path={`/$/${PAGES.BUY}`} component={BuyPage} />
       <PrivateRoute {...props} path={`/$/${PAGES.NOTIFICATIONS}`} component={NotificationsPage} />
+      <PrivateRoute {...props} path={`/$/${PAGES.AUTH_WALLET_PASSWORD}`} component={SignInWalletPasswordPage} />
 
       <Route path={`/$/${PAGES.EMBED}/:claimName`} exact component={EmbedWrapperPage} />
       <Route path={`/$/${PAGES.EMBED}/:claimName/:claimId`} exact component={EmbedWrapperPage} />

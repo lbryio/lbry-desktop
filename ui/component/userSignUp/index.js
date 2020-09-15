@@ -1,6 +1,6 @@
 import REWARD_TYPES from 'rewards';
 import { connect } from 'react-redux';
-import { selectGetSyncIsPending, selectGetSyncErrorMessage, selectSyncHash } from 'lbryinc';
+import { selectGetSyncIsPending, selectSyncHash } from 'lbryinc';
 import { doClaimRewardType } from 'redux/actions/rewards';
 import { doSetClientSetting } from 'redux/actions/settings';
 import { selectClaimedRewards, makeSelectIsRewardClaimPending } from 'redux/selectors/rewards';
@@ -42,7 +42,6 @@ const select = state => ({
   tagsAcknowledged: makeSelectClientSetting(SETTINGS.TAGS_ACKNOWLEDGED)(state),
   rewardsAcknowledged: makeSelectClientSetting(SETTINGS.REWARDS_ACKNOWLEDGED)(state),
   syncingWallet: selectGetSyncIsPending(state),
-  getSyncError: selectGetSyncErrorMessage(state),
   hasSynced: Boolean(selectSyncHash(state)),
   creatingChannel: selectCreatingChannel(state),
   interestedInYoutubeSync: selectInterestedInYoutubeSync(state),
