@@ -302,23 +302,30 @@
 }
 
 .claim-grid__header {
-  @extend .section__actions;
+  @extend .button--link;
   margin-bottom: var(--spacing-m);
+  display: inline-block;
 
   .icon__wrapper {
-    height: 2rem;
-    width: 2rem;
+    height: 1.5rem;
+    width: 1.5rem;
+    background-color: var(--color-primary-alt);
+    margin-right: var(--spacing-m);
+
+    .icon {
+      stroke: var(--color-primary);
+    }
   }
 }
 
+.claim-grid__header-icon {
+}
+
 .claim-grid__title {
+  margin-top: var(--spacing-m);
   margin-bottom: var(--spacing-m);
   font-weight: 300;
   font-size: var(--font-large);
-
-  &:not(:first-of-type) {
-    margin-top: var(--spacing-m);
-  }
 }
 
 .claim-grid__title--secondary {
