@@ -3,6 +3,7 @@
 import React from 'react';
 import Lbry from 'lbry-redux';
 import Button from 'component/button';
+import Spinner from 'component/spinner';
 
 type Props = {
   reflectingInfo?: ReflectingUpdate,
@@ -25,7 +26,11 @@ const PublishPending = (props: Props) => {
   } else if (reflecting) {
     return <span>{__('Uploading (%progress%%) ', { progress: progress })}</span>;
   } else {
-    return <span>{__('Confirming')}</span>;
+    return (
+      <span>
+        {__('Confirming...')} <Spinner type="small" />
+      </span>
+    );
   }
 };
 

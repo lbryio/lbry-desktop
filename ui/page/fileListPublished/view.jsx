@@ -9,7 +9,6 @@ import Paginate from 'component/common/paginate';
 import { PAGE_PARAM, PAGE_SIZE_PARAM } from 'constants/claim';
 import WebUploadList from 'component/webUploadList';
 import Spinner from 'component/spinner';
-import Card from 'component/common/card';
 import Yrbl from 'component/yrbl';
 
 type Props = {
@@ -61,36 +60,35 @@ function FileListPublished(props: Props) {
       <div className="card-stack">
         <WebUploadList />
         {!!(urls && urls.length) && (
-          <Card
-            title={__('Uploads')}
-            titleActions={
-              <div className="card__actions--inline">
-                {fetching && <Spinner type="small" />}
-                {!fetching && (
+          <>
+            <ClaimList
+              header={<h1 className="section__title">{__('Uploads')}</h1>}
+              headerAltControls={
+                <div className="card__actions--inline">
+                  {fetching && <Spinner type="small" />}
+                  {!fetching && (
+                    <Button
+                      button="alt"
+                      label={__('Refresh')}
+                      icon={ICONS.REFRESH}
+                      onClick={() => fetchClaimListMine(params.page, params.page_size)}
+                    />
+                  )}
                   <Button
-                    button="alt"
-                    label={__('Refresh')}
-                    icon={ICONS.REFRESH}
-                    onClick={() => fetchClaimListMine(params.page, params.page_size)}
+                    icon={ICONS.PUBLISH}
+                    button="secondary"
+                    label={__('Upload')}
+                    navigate={`/$/${PAGES.UPLOAD}`}
+                    onClick={() => clearPublish()}
                   />
-                )}
-                <Button
-                  icon={ICONS.PUBLISH}
-                  button="secondary"
-                  label={__('Upload')}
-                  navigate={`/$/${PAGES.UPLOAD}`}
-                  onClick={() => clearPublish()}
-                />
-              </div>
-            }
-            isBodyList
-            body={
-              <div>
-                <ClaimList loading={fetching} persistedStorageKey="claim-list-published" uris={urls} />
-                <Paginate totalPages={urlTotal > 0 ? Math.ceil(urlTotal / Number(pageSize)) : 1} />
-              </div>
-            }
-          />
+                </div>
+              }
+              loading={fetching}
+              persistedStorageKey="claim-list-published"
+              uris={urls}
+            />
+            <Paginate totalPages={urlTotal > 0 ? Math.ceil(urlTotal / Number(pageSize)) : 1} />
+          </>
         )}
       </div>
       {!(urls && urls.length) && (
