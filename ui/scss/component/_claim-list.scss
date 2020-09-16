@@ -318,9 +318,6 @@
   }
 }
 
-.claim-grid__header-icon {
-}
-
 .claim-grid__title {
   margin-top: var(--spacing-m);
   margin-bottom: var(--spacing-m);
@@ -380,7 +377,7 @@
   }
 
   @media (max-width: $breakpoint-medium) and (min-width: $breakpoint-small) {
-    $width: calc((100vw - var(--side-nav-width--micro) - var(--spacing-l) * 3) / 3);
+    $width: calc((100vw - var(--side-nav-width--micro) - var(--spacing-xl) * 3) / 3);
     width: $width;
     @include handleClaimTileGifThumbnail($width);
 
@@ -395,7 +392,7 @@
   }
 
   @media (max-width: $breakpoint-small) {
-    $width: calc((100vw / 2) - var(--spacing-xs) - var(--spacing-m) / 2);
+    $width: calc((100vw / 2) - var(--spacing-s) - var(--spacing-l) / 2);
     width: $width;
     @include handleClaimTileGifThumbnail($width);
     margin-bottom: var(--spacing-l);
