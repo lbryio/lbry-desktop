@@ -1,11 +1,6 @@
 // @flow
 
-import {
-  NOTIFICATION_CREATOR_SUBSCRIBER,
-  NOTIFICATION_COMMENT,
-  NOTIFICATION_REPLY,
-  DAILY_WATCH_AVAILABLE,
-} from 'constants/notifications';
+import * as NOTIFICATIONS from 'constants/notifications';
 import * as PAGES from 'constants/pages';
 import * as ICONS from 'constants/icons';
 import React from 'react';
@@ -31,12 +26,20 @@ export default function Notification(props: Props) {
   const { notification, menuButton = false, doSeeNotifications } = props;
   const { push } = useHistory();
   const { notification_rule, notification_parameters, is_seen, id } = notification;
-  const notificationTarget =
-    notification && notification_rule === DAILY_WATCH_AVAILABLE
-      ? `/$/${PAGES.CHANNELS_FOLLOWING}`
-      : notification_parameters.device.target;
-  const isCommentNotification = notification_rule === NOTIFICATION_COMMENT || notification_rule === NOTIFICATION_REPLY;
+  const isCommentNotification =
+    notification_rule === NOTIFICATIONS.NOTIFICATION_COMMENT || notification_rule === NOTIFICATIONS.NOTIFICATION_REPLY;
   const commentText = isCommentNotification && notification_parameters.dynamic.comment;
+
+  let notificationTarget;
+  switch (notification_rule) {
+    case NOTIFICATIONS.DAILY_WATCH_AVAILABLE:
+    case NOTIFICATIONS.DAILY_WATCH_REMIND:
+      notificationTarget = `/$/${PAGES.CHANNELS_FOLLOWING}`;
+      break;
+    default:
+      notificationTarget = notification_parameters.device.target;
+  }
+
   let notificationLink = formatLbryUrlForWeb(notificationTarget);
   let urlParams = new URLSearchParams();
   if (isCommentNotification && notification_parameters.dynamic.hash) {
@@ -54,13 +57,13 @@ export default function Notification(props: Props) {
 
   let icon;
   switch (notification_rule) {
-    case NOTIFICATION_CREATOR_SUBSCRIBER:
+    case NOTIFICATIONS.NOTIFICATION_CREATOR_SUBSCRIBER:
       icon = <Icon icon={ICONS.SUBSCRIBE} sectionIcon className="notification__icon" />;
       break;
-    case NOTIFICATION_COMMENT:
+    case NOTIFICATIONS.NOTIFICATION_COMMENT:
       icon = <ChannelThumbnail small uri={notification_parameters.dynamic.comment_author} />;
       break;
-    case NOTIFICATION_REPLY:
+    case NOTIFICATIONS.NOTIFICATION_REPLY:
       icon = <ChannelThumbnail small uri={notification_parameters.dynamic.reply_author} />;
       break;
     default:
