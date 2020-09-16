@@ -20,7 +20,14 @@ function PublishPage(props: Props) {
   }
 
   return (
-    <Page>
+    <Page
+      noFooter
+      noSideNavigation
+      backout={{
+        title: __('Upload'),
+        backLabel: __('Back'),
+      }}
+    >
       {balance === 0 && <YrblWalletEmpty />}
       <PublishForm scrollToTop={scrollToTop} disabled={balance === 0} />
     </Page>
