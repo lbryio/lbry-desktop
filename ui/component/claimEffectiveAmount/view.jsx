@@ -1,6 +1,6 @@
 // @flow
 import React from 'react';
-import LbcSymbol from 'component/common/lbc-symbol';
+import CreditAmount from 'component/common/credit-amount';
 
 type Props = {
   uri: string,
@@ -14,7 +14,7 @@ function ClaimEffectiveAmount(props: Props) {
     return null;
   }
 
-  return <LbcSymbol postfix={claim.meta.effective_amount} />;
+  return <CreditAmount amount={Number(claim.meta.effective_amount)} />;
 }
 
 export default ClaimEffectiveAmount;
