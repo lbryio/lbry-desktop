@@ -6,7 +6,6 @@ import Page from 'component/page';
 import Button from 'component/button';
 import YoutubeTransferStatus from 'component/youtubeTransferStatus';
 import Spinner from 'component/spinner';
-import Card from 'component/common/card';
 import Yrbl from 'component/yrbl';
 import * as PAGES from 'constants/pages';
 
@@ -33,20 +32,18 @@ export default function ChannelsPage(props: Props) {
         {hasYoutubeChannels && <YoutubeTransferStatus hideChannelLink />}
 
         {channelUrls && Boolean(channelUrls.length) && (
-          <Card
-            title={__('Your channels')}
-            titleActions={
-              <>
-                <Button
-                  button="secondary"
-                  icon={ICONS.CHANNEL}
-                  label={__('New Channel')}
-                  navigate={`/$/${PAGES.CHANNEL_NEW}`}
-                />
-              </>
+          <ClaimList
+            header={<h1 className="section__title">{__('Your channels')}</h1>}
+            headerAltControls={
+              <Button
+                button="secondary"
+                icon={ICONS.CHANNEL}
+                label={__('New Channel')}
+                navigate={`/$/${PAGES.CHANNEL_NEW}`}
+              />
             }
-            isBodyList
-            body={<ClaimList loading={fetchingChannels} uris={channelUrls} />}
+            loading={fetchingChannels}
+            uris={channelUrls}
           />
         )}
       </div>
