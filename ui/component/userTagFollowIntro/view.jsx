@@ -26,11 +26,9 @@ function UserTagFollowIntro(props: Props) {
             <div className="section__actions--between">
               <span />
               <Button
-                button="primary"
-                type="Submit"
+                button={followedTags.length < 1 ? 'alt' : 'primary'}
                 onClick={onContinue}
-                label={__('Continue')}
-                disabled={followedTags.length < 1}
+                label={followedTags.length < 1 ? __('Skip') : __('Continue')}
               />
             </div>
           </Form>

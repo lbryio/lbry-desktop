@@ -46,11 +46,9 @@ function UserChannelFollowIntro(props: Props) {
           <div className="section__actions--between">
             <Button button="secondary" onClick={onBack} label={__('Back')} />
             <Button
-              button="primary"
-              type="Submit"
+              button={subscribedChannels.length < 1 ? 'alt' : 'primary'}
               onClick={onContinue}
-              label={__('Continue')}
-              disabled={subscribedChannels.length < 1}
+              label={subscribedChannels.length < 1 ? __('Skip') : __('Continue')}
             />
           </div>
           <div className="section__body">

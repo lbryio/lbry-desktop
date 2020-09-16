@@ -43,8 +43,13 @@ export default function YoutubeSync(props: Props) {
   const hasYoutubeChannels = youtubeChannels && youtubeChannels.length > 0;
 
   React.useEffect(() => {
-    replace(`?reset_scroll=youtube`);
-  }, []);
+    const urlParamsInEffect = new URLSearchParams(search);
+    if (!urlParamsInEffect.get('reset_scroll')) {
+      urlParamsInEffect.append('reset_scroll', 'youtube');
+    }
+
+    replace(`?${urlParamsInEffect.toString()}`);
+  }, [pathname, search]);
 
   React.useEffect(() => {
     if (statusToken && !hasYoutubeChannels) {
