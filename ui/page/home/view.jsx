@@ -8,6 +8,7 @@ import Page from 'component/page';
 import Button from 'component/button';
 import ClaimTilesDiscover from 'component/claimTilesDiscover';
 import getHomepage from 'homepage';
+import Icon from 'component/common/icon';
 
 type Props = {
   authenticated: boolean,
@@ -49,9 +50,11 @@ function HomePage(props: Props) {
       {rowData.map(({ title, link, icon, help, options = {} }) => (
         <div key={title} className="claim-grid__wrapper">
           <h1 className="claim-grid__header">
-            {icon}
-            <span className="claim-grid__title">{title}</span>
-            {help}
+            <Button navigate={link} button="link">
+              {icon && <Icon className="claim-grid__header-icon" sectionIcon icon={icon} size={20} />}
+              <span className="claim-grid__title">{title}</span>
+              {help}
+            </Button>
           </h1>
 
           <ClaimTilesDiscover {...options} />

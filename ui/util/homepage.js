@@ -1,21 +1,18 @@
 // @flow
-import type { Node } from 'react';
 import * as PAGES from 'constants/pages';
 import * as ICONS from 'constants/icons';
 import * as CS from 'constants/claim_search';
-import React from 'react';
 import { parseURI } from 'lbry-redux';
 import moment from 'moment';
 import { toCapitalCase } from 'util/string';
 import { useIsLargeScreen } from 'effects/use-screensize';
-import Icon from 'component/common/icon';
 
 export type RowDataItem = {
   title: string,
   link?: string,
   help?: any,
   options?: {},
-  icon?: Node,
+  icon?: string,
 };
 
 export default function GetHomePageRowData(
@@ -156,7 +153,7 @@ export default function GetHomePageRowData(
   const RECENT_FROM_FOLLOWING = {
     title: __('Recent From Following'),
     link: `/$/${PAGES.CHANNELS_FOLLOWING}`,
-    icon: <Icon sectionIcon icon={ICONS.SUBSCRIBE} size={14} />,
+    icon: ICONS.SUBSCRIBE,
     options: {
       orderBy: ['release_time'],
       releaseTime:
@@ -234,7 +231,7 @@ export default function GetHomePageRowData(
   const TRENDING_FOR_TAGS = {
     title: __('Trending For Your Tags'),
     link: `/$/${PAGES.TAGS_FOLLOWING}`,
-    icon: <Icon sectionIcon icon={ICONS.TAG} size={14} />,
+    icon: ICONS.TAG,
 
     options: {
       pageSize: getPageSize(4),
