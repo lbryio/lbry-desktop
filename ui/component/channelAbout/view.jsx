@@ -1,4 +1,5 @@
 // @flow
+import { SIMPLE_SITE } from 'config';
 import React, { Fragment } from 'react';
 import MarkdownPreview from 'component/common/markdown-preview';
 import ClaimTags from 'component/claimTags';
@@ -86,15 +87,15 @@ function ChannelAbout(props: Props) {
               amount={parseFloat(claim.amount) + parseFloat(claim.meta.support_amount)}
               precision={8}
             />{' '}
-            (
-            <Button
-              button="link"
-              label={__('view other claims at lbry://%name%', {
-                name: claim.name,
-              })}
-              navigate={`/$/${PAGES.TOP}?name=${claim.name}`}
-            />
-            )
+            {SIMPLE_SITE && (
+              <Button
+                button="link"
+                label={__('view other claims at lbry://%name%', {
+                  name: claim.name,
+                })}
+                navigate={`/$/${PAGES.TOP}?name=${claim.name}`}
+              />
+            )}
           </div>
         </Fragment>
       </section>
