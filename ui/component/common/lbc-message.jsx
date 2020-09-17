@@ -9,15 +9,18 @@ type Props = {
 
 export default function LbcMessage(props: Props) {
   let amount;
-  const tokenizedMessage = props.children.replace(/(\d?\.?-?\d+?\.?-?\d+?)\s(LBC)/g, (originalString, lbcAmount) => {
-    amount = lbcAmount;
-    return `%lbc%`;
-  });
+  const tokenizedMessage = props.children.replace(
+    /(\d?\.?-?\d?\.?-?\d+?)\s(LBC)/g,
+    (originalString, lbcAmount, thirdArg) => {
+      amount = lbcAmount;
+      return `%lbc%`;
+    }
+  );
 
   return (
     <I18nMessage tokens={{ lbc: amount ? <CreditAmount badge noFormat amount={amount} /> : undefined }}>
       {/* Catch any rogue LBC's left */}
-      {tokenizedMessage.replace(/LBC/g, 'LBRY Credits')}
+      {tokenizedMessage.replace(/LBC/g, 'Credits')}
     </I18nMessage>
   );
 }
