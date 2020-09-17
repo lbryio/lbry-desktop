@@ -1,5 +1,5 @@
 // @flow
-import { SIMPLE_SITE } from 'config';
+import { SIMPLE_SITE, SITE_NAME } from 'config';
 import * as PAGES from 'constants/pages';
 import * as CS from 'constants/claim_search';
 import * as MODALS from 'constants/modal_types';
@@ -11,6 +11,7 @@ import { buildURI } from 'lbry-redux';
 import * as RENDER_MODES from 'constants/file_render_modes';
 import { useIsMobile } from 'effects/use-screensize';
 import ClaimSupportButton from 'component/claimSupportButton';
+import { useHistory } from 'react-router';
 
 type Props = {
   uri: string,
@@ -21,13 +22,33 @@ type Props = {
   fileInfo: FileListItem,
   costInfo: ?{ cost: number },
   renderMode: string,
+  myChannels: ?Array<ChannelClaim>,
+  doToast: ({ message: string }) => void,
+  clearPlayingUri: () => void,
 };
 
 function FileActions(props: Props) {
-  const { fileInfo, uri, openModal, claimIsMine, claim, costInfo, renderMode, prepareEdit } = props;
+  const {
+    fileInfo,
+    uri,
+    openModal,
+    claimIsMine,
+    claim,
+    costInfo,
+    renderMode,
+    prepareEdit,
+    myChannels,
+    clearPlayingUri,
+    doToast,
+  } = props;
+  const {
+    push,
+    location: { pathname },
+  } = useHistory();
   const isMobile = useIsMobile();
   const webShareable = costInfo && costInfo.cost === 0 && RENDER_MODES.WEB_SHAREABLE_MODES.includes(renderMode);
   const showDelete = claimIsMine || (fileInfo && (fileInfo.written_bytes > 0 || fileInfo.blobs_completed > 0));
+  const hasChannels = myChannels && myChannels.length > 0;
   const claimId = claim && claim.claim_id;
   const { signing_channel: signingChannel } = claim;
   const channelName = signingChannel && signingChannel.name;
@@ -47,6 +68,16 @@ function FileActions(props: Props) {
     editUri = buildURI(uriObject);
   }
 
+  function handleRepostClick() {
+    if (!hasChannels) {
+      clearPlayingUri();
+      push(`/$/${PAGES.CHANNEL_NEW}?redirect=${pathname}`);
+      doToast({ message: __('A channel is required to repost on %SITE_NAME%', { SITE_NAME }) });
+    } else {
+      openModal(MODALS.REPOST, { uri });
+    }
+  }
+
   const lhsSection = (
     <>
       <Button
@@ -62,7 +93,7 @@ function FileActions(props: Props) {
           icon={ICONS.REPOST}
           label={__('Repost')}
           requiresAuth={IS_WEB}
-          onClick={() => openModal(MODALS.REPOST, { uri })}
+          onClick={handleRepostClick}
         />
         {claim.meta.reposted > 0 && (
           <Button
