@@ -1,5 +1,6 @@
 // @flow
 import * as React from 'react';
+import classnames from 'classnames';
 import remark from 'remark';
 import remarkAttr from 'remark-attr';
 import remarkStrip from 'strip-markdown';
@@ -29,6 +30,7 @@ type MarkdownProps = {
   content: ?string,
   promptLinks?: boolean,
   noDataStore?: boolean,
+  className?: string,
 };
 
 const SimpleText = (props: SimpleTextProps) => {
@@ -97,7 +99,7 @@ schema.attributes.a.push('embed');
 const REPLACE_REGEX = /(<iframe\s+src=["'])(.*?(?=))(["']\s*><\/iframe>)/g;
 
 const MarkdownPreview = (props: MarkdownProps) => {
-  const { content, strip, promptLinks, noDataStore } = props;
+  const { content, strip, promptLinks, noDataStore, className } = props;
   const strippedContent = content
     ? content.replace(REPLACE_REGEX, (iframeHtml, y, iframeSrc) => {
         // Let the browser try to create an iframe to see if the markup is valid
@@ -151,7 +153,7 @@ const MarkdownPreview = (props: MarkdownProps) => {
   }
 
   return (
-    <div dir="auto" className="markdown-preview">
+    <div dir="auto" className={classnames('markdown-preview', className)}>
       {
         remark()
           .use(remarkAttr, remarkAttrOpts)
