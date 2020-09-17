@@ -56,25 +56,24 @@ function FileActions(props: Props) {
         onClick={() => openModal(MODALS.SOCIAL_SHARE, { uri, webShareable })}
       />
 
-      {!SIMPLE_SITE && (
-        <div className="button-group">
+      <div className="button-group">
+        <Button
+          button="alt"
+          icon={ICONS.REPOST}
+          label={__('Repost')}
+          requiresAuth={IS_WEB}
+          onClick={() => openModal(MODALS.REPOST, { uri })}
+        />
+        {claim.meta.reposted > 0 && (
           <Button
             button="alt"
-            icon={ICONS.REPOST}
-            label={__('Repost')}
+            label={claim.meta.reposted}
             requiresAuth={IS_WEB}
-            onClick={() => openModal(MODALS.REPOST, { uri })}
+            navigate={`/$/${PAGES.DISCOVER}?${CS.REPOSTED_URI_KEY}=${encodeURIComponent(uri)}`}
           />
-          {claim.meta.reposted > 0 && (
-            <Button
-              button="alt"
-              label={claim.meta.reposted}
-              requiresAuth={IS_WEB}
-              navigate={`/$/${PAGES.DISCOVER}?${CS.REPOSTED_URI_KEY}=${encodeURIComponent(uri)}`}
-            />
-          )}
-        </div>
-      )}
+        )}
+      </div>
+
       <ClaimSupportButton uri={uri} />
     </>
   );
