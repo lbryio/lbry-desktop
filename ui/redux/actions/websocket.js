@@ -3,6 +3,8 @@ import { getAuthToken } from 'util/saved-passwords';
 import { doNotificationList } from 'redux/actions/notifications';
 
 let socket = null;
+let retryCount = 0;
+
 export const doSocketConnect = () => dispatch => {
   const authToken = getAuthToken();
   if (!authToken) {
@@ -10,31 +12,42 @@ export const doSocketConnect = () => dispatch => {
     return;
   }
 
-  if (socket !== null) {
-    socket.close();
+  function connectToSocket() {
+    if (socket !== null) {
+      socket.close();
+      socket = null;
+    }
+
+    const timeToWait = retryCount ** 2 * 1000;
+    setTimeout(() => {
+      const url = `wss://api.lbry.com/subscribe?auth_token=${authToken}`;
+      socket = new WebSocket(url);
+      socket.onopen = e => {
+        retryCount = 0;
+        console.log('\nConnected to WS \n\n'); // eslint-disable-line
+      };
+      socket.onmessage = e => {
+        const data = JSON.parse(e.data);
+
+        if (data.type === 'pending_notification') {
+          dispatch(doNotificationList());
+        }
+      };
+
+      socket.onerror = e => {
+        console.error('websocket onerror', e);
+        // onerror and onclose will both fire, so nothing is needed here
+      };
+
+      socket.onclose = e => {
+        console.error('websocket onclose', e);
+        retryCount += 1;
+        connectToSocket();
+      };
+    }, timeToWait);
   }
 
-  socket = new WebSocket(`wss://api.lbry.com/subscribe?auth_token=${authToken}`);
-
-  socket.onmessage = e => {
-    const data = JSON.parse(e.data);
-
-    if (data.type === 'pending_notification') {
-      dispatch(doNotificationList());
-    }
-  };
-
-  socket.onerror = e => {
-    console.error('Error connecting to websocket', e); // eslint-disable-line
-  };
-
-  socket.onclose = e => {
-    // Reconnect?
-  };
-
-  socket.onopen = e => {
-    console.log('\nConnected to WS \n\n'); // eslint-disable-line
-  };
+  connectToSocket();
 };
 
 export const doSocketDisconnect = () => ({
