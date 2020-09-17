@@ -92,7 +92,7 @@ function DiscoverPage(props: Props) {
   return (
     <Page noFooter fullWidthPage={tileLayout}>
       <ClaimListDiscover
-        header={<span />}
+        header={repostedUri ? <span /> : undefined}
         tileLayout={repostedUri ? false : tileLayout}
         claimType={claimType ? [claimType] : undefined}
         headerLabel={headerLabel}
