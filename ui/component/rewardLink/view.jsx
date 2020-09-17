@@ -35,7 +35,7 @@ const RewardLink = (props: Props) => {
     <Button
       button={button ? 'primary' : 'link'}
       disabled={isPending}
-      label={<LbcMessage test>{displayLabel}</LbcMessage>}
+      label={<LbcMessage>{displayLabel}</LbcMessage>}
       onClick={() => {
         claimReward(reward);
       }}
