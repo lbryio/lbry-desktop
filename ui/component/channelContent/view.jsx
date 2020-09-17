@@ -29,6 +29,7 @@ type Props = {
   claim: ?Claim,
   isAuthenticated: boolean,
   showMature: boolean,
+  tileLayout: boolean,
 };
 
 function ChannelContent(props: Props) {
@@ -43,6 +44,7 @@ function ChannelContent(props: Props) {
     defaultPageSize = CS.PAGE_SIZE,
     defaultInfiniteScroll = true,
     showMature,
+    tileLayout,
   } = props;
   const claimsInChannel = (claim && claim.meta.claims_in_channel) || 0;
   const [searchQuery, setSearchQuery] = React.useState('');
@@ -122,6 +124,7 @@ function ChannelContent(props: Props) {
 
       {claim && claimsInChannel > 0 ? (
         <ClaimListDiscover
+          tileLayout={tileLayout}
           uris={searchResults}
           channelIds={[claim.claim_id]}
           defaultOrderBy={CS.ORDER_BY_NEW}
