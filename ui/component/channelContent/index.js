@@ -28,6 +28,7 @@ const select = (state, props) => {
     claim: props.uri && makeSelectClaimForUri(props.uri)(state),
     isAuthenticated: selectUserVerifiedEmail(state),
     showMature: makeSelectClientSetting(SETTINGS.SHOW_MATURE)(state),
+    tileLayout: makeSelectClientSetting(SETTINGS.TILE_LAYOUT)(state),
   };
 };
 
