@@ -32,7 +32,7 @@ class FileDescription extends PureComponent<Props> {
           <>
             {description && (
               <div className="media__info-text">
-                <MarkdownPreview content={description} />
+                <MarkdownPreview className="markdown-preview--description" content={description} />
               </div>
             )}
             <ClaimTags uri={uri} type="large" />
