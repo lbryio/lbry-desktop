@@ -10,7 +10,7 @@ type Props = {
 export default function LbcMessage(props: Props) {
   let amount;
   const tokenizedMessage = props.children.replace(
-    /(\d?\.?-?\d?\.?-?\d+?)\s(LBC)/g,
+    /(\d?\.?-?\d?\.?-?\d+?)\s(LBC|LBRY Credits?)/g,
     (originalString, lbcAmount, thirdArg) => {
       amount = lbcAmount;
       return `%lbc%`;
