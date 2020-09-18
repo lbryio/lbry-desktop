@@ -46,7 +46,6 @@ function SyncEnableFlow(props: Props) {
 
   const [step, setStep] = React.useState(INITIAL);
   const [prefDict, setPrefDict]: [any, (any) => void] = React.useState();
-  const [password, setPassword] = React.useState('');
   const [error, setError] = React.useState();
 
   const handleSyncToggle = async () => {
@@ -117,29 +116,28 @@ function SyncEnableFlow(props: Props) {
   }, [mode]);
 
   React.useEffect(() => {
-    getSavedPassword()
-      .then(pw => setPassword(pw || ''))
-      .catch(e => {
-        setError(e && e.message ? e.message : e);
-      });
-  }, []);
-
-  React.useEffect(() => {
     if (step === FETCH_FOR_ENABLE) {
-      getSync(password, (e, hasChanged) => {
-        if (e) {
+      getSavedPassword()
+        .then(pw => {
+          getSync(pw, (e, hasChanged) => {
+            if (e) {
+              setStep(ERROR);
+              setError(e && e.message ? e.message : e);
+            } else {
+              Lbry.preference_get().then(result => {
+                const prefs = {};
+                if (result[SHARED_KEY]) prefs[SHARED_KEY] = result[SHARED_KEY];
+                if (result[LOCAL_KEY]) prefs[LOCAL_KEY] = result[LOCAL_KEY];
+                setPrefDict(prefs);
+                setStep(CONFIRM);
+              });
+            }
+          });
+        })
+        .catch(e => {
           setStep(ERROR);
           setError(e && e.message ? e.message : e);
-        } else {
-          Lbry.preference_get().then(result => {
-            const prefs = {};
-            if (result[SHARED_KEY]) prefs[SHARED_KEY] = result[SHARED_KEY];
-            if (result[LOCAL_KEY]) prefs[LOCAL_KEY] = result[LOCAL_KEY];
-            setPrefDict(prefs);
-            setStep(CONFIRM);
-          });
-        }
-      });
+        });
     }
     if (step === FETCH_FOR_DISABLE) {
       Lbry.preference_get().then(result => {
@@ -150,7 +148,7 @@ function SyncEnableFlow(props: Props) {
         setStep(CONFIRM);
       });
     }
-  }, [step, setPrefDict, setStep, password]);
+  }, [step, setPrefDict, setStep]);
 
   if (getSyncPending) {
     return (
