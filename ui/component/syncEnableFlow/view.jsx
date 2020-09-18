@@ -7,6 +7,7 @@ import { withRouter } from 'react-router';
 import Spinner from 'component/spinner';
 import { Lbry } from 'lbry-redux';
 import ErrorText from 'component/common/error-text';
+import I18nMessage from 'component/i18nMessage';
 
 type Props = {
   setSyncEnabled: boolean => void,
@@ -158,8 +159,23 @@ function SyncEnableFlow(props: Props) {
   return (
     <Card
       title={mode === ENABLE_MODE ? 'Enable Sync' : 'Disable Sync'}
-      body={
+      subtitle={
         <div>
+          {(error || getSyncError) && (
+            <I18nMessage
+              tokens={{
+                click_here: (
+                  <Button
+                    button="link"
+                    href="https://lbry.com/faq/accounts-and-sync#limitations"
+                    label={__('Click here')}
+                  />
+                ),
+              }}
+            >
+              Something went wrong. Please %click_here% to learn about sync limitations.
+            </I18nMessage>
+          )}
           {step === INITIAL && (
             <>
               <h1>{__(`Please wait...`)}</h1>
@@ -184,7 +200,6 @@ function SyncEnableFlow(props: Props) {
           )}
           {(error || getSyncError) && (
             <>
-              <h1>{__(`Something went wrong...`)}</h1>
               <ErrorText>{error || (getSyncError && String(getSyncError)) || __('Unknown error')}</ErrorText>
             </>
           )}
@@ -218,6 +233,7 @@ function SyncEnableFlow(props: Props) {
           {(error || getSyncError) && (
             <div className={'card__actions'}>
               <Button button="primary" name={'cancel'} label={__('Close')} onClick={() => closeModal()} />
+              <ErrorText>{error || (getSyncError && String(getSyncError)) || __('Unknown error')}</ErrorText>
             </div>
           )}
         </>

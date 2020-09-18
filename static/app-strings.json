@@ -1306,5 +1306,8 @@
   "Disabling sync will switch to your local profile.": "Disabling sync will switch to your local profile.",
   "Something went wrong...": "Something went wrong...",
   "To enable Sync, close LBRY completely and check 'Remember Password' during wallet unlock.": "To enable Sync, close LBRY completely and check 'Remember Password' during wallet unlock.",
+  "Something went wrong.": "Something went wrong.",
+  "Something went wrong. Please %click_here% to learn about sync limitations.": "Something went wrong. Please %click_here% to learn about sync limitations.",
+  "Buy LBC": "Buy LBC",
   "--end--": "--end--"
 }
