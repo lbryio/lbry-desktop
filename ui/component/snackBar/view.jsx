@@ -4,6 +4,7 @@ import React from 'react';
 import Button from 'component/button';
 import classnames from 'classnames';
 import Icon from 'component/common/icon';
+import LbcMessage from 'component/common/lbc-message';
 
 type Props = {
   removeSnack: any => void,
@@ -52,7 +53,9 @@ class SnackBar extends React.PureComponent<Props> {
         <div className="snack-bar__message">
           <Icon icon={isError ? ICONS.ALERT : ICONS.COMPLETED} size={18} />
 
-          <div>{message}</div>
+          <div>
+            <LbcMessage>{message}</LbcMessage>
+          </div>
         </div>
         {linkText && linkTarget && (
           // This is a little weird because of `linkTarget` code in `lbry-redux`

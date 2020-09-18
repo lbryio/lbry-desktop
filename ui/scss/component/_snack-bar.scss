@@ -52,7 +52,12 @@
   flex-direction: row;
   font-size: var(--font-body);
 
-  .icon {
+  .credit-amount {
+    color: inherit;
+  }
+
+  .icon--CheckCircle,
+  .icon--AlertCircle {
     margin-right: var(--spacing-m);
     min-width: 1rem;
   }
