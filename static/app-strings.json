@@ -1304,5 +1304,6 @@
   "Getting your profiles...": "Getting your profiles...",
   "Enabling sync will switch to your cloud profile.": "Enabling sync will switch to your cloud profile.",
   "Disabling sync will switch to your local profile.": "Disabling sync will switch to your local profile.",
+  "Something went wrong...": "Something went wrong...",
   "--end--": "--end--"
 }
