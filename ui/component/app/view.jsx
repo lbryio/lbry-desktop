@@ -272,8 +272,8 @@ function App(props: Props) {
   }, [user, setReadyForPrefs]);
 
   useEffect(() => {
-    if (syncError && isAuthenticated) {
-      history.push(`/$/${PAGES.AUTH}?redirect=${pathname}`);
+    if (syncError && isAuthenticated && !pathname.includes(PAGES.AUTH_WALLET_PASSWORD)) {
+      history.push(`/$/${PAGES.AUTH_WALLET_PASSWORD}?redirect=${pathname}`);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [syncError, pathname, isAuthenticated]);

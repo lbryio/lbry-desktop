@@ -1,6 +1,6 @@
 import REWARD_TYPES from 'rewards';
 import { connect } from 'react-redux';
-import { selectGetSyncIsPending, selectGetSyncErrorMessage, selectSyncHash } from 'lbryinc';
+import { selectGetSyncIsPending, selectSyncHash } from 'lbryinc';
 import { doClaimRewardType } from 'redux/actions/rewards';
 import { selectClaimedRewards, makeSelectIsRewardClaimPending } from 'redux/selectors/rewards';
 import { doUserFetch } from 'redux/actions/user';
@@ -36,7 +36,6 @@ const select = state => ({
   userFetchPending: selectUserIsPending(state),
   syncEnabled: makeSelectClientSetting(SETTINGS.ENABLE_SYNC)(state),
   syncingWallet: selectGetSyncIsPending(state),
-  getSyncError: selectGetSyncErrorMessage(state),
   hasSynced: Boolean(selectSyncHash(state)),
   creatingChannel: selectCreatingChannel(state),
 });
