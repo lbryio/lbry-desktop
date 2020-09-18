@@ -1,5 +1,4 @@
 // @flow
-import * as PAGES from 'constants/pages';
 import * as MODALS from 'constants/modal_types';
 import React from 'react';
 import Button from 'component/button';
@@ -18,20 +17,7 @@ type Props = {
 };
 
 function SyncToggle(props: Props) {
-  const {
-    verifiedEmail,
-    getSyncError,
-    history,
-    location: { pathname },
-    openModal,
-    syncEnabled,
-    disabled,
-  } = props;
-
-  if (getSyncError) {
-    history.push(`/$/${PAGES.AUTH}?redirect=${pathname}&immediate=true`);
-    return null;
-  }
+  const { verifiedEmail, openModal, syncEnabled, disabled } = props;
 
   return (
     <div>
