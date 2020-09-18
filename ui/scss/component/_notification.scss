@@ -15,7 +15,15 @@
 
 .notification__icon {
   .icon__wrapper {
+    width: 1rem;
+    height: 1rem;
+    padding: 1rem;
+    border-radius: var(--border-radius);
     margin-right: var(--spacing-m);
+
+    @media (min-width: $breakpoint-small) {
+      padding: 1.5rem;
+    }
   }
 }
 
@@ -48,13 +56,14 @@
 }
 
 .notification__content {
-  display: flex;
   flex: 1;
-  justify-content: space-between;
-  align-items: center;
+  display: flex;
+  flex-direction: column;
 
-  @media (max-width: $breakpoint-small) {
-    align-items: flex-start;
+  @media (min-width: $breakpoint-small) {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
   }
 }
 
@@ -62,6 +71,10 @@
   font-size: var(--font-small);
   color: var(--color-text);
   margin-bottom: var(--spacing-s);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 
   @media (max-width: $breakpoint-small) {
     margin-bottom: 0;
@@ -79,8 +92,13 @@
 .notification__time {
   font-size: var(--font-small);
   color: var(--color-text-help);
-  margin-left: var(--spacing-s);
   flex-shrink: 0;
+  margin-top: var(--spacing-s);
+
+  @media (min-width: $breakpoint-small) {
+    margin-left: var(--spacing-s);
+    margin-top: 0;
+  }
 }
 
 .notification__bubble {
