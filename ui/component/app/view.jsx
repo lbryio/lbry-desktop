@@ -79,6 +79,7 @@ type Props = {
   socketConnect: () => void,
   syncSubscribe: () => void,
   syncEnabled: boolean,
+  currentModal: any,
 };
 
 function App(props: Props) {
@@ -103,6 +104,7 @@ function App(props: Props) {
     setReferrer,
     isAuthenticated,
     syncSubscribe,
+    currentModal,
   } = props;
 
   const appRef = useRef();
@@ -262,7 +264,7 @@ function App(props: Props) {
   }, [user, setReadyForPrefs]);
 
   useEffect(() => {
-    if (syncError && isAuthenticated && !pathname.includes(PAGES.AUTH_WALLET_PASSWORD)) {
+    if (syncError && isAuthenticated && !pathname.includes(PAGES.AUTH_WALLET_PASSWORD) && !currentModal) {
       history.push(`/$/${PAGES.AUTH_WALLET_PASSWORD}?redirect=${pathname}`);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps

@@ -6,7 +6,7 @@ import { selectUser, selectAccessToken, selectUserVerifiedEmail } from 'redux/se
 import { selectUnclaimedRewards } from 'redux/selectors/rewards';
 import { doFetchChannelListMine, SETTINGS } from 'lbry-redux';
 import { makeSelectClientSetting, selectLoadedLanguages, selectThemePath } from 'redux/selectors/settings';
-import { selectIsUpgradeAvailable, selectAutoUpdateDownloaded } from 'redux/selectors/app';
+import { selectIsUpgradeAvailable, selectAutoUpdateDownloaded, selectModal } from 'redux/selectors/app';
 import { doGetWalletSyncPreference, doSetLanguage } from 'redux/actions/settings';
 import { doSyncSubscribe } from 'redux/actions/syncwrapper';
 import {
@@ -30,6 +30,7 @@ const select = state => ({
   uploadCount: selectUploadCount(state),
   rewards: selectUnclaimedRewards(state),
   isAuthenticated: selectUserVerifiedEmail(state),
+  currentModal: selectModal(state),
 });
 
 const perform = dispatch => ({
