@@ -13,7 +13,6 @@ import REWARDS from 'rewards';
 import UserVerify from 'component/userVerify';
 import Spinner from 'component/spinner';
 import YoutubeTransferStatus from 'component/youtubeTransferStatus';
-import SyncPassword from 'component/syncPassword';
 import useFetched from 'effects/use-fetched';
 import usePersistedState from 'effects/use-persisted-state';
 import Confetti from 'react-confetti';
@@ -34,7 +33,6 @@ type Props = {
   syncEnabled: boolean,
   hasSynced: boolean,
   syncingWallet: boolean,
-  getSyncError: ?string,
   creatingChannel: boolean,
 };
 
@@ -53,7 +51,6 @@ function UserSignIn(props: Props) {
     youtubeChannels,
     syncEnabled,
     syncingWallet,
-    getSyncError,
     hasSynced,
     fetchingChannels,
     creatingChannel,
@@ -88,7 +85,6 @@ function UserSignIn(props: Props) {
   const showEmail = !hasVerifiedEmail;
   const showEmailVerification = (emailToVerify && !hasVerifiedEmail) || (!hasVerifiedEmail && passwordSet);
   const showUserVerification = hasVerifiedEmail && !rewardsApproved && !isIdentityVerified && !hasSkippedRewards;
-  const showSyncPassword = syncEnabled && getSyncError;
   const showChannelCreation =
     hasVerifiedEmail &&
     balance !== undefined &&
@@ -99,7 +95,7 @@ function UserSignIn(props: Props) {
   const showYoutubeTransfer = hasVerifiedEmail && hasYoutubeChannels && !isYoutubeTransferComplete;
   const showFollowIntro = step === 'channels' || (hasVerifiedEmail && !hasSeenFollowList);
   const showTagsIntro = step === 'tags' || (hasVerifiedEmail && !hasSeenTagsList);
-  const canHijackSignInFlowWithSpinner = hasVerifiedEmail && !getSyncError && !showFollowIntro;
+  const canHijackSignInFlowWithSpinner = hasVerifiedEmail && !showFollowIntro;
   const isCurrentlyFetchingSomething = fetchingChannels || claimingReward || syncingWallet || creatingChannel;
   const isWaitingForSomethingToFinish =
     // If the user has claimed the email award, we need to wait until the balance updates sometime in the future
@@ -177,7 +173,6 @@ function UserSignIn(props: Props) {
         <YoutubeTransferStatus /> <Confetti recycle={false} style={{ position: 'fixed' }} />
       </div>
     ),
-    showSyncPassword && <SyncPassword />,
     showLoadingSpinner && (
       <div className="main--empty">
         <Spinner />
