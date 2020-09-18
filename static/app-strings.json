@@ -1305,5 +1305,6 @@
   "Enabling sync will switch to your cloud profile.": "Enabling sync will switch to your cloud profile.",
   "Disabling sync will switch to your local profile.": "Disabling sync will switch to your local profile.",
   "Something went wrong...": "Something went wrong...",
+  "To enable Sync, close LBRY completely and check 'Remember Password' during wallet unlock.": "To enable Sync, close LBRY completely and check 'Remember Password' during wallet unlock.",
   "--end--": "--end--"
 }
