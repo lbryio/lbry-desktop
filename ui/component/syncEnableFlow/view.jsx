@@ -47,6 +47,7 @@ function SyncEnableFlow(props: Props) {
   const [step, setStep] = React.useState(INITIAL);
   const [prefDict, setPrefDict]: [any, (any) => void] = React.useState();
   const [error, setError] = React.useState();
+  const [password, setPassword] = React.useState('');
 
   const handleSyncToggle = async () => {
     const shared = prefDict.shared;
@@ -108,36 +109,32 @@ function SyncEnableFlow(props: Props) {
     if (mode) {
       checkSync();
       if (mode === ENABLE_MODE) {
-        setStep(FETCH_FOR_ENABLE);
+        getSavedPassword().then(pw => {
+          setPassword(pw);
+          setStep(FETCH_FOR_ENABLE);
+        });
       } else {
         setStep(FETCH_FOR_DISABLE);
       }
     }
-  }, [mode]);
+  }, [mode, setPassword]);
 
   React.useEffect(() => {
     if (step === FETCH_FOR_ENABLE) {
-      getSavedPassword()
-        .then(pw => {
-          getSync(pw, (e, hasChanged) => {
-            if (e) {
-              setStep(ERROR);
-              setError(e && e.message ? e.message : e);
-            } else {
-              Lbry.preference_get().then(result => {
-                const prefs = {};
-                if (result[SHARED_KEY]) prefs[SHARED_KEY] = result[SHARED_KEY];
-                if (result[LOCAL_KEY]) prefs[LOCAL_KEY] = result[LOCAL_KEY];
-                setPrefDict(prefs);
-                setStep(CONFIRM);
-              });
-            }
-          });
-        })
-        .catch(e => {
+      getSync(password, (e, hasChanged) => {
+        if (e) {
           setStep(ERROR);
           setError(e && e.message ? e.message : e);
-        });
+        } else {
+          Lbry.preference_get().then(result => {
+            const prefs = {};
+            if (result[SHARED_KEY]) prefs[SHARED_KEY] = result[SHARED_KEY];
+            if (result[LOCAL_KEY]) prefs[LOCAL_KEY] = result[LOCAL_KEY];
+            setPrefDict(prefs);
+            setStep(CONFIRM);
+          });
+        }
+      });
     }
     if (step === FETCH_FOR_DISABLE) {
       Lbry.preference_get().then(result => {
@@ -148,7 +145,7 @@ function SyncEnableFlow(props: Props) {
         setStep(CONFIRM);
       });
     }
-  }, [step, setPrefDict, setStep]);
+  }, [step, setPrefDict, setStep, password]);
 
   if (getSyncPending) {
     return (
