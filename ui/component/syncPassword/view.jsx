@@ -6,6 +6,7 @@ import Card from 'component/common/card';
 import { setSavedPassword } from 'util/saved-passwords';
 import usePersistedState from 'effects/use-persisted-state';
 import I18nMessage from 'component/i18nMessage';
+import { useHistory } from 'react-router';
 
 type Props = {
   getSync: ((any, boolean) => void, ?string) => void,
@@ -18,6 +19,12 @@ type Props = {
 
 function SyncPassword(props: Props) {
   const { getSync, getSyncIsPending, email, signOut, passwordError, handleSyncComplete } = props;
+  const {
+    push,
+    location: { search },
+  } = useHistory();
+  const urlParams = new URLSearchParams(search);
+  const redirect = urlParams.get('redirect');
   const [password, setPassword] = React.useState('');
   const [rememberPassword, setRememberPassword] = usePersistedState(true);
 
@@ -26,6 +33,7 @@ function SyncPassword(props: Props) {
       handleSyncComplete(error, hasDataChanged);
 
       if (!error) {
+        push(redirect || '/');
         setSavedPassword(password, rememberPassword);
       }
     }, password);
@@ -55,7 +63,12 @@ function SyncPassword(props: Props) {
               onChange={() => setRememberPassword(!rememberPassword)}
             />
             <div className="card__actions">
-              <Button type="submit" button="primary" label={__('Continue')} disabled={getSyncIsPending} />
+              <Button
+                type="submit"
+                button="primary"
+                label={getSyncIsPending ? __('Continue...') : __('Continue')}
+                disabled={getSyncIsPending}
+              />
               <Button button="link" label={__('Cancel')} onClick={signOut} />
             </div>
             <p className="help">
