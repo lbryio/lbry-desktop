@@ -32,9 +32,7 @@ function ChannelsFollowingDiscover(props: Props) {
 
   rowData.push({
     title: 'Top Channels Of All Time',
-    link: `/$/${PAGES.DISCOVER}?claim_type=channel&${CS.ORDER_BY_KEY}=${CS.ORDER_BY_TOP}&${CS.FRESH_KEY}=${
-      CS.FRESH_ALL
-    }`,
+    link: `/$/${PAGES.DISCOVER}?claim_type=channel&${CS.ORDER_BY_KEY}=${CS.ORDER_BY_TOP}&${CS.FRESH_KEY}=${CS.FRESH_ALL}`,
     options: {
       pageSize: 12,
       claimType: 'channel',
@@ -107,10 +105,10 @@ function ChannelsFollowingDiscover(props: Props) {
                 button="link"
                 navigate={link}
                 iconRight={ICONS.ARROW_RIGHT}
-                label={title}
+                label={__(title)}
               />
             ) : (
-              <span className="claim-grid__title">{title}</span>
+              <span className="claim-grid__title">{__(title)}</span>
             )}
             {help}
           </h1>
