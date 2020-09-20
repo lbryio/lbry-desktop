@@ -61,6 +61,15 @@ if (fs.existsSync(CUSTOM_OG_PATH)) {
   });
 }
 
+const ROBOTS_TXT_PATH = `${CUSTOM_ROOT}/robots.txt`;
+if (fs.existsSync(ROBOTS_TXT_PATH)) {
+  copyWebpackCommands.push({
+    from: ROBOTS_TXT_PATH,
+    to: `${DIST_ROOT}/robots.txt`,
+    force: true,
+  });
+}
+
 let plugins = [
   new WriteFilePlugin(),
   new CopyWebpackPlugin(copyWebpackCommands),
