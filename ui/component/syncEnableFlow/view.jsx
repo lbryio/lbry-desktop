@@ -73,37 +73,37 @@ function SyncEnableFlow(props: Props) {
     closeModal();
   };
 
-  const makeMergedPrefs = (from, to) => {
-    const mergedTo = to;
-    const toPrefs = to.value;
-    const fromPrefs = from.value;
-    if (!fromPrefs) {
-      return to;
+  const makeMergedPrefs = (alt, base) => {
+    let finalPrefs = base;
+    let baseData = base.value;
+    let altData = alt.value;
+    if (!altData) {
+      return base;
     }
 
-    const mergedBlockListSet = new Set(toPrefs.blocked || []);
-    const mergedSubscriptionsSet = new Set(toPrefs.subscriptions || []);
-    const mergedTagsSet = new Set(toPrefs.tags || []);
+    let mergedBlockListSet = new Set(baseData.blocked || []);
+    let mergedSubscriptionsSet = new Set(baseData.subscriptions || []);
+    let mergedTagsSet = new Set(baseData.tags || []);
 
-    const fromBlocklist = fromPrefs.blocked || [];
-    const fromSubscriptions = fromPrefs.subscriptions || [];
-    const fromTags = fromPrefs.tags || [];
+    const altBlocklist = altData.blocked || [];
+    const altSubscriptions = altData.subscriptions || [];
+    const altTags = altData.tags || [];
 
-    if (fromBlocklist.length) {
-      fromBlocklist.forEach(el => mergedBlockListSet.add(el));
+    if (altBlocklist.length) {
+      altBlocklist.forEach(el => mergedBlockListSet.add(el));
     }
-    if (fromSubscriptions.length) {
-      fromSubscriptions.forEach(el => mergedSubscriptionsSet.add(el));
+    if (altSubscriptions.length) {
+      altSubscriptions.forEach(el => mergedSubscriptionsSet.add(el));
     }
-    if (fromTags.length) {
-      fromTags.forEach(el => mergedTagsSet.add(el));
+    if (altTags.length) {
+      altTags.forEach(el => mergedTagsSet.add(el));
     }
 
-    toPrefs.blocked = Array.from(mergedBlockListSet);
-    toPrefs.subscriptions = Array.from(mergedSubscriptionsSet);
-    toPrefs.tags = Array.from(mergedTagsSet);
-    mergedTo.value = toPrefs;
-    return mergedTo;
+    baseData.blocked = Array.from(mergedBlockListSet);
+    baseData.subscriptions = Array.from(mergedSubscriptionsSet);
+    baseData.tags = Array.from(mergedTagsSet);
+    finalPrefs.value = baseData;
+    return finalPrefs;
   };
 
   React.useEffect(() => {
