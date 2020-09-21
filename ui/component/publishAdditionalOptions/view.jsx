@@ -183,6 +183,7 @@ function PublishAdditionalOptions(props: Props) {
                   <option value="ro">{__('Romanian')}</option>
                   <option value="hi">{__('Hindi')}</option>
                   <option value="el">{__('Greek')}</option>
+                  <option value="fa">{__('Persian')}</option>
                 </FormField>
 
                 <LicenseType
