@@ -15,7 +15,9 @@ type Props = {
   channelSubscribe: (sub: Subscription) => void,
 };
 
-const channelsToSubscribe = AUTO_FOLLOW_CHANNELS.trim().split(' ');
+const channelsToSubscribe = AUTO_FOLLOW_CHANNELS.trim()
+  .split(' ')
+  .filter(x => x !== '');
 
 function UserChannelFollowIntro(props: Props) {
   const { subscribedChannels, channelSubscribe, onContinue, onBack } = props;
