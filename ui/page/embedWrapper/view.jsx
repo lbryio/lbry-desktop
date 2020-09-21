@@ -1,10 +1,12 @@
 // @flow
 import React, { useEffect } from 'react';
+import classnames from 'classnames';
 import FileRender from 'component/fileRender';
 import FileViewerEmbeddedTitle from 'component/fileViewerEmbeddedTitle';
 import Spinner from 'component/spinner';
 import Button from 'component/button';
 import { formatLbryUrlForWeb } from 'util/url';
+import { useHistory } from 'react-router';
 
 type Props = {
   uri: string,
@@ -20,6 +22,11 @@ type Props = {
 export const EmbedContext = React.createContext();
 const EmbedWrapperPage = (props: Props) => {
   const { resolveUri, claim, uri, doPlayUri, costInfo, streamingUrl, doFetchCostInfoForUri, isResolvingUri } = props;
+  const {
+    location: { search },
+  } = useHistory();
+  const urlParams = new URLSearchParams(search);
+  const embedLightBackground = urlParams.get('embedBackgroundLight');
   const haveClaim = Boolean(claim);
   const readyToDisplay = claim && streamingUrl;
   const loading = !claim && isResolvingUri;
@@ -43,7 +50,11 @@ const EmbedWrapperPage = (props: Props) => {
   }, [uri, haveClaim, doFetchCostInfoForUri]);
 
   return (
-    <div className="embed__wrapper">
+    <div
+      className={classnames('embed__wrapper', {
+        'embed__wrapper--light-background': embedLightBackground,
+      })}
+    >
       <EmbedContext.Provider value>
         {readyToDisplay ? (
           <FileRender uri={uri} embedded />
