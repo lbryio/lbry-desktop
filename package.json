@@ -23,7 +23,7 @@
     "compile:electron": "node --max_old_space_size=4096 ./node_modules/webpack/bin/webpack.js --config webpack.electron.config.js",
     "compile:web": "yarn copyenv && cd web && node --max_old_space_size=4096 ./node_modules/webpack/bin/webpack.js --config webpack.config.js",
     "compile": "cross-env NODE_ENV=production yarn compile:electron && cross-env NODE_ENV=production yarn compile:web",
-    "copyenv": "rm -r ./web/.env* && cp ./.env* web/",
+    "copyenv": "cp ./.env* web/",
     "dev": "yarn dev:electron",
     "dev:electron": "cross-env NODE_ENV=development node ./electron/devServer.js",
     "dev:web": "yarn copyenv && cd web && yarn dev",
