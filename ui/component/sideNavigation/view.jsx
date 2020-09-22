@@ -6,6 +6,7 @@ import React from 'react';
 import Button from 'component/button';
 import classnames from 'classnames';
 import NotificationBubble from 'component/notificationBubble';
+import { PINNED_LABEL_1, PINNED_URI_1, PINNED_URI_2, PINNED_LABEL_2 } from 'config';
 // @if TARGET='app'
 import { IS_MAC } from 'component/app/view';
 // @endif
@@ -82,6 +83,24 @@ function SideNavigation(props: Props) {
       navigate: `/$/${PAGES.LIBRARY}`,
       icon: ICONS.PURCHASED,
       hideForUnauth: true,
+    },
+    {
+      ...(PINNED_URI_1 && PINNED_LABEL_1
+        ? {
+            label: PINNED_LABEL_1,
+            navigate: PINNED_URI_1,
+            icon: ICONS.PINNED,
+          }
+        : {}),
+    },
+    {
+      ...(PINNED_URI_2 && PINNED_LABEL_2
+        ? {
+            label: PINNED_LABEL_2,
+            navigate: PINNED_URI_2,
+            icon: ICONS.PINNED,
+          }
+        : {}),
     },
   ];
 
