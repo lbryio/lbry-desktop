@@ -23,4 +23,6 @@ package-lock.json
 /web/.env.defaults
 /custom/*
 !/custom/homepage.example.js
+!/custom/robots.disallowall
+!/custom/robots.allowall
 .env
