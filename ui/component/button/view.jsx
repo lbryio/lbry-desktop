@@ -94,7 +94,11 @@ const Button = forwardRef<any, {}>((props: Props, ref: any) => {
     <span className="button__content">
       {icon && <Icon icon={icon} iconColor={iconColor} size={iconSize} />}
 
-      {!largestLabel && label && <span dir="auto" className="button__label">{label}</span>}
+      {!largestLabel && label && (
+        <span dir="auto" className="button__label">
+          {label}
+        </span>
+      )}
 
       {/* largestLabel is used when a single button has two different labels based on hover state */}
       {largestLabel && (
@@ -129,10 +133,16 @@ const Button = forwardRef<any, {}>((props: Props, ref: any) => {
     </span>
   );
 
-  // TODO: replace the below with an outbound link tracker for matomo
-  if (href) {
+  if (href || (navigate && navigate.startsWith('http'))) {
+    // TODO: replace the below with an outbound link tracker for matomo
     return (
-      <a target="_blank" rel="noopener noreferrer" href={href} className={combinedClassName} onClick={onClick}>
+      <a
+        target="_blank"
+        rel="noopener noreferrer"
+        href={href || navigate}
+        className={combinedClassName}
+        onClick={onClick}
+      >
         {content}
       </a>
     );

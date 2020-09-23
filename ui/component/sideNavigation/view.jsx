@@ -84,25 +84,23 @@ function SideNavigation(props: Props) {
       icon: ICONS.PURCHASED,
       hideForUnauth: true,
     },
-    {
-      ...(PINNED_URI_1 && PINNED_LABEL_1
-        ? {
-            label: PINNED_LABEL_1,
-            navigate: PINNED_URI_1,
-            icon: ICONS.PINNED,
-          }
-        : {}),
-    },
-    {
-      ...(PINNED_URI_2 && PINNED_LABEL_2
-        ? {
-            label: PINNED_LABEL_2,
-            navigate: PINNED_URI_2,
-            icon: ICONS.PINNED,
-          }
-        : {}),
-    },
   ];
+
+  if (PINNED_URI_1 && PINNED_LABEL_1) {
+    TOP_LEVEL_LINKS.push({
+      label: PINNED_LABEL_1,
+      navigate: PINNED_URI_1,
+      icon: ICONS.PINNED,
+    });
+  }
+
+  if (PINNED_URI_2 && PINNED_LABEL_2) {
+    TOP_LEVEL_LINKS.push({
+      label: PINNED_LABEL_2,
+      navigate: PINNED_URI_2,
+      icon: ICONS.PINNED,
+    });
+  }
 
   const ABSOLUTE_LINKS: Array<{
     label: string,
