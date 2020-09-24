@@ -84,8 +84,6 @@ export default function YoutubeTransferStatus(props: Props) {
       return () => {
         clearInterval(interval);
       };
-    } else {
-      updateUser();
     }
   }, [hasPendingTransfers, checkYoutubeTransfer, updateUser, updateUser]);
 
