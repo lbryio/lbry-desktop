@@ -22,6 +22,7 @@ import { IS_MAC } from 'component/app/view';
 // @endif
 
 type Props = {
+  user: ?User,
   balance: string,
   roundedBalance: number,
   history: {
@@ -81,6 +82,7 @@ const Header = (props: Props) => {
     sidebarOpen,
     setSidebarOpen,
     isAbsoluteSideNavHidden,
+    user,
   } = props;
   const isMobile = useIsMobile();
   // on the verify page don't let anyone escape other than by closing the tab to keep session data consistent
@@ -90,6 +92,7 @@ const Header = (props: Props) => {
   const isPwdResetPage = history.location.pathname.includes(PAGES.AUTH_PASSWORD_RESET);
   const hasBackout = Boolean(backout);
   const { backLabel, backNavDefault, title: backTitle, simpleTitle: simpleBackTitle } = backout || {};
+  const notificationsEnabled = user && user.experimental_ui;
 
   // Sign out if they click the "x" when they are on the password prompt
   const authHeaderAction = syncError ? { onClick: signOut } : { navigate: '/' };
@@ -201,7 +204,7 @@ const Header = (props: Props) => {
                     icon={ICONS.MENU}
                     onClick={() => setSidebarOpen(!sidebarOpen)}
                   >
-                    {isAbsoluteSideNavHidden && isMobile && <NotificationBubble />}
+                    {isAbsoluteSideNavHidden && isMobile && notificationsEnabled && <NotificationBubble />}
                   </Button>
                 </span>
               )}
@@ -252,7 +255,7 @@ const Header = (props: Props) => {
                       >
                         <Icon size={18} icon={ICONS.PUBLISH} aria-hidden />
                       </MenuButton>
-                      <NotificationHeaderButton />
+                      {notificationsEnabled && <NotificationHeaderButton />}
                       <MenuList className="menu__list--header">
                         <MenuItem className="menu__link" onSelect={() => history.push(`/$/${PAGES.UPLOAD}`)}>
                           <Icon aria-hidden icon={ICONS.PUBLISH} />
