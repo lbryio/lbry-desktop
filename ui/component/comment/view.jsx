@@ -246,7 +246,6 @@ function Comment(props: Props) {
                 </div>
 
                 <div className="comment__actions">
-                  <CommentReactions />
                   {!hideReplyButton && (
                     <Button
                       requiresAuth={IS_WEB}
@@ -256,6 +255,7 @@ function Comment(props: Props) {
                       icon={ICONS.REPLY}
                     />
                   )}
+                  <CommentReactions commentId={commentId} />
                 </div>
               </>
             )}

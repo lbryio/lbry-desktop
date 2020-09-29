@@ -22,4 +22,16 @@ declare type CommentsState = {
   commentById: { [string]: Comment },
   isLoading: boolean,
   myComments: ?Set<string>,
+  isFetchingReacts: boolean,
+  myReactsByCommentId: any,
+  othersReactsByCommentId: any,
 };
+
+declare type CommentReactParams = {
+  comment_ids: string,
+  channel_name: string,
+  channel_id: string,
+  react_type: string,
+  clear_types?: string,
+  remove?: boolean,
+}

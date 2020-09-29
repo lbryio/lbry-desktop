@@ -11,6 +11,9 @@ const defaultState: CommentsState = {
   isLoading: false,
   isCommenting: false,
   myComments: undefined,
+  isFetchingReacts: false,
+  myReactsByCommentId: {},
+  othersReactsByCommentId: {},
 };
 
 export default handleActions(
@@ -56,7 +59,6 @@ export default handleActions(
           topLevelCommentsById[claimId].unshift(comment.comment_id);
         }
       }
-
       return {
         ...state,
         topLevelCommentsById,
@@ -66,6 +68,44 @@ export default handleActions(
         commentsByUri,
         isLoading: false,
         isCommenting: false,
+      };
+    },
+
+    [ACTIONS.COMMENT_REACTION_LIST_STARTED]: (state: CommentsState, action: any): CommentsState => ({
+      ...state,
+      isFetchingReacts: true,
+    }),
+
+    [ACTIONS.COMMENT_REACTION_LIST_FAILED]: (state: CommentsState, action: any) => ({
+      ...state,
+      isFetchingReacts: false,
+    }),
+
+    [ACTIONS.COMMENT_REACTION_LIST_COMPLETED]: (state: CommentsState, action: any): CommentsState => {
+      const { myReactions, othersReactions } = action.data;
+      const myReacts = Object.assign({}, state.myReactsByCommentId);
+      const othersReacts = Object.assign({}, state.othersReactsByCommentId);
+      if (myReactions) {
+        Object.entries(myReactions).forEach(e => {
+          myReacts[e[0]] = Object.entries(e[1]).reduce((acc, el) => {
+            if (el[1] === 1) {
+              acc.push(el[0]);
+            }
+            return acc;
+          }, []);
+        });
+      }
+      if (othersReactions) {
+        Object.entries(othersReactions).forEach(e => {
+          othersReacts[e[0]] = e[1];
+        });
+      }
+
+      return {
+        ...state,
+        isFetchingReacts: false,
+        myReactsByCommentId: myReacts,
+        othersReactsByCommentId: othersReacts,
       };
     },
 

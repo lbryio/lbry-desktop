@@ -88,6 +88,22 @@ export const selectCommentsByUri = createSelector(selectState, state => {
   return comments;
 });
 
+export const makeSelectCommentIdsForUri = (uri: string) =>
+  createSelector(selectState, selectCommentsByUri, selectClaimsById, (state, byUri) => {
+    const claimId = byUri[uri];
+    return state.byId[claimId];
+  });
+
+export const makeSelectMyReactionsForComment = (commentId: string) =>
+  createSelector(selectState, state => {
+    return state.myReactsByCommentId[commentId];
+  });
+
+export const makeSelectOthersReactionsForComment = (commentId: string) =>
+  createSelector(selectState, state => {
+    return state.othersReactsByCommentId[commentId];
+  });
+
 export const makeSelectCommentsForUri = (uri: string) =>
   createSelector(
     selectCommentsByClaimId,
