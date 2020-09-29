@@ -3,7 +3,11 @@ import * as ACTIONS from 'constants/action_types';
 import * as REACTION_TYPES from 'constants/reactions';
 import { Lbry, selectClaimsByUri, selectMyChannelClaims } from 'lbry-redux';
 import { doToast } from 'redux/actions/notifications';
-import { makeSelectCommentIdsForUri, makeSelectMyReactionsForComment } from 'redux/selectors/comments';
+import {
+  makeSelectCommentIdsForUri,
+  makeSelectMyReactionsForComment,
+  makeSelectOthersReactionsForComment,
+} from 'redux/selectors/comments';
 
 export function doCommentList(uri: string, page: number = 1, pageSize: number = 99999) {
   return (dispatch: Dispatch, getState: GetState) => {
@@ -45,7 +49,6 @@ export function doCommentReactList(uri: string | null, commentId?: string) {
   return (dispatch: Dispatch, getState: GetState) => {
     const state = getState();
     const channel = localStorage.getItem('comment-channel');
-    // if not channel, fail?
     if (!channel) {
       dispatch({
         type: ACTIONS.COMMENT_REACTION_LIST_FAILED,
@@ -88,7 +91,6 @@ export function doCommentReact(commentId: string, type: string) {
   return (dispatch: Dispatch, getState: GetState) => {
     const state = getState();
     const channel = localStorage.getItem('comment-channel');
-    // if not channel, fail?
     if (!channel) {
       dispatch({
         type: ACTIONS.COMMENT_REACTION_LIST_FAILED,
@@ -97,7 +99,9 @@ export function doCommentReact(commentId: string, type: string) {
       return;
     }
     const myChannels = selectMyChannelClaims(state);
-    const myReacts = makeSelectMyReactionsForComment(commentId)(state);
+    let myReacts = makeSelectMyReactionsForComment(commentId)(state);
+    let reactingTypes = [];
+    const othersReacts = makeSelectOthersReactionsForComment(commentId)(state);
     const claimForChannelName = myChannels.find(chan => chan.name === channel);
     const channelId = claimForChannelName && claimForChannelName.claim_id;
     const exclusiveTypes = {
@@ -105,33 +109,55 @@ export function doCommentReact(commentId: string, type: string) {
       [REACTION_TYPES.DISLIKE]: REACTION_TYPES.LIKE,
     };
 
-    dispatch({
-      type: ACTIONS.COMMENT_REACT_STARTED,
-    });
     const params: CommentReactParams = {
       comment_ids: commentId,
       channel_name: channel,
       channel_id: channelId,
       react_type: type,
     };
-    if (Object.keys(exclusiveTypes).includes(type)) {
-      params['clear_types'] = exclusiveTypes[type];
-    }
     if (myReacts.includes(type)) {
       params['remove'] = true;
+      myReacts.splice(myReacts.indexOf(type), 1);
+      reactingTypes.push(type);
+    } else {
+      myReacts.push(type);
+      reactingTypes.push(type);
+      if (Object.keys(exclusiveTypes).includes(type)) {
+        params['clear_types'] = exclusiveTypes[type];
+        reactingTypes.push(exclusiveTypes[type]);
+        if (myReacts.indexOf(exclusiveTypes[type]) !== -1) {
+          myReacts.splice(myReacts.indexOf(exclusiveTypes[type]), 1);
+        }
+      }
     }
+    dispatch({
+      type: ACTIONS.COMMENT_REACT_STARTED,
+      data: reactingTypes,
+    });
+    // simulate api return shape: ['like'] -> { 'like': 1 }
+    const myReactsObj = myReacts.reduce((acc, el) => {
+      acc[el] = 1;
+      return acc;
+    }, {});
 
     Lbry.comment_react(params)
       .then((result: CommentReactListResponse) => {
         dispatch({
           type: ACTIONS.COMMENT_REACT_COMPLETED,
+          data: reactingTypes,
         });
-        dispatch(doCommentReactList(null, commentId));
+        dispatch({
+          type: ACTIONS.COMMENT_REACTION_LIST_COMPLETED,
+          data: {
+            myReactions: { [commentId]: myReactsObj },
+            othersReactions: { [commentId]: othersReacts },
+          },
+        });
       })
       .catch(error => {
         dispatch({
           type: ACTIONS.COMMENT_REACT_FAILED,
-          data: error,
+          data: reactingTypes,
         });
       });
   };
