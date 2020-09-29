@@ -213,8 +213,12 @@ $thumbnailWidthSmall: 1.5rem;
 
 .comment__actions--nested {
   @extend .comment__actions;
-  margin-left: calc((#{$thumbnailWidthSmall} + var(--spacing-l)));
+  margin-left: calc((#{$thumbnailWidthSmall} + var(--spacing-xs)));
   margin-top: var(--spacing-m);
+
+  @media (min-width: $breakpoint-small) {
+    margin-left: calc((#{$thumbnailWidth} + var(--spacing-m)));
+  }
 }
 
 .comment__action {
