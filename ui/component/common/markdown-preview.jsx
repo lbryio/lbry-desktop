@@ -21,14 +21,14 @@ type SimpleLinkProps = {
   href?: string,
   title?: string,
   children?: React.Node,
-  isStubEmbed?: boolean,
+  noDataStore?: boolean,
 };
 
 type MarkdownProps = {
   strip?: boolean,
   content: ?string,
   promptLinks?: boolean,
-  isStubEmbed?: boolean,
+  noDataStore?: boolean,
 };
 
 const SimpleText = (props: SimpleTextProps) => {
@@ -37,7 +37,7 @@ const SimpleText = (props: SimpleTextProps) => {
 
 const SimpleLink = (props: SimpleLinkProps) => {
   const { title, children } = props;
-  const { href, isStubEmbed } = props;
+  const { href, noDataStore } = props;
 
   if (!href) {
     return children || null;
@@ -58,7 +58,7 @@ const SimpleLink = (props: SimpleLinkProps) => {
   if (embed) {
     // Decode this since users might just copy it from the url bar
     const decodedUri = decodeURI(uri);
-    return isStubEmbed ? (
+    return noDataStore ? (
       <div className="embed__inline-button-preview">
         <pre>{decodedUri}</pre>
       </div>
@@ -71,7 +71,10 @@ const SimpleLink = (props: SimpleLinkProps) => {
   // using Link after formatLbryUrl to handle "/" vs "#/"
   // for web and desktop scenarios respectively
 
-  return (
+  return noDataStore ? (
+    // Dummy link (no 'href')
+    <a title={title}>{children}</a>
+  ) : (
     <Link
       title={title}
       to={webLink}
@@ -94,7 +97,7 @@ schema.attributes.a.push('embed');
 const REPLACE_REGEX = /(<iframe\s+src=["'])(.*?(?=))(["']\s*><\/iframe>)/g;
 
 const MarkdownPreview = (props: MarkdownProps) => {
-  const { content, strip, promptLinks, isStubEmbed } = props;
+  const { content, strip, promptLinks, noDataStore } = props;
   const strippedContent = content
     ? content.replace(REPLACE_REGEX, (iframeHtml, y, iframeSrc) => {
         // Let the browser try to create an iframe to see if the markup is valid
@@ -118,7 +121,7 @@ const MarkdownPreview = (props: MarkdownProps) => {
     sanitize: schema,
     fragment: React.Fragment,
     remarkReactComponents: {
-      a: promptLinks ? ExternalLink : linkProps => <SimpleLink {...linkProps} isStubEmbed={isStubEmbed} />,
+      a: promptLinks ? ExternalLink : linkProps => <SimpleLink {...linkProps} noDataStore={noDataStore} />,
       // Workaraund of remarkOptions.Fragment
       div: React.Fragment,
     },
