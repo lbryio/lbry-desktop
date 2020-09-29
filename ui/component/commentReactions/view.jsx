@@ -4,13 +4,29 @@ import * as REACTION_TYPES from 'constants/reactions';
 import React from 'react';
 import classnames from 'classnames';
 import Button from 'component/button';
+import usePersistedState from 'effects/use-persisted-state';
 
 type Props = {
-  myReaction: ?string,
+  myReacts: Array<string>,
+  othersReacts: any,
+  react: (string, string) => void,
+  commentId: string,
 };
 
 export default function CommentReactions(props: Props) {
-  const { myReaction } = props;
+  const { myReacts, othersReacts, commentId, react } = props;
+  const [activeChannel] = usePersistedState('comment-channel');
+
+  const getCountForReact = type => {
+    let count = 0;
+    if (othersReacts && othersReacts[type]) {
+      count += othersReacts[type];
+    }
+    if (myReacts && myReacts.includes(type)) {
+      count += 1;
+    }
+    return count;
+  };
 
   return (
     <>
@@ -18,15 +34,20 @@ export default function CommentReactions(props: Props) {
         title={__('Upvote')}
         icon={ICONS.UPVOTE}
         className={classnames('comment__action', {
-          'comment__action--active': myReaction === REACTION_TYPES.LIKE,
+          'comment__action--active': myReacts && myReacts.includes(REACTION_TYPES.LIKE),
         })}
+        disabled={!activeChannel}
+        onClick={() => react(commentId, REACTION_TYPES.LIKE)}
+        label={getCountForReact(REACTION_TYPES.LIKE)}
       />
       <Button
         title={__('Downvote')}
         icon={ICONS.DOWNVOTE}
         className={classnames('comment__action', {
-          'comment__action--active': myReaction === REACTION_TYPES.DISLIKE,
+          'comment__action--active': myReacts && myReacts.includes(REACTION_TYPES.DISLIKE),
         })}
+        onClick={() => react(commentId, REACTION_TYPES.DISLIKE)}
+        label={getCountForReact(REACTION_TYPES.DISLIKE)}
       />
     </>
   );
