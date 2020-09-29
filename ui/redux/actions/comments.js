@@ -1,7 +1,9 @@
 // @flow
 import * as ACTIONS from 'constants/action_types';
+import * as REACTION_TYPES from 'constants/reactions';
 import { Lbry, selectClaimsByUri, selectMyChannelClaims } from 'lbry-redux';
 import { doToast } from 'redux/actions/notifications';
+import { makeSelectCommentIdsForUri, makeSelectMyReactionsForComment } from 'redux/selectors/comments';
 
 export function doCommentList(uri: string, page: number = 1, pageSize: number = 99999) {
   return (dispatch: Dispatch, getState: GetState) => {
@@ -33,6 +35,102 @@ export function doCommentList(uri: string, page: number = 1, pageSize: number = 
       .catch(error => {
         dispatch({
           type: ACTIONS.COMMENT_LIST_FAILED,
+          data: error,
+        });
+      });
+  };
+}
+
+export function doCommentReactList(uri: string | null, commentId?: string) {
+  return (dispatch: Dispatch, getState: GetState) => {
+    const state = getState();
+    const channel = localStorage.getItem('comment-channel');
+    // if not channel, fail?
+    if (!channel) {
+      dispatch({
+        type: ACTIONS.COMMENT_REACTION_LIST_FAILED,
+        data: 'No active channel found',
+      });
+      return;
+    }
+    const commentIds = uri ? makeSelectCommentIdsForUri(uri)(state) : [commentId];
+    const myChannels = selectMyChannelClaims(state);
+    const claimForChannelName = myChannels.find(chan => chan.name === channel);
+    const channelId = claimForChannelName && claimForChannelName.claim_id;
+    dispatch({
+      type: ACTIONS.COMMENT_REACTION_LIST_STARTED,
+    });
+    Lbry.comment_react_list({
+      comment_ids: commentIds.join(','),
+      channel_name: channel,
+      channel_id: channelId,
+    })
+      .then((result: CommentReactListResponse) => {
+        const { my_reactions: myReactions, others_reactions: othersReactions } = result;
+        dispatch({
+          type: ACTIONS.COMMENT_REACTION_LIST_COMPLETED,
+          data: {
+            myReactions,
+            othersReactions,
+          },
+        });
+      })
+      .catch(error => {
+        dispatch({
+          type: ACTIONS.COMMENT_REACTION_LIST_FAILED,
+          data: error,
+        });
+      });
+  };
+}
+
+export function doCommentReact(commentId: string, type: string) {
+  return (dispatch: Dispatch, getState: GetState) => {
+    const state = getState();
+    const channel = localStorage.getItem('comment-channel');
+    // if not channel, fail?
+    if (!channel) {
+      dispatch({
+        type: ACTIONS.COMMENT_REACTION_LIST_FAILED,
+        data: 'No active channel found',
+      });
+      return;
+    }
+    const myChannels = selectMyChannelClaims(state);
+    const myReacts = makeSelectMyReactionsForComment(commentId)(state);
+    const claimForChannelName = myChannels.find(chan => chan.name === channel);
+    const channelId = claimForChannelName && claimForChannelName.claim_id;
+    const exclusiveTypes = {
+      [REACTION_TYPES.LIKE]: REACTION_TYPES.DISLIKE,
+      [REACTION_TYPES.DISLIKE]: REACTION_TYPES.LIKE,
+    };
+
+    dispatch({
+      type: ACTIONS.COMMENT_REACT_STARTED,
+    });
+    const params: CommentReactParams = {
+      comment_ids: commentId,
+      channel_name: channel,
+      channel_id: channelId,
+      react_type: type,
+    };
+    if (Object.keys(exclusiveTypes).includes(type)) {
+      params['clear_types'] = exclusiveTypes[type];
+    }
+    if (myReacts.includes(type)) {
+      params['remove'] = true;
+    }
+
+    Lbry.comment_react(params)
+      .then((result: CommentReactListResponse) => {
+        dispatch({
+          type: ACTIONS.COMMENT_REACT_COMPLETED,
+        });
+        dispatch(doCommentReactList(null, commentId));
+      })
+      .catch(error => {
+        dispatch({
+          type: ACTIONS.COMMENT_REACT_FAILED,
           data: error,
         });
       });
@@ -83,7 +181,6 @@ export function doCommentCreate(
             uri,
             comment: result,
             claimId: claim_id,
-            uri,
           },
         });
       })

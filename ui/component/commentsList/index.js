@@ -1,7 +1,7 @@
 import { connect } from 'react-redux';
 import { makeSelectClaimIsMine, selectMyChannelClaims } from 'lbry-redux';
 import { makeSelectTopLevelCommentsForUri, selectIsFetchingComments } from 'redux/selectors/comments';
-import { doCommentList } from 'redux/actions/comments';
+import { doCommentList, doCommentReactList } from 'redux/actions/comments';
 import CommentsList from './view';
 import { selectUserVerifiedEmail } from 'redux/selectors/user';
 
@@ -15,6 +15,7 @@ const select = (state, props) => ({
 
 const perform = dispatch => ({
   fetchComments: uri => dispatch(doCommentList(uri)),
+  fetchReacts: uri => dispatch(doCommentReactList(uri)),
 });
 
 export default connect(select, perform)(CommentsList);

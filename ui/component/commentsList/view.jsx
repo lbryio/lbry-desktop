@@ -5,10 +5,12 @@ import Spinner from 'component/spinner';
 import Button from 'component/button';
 import Card from 'component/common/card';
 import CommentCreate from 'component/commentCreate';
+import usePersistedState from 'effects/use-persisted-state';
 
 type Props = {
   comments: Array<any>,
   fetchComments: string => void,
+  fetchReacts: string => void,
   uri: string,
   claimIsMine: boolean,
   myChannels: ?Array<ChannelClaim>,
@@ -17,7 +19,16 @@ type Props = {
 };
 
 function CommentList(props: Props) {
-  const { fetchComments, uri, comments, claimIsMine, myChannels, isFetchingComments, linkedComment } = props;
+  const {
+    fetchComments,
+    fetchReacts,
+    uri,
+    comments,
+    claimIsMine,
+    myChannels,
+    isFetchingComments,
+    linkedComment,
+  } = props;
 
   const linkedCommentId = linkedComment && linkedComment.comment_id;
   const [start] = React.useState(0);
@@ -44,11 +55,18 @@ function CommentList(props: Props) {
     }
   };
 
+  const [activeChannel] = usePersistedState('comment-channel', '');
   const commentRef = React.useRef();
 
   useEffect(() => {
     fetchComments(uri);
   }, [fetchComments, uri]);
+
+  useEffect(() => {
+    if (totalComments) {
+      fetchReacts(uri);
+    }
+  }, [fetchReacts, uri, totalComments, activeChannel]);
 
   useEffect(() => {
     if (linkedCommentId && commentRef && commentRef.current) {
