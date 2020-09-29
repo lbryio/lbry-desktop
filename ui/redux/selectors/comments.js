@@ -96,7 +96,7 @@ export const makeSelectCommentIdsForUri = (uri: string) =>
 
 export const makeSelectMyReactionsForComment = (commentId: string) =>
   createSelector(selectState, state => {
-    return state.myReactsByCommentId[commentId];
+    return state.myReactsByCommentId[commentId] || [];
   });
 
 export const makeSelectOthersReactionsForComment = (commentId: string) =>
