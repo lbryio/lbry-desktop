@@ -47,7 +47,6 @@ import BuyPage from 'page/buy';
 import NotificationsPage from 'page/notifications';
 import SignInWalletPasswordPage from 'page/signInWalletPassword';
 import YoutubeSyncPage from 'page/youtubeSync';
-import SignInWalletPasswordPage from 'page/signInWalletPassword';
 import { LINKED_COMMENT_QUERY_PARAM } from 'constants/comment';
 import { parseURI } from 'lbry-redux';
 import { SITE_TITLE, WELCOME_VERSION } from 'config';
