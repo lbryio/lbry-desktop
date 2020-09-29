@@ -1,11 +1,16 @@
 import { connect } from 'react-redux';
 import Comment from './view';
-import { makeSelectMyReactionsForComment, makeSelectOthersReactionsForComment } from 'redux/selectors/comments';
+import {
+  makeSelectMyReactionsForComment,
+  makeSelectOthersReactionsForComment,
+  selectTypesReacting,
+} from 'redux/selectors/comments';
 import { doCommentReact } from 'redux/actions/comments';
 
 const select = (state, props) => ({
   myReacts: makeSelectMyReactionsForComment(props.commentId)(state),
   othersReacts: makeSelectOthersReactionsForComment(props.commentId)(state),
+  typesReacting: selectTypesReacting(state),
 });
 
 const perform = dispatch => ({

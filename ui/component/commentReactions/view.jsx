@@ -11,10 +11,11 @@ type Props = {
   othersReacts: any,
   react: (string, string) => void,
   commentId: string,
+  typesReacting: Array<string>,
 };
 
 export default function CommentReactions(props: Props) {
-  const { myReacts, othersReacts, commentId, react } = props;
+  const { myReacts, othersReacts, commentId, react, typesReacting } = props;
   const [activeChannel] = usePersistedState('comment-channel');
 
   const getCountForReact = type => {
@@ -36,7 +37,7 @@ export default function CommentReactions(props: Props) {
         className={classnames('comment__action', {
           'comment__action--active': myReacts && myReacts.includes(REACTION_TYPES.LIKE),
         })}
-        disabled={!activeChannel}
+        disabled={!activeChannel || typesReacting.includes(REACTION_TYPES.LIKE)}
         onClick={() => react(commentId, REACTION_TYPES.LIKE)}
         label={getCountForReact(REACTION_TYPES.LIKE)}
       />
@@ -46,6 +47,7 @@ export default function CommentReactions(props: Props) {
         className={classnames('comment__action', {
           'comment__action--active': myReacts && myReacts.includes(REACTION_TYPES.DISLIKE),
         })}
+        disabled={!activeChannel || typesReacting.includes(REACTION_TYPES.DISLIKE)}
         onClick={() => react(commentId, REACTION_TYPES.DISLIKE)}
         label={getCountForReact(REACTION_TYPES.DISLIKE)}
       />

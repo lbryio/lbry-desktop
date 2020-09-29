@@ -12,6 +12,7 @@ const defaultState: CommentsState = {
   isCommenting: false,
   myComments: undefined,
   isFetchingReacts: false,
+  typesReacting: [],
   myReactsByCommentId: {},
   othersReactsByCommentId: {},
 };
@@ -81,23 +82,56 @@ export default handleActions(
       isFetchingReacts: false,
     }),
 
+    [ACTIONS.COMMENT_REACT_FAILED]: (state: CommentsState, action: any): CommentsState => {
+      return {
+        ...state,
+        typesReacting: [],
+      };
+    },
+
+    [ACTIONS.COMMENT_REACT_STARTED]: (state: CommentsState, action: any): CommentsState => {
+      const reactingTypes = action.data;
+      const newReactingTypes = new Set(state.typesReacting);
+      reactingTypes.forEach(type => {
+        newReactingTypes.add(type);
+      });
+
+      return {
+        ...state,
+        typesReacting: Array.from(newReactingTypes),
+      };
+    },
+
+    [ACTIONS.COMMENT_REACT_COMPLETED]: (state: CommentsState, action: any): CommentsState => {
+      const reactingTypes = action.data;
+      const newReactingTypes = new Set(state.typesReacting);
+      reactingTypes.forEach(type => {
+        newReactingTypes.delete(type);
+      });
+
+      return {
+        ...state,
+        typesReacting: Array.from(newReactingTypes),
+      };
+    },
+
     [ACTIONS.COMMENT_REACTION_LIST_COMPLETED]: (state: CommentsState, action: any): CommentsState => {
       const { myReactions, othersReactions } = action.data;
       const myReacts = Object.assign({}, state.myReactsByCommentId);
       const othersReacts = Object.assign({}, state.othersReactsByCommentId);
       if (myReactions) {
-        Object.entries(myReactions).forEach(e => {
-          myReacts[e[0]] = Object.entries(e[1]).reduce((acc, el) => {
-            if (el[1] === 1) {
-              acc.push(el[0]);
+        Object.entries(myReactions).forEach(([commentId, reactions]) => {
+          myReacts[commentId] = Object.entries(reactions).reduce((acc, [name, count]) => {
+            if (count === 1) {
+              acc.push(name);
             }
             return acc;
           }, []);
         });
       }
       if (othersReactions) {
-        Object.entries(othersReactions).forEach(e => {
-          othersReacts[e[0]] = e[1];
+        Object.entries(othersReactions).forEach(([commentId, reactions]) => {
+          othersReacts[commentId] = reactions;
         });
       }
 
