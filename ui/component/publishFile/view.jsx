@@ -1,4 +1,5 @@
 // @flow
+import { SITE_NAME } from 'config';
 import type { Node } from 'react';
 import * as ICONS from 'constants/icons';
 import React, { useState, useEffect } from 'react';
@@ -12,6 +13,7 @@ import Spinner from 'component/spinner';
 import I18nMessage from 'component/i18nMessage';
 import usePersistedState from 'effects/use-persisted-state';
 import * as PUBLISH_MODES from 'constants/publish_types';
+import PublishName from 'component/publishName';
 
 type Props = {
   uri: ?string,
@@ -76,7 +78,10 @@ function PublishFile(props: Props) {
 
   const RECOMMENDED_BITRATE = 6000000;
   const TV_PUBLISH_SIZE_LIMIT: number = 1073741824;
-  const UPLOAD_SIZE_MESSAGE = 'Lbry.tv uploads are limited to 1 GB. Download the app for unrestricted publishing.';
+  const UPLOAD_SIZE_MESSAGE = __(
+    '%SITE_NAME% uploads are limited to 1 GB. Download the app for unrestricted publishing.',
+    { SITE_NAME }
+  );
   const PROCESSING_MB_PER_SECOND = 0.5;
   const MINUTES_THRESHOLD = 30;
   const HOURS_THRESHOLD = MINUTES_THRESHOLD * 60;
@@ -157,7 +162,7 @@ function PublishFile(props: Props) {
     if (oversized) {
       return (
         <p className="help--error">
-          {__(UPLOAD_SIZE_MESSAGE)}{' '}
+          {UPLOAD_SIZE_MESSAGE}{' '}
           <Button button="link" label={__('Upload Guide')} href="https://lbry.com/faq/video-publishing-guide" />
         </p>
       );
@@ -339,19 +344,31 @@ function PublishFile(props: Props) {
     <Card
       className={disabled || balance === 0 ? 'card--disabled' : ''}
       title={
-        <div>
-          {header}
-          {publishing && <Spinner type={'small'} />}
-          {inProgress && (
-            <div>
-              <Button button="close" label={__('Cancel')} icon={ICONS.REMOVE} onClick={clearPublish} />
-            </div>
-          )}
-        </div>
+        __('Upload') || (
+          <div>
+            {header}
+            {publishing && <Spinner type={'small'} />}
+            {inProgress && (
+              <div>
+                <Button button="close" label={__('Cancel')} icon={ICONS.REMOVE} onClick={clearPublish} />
+              </div>
+            )}
+          </div>
+        )
       }
       subtitle={isStillEditing && __('You are currently editing your upload.')}
       actions={
         <React.Fragment>
+          <FileSelector
+            disabled={disabled}
+            currentPath={currentFile}
+            onFileChosen={handleFileChange}
+            // https://stackoverflow.com/questions/19107685/safari-input-type-file-accept-video-ignores-mp4-files
+            accept="video/mp4,video/x-m4v,video/*"
+            placeholder={__('Select video file to upload')}
+          />
+          {getMessage()}
+
           <FormField
             type="text"
             name="content_title"
@@ -361,7 +378,7 @@ function PublishFile(props: Props) {
             value={title}
             onChange={handleTitleChange}
           />
-          {isPublishFile && (
+          {isPublishFile && false && (
             <FileSelector disabled={disabled} currentPath={currentFile} onFileChosen={handleFileChange} />
           )}
           {isPublishPost && (
@@ -374,7 +391,7 @@ function PublishFile(props: Props) {
               setCurrentFileType={setCurrentFileType}
             />
           )}
-          {isPublishFile && getMessage()}
+          {isPublishFile && false && getMessage()}
           {/* @if TARGET='app' */}
           {isPublishFile && (
             <FormField
@@ -411,6 +428,8 @@ function PublishFile(props: Props) {
             </p>
           )}
           {/* @endif */}
+
+          <PublishName nameOnly autoPopulateName={autoPopulateName} setAutoPopulateName={setAutoPopulateName} />
         </React.Fragment>
       }
     />

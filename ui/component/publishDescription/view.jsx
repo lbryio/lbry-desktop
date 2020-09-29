@@ -22,24 +22,22 @@ function PublishDescription(props: Props) {
   return (
     <Card
       actions={
-        <React.Fragment>
-          <FormField
-            type={!SIMPLE_SITE && advancedEditor ? 'markdown' : 'textarea'}
-            name="content_description"
-            label={__('Description')}
-            placeholder={__(
-              'What is your content about? Use this space to include any other relevant details you may like to share about your content and channel.'
-            )}
-            value={description}
-            disabled={disabled}
-            onChange={value =>
-              updatePublishForm({ description: !SIMPLE_SITE && advancedEditor ? value : value.target.value })
-            }
-            quickActionLabel={!SIMPLE_SITE && (advancedEditor ? __('Simple Editor') : __('Advanced Editor'))}
-            quickActionHandler={toggleMarkdown}
-            textAreaMaxLength={FF_MAX_CHARS_IN_DESCRIPTION}
-          />
-        </React.Fragment>
+        <FormField
+          type={!SIMPLE_SITE && advancedEditor ? 'markdown' : 'textarea'}
+          name="content_description"
+          label={__('Video Description')}
+          placeholder={__(
+            'What is your content about? Use this space to include any other relevant details you may like to share about your content and channel.'
+          )}
+          value={description}
+          disabled={disabled}
+          onChange={value =>
+            updatePublishForm({ description: !SIMPLE_SITE && advancedEditor ? value : value.target.value })
+          }
+          quickActionLabel={!SIMPLE_SITE && (advancedEditor ? __('Simple Editor') : __('Advanced Editor'))}
+          quickActionHandler={toggleMarkdown}
+          textAreaMaxLength={FF_MAX_CHARS_IN_DESCRIPTION}
+        />
       }
     />
   );

@@ -21,7 +21,7 @@ function FileViewCount(props: Props) {
   const formattedViewCount = Number(viewCount).toLocaleString();
 
   return (
-    <span>
+    <span className="media__subtitle--centered">
       {viewCount !== 1 ? __('%view_count% views', { view_count: formattedViewCount }) : __('1 view')}
       <HelpLink href="https://lbry.com/faq/views" />
     </span>

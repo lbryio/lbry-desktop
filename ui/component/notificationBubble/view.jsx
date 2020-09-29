@@ -5,14 +5,12 @@ import classnames from 'classnames';
 type Props = {
   unreadCount: number,
   inline: boolean,
-  user: ?User,
 };
 
 export default function NotificationHeaderButton(props: Props) {
-  const { unreadCount, inline = false, user } = props;
-  const notificationsEnabled = user && user.experimental_ui;
+  const { unreadCount, inline = false } = props;
 
-  if (unreadCount === 0 || !notificationsEnabled) {
+  if (unreadCount === 0) {
     return null;
   }
 

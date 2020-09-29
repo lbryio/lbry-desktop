@@ -27,6 +27,7 @@
     "no-multi-spaces": 0,
     "no-redeclare": 0,
     "no-return-await": 0,
+    "no-tabs": 0,
     "object-curly-spacing": 0,
     "one-var": 0,
     "prefer-promise-reject-errors": 0,

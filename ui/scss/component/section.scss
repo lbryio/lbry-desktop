@@ -36,7 +36,7 @@
 
 .section__title {
   text-align: left;
-  font-size: var(--font-title);
+  font-size: var(--font-large);
   font-weight: var(--font-weight-light);
 }
 
@@ -101,10 +101,10 @@
 .section__actions {
   display: flex;
   align-items: center;
-  margin-top: var(--spacing-l);
+  margin-top: var(--spacing-m);
 
   ~ .section {
-    margin-top: var(--spacing-l);
+    margin-top: var(--spacing-m);
   }
 
   &:only-child,

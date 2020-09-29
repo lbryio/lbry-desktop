@@ -18,6 +18,7 @@
     position: relative;
     margin-left: var(--spacing-m);
     white-space: nowrap;
+    color: var(--color-purchased-text);
   }
 
   &::before {
@@ -54,6 +55,7 @@
 
   .credit-amount {
     margin: 0 var(--spacing-m);
+    margin-bottom: -0.5rem;
   }
 
   &::before {

@@ -33,6 +33,7 @@ type Props = {
   hiddenUris: Array<string>,
   hiddenNsfwMessage?: Node,
   channelIds?: Array<string>,
+  claimIds?: Array<string>,
   tags: string, // these are just going to be string. pass a CSV if you want multi
   defaultTags: string,
   orderBy?: Array<string>,
@@ -57,6 +58,9 @@ type Props = {
   infiniteScroll?: Boolean,
   feeAmount?: string,
   tileLayout: boolean,
+  hideFilters?: boolean,
+  maxPages?: number,
+  forceShowReposts?: boolean,
 };
 
 function ClaimListDiscover(props: Props) {
@@ -84,20 +88,24 @@ function ClaimListDiscover(props: Props) {
     pageSize,
     hideBlock,
     defaultClaimType,
-    streamType,
-    defaultStreamType,
+    streamType = CS.FILE_VIDEO,
+    defaultStreamType = CS.FILE_VIDEO,
     freshness,
     defaultFreshness = CS.FRESH_WEEK,
     renderProperties,
     includeSupportAction,
     repostedClaimId,
-    hideFilter,
+    hideFilter = true,
     infiniteScroll = true,
     followedTags,
     injectedItem,
     feeAmount,
     uris,
     tileLayout,
+    hideFilters = false,
+    claimIds,
+    maxPages,
+    forceShowReposts = false,
   } = props;
   const didNavigateForward = history.action === 'PUSH';
   const { search } = location;
@@ -116,12 +124,13 @@ function ClaimListDiscover(props: Props) {
   const contentTypeParam = urlParams.get(CS.CONTENT_KEY);
   const claimTypeParam =
     claimType || (CS.CLAIM_TYPES.includes(contentTypeParam) && contentTypeParam) || defaultClaimType || null;
+
   const streamTypeParam =
     streamType || (CS.FILE_TYPES.includes(contentTypeParam) && contentTypeParam) || defaultStreamType || null;
   const durationParam = urlParams.get(CS.DURATION_KEY) || null;
   const channelIdsInUrl = urlParams.get(CS.CHANNEL_IDS_KEY);
   const channelIdsParam = channelIdsInUrl ? channelIdsInUrl.split(',') : channelIds;
-  const feeAmountParam = urlParams.get('fee_amount') || feeAmount || CS.FEE_AMOUNT_ANY;
+  const feeAmountParam = urlParams.get('fee_amount') || feeAmount || CS.FEE_AMOUNT_ONLY_FREE;
   const originalPageSize = pageSize || CS.PAGE_SIZE;
   const dynamicPageSize = isLargeScreen ? originalPageSize * (3 / 2) : originalPageSize;
 
@@ -153,7 +162,8 @@ function ClaimListDiscover(props: Props) {
     no_totals: boolean,
     any_tags?: Array<string>,
     not_tags: Array<string>,
-    channel_ids: Array<string>,
+    channel_ids?: Array<string>,
+    claim_ids?: Array<string>,
     not_channel_ids: Array<string>,
     order_by: Array<string>,
     release_time?: string,
@@ -171,7 +181,6 @@ function ClaimListDiscover(props: Props) {
     // no_totals makes it so the sdk doesn't have to calculate total number pages for pagination
     // it's faster, but we will need to remove it if we start using total_pages
     no_totals: true,
-    channel_ids: channelIdsParam || [],
     not_channel_ids:
       // If channelIdsParam were passed in, we don't need not_channel_ids
       !channelIdsParam && hiddenUris && hiddenUris.length ? hiddenUris.map(hiddenUri => hiddenUri.split('#')[1]) : [],
@@ -189,51 +198,61 @@ function ClaimListDiscover(props: Props) {
     options.reposted_claim_id = repostedClaimId;
   }
 
-  if (orderParam === CS.ORDER_BY_TOP && freshnessParam !== CS.FRESH_ALL) {
-    options.release_time = `>${Math.floor(
-      moment()
-        .subtract(1, freshnessParam)
-        .startOf('hour')
-        .unix()
-    )}`;
-  } else if (orderParam === CS.ORDER_BY_NEW || orderParam === CS.ORDER_BY_TRENDING) {
-    // Warning - hack below
-    // If users are following more than 10 channels or tags, limit results to stuff less than a year old
-    // For more than 20, drop it down to 6 months
-    // This helps with timeout issues for users that are following a ton of stuff
-    // https://github.com/lbryio/lbry-sdk/issues/2420
-    if (
-      (options.channel_ids && options.channel_ids.length > 20) ||
-      (options.any_tags && options.any_tags.length > 20)
-    ) {
-      options.release_time = `>${Math.floor(
-        moment()
-          .subtract(3, CS.FRESH_MONTH)
-          .startOf('week')
-          .unix()
-      )}`;
-    } else if (
-      (options.channel_ids && options.channel_ids.length > 10) ||
-      (options.any_tags && options.any_tags.length > 10)
-    ) {
-      options.release_time = `>${Math.floor(
-        moment()
-          .subtract(1, CS.FRESH_YEAR)
-          .startOf('week')
-          .unix()
-      )}`;
-    } else {
-      // Hack for at least the New page until https://github.com/lbryio/lbry-sdk/issues/2591 is fixed
-      options.release_time = `<${Math.floor(
-        moment()
-          .startOf('minute')
-          .unix()
-      )}`;
-    }
+  if (feeAmountParam && claimType !== CS.CLAIM_CHANNEL) {
+    options.fee_amount = feeAmountParam;
   }
 
-  if (feeAmountParam) {
-    options.fee_amount = feeAmountParam;
+  if (claimIds) {
+    options.claim_ids = claimIds;
+  }
+
+  if (channelIdsParam) {
+    options.channel_ids = channelIdsParam;
+  }
+
+  if (claimType !== CS.CLAIM_CHANNEL) {
+    if (orderParam === CS.ORDER_BY_TOP && freshnessParam !== CS.FRESH_ALL) {
+      //   options.release_time = `>${Math.floor(
+      //     moment()
+      //       .subtract(1, freshnessParam)
+      //       .startOf('hour')
+      //       .unix()
+      //   )}`;
+    } else if (orderParam === CS.ORDER_BY_NEW || orderParam === CS.ORDER_BY_TRENDING) {
+      // Warning - hack below
+      // If users are following more than 10 channels or tags, limit results to stuff less than a year old
+      // For more than 20, drop it down to 6 months
+      // This helps with timeout issues for users that are following a ton of stuff
+      // https://github.com/lbryio/lbry-sdk/issues/2420
+      if (
+        (options.channel_ids && options.channel_ids.length > 20) ||
+        (options.any_tags && options.any_tags.length > 20)
+      ) {
+        options.release_time = `>${Math.floor(
+          moment()
+            .subtract(3, CS.FRESH_MONTH)
+            .startOf('week')
+            .unix()
+        )}`;
+      } else if (
+        (options.channel_ids && options.channel_ids.length > 10) ||
+        (options.any_tags && options.any_tags.length > 10)
+      ) {
+        options.release_time = `>${Math.floor(
+          moment()
+            .subtract(1, CS.FRESH_YEAR)
+            .startOf('week')
+            .unix()
+        )}`;
+      } else {
+        // Hack for at least the New page until https://github.com/lbryio/lbry-sdk/issues/2591 is fixed
+        options.release_time = `<${Math.floor(
+          moment()
+            .startOf('minute')
+            .unix()
+        )}`;
+      }
+    }
   }
 
   if (durationParam) {
@@ -244,7 +263,7 @@ function ClaimListDiscover(props: Props) {
     }
   }
 
-  if (streamTypeParam) {
+  if (streamTypeParam && claimType !== CS.CLAIM_CHANNEL) {
     if (streamTypeParam !== CS.CONTENT_ALL) {
       options.stream_types = [streamTypeParam];
     }
@@ -272,7 +291,7 @@ function ClaimListDiscover(props: Props) {
     }
   }
   // https://github.com/lbryio/lbry-desktop/issues/3774
-  if (hideReposts && !options.reposted_claim_id) {
+  if (hideReposts && !options.reposted_claim_id && !forceShowReposts) {
     // and not claimrepostid
     if (Array.isArray(options.claim_type)) {
       if (options.claim_type.length > 1) {
@@ -285,8 +304,25 @@ function ClaimListDiscover(props: Props) {
 
   const hasMatureTags = tagsParam && tagsParam.split(',').some(t => MATURE_TAGS.includes(t));
   const claimSearchCacheQuery = createNormalizedClaimSearchKey(options);
-  const claimSearchResult = claimSearchByQuery[claimSearchCacheQuery];
+  let claimSearchResult = claimSearchByQuery[claimSearchCacheQuery];
   const claimSearchResultLastPageReached = claimSearchByQueryLastPageReached[claimSearchCacheQuery];
+
+  // uncomment to fix an item on a page
+
+  const fixUri = 'lbry://@corbettreport#0/lbryodysee#5';
+  if (
+    orderParam === CS.ORDER_BY_NEW &&
+    claimSearchResult &&
+    claimSearchResult.length > 2 &&
+    window.location.pathname === '/$/rabbithole'
+  ) {
+    if (claimSearchResult.indexOf(fixUri) !== -1) {
+      claimSearchResult.splice(claimSearchResult.indexOf(fixUri), 1);
+    } else {
+      claimSearchResult.pop();
+    }
+    claimSearchResult.splice(2, 0, fixUri);
+  }
 
   const [prevOptions, setPrevOptions] = React.useState(null);
 
@@ -379,6 +415,10 @@ function ClaimListDiscover(props: Props) {
   }
 
   function handleScrollBottom() {
+    if (maxPages !== undefined && page === maxPages) {
+      return;
+    }
+
     if (!loading && infiniteScroll) {
       if (claimSearchResult && !claimSearchResultLastPageReached) {
         setPage(page + 1);
@@ -403,7 +443,7 @@ function ClaimListDiscover(props: Props) {
       claimType={claimType}
       streamType={streamType}
       defaultStreamType={defaultStreamType}
-      feeAmount={feeAmount}
+      //   feeAmount={feeAmount}
       orderBy={orderBy}
       defaultOrderBy={defaultOrderBy}
       hideFilter={hideFilter}
@@ -411,6 +451,7 @@ function ClaimListDiscover(props: Props) {
       hiddenNsfwMessage={hiddenNsfwMessage}
       setPage={setPage}
       tileLayout={tileLayout}
+      hideFilters={hideFilters}
     />
   );
 

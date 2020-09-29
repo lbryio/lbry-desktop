@@ -5,13 +5,13 @@ import FilePrice from 'component/filePrice';
 import ClaimInsufficientCredits from 'component/claimInsufficientCredits';
 import FileSubtitle from 'component/fileSubtitle';
 import FileAuthor from 'component/fileAuthor';
-import FileActions from 'component/fileActions';
 import Card from 'component/common/card';
 import * as ICONS from 'constants/icons';
 import Icon from 'component/common/icon';
 import I18nMessage from 'component/i18nMessage';
 import Button from 'component/button';
 import * as PAGES from 'constants/pages';
+import FileDescription from 'component/fileDescription';
 
 type Props = {
   uri: string,
@@ -64,13 +64,9 @@ function FileTitle(props: Props) {
             </div>
           </div>
         ) : (
-          <div>
-            <div className="section">
-              <FileActions uri={uri} />
-            </div>
-            <div className="section">
-              <FileAuthor uri={uri} />
-            </div>
+          <div className="section">
+            <FileAuthor uri={uri} />
+            <FileDescription uri={uri} simple />
           </div>
         )
       }

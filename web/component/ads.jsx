@@ -1,11 +1,11 @@
 // @flow
+import { DOMAIN, SIMPLE_SITE } from 'config';
 import * as PAGES from 'constants/pages';
 import React, { useEffect } from 'react';
 import { withRouter } from 'react-router';
 import I18nMessage from 'component/i18nMessage';
 import Button from 'component/button';
 import classnames from 'classnames';
-import { DOMAIN } from 'config';
 
 const ADS_URL = '//assets.revcontent.com/master/delivery.js';
 const IS_MOBILE = typeof window.orientation !== 'undefined';
@@ -77,6 +77,10 @@ function Ads(props: Props) {
       Hate these? %sign_in_to_lbrytv% or %download_the_app% for an ad free experience.
     </I18nMessage>
   );
+
+  if (SIMPLE_SITE) {
+    return null;
+  }
 
   return type === 'video' ? (
     <div className="ads__claim-item">

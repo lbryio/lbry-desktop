@@ -1,7 +1,6 @@
 // @flow
 import { SIMPLE_SITE, SITE_NAME } from 'config';
 import * as PAGES from 'constants/pages';
-import * as CS from 'constants/claim_search';
 import * as MODALS from 'constants/modal_types';
 import * as ICONS from 'constants/icons';
 import React from 'react';
@@ -80,32 +79,24 @@ function FileActions(props: Props) {
 
   const lhsSection = (
     <>
+      <ClaimSupportButton uri={uri} fileAction />
       <Button
         button="alt"
+        className="button--file-action"
+        icon={ICONS.REPOST}
+        label={
+          claim.meta.reposted > 1 ? __(`%repost_total% Reposts`, { repost_total: claim.meta.reposted }) : __('Repost')
+        }
+        requiresAuth={IS_WEB}
+        onClick={handleRepostClick}
+      />
+      <Button
+        button="alt"
+        className="button--file-action"
         icon={ICONS.SHARE}
         label={__('Share')}
         onClick={() => openModal(MODALS.SOCIAL_SHARE, { uri, webShareable })}
       />
-
-      <div className="button-group">
-        <Button
-          button="alt"
-          icon={ICONS.REPOST}
-          label={__('Repost')}
-          requiresAuth={IS_WEB}
-          onClick={handleRepostClick}
-        />
-        {claim.meta.reposted > 0 && (
-          <Button
-            button="alt"
-            label={claim.meta.reposted}
-            requiresAuth={IS_WEB}
-            navigate={`/$/${PAGES.DISCOVER}?${CS.REPOSTED_URI_KEY}=${encodeURIComponent(uri)}`}
-          />
-        )}
-      </div>
-
-      <ClaimSupportButton uri={uri} />
     </>
   );
 
@@ -116,6 +107,7 @@ function FileActions(props: Props) {
       {claimIsMine && (
         <Button
           button="alt"
+          className="button--file-action"
           icon={ICONS.EDIT}
           label={__('Edit')}
           navigate="/$/upload"
@@ -129,15 +121,17 @@ function FileActions(props: Props) {
         <Button
           title={__('Remove from your library')}
           button="alt"
+          className="button--file-action"
           icon={ICONS.DELETE}
           description={__('Delete')}
           onClick={() => openModal(MODALS.CONFIRM_FILE_REMOVE, { uri })}
         />
       )}
-      {!claimIsMine && !SIMPLE_SITE && (
+      {!claimIsMine && SIMPLE_SITE && (
         <Button
           title={__('Report content')}
           button="alt"
+          className="button--file-action"
           icon={ICONS.REPORT}
           href={`https://lbry.com/dmca/${claimId}`}
         />
@@ -155,8 +149,10 @@ function FileActions(props: Props) {
   } else {
     return (
       <div className="media__actions">
-        <div className="section__actions section__actions--no-margin">{lhsSection}</div>
-        <div className="section__actions section__actions--no-margin">{rhsSection}</div>
+        <div className="section__actions section__actions--no-margin">
+          {lhsSection}
+          {rhsSection}
+        </div>
       </div>
     );
   }

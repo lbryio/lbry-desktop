@@ -88,6 +88,7 @@ $metadata-z-index: 1;
   width: 100%;
   object-fit: cover;
   background-color: var(--color-thumbnail-background);
+  font-size: 1px; // To hide the alt text on firefox;
 }
 
 .channel-thumbnail__default {

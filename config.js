@@ -1,6 +1,7 @@
 // On Web, this will find .env.defaults and optional .env in web/
 // On Desktop App, this will find .env.defaults and optional .env in root dir
 require('dotenv-defaults').config({ silent: false });
+
 const config = {
   MATOMO_URL: process.env.MATOMO_URL,
   MATOMO_ID: process.env.MATOMO_ID,
@@ -34,6 +35,7 @@ const config = {
   PINNED_LABEL_1: process.env.PINNED_LABEL_1,
   PINNED_URI_2: process.env.PINNED_URI_2,
   PINNED_LABEL_2: process.env.PINNED_LABEL_2,
+  ODYSEE_PASSWORD: process.env.ODYSEE_PASSWORD,
 };
 
 config.URL_LOCAL = `http://localhost:${config.WEB_SERVER_PORT}`;

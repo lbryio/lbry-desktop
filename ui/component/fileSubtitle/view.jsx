@@ -4,8 +4,10 @@ import * as ICONS from 'constants/icons';
 import React from 'react';
 import DateTime from 'component/dateTime';
 import FileViewCount from 'component/fileViewCount';
+import FileReactions from 'component/fileReactions';
+import FileActions from 'component/fileActions';
 import CreditAmount from 'component/common/credit-amount';
-import HelpLink from 'component/common/help-link';
+import Button from 'component/button';
 
 type Props = {
   uri: string,
@@ -20,8 +22,14 @@ function FileSubtitle(props: Props) {
 
   return (
     <div className="media__subtitle--between">
-      <DateTime uri={uri} show={DateTime.SHOW_DATE} />
-      <span>
+      <div className="file__viewdate">
+        <DateTime uri={uri} show={DateTime.SHOW_DATE} />
+        <FileViewCount uri={uri} />
+      </div>
+      <div className="file__whoknows">
+        <FileReactions uri={uri} />
+        <FileActions uri={uri} />
+
         {!SIMPLE_SITE && (
           <>
             <CreditAmount
@@ -31,11 +39,16 @@ function FileSubtitle(props: Props) {
             {' • ' /* this is bad, but it's quick! */}
           </>
         )}
-        <FileViewCount uri={uri} />
-        {claimId && !claimIsMine && SIMPLE_SITE && (
-          <HelpLink description={__('Report content')} icon={ICONS.REPORT} href={`https://lbry.com/dmca/${claimId}`} />
+        {claimId && !claimIsMine && !SIMPLE_SITE && (
+          <Button
+            iconSize={18}
+            className="button--file-action"
+            icon={ICONS.REPORT}
+            description={__('Report content')}
+            href={`https://lbry.com/dmca/${claimId}`}
+          />
         )}
-      </span>
+      </div>
     </div>
   );
 }

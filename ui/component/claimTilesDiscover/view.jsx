@@ -1,4 +1,5 @@
 // @flow
+import * as CS from 'constants/claim_search';
 import React from 'react';
 import { createNormalizedClaimSearchKey, MATURE_TAGS } from 'lbry-redux';
 import ClaimPreviewTile from 'component/claimPreviewTile';
@@ -20,6 +21,7 @@ type Props = {
   // claim search options are below
   tags: Array<string>,
   hiddenUris: Array<string>,
+  claimIds?: Array<string>,
   channelIds?: Array<string>,
   notChannelIds?: Array<string>,
   pageSize: number,
@@ -30,6 +32,7 @@ type Props = {
   timestamp?: string,
   feeAmount?: string,
   limitClaimsPerChannel?: number,
+  hideRepostLabel: boolean,
 };
 
 function ClaimTilesDiscover(props: Props) {
@@ -42,6 +45,7 @@ function ClaimTilesDiscover(props: Props) {
     // Below are options to pass that are forwarded to claim_search
     tags,
     channelIds,
+    claimIds,
     notChannelIds,
     orderBy,
     pageSize = 8,
@@ -53,16 +57,18 @@ function ClaimTilesDiscover(props: Props) {
     feeAmount,
     limitClaimsPerChannel,
     fetchingClaimSearchByQuery,
+    hideRepostLabel = false,
   } = props;
   const { location } = useHistory();
   const urlParams = new URLSearchParams(location.search);
   const feeAmountInUrl = urlParams.get('fee_amount');
-  const feeAmountParam = feeAmountInUrl || feeAmount;
+  const feeAmountParam = feeAmountInUrl || feeAmount || CS.FEE_AMOUNT_ONLY_FREE;
+
   const options: {
     page_size: number,
     no_totals: boolean,
     any_tags: Array<string>,
-    channel_ids: Array<string>,
+    claim_ids?: Array<string>,
     channel_ids: Array<string>,
     not_channel_ids: Array<string>,
     not_tags: Array<string>,
@@ -73,6 +79,7 @@ function ClaimTilesDiscover(props: Props) {
     timestamp?: string,
     fee_amount?: string,
     limit_claims_per_channel?: number,
+    stream_types: Array<string>,
   } = {
     page_size: pageSize,
     claim_type: claimType || undefined,
@@ -88,6 +95,7 @@ function ClaimTilesDiscover(props: Props) {
       // If channelIds were passed in, we don't need not_channel_ids
       (!channelIds && hiddenUris && hiddenUris.length ? hiddenUris.map(hiddenUri => hiddenUri.split('#')[1]) : []),
     order_by: orderBy || ['trending_group', 'trending_mixed'],
+    stream_types: [CS.FILE_VIDEO],
   };
 
   if (releaseTime) {
@@ -119,12 +127,26 @@ function ClaimTilesDiscover(props: Props) {
     options.timestamp = timestamp;
   }
 
+  if (claimIds) {
+    options.claim_ids = claimIds;
+  }
+
   const claimSearchCacheQuery = createNormalizedClaimSearchKey(options);
   const uris = (prefixUris || []).concat(claimSearchByQuery[claimSearchCacheQuery] || []);
   // Don't use the query from createNormalizedClaimSearchKey for the effect since that doesn't include page & release_time
   const optionsStringForEffect = JSON.stringify(options);
   const isLoading = fetchingClaimSearchByQuery[claimSearchCacheQuery];
   const shouldPerformSearch = !isLoading && uris.length === 0;
+
+  //   const fixUri = 'lbry://@MPCunningham#b/Dear-Coach#f';
+  //   if (uris && uris.length > 2 && window.location.pathname === '/') {
+  //     if (uris.indexOf(fixUri) !== -1) {
+  //       uris.splice(uris.indexOf(fixUri), 1);
+  //     } else {
+  //       uris.pop();
+  //     }
+  //     uris.splice(2, 0, fixUri);
+  //   }
 
   React.useEffect(() => {
     if (shouldPerformSearch) {
@@ -136,7 +158,7 @@ function ClaimTilesDiscover(props: Props) {
   return (
     <ul className="claim-grid">
       {uris && uris.length
-        ? uris.map(uri => <ClaimPreviewTile key={uri} uri={uri} />)
+        ? uris.map(uri => <ClaimPreviewTile key={uri} uri={uri} hideRepostLabel={hideRepostLabel} />)
         : new Array(pageSize).fill(1).map((x, i) => <ClaimPreviewTile key={i} placeholder />)}
     </ul>
   );

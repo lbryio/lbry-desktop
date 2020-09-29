@@ -50,9 +50,7 @@ function buildOgMetadata(overrideOptions = {}) {
   const head =
     `<title>${SITE_TITLE}</title>\n` +
     `<meta property="og:url" content="${URL}" />\n` +
-    `<meta property="og:title" content="${(title && title + OG_TITLE_SUFFIX) ||
-      OG_HOMEPAGE_TITLE ||
-      SITE_TITLE}" />\n` +
+    `<meta property="og:title" content="${title || OG_HOMEPAGE_TITLE || SITE_TITLE}" />\n` +
     `<meta property="og:site_name" content="${SITE_NAME || SITE_TITLE}"/>\n` +
     `<meta property="og:description" content="${description || SITE_DESCRIPTION}" />\n` +
     `<meta property="og:image" content="${OG_IMAGE_URL || `${URL}/public/v2-og.png`}" />\n` +
@@ -200,8 +198,8 @@ async function getHtml(ctx) {
       parseURI(inviteChannelUrl);
       const claim = await getClaimFromChainqueryOrRedirect(ctx, inviteChannelUrl);
       const invitePageMetadata = buildClaimOgMetadata(inviteChannelUrl, claim, {
-        title: `Join ${claim.name} on LBRY`,
-        description: `Join ${claim.name} on LBRY, a content wonderland owned by everyone (and no one).`,
+        title: `Join ${claim.name} on ${SITE_NAME}`,
+        description: `Join ${claim.name} on ${SITE_NAME}, a content wonderland owned by everyone (and no one).`,
       });
 
       return insertToHead(html, invitePageMetadata);
@@ -209,8 +207,8 @@ async function getHtml(ctx) {
       // Something about the invite channel is messed up
       // Enter generic invite metadata
       const invitePageMetadata = buildOgMetadata({
-        title: `Join a friend on LBRY`,
-        description: `Join a friend on LBRY, a content wonderland owned by everyone (and no one).`,
+        title: `Join a friend on ${SITE_NAME} `,
+        description: `Join a friend on ${SITE_NAME}, a content wonderland owned by everyone (and no one).`,
       });
       return insertToHead(html, invitePageMetadata);
     }
