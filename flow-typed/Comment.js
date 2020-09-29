@@ -25,6 +25,7 @@ declare type CommentsState = {
   isFetchingReacts: boolean,
   myReactsByCommentId: any,
   othersReactsByCommentId: any,
+  typesReacting: Array<string>,
 };
 
 declare type CommentReactParams = {
