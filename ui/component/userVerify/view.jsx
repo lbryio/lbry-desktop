@@ -40,7 +40,7 @@ class UserVerify extends React.PureComponent<Props> {
       <div className="main__auth-content">
         <section className="section__header">
           <h1 className="section__title--large">
-            {__('')}
+            {''}
             <I18nMessage
               tokens={{
                 lbc: <LbcSymbol size={48} />,
