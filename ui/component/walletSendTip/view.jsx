@@ -301,7 +301,7 @@ function WalletSendTip(props: Props) {
                     }
                   />
                   {fetchingChannels && <span className="help">{__('Loading your channels...')}</span>}
-                  {false && !claimIsMine && !fetchingChannels && (
+                  {!claimIsMine && !fetchingChannels && (
                     <FormField
                       name="toggle-is-support"
                       type="checkbox"
