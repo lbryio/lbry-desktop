@@ -497,3 +497,18 @@
 .autoplay-countdown__button--1 {
   border-color: #fff;
 }
+
+.file__viewdate {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: var(--spacing-s);
+
+  @media (min-width: $breakpoint-small) {
+    flex-direction: column;
+    margin-bottom: 0;
+
+    > :first-child {
+      margin-bottom: var(--spacing-s);
+    }
+  }
+}

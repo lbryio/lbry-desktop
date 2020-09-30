@@ -1,8 +1,9 @@
 // @flow
-import React, { PureComponent } from 'react';
+import React from 'react';
+import classnames from 'classnames';
 import MarkdownPreview from 'component/common/markdown-preview';
 import ClaimTags from 'component/claimTags';
-import Card from 'component/common/card';
+import Button from 'component/button';
 
 type Props = {
   uri: string,
@@ -12,35 +13,50 @@ type Props = {
   tags: any,
 };
 
-class FileDescription extends PureComponent<Props> {
-  render() {
-    const { uri, claim, metadata, tags } = this.props;
+function FileDescription(props: Props) {
+  const { uri, claim, metadata, tags } = props;
+  const [expanded, setExpanded] = React.useState(false);
+  const [hasOverflow, setHasOverflow] = React.useState(false);
+  const [hasCalculatedOverflow, setHasCalculatedOverflow] = React.useState(false);
+  const descriptionRef = React.useRef();
 
-    if (!claim || !metadata) {
-      return <span className="empty">{__('Empty claim or metadata info.')}</span>;
+  React.useEffect(() => {
+    if (descriptionRef && descriptionRef.current) {
+      const element = descriptionRef.current;
+      const isOverflowing = element.scrollHeight > element.clientHeight;
+      setHasOverflow(isOverflowing);
+      setHasCalculatedOverflow(true);
     }
+  }, [descriptionRef]);
 
-    const { description } = metadata;
-
-    if (!description && !(tags && tags.length)) return null;
-
-    return (
-      <Card
-        title={__('Description')}
-        defaultExpand
-        actions={
-          <>
-            {description && (
-              <div className="media__info-text">
-                <MarkdownPreview className="markdown-preview--description" content={description} />
-              </div>
-            )}
-            <ClaimTags uri={uri} type="large" />
-          </>
-        }
-      />
-    );
+  if (!claim || !metadata) {
+    return <span className="empty">{__('Empty claim or metadata info.')}</span>;
   }
+
+  const { description } = metadata;
+
+  if (!description && !(tags && tags.length)) return null;
+
+  return (
+    <div>
+      <div
+        ref={descriptionRef}
+        className={classnames({ 'media__info-text--contracted': !expanded, 'media__info-text--expanded': expanded })}
+      >
+        <MarkdownPreview className="markdown-preview--description" content={description} />
+        <ClaimTags uri={uri} type="large" />
+      </div>
+      {hasCalculatedOverflow && hasOverflow && (
+        <div className="media__info-expand">
+          {expanded ? (
+            <Button button="link" label={__('Less')} onClick={() => setExpanded(!expanded)} />
+          ) : (
+            <Button button="link" label={__('More')} onClick={() => setExpanded(!expanded)} />
+          )}
+        </div>
+      )}
+    </div>
+  );
 }
 
 export default FileDescription;

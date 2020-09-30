@@ -160,6 +160,7 @@
 }
 
 .section__actions--no-margin {
+  @extend .section__actions;
   margin-top: 0;
 }
 
