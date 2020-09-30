@@ -32,9 +32,15 @@ class TxoListItem extends React.PureComponent<Props, State> {
 
   getLink(type: string, tip: boolean) {
     const { abandonState } = this.state;
+
+    if (type === 'claim') {
+      return null;
+    }
+
     if (this.state.abandonState === ABANDON_STATES.PENDING) {
       return <Spinner type={'small'} />;
     }
+
     if (tip && type === TXO.SUPPORT) {
       return (
         <Button
