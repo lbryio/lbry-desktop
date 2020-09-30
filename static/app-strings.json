@@ -1315,7 +1315,14 @@
   "Change to tile layout": "Change to tile layout",
   "Create a channel": "Create a channel",
   "Credit Details": "Credit Details",
+<<<<<<< HEAD
   "LBRY Credits": "LBRY Credits",
   "Sync my YouTube channel": "Sync my YouTube channel",
+=======
+  "Sign In": "Sign In",
+  "Change to tile layout": "Change to tile layout",
+  "%total_comments% comments": "%total_comments% comments",
+  "Show more": "Show more",
+>>>>>>> shift enter to comment
   "--end--": "--end--"
 }

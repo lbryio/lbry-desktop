@@ -10,6 +10,7 @@ import ChannelSelection from 'component/selectChannel';
 import usePersistedState from 'effects/use-persisted-state';
 import { FF_MAX_CHARS_IN_COMMENT } from 'constants/form-field';
 import { useHistory } from 'react-router';
+import type { ElementRef } from 'react';
 
 type Props = {
   uri: string,
@@ -24,6 +25,7 @@ type Props = {
 
 export function CommentCreate(props: Props) {
   const { createComment, claim, channels, topLevelId, onDoneReplying, onCancelReplying, isNested } = props;
+  const buttonref: ElementRef<any> = React.useRef();
   const { push } = useHistory();
   const { claim_id: claimId } = claim;
   const isReply = !!topLevelId;
@@ -32,6 +34,7 @@ export function CommentCreate(props: Props) {
   const [charCount, setCharCount] = useState(commentValue.length);
   const [advancedEditor, setAdvancedEditor] = usePersistedState('comment-editor-mode', false);
   const hasChannels = channels && channels.length;
+  const disabled = channel === CHANNEL_NEW || !commentValue.length;
 
   const topChannel =
     channels &&
@@ -57,6 +60,28 @@ export function CommentCreate(props: Props) {
     }
 
     setCommentValue(commentValue);
+  }
+
+  function handleCommentAck() {
+    setCommentAck(true);
+  }
+
+  function altEnterListener(e: SyntheticKeyboardEvent<*>) {
+    if (e.shiftKey && e.keyCode === 13) {
+      e.preventDefault();
+      buttonref.current.click();
+    }
+  }
+
+  function onTextareaFocus() {
+    window.addEventListener('keydown', altEnterListener);
+    if (!commentAck) {
+      openModal(MODALS.COMMENT_ACKNOWEDGEMENT, { onCommentAcknowledge: handleCommentAck });
+    }
+  }
+
+  function onTextareaBlur() {
+    window.removeEventListener('keydown', altEnterListener);
   }
 
   function handleSubmit() {
@@ -108,6 +133,8 @@ export function CommentCreate(props: Props) {
           !SIMPLE_SITE && (isReply ? undefined : advancedEditor ? __('Simple Editor') : __('Advanced Editor'))
         }
         quickActionHandler={!SIMPLE_SITE && toggleEditorMode}
+        onFocus={onTextareaFocus}
+        onBlur={onTextareaBlur}
         placeholder={__('Say something about this...')}
         value={commentValue}
         charCount={charCount}
@@ -117,8 +144,9 @@ export function CommentCreate(props: Props) {
       />
       <div className="section__actions section__actions--no-margin">
         <Button
+          ref={buttonref}
           button="primary"
-          disabled={channel === CHANNEL_NEW || !commentValue.length}
+          disabled={disabled}
           type="submit"
           label={isReply ? __('Reply') : __('Post')}
           requiresAuth={IS_WEB}
