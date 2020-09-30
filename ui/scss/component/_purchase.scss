@@ -1,6 +1,6 @@
 .credit-amount {
   font-weight: bold;
-  color: var(--color-purchased-text);
+  color: var(--color-text);
 
   .icon {
     margin-bottom: 2px;
@@ -18,6 +18,7 @@
     position: relative;
     margin-left: var(--spacing-m);
     white-space: nowrap;
+    color: var(--color-purchased-text);
   }
 
   &::before {
