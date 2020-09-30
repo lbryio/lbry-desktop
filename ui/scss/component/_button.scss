@@ -369,6 +369,77 @@
   color: var(--color-slime);
 }
 
+.button__slime-drop {
+  position: absolute;
+  top: 60%;
+  left: 15%;
+  width: 5px;
+  height: 5px;
+  background-color: #81c554;
+  border-radius: 50%;
+  filter: drop-shadow(0 0 10px #d43322);
+  animation-iteration-count: 2;
+  animation-fill-mode: both;
+}
+
+.button__slime-drop1 {
+  @extend .button__slime-drop;
+  top: 40%;
+  animation: dropDown 1.5s ease-out 0;
+  animation-iteration-count: 1;
+  animation-fill-mode: both;
+}
+
+.button__slime-drop2 {
+  @extend .button__slime-drop;
+  left: 35%;
+  top: 40%;
+  animation: dropDown2 1.5s ease-out 0;
+  animation-iteration-count: 1;
+  animation-fill-mode: both;
+}
+
+.button__slime-stain {
+  width: 1px;
+  height: 1px;
+  left: var(--spacing-s);
+  bottom: var(--spacing-m);
+  position: absolute;
+  box-shadow: 4px 0px 10px 10px var(--color-slime);
+  animation: glowDecay 2.5s ease-out;
+  opacity: 0;
+}
+
+@keyframes dropDown {
+  0% {
+    opacity: 1;
+    top: 50%;
+  }
+  70% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    top: 80%;
+    transform: scale(0.5, 4);
+  }
+}
+
+@keyframes dropDown2 {
+  0% {
+    opacity: 1;
+    top: 50%;
+  }
+  60% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    top: 80%;
+    transform: scale(0.5, 6);
+  }
+}
+
 .button--disabled {
   opacity: 0.5;
 }

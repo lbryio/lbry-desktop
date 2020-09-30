@@ -65,7 +65,18 @@ function FileReactions(props: Props) {
         requiresAuth
         title={__('I dislike this')}
         className={classnames('button--file-action', { 'button--slime': myReaction === REACTION_TYPES.DISLIKE })}
-        label={String(dislikeCount)}
+        label={
+          <>
+            {myReaction === REACTION_TYPES.DISLIKE && (
+              <>
+                <div className="button__slime-stain" />
+                <div className="button__slime-drop1" />
+                <div className="button__slime-drop2" />
+              </>
+            )}
+            {String(dislikeCount)}
+          </>
+        }
         iconSize={18}
         icon={myReaction === REACTION_TYPES.DISLIKE ? ICONS.SLIME_ACTIVE : ICONS.SLIME}
         onClick={() => doReactionDislike(uri)}
