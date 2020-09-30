@@ -223,7 +223,7 @@ class SettingsPage extends React.PureComponent<Props, State> {
           <div>
             {/* @if TARGET='app' */}
             <Card
-              title={__('Neetwork and data settings')}
+              title={__('Network and data settings')}
               actions={
                 <React.Fragment>
                   <FormField
