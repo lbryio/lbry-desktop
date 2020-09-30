@@ -24,7 +24,7 @@ type Props = {
   feeAmount: string,
   orderBy?: Array<string>,
   defaultOrderBy?: string,
-  hideFilter: boolean,
+  hideAdvancedFilter: boolean,
   hasMatureTags: boolean,
   hiddenNsfwMessage?: Node,
   channelIds?: Array<string>,
@@ -46,7 +46,7 @@ function ClaimListHeader(props: Props) {
     feeAmount,
     orderBy,
     defaultOrderBy,
-    hideFilter,
+    hideAdvancedFilter,
     hasMatureTags,
     hiddenNsfwMessage,
     channelIds,
@@ -224,7 +224,7 @@ function ClaimListHeader(props: Props) {
           </div>
 
           <div>
-            {!hideFilter && !SIMPLE_SITE && (
+            {!hideAdvancedFilter && !SIMPLE_SITE && (
               <Button
                 button="alt"
                 aria-label={__('More')}

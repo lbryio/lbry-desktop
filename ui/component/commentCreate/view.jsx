@@ -1,6 +1,5 @@
 // @flow
 import { SIMPLE_SITE } from 'config';
-import * as MODALS from 'constants/modal_types';
 import * as PAGES from 'constants/pages';
 import { CHANNEL_NEW } from 'constants/claim';
 import React, { useEffect, useState } from 'react';
@@ -15,7 +14,6 @@ import { useHistory } from 'react-router';
 type Props = {
   uri: string,
   claim: StreamClaim,
-  openModal: (id: string, { onCommentAcknowledge: () => void }) => void,
   createComment: (string, string, string, ?string) => void,
   channels: ?Array<ChannelClaim>,
   topLevelId?: string,
@@ -25,12 +23,11 @@ type Props = {
 };
 
 export function CommentCreate(props: Props) {
-  const { createComment, claim, openModal, channels, topLevelId, onDoneReplying, onCancelReplying, isNested } = props;
+  const { createComment, claim, channels, topLevelId, onDoneReplying, onCancelReplying, isNested } = props;
   const { push } = useHistory();
   const { claim_id: claimId } = claim;
   const isReply = !!topLevelId;
   const [commentValue, setCommentValue] = React.useState('');
-  const [commentAck, setCommentAck] = usePersistedState('comment-acknowledge', false);
   const [channel, setChannel] = usePersistedState('comment-channel', '');
   const [charCount, setCharCount] = useState(commentValue.length);
   const [advancedEditor, setAdvancedEditor] = usePersistedState('comment-editor-mode', false);
@@ -60,16 +57,6 @@ export function CommentCreate(props: Props) {
     }
 
     setCommentValue(commentValue);
-  }
-
-  function handleCommentAck() {
-    setCommentAck(true);
-  }
-
-  function onTextareaFocus() {
-    if (!commentAck) {
-      openModal(MODALS.COMMENT_ACKNOWEDGEMENT, { onCommentAcknowledge: handleCommentAck });
-    }
   }
 
   function handleSubmit() {
@@ -120,7 +107,6 @@ export function CommentCreate(props: Props) {
           !SIMPLE_SITE && (isReply ? undefined : advancedEditor ? __('Simple Editor') : __('Advanced Editor'))
         }
         quickActionHandler={!SIMPLE_SITE && toggleEditorMode}
-        onFocus={onTextareaFocus}
         placeholder={__('Say something about this...')}
         value={commentValue}
         charCount={charCount}

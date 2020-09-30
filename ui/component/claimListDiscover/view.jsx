@@ -33,6 +33,7 @@ type Props = {
   hiddenUris: Array<string>,
   hiddenNsfwMessage?: Node,
   channelIds?: Array<string>,
+  claimIds?: Array<string>,
   tags: string, // these are just going to be string. pass a CSV if you want multi
   defaultTags: string,
   orderBy?: Array<string>,
@@ -43,7 +44,7 @@ type Props = {
   headerLabel?: string | Node,
   name?: string,
   hideBlock?: boolean,
-  hideFilter?: boolean,
+  hideAdvancedFilter?: boolean,
   claimType?: Array<string>,
   defaultClaimType?: Array<string>,
   streamType?: string | Array<string>,
@@ -57,6 +58,8 @@ type Props = {
   infiniteScroll?: Boolean,
   feeAmount?: string,
   tileLayout: boolean,
+  maxPages?: number,
+  forceShowReposts?: boolean,
 };
 
 function ClaimListDiscover(props: Props) {
@@ -91,13 +94,16 @@ function ClaimListDiscover(props: Props) {
     renderProperties,
     includeSupportAction,
     repostedClaimId,
-    hideFilter,
+    hideAdvancedFilter,
     infiniteScroll = true,
     followedTags,
     injectedItem,
     feeAmount,
     uris,
     tileLayout,
+    claimIds,
+    maxPages,
+    forceShowReposts = false,
   } = props;
   const didNavigateForward = history.action === 'PUSH';
   const { search } = location;
@@ -154,6 +160,7 @@ function ClaimListDiscover(props: Props) {
     any_tags?: Array<string>,
     not_tags: Array<string>,
     channel_ids: Array<string>,
+    claim_ids?: Array<string>,
     not_channel_ids: Array<string>,
     order_by: Array<string>,
     release_time?: string,
@@ -236,6 +243,10 @@ function ClaimListDiscover(props: Props) {
     options.fee_amount = feeAmountParam;
   }
 
+  if (claimIds) {
+    options.claim_ids = claimIds;
+  }
+
   if (durationParam) {
     if (durationParam === CS.DURATION_SHORT) {
       options.duration = '<=1800';
@@ -244,10 +255,8 @@ function ClaimListDiscover(props: Props) {
     }
   }
 
-  if (streamTypeParam) {
-    if (streamTypeParam !== CS.CONTENT_ALL) {
-      options.stream_types = [streamTypeParam];
-    }
+  if (streamTypeParam && streamTypeParam !== CS.CONTENT_ALL && claimType !== CS.CLAIM_CHANNEL) {
+    options.stream_types = [streamTypeParam];
   }
 
   if (claimTypeParam) {
@@ -271,9 +280,8 @@ function ClaimListDiscover(props: Props) {
       }
     }
   }
-  // https://github.com/lbryio/lbry-desktop/issues/3774
-  if (hideReposts && !options.reposted_claim_id) {
-    // and not claimrepostid
+
+  if (hideReposts && !options.reposted_claim_id && !forceShowReposts) {
     if (Array.isArray(options.claim_type)) {
       if (options.claim_type.length > 1) {
         options.claim_type = options.claim_type.filter(claimType => claimType !== 'repost');
@@ -379,6 +387,10 @@ function ClaimListDiscover(props: Props) {
   }
 
   function handleScrollBottom() {
+    if (maxPages !== undefined && page === maxPages) {
+      return;
+    }
+
     if (!loading && infiniteScroll) {
       if (claimSearchResult && !claimSearchResultLastPageReached) {
         setPage(page + 1);
@@ -406,7 +418,7 @@ function ClaimListDiscover(props: Props) {
       feeAmount={feeAmount}
       orderBy={orderBy}
       defaultOrderBy={defaultOrderBy}
-      hideFilter={hideFilter}
+      hideAdvancedFilter={hideAdvancedFilter}
       hasMatureTags={hasMatureTags}
       hiddenNsfwMessage={hiddenNsfwMessage}
       setPage={setPage}
