@@ -12,6 +12,7 @@ const defaultState: CommentsState = {
   isCommenting: false,
   myComments: undefined,
   isFetchingReacts: false,
+  pendingCommentReactions: [],
   typesReacting: [],
   myReactsByCommentId: {},
   othersReactsByCommentId: {},
@@ -83,35 +84,35 @@ export default handleActions(
     }),
 
     [ACTIONS.COMMENT_REACT_FAILED]: (state: CommentsState, action: any): CommentsState => {
+      const commentReaction = action.data; // String: reactionHash + type
+      const newReactingTypes = new Set(state.pendingCommentReactions);
+      newReactingTypes.delete(commentReaction);
+
       return {
         ...state,
-        typesReacting: [],
+        pendingCommentReactions: Array.from(newReactingTypes),
       };
     },
 
     [ACTIONS.COMMENT_REACT_STARTED]: (state: CommentsState, action: any): CommentsState => {
-      const reactingTypes = action.data;
-      const newReactingTypes = new Set(state.typesReacting);
-      reactingTypes.forEach(type => {
-        newReactingTypes.add(type);
-      });
+      const commentReaction = action.data;
+      const newReactingTypes = new Set(state.pendingCommentReactions);
+      newReactingTypes.add(commentReaction);
 
       return {
         ...state,
-        typesReacting: Array.from(newReactingTypes),
+        pendingCommentReactions: Array.from(newReactingTypes),
       };
     },
 
     [ACTIONS.COMMENT_REACT_COMPLETED]: (state: CommentsState, action: any): CommentsState => {
-      const reactingTypes = action.data;
-      const newReactingTypes = new Set(state.typesReacting);
-      reactingTypes.forEach(type => {
-        newReactingTypes.delete(type);
-      });
+      const commentReaction = action.data; // String: reactionHash + type
+      const newReactingTypes = new Set(state.pendingCommentReactions);
+      newReactingTypes.delete(commentReaction);
 
       return {
         ...state,
-        typesReacting: Array.from(newReactingTypes),
+        pendingCommentReactions: Array.from(newReactingTypes),
       };
     },
 

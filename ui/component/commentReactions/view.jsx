@@ -12,10 +12,11 @@ type Props = {
   othersReacts: any,
   react: (string, string) => void,
   commentId: string,
+  pendingCommentReacts: Array<string>,
 };
 
 export default function CommentReactions(props: Props) {
-  const { myReacts, othersReacts, commentId, react } = props;
+  const { myReacts, othersReacts, commentId, react, pendingCommentReacts } = props;
   const [activeChannel] = usePersistedState('comment-channel');
 
   const getCountForReact = type => {
@@ -29,29 +30,29 @@ export default function CommentReactions(props: Props) {
     return count;
   };
 
-  if (!ENABLE_COMMENT_REACTIONS) {
-    return null;
-  }
+  // return null;
 
   return (
     <>
       <Button
+        requiresAuth={IS_WEB}
         title={__('Upvote')}
         icon={ICONS.UPVOTE}
         className={classnames('comment__action', {
           'comment__action--active': myReacts && myReacts.includes(REACTION_TYPES.LIKE),
         })}
-        disabled={!activeChannel}
+        disabled={!activeChannel || pendingCommentReacts.includes(commentId + REACTION_TYPES.LIKE)}
         onClick={() => react(commentId, REACTION_TYPES.LIKE)}
         label={getCountForReact(REACTION_TYPES.LIKE)}
       />
       <Button
+        requiresAuth={IS_WEB}
         title={__('Downvote')}
         icon={ICONS.DOWNVOTE}
         className={classnames('comment__action', {
           'comment__action--active': myReacts && myReacts.includes(REACTION_TYPES.DISLIKE),
         })}
-        disabled={!activeChannel}
+        disabled={!activeChannel || pendingCommentReacts.includes(commentId + REACTION_TYPES.DISLIKE)}
         onClick={() => react(commentId, REACTION_TYPES.DISLIKE)}
         label={getCountForReact(REACTION_TYPES.DISLIKE)}
       />

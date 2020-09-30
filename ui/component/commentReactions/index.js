@@ -3,14 +3,14 @@ import Comment from './view';
 import {
   makeSelectMyReactionsForComment,
   makeSelectOthersReactionsForComment,
-  selectTypesReacting,
+  selectPendingCommentReacts,
 } from 'redux/selectors/comments';
 import { doCommentReact } from 'redux/actions/comments';
 
 const select = (state, props) => ({
   myReacts: makeSelectMyReactionsForComment(props.commentId)(state),
   othersReacts: makeSelectOthersReactionsForComment(props.commentId)(state),
-  typesReacting: selectTypesReacting(state),
+  pendingCommentReacts: selectPendingCommentReacts(state),
 });
 
 const perform = dispatch => ({

@@ -7,6 +7,7 @@ import {
   makeSelectCommentIdsForUri,
   makeSelectMyReactionsForComment,
   makeSelectOthersReactionsForComment,
+  selectPendingCommentReacts,
 } from 'redux/selectors/comments';
 
 export function doCommentList(uri: string, page: number = 1, pageSize: number = 99999) {
@@ -49,31 +50,29 @@ export function doCommentReactList(uri: string | null, commentId?: string) {
   return (dispatch: Dispatch, getState: GetState) => {
     const state = getState();
     const channel = localStorage.getItem('comment-channel');
-    if (!channel) {
-      dispatch({
-        type: ACTIONS.COMMENT_REACTION_LIST_FAILED,
-        data: 'No active channel found',
-      });
-      return;
-    }
     const commentIds = uri ? makeSelectCommentIdsForUri(uri)(state) : [commentId];
     const myChannels = selectMyChannelClaims(state);
-    const claimForChannelName = myChannels.find(chan => chan.name === channel);
-    const channelId = claimForChannelName && claimForChannelName.claim_id;
+
     dispatch({
       type: ACTIONS.COMMENT_REACTION_LIST_STARTED,
     });
-    Lbry.comment_react_list({
+    const params: { comment_ids: string, channel_name?: string, channel_id?: string } = {
       comment_ids: commentIds.join(','),
-      channel_name: channel,
-      channel_id: channelId,
-    })
+    };
+
+    if (channel && myChannels) {
+      const claimForChannelName = myChannels && myChannels.find(chan => chan.name === channel);
+      const channelId = claimForChannelName && claimForChannelName.claim_id;
+      params['channel_name'] = channel;
+      params['channel_id'] = channelId;
+    }
+    Lbry.comment_react_list(params)
       .then((result: CommentReactListResponse) => {
         const { my_reactions: myReactions, others_reactions: othersReactions } = result;
         dispatch({
           type: ACTIONS.COMMENT_REACTION_LIST_COMPLETED,
           data: {
-            myReactions,
+            myReactions: myReactions || {},
             othersReactions,
           },
         });
@@ -91,23 +90,27 @@ export function doCommentReact(commentId: string, type: string) {
   return (dispatch: Dispatch, getState: GetState) => {
     const state = getState();
     const channel = localStorage.getItem('comment-channel');
-    if (!channel) {
+    const pendingReacts = selectPendingCommentReacts(state);
+    const myChannels = selectMyChannelClaims(state);
+    const exclusiveTypes = {
+      [REACTION_TYPES.LIKE]: REACTION_TYPES.DISLIKE,
+      [REACTION_TYPES.DISLIKE]: REACTION_TYPES.LIKE,
+    };
+    if (!channel || !myChannels) {
       dispatch({
         type: ACTIONS.COMMENT_REACTION_LIST_FAILED,
         data: 'No active channel found',
       });
       return;
     }
-    const myChannels = selectMyChannelClaims(state);
+    if (pendingReacts.includes(commentId + exclusiveTypes[type])) {
+      // ignore dislikes during likes, for example
+      return;
+    }
     let myReacts = makeSelectMyReactionsForComment(commentId)(state);
-    let reactingTypes = [];
     const othersReacts = makeSelectOthersReactionsForComment(commentId)(state);
     const claimForChannelName = myChannels.find(chan => chan.name === channel);
     const channelId = claimForChannelName && claimForChannelName.claim_id;
-    const exclusiveTypes = {
-      [REACTION_TYPES.LIKE]: REACTION_TYPES.DISLIKE,
-      [REACTION_TYPES.DISLIKE]: REACTION_TYPES.LIKE,
-    };
 
     const params: CommentReactParams = {
       comment_ids: commentId,
@@ -118,13 +121,10 @@ export function doCommentReact(commentId: string, type: string) {
     if (myReacts.includes(type)) {
       params['remove'] = true;
       myReacts.splice(myReacts.indexOf(type), 1);
-      reactingTypes.push(type);
     } else {
       myReacts.push(type);
-      reactingTypes.push(type);
       if (Object.keys(exclusiveTypes).includes(type)) {
         params['clear_types'] = exclusiveTypes[type];
-        reactingTypes.push(exclusiveTypes[type]);
         if (myReacts.indexOf(exclusiveTypes[type]) !== -1) {
           myReacts.splice(myReacts.indexOf(exclusiveTypes[type]), 1);
         }
@@ -132,7 +132,7 @@ export function doCommentReact(commentId: string, type: string) {
     }
     dispatch({
       type: ACTIONS.COMMENT_REACT_STARTED,
-      data: reactingTypes,
+      data: commentId + type,
     });
     // simulate api return shape: ['like'] -> { 'like': 1 }
     const myReactsObj = myReacts.reduce((acc, el) => {
@@ -144,7 +144,7 @@ export function doCommentReact(commentId: string, type: string) {
       .then((result: CommentReactListResponse) => {
         dispatch({
           type: ACTIONS.COMMENT_REACT_COMPLETED,
-          data: reactingTypes,
+          data: commentId + type,
         });
         dispatch({
           type: ACTIONS.COMMENT_REACTION_LIST_COMPLETED,
@@ -157,7 +157,7 @@ export function doCommentReact(commentId: string, type: string) {
       .catch(error => {
         dispatch({
           type: ACTIONS.COMMENT_REACT_FAILED,
-          data: reactingTypes,
+          data: commentId + type,
         });
       });
   };

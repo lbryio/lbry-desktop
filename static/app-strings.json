@@ -1303,5 +1303,9 @@
   "Create a channel": "Create a channel",
   "Credit Details": "Credit Details",
   "LBRY Credits": "LBRY Credits",
+  "Sign In": "Sign In",
+  "Change to tile layout": "Change to tile layout",
+  "%total_comments% comments": "%total_comments% comments",
+  "Sync my YouTube channel": "Sync my YouTube channel",
   "--end--": "--end--"
 }
