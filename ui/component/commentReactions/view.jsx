@@ -1,5 +1,4 @@
 // @flow
-import { ENABLE_COMMENT_REACTIONS } from 'config';
 import * as ICONS from 'constants/icons';
 import * as REACTION_TYPES from 'constants/reactions';
 import React from 'react';
@@ -29,8 +28,6 @@ export default function CommentReactions(props: Props) {
     }
     return count;
   };
-
-  // return null;
 
   return (
     <>
