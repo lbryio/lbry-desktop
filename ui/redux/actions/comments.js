@@ -209,6 +209,7 @@ export function doCommentCreate(
             claimId: claim_id,
           },
         });
+        return result;
       })
       .catch(error => {
         dispatch({

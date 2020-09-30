@@ -14,7 +14,7 @@ import { useHistory } from 'react-router';
 type Props = {
   uri: string,
   claim: StreamClaim,
-  createComment: (string, string, string, ?string) => void,
+  createComment: (string, string, string, ?string) => Promise<any>,
   channels: ?Array<ChannelClaim>,
   topLevelId?: string,
   onDoneReplying?: () => void,
@@ -61,13 +61,14 @@ export function CommentCreate(props: Props) {
 
   function handleSubmit() {
     if (channel !== CHANNEL_NEW && commentValue.length) {
-      createComment(commentValue, claimId, channel, topLevelId);
-    }
-
-    setCommentValue('');
-
-    if (onDoneReplying) {
-      onDoneReplying();
+      createComment(commentValue, claimId, channel, topLevelId).then(res => {
+        if (res && res.signature) {
+          setCommentValue('');
+          if (onDoneReplying) {
+            onDoneReplying();
+          }
+        }
+      });
     }
   }
 
