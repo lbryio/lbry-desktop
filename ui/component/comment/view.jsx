@@ -2,7 +2,7 @@
 import * as ICONS from 'constants/icons';
 import * as PAGES from 'constants/pages';
 import { FF_MAX_CHARS_IN_COMMENT } from 'constants/form-field';
-import { SITE_NAME, SIMPLE_SITE } from 'config';
+import { SITE_NAME, SIMPLE_SITE, ENABLE_COMMENT_REACTIONS } from 'config';
 import React, { useEffect, useState } from 'react';
 import { isEmpty } from 'util/object';
 import DateTime from 'component/dateTime';
@@ -255,7 +255,7 @@ function Comment(props: Props) {
                       icon={ICONS.REPLY}
                     />
                   )}
-                  <CommentReactions commentId={commentId} />
+                  {ENABLE_COMMENT_REACTIONS && <CommentReactions commentId={commentId} />}
                 </div>
               </>
             )}

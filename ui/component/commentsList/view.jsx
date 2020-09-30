@@ -1,5 +1,4 @@
 // @flow
-import { ENABLE_COMMENT_REACTIONS } from 'config';
 import * as ICONS from 'constants/icons';
 import React, { useEffect } from 'react';
 import Comment from 'component/comment';
@@ -8,6 +7,7 @@ import Button from 'component/button';
 import Card from 'component/common/card';
 import CommentCreate from 'component/commentCreate';
 import usePersistedState from 'effects/use-persisted-state';
+import { ENABLE_COMMENT_REACTIONS } from 'config';
 
 type Props = {
   comments: Array<any>,
@@ -33,6 +33,7 @@ function CommentList(props: Props) {
     linkedComment,
     totalComments,
   } = props;
+
   const commentRef = React.useRef();
   const [activeChannel] = usePersistedState('comment-channel', '');
   const [start] = React.useState(0);
@@ -67,7 +68,7 @@ function CommentList(props: Props) {
     if (totalComments && ENABLE_COMMENT_REACTIONS) {
       fetchReacts(uri);
     }
-  }, [fetchReacts, uri, totalComments, activeChannel]);
+  }, [fetchReacts, uri, totalComments, activeChannel, ENABLE_COMMENT_REACTIONS]);
 
   useEffect(() => {
     if (linkedCommentId && commentRef && commentRef.current) {

@@ -104,7 +104,7 @@ export const makeSelectOthersReactionsForComment = (commentId: string) =>
     return state.othersReactsByCommentId[commentId];
   });
 
-export const selectTypesReacting = createSelector(selectState, state => state.typesReacting);
+export const selectPendingCommentReacts = createSelector(selectState, state => state.pendingCommentReactions);
 
 export const makeSelectCommentsForUri = (uri: string) =>
   createSelector(
