@@ -168,7 +168,7 @@ export default function ClaimList(props: Props) {
       {!timedOut && urisLength === 0 && !loading && (
         <div className="empty empty--centered">{empty || __('No results')}</div>
       )}
-      {timedOut && timedOutMessage && <div className="empty empty--centered">{timedOutMessage}</div>}
+      {!loading && timedOut && timedOutMessage && <div className="empty empty--centered">{timedOutMessage}</div>}
     </section>
   );
 }

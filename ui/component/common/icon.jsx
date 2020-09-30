@@ -51,7 +51,7 @@ class IconComponent extends React.PureComponent<Props> {
   };
 
   render() {
-    const { icon, tooltip, customTooltipText, iconColor, size, className, sectionIcon = false } = this.props;
+    const { icon, tooltip, customTooltipText, iconColor, size, className, sectionIcon = false, ...rest } = this.props;
     const Icon = icons[this.props.icon];
 
     if (!Icon) {
@@ -73,6 +73,7 @@ class IconComponent extends React.PureComponent<Props> {
         size={size || (sectionIcon ? 20 : 16)}
         className={classnames(`icon icon--${icon}`, className)}
         color={color}
+        {...rest}
       />
     );
 

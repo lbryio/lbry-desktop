@@ -1,4 +1,5 @@
 // @flow
+import * as ICONS from 'constants/icons';
 import React, { useEffect } from 'react';
 import Comment from 'component/comment';
 import Spinner from 'component/spinner';
@@ -16,6 +17,7 @@ type Props = {
   myChannels: ?Array<ChannelClaim>,
   isFetchingComments: boolean,
   linkedComment: any,
+  totalComments: number,
 };
 
 function CommentList(props: Props) {
@@ -28,12 +30,12 @@ function CommentList(props: Props) {
     myChannels,
     isFetchingComments,
     linkedComment,
+    totalComments,
   } = props;
 
   const linkedCommentId = linkedComment && linkedComment.comment_id;
   const [start] = React.useState(0);
   const [end, setEnd] = React.useState(9);
-  const totalComments = comments && comments.length;
   const hasNoComments = totalComments === 0;
 
   const moreBelow = totalComments - end > 0;
@@ -103,6 +105,7 @@ function CommentList(props: Props) {
             : __('%total_comments% comments', { total_comments: totalComments })
           : __('Leave a comment')
       }
+      titleActions={<Button button="alt" icon={ICONS.REFRESH} onClick={() => fetchComments(uri)} />}
       actions={
         <>
           <CommentCreate uri={uri} />
