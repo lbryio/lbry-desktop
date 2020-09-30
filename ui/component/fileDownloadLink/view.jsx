@@ -33,7 +33,7 @@ function FileDownloadLink(props: Props) {
     download,
     uri,
     claim,
-    buttonType = 'alt',
+    buttonType,
     showLabel = false,
     hideOpenButton = false,
     hideDownloadStatus = false,
@@ -107,6 +107,7 @@ function FileDownloadLink(props: Props) {
   return (
     <Button
       button={buttonType}
+      className={buttonType ? undefined : 'button--file-action'}
       title={label}
       icon={ICONS.DOWNLOAD}
       label={showLabel ? label : null}

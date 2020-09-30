@@ -9,8 +9,6 @@ import FileRenderInline from 'component/fileRenderInline';
 import FileRenderDownload from 'component/fileRenderDownload';
 import FileDetails from 'component/fileDetails';
 import FileValues from 'component/fileValues';
-import FileDescription from 'component/fileDescription';
-// import WaitUntilOnPage from 'component/common/wait-until-on-page';
 import RecommendedContent from 'component/recommendedContent';
 import CommentsList from 'component/commentsList';
 
@@ -145,7 +143,6 @@ class FilePage extends React.Component<Props> {
       <Page className="file-page" filePage>
         <div className={classnames('section card-stack', `file-page__${renderMode}`)}>
           {this.renderFilePageLayout(uri, renderMode, costInfo ? costInfo.cost : null)}
-          <FileDescription uri={uri} />
           <FileValues uri={uri} />
           <FileDetails uri={uri} />
 

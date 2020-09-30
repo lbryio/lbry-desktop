@@ -167,6 +167,33 @@
   }
 }
 
+.button--file-action {
+  @extend .button--alt;
+  background-color: transparent;
+  margin-right: var(--spacing-m);
+  padding: 0 var(--spacing-xxs);
+
+  .icon {
+    stroke: #777;
+  }
+
+  .button__label {
+    min-width: 10px;
+  }
+
+  &:last-child {
+    margin-right: 0;
+  }
+
+  &:hover {
+    background-color: var(--color-button-alt-bg);
+  }
+
+  &:focus {
+    box-shadow: none;
+  }
+}
+
 .button--disabled {
   opacity: 0.5;
 }
