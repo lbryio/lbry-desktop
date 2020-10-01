@@ -369,27 +369,6 @@ textarea {
   }
 }
 
-.file__whoknows {
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-}
-
-.file__viewdate {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: var(--spacing-s);
-
-  @media (min-width: $breakpoint-small) {
-    flex-direction: column;
-    margin-bottom: 0;
-
-    > :first-child {
-      margin-bottom: var(--spacing-s);
-    }
-  }
-}
-
 .odysee__help {
   height: 100px;
   width: 100px;
