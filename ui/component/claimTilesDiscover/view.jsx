@@ -1,4 +1,5 @@
 // @flow
+import * as CS from 'constants/claim_search';
 import React from 'react';
 import { createNormalizedClaimSearchKey, MATURE_TAGS } from 'lbry-redux';
 import ClaimPreviewTile from 'component/claimPreviewTile';
@@ -31,6 +32,7 @@ type Props = {
   timestamp?: string,
   feeAmount?: string,
   limitClaimsPerChannel?: number,
+  hideRepostLabel: boolean,
 };
 
 function ClaimTilesDiscover(props: Props) {
@@ -55,11 +57,13 @@ function ClaimTilesDiscover(props: Props) {
     feeAmount,
     limitClaimsPerChannel,
     fetchingClaimSearchByQuery,
+    hideRepostLabel = false,
   } = props;
   const { location } = useHistory();
   const urlParams = new URLSearchParams(location.search);
   const feeAmountInUrl = urlParams.get('fee_amount');
-  const feeAmountParam = feeAmountInUrl || feeAmount;
+  const feeAmountParam = feeAmountInUrl || feeAmount || CS.FEE_AMOUNT_ONLY_FREE;
+
   const options: {
     page_size: number,
     no_totals: boolean,
@@ -91,6 +95,7 @@ function ClaimTilesDiscover(props: Props) {
       // If channelIds were passed in, we don't need not_channel_ids
       (!channelIds && hiddenUris && hiddenUris.length ? hiddenUris.map(hiddenUri => hiddenUri.split('#')[1]) : []),
     order_by: orderBy || ['trending_group', 'trending_mixed'],
+    stream_types: [CS.FILE_VIDEO],
   };
 
   if (releaseTime) {
@@ -133,6 +138,16 @@ function ClaimTilesDiscover(props: Props) {
   const isLoading = fetchingClaimSearchByQuery[claimSearchCacheQuery];
   const shouldPerformSearch = !isLoading && uris.length === 0;
 
+  //   const fixUri = 'lbry://@MPCunningham#b/Dear-Coach#f';
+  //   if (uris && uris.length > 2 && window.location.pathname === '/') {
+  //     if (uris.indexOf(fixUri) !== -1) {
+  //       uris.splice(uris.indexOf(fixUri), 1);
+  //     } else {
+  //       uris.pop();
+  //     }
+  //     uris.splice(2, 0, fixUri);
+  //   }
+
   React.useEffect(() => {
     if (shouldPerformSearch) {
       const searchOptions = JSON.parse(optionsStringForEffect);
@@ -143,7 +158,7 @@ function ClaimTilesDiscover(props: Props) {
   return (
     <ul className="claim-grid">
       {uris && uris.length
-        ? uris.map(uri => <ClaimPreviewTile key={uri} uri={uri} />)
+        ? uris.map(uri => <ClaimPreviewTile key={uri} uri={uri} hideRepostLabel={hideRepostLabel} />)
         : new Array(pageSize).fill(1).map((x, i) => <ClaimPreviewTile key={i} placeholder />)}
     </ul>
   );

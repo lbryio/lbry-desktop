@@ -30,9 +30,11 @@
   transform: translateY(-130%);
   font-size: var(--font-xsmall);
   color: var(--color-text-subtitle);
+  overflow: visible;
 
   .icon {
     margin-right: var(--spacing-xs);
+    stroke: var(--color-text-subtitle);
   }
 
   @media (max-width: $breakpoint-small) {
@@ -163,7 +165,6 @@
 
   .claim-preview__actions {
     align-self: flex-end;
-    margin-top: 0;
     margin-bottom: auto;
     justify-content: flex-end;
     width: auto;
@@ -178,7 +179,11 @@
 
   @media (max-width: $breakpoint-xsmall) {
     .claim-preview__actions {
-      align-self: flex-start;
+      .claim-preview__primary-actions {
+        .button {
+          margin-top: 0;
+        }
+      }
     }
   }
 }
@@ -228,13 +233,18 @@
   align-self: flex-end;
   display: flex;
   justify-content: space-between;
-  margin-top: auto;
   width: 100%;
 }
 
 .claim-preview__primary-actions {
   @extend .section__actions;
-  margin-top: 0;
+  margin-top: var(--spacing-s);
+
+  &:first-child {
+    .button {
+      margin-top: var(--spacing-s);
+    }
+  }
 }
 
 .claim-preview__actions--header {
@@ -339,6 +349,16 @@
   font-size: var(--font-large);
 }
 
+.claim-grid__title--first {
+  text-align: center;
+  width: 100%;
+  margin-bottom: var(--spacing-l);
+
+  .no-evil {
+    font-size: var(--font-heading);
+  }
+}
+
 .claim-grid__title--secondary {
   margin-left: auto;
 }
@@ -414,11 +434,11 @@
     &:not(:first-child) {
       margin-top: var(--spacing-s);
     }
-
-    .channel-thumbnail {
-      display: none;
-    }
   }
+}
+
+.claim-preview--channel {
+  align-items: flex-start;
 }
 
 .claim-tile__title {

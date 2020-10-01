@@ -13,6 +13,7 @@ import Spinner from 'component/spinner';
 import I18nMessage from 'component/i18nMessage';
 import usePersistedState from 'effects/use-persisted-state';
 import * as PUBLISH_MODES from 'constants/publish_types';
+import PublishName from 'component/publishName';
 
 type Props = {
   uri: ?string,
@@ -344,19 +345,31 @@ function PublishFile(props: Props) {
     <Card
       className={disabled || balance === 0 ? 'card--disabled' : ''}
       title={
-        <div>
-          {header}
-          {publishing && <Spinner type={'small'} />}
-          {inProgress && (
-            <div>
-              <Button button="close" label={__('Cancel')} icon={ICONS.REMOVE} onClick={clearPublish} />
-            </div>
-          )}
-        </div>
+        __('Upload') || (
+          <div>
+            {header}
+            {publishing && <Spinner type={'small'} />}
+            {inProgress && (
+              <div>
+                <Button button="close" label={__('Cancel')} icon={ICONS.REMOVE} onClick={clearPublish} />
+              </div>
+            )}
+          </div>
+        )
       }
       subtitle={isStillEditing && __('You are currently editing your upload.')}
       actions={
         <React.Fragment>
+          <FileSelector
+            disabled={disabled}
+            currentPath={currentFile}
+            onFileChosen={handleFileChange}
+            // https://stackoverflow.com/questions/19107685/safari-input-type-file-accept-video-ignores-mp4-files
+            accept="video/mp4,video/x-m4v,video/*"
+            placeholder={__('Select video file to upload')}
+          />
+          {getMessage()}
+
           <FormField
             type="text"
             name="content_title"
@@ -366,7 +379,7 @@ function PublishFile(props: Props) {
             value={title}
             onChange={handleTitleChange}
           />
-          {isPublishFile && (
+          {isPublishFile && false && (
             <FileSelector disabled={disabled} currentPath={currentFile} onFileChosen={handleFileChange} />
           )}
           {isPublishPost && (
@@ -379,7 +392,7 @@ function PublishFile(props: Props) {
               setCurrentFileType={setCurrentFileType}
             />
           )}
-          {isPublishFile && getMessage()}
+          {isPublishFile && false && getMessage()}
           {/* @if TARGET='app' */}
           {isPublishFile && (
             <FormField
@@ -416,6 +429,8 @@ function PublishFile(props: Props) {
             </p>
           )}
           {/* @endif */}
+
+          <PublishName nameOnly autoPopulateName={autoPopulateName} setAutoPopulateName={setAutoPopulateName} />
         </React.Fragment>
       }
     />
