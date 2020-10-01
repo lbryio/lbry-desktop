@@ -221,6 +221,10 @@ function PublishForm(props: Props) {
     }
   }, [name, channel, resolveUri, updatePublishForm, checkAvailability]);
 
+  useEffect(() => {
+    updatePublishForm({ isMarkdownPost: mode === PUBLISH_MODES.POST });
+  }, [mode, updatePublishForm]);
+
   function handleChannelNameChange(channel) {
     updatePublishForm({ channel });
   }
