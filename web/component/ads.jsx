@@ -1,11 +1,11 @@
 // @flow
+import { DOMAIN, SHOW_ADS } from 'config';
 import * as PAGES from 'constants/pages';
 import React, { useEffect } from 'react';
 import { withRouter } from 'react-router';
 import I18nMessage from 'component/i18nMessage';
 import Button from 'component/button';
 import classnames from 'classnames';
-import { DOMAIN } from 'config';
 
 const ADS_URL = '//assets.revcontent.com/master/delivery.js';
 const IS_MOBILE = typeof window.orientation !== 'undefined';
@@ -24,7 +24,7 @@ function Ads(props: Props) {
   } = props;
 
   useEffect(() => {
-    if (type === 'video') {
+    if (SHOW_ADS && type === 'video') {
       try {
         const d = document;
         const s = 'script';
@@ -42,7 +42,7 @@ function Ads(props: Props) {
   }, [type]);
 
   useEffect(() => {
-    if (!IS_MOBILE && type === 'sidebar') {
+    if (SHOW_ADS && !IS_MOBILE && type === 'sidebar') {
       const script = document.createElement('script');
       script.src = ADS_URL;
       script.async = true;
@@ -77,6 +77,10 @@ function Ads(props: Props) {
       Hate these? %sign_in_to_lbrytv% or %download_the_app% for an ad free experience.
     </I18nMessage>
   );
+
+  if (!SHOW_ADS) {
+    return false;
+  }
 
   return type === 'video' ? (
     <div className="ads__claim-item">
