@@ -36,7 +36,7 @@ const defaultState = {
 
     // UI
     [SETTINGS.LANGUAGE]: settingLanguage.find(language => SUPPORTED_LANGUAGES[language]),
-    [SETTINGS.THEME]: __('light'),
+    [SETTINGS.THEME]: __('dark'),
     [SETTINGS.THEMES]: [__('light'), __('dark')],
     [SETTINGS.HIDE_SPLASH_ANIMATION]: false,
     [SETTINGS.HIDE_BALANCE]: false,
@@ -62,7 +62,7 @@ const defaultState = {
     [SETTINGS.AUTOPLAY_NEXT]: true,
     [SETTINGS.FLOATING_PLAYER]: true,
     [SETTINGS.AUTO_DOWNLOAD]: true,
-    [SETTINGS.HIDE_REPOSTS]: false,
+    [SETTINGS.HIDE_REPOSTS]: true,
 
     // OS
     [SETTINGS.AUTO_LAUNCH]: true,

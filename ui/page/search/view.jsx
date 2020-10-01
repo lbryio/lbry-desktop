@@ -119,24 +119,26 @@ export default function SearchPage(props: Props) {
             <ClaimList
               uris={uris}
               loading={isSearching}
-              header={<SearchOptions additionalOptions={additionalOptions} />}
+              header={!SIMPLE_SITE && <SearchOptions additionalOptions={additionalOptions} />}
               injectedItem={SHOW_ADS && !isAuthenticated && IS_WEB && <Ads type="video" />}
               headerAltControls={
-                <Fragment>
-                  <span>{__('Find what you were looking for?')}</span>
-                  <Button
-                    button="alt"
-                    description={__('Yes')}
-                    onClick={() => onFeedbackPositive(urlQuery)}
-                    icon={ICONS.YES}
-                  />
-                  <Button
-                    button="alt"
-                    description={__('No')}
-                    onClick={() => onFeedbackNegative(urlQuery)}
-                    icon={ICONS.NO}
-                  />
-                </Fragment>
+                !SIMPLE_SITE && (
+                  <Fragment>
+                    <span>{__('Find what you were looking for?')}</span>
+                    <Button
+                      button="alt"
+                      description={__('Yes')}
+                      onClick={() => onFeedbackPositive(urlQuery)}
+                      icon={ICONS.YES}
+                    />
+                    <Button
+                      button="alt"
+                      description={__('No')}
+                      onClick={() => onFeedbackNegative(urlQuery)}
+                      icon={ICONS.NO}
+                    />
+                  </Fragment>
+                )
               }
             />
 

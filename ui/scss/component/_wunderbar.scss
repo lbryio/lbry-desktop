@@ -14,6 +14,7 @@
   @media (max-width: $breakpoint-small) {
     max-width: none;
     margin: 0;
+    margin-right: var(--spacing-m);
   }
 
   > .icon {
@@ -101,7 +102,7 @@
 
 .wunderbar__suggestion-label {
   overflow: hidden;
-  padding-left: var(--spacing-s);
+  //   padding-left: var(--spacing-s);
   text-overflow: ellipsis;
   white-space: nowrap;
 }

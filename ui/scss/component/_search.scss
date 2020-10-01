@@ -14,6 +14,7 @@
     color: var(--color-secondary);
     margin-bottom: var(--spacing-s);
     padding: var(--spacing-xxs);
+    border-radius: var(--border-radius);
   }
 
   fieldset:not(:first-child) {

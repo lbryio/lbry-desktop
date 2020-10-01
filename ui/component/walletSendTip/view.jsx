@@ -290,7 +290,7 @@ function WalletSendTip(props: Props) {
                 <div className="section__actions">
                   <Button
                     autoFocus
-                    icon={isSupport ? undefined : ICONS.SUPPORT}
+                    // icon={isSupport ? undefined : ICONS.SUPPORT}
                     button="primary"
                     type="submit"
                     disabled={fetchingChannels || isPending || tipError || !tipAmount}
@@ -301,7 +301,7 @@ function WalletSendTip(props: Props) {
                     }
                   />
                   {fetchingChannels && <span className="help">{__('Loading your channels...')}</span>}
-                  {!claimIsMine && !fetchingChannels && (
+                  {false && !claimIsMine && !fetchingChannels && (
                     <FormField
                       name="toggle-is-support"
                       type="checkbox"

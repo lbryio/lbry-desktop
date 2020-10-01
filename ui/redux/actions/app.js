@@ -530,14 +530,11 @@ export function doSignIn() {
     const state = getState();
     const user = selectUser(state);
     const userId = user.id;
-    const notificationsEnabled = user.experimental_ui;
 
     analytics.setUser(userId);
 
-    if (notificationsEnabled) {
-      dispatch(doSocketConnect());
-      dispatch(doNotificationList());
-    }
+    dispatch(doSocketConnect());
+    dispatch(doNotificationList());
 
     // @if TARGET='web'
     dispatch(doBalanceSubscribe());

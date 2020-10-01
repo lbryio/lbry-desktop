@@ -54,6 +54,10 @@
   @media (max-width: $breakpoint-small) {
     display: none;
   }
+
+  .icon {
+    margin-right: var(--spacing-xs);
+  }
 }
 
 //  M E D I A
@@ -63,10 +67,12 @@
   align-self: flex-start;
   color: var(--color-text-subtitle);
   font-size: var(--font-small);
+}
 
-  svg {
-    stroke: var(--color-text-subtitle);
-  }
+.media__subtitle--centered {
+  @extend .media__subtitle;
+  align-items: center;
+  display: flex;
 }
 
 .media__subtitle--centered {

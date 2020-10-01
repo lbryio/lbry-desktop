@@ -20,6 +20,7 @@ import userReducer from 'redux/reducers/user';
 import commentsReducer from 'redux/reducers/comments';
 import blockedReducer from 'redux/reducers/blocked';
 import searchReducer from 'redux/reducers/search';
+import reactionsReducer from 'redux/reducers/reactions';
 
 export default history =>
   combineReducers({
@@ -35,6 +36,7 @@ export default history =>
     homepage: homepageReducer,
     notifications: notificationsReducer,
     publish: publishReducer,
+    reactions: reactionsReducer,
     rewards: rewardsReducer,
     search: searchReducer,
     settings: settingsReducer,

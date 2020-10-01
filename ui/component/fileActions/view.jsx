@@ -11,6 +11,7 @@ import * as RENDER_MODES from 'constants/file_render_modes';
 import { useIsMobile } from 'effects/use-screensize';
 import ClaimSupportButton from 'component/claimSupportButton';
 import { useHistory } from 'react-router';
+import FileReactions from 'component/fileReactions';
 
 type Props = {
   uri: string,
@@ -79,6 +80,7 @@ function FileActions(props: Props) {
 
   const lhsSection = (
     <>
+      <FileReactions uri={uri} />
       <ClaimSupportButton uri={uri} fileAction />
       <Button
         button="alt"
@@ -145,8 +147,10 @@ function FileActions(props: Props) {
   } else {
     return (
       <div className="media__actions">
-        <div className="section__actions section__actions--no-margin">{lhsSection}</div>
-        <div className="section__actions section__actions--no-margin">{rhsSection}</div>
+        <div className="section__actions section__actions--no-margin">
+          {lhsSection}
+          {rhsSection}
+        </div>
       </div>
     );
   }

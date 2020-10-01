@@ -26,7 +26,6 @@ import OpenInAppLink from 'web/component/openInAppLink';
 import YoutubeWelcome from 'web/component/youtubeReferralWelcome';
 import NagDegradedPerformance from 'web/component/nag-degraded-performance';
 import NagDataCollection from 'web/component/nag-data-collection';
-
 import {
   useDegradedPerformance,
   STATUS_OK,
@@ -330,12 +329,12 @@ function App(props: Props) {
 
           {/* @if TARGET='web' */}
           <YoutubeWelcome />
-          {!shouldHideNag && <OpenInAppLink uri={uri} />}
+          {false && !shouldHideNag && <OpenInAppLink uri={uri} />}
           {!shouldHideNag && <NagContinueFirstRun />}
           {(lbryTvApiStatus === STATUS_DEGRADED || lbryTvApiStatus === STATUS_FAILING) && !shouldHideNag && (
             <NagDegradedPerformance onClose={() => setLbryTvApiStatus(STATUS_OK)} />
           )}
-          {lbryTvApiStatus === STATUS_OK && showAnalyticsNag && !shouldHideNag && (
+          {false && lbryTvApiStatus === STATUS_OK && showAnalyticsNag && !shouldHideNag && (
             <NagDataCollection onClose={handleAnalyticsDismiss} />
           )}
           {/* @endif */}
