@@ -10,6 +10,7 @@ import { COPYRIGHT, OTHER } from 'constants/licenses';
 
 type Props = {
   filePath: string | WebFile,
+  isMarkdownPost: boolean,
   optimize: boolean,
   title: ?string,
   description: ?string,
@@ -73,6 +74,7 @@ class ModalPublishPreview extends React.PureComponent<Props> {
   render() {
     const {
       filePath,
+      isMarkdownPost,
       optimize,
       title,
       description,
@@ -133,7 +135,7 @@ class ModalPublishPreview extends React.PureComponent<Props> {
                 <div className="section">
                   <table className="table table--condensed table--publish-preview">
                     <tbody>
-                      {this.createRow(__('File'), this.resolveFilePathName(filePath))}
+                      {!isMarkdownPost && this.createRow(__('File'), this.resolveFilePathName(filePath))}
                       {isOptimizeAvail && this.createRow(__('Transcode'), optimize ? __('Yes') : __('No'))}
                       {this.createRow(__('Title'), title)}
                       {this.createRow(__('Description'), descriptionValue)}
