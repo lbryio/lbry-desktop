@@ -1,6 +1,6 @@
 // @flow
 import * as PAGES from 'constants/pages';
-import * as MODALS from 'constants/modal_types';
+// import * as MODALS from 'constants/modal_types';
 import * as ICONS from 'constants/icons';
 import * as React from 'react';
 import { SETTINGS } from 'lbry-redux';
@@ -13,7 +13,7 @@ import SyncToggle from 'component/syncToggle';
 import Card from 'component/common/card';
 import SettingAccountPassword from 'component/settingAccountPassword';
 import { getPasswordFromCookie } from 'util/saved-passwords';
-import { Lbryio } from 'lbryinc';
+// import { Lbryio } from 'lbryinc';
 
 type Price = {
   currency: string,
@@ -22,10 +22,10 @@ type Price = {
 
 type SetDaemonSettingArg = boolean | string | number;
 
-type DarkModeTimes = {
-  from: { hour: string, min: string, formattedTime: string },
-  to: { hour: string, min: string, formattedTime: string },
-};
+// type DarkModeTimes = {
+//   from: { hour: string, min: string, formattedTime: string },
+//   to: { hour: string, min: string, formattedTime: string },
+// };
 
 type OptionTimes = {
   fromTo: string,
@@ -60,7 +60,7 @@ type Props = {
   floatingPlayer: boolean,
   hideReposts: ?boolean,
   clearPlayingUri: () => void,
-  darkModeTimes: DarkModeTimes,
+  //   darkModeTimes: DarkModeTimes,
   setDarkTime: (string, {}) => void,
   openModal: string => void,
   language?: string,
@@ -156,11 +156,11 @@ class SettingsPage extends React.PureComponent<Props, State> {
     const {
       daemonSettings,
       allowAnalytics,
-      showNsfw,
+      //   showNsfw,
       isAuthenticated,
       currentTheme,
       themes,
-      automaticDarkModeEnabled,
+      //   automaticDarkModeEnabled,
       autoplay,
       walletEncrypted,
       // autoDownload,
@@ -169,16 +169,16 @@ class SettingsPage extends React.PureComponent<Props, State> {
       toggle3PAnalytics,
       userBlockedChannelsCount,
       floatingPlayer,
-      hideReposts,
+      //   hideReposts,
       clearPlayingUri,
-      darkModeTimes,
+      //   darkModeTimes,
       clearCache,
-      openModal,
+      //   openModal,
     } = this.props;
     const { storedPassword } = this.state;
     const noDaemonSettings = !daemonSettings || Object.keys(daemonSettings).length === 0;
-    const startHours = ['18', '19', '20', '21'];
-    const endHours = ['5', '6', '7', '8'];
+    // const startHours = ['18', '19', '20', '21'];
+    // const endHours = ['5', '6', '7', '8'];
 
     return (
       <Page
@@ -252,7 +252,7 @@ class SettingsPage extends React.PureComponent<Props, State> {
                     )}
                   />
 
-                  <FormField
+                  {/* <FormField
                     type="checkbox"
                     name="hide_reposts"
                     onChange={e => {
@@ -266,7 +266,7 @@ class SettingsPage extends React.PureComponent<Props, State> {
                     checked={hideReposts}
                     label={__('Hide reposts')}
                     helper={__('You will not see reposts by people you follow or receive email notifying about them.')}
-                  />
+                  /> */}
 
                   {/* <FormField
                     type="checkbox"
@@ -277,7 +277,7 @@ class SettingsPage extends React.PureComponent<Props, State> {
                     helper={__('Anonymous content is published without a channel.')}
                   /> */}
 
-                  <FormField
+                  {/* <FormField
                     type="checkbox"
                     name="show_nsfw"
                     onChange={() =>
@@ -290,7 +290,7 @@ class SettingsPage extends React.PureComponent<Props, State> {
                     helper={__(
                       'Mature content may include nudity, intense sexuality, profanity, or other adult content. By displaying mature content, you are affirming you are of legal age to view mature content in your country or jurisdiction.  '
                     )}
-                  />
+                  /> */}
                 </React.Fragment>
               }
             />
@@ -306,7 +306,7 @@ class SettingsPage extends React.PureComponent<Props, State> {
                       label={__('Theme')}
                       onChange={this.onThemeChange}
                       value={currentTheme}
-                      disabled={automaticDarkModeEnabled}
+                      //   disabled={automaticDarkModeEnabled}
                     >
                       {themes.map(theme => (
                         <option key={theme} value={theme}>
@@ -315,7 +315,7 @@ class SettingsPage extends React.PureComponent<Props, State> {
                       ))}
                     </FormField>
                   </fieldset-section>
-                  <fieldset-section>
+                  {/* <fieldset-section>
                     <FormField
                       type="checkbox"
                       name="automatic_dark_mode"
@@ -353,7 +353,7 @@ class SettingsPage extends React.PureComponent<Props, State> {
                         </FormField>
                       </fieldset-group>
                     )}
-                  </fieldset-section>
+                  </fieldset-section> */}
                 </React.Fragment>
               }
             />

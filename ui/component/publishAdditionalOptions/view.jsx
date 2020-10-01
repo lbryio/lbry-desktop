@@ -6,6 +6,7 @@ import { FormField } from 'component/common/form';
 import Button from 'component/button';
 import LicenseType from './license-type';
 import Card from 'component/common/card';
+import PublishName from 'component/publishName';
 // @if TARGET='app'
 // import ErrorText from 'component/common/error-text';
 // import { LbryFirst } from 'lbry-redux';
@@ -113,6 +114,7 @@ function PublishAdditionalOptions(props: Props) {
         <React.Fragment>
           {!hideSection && (
             <div className={classnames({ 'card--disabled': !name })}>
+              <PublishName />
               {/* @if TARGET='app' */}
               {/* {showLbryFirstCheckbox && (
                 <div className="section">
