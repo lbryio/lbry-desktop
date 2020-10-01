@@ -227,8 +227,7 @@
   position: fixed;
   width: 100vw;
   height: 100vh;
-  opacity: 0.3;
-  background-color: black;
+  background-color: var(--color-background-overlay);
   z-index: 3;
   left: 0;
   top: var(--header-height);

@@ -17,7 +17,7 @@
   .icon__wrapper {
     width: 1rem;
     height: 1rem;
-    padding: 1rem;
+    padding: 1.2rem;
     border-radius: var(--border-radius);
     margin-right: var(--spacing-m);
 
@@ -89,6 +89,11 @@
   overflow: hidden;
 }
 
+.notification__title,
+.notification__text {
+  max-width: 30rem;
+}
+
 .notification__time {
   font-size: var(--font-small);
   color: var(--color-text-help);
@@ -135,4 +140,9 @@
   border-radius: 50%;
   background-color: var(--color-primary);
   margin-left: var(--spacing-s);
+  margin-top: var(--spacing-s);
+
+  @media (min-width: $breakpoint-small) {
+    margin-top: 0;
+  }
 }
