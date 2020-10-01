@@ -38,6 +38,7 @@ type Props = {
   streamingUrl: string,
   isMature: boolean,
   showMature: boolean,
+  hideRepostLabel: boolean,
 };
 
 function ClaimPreviewTile(props: Props) {
@@ -57,6 +58,7 @@ function ClaimPreviewTile(props: Props) {
     blockedChannelUris,
     isMature,
     showMature,
+    hideRepostLabel = false,
   } = props;
   const isRepost = claim && claim.repost_channel_url;
   const shouldFetch = claim === undefined;
@@ -201,7 +203,7 @@ function ClaimPreviewTile(props: Props) {
             </React.Fragment>
           )}
         </div>
-        {isRepost && (
+        {isRepost && !hideRepostLabel && (
           <div className="claim-tile__repost-author">
             <ClaimRepostAuthor uri={uri} />
           </div>

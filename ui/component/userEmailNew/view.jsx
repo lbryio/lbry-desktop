@@ -1,6 +1,6 @@
 // @flow
 import * as PAGES from 'constants/pages';
-import { SITE_NAME } from 'config';
+import { SITE_NAME, DOMAIN } from 'config';
 import React, { useState } from 'react';
 import { FormField, Form } from 'component/common/form';
 import Button from 'component/button';
@@ -95,7 +95,7 @@ function UserEmailNew(props: Props) {
       <Card
         title={__('Join %SITE_NAME%', { SITE_NAME })}
         // @if TARGET='app'
-        subtitle={__('An account with lbry.tv allows you to earn rewards and backup your data.')}
+        subtitle={__('An account with %domain% allows you to earn rewards and backup your data.', { domain: DOMAIN })}
         // @endif
         actions={
           <div>

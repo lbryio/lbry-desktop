@@ -26,33 +26,34 @@ const SearchOptions = (props: Props) => {
       />
       {expanded && (
         <Form className="search__options">
-          <fieldset>
-            <legend className="search__legend">{__('Search For')}</legend>
-            {[
-              {
-                option: SEARCH_OPTIONS.INCLUDE_FILES,
-                label: __('Files'),
-              },
-              {
-                option: SEARCH_OPTIONS.INCLUDE_CHANNELS,
-                label: __('Channels'),
-              },
-              {
-                option: SEARCH_OPTIONS.INCLUDE_FILES_AND_CHANNELS,
-                label: __('Everything'),
-              },
-            ].map(({ option, label }) => (
-              <FormField
-                key={option}
-                name={option}
-                type="radio"
-                blockWrap={false}
-                label={label}
-                checked={options[SEARCH_OPTIONS.CLAIM_TYPE] === option}
-                onChange={() => setSearchOption(SEARCH_OPTIONS.CLAIM_TYPE, option)}
-              />
-            ))}
-          </fieldset>
+          {false && (
+            <fieldset>
+              {[
+                {
+                  option: SEARCH_OPTIONS.INCLUDE_FILES,
+                  label: __('Files'),
+                },
+                {
+                  option: SEARCH_OPTIONS.INCLUDE_CHANNELS,
+                  label: __('Channels'),
+                },
+                {
+                  option: SEARCH_OPTIONS.INCLUDE_FILES_AND_CHANNELS,
+                  label: __('Everything'),
+                },
+              ].map(({ option, label }) => (
+                <FormField
+                  key={option}
+                  name={option}
+                  type="radio"
+                  blockWrap={false}
+                  label={label}
+                  checked={options[SEARCH_OPTIONS.CLAIM_TYPE] === option}
+                  onChange={() => setSearchOption(SEARCH_OPTIONS.CLAIM_TYPE, option)}
+                />
+              ))}
+            </fieldset>
+          )}
 
           <fieldset>
             <legend className="search__legend">{__('Type')}</legend>
@@ -63,7 +64,7 @@ const SearchOptions = (props: Props) => {
               },
               {
                 option: SEARCH_OPTIONS.MEDIA_AUDIO,
-                label: __('Audio'),
+                label: __('Music'),
               },
               {
                 option: SEARCH_OPTIONS.MEDIA_IMAGE,
@@ -91,22 +92,24 @@ const SearchOptions = (props: Props) => {
             ))}
           </fieldset>
 
-          <fieldset>
-            <legend className="search__legend">{__('Other Options')}</legend>
-            <FormField
-              type="select"
-              name="result-count"
-              value={resultCount}
-              onChange={e => setSearchOption(SEARCH_OPTIONS.RESULT_COUNT, e.target.value)}
-              blockWrap={false}
-              label={__('Returned Results')}
-            >
-              <option value={10}>10</option>
-              <option value={30}>30</option>
-              <option value={50}>50</option>
-              <option value={100}>100</option>
-            </FormField>
-          </fieldset>
+          {false && (
+            <fieldset>
+              <legend className="search__legend">{__('Other Options')}</legend>
+              <FormField
+                type="select"
+                name="result-count"
+                value={resultCount}
+                onChange={e => setSearchOption(SEARCH_OPTIONS.RESULT_COUNT, e.target.value)}
+                blockWrap={false}
+                label={__('Returned Results')}
+              >
+                <option value={10}>10</option>
+                <option value={30}>30</option>
+                <option value={50}>50</option>
+                <option value={100}>100</option>
+              </FormField>
+            </fieldset>
+          )}
         </Form>
       )}
     </div>

@@ -54,7 +54,7 @@ export default function FileRenderFloating(props: Props) {
   const [desktopPlayStartTime, setDesktopPlayStartTime] = useState();
   const [wasDragging, setWasDragging] = useState(false);
   const [position, setPosition] = usePersistedState('floating-file-viewer:position', {
-    x: -25,
+    x: window.innerWidth - 550,
     y: window.innerHeight - 400,
   });
   const [relativePos, setRelativePos] = useState({

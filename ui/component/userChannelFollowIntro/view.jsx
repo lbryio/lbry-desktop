@@ -7,11 +7,11 @@ import { parseURI } from 'lbry-redux';
 import Button from 'component/button';
 import Card from 'component/common/card';
 import { AUTO_FOLLOW_CHANNELS } from 'config';
+import { PRIMARY_CONTENT_CHANNEL_IDS } from 'homepage';
 
 type Props = {
   subscribedChannels: Array<Subscription>,
   onContinue: () => void,
-  onBack: () => void,
   channelSubscribe: (sub: Subscription) => void,
 };
 
@@ -20,7 +20,7 @@ const channelsToSubscribe = AUTO_FOLLOW_CHANNELS.trim()
   .filter(x => x !== '');
 
 function UserChannelFollowIntro(props: Props) {
-  const { subscribedChannels, channelSubscribe, onContinue, onBack } = props;
+  const { subscribedChannels, channelSubscribe, onContinue } = props;
   const followingCount = (subscribedChannels && subscribedChannels.length) || 0;
 
   // subscribe to lbry
@@ -39,24 +39,25 @@ function UserChannelFollowIntro(props: Props) {
     <Card
       title={__('Find channels to follow')}
       subtitle={__(
-        'LBRY works better if you find and follow a couple creators you like. You can also block channels you never want to see.'
+        'Odysee works better if you find and follow a couple creators you like. You can also block channels you never want to see.'
       )}
       actions={
         <React.Fragment>
-          <div className="section__actions--between">
-            <Button button="secondary" onClick={onBack} label={__('Back')} />
-            <Button
-              button={subscribedChannels.length < 1 ? 'alt' : 'primary'}
-              onClick={onContinue}
-              label={subscribedChannels.length < 1 ? __('Skip') : __('Continue')}
-            />
-          </div>
           <div className="section__body">
             <ClaimListDiscover
-              defaultOrderBy={CS.ORDER_BY_TOP}
+              hideFilters
+              meta={
+                <Button
+                  button={subscribedChannels.length < 1 ? 'alt' : 'primary'}
+                  onClick={onContinue}
+                  label={subscribedChannels.length < 1 ? __('Skip') : __('Continue')}
+                />
+              }
+              defaultOrderBy={CS.ORDER_BY_TRENDING}
               defaultFreshness={CS.FRESH_ALL}
-              claimType="channel"
-              defaultTags={followingCount > 3 ? CS.TAGS_FOLLOWED : undefined}
+              claimType={CS.CLAIM_CHANNEL}
+              claimIds={PRIMARY_CONTENT_CHANNEL_IDS}
+              maxPages={3}
             />
             {followingCount > 0 && (
               <Nag
