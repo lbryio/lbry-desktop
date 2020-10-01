@@ -16,18 +16,24 @@ export default function apiPublishCallViaWeb(
   connectionString: string,
   token: string,
   method: string,
-  params: { file_path: string },
+  params: { file_path: string, preview: boolean },
   resolve: Function,
   reject: Function
 ) {
-  const { file_path: filePath } = params;
+  const { file_path: filePath, preview } = params;
 
   if (!filePath) {
     return apiCall(method, params, resolve, reject);
   }
 
   const counter = new Date().getTime();
-  const fileField = filePath;
+  let fileField = filePath;
+
+  if (preview) {
+    // Send dummy file for the preview. The tx-fee calculation does not depend on it.
+    const dummyContent = 'x';
+    fileField = new File([dummyContent], 'dummy.md', { type: 'text/markdown' });
+  }
 
   // Putting a dummy value here, the server is going to process the POSTed file
   // and set the file_path itself
