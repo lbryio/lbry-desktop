@@ -7,6 +7,7 @@ import Card from 'component/common/card';
 import Tag from 'component/tag';
 import MarkdownPreview from 'component/common/markdown-preview';
 import { COPYRIGHT, OTHER } from 'constants/licenses';
+import LbcSymbol from 'component/common/lbc-symbol';
 
 type Props = {
   filePath: string | WebFile,
@@ -97,8 +98,8 @@ class ModalPublishPreview extends React.PureComponent<Props> {
       isStillEditing,
     } = this.props;
 
-    const modalTitle = isStillEditing ? __('Confirm Edit') : __('Confirm Publish');
-    const confirmBtnText = isStillEditing ? __('Save') : __('Publish');
+    const modalTitle = isStillEditing ? __('Confirm Edit') : __('Confirm Upload');
+    const confirmBtnText = isStillEditing ? __('Save') : __('Upload');
     const txFee = previewResponse ? previewResponse['total_fee'] : null;
     const isOptimizeAvail = filePath && filePath !== '' && isVid && ffmpegStatus.available;
 
@@ -125,6 +126,17 @@ class ModalPublishPreview extends React.PureComponent<Props> {
       // Do nothing for onClick(). Setting to 'null' results in "View Tag" action -- we don't want to leave the modal.
       tags.map(tag => <Tag key={tag.name} title={tag.name} name={tag.name} type={'flow'} onClick={() => {}} />);
 
+    const depositValue = bid ? <LbcSymbol postfix={`${bid}`} size={14} /> : <p>---</p>;
+
+    let priceValue = __('Free');
+    if (!contentIsFree) {
+      if (fee.currency === 'LBC') {
+        priceValue = <LbcSymbol postfix={fee.amount} />;
+      } else {
+        priceValue = `${fee.amount} ${fee.currency}`;
+      }
+    }
+
     return (
       <Modal isOpen contentLabel={modalTitle} type="card" onAborted={closeModal}>
         <Form onSubmit={() => this.onConfirmed()}>
@@ -141,8 +153,8 @@ class ModalPublishPreview extends React.PureComponent<Props> {
                       {this.createRow(__('Description'), descriptionValue)}
                       {this.createRow(__('Channel'), channel)}
                       {this.createRow(__('URL'), uri)}
-                      {this.createRow(__('Deposit'), bid ? `${bid} LBC` : '---')}
-                      {this.createRow(__('Price'), contentIsFree ? __('Free') : `${fee.amount} ${fee.currency}`)}
+                      {this.createRow(__('Deposit'), depositValue)}
+                      {this.createRow(__('Price'), priceValue)}
                       {this.createRow(__('Language'), language)}
                       {this.createRow(__('License'), licenseValue)}
                       {this.createRow(__('Tags'), tagsValue)}
@@ -151,7 +163,10 @@ class ModalPublishPreview extends React.PureComponent<Props> {
                 </div>
                 {txFee && (
                   <div className="section" aria-label={__('Estimated transaction fee:')}>
-                    <b>{__('Est. transaction fee:')}</b>&nbsp;&nbsp;<em>{txFee}</em> LBC
+                    <b>{__('Est. transaction fee:')}</b>&nbsp;&nbsp;
+                    <em>
+                      <LbcSymbol postfix={txFee} />
+                    </em>
                   </div>
                 )}
               </>
