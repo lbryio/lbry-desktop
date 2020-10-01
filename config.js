@@ -35,6 +35,7 @@ const config = {
   PINNED_LABEL_1: process.env.PINNED_LABEL_1,
   PINNED_URI_2: process.env.PINNED_URI_2,
   PINNED_LABEL_2: process.env.PINNED_LABEL_2,
+  ENABLE_COMMENT_REACTIONS: process.env.ENABLE_COMMENT_REACTIONS === 'true',
 };
 
 config.URL_LOCAL = `http://localhost:${config.WEB_SERVER_PORT}`;

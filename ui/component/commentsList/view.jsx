@@ -1,4 +1,5 @@
 // @flow
+import { ENABLE_COMMENT_REACTIONS } from 'config';
 import * as ICONS from 'constants/icons';
 import React, { useEffect } from 'react';
 import Comment from 'component/comment';
@@ -6,7 +7,7 @@ import Spinner from 'component/spinner';
 import Button from 'component/button';
 import Card from 'component/common/card';
 import CommentCreate from 'component/commentCreate';
-// import usePersistedState from 'effects/use-persisted-state';
+import usePersistedState from 'effects/use-persisted-state';
 
 type Props = {
   comments: Array<any>,
@@ -23,7 +24,7 @@ type Props = {
 function CommentList(props: Props) {
   const {
     fetchComments,
-    // fetchReacts,
+    fetchReacts,
     uri,
     comments,
     claimIsMine,
@@ -32,10 +33,11 @@ function CommentList(props: Props) {
     linkedComment,
     totalComments,
   } = props;
-
-  const linkedCommentId = linkedComment && linkedComment.comment_id;
+  const commentRef = React.useRef();
+  const [activeChannel] = usePersistedState('comment-channel', '');
   const [start] = React.useState(0);
   const [end, setEnd] = React.useState(9);
+  const linkedCommentId = linkedComment && linkedComment.comment_id;
   const hasNoComments = totalComments === 0;
 
   const moreBelow = totalComments - end > 0;
@@ -57,18 +59,15 @@ function CommentList(props: Props) {
     }
   };
 
-  //   const [activeChannel] = usePersistedState('comment-channel', '');
-  const commentRef = React.useRef();
-
   useEffect(() => {
     fetchComments(uri);
   }, [fetchComments, uri]);
 
-  //   useEffect(() => {
-  //     if (totalComments) {
-  //       fetchReacts(uri);
-  //     }
-  //   }, [fetchReacts, uri, totalComments, activeChannel]);
+  useEffect(() => {
+    if (totalComments && ENABLE_COMMENT_REACTIONS) {
+      fetchReacts(uri);
+    }
+  }, [fetchReacts, uri, totalComments, activeChannel]);
 
   useEffect(() => {
     if (linkedCommentId && commentRef && commentRef.current) {
