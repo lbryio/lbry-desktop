@@ -9,7 +9,7 @@ import { toCapitalCase } from 'util/string';
 import { useIsLargeScreen } from 'effects/use-screensize';
 
 export type RowDataItem = {
-  title: any,
+  title: string,
   link?: string,
   help?: any,
   icon?: string,
@@ -18,6 +18,8 @@ export type RowDataItem = {
     channelIds?: Array<string>,
     pageSize: number,
   },
+  route?: string,
+  hideRepostLabel?: boolean,
   route?: string,
   hideForUnauth?: boolean,
 };
