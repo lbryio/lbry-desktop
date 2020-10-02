@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import { selectGetSyncIsPending, selectSyncApplyPasswordError } from 'lbryinc';
+import { selectGetSyncIsPending, selectSyncApplyPasswordError } from 'redux/selectors/sync';
 import { doGetSyncDesktop } from 'redux/actions/syncwrapper';
 import { selectUserEmail } from 'redux/selectors/user';
 import { doSetClientSetting } from 'redux/actions/settings';

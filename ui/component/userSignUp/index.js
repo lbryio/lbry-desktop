@@ -1,6 +1,6 @@
 import REWARD_TYPES from 'rewards';
 import { connect } from 'react-redux';
-import { selectGetSyncIsPending, selectSyncHash } from 'lbryinc';
+import { selectGetSyncIsPending, selectSyncHash } from 'redux/selectors/sync';
 import { doClaimRewardType } from 'redux/actions/rewards';
 import { doSetClientSetting } from 'redux/actions/settings';
 import { selectClaimedRewards, makeSelectIsRewardClaimPending } from 'redux/selectors/rewards';

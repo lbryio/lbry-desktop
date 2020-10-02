@@ -6,9 +6,8 @@ import {
   selectHasSyncedWallet,
   selectGetSyncIsPending,
   selectHashChanged,
-  doCheckSync,
-  doGetSync,
-} from 'lbryinc';
+} from 'redux/selectors/sync';
+import { doCheckSync, doGetSync } from 'redux/actions/sync';
 import { makeSelectClientSetting } from 'redux/selectors/settings';
 import { doSetWalletSyncPreference } from 'redux/actions/settings';
 import SyncToggle from './view';
