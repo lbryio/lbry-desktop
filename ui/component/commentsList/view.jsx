@@ -19,6 +19,7 @@ type Props = {
   isFetchingComments: boolean,
   linkedComment: any,
   totalComments: number,
+  fetchingChannels: boolean,
 };
 
 function CommentList(props: Props) {
@@ -32,6 +33,7 @@ function CommentList(props: Props) {
     isFetchingComments,
     linkedComment,
     totalComments,
+    fetchingChannels,
   } = props;
 
   const commentRef = React.useRef();
@@ -65,10 +67,10 @@ function CommentList(props: Props) {
   }, [fetchComments, uri]);
 
   useEffect(() => {
-    if (totalComments && ENABLE_COMMENT_REACTIONS) {
+    if (totalComments && ENABLE_COMMENT_REACTIONS && !fetchingChannels) {
       fetchReacts(uri);
     }
-  }, [fetchReacts, uri, totalComments, activeChannel, ENABLE_COMMENT_REACTIONS]);
+  }, [fetchReacts, uri, totalComments, activeChannel, fetchingChannels, ENABLE_COMMENT_REACTIONS]);
 
   useEffect(() => {
     if (linkedCommentId && commentRef && commentRef.current) {
