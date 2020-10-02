@@ -141,6 +141,7 @@ const Button = forwardRef<any, {}>((props: Props, ref: any) => {
         rel="noopener noreferrer"
         href={href || navigate}
         className={combinedClassName}
+        title={title}
         onClick={onClick}
       >
         {content}
