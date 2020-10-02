@@ -2,7 +2,8 @@
 // A housing for all of our icons. Mostly taken from https://github.com/feathericons/react-feather
 import * as ICONS from 'constants/icons';
 import React, { forwardRef } from 'react';
-import uuid from 'uuid/v4';
+// $FlowFixMe
+import { v4 as uuid } from 'uuid';
 
 type IconProps = {
   size: number,

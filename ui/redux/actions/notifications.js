@@ -1,7 +1,8 @@
 // @flow
 import * as ACTIONS from 'constants/action_types';
 import { Lbryio } from 'lbryinc';
-import uuid from 'uuid/v4';
+// $FlowFixMe
+import { v4 as uuid } from 'uuid';
 import { selectNotifications } from 'redux/selectors/notifications';
 import { doResolveUris } from 'lbry-redux';
 
