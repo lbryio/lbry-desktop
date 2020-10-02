@@ -1,7 +1,7 @@
 import { SETTINGS } from 'lbry-redux';
 import { connect } from 'react-redux';
 import { selectUserVerifiedEmail } from 'redux/selectors/user';
-import { selectGetSyncErrorMessage } from 'lbryinc';
+import { selectGetSyncErrorMessage } from 'redux/selectors/sync';
 import { makeSelectClientSetting } from 'redux/selectors/settings';
 import { doSetWalletSyncPreference } from 'redux/actions/settings';
 import { doOpenModal } from 'redux/actions/app';

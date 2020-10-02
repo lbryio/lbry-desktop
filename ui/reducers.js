@@ -1,15 +1,7 @@
 import { combineReducers } from 'redux';
 import { connectRouter } from 'connected-react-router';
 import { claimsReducer, fileInfoReducer, walletReducer, tagsReducer, publishReducer } from 'lbry-redux';
-import {
-  costInfoReducer,
-  blacklistReducer,
-  filteredReducer,
-  homepageReducer,
-  statsReducer,
-  syncReducer,
-  webReducer,
-} from 'lbryinc';
+import { costInfoReducer, blacklistReducer, filteredReducer, homepageReducer, statsReducer, webReducer } from 'lbryinc';
 import appReducer from 'redux/reducers/app';
 import contentReducer from 'redux/reducers/content';
 import settingsReducer from 'redux/reducers/settings';
@@ -21,6 +13,7 @@ import commentsReducer from 'redux/reducers/comments';
 import blockedReducer from 'redux/reducers/blocked';
 import searchReducer from 'redux/reducers/search';
 import reactionsReducer from 'redux/reducers/reactions';
+import syncReducer from 'redux/reducers/sync';
 
 export default history =>
   combineReducers({

@@ -1,5 +1,6 @@
 // @flow
-import { doGetSync, selectGetSyncIsPending, selectSetSyncIsPending } from 'lbryinc';
+import { doGetSync } from 'redux/actions/sync';
+import { selectGetSyncIsPending, selectSetSyncIsPending } from 'redux/selectors/sync';
 import { makeSelectClientSetting } from 'redux/selectors/settings';
 import { getSavedPassword } from 'util/saved-passwords';
 import { doAnalyticsTagSync, doHandleSyncComplete } from 'redux/actions/app';
