@@ -30,6 +30,7 @@ const config = {
   AUTO_FOLLOW_CHANNELS: process.env.AUTO_FOLLOW_CHANNELS,
   UNSYNCED_SETTINGS: process.env.UNSYNCED_SETTINGS,
   ENABLE_COMMENT_REACTIONS: process.env.ENABLE_COMMENT_REACTIONS === 'true',
+  ENABLE_FILE_REACTIONS: process.env.ENABLE_FILE_REACTIONS === 'true',
   SIMPLE_SITE: process.env.SIMPLE_SITE === 'true',
   SHOW_ADS: process.env.SHOW_ADS === 'true',
   PINNED_URI_1: process.env.PINNED_URI_1,

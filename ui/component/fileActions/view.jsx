@@ -1,5 +1,5 @@
 // @flow
-import { SIMPLE_SITE, SITE_NAME } from 'config';
+import { SIMPLE_SITE, SITE_NAME, ENABLE_FILE_REACTIONS } from 'config';
 import * as PAGES from 'constants/pages';
 import * as MODALS from 'constants/modal_types';
 import * as ICONS from 'constants/icons';
@@ -11,6 +11,7 @@ import * as RENDER_MODES from 'constants/file_render_modes';
 import { useIsMobile } from 'effects/use-screensize';
 import ClaimSupportButton from 'component/claimSupportButton';
 import { useHistory } from 'react-router';
+import FileReactions from 'component/fileReactions';
 
 type Props = {
   uri: string,
@@ -79,6 +80,7 @@ function FileActions(props: Props) {
 
   const lhsSection = (
     <>
+      {ENABLE_FILE_REACTIONS && <FileReactions uri={uri} />}
       <ClaimSupportButton uri={uri} fileAction />
       <Button
         button="alt"
