@@ -103,7 +103,7 @@ export function doCommentReact(commentId: string, type: string) {
       });
       return;
     }
-    if (pendingReacts.includes(commentId + exclusiveTypes[type])) {
+    if (pendingReacts.includes(commentId + exclusiveTypes[type]) || pendingReacts.includes(commentId + type)) {
       // ignore dislikes during likes, for example
       return;
     }
@@ -134,11 +134,20 @@ export function doCommentReact(commentId: string, type: string) {
       type: ACTIONS.COMMENT_REACT_STARTED,
       data: commentId + type,
     });
+
     // simulate api return shape: ['like'] -> { 'like': 1 }
     const myReactsObj = myReacts.reduce((acc, el) => {
       acc[el] = 1;
       return acc;
     }, {});
+
+    dispatch({
+      type: ACTIONS.COMMENT_REACTION_LIST_COMPLETED,
+      data: {
+        myReactions: { [commentId]: myReactsObj },
+        othersReactions: { [commentId]: othersReacts },
+      },
+    });
 
     Lbry.comment_react(params)
       .then((result: CommentReactListResponse) => {
@@ -146,18 +155,26 @@ export function doCommentReact(commentId: string, type: string) {
           type: ACTIONS.COMMENT_REACT_COMPLETED,
           data: commentId + type,
         });
-        dispatch({
-          type: ACTIONS.COMMENT_REACTION_LIST_COMPLETED,
-          data: {
-            myReactions: { [commentId]: myReactsObj },
-            othersReactions: { [commentId]: othersReacts },
-          },
-        });
       })
       .catch(error => {
         dispatch({
           type: ACTIONS.COMMENT_REACT_FAILED,
           data: commentId + type,
+        });
+
+        const myRevertedReactsObj = myReacts
+          .filter(el => el !== type)
+          .reduce((acc, el) => {
+            acc[el] = 1;
+            return acc;
+          }, {});
+
+        dispatch({
+          type: ACTIONS.COMMENT_REACTION_LIST_COMPLETED,
+          data: {
+            myReactions: { [commentId]: myRevertedReactsObj },
+            othersReactions: { [commentId]: othersReacts },
+          },
         });
       });
   };
