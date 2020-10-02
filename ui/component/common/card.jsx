@@ -71,7 +71,7 @@ export default function Card(props: Props) {
                 <Button
                   button="alt"
                   aria-expanded={expanded}
-                  aria-label={__('More')}
+                  aria-label={expanded ? __('Less') : __('More')}
                   icon={expanded ? ICONS.SUBTRACT : ICONS.ADD}
                   onClick={() => setExpanded(!expanded)}
                 />
