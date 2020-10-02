@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import { makeSelectClaimIsMine, selectMyChannelClaims } from 'lbry-redux';
+import { makeSelectClaimIsMine, selectFetchingMyChannels, selectMyChannelClaims } from 'lbry-redux';
 import {
   makeSelectTopLevelCommentsForUri,
   selectIsFetchingComments,
@@ -16,6 +16,7 @@ const select = (state, props) => ({
   claimIsMine: makeSelectClaimIsMine(props.uri)(state),
   isFetchingComments: selectIsFetchingComments(state),
   commentingEnabled: IS_WEB ? Boolean(selectUserVerifiedEmail(state)) : true,
+  fetchingChannels: selectFetchingMyChannels(state),
 });
 
 const perform = dispatch => ({
