@@ -105,7 +105,9 @@ function CommentList(props: Props) {
             : __('%total_comments% comments', { total_comments: totalComments })
           : __('Leave a comment')
       }
-      titleActions={<Button button="alt" icon={ICONS.REFRESH} onClick={() => fetchComments(uri)} />}
+      titleActions={
+        <Button button="alt" icon={ICONS.REFRESH} title={__('Refresh')} onClick={() => fetchComments(uri)} />
+      }
       actions={
         <>
           <CommentCreate uri={uri} />

@@ -87,6 +87,7 @@ function FileActions(props: Props) {
         label={
           claim.meta.reposted > 1 ? __(`%repost_total% Reposts`, { repost_total: claim.meta.reposted }) : __('Repost')
         }
+        description={__('Repost')}
         requiresAuth={IS_WEB}
         onClick={handleRepostClick}
       />
@@ -94,6 +95,7 @@ function FileActions(props: Props) {
         className="button--file-action"
         icon={ICONS.SHARE}
         label={__('Share')}
+        title={__('Share')}
         onClick={() => openModal(MODALS.SOCIAL_SHARE, { uri, webShareable })}
       />
     </>
