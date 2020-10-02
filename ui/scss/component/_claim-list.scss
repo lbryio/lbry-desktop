@@ -420,6 +420,13 @@
   }
 }
 
+.claim-preview__wrapper--channel{
+  .media__thumb {
+    background-size:contain;
+    background-color:transparent;
+  }
+}
+
 .claim-tile__title {
   margin: var(--spacing-s);
   font-weight: 600;
