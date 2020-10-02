@@ -58,7 +58,6 @@ type Props = {
   infiniteScroll?: Boolean,
   feeAmount?: string,
   tileLayout: boolean,
-  hideFilters?: boolean,
   maxPages?: number,
   forceShowReposts?: boolean,
 };
@@ -102,7 +101,6 @@ function ClaimListDiscover(props: Props) {
     feeAmount,
     uris,
     tileLayout,
-    hideFilters = false,
     claimIds,
     maxPages,
     forceShowReposts = false,
@@ -161,7 +159,7 @@ function ClaimListDiscover(props: Props) {
     no_totals: boolean,
     any_tags?: Array<string>,
     not_tags: Array<string>,
-    channel_ids?: Array<string>,
+    channel_ids: Array<string>,
     claim_ids?: Array<string>,
     not_channel_ids: Array<string>,
     order_by: Array<string>,
@@ -180,6 +178,7 @@ function ClaimListDiscover(props: Props) {
     // no_totals makes it so the sdk doesn't have to calculate total number pages for pagination
     // it's faster, but we will need to remove it if we start using total_pages
     no_totals: true,
+    channel_ids: channelIdsParam || [],
     not_channel_ids:
       // If channelIdsParam were passed in, we don't need not_channel_ids
       !channelIdsParam && hiddenUris && hiddenUris.length ? hiddenUris.map(hiddenUri => hiddenUri.split('#')[1]) : [],
@@ -197,61 +196,55 @@ function ClaimListDiscover(props: Props) {
     options.reposted_claim_id = repostedClaimId;
   }
 
-  if (claimType !== CS.CLAIM_CHANNEL) {
-    if (orderParam === CS.ORDER_BY_TOP && freshnessParam !== CS.FRESH_ALL) {
+  if (orderParam === CS.ORDER_BY_TOP && freshnessParam !== CS.FRESH_ALL) {
+    options.release_time = `>${Math.floor(
+      moment()
+        .subtract(1, freshnessParam)
+        .startOf('hour')
+        .unix()
+    )}`;
+  } else if (orderParam === CS.ORDER_BY_NEW || orderParam === CS.ORDER_BY_TRENDING) {
+    // Warning - hack below
+    // If users are following more than 10 channels or tags, limit results to stuff less than a year old
+    // For more than 20, drop it down to 6 months
+    // This helps with timeout issues for users that are following a ton of stuff
+    // https://github.com/lbryio/lbry-sdk/issues/2420
+    if (
+      (options.channel_ids && options.channel_ids.length > 20) ||
+      (options.any_tags && options.any_tags.length > 20)
+    ) {
       options.release_time = `>${Math.floor(
         moment()
-          .subtract(1, freshnessParam)
-          .startOf('hour')
+          .subtract(3, CS.FRESH_MONTH)
+          .startOf('week')
           .unix()
       )}`;
-    } else if (orderParam === CS.ORDER_BY_NEW || orderParam === CS.ORDER_BY_TRENDING) {
-      // Warning - hack below
-      // If users are following more than 10 channels or tags, limit results to stuff less than a year old
-      // For more than 20, drop it down to 6 months
-      // This helps with timeout issues for users that are following a ton of stuff
-      // https://github.com/lbryio/lbry-sdk/issues/2420
-      if (
-        (options.channel_ids && options.channel_ids.length > 20) ||
-        (options.any_tags && options.any_tags.length > 20)
-      ) {
-        options.release_time = `>${Math.floor(
-          moment()
-            .subtract(3, CS.FRESH_MONTH)
-            .startOf('week')
-            .unix()
-        )}`;
-      } else if (
-        (options.channel_ids && options.channel_ids.length > 10) ||
-        (options.any_tags && options.any_tags.length > 10)
-      ) {
-        options.release_time = `>${Math.floor(
-          moment()
-            .subtract(1, CS.FRESH_YEAR)
-            .startOf('week')
-            .unix()
-        )}`;
-      } else {
-        // Hack for at least the New page until https://github.com/lbryio/lbry-sdk/issues/2591 is fixed
-        options.release_time = `<${Math.floor(
-          moment()
-            .startOf('minute')
-            .unix()
-        )}`;
-      }
+    } else if (
+      (options.channel_ids && options.channel_ids.length > 10) ||
+      (options.any_tags && options.any_tags.length > 10)
+    ) {
+      options.release_time = `>${Math.floor(
+        moment()
+          .subtract(1, CS.FRESH_YEAR)
+          .startOf('week')
+          .unix()
+      )}`;
+    } else {
+      // Hack for at least the New page until https://github.com/lbryio/lbry-sdk/issues/2591 is fixed
+      options.release_time = `<${Math.floor(
+        moment()
+          .startOf('minute')
+          .unix()
+      )}`;
     }
   }
 
-  if (feeAmountParam && claimType !== CS.CLAIM_CHANNEL) {
+  if (feeAmountParam) {
     options.fee_amount = feeAmountParam;
   }
 
   if (claimIds) {
     options.claim_ids = claimIds;
-  }
-
-  if (channelIdsParam) {
-    options.channel_ids = channelIdsParam;
   }
 
   if (durationParam) {
@@ -430,7 +423,6 @@ function ClaimListDiscover(props: Props) {
       hiddenNsfwMessage={hiddenNsfwMessage}
       setPage={setPage}
       tileLayout={tileLayout}
-      hideFilters={hideFilters}
     />
   );
 
