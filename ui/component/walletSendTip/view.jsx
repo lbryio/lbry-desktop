@@ -54,7 +54,7 @@ function WalletSendTip(props: Props) {
   const [customTipAmount, setCustomTipAmount] = usePersistedState('comment-support:customTip', 1.0);
   const [useCustomTip, setUseCustomTip] = usePersistedState('comment-support:useCustomTip', false);
   const [tipError, setTipError] = React.useState();
-  const [sendAsTip, setSendAsTip] = React.useState(true); // usePersistedState('comment-support:sendAsTip', true);
+  const [sendAsTip, setSendAsTip] = usePersistedState('comment-support:sendAsTip', true);
   const [isConfirming, setIsConfirming] = React.useState(false);
   const [selectedChannel, setSelectedChannel] = usePersistedState('comment-support:channel');
   const { claim_id: claimId } = claim;
