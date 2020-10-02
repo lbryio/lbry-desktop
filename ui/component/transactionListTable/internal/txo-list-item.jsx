@@ -30,10 +30,10 @@ class TxoListItem extends React.PureComponent<Props, State> {
     (this: any).getLink = this.getLink.bind(this);
   }
 
-  getLink(type: string, tip: boolean) {
+  getLink(type: string, tip: boolean, valueType: string) {
     const { abandonState } = this.state;
 
-    if (type === 'claim') {
+    if (type === 'claim' && valueType !== 'repost') {
       return null;
     }
 
@@ -130,7 +130,7 @@ class TxoListItem extends React.PureComponent<Props, State> {
               (valueType && ((valueType === 'stream' && __('Upload')) || __(toCapitalCase(valueType)))) ||
               (type && __(toCapitalCase(type)))}
           </span>{' '}
-          {isRevokeable && this.getLink(type, isTip)}
+          {isRevokeable && this.getLink(type, isTip, valueType)}
         </td>
         <td>
           {forClaim && <Button button="link" navigate={uri} label={claimName} disabled={!date} />}
