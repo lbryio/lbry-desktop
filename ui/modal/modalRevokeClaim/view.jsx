@@ -74,7 +74,7 @@ export default function ModalRevokeClaim(props: Props) {
 
     return (
       <React.Fragment>
-        <p>{__('Are you sure want to revoke this claim?')}</p>
+        <p>{__('Are you sure you want to revoke this claim?')}</p>
         <p>
           <I18nMessage tokens={{ lbc: <LbcSymbol /> }}>
             This will prevent others from resolving and accessing the content you published. It will return the %lbc% to
