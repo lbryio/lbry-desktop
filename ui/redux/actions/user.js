@@ -610,7 +610,7 @@ export function doUserInviteNew(email) {
 
         dispatch(
           doToast({
-            message: __(`Invite sent to ${email}`),
+            message: __('Invite sent to %email_address%', { email_address: email }),
           })
         );
 
