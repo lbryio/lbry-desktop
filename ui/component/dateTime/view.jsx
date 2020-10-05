@@ -35,7 +35,12 @@ class DateTime extends React.PureComponent<Props> {
     // Strip off the 's' for the singular suffix, construct the string ID,
     // then load the localized version.
     const suffix = duration === 1 ? suffixList[i].substr(0, suffixList[i].length - 1) : suffixList[i];
-    const strId = '%duration% ' + suffix + ' ago';
+    let strId = '%duration% ' + suffix + ' ago';
+
+    if (!suffix) {
+      strId = 'Just now';
+    }
+
     return __(strId, { duration });
   }
 
