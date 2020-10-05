@@ -13,14 +13,15 @@ type Props = {
   claim: Claim,
   includeStartTime: boolean,
   startTime: number,
+  referralCode: ?string,
 };
 
 export default function EmbedTextArea(props: Props) {
-  const { doToast, snackMessage, label, claim, includeStartTime, startTime } = props;
+  const { doToast, snackMessage, label, claim, includeStartTime, startTime, referralCode } = props;
   const { claim_id: claimId, name } = claim;
   const input = useRef();
 
-  const streamUrl = generateEmbedUrl(name, claimId, includeStartTime, startTime);
+  const streamUrl = generateEmbedUrl(name, claimId, includeStartTime, startTime, referralCode);
   let embedText = `<iframe id="lbry-iframe" width="560" height="315" src="${streamUrl}" allowfullscreen></iframe>`;
 
   function copyToClipboard() {
