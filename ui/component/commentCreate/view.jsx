@@ -62,10 +62,6 @@ export function CommentCreate(props: Props) {
     setCommentValue(commentValue);
   }
 
-  function handleCommentAck() {
-    setCommentAck(true);
-  }
-
   function altEnterListener(e: SyntheticKeyboardEvent<*>) {
     if (e.shiftKey && e.keyCode === 13) {
       e.preventDefault();
@@ -75,9 +71,6 @@ export function CommentCreate(props: Props) {
 
   function onTextareaFocus() {
     window.addEventListener('keydown', altEnterListener);
-    if (!commentAck) {
-      openModal(MODALS.COMMENT_ACKNOWEDGEMENT, { onCommentAcknowledge: handleCommentAck });
-    }
   }
 
   function onTextareaBlur() {
