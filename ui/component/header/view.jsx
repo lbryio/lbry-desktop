@@ -312,7 +312,10 @@ const Header = (props: Props) => {
                         <MenuButton
                           aria-label={__('Your account')}
                           title={__('Your account')}
-                          className="header__navigation-item menu__title header__navigation-item--icon"
+                          className={classnames('header__navigation-item', {
+                            'menu__title header__navigation-item--icon': !channelUrl,
+                            'header__navigation-item--profile-pic': channelUrl,
+                          })}
                           // @if TARGET='app'
                           onDoubleClick={e => {
                             e.stopPropagation();

@@ -108,6 +108,23 @@
   }
 }
 
+.header__navigation-item--profile-pic {
+  .channel-thumbnail {
+    height: var(--height-button);
+    width: var(--height-button);
+    margin-right: 0;
+    border-radius: calc(var(--height-button) / 2);
+
+    img {
+      border-radius: calc(var(--height-button) / 2);
+    }
+  }
+
+  &:hover {
+    opacity: 0.7;
+  }
+}
+
 .header__navigation-item--balance {
   @extend .button--link;
 }
