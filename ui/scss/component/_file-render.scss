@@ -16,6 +16,10 @@
     .card {
       border-bottom-left-radius: 0;
       border-bottom-right-radius: 0;
+
+      &:first-child {
+        margin-bottom: 0;
+      }
     }
 
     .card + .file-render {
@@ -242,14 +246,14 @@
   .icon--Key {
     margin-right: var(--spacing-m);
   }
+
+  @media (min-width: $breakpoint-small) {
+    padding: 0 var(--spacing-l);
+  }
 }
 
 .file-viewer__embedded-title {
   max-width: 75%;
-
-  @media (max-width: $breakpoint-small) {
-    font-size: var(--font-small);
-  }
 }
 
 .file-viewer__embedded-info {
@@ -258,6 +262,8 @@
   font-size: var(--font-small);
   margin-left: var(--spacing-m);
   white-space: nowrap;
+  position: relative;
+  overflow: hidden;
 
   & > *:not(:last-child) {
     margin-right: var(--spacing-s);
@@ -337,6 +343,8 @@
   }
 
   .vjs-control-bar {
+    background-color: #00000095;
+
     .vjs-remaining-time {
       display: none;
     }
@@ -429,6 +437,15 @@
   .vjs-ended {
     .vjs-big-play-button {
       display: none;
+    }
+  }
+
+  .video-js--tap-to-unmute {
+    margin-top: var(--spacing-xl);
+    margin-left: var(--spacing-s);
+
+    @media (min-width: $breakpoint-small) {
+      margin-left: calc(var(--spacing-m) + var(--spacing-s));
     }
   }
 

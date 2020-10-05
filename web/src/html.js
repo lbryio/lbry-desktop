@@ -50,9 +50,7 @@ function buildOgMetadata(overrideOptions = {}) {
   const head =
     `<title>${SITE_TITLE}</title>\n` +
     `<meta property="og:url" content="${URL}" />\n` +
-    `<meta property="og:title" content="${(title && title + OG_TITLE_SUFFIX) ||
-      OG_HOMEPAGE_TITLE ||
-      SITE_TITLE}" />\n` +
+    `<meta property="og:title" content="${title || OG_HOMEPAGE_TITLE || SITE_TITLE}" />\n` +
     `<meta property="og:site_name" content="${SITE_NAME || SITE_TITLE}"/>\n` +
     `<meta property="og:description" content="${description || SITE_DESCRIPTION}" />\n` +
     `<meta property="og:image" content="${OG_IMAGE_URL || `${URL}/public/v2-og.png`}" />\n` +
