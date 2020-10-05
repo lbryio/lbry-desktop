@@ -8,6 +8,7 @@ import Card from 'component/common/card';
 import CommentCreate from 'component/commentCreate';
 import usePersistedState from 'effects/use-persisted-state';
 import { ENABLE_COMMENT_REACTIONS } from 'config';
+import { useIsMobile } from 'effects/use-screensize';
 
 type Props = {
   comments: Array<any>,
@@ -37,6 +38,7 @@ function CommentList(props: Props) {
   } = props;
 
   const commentRef = React.useRef();
+  const isMobile = useIsMobile();
   const [activeChannel] = usePersistedState('comment-channel', '');
   const [start] = React.useState(0);
   const [end, setEnd] = React.useState(9);
@@ -78,6 +80,22 @@ function CommentList(props: Props) {
       window.scrollBy(0, -100);
     }
   }, [linkedCommentId]);
+
+  useEffect(() => {
+    function handleCommentScroll(e) {
+      // Use some arbitrary amount so comments start loading before a user actually reaches the real bottom of the page
+      // $FlowFixMe
+      if (window.innerHeight + window.scrollY >= document.body.offsetHeight - (isMobile ? 2750 : 300)) {
+        handleMoreBelow();
+      }
+    }
+
+    if (moreBelow) {
+      window.addEventListener('scroll', handleCommentScroll);
+    }
+
+    return () => window.removeEventListener('scroll', handleCommentScroll);
+  }, [moreBelow, handleMoreBelow, isMobile]);
 
   function prepareComments(arrayOfComments, linkedComment) {
     let orderedComments = [];
@@ -143,9 +161,9 @@ function CommentList(props: Props) {
                 );
               })}
           </ul>
-          {moreBelow && (
-            <div className="comment__actions">
-              <Button button="link" className="comment__more-below" onClick={handleMoreBelow} label={__('Show More')} />
+          {!isFetchingComments && moreBelow && (
+            <div className="main--empty">
+              <Spinner type="small" />
             </div>
           )}
         </>
