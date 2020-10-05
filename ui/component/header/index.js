@@ -1,6 +1,6 @@
 import * as MODALS from 'constants/modal_types';
 import { connect } from 'react-redux';
-import { selectBalance, formatCredits, SETTINGS } from 'lbry-redux';
+import { selectBalance, formatCredits, selectMyChannelClaims, SETTINGS } from 'lbry-redux';
 import { selectGetSyncErrorMessage } from 'lbryinc';
 import { selectUserVerifiedEmail, selectUserEmail, selectEmailToVerify, selectUser } from 'redux/selectors/user';
 import { doClearEmailEntry, doClearPasswordEntry } from 'redux/actions/user';
@@ -23,6 +23,7 @@ const select = state => ({
   emailToVerify: selectEmailToVerify(state),
   hasNavigated: selectHasNavigated(state),
   user: selectUser(state),
+  myChannels: selectMyChannelClaims(state),
 });
 
 const perform = dispatch => ({

@@ -93,17 +93,6 @@ function InviteNew(props: Props) {
                 injected={[referralCode]}
               />
             )}
-
-            <p className="help">
-              <I18nMessage
-                tokens={{
-                  rewards_link: <Button button="link" navigate="/$/rewards" label={__('rewards')} />,
-                  referral_faq_link: <Button button="link" label={__('FAQ')} href="https://lbry.com/faq/referrals" />,
-                }}
-              >
-                Read our %referral_faq_link% to learn more about rewards.
-              </I18nMessage>
-            </p>
           </React.Fragment>
         }
       />

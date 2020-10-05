@@ -26,7 +26,6 @@ import OpenInAppLink from 'web/component/openInAppLink';
 import YoutubeWelcome from 'web/component/youtubeReferralWelcome';
 import NagDegradedPerformance from 'web/component/nag-degraded-performance';
 import NagDataCollection from 'web/component/nag-data-collection';
-
 import {
   useDegradedPerformance,
   STATUS_OK,
