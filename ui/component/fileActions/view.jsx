@@ -149,8 +149,10 @@ function FileActions(props: Props) {
   } else {
     return (
       <div className="media__actions">
-        <div className="section__actions section__actions--no-margin">{lhsSection}</div>
-        <div className="section__actions section__actions--no-margin">{rhsSection}</div>
+        <div className="section__actions section__actions--no-margin">
+          {lhsSection}
+          {rhsSection}
+        </div>
       </div>
     );
   }

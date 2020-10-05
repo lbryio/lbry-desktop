@@ -20,6 +20,7 @@ type Props = {
   // claim search options are below
   tags: Array<string>,
   hiddenUris: Array<string>,
+  claimIds?: Array<string>,
   channelIds?: Array<string>,
   notChannelIds?: Array<string>,
   pageSize: number,
@@ -42,6 +43,7 @@ function ClaimTilesDiscover(props: Props) {
     // Below are options to pass that are forwarded to claim_search
     tags,
     channelIds,
+    claimIds,
     notChannelIds,
     orderBy,
     pageSize = 8,
@@ -63,7 +65,7 @@ function ClaimTilesDiscover(props: Props) {
     no_totals: boolean,
     any_tags: Array<string>,
     channel_ids: Array<string>,
-    channel_ids: Array<string>,
+    claim_ids?: Array<string>,
     not_channel_ids: Array<string>,
     not_tags: Array<string>,
     order_by: Array<string>,
@@ -73,6 +75,7 @@ function ClaimTilesDiscover(props: Props) {
     timestamp?: string,
     fee_amount?: string,
     limit_claims_per_channel?: number,
+    stream_types?: Array<string>,
   } = {
     page_size: pageSize,
     claim_type: claimType || undefined,
@@ -117,6 +120,10 @@ function ClaimTilesDiscover(props: Props) {
 
   if (timestamp) {
     options.timestamp = timestamp;
+  }
+
+  if (claimIds) {
+    options.claim_ids = claimIds;
   }
 
   const claimSearchCacheQuery = createNormalizedClaimSearchKey(options);
