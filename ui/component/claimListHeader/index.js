@@ -1,5 +1,6 @@
 import { connect } from 'react-redux';
-import { selectFetchingClaimSearch, SETTINGS, selectFollowedTags } from 'lbry-redux';
+import { selectFetchingClaimSearch, SETTINGS } from 'lbry-redux';
+import { selectFollowedTags } from 'redux/selectors/tags';
 import { doToggleTagFollowDesktop } from 'redux/actions/tags';
 import { makeSelectClientSetting } from 'redux/selectors/settings';
 import { doSetClientSetting } from 'redux/actions/settings';

@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
-import { selectUnfollowedTags, selectFollowedTags, doReplaceTags, doAddTag, doDeleteTag } from 'lbry-redux';
-import { doToggleTagFollowDesktop } from 'redux/actions/tags';
+import { selectUnfollowedTags, selectFollowedTags } from 'redux/selectors/tags';
+import { doToggleTagFollowDesktop, doAddTag, doDeleteTag } from 'redux/actions/tags';
 import DiscoveryFirstRun from './view';
 
 const select = (state, props) => ({
@@ -8,12 +8,8 @@ const select = (state, props) => ({
   followedTags: selectFollowedTags(state),
 });
 
-export default connect(
-  select,
-  {
-    doToggleTagFollowDesktop,
-    doAddTag,
-    doDeleteTag,
-    doReplaceTags,
-  }
-)(DiscoveryFirstRun);
+export default connect(select, {
+  doToggleTagFollowDesktop,
+  doAddTag,
+  doDeleteTag,
+})(DiscoveryFirstRun);

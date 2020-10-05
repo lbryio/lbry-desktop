@@ -42,7 +42,6 @@ export type AppState = {
   welcomeVersion: number,
   allowAnalytics: boolean,
   hasNavigated: boolean,
-  syncLocked: boolean,
   interestedInYoutubeSync: boolean,
 };
 
@@ -78,7 +77,6 @@ const defaultState: AppState = {
   welcomeVersion: 0.0,
   allowAnalytics: false,
   hasNavigated: false,
-  syncLocked: false,
   interestedInYoutubeSync: false,
 };
 
@@ -111,11 +109,6 @@ reducers['@@router/LOCATION_CHANGE'] = (state, action) => {
 reducers[ACTIONS.DAEMON_READY] = state =>
   Object.assign({}, state, {
     daemonReady: true,
-  });
-
-reducers[ACTIONS.SET_SYNC_LOCK] = (state, action) =>
-  Object.assign({}, state, {
-    syncLocked: action.data,
   });
 
 reducers[ACTIONS.PASSWORD_SAVED] = (state, action) =>

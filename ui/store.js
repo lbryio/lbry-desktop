@@ -10,7 +10,7 @@ import { createMemoryHistory, createBrowserHistory } from 'history';
 import { routerMiddleware } from 'connected-react-router';
 import createRootReducer from './reducers';
 import { Lbry, buildSharedStateMiddleware, ACTIONS as LBRY_REDUX_ACTIONS } from 'lbry-redux';
-import { doSyncSubscribe } from 'redux/actions/syncwrapper';
+import { doSyncSubscribe } from 'redux/actions/sync';
 import { getAuthToken } from 'util/saved-passwords';
 import { generateInitialUrl } from 'util/url';
 import { X_LBRY_AUTH_TOKEN } from 'constants/token';
@@ -120,7 +120,7 @@ const triggerSharedStateActions = [
   ACTIONS.CHANNEL_SUBSCRIBE,
   ACTIONS.CHANNEL_UNSUBSCRIBE,
   ACTIONS.TOGGLE_BLOCK_CHANNEL,
-  LBRY_REDUX_ACTIONS.TOGGLE_TAG_FOLLOW,
+  ACTIONS.TOGGLE_TAG_FOLLOW,
   LBRY_REDUX_ACTIONS.CREATE_CHANNEL_COMPLETED,
   ACTIONS.SYNC_CLIENT_SETTINGS,
   // Disabled until we can overwrite preferences

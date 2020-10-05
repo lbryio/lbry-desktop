@@ -1,4 +1,5 @@
 import * as ACTIONS from 'constants/action_types';
+import { ACTIONS as LBRY_REDUX_ACTIONS } from 'lbry-redux';
 
 const reducers = {};
 const defaultState = {
@@ -12,13 +13,33 @@ const defaultState = {
   syncApplyPasswordError: false,
   getSyncIsPending: false,
   setSyncIsPending: false,
+  prefsReady: false,
+  syncLocked: false,
   hashChanged: false,
 };
+
+reducers[LBRY_REDUX_ACTIONS.USER_STATE_POPULATE] = state => {
+  const { syncReady } = state;
+  if (!syncReady) {
+    return Object.assign({}, state, {
+      prefsReady: true,
+    });
+  } else {
+    return Object.assign({}, state);
+  }
+};
+
+reducers[ACTIONS.SET_PREFS_READY] = (state, action) => Object.assign({}, state, { prefsReady: action.data });
 
 reducers[ACTIONS.GET_SYNC_STARTED] = state =>
   Object.assign({}, state, {
     getSyncIsPending: true,
     getSyncErrorMessage: null,
+  });
+
+reducers[ACTIONS.SET_SYNC_LOCK] = (state, action) =>
+  Object.assign({}, state, {
+    syncLocked: action.data,
   });
 
 reducers[ACTIONS.GET_SYNC_COMPLETED] = (state, action) =>

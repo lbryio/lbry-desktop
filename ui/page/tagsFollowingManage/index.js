@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import { selectFollowedTags } from 'lbry-redux';
+import { selectFollowedTags } from 'redux/selectors/tags';
 import { selectSubscriptions, selectSuggestedChannels } from 'redux/selectors/subscriptions';
 import { doFetchRecommendedSubscriptions } from 'redux/actions/subscriptions';
 
@@ -11,9 +11,6 @@ const select = state => ({
   suggestedSubscriptions: selectSuggestedChannels(state),
 });
 
-export default connect(
-  select,
-  {
-    doFetchRecommendedSubscriptions,
-  }
-)(TagsEdit);
+export default connect(select, {
+  doFetchRecommendedSubscriptions,
+})(TagsEdit);

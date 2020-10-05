@@ -18,12 +18,13 @@ import {
   doClearPublish,
   doPreferenceGet,
   doClearSupport,
-  selectFollowedTagsList,
   SHARED_PREFERENCES,
   DAEMON_SETTINGS,
   SETTINGS,
 } from 'lbry-redux';
+import { selectFollowedTagsList } from 'redux/selectors/tags';
 import { doToast, doError, doNotificationList } from 'redux/actions/notifications';
+
 import Native from 'native';
 import {
   doFetchDaemonSettings,
@@ -47,7 +48,7 @@ import {
 import { selectDaemonSettings, makeSelectClientSetting } from 'redux/selectors/settings';
 import { selectUser } from 'redux/selectors/user';
 // import { selectDaemonSettings } from 'redux/selectors/settings';
-import { doSyncSubscribe } from 'redux/actions/syncwrapper';
+import { doSyncSubscribe, doSetPrefsReady } from 'redux/actions/sync';
 import { doAuthenticate } from 'redux/actions/user';
 import { lbrySettings as config, version as appVersion } from 'package.json';
 import analytics, { SHARE_INTERNAL } from 'analytics';
@@ -87,13 +88,6 @@ export function doUpdateDownloadProgress(percent) {
     data: {
       percent,
     },
-  };
-}
-
-export function doSetSyncLock(lock) {
-  return {
-    type: ACTIONS.SET_SYNC_LOCK,
-    data: lock,
   };
 }
 
@@ -338,6 +332,16 @@ export function doAlertError(errorList) {
   return dispatch => {
     dispatch(doError(errorList));
   };
+}
+
+export function doAlertWaitingForSync() {
+  return dispatch =>
+    dispatch(
+      doToast({
+        message: __('Hold on, we are setting up your account'),
+        isError: false,
+      })
+    );
 }
 
 export function doDaemonReady() {
@@ -628,6 +632,8 @@ export function doGetAndPopulatePreferences() {
           });
         }
         // @endif
+      } else {
+        dispatch(doSetPrefsReady());
       }
       return true;
     }

@@ -1,5 +1,6 @@
 import { connect } from 'react-redux';
-import { makeSelectTagsForUri, selectFollowedTags } from 'lbry-redux';
+import { makeSelectTagsForUri } from 'lbry-redux';
+import { selectFollowedTags } from 'redux/selectors/tags';
 import ClaimTags from './view';
 
 const select = (state, props) => ({
@@ -7,7 +8,4 @@ const select = (state, props) => ({
   followedTags: selectFollowedTags(state),
 });
 
-export default connect(
-  select,
-  null
-)(ClaimTags);
+export default connect(select, null)(ClaimTags);

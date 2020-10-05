@@ -144,6 +144,12 @@ export default handleActions(
       action: { data: { subscriptions: ?Array<string> } }
     ) => {
       const { subscriptions } = action.data;
+      const incomingSubscriptions = Array.isArray(subscriptions) && subscriptions.length;
+      if (!incomingSubscriptions) {
+        return {
+          ...state,
+        };
+      }
       let newSubscriptions;
 
       if (!subscriptions) {

@@ -1,8 +1,9 @@
 import { combineReducers } from 'redux';
 import { connectRouter } from 'connected-react-router';
-import { claimsReducer, fileInfoReducer, walletReducer, tagsReducer, publishReducer } from 'lbry-redux';
+import { claimsReducer, fileInfoReducer, walletReducer, publishReducer } from 'lbry-redux';
 import { costInfoReducer, blacklistReducer, filteredReducer, homepageReducer, statsReducer, webReducer } from 'lbryinc';
 import appReducer from 'redux/reducers/app';
+import tagsReducer from 'redux/reducers/tags';
 import contentReducer from 'redux/reducers/content';
 import settingsReducer from 'redux/reducers/settings';
 import subscriptionsReducer from 'redux/reducers/subscriptions';
