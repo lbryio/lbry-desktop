@@ -77,7 +77,10 @@ function PublishFile(props: Props) {
 
   const RECOMMENDED_BITRATE = 6000000;
   const TV_PUBLISH_SIZE_LIMIT: number = 1073741824;
-  const UPLOAD_SIZE_MESSAGE = 'Lbry.tv uploads are limited to 1 GB. Download the app for unrestricted publishing.';
+  const UPLOAD_SIZE_MESSAGE = __(
+    '%SITE_NAME% uploads are limited to 1 GB. Download the app for unrestricted publishing.',
+    { SITE_NAME }
+  );
   const PROCESSING_MB_PER_SECOND = 0.5;
   const MINUTES_THRESHOLD = 30;
   const HOURS_THRESHOLD = MINUTES_THRESHOLD * 60;
@@ -158,7 +161,7 @@ function PublishFile(props: Props) {
     if (oversized) {
       return (
         <p className="help--error">
-          {__(UPLOAD_SIZE_MESSAGE)}{' '}
+          {UPLOAD_SIZE_MESSAGE}{' '}
           <Button button="link" label={__('Upload Guide')} href="https://lbry.com/faq/video-publishing-guide" />
         </p>
       );

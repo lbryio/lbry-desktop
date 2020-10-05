@@ -55,11 +55,11 @@ const SearchOptions = (props: Props) => {
           </fieldset>
 
           <fieldset>
-            <legend className="search__legend">{__('File Types')}</legend>
+            <legend className="search__legend">{__('Type')}</legend>
             {[
               {
                 option: SEARCH_OPTIONS.MEDIA_VIDEO,
-                label: __('Videos'),
+                label: __('Video'),
               },
               {
                 option: SEARCH_OPTIONS.MEDIA_AUDIO,
@@ -67,7 +67,7 @@ const SearchOptions = (props: Props) => {
               },
               {
                 option: SEARCH_OPTIONS.MEDIA_IMAGE,
-                label: __('Images'),
+                label: __('Image'),
               },
               {
                 option: SEARCH_OPTIONS.MEDIA_TEXT,
@@ -75,7 +75,7 @@ const SearchOptions = (props: Props) => {
               },
               {
                 option: SEARCH_OPTIONS.MEDIA_APPLICATION,
-                label: __('Other Files'),
+                label: __('Other'),
               },
             ].map(({ option, label }) => (
               <FormField

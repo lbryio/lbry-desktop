@@ -1,5 +1,7 @@
 // @flow
+import type { RowDataItem } from 'homepage';
 import * as PAGES from 'constants/pages';
+import * as SIDEBAR_ROUTES from 'homepage';
 import React, { useEffect } from 'react';
 import { Route, Redirect, Switch, withRouter } from 'react-router-dom';
 import SettingsPage from 'page/settings';
@@ -50,6 +52,10 @@ import YoutubeSyncPage from 'page/youtubeSync';
 import { LINKED_COMMENT_QUERY_PARAM } from 'constants/comment';
 import { parseURI } from 'lbry-redux';
 import { SITE_TITLE, WELCOME_VERSION } from 'config';
+
+const dynamicRoutes = Object.values(SIDEBAR_ROUTES).filter(
+  (potentialRoute: any) => potentialRoute && potentialRoute.route
+);
 
 // Tell the browser we are handling scroll restoration
 if ('scrollRestoration' in history) {
@@ -185,13 +191,21 @@ function AppRouter(props: Props) {
 
       <Route path={`/`} exact component={HomePage} />
       <Route path={`/$/${PAGES.DISCOVER}`} exact component={DiscoverPage} />
+      {/* $FlowFixMe */}
+      {dynamicRoutes.map((dynamicRouteProps: RowDataItem) => (
+        <Route
+          key={dynamicRouteProps.route}
+          path={dynamicRouteProps.route}
+          component={routerProps => <DiscoverPage {...routerProps} dynamicRouteProps={dynamicRouteProps} />}
+        />
+      ))}
+
       <Route path={`/$/${PAGES.AUTH_SIGNIN}`} exact component={SignInPage} />
       <Route path={`/$/${PAGES.AUTH_PASSWORD_RESET}`} exact component={PasswordResetPage} />
       <Route path={`/$/${PAGES.AUTH_PASSWORD_SET}`} exact component={PasswordSetPage} />
       <Route path={`/$/${PAGES.AUTH}`} exact component={SignUpPage} />
       <Route path={`/$/${PAGES.AUTH}/*`} exact component={SignUpPage} />
       <Route path={`/$/${PAGES.WELCOME}`} exact component={Welcome} />
-      <Route path={`/$/${PAGES.YOUTUBE_SYNC}`} exact component={YoutubeSyncPage} />
 
       <Route path={`/$/${PAGES.HELP}`} exact component={HelpPage} />
       {/* @if TARGET='app' */}
@@ -209,6 +223,7 @@ function AppRouter(props: Props) {
       <Route path={`/$/${PAGES.INVITE}/:referrer`} exact component={InvitedPage} />
       <Route path={`/$/${PAGES.CHECKOUT}`} exact component={CheckoutPage} />
 
+      <PrivateRoute {...props} exact path={`/$/${PAGES.YOUTUBE_SYNC}`} component={YoutubeSyncPage} />
       <PrivateRoute {...props} exact path={`/$/${PAGES.TAGS_FOLLOWING}`} component={TagsFollowingPage} />
       <PrivateRoute
         {...props}
