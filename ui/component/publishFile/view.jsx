@@ -1,4 +1,5 @@
 // @flow
+import { SITE_NAME } from 'config';
 import type { Node } from 'react';
 import * as ICONS from 'constants/icons';
 import React, { useState, useEffect } from 'react';
@@ -195,7 +196,7 @@ function PublishFile(props: Props) {
       return (
         <p className="help">
           {__(
-            'For video content, use MP4s in H264/AAC format and a friendly bitrate (under 5 Mbps) and resolution (720p) for more reliable streaming. Lbry.tv uploads are restricted to 1 GB.'
+            `For video content, use MP4s in H264/AAC format and a friendly bitrate (under 5 Mbps) and resolution (720p) for more reliable streaming. ${SITE_NAME} uploads are restricted to 1 GB.`
           )}{' '}
           <Button button="link" label={__('Upload Guide')} href="https://lbry.com/faq/video-publishing-guide" />
         </p>
