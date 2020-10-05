@@ -6,9 +6,17 @@ function generateStreamUrl(claimName, claimId) {
   return `${LBRY_WEB_STREAMING_API}/content/claims/${claimName}/${claimId}/stream`;
 }
 
-function generateEmbedUrl(claimName, claimId, includeStartTime, startTime) {
-  const queryParam = includeStartTime ? `?t=${startTime}` : '';
-  return `${URL}/$/embed/${claimName}/${claimId}${queryParam}`;
+function generateEmbedUrl(claimName, claimId, includeStartTime, startTime, referralLink) {
+  let urlParams = new URLSearchParams();
+  if (includeStartTime && startTime) {
+    urlParams.append('t', startTime);
+  }
+
+  if (referralLink) {
+    urlParams.append('r', referralLink);
+  }
+
+  return `${URL}/$/embed/${claimName}/${claimId}?${urlParams.toString()}`;
 }
 
 function generateDownloadUrl(claimName, claimId) {

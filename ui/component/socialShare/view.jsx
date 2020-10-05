@@ -162,6 +162,7 @@ function SocialShare(props: Props) {
           claim={claim}
           includeStartTime={includeStartTime}
           startTime={startTimeSeconds}
+          referralCode={referralCode}
         />
       )}
       {showClaimLinks && (
