@@ -5,8 +5,9 @@ import analytics from 'analytics';
 import SUPPORTED_LANGUAGES from 'constants/supported_languages';
 import { launcher } from 'util/autoLaunch';
 import { makeSelectClientSetting } from 'redux/selectors/settings';
-import { doGetSyncDesktop, doSyncUnsubscribe } from 'redux/actions/syncwrapper';
-import { doGetAndPopulatePreferences, doSetSyncLock } from 'redux/actions/app';
+import { doGetSyncDesktop, doSyncUnsubscribe, doSetSyncLock } from 'redux/actions/sync';
+import { doAlertWaitingForSync, doGetAndPopulatePreferences } from 'redux/actions/app';
+import { selectPrefsReady } from 'redux/selectors/sync';
 
 const { DEFAULT_LANGUAGE } = require('config');
 const { SDK_SYNC_KEYS } = SHARED_PREFERENCES;
@@ -57,10 +58,18 @@ export function doGetDaemonStatus() {
 }
 
 export function doClearDaemonSetting(key) {
-  return dispatch => {
+  return (dispatch, getState) => {
+    const state = getState();
+    const ready = selectPrefsReady(state);
+
+    if (!ready) {
+      return dispatch(doAlertWaitingForSync());
+    }
+
     const clearKey = {
       key,
     };
+    // not if syncLocked
     Lbry.settings_clear(clearKey).then(defaultSettings => {
       if (SDK_SYNC_KEYS.includes(key)) {
         dispatch({
@@ -85,7 +94,14 @@ export function doClearDaemonSetting(key) {
 }
 // if doPopulate is applying settings, we don't want to cause a loop; doNotDispatch = true.
 export function doSetDaemonSetting(key, value, doNotDispatch = false) {
-  return dispatch => {
+  return (dispatch, getState) => {
+    const state = getState();
+    const ready = selectPrefsReady(state);
+
+    if (!ready) {
+      return dispatch(doAlertWaitingForSync());
+    }
+
     const newSettings = {
       key,
       value: !value && value !== false ? null : value,
@@ -123,7 +139,14 @@ export function doSaveCustomWalletServers(servers) {
 }
 
 export function doSetClientSetting(key, value, pushPrefs) {
-  return dispatch => {
+  return (dispatch, getState) => {
+    const state = getState();
+    const ready = selectPrefsReady(state);
+
+    if (!ready) {
+      return dispatch(doAlertWaitingForSync());
+    }
+
     dispatch({
       type: ACTIONS.CLIENT_SETTING_CHANGED,
       data: {

@@ -45,6 +45,7 @@ type Props = {
   rewardsAcknowledged: boolean,
   interestedInYoutubeSync: boolean,
   doToggleInterestedInYoutubeSync: () => void,
+  setPrefsReady: () => void,
 };
 
 function UserSignUp(props: Props) {
@@ -70,6 +71,7 @@ function UserSignUp(props: Props) {
     setClientSetting,
     interestedInYoutubeSync,
     doToggleInterestedInYoutubeSync,
+    setPrefsReady,
   } = props;
   const {
     location: { search, pathname },
@@ -133,9 +135,10 @@ function UserSignUp(props: Props) {
 
   React.useEffect(() => {
     if (hasVerifiedEmail) {
+      setPrefsReady();
       setSettingAndSync(SETTINGS.FIRST_RUN_STARTED, true);
     }
-  }, [hasVerifiedEmail]);
+  }, [hasVerifiedEmail, setPrefsReady]);
 
   React.useEffect(() => {
     // Don't claim the reward if sync is enabled until after a sync has been completed successfully

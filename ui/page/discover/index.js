@@ -1,7 +1,8 @@
 import * as CS from 'constants/claim_search';
 import { connect } from 'react-redux';
-import { makeSelectClaimForUri, selectFollowedTags, doResolveUri, SETTINGS } from 'lbry-redux';
+import { makeSelectClaimForUri, doResolveUri, SETTINGS } from 'lbry-redux';
 import { selectUserVerifiedEmail } from 'redux/selectors/user';
+import { selectFollowedTags } from 'redux/selectors/tags';
 import { doToggleTagFollowDesktop } from 'redux/actions/tags';
 import { makeSelectClientSetting } from 'redux/selectors/settings';
 import Tags from './view';

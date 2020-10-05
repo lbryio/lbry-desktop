@@ -5,6 +5,7 @@ import { Lbryio } from 'lbryinc';
 import { doClaimRewardType } from 'redux/actions/rewards';
 import { selectUnreadByChannel } from 'redux/selectors/subscriptions';
 import { parseURI } from 'lbry-redux';
+import { doAlertWaitingForSync } from 'redux/actions/app';
 
 export const doSetViewMode = (viewMode: ViewMode) => (dispatch: Dispatch) =>
   dispatch({
@@ -123,7 +124,13 @@ export const doRemoveUnreadSubscription = (channelUri: string, readUri: string) 
 export const doChannelSubscribe = (subscription: Subscription) => (dispatch: Dispatch, getState: GetState) => {
   const {
     settings: { daemonSettings },
+    sync: { prefsReady: ready },
   } = getState();
+
+  if (!ready) {
+    return dispatch(doAlertWaitingForSync());
+  }
+
   const { share_usage_data: shareSetting } = daemonSettings;
   const isSharingData = shareSetting || IS_WEB;
 
@@ -153,7 +160,13 @@ export const doChannelSubscribe = (subscription: Subscription) => (dispatch: Dis
 export const doChannelUnsubscribe = (subscription: Subscription) => (dispatch: Dispatch, getState: GetState) => {
   const {
     settings: { daemonSettings },
+    sync: { prefsReady: ready },
   } = getState();
+
+  if (!ready) {
+    return dispatch(doAlertWaitingForSync());
+  }
+
   const { share_usage_data: shareSetting } = daemonSettings;
   const isSharingData = shareSetting || IS_WEB;
 

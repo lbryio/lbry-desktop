@@ -279,6 +279,11 @@ export const COMMENT_SET_CHANNEL = 'COMMENT_SET_CHANNEL';
 // Blocked channels
 export const TOGGLE_BLOCK_CHANNEL = 'TOGGLE_BLOCK_CHANNEL';
 
+// Tags
+export const TOGGLE_TAG_FOLLOW = 'TOGGLE_TAG_FOLLOW';
+export const TAG_ADD = 'TAG_ADD';
+export const TAG_DELETE = 'TAG_DELETE';
+
 // Notifications
 export const WS_CONNECT = 'WS_CONNECT';
 export const WS_DISCONNECT = 'WS_DISCONNECT';
@@ -290,6 +295,7 @@ export const GET_SYNC_FAILED = 'GET_SYNC_FAILED';
 export const SET_SYNC_STARTED = 'SET_SYNC_STARTED';
 export const SET_SYNC_FAILED = 'SET_SYNC_FAILED';
 export const SET_SYNC_COMPLETED = 'SET_SYNC_COMPLETED';
+export const SET_PREFS_READY = 'SET_PREFS_READY';
 export const SET_DEFAULT_ACCOUNT = 'SET_DEFAULT_ACCOUNT';
 export const SYNC_APPLY_STARTED = 'SYNC_APPLY_STARTED';
 export const SYNC_APPLY_COMPLETED = 'SYNC_APPLY_COMPLETED';

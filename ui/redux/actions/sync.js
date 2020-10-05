@@ -1,6 +1,14 @@
 import * as ACTIONS from 'constants/action_types';
 import { Lbryio } from 'lbryinc';
-import { Lbry, doWalletEncrypt, doWalletDecrypt } from 'lbry-redux';
+import { SETTINGS, Lbry, doWalletEncrypt, doWalletDecrypt } from 'lbry-redux';
+import { selectGetSyncIsPending, selectSetSyncIsPending, selectSyncIsLocked } from 'redux/selectors/sync';
+import { makeSelectClientSetting } from 'redux/selectors/settings';
+import { getSavedPassword } from 'util/saved-passwords';
+import { doAnalyticsTagSync, doHandleSyncComplete } from 'redux/actions/app';
+import { selectUserVerifiedEmail } from 'redux/selectors/user';
+
+let syncTimer = null;
+const SYNC_INTERVAL = 1000 * 60 * 5; // 5 minutes
 
 export function doSetDefaultAccount(success, failure) {
   return dispatch => {
@@ -74,6 +82,52 @@ export function doSetSync(oldHash, newHash, data) {
           data: { error },
         });
       });
+  };
+}
+
+export const doGetSyncDesktop = (cb?, password) => (dispatch, getState) => {
+  const state = getState();
+  const syncEnabled = makeSelectClientSetting(SETTINGS.ENABLE_SYNC)(state);
+  const getSyncPending = selectGetSyncIsPending(state);
+  const setSyncPending = selectSetSyncIsPending(state);
+  const syncLocked = selectSyncIsLocked(state);
+
+  return getSavedPassword().then(savedPassword => {
+    const passwordArgument = password || password === '' ? password : savedPassword === null ? '' : savedPassword;
+
+    if (syncEnabled && !getSyncPending && !setSyncPending && !syncLocked) {
+      return dispatch(doGetSync(passwordArgument, cb));
+    }
+  });
+};
+
+export function doSyncSubscribe() {
+  return (dispatch, getState) => {
+    if (syncTimer) clearInterval(syncTimer);
+    const state = getState();
+    const hasVerifiedEmail = selectUserVerifiedEmail(state);
+    const syncEnabled = makeSelectClientSetting(SETTINGS.ENABLE_SYNC)(state);
+    const syncLocked = selectSyncIsLocked(state);
+    if (hasVerifiedEmail && syncEnabled && !syncLocked) {
+      dispatch(doGetSyncDesktop((error, hasNewData) => dispatch(doHandleSyncComplete(error, hasNewData))));
+      dispatch(doAnalyticsTagSync());
+      syncTimer = setInterval(() => {
+        const state = getState();
+        const syncEnabled = makeSelectClientSetting(SETTINGS.ENABLE_SYNC)(state);
+        if (syncEnabled) {
+          dispatch(doGetSyncDesktop((error, hasNewData) => dispatch(doHandleSyncComplete(error, hasNewData))));
+          dispatch(doAnalyticsTagSync());
+        }
+      }, SYNC_INTERVAL);
+    }
+  };
+}
+
+export function doSyncUnsubscribe() {
+  return dispatch => {
+    if (syncTimer) {
+      clearInterval(syncTimer);
+    }
   };
 }
 
@@ -278,5 +332,19 @@ export function doSyncEncryptAndDecrypt(oldPassword, newPassword, encrypt) {
         }
       })
       .catch(console.error); // eslint-disable-line
+  };
+}
+
+export function doSetSyncLock(lock) {
+  return {
+    type: ACTIONS.SET_SYNC_LOCK,
+    data: lock,
+  };
+}
+
+export function doSetPrefsReady() {
+  return {
+    type: ACTIONS.SET_PREFS_READY,
+    data: true,
   };
 }

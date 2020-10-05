@@ -2,7 +2,7 @@
 import { Lbryio } from 'lbryinc';
 import * as ACTIONS from 'constants/action_types';
 import * as REACTION_TYPES from 'constants/reactions';
-import { makeSelectMyReactionForUri } from '../selectors/reactions';
+import { makeSelectMyReactionForUri } from 'redux/selectors/reactions';
 import { makeSelectClaimForUri } from 'lbry-redux';
 
 export const doFetchReactions = (claimId: string) => (dispatch: Dispatch) => {

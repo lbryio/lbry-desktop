@@ -22,6 +22,8 @@ import {
 import { makeSelectClientSetting } from 'redux/selectors/settings';
 import { selectInterestedInYoutubeSync } from 'redux/selectors/app';
 import { doToggleInterestedInYoutubeSync } from 'redux/actions/app';
+import { doSetPrefsReady } from 'redux/actions/sync';
+
 import UserSignIn from './view';
 
 const select = state => ({
@@ -63,6 +65,7 @@ const perform = dispatch => ({
     ),
   setClientSetting: (setting, value, pushToPrefs) => dispatch(doSetClientSetting(setting, value, pushToPrefs)),
   doToggleInterestedInYoutubeSync: () => dispatch(doToggleInterestedInYoutubeSync()),
+  setPrefsReady: () => dispatch(doSetPrefsReady()),
 });
 
 export default connect(select, perform)(UserSignIn);

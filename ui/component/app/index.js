@@ -9,7 +9,7 @@ import { doFetchChannelListMine, SETTINGS } from 'lbry-redux';
 import { makeSelectClientSetting, selectLoadedLanguages, selectThemePath } from 'redux/selectors/settings';
 import { selectIsUpgradeAvailable, selectAutoUpdateDownloaded, selectModal } from 'redux/selectors/app';
 import { doGetWalletSyncPreference, doSetLanguage } from 'redux/actions/settings';
-import { doSyncSubscribe } from 'redux/actions/syncwrapper';
+import { doSyncSubscribe } from 'redux/actions/sync';
 import {
   doDownloadUpgradeRequested,
   doSignIn,

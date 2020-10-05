@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import { selectFollowedTags } from 'lbry-redux';
+import { selectFollowedTags } from 'redux/selectors/tags';
 import { selectBlockedChannels } from 'redux/selectors/blocked';
 import { selectSubscriptions } from 'redux/selectors/subscriptions';
 import ChannelsFollowingManagePage from './view';

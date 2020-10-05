@@ -13,7 +13,7 @@ import {
 import { doError } from 'redux/actions/notifications';
 import { push } from 'connected-react-router';
 import analytics from 'analytics';
-import { doOpenModal } from './app';
+import { doOpenModal } from 'redux/actions/app';
 
 export const doPublishDesktop = (filePath: string, preview?: boolean) => (dispatch: Dispatch, getState: () => {}) => {
   const publishPreview = previewResponse => {

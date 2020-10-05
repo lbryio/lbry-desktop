@@ -5,8 +5,8 @@ import {
   selectClaimSearchByQueryLastPageReached,
   selectFetchingClaimSearch,
   SETTINGS,
-  selectFollowedTags,
 } from 'lbry-redux';
+import { selectFollowedTags } from 'redux/selectors/tags';
 import { selectBlockedChannels } from 'redux/selectors/blocked';
 import { doToggleTagFollowDesktop } from 'redux/actions/tags';
 import { makeSelectClientSetting } from 'redux/selectors/settings';
