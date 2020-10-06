@@ -13,6 +13,16 @@ $thumbnailWidthSmall: 1.5rem;
   flex: 1;
 }
 
+.comment__sort {
+  margin: var(--spacing-s) 0;
+  display: block;
+
+  @media (min-width: $breakpoint-small) {
+    margin-top: 0;
+    display: inline;
+  }
+}
+
 .comment__create {
   padding-bottom: var(--spacing-m);
   font-size: var(--font-small);
@@ -146,18 +156,31 @@ $thumbnailWidthSmall: 1.5rem;
 
 .comment__author {
   text-overflow: ellipsis;
-  padding-right: var(--spacing-xs);
+  margin-right: var(--spacing-xs);
   height: 100%;
 }
 
 .comment__time {
+  @extend .button--uri-indicator;
   opacity: 0.5;
   white-space: nowrap;
   height: 100%;
+
+  &:focus {
+    @include linkFocus;
+  }
 }
 
 .comment__menu {
   align-self: flex-end;
+
+  button {
+    border-radius: var(--border-radius);
+
+    &:focus {
+      @include linkFocus;
+    }
+  }
 }
 
 .comment__char-count {
@@ -225,6 +248,13 @@ $thumbnailWidthSmall: 1.5rem;
   @extend .button--uri-indicator;
   height: auto;
   font-size: var(--font-xsmall);
+}
+
+.comment__action,
+.comment__author {
+  &:focus {
+    @include linkFocus;
+  }
 }
 
 .comment__action--active {

@@ -158,6 +158,11 @@
   box-shadow: 0 0 0 3px var(--color-focus);
 }
 
+@mixin linkFocus {
+  background-color: var(--color-link-focus-bg);
+  box-shadow: 0 0 0 5px var(--color-link-focus-bg);
+}
+
 @mixin underline($text-color: var(--lbry-black), $whitespace-color: var(--lbry-white)) {
   @include selection($text-color, $whitespace-color);
 

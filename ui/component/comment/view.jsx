@@ -174,13 +174,9 @@ function Comment(props: Props) {
                 />
               )}
               <Button
-                className="button--uri-indicator"
+                className="comment__time"
                 navigate={`${uri}?lc=${commentId}`}
-                label={
-                  <span className="comment__time">
-                    <DateTime date={timePosted} timeAgo />
-                  </span>
-                }
+                label={<DateTime date={timePosted} timeAgo />}
               />
             </div>
             <div className="comment__menu">

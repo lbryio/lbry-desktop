@@ -21,10 +21,20 @@ type Props = {
   onDoneReplying?: () => void,
   onCancelReplying?: () => void,
   isNested: boolean,
+  isFetchingChannels: boolean,
 };
 
 export function CommentCreate(props: Props) {
-  const { createComment, claim, channels, topLevelId, onDoneReplying, onCancelReplying, isNested } = props;
+  const {
+    createComment,
+    claim,
+    channels,
+    topLevelId,
+    onDoneReplying,
+    onCancelReplying,
+    isNested,
+    isFetchingChannels,
+  } = props;
   const buttonref: ElementRef<any> = React.useRef();
   const { push } = useHistory();
   const { claim_id: claimId } = claim;
@@ -100,7 +110,15 @@ export function CommentCreate(props: Props) {
   if (!hasChannels) {
     return (
       <div role="button" onClick={() => push(`/$/${PAGES.CHANNEL_NEW}`)}>
-        <FormField type="textarea" name={'comment_signup_prompt'} placeholder={__('Say something about this...')} />
+        <FormField
+          type="textarea"
+          name={'comment_signup_prompt'}
+          placeholder={__('Say something about this...')}
+          label={isFetchingChannels ? __('Comment') : undefined}
+        />
+        <div className="section__actions">
+          <Button disabled button="primary" label={__('Post')} requiresAuth={IS_WEB} />
+        </div>
       </div>
     );
   }

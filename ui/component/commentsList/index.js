@@ -4,6 +4,7 @@ import {
   makeSelectTopLevelCommentsForUri,
   selectIsFetchingComments,
   makeSelectTotalCommentsCountForUri,
+  selectOthersReactsById,
 } from 'redux/selectors/comments';
 import { doCommentList, doCommentReactList } from 'redux/actions/comments';
 import CommentsList from './view';
@@ -17,6 +18,7 @@ const select = (state, props) => ({
   isFetchingComments: selectIsFetchingComments(state),
   commentingEnabled: IS_WEB ? Boolean(selectUserVerifiedEmail(state)) : true,
   fetchingChannels: selectFetchingMyChannels(state),
+  reactionsById: selectOthersReactsById(state),
 });
 
 const perform = dispatch => ({

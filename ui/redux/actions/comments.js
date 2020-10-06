@@ -66,7 +66,8 @@ export function doCommentReactList(uri: string | null, commentId?: string) {
       params['channel_name'] = channel;
       params['channel_id'] = channelId;
     }
-    Lbry.comment_react_list(params)
+
+    return Lbry.comment_react_list(params)
       .then((result: CommentReactListResponse) => {
         const { my_reactions: myReactions, others_reactions: othersReactions } = result;
         dispatch({
