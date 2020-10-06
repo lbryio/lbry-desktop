@@ -120,3 +120,7 @@ export const YOUTUBE = 'Youtube';
 export const UPVOTE = 'Upvote';
 export const DOWNVOTE = 'Downvote';
 export const CONTROVERSIAL = 'Controversial';
+export const FIRE_ACTIVE = 'FireActive';
+export const SLIME_ACTIVE = 'SlimeActive';
+export const FIRE = 'Fire';
+export const SLIME = 'Slime';

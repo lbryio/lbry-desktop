@@ -84,7 +84,7 @@ function CommentList(props: Props) {
         })
         .catch(() => setReadyToDisplayComments(true));
     }
-  }, [fetchReacts, uri, totalComments, activeChannel, fetchingChannels, ENABLE_COMMENT_REACTIONS]);
+  }, [fetchReacts, uri, totalComments, activeChannel, fetchingChannels]);
 
   useEffect(() => {
     if (linkedCommentId && commentRef && commentRef.current) {
@@ -161,7 +161,7 @@ function CommentList(props: Props) {
               <Button
                 button="alt"
                 label={'Best'}
-                icon={ICONS.TOP}
+                icon={ICONS.FIRE}
                 onClick={() => setSort(SORT_COMMENTS_BEST)}
                 className={classnames(`button-toggle`, {
                   'button-toggle--active': sort === SORT_COMMENTS_BEST,
