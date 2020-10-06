@@ -20,7 +20,6 @@ import ChannelEdit from 'component/channelEdit';
 import classnames from 'classnames';
 import HelpLink from 'component/common/help-link';
 import ClaimSupportButton from 'component/claimSupportButton';
-import YoutubeBadge from 'component/youtubeBadge';
 
 export const PAGE_VIEW_QUERY = `view`;
 const ABOUT_PAGE = `about`;
@@ -144,7 +143,6 @@ function ChannelPage(props: Props) {
 
   return (
     <Page noFooter>
-      <YoutubeBadge channelClaimId={claimId} />
       <header className="channel-cover">
         <div className="channel__quick-actions">
           {isMyYouTubeChannel && (
