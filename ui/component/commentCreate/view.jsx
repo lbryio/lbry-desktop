@@ -63,7 +63,8 @@ export function CommentCreate(props: Props) {
   }
 
   function altEnterListener(e: SyntheticKeyboardEvent<*>) {
-    if (e.shiftKey && e.keyCode === 13) {
+    const KEYCODE_ENTER = 13;
+    if ((e.ctrlKey || e.metaKey) && e.keyCode === KEYCODE_ENTER) {
       e.preventDefault();
       buttonref.current.click();
     }
