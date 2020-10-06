@@ -1,18 +1,14 @@
 // @flow
-import * as ICONS from 'constants/icons';
 import * as React from 'react';
 import DateTime from 'component/dateTime';
-import Icon from 'component/common/icon';
 import { Lbryio } from 'lbryinc';
 
 type Props = {
   channelClaimId: string,
-  includeSyncDate: boolean,
 };
 
 export default function YoutubeBadge(props: Props) {
-  const { channelClaimId, includeSyncDate = true } = props;
-
+  const { channelClaimId } = props;
   const [isVerified, setIsVerified] = React.useState();
   const [lastYtSyncDate, setLastYtSyncDate] = React.useState();
 
@@ -34,15 +30,15 @@ export default function YoutubeBadge(props: Props) {
   }, [channelClaimId]);
 
   if (isVerified) {
-    const str =
-      includeSyncDate && lastYtSyncDate
-        ? __('Official YouTube Creator - Last checked %time_ago%', { time_ago: DateTime.getTimeAgoStr(lastYtSyncDate) })
-        : __('Official YouTube Creator');
     return (
-      <div className="media__uri--right--yt-badge">
-        <Icon icon={ICONS.VALIDATED} size={12} />
-        {str}
-      </div>
+      <>
+        <label>{__('Official YouTube Creator')}</label>
+        <div className="media__info-text">
+          <div className="media__info-text media__info-text--constrained">
+            {lastYtSyncDate && __('Last checked %time_ago%', { time_ago: DateTime.getTimeAgoStr(lastYtSyncDate) })}
+          </div>
+        </div>
+      </>
     );
   } else {
     return null;

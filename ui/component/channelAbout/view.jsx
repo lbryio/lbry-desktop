@@ -7,6 +7,7 @@ import CreditAmount from 'component/common/credit-amount';
 import Button from 'component/button';
 import * as PAGES from 'constants/pages';
 import DateTime from 'component/dateTime';
+import YoutubeBadge from 'component/youtubeBadge';
 
 type Props = {
   claim: ChannelClaim,
@@ -27,6 +28,7 @@ const formatEmail = (email: string) => {
 
 function ChannelAbout(props: Props) {
   const { claim, uri, description, email, website } = props;
+  const claimId = claim && claim.claim_id;
 
   return (
     <div className="card">
@@ -97,6 +99,8 @@ function ChannelAbout(props: Props) {
               />
             )}
           </div>
+
+          <YoutubeBadge channelClaimId={claimId} />
         </Fragment>
       </section>
     </div>
