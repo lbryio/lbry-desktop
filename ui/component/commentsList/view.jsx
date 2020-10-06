@@ -111,12 +111,12 @@ function CommentList(props: Props) {
       }
     }
 
-    if (!isFetchingComments && moreBelow && spinnerRef && spinnerRef.current) {
+    if (!isFetchingComments && readyToDisplayComments && moreBelow && spinnerRef && spinnerRef.current) {
       window.addEventListener('scroll', handleCommentScroll);
     }
 
     return () => window.removeEventListener('scroll', handleCommentScroll);
-  }, [moreBelow, handleMoreBelow, spinnerRef]);
+  }, [moreBelow, handleMoreBelow, spinnerRef, isFetchingComments, readyToDisplayComments]);
 
   function prepareComments(arrayOfComments, linkedComment, isFetchingComments) {
     let orderedComments = [];
