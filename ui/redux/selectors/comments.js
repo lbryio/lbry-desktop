@@ -14,6 +14,10 @@ export const selectIsFetchingComments = createSelector(selectState, state => sta
 
 export const selectIsPostingComment = createSelector(selectState, state => state.isCommenting);
 
+export const selectIsFetchingReacts = createSelector(selectState, state => state.isFetchingReacts);
+
+export const selectOthersReactsById = createSelector(selectState, state => state.othersReactsByCommentId);
+
 export const selectCommentsByClaimId = createSelector(selectState, selectCommentsById, (state, byId) => {
   const byClaimId = state.byId || {};
   const comments = {};

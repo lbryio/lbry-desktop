@@ -1,19 +1,22 @@
 // @flow
+import * as REACTION_TYPES from 'constants/reactions';
 import * as ICONS from 'constants/icons';
+import { SORT_COMMENTS_NEW, SORT_COMMENTS_BEST, SORT_COMMENTS_CONTROVERSIAL } from 'constants/comment';
 import React, { useEffect } from 'react';
-import Comment from 'component/comment';
+import classnames from 'classnames';
+import CommentView from 'component/comment';
 import Spinner from 'component/spinner';
 import Button from 'component/button';
 import Card from 'component/common/card';
 import CommentCreate from 'component/commentCreate';
 import usePersistedState from 'effects/use-persisted-state';
 import { ENABLE_COMMENT_REACTIONS } from 'config';
-import { useIsMobile } from 'effects/use-screensize';
+import { sortComments } from 'util/comments';
 
 type Props = {
-  comments: Array<any>,
+  comments: Array<Comment>,
   fetchComments: string => void,
-  fetchReacts: string => void,
+  fetchReacts: string => Promise<any>,
   uri: string,
   claimIsMine: boolean,
   myChannels: ?Array<ChannelClaim>,
@@ -21,6 +24,7 @@ type Props = {
   linkedComment: any,
   totalComments: number,
   fetchingChannels: boolean,
+  reactionsById: { [string]: { [REACTION_TYPES.LIKE | REACTION_TYPES.DISLIKE]: number } },
 };
 
 function CommentList(props: Props) {
@@ -35,13 +39,17 @@ function CommentList(props: Props) {
     linkedComment,
     totalComments,
     fetchingChannels,
+    reactionsById,
   } = props;
-
   const commentRef = React.useRef();
-  const isMobile = useIsMobile();
+  const spinnerRef = React.useRef();
+  const [sort, setSort] = usePersistedState('comment-sort', SORT_COMMENTS_BEST);
   const [activeChannel] = usePersistedState('comment-channel', '');
   const [start] = React.useState(0);
   const [end, setEnd] = React.useState(9);
+  // Display comments immediately if not fetching reactions
+  // If not, wait to show comments until reactions are fetched
+  const [readyToDisplayComments, setReadyToDisplayComments] = React.useState(!ENABLE_COMMENT_REACTIONS);
   const linkedCommentId = linkedComment && linkedComment.comment_id;
   const hasNoComments = totalComments === 0;
 
@@ -58,11 +66,11 @@ function CommentList(props: Props) {
     return false;
   };
 
-  const handleMoreBelow = () => {
+  const handleMoreBelow = React.useCallback(() => {
     if (moreBelow) {
       setEnd(end + 10);
     }
-  };
+  }, [end, setEnd, moreBelow]);
 
   useEffect(() => {
     fetchComments(uri);
@@ -70,7 +78,11 @@ function CommentList(props: Props) {
 
   useEffect(() => {
     if (totalComments && ENABLE_COMMENT_REACTIONS && !fetchingChannels) {
-      fetchReacts(uri);
+      fetchReacts(uri)
+        .then(() => {
+          setReadyToDisplayComments(true);
+        })
+        .catch(() => setReadyToDisplayComments(true));
     }
   }, [fetchReacts, uri, totalComments, activeChannel, fetchingChannels, ENABLE_COMMENT_REACTIONS]);
 
@@ -83,19 +95,28 @@ function CommentList(props: Props) {
 
   useEffect(() => {
     function handleCommentScroll(e) {
-      // Use some arbitrary amount so comments start loading before a user actually reaches the real bottom of the page
       // $FlowFixMe
-      if (window.innerHeight + window.scrollY >= document.body.offsetHeight - (isMobile ? 2750 : 300)) {
+      const rect = spinnerRef.current.getBoundingClientRect();
+
+      const isInViewport =
+        rect.top >= 0 &&
+        rect.left >= 0 &&
+        // $FlowFixMe
+        rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&
+        // $FlowFixMe
+        rect.right <= (window.innerWidth || document.documentElement.clientWidth);
+
+      if (isInViewport) {
         handleMoreBelow();
       }
     }
 
-    if (moreBelow) {
+    if (moreBelow && spinnerRef && spinnerRef.current) {
       window.addEventListener('scroll', handleCommentScroll);
     }
 
     return () => window.removeEventListener('scroll', handleCommentScroll);
-  }, [moreBelow, handleMoreBelow, isMobile]);
+  }, [moreBelow, handleMoreBelow, spinnerRef]);
 
   function prepareComments(arrayOfComments, linkedComment) {
     let orderedComments = [];
@@ -107,7 +128,10 @@ function CommentList(props: Props) {
       } else {
         const parentComment = arrayOfComments.find(c => c.comment_id === linkedComment.parent_id);
         orderedComments = arrayOfComments.filter(c => c.comment_id !== linkedComment.parent_id);
-        orderedComments.unshift(parentComment);
+
+        if (parentComment) {
+          orderedComments.unshift(parentComment);
+        }
       }
     } else {
       orderedComments = arrayOfComments;
@@ -115,7 +139,12 @@ function CommentList(props: Props) {
     return orderedComments;
   }
 
-  const displayedComments = prepareComments(comments, linkedComment).slice(start, end);
+  // Default to newest first for apps that don't have comment reactions
+  const sortedComments = ENABLE_COMMENT_REACTIONS ? sortComments(comments, reactionsById, sort) : comments;
+  const displayedComments = readyToDisplayComments
+    ? prepareComments(sortedComments, linkedComment).slice(start, end)
+    : [];
+
   return (
     <Card
       title={
@@ -126,24 +155,52 @@ function CommentList(props: Props) {
           : __('Leave a comment')
       }
       titleActions={
-        <Button button="alt" icon={ICONS.REFRESH} title={__('Refresh')} onClick={() => fetchComments(uri)} />
+        <>
+          {totalComments > 1 && ENABLE_COMMENT_REACTIONS && (
+            <span className="comment__sort">
+              <Button
+                button="alt"
+                label={'Best'}
+                icon={ICONS.TOP}
+                onClick={() => setSort(SORT_COMMENTS_BEST)}
+                className={classnames(`button-toggle`, {
+                  'button-toggle--active': sort === SORT_COMMENTS_BEST,
+                })}
+              />
+              <Button
+                button="alt"
+                label={'Controversial'}
+                icon={ICONS.CONTROVERSIAL}
+                onClick={() => setSort(SORT_COMMENTS_CONTROVERSIAL)}
+                className={classnames(`button-toggle`, {
+                  'button-toggle--active': sort === SORT_COMMENTS_CONTROVERSIAL,
+                })}
+              />
+              <Button
+                button="alt"
+                label={'New'}
+                icon={ICONS.NEW}
+                onClick={() => setSort(SORT_COMMENTS_NEW)}
+                className={classnames(`button-toggle`, {
+                  'button-toggle--active': sort === SORT_COMMENTS_NEW,
+                })}
+              />
+            </span>
+          )}
+          <Button button="alt" icon={ICONS.REFRESH} title={__('Refresh')} onClick={() => fetchComments(uri)} />
+        </>
       }
       actions={
         <>
           <CommentCreate uri={uri} />
           {!isFetchingComments && hasNoComments && <div className="main--empty">{__('Be the first to comment!')}</div>}
           <ul className="comments" ref={commentRef}>
-            {isFetchingComments && (
-              <div className="main--empty">
-                <Spinner />
-              </div>
-            )}
             {!isFetchingComments &&
               comments &&
               displayedComments &&
               displayedComments.map(comment => {
                 return (
-                  <Comment
+                  <CommentView
                     isTopLevel
                     key={comment.comment_id}
                     uri={uri}
@@ -161,8 +218,8 @@ function CommentList(props: Props) {
                 );
               })}
           </ul>
-          {!isFetchingComments && moreBelow && (
-            <div className="main--empty">
+          {(isFetchingComments || moreBelow) && (
+            <div className="main--empty" ref={spinnerRef}>
               <Spinner type="small" />
             </div>
           )}

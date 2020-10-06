@@ -237,6 +237,7 @@
 .card__header--between {
   @extend .card__header;
   justify-content: space-between;
+  align-items: center;
   flex-wrap: wrap;
 }
 

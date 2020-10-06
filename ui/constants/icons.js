@@ -119,3 +119,4 @@ export const REPLY = 'Reply';
 export const YOUTUBE = 'Youtube';
 export const UPVOTE = 'Upvote';
 export const DOWNVOTE = 'Downvote';
+export const CONTROVERSIAL = 'Controversial';
