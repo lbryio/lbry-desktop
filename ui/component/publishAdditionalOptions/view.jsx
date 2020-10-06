@@ -160,7 +160,7 @@ function PublishAdditionalOptions(props: Props) {
                   <option value="zh">{__('Chinese')}</option>
                   <option value="fr">{__('French')}</option>
                   <option value="de">{__('German')}</option>
-                  <option value="jp">{__('Japanese')}</option>
+                  <option value="ja">{__('Japanese')}</option>
                   <option value="ru">{__('Russian')}</option>
                   <option value="es">{__('Spanish')}</option>
                   <option value="id">{__('Indonesian')}</option>
