@@ -873,7 +873,7 @@ export const icons = {
     <svg
       {...props}
       xmlns="http://www.w3.org/2000/svg"
-      viewBox="-2 0 26 24"
+      viewBox="-6 0 26 24"
       width={props.size || '18'}
       height={props.size || '18'}
       fill="none"
