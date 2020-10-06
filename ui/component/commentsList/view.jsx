@@ -111,14 +111,14 @@ function CommentList(props: Props) {
       }
     }
 
-    if (moreBelow && spinnerRef && spinnerRef.current) {
+    if (!isFetchingComments && moreBelow && spinnerRef && spinnerRef.current) {
       window.addEventListener('scroll', handleCommentScroll);
     }
 
     return () => window.removeEventListener('scroll', handleCommentScroll);
   }, [moreBelow, handleMoreBelow, spinnerRef]);
 
-  function prepareComments(arrayOfComments, linkedComment) {
+  function prepareComments(arrayOfComments, linkedComment, isFetchingComments) {
     let orderedComments = [];
 
     if (linkedComment) {
