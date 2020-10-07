@@ -4,7 +4,7 @@ import Button from 'component/button';
 import UserSignOutButton from 'component/userSignOutButton';
 import I18nMessage from 'component/i18nMessage';
 import Card from 'component/common/card';
-
+const THIRTY_SECONDS_IN_MS = 30000;
 type Props = {
   email: string,
   isReturningUser: boolean,
@@ -17,10 +17,15 @@ type Props = {
   },
 };
 
-class UserEmailVerify extends React.PureComponent<Props> {
+type State = {
+  wait: boolean,
+};
+
+class UserEmailVerify extends React.PureComponent<Props, State> {
   constructor(props: Props) {
     super(props);
     this.emailVerifyCheckInterval = null;
+    this.state = { wait: false };
     (this: any).handleResendVerificationEmail = this.handleResendVerificationEmail.bind(this);
   }
 
@@ -46,8 +51,16 @@ class UserEmailVerify extends React.PureComponent<Props> {
 
   handleResendVerificationEmail() {
     const { email, resendVerificationEmail, toast } = this.props;
-    resendVerificationEmail(email);
-    toast(__('New email sent.'));
+    if (!this.state.wait) {
+      resendVerificationEmail(email);
+      toast(__('New email sent.'));
+      this.setState({
+        wait: true,
+      });
+      setTimeout(() => this.setState({ wait: false }), THIRTY_SECONDS_IN_MS);
+    } else {
+      toast(__('Please wait a bit longer before requesting again.'));
+    }
   }
 
   checkIfVerified() {
