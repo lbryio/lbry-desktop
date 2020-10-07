@@ -339,7 +339,7 @@ function PublishForm(props: Props) {
               <Button
                 key={index}
                 icon={modeName}
-                label={modeName}
+                label={__(String(modeName))}
                 button="alt"
                 onClick={() => {
                   setMode(modeName);
