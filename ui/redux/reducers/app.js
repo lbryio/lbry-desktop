@@ -85,7 +85,7 @@ const defaultState: AppState = {
 // @@router comes from react-router
 // This action is dispatched any time a user navigates forward or back
 try {
-  defaultState.volume = Number(sessionStorage.getItem('volume'));
+  defaultState.volume = Number(sessionStorage.getItem('volume') || 1);
 } catch (e) {}
 
 reducers['@@router/LOCATION_CHANGE'] = (state, action) => {
