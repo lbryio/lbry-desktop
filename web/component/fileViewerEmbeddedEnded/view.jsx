@@ -43,7 +43,11 @@ function FileViewerEmbeddedEnded(props: Props) {
       <div className="file-viewer__overlay-actions">
         <Button label={__('Rewatch or Discuss')} button="primary" href={lbrytvLink} />
         {!isAuthenticated && (
-          <Button label={__(`Join ${SITE_NAME}`)} button="secondary" href={`${URL}/$/signup?src=embed_signup`} />
+          <Button
+            label={__('Join %SITE_NAME%', { SITE_NAME })}
+            button="secondary"
+            href={`${URL}/$/signup?src=embed_signup`}
+          />
         )}
       </div>
     </div>
