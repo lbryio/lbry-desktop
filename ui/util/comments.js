@@ -5,14 +5,32 @@ import { SORT_COMMENTS_NEW, SORT_COMMENTS_BEST, SORT_COMMENTS_CONTROVERSIAL } fr
 // Mostly taken from Reddit's sorting functions
 // https://github.com/reddit-archive/reddit/blob/master/r2/r2/lib/db/_sorts.pyx
 
-export function sortComments(comments: ?Array<Comment>, reactionsById: {}, method: string): Array<Comment> {
+type SortProps = {
+  comments: ?Array<Comment>,
+  reactionsById: {},
+  sort: string,
+  isMyComment: string => boolean,
+};
+
+export function sortComments(sortProps: SortProps): Array<Comment> {
+  const { comments, reactionsById, sort, isMyComment } = sortProps;
+
   if (!comments) {
     return [];
   }
 
-  return comments.slice().sort((a, b) => {
-    if (method === SORT_COMMENTS_NEW) {
+  return comments.slice().sort((a: Comment, b: Comment) => {
+    if (sort === SORT_COMMENTS_NEW) {
       return 0;
+    }
+
+    const aIsMine = isMyComment(a.channel_id);
+    const bIsMine = isMyComment(b.channel_id);
+
+    if (aIsMine) {
+      return -1;
+    } else if (bIsMine) {
+      return 1;
     }
 
     const aReactions = reactionsById[a.comment_id];
@@ -22,7 +40,7 @@ export function sortComments(comments: ?Array<Comment>, reactionsById: {}, metho
     const bLikes = (bReactions && bReactions[REACTION_TYPES.LIKE]) || 0;
     const bDislikes = (bReactions && bReactions[REACTION_TYPES.DISLIKE]) || 0;
 
-    if (method === SORT_COMMENTS_CONTROVERSIAL) {
+    if (sort === SORT_COMMENTS_CONTROVERSIAL) {
       if (aLikes === 0 && aDislikes === 0) {
         return 1;
       } else if (bLikes === 0 && bDislikes === 0) {
@@ -38,7 +56,7 @@ export function sortComments(comments: ?Array<Comment>, reactionsById: {}, metho
       return bMagnitude ** bBalance - aMagnitude ** aBalance;
     }
 
-    if (method === SORT_COMMENTS_BEST) {
+    if (sort === SORT_COMMENTS_BEST) {
       const aN = aLikes + aDislikes;
       const bN = bLikes + bDislikes;
 
