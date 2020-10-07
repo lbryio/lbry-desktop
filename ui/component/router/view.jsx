@@ -50,7 +50,7 @@ import NotificationsPage from 'page/notifications';
 import SignInWalletPasswordPage from 'page/signInWalletPassword';
 import YoutubeSyncPage from 'page/youtubeSync';
 import { LINKED_COMMENT_QUERY_PARAM } from 'constants/comment';
-import { parseURI } from 'lbry-redux';
+import { parseURI, isURIValid } from 'lbry-redux';
 import { SITE_TITLE, WELCOME_VERSION } from 'config';
 
 const dynamicRoutes = Object.values(SIDEBAR_ROUTES).filter(
@@ -105,6 +105,8 @@ type Props = {
   welcomeVersion: number,
   hasNavigated: boolean,
   setHasNavigated: () => void,
+  setReferrer: string => void,
+  hasUnclaimedRefereeReward: boolean,
 };
 
 function AppRouter(props: Props) {
@@ -118,6 +120,8 @@ function AppRouter(props: Props) {
     welcomeVersion,
     hasNavigated,
     setHasNavigated,
+    hasUnclaimedRefereeReward,
+    setReferrer,
   } = props;
   const { entries } = history;
   const entryIndex = history.index;
@@ -134,6 +138,16 @@ function AppRouter(props: Props) {
     });
     return unlisten;
   }, [hasNavigated, setHasNavigated]);
+
+  useEffect(() => {
+    if (!hasNavigated && hasUnclaimedRefereeReward) {
+      const valid = isURIValid(uri);
+      if (valid) {
+        const { path } = parseURI(uri);
+        setReferrer(path);
+      }
+    }
+  }, [hasNavigated, uri, hasUnclaimedRefereeReward, setReferrer]);
 
   useEffect(() => {
     if (uri) {

@@ -1,4 +1,4 @@
-import { Lbry, doFetchChannelListMine, batchActions, makeSelectClaimForUri, parseURI } from 'lbry-redux';
+import { Lbry, doFetchChannelListMine, batchActions, makeSelectClaimForUri, isURIValid } from 'lbry-redux';
 import * as ACTIONS from 'constants/action_types';
 import { doClaimRewardType, doRewardList } from 'redux/actions/rewards';
 import { selectEmailToVerify, selectPhoneToVerify, selectUserCountryCode, selectUser } from 'redux/selectors/user';
@@ -640,10 +640,8 @@ export function doUserSetReferrer(referrer, shouldClaim) {
     });
     let claim;
     let referrerCode;
-
-    const { isChannel } = parseURI(referrer);
-
-    if (isChannel) {
+    const isValid = isURIValid(referrer);
+    if (isValid) {
       const uri = `lbry://${referrer}`;
       claim = makeSelectClaimForUri(uri)(getState());
       if (!claim) {
@@ -657,7 +655,13 @@ export function doUserSetReferrer(referrer, shouldClaim) {
           });
         }
       }
-      referrerCode = claim && claim.permanent_url && claim.permanent_url.replace('lbry://', '');
+      if (claim) {
+        if (claim.signing_channel) {
+          referrerCode = claim.signing_channel.permanent_url.replace('lbry://', '');
+        } else {
+          referrerCode = claim.permanent_url.replace('lbry://', '');
+        }
+      }
     }
 
     if (!referrerCode) {

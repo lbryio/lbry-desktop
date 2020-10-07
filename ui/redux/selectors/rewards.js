@@ -57,3 +57,7 @@ export const selectReferralReward = createSelector(
   selectUnclaimedRewards,
   unclaimedRewards => unclaimedRewards.filter(reward => reward.reward_type === REWARDS.TYPE_REFERRAL)[0]
 );
+
+export const selectHasUnclaimedRefereeReward = createSelector(selectUnclaimedRewards, unclaimedRewards =>
+  unclaimedRewards.some(reward => reward.reward_type === REWARDS.TYPE_REFEREE)
+);
