@@ -140,14 +140,14 @@ function AppRouter(props: Props) {
   }, [hasNavigated, setHasNavigated]);
 
   useEffect(() => {
-    if (!hasNavigated && hasUnclaimedRefereeReward) {
+    if (!hasNavigated && hasUnclaimedRefereeReward && !isAuthenticated) {
       const valid = isURIValid(uri);
       if (valid) {
         const { path } = parseURI(uri);
-        setReferrer(path);
+        if (path !== 'undefined') setReferrer(path);
       }
     }
-  }, [hasNavigated, uri, hasUnclaimedRefereeReward, setReferrer]);
+  }, [hasNavigated, uri, hasUnclaimedRefereeReward, setReferrer, isAuthenticated]);
 
   useEffect(() => {
     if (uri) {
