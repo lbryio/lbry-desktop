@@ -3,7 +3,6 @@ import * as ICONS from 'constants/icons';
 import React from 'react';
 import Comment from 'component/comment';
 import Button from 'component/button';
-import CommentCreate from 'component/commentCreate';
 
 type Props = {
   comments: Array<any>,
@@ -11,25 +10,13 @@ type Props = {
   claimIsMine: boolean,
   myChannels: ?Array<ChannelClaim>,
   linkedComment?: Comment,
-  topLevelId: string,
   commentingEnabled: boolean,
-  topLevelIsReplying: boolean,
-  setTopLevelIsReplying: boolean => void,
+  threadDepth: number,
 };
 
 function CommentsReplies(props: Props) {
-  const {
-    uri,
-    comments,
-    claimIsMine,
-    myChannels,
-    linkedComment,
-    topLevelId,
-    commentingEnabled,
-    topLevelIsReplying,
-    setTopLevelIsReplying,
-  } = props;
-  const [isExpanded, setExpanded] = React.useState(false);
+  const { uri, comments, claimIsMine, myChannels, linkedComment, commentingEnabled, threadDepth } = props;
+  const [isExpanded, setExpanded] = React.useState(true);
   const [start, setStart] = React.useState(0);
   const [end, setEnd] = React.useState(9);
   const sortedComments = comments ? [...comments].reverse() : [];
@@ -63,7 +50,6 @@ function CommentsReplies(props: Props) {
       setStart(numberOfComments || 0);
     }
     setEnd(numberOfComments + 1);
-    setTopLevelIsReplying(false);
   }
 
   React.useEffect(() => {
@@ -84,17 +70,13 @@ function CommentsReplies(props: Props) {
   const displayedComments = sortedComments.slice(start, end);
 
   return (
-    (Boolean(numberOfComments) || topLevelIsReplying) && (
+    Boolean(numberOfComments) && (
       <div className="comment__replies-container">
-        {Boolean(numberOfComments) && (
+        {Boolean(numberOfComments) && !isExpanded && (
           <div className="comment__actions--nested">
             <Button
               className="comment__action"
-              label={
-                isExpanded
-                  ? __('Hide %number% Replies', { number: numberOfComments })
-                  : __('Show %number% Replies', { number: numberOfComments })
-              }
+              label={__('Show Replies')}
               onClick={() => setExpanded(!isExpanded)}
               icon={isExpanded ? ICONS.UP : ICONS.DOWN}
             />
@@ -109,6 +91,7 @@ function CommentsReplies(props: Props) {
                 {displayedComments.map((comment, index) => {
                   return (
                     <Comment
+                      threadDepth={threadDepth}
                       uri={uri}
                       authorUri={comment.channel_url}
                       author={comment.channel_name}
@@ -121,9 +104,7 @@ function CommentsReplies(props: Props) {
                       commentIsMine={comment.channel_id && isMyComment(comment.channel_id)}
                       linkedComment={linkedComment}
                       commentingEnabled={commentingEnabled}
-                      hideReplyButton={index !== displayedComments.length - 1}
-                      topLevelIsReplying={topLevelIsReplying}
-                      setTopLevelIsReplying={setTopLevelIsReplying}
+                      handleCommentDone={handleCommentDone}
                     />
                   );
                 })}
@@ -135,17 +116,6 @@ function CommentsReplies(props: Props) {
           <div className="comment__actions">
             <Button button="link" label={__('Show more')} onClick={showMore} className="button--uri-indicator" />
           </div>
-        )}
-
-        {topLevelIsReplying && (
-          <CommentCreate
-            isNested={isExpanded}
-            key={topLevelId}
-            uri={uri}
-            topLevelId={topLevelId}
-            onDoneReplying={() => handleCommentDone()}
-            onCancelReplying={() => setTopLevelIsReplying(false)}
-          />
         )}
       </div>
     )

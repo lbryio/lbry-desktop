@@ -193,7 +193,9 @@ function CommentList(props: Props) {
       actions={
         <>
           <CommentCreate uri={uri} />
+
           {!isFetchingComments && hasNoComments && <div className="main--empty">{__('Be the first to comment!')}</div>}
+
           <ul className="comments" ref={commentRef}>
             {!isFetchingComments &&
               comments &&
@@ -202,13 +204,13 @@ function CommentList(props: Props) {
                 return (
                   <CommentView
                     isTopLevel
+                    threadDepth={3}
                     key={comment.comment_id}
                     uri={uri}
                     authorUri={comment.channel_url}
                     author={comment.channel_name}
                     claimId={comment.claim_id}
                     commentId={comment.comment_id}
-                    topLevelId={comment.comment_id}
                     message={comment.comment}
                     timePosted={comment.timestamp * 1000}
                     claimIsMine={claimIsMine}
@@ -218,6 +220,7 @@ function CommentList(props: Props) {
                 );
               })}
           </ul>
+
           {(isFetchingComments || moreBelow) && (
             <div className="main--empty" ref={spinnerRef}>
               <Spinner type="small" />

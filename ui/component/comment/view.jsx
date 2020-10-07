@@ -18,13 +18,13 @@ import usePersistedState from 'effects/use-persisted-state';
 import CommentReactions from 'component/commentReactions';
 import CommentsReplies from 'component/commentsReplies';
 import { useHistory } from 'react-router';
+import CommentCreate from 'component/commentCreate';
 
 type Props = {
   uri: string,
   author: ?string, // LBRY Channel Name, e.g. @channel
   authorUri: string, // full LBRY Channel URI: lbry://@channel#123...
   commentId: string, // sha256 digest identifying the comment
-  topLevelId: string, // sha256 digest identifying the parent of the comment
   message: string, // comment body
   timePosted: number, // Comment timestamp
   channel: ?Claim, // Channel Claim, retrieved to obtain thumbnail
@@ -41,10 +41,8 @@ type Props = {
   myChannels: ?Array<ChannelClaim>,
   commentingEnabled: boolean,
   doToast: ({ message: string }) => void,
-  hideReplyButton?: boolean,
   isTopLevel?: boolean,
-  topLevelIsReplying: boolean,
-  setTopLevelIsReplying: boolean => void,
+  threadDepth: number,
 };
 
 const LENGTH_TO_COLLAPSE = 300;
@@ -71,11 +69,8 @@ function Comment(props: Props) {
     commentingEnabled,
     myChannels,
     doToast,
-    hideReplyButton,
     isTopLevel,
-    topLevelIsReplying,
-    setTopLevelIsReplying,
-    topLevelId,
+    threadDepth,
   } = props;
   const {
     push,
@@ -134,17 +129,14 @@ function Comment(props: Props) {
       push(`/$/${PAGES.CHANNEL_NEW}?redirect=${pathname}`);
       doToast({ message: __('A channel is required to comment on %SITE_NAME%', { SITE_NAME }) });
     } else {
-      if (setTopLevelIsReplying) {
-        setTopLevelIsReplying(!topLevelIsReplying);
-      } else {
-        setReplying(!isReplying);
-      }
+      setReplying(!isReplying);
     }
   }
 
   return (
     <li
       className={classnames('comment', {
+        'comment--top-level': isTopLevel,
         'comment--reply': !isTopLevel,
         'comment--highlighted': linkedComment && linkedComment.comment_id === commentId,
       })}
@@ -242,7 +234,7 @@ function Comment(props: Props) {
                 </div>
 
                 <div className="comment__actions">
-                  {!hideReplyButton && (
+                  {threadDepth !== 0 && (
                     <Button
                       requiresAuth={IS_WEB}
                       label={commentingEnabled ? __('Reply') : __('Log in to reply')}
@@ -253,21 +245,23 @@ function Comment(props: Props) {
                   )}
                   {ENABLE_COMMENT_REACTIONS && <CommentReactions commentId={commentId} />}
                 </div>
+
+                {isReplying && (
+                  <CommentCreate
+                    isReply
+                    uri={uri}
+                    parentId={commentId}
+                    onDoneReplying={() => setReplying(false)}
+                    onCancelReplying={() => setReplying(false)}
+                  />
+                )}
               </>
             )}
           </div>
         </div>
       </div>
 
-      {isTopLevel && (
-        <CommentsReplies
-          uri={uri}
-          topLevelId={topLevelId}
-          linkedComment={linkedComment}
-          topLevelIsReplying={isReplying}
-          setTopLevelIsReplying={setReplying}
-        />
-      )}
+      <CommentsReplies threadDepth={threadDepth - 1} uri={uri} parentId={commentId} linkedComment={linkedComment} />
     </li>
   );
 }
