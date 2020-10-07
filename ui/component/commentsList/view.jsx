@@ -160,7 +160,7 @@ function CommentList(props: Props) {
             <span className="comment__sort">
               <Button
                 button="alt"
-                label={'Best'}
+                label={__('Best')}
                 icon={ICONS.FIRE}
                 onClick={() => setSort(SORT_COMMENTS_BEST)}
                 className={classnames(`button-toggle`, {
@@ -169,7 +169,7 @@ function CommentList(props: Props) {
               />
               <Button
                 button="alt"
-                label={'Controversial'}
+                label={__('Controversial')}
                 icon={ICONS.CONTROVERSIAL}
                 onClick={() => setSort(SORT_COMMENTS_CONTROVERSIAL)}
                 className={classnames(`button-toggle`, {
@@ -178,7 +178,7 @@ function CommentList(props: Props) {
               />
               <Button
                 button="alt"
-                label={'New'}
+                label={__('New')}
                 icon={ICONS.NEW}
                 onClick={() => setSort(SORT_COMMENTS_NEW)}
                 className={classnames(`button-toggle`, {
