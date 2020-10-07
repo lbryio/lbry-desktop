@@ -5,7 +5,7 @@ import { selectUserVerifiedEmail } from 'redux/selectors/user';
 import CommentsReplies from './view';
 
 const select = (state, props) => ({
-  comments: makeSelectRepliesForParentId(props.topLevelId)(state),
+  comments: makeSelectRepliesForParentId(props.parentId)(state),
   claimIsMine: makeSelectClaimIsMine(props.uri)(state),
   commentingEnabled: IS_WEB ? Boolean(selectUserVerifiedEmail(state)) : true,
   myChannels: selectMyChannelClaims(state),

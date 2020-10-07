@@ -17,11 +17,13 @@ type Props = {
   claim: StreamClaim,
   createComment: (string, string, string, ?string) => Promise<any>,
   channels: ?Array<ChannelClaim>,
-  topLevelId?: string,
   onDoneReplying?: () => void,
   onCancelReplying?: () => void,
   isNested: boolean,
   isFetchingChannels: boolean,
+  parentId: string,
+  isReply: boolean,
+  isPostingComment: boolean,
 };
 
 export function CommentCreate(props: Props) {
@@ -29,23 +31,23 @@ export function CommentCreate(props: Props) {
     createComment,
     claim,
     channels,
-    topLevelId,
     onDoneReplying,
     onCancelReplying,
     isNested,
     isFetchingChannels,
+    isReply,
+    parentId,
+    isPostingComment,
   } = props;
   const buttonref: ElementRef<any> = React.useRef();
   const { push } = useHistory();
   const { claim_id: claimId } = claim;
-  const isReply = !!topLevelId;
   const [commentValue, setCommentValue] = React.useState('');
   const [channel, setChannel] = usePersistedState('comment-channel', '');
   const [charCount, setCharCount] = useState(commentValue.length);
   const [advancedEditor, setAdvancedEditor] = usePersistedState('comment-editor-mode', false);
   const hasChannels = channels && channels.length;
-  const disabled = channel === CHANNEL_NEW || !commentValue.length;
-
+  const disabled = isPostingComment || channel === CHANNEL_NEW || !commentValue.length;
   const topChannel =
     channels &&
     channels.reduce((top, channel) => {
@@ -90,9 +92,10 @@ export function CommentCreate(props: Props) {
 
   function handleSubmit() {
     if (channel !== CHANNEL_NEW && commentValue.length) {
-      createComment(commentValue, claimId, channel, topLevelId).then(res => {
+      createComment(commentValue, claimId, channel, parentId).then(res => {
         if (res && res.signature) {
           setCommentValue('');
+
           if (onDoneReplying) {
             onDoneReplying();
           }
@@ -160,7 +163,15 @@ export function CommentCreate(props: Props) {
           button="primary"
           disabled={disabled}
           type="submit"
-          label={isReply ? __('Reply') : __('Post')}
+          label={
+            isReply
+              ? isPostingComment
+                ? __('Replying...')
+                : __('Reply')
+              : isPostingComment
+              ? __('Posting...')
+              : __('Post')
+          }
           requiresAuth={IS_WEB}
         />
         {isReply && (

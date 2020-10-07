@@ -1,5 +1,5 @@
-$thumbnailWidth: 2rem;
-$thumbnailWidthSmall: 1.5rem;
+$thumbnailWidth: 1.5rem;
+$thumbnailWidthSmall: 0rem;
 
 .comments {
   list-style-type: none;
@@ -9,7 +9,7 @@ $thumbnailWidthSmall: 1.5rem;
 
 .comments--replies {
   list-style-type: none;
-  margin-left: var(--spacing-m);
+  margin-left: var(--spacing-s);
   flex: 1;
 }
 
@@ -29,8 +29,7 @@ $thumbnailWidthSmall: 1.5rem;
 }
 
 .comment__create--reply {
-  margin-top: var(--spacing-l);
-  margin-left: calc(#{$thumbnailWidth} + var(--spacing-m));
+  margin-top: var(--spacing-m);
   position: relative;
 }
 
@@ -81,11 +80,17 @@ $thumbnailWidthSmall: 1.5rem;
   }
 }
 
+.comment--top-level {
+  &:not(:first-child) {
+    margin-top: var(--spacing-l);
+  }
+}
+
 .comment__threadline {
   @extend .button--alt;
   height: auto;
   align-self: stretch;
-  padding: 2px;
+  padding: 1px;
   border-radius: 3px;
   background-color: var(--color-comment-threadline);
 
@@ -93,6 +98,10 @@ $thumbnailWidthSmall: 1.5rem;
     box-shadow: 0 0 0 1px var(--color-comment-threadline-hover);
     background-color: var(--color-comment-threadline-hover);
     border-color: var(--color-comment-threadline-hover);
+  }
+
+  @media (min-width: $breakpoint-small) {
+    padding: 2px;
   }
 }
 
@@ -134,7 +143,6 @@ $thumbnailWidthSmall: 1.5rem;
 .comment__meta {
   display: flex;
   justify-content: space-between;
-  text-overflow: ellipsis;
 }
 
 .comment__meta-information {
