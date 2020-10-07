@@ -4,8 +4,8 @@ declare type Comment = {
   claim_id: string, // id linking to the claim this comment
   timestamp: number, // integer representing unix-time
   is_hidden: boolean, // claim owner may enable/disable this
-  channel_id?: string,  // claimId of channel signing this comment
-  channel_name?: string,  // name of channel claim
+  channel_id: string, // claimId of channel signing this comment
+  channel_name?: string, // name of channel claim
   channel_url?: string, // full lbry url to signing channel
   signature?: string, // signature of comment by originating channel
   signing_ts?: string, // timestamp used when signing this comment
@@ -35,4 +35,4 @@ declare type CommentReactParams = {
   react_type: string,
   clear_types?: string,
   remove?: boolean,
-}
+};

@@ -52,10 +52,8 @@ function CommentList(props: Props) {
   const [readyToDisplayComments, setReadyToDisplayComments] = React.useState(!ENABLE_COMMENT_REACTIONS);
   const linkedCommentId = linkedComment && linkedComment.comment_id;
   const hasNoComments = totalComments === 0;
-
   const moreBelow = totalComments - end > 0;
-  // todo: implement comment_list --mine in SDK so redux can grab with selectCommentIsMine
-  const isMyComment = (channelId: string) => {
+  const isMyComment = (channelId: string): boolean => {
     if (myChannels != null && channelId != null) {
       for (let i = 0; i < myChannels.length; i++) {
         if (myChannels[i].claim_id === channelId) {
@@ -140,7 +138,9 @@ function CommentList(props: Props) {
   }
 
   // Default to newest first for apps that don't have comment reactions
-  const sortedComments = ENABLE_COMMENT_REACTIONS ? sortComments(comments, reactionsById, sort) : comments;
+  const sortedComments = ENABLE_COMMENT_REACTIONS
+    ? sortComments({ comments, reactionsById, sort, isMyComment })
+    : comments;
   const displayedComments = readyToDisplayComments
     ? prepareComments(sortedComments, linkedComment).slice(start, end)
     : [];
