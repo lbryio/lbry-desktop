@@ -3,6 +3,7 @@ import * as ICONS from 'constants/icons';
 import React from 'react';
 import classnames from 'classnames';
 import Button from 'component/button';
+import { formatNumberWithCommas } from 'util/number';
 
 type Props = {
   claim: StreamClaim,
@@ -31,7 +32,7 @@ function FileReactions(props: Props) {
         title={__('I like this')}
         requiresAuth
         className={classnames('button--file-action')}
-        label={String(likeCount)}
+        label={formatNumberWithCommas(likeCount)}
         iconSize={18}
         icon={ICONS.UPVOTE}
         onClick={() => doReactionLike(uri)}
@@ -40,7 +41,7 @@ function FileReactions(props: Props) {
         requiresAuth
         title={__('I dislike this')}
         className={classnames('button--file-action')}
-        label={String(dislikeCount)}
+        label={formatNumberWithCommas(dislikeCount)}
         iconSize={18}
         icon={ICONS.DOWNVOTE}
         onClick={() => doReactionDislike(uri)}
