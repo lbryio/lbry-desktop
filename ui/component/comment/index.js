@@ -12,7 +12,7 @@ import { doToggleBlockChannel } from 'redux/actions/blocked';
 import { selectChannelIsBlocked } from 'redux/selectors/blocked';
 import { doToast } from 'redux/actions/notifications';
 import { selectUserVerifiedEmail } from 'redux/selectors/user';
-import { selectIsFetchingComments } from 'redux/selectors/comments';
+import { selectIsFetchingComments, makeSelectOthersReactionsForComment } from 'redux/selectors/comments';
 import Comment from './view';
 
 const select = (state, props) => ({
@@ -24,6 +24,7 @@ const select = (state, props) => ({
   commentingEnabled: IS_WEB ? Boolean(selectUserVerifiedEmail(state)) : true,
   isFetchingComments: selectIsFetchingComments(state),
   myChannels: selectMyChannelClaims(state),
+  othersReacts: makeSelectOthersReactionsForComment(props.commentId)(state),
 });
 
 const perform = dispatch => ({
