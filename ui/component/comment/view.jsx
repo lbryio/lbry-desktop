@@ -45,6 +45,10 @@ type Props = {
   isTopLevel?: boolean,
   threadDepth: number,
   isPinned: boolean,
+  othersReacts: ?{
+    like: number,
+    dislike: number,
+  },
 };
 
 const LENGTH_TO_COLLAPSE = 300;
@@ -74,6 +78,7 @@ function Comment(props: Props) {
     isTopLevel,
     threadDepth,
     isPinned,
+    othersReacts,
   } = props;
   const {
     push,
@@ -87,7 +92,12 @@ function Comment(props: Props) {
   // used for controlling the visibility of the menu icon
   const [mouseIsHovering, setMouseHover] = useState(false);
   const [advancedEditor] = usePersistedState('comment-editor-mode', false);
+  const [displayDeadComment, setDisplayDeadComment] = React.useState(false);
   const hasChannels = myChannels && myChannels.length > 0;
+  const likesCount = (othersReacts && othersReacts.like) || 0;
+  const dislikesCount = (othersReacts && othersReacts.dislike) || 0;
+  const totalLikesAndDislikes = likesCount + dislikesCount;
+  const slimedToDeath = totalLikesAndDislikes > 5 && dislikesCount / totalLikesAndDislikes > 0.8;
   // to debounce subsequent requests
   const shouldFetch =
     channel === undefined ||
@@ -163,6 +173,7 @@ function Comment(props: Props) {
       <div
         className={classnames('comment__content', {
           'comment--highlighted': linkedComment && linkedComment.comment_id === commentId,
+          'comment--slimed': slimedToDeath && !displayDeadComment,
         })}
       >
         <div className="comment__author-thumbnail">
@@ -253,7 +264,11 @@ function Comment(props: Props) {
             ) : (
               <>
                 <div className="comment__message">
-                  {editedMessage.length >= LENGTH_TO_COLLAPSE ? (
+                  {slimedToDeath && !displayDeadComment ? (
+                    <div onClick={() => setDisplayDeadComment(true)} className="comment__dead">
+                      {__('This comment was eaten by the slime.')} <Icon icon={ICONS.SLIME_ACTIVE} />
+                    </div>
+                  ) : editedMessage.length >= LENGTH_TO_COLLAPSE ? (
                     <Expandable>
                       <MarkdownPreview content={message} promptLinks />
                     </Expandable>
