@@ -85,11 +85,11 @@ function CommentList(props: Props) {
   }, [fetchReacts, uri, totalComments, activeChannel, fetchingChannels]);
 
   useEffect(() => {
-    if (linkedCommentId && commentRef && commentRef.current) {
+    if (readyToDisplayComments && linkedCommentId && commentRef && commentRef.current) {
       commentRef.current.scrollIntoView({ block: 'start' });
       window.scrollBy(0, -100);
     }
-  }, [linkedCommentId]);
+  }, [readyToDisplayComments, linkedCommentId]);
 
   useEffect(() => {
     function handleCommentScroll(e) {
