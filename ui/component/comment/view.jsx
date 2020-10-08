@@ -255,10 +255,10 @@ function Comment(props: Props) {
                 <div className="comment__message">
                   {editedMessage.length >= LENGTH_TO_COLLAPSE ? (
                     <Expandable>
-                      <MarkdownPreview content={message} />
+                      <MarkdownPreview content={message} promptLinks />
                     </Expandable>
                   ) : (
-                    <MarkdownPreview content={message} />
+                    <MarkdownPreview content={message} promptLinks />
                   )}
                 </div>
 

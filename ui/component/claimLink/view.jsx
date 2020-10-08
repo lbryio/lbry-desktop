@@ -1,15 +1,12 @@
 // @flow
 import * as React from 'react';
-import Button from 'component/button';
 import PreviewLink from 'component/previewLink';
 import UriIndicator from 'component/uriIndicator';
 
 type Props = {
   uri: string,
-  title: ?string,
   claim: StreamClaim,
   children: React.Node,
-  className: ?string,
   autoEmbed: ?boolean,
   description: ?string,
   isResolvingUri: boolean,
@@ -24,7 +21,6 @@ class ClaimLink extends React.Component<Props> {
   static defaultProps = {
     href: null,
     link: false,
-    title: null,
     thumbnail: null,
     autoEmbed: false,
     description: null,
@@ -63,7 +59,7 @@ class ClaimLink extends React.Component<Props> {
   };
 
   render() {
-    const { uri, claim, title, className, autoEmbed, children, isResolvingUri } = this.props;
+    const { uri, claim, autoEmbed, children, isResolvingUri } = this.props;
     const isUnresolved = (!isResolvingUri && !claim) || !claim;
     const isBlacklisted = this.isClaimBlackListed();
 
@@ -71,20 +67,15 @@ class ClaimLink extends React.Component<Props> {
       return <span>{children}</span>;
     }
 
-    const { name: claimName, value_type: valueType } = claim;
+    const { value_type: valueType } = claim;
     const isChannel = valueType === 'channel';
     const showPreview = autoEmbed === true && !isUnresolved;
 
-     if(isChannel){
-       return <UriIndicator uri={uri} link addTooltip />
-     }
+    if (isChannel) {
+      return <UriIndicator uri={uri} link addTooltip />;
+    }
 
-    return (
-      <React.Fragment>
-        <Button label={children} title={title || claimName} button={'link'} navigate={uri} className={className} />
-        {showPreview && <PreviewLink uri={uri} />}
-      </React.Fragment>
-    );
+    return <React.Fragment>{showPreview && <PreviewLink uri={uri} />}</React.Fragment>;
   }
 }
 

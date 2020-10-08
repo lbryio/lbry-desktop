@@ -29,20 +29,20 @@ class PreviewLink extends React.PureComponent<Props> {
     };
 
     return (
-      <span className={'preview-link'} role="button" onClick={this.handleClick}>
-        <span className={'claim-preview'}>
-          <span style={thumbnailStyle} className={'preview-link__thumbnail media__thumb'} />
-          <span className={'claim-preview-metadata'}>
-            <span className={'claim-preview-info'}>
-              <span className={'claim-preview__title'}>
+      <span className="preview-link" role="button" onClick={this.handleClick}>
+        <span className="claim-preview">
+          <span style={thumbnailStyle} className="preview-link__thumbnail media__thumb" />
+          <span className="claim-preview-metadata">
+            <span className="claim-preview-info">
+              <span className="claim-preview__title">
                 <TruncatedText text={title} lines={1} />
               </span>
             </span>
-            <span className={'media__subtitle'}>
+            <span className="media__subtitle">
               <UriIndicator uri={uri} link />
             </span>
-            <span className={'claim-preview-properties'}>
-              <span className={'preview-link__description media__subtitle'}>
+            <span className="claim-preview-properties">
+              <span className="preview-link__description media__subtitle">
                 <TruncatedText lines={2} showTooltip={false}>
                   <MarkdownPreview content={description} strip />
                 </TruncatedText>
