@@ -180,13 +180,14 @@
 
   .preview-link {
     padding: 0;
-    margin: 1rem 0;
+    margin: var(--spacing-s) 0;
+    padding-right: var(--spacing-s);
     background-color: var(--color-primary-alt);
-    border-left: 0.5rem solid var(--color-primary);
     display: block;
     align-items: center;
     word-break: break-all;
     overflow: hidden;
+    border-radius: var(--border-radius);
 
     .claim-preview {
       border: 0;
@@ -198,8 +199,14 @@
     }
   }
 
+  .claim-preview-metadata {
+    padding: var(--spacing-s) 0;
+  }
+
   .preview-link__thumbnail {
     width: 12rem;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
   }
 
   .preview-link__description {
