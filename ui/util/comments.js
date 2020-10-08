@@ -20,6 +20,12 @@ export function sortComments(sortProps: SortProps): Array<Comment> {
   }
 
   return comments.slice().sort((a: Comment, b: Comment) => {
+    if (a.is_pinned) {
+      return -1;
+    } else if (b.is_pinned) {
+      return 1;
+    }
+
     if (sort === SORT_COMMENTS_NEW) {
       return 0;
     }

@@ -892,4 +892,22 @@ export const icons = {
       </g>
     </svg>
   ),
+  [ICONS.PIN]: (props: CustomProps) => (
+    <svg
+      {...props}
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="-6 -5 26 24"
+      width={props.size || '18'}
+      height={props.size || '18'}
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path d="M11.3333333,6 C11.3333333,8.94666667 8.94666667,11.3333333 6,11.3333333 C3.056,11.3333333 0.666666667,8.94666667 0.666666667,6 C0.666666667,3.05466667 3.056,0.666666667 6,0.666666667 C8.94666667,0.666666667 11.3333333,3.05466667 11.3333333,6 L11.3333333,6 Z" />
+      <line x1="6" y1="11.3333333" x2="6" y2="23.3333333" />
+      <path d="M6,3.33333333 C7.47333333,3.33333333 8.66666667,4.528 8.66666667,6" />
+    </svg>
+  ),
 };

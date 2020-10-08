@@ -127,7 +127,7 @@ $thumbnailWidthSmall: 0rem;
 
 .comment--highlighted {
   background: var(--color-comment-highlighted);
-  box-shadow: 0 0 0 var(--spacing-xs) var(--color-comment-highlighted);
+  box-shadow: 0 0 0 5px var(--color-comment-highlighted);
   border-radius: 4px;
 }
 
@@ -149,6 +149,10 @@ $thumbnailWidthSmall: 0rem;
   justify-content: flex-start;
   display: flex;
   height: 100%;
+}
+
+.comment__pin {
+  margin-left: var(--spacing-s);
 }
 
 .comment__message {
