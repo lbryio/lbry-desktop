@@ -647,19 +647,19 @@ export function doUserSetReferrer(referrer, shouldClaim) {
       if (!claim) {
         try {
           const response = await Lbry.resolve({ urls: [uri] });
-          claim = response && response[uri];
+          if (response && response[uri] && !response[uri].error) claim = response && response[uri];
+          if (claim) {
+            if (claim.signing_channel) {
+              referrerCode = claim.signing_channel.permanent_url.replace('lbry://', '');
+            } else {
+              referrerCode = claim.permanent_url.replace('lbry://', '');
+            }
+          }
         } catch (error) {
           dispatch({
             type: ACTIONS.USER_SET_REFERRER_FAILURE,
             data: { error },
           });
-        }
-      }
-      if (claim) {
-        if (claim.signing_channel) {
-          referrerCode = claim.signing_channel.permanent_url.replace('lbry://', '');
-        } else {
-          referrerCode = claim.permanent_url.replace('lbry://', '');
         }
       }
     }
