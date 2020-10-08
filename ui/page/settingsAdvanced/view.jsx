@@ -507,7 +507,7 @@ class SettingsPage extends React.PureComponent<Props, State> {
               />
             )}
 
-            <Card title={__('Upload Settings')} actions={<PublishSettings />} />
+            <Card title={__('Upload settings')} actions={<PublishSettings />} />
 
             {/* @if TARGET='app' */}
             {/* Auto launch in a hidden state doesn't work on mac https://github.com/Teamwork/node-auto-launch/issues/81 */}
