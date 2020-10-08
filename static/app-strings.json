@@ -1321,5 +1321,7 @@
   "Credit Details": "Credit Details",
   "LBRY Credits": "LBRY Credits",
   "Sync my YouTube channel": "Sync my YouTube channel",
+  "Pinned by @%channel%": "Pinned by @%channel%",
+  "Pinned by creator": "Pinned by creator",
   "--end--": "--end--"
 }
