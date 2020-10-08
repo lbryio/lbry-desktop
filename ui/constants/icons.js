@@ -124,3 +124,4 @@ export const FIRE_ACTIVE = 'FireActive';
 export const SLIME_ACTIVE = 'SlimeActive';
 export const FIRE = 'Fire';
 export const SLIME = 'Slime';
+export const PIN = 'Pin';

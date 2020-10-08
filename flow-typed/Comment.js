@@ -11,6 +11,7 @@ declare type Comment = {
   signing_ts?: string, // timestamp used when signing this comment
   is_channel_signature_valid?: boolean, // whether or not the signature could be validated
   parent_id?: number, // comment_id of comment this is in reply to
+  is_pinned: boolean,
 };
 
 // todo: relate individual comments to their commentId

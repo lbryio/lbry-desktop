@@ -216,6 +216,7 @@ function CommentList(props: Props) {
                     claimIsMine={claimIsMine}
                     commentIsMine={comment.channel_id && isMyComment(comment.channel_id)}
                     linkedComment={linkedComment}
+                    isPinned={comment.is_pinned}
                   />
                 );
               })}

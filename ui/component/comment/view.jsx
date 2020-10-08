@@ -4,6 +4,7 @@ import * as PAGES from 'constants/pages';
 import { FF_MAX_CHARS_IN_COMMENT } from 'constants/form-field';
 import { SITE_NAME, SIMPLE_SITE, ENABLE_COMMENT_REACTIONS } from 'config';
 import React, { useEffect, useState } from 'react';
+import { parseURI } from 'lbry-redux';
 import { isEmpty } from 'util/object';
 import DateTime from 'component/dateTime';
 import Button from 'component/button';
@@ -43,6 +44,7 @@ type Props = {
   doToast: ({ message: string }) => void,
   isTopLevel?: boolean,
   threadDepth: number,
+  isPinned: boolean,
 };
 
 const LENGTH_TO_COLLAPSE = 300;
@@ -71,10 +73,12 @@ function Comment(props: Props) {
     doToast,
     isTopLevel,
     threadDepth,
+    isPinned,
   } = props;
   const {
     push,
-    location: { pathname },
+    replace,
+    location: { pathname, search },
   } = useHistory();
   const [isReplying, setReplying] = React.useState(false);
   const [isEditing, setEditing] = useState(false);
@@ -84,11 +88,17 @@ function Comment(props: Props) {
   const [mouseIsHovering, setMouseHover] = useState(false);
   const [advancedEditor] = usePersistedState('comment-editor-mode', false);
   const hasChannels = myChannels && myChannels.length > 0;
-
   // to debounce subsequent requests
   const shouldFetch =
     channel === undefined ||
     (channel !== null && channel.value_type === 'channel' && isEmpty(channel.meta) && !pending);
+  let channelOwnerOfContent;
+  try {
+    const { channelName } = parseURI(uri);
+    if (channelName) {
+      channelOwnerOfContent = channelName;
+    }
+  } catch (e) {}
 
   useEffect(() => {
     // If author was extracted from the URI, then it must be valid.
@@ -133,18 +143,28 @@ function Comment(props: Props) {
     }
   }
 
+  function handleTimeClick() {
+    const urlParams = new URLSearchParams(search);
+    urlParams.delete('lc');
+    urlParams.append('lc', commentId);
+    replace(`${pathname}?${urlParams.toString()}`);
+  }
+
   return (
     <li
       className={classnames('comment', {
         'comment--top-level': isTopLevel,
         'comment--reply': !isTopLevel,
-        'comment--highlighted': linkedComment && linkedComment.comment_id === commentId,
       })}
       id={commentId}
       onMouseOver={() => setMouseHover(true)}
       onMouseOut={() => setMouseHover(false)}
     >
-      <div className="comment__content">
+      <div
+        className={classnames('comment__content', {
+          'comment--highlighted': linkedComment && linkedComment.comment_id === commentId,
+        })}
+      >
         <div className="comment__author-thumbnail">
           {authorUri ? (
             <ChannelThumbnail uri={authorUri} obscure={channelIsBlocked} small />
@@ -167,9 +187,18 @@ function Comment(props: Props) {
               )}
               <Button
                 className="comment__time"
-                navigate={`${uri}?lc=${commentId}`}
+                onClick={handleTimeClick}
                 label={<DateTime date={timePosted} timeAgo />}
               />
+
+              {isPinned && (
+                <span className="comment__pin">
+                  <Icon icon={ICONS.PIN} />
+                  {channelOwnerOfContent
+                    ? __('Pinned by @%channel%', { channel: channelOwnerOfContent })
+                    : __('Pinned by creator')}
+                </span>
+              )}
             </div>
             <div className="comment__menu">
               <Menu>
