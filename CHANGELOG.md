@@ -10,12 +10,15 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 - Add Publish Preview dialog _community pr!_ ([#4620](https://github.com/lbryio/lbry-desktop/pull/4620))
 - "ctrl/cmd+enter" can now be used to directly submit a comment ([#4809](https://github.com/lbryio/lbry-desktop/pull/4809))
+- Deeper comment thread depth ([#4868](https://github.com/lbryio/lbry-desktop/pull/4868))
 
 ### Changed
 
-- Fade out expandable areas (e.g. comments, file description) when collapsed  _community pr!_ ([#4818](https://github.com/lbryio/lbry-desktop/pull/4818))
+- Fade out expandable areas (e.g. comments, file description) when collapsed _community pr!_ ([#4818](https://github.com/lbryio/lbry-desktop/pull/4818))
 
 ### Fixed
+
+- Videos started as muted on initial desktop session _community pr!_ ([#4864](https://github.com/lbryio/lbry-desktop/pull/4864))
 
 ## [0.48.0] - [2020-09-23]
 
