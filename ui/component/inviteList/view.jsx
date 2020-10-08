@@ -50,7 +50,7 @@ class InviteList extends React.PureComponent<Props> {
             <div className="card__actions--inline">
               <RewardLink
                 button
-                label={__(`Claim Your ${rewardAmount} Credit Invite Reward`)}
+                label={__(`Claim Your %reward_amount% Credit Invite Reward`, { reward_amount: rewardAmount })}
                 claim_code={referralReward.claim_code}
               />
             </div>
