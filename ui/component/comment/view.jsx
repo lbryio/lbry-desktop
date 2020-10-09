@@ -266,7 +266,7 @@ function Comment(props: Props) {
                 <div className="comment__message">
                   {slimedToDeath && !displayDeadComment ? (
                     <div onClick={() => setDisplayDeadComment(true)} className="comment__dead">
-                      {__('This comment was eaten by the slime.')} <Icon icon={ICONS.SLIME_ACTIVE} />
+                      {__('This comment was slimed to death.')} <Icon icon={ICONS.SLIME_ACTIVE} />
                     </div>
                   ) : editedMessage.length >= LENGTH_TO_COLLAPSE ? (
                     <Expandable>
