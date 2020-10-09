@@ -212,7 +212,7 @@ class HelpPage extends React.PureComponent<Props, State> {
         {/* @endif */}
 
         <Card
-          title={__('About')}
+          title={__('About --[About section in Help Page]--')}
           subtitle={
             this.state.upgradeAvailable !== null && this.state.upgradeAvailable ? (
               <span>

@@ -21,14 +21,14 @@ function saveMessage(message) {
     try {
       knownMessages = JSON.parse(fs.readFileSync(messagesFilePath, 'utf-8'));
     } catch (err) {
-      throw 'Error parsing i18n messages file: ' + messagesFilePath + ' err: ' + err;
+      throw new Error('Error parsing i18n messages file: ' + messagesFilePath + ' err: ' + err);
     }
   }
 
   if (!knownMessages[message]) {
     const END = '--end--';
     delete knownMessages[END];
-    knownMessages[message] = message;
+    knownMessages[message] = removeContextMetadata(message);
     knownMessages[END] = END;
 
     fs.writeFile(messagesFilePath, JSON.stringify(knownMessages, null, 2) + '\n', 'utf-8', err => {
@@ -53,6 +53,31 @@ function saveMessage(message) {
 }
 // @endif
 
+function removeContextMetadata(message) {
+  // Example string entries with context-metadata:
+  //   "About --[About section in Help Page]--": "About",
+  //   "About --[tab title in Channel Page]--": "About",
+  const CONTEXT_BEGIN = '--[';
+  const CONTEXT_FINAL = ']--';
+
+  // If the resolved string still contains the context-metadata, then it's one of the following:
+  // 1. In development mode, where 'en.json' in the server hasn't been updated with the string yet.
+  // 2. Translator made a mistake of not ignoring the context string.
+  // In either case, we'll revert to the English version.
+
+  const begin = message.lastIndexOf(CONTEXT_BEGIN);
+  if (begin > 0 && message.endsWith(CONTEXT_FINAL)) {
+    // Strip away context:
+    message = message.substring(0, begin);
+    // No trailing spaces should be allowed in the string database anyway, because that is hard to translate
+    // (can't see in Transifex; might not make sense in other languages; etc.).
+    // With that, we can add a space before the context-metadata to make it neat, and trim both cases here:
+    message = message.trimEnd();
+  }
+
+  return message;
+}
+
 export function __(message, tokens) {
   const language = localStorageAvailable
     ? window.localStorage.getItem('language') || 'en'
@@ -62,9 +87,8 @@ export function __(message, tokens) {
     saveMessage(message);
   }
 
-  const translatedMessage = window.i18n_messages[language]
-    ? window.i18n_messages[language][message] || message
-    : message;
+  let translatedMessage = window.i18n_messages[language] ? window.i18n_messages[language][message] || message : message;
+  translatedMessage = removeContextMetadata(translatedMessage);
 
   if (!tokens) {
     return translatedMessage;
