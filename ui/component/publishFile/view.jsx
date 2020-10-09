@@ -371,7 +371,7 @@ function PublishFile(props: Props) {
           )}
           {isPublishPost && (
             <PostEditor
-              label={__('Post')}
+              label={__('Post --[noun, markdown post tab button]--')}
               uri={uri}
               disabled={disabled}
               fileMimeType={fileMimeType}

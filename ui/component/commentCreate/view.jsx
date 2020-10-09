@@ -120,7 +120,7 @@ export function CommentCreate(props: Props) {
           label={isFetchingChannels ? __('Comment') : undefined}
         />
         <div className="section__actions">
-          <Button disabled button="primary" label={__('Post')} requiresAuth={IS_WEB} />
+          <Button disabled button="primary" label={__('Post --[button to submit something]--')} requiresAuth={IS_WEB} />
         </div>
       </div>
     );
@@ -170,7 +170,7 @@ export function CommentCreate(props: Props) {
                 : __('Reply')
               : isPostingComment
               ? __('Posting...')
-              : __('Post')
+              : __('Post --[button to submit something]--')
           }
           requiresAuth={IS_WEB}
         />
