@@ -16,12 +16,11 @@ export default function ClaimSupportButton(props: Props) {
 
   return (
     <Button
-      button="alt"
       button={fileAction ? undefined : 'alt'}
       className={classnames({ 'button--file-action': fileAction })}
       icon={ICONS.LBC}
       iconSize={fileAction ? 22 : undefined}
-      label={__('Support')}
+      label={__('Support --[button to support a claim]--')}
       requiresAuth={IS_WEB}
       title={__('Support this claim')}
       onClick={() => doOpenModal(MODALS.SEND_TIP, { uri, isSupport: true })}

@@ -126,7 +126,7 @@ class TxoListItem extends React.PureComponent<Props, State> {
         <td className="table__item--actionable">
           <span>
             {(isTip && __('Tip')) ||
-              (type === 'support' && !isTip && __('Support')) ||
+              (type === 'support' && !isTip && __('Support --[noun; transaction type]--')) ||
               (valueType && ((valueType === 'stream' && __('Upload')) || __(toCapitalCase(valueType)))) ||
               (type && __(toCapitalCase(type)))}
           </span>{' '}

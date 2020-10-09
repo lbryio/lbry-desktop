@@ -37,7 +37,7 @@ const sections = [
         link: 'https://lbry.com/faq',
       },
       {
-        label: 'Support',
+        label: 'Support --[used in footer; general help/support]--',
         link: 'https://lbry.com/faq/support',
       },
       {
