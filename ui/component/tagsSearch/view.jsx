@@ -148,7 +148,7 @@ export default function TagsSearch(props: Props) {
               %selectTagsLabel% (%number% left)
             </I18nMessage>
           ) : (
-            label || __('Following')
+            label || __('Following --[button label indicating a channel has been followed]--')
           )}
         </label>
         <ul className="tags--remove">

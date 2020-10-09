@@ -21,7 +21,7 @@ const HOME = {
 };
 
 const RECENT_FROM_FOLLOWING = {
-  label: 'Following',
+  label: 'Following --[sidebar button]--',
   navigate: `/$/${PAGES.CHANNELS_FOLLOWING}`,
   icon: ICONS.SUBSCRIBE,
 };
