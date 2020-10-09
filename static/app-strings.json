@@ -1,5 +1,6 @@
 {
   "404": "404",
+  "2257": "2257",
   "Thumbnail Image": "Thumbnail Image",
   "OK": "OK",
   "Cancel": "Cancel",
@@ -1435,5 +1436,12 @@
   "Level up with LBRY - %version%": "Level up with LBRY - %version%",
   "Invites": "Invites",
   "This comment was slimed to death.": "This comment was slimed to death.",
+  "Reddit": "Reddit",
+  "Chat (Discord)": "Chat (Discord)",
+  "Telegram": "Telegram",
+  "YouTube Partner Program": "YouTube Partner Program",
+  "lbry.com": "lbry.com",
+  "lbry.tech": "lbry.tech",
+  "GitHub": "GitHub",
   "--end--": "--end--"
 }
