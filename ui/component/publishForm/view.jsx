@@ -34,6 +34,11 @@ import tempy from 'tempy';
 
 const MODES = Object.values(PUBLISH_MODES);
 
+const MODE_TO_I18N_STR = {
+  [PUBLISH_MODES.FILE]: 'File',
+  [PUBLISH_MODES.POST]: 'Post --[noun, markdown post tab button]--',
+};
+
 type Props = {
   disabled: boolean,
   tags: Array<Tag>,
@@ -339,7 +344,7 @@ function PublishForm(props: Props) {
               <Button
                 key={index}
                 icon={modeName}
-                label={__(String(modeName))}
+                label={__(MODE_TO_I18N_STR[String(modeName)] || '---')}
                 button="alt"
                 onClick={() => {
                   setMode(modeName);
