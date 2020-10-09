@@ -89,7 +89,7 @@ export default function Footer() {
               {links.map(({ label, link, navigate }) => {
                 return (
                   <li key={label}>
-                    <Button className="footer__link" href={link} navigate={navigate} label={label} />
+                    <Button className="footer__link" href={link} navigate={navigate} label={__(label)} />
                   </li>
                 );
               })}
