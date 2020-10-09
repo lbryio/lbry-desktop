@@ -117,6 +117,7 @@ function UserEmailNew(props: Props) {
                 onChange={e => setPassword(e.target.value)}
               />
 
+              {/* @if TARGET='web' */}
               <FormField
                 type="checkbox"
                 name="youtube_sync_checkbox"
@@ -124,21 +125,22 @@ function UserEmailNew(props: Props) {
                 checked={interestedInYoutubSync}
                 onChange={() => doToggleInterestedInYoutubeSync()}
               />
+              {/* @endif */}
 
-              {!IS_WEB && (
-                <FormField
-                  type="checkbox"
-                  name="sync_checkbox"
-                  label={
-                    <React.Fragment>
-                      {__('Backup your account and wallet data.')}{' '}
-                      <Button button="link" href="https://lbry.com/faq/account-sync" label={__('Learn More')} />
-                    </React.Fragment>
-                  }
-                  checked={formSyncEnabled}
-                  onChange={() => setFormSyncEnabled(!formSyncEnabled)}
-                />
-              )}
+              {/* @if TARGET='app' */}
+              <FormField
+                type="checkbox"
+                name="sync_checkbox"
+                label={
+                  <React.Fragment>
+                    {__('Backup your account and wallet data.')}{' '}
+                    <Button button="link" href="https://lbry.com/faq/account-sync" label={__('Learn More')} />
+                  </React.Fragment>
+                }
+                checked={formSyncEnabled}
+                onChange={() => setFormSyncEnabled(!formSyncEnabled)}
+              />
+              {/* @endif */}
 
               {!shareUsageData && !IS_WEB && (
                 <FormField
