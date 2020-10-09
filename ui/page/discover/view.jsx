@@ -50,7 +50,7 @@ function DiscoverPage(props: Props) {
   const tag = (tags && tags[0]) || null;
 
   const isFollowing = followedTags.map(({ name }) => name).includes(tag);
-  let label = isFollowing ? __('Following') : __('Follow');
+  let label = isFollowing ? __('Following --[button label indicating a channel has been followed]--') : __('Follow');
   if (isHovering && isFollowing) {
     label = __('Unfollow');
   }

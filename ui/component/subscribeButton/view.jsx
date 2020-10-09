@@ -41,7 +41,9 @@ export default function SubscribeButton(props: Props) {
   const claimName = '@' + channelName;
 
   const subscriptionHandler = isSubscribed ? doChannelUnsubscribe : doChannelSubscribe;
-  const subscriptionLabel = isSubscribed ? __('Following') : __('Follow');
+  const subscriptionLabel = isSubscribed
+    ? __('Following --[button label indicating a channel has been followed]--')
+    : __('Follow');
   const unfollowOverride = isSubscribed && isHovering && __('Unfollow');
 
   const label = isMobile && shrinkOnMobile ? '' : unfollowOverride || subscriptionLabel;

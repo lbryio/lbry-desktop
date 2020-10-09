@@ -21,6 +21,8 @@
   "Library": "Library",
   "Purchased": "Purchased",
   "Following": "Following",
+  "Following --[sidebar button]--": "Following",
+  "Following --[button label indicating a channel has been followed]--": "Following",
   "The tags you follow will change what's trending for you.": "The tags you follow will change what's trending for you.",
   "Tags": "Tags",
   "Send a tip": "Send a tip",
