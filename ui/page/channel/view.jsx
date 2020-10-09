@@ -200,7 +200,7 @@ function ChannelPage(props: Props) {
       <Tabs onChange={onTabChange} index={tabIndex}>
         <TabList className="tabs__list--channel-page">
           <Tab disabled={editing}>{__('Content')}</Tab>
-          <Tab>{editing ? __('Editing Your Channel') : __('About')}</Tab>
+          <Tab>{editing ? __('Editing Your Channel') : __('About --[tab title in Channel Page]--')}</Tab>
           <Tab disabled={editing}>{__('Discussion')}</Tab>
         </TabList>
         <TabPanels>
