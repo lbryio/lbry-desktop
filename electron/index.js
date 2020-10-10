@@ -274,7 +274,7 @@ ipcMain.on('upgrade', (event, installerPath) => {
     console.log('Launching upgrade installer at', installerPath);
     // This gets triggered called after *all* other quit-related events, so
     // we'll only get here if we're fully prepared and quitting for real.
-    shell.openItem(installerPath);
+    shell.openPath(installerPath);
   });
   // what to do if no shutdown in a long time?
   console.log('Update downloaded to', installerPath);
