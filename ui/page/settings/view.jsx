@@ -330,7 +330,7 @@ class SettingsPage extends React.PureComponent<Props, State> {
                           name="automatic_dark_mode_range"
                           onChange={value => this.onChangeTime(value, { fromTo: 'from', time: 'hour' })}
                           value={darkModeTimes.from.hour}
-                          label={__('From')}
+                          label={__('From --[initial time]--')}
                         >
                           {startHours.map(time => (
                             <option key={time} value={time}>
@@ -341,7 +341,7 @@ class SettingsPage extends React.PureComponent<Props, State> {
                         <FormField
                           type="select"
                           name="automatic_dark_mode_range"
-                          label={__('To')}
+                          label={__('To --[final time]--')}
                           onChange={value => this.onChangeTime(value, { fromTo: 'to', time: 'hour' })}
                           value={darkModeTimes.to.hour}
                         >
