@@ -191,9 +191,9 @@ function WalletSendTip(props: Props) {
               <>
                 <div className="section section--padded card--inline confirm__wrapper">
                   <div className="section">
-                    <div className="confirm__label">{__('To')}</div>
+                    <div className="confirm__label">{__('To --[the tip recipient]--')}</div>
                     <div className="confirm__value">{channelName || title}</div>
-                    <div className="confirm__label">{__('From')}</div>
+                    <div className="confirm__label">{__('From --[the tip sender]--')}</div>
                     <div className="confirm__value">{selectedChannel}</div>
                     <div className="confirm__label">{__(isSupport ? 'Supporting' : 'Tipping')}</div>
                     <div className="confirm__value">
