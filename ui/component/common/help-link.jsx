@@ -14,6 +14,11 @@ export default function HelpLink(props: Props) {
   const { href, navigate, icon, description } = props;
   return (
     <Button
+      onClick={e => {
+        if (href) {
+          e.stopPropagation();
+        }
+      }}
       className="icon--help"
       icon={icon || ICONS.HELP}
       description={description || __('Help')}
