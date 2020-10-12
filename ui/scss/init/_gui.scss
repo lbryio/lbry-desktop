@@ -234,6 +234,11 @@ textarea {
   &:not(:last-child) {
     margin-bottom: 0;
   }
+
+  .icon--help {
+    top: 3px;
+    margin-left: 2px;
+  }
 }
 
 .help--card-actions {

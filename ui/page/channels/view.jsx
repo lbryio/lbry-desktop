@@ -10,6 +10,7 @@ import Spinner from 'component/spinner';
 import Yrbl from 'component/yrbl';
 import LbcSymbol from 'component/common/lbc-symbol';
 import * as PAGES from 'constants/pages';
+import HelpLink from 'component/common/help-link';
 
 type Props = {
   channels: Array<ChannelClaim>,
@@ -81,7 +82,9 @@ export default function ChannelsPage(props: Props) {
               if (channelRewardData) {
                 return (
                   <span className="claim-preview__custom-properties">
-                    <span className="help--inline">{__('Earnings per view')}</span>
+                    <span className="help--inline">
+                      {__('Earnings per view')} <HelpLink href="https://lbry.com/faq/view-rewards" />
+                    </span>
                     <LbcSymbol postfix={channelRewardData.view_rate.toFixed(2)} />
                   </span>
                 );
