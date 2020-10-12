@@ -14,6 +14,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ### Changed
 
+- Updated lbry-sdk to [0.83.0](https://github.com/lbryio/lbry-sdk/releases/tag/v0.83.0)
 - Upgrade electron to v9 ([#4824](https://github.com/lbryio/lbry-desktop/pull/4824))
 - Fade out expandable areas (e.g. comments, file description) when collapsed _community pr!_ ([#4818](https://github.com/lbryio/lbry-desktop/pull/4818))
 
