@@ -200,6 +200,10 @@
   color: var(--color-text);
 }
 
+.claim-preview__custom-properties {
+  text-align: right;
+}
+
 .claim-preview-metadata {
   display: flex;
   flex-direction: column;

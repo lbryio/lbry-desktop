@@ -1,12 +1,14 @@
 // @flow
 import * as ICONS from 'constants/icons';
 import React, { useEffect } from 'react';
+import { Lbryio } from 'lbryinc';
 import ClaimList from 'component/claimList';
 import Page from 'component/page';
 import Button from 'component/button';
 import YoutubeTransferStatus from 'component/youtubeTransferStatus';
 import Spinner from 'component/spinner';
 import Yrbl from 'component/yrbl';
+import LbcSymbol from 'component/common/lbc-symbol';
 import * as PAGES from 'constants/pages';
 
 type Props = {
@@ -19,12 +21,17 @@ type Props = {
 
 export default function ChannelsPage(props: Props) {
   const { channels, channelUrls, fetchChannelListMine, fetchingChannels, youtubeChannels } = props;
+  const [rewardData, setRewardData] = React.useState();
   const hasYoutubeChannels = youtubeChannels && Boolean(youtubeChannels.length);
   const hasPendingChannels = channels && channels.some(channel => channel.confirmations < 0);
 
   useEffect(() => {
     fetchChannelListMine();
   }, [fetchChannelListMine, hasPendingChannels]);
+
+  useEffect(() => {
+    Lbryio.call('user_rewards', 'view_rate').then(data => setRewardData(data));
+  }, [setRewardData]);
 
   return (
     <Page>
@@ -44,6 +51,44 @@ export default function ChannelsPage(props: Props) {
             }
             loading={fetchingChannels}
             uris={channelUrls}
+            renderActions={claim => {
+              const claimsInChannel = claim.meta.claims_in_channel;
+              return claimsInChannel === 0 ? (
+                <span />
+              ) : (
+                <div className="section__actions">
+                  <Button
+                    button="alt"
+                    icon={ICONS.ANALYTICS}
+                    label={__('Analytics')}
+                    navigate={`/$/${PAGES.CREATOR_DASHBOARD}?channel=${encodeURIComponent(claim.canonical_url)}`}
+                  />
+                </div>
+              );
+            }}
+            renderProperties={claim => {
+              const claimsInChannel = claim.meta.claims_in_channel;
+              if (!claim || claimsInChannel === 0) {
+                return null;
+              }
+
+              const channelRewardData =
+                rewardData &&
+                rewardData.rates.find(data => {
+                  return data.channel_claim_id === claim.claim_id;
+                });
+
+              if (channelRewardData) {
+                return (
+                  <span className="claim-preview__custom-properties">
+                    <span className="help--inline">{__('Earnings per view')}</span>
+                    <LbcSymbol postfix={channelRewardData.view_rate.toFixed(2)} />
+                  </span>
+                );
+              } else {
+                return null;
+              }
+            }}
           />
         )}
       </div>
