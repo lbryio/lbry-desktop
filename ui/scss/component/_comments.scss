@@ -53,6 +53,10 @@ $thumbnailWidthSmall: 0rem;
   }
 }
 
+.comment__author-thumbnail {
+  flex: 0;
+}
+
 .comment__content {
   display: flex;
   flex-direction: row;
