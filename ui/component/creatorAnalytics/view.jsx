@@ -26,7 +26,7 @@ export default function CreatorAnalytics(props: Props) {
   const history = useHistory();
   const [stats, setStats] = React.useState();
   const [error, setError] = React.useState();
-  const [fetchingStats, setFetchingStats] = React.useState(false);
+  const [fetchingStats, setFetchingStats] = React.useState(true);
   const claimId = claim && claim.claim_id;
   const channelHasClaims = claim && claim.meta && claim.meta.claims_in_channel && claim.meta.claims_in_channel > 0;
 

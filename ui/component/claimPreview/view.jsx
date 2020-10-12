@@ -59,6 +59,8 @@ type Props = {
   customShouldHide?: Claim => boolean,
   showUnresolvedClaim?: boolean,
   includeSupportAction?: boolean,
+  hideActions?: boolean,
+  renderActions?: Claim => ?Node,
 };
 
 const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
@@ -91,12 +93,14 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
     customShouldHide,
     showUnresolvedClaim,
     includeSupportAction,
+    hideActions = false,
+    renderActions,
   } = props;
   const shouldFetch =
     claim === undefined || (claim !== null && claim.value_type === 'channel' && isEmpty(claim.meta) && !pending);
   const abandoned = !isResolvingUri && !claim;
   const showPublishLink = abandoned && !showUnresolvedClaim && placeholder === 'publish';
-  const hideActions = type === 'small' || type === 'tooltip';
+  const shouldHideActions = hideActions || type === 'small' || type === 'tooltip';
   const canonicalUrl = claim && claim.canonical_url;
   let isValid = false;
   if (uri) {
@@ -286,7 +290,8 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
             <div className="claim-preview__actions">
               {!pending && (
                 <>
-                  {hideActions ? null : actions !== undefined ? (
+                  {renderActions && claim && renderActions(claim)}
+                  {shouldHideActions || renderActions ? null : actions !== undefined ? (
                     actions
                   ) : (
                     <div className="claim-preview__primary-actions">

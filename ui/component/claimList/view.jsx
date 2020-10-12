@@ -36,6 +36,7 @@ type Props = {
   injectedItem: ?Node,
   timedOutMessage?: Node,
   tileLayout?: boolean,
+  renderActions?: Claim => ?Node,
 };
 
 export default function ClaimList(props: Props) {
@@ -59,6 +60,7 @@ export default function ClaimList(props: Props) {
     injectedItem,
     timedOutMessage,
     tileLayout = false,
+    renderActions,
   } = props;
 
   const [currentSort, setCurrentSort] = usePersistedState(persistedStorageKey, SORT_NEW);
@@ -147,6 +149,7 @@ export default function ClaimList(props: Props) {
                 includeSupportAction={includeSupportAction}
                 showUnresolvedClaim={showUnresolvedClaims}
                 properties={renderProperties || (type !== 'small' ? undefined : false)}
+                renderActions={renderActions}
                 showUserBlocked={showHiddenByUser}
                 hideBlock={hideBlock}
                 customShouldHide={(claim: StreamClaim) => {

@@ -230,6 +230,10 @@ textarea {
   @extend .help;
   margin-top: 0;
   margin-bottom: 0;
+
+  &:not(:last-child) {
+    margin-bottom: 0;
+  }
 }
 
 .help--card-actions {
