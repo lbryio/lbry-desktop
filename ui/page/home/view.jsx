@@ -14,10 +14,11 @@ type Props = {
   authenticated: boolean,
   followedTags: Array<Tag>,
   subscribedChannels: Array<Subscription>,
+  showNsfw: boolean,
 };
 
 function HomePage(props: Props) {
-  const { followedTags, subscribedChannels, authenticated } = props;
+  const { followedTags, subscribedChannels, authenticated, showNsfw } = props;
   const showPersonalizedChannels = (authenticated || !IS_WEB) && subscribedChannels && subscribedChannels.length > 0;
   const showPersonalizedTags = (authenticated || !IS_WEB) && followedTags && followedTags.length > 0;
   const showIndividualTags = showPersonalizedTags && followedTags.length < 5;
@@ -28,7 +29,8 @@ function HomePage(props: Props) {
     showPersonalizedTags,
     subscribedChannels,
     followedTags,
-    showIndividualTags
+    showIndividualTags,
+    showNsfw
   );
 
   return (
