@@ -21,7 +21,8 @@ export default function GetHomePageRowData(
   showPersonalizedTags: boolean,
   subscribedChannels: Array<Subscription>,
   followedTags: Array<Tag>,
-  showIndividualTags: boolean
+  showIndividualTags: boolean,
+  showNsfw: boolean
 ) {
   const isLargeScreen = useIsLargeScreen();
 
