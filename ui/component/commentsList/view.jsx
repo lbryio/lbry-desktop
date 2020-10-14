@@ -161,7 +161,8 @@ function CommentList(props: Props) {
               <Button
                 button="alt"
                 label={__('Best')}
-                icon={ICONS.FIRE}
+                icon={ICONS.BEST}
+                iconSize={18}
                 onClick={() => setSort(SORT_COMMENTS_BEST)}
                 className={classnames(`button-toggle`, {
                   'button-toggle--active': sort === SORT_COMMENTS_BEST,
@@ -171,6 +172,7 @@ function CommentList(props: Props) {
                 button="alt"
                 label={__('Controversial')}
                 icon={ICONS.CONTROVERSIAL}
+                iconSize={18}
                 onClick={() => setSort(SORT_COMMENTS_CONTROVERSIAL)}
                 className={classnames(`button-toggle`, {
                   'button-toggle--active': sort === SORT_COMMENTS_CONTROVERSIAL,
@@ -180,6 +182,7 @@ function CommentList(props: Props) {
                 button="alt"
                 label={__('New')}
                 icon={ICONS.NEW}
+                iconSize={18}
                 onClick={() => setSort(SORT_COMMENTS_NEW)}
                 className={classnames(`button-toggle`, {
                   'button-toggle--active': sort === SORT_COMMENTS_NEW,
