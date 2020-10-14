@@ -221,6 +221,7 @@ function ClaimListHeader(props: Props) {
                   })}
                   disabled={orderBy}
                   icon={toCapitalCase(type)}
+                  iconSize={toCapitalCase(type) === ICONS.NEW ? 20 : undefined}
                   label={__(toCapitalCase(type))}
                 />
               ))}
