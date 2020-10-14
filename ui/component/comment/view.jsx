@@ -49,6 +49,10 @@ type Props = {
     like: number,
     dislike: number,
   },
+  pinComment: (string, boolean) => Promise<any>,
+  fetchComments: string => void,
+  commentIdentityChannel: any,
+  contentChannel: any,
 };
 
 const LENGTH_TO_COLLAPSE = 300;
@@ -78,7 +82,11 @@ function Comment(props: Props) {
     isTopLevel,
     threadDepth,
     isPinned,
+    pinComment,
+    fetchComments,
     othersReacts,
+    commentIdentityChannel,
+    contentChannel,
   } = props;
   const {
     push,
@@ -137,6 +145,10 @@ function Comment(props: Props) {
 
   function handleEditMessageChanged(event) {
     setCommentValue(!SIMPLE_SITE && advancedEditor ? event : event.target.value);
+  }
+
+  function handlePinComment(commentId, remove) {
+    pinComment(commentId, remove).then(() => fetchComments(uri));
   }
 
   function handleSubmit() {
@@ -204,7 +216,7 @@ function Comment(props: Props) {
 
               {isPinned && (
                 <span className="comment__pin">
-                  <Icon icon={ICONS.PIN} />
+                  <Icon icon={ICONS.PIN} size={14} />
                   {channelOwnerOfContent
                     ? __('Pinned by @%channel%', { channel: channelOwnerOfContent })
                     : __('Pinned by creator')}
@@ -223,16 +235,32 @@ function Comment(props: Props) {
                 <MenuList className="menu__list--comments">
                   {commentIsMine ? (
                     <>
-                      <MenuItem className="comment__menu-option" onSelect={() => setEditing(true)}>
+                      <MenuItem className="comment__menu-option menu__link" onSelect={() => setEditing(true)}>
+                        <Icon aria-hidden icon={ICONS.EDIT} />
                         {__('Edit')}
                       </MenuItem>
-                      <MenuItem className="comment__menu-option" onSelect={() => deleteComment(commentId)}>
+                      <MenuItem className="comment__menu-option menu__link" onSelect={() => deleteComment(commentId)}>
+                        <Icon aria-hidden icon={ICONS.DELETE} />
                         {__('Delete')}
                       </MenuItem>
                     </>
                   ) : (
-                    <MenuItem className="comment__menu-option" onSelect={() => blockChannel(authorUri)}>
+                    <MenuItem className="comment__menu-option menu__link" onSelect={() => blockChannel(authorUri)}>
+                      <Icon aria-hidden icon={ICONS.NO} />
                       {__('Block Channel')}
+                    </MenuItem>
+                  )}
+                  {commentIdentityChannel === contentChannel && (
+                    <MenuItem
+                      className="comment__menu-option menu__link"
+                      onSelect={
+                        isPinned ? () => handlePinComment(commentId, true) : () => handlePinComment(commentId, false)
+                      }
+                    >
+                      <span className={'button__content'}>
+                        <Icon aria-hidden icon={ICONS.PIN} className={'icon'} />
+                        {isPinned ? __('Unpin') : __('Pin')}
+                      </span>
                     </MenuItem>
                   )}
                 </MenuList>
