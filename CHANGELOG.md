@@ -8,6 +8,18 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ### Added
 
+### Changed
+
+- Disable snapshot thumbnail upload on desktop until Electron issue is fixed ([#4905](https://github.com/lbryio/lbry-desktop/pull/4905))
+
+### Fixed
+
+
+
+## [0.48.1] - [2020-10-14]
+
+### Added
+
 - Add Publish Preview dialog _community pr!_ ([#4620](https://github.com/lbryio/lbry-desktop/pull/4620))
 - "ctrl/cmd+enter" can now be used to directly submit a comment ([#4809](https://github.com/lbryio/lbry-desktop/pull/4809))
 - Deeper comment thread depth ([#4868](https://github.com/lbryio/lbry-desktop/pull/4868))
