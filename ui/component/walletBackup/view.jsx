@@ -144,7 +144,7 @@ class WalletBackup extends React.PureComponent<Props, State> {
                 label={__('Create Backup')}
                 onClick={() => this.backupWalletDir(lbryumWalletDir)}
               />
-              <Button button="link" label={__('Open Folder')} onClick={() => shell.openItem(lbryumWalletDir)} />
+              <Button button="link" label={__('Open Folder')} onClick={() => shell.openPath(lbryumWalletDir)} />
             </div>
           </React.Fragment>
         }

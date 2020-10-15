@@ -89,9 +89,9 @@ class HelpPage extends React.PureComponent<Props, State> {
     const logFileName = 'lbrynet.log';
     const os = this.state.versionInfo.os_system;
     if (os === 'Darwin' || os === 'Linux') {
-      shell.openItem(`${userHomeDirectory}/${logFileName}`);
+      shell.openPath(`${userHomeDirectory}/${logFileName}`);
     } else {
-      shell.openItem(`${userHomeDirectory}\\${logFileName}`);
+      shell.openPath(`${userHomeDirectory}\\${logFileName}`);
     }
   }
 
@@ -202,7 +202,7 @@ class HelpPage extends React.PureComponent<Props, State> {
                 button="secondary"
                 label={__('Open Log Folder')}
                 icon={ICONS.OPEN_LOG_FOLDER}
-                onClick={() => shell.openItem(dataDirectory)}
+                onClick={() => shell.openPath(dataDirectory)}
               />
             </div>
           }

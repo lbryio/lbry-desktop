@@ -1,6 +1,6 @@
 // @flow
 import * as React from 'react';
-
+import { remote } from 'electron';
 import Button from 'component/button';
 import { FormField } from 'component/common/form';
 
@@ -49,9 +49,20 @@ class FileSelector extends React.PureComponent<Props> {
     }
 
     const file = files[0];
+
     if (this.props.onFileChosen) {
       this.props.onFileChosen(file);
     }
+  };
+
+  handleDirectoryInputSelection = () => {
+    remote.dialog.showOpenDialog({ properties: ['openDirectory'] }).then(result => {
+      const path = result && result.filePaths[0];
+      if (path) {
+        // $FlowFixMe
+        this.props.onFileChosen({ path });
+      }
+    });
   };
 
   fileInputButton = () => {
@@ -80,7 +91,7 @@ class FileSelector extends React.PureComponent<Props> {
               autoFocus={autoFocus}
               button="secondary"
               disabled={disabled}
-              onClick={this.fileInputButton}
+              onClick={type === 'openDirectory' ? this.handleDirectoryInputSelection : this.fileInputButton}
               label={__('Browse')}
             />
           }
@@ -90,7 +101,7 @@ class FileSelector extends React.PureComponent<Props> {
           style={{ display: 'none' }}
           accept={accept}
           ref={this.fileInput}
-          onChange={() => this.handleFileInputSelection()}
+          onChange={() => (type === 'openDirectory' ? () => {} : this.handleFileInputSelection())}
           webkitdirectory={type === 'openDirectory' ? 'True' : null}
         />
       </React.Fragment>
