@@ -10,6 +10,8 @@ const select = state => ({
   followedTags: selectFollowedTags(state),
   loading: selectFetchingClaimSearch(state),
   showNsfw: makeSelectClientSetting(SETTINGS.SHOW_MATURE)(state),
+  searchInLanguage: makeSelectClientSetting(SETTINGS.SEARCH_IN_LANGUAGE)(state),
+  languageSetting: makeSelectClientSetting(SETTINGS.LANGUAGE)(state),
 });
 
 const perform = {

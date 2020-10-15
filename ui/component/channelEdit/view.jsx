@@ -18,6 +18,9 @@ import Card from 'component/common/card';
 import * as PAGES from 'constants/pages';
 import analytics from 'analytics';
 import LbcSymbol from 'component/common/lbc-symbol';
+import SUPPORTED_LANGUAGES from 'constants/supported_languages';
+const LANG_NONE = 'none';
+
 const MAX_TAG_SELECT = 5;
 
 type Props = {
@@ -63,7 +66,7 @@ function ChannelForm(props: Props) {
     coverUrl,
     tags,
     locations,
-    languages,
+    languages = [],
     onDone,
     updateChannel,
     updateError,
@@ -83,6 +86,9 @@ function ChannelForm(props: Props) {
   const name = params.name;
   const isNewChannel = !uri;
   const { replace } = useHistory();
+  const languageParam = params.languages;
+  const primaryLanguage = Array.isArray(languageParam) && languageParam.length && languageParam[0];
+  const secondaryLanguage = Array.isArray(languageParam) && languageParam.length >= 2 && languageParam[1];
 
   function getChannelParams() {
     // fill this in with sdk data
@@ -139,6 +145,25 @@ function ChannelForm(props: Props) {
     } else {
       setBidError('');
     }
+  }
+
+  function handleLanguageChange(index, code) {
+    let langs = [...languageParam];
+    if (index === 0) {
+      if (code === LANG_NONE) {
+        // clear all
+        langs = [];
+      } else {
+        langs[0] = code;
+      }
+    } else {
+      if (code === LANG_NONE || code === langs[0]) {
+        langs.splice(1, 1);
+      } else {
+        langs[index] = code;
+      }
+    }
+    setParams({ ...params, languages: langs });
   }
 
   function handleThumbnailChange(thumbnailUrl: string) {
@@ -356,6 +381,43 @@ function ChannelForm(props: Props) {
                       value={params.email}
                       onChange={e => setParams({ ...params, email: e.target.value })}
                     />
+                    <FormField
+                      name="language_select"
+                      type="select"
+                      label={__('Primary Language')}
+                      onChange={event => handleLanguageChange(0, event.target.value)}
+                      value={primaryLanguage}
+                      helper={__('Your main content language')}
+                    >
+                      <option key={'pri-langNone'} value={LANG_NONE}>
+                        {__('None selected')}
+                      </option>
+                      {Object.keys(SUPPORTED_LANGUAGES).map(language => (
+                        <option key={language} value={language}>
+                          {SUPPORTED_LANGUAGES[language]}
+                        </option>
+                      ))}
+                    </FormField>
+                    <FormField
+                      name="language_select2"
+                      type="select"
+                      label={__('Secondary Language')}
+                      onChange={event => handleLanguageChange(1, event.target.value)}
+                      value={secondaryLanguage}
+                      disabled={!languageParam[0]}
+                      helper={__('Your other content language')}
+                    >
+                      <option key={'sec-langNone'} value={LANG_NONE}>
+                        {__('None selected')}
+                      </option>
+                      {Object.keys(SUPPORTED_LANGUAGES)
+                        .filter(lang => lang !== languageParam[0])
+                        .map(language => (
+                          <option key={language} value={language}>
+                            {SUPPORTED_LANGUAGES[language]}
+                          </option>
+                        ))}
+                    </FormField>
                   </>
                 }
               />

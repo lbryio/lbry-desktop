@@ -3,6 +3,7 @@ export const PAGE_SIZE = 20;
 export const FRESH_KEY = 'fresh';
 export const ORDER_BY_KEY = 'order';
 export const DURATION_KEY = 'duration';
+export const LANGUAGE_KEY = 'language';
 export const TAGS_KEY = 't';
 export const CONTENT_KEY = 'content';
 export const REPOSTED_URI_KEY = 'reposted_uri';
@@ -14,6 +15,8 @@ export const FEE_AMOUNT_KEY = 'fee_amount';
 export const FEE_AMOUNT_ANY = '>=0';
 export const FEE_AMOUNT_ONLY_PAID = '>0';
 export const FEE_AMOUNT_ONLY_FREE = '<=0';
+
+export const LANGUAGES_ALL = 'all';
 
 export const FRESH_DAY = 'day';
 export const FRESH_WEEK = 'week';

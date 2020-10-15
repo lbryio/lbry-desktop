@@ -7,6 +7,7 @@ const select = (state, props) => ({
   description: makeSelectMetadataItemForUri(props.uri, 'description')(state),
   website: makeSelectMetadataItemForUri(props.uri, 'website_url')(state),
   email: makeSelectMetadataItemForUri(props.uri, 'email')(state),
+  languages: makeSelectMetadataItemForUri(props.uri, 'languages')(state),
 });
 
 export default connect(select, null)(ChannelAbout);
