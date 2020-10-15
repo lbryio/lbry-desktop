@@ -23,7 +23,7 @@ export function doOpenFileInFolder(path) {
 
 export function doOpenFileInShell(path) {
   return dispatch => {
-    const success = shell.openItem(path);
+    const success = shell.openPath(path);
     if (!success) {
       dispatch(doOpenFileInFolder(path));
     }
