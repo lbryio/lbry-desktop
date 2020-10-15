@@ -11,6 +11,7 @@ import { SETTINGS } from 'lbry-redux';
 import { FormField } from 'component/common/form';
 import Button from 'component/button';
 import { toCapitalCase } from 'util/string';
+import SEARCHABLE_LANGUAGES from 'constants/searchable_languages';
 
 type Props = {
   defaultTags: string,
@@ -32,6 +33,8 @@ type Props = {
   doSetClientSetting: (string, boolean, ?boolean) => void,
   setPage: number => void,
   hideFilters: boolean,
+  searchInLanguage: boolean,
+  languageSetting: string,
 };
 
 function ClaimListHeader(props: Props) {
@@ -55,6 +58,8 @@ function ClaimListHeader(props: Props) {
     doSetClientSetting,
     setPage,
     hideFilters,
+    searchInLanguage,
+    languageSetting,
   } = props;
   const { action, push, location } = useHistory();
   const { search } = location;
@@ -72,6 +77,7 @@ function ClaimListHeader(props: Props) {
   const streamTypeParam =
     streamType || (CS.FILE_TYPES.includes(contentTypeParam) && contentTypeParam) || defaultStreamType || null;
   const durationParam = urlParams.get(CS.DURATION_KEY) || null;
+  const languageParam = urlParams.get(CS.LANGUAGE_KEY) || null;
   const channelIdsInUrl = urlParams.get(CS.CHANNEL_IDS_KEY);
   const channelIdsParam = channelIdsInUrl ? channelIdsInUrl.split(',') : channelIds;
   const feeAmountParam = urlParams.get('fee_amount') || feeAmount || CS.FEE_AMOUNT_ANY;
@@ -82,8 +88,21 @@ function ClaimListHeader(props: Props) {
         urlParams.get(CS.CONTENT_KEY) ||
         urlParams.get(CS.DURATION_KEY) ||
         urlParams.get(CS.TAGS_KEY) ||
-        urlParams.get(CS.FEE_AMOUNT_KEY)
+        urlParams.get(CS.FEE_AMOUNT_KEY) ||
+        urlParams.get(CS.LANGUAGE_KEY)
     );
+
+  const languageValue = searchInLanguage
+    ? languageParam === null
+      ? languageSetting
+      : languageParam
+    : languageParam === null
+    ? CS.LANGUAGES_ALL
+    : languageParam;
+
+  const shouldHighlight = searchInLanguage
+    ? languageParam !== languageSetting && languageParam !== null
+    : languageParam !== CS.LANGUAGES_ALL && languageParam !== null;
 
   React.useEffect(() => {
     if (action !== 'POP' && isFiltered()) {
@@ -171,6 +190,9 @@ function ClaimListHeader(props: Props) {
         } else {
           newUrlParams.set(CS.DURATION_KEY, delta.value);
         }
+        break;
+      case CS.LANGUAGE_KEY:
+        newUrlParams.set(CS.LANGUAGE_KEY, delta.value);
         break;
       case CS.TAGS_KEY:
         if (delta.value === CS.TAGS_ALL) {
@@ -329,6 +351,43 @@ function ClaimListHeader(props: Props) {
                           </option>
                         );
                       }
+                    })}
+                  </FormField>
+                </div>
+              )}
+
+              {/* LANGUAGE FIELD */}
+              {!claimType && (
+                <div
+                  className={classnames('claim-search__input-container', {
+                    'claim-search__input-container--selected': shouldHighlight,
+                  })}
+                >
+                  <FormField
+                    className={classnames('claim-search__dropdown', {
+                      'claim-search__dropdown--selected': shouldHighlight,
+                    })}
+                    type="select"
+                    name="claimType"
+                    label={__('Language')}
+                    value={languageValue || CS.LANGUAGES_ALL}
+                    onChange={e =>
+                      handleChange({
+                        key: CS.LANGUAGE_KEY,
+                        value: e.target.value,
+                      })
+                    }
+                  >
+                    <option key={CS.LANGUAGES_ALL} value={CS.LANGUAGES_ALL}>
+                      {__('Any')}
+                      {/* i18fixme */}
+                    </option>
+                    {Object.entries(SEARCHABLE_LANGUAGES).map(([code, label]) => {
+                      return (
+                        <option key={code} value={code}>
+                          {__(String(label))}
+                        </option>
+                      );
                     })}
                   </FormField>
                 </div>

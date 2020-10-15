@@ -19,7 +19,9 @@ const select = state => ({
   loading: selectFetchingClaimSearch(state),
   showNsfw: makeSelectClientSetting(SETTINGS.SHOW_MATURE)(state),
   hideReposts: makeSelectClientSetting(SETTINGS.HIDE_REPOSTS)(state),
+  languageSetting: makeSelectClientSetting(SETTINGS.LANGUAGE)(state),
   hiddenUris: selectBlockedChannels(state),
+  searchInLanguage: makeSelectClientSetting(SETTINGS.SEARCH_IN_LANGUAGE)(state),
 });
 
 const perform = {

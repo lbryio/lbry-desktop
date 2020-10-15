@@ -8,6 +8,7 @@ import Button from 'component/button';
 import * as PAGES from 'constants/pages';
 import DateTime from 'component/dateTime';
 import YoutubeBadge from 'component/youtubeBadge';
+import SUPPORTED_LANGUAGES from 'constants/supported_languages';
 
 type Props = {
   claim: ChannelClaim,
@@ -15,6 +16,7 @@ type Props = {
   description: ?string,
   email: ?string,
   website: ?string,
+  languages: Array<string>,
 };
 
 const formatEmail = (email: string) => {
@@ -27,7 +29,7 @@ const formatEmail = (email: string) => {
 };
 
 function ChannelAbout(props: Props) {
-  const { claim, uri, description, email, website } = props;
+  const { claim, uri, description, email, website, languages } = props;
   const claimId = claim && claim.claim_id;
 
   return (
@@ -62,6 +64,12 @@ function ChannelAbout(props: Props) {
           <label>{__('Tags')}</label>
           <div className="media__info-text">
             <ClaimTags uri={uri} type="large" />
+          </div>
+
+          <label>{__('Languages')}</label>
+          <div className="media__info-text">
+            {/* this could use some nice 'tags' styling */}
+            {`${SUPPORTED_LANGUAGES[languages[0]]}${languages[1] ? ', ' + SUPPORTED_LANGUAGES[languages[1]] : ''}`}
           </div>
 
           <label>{__('Total Uploads')}</label>

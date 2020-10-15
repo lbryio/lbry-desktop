@@ -37,6 +37,7 @@ const defaultState = {
 
     // UI
     [SETTINGS.LANGUAGE]: settingLanguage.find(language => SUPPORTED_LANGUAGES[language]),
+    [SETTINGS.SEARCH_IN_LANGUAGE]: false,
     [SETTINGS.THEME]: __('light'),
     [SETTINGS.THEMES]: [__('light'), __('dark')],
     [SETTINGS.HIDE_SPLASH_ANIMATION]: false,

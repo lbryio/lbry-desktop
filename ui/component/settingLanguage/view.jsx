@@ -3,15 +3,17 @@
 import React, { useState } from 'react';
 import { FormField } from 'component/common/form';
 import Spinner from 'component/spinner';
-import SUPPORTED_LANGUAGES from '../../constants/supported_languages';
+import SUPPORTED_LANGUAGES from 'constants/supported_languages';
 
 type Props = {
   language: string,
   setLanguage: string => void,
+  searchInLanguage: boolean,
+  setSearchInLanguage: boolean => void,
 };
 
 function SettingLanguage(props: Props) {
-  const { language, setLanguage } = props;
+  const { language, setLanguage, searchInLanguage, setSearchInLanguage } = props;
 
   const [previousLanguage, setPreviousLanguage] = useState(null);
   const languages = SUPPORTED_LANGUAGES;
@@ -45,6 +47,13 @@ function SettingLanguage(props: Props) {
         ))}
       </FormField>
       {previousLanguage && <Spinner type="small" />}
+      <FormField
+        name="search-in-language"
+        type="checkbox"
+        label={__('Search only in this language by default')}
+        checked={searchInLanguage}
+        onChange={() => setSearchInLanguage(!searchInLanguage)}
+      />
     </React.Fragment>
   );
 }
