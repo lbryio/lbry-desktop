@@ -298,7 +298,7 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
                       {isChannel && !channelIsBlocked && !claimIsMine && (
                         <SubscribeButton uri={uri.startsWith('lbry://') ? uri : `lbry://${uri}`} />
                       )}
-                      {!hideBlock && isChannel && !isSubscribed && !claimIsMine && (
+                      {!hideBlock && isChannel && !isSubscribed && (!claimIsMine || channelIsBlocked) && (
                         <BlockButton uri={uri.startsWith('lbry://') ? uri : `lbry://${uri}`} />
                       )}
                       {includeSupportAction && <ClaimSupportButton uri={uri} />}
