@@ -941,7 +941,7 @@
   "Account password": "Account password",
   "You do not currently have a password set.": "You do not currently have a password set.",
   "Enter Your lbry.tv Password": "Enter Your lbry.tv Password",
-  "Logging in in as %email%": "Logging in in as %email%",
+  "Logging in as %email%": "Logging in as %email%",
   "Forgot Password?": "Forgot Password?",
   "Use Magic Link": "Use Magic Link",
   "Password updated successfully.": "Password updated successfully.",
