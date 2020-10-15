@@ -24,7 +24,7 @@ export default function BlockButton(props: Props) {
   const blockTitlePrefix = channelIsBlocked ? __('Unblock this channel') : __('Block this channel');
   const blockedOverride = channelIsBlocked && isHovering && __('Unblock');
 
-  return permanentUrl && !claimIsMine ? (
+  return permanentUrl && (!claimIsMine || channelIsBlocked) ? (
     <Button
       ref={blockRef}
       icon={ICONS.BLOCK}
