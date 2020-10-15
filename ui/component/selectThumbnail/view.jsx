@@ -156,7 +156,9 @@ class SelectThumbnail extends React.PureComponent<Props, State> {
               label={__('Enter a thumbnail URL')}
               onClick={() => updatePublishForm({ uploadThumbnailStatus: THUMBNAIL_STATUSES.MANUAL })}
             />
-            {isSupportedVideo && (
+            {isSupportedVideo && IS_WEB && (
+              // Disabled on desktop until this is resolved
+              // https://github.com/electron/electron/issues/20750#issuecomment-709505902
               <Button
                 button="link"
                 label={__('Take a snapshot from your video')}
