@@ -75,6 +75,7 @@ export default function ChannelsPage(props: Props) {
 
               const channelRewardData =
                 rewardData &&
+                rewardData.rates &&
                 rewardData.rates.find(data => {
                   return data.channel_claim_id === claim.claim_id;
                 });
