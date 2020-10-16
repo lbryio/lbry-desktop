@@ -23,11 +23,11 @@ function ModalOpenExternalResource(props: Props) {
 
   function openResource() {
     // @if TARGET='app'
-    const { openExternal, openItem, showItemInFolder } = shell;
+    const { openExternal, openPath, showItemInFolder } = shell;
     if (uri) {
       openExternal(uri);
     } else if (path) {
-      const success = openItem(path);
+      const success = openPath(path);
       if (!success) {
         showItemInFolder(path);
       }
