@@ -107,7 +107,7 @@
     "dotenv-defaults": "^1.1.1",
     "dotenv-webpack": "^1.8.0",
     "electron": "9.3.1",
-    "electron-builder": "^22.8.0",
+    "electron-builder": "^22.9.1",
     "electron-devtools-installer": "^2.2.4",
     "electron-is-dev": "^0.3.0",
     "electron-webpack": "^2.8.2",
