@@ -10,9 +10,19 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ### Changed
 
+
+### Fixed
+
+
+## [0.48.2] - [2020-10-16]
+
+### Changed
+
 - Disable snapshot thumbnail upload on desktop until Electron issue is fixed ([#4905](https://github.com/lbryio/lbry-desktop/pull/4905))
 
 ### Fixed
+
+- Files not opening externally properly ([#4908](https://github.com/lbryio/lbry-desktop/pull/4908))
 
 
 
