@@ -8,7 +8,6 @@ import {
   makeSelectMyReactionsForComment,
   makeSelectOthersReactionsForComment,
   selectPendingCommentReacts,
-  selectCommentChannel,
 } from 'redux/selectors/comments';
 
 export function doCommentList(uri: string, page: number = 1, pageSize: number = 99999) {
@@ -20,7 +19,7 @@ export function doCommentList(uri: string, page: number = 1, pageSize: number = 
     dispatch({
       type: ACTIONS.COMMENT_LIST_STARTED,
     });
-    return Lbry.comment_list({
+    Lbry.comment_list({
       claim_id: claimId,
       page,
       page_size: pageSize,
@@ -37,7 +36,6 @@ export function doCommentList(uri: string, page: number = 1, pageSize: number = 
             uri: uri,
           },
         });
-        return result;
       })
       .catch(error => {
         dispatch({
@@ -48,19 +46,10 @@ export function doCommentList(uri: string, page: number = 1, pageSize: number = 
   };
 }
 
-export function doSetCommentChannel(channelName: string) {
-  return (dispatch: Dispatch) => {
-    dispatch({
-      type: ACTIONS.COMMENT_SET_CHANNEL,
-      data: channelName,
-    });
-  };
-}
-
 export function doCommentReactList(uri: string | null, commentId?: string) {
   return (dispatch: Dispatch, getState: GetState) => {
     const state = getState();
-    const channel = selectCommentChannel(state);
+    const channel = localStorage.getItem('comment-channel');
     const commentIds = uri ? makeSelectCommentIdsForUri(uri)(state) : [commentId];
     const myChannels = selectMyChannelClaims(state);
 
@@ -101,7 +90,7 @@ export function doCommentReactList(uri: string | null, commentId?: string) {
 export function doCommentReact(commentId: string, type: string) {
   return (dispatch: Dispatch, getState: GetState) => {
     const state = getState();
-    const channel = selectCommentChannel(state);
+    const channel = localStorage.getItem('comment-channel');
     const pendingReacts = selectPendingCommentReacts(state);
     const myChannels = selectMyChannelClaims(state);
     const exclusiveTypes = {
@@ -277,56 +266,6 @@ export function doCommentHide(comment_id: string) {
         dispatch(
           doToast({
             message: 'Unable to hide this comment, please try again later.',
-            isError: true,
-          })
-        );
-      });
-  };
-}
-
-export function doCommentPin(commentId: string, remove: boolean) {
-  return (dispatch: Dispatch, getState: GetState) => {
-    const state = getState();
-    // const channel = localStorage.getItem('comment-channel');
-    const channel = selectCommentChannel(state);
-    const myChannels = selectMyChannelClaims(state);
-    const claimForChannelName = myChannels && myChannels.find(chan => chan.name === channel);
-    const channelId = claimForChannelName && claimForChannelName.claim_id;
-
-    dispatch({
-      type: ACTIONS.COMMENT_PIN_STARTED,
-    });
-    if (!channelId || !channel || !commentId) {
-      return dispatch({
-        type: ACTIONS.COMMENT_PIN_FAILED,
-        data: { message: 'missing params - unable to pin' },
-      });
-    }
-    const params: { comment_id: string, channel_name: string, channel_id: string, remove?: boolean } = {
-      comment_id: commentId,
-      channel_name: channel,
-      channel_id: channelId,
-    };
-
-    if (remove) {
-      params['remove'] = true;
-    }
-
-    return Lbry.comment_pin(params)
-      .then((result: CommentPinResponse) => {
-        dispatch({
-          type: ACTIONS.COMMENT_PIN_COMPLETED,
-          data: result,
-        });
-      })
-      .catch(error => {
-        dispatch({
-          type: ACTIONS.COMMENT_PIN_FAILED,
-          data: error,
-        });
-        dispatch(
-          doToast({
-            message: 'Unable to pin this comment, please try again later.',
             isError: true,
           })
         );
