@@ -60,14 +60,12 @@ const appFilter = createFilter('app', [
 ]);
 // We only need to persist the receiveAddress for the wallet
 const walletFilter = createFilter('wallet', ['receiveAddress']);
-const commentsFilter = createFilter('comments', ['commentChannel']);
 const searchFilter = createFilter('search', ['options']);
 const tagsFilter = createFilter('tags', ['followedTags']);
 const subscriptionsFilter = createFilter('subscriptions', ['subscriptions']);
 const blockedFilter = createFilter('blocked', ['blockedChannels']);
 const settingsFilter = createBlacklistFilter('settings', ['loadedLanguages', 'language']);
 const whiteListedReducers = [
-  'comments',
   'fileInfo',
   'publish',
   'wallet',
@@ -81,7 +79,6 @@ const whiteListedReducers = [
 ];
 
 const transforms = [
-  commentsFilter,
   fileInfoFilter,
   walletFilter,
   blockedFilter,
