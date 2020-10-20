@@ -5,6 +5,8 @@ import TruncatedText from 'component/common/truncated-text';
 import MarkdownPreview from 'component/common/markdown-preview';
 import { withRouter } from 'react-router-dom';
 import { formatLbryUrlForWeb } from 'util/url';
+import { parseURI } from 'lbry-redux';
+import classnames from 'classnames';
 
 type Props = {
   uri: string,
@@ -22,6 +24,7 @@ class PreviewLink extends React.PureComponent<Props> {
 
   render() {
     const { uri, title, description, thumbnail } = this.props;
+    const { isChannel } = parseURI(uri);
     const placeholder = 'static/img/placeholder.png';
 
     const thumbnailStyle = {
@@ -31,7 +34,12 @@ class PreviewLink extends React.PureComponent<Props> {
     return (
       <span className="preview-link" role="button" onClick={this.handleClick}>
         <span className="claim-preview">
-          <span style={thumbnailStyle} className="preview-link__thumbnail media__thumb" />
+          <span
+            style={thumbnailStyle}
+            className={classnames('preview-link__thumbnail media__thumb', {
+              'preview-link__thumbnail--channel': isChannel,
+            })}
+          />
           <span className="claim-preview-metadata">
             <span className="claim-preview-info">
               <span className="claim-preview__title">

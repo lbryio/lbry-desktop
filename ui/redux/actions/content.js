@@ -26,7 +26,6 @@ import {
 import { makeSelectCostInfoForUri, Lbryio } from 'lbryinc';
 import { makeSelectClientSetting, selectosNotificationsEnabled, selectDaemonSettings } from 'redux/selectors/settings';
 import { formatLbryUrlForWeb } from 'util/url';
-import { selectFloatingUri } from 'redux/selectors/content';
 
 const DOWNLOAD_POLL_INTERVAL = 1000;
 
@@ -128,34 +127,31 @@ export function doUpdateLoadStatus(uri: string, outpoint: string) {
   // @endif
 }
 
-export function doSetPlayingUri(uri: ?string) {
+export function doSetPrimaryUri(uri: ?string) {
+  return (dispatch: Dispatch) => {
+    dispatch({
+      type: ACTIONS.SET_PRIMARY_URI,
+      data: { uri },
+    });
+  };
+}
+
+export function doSetPlayingUri({
+  uri,
+  source,
+  pathname,
+  commentId,
+}: {
+  uri: ?string,
+  source?: string,
+  commentId?: string,
+  pathname: string,
+}) {
   return (dispatch: Dispatch) => {
     dispatch({
       type: ACTIONS.SET_PLAYING_URI,
-      data: { uri },
+      data: { uri, source, pathname, commentId },
     });
-  };
-}
-
-export function doSetFloatingUri(uri: ?string) {
-  return (dispatch: Dispatch) => {
-    dispatch({
-      type: ACTIONS.SET_FLOATING_URI,
-      data: { uri },
-    });
-  };
-}
-
-export function doCloseFloatingPlayer() {
-  return (dispatch: Dispatch, getState: GetState) => {
-    const state = getState();
-    const floatingUri = selectFloatingUri(state);
-
-    if (floatingUri) {
-      dispatch(doSetFloatingUri(null));
-    } else {
-      dispatch(doSetPlayingUri(null));
-    }
   };
 }
 

@@ -8,14 +8,16 @@ import LoadingScreen from 'component/common/loading-screen';
 import FileRender from 'component/fileRender';
 import UriIndicator from 'component/uriIndicator';
 import usePersistedState from 'effects/use-persisted-state';
-import { FILE_WRAPPER_CLASS } from 'page/file/view';
+import { PRIMARY_PLAYER_WRAPPER_CLASS } from 'page/file/view';
 import Draggable from 'react-draggable';
 import Tooltip from 'component/common/tooltip';
 import { onFullscreenChange } from 'util/full-screen';
 import { useIsMobile } from 'effects/use-screensize';
 import debounce from 'util/debounce';
+import { useHistory } from 'react-router';
 
 const DEBOUNCE_WINDOW_RESIZE_HANDLER_MS = 60;
+export const INLINE_PLAYER_WRAPPER_CLASS = 'inline-player__wrapper';
 
 type Props = {
   isFloating: boolean,
@@ -26,6 +28,8 @@ type Props = {
   floatingPlayerEnabled: boolean,
   closeFloatingPlayer: () => void,
   renderMode: string,
+  playingUri: ?PlayingUri,
+  primaryUri: ?string,
 };
 
 export default function FileRenderFloating(props: Props) {
@@ -38,9 +42,14 @@ export default function FileRenderFloating(props: Props) {
     closeFloatingPlayer,
     floatingPlayerEnabled,
     renderMode,
+    playingUri,
+    primaryUri,
   } = props;
-
+  const {
+    location: { pathname },
+  } = useHistory();
   const isMobile = useIsMobile();
+  const mainFilePlaying = playingUri && playingUri.uri === primaryUri;
   const [fileViewerRect, setFileViewerRect] = useState();
   const [desktopPlayStartTime, setDesktopPlayStartTime] = useState();
   const [wasDragging, setWasDragging] = useState(false);
@@ -48,8 +57,12 @@ export default function FileRenderFloating(props: Props) {
     x: -25,
     y: window.innerHeight - 400,
   });
-  const [relativePos, setRelativePos] = useState({ x: 0, y: 0 });
+  const [relativePos, setRelativePos] = useState({
+    x: 0,
+    y: 0,
+  });
 
+  const playingUriSource = playingUri && playingUri.source;
   const isPlayable = RENDER_MODES.FLOATING_MODES.includes(renderMode);
   const isReadyToPlay = isPlayable && (streamingUrl || (fileInfo && fileInfo.completed));
   const loadingMessage =
@@ -98,15 +111,18 @@ export default function FileRenderFloating(props: Props) {
   }, []);
 
   // Ensure player is within screen when 'isFloating' changes.
+  const stringifiedPosition = JSON.stringify(position);
   useEffect(() => {
+    const jsonPosition = JSON.parse(stringifiedPosition);
+
     if (isFloating) {
-      let pos = { x: position.x, y: position.y };
+      let pos = { x: jsonPosition.x, y: jsonPosition.y };
       clampToScreen(pos);
       if (pos.x !== position.x || pos.y !== position.y) {
         setPosition({ x: pos.x, y: pos.y });
       }
     }
-  }, [isFloating]);
+  }, [isFloating, stringifiedPosition]);
 
   // Listen to main-window resizing and adjust the fp position accordingly:
   useEffect(() => {
@@ -126,27 +142,37 @@ export default function FileRenderFloating(props: Props) {
     // Otherwise, this could just be changed to a one-time effect.
   }, [relativePos]);
 
-  // Update 'fileViewerRect':
-  useEffect(() => {
-    function handleResize() {
-      const element = document.querySelector(`.${FILE_WRAPPER_CLASS}`);
-      if (!element) {
-        return;
-      }
+  function handleResize() {
+    const element = mainFilePlaying
+      ? document.querySelector(`.${PRIMARY_PLAYER_WRAPPER_CLASS}`)
+      : document.querySelector(`.${INLINE_PLAYER_WRAPPER_CLASS}`);
 
-      const rect = element.getBoundingClientRect();
-      // $FlowFixMe
-      setFileViewerRect(rect);
+    if (!element) {
+      return;
     }
 
+    const rect = element.getBoundingClientRect();
+
+    // $FlowFixMe
+    setFileViewerRect(rect);
+  }
+
+  useEffect(() => {
+    if (streamingUrl) {
+      handleResize();
+    }
+  }, [streamingUrl, pathname, playingUriSource, isFloating, mainFilePlaying]);
+
+  useEffect(() => {
     handleResize();
     window.addEventListener('resize', handleResize);
     onFullscreenChange(window, 'add', handleResize);
+
     return () => {
       window.removeEventListener('resize', handleResize);
       onFullscreenChange(window, 'remove', handleResize);
     };
-  }, [setFileViewerRect, isFloating]);
+  }, [setFileViewerRect, isFloating, playingUriSource, mainFilePlaying]);
 
   useEffect(() => {
     // @if TARGET='app'
@@ -210,7 +236,13 @@ export default function FileRenderFloating(props: Props) {
         })}
         style={
           !isFloating && fileViewerRect
-            ? { width: fileViewerRect.width, height: fileViewerRect.height, left: fileViewerRect.x }
+            ? {
+                width: fileViewerRect.width,
+                height: fileViewerRect.height,
+                left: fileViewerRect.x,
+                // 80px is header height in scss/init/vars.scss
+                top: window.pageYOffset + fileViewerRect.top - 80,
+              }
             : {}
         }
       >

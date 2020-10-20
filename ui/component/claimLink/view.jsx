@@ -1,20 +1,25 @@
 // @flow
 import * as React from 'react';
-import PreviewLink from 'component/previewLink';
-import UriIndicator from 'component/uriIndicator';
+import classnames from 'classnames';
+import ClaimPreview from 'component/claimPreview';
+import EmbedPlayButton from 'component/embedPlayButton';
+import Button from 'component/button';
+import { INLINE_PLAYER_WRAPPER_CLASS } from 'component/fileRenderFloating/view';
 
 type Props = {
   uri: string,
   claim: StreamClaim,
   children: React.Node,
-  autoEmbed: ?boolean,
   description: ?string,
   isResolvingUri: boolean,
-  resolveUri: string => void,
+  doResolveUri: string => void,
   blackListedOutpoints: Array<{
     txid: string,
     nout: number,
   }>,
+  playingUri: ?PlayingUri,
+  parentCommentId?: string,
+  isMarkdownPost?: boolean,
 };
 
 class ClaimLink extends React.Component<Props> {
@@ -22,7 +27,6 @@ class ClaimLink extends React.Component<Props> {
     href: null,
     link: false,
     thumbnail: null,
-    autoEmbed: false,
     description: null,
     isResolvingUri: false,
   };
@@ -51,17 +55,22 @@ class ClaimLink extends React.Component<Props> {
   }
 
   resolve = (props: Props) => {
-    const { isResolvingUri, resolveUri, claim, uri } = props;
+    const { isResolvingUri, doResolveUri, claim, uri } = props;
 
     if (!isResolvingUri && claim === undefined && uri) {
-      resolveUri(uri);
+      doResolveUri(uri);
     }
   };
 
   render() {
-    const { uri, claim, autoEmbed, children, isResolvingUri } = this.props;
+    const { uri, claim, children, isResolvingUri, playingUri, parentCommentId, isMarkdownPost } = this.props;
     const isUnresolved = (!isResolvingUri && !claim) || !claim;
     const isBlacklisted = this.isClaimBlackListed();
+    const isPlayingInline =
+      playingUri &&
+      playingUri.uri === uri &&
+      ((playingUri.source === 'comment' && parentCommentId === playingUri.commentId) ||
+        playingUri.source === 'markdown');
 
     if (isBlacklisted || isUnresolved) {
       return <span>{children}</span>;
@@ -69,13 +78,23 @@ class ClaimLink extends React.Component<Props> {
 
     const { value_type: valueType } = claim;
     const isChannel = valueType === 'channel';
-    const showPreview = autoEmbed === true && !isUnresolved;
 
-    if (isChannel) {
-      return <UriIndicator uri={uri} link addTooltip />;
-    }
-
-    return <React.Fragment>{showPreview && <PreviewLink uri={uri} />}</React.Fragment>;
+    return isChannel ? (
+      <div className="card--inline">
+        <ClaimPreview uri={uri} wrapperElement="div" />
+      </div>
+    ) : (
+      <div className={classnames('claim-link')}>
+        <div
+          className={classnames({
+            [INLINE_PLAYER_WRAPPER_CLASS]: isPlayingInline,
+          })}
+        >
+          <EmbedPlayButton uri={uri} parentCommentId={parentCommentId} isMarkdownPost={isMarkdownPost} />
+        </div>
+        <Button button="link" className="preview-link__url" label={uri} navigate={uri} />
+      </div>
+    );
   }
 }
 

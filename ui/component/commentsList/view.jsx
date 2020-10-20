@@ -53,7 +53,9 @@ function CommentList(props: Props) {
   const [end, setEnd] = React.useState(9);
   // Display comments immediately if not fetching reactions
   // If not, wait to show comments until reactions are fetched
-  const [readyToDisplayComments, setReadyToDisplayComments] = React.useState(!ENABLE_COMMENT_REACTIONS);
+  const [readyToDisplayComments, setReadyToDisplayComments] = React.useState(
+    reactionsById || !ENABLE_COMMENT_REACTIONS
+  );
   const linkedCommentId = linkedComment && linkedComment.comment_id;
   const hasNoComments = totalComments === 0;
   const moreBelow = totalComments - end > 0;
@@ -203,8 +205,7 @@ function CommentList(props: Props) {
           {!isFetchingComments && hasNoComments && <div className="main--empty">{__('Be the first to comment!')}</div>}
 
           <ul className="comments" ref={commentRef}>
-            {!isFetchingComments &&
-              comments &&
+            {comments &&
               displayedComments &&
               displayedComments.map(comment => {
                 return (

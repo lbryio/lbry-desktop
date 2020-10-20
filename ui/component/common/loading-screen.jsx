@@ -19,8 +19,13 @@ class LoadingScreen extends React.PureComponent<Props> {
     const { status, spinner, isDocument } = this.props;
     return (
       <div className={classnames('content__loading', { 'content__loading--document': isDocument })}>
-        {spinner && <Spinner light={!isDocument} />}
-        {status && <span className={classnames('content__loading-text')}>{status}</span>}
+        {spinner && (
+          <Spinner
+            light={!isDocument}
+            delayed
+            text={status && <span className={classnames('content__loading-text')}>{status}</span>}
+          />
+        )}
       </div>
     );
   }

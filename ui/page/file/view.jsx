@@ -12,7 +12,7 @@ import FileValues from 'component/fileValues';
 import RecommendedContent from 'component/recommendedContent';
 import CommentsList from 'component/commentsList';
 
-export const FILE_WRAPPER_CLASS = 'file-page__video-container';
+export const PRIMARY_PLAYER_WRAPPER_CLASS = 'file-page__video-container';
 
 type Props = {
   costInfo: ?{ includesData: boolean, cost: number },
@@ -28,63 +28,61 @@ type Props = {
   obscureNsfw: boolean,
   isMature: boolean,
   linkedComment: any,
+  setPrimaryUri: (?string) => void,
 };
 
-class FilePage extends React.Component<Props> {
-  constructor() {
-    super();
-    this.lastReset = undefined;
-  }
+function FilePage(props: Props) {
+  const {
+    uri,
+    channelUri,
+    renderMode,
+    fetchFileInfo,
+    fetchCostInfo,
+    setViewed,
+    isSubscribed,
+    fileInfo,
+    markSubscriptionRead,
+    obscureNsfw,
+    isMature,
+    costInfo,
+    linkedComment,
+    setPrimaryUri,
+  } = props;
+  const cost = costInfo ? costInfo.cost : null;
+  const hasFileInfo = fileInfo !== undefined;
 
-  componentDidMount() {
-    const { uri, fetchFileInfo, fetchCostInfo, setViewed, isSubscribed } = this.props;
-
-    if (isSubscribed) {
-      this.removeFromSubscriptionNotifications();
-    }
-
+  React.useEffect(() => {
     // always refresh file info when entering file page to see if we have the file
     // this could probably be refactored into more direct components now
     // @if TARGET='app'
-    fetchFileInfo(uri);
+    if (!hasFileInfo) {
+      fetchFileInfo(uri);
+    }
     // @endif
 
     // See https://github.com/lbryio/lbry-desktop/pull/1563 for discussion
     fetchCostInfo(uri);
     setViewed(uri);
-  }
+    setPrimaryUri(uri);
 
-  componentDidUpdate(prevProps: Props) {
-    const { isSubscribed, uri, fileInfo, setViewed, fetchFileInfo } = this.props;
+    return () => {
+      setPrimaryUri(null);
+    };
+  }, [uri, hasFileInfo, fetchFileInfo, fetchCostInfo, setViewed, setPrimaryUri]);
 
-    if (!prevProps.isSubscribed && isSubscribed) {
-      this.removeFromSubscriptionNotifications();
-    }
-
-    if (prevProps.uri !== uri) {
-      setViewed(uri);
-      this.lastReset = Date.now();
-    }
-
-    // @if TARGET='app'
-    if (prevProps.uri !== uri && fileInfo === undefined) {
-      fetchFileInfo(uri);
-    }
-    // @endif
-  }
-
-  removeFromSubscriptionNotifications() {
+  React.useEffect(() => {
     // Always try to remove
     // If it doesn't exist, nothing will happen
-    const { markSubscriptionRead, uri, channelUri } = this.props;
-    markSubscriptionRead(channelUri, uri);
-  }
+    if (isSubscribed) {
+      markSubscriptionRead(channelUri, uri);
+    }
+  }, [isSubscribed, markSubscriptionRead, uri, channelUri]);
 
-  renderFilePageLayout(uri: string, mode: string, cost: ?number) {
-    if (RENDER_MODES.FLOATING_MODES.includes(mode)) {
+  function renderFilePageLayout() {
+    if (RENDER_MODES.FLOATING_MODES.includes(renderMode)) {
       return (
         <React.Fragment>
-          <div className={FILE_WRAPPER_CLASS}>
+          <div className={PRIMARY_PLAYER_WRAPPER_CLASS}>
             <FileRenderInitiator uri={uri} />
           </div>
           {/* playables will be rendered and injected by <FileRenderFloating> */}
@@ -93,7 +91,7 @@ class FilePage extends React.Component<Props> {
       );
     }
 
-    if (RENDER_MODES.UNRENDERABLE_MODES.includes(mode)) {
+    if (RENDER_MODES.UNRENDERABLE_MODES.includes(renderMode)) {
       return (
         <React.Fragment>
           <FileTitle uri={uri} />
@@ -102,7 +100,7 @@ class FilePage extends React.Component<Props> {
       );
     }
 
-    if (RENDER_MODES.TEXT_MODES.includes(mode)) {
+    if (RENDER_MODES.TEXT_MODES.includes(renderMode)) {
       return (
         <React.Fragment>
           <FileTitle uri={uri} />
@@ -121,8 +119,7 @@ class FilePage extends React.Component<Props> {
     );
   }
 
-  renderBlockedPage() {
-    const { uri } = this.props;
+  function renderBlockedPage() {
     return (
       <Page>
         <FileTitle uri={uri} isNsfwBlocked />
@@ -130,29 +127,23 @@ class FilePage extends React.Component<Props> {
     );
   }
 
-  lastReset: ?any;
-
-  render() {
-    const { uri, renderMode, costInfo, obscureNsfw, isMature, linkedComment } = this.props;
-
-    if (obscureNsfw && isMature) {
-      return this.renderBlockedPage();
-    }
-
-    return (
-      <Page className="file-page" filePage>
-        <div className={classnames('section card-stack', `file-page__${renderMode}`)}>
-          {this.renderFilePageLayout(uri, renderMode, costInfo ? costInfo.cost : null)}
-          <FileValues uri={uri} />
-          <FileDetails uri={uri} />
-
-          <CommentsList uri={uri} linkedComment={linkedComment} />
-        </div>
-
-        <RecommendedContent uri={uri} />
-      </Page>
-    );
+  if (obscureNsfw && isMature) {
+    return renderBlockedPage();
   }
+
+  return (
+    <Page className="file-page" filePage>
+      <div className={classnames('section card-stack', `file-page__${renderMode}`)}>
+        {renderFilePageLayout()}
+        <FileValues uri={uri} />
+        <FileDetails uri={uri} />
+
+        <CommentsList uri={uri} linkedComment={linkedComment} />
+      </div>
+
+      <RecommendedContent uri={uri} />
+    </Page>
+  );
 }
 
 export default FilePage;

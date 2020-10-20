@@ -8,8 +8,8 @@ import {
   selectCommentChannel,
 } from 'redux/selectors/comments';
 import { doCommentList, doCommentReactList } from 'redux/actions/comments';
-import CommentsList from './view';
 import { selectUserVerifiedEmail } from 'redux/selectors/user';
+import CommentsList from './view';
 
 const select = (state, props) => ({
   myChannels: selectMyChannelClaims(state),

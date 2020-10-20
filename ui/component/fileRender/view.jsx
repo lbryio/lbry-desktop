@@ -150,6 +150,7 @@ class FileRender extends React.PureComponent<Props> {
         className={classnames('file-render', className, {
           'file-render--document': RENDER_MODES.TEXT_MODES.includes(renderMode) && !embedded,
           'file-render--embed': embedded,
+          'file-render--video': renderMode === RENDER_MODES.VIDEO || renderMode === RENDER_MODES.AUDIO,
         })}
       >
         {this.renderViewer()}

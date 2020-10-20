@@ -2,21 +2,27 @@ import * as ACTIONS from 'constants/action_types';
 
 const reducers = {};
 const defaultState = {
+  primaryUri: null, // Top level content uri triggered from the file page
   playingUri: null,
-  floatingUri: null,
   channelClaimCounts: {},
   positions: {},
   history: [],
 };
 
-reducers[ACTIONS.SET_PLAYING_URI] = (state, action) =>
+reducers[ACTIONS.SET_PRIMARY_URI] = (state, action) =>
   Object.assign({}, state, {
-    playingUri: action.data.uri,
+    primaryUri: action.data.uri,
   });
 
-reducers[ACTIONS.SET_FLOATING_URI] = (state, action) =>
+reducers[ACTIONS.SET_PLAYING_URI] = (state, action) =>
   Object.assign({}, state, {
-    floatingUri: action.data.uri,
+    playingUri: {
+      uri: action.data.uri,
+      source: action.data.source,
+      pathname: action.data.pathname,
+      commentId: action.data.commentId,
+      primaryUri: state.primaryUri,
+    },
   });
 
 reducers[ACTIONS.SET_CONTENT_POSITION] = (state, action) => {

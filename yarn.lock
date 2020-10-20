@@ -7391,13 +7391,13 @@ lazy-val@^1.0.4:
     yargs "^13.2.2"
     zstd-codec "^0.1.1"
 
-lbry-redux@lbryio/lbry-redux#15737f9b098f3654122a75f93d63584e7ffa17a1:
+lbry-redux@lbryio/lbry-redux#823197af37da745fd79632b9e82deddf9d7fe033:
   version "0.0.1"
-  resolved "https://codeload.github.com/lbryio/lbry-redux/tar.gz/15737f9b098f3654122a75f93d63584e7ffa17a1"
+  resolved "https://codeload.github.com/lbryio/lbry-redux/tar.gz/823197af37da745fd79632b9e82deddf9d7fe033"
   dependencies:
     proxy-polyfill "0.1.6"
     reselect "^3.0.0"
-    uuid "^3.3.2"
+    uuid "^8.3.1"
 
 lbryinc@lbryio/lbryinc#db0663fcc4a64cb082b6edc5798fafa67eb4300f:
   version "0.0.1"
@@ -12129,6 +12129,11 @@ uuid@^8.3.0:
   version "8.3.0"
   resolved "https://registry.yarnpkg.com/uuid/-/uuid-8.3.0.tgz#ab738085ca22dc9a8c92725e459b1d507df5d6ea"
   integrity sha512-fX6Z5o4m6XsXBdli9g7DtWgAx+osMsRRZFKma1mIUsLCz6vRvv+pz5VNbyu9UEDzpMWulZfvpgb/cmDXVulYFQ==
+
+uuid@^8.3.1:
+  version "8.3.1"
+  resolved "https://registry.yarnpkg.com/uuid/-/uuid-8.3.1.tgz#2ba2e6ca000da60fce5a196954ab241131e05a31"
+  integrity sha512-FOmRr+FmWEIG8uhZv6C2bTgEVXsHk08kE7mPlrBbEe+c3r9pjceVPgupIfNIhc4yx55H69OXANrUaSuu9eInKg==
 
 v8-compile-cache@2.0.3:
   version "2.0.3"

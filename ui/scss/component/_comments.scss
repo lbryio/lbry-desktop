@@ -43,7 +43,7 @@ $thumbnailWidthSmall: 0rem;
     margin-top: var(--spacing-l);
   }
 
-  .channel-thumbnail {
+  .comment__author-thumbnail {
     @include handleChannelGif($thumbnailWidthSmall);
     margin-right: 0;
 
@@ -53,7 +53,7 @@ $thumbnailWidthSmall: 0rem;
   }
 }
 
-.comment__author-thumbnail {
+.comment__thumbnail-wrapper {
   flex: 0;
 }
 

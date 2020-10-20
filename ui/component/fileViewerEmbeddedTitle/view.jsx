@@ -27,6 +27,7 @@ function FileViewerEmbeddedTitle(props: Props) {
 
   return (
     <div className="file-viewer__embedded-header">
+      <div className="file-viewer__embedded-gradient" />
       <Button label={title} button="link" className="file-viewer__embedded-title" {...contentLinkProps} />
       <div className="file-viewer__embedded-info">
         <Button className="file-viewer__overlay-logo" icon={ICONS.LBRY} {...lbryLinkProps} />
