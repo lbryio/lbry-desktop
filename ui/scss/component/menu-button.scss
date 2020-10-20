@@ -67,6 +67,7 @@
   @extend .menu__list;
   border: 1px solid var(--color-border);
   border-radius: var(--border-radius);
+  padding: var(--spacing-xxs);
 }
 
 .menu__link {
