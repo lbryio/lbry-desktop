@@ -170,6 +170,10 @@ $thumbnailWidthSmall: 0rem;
 
 .comment__pin {
   margin-left: var(--spacing-s);
+
+  .icon {
+    padding-top: 1px;
+  }
 }
 
 .comment__message {
