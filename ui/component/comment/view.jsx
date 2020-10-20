@@ -250,7 +250,7 @@ function Comment(props: Props) {
                       {__('Block Channel')}
                     </MenuItem>
                   )}
-                  {commentIdentityChannel === contentChannel && (
+                  {commentIdentityChannel === contentChannel && isTopLevel && (
                     <MenuItem
                       className="comment__menu-option menu__link"
                       onSelect={
