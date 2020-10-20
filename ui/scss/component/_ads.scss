@@ -21,12 +21,15 @@
   padding: var(--spacing-m);
   background-color: var(--color-ads-background);
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
+  flex-wrap: wrap;
   width: 100%;
 
   > div {
     width: 100%;
     position: relative !important;
+    max-width: 30rem;
+    min-width: 15rem;
   }
 
   .avp-p-gui {
