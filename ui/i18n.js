@@ -79,6 +79,10 @@ function removeContextMetadata(message) {
 }
 
 export function __(message, tokens) {
+  if (!message) {
+    return '';
+  }
+
   const language = localStorageAvailable
     ? window.localStorage.getItem('language') || 'en'
     : window.navigator.language.slice(0, 2) || 'en';
