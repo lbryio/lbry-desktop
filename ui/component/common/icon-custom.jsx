@@ -745,9 +745,7 @@ export const icons = {
   ),
   [ICONS.NOT_COMPLETED]: buildIcon(<circle cx="12" cy="12" r="10" />),
   [ICONS.PINNED]: buildIcon(
-    <g>
-      <path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48" />
-    </g>
+    <path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48" />
   ),
   [ICONS.REFRESH]: buildIcon(
     <g>
@@ -866,7 +864,7 @@ export const icons = {
     <svg
       {...props}
       xmlns="http://www.w3.org/2000/svg"
-      viewBox="-6 -5 26 24"
+      viewBox="-6 0 26 24"
       width={props.size || '18'}
       height={props.size || '18'}
       fill="none"
