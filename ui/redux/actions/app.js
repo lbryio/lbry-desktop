@@ -529,10 +529,7 @@ export function doSignIn() {
   return (dispatch, getState) => {
     const state = getState();
     const user = selectUser(state);
-    const userId = user.id;
     const notificationsEnabled = user.experimental_ui;
-
-    analytics.setUser(userId);
 
     if (notificationsEnabled) {
       dispatch(doSocketConnect());

@@ -130,6 +130,7 @@ function App(props: Props) {
   const rawReferrerParam = urlParams.get('r');
   const sanitizedReferrerParam = rawReferrerParam && rawReferrerParam.replace(':', '#');
   const shouldHideNag = pathname.startsWith(`/$/${PAGES.EMBED}`) || pathname.startsWith(`/$/${PAGES.AUTH_VERIFY}`);
+  const userId = user && user.id;
 
   let uri;
   try {
@@ -142,6 +143,11 @@ function App(props: Props) {
     setShowAnalyticsNag(false);
   }
   // @endif
+  useEffect(() => {
+    if (userId) {
+      analytics.setUser(userId);
+    }
+  }, [userId]);
 
   useEffect(() => {
     if (!uploadCount) return;
