@@ -4,6 +4,19 @@ export const selectState = state => state.notifications || {};
 
 export const selectNotifications = createSelector(selectState, state => state.notifications);
 
+export const makeSelectNotificationForCommentId = id =>
+  createSelector(selectNotifications, notifications => {
+    const match =
+      notifications &&
+      notifications.find(
+        n =>
+          n.notification_parameters &&
+          n.notification_parameters.dynamic &&
+          n.notification_parameters.dynamic.hash === id
+      );
+    return match;
+  });
+
 export const selectIsFetchingNotifications = createSelector(selectState, state => state.fetchingNotifications);
 
 export const selectUnreadNotificationCount = createSelector(selectNotifications, notifications => {
