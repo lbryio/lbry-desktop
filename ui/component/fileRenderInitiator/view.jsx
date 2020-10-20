@@ -52,7 +52,6 @@ export default function FileRenderInitiator(props: Props) {
     claimWasPurchased,
     authenticated,
   } = props;
-
   const cost = costInfo && costInfo.cost;
   const isFree = hasCostInfo && cost === 0;
   const fileStatus = fileInfo && fileInfo.status;

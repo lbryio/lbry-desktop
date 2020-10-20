@@ -61,6 +61,7 @@ type Props = {
   includeSupportAction?: boolean,
   hideActions?: boolean,
   renderActions?: Claim => ?Node,
+  wrapperElement?: string,
 };
 
 const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
@@ -95,7 +96,9 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
     includeSupportAction,
     hideActions = false,
     renderActions,
+    wrapperElement,
   } = props;
+  const WrapperElement = wrapperElement || 'li';
   const shouldFetch =
     claim === undefined || (claim !== null && claim.value_type === 'channel' && isEmpty(claim.meta) && !pending);
   const abandoned = !isResolvingUri && !claim;
@@ -221,7 +224,7 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
   }
 
   return (
-    <li
+    <WrapperElement
       ref={ref}
       role="link"
       onClick={pending || type === 'inline' ? undefined : handleOnClick}
@@ -321,7 +324,7 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
           )}
         </div>
       </div>
-    </li>
+    </WrapperElement>
   );
 });
 

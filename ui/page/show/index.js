@@ -51,12 +51,12 @@ const select = (state, props) => {
   }
 
   return {
+    uri,
     claim: makeSelectClaimForUri(uri)(state),
     isResolvingUri: makeSelectIsUriResolving(uri)(state),
     blackListedOutpoints: selectBlackListedOutpoints(state),
     totalPages: makeSelectTotalPagesForChannel(uri, PAGE_SIZE)(state),
     isSubscribed: makeSelectChannelInSubscriptions(uri)(state),
-    uri,
     title: makeSelectTitleForUri(uri)(state),
     claimIsMine: makeSelectClaimIsMine(uri)(state),
     claimIsPending: makeSelectClaimIsPending(uri)(state),

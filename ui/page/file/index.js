@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import { doRemoveUnreadSubscription } from 'redux/actions/subscriptions';
-import { doSetContentHistoryItem } from 'redux/actions/content';
+import { doSetContentHistoryItem, doSetPrimaryUri } from 'redux/actions/content';
 import { withRouter } from 'react-router';
 import {
   doFetchFileInfo,
@@ -39,6 +39,7 @@ const perform = dispatch => ({
   fetchCostInfo: uri => dispatch(doFetchCostInfoForUri(uri)),
   setViewed: uri => dispatch(doSetContentHistoryItem(uri)),
   markSubscriptionRead: (channel, uri) => dispatch(doRemoveUnreadSubscription(channel, uri)),
+  setPrimaryUri: uri => dispatch(doSetPrimaryUri(uri)),
 });
 
 export default withRouter(connect(select, perform)(FilePage));

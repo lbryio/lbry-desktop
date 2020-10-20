@@ -1,9 +1,11 @@
 import { connect } from 'react-redux';
 import { makeSelectThumbnailForUri, doResolveUri, makeSelectClaimForUri, SETTINGS } from 'lbry-redux';
 import { doFetchCostInfoForUri, makeSelectCostInfoForUri } from 'lbryinc';
-import { doSetFloatingUri, doPlayUri } from 'redux/actions/content';
+import { doPlayUri, doSetPlayingUri } from 'redux/actions/content';
 import { doAnaltyicsPurchaseEvent } from 'redux/actions/app';
 import { makeSelectClientSetting } from 'redux/selectors/settings';
+import { makeSelectFileRenderModeForUri } from 'redux/selectors/content';
+
 import ChannelThumbnail from './view';
 
 const select = (state, props) => ({
@@ -11,12 +13,13 @@ const select = (state, props) => ({
   claim: makeSelectClaimForUri(props.uri)(state),
   floatingPlayerEnabled: makeSelectClientSetting(SETTINGS.FLOATING_PLAYER)(state),
   costInfo: makeSelectCostInfoForUri(props.uri)(state),
+  renderMode: makeSelectFileRenderModeForUri(props.uri)(state),
 });
 
 export default connect(select, {
   doResolveUri,
   doFetchCostInfoForUri,
-  doSetFloatingUri,
   doPlayUri,
+  doSetPlayingUri,
   doAnaltyicsPurchaseEvent,
 })(ChannelThumbnail);

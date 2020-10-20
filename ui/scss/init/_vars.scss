@@ -38,6 +38,7 @@ $breakpoint-large: 1600px;
   --font-weight-bold: 700;
   --font-base: 14px;
   --font-body: 1rem;
+  --font-xxsmall: 0.65rem;
   --font-xsmall: 0.7344rem;
   --font-small: 0.8571rem;
   --font-large: 1.3rem;
@@ -67,7 +68,9 @@ $breakpoint-large: 1600px;
   --tab-indicator-size: 0.5rem;
 
   // Header
-  --header-height: 5rem;
+  // This is tied to the floating player so it knows where to attach to
+  // ui/component/fileRenderFloating/view.jsx
+  --header-height: 80px;
 
   // Inline Player
   --inline-player-max-height: calc(100vh - var(--header-height) - var(--spacing-l) * 2);

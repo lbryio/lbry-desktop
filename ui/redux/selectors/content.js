@@ -9,7 +9,6 @@ import {
   makeSelectMediaTypeForUri,
   selectBalance,
   parseURI,
-  buildURI,
   makeSelectContentTypeForUri,
   makeSelectFileNameForUri,
 } from 'lbry-redux';
@@ -27,28 +26,23 @@ const HISTORY_ITEMS_PER_PAGE = 50;
 export const selectState = (state: any) => state.content || {};
 
 export const selectPlayingUri = createSelector(selectState, state => state.playingUri);
-export const selectFloatingUri = createSelector(selectState, state => state.floatingUri);
+export const selectPrimaryUri = createSelector(selectState, state => state.primaryUri);
 
-export const makeSelectIsPlaying = (uri: string) => createSelector(selectPlayingUri, playingUri => playingUri === uri);
+export const makeSelectIsPlaying = (uri: string) => createSelector(selectPrimaryUri, primaryUri => primaryUri === uri);
 
-// below is dumb, some context: https://stackoverflow.com/questions/39622864/access-react-router-state-in-selector
 export const makeSelectIsPlayerFloating = (location: UrlLocation) =>
-  createSelector(selectFloatingUri, selectPlayingUri, selectClaimsByUri, (floatingUri, playingUri, claimsByUri) => {
-    if (playingUri && floatingUri && playingUri !== floatingUri) {
-      return true;
+  createSelector(selectPrimaryUri, selectPlayingUri, selectClaimsByUri, (primaryUri, playingUri, claimsByUri) => {
+    const isInlineSecondaryPlayer =
+      playingUri &&
+      playingUri.uri !== primaryUri &&
+      location.pathname === playingUri.pathname &&
+      (playingUri.source === 'comment' || playingUri.source === 'markdown');
+
+    if ((playingUri && playingUri.uri === primaryUri) || isInlineSecondaryPlayer) {
+      return false;
     }
 
-    // If there is no floatingPlayer explicitly set, see if the playingUri can float
-    try {
-      const { pathname } = location;
-      const { streamName, streamClaimId, channelName, channelClaimId } = parseURI(pathname.slice(1).replace(/:/g, '#'));
-      const pageUrl = buildURI({ streamName, streamClaimId, channelName, channelClaimId });
-      const claimFromUrl = claimsByUri[pageUrl];
-      const playingClaim = claimsByUri[playingUri];
-      return (claimFromUrl && claimFromUrl.claim_id) !== (playingClaim && playingClaim.claim_id);
-    } catch (e) {}
-
-    return !!playingUri;
+    return true;
   });
 
 export const makeSelectContentPositionForUri = (uri: string) =>

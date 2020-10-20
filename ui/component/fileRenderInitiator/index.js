@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import { doPlayUri, doSetPlayingUri } from 'redux/actions/content';
+import { doPlayUri, doSetPlayingUri, doSetPrimaryUri } from 'redux/actions/content';
 import {
   makeSelectFileInfoForUri,
   makeSelectThumbnailForUri,
@@ -41,7 +41,8 @@ const select = (state, props) => ({
 
 const perform = dispatch => ({
   play: uri => {
-    dispatch(doSetPlayingUri(uri));
+    dispatch(doSetPrimaryUri(uri));
+    dispatch(doSetPlayingUri({ uri }));
     dispatch(doPlayUri(uri, undefined, undefined, fileInfo => dispatch(doAnaltyicsPurchaseEvent(fileInfo))));
   },
 });

@@ -9,6 +9,7 @@ type Props = {
   theme: string,
   type: ?string,
   delayed: boolean,
+  text?: any,
 };
 
 type State = {
@@ -54,7 +55,7 @@ class Spinner extends PureComponent<Props, State> {
   delayedTimeout: ?TimeoutID;
 
   render() {
-    const { dark, light, theme, type } = this.props;
+    const { dark, light, theme, type, text } = this.props;
     const { show } = this.state;
 
     if (!show) {
@@ -62,19 +63,22 @@ class Spinner extends PureComponent<Props, State> {
     }
 
     return (
-      <div
-        className={classnames('spinner', {
-          'spinner--dark': !light && (dark || theme === LIGHT_THEME),
-          'spinner--light': !dark && (light || theme === DARK_THEME),
-          'spinner--small': type === 'small',
-        })}
-      >
-        <div className="rect rect1" />
-        <div className="rect rect2" />
-        <div className="rect rect3" />
-        <div className="rect rect4" />
-        <div className="rect rect5" />
-      </div>
+      <>
+        {text}
+        <div
+          className={classnames('spinner', {
+            'spinner--dark': !light && (dark || theme === LIGHT_THEME),
+            'spinner--light': !dark && (light || theme === DARK_THEME),
+            'spinner--small': type === 'small',
+          })}
+        >
+          <div className="rect rect1" />
+          <div className="rect rect2" />
+          <div className="rect rect3" />
+          <div className="rect rect4" />
+          <div className="rect rect5" />
+        </div>
+      </>
     );
   }
 }

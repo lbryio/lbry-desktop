@@ -188,11 +188,11 @@ function Comment(props: Props) {
           'comment--slimed': slimedToDeath && !displayDeadComment,
         })}
       >
-        <div className="comment__author-thumbnail">
+        <div className="comment__thumbnail-wrapper">
           {authorUri ? (
-            <ChannelThumbnail uri={authorUri} obscure={channelIsBlocked} small />
+            <ChannelThumbnail uri={authorUri} obscure={channelIsBlocked} small className="comment__author-thumbnail" />
           ) : (
-            <ChannelThumbnail small />
+            <ChannelThumbnail small className="comment__author-thumbnail" />
           )}
         </div>
 
@@ -298,10 +298,10 @@ function Comment(props: Props) {
                     </div>
                   ) : editedMessage.length >= LENGTH_TO_COLLAPSE ? (
                     <Expandable>
-                      <MarkdownPreview content={message} promptLinks />
+                      <MarkdownPreview content={message} promptLinks parentCommentId={commentId} />
                     </Expandable>
                   ) : (
-                    <MarkdownPreview content={message} promptLinks />
+                    <MarkdownPreview content={message} promptLinks parentCommentId={commentId} />
                   )}
                 </div>
 

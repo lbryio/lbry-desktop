@@ -298,7 +298,7 @@ textarea {
 .thumbnail-preview {
   width: var(--thumbnail-preview-width);
   height: var(--thumbnail-preview-height);
-
+  border-radius: var(--border-radius);
   background-position: 50% 50%;
   background-repeat: no-repeat;
   background-size: cover;

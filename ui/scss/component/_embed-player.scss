@@ -29,6 +29,9 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  border-top-left-radius: var(--border-radius);
+  border-top-right-radius: var(--border-radius);
+  background-color: var(--color-black);
 
   @media (max-width: $breakpoint-small) {
     height: 200px;

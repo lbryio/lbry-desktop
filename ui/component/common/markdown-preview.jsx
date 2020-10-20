@@ -7,12 +7,9 @@ import remarkStrip from 'strip-markdown';
 import remarkEmoji from 'remark-emoji';
 import remarkBreaks from 'remark-breaks';
 import reactRenderer from 'remark-react';
-import ExternalLink from 'component/externalLink';
+import MarkdownLink from 'component/markdownLink';
 import defaultSchema from 'hast-util-sanitize/lib/github.json';
 import { formatedLinks, inlineLinks } from 'util/remark-lbry';
-import { Link } from 'react-router-dom';
-import { formatLbryUrlForWeb } from 'util/url';
-import EmbedPlayButton from 'component/embedPlayButton';
 
 type SimpleTextProps = {
   children?: React.Node,
@@ -22,7 +19,6 @@ type SimpleLinkProps = {
   href?: string,
   title?: string,
   children?: React.Node,
-  noDataStore?: boolean,
 };
 
 type MarkdownProps = {
@@ -31,6 +27,8 @@ type MarkdownProps = {
   promptLinks?: boolean,
   noDataStore?: boolean,
   className?: string,
+  parentCommentId?: string,
+  isMarkdownPost?: boolean,
 };
 
 const SimpleText = (props: SimpleTextProps) => {
@@ -38,14 +36,13 @@ const SimpleText = (props: SimpleTextProps) => {
 };
 
 const SimpleLink = (props: SimpleLinkProps) => {
-  const { title, children } = props;
-  const { href, noDataStore } = props;
+  const { title, children, href } = props;
 
   if (!href) {
     return children || null;
   }
 
-  if (!href.startsWith('lbry://')) {
+  if (!href.startsWith('lbry:/')) {
     return (
       <a href={href} title={title} target={'_blank'} rel={'noreferrer noopener'}>
         {children}
@@ -60,33 +57,15 @@ const SimpleLink = (props: SimpleLinkProps) => {
   if (embed) {
     // Decode this since users might just copy it from the url bar
     const decodedUri = decodeURI(uri);
-    return noDataStore ? (
+    return (
       <div className="embed__inline-button-preview">
         <pre>{decodedUri}</pre>
       </div>
-    ) : (
-      <EmbedPlayButton uri={decodedUri} />
     );
   }
 
-  const webLink = formatLbryUrlForWeb(uri);
-  // using Link after formatLbryUrl to handle "/" vs "#/"
-  // for web and desktop scenarios respectively
-
-  return noDataStore ? (
-    // Dummy link (no 'href')
-    <a title={title}>{children}</a>
-  ) : (
-    <Link
-      title={title}
-      to={webLink}
-      onClick={e => {
-        e.stopPropagation();
-      }}
-    >
-      {children}
-    </Link>
-  );
+  // Dummy link (no 'href')
+  return <a title={title}>{children}</a>;
 };
 
 // Use github sanitation schema
@@ -99,7 +78,7 @@ schema.attributes.a.push('embed');
 const REPLACE_REGEX = /(<iframe\s+src=["'])(.*?(?=))(["']\s*><\/iframe>)/g;
 
 const MarkdownPreview = (props: MarkdownProps) => {
-  const { content, strip, promptLinks, noDataStore, className } = props;
+  const { content, strip, promptLinks, noDataStore, className, parentCommentId, isMarkdownPost } = props;
   const strippedContent = content
     ? content.replace(REPLACE_REGEX, (iframeHtml, y, iframeSrc) => {
         // Let the browser try to create an iframe to see if the markup is valid
@@ -111,7 +90,7 @@ const MarkdownPreview = (props: MarkdownProps) => {
           const src = iframe.src;
 
           if (src && src.startsWith('lbry://')) {
-            return `${src}?embed=true`;
+            return src;
           }
         }
 
@@ -123,7 +102,16 @@ const MarkdownPreview = (props: MarkdownProps) => {
     sanitize: schema,
     fragment: React.Fragment,
     remarkReactComponents: {
-      a: promptLinks ? ExternalLink : linkProps => <SimpleLink {...linkProps} noDataStore={noDataStore} />,
+      a: noDataStore
+        ? SimpleLink
+        : linkProps => (
+            <MarkdownLink
+              {...linkProps}
+              parentCommentId={parentCommentId}
+              isMarkdownPost={isMarkdownPost}
+              promptLinks={promptLinks}
+            />
+          ),
       // Workaraund of remarkOptions.Fragment
       div: React.Fragment,
     },
