@@ -2,7 +2,7 @@
 import * as ACTIONS from 'constants/action_types';
 import * as REACTION_TYPES from 'constants/reactions';
 import { Lbry, selectClaimsByUri, selectMyChannelClaims } from 'lbry-redux';
-import { doToast } from 'redux/actions/notifications';
+import { doToast, doSeeNotifications } from 'redux/actions/notifications';
 import {
   makeSelectCommentIdsForUri,
   makeSelectMyReactionsForComment,
@@ -10,6 +10,7 @@ import {
   selectPendingCommentReacts,
   selectCommentChannel,
 } from 'redux/selectors/comments';
+import { makeSelectNotificationForCommentId } from 'redux/selectors/notifications';
 
 export function doCommentList(uri: string, page: number = 1, pageSize: number = 99999) {
   return (dispatch: Dispatch, getState: GetState) => {
@@ -104,6 +105,10 @@ export function doCommentReact(commentId: string, type: string) {
     const channel = selectCommentChannel(state);
     const pendingReacts = selectPendingCommentReacts(state);
     const myChannels = selectMyChannelClaims(state);
+    const notification = makeSelectNotificationForCommentId(commentId)(state);
+    if (notification && !notification.is_seen) {
+      dispatch(doSeeNotifications([notification.id]));
+    }
     const exclusiveTypes = {
       [REACTION_TYPES.LIKE]: REACTION_TYPES.DISLIKE,
       [REACTION_TYPES.DISLIKE]: REACTION_TYPES.LIKE,
@@ -204,6 +209,13 @@ export function doCommentCreate(
     dispatch({
       type: ACTIONS.COMMENT_CREATE_STARTED,
     });
+
+    if (parent_id) {
+      const notification = makeSelectNotificationForCommentId(parent_id)(state);
+      if (notification && !notification.is_seen) {
+        dispatch(doSeeNotifications([notification.id]));
+      }
+    }
 
     const myChannels = selectMyChannelClaims(state);
     const namedChannelClaim = myChannels && myChannels.find(myChannel => myChannel.name === channel);
