@@ -1059,7 +1059,7 @@
   "minute": "minute",
   "hours": "hours",
   "hour": "hour",
-  "%SITE_NAME% uploads are limited to 1 GB. Download the app for unrestricted publishing.": "%SITE_NAME% uploads are limited to 1 GB. Download the app for unrestricted publishing.",
+  "%SITE_NAME% uploads are limited to 2 GB. Download the app for unrestricted publishing.": "%SITE_NAME% uploads are limited to 2 GB. Download the app for unrestricted publishing.",
   "Connected": "Connected",
   "Not connected": "Not connected",
   "this link": "this link",

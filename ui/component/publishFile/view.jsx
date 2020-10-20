@@ -76,9 +76,9 @@ function PublishFile(props: Props) {
   const [userOptimize, setUserOptimize] = usePersistedState('publish-file-user-optimize', false);
 
   const RECOMMENDED_BITRATE = 6000000;
-  const TV_PUBLISH_SIZE_LIMIT: number = 1073741824;
+  const TV_PUBLISH_SIZE_LIMIT: number = 2147483648;
   const UPLOAD_SIZE_MESSAGE = __(
-    '%SITE_NAME% uploads are limited to 1 GB. Download the app for unrestricted publishing.',
+    '%SITE_NAME% uploads are limited to 2 GB. Download the app for unrestricted publishing.',
     { SITE_NAME }
   );
   const PROCESSING_MB_PER_SECOND = 0.5;
