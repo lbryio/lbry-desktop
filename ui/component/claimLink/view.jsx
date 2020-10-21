@@ -81,7 +81,7 @@ class ClaimLink extends React.Component<Props> {
 
     return isChannel ? (
       <div className="card--inline">
-        <ClaimPreview uri={uri} wrapperElement="div" />
+        <ClaimPreview uri={uri} wrapperElement="div" hideActions />
       </div>
     ) : (
       <div className={classnames('claim-link')}>

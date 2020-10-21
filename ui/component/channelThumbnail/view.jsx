@@ -55,7 +55,7 @@ function ChannelThumbnail(props: Props) {
   }, [doResolveUri, shouldResolve, uri]);
 
   if (channelThumbnail && channelThumbnail.endsWith('gif') && !allowGifs) {
-    return <FreezeframeWrapper src={channelThumbnail} className="channel-thumbnail" />;
+    return <FreezeframeWrapper src={channelThumbnail} className={classnames('channel-thumbnail', className)} />;
   }
 
   return (
