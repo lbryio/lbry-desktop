@@ -73,15 +73,20 @@ function MarkdownLink(props: Props) {
     simpleLinks ||
     (protocol && (protocol[0] === 'http:' || protocol[0] === 'https:' || protocol[0] === 'mailto:'))
   ) {
+    const isLbryLink = href.startsWith('lbry://');
+
     element = (
       <Button
         button="link"
-        iconRight={ICONS.EXTERNAL}
+        iconRight={isLbryLink ? undefined : ICONS.EXTERNAL}
         title={title || decodedUri}
         label={children}
         className="button--external-link"
+        navigate={isLbryLink ? href : undefined}
         onClick={() => {
-          openModal(MODALS.CONFIRM_EXTERNAL_RESOURCE, { uri: href, isTrusted: false });
+          if (!isLbryLink) {
+            openModal(MODALS.CONFIRM_EXTERNAL_RESOURCE, { uri: href, isTrusted: false });
+          }
         }}
       />
     );
