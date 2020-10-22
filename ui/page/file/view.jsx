@@ -7,8 +7,6 @@ import FileTitle from 'component/fileTitle';
 import FileRenderInitiator from 'component/fileRenderInitiator';
 import FileRenderInline from 'component/fileRenderInline';
 import FileRenderDownload from 'component/fileRenderDownload';
-import FileDetails from 'component/fileDetails';
-import FileValues from 'component/fileValues';
 import RecommendedContent from 'component/recommendedContent';
 import CommentsList from 'component/commentsList';
 
@@ -135,8 +133,6 @@ function FilePage(props: Props) {
     <Page className="file-page" filePage>
       <div className={classnames('section card-stack', `file-page__${renderMode}`)}>
         {renderFilePageLayout()}
-        <FileValues uri={uri} />
-        <FileDetails uri={uri} />
 
         <CommentsList uri={uri} linkedComment={linkedComment} />
       </div>
