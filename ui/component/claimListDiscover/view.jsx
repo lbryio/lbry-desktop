@@ -191,6 +191,30 @@ function ClaimListDiscover(props: Props) {
         : CS.ORDER_BY_TOP_VALUE, // Sort by top
   };
 
+  if (feeAmountParam && claimType !== CS.CLAIM_CHANNEL) {
+    options.fee_amount = feeAmountParam;
+  }
+
+  if (claimIds) {
+    options.claim_ids = claimIds;
+  }
+
+  if (channelIdsParam) {
+    options.channel_ids = channelIdsParam;
+  }
+
+  if (tagsParam) {
+    if (tagsParam !== CS.TAGS_ALL && tagsParam !== '') {
+      if (tagsParam === CS.TAGS_FOLLOWED) {
+        options.any_tags = followed;
+      } else if (Array.isArray(tagsParam)) {
+        options.any_tags = tagsParam;
+      } else {
+        options.any_tags = tagsParam.split(',');
+      }
+    }
+  }
+
   if (repostedClaimId) {
     // SDK chokes on reposted_claim_id of null or false, needs to not be present if no value
     options.reposted_claim_id = repostedClaimId;
@@ -230,27 +254,8 @@ function ClaimListDiscover(props: Props) {
             .startOf('week')
             .unix()
         )}`;
-      } else {
-        // Hack for at least the New page until https://github.com/lbryio/lbry-sdk/issues/2591 is fixed
-        options.release_time = `<${Math.floor(
-          moment()
-            .startOf('minute')
-            .unix()
-        )}`;
       }
     }
-  }
-
-  if (feeAmountParam && claimType !== CS.CLAIM_CHANNEL) {
-    options.fee_amount = feeAmountParam;
-  }
-
-  if (claimIds) {
-    options.claim_ids = claimIds;
-  }
-
-  if (channelIdsParam) {
-    options.channel_ids = channelIdsParam;
   }
 
   if (durationParam) {
@@ -271,18 +276,6 @@ function ClaimListDiscover(props: Props) {
         options.claim_type = claimTypeParam;
       } else {
         options.claim_type = [claimTypeParam];
-      }
-    }
-  }
-
-  if (tagsParam) {
-    if (tagsParam !== CS.TAGS_ALL && tagsParam !== '') {
-      if (tagsParam === CS.TAGS_FOLLOWED) {
-        options.any_tags = followed;
-      } else if (Array.isArray(tagsParam)) {
-        options.any_tags = tagsParam;
-      } else {
-        options.any_tags = tagsParam.split(',');
       }
     }
   }
