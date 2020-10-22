@@ -44,7 +44,7 @@ export function doDismissError() {
 export function doNotificationList() {
   return (dispatch: Dispatch) => {
     dispatch({ type: ACTIONS.NOTIFICATION_LIST_STARTED });
-    return Lbryio.call('notification', 'list')
+    return Lbryio.call('notification', 'list', { is_app_readable: true })
       .then(response => {
         const notifications = response || [];
         const channelsToResolve = notifications
