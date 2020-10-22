@@ -11,6 +11,7 @@ import SearchOptions from 'component/searchOptions';
 import Button from 'component/button';
 import ClaimUri from 'component/claimUri';
 import Ads from 'web/component/ads';
+import ClaimEffectiveAmount from 'component/claimEffectiveAmount';
 import { formatLbryUrlForWeb } from 'util/url';
 import { useHistory } from 'react-router';
 
@@ -85,9 +86,11 @@ export default function SearchPage(props: Props) {
           .replace(INVALID_URI_CHARS, '');
   const uriFromQuery = `lbry://${modifiedUrlQuery}`;
 
+  const stringifiedOptions = JSON.stringify(additionalOptions);
   useEffect(() => {
     if (urlQuery) {
-      search(urlQuery, additionalOptions);
+      const jsonOptions = JSON.parse(stringifiedOptions);
+      search(urlQuery, jsonOptions);
     }
   }, [search, urlQuery]);
 
@@ -96,7 +99,7 @@ export default function SearchPage(props: Props) {
       <section className="search">
         {urlQuery && (
           <Fragment>
-            {!SIMPLE_SITE && isValid && (
+            {isValid && (
               <header className="search__header">
                 <div className="claim-preview__actions--header">
                   <ClaimUri uri={uriFromQuery} noShortUrl />
@@ -111,7 +114,17 @@ export default function SearchPage(props: Props) {
                   />
                 </div>
                 <div className="card">
-                  <ClaimPreview uri={uriFromQuery} type="large" placeholder="publish" />
+                  <ClaimPreview
+                    uri={uriFromQuery}
+                    type="large"
+                    placeholder="publish"
+                    properties={claim => (
+                      <span className="claim-preview__custom-properties">
+                        <span className="help--inline">{__('Current winning amount')}</span>
+                        <ClaimEffectiveAmount uri={uriFromQuery} />
+                      </span>
+                    )}
+                  />
                 </div>
               </header>
             )}
@@ -119,7 +132,7 @@ export default function SearchPage(props: Props) {
             <ClaimList
               uris={uris}
               loading={isSearching}
-              header={<SearchOptions additionalOptions={additionalOptions} />}
+              header={SIMPLE_SITE && <SearchOptions additionalOptions={additionalOptions} />}
               injectedItem={SHOW_ADS && !isAuthenticated && IS_WEB && <Ads type="video" />}
               headerAltControls={
                 <Fragment>
