@@ -15,10 +15,20 @@ type Props = {
   openModal: (id: string, { uri: string }) => void,
   parentCommentId?: string,
   isMarkdownPost?: boolean,
+  simpleLinks?: boolean,
 };
 
 function MarkdownLink(props: Props) {
-  const { children, href, title, embed = false, openModal, parentCommentId, isMarkdownPost } = props;
+  const {
+    children,
+    href,
+    title,
+    embed = false,
+    openModal,
+    parentCommentId,
+    isMarkdownPost,
+    simpleLinks = false,
+  } = props;
   const decodedUri = decodeURI(href);
   if (!href) {
     return children || null;
@@ -33,7 +43,7 @@ function MarkdownLink(props: Props) {
   // Return plain text if no valid url
   // Return external link if protocol is http or https
   // Return local link if protocol is lbry uri
-  if (protocol && protocol[0] === 'lbry:' && isURIValid(decodedUri)) {
+  if (!simpleLinks && protocol && protocol[0] === 'lbry:' && isURIValid(decodedUri)) {
     const linkUrlObject = new URL(decodedUri);
     const linkDomain = linkUrlObject.host;
     const isKnownAppDomainLink = KNOWN_APP_DOMAINS.includes(linkDomain);
@@ -59,7 +69,10 @@ function MarkdownLink(props: Props) {
         {children}
       </ClaimLink>
     );
-  } else if (protocol && (protocol[0] === 'http:' || protocol[0] === 'https:' || protocol[0] === 'mailto:')) {
+  } else if (
+    simpleLinks ||
+    (protocol && (protocol[0] === 'http:' || protocol[0] === 'https:' || protocol[0] === 'mailto:'))
+  ) {
     element = (
       <Button
         button="link"

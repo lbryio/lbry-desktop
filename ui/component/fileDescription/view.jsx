@@ -47,7 +47,7 @@ function FileDescription(props: Props) {
           'media__info-text--fade': hasOverflow && !expanded,
         })}
       >
-        <MarkdownPreview className="markdown-preview--description" content={description} />
+        <MarkdownPreview className="markdown-preview--description" content={description} simpleLinks />
         <ClaimTags uri={uri} type="large" />
       </div>
       {hasCalculatedOverflow && hasOverflow && (

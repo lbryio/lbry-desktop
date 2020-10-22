@@ -24,7 +24,7 @@ type SimpleLinkProps = {
 type MarkdownProps = {
   strip?: boolean,
   content: ?string,
-  promptLinks?: boolean,
+  simpleLinks?: boolean,
   noDataStore?: boolean,
   className?: string,
   parentCommentId?: string,
@@ -78,7 +78,7 @@ schema.attributes.a.push('embed');
 const REPLACE_REGEX = /(<iframe\s+src=["'])(.*?(?=))(["']\s*><\/iframe>)/g;
 
 const MarkdownPreview = (props: MarkdownProps) => {
-  const { content, strip, promptLinks, noDataStore, className, parentCommentId, isMarkdownPost } = props;
+  const { content, strip, simpleLinks, noDataStore, className, parentCommentId, isMarkdownPost } = props;
   const strippedContent = content
     ? content.replace(REPLACE_REGEX, (iframeHtml, y, iframeSrc) => {
         // Let the browser try to create an iframe to see if the markup is valid
@@ -109,7 +109,7 @@ const MarkdownPreview = (props: MarkdownProps) => {
               {...linkProps}
               parentCommentId={parentCommentId}
               isMarkdownPost={isMarkdownPost}
-              promptLinks={promptLinks}
+              simpleLinks={simpleLinks}
             />
           ),
       // Workaraund of remarkOptions.Fragment
