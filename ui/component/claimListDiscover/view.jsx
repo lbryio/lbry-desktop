@@ -129,7 +129,7 @@ function ClaimListDiscover(props: Props) {
   const durationParam = urlParams.get(CS.DURATION_KEY) || null;
   const channelIdsInUrl = urlParams.get(CS.CHANNEL_IDS_KEY);
   const channelIdsParam = channelIdsInUrl ? channelIdsInUrl.split(',') : channelIds;
-  const feeAmountParam = urlParams.get('fee_amount') || feeAmount || CS.FEE_AMOUNT_ANY;
+  const feeAmountParam = urlParams.get('fee_amount') || feeAmount;
   const originalPageSize = pageSize || CS.PAGE_SIZE;
   const dynamicPageSize = isLargeScreen ? Math.ceil(originalPageSize * (3 / 2)) : originalPageSize;
   let orderParam = orderBy || urlParams.get(CS.ORDER_BY_KEY) || defaultOrderBy;
