@@ -24,30 +24,31 @@ function MarkdownLink(props: Props) {
     return children || null;
   }
 
+  let element = <span>{children}</span>;
+
   // Regex for url protocol
   const protocolRegex = new RegExp('^(https?|lbry|mailto)+:', 'i');
   const protocol = href ? protocolRegex.exec(href) : null;
+
   // Return plain text if no valid url
-  let element = <span>{children}</span>;
   // Return external link if protocol is http or https
-
-  const linkUrlObject = new URL(decodedUri);
-  const linkDomain = linkUrlObject.host;
-  const isKnownAppDomainLink = KNOWN_APP_DOMAINS.includes(linkDomain);
-  let lbryUrlFromLink;
-  if (isKnownAppDomainLink) {
-    const linkPathname = decodeURIComponent(
-      linkUrlObject.pathname.startsWith('//') ? linkUrlObject.pathname.slice(2) : linkUrlObject.pathname.slice(1)
-    );
-    const possibleLbryUrl = `lbry://${linkPathname.replace(/:/g, '#')}`;
-    const lbryLinkIsValid = isURIValid(possibleLbryUrl);
-    if (lbryLinkIsValid) {
-      lbryUrlFromLink = possibleLbryUrl;
-    }
-  }
-
   // Return local link if protocol is lbry uri
-  if ((protocol && protocol[0] === 'lbry:' && isURIValid(decodedUri)) || lbryUrlFromLink) {
+  if (protocol && protocol[0] === 'lbry:' && isURIValid(decodedUri)) {
+    const linkUrlObject = new URL(decodedUri);
+    const linkDomain = linkUrlObject.host;
+    const isKnownAppDomainLink = KNOWN_APP_DOMAINS.includes(linkDomain);
+    let lbryUrlFromLink;
+    if (isKnownAppDomainLink) {
+      const linkPathname = decodeURIComponent(
+        linkUrlObject.pathname.startsWith('//') ? linkUrlObject.pathname.slice(2) : linkUrlObject.pathname.slice(1)
+      );
+      const possibleLbryUrl = `lbry://${linkPathname.replace(/:/g, '#')}`;
+      const lbryLinkIsValid = isURIValid(possibleLbryUrl);
+      if (lbryLinkIsValid) {
+        lbryUrlFromLink = possibleLbryUrl;
+      }
+    }
+
     element = (
       <ClaimLink
         uri={lbryUrlFromLink || decodedUri}
