@@ -197,6 +197,7 @@
 .card__title-actions {
   align-self: flex-start;
   padding: var(--spacing-m);
+  padding-right: var(--spacing-l);
 
   @media (max-width: $breakpoint-small) {
     padding: 0;

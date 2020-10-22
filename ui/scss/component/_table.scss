@@ -180,6 +180,7 @@ th {
 }
 .table--file-details {
   @extend .table--details;
+  margin-top: var(--spacing-m);
 
   td:nth-of-type(1) {
     width: 25%;

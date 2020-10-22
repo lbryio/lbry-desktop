@@ -1,8 +1,7 @@
 // @flow
-import React, { Fragment, PureComponent } from 'react';
+import React, { PureComponent } from 'react';
 import Button from 'component/button';
 import path from 'path';
-import Card from 'component/common/card';
 import { formatBytes } from 'util/format-bytes';
 
 type Props = {
@@ -39,67 +38,58 @@ class FileDetails extends PureComponent<Props> {
     }
 
     return (
-      <Fragment>
-        <Card
-          title={__('File details')}
-          defaultExpand={false}
-          actions={
-            <table className="table table--condensed table--fixed table--file-details">
-              <tbody>
-                <tr>
-                  <td> {__('Content Type')}</td>
-                  <td>{mediaType}</td>
-                </tr>
-                {fileSize && (
-                  <tr>
-                    <td> {__('File Size')}</td>
-                    <td>{fileSize}</td>
-                  </tr>
-                )}
+      <table className="table table--condensed table--fixed table--file-details">
+        <tbody>
+          <tr>
+            <td> {__('Content Type')}</td>
+            <td>{mediaType}</td>
+          </tr>
+          {fileSize && (
+            <tr>
+              <td> {__('File Size')}</td>
+              <td>{fileSize}</td>
+            </tr>
+          )}
 
-                <tr>
-                  <td> {__('URL')}</td>
-                  <td>{claim.canonical_url}</td>
-                </tr>
+          <tr>
+            <td> {__('URL')}</td>
+            <td>{claim.canonical_url}</td>
+          </tr>
 
-                <tr>
-                  <td> {__('Claim ID')}</td>
-                  <td>{claim.claim_id}</td>
-                </tr>
+          <tr>
+            <td> {__('Claim ID')}</td>
+            <td>{claim.claim_id}</td>
+          </tr>
 
-                {languages && (
-                  <tr>
-                    <td>{__('Languages')}</td>
-                    <td>{languages.join(' ')}</td>
-                  </tr>
-                )}
-                <tr>
-                  <td>{__('License')}</td>
-                  <td>{license}</td>
-                </tr>
-                {downloadPath && (
-                  <tr>
-                    <td>{__('Downloaded to')}</td>
-                    <td>
-                      {/* {downloadPath.replace(/(.{10})/g, '$1\u200b')} */}
-                      <Button
-                        button="link"
-                        className="button--download-link"
-                        onClick={() => {
-                          if (downloadPath) {
-                            openFolder(downloadPath);
-                          }
-                        }}
-                        label={downloadNote || downloadPath.replace(/(.{10})/g, '$1\u200b')}
-                      />
-                    </td>
-                  </tr>
-                )}
-              </tbody>
-            </table>
-          }
-        />
-      </Fragment>
+          {languages && (
+            <tr>
+              <td>{__('Languages')}</td>
+              <td>{languages.join(' ')}</td>
+            </tr>
+          )}
+          <tr>
+            <td>{__('License')}</td>
+            <td>{license}</td>
+          </tr>
+          {downloadPath && (
+            <tr>
+              <td>{__('Downloaded to')}</td>
+              <td>
+                <Button
+                  button="link"
+                  className="button--download-link"
+                  onClick={() => {
+                    if (downloadPath) {
+                      openFolder(downloadPath);
+                    }
+                  }}
+                  label={downloadNote || downloadPath.replace(/(.{10})/g, '$1\u200b')}
+                />
+              </td>
+            </tr>
+          )}
+        </tbody>
+      </table>
     );
   }
 }

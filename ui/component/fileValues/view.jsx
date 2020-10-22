@@ -1,13 +1,12 @@
 // @flow
-import React, { Fragment, PureComponent } from 'react';
 import * as ICONS from 'constants/icons';
 import * as MODALS from 'constants/modal_types';
+import * as PAGES from 'constants/pages';
+import React, { PureComponent } from 'react';
 import Button from 'component/button';
 import Spinner from 'component/spinner';
-import * as PAGES from 'constants/pages';
 import HelpLink from 'component/common/help-link';
 import CreditAmount from 'component/common/credit-amount';
-import Card from 'component/common/card';
 
 type Props = {
   uri: string,
@@ -32,86 +31,76 @@ class FileValues extends PureComponent<Props> {
     const purchaseReceipt = claim && claim.purchase_receipt;
 
     return (
-      <Fragment>
-        <Card
-          title={__('Credit details')}
-          defaultExpand={false}
-          actions={
-            <table className="table table--condensed table--fixed table--lbc-details">
-              <tbody>
-                {purchaseReceipt && (
-                  <tr>
-                    <td> {__('Purchase Amount')}</td>
-                    <td>
-                      <Button
-                        button="link"
-                        href={`https://explorer.lbry.com/tx/${purchaseReceipt.txid}`}
-                        label={<CreditAmount amount={Number(purchaseReceipt.amount)} precision={2} />}
-                      />
-                    </td>
-                  </tr>
-                )}
-                <tr>
-                  <td> {__('Original Publish Amount')}</td>
-                  <td>
-                    {claim && claim.amount ? <CreditAmount amount={Number(claim.amount)} precision={2} /> : <p>...</p>}
-                  </td>
-                </tr>
-                <tr>
-                  <td>
-                    {__('Supports and Tips')}
-                    <HelpLink href="https://lbry.com/faq/tipping" />
-                  </td>
-                  <td>
-                    {claimIsMine && !pendingAmount && Boolean(supportsAmount) && (
-                      <>
-                        <Button
-                          button="link"
-                          className="expandable__button"
-                          icon={ICONS.UNLOCK}
-                          label={<CreditAmount amount={Number(supportsAmount)} precision={2} />}
-                          onClick={() => {
-                            openModal(MODALS.LIQUIDATE_SUPPORTS, { uri });
-                          }}
-                        />{' '}
-                      </>
-                    )}
-                    {(!claimIsMine || (claimIsMine && !pendingAmount && supportsAmount === 0)) && (
-                      <CreditAmount amount={Number(supportsAmount)} precision={2} />
-                    )}
+      <table className="table table--condensed table--fixed table--lbc-details">
+        <tbody>
+          {purchaseReceipt && (
+            <tr>
+              <td> {__('Purchase Amount')}</td>
+              <td>
+                <Button
+                  button="link"
+                  href={`https://explorer.lbry.com/tx/${purchaseReceipt.txid}`}
+                  label={<CreditAmount amount={Number(purchaseReceipt.amount)} precision={2} />}
+                />
+              </td>
+            </tr>
+          )}
+          <tr>
+            <td> {__('Original Publish Amount')}</td>
+            <td>{claim && claim.amount ? <CreditAmount amount={Number(claim.amount)} precision={2} /> : <p>...</p>}</td>
+          </tr>
+          <tr>
+            <td>
+              {__('Supports and Tips')}
+              <HelpLink href="https://lbry.com/faq/tipping" />
+            </td>
+            <td>
+              {claimIsMine && !pendingAmount && Boolean(supportsAmount) && (
+                <>
+                  <Button
+                    button="link"
+                    className="expandable__button"
+                    icon={ICONS.UNLOCK}
+                    label={<CreditAmount amount={Number(supportsAmount)} precision={2} />}
+                    onClick={() => {
+                      openModal(MODALS.LIQUIDATE_SUPPORTS, { uri });
+                    }}
+                  />{' '}
+                </>
+              )}
+              {(!claimIsMine || (claimIsMine && !pendingAmount && supportsAmount === 0)) && (
+                <CreditAmount amount={Number(supportsAmount)} precision={2} />
+              )}
 
-                    {claimIsMine && pendingAmount && <Spinner type={'small'} />}
-                  </td>
-                </tr>
-                <tr>
-                  <td>
-                    <div>
-                      {__('Total Staked Amount')}
-                      <HelpLink href="https://lbry.com/faq/tipping" />
-                    </div>
-                  </td>
-                  <td>
-                    <CreditAmount amount={Number(claim.meta.effective_amount)} precision={2} />
-                  </td>
-                </tr>
-                <tr>
-                  <td>
-                    {__('Community Choice?')}
-                    <HelpLink href="https://lbry.com/faq/naming" />
-                  </td>
-                  <td>
-                    <Button
-                      button="link"
-                      label={claim.meta.is_controlling ? __('Yes') : __('No')}
-                      navigate={`/$/${PAGES.TOP}?name=${claim.name}`}
-                    />
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          }
-        />
-      </Fragment>
+              {claimIsMine && pendingAmount && <Spinner type={'small'} />}
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <div>
+                {__('Total Staked Amount')}
+                <HelpLink href="https://lbry.com/faq/tipping" />
+              </div>
+            </td>
+            <td>
+              <CreditAmount amount={Number(claim.meta.effective_amount)} precision={2} />
+            </td>
+          </tr>
+          <tr>
+            <td>
+              {__('Community Choice?')}
+              <HelpLink href="https://lbry.com/faq/naming" />
+            </td>
+            <td>
+              <Button
+                button="link"
+                label={claim.meta.is_controlling ? __('Yes') : __('No')}
+                navigate={`/$/${PAGES.TOP}?name=${claim.name}`}
+              />
+            </td>
+          </tr>
+        </tbody>
+      </table>
     );
   }
 }
