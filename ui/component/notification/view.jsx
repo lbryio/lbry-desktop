@@ -66,6 +66,10 @@ export default function Notification(props: Props) {
     case NOTIFICATIONS.NOTIFICATION_REPLY:
       icon = <ChannelThumbnail small uri={notification_parameters.dynamic.reply_author} />;
       break;
+    case NOTIFICATIONS.DAILY_WATCH_AVAILABLE:
+    case NOTIFICATIONS.DAILY_WATCH_REMIND:
+      icon = <Icon icon={ICONS.LBC} sectionIcon className="notification__icon" />;
+      break;
     default:
       icon = <Icon icon={ICONS.NOTIFICATION} sectionIcon className="notification__icon" />;
   }
