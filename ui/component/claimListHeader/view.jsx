@@ -265,7 +265,7 @@ function ClaimListHeader(props: Props) {
             {tileLayout !== undefined && (
               <Button
                 onClick={() => {
-                  doSetClientSetting(SETTINGS.TILE_LAYOUT, !tileLayout);
+                  doSetClientSetting(SETTINGS.TILE_LAYOUT, !tileLayout, true);
                 }}
                 button="alt"
                 className="button-toggle"

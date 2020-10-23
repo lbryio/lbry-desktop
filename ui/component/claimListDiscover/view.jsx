@@ -142,7 +142,6 @@ function ClaimListDiscover(props: Props) {
   const contentTypeParam = urlParams.get(CS.CONTENT_KEY);
   const claimTypeParam =
     claimType || (CS.CLAIM_TYPES.includes(contentTypeParam) && contentTypeParam) || defaultClaimType || null;
-
   const streamTypeParam =
     streamType || (CS.FILE_TYPES.includes(contentTypeParam) && contentTypeParam) || defaultStreamType || null;
   const durationParam = urlParams.get(CS.DURATION_KEY) || null;
@@ -334,21 +333,20 @@ function ClaimListDiscover(props: Props) {
   const claimSearchResultLastPageReached = claimSearchByQueryLastPageReached[claimSearchCacheQuery];
 
   // uncomment to fix an item on a page
-
-  const fixUri = 'lbry://@corbettreport#0/lbryodysee#5';
-  if (
-    orderParam === CS.ORDER_BY_NEW &&
-    claimSearchResult &&
-    claimSearchResult.length > 2 &&
-    window.location.pathname === '/$/rabbithole'
-  ) {
-    if (claimSearchResult.indexOf(fixUri) !== -1) {
-      claimSearchResult.splice(claimSearchResult.indexOf(fixUri), 1);
-    } else {
-      claimSearchResult.pop();
-    }
-    claimSearchResult.splice(2, 0, fixUri);
-  }
+  //   const fixUri = 'lbry://@corbettreport#0/lbryodysee#5';
+  //   if (
+  //     orderParam === CS.ORDER_BY_NEW &&
+  //     claimSearchResult &&
+  //     claimSearchResult.length > 2 &&
+  //     window.location.pathname === '/$/rabbithole'
+  //   ) {
+  //     if (claimSearchResult.indexOf(fixUri) !== -1) {
+  //       claimSearchResult.splice(claimSearchResult.indexOf(fixUri), 1);
+  //     } else {
+  //       claimSearchResult.pop();
+  //     }
+  //     claimSearchResult.splice(2, 0, fixUri);
+  //   }
 
   const [prevOptions, setPrevOptions] = React.useState(null);
 

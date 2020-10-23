@@ -2,7 +2,6 @@
 import React from 'react';
 import DateTime from 'component/dateTime';
 import FileViewCount from 'component/fileViewCount';
-import FileReactions from 'component/fileReactions';
 import FileActions from 'component/fileActions';
 
 type Props = {
