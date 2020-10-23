@@ -1,4 +1,5 @@
 // @flow
+import { SIMPLE_SITE } from 'config';
 import * as ICONS from 'constants/icons';
 import * as PAGES from 'constants/pages';
 import React from 'react';
@@ -72,7 +73,7 @@ function WalletSendTip(props: Props) {
   }, [channelStrings]);
 
   const tipAmount = useCustomTip ? customTipAmount : presetTipAmount;
-  const isSupport = claimIsMine ? true : !sendAsTip;
+  const isSupport = claimIsMine ? true : SIMPLE_SITE ? false : !sendAsTip;
 
   React.useEffect(() => {
     const regexp = RegExp(/^(\d*([.]\d{0,8})?)$/);
@@ -301,7 +302,7 @@ function WalletSendTip(props: Props) {
                     }
                   />
                   {fetchingChannels && <span className="help">{__('Loading your channels...')}</span>}
-                  {!claimIsMine && !fetchingChannels && (
+                  {!claimIsMine && !fetchingChannels && !SIMPLE_SITE && (
                     <FormField
                       name="toggle-is-support"
                       type="checkbox"
