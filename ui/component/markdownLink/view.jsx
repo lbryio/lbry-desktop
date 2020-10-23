@@ -64,7 +64,7 @@ function MarkdownLink(props: Props) {
   // Return plain text if no valid url
   // Return external link if protocol is http or https
   // Return local link if protocol is lbry uri
-  if ((protocol && protocol[0] === 'lbry:' && isURIValid(decodedUri)) || lbryUrlFromLink) {
+  if (!simpleLinks && ((protocol && protocol[0] === 'lbry:' && isURIValid(decodedUri)) || lbryUrlFromLink)) {
     element = (
       <ClaimLink
         uri={lbryUrlFromLink || decodedUri}
