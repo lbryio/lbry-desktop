@@ -35,7 +35,7 @@ function HomePage(props: Props) {
 
   return (
     <Page fullWidthPage>
-      {rowData.map(({ title, route, link, help, icon, options = {}, hideRepostLabel = false }, index) => (
+      {rowData.map(({ title, route, link, help, icon, options = {} }, index) => (
         <div key={title} className="claim-grid__wrapper">
           {index === 0 ? (
             <span
@@ -49,7 +49,7 @@ function HomePage(props: Props) {
             <h1 className="claim-grid__header">
               <Button navigate={route || link} button="link">
                 {icon && <Icon className="claim-grid__header-icon" sectionIcon icon={icon} size={20} />}
-                <span className="claim-grid__title">{title}</span>
+                <span className="claim-grid__title">{__(title)}</span>
                 {help}
               </Button>
             </h1>

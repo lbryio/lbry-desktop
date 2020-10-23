@@ -66,7 +66,7 @@ function PublishFile(props: Props) {
     setPrevFileText,
     autoPopulateName,
     setAutoPopulateName,
-    header,
+    // header,
   } = props;
 
   const ffmpegAvail = ffmpegStatus.available;
@@ -345,17 +345,15 @@ function PublishFile(props: Props) {
     <Card
       className={disabled || balance === 0 ? 'card--disabled' : ''}
       title={
-        __('Upload') || (
-          <div>
-            {header}
-            {publishing && <Spinner type={'small'} />}
-            {inProgress && (
-              <div>
-                <Button button="close" label={__('Cancel')} icon={ICONS.REMOVE} onClick={clearPublish} />
-              </div>
-            )}
-          </div>
-        )
+        <div>
+          {__('Upload')}
+          {publishing && <Spinner type={'small'} />}
+          {inProgress && (
+            <div>
+              <Button button="close" label={__('Cancel')} icon={ICONS.REMOVE} onClick={clearPublish} />
+            </div>
+          )}
+        </div>
       }
       subtitle={isStillEditing && __('You are currently editing your upload.')}
       actions={

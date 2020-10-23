@@ -22,8 +22,8 @@ const HOME = {
 };
 
 const RECENT_FROM_FOLLOWING = {
-  label: 'Following --[sidebar button]--',
-  navigate: `/$/${PAGES.CHANNELS_FOLLOWING}`,
+  title: 'Following --[sidebar button]--',
+  link: `/$/${PAGES.CHANNELS_FOLLOWING}`,
   icon: ICONS.SUBSCRIBE,
 };
 
@@ -54,7 +54,6 @@ const RECENT_FROM_FOLLOWING = {
 //     hideForUnauth: true,
 //   },
 // ];
-const ODYSEE_LINKS = [HOME, ...EXTRA_SIDEBAR_LINKS, RECENT_FROM_FOLLOWING];
 
 type Props = {
   subscriptions: Array<Subscription>,
@@ -69,6 +68,15 @@ type Props = {
   unreadCount: number,
   purchaseSuccess: boolean,
   doClearPurchasedUriSuccess: () => void,
+};
+
+type SideNavLink = {
+  title: string,
+  link?: string,
+  onClick?: () => any,
+  icon: string,
+  extra?: Node,
+  hideForUnauth?: boolean,
 };
 
 function SideNavigation(props: Props) {
@@ -101,14 +109,7 @@ function SideNavigation(props: Props) {
   //     });
   //   }
 
-  const ABSOLUTE_LINKS: Array<{
-    title: string,
-    link?: string,
-    onClick?: () => any,
-    icon: string,
-    extra?: Node,
-    hideForUnauth?: boolean,
-  }> = [
+  const ABSOLUTE_LINKS: Array<SideNavLink> = [
     {
       title: 'Notifications',
       link: `/$/${PAGES.NOTIFICATIONS}`,
@@ -186,14 +187,7 @@ function SideNavigation(props: Props) {
     },
   ];
 
-  const UNAUTH_LINKS: Array<{
-    title: string,
-    link?: string,
-    icon: string,
-    extra?: Node,
-    hideForUnauth?: boolean,
-    onClick?: () => any,
-  }> = [
+  const UNAUTH_LINKS: Array<SideNavLink> = [
     {
       title: 'Log In',
       link: `/$/${PAGES.AUTH_SIGNIN}`,
@@ -217,6 +211,14 @@ function SideNavigation(props: Props) {
   ];
 
   const isAuthenticated = Boolean(email);
+  let ODYSEE_LINKS: Array<SideNavLink> = [];
+  if (isAuthenticated) {
+    ODYSEE_LINKS.push(RECENT_FROM_FOLLOWING);
+  }
+
+  // $FlowFixMe
+  ODYSEE_LINKS.push(...[HOME, ...EXTRA_SIDEBAR_LINKS]);
+
   const [pulseLibrary, setPulseLibrary] = React.useState(false);
   const isPersonalized = !IS_WEB || isAuthenticated;
   const isAbsolute = isOnFilePage || isMediumScreen;
