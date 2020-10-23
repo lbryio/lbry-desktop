@@ -249,6 +249,7 @@ input-submit {
   display: flex;
   justify-content: space-between;
   width: 100%;
+  margin-bottom: var(--spacing-m);
 
   > * {
     width: 33%;
