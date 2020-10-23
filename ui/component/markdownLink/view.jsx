@@ -53,7 +53,10 @@ function MarkdownLink(props: Props) {
       const linkPathname = decodeURIComponent(
         linkUrlObject.pathname.startsWith('//') ? linkUrlObject.pathname.slice(2) : linkUrlObject.pathname.slice(1)
       );
-      const possibleLbryUrl = `lbry://${linkPathname.replace(/:/g, '#')}`;
+
+      const linkPathPlusHash = linkPathname + linkUrlObject.hash;
+      const possibleLbryUrl = `lbry://${linkPathPlusHash.replace(/:/g, '#')}`;
+
       const lbryLinkIsValid = isURIValid(possibleLbryUrl);
       if (lbryLinkIsValid) {
         lbryUrlFromLink = possibleLbryUrl;
