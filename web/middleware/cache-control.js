@@ -23,7 +23,7 @@ async function redirectMiddleware(ctx, next) {
     request: { url },
   } = ctx;
 
-  if (STATIC_ASSET_PATHS.includes(url)) {
+  if (STATIC_ASSET_PATHS.includes(url) || (url.startsWith('/public/ui-') && url.endsWith('.js'))) {
     ctx.set('Cache-Control', `public, max-age=${SIX_MONTHS_IN_SECONDS}`);
   }
 
