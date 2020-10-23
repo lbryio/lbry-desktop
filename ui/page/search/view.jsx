@@ -132,7 +132,7 @@ export default function SearchPage(props: Props) {
             <ClaimList
               uris={uris}
               loading={isSearching}
-              header={SIMPLE_SITE && <SearchOptions additionalOptions={additionalOptions} />}
+              header={!SIMPLE_SITE && <SearchOptions additionalOptions={additionalOptions} />}
               injectedItem={SHOW_ADS && !isAuthenticated && IS_WEB && <Ads type="video" />}
               headerAltControls={
                 <Fragment>
