@@ -1,5 +1,4 @@
 // @flow
-import { SIMPLE_SITE } from 'config';
 import React from 'react';
 import Page from 'component/page';
 import ClaimListDiscover from 'component/claimListDiscover';
@@ -19,7 +18,7 @@ function TopPage(props: Props) {
         name={name}
         defaultFreshness={FRESH_ALL}
         defaultOrderBy={ORDER_BY_TOP}
-        includeSupportAction={!SIMPLE_SITE}
+        includeSupportAction
         renderProperties={claim => (
           <span className="media__subtitle">
             <ClaimEffectiveAmount uri={claim.repost_url || claim.canonical_url} />
