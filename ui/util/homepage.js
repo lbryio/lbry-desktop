@@ -1091,6 +1091,7 @@ const NEWS_CHANNEL_IDS = [
   '8954add966e59c9cba98a143a3387f788a36d7be',
   '79162cdb9d5ae8d7502089a38bdaaf81f902bf0c',
   'b57fb7641efdeb7af52bf96abb280d84c45587cc',
+  '833fa9985192d2a185806cad08d4dc9910b1b4ef',
 ];
 
 export const NEWS = {
