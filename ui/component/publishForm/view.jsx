@@ -136,7 +136,10 @@ function PublishForm(props: Props) {
 
   // Editing content info
   const uri = myClaimForUri ? myClaimForUri.permanent_url : undefined;
-  const fileMimeType = myClaimForUri ? myClaimForUri.value.source.media_type : undefined;
+  const fileMimeType =
+    myClaimForUri && myClaimForUri.value && myClaimForUri.value.source
+      ? myClaimForUri.value.source.media_type
+      : undefined;
   const nameEdited = isStillEditing && name !== prevName;
 
   // If they are editing, they don't need a new file chosen
