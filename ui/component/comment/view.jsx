@@ -105,7 +105,7 @@ function Comment(props: Props) {
   const likesCount = (othersReacts && othersReacts.like) || 0;
   const dislikesCount = (othersReacts && othersReacts.dislike) || 0;
   const totalLikesAndDislikes = likesCount + dislikesCount;
-  const slimedToDeath = totalLikesAndDislikes > 5 && dislikesCount / totalLikesAndDislikes > 0.8;
+  const slimedToDeath = totalLikesAndDislikes >= 5 && dislikesCount / totalLikesAndDislikes > 0.8;
   // to debounce subsequent requests
   const shouldFetch =
     channel === undefined ||
