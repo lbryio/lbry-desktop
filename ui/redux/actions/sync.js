@@ -9,6 +9,7 @@ import { selectUserVerifiedEmail } from 'redux/selectors/user';
 
 let syncTimer = null;
 const SYNC_INTERVAL = 1000 * 60 * 5; // 5 minutes
+const NO_WALLET_ERROR = 'no wallet found for this user';
 
 export function doSetDefaultAccount(success, failure) {
   return dispatch => {
@@ -231,14 +232,16 @@ export function doGetSync(passedPassword, callback) {
 
           // call sync_apply to get data to sync
           // first time sync. use any string for old hash
-          Lbry.sync_apply({ password })
-            .then(({ hash: walletHash, data: syncApplyData }) => {
-              dispatch(doSetSync('', walletHash, syncApplyData, password));
-              handleCallback();
-            })
-            .catch(syncApplyError => {
-              handleCallback(syncApplyError);
-            });
+          if (syncAttemptError.message === NO_WALLET_ERROR) {
+            Lbry.sync_apply({ password })
+              .then(({ hash: walletHash, data: syncApplyData }) => {
+                dispatch(doSetSync('', walletHash, syncApplyData, password));
+                handleCallback();
+              })
+              .catch(syncApplyError => {
+                handleCallback(syncApplyError);
+              });
+          }
         }
       });
   };
