@@ -82,7 +82,7 @@ function ChannelContent(props: Props) {
       } else {
         getResults(
           `${LIGHTHOUSE_URL}?s=${encodeURIComponent(searchQuery)}&channel_id=${encodeURIComponent(claimId)}${
-            !showMature ? '&nsfw=false' : ''
+            !showMature ? '&nsfw=false&size=999&from=0' : ''
           }`
         );
       }
