@@ -9,11 +9,14 @@ type Props = {
   uri: string,
   doOpenModal: (string, {}) => void,
   fileAction?: boolean,
+  disableSupport: boolean,
 };
 
 export default function ClaimSupportButton(props: Props) {
-  const { doOpenModal, uri, fileAction } = props;
-
+  const { doOpenModal, uri, fileAction, disableSupport } = props;
+  if (disableSupport) {
+    return null;
+  }
   return (
     <Button
       button={fileAction ? undefined : 'alt'}
