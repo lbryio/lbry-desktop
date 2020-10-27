@@ -1,10 +1,11 @@
 // @flow
+import { ENABLE_CREATOR_REACTIONS } from 'config';
 import * as ICONS from 'constants/icons';
 import * as REACTION_TYPES from 'constants/reactions';
 import React from 'react';
 import classnames from 'classnames';
 import Button from 'component/button';
-import usePersistedState from 'effects/use-persisted-state';
+import ChannelThumbnail from 'component/channelThumbnail';
 
 type Props = {
   myReacts: Array<string>,
@@ -12,11 +13,15 @@ type Props = {
   react: (string, string) => void,
   commentId: string,
   pendingCommentReacts: Array<string>,
+  claimIsMine: boolean,
+  activeChannel: string,
+  claim: ?ChannelClaim,
 };
 
 export default function CommentReactions(props: Props) {
-  const { myReacts, othersReacts, commentId, react } = props;
-  const [activeChannel] = usePersistedState('comment-channel');
+  const { myReacts, othersReacts, commentId, react, claimIsMine, claim, activeChannel } = props;
+  const canCreatorReact = claimIsMine && claim && claim.name === activeChannel;
+  const authorUri = claim && claim.value_type === 'channel' ? claim.canonical_url : '';
 
   const getCountForReact = type => {
     let count = 0;
@@ -29,6 +34,8 @@ export default function CommentReactions(props: Props) {
     return count;
   };
 
+  const creatorLiked = getCountForReact(REACTION_TYPES.CREATOR_LIKE) > 0;
+
   return (
     <>
       <Button
@@ -40,7 +47,7 @@ export default function CommentReactions(props: Props) {
         })}
         disabled={!activeChannel}
         onClick={() => react(commentId, REACTION_TYPES.LIKE)}
-        label={getCountForReact(REACTION_TYPES.LIKE)}
+        label={<span className="comment__reaction-count">{getCountForReact(REACTION_TYPES.LIKE)}</span>}
       />
       <Button
         requiresAuth={IS_WEB}
@@ -51,8 +58,26 @@ export default function CommentReactions(props: Props) {
         })}
         disabled={!activeChannel}
         onClick={() => react(commentId, REACTION_TYPES.DISLIKE)}
-        label={getCountForReact(REACTION_TYPES.DISLIKE)}
+        label={<span className="comment__reaction-count">{getCountForReact(REACTION_TYPES.DISLIKE)}</span>}
       />
+
+      {ENABLE_CREATOR_REACTIONS && (
+        <>
+          {(canCreatorReact || creatorLiked) && (
+            <Button
+              iconOnly
+              disabled={!canCreatorReact || !claimIsMine}
+              requiresAuth={IS_WEB}
+              title={claimIsMine ? __('You loved this') : __('Creator loved this')}
+              icon={creatorLiked ? ICONS.CREATOR_LIKE : ICONS.SUBSCRIBE}
+              className={classnames('comment__action comment__action--creator-like')}
+              onClick={() => react(commentId, REACTION_TYPES.CREATOR_LIKE)}
+            />
+          )}
+
+          {creatorLiked && <ChannelThumbnail uri={authorUri} className="comment__creator-like" />}
+        </>
+      )}
     </>
   );
 }
