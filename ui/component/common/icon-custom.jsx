@@ -944,4 +944,41 @@ export const icons = {
       <polyline points="14.94 12.98 17.37 17.09 14.88 16.99 13.7 19.26 11.19 15.03" />
     </svg>
   ),
+  [ICONS.CREATOR_LIKE]: (props: CustomProps) => (
+    <svg
+      {...props}
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 24 24"
+      width={props.size || '18'}
+      height={props.size || '18'}
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="0"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <g clipPath="url(#clip0)">
+        <path
+          d="M12 4.65882C11.0118 2.4 8.61176 0.564705 6.63529 0.141176C3.24706 -0.564707 0 2.11765 0 6.63529C0 11.2941 12 21.7412 12 21.7412C12 21.7412 24 11.4353 24 6.63529C24 2.11765 20.4706 -0.564707 17.0824 0.282352C15.1059 0.564705 12.7059 2.25882 12 4.65882Z"
+          fill="url(#paint0_linear)"
+        />
+      </g>
+      <defs>
+        <linearGradient
+          id="paint0_linear"
+          x1="0.984988"
+          y1="-1.58654"
+          x2="28.1615"
+          y2="20.8252"
+          gradientUnits="userSpaceOnUse"
+        >
+          <stop offset="0.2395" stopColor="#FA3661" />
+          <stop offset="0.6871" stopColor="#FFB420" />
+        </linearGradient>
+        <clipPath id="clip0">
+          <rect width="24" height="21.7412" fill="white" />
+        </clipPath>
+      </defs>
+    </svg>
+  ),
 };

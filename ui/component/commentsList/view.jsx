@@ -195,7 +195,15 @@ function CommentList(props: Props) {
               />
             </span>
           )}
-          <Button button="alt" icon={ICONS.REFRESH} title={__('Refresh')} onClick={() => fetchComments(uri)} />
+          <Button
+            button="alt"
+            icon={ICONS.REFRESH}
+            title={__('Refresh')}
+            onClick={() => {
+              fetchComments(uri);
+              fetchReacts(uri);
+            }}
+          />
         </>
       }
       actions={

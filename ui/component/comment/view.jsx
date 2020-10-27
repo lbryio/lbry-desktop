@@ -315,7 +315,7 @@ function Comment(props: Props) {
                       icon={ICONS.REPLY}
                     />
                   )}
-                  {ENABLE_COMMENT_REACTIONS && <CommentReactions commentId={commentId} />}
+                  {ENABLE_COMMENT_REACTIONS && <CommentReactions uri={uri} commentId={commentId} />}
                 </div>
 
                 {isReplying && (

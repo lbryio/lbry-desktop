@@ -254,16 +254,12 @@ $thumbnailWidthSmall: 0rem;
   display: flex;
   margin-top: var(--spacing-s);
 
-  > *:not(:last-child) {
+  > *:not(:last-of-type) {
     margin-right: var(--spacing-m);
   }
 
-  .icon {
-    margin-right: var(--spacing-xxs);
-  }
-
   .button__label {
-    margin-left: 0;
+    margin-left: var(--spacing-xs);
   }
 }
 
@@ -281,6 +277,12 @@ $thumbnailWidthSmall: 0rem;
   @extend .button--uri-indicator;
   height: auto;
   font-size: var(--font-xsmall);
+}
+
+.comment__action--creator-like {
+  &:disabled {
+    opacity: 1;
+  }
 }
 
 .comment__action,
@@ -313,4 +315,11 @@ $thumbnailWidthSmall: 0rem;
 
 .comment__more-below {
   margin-top: var(--spacing-l);
+}
+
+.comment__creator-like {
+  height: 1rem;
+  width: 1rem;
+  margin-left: 3px;
+  z-index: 3;
 }

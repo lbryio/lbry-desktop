@@ -31,13 +31,14 @@ const config = {
   UNSYNCED_SETTINGS: process.env.UNSYNCED_SETTINGS,
   ENABLE_COMMENT_REACTIONS: process.env.ENABLE_COMMENT_REACTIONS === 'true',
   ENABLE_FILE_REACTIONS: process.env.ENABLE_FILE_REACTIONS === 'true',
+  ENABLE_CREATOR_REACTIONS: process.env.ENABLE_CREATOR_REACTIONS === 'true',
   SIMPLE_SITE: process.env.SIMPLE_SITE === 'true',
   SHOW_ADS: process.env.SHOW_ADS === 'true',
   PINNED_URI_1: process.env.PINNED_URI_1,
   PINNED_LABEL_1: process.env.PINNED_LABEL_1,
   PINNED_URI_2: process.env.PINNED_URI_2,
   PINNED_LABEL_2: process.env.PINNED_LABEL_2,
-  KNOWN_APP_DOMAINS: process.env.KNOWN_APP_DOMAINS
+  KNOWN_APP_DOMAINS: process.env.KNOWN_APP_DOMAINS,
 };
 
 config.URL_LOCAL = `http://localhost:${config.WEB_SERVER_PORT}`;
