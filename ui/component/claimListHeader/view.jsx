@@ -140,8 +140,8 @@ function ClaimListHeader(props: Props) {
   function buildUrl(delta) {
     const newUrlParams = new URLSearchParams(location.search);
     CS.KEYS.forEach(k => {
-      // $FlowFixMe append() can't take null as second arg, but get() can return null
-      if (urlParams.get(k) !== null) newUrlParams.append(k, urlParams.get(k));
+      // $FlowFixMe get() can return null
+      if (urlParams.get(k) !== null) newUrlParams.set(k, urlParams.get(k));
     });
 
     switch (delta.key) {
