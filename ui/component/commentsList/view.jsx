@@ -24,7 +24,7 @@ type Props = {
   linkedComment: any,
   totalComments: number,
   fetchingChannels: boolean,
-  reactionsById: { [string]: { [REACTION_TYPES.LIKE | REACTION_TYPES.DISLIKE]: number } },
+  reactionsById: ?{ [string]: { [REACTION_TYPES.LIKE | REACTION_TYPES.DISLIKE]: number } },
   activeChannel: string,
 };
 
@@ -49,12 +49,13 @@ function CommentList(props: Props) {
     'comment-sort',
     ENABLE_COMMENT_REACTIONS ? SORT_COMMENTS_BEST : SORT_COMMENTS_NEW
   );
+
   const [start] = React.useState(0);
   const [end, setEnd] = React.useState(9);
   // Display comments immediately if not fetching reactions
   // If not, wait to show comments until reactions are fetched
   const [readyToDisplayComments, setReadyToDisplayComments] = React.useState(
-    reactionsById || !ENABLE_COMMENT_REACTIONS
+    Boolean(reactionsById) || !ENABLE_COMMENT_REACTIONS
   );
   const linkedCommentId = linkedComment && linkedComment.comment_id;
   const hasNoComments = totalComments === 0;
@@ -144,8 +145,7 @@ function CommentList(props: Props) {
   }
 
   // Default to newest first for apps that don't have comment reactions
-  const sortedComments = sortComments({ comments, reactionsById, sort, isMyComment });
-
+  const sortedComments = reactionsById ? sortComments({ comments, reactionsById, sort, isMyComment }) : [];
   const displayedComments = readyToDisplayComments
     ? prepareComments(sortedComments, linkedComment).slice(start, end)
     : [];

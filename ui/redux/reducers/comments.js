@@ -14,8 +14,8 @@ const defaultState: CommentsState = {
   isFetchingReacts: false,
   pendingCommentReactions: [],
   typesReacting: [],
-  myReactsByCommentId: {},
-  othersReactsByCommentId: {},
+  myReactsByCommentId: undefined,
+  othersReactsByCommentId: undefined,
   commentChannel: '',
 };
 
