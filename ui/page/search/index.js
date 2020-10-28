@@ -9,7 +9,6 @@ import analytics from 'analytics';
 import SearchPage from './view';
 
 const select = (state, props) => {
-  const showMature = makeSelectClientSetting(SETTINGS.SHOW_MATURE)(state);
   const urlParams = new URLSearchParams(props.location.search);
   const urlQuery = urlParams.get('q') || null;
   const query = makeSelectQueryWithOptions(urlQuery, { nsfw: false, isBackgroundSearch: false })(state);
