@@ -18,6 +18,7 @@ import REWARDS from 'rewards';
 import usePersistedState from 'effects/use-persisted-state';
 import FileDrop from 'component/fileDrop';
 import NagContinueFirstRun from 'component/nagContinueFirstRun';
+import Spinner from 'component/spinner';
 // @if TARGET='app'
 import useZoom from 'effects/use-zoom';
 // @endif
@@ -294,7 +295,11 @@ function App(props: Props) {
   // This also prevents the site from loading in the un-authed state while we wait for internal-apis to return for the first time
   // It's not needed on desktop since there is no un-authed state
   if (!user) {
-    return null;
+    return (
+      <div className="main--empty">
+        <Spinner delayed />
+      </div>
+    );
   }
   // @endif
 
