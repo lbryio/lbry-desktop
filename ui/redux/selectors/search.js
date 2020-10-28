@@ -174,3 +174,33 @@ export const makeSelectRecommendedContentForUri = (uri: string) =>
       return recommendedContent;
     }
   );
+
+export const makeSelectWinningUriForQuery = (query: string) => {
+  const uriFromQuery = `lbry://${query}`;
+
+  let channelUriFromQuery;
+  try {
+    const { isChannel } = parseURI(uriFromQuery);
+    if (!isChannel) {
+      channelUriFromQuery = `lbry://@${query}`;
+    }
+  } catch (e) {}
+
+  return createSelector(
+    makeSelectClaimForUri(uriFromQuery),
+    makeSelectClaimForUri(channelUriFromQuery),
+    (claim1, claim2) => {
+      if (!claim1 && !claim2) {
+        return undefined;
+      } else if (!claim1 && claim2) {
+        return claim2.canonical_url;
+      } else if (claim1 && !claim2) {
+        return claim1.canonical_url;
+      }
+
+      const effectiveAmount1 = claim1 && claim1.meta.effective_amount;
+      const effectiveAmount2 = claim2 && claim2.meta.effective_amount;
+      return effectiveAmount1 > effectiveAmount2 ? claim1.canonical_url : claim2.canonical_url;
+    }
+  );
+};

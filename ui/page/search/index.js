@@ -1,5 +1,6 @@
 import { connect } from 'react-redux';
 import { doToast, SETTINGS } from 'lbry-redux';
+import { withRouter } from 'react-router';
 import { doSearch } from 'redux/actions/search';
 import { selectIsSearching, makeSelectSearchUris, makeSelectQueryWithOptions } from 'redux/selectors/search';
 import { makeSelectClientSetting } from 'redux/selectors/settings';
@@ -7,10 +8,12 @@ import { selectUserVerifiedEmail } from 'redux/selectors/user';
 import analytics from 'analytics';
 import SearchPage from './view';
 
-const select = state => {
+const select = (state, props) => {
   const showMature = makeSelectClientSetting(SETTINGS.SHOW_MATURE)(state);
+  const urlParams = new URLSearchParams(props.location.search);
+  const urlQuery = urlParams.get('q') || null;
   const query = makeSelectQueryWithOptions(
-    null,
+    urlQuery,
     showMature === false ? { nsfw: false, isBackgroundSearch: false } : { isBackgroundSearch: false }
   )(state);
   const uris = makeSelectSearchUris(query)(state);
@@ -45,4 +48,4 @@ const perform = dispatch => ({
   },
 });
 
-export default connect(select, perform)(SearchPage);
+export default withRouter(connect(select, perform)(SearchPage));

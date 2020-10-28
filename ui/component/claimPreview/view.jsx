@@ -62,6 +62,7 @@ type Props = {
   hideActions?: boolean,
   renderActions?: Claim => ?Node,
   wrapperElement?: string,
+  hideRepostLabel?: boolean,
 };
 
 const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
@@ -97,6 +98,7 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
     hideActions = false,
     renderActions,
     wrapperElement,
+    hideRepostLabel = false,
   } = props;
   const WrapperElement = wrapperElement || 'li';
   const shouldFetch =
@@ -235,7 +237,7 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
         'claim-preview__wrapper--small': type === 'small',
       })}
     >
-      <ClaimRepostAuthor uri={uri} />
+      {!hideRepostLabel && <ClaimRepostAuthor uri={uri} />}
 
       <div
         className={classnames('claim-preview', {

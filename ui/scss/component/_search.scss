@@ -1,4 +1,5 @@
 .search__header {
+  width: 100%;
   margin-bottom: var(--spacing-l);
 
   .placeholder {
@@ -28,4 +29,8 @@
       margin-left: var(--spacing-m);
     }
   }
+}
+
+.search__top-link {
+  font-weight: var(--font-weight-body);
 }
