@@ -21,6 +21,7 @@ export default function HelpLink(props: Props) {
       }}
       className="icon--help"
       icon={icon || ICONS.HELP}
+      iconSize={14}
       description={description || __('Help')}
       href={href}
       navigate={navigate}

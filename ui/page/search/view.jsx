@@ -1,17 +1,14 @@
 // @flow
 import { SIMPLE_SITE, SHOW_ADS } from 'config';
 import * as ICONS from 'constants/icons';
-import * as PAGES from 'constants/pages';
-import React, { useEffect, Fragment } from 'react';
+import React, { useEffect } from 'react';
 import { Lbry, regexInvalidURI, parseURI, isNameValid } from 'lbry-redux';
-import ClaimPreview from 'component/claimPreview';
 import ClaimList from 'component/claimList';
 import Page from 'component/page';
 import SearchOptions from 'component/searchOptions';
 import Button from 'component/button';
-import ClaimUri from 'component/claimUri';
 import Ads from 'web/component/ads';
-import ClaimEffectiveAmount from 'component/claimEffectiveAmount';
+import SearchTopClaim from 'component/searchTopClaim';
 import { formatLbryUrlForWeb } from 'util/url';
 import { useHistory } from 'react-router';
 
@@ -51,10 +48,16 @@ export default function SearchPage(props: Props) {
   }
 
   const INVALID_URI_CHARS = new RegExp(regexInvalidURI, 'gu');
-  let path, streamName;
+  const modifiedUrlQuery = urlQuery
+    .trim()
+    .replace(/\s+/g, '')
+    .replace(INVALID_URI_CHARS, '');
+  const uriFromQuery = `lbry://${modifiedUrlQuery}`;
+
+  let streamName;
   let isValid = true;
   try {
-    ({ path, streamName } = parseURI(urlQuery.replace(/ /g, '-').replace(/:/g, '#')));
+    ({ streamName } = parseURI(uriFromQuery));
     if (!isNameValid(streamName)) {
       isValid = false;
     }
@@ -63,6 +66,7 @@ export default function SearchPage(props: Props) {
   }
 
   let claimId;
+  // Navigate directly to a claim if a claim_id is pasted into the search bar
   if (!/\s/.test(urlQuery) && urlQuery.length === 40) {
     try {
       const dummyUrlForClaimId = `x#${urlQuery}`;
@@ -77,57 +81,20 @@ export default function SearchPage(props: Props) {
     } catch (e) {}
   }
 
-  const modifiedUrlQuery =
-    isValid && path
-      ? path
-      : urlQuery
-          .trim()
-          .replace(/\s+/g, '-')
-          .replace(INVALID_URI_CHARS, '');
-  const uriFromQuery = `lbry://${modifiedUrlQuery}`;
-
   const stringifiedOptions = JSON.stringify(additionalOptions);
   useEffect(() => {
     if (urlQuery) {
       const jsonOptions = JSON.parse(stringifiedOptions);
       search(urlQuery, jsonOptions);
     }
-  }, [search, urlQuery]);
+  }, [search, urlQuery, stringifiedOptions]);
 
   return (
     <Page>
       <section className="search">
         {urlQuery && (
-          <Fragment>
-            {isValid && (
-              <header className="search__header">
-                <div className="claim-preview__actions--header">
-                  <ClaimUri uri={uriFromQuery} noShortUrl />
-                  <Button
-                    button="link"
-                    className="media__uri--right"
-                    label={__('View top claims for %normalized_uri%', {
-                      normalized_uri: uriFromQuery,
-                    })}
-                    navigate={`/$/${PAGES.TOP}?name=${modifiedUrlQuery}`}
-                    icon={ICONS.TOP}
-                  />
-                </div>
-                <div className="card">
-                  <ClaimPreview
-                    uri={uriFromQuery}
-                    type="large"
-                    placeholder="publish"
-                    properties={claim => (
-                      <span className="claim-preview__custom-properties">
-                        <span className="help--inline">{__('Current winning amount')}</span>
-                        <ClaimEffectiveAmount uri={uriFromQuery} />
-                      </span>
-                    )}
-                  />
-                </div>
-              </header>
-            )}
+          <>
+            {isValid && <SearchTopClaim query={modifiedUrlQuery} />}
 
             <ClaimList
               uris={uris}
@@ -135,7 +102,7 @@ export default function SearchPage(props: Props) {
               header={!SIMPLE_SITE && <SearchOptions additionalOptions={additionalOptions} />}
               injectedItem={SHOW_ADS && !isAuthenticated && IS_WEB && <Ads type="video" />}
               headerAltControls={
-                <Fragment>
+                <>
                   <span>{__('Find what you were looking for?')}</span>
                   <Button
                     button="alt"
@@ -149,12 +116,12 @@ export default function SearchPage(props: Props) {
                     onClick={() => onFeedbackNegative(urlQuery)}
                     icon={ICONS.NO}
                   />
-                </Fragment>
+                </>
               }
             />
 
-            <div className="help">{__('These search results are provided by LBRY, Inc.')}</div>
-          </Fragment>
+            <div className="main--empty help">{__('These search results are provided by LBRY, Inc.')}</div>
+          </>
         )}
       </section>
     </Page>

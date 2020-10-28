@@ -18,8 +18,10 @@
 .media__uri {
   position: absolute;
   transform: translateY(-130%);
+  display: flex;
   font-size: var(--font-xsmall);
   color: var(--color-text-subtitle);
+  font-weight: var(--font-weight-base);
 
   @media (max-width: $breakpoint-small) {
     position: static;
