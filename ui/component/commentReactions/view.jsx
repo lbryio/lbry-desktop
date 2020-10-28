@@ -61,22 +61,18 @@ export default function CommentReactions(props: Props) {
         label={<span className="comment__reaction-count">{getCountForReact(REACTION_TYPES.DISLIKE)}</span>}
       />
 
-      {ENABLE_CREATOR_REACTIONS && (
-        <>
-          {(canCreatorReact || creatorLiked) && (
-            <Button
-              iconOnly
-              disabled={!canCreatorReact || !claimIsMine}
-              requiresAuth={IS_WEB}
-              title={claimIsMine ? __('You loved this') : __('Creator loved this')}
-              icon={creatorLiked ? ICONS.CREATOR_LIKE : ICONS.SUBSCRIBE}
-              className={classnames('comment__action comment__action--creator-like')}
-              onClick={() => react(commentId, REACTION_TYPES.CREATOR_LIKE)}
-            />
-          )}
-
+      {ENABLE_CREATOR_REACTIONS && (canCreatorReact || creatorLiked) && (
+        <Button
+          iconOnly
+          disabled={!canCreatorReact || !claimIsMine}
+          requiresAuth={IS_WEB}
+          title={claimIsMine ? __('You loved this') : __('Creator loved this')}
+          icon={creatorLiked ? ICONS.CREATOR_LIKE : ICONS.SUBSCRIBE}
+          className={classnames('comment__action comment__action--creator-like')}
+          onClick={() => react(commentId, REACTION_TYPES.CREATOR_LIKE)}
+        >
           {creatorLiked && <ChannelThumbnail uri={authorUri} className="comment__creator-like" />}
-        </>
+        </Button>
       )}
     </>
   );
