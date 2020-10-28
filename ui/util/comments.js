@@ -66,10 +66,8 @@ export function sortComments(sortProps: SortProps): Array<Comment> {
       const aN = aLikes + aDislikes;
       const bN = bLikes + bDislikes;
 
-      if (aN === 0) {
-        return 1;
-      } else if (bN === 0) {
-        return -1;
+      if (aLikes === 0 && bLikes === 0 && (aDislikes || bDislikes)) {
+        return aDislikes - bDislikes;
       }
 
       const z = 1.281551565545; // 80% confidence
