@@ -8,20 +8,11 @@ import { selectUserVerifiedEmail } from 'redux/selectors/user';
 import analytics from 'analytics';
 import SearchPage from './view';
 
-<<<<<<< HEAD
 const select = (state, props) => {
   const showMature = makeSelectClientSetting(SETTINGS.SHOW_MATURE)(state);
   const urlParams = new URLSearchParams(props.location.search);
   const urlQuery = urlParams.get('q') || null;
-  const query = makeSelectQueryWithOptions(
-    urlQuery,
-    showMature === false ? { nsfw: false, isBackgroundSearch: false } : { isBackgroundSearch: false }
-  )(state);
-=======
-const select = state => {
-  //   const showMature = makeSelectClientSetting(SETTINGS.SHOW_MATURE)(state);
-  const query = makeSelectQueryWithOptions(null, { nsfw: false, isBackgroundSearch: false })(state);
->>>>>>> housekeeping
+  const query = makeSelectQueryWithOptions(urlQuery, { nsfw: false, isBackgroundSearch: false })(state);
   const uris = makeSelectSearchUris(query)(state);
 
   return {

@@ -95,6 +95,7 @@ function DiscoverPage(props: Props) {
   return (
     <Page noFooter fullWidthPage={tileLayout}>
       <ClaimListDiscover
+        limitClaimsPerChannel={2}
         header={repostedUri ? <span /> : undefined}
         tileLayout={repostedUri ? false : tileLayout}
         defaultOrderBy={CS.ORDER_BY_NEW}
