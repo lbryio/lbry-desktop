@@ -63,6 +63,7 @@ type Props = {
   forceShowReposts?: boolean,
   languageSetting: string,
   searchInLanguage: boolean,
+  limitClaimsPerChannel?: number,
 };
 
 function ClaimListDiscover(props: Props) {
@@ -110,6 +111,7 @@ function ClaimListDiscover(props: Props) {
     forceShowReposts = false,
     languageSetting,
     searchInLanguage,
+    limitClaimsPerChannel,
   } = props;
   const didNavigateForward = history.action === 'PUSH';
   const { search } = location;
@@ -190,6 +192,7 @@ function ClaimListDiscover(props: Props) {
     reposted_claim_id?: string,
     stream_types?: any,
     fee_amount?: string,
+    limit_claims_per_channel?: number,
   } = {
     page_size: dynamicPageSize,
     page,
@@ -209,6 +212,10 @@ function ClaimListDiscover(props: Props) {
         ? CS.ORDER_BY_NEW_VALUE
         : CS.ORDER_BY_TOP_VALUE, // Sort by top
   };
+
+  if (limitClaimsPerChannel) {
+    options.limit_claims_per_channel = limitClaimsPerChannel;
+  }
 
   if (feeAmountParam && claimType !== CS.CLAIM_CHANNEL) {
     options.fee_amount = feeAmountParam;
