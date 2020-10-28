@@ -193,6 +193,10 @@
     height: 2rem;
     line-height: 2rem;
 
+    .button__label {
+      white-space: nowrap;
+    }
+
     &:hover {
       text-decoration: underline;
       color: var(--color-gray-2);
