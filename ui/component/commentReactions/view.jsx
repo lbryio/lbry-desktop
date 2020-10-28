@@ -20,8 +20,16 @@ type Props = {
 
 export default function CommentReactions(props: Props) {
   const { myReacts, othersReacts, commentId, react, claimIsMine, claim, activeChannel } = props;
-  const canCreatorReact = claimIsMine && claim && claim.name === activeChannel;
-  const authorUri = claim && claim.value_type === 'channel' ? claim.canonical_url : '';
+  const canCreatorReact =
+    claim &&
+    claimIsMine &&
+    (claim.value_type === 'channel'
+      ? claim.name === activeChannel
+      : claim.signing_channel && claim.signing_channel.name === activeChannel);
+  const authorUri =
+    claim && claim.value_type === 'channel'
+      ? claim.canonical_url
+      : claim && claim.signing_channel && claim.signing_channel.canonical_url;
 
   const getCountForReact = type => {
     let count = 0;
