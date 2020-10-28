@@ -155,6 +155,7 @@ export const PRIMARY_CONTENT_CHANNEL_IDS = [
   '01c80abaf2f957cd0e37e0a0c58d357070c2b6ff',
   '44492321a13a0087c12394d4fb48c208ca6d4b27',
   'cc8f04f02b15a4de03381f1ef506bd270c7b0936',
+  '3264777dacecd86cb6b5b2f67b7e52b7b3b9f06a',
 ];
 
 export const PRIMARY_CONTENT = {
@@ -550,6 +551,7 @@ const ENLIGHTENMENT_CHANNEL_IDS = [
   '01c80abaf2f957cd0e37e0a0c58d357070c2b6ff',
   '7cefac5dfb1013fe53a1c9717770535f1d622c90',
   '733f6720ab1db4326b3801686313085e8e7b3faa',
+  '3264777dacecd86cb6b5b2f67b7e52b7b3b9f06a',
 ];
 
 export const ENLIGHTENMENT = {
