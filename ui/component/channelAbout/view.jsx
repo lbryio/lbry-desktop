@@ -69,7 +69,11 @@ function ChannelAbout(props: Props) {
           <label>{__('Languages')}</label>
           <div className="media__info-text">
             {/* this could use some nice 'tags' styling */}
-            {`${SUPPORTED_LANGUAGES[languages[0]]}${languages[1] ? ', ' + SUPPORTED_LANGUAGES[languages[1]] : ''}`}
+            {languages && languages.length
+              ? languages.reduce((acc, lang, i) => {
+                  return acc + `${__(SUPPORTED_LANGUAGES[lang])}` + ' ';
+                }, '')
+              : null}
           </div>
 
           <label>{__('Total Uploads')}</label>
