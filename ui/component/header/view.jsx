@@ -61,6 +61,7 @@ type Props = {
   isAbsoluteSideNavHidden: boolean,
   hideCancel: boolean,
   myChannels: ?Array<ChannelClaim>,
+  commentChannel: string,
 };
 
 const Header = (props: Props) => {
@@ -87,6 +88,7 @@ const Header = (props: Props) => {
     user,
     hideCancel,
     myChannels,
+    commentChannel,
   } = props;
   const isMobile = useIsMobile();
   // on the verify page don't let anyone escape other than by closing the tab to keep session data consistent
@@ -98,9 +100,16 @@ const Header = (props: Props) => {
   const { backLabel, backNavDefault, title: backTitle, simpleTitle: simpleBackTitle } = backout || {};
   const notificationsEnabled = user && user.experimental_ui;
   let channelUrl;
-  if (myChannels && myChannels.length === 1) {
-    const channel = myChannels[0];
-    channelUrl = channel.permanent_url || channel.canonical_url;
+  let identityChannel;
+  if (myChannels && myChannels.length > 1) {
+    if (myChannels.length === 1) {
+      identityChannel = myChannels[0];
+    } else if (commentChannel) {
+      identityChannel = myChannels.find(chan => chan.name === commentChannel);
+    } else {
+      identityChannel = myChannels[0];
+    }
+    channelUrl = identityChannel && (identityChannel.permanent_url || identityChannel.canonical_url);
   }
   // Sign out if they click the "x" when they are on the password prompt
   const authHeaderAction = syncError ? { onClick: signOut } : { navigate: '/' };
