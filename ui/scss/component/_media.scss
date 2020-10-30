@@ -165,4 +165,9 @@
   font-size: var(--font-xxsmall);
   display: flex;
   flex-direction: column;
+  margin-bottom: var(--spacing-s);
+
+  &:not(:last-child) {
+    margin-bottom: var(--spacing-s);
+  }
 }
