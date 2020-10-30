@@ -49,6 +49,8 @@ import BuyPage from 'page/buy';
 import NotificationsPage from 'page/notifications';
 import SignInWalletPasswordPage from 'page/signInWalletPassword';
 import YoutubeSyncPage from 'page/youtubeSync';
+import AdsTestPage from 'page/adsTest';
+
 import { LINKED_COMMENT_QUERY_PARAM } from 'constants/comment';
 import { parseURI, isURIValid } from 'lbry-redux';
 import { SITE_TITLE, WELCOME_VERSION } from 'config';
@@ -60,28 +62,6 @@ const dynamicRoutes = Object.values(SIDEBAR_ROUTES).filter(
 // Tell the browser we are handling scroll restoration
 if ('scrollRestoration' in history) {
   history.scrollRestoration = 'manual';
-}
-
-type PrivateRouteProps = {
-  component: any,
-  isAuthenticated: boolean,
-  location: { pathname: string },
-};
-
-function PrivateRoute(props: PrivateRouteProps) {
-  const { component: Component, isAuthenticated, ...rest } = props;
-  return (
-    <Route
-      {...rest}
-      render={props =>
-        isAuthenticated || !IS_WEB ? (
-          <Component {...props} />
-        ) : (
-          <Redirect to={`/$/${PAGES.AUTH}?redirect=${props.location.pathname}`} />
-        )
-      }
-    />
-  );
 }
 
 type Props = {
@@ -108,6 +88,27 @@ type Props = {
   setReferrer: string => void,
   hasUnclaimedRefereeReward: boolean,
 };
+
+type PrivateRouteProps = Props & {
+  component: any,
+  isAuthenticated: boolean,
+};
+
+function PrivateRoute(props: PrivateRouteProps) {
+  const { component: Component, isAuthenticated, ...rest } = props;
+  return (
+    <Route
+      {...rest}
+      render={props =>
+        isAuthenticated || !IS_WEB ? (
+          <Component {...props} />
+        ) : (
+          <Redirect to={`/$/${PAGES.AUTH}?redirect=${props.location.pathname}`} />
+        )
+      }
+    />
+  );
+}
 
 function AppRouter(props: Props) {
   const {
@@ -236,6 +237,8 @@ function AppRouter(props: Props) {
       <Route path={`/$/${PAGES.SETTINGS_ADVANCED}`} exact component={SettingsAdvancedPage} />
       <Route path={`/$/${PAGES.INVITE}/:referrer`} exact component={InvitedPage} />
       <Route path={`/$/${PAGES.CHECKOUT}`} exact component={CheckoutPage} />
+
+      <Route path="/$/adstest" exact component={AdsTestPage} />
 
       <PrivateRoute {...props} exact path={`/$/${PAGES.YOUTUBE_SYNC}`} component={YoutubeSyncPage} />
       <PrivateRoute {...props} exact path={`/$/${PAGES.TAGS_FOLLOWING}`} component={TagsFollowingPage} />
