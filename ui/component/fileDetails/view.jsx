@@ -1,4 +1,5 @@
 // @flow
+import { SIMPLE_SITE } from 'config';
 import React, { PureComponent } from 'react';
 import Button from 'component/button';
 import path from 'path';
@@ -38,58 +39,63 @@ class FileDetails extends PureComponent<Props> {
     }
 
     return (
-      <table className="table table--condensed table--fixed table--file-details">
-        <tbody>
-          <tr>
-            <td> {__('Content Type')}</td>
-            <td>{mediaType}</td>
-          </tr>
-          {fileSize && (
-            <tr>
-              <td> {__('File Size')}</td>
-              <td>{fileSize}</td>
-            </tr>
-          )}
+      <>
+        <div className="media__details">
+          <span>{__('LBRY URL')}</span>
+          <span>{claim.canonical_url}</span>
+        </div>
+        <div className="media__details">
+          <span>{__('Claim ID')}</span>
+          <span>{claim.claim_id}</span>
+        </div>
 
-          <tr>
-            <td> {__('URL')}</td>
-            <td>{claim.canonical_url}</td>
-          </tr>
+        {!SIMPLE_SITE && (
+          <>
+            {languages && (
+              <div className="media__details">
+                <span>{__('Languages')}</span>
+                <span>{languages.join(' ')}</span>
+              </div>
+            )}
 
-          <tr>
-            <td> {__('Claim ID')}</td>
-            <td>{claim.claim_id}</td>
-          </tr>
+            {languages && (
+              <div className="media__details">
+                <span>{__('Media Type')}</span>
+                <span>{mediaType}</span>
+              </div>
+            )}
 
-          {languages && (
-            <tr>
-              <td>{__('Languages')}</td>
-              <td>{languages.join(' ')}</td>
-            </tr>
-          )}
-          <tr>
-            <td>{__('License')}</td>
-            <td>{license}</td>
-          </tr>
-          {downloadPath && (
-            <tr>
-              <td>{__('Downloaded to')}</td>
-              <td>
-                <Button
-                  button="link"
-                  className="button--download-link"
-                  onClick={() => {
-                    if (downloadPath) {
-                      openFolder(downloadPath);
-                    }
-                  }}
-                  label={downloadNote || downloadPath.replace(/(.{10})/g, '$1\u200b')}
-                />
-              </td>
-            </tr>
-          )}
-        </tbody>
-      </table>
+            <div className="media__details">
+              <span>{__('License')}</span>
+              <span>{license}</span>
+            </div>
+
+            {downloadPath && (
+              <div className="media__details">
+                <span>{__('Downloaded to')}</span>
+                <span>
+                  <Button
+                    button="link"
+                    className="button--download-link"
+                    onClick={() => {
+                      if (downloadPath) {
+                        openFolder(downloadPath);
+                      }
+                    }}
+                    label={downloadNote || downloadPath.replace(/(.{10})/g, '$1\u200b')}
+                  />
+                </span>
+              </div>
+            )}
+          </>
+        )}
+
+        {fileSize && (
+          <div className="media__details">
+            <span>{fileSize}</span>
+          </div>
+        )}
+      </>
     );
   }
 }
