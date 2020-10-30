@@ -7,6 +7,9 @@ import videojs from 'video.js/dist/alt/video.core.novtt.min.js';
 import 'video.js/dist/alt/video-js-cdn.min.css';
 import eventTracking from 'videojs-event-tracking';
 import isUserTyping from 'util/detect-typing';
+import './adstest.js';
+import './adstest.css';
+
 const isDev = process.env.NODE_ENV !== 'production';
 
 export type Player = {
@@ -32,6 +35,7 @@ type Props = {
   onPlayerReady: Player => void,
   isAudio: boolean,
   startMuted: boolean,
+  adsTest?: boolean,
 };
 
 type VideoJSOptions = {
@@ -78,8 +82,9 @@ if (!Object.keys(videojs.getPlugins()).includes('eventTracking')) {
 properties for this component should be kept to ONLY those that if changed should REQUIRE an entirely new videojs element
  */
 export default React.memo<Props>(function VideoJs(props: Props) {
-  const { startMuted, source, sourceType, poster, isAudio, onPlayerReady } = props;
+  const { startMuted, source, sourceType, poster, isAudio, onPlayerReady, adsTest } = props;
   const [reload, setReload] = useState('initial');
+
   let player: ?Player;
   const containerRef = useRef();
   const videoJsOptions = {
@@ -96,6 +101,23 @@ export default React.memo<Props>(function VideoJs(props: Props) {
     'webkit-playsinline': IS_IOS,
     playsinline: IS_IOS,
   };
+
+  if (adsTest) {
+    videoJsOptions.sources = [
+      {
+        src:
+          'https://cdn.lbryplayer.xyz/api/v3/streams/free/ted-cruz-obliterates-jack-dorsey/9c1d2dec8fd668a79966da4218b2c4d850f7e3c6/bd9c0e',
+        type: 'video/mp4',
+      },
+    ];
+
+    // $FlowFixMe
+    videoJsOptions.plugins.vastClient = {
+      adTagUrl: 'https://rozamimo9za10.com/ceef/gdt3g0/tbt/1794126/tlk.xml',
+      adsCancelTimeout: 5000,
+      adsEnabled: true,
+    };
+  }
 
   videoJsOptions.muted = startMuted;
 
