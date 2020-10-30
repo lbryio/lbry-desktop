@@ -385,7 +385,7 @@ function ClaimListHeader(props: Props) {
                     {Object.entries(SEARCHABLE_LANGUAGES).map(([code, label]) => {
                       return (
                         <option key={code} value={code}>
-                          {__(String(label))}
+                          {String(label)}
                         </option>
                       );
                     })}

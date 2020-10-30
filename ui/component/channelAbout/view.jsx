@@ -71,7 +71,7 @@ function ChannelAbout(props: Props) {
             {/* this could use some nice 'tags' styling */}
             {languages && languages.length
               ? languages.reduce((acc, lang, i) => {
-                  return acc + `${__(SUPPORTED_LANGUAGES[lang])}` + ' ';
+                  return acc + `${SUPPORTED_LANGUAGES[lang]}` + ' ';
                 }, '')
               : null}
           </div>
