@@ -15,7 +15,7 @@ type Props = {
   nextRecommendedClaim: ?StreamClaim,
   nextRecommendedUri: string,
   isFloating: boolean,
-  doSetPlayingUri: (string | null) => void,
+  doSetPlayingUri: ({ uri: ?string }) => void,
   doPlayUri: string => void,
   modal: { id: string, modalProps: {} },
 };
@@ -50,12 +50,12 @@ function AutoplayCountdown(props: Props) {
     if (!isFloating) {
       if (navigateUrl) {
         push(navigateUrl);
-        doSetPlayingUri(nextRecommendedUri);
+        doSetPlayingUri({ uri: nextRecommendedUri });
         doPlayUri(nextRecommendedUri);
       }
     } else {
       if (nextRecommendedUri) {
-        doSetPlayingUri(nextRecommendedUri);
+        doSetPlayingUri({ uri: nextRecommendedUri });
         doPlayUri(nextRecommendedUri);
       }
     }
