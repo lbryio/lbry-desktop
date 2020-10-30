@@ -2,7 +2,7 @@
 import { SIMPLE_SITE, SHOW_ADS } from 'config';
 import * as ICONS from 'constants/icons';
 import React, { useEffect } from 'react';
-import { Lbry, regexInvalidURI, parseURI, isNameValid } from 'lbry-redux';
+import { Lbry, parseURI, isNameValid } from 'lbry-redux';
 import ClaimList from 'component/claimList';
 import Page from 'component/page';
 import SearchOptions from 'component/searchOptions';
@@ -47,11 +47,10 @@ export default function SearchPage(props: Props) {
     additionalOptions['nsfw'] = false;
   }
 
-  const INVALID_URI_CHARS = new RegExp(regexInvalidURI, 'gu');
   const modifiedUrlQuery = urlQuery
     .trim()
     .replace(/\s+/g, '')
-    .replace(INVALID_URI_CHARS, '');
+    .replace(/:/g, '#');
   const uriFromQuery = `lbry://${modifiedUrlQuery}`;
 
   let streamName;
