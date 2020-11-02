@@ -21,6 +21,7 @@ type Props = {
   doToast: ({ message: string }) => void,
   shrinkOnMobile: boolean,
   notificationsDisabled: boolean,
+  user: ?User,
 };
 
 export default function SubscribeButton(props: Props) {
@@ -33,12 +34,14 @@ export default function SubscribeButton(props: Props) {
     doToast,
     shrinkOnMobile = false,
     notificationsDisabled,
+    user,
   } = props;
 
   const buttonRef = useRef();
   const isMobile = useIsMobile();
   let isHovering = useHover(buttonRef);
   isHovering = isMobile ? true : isHovering;
+  const uiNotificationsEnabled = user && user.experimental_ui;
 
   const { channelName } = parseURI(permanentUrl);
   const claimName = '@' + channelName;
@@ -77,7 +80,7 @@ export default function SubscribeButton(props: Props) {
           }
         }}
       />
-      {isSubscribed && (
+      {isSubscribed && uiNotificationsEnabled && (
         <Button
           button="alt"
           icon={notificationsDisabled ? ICONS.BELL : ICONS.BELL_ON}
