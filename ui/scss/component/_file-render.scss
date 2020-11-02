@@ -359,6 +359,12 @@
   width: 100%;
 }
 
+.video-js-parent--ios {
+  .vjs-control-bar {
+    display: none;
+  }
+}
+
 // By default no video js play button
 .vjs-big-play-button {
   display: none;
