@@ -26,6 +26,7 @@ declare type WebNotification = {
       hash: string,
       claim_title: string,
       comment?: string,
+      channel_url: string,
     },
     email: {},
   },

@@ -147,6 +147,10 @@ const sharedStateFilters = {
       return value.map(({ uri }) => uri);
     },
   },
+  following: {
+    source: 'subscriptions',
+    property: 'following',
+  },
   blocked: { source: 'blocked', property: 'blockedChannels' },
   settings: { source: 'settings', property: 'sharedPreferences' },
   app_welcome_version: { source: 'app', property: 'welcomeVersion' },

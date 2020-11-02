@@ -185,11 +185,18 @@ $metadata-z-index: 1;
   flex-wrap: wrap;
   font-size: var(--font-base);
 
-  > * {
+  > .button,
+  > .button-group .button {
     padding: 0 var(--spacing-xs);
 
     &:not(:last-child) {
       margin-right: var(--spacing-m);
+    }
+  }
+
+  .button-group .button {
+    &:not(:last-child) {
+      margin-right: 0;
     }
   }
 

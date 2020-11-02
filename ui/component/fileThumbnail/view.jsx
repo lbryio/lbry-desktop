@@ -3,48 +3,52 @@ import type { Node } from 'react';
 import React from 'react';
 import FreezeframeWrapper from './FreezeframeWrapper';
 import Placeholder from './placeholder.png';
+import classnames from 'classnames';
 
 type Props = {
+  uri: string,
   thumbnail: ?string, // externally sourced image
   children?: Node,
   allowGifs: boolean,
+  claim: ?StreamClaim,
+  doResolveUri: string => void,
+  className?: string,
 };
 
-const className = 'media__thumb';
+function FileThumbnail(props: Props) {
+  const { claim, uri, doResolveUri, thumbnail: rawThumbnail, children, allowGifs = false, className } = props;
+  const passedThumbnail = rawThumbnail && rawThumbnail.trim().replace(/^http:\/\//i, 'https://');
+  const thumbnailFromClaim =
+    uri && claim && claim.value && claim.value.thumbnail ? claim.value.thumbnail.url : undefined;
+  const thumbnail = passedThumbnail || thumbnailFromClaim;
+  const hasResolvedClaim = claim !== undefined;
 
-class FileThumbnail extends React.PureComponent<Props> {
-  render() {
-    const { thumbnail: rawThumbnail, children, allowGifs = false } = this.props;
-    const thumbnail = rawThumbnail && rawThumbnail.trim().replace(/^http:\/\//i, 'https://');
-
-    if (!allowGifs && thumbnail && thumbnail.endsWith('gif')) {
-      return (
-        <FreezeframeWrapper src={thumbnail} className={className}>
-          {children}
-        </FreezeframeWrapper>
-      );
+  React.useEffect(() => {
+    if (!hasResolvedClaim) {
+      doResolveUri(uri);
     }
+  }, [hasResolvedClaim, uri, doResolveUri]);
 
-    let url;
-    // @if TARGET='web'
-    // Pass image urls through a compression proxy
-    url = thumbnail || Placeholder;
-    // url = thumbnail
-    //   ? 'https://ext.thumbnails.lbry.com/400x,q55/' +
-    //     // The image server will redirect if we don't remove the double slashes after http(s)
-    //     thumbnail.replace('https://', 'https:/').replace('http://', 'http:/')
-    //   : Placeholder;
-    // @endif
-    // @if TARGET='app'
-    url = thumbnail || Placeholder;
-    // @endif
-
+  if (!allowGifs && thumbnail && thumbnail.endsWith('gif')) {
     return (
-      <div style={{ backgroundImage: `url('${url.replace(/'/g, "\\'")}')` }} className={className}>
+      <FreezeframeWrapper src={thumbnail} className={classnames('media__thumb', className)}>
         {children}
-      </div>
+      </FreezeframeWrapper>
     );
   }
+
+  const url = passedThumbnail || uri ? thumbnailFromClaim : Placeholder;
+
+  return (
+    <div
+      style={{ backgroundImage: `url('${url ? url.replace(/'/g, "\\'") : ''}')` }}
+      className={classnames('media__thumb', className, {
+        'media__thumb--resolving': !hasResolvedClaim,
+      })}
+    >
+      {children}
+    </div>
+  );
 }
 
 export default FileThumbnail;

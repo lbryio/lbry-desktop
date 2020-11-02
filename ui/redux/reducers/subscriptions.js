@@ -1,106 +1,64 @@
 // @flow
 import * as ACTIONS from 'constants/action_types';
 import { parseURI, ACTIONS as LBRY_REDUX_ACTIONS } from 'lbry-redux';
-import { VIEW_ALL } from 'constants/subscriptions';
 import { handleActions } from 'util/redux-utils';
 
 const defaultState: SubscriptionState = {
-  subscriptions: [],
-  unread: {},
-  suggested: {},
+  subscriptions: [], // Deprecated
+  following: [],
   loading: false,
-  viewMode: VIEW_ALL,
-  loadingSuggested: false,
   firstRunCompleted: false,
-  showSuggestedSubs: false,
-  enabledChannelNotifications: [],
 };
 
 export default handleActions(
   {
-    [ACTIONS.CHANNEL_SUBSCRIBE]: (state: SubscriptionState, action: DoChannelSubscribe): SubscriptionState => {
-      const newSubscription: Subscription = action.data;
+    [ACTIONS.CHANNEL_SUBSCRIBE]: (state: SubscriptionState, action): SubscriptionState => {
+      const newSubscription: { uri: string, channelName: string, notificationsDisabled: boolean } = action.data;
       const newSubscriptions: Array<Subscription> = state.subscriptions.slice();
+      let newFollowing: Array<Following> = state.following.slice();
       // prevent duplicates in the sidebar
       if (!newSubscriptions.some(sub => sub.uri === newSubscription.uri)) {
+        //   $FlowFixMe
         newSubscriptions.unshift(newSubscription);
+      }
+
+      if (!newFollowing.some(sub => sub.uri === newSubscription.uri)) {
+        newFollowing.unshift({
+          uri: newSubscription.uri,
+          notificationsDisabled: newSubscription.notificationsDisabled,
+        });
+      } else {
+        newFollowing = newFollowing.map(following => {
+          if (following.uri === newSubscription.uri) {
+            return {
+              uri: newSubscription.uri,
+              notificationsDisabled: newSubscription.notificationsDisabled,
+            };
+          } else {
+            return following;
+          }
+        });
       }
 
       return {
         ...state,
         subscriptions: newSubscriptions,
+        following: newFollowing,
       };
     },
-    [ACTIONS.CHANNEL_UNSUBSCRIBE]: (state: SubscriptionState, action: DoChannelUnsubscribe): SubscriptionState => {
+    [ACTIONS.CHANNEL_UNSUBSCRIBE]: (state: SubscriptionState, action): SubscriptionState => {
       const subscriptionToRemove: Subscription = action.data;
       const newSubscriptions = state.subscriptions
         .slice()
         .filter(subscription => subscription.channelName !== subscriptionToRemove.channelName);
+      const newFollowing = state.following
+        .slice()
+        .filter(subscription => subscription.uri !== subscriptionToRemove.uri);
 
-      // Check if we need to remove it from the 'unread' state
-      const { unread } = state;
-      if (unread[subscriptionToRemove.uri]) {
-        delete unread[subscriptionToRemove.uri];
-      }
       return {
         ...state,
-        unread: { ...unread },
         subscriptions: newSubscriptions,
-      };
-    },
-    [ACTIONS.SET_SUBSCRIPTION_LATEST]: (
-      state: SubscriptionState,
-      action: SetSubscriptionLatest
-    ): SubscriptionState => ({
-      ...state,
-      subscriptions: state.subscriptions.map(subscription =>
-        subscription.channelName === action.data.subscription.channelName
-          ? { ...subscription, latest: action.data.uri }
-          : subscription
-      ),
-    }),
-    [ACTIONS.UPDATE_SUBSCRIPTION_UNREADS]: (
-      state: SubscriptionState,
-      action: DoUpdateSubscriptionUnreads
-    ): SubscriptionState => {
-      const { channel, uris, type } = action.data;
-
-      return {
-        ...state,
-        unread: {
-          ...state.unread,
-          [channel]: {
-            uris,
-            type,
-          },
-        },
-      };
-    },
-    [ACTIONS.REMOVE_SUBSCRIPTION_UNREADS]: (
-      state: SubscriptionState,
-      action: DoRemoveSubscriptionUnreads
-    ): SubscriptionState => {
-      const { channel, uris } = action.data;
-
-      // If no channel is passed in, remove all unreads
-      let newUnread;
-      if (channel) {
-        newUnread = { ...state.unread };
-
-        if (!uris) {
-          delete newUnread[channel];
-        } else {
-          newUnread[channel].uris = uris;
-        }
-      } else {
-        newUnread = {};
-      }
-
-      return {
-        ...state,
-        unread: {
-          ...newUnread,
-        },
+        following: newFollowing,
       };
     },
     [ACTIONS.FETCH_SUBSCRIPTIONS_START]: (state: SubscriptionState): SubscriptionState => ({
@@ -111,39 +69,20 @@ export default handleActions(
       ...state,
       loading: false,
     }),
-    [ACTIONS.FETCH_SUBSCRIPTIONS_SUCCESS]: (
-      state: SubscriptionState,
-      action: FetchedSubscriptionsSucess
-    ): SubscriptionState => ({
+    [ACTIONS.FETCH_SUBSCRIPTIONS_SUCCESS]: (state: SubscriptionState, action): SubscriptionState => ({
       ...state,
       loading: false,
       subscriptions: action.data,
     }),
-    [ACTIONS.SET_VIEW_MODE]: (state: SubscriptionState, action: SetViewMode): SubscriptionState => ({
+    [ACTIONS.SET_VIEW_MODE]: (state: SubscriptionState, action): SubscriptionState => ({
       ...state,
       viewMode: action.data,
     }),
-    [ACTIONS.GET_SUGGESTED_SUBSCRIPTIONS_START]: (state: SubscriptionState): SubscriptionState => ({
-      ...state,
-      loadingSuggested: true,
-    }),
-    [ACTIONS.GET_SUGGESTED_SUBSCRIPTIONS_SUCCESS]: (
-      state: SubscriptionState,
-      action: GetSuggestedSubscriptionsSuccess
-    ): SubscriptionState => ({
-      ...state,
-      suggested: action.data,
-      loadingSuggested: false,
-    }),
-    [ACTIONS.GET_SUGGESTED_SUBSCRIPTIONS_FAIL]: (state: SubscriptionState): SubscriptionState => ({
-      ...state,
-      loadingSuggested: false,
-    }),
     [LBRY_REDUX_ACTIONS.USER_STATE_POPULATE]: (
       state: SubscriptionState,
-      action: { data: { subscriptions: ?Array<string> } }
+      action: { data: { subscriptions: ?Array<string>, following: ?Array<Subscription> } }
     ) => {
-      const { subscriptions } = action.data;
+      const { subscriptions, following } = action.data;
       const incomingSubscriptions = Array.isArray(subscriptions) && subscriptions.length;
       if (!incomingSubscriptions) {
         return {
@@ -151,6 +90,7 @@ export default handleActions(
         };
       }
       let newSubscriptions;
+      let newFollowing;
 
       if (!subscriptions) {
         newSubscriptions = state.subscriptions;
@@ -166,9 +106,24 @@ export default handleActions(
         newSubscriptions = parsedSubscriptions;
       }
 
+      if (!following) {
+        newFollowing = newSubscriptions.slice().map(({ uri }) => {
+          return {
+            uri,
+            // Default first time movers to notifications on
+            // This value is for email notifications too so we can't default off
+            // New subscriptions after population will default off
+            notificationsDisabled: false,
+          };
+        });
+      } else {
+        newFollowing = following;
+      }
+
       return {
         ...state,
         subscriptions: newSubscriptions,
+        following: newFollowing,
       };
     },
   },
