@@ -187,8 +187,11 @@ $metadata-z-index: 1;
 
   > .button,
   > .button-group .button {
-    padding: 0 var(--spacing-xs);
+    padding: 0 var(--spacing-s);
+  }
 
+  > .button,
+  > .button-group {
     &:not(:last-child) {
       margin-right: var(--spacing-m);
     }
