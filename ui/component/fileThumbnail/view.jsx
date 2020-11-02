@@ -37,7 +37,7 @@ function FileThumbnail(props: Props) {
     );
   }
 
-  const url = passedThumbnail || uri ? thumbnailFromClaim : Placeholder;
+  const url = passedThumbnail || (uri ? thumbnailFromClaim : Placeholder);
 
   return (
     <div

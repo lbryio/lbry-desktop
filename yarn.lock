@@ -7411,15 +7411,11 @@ lazy-val@^1.0.4:
     yargs "^13.2.2"
     zstd-codec "^0.1.1"
 
-<<<<<<< HEAD
-lbry-redux@lbryio/lbry-redux#04789190b060f27bf0c438a9af449b4a18ef4925:
-  version "0.0.1"
-  resolved "https://codeload.github.com/lbryio/lbry-redux/tar.gz/04789190b060f27bf0c438a9af449b4a18ef4925"
-=======
+
 lbry-redux@lbryio/lbry-redux#4d11f319141ba49a26f06053c42c01f00dd4feaf:
   version "0.0.1"
   resolved "https://codeload.github.com/lbryio/lbry-redux/tar.gz/4d11f319141ba49a26f06053c42c01f00dd4feaf"
->>>>>>> per channel notification settings
+
   dependencies:
     proxy-polyfill "0.1.6"
     reselect "^3.0.0"
