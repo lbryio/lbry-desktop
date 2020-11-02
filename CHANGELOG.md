@@ -8,11 +8,20 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ### Added
 
+- Inline video player in comments/markdown posts ([#4894](https://github.com/lbryio/lbry-desktop/pull/4894))
+- Better handling of winning claim + top page improvements ([#4944](https://github.com/lbryio/lbry-desktop/pull/4944))
 - Comment pinning ([#4895](https://github.com/lbryio/lbry-desktop/pull/4895))
+- Comment reactions ([#4895](https://github.com/lbryio/lbry-desktop/pull/4895))
+- Language search ([#4907](https://github.com/lbryio/lbry-desktop/pull/4907))
+- Content notifications ([#4981](https://github.com/lbryio/lbry-desktop/pull/4981))
 
 ### Changed
 
+- Refactored file/lbc details UI ([#4937](https://github.com/lbryio/lbry-desktop/pull/4937))
+
 ### Fixed
+
+- Loss of subscriptions on startup ([#4882](https://github.com/lbryio/lbry-desktop/pull/4882))
 
 ## [0.48.2] - [2020-10-16]
 
