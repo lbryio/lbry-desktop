@@ -105,6 +105,11 @@ label {
   color: var(--color-input-label);
   display: inline-block;
   margin-bottom: var(--spacing-xxs);
+  background-color: #c7c7c7;
+  border-radius: 2px;
+  display: inline-block;
+  color: #131313;
+  padding: 2px 5px;
 
   .icon__lbc {
     margin-bottom: 4px;
