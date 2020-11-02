@@ -19,10 +19,7 @@ type Props = {
   fetchFileInfo: string => void,
   fetchCostInfo: string => void,
   setViewed: string => void,
-  isSubscribed: boolean,
-  channelUri: string,
   renderMode: string,
-  markSubscriptionRead: (string, string) => void,
   obscureNsfw: boolean,
   isMature: boolean,
   linkedComment: any,
@@ -32,14 +29,11 @@ type Props = {
 function FilePage(props: Props) {
   const {
     uri,
-    channelUri,
     renderMode,
     fetchFileInfo,
     fetchCostInfo,
     setViewed,
-    isSubscribed,
     fileInfo,
-    markSubscriptionRead,
     obscureNsfw,
     isMature,
     costInfo,
@@ -67,14 +61,6 @@ function FilePage(props: Props) {
       setPrimaryUri(null);
     };
   }, [uri, hasFileInfo, fetchFileInfo, fetchCostInfo, setViewed, setPrimaryUri]);
-
-  React.useEffect(() => {
-    // Always try to remove
-    // If it doesn't exist, nothing will happen
-    if (isSubscribed) {
-      markSubscriptionRead(channelUri, uri);
-    }
-  }, [isSubscribed, markSubscriptionRead, uri, channelUri]);
 
   function renderFilePageLayout() {
     if (RENDER_MODES.FLOATING_MODES.includes(renderMode)) {

@@ -7391,17 +7391,23 @@ lazy-val@^1.0.4:
     yargs "^13.2.2"
     zstd-codec "^0.1.1"
 
+<<<<<<< HEAD
 lbry-redux@lbryio/lbry-redux#04789190b060f27bf0c438a9af449b4a18ef4925:
   version "0.0.1"
   resolved "https://codeload.github.com/lbryio/lbry-redux/tar.gz/04789190b060f27bf0c438a9af449b4a18ef4925"
+=======
+lbry-redux@lbryio/lbry-redux#4d11f319141ba49a26f06053c42c01f00dd4feaf:
+  version "0.0.1"
+  resolved "https://codeload.github.com/lbryio/lbry-redux/tar.gz/4d11f319141ba49a26f06053c42c01f00dd4feaf"
+>>>>>>> per channel notification settings
   dependencies:
     proxy-polyfill "0.1.6"
     reselect "^3.0.0"
     uuid "^8.3.1"
 
-lbryinc@lbryio/lbryinc#517c28a183d6ab69a357227809bc7c3c12d8411e:
+lbryinc@lbryio/lbryinc#9bdf18eef6a65aef7d92ce1040b6f8d3db1be671:
   version "0.0.1"
-  resolved "https://codeload.github.com/lbryio/lbryinc/tar.gz/517c28a183d6ab69a357227809bc7c3c12d8411e"
+  resolved "https://codeload.github.com/lbryio/lbryinc/tar.gz/9bdf18eef6a65aef7d92ce1040b6f8d3db1be671"
   dependencies:
     reselect "^3.0.0"
 

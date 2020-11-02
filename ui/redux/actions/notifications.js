@@ -1,7 +1,7 @@
 // @flow
 import * as ACTIONS from 'constants/action_types';
+import * as NOTIFICATIONS from 'constants/notifications';
 import { Lbryio } from 'lbryinc';
-// $FlowFixMe
 import { v4 as uuid } from 'uuid';
 import { selectNotifications } from 'redux/selectors/notifications';
 import { doResolveUris } from 'lbry-redux';
@@ -42,7 +42,7 @@ export function doDismissError() {
 }
 
 export function doNotificationList() {
-  return (dispatch: Dispatch) => {
+  return (dispatch: Dispatch<*>) => {
     dispatch({ type: ACTIONS.NOTIFICATION_LIST_STARTED });
     return Lbryio.call('notification', 'list', { is_app_readable: true })
       .then(response => {
@@ -50,15 +50,22 @@ export function doNotificationList() {
         const channelsToResolve = notifications
           .filter((notification: WebNotification) => {
             if (
-              notification.notification_parameters.dynamic &&
-              notification.notification_parameters.dynamic.comment_author
+              (notification.notification_parameters.dynamic &&
+                notification.notification_parameters.dynamic.comment_author) ||
+              notification.notification_rule === NOTIFICATIONS.NEW_CONTENT
             ) {
               return true;
             } else {
               return false;
             }
           })
-          .map(notification => notification.notification_parameters.dynamic.comment_author);
+          .map(notification => {
+            if (notification.notification_rule === NOTIFICATIONS.NEW_CONTENT) {
+              return notification.notification_parameters.device.target;
+            } else {
+              return notification.notification_parameters.dynamic.comment_author;
+            }
+          });
 
         dispatch(doResolveUris(channelsToResolve));
         dispatch({ type: ACTIONS.NOTIFICATION_LIST_COMPLETED, data: { notifications } });
@@ -70,7 +77,7 @@ export function doNotificationList() {
 }
 
 export function doReadNotifications() {
-  return (dispatch: Dispatch, getState: GetState) => {
+  return (dispatch: Dispatch<*>, getState: GetState) => {
     const state = getState();
     const notifications = selectNotifications(state);
     const unreadNotifications =
@@ -92,7 +99,7 @@ export function doReadNotifications() {
 }
 
 export function doSeeNotifications(notificationIds: Array<string>) {
-  return (dispatch: Dispatch) => {
+  return (dispatch: Dispatch<*>) => {
     dispatch({ type: ACTIONS.NOTIFICATION_SEEN_STARTED });
     return Lbryio.call('notification', 'edit', { notification_ids: notificationIds.join(','), is_seen: true })
       .then(() => {
@@ -110,7 +117,7 @@ export function doSeeNotifications(notificationIds: Array<string>) {
 }
 
 export function doSeeAllNotifications() {
-  return (dispatch: Dispatch, getState: GetState) => {
+  return (dispatch: Dispatch<*>, getState: GetState) => {
     const state = getState();
     const notifications = selectNotifications(state);
     const unSeenNotifications =

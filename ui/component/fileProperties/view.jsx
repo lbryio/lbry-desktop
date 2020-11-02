@@ -12,7 +12,6 @@ type Props = {
   downloaded: boolean,
   claimIsMine: boolean,
   isSubscribed: boolean,
-  isNew: boolean,
   small: boolean,
 };
 

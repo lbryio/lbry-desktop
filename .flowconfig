@@ -1,6 +1,8 @@
 [ignore]
 .*\.typeface\.json
 .*/node_modules/findup/.*
+node_modules/lbryinc/flow-typed/Redux.js
+node_modules/lbry-redux/flow-typed/Redux.js
 
 [include]
 

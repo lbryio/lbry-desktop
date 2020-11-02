@@ -15,7 +15,10 @@ import { push } from 'connected-react-router';
 import analytics from 'analytics';
 import { doOpenModal } from 'redux/actions/app';
 
-export const doPublishDesktop = (filePath: string, preview?: boolean) => (dispatch: Dispatch, getState: () => {}) => {
+export const doPublishDesktop = (filePath: string, preview?: boolean) => (
+  dispatch: Dispatch<*>,
+  getState: () => {}
+) => {
   const publishPreview = previewResponse => {
     dispatch(
       doOpenModal(MODALS.PUBLISH_PREVIEW, {

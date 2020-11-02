@@ -14,6 +14,7 @@ import { formatLbryUrlForWeb } from 'util/url';
 import { useHistory } from 'react-router';
 import { parseURI } from 'lbry-redux';
 import { PAGE_VIEW_QUERY, DISCUSSION_PAGE } from 'page/channel/view';
+import FileThumbnail from 'component/fileThumbnail';
 
 type Props = {
   notification: WebNotification,
@@ -65,6 +66,9 @@ export default function Notification(props: Props) {
       break;
     case NOTIFICATIONS.NOTIFICATION_REPLY:
       icon = <ChannelThumbnail small uri={notification_parameters.dynamic.reply_author} />;
+      break;
+    case NOTIFICATIONS.NEW_CONTENT:
+      icon = <ChannelThumbnail small uri={notification_parameters.dynamic.channel_url} />;
       break;
     case NOTIFICATIONS.DAILY_WATCH_AVAILABLE:
     case NOTIFICATIONS.DAILY_WATCH_REMIND:
@@ -135,6 +139,12 @@ export default function Notification(props: Props) {
               </>
             )}
           </div>
+
+          {notification_rule === NOTIFICATIONS.NEW_CONTENT && (
+            <>
+              <FileThumbnail uri={notification_parameters.device.target} className="notification__content-thumbnail" />
+            </>
+          )}
 
           <div className="notification__extra">
             <div className="notification__time">
