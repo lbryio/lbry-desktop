@@ -58,6 +58,7 @@ const VIDEO_JS_OPTIONS: VideoJSOptions = {
   playbackRates: [0.25, 0.5, 0.75, 1, 1.1, 1.25, 1.5, 1.75, 2],
   responsive: true,
   controls: true,
+  html5: { nativeControlsForTouch: IS_IOS },
 };
 
 const F11_KEYCODE = 122;
@@ -99,8 +100,6 @@ export default React.memo<Props>(function VideoJs(props: Props) {
     autoplay: false,
     poster: poster, // thumb looks bad in app, and if autoplay, flashing poster is annoying
     plugins: { eventTracking: true },
-    'webkit-playsinline': IS_IOS,
-    playsinline: IS_IOS,
   };
 
   //   if (adsTest) {
@@ -283,7 +282,7 @@ export default React.memo<Props>(function VideoJs(props: Props) {
   return (
     reload && (
       // $FlowFixMe
-      <div className={classnames('video-js-parent')} ref={containerRef}>
+      <div className={classnames('video-js-parent', { 'video-js-parent--ios': IS_IOS })} ref={containerRef}>
         <Button
           label={__('Tap to unmute')}
           button="link"
