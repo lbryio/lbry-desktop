@@ -338,7 +338,7 @@ export function doAlertWaitingForSync() {
   return dispatch =>
     dispatch(
       doToast({
-        message: __('Hold on, we are setting up your account'),
+        message: __('Please wait a bit, we are still getting your account ready.'),
         isError: false,
       })
     );

@@ -94,7 +94,7 @@ export default function SubscribeButton(props: Props) {
             });
 
             if (newNotificationsDisabled === false) {
-              doToast({ message: __('Notifications enabled for %channel%!', { channel: claimName }) });
+              doToast({ message: __('Notifications turned on for %channel%!', { channel: claimName }) });
             }
           }}
         />

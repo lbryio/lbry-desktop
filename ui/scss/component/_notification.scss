@@ -34,13 +34,14 @@ $contentMaxWidth: 35rem;
 
   @media (min-width: $breakpoint-small) {
     align-items: center;
+    margin-left: var(--spacing-m);
   }
 }
 
 .notification__wrapper {
   width: 100%;
   display: flex;
-  padding: var(--spacing-m);
+  padding: var(--spacing-m) 0;
 
   .channel-thumbnail {
     @include handleChannelGif(3rem);
@@ -111,7 +112,7 @@ $contentMaxWidth: 35rem;
 }
 
 .notification__text-wrapper {
-  max-width: calc(#{$contentMaxWidth} - (#{$thumbnailWidth} * 16 / 9) - var(--spacing-m)); //25rem;
+  max-width: calc(#{$contentMaxWidth} - (#{$thumbnailWidth} * 16 / 9) - var(--spacing-m));
 }
 
 .notification__title {
@@ -179,6 +180,15 @@ $contentMaxWidth: 35rem;
 .notification__extra {
   display: flex;
   align-items: center;
+  justify-content: flex-end;
+  margin-right: var(--spacing-m);
+  flex-direction: row-reverse;
+
+  @media (min-width: $breakpoint-small) {
+    margin-left: var(--spacing-s);
+    margin-top: 0;
+    flex-direction: row;
+  }
 }
 
 .notification__mark-seen {
@@ -191,5 +201,21 @@ $contentMaxWidth: 35rem;
 
   @media (min-width: $breakpoint-small) {
     margin-top: 0;
+  }
+}
+
+.notification__menu {
+  margin-right: var(--spacing-m);
+
+  .icon {
+    stroke: var(--color-text-help);
+  }
+
+  button {
+    border-radius: var(--border-radius);
+
+    &:focus {
+      @include linkFocus;
+    }
   }
 }

@@ -82,6 +82,18 @@ export default handleActions(
         notifications: newNotifications,
       };
     },
+    [ACTIONS.NOTIFICATION_DELETE_COMPLETED]: (state, action) => {
+      const { notifications } = state;
+      const { notificationId } = action.data;
+      const newNotifications = notifications.filter(notification => {
+        return notification.id !== notificationId;
+      });
+
+      return {
+        ...state,
+        notifications: newNotifications,
+      };
+    },
 
     // Errors
     [ACTIONS.CREATE_ERROR]: (state: NotificationState, action: DoError) => {
