@@ -1,3 +1,6 @@
+$thumbnailWidth: 4rem;
+$contentMaxWidth: 35rem;
+
 .notifications__empty {
   background-color: var(--color-card-background);
   padding: var(--spacing-l);
@@ -62,9 +65,10 @@
   }
 }
 
-.notification__content {
+.notification__content-wrapper {
   flex: 1;
   display: flex;
+  justify-content: space-between;
   flex-direction: column;
 
   @media (min-width: $breakpoint-small) {
@@ -72,6 +76,42 @@
     justify-content: space-between;
     align-items: center;
   }
+}
+
+.notification__content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  max-width: $contentMaxWidth;
+
+  @media (min-width: $breakpoint-small) {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+  }
+}
+
+.notification__content-thumbnail {
+  @include thumbnail;
+  position: relative;
+  margin-left: auto;
+  height: auto;
+  width: 100%;
+  margin-top: var(--spacing-s);
+
+  @media (min-width: $breakpoint-small) {
+    height: thumbnailWidth;
+    width: calc(#{$thumbnailWidth} * 16 / 9);
+    max-width: calc(#{$thumbnailWidth} * 16 / 9);
+    margin-left: var(--spacing-m);
+    margin-top: 0;
+    min-width: 0;
+  }
+}
+
+.notification__text-wrapper {
+  max-width: calc(#{$contentMaxWidth} - (#{$thumbnailWidth} * 16 / 9) - var(--spacing-m)); //25rem;
 }
 
 .notification__title {
@@ -96,9 +136,9 @@
   overflow: hidden;
 }
 
-.notification__title,
-.notification__text {
-  max-width: 30rem;
+.notification__text,
+.notification__title {
+  flex-shrink: 1;
 }
 
 .notification__time {
@@ -150,22 +190,6 @@
   margin-top: var(--spacing-s);
 
   @media (min-width: $breakpoint-small) {
-    margin-top: 0;
-  }
-}
-
-.notification__content-thumbnail {
-  @include thumbnail;
-  position: relative;
-  margin-right: auto;
-  height: auto;
-  width: 100%;
-  margin-top: var(--spacing-s);
-
-  @media (min-width: $breakpoint-small) {
-    height: 4rem;
-    width: calc(4rem * 16 / 9);
-    margin-left: var(--spacing-s);
     margin-top: 0;
   }
 }
