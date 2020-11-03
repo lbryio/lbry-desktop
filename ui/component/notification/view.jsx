@@ -122,29 +122,35 @@ export default function Notification(props: Props) {
         })}
       >
         <div className="notification__icon">{icon}</div>
-        <div className="notification__content">
-          <div>
-            {!isCommentNotification && (
-              <div className="notification__title">{notification_parameters.device.title}</div>
-            )}
 
-            {isCommentNotification && commentText ? (
-              <>
+        <div className="notification__content-wrapper">
+          <div className="notification__content">
+            <div className="notification__text-wrapper">
+              {!isCommentNotification && (
                 <div className="notification__title">{notification_parameters.device.title}</div>
-                <div className="notification__text mobile-hidden">{commentText}</div>
-              </>
-            ) : (
+              )}
+
+              {isCommentNotification && commentText ? (
+                <>
+                  <div className="notification__title">{notification_parameters.device.title}</div>
+                  <div className="notification__text mobile-hidden">{commentText}</div>
+                </>
+              ) : (
+                <>
+                  <div className="notification__text">{notification_parameters.device.text}</div>
+                </>
+              )}
+            </div>
+
+            {notification_rule === NOTIFICATIONS.NEW_CONTENT && (
               <>
-                <div className="notification__text">{notification_parameters.device.text}</div>
+                <FileThumbnail
+                  uri={notification_parameters.device.target}
+                  className="notification__content-thumbnail"
+                />
               </>
             )}
           </div>
-
-          {notification_rule === NOTIFICATIONS.NEW_CONTENT && (
-            <>
-              <FileThumbnail uri={notification_parameters.device.target} className="notification__content-thumbnail" />
-            </>
-          )}
 
           <div className="notification__extra">
             <div className="notification__time">
