@@ -9,27 +9,31 @@ import Icon from 'component/common/icon';
 import DateTime from 'component/dateTime';
 import Button from 'component/button';
 import ChannelThumbnail from 'component/channelThumbnail';
-import { MenuItem } from '@reach/menu-button';
 import { formatLbryUrlForWeb } from 'util/url';
 import { useHistory } from 'react-router';
 import { parseURI } from 'lbry-redux';
 import { PAGE_VIEW_QUERY, DISCUSSION_PAGE } from 'page/channel/view';
 import FileThumbnail from 'component/fileThumbnail';
+import { Menu, MenuList, MenuButton, MenuItem } from '@reach/menu-button';
+import NotificationContentChannelMenu from 'component/notificationContentChannelMenu';
 
 type Props = {
   notification: WebNotification,
   menuButton: boolean,
   children: any,
   doSeeNotifications: ([number]) => void,
+  doDeleteNotification: number => void,
 };
 
 export default function Notification(props: Props) {
-  const { notification, menuButton = false, doSeeNotifications } = props;
+  const { notification, menuButton = false, doSeeNotifications, doDeleteNotification } = props;
   const { push } = useHistory();
   const { notification_rule, notification_parameters, is_seen, id } = notification;
   const isCommentNotification =
     notification_rule === NOTIFICATIONS.NOTIFICATION_COMMENT || notification_rule === NOTIFICATIONS.NOTIFICATION_REPLY;
   const commentText = isCommentNotification && notification_parameters.dynamic.comment;
+  const channelUrl =
+    (notification_rule === NOTIFICATIONS.NEW_CONTENT && notification.notification_parameters.dynamic.channel_url) || '';
 
   let notificationTarget;
   switch (notification_rule) {
@@ -153,11 +157,28 @@ export default function Notification(props: Props) {
           </div>
 
           <div className="notification__extra">
+            {!is_seen && <Button className="notification__mark-seen" onClick={handleSeeNotification} />}
             <div className="notification__time">
               <DateTime timeAgo date={notification.active_at} />
             </div>
-            {!is_seen && <Button className="notification__mark-seen" onClick={handleSeeNotification} />}
           </div>
+        </div>
+
+        <div className="notification__menu">
+          <Menu>
+            <MenuButton onClick={e => e.stopPropagation()}>
+              <Icon size={18} icon={ICONS.MORE_VERTICAL} />
+            </MenuButton>
+            <MenuList className="menu__list--comments">
+              <MenuItem className="menu__link" onSelect={() => doDeleteNotification(id)}>
+                <Icon aria-hidden icon={ICONS.DELETE} />
+                {__('Delete')}
+              </MenuItem>
+              {notification_rule === NOTIFICATIONS.NEW_CONTENT && channelUrl ? (
+                <NotificationContentChannelMenu uri={channelUrl} />
+              ) : null}
+            </MenuList>
+          </Menu>
         </div>
       </div>
     </Wrapper>

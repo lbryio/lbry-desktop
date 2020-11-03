@@ -126,3 +126,15 @@ export function doSeeAllNotifications() {
     dispatch(doSeeNotifications(unSeenNotifications));
   };
 }
+
+export function doDeleteNotification(notificationId: number) {
+  return (dispatch: Dispatch<*>) => {
+    Lbryio.call('notification', 'delete', { notification_ids: notificationId })
+      .then(() => {
+        dispatch({ type: ACTIONS.NOTIFICATION_DELETE_COMPLETED, data: { notificationId } });
+      })
+      .catch(() => {
+        dispatch(doToast({ isError: true, message: __('Unable to delete this right now. Please try again later.') }));
+      });
+  };
+}
