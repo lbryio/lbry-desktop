@@ -23,7 +23,7 @@ type Props = {
 };
 
 function FileDescription(props: Props) {
-  const { uri, claim, metadata, tags, pendingAmount, doOpenModal, claimIsMine } = props;
+  const { uri, claim, metadata, pendingAmount, doOpenModal, claimIsMine } = props;
   const [expanded, setExpanded] = React.useState(false);
   const [showCreditDetails, setShowCreditDetails] = React.useState(false);
   const amount = parseFloat(claim.amount) + parseFloat(pendingAmount || claim.meta.support_amount);
@@ -36,8 +36,6 @@ function FileDescription(props: Props) {
 
   const { description } = metadata;
 
-  if (!description && !(tags && tags.length)) return null;
-
   return (
     <div>
       <div
@@ -47,7 +45,7 @@ function FileDescription(props: Props) {
           'media__info-text--fade': !expanded,
         })}
       >
-        <MarkdownPreview className="markdown-preview--description" content={description} simpleLinks />
+        {description && <MarkdownPreview className="markdown-preview--description" content={description} simpleLinks />}
         <ClaimTags uri={uri} type="large" />
         <FileDetails uri={uri} />
       </div>
