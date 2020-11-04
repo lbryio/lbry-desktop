@@ -358,6 +358,15 @@ textarea {
 
 .ads-test {
   height: 50vh;
+  position: relative;
+
+  .video-js {
+    height: 50vh;
+  }
+
+  .video-js .vjs-tech {
+    height: 50vh;
+  }
 }
 
 .adspruce-bannerspot {
