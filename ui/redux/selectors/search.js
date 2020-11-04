@@ -200,7 +200,8 @@ export const makeSelectWinningUriForQuery = (query: string) => {
 
       const effectiveAmount1 = claim1 && claim1.meta.effective_amount;
       const effectiveAmount2 = claim2 && claim2.meta.effective_amount;
-      return effectiveAmount1 > effectiveAmount2 ? claim1.canonical_url : claim2.canonical_url;
+
+      return Number(effectiveAmount1) > Number(effectiveAmount2) ? claim1.canonical_url : claim2.canonical_url;
     }
   );
 };
