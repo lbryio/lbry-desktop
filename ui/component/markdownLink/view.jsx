@@ -1,6 +1,5 @@
 // @flow
 import { KNOWN_APP_DOMAINS } from 'config';
-import * as MODALS from 'constants/modal_types';
 import * as ICONS from 'constants/icons';
 import * as React from 'react';
 import { isURIValid } from 'lbry-redux';
@@ -12,24 +11,15 @@ type Props = {
   title?: string,
   embed?: boolean,
   children: React.Node,
-  openModal: (id: string, { uri: string }) => void,
   parentCommentId?: string,
   isMarkdownPost?: boolean,
   simpleLinks?: boolean,
 };
 
 function MarkdownLink(props: Props) {
-  const {
-    children,
-    href,
-    title,
-    embed = false,
-    openModal,
-    parentCommentId,
-    isMarkdownPost,
-    simpleLinks = false,
-  } = props;
+  const { children, href, title, embed = false, parentCommentId, isMarkdownPost, simpleLinks = false } = props;
   const decodedUri = decodeURI(href);
+
   if (!href) {
     return children || null;
   }
@@ -50,14 +40,18 @@ function MarkdownLink(props: Props) {
     const linkDomain = linkUrlObject.host;
     const isKnownAppDomainLink = KNOWN_APP_DOMAINS.includes(linkDomain);
     if (isKnownAppDomainLink) {
-      const linkPathname = decodeURIComponent(
-        linkUrlObject.pathname.startsWith('//') ? linkUrlObject.pathname.slice(2) : linkUrlObject.pathname.slice(1)
-      );
+      let linkPathname;
+      try {
+        // This could be anything
+        linkPathname = decodeURIComponent(
+          linkUrlObject.pathname.startsWith('//') ? linkUrlObject.pathname.slice(2) : linkUrlObject.pathname.slice(1)
+        );
+      } catch (e) {}
 
-      const linkPathPlusHash = linkPathname + linkUrlObject.hash;
-      const possibleLbryUrl = `lbry://${linkPathPlusHash.replace(/:/g, '#')}`;
+      const linkPathPlusHash = linkPathname ? `${linkPathname}${linkUrlObject.hash}` : undefined;
+      const possibleLbryUrl = linkPathPlusHash ? `lbry://${linkPathPlusHash.replace(/:/g, '#')}` : undefined;
 
-      const lbryLinkIsValid = isURIValid(possibleLbryUrl);
+      const lbryLinkIsValid = possibleLbryUrl && isURIValid(possibleLbryUrl);
       if (lbryLinkIsValid) {
         lbryUrlFromLink = possibleLbryUrl;
       }
@@ -92,11 +86,7 @@ function MarkdownLink(props: Props) {
         label={children}
         className="button--external-link"
         navigate={isLbryLink ? href : undefined}
-        onClick={() => {
-          if (!isLbryLink) {
-            openModal(MODALS.CONFIRM_EXTERNAL_RESOURCE, { uri: href, isTrusted: false });
-          }
-        }}
+        href={isLbryLink ? undefined : href}
       />
     );
   }
