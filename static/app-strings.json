@@ -33,6 +33,7 @@
   "Report content": "Report content",
   "Content-Type": "Content-Type",
   "Languages": "Languages",
+  "Media Type": "Media Type",
   "License": "License",
   "More": "More",
   "Related": "Related",
@@ -1469,5 +1470,9 @@
   "Publish Something": "Publish Something",
   "Watch on lbry.tv": "Watch on lbry.tv",
   "Paid content cannot be embedded.": "Paid content cannot be embedded.",
+  "Most supported": "Most supported",
+  "View competing uploads for %name%": "View competing uploads for %name%",
+  "Currently winning": "Currently winning",
+  "URL can not include a space": "URL can not include a space",
   "--end--": "--end--"
 }
