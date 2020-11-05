@@ -7,9 +7,9 @@ import videojs from 'video.js/dist/alt/video.core.novtt.min.js';
 import 'video.js/dist/alt/video-js-cdn.min.css';
 import eventTracking from 'videojs-event-tracking';
 import isUserTyping from 'util/detect-typing';
-// import './adstest.js';
+import './adstest.js';
 // import './adstest2.js';
-// import './adstest.css';
+import './adstest.css';
 
 const isDev = process.env.NODE_ENV !== 'production';
 
@@ -110,11 +110,13 @@ export default React.memo<Props>(function VideoJs(props: Props) {
         type: 'video/mp4',
       },
     ];
-    // videoJsOptions.plugins.vastClient = {
-    //   adTagUrl: 'https://rozamimo9za10.com/ceef/gdt3g0/tbt/1794126/tlk.xml',
-    //   adsCancelTimeout: 5000,
-    //   adsEnabled: true,
-    // };
+
+    // $FlowFixMe
+    videoJsOptions.plugins.vastClient = {
+      adTagUrl: 'https://serve.adspruce.com/vpaid-8394-3.xml',
+      adsCancelTimeout: 5000,
+      adsEnabled: true,
+    };
   }
 
   videoJsOptions.muted = startMuted;
