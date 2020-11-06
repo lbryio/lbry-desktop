@@ -89,7 +89,7 @@ export default function NotificationSettingsPage(props: Props) {
       });
   }
 
-  if (!isAuthenticated && !verificationToken) {
+  if (IS_WEB && !isAuthenticated && !verificationToken) {
     return <Redirect to={`/$/${PAGES.AUTH_SIGNIN}?redirect=${location.pathname}`} />;
   }
 

@@ -233,7 +233,6 @@ function AppRouter(props: Props) {
       <Route path={`/$/${PAGES.SEARCH}`} exact component={SearchPage} />
       <Route path={`/$/${PAGES.TOP}`} exact component={TopPage} />
       <Route path={`/$/${PAGES.SETTINGS}`} exact component={SettingsPage} />
-      <Route path={`/$/${PAGES.SETTINGS_NOTIFICATIONS}`} exact component={SettingsNotificationsPage} />
       <Route path={`/$/${PAGES.SETTINGS_ADVANCED}`} exact component={SettingsAdvancedPage} />
       <Route path={`/$/${PAGES.INVITE}/:referrer`} exact component={InvitedPage} />
       <Route path={`/$/${PAGES.CHECKOUT}`} exact component={CheckoutPage} />

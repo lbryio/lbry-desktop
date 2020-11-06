@@ -6,7 +6,7 @@ import SettingsPage from './view';
 
 const select = state => ({
   osNotificationsEnabled: selectosNotificationsEnabled(state),
-  isAuthenticated: selectUserVerifiedEmail(state),
+  isAuthenticated: Boolean(selectUserVerifiedEmail)(state),
 });
 
 const perform = dispatch => ({
