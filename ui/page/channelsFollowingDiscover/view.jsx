@@ -7,15 +7,16 @@ import Page from 'component/page';
 // import Button from 'component/button';
 import ClaimListDiscover from 'component/claimListDiscover';
 // import { toCapitalCase } from 'util/string';
-import { PRIMARY_CONTENT_CHANNEL_IDS } from 'homepage';
 
 type Props = {
   followedTags: Array<Tag>,
   subscribedChannels: Array<Subscription>,
   blockedChannels: Array<string>,
+  homepageData: any,
 };
 
 function ChannelsFollowingDiscover(props: Props) {
+  const { PRIMARY_CONTENT_CHANNEL_IDS } = props.homepageData;
   //   const { followedTags, subscribedChannels, blockedChannels } = props;
   //   let rowData: Array<RowDataItem> = [];
   //   const notChannels = subscribedChannels
@@ -115,9 +116,8 @@ function ChannelsFollowingDiscover(props: Props) {
             )}
             {help}
           </h1>
-
-		<ClaimTilesDiscover {...options} />
-        </div>
+        <ClaimTilesDiscover {...options} />
+      </div>
       ))} */}
       {/* <h1 className="claim-grid__title">{__('More Channels')}</h1> */}
       {/* <ClaimListDiscover defaultOrderBy={CS.ORDER_BY_TOP} defaultFreshness={CS.FRESH_ALL} claimType="channel" /> */}

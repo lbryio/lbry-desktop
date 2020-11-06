@@ -1,12 +1,13 @@
 // @flow
-import type { RowDataItem } from 'homepage';
+// import type { RowDataItem } from 'homepages';
 import * as ICONS from 'constants/icons';
 import classnames from 'classnames';
 import React from 'react';
 import Page from 'component/page';
 import Button from 'component/button';
 import ClaimTilesDiscover from 'component/claimTilesDiscover';
-import getHomepage from 'homepage';
+// import getHomepage from 'homepage';
+
 import Icon from 'component/common/icon';
 import { useIsLargeScreen } from 'effects/use-screensize';
 
@@ -15,14 +16,18 @@ type Props = {
   followedTags: Array<Tag>,
   subscribedChannels: Array<Subscription>,
   showNsfw: boolean,
+  homepageData: any,
 };
+// rowData
 
 function HomePage(props: Props) {
-  const { followedTags, subscribedChannels, authenticated, showNsfw } = props;
+  const { followedTags, subscribedChannels, authenticated, showNsfw, homepageData } = props;
   const isLargeScreen = useIsLargeScreen();
   const showPersonalizedChannels = (authenticated || !IS_WEB) && subscribedChannels && subscribedChannels.length > 0;
   const showPersonalizedTags = (authenticated || !IS_WEB) && followedTags && followedTags.length > 0;
   const showIndividualTags = showPersonalizedTags && followedTags.length < 5;
+  const { default: getHomepage } = homepageData;
+
   const rowData: Array<RowDataItem> = getHomepage(
     authenticated,
     showPersonalizedChannels,

@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { selectFollowedTags } from 'redux/selectors/tags';
 import { selectUserVerifiedEmail } from 'redux/selectors/user';
 import { selectSubscriptions } from 'redux/selectors/subscriptions';
-import { makeSelectClientSetting } from 'redux/selectors/settings';
+import { makeSelectClientSetting, selectHomepageData } from 'redux/selectors/settings';
 
 import DiscoverPage from './view';
 
@@ -12,6 +12,7 @@ const select = state => ({
   subscribedChannels: selectSubscriptions(state),
   authenticated: selectUserVerifiedEmail(state),
   showNsfw: makeSelectClientSetting(SETTINGS.SHOW_MATURE)(state),
+  homepageData: selectHomepageData(state),
 });
 
 const perform = {};

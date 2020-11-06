@@ -7,7 +7,7 @@ import Button from 'component/button';
 import classnames from 'classnames';
 import NotificationBubble from 'component/notificationBubble';
 // import { PINNED_LABEL_1, PINNED_URI_1, PINNED_URI_2, PINNED_LABEL_2 } from 'config';
-import { EXTRA_SIDEBAR_LINKS } from 'homepage';
+// import { EXTRA_SIDEBAR_LINKS } from 'homepage';
 // @if TARGET='app'
 import { IS_MAC } from 'component/app/view';
 // @endif
@@ -68,6 +68,7 @@ type Props = {
   unreadCount: number,
   purchaseSuccess: boolean,
   doClearPurchasedUriSuccess: () => void,
+  homepageData: any,
 };
 
 type SideNavLink = {
@@ -91,6 +92,7 @@ function SideNavigation(props: Props) {
     isMediumScreen,
     isOnFilePage,
     unreadCount,
+    homepageData,
   } = props;
 
   //   if (PINNED_URI_1 && PINNED_LABEL_1) {
@@ -109,6 +111,7 @@ function SideNavigation(props: Props) {
   //     });
   //   }
 
+  const { EXTRA_SIDEBAR_LINKS } = homepageData;
   const ABSOLUTE_LINKS: Array<SideNavLink> = [
     {
       title: 'Notifications',
