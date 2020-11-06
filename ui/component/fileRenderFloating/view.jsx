@@ -16,6 +16,7 @@ import { useIsMobile } from 'effects/use-screensize';
 import debounce from 'util/debounce';
 import { useHistory } from 'react-router';
 
+const IS_DESKTOP_MAC = typeof process === 'object' ? process.platform === 'darwin' : false;
 const DEBOUNCE_WINDOW_RESIZE_HANDLER_MS = 60;
 export const INLINE_PLAYER_WRAPPER_CLASS = 'inline-player__wrapper';
 
@@ -153,8 +154,18 @@ export default function FileRenderFloating(props: Props) {
 
     const rect = element.getBoundingClientRect();
 
+    // getBoundingCLientRect returns a DomRect, not an object
+    const objectRect = {
+      top: rect.top,
+      right: rect.right,
+      bottom: rect.bottom,
+      left: rect.left,
+      width: rect.width,
+      height: rect.height,
+    };
+
     // $FlowFixMe
-    setFileViewerRect(rect);
+    setFileViewerRect({ ...objectRect, windowOffset: window.pageYOffset });
   }
 
   useEffect(() => {
@@ -241,7 +252,7 @@ export default function FileRenderFloating(props: Props) {
                 height: fileViewerRect.height,
                 left: fileViewerRect.x,
                 // 80px is header height in scss/init/vars.scss
-                top: window.pageYOffset + fileViewerRect.top - 80,
+                top: fileViewerRect.windowOffset + fileViewerRect.top - 80 - (IS_DESKTOP_MAC ? 24 : 0),
               }
             : {}
         }
