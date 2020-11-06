@@ -1,21 +1,15 @@
 // @flow
 import * as ACTIONS from 'constants/action_types';
-import * as NOTIFICATION_TYPES from 'constants/subscriptions';
 import * as MODALS from 'constants/modal_types';
 // @if TARGET='app'
 import { ipcRenderer } from 'electron';
 // @endif
 import { doOpenModal } from 'redux/actions/app';
-import { push } from 'connected-react-router';
-import { doUpdateUnreadSubscriptions } from 'redux/actions/subscriptions';
-import { makeSelectUnreadByChannel } from 'redux/selectors/subscriptions';
 import {
   Lbry,
   SETTINGS,
   makeSelectFileInfoForUri,
   selectFileInfosByOutpoint,
-  makeSelectChannelForClaimUri,
-  parseURI,
   doPurchaseUri,
   makeSelectUriIsStreamable,
   selectDownloadingByOutpoint,
@@ -25,7 +19,6 @@ import {
 } from 'lbry-redux';
 import { makeSelectCostInfoForUri, Lbryio } from 'lbryinc';
 import { makeSelectClientSetting, selectosNotificationsEnabled, selectDaemonSettings } from 'redux/selectors/settings';
-import { formatLbryUrlForWeb } from 'util/url';
 
 const DOWNLOAD_POLL_INTERVAL = 1000;
 
@@ -57,7 +50,6 @@ export function doUpdateLoadStatus(uri: string, outpoint: string) {
         // download hasn't started yet
         setNextStatusUpdate();
       } else if (fileInfo.completed) {
-        const state = getState();
         // TODO this isn't going to get called if they reload the client before
         // the download finished
         dispatch({
@@ -69,42 +61,19 @@ export function doUpdateLoadStatus(uri: string, outpoint: string) {
           },
         });
 
-        const channelUri = makeSelectChannelForClaimUri(uri, true)(state);
-        const { channelName } = parseURI(channelUri);
-        const claimName = '@' + channelName;
+        // If notifications are disabled(false) just return
+        if (!selectosNotificationsEnabled(getState()) || !fileInfo.written_bytes) return;
 
-        const unreadForChannel = makeSelectUnreadByChannel(channelUri)(state);
-        if (unreadForChannel && unreadForChannel.type === NOTIFICATION_TYPES.DOWNLOADING) {
-          const count = unreadForChannel.uris.length;
+        const notif = new window.Notification(__('LBRY Download Complete'), {
+          body: fileInfo.metadata.title,
+          silent: false,
+        });
 
-          if (selectosNotificationsEnabled(state)) {
-            const notif = new window.Notification(claimName, {
-              body: `Posted ${fileInfo.metadata.title}${
-                count > 1 && count < 10 ? ` and ${count - 1} other new items` : ''
-              }${count > 9 ? ' and 9+ other new items' : ''}`,
-              silent: false,
-            });
-            notif.onclick = () => {
-              dispatch(push(formatLbryUrlForWeb(uri)));
-            };
-          }
-
-          dispatch(doUpdateUnreadSubscriptions(channelUri, null, NOTIFICATION_TYPES.DOWNLOADED));
-        } else {
-          // If notifications are disabled(false) just return
-          if (!selectosNotificationsEnabled(getState()) || !fileInfo.written_bytes) return;
-
-          const notif = new window.Notification(__('LBRY Download Complete'), {
-            body: fileInfo.metadata.title,
-            silent: false,
-          });
-
-          // @if TARGET='app'
-          notif.onclick = () => {
-            ipcRenderer.send('focusWindow', 'main');
-          };
-          // @ENDIF
-        }
+        // @if TARGET='app'
+        notif.onclick = () => {
+          ipcRenderer.send('focusWindow', 'main');
+        };
+        // @ENDIF
       } else {
         // ready to play
         const { total_bytes: totalBytes, written_bytes: writtenBytes } = fileInfo;
