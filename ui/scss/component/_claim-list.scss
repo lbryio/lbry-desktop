@@ -447,10 +447,14 @@
 }
 
 .claim-tile__about {
-  display: flex;
-  flex-direction: column;
   font-size: var(--font-xsmall);
   color: var(--color-text-subtitle);
+  overflow: hidden;
+  white-space: nowrap;
+
+  > * {
+    display: block;
+  }
 }
 
 .claim-tile__publishes {
