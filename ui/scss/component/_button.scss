@@ -116,8 +116,13 @@
   color: var(--color-text-subtitle);
   max-width: 100%;
   text-align: left;
-  text-overflow: ellipsis;
   transition: color 0.2s;
+
+  .channel-name {
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+  }
 
   .markdown-preview & {
     height: initial;
