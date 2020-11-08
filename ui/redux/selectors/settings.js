@@ -62,7 +62,7 @@ export const selectHomepageData = createSelector(
   selectHomepageCode,
   homepageCode => {
     // homepages = { 'en': odyseeFile, ... }
-    if (!homepageCode) {
+    if (!homepageCode || !homepages[homepageCode]) {
       return homepages['en'];
     } else {
       return homepages[homepageCode];

@@ -43,13 +43,15 @@ function HomePage(props: Props) {
       {rowData.map(({ title, route, link, help, icon, options = {} }, index) => (
         <div key={title} className="claim-grid__wrapper">
           {index === 0 ? (
-            <span
-              className={classnames('claim-grid__title', {
-                'claim-grid__title--first': index === 0,
-              })}
-            >
-              {title}
-            </span>
+            <div className="section__header--actions">
+              <span
+                className={classnames('claim-grid__title', {
+                  'claim-grid__title--first': index === 0,
+                })}
+              >
+                {title}
+              </span>
+            </div>
           ) : (
             <h1 className="claim-grid__header">
               <Button navigate={route || link} button="link">

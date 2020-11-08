@@ -10,7 +10,6 @@ import { useHistory } from 'react-router';
 import { SETTINGS } from 'lbry-redux';
 import { FormField } from 'component/common/form';
 import Button from 'component/button';
-import HomepageSelector from 'component/homepageSelector';
 import { toCapitalCase } from 'util/string';
 import SEARCHABLE_LANGUAGES from 'constants/searchable_languages';
 
@@ -274,7 +273,6 @@ function ClaimListHeader(props: Props) {
                 icon={ICONS.LAYOUT}
               />
             )}
-            <HomepageSelector />
           </div>
         </div>
         {expanded && !SIMPLE_SITE && (
