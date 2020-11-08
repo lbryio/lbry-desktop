@@ -78,7 +78,7 @@ export default function CreatorDashboardPage(props: Props) {
       {!fetchingChannels && channels && channels.length && (
         <React.Fragment>
           <div className="section section--padded section--help">
-            <p>Creator analytics may not be working properly right now. Please check back later.</p>
+            <p>Creator analytics are down for maintenance. Please check back later.</p>
           </div>
 
           <div className="section">
