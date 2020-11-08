@@ -14,6 +14,11 @@
   max-width: 40rem;
 }
 
+.section--help {
+  border-radius: var(--border-radius);
+  background-color: var(--color-primary-alt);
+}
+
 .section__header {
   margin-bottom: var(--spacing-l);
 }
