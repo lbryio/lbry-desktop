@@ -4,7 +4,7 @@ import { selectFollowedTags } from 'redux/selectors/tags';
 import { doToggleTagFollowDesktop } from 'redux/actions/tags';
 import { makeSelectClientSetting } from 'redux/selectors/settings';
 import { doSetClientSetting } from 'redux/actions/settings';
-import ClaimListDiscover from './view';
+import ClaimListHeader from './view';
 
 const select = state => ({
   followedTags: selectFollowedTags(state),
@@ -19,4 +19,4 @@ const perform = {
   doSetClientSetting,
 };
 
-export default connect(select, perform)(ClaimListDiscover);
+export default connect(select, perform)(ClaimListHeader);
