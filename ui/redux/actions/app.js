@@ -676,3 +676,9 @@ export function doToggleInterestedInYoutubeSync() {
     type: ACTIONS.TOGGLE_YOUTUBE_SYNC_INTEREST,
   };
 }
+
+export function doToggleSplashAnimation() {
+  return {
+    type: ACTIONS.TOGGLE_SPLASH_ANIMATION,
+  };
+}

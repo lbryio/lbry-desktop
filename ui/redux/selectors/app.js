@@ -82,3 +82,5 @@ export const selectScrollStartingPosition = createSelector(selectState, state =>
 export const selectIsPasswordSaved = createSelector(selectState, state => state.isPasswordSaved);
 
 export const selectInterestedInYoutubeSync = createSelector(selectState, state => state.interestedInYoutubeSync);
+
+export const selectSplashAnimationEnabled = createSelector(selectState, state => state.splashAnimationEnabled);

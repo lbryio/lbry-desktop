@@ -57,6 +57,7 @@ const appFilter = createFilter('app', [
   'allowAnalytics',
   'welcomeVersion',
   'interestedInYoutubeSync',
+  'splashAnimationEnabled',
 ]);
 // We only need to persist the receiveAddress for the wallet
 const walletFilter = createFilter('wallet', ['receiveAddress']);
