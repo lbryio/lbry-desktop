@@ -1474,5 +1474,6 @@
   "View competing uploads for %name%": "View competing uploads for %name%",
   "Currently winning": "Currently winning",
   "URL can not include a space": "URL can not include a space",
+  "Creator analytics are down for maintenance. Please check back later.": "Creator analytics are down for maintenance. Please check back later.",
   "--end--": "--end--"
 }
