@@ -56,8 +56,8 @@ function UserEmailNew(props: Props) {
   }
 
   function handleSubmit() {
-    setSync(formSyncEnabled);
     // @if TARGET='app'
+    setSync(formSyncEnabled);
     setShareDiagnosticData(true);
     // @endif
     doSignUp(email, password === '' ? undefined : password).then(() => {
