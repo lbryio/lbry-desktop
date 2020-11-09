@@ -37,6 +37,7 @@ export type AppState = {
   isUpgradeSkipped: ?boolean,
   hasClickedComment: boolean,
   enhancedLayout: boolean,
+  splashAnimationEnabled: boolean,
   searchOptionsExpanded: boolean,
   isPasswordSaved: boolean,
   welcomeVersion: number,
@@ -70,6 +71,7 @@ const defaultState: AppState = {
   isUpgradeAvailable: undefined,
   isUpgradeSkipped: undefined,
   enhancedLayout: false,
+  splashAnimationEnabled: true,
   searchOptionsExpanded: false,
   currentScroll: 0,
   scrollHistory: [0],
@@ -288,6 +290,13 @@ reducers[ACTIONS.TOGGLE_YOUTUBE_SYNC_INTEREST] = (state, action) => {
   return {
     ...state,
     interestedInYoutubeSync: !state.interestedInYoutubeSync,
+  };
+};
+
+reducers[ACTIONS.TOGGLE_SPLASH_ANIMATION] = (state, action) => {
+  return {
+    ...state,
+    splashAnimationEnabled: !state.splashAnimationEnabled,
   };
 };
 

@@ -3,7 +3,7 @@ import type { Node } from 'react';
 import * as MODALS from 'constants/modal_types';
 import * as ICONS from 'constants/icons';
 import React from 'react';
-import { Lbry, SETTINGS } from 'lbry-redux';
+import { Lbry } from 'lbry-redux';
 import Button from 'component/button';
 import ModalWalletUnlock from 'modal/modalWalletUnlock';
 import ModalIncompatibleDaemon from 'modal/modalIncompatibleDaemon';
@@ -28,7 +28,7 @@ type Props = {
     id: string,
   },
   animationHidden: boolean,
-  setClientSetting: (string, boolean) => void,
+  toggleSplashAnimation: () => void,
   clearWalletServers: () => void,
   doShowSnackBar: string => void,
 };
@@ -242,7 +242,7 @@ export default class SplashScreen extends React.PureComponent<Props, State> {
 
   render() {
     const { error, details } = this.state;
-    const { animationHidden, setClientSetting } = this.props;
+    const { animationHidden, toggleSplashAnimation } = this.props;
 
     return (
       <div className="splash">
@@ -290,7 +290,7 @@ export default class SplashScreen extends React.PureComponent<Props, State> {
           <Button
             className="splash__animation-toggle"
             label={!animationHidden ? __('I feel woosy! Stop spinning!') : __('Spin Spin Sugar')}
-            onClick={() => setClientSetting(SETTINGS.HIDE_SPLASH_ANIMATION, !animationHidden)}
+            onClick={() => toggleSplashAnimation()}
           />
         )}
         {error && (
