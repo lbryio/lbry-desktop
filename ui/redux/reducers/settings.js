@@ -4,6 +4,9 @@ import SUPPORTED_LANGUAGES from 'constants/supported_languages';
 import { ACTIONS as LBRY_REDUX_ACTIONS, SETTINGS, SHARED_PREFERENCES } from 'lbry-redux';
 import { getSubsetFromKeysArray } from 'util/sync-settings';
 import { UNSYNCED_SETTINGS } from 'config';
+import homepages from 'homepages';
+
+const homepageKeys = Object.keys(homepages);
 const { CLIENT_SYNC_KEYS } = SHARED_PREFERENCES;
 const settingsToIgnore = (UNSYNCED_SETTINGS && UNSYNCED_SETTINGS.trim().split(' ')) || [];
 const clientSyncKeys = settingsToIgnore.length
@@ -39,6 +42,7 @@ const defaultState = {
     [SETTINGS.LANGUAGE]: settingLanguage.find(language => SUPPORTED_LANGUAGES[language]),
     [SETTINGS.THEME]: __('dark'),
     [SETTINGS.THEMES]: [__('light'), __('dark')],
+    [SETTINGS.HOMEPAGE]: settingLanguage.find(language => homepageKeys.includes(language)),
     [SETTINGS.HIDE_SPLASH_ANIMATION]: false,
     [SETTINGS.HIDE_BALANCE]: false,
     [SETTINGS.OS_NOTIFICATIONS_ENABLED]: true,

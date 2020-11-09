@@ -249,7 +249,7 @@ function ClaimListHeader(props: Props) {
               ))}
           </div>
 
-          <div>
+          <div className="claim-search__top-row">
             {!hideAdvancedFilter && !SIMPLE_SITE && (
               <Button
                 button="alt"

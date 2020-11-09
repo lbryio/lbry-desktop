@@ -87,6 +87,10 @@
   }
 }
 
+.menu__link--active {
+  color: var(--color-primary);
+}
+
 .menu__link-help {
   @extend .menu__link;
   color: var(--color-text-help);

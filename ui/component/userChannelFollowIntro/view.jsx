@@ -7,12 +7,13 @@ import { parseURI } from 'lbry-redux';
 import Button from 'component/button';
 import Card from 'component/common/card';
 import { AUTO_FOLLOW_CHANNELS } from 'config';
-import { PRIMARY_CONTENT_CHANNEL_IDS } from 'homepage';
+// import { PRIMARY_CONTENT_CHANNEL_IDS } from 'homepage';
 
 type Props = {
   subscribedChannels: Array<Subscription>,
   onContinue: () => void,
   channelSubscribe: (sub: Subscription) => void,
+  homepageData: any,
 };
 
 const channelsToSubscribe = AUTO_FOLLOW_CHANNELS.trim()
@@ -20,7 +21,8 @@ const channelsToSubscribe = AUTO_FOLLOW_CHANNELS.trim()
   .filter(x => x !== '');
 
 function UserChannelFollowIntro(props: Props) {
-  const { subscribedChannels, channelSubscribe, onContinue } = props;
+  const { subscribedChannels, channelSubscribe, onContinue, homepageData } = props;
+  const { PRIMARY_CONTENT_CHANNEL_IDS } = homepageData;
   const followingCount = (subscribedChannels && subscribedChannels.length) || 0;
 
   // subscribe to lbry
