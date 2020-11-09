@@ -94,6 +94,7 @@
   "publishes": "publishes",
   "About --[About section in Help Page]--": "About",
   "About --[tab title in Channel Page]--": "About",
+  "About --[link title in Sidebar or Footer]--": "About",
   "Share Channel": "Share Channel",
   "Go to page:": "Go to page:",
   "Enter a URL for your thumbnail.": "Enter a URL for your thumbnail.",
