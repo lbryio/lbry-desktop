@@ -1,7 +1,5 @@
 // @flow
-import type { RowDataItem } from 'homepage';
 import * as PAGES from 'constants/pages';
-import * as SIDEBAR_ROUTES from 'homepage';
 import React, { useEffect } from 'react';
 import { Route, Redirect, Switch, withRouter } from 'react-router-dom';
 import SettingsPage from 'page/settings';
@@ -55,10 +53,6 @@ import { LINKED_COMMENT_QUERY_PARAM } from 'constants/comment';
 import { parseURI, isURIValid } from 'lbry-redux';
 import { SITE_TITLE, WELCOME_VERSION } from 'config';
 
-const dynamicRoutes = Object.values(SIDEBAR_ROUTES).filter(
-  (potentialRoute: any) => potentialRoute && potentialRoute.route
-);
-
 // Tell the browser we are handling scroll restoration
 if ('scrollRestoration' in history) {
   history.scrollRestoration = 'manual';
@@ -87,6 +81,7 @@ type Props = {
   setHasNavigated: () => void,
   setReferrer: string => void,
   hasUnclaimedRefereeReward: boolean,
+  homepageData: any,
 };
 
 type PrivateRouteProps = Props & {
@@ -123,12 +118,17 @@ function AppRouter(props: Props) {
     setHasNavigated,
     hasUnclaimedRefereeReward,
     setReferrer,
+    homepageData,
   } = props;
   const { entries } = history;
   const entryIndex = history.index;
   const urlParams = new URLSearchParams(search);
   const resetScroll = urlParams.get('reset_scroll');
   const hasLinkedCommentInUrl = urlParams.get(LINKED_COMMENT_QUERY_PARAM);
+
+  const dynamicRoutes = Object.values(homepageData).filter(
+    (potentialRoute: any) => potentialRoute && potentialRoute.route
+  );
 
   // For people arriving at settings page from deeplinks, know whether they can "go back"
   useEffect(() => {

@@ -13,6 +13,7 @@ type Props = {
   followedTags: Array<Tag>,
   subscribedChannels: Array<Subscription>,
   blockedChannels: Array<string>,
+  homepageData: any,
 };
 
 type ChannelsFollowingItem = {
@@ -23,7 +24,8 @@ type ChannelsFollowingItem = {
 };
 
 function ChannelsFollowingDiscover(props: Props) {
-  const { followedTags, subscribedChannels, blockedChannels } = props;
+  const { followedTags, subscribedChannels, blockedChannels, homepageData } = props;
+  const { PRIMARY_CONTENT_CHANNEL_IDS } = homepageData;
   let rowData: Array<ChannelsFollowingItem> = [];
   const notChannels = subscribedChannels
     .map(({ uri }) => uri)
@@ -117,6 +119,7 @@ function ChannelsFollowingDiscover(props: Props) {
         </div>
       ))}
       <h1 className="claim-grid__title">{__('More Channels')}</h1>
+      {/* odysee: claimIds = PRIMARY_CONTENT_CHANNEL_IDS if simplesite CLD */}
       <ClaimListDiscover defaultOrderBy={CS.ORDER_BY_TOP} defaultFreshness={CS.FRESH_ALL} claimType="channel" />
     </Page>
   );
