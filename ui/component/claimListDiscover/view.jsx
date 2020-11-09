@@ -356,6 +356,7 @@ function ClaimListDiscover(props: Props) {
     claimSearchResult === undefined ||
     didNavigateForward ||
     (!loading &&
+      !claimSearchResultLastPageReached &&
       claimSearchResult &&
       claimSearchResult.length &&
       claimSearchResult.length < dynamicPageSize * options.page &&
