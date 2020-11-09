@@ -162,6 +162,8 @@ export default function FileRenderFloating(props: Props) {
       left: rect.left,
       width: rect.width,
       height: rect.height,
+      // $FlowFixMe
+      x: rect.x,
     };
 
     // $FlowFixMe
