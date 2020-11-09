@@ -43,7 +43,7 @@ const perform = dispatch => ({
   setClientSetting: (key, value) => dispatch(doSetClientSetting(key, value)),
   updateWalletStatus: () => dispatch(doWalletStatus()),
   confirmForgetPassword: modalProps => dispatch(doNotifyForgetPassword(modalProps)),
-  clearPlayingUri: () => dispatch(doSetPlayingUri(null)),
+  clearPlayingUri: () => dispatch(doSetPlayingUri({ uri: null })),
   setDarkTime: (time, options) => dispatch(doSetDarkTime(time, options)),
   openModal: (id, params) => dispatch(doOpenModal(id, params)),
   enterSettings: () => dispatch(doEnterSettingsPage()),
