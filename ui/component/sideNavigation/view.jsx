@@ -336,6 +336,7 @@ function SideNavigation(props: Props) {
                     <Button
                       {...passedProps}
                       label={__(linkProps.title)}
+                      title={__(linkProps.title)}
                       //   $FlowFixMe
                       navigate={linkProps.route || linkProps.link}
                       icon={pulseLibrary && linkProps.icon === ICONS.LIBRARY ? ICONS.PURCHASED : linkProps.icon}
@@ -415,6 +416,7 @@ function SideNavigation(props: Props) {
                         {...passedProps}
                         navigate={route || link}
                         label={__(linkProps.title)}
+                        title={__(linkProps.title)}
                         icon={pulseLibrary && linkProps.icon === ICONS.LIBRARY ? ICONS.PURCHASED : linkProps.icon}
                         className={classnames('navigation-link', {
                           'navigation-link--pulse': linkProps.icon === ICONS.LIBRARY && pulseLibrary,
@@ -437,6 +439,7 @@ function SideNavigation(props: Props) {
                         {...passedProps}
                         navigate={linkProps.link}
                         label={__(linkProps.title)}
+                        title={__(linkProps.title)}
                         className="navigation-link"
                         activeClass="navigation-link--active"
                       />
