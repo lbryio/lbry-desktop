@@ -5,6 +5,7 @@ import { selectEmailToVerify, selectPhoneToVerify, selectUserCountryCode, select
 import { doToast } from 'redux/actions/notifications';
 import rewards from 'rewards';
 import { Lbryio } from 'lbryinc';
+import { DOMAIN } from 'config';
 
 export function doFetchInviteStatus(shouldCallRewardList = true) {
   return dispatch => {
@@ -101,7 +102,7 @@ export function doAuthenticate(
       type: ACTIONS.AUTHENTICATION_STARTED,
     });
 
-    Lbryio.authenticate()
+    Lbryio.authenticate(DOMAIN)
       .then(user => {
         Lbryio.getAuthToken().then(token => {
           dispatch({
