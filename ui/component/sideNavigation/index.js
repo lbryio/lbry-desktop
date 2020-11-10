@@ -3,7 +3,7 @@ import { selectSubscriptions } from 'redux/selectors/subscriptions';
 import { selectPurchaseUriSuccess, doClearPurchasedUriSuccess, SETTINGS } from 'lbry-redux';
 import { selectFollowedTags } from 'redux/selectors/tags';
 import { selectUserVerifiedEmail, selectUser } from 'redux/selectors/user';
-import { makeSelectClientSetting } from 'redux/selectors/settings';
+import { makeSelectClientSetting, selectHomepageData } from 'redux/selectors/settings';
 import { doSignOut } from 'redux/actions/app';
 import { selectUnreadNotificationCount } from 'redux/selectors/notifications';
 
@@ -17,6 +17,7 @@ const select = state => ({
   purchaseSuccess: selectPurchaseUriSuccess(state),
   unreadCount: selectUnreadNotificationCount(state),
   user: selectUser(state),
+  homepageData: selectHomepageData(state),
 });
 
 export default connect(select, {
