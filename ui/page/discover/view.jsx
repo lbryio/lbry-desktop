@@ -21,7 +21,6 @@ type Props = {
   doToggleTagFollowDesktop: string => void,
   doResolveUri: string => void,
   isAuthenticated: boolean,
-  dynamicRouteProps: RowDataItem,
   tileLayout: boolean,
 };
 
@@ -35,7 +34,6 @@ function DiscoverPage(props: Props) {
     doResolveUri,
     isAuthenticated,
     tileLayout,
-    dynamicRouteProps,
   } = props;
   const buttonRef = useRef();
   const isHovering = useHover(buttonRef);
@@ -85,8 +83,8 @@ function DiscoverPage(props: Props) {
   } else {
     headerLabel = (
       <span>
-        <Icon icon={(dynamicRouteProps && dynamicRouteProps.icon) || ICONS.DISCOVER} size={10} />
-        {(dynamicRouteProps && dynamicRouteProps.title) || __('All Content')}
+        <Icon icon={ICONS.DISCOVER} size={10} />
+        {__('All Content')}
       </span>
     );
   }
@@ -94,19 +92,14 @@ function DiscoverPage(props: Props) {
   return (
     <Page noFooter fullWidthPage={tileLayout}>
       <ClaimListDiscover
-        limitClaimsPerChannel={3}
         header={repostedUri ? <span /> : undefined}
         tileLayout={repostedUri ? false : tileLayout}
-        defaultOrderBy={CS.ORDER_BY_NEW}
         claimType={claimType ? [claimType] : undefined}
         headerLabel={headerLabel}
         tags={tags}
         hiddenNsfwMessage={<HiddenNsfw type="page" />}
         repostedClaimId={repostedClaim ? repostedClaim.claim_id : null}
         injectedItem={SHOW_ADS && !isAuthenticated && IS_WEB && <Ads type="video" />}
-        channelIds={
-          (dynamicRouteProps && dynamicRouteProps.options && dynamicRouteProps.options.channelIds) || undefined
-        }
         meta={
           tag &&
           !isMobile && (
