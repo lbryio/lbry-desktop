@@ -1,7 +1,7 @@
 .nudge {
   z-index: 3;
   position: absolute;
-  left: 0;
+  left: 5rem;
   top: 4rem;
   white-space: normal;
   overflow: visible;
@@ -10,6 +10,7 @@
   box-shadow: var(--card-box-shadow);
   background-color: var(--color-secondary);
   color: var(--color-white);
+  font-weight: bold;
 
   .button--close {
     .icon {
@@ -27,7 +28,7 @@
     height: 1rem;
     width: 1rem;
     top: -0.5rem;
-    left: 3rem;
+    left: 5rem;
     transform: rotate(45deg);
     background-color: var(--color-secondary);
   }

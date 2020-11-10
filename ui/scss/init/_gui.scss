@@ -220,7 +220,7 @@ textarea {
   margin-top: var(--spacing-s);
 
   &:not(:last-child) {
-    margin-bottom: var(--spacing-s);
+    margin-bottom: var(--spacing-l);
   }
 }
 
@@ -375,4 +375,24 @@ textarea {
 .adspruce-bannerspot {
   height: 5rem;
   width: 100%;
+}
+
+.no-evil {
+  font-size: var(--font-title);
+  font-family: 'Times New Roman', Times, serif;
+  font-weight: 700;
+  line-height: 0.7;
+
+  .no-evil--red {
+    color: #db4437;
+  }
+  .no-evil--blue {
+    color: #4285f4;
+  }
+  .no-evil--yellow {
+    color: #f4b400;
+  }
+  .no-evil--green {
+    color: #0f9d58;
+  }
 }
