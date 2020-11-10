@@ -8,9 +8,7 @@ import React from 'react';
 import Page from 'component/page';
 import Button from 'component/button';
 import ClaimTilesDiscover from 'component/claimTilesDiscover';
-
 import Icon from 'component/common/icon';
-import { useIsLargeScreen } from 'effects/use-screensize';
 
 type Props = {
   authenticated: boolean,
@@ -22,7 +20,6 @@ type Props = {
 
 function HomePage(props: Props) {
   const { followedTags, subscribedChannels, authenticated, showNsfw, homepageData } = props;
-  const isLargeScreen = useIsLargeScreen();
   const showPersonalizedChannels = (authenticated || !IS_WEB) && subscribedChannels && subscribedChannels.length > 0;
   const showPersonalizedTags = (authenticated || !IS_WEB) && followedTags && followedTags.length > 0;
   const showIndividualTags = showPersonalizedTags && followedTags.length < 5;
@@ -77,7 +74,7 @@ function HomePage(props: Props) {
             </h1>
           )}
 
-          <ClaimTilesDiscover {...options} pageSize={isLargeScreen ? options.pageSize * (3 / 2) : options.pageSize} />
+          <ClaimTilesDiscover {...options} />
           {link && (
             <Button
               className="claim-grid__title--secondary"
