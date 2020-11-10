@@ -6,8 +6,7 @@ import React from 'react';
 import Page from 'component/page';
 // import Button from 'component/button';
 import ClaimListDiscover from 'component/claimListDiscover';
-import * as CS from 'constants/claim_search';
-import { toCapitalCase } from 'util/string';
+// import { toCapitalCase } from 'util/string';
 import { SIMPLE_SITE } from 'config';
 
 type Props = {
@@ -18,13 +17,18 @@ type Props = {
 };
 
 function ChannelsFollowingDiscover(props: Props) {
-  const { followedTags, subscribedChannels, blockedChannels, homepageData } = props;
+  const {
+    //   followedTags,
+    // subscribedChannels,
+    // blockedChannels,
+    homepageData,
+  } = props;
   const { PRIMARY_CONTENT_CHANNEL_IDS } = homepageData;
-  let rowData: Array<ChannelsFollowingItem> = [];
-  const notChannels = subscribedChannels
-    .map(({ uri }) => uri)
-    .concat(blockedChannels)
-    .map(uri => uri.split('#')[1]);
+  //   let rowData: Array<ChannelsFollowingItem> = [];
+  //   const notChannels = subscribedChannels
+  //     .map(({ uri }) => uri)
+  //     .concat(blockedChannels)
+  //     .map(uri => uri.split('#')[1]);
 
   //   rowData.push({
   //     title: 'Top Channels Of All Time',
@@ -109,9 +113,9 @@ function ChannelsFollowingDiscover(props: Props) {
             {help}
           </h1>
 
-		<ClaimTilesDiscover {...options} />
+          <ClaimTilesDiscover {...options} />
         </div>
-      ))}
+      ))} */}
       <h1 className="claim-grid__title">{__('More Channels')}</h1>
       {/* odysee: claimIds = PRIMARY_CONTENT_CHANNEL_IDS if simplesite CLD */}
 

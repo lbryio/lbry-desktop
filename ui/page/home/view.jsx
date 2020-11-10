@@ -8,7 +8,6 @@ import Page from 'component/page';
 import Button from 'component/button';
 import ClaimTilesDiscover from 'component/claimTilesDiscover';
 import Icon from 'component/common/icon';
-import { useIsLargeScreen } from 'effects/use-screensize';
 
 type Props = {
   authenticated: boolean,
@@ -73,7 +72,7 @@ function HomePage(props: Props) {
             </h1>
           )}
 
-          <ClaimTilesDiscover {...options} pageSize={isLargeScreen ? options.pageSize * (3 / 2) : options.pageSize} />
+          <ClaimTilesDiscover {...options} />
           {link && (
             <Button
               className="claim-grid__title--secondary"
