@@ -1,5 +1,6 @@
 // @flow
 import { SHOW_ADS, DOMAIN } from 'config';
+import type { RowDataItem } from 'homepage';
 import * as ICONS from 'constants/icons';
 import * as CS from 'constants/claim_search';
 import React, { useRef } from 'react';

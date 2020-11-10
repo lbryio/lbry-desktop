@@ -113,7 +113,7 @@ function ChannelsFollowingDiscover(props: Props) {
             {help}
           </h1>
 
-          <ClaimTilesDiscover {...options} />
+		<ClaimTilesDiscover {...options} />
         </div>
       ))} */}
 
