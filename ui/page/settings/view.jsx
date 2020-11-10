@@ -10,10 +10,13 @@ import Page from 'component/page';
 import SettingLanguage from 'component/settingLanguage';
 import FileSelector from 'component/common/file-selector';
 import SyncToggle from 'component/syncToggle';
+import HomepageSelector from 'component/homepageSelector';
 import Card from 'component/common/card';
 import SettingAccountPassword from 'component/settingAccountPassword';
 import classnames from 'classnames';
 import { getPasswordFromCookie } from 'util/saved-passwords';
+// $FlowFixMe
+import homepages from 'homepages';
 import { Lbryio } from 'lbryinc';
 import Yrbl from 'component/yrbl';
 
@@ -214,6 +217,9 @@ class SettingsPage extends React.PureComponent<Props, State> {
         ) : (
           <div className={classnames({ 'card--disabled': IS_WEB && !isAuthenticated })}>
             <Card title={__('Language')} actions={<SettingLanguage />} />
+            {homepages && Object.keys(homepages).length > 1 && (
+              <Card title={__('Homepage')} actions={<HomepageSelector />} />
+            )}
             {isAuthenticated && <SettingAccountPassword />}
             {/* @if TARGET='app' */}
             <Card

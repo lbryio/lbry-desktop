@@ -1,27 +1,32 @@
 // @flow
-import type { RowDataItem } from 'homepage';
+// import type { RowDataItem } from 'homepages';
 import * as ICONS from 'constants/icons';
 import * as PAGES from 'constants/pages';
 import { SITE_NAME } from 'config';
+import classnames from 'classnames';
 import React from 'react';
 import Page from 'component/page';
 import Button from 'component/button';
 import ClaimTilesDiscover from 'component/claimTilesDiscover';
-import getHomepage from 'homepage';
+
 import Icon from 'component/common/icon';
+import { useIsLargeScreen } from 'effects/use-screensize';
 
 type Props = {
   authenticated: boolean,
   followedTags: Array<Tag>,
   subscribedChannels: Array<Subscription>,
   showNsfw: boolean,
+  homepageData: any,
 };
 
 function HomePage(props: Props) {
-  const { followedTags, subscribedChannels, authenticated, showNsfw } = props;
+  const { followedTags, subscribedChannels, authenticated, showNsfw, homepageData } = props;
+  const isLargeScreen = useIsLargeScreen();
   const showPersonalizedChannels = (authenticated || !IS_WEB) && subscribedChannels && subscribedChannels.length > 0;
   const showPersonalizedTags = (authenticated || !IS_WEB) && followedTags && followedTags.length > 0;
   const showIndividualTags = showPersonalizedTags && followedTags.length < 5;
+  const { default: getHomepage } = homepageData;
 
   const rowData: Array<RowDataItem> = getHomepage(
     authenticated,
@@ -35,6 +40,7 @@ function HomePage(props: Props) {
 
   return (
     <Page fullWidthPage>
+      {/* MAYBE NOT SIMPLESITE */}
       {(authenticated || !IS_WEB) && !subscribedChannels.length && (
         <div className="notice-message">
           <h1 className="section__title">
@@ -49,24 +55,36 @@ function HomePage(props: Props) {
           </p>
         </div>
       )}
-      {rowData.map(({ title, link, icon, help, options = {} }) => (
+      {rowData.map(({ title, route, link, icon, help, options = {} }, index) => (
         <div key={title} className="claim-grid__wrapper">
-          <h1 className="claim-grid__header">
-            <Button navigate={link} button="link">
-              {icon && <Icon className="claim-grid__header-icon" sectionIcon icon={icon} size={20} />}
-              <span className="claim-grid__title">{title}</span>
-              {help}
-            </Button>
-          </h1>
+          {index === 0 ? (
+            <div className="section__header--actions">
+              <span
+                className={classnames('claim-grid__title', {
+                  'claim-grid__title--first': index === 0,
+                })}
+              >
+                {title}
+              </span>
+            </div>
+          ) : (
+            <h1 className="claim-grid__header">
+              <Button navigate={route || link} button="link">
+                {icon && <Icon className="claim-grid__header-icon" sectionIcon icon={icon} size={20} />}
+                <span className="claim-grid__title">{__(title)}</span>
+                {help}
+              </Button>
+            </h1>
+          )}
 
-          <ClaimTilesDiscover {...options} />
+          <ClaimTilesDiscover {...options} pageSize={isLargeScreen ? options.pageSize * (3 / 2) : options.pageSize} />
           {link && (
             <Button
               className="claim-grid__title--secondary"
               button="link"
-              navigate={link}
+              navigate={route || link}
               iconRight={ICONS.ARROW_RIGHT}
-              label={title}
+              label={__('View More')}
             />
           )}
         </div>
