@@ -21,7 +21,9 @@ export default function WebUploadList(props: Props) {
     !!uploadCount && (
       <Card
         title={__('Currently uploading')}
-        subtitle={uploadCount > 1 ? __('You files are currently uploading.') : __('Your file is currently uploading.')}
+        subtitle={
+          uploadCount > 1 ? __('You videos are currently uploading.') : __('Your video is currently uploading.')
+        }
         body={
           <section>
             {/* $FlowFixMe */}

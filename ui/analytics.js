@@ -38,6 +38,7 @@ type Analytics = {
   playerLoadedEvent: (?boolean) => void,
   playerStartedEvent: (?boolean) => void,
   videoStartEvent: (string, number) => void,
+  adsFetchedEvent: () => void,
   videoBufferEvent: (
     StreamClaim,
     {
@@ -236,6 +237,9 @@ const analytics: Analytics = {
   },
   playerStartedEvent: embedded => {
     sendMatomoEvent('Player', 'Started', embedded ? 'embedded' : 'onsite');
+  },
+  adsFetchedEvent: () => {
+    sendMatomoEvent('Media', 'AdsFetched');
   },
   tagFollowEvent: (tag, following) => {
     sendMatomoEvent('Tag', following ? 'Tag-Follow' : 'Tag-Unfollow', tag);

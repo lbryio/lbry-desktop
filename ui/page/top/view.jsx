@@ -5,7 +5,7 @@ import Page from 'component/page';
 import ClaimListDiscover from 'component/claimListDiscover';
 import ClaimEffectiveAmount from 'component/claimEffectiveAmount';
 import SearchTopClaim from 'component/searchTopClaim';
-import { ORDER_BY_TOP, FRESH_ALL } from 'constants/claim_search';
+import * as CS from 'constants/claim_search';
 import Button from 'component/button';
 
 type Props = {
@@ -21,8 +21,9 @@ function TopPage(props: Props) {
       <SearchTopClaim query={name} hideLink />
       <ClaimListDiscover
         name={channelActive ? `@${name}` : name}
-        defaultFreshness={FRESH_ALL}
-        defaultOrderBy={ORDER_BY_TOP}
+        defaultFreshness={CS.FRESH_ALL}
+        defaultOrderBy={CS.ORDER_BY_TOP}
+        streamType={CS.CONTENT_ALL}
         includeSupportAction
         renderProperties={claim => (
           <span className="claim-preview__custom-properties">

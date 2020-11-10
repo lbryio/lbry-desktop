@@ -57,7 +57,6 @@ type SideNavLink = {
 function SideNavigation(props: Props) {
   const {
     subscriptions,
-    followedTags,
     doSignOut,
     email,
     purchaseSuccess,
@@ -69,6 +68,7 @@ function SideNavigation(props: Props) {
     unreadCount,
     homepageData,
     user,
+    followedTags,
   } = props;
 
   const { EXTRA_SIDEBAR_LINKS } = homepageData;
@@ -214,7 +214,7 @@ function SideNavigation(props: Props) {
     });
   }
 
-  const notificationsEnabled = user && user.experimental_ui;
+  const notificationsEnabled = SIMPLE_SITE || (user && user.experimental_ui);
   const isAuthenticated = Boolean(email);
   // SIDE LINKS: FOLLOWING, HOME, [FULL,] [EXTRA]
   let SIDE_LINKS: Array<SideNavLink> = [];
@@ -416,7 +416,7 @@ function SideNavigation(props: Props) {
                   const { hideForUnauth, ...passedProps } = linkProps;
 
                   return !email && hideForUnauth && IS_WEB ? null : (
-                    <li key={linkProps.icon} className="mobile-only">
+                    <li key={linkProps.icon}>
                       <Button
                         {...passedProps}
                         navigate={linkProps.link}
