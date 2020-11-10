@@ -113,11 +113,9 @@ function ChannelsFollowingDiscover(props: Props) {
             {help}
           </h1>
 
-		<ClaimTilesDiscover {...options} />
+          <ClaimTilesDiscover {...options} />
         </div>
       ))} */}
-
-      {/* odysee: claimIds = PRIMARY_CONTENT_CHANNEL_IDS if simplesite CLD */}
 
       <ClaimListDiscover
         defaultOrderBy={CS.ORDER_BY_TRENDING}
