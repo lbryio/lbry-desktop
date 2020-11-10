@@ -28,9 +28,7 @@ function SelectHomepage(props: Props) {
         label={__('Homepage')}
         onChange={handleSetHomepage}
         value={homepage}
-        helper={__(
-          'Multi-language support is brand new and incomplete. Switching your language may have unintended consequences, like glossolalia.'
-        )}
+        helper={__('Tailor your experience.')}
       >
         {Object.keys(homepages).map(hp => (
           <option key={'hp' + hp} value={hp}>
