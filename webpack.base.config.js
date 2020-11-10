@@ -75,8 +75,7 @@ let baseConfig = {
     extensions: ['.js', '.jsx', '.json', '.scss'],
     alias: {
       config: path.resolve(__dirname, 'config.js'),
-      homepage: 'util/homepage.js',
-      homepages: process.env.CUSTOM_HOMEPAGE === 'true' ? path.resolve(__dirname, 'custom/homepages/index.js') : ('homepages/index.js'),
+      homepage: process.env.CUSTOM_HOMEPAGE === 'true' ? path.resolve(__dirname, 'custom/homepage.js') : ('util/homepage.js'),
       lbryinc: 'lbryinc/dist/bundle.es.js',
       // Build optimizations for 'redux-persist-transform-filter'
       'redux-persist-transform-filter': 'redux-persist-transform-filter/index.js',

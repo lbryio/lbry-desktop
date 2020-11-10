@@ -13,7 +13,6 @@ type Props = {
   onContinue: () => void,
   onBack: () => void,
   channelSubscribe: (sub: Subscription) => void,
-  homepageData: any,
 };
 
 const channelsToSubscribe = AUTO_FOLLOW_CHANNELS.trim()
@@ -21,8 +20,7 @@ const channelsToSubscribe = AUTO_FOLLOW_CHANNELS.trim()
   .filter(x => x !== '');
 
 function UserChannelFollowIntro(props: Props) {
-  const { subscribedChannels, channelSubscribe, onContinue, onBack, homepageData } = props;
-  const { PRIMARY_CONTENT_CHANNEL_IDS } = homepageData;
+  const { subscribedChannels, channelSubscribe, onContinue, onBack } = props;
   const followingCount = (subscribedChannels && subscribedChannels.length) || 0;
 
   // subscribe to lbry
@@ -58,8 +56,6 @@ function UserChannelFollowIntro(props: Props) {
               defaultOrderBy={CS.ORDER_BY_TOP}
               defaultFreshness={CS.FRESH_ALL}
               claimType="channel"
-              // claimIds={PRIMARY_CONTENT_CHANNEL_IDS} // odysee
-
               defaultTags={followingCount > 3 ? CS.TAGS_FOLLOWED : undefined}
             />
             {followingCount > 0 && (

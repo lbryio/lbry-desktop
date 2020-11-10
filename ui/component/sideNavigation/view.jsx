@@ -8,7 +8,7 @@ import classnames from 'classnames';
 import Icon from 'component/common/icon';
 import NotificationBubble from 'component/notificationBubble';
 import I18nMessage from 'component/i18nMessage';
-import { PINNED_LABEL_1, PINNED_URI_1, PINNED_URI_2, PINNED_LABEL_2, SIMPLE_SITE } from 'config';
+import { PINNED_LABEL_1, PINNED_URI_1, PINNED_URI_2, PINNED_LABEL_2 } from 'config';
 // @if TARGET='app'
 import { IS_MAC } from 'component/app/view';
 // @endif
@@ -17,14 +17,14 @@ const ESCAPE_KEY_CODE = 27;
 const BACKSLASH_KEY_CODE = 220;
 
 const HOME = {
-  title: 'Home',
-  link: `/`,
+  label: 'Home',
+  navigate: `/`,
   icon: ICONS.HOME,
 };
 
 const RECENT_FROM_FOLLOWING = {
-  title: 'Following --[sidebar button]--',
-  link: `/$/${PAGES.CHANNELS_FOLLOWING}`,
+  label: 'Following --[sidebar button]--',
+  navigate: `/$/${PAGES.CHANNELS_FOLLOWING}`,
   icon: ICONS.SUBSCRIBE,
 };
 
@@ -42,16 +42,6 @@ type Props = {
   purchaseSuccess: boolean,
   doClearPurchasedUriSuccess: () => void,
   user: ?User,
-  homepageData: any,
-};
-
-type SideNavLink = {
-  title: string,
-  link?: string,
-  onClick?: () => any,
-  icon: string,
-  extra?: Node,
-  hideForUnauth?: boolean,
 };
 
 function SideNavigation(props: Props) {
@@ -67,85 +57,102 @@ function SideNavigation(props: Props) {
     isMediumScreen,
     isOnFilePage,
     unreadCount,
-    homepageData,
     user,
   } = props;
 
-  const { EXTRA_SIDEBAR_LINKS } = homepageData;
-
-  const FULL_LINKS: Array<SideNavLink> = [
+  const TOP_LEVEL_LINKS: Array<{
+    label: string,
+    navigate: string,
+    icon: string,
+    extra?: Node,
+    hideForUnauth?: boolean,
+  }> = [
+    HOME,
+    RECENT_FROM_FOLLOWING,
     {
-      title: 'Your Tags',
+      label: 'Your Tags',
       navigate: `/$/${PAGES.TAGS_FOLLOWING}`,
       icon: ICONS.TAG,
       hideForUnauth: true,
     },
     {
-      title: 'Discover',
+      label: 'Discover',
       navigate: `/$/${PAGES.DISCOVER}`,
       icon: ICONS.DISCOVER,
     },
     {
-      title: IS_WEB ? 'Purchased' : 'Library',
+      label: IS_WEB ? 'Purchased' : 'Library',
       navigate: `/$/${PAGES.LIBRARY}`,
       icon: ICONS.PURCHASED,
       hideForUnauth: true,
     },
   ];
 
-  const MOBILE_LINKS: Array<SideNavLink> = [
+  if (PINNED_URI_1 && PINNED_LABEL_1) {
+    TOP_LEVEL_LINKS.push({
+      label: PINNED_LABEL_1,
+      navigate: PINNED_URI_1,
+      icon: ICONS.PINNED,
+    });
+  }
+
+  if (PINNED_URI_2 && PINNED_LABEL_2) {
+    TOP_LEVEL_LINKS.push({
+      label: PINNED_LABEL_2,
+      navigate: PINNED_URI_2,
+      icon: ICONS.PINNED,
+    });
+  }
+
+  const ABSOLUTE_LINKS: Array<{
+    label: string,
+    navigate?: string,
+    onClick?: () => any,
+    icon: string,
+    extra?: Node,
+    hideForUnauth?: boolean,
+  }> = [
     {
-      title: 'Notifications',
-      link: `/$/${PAGES.NOTIFICATIONS}`,
-      icon: ICONS.NOTIFICATION,
-      extra: <NotificationBubble inline />,
-      hideForUnauth: true,
-    },
-    {
-      title: 'Discover',
-      link: `/$/${PAGES.DISCOVER}`,
-      icon: ICONS.DISCOVER,
-    },
-    {
-      title: IS_WEB ? 'Purchased' : 'Library',
-      navigate: `/$/${PAGES.LIBRARY}`,
-      icon: ICONS.PURCHASED,
-      hideForUnauth: true,
-    },
-    {
-      title: 'Upload',
-      link: `/$/${PAGES.UPLOAD}`,
+      label: 'Upload',
+      navigate: `/$/${PAGES.UPLOAD}`,
       icon: ICONS.PUBLISH,
     },
     {
-      title: 'New Channel',
-      link: `/$/${PAGES.CHANNEL_NEW}`,
+      label: 'New Channel',
+      navigate: `/$/${PAGES.CHANNEL_NEW}`,
       icon: ICONS.CHANNEL,
       hideForUnauth: true,
     },
     {
-      title: 'Uploads',
-      link: `/$/${PAGES.UPLOADS}`,
+      label: 'Uploads',
+      navigate: `/$/${PAGES.UPLOADS}`,
       icon: ICONS.PUBLISH,
       hideForUnauth: true,
     },
 
     {
-      title: 'Channels',
-      link: `/$/${PAGES.CHANNELS}`,
+      label: 'Channels',
+      navigate: `/$/${PAGES.CHANNELS}`,
       icon: ICONS.CHANNEL,
       hideForUnauth: true,
     },
     {
-      title: 'Creator Analytics',
-      link: `/$/${PAGES.CREATOR_DASHBOARD}`,
+      label: 'Creator Analytics',
+      navigate: `/$/${PAGES.CREATOR_DASHBOARD}`,
       icon: ICONS.ANALYTICS,
       hideForUnauth: true,
     },
     {
-      title: 'Wallet',
-      link: `/$/${PAGES.WALLET}`,
+      label: 'Wallet',
+      navigate: `/$/${PAGES.WALLET}`,
       icon: ICONS.WALLET,
+      hideForUnauth: true,
+    },
+    {
+      label: 'Notifications',
+      navigate: `/$/${PAGES.NOTIFICATIONS}`,
+      icon: ICONS.NOTIFICATION,
+      extra: <NotificationBubble inline />,
       hideForUnauth: true,
     },
     {
@@ -155,92 +162,68 @@ function SideNavigation(props: Props) {
       hideForUnauth: true,
     },
     {
-      title: 'Invites',
-      link: `/$/${PAGES.INVITE}`,
+      label: 'Invites',
+      navigate: `/$/${PAGES.INVITE}`,
       icon: ICONS.INVITE,
       hideForUnauth: true,
     },
     {
-      title: 'Settings',
-      link: `/$/${PAGES.SETTINGS}`,
+      label: 'Settings',
+      navigate: `/$/${PAGES.SETTINGS}`,
       icon: ICONS.SETTINGS,
       hideForUnauth: true,
     },
     {
-      title: 'Help',
-      link: `/$/${PAGES.HELP}`,
+      label: 'Help',
+      navigate: `/$/${PAGES.HELP}`,
       icon: ICONS.HELP,
       hideForUnauth: true,
     },
     {
-      title: 'Sign Out',
+      label: 'Sign Out',
       onClick: doSignOut,
       icon: ICONS.SIGN_OUT,
       hideForUnauth: true,
     },
   ];
 
-  const UNAUTH_LINKS: Array<SideNavLink> = [
+  const UNAUTH_LINKS: Array<{
+    label: string,
+    navigate: string,
+    icon: string,
+    extra?: Node,
+    hideForUnauth?: boolean,
+  }> = [
     {
-      title: 'Log In',
-      link: `/$/${PAGES.AUTH_SIGNIN}`,
+      label: 'Log In',
+      navigate: `/$/${PAGES.AUTH_SIGNIN}`,
       icon: ICONS.SIGN_IN,
     },
     {
-      title: 'Sign Up',
-      link: `/$/${PAGES.AUTH}`,
+      label: 'Sign Up',
+      navigate: `/$/${PAGES.AUTH}`,
       icon: ICONS.SIGN_UP,
     },
     {
-      title: 'Settings',
-      link: `/$/${PAGES.SETTINGS}`,
+      label: 'Settings',
+      navigate: `/$/${PAGES.SETTINGS}`,
       icon: ICONS.SETTINGS,
     },
     {
-      title: 'Help',
-      link: `/$/${PAGES.HELP}`,
+      label: 'Help',
+      navigate: `/$/${PAGES.HELP}`,
       icon: ICONS.HELP,
     },
   ];
-  if (PINNED_URI_1 && PINNED_LABEL_1) {
-    MOBILE_LINKS.push({
-      label: PINNED_LABEL_1,
-      navigate: PINNED_URI_1,
-      icon: ICONS.PINNED,
-    });
-  }
-
-  if (PINNED_URI_2 && PINNED_LABEL_2) {
-    MOBILE_LINKS.push({
-      label: PINNED_LABEL_2,
-      navigate: PINNED_URI_2,
-      icon: ICONS.PINNED,
-    });
-  }
 
   const notificationsEnabled = user && user.experimental_ui;
   const isAuthenticated = Boolean(email);
-  // SIDE LINKS: FOLLOWING, HOME, [FULL,] [EXTRA]
-  let SIDE_LINKS: Array<SideNavLink> = [];
-  if (isAuthenticated) {
-    SIDE_LINKS.push(RECENT_FROM_FOLLOWING);
-  }
-  SIDE_LINKS.push(HOME);
-
-  if (!SIMPLE_SITE) {
-    SIDE_LINKS.push(...FULL_LINKS);
-  }
-  // $FlowFixMe
-  if (EXTRA_SIDEBAR_LINKS) {
-    SIDE_LINKS.push(EXTRA_SIDEBAR_LINKS);
-  }
-
   const [pulseLibrary, setPulseLibrary] = React.useState(false);
   const isPersonalized = !IS_WEB || isAuthenticated;
   const isAbsolute = isOnFilePage || isMediumScreen;
   const microNavigation = !sidebarOpen || isMediumScreen;
   const subLinks = email
-    ? MOBILE_LINKS.filter(link => {
+    ? ABSOLUTE_LINKS.filter(link => {
         if (!notificationsEnabled && link.icon === ICONS.NOTIFICATION) {
           return false;
         }
@@ -248,6 +231,7 @@ function SideNavigation(props: Props) {
         return true;
       })
     : UNAUTH_LINKS;
+
   React.useEffect(() => {
     if (purchaseSuccess) {
       setPulseLibrary(true);
@@ -307,16 +291,13 @@ function SideNavigation(props: Props) {
         >
           <div>
             <ul className={classnames('navigation-links', { 'navigation-links--micro': !sidebarOpen })}>
-              {SIDE_LINKS.map(linkProps => {
-                //   $FlowFixMe
+              {TOP_LEVEL_LINKS.map(linkProps => {
                 const { hideForUnauth, ...passedProps } = linkProps;
                 return !email && linkProps.hideForUnauth && IS_WEB ? null : (
                   <li key={linkProps.icon}>
                     <Button
                       {...passedProps}
-                      label={__(linkProps.title)}
-                      //   $FlowFixMe
-                      navigate={linkProps.route || linkProps.link}
+                      label={__(linkProps.label)}
                       icon={pulseLibrary && linkProps.icon === ICONS.LIBRARY ? ICONS.PURCHASED : linkProps.icon}
                       className={classnames('navigation-link', {
                         'navigation-link--pulse': linkProps.icon === ICONS.LIBRARY && pulseLibrary,
@@ -324,14 +305,14 @@ function SideNavigation(props: Props) {
                       })}
                       activeClass="navigation-link--active"
                     />
-                    {linkProps.extra && linkProps.extra}
+                    {linkProps.extra}
                   </li>
                 );
               })}
             </ul>
 
             {sidebarOpen && isPersonalized && subscriptions && subscriptions.length > 0 && (
-              <ul className="navigation__secondary navigation-links">
+              <ul className="navigation__secondary navigation-links navigation-links--small">
                 {subscriptions.map(({ uri, channelName }, index) => (
                   <li key={uri} className="navigation-link__wrapper">
                     <Button
@@ -344,7 +325,7 @@ function SideNavigation(props: Props) {
                 ))}
               </ul>
             )}
-            {!SIMPLE_SITE && sidebarOpen && isPersonalized && followedTags && followedTags.length > 0 && (
+            {sidebarOpen && isPersonalized && followedTags && followedTags.length > 0 && (
               <ul className="navigation__secondary navigation-links navigation-links--small">
                 {followedTags.map(({ name }, key) => (
                   <li key={name} className="navigation-link__wrapper">
@@ -368,7 +349,6 @@ function SideNavigation(props: Props) {
                 </div>
               ))}
           </div>
-          {sidebarOpen && helpLinks}
         </nav>
       )}
 
@@ -383,15 +363,14 @@ function SideNavigation(props: Props) {
           >
             <div>
               <ul className="navigation-links--absolute">
-                {SIDE_LINKS.map(linkProps => {
-                  //   $FlowFixMe
-                  const { hideForUnauth, link, route, ...passedProps } = linkProps;
-                  return !email && linkProps.hideForUnauth && IS_WEB ? null : (
+                {TOP_LEVEL_LINKS.map(linkProps => {
+                  const { hideForUnauth, ...passedProps } = linkProps;
+
+                  return !email && hideForUnauth && IS_WEB ? null : (
                     <li key={linkProps.icon}>
                       <Button
                         {...passedProps}
-                        navigate={route || link}
-                        label={__(linkProps.title)}
+                        label={__(linkProps.label)}
                         icon={pulseLibrary && linkProps.icon === ICONS.LIBRARY ? ICONS.PURCHASED : linkProps.icon}
                         className={classnames('navigation-link', {
                           'navigation-link--pulse': linkProps.icon === ICONS.LIBRARY && pulseLibrary,
@@ -399,12 +378,12 @@ function SideNavigation(props: Props) {
                         })}
                         activeClass="navigation-link--active"
                       />
-                      {linkProps.extra && linkProps.extra}
+                      {linkProps.extra}
                     </li>
                   );
                 })}
               </ul>
-              <ul className="navigation-links--absolute mobile-only">
+              <ul className="navigation-links--absolute">
                 {subLinks.map(linkProps => {
                   const { hideForUnauth, ...passedProps } = linkProps;
 
@@ -412,8 +391,7 @@ function SideNavigation(props: Props) {
                     <li key={linkProps.icon} className="mobile-only">
                       <Button
                         {...passedProps}
-                        navigate={linkProps.link}
-                        label={__(linkProps.title)}
+                        label={__(linkProps.label)}
                         className="navigation-link"
                         activeClass="navigation-link--active"
                       />
@@ -422,8 +400,8 @@ function SideNavigation(props: Props) {
                   );
                 })}
               </ul>
-              {sidebarOpen && isPersonalized && subscriptions && subscriptions.length > 0 && (
-                <ul className="navigation__secondary navigation-links">
+              {isPersonalized && subscriptions && subscriptions.length > 0 && (
+                <ul className="navigation__secondary navigation-links--small">
                   {subscriptions.map(({ uri, channelName }, index) => (
                     <li key={uri} className="navigation-link__wrapper">
                       <Button
@@ -436,7 +414,7 @@ function SideNavigation(props: Props) {
                   ))}
                 </ul>
               )}
-              {!SIMPLE_SITE && sidebarOpen && isPersonalized && followedTags && followedTags.length > 0 && (
+              {sidebarOpen && isPersonalized && followedTags && followedTags.length > 0 && (
                 <ul className="navigation__secondary navigation-links navigation-links--small">
                   {followedTags.map(({ name }, key) => (
                     <li key={name} className="navigation-link__wrapper">
@@ -447,7 +425,6 @@ function SideNavigation(props: Props) {
               )}
               {!isAuthenticated && unAuthNudge}
             </div>
-            {helpLinks}
           </nav>
           <div
             className={classnames('navigation__overlay', {
