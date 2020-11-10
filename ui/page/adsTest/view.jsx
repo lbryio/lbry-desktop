@@ -1,34 +1,20 @@
 // @flow
-import * as React from 'react';
-import Page from 'component/page';
-import VideoJs from 'component/viewers/videoViewer/internal/videojs';
+// import React from 'react';
+// import FilePage from 'page/file';
 
-export default function AdsTestPage() {
-  const [show, setShow] = React.useState(false);
-  React.useEffect(() => {
-    const script = document.createElement('script');
-    script.src = 'https://sdk.adspruce.com/1/adsprucetag.js?pid=8394&sid=2"';
-    script.defer = true;
+type Props = {
+  doResolveUri: string => void,
+  claim: ?StreamClaim,
+};
 
-    // $FlowFixMe
-    document.head.appendChild(script);
-  }, []);
-
-  React.useEffect(() => {
-    setTimeout(() => {
-      setShow(true);
-    }, 1000);
-  }, []);
-
-  return (
-    <Page className="ads-test">
-      <h1>ads test</h1>
-      {show && (
-        <div style={{ marginTop: '5rem' }}>
-          {/* $FlowFixMe */}
-          <VideoJs adsTest />
-        </div>
-      )}
-    </Page>
-  );
+export default function AdsTestPage(props: Props) {
+  return null;
+  //   const { doResolveUri, claim } = props;
+  //   const hasClaim = claim !== undefined;
+  //   React.useEffect(() => {
+  //     if (!hasClaim) {
+  //       doResolveUri('lbry://fullscreenrelease#7');
+  //     }
+  //   }, [hasClaim, doResolveUri]);
+  //   return <div>{hasClaim && <FilePage uri="lbry://fullscreenrelease#7" />}</div>;
 }

@@ -35,6 +35,16 @@ type Props = {
   claimRewards: () => void,
   savePosition: (string, number) => void,
   clearPosition: string => void,
+  authenticated: boolean,
+  homepageData: {
+    PRIMARY_CONTENT_CHANNEL_IDS?: Array<string>,
+    ENLIGHTENMENT_CHANNEL_IDS?: Array<string>,
+    GAMING_CHANNEL_IDS?: Array<string>,
+    SCIENCE_CHANNEL_IDS?: Array<string>,
+    TECHNOLOGY_CHANNEL_IDS?: Array<string>,
+    COMMUNITY_CHANNEL_IDS?: Array<string>,
+    FINCANCE_CHANNEL_IDS?: Array<string>,
+  },
 };
 
 /*
@@ -62,13 +72,35 @@ function VideoViewer(props: Props) {
     savePosition,
     clearPosition,
     desktopPlayStartTime,
+    homepageData,
+    // authenticated,
   } = props;
   const claimId = claim && claim.claim_id;
+  const channelClaimId = claim && claim.signing_channel && claim.signing_channel.claim_id;
   const isAudio = contentType.includes('audio');
   const forcePlayer = FORCE_CONTENT_TYPE_PLAYER.includes(contentType);
   const [isPlaying, setIsPlaying] = useState(false);
   const [showAutoplayCountdown, setShowAutoplayCountdown] = useState(false);
   const [isEndededEmbed, setIsEndededEmbed] = useState(false);
+  const {
+    PRIMARY_CONTENT_CHANNEL_IDS = [],
+    ENLIGHTENMENT_CHANNEL_IDS = [],
+    GAMING_CHANNEL_IDS = [],
+    SCIENCE_CHANNEL_IDS = [],
+    TECHNOLOGY_CHANNEL_IDS = [],
+    COMMUNITY_CHANNEL_IDS = [],
+    FINCANCE_CHANNEL_IDS = [],
+  } = homepageData;
+  const adApprovedChannelIds = [
+    ...PRIMARY_CONTENT_CHANNEL_IDS,
+    ...ENLIGHTENMENT_CHANNEL_IDS,
+    ...GAMING_CHANNEL_IDS,
+    ...SCIENCE_CHANNEL_IDS,
+    ...TECHNOLOGY_CHANNEL_IDS,
+    ...COMMUNITY_CHANNEL_IDS,
+    ...FINCANCE_CHANNEL_IDS,
+  ];
+  const showAds = Boolean(channelClaimId) && adApprovedChannelIds.includes(channelClaimId);
 
   /* isLoading was designed to show loading screen on first play press, rather than completely black screen, but
   breaks because some browsers (e.g. Firefox) block autoplay but leave the player.play Promise pending */
@@ -206,6 +238,7 @@ function VideoViewer(props: Props) {
       {/* disable this loading behavior because it breaks when player.play() promise hangs */}
       {isLoading && <LoadingScreen status={__('Loading')} />}
       <VideoJs
+        showAds={showAds}
         source={source}
         isAudio={isAudio}
         poster={isAudio || (embedded && !autoplayIfEmbedded) ? thumbnail : null}

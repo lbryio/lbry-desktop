@@ -7,10 +7,13 @@ import videojs from 'video.js/dist/alt/video.core.novtt.min.js';
 import 'video.js/dist/alt/video-js-cdn.min.css';
 import eventTracking from 'videojs-event-tracking';
 import isUserTyping from 'util/detect-typing';
-import './adstest.js';
+import analytics from 'analytics';
+// import './adstest.js';
 // import './adstest2.js';
-import './adstest.css';
+// import './adstest.css';
+import { VASTClient } from 'vast-client';
 
+const vastClient = new VASTClient();
 const isDev = process.env.NODE_ENV !== 'production';
 
 export type Player = {
@@ -39,7 +42,7 @@ type Props = {
   onPlayerReady: Player => void,
   isAudio: boolean,
   startMuted: boolean,
-  adsTest?: boolean,
+  showAds?: boolean,
 };
 
 type VideoJSOptions = {
@@ -135,7 +138,7 @@ class LbryVolumeBarClass extends videojs.getComponent(VIDEOJS_VOLUME_BAR_CLASS) 
 properties for this component should be kept to ONLY those that if changed should REQUIRE an entirely new videojs element
  */
 export default React.memo<Props>(function VideoJs(props: Props) {
-  const { startMuted, source, sourceType, poster, isAudio, onPlayerReady, adsTest } = props;
+  const { startMuted, source, sourceType, poster, isAudio, onPlayerReady, showAds } = props;
   const [reload, setReload] = useState('initial');
 
   let player: ?Player;
@@ -153,23 +156,6 @@ export default React.memo<Props>(function VideoJs(props: Props) {
     plugins: { eventTracking: true },
   };
 
-  if (adsTest) {
-    videoJsOptions.sources = [
-      {
-        src:
-          'https://cdn.lbryplayer.xyz/api/v3/streams/free/ted-cruz-obliterates-jack-dorsey/9c1d2dec8fd668a79966da4218b2c4d850f7e3c6/bd9c0e',
-        type: 'video/mp4',
-      },
-    ];
-
-    // $FlowFixMe
-    videoJsOptions.plugins.vastClient = {
-      adTagUrl: 'https://serve.adspruce.com/vpaid-8394-3.xml',
-      adsCancelTimeout: 5000,
-      adsEnabled: true,
-    };
-  }
-
   videoJsOptions.muted = startMuted;
 
   const tapToUnmuteRef = useRef();
@@ -180,6 +166,26 @@ export default React.memo<Props>(function VideoJs(props: Props) {
     UNMUTE: 'UNMUTE',
     RETRY: 'RETRY',
   };
+
+  React.useEffect(() => {
+    if (showAds) {
+      analytics.adsFetchedEvent();
+      const url = `https://tag.targeting.unrulymedia.com/rmp/216276/0/vast2?vastfw=vpaid&url=${encodeURI(
+        window.location.href
+      )}&w=300&h=500`;
+      console.log('fetching: ', url);
+      vastClient
+        .get(url)
+        .then(res => {
+          // Do something with the parsed VAST response
+          console.log('ads response', res);
+        })
+        .catch(err => {
+          // Deal with the error
+          console.log('ads error', err);
+        });
+    }
+  }, [showAds]);
 
   function showTapButton(tapButton) {
     const setButtonVisibility = (theRef, newState) => {

@@ -11,12 +11,12 @@ type Props = {
 
 function FileViewCount(props: Props) {
   const { claim, uri, fetchViewCount, viewCount } = props;
-
+  const claimId = claim && claim.claim_id;
   useEffect(() => {
-    if (claim && claim.claim_id) {
-      fetchViewCount(claim.claim_id);
+    if (claimId) {
+      fetchViewCount(claimId);
     }
-  }, [fetchViewCount, uri, claim]);
+  }, [fetchViewCount, uri, claimId]);
 
   const formattedViewCount = Number(viewCount).toLocaleString();
 

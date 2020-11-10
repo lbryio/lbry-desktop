@@ -8,13 +8,13 @@ const defaultState = {
   focused: false, // is the search input focused
   searchQuery: '', // needs to be an empty string for input focusing
   options: {
-    [SEARCH_OPTIONS.RESULT_COUNT]: 30,
-    [SEARCH_OPTIONS.CLAIM_TYPE]: SEARCH_OPTIONS.INCLUDE_FILES_AND_CHANNELS,
-    [SEARCH_OPTIONS.MEDIA_AUDIO]: true,
+    [SEARCH_OPTIONS.RESULT_COUNT]: 50,
+    [SEARCH_OPTIONS.CLAIM_TYPE]: 'file,channel',
+    [SEARCH_OPTIONS.MEDIA_AUDIO]: false,
     [SEARCH_OPTIONS.MEDIA_VIDEO]: true,
-    [SEARCH_OPTIONS.MEDIA_TEXT]: true,
-    [SEARCH_OPTIONS.MEDIA_IMAGE]: true,
-    [SEARCH_OPTIONS.MEDIA_APPLICATION]: true,
+    [SEARCH_OPTIONS.MEDIA_TEXT]: false,
+    [SEARCH_OPTIONS.MEDIA_IMAGE]: false,
+    [SEARCH_OPTIONS.MEDIA_APPLICATION]: false,
   },
   suggestions: {},
   urisByQuery: {},

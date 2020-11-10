@@ -30,9 +30,11 @@
   transform: translateY(-130%);
   font-size: var(--font-xsmall);
   color: var(--color-text-subtitle);
+  overflow: visible;
 
   .icon {
     margin-right: var(--spacing-xs);
+    stroke: var(--color-text-subtitle);
   }
 
   @media (max-width: $breakpoint-small) {
@@ -139,6 +141,20 @@
   .channel-thumbnail {
     @include handleChannelGif(7.5rem);
   }
+
+  .claim-preview__text {
+    height: 7.5rem;
+  }
+
+  @media (max-width: $breakpoint-small) {
+    .channel-thumbnail {
+      @include handleChannelGif(6rem);
+    }
+
+    .claim-preview__text {
+      height: 3.5rem;
+    }
+  }
 }
 
 .claim-preview--small {
@@ -162,7 +178,6 @@
 
   .claim-preview__actions {
     align-self: flex-end;
-    margin-top: 0;
     margin-bottom: auto;
     justify-content: flex-end;
     width: auto;
@@ -177,7 +192,11 @@
 
   @media (max-width: $breakpoint-xsmall) {
     .claim-preview__actions {
-      align-self: flex-start;
+      .claim-preview__primary-actions {
+        .button {
+          margin-top: 0;
+        }
+      }
     }
   }
 }
@@ -201,6 +220,11 @@
 
 .claim-preview__custom-properties {
   text-align: right;
+  margin-top: auto;
+
+  @media (max-width: $breakpoint-small) {
+    display: none;
+  }
 }
 
 .claim-preview-metadata {
@@ -227,13 +251,18 @@
   align-self: flex-end;
   display: flex;
   justify-content: space-between;
-  margin-top: auto;
   width: 100%;
 }
 
 .claim-preview__primary-actions {
   @extend .section__actions;
-  margin-top: 0;
+  margin-top: var(--spacing-s);
+
+  &:first-child {
+    .button {
+      margin-top: var(--spacing-s);
+    }
+  }
 }
 
 .claim-preview__actions--header {
@@ -409,6 +438,10 @@
       margin-top: var(--spacing-s);
     }
   }
+}
+
+.claim-preview--channel {
+  align-items: flex-start;
 }
 
 .claim-tile__title {

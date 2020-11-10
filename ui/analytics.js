@@ -36,6 +36,7 @@ type Analytics = {
   apiSyncTags: ({}) => void,
   tagFollowEvent: (string, boolean, ?string) => void,
   videoStartEvent: (string, number) => void,
+  adsFetchedEvent: () => void,
   videoBufferEvent: (
     StreamClaim,
     {
@@ -226,6 +227,10 @@ const analytics: Analytics = {
         }),
       });
     }
+  },
+
+  adsFetchedEvent: () => {
+    sendMatomoEvent('Media', 'AdsFetched');
   },
   tagFollowEvent: (tag, following) => {
     sendMatomoEvent('Tag', following ? 'Tag-Follow' : 'Tag-Unfollow', tag);
