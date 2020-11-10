@@ -169,7 +169,7 @@ export default function TagsSearch(props: Props) {
           autoFocus={!disableAutoFocus}
           className="tag__input"
           onChange={onChange}
-          placeholder={placeholder || __('gaming, crypto')}
+          placeholder={placeholder || __('gaming, comedy, educational')}
           type="text"
           value={newTag}
           disabled={disabled}
