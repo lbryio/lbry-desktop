@@ -290,6 +290,26 @@ function SideNavigation(props: Props) {
     </div>
   );
 
+  const helpLinks = (
+    <ul className="navigation__tertiary navigation-links--small">
+      <li className="navigation-link">
+        <Button label={__('About --[link title in Sidebar or Footer]--')} href="https://lbry.com/about" />
+      </li>
+      <li className="navigation-link">
+        <Button label={__('FAQ')} href="https://odysee.com/@OdyseeHelp:b" />
+      </li>
+      <li className="navigation-link">
+        <Button label={__('Support')} href="https://lbry.com/support" />
+      </li>
+      <li className="navigation-link">
+        <Button label={__('Terms')} href="https://lbry.com/termsofservice" />
+      </li>
+      <li className="navigation-link">
+        <Button label={__('Privacy Policy')} href="https://lbry.com/privacy" />
+      </li>
+    </ul>
+  );
+
   return (
     <div
       className={classnames('navigation__wrapper', {
@@ -370,6 +390,8 @@ function SideNavigation(props: Props) {
                 </div>
               ))}
           </div>
+
+          {SIMPLE_SITE && sidebarOpen && helpLinks}
         </nav>
       )}
 
@@ -447,6 +469,7 @@ function SideNavigation(props: Props) {
                 </ul>
               )}
               {!isAuthenticated && unAuthNudge}
+              {SIMPLE_SITE && helpLinks}
             </div>
           </nav>
           <div
