@@ -174,6 +174,13 @@ const Header = (props: Props) => {
     return hideBalance || Number(roundedBalance) === 0 ? __('Your Wallet') : roundedBalance;
   }
 
+  const loginButtons = (
+    <div className="header__auth-buttons">
+      <Button navigate={`/$/${PAGES.AUTH_SIGNIN}`} button="link" label={__('Log In')} className="mobile-hidden" />
+      <Button navigate={`/$/${PAGES.AUTH}`} button="primary" label={__('Sign Up')} />
+    </div>
+  );
+
   return (
     <header
       className={classnames('header', {
@@ -198,18 +205,22 @@ const Header = (props: Props) => {
               icon={ICONS.ARROW_LEFT}
             />
             {backTitle && <h1 className="header__auth-title">{isMobile ? simpleBackTitle || backTitle : backTitle}</h1>}
-            <Button
-              aria-label={__('Your wallet')}
-              navigate={`/$/${PAGES.WALLET}`}
-              className="header__navigation-item menu__title header__navigation-item--balance"
-              label={getWalletTitle()}
-              icon={ICONS.LBC}
-              // @if TARGET='app'
-              onDoubleClick={e => {
-                e.stopPropagation();
-              }}
-              // @endif
-            />
+            {authenticated ? (
+              <Button
+                aria-label={__('Your wallet')}
+                navigate={`/$/${PAGES.WALLET}`}
+                className="header__navigation-item menu__title header__navigation-item--balance"
+                label={getWalletTitle()}
+                icon={ICONS.LBC}
+                // @if TARGET='app'
+                onDoubleClick={e => {
+                  e.stopPropagation();
+                }}
+                // @endif
+              />
+            ) : (
+              loginButtons
+            )}
           </div>
         ) : (
           <>
@@ -409,17 +420,7 @@ const Header = (props: Props) => {
                   />
                 )}
 
-                {IS_WEB && !authenticated && (
-                  <div className="header__auth-buttons">
-                    <Button
-                      navigate={`/$/${PAGES.AUTH_SIGNIN}`}
-                      button="link"
-                      label={__('Log In')}
-                      className="mobile-hidden"
-                    />
-                    <Button navigate={`/$/${PAGES.AUTH}`} button="primary" label={__('Sign Up')} />
-                  </div>
-                )}
+                {IS_WEB && !authenticated && loginButtons}
               </div>
             ) : (
               !isVerifyPage &&

@@ -1,0 +1,39 @@
+.nudge {
+  z-index: 3;
+  position: absolute;
+  left: 0;
+  top: calc(var(--height-button) + var(--spacing-s));
+  white-space: normal;
+  overflow: visible;
+  padding: var(--spacing-m);
+  border-radius: var(--border-radius);
+  box-shadow: var(--card-box-shadow);
+  background-color: var(--color-secondary);
+  color: var(--color-white);
+
+  .button--close {
+    .icon {
+      stroke: var(--color-white);
+    }
+  }
+
+  &::after {
+    content: '';
+    position: absolute;
+    height: 1rem;
+    width: 1rem;
+    top: -0.5rem;
+    left: 3rem;
+    transform: rotate(45deg);
+    background-color: var(--color-secondary);
+  }
+}
+
+.nudge__wrapper {
+  width: 10rem;
+  margin-right: var(--spacing-m);
+
+  @media (min-width: $breakpoint-small) {
+    width: 12.5rem;
+  }
+}

@@ -46,7 +46,7 @@ import {
   selectAllowAnalytics,
 } from 'redux/selectors/app';
 import { selectDaemonSettings, makeSelectClientSetting } from 'redux/selectors/settings';
-import { selectUser } from 'redux/selectors/user';
+import { selectUser, selectUserVerifiedEmail } from 'redux/selectors/user';
 // import { selectDaemonSettings } from 'redux/selectors/settings';
 import { doSyncSubscribe, doSetPrefsReady } from 'redux/actions/sync';
 import { doAuthenticate } from 'redux/actions/user';
@@ -335,13 +335,20 @@ export function doAlertError(errorList) {
 }
 
 export function doAlertWaitingForSync() {
-  return dispatch =>
+  return (dispatch, getState) => {
+    const state = getState();
+    const authenticated = selectUserVerifiedEmail(state);
+
     dispatch(
       doToast({
-        message: __('Please wait a bit, we are still getting your account ready.'),
+        message:
+          !authenticated && IS_WEB
+            ? __('Sign in or create an account to change this setting.')
+            : __('Please wait a bit, we are still getting your account ready.'),
         isError: false,
       })
     );
+  };
 }
 
 export function doDaemonReady() {
