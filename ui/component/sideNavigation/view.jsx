@@ -76,18 +76,18 @@ function SideNavigation(props: Props) {
   const FULL_LINKS: Array<SideNavLink> = [
     {
       title: 'Your Tags',
-      navigate: `/$/${PAGES.TAGS_FOLLOWING}`,
+      link: `/$/${PAGES.TAGS_FOLLOWING}`,
       icon: ICONS.TAG,
       hideForUnauth: true,
     },
     {
       title: 'Discover',
-      navigate: `/$/${PAGES.DISCOVER}`,
+      link: `/$/${PAGES.DISCOVER}`,
       icon: ICONS.DISCOVER,
     },
     {
       title: IS_WEB ? 'Purchased' : 'Library',
-      navigate: `/$/${PAGES.LIBRARY}`,
+      link: `/$/${PAGES.LIBRARY}`,
       icon: ICONS.PURCHASED,
       hideForUnauth: true,
     },
@@ -108,7 +108,7 @@ function SideNavigation(props: Props) {
     },
     {
       title: IS_WEB ? 'Purchased' : 'Library',
-      navigate: `/$/${PAGES.LIBRARY}`,
+      link: `/$/${PAGES.LIBRARY}`,
       icon: ICONS.PURCHASED,
       hideForUnauth: true,
     },
@@ -150,7 +150,7 @@ function SideNavigation(props: Props) {
     },
     {
       title: 'Rewards',
-      navigate: `/$/${PAGES.REWARDS}`,
+      link: `/$/${PAGES.REWARDS}`,
       icon: ICONS.REWARDS,
       hideForUnauth: true,
     },
@@ -206,7 +206,7 @@ function SideNavigation(props: Props) {
   if (PINNED_URI_1 && PINNED_LABEL_1) {
     MOBILE_LINKS.push({
       title: PINNED_LABEL_1,
-      navigate: PINNED_URI_1,
+      link: PINNED_URI_1,
       icon: ICONS.PINNED,
     });
   }
@@ -214,7 +214,7 @@ function SideNavigation(props: Props) {
   if (PINNED_URI_2 && PINNED_LABEL_2) {
     MOBILE_LINKS.push({
       title: PINNED_LABEL_2,
-      navigate: PINNED_URI_2,
+      link: PINNED_URI_2,
       icon: ICONS.PINNED,
     });
   }
