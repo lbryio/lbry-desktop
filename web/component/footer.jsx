@@ -106,7 +106,7 @@ export default function Footer() {
       </span>
       <ul className="navigation__tertiary footer__links">
         <li className="footer__link">
-          <Button label={__('About')} href="https://lbry.com/about" />
+          <Button label={__('About --[link title in Sidebar or Footer]--')} href="https://lbry.com/about" />
         </li>
         <li className="footer__link">
           <Button label={__('FAQ')} href="https://odysee.com/@OdyseeHelp:b" />
