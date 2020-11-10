@@ -1,8 +1,7 @@
 // @flow
-// import type { RowDataItem } from 'homepages';
 import * as ICONS from 'constants/icons';
 import * as PAGES from 'constants/pages';
-import { SITE_NAME } from 'config';
+import { SITE_NAME, SIMPLE_SITE } from 'config';
 import classnames from 'classnames';
 import React from 'react';
 import Page from 'component/page';
@@ -37,8 +36,7 @@ function HomePage(props: Props) {
 
   return (
     <Page fullWidthPage>
-      {/* MAYBE NOT SIMPLESITE */}
-      {(authenticated || !IS_WEB) && !subscribedChannels.length && (
+      {!SIMPLE_SITE && (authenticated || !IS_WEB) && !subscribedChannels.length && (
         <div className="notice-message">
           <h1 className="section__title">
             {__("%SITE_NAME% is more fun if you're following channels", { SITE_NAME })}
