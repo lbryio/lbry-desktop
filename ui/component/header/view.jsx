@@ -101,7 +101,7 @@ const Header = (props: Props) => {
   const notificationsEnabled = user && user.experimental_ui;
   let channelUrl;
   let identityChannel;
-  if (myChannels && myChannels.length > 1) {
+  if (myChannels && myChannels.length >= 1) {
     if (myChannels.length === 1) {
       identityChannel = myChannels[0];
     } else if (commentChannel) {
