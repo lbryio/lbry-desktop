@@ -2,7 +2,7 @@
   z-index: 3;
   position: absolute;
   left: 0;
-  top: calc(var(--height-button) + var(--spacing-s));
+  top: 4rem;
   white-space: normal;
   overflow: visible;
   padding: var(--spacing-m);
@@ -15,6 +15,10 @@
     .icon {
       stroke: var(--color-white);
     }
+  }
+
+  @media (min-width: $breakpoint-small) {
+    top: calc(var(--height-button) + var(--spacing-s));
   }
 
   &::after {
