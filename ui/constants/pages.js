@@ -7,6 +7,7 @@ exports.AUTH_WALLET_PASSWORD = 'walletpassword';
 exports.BACKUP = 'backup';
 exports.CHANNEL = 'channel';
 exports.DISCOVER = 'discover';
+exports.RABBIT_HOLE = 'rabbithole';
 exports.HOME = 'home';
 exports.HELP = 'help';
 exports.LIBRARY = 'library';
