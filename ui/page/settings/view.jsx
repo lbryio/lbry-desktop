@@ -195,6 +195,11 @@ class SettingsPage extends React.PureComponent<Props, State> {
         }}
         className="card-stack"
       >
+        <Card title={__('Language')} actions={<SettingLanguage />} />
+        {homepages && Object.keys(homepages).length > 1 && (
+          <Card title={__('Homepage')} actions={<HomepageSelector />} />
+        )}
+
         {!isAuthenticated && IS_WEB && (
           <div className="main--empty">
             <Yrbl
@@ -216,10 +221,6 @@ class SettingsPage extends React.PureComponent<Props, State> {
           </section>
         ) : (
           <div className={classnames({ 'card--disabled': IS_WEB && !isAuthenticated })}>
-            <Card title={__('Language')} actions={<SettingLanguage />} />
-            {homepages && Object.keys(homepages).length > 1 && (
-              <Card title={__('Homepage')} actions={<HomepageSelector />} />
-            )}
             {isAuthenticated && <SettingAccountPassword />}
             {/* @if TARGET='app' */}
             <Card

@@ -143,7 +143,7 @@ export function doSetClientSetting(key, value, pushPrefs) {
     const state = getState();
     const ready = selectPrefsReady(state);
 
-    if (!ready) {
+    if (!ready && pushPrefs) {
       return dispatch(doAlertWaitingForSync());
     }
 
@@ -154,6 +154,7 @@ export function doSetClientSetting(key, value, pushPrefs) {
         value,
       },
     });
+
     if (pushPrefs) {
       dispatch(doPushSettingsToPrefs());
     }
