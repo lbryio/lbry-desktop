@@ -12,8 +12,10 @@ import FileSelector from 'component/common/file-selector';
 import SyncToggle from 'component/syncToggle';
 import Card from 'component/common/card';
 import SettingAccountPassword from 'component/settingAccountPassword';
+import classnames from 'classnames';
 import { getPasswordFromCookie } from 'util/saved-passwords';
 import { Lbryio } from 'lbryinc';
+import Yrbl from 'component/yrbl';
 
 type Price = {
   currency: string,
@@ -190,12 +192,27 @@ class SettingsPage extends React.PureComponent<Props, State> {
         }}
         className="card-stack"
       >
+        {!isAuthenticated && IS_WEB && (
+          <div className="main--empty">
+            <Yrbl
+              type="happy"
+              title={__('Sign up for full control')}
+              subtitle={__('Unlock new buttons that change things.')}
+              actions={
+                <div className="section__actions">
+                  <Button button="primary" icon={ICONS.SIGN_UP} label={__('Sign Up')} navigate={`/$/${PAGES.AUTH}`} />
+                </div>
+              }
+            />
+          </div>
+        )}
+
         {!IS_WEB && noDaemonSettings ? (
           <section className="card card--section">
             <div className="card__title card__title--deprecated">{__('Failed to load settings.')}</div>
           </section>
         ) : (
-          <div>
+          <div className={classnames({ 'card--disabled': IS_WEB && !isAuthenticated })}>
             <Card title={__('Language')} actions={<SettingLanguage />} />
             {isAuthenticated && <SettingAccountPassword />}
             {/* @if TARGET='app' */}
