@@ -63,6 +63,7 @@ type Props = {
   forceShowReposts?: boolean,
   languageSetting: string,
   searchInLanguage: boolean,
+  limitClaimsPerChannel?: number,
 };
 
 function ClaimListDiscover(props: Props) {
@@ -90,8 +91,8 @@ function ClaimListDiscover(props: Props) {
     pageSize,
     hideBlock,
     defaultClaimType,
-    streamType,
-    defaultStreamType,
+    streamType = CS.FILE_VIDEO,
+    defaultStreamType = CS.FILE_VIDEO,
     freshness,
     defaultFreshness = CS.FRESH_WEEK,
     renderProperties,
@@ -110,6 +111,7 @@ function ClaimListDiscover(props: Props) {
     forceShowReposts = false,
     languageSetting,
     searchInLanguage,
+    limitClaimsPerChannel,
   } = props;
   const didNavigateForward = history.action === 'PUSH';
   const { search } = location;
@@ -147,7 +149,7 @@ function ClaimListDiscover(props: Props) {
   const durationParam = urlParams.get(CS.DURATION_KEY) || null;
   const channelIdsInUrl = urlParams.get(CS.CHANNEL_IDS_KEY);
   const channelIdsParam = channelIdsInUrl ? channelIdsInUrl.split(',') : channelIds;
-  const feeAmountParam = urlParams.get('fee_amount') || feeAmount;
+  const feeAmountParam = urlParams.get('fee_amount') || feeAmount || CS.FEE_AMOUNT_ONLY_FREE;
   const originalPageSize = pageSize || CS.PAGE_SIZE;
   const dynamicPageSize = isLargeScreen ? Math.ceil(originalPageSize * (3 / 2)) : originalPageSize;
   let orderParam = orderBy || urlParams.get(CS.ORDER_BY_KEY) || defaultOrderBy;
@@ -190,6 +192,7 @@ function ClaimListDiscover(props: Props) {
     reposted_claim_id?: string,
     stream_types?: any,
     fee_amount?: string,
+    limit_claims_per_channel?: number,
   } = {
     page_size: dynamicPageSize,
     page,
@@ -209,6 +212,10 @@ function ClaimListDiscover(props: Props) {
         ? CS.ORDER_BY_NEW_VALUE
         : CS.ORDER_BY_TOP_VALUE, // Sort by top
   };
+
+  if (limitClaimsPerChannel) {
+    options.limit_claims_per_channel = limitClaimsPerChannel;
+  }
 
   if (feeAmountParam && claimType !== CS.CLAIM_CHANNEL) {
     options.fee_amount = feeAmountParam;
@@ -329,8 +336,24 @@ function ClaimListDiscover(props: Props) {
 
   const hasMatureTags = tagsParam && tagsParam.split(',').some(t => MATURE_TAGS.includes(t));
   const claimSearchCacheQuery = createNormalizedClaimSearchKey(options);
-  const claimSearchResult = claimSearchByQuery[claimSearchCacheQuery];
+  let claimSearchResult = claimSearchByQuery[claimSearchCacheQuery];
   const claimSearchResultLastPageReached = claimSearchByQueryLastPageReached[claimSearchCacheQuery];
+
+  // uncomment to fix an item on a page
+  //   const fixUri = 'lbry://@corbettreport#0/lbryodysee#5';
+  //   if (
+  //     orderParam === CS.ORDER_BY_NEW &&
+  //     claimSearchResult &&
+  //     claimSearchResult.length > 2 &&
+  //     window.location.pathname === '/$/rabbithole'
+  //   ) {
+  //     if (claimSearchResult.indexOf(fixUri) !== -1) {
+  //       claimSearchResult.splice(claimSearchResult.indexOf(fixUri), 1);
+  //     } else {
+  //       claimSearchResult.pop();
+  //     }
+  //     claimSearchResult.splice(2, 0, fixUri);
+  //   }
 
   const [prevOptions, setPrevOptions] = React.useState(null);
 
@@ -451,7 +474,7 @@ function ClaimListDiscover(props: Props) {
       claimType={claimType}
       streamType={streamType}
       defaultStreamType={defaultStreamType}
-      feeAmount={feeAmount}
+      //   feeAmount={feeAmount}
       orderBy={orderBy}
       defaultOrderBy={defaultOrderBy}
       hideAdvancedFilter={hideAdvancedFilter}

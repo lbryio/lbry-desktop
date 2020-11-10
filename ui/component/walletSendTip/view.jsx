@@ -291,7 +291,7 @@ function WalletSendTip(props: Props) {
                 <div className="section__actions">
                   <Button
                     autoFocus
-                    icon={isSupport ? undefined : ICONS.SUPPORT}
+                    // icon={isSupport ? undefined : ICONS.SUPPORT}
                     button="primary"
                     type="submit"
                     disabled={fetchingChannels || isPending || tipError || !tipAmount}

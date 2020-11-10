@@ -40,8 +40,7 @@ const defaultState = {
 
     // UI
     [SETTINGS.LANGUAGE]: settingLanguage.find(language => SUPPORTED_LANGUAGES[language]),
-    [SETTINGS.SEARCH_IN_LANGUAGE]: false,
-    [SETTINGS.THEME]: __('light'),
+    [SETTINGS.THEME]: __('dark'),
     [SETTINGS.THEMES]: [__('light'), __('dark')],
     [SETTINGS.HOMEPAGE]: settingLanguage.find(language => homepageKeys.includes(language)) || 'en',
     [SETTINGS.HIDE_SPLASH_ANIMATION]: false,
@@ -68,7 +67,7 @@ const defaultState = {
     [SETTINGS.AUTOPLAY_NEXT]: true,
     [SETTINGS.FLOATING_PLAYER]: true,
     [SETTINGS.AUTO_DOWNLOAD]: true,
-    [SETTINGS.HIDE_REPOSTS]: false,
+    [SETTINGS.HIDE_REPOSTS]: true,
 
     // OS
     [SETTINGS.AUTO_LAUNCH]: true,

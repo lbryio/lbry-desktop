@@ -1,5 +1,6 @@
 // @flow
 import { SHOW_ADS } from 'config';
+import type { RowDataItem } from 'homepage';
 import * as ICONS from 'constants/icons';
 import React, { useRef } from 'react';
 import Page from 'component/page';
