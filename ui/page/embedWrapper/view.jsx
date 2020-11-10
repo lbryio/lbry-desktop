@@ -5,6 +5,7 @@ import FileRender from 'component/fileRender';
 import FileViewerEmbeddedTitle from 'component/fileViewerEmbeddedTitle';
 import Spinner from 'component/spinner';
 import Button from 'component/button';
+import Card from 'component/common/card';
 import { formatLbryUrlForWeb } from 'util/url';
 import { useHistory } from 'react-router';
 
@@ -17,11 +18,26 @@ type Props = {
   streamingUrl: string,
   doFetchCostInfoForUri: string => void,
   isResolvingUri: boolean,
+  blackListedOutpoints: Array<{
+    txid: string,
+    nout: number,
+  }>,
 };
 // $FlowFixMe apparently flow thinks this is wrong.
 export const EmbedContext = React.createContext();
 const EmbedWrapperPage = (props: Props) => {
-  const { resolveUri, claim, uri, doPlayUri, costInfo, streamingUrl, doFetchCostInfoForUri, isResolvingUri } = props;
+  const {
+    resolveUri,
+    claim,
+    uri,
+    doPlayUri,
+    costInfo,
+    streamingUrl,
+    doFetchCostInfoForUri,
+    isResolvingUri,
+    blackListedOutpoints,
+  } = props;
+
   const {
     location: { search },
   } = useHistory();
@@ -33,6 +49,15 @@ const EmbedWrapperPage = (props: Props) => {
   const noContentFound = !claim && !isResolvingUri;
   const isPaidContent = costInfo && costInfo.cost > 0;
   const contentLink = formatLbryUrlForWeb(uri);
+  const signingChannel = claim && claim.signing_channel;
+  const isClaimBlackListed =
+    claim &&
+    blackListedOutpoints &&
+    blackListedOutpoints.some(
+      outpoint =>
+        (signingChannel && outpoint.txid === signingChannel.txid && outpoint.nout === signingChannel.nout) ||
+        (outpoint.txid === claim.txid && outpoint.nout === claim.nout)
+    );
 
   useEffect(() => {
     if (resolveUri && uri && !haveClaim) {
@@ -48,6 +73,22 @@ const EmbedWrapperPage = (props: Props) => {
       doFetchCostInfoForUri(uri);
     }
   }, [uri, haveClaim, doFetchCostInfoForUri]);
+
+  if (isClaimBlackListed) {
+    return (
+      <Card
+        title={uri}
+        subtitle={__(
+          'In response to a complaint we received under the US Digital Millennium Copyright Act, we have blocked access to this content from our applications.'
+        )}
+        actions={
+          <div className="section__actions">
+            <Button button="link" href="https://lbry.com/faq/dmca" label={__('Read More')} />
+          </div>
+        }
+      />
+    );
+  }
 
   return (
     <div
