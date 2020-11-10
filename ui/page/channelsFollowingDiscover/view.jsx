@@ -122,10 +122,10 @@ function ChannelsFollowingDiscover(props: Props) {
       <h1 className="claim-grid__title">{__('More Channels')}</h1>
       {/* odysee: claimIds = PRIMARY_CONTENT_CHANNEL_IDS if simplesite CLD */}
       <ClaimListDiscover
-        defaultOrderBy={CS.ORDER_BY_TOP}
-        channelIds={SIMPLE_SITE ? PRIMARY_CONTENT_CHANNEL_IDS : undefined}
+        defaultOrderBy={CS.ORDER_BY_TRENDING}
         defaultFreshness={CS.FRESH_ALL}
-        claimType="channel"
+        claimType={CS.CLAIM_CHANNEL}
+        channelIds={SIMPLE_SITE ? PRIMARY_CONTENT_CHANNEL_IDS : undefined}
       />
     </Page>
   );
