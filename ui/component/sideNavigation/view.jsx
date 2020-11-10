@@ -232,7 +232,7 @@ function SideNavigation(props: Props) {
   }
   // $FlowFixMe
   if (EXTRA_SIDEBAR_LINKS) {
-    SIDE_LINKS.push(EXTRA_SIDEBAR_LINKS);
+    SIDE_LINKS.push(...EXTRA_SIDEBAR_LINKS);
   }
 
   const [pulseLibrary, setPulseLibrary] = React.useState(false);
