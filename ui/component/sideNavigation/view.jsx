@@ -149,7 +149,7 @@ function SideNavigation(props: Props) {
       hideForUnauth: true,
     },
     {
-      label: 'Rewards',
+      title: 'Rewards',
       navigate: `/$/${PAGES.REWARDS}`,
       icon: ICONS.REWARDS,
       hideForUnauth: true,
@@ -202,9 +202,10 @@ function SideNavigation(props: Props) {
       icon: ICONS.HELP,
     },
   ];
+
   if (PINNED_URI_1 && PINNED_LABEL_1) {
     MOBILE_LINKS.push({
-      label: PINNED_LABEL_1,
+      title: PINNED_LABEL_1,
       navigate: PINNED_URI_1,
       icon: ICONS.PINNED,
     });
@@ -212,7 +213,7 @@ function SideNavigation(props: Props) {
 
   if (PINNED_URI_2 && PINNED_LABEL_2) {
     MOBILE_LINKS.push({
-      label: PINNED_LABEL_2,
+      title: PINNED_LABEL_2,
       navigate: PINNED_URI_2,
       icon: ICONS.PINNED,
     });
@@ -222,10 +223,9 @@ function SideNavigation(props: Props) {
   const isAuthenticated = Boolean(email);
   // SIDE LINKS: FOLLOWING, HOME, [FULL,] [EXTRA]
   let SIDE_LINKS: Array<SideNavLink> = [];
-  if (isAuthenticated) {
-    SIDE_LINKS.push(RECENT_FROM_FOLLOWING);
-  }
+
   SIDE_LINKS.push(HOME);
+  SIDE_LINKS.push(RECENT_FROM_FOLLOWING);
 
   if (!SIMPLE_SITE) {
     SIDE_LINKS.push(...FULL_LINKS);
@@ -248,6 +248,7 @@ function SideNavigation(props: Props) {
         return true;
       })
     : UNAUTH_LINKS;
+
   React.useEffect(() => {
     if (purchaseSuccess) {
       setPulseLibrary(true);
@@ -360,7 +361,8 @@ function SideNavigation(props: Props) {
               ) : (
                 <div className="navigation-links--micro">
                   <Button
-                    label={__('Sign In')}
+                    label={__('Sign Up')}
+                    navigate={`/$/${PAGES.AUTH}`}
                     icon={ICONS.SIGN_IN}
                     className={classnames('navigation-link')}
                     activeClass="navigation-link--active"
@@ -368,7 +370,6 @@ function SideNavigation(props: Props) {
                 </div>
               ))}
           </div>
-          {sidebarOpen && helpLinks}
         </nav>
       )}
 
@@ -447,7 +448,6 @@ function SideNavigation(props: Props) {
               )}
               {!isAuthenticated && unAuthNudge}
             </div>
-            {helpLinks}
           </nav>
           <div
             className={classnames('navigation__overlay', {
