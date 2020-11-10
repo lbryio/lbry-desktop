@@ -21,9 +21,10 @@ class ModalPublishSuccess extends React.PureComponent<Props> {
   render() {
     const { closeModal, clearPublish, navigate, uri, isEdit, filePath, lbryFirstError } = this.props;
     const contentLabel = isEdit ? __('Update published') : __('File published');
-    const publishMessage = isEdit
-      ? __('Your update is now pending on LBRY. It will take a few minutes to appear for other users.')
-      : __('Your file is now pending on LBRY. It will take a few minutes to appear for other users.');
+    // const publishMessage = isEdit
+    //   ? __('Your update is now pending on LBRY. It will take a few minutes to appear for other users.')
+    //   : __('Your file is now pending on LBRY. It will take a few minutes to appear for other users.');
+    const publishMessage = __('Your video will appear on Odysee shortly.');
 
     function handleClose() {
       clearPublish();
@@ -33,7 +34,7 @@ class ModalPublishSuccess extends React.PureComponent<Props> {
     return (
       <Modal isOpen type="card" contentLabel={__(contentLabel)} onAborted={handleClose}>
         <Card
-          title={__('Success')}
+          title={__('Upload Complete')}
           subtitle={publishMessage}
           body={
             <React.Fragment>

@@ -19,7 +19,7 @@ import TagsSelect from 'component/tagsSelect';
 import PublishDescription from 'component/publishDescription';
 import PublishPrice from 'component/publishPrice';
 import PublishFile from 'component/publishFile';
-import PublishName from 'component/publishName';
+// import PublishName from 'component/publishName';
 import PublishAdditionalOptions from 'component/publishAdditionalOptions';
 import PublishFormErrors from 'component/publishFormErrors';
 import SelectThumbnail from 'component/selectThumbnail';
@@ -372,7 +372,6 @@ function PublishForm(props: Props) {
             help={__(
               "Add tags that are relevant to your content so those who're looking for it can find it more easily. If mature content, ensure it is tagged mature. Tag abuse and missing mature tags will not be tolerated."
             )}
-            placeholder={__('gaming, crypto')}
             onSelect={newTags => {
               const validatedTags = [];
               newTags.forEach(newTag => {
@@ -400,11 +399,7 @@ function PublishForm(props: Props) {
               </React.Fragment>
             }
           />
-          <PublishName
-            disabled={isStillEditing || formDisabled}
-            autoPopulateName={autoPopulateNameFromTitle}
-            setAutoPopulateName={setAutoPopulateNameFromTitle}
-          />
+
           <PublishPrice disabled={formDisabled} />
           <PublishAdditionalOptions disabled={formDisabled} />
         </div>
