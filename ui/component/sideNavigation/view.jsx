@@ -74,6 +74,7 @@ function SideNavigation(props: Props) {
     unreadCount,
     homepageData,
     user,
+    followedTags,
   } = props;
 
   const { EXTRA_SIDEBAR_LINKS } = homepageData;
