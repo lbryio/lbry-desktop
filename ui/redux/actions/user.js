@@ -102,7 +102,7 @@ export function doAuthenticate(
       type: ACTIONS.AUTHENTICATION_STARTED,
     });
 
-    Lbryio.authenticate(DOMAIN)
+    Lbryio.authenticate(DOMAIN, window.navigator.language.slice(0, 2) || 'en')
       .then(user => {
         Lbryio.getAuthToken().then(token => {
           dispatch({

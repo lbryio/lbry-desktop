@@ -8,6 +8,7 @@ import { makeSelectClientSetting } from 'redux/selectors/settings';
 import { doGetSyncDesktop, doSyncUnsubscribe, doSetSyncLock } from 'redux/actions/sync';
 import { doAlertWaitingForSync, doGetAndPopulatePreferences } from 'redux/actions/app';
 import { selectPrefsReady } from 'redux/selectors/sync';
+import { Lbryio } from 'lbryinc';
 
 const { DEFAULT_LANGUAGE } = require('config');
 const { SDK_SYNC_KEYS } = SHARED_PREFERENCES;
@@ -294,6 +295,10 @@ export function doFetchLanguage(language) {
 export function doSetLanguage(language) {
   return (dispatch, getState) => {
     const { settings } = getState();
+    const { daemonSettings } = settings;
+    const { share_usage_data: shareSetting } = daemonSettings;
+    const isSharingData = shareSetting || IS_WEB;
+
     if (settings.language !== language || (settings.loadedLanguages && !settings.loadedLanguages.includes(language))) {
       // this should match the behavior/logic in index-web.html
       fetch('https://lbry.com/i18n/get/lbry-desktop/app-strings/' + language + '.json')
@@ -311,6 +316,11 @@ export function doSetLanguage(language) {
           // set on localStorage so it can be read outside of redux
           window.localStorage.setItem(SETTINGS.LANGUAGE, language);
           dispatch(doSetClientSetting(SETTINGS.LANGUAGE, language));
+          if (isSharingData) {
+            Lbryio.call('user', 'language', {
+              language: language,
+            });
+          }
         })
         .catch(e => {
           window.localStorage.setItem(SETTINGS.LANGUAGE, DEFAULT_LANGUAGE);
