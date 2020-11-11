@@ -138,7 +138,12 @@ class SelectThumbnail extends React.PureComponent<Props, State> {
             )}
             {status === THUMBNAIL_STATUSES.COMPLETE && thumbnail && (
               <div className="column column--space-between">
-                <div className="column__item thumbnail-preview" style={{ backgroundImage: `url(${thumbnail})` }} />
+                <div
+                  className="column__item thumbnail-preview"
+                  // style={{ backgroundImage: `url(${thumbnail})` }}
+                >
+                  {__('This will be visible in a few minutes.')}
+                </div>
                 <div className="column__item">
                   <p>{__('Upload complete.')}</p>
                   <div className="section__actions">
