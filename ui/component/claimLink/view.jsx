@@ -1,9 +1,9 @@
 // @flow
 import * as React from 'react';
 import classnames from 'classnames';
-import ClaimPreview from 'component/claimPreview';
 import EmbedPlayButton from 'component/embedPlayButton';
 import Button from 'component/button';
+import UriIndicator from 'component/uriIndicator';
 import { INLINE_PLAYER_WRAPPER_CLASS } from 'component/fileRenderFloating/view';
 
 type Props = {
@@ -80,9 +80,7 @@ class ClaimLink extends React.Component<Props> {
     const isChannel = valueType === 'channel';
 
     return isChannel ? (
-      <div className="card--inline">
-        <ClaimPreview uri={uri} wrapperElement="div" hideActions />
-      </div>
+      <UriIndicator uri={uri} link />
     ) : (
       <div className={classnames('claim-link')}>
         <div
