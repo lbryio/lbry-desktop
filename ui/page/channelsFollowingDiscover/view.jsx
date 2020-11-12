@@ -122,8 +122,8 @@ function ChannelsFollowingDiscover(props: Props) {
       <ClaimListDiscover
         defaultOrderBy={CS.ORDER_BY_TRENDING}
         defaultFreshness={CS.FRESH_ALL}
+        claimIds={SIMPLE_SITE ? PRIMARY_CONTENT_CHANNEL_IDS : undefined}
         claimType={CS.CLAIM_CHANNEL}
-        channelIds={SIMPLE_SITE ? PRIMARY_CONTENT_CHANNEL_IDS : undefined}
         maxPages={3}
         hideFilters
         header={<h1 className="section__title">{__('Moon cheese is an acquired taste')}</h1>}
