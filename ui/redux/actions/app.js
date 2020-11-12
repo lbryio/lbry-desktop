@@ -653,11 +653,15 @@ export function doGetAndPopulatePreferences() {
             message: __('Unable to load your saved preferences.'),
           })
         );
+
+        dispatch({
+          type: ACTIONS.SYNC_FATAL_ERROR,
+        });
       });
       return false;
     }
 
-    return doPreferenceGet(preferenceKey, successCb, failCb);
+    return dispatch(doPreferenceGet(preferenceKey, successCb, failCb));
   };
 }
 

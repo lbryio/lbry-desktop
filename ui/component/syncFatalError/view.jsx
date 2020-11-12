@@ -8,8 +8,10 @@ export default function SyncFatalError() {
   return (
     <div className="main--empty">
       <Yrbl
-        title={__('There was an error starting up')}
-        subtitle={<p>Try refreshing to fix the issue. If that doesn't work, email help@lbry.com for support.</p>}
+        title={__('There is a bug... somewhere')}
+        subtitle={
+          <p>{__("Try refreshing to fix the issue. If that doesn't work, email help@lbry.com for support.")}</p>
+        }
         actions={
           <div className="section__actions">
             <Button
