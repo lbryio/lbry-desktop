@@ -3,7 +3,7 @@ const webpack = require('webpack');
 const Dotenv = require('dotenv-webpack');
 const { DefinePlugin } = require('webpack');
 const { getIfUtils } = require('webpack-config-utils');
-const TerserPlugin = require('terser-webpack-plugin');
+// const TerserPlugin = require('terser-webpack-plugin');
 
 const NODE_ENV = process.env.NODE_ENV || 'development';
 const { ifProduction } = getIfUtils(NODE_ENV);
@@ -13,14 +13,14 @@ const STATIC_ROOT = path.resolve(__dirname, 'static/');
 let baseConfig = {
   mode: ifProduction('production', 'development'),
   devtool: ifProduction('source-map', 'eval-cheap-module-source-map'),
-  optimization: {
-    minimizer: [
-      new TerserPlugin({
-        parallel: true,
-        sourceMap: true,
-      }),
-    ],
-  },
+  //   optimization: {
+  //     minimizer: [
+  //       new TerserPlugin({
+  //         parallel: true,
+  //         sourceMap: true,
+  //       }),
+  //     ],
+  //   },
   node: {
     __dirname: false,
   },
@@ -39,17 +39,18 @@ let baseConfig = {
       {
         test: /\.s?css$/,
         use: [
-		{ loader: 'style-loader' },
-		{ loader: 'css-loader' },
-		{ loader: 'postcss-loader',
-		  options: {
-		    plugins: function () {
-		      return [ require( 'postcss-rtl' )() ]
-		    }
-		  }
-		},
-		{ loader: 'sass-loader'},
-	      ],
+          { loader: 'style-loader' },
+          { loader: 'css-loader' },
+          {
+            loader: 'postcss-loader',
+            options: {
+              plugins: function() {
+                return [require('postcss-rtl')()];
+              },
+            },
+          },
+          { loader: 'sass-loader' },
+        ],
       },
       {
         test: /\.(png|svg|gif)$/,
@@ -76,7 +77,10 @@ let baseConfig = {
     alias: {
       config: path.resolve(__dirname, 'config.js'),
       homepage: 'util/homepage.js',
-      homepages: process.env.CUSTOM_HOMEPAGE === 'true' ? path.resolve(__dirname, 'custom/homepages/index.js') : ('homepages/index.js'),
+      homepages:
+        process.env.CUSTOM_HOMEPAGE === 'true'
+          ? path.resolve(__dirname, 'custom/homepages/index.js')
+          : 'homepages/index.js',
       lbryinc: 'lbryinc/dist/bundle.es.js',
       // Build optimizations for 'redux-persist-transform-filter'
       'redux-persist-transform-filter': 'redux-persist-transform-filter/index.js',
@@ -89,7 +93,15 @@ let baseConfig = {
       'lodash.clonedeep': 'lodash-es/cloneDeep',
       ...ifProduction({}, { 'react-dom': '@hot-loader/react-dom' }),
     },
-    symlinks: false,
+    fallback: {
+      crypto: require.resolve('crypto-browserify'),
+      http: require.resolve('stream-http'),
+      https: require.resolve('https-browserify'),
+      os: require.resolve('os-browserify/browser'),
+      path: require.resolve('path-browserify'),
+      stream: require.resolve('stream-browserify'),
+      vm: require.resolve('vm-browserify'),
+    },
   },
 
   plugins: [

@@ -1,0 +1,10 @@
+{
+	"renderer": {
+		"webpackConfig": "webpack.electron-renderer.config.js",
+		"sourceDirectory": "./ui/"
+	},
+	"main": {
+		"webpackConfig": "webpack.electron-main.config.js",
+		"sourceDirectory": "./electron/"
+	}
+}

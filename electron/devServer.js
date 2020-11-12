@@ -11,7 +11,7 @@ console.log(
   chalk.magenta(`Compiling ${chalk.underline('main')} and ${chalk.underline('render')}, this will take a while.`)
 );
 
-let [mainConfig, renderConfig] = require('../webpack.electron.config.js');
+let [mainConfig, renderConfig] = require('../webpack.electron-main.config.js');
 
 renderConfig = merge(renderConfig, {
   entry: { ui: ['webpack-hot-middleware/client'] },
@@ -20,23 +20,16 @@ renderConfig = merge(renderConfig, {
     alias: { 'react-dom': '@hot-loader/react-dom' },
     symlinks: false,
   },
-
 });
 
 const mainCompiler = webpack(mainConfig);
-const mainInstance = middleware(mainCompiler, {
-  logLevel: 'warn',
-  writeToDisk: filename => {
-    // console.log(`Writing '${filename}'.`);
-    return true;
-  },
-});
-
+const mainInstance = middleware(mainCompiler, { writeToDisk: true });
 const renderCompiler = webpack(renderConfig);
 const renderInstance = middleware(renderCompiler, {
-  logLevel: 'warn',
   publicPath: '/',
+  writeToDisk: true,
 });
+
 app.use(require('webpack-hot-middleware')(renderCompiler));
 app.use(renderInstance);
 app.use(express.static('dist/electron/static'));

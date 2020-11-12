@@ -6,7 +6,6 @@ const baseConfig = require('./webpack.base.config.js');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const { DefinePlugin, ProvidePlugin } = require('webpack');
 const { getIfUtils, removeEmpty } = require('webpack-config-utils');
-const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
 
 const STATIC_ROOT = path.resolve(__dirname, 'static/');
 const DIST_ROOT = path.resolve(__dirname, 'dist/');
@@ -85,54 +84,4 @@ if (process.env.NODE_ENV === 'production') {
   });
 }
 
-let plugins = [
-  new DefinePlugin({
-    IS_WEB: JSON.stringify(false),
-  }),
-  new ProvidePlugin({
-    __: ['i18n.js', '__'],
-  }),
-];
-
-// if (hasSentryToken) {
-//   plugins.push(
-//     new SentryWebpackPlugin({
-//       include: './dist',
-//       ignoreFile: '.sentrycliignore',
-//       ignore: ['node_modules', 'webpack.config.js', 'webworkers'],
-//       configFile: 'sentry.properties',
-//     })
-//   );
-// }
-
-const renderConfig = {
-  target: 'electron-renderer',
-  entry: {
-    ui: ['./ui/index.jsx'],
-  },
-  output: {
-    filename: '[name].js',
-    path: __dirname + '/dist/electron/webpack',
-  },
-  module: {
-    rules: [
-      {
-        test: /\.jsx?$/,
-        use: [
-          {
-            loader: 'preprocess-loader',
-            options: {
-              TARGET: 'app',
-              ppOptions: {
-                type: 'js',
-              },
-            },
-          },
-        ],
-      },
-    ],
-  },
-  plugins,
-};
-
-module.exports = [merge(baseConfig, mainConfig), merge(baseConfig, renderConfig)];
+module.exports = merge(baseConfig, mainConfig);
