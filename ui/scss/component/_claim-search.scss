@@ -1,0 +1,87 @@
+.claim-search__menus {
+  background-color: var(--color-card-background);
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  align-items: center;
+  padding: var(--spacing-m);
+  padding-bottom: var(--spacing-s);
+  margin-top: var(--spacing-m);
+  color: var(--color-text-subtitle);
+
+  @media (max-width: $breakpoint-small) {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
+.claim-search__dropdown {
+  padding: 0 var(--spacing-m);
+  max-width: 400px;
+  font-size: var(--font-body);
+  background-color: var(--color-card-background);
+  width: var(--option-select-width);
+
+  @media (max-width: $breakpoint-small) {
+    margin-left: 0;
+  }
+}
+
+.claim-search__dropdown--selected {
+  background-color: var(--color-input-bg-selected);
+}
+
+.claim-search__input-container {
+  display: flex;
+  flex-direction: column;
+  font-size: var(--font-body);
+
+  .button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0;
+  }
+
+  &:not(:first-of-type) {
+    padding-left: var(--spacing-m);
+  }
+
+  @media (max-width: $breakpoint-small) {
+    padding-left: 0px;
+
+    &:not(:first-of-type) {
+      margin-top: var(--spacing-s);
+    }
+
+    &:not(:first-of-type) {
+      padding-left: 0;
+    }
+  }
+}
+
+.claim-search__input-special {
+  font-weight: var(--font-weight-bold);
+}
+
+.claim-search__extra {
+  display: flex;
+  align-items: center;
+}
+
+.claim-search__top {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.claim-search__top > div {
+  @media (max-width: $breakpoint-small) {
+    margin-bottom: var(--spacing-xxs);
+  }
+}
+
+.claim-search__top-row {
+  display: flex;
+  flex-wrap: nowrap;
+}

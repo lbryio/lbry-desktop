@@ -1,0 +1,113 @@
+.wunderbar {
+  flex: 1;
+  cursor: text;
+  display: flex;
+  align-items: center;
+  position: relative;
+  z-index: 1;
+  font-size: var(--font-small);
+  height: var(--height-input);
+  max-width: 30rem;
+  margin-left: var(--spacing-s);
+  margin-right: var(--spacing-s);
+
+  @media (max-width: $breakpoint-small) {
+    max-width: none;
+    margin: 0;
+  }
+
+  > .icon {
+    top: 0;
+    left: var(--spacing-s);
+    height: 100%;
+    position: absolute;
+    z-index: 1;
+    stroke: var(--color-input-placeholder);
+  }
+}
+
+.wunderbar--inline {
+  @extend .wunderbar;
+  flex: 0;
+  margin-right: 0;
+
+  fieldset-section {
+    width: 15rem;
+  }
+
+  @media (max-width: $breakpoint-small) {
+    margin: var(--spacing-xxs) 0;
+  }
+}
+
+.wunderbar__active-suggestion {
+  color: var(--color-search-suggestion);
+  background-color: var(--color-search-suggestion-background);
+}
+
+.wunderbar__input {
+  width: 100%;
+  align-items: center;
+  min-width: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  height: var(--height-input);
+  border-radius: var(--height-input);
+  background-color: var(--color-input-bg);
+  color: var(--color-input);
+  border: none;
+  padding-right: var(--spacing-s);
+  padding-left: 2.5rem;
+  transition: all 0.2s;
+  -webkit-app-region: no-drag;
+
+  &:focus {
+    border-radius: var(--border-radius);
+  }
+}
+
+.wunderbar__input--inline {
+  @extend .wunderbar__input;
+  @media (max-width: $breakpoint-small) {
+    position: absolute;
+    top: 0;
+  }
+}
+
+.wunderbar__menu {
+  min-width: 100%;
+  overflow: hidden;
+  background-color: var(--color-input-bg);
+  margin-top: -4px;
+}
+
+.wunderbar__suggestion {
+  align-items: center;
+  cursor: pointer;
+  display: flex;
+  flex-direction: row;
+  justify-items: flex-start;
+  padding: var(--spacing-s);
+
+  &:not(:first-of-type) {
+    border-top: 1px solid transparent;
+  }
+
+  .icon {
+    flex-shrink: 0;
+  }
+}
+
+.wunderbar__suggestion-label {
+  overflow: hidden;
+  padding-left: var(--spacing-s);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.wunderbar__suggestion-label--action {
+  margin-left: var(--spacing-m);
+  opacity: 0.6;
+  white-space: nowrap;
+}
