@@ -10,6 +10,7 @@ import { selectUserVerifiedEmail } from 'redux/selectors/user';
 let syncTimer = null;
 const SYNC_INTERVAL = 1000 * 60 * 5; // 5 minutes
 const NO_WALLET_ERROR = 'no wallet found for this user';
+const BAD_PASSWORD_ERROR_NAME = 'InvalidPasswordError';
 
 export function doSetDefaultAccount(success, failure) {
   return dispatch => {
@@ -198,10 +199,13 @@ export function doGetSync(passedPassword, callback) {
         handleCallback(null, data.changed);
       })
       .catch(syncAttemptError => {
+        const badPasswordError =
+          syncAttemptError && syncAttemptError.data && syncAttemptError.data.name === BAD_PASSWORD_ERROR_NAME;
+
         if (data.unlockFailed) {
           dispatch({ type: ACTIONS.GET_SYNC_FAILED, data: { error: syncAttemptError } });
 
-          if (password !== '') {
+          if (badPasswordError) {
             dispatch({ type: ACTIONS.SYNC_APPLY_BAD_PASSWORD });
           }
 
@@ -215,10 +219,7 @@ export function doGetSync(passedPassword, callback) {
             },
           });
 
-          // Temp solution until we have a bad password error code
-          // Don't fail on blank passwords so we don't show a "password error" message
-          // before users have ever entered a password
-          if (password !== '') {
+          if (badPasswordError) {
             dispatch({ type: ACTIONS.SYNC_APPLY_BAD_PASSWORD });
           }
 

@@ -104,10 +104,11 @@ reducers[ACTIONS.SYNC_APPLY_BAD_PASSWORD] = state =>
     syncApplyPasswordError: true,
   });
 
-reducers[LBRY_REDUX_ACTIONS.SYNC_FATAL_ERROR] = state =>
-  Object.assign({}, state, {
+reducers[LBRY_REDUX_ACTIONS.SYNC_FATAL_ERROR] = (state, action) => {
+  return Object.assign({}, state, {
     fatalError: true,
   });
+};
 
 reducers[ACTIONS.SYNC_RESET] = () => defaultState;
 
