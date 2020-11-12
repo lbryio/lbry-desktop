@@ -16,6 +16,7 @@ const defaultState = {
   prefsReady: false,
   syncLocked: false,
   hashChanged: false,
+  fatalError: false,
 };
 
 reducers[LBRY_REDUX_ACTIONS.USER_STATE_POPULATE] = state => {
@@ -49,6 +50,7 @@ reducers[ACTIONS.GET_SYNC_COMPLETED] = (state, action) =>
     hasSyncedWallet: action.data.hasSyncedWallet,
     getSyncIsPending: false,
     hashChanged: action.data.hashChanged,
+    fatalError: action.data.fatalError,
   });
 
 reducers[ACTIONS.GET_SYNC_FAILED] = (state, action) =>
