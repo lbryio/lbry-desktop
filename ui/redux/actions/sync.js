@@ -224,15 +224,22 @@ export function doGetSync(passedPassword, callback) {
 
           handleCallback(error);
         } else {
-          // user doesn't have a synced wallet
+          const noWalletError = syncAttemptError && syncAttemptError.message === NO_WALLET_ERROR;
+
           dispatch({
             type: ACTIONS.GET_SYNC_COMPLETED,
-            data: { hasSyncedWallet: false, syncHash: null },
+            data: {
+              hasSyncedWallet: false,
+              syncHash: null,
+              // If there was some unknown error, bail
+              fatalError: !noWalletError,
+            },
           });
 
-          // call sync_apply to get data to sync
-          // first time sync. use any string for old hash
-          if (syncAttemptError.message === NO_WALLET_ERROR) {
+          // user doesn't have a synced wallet
+          //   call sync_apply to get data to sync
+          //   first time sync. use any string for old hash
+          if (noWalletError) {
             Lbry.sync_apply({ password })
               .then(({ hash: walletHash, data: syncApplyData }) => {
                 dispatch(doSetSync('', walletHash, syncApplyData, password));

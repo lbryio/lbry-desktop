@@ -34,6 +34,7 @@ import {
   STATUS_FAILING,
   STATUS_DOWN,
 } from 'web/effects/use-degraded-performance';
+import SyncFatalError from 'component/syncFatalError';
 // @endif
 export const MAIN_WRAPPER_CLASS = 'main-wrapper';
 // @if TARGET='app'
@@ -81,6 +82,7 @@ type Props = {
   syncSubscribe: () => void,
   syncEnabled: boolean,
   currentModal: any,
+  syncFatalError: boolean,
 };
 
 function App(props: Props) {
@@ -106,6 +108,7 @@ function App(props: Props) {
     isAuthenticated,
     syncSubscribe,
     currentModal,
+    syncFatalError,
   } = props;
 
   const appRef = useRef();
@@ -302,6 +305,10 @@ function App(props: Props) {
     );
   }
   // @endif
+
+  if (syncFatalError) {
+    return <SyncFatalError />;
+  }
 
   return (
     <div

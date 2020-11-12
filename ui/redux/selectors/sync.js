@@ -27,3 +27,5 @@ export const selectSyncApplyPasswordError = createSelector(selectState, state =>
 export const selectSyncIsLocked = createSelector(selectState, state => state.syncLocked);
 
 export const selectPrefsReady = createSelector(selectState, state => state.prefsReady);
+
+export const selectSyncFatalError = createSelector(selectState, state => state.fatalError);

@@ -1,7 +1,7 @@
 import { hot } from 'react-hot-loader/root';
 import { connect } from 'react-redux';
 import { selectUploadCount } from 'lbryinc';
-import { selectGetSyncErrorMessage } from 'redux/selectors/sync';
+import { selectGetSyncErrorMessage, selectSyncFatalError } from 'redux/selectors/sync';
 import { doFetchAccessToken, doUserSetReferrer } from 'redux/actions/user';
 import { selectUser, selectAccessToken, selectUserVerifiedEmail } from 'redux/selectors/user';
 import { selectUnclaimedRewards } from 'redux/selectors/rewards';
@@ -32,6 +32,7 @@ const select = state => ({
   rewards: selectUnclaimedRewards(state),
   isAuthenticated: selectUserVerifiedEmail(state),
   currentModal: selectModal(state),
+  syncFatalError: selectSyncFatalError(state),
 });
 
 const perform = dispatch => ({
