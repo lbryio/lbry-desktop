@@ -116,7 +116,7 @@ function ChannelsFollowingDiscover(props: Props) {
           <ClaimTilesDiscover {...options} />
         </div>
       ))} */}
-      <h1 className="claim-grid__title">{__('More Channels')}</h1>
+
       {/* odysee: claimIds = PRIMARY_CONTENT_CHANNEL_IDS if simplesite CLD */}
 
       <ClaimListDiscover
