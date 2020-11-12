@@ -56,7 +56,7 @@ function UserChannelFollowIntro(props: Props) {
               }
               defaultOrderBy={CS.ORDER_BY_TRENDING}
               defaultFreshness={CS.FRESH_ALL}
-              claimIds={SIMPLE_SITE ? undefined : PRIMARY_CONTENT_CHANNEL_IDS}
+              claimIds={SIMPLE_SITE ? PRIMARY_CONTENT_CHANNEL_IDS : undefined}
               claimType={CS.CLAIM_CHANNEL}
               maxPages={3}
             />
