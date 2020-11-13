@@ -52,6 +52,10 @@ $contentMaxWidth: 35rem;
       @include handleChannelGif(2rem);
     }
   }
+
+  @media (max-width: $breakpoint-small) {
+    padding: var(--spacing-s);
+  }
 }
 
 .notification__wrapper--unseen {

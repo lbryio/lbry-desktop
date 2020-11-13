@@ -76,7 +76,7 @@ export default function Notification(props: Props) {
       break;
     case NOTIFICATIONS.DAILY_WATCH_AVAILABLE:
     case NOTIFICATIONS.DAILY_WATCH_REMIND:
-      icon = <Icon icon={ICONS.LBC} sectionIcon className="notification__icon" />;
+      icon = <Icon icon={ICONS.LBC} sectionIcon />;
       break;
     default:
       icon = <Icon icon={ICONS.NOTIFICATION} sectionIcon className="notification__icon" />;
