@@ -63,7 +63,7 @@ export default function Notification(props: Props) {
   let icon;
   switch (notification_rule) {
     case NOTIFICATIONS.NOTIFICATION_CREATOR_SUBSCRIBER:
-      icon = <Icon icon={ICONS.SUBSCRIBE} sectionIcon className="notification__icon" />;
+      icon = <Icon icon={ICONS.SUBSCRIBE} sectionIcon />;
       break;
     case NOTIFICATIONS.NOTIFICATION_COMMENT:
       icon = <ChannelThumbnail small uri={notification_parameters.dynamic.comment_author} />;
@@ -79,7 +79,7 @@ export default function Notification(props: Props) {
       icon = <Icon icon={ICONS.LBC} sectionIcon />;
       break;
     default:
-      icon = <Icon icon={ICONS.NOTIFICATION} sectionIcon className="notification__icon" />;
+      icon = <Icon icon={ICONS.NOTIFICATION} sectionIcon />;
   }
 
   function handleNotificationClick() {
