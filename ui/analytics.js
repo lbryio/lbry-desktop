@@ -95,11 +95,19 @@ const analytics: Analytics = {
       }
     });
   },
-  pageView: path => {
+  pageView: (path, search) => {
     if (internalAnalyticsEnabled) {
-      MatomoInstance.trackPageView({
-        href: `${path}`,
-      });
+      const params = { href: `${path}` };
+      const dimensions = [];
+      const searchParams = search && new URLSearchParams(search);
+
+      if (searchParams && searchParams.get('src')) {
+        dimensions.push({ id: 1, value: searchParams.get('src') });
+      }
+      if (dimensions.length) {
+        params['customDimensions'] = dimensions;
+      }
+      MatomoInstance.trackPageView(params);
     }
   },
   setUser: userId => {
@@ -280,7 +288,7 @@ const MatomoInstance = new MatomoTracker({
 // Manually call the first page view
 // React Router doesn't include this on `history.listen`
 // @if TARGET='web'
-analytics.pageView(window.location.pathname + window.location.search);
+analytics.pageView(window.location.pathname + window.location.search, window.location.search);
 // @endif
 
 // @if TARGET='app'
@@ -295,7 +303,7 @@ history.listen(location => {
   const { pathname, search } = location;
 
   const page = `${pathname}${search}`;
-  analytics.pageView(page);
+  analytics.pageView(page, search);
 });
 
 export default analytics;
