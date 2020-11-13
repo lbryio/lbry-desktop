@@ -281,7 +281,7 @@ function ClaimListDiscover(props: Props) {
     if (durationParam === CS.DURATION_SHORT) {
       options.duration = '<=240';
     } else if (durationParam === CS.DURATION_LONG) {
-      options.duration = '>=1800';
+      options.duration = '>=1200';
     }
   }
 
