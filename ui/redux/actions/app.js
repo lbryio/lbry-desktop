@@ -52,7 +52,7 @@ import { doSyncSubscribe, doSetPrefsReady } from 'redux/actions/sync';
 import { doAuthenticate } from 'redux/actions/user';
 import { lbrySettings as config, version as appVersion } from 'package.json';
 import analytics, { SHARE_INTERNAL } from 'analytics';
-import { doSignOutCleanup, deleteSavedPassword } from 'util/saved-passwords';
+import { doSignOutCleanup } from 'util/saved-passwords';
 import { doSocketConnect } from 'redux/actions/websocket';
 import { stringifyServerParam, shouldSetSetting } from 'util/sync-settings';
 import sha256 from 'crypto-js/sha256';
@@ -646,18 +646,17 @@ export function doGetAndPopulatePreferences() {
     }
 
     function failCb() {
-      deleteSavedPassword().then(() => {
-        dispatch(
-          doToast({
-            isError: true,
-            message: __('Unable to load your saved preferences.'),
-          })
-        );
+      dispatch(
+        doToast({
+          isError: true,
+          message: __('Unable to load your saved preferences.'),
+        })
+      );
 
-        dispatch({
-          type: ACTIONS.SYNC_FATAL_ERROR,
-        });
+      dispatch({
+        type: ACTIONS.SYNC_FATAL_ERROR,
       });
+
       return false;
     }
 
