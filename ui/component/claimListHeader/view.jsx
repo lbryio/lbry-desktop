@@ -15,8 +15,6 @@ import SEARCHABLE_LANGUAGES from 'constants/searchable_languages';
 
 type Props = {
   defaultTags: string,
-  followedTags?: Array<Tag>,
-  tags: string,
   freshness?: string,
   defaultFreshness?: string,
   claimType?: Array<string>,
@@ -40,8 +38,6 @@ type Props = {
 function ClaimListHeader(props: Props) {
   const {
     defaultTags,
-    followedTags,
-    tags,
     freshness,
     defaultFreshness,
     claimType,
@@ -66,12 +62,7 @@ function ClaimListHeader(props: Props) {
   const [expanded, setExpanded] = usePersistedState(`expanded-${location.pathname}`, false);
   const [orderParamEntry, setOrderParamEntry] = usePersistedState(`entry-${location.pathname}`, CS.ORDER_BY_TRENDING);
   const [orderParamUser, setOrderParamUser] = usePersistedState(`orderUser-${location.pathname}`, CS.ORDER_BY_TRENDING);
-  const followed = (followedTags && followedTags.map(t => t.name)) || [];
   const urlParams = new URLSearchParams(search);
-  const tagsParam = // can be 'x,y,z' or 'x' or ['x','y'] or CS.CONSTANT
-    (tags && getParamFromTags(tags)) ||
-    (urlParams.get(CS.TAGS_KEY) !== null && urlParams.get(CS.TAGS_KEY)) ||
-    (defaultTags && getParamFromTags(defaultTags));
   const freshnessParam = freshness || urlParams.get(CS.FRESH_KEY) || defaultFreshness;
   const contentTypeParam = urlParams.get(CS.CONTENT_KEY);
   const streamTypeParam =
@@ -148,14 +139,6 @@ function ClaimListHeader(props: Props) {
     push(newSearch);
   }
 
-  function getParamFromTags(t) {
-    if (t === CS.TAGS_ALL || t === CS.TAGS_FOLLOWED) {
-      return t;
-    } else if (Array.isArray(t)) {
-      return t.join(',');
-    }
-  }
-
   function buildUrl(delta) {
     const newUrlParams = new URLSearchParams(location.search);
     CS.KEYS.forEach(k => {
@@ -226,7 +209,7 @@ function ClaimListHeader(props: Props) {
     <>
       <div className="claim-search__wrapper">
         <div className="claim-search__top">
-          <div className="claim-search__top-row">
+          <div className="claim-search__menu-group">
             {!hideFilters &&
               CS.ORDER_BY_TYPES.map(type => (
                 <Button
@@ -249,13 +232,14 @@ function ClaimListHeader(props: Props) {
               ))}
           </div>
 
-          <div className="claim-search__top-row">
+          <div className="claim-search__menu-group">
             {!hideAdvancedFilter && !SIMPLE_SITE && (
               <Button
                 button="alt"
                 aria-label={__('More')}
                 className={classnames(`button-toggle button-toggle--top button-toggle--more`, {
                   'button-toggle--custom': isFiltered(),
+                  'button-toggle--active': expanded,
                 })}
                 icon={ICONS.SLIDERS}
                 onClick={() => setExpanded(!expanded)}
@@ -277,7 +261,7 @@ function ClaimListHeader(props: Props) {
         </div>
         {expanded && !SIMPLE_SITE && (
           <>
-            <div className={classnames('card--inline', `claim-search__menus`)}>
+            <div className={classnames(`card claim-search__menus`)}>
               {/* FRESHNESS FIELD */}
               {orderParam === CS.ORDER_BY_TOP && (
                 <div className="claim-search__input-container">
@@ -421,54 +405,9 @@ function ClaimListHeader(props: Props) {
                     {CS.DURATION_TYPES.map(dur => (
                       <option key={dur} value={dur}>
                         {/* i18fixme */}
-                        {dur === CS.DURATION_SHORT && __('Short')}
-                        {dur === CS.DURATION_LONG && __('Long')}
+                        {dur === CS.DURATION_SHORT && __('Short (< 4 minutes)')}
+                        {dur === CS.DURATION_LONG && __('Long (> 20 min)')}
                         {dur === CS.DURATION_ALL && __('Any')}
-                      </option>
-                    ))}
-                  </FormField>
-                </div>
-              )}
-
-              {/* TAGS FIELD */}
-              {!tags && (
-                <div className={'claim-search__input-container'}>
-                  <FormField
-                    className={classnames('claim-search__dropdown', {
-                      'claim-search__dropdown--selected':
-                        ((!defaultTags || defaultTags === CS.TAGS_ALL) && tagsParam && tagsParam !== CS.TAGS_ALL) ||
-                        (defaultTags === CS.TAGS_FOLLOWED && tagsParam !== CS.TAGS_FOLLOWED),
-                    })}
-                    label={__('Tags')}
-                    type="select"
-                    name="tags"
-                    value={tagsParam || CS.TAGS_ALL}
-                    onChange={e =>
-                      handleChange({
-                        key: CS.TAGS_KEY,
-                        value: e.target.value,
-                      })
-                    }
-                  >
-                    {[
-                      CS.TAGS_ALL,
-                      CS.TAGS_FOLLOWED,
-                      ...followed,
-                      ...(followed.includes(tagsParam) || tagsParam === CS.TAGS_ALL || tagsParam === CS.TAGS_FOLLOWED
-                        ? []
-                        : [tagsParam]), // if they unfollow while filtered, add Other
-                    ].map(tag => (
-                      <option
-                        key={tag}
-                        value={tag}
-                        className={classnames({
-                          'claim-search__input-special': !followed.includes(tag),
-                        })}
-                      >
-                        {followed.includes(tag) && typeof tag === 'string' && toCapitalCase(tag)}
-                        {tag === CS.TAGS_ALL && __('Any')}
-                        {tag === CS.TAGS_FOLLOWED && __('Following')}
-                        {!followed.includes(tag) && tag !== CS.TAGS_ALL && tag !== CS.TAGS_FOLLOWED && __('Other')}
                       </option>
                     ))}
                   </FormField>
@@ -503,7 +442,12 @@ function ClaimListHeader(props: Props) {
               {channelIdsInUrl && (
                 <div className={'claim-search__input-container'}>
                   <label>{__('Advanced Filters from URL')}</label>
-                  <Button button="alt" label={__('Clear')} onClick={handleAdvancedReset} />
+                  <Button
+                    button="alt"
+                    className="claim-search__filter-button"
+                    label={__('Clear')}
+                    onClick={handleAdvancedReset}
+                  />
                 </div>
               )}
             </div>

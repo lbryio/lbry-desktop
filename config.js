@@ -2,6 +2,8 @@
 // On Desktop App, this will find .env.defaults and optional .env in root dir
 require('dotenv-defaults').config({ silent: false });
 
+console.log('process.env.SIMPLE_SITE', process.env.SIMPLE_SITE);
+
 const config = {
   MATOMO_URL: process.env.MATOMO_URL,
   MATOMO_ID: process.env.MATOMO_ID,

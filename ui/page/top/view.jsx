@@ -31,7 +31,7 @@ function TopPage(props: Props) {
           </span>
         )}
         header={
-          <div className="claim-search__top-row">
+          <div className="claim-search__menu-group">
             <Button
               label={name}
               button="alt"
