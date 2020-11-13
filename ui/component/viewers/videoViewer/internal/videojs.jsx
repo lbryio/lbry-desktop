@@ -27,6 +27,7 @@ export type Player = {
   ended: () => boolean,
   error: () => any,
   loadingSpinner: any,
+  getChild: string => any,
 };
 
 type Props = {
@@ -79,6 +80,50 @@ const SEEK_STEP = 10; // time to seek in seconds
 if (!Object.keys(videojs.getPlugins()).includes('eventTracking')) {
   videojs.registerPlugin('eventTracking', eventTracking);
 }
+
+// ********************************************************************************************************************
+// LbryVolumeBarClass
+// ********************************************************************************************************************
+
+const VIDEOJS_CONTROL_BAR_CLASS = 'ControlBar';
+const VIDEOJS_VOLUME_PANEL_CLASS = 'VolumePanel';
+const VIDEOJS_VOLUME_CONTROL_CLASS = 'VolumeControl';
+const VIDEOJS_VOLUME_BAR_CLASS = 'VolumeBar';
+
+class LbryVolumeBarClass extends videojs.getComponent(VIDEOJS_VOLUME_BAR_CLASS) {
+  constructor(player, options = {}) {
+    super(player, options);
+  }
+
+  static replaceExisting(player) {
+    try {
+      const volumeControl = player
+        .getChild(VIDEOJS_CONTROL_BAR_CLASS)
+        .getChild(VIDEOJS_VOLUME_PANEL_CLASS)
+        .getChild(VIDEOJS_VOLUME_CONTROL_CLASS);
+      const volumeBar = volumeControl.getChild(VIDEOJS_VOLUME_BAR_CLASS);
+      volumeControl.removeChild(volumeBar);
+      volumeControl.addChild(new LbryVolumeBarClass(player));
+    } catch (error) {
+      // In case it slips in 'Production', the original volume bar will be used and the site should still be working
+      // (just not exactly the way we want).
+      if (isDev) throw Error('\n\nvideojs.jsx: Volume Panel hierarchy changed?\n\n' + error);
+    }
+  }
+
+  handleMouseDown(event) {
+    super.handleMouseDown(event);
+    event.stopPropagation();
+  }
+
+  handleMouseMove(event) {
+    super.handleMouseMove(event);
+    event.stopPropagation();
+  }
+}
+
+// ********************************************************************************************************************
+// ********************************************************************************************************************
 
 /*
 properties for this component should be kept to ONLY those that if changed should REQUIRE an entirely new videojs element
@@ -259,6 +304,8 @@ export default React.memo<Props>(function VideoJs(props: Props) {
           player.on('volumechange', onVolumeChange);
           player.on('error', onError);
           player.on('ended', onEnded);
+
+          LbryVolumeBarClass.replaceExisting(player);
 
           onPlayerReady(player);
         }
