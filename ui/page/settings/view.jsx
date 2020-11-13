@@ -220,7 +220,7 @@ class SettingsPage extends React.PureComponent<Props, State> {
             <div className="card__title card__title--deprecated">{__('Failed to load settings.')}</div>
           </section>
         ) : (
-          <div className={classnames({ 'card--disabled': IS_WEB && !isAuthenticated })}>
+          <div className={classnames('card-stack', { 'card--disabled': IS_WEB && !isAuthenticated })}>
             {isAuthenticated && <SettingAccountPassword />}
             {/* @if TARGET='app' */}
             <Card

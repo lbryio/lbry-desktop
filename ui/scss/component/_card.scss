@@ -132,6 +132,10 @@
   }
 }
 
+.card ~ .card-stack {
+  margin-top: var(--spacing-l);
+}
+
 .card__list {
   column-count: 2;
   column-gap: var(--spacing-l);
