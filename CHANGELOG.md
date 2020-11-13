@@ -23,6 +23,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 - Loss of subscriptions on startup ([#4882](https://github.com/lbryio/lbry-desktop/pull/4882))
 - Fix lost search results when a timeout occurs _community pr!_ ([#4996](https://github.com/lbryio/lbry-desktop/pull/4996))
+- Can't slide volume slider in pop-sout mode _community pr!_ ([#4913](https://github.com/lbryio/lbry-desktop/pull/4913))
 
 ## [0.48.2] - [2020-10-16]
 
