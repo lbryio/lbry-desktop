@@ -127,17 +127,17 @@ function ClaimListDiscover(props: Props) {
   const freshnessParam = freshness || urlParams.get(CS.FRESH_KEY) || defaultFreshness;
 
   const langParam = urlParams.get(CS.LANGUAGE_KEY) || null;
-  const languageParam = searchInLanguage
+  const languageParams = searchInLanguage
     ? langParam === null
-      ? languageSetting
+      ? languageSetting.concat(languageSetting === 'en' ? ',none' : '')
       : langParam === 'any'
       ? null
-      : langParam
+      : langParam.concat(langParam === 'en' ? ',none' : '')
     : langParam === null
     ? null
     : langParam === 'any'
     ? null
-    : langParam;
+    : langParam.concat(langParam === 'en' ? ',none' : '');
 
   const contentTypeParam = urlParams.get(CS.CONTENT_KEY);
   const claimTypeParam =
@@ -299,9 +299,9 @@ function ClaimListDiscover(props: Props) {
     }
   }
 
-  if (languageParam) {
-    if (languageParam !== CS.LANGUAGES_ALL) {
-      options.any_languages = [languageParam];
+  if (languageParams) {
+    if (languageParams !== CS.LANGUAGES_ALL) {
+      options.any_languages = languageParams.split(',');
     }
   }
 
