@@ -206,7 +206,8 @@ $metadata-z-index: 1;
   @media (max-width: $breakpoint-small) {
     flex-direction: column;
 
-    > * {
+    > .button,
+    > .button-group {
       margin-right: 0;
       margin-bottom: var(--spacing-xs);
       margin-left: auto;

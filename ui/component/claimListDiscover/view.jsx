@@ -279,7 +279,7 @@ function ClaimListDiscover(props: Props) {
 
   if (durationParam) {
     if (durationParam === CS.DURATION_SHORT) {
-      options.duration = '<=1800';
+      options.duration = '<=240';
     } else if (durationParam === CS.DURATION_LONG) {
       options.duration = '>=1800';
     }
@@ -472,7 +472,7 @@ function ClaimListDiscover(props: Props) {
           {!repostedClaimId && (
             <div className="section__header--actions">
               {headerToUse}
-              {meta && <div className="card__actions--inline">{meta}</div>}
+              {meta && <div className="section__actions--no-margin">{meta}</div>}
             </div>
           )}
           <ClaimList
@@ -501,7 +501,7 @@ function ClaimListDiscover(props: Props) {
         <div>
           <div className="section__header--actions">
             {headerToUse}
-            {meta && <div className="card__actions--inline">{meta}</div>}
+            {meta && <div className="section__actions--no-margin">{meta}</div>}
           </div>
 
           <ClaimList

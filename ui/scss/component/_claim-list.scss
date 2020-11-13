@@ -51,7 +51,6 @@
   display: flex;
   align-items: center;
   margin-left: auto;
-  //   padding-top: var(--spacing-m);
 
   & > * {
     margin-left: var(--spacing-s);
@@ -414,10 +413,6 @@
     &:not(:first-child) {
       margin-top: var(--spacing-s);
     }
-
-    .channel-thumbnail {
-      display: none;
-    }
   }
 }
 
@@ -467,7 +462,6 @@
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  height: 2.1rem;
   font-size: var(--font-body);
 }
 
