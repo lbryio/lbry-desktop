@@ -69,7 +69,6 @@ reducers[ACTIONS.SET_SYNC_FAILED] = (state, action) =>
   Object.assign({}, state, {
     setSyncIsPending: false,
     setSyncErrorMessage: action.data.error,
-    fatalError: true,
   });
 
 reducers[ACTIONS.SET_SYNC_COMPLETED] = (state, action) =>
